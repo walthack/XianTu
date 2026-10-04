@@ -83,7 +83,7 @@ export const CHARACTER_QUESTS: CharacterQuest[] = [
       { reviewSummary: '你与小紫设局，迫使她放弃抵抗，同意以性奴身份赚钱赎身', status: 'ready', eventIds: ['lcq.event.s07_09_hengtang_ambush'] },
       { reviewSummary: '同夜你为她破处，确立人身依附。她坦白：失身是恩将仇报的报应；师叔被蔺采泉杀害；求你杀蔺，承诺终身为你的妓女', status: 'new', eventIds: ['lcq.event.s07_zhuo_price'] },
       { reviewSummary: '沐羽城庆典，你认出云中仙子就是她。小紫以更高权威再压一次，她为保命放弃抵抗，并指导徒儿侍奉', status: 'ready', eventIds: ['lcq.event.s12_02_recognize_zhuo', 'lcq.event.s12_03_xiaozi_controls_zhuo'] },
-      { reviewSummary: '你以「新任掌教」身份迫使她与申婉盈屈服，胁迫双修', status: 'new', eventIds: ['lcq.event.s12_zhuo_forced'] },
+      // 合规C02：s12_zhuo_forced暂停，不作为玩家任务；替换方案待剧情侧提供。
       { reviewSummary: '翠微园。她把 ZY5 的价拿到你面前兑现：你承诺对付现任掌教蔺采泉，并写下盘江程氏股份', status: 'insert', eventIds: ['lyl.event.sacred_against_lin', 'lyl.event.taiquan_sacred_fruit_02'] },
     ],
   },

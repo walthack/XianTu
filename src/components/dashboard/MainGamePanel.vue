@@ -1,6 +1,11 @@
 <template>
   <div class="main-game-panel">
     <WorldSimulationPlaytestPanel />
+    <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
+      <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
+      <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
+      <p v-if="currentTravelCard.companions?.length">同行：{{ currentTravelCard.companions.join('、') }}</p>
+    </aside>
     <XingyuehuQuestPlaytestHud />
     <!-- 短期记忆区域 -->
     <div class="memory-section" v-if="showMemorySection">
@@ -526,6 +531,7 @@ import { isAiRequestTimeout } from '@/services/aiRequestDeadline';
 import FormattedText from '@/components/common/FormattedText.vue';
 import WorldSimulationPlaytestPanel from '@/components/dashboard/WorldSimulationPlaytestPanel.vue';
 import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlaytestHud.vue';
+import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
 import {
@@ -864,6 +870,7 @@ const abandonOwnedGameTurn = () => {
   }
 };
 const gameStateStore = useGameStateStore();
+const currentTravelCard = computed(() => getTravelCard(gameStateStore.toSaveData()));
 // 本局已结束（玩家走进绝路）。引擎侧 `runtime.gameOver` 是唯一真值来源——
 // 结局正文由叙述在本轮已经写完，这里只负责收住界面：封输入，只留退路。
 const scenarioGameOver = computed<{ endingId: string; title: string; facts: string[] } | null>(() => {
@@ -4082,6 +4089,9 @@ const syncGameState = async () => {
   background: rgba(111, 127, 168, 0.16);
   border-color: rgba(111, 127, 168, 0.35);
 }
+
+.travel-card { padding: 12px; margin: 8px 0; border: 1px solid var(--border-color); border-radius: 8px; }
+.travel-card p { margin: 6px 0 0; }
 
 .traveling-badge {
   display: inline-flex;

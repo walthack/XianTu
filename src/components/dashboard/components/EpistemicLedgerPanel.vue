@@ -35,10 +35,10 @@ const knowledgeEntries = computed(() => Object.values(props.playerKnowledge || {
   .map(fact => ({
     id: String(fact.factId),
     confirmed: fact.status === 'confirmed',
-    claim: typeof fact.claim === 'string' && fact.claim.trim()
+    claim: typeof fact.claim === 'string' && fact.claim.trim() && !/lcq\.|liuchao\./.test(fact.claim)
       ? fact.claim
-      : `${fact.subjectId}.${fact.predicate}${fact.objectId ? `=${fact.objectId}` : ''}（旧记录）`,
-    source: String(fact.source?.label || fact.sourceEventId || '来源未记载'),
+      : /lcq\.|liuchao\./.test(`${fact.subjectId}.${fact.predicate}.${fact.objectId}`) ? '已获知一条线索（旧记录未留摘要）' : `${fact.subjectId}.${fact.predicate}${fact.objectId ? `=${fact.objectId}` : ''}（旧记录）`,
+    source: typeof fact.source?.label === 'string' && !/lcq\.|liuchao\./.test(fact.source.label) ? fact.source.label : '已发生的剧情',
     turn: Number(fact.learnedAtTurn || 0),
   })));
 const pathEntries = computed(() => Object.values(props.pathReceipts || {})
@@ -46,8 +46,8 @@ const pathEntries = computed(() => Object.values(props.pathReceipts || {})
   .slice(0, 8)
   .map(receipt => ({
     id: String(receipt.receiptId),
-    label: String(receipt.label),
-    dimension: String(receipt.dimension),
+    label: typeof receipt.label === 'string' && !/lcq\.|liuchao\./.test(receipt.label) ? receipt.label : '已作出的选择',
+    dimension: /lcq\.|liuchao\./.test(String(receipt.dimension || '')) ? '剧情分支' : String(receipt.dimension || '剧情分支'),
     turn: Number(receipt.selectedAtTurn || 0),
   })));
 </script>

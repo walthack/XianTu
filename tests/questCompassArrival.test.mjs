@@ -264,3 +264,17 @@ test('单步合同同理：过期按钮在人离场后不落账、不瞬移', as
   assert.equal(away.角色.位置.描述, '南荒·营地');
   assert.notEqual(away.世界.状态.剧本模组.flags['event.mini.done'], true);
 });
+
+test('travel button contains only destination and person; a child location suppresses go-to compass', async () => {
+  const { formatQuestCompass } = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
+  const { advanceScenarioRuntime, getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const save = await playtestSave();
+  skipToCommandTent(save.世界.状态.剧本模组);
+  const next = advanceScenarioRuntime(save).saveData;
+  const move = getCurrentStoryEventActions(next).find(a => a.actionId.startsWith('travel:'));
+  assert.ok(move);
+  assert.doesNotMatch(move.label, /：|诊治|来历说清/);
+  const event = { id: 'lcq.event.test', locationId: 'liuchao.location.biyu_village', relatedCharacterIds: [], objective: '观察现场' };
+  const compass = formatQuestCompass(event, { canon: { locations: [{ id: event.locationId, name: '碧鲮族' }], characters: [] } }, 'liuchao.location.sea_temple');
+  assert.doesNotMatch(compass, /去碧鲮/);
+});

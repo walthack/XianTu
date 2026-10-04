@@ -17,6 +17,7 @@ interface RegistryPhase {
   stageId?: string;
   seq?: string;
   identity?: string;
+  description?: string;
   role?: string;
   status?: string;
   forbidden?: string[];
@@ -224,7 +225,7 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
     }
   }
   if (currentPhase) {
-    add('阶段身份', `当前关卡 ${currentPhase.stageId}：${currentPhase.identity || currentPhase.role || ''}`, 520);
+    add('阶段身份', currentPhase.identity || currentPhase.role || '', 520);
     if (currentPhase.forbidden?.length) add('本阶段禁用', `${currentPhase.stageId}：${currentPhase.forbidden.join('、')}`, 360);
     // 「转折前禁止提前写成后宫／侍妾／情人」是**纯约束、不含未来信息**，与上面被刻意排除的
     // 「转折后才可写入」不同。此前两者被同一个 `if (!currentPhase)` 一起丢弃——恰恰在角色
@@ -253,6 +254,12 @@ for (const entry of (registryJson as { characters: RegistryEntry[] }).characters
   byId.set(entry.id, entry);
   byName.set(entry.canonicalName, entry);
   for (const alias of entry.aliases || []) if (!byName.has(alias)) byName.set(alias, entry);
+}
+
+/** 年龄只取源卡事实，不解析角色称谓，也不把出生年当年龄。 */
+export function getRegistryAgeFacts(character: { id?: string; name?: string }) {
+  const entry = byId.get(character.id || '') || byName.get(character.name || '');
+  return { birthYear: entry?.staticProfile?.birthYear, storyAge: entry?.staticProfile?.storyAge };
 }
 
 // 与构建期 apply-character-cards-v3-to-mod.mjs 同步：早期关卡里的未揭示称谓
@@ -345,6 +352,12 @@ function resolveOne(character: any, stageId: string): boolean {
   // 70章刚见面的小紫仅投射表面性格；保留registry种族、外貌和当前阶段资料。
   if (stageId === 'lcq.stage_04b_lingfei_baiyi_crisis' && character.id === 'liuchao.character.xiao_zi') {
     profile.personality = ['看上去天真灵动，笑语亲切，言行令旁人难以捉摸。'];
+  }
+  // 第六批逐关公开卡以已批准的阶段身份为准，避免旧档沿用全书身份和外貌。
+  if (['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis'].includes(stageId)
+    && ['程宗扬', '凝羽', '苏荔', '阿夕', '谢艺', '武二郎', '祁远', '云苍峰'].includes(entry.canonicalName)) {
+    if (currentPhase?.description) character.description = currentPhase.description;
+    if (currentPhase?.identity) profile.origin = currentPhase.identity;
   }
   character.profile = profile;
   return true;
@@ -457,6 +470,7 @@ export function stripNarrativeEntityTypeConflicts(text: string): { text: string;
 export function stripNarrativeUnintroducedCharacters(
   text: string,
   introducedCanonicalNames: Iterable<string>,
+  authoredHistoricalContext = '',
 ): { text: string; conflicts: string[] } {
   const introduced = new Set([...introducedCanonicalNames].map(name => byName.get(name)?.canonicalName || name));
   // 正文删除不可逆：两字姓名、氏族/称谓往往也有普通语义（如“龙神”），不能作为
@@ -477,7 +491,9 @@ export function stripNarrativeUnintroducedCharacters(
   for (let index = 0; index < parts.length; index += 2) {
     const sentence = parts[index] || '';
     const tail = parts[index + 1] || '';
-    const offender = blocked.find(name => sentence.includes(name));
+    // 合同明确要求讲述某人的旧事，不等于该人在现场登场；不能删掉合法回忆对白。
+    const offender = blocked.find(name => sentence.includes(name)
+      && !(authoredHistoricalContext.includes(name) && /当年|曾经|那时|旧事|头几年|回忆|往事/.test(sentence)));
     if (offender) {
       conflicts.push(`未登场正典人物“${offender}”被提前写入叙事/记忆`);
       continue;
@@ -493,16 +509,73 @@ export function getRegistryBottomLine(name: string): string[] {
   return unique(asArray<string>(entry?.staticProfile?.principles)).filter(Boolean);
 }
 
+/** 小说第78章交易拍揭母系；第105章父系劝说在临时协定第一步落账后成立。
+ * seqLo/seqHi为主轴序号，不能当小说章号。未知进度保持表面卡。
+ */
+export function xiaoziDisclosure(runtime: {
+  modId?: string; completedEventIds?: string[]; flags?: Record<string, unknown>;
+  travelLedger?: { doneEventIds?: string[] };
+  sceneLedger?: { worldFacts?: string[] };
+  eventActionStates?: Record<string, { readyAtTurn?: number; preparations?: string[] }>;
+}): { mother: boolean; father: boolean; suspectedFather: boolean } {
+  const done = (id: string) => runtime.completedEventIds?.includes(id) || runtime.travelLedger?.doneEventIds?.includes(id)
+    || runtime.eventActionStates?.[id]?.readyAtTurn !== undefined || runtime.flags?.[`event.${id.replace('lcq.event.', '')}.done`] === true;
+  const lateStage = /^lcq\.stage_(?:0[6-9]|1\d)/.test(runtime.modId || '') || /^ly[lg]\./.test(runtime.modId || '');
+  const pact = 'lcq.event.s05b_09_temporary_pact_with_xiaozi';
+  const father = lateStage || Boolean(done(pact)) || Boolean(runtime.eventActionStates?.[pact]?.preparations?.includes('counterstrike_plan_formed'));
+  const trade = Boolean(done('lcq.event.weapon_deal_with_geluo'));
+  return { mother: father || Boolean(runtime.sceneLedger?.worldFacts?.includes('小紫母系已演出：碧奴的女儿')), father, suspectedFather: trade && !father };
+}
+
+/** 老档缓存也只能保留当前已公开的记忆；已揭母系／父系不因清理又丢失。 */
+export function xiaoziUnrevealedFacts(runtime: Parameters<typeof xiaoziDisclosure>[0]): RegExp {
+  const reveal = xiaoziDisclosure(runtime);
+  return reveal.father ? /毒宗|黑魔海|殇侯|正宫|后宫|白切黑|病娇/ : reveal.mother
+    ? /岳帅|岳鹏举|父亲|遗孤|遗腹|毒宗|黑魔海|殇侯|正宫|后宫|白切黑|病娇/
+    : /岳帅|岳鹏举|碧姬|碧奴|母亲|父亲|血脉|遗孤|遗腹|毒宗|黑魔海|殇侯|正宫|后宫|白切黑|病娇/;
+}
+
 /** 南荒身份展示只接受本地完成回执；不修改registry的人工身份。 */
 export function syncNanhuangIdentityDisplay(runtime: {
   modId?: string; canon?: { characters?: any[] }; completedEventIds?: string[];
-  flags?: Record<string, unknown>; eventActionStates?: Record<string, { readyAtTurn?: number }>;
+  flags?: Record<string, unknown>; eventActionStates?: Record<string, { readyAtTurn?: number; preparations?: string[] }>;
+  sceneLedger?: { names?: Record<string, string>; worldFacts?: string[] };
+  travelLedger?: { doneEventIds?: string[] };
 }): void {
+  sanitizeXieyiDisclosure(runtime);
   if (!['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b'].includes(runtime.modId || '')) return;
   const settled = (id: string) => runtime.completedEventIds?.includes(id)
     || runtime.eventActionStates?.[id]?.readyAtTurn !== undefined
     || runtime.flags?.[`event.${id.replace('lcq.event.', '')}.done`] === true;
   for (const character of runtime.canon?.characters || []) {
+    if (character.id === 'liuchao.character.xiao_zi') {
+      const reveal = xiaoziDisclosure(runtime);
+      const old = character.profile || {};
+      const hidden = xiaoziUnrevealedFacts(runtime);
+      character.role = '碧鲮村少女';
+      character.description = '穿紫衣的碧鲮族少女，住在碧鲮村。';
+      character.profile = {
+        ...(old.attributes ? { attributes: old.attributes } : {}),
+        ...(old.spiritRoot ? { spiritRoot: old.spiritRoot } : {}),
+        ...(old.talents ? { talents: old.talents } : {}),
+        ...(old.avatar ? { avatar: old.avatar } : {}), ...(old.portrait ? { portrait: old.portrait } : {}),
+        race: reveal.mother ? '碧鲮族（母系碧姬）' : '碧鲮族',
+        origin: character.description,
+        appearance: '穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。',
+        personality: ['天真俏皮', '偶露古怪狠劲', '对程宗扬好奇'],
+        memories: asArray<string>(old.memories).filter(note => !hidden.test(String(note))),
+        notes: [
+          ...(reveal.mother ? ['【已知身世】小紫是碧奴（碧姬）的女儿。'] : []),
+          ...(reveal.father ? ['【已知身世】小紫的生父是岳鹏举。'] : []),
+          ...(reveal.suspectedFather ? ['【未证实的猜测】程宗扬怀疑小紫是岳帅的遗腹女；尚未证实。'] : []),
+        ],
+      };
+      // 全书阵营真值保留在registry；南荒公开卡不因血缘替她声明所属势力。
+      delete character.affiliations; delete character.factionId;
+    }
+    if (character.id === 'lcq.character.np006' && runtime.modId === 'lcq.stage_04b_lingfei_baiyi_crisis') {
+      character.name = runtime.sceneLedger?.names?.阁罗 === '阁罗' || settled('lcq.event.weapon_deal_with_geluo') ? '阁罗' : '鬼王峒使者';
+    }
     if (character.id === 'liuchao.character.shang_zhen_yu') {
       const revealed = settled('lcq.event.shanghou_revealed');
       character.name = revealed ? '殇侯' : '朱八八';
@@ -511,6 +584,9 @@ export function syncNanhuangIdentityDisplay(runtime: {
       character.profile = { origin: character.description, appearance: '瘦小苍老的成年老向导，不是魁梧壮汉。' };
       delete character.affiliations; delete character.factionId;
     }
+    if (character.id === 'liuchao.character.le_mingzhu' && !settled('lcq.event.ghost_king_swallowed')) {
+      for (const key of ['notes', 'memories', 'formsOfAddress']) if (Array.isArray(character.profile?.[key])) character.profile[key] = character.profile[key].filter((note: string) => !/大笨瓜|老公/.test(String(note)));
+    }
     if (character.id === 'liuchao.character.le_mingzhu' && ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04'].includes(runtime.modId || '')) {
       const revealed = settled('lcq.event.s04_03');
       character.name = revealed ? '乐明珠' : '花苗新娘';
@@ -518,6 +594,25 @@ export function syncNanhuangIdentityDisplay(runtime: {
       character.description = revealed ? '送亲新娘的身份已揭露，是光明观堂弟子乐明珠。' : '随花苗送亲队同行，身份尚未揭露。';
       character.profile = revealed ? { ...character.profile, origin: character.description } : { origin: character.description, appearance: '戴面纱的成年花苗新娘，暂不描写面纱下的容貌。' };
       delete character.affiliations; delete character.factionId;
+    }
+  }
+}
+
+/** 身手披露按本地完成事实；真境界留在canon，不用隐藏来改战斗数值。 */
+export function isXieyiSkillHidden(runtime: { modId?: string; completedEventIds?: string[]; flags?: Record<string, unknown> }): boolean {
+  if (!['lcq.stage_02', 'lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis'].includes(runtime.modId || '')) return false;
+  return !runtime.completedEventIds?.includes('lcq.event.s04b_lingfei_baiyi_crisis_13')
+    && runtime.flags?.['event.s04b_lingfei_baiyi_crisis_13.done'] !== true;
+}
+
+/** 谢艺旧档与源卡均不得把寻找写成受命护佑；105章前不透露寻找对象。 */
+export function sanitizeXieyiDisclosure(runtime: Parameters<typeof xiaoziDisclosure>[0] & { canon?: { characters?: any[] } }): void {
+  const known = xiaoziDisclosure(runtime).father;
+  for (const c of runtime.canon?.characters || []) {
+    if (c.id !== 'liuchao.character.xie_yi') continue;
+    const profile = c.profile || {};
+    for (const key of ['notes', 'memories', 'goals']) if (Array.isArray(profile[key])) {
+      profile[key] = profile[key].filter((note: string) => !/护佑其遗孀|护佑.*遗孤|奉岳帅之命/.test(String(note)) && (known || !/碧姬|碧奴|遗孤|遗腹|小紫/.test(String(note))));
     }
   }
 }

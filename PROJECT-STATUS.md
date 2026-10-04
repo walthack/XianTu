@@ -1,4 +1,45 @@
+> **2026-10-04 15:10 用户授权本地提交第八、九、十批（不push）。** New Bot独立复跑tsc0错、npm test1279项（1274过/0败/5既有skip）、canon:build绿；五原新档真MiniMax约110回合连续到04b本期结束，无卡死/红字，第九批s02_04、易虎生死、岳帅性别、凝羽开价复测通过。合并提交包含此前共享文件中的叙事/行旅/搜刮依赖；独立dev/combat-proto及其测试不纳入。中低问题留第十一批，不改实现。
+
+> **2026-10-04 15:03 用户裁定：第十批已撤回内容重新补回，三项门禁复验全绿，未提交／未推送。** 保留第八、九批；14:58修复合并；不新增合规条目。[交接](docs/handoffs/2026-10-04/BATCH10-COMPLIANCE-HARD-LINES.md)。
+
+> **2026-10-04 第十批：C01/C02指定九项完成，三项门禁全绿，未提交／未推送。** 成年估龄与旧档生日、阿夕/安乐公主/小玲儿源卡窄勘误、合意双修才有收益、卓云君未实装强迫双修登记暂停、月霜非自愿旧事仅事实/不作亲密档位、凝羽中性原著记忆与旧档兼容。乐明珠童颜、小紫成年措辞及其他成人内容保留。最新要求及已批准身份/演出回执裁定同步五条旧测试口径；tsc0错，npm test1279项1274过/0败/5既有skip，canon:build全绿46.5s（manifest86d357d09fbb），diffcheck绿。第九批旧口径阻塞本批已关闭，下方保留原轮历史。逐项文件/行号、卓云君触发审计、两处label与搜刮类型修复见：[第十批交接](docs/handoffs/2026-10-04/BATCH10-COMPLIANCE-HARD-LINES.md)。待New Bot独立复测及用户提交决定，无真机PASS。
+
+> **2026-10-04 第九批：实现交付，待真机复测，未提交／未推送。** A1点心铺前置引导无红字／不伪完成；易虎失踪与血虎怪物事实守卫；岳鹏举男性；凝羽32章固定原条件；A3用户撤销保持成年措辞。小紫70碧鲮族、78母系必须演出回执、79疑父未证、105确证，南荒毒宗不公开；谢艺错误护佑目标源纠正与旧缓存门控、关系登记。部分C与两项轻微顺手修。17文件定向162/162、严格overlay11/11、diffcheck绿；未改第八批两条南荒人断言，单跑6项4过2败，与B1新裁定冲突，**全量门禁不能宣称绿**。无本批全量／tsc／build／canon／真机，New Bot复测；待用户授权测试侧同步新口径。[第九批交接](docs/handoffs/2026-10-04/BATCH9-CANON-GUIDANCE.md)。
+
+> **2026-10-04 第八批：静态门禁绿，READY_FOR_TRUE_DEVICE_RETEST，未提交／未推送。** 修复第六／七批10个类型错误及五关卡投影overlay快照；同步在全目录overlay预检成功后才写盘，37关正常保留。E06/F10、E07/F13死亡及E08/F14存活失败终局全文/元数据已入库，rout接线等待主线战斗接入，不采旧龙陨之前。小紫表面卡、78母系／105父系与公开种族门、旧档缓存／embedding／RAG／在场门已落实；seq范围是主轴序号而非章号。tsc0错、canon:build46.3s全绿（1259项：1254过／0败／5既有skip）、原overlay11/11、diffcheck通过；未做真机或单独build。保留此前全部改动与战斗原型，原测试期望未改。[第八批交付](docs/handoffs/2026-10-04/BATCH8-REGRESSION-ENDINGS-DISCLOSURE.md)。
+
+> **2026-10-04 第七批：READY_FOR_RETEST，未提交／未推送。** 南荒15地点115搜刮条目合并，60物品登记四关overlay＋镜像（03b23／0423／04b28／05b23）；深井空表ready；前置读当前进度与跨关行旅历史；海神殿3条补战后前置。新增只读搜刮校验脚本，价格／效果先不接结算。串行定向8文件83/83，校验失败0、diffcheck通过；未跑全量／tsc／build／canon／真机，由New Bot统一门禁。保留此前全部工作与战斗原型。[第七批交付](docs/handoffs/2026-10-04/BATCH7-LOOT-CONTENT.md)。
+
+> **2026-10-04 第六批：READY_FOR_RETEST，未提交／未推送。** 第五批独立全量门禁1242项（1237过／0败／5冻结skip）、tsc／build／canon:build绿为修改前基线。本批落14稿公开开场、角色卡及02源行动，阴蛛不重复拆步；谢艺化神数据保留，65章杀使前公开面板／叙事隐藏；小紫race勘误获批并从源生成registry。七合同精确旧档文案迁移、凝羽同行识别连带修复。串行定向16文件167/167及diffcheck通过；未跑全量／tsc／build／canon／真机。C按用户允许留待战斗接入，未伪造flag/tier或可点击死亡选项；剧情侧需终局固定全文。保留现有全部工作与战斗原型，New Bot统一验收。[第六批交付](docs/handoffs/2026-10-04/BATCH6-IMPLEMENTATION.md)。
+
+> **2026-10-04 第五批：READY_FOR_RETEST，未提交／未推送。** New Bot第四轮门禁：1216项（1211通过／0失败／5既有冻结skip）、tsc 0错、build及canon:build绿；这是第四轮证据，不代表本批全量门禁。本批落实已批准的搜刮空表／种子／回执与南荒一期R1–R10场景账本，50事件67动作卡；阴蛛三步与后事后赴熊耳铺、np006显示名按步揭露、旧档防重；决战锚点扩原著109–112而不改战斗系统。串行定向21文件200/200通过，diffcheck通过；未跑全量、tsc、build、canon:build或真机。本批保留所有既有与其他任务未提交改动；小紫源卡勘误仍待剧情策划确认，地点搜刮内容仍pending。交付／文件清单／模板见 [第五批报告](docs/handoffs/2026-10-04/BATCH5-IMPLEMENTATION.md)，[源卡待确认清单](docs/handoffs/2026-10-04/BATCH5-CHARACTER-CORRECTIONS.md)。
+
 # 仙途 (XianTu) · 项目总体状况与并行分工文档
+
+
+> **2026-10-04 nh6-player第四轮（未提交，READY_FOR_RETEST）。** 保留全部既有工作区改动；传输失败恢复两次即停且不结算，正文拒稿仍三稿后静默安全承接。P1：玩家文案投影去作者指令与武二郎返回前提；在场名单不再逐人必须点名（樨夫人/易勇必到保留），整拍完成才提供作者批准结果，兜底不复制按钮；阴蛛袭击→阿葭死亡→焚尸承接；当前章节介绍投影；小紫未揭身世、未平定鬼王峒、南荒≠王哲焦土及孟老大/阁罗缺席检查。自主权检查区分NPC动作，仍拦擅自代玩家杀人。未改剧情源数据、行旅、搜刮或受保护字段。
+>
+> **证据/交接：** 串行定向9文件121/121及diffcheck；原baihu32/32，expect(calls,2)未动。日志`/tmp/xiantu-nh6-player-r4-focused.log`；[逐条根因、代码位置与第7–21分类](/Users/clawbot/Documents/Codex/2026-06-21/xiantu/work/XianTu/docs/NH6-PLAYER-ROUND4-REVIEW-2026-10-04.md)。模型旧日志未保存全部逐稿拒因，离线重建不作为完整运行时根因恢复。快进只解释开局缺历史/第0回合，不作为正典错误免责。备份`~/Desktop/xiantu-nh6-player-round4-backup-20261004/`；无全量/tsc/build/canon/真机、无提交推送，New Bot统一门禁。裁定#182。
+
+
+> **2026-10-04 nh6第三轮返修（未提交）。** 在全部已有改动上继续：demo成功取得正文后的所有校验失败统一守卫错误，三稿拒绝静默安全承接并落既定动作，网络/取消不伪结算；未授权道具与年龄全拒均有流水线夹具。同行沿用上一张真实出发快照、上一完成事件及明确商队成员，继续过滤死亡/离场/失踪。模型材料恢复本拍出发场景，不倒灌预结算的下一站；主角名取当前正典角色；合同授权的西门庆旧事不再被未登场人物过滤整段删除，不给他当前登场权限。未加正常固定演出，未做地点三状态UI。
+>
+> **证据/依赖：** 定向7文件85/85，日志`/tmp/xiantu-nh6-round3-focused.log`，覆盖真实转关队伍延续、未授权道具/年龄三稿全拒、紫溪身份与黑石滩第二步/叶媪村现场材料、凝羽对白发布和历史留存；stub证据不是新真机PASS。备份`~/Desktop/xiantu-nh6-round3-backup-20261004/`；无全量/tsc/build/canon:build、无commit/push，New Bot统一门禁及真机。裁定#181。
+
+
+> **2026-10-03 行程第二轮窄修（未提交）。** 保留现有全部未提交改动及New Bot门禁生成的manifest version/registry generatedAt。05b前两拍峒域locationId并入overlay的scenario.events整体to，移除重叠子字段操作；源重建及二次套用幂等恢复。剧情裁定#180：第52章离叶媪山村至旱洪山涧五日；鬼王峒散峒至出发营地半日。当前定义中默认/显式several路线0条；#179其他获批换算不变。
+>
+> **验证/依赖：** canonAuthorityOverlay + nanhuangTravelLedger定向20/20，日志`/tmp/xiantu-itinerary-round2-focused.log`；新增两段卡面/日历/重放回归。备份`~/Desktop/xiantu-itinerary-round2-backup-20261003/`。本轮不跑全量/tsc/build/canon:build或真机，不commit/push，New Bot统一门禁；此前全量1204＝1198过/1败/5跳过、tsc0、build通过仅为修前证据，不能据此宣称本轮全绿。
+
+> **2026-10-03 主策划接管行程裁定（未提交，承接#178全部16文件）。** 用户22:37 SGT批准、模块策划不再并行改travel。弥骨路线名、叶媪站及05b峒域衔接完成；紫溪/黑石滩移除正常固定概要，五拍正常路径走模型。wuerlang_joins完成立即记路途卡/日历，03b转关不重复收南下耗时，主面板显示最新路途卡；白夷/熊耳铺均03b04后听闻，到达才改到过。三段蛇彝至熊耳铺累计3日（第43三四日取下界，每段1日），第39预计当晚到不再单独叠加；出五原前置计入第34南荒初段3日，非原著五原至桥的精确时长；熊耳铺离开2日、古道入峒5日、散峒山村1.5日，近程半日/片刻。第52第五天起算不明，不新增5日；村→山涧远程沿数日3日占位。同行取出发时运行时在场随队快照；05b03激活即关自由窗。裁定#179。
+>
+> **验证/交付：** 定向7文件71/71（行旅账/扩展时钟/地点/02合同walker/演出流水线/南荒/到达罗盘），包含实际武二郎合同完成→出发、重放幂等、转关不收天数、听闻、1.5日进位、同行快照及两拍真实流水线stub请求并返回modular。日志`/tmp/xiantu-itinerary-focused.log`；Vue源解析/compileScript及diffcheck通过。备份`~/Desktop/xiantu-itinerary-backup-20261003/pre-change.tgz`。未全量/tsc/build/canon:build/真机、无commit/push；New Bot统一验收。地点门关闭已解决D8的2条旧债务，校验仍覆盖所有数据，stage_02五原段仍由既有五原门检验。上一轮M3/M2修复完整保留。
+
+
+> **2026-10-03 M3/M2叙事守卫与P3数据返修（未提交，待New Bot）。** 基于a12ebee8；安全兜底不拼内部playerLine、逐稿拒因日志、合同指令复述退稿；凝羽弑主开价第二步年龄问题最多三稿静默承接。移动按钮只去某地/见某人，到场合同不标前往，海神殿子地点不重复去碧鲮。s04_04绑定既有叶媪山村`lcq.location.yeao_village`(1725,8420)，05b前两拍绑定`liuchao.location.guiwang_dong`；两关overlay与builtin同步小片段，未运行生成器。裁定#178，备份`~/Desktop/xiantu-narrative-m3-backup-20261003/`。五份定向77/77；随后将三稿拒绝夹具精确定位03b_02，相关文件23/23复跑通过。日志`/tmp/xiantu-m3-focused.log`、`/tmp/xiantu-m3-exact-scene.log`；两关源+overlay只读核对与builtin一致、diffcheck通过。未全量/tsc/build/canon:build/新真机，无commit/push；不将stub验证视为玩家验收。
+>
+> **模块策划交接：** 正确人名「弥骨」，请在你的路线文案修迷谷；在行旅定义接叶媪山村站及05b峒内前两拍，地点ID如上。主策划未修改travel目录、openWorldSlice、行旅账/卡UI/日历/听闻/天数或stage_02五拍演出；runtime仅改按钮显示片段。行旅与叙事两边完成后New Bot统一全量门禁/真机。
+
 
 > **2026-10-03 移动系统0–3步交付，用户批准提交/推送。** 基于`afd1e3e6`，本批移动0–3步已纳入本次提交：到达≠完成、五原移除一键完成捷径、南荒强制移动与行旅账、「数日后」顶栏、规范地点ID/别名及独立地点校验接入`canon:build`。New Bot隔离副本串行门禁：单测1196项（1191通过/0失败/5跳过）、tsc 0错误、build通过、canon:build全绿；地点ID校验失败0、已登记警告39。canon重建仅`generatedAt`时间戳变化，无内容漂移。证据：[报告“移动系统0–3步真机”](../playtest-2026-09-28/REPORT-2026-10-02-nolegacy-retest.md)。真机核心行为通过：到达后仍须完成动作、五原无快捷结算、南荒22次强制移动有回执且无多余移动回合、顶栏/止点/谢艺托付/海神殿开局正常，原南荒回归保留。分支`feat/fast-no-legacy`，本轮只更新交付记录和Git，不重跑门禁、不修新增问题。
 >
@@ -708,6 +749,7 @@
 | 生成内容根 | `mod-kit/generated/deepseek-v4-flash/`（`qingyu/ yunlong/ yange/ shared-atlas/ character-canon/`）|
 | 脚本（167 个 .mjs） | `scripts/` |
 | 核心文档 roadmap | `mod-kit/generated/deepseek-v4-flash/character-canon/CORE-DOCS-ROADMAP.md` |
+| **合规清单（所有协作模型开工必读，仓库版为准）** | [docs/COMPLIANCE-REQUIREMENTS.md](docs/COMPLIANCE-REQUIREMENTS.md)：条目是有意偏离原著，测试／复核只标记、不当问题报告、不要求修复；新增合规条目须用户确认。文末11:39裁定优先：成人内容不处理／不软化，硬线仅全员18+与强迫内容不可玩化；R01–R52及⚠留第十批。 |
 | **正典裁定簿（改 canon/prompt 前必读）** | `…/character-canon/CANON-DECISIONS.md`（142 条人工裁定 + 执法标记）|
 | 续写总纲 / 剧透血缘密档 | `…/character-canon/ENDING-BLUEPRINT.md` v2（真值源）+ `RELATIONSHIPS-SECRET.md`（关系密档层，裁定 #89）|
 | 默认线正典轨道设计 | `…/character-canon/DEFAULT-CANON-RAIL-DESIGN.md` |

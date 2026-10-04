@@ -52,6 +52,8 @@ export interface OpenWorldRoute {
   kind?: OpenWorldRouteKind;
   /** 只用于 journey。 */
   dayCost?: OpenWorldDayCost;
+  /** 原著/策划的耗时显示，独立于内部日历量。 */
+  durationLabel?: string;
   forcedBy?: OpenWorldForcedBy;
   /** 这些事件全部完成后路线才可用。 */
   unlockWhen?: string[];

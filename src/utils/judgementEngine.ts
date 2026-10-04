@@ -464,6 +464,13 @@ function spiritCostEffects(
   return [{ key: '角色.属性.神识.当前', action: 'set', value: target }];
 }
 
+/** C02：合意须明确记录；强迫信号优先，药物/控制不能充当同意。 */
+export function mutualCultivationConsent(actionText: string): 'consensual' | 'unconfirmed' | 'coercive' {
+  if (!/双修|采补/.test(actionText)) return 'unconfirmed';
+  if (/强迫|胁迫|逼迫|迫使|威胁|迷药|麻古|下药|催情|制住|制服|控制|绑住|束缚|强行|不愿|不情愿|不同意|不合意|非自愿|被迫|拒绝|昏迷|失去意识|神志不清|不能反抗|不得不|乘人之危/.test(actionText)) return 'coercive';
+  return /双方(?:都)?(?:合意|同意|自愿)|两人(?:都)?(?:同意|自愿)|彼此(?:同意|自愿)/.test(actionText) ? 'consensual' : 'unconfirmed';
+}
+
 function cultivationRecoveryEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome): JudgementResolution['appliedEffects'] {
   const ratio = CULTIVATION_RECOVERY_RATIO[outcome];
   if (
@@ -496,6 +503,9 @@ function cultivationRecoveryEffects(saveData: unknown, proposal: JudgementPropos
 
 function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome, currentTurn: number): JudgementResolution['appliedEffects'] {
   const effects: JudgementResolution['appliedEffects'] = [];
+  if (/双修|采补/.test(proposal.actionText) && mutualCultivationConsent(proposal.actionText) !== 'consensual') {
+    return []; // 非自愿/未确认合意不恢复、不发buff，也不接收外部增益。
+  }
   if (['partial', 'success', 'great_success', 'perfect'].includes(outcome)) {
     effects.push(...cultivationRecoveryEffects(saveData, proposal, outcome));
   }
@@ -598,8 +608,9 @@ export function resolvePendingJudgement(
   const roll = Math.max(1, Math.min(20, Math.floor((options.roll || rollD20)())));
   const total = roll + state.pending.factors.reduce((sum, factor) => sum + factor.value, 0);
   const testOutcome = options.testOutcome && isOutcome(options.testOutcome) ? options.testOutcome : undefined;
-  const outcome = testOutcome || outcomeForTotal(total, state.pending.difficulty.value);
-  const appliedEffects = options.appliedEffects ? clone(options.appliedEffects) : deterministicOutcomeEffects(saveData, state.pending, outcome, normalizeTurn(options.currentTurn));
+  const consentBlocked = /双修|采补/.test(state.pending.actionText) && mutualCultivationConsent(state.pending.actionText) !== 'consensual';
+  const outcome = consentBlocked ? 'failure' : testOutcome || outcomeForTotal(total, state.pending.difficulty.value);
+  const appliedEffects = consentBlocked ? [] : options.appliedEffects ? clone(options.appliedEffects) : deterministicOutcomeEffects(saveData, state.pending, outcome, normalizeTurn(options.currentTurn));
   const resolution: JudgementResolution = {
     ...state.pending,
     status: 'resolved',

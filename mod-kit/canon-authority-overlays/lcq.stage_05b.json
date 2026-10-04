@@ -60,6 +60,475 @@
     },
     {
       "op": "set",
+      "path": "canon.relationships",
+      "from": [
+        {
+          "fromCharacterId": "liuchao.character.le_mingzhu",
+          "toCharacterId": "liuchao.character.pan_jinlian",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.shen_wan_ying",
+          "toCharacterId": "liuchao.character.zhuo_yunjun",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.shen_wan_ying",
+          "toCharacterId": "liuchao.character.qiu_shao_jun",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.shen_wan_ying",
+          "toCharacterId": "lcq.character.yue_shuang",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.zhuo_yunjun",
+          "toCharacterId": "liuchao.character.qiu_shao_jun",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.zhuo_yunjun",
+          "toCharacterId": "lcq.character.yue_shuang",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.qiu_shao_jun",
+          "toCharacterId": "lcq.character.yue_shuang",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        }
+      ],
+      "to": []
+    },
+    {
+      "op": "insertBefore",
+      "path": "content.items",
+      "beforeId": "liuchao.item.coral_dagger",
+      "value": {
+        "id": "lcq.item.xieyi_ashes",
+        "name": "谢艺骨灰",
+        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.opening.text",
+      "from": "碧鲮族海神殿事件后，程宗扬一行已被鬼王峒深处的危机牵引。小紫、乐明珠、阿夕等人的异常逐渐浮出水面，谢艺和程宗扬准备追索鬼王宫线索。",
+      "to": "随弥骨入峒的当夜，商队被安置进鬼王峒的驿馆。屋外脚步声渐远，白纸信仍没有显出字迹。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.opening.locationId",
+      "from": "liuchao.location.biyu",
+      "to": "lcq.location.guiwang_inn"
+    },
+    {
+      "op": "set",
+      "path": "scenario.opening.featuredCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.le_mingzhu",
+        "liuchao.character.xie_yi",
+        "liuchao.character.su_li"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.ning_yu",
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.xie_yi",
+        "liuchao.character.yun_cang_feng"
+      ]
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "event.xiaozi_kills_mother.done",
+      "beforeKey": null,
+      "entries": {
+        "event.xieyi_entrustment.done": false,
+        "world.xieyi_ashes.generated": false,
+        "event.blank_letter_and_dagu.done": false,
+        "event.geluo_summons_biji.done": false,
+        "event.escape_cave_mechanism.done": false,
+        "event.hongmiao_controlled.done": false,
+        "event.shanghou_revealed.done": false,
+        "event.shanghou_cures_ice_gu.done": false,
+        "event.s05b_ice_gu_detour.done": false,
+        "event.s05b_wuer_suli_depart.done": false,
+        "event.s05b_shanghou_reads_letter.done": false,
+        "event.s05b_yeao_palm_ningyu_stays.done": false,
+        "event.s05b_shanghou_reads_letter.ice_gu_cured": false,
+        "event.shanghou_revealed.relic_test_refused": false
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.stage_05b_investigation].eventIds",
+      "from": [
+        "lcq.event.s05b_01_binu_reveals_xiaozi",
+        "lcq.event.s05b_02_xiaozi_exposed",
+        "lcq.event.debut_lemingzhu"
+      ],
+      "to": [
+        "lcq.event.s05b_01_binu_reveals_xiaozi",
+        "lcq.event.s05b_02_xiaozi_exposed",
+        "lcq.event.debut_lemingzhu",
+        "lcq.event.blank_letter_and_dagu",
+        "lcq.event.geluo_summons_biji",
+        "lcq.event.escape_cave_mechanism",
+        "lcq.event.hongmiao_controlled"
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.stage_05b_reversal].eventIds",
+      "from": [
+        "lcq.event.s05b_08a_rescue_suli",
+        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+        "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+      ],
+      "to": [
+        "lcq.event.s05b_08a_rescue_suli",
+        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+        "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+        "lcq.event.ghost_king_swallowed",
+        "lcq.event.slay_dragon",
+        "lcq.event.xieyi_entrustment",
+        "lcq.event.xiaozi_kills_mother",
+        "lcq.event.tribes_pledge",
+        "lcq.event.s05b_ice_gu_detour",
+        "lcq.event.s05b_wuer_suli_depart",
+        "lcq.event.shanghou_revealed",
+        "lcq.event.s05b_shanghou_reads_letter",
+        "lcq.event.s05b_yeao_palm_ningyu_stays",
+        "lcq.event.shanghou_cures_ice_gu"
+      ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.s05b_bone_tiger",
+      "value": {
+        "id": "lcq.item.nh_mountain_herb",
+        "name": "山草药",
+        "description": "一把晒得半干的南荒草药，捣碎了能敷伤口。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_mountain_herb",
+      "value": {
+        "id": "lcq.item.nh_small_hide",
+        "name": "小张兽皮",
+        "description": "硝得不算好的一张小兽皮，气味呛人。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_small_hide",
+      "value": {
+        "id": "lcq.item.nh_huamiao_flatbread",
+        "name": "花苗烙饼",
+        "description": "在篝火石板上烙熟的粗面饼。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_huamiao_flatbread",
+      "value": {
+        "id": "lcq.item.nh_torch",
+        "name": "火把",
+        "description": "捆扎好的松明火把。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_torch",
+      "value": {
+        "id": "lcq.item.nh_feed_cake",
+        "name": "料饼",
+        "description": "压实的豆料饼，掰碎了喂牲口。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_feed_cake",
+      "value": {
+        "id": "lcq.item.nh_goose_palm_mushroom",
+        "name": "鹅掌菌",
+        "description": "蕈盖狭长、色泽淡红的蘑菇。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_goose_palm_mushroom",
+      "value": {
+        "id": "lcq.item.nh_rat_pelt",
+        "name": "鼠皮",
+        "description": "灰褐色、手掌大小的鼠皮，叠得整整齐齐。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_rat_pelt",
+      "value": {
+        "id": "lcq.item.nh_tarnished_trinket",
+        "name": "黯淡旧首饰",
+        "description": "不知传了多少手的旧首饰，早没了光泽。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_tarnished_trinket",
+      "value": {
+        "id": "lcq.item.nh_pebble_necklace",
+        "name": "石子项链",
+        "description": "几粒磨圆的石子用草绳串成的项链。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_pebble_necklace",
+      "value": {
+        "id": "lcq.item.nh_realgar_sachet",
+        "name": "雄黄避蛊香囊",
+        "description": "一只褪色的布香囊，雄黄味冲鼻。",
+        "type": "other",
+        "grade": "下品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_realgar_sachet",
+      "value": {
+        "id": "lcq.item.nh_wild_fruit",
+        "name": "野果",
+        "description": "拳头大的林中野果。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_wild_fruit",
+      "value": {
+        "id": "lcq.item.nh_lava_glass",
+        "name": "凝岩黑晶",
+        "description": "岩浆冷却后留下的黑色玻璃状碎石，边缘很快。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_lava_glass",
+      "value": {
+        "id": "lcq.item.nh_bone_bead_string",
+        "name": "骨珠串",
+        "description": "一串磨得发亮的兽骨珠子，绳子断了一半。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_bone_bead_string",
+      "value": {
+        "id": "lcq.item.nh_dragon_scale_chip",
+        "name": "龙鳞碎屑",
+        "description": "指甲大小的一片苍黑碎鳞，敲起来有金属声。",
+        "type": "material",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_dragon_scale_chip",
+      "value": {
+        "id": "lcq.item.nh_red_copper_bead",
+        "name": "赤铜熔珠",
+        "description": "岩浆熔渣里结出的一粒赤红铜珠。",
+        "type": "material",
+        "grade": "下品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_red_copper_bead",
+      "value": {
+        "id": "lcq.item.nh_bean_bun",
+        "name": "豆沙包",
+        "description": "甜丝丝的豆沙包，已经凉了。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_bean_bun",
+      "value": {
+        "id": "lcq.item.nh_boshan_incense",
+        "name": "博山炉香屑",
+        "description": "从香炉边扫下的一撮香屑。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_boshan_incense",
+      "value": {
+        "id": "lcq.item.nh_candle_stub",
+        "name": "残烛",
+        "description": "灯台上烧剩的半截蜡烛。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_candle_stub",
+      "value": {
+        "id": "lcq.item.nh_crystal_wine_cup",
+        "name": "水晶酒盏",
+        "description": "一只剔透的水晶酒盏，杯沿有个小缺口。",
+        "type": "other",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_crystal_wine_cup",
+      "value": {
+        "id": "lcq.item.nh_crystal_bead",
+        "name": "水晶帘珠",
+        "description": "从水晶帘上脱落的一颗珠子。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_crystal_bead",
+      "value": {
+        "id": "lcq.item.nh_niche_crystal",
+        "name": "龛窟水晶",
+        "description": "一块从龛窟碎口掉落的透明晶块，握久了仿佛还在微微收缩。",
+        "type": "other",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_niche_crystal",
+      "value": {
+        "id": "lcq.item.nh_fine_crossbow_bolt",
+        "name": "无记号弩矢",
+        "description": "一支做工精良的弩矢，箭杆上没有任何记号。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_fine_crossbow_bolt",
+      "value": {
+        "id": "lcq.item.nh_fine_crossbow_trigger",
+        "name": "精铁弩机牙",
+        "description": "一枚做工极细的精铁弩机牙，没有铭记。",
+        "type": "material",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "set",
       "path": "canon.characters",
       "from": [
         {
@@ -213,7 +682,7 @@
           "id": "liuchao.character.xiao_zi",
           "name": "小紫",
           "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
-          "role": "同行的神秘少女",
+          "role": "碧鲮村少女",
           "gender": "女",
           "realm": "凡人",
           "affiliations": [
@@ -238,12 +707,11 @@
           "techniqueIds": [],
           "itemIds": [],
           "profile": {
-            "appearance": "陆上为白璧无瑕少女双腿，碧鲮族血脉，非鲛人；鲛人为碧鲮族死敌",
+            "appearance": "穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。",
             "personality": [
-              "表面天真娇憨",
-              "观察敏锐",
-              "真实心思尚未完全显露",
-              "会保护认下的同行者"
+              "天真俏皮",
+              "偶露古怪狠劲",
+              "对程宗扬好奇"
             ],
             "race": "碧鲮族",
             "origin": "碧鲮族",
@@ -379,11 +847,9 @@
           "profile": {
             "appearance": "身材高挑，乌黑长发披肩；修长光洁美腿、丰满挺拔乳房；玉体白皙晶莹如羊脂白玉；阴户精巧如初春桃叶；肩头一枚淡红月牙状痕迹；",
             "personality": [
-              "高冷御姐",
-              "外冷内媚(冰火交融)",
-              "口是心非",
-              "不擅表温情",
-              "以冷酷伪装情感与欲望"
+              "冷淡寡言，话短",
+              "倔强，不肯示弱",
+              "守誓，把护卫职责放在私情前面"
             ],
             "race": "羽族",
             "origin": "穹羽族后裔",
@@ -576,9 +1042,9 @@
             ],
             "appearance": "明艳的凤目，白皙肌肤，红裙如火，身材高挑修长，臀部丰满浑圆，大腿根部有黑色刺青。尾骨部有银白色蝎尾",
             "personality": [
-              "美艳",
-              "顺从",
-              "富有情欲"
+              "大方火辣，说话直来直去",
+              "护族，遇事有决断",
+              "能歌，常以歌声与人对答"
             ],
             "origin": "花苗族长",
             "notes": [
@@ -803,7 +1269,7 @@
               "骄傲",
               "主动",
               "淫媚",
-              "小孩子气",
+              "天真跳脱",
               "任性"
             ]
           },
@@ -2414,7 +2880,7 @@
               "骄傲",
               "主动",
               "淫媚",
-              "小孩子气",
+              "天真跳脱",
               "任性"
             ]
           },
@@ -2464,8 +2930,8 @@
         {
           "id": "liuchao.character.xiao_zi",
           "name": "小紫",
-          "description": "碧鲮少女",
-          "role": "碧鲮少女",
+          "description": "穿紫衣的碧鲮族少女，住在碧鲮村。",
+          "role": "碧鲮村少女",
           "gender": "女",
           "realm": "凡人",
           "locationId": "liuchao.location.biyu_village",
@@ -2473,16 +2939,15 @@
           "techniqueIds": [],
           "itemIds": [],
           "profile": {
-            "origin": "碧鲮少女",
+            "origin": "穿紫衣的碧鲮族少女，住在碧鲮村。",
             "personality": [
-              "白切黑病娇",
-              "初识程宗扬时以痴呆、天真、反常无知的形象接近，曾出现用开水浇花等伪装行为",
-              "表面天真烂漫娇憨黏人",
-              "实则心狠手辣城府极深",
-              "视人命如草芥",
-              "智商碾压全场",
-              "喜欢亲手调教、收服违抗程宗扬的女性敌人（种奴印/驯服）"
-            ]
+              "天真俏皮",
+              "偶露古怪狠劲",
+              "对程宗扬好奇"
+            ],
+            "race": "南荒人",
+            "appearance": "穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。",
+            "notes": []
           },
           "affiliations": []
         },
@@ -2722,199 +3187,6 @@
           "description": "峒口刻柱的六朝石匠",
           "affiliations": []
         }
-      ]
-    },
-    {
-      "op": "set",
-      "path": "canon.relationships",
-      "from": [
-        {
-          "fromCharacterId": "liuchao.character.le_mingzhu",
-          "toCharacterId": "liuchao.character.pan_jinlian",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
-        },
-        {
-          "fromCharacterId": "liuchao.character.shen_wan_ying",
-          "toCharacterId": "liuchao.character.zhuo_yunjun",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
-        },
-        {
-          "fromCharacterId": "liuchao.character.shen_wan_ying",
-          "toCharacterId": "liuchao.character.qiu_shao_jun",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
-        },
-        {
-          "fromCharacterId": "liuchao.character.shen_wan_ying",
-          "toCharacterId": "lcq.character.yue_shuang",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
-        },
-        {
-          "fromCharacterId": "liuchao.character.zhuo_yunjun",
-          "toCharacterId": "liuchao.character.qiu_shao_jun",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
-        },
-        {
-          "fromCharacterId": "liuchao.character.zhuo_yunjun",
-          "toCharacterId": "lcq.character.yue_shuang",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
-        },
-        {
-          "fromCharacterId": "liuchao.character.qiu_shao_jun",
-          "toCharacterId": "lcq.character.yue_shuang",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
-        }
-      ],
-      "to": []
-    },
-    {
-      "op": "insertBefore",
-      "path": "content.items",
-      "beforeId": "liuchao.item.coral_dagger",
-      "value": {
-        "id": "lcq.item.xieyi_ashes",
-        "name": "谢艺骨灰",
-        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.opening.text",
-      "from": "碧鲮族海神殿事件后，程宗扬一行已被鬼王峒深处的危机牵引。小紫、乐明珠、阿夕等人的异常逐渐浮出水面，谢艺和程宗扬准备追索鬼王宫线索。",
-      "to": "随弥骨入峒的当夜，商队被安置进鬼王峒的驿馆。屋外脚步声渐远，白纸信仍没有显出字迹。"
-    },
-    {
-      "op": "set",
-      "path": "scenario.opening.locationId",
-      "from": "liuchao.location.biyu",
-      "to": "lcq.location.guiwang_inn"
-    },
-    {
-      "op": "set",
-      "path": "scenario.opening.featuredCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.xiao_zi",
-        "liuchao.character.le_mingzhu",
-        "liuchao.character.xie_yi",
-        "liuchao.character.su_li"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.ning_yu",
-        "liuchao.character.wu_er_lang",
-        "liuchao.character.xie_yi",
-        "liuchao.character.yun_cang_feng"
-      ]
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.initialFlags",
-      "afterKey": "event.xiaozi_kills_mother.done",
-      "beforeKey": null,
-      "entries": {
-        "event.xieyi_entrustment.done": false,
-        "world.xieyi_ashes.generated": false,
-        "event.blank_letter_and_dagu.done": false,
-        "event.geluo_summons_biji.done": false,
-        "event.escape_cave_mechanism.done": false,
-        "event.hongmiao_controlled.done": false,
-        "event.shanghou_revealed.done": false,
-        "event.shanghou_cures_ice_gu.done": false,
-        "event.s05b_ice_gu_detour.done": false,
-        "event.s05b_wuer_suli_depart.done": false,
-        "event.s05b_shanghou_reads_letter.done": false,
-        "event.s05b_yeao_palm_ningyu_stays.done": false,
-        "event.s05b_shanghou_reads_letter.ice_gu_cured": false,
-        "event.shanghou_revealed.relic_test_refused": false
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.chapters[id=lcq.chapter.stage_05b_investigation].eventIds",
-      "from": [
-        "lcq.event.s05b_01_binu_reveals_xiaozi",
-        "lcq.event.s05b_02_xiaozi_exposed",
-        "lcq.event.debut_lemingzhu"
-      ],
-      "to": [
-        "lcq.event.s05b_01_binu_reveals_xiaozi",
-        "lcq.event.s05b_02_xiaozi_exposed",
-        "lcq.event.debut_lemingzhu",
-        "lcq.event.blank_letter_and_dagu",
-        "lcq.event.geluo_summons_biji",
-        "lcq.event.escape_cave_mechanism",
-        "lcq.event.hongmiao_controlled"
-      ]
-    },
-    {
-      "op": "set",
-      "path": "scenario.chapters[id=lcq.chapter.stage_05b_reversal].eventIds",
-      "from": [
-        "lcq.event.s05b_08a_rescue_suli",
-        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
-        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
-        "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
-      ],
-      "to": [
-        "lcq.event.s05b_08a_rescue_suli",
-        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
-        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
-        "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
-        "lcq.event.ghost_king_swallowed",
-        "lcq.event.slay_dragon",
-        "lcq.event.xieyi_entrustment",
-        "lcq.event.xiaozi_kills_mother",
-        "lcq.event.tribes_pledge",
-        "lcq.event.s05b_ice_gu_detour",
-        "lcq.event.s05b_wuer_suli_depart",
-        "lcq.event.shanghou_revealed",
-        "lcq.event.s05b_shanghou_reads_letter",
-        "lcq.event.s05b_yeao_palm_ningyu_stays",
-        "lcq.event.shanghou_cures_ice_gu"
       ]
     },
     {
@@ -3979,7 +4251,7 @@
           "relatedFactionIds": [
             "liuchao.faction.gui_wang_dong"
           ],
-          "locationId": "liuchao.location.biyu",
+          "locationId": "liuchao.location.guiwang_dong",
           "objective": "向碧姬追问小紫的过往",
           "playerCompletionContract": {
             "kind": "objective_action",
@@ -4034,7 +4306,7 @@
           "relatedFactionIds": [
             "liuchao.faction.gui_wang_dong"
           ],
-          "locationId": "liuchao.location.biyu",
+          "locationId": "liuchao.location.guiwang_dong",
           "objective": "质问小紫，揭穿其控制手段",
           "playerCompletionContract": {
             "kind": "objective_action",
@@ -4679,11 +4951,11 @@
         {
           "id": "lcq.event.ghost_king_swallowed",
           "name": "祭台吞王",
-          "description": "祭台决战中，鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
+          "description": "第109–112章祭台决战：众人与鬼巫王交锋，鬼巫王布下苍龙星阵，以祭品唤醒龙神，最终反被龙神吞食。",
           "axisId": "qingyu.114.2",
-          "axisAnchor": "六朝清羽记·#114·第112章·唤龙",
+          "axisAnchor": "qingyu.111.1+qingyu.111.2+qingyu.112.1+qingyu.112.2+qingyu.112.3+qingyu.113.1+qingyu.113.2+qingyu.113.3+qingyu.114.1+qingyu.114.2",
           "axisSeq": 205,
-          "axisBeat": "鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
+          "axisBeat": "原著第109–112章：第109–112章祭台决战：众人与鬼巫王交锋，鬼巫王布下苍龙星阵，以祭品唤醒龙神，最终反被龙神吞食。",
           "critical": true,
           "conditions": [
             {

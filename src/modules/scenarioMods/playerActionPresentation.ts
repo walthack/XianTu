@@ -55,3 +55,25 @@ export function resolveScopedPlayerLine(
 export function playerLineLeaksAuthorNotes(text: string): boolean {
   return AUTHOR_LEAK.test(String(text || ''));
 }
+
+
+/** 展示投影不改变合同actionText；作者约束仍留在模型侧。 */
+export function playerFacingActionLine(line: string): string {
+  if (!/不把尚未|不提前宣告|不走进下一章|不装作无事|不得|禁止|事件完成真值|结构化步骤|走投无路返回|我按当前主线目标行动[：:]/.test(line)) return line.trim();
+  const clauses = String(line || '').split(/[，,。；;]/).map(s => s.trim()).filter(Boolean);
+  const kept = clauses.filter(s => !/不把尚未|不提前宣告|不走进下一章|不装作无事|不得|禁止|事件完成真值|结构化步骤/.test(s));
+  const result = kept.join('，').replace(/^我按当前主线目标行动[：:]/, '我');
+  const firstPerson = result.indexOf('我');
+  return result ? (firstPerson > 0 ? result.slice(firstPerson) : result).replace(/[。]+$/, '') + '。' : '我查看眼前的情况。';
+}
+
+/** 旧合同在玩家面前不重复预设“离开后返回”，也不提前念阿葭死讯。 */
+export function playerActionDisplayOverride(eventId: string, actionId: string): { line: string; label?: string } | undefined {
+  // 武二郎工钱已改入源合同，不再由显示投影缩写。
+  if (eventId === 'lcq.event.huamiao_coop_boundary') return { line: '我跟云苍峰谈清进鬼王峒的合作边界。', label: '与云苍峰谈合作边界' };
+  if (eventId === 'lcq.event.weapon_deal_with_geluo' && actionId === 'open_weapon_talk_with_geluo') return { line: '我向鬼王峒使者提出兵器生意。', label: '同使者谈兵器生意' };
+  if (eventId === 'lcq.event.s03b_yinzhu_xiongerpu' && actionId === 'yinzhu_strikes_ajia') return { line: '我听见阿葭那边的蕨丛里有异响，提刀赶了过去。', label: '赶去阿葭身边查看异动' };
+  if (eventId === 'lcq.event.s03b_yinzhu_xiongerpu' && actionId === 'burn_yinzhu_victim') return { line: '我照祁远的吩咐，和花苗人一起把阿葭、阴蛛和那具蛇彝遇害者焚化。', label: '焚化阿葭的遗体和阴蛛' };
+  if (eventId === 'lcq.event.ningyu_regicide_offer' && actionId === 'hear_ningyu_regicide_price') return { line: '我听她说明条件。', label: '听她说明条件' };
+  return undefined;
+}

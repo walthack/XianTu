@@ -448,26 +448,6 @@
       "reason": "同一规范地点在不同关坐标不一",
       "closeWhen": "主策划校准后各关坐标统一",
       "detail": "同一规范地点坐标不一：2830,3049 / 3159,2767"
-    },
-    {
-      "key": "rail_move_undeclared:lcq.event.s05b_01_binu_reveals_xiaozi",
-      "kind": "rail_move_undeclared",
-      "locationIds": [
-        "lcq.event.s05b_01_binu_reveals_xiaozi"
-      ],
-      "reason": "05b 前两拍挂在碧鲮（06 文档 D8），方案R下 05b 整段在鬼王峒，不替数据补路线",
-      "closeWhen": "主策划裁定 D8 后改 locationId 或声明路线",
-      "detail": "lcq.stage_05b：lcq.event.hongmiao_controlled → lcq.event.s05b_01_binu_reveals_xiaozi（liuchao.location.guiwang_dong → liuchao.location.biyu）没有声明强制路线"
-    },
-    {
-      "key": "rail_move_undeclared:lcq.event.s05b_03_saan_secret_path",
-      "kind": "rail_move_undeclared",
-      "locationIds": [
-        "lcq.event.s05b_03_saan_secret_path"
-      ],
-      "reason": "05b 前两拍挂在碧鲮（06 文档 D8），方案R下 05b 整段在鬼王峒，不替数据补路线",
-      "closeWhen": "主策划裁定 D8 后改 locationId 或声明路线",
-      "detail": "lcq.stage_05b：lcq.event.s05b_02_xiaozi_exposed → lcq.event.s05b_03_saan_secret_path（liuchao.location.biyu → liuchao.location.gui_wang_dong）没有声明强制路线"
     }
   ]
 }

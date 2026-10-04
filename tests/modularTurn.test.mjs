@@ -280,3 +280,66 @@ test('guard rewrites can use a third attempt without publishing rejected drafts'
   assert.equal(result.attempts, 3);
   assert.deepEqual(seen, [1, 2, 3]);
 });
+
+test('instruction echoes are rejected and local fallback never copies the compiled input', () => {
+  const internal = '你<行动趋向>我搜查蛇彝长屋</行动趋向> 本地事件判定已预结算事件=lcq.event.s03b_snake_flower_bridge_02；动作=advance_declared_objective';
+  for (const text of [internal, '你只管按本地合同，固定伤亡、补给、减员，不替玩家加 buff。']) {
+    assert.throws(() => m.readModuleNarrative(text), m.ModuleNarrativeGuardError);
+    const fallback = m.localModuleGuardNarrative(text, true);
+    assert.doesNotMatch(fallback, /<行动趋向>|本地事件判定|advance_declared_objective|lcq\.event\.|本地合同|buff/);
+  }
+  assert.doesNotMatch(m.localModuleGuardNarrative('观察 · 搜查蛇彝长屋，查清尸体来源', true), /观察 ·|你搜查蛇彝长屋/);
+  assert.match(m.localModuleGuardNarrative(undefined, true, '商队发现长屋中的惨案，决定焚屋撤离。'), /惨案.*焚屋撤离/);
+});
+
+
+test('transport failures stop after two calls while successful-body guard failures allow three', async () => {
+  for (const guard of [false, true]) {
+    let calls = 0;
+    const result = await m.attemptModuleNarrative(async () => {
+      calls++;
+      throw guard ? new m.ModuleNarrativeGuardError('fixture rejected prose') : new Error('fixture transport failure');
+    }, { maxAttempts: 3, maxAttemptsForError: error => error instanceof m.ModuleNarrativeGuardError ? 3 : 2, budgetLeft: () => null, isFatal: () => false });
+    assert.equal(result.ok, false);
+    assert.equal(calls, guard ? 3 : 2);
+  }
+});
+
+test('Nanhuang canonical sequence and concealed parentage reject report errors without banning memories', () => {
+  const stage = 'lcq.stage_04b_lingfei_baiyi_crisis';
+  for (const text of ['你听云苍峰说：“鬼王峒既已平定，峒主一死，商路就通了。”', '你望着白夷战场。那是王哲兄以命换来的十里焦土。', '你看着小紫，她的轮廓与碧姬有几分神似，却更肖似传说中的岳帅。']) {
+    assert.throws(() => m.validateNanhuangCanonNarrative(text, stage, '白夷族', []), /正典|身世/);
+  }
+  for (const text of ['你想起王哲兄以命换来的十里焦土。', '你听云苍峰说：“鬼王峒尚未平定，不能轻敌。”', '你见小紫眉眼灵动，笑起来带着天真的神情。']) {
+    assert.doesNotThrow(() => m.validateNanhuangCanonNarrative(text, stage, '白夷族', []));
+  }
+  assert.doesNotThrow(() => m.validateNanhuangCanonNarrative('你听说鬼巫王已死。', 'lcq.stage_05b', '鬼王峒', ['lcq.event.ghost_king_swallowed']));
+  for (const text of ['你走出海湾。阁罗一言不发地跟在后头。', '你抬头，孟老大站在船头。']) assert.throws(() => m.validateModuleCastNarrative(text, ['阁罗', '孟老大']), /在场/);
+  assert.doesNotThrow(() => m.validateModuleCastNarrative('你想起阁罗一言不发地跟在后头的旧事。', ['阁罗']));
+  assert.throws(() => m.readModuleNarrative('你听她说，不对，现在应该称呼另一位阿葭。'), /内部.*指令/);
+});
+
+test('all three reported fallback beats publish authored settled facts without UI verbs or author notes', async () => {
+  const { readFile } = await import('node:fs/promises');
+  for (const [stage, id, expected] of [
+    ['03b_snake_flower_bridge', 's03b_snake_flower_bridge_02', /惨案.*焚屋撤离/],
+    ['03b_snake_flower_bridge', 's03b_snake_flower_bridge_07', /苏荔.*贡物.*新娘/],
+    ['04', 's04_02', /凝羽受伤.*九名武士/],
+  ]) {
+    const mod = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/lcq.stage_${stage}.json`, import.meta.url), 'utf8'));
+    const event = mod.scenario.events.find(e => e.id === `lcq.event.${id}`);
+    const text = m.localModuleGuardNarrative('观察 · 作者按钮', true, event.description);
+    assert.match(text, expected);
+    assert.doesNotMatch(text, /观察 ·|攻击 ·|主轴成形|眼前的事情告一段落|lcq\.event\.|预结算/);
+  }
+});
+
+
+test('existing fixed beats show the spider before death and do not invent Wuerlang returning', async () => {
+  const { fixedBeatNarrative } = await jiti.import('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  const text = fixedBeatNarrative('lcq.event.s03b_yinzhu_xiongerpu', 'burn_yinzhu_victim');
+  assert.match(text, /祁远.*陰蛛|祁远.*阴蛛/);
+  assert.match(text, /武二郎.*阴蛛/);
+  assert.doesNotMatch(text, /已经伏在阿葭身上|你赶过去时/);
+  assert.doesNotMatch(fixedBeatNarrative('lcq.event.wuerlang_joins', 'secure_wuerlang_southbound'), /再见|走投无路|返回/);
+});

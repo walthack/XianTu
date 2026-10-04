@@ -220,3 +220,15 @@ test('retest2 preserves Ningyu detox facts and natural Xiaozi appearance with di
     assert.deepEqual(temple.coordinates, { x: 1872, y: 8664 });
   }
 });
+
+test('Yeao village is a required stop and 05b opening rumours happen inside Guiwang Dong', async () => {
+  const fourth = await stage(ids[1]);
+  const event = fourth.scenario.events.find(e => e.id === 'lcq.event.s04_04');
+  assert.equal(event.locationId, 'lcq.location.yeao_village');
+  const village = fourth.canon.locations.find(l => l.id === event.locationId);
+  assert.deepEqual(village.coordinates, { x: 1725, y: 8420 });
+  const fifth = await stage(ids[3]);
+  for (const id of ['lcq.event.s05b_01_binu_reveals_xiaozi', 'lcq.event.s05b_02_xiaozi_exposed']) {
+    assert.equal(fifth.scenario.events.find(e => e.id === id).locationId, 'liuchao.location.guiwang_dong');
+  }
+});

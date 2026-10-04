@@ -22,6 +22,7 @@ export interface ScenarioInventorySettlement {
 
 interface InventoryTransactionRuntime {
   worldTurn?: number;
+  locationLoot?: { claimedItemIds?: string[] };
   canon?: { items?: ScenarioModItem[] };
   inventoryTransferReceipts?: ScenarioInventoryTransferReceipt[];
 }
@@ -104,6 +105,7 @@ export function settleScenarioInventoryTransfers(
 
   for (const transfer of transfers) {
     if (settledIds.has(transfer.transferId)) continue;
+    if (!source.eventId.startsWith('loot:') && runtime.locationLoot?.claimedItemIds?.includes(transfer.itemId)) continue;
     const item = catalog.get(transfer.itemId);
     const quantity = Number(transfer.quantity);
     if (!item || !Number.isInteger(quantity) || quantity < 1) continue;

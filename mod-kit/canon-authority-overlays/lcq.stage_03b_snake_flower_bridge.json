@@ -1720,13 +1720,665 @@
     },
     {
       "op": "set",
+      "path": "canon.relationships",
+      "from": [
+        {
+          "fromCharacterId": "liuchao.character.le_mingzhu",
+          "toCharacterId": "liuchao.character.pan_jinlian",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.shen_wan_ying",
+          "toCharacterId": "liuchao.character.zhuo_yunjun",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.shen_wan_ying",
+          "toCharacterId": "liuchao.character.qiu_shao_jun",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.shen_wan_ying",
+          "toCharacterId": "lcq.character.yue_shuang",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.zhuo_yunjun",
+          "toCharacterId": "liuchao.character.qiu_shao_jun",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.zhuo_yunjun",
+          "toCharacterId": "lcq.character.yue_shuang",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        },
+        {
+          "fromCharacterId": "liuchao.character.qiu_shao_jun",
+          "toCharacterId": "lcq.character.yue_shuang",
+          "relation": "同门",
+          "score": 30,
+          "direction": "bidirectional",
+          "tags": [
+            "同门",
+            "同势力派生"
+          ]
+        }
+      ],
+      "to": []
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.opening",
+      "afterKey": "relatedCharacterIds",
+      "beforeKey": null,
+      "entries": {
+        "featuredCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "locationId": "lcq.location.sheyi_village"
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "chapter.lcq.stage_03b_snake_flower_bridge.flower.done",
+      "beforeKey": null,
+      "entries": {
+        "event.s03b_wanwu_night.done": false,
+        "event.s03b_yinzhu_xiongerpu.done": false
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.s03b_snake_flower_bridge_flower].eventIds",
+      "from": [
+        "lcq.event.s03b_snake_flower_bridge_04",
+        "lcq.event.s03b_snake_flower_bridge_05",
+        "lcq.event.s03b_snake_flower_bridge_06",
+        "lcq.event.s03b_snake_flower_bridge_07"
+      ],
+      "to": [
+        "lcq.event.s03b_snake_flower_bridge_04",
+        "lcq.event.s03b_snake_flower_bridge_05",
+        "lcq.event.s03b_snake_flower_bridge_06",
+        "lcq.event.s03b_snake_flower_bridge_07",
+        "lcq.event.s03b_wanwu_night",
+        "lcq.event.s03b_yinzhu_xiongerpu"
+      ]
+    },
+    {
+      "op": "set",
+      "path": "rules.contentAccess",
+      "from": [
+        {
+          "contentId": "liuchao.skill.death_root",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.technique.nine_yang_divine_skill",
+          "policy": "restricted",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.five_tiger_broken_gate_knife",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.wu_er_lang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.phoenix_treasure_book",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.le_mingzhu"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.scorpion_tail",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.su_li"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.moon_light_shield",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.ning_yu"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.skill.np001",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.item.coral_dagger",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.item.zhu_hu_guan",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.le_mingzhu"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.item.purple_scale_whip",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.xiao_zi"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.item.gui_yu_sword",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.gui_wu_wang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.item.np002",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.item.np010",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.item.np011",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.item.np015",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.xiao_zi"
+          ],
+          "playerAllowed": false
+        }
+      ],
+      "to": [
+        {
+          "contentId": "liuchao.skill.death_root",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.technique.nine_yang_divine_skill",
+          "policy": "restricted",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.five_tiger_broken_gate_knife",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.wu_er_lang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.phoenix_treasure_book",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.le_mingzhu"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.scorpion_tail",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.su_li"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.skill.moon_light_shield",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.ning_yu"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.skill.np001",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.item.coral_dagger",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "liuchao.item.zhu_hu_guan",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.le_mingzhu"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.item.np002",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.item.np010",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        },
+        {
+          "contentId": "lcq.item.np011",
+          "policy": "exclusive",
+          "allowedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "playerAllowed": false
+        }
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.opening.text",
+      "from": "南荒腹地的危险第一次正面咬住商队。蛇彝毒袭、鬼王峒血符和花苗送嫁让程宗扬意识到，这趟霓龙丝之行已经卷进南荒部族仇杀。",
+      "to": "夜色里，两支商队轮流挥刀，在没膝的蕨林中砍出一条路。脚下忽然一硬，泥泞换成了一块块铺得整齐的青石——蛇彝人的村寨到了。房屋沿着山梁错落铺开，飞檐高高挑起，却看不到一丝灯火。四下一片沉寂，只有你们自己的脚步声和马蹄声。祁远落后半步，压低嗓子说：蛇彝人平常就很少露面，可从没像今天这样，整座村子一点声音都没有，有点邪门。云苍峰摩挲着腰间的玉佩，说前面有一间专给过路客人住的大屋，大伙儿先去歇一晚，明早就上路，别去打搅主人。黑暗里，族长大屋最高一层的竹阁中，隐隐透出一丝灯火。"
+    },
+    {
+      "op": "set",
+      "path": "manifest.description",
+      "from": "蛇彝袭击、鬼王峒屠村痕迹、云氏与商队合作、万古巨藤脱困及花苗送嫁，连接南荒初探与花苗/鬼王峒主轴。",
+      "to": "雨林尽头的蛇彝村既没有灯火，也没有人声。商队要从这里继续南下，往后会遇上哪些部族、哪些同行者，眼下谁也说不准。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.s03b_snake_flower_bridge_snake].summary",
+      "from": "蛇彝袭击与鬼王峒屠村痕迹，让商队确认南荒风险升级。",
+      "to": "蛇彝村没有灯火也没有人声，只有族长大屋的竹阁透出一点微光。商队借住村尾的客屋，打算明早就走。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.s03b_snake_flower_bridge_flower].summary",
+      "from": "云氏同行、巨藤脱困和龙神新娘贡物，把队伍推向花苗与鬼王峒冲突。",
+      "to": "离开蛇彝村后，云苍峰问你们往哪里去：他要去盘江以南的白夷族，邀你们结伴同行。前面的山路怎么走，谁也说不准。"
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.s05b_bone_tiger",
+      "value": {
+        "id": "lcq.item.nh_mountain_herb",
+        "name": "山草药",
+        "description": "一把晒得半干的南荒草药，捣碎了能敷伤口。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_mountain_herb",
+      "value": {
+        "id": "lcq.item.nh_bird_feather",
+        "name": "彩色鸟羽",
+        "description": "几根颜色鲜亮的林鸟长羽。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_bird_feather",
+      "value": {
+        "id": "lcq.item.nh_small_hide",
+        "name": "小张兽皮",
+        "description": "硝得不算好的一张小兽皮，气味呛人。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_small_hide",
+      "value": {
+        "id": "lcq.item.nh_salt_lump",
+        "name": "盐巴块",
+        "description": "油纸包着的一小块粗盐。南荒山里缺盐，盐巴有时比铜铢好使。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_salt_lump",
+      "value": {
+        "id": "lcq.item.nh_snake_slough",
+        "name": "蛇蜕",
+        "description": "一条完整的蛇蜕，挂在竹墙缝里。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_snake_slough",
+      "value": {
+        "id": "lcq.item.nh_clay_oil_lamp",
+        "name": "残油陶灯",
+        "description": "一盏只剩一点灯油的陶灯。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_clay_oil_lamp",
+      "value": {
+        "id": "lcq.item.nh_sheyi_bone_flute",
+        "name": "蛇彝骨笛",
+        "description": "一支细长的骨笛，笛身刻着交缠的蛇纹。",
+        "type": "other",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_sheyi_bone_flute",
+      "value": {
+        "id": "lcq.item.nh_vine_fiber",
+        "name": "巨藤纤维",
+        "description": "从老藤皮上剥下的粗纤维，韧得扯不断。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_vine_fiber",
+      "value": {
+        "id": "lcq.item.nh_ancient_vine_resin",
+        "name": "万古藤脂",
+        "description": "老藤裂口里凝出的一团琥珀色藤脂。",
+        "type": "material",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_ancient_vine_resin",
+      "value": {
+        "id": "lcq.item.nh_huamiao_flatbread",
+        "name": "花苗烙饼",
+        "description": "在篝火石板上烙熟的粗面饼。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_huamiao_flatbread",
+      "value": {
+        "id": "lcq.item.nh_wild_honey",
+        "name": "竹筒野蜂蜜",
+        "description": "用蜡封口的一小截竹筒，里面是野蜂蜜。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_wild_honey",
+      "value": {
+        "id": "lcq.item.nh_bee_wax",
+        "name": "鬼面蜂蜡",
+        "description": "一块带着甜香的暗黄蜂蜡。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_bee_wax",
+      "value": {
+        "id": "lcq.item.nh_cattail_smoke",
+        "name": "蒲棒",
+        "description": "晒干的蒲棒，一点就冒浓烟。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_cattail_smoke",
+      "value": {
+        "id": "lcq.item.nh_tube_skirt_cloth",
+        "name": "筒裙布头",
+        "description": "一截颜色鲜艳的花苗织布。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_tube_skirt_cloth",
+      "value": {
+        "id": "lcq.item.nh_miao_silver_bell",
+        "name": "苗银小铃",
+        "description": "一枚脱了线的苗银脚铃，摇起来叮当响。",
+        "type": "other",
+        "grade": "下品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_miao_silver_bell",
+      "value": {
+        "id": "lcq.item.nh_torch",
+        "name": "火把",
+        "description": "捆扎好的松明火把。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_torch",
+      "value": {
+        "id": "lcq.item.nh_miao_silver_torque",
+        "name": "旧苗银项圈",
+        "description": "绳扣断了的旧苗银项圈，被人收在竹篓底。",
+        "type": "other",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_miao_silver_torque",
+      "value": {
+        "id": "lcq.item.nh_ghostface_stinger",
+        "name": "鬼面蜂尾针",
+        "description": "一根血红色的弯钩尾针，用叶子包着。",
+        "type": "material",
+        "grade": "下品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_ghostface_stinger",
+      "value": {
+        "id": "lcq.item.nh_feed_cake",
+        "name": "料饼",
+        "description": "压实的豆料饼，掰碎了喂牲口。",
+        "type": "consumable",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_feed_cake",
+      "value": {
+        "id": "lcq.item.nh_iron_nail",
+        "name": "铁钉",
+        "description": "几枚有点锈的方头铁钉。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_iron_nail",
+      "value": {
+        "id": "lcq.item.nh_cuizhi_jade_scrap",
+        "name": "翠枝玉碎料",
+        "description": "带几抹绿纹的灰石碎块，不识货的人只当石头。",
+        "type": "material",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_cuizhi_jade_scrap",
+      "value": {
+        "id": "lcq.item.nh_flint_set",
+        "name": "火石火镰",
+        "description": "一块火石配一片旧火镰。",
+        "type": "other",
+        "grade": "凡品"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "content.items",
+      "afterId": "lcq.item.nh_flint_set",
+      "value": {
+        "id": "lcq.item.nh_cuizhi_jade_fine",
+        "name": "上等翠枝玉料",
+        "description": "一块绿纹透进石心的翠枝玉料。",
+        "type": "material",
+        "grade": "中品"
+      }
+    },
+    {
+      "op": "set",
       "path": "canon.characters",
       "from": [
         {
           "id": "liuchao.character.cheng_zongyang",
           "name": "程宗扬",
           "description": "现代穿越者",
-          "role": "主角",
+          "role": "白湖商馆执事，南荒商队领队",
           "gender": "男",
           "realm": "练气",
           "affiliations": [
@@ -1873,7 +2525,7 @@
           "id": "liuchao.character.xiao_zi",
           "name": "小紫",
           "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
-          "role": "同行的神秘少女",
+          "role": "尚未登场",
           "gender": "女",
           "realm": "凡人",
           "affiliations": [
@@ -1898,7 +2550,6 @@
           "techniqueIds": [],
           "itemIds": [],
           "profile": {
-            "appearance": "陆上为白璧无瑕少女双腿，碧鲮族血脉，非鲛人；鲛人为碧鲮族死敌",
             "personality": [
               "表面天真娇憨",
               "观察敏锐",
@@ -1935,7 +2586,7 @@
           "id": "liuchao.character.xie_yi",
           "name": "谢艺",
           "description": "星月湖畔的沉默卫士，一身风尘仆仆的朴素衣衫下藏着不露锋芒的聪慧，言语虽少却总以温和态度让人如沐春风。他心中怀着对自己使命的骄傲，每一步都踏在湖光月影之间，守护着这片天地不为人知的秘密。",
-          "role": "关键人物",
+          "role": "与云氏商队结伴的独行客，自称出身临安",
           "gender": "男",
           "realm": "化神",
           "affiliations": [
@@ -1973,7 +2624,7 @@
                 "description": "骨骼是精铁浇筑，肌肉藏龙象之力，他捏碎空间如捏鸡蛋，真仙看了都缩脖子。"
               }
             ],
-            "appearance": "风尘仆仆，朴素装扮",
+            "appearance": "男子，乍看三四十岁，细看又像二三十岁，眼里有掩不住的淡漠。衣着行李都很普通，像寻常旅人；骑一匹黑马，鞍侧挂一柄寻常钢刀。穿素色布袍。",
             "personality": [
               "温和从容",
               "彬彬有礼",
@@ -1985,7 +2636,7 @@
         {
           "id": "liuchao.character.yun_cang_feng",
           "name": "云苍峰",
-          "role": "商人/盟友",
+          "role": "云氏商会执事，常走南荒的商队首脑",
           "description": "这位云如瑶的兄长，在商界摸爬滚打多年的领袖人物，永远腰佩玉饰、衣着整洁，生着一张与云秀峰肖似却总挂着阴沉或豪迈自信神色的脸。他为人豪爽热情，说话向来直言不讳，可那份沉稳严谨和精明务实，又让人不敢小觑他偶尔爆发的火爆脾气。",
           "itemIds": [
             "lcq.item.np013"
@@ -2010,7 +2661,7 @@
                 "description": "意识铺开如蛛网，方圆千里每粒尘埃的震颤都逃不过，敌人抬脚就被预判三百年。"
               }
             ],
-            "appearance": "文士打扮，气度儒雅",
+            "appearance": "年长的老者，说话不急不缓，腰间挂着一块玉佩，遇事常摩挲它。衣着整洁的商人长袍。",
             "personality": [
               "沉稳",
               "老练",
@@ -2034,16 +2685,14 @@
         {
           "id": "liuchao.character.ning_yu",
           "name": "凝羽",
-          "role": "商队成员",
+          "role": "白湖商馆侍卫长，奉命护卫南荒商队",
           "description": "商队中那位雪肤乌发的女护卫，神色永远冷若冰霜，只在挥剑时才会让人注意到她肩头若隐若现的淡红月牙印记——没人知道她身怀太一经末技的玄妙功法，更无人敢触碰那冷艳外表下隐藏的忠诚与锋芒。",
           "profile": {
-            "appearance": "身材高挑，乌黑长发披肩；修长光洁美腿、丰满挺拔乳房；玉体白皙晶莹如羊脂白玉；阴户精巧如初春桃叶；肩头一枚淡红月牙状痕迹；",
+            "appearance": "身材高挑，肩宽腿长；长眉像一对飞扬的黑羽，眼睛大而空明，神情冷冰冰的；一头乌黑长发。黑色绫衣里衬皮甲，外披斗篷；左腰挂一面小圆盾，右侧佩月牙形弯刀，刀鞘是硬木的。",
             "personality": [
-              "高冷御姐",
-              "外冷内媚(冰火交融)",
-              "口是心非",
-              "不擅表温情",
-              "以冷酷伪装情感与欲望"
+              "冷淡寡言，话短",
+              "倔强，不肯示弱",
+              "守誓，把护卫职责放在私情前面"
             ],
             "race": "羽族",
             "origin": "穹羽族后裔",
@@ -2101,15 +2750,14 @@
         {
           "id": "liuchao.character.wu_er_lang",
           "name": "武二郎",
-          "role": "商队成员",
+          "role": "白武族武士，受雇随商队走南荒",
           "description": "武二郎是商队里出了名的凶神，虎背熊腰、面带悍气，虽然好吃懒做却又粗中有细，争强好胜却对兄弟重情仗义。",
           "profile": {
-            "appearance": "身材魁梧，虎背熊腰，平时则眉开眼笑，桃花眼勾人，满是胸毛, 胸毛虬曲、发怒时/运功时会显露金色虎斑",
+            "appearance": "身高两米三以上，魁梧壮硕，四肢又长又壮，头颅硕大；两道浓眉，一双虎睛，额角和脸颊上有又深又长的虎斑，下颔留着髭须。穿葛衣，腰后连鞘插着两柄钢刀。",
             "personality": [
-              "粗犷威猛",
-              "直率暴躁",
-              "重情重义",
-              "主角武功启蒙，刚猛不失机智"
+              "粗豪暴躁，嘴上不饶人",
+              "讲义气，说话算话",
+              "好酒好热闹，爱自称二爷"
             ],
             "race": "人类",
             "origin": "白武族族人",
@@ -2208,7 +2856,7 @@
         {
           "id": "liuchao.character.su_li",
           "name": "苏荔",
-          "role": "花苗族长",
+          "role": "花苗族长，亲自率族人送亲",
           "description": "花苗族长苏荔，一双明艳凤目灼灼生辉，烈焰红裙衬得她既似高天流云般高傲，又如山间野火般妩媚；她既有族长的冷静从容，又带着苗家女子天生的天真爽朗，举手投足间风情万种，却无人敢轻慢这位肩宽腿长的娇艳首领。",
           "profile": {
             "attributes": {
@@ -2234,11 +2882,11 @@
                 "description": "苏荔的专属异能。"
               }
             ],
-            "appearance": "明艳的凤目，白皙肌肤，红裙如火，身材高挑修长，臀部丰满浑圆，大腿根部有黑色刺青。尾骨部有银白色蝎尾",
+            "appearance": "身量极高，比程宗扬还高出一个头；凤目点漆，鼻梁高挺，五官有雕塑般的美感，皮肤极白。长发盘髻偏向一侧，髻旁一朵红花；上身束红巾，腰系火红褶裙，裙角挽结挂一只皮囊；赤足；颈戴金色巨蝎项链，蝎目嵌两粒红宝石；大腿外侧有青黑色盾形纹身。",
             "personality": [
-              "美艳",
-              "顺从",
-              "富有情欲"
+              "大方火辣，说话直来直去",
+              "护族，遇事有决断",
+              "能歌，常以歌声与人对答"
             ],
             "origin": "花苗族长",
             "notes": [
@@ -2259,7 +2907,7 @@
         {
           "id": "liuchao.character.qi_yuan",
           "name": "祁远",
-          "role": "商业伙伴/属下",
+          "role": "白湖商馆老行商，管商队奴隶与行路",
           "description": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是账面上的银钱。",
           "profile": {
             "attributes": {
@@ -2288,7 +2936,7 @@
               "善交际",
               "有些婆妈"
             ],
-            "appearance": "青黄脸色，身材不高，常穿破旧海象皮，弯腰时半边脸被遮住，不起眼"
+            "appearance": "瘦削，脸色青黄，手掌干瘦、骨节凸出，脸上常挂着市侩的笑。腰间挂一只酒葫芦，鞍侧插一柄快刀。半旧的行商短褐，头裹布巾。"
           },
           "realm": "练气",
           "gender": "男",
@@ -2454,17 +3102,15 @@
           "id": "liuchao.character.a_xi",
           "name": "阿夕",
           "gender": "女",
-          "role": "花苗少女",
+          "role": "花苗送亲队的伴娘",
           "description": "花苗少女阿夕，眉眼盈盈如画，唇瓣细嫩似初绽的花苞，娇小的身躯含苞待放，注定要成为献给鬼巫王的祭品。",
           "profile": {
-            "appearance": "花苗少女，娇柔纤巧，玉体曲线动人，肌肤白嫩，面容精致如瓷器，眉眼盈盈如画，红嫩唇瓣，长发湿淋淋，小巧鸽乳，臀部小巧可爱，眼睛如夜空寒星般明亮。",
+            "appearance": "一双圆圆的大眼睛，眸子明亮，常带狡黠的笑意。穿鹅黄筒裙，长及膝下，裙摆缀着孔雀翎，短袖及肘；白净的脚踝上挂一串银铃，走动时细碎作响。腰间别一把短刀。",
             "origin": "花苗少女",
             "personality": [
-              "骄傲",
-              "主动",
-              "淫媚",
-              "小孩子气",
-              "任性"
+              "好奇，爱捉弄人",
+              "任性要强，不肯服软",
+              "重情，阿葭是她的阿姐"
             ]
           },
           "affiliations": [
@@ -3837,8 +4483,8 @@
         {
           "id": "liuchao.character.cheng_zongyang",
           "name": "程宗扬",
-          "description": "云氏同行商人、现代来客",
-          "role": "云氏同行商人、现代来客",
+          "description": "白湖商馆执事，奉苏妲己之命带队走南荒找霓龙丝。",
+          "role": "白湖商馆执事，南荒商队领队",
           "gender": "男",
           "realm": "练气",
           "locationId": "liuchao.location.sea_temple",
@@ -3865,13 +4511,18 @@
             "lcq.item.np012"
           ],
           "profile": {
-            "origin": "云氏同行商人、现代来客",
+            "origin": "白湖商馆执事，南荒商队领队",
             "personality": [
               "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
               "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
               "冲动",
               "偶尔愧疚",
               "有支配欲"
+            ],
+            "notes": [
+              "【内部约束·不入正文】别人怎么称呼他：云苍峰「程小哥」；祁远、吴战威「程头儿」；谢艺「程兄」；武二郎「小子」；朱八八「小程子」；苏荔、阿夕、凝羽直称「你」。不得出现「程少主」「程爷」「程公子」。",
+              "【内部约束·不入正文】他称呼别人：云苍峰「云老哥」，苏荔「苏荔族长」。",
+              "【内部约束·不入正文】现代来客的身份不向南荒人点破；不是云氏商会的人。"
             ]
           },
           "affiliations": []
@@ -3879,16 +4530,24 @@
         {
           "id": "liuchao.character.ning_yu",
           "name": "凝羽",
-          "role": "随行护卫",
-          "description": "随行护卫",
+          "role": "白湖商馆侍卫长，奉命护卫南荒商队",
+          "description": "白湖商馆侍卫长。黑石滩那夜她独自先过河，在对岸点起火堆给两支商队指路，之后一路随队。",
           "profile": {
-            "origin": "随行护卫",
+            "origin": "白湖商馆侍卫长，奉命护卫南荒商队",
             "personality": [
-              "高冷御姐",
-              "外冷内媚(冰火交融)",
-              "口是心非",
-              "不擅表温情",
-              "以冷酷伪装情感与欲望"
+              "冷淡寡言，话短",
+              "倔强，不肯示弱",
+              "守誓，把护卫职责放在私情前面"
+            ],
+            "race": "穹羽族",
+            "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」",
+            "appearance": "身材高挑，肩宽腿长；长眉像一对飞扬的黑羽，眼睛大而空明，神情冷冰冰的；一头乌黑长发。黑色绫衣里衬皮甲，外披斗篷；左腰挂一面小圆盾，右侧佩月牙形弯刀，刀鞘是硬木的。",
+            "notes": [
+              "【内部约束·不入正文】穹羽族里唯一不会飞的人（第36章 L5549），正文不主动提起无翼、翅膀。",
+              "【内部约束·不入正文】肩头的月牙痕只在原著亲密场景出现，不写。不写胸、腿等身体部位的性化描写。",
+              "【内部约束·不入正文】体内的寒气是西门庆留下的（第33章 L5110），不写成苏妲己所为；她身上没有冰蛊，冰蛊在程宗扬身上（第24章 L3724–3735）。",
+              "【内部约束·不入正文】毒瘾的来历不追述（属于强迫性质，正文不写）。",
+              "【内部约束·不入正文】对程宗扬直称「你」，没有固定称谓。"
             ]
           },
           "skillIds": [
@@ -3901,15 +4560,23 @@
         {
           "id": "liuchao.character.wu_er_lang",
           "name": "武二郎",
-          "role": "白武族同行武士",
-          "description": "白武族同行武士",
+          "role": "白武族武士，受雇随商队走南荒",
+          "description": "白武族武士，族中排行第二，人称武二郎；被程宗扬雇来走南荒，独自随队，不带族人。",
           "profile": {
-            "origin": "白武族同行武士",
+            "origin": "白武族武士，受雇随商队走南荒",
             "personality": [
-              "粗犷威猛",
-              "直率暴躁",
-              "重情重义",
-              "主角武功启蒙，刚猛不失机智"
+              "粗豪暴躁，嘴上不饶人",
+              "讲义气，说话算话",
+              "好酒好热闹，爱自称二爷"
+            ],
+            "race": "白武族（虎族后裔）",
+            "speechStyle": "粗声粗气，自称「二爷」，叫程宗扬「小子」「你小子」",
+            "appearance": "身高两米三以上，魁梧壮硕，四肢又长又壮，头颅硕大；两道浓眉，一双虎睛，额角和脸颊上有又深又长的虎斑，下颔留着髭须。穿葛衣，腰后连鞘插着两柄钢刀。",
+            "notes": [
+              "【内部约束·不入正文】不领任何族人，也没有族人随行；是独自受雇的外人（第46章 L6890，第56章 L8281）。",
+              "【内部约束·不入正文】入队时没有「离开后又回来」的经过（游戏设计，不采用第29章 L4489–4491）。",
+              "【内部约束·不入正文】没有折扇；采石场时摇的是蒲扇（第24章 L3764）。",
+              "【内部约束·不入正文】工钱是两枚银铢一月，每月先付一半，回来补齐（第29章 L4492）。"
             ]
           },
           "skillIds": [
@@ -3923,15 +4590,22 @@
         {
           "id": "liuchao.character.qi_yuan",
           "name": "祁远",
-          "role": "商队老行商",
-          "description": "商队老行商",
+          "role": "白湖商馆老行商，管商队奴隶与行路",
+          "description": "白湖商馆的商人，从前在奴隶市场贩奴，走过几次南荒；这一程替商队带路，管奴隶。",
           "profile": {
-            "origin": "商队老行商",
+            "origin": "白湖商馆老行商，管商队奴隶与行路",
             "personality": [
               "谨慎",
               "多疑",
               "善交际",
               "有些婆妈"
+            ],
+            "speechStyle": "市侩客气，爱念叨，自称「老祁」，叫程宗扬「程头儿」",
+            "appearance": "瘦削，脸色青黄，手掌干瘦、骨节凸出，脸上常挂着市侩的笑。腰间挂一只酒葫芦，鞍侧插一柄快刀。半旧的行商短褐，头裹布巾。",
+            "notes": [
+              "【内部约束·不入正文】不是掌柜，也不是镖局的人；不得出现「祁掌柜」「我们镖局」。",
+              "【内部约束·不入正文】由苏妲己指派管奴隶（第29章 L4552）；上一次走南荒是三年前（第44章 L6654）。",
+              "【内部约束·不入正文】懂南荒的虫蛇药材（第34章 L5277–5279），刀法只够自保（补写）。"
             ]
           },
           "realm": "练气",
@@ -4020,8 +4694,8 @@
         {
           "id": "liuchao.character.xie_yi",
           "name": "谢艺",
-          "description": "云氏商队同行者",
-          "role": "云氏商队同行者",
+          "description": "随云氏商队同行的男子，自称谢艺，出身临安，说学些刀法只为防身。",
+          "role": "与云氏商队结伴的独行客，自称出身临安",
           "gender": "男",
           "realm": "化神",
           "locationId": "liuchao.location.biyu_village",
@@ -4029,15 +4703,20 @@
             "liuchao.skill.blade"
           ],
           "techniqueIds": [],
-          "itemIds": [
-            "liuchao.item.sunglasses"
-          ],
+          "itemIds": [],
           "profile": {
-            "origin": "云氏商队同行者",
+            "origin": "与云氏商队结伴的独行客，自称出身临安",
             "personality": [
               "温和从容",
               "彬彬有礼",
               "沉稳"
+            ],
+            "speechStyle": "温和斯文，称程宗扬「程兄」，话不多，常带一点漫不经心",
+            "appearance": "男子，乍看三四十岁，细看又像二三十岁，眼里有掩不住的淡漠。衣着行李都很普通，像寻常旅人；骑一匹黑马，鞍侧挂一柄寻常钢刀。穿素色布袍。",
+            "notes": [
+              "【内部约束·不入正文】男性，代词一律用「他」。",
+              "【内部约束·不入正文】没有折扇；本段不戴墨镜（墨镜第72章 L10748 才出现）。",
+              "【内部约束·不入正文】真实来历与身手本段不点破；对外只说出身临安、学刀防身（第39章 L5909）。"
             ]
           },
           "affiliations": []
@@ -4045,13 +4724,13 @@
         {
           "id": "liuchao.character.yun_cang_feng",
           "name": "云苍峰",
-          "role": "云氏商会长者",
-          "description": "云氏商会长者",
+          "role": "云氏商会执事，常走南荒的商队首脑",
+          "description": "云氏商会执事，走白夷商路数十年，这一程带云氏商队去白夷。",
           "itemIds": [
             "lcq.item.np013"
           ],
           "profile": {
-            "origin": "云氏商会长者",
+            "origin": "云氏商会执事，常走南荒的商队首脑",
             "personality": [
               "沉稳",
               "老练",
@@ -4059,6 +4738,12 @@
               "有威严",
               "重情义",
               "精明"
+            ],
+            "speechStyle": "老成持重，称程宗扬「程小哥」，自称「老夫」",
+            "appearance": "年长的老者，说话不急不缓，腰间挂着一块玉佩，遇事常摩挲它。衣着整洁的商人长袍。",
+            "notes": [
+              "【内部约束·不入正文】没有折扇。",
+              "【内部约束·不入正文】不是「云公子」；祁远称他「云执事」，程宗扬称他「云老哥」。"
             ]
           },
           "realm": "练气",
@@ -4068,14 +4753,22 @@
         {
           "id": "liuchao.character.su_li",
           "name": "苏荔",
-          "role": "花苗送亲领队",
-          "description": "花苗送亲领队",
+          "role": "花苗族长，亲自率族人送亲",
+          "description": "花苗族长阿依苏荔，在天藤断崖下与商队相遇，亲自护送族里的龙神新娘去熊耳铺。",
           "profile": {
-            "origin": "花苗送亲领队",
+            "origin": "花苗族长，亲自率族人送亲",
             "personality": [
-              "美艳",
-              "顺从",
-              "富有情欲"
+              "大方火辣，说话直来直去",
+              "护族，遇事有决断",
+              "能歌，常以歌声与人对答"
+            ],
+            "race": "花苗",
+            "speechStyle": "爽朗直接，偶尔用花苗歌谣作答；对程宗扬直称「你」",
+            "appearance": "身量极高，比程宗扬还高出一个头；凤目点漆，鼻梁高挺，五官有雕塑般的美感，皮肤极白。长发盘髻偏向一侧，髻旁一朵红花；上身束红巾，腰系火红褶裙，裙角挽结挂一只皮囊；赤足；颈戴金色巨蝎项链，蝎目嵌两粒红宝石；大腿外侧有青黑色盾形纹身。",
+            "notes": [
+              "【内部约束·不入正文】蝎尾在 03b–04b 不写（原著第一次实战使用在第91章 L13687）。",
+              "【内部约束·不入正文】不写万舞的性化细节，不写身体部位的性化描写。",
+              "【内部约束·不入正文】自称族长阿依苏荔，旁人叫她「苏荔」；程宗扬叫她「苏荔族长」（第63章 L9347）。"
             ]
           },
           "realm": "练气",
@@ -4086,16 +4779,22 @@
           "id": "liuchao.character.a_xi",
           "name": "阿夕",
           "gender": "女",
-          "role": "花苗伴娘",
-          "description": "花苗伴娘",
+          "role": "花苗送亲队的伴娘",
+          "description": "花苗送亲队里的伴娘，和阿葭一起随新娘同行，爱捉弄生人。",
           "profile": {
-            "origin": "花苗伴娘",
+            "origin": "花苗送亲队的伴娘",
             "personality": [
-              "骄傲",
-              "主动",
-              "淫媚",
-              "小孩子气",
-              "任性"
+              "好奇，爱捉弄人",
+              "任性要强，不肯服软",
+              "重情，阿葭是她的阿姐"
+            ],
+            "race": "花苗",
+            "speechStyle": "说话快，爱顶嘴，对程宗扬直称「你」",
+            "appearance": "一双圆圆的大眼睛，眸子明亮，常带狡黠的笑意。穿鹅黄筒裙，长及膝下，裙摆缀着孔雀翎，短袖及肘；白净的脚踝上挂一串银铃，走动时细碎作响。腰间别一把短刀。",
+            "notes": [
+              "【内部约束·不入正文】成年；不写年龄，不用「少女」「年幼」。",
+              "【内部约束·不入正文】不写蝎尾，不写身体部位的性化描写。",
+              "【内部约束·不入正文】她后来被人控制一事（第103章 L15363）在 03b–04b 不点破。"
             ]
           },
           "affiliations": []
@@ -4200,705 +4899,2649 @@
     },
     {
       "op": "set",
-      "path": "canon.relationships",
+      "path": "scenario.events",
       "from": [
         {
-          "fromCharacterId": "liuchao.character.le_mingzhu",
-          "toCharacterId": "liuchao.character.pan_jinlian",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
+          "id": "lcq.event.s03b_snake_flower_bridge_01",
+          "name": "蛇彝毒袭",
+          "description": "程宗扬与凝羽遭蛇彝人袭击，程宗扬中毒受伤，凝羽斩杀来敌。",
+          "axisId": "qingyu.39.1",
+          "axisAnchor": "六朝清羽记·#39·第37章·危命",
+          "axisSeq": 61,
+          "axisBeat": "程宗扬与凝羽遭蛇彝人袭击，程宗扬中毒受伤，凝羽斩杀蛇彝人。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_01.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "去蛇彝领地，防备毒袭",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "去蛇彝领地，防备毒袭",
+                "actionText": "我按当前主线目标行动：去蛇彝领地，防备毒袭",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“去蛇彝领地，防备毒袭”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
         },
         {
-          "fromCharacterId": "liuchao.character.shen_wan_ying",
-          "toCharacterId": "liuchao.character.zhuo_yunjun",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
+          "id": "lcq.event.s03b_snake_flower_bridge_02",
+          "name": "屠村痕迹",
+          "description": "商队发现蛇彝族长屋中的惨案与鬼王峒痕迹，决定焚屋撤离。",
+          "axisId": "qingyu.40.1",
+          "axisAnchor": "六朝清羽记·#40·第38章·残虐",
+          "axisSeq": 62,
+          "axisBeat": "程宗扬等人在蛇彝族长屋内发现五十余具女尸，被以仪式性方式残虐致死，疑似鬼王峒所为，商队决定焚屋离去。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_02.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.yun_cang_feng"
+          ],
+          "objective": "搜查蛇彝长屋，查清尸体来源",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "搜查蛇彝长屋，查清尸体来源",
+                "actionText": "我按当前主线目标行动：搜查蛇彝长屋，查清尸体来源",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“搜查蛇彝长屋，查清尸体来源”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.yun_shi_shang_hui"
+          ],
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s03b_02.massacre_traces",
+              "scope": "faction",
+              "summary": "蛇彝长屋里的血符还在，留证物还是焚屋，商队还没落笔。",
+              "domains": [
+                "intelligence",
+                "commerce"
+              ],
+              "geography": [
+                "蛇彝长屋"
+              ],
+              "factionIds": [
+                "liuchao.faction.yun_shi_shang_hui"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s03b_02.corpses": {
+                  "text": "长屋内有仪式性虐杀的女尸，商队怀疑鬼王峒所为，有人主张焚屋离去。",
+                  "access": "public",
+                  "evidence": "lcq.event.s03b_snake_flower_bridge_02 axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "evidenceKept",
+                  "contamination"
+                ],
+                "initialValues": {
+                  "evidenceKept": 30,
+                  "contamination": 55
+                },
+                "limits": {
+                  "evidenceKept": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "contamination": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "长屋惨案已经发现"
+                ],
+                "forbiddenBefore": [
+                  "鬼王峒已经覆灭",
+                  "真凶已经坐实"
+                ],
+                "processFreedom": [
+                  "留血符还是焚屋"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "liuchao.character.yun_cang_feng",
+                  "identity": {
+                    "factionId": "liuchao.faction.yun_shi_shang_hui",
+                    "office": "云氏当家人",
+                    "rank": 5
+                  },
+                  "personality": {
+                    "caution": 5,
+                    "honor": 3,
+                    "ambition": 2
+                  },
+                  "motives": {
+                    "stability": 5,
+                    "control": 3
+                  },
+                  "resources": {
+                    "influence": 5,
+                    "wealth": 4,
+                    "intelligence": 4,
+                    "troops": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s03b_02.corpses"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s03b_02.yun",
+                      "goal": "让商队尽快离开长屋，并决定血符带不带",
+                      "clock": 1,
+                      "escalation": [
+                        "清点",
+                        "取舍",
+                        "撤离"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "gather_intelligence",
+                    "conceal_evidence"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                    "personality.caution": "本拍先要人离开现场。",
+                    "personality.honor": "本拍仍要记录看见过什么。",
+                    "personality.ambition": "本拍不以扩地为目标。",
+                    "motives.stability": "本拍避免商队被血符缠住。",
+                    "motives.control": "带不带证物由队账决定。",
+                    "resources.influence": "人物卡：云氏当家人。",
+                    "resources.wealth": "本拍不在此做买卖。",
+                    "resources.intelligence": "本拍能判断何物可核验。",
+                    "resources.troops": "本拍有护卫。",
+                    "agendas.agenda.lcq.s03b_02.yun.clock": "长屋已开，人还在门槛内。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "gather_intelligence",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "把可核验的血符与现场分开登记",
+                  "reason": "不先指定真凶，只留下以后对得上的痕迹",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_02.corpses"
+                  ],
+                  "mustNotInvent": [
+                    "真凶已经坐实"
+                  ],
+                  "visibleSignal": "云苍峰只让人取可封存的符记，不翻每一具尸体",
+                  "offscreenAction": "保存可核验痕迹",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "evidenceKept": 12,
+                    "contamination": 4
+                  },
+                  "utility": {
+                    "urgency": 8,
+                    "factionGoal": 7,
+                    "expectedBenefit": 7,
+                    "situation": {
+                      "evidenceKept": -3
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "conceal_evidence",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "主张焚屋，不把血符带出村",
+                  "reason": "带出长屋的东西会跟着商队走",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_02.corpses"
+                  ],
+                  "mustNotInvent": [
+                    "血符已经带出村"
+                  ],
+                  "visibleSignal": "有人开始堆柴，账册上不记符记",
+                  "offscreenAction": "焚屋后撤离",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "contamination": -10,
+                    "evidenceKept": -8
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "真凶已经坐实",
+                  "鬼王峒已经覆灭"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s03b_02.keep_blood_token",
+                "title": "留下血符物证，不先定真凶",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "长屋里的符记还在。带走可核验的一件，以后对得上；也会让商队沾上这摊。",
+                "nextStep": "只封存一件可核验血符，不把现场写成已经坐实鬼王峒。",
+                "stakes": "证物会跟着走；有人会把你当成还要追这摊的人。",
+                "rewardPreview": "取得一次调用蛇彝血符核验记录的权限。",
+                "futureHint": "以后再有人提起这座长屋，云苍峰会记得是谁坚持把符记带出来。",
+                "actionText": "我追踪“留下血符物证，不先定真凶”：只封存一件可核验符记，不把真凶写死。",
+                "rewardKey": "permission.lcq.yun.snake_house_token",
+                "rewardLabel": "云氏·蛇彝血符核验",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "gather_intelligence",
+                    "conceal_evidence"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "seal_token",
+                      "label": "封存一件可核验符记",
+                      "actions": [
+                        {
+                          "id": "seal_one_token",
+                          "label": "封存血符",
+                          "actionText": "我只封存一件可核验的血符，不翻遍现场，也不先指定真凶。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "封存一件",
+                        "可核验",
+                        "不先指定真凶"
+                      ],
+                      "rejectIf": [
+                        "焚屋",
+                        "真凶已经是鬼王峒",
+                        "不留证物"
+                      ]
+                    },
+                    {
+                      "id": "log_source",
+                      "label": "记下取出位置",
+                      "actions": [
+                        {
+                          "id": "log_token_source",
+                          "label": "登记取出位置",
+                          "actionText": "我把符记取出的位置与看见的痕迹分开登记，不写成已经结案。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "取出的位置",
+                        "不写成已经结案"
+                      ],
+                      "rejectIf": [
+                        "已经结案",
+                        "焚屋灭迹"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "opportunity.lcq.s03b_02.burn_and_leave",
+                "title": "焚屋离去，不把血符带出村",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "商队停在门槛外。烧掉长屋能切断跟随，也会让这摊以后对不上。",
+                "nextStep": "同意焚屋，不把符记带进队账。",
+                "stakes": "以后再查这座村，少了可核验的物证；鬼王峒那边也少了一条指向你的痕迹。",
+                "rewardPreview": "取得一次与云氏共同决定焚屋撤离、不携带现场物证的权限。",
+                "futureHint": "以后有人问长屋里的东西去哪了，云苍峰会记得是谁主张烧掉。",
+                "actionText": "我追踪“焚屋离去，不把血符带出村”：同意焚屋，符记不入队账。",
+                "rewardKey": "permission.lcq.yun.burned_house_exit",
+                "rewardLabel": "云氏·焚屋撤离",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "gather_intelligence",
+                    "conceal_evidence"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "agree_burn",
+                      "label": "同意焚屋",
+                      "actions": [
+                        {
+                          "id": "agree_to_burn_house",
+                          "label": "焚屋",
+                          "actionText": "我同意焚毁蛇彝长屋，不把现场留作可再入的据点。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "焚毁",
+                        "蛇彝长屋"
+                      ],
+                      "rejectIf": [
+                        "带走血符",
+                        "留下可再入"
+                      ]
+                    },
+                    {
+                      "id": "leave_tokens",
+                      "label": "符记不入队账",
+                      "actions": [
+                        {
+                          "id": "leave_tokens_in_fire",
+                          "label": "不带符记",
+                          "actionText": "我明确不把血符带出村、不写入云氏队账。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不把血符带出村",
+                        "不写入"
+                      ],
+                      "rejectIf": [
+                        "封存一件",
+                        "带走符记"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
         },
         {
-          "fromCharacterId": "liuchao.character.shen_wan_ying",
-          "toCharacterId": "liuchao.character.qiu_shao_jun",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
+          "id": "lcq.event.s03b_snake_flower_bridge_03",
+          "name": "鬼王峒血符",
+          "description": "祁远与谢艺确认鬼王峒巫术血符，商队意识到已卷入南荒仇杀。",
+          "axisId": "qingyu.40.2",
+          "axisAnchor": "六朝清羽记·#40·第38章·残虐",
+          "axisSeq": 63,
+          "axisBeat": "祁远透露鬼王峒擅巫术屠村，谢艺指出尸体附近有鬼王峒血符，商队意识到已卷入南荒仇杀，仓促撤离。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_03.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "调查鬼王峒血符，确认真凶",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "调查鬼王峒血符，确认真凶",
+                "actionText": "我按当前主线目标行动：调查鬼王峒血符，确认真凶",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“调查鬼王峒血符，确认真凶”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
         },
         {
-          "fromCharacterId": "liuchao.character.shen_wan_ying",
-          "toCharacterId": "lcq.character.yue_shuang",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
+          "id": "lcq.event.s03b_snake_flower_bridge_04",
+          "name": "云氏同行",
+          "description": "云苍峰提议两支商队同往白夷族，程宗扬透露寻找霓龙丝目标，双方合作。",
+          "axisId": "qingyu.41.1",
+          "axisAnchor": "六朝清羽记·#41·第39章·合作",
+          "axisSeq": 64,
+          "axisBeat": "云苍峰提议两支商队同行去白夷族，程宗扬同意并透露寻找霓龙丝的目标，谢艺提供碧鲮族线索，双方达成合作。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.yun_cang_feng"
+          ],
+          "objective": "与云苍峰商队同行，前往白夷族",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "与云苍峰商队同行，前往白夷族",
+                "actionText": "我按当前主线目标行动：与云苍峰商队同行，前往白夷族",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“与云苍峰商队同行，前往白夷族”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.yun_shi_shang_hui"
+          ],
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s03b_04.joint_caravan",
+              "scope": "faction",
+              "summary": "两支商队都望白夷，并路之后交不交霓龙丝的底，还没说死。",
+              "domains": [
+                "commerce"
+              ],
+              "geography": [
+                "南荒岔口"
+              ],
+              "factionIds": [
+                "liuchao.faction.yun_shi_shang_hui"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s03b_04.offer": {
+                  "text": "云苍峰提议两支商队同行去白夷族，程宗扬一侧还藏着寻找霓龙丝的目标。",
+                  "access": "public",
+                  "evidence": "lcq.event.s03b_snake_flower_bridge_04 axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "jointRoute",
+                  "goalDisclosure"
+                ],
+                "initialValues": {
+                  "jointRoute": 45,
+                  "goalDisclosure": 20
+                },
+                "limits": {
+                  "jointRoute": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "goalDisclosure": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "两队都望白夷"
+                ],
+                "forbiddenBefore": [
+                  "已经抵达白夷王帐",
+                  "霓龙丝已经到手"
+                ],
+                "processFreedom": [
+                  "摊牌目标还是只并路"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "liuchao.character.yun_cang_feng",
+                  "identity": {
+                    "factionId": "liuchao.faction.yun_shi_shang_hui",
+                    "office": "云氏当家人",
+                    "rank": 5
+                  },
+                  "personality": {
+                    "caution": 4,
+                    "honor": 3,
+                    "ambition": 3
+                  },
+                  "motives": {
+                    "control": 4,
+                    "stability": 4
+                  },
+                  "resources": {
+                    "influence": 5,
+                    "wealth": 5,
+                    "intelligence": 4,
+                    "troops": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s03b_04.offer"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s03b_04.yun",
+                      "goal": "决定并路要不要把对方的真目标写进队账",
+                      "clock": 0,
+                      "escalation": [
+                        "并路",
+                        "问底",
+                        "分账"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "trade_favor",
+                    "open_safe_route"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                    "personality.caution": "人物卡：沉稳老练。",
+                    "personality.honor": "本拍肯并路。",
+                    "personality.ambition": "人物卡：商界领袖。",
+                    "motives.control": "队账由云家写。",
+                    "motives.stability": "本拍先要两队走得动。",
+                    "resources.influence": "人物卡：云氏当家人。",
+                    "resources.wealth": "人物卡：商会领袖。",
+                    "resources.intelligence": "人物卡：熟南荒商路。",
+                    "resources.troops": "本拍有护卫商队。",
+                    "agendas.agenda.lcq.s03b_04.yun.clock": "岔口尚未说死并路。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "trade_favor",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "把并路条件摊开：交底还是只走一路",
+                  "reason": "不先问清目标，并路后会抢货",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_04.offer"
+                  ],
+                  "mustNotInvent": [
+                    "霓龙丝已经到手"
+                  ],
+                  "visibleSignal": "两队在岔口把货账和目的地分成两份谈",
+                  "offscreenAction": "写出并路条件",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "jointRoute": 8,
+                    "goalDisclosure": 6
+                  },
+                  "utility": {
+                    "urgency": 8,
+                    "factionGoal": 8,
+                    "expectedBenefit": 7,
+                    "situation": {
+                      "jointRoute": -2
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "open_safe_route",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "先并路，货账分开走",
+                  "reason": "可以同行，不必先交换真目标",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_04.offer"
+                  ],
+                  "mustNotInvent": [
+                    "已经把霓龙丝写入队账"
+                  ],
+                  "visibleSignal": "两队编列同行，账册仍分两套",
+                  "offscreenAction": "只并路不并账",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "jointRoute": 10,
+                    "goalDisclosure": -4
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "霓龙丝已经到手",
+                  "已经抵达白夷王帐"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s03b_04.disclose_nilong_goal",
+                "title": "向云苍峰摊牌霓龙丝，换同行保护",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "并路条件还没说死。把霓龙丝写进队账，云家会按这个目标护你，也会按这个目标分货。",
+                "nextStep": "把寻找霓龙丝的目标告诉云苍峰，并接受写进并路队账。",
+                "stakes": "云家以后按这个目标调度你；南荒有人问起来，也先问到云氏。",
+                "rewardPreview": "取得一次与云氏按霓龙丝目标并路护行的权限。",
+                "futureHint": "以后再谈南荒货，云苍峰会记得你交没交过底。",
+                "actionText": "我追踪“向云苍峰摊牌霓龙丝，换同行保护”：把目标写入并路队账，接受按此护行与分货。",
+                "rewardKey": "permission.lcq.yun.nilong_joint_ledger",
+                "rewardLabel": "云氏·霓龙丝并路队账",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "trade_favor"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "tell_goal",
+                      "label": "摊牌霓龙丝目标",
+                      "actions": [
+                        {
+                          "id": "disclose_nilong_silk",
+                          "label": "说出霓龙丝",
+                          "actionText": "我向云苍峰说明此行要找霓龙丝，不把目标说成普通换货。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "霓龙丝",
+                        "不把目标说成普通换货"
+                      ],
+                      "rejectIf": [
+                        "只并路",
+                        "不交底",
+                        "普通换货"
+                      ]
+                    },
+                    {
+                      "id": "write_ledger",
+                      "label": "写入并路队账",
+                      "actions": [
+                        {
+                          "id": "write_goal_into_ledger",
+                          "label": "写入队账",
+                          "actionText": "我同意把霓龙丝目标写入云氏并路队账，接受按此护行。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "写入",
+                        "并路队账"
+                      ],
+                      "rejectIf": [
+                        "不写进队账",
+                        "只并路不并账"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "opportunity.lcq.s03b_04.travel_without_brief",
+                "title": "只并路，不把真目标写入队账",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "两队可以同行去白夷，不必先交换真目标。货账分开，云家不欠你，也不知你底。",
+                "nextStep": "接受并路编列，明确霓龙丝不入云氏队账。",
+                "stakes": "路上出事时云家没有义务按你的目标救人；你也不把底交给他们。",
+                "rewardPreview": "取得一次与云氏分账并路、互不并目标的权限。",
+                "futureHint": "以后云苍峰若再邀并路，会按你交没交底来开条件。",
+                "actionText": "我追踪“只并路，不把真目标写入队账”：同行去白夷，霓龙丝不入云氏账。",
+                "rewardKey": "permission.lcq.yun.separate_ledger_travel",
+                "rewardLabel": "云氏·分账并路",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "trade_favor"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "join_column",
+                      "label": "接受并路编列",
+                      "actions": [
+                        {
+                          "id": "accept_joint_column",
+                          "label": "并路编列",
+                          "actionText": "我接受与云氏商队编列同行，不拒绝并路。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "编列同行",
+                        "不拒绝并路"
+                      ],
+                      "rejectIf": [
+                        "分道",
+                        "不并路"
+                      ]
+                    },
+                    {
+                      "id": "keep_goal_off",
+                      "label": "真目标不入队账",
+                      "actions": [
+                        {
+                          "id": "keep_nilong_off_ledger",
+                          "label": "不写入队账",
+                          "actionText": "我明确霓龙丝目标不写入云氏队账，两套货账分开走。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不写入云氏队账",
+                        "货账分开"
+                      ],
+                      "rejectIf": [
+                        "写入队账",
+                        "摊牌霓龙丝"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
         },
         {
-          "fromCharacterId": "liuchao.character.zhuo_yunjun",
-          "toCharacterId": "liuchao.character.qiu_shao_jun",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
+          "id": "lcq.event.s03b_snake_flower_bridge_05",
+          "name": "巨藤断桥",
+          "description": "商队攀爬万古巨藤时藤桥断裂，被困半空石壁，进退两难。",
+          "axisId": "qingyu.42.1",
+          "axisAnchor": "六朝清羽记·#42·第40章·花苗",
+          "axisSeq": 65,
+          "axisBeat": "商队攀爬万古巨藤时，藤桥突然折断，被困在半空石壁，进退两难。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "攀爬万古巨藤，到达崖顶",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "攀爬万古巨藤，到达崖顶",
+                "actionText": "我按当前主线目标行动：攀爬万古巨藤，到达崖顶",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“攀爬万古巨藤，到达崖顶”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
         },
         {
-          "fromCharacterId": "liuchao.character.zhuo_yunjun",
-          "toCharacterId": "lcq.character.yue_shuang",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
+          "id": "lcq.event.s03b_snake_flower_bridge_06",
+          "name": "花苗救援",
+          "description": "花苗族长阿依苏荔率族人出现，以歌声对答并救商队登上崖顶。",
+          "axisId": "qingyu.42.2",
+          "axisAnchor": "六朝清羽记·#42·第40章·花苗",
+          "axisSeq": 66,
+          "axisBeat": "花苗族长阿依苏荔率族人出现，以歌声对答后抛出绳索，救商队脱困，并引众人登上崖顶。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_06.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "求助花苗族长，脱离困境",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "求助花苗族长，脱离困境",
+                "actionText": "我按当前主线目标行动：求助花苗族长，脱离困境",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“求助花苗族长，脱离困境”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
         },
         {
-          "fromCharacterId": "liuchao.character.qiu_shao_jun",
-          "toCharacterId": "lcq.character.yue_shuang",
-          "relation": "同门",
-          "score": 30,
-          "direction": "bidirectional",
-          "tags": [
-            "同门",
-            "同势力派生"
-          ]
+          "id": "lcq.event.s03b_snake_flower_bridge_07",
+          "name": "龙神新娘",
+          "description": "鬼王峒势力扩至花苗领地，苏荔被迫送出龙神新娘与贡物，冲突主轴成形。",
+          "axisId": "qingyu.43.1",
+          "axisAnchor": "六朝清羽记·#43·第41章·送嫁",
+          "axisSeq": 67,
+          "axisBeat": "鬼王峒势力扩张至花苗领地，花苗族长苏荔无奈屈服，选出龙神新娘与两名少女作为贡物送往熊耳铺。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_07.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "objective": "前往熊耳铺，探查贡物详情",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "前往熊耳铺，探查贡物详情",
+                "actionText": "我按当前主线目标行动：前往熊耳铺，探查贡物详情",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“前往熊耳铺，探查贡物详情”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.zixi_intercept",
+          "name": "紫溪拦截",
+          "description": "太乙真宗元行健等人在紫溪拦截白湖商馆船只，指名要程宗扬去龙池；程宗扬被迫出面，祁远被推落水。",
+          "axisId": "qingyu.35.2",
+          "axisAnchor": "六朝清羽记·#35·第33章·武请",
+          "axisSeq": 54,
+          "axisBeat": "在紫溪上，太乙真宗元行健等人拦截白湖商馆船只，指名要程宗扬去龙池，程宗扬避而不见后被迫出面，祁远被推落水中。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.zixi_intercept.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.qi_yuan"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan",
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "objective": "在紫溪出面回应元行健拦船点名去龙池，并确认祁远落水",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "face_yuan_xingjian_at_zixi",
+                "label": "出面回应紫溪拦船点名",
+                "actionText": "元行健等人在紫溪拦住白湖商馆的船并点名要我去龙池后，我不再回避，到船头出面应下这句点名。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "zixi_named_to_longchi"
+              },
+              {
+                "id": "confirm_qiyuan_thrown_overboard",
+                "label": "确认祁远被推落水",
+                "actionText": "拦船冲突里祁远被推落水后，我当场确认他落水，并让船上的人把他捞回来。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已在紫溪出面应下点名去龙池，并确认祁远落水；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "zixi_named_to_longchi"
+                ]
+              }
+            ]
+          }
         }
       ],
-      "to": []
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.opening",
-      "afterKey": "relatedCharacterIds",
-      "beforeKey": null,
-      "entries": {
-        "featuredCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.ning_yu",
-          "liuchao.character.wu_er_lang",
-          "liuchao.character.xie_yi",
-          "liuchao.character.yun_cang_feng"
-        ],
-        "locationId": "lcq.location.sheyi_village"
-      }
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.initialFlags",
-      "afterKey": "chapter.lcq.stage_03b_snake_flower_bridge.flower.done",
-      "beforeKey": null,
-      "entries": {
-        "event.s03b_wanwu_night.done": false,
-        "event.s03b_yinzhu_xiongerpu.done": false
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.chapters[id=lcq.chapter.s03b_snake_flower_bridge_flower].eventIds",
-      "from": [
-        "lcq.event.s03b_snake_flower_bridge_04",
-        "lcq.event.s03b_snake_flower_bridge_05",
-        "lcq.event.s03b_snake_flower_bridge_06",
-        "lcq.event.s03b_snake_flower_bridge_07"
-      ],
       "to": [
-        "lcq.event.s03b_snake_flower_bridge_04",
-        "lcq.event.s03b_snake_flower_bridge_05",
-        "lcq.event.s03b_snake_flower_bridge_06",
-        "lcq.event.s03b_snake_flower_bridge_07",
-        "lcq.event.s03b_wanwu_night",
-        "lcq.event.s03b_yinzhu_xiongerpu"
-      ]
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_01].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.ning_yu",
-        "liuchao.character.wu_er_lang",
-        "liuchao.character.xie_yi",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.qi_yuan",
-        "lcq.character.np003",
-        "lcq.character.np004"
-      ]
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_01]",
-      "afterKey": "playerCompletionContract",
-      "beforeKey": null,
-      "entries": {
-        "locationId": "lcq.location.sheyi_village"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_02].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.yun_cang_feng"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.ning_yu",
-        "liuchao.character.wu_er_lang",
-        "liuchao.character.xie_yi",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.qi_yuan",
-        "lcq.character.np003",
-        "lcq.character.np004"
-      ]
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_02]",
-      "afterKey": "worldActor",
-      "beforeKey": null,
-      "entries": {
-        "locationId": "lcq.location.sheyi_village"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_03].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.ning_yu",
-        "liuchao.character.wu_er_lang",
-        "liuchao.character.xie_yi",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.qi_yuan",
-        "lcq.character.np003",
-        "lcq.character.np004"
-      ]
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_03]",
-      "afterKey": "playerCompletionContract",
-      "beforeKey": null,
-      "entries": {
-        "locationId": "lcq.location.sheyi_village"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_04].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.yun_cang_feng"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.ning_yu",
-        "liuchao.character.wu_er_lang",
-        "liuchao.character.xie_yi",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.qi_yuan",
-        "lcq.character.np003",
-        "lcq.character.np004"
-      ]
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_04]",
-      "afterKey": "worldActor",
-      "beforeKey": null,
-      "entries": {
-        "locationId": "lcq.location.sheyi_village"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_05].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.ning_yu",
-        "liuchao.character.wu_er_lang",
-        "liuchao.character.xie_yi",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.qi_yuan",
-        "lcq.character.np003",
-        "lcq.character.np004"
-      ]
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_05]",
-      "afterKey": "playerCompletionContract",
-      "beforeKey": null,
-      "entries": {
-        "locationId": "lcq.location.giant_vine"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_06].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.su_li",
-        "liuchao.character.a_xi",
-        "lcq.character.nanhuang_kawa",
-        "liuchao.character.wu_er_lang",
-        "liuchao.character.xie_yi",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.ning_yu"
-      ]
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_06]",
-      "afterKey": "playerCompletionContract",
-      "beforeKey": null,
-      "entries": {
-        "locationId": "lcq.location.huamiao_village"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_07].relatedCharacterIds",
-      "from": [
-        "liuchao.character.cheng_zongyang"
-      ],
-      "to": [
-        "liuchao.character.cheng_zongyang",
-        "liuchao.character.su_li",
-        "liuchao.character.a_xi",
-        "liuchao.character.le_mingzhu",
-        "lcq.character.nanhuang_ajia",
-        "liuchao.character.yun_cang_feng",
-        "liuchao.character.ning_yu",
-        "liuchao.character.xie_yi"
-      ]
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_07].objective",
-      "from": "前往熊耳铺，探查贡物详情",
-      "to": "听清花苗送亲与贡物的安排"
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_07].playerCompletionContract.actions[id=advance_declared_objective].label",
-      "from": "前往熊耳铺，探查贡物详情",
-      "to": "听清花苗送亲与贡物的安排"
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_07].playerCompletionContract.actions[id=advance_declared_objective].actionText",
-      "from": "我按当前主线目标行动：前往熊耳铺，探查贡物详情",
-      "to": "我听清花苗送亲与贡物的安排"
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_07].playerCompletionContract.actions[id=advance_declared_objective].outcomeText.success",
-      "from": "你已亲自执行“前往熊耳铺，探查贡物详情”；事件完成真值将由本地引擎落账。",
-      "to": "你已听清花苗送亲与贡物的安排，尚未前往熊耳铺。"
-    },
-    {
-      "op": "insertKeys",
-      "path": "scenario.events[id=lcq.event.s03b_snake_flower_bridge_07]",
-      "afterKey": "playerCompletionContract",
-      "beforeKey": null,
-      "entries": {
-        "locationId": "lcq.location.huamiao_village"
-      }
-    },
-    {
-      "op": "set",
-      "path": "scenario.events[id=lcq.event.zixi_intercept].critical",
-      "from": true,
-      "to": false
-    },
-    {
-      "op": "insertAfter",
-      "path": "scenario.events",
-      "afterId": "lcq.event.zixi_intercept",
-      "value": {
-        "id": "lcq.event.s03b_wanwu_night",
-        "name": "万舞之夜",
-        "description": "花苗篝火万舞后，程宗扬循谢艺预言入林，发现蛇彝遇害者及笑脸血符，接回受惊的阿葭。只写血符及震撼，不描述遇害者年龄和身体；阿葭本拍不死。",
-        "axisId": null,
-        "axisAnchor": "六朝清羽记·第42章",
-        "axisBeat": "花苗篝火万舞后，程宗扬循谢艺预言入林，发现蛇彝遇害者及笑脸血符，接回受惊的阿葭。只写血符及震撼，不描述遇害者年龄和身体；阿葭本拍不死。",
-        "critical": true,
-        "objective": "循谢艺的指点进入夜林，接回受惊的阿葭",
-        "completion": [
-          {
-            "path": "flags.event.s03b_wanwu_night.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.xie_yi",
-          "liuchao.character.su_li",
-          "liuchao.character.wu_er_lang",
-          "lcq.character.nanhuang_ajia",
-          "liuchao.character.yun_cang_feng",
-          "liuchao.character.ning_yu"
-        ],
-        "playerCompletionContract": {
-          "kind": "objective_action",
-          "settleOn": [
-            "success"
-          ],
-          "actions": [
+        {
+          "id": "lcq.event.s03b_snake_flower_bridge_01",
+          "name": "蛇彝毒袭",
+          "description": "程宗扬与凝羽遭蛇彝人袭击，程宗扬中毒受伤，凝羽斩杀来敌。",
+          "axisId": "qingyu.39.1",
+          "axisAnchor": "六朝清羽记·#39·第37章·危命",
+          "axisSeq": 61,
+          "axisBeat": "程宗扬与凝羽遭蛇彝人袭击，程宗扬中毒受伤，凝羽斩杀蛇彝人。",
+          "critical": true,
+          "completion": [
             {
-              "id": "follow_xieyi_hint_into_woods",
-              "label": "循谢艺所说，子时往西南林中查看",
-              "actionText": "我循谢艺所说，子时往西南林中查看。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "循谢艺所说，子时往西南林中查看。",
-                "partial": "本动作无部分成功。",
-                "failure": "本动作无失败分支。"
-              },
-              "kind": "prepare",
-              "grantsPreparation": "wanwu_woods_entered"
-            },
-            {
-              "id": "find_victim_and_ajia",
-              "label": "看清血符，把受惊的阿葭带回营地",
-              "actionText": "我看清血符，把受惊的阿葭带回营地。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "看清血符，把受惊的阿葭带回营地。",
-                "partial": "本动作无部分成功。",
-                "failure": "本动作无失败分支。"
-              },
-              "requiresPreparation": [
-                "wanwu_woods_entered"
-              ]
+              "path": "flags.event.s03b_snake_flower_bridge_01.done",
+              "operator": "eq",
+              "value": true
             }
-          ]
-        },
-        "axisMethod": "reviewed-no-anchor",
-        "locationId": "lcq.location.huamiao_village"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "scenario.events",
-      "afterId": "lcq.event.s03b_wanwu_night",
-      "value": {
-        "id": "lcq.event.s03b_yinzhu_xiongerpu",
-        "name": "阴蛛与熊耳铺",
-        "description": "阿葭被阴蛛吸干，武二郎杀蛛，祁远主张焚尸。新娘仍戴面纱。在熊耳铺拒绝秦桧和吴三桂，选择朱八八；秦吴不随队，商队与送亲队同行。",
-        "axisId": "qingyu.46.1",
-        "axisSeq": 68,
-        "axisAnchor": "六朝清羽记·#46·第44章·向导",
-        "axisBeat": "阿葭被阴蛛吸干，武二郎杀蛛，祁远主张焚尸。新娘仍戴面纱。在熊耳铺拒绝秦桧和吴三桂，选择朱八八；秦吴不随队，商队与送亲队同行。",
-        "critical": true,
-        "objective": "处理阴蛛留下的死者，再到熊耳铺找向导",
-        "completion": [
-          {
-            "path": "flags.event.s03b_yinzhu_xiongerpu.done",
-            "operator": "eq",
-            "value": true
-          }
-        ],
-        "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "liuchao.character.qi_yuan",
-          "liuchao.character.wu_er_lang",
-          "lcq.character.nanhuang_ajia",
-          "liuchao.character.le_mingzhu",
-          "liuchao.character.shang_zhen_yu",
-          "liuchao.character.qin_hui",
-          "liuchao.character.wu_san_gui",
-          "liuchao.character.yun_cang_feng"
-        ],
-        "playerCompletionContract": {
-          "kind": "objective_action",
-          "settleOn": [
-            "success"
           ],
-          "actions": [
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.wu_er_lang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.yun_cang_feng",
+            "liuchao.character.qi_yuan",
+            "lcq.character.np003",
+            "lcq.character.np004"
+          ],
+          "objective": "去蛇彝领地，防备毒袭",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "去蛇彝领地，防备毒袭",
+                "actionText": "我按当前主线目标行动：去蛇彝领地，防备毒袭",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“去蛇彝领地，防备毒袭”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                },
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰"
+                  ]
+                },
+                "sceneLocation": "蛇彝村"
+              }
+            ]
+          },
+          "locationId": "lcq.location.sheyi_village"
+        },
+        {
+          "id": "lcq.event.s03b_snake_flower_bridge_02",
+          "name": "屠村痕迹",
+          "description": "商队发现蛇彝族长屋中的惨案与鬼王峒痕迹，决定焚屋撤离。",
+          "axisId": "qingyu.40.1",
+          "axisAnchor": "六朝清羽记·#40·第38章·残虐",
+          "axisSeq": 62,
+          "axisBeat": "程宗扬等人在蛇彝族长屋内发现五十余具女尸，被以仪式性方式残虐致死，疑似鬼王峒所为，商队决定焚屋离去。",
+          "critical": true,
+          "completion": [
             {
-              "id": "burn_yinzhu_victim",
-              "label": "随祁远焚化阿葭的尸体，确认阴蛛已死",
-              "actionText": "我随祁远焚化阿葭的尸体，确认阴蛛已死。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "随祁远焚化阿葭的尸体，确认阴蛛已死。",
-                "partial": "本动作无部分成功。",
-                "failure": "本动作无失败分支。"
-              },
-              "kind": "prepare",
-              "grantsPreparation": "ajia_mourned"
-            },
-            {
-              "id": "pick_zhu88_as_guide",
-              "label": "在熊耳铺选朱八八带路，与送亲队同行",
-              "actionText": "我在熊耳铺选朱八八带路，与送亲队同行。",
-              "timeCost": 1,
-              "outcomeText": {
-                "success": "在熊耳铺选朱八八带路，与送亲队同行。",
-                "partial": "本动作无部分成功。",
-                "failure": "本动作无失败分支。"
-              },
-              "requiresPreparation": [
-                "ajia_mourned"
-              ]
+              "path": "flags.event.s03b_snake_flower_bridge_02.done",
+              "operator": "eq",
+              "value": true
             }
-          ]
-        },
-        "locationId": "liuchao.location.xiongerpu"
-      }
-    },
-    {
-      "op": "set",
-      "path": "rules.contentAccess",
-      "from": [
-        {
-          "contentId": "liuchao.skill.death_root",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
           ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.technique.nine_yang_divine_skill",
-          "policy": "restricted",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.wu_er_lang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.yun_cang_feng",
+            "liuchao.character.qi_yuan",
+            "lcq.character.np003",
+            "lcq.character.np004"
           ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.skill.five_tiger_broken_gate_knife",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.wu_er_lang"
+          "objective": "搜查蛇彝长屋，查清尸体来源",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "搜查蛇彝长屋，查清尸体来源",
+                "actionText": "我按当前主线目标行动：搜查蛇彝长屋，查清尸体来源",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“搜查蛇彝长屋，查清尸体来源”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                },
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰"
+                  ]
+                },
+                "sceneLocation": "蛇彝村",
+                "fixedFacts": [
+                  "你搜查长屋，发现蛇彝村惨案与鬼王峒的痕迹",
+                  "商队焚屋撤离"
+                ],
+                "factChecks": [
+                  [
+                    "长屋"
+                  ],
+                  [
+                    "惨案",
+                    "尸体"
+                  ],
+                  [
+                    "焚",
+                    "烧"
+                  ]
+                ],
+                "fallbackText": "你搜查长屋，发现蛇彝村惨案与鬼王峒的痕迹。商队焚屋撤离。"
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.yun_shi_shang_hui"
           ],
-          "playerAllowed": false
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s03b_02.massacre_traces",
+              "scope": "faction",
+              "summary": "蛇彝长屋里的血符还在，留证物还是焚屋，商队还没落笔。",
+              "domains": [
+                "intelligence",
+                "commerce"
+              ],
+              "geography": [
+                "蛇彝长屋"
+              ],
+              "factionIds": [
+                "liuchao.faction.yun_shi_shang_hui"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s03b_02.corpses": {
+                  "text": "长屋内有仪式性虐杀的女尸，商队怀疑鬼王峒所为，有人主张焚屋离去。",
+                  "access": "public",
+                  "evidence": "lcq.event.s03b_snake_flower_bridge_02 axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "evidenceKept",
+                  "contamination"
+                ],
+                "initialValues": {
+                  "evidenceKept": 30,
+                  "contamination": 55
+                },
+                "limits": {
+                  "evidenceKept": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "contamination": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "长屋惨案已经发现"
+                ],
+                "forbiddenBefore": [
+                  "鬼王峒已经覆灭",
+                  "真凶已经坐实"
+                ],
+                "processFreedom": [
+                  "留血符还是焚屋"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "liuchao.character.yun_cang_feng",
+                  "identity": {
+                    "factionId": "liuchao.faction.yun_shi_shang_hui",
+                    "office": "云氏当家人",
+                    "rank": 5
+                  },
+                  "personality": {
+                    "caution": 5,
+                    "honor": 3,
+                    "ambition": 2
+                  },
+                  "motives": {
+                    "stability": 5,
+                    "control": 3
+                  },
+                  "resources": {
+                    "influence": 5,
+                    "wealth": 4,
+                    "intelligence": 4,
+                    "troops": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s03b_02.corpses"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s03b_02.yun",
+                      "goal": "让商队尽快离开长屋，并决定血符带不带",
+                      "clock": 1,
+                      "escalation": [
+                        "清点",
+                        "取舍",
+                        "撤离"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "gather_intelligence",
+                    "conceal_evidence"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                    "personality.caution": "本拍先要人离开现场。",
+                    "personality.honor": "本拍仍要记录看见过什么。",
+                    "personality.ambition": "本拍不以扩地为目标。",
+                    "motives.stability": "本拍避免商队被血符缠住。",
+                    "motives.control": "带不带证物由队账决定。",
+                    "resources.influence": "人物卡：云氏当家人。",
+                    "resources.wealth": "本拍不在此做买卖。",
+                    "resources.intelligence": "本拍能判断何物可核验。",
+                    "resources.troops": "本拍有护卫。",
+                    "agendas.agenda.lcq.s03b_02.yun.clock": "长屋已开，人还在门槛内。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "gather_intelligence",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "把可核验的血符与现场分开登记",
+                  "reason": "不先指定真凶，只留下以后对得上的痕迹",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_02.corpses"
+                  ],
+                  "mustNotInvent": [
+                    "真凶已经坐实"
+                  ],
+                  "visibleSignal": "云苍峰只让人取可封存的符记，不翻每一具尸体",
+                  "offscreenAction": "保存可核验痕迹",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "evidenceKept": 12,
+                    "contamination": 4
+                  },
+                  "utility": {
+                    "urgency": 8,
+                    "factionGoal": 7,
+                    "expectedBenefit": 7,
+                    "situation": {
+                      "evidenceKept": -3
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "conceal_evidence",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "主张焚屋，不把血符带出村",
+                  "reason": "带出长屋的东西会跟着商队走",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_02.corpses"
+                  ],
+                  "mustNotInvent": [
+                    "血符已经带出村"
+                  ],
+                  "visibleSignal": "有人开始堆柴，账册上不记符记",
+                  "offscreenAction": "焚屋后撤离",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "contamination": -10,
+                    "evidenceKept": -8
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "真凶已经坐实",
+                  "鬼王峒已经覆灭"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s03b_02.keep_blood_token",
+                "title": "留下血符物证，不先定真凶",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "长屋里的符记还在。带走可核验的一件，以后对得上；也会让商队沾上这摊。",
+                "nextStep": "只封存一件可核验血符，不把现场写成已经坐实鬼王峒。",
+                "stakes": "证物会跟着走；有人会把你当成还要追这摊的人。",
+                "rewardPreview": "取得一次调用蛇彝血符核验记录的权限。",
+                "futureHint": "以后再有人提起这座长屋，云苍峰会记得是谁坚持把符记带出来。",
+                "actionText": "我追踪“留下血符物证，不先定真凶”：只封存一件可核验符记，不把真凶写死。",
+                "rewardKey": "permission.lcq.yun.snake_house_token",
+                "rewardLabel": "云氏·蛇彝血符核验",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "gather_intelligence",
+                    "conceal_evidence"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "seal_token",
+                      "label": "封存一件可核验符记",
+                      "actions": [
+                        {
+                          "id": "seal_one_token",
+                          "label": "封存血符",
+                          "actionText": "我只封存一件可核验的血符，不翻遍现场，也不先指定真凶。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "封存一件",
+                        "可核验",
+                        "不先指定真凶"
+                      ],
+                      "rejectIf": [
+                        "焚屋",
+                        "真凶已经是鬼王峒",
+                        "不留证物"
+                      ]
+                    },
+                    {
+                      "id": "log_source",
+                      "label": "记下取出位置",
+                      "actions": [
+                        {
+                          "id": "log_token_source",
+                          "label": "登记取出位置",
+                          "actionText": "我把符记取出的位置与看见的痕迹分开登记，不写成已经结案。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "取出的位置",
+                        "不写成已经结案"
+                      ],
+                      "rejectIf": [
+                        "已经结案",
+                        "焚屋灭迹"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "opportunity.lcq.s03b_02.burn_and_leave",
+                "title": "焚屋离去，不把血符带出村",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "商队停在门槛外。烧掉长屋能切断跟随，也会让这摊以后对不上。",
+                "nextStep": "同意焚屋，不把符记带进队账。",
+                "stakes": "以后再查这座村，少了可核验的物证；鬼王峒那边也少了一条指向你的痕迹。",
+                "rewardPreview": "取得一次与云氏共同决定焚屋撤离、不携带现场物证的权限。",
+                "futureHint": "以后有人问长屋里的东西去哪了，云苍峰会记得是谁主张烧掉。",
+                "actionText": "我追踪“焚屋离去，不把血符带出村”：同意焚屋，符记不入队账。",
+                "rewardKey": "permission.lcq.yun.burned_house_exit",
+                "rewardLabel": "云氏·焚屋撤离",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "gather_intelligence",
+                    "conceal_evidence"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "agree_burn",
+                      "label": "同意焚屋",
+                      "actions": [
+                        {
+                          "id": "agree_to_burn_house",
+                          "label": "焚屋",
+                          "actionText": "我同意焚毁蛇彝长屋，不把现场留作可再入的据点。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "焚毁",
+                        "蛇彝长屋"
+                      ],
+                      "rejectIf": [
+                        "带走血符",
+                        "留下可再入"
+                      ]
+                    },
+                    {
+                      "id": "leave_tokens",
+                      "label": "符记不入队账",
+                      "actions": [
+                        {
+                          "id": "leave_tokens_in_fire",
+                          "label": "不带符记",
+                          "actionText": "我明确不把血符带出村、不写入云氏队账。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不把血符带出村",
+                        "不写入"
+                      ],
+                      "rejectIf": [
+                        "封存一件",
+                        "带走符记"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "locationId": "lcq.location.sheyi_village"
         },
         {
-          "contentId": "liuchao.skill.phoenix_treasure_book",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.le_mingzhu"
+          "id": "lcq.event.s03b_snake_flower_bridge_03",
+          "name": "鬼王峒血符",
+          "description": "祁远与谢艺确认鬼王峒巫术血符，商队意识到已卷入南荒仇杀。",
+          "axisId": "qingyu.40.2",
+          "axisAnchor": "六朝清羽记·#40·第38章·残虐",
+          "axisSeq": 63,
+          "axisBeat": "祁远透露鬼王峒擅巫术屠村，谢艺指出尸体附近有鬼王峒血符，商队意识到已卷入南荒仇杀，仓促撤离。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_03.done",
+              "operator": "eq",
+              "value": true
+            }
           ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.skill.scorpion_tail",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.su_li"
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.wu_er_lang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.yun_cang_feng",
+            "liuchao.character.qi_yuan",
+            "lcq.character.np003",
+            "lcq.character.np004"
           ],
-          "playerAllowed": false
+          "objective": "调查鬼王峒血符，确认真凶",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "调查鬼王峒血符，确认真凶",
+                "actionText": "我按当前主线目标行动：调查鬼王峒血符，确认真凶",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“调查鬼王峒血符，确认真凶”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                },
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰"
+                  ]
+                },
+                "sceneLocation": "蛇彝村"
+              }
+            ]
+          },
+          "locationId": "lcq.location.sheyi_village"
         },
         {
-          "contentId": "liuchao.skill.moon_light_shield",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
+          "id": "lcq.event.s03b_snake_flower_bridge_04",
+          "name": "云氏同行",
+          "description": "云苍峰提议两支商队同往白夷族，程宗扬透露寻找霓龙丝目标，双方合作。",
+          "axisId": "qingyu.41.1",
+          "axisAnchor": "六朝清羽记·#41·第39章·合作",
+          "axisSeq": 64,
+          "axisBeat": "云苍峰提议两支商队同行去白夷族，程宗扬同意并透露寻找霓龙丝的目标，谢艺提供碧鲮族线索，双方达成合作。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.wu_er_lang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.yun_cang_feng",
+            "liuchao.character.qi_yuan",
+            "lcq.character.np003",
+            "lcq.character.np004"
+          ],
+          "objective": "与云苍峰商队同行，前往白夷族",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "与云苍峰商队同行，前往白夷族",
+                "actionText": "我按当前主线目标行动：与云苍峰商队同行，前往白夷族",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“与云苍峰商队同行，前往白夷族”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                },
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰"
+                  ]
+                },
+                "sceneLocation": "蛇彝村"
+              }
+            ]
+          },
+          "relatedFactionIds": [
+            "liuchao.faction.yun_shi_shang_hui"
+          ],
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s03b_04.joint_caravan",
+              "scope": "faction",
+              "summary": "两支商队都望白夷，并路之后交不交霓龙丝的底，还没说死。",
+              "domains": [
+                "commerce"
+              ],
+              "geography": [
+                "南荒岔口"
+              ],
+              "factionIds": [
+                "liuchao.faction.yun_shi_shang_hui"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s03b_04.offer": {
+                  "text": "云苍峰提议两支商队同行去白夷族，程宗扬一侧还藏着寻找霓龙丝的目标。",
+                  "access": "public",
+                  "evidence": "lcq.event.s03b_snake_flower_bridge_04 axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "jointRoute",
+                  "goalDisclosure"
+                ],
+                "initialValues": {
+                  "jointRoute": 45,
+                  "goalDisclosure": 20
+                },
+                "limits": {
+                  "jointRoute": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "goalDisclosure": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "两队都望白夷"
+                ],
+                "forbiddenBefore": [
+                  "已经抵达白夷王帐",
+                  "霓龙丝已经到手"
+                ],
+                "processFreedom": [
+                  "摊牌目标还是只并路"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "liuchao.character.yun_cang_feng",
+                  "identity": {
+                    "factionId": "liuchao.faction.yun_shi_shang_hui",
+                    "office": "云氏当家人",
+                    "rank": 5
+                  },
+                  "personality": {
+                    "caution": 4,
+                    "honor": 3,
+                    "ambition": 3
+                  },
+                  "motives": {
+                    "control": 4,
+                    "stability": 4
+                  },
+                  "resources": {
+                    "influence": 5,
+                    "wealth": 5,
+                    "intelligence": 4,
+                    "troops": 2
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s03b_04.offer"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s03b_04.yun",
+                      "goal": "决定并路要不要把对方的真目标写进队账",
+                      "clock": 0,
+                      "escalation": [
+                        "并路",
+                        "问底",
+                        "分账"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "trade_favor",
+                    "open_safe_route"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                    "personality.caution": "人物卡：沉稳老练。",
+                    "personality.honor": "本拍肯并路。",
+                    "personality.ambition": "人物卡：商界领袖。",
+                    "motives.control": "队账由云家写。",
+                    "motives.stability": "本拍先要两队走得动。",
+                    "resources.influence": "人物卡：云氏当家人。",
+                    "resources.wealth": "人物卡：商会领袖。",
+                    "resources.intelligence": "人物卡：熟南荒商路。",
+                    "resources.troops": "本拍有护卫商队。",
+                    "agendas.agenda.lcq.s03b_04.yun.clock": "岔口尚未说死并路。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "trade_favor",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "把并路条件摊开：交底还是只走一路",
+                  "reason": "不先问清目标，并路后会抢货",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_04.offer"
+                  ],
+                  "mustNotInvent": [
+                    "霓龙丝已经到手"
+                  ],
+                  "visibleSignal": "两队在岔口把货账和目的地分成两份谈",
+                  "offscreenAction": "写出并路条件",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "jointRoute": 8,
+                    "goalDisclosure": 6
+                  },
+                  "utility": {
+                    "urgency": 8,
+                    "factionGoal": 8,
+                    "expectedBenefit": 7,
+                    "situation": {
+                      "jointRoute": -2
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "open_safe_route",
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "label": "先并路，货账分开走",
+                  "reason": "可以同行，不必先交换真目标",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s03b_04.offer"
+                  ],
+                  "mustNotInvent": [
+                    "已经把霓龙丝写入队账"
+                  ],
+                  "visibleSignal": "两队编列同行，账册仍分两套",
+                  "offscreenAction": "只并路不并账",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "jointRoute": 10,
+                    "goalDisclosure": -4
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "霓龙丝已经到手",
+                  "已经抵达白夷王帐"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s03b_04.disclose_nilong_goal",
+                "title": "向云苍峰摊牌霓龙丝，换同行保护",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "并路条件还没说死。把霓龙丝写进队账，云家会按这个目标护你，也会按这个目标分货。",
+                "nextStep": "把寻找霓龙丝的目标告诉云苍峰，并接受写进并路队账。",
+                "stakes": "云家以后按这个目标调度你；南荒有人问起来，也先问到云氏。",
+                "rewardPreview": "取得一次与云氏按霓龙丝目标并路护行的权限。",
+                "futureHint": "以后再谈南荒货，云苍峰会记得你交没交过底。",
+                "actionText": "我追踪“向云苍峰摊牌霓龙丝，换同行保护”：把目标写入并路队账，接受按此护行与分货。",
+                "rewardKey": "permission.lcq.yun.nilong_joint_ledger",
+                "rewardLabel": "云氏·霓龙丝并路队账",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "trade_favor"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "tell_goal",
+                      "label": "摊牌霓龙丝目标",
+                      "actions": [
+                        {
+                          "id": "disclose_nilong_silk",
+                          "label": "说出霓龙丝",
+                          "actionText": "我向云苍峰说明此行要找霓龙丝，不把目标说成普通换货。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "霓龙丝",
+                        "不把目标说成普通换货"
+                      ],
+                      "rejectIf": [
+                        "只并路",
+                        "不交底",
+                        "普通换货"
+                      ]
+                    },
+                    {
+                      "id": "write_ledger",
+                      "label": "写入并路队账",
+                      "actions": [
+                        {
+                          "id": "write_goal_into_ledger",
+                          "label": "写入队账",
+                          "actionText": "我同意把霓龙丝目标写入云氏并路队账，接受按此护行。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "写入",
+                        "并路队账"
+                      ],
+                      "rejectIf": [
+                        "不写进队账",
+                        "只并路不并账"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "opportunity.lcq.s03b_04.travel_without_brief",
+                "title": "只并路，不把真目标写入队账",
+                "characterIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "whyNow": "两队可以同行去白夷，不必先交换真目标。货账分开，云家不欠你，也不知你底。",
+                "nextStep": "接受并路编列，明确霓龙丝不入云氏队账。",
+                "stakes": "路上出事时云家没有义务按你的目标救人；你也不把底交给他们。",
+                "rewardPreview": "取得一次与云氏分账并路、互不并目标的权限。",
+                "futureHint": "以后云苍峰若再邀并路，会按你交没交底来开条件。",
+                "actionText": "我追踪“只并路，不把真目标写入队账”：同行去白夷，霓龙丝不入云氏账。",
+                "rewardKey": "permission.lcq.yun.separate_ledger_travel",
+                "rewardLabel": "云氏·分账并路",
+                "trigger": {
+                  "actorIds": [
+                    "liuchao.character.yun_cang_feng"
+                  ],
+                  "actionIds": [
+                    "trade_favor"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "join_column",
+                      "label": "接受并路编列",
+                      "actions": [
+                        {
+                          "id": "accept_joint_column",
+                          "label": "并路编列",
+                          "actionText": "我接受与云氏商队编列同行，不拒绝并路。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "编列同行",
+                        "不拒绝并路"
+                      ],
+                      "rejectIf": [
+                        "分道",
+                        "不并路"
+                      ]
+                    },
+                    {
+                      "id": "keep_goal_off",
+                      "label": "真目标不入队账",
+                      "actions": [
+                        {
+                          "id": "keep_nilong_off_ledger",
+                          "label": "不写入队账",
+                          "actionText": "我明确霓龙丝目标不写入云氏队账，两套货账分开走。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不写入云氏队账",
+                        "货账分开"
+                      ],
+                      "rejectIf": [
+                        "写入队账",
+                        "摊牌霓龙丝"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "locationId": "lcq.location.sheyi_village"
+        },
+        {
+          "id": "lcq.event.s03b_snake_flower_bridge_05",
+          "name": "巨藤断桥",
+          "description": "商队攀爬万古巨藤时藤桥断裂，被困半空石壁，进退两难。",
+          "axisId": "qingyu.42.1",
+          "axisAnchor": "六朝清羽记·#42·第40章·花苗",
+          "axisSeq": 65,
+          "axisBeat": "商队攀爬万古巨藤时，藤桥突然折断，被困在半空石壁，进退两难。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.wu_er_lang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.yun_cang_feng",
+            "liuchao.character.qi_yuan",
+            "lcq.character.np003",
+            "lcq.character.np004"
+          ],
+          "objective": "攀爬万古巨藤，到达崖顶",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "攀爬万古巨藤，到达崖顶",
+                "actionText": "我按当前主线目标行动：攀爬万古巨藤，到达崖顶",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“攀爬万古巨藤，到达崖顶”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                },
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰"
+                  ]
+                },
+                "sceneLocation": "万古巨藤半空石壁"
+              }
+            ]
+          },
+          "locationId": "lcq.location.giant_vine"
+        },
+        {
+          "id": "lcq.event.s03b_snake_flower_bridge_06",
+          "name": "花苗救援",
+          "description": "花苗族长阿依苏荔率族人出现，以歌声对答并救商队登上崖顶。",
+          "axisId": "qingyu.42.2",
+          "axisAnchor": "六朝清羽记·#42·第40章·花苗",
+          "axisSeq": 66,
+          "axisBeat": "花苗族长阿依苏荔率族人出现，以歌声对答后抛出绳索，救商队脱困，并引众人登上崖顶。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_06.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_li",
+            "liuchao.character.a_xi",
+            "lcq.character.nanhuang_kawa",
+            "liuchao.character.wu_er_lang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.yun_cang_feng",
             "liuchao.character.ning_yu"
           ],
-          "playerAllowed": false
+          "objective": "求助花苗族长，脱离困境",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "求助花苗族长，脱离困境",
+                "actionText": "我按当前主线目标行动：求助花苗族长，脱离困境",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“求助花苗族长，脱离困境”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                },
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰",
+                    "苏荔",
+                    "阿夕",
+                    "卡瓦",
+                    "阿葭"
+                  ]
+                },
+                "sceneLocation": "巨藤崖顶"
+              }
+            ]
+          },
+          "locationId": "lcq.location.huamiao_village"
         },
         {
-          "contentId": "lcq.skill.np001",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
+          "id": "lcq.event.s03b_snake_flower_bridge_07",
+          "name": "龙神新娘",
+          "description": "夜里同行时，苏荔说明这趟送亲的来历：鬼王峒每年向所有附庸部族索取贡物，其中有三名最美的女子，一人作龙神的新娘，另外两人献给巫王。花苗选出族中最美的女子作新娘，按龙神娶亲的风俗戴上面纱，不再让凡人见到她的面容；阿葭和阿夕献给巫王。巫王的使者在熊耳铺停留，要花苗尽快把人送去，再由使者把新娘带到龙神的宫殿。",
+          "axisId": "qingyu.43.1",
+          "axisAnchor": "六朝清羽记·#43·第41章·送嫁",
+          "axisSeq": 67,
+          "axisBeat": "鬼王峒势力扩张至花苗领地，花苗族长苏荔无奈屈服，选出龙神新娘与两名少女作为贡物送往熊耳铺。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.s03b_snake_flower_bridge_07.done",
+              "operator": "eq",
+              "value": true
+            }
           ],
-          "playerAllowed": false
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_li",
+            "liuchao.character.a_xi",
+            "liuchao.character.le_mingzhu",
+            "lcq.character.nanhuang_ajia",
+            "liuchao.character.yun_cang_feng",
+            "liuchao.character.ning_yu",
+            "liuchao.character.xie_yi"
+          ],
+          "objective": "听清花苗送亲与贡物的安排",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "听清花苗送亲与贡物的安排",
+                "actionText": "我听清花苗送亲与贡物的安排",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已听清花苗送亲与贡物的安排，尚未前往熊耳铺。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                },
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰",
+                    "苏荔",
+                    "阿夕",
+                    "卡瓦",
+                    "阿葭",
+                    "花苗新娘"
+                  ]
+                },
+                "sceneLocation": "花苗营地",
+                "dayPart": "黄昏",
+                "previousBeat": "花苗人用歌声对答后放下绳索，救商队上了崖顶。",
+                "fixedFacts": [
+                  "鬼王峒每年向附庸部族索取贡物，其中有三名女子，一人作龙神新娘，两人献给巫王",
+                  "戴面纱的新娘作龙神新娘，阿葭和阿夕献给巫王；新娘没有揭开面容，也没有报名",
+                  "苏荔亲自送亲，准备在熊耳铺交给巫王使者，由使者把新娘带去龙神宫殿"
+                ],
+                "factChecks": [
+                  [
+                    "贡物",
+                    "送亲"
+                  ],
+                  [
+                    "熊耳铺"
+                  ]
+                ],
+                "fallbackText": "苏荔说，鬼王峒每年向附庸部族索取三名女子：一人作龙神的新娘，另外两人献给巫王。花苗的新娘戴着面纱，阿葭和阿夕一同随行。苏荔亲自送亲，准备在熊耳铺交给巫王的使者，再由使者把新娘带去龙神宫殿。",
+                "forbidden": [
+                  "乐明珠",
+                  "贡物共",
+                  "牲畜贡物",
+                  "献上银铢"
+                ],
+                "ledgerEffects": {
+                  "worldFacts": [
+                    "花苗被迫向鬼王峒送亲"
+                  ]
+                }
+              }
+            ]
+          },
+          "locationId": "lcq.location.huamiao_village"
         },
         {
-          "contentId": "liuchao.item.coral_dagger",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
+          "id": "lcq.event.zixi_intercept",
+          "name": "紫溪拦截",
+          "description": "太乙真宗元行健等人在紫溪拦截白湖商馆船只，指名要程宗扬去龙池；程宗扬被迫出面，祁远被推落水。",
+          "axisId": "qingyu.35.2",
+          "axisAnchor": "六朝清羽记·#35·第33章·武请",
+          "axisSeq": 54,
+          "axisBeat": "在紫溪上，太乙真宗元行健等人拦截白湖商馆船只，指名要程宗扬去龙池，程宗扬避而不见后被迫出面，祁远被推落水中。",
+          "critical": false,
+          "completion": [
+            {
+              "path": "flags.event.zixi_intercept.done",
+              "operator": "eq",
+              "value": true
+            }
           ],
-          "playerAllowed": false
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.qi_yuan"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan",
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "objective": "在紫溪出面回应元行健拦船点名去龙池，并确认祁远落水",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "face_yuan_xingjian_at_zixi",
+                "label": "出面回应紫溪拦船点名",
+                "actionText": "元行健等人在紫溪拦住白湖商馆的船并点名要我去龙池后，我不再回避，到船头出面应下这句点名。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "zixi_named_to_longchi"
+              },
+              {
+                "id": "confirm_qiyuan_thrown_overboard",
+                "label": "确认祁远被推落水",
+                "actionText": "拦船冲突里祁远被推落水后，我当场确认他落水，并让船上的人把他捞回来。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已在紫溪出面应下点名去龙池，并确认祁远落水；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "zixi_named_to_longchi"
+                ]
+              }
+            ]
+          }
         },
         {
-          "contentId": "liuchao.item.zhu_hu_guan",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.le_mingzhu"
+          "id": "lcq.event.s03b_wanwu_night",
+          "name": "夜林异动",
+          "description": "花苗篝火万舞后，程宗扬按谢艺的话，子时到营地西南百丈外的林中，撞见阿葭，又在蕨叶间发现一具蛇彝遇害者，腹上有鬼王峒的笑脸血符。他把阿葭带回营地。",
+          "axisId": null,
+          "axisAnchor": "六朝清羽记·第42章",
+          "axisBeat": "花苗篝火万舞后，程宗扬按谢艺的话，子时到营地西南百丈外的林中，撞见阿葭，又在蕨叶间发现一具蛇彝遇害者，腹上有鬼王峒的笑脸血符。他把阿葭带回营地。",
+          "critical": true,
+          "objective": "循谢艺的话，子时到西南林中看个究竟",
+          "completion": [
+            {
+              "path": "flags.event.s03b_wanwu_night.done",
+              "operator": "eq",
+              "value": true
+            }
           ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.item.purple_scale_whip",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.xiao_zi"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.item.gui_yu_sword",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.gui_wu_wang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "lcq.item.np002",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "lcq.item.np010",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "lcq.item.np011",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "lcq.item.np015",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.xiao_zi"
-          ],
-          "playerAllowed": false
-        }
-      ],
-      "to": [
-        {
-          "contentId": "liuchao.skill.death_root",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.technique.nine_yang_divine_skill",
-          "policy": "restricted",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.skill.five_tiger_broken_gate_knife",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.wu_er_lang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.skill.phoenix_treasure_book",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.le_mingzhu"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.skill.scorpion_tail",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.su_li"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.skill.moon_light_shield",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.su_li",
+            "liuchao.character.wu_er_lang",
+            "lcq.character.nanhuang_ajia",
+            "liuchao.character.yun_cang_feng",
             "liuchao.character.ning_yu"
           ],
-          "playerAllowed": false
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "follow_xieyi_hint_into_woods",
+                "label": "循谢艺所说，子时往西南林中查看",
+                "actionText": "我循谢艺所说，子时往西南林中查看。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "循谢艺所说，子时往西南林中查看。",
+                  "partial": "本动作无部分成功。",
+                  "failure": "本动作无失败分支。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "wanwu_woods_entered",
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰",
+                    "苏荔",
+                    "阿夕",
+                    "卡瓦",
+                    "阿葭",
+                    "花苗新娘"
+                  ]
+                },
+                "sceneLocation": "花苗营地与西南林",
+                "dayPart": "深夜",
+                "previousBeat": "花苗的送亲与贡物安排已经讲清。"
+              },
+              {
+                "id": "find_victim_and_ajia",
+                "label": "查看林中的异状，把阿葭带回营地",
+                "actionText": "我拨开蕨叶看个究竟，再把吓坏了的阿葭带回营地。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "看清血符，把受惊的阿葭带回营地。",
+                  "partial": "本动作无部分成功。",
+                  "failure": "本动作无失败分支。"
+                },
+                "requiresPreparation": [
+                  "wanwu_woods_entered"
+                ],
+                "cast": {
+                  "present": [
+                    "阿葭"
+                  ]
+                },
+                "sceneLocation": "花苗营地与西南林",
+                "dayPart": "深夜",
+                "previousBeat": "花苗的送亲与贡物安排已经讲清。",
+                "fixedFacts": [
+                  "你在西南林中发现蛇彝女子的尸体和鬼王峒笑脸血图",
+                  "你安抚受惊的阿葭，把她带回营地"
+                ],
+                "factChecks": [
+                  [
+                    "尸体",
+                    "遗体"
+                  ],
+                  [
+                    "血图",
+                    "血符",
+                    "图案"
+                  ],
+                  [
+                    "阿葭"
+                  ],
+                  [
+                    "营地"
+                  ]
+                ],
+                "fallbackText": "你在西南林中发现蛇彝女子的尸体和鬼王峒笑脸血图。你安抚受惊的阿葭，把她带回营地。",
+                "forbidden": [
+                  "阴蛛",
+                  "阿葭已经死",
+                  "阿葭已死"
+                ]
+              }
+            ]
+          },
+          "axisMethod": "reviewed-no-anchor",
+          "locationId": "lcq.location.huamiao_village"
         },
         {
-          "contentId": "lcq.skill.np001",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
+          "id": "lcq.event.s03b_yinzhu_xiongerpu",
+          "name": "夜半异动与熊耳铺",
+          "description": "当夜营地边的蕨丛里，一只阴蛛刺中阿葭。程宗扬赶到出刀，削去它一截前肢，又在后肢留下刀痕，阴蛛吐丝逃进密林，阿葭已经身亡。祁远认出是阴蛛：吸血、怕火，必须焚尸；花苗人用蕉叶包起阿葭的遗体，堆起柴；阿夕抱着她痛哭，苏荔双眉紧锁。武二郎从林中拎回被拧断腿的阴蛛，踢给苏荔。天亮前，阿葭、阴蛛和那具蛇彝遇害者一起焚化，阿夕留下收骨。次日正午前后到熊耳铺：拒绝秦桧和吴三桂，选朱八八带路；秦吴不随队。新娘仍戴面纱。",
+          "axisId": "qingyu.46.1",
+          "axisSeq": 68,
+          "axisAnchor": "六朝清羽记·#46·第44章·向导",
+          "axisBeat": "当夜营地边的蕨丛里，一只阴蛛刺中阿葭。程宗扬赶到出刀，削去它一截前肢，又在后肢留下刀痕，阴蛛吐丝逃进密林，阿葭已经身亡。祁远认出是阴蛛：吸血、怕火，必须焚尸；花苗人用蕉叶包起阿葭的遗体，堆起柴；阿夕抱着她痛哭，苏荔双眉紧锁。武二郎从林中拎回被拧断腿的阴蛛，踢给苏荔。天亮前，阿葭、阴蛛和那具蛇彝遇害者一起焚化，阿夕留下收骨。次日正午前后到熊耳铺：拒绝秦桧和吴三桂，选朱八八带路；秦吴不随队。新娘仍戴面纱。",
+          "critical": true,
+          "objective": "照应营地，再到熊耳铺找向导",
+          "completion": [
+            {
+              "path": "flags.event.s03b_yinzhu_xiongerpu.done",
+              "operator": "eq",
+              "value": true
+            }
           ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.item.coral_dagger",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.qi_yuan",
+            "liuchao.character.wu_er_lang",
+            "lcq.character.nanhuang_ajia",
+            "liuchao.character.le_mingzhu",
+            "liuchao.character.shang_zhen_yu",
+            "liuchao.character.qin_hui",
+            "liuchao.character.wu_san_gui",
+            "liuchao.character.yun_cang_feng"
           ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "liuchao.item.zhu_hu_guan",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.le_mingzhu"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "lcq.item.np002",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "lcq.item.np010",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
-        },
-        {
-          "contentId": "lcq.item.np011",
-          "policy": "exclusive",
-          "allowedCharacterIds": [
-            "liuchao.character.cheng_zongyang"
-          ],
-          "playerAllowed": false
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "yinzhu_strikes_ajia",
+                "label": "赶去阿葭身边查看异动",
+                "actionText": "我听见阿葭那边的蕨丛里有异响，提刀赶了过去。",
+                "kind": "prepare",
+                "grantsPreparation": "yinzhu_struck",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你赶回营地边，阴蛛已经袭击阿葭；你伤了阴蛛的后肢，它逃进密林。阿葭已没有气息。",
+                  "partial": "本拍沿用既定结果。",
+                  "failure": "本拍沿用既定结果。"
+                },
+                "cast": {
+                  "present": [
+                    "阿葭",
+                    "阴蛛",
+                    "祁远"
+                  ],
+                  "enter": [
+                    "阴蛛",
+                    "祁远"
+                  ],
+                  "exit": [
+                    {
+                      "name": "阿葭",
+                      "status": "dead"
+                    }
+                  ]
+                },
+                "sceneLocation": "花苗林中营地",
+                "dayPart": "深夜",
+                "fixedFacts": [
+                  "你赶回营地边，阴蛛已经刺中阿葭",
+                  "你出刀削去阴蛛一截前肢，又在它后肢留下刀痕，它吐丝逃进密林",
+                  "阿葭已没有气息",
+                  "你大喊祁远：老四！"
+                ],
+                "factChecks": [
+                  [
+                    "阴蛛"
+                  ],
+                  [
+                    "逃",
+                    "消失"
+                  ],
+                  [
+                    "阿葭"
+                  ],
+                  [
+                    "气息",
+                    "死去",
+                    "死亡"
+                  ],
+                  [
+                    "祁远",
+                    "老四"
+                  ]
+                ],
+                "fallbackText": "营地边的蕨丛里，一只阴蛛刺中了阿葭。你提刀赶到，削去它一截前肢，又在后肢留下刀痕；它吐丝逃进密林。阿葭已经没有气息，你大喊祁远：“老四！”",
+                "forbidden": [
+                  "阴蛛被你杀死",
+                  "你杀死阴蛛",
+                  "武二郎拧死"
+                ]
+              },
+              {
+                "id": "burn_yinzhu_victim",
+                "label": "焚化阿葭的遗体和阴蛛",
+                "actionText": "我照祁远的吩咐，和花苗人一起把阿葭、阴蛛和那具蛇彝遇害者焚化。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "祁远认出是阴蛛，说它吸血、怕火，必须焚尸。花苗人用蕉叶包起阿葭的遗体，堆起柴；阿夕抱着她痛哭，苏荔双眉紧锁。武二郎从林中拎回被拧断腿、后肢带着刀痕的阴蛛，听清原委，把它踢给苏荔。天亮前，阿葭、阴蛛和那具蛇彝遇害者一起焚化，阿夕留下收阿姐的骨殖。",
+                  "partial": "本动作无部分成功。",
+                  "failure": "本动作无失败分支。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ajia_mourned",
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威",
+                    "小魏",
+                    "石刚",
+                    "易彪",
+                    "易虎",
+                    "谢艺",
+                    "云苍峰",
+                    "苏荔",
+                    "阿夕",
+                    "卡瓦",
+                    "花苗新娘"
+                  ],
+                  "enter": [
+                    "武二郎"
+                  ],
+                  "exit": [
+                    {
+                      "name": "阴蛛",
+                      "status": "dead"
+                    }
+                  ]
+                },
+                "sceneLocation": "花苗林中营地",
+                "requiresPreparation": [
+                  "yinzhu_struck"
+                ],
+                "dayPart": "深夜",
+                "fixedFacts": [
+                  "祁远认出阴蛛，说它吸血、怕火，还可能产卵，必须烧尸",
+                  "花苗人用蕉叶包住阿葭的遗体，阿夕抱着她痛哭，苏荔双眉紧锁",
+                  "你认定是鬼王峒豢养的阴蛛",
+                  "武二郎从林中回来，拎着被他拧断腿的阴蛛；腿上还有你留下的刀痕",
+                  "他听清原委，把阴蛛踢给苏荔",
+                  "天亮前，阿葭、阴蛛和那具蛇彝遇害者一起焚化，阿夕留下收阿姐的骨殖"
+                ],
+                "factChecks": [
+                  [
+                    "祁远"
+                  ],
+                  [
+                    "怕火",
+                    "畏火"
+                  ],
+                  [
+                    "阿夕"
+                  ],
+                  [
+                    "武二郎"
+                  ],
+                  [
+                    "刀痕",
+                    "刀伤"
+                  ],
+                  [
+                    "焚",
+                    "烧"
+                  ]
+                ],
+                "fallbackText": "祁远认出是阴蛛，说它吸血、怕火，必须焚尸。花苗人用蕉叶包起阿葭的遗体，堆起柴；阿夕抱着她痛哭，苏荔双眉紧锁。武二郎从林中拎回被拧断腿、后肢带着刀痕的阴蛛，听清原委，把它踢给苏荔。天亮前，阿葭、阴蛛和那具蛇彝遇害者一起焚化，阿夕留下收阿姐的骨殖。",
+                "ledgerEffects": {
+                  "worldFacts": [
+                    "鬼王峒豢养阴蛛"
+                  ]
+                }
+              },
+              {
+                "id": "pick_zhu88_as_guide",
+                "label": "在熊耳铺选朱八八带路，与送亲队同行",
+                "actionText": "我在熊耳铺选朱八八带路，与送亲队同行。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "在熊耳铺选朱八八带路，与送亲队同行。",
+                  "partial": "本动作无部分成功。",
+                  "failure": "本动作无失败分支。"
+                },
+                "requiresPreparation": [
+                  "ajia_mourned"
+                ],
+                "cast": {
+                  "present": [
+                    "云苍峰",
+                    "秦桧",
+                    "吴三桂",
+                    "朱八八"
+                  ],
+                  "enter": [
+                    "秦桧",
+                    "吴三桂",
+                    "朱八八"
+                  ],
+                  "exit": [
+                    {
+                      "name": "秦桧",
+                      "status": "departed"
+                    },
+                    {
+                      "name": "吴三桂",
+                      "status": "departed"
+                    }
+                  ]
+                },
+                "sceneLocation": "熊耳铺村口",
+                "dayPart": "正午",
+                "fixedFacts": [
+                  "你们天不亮便动身，正午到了熊耳铺",
+                  "苏荔带族人去见使者，你与云苍峰寻找向导",
+                  "文士秦桧自报名号，武者吴三桂也上前；你没有选他们，最后请老向导朱八八带路"
+                ],
+                "factChecks": [
+                  [
+                    "熊耳铺"
+                  ],
+                  [
+                    "秦桧"
+                  ],
+                  [
+                    "吴三桂"
+                  ],
+                  [
+                    "朱八八"
+                  ]
+                ],
+                "fallbackText": "你们天不亮便动身，正午到了熊耳铺。苏荔带族人去见使者，你与云苍峰寻找向导。文士秦桧自报名号，武者吴三桂也上前；你没有选他们，最后请老向导朱八八带路。",
+                "forbidden": [
+                  "殇侯",
+                  "秦桧加入",
+                  "吴三桂随队"
+                ],
+                "locationId": "liuchao.location.xiongerpu"
+              }
+            ]
+          },
+          "locationId": "lcq.location.huamiao_village"
         }
       ]
     }

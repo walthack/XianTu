@@ -1575,16 +1575,14 @@
       {
         "id": "liuchao.character.ning_yu",
         "name": "凝羽",
-        "role": "商队成员",
-        "description": "商队中那位雪肤乌发的女护卫，神色永远冷若冰霜，只在挥剑时才会让人注意到她肩头若隐若现的淡红月牙印记——没人知道她身怀太一经末技的玄妙功法，更无人敢触碰那冷艳外表下隐藏的忠诚与锋芒。",
+        "role": "白湖商馆侍卫长，奉命护卫南荒商队",
+        "description": "白湖商馆侍卫长，穹羽族人；奉苏妲己之命护卫南荒商队。",
         "profile": {
-          "appearance": "身材高挑，乌黑长发披肩；修长光洁美腿、丰满挺拔乳房；玉体白皙晶莹如羊脂白玉；阴户精巧如初春桃叶；肩头一枚淡红月牙状痕迹；",
+          "appearance": "身材高挑，肩宽腿长；长眉像一对飞扬的黑羽，眼睛大而空明，神情冷冰冰的；一头乌黑长发。黑色绫衣里衬皮甲，外披斗篷；左腰挂一面小圆盾，右侧佩月牙形弯刀，刀鞘是硬木的。",
           "personality": [
-            "高冷御姐",
-            "外冷内媚(冰火交融)",
-            "口是心非",
-            "不擅表温情",
-            "以冷酷伪装情感与欲望"
+            "冷淡寡言，话短",
+            "倔强，不肯示弱",
+            "守誓，把护卫职责放在私情前面"
           ],
           "race": "羽族",
           "origin": "穹羽族后裔",
@@ -1608,7 +1606,7 @@
           },
           "currentAppearance": "身段匀称，动作矫健，眼中常含一丝忧郁",
           "memories": [
-            "被程宗扬用麻古迷奸",
+            "曾遭程宗扬施用麻古造成的药物侵害，后来出现药物依赖（原著事实记忆，不作为可演出或可重复内容）",
             "与程宗扬通过双修交换真气"
           ],
           "spiritRoot": {
@@ -1617,9 +1615,9 @@
             "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
           },
           "notes": [
-            "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求",
-            "【身体】嘴上拒绝肉体却顺从；晶莹敏感圣躯；肩头淡红月牙痕"
-          ]
+            "【内部约束·不入正文】寒气是西门庆留下的；凝羽没有冰蛊，冰蛊在程宗扬身上。"
+          ],
+          "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」"
         },
         "realm": "练气",
         "gender": "女",
@@ -1847,6 +1845,25 @@
             "role": "雇佣援兵首领"
           }
         ]
+      },
+      {
+        "id": "liuchao.character.wu_er_lang",
+        "name": "武二郎",
+        "role": "白武族同行武士",
+        "description": "白武族同行武士",
+        "profile": {
+          "origin": "白武族同行武士",
+          "personality": [
+            "粗犷威猛",
+            "直率暴躁",
+            "重情重义",
+            "主角武功启蒙，刚猛不失机智"
+          ]
+        },
+        "skillIds": [],
+        "realm": "练气",
+        "gender": "男",
+        "affiliations": []
       }
     ],
     "playerRelationships": [
@@ -2910,7 +2927,7 @@
         "axisSeq": 31,
         "axisAnchor": "六朝清羽记·#17·第15章·冤屈",
         "axisBeat": "程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。",
-        "objective": "五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯",
+        "objective": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2919,7 +2936,7 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯",
+              "label": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
               "actionText": "我按当前主线目标行动：应付眼前的盘问与拉扯",
               "timeCost": 1,
               "outcomeText": {
@@ -3173,7 +3190,7 @@
           "liuchao.faction.bai_hu_shang_guan"
         ],
         "locationId": "liuchao.location.wuyuan",
-        "objective": "让走投无路的武二郎当面答应加入南荒队伍",
+        "objective": "当面同武二郎谈定工钱，请他随商队南行",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3183,7 +3200,7 @@
             {
               "id": "confirm_wuerlang_no_prior_promise",
               "label": "确认武二郎此前并未应诺同行",
-              "actionText": "我让武二郎把先前条件说清，承认他此前只求解开镣铐，并未真正答应随队南行。",
+              "actionText": "我问武二郎：先前说好的只是替他解开镣铐，这一趟南荒，他到底跟不跟？",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
@@ -3196,10 +3213,10 @@
             {
               "id": "secure_wuerlang_southbound",
               "label": "取得武二郎随队南行的明确承诺",
-              "actionText": "武二郎因满城围捕走投无路返回后，我重新谈定报酬，当面取得他加入南荒队伍的明确承诺。",
+              "actionText": "城里的护卫正四处搜人，我当面同武二郎把工钱说定：两枚银铢一月，月底给，每月先付一半，等从南荒回来再补齐。我请他随商队走这一趟。",
               "timeCost": 1,
               "outcomeText": {
-                "success": "武二郎已被迫答应加入南荒队伍；事件完成真值由本地引擎落账。",
+                "success": "武二郎瞪了你半天，终究应下了这份工钱，答应随商队南行。",
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
@@ -3237,6 +3254,17 @@
               ]
             }
           }
+        },
+        "presentation": {
+          "stepGuardTerms": {
+            "secure_wuerlang_southbound": [
+              "返回",
+              "回来找",
+              "又回来",
+              "再见到",
+              "走投无路"
+            ]
+          }
         }
       },
       {
@@ -3273,7 +3301,7 @@
             {
               "id": "hear_ningyu_regicide_price",
               "label": "听清并回应凝羽的弑主开价",
-              "actionText": "凝羽私下找我，要求用巫术与她合作除掉苏妲己、她自己也准备赴死。我让她把条件和代价说清，再当面回应，不把尚未执行的提议写成既成事实。",
+              "actionText": "凝羽私下来找我，说有一件事要我答应。我请她把话说完，再给她答复。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
@@ -3281,23 +3309,91 @@
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
               "kind": "prepare",
-              "grantsPreparation": "ningyu_regicide_price_heard"
+              "grantsPreparation": "ningyu_regicide_price_heard",
+              "previousBeat": "凝羽尚未说明寒气来源。",
+              "forbidden": [
+                "西门庆",
+                "噬心蛊",
+                "采补残痕",
+                "姓周",
+                "星月湖的大将军",
+                "苏荔",
+                "清剿鬼王峒"
+              ],
+              "sceneLocation": "南荒途中",
+              "cast": {
+                "present": [
+                  "凝羽"
+                ]
+              },
+              "sceneObjective": "听凝羽说明条件",
+              "forceFixed": true,
+              "fixedFacts": [
+                "凝羽请程宗扬替她除掉苏妲己。",
+                "凝羽曾在月亮下起誓用生命保护苏妲己，因此要求程宗扬动手时连她一起杀。"
+              ],
+              "factChecks": [
+                [
+                  "苏妲己"
+                ],
+                [
+                  "连我一起杀",
+                  "连她一起杀"
+                ]
+              ],
+              "fallbackText": "你听凝羽提出条件：“替我除掉她。”你望着她的眼睛，问她说的是不是苏妲己。凝羽没有否认：“她一直知道我想杀她。但我在月亮下发过誓，会用我的生命保护她。所以，当你出手的时候，要连我一起杀了。”"
             },
             {
               "id": "trace_ningyu_cold_qi_source",
               "label": "探明凝羽体内阴寒之气的来源",
-              "actionText": "我与凝羽共同运功，确认她体内阴寒之气来自西门庆把她当鼎炉调教，并听她亲口把这段旧事说清。",
+              "actionText": "运功时，我察觉到她体内有一股不属于她的寒气，便问她这股气是从哪里来的。",
               "timeCost": 1,
               "outcomeText": {
-                "success": "你已听清凝羽的弑主合作开价，并探明她体内阴寒之气的来源；事件完成真值由本地引擎落账。",
+                "success": "凝羽告诉你，那股寒气是西门庆留在她体内的；她只知道西门庆是五原城有名的富商，修为远比你想的要高。",
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
               "requiresPreparation": [
                 "ningyu_regicide_price_heard"
+              ],
+              "fixedFacts": [
+                "凝羽体内阴寒之气来自西门庆，不是苏妲己种的噬心蛊"
+              ],
+              "forbidden": [
+                "噬心蛊",
+                "每三日服解药"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽"
+                ]
+              },
+              "fallbackText": "你继续追问阴寒之气的来源。凝羽说出西门庆的名字：那股阴寒之气是他当年留下的，并不是苏妲己种下的噬心蛊。",
+              "factChecks": [
+                [
+                  "西门庆"
+                ],
+                [
+                  "阴寒",
+                  "阴气"
+                ]
               ]
             }
           ]
+        },
+        "presentation": {
+          "stepGuardTerms": {
+            "hear_ningyu_regicide_price": [
+              "鼎炉",
+              "调教"
+            ],
+            "trace_ningyu_cold_qi_source": [
+              "鼎炉",
+              "调教",
+              "噬心蛊",
+              "冰蛊"
+            ]
+          }
         }
       },
       {
@@ -3533,7 +3629,8 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang",
-          "liuchao.character.ning_yu"
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang"
         ],
         "relatedFactionIds": [
           "liuchao.faction.bai_hu_shang_guan"
@@ -3557,7 +3654,15 @@
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
               "kind": "prepare",
-              "grantsPreparation": "wuerlang_wound_held"
+              "grantsPreparation": "wuerlang_wound_held",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威"
+                ]
+              }
             },
             {
               "id": "break_iron_bridge_ambush",
@@ -3571,7 +3676,15 @@
               },
               "requiresPreparation": [
                 "wuerlang_wound_held"
-              ]
+              ],
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威"
+                ]
+              }
             }
           ]
         }
@@ -3610,7 +3723,7 @@
             {
               "id": "bear_rainforest_losses",
               "label": "收拢雨林伤亡后再渡",
-              "actionText": "青藤蛇与山洪造成伤亡后，我先清点两队伤员与货物，承认损失，不装作无事过滩。",
+              "actionText": "我让人把被青蛇缠死的那名同伴埋了，清点人手和货物，趁雨势小些赶紧上路。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
@@ -3623,7 +3736,7 @@
             {
               "id": "follow_ningyu_fire_across_shoal",
               "label": "依凝羽火光渡过黑石滩",
-              "actionText": "两队在黑石滩迷失后，我按凝羽岸边火光校正方向，带白湖与云氏两支商队渡过黑石滩。",
+              "actionText": "河对岸忽然亮起几堆火，我认出火边站着的是凝羽，招呼两队人马朝着火光涉水过滩。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已承受雨林伤亡，并依凝羽火光带两支商队渡过黑石滩；事件完成真值由本地引擎落账。",
@@ -3813,7 +3926,7 @@
             {
               "id": "confirm_sheyi_dark_and_silent",
               "label": "确认寨里无灯也无人声",
-              "actionText": "商队抵寨后，我先从外围确认蛇彝村没有灯火、也没有人应门，只记下眼前的死静，不提前宣告灭村真相。",
+              "actionText": "我在村口停下，四下看了一圈：没有一盏灯，也听不到半点人声。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
@@ -3826,7 +3939,7 @@
             {
               "id": "settle_caravan_in_silent_sheyi",
               "label": "在空村里安置商队",
-              "actionText": "确认无灯无人应之后，我在空村巷口安排警戒与宿处，先把商队人马安置下来，不走进下一章才揭开的真相。",
+              "actionText": "我照云苍峰说的，带大家去村尾那间专给过路客人住的大屋歇脚，安排人轮流守夜，照看马匹和货物。",
               "timeCost": 1,
               "outcomeText": {
                 "success": "商队已抵达无灯火无人声的蛇彝村并安置下来；事件完成真值由本地引擎落账。",
@@ -3838,6 +3951,24 @@
               ]
             }
           ]
+        },
+        "presentation": {
+          "stepGuardTerms": {
+            "confirm_sheyi_dark_and_silent": [
+              "灭村",
+              "屠村",
+              "惨案",
+              "尸体",
+              "血符"
+            ],
+            "settle_caravan_in_silent_sheyi": [
+              "灭村",
+              "屠村",
+              "惨案",
+              "尸体",
+              "血符"
+            ]
+          }
         }
       }
     ],

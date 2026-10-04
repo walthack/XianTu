@@ -1,5 +1,5 @@
 import type { SaveData } from '@/types/game';
-import { getRegistryNamesById } from './characterResolver';
+import { getRegistryAgeFacts, getRegistryNamesById } from './characterResolver';
 import { mergeFixedScenarioStarterInventory } from './fixedInventoryContracts';
 
 import type {
@@ -32,33 +32,43 @@ function gender(value?: string): '男' | '女' | '其他' {
   return '其他';
 }
 
-// mod canon 不含年龄字段，按境界估龄：六朝是寿命压缩的低武世界（寿元上限约 85-130，境界≠长寿），
-// 区间取人间尺度；name-hash 抖动避免同档雷同。孩童/少年 role 关键词给绝对年龄段、优先于境界区间
-// （幼帝不因高境界变老，内测台账 #6/#7）。出生年由调用方用「当前游戏年 - 估龄」反推（见 createNpcProfile）。
+// C01：源卡年龄优先；角色称谓不产生未成年年龄。未知年龄仍保留原人间尺度估龄。
 const REALM_AGE_RANGE: Record<string, [number, number]> = {
-  凡人: [16, 45], 练气: [18, 50], 筑基: [25, 60], 金丹: [30, 70],
+  凡人: [18, 45], 练气: [18, 50], 筑基: [25, 60], 金丹: [30, 70],
   元婴: [40, 80], 化神: [50, 90], 炼虚: [60, 95], 合体: [65, 95], 渡劫: [70, 95],
 };
-// 与投影默认 属性.寿元上限:100 对齐；估龄恒低于寿元上限，避免"年龄>寿元"的自相矛盾卡片。
 const NPC_LIFESPAN_CAP = 100;
-// 绝对年龄段（命中即返回，不受境界地板影响）。关键词取窄词避免误伤（"幼妹"是辈分不是孩童）。
-const ABSOLUTE_AGE_BANDS: Array<[RegExp, [number, number]]> = [
-  [/幼帝|幼子|幼女|幼童|孩童|婴孩|稚童|年幼/, [4, 12]],
-  [/少年|少女|童子|学徒/, [13, 18]],
-];
-export function estimateNpcAge(character: ScenarioModCharacter): number {
+export function estimateNpcAge(character: ScenarioModCharacter, currentYear?: number): number {
+  const card = getRegistryAgeFacts(character);
+  const storyAge = character.profile?.storyAge?.value ?? card.storyAge?.value;
+  const ageValue = typeof storyAge === 'number' || typeof storyAge === 'string' ? Number(storyAge) : NaN;
+  if (Number.isFinite(ageValue) && ageValue > 0) return Math.max(18, Math.floor(ageValue));
+  const birthYear = character.profile?.birthYear ?? card.birthYear;
+  if (typeof birthYear === 'number' && Number.isFinite(birthYear) && typeof currentYear === 'number' && Number.isFinite(currentYear)) {
+    return Math.max(18, Math.floor(currentYear - birthYear));
+  }
   const key = character.id || character.name || '';
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
   const role = `${character.role || ''}${character.profile?.origin || ''}`;
-  for (const [pattern, [bandLo, bandHi]] of ABSOLUTE_AGE_BANDS) {
-    if (pattern.test(role)) return bandLo + (h % (bandHi - bandLo + 1));
-  }
   const [lo, hi] = REALM_AGE_RANGE[character.realm || ''] || [18, 50];
   let age = lo + (h % (hi - lo + 1));
   if (/老祖|祖师|太上|前辈|老者|老妪|老怪|宿老/.test(role)) age = Math.round((age + hi) / 2);
-  if (/弟子|侍女|丫鬟/.test(role)) age = Math.max(16, Math.round(age * 0.6));
-  return Math.min(age, NPC_LIFESPAN_CAP - 5);
+  if (/弟子|侍女|丫鬟/.test(role)) age = Math.round(age * 0.6);
+  return Math.max(18, Math.min(age, NPC_LIFESPAN_CAP - 5));
+}
+
+/** 旧档曾按少女/幼帝估出未成年生日；仅修未满18的关系人物，不改成年生日。 */
+export function enforceScenarioNpcAdulthood(saveData: SaveData): void {
+  const now = saveData.元数据?.时间;
+  if (!now || !Number.isFinite(now.年)) return;
+  for (const npc of Object.values(saveData.社交?.关系 || {}) as Array<{ 出生日期?: { 年: number; 月?: number; 日?: number } }>) {
+    const birth = npc.出生日期;
+    if (!birth || !Number.isFinite(birth.年)) continue;
+    const anniversaryPending = (now.月 || 1) < (birth.月 || 1)
+      || ((now.月 || 1) === (birth.月 || 1) && (now.日 || 1) < (birth.日 || 1));
+    if (now.年 - birth.年 - Number(anniversaryPending) < 18) npc.出生日期 = { 年: now.年 - 18, 月: 1, 日: 1 };
+  }
 }
 
 function itemType(type: ScenarioModItem['type']): '装备' | '丹药' | '材料' | '其他' {
@@ -159,12 +169,12 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
   return {
     名字: character.name,
     性别: gender(character.gender),
-    出生日期: { 年: currentYear - estimateNpcAge(character), 月: 1, 日: 1 },
+    出生日期: { 年: currentYear - estimateNpcAge(character, currentYear), 月: 1, 日: 1 },
     种族: profile.race || '人族',
     出生: profile.origin || character.role || '原作人物',
     外貌描述: profile.appearance || character.description || character.role || character.name,
     性格特征: profile.personality || [],
-    境界: { 名称: character.realm || '凡人', 阶段: '初期', 当前进度: 0, 下一级所需: 100, 突破描述: '依剧情发展' },
+    境界: { 名称: character.id === 'liuchao.character.xie_yi' && /独行客/.test(character.role || '') ? '未知' : character.realm || '凡人', 阶段: '初期', 当前进度: 0, 下一级所需: 100, 突破描述: '依剧情发展' },
     灵根: {
       name: profile.spiritRoot?.name || '原作未载',
       tier: profile.spiritRoot?.tier || '凡品',
@@ -194,7 +204,7 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     技能: { 掌握技能: nativeContent.skills },
     功法: { 修炼功法: nativeContent.primaryTechnique },
     人格底线: [],
-    记忆: [...(profile.memories || []), ...(profile.notes || [])],
+    记忆: [...(profile.memories || []), ...(profile.notes || []).filter(note => !note.startsWith('【内部约束·不入正文】'))],
     当前外貌状态: profile.currentAppearance || '状态正常',
     当前内心想法: profile.currentThought || '依照剧本关系与当前事件行动。',
     头像: profile.avatar || '',

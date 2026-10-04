@@ -37,3 +37,18 @@ test('scoped player lines are first-person, distinct, and do not leak author not
   const source = await import('node:fs/promises').then(fs => fs.readFile(new URL('../src/modules/scenarioMods/playerActionPresentation.ts', import.meta.url), 'utf8'));
   assert.equal(/我\$\{trimmed/.test(source), false);
 });
+
+
+test('author-only limits stay out of player action projection; narrative spoiler overrides leave contracts intact', async () => {
+  const p = await loadTs('../src/modules/scenarioMods/playerActionPresentation.ts');
+  for (const input of ['我让她把条件说清，不把尚未执行的提议写成既成事实。', '我查看村子，不提前宣告灭村真相。', '我安置商队，不走进下一章才揭开的真相。', '我承认损失，不装作无事过滩。']) {
+    assert.match(p.playerFacingActionLine(input), /^我/);
+    assert.doesNotMatch(p.playerFacingActionLine(input), /不把|不提前|不走进|不装作/);
+  }
+  assert.equal(p.playerFacingActionLine('武二郎走投无路返回后，我谈定报酬。'), '我谈定报酬。');
+  const before = p.playerActionDisplayOverride('lcq.event.s03b_yinzhu_xiongerpu', 'yinzhu_strikes_ajia');
+  assert.doesNotMatch(before.line + before.label, /尸体|死|焚化/);
+  const burn = p.playerActionDisplayOverride('lcq.event.s03b_yinzhu_xiongerpu', 'burn_yinzhu_victim');
+  assert.equal(burn.label, '焚化阿葭的遗体和阴蛛');
+  assert.equal(p.playerActionDisplayOverride('lcq.event.wuerlang_joins', 'secure_wuerlang_southbound'), undefined);
+});

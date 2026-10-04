@@ -48,6 +48,9 @@ export interface ScenarioModCharacterAttributes {
 }
 
 export interface ScenarioModCharacterProfile {
+  birthYear?: number;
+  storyAge?: { value?: number | string; basis?: string };
+  speechStyle?: string;
   appearance?: string;
   personality?: string[];
   currentAppearance?: string;

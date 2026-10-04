@@ -1689,7 +1689,7 @@ const getNpcRecentMemories = (npc: NpcProfile): string[] => {
       .slice(-3)
       .reverse()
       .map(m => {
-        if (typeof m === 'string') return m;
+        if (typeof m === 'string') return m.replace(/当前关卡 [a-z0-9._-]+[：:]?/g, '阶段经历：');
         if (typeof m === 'object' && m.事件) return m.事件;
         return '';
       })

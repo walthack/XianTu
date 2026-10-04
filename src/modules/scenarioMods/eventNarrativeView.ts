@@ -1,5 +1,6 @@
 import type { ScenarioCondition, ScenarioModEvent } from './schema';
 import type { ScenarioDivergence } from './divergenceLedger';
+import { locationWithin } from './travel/locationIds';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
@@ -193,7 +194,7 @@ export function questCompassPhrases(
   if (!event) return [];
   const { locName, who } = questCompassTargets(event, runtime);
   const phrases: string[] = [];
-  if (!storyRouteLocation(event.id) && locName && event.locationId && event.locationId !== atLocationId) phrases.push(`去${locName}`);
+  if (!storyRouteLocation(event.id) && locName && event.locationId && !locationWithin(atLocationId, event.locationId)) phrases.push(`去${locName}`);
   for (const name of who) phrases.push(`见${name}`);
   return phrases;
 }
@@ -205,6 +206,7 @@ export function formatQuestCompass(
   atLocationId?: string,
 ): string {
   const objective = resolveFixedQuestObjective(event);
+  if (event?.id === 'lcq.event.s02_04') return objective;
   const pointer = questCompassPhrases(event, runtime, atLocationId).join(' · ');
   if (!pointer) return objective;
   if (!objective) return pointer;

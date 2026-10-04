@@ -1,3 +1,4 @@
+import { xiaoziDisclosure } from './characterResolver';
 /**
  * 事件级叙事边界（数据表）。
  *
@@ -61,4 +62,30 @@ export function stripNarrativeBoundaryClauses(text: string, eventId: string | un
     return true;
   });
   return { text: kept.join('').replace(/\n{3,}/g, '\n\n').trim(), removed };
+}
+
+/** 南荒当前现场与未揭身份约束；只退稿，不改变状态。 */
+export function validateNanhuangCanonNarrative(text: string, stageId: string, location: string, completed: string[], disclosureContext?: Parameters<typeof xiaoziDisclosure>[0]): void {
+  if (!/^lcq\.stage_0(?:3b|4|4b|5b)/.test(stageId)) return;
+  if (/岳帅|岳鹏举/.test(text) && /(?:岳帅|岳鹏举)[^。！？\n]{0,35}(?:她(?:不|的|是|有|说)|丈夫|女性|女人)|(?:岳帅|岳鹏举)[\s\S]{0,80}(?:她不喜见血|她有一女|她在丈夫死后)|她[^。！？\n]{0,12}(?:遗腹女|生下)/.test(text)) throw new Error('岳帅性别冲突：岳帅名岳鹏举，是男性');
+  if (/蛇彝村|蛇彝领地/.test(location) && /(?:老彝婆|蛇彝斥候|蛇彝村民|蛇祖)[^。！？\n]{0,20}(?:躲|走|说|开口|挥|现身|出现|看着|递|活着)|(?:你|程宗扬)[^。！？\n]{0,12}(?:被白蛇咬|白蛇咬伤)/.test(text)) throw new Error('蛇彝村现场冲突：空村不新增活村民或无回执伤势');
+  if (/灵飞镜[^。！？\n]{0,20}(?:阿夕性命相连|前朝名将遗物)|(?:潘师姐|潘掌门)[^。！？\n]{0,12}(?:不同意|点了头)/.test(text)) throw new Error('南荒事实冲突：不得编造灵飞镜来历、性命绑定或潘金莲许可');
+  const ghostKingDead = completed.includes('lcq.event.ghost_king_swallowed');
+  const sentences = text.split(/[。！？\n]/);
+  if (!ghostKingDead && sentences.some(s => !/尚未|并未|没有|未曾|如果|假如|若是|一旦|待到/.test(s)
+    && /鬼王峒[^。！？]{0,12}(?:已|既已|已经)(?:平定|攻破|覆灭)|(?:峒主|鬼巫王)[^。！？]{0,5}(?:已死|一死|死了|被杀|身亡)/.test(s))) {
+    throw new Error('正典时序冲突：鬼王峒尚未平定，鬼巫王未死');
+  }
+  if (sentences.some(s => !/像|仿佛|不同|不是|并非|想起|回忆/.test(s)
+    && /(?:那是|这里|此地|这片|眼前)[^。！？]{0,30}王哲[^。！？]{0,25}十里焦土/.test(s))) {
+    throw new Error(`正典地点冲突：${location || '南荒战场'}不是王哲殉身的十里焦土`);
+  }
+  const xiaozi = xiaoziDisclosure({ ...disclosureContext, modId: stageId, completedEventIds: completed });
+  for (const sentence of sentences) {
+    if (/小紫/.test(sentence) && /毒宗|殇侯[^，。]{0,10}(?:弟子|传人)|唯一[^，。]{0,10}(?:嫡传|传人)/.test(sentence)) throw new Error('小紫师承在南荒尚未公开，清羽范围不开放唯一传人');
+    if (!/小紫/.test(sentence) || !/神似|肖似|相似|女儿|父亲|母亲|亲生|血缘/.test(sentence)) continue;
+    const fatherConflict = !xiaozi.father && /岳帅|岳鹏举/.test(sentence)
+      && !(xiaozi.suspectedFather && /怀疑|猜测|未证实/.test(sentence));
+    if (fatherConflict || (!xiaozi.mother && /碧姬|碧奴/.test(sentence))) throw new Error('小紫身世尚未揭露，不能描写与碧姬或岳帅的亲缘相似');
+  }
 }

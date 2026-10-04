@@ -189,3 +189,11 @@ test('agency guard rejects Run4 consequences while allowing observation and expl
   assert.deepEqual(check('你看见守卫杀死了敌人。', '我观察局势。'), []);
   assert.deepEqual(check('她说：“你可以签下契书。”你没有签下契书。', '我先问清条件。'), []);
 });
+
+
+test('agency guard distinguishes an approved named NPC subject without allowing unrequested player killing', async () => {
+  const { unauthorizedPlayerActions: check } = await loadTs('../src/modules/scenarioMods/playerAgencyGuard.ts');
+  assert.deepEqual(check('你协助武二郎挡住敌人，苏荔与武二郎联手击杀九名武士。', '我协助击退武士。', ['苏荔', '武二郎']), []);
+  assert.deepEqual(check('你抽刀，捅死了敌人。', '我观察局势。', ['苏荔']), ['杀人']);
+  assert.deepEqual(check('你举刀，武二郎被你杀死。', '我观察局势。', ['武二郎']), ['杀人']);
+});

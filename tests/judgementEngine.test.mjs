@@ -104,7 +104,7 @@ test('successful double-cultivation recovery writes core values and one temporar
     系统: { 扩展: {} },
   };
   const pending = await createPending(save, {
-    actionText: '与同伴双修调息疗伤，修复经脉', kind: 'cultivate', difficulty: { band: 'hard', value: 20 },
+    actionText: '双方合意，与同伴双修调息疗伤，修复经脉', kind: 'cultivate', difficulty: { band: 'hard', value: 20 },
     factors: [{ label: '功法相合', value: 15, source: 'skill' }],
   });
   const { resolvePendingJudgement, describeJudgementEffect } = await loadTs('../src/utils/judgementEngine.ts');
@@ -125,7 +125,7 @@ test('successful double-cultivation recovery writes core values and one temporar
 test('test outcome override is explicit, auditable, and still uses deterministic effects', async () => {
   const save = { 角色: { 属性: { 气血: { 当前: 100, 上限: 1000 }, 神识: { 当前: 100, 上限: 1000 } } }, 系统: { 扩展: {} } };
   const pending = await createPending(save, {
-    actionText: '双修调息疗伤', kind: 'cultivate', difficulty: { band: 'severe', value: 25 }, factors: [{ label: '重伤', value: -15, source: 'condition' }],
+    actionText: '双方合意双修调息疗伤', kind: 'cultivate', difficulty: { band: 'severe', value: 25 }, factors: [{ label: '重伤', value: -15, source: 'condition' }],
   });
   const { resolvePendingJudgement, getJudgementState } = await loadTs('../src/utils/judgementEngine.ts');
   const result = resolvePendingJudgement(save, pending.id, { currentTurn: 5, roll: () => 1, testOutcome: 'great_success' });

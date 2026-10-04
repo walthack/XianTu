@@ -444,6 +444,24 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 if (actionIds.has(action.id)) add(`${actionPath}.id`, 'duplicate_id', `Duplicate event action "${action.id}".`);
                 actionIds.add(action.id);
               }
+              for (const field of ['sceneLocation', 'sceneObjective', 'fallbackText', 'previousBeat', 'locationId']) optionalString(action[field], `${actionPath}.${field}`, add);
+              for (const field of ['fixedFacts', 'forbidden']) if (action[field] !== undefined && (!Array.isArray(action[field]) || !(action[field] as unknown[]).every(isNonEmptyString))) add(`${actionPath}.${field}`, 'invalid_type', 'Scene facts must be non-empty strings.');
+              if (action.dayPart !== undefined && !['清晨', '上午', '白天', '黄昏', '傍晚', '夜', '深夜', '正午'].includes(String(action.dayPart))) add(`${actionPath}.dayPart`, 'invalid_enum', 'Unknown scene day part.');
+              if (action.cast !== undefined) {
+                if (!isRecord(action.cast)) add(`${actionPath}.cast`, 'invalid_type', 'Scene cast must be an object.');
+                else {
+                  for (const field of ['present', 'enter']) if (action.cast[field] !== undefined && (!Array.isArray(action.cast[field]) || !(action.cast[field] as unknown[]).every(isNonEmptyString))) add(`${actionPath}.cast.${field}`, 'invalid_type', 'Scene cast must be names.');
+                  if (action.cast.exit !== undefined && (!Array.isArray(action.cast.exit) || !action.cast.exit.every(p => isRecord(p) && isNonEmptyString(p.name) && ['dead', 'missing', 'departed'].includes(String(p.status))))) add(`${actionPath}.cast.exit`, 'invalid_type', 'Each exit must have a name and a status.');
+                }
+              }
+              if (action.ledgerEffects !== undefined) {
+                if (!isRecord(action.ledgerEffects)) add(`${actionPath}.ledgerEffects`, 'invalid_type', 'Ledger effects must be an object.');
+                else {
+                  if (action.ledgerEffects.jiuyang !== undefined && action.ledgerEffects.jiuyang !== '一阳') add(`${actionPath}.ledgerEffects.jiuyang`, 'invalid_enum', 'This pilot only supports one-yang.');
+                  validateInventoryTransfers(action.ledgerEffects.inventoryTransfers, `${actionPath}.ledgerEffects.inventoryTransfers`, String(entity.id), false);
+                }
+              }
+              if (action.fixedFacts !== undefined && (!isNonEmptyString(action.fallbackText) || !Array.isArray(action.factChecks) || !action.factChecks.every(g => Array.isArray(g) && g.length && g.every(isNonEmptyString)))) add(`${actionPath}.fixedFacts`, 'required_fallback', 'Fixed facts require a fallback and semantic checks.');
               requireString(action.label, `${actionPath}.label`, add);
               requireString(action.actionText, `${actionPath}.actionText`, add);
               if (action.timeCost !== 1) add(`${actionPath}.timeCost`, 'invalid_value', 'Structured event actions currently require timeCost=1.');
@@ -919,7 +937,18 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                           if (actionIds.has(action.id)) add(`${actionPath}.id`, 'duplicate_id', `Duplicate step action "${action.id}".`);
                           actionIds.add(action.id);
                         }
-                        requireString(action.label, `${actionPath}.label`, add);
+                        for (const field of ['sceneLocation', 'sceneObjective', 'fallbackText', 'previousBeat', 'locationId']) optionalString(action[field], `${actionPath}.${field}`, add);
+              for (const field of ['fixedFacts', 'forbidden']) if (action[field] !== undefined && (!Array.isArray(action[field]) || !(action[field] as unknown[]).every(isNonEmptyString))) add(`${actionPath}.${field}`, 'invalid_type', 'Scene facts must be non-empty strings.');
+              if (action.dayPart !== undefined && !['清晨', '上午', '白天', '黄昏', '傍晚', '夜', '深夜', '正午'].includes(String(action.dayPart))) add(`${actionPath}.dayPart`, 'invalid_enum', 'Unknown scene day part.');
+              if (action.cast !== undefined) {
+                if (!isRecord(action.cast)) add(`${actionPath}.cast`, 'invalid_type', 'Scene cast must be an object.');
+                else {
+                  for (const field of ['present', 'enter']) if (action.cast[field] !== undefined && (!Array.isArray(action.cast[field]) || !(action.cast[field] as unknown[]).every(isNonEmptyString))) add(`${actionPath}.cast.${field}`, 'invalid_type', 'Scene cast must be names.');
+                  if (action.cast.exit !== undefined && (!Array.isArray(action.cast.exit) || !action.cast.exit.every(p => isRecord(p) && isNonEmptyString(p.name) && ['dead', 'missing', 'departed'].includes(String(p.status))))) add(`${actionPath}.cast.exit`, 'invalid_type', 'Each exit must have a name and a status.');
+                }
+              }
+              if (action.fixedFacts !== undefined && (!isNonEmptyString(action.fallbackText) || !Array.isArray(action.factChecks) || !action.factChecks.every(g => Array.isArray(g) && g.length && g.every(isNonEmptyString)))) add(`${actionPath}.fixedFacts`, 'required_fallback', 'Fixed facts require a fallback and semantic checks.');
+              requireString(action.label, `${actionPath}.label`, add);
                         requireString(action.actionText, `${actionPath}.actionText`, add);
                         if (action.timeCost !== 1) add(`${actionPath}.timeCost`, 'invalid_value', 'R2-11 structured actions currently require timeCost=1.');
                       });

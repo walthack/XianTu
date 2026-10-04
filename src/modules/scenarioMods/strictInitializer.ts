@@ -2,7 +2,7 @@ import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
 import type { ScenarioMod, ScenarioStoryMode, ScenarioWorldSimulation } from './schema';
 import { buildExpandScenarioInitialization, type ExpandScenarioInitialization } from './expandInitializer';
-import { settleNanhuangStageTransition } from './travel/travelLedger';
+import { settleNanhuangStageTransition, currentTravelCompanions } from './travel/travelLedger';
 import { withNativeScenarioLocationType } from './locationTypes';
 import { advanceScenarioRuntime, createScenarioProgress, getInitialScenarioChapterId, type ScenarioProgressState } from './runtime';
 import { applyScenarioRelationshipsToSave } from './relationships';
@@ -408,6 +408,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   }
   newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
   if (divergenceSnapshot.length) newRuntime.divergences = divergenceSnapshot;
+  for (const field of ['locationLoot', 'sceneLedger']) if ((rt as any)[field]) (newRuntime as any)[field] = structuredClone((rt as any)[field]);
   if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;
   if (Object.keys(acquaintanceSnapshot).length) {
     newRuntime.acquaintances = { ...(newRuntime.acquaintances || {}), ...acquaintanceSnapshot };
@@ -436,7 +437,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     (newRuntime as { baihuGambleRefusal?: unknown }).baihuGambleRefusal = inheritedBaihuGambleRefusal;
   }
   // 行旅账跨关携带；转关强制路线先落回执再定位置（开场地点只在账为空时生效）。
-  settleNanhuangStageTransition(next, newRuntime, String(rt.modId), targetId, rt.travelLedger);
+  settleNanhuangStageTransition(next, newRuntime, String(rt.modId), targetId, rt.travelLedger, currentTravelCompanions(saveData, rt));
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);
   const advancedRuntime = (advanced.saveData as any)?.世界?.状态?.剧本模组;

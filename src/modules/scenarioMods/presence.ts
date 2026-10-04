@@ -143,6 +143,7 @@ type DepartedRuntime = {
   departedCast?: unknown;
   modId?: unknown;
   prevStageId?: unknown;
+  sceneLedger?: { actors?: Record<string, { status: string }> };
 };
 
 function qingyuStagePastOpening(runtime: DepartedRuntime | null | undefined): boolean {
@@ -162,6 +163,7 @@ function nanhuangCastExclusions(runtime: DepartedRuntime | null | undefined, per
   const done = (id: string) => eventIsCompleted(runtime, `lcq.event.${id}`);
   const entered = (id: string) => done(id) || Boolean((runtime as { activeEventIds?: string[] })?.activeEventIds?.includes(`lcq.event.${id}`));
   const stage = String(runtime?.modId || '');
+  if (!permanentOnly && ['lcq.stage_03b_snake_flower_bridge','lcq.stage_04'].includes(stage)) names.push('小紫');
   if (!permanentOnly && stage === 'lcq.stage_03b_snake_flower_bridge') {
     if (!entered('s03b_snake_flower_bridge_06')) names.push('苏荔', '阿夕', '卡瓦', '阿葭');
     if (!entered('s03b_snake_flower_bridge_07')) names.push('花苗新娘');
@@ -221,7 +223,10 @@ export function departedPresentNames(runtime: DepartedRuntime | null | undefined
   }
   if (eventIsCompleted(runtime, 'lcq.event.s01_02') || qingyuStagePastOpening(runtime)) names.push('段强');
   if (eventIsCompleted(runtime, 'lcq.event.s02_02') || qingyuStagePastWangZhe(runtime)) names.push('王哲');
-  return [...new Set([...names, ...nanhuangCastExclusions(runtime)])];
+  const recorded = runtime?.sceneLedger?.actors || {};
+  const inferred = nanhuangCastExclusions(runtime).filter(name => recorded[name]?.status !== 'present');
+  const out = Object.entries(recorded).filter(([, actor]) => actor.status !== 'present').map(([name]) => name);
+  return [...new Set([...names.filter(name => recorded[name]?.status !== 'present'), ...inferred, ...out])];
 }
 
 /** Persist inferred deaths onto runtime so later stages and old saves share one list. */

@@ -85,3 +85,17 @@ test('main pane prioritizes the stage entry and the first committed narrative co
   assert.match(aiSource, /stageEntryTargetBefore/);
   assert.match(aiSource, /acknowledgeStageEntryPresentation\(saveData,\s*stageEntryTargetBefore\)/);
 });
+
+
+test('Nanhuang entry presentation hides chapter outlines without rewriting source opening or saved history', async () => {
+  const { getStageEntryPresentation } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  for (const file of ['03b_snake_flower_bridge', '04', '04b_lingfei_baiyi_crisis']) {
+    const mod = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/lcq.stage_${file}.json`, import.meta.url), 'utf8'));
+    const entry = { toStageId: mod.manifest.id, text: mod.scenario.opening.text };
+    const save = { 世界: { 状态: { 剧本模组: { modId: mod.manifest.id, flags: {}, stageEntryPresentation: entry } }, 信息: { 世界背景: mod.world.background } } };
+    const before = JSON.stringify(save);
+    const presented = getStageEntryPresentation(save);
+    assert.doesNotMatch(presented.text, /玩家可|改变.*命运|刺杀|九名|毒袭|血符|识破白夷内变/);
+    assert.equal(JSON.stringify(save), before);
+  }
+});

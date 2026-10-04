@@ -356,3 +356,121 @@ bugfix5收尾：标记后完整串行1142pass/5skip、tsc/diff/两项临时端�
 - 真机/成熟度：真实MiniMax核心行为通过，到达不完成、五原无一键捷径、南荒22次强制移动有回执/无多余移动回合，顶栏及止点/托付/海神殿正常；原南荒回归保留。已知体验问题不混入本次提交，不宣称全部演出通过。
 - 阻塞/下一轮分工：主策划修M3内部指令兜底泄露（P1）与M2 stage_02年龄红字/叙事；模块策划修02路途拍与日历不同步、所有路程统一数日=3天，并接路途卡UI（第5步）；New Bot复测。用户决定先提交再返修。
 - Git范围：有效名单mod-kit/location-id-known-issues.json随代码提交；被忽略shared-atlas名单副本保留不动、不add -f。本批提交后核对origin同哈希与空工作区，具体hash见Git历史及交付回复。
+
+
+### MOVE-P0-4-20261003 · 主策划M3/M2/P3返修（并行隔离）
+
+- 交付：modularTurn指令泄露守卫及独立安全兜底；AIBidirectionalSystem逐稿拒因、03b以后及凝羽开价的静默承接；runtime仅按钮短标题/到场动作动词，eventNarrativeView复用子地点归属去掉多余去X。s04_04叶媪站与05b前两拍地点绑定仅修改04/05b overlay和对应builtin，裁定#178。
+- 验证：modularTurn/run4FollowupRepairs/questCompassArrival/nanhuangExpansion/r2_13共77/77；随后夹具改为精确03b_02带内部输入、该文件23/23复跑。包含凝羽第二步三次年龄拒绝后local无generationError/唯一结算；源+overlay两关只读核对一致，未生成。备份`~/Desktop/xiantu-narrative-m3-backup-20261003/`；日志`/tmp/xiantu-m3-focused.log`及`/tmp/xiantu-m3-exact-scene.log`。
+- 成熟度/未测：READY_FOR_RETEST，无新真机/真实模型、全量/tsc/build/canon门证据，不commit/push。原角色/rail/结局合同不改，未reset/checkout/stash。
+- 并行依赖：模块策划接叶媪站lcq.location.yeao_village(1725,8420)、05b前两拍liuchao.location.guiwang_dong，修路线迷谷→弥骨。主策划未动travel目录、openWorldSlice或行旅账/日历/卡UI/天数/听闻，stage_02五拍演出内容未改；runtime只收紧显示片段。双方完成后New Bot统一全量/真机。
+
+
+### MOVE-P0-4-20261003 · 用户22:37行程裁定，主策划接管
+
+- 交付：在上一轮16未提交文件上继续，travel定义/账、openWorldRoute durationLabel、strictInitializer出发同行快照、主面板路途卡显示；固定正文删除紫溪/黑石滩正常概要，5拍仍由模型演出。新听闻03b04、叶媪村接在rail真正前拍s04_01之后（04 rail顺序02→03→01→04），05b既有峒域合同沿用，03激活即结束自由段。裁定#179。
+- 行程依据与歧义：原文39“如果顺利今晚到”是预计，不另加一天；43三四日按当前三段各一日计累计三日。34初段三日按用户要求提前在离五原结算，不当作原著五原到铁索桥精确时长。49离熊耳铺两日；52“第五天”没有明言起算，不新增五日，叶媪后远程仍数日占位。85古道五日、118一天多1.5日；相邻山谷/白夷/碧鲮半日，区内片刻。同行以运行时在场随队角色快照，不硬编码原著名单。
+- 验证：定向7文件71/71，`/tmp/xiantu-itinerary-focused.log`。覆盖武二郎真实合同出发卡与+3日、五拍未跳过、03b转关无重复天数、听闻和到达区分、半日/一天多日历进位、源随队快照、05b03激活封自由、紫溪/黑石滩实走stub模型且path=modular。SFC解析/compileScript与diffcheck通过；关闭已解决05b D8两条债务，地点定向门通过。
+- 成熟度/依赖：READY_FOR_RETEST，未全量/tsc/build/canon/真机，无commit/push，原未提交修复全部保留。模块策划不再参与本轮行程，New Bot统一跑两轮改动全量门与真机。备份`~/Desktop/xiantu-itinerary-backup-20261003/pre-change.tgz`。
+
+
+### MOVE-P0-4-20261003 · 行程第二轮窄修
+
+- 交付：05b整体事件overlay目标值合并前两拍峒域地点，移除冗余子字段操作，保留builtin现状；叶媪村后五日、散峒半日及自然耗时标签，裁定#180 supersedes #179第52章起算不明部分。其他换算及全部已有工作区修改保留。
+- 证据：canonAuthorityOverlay/nanhuangTravelLedger两份定向20/20，含二次overlay幂等、builtin重建、两段日历/卡面与重放不重复收费；日志`/tmp/xiantu-itinerary-round2-focused.log`。运行时定义枚举剩余several路线0条，工厂默认值仅保留供未来未明远程使用。
+- 成熟度/未测/依赖：READY_FOR_RETEST，不commit/push；New Bot负责全量/tsc/build/canon及真机，本轮未执行上述门禁。备份`~/Desktop/xiantu-itinerary-round2-backup-20261003/`；门禁生成manifest/registry保持原样。
+- 范围说明：上一轮MainGamePanel只展示出发卡，strictInitializer从出发存档取同行，fixedEndingNarratives移除正常路途概要以恢复模型，地点脚本仅排除stage_02的南荒rail专用审计而保留全关地点检查；两条D8债务因05b前两拍不再错挂碧鲮而关闭。本轮不追加这些文件的改动。
+
+
+### MOVE-P0-4-20261003 · nh6第三轮返修（2026-10-04）
+
+- 交付：全部正文拒稿统一静默三稿后安全承接，保护预结算唯一落账；同行延续已有出发快照及完成事件，仍遵守死亡/离场/失踪门；当前步骤场景与步骤结束后的行旅分开，只调整模型材料不改结算顺序。补正典主角姓名；源合同授权的历史人物提及保留对白，不写入当前相识名单。裁定#181，无新增正常固定正文。
+- 根因：道具/结算/格式拒稿原抛普通Error而未进入兜底；转关活跃事件清空和NPC位置未定导致随队少人；预结算已落下一站位置，材料误用终点；西门庆未登场整段过滤删掉了本就授权的旧事对白，非sentenceIds。
+- 验证：定向7文件85/85（run4FollowupRepairs、nanhuangTravelLedger、modularTurn、canonAuthorityOverlay、characterResolver、travelEngineExtension、locationIds）；日志`/tmp/xiantu-nh6-round3-focused.log`。包含03b02道具三稿全拒与凝羽第二步年龄三稿全拒安全唯一结算、两个真实转关、模型现场材料及完整对白发布/历史存档。
+- 成熟度/依赖：READY_FOR_RETEST，New Bot统一全量/tsc/build/canon与真机；本轮未跑这些门禁、不提交推送。地点三状态显示仍属移动第4–5步，本轮不做。备份`~/Desktop/xiantu-nh6-round3-backup-20261004/`，原全部改动和门禁生成元数据保留。
+
+
+### MOVE-P0-4-20261003 · nh6-player第四轮（2026-10-04）
+
+- 目标/交付：零项传输两次回归与P1代码修复；正文守卫三稿静默兜底，使用已批准本拍结果；角色名单与必到分离、玩家意图与作者约束分离、NPC动作与玩家自主权分离。阿葭过渡、章节介绍和未揭/未到正典边界。裁定#182。[逐项代码、源数据交接及第7–21分类](/Users/clawbot/Documents/Codex/2026-06-21/xiantu/work/XianTu/docs/NH6-PLAYER-ROUND4-REVIEW-2026-10-04.md)。
+- 验证：串行定向9文件121/121，日志`/tmp/xiantu-nh6-player-r4-focused.log`；含baihu32/32原expect(calls,2)不改、安全三拍结果及NPC主语误拒、现身与亲缘/时序、章纲展示隔离。diffcheck通过。旧真机逐稿日志不完整，离线发现不冒充原运行时全因恢复。
+- 成熟度/依赖：READY_FOR_RETEST，剧情侧源数据(b)只列建议未改；P2/P3不实施，听闻地点三状态UI/搜刮仍不做；保留所有原改动及门禁生成元数据，未动travel/行旅/rail/年龄命运。未跑全量/tsc/build/canon或真机，不commit/push；New Bot统一门禁。备份`~/Desktop/xiantu-nh6-player-round4-backup-20261004/`。
+
+
+## 2026-10-04／第五批：搜刮与南荒场景账本试点
+
+- 主策划认领：落实用户已批准A／B（R1–R10）／C；保留第四轮工作区，先备份，不提交／推送，不扩战斗系统；D由剧情策划另行处理。
+- 交付：[实现报告](handoffs/2026-10-04/BATCH5-IMPLEMENTATION.md)、[角色卡清单](handoffs/2026-10-04/BATCH5-CHARACTER-CORRECTIONS.md)、`mod-kit/location-loot.qingyu.json`。成熟度：代码已接入，READY_FOR_RETEST；地点清单pending，源卡待确认。
+- 验证层级：串行定向21文件200/200（种子／重试／配额／关键防重、模型入口、演员按步、overlay双套用／重建、行旅／跨关与既有合同）；diffcheck通过。日志 `/tmp/xiantu-batch5-focused-final.log`。New Bot第四轮全绿单独记为上一批基线。
+- 未测：本批全量单测、tsc、build、canon:build、真实模型／真人试玩；不标全局PASS。
+- 剧情依赖：按模板提供地点掉落表；确认小紫race源卡勘误。凝羽／苏荔源卡不以审美为由删除；D开场／actionText继续由剧情策划处理。原文没有一阳与通用高手榜等级换算，保留通用等级、显示已有一阳层次。
+- 下轮：New Bot统一门禁＋南荒试点真机；剧情策划逐拍核对固定事实，确认后才填搜刮内容／落源卡勘误。
+
+
+## 2026-10-04 第六批 · 公开文案／角色卡与兼容（承接第五批）
+
+- 主策划认领目标：落14号稿与已批准角色勘误，保留第五批及战斗原型；不commit/push，不改战斗系统。C允许随战斗接入后做。
+- 交付／成熟度：`docs/handoffs/2026-10-04/BATCH6-IMPLEMENTATION.md`，READY_FOR_RETEST；四关overlay源修改+镜像、registry源修改+脚本产物、七合同精确迁移、谢艺公开门、内部notes隔离、凝羽同行连带修复。source保护字段未变。
+- 证据：New Bot第五批1242项全量绿为基线；本批仅串行16文件167/167与diffcheck，日志`/tmp/xiantu-batch6-*.log`。没有全量/tsc/build/canon/真机/真人体验PASS。
+- 未完成：C的branch/tier与终局数据等待主线encounter接入；未把12b创意续玩线当作已实现。剧情策划供F10/F13死亡及F14失败终局固定全文、14稿§10剩余资料、搜刮地点内容。
+- 跨组依赖／下轮：New Bot统一跑门禁与完整南荒游玩；模块策划战斗接入采用最新用户裁定，避免s06_02与slay_dragon重复战斗。先通完整可玩路线，再深度打磨，不拿当前定向检查作玩家体验证明。
+
+
+## 2026-10-04 第七批 · 南荒搜刮清单
+
+- 主策划认领：审合15号稿，登记60物品至四关overlay与镜像、深井空表ready、跨关前置持久历史和只读校验脚本。保留所有已有改动，不commit/push；只跑定向，统一门禁由New Bot进行。
+- 交付：[第七批报告](handoffs/2026-10-04/BATCH7-LOOT-CONTENT.md)。成熟度READY_FOR_RETEST；15ready／115条目／60物品，海神殿3条新增战后前置。售价／功能效果只留剧情稿，不接机制。
+- 证据：串行8文件83/83、overlay双套用及重建、每条目各声明关卡实际入账、真实切关历史条件、空表次数；脚本校验失败0，diffcheck通过，日志`/tmp/xiantu-batch7-*.log`。
+- 未测／依赖：New Bot统一全量、tsc、build、canon与真机；剧情策划复核3条海神殿前置。没有冒称外部每地3000局由本批重跑；旧档已丢失历史不猜测解锁。无commit/push，现有所有改动保留。下一轮按真人搜刮反馈打磨，不扩大交易／消耗／战斗。
+
+
+## 2026-10-04 第八批 · 回归／战斗结局／小紫信息门
+
+- 主策划认领：类型错误、卡投影overlay闭环与同步预检；16稿三终局入库；小紫78/105揭示门与未登场／RAG泄露核查。保留工作区，备份，不commit/push；本批用户授权tsc、canon:build及定向测试。
+- 交付：[第八批报告](handoffs/2026-10-04/BATCH8-REGRESSION-ENDINGS-DISCLOSURE.md)。成熟度静态门禁绿、READY_FOR_TRUE_DEVICE_RETEST；三战斗终局可消费数据已录，正式rout触发未接。
+- 证据：定向16文件158用例分轮通过；tsc0错；最终canon:build全绿46.3s（1259项，1254过/0败/5既有skip），overlay原11条不改期望；故障预检保留既有目录/manifest；diffcheck通过。日志`/tmp/xiantu-batch8-*`。一次IPC flake单跑20/20后完整重跑绿，不放宽门禁。
+- 未测／依赖：New Bot独立全量/build/真机；主线战斗尚无本地tier消费回执，模块策划接入后才能真触发E06–E08；剧情侧复核105复合拍第一步粒度，并提供毒宗师承最早公开章。旧05/06冻结投影保留，非公开原字段不导出；源卡归属/登场/年龄不变。无commit/push，所有既有工作保留。
+
+
+### 2026-10-04 第九批（进行中）
+- 目标：A卡死/正典事实、B小紫身份回执门控优先，C与轻微顺手修；保留工作区，不提交推送、不改旧测试期望。
+- 基线：New Bot第八批独立门禁全绿1259项、manifest ea85fe34c360，120回合真MiniMax报告为本批问题证据。
+- 验证计划：定向测试、diffcheck；新真机及全量由New Bot负责。
+
+- 交付：[第九批交接](handoffs/2026-10-04/BATCH9-CANON-GUIDANCE.md)。A3撤销，其余A／B落地；部分C及两条轻微项完成，剩余清单见交接。
+- 证据：17文件串行162/162、原overlay11/11（含幂等与源重建）、diffcheck；真实流水线stub覆盖五原引导不结算、弑主固定正文、母系演出后落账。未做真机。
+- 阻塞：未改的第八批6项4过2败，南荒人断言与B1新裁定冲突；不能宣称全量门禁绿。需用户授权测试侧同步，不改期望/skip/测试环境特判。
+- 未测／依赖：New Bot独立全量、tsc、build、canon与真机；道路地点锚点、按钮时机、承重固定文扩写和早关正典待下轮。成熟度实现交付／READY_FOR_TRUE_DEVICE_RETEST但门禁存在已知口径阻塞。源与镜像闭环，裁定#188，全部已有改动保留，无commit/push。
+
+### 第九批收尾后的文档索引补充（2026-10-04，非新实施批次）
+
+- 交付：[合规要求与有意偏离清单](COMPLIANCE-REQUIREMENTS.md)原样复制入仓库，仓库版为准；PROJECT-STATUS文档索引、AGENTS与CLAUDE开工必读入口已接入。
+- 口径：文末11:39用户裁定优先；成人内容不做处理、不软化，硬线仅全员满18岁与强迫内容不可玩化；新增条目需用户确认，待确认项不自动批准。
+- 证据／范围：来源与副本逐字节一致、三个相对链接存在、git diff --check；只改文档，未跑代码测试，未修改运行时／数据／测试／附录落点，未commit/push。
+- 依赖／下轮：附录R01–R52及⚠冲突等待第十批单独指令，本次不实施；第九批实现与已登记门禁冲突状态不变。
+
+
+## 2026-10-04 第十批 · 合规硬线窄修（已交付，未提交）
+
+- 认领：按用户逐项清单只修C01全员18+、C02非自愿双修不可玩化；其余成人内容不软化，A3/乐明珠童颜不动。保留全部工作区，先备份，不提交推送。
+- 验证：计划tsc、npm test、canon:build；旧年龄与第八批身份断言冲突已向用户请求同步授权，不擅改期望。
+- 依赖：卓云君其余胁迫拍只查触发方式，替换方案留剧情侧；交付与证据稍后补。
+
+- 第十批交付：[逐项合规/卓云君触发审计/文件与门禁](handoffs/2026-10-04/BATCH10-COMPLIANCE-HARD-LINES.md)，裁定#189；成熟度实现交付、门禁阻塞。源卡/overlay/registry/旧档修复，成人内容范围不扩大；额外修第九批两处label与搜刮类型真实门禁问题，精确迁移保留进度。
+- 静态证据：tsc0错，9文件109/109定向、diffcheck；npm test与canon内置单测均1279项1269过/5败/5既有skip，失败为3条旧未成年年龄预期+2条第八批身份/母系旧口径，未放宽/skip。canon源投影/同步/裁定/主轴/地点/37关schema已过，但整条canon:build exit1。
+- 依赖/下轮：待用户授权同步过期测试，然后重跑三门；卓云君82–85关联拍的主动动作与未实装登记已只读列明，替换由剧情侧另出。无新真机PASS，不commit/push，其他未提交改动及战斗原型保留。
+
+- 同批续验完成：依据用户重申全员18+／三项全绿及第九批已批准B1/B6，同步npcAgeEstimate与batch8DisclosureAndEndings的五条旧口径，并加强无母系演出回执不解锁断言。不是新批次；前述中间红灯历史保留，旧阻塞关闭。
+- 最终静态门禁：定向20/20（此前相关9文件109/109）；tsc0错，npm test1279项1274过/0败/5既有skip；canon:build全步骤通过46.5s，同样1274过/0败/5skip，manifest86d357d09fbb；diffcheck绿。日志`/tmp/xiantu-b10-*-green.log`，未改代码后重跑结果。
+- 成熟度：三门静态PASS，待New Bot独立复测／用户提交裁定；无真机PASS、无commit/push。卓云君82–85关联拍仍只审计，交剧情侧；全部原未提交改动保留。
+
+### 第十批15:03补回（用户覆盖回滚裁定）
+- 目标／交付：按清单附录B及回滚前备份补回原第十批；14:58名称类型修复和旧测试口径合并，交接恢复，无新增实现范围。
+- 成熟度／证据：实现已恢复，三项门禁复验中；静态检查不代表真机通过。
+- 未测／依赖：未做真机；New Bot可独立复核；无commit/push，用户决定后续提交。
+- 复验证据：tsc0错、npm test1279项（1274过/0败/5既有skip）、canon:build全步骤通过46.3s，manifest86d357d09fbb；diffcheck通过。实现/测试/canon源与回滚前备份一致，未做真机，未提交推送。
+
+### 第八至十批：15:10提交验收
+- 用户授权仅本地commit、不push；共享文件的既有叙事/行旅/搜刮依赖随同提交，不纳入独立战斗原型或临时文件。
+- New Bot独立证据：tsc0错、单测1279项1274过/0败/5skip、canon:build绿；五原新档约110回合到一期终点无卡死/红字，四项第九批严重问题复测通过。
+- 下一步：中低问题第十一批另发；本轮不改实现，不宣称未复测项已通过。

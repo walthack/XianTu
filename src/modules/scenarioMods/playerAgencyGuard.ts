@@ -17,7 +17,7 @@ const ACTIONS = [
 ] as const;
 const NEGATIVE_OR_QUESTION = /不(?:要|会|想|能|去|曾)?|没有|未曾|别|如果|假如|是否|要不要|能不能|[？?]/;
 
-export function unauthorizedPlayerActions(narrative: string, playerIntent: string): string[] {
+export function unauthorizedPlayerActions(narrative: string, playerIntent: string, otherActors: string[] = []): string[] {
   const intentClauses = playerIntent.split(/[，,。！!？?；;\n]/);
   const prose = narrative.replace(/[“「『][^”」』]*[”」』]/g, '');
   const clauses = prose.split(/[。！？；\n]/);
@@ -26,6 +26,9 @@ export function unauthorizedPlayerActions(narrative: string, playerIntent: strin
       const match = clause.match(/(?:你(?!们)|程宗扬)([^。！？\n]*)/);
       if (!match || !action.re.test(match[1])) return false;
       const before = match[1].slice(0, match[1].search(action.re));
+      // 同一句中逗号后换成有名NPC作主语，不把NPC的动作算成玩家动作。
+      const lastClause = before.split(/[，,]/).at(-1)?.trim() || '';
+      if (otherActors.some(name => name && lastClause.startsWith(name) && !/你|程宗扬/.test(lastClause))) return false;
       return !NEGATIVE_OR_QUESTION.test(before.slice(-6)) && !/听说|看到|看见|看着|听见|观察|判断|问/.test(before);
     });
     if (!acted) return false;
@@ -36,7 +39,7 @@ export function unauthorizedPlayerActions(narrative: string, playerIntent: strin
   }).map(action => action.label);
 }
 
-export function assertPlayerAgency(narrative: string, playerIntent: string): void {
-  const actions = unauthorizedPlayerActions(narrative, playerIntent);
+export function assertPlayerAgency(narrative: string, playerIntent: string, otherActors: string[] = []): void {
+  const actions = unauthorizedPlayerActions(narrative, playerIntent, otherActors);
   if (actions.length) throw new PlayerAgencyViolationError(actions);
 }

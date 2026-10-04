@@ -4,7 +4,7 @@ import { getCurrentContractStep, getCurrentStoryEventActions, getScenarioFocusEv
 import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
-import { findRegistryIdentitiesByContext, getRegistrySpeechStyle } from './characterResolver';
+import { findRegistryIdentitiesByContext, getRegistrySpeechStyle, isXieyiSkillHidden } from './characterResolver';
 import { formatIntimacyProfile } from './intimacyProfiles';
 import { formatRelationStance } from './relationStance';
 import { formatAffinityCap } from './affinityCaps';
@@ -527,6 +527,9 @@ function formatFocusedCharacter(
   if ((character.id === 'liuchao.character.shang_zhen_yu' && ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b'].includes(runtime.modId || ''))
     || character.name === '花苗新娘') {
     return `- ${character.name}：${character.description || character.profile?.origin || character.role || ''}。只使用当下已揭示身份，不关联全书真身与未来身世。${presentNames && !isProtagonist && !presentNames.has(character.name) ? formatAbsenceGuard(character.name) : ''}`;
+  }
+  if (character.id === 'liuchao.character.xie_yi' && isXieyiSkillHidden(runtime)) {
+    return `- 谢艺：随云氏商队同行的男子，自称出身临安、学刀防身。${character.profile?.appearance || '衣着行李普通，鞍侧挂一柄寻常钢刀。'}温和斯文，称程宗扬「程兄」。真实身手尚未揭露，不能写出境界或星月湖身份。`;
   }
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];

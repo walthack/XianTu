@@ -1,0 +1,1664 @@
+{
+  "version": 1,
+  "rules": {
+    "maxSearches": 3,
+    "commonSlots": [
+      0.65,
+      0.25
+    ],
+    "rareChance": 0.03,
+    "largeCurrencyChance": 0.02,
+    "maxCopperPerSearch": 80
+  },
+  "locations": {
+    "lcq.location.beast_camp": {
+      "name": "兽蛮人营地",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.command_tent": {
+      "name": "帅帐",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.giant_vine": {
+      "name": "万古巨藤",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "vine.fiber",
+          "itemId": "lcq.item.nh_vine_fiber",
+          "category": "common",
+          "weight": 25,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "vine.feather",
+          "itemId": "lcq.item.nh_bird_feather",
+          "category": "common",
+          "weight": 20,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "vine.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 20,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "vine.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 10,
+          "quantity": [
+            1,
+            4
+          ]
+        },
+        {
+          "id": "vine.resin",
+          "itemId": "lcq.item.nh_ancient_vine_resin",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 30
+    },
+    "lcq.location.grassland": {
+      "name": "草原",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.guiwang_inn": {
+      "name": "鬼王峒驿馆",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "inn.bun",
+          "itemId": "lcq.item.nh_bean_bun",
+          "category": "common",
+          "weight": 20,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "inn.incense",
+          "itemId": "lcq.item.nh_boshan_incense",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "inn.candle",
+          "itemId": "lcq.item.nh_candle_stub",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "inn.feed",
+          "itemId": "lcq.item.nh_feed_cake",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "inn.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "inn.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 12,
+          "quantity": [
+            1,
+            5
+          ]
+        },
+        {
+          "id": "inn.crystal_cup",
+          "itemId": "lcq.item.nh_crystal_wine_cup",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 40
+    },
+    "lcq.location.huamiao_village": {
+      "name": "花苗寨",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "huamiao.flatbread",
+          "itemId": "lcq.item.nh_huamiao_flatbread",
+          "category": "common",
+          "weight": 20,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "huamiao.honey",
+          "itemId": "lcq.item.nh_wild_honey",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "huamiao.wax",
+          "itemId": "lcq.item.nh_bee_wax",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "huamiao.cattail",
+          "itemId": "lcq.item.nh_cattail_smoke",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "huamiao.cloth",
+          "itemId": "lcq.item.nh_tube_skirt_cloth",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "huamiao.bell",
+          "itemId": "lcq.item.nh_miao_silver_bell",
+          "category": "common",
+          "weight": 6,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "huamiao.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "huamiao.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 20,
+          "quantity": [
+            1,
+            8
+          ]
+        },
+        {
+          "id": "huamiao.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            80
+          ]
+        },
+        {
+          "id": "huamiao.silver_torque",
+          "itemId": "lcq.item.nh_miao_silver_torque",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        },
+        {
+          "id": "huamiao.stinger",
+          "itemId": "lcq.item.nh_ghostface_stinger",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 80
+    },
+    "lcq.location.macedon_camp": {
+      "name": "马其顿军营",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.nanhuang_camp": {
+      "name": "花苗营地",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.nanhuang_departure_camp": {
+      "name": "南荒散峒营地",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "camp.flatbread",
+          "itemId": "lcq.item.nh_huamiao_flatbread",
+          "category": "common",
+          "weight": 18,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "camp.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 18,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "camp.bolt",
+          "itemId": "lcq.item.nh_fine_crossbow_bolt",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "camp.hide",
+          "itemId": "lcq.item.nh_small_hide",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "camp.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "camp.fruit",
+          "itemId": "lcq.item.nh_wild_fruit",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "camp.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 18,
+          "quantity": [
+            1,
+            8
+          ]
+        },
+        {
+          "id": "camp.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            60
+          ]
+        },
+        {
+          "id": "camp.trigger",
+          "itemId": "lcq.item.nh_fine_crossbow_trigger",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 80
+    },
+    "lcq.location.nanhuang_route": {
+      "name": "南荒商路",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.roman_camp": {
+      "name": "罗马军营",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.sheyi_village": {
+      "name": "蛇彝村",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "sheyi.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 20,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "sheyi.feather",
+          "itemId": "lcq.item.nh_bird_feather",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "sheyi.hide",
+          "itemId": "lcq.item.nh_small_hide",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "sheyi.salt",
+          "itemId": "lcq.item.nh_salt_lump",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "sheyi.slough",
+          "itemId": "lcq.item.nh_snake_slough",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "sheyi.lamp",
+          "itemId": "lcq.item.nh_clay_oil_lamp",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "sheyi.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 20,
+          "quantity": [
+            1,
+            8
+          ]
+        },
+        {
+          "id": "sheyi.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            60
+          ]
+        },
+        {
+          "id": "sheyi.bone_flute",
+          "itemId": "lcq.item.nh_sheyi_bone_flute",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 80
+    },
+    "lcq.location.taiyi_temple": {
+      "name": "太乙真宗道观",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.turtle_road_ruins": {
+      "name": "龟纹古道废墟",
+      "status": "pending",
+      "entries": []
+    },
+    "lcq.location.yeao_village": {
+      "name": "南荒山村",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "yeao.rat_pelt",
+          "itemId": "lcq.item.nh_rat_pelt",
+          "category": "common",
+          "weight": 18,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "yeao.trinket",
+          "itemId": "lcq.item.nh_tarnished_trinket",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "yeao.pebble",
+          "itemId": "lcq.item.nh_pebble_necklace",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "yeao.mushroom",
+          "itemId": "lcq.item.nh_goose_palm_mushroom",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "yeao.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "yeao.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 20,
+          "quantity": [
+            1,
+            6
+          ]
+        },
+        {
+          "id": "yeao.sachet",
+          "itemId": "lcq.item.nh_realgar_sachet",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 60
+    },
+    "liuchao.location.baihu_shang_guan": {
+      "name": "白湖商馆",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.baijun": {
+      "name": "巴郡",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.bailuojiang": {
+      "name": "白龍江",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.baiyi": {
+      "name": "白夷族",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "baiyi.shell",
+          "itemId": "lcq.item.nh_clam_shell",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "baiyi.orange",
+          "itemId": "lcq.item.nh_orange",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "baiyi.fish",
+          "itemId": "lcq.item.nh_dried_fish",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "baiyi.tea",
+          "itemId": "lcq.item.nh_tea_brick_corner",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "baiyi.silk",
+          "itemId": "lcq.item.nh_silk_scrap",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "baiyi.crow_feather",
+          "itemId": "lcq.item.nh_crowman_feather",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ],
+          "afterEventIds": [
+            "lcq.event.s04b_lingfei_baiyi_crisis_03"
+          ]
+        },
+        {
+          "id": "baiyi.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 6,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "baiyi.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 20,
+          "quantity": [
+            1,
+            8
+          ]
+        },
+        {
+          "id": "baiyi.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            80
+          ]
+        },
+        {
+          "id": "baiyi.rice_pearl",
+          "itemId": "lcq.item.nh_baiyi_rice_pearl",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 80
+    },
+    "liuchao.location.biyu_village": {
+      "name": "碧鲮族",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "biyu.fish",
+          "itemId": "lcq.item.nh_dried_fish",
+          "category": "common",
+          "weight": 22,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "biyu.shell",
+          "itemId": "lcq.item.nh_clam_shell",
+          "category": "common",
+          "weight": 18,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "biyu.coconut",
+          "itemId": "lcq.item.nh_coconut_shell",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "biyu.coral",
+          "itemId": "lcq.item.nh_coral_twig",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "biyu.fruit",
+          "itemId": "lcq.item.nh_wild_fruit",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "biyu.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 12,
+          "quantity": [
+            1,
+            6
+          ]
+        },
+        {
+          "id": "biyu.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            50
+          ]
+        },
+        {
+          "id": "biyu.sea_glow",
+          "itemId": "lcq.item.nh_sea_glow_reef",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        },
+        {
+          "id": "biyu.sea_pearl",
+          "itemId": "lcq.item.nh_biling_sea_pearl",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 60
+    },
+    "liuchao.location.boling": {
+      "name": "泊陵",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.canglan": {
+      "name": "苍澜镇",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.changan": {
+      "name": "长安",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.chenzhou": {
+      "name": "辰州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.cuizhi": {
+      "name": "翠枝港",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.dantu": {
+      "name": "丹徒",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.diqiu": {
+      "name": "帝丘",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.guang_ming_guan": {
+      "name": "光明观",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.guangming": {
+      "name": "光明观堂",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.guangyang": {
+      "name": "广阳",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.gui_wang_gong": {
+      "name": "鬼王宫",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "palace.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 18,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "palace.hide",
+          "itemId": "lcq.item.nh_small_hide",
+          "category": "common",
+          "weight": 14,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "palace.bead",
+          "itemId": "lcq.item.nh_crystal_bead",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "palace.bone_beads",
+          "itemId": "lcq.item.nh_bone_bead_string",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "palace.lava_glass",
+          "itemId": "lcq.item.nh_lava_glass",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "palace.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 10,
+          "quantity": [
+            1,
+            5
+          ]
+        },
+        {
+          "id": "palace.niche_crystal",
+          "itemId": "lcq.item.nh_niche_crystal",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.s05b_05b_ideology_duel_and_defeat"
+          ]
+        }
+      ],
+      "maxCopper": 40
+    },
+    "liuchao.location.gui_wang_gong.jingshen_tai": {
+      "name": "鬼王宫深井祭台",
+      "status": "ready",
+      "entries": []
+    },
+    "liuchao.location.guiwang_dong": {
+      "name": "鬼王峒",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "dong.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "dong.hide",
+          "itemId": "lcq.item.nh_small_hide",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "dong.lava_glass",
+          "itemId": "lcq.item.nh_lava_glass",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "dong.bone_beads",
+          "itemId": "lcq.item.nh_bone_bead_string",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "dong.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "dong.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 20,
+          "quantity": [
+            1,
+            8
+          ]
+        },
+        {
+          "id": "dong.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            80
+          ]
+        },
+        {
+          "id": "dong.dragon_scale",
+          "itemId": "lcq.item.nh_dragon_scale_chip",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
+          ]
+        },
+        {
+          "id": "dong.copper_bead",
+          "itemId": "lcq.item.nh_red_copper_bead",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 80
+    },
+    "liuchao.location.haishanghuahuan": {
+      "name": "海棠花環",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.hanguguan": {
+      "name": "函谷关",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.haoshuichuan": {
+      "name": "好水川",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.hezhou": {
+      "name": "和州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.hongmen": {
+      "name": "鸿门",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.jiangzhou": {
+      "name": "江州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.jiankang": {
+      "name": "建康",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.jiankang_yuji_xiang": {
+      "name": "建康玉鸡巷",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.jingxi": {
+      "name": "荆溪村寨",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.jingzhou_jin": {
+      "name": "竞州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.jinmingzhai": {
+      "name": "金明寨",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.junzhou": {
+      "name": "筠州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.kunwu": {
+      "name": "昆吾",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.liangzhou": {
+      "name": "凉州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.lie": {
+      "name": "烈",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.linan": {
+      "name": "临安",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.linchuan": {
+      "name": "临川",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.lintao": {
+      "name": "临洮",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.liuligu": {
+      "name": "琉璃谷",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.longchi": {
+      "name": "龙池",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.longchuan": {
+      "name": "龙川",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.luoyang": {
+      "name": "洛都",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.mingzhou": {
+      "name": "明州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.nanjun": {
+      "name": "南郡",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.nanzhao": {
+      "name": "昭南",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.ningzhou": {
+      "name": "宁州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.qingyuan_jin": {
+      "name": "清远",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.qingzhou": {
+      "name": "晴州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.qishan": {
+      "name": "歧山",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.rongzhou": {
+      "name": "容州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.sea_temple": {
+      "name": "海神殿",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "temple.shell",
+          "itemId": "lcq.item.nh_clam_shell",
+          "category": "common",
+          "weight": 25,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "temple.bronze",
+          "itemId": "lcq.item.nh_verdigris_shard",
+          "category": "common",
+          "weight": 20,
+          "quantity": [
+            1,
+            2
+          ],
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ]
+        },
+        {
+          "id": "temple.arrowhead",
+          "itemId": "lcq.item.nh_rusty_arrowhead",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "temple.coral",
+          "itemId": "lcq.item.nh_coral_twig",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "temple.snake_horn",
+          "itemId": "lcq.item.nh_golden_seasnake_horn",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ]
+        },
+        {
+          "id": "temple.scale_pouch",
+          "itemId": "lcq.item.nh_merfolk_scale_pouch",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ]
+        }
+      ],
+      "maxCopper": 0
+    },
+    "liuchao.location.shan_jian": {
+      "name": "南荒山涧",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "shanjian.mushroom",
+          "itemId": "lcq.item.nh_goose_palm_mushroom",
+          "category": "common",
+          "weight": 25,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "shanjian.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 18,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "shanjian.feather",
+          "itemId": "lcq.item.nh_bird_feather",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "shanjian.bark",
+          "itemId": "lcq.item.nh_beech_bark",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "shanjian.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "shanjian.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 12,
+          "quantity": [
+            1,
+            6
+          ]
+        },
+        {
+          "id": "shanjian.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            50
+          ]
+        },
+        {
+          "id": "shanjian.ghost_horn",
+          "itemId": "lcq.item.nh_ghost_horn_shard",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.s04_02"
+          ]
+        }
+      ],
+      "maxCopper": 60
+    },
+    "liuchao.location.shangjun": {
+      "name": "上郡",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.shenmu": {
+      "name": "神木",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.south_wild_valley": {
+      "name": "南荒山谷",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "valley.mushroom",
+          "itemId": "lcq.item.nh_goose_palm_mushroom",
+          "category": "common",
+          "weight": 18,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "valley.fruit",
+          "itemId": "lcq.item.nh_wild_fruit",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "valley.feather",
+          "itemId": "lcq.item.nh_bird_feather",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "valley.bark",
+          "itemId": "lcq.item.nh_beech_bark",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "valley.silk",
+          "itemId": "lcq.item.nh_yinzhu_silk",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.ruins_ghost_warriors"
+          ]
+        },
+        {
+          "id": "valley.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "valley.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 10,
+          "quantity": [
+            1,
+            5
+          ]
+        },
+        {
+          "id": "valley.bronze_drum",
+          "itemId": "lcq.item.nh_cracked_bronze_drum",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.ruins_ghost_warriors"
+          ]
+        }
+      ],
+      "maxCopper": 40
+    },
+    "liuchao.location.taiquan": {
+      "name": "太泉古阵",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.wudu": {
+      "name": "舞都",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.wuyuan": {
+      "name": "五原城",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.xianyang": {
+      "name": "咸阳",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.xiongerpu": {
+      "name": "熊耳铺",
+      "status": "ready",
+      "entries": [
+        {
+          "id": "xep.feed",
+          "itemId": "lcq.item.nh_feed_cake",
+          "category": "common",
+          "weight": 15,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "xep.nail",
+          "itemId": "lcq.item.nh_iron_nail",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            3
+          ]
+        },
+        {
+          "id": "xep.jade_scrap",
+          "itemId": "lcq.item.nh_cuizhi_jade_scrap",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "xep.salt",
+          "itemId": "lcq.item.nh_salt_lump",
+          "category": "common",
+          "weight": 12,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "xep.torch",
+          "itemId": "lcq.item.nh_torch",
+          "category": "common",
+          "weight": 10,
+          "quantity": [
+            1,
+            2
+          ]
+        },
+        {
+          "id": "xep.herb",
+          "itemId": "lcq.item.nh_mountain_herb",
+          "category": "common",
+          "weight": 8,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "xep.flint",
+          "itemId": "lcq.item.nh_flint_set",
+          "category": "common",
+          "weight": 5,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "xep.coins",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": false,
+          "weight": 25,
+          "quantity": [
+            1,
+            8
+          ]
+        },
+        {
+          "id": "xep.coin_string",
+          "category": "currency",
+          "currency": "铜铢",
+          "large": true,
+          "weight": 1,
+          "quantity": [
+            30,
+            80
+          ]
+        },
+        {
+          "id": "xep.fine_jade",
+          "itemId": "lcq.item.nh_cuizhi_jade_fine",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true
+        }
+      ],
+      "maxCopper": 80
+    },
+    "liuchao.location.yiyang": {
+      "name": "夷陵",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.yong": {
+      "name": "上庸",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.yongcheng": {
+      "name": "雍",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.yongzhou": {
+      "name": "永州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.yongzhou_jin": {
+      "name": "邕州",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.yun_shi_shop": {
+      "name": "云氏商铺",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.zhuoguang": {
+      "name": "涿光",
+      "status": "pending",
+      "entries": []
+    },
+    "liuchao.location.zhuyajun": {
+      "name": "珠崖郡",
+      "status": "pending",
+      "entries": []
+    }
+  }
+}

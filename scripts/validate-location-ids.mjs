@@ -45,6 +45,8 @@ export async function auditNanhuangRailRoutes(stages) {
   const { worldLocationIdOf, forcedRoutesFor } = await ts('src/modules/scenarioMods/openWorldSlice.ts');
   const issues = [];
   for (const stageId of NANHUANG_STAGE_IDS) {
+    // stage_02只为提前建立行旅账；五原军帐/市集仍由既有开放世界校验负责。
+    if (stageId === "lcq.stage_02") continue;
     const stage = stages.find(item => item.modId === stageId);
     if (!stage) continue;
     const rail = getCanonRailProfile({ modId: stageId })?.orderedEventIds || [];

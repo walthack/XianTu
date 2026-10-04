@@ -310,6 +310,8 @@ class CharacterRagService {
         const regEntry = entryMap.get(result.id);
         if (!regEntry) continue;
 
+        // RAG无回合事实：未到登场关或缺省关卡不召回；已到南荒后仍只给表面阶段卡。
+        if (regEntry.id === 'liuchao.character.xiao_zi' && (!opts?.stageId || /^(?:lcq\.stage_0[1-4])$|^lcq\.stage_03b/.test(opts.stageId))) continue;
         const { canonicalName, gender, tier, staticProfile } = regEntry;
         const meta = [gender, tier].filter(Boolean).join('；');
         // 静态卡的身份摘要与主角关系是全书终点快照（含后宫/身世/结局）：只注入当前关卡

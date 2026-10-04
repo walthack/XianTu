@@ -226,12 +226,27 @@ export interface ScenarioEventActionJudgement {
   };
 }
 
+/** 南荒试点：步骤材料与本地账本；缺省沿用事件值。 */
+export interface ScenarioStepScene {
+  locationId?: string;
+  cast?: { present?: string[]; enter?: string[]; exit?: Array<{ name: string; status: 'dead' | 'missing' | 'departed' }> };
+  sceneLocation?: string; sceneObjective?: string;
+  dayPart?: '清晨' | '上午' | '白天' | '黄昏' | '傍晚' | '夜' | '深夜' | '正午';
+  fixedFacts?: string[];
+  factChecks?: string[][];
+  forbidden?: string[];
+  fallbackText?: string;
+  forceFixed?: boolean;
+  previousBeat?: string;
+  ledgerEffects?: { worldFacts?: string[]; names?: Record<string, string>; returnActors?: string[]; injuries?: Record<string, string>; jiuyang?: '一阳'; inventoryTransfers?: ScenarioPlayerCompletionEffects['inventoryTransfers'] };
+}
+
 export interface ScenarioPlayerCompletionContract {
   /** objective_action 由玩家点击引擎声明动作即成功；local_condition 还会读取本地状态判定。 */
   kind: 'local_condition' | 'objective_action';
   /** 哪些本地判定结果足以完成该事件。默认不含 failure；作者显式列入时失败也可收束。 */
   settleOn: ScenarioPlayerCompletionOutcome[];
-  actions: Array<{
+  actions: Array<ScenarioStepScene & {
     id: string;
     label: string;
     actionText: string;

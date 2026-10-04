@@ -1,4 +1,5 @@
 import type { GameTime, SaveData } from '@/types/game';
+import { computePresentNames, departedPresentNames } from '../presence';
 import { normalizeGameTime } from '@/utils/time';
 import {
   SEVERAL_DAYS_PLACEHOLDER,
@@ -125,7 +126,7 @@ export function locationFromPosition(positionDescription: unknown, locations: Lo
 
 /** 读存档的位置；locations 缺省取存档里当前剧本运行时的正典地点。 */
 export function currentLocation(saveData: SaveData | null | undefined, locations?: LocationList): CurrentLocation {
-  const save = saveData as { 角色?: { 位置?: { 描述?: unknown } }; 世界?: { 状态?: { 剧本模组?: { canon?: { locations?: LocationList } } } } } | null | undefined;
+  const save = saveData as { 角色?: { 位置?: { 描述?: unknown } }; 世界?: { 状态?: { 剧本模组?: { canon?: { characters?: Array<{ id: string; name: string; role?: string; description?: string; affiliations?: Array<{ role?: string }>; isProtagonist?: boolean }>; locations?: LocationList } } } } } | null | undefined;
   return locationFromPosition(
     save?.角色?.位置?.描述,
     locations ?? save?.世界?.状态?.剧本模组?.canon?.locations,
@@ -157,7 +158,7 @@ export function advanceClock(
     const several = advance.days === 'several';
     const days = several ? SEVERAL_DAYS_PLACEHOLDER : Math.max(0, Number(advance.days) || 0);
     const { 相对日: _dropped, ...base } = oldValue;
-    newValue = normalizeGameTime({ ...base, 日: (Number(base.日) || 0) + days });
+    newValue = normalizeGameTime({ ...base, 日: (Number(base.日) || 0) + Math.floor(days), 分钟: (Number(base.分钟) || 0) + Math.round((days % 1) * 1440) });
     if (several) newValue.相对日 = RELATIVE_DAY_LABEL;
   }
   meta.时间 = newValue;
@@ -195,9 +196,11 @@ type LedgerRuntime = {
   worldTurn?: number;
   completedEventIds?: string[];
   activeEventIds?: string[];
-  events?: Array<{ id: string; locationId?: string }>;
+  events?: Array<{ id: string; locationId?: string; relatedCharacterIds?: string[] }>;
+  flags?: Record<string, unknown>;
+  departedCast?: string[];
   opening?: { locationId?: string; text?: string };
-  canon?: { locations?: Array<{ id: string; name: string; coordinates?: { x?: number; y?: number } }> };
+  canon?: { characters?: Array<{ id: string; name: string; role?: string; description?: string; affiliations?: Array<{ role?: string }>; isProtagonist?: boolean }>; locations?: Array<{ id: string; name: string; coordinates?: { x?: number; y?: number } }> };
   travelLedger?: NanhuangTravelLedger;
 };
 
@@ -216,6 +219,9 @@ function zoneForLocation(locationId: string | undefined, zoneHint?: string): str
 }
 
 function backfillZone(saveData: SaveData, runtime: LedgerRuntime): string | undefined {
+  const segment = String((saveData as any).角色?.位置?.描述 || "").split("·").at(-1);
+  const roadZone = DEF.zones.find(zone => zone.name === segment);
+  if (roadZone) return roadZone.id;
   const here = currentLocation(saveData, runtime.canon?.locations);
   const fromPosition = zoneForLocation(here.locationId, here.zoneId);
   if (fromPosition) return fromPosition;
@@ -237,6 +243,10 @@ export function ensureNanhuangLedger(saveData: SaveData, runtime: LedgerRuntime)
   if (!zoneId) return undefined;
   const state = hydrateOpenWorldSliceRuntime({ currentZoneId: zoneId }, DEF);
   const done = [...(runtime.completedEventIds || [])];
+  // 旧档已经焚尸或整拍完成时，补零耗时回执，不重新走营地到熊耳铺。
+  if (done.includes('lcq.event.s03b_yinzhu_xiongerpu') || (runtime as any).eventActionStates?.['lcq.event.s03b_yinzhu_xiongerpu']?.preparations?.includes('ajia_mourned')) {
+    rememberOpenWorldForcedTravel(state, DEF, 'nh.r.after.wanwu_night', 'lcq.event.s03b_yinzhu_xiongerpu::burn_yinzhu_victim');
+  }
   for (const eventId of done) {
     for (const route of forcedRoutesFor(DEF, { afterEventDone: eventId })) rememberOpenWorldForcedTravel(state, DEF, route.id, eventId);
   }
@@ -261,16 +271,38 @@ function projectPosition(saveData: SaveData, runtime: LedgerRuntime, zoneId: str
   if (typeof loc?.coordinates?.y === 'number') position.y = loc.coordinates.y;
 }
 
-function travelCard(receiptId: string, routeId: string): TravelCard | undefined {
+/** 从当前运行时及同处关系取随队角色，排除主角、已故/离场者；不硬填原著名单。 */
+export function currentTravelCompanions(saveData: SaveData, runtime: LedgerRuntime, sourceEventId?: string): string[] {
+  const characters = runtime.canon?.characters || [];
+  const related = new Set([...new Set([...(runtime.activeEventIds || []), ...(sourceEventId ? [sourceEventId] : (runtime.completedEventIds || []).slice(-1))])].flatMap(id => runtime.events?.find(e => e.id === id)?.relatedCharacterIds || []));
+  const team = characters.filter(c => !c.isProtagonist && c.id !== 'liuchao.character.cheng_zongyang'
+    && /商队|商会|送亲|随行|同行|护卫|向导|行商|佣兵|执事|队友/.test(`${c.role || ''} ${c.description || ''}`));
+  const present = computePresentNames({ playerLocation: String((saveData as any).角色?.位置?.描述 || ''),
+    relations: (saveData as any).社交?.关系,
+    eventCharacterNames: team.filter(c => related.has(c.id)).map(c => c.name),
+    excludeNames: departedPresentNames(runtime),
+  });
+  // 在场事件清空和NPC位置未定都不意味着队伍解散；延续上次真实出发快照。
+  const departed = new Set(departedPresentNames(runtime));
+  const carried = new Set(runtime.travelLedger?.lastCard?.companions || []);
+  const names = new Set(team.filter(c => !departed.has(c.name)
+    && (present.has(c.name) || carried.has(c.name) || c.role === '商队成员' || c.affiliations?.some(a => /商队成员|商队护卫/.test(a.role || '')))).map(c => c.name));
+  // 早期stage_02卡缺武二郎；读取已经落账的加入合同，不能因此漏掉刚加入的队友。
+  const joinedWuer = [...(runtime.completedEventIds || []), ...(runtime.travelLedger?.doneEventIds || [])].includes('lcq.event.wuerlang_joins');
+  const wuer = (saveData as any).社交?.关系?.武二郎;
+  if (joinedWuer && wuer && !departedPresentNames(runtime).includes('武二郎')) names.add(String(wuer.名字 || '武二郎'));
+  return [...names];
+}
+
+function travelCard(receiptId: string, routeId: string, companions: string[]): TravelCard | undefined {
   const route = DEF.routes.find(item => item.id === routeId);
   if (!route) return undefined;
   const { days, several } = routeDayCost(route);
-  const duration = route.kind !== 'journey' ? '片刻' : several ? '数日' : days === 1 ? '一天多' : `${days}日`;
+  const duration = route.durationLabel || (route.kind !== 'journey' ? '片刻' : several ? '数日' : days === 0.5 ? '半日' : days === 1 ? '一日' : `${days}日`);
   const from = zoneName(route.fromZoneId);
   const to = zoneName(route.toZoneId);
-  const companions = route.companions?.length ? [...route.companions] : undefined;
-  const text = [`【路途】${from} → ${to}`, route.summary || route.label, `耗时：${duration}`, ...(companions ? [`同行：${companions.join('、')}`] : [])].join('｜');
-  return { receiptId, from, to, label: route.label, ...(route.summary ? { summary: route.summary } : {}), duration, ...(companions ? { companions } : {}), text };
+  const text = [`【路途】${from} → ${to}`, route.summary || route.label, `耗时：${duration}`, ...(companions.length ? [`同行：${companions.join('、')}`] : [])].join('｜');
+  return { receiptId, from, to, label: route.label, ...(route.summary ? { summary: route.summary } : {}), duration, ...(companions.length ? { companions: [...companions] } : {}), text };
 }
 
 /**
@@ -282,11 +314,12 @@ export function settleNanhuangForcedTravel(
   saveData: SaveData,
   runtime: LedgerRuntime,
   trigger: OpenWorldForcedBy,
+  departureCompanions = currentTravelCompanions(saveData, runtime, 'afterEventDone' in trigger ? trigger.afterEventDone : undefined),
 ): TravelCard[] {
   const routes = forcedRoutesFor(DEF, trigger);
   if (!routes.length) return [];
   // 转关时新关开场位置已写进存档，不能按它推导（会把账建在终点、吞掉路途）；没有账就从路线起点建。
-  if (!runtime.travelLedger?.state && 'stageTransition' in trigger) {
+  if (!runtime.travelLedger?.state && ('stageTransition' in trigger || ('afterEventDone' in trigger && trigger.afterEventDone === 'lcq.event.wuerlang_joins'))) {
     runtime.travelLedger = { sliceId: DEF.id, state: hydrateOpenWorldSliceRuntime({ currentZoneId: routes[0].fromZoneId }, DEF), doneEventIds: [] };
   }
   const ledger = ensureNanhuangLedger(saveData, runtime);
@@ -316,7 +349,8 @@ export function settleNanhuangForcedTravel(
     if (route.kind === 'journey') {
       advanceClock(saveData, { days: route.dayCost === 'several' ? 'several' : routeDayCost(route).days }, item.receiptId);
     }
-    const card = travelCard(item.receiptId, item.routeId);
+    else advanceClock(saveData, { minutes: Math.max(1, route.turnCost) }, item.receiptId);
+    const card = travelCard(item.receiptId, item.routeId, departureCompanions);
     if (card) cards.push(card);
   }
   if (cards.length) ledger.lastCard = cards[cards.length - 1];
@@ -327,6 +361,12 @@ export function settleNanhuangForcedTravel(
 /** 每回合：新完成的拍触发对应强制移动。旧档首次接入不回放已完成拍。 */
 export function syncNanhuangRailTravel(saveData: SaveData, runtime: LedgerRuntime): TravelCard[] {
   if (!isNanhuangTravelStage(runtime.modId)) return [];
+  // 新离开五原时必须先记南下账；旧档已在路上则只回填0耗时。
+  if (runtime.modId === 'lcq.stage_02' && !runtime.travelLedger?.state
+    && runtime.completedEventIds?.includes('lcq.event.wuerlang_joins')
+    && /五原|白湖/.test(String((saveData as any).角色?.位置?.描述 || ''))) {
+    settleNanhuangForcedTravel(saveData, runtime, { afterEventDone: 'lcq.event.wuerlang_joins' });
+  }
   const ledger = ensureNanhuangLedger(saveData, runtime);
   if (!ledger) return [];
   const cards: TravelCard[] = [];
@@ -345,9 +385,10 @@ export function settleNanhuangStageTransition(
   fromStageId: string,
   toStageId: string,
   carried: NanhuangTravelLedger | undefined,
+  departureCompanions = currentTravelCompanions(saveData, runtime),
 ): TravelCard[] {
   if (carried) runtime.travelLedger = structuredClone(carried);
-  const cards = settleNanhuangForcedTravel(saveData, runtime, { stageTransition: `${fromStageId}→${toStageId}` });
+  const cards = settleNanhuangForcedTravel(saveData, runtime, { stageTransition: `${fromStageId}→${toStageId}` }, departureCompanions);
   if (!cards.length && runtime.travelLedger?.state && isNanhuangTravelStage(toStageId)) {
     projectPosition(saveData, runtime, runtime.travelLedger.state.currentZoneId);
   }
@@ -372,7 +413,8 @@ export function getNanhuangLocationStates(saveData: SaveData | null | undefined)
   const ledger = runtime?.travelLedger;
   if (!ledger?.state) return [];
   const state = hydrateOpenWorldSliceRuntime(ledger.state, DEF);
-  const done = [...new Set([...(ledger.doneEventIds || []), ...(runtime?.completedEventIds || [])])];
+  const done = [...new Set([...(ledger.doneEventIds || []), ...(runtime?.completedEventIds || []),
+    ...(runtime?.activeEventIds?.includes('lcq.event.s05b_03_saan_secret_path') ? ['lcq.event.s05b_03_saan_secret_path'] : [])])];
   return DEF.zones.map(zone => ({
     zoneId: zone.id,
     locationId: canonicalLocationId(worldLocationIdOf(DEF, zone.id)),

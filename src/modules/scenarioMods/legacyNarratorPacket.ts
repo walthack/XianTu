@@ -1,3 +1,4 @@
+import { stepScene, sceneLedgerSummary } from './fixedEndingNarratives';
 import { cloneDeep } from 'lodash';
 import { getPrompt, getSystemPrompts } from '@/services/defaultPrompts';
 import { rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
@@ -47,6 +48,8 @@ export interface LegacyPresentActor {
   role?: string;
   race?: string;
   appearance?: string;
+  gender?: string;
+  称呼?: { 对主角: string; 主角对他: string };
 }
 
 export interface LegacyLocalReceipt {
@@ -197,16 +200,21 @@ function readPresentActors(saveData: SaveData, presentNames: string[]): LegacyPr
     const speechStyle = isSafePersonalityTrait(readText(rec?.profile?.speechStyle) || readText(rec?.speechStyle))
       ? readText(rec?.profile?.speechStyle || rec?.speechStyle)
       : '';
-    if (!rec) continue;
+    const baseName = name.replace(/[（(].*$/, '');
+    const matched = rec || characters.find((c: any) => c.name === baseName) || (baseName === '鬼王峒使者' ? characters.find((c: any) => c.name === '阁罗' || c.id === 'lcq.character.np006') : undefined);
+    const gender = matched?.gender || (/^(?:谢艺|云苍峰|祁远|武二郎|朱八八|易彪|易虎|吴战威|小魏|石刚|阁罗|弥骨|达古|鬼王峒使者)$/.test(baseName) ? '男' : /^(?:凝羽|苏荔|阿夕|阿葭|花苗新娘|乐明珠|樨夫人|小紫)$/.test(baseName) ? '女' : undefined);
+    const addresses: Record<string, string> = { 云苍峰: '程小哥', 祁远: '程头儿', 吴战威: '程头儿', 谢艺: '程兄', 武二郎: '你小子（自称二爷）', 朱八八: '小程子', 樨夫人: '公子' };
     actors.push({
       name,
       traits,
-      role: readText(rec?.role).slice(0, 80),
-      race: readText(rec?.profile?.race).slice(0, 80),
-      appearance: readText(rec?.profile?.appearance).slice(0, 180),
+      role: baseName === '鬼王峒使者' ? '鬼王峒使者，尚未报名' : readText(matched?.role).slice(0, 80),
+      race: baseName === '小紫' ? '碧鲮族' : readText(matched?.profile?.race).split(/[（(]/)[0].replace(/.*(?:之女|血统|身世).*/, '').slice(0, 40),
+      appearance: readText(matched?.profile?.appearance).split(/[。！？]/)[0].replace(/(?:胸|乳|臀|私处|胯)[^，,；;]*/g, '').slice(0, 90),
+      ...(gender ? { gender } : {}),
+      称呼: { 对主角: addresses[baseName] || (Array.isArray(matched?.profile?.notes) ? matched.profile.notes.map((n: string) => n.match(/【称呼】(.+)/)?.[1]).filter(Boolean).join('；').slice(0, 70) : '') || '你', 主角对他: baseName === '苏荔' ? '苏荔族长' : baseName },
       ...(speechStyle ? { speechStyle } : {}),
     });
-    if (actors.length >= (/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime.modId || '')) ? 8 : 3)) break;
+    if (actors.length >= (/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime.modId || '')) ? 18 : 3)) break;
   }
   return actors;
 }
@@ -232,18 +240,20 @@ export function readLocalMemoryCapsule(saveData: SaveData, selection: ScenarioEv
   const selectedEvent = (runtime.events || []).find((item: any) => item?.id === selection.eventId);
   const focus = selectedEvent || getScenarioFocusEvent(runtime as never);
   const recent = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-1).join('\n');
-  const currentObjective = playerFacingFact(focus?.objective);
+  const card = stepScene(runtime, selection.eventId, selection.actionId);
+  const currentObjective = playerFacingFact(card ? card.sceneObjective || (card as any).label : focus?.objective);
   const view = focus ? resolveScenarioEventNarrative(focus, runtime.flags || {}, runtime.divergences) : null;
   const completed = runtime.completedEventIds?.includes(focus?.id) || runtime.eventActionStates?.[focus?.id]?.readyAtTurn !== undefined;
   const facts = uniqueFacts([
-    playerFacingFact(selection.outcomeText),
+    ...(card?.fixedFacts?.length ? [] : [playerFacingFact(selection.outcomeText)]),
     currentObjective,
-    ...(completed && /^lcq\.stage_0(?:3b|4|4b)/.test(String(runtime.modId || '')) ? [playerFacingFact(view?.description)] : []),
+    ...(card?.fixedFacts || []),
+    ...(completed && !card?.fixedFacts?.length && /^lcq\.stage_0(?:3b|4|4b)/.test(String(runtime.modId || '')) ? [playerFacingFact(view?.description)] : []),
     readLocation(saveData),
   ]).slice(0, 6);
-  const presentNames = readPresentNames(saveData, selection.eventId);
+  const presentNames = card?.cast?.present ? [...card.cast.present] : readPresentNames(saveData, selection.eventId);
   return {
-    location: readLocation(saveData),
+    location: card?.sceneLocation || readLocation(saveData),
     presentNames,
     presentActors: readPresentActors(saveData, presentNames),
     eventId: selection.eventId,

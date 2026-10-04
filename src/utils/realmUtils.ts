@@ -75,6 +75,7 @@ export function formatRealmWithStage(realm: any): string {
   const name = realm.名称 || realm.name || '凡人';
   const stage = realm.阶段 || realm.stage || '';
   const displayName = toGaoshoubangName(name);
+  if (realm.九阳层次) return `${displayName} · ${realm.九阳层次}`;
 
   // 凡人不加阶段
   if (name === '凡人' || name === 'Mortal') {

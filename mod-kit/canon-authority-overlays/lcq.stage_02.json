@@ -1,0 +1,4543 @@
+{
+  "schema": "xiantu.canon-authority-overlay",
+  "version": 1,
+  "stageId": "lcq.stage_02",
+  "book": "qingyu",
+  "ops": [
+    {
+      "op": "set",
+      "path": "canon.characters",
+      "from": [
+        {
+          "id": "liuchao.character.cheng_zongyang",
+          "name": "程宗扬",
+          "description": "现代穿越者",
+          "role": "主角",
+          "gender": "男",
+          "realm": "筑基",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "military",
+              "role": "临时成员"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "少主/大少爷"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.death_root",
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [
+            "lcq.item.backpack",
+            "lcq.item.lingerie",
+            "lcq.item.vibrator",
+            "lcq.item.drug",
+            "lcq.item.np001"
+          ],
+          "profile": {
+            "appearance": "下巴有胡茬",
+            "personality": [
+              "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
+              "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
+              "冲动",
+              "偶尔愧疚",
+              "有支配欲"
+            ],
+            "race": "人类",
+            "origin": "现代穿越者",
+            "talents": [
+              {
+                "name": "天命主角",
+                "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
+              },
+              {
+                "name": "生死根",
+                "description": "程宗扬的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 9,
+              "comprehension": 10,
+              "fortune": 9,
+              "charm": 8,
+              "temperament": 10
+            },
+            "memories": [
+              "被苏妲己下冰蛊",
+              "结识凝羽",
+              "前往南荒"
+            ],
+            "spiritRoot": {
+              "name": "变异灵根",
+              "tier": "天品",
+              "description": "灵根异变破常理，潜力无穷，修炼者似逆命而行，主颠覆与意外之变。"
+            },
+            "notes": [
+              "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.wang_zhe",
+          "name": "王哲",
+          "description": "身为左武卫大将军与太乙真宗掌教，他气度不凡，既有高人风范又深谋远虑，坚毅如钢却可亲可敬，善于在纷争中平衡各方势力。",
+          "role": "关键人物",
+          "gender": "男",
+          "realm": "合体",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "military",
+              "role": "师帅"
+            },
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "掌教"
+            },
+            {
+              "factionId": "liuchao.faction.xb9033ecdb3",
+              "category": "organization",
+              "role": "师帅/主帅"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [
+            "lcq.item.jin_nang"
+          ],
+          "profile": {
+            "appearance": "脸色微微有些发黯，腰背如标枪一样挺直",
+            "personality": [
+              "养气功夫深湛",
+              "严厉正直",
+              "沉稳干练",
+              "有军人气质"
+            ],
+            "race": "人类",
+            "origin": "太乙真宗掌教",
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 9,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 8
+            },
+            "currentAppearance": "已死亡",
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.yue_shuang",
+          "name": "月霜",
+          "description": "岳帅遗孤之一、雪隼佣兵团副队长。冷艳绝色却傲娇自负、自以为是的\"圣母纸老虎\"，身负寒毒体质；王哲临终将其托付程宗扬。",
+          "role": "关键人物",
+          "gender": "女",
+          "realm": "元婴",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲门下（九阳神功传承）"
+            },
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "成员（王哲军中）"
+            },
+            {
+              "factionId": "liuchao.faction.xing_yue_hu",
+              "category": "organization",
+              "role": "岳帅遗孤"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [
+            "lcq.item.horse"
+          ],
+          "profile": {
+            "appearance": "倾国倾城冷艳绝色、易碎感；寒毒体质发作时极虚弱、身体冰冷战栗",
+            "personality": [
+              "极度傲娇自以为是的\"圣母纸老虎\"",
+              "自私虚伪",
+              "行事双标（濒死要救命恩人心头血作药引）",
+              "智商与江湖经验匮乏",
+              "推卸责任的受害者心态",
+              "复杂亲缘认同（嘴拒认岳帅是父",
+              "却以\"八骏新主人\"自居）"
+            ],
+            "race": "人族",
+            "origin": "岳鹏举之女",
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "notes": [
+              "【体质约束】月霜身具寒毒，需阳性能量调和（破坏后果：不调和则寒毒持续危害身体）"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.han_geng",
+          "name": "韩庚",
+          "description": "韩庚，天武营主将，王哲最锐的剑——他面容冷峻，剑眉压眸，魁梧身材裹在布衣或黑色皮甲里，军伍气质如刀锋淬冰，却注定倒在下一场战役的血泊中。",
+          "role": "关键人物",
+          "gender": "男",
+          "realm": "化神",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "第一军团天武营主将"
+            },
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲爱徒（拟传掌教；后与王哲一同战死草原）"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [],
+          "profile": {
+            "attributes": {
+              "rootBone": 10,
+              "spirituality": 7,
+              "comprehension": 7,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "体修奇才",
+                "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
+              }
+            ],
+            "appearance": "中年人，身着布衣，面容沉静，身体挺得笔直，鹰隼般犀利的眼睛，乌黑眼睛目光沉静，神光内敛",
+            "origin": "天武营主将",
+            "personality": [
+              "傲慢",
+              "冷漠",
+              "决绝",
+              "自信"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.agamenon",
+          "name": "阿伽门侬",
+          "description": "阿伽门侬，罗马联军统帅，凯撒长子——他金色鬈发披肩，蓝眸如冷海，浓密胡须间挂着傲慢冷笑，金黄铠甲映着烈日，马蹄踏过处，诸国皆颤。",
+          "role": "关键人物",
+          "gender": "男",
+          "realm": "凡人",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.roman",
+              "category": "military",
+              "role": "统帅"
+            }
+          ],
+          "locationId": "lcq.location.roman_camp",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "attributes": {
+              "rootBone": 5,
+              "spirituality": 4,
+              "comprehension": 4,
+              "fortune": 6,
+              "charm": 5,
+              "temperament": 4
+            },
+            "spiritRoot": {
+              "name": "雷灵根",
+              "tier": "黄品",
+              "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
+            },
+            "talents": [
+              {
+                "name": "夜猫子",
+                "description": "瞳孔在暗夜灼烧如鬼火，每缕月光都化作他的眼睛，黑暗成了最忠实的猎场。"
+              }
+            ],
+            "appearance": "金色鬈发披到肩后，蓝色眼眸，身穿金黄细密锁甲，腰间佩带短剑，使用高卢式四角马鞍",
+            "origin": "罗马军团统帅",
+            "personality": [
+              "傲慢",
+              "自信",
+              "冷酷",
+              "易怒",
+              "恐惧"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.dai_jixue",
+          "name": "黛姬雪娜",
+          "description": "黛姬雪娜，拜火教金发女祭司——冷漠美貌如冰雪雕琢，她立于祭坛上念咒，却在王哲一箭之下，烈焰与血溅裂了圣袍。",
+          "role": "关键人物",
+          "gender": "女",
+          "realm": "化神",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.roman",
+              "category": "organization",
+              "role": "拜火教女祭司（随军协同，非编制）"
+            }
+          ],
+          "locationId": "lcq.location.roman_camp",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "attributes": {
+              "rootBone": 5,
+              "spirituality": 4,
+              "comprehension": 4,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 4
+            },
+            "spiritRoot": {
+              "name": "土灵根",
+              "tier": "黄品",
+              "description": "厚土沉凝如山，承载万物，修炼者如地脉巍峨，擅长防御与镇压之法。"
+            },
+            "talents": [
+              {
+                "name": "老实人",
+                "description": "木讷面孔下藏着万年算计，他的拳头总在敌人以为得逞时，从最朴素角度砸穿所有阴谋。"
+              }
+            ],
+            "appearance": "波斯/西域纯白雪肤，五官如雕刻般立体、高鼻深目、妖艳夺目；被俘前着拜火教圣洁红袍/轻纱；被十方丛林秘术脑控后常被施屈辱束缚刑具，纯净修行肉体在佛门采伐洗脑下呈血脉偾张又极度绝望的淫靡美感",
+            "origin": "拜火教女祭司",
+            "personality": [
+              "(被洗脑后)提线傀儡",
+              "接受十方丛林调教，自我尽失"
+            ]
+          }
+        },
+        {
+          "id": "liuchao.character.ning_yu",
+          "name": "凝羽",
+          "role": "白湖商馆侍卫长",
+          "description": "商队中那位雪肤乌发的女护卫，神色永远冷若冰霜，只在挥剑时才会让人注意到她肩头若隐若现的淡红月牙印记——没人知道她身怀太一经末技的玄妙功法，更无人敢触碰那冷艳外表下隐藏的忠诚与锋芒。",
+          "profile": {
+            "appearance": "身材高挑，肩宽腿长；长眉像一对飞扬的黑羽，眼睛大而空明，神情冷冰冰的；一头乌黑长发。黑色绫衣里衬皮甲，外披斗篷；左腰挂一面小圆盾，右侧佩月牙形弯刀，刀鞘是硬木的。",
+            "personality": [
+              "冷淡寡言，话短",
+              "倔强，不肯示弱",
+              "守誓，把护卫职责放在私情前面"
+            ],
+            "race": "羽族",
+            "origin": "穹羽族后裔",
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              },
+              {
+                "name": "月光盾",
+                "description": "凝羽的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "currentAppearance": "身段匀称，动作矫健，眼中常含一丝忧郁",
+            "memories": [
+              "被程宗扬用麻古迷奸",
+              "与程宗扬通过双修交换真气"
+            ],
+            "spiritRoot": {
+              "name": "暗灵根",
+              "tier": "玄品",
+              "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
+            },
+            "notes": [
+              "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求",
+              "【身体】嘴上拒绝肉体却顺从；晶莹敏感圣躯；肩头淡红月牙痕"
+            ]
+          },
+          "realm": "练气",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "商队护卫"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "商队成员/护卫"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "御姬奴（凝奴）"
+            }
+          ]
+        },
+        {
+          "id": "liuchao.character.su_daji",
+          "name": "苏妲己",
+          "role": "敌对方/妖族",
+          "description": "她是妖族中最为冶艳的祸水，慵懒一笑间便能让仙门覆灭，贪婪的舌尖舔过唇角，仿佛连天命都能吞噬。",
+          "profile": {
+            "appearance": "全书妖艳天花板；身材丰腴熟透，一颦一笑勾魂摄魄；眼神仿佛看穿男人皮囊、直刺灵魂深处的渴望",
+            "personality": [
+              "病态魅惑(侵蚀灵魂)",
+              "极高智商",
+              "近乎病态的掌控欲",
+              "喜怒无常",
+              "狠辣狡诈多疑与天真融合",
+              "视馆下男宠如掌中玩物毫不怜惜"
+            ],
+            "race": "狐族",
+            "origin": "白湖商馆主人",
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 5,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 8,
+              "temperament": 7
+            },
+            "currentAppearance": "美艳动人，衣着华丽",
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "玄品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "多宝童子",
+                "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
+              },
+              {
+                "name": "冰蛊",
+                "description": "苏妲己的专属异能。"
+              }
+            ],
+            "notes": [
+              "【性癖】被现代性玩具（按摩棒）插入；在男性面前展示下体；被支配；后庭性爱；口交",
+              "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
+            ]
+          },
+          "realm": "炼虚",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "掌柜"
+            }
+          ]
+        },
+        {
+          "id": "liuchao.character.lin_cai_quan",
+          "name": "蔺采泉",
+          "role": "教御",
+          "description": "蔺采泉——教御之职如暗影中的戒尺，无人知晓他的真容与来历，只道他目光落处，必有血光。",
+          "profile": {
+            "attributes": {
+              "rootBone": 7,
+              "spirituality": 8,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "雷灵根",
+              "tier": "地品",
+              "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "老奸巨猾",
+              "谦和",
+              "和气"
+            ],
+            "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。"
+          },
+          "realm": "化神",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御（首席教御）"
+            }
+          ]
+        },
+        {
+          "id": "lcq.character.np001",
+          "name": "商乐轩",
+          "role": "教御",
+          "description": "商乐轩——教御袍下藏着沉默的法则，姓名如浮尘，只在生死簿上留一抹淡痕。",
+          "profile": {
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 8,
+              "comprehension": 8,
+              "fortune": 6,
+              "charm": 8,
+              "temperament": 8
+            },
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "地品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "眼高于顶",
+              "盛气凌人",
+              "刚愎自用",
+              "傲气",
+              "争权夺利"
+            ],
+            "appearance": "身材高大的中年道人，负双手，冷冰冰，肩后披黑色披风，紫金帅冠，金属战甲"
+          },
+          "realm": "化神",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            }
+          ]
+        },
+        {
+          "id": "liuchao.character.zhuo_yunjun",
+          "name": "卓云君",
+          "role": "正典人物",
+          "gender": "女",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "personality": [
+              "白天高洁端庄仙姑",
+              "虚荣强撑尊严",
+              "黑夜自称\"奴婢\"的母狗双重人格",
+              "常年被太尉折磨出受虐底子"
+            ]
+          },
+          "realm": "化神",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "侍奴"
+            }
+          ]
+        },
+        {
+          "id": "canon.character.55df25e1a5",
+          "name": "古格尔",
+          "role": "配角",
+          "gender": "男",
+          "profile": {
+            "race": "兽蛮人",
+            "personality": [],
+            "origin": "兽蛮首领"
+          },
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.beidi_shaman",
+              "category": "organization",
+              "role": "兽蛮首领"
+            },
+            {
+              "factionId": "lyl.faction.lyu_clan",
+              "category": "organization",
+              "role": "雇佣援兵首领"
+            }
+          ]
+        }
+      ],
+      "to": [
+        {
+          "id": "liuchao.character.cheng_zongyang",
+          "name": "程宗扬",
+          "description": "现代穿越者",
+          "role": "主角",
+          "gender": "男",
+          "realm": "筑基",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "military",
+              "role": "临时成员"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "少主/大少爷"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.death_root",
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [
+            "lcq.item.backpack",
+            "lcq.item.lingerie",
+            "lcq.item.vibrator",
+            "lcq.item.drug",
+            "lcq.item.np001"
+          ],
+          "profile": {
+            "appearance": "下巴有胡茬",
+            "personality": [
+              "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
+              "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
+              "冲动",
+              "偶尔愧疚",
+              "有支配欲"
+            ],
+            "race": "人类",
+            "origin": "现代穿越者",
+            "talents": [
+              {
+                "name": "天命主角",
+                "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
+              },
+              {
+                "name": "生死根",
+                "description": "程宗扬的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 9,
+              "comprehension": 10,
+              "fortune": 9,
+              "charm": 8,
+              "temperament": 10
+            },
+            "memories": [
+              "被苏妲己下冰蛊",
+              "结识凝羽",
+              "前往南荒"
+            ],
+            "spiritRoot": {
+              "name": "变异灵根",
+              "tier": "天品",
+              "description": "灵根异变破常理，潜力无穷，修炼者似逆命而行，主颠覆与意外之变。"
+            },
+            "notes": [
+              "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.wang_zhe",
+          "name": "王哲",
+          "description": "身为左武卫大将军与太乙真宗掌教，他气度不凡，既有高人风范又深谋远虑，坚毅如钢却可亲可敬，善于在纷争中平衡各方势力。",
+          "role": "关键人物",
+          "gender": "男",
+          "realm": "合体",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "military",
+              "role": "师帅"
+            },
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "掌教"
+            },
+            {
+              "factionId": "liuchao.faction.xb9033ecdb3",
+              "category": "organization",
+              "role": "师帅/主帅"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [
+            "lcq.item.jin_nang"
+          ],
+          "profile": {
+            "appearance": "脸色微微有些发黯，腰背如标枪一样挺直",
+            "personality": [
+              "养气功夫深湛",
+              "严厉正直",
+              "沉稳干练",
+              "有军人气质"
+            ],
+            "race": "人类",
+            "origin": "太乙真宗掌教",
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 9,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 8
+            },
+            "currentAppearance": "已死亡",
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.yue_shuang",
+          "name": "月霜",
+          "description": "岳帅遗孤之一、雪隼佣兵团副队长。冷艳绝色却傲娇自负、自以为是的\"圣母纸老虎\"，身负寒毒体质；王哲临终将其托付程宗扬。",
+          "role": "关键人物",
+          "gender": "女",
+          "realm": "元婴",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲门下（九阳神功传承）"
+            },
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "成员（王哲军中）"
+            },
+            {
+              "factionId": "liuchao.faction.xing_yue_hu",
+              "category": "organization",
+              "role": "岳帅遗孤"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [
+            "lcq.item.horse"
+          ],
+          "profile": {
+            "appearance": "倾国倾城冷艳绝色、易碎感；寒毒体质发作时极虚弱、身体冰冷战栗",
+            "personality": [
+              "极度傲娇自以为是的\"圣母纸老虎\"",
+              "自私虚伪",
+              "行事双标（濒死要救命恩人心头血作药引）",
+              "智商与江湖经验匮乏",
+              "推卸责任的受害者心态",
+              "复杂亲缘认同（嘴拒认岳帅是父",
+              "却以\"八骏新主人\"自居）"
+            ],
+            "race": "人族",
+            "origin": "岳鹏举之女",
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "notes": [
+              "【体质约束】月霜身具寒毒，需阳性能量调和（破坏后果：不调和则寒毒持续危害身体）"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.han_geng",
+          "name": "韩庚",
+          "description": "韩庚，天武营主将，王哲最锐的剑——他面容冷峻，剑眉压眸，魁梧身材裹在布衣或黑色皮甲里，军伍气质如刀锋淬冰，却注定倒在下一场战役的血泊中。",
+          "role": "关键人物",
+          "gender": "男",
+          "realm": "化神",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "第一军团天武营主将"
+            },
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲爱徒（拟传掌教；后与王哲一同战死草原）"
+            }
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "skillIds": [
+            "lcq.skill.nine_sun"
+          ],
+          "techniqueIds": [
+            "lcq.technique.nine_sun_manual"
+          ],
+          "itemIds": [],
+          "profile": {
+            "attributes": {
+              "rootBone": 10,
+              "spirituality": 7,
+              "comprehension": 7,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "体修奇才",
+                "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
+              }
+            ],
+            "appearance": "中年人，身着布衣，面容沉静，身体挺得笔直，鹰隼般犀利的眼睛，乌黑眼睛目光沉静，神光内敛",
+            "origin": "天武营主将",
+            "personality": [
+              "傲慢",
+              "冷漠",
+              "决绝",
+              "自信"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.agamenon",
+          "name": "阿伽门侬",
+          "description": "阿伽门侬，罗马联军统帅，凯撒长子——他金色鬈发披肩，蓝眸如冷海，浓密胡须间挂着傲慢冷笑，金黄铠甲映着烈日，马蹄踏过处，诸国皆颤。",
+          "role": "关键人物",
+          "gender": "男",
+          "realm": "凡人",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.roman",
+              "category": "military",
+              "role": "统帅"
+            }
+          ],
+          "locationId": "lcq.location.roman_camp",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "attributes": {
+              "rootBone": 5,
+              "spirituality": 4,
+              "comprehension": 4,
+              "fortune": 6,
+              "charm": 5,
+              "temperament": 4
+            },
+            "spiritRoot": {
+              "name": "雷灵根",
+              "tier": "黄品",
+              "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
+            },
+            "talents": [
+              {
+                "name": "夜猫子",
+                "description": "瞳孔在暗夜灼烧如鬼火，每缕月光都化作他的眼睛，黑暗成了最忠实的猎场。"
+              }
+            ],
+            "appearance": "金色鬈发披到肩后，蓝色眼眸，身穿金黄细密锁甲，腰间佩带短剑，使用高卢式四角马鞍",
+            "origin": "罗马军团统帅",
+            "personality": [
+              "傲慢",
+              "自信",
+              "冷酷",
+              "易怒",
+              "恐惧"
+            ]
+          }
+        },
+        {
+          "id": "lcq.character.dai_jixue",
+          "name": "黛姬雪娜",
+          "description": "黛姬雪娜，拜火教金发女祭司——冷漠美貌如冰雪雕琢，她立于祭坛上念咒，却在王哲一箭之下，烈焰与血溅裂了圣袍。",
+          "role": "关键人物",
+          "gender": "女",
+          "realm": "化神",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.roman",
+              "category": "organization",
+              "role": "拜火教女祭司（随军协同，非编制）"
+            }
+          ],
+          "locationId": "lcq.location.roman_camp",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "attributes": {
+              "rootBone": 5,
+              "spirituality": 4,
+              "comprehension": 4,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 4
+            },
+            "spiritRoot": {
+              "name": "土灵根",
+              "tier": "黄品",
+              "description": "厚土沉凝如山，承载万物，修炼者如地脉巍峨，擅长防御与镇压之法。"
+            },
+            "talents": [
+              {
+                "name": "老实人",
+                "description": "木讷面孔下藏着万年算计，他的拳头总在敌人以为得逞时，从最朴素角度砸穿所有阴谋。"
+              }
+            ],
+            "appearance": "波斯/西域纯白雪肤，五官如雕刻般立体、高鼻深目、妖艳夺目；被俘前着拜火教圣洁红袍/轻纱；被十方丛林秘术脑控后常被施屈辱束缚刑具，纯净修行肉体在佛门采伐洗脑下呈血脉偾张又极度绝望的淫靡美感",
+            "origin": "拜火教女祭司",
+            "personality": [
+              "(被洗脑后)提线傀儡",
+              "接受十方丛林调教，自我尽失"
+            ]
+          }
+        },
+        {
+          "id": "liuchao.character.ning_yu",
+          "name": "凝羽",
+          "role": "白湖商馆侍卫长，奉命护卫南荒商队",
+          "description": "白湖商馆侍卫长，穹羽族人；奉苏妲己之命护卫南荒商队。",
+          "profile": {
+            "appearance": "身材高挑，肩宽腿长；长眉像一对飞扬的黑羽，眼睛大而空明，神情冷冰冰的；一头乌黑长发。黑色绫衣里衬皮甲，外披斗篷；左腰挂一面小圆盾，右侧佩月牙形弯刀，刀鞘是硬木的。",
+            "personality": [
+              "冷淡寡言，话短",
+              "倔强，不肯示弱",
+              "守誓，把护卫职责放在私情前面"
+            ],
+            "race": "羽族",
+            "origin": "穹羽族后裔",
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              },
+              {
+                "name": "月光盾",
+                "description": "凝羽的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "currentAppearance": "身段匀称，动作矫健，眼中常含一丝忧郁",
+            "memories": [
+              "曾遭程宗扬施用麻古造成的药物侵害，后来出现药物依赖（原著事实记忆，不作为可演出或可重复内容）",
+              "与程宗扬通过双修交换真气"
+            ],
+            "spiritRoot": {
+              "name": "暗灵根",
+              "tier": "玄品",
+              "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
+            },
+            "notes": [
+              "【内部约束·不入正文】寒气是西门庆留下的；凝羽没有冰蛊，冰蛊在程宗扬身上。"
+            ],
+            "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」"
+          },
+          "realm": "练气",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "商队护卫"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "商队成员/护卫"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "御姬奴（凝奴）"
+            }
+          ]
+        },
+        {
+          "id": "liuchao.character.su_daji",
+          "name": "苏妲己",
+          "role": "敌对方/妖族",
+          "description": "她是妖族中最为冶艳的祸水，慵懒一笑间便能让仙门覆灭，贪婪的舌尖舔过唇角，仿佛连天命都能吞噬。",
+          "profile": {
+            "appearance": "全书妖艳天花板；身材丰腴熟透，一颦一笑勾魂摄魄；眼神仿佛看穿男人皮囊、直刺灵魂深处的渴望",
+            "personality": [
+              "病态魅惑(侵蚀灵魂)",
+              "极高智商",
+              "近乎病态的掌控欲",
+              "喜怒无常",
+              "狠辣狡诈多疑与天真融合",
+              "视馆下男宠如掌中玩物毫不怜惜"
+            ],
+            "race": "狐族",
+            "origin": "白湖商馆主人",
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 5,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 8,
+              "temperament": 7
+            },
+            "currentAppearance": "美艳动人，衣着华丽",
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "玄品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "多宝童子",
+                "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
+              },
+              {
+                "name": "冰蛊",
+                "description": "苏妲己的专属异能。"
+              }
+            ],
+            "notes": [
+              "【性癖】被现代性玩具（按摩棒）插入；在男性面前展示下体；被支配；后庭性爱；口交",
+              "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
+            ]
+          },
+          "realm": "炼虚",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "掌柜"
+            }
+          ]
+        },
+        {
+          "id": "liuchao.character.lin_cai_quan",
+          "name": "蔺采泉",
+          "role": "教御",
+          "description": "蔺采泉——教御之职如暗影中的戒尺，无人知晓他的真容与来历，只道他目光落处，必有血光。",
+          "profile": {
+            "attributes": {
+              "rootBone": 7,
+              "spirituality": 8,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "雷灵根",
+              "tier": "地品",
+              "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "老奸巨猾",
+              "谦和",
+              "和气"
+            ],
+            "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。"
+          },
+          "realm": "化神",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御（首席教御）"
+            }
+          ]
+        },
+        {
+          "id": "lcq.character.np001",
+          "name": "商乐轩",
+          "role": "教御",
+          "description": "商乐轩——教御袍下藏着沉默的法则，姓名如浮尘，只在生死簿上留一抹淡痕。",
+          "profile": {
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 8,
+              "comprehension": 8,
+              "fortune": 6,
+              "charm": 8,
+              "temperament": 8
+            },
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "地品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "眼高于顶",
+              "盛气凌人",
+              "刚愎自用",
+              "傲气",
+              "争权夺利"
+            ],
+            "appearance": "身材高大的中年道人，负双手，冷冰冰，肩后披黑色披风，紫金帅冠，金属战甲"
+          },
+          "realm": "化神",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            }
+          ]
+        },
+        {
+          "id": "liuchao.character.zhuo_yunjun",
+          "name": "卓云君",
+          "role": "正典人物",
+          "gender": "女",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "personality": [
+              "白天高洁端庄仙姑",
+              "虚荣强撑尊严",
+              "黑夜自称\"奴婢\"的母狗双重人格",
+              "常年被太尉折磨出受虐底子"
+            ]
+          },
+          "realm": "化神",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "侍奴"
+            }
+          ]
+        },
+        {
+          "id": "canon.character.55df25e1a5",
+          "name": "古格尔",
+          "role": "配角",
+          "gender": "男",
+          "profile": {
+            "race": "兽蛮人",
+            "personality": [],
+            "origin": "兽蛮首领"
+          },
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.beidi_shaman",
+              "category": "organization",
+              "role": "兽蛮首领"
+            },
+            {
+              "factionId": "lyl.faction.lyu_clan",
+              "category": "organization",
+              "role": "雇佣援兵首领"
+            }
+          ]
+        },
+        {
+          "id": "liuchao.character.wu_er_lang",
+          "name": "武二郎",
+          "role": "白武族同行武士",
+          "description": "白武族同行武士",
+          "profile": {
+            "origin": "白武族同行武士",
+            "personality": [
+              "粗犷威猛",
+              "直率暴躁",
+              "重情重义",
+              "主角武功启蒙，刚猛不失机智"
+            ]
+          },
+          "skillIds": [],
+          "realm": "练气",
+          "gender": "男",
+          "affiliations": []
+        }
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.events",
+      "from": [
+        {
+          "id": "lcq.event.s02_01",
+          "name": "王哲传功与托付",
+          "description": "王哲为程宗扬筑基并传九阳神功口诀，托付三件事：拆锦囊、去太泉古阵、守护月霜。",
+          "conditions": [
+            {
+              "path": "flags.chapter.lcq.stage_02.started",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_01.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "lcq.character.wang_zhe"
+          ],
+          "relatedFactionIds": [
+            "lcq.faction.left_guard",
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "axisId": "qingyu.10.2",
+          "axisSeq": 20,
+          "axisAnchor": "六朝清羽记·#10·第9章·传功",
+          "axisBeat": "王哲托付程宗扬三件事：保管锦囊、修为达六阳后前往太泉古阵祭祀、守护岳帅后人月霜。",
+          "objective": "王哲还有事要当面交代，先听他把话说完",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "王哲还有事要当面交代，先听他把话说完",
+                "actionText": "我按当前主线目标行动：听他把话说完",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“前往王哲处，获取锦囊并接受托付”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s02_01.silk_bag",
+              "scope": "faction",
+              "summary": "帅帐里锦囊与口诀册已单独收起。接下托付，还是只保管物件，还没落口。",
+              "domains": [
+                "sect"
+              ],
+              "geography": [
+                "帅帐"
+              ],
+              "factionIds": [
+                "liuchao.faction.tai_yi_zhen_zong",
+                "lcq.faction.left_guard"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s02_01.charge": {
+                  "text": "王哲要程宗扬保管锦囊、修为达六阳后去太泉古阵、并守护月霜；托付与物件还没分开说死。",
+                  "access": "public",
+                  "evidence": "lcq.event.s02_01 axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "mandateTaken",
+                  "objectOnly"
+                ],
+                "initialValues": {
+                  "mandateTaken": 35,
+                  "objectOnly": 30
+                },
+                "limits": {
+                  "mandateTaken": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "objectOnly": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "锦囊已经摆在案上"
+                ],
+                "forbiddenBefore": [
+                  "王哲已经身死",
+                  "锦囊已经拆开宣读"
+                ],
+                "processFreedom": [
+                  "认下托付还是只保管物件"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "lcq.character.wang_zhe",
+                  "identity": {
+                    "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                    "office": "太乙掌教",
+                    "rank": 7
+                  },
+                  "personality": {
+                    "honor": 5,
+                    "caution": 4,
+                    "ambition": 2
+                  },
+                  "motives": {
+                    "legitimacy": 5,
+                    "stability": 4
+                  },
+                  "resources": {
+                    "influence": 5,
+                    "intelligence": 4,
+                    "troops": 4,
+                    "wealth": 3
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s02_01.charge"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s02_01.wang",
+                      "goal": "决定托付是整份落下，还是先只把物件交出去",
+                      "clock": 0,
+                      "escalation": [
+                        "密召",
+                        "交物",
+                        "问口"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "offer_patronage",
+                    "delay_commitment"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：王哲为太乙真宗掌教、左武卫师帅。",
+                    "personality.honor": "axisBeat：亲口托付三事。",
+                    "personality.caution": "本拍先密召再交物。",
+                    "personality.ambition": "本拍不趁机扩权。",
+                    "motives.legitimacy": "人物卡：掌教。",
+                    "motives.stability": "本拍要托付有人接。",
+                    "resources.influence": "人物卡：掌教／师帅。",
+                    "resources.intelligence": "本拍独知锦囊内容。",
+                    "resources.troops": "本拍亲兵拦帐。",
+                    "resources.wealth": "本拍不靠赏赐。",
+                    "agendas.agenda.lcq.s02_01.wang.clock": "帐内已静，口尚未落。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "offer_patronage",
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "label": "把清理门户与传功一并问出口",
+                  "reason": "物件可以交，托付要当面认",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s02_01.charge"
+                  ],
+                  "mustNotInvent": [
+                    "清理门户已经完成"
+                  ],
+                  "visibleSignal": "王哲把锦囊按住，先问这三件事谁来认",
+                  "offscreenAction": "摊开整份托付",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "mandateTaken": 12,
+                    "objectOnly": -4
+                  },
+                  "utility": {
+                    "urgency": 8,
+                    "factionGoal": 9,
+                    "expectedBenefit": 8,
+                    "situation": {
+                      "mandateTaken": -3
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "delay_commitment",
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "label": "先把锦囊交出去，不逼人把差事认死",
+                  "reason": "物件先有人拿，话可以后说",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s02_01.charge"
+                  ],
+                  "mustNotInvent": [
+                    "锦囊已经拆开"
+                  ],
+                  "visibleSignal": "锦囊被推向对面，口诀册仍封着",
+                  "offscreenAction": "只交物件",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "objectOnly": 12,
+                    "mandateTaken": -6
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "锦囊已经拆开",
+                  "清理门户已经完成"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s02_01.take_full_mandate",
+                "title": "接下锦囊，并认下清理门户的托付",
+                "characterIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "whyNow": "帐内只剩这句还没出口。认下托付，锦囊就不是普通物件。",
+                "nextStep": "当面收下锦囊，并承认清理门户与传授九阳是你接下来要办的差事。",
+                "stakes": "以后有人问这只囊是谁的差事，会先问到你；话也收不回去。",
+                "rewardPreview": "取得一次以王哲托付名义保管锦囊并认差的权限。",
+                "futureHint": "以后再有人提起这只囊，会先看你当时认没认过差事。",
+                "actionText": "我追踪“接下锦囊，并认下清理门户的托付”：收下锦囊，当面承认这是我的差事。",
+                "rewardKey": "permission.lcq.taiyi.silk_mandate",
+                "rewardLabel": "太乙·锦囊托付",
+                "trigger": {
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "actionIds": [
+                    "offer_patronage"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "take_bag",
+                      "label": "当面收下锦囊",
+                      "outcomeEffects": {
+                        "inventoryTransfers": [
+                          {
+                            "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                            "itemId": "lcq.item.jin_nang",
+                            "quantity": 1
+                          }
+                        ]
+                      },
+                      "actions": [
+                        {
+                          "id": "accept_silk_bag",
+                          "label": "收下锦囊",
+                          "actionText": "我当面从王哲案上收下锦囊，不让它再留在帐内无人认领。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "收下锦囊",
+                        "不让它再留在帐内"
+                      ],
+                      "rejectIf": [
+                        "只看一眼",
+                        "不接手"
+                      ]
+                    },
+                    {
+                      "id": "own_charge",
+                      "label": "认下清理门户的差事",
+                      "actions": [
+                        {
+                          "id": "acknowledge_purge_charge",
+                          "label": "认下托付",
+                          "actionText": "我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "承认",
+                        "差事",
+                        "不改口说只是代为保管"
+                      ],
+                      "rejectIf": [
+                        "只保管",
+                        "不认差事"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "opportunity.lcq.s02_01.keep_object_only",
+                "title": "只保管锦囊，不把清理门户说成你的差事",
+                "characterIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "whyNow": "物件可以先离开帅帐。差事若不出口，日后也不算你已经领了。",
+                "nextStep": "收下锦囊实物，明确此刻不把清理门户认成自己的差事。",
+                "stakes": "宗门不会按托付来找你；有人问这只囊的差事，帐里也没有你的画押。",
+                "rewardPreview": "取得一次只保管锦囊实物、不认差事的权限。",
+                "futureHint": "以后若再问这只囊，王哲一侧会记得你当时只接了物件。",
+                "actionText": "我追踪“只保管锦囊，不把清理门户说成你的差事”：收下实物，不认差事。",
+                "rewardKey": "permission.lcq.taiyi.silk_custody",
+                "rewardLabel": "太乙·锦囊代管",
+                "trigger": {
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "actionIds": [
+                    "delay_commitment"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "hold_bag",
+                      "label": "收下锦囊实物",
+                      "outcomeEffects": {
+                        "inventoryTransfers": [
+                          {
+                            "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                            "itemId": "lcq.item.jin_nang",
+                            "quantity": 1
+                          }
+                        ]
+                      },
+                      "actions": [
+                        {
+                          "id": "hold_silk_object",
+                          "label": "代管锦囊",
+                          "actionText": "我收下锦囊实物，答应先保管，不拆开、不宣读。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "收下锦囊实物",
+                        "先保管",
+                        "不拆开"
+                      ],
+                      "rejectIf": [
+                        "认下托付",
+                        "承认这是我的差事"
+                      ]
+                    },
+                    {
+                      "id": "no_charge",
+                      "label": "不认清理门户差事",
+                      "actions": [
+                        {
+                          "id": "refuse_purge_charge",
+                          "label": "不认差事",
+                          "actionText": "我明确此刻不把清理门户说成我的差事，也不画押认领。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不把清理门户说成我的差事",
+                        "不画押"
+                      ],
+                      "rejectIf": [
+                        "承认",
+                        "差事",
+                        "认下托付"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_02",
+          "name": "左武军与罗马军团大战",
+          "description": "左武军第一军团与罗马五个军团及马其顿军团激战，韩庚战死，王哲最终以九阳神功自爆，全军覆没。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_01.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_02.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "lcq.character.wang_zhe",
+            "lcq.character.han_geng",
+            "lcq.character.agamenon",
+            "lcq.character.yue_shuang",
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "lcq.faction.left_guard",
+            "lcq.faction.roman",
+            "lcq.faction.macedon",
+            "lcq.faction.beast"
+          ],
+          "axisId": "qingyu.14.2",
+          "axisMethod": "deepseek",
+          "axisSeq": 30,
+          "axisAnchor": "六朝清羽记·#14·第12章·九阳",
+          "axisBeat": "半预制高光：先完整交代左武第一军团在罗马、马其顿、兽蛮联军围攻下伤亡殆尽、天霁营毁弩、帅帐卫士杀马毁械与文泽自刎；随后把镜头锁定王哲：脱甲悬空，九阳依次点亮并合一如日轮，阿伽门侬由轻蔑转为惊恐，毁灭性光球坠地将战场化为焦土，完成王哲以自身殉军的收束。不得把这一段概括成“一招自爆”，也不得让旁人抢走最后一击。",
+          "completionEvidence": [
+            "左武第一军团",
+            "王哲",
+            "九阳",
+            "日轮",
+            "阿伽门侬",
+            "焦土"
+          ],
+          "objective": "左武军已与联军开战，先保住自己和月霜，跟上战局变化",
+          "offscreenResolution": {
+            "id": "offscreen.r2_9.lcq_event_s02_02",
+            "afterStallTurns": 7,
+            "flagKey": "world.r2_9.lcq_event_s02_02.offscreen_resolved",
+            "resolvedEventIds": [
+              "lcq.event.s02_02"
+            ],
+            "worldDelta": "左武军与罗马军团的战事自行爆发，前线死伤与溃兵已经改变五原周边局势。",
+            "evidence": "R2-9 世界引力合同：左武军与罗马军团大战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+          },
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "hold_left_army_line",
+                "label": "守住左武军覆灭的前因视角",
+                "actionText": "我留在战局视角内，先确认左武军在多方围攻下伤亡殆尽及军械尽毁的前因。",
+                "timeCost": 1,
+                "kind": "prepare",
+                "grantsPreparation": "sequence_step_1",
+                "outcomeText": {
+                  "success": "你已完成“守住左武军覆灭的前因视角”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              },
+              {
+                "id": "witness_wang_zhe_nine_suns",
+                "label": "见证王哲九阳合一",
+                "actionText": "我继续见证王哲脱甲悬空、九阳依次点亮并合一如日轮，不让旁人抢走这次收束。",
+                "timeCost": 1,
+                "kind": "prepare",
+                "grantsPreparation": "sequence_step_2",
+                "requiresPreparation": [
+                  "sequence_step_1"
+                ],
+                "outcomeText": {
+                  "success": "你已完成“见证王哲九阳合一”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              },
+              {
+                "id": "record_battlefield_aftermath",
+                "label": "确认焦土余波与殉军结果",
+                "actionText": "我确认毁灭性光球坠地后的焦土余波，把王哲殉军与左武军覆灭完整落账。",
+                "timeCost": 1,
+                "requiresPreparation": [
+                  "sequence_step_2"
+                ],
+                "outcomeText": {
+                  "success": "你已完成“确认焦土余波与殉军结果”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "deadline": {
+              "afterActionId": "witness_wang_zhe_nine_suns",
+              "turns": 3,
+              "approach": [
+                "热浪先一步到了，眼前的草叶卷曲发黑；身后的喊杀声正被一种更大的声音盖过去。",
+                "光墙已经推到近前，吸进去的空气是烫的；月霜在拽你的袖子，说不出话。"
+              ],
+              "ending": {
+                "id": "lcq.ending.death.wangzhe_blast",
+                "title": "十里焦土",
+                "facts": [
+                  "王哲以九阳神功合一，化为太阳之火与敌军同归于尽",
+                  "草原化为十里焦土",
+                  "程宗扬没有离开战场，被焰浪吞没",
+                  "月霜没有被带走"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "lcq.event.s02_03",
+          "name": "秦军与罗马军团交战",
+          "description": "天武营秦军与罗马第十二军团交战；罗马军团以标枪和右刺战术重创秦军方阵，秦军最终溃散。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_02.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_03.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "lcq.character.yue_shuang"
+          ],
+          "axisId": "qingyu.11.1",
+          "axisMethod": "deepseek",
+          "axisSeq": 22,
+          "axisAnchor": "六朝清羽记·#11·第10章·军团",
+          "axisBeat": "天武营秦军与罗马第十二军团交战，弩手远程杀伤敌军，但罗马军团投掷标枪重创秦军方阵，短兵相接后秦军因罗马右刺战术而溃散。",
+          "objective": "在秦军与罗马军的交战中求生并观察战局",
+          "offscreenResolution": {
+            "id": "offscreen.r2_9.lcq_event_s02_03",
+            "afterStallTurns": 7,
+            "flagKey": "world.r2_9.lcq_event_s02_03.offscreen_resolved",
+            "resolvedEventIds": [
+              "lcq.event.s02_03"
+            ],
+            "worldDelta": "秦军随后卷入罗马军团战事，军情、俘虏与道路封锁成为玩家缺席后的既成事实。",
+            "evidence": "R2-9 世界引力合同：秦军与罗马军团交战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+          },
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在秦军与罗马军的交战中求生并观察战局",
+                "actionText": "我按当前主线目标行动：在秦军与罗马军的交战中求生并观察战局",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在秦军与罗马军的交战中求生并观察战局”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_04",
+          "name": "程宗扬在五原城被误抓为奴隶",
+          "description": "程宗扬在五原城被白湖商馆的人误认为逃奴，遭毒打并烙上奴隶印记。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_03.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "axisId": "qingyu.17.1",
+          "axisMethod": "deepseek",
+          "axisSeq": 31,
+          "axisAnchor": "六朝清羽记·#17·第15章·冤屈",
+          "axisBeat": "程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。",
+          "objective": "五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "五原城里有人把你当成逃奴，先应付眼前的盘问与拉扯",
+                "actionText": "我按当前主线目标行动：应付眼前的盘问与拉扯",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在五原城中避免被误抓为奴隶”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_05",
+          "name": "程宗扬与阿姬曼·芭娜相遇",
+          "description": "程宗扬在地牢中遇到天竺舞姬阿姬曼，她帮助程宗扬逃跑但实为圈套，程宗扬杀死孙疤脸。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "axisId": "qingyu.19.1",
+          "axisMethod": "deepseek",
+          "axisSeq": 33,
+          "axisAnchor": "六朝清羽记·#19·第17章·圈套",
+          "axisBeat": "程宗扬被故意放出牢房后遭戈龙伏击，被迫杀死孙疤脸并试图反抗。",
+          "objective": "地牢里有人靠近你，先判断她要带你去哪",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "地牢里有人靠近你，先判断她要带你去哪",
+                "actionText": "我按当前主线目标行动：判断她要带你去哪",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在五原城牢房外应对戈龙伏击”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_06",
+          "name": "程宗扬见苏妲己",
+          "description": "程宗扬识破白湖商馆主人苏妲己的伪装后，被囚禁并遭追问霓龙丝情报。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_06.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji",
+            "liuchao.character.ning_yu"
+          ],
+          "axisId": "qingyu.20.1",
+          "axisSeq": 35,
+          "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+          "axisBeat": "程宗扬识破商馆女主人苏妲己的伪装，揭露其外淫内端的实质，苏妲己下令处死男奴，并囚禁程宗扬逼问霓龙丝情报。",
+          "objective": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+                "actionText": "我按当前主线目标行动：看清她究竟是谁",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在商馆揭穿苏妲己伪装，脱身”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.baihu_shangguan_escape",
+          "name": "白湖脱身",
+          "description": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+          "axisId": "qingyu.25.2",
+          "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+          "axisSeq": 41,
+          "axisBeat": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.baihu_shangguan_escape.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "从白湖商馆的死局里脱身，走出五原商馆",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "walk_out_wuyuan_shangguan",
+                "label": "走出五原商馆",
+                "actionText": "我从白湖商馆内院走到大门，确认自己已不在囚室与死局里，自行迈出五原商馆，人仍留在五原城里。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已从白湖商馆的死局里脱身，走出五原商馆；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.sudaji_south_pact",
+          "name": "三个月南荒之约",
+          "description": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+          "axisId": "qingyu.20.2",
+          "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+          "axisSeq": 36,
+          "axisBeat": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.sudaji_south_pact.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "offer_nylon_clue_for_term",
+                "label": "以霓龙丝线索换三个月期限",
+                "actionText": "我不当面硬拼，明确以自己掌握的霓龙丝产地线索，向苏妲己换取活命和三个月行动期限。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "south_pact_terms_opened"
+              },
+              {
+                "id": "seal_three_month_south_pact",
+                "label": "当面订下三个月南荒之约",
+                "actionText": "我当着苏妲己的面把约定说死：三个月内前往南荒采集霓龙丝，逾期受炮烙；这就是我南下的由头。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已与苏妲己订下三个月南荒之约；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "south_pact_terms_opened"
+                ]
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "choices": [
+              {
+                "id": "refuse_term_take_paolao",
+                "label": "拒绝期限，要她现在就动炮烙",
+                "actionText": "我不接三个月的条件，当面对苏妲己说：要炮烙就现在动手。",
+                "ending": {
+                  "id": "lcq.ending.death.paolao",
+                  "title": "炮烙",
+                  "facts": [
+                    "程宗扬当面拒绝三个月南荒之约",
+                    "苏妲己依约执行炮烙",
+                    "霓龙丝无人去采，南荒之行未曾成行"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.wuerlang_joins",
+          "name": "武二郎入队",
+          "description": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+          "axisId": "qingyu.31.2",
+          "axisAnchor": "六朝清羽记·#31·第29章·伏虎",
+          "axisSeq": 47,
+          "axisBeat": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.wuerlang_joins.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "让走投无路的武二郎当面答应加入南荒队伍",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "confirm_wuerlang_no_prior_promise",
+                "label": "确认武二郎此前并未应诺同行",
+                "actionText": "我让武二郎把先前条件说清，承认他此前只求解开镣铐，并未真正答应随队南行。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "wuerlang_cornered_known"
+              },
+              {
+                "id": "secure_wuerlang_southbound",
+                "label": "取得武二郎随队南行的明确承诺",
+                "actionText": "武二郎因满城围捕走投无路返回后，我重新谈定报酬，当面取得他加入南荒队伍的明确承诺。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "武二郎已被迫答应加入南荒队伍；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "wuerlang_cornered_known"
+                ]
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "deadline": {
+              "afterActionId": "confirm_wuerlang_no_prior_promise",
+              "when": [
+                {
+                  "path": "pathReceipts.lcq.event.free_ajiman.path.bond_pocketed",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "turns": 0,
+              "approach": [],
+              "ending": {
+                "id": "lcq.ending.death.ajiman_bond",
+                "title": "冰蛊",
+                "facts": [
+                  "程宗扬没有当面撕毁阿姬曼的身契，只把它收进了怀里",
+                  "阿姬曼因此不信他，不肯跟他离开五原城",
+                  "冰蛊是之后苏妲己在冰镇酸梅汤里给程宗扬种下的",
+                  "苏妲己下令追查买走舞姬的人，那张没有撕掉的身契让她查到了程宗扬",
+                  "苏妲己催动冰蛊，寒气冻住了程宗扬的心脏与脑浆，他当场毙命",
+                  "阿姬曼被收回白湖商馆，镣铐加身，和箱笼货物一起被逐件清点、登记入册，押往黑魔海",
+                  "那个没有舌头的哑奴母亲早被卖给了路过的晋国商人，阿姬曼再也见不到她",
+                  "她的哥哥将永远等不到她回来",
+                  "阿姬曼心里最后一点盼头熄灭了，没有人会来救她，也没有任何转机"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "lcq.event.ningyu_regicide_offer",
+          "name": "凝羽开价弑主",
+          "description": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+          "axisId": "qingyu.35.1",
+          "axisAnchor": "六朝清羽记·#35·第33章·武请",
+          "axisSeq": 53,
+          "axisBeat": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.ningyu_regicide_offer.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "当面听清凝羽私下的合作条件，并探明她体内阴寒之气从何而来",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "hear_ningyu_regicide_price",
+                "label": "听清并回应凝羽的弑主开价",
+                "actionText": "凝羽私下找我，要求用巫术与她合作除掉苏妲己、她自己也准备赴死。我让她把条件和代价说清，再当面回应，不把尚未执行的提议写成既成事实。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ningyu_regicide_price_heard"
+              },
+              {
+                "id": "trace_ningyu_cold_qi_source",
+                "label": "探明凝羽体内阴寒之气的来源",
+                "actionText": "我与凝羽共同运功，确认她体内阴寒之气来自西门庆把她当鼎炉调教，并听她亲口把这段旧事说清。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已听清凝羽的弑主合作开价，并探明她体内阴寒之气的来源；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ningyu_regicide_price_heard"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.gamble_bond_signed",
+          "name": "落败签下卖身契",
+          "description": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
+          "axisId": "qingyu.21.1",
+          "axisAnchor": "六朝清羽记·#21·第19章·赌局",
+          "axisSeq": 37,
+          "axisBeat": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.gamble_bond_signed.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "赌局局面骤变，面对眼前的刻香与契书做出回应",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "confirm_rigged_wager_loss",
+                "label": "确认刻香被加速后赌局落败",
+                "actionText": "我当面核对赌局时限与刻香，确认苏妲己作弊加速刻香、此局已判我落败，不把规则说成尚未结束。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "rigged_wager_loss_seen"
+              },
+              {
+                "id": "sign_the_bond",
+                "label": "面对眼前的刻香与契书做出回应",
+                "actionText": "赌局落败后，我面对苏妲己作弊造成的结果，签下卖身契、成为白湖商馆的奴隶，不把这拍改写成赌局作废或由旁人代签。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已签下卖身契、落入白湖商馆奴籍；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "rigged_wager_loss_seen"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.charge_sudaji_fee",
+          "name": "谈定六十金铢",
+          "description": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+          "axisId": "qingyu.23.1",
+          "axisAnchor": "六朝清羽记·#23·第21章·戏弄",
+          "axisSeq": 38,
+          "axisBeat": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.charge_sudaji_fee.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "在帮苏妲己取出新奇器物前谈定六十金铢报酬",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "name_sixty_zhu_before_help",
+                "label": "先开出六十金铢工价",
+                "actionText": "苏妲己要我取出那件新奇器物之前，我先把工价说死：六十金铢，不预支就不动手。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "sixty_zhu_named"
+              },
+              {
+                "id": "lock_fee_then_remove_device",
+                "label": "谈定报酬后再取出器物",
+                "actionText": "苏妲己当面应下六十金铢后，我才按约帮她取出新奇器物，不把这拍写成先帮忙后空口赊账。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已在取出器物前谈定六十金铢报酬；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "sixty_zhu_named"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.free_ajiman",
+          "name": "撕毁阿姬曼身契",
+          "description": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+          "axisId": "qingyu.25.1",
+          "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+          "axisSeq": 40,
+          "axisBeat": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.free_ajiman.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "取得阿姬曼的身契并当面还她自由，再设法出城",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "take_ajiman_bond_in_hand",
+                "label": "取得阿姬曼身契",
+                "actionText": "我用五十金铢把阿姬曼的身契拿到自己手里，先确认契据已离开卖方，再准备当面处置。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ajiman_bond_in_hand"
+              },
+              {
+                "id": "tear_bond_and_face_blockade",
+                "label": "当面撕契并改道出城",
+                "actionText": "我当着阿姬曼的面撕毁身契还她自由；发现商馆侍卫封锁出城岔路后，立刻改道避开搜查。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已当面撕毁阿姬曼身契，并应对被封锁的出城路线；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ajiman_bond_in_hand"
+                ]
+              },
+              {
+                "id": "pocket_ajiman_bond",
+                "label": "先收起身契，出城再说",
+                "actionText": "我先把阿姬曼的身契收进怀里，不当面撕掉，出城再说。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你没有撕毁阿姬曼的身契，只把它收进怀里，先出城再说；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ajiman_bond_in_hand"
+                ],
+                "outcomeEffects": {
+                  "success": {
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.free_ajiman.path.bond_pocketed",
+                        "sourceEventId": "lcq.event.free_ajiman",
+                        "choiceId": "pocket_ajiman_bond",
+                        "mutexGroupId": "lcq.event.free_ajiman.mutex.bond",
+                        "dimension": "method",
+                        "label": "没有撕掉阿姬曼的身契（苏妲己已下令追查买走舞姬的人）",
+                        "consumeAtEventIds": [
+                          "lcq.event.wuerlang_joins"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.iron_bridge_ambush",
+          "name": "铁索桥伏击",
+          "description": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+          "axisId": "qingyu.32.2",
+          "axisAnchor": "六朝清羽记·#32·第30章·险路",
+          "axisSeq": 50,
+          "axisBeat": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.iron_bridge_ambush.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "先稳住武二郎伤势，再带队过铁索桥",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "stabilize_wuerlang_on_route",
+                "label": "先稳住武二郎伤势",
+                "actionText": "我与凝羽先处理武二郎中毒带伤的伤口，确认他还能随队，不把他丢在桥前。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "wuerlang_wound_held"
+              },
+              {
+                "id": "break_iron_bridge_ambush",
+                "label": "带队突破铁索桥伏击",
+                "actionText": "桥头被不明敌人抢占后，我护住伤员与货物，带队从进退两难的铁索桥上突过去。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已稳定武二郎伤势，并带队突破铁索桥伏击；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "wuerlang_wound_held"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.rainforest_black_shoal",
+          "name": "黑石滩渡河",
+          "description": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+          "axisId": "qingyu.37.2",
+          "axisAnchor": "六朝清羽记·#37·第35章·渡河",
+          "axisSeq": 58,
+          "axisBeat": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.rainforest_black_shoal.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "收拢雨林里的伤员，按岸边火光把两支商队渡过黑石滩",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "bear_rainforest_losses",
+                "label": "收拢雨林伤亡后再渡",
+                "actionText": "青藤蛇与山洪造成伤亡后，我先清点两队伤员与货物，承认损失，不装作无事过滩。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "rainforest_losses_borne"
+              },
+              {
+                "id": "follow_ningyu_fire_across_shoal",
+                "label": "依凝羽火光渡过黑石滩",
+                "actionText": "两队在黑石滩迷失后，我按凝羽岸边火光校正方向，带白湖与云氏两支商队渡过黑石滩。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已承受雨林伤亡，并依凝羽火光带两支商队渡过黑石滩；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "rainforest_losses_borne"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.ningyu_enters_gamble",
+          "name": "凝羽进入赌局",
+          "description": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+          "axisId": "qingyu.20.1",
+          "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+          "axisSeq": 35,
+          "axisBeat": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.ningyu_enters_gamble.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "凝羽突然入局，当面看清她此刻的处境并回应",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "see_ningyu_sent_into_gamble",
+                "label": "看清凝羽奉命进入赌局",
+                "actionText": "苏妲己命凝羽上场后，我当面看清她是奉命进入这场赌局的商馆侍卫长，只认眼前处境，不把后续来历提前当成已知。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ningyu_gamble_debut_seen"
+              },
+              {
+                "id": "answer_ningyu_on_debut",
+                "label": "当面回应登场的凝羽",
+                "actionText": "我认清凝羽此刻被差遣进赌局的处境后当面回应她，把这拍当作她的登场，不借登场预写后来的经历。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已认清奉命进入赌局的凝羽的处境并当面回应；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ningyu_gamble_debut_seen"
+                ]
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "choices": [
+              {
+                "id": "refuse_gamble_take_paolao",
+                "label": "不赌",
+                "actionText": "我当面回绝这场赌局，不和苏妲己赌。",
+                "ending": {
+                  "id": "lcq.ending.death.paolao",
+                  "title": "炮烙",
+                  "facts": [
+                    "程宗扬当面回绝白湖商馆的赌局",
+                    "苏妲己下令执行炮烙",
+                    "赌局未开，卖身契未签"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.zixi_taiyi_intercept",
+          "name": "紫溪太乙拦船",
+          "description": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+          "axisId": "qingyu.35.2",
+          "axisAnchor": "六朝清羽记·#35·第33章·武请",
+          "axisSeq": 54,
+          "axisBeat": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.zixi_taiyi_intercept.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan",
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "应对紫溪上太乙真宗拦船，护住船上的人",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "face_taiyi_at_zixi",
+                "label": "现身与太乙真宗交涉",
+                "actionText": "太乙真宗在紫溪拦住船队后，我现身船头与对方当面交涉，承认他们在追问，同时拒绝让他们直接接管商队。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "zixi_taiyi_faced"
+              },
+              {
+                "id": "pull_qiyuan_back_aboard",
+                "label": "救回落水的祁远",
+                "actionText": "交涉冲突里祁远被推落水后，我立刻组织船上人手把他救回船队，不把他丢在紫溪里。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已在紫溪现身与太乙真宗交涉，并救回落水的祁远；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "zixi_taiyi_faced"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.silent_sheyi_village",
+          "name": "抵达无声蛇彝村",
+          "description": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+          "axisId": "qingyu.38.1",
+          "axisAnchor": "六朝清羽记·#38·第36章·蛇村",
+          "axisSeq": 59,
+          "axisBeat": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.silent_sheyi_village.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "抵达蛇彝村，把商队安顿下来",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "confirm_sheyi_dark_and_silent",
+                "label": "确认寨里无灯也无人声",
+                "actionText": "商队抵寨后，我先从外围确认蛇彝村没有灯火、也没有人应门，只记下眼前的死静，不提前宣告灭村真相。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "sheyi_silence_confirmed"
+              },
+              {
+                "id": "settle_caravan_in_silent_sheyi",
+                "label": "在空村里安置商队",
+                "actionText": "确认无灯无人应之后，我在空村巷口安排警戒与宿处，先把商队人马安置下来，不走进下一章才揭开的真相。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "商队已抵达无灯火无人声的蛇彝村并安置下来；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "sheyi_silence_confirmed"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "to": [
+        {
+          "id": "lcq.event.s02_01",
+          "name": "王哲传功与托付",
+          "description": "王哲为程宗扬筑基并传九阳神功口诀，托付三件事：拆锦囊、去太泉古阵、守护月霜。",
+          "conditions": [
+            {
+              "path": "flags.chapter.lcq.stage_02.started",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_01.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "lcq.character.wang_zhe"
+          ],
+          "relatedFactionIds": [
+            "lcq.faction.left_guard",
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "locationId": "lcq.location.shuai_zhang",
+          "axisId": "qingyu.10.2",
+          "axisSeq": 20,
+          "axisAnchor": "六朝清羽记·#10·第9章·传功",
+          "axisBeat": "王哲托付程宗扬三件事：保管锦囊、修为达六阳后前往太泉古阵祭祀、守护岳帅后人月霜。",
+          "objective": "王哲还有事要当面交代，先听他把话说完",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "王哲还有事要当面交代，先听他把话说完",
+                "actionText": "我按当前主线目标行动：听他把话说完",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“前往王哲处，获取锦囊并接受托付”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          },
+          "worldActor": {
+            "pressure": {
+              "id": "world.lcq.s02_01.silk_bag",
+              "scope": "faction",
+              "summary": "帅帐里锦囊与口诀册已单独收起。接下托付，还是只保管物件，还没落口。",
+              "domains": [
+                "sect"
+              ],
+              "geography": [
+                "帅帐"
+              ],
+              "factionIds": [
+                "liuchao.faction.tai_yi_zhen_zong",
+                "lcq.faction.left_guard"
+              ],
+              "intensity": 2,
+              "canonPolicy": "process_only"
+            },
+            "decisionCore": {
+              "knowledgeFacts": {
+                "knowledge.lcq.s02_01.charge": {
+                  "text": "王哲要程宗扬保管锦囊、修为达六阳后去太泉古阵、并守护月霜；托付与物件还没分开说死。",
+                  "access": "public",
+                  "evidence": "lcq.event.s02_01 axisBeat。"
+                }
+              },
+              "situation": {
+                "whitelist": [
+                  "mandateTaken",
+                  "objectOnly"
+                ],
+                "initialValues": {
+                  "mandateTaken": 35,
+                  "objectOnly": 30
+                },
+                "limits": {
+                  "mandateTaken": {
+                    "min": 0,
+                    "max": 100
+                  },
+                  "objectOnly": {
+                    "min": 0,
+                    "max": 100
+                  }
+                }
+              },
+              "canonPolicy": {
+                "invariant": [
+                  "锦囊已经摆在案上"
+                ],
+                "forbiddenBefore": [
+                  "王哲已经身死",
+                  "锦囊已经拆开宣读"
+                ],
+                "processFreedom": [
+                  "认下托付还是只保管物件"
+                ]
+              },
+              "actors": [
+                {
+                  "characterId": "lcq.character.wang_zhe",
+                  "identity": {
+                    "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                    "office": "太乙掌教",
+                    "rank": 7
+                  },
+                  "personality": {
+                    "honor": 5,
+                    "caution": 4,
+                    "ambition": 2
+                  },
+                  "motives": {
+                    "legitimacy": 5,
+                    "stability": 4
+                  },
+                  "resources": {
+                    "influence": 5,
+                    "intelligence": 4,
+                    "troops": 4,
+                    "wealth": 3
+                  },
+                  "relationships": {},
+                  "knowledge": [
+                    "knowledge.lcq.s02_01.charge"
+                  ],
+                  "agendas": [
+                    {
+                      "id": "agenda.lcq.s02_01.wang",
+                      "goal": "决定托付是整份落下，还是先只把物件交出去",
+                      "clock": 0,
+                      "escalation": [
+                        "密召",
+                        "交物",
+                        "问口"
+                      ]
+                    }
+                  ],
+                  "allowedActionIds": [
+                    "offer_patronage",
+                    "delay_commitment"
+                  ],
+                  "wake": {
+                    "tier": "local_critical"
+                  },
+                  "evidence": {
+                    "identity.rank": "人物卡：王哲为太乙真宗掌教、左武卫师帅。",
+                    "personality.honor": "axisBeat：亲口托付三事。",
+                    "personality.caution": "本拍先密召再交物。",
+                    "personality.ambition": "本拍不趁机扩权。",
+                    "motives.legitimacy": "人物卡：掌教。",
+                    "motives.stability": "本拍要托付有人接。",
+                    "resources.influence": "人物卡：掌教／师帅。",
+                    "resources.intelligence": "本拍独知锦囊内容。",
+                    "resources.troops": "本拍亲兵拦帐。",
+                    "resources.wealth": "本拍不靠赏赐。",
+                    "agendas.agenda.lcq.s02_01.wang.clock": "帐内已静，口尚未落。"
+                  }
+                }
+              ],
+              "actionBindings": [
+                {
+                  "actionId": "offer_patronage",
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "label": "把清理门户与传功一并问出口",
+                  "reason": "物件可以交，托付要当面认",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s02_01.charge"
+                  ],
+                  "mustNotInvent": [
+                    "清理门户已经完成"
+                  ],
+                  "visibleSignal": "王哲把锦囊按住，先问这三件事谁来认",
+                  "offscreenAction": "摊开整份托付",
+                  "costs": {
+                    "influence": 1
+                  },
+                  "effects": {
+                    "mandateTaken": 12,
+                    "objectOnly": -4
+                  },
+                  "utility": {
+                    "urgency": 8,
+                    "factionGoal": 9,
+                    "expectedBenefit": 8,
+                    "situation": {
+                      "mandateTaken": -3
+                    }
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                },
+                {
+                  "actionId": "delay_commitment",
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "label": "先把锦囊交出去，不逼人把差事认死",
+                  "reason": "物件先有人拿，话可以后说",
+                  "knownFacts": [],
+                  "knownFactIds": [
+                    "knowledge.lcq.s02_01.charge"
+                  ],
+                  "mustNotInvent": [
+                    "锦囊已经拆开"
+                  ],
+                  "visibleSignal": "锦囊被推向对面，口诀册仍封着",
+                  "offscreenAction": "只交物件",
+                  "costs": {
+                    "intelligence": 1
+                  },
+                  "effects": {
+                    "objectOnly": 12,
+                    "mandateTaken": -6
+                  },
+                  "utility": {
+                    "expectedBenefit": 4
+                  },
+                  "visibility": "public",
+                  "durationTurns": 1
+                }
+              ],
+              "maxVisibleActions": 2,
+              "narrativeGuard": {
+                "forbiddenTerms": [
+                  "锦囊已经拆开",
+                  "清理门户已经完成"
+                ],
+                "rejectConcreteQuantities": true,
+                "allowUnverifiedQuantities": true
+              }
+            },
+            "opportunities": [
+              {
+                "id": "opportunity.lcq.s02_01.take_full_mandate",
+                "title": "接下锦囊，并认下清理门户的托付",
+                "characterIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "whyNow": "帐内只剩这句还没出口。认下托付，锦囊就不是普通物件。",
+                "nextStep": "当面收下锦囊，并承认清理门户与传授九阳是你接下来要办的差事。",
+                "stakes": "以后有人问这只囊是谁的差事，会先问到你；话也收不回去。",
+                "rewardPreview": "取得一次以王哲托付名义保管锦囊并认差的权限。",
+                "futureHint": "以后再有人提起这只囊，会先看你当时认没认过差事。",
+                "actionText": "我追踪“接下锦囊，并认下清理门户的托付”：收下锦囊，当面承认这是我的差事。",
+                "rewardKey": "permission.lcq.taiyi.silk_mandate",
+                "rewardLabel": "太乙·锦囊托付",
+                "trigger": {
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "actionIds": [
+                    "offer_patronage"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "take_bag",
+                      "label": "当面收下锦囊",
+                      "outcomeEffects": {
+                        "inventoryTransfers": [
+                          {
+                            "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                            "itemId": "lcq.item.jin_nang",
+                            "quantity": 1
+                          }
+                        ]
+                      },
+                      "actions": [
+                        {
+                          "id": "accept_silk_bag",
+                          "label": "收下锦囊",
+                          "actionText": "我当面从王哲案上收下锦囊，不让它再留在帐内无人认领。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "收下锦囊",
+                        "不让它再留在帐内"
+                      ],
+                      "rejectIf": [
+                        "只看一眼",
+                        "不接手"
+                      ]
+                    },
+                    {
+                      "id": "own_charge",
+                      "label": "认下清理门户的差事",
+                      "actions": [
+                        {
+                          "id": "acknowledge_purge_charge",
+                          "label": "认下托付",
+                          "actionText": "我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "承认",
+                        "差事",
+                        "不改口说只是代为保管"
+                      ],
+                      "rejectIf": [
+                        "只保管",
+                        "不认差事"
+                      ]
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "opportunity.lcq.s02_01.keep_object_only",
+                "title": "只保管锦囊，不把清理门户说成你的差事",
+                "characterIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "whyNow": "物件可以先离开帅帐。差事若不出口，日后也不算你已经领了。",
+                "nextStep": "收下锦囊实物，明确此刻不把清理门户认成自己的差事。",
+                "stakes": "宗门不会按托付来找你；有人问这只囊的差事，帐里也没有你的画押。",
+                "rewardPreview": "取得一次只保管锦囊实物、不认差事的权限。",
+                "futureHint": "以后若再问这只囊，王哲一侧会记得你当时只接了物件。",
+                "actionText": "我追踪“只保管锦囊，不把清理门户说成你的差事”：收下实物，不认差事。",
+                "rewardKey": "permission.lcq.taiyi.silk_custody",
+                "rewardLabel": "太乙·锦囊代管",
+                "trigger": {
+                  "actorIds": [
+                    "lcq.character.wang_zhe"
+                  ],
+                  "actionIds": [
+                    "delay_commitment"
+                  ]
+                },
+                "completionContract": {
+                  "kind": "player_action_sequence",
+                  "settlement": "immediate",
+                  "expiry": "persistent",
+                  "steps": [
+                    {
+                      "id": "hold_bag",
+                      "label": "收下锦囊实物",
+                      "outcomeEffects": {
+                        "inventoryTransfers": [
+                          {
+                            "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                            "itemId": "lcq.item.jin_nang",
+                            "quantity": 1
+                          }
+                        ]
+                      },
+                      "actions": [
+                        {
+                          "id": "hold_silk_object",
+                          "label": "代管锦囊",
+                          "actionText": "我收下锦囊实物，答应先保管，不拆开、不宣读。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "收下锦囊实物",
+                        "先保管",
+                        "不拆开"
+                      ],
+                      "rejectIf": [
+                        "认下托付",
+                        "承认这是我的差事"
+                      ]
+                    },
+                    {
+                      "id": "no_charge",
+                      "label": "不认清理门户差事",
+                      "actions": [
+                        {
+                          "id": "refuse_purge_charge",
+                          "label": "不认差事",
+                          "actionText": "我明确此刻不把清理门户说成我的差事，也不画押认领。",
+                          "timeCost": 1
+                        }
+                      ],
+                      "matchAny": [
+                        "不把清理门户说成我的差事",
+                        "不画押"
+                      ],
+                      "rejectIf": [
+                        "承认",
+                        "差事",
+                        "认下托付"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_02",
+          "name": "左武军与罗马军团大战",
+          "description": "左武军第一军团与罗马五个军团及马其顿军团激战，韩庚战死，王哲最终以九阳神功自爆，全军覆没。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_01.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_02.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "lcq.character.wang_zhe",
+            "lcq.character.han_geng",
+            "lcq.character.agamenon",
+            "lcq.character.yue_shuang",
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "lcq.faction.left_guard",
+            "lcq.faction.roman",
+            "lcq.faction.macedon",
+            "lcq.faction.beast"
+          ],
+          "axisId": "qingyu.14.2",
+          "axisMethod": "deepseek",
+          "axisSeq": 30,
+          "axisAnchor": "六朝清羽记·#14·第12章·九阳",
+          "axisBeat": "半预制高光：先完整交代左武第一军团在罗马、马其顿、兽蛮联军围攻下伤亡殆尽、天霁营毁弩、帅帐卫士杀马毁械与文泽自刎；随后把镜头锁定王哲：脱甲悬空，九阳依次点亮并合一如日轮，阿伽门侬由轻蔑转为惊恐，毁灭性光球坠地将战场化为焦土，完成王哲以自身殉军的收束。不得把这一段概括成“一招自爆”，也不得让旁人抢走最后一击。",
+          "completionEvidence": [
+            "左武第一军团",
+            "王哲",
+            "九阳",
+            "日轮",
+            "阿伽门侬",
+            "焦土"
+          ],
+          "objective": "左武军已与联军开战，先保住自己和月霜，跟上战局变化",
+          "offscreenResolution": {
+            "id": "offscreen.r2_9.lcq_event_s02_02",
+            "afterStallTurns": 7,
+            "flagKey": "world.r2_9.lcq_event_s02_02.offscreen_resolved",
+            "resolvedEventIds": [
+              "lcq.event.s02_02"
+            ],
+            "worldDelta": "左武军与罗马军团的战事自行爆发，前线死伤与溃兵已经改变五原周边局势。",
+            "evidence": "R2-9 世界引力合同：左武军与罗马军团大战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+          },
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "hold_left_army_line",
+                "label": "守住左武军覆灭的前因视角",
+                "actionText": "我留在战局视角内，先确认左武军在多方围攻下伤亡殆尽及军械尽毁的前因。",
+                "timeCost": 1,
+                "kind": "prepare",
+                "grantsPreparation": "sequence_step_1",
+                "outcomeText": {
+                  "success": "你已完成“守住左武军覆灭的前因视角”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              },
+              {
+                "id": "witness_wang_zhe_nine_suns",
+                "label": "见证王哲九阳合一",
+                "actionText": "我继续见证王哲脱甲悬空、九阳依次点亮并合一如日轮，不让旁人抢走这次收束。",
+                "timeCost": 1,
+                "kind": "prepare",
+                "grantsPreparation": "sequence_step_2",
+                "requiresPreparation": [
+                  "sequence_step_1"
+                ],
+                "outcomeText": {
+                  "success": "你已完成“见证王哲九阳合一”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              },
+              {
+                "id": "record_battlefield_aftermath",
+                "label": "确认焦土余波与殉军结果",
+                "actionText": "我确认毁灭性光球坠地后的焦土余波，把王哲殉军与左武军覆灭完整落账。",
+                "timeCost": 1,
+                "requiresPreparation": [
+                  "sequence_step_2"
+                ],
+                "outcomeText": {
+                  "success": "你已完成“确认焦土余波与殉军结果”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "deadline": {
+              "afterActionId": "witness_wang_zhe_nine_suns",
+              "turns": 3,
+              "approach": [
+                "热浪先一步到了，眼前的草叶卷曲发黑；身后的喊杀声正被一种更大的声音盖过去。",
+                "光墙已经推到近前，吸进去的空气是烫的；月霜在拽你的袖子，说不出话。"
+              ],
+              "ending": {
+                "id": "lcq.ending.death.wangzhe_blast",
+                "title": "十里焦土",
+                "facts": [
+                  "王哲以九阳神功合一，化为太阳之火与敌军同归于尽",
+                  "草原化为十里焦土",
+                  "程宗扬没有离开战场，被焰浪吞没",
+                  "月霜没有被带走"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "id": "lcq.event.s02_03",
+          "name": "秦军与罗马军团交战",
+          "description": "天武营秦军与罗马第十二军团交战；罗马军团以标枪和右刺战术重创秦军方阵，秦军最终溃散。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_02.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_03.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "lcq.character.yue_shuang"
+          ],
+          "axisId": "qingyu.11.1",
+          "axisMethod": "deepseek",
+          "axisSeq": 22,
+          "axisAnchor": "六朝清羽记·#11·第10章·军团",
+          "axisBeat": "天武营秦军与罗马第十二军团交战，弩手远程杀伤敌军，但罗马军团投掷标枪重创秦军方阵，短兵相接后秦军因罗马右刺战术而溃散。",
+          "objective": "在秦军与罗马军的交战中求生并观察战局",
+          "offscreenResolution": {
+            "id": "offscreen.r2_9.lcq_event_s02_03",
+            "afterStallTurns": 7,
+            "flagKey": "world.r2_9.lcq_event_s02_03.offscreen_resolved",
+            "resolvedEventIds": [
+              "lcq.event.s02_03"
+            ],
+            "worldDelta": "秦军随后卷入罗马军团战事，军情、俘虏与道路封锁成为玩家缺席后的既成事实。",
+            "evidence": "R2-9 世界引力合同：秦军与罗马军团交战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+          },
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在秦军与罗马军的交战中求生并观察战局",
+                "actionText": "我按当前主线目标行动：在秦军与罗马军的交战中求生并观察战局",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在秦军与罗马军的交战中求生并观察战局”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_04",
+          "name": "程宗扬在五原城被误抓为奴隶",
+          "description": "程宗扬在五原城被白湖商馆的人误认为逃奴，遭毒打并烙上奴隶印记。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_03.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "axisId": "qingyu.17.1",
+          "axisMethod": "deepseek",
+          "axisSeq": 31,
+          "axisAnchor": "六朝清羽记·#17·第15章·冤屈",
+          "axisBeat": "程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。",
+          "objective": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
+                "actionText": "我按当前主线目标行动：应付眼前的盘问与拉扯",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在五原城中避免被误抓为奴隶”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_05",
+          "name": "程宗扬与阿姬曼·芭娜相遇",
+          "description": "程宗扬在地牢中遇到天竺舞姬阿姬曼，她帮助程宗扬逃跑但实为圈套，程宗扬杀死孙疤脸。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_04.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "axisId": "qingyu.19.1",
+          "axisMethod": "deepseek",
+          "axisSeq": 33,
+          "axisAnchor": "六朝清羽记·#19·第17章·圈套",
+          "axisBeat": "程宗扬被故意放出牢房后遭戈龙伏击，被迫杀死孙疤脸并试图反抗。",
+          "objective": "地牢里有人靠近你，先判断她要带你去哪",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "地牢里有人靠近你，先判断她要带你去哪",
+                "actionText": "我按当前主线目标行动：判断她要带你去哪",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在五原城牢房外应对戈龙伏击”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.s02_06",
+          "name": "程宗扬见苏妲己",
+          "description": "程宗扬识破白湖商馆主人苏妲己的伪装后，被囚禁并遭追问霓龙丝情报。",
+          "conditions": [
+            {
+              "path": "flags.event.s02_05.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.event.s02_06.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji",
+            "liuchao.character.ning_yu"
+          ],
+          "axisId": "qingyu.20.1",
+          "axisSeq": 35,
+          "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+          "axisBeat": "程宗扬识破商馆女主人苏妲己的伪装，揭露其外淫内端的实质，苏妲己下令处死男奴，并囚禁程宗扬逼问霓龙丝情报。",
+          "objective": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+                "actionText": "我按当前主线目标行动：看清她究竟是谁",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已亲自执行“在商馆揭穿苏妲己伪装，脱身”；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                  "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.baihu_shangguan_escape",
+          "name": "白湖脱身",
+          "description": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+          "axisId": "qingyu.25.2",
+          "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+          "axisSeq": 41,
+          "axisBeat": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.baihu_shangguan_escape.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "从白湖商馆的死局里脱身，走出五原商馆",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "walk_out_wuyuan_shangguan",
+                "label": "走出五原商馆",
+                "actionText": "我从白湖商馆内院走到大门，确认自己已不在囚室与死局里，自行迈出五原商馆，人仍留在五原城里。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已从白湖商馆的死局里脱身，走出五原商馆；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.sudaji_south_pact",
+          "name": "三个月南荒之约",
+          "description": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+          "axisId": "qingyu.20.2",
+          "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+          "axisSeq": 36,
+          "axisBeat": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.sudaji_south_pact.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "offer_nylon_clue_for_term",
+                "label": "以霓龙丝线索换三个月期限",
+                "actionText": "我不当面硬拼，明确以自己掌握的霓龙丝产地线索，向苏妲己换取活命和三个月行动期限。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "south_pact_terms_opened"
+              },
+              {
+                "id": "seal_three_month_south_pact",
+                "label": "当面订下三个月南荒之约",
+                "actionText": "我当着苏妲己的面把约定说死：三个月内前往南荒采集霓龙丝，逾期受炮烙；这就是我南下的由头。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已与苏妲己订下三个月南荒之约；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "south_pact_terms_opened"
+                ]
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "choices": [
+              {
+                "id": "refuse_term_take_paolao",
+                "label": "拒绝期限，要她现在就动炮烙",
+                "actionText": "我不接三个月的条件，当面对苏妲己说：要炮烙就现在动手。",
+                "ending": {
+                  "id": "lcq.ending.death.paolao",
+                  "title": "炮烙",
+                  "facts": [
+                    "程宗扬当面拒绝三个月南荒之约",
+                    "苏妲己依约执行炮烙",
+                    "霓龙丝无人去采，南荒之行未曾成行"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.wuerlang_joins",
+          "name": "武二郎入队",
+          "description": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+          "axisId": "qingyu.31.2",
+          "axisAnchor": "六朝清羽记·#31·第29章·伏虎",
+          "axisSeq": 47,
+          "axisBeat": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.wuerlang_joins.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "当面同武二郎谈定工钱，请他随商队南行",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "confirm_wuerlang_no_prior_promise",
+                "label": "确认武二郎此前并未应诺同行",
+                "actionText": "我问武二郎：先前说好的只是替他解开镣铐，这一趟南荒，他到底跟不跟？",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "wuerlang_cornered_known"
+              },
+              {
+                "id": "secure_wuerlang_southbound",
+                "label": "取得武二郎随队南行的明确承诺",
+                "actionText": "城里的护卫正四处搜人，我当面同武二郎把工钱说定：两枚银铢一月，月底给，每月先付一半，等从南荒回来再补齐。我请他随商队走这一趟。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "武二郎瞪了你半天，终究应下了这份工钱，答应随商队南行。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "wuerlang_cornered_known"
+                ]
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "deadline": {
+              "afterActionId": "confirm_wuerlang_no_prior_promise",
+              "when": [
+                {
+                  "path": "pathReceipts.lcq.event.free_ajiman.path.bond_pocketed",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "turns": 0,
+              "approach": [],
+              "ending": {
+                "id": "lcq.ending.death.ajiman_bond",
+                "title": "冰蛊",
+                "facts": [
+                  "程宗扬没有当面撕毁阿姬曼的身契，只把它收进了怀里",
+                  "阿姬曼因此不信他，不肯跟他离开五原城",
+                  "冰蛊是之后苏妲己在冰镇酸梅汤里给程宗扬种下的",
+                  "苏妲己下令追查买走舞姬的人，那张没有撕掉的身契让她查到了程宗扬",
+                  "苏妲己催动冰蛊，寒气冻住了程宗扬的心脏与脑浆，他当场毙命",
+                  "阿姬曼被收回白湖商馆，镣铐加身，和箱笼货物一起被逐件清点、登记入册，押往黑魔海",
+                  "那个没有舌头的哑奴母亲早被卖给了路过的晋国商人，阿姬曼再也见不到她",
+                  "她的哥哥将永远等不到她回来",
+                  "阿姬曼心里最后一点盼头熄灭了，没有人会来救她，也没有任何转机"
+                ]
+              }
+            }
+          },
+          "presentation": {
+            "stepGuardTerms": {
+              "secure_wuerlang_southbound": [
+                "返回",
+                "回来找",
+                "又回来",
+                "再见到",
+                "走投无路"
+              ]
+            }
+          }
+        },
+        {
+          "id": "lcq.event.ningyu_regicide_offer",
+          "name": "凝羽开价弑主",
+          "description": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+          "axisId": "qingyu.35.1",
+          "axisAnchor": "六朝清羽记·#35·第33章·武请",
+          "axisSeq": 53,
+          "axisBeat": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.ningyu_regicide_offer.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "当面听清凝羽私下的合作条件，并探明她体内阴寒之气从何而来",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "hear_ningyu_regicide_price",
+                "label": "听清并回应凝羽的弑主开价",
+                "actionText": "凝羽私下来找我，说有一件事要我答应。我请她把话说完，再给她答复。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ningyu_regicide_price_heard",
+                "previousBeat": "凝羽尚未说明寒气来源。",
+                "forbidden": [
+                  "西门庆",
+                  "噬心蛊",
+                  "采补残痕",
+                  "姓周",
+                  "星月湖的大将军",
+                  "苏荔",
+                  "清剿鬼王峒"
+                ],
+                "sceneLocation": "南荒途中",
+                "cast": {
+                  "present": [
+                    "凝羽"
+                  ]
+                },
+                "sceneObjective": "听凝羽说明条件",
+                "forceFixed": true,
+                "fixedFacts": [
+                  "凝羽请程宗扬替她除掉苏妲己。",
+                  "凝羽曾在月亮下起誓用生命保护苏妲己，因此要求程宗扬动手时连她一起杀。"
+                ],
+                "factChecks": [
+                  [
+                    "苏妲己"
+                  ],
+                  [
+                    "连我一起杀",
+                    "连她一起杀"
+                  ]
+                ],
+                "fallbackText": "你听凝羽提出条件：“替我除掉她。”你望着她的眼睛，问她说的是不是苏妲己。凝羽没有否认：“她一直知道我想杀她。但我在月亮下发过誓，会用我的生命保护她。所以，当你出手的时候，要连我一起杀了。”"
+              },
+              {
+                "id": "trace_ningyu_cold_qi_source",
+                "label": "探明凝羽体内阴寒之气的来源",
+                "actionText": "运功时，我察觉到她体内有一股不属于她的寒气，便问她这股气是从哪里来的。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "凝羽告诉你，那股寒气是西门庆留在她体内的；她只知道西门庆是五原城有名的富商，修为远比你想的要高。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ningyu_regicide_price_heard"
+                ],
+                "fixedFacts": [
+                  "凝羽体内阴寒之气来自西门庆，不是苏妲己种的噬心蛊"
+                ],
+                "forbidden": [
+                  "噬心蛊",
+                  "每三日服解药"
+                ],
+                "cast": {
+                  "present": [
+                    "凝羽"
+                  ]
+                },
+                "fallbackText": "你继续追问阴寒之气的来源。凝羽说出西门庆的名字：那股阴寒之气是他当年留下的，并不是苏妲己种下的噬心蛊。",
+                "factChecks": [
+                  [
+                    "西门庆"
+                  ],
+                  [
+                    "阴寒",
+                    "阴气"
+                  ]
+                ]
+              }
+            ]
+          },
+          "presentation": {
+            "stepGuardTerms": {
+              "hear_ningyu_regicide_price": [
+                "鼎炉",
+                "调教"
+              ],
+              "trace_ningyu_cold_qi_source": [
+                "鼎炉",
+                "调教",
+                "噬心蛊",
+                "冰蛊"
+              ]
+            }
+          }
+        },
+        {
+          "id": "lcq.event.gamble_bond_signed",
+          "name": "落败签下卖身契",
+          "description": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
+          "axisId": "qingyu.21.1",
+          "axisAnchor": "六朝清羽记·#21·第19章·赌局",
+          "axisSeq": 37,
+          "axisBeat": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.gamble_bond_signed.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "赌局局面骤变，面对眼前的刻香与契书做出回应",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "confirm_rigged_wager_loss",
+                "label": "确认刻香被加速后赌局落败",
+                "actionText": "我当面核对赌局时限与刻香，确认苏妲己作弊加速刻香、此局已判我落败，不把规则说成尚未结束。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "rigged_wager_loss_seen"
+              },
+              {
+                "id": "sign_the_bond",
+                "label": "面对眼前的刻香与契书做出回应",
+                "actionText": "赌局落败后，我面对苏妲己作弊造成的结果，签下卖身契、成为白湖商馆的奴隶，不把这拍改写成赌局作废或由旁人代签。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已签下卖身契、落入白湖商馆奴籍；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "rigged_wager_loss_seen"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.charge_sudaji_fee",
+          "name": "谈定六十金铢",
+          "description": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+          "axisId": "qingyu.23.1",
+          "axisAnchor": "六朝清羽记·#23·第21章·戏弄",
+          "axisSeq": 38,
+          "axisBeat": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.charge_sudaji_fee.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "在帮苏妲己取出新奇器物前谈定六十金铢报酬",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "name_sixty_zhu_before_help",
+                "label": "先开出六十金铢工价",
+                "actionText": "苏妲己要我取出那件新奇器物之前，我先把工价说死：六十金铢，不预支就不动手。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "sixty_zhu_named"
+              },
+              {
+                "id": "lock_fee_then_remove_device",
+                "label": "谈定报酬后再取出器物",
+                "actionText": "苏妲己当面应下六十金铢后，我才按约帮她取出新奇器物，不把这拍写成先帮忙后空口赊账。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已在取出器物前谈定六十金铢报酬；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "sixty_zhu_named"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.free_ajiman",
+          "name": "撕毁阿姬曼身契",
+          "description": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+          "axisId": "qingyu.25.1",
+          "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+          "axisSeq": 40,
+          "axisBeat": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.free_ajiman.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "取得阿姬曼的身契并当面还她自由，再设法出城",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "take_ajiman_bond_in_hand",
+                "label": "取得阿姬曼身契",
+                "actionText": "我用五十金铢把阿姬曼的身契拿到自己手里，先确认契据已离开卖方，再准备当面处置。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ajiman_bond_in_hand"
+              },
+              {
+                "id": "tear_bond_and_face_blockade",
+                "label": "当面撕契并改道出城",
+                "actionText": "我当着阿姬曼的面撕毁身契还她自由；发现商馆侍卫封锁出城岔路后，立刻改道避开搜查。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已当面撕毁阿姬曼身契，并应对被封锁的出城路线；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ajiman_bond_in_hand"
+                ]
+              },
+              {
+                "id": "pocket_ajiman_bond",
+                "label": "先收起身契，出城再说",
+                "actionText": "我先把阿姬曼的身契收进怀里，不当面撕掉，出城再说。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你没有撕毁阿姬曼的身契，只把它收进怀里，先出城再说；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ajiman_bond_in_hand"
+                ],
+                "outcomeEffects": {
+                  "success": {
+                    "pathReceipts": [
+                      {
+                        "receiptId": "lcq.event.free_ajiman.path.bond_pocketed",
+                        "sourceEventId": "lcq.event.free_ajiman",
+                        "choiceId": "pocket_ajiman_bond",
+                        "mutexGroupId": "lcq.event.free_ajiman.mutex.bond",
+                        "dimension": "method",
+                        "label": "没有撕掉阿姬曼的身契（苏妲己已下令追查买走舞姬的人）",
+                        "consumeAtEventIds": [
+                          "lcq.event.wuerlang_joins"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.iron_bridge_ambush",
+          "name": "铁索桥伏击",
+          "description": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+          "axisId": "qingyu.32.2",
+          "axisAnchor": "六朝清羽记·#32·第30章·险路",
+          "axisSeq": 50,
+          "axisBeat": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.iron_bridge_ambush.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu",
+            "liuchao.character.wu_er_lang"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "先稳住武二郎伤势，再带队过铁索桥",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "stabilize_wuerlang_on_route",
+                "label": "先稳住武二郎伤势",
+                "actionText": "我与凝羽先处理武二郎中毒带伤的伤口，确认他还能随队，不把他丢在桥前。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "wuerlang_wound_held",
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威"
+                  ]
+                }
+              },
+              {
+                "id": "break_iron_bridge_ambush",
+                "label": "带队突破铁索桥伏击",
+                "actionText": "桥头被不明敌人抢占后，我护住伤员与货物，带队从进退两难的铁索桥上突过去。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已稳定武二郎伤势，并带队突破铁索桥伏击；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "wuerlang_wound_held"
+                ],
+                "cast": {
+                  "present": [
+                    "凝羽",
+                    "武二郎",
+                    "祁远",
+                    "吴战威"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.rainforest_black_shoal",
+          "name": "黑石滩渡河",
+          "description": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+          "axisId": "qingyu.37.2",
+          "axisAnchor": "六朝清羽记·#37·第35章·渡河",
+          "axisSeq": 58,
+          "axisBeat": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.rainforest_black_shoal.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "收拢雨林里的伤员，按岸边火光把两支商队渡过黑石滩",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "bear_rainforest_losses",
+                "label": "收拢雨林伤亡后再渡",
+                "actionText": "我让人把被青蛇缠死的那名同伴埋了，清点人手和货物，趁雨势小些赶紧上路。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "rainforest_losses_borne"
+              },
+              {
+                "id": "follow_ningyu_fire_across_shoal",
+                "label": "依凝羽火光渡过黑石滩",
+                "actionText": "河对岸忽然亮起几堆火，我认出火边站着的是凝羽，招呼两队人马朝着火光涉水过滩。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已承受雨林伤亡，并依凝羽火光带两支商队渡过黑石滩；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "rainforest_losses_borne"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.ningyu_enters_gamble",
+          "name": "凝羽进入赌局",
+          "description": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+          "axisId": "qingyu.20.1",
+          "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+          "axisSeq": 35,
+          "axisBeat": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.ningyu_enters_gamble.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_daji",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "凝羽突然入局，当面看清她此刻的处境并回应",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "see_ningyu_sent_into_gamble",
+                "label": "看清凝羽奉命进入赌局",
+                "actionText": "苏妲己命凝羽上场后，我当面看清她是奉命进入这场赌局的商馆侍卫长，只认眼前处境，不把后续来历提前当成已知。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "ningyu_gamble_debut_seen"
+              },
+              {
+                "id": "answer_ningyu_on_debut",
+                "label": "当面回应登场的凝羽",
+                "actionText": "我认清凝羽此刻被差遣进赌局的处境后当面回应她，把这拍当作她的登场，不借登场预写后来的经历。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已认清奉命进入赌局的凝羽的处境并当面回应；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "ningyu_gamble_debut_seen"
+                ]
+              }
+            ]
+          },
+          "fatalOutcomes": {
+            "choices": [
+              {
+                "id": "refuse_gamble_take_paolao",
+                "label": "不赌",
+                "actionText": "我当面回绝这场赌局，不和苏妲己赌。",
+                "ending": {
+                  "id": "lcq.ending.death.paolao",
+                  "title": "炮烙",
+                  "facts": [
+                    "程宗扬当面回绝白湖商馆的赌局",
+                    "苏妲己下令执行炮烙",
+                    "赌局未开，卖身契未签"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.zixi_taiyi_intercept",
+          "name": "紫溪太乙拦船",
+          "description": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+          "axisId": "qingyu.35.2",
+          "axisAnchor": "六朝清羽记·#35·第33章·武请",
+          "axisSeq": 54,
+          "axisBeat": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.zixi_taiyi_intercept.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan",
+            "liuchao.faction.tai_yi_zhen_zong"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "应对紫溪上太乙真宗拦船，护住船上的人",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "face_taiyi_at_zixi",
+                "label": "现身与太乙真宗交涉",
+                "actionText": "太乙真宗在紫溪拦住船队后，我现身船头与对方当面交涉，承认他们在追问，同时拒绝让他们直接接管商队。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "zixi_taiyi_faced"
+              },
+              {
+                "id": "pull_qiyuan_back_aboard",
+                "label": "救回落水的祁远",
+                "actionText": "交涉冲突里祁远被推落水后，我立刻组织船上人手把他救回船队，不把他丢在紫溪里。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已在紫溪现身与太乙真宗交涉，并救回落水的祁远；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "zixi_taiyi_faced"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.silent_sheyi_village",
+          "name": "抵达无声蛇彝村",
+          "description": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+          "axisId": "qingyu.38.1",
+          "axisAnchor": "六朝清羽记·#38·第36章·蛇村",
+          "axisSeq": 59,
+          "axisBeat": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.silent_sheyi_village.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.ning_yu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.bai_hu_shang_guan"
+          ],
+          "locationId": "liuchao.location.wuyuan",
+          "objective": "抵达蛇彝村，把商队安顿下来",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "confirm_sheyi_dark_and_silent",
+                "label": "确认寨里无灯也无人声",
+                "actionText": "我在村口停下，四下看了一圈：没有一盏灯，也听不到半点人声。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "sheyi_silence_confirmed"
+              },
+              {
+                "id": "settle_caravan_in_silent_sheyi",
+                "label": "在空村里安置商队",
+                "actionText": "我照云苍峰说的，带大家去村尾那间专给过路客人住的大屋歇脚，安排人轮流守夜，照看马匹和货物。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "商队已抵达无灯火无人声的蛇彝村并安置下来；事件完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "sheyi_silence_confirmed"
+                ]
+              }
+            ]
+          },
+          "presentation": {
+            "stepGuardTerms": {
+              "confirm_sheyi_dark_and_silent": [
+                "灭村",
+                "屠村",
+                "惨案",
+                "尸体",
+                "血符"
+              ],
+              "settle_caravan_in_silent_sheyi": [
+                "灭村",
+                "屠村",
+                "惨案",
+                "尸体",
+                "血符"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

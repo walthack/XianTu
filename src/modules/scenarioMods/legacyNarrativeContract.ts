@@ -125,16 +125,16 @@ function authorizedFactBlob(packet: LegacyNarratorPacket): string {
   ].filter(Boolean).join('｜');
 }
 
-function unauthorizedInvention(text: string, packet: LegacyNarratorPacket): string | undefined {
+function unauthorizedInvention(text: string, packet: LegacyNarratorPacket, allowItemObservation = false): string | undefined {
   const authorized = authorizedFactBlob(packet);
-  if (UNAUTHORIZED_ITEM_RE.test(text) && !/神兵|仙剑|飞剑|法宝/.test(authorized)) {
+  if (!allowItemObservation && UNAUTHORIZED_ITEM_RE.test(text) && !/神兵|仙剑|飞剑|法宝/.test(authorized)) {
     return '未经授权的物品';
   }
   const move = text.match(UNAUTHORIZED_MOVE_RE);
   if (move?.[1] && !placeIsAuthorized(move[1], packet)) {
     return '未经授权的地点移动';
   }
-  if (UNAUTHORIZED_HARM_RE.test(text) && !UNAUTHORIZED_HARM_RE.test(authorized)) {
+  if (UNAUTHORIZED_HARM_RE.test(text) && !/(?:重伤|身亡|死亡|被射杀|中箭身亡|刎颈|气绝|受伤|击杀|惨案|尸体)/.test(authorized)) {
     return '未经授权的受伤或死亡';
   }
   if (UNAUTHORIZED_RELATION_RE.test(text) && !UNAUTHORIZED_RELATION_RE.test(authorized)) {
@@ -202,7 +202,7 @@ export function narrativeHasRequiredConcepts(text: string, packet: LegacyNarrato
 export function validateLegacyVisibleNarrative(
   text: string,
   packet: LegacyNarratorPacket,
-  options: { partial?: boolean; userInput?: string; storyPrompt?: string } = {},
+  options: { partial?: boolean; userInput?: string; storyPrompt?: string; allowItemObservation?: boolean } = {},
 ): LegacyVisibleNarrativeCheck {
   const issues: string[] = [];
   const narrative = String(text || '');
@@ -216,7 +216,7 @@ export function validateLegacyVisibleNarrative(
   if (hasPlayerVisibleMetaLeak(narrative)) {
     issues.push('正文含玩家可见系统话术');
   }
-  const invention = unauthorizedInvention(narrative, packet);
+  const invention = unauthorizedInvention(narrative, packet, options.allowItemObservation);
   if (invention) issues.push(invention);
   if (options.storyPrompt) {
     const performance = validateNarrativePerformance(

@@ -290,7 +290,7 @@ test('only truncation/format errors may settle a local contract; infrastructure 
   assert.equal(shouldSettleLocalContractAfterGenerationFailure(new QingyuTurnLongRequestBudgetError()), true);
 });
 
-test('processPlayerAction generate-publish path rejects unreceipted item grants via item_references', async () => {
+test('processPlayerAction generate-publish path observes off-list items without rejecting prose or granting inventory', async () => {
   setActivePinia(createPinia());
   const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
   const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
@@ -300,7 +300,7 @@ test('processPlayerAction generate-publish path rejects unreceipted item grants 
   const restore = await withStubbedGenerate(aiService, async () => {
     calls += 1;
     return JSON.stringify({
-      text: '你接过星河剑。草原的风还在吹。',
+      text: '你端详星河剑。草原的风还在吹。',
       mid_term_memory: '得剑。',
       tavern_commands: [],
       item_references: [{ id: 'lcq.item.star_sword', purpose: 'claim' }],
@@ -316,17 +316,19 @@ test('processPlayerAction generate-publish path rejects unreceipted item grants 
       playerIntentText: action.playerLine,
       shouldAbort: () => false,
     });
-    assert.ok(calls >= 1 && calls <= 2, `generate calls=${calls}`);
+    assert.equal(calls, 1);
     assert.ok(response);
-    assert.equal(response.generationError?.code, 'DEMO_MODULE_FAILED');
-    assert.notEqual(response.transactionCommitted, true);
+    assert.equal(response.generationError, undefined);
+    assert.equal(response.moduleReceipt.path, 'modular');
+    assert.doesNotMatch(response.text, /本地事件判定/);
+    assert.equal(response.transactionCommitted, true);
     assert.equal(store.toSaveData().角色.背包?.物品?.['lcq.item.star_sword'], undefined);
   } finally {
     restore();
   }
 });
 
-test('processPlayerAction generate-publish path fail-closes unauthorized killing', async () => {
+test('processPlayerAction generate-publish path silently replaces unauthorized killing', async () => {
   setActivePinia(createPinia());
   const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
   const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
@@ -352,10 +354,13 @@ test('processPlayerAction generate-publish path fail-closes unauthorized killing
       playerIntentText: '我判断她要带我去哪。',
       shouldAbort: () => false,
     });
-    assert.ok(calls >= 1 && calls <= 2, `generate calls=${calls}`);
-    assert.equal(response?.generationError?.code, 'DEMO_MODULE_FAILED');
-    assert.notEqual(response?.transactionCommitted, true);
-    assert.deepEqual(store.toSaveData().世界.状态.剧本模组.completedEventIds || [], before);
+    assert.equal(calls, 3);
+    assert.equal(response?.generationError, undefined);
+    assert.equal(response.moduleReceipt.path, 'local');
+    assert.doesNotMatch(response.text, /捅死|杀人|本地事件判定/);
+    assert.equal(response?.transactionCommitted, true);
+    assert.ok(store.toSaveData().世界.状态.剧本模组.completedEventIds.includes(action.eventId));
+    assert.ok(before.every(id => store.toSaveData().世界.状态.剧本模组.completedEventIds.includes(id)));
   } finally {
     restore();
   }
@@ -734,9 +739,12 @@ test('Nanhuang cast rejection silently rewrites; persistent bad drafts use local
   const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadPipeline('../src/modules/scenarioMods/strictInitializer.ts');
   const { getCurrentStoryEventActions, advanceScenarioRuntime } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
   const mod = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json', import.meta.url), 'utf8'));
-  const opened = advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod))).saveData;
+  let opened = advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod))).saveData;
   opened.系统.扩展.清羽记开局 = { kind: 'qingyu-demo-v1', endModId: 'lcq.stage_04b_lingfei_baiyi_crisis', endEventId: 'lcq.event.enter_dong_with_migu' };
+  opened.世界.状态.剧本模组.flags['event.s03b_snake_flower_bridge_01.done'] = true;
+  opened = advanceScenarioRuntime(opened).saveData;
   const action = getCurrentStoryEventActions(opened)[0];
+  assert.equal(action.eventId, 'lcq.event.s03b_snake_flower_bridge_02');
   let calls = 0;
   let correctionSeen = false;
   const restore = await withStubbedGenerate(aiService, async options => {
@@ -748,7 +756,7 @@ test('Nanhuang cast rejection silently rewrites; persistent bad drafts use local
   try {
     const store = useGameStateStore();
     store.loadFromSaveData(structuredClone(opened));
-    const response = await AIBidirectionalSystem.processPlayerAction(action.playerLine, TEST_PROFILE, {
+    const response = await AIBidirectionalSystem.processPlayerAction(`<行动趋向>${action.playerLine}</行动趋向> 本地事件判定已预结算事件=${action.eventId}；动作=advance_declared_objective`, TEST_PROFILE, {
       eventAction: structuredClone(action), eventActionProvenance: 'selected', playerIntentText: action.playerLine, shouldAbort: () => false,
     });
     assert.equal(response.generationError, undefined);
@@ -756,8 +764,303 @@ test('Nanhuang cast rejection silently rewrites; persistent bad drafts use local
     assert.equal(response.moduleReceipt.path, 'local');
     assert.equal(calls, 3);
     assert.equal(correctionSeen, true);
-    assert.doesNotMatch(response.text, /段强/);
+    assert.doesNotMatch(response.text, /段强|<行动趋向>|本地事件判定|advance_declared_objective|lcq\.event\./);
     const current = store.toSaveData().世界.状态.剧本模组;
     assert.equal(current.completedEventIds.filter(id => id === action.eventId).length, 1);
   } finally { restore(); }
+});
+
+test('Nanhuang missing fixed facts silently rewrites three drafts, safely settles once', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { aiService } = await loadPipeline('../src/services/aiService.ts');
+  const { createMinimalSaveDataV3 } = await loadPipeline('../src/utils/dataRepair.ts');
+  const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadPipeline('../src/modules/scenarioMods/strictInitializer.ts');
+  const { getCurrentStoryEventActions, advanceScenarioRuntime } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  const mod = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json', import.meta.url), 'utf8'));
+  let opened = advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod))).saveData;
+  opened.角色.身份.名字 = '程宗扬';
+  opened.系统.扩展.清羽记开局 = { kind: 'qingyu-demo-v1', endModId: 'lcq.stage_04b_lingfei_baiyi_crisis', endEventId: 'lcq.event.enter_dong_with_migu' };
+  opened.世界.状态.剧本模组.flags['event.s03b_snake_flower_bridge_01.done'] = true;
+  opened = advanceScenarioRuntime(opened).saveData;
+  const action = getCurrentStoryEventActions(opened)[0];
+  assert.equal(action.eventId, 'lcq.event.s03b_snake_flower_bridge_02');
+  let calls = 0;
+  let correctionSeen = false;
+  const restore = await withStubbedGenerate(aiService, async options => {
+    calls++;
+    const prompt = (options.injects || []).map(i => i.content).join('\n') + String(options.user_input || '');
+    if (calls > 1 && prompt.includes('上一稿被内部守卫退回：步骤固定要点缺失')) correctionSeen = true;
+    return '你与云苍峰、凝羽、武二郎、祁远、吴战威、易彪、谢艺一同搜查蛇彝长屋。你得到一枚神秘玉符，放进背包。';
+  });
+  try {
+    const store = useGameStateStore();
+    store.loadFromSaveData(structuredClone(opened));
+    const response = await AIBidirectionalSystem.processPlayerAction(`<行动趋向>${action.playerLine}</行动趋向> 本地事件判定已预结算事件=${action.eventId}；动作=advance_declared_objective`, TEST_PROFILE, {
+      eventAction: structuredClone(action), eventActionProvenance: 'selected', playerIntentText: action.playerLine, shouldAbort: () => false,
+    });
+    assert.equal(response.generationError, undefined);
+    assert.equal(response.transactionCommitted, true);
+    assert.equal(response.moduleReceipt.path, 'local');
+    assert.equal(calls, 3);
+    assert.equal(correctionSeen, true);
+    assert.match(response.text, /鬼王峒/);
+    assert.doesNotMatch(response.text, /观察 ·|眼前的事情告一段落/);
+    assert.doesNotMatch(response.text, /神秘玉符|<行动趋向>|本地事件判定|advance_declared_objective|lcq\.event\./);
+    const current = store.toSaveData().世界.状态.剧本模组;
+    assert.equal(current.completedEventIds.filter(id => id === action.eventId).length, 1);
+  } finally { restore(); }
+});
+
+test('stage_02 regicide-offer age failures silently retry and safely settle its second step', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { aiService } = await loadPipeline('../src/services/aiService.ts');
+  const { createMinimalSaveDataV3 } = await loadPipeline('../src/utils/dataRepair.ts');
+  const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadPipeline('../src/modules/scenarioMods/strictInitializer.ts');
+  const { getCurrentStoryEventActions, advanceScenarioRuntime } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  const mod = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url), 'utf8'));
+  const opened = advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod))).saveData;
+  opened.系统.扩展.清羽记开局 = { kind: 'qingyu-demo-v1', endModId: 'lcq.stage_04b_lingfei_baiyi_crisis', endEventId: 'lcq.event.enter_dong_with_migu' };
+  const runtime = opened.世界.状态.剧本模组;
+  for (const event of runtime.events) {
+    if (event.id === 'lcq.event.ningyu_regicide_offer') continue;
+    runtime.completedEventIds.push(event.id);
+    for (const condition of event.completion || []) {
+      if (condition.path.startsWith('flags.')) runtime.flags[condition.path.slice(6)] = condition.value;
+    }
+  }
+  runtime.activeEventIds = ['lcq.event.ningyu_regicide_offer'];
+  const { recordStoryEventStructuredAction } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  const first = getCurrentStoryEventActions(opened)[0];
+  assert.equal(first.eventId, 'lcq.event.ningyu_regicide_offer');
+  runtime.worldTurn++;
+  assert.equal(recordStoryEventStructuredAction(opened, first).attempted, true);
+  const action = getCurrentStoryEventActions(opened)[0];
+  assert.ok(action);
+  assert.equal(action.stepIndex, 2);
+  runtime.worldTurn++;
+  let calls = 0;
+  let correctionSeen = false;
+  const restore = await withStubbedGenerate(aiService, async options => {
+    calls++;
+    const prompt = (options.injects || []).map(i => i.content).join('\n') + String(options.user_input || '');
+    if (calls > 1 && prompt.includes('上一稿被内部守卫退回')) correctionSeen = true;
+    return '你看见不过十七八岁的姑娘站在篝火旁。';
+  });
+  try {
+    const store = useGameStateStore();
+    store.loadFromSaveData(structuredClone(opened));
+    const response = await AIBidirectionalSystem.processPlayerAction(`<行动趋向>${action.playerLine}</行动趋向> 本地事件判定已预结算事件=${action.eventId}；动作=advance_declared_objective`, TEST_PROFILE, {
+      eventAction: structuredClone(action), eventActionProvenance: 'selected', playerIntentText: action.playerLine, shouldAbort: () => false,
+    });
+    assert.equal(response.generationError, undefined);
+    assert.equal(response.transactionCommitted, true);
+    assert.equal(response.moduleReceipt.path, 'local');
+    assert.equal(calls, 3);
+    assert.equal(correctionSeen, true);
+    assert.doesNotMatch(response.text, /十七八|<行动趋向>|本地事件判定|advance_declared_objective|lcq\.event\./);
+    const current = store.toSaveData().世界.状态.剧本模组;
+    assert.equal(current.completedEventIds.filter(id => id === action.eventId).length, 1);
+  } finally { restore(); }
+});
+
+test('Zixi and Black Shoal request model performance instead of bypassing it with fixed summaries', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { aiService } = await loadPipeline('../src/services/aiService.ts');
+  const { createMinimalSaveDataV3 } = await loadPipeline('../src/utils/dataRepair.ts');
+  const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadPipeline('../src/modules/scenarioMods/strictInitializer.ts');
+  const { getCurrentStoryEventActions, advanceScenarioRuntime, recordStoryEventStructuredAction } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  const { fixedBeatNarrative } = await loadPipeline('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  for (const [stageId, id, location, secondStep] of [
+    ['02', 'lcq.event.zixi_taiyi_intercept', '中州·南荒途中·紫溪', false],
+    ['02', 'lcq.event.rainforest_black_shoal', '中州·南荒途中·雨林黑石滩', true],
+    ['04', 'lcq.event.s04_04', '叶媪山村', false],
+  ]) {
+    const mod = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/lcq.stage_${stageId}.json`, import.meta.url), 'utf8'));
+    const opened = advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod))).saveData;
+    opened.系统.扩展.清羽记开局 = { kind: 'qingyu-demo-v1' };
+    const runtime = opened.世界.状态.剧本模组;
+    for (const event of runtime.events) {
+      if (event.id === id) continue;
+      runtime.completedEventIds.push(event.id);
+      for (const c of event.completion || []) if (c.path.startsWith('flags.')) runtime.flags[c.path.slice(6)] = c.value;
+    }
+    runtime.activeEventIds = [id];
+    if (secondStep) {
+      runtime.worldTurn++;
+      recordStoryEventStructuredAction(opened, getCurrentStoryEventActions(opened)[0]);
+    }
+    opened.角色.位置.描述 = location;
+    runtime.worldTurn++;
+    const action = getCurrentStoryEventActions(opened)[0];
+    assert.equal(action.eventId, id);
+    for (const a of runtime.events.find(e => e.id === id).playerCompletionContract.actions) assert.equal(fixedBeatNarrative(id, a.id), undefined);
+    let calls = 0;
+    let sceneCalls = 0;
+    const restore = await withStubbedGenerate(aiService, async options => {
+      calls++;
+      const prompt = (options.injects || []).map(i => i.content).join('\n') + String(options.user_input || '');
+      if (!prompt.includes('场景材料：')) return '你停下来察看眼前的情况。';
+      sceneCalls++;
+      assert.match(prompt, /玩家主角姓名：程宗扬/);
+      assert.doesNotMatch(prompt, /苏黎/);
+      const scene = JSON.parse(prompt.split('场景材料：')[1].split('\n历史摘录')[0]);
+      assert.equal(scene.location, location);
+      assert.equal(scene.mustAppear.location, location);
+      if (secondStep) assert.ok(!scene.publicFacts.some(fact => /蛇彝村/.test(fact)), '下一站不能成为本拍现场事实');
+      if (id === 'lcq.event.s04_04') assert.ok(!scene.publicFacts.some(fact => /山涧/.test(fact)), '穿山终点不能成为叶媪村现场');
+      return `你和${scene.present.join('、')}一同${action.label}。你停下来察看眼前的情况。`;
+    });
+    try {
+      useGameStateStore().loadFromSaveData(structuredClone(opened));
+      const response = await AIBidirectionalSystem.processPlayerAction(action.playerLine, TEST_PROFILE, { eventAction: action, eventActionProvenance: 'selected', playerIntentText: action.playerLine, shouldAbort: () => false });
+      assert.equal(response.generationError, undefined);
+      assert.equal(response.moduleReceipt.path, 'modular');
+      assert.ok(sceneCalls > 0, '必须核验实际演出材料');
+      assert.ok(calls > 0, `${id} must request the narrative model`);
+    } finally { restore(); }
+  }
+});
+
+
+test('凝羽合同中的西门庆旧事保留完整对白，未授权当前登场仍被拦', async () => {
+  setActivePinia(createPinia());
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { createMinimalSaveDataV3 } = await loadPipeline('../src/utils/dataRepair.ts');
+  const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadPipeline('../src/modules/scenarioMods/strictInitializer.ts');
+  const { getCurrentStoryEventActions, advanceScenarioRuntime, recordStoryEventStructuredAction } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  const { stripNarrativeUnintroducedCharacters } = await loadPipeline('../src/modules/scenarioMods/characterResolver.ts');
+  const mod = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url), 'utf8'));
+  const save = advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod))).saveData;
+  const runtime = save.世界.状态.剧本模组;
+  runtime.activeEventIds = ['lcq.event.ningyu_regicide_offer'];
+  const first = getCurrentStoryEventActions(save).find(a => a.eventId === 'lcq.event.ningyu_regicide_offer');
+  runtime.worldTurn++;
+  recordStoryEventStructuredAction(save, first);
+  const action = getCurrentStoryEventActions(save).find(a => a.eventId === first.eventId);
+  assert.equal(action.stepIndex, 2);
+  const text = '你收回真元，抬头看她。\n\n她开口，声音低得像从牙缝里挤出来的：\n\n"西门庆……当年把我从羽族旧部带出来，说是要教我剑道。"她顿了顿，"头几年确实是正经传授。"\n\n你听清她的旧事，仍未答应弑主。';
+  const response = { text, mid_term_memory: '', tavern_commands: [], action_options: [] };
+  useGameStateStore().loadFromSaveData(structuredClone(save));
+  const processed = await AIBidirectionalSystem.processGmResponse(response, save, false, () => false, {
+    eventAction: action, eventActionProvenance: 'selected', playerIntentText: action.playerLine, narrativeAuthority: 'local_contract',
+  });
+  assert.ok(processed.saveData.系统.历史.叙事.some(entry => String(entry.content || entry.内容 || entry.text || entry).includes('西门庆……当年')));
+  assert.match(response.text, /西门庆……当年把我从羽族旧部带出来/);
+  const historicalContext = mod.scenario.events.find(e => e.id === action.eventId).playerCompletionContract.actions[1].actionText;
+  assert.ok(stripNarrativeUnintroducedCharacters('西门庆走进屋里，朝你开口。', [], historicalContext).conflicts.length > 0);
+});
+
+
+test('reported completed beats authorize their actual outcomes without demanding every present actor be named', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { aiService } = await loadPipeline('../src/services/aiService.ts');
+  const { createMinimalSaveDataV3 } = await loadPipeline('../src/utils/dataRepair.ts');
+  const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadPipeline('../src/modules/scenarioMods/strictInitializer.ts');
+  const { getCurrentStoryEventActions, advanceScenarioRuntime } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  for (const [stageId, id, prose] of [
+    ['03b_snake_flower_bridge', 's03b_snake_flower_bridge_02', '你搜查蛇彝长屋，发现鬼王峒笑脸的惨案痕迹和尸体，随后同云苍峰焚屋撤离。'],
+    ['03b_snake_flower_bridge', 's03b_snake_flower_bridge_07', '你听苏荔说清送亲与贡物的安排：戴面纱的新娘、阿葭和阿夕要献给龙神和巫王，送亲队要到熊耳铺见使者。'],
+    ['04', 's04_02', '你协助武二郎击退鬼王峒武士，凝羽身上的血是敌人的，苏荔与武二郎联手击杀九名武士，余敌看见死亡便退入浓雾。'],
+  ]) {
+    const mod = JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/lcq.stage_${stageId}.json`, import.meta.url), 'utf8'));
+    let save = applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), buildStrictScenarioInitialization(mod));
+    save.系统.扩展.清羽记开局 = { kind: 'qingyu-demo-v1' };
+    const runtime = save.世界.状态.剧本模组;
+    for (const e of runtime.events) if (e.id !== `lcq.event.${id}`) {
+      runtime.completedEventIds.push(e.id);
+      for (const c of e.completion || []) if (c.path.startsWith('flags.')) runtime.flags[c.path.slice(6)] = c.value;
+    }
+    save = advanceScenarioRuntime(save).saveData;
+    const target = mod.scenario.events.find(e => e.id === `lcq.event.${id}`);
+    const place = mod.canon.locations.find(l => l.id === target.locationId);
+    if (place) save.角色.位置.描述 = `南荒·${place.name}`;
+    const action = getCurrentStoryEventActions(save)[0];
+    assert.equal(action.eventId, `lcq.event.${id}`);
+    assert.equal(action.source, 'event_engine');
+    let calls = 0;
+    const restore = await withStubbedGenerate(aiService, async options => {
+      calls++;
+      const prompt = (options.injects || []).map(i => i.content).join('\n');
+      const scene = JSON.parse(prompt.split('场景材料：')[1].split('\n历史摘录')[0]);
+      assert.deepEqual(scene.mustAppear.present, []);
+      assert.ok(scene.settledOutcome.includes(id === 's04_02' ? '凝羽身上沾的是别人的血' : id.endsWith('02') ? '惨案' : '贡物'), scene.settledOutcome);
+      return prose;
+    });
+    try {
+      const store = useGameStateStore(); store.loadFromSaveData(structuredClone(save));
+      const result = await AIBidirectionalSystem.processPlayerAction(action.playerLine, TEST_PROFILE, { eventAction: structuredClone(action), eventActionProvenance: 'selected', playerIntentText: action.playerLine, shouldAbort: () => false });
+      assert.equal(calls, 1, id);
+      assert.equal(result.moduleReceipt?.path, 'modular', id);
+      assert.equal(result.generationError, undefined);
+      assert.equal(result.transactionCommitted, true);
+    } finally { restore(); }
+  }
+});
+
+test('seeded loot preview narrates only local rolls and commits once; transport failure never consumes attempts', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { aiService } = await loadPipeline('../src/services/aiService.ts');
+  const { QINGYU_LOOT_TABLE } = await loadPipeline('../src/modules/scenarioMods/locationLoot.ts');
+  const { currentLocation } = await loadPipeline('../src/modules/scenarioMods/travel/travelLedger.ts');
+  const { save } = await openingSave();
+  const runtime = save.世界.状态.剧本模组;
+  const id = currentLocation(save, runtime.canon.locations).locationId;
+  const item = runtime.canon.items.find(item => !save.角色.背包?.物品?.[item.id]); assert.ok(item, 'fixture needs a registered item');
+  const old = structuredClone(QINGYU_LOOT_TABLE.locations[id]);
+  QINGYU_LOOT_TABLE.locations[id] = { name: '试玩搜刮点', status: 'ready', entries: [{id:'key',itemId:item.id,category:'key',quantity:[1,1]}] };
+  let calls = 0;
+  let restore = await withStubbedGenerate(aiService, async options => {
+    calls++;
+    const prompt = (options.injects || []).map(i => i.content).join('\n');
+    assert.match(prompt,/搜刮回执/);assert.ok(prompt.includes(item.name));
+    return `你仔细搜刮眼前的地方，找到${item.name}，收进背包。`;
+  });
+  try {
+    const store = useGameStateStore();store.loadFromSaveData(structuredClone(save));
+    const response = await AIBidirectionalSystem.processPlayerAction('我搜刮这里',TEST_PROFILE,{playerIntentText:'我搜刮这里',shouldAbort:()=>false});
+    assert.equal(response.generationError,undefined);assert.equal(response.transactionCommitted,true);assert.equal(calls,1);
+    const settled=store.toSaveData();assert.ok(settled.世界.状态.剧本模组.worldTurn > runtime.worldTurn, 'successful loot must advance the runtime turn so another search is possible');assert.equal(settled.角色.背包.物品[item.id].数量,1);assert.equal(settled.世界.状态.剧本模组.locationLoot.searches[id],1);
+    restore();calls=0;restore=await withStubbedGenerate(aiService,async()=>{calls++;throw new Error('loot network down');});
+    store.loadFromSaveData(structuredClone(save));
+    const failed=await AIBidirectionalSystem.processPlayerAction('我搜刮这里',TEST_PROFILE,{playerIntentText:'我搜刮这里',shouldAbort:()=>false});
+    assert.equal(calls,2);assert.ok(failed.generationError);assert.notEqual(failed.transactionCommitted,true);assert.equal(store.toSaveData().世界.状态.剧本模组.locationLoot,undefined);
+  } finally {restore();if(old)QINGYU_LOOT_TABLE.locations[id]=old;else delete QINGYU_LOOT_TABLE.locations[id];}
+});
+
+test('accepted audit voice/state findings correct only the active slot next prompt, without writing world facts', async()=>{
+  setActivePinia(createPinia());
+  const {AIBidirectionalSystem}=await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const {useGameStateStore}=await loadPipeline('../src/stores/gameStateStore.ts');
+  const {useCharacterStore}=await loadPipeline('./stubs/characterStoreForAbortTest.ts');
+  const {aiService}=await loadPipeline('../src/services/aiService.ts');
+  const {AUDIT_LOG_KEY}=await loadPipeline('../src/modules/scenarioMods/backgroundAuditCore.ts');
+  const {save,action}=await openingSave();
+  const old=localStorage.getItem(AUDIT_LOG_KEY);
+  useCharacterStore().rootState.当前激活存档={角色ID:'audit-A',存档槽位:'one'};
+  localStorage.setItem(AUDIT_LOG_KEY,JSON.stringify([
+    {status:'accepted',slotKey:'audit-B:one',modId:save.世界.状态.剧本模组.modId,findings:[{category:'voice_drift',issue:'wrong slot correction'}]},
+    {status:'accepted',slotKey:'audit-A:one',modId:save.世界.状态.剧本模组.modId,findings:[{category:'voice_drift',issue:'active voice correction'},{category:'state_mismatch',issue:'active state correction'}]},
+  ]));
+  const restore=await withStubbedGenerate(aiService,async options=>{
+    const prompt=(options.injects||[]).map(i=>i.content).join('\n');
+    assert.match(prompt,/active voice correction/);assert.match(prompt,/active state correction/);assert.doesNotMatch(prompt,/wrong slot correction/);
+    return '你稳住呼吸，看清草原上眼前的处境。';
+  });
+  try {
+    const store=useGameStateStore();store.loadFromSaveData(structuredClone(save));
+    const result=await AIBidirectionalSystem.processPlayerAction(action.playerLine,TEST_PROFILE,{eventAction:structuredClone(action),eventActionProvenance:'selected',playerIntentText:action.playerLine,shouldAbort:()=>false});
+    assert.equal(result.generationError,undefined);assert.equal(result.transactionCommitted,true);
+    assert.doesNotMatch(JSON.stringify(store.toSaveData().世界),/active voice correction|active state correction/);
+  } finally {restore();useCharacterStore().rootState.当前激活存档=null;if(old)localStorage.setItem(AUDIT_LOG_KEY,old);else localStorage.removeItem(AUDIT_LOG_KEY);}
 });

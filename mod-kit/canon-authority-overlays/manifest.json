@@ -40,6 +40,11 @@
       "stageId": "lcq.stage_04",
       "file": "lcq.stage_04.json",
       "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "file": "lcq.stage_02.json",
+      "book": "qingyu"
     }
   ]
 }
