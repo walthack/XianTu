@@ -19,12 +19,13 @@ async function opened(id) {
 
 /** 按真实合同动作走完本关；记下每拍出现时的位置，以及是否曾需要罗盘移动。 */
 async function walk(save) {
-  const { getCurrentStoryEventActions, recordStoryEventStructuredAction, advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { getCurrentStoryEventActions, getCurrentStoryExplorationActions, recordStoryEventStructuredAction, advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const seen = [];
   let compassMoves = 0;
   for (let n = 0; n < 200 && !rt(save).nextStageReadyId; n++) {
     const actions = getCurrentStoryEventActions(save);
-    const action = actions.find(item => !item.judgement && !item.actionId.startsWith('travel:') && !item.actionId.startsWith('idle:')
+    // 完整行旅夹具先体验已批准的可选闲聊，再检验后续强制路线；跳过分支另有batch12夹具。
+    const action = getCurrentStoryExplorationActions(save).find(item => item.eventId === 'lcq.event.zhu88_heimohai_chat') || actions.find(item => !item.judgement && !item.actionId.startsWith('travel:') && !item.actionId.startsWith('idle:')
       && rt(save).events.find(event => event.id === item.eventId)?.playerCompletionContract?.actions.some(entry => entry.id === item.actionId))
       || actions.find(item => item.actionId.startsWith('travel:'));
     assert.ok(action, `stalled: ${JSON.stringify(actions.map(item => item.actionId))}`);
@@ -178,7 +179,7 @@ test('02→03b 转关只接续到达，不重复南下天数；旧档也不补�
 
 test('real Wuerlang contract completion starts the itinerary before Iron Bridge; five road beats stay unskipped', async () => {
   const { getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
-  const { getCurrentStoryEventActions, recordStoryEventStructuredAction, advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { getCurrentStoryEventActions, getCurrentStoryExplorationActions, recordStoryEventStructuredAction, advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { fixedBeatNarrative } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
   let save = await opened('lcq.stage_02');
   save.角色.位置.描述 = '中州·五原·白湖商馆门前街';

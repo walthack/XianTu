@@ -1,3 +1,5 @@
+import { sameCanonicalLocation } from './travel/locationIds';
+import { backfillRelationshipIds, migrateRuntimePersonRecords } from './ledger/affinityIdentity';
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
 import type { ScenarioMod, ScenarioStoryMode, ScenarioWorldSimulation } from './schema';
@@ -83,7 +85,7 @@ export function buildStrictScenarioInitialization(
   const factions = mod.canon?.factions || [];
   const factionRelationships = mod.canon?.factionRelationships || [];
   const locations = mod.canon?.locations || [];
-  const openingLocation = locations.find(location => location.id === mod.scenario.opening.locationId) || locations[0];
+  const openingLocation = locations.find(location => sameCanonicalLocation(location.id, mod.scenario.opening.locationId)) || locations[0];
   const firstContinentName = continents[0]?.name || '未定大陆';
   const mapConfig = mod.world.map?.mapConfig || {
     width: 10000,
@@ -327,6 +329,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     mod = overlayXingyuehuLandingPlaytestStage(mod);
   }
 
+  backfillRelationshipIds(saveData, rt.canon?.characters);
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
   // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；
   // done/章节进度仍按新关初始化，只继承分支、人物状态与 void 审计标记。
@@ -384,12 +387,14 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     if (relations[name]) {
       const fresh = relations[name];
       const mergedMemories = [...new Set([...(old?.记忆 || []), ...(fresh?.记忆 || [])])];
-      relations[name] = { ...fresh, ...old, 记忆: mergedMemories };
+      relations[name] = { ...fresh, ...old, 名字: fresh.名字, 记忆: mergedMemories }; // 人物id不变；本关显示名不能被旧档覆盖
     } else {
       relations[name] = old; // 跨关携带旧 NPC（后宫/同行者不因换关消失）
     }
   }
+  backfillRelationshipIds(next, (next as any).世界.状态.剧本模组?.canon?.characters);
   const newRuntime = (next as any).世界.状态.剧本模组;
+  migrateRuntimePersonRecords(newRuntime);
   if (rt.storyMode === 'world_sim') {
     newRuntime.storyMode = 'world_sim';
     (next as any).系统.扩展.剧本模组.storyMode = 'world_sim';
@@ -408,12 +413,13 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   }
   newRuntime.reconciledRegistryVersion = rt.reconciledRegistryVersion;
   if (divergenceSnapshot.length) newRuntime.divergences = divergenceSnapshot;
-  for (const field of ['locationLoot', 'sceneLedger']) if ((rt as any)[field]) (newRuntime as any)[field] = structuredClone((rt as any)[field]);
+  for (const field of ['locationLoot', 'sceneLedger', 'personIdentities']) if ((rt as any)[field]) (newRuntime as any)[field] = structuredClone((rt as any)[field]);
   if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;
   if (Object.keys(acquaintanceSnapshot).length) {
     newRuntime.acquaintances = { ...(newRuntime.acquaintances || {}), ...acquaintanceSnapshot };
   }
   if (departedCastSnapshot.length) newRuntime.departedCast = departedCastSnapshot;
+  migrateRuntimePersonRecords(newRuntime);
   if (Object.keys(stanceSnapshot).length) {
     newRuntime.stanceStates = { ...(newRuntime.stanceStates || {}), ...stanceSnapshot };
   }

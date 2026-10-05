@@ -1,3 +1,4 @@
+import { newLocalCharacterId, backfillRelationshipIds } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * @fileoverview 角色初始化服务
  * 负责角色创建生成和完整初始化流程，包括AI动态生成。
@@ -1273,8 +1274,9 @@ export async function initializeCharacter(
         // 3. 注入存档
         if (!(initialSaveData as any).社交) (initialSaveData as any).社交 = { 关系: {}, 事件: {}, 记忆: {} };
         if (!(initialSaveData as any).社交.关系) (initialSaveData as any).社交.关系 = {};
-        if (!(initialSaveData as any).社交.关系[greyLady.名字]) {
-          (initialSaveData as any).社交.关系[greyLady.名字] = greyLady;
+        (greyLady as any).角色ID ||= newLocalCharacterId();
+        if (!(initialSaveData as any).社交.关系[(greyLady as any).角色ID]) {
+          (initialSaveData as any).社交.关系[(greyLady as any).角色ID] = greyLady;
         }
       }
     }
@@ -1332,6 +1334,7 @@ export async function initializeCharacter(
     console.log('[初始化流程] ✅ 角色创建成功！准备返回completedSaveData');
     console.log('[初始化流程] completedSaveData类型:', typeof completedSaveData);
     console.log('[初始化流程] completedSaveData有效:', !!completedSaveData);
+    backfillRelationshipIds(completedSaveData as any, (completedSaveData as any).世界?.状态?.剧本模组?.canon?.characters);
     return completedSaveData;
 
   } catch (error) {

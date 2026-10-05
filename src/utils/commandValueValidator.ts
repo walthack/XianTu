@@ -1,3 +1,4 @@
+import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 指令值格式验证系统
  *
@@ -106,7 +107,7 @@ export function validateAndRepairCommandValue(command: TavernCommand): Validatio
     // 6. NPC对象（创建或更新）
     // 🔥 只在“创建/完整覆盖NPC对象”时验证完整性；更新现有NPC时不验证
     // 判断是否是创建新NPC：value包含多个核心字段（名字、性别、出生日期、外貌等）
-    if (key.startsWith('社交.关系.') && (key.match(/\./g) || []).length === 2 && action === 'set') {
+    if (key.startsWith('社交.关系.') && splitRecordPath(key).length === 3 && action === 'set') {
       const isLikelyFullNpcObject =
         value &&
         typeof value === 'object' &&
@@ -132,7 +133,7 @@ export function validateAndRepairCommandValue(command: TavernCommand): Validatio
     // 8. 大道对象
     if (key.startsWith('角色.大道.大道列表.') && action === 'set' && (key.match(/\./g) || []).length === 3) {
       // 从 key 中提取道名（如 "角色.大道.大道列表.剑道" -> "剑道"）
-      const daoName = key.split('.')[3];
+      const daoName = splitRecordPath(key)[3];
       const result = validateDaoObject(value, daoName);
       errors.push(...result.errors);
     }

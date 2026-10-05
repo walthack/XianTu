@@ -189,6 +189,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.description, `${entity.__path}.description`, add);
       optionalString(entity.role, `${entity.__path}.role`, add);
       optionalString(entity.gender, `${entity.__path}.gender`, add);
+      if (entity.entityType !== undefined && entity.entityType !== 'character' && entity.entityType !== 'creature') add(`${entity.__path}.entityType`, 'invalid_enum', 'must be character or creature');
       optionalString(entity.realm, `${entity.__path}.realm`, add);
       optionalId(entity.factionId, `${entity.__path}.factionId`, add);
       validateCharacterAffiliations(entity.affiliations, `${entity.__path}.affiliations`, add);

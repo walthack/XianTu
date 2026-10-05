@@ -81,6 +81,7 @@ export interface ScenarioModCharacter {
   description?: string;
   role?: string;
   gender?: string;
+  entityType?: 'character' | 'creature';
   realm?: string;
   factionId?: string;
   affiliations?: ScenarioModCharacterAffiliation[];

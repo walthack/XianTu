@@ -1,3 +1,4 @@
+import { runtimeEntityId, runtimeEntityName } from './ledger/affinityIdentity';
 /**
  * 在场判定（2026-08-15）——"此刻谁真的在你面前"的单一判据。
  *
@@ -78,7 +79,6 @@ export function computePresentNames(input: PresenceInput): Set<string> {
         .filter(Boolean);
       if (!segments.includes(building)) continue;
       present.add(String((npc as { 名字?: unknown }).名字 || key));
-      present.add(String(key));
     }
   }
 
@@ -90,8 +90,7 @@ export function computePresentNames(input: PresenceInput): Set<string> {
       const name = String((npc as { 名字?: unknown }).名字 || key);
       if (name.length >= 2 && narrative.includes(name)) {
         present.add(name);
-        present.add(String(key));
-      }
+        }
     }
   }
   for (const name of input.excludeNames || []) {
@@ -175,7 +174,7 @@ function nanhuangCastExclusions(runtime: DepartedRuntime | null | undefined, per
     if (!entered('s04_07')) names.push('樨夫人', '白夷族长', '易勇');
   }
   if (!permanentOnly && stage === 'lcq.stage_04b_lingfei_baiyi_crisis') {
-    names.push('叶媪', '秦桧', '吴三桂');
+    names.push('叶媪', '秦桧', '吴三桂', '碧姬', '碧奴');
     if (!entered('xiaozi_first_appears')) names.push('小紫');
     if (done('s04b_xi_furen_trade_route')) names.push('易虎');
     if (!entered('regroup_caravan_envoy')) names.push('阁罗', '蛇傀', '黑舌');
@@ -218,15 +217,15 @@ export function departedPresentNames(runtime: DepartedRuntime | null | undefined
   const names: string[] = [];
   const persisted = Array.isArray(runtime?.departedCast) ? runtime.departedCast : [];
   for (const name of persisted) {
-    const text = String(name || '').trim();
+    const text = runtimeEntityName(runtime,String(name || '').trim());
     if (text) names.push(text);
   }
   if (eventIsCompleted(runtime, 'lcq.event.s01_02') || qingyuStagePastOpening(runtime)) names.push('段强');
   if (eventIsCompleted(runtime, 'lcq.event.s02_02') || qingyuStagePastWangZhe(runtime)) names.push('王哲');
   const recorded = runtime?.sceneLedger?.actors || {};
-  const inferred = nanhuangCastExclusions(runtime).filter(name => recorded[name]?.status !== 'present');
-  const out = Object.entries(recorded).filter(([, actor]) => actor.status !== 'present').map(([name]) => name);
-  return [...new Set([...names.filter(name => recorded[name]?.status !== 'present'), ...inferred, ...out])];
+  const inferred = nanhuangCastExclusions(runtime).filter(name => recorded[runtimeEntityId(runtime,name)]?.status !== 'present');
+  const out = Object.entries(recorded).filter(([, actor]) => actor.status !== 'present').map(([id]) => runtimeEntityName(runtime,id));
+  return [...new Set([...names.filter(name => recorded[runtimeEntityId(runtime,name)]?.status !== 'present'), ...inferred, ...out])];
 }
 
 /** Persist inferred deaths onto runtime so later stages and old saves share one list. */
@@ -235,7 +234,7 @@ export function stampDepartedCast(runtime: DepartedRuntime | null | undefined): 
   if (runtime && typeof runtime === 'object') {
     const temporary = new Set(nanhuangCastExclusions(runtime));
     const permanent = new Set(nanhuangCastExclusions(runtime, true));
-    runtime.departedCast = names.filter(name => !temporary.has(name) || permanent.has(name));
+    runtime.departedCast = names.filter(name => name !== '易虎' && (!temporary.has(name) || permanent.has(name))).map(name=>runtimeEntityId(runtime,name));
   }
   return names;
 }
@@ -263,7 +262,7 @@ export function focusedNpcNamesFromState(stateForAI: {
       if (!tracked) return false;
       return present.has(String(name)) || present.has(String(record.名字 || ''));
     })
-    .map(([name]) => String(name))
+    .map(([name, npc]) => String((npc as { 名字?: string }).名字 || name))
     .filter(name => name.trim().length > 0);
 }
 

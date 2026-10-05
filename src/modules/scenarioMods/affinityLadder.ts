@@ -1,3 +1,4 @@
+import { splitRecordPath } from './ledger/affinityIdentity';
 /**
  * 好感阶梯（R3-9 / R3 项 5「好感分阶段化」）——`社交.关系.<NPC>.好感度` 的**单一真值源**。
  *
@@ -219,7 +220,8 @@ export function createAffinityCommandGate(context: AffinityGateContext = {}) {
     if (!command || typeof command !== 'object' || Array.isArray(command)) return { command: command as null };
     const cmd = command as Record<string, unknown>;
     const key = typeof cmd.key === 'string' ? cmd.key : '';
-    const matched = AFFINITY_COMMAND_KEY_RE.exec(key);
+    const tokens=splitRecordPath(key);
+    const matched=tokens[0]==='社交'&&tokens[1]==='关系'&&tokens.length===4&&tokens[3]==='好感度' ? [key,tokens[2]] : null;
     if (!matched) return { command: cmd };
 
     // 白名单：只有 add 放行，其余动作一律拒绝。

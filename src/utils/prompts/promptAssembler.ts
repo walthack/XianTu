@@ -91,7 +91,7 @@ export async function assembleSystemPrompt(
         `- nsfwMode: ${nsfwMode ? 'true' : 'false'}`,
         `- nsfwGenderFilter: ${nsfwGenderFilter}`,
         '- 当 nsfwMode=true 且 NPC性别符合过滤条件时，创建NPC必须生成完整私密信息(PrivacyProfile)',
-        '- 若 NPC 已存在但私密信息缺失，需用 set 写入 社交.关系.[NPC名].私密信息 完整对象',
+        '- 若 NPC 已存在但私密信息缺失，需用 set 写入 社交.关系.["角色ID"].私密信息 完整对象',
         '- 当 nsfwMode=false 或 性别不匹配 时，禁止生成私密信息'
       ].join('\n')
     );

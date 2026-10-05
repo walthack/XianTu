@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>战斗试玩原型 · F03 山涧雾战</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="title">
+      <h1 id="title">战斗试玩原型</h1>
+      <nav class="modes">
+        <a id="link-A" href="?mode=A">A 回合制</a>
+        <a id="link-B" href="?mode=B">B 分阶段判定</a>
+      </nav>
+    </div>
+    <div class="top-actions">
+      <span id="stats" class="stats"></span>
+      <button id="restart" class="restart" type="button">重开</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="card" class="card"></section>
+    <section id="status" class="status"></section>
+    <section id="log" class="log" aria-live="polite"></section>
+    <section id="actions" class="actions"></section>
+    <section id="ending" class="ending"></section>
+  </main>
+
+  <details class="dev" id="dev">
+    <summary>开发参数（复现输赢用；默认真随机）</summary>
+    <label>固定种子 <input id="dev-seed" type="number" placeholder="留空＝真随机"></label>
+    <label>指定骰点（逗号分隔，按顺序用完再随机） <input id="dev-rolls" type="text" placeholder="例：20,20 或 1,1,1,1,1"></label>
+    <label class="llm"><input id="dev-llm" type="checkbox" disabled> 用模型描写（<span id="llm-note">检测中…</span>）</label>
+    <button id="dev-apply" type="button">应用并重开</button>
+  </details>
+
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>

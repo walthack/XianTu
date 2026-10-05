@@ -623,6 +623,13 @@
         "features": [],
         "polity": "宋国",
         "region": "宋国"
+      },
+      {
+        "id": "liuchao.faction.bai_yi",
+        "name": "白夷",
+        "description": "南荒部族，出产珍珠与美玉。",
+        "type": "部族",
+        "headquartersLocationId": "liuchao.location.baiyi"
       }
     ],
     "locations": [
@@ -1595,10 +1602,10 @@
       {
         "id": "lcq.character.np003",
         "name": "吴战威",
-        "role": "商队同行刀客",
-        "description": "商队同行刀客",
+        "role": "白湖商馆护卫，随商队进入南荒",
+        "description": "白湖商馆护卫，随商队进入南荒",
         "profile": {
-          "origin": "商队同行刀客",
+          "origin": "白湖商馆护卫，随商队进入南荒",
           "personality": [
             "粗豪直爽",
             "好色贪花",
@@ -1614,30 +1621,30 @@
       {
         "id": "lcq.character.nanhuang_xiaowei",
         "name": "小魏",
-        "role": "云氏护卫",
+        "role": "白湖商馆护卫",
         "profile": {
-          "origin": "云氏护卫"
+          "origin": "白湖商馆护卫"
         },
-        "description": "云氏护卫",
+        "description": "白湖商馆护卫",
         "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_shigang",
         "name": "石刚",
-        "role": "云氏护卫",
+        "role": "白湖商馆护卫",
         "profile": {
-          "origin": "云氏护卫"
+          "origin": "白湖商馆护卫"
         },
-        "description": "云氏护卫",
+        "description": "白湖商馆护卫",
         "affiliations": []
       },
       {
         "id": "lcq.character.np004",
         "name": "易彪",
-        "role": "云氏护卫",
-        "description": "云氏护卫",
+        "role": "云氏商会护卫，与商队同行",
+        "description": "云氏商会护卫，与商队同行",
         "profile": {
-          "origin": "云氏护卫",
+          "origin": "云氏商会护卫，与商队同行",
           "personality": [
             "沉默寡言",
             "忠厚老实",
@@ -1838,10 +1845,10 @@
       {
         "id": "liuchao.character.qin_hui",
         "name": "秦桧",
-        "role": "候选向导",
-        "description": "候选向导",
+        "role": "熊耳铺的候选向导文士",
+        "description": "熊耳铺的候选向导文士",
         "profile": {
-          "origin": "候选向导",
+          "origin": "熊耳铺的候选向导文士",
           "personality": [
             "胸有城府",
             "精明狡黠",
@@ -1860,10 +1867,10 @@
       {
         "id": "liuchao.character.wu_san_gui",
         "name": "吴三桂",
-        "role": "候选向导",
-        "description": "候选向导",
+        "role": "熊耳铺的候选向导武士",
+        "description": "熊耳铺的候选向导武士",
         "profile": {
-          "origin": "候选向导",
+          "origin": "熊耳铺的候选向导武士",
           "personality": [
             "果敢干练",
             "剽悍好胜",

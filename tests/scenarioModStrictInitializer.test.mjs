@@ -115,25 +115,25 @@ test('strict Mod identity and canon survive a save serialization round trip', as
   assert.equal(reloaded.世界.状态.剧本模组.canon.characters[0].name, '程宗扬');
   assert.equal(reloaded.世界.状态.剧本模组.contentAccess[0].policy, 'exclusive');
   assert.equal(reloaded.角色.位置.描述, '江南·建康');
-  assert.equal(reloaded.社交.关系.程宗扬.与玩家关系, '盟友');
-  assert.equal(reloaded.社交.关系.程宗扬.好感度, 25);
-  assert.deepEqual(reloaded.社交.关系.程宗扬.记忆, [
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].与玩家关系, '盟友');
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].好感度, 25);
+  assert.deepEqual(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].记忆, [
     '穿越后卷入六朝风云。',
     '生死根不得被其他 NPC 自动获得。',
     '在建康城外初次相遇',
   ]);
-  assert.equal(reloaded.社交.关系.程宗扬.宗门, '太乙真宗');
-  assert.equal(reloaded.社交.关系.程宗扬.外貌描述, '年轻男子，眉目清朗，带着异世来客的警觉与机变。');
-  assert.deepEqual(reloaded.社交.关系.程宗扬.性格特征, ['机变', '谨慎', '重情义']);
-  assert.equal(reloaded.社交.关系.程宗扬.灵根.name, '生死根');
-  assert.equal(reloaded.社交.关系.程宗扬.先天六司.悟性, 7);
-  assert.equal(reloaded.社交.关系.程宗扬.当前位置.x, 7100);
-  assert.equal(reloaded.社交.关系.程宗扬.技能.掌握技能[0].技能名称, '雷刀诀');
-  assert.equal(reloaded.社交.关系.程宗扬.功法.修炼功法.名称, '九阳神功');
-  assert.equal(reloaded.社交.关系.程宗扬.背包.物品['item.thunderblade'].名称, '雷刀');
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].宗门, '太乙真宗');
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].外貌描述, '年轻男子，眉目清朗，带着异世来客的警觉与机变。');
+  assert.deepEqual(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].性格特征, ['机变', '谨慎', '重情义']);
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].灵根.name, '生死根');
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].先天六司.悟性, 7);
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].当前位置.x, 7100);
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].技能.掌握技能[0].技能名称, '雷刀诀');
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].功法.修炼功法.名称, '九阳神功');
+  assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].背包.物品['item.thunderblade'].名称, '雷刀');
   assert.deepEqual(reloaded.社交.关系矩阵.edges[0], {
-    from: '王哲',
-    to: '程宗扬',
+    from: mod.canon.characters.find(c => c.name === '王哲').id,
+    to: mod.canon.characters.find(c => c.name === '程宗扬').id,
     relation: '师徒',
     score: 80,
     type: '单向',

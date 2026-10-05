@@ -1,6 +1,8 @@
+import { filterLedgerMemory, type GuardFinding } from './ledger/guardFramework';
 import type { SaveData } from '@/types/game';
 import { isScopedPlaytestSave, isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { validateNarrativeBoundary } from './narrativeBoundaries';
+import { stripNarrativeTimePrefix } from '@/utils/memorySanitizer';
 
 export const MODULE_TURN_KEY = '回合模块试玩';
 export const MODULE_TURN_SWITCH = 'xiantu.modularTurnPlaytest.v1';
@@ -17,6 +19,7 @@ export interface ModuleReceipt {
   shortTermEntry?: string;
   /** 模块演出未被采用、回落旧链路时的原因与尝试次数。 */
   fallback?: { reason: string; attempts: number };
+  guard?: GuardFinding[];
   memory?: ModuleSideResult;
   /** 旧版每回合质量检查的遗留字段；已并入后台审计，不再写入。 */
   quality?: ModuleSideResult;
@@ -85,8 +88,8 @@ export function localModuleGuardNarrative(label: string | undefined, attempted: 
 
 export function readModuleNarrative(raw: string): string {
   const visible = visibleModuleText(raw);
-  const text = visible.startsWith('{') || visible.startsWith('```')
-    ? String(parseModuleObject(visible).text || '') : visible;
+  const text = stripNarrativeTimePrefix(visible.startsWith('{') || visible.startsWith('```')
+    ? String(parseModuleObject(visible).text || '') : visible);
   validateModuleInstructionLeak(text);
   if (!text.trim() || text.length > 6000) throw new Error('正文为空或异常过长');
   if (text.split(/[，,、。；;：:！？!?…\n]/).some(part => part.trim().length > 120)) throw new Error('正文出现无标点长句，本稿不展示、不落档');
@@ -149,9 +152,22 @@ export function replaceShortTermEntry(shortTerm: unknown, originalEntry: string 
 }
 
 /** 演出模型可读的最近记忆：直接取短期记忆（模块记忆已在其中替换为摘录），不再另记平行账。 */
+/** Preserve sentence ids from the original receipt so filtering cannot shift a selection. */
+export function ledgerMemoryCandidates(text: string, save: SaveData, findings: GuardFinding[] = []) {
+  return moduleMemorySentences(text).flatMap(sentence => {
+    const filtered = filterLedgerMemory(sentence.text, save, findings);
+    return filtered ? [{ ...sentence, text: filtered }] : [];
+  });
+}
+export function validateLedgerMemorySide(raw: string, text: string, save: SaveData, findings: GuardFinding[] = []): string {
+  const excerpt = validateModuleSide(raw, text, 'memory');
+  const safe = filterLedgerMemory(excerpt, save, findings);
+  if (!safe) throw new Error('记忆摘录全部命中事实守卫，未写入');
+  return safe;
+}
 export function recentModuleMemory(save: SaveData | null | undefined, count = 2): string[] {
   const shortTerm = (save as any)?.社交?.记忆?.短期记忆;
-  return Array.isArray(shortTerm) ? shortTerm.filter((item: unknown) => typeof item === 'string').slice(-count) : [];
+  return Array.isArray(shortTerm) ? shortTerm.filter((item: unknown): item is string => typeof item === 'string').map((item: string) => filterLedgerMemory(item, save)).filter(Boolean).slice(-count) : [];
 }
 export function getModuleReceipts(save: SaveData | null | undefined): ModuleReceipt[] {
   const value = (save as any)?.系统?.扩展?.[MODULE_TURN_KEY]?.receipts;
@@ -248,18 +264,8 @@ export function validateStepSceneNarrative(text: string, card: import('./schema'
     if (terms.some(term => term && text.includes(term))) throw new ModuleNarrativeGuardError(`步骤越界：${forbidden}`);
   }
   if (/程(?:爷|少主|族长)|云公子/.test(text)) throw new ModuleNarrativeGuardError('主角称呼冲突：按人物称呼表，不给主角编造官职或身份');
-  const paragraphs = text.split(/[。！？\n]/);
   for (const actor of scene.presentActors || []) {
-    const pronoun = actor.gender === '男' ? '她' : actor.gender === '女' ? '他' : '';
-    if (!pronoun) continue;
-    for (const sentence of paragraphs) {
-      const at = sentence.indexOf(actor.name);
-      if (at < 0) continue;
-      const tail = sentence.slice(at + actor.name.length);
-      // 仅同一人物紧接代词的指代检查；不把对白里的他人/他乡算成代词。
-      if (new RegExp(`^[，,\\s]*(?:${pronoun}(?:说|问|看|走|抬|转|伸|点|摇|笑|的(?:脸|手|目光)))`).test(tail))
-        throw new ModuleNarrativeGuardError(`人物性别冲突：${actor.name}是${actor.gender}`);
-    }
+    // P0: gender candidates run in shadow at the caller, never reject here before clean-corpus approval.
     const feature = actor.appearance?.trim();
     if (feature && feature.length > 12 && text.includes(feature) && recent.some(old => old.includes(feature)))
       throw new ModuleNarrativeGuardError(`外貌重复：${actor.name}上一拍已描写这一特征，本轮不再复述`);

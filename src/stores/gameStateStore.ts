@@ -1,3 +1,4 @@
+import { backfillRelationshipIds, resolveRelationshipId } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 仙途 (XianTu) - 游戏状态管理
  * @author 千夜 | GitHub: qianye60 | Bilibili: 477576651
@@ -317,6 +318,7 @@ export const useGameStateStore = defineStore('gameState', {
      * @param saveData 完整的存档数据
      */
     loadFromSaveData(saveData: SaveData) {
+      backfillRelationshipIds(saveData, (saveData as any).世界?.状态?.剧本模组?.canon?.characters);
       const v3 = (isSaveDataV3(saveData) ? saveData : migrateSaveDataToLatest(saveData).migrated) as any;
 
       // 兼容修复：旧存档可能被 LLM 指令误扣至 0，但历史正文只写昏迷/受伤。
@@ -659,7 +661,10 @@ export const useGameStateStore = defineStore('gameState', {
       // character.后天六司 应该只存储永久性的消耗品加成。
       // 天赋/装备加成应在运行时动态计算，不落盘到该字段。
 
-      return deepCopy(v3 as any);
+      // 身份迁移只能修改快照；computed读存档不能反写store的关系/关系矩阵。
+      const snapshot = deepCopy(v3 as SaveData);
+      backfillRelationshipIds(snapshot as any, (snapshot as any).世界?.状态?.剧本模组?.canon?.characters);
+      return snapshot;
     },
 
     /**
@@ -694,8 +699,9 @@ export const useGameStateStore = defineStore('gameState', {
      * @param updates 部分 NpcProfile 对象
      */
     updateRelationship(npcName: string, updates: Partial<NpcProfile>) {
-      if (this.relationships && this.relationships[npcName]) {
-        this.relationships[npcName] = { ...this.relationships[npcName], ...updates };
+      const id = resolveRelationshipId({ 社交: { 关系: this.relationships || {} } }, npcName);
+      if (id && this.relationships && this.relationships[id]) {
+        this.relationships[id] = { ...this.relationships[id], ...updates };
       }
     },
 

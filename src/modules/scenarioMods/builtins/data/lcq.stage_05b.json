@@ -316,7 +316,7 @@
         "name": "白武族",
         "description": "武二郎所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.gui_wang_dong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -346,7 +346,7 @@
         "name": "花苗族",
         "description": "苏荔所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.gui_wang_dong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -623,6 +623,13 @@
         "features": [],
         "polity": "宋国",
         "region": "宋国"
+      },
+      {
+        "id": "liuchao.faction.bai_yi",
+        "name": "白夷",
+        "description": "南荒部族，出产珍珠与美玉。",
+        "type": "部族",
+        "headquartersLocationId": "liuchao.location.baiyi"
       }
     ],
     "locations": [
@@ -1161,20 +1168,6 @@
         "region": "宋国"
       },
       {
-        "id": "liuchao.location.gui_wang_dong",
-        "name": "鬼王峒",
-        "description": "鬼巫王统治的洞窟，龙神出没之地。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-        "type": "洞府",
-        "continentId": "liuchao.continent.nanhuang",
-        "factionId": "liuchao.faction.gui_wang_dong",
-        "coordinates": {
-          "x": 1641,
-          "y": 8690
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
         "id": "liuchao.location.south_wild_valley",
         "name": "南荒山谷",
         "description": "龙神坠落之地。",
@@ -1197,19 +1190,6 @@
           "y": 4960
         },
         "features": []
-      },
-      {
-        "id": "liuchao.location.biyu",
-        "name": "碧鲮族",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "城池",
-        "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
-        "coordinates": {
-          "x": 1824,
-          "y": 8592
-        },
-        "features": [],
-        "region": "南荒"
       },
       {
         "id": "liuchao.location.gui_wang_gong",
@@ -1587,11 +1567,11 @@
       {
         "id": "lcq.character.nanhuang_xiaowei",
         "name": "小魏",
-        "role": "云氏护卫",
+        "role": "白湖商馆护卫",
         "profile": {
-          "origin": "云氏护卫"
+          "origin": "白湖商馆护卫"
         },
-        "description": "云氏护卫",
+        "description": "白湖商馆护卫",
         "affiliations": []
       },
       {
@@ -1829,10 +1809,10 @@
         "id": "liuchao.character.dan_chen",
         "name": "丹宸",
         "gender": "女",
-        "role": "鬼王宫中的道士",
-        "description": "鬼王宫中的道士",
+        "role": "红苗女子，娄蒙之妻",
+        "description": "红苗女子，娄蒙之妻",
         "profile": {
-          "origin": "鬼王宫中的道士",
+          "origin": "红苗女子，娄蒙之妻",
           "personality": [
             "谦卑",
             "亢奋",
@@ -1845,11 +1825,11 @@
       {
         "id": "lcq.character.nanhuang_loumeng",
         "name": "娄蒙",
-        "role": "鬼王峒武士",
+        "role": "红苗族长之子",
         "profile": {
-          "origin": "鬼王峒武士"
+          "origin": "红苗族长之子"
         },
-        "description": "鬼王峒武士",
+        "description": "红苗族长之子",
         "affiliations": []
       },
       {
@@ -1858,7 +1838,7 @@
         "description": "熟悉鬼王宫密道的人",
         "role": "熟悉鬼王宫密道的人",
         "gender": "男",
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "profile": {
           "origin": "熟悉鬼王宫密道的人",
           "personality": [
@@ -1891,9 +1871,9 @@
         "name": "龙神",
         "description": "鬼王峒龙神",
         "role": "鬼王峒龙神",
-        "gender": "男",
+        "gender": "无",
         "realm": "化神",
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
@@ -1906,7 +1886,8 @@
             "精力旺盛"
           ]
         },
-        "affiliations": []
+        "affiliations": [],
+        "entityType": "creature"
       },
       {
         "id": "liuchao.character.gui_wu_wang",
@@ -1915,7 +1896,7 @@
         "role": "鬼王峒之主",
         "gender": "男",
         "realm": "金丹",
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "skillIds": [
           "liuchao.skill.gui_yu_sword"
         ],
@@ -2885,7 +2866,7 @@
           "liuchao.faction.gui_wang_dong",
           "liuchao.faction.hong_miao"
         ],
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "objective": "从萨安处获取鬼王宫密道",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3563,7 +3544,7 @@
           "liuchao.faction.gui_wang_dong",
           "liuchao.faction.xing_yue_hu"
         ],
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "objective": "了结龙神",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3620,7 +3601,7 @@
         "relatedFactionIds": [
           "liuchao.faction.xing_yue_hu"
         ],
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "objective": "听清谢艺把小紫带往星月湖的托付，并决定承接遗言或施针救治",
         "presentation": {
           "targetLabel": "谢艺"
@@ -3772,7 +3753,7 @@
           "liuchao.faction.biyu",
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "objective": "散峒之后，听清三族是否真的站到你这边",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3852,7 +3833,7 @@
           "liuchao.character.bi_ji",
           "liuchao.character.le_mingzhu"
         ],
-        "locationId": "liuchao.location.gui_wang_dong",
+        "locationId": "liuchao.location.guiwang_dong",
         "objective": "追上小紫，见证她与母亲碧姬对质后的决断并承接余波",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3985,11 +3966,11 @@
       {
         "id": "lcq.event.geluo_summons_biji",
         "name": "阁罗召来碧姬",
-        "description": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "description": "阁罗召来碧姬，程宗扬第一次当面见到谢艺要找的人。",
         "axisId": "qingyu.90.2",
         "axisAnchor": "六朝清羽记·#90·第88章·碧奴",
         "axisSeq": 158,
-        "axisBeat": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "axisBeat": "阁罗召来碧姬，程宗扬第一次当面见到谢艺要找的人。",
         "critical": true,
         "completion": [
           {
@@ -4009,7 +3990,7 @@
           "liuchao.faction.biyu"
         ],
         "locationId": "liuchao.location.guiwang_dong",
-        "objective": "在阁罗召来被称作碧奴的碧姬时，当面见到谢艺要找的人",
+        "objective": "在阁罗召来碧姬时，当面见到谢艺要找的人",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -4018,11 +3999,11 @@
           "actions": [
             {
               "id": "watch_geluo_summon_binu",
-              "label": "看阁罗召来被称作碧奴的人",
-              "actionText": "我看着阁罗把峒里称作碧奴的人召到面前，先记下这个称呼。",
+              "label": "看阁罗召来碧姬",
+              "actionText": "我看着阁罗召来碧姬，当面见到谢艺要找的人。",
               "timeCost": 1,
               "outcomeText": {
-                "success": "阁罗已召来被称作碧奴的人；最终完成真值由本地引擎落账。",
+                "success": "阁罗已召来碧姬；最终完成真值由本地引擎落账。",
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
@@ -4175,11 +4156,11 @@
       {
         "id": "lcq.event.shanghou_revealed",
         "name": "殇侯现身",
-        "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。",
+        "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
         "axisId": "qingyu.122.2",
         "axisAnchor": "六朝清羽记·#122·第120章·殇侯",
         "axisSeq": 222,
-        "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
+        "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
         "critical": true,
         "completion": [
           {
@@ -4261,8 +4242,8 @@
                 "value": true
               }
             ],
-            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。",
-            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。"
+            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
+            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。"
           },
           {
             "when": [
@@ -4272,8 +4253,8 @@
                 "value": true
               }
             ],
-            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。",
-            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。"
+            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
+            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。"
           }
         ],
         "fatalOutcomes": {

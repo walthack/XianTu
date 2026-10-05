@@ -40,6 +40,8 @@ export interface SystemConfig extends AIMetadata {
 
 // --- 状态变更日志接口 ---
 export type StateChange = {
+  characterId?: string;
+  targetName?: string;
   key: string;
   action: string;
   oldValue: unknown;
@@ -986,6 +988,8 @@ export interface PrivacyProfile {
 
 /** NPC核心档案 - 精简高效的数据结构 */
 export interface NpcProfile {
+  /** Stable canon identity; old saves are backfilled without changing affinity. */
+  角色ID?: string;
   // === 核心身份 ===
   名字: string;
   性别: '男' | '女' | '其他';

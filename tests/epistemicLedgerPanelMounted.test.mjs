@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { Buffer } from 'node:buffer';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
+import { loadTs } from './loadTs.mjs';
 import ts from 'typescript';
 import { compileScript, parse } from '@vue/compiler-sfc';
 import { createSSRApp, h } from 'vue';
@@ -21,7 +22,10 @@ async function loadPanel() {
     compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
     fileName: filename,
   }).outputText;
-  const resolvable = transpiled
+  const ledger = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
+  // data-URL组件测试不能使用webpack别名，载入实际TS模块；断言不变。
+  const helpers = `const ledgerRecordOrder = ${ledger.ledgerRecordOrder.toString()}; const ledgerRecordTurnLabel = ${ledger.ledgerRecordTurnLabel.toString()};`;
+  const resolvable = transpiled.replace(/import \{ ledgerRecordOrder, ledgerRecordTurnLabel \} from ['"]@\/modules\/scenarioMods\/eventNarrativeView['"];?/, helpers)
     .replaceAll("from 'vue'", `from '${import.meta.resolve('vue')}'`)
     .replaceAll('from "vue"', `from '${import.meta.resolve('vue')}'`)
     .replaceAll("from 'vue/server-renderer'", `from '${import.meta.resolve('@vue/server-renderer')}'`)

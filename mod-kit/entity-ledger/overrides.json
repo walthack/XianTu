@@ -1,0 +1,1207 @@
+{
+  "version": 1,
+  "ruling": "#199",
+  "entities": [
+    {
+      "id": "liuchao.character.shang_zhen_yu",
+      "aliases": [
+        "朱八八",
+        "朱老头",
+        "殇侯",
+        "殇振羽"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "朱老头"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "老向导"
+          },
+          {
+            "fromChapter": 44,
+            "text": "朱老头"
+          },
+          {
+            "fromChapter": 121,
+            "text": "殇侯"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "朱老头"
+          },
+          {
+            "fromChapter": 120,
+            "text": "老头儿／侯爷／君侯"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "朱老头"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "小程子"
+          },
+          {
+            "fromChapter": 122,
+            "text": "程公子"
+          }
+        ],
+        "selfReportedName": [
+          {
+            "fromChapter": 44,
+            "text": "朱八八"
+          }
+        ]
+      }
+    },
+    {
+      "id": "liuchao.character.le_mingzhu",
+      "aliases": [
+        "花苗新娘",
+        "乐明珠",
+        "戴面纱的新娘"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "花苗新娘",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "花苗新娘",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠",
+            "kind": "name"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "新娘"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠"
+          },
+          {
+            "fromChapter": 66,
+            "text": "乐丫头"
+          },
+          {
+            "fromChapter": 80,
+            "text": "小香瓜"
+          },
+          {
+            "fromChapter": 117,
+            "text": "乐姑娘"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "新娘"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠"
+          },
+          {
+            "fromChapter": 66,
+            "text": "乐丫头"
+          },
+          {
+            "fromChapter": 80,
+            "text": "小香瓜"
+          },
+          {
+            "fromChapter": 117,
+            "text": "乐姑娘"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [
+          {
+            "fromChapter": 47,
+            "text": "大笨蛋／大笨牛／大笨瓜"
+          }
+        ],
+        "selfReportedName": [
+          {
+            "fromChapter": 47,
+            "text": "乐明珠"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lcq.character.np006",
+      "aliases": [
+        "阁罗",
+        "鬼王峒使者",
+        "骑白象的鬼王峒使者"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "骑白象的鬼王峒使者",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "骑白象的鬼王峒使者",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗",
+            "kind": "name"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "使者"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗"
+          },
+          {
+            "fromChapter": 92,
+            "text": "阁罗老兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "使者"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗"
+          },
+          {
+            "fromChapter": 92,
+            "text": "阁罗老兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": [
+          {
+            "fromChapter": 78,
+            "text": "阁罗"
+          }
+        ]
+      }
+    },
+    {
+      "id": "liuchao.character.bi_ji",
+      "aliases": [
+        "碧姬",
+        "碧奴",
+        "碧宛"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          },
+          {
+            "fromChapter": 115,
+            "text": "碧姬"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          },
+          {
+            "fromChapter": 115,
+            "text": "碧姬"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.yi_hu",
+      "aliases": [
+        "易虎",
+        "血虎"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 63,
+            "text": "易虎",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎"
+          },
+          {
+            "fromChapter": 63,
+            "text": "易虎"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎"
+          },
+          {
+            "fromChapter": 63,
+            "text": "易虎"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.qi_yuan",
+      "aliases": [
+        "祁远",
+        "老祁",
+        "祁老四",
+        "老四"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "祁远"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "祁远"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "老祁"
+          },
+          {
+            "fromChapter": 80,
+            "text": "老四"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "老祁"
+          },
+          {
+            "fromChapter": 80,
+            "text": "老四"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.wu_er_lang",
+      "aliases": [
+        "武二郎",
+        "武二",
+        "二爷",
+        "武二爷"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          },
+          {
+            "fromChapter": 66,
+            "text": "武二／二爷"
+          },
+          {
+            "fromChapter": 117,
+            "text": "武二爷"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          },
+          {
+            "fromChapter": 66,
+            "text": "武二／二爷"
+          },
+          {
+            "fromChapter": 117,
+            "text": "武二爷"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.yun_cang_feng",
+      "aliases": [
+        "云苍峰",
+        "云执事",
+        "云老哥"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          },
+          {
+            "fromChapter": 34,
+            "text": "云执事"
+          },
+          {
+            "fromChapter": 35,
+            "text": "云执事／云老哥"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          },
+          {
+            "fromChapter": 34,
+            "text": "云执事"
+          },
+          {
+            "fromChapter": 35,
+            "text": "云执事／云老哥"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "lcq.character.np003",
+      "aliases": [
+        "吴战威",
+        "老吴",
+        "吴爷"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          },
+          {
+            "fromChapter": 35,
+            "text": "老吴"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          },
+          {
+            "fromChapter": 35,
+            "text": "老吴"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "lcq.character.np004",
+      "aliases": [
+        "易彪",
+        "老易"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          },
+          {
+            "fromChapter": 117,
+            "text": "老易"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          },
+          {
+            "fromChapter": 117,
+            "text": "老易"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.xie_yi",
+      "aliases": [
+        "谢艺",
+        "谢兄"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          },
+          {
+            "fromChapter": 41,
+            "text": "谢兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          },
+          {
+            "fromChapter": 41,
+            "text": "谢兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.su_li",
+      "aliases": [
+        "苏荔",
+        "阿依苏荔"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          },
+          {
+            "fromChapter": 49,
+            "text": "苏荔族长"
+          },
+          {
+            "fromChapter": 83,
+            "text": "阿依苏荔族长"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          },
+          {
+            "fromChapter": 49,
+            "text": "苏荔族长"
+          },
+          {
+            "fromChapter": 83,
+            "text": "阿依苏荔族长"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.ning_yu",
+      "aliases": [
+        "凝羽"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          },
+          {
+            "fromChapter": 35,
+            "text": "凝羽姑娘"
+          },
+          {
+            "fromChapter": 73,
+            "text": "凝羽"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          },
+          {
+            "fromChapter": 35,
+            "text": "凝羽姑娘"
+          },
+          {
+            "fromChapter": 73,
+            "text": "凝羽"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.qin_hui",
+      "aliases": [
+        "秦桧",
+        "秦伴当"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          },
+          {
+            "fromChapter": 122,
+            "text": "秦兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          },
+          {
+            "fromChapter": 122,
+            "text": "秦兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.wu_san_gui",
+      "aliases": [
+        "吴三桂"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          },
+          {
+            "fromChapter": 124,
+            "text": "吴兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          },
+          {
+            "fromChapter": 124,
+            "text": "吴兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [
+          {
+            "fromChapter": 124,
+            "text": "公子"
+          }
+        ],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "lcq.character.nanhuang_yeao",
+      "aliases": [
+        "叶媪"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "叶媪"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "叶媪"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "大娘"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "大娘"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.a_xi",
+      "aliases": [
+        "阿夕"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "liuchao.character.xiao_zi",
+      "aliases": [
+        "小紫"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫",
+            "kind": "name"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫"
+          },
+          {
+            "fromChapter": 120,
+            "text": "死丫头"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": [
+          {
+            "fromChapter": 70,
+            "text": "小紫"
+          }
+        ]
+      }
+    },
+    {
+      "id": "lcq.character.nanhuang_blacksea_envoy",
+      "aliases": [
+        "黑衣丽人"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "黑衣丽人",
+            "kind": "description"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "黑衣丽人",
+            "kind": "description"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "黑衣丽人",
+            "kind": "description"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "黑衣丽人",
+            "kind": "description"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "lcq.character.nanhuang_stonemason",
+      "aliases": [
+        "六朝石匠"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "六朝石匠",
+            "kind": "description"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "六朝石匠",
+            "kind": "description"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "六朝石匠",
+            "kind": "description"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "六朝石匠",
+            "kind": "description"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "lcq.character.nanhuang_yiyong",
+      "aliases": [
+        "易勇"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "易勇"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "易勇"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "易勇"
+          },
+          {
+            "fromChapter": 60,
+            "text": "易兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "易勇"
+          },
+          {
+            "fromChapter": 60,
+            "text": "易兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      }
+    },
+    {
+      "id": "lcq.character.nanhuang_baiyi_envoy",
+      "aliases": [
+        "鬼王峒使者",
+        "白夷地宫使者"
+      ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "白夷地宫使者",
+            "kind": "description"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "白夷地宫使者",
+            "kind": "description"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "白夷地宫使者",
+            "kind": "description"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "白夷地宫使者",
+            "kind": "description"
+          }
+        ],
+        "npcAddress": [],
+        "source": "28号：第62–65章白夷地宫无名使者；不与阁罗合并",
+        "selfReportedName": []
+      },
+      "sceneBinding": {
+        "fromChapter": 62,
+        "toChapter": 65,
+        "role": "白夷地宫中受谢艺刑问的鬼王峒使者；原著未给姓名"
+      }
+    }
+  ],
+  "chapterGates": {
+    "ruling": "2026-10-05 00:41",
+    "poisonSectName": 121,
+    "suliRegicide": 49,
+    "xieyiSearch": 65,
+    "generalPosthumousDaughter": 72,
+    "shangName": 44,
+    "shangTitle": 66,
+    "xiaoziFather": 105,
+    "zhuIdentity": 120,
+    "daughterPattern": "遗腹女|岳帅.{0,12}女儿",
+    "specificDaughterPattern": "小紫",
+    "searchPattern": "碧姬|碧奴|碧宛|遗孤|遗腹|小紫",
+    "mentions": [
+      {
+        "name": "殇振羽",
+        "chapter": 44
+      },
+      {
+        "name": "殇侯",
+        "chapter": 66
+      },
+      {
+        "name": "毒宗",
+        "chapter": 121
+      }
+    ],
+    "searchDescendantsPattern": "遗孤|遗腹|后裔|骨肉",
+    "searchDetailPattern": "生药铺|生藥鋪",
+    "searchDetailChapter": 76
+  },
+  "namingInstructions": "称呼以在场人物逐章投影为准：第115章前旁白和台词用碧奴，第115章起旁白用碧姬；同一人物，不另造人物。朱老头面板不随身份揭示改名；旁白第121章起殇侯，主角心里仍朱老头。描述标签不是姓名，不让花苗新娘或使者自报标签为真名。",
+  "stageOpeningChapters": {
+    "lcq.stage_03b_snake_flower_bridge": 37,
+    "lcq.stage_04": 46,
+    "lcq.stage_04b_lingfei_baiyi_crisis": 56,
+    "lcq.stage_05": 74,
+    "lcq.stage_05b": 87,
+    "lcq.stage_06": 112,
+    "lcq.stage_07_qingyuan_jiankang": 125
+  },
+  "nonReplacingAliases": [
+    "鬼王峒使者",
+    "老四",
+    "二爷",
+    "血虎",
+    "碧宛"
+  ],
+  "legacyDisplayAliases": [
+    "朱八八",
+    "吴爷"
+  ],
+  "historicalAliases": {
+    "id": "liuchao.character.shang_zhen_yu",
+    "beforeChapter": 120,
+    "names": [
+      "殇侯",
+      "殇振羽"
+    ]
+  },
+  "namingMilestones": {
+    "lcq.event.s04_03": 48,
+    "lcq.event.shanghou_revealed": 120
+  },
+  "blockedSouthernRecallIds": [
+    "liuchao.character.yi_xin"
+  ],
+  "nameProtectedSuffixes": [
+    "门",
+    "势力",
+    "府",
+    "家族",
+    "派",
+    "宗"
+  ],
+  "selfIntroductionPrefixes": [
+    "自称",
+    "自报名",
+    "俺叫",
+    "我叫"
+  ],
+  "historicalNamePreservationIds": [
+    "liuchao.character.yi_hu"
+  ]
+}

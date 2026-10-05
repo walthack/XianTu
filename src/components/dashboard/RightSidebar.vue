@@ -279,6 +279,7 @@
 
       <!-- 玩家认知与路径：只展示引擎已落账内容，不从叙事猜测事实 -->
       <EpistemicLedgerPanel
+        :runtime="epistemicRuntime"
         :player-knowledge="epistemicRuntime?.playerKnowledge"
         :path-receipts="epistemicRuntime?.pathReceipts"
       />
@@ -449,7 +450,7 @@ import {
   isWorldSimulationRuntime,
 } from '@/modules/scenarioMods/worldSimulation';
 import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from '@/modules/scenarioMods/mainQuestAxis';
-import { resolveAvailableLines, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
+import { secondaryLineDisplayName, resolveAvailableLines, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
@@ -503,7 +504,7 @@ const questAtLocationId = (rt: any): string | undefined => locationFromPosition(
 ).locationId;
 const visibleQuestObjective = (rt: any, event: any): string => {
   if (!event) return '';
-  const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences);
+  const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt);
   return formatQuestCompass(view, rt, questAtLocationId(rt)) || String(view.objective || '').trim();
 };
 // world_sim 主线轴：长期方向（当前层）+ 本关节点 + 局势源事件 objective；不含层六、无逐拍列表。
@@ -538,7 +539,7 @@ const availableLines = computed(() => {
   const activeLineIds = new Set(secondaryLinesAtEvent(event?.id).map(line => line.id));
   return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => ({
     id: line.id,
-    name: line.name,
+    name: secondaryLineDisplayName(line, event),
     kind: line.kind === 'sect'
       ? '宗派'
       : line.kind === 'commerce'
@@ -571,7 +572,7 @@ const questMain = computed(() => {
   const anchor = getScenarioFocusEvent(rt);
   const activeEvents = anchor ? [anchor] : [];
   const events = activeEvents.slice(0, 1).map((e: any) => {
-    const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences);
+    const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences, rt);
     return formatQuestCompass(view, rt, questAtLocationId(rt)) || view.objective || view.name;
   }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
@@ -579,7 +580,7 @@ const questMain = computed(() => {
   const departure = ready ? getStageDepartureOffer(gameStateStore.toSaveData()) : null;
   if (departure?.label && !events.length) events.push(departure.label);
   const cleared = ready && !chapter && !events.length;
-  const next = Boolean(ready);
+  const next = Boolean(departure);
   // 脱节哨兵（零成本确定性）：停滞轮数超阈值 → UI 预警"主线疑似脱节"，只提示、不改任何数据。
   // 阈值 10 高于强引子(7)，避免正常卡关误报；治本对齐仍靠进度审计对账。
   const stallTurns = Number(rt.stallTurns) || 0;
@@ -593,7 +594,7 @@ const questMain = computed(() => {
     moreCount,
     cleared,
     next,
-    nextStageId: ready ? String(rt.nextStageReadyId) : '',
+    nextStageId: next ? String(rt.nextStageReadyId) : '',
     stalled,
     stallCount: stallTurns,
     signal,

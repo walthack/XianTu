@@ -1064,3 +1064,64 @@ test('accepted audit voice/state findings correct only the active slot next prom
     assert.doesNotMatch(JSON.stringify(store.toSaveData().世界),/active voice correction|active state correction/);
   } finally {restore();useCharacterStore().rootState.当前激活存档=null;if(old)localStorage.setItem(AUDIT_LOG_KEY,old);else localStorage.removeItem(AUDIT_LOG_KEY);}
 });
+
+test('r12 toSaveData migrates isolated relationships and matrix without invalidating Vue read effects', async () => {
+  setActivePinia(createPinia());
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { computed, watch, watchEffect, nextTick } = await import('vue');
+  const { save } = await openingSave();
+  const store = useGameStateStore();
+  store.loadFromSaveData(structuredClone(save));
+  store.relationships = { 朱八八: { 名字: '朱八八', 好感度: 12 } };
+  store.relationshipMatrix = { nodes: ['玩家', '朱八八'], edges: [{ from: '玩家', to: '朱八八', strength: 12 }] };
+  const before = JSON.stringify({ relations: store.relationships, matrix: store.relationshipMatrix });
+  let writes = 0;
+  const stopWatch = watch(() => [store.relationships, store.relationshipMatrix], () => { writes++; }, { deep: true, flush: 'sync' });
+  const snapshot = computed(() => store.toSaveData());
+  let renderRuns = 0;
+  const stopRender = watchEffect(() => { renderRuns++; void snapshot.value?.社交.关系矩阵; });
+  try {
+    for (let i = 0; i < 10; i++) {
+      const exported = store.toSaveData();
+      assert.notEqual(exported.社交.关系, store.relationships);
+      assert.notEqual(exported.社交.关系矩阵, store.relationshipMatrix);
+      assert.equal(exported.社交.关系['liuchao.character.shang_zhen_yu'].好感度, 12);
+      assert.ok(exported.社交.关系矩阵.nodes.includes('liuchao.character.shang_zhen_yu'));
+      exported.社交.关系['liuchao.character.shang_zhen_yu'].好感度 = 99;
+      exported.社交.关系矩阵.edges[0].strength = 99;
+    }
+    await nextTick();
+    assert.equal(writes, 0);
+    assert.equal(renderRuns, 1);
+    assert.equal(JSON.stringify({ relations: store.relationships, matrix: store.relationshipMatrix }), before);
+  } finally { stopRender(); stopWatch(); }
+});
+
+test('r12 phase-two fresh opening first action reaches narrative and commits without browser patch', async () => {
+  setActivePinia(createPinia());
+  const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');
+  const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
+  const { aiService } = await loadPipeline('../src/services/aiService.ts');
+  const { createQingyuOpeningPlaytestSave } = await loadPipeline('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { getCurrentStoryEventActions } = await loadPipeline('../src/modules/scenarioMods/runtime.ts');
+  const mod = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8'));
+  const save = createQingyuOpeningPlaytestSave(mod, '2026-10-05T00:00:00Z', 2);
+  let calls = 0;
+  const restore = await withStubbedGenerate(aiService, async () => {
+    calls++;
+    return JSON.stringify({ text: '你听见客舱骤然响起嘈杂声，扶住座椅，转头确认身旁的动静。段强就在旁边，你稳住脚步，先看清眼前的变化。', mid_term_memory: '', tavern_commands: [], action_options: [] });
+  });
+  try {
+    const store = useGameStateStore();
+    store.loadFromSaveData(save);
+    const action = getCurrentStoryEventActions(store.toSaveData())[0];
+    assert.equal(action.eventId, 'lcq.event.s01_01');
+    const response = await AIBidirectionalSystem.processPlayerAction(action.playerLine, TEST_PROFILE, {
+      eventAction: action, eventActionProvenance: 'selected', playerIntentText: action.playerLine, shouldAbort: () => false,
+    });
+    assert.ok(calls > 0, 'first action must reach the model boundary');
+    assert.equal(response.generationError, undefined);
+    assert.equal(response.transactionCommitted, true);
+    assert.ok(store.toSaveData().世界.状态.剧本模组.worldTurn > save.世界.状态.剧本模组.worldTurn);
+  } finally { restore(); }
+});

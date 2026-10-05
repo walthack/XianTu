@@ -623,6 +623,13 @@
         "features": [],
         "polity": "宋国",
         "region": "宋国"
+      },
+      {
+        "id": "liuchao.faction.bai_yi",
+        "name": "白夷",
+        "description": "南荒部族，出产珍珠与美玉。",
+        "type": "部族",
+        "headquartersLocationId": "liuchao.location.baiyi"
       }
     ],
     "locations": [
@@ -1616,21 +1623,21 @@
       {
         "id": "lcq.character.nanhuang_xiaowei",
         "name": "小魏",
-        "role": "云氏护卫",
+        "role": "白湖商馆护卫",
         "profile": {
-          "origin": "云氏护卫"
+          "origin": "白湖商馆护卫"
         },
-        "description": "云氏护卫",
+        "description": "白湖商馆护卫",
         "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_shigang",
         "name": "石刚",
-        "role": "云氏护卫",
+        "role": "白湖商馆护卫",
         "profile": {
-          "origin": "云氏护卫"
+          "origin": "白湖商馆护卫"
         },
-        "description": "云氏护卫",
+        "description": "白湖商馆护卫",
         "affiliations": []
       },
       {
@@ -1764,7 +1771,7 @@
             "【内部约束·不入正文】蝎尾在 03b–04b 不写（原著第一次实战使用在第91章 L13687）。",
             "【内部约束·不入正文】不写万舞的性化细节，不写身体部位的性化描写。",
             "【内部约束·不入正文】自称族长阿依苏荔，旁人叫她「苏荔」；程宗扬叫她「苏荔族长」（第63章 L9347）。",
-            "【内部约束·不入正文】刺杀鬼巫王的意图要到第59章才由她亲口承认，此前不点破。"
+            "【内部约束·不入正文】刺杀鬼巫王的意图在第49章已对程宗扬、武二郎亲口说出。"
           ]
         },
         "realm": "练气",
@@ -1922,11 +1929,11 @@
       {
         "id": "lcq.character.nanhuang_heishe",
         "name": "黑舌",
-        "role": "碧鲮族人",
+        "role": "阁罗的随从，隶属鬼王峒",
         "profile": {
-          "origin": "碧鲮族人"
+          "origin": "阁罗的随从，隶属鬼王峒"
         },
-        "description": "碧鲮族人",
+        "description": "阁罗的随从，隶属鬼王峒",
         "affiliations": []
       },
       {
@@ -1952,11 +1959,11 @@
       {
         "id": "lcq.character.nanhuang_dagu",
         "name": "达古",
-        "role": "鬼王峒武士",
+        "role": "鬼王峒巫师",
         "profile": {
-          "origin": "鬼王峒武士"
+          "origin": "鬼王峒巫师"
         },
-        "description": "鬼王峒武士",
+        "description": "鬼王峒巫师",
         "affiliations": []
       },
       {
@@ -2656,7 +2663,8 @@
           "lcq.event.s04b_lingfei_baiyi_crisis_02",
           "lcq.event.s04b_lingfei_baiyi_crisis_03",
           "lcq.event.s04b_lingfei_baiyi_crisis_04",
-          "lcq.event.s04b_lingfei_baiyi_crisis_05"
+          "lcq.event.s04b_lingfei_baiyi_crisis_05",
+          "lcq.event.zhu88_heimohai_chat"
         ]
       },
       {
@@ -2720,7 +2728,8 @@
           "lcq.event.yiyang_repels_yinsha",
           "lcq.event.huamiao_coop_boundary",
           "lcq.event.guiwangdong_coop_pact",
-          "lcq.event.enter_dong_with_migu"
+          "lcq.event.enter_dong_with_migu",
+          "lcq.event.zhu88_heimohai_chat"
         ],
         "activation": [
           {
@@ -3122,13 +3131,13 @@
                 },
                 "evidence": {
                   "identity.rank": "人物卡：谢艺为星月湖八骏，并提供碧鲮线索。",
-                  "personality.honor": "本拍护的是她给过线索的那一族。",
+                  "personality.honor": "本拍护的是他给过线索的那一族。",
                   "personality.caution": "本拍不把纸公开给三族同时看。",
                   "personality.ambition": "人物卡：八骏。",
                   "motives.legitimacy": "本拍要碧鲮先知情。",
                   "motives.stability": "本拍仍要避免当场撕破。",
                   "resources.influence": "人物卡：八骏。",
-                  "resources.intelligence": "axisBeat：她提供碧鲮线索。",
+                  "resources.intelligence": "axisBeat：他提供碧鲮线索。",
                   "resources.wealth": "本拍不买纸。",
                   "resources.troops": "本拍有随行武力。",
                   "agendas.agenda.lcq.s04b_04.xie.clock": "纸已出现，通报尚未发生。"
@@ -3321,11 +3330,11 @@
                 "liuchao.character.xie_yi"
               ],
               "whyNow": "谢艺手里有碧鲮的线。先让这一族知情，等于在三族里先站了一边。",
-              "nextStep": "把纸的存在先告诉谢艺，由她通报碧鲮，不走云家中立匣。",
+              "nextStep": "把纸的存在先告诉谢艺，由他通报碧鲮，不走云家中立匣。",
               "stakes": "碧鲮会记你先通报；另外两族若事后得知，会把你看成偏过一边。",
               "rewardPreview": "取得一次经谢艺向碧鲮先期通报的权限。",
               "futureHint": "以后碧鲮再听到南荒的风声，会先问当时是谁让他们早知道。",
-              "actionText": "我追踪“让谢艺先通报碧鲮”：把纸的存在先交给她，不走云家中立匣。",
+              "actionText": "我追踪“让谢艺先通报碧鲮”：把纸的存在先交给他，不走云家中立匣。",
               "rewardKey": "permission.lcq.biyu.first_brief",
               "rewardLabel": "碧鲮·先期传讯通报",
               "trigger": {
@@ -3348,7 +3357,7 @@
                       {
                         "id": "tell_xie_about_parchment",
                         "label": "告知谢艺",
-                        "actionText": "我把空白羊皮的存在先告诉谢艺，请她决定如何通报碧鲮。",
+                        "actionText": "我把空白羊皮的存在先告诉谢艺，请他决定如何通报碧鲮。",
                         "timeCost": 1
                       }
                     ],
@@ -3733,7 +3742,7 @@
       },
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_11",
-        "name": "血虎现身",
+        "name": "认出血虎",
         "description": "被鬼王峒改造的易虎出现并攻击武二郎，易彪唤醒兄长失败。",
         "axisId": "qingyu.65.2",
         "axisAnchor": "六朝清羽记·#65·第63章·陷阱",
@@ -4190,11 +4199,11 @@
       {
         "id": "lcq.event.s04b_lingfei_baiyi_crisis_18",
         "name": "谢艺谈旧事",
-        "description": "谢艺以现代装扮出现，向程宗扬谈及玻璃技术、岳帅晕血及遗腹女秘密。",
+        "description": "谢艺以现代装扮出现，向程宗扬谈及玻璃技术、岳帅晕血，以及岳帅有一名遗腹女的旧事，尚未确认女儿是谁。",
         "axisId": "qingyu.74.1",
         "axisAnchor": "六朝清羽记·#74·第72章·大潮",
         "axisSeq": 121,
-        "axisBeat": "谢艺以现代休闲装扮出现，与程宗扬讨论玻璃制造技术，并透露岳帅晕血及遗腹女等秘密。",
+        "axisBeat": "谢艺以现代休闲装扮出现，与程宗扬讨论玻璃制造技术，并谈及岳帅晕血及留有遗腹女的旧事，尚未确认女儿是谁。",
         "critical": true,
         "completion": [
           {
@@ -4602,14 +4611,14 @@
                   "阁罗": "阁罗"
                 },
                 "worldFacts": [
-                  "小紫母系已演出：碧奴的女儿"
+                  "小紫母系已演出：碧姬的女儿"
                 ]
               },
               "fixedFacts": [
                 "你与使者谈兵器生意",
                 "他这才自报姓名：我叫阁罗，是鬼巫王大人的仆从",
                 "他要一成利润，交易的边界就此谈清",
-                "阁罗当面称小紫为“碧奴的女儿”，小紫提起自己的阿娘。程宗扬由此听清她的母亲是碧奴。"
+                "阁罗当面称小紫为“碧奴的女儿”，小紫提起自己的阿娘。程宗扬由此听清她的母亲是碧姬。"
               ],
               "factChecks": [
                 [
@@ -4628,7 +4637,7 @@
                   "女儿"
                 ]
               ],
-              "fallbackText": "你与使者谈兵器生意。他这才自报姓名：我叫阁罗，是鬼巫王大人的仆从。他要一成利润，交易的边界就此谈清。阁罗看向小紫，称她“碧奴的女儿”。小紫说自己许久没见阿娘了。你这才听清小紫与碧奴的母女关系。"
+              "fallbackText": "你与使者谈兵器生意。他这才自报姓名：我叫阁罗，是鬼巫王大人的仆从。他要一成利润，交易的边界就此谈清。阁罗看向小紫，称她“碧奴的女儿”。小紫说自己许久没见阿娘了。你这才听清小紫与碧姬的母女关系。"
             }
           ]
         }
@@ -5967,6 +5976,107 @@
           ]
         },
         "locationId": "liuchao.location.baiyi"
+      },
+      {
+        "id": "lcq.event.zhu88_heimohai_chat",
+        "name": "朱老头聊黑魔海",
+        "description": "白夷停留时，朱老头主动聊起鸟人与黑魔海旧闻；装不识字，把王哲无字信笺丢回，转头讨钱。",
+        "axisAnchor": "六朝清羽记·第65章·杀星",
+        "critical": false,
+        "locationId": "liuchao.location.baiyi",
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.shang_zhen_yu"
+        ],
+        "conditions": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_13.done",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_14.done",
+            "operator": "neq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.zhu88_heimohai_chat.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "objective": "听朱老头聊聊黑魔海旧闻",
+        "exploration": {
+          "role": "seed"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_heimohai_old_tale",
+              "label": "听朱老头聊聊黑魔海旧闻",
+              "actionText": "我坐下来，听朱老头聊聊黑魔海的旧事。",
+              "timeCost": 1,
+              "requiresPresentCharacterIds": [
+                "liuchao.character.shang_zhen_yu"
+              ],
+              "visibleWhen": [
+                {
+                  "path": "flags.event.s04b_lingfei_baiyi_crisis_13.done",
+                  "operator": "eq",
+                  "value": true
+                },
+                {
+                  "path": "flags.event.s04b_lingfei_baiyi_crisis_14.done",
+                  "operator": "neq",
+                  "value": true
+                },
+                {
+                  "path": "角色.位置.描述",
+                  "operator": "includes",
+                  "value": "白夷"
+                }
+              ],
+              "cast": {
+                "present": [
+                  "朱老头"
+                ]
+              },
+              "sceneLocation": "白夷城停留处",
+              "fixedFacts": [
+                "朱老头主动问起鸟人并讲黑魔海旧事",
+                "王哲无字信笺被揉皱丢回，不丢失、不揭信文",
+                "不提毒宗、不指路、不支付钱款"
+              ],
+              "forceFixed": true,
+              "fallbackText": "朱老头蹲在角落里，啃着果核，主动问你：“我听小刚子说，你们前两天在山顶撞见个长翅膀的鸟人？哪儿来的？”\n你答：“黑魔海送信的。”\n“黑魔海？”他嘿嘿笑起来，“骗谁呢。”\n你问他是不是知道黑魔海。他说十几年前那些人很威风，擅长采阴补阳、开鼎炼丹、使毒作法，与光明观堂没少别苗头；后来惹上岳帅，被带人连根铲掉。他吐掉果核，摊开手：“说了这么多，怎么也值几个银铢吧？”\n你起身要走，他又拉住你问信在哪里，吹嘘自己上过学。你取出王哲留下的无字信笺。他翻来覆去看了几遍，指着纸上的线格装模作样；你让他找出一个字，他便把信揉成一团丢回你手里：“不看了，不看了。还是说说钱的事儿，小程子……”\n你接回信笺。他讲了些旧事，又把话绕回欠款，没有交给你任何门路。",
+              "outcomeText": {
+                "success": "你听过朱老头的黑魔海旧闻，收回了无字信笺。",
+                "partial": "这次闲聊不产生部分结算。",
+                "failure": "这次闲聊不产生失败结算。"
+              },
+              "factChecks": [
+                [
+                  "朱老头"
+                ],
+                [
+                  "黑魔海"
+                ],
+                [
+                  "无字信笺"
+                ],
+                [
+                  "钱"
+                ]
+              ]
+            }
+          ]
+        }
       }
     ],
     "worldSimulation": {
@@ -6595,7 +6705,7 @@
             "afterTurns": 1,
             "observableFacts": [
               "阿夕神色恍惚，应答对不上前后",
-              "程宗扬堵住谢艺，追问她的异常",
+              "程宗扬堵住谢艺，追问阿夕的异常",
               "谢艺承认设计过接触，后话收住"
             ],
             "transmitters": [

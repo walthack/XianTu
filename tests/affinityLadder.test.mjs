@@ -619,7 +619,7 @@ test('滞回状态持久化进 runtime 并跨关继承', async () => {
   const fs = await import('node:fs');
   const runtimeSrc = fs.readFileSync(new URL('../src/modules/scenarioMods/runtime.ts', import.meta.url), 'utf8');
   assert.match(runtimeSrc, /updateStanceStates\(next, runtime/, '每回合须推进姿态');
-  assert.match(runtimeSrc, /rt\.stanceStates\[name\] = projectStance/, '须调用滞回函数并落状态');
+  assert.match(runtimeSrc, /rt\.stanceStates\[id\] = projectStance/, '须调用滞回函数并落状态');
   const initSrc = fs.readFileSync(new URL('../src/modules/scenarioMods/strictInitializer.ts', import.meta.url), 'utf8');
   assert.match(initSrc, /stanceSnapshot/, '切关须快照姿态状态');
   assert.match(initSrc, /newRuntime\.stanceStates/, '切关须恢复姿态状态');

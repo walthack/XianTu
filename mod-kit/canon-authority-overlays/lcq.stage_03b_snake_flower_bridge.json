@@ -601,20 +601,6 @@
           "region": "宋国"
         },
         {
-          "id": "liuchao.location.gui_wang_dong",
-          "name": "鬼王峒",
-          "description": "鬼巫王统治的洞窟，龙神出没之地。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-          "type": "洞府",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.gui_wang_dong",
-          "coordinates": {
-            "x": 1641,
-            "y": 8690
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
           "id": "liuchao.location.south_wild_valley",
           "name": "南荒山谷",
           "description": "龙神坠落之地。",
@@ -637,19 +623,6 @@
             "y": 4960
           },
           "features": []
-        },
-        {
-          "id": "liuchao.location.biyu",
-          "name": "碧鲮族",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
-          "coordinates": {
-            "x": 1824,
-            "y": 8592
-          },
-          "features": [],
-          "region": "南荒"
         },
         {
           "id": "liuchao.location.gui_wang_gong",
@@ -2417,7 +2390,7 @@
             "lcq.item.np012"
           ],
           "profile": {
-            "appearance": "下巴有胡茬",
+            "appearance": "白湖商馆执事，奉苏妲己之命带队走南荒找霓龙丝。",
             "personality": [
               "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
               "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
@@ -2508,7 +2481,7 @@
               "【性癖】因为修炼凤凰宝典，保留元红，只和男主肛交（被插入屁眼）",
               "【身体】床笫间最自然娇羞的少女反应；治愈系依恋"
             ],
-            "appearance": "娇小玲珑、娇憨稚气的童颜，却有一对与身材极不相称、宏伟肥美的大胸（常引调戏名场面）；皮肤细腻白皙",
+            "appearance": "戴着面纱的成年花苗新娘。",
             "personality": [
               "娇憨可爱",
               "小市侩小财迷",
@@ -2518,7 +2491,7 @@
               "纯真无算计",
               "对性事缺乏概念，容易被主角哄骗"
             ],
-            "origin": "太乙真宗边缘分支弟子，潘金莲/义姁同门"
+            "origin": "光明观堂弟子，潘金莲/义姁同门"
           }
         },
         {
@@ -2802,8 +2775,8 @@
         {
           "id": "lcq.character.np003",
           "name": "吴战威",
-          "role": "新任直属营执事",
-          "description": "新任直属营执事的脚步声刚踏进营帐，甲胄上的灰尘和血渍便让所有老兵眯起了眼——这人的刀鞘比他们的更旧。",
+          "role": "白湖商馆护卫",
+          "description": "白湖商馆护卫，随商队进入南荒",
           "profile": {
             "attributes": {
               "rootBone": 7,
@@ -2824,7 +2797,7 @@
                 "description": "瞳孔是刻录镜，每次眨眼就烙印宇宙法则，他看书如吃饭，记忆在脑海筑起书山。"
               }
             ],
-            "origin": "程宗扬手下头目之一；盘江程氏成员",
+            "origin": "白湖商馆护卫，随商队进入南荒",
             "personality": [
               "粗豪直爽",
               "好色贪花",
@@ -2832,7 +2805,7 @@
               "没正经",
               "对朋友讲义气，有忠心"
             ],
-            "appearance": "体格粗壮，肤色黝黑，背脊黝黑发亮并有多道伤痕，并非俊秀白净的小白脸类型。",
+            "appearance": "白湖商馆护卫，随商队进入南荒",
             "notes": [
               "【性癖】喜好美色，不拒风流（与歌姬苟合）",
               "【身体】背脊有多道伤痕"
@@ -2961,8 +2934,8 @@
         {
           "id": "lcq.character.np004",
           "name": "易彪",
-          "role": "护卫",
-          "description": "易彪握着刀沉默地站在商队阴影里，他不需要开口，那道从北境战场带回来的疤痕便替他说完了所有威慑。",
+          "role": "云氏商会护卫",
+          "description": "云氏商会护卫，与商队同行",
           "profile": {
             "attributes": {
               "rootBone": 8,
@@ -2983,14 +2956,14 @@
                 "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
               }
             ],
-            "origin": "北府兵军官",
+            "origin": "云氏商会护卫，与商队同行",
             "personality": [
               "沉默寡言",
               "忠厚老实",
               "易害羞",
               "坚韧"
             ],
-            "appearance": "铁铮铮的汉子，平日沉默寡言"
+            "appearance": "云氏商会护卫，与商队同行"
           },
           "realm": "金丹",
           "gender": "男",
@@ -3015,8 +2988,8 @@
         {
           "id": "lcq.character.np006",
           "name": "阁罗",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "profile": {
             "attributes": {
               "rootBone": 7,
@@ -3047,7 +3020,7 @@
             "notes": [
               "【性癖】施虐；肛交；强迫；姐妹同淫；观看羞辱"
             ],
-            "origin": "鬼王峒首领"
+            "origin": "鬼巫王的仆从"
           },
           "realm": "筑基",
           "gender": "男",
@@ -3216,7 +3189,7 @@
               "role": "与巫宗关联者"
             }
           ],
-          "locationId": "liuchao.location.gui_wang_dong",
+          "locationId": "liuchao.location.guiwang_dong",
           "skillIds": [
             "liuchao.skill.gui_yu_sword"
           ],
@@ -3266,10 +3239,10 @@
           "name": "龙神",
           "description": "上古龙神自星阵中降临，庞大的阴影碾碎凡人的傲慢，鬼巫王的献祭不过是为自己掘墓——祂会吞噬一切胆敢觊觎神力的蝼蚁。",
           "role": "神兽",
-          "gender": "男",
+          "gender": "无",
           "realm": "化神",
           "affiliations": [],
-          "locationId": "liuchao.location.gui_wang_dong",
+          "locationId": "liuchao.location.guiwang_dong",
           "skillIds": [],
           "techniqueIds": [],
           "itemIds": [],
@@ -3301,7 +3274,8 @@
               "恶毒",
               "精力旺盛"
             ]
-          }
+          },
+          "entityType": "creature"
         },
         {
           "id": "liuchao.character.xiao_yao_yi",
@@ -3375,8 +3349,8 @@
         {
           "id": "liuchao.character.qin_hui",
           "name": "秦桧",
-          "role": "程宗扬的谋士/大奸臣",
-          "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
+          "role": "熊耳铺候选向导文士",
+          "description": "熊耳铺的候选向导文士",
           "profile": {
             "attributes": {
               "rootBone": 7,
@@ -3411,11 +3385,11 @@
               "机敏灵动",
               "遇明主忠义，遇昏主奸术自保"
             ],
-            "origin": "殇侯指派给程宗扬的第一智囊/家主伴当",
+            "origin": "熊耳铺的候选向导文士",
             "notes": [
               "【势力】殇侯旧部、黑魔海毒宗出身(其资源/功法传承后归程宗扬)（字会之）"
             ],
-            "appearance": "举止温文尔雅，外形讨好，发须整齐，仪表翩翩，气度不凡。"
+            "appearance": "熊耳铺的候选向导文士"
           },
           "realm": "化神",
           "gender": "男",
@@ -3440,8 +3414,8 @@
         {
           "id": "liuchao.character.wu_san_gui",
           "name": "吴三桂",
-          "role": "程宗扬手下",
-          "description": "吴三桂是星月湖大营中程宗扬直属的军士，沉默如铁，随时待命，刀锋映着营帐的灯火，不显山露水却是主子最锋利的爪牙。",
+          "role": "熊耳铺候选向导武士",
+          "description": "熊耳铺的候选向导武士",
           "profile": {
             "attributes": {
               "rootBone": 9,
@@ -3462,14 +3436,14 @@
                 "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
               }
             ],
-            "origin": "殇侯麾下将领，后受命跟随程宗扬",
+            "origin": "熊耳铺的候选向导武士",
             "personality": [
               "果敢干练",
               "剽悍好胜",
               "忠直耿介",
               "豪爽"
             ],
-            "appearance": "身材强壮，但腰背微微佝偻，在猛士如林的精锐中并不起眼。神情剽悍。",
+            "appearance": "熊耳铺的候选向导武士",
             "notes": [
               "【势力】殇侯旧部、黑魔海毒宗出身（字长伯）"
             ]
@@ -3502,7 +3476,7 @@
         {
           "id": "liuchao.character.shang_zhen_yu",
           "name": "殇侯",
-          "role": "王侯",
+          "role": "老向导",
           "description": "殇侯常年一副威严尊贵的老年男子模样，身姿挺拔如布衣王侯，双目精光四射却深陷于眼眶，左手扶玉带，指戴翠绿戒指；他城府深不可测，手腕高明，言语间严厉直接，洞察力敏锐，仿佛一眼便能看穿人心，而外表可任意变换，必要时又会化作一个猥琐佝偻的朱老头，裹着破旧葛袍，混迹于市井之间。（真身殇振羽，即殇侯一系）",
           "profile": {
             "attributes": {
@@ -3528,7 +3502,7 @@
                 "description": "殇侯的专属异能。"
               }
             ],
-            "appearance": "平时伪装成佝偻猥琐的朱老头，穿破旧葛袍；真实形态挺直肩背，散发傲气，如布衣王侯。",
+            "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。",
             "personality": [
               "冷傲",
               "自负",
@@ -4375,7 +4349,7 @@
               "role": "厨师"
             }
           ],
-          "locationId": "liuchao.location.gui_wang_dong",
+          "locationId": "liuchao.location.guiwang_dong",
           "profile": {
             "origin": "红苗族厨师",
             "personality": [
@@ -4615,10 +4589,10 @@
         {
           "id": "lcq.character.np003",
           "name": "吴战威",
-          "role": "商队同行刀客",
-          "description": "商队同行刀客",
+          "role": "白湖商馆护卫，随商队进入南荒",
+          "description": "白湖商馆护卫，随商队进入南荒",
           "profile": {
-            "origin": "商队同行刀客",
+            "origin": "白湖商馆护卫，随商队进入南荒",
             "personality": [
               "粗豪直爽",
               "好色贪花",
@@ -4634,30 +4608,30 @@
         {
           "id": "lcq.character.nanhuang_xiaowei",
           "name": "小魏",
-          "role": "云氏护卫",
+          "role": "白湖商馆护卫",
           "profile": {
-            "origin": "云氏护卫"
+            "origin": "白湖商馆护卫"
           },
-          "description": "云氏护卫",
+          "description": "白湖商馆护卫",
           "affiliations": []
         },
         {
           "id": "lcq.character.nanhuang_shigang",
           "name": "石刚",
-          "role": "云氏护卫",
+          "role": "白湖商馆护卫",
           "profile": {
-            "origin": "云氏护卫"
+            "origin": "白湖商馆护卫"
           },
-          "description": "云氏护卫",
+          "description": "白湖商馆护卫",
           "affiliations": []
         },
         {
           "id": "lcq.character.np004",
           "name": "易彪",
-          "role": "云氏护卫",
-          "description": "云氏护卫",
+          "role": "云氏商会护卫，与商队同行",
+          "description": "云氏商会护卫，与商队同行",
           "profile": {
-            "origin": "云氏护卫",
+            "origin": "云氏商会护卫，与商队同行",
             "personality": [
               "沉默寡言",
               "忠厚老实",
@@ -4858,10 +4832,10 @@
         {
           "id": "liuchao.character.qin_hui",
           "name": "秦桧",
-          "role": "候选向导",
-          "description": "候选向导",
+          "role": "熊耳铺的候选向导文士",
+          "description": "熊耳铺的候选向导文士",
           "profile": {
-            "origin": "候选向导",
+            "origin": "熊耳铺的候选向导文士",
             "personality": [
               "胸有城府",
               "精明狡黠",
@@ -4880,10 +4854,10 @@
         {
           "id": "liuchao.character.wu_san_gui",
           "name": "吴三桂",
-          "role": "候选向导",
-          "description": "候选向导",
+          "role": "熊耳铺的候选向导武士",
+          "description": "熊耳铺的候选向导武士",
           "profile": {
-            "origin": "候选向导",
+            "origin": "熊耳铺的候选向导武士",
             "personality": [
               "果敢干练",
               "剽悍好胜",
@@ -7542,6 +7516,1026 @@
             ]
           },
           "locationId": "lcq.location.huamiao_village"
+        }
+      ]
+    },
+    {
+      "op": "set",
+      "path": "canon.factions",
+      "from": [
+        {
+          "id": "liuchao.faction.bai_hu_shang_guan",
+          "name": "白湖商馆",
+          "description": "五原城商馆，程宗扬所属。",
+          "type": "商馆",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.guang_ming_guan_tang",
+          "name": "光明观堂",
+          "description": "乐明珠所属的医道门派。",
+          "type": "宗门",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.biyu",
+          "name": "碧鲮族",
+          "description": "南荒海族，已衰落。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.gui_wang_dong",
+          "name": "鬼王峒",
+          "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。部族出自大地深处（凿岩而居、食青苔饮硫磺水）；与蛇彝人有灭族级血仇（部族女性曾被蛇彝灭绝殆尽）；得龙神庇护方存续至今。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xing_yue_hu",
+          "name": "星月湖",
+          "description": "星月湖，岳帅旧部所在。",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.jiangzhou",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hei_mo_hai",
+          "name": "黑魔海",
+          "description": "魔道宗派/黑魔海教众自称；总部/据点：未知；目标：大兴圣教，迎回魔尊，完成大祭；核心：魔尊（真身未明确）、剑玉姬（高层智囊/巫宗核心）、殇侯/殇君（毒宗元老）、泉玉姬（黑魔海玉姬之一）；人物：殇侯/殇君（毒宗元老）、小紫（毒宗唯一嫡脉）、齐羽仙（巫宗成员）、泉玉姬（玉姬之一）、游婵（黑魔海分部下级小头目，负责和飞鸟翔/飞鸟熊藏接头）、鱼朝恩（毒宗成员）、古冥隐（黑魔海供奉）；与程宗扬：敌对关系，程宗扬为圣教死敌，杀圣教供奉屈无伏，破坏圣教在晋国安插的人手，圣教下令血债血偿",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.nanzhao",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7700
+            }
+          ],
+          "features": [
+            "鼎炉献祭（玉姬/姬奴服侍主人）",
+            "洗脑脑控（通过赐药/秘术控制成员）",
+            "玉姬容器（剑玉姬、泉玉姬等作为容器/工具）",
+            "秘制神药（教母亲自赐药，神效无比）",
+            "巫毒双修（教主兼巫毒二宗之秘）"
+          ]
+        },
+        {
+          "id": "liuchao.faction.bai_wu",
+          "name": "白武族",
+          "description": "武二郎所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hua_miao",
+          "name": "花苗族",
+          "description": "苏荔所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hong_miao",
+          "name": "红苗族",
+          "description": "南荒苗族分支之一，本关作为萨安、丹宸等鬼王宫线索的族属背景出现。",
+          "type": "部族",
+          "level": "地方部族",
+          "features": [
+            "南荒部族",
+            "与鬼王峒冲突牵连",
+            "红苗厨师萨安提供潜入线索"
+          ]
+        },
+        {
+          "id": "liuchao.faction.pan_jiang_cheng",
+          "name": "盘江程氏",
+          "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.yun_shi_shang_hui",
+          "name": "云氏商会",
+          "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.tai_yi_zhen_zong",
+          "name": "太乙真宗",
+          "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x12f7726f47",
+          "name": "申服君封地",
+          "description": "申服君封地（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x898ded5bf1",
+          "name": "少陵侯府",
+          "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x8b538653d9",
+          "name": "殇侯势力",
+          "description": "黑魔海毒宗旗下的一个分支——殇侯（鸩羽殇侯·殇振羽）的私人班底，成员忠心于殇侯个人而非毒宗建制，**不等同于毒宗**。背景：黑魔海分巫、毒二宗且向来不睦（巫宗之主=秘御天王，外堂总执事=剑玉姬），两宗曾有内斗。核心成员：秦桧（门客二十余年，习毒宗绝学惊魔指）、石敬瑭（近卫/代理人）、仇雍；小紫幼时托庇殇侯门下，被殇侯指定为毒宗嫡传。",
+          "type": "宗门分支",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.cheng_shi_shang_hui",
+          "name": "程氏商会",
+          "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x7ef38c734e",
+          "name": "影月宗",
+          "description": "影月宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x4e30686b32",
+          "name": "临川王势力",
+          "description": "临川王势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyl.faction.pengyi",
+          "name": "鹏翼社",
+          "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.wuyang_houfu",
+          "name": "舞阳侯府",
+          "description": "舞阳侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.jin_state",
+          "name": "晋国",
+          "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x37741bab36",
+          "name": "石家（金谷园）",
+          "description": "石家（金谷园）（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x2d33e1eaf9",
+          "name": "程宗扬势力",
+          "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x874bfaa9da",
+          "name": "平山宗",
+          "description": "平山宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xue_sun",
+          "name": "雪隼佣兵团",
+          "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0ba5d2439c",
+          "name": "泊陵鱼氏",
+          "description": "泊陵鱼氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x94cc3fdd7b",
+          "name": "混元观",
+          "description": "混元观（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.dragon_chen",
+          "name": "龙宸",
+          "description": "杀手集团/刺客组织；总部/据点：晴州；目标：绝对中立，只为金铢服务，不涉及任何立场；核心：座主（真身未明）,长老焚无尘；架构：外围：三十六妖星（其他门派弃徒）；核心：二十八宿正星等；手段：色诱术,隐匿形迹,刺杀,暗杀法门,标记召唤；人物：虞白樱,虞紫薇,焚无尘,牛金牛,虚日鼠,女土蝠,室火猪,壁水貐,斗木獬,危月燕,惊理,罂奴；与程宗扬：敌对，程宗扬多次与龙宸杀手冲突，但亦有短暂合作（如请焚无尘开启魔墟禁制）；关键事件：龙宸刺杀岳鸟人及程宗扬同伴,与黑魔海联手袭击云家,在伊水之战中派遣六名杀手刺杀程宗扬,焚无尘被程宗扬设计击杀于太泉古阵。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe6bd0066c9",
+          "name": "小紫势力",
+          "description": "小紫势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.qin_state",
+          "name": "秦国",
+          "description": "秦国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0f21ed0f98",
+          "name": "太原王家",
+          "description": "太原王家（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe9675069af",
+          "name": "香竹寺",
+          "description": "香竹寺（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.song_state",
+          "name": "宋国",
+          "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x5a4fdd48cd",
+          "name": "选锋营",
+          "description": "选锋营（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.tiance_fu",
+          "name": "皇图天策府",
+          "description": "皇图天策府（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.jin_jun",
+          "name": "禁军",
+          "description": "隶属萧侯（萧遥逸之父）统领；皇城守卫禁军，兵力八千余人，兵甲精良胜过北府兵，守卫台城外廷；主将：萧侯；戒备森严，明哨暗哨俱全，由萧侯亲自训练布置，守卫台城宫禁。",
+          "type": "军队",
+          "features": [],
+          "polity": "晋国",
+          "region": "晋国"
+        },
+        {
+          "id": "lcq.faction.left_guard",
+          "name": "左武军",
+          "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
+          "type": "军队",
+          "features": [],
+          "polity": "大汉/六朝",
+          "region": "跨国（草原域外作战）"
+        },
+        {
+          "id": "liuchao.faction.x56f82fa2b5",
+          "name": "羽林军",
+          "description": "天子亲领；与期门武士并为最可靠兵力；太后、吕氏亦曾插手其人事安排；天子亲军/禁军；驻扎上林苑；设右营骑射等编制；兵力分散驻守各宫观；主将：义纵（右营骑射）、冯子都（羽林郎）、王子方（羽林郎）、霍少将军（后接管）；天子亲领精锐；盔带长羽；骑射为主；被视为最可靠兵力；可争取为皇位支撑。",
+          "type": "军队",
+          "features": [],
+          "polity": "汉国",
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.faction.x89db5b6118",
+          "name": "兰陵萧氏",
+          "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x739323b7a6",
+          "name": "八骏",
+          "description": "八骏（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x96f008a7cb",
+          "name": "捧日军",
+          "description": "宋国朝廷禁军，枢密院调兵，太尉府练兵，属上四军之一；宋国禁军精锐上四军之一，额定五万人编制，主力为步骑混编，骑兵额定八千但实有不足四千；设左厢、右厢，下辖数军；主将：夏用和（捧日军主将，绰号夏夜眼）、刘平（捧日左厢主将，前锋主将）、郭遵（第六军指挥使）、王信（第三军都指挥使）、卢政（第七军都指挥使）；禁军精锐，骑兵为主但战马短缺；采用募兵制、兵将分离制度；遭星月湖游击队袭扰，在烈山迟滞多日，伤亡数百人仍难突破。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.x14484c1b02",
+          "name": "龙卫军",
+          "description": "隶属宋国朝廷，枢密院调兵，太尉府练兵；宋国禁军上四军之一，野战精锐；左厢八军约两万人；右厢另有数军；总计参与江州之战约五万人；主将：任福（龙卫军左厢都指挥使）、葛怀敏（右厢指挥使）、桑怿（左厢第一军指挥使）、常鼎（左厢第四军指挥使）、刘肃（左厢第五军指挥使）、王庆（左厢第六军指挥使）、朱观（左厢第二军指挥使）、武英（左厢第三军指挥使）、赵津（左厢第七军指挥使）、王珪（左厢第八军指挥使）、任怀亮（任福之子，左厢军士）；宋军精锐禁军，兵将分离制度；缺乏神臂弓装备；好水川之战被星月湖大营以铁丝网、伏兵、地形分割围歼，左厢主将任福阵亡。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.bai_yi",
+          "name": "白夷",
+          "description": "南荒部族，出产珍珠与美玉。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.baiyi"
+        }
+      ],
+      "to": [
+        {
+          "id": "liuchao.faction.bai_hu_shang_guan",
+          "name": "白湖商馆",
+          "description": "五原城商馆，程宗扬所属。",
+          "type": "商馆",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.guang_ming_guan_tang",
+          "name": "光明观堂",
+          "description": "花苗新娘所属的医道门派。",
+          "type": "宗门",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.biyu",
+          "name": "碧鲮族",
+          "description": "南荒海族，已衰落。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.gui_wang_dong",
+          "name": "鬼王峒",
+          "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。部族出自大地深处（凿岩而居、食青苔饮硫磺水）；与蛇彝人有灭族级血仇（部族女性曾被蛇彝灭绝殆尽）；得龙神庇护方存续至今。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xing_yue_hu",
+          "name": "星月湖",
+          "description": "星月湖，岳帅旧部所在。",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.jiangzhou",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hei_mo_hai",
+          "name": "黑魔海",
+          "description": "这一势力的成员与来历尚未向玩家披露。",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.nanzhao",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7700
+            }
+          ],
+          "features": [
+            "鼎炉献祭（玉姬/姬奴服侍主人）",
+            "洗脑脑控（通过赐药/秘术控制成员）",
+            "玉姬容器（剑玉姬、泉玉姬等作为容器/工具）",
+            "秘制神药（教母亲自赐药，神效无比）",
+            "巫毒双修（教主兼巫毒二宗之秘）"
+          ]
+        },
+        {
+          "id": "liuchao.faction.bai_wu",
+          "name": "白武族",
+          "description": "武二郎所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hua_miao",
+          "name": "花苗族",
+          "description": "苏荔所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hong_miao",
+          "name": "红苗族",
+          "description": "南荒苗族分支之一，本关作为萨安、丹宸等鬼王宫线索的族属背景出现。",
+          "type": "部族",
+          "level": "地方部族",
+          "features": [
+            "南荒部族",
+            "与鬼王峒冲突牵连",
+            "红苗厨师萨安提供潜入线索"
+          ]
+        },
+        {
+          "id": "liuchao.faction.pan_jiang_cheng",
+          "name": "盘江程氏",
+          "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.yun_shi_shang_hui",
+          "name": "云氏商会",
+          "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.tai_yi_zhen_zong",
+          "name": "太乙真宗",
+          "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x12f7726f47",
+          "name": "申服君封地",
+          "description": "申服君封地（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x898ded5bf1",
+          "name": "少陵侯府",
+          "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x8b538653d9",
+          "name": "未明来历的势力",
+          "description": "这一势力的成员与来历尚未向玩家披露。",
+          "type": "宗门分支",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.cheng_shi_shang_hui",
+          "name": "程氏商会",
+          "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x7ef38c734e",
+          "name": "影月宗",
+          "description": "影月宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x4e30686b32",
+          "name": "临川王势力",
+          "description": "临川王势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyl.faction.pengyi",
+          "name": "鹏翼社",
+          "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.wuyang_houfu",
+          "name": "舞阳侯府",
+          "description": "舞阳侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.jin_state",
+          "name": "晋国",
+          "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x37741bab36",
+          "name": "石家（金谷园）",
+          "description": "石家（金谷园）（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x2d33e1eaf9",
+          "name": "程宗扬势力",
+          "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x874bfaa9da",
+          "name": "平山宗",
+          "description": "平山宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xue_sun",
+          "name": "雪隼佣兵团",
+          "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0ba5d2439c",
+          "name": "泊陵鱼氏",
+          "description": "泊陵鱼氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x94cc3fdd7b",
+          "name": "混元观",
+          "description": "混元观（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.dragon_chen",
+          "name": "龙宸",
+          "description": "杀手集团/刺客组织；总部/据点：晴州；目标：绝对中立，只为金铢服务，不涉及任何立场；核心：座主（真身未明）,长老焚无尘；架构：外围：三十六妖星（其他门派弃徒）；核心：二十八宿正星等；手段：色诱术,隐匿形迹,刺杀,暗杀法门,标记召唤；人物：虞白樱,虞紫薇,焚无尘,牛金牛,虚日鼠,女土蝠,室火猪,壁水貐,斗木獬,危月燕,惊理,罂奴；与程宗扬：敌对，程宗扬多次与龙宸杀手冲突，但亦有短暂合作（如请焚无尘开启魔墟禁制）；关键事件：龙宸刺杀岳鸟人及程宗扬同伴,与黑魔海联手袭击云家,在伊水之战中派遣六名杀手刺杀程宗扬,焚无尘被程宗扬设计击杀于太泉古阵。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe6bd0066c9",
+          "name": "小紫势力",
+          "description": "小紫势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.qin_state",
+          "name": "秦国",
+          "description": "秦国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0f21ed0f98",
+          "name": "太原王家",
+          "description": "太原王家（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe9675069af",
+          "name": "香竹寺",
+          "description": "香竹寺（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.song_state",
+          "name": "宋国",
+          "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x5a4fdd48cd",
+          "name": "选锋营",
+          "description": "选锋营（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.tiance_fu",
+          "name": "皇图天策府",
+          "description": "皇图天策府（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.jin_jun",
+          "name": "禁军",
+          "description": "隶属萧侯（萧遥逸之父）统领；皇城守卫禁军，兵力八千余人，兵甲精良胜过北府兵，守卫台城外廷；主将：萧侯；戒备森严，明哨暗哨俱全，由萧侯亲自训练布置，守卫台城宫禁。",
+          "type": "军队",
+          "features": [],
+          "polity": "晋国",
+          "region": "晋国"
+        },
+        {
+          "id": "lcq.faction.left_guard",
+          "name": "左武军",
+          "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
+          "type": "军队",
+          "features": [],
+          "polity": "大汉/六朝",
+          "region": "跨国（草原域外作战）"
+        },
+        {
+          "id": "liuchao.faction.x56f82fa2b5",
+          "name": "羽林军",
+          "description": "天子亲领；与期门武士并为最可靠兵力；太后、吕氏亦曾插手其人事安排；天子亲军/禁军；驻扎上林苑；设右营骑射等编制；兵力分散驻守各宫观；主将：义纵（右营骑射）、冯子都（羽林郎）、王子方（羽林郎）、霍少将军（后接管）；天子亲领精锐；盔带长羽；骑射为主；被视为最可靠兵力；可争取为皇位支撑。",
+          "type": "军队",
+          "features": [],
+          "polity": "汉国",
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.faction.x89db5b6118",
+          "name": "兰陵萧氏",
+          "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x739323b7a6",
+          "name": "八骏",
+          "description": "八骏（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x96f008a7cb",
+          "name": "捧日军",
+          "description": "宋国朝廷禁军，枢密院调兵，太尉府练兵，属上四军之一；宋国禁军精锐上四军之一，额定五万人编制，主力为步骑混编，骑兵额定八千但实有不足四千；设左厢、右厢，下辖数军；主将：夏用和（捧日军主将，绰号夏夜眼）、刘平（捧日左厢主将，前锋主将）、郭遵（第六军指挥使）、王信（第三军都指挥使）、卢政（第七军都指挥使）；禁军精锐，骑兵为主但战马短缺；采用募兵制、兵将分离制度；遭星月湖游击队袭扰，在烈山迟滞多日，伤亡数百人仍难突破。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.x14484c1b02",
+          "name": "龙卫军",
+          "description": "隶属宋国朝廷，枢密院调兵，太尉府练兵；宋国禁军上四军之一，野战精锐；左厢八军约两万人；右厢另有数军；总计参与江州之战约五万人；主将：任福（龙卫军左厢都指挥使）、葛怀敏（右厢指挥使）、桑怿（左厢第一军指挥使）、常鼎（左厢第四军指挥使）、刘肃（左厢第五军指挥使）、王庆（左厢第六军指挥使）、朱观（左厢第二军指挥使）、武英（左厢第三军指挥使）、赵津（左厢第七军指挥使）、王珪（左厢第八军指挥使）、任怀亮（任福之子，左厢军士）；宋军精锐禁军，兵将分离制度；缺乏神臂弓装备；好水川之战被星月湖大营以铁丝网、伏兵、地形分割围歼，左厢主将任福阵亡。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.bai_yi",
+          "name": "白夷",
+          "description": "南荒部族，出产珍珠与美玉。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.baiyi"
         }
       ]
     }

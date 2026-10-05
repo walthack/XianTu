@@ -1,3 +1,4 @@
+import { backfillRelationshipIds, relationshipOf } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
 import { getRegistryAgeFacts, getRegistryNamesById } from './characterResolver';
 import { mergeFixedScenarioStarterInventory } from './fixedInventoryContracts';
@@ -167,6 +168,7 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
   const attributes = profile.attributes || {};
   const locationCoordinates = location?.coordinates;
   return {
+    角色ID: character.id,
     名字: character.name,
     性别: gender(character.gender),
     出生日期: { 年: currentYear - estimateNpcAge(character, currentYear), 月: 1, 日: 1 },
@@ -217,18 +219,23 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
 export function ensureEncounteredScenarioCharacter(saveData: SaveData, source: ScenarioRelationshipSource, characterId: string, encountered?: { name: string; gender: string }): void {
   const character = source.characters?.find(item => item.id === characterId)
     || (encountered ? { id: characterId, name: getRegistryNamesById(characterId)[0] || encountered.name, gender: encountered.gender } : undefined);
-  if (!character || saveData.社交?.关系?.[character.name]) return;
+  if (!character) return;
+  backfillRelationshipIds(saveData, source.characters);
+  const existing = relationshipOf(saveData, characterId);
+  if (existing) { existing.profile.名字 = character.name; return; }
   const profile = createNpcProfile(source, character, '相识', 0, saveData.元数据?.时间?.年 ?? 1000);
   // 初识只登记人物，不把角色卡的背景/未来经历当作玩家已知或 NPC 已说的话。
   profile.记忆 = [];
   profile.当前内心想法 = '未记录';
   (saveData as any).社交 ||= {};
   saveData.社交.关系 ||= {};
-  saveData.社交.关系[character.name] = profile as any;
+  saveData.社交.关系[character.id] = profile as any;
+  backfillRelationshipIds(saveData, source.characters);
 }
 
 export function applyScenarioRelationshipsToSave(saveData: SaveData, source: ScenarioRelationshipSource, generatedAt: string): SaveData {
   const next = saveData as SaveData & { 社交?: Record<string, any>; 元数据?: { 时间?: { 年?: number } } };
+  backfillRelationshipIds(saveData, source.characters);
   const currentYear = next.元数据?.时间?.年 ?? 1000;
   const characters = source.characters || [];
   const byId = new Map(characters.map(character => [character.id, character]));
@@ -246,20 +253,23 @@ export function applyScenarioRelationshipsToSave(saveData: SaveData, source: Sce
     const character = byId.get(characterId);
     if (!character) continue;
     const declared = playerRelations.find(item => item.characterId === characterId);
-    const existing = next.社交.关系[character.name] || {};
+    const identity = relationshipOf(saveData, characterId);
+    const key = characterId;
+    const existing = next.社交.关系[key] || {};
     const profile = createNpcProfile(source, character, declared?.relation || '陌生人', declared?.favorability || 0, currentYear);
-    next.社交.关系[character.name] = { ...profile, ...existing, 名字: character.name };
+    next.社交.关系[key] = { ...profile, ...existing, 名字: character.name };
     if (declared) {
-      next.社交.关系[character.name].与玩家关系 = declared.relation;
-      next.社交.关系[character.name].好感度 = declared.favorability;
-      next.社交.关系[character.name].记忆 = [...(next.社交.关系[character.name].记忆 || []), ...(declared.memories || [])];
+      next.社交.关系[key].与玩家关系 = declared.relation;
+      next.社交.关系[key].好感度 = declared.favorability;
+      next.社交.关系[key].记忆 = [...(next.社交.关系[key].记忆 || []), ...(declared.memories || [])];
     }
   }
 
+  backfillRelationshipIds(saveData, source.characters);
   const nodes = Array.from(new Set(Object.keys(next.社交.关系)));
   const edges = npcEdges.flatMap(edge => {
-    const from = byId.get(edge.fromCharacterId)?.name;
-    const to = byId.get(edge.toCharacterId)?.name;
+    const from = byId.get(edge.fromCharacterId)?.id;
+    const to = byId.get(edge.toCharacterId)?.id;
     if (!from || !to || edge.fromCharacterId === source.opening.playerCharacterId || edge.toCharacterId === source.opening.playerCharacterId) return [];
     return [{
       from,

@@ -45,9 +45,9 @@
             <div v-else class="person-list">
               <div
                 v-for="person in filteredRelationships"
-                :key="person.名字"
+                :key="person.角色ID"
                 class="person-card"
-                :class="{ selected: selectedPerson?.名字 === person.名字 }"
+                :class="{ selected: selectedPerson?.角色ID === person.角色ID }"
                 @click="selectPerson(person)"
               >
                 <div class="person-avatar">
@@ -1122,6 +1122,8 @@ const actionQueue = useActionQueueStore();
     from: string;
     to: string;
     relation?: string;
+    fromLabel?: string;
+    toLabel?: string;
     score?: number;
     tags?: string[];
     updatedAt?: string;
@@ -1152,7 +1154,7 @@ const actionQueue = useActionQueueStore();
     const name = anySave?.角色?.身份?.名字 || anySave?.角色?.名字;
     return typeof name === 'string' && name.trim() ? name.trim() : '玩家';
   });
-  const playerNodeId = '玩家';
+  const playerNodeId = computed(() => (characterData.value as any)?.世界?.状态?.剧本模组?.opening?.playerCharacterId || '$player');
 
   const relationshipMatrixEdges = computed<RelationshipMatrixEdge[]>(() => {
     const raw = (characterData.value as any)?.社交?.关系矩阵?.edges;
@@ -1162,6 +1164,8 @@ const actionQueue = useActionQueueStore();
       .map((e: any) => ({
         from: String(e.from ?? '').trim(),
         to: String(e.to ?? '').trim(),
+        fromLabel: typeof e.fromLabel === 'string' ? e.fromLabel : undefined,
+        toLabel: typeof e.toLabel === 'string' ? e.toLabel : undefined,
         relation: typeof e.relation === 'string' ? e.relation : undefined,
         score: typeof e.score === 'number' && Number.isFinite(e.score) ? e.score : undefined,
         tags: Array.isArray(e.tags) ? e.tags.filter((t: any) => typeof t === 'string' && t.trim()) : undefined,
@@ -1194,7 +1198,7 @@ const actionQueue = useActionQueueStore();
       return (realmOrder[realmName] ?? 0) * 10 + (stageOrder[stage] ?? 0);
     };
 
-    const nameSet = new Set(npcs.map((n) => n.名字).filter((n) => typeof n === 'string' && n.trim()));
+    const nameSet = new Set(npcs.map((n) => n.角色ID).filter((n): n is string => typeof n === 'string' && !!n));
     const makeKey = (a: string, b: string) => {
       const x = a < b ? a : b;
       const y = a < b ? b : a;
@@ -1232,8 +1236,8 @@ const actionQueue = useActionQueueStore();
       if (members.length < 2) continue;
       const hub = [...members].sort((a, b) => getRealmRank(b) - getRealmRank(a) || a.名字.localeCompare(b.名字))[0];
       for (const npc of members) {
-        if (npc.名字 === hub.名字) continue;
-        addEdge(hub.名字, npc.名字, '同门', 25, ['auto', '同势力', faction]);
+        if (npc.角色ID === hub.角色ID) continue;
+        addEdge(hub.角色ID || '', npc.角色ID || '', '同门', 25, ['auto', '同势力', faction]);
       }
     }
 
@@ -1244,11 +1248,10 @@ const actionQueue = useActionQueueStore();
       if (mems.length === 0) continue;
       const joined = mems.filter((m) => typeof m === 'string').join('\n');
       if (!joined) continue;
-      for (const otherName of allNames) {
-        if (otherName === npc.名字) continue;
-        if (joined.includes(otherName)) {
-          addEdge(npc.名字, otherName, '旧识', 10, ['auto', '记忆相关']);
-        }
+      for (const other of npcs) {
+        if (!other.角色ID || other.角色ID === npc.角色ID) continue;
+        if (npcs.filter(p=>p.名字===other.名字).length !== 1) continue;
+        if (joined.includes(other.名字)) addEdge(npc.角色ID || '', other.角色ID, '旧识', 10, ['auto', '记忆相关']);
       }
     }
 
@@ -1263,8 +1266,8 @@ const actionQueue = useActionQueueStore();
 
   const graphEdges = computed<RelationshipMatrixEdge[]>(() => {
     const base = relationships.value.map((npc) => ({
-      from: playerNodeId,
-      to: npc.名字,
+      from: playerNodeId.value,
+      to: npc.角色ID || '',
       relation: npc.与玩家关系 || '相识',
       score: typeof npc.好感度 === 'number' ? npc.好感度 : 0,
     }));
@@ -1272,8 +1275,8 @@ const actionQueue = useActionQueueStore();
     const extra = effectiveMatrixEdges.value
       .map((e) => ({
         ...e,
-        from: e.from === '玩家' ? playerNodeId : e.from,
-        to: e.to === '玩家' ? playerNodeId : e.to,
+        from: e.from === '玩家' ? playerNodeId.value : e.from,
+        to: e.to === '玩家' ? playerNodeId.value : e.to,
       }))
       .filter((e) => e.from !== e.to);
 
@@ -1294,27 +1297,29 @@ const actionQueue = useActionQueueStore();
 
   const graphNodes = computed<GraphNode[]>(() => {
     const nodeIds = new Set<string>();
-    nodeIds.add(playerNodeId);
-    for (const npc of relationships.value) nodeIds.add(npc.名字);
+    nodeIds.add(playerNodeId.value);
+    for (const npc of relationships.value) if(npc.角色ID)nodeIds.add(npc.角色ID);
     for (const e of effectiveMatrixEdges.value) {
-      if (e.from) nodeIds.add(e.from === '玩家' ? playerNodeId : e.from);
-      if (e.to) nodeIds.add(e.to === '玩家' ? playerNodeId : e.to);
+      if (e.from) nodeIds.add(e.from === '玩家' ? playerNodeId.value : e.from);
+      if (e.to) nodeIds.add(e.to === '玩家' ? playerNodeId.value : e.to);
     }
 
-    const others = Array.from(nodeIds).filter((id) => id !== playerNodeId);
+    const others = Array.from(nodeIds).filter((id) => id !== playerNodeId.value);
     const centerX = GRAPH_W / 2;
     const centerY = GRAPH_H / 2;
     // 增加半径，让节点分布更开
     const radius = clamp(200 + others.length * 8, 220, 260);
 
     const nodes: GraphNode[] = [];
-    nodes.push({ id: playerNodeId, label: playerName.value, kind: 'player', x: centerX, y: centerY });
+    nodes.push({ id: playerNodeId.value, label: playerName.value, kind: 'player', x: centerX, y: centerY });
     others.forEach((id, index) => {
       const angle = (2 * Math.PI * index) / Math.max(1, others.length) - Math.PI / 2;
       const x = centerX + Math.cos(angle) * radius;
       const y = centerY + Math.sin(angle) * radius;
-      const isNpc = relationships.value.some((n) => n.名字 === id);
-      nodes.push({ id, label: id, kind: isNpc ? 'npc' : 'extra', x, y });
+      const isNpc = relationships.value.some((n) => n.角色ID === id);
+      const edge = relationshipMatrixEdges.value.find(e=>e.from===id||e.to===id);
+      const label = relationships.value.find(n=>n.角色ID===id)?.名字 || (edge?.from===id ? edge.fromLabel : edge?.toLabel) || id;
+      nodes.push({ id, label, kind: isNpc ? 'npc' : 'extra', x, y });
     });
 
     return nodes;
@@ -1343,8 +1348,8 @@ const actionQueue = useActionQueueStore();
   };
 
   const getGraphNodeClass = (id: string): string => {
-    if (id === playerNodeId) return 'player';
-    if (selectedPerson.value?.名字 === id) return 'selected';
+    if (id === playerNodeId.value) return 'player';
+    if (selectedPerson.value?.角色ID === id) return 'selected';
     return '';
   };
 
@@ -1400,8 +1405,8 @@ const actionQueue = useActionQueueStore();
   };
 
   const handleGraphNodeClick = (nodeId: string) => {
-    if (nodeId === playerNodeId) return;
-    const npc = relationships.value.find((n) => n.名字 === nodeId);
+    if (nodeId === playerNodeId.value) return;
+    const npc = relationships.value.find((n) => n.角色ID === nodeId);
     if (!npc) return;
     selectPerson(npc);
     isDetailViewActive.value = true;
@@ -1878,7 +1883,7 @@ const getIntimacyClass = (intimacy: number | undefined): string => {
 };
 
 const selectPerson = (person: NpcProfile) => {
-  const isNewSelection = selectedPerson.value?.名字 !== person.名字;
+  const isNewSelection = selectedPerson.value?.角色ID !== person.角色ID;
 
   // 🔧 数据规范化：确保记忆总结是数组
   if (person && person.记忆总结) {
@@ -1891,7 +1896,7 @@ const selectPerson = (person: NpcProfile) => {
     }
   }
 
-  selectedPerson.value = selectedPerson.value?.名字 === person.名字
+  selectedPerson.value = selectedPerson.value?.角色ID === person.角色ID
     ? null
     : person;
 
@@ -1933,13 +1938,13 @@ onMounted(async () => {
 const findRelationshipKeyByName = (name: string): string | null => {
   const relations = (characterData.value as any)?.社交?.关系;
   if (!relations) return null;
-  return Object.keys(relations).find(key => relations[key]?.名字 === name) || null;
+  return Object.keys(relations).find(key => key === name && relations[key]?.角色ID === name) || null;
 };
 
 const editMemory = async (index: number) => {
   if (!selectedPerson.value) return;
   const name = selectedPerson.value.名字;
-  const key = findRelationshipKeyByName(name);
+  const key = findRelationshipKeyByName(selectedPerson.value?.角色ID || '');
   if (!key) return;
 
   // 🔴 修复：直接从 gameStateStore.relationships 获取记忆
@@ -1994,7 +1999,7 @@ const deleteMemory = async (index: number) => {
     cancelText: '取消',
     onConfirm: async () => {
       const name = selectedPerson.value!.名字;
-      const key = findRelationshipKeyByName(name);
+      const key = findRelationshipKeyByName(selectedPerson.value?.角色ID || '');
       if (!key) return;
 
       // 🔴 修复：直接修改 gameStateStore.relationships，而不是 characterData
@@ -2043,6 +2048,7 @@ const initiateTradeWithNpc = (npc: NpcProfile, item: Item) => {
     itemName: item.名称,
     itemType: 'NPC交易',
     description: actionDescription,
+    npcId: npc.角色ID,
     npcName: npc.名字,
     itemId: item.物品ID || item.名称,
     tradeType: 'trade'
@@ -2058,6 +2064,7 @@ const requestItemFromNpc = (npc: NpcProfile, item: Item) => {
     itemName: item.名称,
     itemType: 'NPC索要',
     description: actionDescription,
+    npcId: npc.角色ID,
     npcName: npc.名字,
     itemId: item.物品ID || item.名称,
     tradeType: 'request'
@@ -2069,6 +2076,7 @@ const requestItemFromNpc = (npc: NpcProfile, item: Item) => {
 const toggleAttention = async (person: NpcProfile) => {
   console.log('[关注按钮] 点击了关注按钮，人物:', person.名字);
   const npcName = person.名字;
+  const npcId = person.角色ID;
 
   try {
     // 🔥 直接访问 gameStateStore 的响应式数据，而不是副本
@@ -2079,7 +2087,7 @@ const toggleAttention = async (person: NpcProfile) => {
     }
 
     const npcKey = Object.keys(relationships).find(
-      key => relationships[key]?.名字 === npcName
+      key => key === npcId
     );
 
     if (!npcKey) {
@@ -2102,7 +2110,7 @@ const toggleAttention = async (person: NpcProfile) => {
     uiStore.showToast(newState ? `已关注 ${npcName}` : `已取消关注 ${npcName}`, { type: 'success' });
 
     // 强制更新选中的人物（触发响应式）
-    if (selectedPerson.value?.名字 === npcName) {
+    if (selectedPerson.value?.角色ID === npcId) {
       selectedPerson.value = { ...relationships[npcKey] };
     }
   } catch (error) {
@@ -2125,6 +2133,7 @@ const attemptStealFromNpc = (npc: NpcProfile, item: Item) => {
     itemName: item.名称,
     itemType: 'NPC偷窃',
     description: actionDescription,
+    npcId: npc.角色ID,
     npcName: npc.名字,
     itemId: item.物品ID || item.名称,
     tradeType: 'steal'
@@ -2136,6 +2145,7 @@ const attemptStealFromNpc = (npc: NpcProfile, item: Item) => {
 const summarizeMemories = async () => {
   if (!selectedPerson.value) return;
   const npcName = selectedPerson.value.名字;
+    const npcId = selectedPerson.value.角色ID;
   isSummarizing.value = true;
 
   try {
@@ -2349,7 +2359,7 @@ ${saveDataJson}
     }
 
     const npcKey = Object.keys(relations).find(
-      key => relations[key]?.名字 === npcName
+      key => key === npcId
     );
 
     if (!npcKey) {
@@ -2376,7 +2386,7 @@ ${saveDataJson}
     await gameStateStore.saveGame();
 
     // 更新选中的人物（触发UI刷新）
-    if (selectedPerson.value?.名字 === npcName) {
+    if (selectedPerson.value?.角色ID === npcId) {
       selectedPerson.value = { ...npcProfile };
     }
 
@@ -2403,6 +2413,7 @@ const downloadMemories = () => {
 
   try {
     const npcName = selectedPerson.value.名字;
+    const npcId = selectedPerson.value.角色ID;
     const memories = {
       人物名称: npcName,
       导出时间: new Date().toLocaleString('zh-CN'),
@@ -2463,12 +2474,13 @@ const saveEditRaw = async () => {
     rawErrorMsg.value = 'JSON 格式错误，未保存：' + (e instanceof Error ? e.message : String(e));
     return;
   }
-  const key = selectedPerson.value?.名字;
+  const key = selectedPerson.value?.角色ID;
   if (!key || !gameStateStore.relationships?.[key]) {
     rawErrorMsg.value = '未找到该人物在存档中的位置（名字可能已变更）';
     return;
   }
   try {
+    parsed.角色ID=key;
     gameStateStore.relationships[key] = parsed;
     selectedPerson.value = parsed as NpcProfile;
     await gameStateStore.saveGame();
@@ -2487,6 +2499,7 @@ const downloadCharacterData = () => {
 
   try {
     const npcName = selectedPerson.value.名字;
+    const npcId = selectedPerson.value.角色ID;
     const characterData = {
       导出信息: {
         人物名称: npcName,
@@ -2715,7 +2728,8 @@ const confirmDeleteNpc = (person: NpcProfile) => {
     onConfirm: async () => {
       // 🔥 提前清空选择，避免删除后UI尝试渲染不存在的NPC
       const npcNameToDelete = person.名字;
-      const wasSelected = selectedPerson.value?.名字 === npcNameToDelete;
+      const npcIdToDelete = person.角色ID;
+      const wasSelected = selectedPerson.value?.角色ID === npcIdToDelete;
 
       if (wasSelected) {
         selectedPerson.value = null;
@@ -2724,7 +2738,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
 
       try {
         // deleteNpc 内部会自动保存到存档
-        await characterStore.deleteNpc(npcNameToDelete);
+        await characterStore.deleteNpc(npcIdToDelete || '');
         // 删除成功，无需额外操作（已提前清空选择）
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : '未知错误';
@@ -2734,7 +2748,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
         // 🔥 如果删除失败且之前清空了选择，尝试重新从人物列表中找到该NPC并恢复选择
         // （因为deleteNpc函数会回滚数据）
         if (wasSelected) {
-          const restoredNpc = relationships.value.find(npc => npc.名字 === npcNameToDelete);
+          const restoredNpc = relationships.value.find(npc => npc.角色ID === npcIdToDelete);
           if (restoredNpc) {
             selectedPerson.value = restoredNpc;
             isDetailViewActive.value = true;

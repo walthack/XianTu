@@ -1,3 +1,6 @@
+import { endingPresentation, type EndingPresentation } from './endingPresentation';
+import { projectNamingText } from './ledger/naming';
+import { backfillRelationshipIds, relationshipOf, resolveRelationshipId, migrateRuntimePersonRecords, runtimeEntityId } from './ledger/affinityIdentity';
 import { applyStepSceneLedger, stepScene } from './fixedEndingNarratives';
 import { isXieyiSkillHidden, syncNanhuangIdentityDisplay, xiaoziUnrevealedFacts, xiaoziDisclosure } from './characterResolver';
 import type { SaveData } from '@/types/game';
@@ -48,7 +51,7 @@ import { affinityCapFor } from './affinityCaps';
 import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
 import { lineCriticalFrozen } from './secondaryLines';
 import { currentLocation, locationFromPosition, noteNanhuangArrival, settleNanhuangForcedTravel, syncNanhuangRailTravel, type NanhuangTravelLedger } from './travel/travelLedger';
-import { locationWithin } from './travel/locationIds';
+import { locationWithin, sameCanonicalLocation } from './travel/locationIds';
 import { recordOffscreenDivergence, recordReconcileDivergences, type ScenarioDivergence } from './divergenceLedger';
 import {
   cancelPendingJudgement,
@@ -315,7 +318,7 @@ export interface RuntimeState extends ScenarioProgressState {
   /** 剧情停滞轮数：连续多少轮无事件/章节推进（供收束提示分档），推进即清零 */
   stallTurns?: number;
   /** 本局已结束（玩家走进绝路）。置上之后引擎不再推进任何进度。 */
-  gameOver?: { endingId: string; title: string; facts: string[]; sourceEventId: string; atTurn: number };
+  gameOver?: { endingId: string; title: string; facts: string[]; sourceEventId: string; atTurn: number; presentation?: EndingPresentation };
   /** 已送达过的逼近提示，防同一轮/重载重复送。 */
   fatalApproachDelivered?: string[];
   /**
@@ -979,6 +982,8 @@ function stableContractHash(contract: unknown): string {
 
 // 第六批仅改变公开文案；精确双哈希迁移不放宽其他合同变化的失效保护。
 const BATCH6_TEXT_CONTRACT_REVISIONS: Record<string, { from: string; to: string }> = {
+  // 第十一批碧姬规范名文案；只承接这一对精确合同，不重置旧档召见进度。
+  'lcq.event.geluo_summons_biji': { from: 'e0119be2', to: 'f0f6dac7' },
   // 第十批门禁发现第九批两处按钮label未与目标对齐；仅显示文案精确迁移。
   'lcq.event.s02_04': { from: 'f6f916da', to: '68462843' },
   'lcq.event.huamiao_coop_boundary': { from: 'dc6ab360', to: 'b0a94a70' },
@@ -1023,7 +1028,7 @@ function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModE
     if (oldYinzhu) {
       const legacy = runtime as any;
       legacy.sceneLedger ||= { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [] };
-      for (const name of ['阿葭', '阴蛛']) legacy.sceneLedger.actors[name] = { status: 'dead', eventId: event.id, actionId: 'burn_yinzhu_victim' };
+      for (const name of ['阿葭', '阴蛛']) legacy.sceneLedger.actors[runtimeEntityId(legacy, name)] = { name, status: 'dead', eventId: event.id, actionId: 'burn_yinzhu_victim' };
       // 旧档焚尸已发生，不再演袭击/焚尸或推进其时钟；后面仍须选择向导。
       legacy.sceneLedger.lastBeat = { eventId: event.id, actionId: 'burn_yinzhu_victim', facts: ['阿葭已亡，营地里的后事已料理。'] };
     }
@@ -1376,7 +1381,8 @@ function derivePlayerLine(event: ScenarioModEvent, action: { id: string; label?:
 
 /** 当前非机会卡承重事件的本地动作；按钮身份来自事件合同，不来自 LLM。 */
 export function getCurrentStoryEventActions(saveData: SaveData): ScenarioEventActionSelection[] {
-  return currentStoryEventActions(saveData, false);
+  const runtime = getRuntime(saveData);
+  return currentStoryEventActions(saveData, false).map(selection => runtime ? { ...selection, label: projectNamingText(selection.label, runtime), playerLine: projectNamingText(selection.playerLine, runtime) } : selection);
 }
 
 /** includeAwayActions 只给谢艺托付「离开即接受」用：人已离场仍须找到【承接】（裁定 #90 冻结）。 */
@@ -1553,7 +1559,7 @@ export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioE
           source: 'exploration_engine' as const,
           eventId: event.id,
           actionId: action.id,
-          label: `${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix}`,
+          label: projectNamingText(`${INTERACTION_VERB_LABELS[interaction.verb]}${targetSuffix} · ${action.label}`, runtime),
           actionText: action.actionText,
           playerLine: action.actionText,
           timeCost: action.timeCost,
@@ -1818,6 +1824,7 @@ function recordStoryEventStructuredActionAt(
     }
     runtime.gameOver = {
       endingId: fatalChoice.ending.id,
+      presentation: endingPresentation({ endingId: fatalChoice.ending.id, sourceEventId: event.id }),
       title: fatalChoice.ending.title,
       facts: fatalChoice.ending.facts.map(fact => event.id === 'lcq.event.sudaji_south_pact' ? fact.replace('依约执行炮烙', '下令执行炮烙') : fact),
       sourceEventId: event.id,
@@ -1951,7 +1958,10 @@ function reconcileOpportunityCompletionContract(
 ): void {
   const nextHash = opportunityCompletionContractHash(opportunity);
   if (!nextHash) return;
-  if (state.completionContractHash && state.completionContractHash !== nextHash) {
+  // 23号补充仅纠正男性代词；此一对旧/新合同的动作、步骤与结算相同。
+  const xieyiPronounOnlyRevision = opportunity.id === 'opportunity.lcq.s04b_04.brief_biyu_first'
+    && state.completionContractHash === '4270292f' && nextHash === '98654656';
+  if (state.completionContractHash && state.completionContractHash !== nextHash && !xieyiPronounOnlyRevision) {
     state.completionStepIndex = 0;
     state.lastCompletionActionKey = undefined;
     state.lastCompletionProgressAtTurn = undefined;
@@ -2206,7 +2216,7 @@ function locationNameById(runtime: RuntimeState, locationId: string | undefined)
 
 function sameSceneLocation(runtime: RuntimeState, leftId: string | undefined, rightId: string | undefined): boolean {
   if (!leftId || !rightId) return false;
-  if (leftId === rightId) return true;
+  if (sameCanonicalLocation(leftId, rightId)) return true;
   const left = locationNameById(runtime, leftId);
   const right = locationNameById(runtime, rightId);
   return Boolean(left && left === right);
@@ -2306,6 +2316,11 @@ function settleQuestTravel(
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_action' };
   }
   const locationId = fresh.actionId.slice(QUEST_TRAVEL_ACTION_PREFIX.length);
+  if (event.id === 'lcq.event.s04b_lingfei_baiyi_crisis_14'
+    && runtime.completedEventIds.includes('lcq.event.s04b_lingfei_baiyi_crisis_13')) {
+    settleNanhuangForcedTravel(saveData, runtime, { afterEventDone: 'lcq.event.s04b_lingfei_baiyi_crisis_13' });
+    if (runtime.travelLedger && !runtime.travelLedger.doneEventIds.includes('lcq.event.s04b_lingfei_baiyi_crisis_13')) runtime.travelLedger.doneEventIds.push('lcq.event.s04b_lingfei_baiyi_crisis_13');
+  }
   movePlayerToEventLocation(saveData, runtime, locationId);
   noteNanhuangArrival(runtime, locationId, `arrive:${event.id}`);
   const id = `arrive:${event.id}:${locationId}`;
@@ -2528,7 +2543,7 @@ function syncPlayerKnowledgeLedger(runtime: RuntimeState): void {
     if (!runtime.completedEventIds.includes(event.id) || !eventIsKnownToPlayer(runtime, event.id)) continue;
     sources.push({
       text: [event.name, event.description, event.axisBeat, event.objective].filter(Boolean).join('；'),
-      turn: eventTimelineState(runtime, event.id)?.playerLearnedAtTurn ?? 0,
+      turn: eventTimelineState(runtime, event.id)?.playerLearnedAtTurn ?? runtime.eventActionStates?.[event.id]?.readyAtTurn ?? eventTimelineState(runtime, event.id)?.occurredAtTurn ?? 0,
       sourceEventId: event.id,
     });
   }
@@ -2542,7 +2557,16 @@ function syncPlayerKnowledgeLedger(runtime: RuntimeState): void {
       && fact.status === 'confirmed'
       && (fact.disclosureScope === 'player' || fact.disclosureScope === 'public')
     );
-    if (alreadyConfirmed) continue;
+    if (alreadyConfirmed) {
+      for (const fact of Object.values(ledger).filter(f => f.subjectId === entity.id && f.predicate === 'known' && Boolean(f.sourceEventId))) {
+        fact.claim ||= `你已知晓${entity.name}`;
+        const knownEvent = runtime.events.find(e => e.id === fact.sourceEventId);
+        const knownTurn = fact.sourceEventId ? runtime.eventActionStates?.[fact.sourceEventId]?.readyAtTurn ?? eventTimelineState(runtime, fact.sourceEventId)?.playerLearnedAtTurn ?? eventTimelineState(runtime, fact.sourceEventId)?.occurredAtTurn : undefined;
+        if (!fact.learnedAtTurn && knownTurn !== undefined) fact.learnedAtTurn = knownTurn;
+        if (!fact.source && knownEvent) fact.source = { kind: 'observed', label: knownEvent.name };
+      }
+      continue;
+    }
     const factId = `knowledge.player.entity.${entity.id}`;
     ledger[factId] ||= {
       factId,
@@ -2551,6 +2575,8 @@ function syncPlayerKnowledgeLedger(runtime: RuntimeState): void {
       status: 'confirmed',
       disclosureScope: 'player',
       learnedAtTurn: source.turn,
+      claim: `你已知晓${entity.name}`,
+      source: { kind: 'observed', label: runtime.events.find(e => e.id === source.sourceEventId)?.name || '开场已知' },
       ...(source.sourceEventId ? { sourceEventId: source.sourceEventId } : {}),
     };
   }
@@ -2841,6 +2867,7 @@ function settleFatalDeadlines(runtime: RuntimeState, transitions: ScenarioRuntim
     if (age >= deadline.turns) {
       runtime.gameOver = {
         endingId: deadline.ending.id,
+        presentation: endingPresentation({ endingId: deadline.ending.id, sourceEventId: eventId }),
         title: deadline.ending.title,
         facts: [...deadline.ending.facts],
         sourceEventId: eventId,
@@ -2991,6 +3018,14 @@ function recordChronicleTransitions(runtime: RuntimeState, transitions: Scenario
 }
 
 function backfillCompletedEventChronicle(runtime: RuntimeState): void {
+  for (const entry of runtime.chronicle || []) {
+    if (typeof entry.title === 'string') entry.title = entry.title.replace(/易虎之死/g, '易虎失踪');
+    if (entry.detail) entry.detail = entry.detail.replace(/易虎之死/g, '易虎失踪');
+  }
+  for (const entry of runtime.divergences || []) {
+    if (typeof entry.worldDelta === 'string') entry.worldDelta = entry.worldDelta.replace(/易虎之死/g, '易虎失踪');
+    if (typeof entry.evidence === 'string') entry.evidence = entry.evidence.replace(/易虎之死/g, '易虎失踪');
+  }
   for (const eventId of runtime.completedEventIds || []) {
     if (!eventIsKnownToPlayer(runtime, eventId)) continue;
     const event = runtime.events.find(item => item.id === eventId);
@@ -3219,7 +3254,7 @@ export function migrateBatch6TextContracts(runtime: Pick<RuntimeState, 'events' 
     const revision = BATCH6_TEXT_CONTRACT_REVISIONS[saved.id];
     const latest = canonicalEvents.find(e => e.id === saved.id);
     if (!latest?.playerCompletionContract || !saved.playerCompletionContract) continue;
-    const sameDeliveryContract = ['lcq.event.s03b_snake_flower_bridge_07', 'lcq.event.ningyu_regicide_offer', 'lcq.event.weapon_deal_with_geluo', 'lcq.event.s04b_lingfei_baiyi_crisis_11'].includes(saved.id)
+    const sameDeliveryContract = ['lcq.event.s03b_snake_flower_bridge_07', 'lcq.event.ningyu_regicide_offer', 'lcq.event.weapon_deal_with_geluo', 'lcq.event.s04b_lingfei_baiyi_crisis_11', 'lcq.event.s04b_lingfei_baiyi_crisis_18'].includes(saved.id)
       && stableContractHash(saved.playerCompletionContract) === stableContractHash(latest.playerCompletionContract);
     if (!sameDeliveryContract && (!revision
       || revision.to !== stableContractHash(latest.playerCompletionContract)
@@ -3410,7 +3445,10 @@ function updateStanceStates(saveData: SaveData, runtime: RuntimeState & { modId?
       if (!npc || typeof npc !== 'object') continue;
       const name = String((npc as { 名字?: unknown }).名字 || key);
       const favorability = Number((npc as { 好感度?: unknown }).好感度) || 0;
-      rt.stanceStates[name] = projectStance(favorability, rt.stanceStates[name], day);
+      const id = String((npc as { 角色ID?: string }).角色ID || key);
+      const previous = rt.stanceStates[id] || rt.stanceStates[name];
+      rt.stanceStates[id] = projectStance(favorability, previous, day);
+      if (id !== name) delete rt.stanceStates[name];
     }
   } catch (error) {
     console.warn('[剧本模组] 关系姿态推进失败（不阻断回合）:', error);
@@ -3432,6 +3470,7 @@ function updateStanceStates(saveData: SaveData, runtime: RuntimeState & { modId?
  * 走引擎通道，不占模型的 ±15 单回合预算——否则引擎给的分会被日常加减挤掉。
  */
 export interface SharedExperienceGrant {
+  characterId: string;
   name: string;
   from: number;
   to: number;
@@ -3535,6 +3574,7 @@ function settleSharedExperienceAffinity(
       return grants;
     }
 
+    backfillRelationshipIds(saveData, rt.canon?.characters);
     const nameById = new Map((rt.canon?.characters || []).map(item => [item.id, item.name]));
     const eventById = new Map((rt.events || []).map(event => [event.id, event]));
 
@@ -3546,17 +3586,17 @@ function settleSharedExperienceAffinity(
       for (const characterId of event.relatedCharacterIds || []) {
         const name = nameById.get(characterId);
         if (!name) continue;
-        const npc = relations[name] as { 好感度?: unknown; 与玩家关系?: unknown } | undefined;
+        const npc = relationshipOf(saveData, characterId)?.profile;
         if (!npc || typeof npc !== 'object') continue;
         const current = Number(npc.好感度) || 0;
         const label = typeof npc.与玩家关系 === 'string' ? npc.与玩家关系 : undefined;
-        const cap = affinityCapFor(name, label);
+        const cap = affinityCapFor(characterId, label, name);
         const ceiling = cap ? cap.cap : 100;
         if (current >= ceiling) continue;
         const settled = clampAffinity(Math.min(ceiling, current + grant));
         npc.好感度 = settled;
         // 记录明细：引擎侧的变化必须能进玩家可见的状态流，否则因果只存在于代码里。
-        grants.push({ name, from: current, to: settled, eventId, eventName: event.name });
+        grants.push({ name, characterId, from: current, to: settled, eventId, eventName: event.name });
       }
     }
     rt.affinityGrantedEventIds = [...granted];
@@ -3671,6 +3711,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   if (!runtime) return { saveData: next, transitions: [] };
   // 本局已结束：不再推进任何进度，也不再激活新拍。玩家只能读档。
   if ((runtime as RuntimeState).gameOver) return { saveData: next, transitions: [] };
+  backfillRelationshipIds(next, runtime.canon?.characters);
+  migrateRuntimePersonRecords(runtime);
   syncEarlyEncounteredCharacters(next, runtime);
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
@@ -3700,18 +3742,21 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   enforceScenarioNpcAdulthood(next);
   const relations = next.社交?.关系;
   for (const character of runtime.canon?.characters || []) {
-    const npc = relations?.[character.name];
+    const npc = relations?.[character.id];
     if (!npc) continue;
+    npc.名字 = character.name;
     if (character.name === '凝羽') {
       const factualMemory = (note: string) => note.replace('被程宗扬用麻古迷奸', '曾遭程宗扬施用麻古造成的药物侵害，后来出现药物依赖（原著事实记忆，不作为可演出或可重复内容）');
       if (character.profile?.memories) character.profile.memories = character.profile.memories.map(factualMemory);
       npc.记忆 = (npc.记忆 || []).map(factualMemory);
     }
     if (Array.isArray(npc.记忆)) npc.记忆 = npc.记忆.filter((note: string) => !String(note).startsWith('【内部约束·不入正文】'));
-    if (character.id === 'liuchao.character.xiao_zi' && /^lcq\.stage_0(?:3b|4|4b|5b)$/.test(runtime.modId || '')) {
+    if (character.id === 'liuchao.character.xiao_zi' && ['lcq.stage_03b_snake_flower_bridge','lcq.stage_04','lcq.stage_04b_lingfei_baiyi_crisis','lcq.stage_05b'].includes(runtime.modId || '')) {
       npc.种族 = character.profile?.race; npc.出生 = character.profile?.origin;
       npc.外貌描述 = character.profile?.appearance; npc.性格特征 = character.profile?.personality;
       npc.当前外貌状态 = '状态正常';
+      if (/小紫势力|简介待补/.test(String(npc.势力归属 || ''))) delete npc.势力归属;
+      npc.势力归属列表 = (npc.势力归属列表 || []).filter((name: string) => !/小紫势力|简介待补/.test(name));
       npc.记忆 = (npc.记忆 || []).filter((note: string) => !xiaoziUnrevealedFacts(runtime).test(String(note)));
       npc.记忆 = [...new Set([...npc.记忆, ...(character.profile?.notes || [])])];
     }
@@ -3830,6 +3875,15 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   // 南荒：上一拍完成触发的强制移动先落回执、再投影位置，下一拍才在新地点激活。
   syncNanhuangRailTravel(next, runtime);
   const activeChapter = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
+  // rail跨章节但保留初始chapter的旧档：65章闲聊仍按事件条件开放。
+  if (runtime.modId === 'lcq.stage_04b_lingfei_baiyi_crisis' && activeChapter
+    && runtime.events.some(e => e.id === 'lcq.event.zhu88_heimohai_chat')
+    && !(activeChapter.eventIds || []).includes('lcq.event.zhu88_heimohai_chat')) (activeChapter.eventIds ||= []).push('lcq.event.zhu88_heimohai_chat');
+  // 可选探索窗口关闭后不再占活跃列表；不伪造完成/奖励，不影响主线。
+  runtime.activeEventIds = runtime.activeEventIds.filter(id => {
+    const event = runtime.events.find(item => item.id === id);
+    return !event?.exploration || conditionsMatch(event.conditions, next, runtime);
+  });
   const chapterEventIds = new Set(activeChapter?.eventIds || []);
   syncEventTimelineEligibility(next, runtime);
   if (isCanonRailChapter(railProfile, activeChapter?.id)) {

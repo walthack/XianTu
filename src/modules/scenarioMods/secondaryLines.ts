@@ -331,14 +331,12 @@ export const SECONDARY_LINES: SecondaryLine[] = [
   },
   {
     id: 'heimohai',
-    name: '黑魔海／毒宗',
+    name: '黑魔海',
     kind: 'sect',
     // 线开在「信被解读出来」那一刻，不开在见到某个人（用户裁定 2026-08-16）。
     anchorEventIds: ['lcq.event.s04b_lingfei_baiyi_crisis_04'],
-    // 保留但不参与判定：指引把玩家指向朱老头，说明"去问谁"。
-    anchorCharacterIds: ['liuchao.character.shang_zhen_yu'],
-    entryHint: '鸦人尸体上搜出一张白纸，云苍峰说那是秘法传讯——黑魔海与鬼王峒勾结；'
-      + '苏妲己的回话只有一句：别惹他们。要找门路，问同行的朱老头。',
+    entryHint: '鸦人尸体上搜出一张空白羊皮纸，云苍峰说那是秘法传讯——黑魔海与鬼王峒勾结；'
+      + '苏妲己的回话只有一句：别惹他们，也别报她的名头。',
     basis: '**引子＝玩家怎么第一次知道"黑魔海"这个名字**（用户裁定 2026-08-16）：'
       + '原来那句「名分不在总坛里，在人身上」是讲给设计者听的机制说明，不是钩子。'
       + '正典最早两拍：seq 93 从鸦人尸体上搜出一张**空白羊皮纸**，云苍峰鉴定是秘法传讯，'
@@ -358,6 +356,11 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // 杀局挂 `_04_beat`（实为野猪林乱战）→ 改 `_08_beat`。
       { reviewSummary: '查清夜间发丝是叶媪发蛊，逼近朱老头却退缩', status: 'ready', stageId: 'lcq.stage_04', eventId: 'lcq.event.s04_04' },
       { reviewSummary: '把羊皮纸交云苍峰鉴定：疑黑魔海与鬼王峒勾结白夷', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.s04b_lingfei_baiyi_crisis_04' },
+      { reviewSummary: '白夷闲聊：朱老头主动聊黑魔海来历，装不识字、丢信、讨钱，不给门路', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.zhu88_heimohai_chat' },
+      { reviewSummary: '第86章随弥骨入峒，到驿馆见黑魔海工匠，云苍峰指出两方联系已非一日', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.enter_dong_with_migu' },
+      { reviewSummary: '第90章谢艺谈黑魔海太一经，现有机关山洞事件未承载这段谈话', status: 'pending', stageId: 'lcq.stage_05b' },
+      { reviewSummary: '第106章小紫解释黑魔海帮鬼巫王吸收龙神力量的图谋', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_09_temporary_pact_with_xiaozi' },
+      { reviewSummary: '龙神决战收束南荒黑魔海图谋', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.slay_dragon' },
       // 方案R：120章山村确认身份，121章显信，124章授艺，再转北上交接。
       { reviewSummary: '当面确认朱老头就是殇侯，听他称你是天命之人', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.shanghou_revealed' },
       { reviewSummary: '解蛊后辨认白纸信，听清廿载共祭与师兄旧怨', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_shanghou_reads_letter' },
@@ -486,7 +489,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '安置旧伤复发的凝羽，与云氏、花苗谈成探峒同行', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.guiwangdong_coop_pact' },
       { reviewSummary: '随弥骨进峒，拦住接待冲突，记清路线与奴隶区', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.enter_dong_with_migu' },
       { reviewSummary: '打开白纸信笺仍是白纸，小紫当着阁罗说破达古已死', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.blank_letter_and_dagu' },
-      { reviewSummary: '阁罗召来碧奴碧姬——当面见到谢艺要找的人', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.geluo_summons_biji' },
+      { reviewSummary: '阁罗召来碧姬——当面见到谢艺要找的人', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.geluo_summons_biji' },
       { reviewSummary: '借机关异动摆脱看守，从岩壁找出可通行山洞', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.escape_cave_mechanism' },
       { reviewSummary: '看出红苗已被峒里控制，先把苏荔保下来', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.hongmiao_controlled' },
       { reviewSummary: '从萨安处获取鬼王宫密道', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.s05b_03_saan_secret_path' },
@@ -846,6 +849,12 @@ export const SECONDARY_LINES: SecondaryLine[] = [
  * 相识账本四档 `rumored | introduced | encountered | joined`——只听过传闻不算，
  * 否则"世上有这么个人"就能开线，那又回到了模型说了算。
  */
+/** 121章书信揭出名号之前只显示黑魔海；按当前原著章节锚点开放后缀，不按认识朱老头解锁。 */
+export function secondaryLineDisplayName(line: SecondaryLine, event?: { axisAnchor?: string }): string {
+  const chapter = Number(event?.axisAnchor?.match(/第(\d+)章/)?.[1] || 0);
+  return line.id === 'heimohai' && chapter >= 121 ? '黑魔海／毒宗' : line.name;
+}
+
 export const LINE_ANCHOR_MIN_ACQUAINTANCE = 'encountered' as const;
 
 /**

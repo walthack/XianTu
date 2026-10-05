@@ -138,7 +138,7 @@ test('build-time cards, runtime registry and focused prompt all preserve opening
     focusOf('我观察程宗扬、乐明珠、谢艺、武二郎、凝羽、苏荔与小紫'),
     focusOf('我观察鬼巫王、龙神、阁罗、云苍峰、碧姬与殇侯'),
   ].join('\n');
-  for (const name of ['程宗扬', '乐明珠', '谢艺', '武二郎', '凝羽', '苏荔', '小紫', '鬼巫王', '龙神', '阁罗', '云苍峰', '碧姬', '殇侯']) {
+  for (const name of ['程宗扬', '乐明珠', '谢艺', '武二郎', '凝羽', '苏荔', '小紫', '鬼巫王', '龙神', '阁罗', '云苍峰', '碧奴', '朱老头']) {
     assert.match(focused, new RegExp(name), name);
   }
   for (const marker of ['盘江程氏', '星月湖大营', '少校', '龙雕弓', '御姬奴', '凝奴', '太一经', '毒宗唯一嫡传', '紫妈妈', '后宫', '拜殇侯为师']) {

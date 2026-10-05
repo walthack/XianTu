@@ -1,3 +1,4 @@
+import { resolveRelationshipId } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 仙途 (XianTu) - 角色数据管理
  * @author 千夜 | GitHub: qianye60 | Bilibili: 477576651
@@ -2411,9 +2412,7 @@ const deleteNpc = async (npcName: string) => {
     throw new Error(msg);
   }
 
-  const npcKey = Object.keys(relationships).find(
-    key => relationships[key]?.名字 === npcName
-  );
+  const npcKey = resolveRelationshipId({社交:{关系:relationships}}, npcName);
 
   if (!npcKey) {
     const msg = `找不到名为 ${npcName} 的NPC。`;

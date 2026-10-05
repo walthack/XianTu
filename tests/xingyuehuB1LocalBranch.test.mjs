@@ -39,7 +39,7 @@ function seedExistingXieyiRelation(save, favorability = XIEYI_EXISTING_AFFINITY)
 }
 
 function xieyiFavorability(save) {
-  const value = Number(save.社交?.关系?.谢艺?.好感度);
+  const value = Number(save.社交?.关系?.['liuchao.character.xie_yi']?.好感度);
   assert.equal(Number.isFinite(value), true, '须存在既有谢艺关系且好感度为有限数');
   return value;
 }

@@ -1,3 +1,4 @@
+import { newLocalCharacterId } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import { generateWithRawPrompt } from '@/utils/tavernCore';
 import { getPrompt } from '@/services/defaultPrompts';
 import type { SaveData, GameTime, GameEvent, NpcProfile, WorldInfo } from '@/types/game';
@@ -159,6 +160,7 @@ ${extra}
       worldInfo,
     });
 
+    npcProfile.角色ID ||= newLocalCharacterId();
     const eventName = String((parsed as any)?.event_name || `异人现世·${npcProfile.名字}`).trim();
     const eventType = String((parsed as any)?.event_type || '人物风波').trim();
 
@@ -169,7 +171,7 @@ ${extra}
       事件描述: eventStory,
       影响等级: '轻微',
       影响范围: '局部',
-      相关人物: [npcProfile.名字],
+      相关人物: [npcProfile.角色ID],
       事件来源: '系统',
       发生时间: now,
     };

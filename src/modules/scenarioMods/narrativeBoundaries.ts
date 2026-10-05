@@ -1,4 +1,4 @@
-import { xiaoziDisclosure } from './characterResolver';
+import { xiaoziDisclosure, isDisclosureFactAllowed } from './characterResolver';
 /**
  * 事件级叙事边界（数据表）。
  *
@@ -80,12 +80,28 @@ export function validateNanhuangCanonNarrative(text: string, stageId: string, lo
     && /(?:那是|这里|此地|这片|眼前)[^。！？]{0,30}王哲[^。！？]{0,25}十里焦土/.test(s))) {
     throw new Error(`正典地点冲突：${location || '南荒战场'}不是王哲殉身的十里焦土`);
   }
+  if (stageId === 'lcq.stage_04b_lingfei_baiyi_crisis' && sentences.some(sentence => !/当年|旧时|曾经|回忆|往事|过去/.test(sentence)
+    && /(?:碧奴|碧姬)[^。！？\n]{0,20}(?:说是|说过|说这|解释|打翻|村里|粮仓|村务)/.test(sentence))) {
+    throw new Error('正典在场冲突：碧姬不在当前碧鲮村现场，不编造她最近处理村务的言行');
+  }
   const xiaozi = xiaoziDisclosure({ ...disclosureContext, modId: stageId, completedEventIds: completed });
   for (const sentence of sentences) {
+    if (!isDisclosureFactAllowed(sentence, { ...disclosureContext, modId: stageId, completedEventIds: completed })) throw new Error('父系身世秘密尚未揭露：一般旧事须到72章，具体父系须经105章确证');
     if (/小紫/.test(sentence) && /毒宗|殇侯[^，。]{0,10}(?:弟子|传人)|唯一[^，。]{0,10}(?:嫡传|传人)/.test(sentence)) throw new Error('小紫师承在南荒尚未公开，清羽范围不开放唯一传人');
     if (!/小紫/.test(sentence) || !/神似|肖似|相似|女儿|父亲|母亲|亲生|血缘/.test(sentence)) continue;
     const fatherConflict = !xiaozi.father && /岳帅|岳鹏举/.test(sentence)
       && !(xiaozi.suspectedFather && /怀疑|猜测|未证实/.test(sentence));
     if (fatherConflict || (!xiaozi.mother && /碧姬|碧奴/.test(sentence))) throw new Error('小紫身世尚未揭露，不能描写与碧姬或岳帅的亲缘相似');
+  }
+}
+
+export function validateQingyuNarrativeFacts(text: string, eventId?: string): void {
+  if (/苏荔[^。！？\n]{0,12}(?:是|正是|担任|身为)?碧鲮族长|碧鲮族长苏荔|小紫[^。！？\n]{0,20}(?:叫|喊|唤)苏荔[^。！？\n]{0,8}娘|小紫[^。！？\n]{0,30}(?:叫|喊)[^。！？\n]{0,8}娘[^。！？\n]{0,100}苏荔/.test(text)) throw new Error('正典关系冲突：苏荔是花苗族长，不是小紫的母亲');
+  if (/黑魔海(?:的)?(?:海底|海水|海域|水脉|封印)|(?:整片|一片|那片)黑魔海/.test(text)) throw new Error('黑魔海是宗派，不是海域或封印之物');
+  if (/血虎[^。！？\n]{0,60}虎斑[^。！？\n]{0,35}武二郎[^。！？\n]{0,12}(?:如出一辙|相似|一样)|死老头留下的遗物/.test(text)) throw new Error('南荒事实冲突：不编血虎与武二郎外貌同源或死老头遗物');
+  if (eventId === 'lcq.event.ningyu_regicide_offer') {
+    if (/天竺/.test(text)) throw new Error('凝羽旧事地点冲突：本拍不编天竺往事');
+    const nameAt = text.indexOf('西门庆');
+    if (nameAt >= 0 && !/凝羽[^。！？\n]{0,80}(?:说|道|开口|吐出|答|提起)[^。！？\n]*$/.test(text.slice(Math.max(0,nameAt-100), nameAt))) throw new Error('姓名揭示顺序冲突：先由凝羽说西门庆，主角再反应');
   }
 }

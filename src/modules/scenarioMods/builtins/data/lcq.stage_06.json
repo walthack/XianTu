@@ -312,12 +312,13 @@
         "name": "龙神",
         "description": "沉睡在鬼王峒深井中的巨龙，已被苍龙星阵唤醒。",
         "role": "龙神",
-        "gender": "未知",
+        "gender": "无",
         "affiliations": [],
         "locationId": "liuchao.location.gui_wang_dong",
         "profile": {
           "origin": "鬼王峒地下沉睡的巨龙。"
-        }
+        },
+        "entityType": "creature"
       },
       {
         "id": "lcq.character.np006",
@@ -547,7 +548,7 @@
         "status": "confirmed",
         "claim": "碧姬就是星月湖旧部称作“碧宛”的岳帅姬妾。",
         "behaviorCue": "谢艺寻找碧姬并非泛泛寻人；他对目标的旧称与旧日来历有确定把握。玩家尚未确认前，只通过辨认、克制的称呼与保护性行动体现知情，不替玩家说破完整身份链",
-        "evidence": "RELATIONSHIPS-SECRET.md §2；CANON-DECISIONS #81/#141；清羽记 ch82/ch95",
+        "evidence": "RELATIONSHIPS-SECRET.md §2；CANON-DECISIONS #81/#141；六朝清羽记第65章段33、第76章段91",
         "forbiddenAssociations": [
           {
             "subjects": [
@@ -599,7 +600,8 @@
       {
         "factId": "knowledge.npc.qingyu.xiaozi_biji_mother",
         "holderCharacterIds": [
-          "liuchao.character.xiao_zi"
+          "liuchao.character.xiao_zi",
+          "lcq.character.np006"
         ],
         "subjectId": "liuchao.character.bi_ji",
         "predicate": "mother_of",
@@ -607,7 +609,7 @@
         "status": "confirmed",
         "claim": "碧姬是小紫的生母。",
         "behaviorCue": "小紫面对碧姬时带着早已积压的私人旧恨；在玩家尚未确认母女关系前，只让这种针对性通过回避、冷意与行动选择显现，不先说破称谓",
-        "evidence": "RELATIONSHIPS-SECRET.md §1/§2；CANON-DECISIONS #81/#82；清羽记 ch118 母女对质",
+        "evidence": "RELATIONSHIPS-SECRET.md §1/§2；CANON-DECISIONS #81/#82；清羽记 ch118 母女对质；六朝清羽记第78章阁罗当众揭示母系",
         "forbiddenAssociations": [
           {
             "subjects": [

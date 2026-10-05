@@ -136,7 +136,7 @@
             <div class="last-user-intent-text">{{ currentNarrative.userIntent }}</div>
           </div>
           <div class="narrative-text">
-            <img v-if="currentNarrative.image" :src="currentNarrative.image" alt="剧情插图" style="display:block;max-width:100%;height:auto;margin:0 auto 1rem;" />
+            <img v-if="currentNarrative.image" :src="resolveEndingImage(currentNarrative.image)" alt="剧情插图" style="display:block;max-width:100%;height:auto;margin:0 auto 1rem;" />
             <FormattedText :text="currentNarrative.content" />
           </div>
 
@@ -343,6 +343,7 @@
           </div>
 
           <div v-if="scenarioGameOver" class="game-over-card">
+            <img v-if="scenarioEndingImage && resolveEndingImage(currentNarrative?.image) !== scenarioEndingImage" :src="scenarioEndingImage" :alt="scenarioGameOver.title" class="ending-image" />
             <div class="game-over-head">
               <span class="game-over-tag">本局结束</span>
               <h3>{{ scenarioGameOver.title }}</h3>
@@ -496,6 +497,8 @@
 </template>
 
 <script setup lang="ts">
+import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
+import { resolveEndingImage } from '@/assets/endings';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
 import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
@@ -877,6 +880,11 @@ const scenarioGameOver = computed<{ endingId: string; title: string; facts: stri
   const runtime = (gameStateStore.worldState as any)?.剧本模组;
   const over = runtime?.gameOver;
   return over?.endingId ? over : null;
+});
+const scenarioEndingImage = computed(() => {
+  const over = (gameStateStore.worldState as any)?.剧本模组?.gameOver;
+  if (!over?.endingId) return undefined;
+  return resolveEndingImage(over.presentation?.image || endingPresentation(over).image);
 });
 const worldSimulationPlaytestFinished = computed(() => {
   const marker = (gameStateStore.systemExtensions as any)?.六朝世界试玩;
@@ -3680,6 +3688,12 @@ const syncGameState = async () => {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+.ending-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 .game-over-head {
   display: flex;

@@ -65,7 +65,7 @@ test('E05 only opens after warning step, refusal closes fatal choice, touch ends
  assert.match(fixedEndingNarrative(rt(touched).gameOver),/空洞的眼窝/);assert.doesNotMatch(endingBridge('你已经烧成了灰。','lcq.ending.death.shanghou_relic'),/烧成/);
  save=await action(save,'refuse_shanghou_relic_test');assert.ok(!getCurrentStoryEventActions(save).some(a=>a.actionId==='touch_shanghou_relic'));
  assert.equal(recordStoryEventStructuredAction(save,fatal).reason,'action_unavailable');
- save=await action(save,'confirm_zhu_is_shanghou');assert.equal(rt(save).canon.characters.find(c=>c.id==='liuchao.character.shang_zhen_yu').name,'殇侯');
+ save=await action(save,'confirm_zhu_is_shanghou');assert.equal(rt(save).canon.characters.find(c=>c.id==='liuchao.character.shang_zhen_yu').name,'朱老头');
 });
 test('chapter121 cures once; chapter124 confirms without repeating treatment',async()=>{
  let save=await focus(await opened(ids[3]),'lcq.event.s05b_shanghou_reads_letter');
@@ -77,7 +77,7 @@ test('chapter121 cures once; chapter124 confirms without repeating treatment',as
 test('masked identity and death/longrest facts remain distinct',async()=>{
  const {syncNanhuangIdentityDisplay}=await loadTs('../src/modules/scenarioMods/characterResolver.ts');
  const runtime={modId:ids[1],canon:{characters:[{id:'liuchao.character.le_mingzhu',name:'乐明珠'},{id:'liuchao.character.shang_zhen_yu',name:'殇侯'}]},flags:{},completedEventIds:[]};
- syncNanhuangIdentityDisplay(runtime);assert.deepEqual(runtime.canon.characters.map(c=>c.name),['花苗新娘','朱八八']);assert.doesNotMatch(JSON.stringify(runtime.canon.characters),/鸩羽|毒宗/);
+ syncNanhuangIdentityDisplay(runtime);assert.deepEqual(runtime.canon.characters.map(c=>c.name),['花苗新娘','朱老头']);assert.doesNotMatch(JSON.stringify(runtime.canon.characters),/鸩羽|毒宗/);
  runtime.completedEventIds=['lcq.event.s04_03'];syncNanhuangIdentityDisplay(runtime);assert.equal(runtime.canon.characters[0].name,'乐明珠');
  const {resolveScenarioEventNarrative}=await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
  const e=(await stage(ids[3])).scenario.events.find(e=>e.id==='lcq.event.s05b_ice_gu_detour');
@@ -149,7 +149,7 @@ test('temporary debut exclusions do not persist; deaths do persist between stage
   const { validateModuleCastNarrative } = await loadTs('../src/modules/scenarioMods/modularTurn.ts');
   const runtime = { modId: ids[0], completedEventIds: ['lcq.event.s03b_yinzhu_xiongerpu'], flags: {} };
   stampDepartedCast(runtime);
-  assert.ok(runtime.departedCast.includes('阿葭'));
+  assert.ok(runtime.departedCast.some(id => runtime.personIdentities?.[id]?.name === '阿葭'));
   assert.ok(!runtime.departedCast.includes('苏荔'));
   runtime.modId = ids[2]; runtime.completedEventIds = [];
   assert.ok(departedPresentNames(runtime).includes('阿葭'));

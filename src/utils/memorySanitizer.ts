@@ -34,7 +34,6 @@ export function sanitizePersistedMemoryEntry(value: unknown): string {
   return cleaned;
 }
 
-const TIME_PREFIX_RE = /^【(?:仙道|仙历|未知时间)/;
 
 /**
  * 逐轮正文写入短期记忆的统一入口：先过持久化清洗（剥思维链/JSON 壳/围栏），
@@ -44,7 +43,12 @@ const TIME_PREFIX_RE = /^【(?:仙道|仙历|未知时间)/;
 export function composeShortTermMemoryEntry(timePrefix: string, rawText: unknown): string {
   const cleaned = sanitizePersistedMemoryEntry(rawText);
   if (!cleaned) return '';
-  return TIME_PREFIX_RE.test(cleaned) ? cleaned : `${timePrefix}${cleaned}`;
+  const body = stripNarrativeTimePrefix(cleaned);
+  return `${timePrefix}${body}`;
+}
+
+export function stripNarrativeTimePrefix(text: string): string {
+  return text.replace(/^(?:(?:【(?:仙道|仙历|未知时间)[^】]*】|(?:仙道|仙历)\d+年\d+月\d+日\s+\d{1,2}:\d{2})\s*)+/, '');
 }
 
 export function sanitizePersistedMemoryArray(value: unknown): string[] {

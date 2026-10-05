@@ -151,7 +151,8 @@ function applyCardToCharacter(character, card, stageId) {
   const profile = character.profile || {};
   const currentPhase = stagePhase(card, stageId);
 
-  if (card.gender && (!character.gender || character.gender === '未知')) character.gender = card.gender;
+  if (card.entityType) character.entityType = card.entityType;
+  if (card.entityType === 'creature' || (card.gender && (!character.gender || character.gender === '未知'))) character.gender = card.gender;
   if (currentPhase?.role) character.role = currentPhase.role;
 
   // 只删【派生 notes】——它 100% 可由 registry 无损还原（等价性验证 notes 0 不一致）。

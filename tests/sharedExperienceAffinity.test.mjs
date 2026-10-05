@@ -171,7 +171,7 @@ test('结算返回变动明细，含事件出处', async () => {
   const { affinityGrants } = advanceScenarioRuntime(save);
   assert.equal(affinityGrants.length, 1);
   assert.deepEqual(affinityGrants[0], {
-    name: '小紫', from: 40, to: 48, eventId: 'e1', eventName: '共闯神龙殿',
+    name: '小紫', characterId: 'c.xiaozi', from: 40, to: 48, eventId: 'e1', eventName: '共闯神龙殿',
   });
 });
 
@@ -186,7 +186,7 @@ test('明细进入玩家可见的状态变化流', async () => {
   const src = fs.readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
   const block = src.slice(src.indexOf('affinityGrants || []'), src.indexOf('里程碑奖励'));
   assert.match(block, /changes\.push/, '须推进 changes（stateChanges）');
-  assert.match(block, /社交\.关系\.\$\{grant\.name\}\.好感度/, 'key 须用标准路径以复用既有格式化');
+  assert.match(block, /npcRecordPath\(grant\.characterId, '好感度'\)/, 'key 须用标准路径以复用既有格式化');
   assert.match(block, /oldValue: grant\.from/, '须带前后值，否则显示不出增减');
 });
 
@@ -201,7 +201,7 @@ test('好感结算发生在姿态推进之前（姿态须反映结算后的值�
   });
   const out = advanceScenarioRuntime(save).saveData;
   assert.equal(favOf(out, '小紫'), 46);
-  const stance = out.世界.状态.剧本模组.stanceStates?.小紫;
+  const stance = out.世界.状态.剧本模组.stanceStates?.['c.xiaozi'];
   assert.ok(stance, '姿态状态应已写入');
   // 首轮无历史状态时滞回退化为瞬时投影（另有测试覆盖），所以直接看姿态值：
   // 结算前 38 属 mid、结算后 46 属 high——得到 high 即证明结算跑在姿态推进之前。

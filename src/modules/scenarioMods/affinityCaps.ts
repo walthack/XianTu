@@ -1,3 +1,4 @@
+import { canonicalIdentityName } from './ledger/affinityIdentity';
 /**
  * 好感天花板（R3-9 规格 §3.5 待拍板项 C，2026-08-15 用户批准）。
  *
@@ -125,8 +126,8 @@ export const AFFINITY_CAPS: readonly AffinityCap[] = [
  * `relationLabel` 传入存档里的 `与玩家关系`：一旦标签已表明归属，说明正典加入事件
  * 已经发生，cap 自动失效——避免"人都进后宫了好感还卡在陌路"这种自相矛盾。
  */
-export function affinityCapFor(name: string, relationLabel?: string): AffinityCap | null {
-  const entry = AFFINITY_CAPS.find(item => item.names.includes(name));
+export function affinityCapFor(name: string, relationLabel?: string, displayName?: string): AffinityCap | null {
+  const entry = AFFINITY_CAPS.find(item => item.names.includes(canonicalIdentityName(name) || displayName || name));
   if (!entry) return null;
   if (relationLabel && SETTLED_RELATION_RE.test(relationLabel)) return null;
   return entry;

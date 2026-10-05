@@ -15,6 +15,7 @@ const root = resolve(import.meta.dirname, '..');
 const gen = join(root, 'mod-kit/generated/deepseek-v4-flash');
 
 const steps = [
+  ['账本人名棘轮', 'node', ['scripts/validate-ledger-ratchet.mjs']],
   ['registry 重建', 'node', ['scripts/build-character-registry.mjs']],
   ['卡投影 stage(slim+personality)', 'node', ['scripts/apply-character-cards-v3-to-mod.mjs']],
   ['归属投影 stage', 'node', ['scripts/project-affiliations-to-stages.mjs', '--apply']],

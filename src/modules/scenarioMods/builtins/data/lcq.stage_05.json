@@ -562,7 +562,7 @@
         "status": "confirmed",
         "claim": "碧姬就是星月湖旧部称作“碧宛”的岳帅姬妾。",
         "behaviorCue": "谢艺寻找碧姬并非泛泛寻人；他对目标的旧称与旧日来历有确定把握。玩家尚未确认前，只通过辨认、克制的称呼与保护性行动体现知情，不替玩家说破完整身份链",
-        "evidence": "RELATIONSHIPS-SECRET.md §2；CANON-DECISIONS #81/#141；清羽记 ch82/ch95",
+        "evidence": "RELATIONSHIPS-SECRET.md §2；CANON-DECISIONS #81/#141；六朝清羽记第65章段33、第76章段91",
         "forbiddenAssociations": [
           {
             "subjects": [
@@ -614,7 +614,8 @@
       {
         "factId": "knowledge.npc.qingyu.xiaozi_biji_mother",
         "holderCharacterIds": [
-          "liuchao.character.xiao_zi"
+          "liuchao.character.xiao_zi",
+          "lcq.character.np006"
         ],
         "subjectId": "liuchao.character.bi_ji",
         "predicate": "mother_of",
@@ -622,7 +623,7 @@
         "status": "confirmed",
         "claim": "碧姬是小紫的生母。",
         "behaviorCue": "小紫面对碧姬时带着早已积压的私人旧恨；在玩家尚未确认母女关系前，只让这种针对性通过回避、冷意与行动选择显现，不先说破称谓",
-        "evidence": "RELATIONSHIPS-SECRET.md §1/§2；CANON-DECISIONS #81/#82；清羽记 ch118 母女对质",
+        "evidence": "RELATIONSHIPS-SECRET.md §1/§2；CANON-DECISIONS #81/#82；清羽记 ch118 母女对质；六朝清羽记第78章阁罗当众揭示母系",
         "unlockAfterEventId": "lcq.event.s05_13",
         "forbiddenAssociations": [
           {
@@ -1717,7 +1718,7 @@
       {
         "id": "lcq.event.s05_13",
         "name": "阁罗召来碧姬",
-        "description": "阁罗只展示鬼王峒的部分实力，不肯透露控制诸族的关键。随后他召来被峒中称作“碧奴”的碧姬；程宗扬首次当面见到谢艺寻找的人。",
+        "description": "阁罗只展示鬼王峒的部分实力，不肯透露控制诸族的关键。随后他召来碧姬；程宗扬首次当面见到谢艺寻找的人。",
         "objective": "从阁罗口中确认控制线索的边界，并当面辨认碧姬",
         "locationId": "liuchao.location.guiwang_dong",
         "relatedCharacterIds": [
@@ -1733,7 +1734,7 @@
         "axisId": "qingyu.90.2",
         "axisSeq": 158,
         "axisAnchor": "六朝清羽记·#90·第88章·碧奴",
-        "axisBeat": "阁罗拒绝透露鬼王峒控制秘密，随后召来峒中称作“碧奴”的碧姬。",
+        "axisBeat": "阁罗拒绝透露鬼王峒控制秘密，随后召来碧姬。",
         "axisMethod": "source-rebuilt-append-only",
         "critical": true,
         "conditions": [
@@ -2532,7 +2533,7 @@
         {
           "id": "world-sim.baseline.lcq.stage_05.lcq.event.s05_13",
           "title": "使者讳言召人",
-          "summary": "阁罗只肯展示峒中一部分实力，关键问句一律推开，随即命人去唤一位被称作“碧奴”的女子。",
+          "summary": "阁罗只肯展示峒中一部分实力，关键问句一律推开，随即命人去唤碧姬。",
           "sourceEventId": "lcq.event.s05_13",
           "settledWhenAny": [
             [
@@ -2551,7 +2552,7 @@
             "observableFacts": [
               "阁罗谈实力时只亮出半扇石厅",
               "问到如何辖制诸族，他一律岔开",
-              "侍从被打发去唤一位叫“碧奴”的人"
+              "侍从被打发去唤碧姬"
             ],
             "transmitters": [
               {
@@ -2568,7 +2569,7 @@
             "environmentFallback": "石厅深处帷幕未开，铜环轻响，侍从的脚步消失在更里面的甬道。",
             "presentation": {
               "title": "半厅未开",
-              "text": "阁罗把话题停在半扇石厅里，问到辖制诸族的关节便笑着推开。他抬手让人去唤“碧奴”，帷幕后铜环一响，来人还没有露脸。"
+              "text": "阁罗把话题停在半扇石厅里，问到辖制诸族的关节便笑着推开。他抬手吩咐：“去唤碧奴。”帷幕后铜环一响，来人还没有露脸。"
             }
           }
         },

@@ -1,0 +1,266 @@
+// F03 山涧雾战与九名鬼王峒武士（原著第45–46章），依据 ~/Desktop/narrative/10-战斗系统_剧情侧需求.md §1.1 F03。
+// 两种模式共用同一场景卡、同一组基础因子和同一张后果表；差别只在「怎么掷、掷几次」。
+// 所有出场角色均为成年人；本场不含任何性内容。
+import { fixedLuck } from './engine.mjs';
+
+const FORTUNE = 5;
+
+export const scenario = {
+  id: 'F03',
+  title: 'F03 山涧雾战 · 九名鬼王峒武士',
+  source: '原著第45–46章《袭击》《幻真》',
+  card: {
+    enemies: '鬼王峒武士 9 名：光头，额心生着一支利角，手持铁斧',
+    allies: '凝羽、武二郎（在后队，稍后赶到）、苏荔（弓）、易彪、易虎、祁远、小魏、吴战威、卡瓦和花苗勇士',
+    bystanders: '乐明珠此时是戴面纱的新娘，不出手',
+    role: '你单打撑不过一名武士。护住凝羽，拖到援手赶到。',
+    twist: '局势可能有变。',
+    environment: '浓雾：看不清三步外的人（判定 −3）',
+    stakes: {
+      胜: '照原著：花苗勇士死伤若干，1 名商馆护卫被鬼角刺死；你外伤（轻）',
+      败: '你被撞翻，外伤（中）；祁远肩伤加重一级；再多 1 名花苗勇士阵亡',
+      大败: '你外伤（重），要人搀扶；凝羽内伤（中）。武二郎照常扭转战局',
+    },
+  },
+  baseFactors: () => [
+    { label: '六司（根骨/灵性/气运加权）', value: 1, source: 'attribute' },
+    { label: '刀法初学（随武二郎学五虎断门刀）', value: 1, source: 'skill' },
+    { label: `幸运（气运 ${FORTUNE}，固定值）`, value: fixedLuck(FORTUNE), source: 'condition' },
+    { label: '环境：浓雾', value: -3, source: 'environment' },
+  ],
+  woundPenalty: { 无: 0, 轻: -1, 中: -3, 重: -5 },
+  intro: '浓雾压进山涧。探路的花苗汉子一声闷哼倒在雾里，再没起来。雾里走出一个光头的汉子，额心生着一支可怖的利角，手里的铁斧还在滴血。这是你来到这个世界之后，第一次与人正式交手。',
+
+  // ---------- B：分阶段判定 ----------
+  phased: {
+    phases: [
+      {
+        title: '第一阶段 · 雾中第一次交手',
+        prompt: '利角武士抡斧直取你的面门。',
+        factors: [],
+        tactics: [
+          {
+            id: 'meet_axe', label: '正面硬接这一斧', kind: 'combat', difficulty: 16,
+            hint: '硬碰硬：赢了士气大振，输了虎口震裂',
+            costs: {
+              胜: { playerWound: '无', effects: ['你接住了这一斧，钢刀没有脱手，武士被逼退半步'], carry: [{ label: '站稳脚跟（上阶段硬接成功）', value: 3, source: 'condition' }] },
+              败: { playerWound: '轻', effects: ['程宗扬 外伤（轻）：虎口震裂，钢刀几乎脱手'] },
+              大败: { playerWound: '中', effects: ['程宗扬 外伤（中）：被斧背撞翻在地'] },
+            },
+          },
+          {
+            id: 'use_mist', label: '借浓雾周旋，不让他看清', kind: 'escape', difficulty: 12,
+            hint: '稳妥：不求伤敌，只求不被劈中',
+            costs: {
+              胜: { playerWound: '无', effects: ['武士在雾里扑了个空，你拖住了他'], carry: [{ label: '雾中占位（上阶段周旋成功）', value: 1, source: 'condition' }] },
+              败: { playerWound: '轻', effects: ['程宗扬 外伤（轻）：雾里被斧刃擦过手臂'] },
+              大败: { playerWound: '中', effects: ['程宗扬 外伤（中）：在雾里撞上斧口'] },
+            },
+          },
+          {
+            id: 'beside_ningyu', label: '退到凝羽身侧并肩', kind: 'combat', difficulty: 15,
+            factors: [{ label: '凝羽并肩（在场）', value: 2, source: 'ally' }],
+            hint: '借同伴之力：两人互相照应',
+            costs: {
+              胜: { playerWound: '无', effects: ['你和凝羽背靠背，武士一时找不到破绽'], carry: [{ label: '与凝羽配合（上阶段并肩成功）', value: 2, source: 'ally' }] },
+              败: { playerWound: '轻', effects: ['程宗扬 外伤（轻）：替凝羽挡了一下，被斧风扫中'] },
+              大败: { playerWound: '中', effects: ['程宗扬 外伤（中）：两人被冲散，你挨了一斧'] },
+            },
+          },
+        ],
+      },
+      {
+        title: '第二阶段 · 撑到武二郎赶到',
+        prompt: '更多的利角武士从雾里压过来，凝羽被逼到你身后。',
+        factors: [{ label: '生死根续航（混战中有人身死）', value: 2, source: 'talent' }],
+        tactics: [
+          {
+            id: 'shield_ningyu', label: '挡在凝羽身前硬扛', kind: 'combat', difficulty: 21,
+            hint: '高风险：赢了凝羽毫发无伤、信任 +1；掷出 1 会大败',
+            costs: {
+              胜: { playerWound: '轻', effects: ['凝羽毫发无伤，你硬扛下了这一轮', '凝羽 对你的态度：信任 +1（只有这个战术的「胜」才有）'] },
+              败: { playerWound: '中', effects: ['程宗扬 外伤（中）：斧刃划开肩头'] },
+              大败: { playerWound: '重', effects: ['程宗扬 外伤（重）：被斧柄撞在肋下，站不起来'] },
+            },
+          },
+          {
+            id: 'call_suli', label: '高喊苏荔放箭掩护', kind: 'scheme', difficulty: 15,
+            factors: [{ label: '苏荔弓箭掩护（在场）', value: 3, source: 'ally' }],
+            hint: '借远程：成功率高，但要喊得准、喊得及时',
+            costs: {
+              胜: { playerWound: '无', effects: ['苏荔一箭逼退了逼近的武士'] },
+              败: { playerWound: '轻', effects: ['程宗扬 外伤（轻）：箭慢了半拍'] },
+              大败: { playerWound: '中', effects: ['程宗扬 外伤（中）：喊声暴露了位置'] },
+            },
+          },
+          {
+            id: 'kite_rocks', label: '绕着山石游斗拖时间', kind: 'escape', difficulty: 14,
+            hint: '拖字诀：不伤敌，只拖到援手来',
+            costs: {
+              胜: { playerWound: '无', effects: ['你绕着山石兜圈，武士始终劈不到实处'] },
+              败: { playerWound: '轻', effects: ['程宗扬 外伤（轻）：被逼到石壁，挨了一下'] },
+              大败: { playerWound: '中', effects: ['程宗扬 外伤（中）：脚下一滑，被斧锋追上'] },
+            },
+          },
+        ],
+      },
+    ],
+    interludes: [
+      '雾里传来一声惨叫，有人倒下。一缕阴寒的气息透过太阳穴游入你的丹田，你手上忽然又有了力气。（生死根：下一阶段 +2）',
+      '高处弓弦响，苏荔张弓，一支箭钉进雾里。',
+    ],
+    finale: [
+      '后队一声长啸，武二郎冲进雾里，一把拧断一名武士的脖颈，双刀犹如两条长虹。',
+      '一名武士吸食同伴的鲜血，体形暴涨，胸前浮出一张大笑的鬼脸。武二郎提刀迎了上去，战局就此扭转。',
+    ],
+    finalByTier: {
+      胜: {
+        playerWound: '轻',
+        effects: [
+          '原著结果：武二郎斩杀四人，两人死在花苗人刀下，余者被削去半掌',
+          '花苗勇士死伤若干；1 名商馆护卫被鬼角刺死',
+          '程宗扬 外伤（轻）',
+        ],
+      },
+      败: {
+        playerWound: '中',
+        effects: [
+          '原著结果照旧：武二郎斩杀四人，两人死在花苗人刀下，余者被削去半掌',
+          '程宗扬 外伤（中）：被撞翻',
+          '祁远 肩伤加重一级',
+          '再多 1 名花苗勇士阵亡',
+        ],
+      },
+      大败: {
+        playerWound: '重',
+        effects: [
+          '原著结果照旧：武二郎扭转战局',
+          '程宗扬 外伤（重）：需要人搀扶',
+          '凝羽 内伤（中）：与武士缠斗后吐出黑血（原著第46章）',
+        ],
+      },
+    },
+  },
+
+  // ---------- A：回合制 ----------
+  rounds: {
+    playerHp: 28,
+    enemyHp: 40,
+    rescueRound: 5,
+    winHpRatio: 0.6,
+    winEnemyHp: 15,
+    shengsigenFromRound: 2,
+    actions: [
+      { id: 'attack', label: '挥刀进攻', kind: 'combat', difficulty: 15, dealScale: 1, takeShift: 0, hint: '伤敌多，挨打也多' },
+      { id: 'guard', label: '稳守格挡', kind: 'combat', difficulty: 13, dealScale: 0.5, takeShift: -1, hint: '少挨一点，伤敌减半' },
+      { id: 'protect', label: '护住凝羽', kind: 'combat', difficulty: 13, dealScale: 0, takeShift: 0, protectsNingyu: true, fromRound: 2, hint: '不伤敌；成功护住，凝羽战后不受内伤' },
+    ],
+    damage: {
+      deal: { perfect: 14, great_success: 10, success: 7, partial: 3, failure: 0, critical_failure: 0 },
+      take: { perfect: 0, great_success: 0, success: 2, partial: 4, failure: 6, critical_failure: 9 },
+    },
+    scripted: [
+      { afterRound: 1, text: '雾里一声惨叫，有人倒下。一缕阴寒的气息游入你的丹田。（生死根：此后每回合 +2）' },
+      { afterRound: 3, enemyDamage: 6, text: '弓弦响处，苏荔一箭钉进武士肩头。（武士 −6）' },
+      { afterRound: 4, text: '凝羽被另一名武士缠住，刀光越来越乱。' },
+    ],
+    finale: [
+      '后队一声长啸，武二郎冲进雾里，一把拧断一名武士的脖颈，双刀犹如两条长虹。',
+      '一名武士吸食同伴的鲜血，体形暴涨，胸前浮出一张大笑的鬼脸。武二郎提刀迎了上去，战局就此扭转。',
+    ],
+    unprotectedNingyuEffect: '凝羽 内伤（中）：无人接应，与武士缠斗后吐出黑血',
+    finalByTier: {
+      胜: { effects: ['原著结果：武二郎斩杀四人，两人死在花苗人刀下，余者被削去半掌', '花苗勇士死伤若干；1 名商馆护卫被鬼角刺死', '程宗扬 外伤（轻）'] },
+      败: { effects: ['原著结果照旧', '程宗扬 外伤（中）：被撞翻', '祁远 肩伤加重一级', '再多 1 名花苗勇士阵亡'] },
+      大败: { effects: ['原著结果照旧：你倒下时武二郎刚好赶到', '程宗扬 外伤（重）：需要人搀扶'] },
+    },
+  },
+};
+
+// ---------- 模板叙事（离线） ----------
+// 按动作 × 档位给 2–3 个变体，按结算 id 与骰点稳定选取：同一结果刷新后文字不变。
+
+function pick(list, key) {
+  let hash = 0;
+  for (const char of key) hash = (hash * 31 + char.codePointAt(0)) >>> 0;
+  return list[hash % list.length];
+}
+
+const PHASE_TEXT = {
+  meet_axe: {
+    胜: ['铁斧压下来，你横刀硬接，刀斧一交，钢刀几乎要脱手飞出，可你咬牙撑住了。那武士没料到你这一刀这么沉，脚下退了半步。', '你迎着斧风上前一步，刀身架住斧刃，火星在雾里一闪。手臂震得发麻，可刀还在手里，武士的斧头被你顶了回去。'],
+    败: ['刀斧相交的一瞬，一股巨力顺着刀身撞进手臂。你的虎口当场裂开，钢刀险些脱手，只能踉跄着退开。', '你横刀去接，却低估了那一斧的分量。刀被压得贴到肩头，虎口一阵钻心的疼，血顺着刀柄往下淌。'],
+    大败: ['你硬接这一斧，却被连人带刀撞了出去，背脊重重砸在湿石上，眼前一阵发黑。'],
+  },
+  use_mist: {
+    胜: ['你矮身钻进更浓的雾里。武士的斧头劈开一团白雾，却只劈中了空气。他转着头找你，你已经绕到他的侧面。', '你脚下不停，借着雾气忽左忽右。那武士几斧都落了空，喘息声越来越重。'],
+    败: ['雾遮住了你，也遮住了脚下的乱石。你一个踉跄，斧刃擦着手臂过去，划开一道口子。'],
+    大败: ['你在雾里转错了方向，正撞上斧口，只来得及侧身，肩头一阵剧痛。'],
+  },
+  beside_ningyu: {
+    胜: ['你退到凝羽身侧，两人背靠着背。她的弯刀在左，你的钢刀在右，武士绕了半圈，竟找不到下手的地方。'],
+    败: ['你退向凝羽，正赶上武士一斧扫来。你替她挡了这一下，斧风扫过你的胳膊，火辣辣地疼。'],
+    大败: ['你刚靠近凝羽，两人就被冲上来的武士冲散，你挨了结结实实的一斧。'],
+  },
+  shield_ningyu: {
+    胜: ['你横身挡在凝羽前面，一斧接一斧地扛。手臂早已麻木，可你一步也没退，凝羽在你身后稳住了气息。', '斧头一次次落下，你一次次举刀。有一下几乎劈到你眉心，你偏头躲过，仍旧挡在原地。'],
+    败: ['你挡在凝羽身前，扛住了前两斧，第三斧却从刀下钻了进来，划开你的肩头。'],
+    大败: ['你挡在凝羽身前，被斧柄重重撞在肋下，整个人折了下去，再也站不起来。凝羽只能独自迎上去。'],
+  },
+  call_suli: {
+    胜: ['你冲着高处大喊一声。几乎同时，一支箭从雾里飞出，钉进逼近的武士脚前，他硬生生收住了步子。', '"苏荔！左边！"你话音未落，弓弦已响。武士捂着手臂退回了雾里。'],
+    败: ['你喊了一声，可雾太浓，那支箭慢了半拍。武士的斧头先到，在你身上留下一道口子。'],
+    大败: ['你的喊声暴露了自己的位置，两名武士同时朝你扑过来。'],
+  },
+  kite_rocks: {
+    胜: ['你绕着一块大石兜圈子，武士的斧头一次次砍在石头上，碎石四溅，却始终够不到你。'],
+    败: ['你绕着山石游走，最后还是被逼到了石壁前，挨了一下才脱身。'],
+    大败: ['湿滑的石头让你脚下一空，斧锋追着你的后背落了下来。'],
+  },
+};
+
+const ROUND_TEXT = {
+  attack: {
+    胜: [
+      '你抢先出刀，刀锋划过武士的手臂，带出一串血珠。他闷吼一声，斧头回得慢了。',
+      '你一刀劈在武士肩头，他踉跄了一下，铁斧却仍旧横扫过来，你堪堪避开。',
+      '你学着武二郎教的架势斜劈下去，刀锋在武士肋下拉开一道口子，他的步子乱了。',
+      '你贴着斧风欺身而上，刀柄撞在他下颌，趁他一晃又补了一刀。',
+    ],
+    败: [
+      '你一刀劈出，被铁斧磕开。斧柄顺势撞在你胸口，你连退几步。',
+      '你的刀砍了个空，武士的斧头擦着你的身侧落下，带走一片衣襟和皮肉。',
+      '你的刀砍在斧面上，震得手臂发麻；武士反手一推，你肩头又添一道伤。',
+    ],
+    大败: ['你冲得太猛，武士侧身让过，一斧背砸在你后心，你扑倒在地。'],
+  },
+  guard: {
+    胜: [
+      '你收刀守住门户，斧头落下时稳稳一架，顺手削在武士的腕上。',
+      '你只守不攻，几斧都被你架住，手臂发麻，却没有再添新伤。',
+      '你记着凝羽的话，呼吸不乱，一斧一斧地卸开，脚下一步没退。',
+    ],
+    败: [
+      '你举刀格挡，可那斧头太沉，刀被压下来，在你肩上压出一道血痕。',
+      '你架住了斧刃，却没防住他顺势撞来的肩膀，后背重重磕在石头上。',
+    ],
+    大败: ['你的格挡被一斧砸开，刀脱手飞出，下一斧结结实实落在你身上。'],
+  },
+  protect: {
+    胜: ['你冲到凝羽身旁，替她挡开一记偷袭。她回头看了你一眼，气息稳了下来。'],
+    败: ['你赶去护凝羽，替她挨了一下，伤口火辣辣地疼。'],
+    大败: ['你扑过去护凝羽，却被两把斧头夹住，摔进泥里。'],
+  },
+};
+
+export function narratePhase(resolution) {
+  const variants = PHASE_TEXT[resolution.tacticId]?.[resolution.tier] || ['（缺模板）'];
+  return pick(variants, `${resolution.id}:${resolution.roll}`);
+}
+
+export function narrateRound(resolution) {
+  const variants = ROUND_TEXT[resolution.actionId]?.[resolution.tier] || ['（缺模板）'];
+  // 按回合号轮换，相邻回合不重复同一句（模板数量有限，多打几回合仍会看到重复）。
+  const offset = variants.indexOf(pick(variants, `${resolution.actionId}:${resolution.tier}`));
+  return variants[(offset + (resolution.round || 0)) % variants.length];
+}

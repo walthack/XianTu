@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-10-04-e4bd3253cbd2c90d",
-  "sourceHash": "e4bd3253cbd2c90d",
+  "version": "cr-2026-10-05-40d0c799ea1bcdbb",
+  "sourceHash": "40d0c799ea1bcdbb",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-10-04T08:23:15.866Z",
+  "generatedAt": "2026-10-05T05:24:38.030Z",
   "stats": {
     "total": 315,
     "stagePresent": 218,
@@ -4991,9 +4991,9 @@
           }
         ],
         "debutLocation": {
-          "location": "南荒·某地（碧奴艳舞场景中）",
+          "location": "南荒·某地（碧姬艳舞场景中）",
           "locator": "六朝清羽记/第110章前后",
-          "scene": "程宗扬观看碧奴舞蹈时内心想起；已故武穆王/岳鹏举；碧奴的前主人"
+          "scene": "程宗扬观看碧姬舞蹈时内心想起；已故武穆王/岳鹏举；碧姬的前主人"
         },
         "birthYear": 170
       },
@@ -5005,7 +5005,7 @@
         "conflicts": [],
         "note": "用户裁定新建：多次被提及却无卡；原型岳飞，实为穿越者"
       },
-      "embedText": "岳帅 ｜ 岳鸟人 岳鹏举 武穆王 ｜ 穿越者；星月湖大营创建者与领袖，八骏之主；自号岳鹏举（武穆王），于风波亭事件中消失、下落不明 ｜ 星月湖(创建者/之主) ｜ 登场于南荒·某地（碧奴艳舞场景中） ｜ 无直接关系；程宗扬经小紫间接与星月湖势力关联，继承其部分遗业（星月湖产业、军事体系） ｜ 生前创建星月湖大营，麾下统率八骏；与黑魔海结仇（黑魔海培养「九御」以压其八骏）；以穿越者之能发明水泥配方、钟表设计；遗留钟表等器物给旧部；于风波亭事件中消失，下落不明（生死未卜）"
+      "embedText": "岳帅 ｜ 岳鸟人 岳鹏举 武穆王 ｜ 穿越者；星月湖大营创建者与领袖，八骏之主；自号岳鹏举（武穆王），于风波亭事件中消失、下落不明 ｜ 星月湖(创建者/之主) ｜ 登场于南荒·某地（碧姬艳舞场景中） ｜ 无直接关系；程宗扬经小紫间接与星月湖势力关联，继承其部分遗业（星月湖产业、军事体系） ｜ 生前创建星月湖大营，麾下统率八骏；与黑魔海结仇（黑魔海培养「九御」以压其八骏）；以穿越者之能发明水泥配方、钟表设计；遗留钟表等器物给旧部；于风波亭事件中消失，下落不明（生死未卜）"
     },
     {
       "id": "canon.character.a409f09c22",
@@ -7699,7 +7699,54 @@
           "scene": "作为追兵与集会秩序力量出现"
         }
       },
-      "phaseIdentities": [],
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "鬼王峒迎客者",
+          "role": "鬼王峒迎客者",
+          "status": "stage-current",
+          "appearance": "鬼王峒迎客者",
+          "personality": [
+            "凶悍",
+            "服从鬼巫王",
+            "负责追击与维持集会秩序"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "identity": "鬼王峒迎客者",
+          "role": "鬼王峒迎客者",
+          "status": "stage-current",
+          "appearance": "鬼王峒迎客者",
+          "personality": [
+            "凶悍",
+            "服从鬼巫王",
+            "负责追击与维持集会秩序"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        }
+      ],
       "review": {
         "approved": false,
         "reviewed": true,
@@ -7850,7 +7897,7 @@
           "程宗扬的部下、兄弟之一，平等亲近但在正式场合依然以上级态度对待主角。"
         ],
         "formsOfAddress": [
-          "程宗扬称其为“吴爷”；旁人常称“吴战威”或“吴爷”；程宗扬有时也称“吴爷”。"
+          "程宗扬称其为“老吴”；旁人常称“吴战威”或“老吴”；程宗扬有时也称“老吴”。"
         ],
         "joining": [
           "云氏商会护卫之一，程宗扬在南荒起事时收纳的旧部，为程家初期骨干。"
@@ -7888,14 +7935,39 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "程宗扬手下头目之一；盘江程氏成员",
-          "role": "新任直属营执事",
-          "description": "新任直属营执事的脚步声刚踏进营帐，甲胄上的灰尘和血渍便让所有老兵眯起了眼——这人的刀鞘比他们的更旧。",
+          "identity": "白湖商馆护卫",
+          "role": "白湖商馆护卫",
+          "description": "白湖商馆护卫，随程宗扬一行商队进入南荒。",
           "notes": [
             "【关系】程宗扬的部下、兄弟之一，平等亲近但在正式场合依然以上级态度对待主角。",
-            "【目标】跟随程宗扬建功立业、捞取好处；同时贪图美色，希望能成家生子。"
+            "【目标】跟随程宗扬建功立业、捞取好处；同时贪图美色，希望能成家生子。",
+            "【阶段身份】白湖商馆护卫"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "goals": [
+            "护卫商队，与同行者协力"
+          ],
+          "relationToProtagonist": [
+            "商队同行者"
+          ],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "appearance": "白湖商馆护卫，随商队进入南荒",
+          "personality": [
+            "粗豪直爽",
+            "好色贪花",
+            "有时嬉皮笑脸",
+            "没正经",
+            "对朋友讲义气，有忠心"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "formsOfAddress": [
+            "主角第35章起称老吴；不称吴爷"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -7910,7 +7982,27 @@
             "【关系】程宗扬的部下、兄弟之一，平等亲近但在正式场合依然以上级态度对待主角。",
             "【目标】跟随程宗扬建功立业、捞取好处；同时贪图美色，希望能成家生子。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "商队同行刀客",
+          "personality": [
+            "粗豪直爽",
+            "好色贪花",
+            "有时嬉皮笑脸",
+            "没正经",
+            "对朋友讲义气，有忠心"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角第35章起称老吴；不称吴爷"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -7940,7 +8032,27 @@
             "【关系】程宗扬的部下、兄弟之一，平等亲近但在正式场合依然以上级态度对待主角。",
             "【目标】跟随程宗扬建功立业、捞取好处；同时贪图美色，希望能成家生子。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "商队同行刀客",
+          "personality": [
+            "粗豪直爽",
+            "好色贪花",
+            "有时嬉皮笑脸",
+            "没正经",
+            "对朋友讲义气，有忠心"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角第35章起称老吴；不称吴爷"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -8031,15 +8143,79 @@
             "【目标】跟随程宗扬建功立业、捞取好处；同时贪图美色，希望能成家生子。"
           ],
           "status": "stage-current"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04",
+          "identity": "商队同行刀客",
+          "role": "商队同行刀客",
+          "status": "stage-current",
+          "appearance": "商队同行刀客",
+          "personality": [
+            "粗豪直爽",
+            "好色贪花",
+            "有时嬉皮笑脸",
+            "没正经",
+            "对朋友讲义气，有忠心"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角第35章起称老吴；不称吴爷"
+          ]
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          },
+          {
+            "fromChapter": 35,
+            "text": "老吴"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "吴战威"
+          },
+          {
+            "fromChapter": 35,
+            "text": "老吴"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": false,
         "reviewed": true,
         "flags": [],
         "conflicts": []
       },
-      "embedText": "吴战威 ｜ 程宗扬手下头目之一；盘江程氏成员 ｜ 白湖商馆(护卫)、程宗扬势力(安保执事/护卫) ｜ 登场于南荒村寨 ｜ 粗豪直爽、好色贪花、有时嬉皮笑脸、没正经、对朋友讲义气，有忠心 ｜ 程宗扬的部下、兄弟之一，平等亲近但在正式场合依然以上级态度对待主角。 ｜ 程宗扬称其为“吴爷”；旁人常称“吴战威”或“吴爷”；程宗扬有时也称“吴爷”。 ｜ 南荒之战后与众人分一成利（第195章）；腿伤未愈；被骑兵踢伤仍坚持作战（第158章）；与歌姬私通，被程宗扬撞破后尴尬羞愧（第163章）；在竹筏上晕船呕吐（第73章）；与易彪一起调侃，对水镜检查柳翠烟怀孕很兴奋（第252章）"
+      "embedText": "吴战威 ｜ 程宗扬手下头目之一；盘江程氏成员 ｜ 白湖商馆(护卫)、程宗扬势力(安保执事/护卫) ｜ 登场于南荒村寨 ｜ 粗豪直爽、好色贪花、有时嬉皮笑脸、没正经、对朋友讲义气，有忠心 ｜ 程宗扬的部下、兄弟之一，平等亲近但在正式场合依然以上级态度对待主角。 ｜ 程宗扬称其为“老吴”；旁人常称“吴战威”或“老吴”；程宗扬有时也称“老吴”。 ｜ 南荒之战后与众人分一成利（第195章）；腿伤未愈；被骑兵踢伤仍坚持作战（第158章）；与歌姬私通，被程宗扬撞破后尴尬羞愧（第163章）；在竹筏上晕船呕吐（第73章）；与易彪一起调侃，对水镜检查柳翠烟怀孕很兴奋（第252章）"
     },
     {
       "id": "lcq.character.np004",
@@ -8116,14 +8292,36 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "北府兵军官",
-          "role": "护卫",
-          "description": "易彪握着刀沉默地站在商队阴影里，他不需要开口，那道从北境战场带回来的疤痕便替他说完了所有威慑。",
+          "identity": "云氏商会护卫",
+          "role": "云氏商会护卫",
+          "description": "云氏商会护卫，与兄长易虎随队护卫商旅。",
           "notes": [
             "【关系】程宗扬的同伴/商队成员",
-            "【目标】协助程宗扬一行完成商队任务，保护同伴"
+            "【目标】协助程宗扬一行完成商队任务，保护同伴",
+            "【阶段身份】云氏商会护卫"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "goals": [
+            "护卫商队，与同行者协力"
+          ],
+          "relationToProtagonist": [
+            "商队同行者"
+          ],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "appearance": "云氏商会护卫，与商队同行",
+          "personality": [
+            "沉默寡言",
+            "忠厚老实",
+            "易害羞",
+            "坚韧"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8138,7 +8336,24 @@
             "【关系】程宗扬的同伴/商队成员",
             "【目标】协助程宗扬一行完成商队任务，保护同伴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏护卫",
+          "personality": [
+            "沉默寡言",
+            "忠厚老实",
+            "易害羞",
+            "坚韧"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8153,7 +8368,19 @@
             "【关系】程宗扬的同伴/商队成员",
             "【目标】协助程宗扬一行完成商队任务，保护同伴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏商队护卫，善于组织队伍迎敌。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8168,7 +8395,24 @@
             "【关系】程宗扬的同伴/商队成员",
             "【目标】协助程宗扬一行完成商队任务，保护同伴"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏护卫",
+          "personality": [
+            "沉默寡言",
+            "忠厚老实",
+            "易害羞",
+            "坚韧"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8259,8 +8503,69 @@
             "【目标】协助程宗扬一行完成商队任务，保护同伴"
           ],
           "status": "stage-current"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04",
+          "identity": "云氏护卫",
+          "role": "云氏护卫",
+          "status": "stage-current",
+          "appearance": "云氏护卫",
+          "personality": [
+            "沉默寡言",
+            "忠厚老实",
+            "易害羞",
+            "坚韧"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          },
+          {
+            "fromChapter": 117,
+            "text": "老易"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "易彪"
+          },
+          {
+            "fromChapter": 117,
+            "text": "老易"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": false,
         "reviewed": true,
@@ -8280,7 +8585,7 @@
       "tier": "主要",
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "",
+        "identitySummary": "鬼巫王的仆从，代表鬼王峒接收贡物与洽谈兵器生意",
         "personality": [
           "淫恶",
           "凶狠",
@@ -8309,7 +8614,7 @@
         ],
         "joining": [],
         "keyEvents": [
-          "奸淫碧奴",
+          "奸淫碧姬",
           "强暴达古妻子姐妹花",
           "在程宗扬面前施虐炫耀",
           "与程宗扬交战，使用黑色长鞭"
@@ -8335,9 +8640,9 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
@@ -8350,14 +8655,32 @@
           "book": "qingyu",
           "seqLo": 88,
           "seqHi": 122,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "鬼王峒使者",
+          "personality": [
+            "淫恶",
+            "凶狠",
+            "施虐狂",
+            "得意",
+            "粗鄙"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8365,14 +8688,26 @@
           "book": "qingyu",
           "seqLo": 123,
           "seqHi": 162,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "代表鬼王峒接收贡物与洽谈兵器交易的使者。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8380,14 +8715,32 @@
           "book": "qingyu",
           "seqLo": 163,
           "seqHi": 195,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "鬼王峒使者",
+          "personality": [
+            "淫恶",
+            "凶狠",
+            "施虐狂",
+            "得意",
+            "粗鄙"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8395,14 +8748,26 @@
           "book": "qingyu",
           "seqLo": 196,
           "seqHi": 231,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "鬼王峒主事者，发现受骗后仍返回攻击龙神。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -8410,9 +8775,9 @@
           "book": "qingyu",
           "seqLo": 232,
           "seqHi": 278,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
@@ -8425,9 +8790,9 @@
           "book": "qingyu",
           "seqLo": 279,
           "seqHi": 330,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
@@ -8440,9 +8805,9 @@
           "book": "qingyu",
           "seqLo": 331,
           "seqHi": 381,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
@@ -8455,9 +8820,9 @@
           "book": "qingyu",
           "seqLo": 382,
           "seqHi": 430,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
@@ -8470,9 +8835,9 @@
           "book": "qingyu",
           "seqLo": 431,
           "seqHi": 478,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
@@ -8485,9 +8850,9 @@
           "book": "qingyu",
           "seqLo": 479,
           "seqHi": 550,
-          "identity": "鬼王峒首领",
-          "role": "鬼王峒首领",
-          "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+          "identity": "鬼巫王的仆从",
+          "role": "鬼巫王的仆从",
+          "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
           "notes": [
             "【关系】开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对",
             "【目标】满足性欲、凌辱女性、取悦鬼巫王"
@@ -8495,13 +8860,75 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "骑白象的鬼王峒使者",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "骑白象的鬼王峒使者",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗",
+            "kind": "name"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "使者"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗"
+          },
+          {
+            "fromChapter": 92,
+            "text": "阁罗老兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "使者"
+          },
+          {
+            "fromChapter": 78,
+            "text": "阁罗"
+          },
+          {
+            "fromChapter": 92,
+            "text": "阁罗老兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": [
+          {
+            "fromChapter": 78,
+            "text": "阁罗"
+          }
+        ]
+      },
       "review": {
         "approved": true,
         "reviewed": true,
         "flags": [],
         "conflicts": []
       },
-      "embedText": "阁罗 ｜ 鬼王峒(峒中主事者（代理鬼巫王处理峒务）) ｜ 登场于程宗扬与鬼巫王使者初次会面并谈生意 ｜ 淫恶、凶狠、施虐狂、得意、粗鄙 ｜ 开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对 ｜ 敌对前“商人朋友”，敌对后“阁罗的敌人” ｜ 奸淫碧奴；强暴达古妻子姐妹花；在程宗扬面前施虐炫耀；与程宗扬交战，使用黑色长鞭"
+      "embedText": "阁罗 ｜ 鬼巫王的仆从，代表鬼王峒接收贡物与洽谈兵器生意 ｜ 鬼王峒(峒中主事者（代理鬼巫王处理峒务）) ｜ 登场于程宗扬与鬼巫王使者初次会面并谈生意 ｜ 淫恶、凶狠、施虐狂、得意、粗鄙 ｜ 开始视作商业伙伴，知晓商队一行会干扰鬼谷巫王计划后敌对 ｜ 敌对前“商人朋友”，敌对后“阁罗的敌人” ｜ 奸淫碧姬；强暴达古妻子姐妹花；在程宗扬面前施虐炫耀；与程宗扬交战，使用黑色长鞭"
     },
     {
       "id": "lcq.character.saan",
@@ -8552,7 +8979,31 @@
         }
       },
       "region": "南荒",
-      "phaseIdentities": [],
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "identity": "熟悉鬼王宫密道的人",
+          "role": "熟悉鬼王宫密道的人",
+          "status": "stage-current",
+          "appearance": "熟悉鬼王宫密道的人",
+          "personality": [
+            "惊惧",
+            "复仇心重",
+            "熟悉鬼王宫后厨与密道"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        }
+      ],
       "review": {
         "approved": false,
         "reviewed": true,
@@ -8847,7 +9298,31 @@
           "scene": "作为女尸鬼参与祭台战斗"
         }
       },
-      "phaseIdentities": [],
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "identity": "祭台尸鬼",
+          "role": "祭台尸鬼",
+          "status": "stage-current",
+          "appearance": "祭台尸鬼",
+          "personality": [
+            "亡者",
+            "被鬼巫王利用",
+            "战斗节点角色"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        }
+      ],
       "review": {
         "approved": false,
         "reviewed": true,
@@ -9204,7 +9679,9 @@
             "任性要强，不肯服软",
             "重情，阿葭是她的阿姐"
           ],
-          "speechStyle": "说话快，爱顶嘴，对程宗扬直称「你」"
+          "speechStyle": "说话快，爱顶嘴，对程宗扬直称「你」",
+          "principles": [],
+          "signatureAbilities": []
         },
         {
           "scope": "stage-projection",
@@ -9243,7 +9720,9 @@
             "任性要强，不肯服软",
             "重情，阿葭是她的阿姐"
           ],
-          "speechStyle": "说话快，爱顶嘴，对程宗扬直称「你」"
+          "speechStyle": "说话快，爱顶嘴，对程宗扬直称「你」",
+          "principles": [],
+          "signatureAbilities": []
         },
         {
           "scope": "stage-projection",
@@ -9273,7 +9752,12 @@
           "blockedStageNotePrefixes": [
             "【性癖】",
             "【身体】"
-          ]
+          ],
+          "appearance": "随花苗队伍行动的女子，近期行为出现难以解释的异常。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "signatureAbilities": []
         },
         {
           "scope": "stage-projection",
@@ -9310,7 +9794,11 @@
             "淫媚",
             "天真跳脱",
             "任性"
-          ]
+          ],
+          "appearance": "花苗伴娘",
+          "speechStyle": [],
+          "principles": [],
+          "signatureAbilities": []
         },
         {
           "scope": "stage-projection",
@@ -9437,9 +9925,40 @@
             "任性要强，不肯服软",
             "重情，阿葭是她的阿姐"
           ],
-          "speechStyle": "说话快，爱顶嘴，对程宗扬直称「你」"
+          "speechStyle": "说话快，爱顶嘴，对程宗扬直称「你」",
+          "principles": [],
+          "signatureAbilities": []
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "阿夕"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": false,
         "reviewed": true,
@@ -10436,13 +10955,12 @@
           "无直接关系（程宗扬是小紫的伴侣，碧姬是小紫的母亲）。"
         ],
         "formsOfAddress": [
-          "被称作“碧姬”、“那女人”、“小紫的娘亲”。",
-          "「碧宛」是其碧鲮族本名（岳帅姬妾时期的称呼，星月湖一方——尤其谢艺——沿用此名寻访）",
-          "「碧奴」是鬼王峒/黑魔海中人对她的蔑称（役奴之名），仅这些人使用；其他人物应称「碧姬」，不得叫碧奴"
+          "第115章前旁白和台词用碧奴；第115章起旁白用碧姬；主角当面仍可称碧奴；同一人物，身份按id。",
+          "谢艺原著称夫人；碧宛是本名，不据此另建人物。"
         ],
         "joining": [],
         "keyEvents": [
-          "阁罗召碧奴献舞、邀程宗扬一同享用；席间阁罗道出碧奴来历，程宗扬由此串出其真实身份（岳帅妻妾碧姬、小紫生母）",
+          "阁罗召碧姬献舞、邀程宗扬一同享用；席间阁罗道出碧姬来历，程宗扬由此串出其真实身份（岳帅妻妾碧姬、小紫生母）",
           "在第118章被女儿小紫用珊瑚匕首刺杀而死",
           "曾在龙神之乱中幸免于难但最终丧命"
         ],
@@ -10508,9 +11026,101 @@
             "【关系】无直接关系（程宗扬是小紫的伴侣，碧姬是小紫的母亲）。",
             "【目标】想要好吃的食物、好看的衣服，想不劳而获，维持曾经锦衣美食的生活。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "从鬼王峒废墟逃出的碧鲮族女子。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05",
+          "identity": "碧鲮族人，现受鬼王峒控制。",
+          "role": "鬼王峒舞姬",
+          "status": "stage-current",
+          "appearance": "被鬼王峒控制的碧鲮族女子；峒中以“碧奴”蔑称她。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "identity": "南荒来客",
+          "role": "南荒来客",
+          "status": "stage-current",
+          "appearance": "南荒来客",
+          "personality": [
+            "妖媚",
+            "自私",
+            "贪图享乐",
+            "软弱无助"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          },
+          {
+            "fromChapter": 115,
+            "text": "碧姬"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          },
+          {
+            "fromChapter": 115,
+            "text": "碧姬"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "碧奴"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": false,
         "reviewed": true,
@@ -10521,10 +11131,11 @@
         ],
         "aliasReviewNote": [
           "用户裁定：原条目方向反了；本名/规范名为碧姬，碧奴作为 alias。",
-          "2026-07-30 补名链：原文核实（清羽记 chapter82/95/110/113）「碧宛」为碧鲮族本名/岳帅姬妾时期称呼（6 次），「碧姬」为叙述层通称（33 次），「碧奴」为鬼王峒役奴蔑称（179 次，仅峒中人使用）。规范名仍为碧姬。"
+          "2026-07-30 补名链：原文核实（清羽记 chapter82/95/110/113）「碧宛」为碧鲮族本名/岳帅姬妾时期称呼（6 次），「碧姬」为叙述层通称（33 次），「碧奴」为鬼王峒役奴蔑称（179 次，仅峒中人使用）。规范名仍为碧姬。",
+          "2026-10-05 用户裁定#199覆盖此前“仅峒中人用碧奴”的限制；按第115章旁白切换。"
         ]
       },
-      "embedText": "碧姬 ｜ 碧宛 碧奴 ｜ 碧鲮族，本名碧宛；岳帅（岳鸟人）妻妾，小紫生母 ｜ 【南荒人物】 ｜ 碧鲮族(族民)、鬼王峒(巫王姬侍（后称病亡）)、星月湖(武穆王姬妾) ｜ 登场于南荒鬼王峒 ｜ 妖媚、自私、贪图享乐、软弱无助 ｜ 无直接关系（程宗扬是小紫的伴侣，碧姬是小紫的母亲）。 ｜ 被称作“碧姬”、“那女人”、“小紫的娘亲”。 「碧宛」是其碧鲮族本名（岳帅姬妾时期的称呼，星月湖一方——尤其谢艺——沿用此名寻访） 「碧奴」是鬼王峒/黑魔海中人对她的蔑称（役奴之名），仅这些人使用；其他人物应称「碧姬」，不得叫碧奴 ｜ 阁罗召碧奴献舞、邀程宗扬一同享用；席间阁罗道出碧奴来历，程宗扬由此串出其真实身份（岳帅妻妾碧姬、小紫生母）；在第118章被女儿小紫用珊瑚匕首刺杀而死；曾在龙神之乱中幸免于难但最终丧命"
+      "embedText": "碧姬 ｜ 碧宛 碧奴 ｜ 碧鲮族，本名碧宛；岳帅（岳鸟人）妻妾，小紫生母 ｜ 【南荒人物】 ｜ 碧鲮族(族民)、鬼王峒(巫王姬侍（后称病亡）)、星月湖(武穆王姬妾) ｜ 登场于南荒鬼王峒 ｜ 妖媚、自私、贪图享乐、软弱无助 ｜ 无直接关系（程宗扬是小紫的伴侣，碧姬是小紫的母亲）。 ｜ 第115章前旁白和台词用碧奴；第115章起旁白用碧姬；主角当面仍可称碧奴；同一人物，身份按id。 谢艺原著称夫人；碧宛是本名，不据此另建人物。 ｜ 阁罗召碧姬献舞、邀程宗扬一同享用；席间阁罗道出碧姬来历，程宗扬由此串出其真实身份（岳帅妻妾碧姬、小紫生母）；在第118章被女儿小紫用珊瑚匕首刺杀而死；曾在龙神之乱中幸免于难但最终丧命"
     },
     {
       "id": "liuchao.character.bi_shui_yu",
@@ -11637,7 +12248,18 @@
             "冲动",
             "偶尔愧疚",
             "有支配欲"
-          ]
+          ],
+          "appearance": "白湖商馆执事，奉苏妲己之命带队走南荒找霓龙丝。",
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -11660,7 +12282,18 @@
             "冲动",
             "偶尔愧疚",
             "有支配欲"
-          ]
+          ],
+          "appearance": "白湖商馆执事，奉苏妲己之命带队走南荒找霓龙丝。",
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -11684,7 +12317,17 @@
             "冲动",
             "偶尔愧疚",
             "有支配欲"
-          ]
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -11699,7 +12342,19 @@
             "【关系】自己是主角",
             "【目标】征服视己为敌的女性，包括苏妖妇、剑玉姬等"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "随商队深入南荒、刚在海湾大潮中与同伴失散的异乡人。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -11714,7 +12369,25 @@
             "【关系】自己是主角",
             "【目标】征服视己为敌的女性，包括苏妖妇、剑玉姬等"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏同行商人、现代来客",
+          "personality": [
+            "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
+            "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
+            "冲动",
+            "偶尔愧疚",
+            "有支配欲"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -11729,7 +12402,19 @@
             "【关系】自己是主角",
             "【目标】征服视己为敌的女性，包括苏妖妇、剑玉姬等"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "来自现代世界、随白湖商馆进入南荒的商队成员。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -12857,7 +13542,19 @@
             "【关系】敌对/被俘（程宗扬曾抽她耳光，她咬他大腿）",
             "【目标】服侍鬼巫王，获得其评价与认可；在交合中追求幸福与亢奋。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "苏荔在红苗中的盟友之一，已显出受鬼王峒控制的迹象。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -12866,13 +13563,30 @@
           "seqLo": 163,
           "seqHi": 195,
           "identity": "红苗人/南荒人",
-          "role": "女奴",
+          "role": "红苗女子，娄蒙之妻",
           "description": "红苗美妇丹宸，雪白丰腴的身躯掩不住乌黑长发下的绝望，她是娄蒙的妻子，却被鬼巫王的缰绳驱使，如一件精美的玩物，连双眼也常被蒙上。",
           "notes": [
             "【关系】敌对/被俘（程宗扬曾抽她耳光，她咬他大腿）",
             "【目标】服侍鬼巫王，获得其评价与认可；在交合中追求幸福与亢奋。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "红苗女子，娄蒙之妻",
+          "personality": [
+            "谦卑",
+            "亢奋",
+            "易受蛊惑",
+            "妖艳"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -13492,7 +14206,8 @@
       "id": "liuchao.character.dragon_god",
       "canonicalName": "龙神",
       "aliases": [],
-      "gender": "未知",
+      "gender": "无",
+      "entityType": "creature",
       "books": [
         "qingyu",
         "yange"
@@ -13586,7 +14301,24 @@
             "【关系】敌对",
             "【目标】与鬼巫王合体（实际吞噬鬼巫王）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "鬼王峒龙神",
+          "personality": [
+            "冷漠",
+            "凶恶",
+            "恶毒",
+            "精力旺盛"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -13601,7 +14333,19 @@
             "【关系】敌对",
             "【目标】与鬼巫王合体（实际吞噬鬼巫王）"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "沉睡在鬼王峒深井中的巨龙，已被苍龙星阵唤醒。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -14948,13 +15692,14 @@
           "命花苗族送阿依苏荔一行为\"新娘\"入峒；小紫被阁罗等作为献给他的新娘养成",
           "出关后布苍龙星阵：小紫借谢艺掩护弹出细针毁其箕宿最后一星，功败垂成、流血甚多",
           "重新聚血成阵唤龙，与龙神合体——却是为他人作嫁：\"不是鬼巫王合龙神的体，而是龙神合了鬼巫王\"",
-          "调教女奴（碧奴、丹宸等）用于交合与舞蹈",
+          "调教女奴（碧姬、丹宸等）用于交合与舞蹈",
           "鬼王峒身世（自述）：祖先来自大地深处，\"用牙齿和利角开凿岩石，在冰冷的地下生存，吞食青苔，喝着地下的硫磺水\"——地底而出的部族，饱受饥饿病痛与蛇彝人威胁",
           "血仇：蛇彝人曾令其部族女性全部灭绝——向蛇彝复仇是鬼王峒立世之恨（蛇彝×鬼王峒恩怨的根）",
           "龙神救族之恩：\"如果不是龙神，我的部族早已在地下默默灭绝\"——与龙神的羁绊有感恩之根，非纯利用",
           "与程宗扬论道（征服救世论）：南荒人均寿命不足三十五、死于每年数百场部族战争；鬼王峒已征服上百部族令其间再无争斗；\"如果我征服整个南荒……挽救无数人的生命\"；娄蒙反抗他被视为愚蠢",
           "逐族毒评（南荒众生相）：白夷垄断湖珠贪婪不施舍、黑獠掠夺成性如蝗、碧鲮忌刻凉薄背后诋毁强者当面耻笑弱者、红苗鲁莽傲慢在主人祖神像上刻本族图腾、花苗精于算计凭美貌放荡",
-          "决战·程宗扬商队 vs 鬼王峒战士（秘营）：巫师腹语下令，鬼战士围攻半月阵，商队阵形开始崩溃→程宗扬被数名鬼战士缠住，刀锋擦肩而过→苏荔白翎羽箭射杀鬼战士，扭转近身危机→巫师施法驱动无头尸体和残肢，程宗扬等人陷入更大恐慌；转折：武二郎掷岩误中巫师，暴露鬼巫王本人并未亲临战场，而是通过巫师和邪术遥控；商队伤亡惨重被迫退守"
+          "决战·程宗扬商队 vs 鬼王峒战士（秘营）：巫师腹语下令，鬼战士围攻半月阵，商队阵形开始崩溃→程宗扬被数名鬼战士缠住，刀锋擦肩而过→苏荔白翎羽箭射杀鬼战士，扭转近身危机→巫师施法驱动无头尸体和残肢，程宗扬等人陷入更大恐慌；转折：武二郎掷岩误中巫师，暴露鬼巫王本人并未亲临战场，而是通过巫师和邪术遥控；商队伤亡惨重被迫退守",
+          "第120章殇侯亲口称鬼巫王为自己的徒弟。"
         ],
         "ending": [
           "被龙神吃掉（龙神嘴巴合拢，齿间发出碎响）；（高手榜红:身死）"
@@ -15044,7 +15789,28 @@
             "【关系】敌人，程宗扬的对抗对象",
             "【目标】与龙神合一以获取至高力量，统治南荒"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "鬼王峒之主",
+          "personality": [
+            "残忍",
+            "淫邪",
+            "控制欲强",
+            "傲慢",
+            "疯狂",
+            "极骄傲——\"也许会歪曲事实，但绝不屑于说谎\"（程宗扬判语）",
+            "雄辩滔滔，自视为南荒的救世主",
+            "亢奋时苍白脸颊泛起红晕"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -15059,7 +15825,19 @@
             "【关系】敌人，程宗扬的对抗对象",
             "【目标】与龙神合一以获取至高力量，统治南荒"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "鬼王峒首领，以苍龙星阵唤醒龙神并谋求合体。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -15157,9 +15935,9 @@
         "reviewed": true,
         "flags": [],
         "conflicts": [],
-        "humanNotes": "2026-07-05 用户裁定: 鬼巫王与黑魔海仅合作-利用(非信众);撤殇侯势力归属(原文无关系,扫描证实);定性=鬼王峒统治者借黑魔海之力奴役诸部族实现大同理想。 2026-07-05 能力卡对原文重建: 巨斧=瞎编已删;鬼羽剑属实(112章切于腕中);苍龙星阵/驱役鬼神/黑雾现身均核实;结局(龙神合了鬼巫王)由书籍简介坐实。 2026-07-05 用户供原文独白落卡: 论道/地底身世/蛇彝血仇/龙神之恩/逐族毒评/绝不说谎判语。"
+        "humanNotes": "2026-07-05 用户裁定: 鬼巫王与黑魔海仅合作-利用(非信众);撤殇侯势力归属(原文无关系,扫描证实);定性=鬼王峒统治者借黑魔海之力奴役诸部族实现大同理想。 2026-07-05 能力卡对原文重建: 巨斧=瞎编已删;鬼羽剑属实(112章切于腕中);苍龙星阵/驱役鬼神/黑雾现身均核实;结局(龙神合了鬼巫王)由书籍简介坐实。 2026-07-05 用户供原文独白落卡: 论道/地底身世/蛇彝血仇/龙神之恩/逐族毒评/绝不说谎判语。 2026-10-05 用户23#15覆盖旧判：第120章段72–76证实殇侯与鬼巫王为师徒；不等于鬼巫王为黑魔海信众。"
       },
-      "embedText": "鬼巫王 ｜ 南荒鬼王峒的统治者。与黑魔海仅为合作-利用关系（本人并非黑魔海信众），妄图借黑魔海之力奴役南荒诸部族、实现自己的「大同」理想；在鬼王峒中与程宗扬等人激烈交锋。其部族出自大地深处（受蛇彝之害几近灭绝，得龙神庇护而存）——征服是他挽救族人与\"终结南荒互噬\"的救世方案 ｜ 【南荒人物】 ｜ 黑魔海(合作-利用关系（非信众，各取所需）)、鬼王峒(统治者) ｜ 登场于南荒鬼王峒区域 ｜ 残忍、淫邪、控制欲强、傲慢、疯狂、极骄傲——\"也许会歪曲事实，但绝不屑于说谎\"（程宗扬判语）、雄辩滔滔，自视为南荒的救世主、亢奋时苍白脸颊泛起红晕 ｜ 敌人，程宗扬的对抗对象 ｜ 鬼巫王大人（被他人称呼），鬼巫王 ｜ 以武力征服南荒诸部、掳部众为奴（每隔几日便有新部族被押到峒中），借献祭\"龙神新娘\"维系权威；命花苗族送阿依苏荔一行为\"新娘\"入峒；小紫被阁罗等作为献给他的新娘养成；出关后布苍龙星阵：小紫借谢艺掩护弹出细针毁其箕宿最后一星，功败垂成、流血甚多；重新聚血成阵唤龙，与龙神合体——却是为他人作嫁：\"不是鬼巫王合龙神的体，而是龙神合了鬼巫王\"；调教女奴（碧奴、丹宸等）用于交合与舞蹈；鬼王峒身世（自述）：祖先来自大地深处，\"用牙齿和利角开凿岩石，在冰冷的地下生存，吞食青苔，喝着地下的硫磺水\"——地底而出的部族，饱受饥饿病痛与蛇彝人威胁"
+      "embedText": "鬼巫王 ｜ 南荒鬼王峒的统治者。与黑魔海仅为合作-利用关系（本人并非黑魔海信众），妄图借黑魔海之力奴役南荒诸部族、实现自己的「大同」理想；在鬼王峒中与程宗扬等人激烈交锋。其部族出自大地深处（受蛇彝之害几近灭绝，得龙神庇护而存）——征服是他挽救族人与\"终结南荒互噬\"的救世方案 ｜ 【南荒人物】 ｜ 黑魔海(合作-利用关系（非信众，各取所需）)、鬼王峒(统治者) ｜ 登场于南荒鬼王峒区域 ｜ 残忍、淫邪、控制欲强、傲慢、疯狂、极骄傲——\"也许会歪曲事实，但绝不屑于说谎\"（程宗扬判语）、雄辩滔滔，自视为南荒的救世主、亢奋时苍白脸颊泛起红晕 ｜ 敌人，程宗扬的对抗对象 ｜ 鬼巫王大人（被他人称呼），鬼巫王 ｜ 以武力征服南荒诸部、掳部众为奴（每隔几日便有新部族被押到峒中），借献祭\"龙神新娘\"维系权威；命花苗族送阿依苏荔一行为\"新娘\"入峒；小紫被阁罗等作为献给他的新娘养成；出关后布苍龙星阵：小紫借谢艺掩护弹出细针毁其箕宿最后一星，功败垂成、流血甚多；重新聚血成阵唤龙，与龙神合体——却是为他人作嫁：\"不是鬼巫王合龙神的体，而是龙神合了鬼巫王\"；调教女奴（碧姬、丹宸等）用于交合与舞蹈；鬼王峒身世（自述）：祖先来自大地深处，\"用牙齿和利角开凿岩石，在冰冷的地下生存，吞食青苔，喝着地下的硫磺水\"——地底而出的部族，饱受饥饿病痛与蛇彝人威胁"
     },
     {
       "id": "liuchao.character.guo_jie",
@@ -18797,7 +19575,7 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18806,8 +19584,19 @@
           ],
           "status": "stage-current",
           "formsOfAddress": [
-            "对程宗扬称呼：程宗扬"
-          ]
+            "对程宗扬：大笨瓜；主角对她按逐章称呼表：乐丫头／小香瓜／乐姑娘"
+          ],
+          "appearance": "戴着面纱的成年花苗新娘。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": []
         },
         {
           "scope": "stage-projection",
@@ -18815,7 +19604,7 @@
           "book": "qingyu",
           "seqLo": 68,
           "seqHi": 87,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲同门",
           "role": "医者",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18824,8 +19613,19 @@
           ],
           "status": "stage-current",
           "formsOfAddress": [
-            "对程宗扬称呼：程宗扬"
-          ]
+            "对程宗扬：大笨瓜；主角对她按逐章称呼表：乐丫头／小香瓜／乐姑娘"
+          ],
+          "appearance": "戴着面纱的成年花苗新娘。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": []
         },
         {
           "scope": "stage-projection",
@@ -18833,7 +19633,7 @@
           "book": "qingyu",
           "seqLo": 88,
           "seqHi": 122,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18842,8 +19642,27 @@
           ],
           "status": "stage-current",
           "formsOfAddress": [
-            "对程宗扬称呼：程宗扬"
-          ]
+            "对程宗扬：大笨瓜；主角对她按逐章称呼表：乐丫头／小香瓜／乐姑娘"
+          ],
+          "appearance": "光明观堂弟子",
+          "personality": [
+            "娇憨可爱",
+            "小市侩小财迷",
+            "遇大风浪会怕会尖叫",
+            "大是大非有小女子的坚韧",
+            "邻家女孩",
+            "纯真无算计",
+            "对性事缺乏概念，容易被主角哄骗"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": []
         },
         {
           "scope": "stage-projection",
@@ -18851,14 +19670,28 @@
           "book": "qingyu",
           "seqLo": 123,
           "seqHi": 162,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
             "【关系】程宗扬历经权谋博弈后唯一能彻底放松的避风港；小鸟依人、纯粹依赖与满足；为一点赏赐便欢天喜地",
             "【目标】依赖程宗扬，渴望亲近、宠爱与安全感。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "光明观堂弟子，随程宗扬在海神殿受困并遭鲛人袭击。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "对程宗扬：大笨瓜；主角对她按逐章称呼表：乐丫头／小香瓜／乐姑娘"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -18866,7 +19699,7 @@
           "book": "qingyu",
           "seqLo": 163,
           "seqHi": 195,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18875,8 +19708,27 @@
           ],
           "status": "stage-current",
           "formsOfAddress": [
-            "对程宗扬称呼：程宗扬"
-          ]
+            "对程宗扬：大笨瓜；主角对她按逐章称呼表：乐丫头／小香瓜／乐姑娘"
+          ],
+          "appearance": "光明观堂弟子",
+          "personality": [
+            "娇憨可爱",
+            "小市侩小财迷",
+            "遇大风浪会怕会尖叫",
+            "大是大非有小女子的坚韧",
+            "邻家女孩",
+            "纯真无算计",
+            "对性事缺乏概念，容易被主角哄骗"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": []
         },
         {
           "scope": "stage-projection",
@@ -18884,14 +19736,28 @@
           "book": "qingyu",
           "seqLo": 196,
           "seqHi": 231,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲同门",
           "role": "少女",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
             "【关系】程宗扬历经权谋博弈后唯一能彻底放松的避风港；小鸟依人、纯粹依赖与满足；为一点赏赐便欢天喜地",
             "【目标】依赖程宗扬，渴望亲近、宠爱与安全感。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "光明观堂弟子，随程宗扬一同落到龙神附近。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "对程宗扬：大笨瓜；主角对她按逐章称呼表：乐丫头／小香瓜／乐姑娘"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -18899,7 +19765,7 @@
           "book": "qingyu",
           "seqLo": 232,
           "seqHi": 278,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲/义姁同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18914,7 +19780,7 @@
           "book": "qingyu",
           "seqLo": 279,
           "seqHi": 330,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲/义姁同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18929,7 +19795,7 @@
           "book": "qingyu",
           "seqLo": 331,
           "seqHi": 381,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲/义姁同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18944,7 +19810,7 @@
           "book": "qingyu",
           "seqLo": 382,
           "seqHi": 430,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲/义姁同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18959,7 +19825,7 @@
           "book": "qingyu",
           "seqLo": 431,
           "seqHi": 478,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲/义姁同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18974,7 +19840,7 @@
           "book": "qingyu",
           "seqLo": 479,
           "seqHi": 550,
-          "identity": "太乙真宗边缘分支弟子，潘金莲/义姁同门",
+          "identity": "光明观堂弟子，潘金莲/义姁同门",
           "role": "女主角",
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "notes": [
@@ -18984,6 +19850,89 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "花苗新娘",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "花苗新娘",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠",
+            "kind": "name"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "新娘"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠"
+          },
+          {
+            "fromChapter": 66,
+            "text": "乐丫头"
+          },
+          {
+            "fromChapter": 80,
+            "text": "小香瓜"
+          },
+          {
+            "fromChapter": 117,
+            "text": "乐姑娘"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "新娘"
+          },
+          {
+            "fromChapter": 47,
+            "text": "乐明珠"
+          },
+          {
+            "fromChapter": 66,
+            "text": "乐丫头"
+          },
+          {
+            "fromChapter": 80,
+            "text": "小香瓜"
+          },
+          {
+            "fromChapter": 117,
+            "text": "乐姑娘"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [
+          {
+            "fromChapter": 47,
+            "text": "大笨蛋／大笨牛／大笨瓜"
+          }
+        ],
+        "selfReportedName": [
+          {
+            "fromChapter": 47,
+            "text": "乐明珠"
+          }
+        ]
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -24067,7 +25016,16 @@
             "倔强，不肯示弱",
             "守誓，把护卫职责放在私情前面"
           ],
-          "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」"
+          "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -24092,7 +25050,16 @@
             "倔强，不肯示弱",
             "守誓，把护卫职责放在私情前面"
           ],
-          "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」"
+          "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -24118,7 +25085,16 @@
             "倔强，不肯示弱",
             "守誓，把护卫职责放在私情前面"
           ],
-          "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」"
+          "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -24132,7 +25108,19 @@
           "notes": [
             "【关系】与程宗扬极度契合的肉体伴侣；从不口头承认爱意，对他直呼其名或冷冷一个\"你\"；外人前是威严冷艳的\"凝羽姐姐\"，主角前嘴上拒绝、肉体极顺从，任其开发征服的极品尤物，冰蛊在程宗扬身上，凝羽没有冰蛊"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "白湖商馆护卫，南荒途中旧伤复发。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -24146,7 +25134,25 @@
           "notes": [
             "【关系】与程宗扬极度契合的肉体伴侣；从不口头承认爱意，对他直呼其名或冷冷一个\"你\"；外人前是威严冷艳的\"凝羽姐姐\"，主角前嘴上拒绝、肉体极顺从，任其开发征服的极品尤物，冰蛊在程宗扬身上，凝羽没有冰蛊"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "随行护卫",
+          "personality": [
+            "高冷御姐",
+            "外冷内媚(冰火交融)",
+            "口是心非",
+            "不擅表温情",
+            "以冷酷伪装情感与欲望"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -24160,7 +25166,19 @@
           "notes": [
             "【关系】与程宗扬极度契合的肉体伴侣；从不口头承认爱意，对他直呼其名或冷冷一个\"你\"；外人前是威严冷艳的\"凝羽姐姐\"，主角前嘴上拒绝、肉体极顺从，任其开发征服的极品尤物，冰蛊在程宗扬身上，凝羽没有冰蛊"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "白湖商馆女护卫，外冷少言，正参与围猎龙神。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -24247,6 +25265,51 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          },
+          {
+            "fromChapter": 35,
+            "text": "凝羽姑娘"
+          },
+          {
+            "fromChapter": 73,
+            "text": "凝羽"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "凝羽"
+          },
+          {
+            "fromChapter": 35,
+            "text": "凝羽姑娘"
+          },
+          {
+            "fromChapter": 73,
+            "text": "凝羽"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -25616,7 +26679,16 @@
             "善交际",
             "有些婆妈"
           ],
-          "speechStyle": "市侩客气，爱念叨，自称「老祁」，叫程宗扬「程头儿」"
+          "speechStyle": "市侩客气，爱念叨，自称「老祁」，叫程宗扬「程头儿」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -25640,7 +26712,16 @@
             "善交际",
             "有些婆妈"
           ],
-          "speechStyle": "市侩客气，爱念叨，自称「老祁」，叫程宗扬「程头儿」"
+          "speechStyle": "市侩客气，爱念叨，自称「老祁」，叫程宗扬「程头儿」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -25655,7 +26736,19 @@
             "【关系】程宗扬的随从/同伴",
             "【目标】完成掌柜交代的活儿，安全脱身"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "熟悉南荒与交易门道的白湖商馆老伙计。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -25670,7 +26763,24 @@
             "【关系】程宗扬的随从/同伴",
             "【目标】完成掌柜交代的活儿，安全脱身"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "商队老行商",
+          "personality": [
+            "谨慎",
+            "多疑",
+            "善交际",
+            "有些婆妈"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -25797,9 +26907,55 @@
             "善交际",
             "有些婆妈"
           ],
-          "speechStyle": "市侩客气，爱念叨，自称「老祁」，叫程宗扬「程头儿」"
+          "speechStyle": "市侩客气，爱念叨，自称「老祁」，叫程宗扬「程头儿」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "祁远"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "祁远"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "老祁"
+          },
+          {
+            "fromChapter": 80,
+            "text": "老四"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "老祁"
+          },
+          {
+            "fromChapter": 80,
+            "text": "老四"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": false,
         "reviewed": true,
@@ -26194,14 +27350,38 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "殇侯指派给程宗扬的第一智囊/家主伴当",
-          "role": "程宗扬的谋士/大奸臣",
-          "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
+          "identity": "熊耳铺候选向导文士",
+          "role": "熊耳铺候选向导文士",
+          "description": "在熊耳铺可供选择的向导文士。",
           "notes": [
-            "【关系】殇侯指派给程宗扬的第一智囊与家主伴当，负责谋划、周旋和替主角处理棘手事务",
-            "【目标】辅佐程宗扬脱困立足，替主角谋划商路、粮草、人脉与危局应对；盘江程氏成立前不得使用股东身份"
+            "【阶段身份】熊耳铺候选向导文士"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "goals": [
+            "候选向导，等待受雇"
+          ],
+          "relationToProtagonist": [
+            "候选向导，尚未受雇为主角属下"
+          ],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "appearance": "熊耳铺的候选向导文士",
+          "personality": [
+            "胸有城府",
+            "精明狡黠",
+            "七窍玲珑",
+            "奸诈无比",
+            "能言善辩",
+            "虚伪",
+            "机敏灵动",
+            "遇明主忠义，遇昏主奸术自保"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -26231,7 +27411,28 @@
             "【关系】殇侯指派给程宗扬的第一智囊与家主伴当，负责谋划、周旋和替主角处理棘手事务",
             "【目标】辅佐程宗扬脱困立足，替主角谋划商路、粮草、人脉与危局应对；盘江程氏成立前不得使用股东身份"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "殇侯属下文士",
+          "personality": [
+            "胸有城府",
+            "精明狡黠",
+            "七窍玲珑",
+            "奸诈无比",
+            "能言善辩",
+            "虚伪",
+            "机敏灵动",
+            "遇明主忠义，遇昏主奸术自保"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -26504,6 +27705,43 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          },
+          {
+            "fromChapter": 122,
+            "text": "秦兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "秦桧"
+          },
+          {
+            "fromChapter": 122,
+            "text": "秦兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -28259,14 +29497,28 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)",
-          "role": "王侯",
-          "description": "殇侯常年一副威严尊贵的老年男子模样，身姿挺拔如布衣王侯，双目精光四射却深陷于眼眶，左手扶玉带，指戴翠绿戒指；他城府深不可测，手腕高明，言语间严厉直接，洞察力敏锐，仿佛一眼便能看穿人心，而外表可任意变换，必要时又会化作一个猥琐佝偻的朱老头，裹着破旧葛袍，混迹于市井之间。（真身殇振羽，即殇侯一系）",
+          "identity": "云氏雇用的老向导，自称朱八八。",
+          "role": "老向导",
+          "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
             "【目标】因痛失所爱而投身魔门，毒杀仇人，屠吕家满门；后与程宗扬合作赚钱并培养程宗扬。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角心里和面板一直用朱老头；旁白121章起殇侯；当面120章起老头儿／侯爷／君侯"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -28274,14 +29526,28 @@
           "book": "qingyu",
           "seqLo": 88,
           "seqHi": 122,
-          "identity": "鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)",
-          "role": "王侯",
-          "description": "殇侯常年一副威严尊贵的老年男子模样，身姿挺拔如布衣王侯，双目精光四射却深陷于眼眶，左手扶玉带，指戴翠绿戒指；他城府深不可测，手腕高明，言语间严厉直接，洞察力敏锐，仿佛一眼便能看穿人心，而外表可任意变换，必要时又会化作一个猥琐佝偻的朱老头，裹着破旧葛袍，混迹于市井之间。（真身殇振羽，即殇侯一系）",
+          "identity": "云氏雇用的老向导，自称朱八八。",
+          "role": "老向导",
+          "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
             "【目标】因痛失所爱而投身魔门，毒杀仇人，屠吕家满门；后与程宗扬合作赚钱并培养程宗扬。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角心里和面板一直用朱老头；旁白121章起殇侯；当面120章起老头儿／侯爷／君侯"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -28289,14 +29555,28 @@
           "book": "qingyu",
           "seqLo": 163,
           "seqHi": 195,
-          "identity": "鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)",
-          "role": "王侯",
-          "description": "殇侯常年一副威严尊贵的老年男子模样，身姿挺拔如布衣王侯，双目精光四射却深陷于眼眶，左手扶玉带，指戴翠绿戒指；他城府深不可测，手腕高明，言语间严厉直接，洞察力敏锐，仿佛一眼便能看穿人心，而外表可任意变换，必要时又会化作一个猥琐佝偻的朱老头，裹着破旧葛袍，混迹于市井之间。（真身殇振羽，即殇侯一系）",
+          "identity": "云氏雇用的老向导，自称朱八八。",
+          "role": "老向导",
+          "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
             "【目标】因痛失所爱而投身魔门，毒杀仇人，屠吕家满门；后与程宗扬合作赚钱并培养程宗扬。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏雇用的老向导",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角心里和面板一直用朱老头；旁白121章起殇侯；当面120章起老头儿／侯爷／君侯"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -28304,14 +29584,28 @@
           "book": "qingyu",
           "seqLo": 196,
           "seqHi": 231,
-          "identity": "鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)",
-          "role": "王侯",
-          "description": "殇侯常年一副威严尊贵的老年男子模样，身姿挺拔如布衣王侯，双目精光四射却深陷于眼眶，左手扶玉带，指戴翠绿戒指；他城府深不可测，手腕高明，言语间严厉直接，洞察力敏锐，仿佛一眼便能看穿人心，而外表可任意变换，必要时又会化作一个猥琐佝偻的朱老头，裹着破旧葛袍，混迹于市井之间。（真身殇振羽，即殇侯一系）",
+          "identity": "云氏雇用的老向导，自称朱八八。",
+          "role": "老向导",
+          "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
             "【目标】因痛失所爱而投身魔门，毒杀仇人，屠吕家满门；后与程宗扬合作赚钱并培养程宗扬。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "居于南荒隐秘村落的年长主人。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角心里和面板一直用朱老头；旁白121章起殇侯；当面120章起老头儿／侯爷／君侯"
+          ]
         },
         {
           "scope": "stage-projection",
@@ -28522,8 +29816,85 @@
             "【目标】目前不明显，已知对洛都之乱只是冷眼旁观，并未插手；可接受不完美结果。"
           ],
           "status": "stage-current"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04",
+          "identity": "云氏雇用的老向导，自称朱八八。",
+          "role": "老向导",
+          "status": "stage-current",
+          "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": [
+            "主角心里和面板一直用朱老头；旁白121章起殇侯；当面120章起老头儿／侯爷／君侯"
+          ],
+          "description": "瘦小苍老的成年老向导。"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "朱老头"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "老向导"
+          },
+          {
+            "fromChapter": 44,
+            "text": "朱老头"
+          },
+          {
+            "fromChapter": 121,
+            "text": "殇侯"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "朱老头"
+          },
+          {
+            "fromChapter": 120,
+            "text": "老头儿／侯爷／君侯"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "朱老头"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "小程子"
+          },
+          {
+            "fromChapter": 122,
+            "text": "程公子"
+          }
+        ],
+        "selfReportedName": [
+          {
+            "fromChapter": 44,
+            "text": "朱八八"
+          }
+        ]
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -29786,7 +31157,16 @@
             "护族，遇事有决断",
             "能歌，常以歌声与人对答"
           ],
-          "speechStyle": "爽朗直接，偶尔用花苗歌谣作答；对程宗扬直称「你」"
+          "speechStyle": "爽朗直接，偶尔用花苗歌谣作答；对程宗扬直称「你」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -29809,7 +31189,16 @@
             "护族，遇事有决断",
             "能歌，常以歌声与人对答"
           ],
-          "speechStyle": "爽朗直接，偶尔用花苗歌谣作答；对程宗扬直称「你」"
+          "speechStyle": "爽朗直接，偶尔用花苗歌谣作答；对程宗扬直称「你」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -29824,7 +31213,7 @@
             "【内部约束·不入正文】蝎尾在 03b–04b 不写（原著第一次实战使用在第91章 L13687）。",
             "【内部约束·不入正文】不写万舞的性化细节，不写身体部位的性化描写。",
             "【内部约束·不入正文】自称族长阿依苏荔，旁人叫她「苏荔」；程宗扬叫她「苏荔族长」（第63章 L9347）。",
-            "【内部约束·不入正文】刺杀鬼巫王的意图要到第59章才由她亲口承认，此前不点破。"
+            "【内部约束·不入正文】刺杀鬼巫王的意图在第49章已对程宗扬、武二郎亲口说出。"
           ],
           "status": "stage-current",
           "appearance": "身量极高，比程宗扬还高出一个头；凤目点漆，鼻梁高挺，五官有雕塑般的美感，皮肤极白。长发盘髻偏向一侧，髻旁一朵红花；上身束红巾，腰系火红褶裙，裙角挽结挂一只皮囊；赤足；颈戴金色巨蝎项链，蝎目嵌两粒红宝石；大腿外侧有青黑色盾形纹身。",
@@ -29833,7 +31222,16 @@
             "护族，遇事有决断",
             "能歌，常以歌声与人对答"
           ],
-          "speechStyle": "爽朗直接，偶尔用花苗歌谣作答；对程宗扬直称「你」"
+          "speechStyle": "爽朗直接，偶尔用花苗歌谣作答；对程宗扬直称「你」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -29847,7 +31245,19 @@
           "notes": [
             "【目标】作为花苗族长，保证全族延续愿意和任意强者交合。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "花苗族长，正联络红苗等部族反抗鬼王峒。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -29861,7 +31271,23 @@
           "notes": [
             "【目标】作为花苗族长，保证全族延续愿意和任意强者交合。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "花苗送亲领队",
+          "personality": [
+            "美艳",
+            "顺从",
+            "富有情欲"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -29875,7 +31301,19 @@
           "notes": [
             "【目标】作为花苗族长，保证全族延续愿意和任意强者交合。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "花苗族长，以弓箭和蝎尾参与围猎龙神。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -29962,6 +31400,51 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          },
+          {
+            "fromChapter": 49,
+            "text": "苏荔族长"
+          },
+          {
+            "fromChapter": 83,
+            "text": "阿依苏荔族长"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "苏荔"
+          },
+          {
+            "fromChapter": 49,
+            "text": "苏荔族长"
+          },
+          {
+            "fromChapter": 83,
+            "text": "阿依苏荔族长"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -32343,7 +33826,16 @@
             "讲义气，说话算话",
             "好酒好热闹，爱自称二爷"
           ],
-          "speechStyle": "粗声粗气，自称「二爷」，叫程宗扬「小子」「你小子」"
+          "speechStyle": "粗声粗气，自称「二爷」，叫程宗扬「小子」「你小子」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -32367,7 +33859,16 @@
             "讲义气，说话算话",
             "好酒好热闹，爱自称二爷"
           ],
-          "speechStyle": "粗声粗气，自称「二爷」，叫程宗扬「小子」「你小子」"
+          "speechStyle": "粗声粗气，自称「二爷」，叫程宗扬「小子」「你小子」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -32391,7 +33892,16 @@
             "讲义气，说话算话",
             "好酒好热闹，爱自称二爷"
           ],
-          "speechStyle": "粗声粗气，自称「二爷」，叫程宗扬「小子」「你小子」"
+          "speechStyle": "粗声粗气，自称「二爷」，叫程宗扬「小子」「你小子」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -32406,7 +33916,19 @@
             "【关系】前期同伴，后续仍为盟友/兄弟般伙伴，并非程宗扬部下。",
             "【目标】喜欢赚大钱，保护程宗扬并为其效力，享受战斗与情欲"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "随商队南行的白武族刀客，以五虎断门刀正面破阵。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -32421,7 +33943,24 @@
             "【关系】前期同伴，后续仍为盟友/兄弟般伙伴，并非程宗扬部下。",
             "【目标】喜欢赚大钱，保护程宗扬并为其效力，享受战斗与情欲"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "白武族同行武士",
+          "personality": [
+            "粗犷威猛",
+            "直率暴躁",
+            "重情重义",
+            "主角武功启蒙，刚猛不失机智"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -32436,7 +33975,19 @@
             "【关系】前期同伴，后续仍为盟友/兄弟般伙伴，并非程宗扬部下。",
             "【目标】喜欢赚大钱，保护程宗扬并为其效力，享受战斗与情欲"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "白武族勇士，商队此行的重要战力。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -32544,6 +34095,51 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          },
+          {
+            "fromChapter": 66,
+            "text": "武二／二爷"
+          },
+          {
+            "fromChapter": 117,
+            "text": "武二爷"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "武二郎"
+          },
+          {
+            "fromChapter": 66,
+            "text": "武二／二爷"
+          },
+          {
+            "fromChapter": 117,
+            "text": "武二爷"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -32887,14 +34483,35 @@
           "book": "qingyu",
           "seqLo": 61,
           "seqHi": 67,
-          "identity": "殇侯麾下将领，后受命跟随程宗扬",
-          "role": "程宗扬手下",
-          "description": "吴三桂是星月湖大营中程宗扬直属的军士，沉默如铁，随时待命，刀锋映着营帐的灯火，不显山露水却是主子最锋利的爪牙。",
+          "identity": "熊耳铺候选向导武士",
+          "role": "熊耳铺候选向导武士",
+          "description": "来自蓟州的武士，在熊耳铺可供选择为向导。",
           "notes": [
             "【关系】下属／同伴",
-            "【目标】效忠主公，执行命令，展现军事才能；后受殇侯指派跟随程宗扬"
+            "【阶段身份】熊耳铺候选向导武士"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "goals": [
+            "候选向导，等待受雇"
+          ],
+          "relationToProtagonist": [
+            "候选向导，尚未受雇为主角属下"
+          ],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "appearance": "熊耳铺的候选向导武士",
+          "personality": [
+            "果敢干练",
+            "剽悍好胜",
+            "忠直耿介",
+            "豪爽"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -32924,7 +34541,24 @@
             "【关系】下属／同伴",
             "【目标】效忠主公，执行命令，展现军事才能；后受殇侯指派跟随程宗扬"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "殇侯属下武士",
+          "personality": [
+            "果敢干练",
+            "剽悍好胜",
+            "忠直耿介",
+            "豪爽"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -33062,6 +34696,48 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          },
+          {
+            "fromChapter": 124,
+            "text": "吴兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "吴三桂"
+          },
+          {
+            "fromChapter": 124,
+            "text": "吴兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [
+          {
+            "fromChapter": 124,
+            "text": "公子"
+          }
+        ],
+        "selfReportedName": []
+      },
       "review": {
         "approved": false,
         "reviewed": true,
@@ -34627,7 +36303,7 @@
           {
             "bookRank": 0,
             "label": "清羽篇",
-            "text": "亲历：小紫疑云（与程宗扬、碧奴、谢艺）；小紫暴露（与程宗扬、阿夕、乐明珠）；辰星七妖现身（与程宗扬）；擒获惊理（与程宗扬）"
+            "text": "亲历：小紫疑云（与程宗扬、碧姬、谢艺）；小紫暴露（与程宗扬、阿夕、乐明珠）；辰星七妖现身（与程宗扬）；擒获惊理（与程宗扬）"
           }
         ],
         "race": "碧鲮族",
@@ -34734,7 +36410,8 @@
           ],
           "appearance": "穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。",
           "principles": [],
-          "signatureAbilities": []
+          "signatureAbilities": [],
+          "speechStyle": []
         },
         {
           "scope": "stage-projection",
@@ -34770,7 +36447,8 @@
           ],
           "appearance": "穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。",
           "principles": [],
-          "signatureAbilities": []
+          "signatureAbilities": [],
+          "speechStyle": []
         },
         {
           "scope": "stage-projection",
@@ -34806,7 +36484,8 @@
           ],
           "appearance": "穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。",
           "principles": [],
-          "signatureAbilities": []
+          "signatureAbilities": [],
+          "speechStyle": []
         },
         {
           "scope": "stage-projection",
@@ -34843,7 +36522,11 @@
           "blockedStageNotePrefixes": [
             "【性癖】",
             "【身体】"
-          ]
+          ],
+          "appearance": "一路同行的少女，常以天真无知的姿态示人。",
+          "speechStyle": [],
+          "principles": [],
+          "signatureAbilities": []
         },
         {
           "scope": "stage-projection",
@@ -35266,6 +36949,64 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫",
+            "kind": "name"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "紫衣少女"
+          },
+          {
+            "fromChapter": 70,
+            "text": "小紫"
+          },
+          {
+            "fromChapter": 120,
+            "text": "死丫头"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": [
+          {
+            "fromChapter": 70,
+            "text": "小紫"
+          }
+        ]
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -35332,7 +37073,7 @@
         "joining": [],
         "keyEvents": [
           "第41章出手掠走蜂后，协助苏荔完成祭祀",
-          "第106章拒绝碧奴勾引，表明自己是岳帅部属",
+          "第106章拒绝碧姬勾引，表明自己是岳帅部属",
           "第110章在决战中劈开阴煞，咬指出血点其眉心",
           "第115章掷入一刀伤及龙神心脉，最终在第116章殒逝"
         ],
@@ -35389,7 +37130,15 @@
             "沉稳"
           ],
           "speechStyle": "温和斯文，称程宗扬「程兄」，话不多，常带一点漫不经心",
-          "goals": []
+          "goals": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -35413,7 +37162,15 @@
             "沉稳"
           ],
           "speechStyle": "温和斯文，称程宗扬「程兄」，话不多，常带一点漫不经心",
-          "goals": []
+          "goals": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -35437,7 +37194,15 @@
             "沉稳"
           ],
           "speechStyle": "温和斯文，称程宗扬「程兄」，话不多，常带一点漫不经心",
-          "goals": []
+          "goals": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -35451,7 +37216,19 @@
           "notes": [
             "【关系】同伴/盟友"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "温和沉稳的同行刀客，已向程宗扬讲述部分星月湖旧事。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -35466,7 +37243,22 @@
             "【关系】同伴/盟友"
           ],
           "status": "stage-current",
-          "goals": []
+          "goals": [],
+          "appearance": "云氏商队同行者",
+          "personality": [
+            "温和从容",
+            "彬彬有礼",
+            "沉稳"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -35480,7 +37272,19 @@
           "notes": [
             "【关系】同伴/盟友"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "自称星月湖谢艺的刀客，正与鬼巫王和龙神交战。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -35567,6 +37371,43 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          },
+          {
+            "fromChapter": 41,
+            "text": "谢兄"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "谢艺"
+          },
+          {
+            "fromChapter": 41,
+            "text": "谢兄"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": true,
         "reviewed": true,
@@ -35579,7 +37420,7 @@
           "alias-unification approved"
         ]
       },
-      "embedText": "谢艺 ｜ 龙骥 ｜ 星月湖八骏之一，岳帅部属 ｜ 星月湖(八骏·龙骥/岳帅部属) ｜ 登场于废墟 ｜ 温和从容、彬彬有礼、沉稳 ｜ 同伴/盟友 ｜ 谢艺（直接称呼） 别名/称谓：龙骥 ｜ 第41章出手掠走蜂后，协助苏荔完成祭祀；第106章拒绝碧奴勾引，表明自己是岳帅部属；第110章在决战中劈开阴煞，咬指出血点其眉心；第115章掷入一刀伤及龙神心脉，最终在第116章殒逝"
+      "embedText": "谢艺 ｜ 龙骥 ｜ 星月湖八骏之一，岳帅部属 ｜ 星月湖(八骏·龙骥/岳帅部属) ｜ 登场于废墟 ｜ 温和从容、彬彬有礼、沉稳 ｜ 同伴/盟友 ｜ 谢艺（直接称呼） 别名/称谓：龙骥 ｜ 第41章出手掠走蜂后，协助苏荔完成祭祀；第106章拒绝碧姬勾引，表明自己是岳帅部属；第110章在决战中劈开阴煞，咬指出血点其眉心；第115章掷入一刀伤及龙神心脉，最终在第116章殒逝"
     },
     {
       "id": "liuchao.character.xie_youdu",
@@ -37451,7 +39292,8 @@
         "keyEvents": [
           "舍命救起落水军士",
           "被洪峰岩石砸中胸口",
-          "后身体畸形化为怪物"
+          "后身体畸形化为怪物",
+          "第52章被山洪卷走后失踪；第61章血虎出场；第63章易彪认出血虎是易虎。"
         ],
         "ending": [
           "身体被鬼巫王施法畸形化为怪物（被认出是易虎）。"
@@ -37499,21 +39341,148 @@
           "seqHi": 87,
           "identity": "北府兵军官/云氏商会护卫统领",
           "role": "护卫",
-          "description": "云氏商会的护卫队长在北府兵时便以虬髯铁脊闻名，直到山洪吞没他最后一口气——鬼王峒的秘法却将残骸拧成头臂扭曲的怪物，胸膛里还闷着生前那句‘护镖’。",
+          "description": "云氏商会护卫，与商队同行；被山洪卷走后失踪，去向未明。",
           "notes": [
             "【关系】云氏商会护卫统领，与程宗扬为同行/合作关系。",
             "【目标】完成护卫任务，保护同袍与商队安全。"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏护卫",
+          "personality": [
+            "沉默寡言",
+            "沉稳严谨",
+            "冷静",
+            "重情义",
+            "有担当"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "identity": "云氏护卫",
+          "role": "云氏护卫",
+          "status": "stage-current",
+          "appearance": "云氏护卫",
+          "personality": [
+            "沉默寡言",
+            "沉稳严谨",
+            "冷静",
+            "重情义",
+            "有担当"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "云氏护卫",
+          "role": "云氏护卫",
+          "status": "stage-current",
+          "appearance": "云氏护卫",
+          "personality": [
+            "沉默寡言",
+            "沉稳严谨",
+            "冷静",
+            "重情义",
+            "有担当"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎",
+            "kind": "description"
+          },
+          {
+            "fromChapter": 63,
+            "text": "易虎",
+            "kind": "name"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎"
+          },
+          {
+            "fromChapter": 63,
+            "text": "易虎"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "易虎"
+          },
+          {
+            "fromChapter": 61,
+            "text": "血虎"
+          },
+          {
+            "fromChapter": 63,
+            "text": "易虎"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": false,
         "reviewed": true,
         "flags": [],
         "conflicts": []
       },
-      "embedText": "易虎 ｜ 北府兵军官/云氏商会护卫统领，易彪的哥哥 ｜ 云氏商会(护卫)、北府军(军士/头领) ｜ 登场于黑石滩 ｜ 沉默寡言、沉稳严谨、冷静、重情义、有担当 ｜ 云氏商会护卫统领，与程宗扬为同行/合作关系。 ｜ 程宗扬称其为“易虎”；被他人称为“易虎”。 ｜ 舍命救起落水军士；被洪峰岩石砸中胸口；后身体畸形化为怪物"
+      "embedText": "易虎 ｜ 北府兵军官/云氏商会护卫统领，易彪的哥哥 ｜ 云氏商会(护卫)、北府军(军士/头领) ｜ 登场于黑石滩 ｜ 沉默寡言、沉稳严谨、冷静、重情义、有担当 ｜ 云氏商会护卫统领，与程宗扬为同行/合作关系。 ｜ 程宗扬称其为“易虎”；被他人称为“易虎”。 ｜ 舍命救起落水军士；被洪峰岩石砸中胸口；后身体畸形化为怪物；第52章被山洪卷走后失踪；第61章血虎出场；第63章易彪认出血虎是易虎。"
     },
     {
       "id": "liuchao.character.yi_xin",
@@ -39561,7 +41530,16 @@
             "重情义",
             "精明"
           ],
-          "speechStyle": "老成持重，称程宗扬「程小哥」，自称「老夫」"
+          "speechStyle": "老成持重，称程宗扬「程小哥」，自称「老夫」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -39586,7 +41564,16 @@
             "重情义",
             "精明"
           ],
-          "speechStyle": "老成持重，称程宗扬「程小哥」，自称「老夫」"
+          "speechStyle": "老成持重，称程宗扬「程小哥」，自称「老夫」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -39611,7 +41598,16 @@
             "重情义",
             "精明"
           ],
-          "speechStyle": "老成持重，称程宗扬「程小哥」，自称「老夫」"
+          "speechStyle": "老成持重，称程宗扬「程小哥」，自称「老夫」",
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -39626,7 +41622,19 @@
             "【关系】盟友，程宗扬称其为‘云老哥’",
             "【目标】保全云氏家族声誉与财富"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏商会执事，准备以平等合作方式探查鬼王峒。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -39641,7 +41649,26 @@
             "【关系】盟友，程宗扬称其为‘云老哥’",
             "【目标】保全云氏家族声誉与财富"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏商会长者",
+          "personality": [
+            "沉稳",
+            "老练",
+            "果断",
+            "有威严",
+            "重情义",
+            "精明"
+          ],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -39656,7 +41683,19 @@
             "【关系】盟友，程宗扬称其为‘云老哥’",
             "【目标】保全云氏家族声誉与财富"
           ],
-          "status": "stage-current"
+          "status": "stage-current",
+          "appearance": "云氏商会执事，与白湖商队共同经历鬼王峒之战。",
+          "personality": [],
+          "speechStyle": [],
+          "principles": [],
+          "goals": [],
+          "weaknesses": [],
+          "signatureAbilities": [],
+          "relationToProtagonist": [],
+          "joining": [],
+          "keyEvents": [],
+          "ending": [],
+          "formsOfAddress": []
         },
         {
           "scope": "stage-projection",
@@ -39869,6 +41908,51 @@
           "status": "stage-current"
         }
       ],
+      "naming": {
+        "panel": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          }
+        ],
+        "narration": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          }
+        ],
+        "protagonistAddress": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          },
+          {
+            "fromChapter": 34,
+            "text": "云执事"
+          },
+          {
+            "fromChapter": 35,
+            "text": "云执事／云老哥"
+          }
+        ],
+        "protagonistThought": [
+          {
+            "fromChapter": 0,
+            "text": "云苍峰"
+          },
+          {
+            "fromChapter": 34,
+            "text": "云执事"
+          },
+          {
+            "fromChapter": 35,
+            "text": "云执事／云老哥"
+          }
+        ],
+        "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
+        "npcAddress": [],
+        "selfReportedName": []
+      },
       "review": {
         "approved": true,
         "reviewed": true,

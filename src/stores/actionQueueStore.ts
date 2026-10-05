@@ -1,3 +1,5 @@
+import { backfillRelationshipIds, resolveRelationshipId } from '@/modules/scenarioMods/ledger/affinityIdentity';
+import { useGameStateStore } from './gameStateStore';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
@@ -59,7 +61,7 @@ export const useActionQueueStore = defineStore('actionQueue', () => {
 
     // 检查是否已经有相同类型的操作，如果有则替换
     const existingIndex = pendingActions.value.findIndex(
-      a => a.type === action.type && a.itemName === action.itemName
+      a => a.type === action.type && a.itemName === action.itemName && a.npcId === action.npcId
     );
     
     if (existingIndex !== -1) {
@@ -106,7 +108,19 @@ export const useActionQueueStore = defineStore('actionQueue', () => {
       return '';
     }
     
-    const actionTexts = pendingActions.value.map(action => {
+    const store = useGameStateStore();
+    const save = { 社交: { 关系: store.relationships || {} } };
+    backfillRelationshipIds(save);
+    for (const action of pendingActions.value) {
+      if (!String(action.type || '').startsWith('npc_')) continue;
+      const id = typeof action.npcId === 'string' ? action.npcId : resolveRelationshipId(save, String(action.npcName || ''));
+      if (!id || !store.relationships?.[id]) { action.identityPending = true; continue; }
+      action.npcId = id; action.npcName = store.relationships[id].名字; action.identityPending = false;
+    }
+    saveToStorage();
+    const executable = pendingActions.value.filter(action => !action.identityPending);
+    if (!executable.length) return '';
+    const actionTexts = executable.map(action => {
       switch (action.type) {
         case 'cultivate':
           if (action.itemType === '大道') {
@@ -147,7 +161,8 @@ export const useActionQueueStore = defineStore('actionQueue', () => {
   const consumeActions = (): string => {
     const prompt = getActionPrompt();
     if (prompt) {
-      clearActions();
+      pendingActions.value = pendingActions.value.filter(action => action.identityPending);
+      saveToStorage();
     }
     return prompt;
   };

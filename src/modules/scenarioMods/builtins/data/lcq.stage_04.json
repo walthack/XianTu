@@ -130,7 +130,7 @@
         "name": "鬼王峒",
         "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。部族出自大地深处（凿岩而居、食青苔饮硫磺水）；与蛇彝人有灭族级血仇（部族女性曾被蛇彝灭绝殆尽）；得龙神庇护方存续至今。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -160,7 +160,7 @@
         "name": "花苗",
         "description": "南荒花苗部族，族长苏荔亲自率族人护送戴面纱的新娘与两名伴娘。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "headquartersLocationId": "liuchao.location.guiwang_dong",
         "territory": [
           {
             "x": 1500,
@@ -190,7 +190,7 @@
         "name": "白夷",
         "description": "南荒富饶部族，出产珍珠与美玉。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.guiwangdong",
+        "headquartersLocationId": "liuchao.location.baiyi",
         "territory": [
           {
             "x": 1500,
@@ -442,19 +442,6 @@
     ],
     "locations": [
       {
-        "id": "liuchao.location.xiong_er_pu",
-        "name": "熊耳铺",
-        "description": "南荒隘口村寨，商队在此寻向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
-        "type": "城池",
-        "continentId": "liuchao.continent.nanhuang",
-        "coordinates": {
-          "x": 1623,
-          "y": 7612
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
         "id": "liuchao.location.shan_jian",
         "name": "南荒山涧",
         "description": "鬼王峒武士袭击发生地。",
@@ -476,19 +463,6 @@
         "coordinates": {
           "x": 1780,
           "y": 8070
-        },
-        "features": []
-      },
-      {
-        "id": "liuchao.location.gui_wang_dong_palace",
-        "name": "鬼王峒宫殿",
-        "description": "鬼巫王居所，花苗刺杀目标。",
-        "type": "洞府",
-        "continentId": "liuchao.continent.nanhuang",
-        "factionId": "liuchao.faction.gui_wang_dong",
-        "coordinates": {
-          "x": 1668,
-          "y": 8720
         },
         "features": []
       },
@@ -541,19 +515,6 @@
         "coordinates": {
           "x": 1818,
           "y": 8118
-        },
-        "features": [],
-        "region": "南荒"
-      },
-      {
-        "id": "liuchao.location.guiwangdong",
-        "name": "鬼王峒",
-        "continentId": "liuchao.continent.nanhuang",
-        "type": "洞府",
-        "description": "南荒鬼王峒势力的核心洞窟。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-        "coordinates": {
-          "x": 1641,
-          "y": 8690
         },
         "features": [],
         "region": "南荒"
@@ -1246,6 +1207,45 @@
           "y": 7470
         },
         "description": "苏荔主持的花苗寨，商队在此得到帮助。"
+      },
+      {
+        "id": "liuchao.location.xiongerpu",
+        "name": "熊耳铺",
+        "description": "南荒隘口村寨，商队在此寻向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
+        "type": "城池",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 1623,
+          "y": 7612
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.guiwang_dong",
+        "name": "鬼王峒",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "洞府",
+        "description": "南荒鬼王峒势力的核心洞窟。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.gui_wang_gong",
+        "name": "鬼王峒宫殿",
+        "description": "鬼巫王居所，花苗刺杀目标。",
+        "type": "洞府",
+        "continentId": "liuchao.continent.nanhuang",
+        "factionId": "liuchao.faction.gui_wang_dong",
+        "coordinates": {
+          "x": 1668,
+          "y": 8720
+        },
+        "features": []
       }
     ],
     "characters": [
@@ -1389,21 +1389,21 @@
       {
         "id": "lcq.character.nanhuang_xiaowei",
         "name": "小魏",
-        "role": "云氏护卫",
+        "role": "白湖商馆护卫",
         "profile": {
-          "origin": "云氏护卫"
+          "origin": "白湖商馆护卫"
         },
-        "description": "云氏护卫",
+        "description": "白湖商馆护卫",
         "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_shigang",
         "name": "石刚",
-        "role": "云氏护卫",
+        "role": "白湖商馆护卫",
         "profile": {
-          "origin": "云氏护卫"
+          "origin": "白湖商馆护卫"
         },
-        "description": "云氏护卫",
+        "description": "白湖商馆护卫",
         "affiliations": []
       },
       {
@@ -2987,7 +2987,7 @@
       },
       {
         "id": "lcq.event.s04_05",
-        "name": "旱洪与易虎之死",
+        "name": "旱洪与易虎失踪",
         "description": "山洪突袭商队，易虎先后救下易彪与一名年轻军士，以千斤坠扛住洪峰，继而胸口中岩、缓缓坐倒并被洪水吞没；易彪跪岸认兄送别。",
         "conditions": [
           {
@@ -3051,8 +3051,8 @@
           "resolvedEventIds": [
             "lcq.event.s04_05"
           ],
-          "worldDelta": "旱洪席卷去路，易虎之死已成为队伍共同经历；灾后失散、哀恸与道路中断继续影响众人。",
-          "evidence": "R2-9 世界引力合同：旱洪与易虎之死属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+          "worldDelta": "旱洪席卷去路，易虎失踪已成为队伍共同经历；灾后失散、哀恸与道路中断继续影响众人。",
+          "evidence": "R2-9 世界引力合同：旱洪与易虎失踪属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
         },
         "playerCompletionContract": {
           "kind": "objective_action",

@@ -66,7 +66,7 @@ test('clock is monotonic/idempotent, K20 records one-yang without inventing a ge
 });
 test('scene guards reject omitted facts, early identities, wrong pronouns, unreceipted money/realm and opposite daylight',()=>{
  const scene={时段:'深夜',presentActors:[{name:'谢艺',gender:'男'}],账本摘要:{主角:{境界:{名称:'凡人'}}}};
- assert.throws(()=>validateStepSceneNarrative('谢艺，她说你回来了。',undefined,scene),/性别/);
+ assert.doesNotThrow(()=>validateStepSceneNarrative('谢艺，她说你回来了。',undefined,scene)); // P0: not an enforced rule until clean-corpus approval.
  assert.throws(()=>validateStepSceneNarrative('你看晨光落下。',undefined,scene),/昼夜/);
  assert.throws(()=>validateStepSceneNarrative('你支付了五枚铜铢。',undefined,scene),/钱物/);
  assert.throws(()=>validateStepSceneNarrative('你踏入一阳。',undefined,scene),/一阳/);

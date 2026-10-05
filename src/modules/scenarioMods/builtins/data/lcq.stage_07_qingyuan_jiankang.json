@@ -1588,7 +1588,7 @@
             "纯真无算计",
             "对性事缺乏概念，容易被主角哄骗"
           ],
-          "origin": "太乙真宗边缘分支弟子，潘金莲/义姁同门"
+          "origin": "光明观堂弟子，潘金莲/义姁同门"
         }
       },
       {
@@ -2087,8 +2087,8 @@
       {
         "id": "lcq.character.np006",
         "name": "阁罗",
-        "role": "鬼王峒首领",
-        "description": "鬼王峒首领阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
+        "role": "鬼巫王的仆从",
+        "description": "鬼巫王的仆从阁罗，性情粗暴傲慢，脑子虽笨却总爱发号施令，急性子一上来便吼得山摇地动，谁也不敢违逆。",
         "profile": {
           "attributes": {
             "rootBone": 7,
@@ -2119,7 +2119,7 @@
           "notes": [
             "【性癖】施虐；肛交；强迫；姐妹同淫；观看羞辱"
           ],
-          "origin": "鬼王峒首领"
+          "origin": "鬼巫王的仆从"
         },
         "realm": "筑基",
         "gender": "男",
@@ -2342,7 +2342,7 @@
         "name": "龙神",
         "description": "上古龙神自星阵中降临，庞大的阴影碾碎凡人的傲慢，鬼巫王的献祭不过是为自己掘墓——祂会吞噬一切胆敢觊觎神力的蝼蚁。",
         "role": "神兽",
-        "gender": "男",
+        "gender": "无",
         "realm": "化神",
         "affiliations": [],
         "locationId": "liuchao.location.gui_wang_dong",
@@ -2377,7 +2377,8 @@
             "恶毒",
             "精力旺盛"
           ]
-        }
+        },
+        "entityType": "creature"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",

@@ -1,3 +1,4 @@
+import { splitRecordPath, npcRecordPath, resolveRelationshipId, backfillRelationshipIds, normalizeNpcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import { get, set, cloneDeep } from 'lodash';
 import type { SaveData, StateChange, StatusEffect } from '@/types/game';
 
@@ -359,7 +360,8 @@ export function reconcilePlayerLocationFromNarrative(input: NarrativeReconcileIn
   const movedByDesc = new Map<string, { npcs: Set<string>; rawDesc: string }>();
   for (const cmd of commands) {
     if (cmd.action !== 'set') continue;
-    const match = NPC_LOCATION_KEY_RE.exec(cmd.key);
+    const tokens=splitRecordPath(cmd.key);
+    const match=tokens[0]==='社交'&&tokens[1]==='关系'&&tokens.length===4&&tokens[3]==='当前位置' ? [cmd.key,tokens[2]] : null;
     if (!match) continue;
     const rawDesc =
       typeof (cmd.value as { 描述?: unknown } | undefined)?.描述 === 'string'
@@ -389,7 +391,7 @@ export function reconcilePlayerLocationFromNarrative(input: NarrativeReconcileIn
   // 取带坐标的完整位置对象，且候选 NPC 间坐标必须一致（避免造假坐标 / 留旧坐标错位）
   let sourceLocation: LocationObject | null = null;
   for (const npcName of group.npcs) {
-    const loc = get(saveData, ['社交', '关系', npcName, '当前位置']);
+    const loc = get(saveData, ['社交', '关系', resolveRelationshipId(saveData,npcName)||npcName, '当前位置']);
     if (!isLocationObjectWithCoords(loc) || normalizeDesc(loc.描述) !== candidateDesc) continue;
     if (!sourceLocation) {
       sourceLocation = loc;
@@ -514,18 +516,19 @@ export function reconcilePartyNpcStateFromNarrative(input: NarrativeReconcileInp
         typeof relationBefore !== 'object' ||
         Array.isArray(relationBefore)
       ) continue;
-      const relationPath = `社交.关系.${target}`;
+      const relationPath = npcRecordPath(resolveRelationshipId(saveData,target)||target);
       const statusPath = `${relationPath}.当前状态`;
       const relation = get(saveData, relationPath);
       if (!relation || typeof relation !== 'object' || Array.isArray(relation)) continue;
       const oldValue = get(saveData, statusPath);
       if (!EMPTY_STATUS_RE.test(typeof oldValue === 'string' ? oldValue.trim() : oldValue == null ? '' : String(oldValue))) continue;
       if (commands.some(command =>
-        command.key === relationPath ||
-        command.key.startsWith(`${relationPath}.`) ||
-        relationPath.startsWith(`${command.key}.`)
+        normalizeNpcRecordPath(command.key, saveData) === relationPath ||
+        normalizeNpcRecordPath(command.key, saveData)?.startsWith(`${relationPath}.`) ||
+        relationPath.startsWith(`${normalizeNpcRecordPath(command.key, saveData)}.`)
       )) continue;
-      const nextValue = hypnosisTargetStatus(text, '阮香凝', target).slice(0, 60);
+      const targetName = String((relationBefore as any).名字 || target);
+      const nextValue = hypnosisTargetStatus(text, '阮香凝', targetName).slice(0, 60);
       if (!nextValue) continue;
       set(saveData, statusPath, nextValue);
       console.warn(`[AI双向系统] 叙事状态补账: ${target}当前状态 → ${nextValue}`);
@@ -540,18 +543,19 @@ export function reconcilePartyNpcStateFromNarrative(input: NarrativeReconcileInp
 
   for (const [npc, relationBefore] of relationEntries) {
     if (!npc || !relationBefore || typeof relationBefore !== 'object' || Array.isArray(relationBefore)) continue;
-    const relationPath = `社交.关系.${npc}`;
+    const relationPath = npcRecordPath(resolveRelationshipId(saveData,npc)||npc);
     const statusPath = `${relationPath}.当前状态`;
     const relation = get(saveData, relationPath);
     if (!relation || typeof relation !== 'object' || Array.isArray(relation)) continue;
     const oldValue = get(saveData, statusPath);
     if (!EMPTY_STATUS_RE.test(typeof oldValue === 'string' ? oldValue.trim() : oldValue == null ? '' : String(oldValue))) continue;
     if (commands.some(command =>
-      command.key === relationPath ||
-      command.key.startsWith(`${relationPath}.`) ||
-      relationPath.startsWith(`${command.key}.`)
+      normalizeNpcRecordPath(command.key, saveData) === relationPath ||
+      normalizeNpcRecordPath(command.key, saveData)?.startsWith(`${relationPath}.`) ||
+      relationPath.startsWith(`${normalizeNpcRecordPath(command.key, saveData)}.`)
     )) continue;
-    const nextValue = (specialRules.get(npc)?.build(text) || buildGenericPartyStatus(text, npc)).slice(0, 60);
+    const npcName = String((relationBefore as any).名字 || npc);
+    const nextValue = (specialRules.get(npcName)?.build(text) || buildGenericPartyStatus(text, npcName)).slice(0, 60);
     if (!nextValue) continue;
     set(saveData, statusPath, nextValue);
     console.warn(`[AI双向系统] 叙事状态补账: ${npc}当前状态 → ${nextValue}`);
@@ -622,6 +626,14 @@ export function reconcilePlayerCanonEffectsFromNarrative(input: NarrativeReconci
  * 叙事状态兜底入口。位置、即兴目标、NPC 状态与主角专属机制互不覆盖。
  */
 export function reconcileNarrativeState(input: NarrativeReconcileInput): StateChange[] {
+  backfillRelationshipIds(input.saveData, input.saveData.世界?.状态?.剧本模组?.canon?.characters);
+  // Reuse current identities for the pre-turn snapshot, including unnamed local NPCs.
+  for (const [key, raw] of Object.entries(input.saveDataBefore.社交?.关系 || {})) {
+    if (!raw || typeof raw !== 'object' || (raw as any).角色ID) continue;
+    const matches = Object.values(input.saveData.社交?.关系 || {}).filter(v => (v as any)?.原关系键 === key);
+    if (matches.length === 1) (raw as any).角色ID = (matches[0] as any).角色ID;
+  }
+  backfillRelationshipIds(input.saveDataBefore, input.saveDataBefore.世界?.状态?.剧本模组?.canon?.characters);
   return [
     ...reconcilePlayerLocationFromNarrative(input),
     ...reconcileImprovisedGoalsFromNarrative(input),

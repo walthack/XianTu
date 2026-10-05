@@ -1,6 +1,6 @@
 import type { SaveData } from '@/types/game';
 import {
-  getCurrentStoryEventActions, previewWangZheStayEnding,
+  getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding,
   getTrackedStoryOpportunityActions,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
@@ -137,7 +137,7 @@ export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCa
     playerLine: item.playerLine,
     contractHash: item.contractHash,
   }));
-  const events = getCurrentStoryEventActions(saveData).map(item => ({
+  const events = [...getCurrentStoryEventActions(saveData), ...getCurrentStoryExplorationActions(saveData)].map(item => ({
     source: item.source,
     actionId: item.actionId,
     eventId: item.eventId,
@@ -195,14 +195,14 @@ export function verifyFreshSelection(
       item.identityId === chosen.actionId && item.receiptId === chosen.contractHash,
     );
   }
-  return getCurrentStoryEventActions(saveData).find(item =>
+  return [...getCurrentStoryEventActions(saveData), ...getCurrentStoryExplorationActions(saveData)].find(item =>
     item.actionId === chosen.actionId
     && item.eventId === chosen.eventId
     && item.contractHash === chosen.contractHash,
   );
 }
 
-function parseIntentJson(raw: string): {
+export function parseIntentJson(raw: string): {
   actionId?: string;
   source?: string;
   eventId?: string;
@@ -210,7 +210,7 @@ function parseIntentJson(raw: string): {
   evidence?: string;
   certainty?: string;
 } | null {
-  const text = String(raw || '').trim();
+  const text = String(raw || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
   if (!text) return null;
   const fenced = text.match(/\{[\s\S]*\}/);
   if (!fenced) return null;

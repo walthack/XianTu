@@ -506,7 +506,7 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
       },
       {
         "eventId": "lcq.event.geluo_summons_biji",
-        "mustReach": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "mustReach": "阁罗召来碧姬，程宗扬第一次当面见到谢艺要找的人。",
         "completionEvidence": [],
         "forbiddenInCanon": [
           "提前演出后续剧情",

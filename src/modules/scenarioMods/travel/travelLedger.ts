@@ -372,6 +372,12 @@ export function syncNanhuangRailTravel(saveData: SaveData, runtime: LedgerRuntim
   const cards: TravelCard[] = [];
   for (const eventId of runtime.completedEventIds || []) {
     if (ledger.doneEventIds.includes(eventId)) continue;
+    // 65章白夷闲聊可选：留下离城前窗口，实际选择去山谷时才记这段半日。
+    if (eventId === 'lcq.event.s04b_lingfei_baiyi_crisis_13'
+      && runtime.modId === 'lcq.stage_04b_lingfei_baiyi_crisis'
+      && ledger.state.currentZoneId === 'nh.baiyi'
+      && !runtime.completedEventIds?.includes('lcq.event.s04b_lingfei_baiyi_crisis_14')
+      && !runtime.completedEventIds?.includes('lcq.event.zhu88_heimohai_chat')) continue;
     cards.push(...settleNanhuangForcedTravel(saveData, runtime, { afterEventDone: eventId }));
     ledger.doneEventIds.push(eventId);
   }

@@ -1,8 +1,10 @@
+import { endingKey, endingPresentation } from './endingPresentation';
+import { runtimeEntityId, runtimeEntityName, migrateRuntimePersonRecords } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
 import type { ScenarioStepScene } from './schema';
 import { advanceClock } from './travel/travelLedger';
 import { visibleModuleText } from './modularTurn';
-/** 剧情交接 2026-10-02：固定死亡正文；插图过程稿不接入。 */
+/** 剧情交接 2026-10-02：固定死亡正文；配图由 endingPresentation 提供。 */
 const ENDING_TEXTS: Readonly<Record<string, string>> = {
   "E05": "指尖碰到那层凝固的灰尘时，你先听见了一声极轻的嗡鸣。\n那声音你太熟了。小区楼下的配电箱，地铁隧道里的变压器，夏夜空调外机旁的铁皮柜，都是这样低低的、不肯停歇的嗡嗡声。你在那个世界里从它们旁边走过一千次，从没多看一眼。它们的门上贴着同一个标记：黄底，黑边，一道红色的拐弯箭头。\n手臂上的汗毛先竖了起来，接着是头皮。空气里浮起一股焦甜的腥气，像雷雨落下之前的味道。你想把手缩回来，手指却不听使唤，像被一只看不见的铁钳攥住，五指反而越扣越紧。\n然后它进来了。\n起初不是疼，是一股蛮横的力量从指尖灌进来，顺着胳膊直撞胸口。全身的筋肉在同一瞬间抽紧，牙关咬得咯咯作响，你连一声都叫不出来。心口猛地一顿，又胡乱跳了几下，像一面被人乱擂的破鼓。丹田里那团真阳被惊醒了，生死根疯了一样翻涌，却不知该往哪里去。\n眼前白了一下。你闻到头发烧焦的味道，然后是皮肉。殇侯说过，以往的测试者一触之下便化作火球。那时你还在心里嘀咕：有这么厉害吗？现在你知道了，衣襟上已经蹿起了火苗。\n你忽然想起路边那些骨头。藤蔓底下一层压着一层，一直铺到土径尽头。一百六十七个。他们大概也是这样，被一句“天命之人”说动了心，伸出手去，以为前面就是荣华富贵。\n可你本来认得这个标记。你比他们中的任何一个都认得。\n隔着那片白光，你好像看见殇侯站了起来，又慢慢坐了回去。他捋了捋胡须，叹了口气，那声音很轻，像在惋惜一颗又被失手摔碎的夜明珠。\n最后一个念头竟有点好笑：苏妲己的冰蛊等了你三个月，到底没能等到。\n雨还在下。\n等雨停了，那条红土路边会多出一具焦黑的骨头。用不了几年，藤蔓就会把它盖住，空洞的眼窝里，也会长出青草。",
   "E01": "苏妲己没有动怒。她用手背掩住红唇，吃吃笑了两声，眼波在你脸上慢悠悠一转，像在打量一只刚摔出裂纹的瓷盏。\n“不赌也好。”她的声音又软又甜，“妾身本想赏你一条做奴才的活路。既然你骨头这样硬，就让妾身瞧瞧，它在铜柱上能硬多久。凝羽，抬炮烙来。”\n你还梗着脖子，心里甚至有一丝得意。你当着她的面回绝了，赌局没有开始，卖身契一个字也没有签，你没让任何人摆布。可这份得意只撑到院门打开的那一刻。\n两名女侍卫推进一根粗如人腰的铜柱，柱下炭火烧得通红，热浪扑面而来，燎得你眉梢发焦。铜柱上涂满了油，在火光里泛着暗金色的光，油脂被烤出细密的气泡，噼啪作响，一股焦甜的气味直往鼻腔里钻。\n膝盖先软了。你听见自己的牙齿在打颤，那声音大得出奇。\n“夫人，我……”\n凝羽拧住你的手臂，骨节发出熟悉的酸响。不久前她也这样把你按跪在地，那时你还能靠一张嘴翻盘。此刻你满脑子只剩一个荒唐的念头：炮烙原来真是这妖妇亲手发明的，书上那几行字，竟要用自己的皮肉去验证。\n铜柱贴上胸口的一瞬，你没有感觉到烫，只听见“嗤”的一声，像冷水泼进热锅。然后疼痛才追上来，白亮、尖锐，从胸前一路炸进脑髓。你在尖叫，耳朵里却只有油脂沸腾的声音和自己破碎的喘息。焦糊味浓得发苦，你分不清那是油，还是你自己。\n苏妲己倚在榻上，捧着茶盏浅浅啜饮，笑意盈盈地看着，仿佛在看一出新排的戏。\n你想起那个世界的出租屋，想起楼下便利店的冰柜，拉开门时冷气扑在脸上的感觉。你想喊一声“我赌”，喉咙却早已烧哑，只呼出一缕热气。\n火光越来越远，越来越暗。她的笑声像隔着一层厚厚的水传来。那点骨气，那句硬话，此刻轻得像一片灰。\n你最后感觉到的，是铜柱的热度一点点变得无关紧要。\n然后，什么都没有了。",
@@ -10,12 +12,12 @@ const ENDING_TEXTS: Readonly<Record<string, string>> = {
   "E03": "你以为自己算准了。\n霓龙丝的产地只有你一个人知道，至少她这样相信。只要这个秘密还锁在你脑子里，她就杀不得你。九十天太短，条件太苛，你把它推回去，她自然会让一步，生意场上向来如此。你甚至已经在心里打好了下一轮的腹稿：放宽期限，要几成股份，再添几个护卫。\n苏妲己听完，没有还价。她端起茶盏浅浅抿了一口，又轻轻放下，瓷底碰在案上，一声脆响。\n“公子说得不错，那地方只有你知道。”她嫣然一笑，“可一个不肯去的人，知道什么又有何用？妾身院里的牡丹池下，埋过不少知道秘密的人。”\n她转向凝羽，语气平常得像在吩咐添茶：“原说三个月不回便尝炮烙，既然他连三个月都不要，那便今日吧。”\n你脸上的笑还挂着，脑子却空了一拍。你张嘴想换第二套说辞、第三套，那些在会议室里屡试不爽的话，双赢、让利、长期合作。话到嘴边，你才发现对面坐的根本不是客户。\n铜柱抬进来时，你闻到了炭火和热油的气味，浓得让人作呕。热浪先一步扑到脸上，皮肤绷紧发痛。你还在算，现在答应还来得及吗？九十天，六十天，三十天都行。你喊出来了，声音尖得不像自己。\n苏妲己笑吟吟地看着你，像在看一个出价太晚的买家。“晚了。”\n凝羽拧住你的手臂，把你推向那团暗红的光。贴上去的那一瞬，先是一声轻响，然后是白。不是疼，是白，铺天盖地的白，把所有念头都烧穿了。等疼追上来，你已经叫不出声，只听见油脂在耳边嗤嗤沸腾，像有人在一遍遍拨着算盘。\n原来从一开始你就没有筹码。她要霓龙丝，可她从不缺一个奴才。你把命当成底牌押上了桌，她连看都没看一眼。\n火光渐渐退成远处的一点红。你想起那个世界里打过的无数通电话，签过的无数份合同。最后一份，是你亲手推了回去。\n热度慢慢离你而去。\n再也没有下一轮了。",
   "E04": "天上先静了一瞬。\n你仰起头，看见那道天青色的身影悬在百丈高处，金冠碎成一蓬流星，黑发在风里散开。王哲的声音从极高的地方落下来，一个字，又一个字，临，兵，斗，者……每喝一声，他身上便多亮起一点光，像有人在天上一盏一盏地点灯。\n你知道你该走。他让你带着月霜往东南去，两刻之内离开，这句话还在耳朵里。可你的腿钉在原地，像被什么按住了。也许是不信，一个人怎么能把自己点成一轮太阳。也许是那一声“拜托”太重，重得你挪不动步。\n四周的厮杀停了。罗马人的铜盔，唐军的陌刀，满地横陈的尸骨，全都仰着脸。你忽然觉得小腹那团暖意在疯长，生死根贪婪地吞着满场死气，真阳一股股往经脉里灌，胀得你耳膜嗡嗡作响。\n“行！”\n八点光聚成一团，在他胸腹间旋转、膨胀。你脸上的皮肤先感觉到了，像贴着一扇刚刚拉开的炉门。汗还没流下来就干了。你眯起眼，泪水涌出，又被烤得发涩。\n你想起背包里那只锦囊，火漆还没拆。想起六阳，想起太泉古阵西边那块赤红的石头，你一样都没去成。想起那个总想一剑捅穿你的丫头，师帅把她托付给你，你却连她此刻在哪儿都顾不上去想。\n你甚至荒唐地想到了加班，想到地铁里挤得喘不过气的早高峰。那时候你总觉得日子烂透了，现在才知道，那些烂日子有多好。\n“极！”\n光落下来了。\n没有声音。或者说声音太大，大到耳朵直接放弃了。你看见自己的手在光里变得透明，能看见骨头的影子，然后连影子也被抹去。热不再是热，是一种干净而彻底的白，从皮肤一直灌进骨髓，再从骨髓里把你整个人推出去。疼来不及到，恐惧也来不及到。\n你最后一个念头很轻：原来他说两刻，是真心想让你活下去。\n然后草原裂开，焦土连成一片方圆十里的黑。\n那片黑里，已经没有你了。",
   "E06": "骨虎的尾巴横扫过来，你听见自己腰间“咯”的一声。\n你被抽回身后那间龛窟，后脑撞上冰凉的水晶。那些水晶像活物一样涌过来，漫过脚踝、膝盖、胸口，最后停在下颌，把你封在里面，和墙上那些龛里的人一模一样。刀还握在手里，却一寸也抬不起来。背上的伤还在淌血，血顺着晶壁往下流，一滴也够不着那头骨虎。\n丹宸骑在虎背上，隔着水晶憎恨地看着你。几招之前，你还站在祭台上笑他“老弟贵庚”。那张嘴替你抢到过一步上风，此刻只够用来喘气。\n不知过了多久，一片黑色的斗篷停在你面前。\n鬼巫王回来了。他苍白的手指在水晶上一划，坚硬的晶壁像水一样分开，露出你的头脸。他凝视着你太阳穴上的伤痕，那道伤痕在他目光下又霍霍跳动起来，贪婪地吸着宫殿里的死气，气轮转得发烫，真阳却一丝也推不出去。\n“天命者，”他平淡地说，“我说过，我要切开你的头颅，寻找天命的指引。”\n鬼羽剑的剑尖凉凉地抵上你的额角。\n你越过他的肩膀，看见祭台旁那面银镜。镜中，谢艺的刀光还缠着炎煞，武二郎横冲直撞，凝羽的光盾一明一灭。他们离你那么近，近得只隔着一扇门，可谁也不知道该往这边看。镜子里能看见每一个人，只少了朱老头。\n穹顶上无数明珠汇成星河，亮得叫人睁不开眼。你忽然有点想笑：在那个世界，你很多年没见过星星了，最后看见的这一片，是假的。\n剑尖往里送了一分。\n那道伤痕跳了最后一下，停了。\n后来的事，你已经看不见了。\n鬼巫王在那颗头颅里什么也没有找到。当夜，一个刀锋般的黑影在水晶前站了很久，只说了两个字：“可惜。”\n两天之后，苍龙星阵在祭坛上亮起，龙神睁开眼睛，一口吞下了召唤它的人，南荒从此落进一只看不见的手里。银镜里那十几个人后来有没有走出鬼王峒，没有人说得清。只有那面银镜还立在祭台旁，照着满穹的假星星。",
-  "E07": "第十三次心跳还没数完，托着你们的那股气流就断了。\n你算准了气流，算准了井壁，偏偏算漏了背上的伤。鲛绡贴上井壁那一下，伤口整个撕开，手腕一软，布角从指缝里滑了出去。你只来得及翻过身，把乐明珠护在胸前，背脊朝下砸进井底。\n身体里有什么东西断了，一根，又一根。你躺在湿滑的青苔上，闻到一股奇异的香气，像龙涎。火褶的微光里，那只山丘般的眼睛就悬在头顶。\n“大笨瓜！你起来呀！”\n你起不来。可你还是撑着那口气，看清了它的眼睑在动。一点寒星亮在它眼前，然后是两点，四点……星芒一颗接一颗爬满它的瞳孔。你本想趁它沉睡下手，到这时才明白，叫醒它的从来不是你。\n巨大的眼珠翻开，映出一个人影：衣衫褴褛，满脸血污，唇角还挂着那点改不掉的坏笑。像极了从前那个挤在地铁里、为一滴蜜糖拼命的小职员。\n龙首开始抬起，成吨的玄武岩像饼干一样碎裂。你用尽最后的力气，把乐明珠推进龙角下那道缝隙：“抓紧！别松手！”\n她哭着伸手来拉你。你没有去握。\n深井裂成两半，岩石如雨落下。龙神昂身而起，带走了井口最后一线光。鬼巫王说过，鬼王峒的祖先来自大地深处。你最后也留在了那里。黑暗压下来，又沉又暖，像加完班倒头就睡的那张床。\n上面的洞窟里，龙神一口吞下了鬼巫王，那句“黑魔海”的咒骂被嚼碎在齿间。凝羽拉住每一个逃出来的人问：“见到他们了吗？”没有人回答她。\n龙首冲出山体，暴雨倾盆。满山逃出来的南荒人跪在泥水里，等着有人站在龙首上，喊一声“拿起你们的武器”。龙角下只有一个哭哑了嗓子的少女。\n他们就那样一直跪着。很多年后，南荒的部族照旧往鬼王峒送新娘，只是祭坛上换了一位不说话的神，替神传话的人，穿着黑衣。",
+  "E07": "井口守不住了。你抓起乐明珠的手，往洞窟深处那道裂缝跑。身后是尸鬼的嘶叫，脚下的地面在一下一下地发颤，像有什么东西在大地深处翻身。\n\n你算准了退路，偏偏算漏了背上的伤。跨过石缝那一步，伤口整个撕开，腿一软，你们俩一起滚下了碎石坡。你只来得及翻过身，把她护在胸前，背脊朝下砸在岩石上。\n\n身体里有什么东西断了，一根，又一根。\n\n“大笨瓜！你起来呀！”\n\n你起不来。头顶的岩壁裂开一道缝，缝里透出一只山丘般的眼睛。一点寒星亮在它眼前，然后是两点，四点……星芒一颗接一颗爬满它的瞳孔。巨大的眼珠翻开，映出一个人影：衣衫褴褛，满脸血污，唇角还挂着那点改不掉的坏笑。像极了从前那个挤在地铁里、为一滴蜜糖拼命的小职员。\n\n龙首开始抬起，成吨的玄武岩像饼干一样碎裂。你用尽最后的力气，把乐明珠推进龙角下那道缝隙：“抓紧！别松手！”\n\n她哭着伸手来拉你。你没有去握。\n\n岩石如雨落下。龙神昂身而起，带走了最后一线光。鬼巫王说过，鬼王峒的祖先来自大地深处。你最后也留在了那里。黑暗压下来，又沉又暖，像加完班倒头就睡的那张床。\n\n上面的洞窟里，龙神一口吞下了鬼巫王，那句“黑魔海”的咒骂被嚼碎在齿间。凝羽拉住每一个逃出来的人问：“见到他们了吗？”没有人回答她。\n\n龙首冲出山体，暴雨倾盆。满山逃出来的南荒人跪在泥水里，等着有人站在龙首上，喊一声“拿起你们的武器”。龙角下只有一个哭哑了嗓子的少女。\n\n他们就那样一直跪着。\n\n后来乐明珠回了花苗，再没穿过那身新娘的衣裳。每年雨季，她都独自走到鬼王峒塌掉的山口，坐上一整天。有人听见她对着山石说话，说的总是同一句：“大笨瓜，你骗人，你说过要带我出去的。”\n\n很多年后，南荒的部族照旧往鬼王峒送新娘，只是祭坛上换了一位不说话的神，替神传话的人，穿着黑衣。",
   "E08": "匕首卡在龙颅的骨缝里，再也推不动半分。\n气轮空了。你跪在湿透的龙鳞上，听着暴雨砸在龙角上的声音，也听着自己的心跳一下慢过一下。\n就在这时，那股力量来了。它从刀柄灌进手臂，阴冷，蛮横，一往无前。枯竭的丹田猛然一震，气轮疯了一样转起来。你知道这不是你的力气，可你还是吼着把匕首压了下去。\n龙颅掀开，血珠凝成的星图在你眼前轰然碎裂。龙神哀鸣一声，翻滚着从空中坠落。\n那股力量却没有停。\n它顺着匕首倒流回来，带着碧青的光，带着龙脑里凝了十几年的东西。太阳穴上的伤痕先尝到了味道，像一头饿了太久的鲸，张口就吞。生死根把一条龙的死，整个吸进了你的身体。\n丹田深处多了一团冰冷的东西，正慢慢睁开眼睛。\n“天命者，”一个声音在你颅骨里轻轻说道，“现在，我们可以好好谈谈了。”\n你听出了那是谁的声音。\n龙神伏在碧潭边，再也没有动。乐明珠扑过来，又哭又笑：“你杀了龙神！”她伸手想摸你的眉毛，指尖却停在半空。她看着你的眼睛，往后缩了一下。\n黄昏时，那个黑衣女子站在剖开的龙颅旁，探手进去，摸了个空。她回头看你，目光像在清点一只已经装好货的箱子。“龙精我会来取。”说完，她便没入了密林。\n谢艺躺在山石上，胸口焦黑。他看了你很久，那句“你杀了龙神，很好”，终究没有说出口。小紫站在远处的岩石下，第一次没有笑。\n你站在龙首上，望着脚下那片阳光普照的南荒。你想像从前那样放声大喊“能活着真好”。张开嘴，说出来的却是：\n“他们需要秩序。”\n那声音很平静，也很耳熟。\n你还活着，还会一直活下去。南荒很快就会知道，鬼王峒有了新的主人。\n只是那个从地铁和加班里走出来的程宗扬，永远留在了龙颅里。",
 };
 
 // 战斗正式接入时消费此表；此处只录数据，不由LLM写tier触发，也不重复判slay_dragon/s06_02。
-export const BATTLE_ROUT_ENDINGS = [
+export const BATTLE_ROUT_ENDINGS = ([
   {
     "endingId": "lcq.ending.death.ghost_king_skull",
     "title": "天命的指引",
@@ -38,7 +40,7 @@ export const BATTLE_ROUT_ENDINGS = [
     "tierFlag": "lcq.encounter.f13.tier",
     "tier": "rout",
     "facts": [
-      "程宗扬带乐明珠跳井时坠落重伤",
+      "你带乐明珠逃往洞窟裂缝时滚下碎石坡，背脊重伤",
       "乐明珠被推进龙角下的空隙",
       "程宗扬被埋在鬼王峒地底",
       "龙神吞下鬼巫王，龙首无人号令反击"
@@ -58,18 +60,11 @@ export const BATTLE_ROUT_ENDINGS = [
       "本局结束，不可续玩"
     ]
   }
-] as const;
+] as const).map(ending => ({ ...ending, presentation: endingPresentation(ending) }));
 
 export function fixedEndingNarrative(ending: { endingId: string; sourceEventId: string } | undefined): string | undefined {
   if (!ending) return undefined;
-  const key = ending.endingId === 'lcq.ending.death.ajiman_bond' ? 'E02'
-    : ending.endingId === 'lcq.ending.death.shanghou_relic' ? 'E05'
-    : ending.endingId === 'lcq.ending.death.wangzhe_blast' ? 'E04'
-    : ending.endingId === 'lcq.ending.death.ghost_king_skull' ? 'E06'
-    : ending.endingId === 'lcq.ending.death.dragon_well' ? 'E07'
-    : ending.endingId === 'lcq.ending.fail.dragon_essence' ? 'E08'
-    : ending.endingId === 'lcq.ending.death.paolao'
-      ? ending.sourceEventId === 'lcq.event.ningyu_enters_gamble' ? 'E01' : 'E03' : '';
+  const key = endingKey(ending);
   return ENDING_TEXTS[key];
 }
 
@@ -102,7 +97,7 @@ export function fixedBeatNarrative(eventId: string | undefined, actionId: string
 /** 结局承接只保留1–2个完整句；长句/格式异常直接舍弃，固定结局始终可发布。 */
 export function endingBridge(raw: string, endingId?: string): string {
   if (endingId === 'lcq.ending.death.ghost_king_skull') return '骨虎白森森的头颅从石柱旁探了出来。';
-  if (endingId === 'lcq.ending.death.dragon_well') return '你扯开鲛绡，抱紧乐明珠，朝黑暗的井底跳了下去。';
+  if (endingId === 'lcq.ending.death.dragon_well') return '你抓起乐明珠的手，转身往洞窟深处的裂缝跑去。';
   if (endingId === 'lcq.ending.fail.dragon_essence') return '你双手握紧匕首，再一次朝龙颅的裂缝压了下去。';
   if (endingId === 'lcq.ending.death.shanghou_relic') return '你伸出手，指尖朝那块黄底黑边的三角落了下去。';
   if (endingId === 'lcq.ending.death.wangzhe_blast') return '你仍留在战场上，天光刺得你难以睁眼。';
@@ -121,7 +116,7 @@ export function endingBridge(raw: string, endingId?: string): string {
 
 
 export interface SceneLedger {
-  receipts: string[]; actors: Record<string, { status: 'dead' | 'missing' | 'departed' | 'present'; eventId: string; actionId: string }>;
+  receipts: string[]; actors: Record<string, { status: 'dead' | 'missing' | 'departed' | 'present'; eventId: string; actionId: string; name?: string; characterId?: string }>;
   injuries: Record<string, string>; names: Record<string, string>; worldFacts: string[];
   lastBeat?: { eventId: string; actionId: string; facts: string[] };
 }
@@ -146,15 +141,20 @@ export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: stri
   if (ledger.receipts.includes(receipt)) return;
   ledger.receipts.push(receipt);
   for (const person of scene.cast?.exit || []) {
-    ledger.actors[person.name] = { status: person.status, eventId, actionId };
-    runtime.departedCast = [...new Set([...(runtime.departedCast || []), person.name])];
+    const id=runtimeEntityId(runtime,person.name);
+    ledger.actors[id] = { name:person.name, characterId:id, status: person.status, eventId, actionId };
+    runtime.departedCast = person.status === 'dead'
+      ? [...new Set([...(runtime.departedCast || []), id])]
+      : (runtime.departedCast || []).filter((name: string) => name !== id);
   }
   for (const name of scene.ledgerEffects?.returnActors || []) {
-    ledger.actors[name] = { status: 'present', eventId, actionId };
-    runtime.departedCast = (runtime.departedCast || []).filter((n: string) => n !== name);
+    const id=runtimeEntityId(runtime,name);
+    ledger.actors[id] = { name, characterId:id, status: 'present', eventId, actionId };
+    runtime.departedCast = (runtime.departedCast || []).filter((n: string) => n !== id);
   }
-  Object.assign(ledger.names, scene.ledgerEffects?.names || {});
-  Object.assign(ledger.injuries, scene.ledgerEffects?.injuries || {});
+  for(const [name,value] of Object.entries(scene.ledgerEffects?.names||{}))ledger.names[runtimeEntityId(runtime,name)]=value;
+  for(const [name,value] of Object.entries(scene.ledgerEffects?.injuries||{}))ledger.injuries[runtimeEntityId(runtime,name)]=value;
+  migrateRuntimePersonRecords(runtime);
   ledger.worldFacts = [...new Set([...ledger.worldFacts, ...(scene.ledgerEffects?.worldFacts || [])])];
   if (scene.ledgerEffects?.jiuyang) {
     const realm = (save as any).角色.属性.境界;
@@ -185,8 +185,8 @@ export function sceneLedgerSummary(save: SaveData): Record<string, unknown> {
     日期: (save as any).元数据?.时间, 时段: sceneDayPart((save as any).元数据?.时间),
     主角: { 姓名: '程宗扬', 性别: '男', 身份: '白湖商馆南荒商队头领', 境界: (save as any).角色?.属性?.境界 },
     货币: inventory?.货币 || {}, 关键物品: Object.values(inventory?.物品 || {}).map((i: any) => ({ 名称: i.名称, 数量: i.数量 })),
-    人物状态: { ...(ledger?.actors || {}), ...(yiHuState ? { 易虎: yiHuState } : {}) }, 伤病: ledger?.injuries || {},
-    已故: [...new Set(['段强', '王哲', ...Object.entries(ledger?.actors || {}).filter(([, v]) => v.status === 'dead').map(([name]) => name)])],
+    人物状态: { ...Object.fromEntries(Object.entries(ledger?.actors||{}).map(([id,value])=>[runtimeEntityName(runtime,id),value])), ...(yiHuState ? { 易虎: yiHuState } : {}) }, 伤病: Object.fromEntries(Object.entries(ledger?.injuries||{}).map(([id,value])=>[runtimeEntityName(runtime,id),value])),
+    已故: [...new Set(['段强', '王哲', ...Object.entries(ledger?.actors || {}).filter(([, v]) => v.status === 'dead').map(([id]) => runtimeEntityName(runtime,id))])],
     世界事实: [...(runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') ? [] : ['鬼王峒未平定，鬼巫王在世']), ...(ledger?.worldFacts || [])],
     上一拍要点: ledger?.lastBeat?.facts || runtime?.chronicle?.at(-1)?.summary || '',
   };

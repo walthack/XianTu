@@ -10,11 +10,11 @@
           {{ entry.confirmed ? '已确认' : '听说' }}
         </span>
         {{ entry.claim }}
-        <div class="ledger-meta">{{ entry.source }} · 第 {{ entry.turn }} 回合</div>
+        <div class="ledger-meta">{{ entry.source }} · {{ entry.turnLabel }}</div>
       </article>
       <article v-for="entry in pathEntries" :key="entry.id" class="ledger-entry">
         <span aria-hidden="true">◇</span> {{ entry.label }}
-        <div class="ledger-meta">路径记录 · {{ entry.dimension }} · 第 {{ entry.turn }} 回合</div>
+        <div class="ledger-meta">路径记录 · {{ entry.dimension }} · {{ entry.turnLabel }}</div>
       </article>
     </div>
   </section>
@@ -22,33 +22,39 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { ledgerRecordOrder, ledgerRecordTurnLabel } from '@/modules/scenarioMods/eventNarrativeView';
 
 const props = defineProps<{
   playerKnowledge?: Record<string, any>;
   pathReceipts?: Record<string, any>;
+  runtime?: any;
 }>();
 
 const collapsed = ref(false);
+const factName = (id: string) => [...(props.runtime?.canon?.characters || []), ...(props.runtime?.canon?.factions || []), ...(props.runtime?.canon?.locations || [])].find(item => item.id === id)?.name;
+const eventName = (id: string) => props.runtime?.events?.find((item: any) => item.id === id)?.name;
+const order = (record: any) => ledgerRecordOrder(props.runtime, record);
+const datedTurn = (record: any, turn: unknown) => ledgerRecordTurnLabel(props.runtime, record, turn);
 const knowledgeEntries = computed(() => Object.values(props.playerKnowledge || {})
-  .sort((a, b) => Number(b.learnedAtTurn || 0) - Number(a.learnedAtTurn || 0))
+  .sort((a, b) => order(b) - order(a) || Number(b.learnedAtTurn || 0) - Number(a.learnedAtTurn || 0))
   .slice(0, 12)
   .map(fact => ({
     id: String(fact.factId),
     confirmed: fact.status === 'confirmed',
     claim: typeof fact.claim === 'string' && fact.claim.trim() && !/lcq\.|liuchao\./.test(fact.claim)
       ? fact.claim
-      : /lcq\.|liuchao\./.test(`${fact.subjectId}.${fact.predicate}.${fact.objectId}`) ? '已获知一条线索（旧记录未留摘要）' : `${fact.subjectId}.${fact.predicate}${fact.objectId ? `=${fact.objectId}` : ''}（旧记录）`,
-    source: typeof fact.source?.label === 'string' && !/lcq\.|liuchao\./.test(fact.source.label) ? fact.source.label : '已发生的剧情',
-    turn: Number(fact.learnedAtTurn || 0),
+      : /lcq\.|liuchao\./.test(`${fact.subjectId}.${fact.predicate}.${fact.objectId}`) ? factName(fact.subjectId) ? `你已知晓${factName(fact.subjectId)}` : '已记录一条线索（原记录缺少名称）' : `${fact.subjectId}.${fact.predicate}${fact.objectId ? `=${fact.objectId}` : ''}（旧记录）`,
+    source: typeof fact.source?.label === 'string' && !/lcq\.|liuchao\./.test(fact.source.label) ? fact.source.label : eventName(fact.sourceEventId) || '已发生的剧情',
+    turnLabel: datedTurn(fact, fact.learnedAtTurn || props.runtime?.eventActionStates?.[fact.sourceEventId]?.readyAtTurn),
   })));
 const pathEntries = computed(() => Object.values(props.pathReceipts || {})
-  .sort((a, b) => Number(b.selectedAtTurn || 0) - Number(a.selectedAtTurn || 0))
+  .sort((a, b) => order(b) - order(a) || Number(b.selectedAtTurn || 0) - Number(a.selectedAtTurn || 0))
   .slice(0, 8)
   .map(receipt => ({
     id: String(receipt.receiptId),
     label: typeof receipt.label === 'string' && !/lcq\.|liuchao\./.test(receipt.label) ? receipt.label : '已作出的选择',
     dimension: /lcq\.|liuchao\./.test(String(receipt.dimension || '')) ? '剧情分支' : String(receipt.dimension || '剧情分支'),
-    turn: Number(receipt.selectedAtTurn || 0),
+    turnLabel: datedTurn(receipt, receipt.selectedAtTurn),
   })));
 </script>
 

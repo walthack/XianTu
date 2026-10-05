@@ -378,7 +378,7 @@ test('fills missing xiaozi state from explicit guihai-heart recovery facts', asy
   });
 
   assert.equal(saveData.社交.关系.小紫.当前状态, '归海之心正温养神魂，离魂症已有缓解');
-  assert.equal(changes.at(-1).key, '社交.关系.小紫.当前状态');
+  assert.equal(changes.at(-1).key, '社交.关系.["' + saveData.社交.关系.小紫.角色ID + '"].当前状态');
 });
 
 test('does not overwrite an existing xiaozi state', async () => {
@@ -395,7 +395,7 @@ test('does not overwrite an existing xiaozi state', async () => {
   });
 
   assert.equal(saveData.社交.关系.小紫.当前状态, '正在静养');
-  assert.equal(changes.some(change => change.key === '社交.关系.小紫.当前状态'), false);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.小紫.角色ID) + '].当前状态'), false);
 });
 
 test('explicit npc state command takes precedence over party-state fallback', async () => {
@@ -412,7 +412,7 @@ test('explicit npc state command takes precedence over party-state fallback', as
   });
 
   assert.equal(saveData.社交.关系.小紫.当前状态, '');
-  assert.equal(changes.some(change => change.key === '社交.关系.小紫.当前状态'), false);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.小紫.角色ID) + '].当前状态'), false);
 });
 
 test('rejects negated party-state narration', async () => {
@@ -429,7 +429,7 @@ test('rejects negated party-state narration', async () => {
   });
 
   assert.equal(saveData.社交.关系.小紫.当前状态, '未记录');
-  assert.equal(changes.some(change => change.key === '社交.关系.小紫.当前状态'), false);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.小紫.角色ID) + '].当前状态'), false);
 });
 
 test('writes a generic short status for an existing improvised npc', async () => {
@@ -446,7 +446,7 @@ test('writes a generic short status for an existing improvised npc', async () =>
   });
 
   assert.equal(saveData.社交.关系.临时旅伴.当前状态, '根基受损，暂不宜强战');
-  assert.equal(changes.some(change => change.key === '社交.关系.临时旅伴.当前状态'), true);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.临时旅伴.角色ID) + '].当前状态'), true);
 });
 
 test('does not apply xiaozi-specific canon wording to another npc', async () => {
@@ -463,7 +463,7 @@ test('does not apply xiaozi-specific canon wording to another npc', async () => 
   });
 
   assert.equal(saveData.社交.关系.临时旅伴.当前状态, '');
-  assert.equal(changes.some(change => change.key === '社交.关系.临时旅伴.当前状态'), false);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.临时旅伴.角色ID) + '].当前状态'), false);
 });
 
 test('does not create or patch a relationship introduced during the current turn', async () => {
@@ -480,7 +480,7 @@ test('does not create or patch a relationship introduced during the current turn
   });
 
   assert.equal(saveData.社交.关系.新旅伴.当前状态, '');
-  assert.equal(changes.some(change => change.key === '社交.关系.新旅伴.当前状态'), false);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.新旅伴.角色ID) + '].当前状态'), false);
   assert.deepEqual(saveDataBefore.社交.关系, {});
 });
 
@@ -498,7 +498,7 @@ test('does not misread xiaozi as the recipient when she heals someone else', asy
   });
 
   assert.equal(saveData.社交.关系.小紫.当前状态, '');
-  assert.equal(changes.some(change => change.key === '社交.关系.小紫.当前状态'), false);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.小紫.角色ID) + '].当前状态'), false);
 });
 
 test('writes reviewed canon-specific statuses for major characters', async () => {
@@ -529,7 +529,7 @@ test('writes reviewed canon-specific statuses for major characters', async () =>
       commands: [],
     });
     assert.equal(saveData.社交.关系[npc].当前状态, expected, npc);
-    assert.equal(changes.some(change => change.key === `社交.关系.${npc}.当前状态`), true, npc);
+    assert.equal(changes.some(change => change.key === `社交.关系.[${JSON.stringify(saveData.社交.关系[npc].角色ID)}].当前状态`), true, npc);
   }
 });
 
@@ -564,7 +564,7 @@ test('does not treat ordinary yuan-tiangang nosebleeds as a danger warning', asy
   });
 
   assert.equal(saveData.社交.关系.袁天罡.当前状态, '');
-  assert.equal(changes.some(change => change.key === '社交.关系.袁天罡.当前状态'), false);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.袁天罡.角色ID) + '].当前状态'), false);
 });
 
 test('writes the target state when Ruan Xiangning explicitly applies her exclusive hypnosis', async () => {
@@ -582,7 +582,7 @@ test('writes the target state when Ruan Xiangning explicitly applies her exclusi
 
   assert.equal(saveData.社交.关系.阮香凝.当前状态, '');
   assert.equal(saveData.社交.关系.林冲.当前状态, '受瞑寂催眠，如坠梦中并受人驱使');
-  assert.equal(changes.some(change => change.key === '社交.关系.林冲.当前状态'), true);
+  assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.林冲.角色ID) + '].当前状态'), true);
 });
 
 test('does not turn discussion or negation of Ruan Xiangning hypnosis into a target state', async () => {
@@ -601,7 +601,7 @@ test('does not turn discussion or negation of Ruan Xiangning hypnosis into a tar
       commands: [],
     });
     assert.equal(saveData.社交.关系.林冲.当前状态, '', text);
-    assert.equal(changes.some(change => change.key === '社交.关系.林冲.当前状态'), false, text);
+    assert.equal(changes.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.林冲.角色ID) + '].当前状态'), false, text);
   }
 });
 
@@ -619,7 +619,7 @@ test('does not create a hypnosis target or override an explicit target-state com
     commands: [],
   });
   assert.equal(saveData.社交.关系.林冲.当前状态, '');
-  assert.equal(introducedChanges.some(change => change.key === '社交.关系.林冲.当前状态'), false);
+  assert.equal(introducedChanges.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.林冲.角色ID) + '].当前状态'), false);
 
   const existing = baseSaveData();
   existing.社交.关系.阮香凝 = { 当前状态: '' };
@@ -631,7 +631,7 @@ test('does not create a hypnosis target or override an explicit target-state com
     commands: [{ action: 'set', key: '社交.关系.林冲.当前状态', value: '已由模型明确记录' }],
   });
   assert.equal(existing.社交.关系.林冲.当前状态, '');
-  assert.equal(explicitChanges.some(change => change.key === '社交.关系.林冲.当前状态'), false);
+  assert.equal(explicitChanges.some(change => change.key === '社交.关系.[' + JSON.stringify(saveData.社交.关系.林冲.角色ID) + '].当前状态'), false);
 });
 
 test('records death-root overload as a protected player effect', async () => {

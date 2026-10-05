@@ -142,6 +142,11 @@ export default (env, argv) => {
           use: ['style-loader', 'css-loader'],
         },
         {
+          test: /\.jpg$/i,
+          include: path.resolve(__dirname, 'src/assets/endings'),
+          type: 'asset/inline',
+        },
+        {
           test: /\.(mp3|ogg|wav|m4a)$/i,
           type: 'asset/resource',
           generator: {

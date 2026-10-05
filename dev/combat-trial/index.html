@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <script>
+      // 与主页面一致：初始主题，避免闪烁。
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          if (theme !== 'light') document.documentElement.setAttribute('data-theme', 'dark');
+        } catch (e) {}
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>仙途 · 战斗试玩（内部）</title>
+    <!-- 图标字体：局域网设备若无外网，只会缺少个别图标，不影响功能。 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      html, body, #app { margin: 0; padding: 0; width: 100%; height: 100%; box-sizing: border-box; overflow: auto; }
+    </style>
+    <script>
+      // 主页面的 Turnstile 回调占位；试玩不加载 Turnstile 脚本。
+      window.turnstileCallbacks = [];
+      window.onTurnstileLoad = function() {};
+    </script>
+    <!-- 本地副本（由 build.mjs 从 node_modules 复制），不依赖 unpkg -->
+    <script src="./vendor/vue.global.js"></script>
+    <script src="./vendor/vue-router.global.js"></script>
+    <script src="./vendor/lodash.min.js"></script>
+    <script src="./vendor/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>

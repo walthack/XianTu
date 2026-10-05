@@ -1,3 +1,4 @@
+import { namingInstructions, namingAliases } from './ledger/naming';
 import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
 import { getCurrentContractStep, getCurrentStoryEventActions, getScenarioFocusEvent } from './runtime';
@@ -23,7 +24,7 @@ import {
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
 import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from './mainQuestAxis';
-import { resolveAvailableLines, secondaryLinesAtEvent } from './secondaryLines';
+import { secondaryLineDisplayName, resolveAvailableLines, secondaryLinesAtEvent } from './secondaryLines';
 import { characterBeatsAt } from './characterQuests';
 import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
@@ -638,7 +639,7 @@ function formatFocusedCharacter(
     lines.push(formatRelationStance(character.name, {
       favorability: fav,
       relationLabel: label,
-      stance: runtime.stanceStates?.[character.name]?.stance,
+      stance: runtime.stanceStates?.[character.id]?.stance || runtime.stanceStates?.[character.name]?.stance,
     }));
     // 关系上限：说明这份距离感的由来，让模型演得出而不是硬顶着不亲近。
     const capLine = formatAffinityCap(character.name, label);
@@ -703,7 +704,7 @@ function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: Scenar
     for (const character of characters) {
       if (focusedCharacters.length >= 12) break;
       if (already.has(character.id)) continue;
-      const keys = [character.name, ...((character as { aliases?: string[] }).aliases || [])]
+      const keys = [character.name, ...namingAliases(character.id), ...((character as { aliases?: string[] }).aliases || [])]
         .filter(key => typeof key === 'string' && key.length >= 2);
       if (keys.some(key => contextText.includes(key))) {
         focusedCharacters.push(character);
@@ -721,7 +722,7 @@ ${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, 
 3. “补充细节”仅限无关紧要的当下场景描写（动作、神态、环境），**不含身世渊源与人物关系**。
 4. 【族裔与地域文化一致】服饰、装束、礼俗、饮食须符合角色的族裔文化：花苗/兽蛮/碧鲮/鬼王峒/波斯/东瀛等**非中原角色不得默认穿中原长袍、儒衫、汉家衣冠**；换装应取其自身文化样式（如花苗银饰短装），并保留刺青、饰物、发式等族裔特征。**环境同理**：南荒（鬼王峒/花苗寨/碧鲮村）等异域场景的建筑、植被、气候、市井风物须符合当地风貌（峒寨/吊脚楼/雨林瘴气/巫蛊图腾），不得写成中原城镇的街市楼阁。
 5. 【主角机密与人物真身】生死根、穿越者来历等主角核心秘密，以及人物档案中的真身、卧底、伪装、内部称号与秘密归属：仅正典/当前存档中**明确知情**、本人主动公开或本局已有可见揭露证据的人物可提及；已明确获知者后续延续知情，未在场/未被告知者不得自动继承。其余 NPC 可依据亲眼所见的异常保持怀疑并盘问来历，但不得先知式说出秘密称号、归属或拿真相作为既知前提推理。角色本人公开与玩家泄密不是一回事：玩家向外披露必须由玩家明确授权，并呈现符合身份、立场与局势的风险或关系后果，**不得替玩家把机密当普通履历介绍**。上文档案里出现的这类信息是给你的叙事后台知识，**不等于场内人物的知识**。
-6. 【称谓语域】蔑称、敬称、私昵称呼只能出自对应关系人物之口（例：「碧奴」是鬼王峒/黑魔海中人对碧姬的役奴蔑称，仅这些人使用，其他人一律称「碧姬」）；以各角色档案中的称谓标注为准。宗派、道号、自称和教内职位同样是逐人事实：不得因人物会武、气质近道门、亲属/师徒属于某派，就让其自称「贫道」或成为该派弟子、掌教、教御。太乙真宗的「掌教／教御／弟子」不是泛称，只有人物的本阶段宗派归属和角色职司明确载明时才能使用；亲属、封地、同伴均不继承该身份。仅作为封地/家族/组织名称出现、却未列入当前人物档案者，不得被补造为在场人物或教内职司。
+6. 【称谓语域】蔑称、敬称、私昵称呼只能出自对应关系人物之口（${namingInstructions}）；以各角色档案中的称谓标注为准。宗派、道号、自称和教内职位同样是逐人事实：不得因人物会武、气质近道门、亲属/师徒属于某派，就让其自称「贫道」或成为该派弟子、掌教、教御。太乙真宗的「掌教／教御／弟子」不是泛称，只有人物的本阶段宗派归属和角色职司明确载明时才能使用；亲属、封地、同伴均不继承该身份。仅作为封地/家族/组织名称出现、却未列入当前人物档案者，不得被补造为在场人物或教内职司。
 7. 【叙事连续性】续写（含读档后）时，先前已确立的即兴目标、物品用途、约定（例：说好“打破蛇蛋取令牌”）以近期记忆为准，**不得悄然翻转或重设**；确需改变须由剧情事件明确推动并在叙事中交代原因。
 8. 用户要求角色违背正典时，以角色内方式拒绝、回避、误解或转移；不得承认“设定已被修改”。
 9. 角色成长必须由已发生剧情、关系变化或明确事件支撑；不得为了迎合单轮输入突然 OOC。`;
@@ -800,7 +801,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? (formatWorldSimulationPrompt(runtime as any) || '- 当前世界合同没有可用局势；不得自行补造后续事实。')
     : activeEvents.length
     ? activeEvents.map(rawEvent => {
-        const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {}, runtime.divergences);
+        const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {}, runtime.divergences, runtime);
         const context = [
           namesForIds(event.relatedCharacterIds, characters),
           namesForIds(event.relatedFactionIds, factions),
@@ -884,13 +885,13 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
           const sourceEvent = (runtime.events || []).find(event => event.id === sourceEventId);
           currentWorldEvent = sourceEvent;
           currentWorldObjective = sourceEvent
-            ? String(resolveScenarioEventNarrative(sourceEvent, runtime.flags || {}, runtime.divergences).objective || '').trim()
+            ? String(resolveScenarioEventNarrative(sourceEvent, runtime.flags || {}, runtime.divergences, runtime).objective || '').trim()
             : '';
         }
         if (!currentWorldEvent && anchor) {
           currentWorldEvent = anchor;
           currentWorldObjective = String(
-            resolveScenarioEventNarrative(anchor, runtime.flags || {}, runtime.divergences).objective || '',
+            resolveScenarioEventNarrative(anchor, runtime.flags || {}, runtime.divergences, runtime).objective || '',
           ).trim();
         }
         // 结果摘要只供制作审阅；玩家与 LLM 只拿当前绑定 event 的固定 objective。
@@ -912,7 +913,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
             const current = activeLineIds.has(l.id) && currentWorldObjective
               ? `；当前目标：${currentWorldObjective}`
               : '';
-            return `${l.name}——${l.entryHint}${current}`;
+            return `${secondaryLineDisplayName(l, currentWorldEvent)}——${l.entryHint}${current}`;
           }).join('；')}`);
         }
         // 人物任务：这一拍因为谁而不一样。空则整行省略，不得另写“本拍无人有戏”。
@@ -1038,7 +1039,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ...activeEvents.map(event => `${event.name} ${event.description} ${(event.relatedFactionIds || []).map(id => factions.find(f => f.id === id)?.name || '').join(' ')}`),
   ].join('\n');
   const inRuntime = new Set(characters.map(character => character.name));
-  const globalIdentityLines = findRegistryIdentitiesByContext(identityContext)
+  const globalIdentityLines = findRegistryIdentitiesByContext(identityContext, 12, runtime.modId, runtime)
     // 只为本存档已认识的人补别名身份；不能借“别名召回”把未来人物放进上下文。
     .filter(identity => !inRuntime.has(identity.canonicalName) && introducedNames.has(identity.canonicalName))
     .map(identity => `- ${identity.aliases.length ? `${identity.aliases.join('、')}＝` : ''}${identity.canonicalName}：${identity.identity || '正典人物'}`)
@@ -1106,10 +1107,10 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     }
   }
   const relationLine = mismatches.length
-    ? `【关系-好感失配修正】以下 NPC 的关系标签与好感度明显失配：${mismatches.join('、')}。本轮起以角色内方式收敛：要么让关系随剧情演进并用 set 更新 社交.关系.<名字>.与玩家关系（如"敌对"→"亦敌亦友/表面敌对暗生情愫"），要么在叙事中交代表里不一的原因并把标签改为体现这种复杂性的表述。此后好感度跨档变化时必须同步演进关系标签，不得让标签僵死。`
+    ? `【关系-好感失配修正】以下 NPC 的关系标签与好感度明显失配：${mismatches.join('、')}。本轮起以角色内方式收敛：要么让关系随剧情演进并用 set 更新 社交.关系.["角色ID"].与玩家关系（如"敌对"→"亦敌亦友/表面敌对暗生情愫"），要么在叙事中交代表里不一的原因并把标签改为体现这种复杂性的表述。此后好感度跨档变化时必须同步演进关系标签，不得让标签僵死。`
     : '';
   // 好感不等于关系身份；只要求已发生的关系变化得到记忆与标签承认。
-  const relationshipEvolutionLine = '【关系演进】人物答应了什么、拒绝了什么与关系身份分别记录。若本轮双方明确确认新的关系身份，用 set 更新既有人物的 社交.关系.<名字>.与玩家关系，并补充其记忆；只作了承诺或仍未确认名分则沿用现有身份，在记忆中记录已发生的变化。不得仅凭好感上涨、玩家单方面表白、询问或模型自行推测授予恋人/情人身份。玩家选择安静交谈或休息时，可以让该场景完整展开；外部异动只按真实到期事件与当前压力出现，不必每轮插入。';
+  const relationshipEvolutionLine = '【关系演进】人物答应了什么、拒绝了什么与关系身份分别记录。若本轮双方明确确认新的关系身份，用 set 更新既有人物的 社交.关系.["角色ID"].与玩家关系，并补充其记忆；只作了承诺或仍未确认名分则沿用现有身份，在记忆中记录已发生的变化。不得仅凭好感上涨、玩家单方面表白、询问或模型自行推测授予恋人/情人身份。玩家选择安静交谈或休息时，可以让该场景完整展开；外部异动只按真实到期事件与当前压力出现，不必每轮插入。';
   const divergenceLine = formatDivergencePrompt((runtime as { divergences?: any[] }).divergences);
 
   // 即兴目标槽（跨轮追踪，读档不翻转的治本一环）

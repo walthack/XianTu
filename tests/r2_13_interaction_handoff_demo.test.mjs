@@ -127,7 +127,8 @@ test('fixed verbs are presentation-only and carry the flood farewell into the Ni
   assert.match(buildScenarioStoryPrompt(save), /跨拍承接·余波铺垫，不改真值/);
   assert.match(buildScenarioStoryPrompt(save), /renderGuard\.rejectUngroundedHandoffLosses=true/);
   assert.match(buildScenarioStoryPrompt(save), /当前没有结构化损失回执/);
-  assert.match(buildScenarioStoryPrompt(save), /旱洪与易虎之死/);
+  assert.match(buildScenarioStoryPrompt(save), /旱洪与易虎失踪/);
+  assert.doesNotMatch(buildScenarioStoryPrompt(save), /易虎之死/);
   assert.match(buildScenarioStoryPrompt(save), /请求乐明珠为凝羽解毒/);
   assert.equal(acknowledgeStoryBeatHandoff(save, FLOOD_EVENT_ID), 'bridged');
   assert.equal(hasPendingStoryBeatHandoff(save), false);

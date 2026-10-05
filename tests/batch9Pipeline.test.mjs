@@ -108,6 +108,6 @@ test('maternal disclosure is actually narrated on the close-trade step before it
   narrativeCalls++;return JSON.stringify({text:card.fallbackText,mid_term_memory:'',tavern_commands:[],action_options:[]});
  });
  try{const store=useGameStateStore();store.loadFromSaveData(s);const res=await AIBidirectionalSystem.processPlayerAction(action.playerLine,TEST_PROFILE,{eventAction:action,eventActionProvenance:'selected',playerIntentText:action.playerLine,shouldAbort:()=>false});
-  assert.equal(res.generationError,undefined);assert.equal(narrativeCalls,1);assert.equal(res.moduleReceipt.path,'modular');assert.match(res.text,/碧奴.*女儿/);assert.ok(store.toSaveData().世界.状态.剧本模组.sceneLedger.worldFacts.includes('小紫母系已演出：碧奴的女儿'));
+  assert.equal(res.generationError,undefined);assert.equal(narrativeCalls,1);assert.equal(res.moduleReceipt.path,'modular');assert.match(res.text,/碧奴.*女儿/);assert.ok(store.toSaveData().世界.状态.剧本模组.sceneLedger.worldFacts.includes('小紫母系已演出：碧姬的女儿'));
  }finally{restore();}
 });

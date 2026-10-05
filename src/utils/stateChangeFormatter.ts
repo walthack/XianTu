@@ -1,3 +1,4 @@
+import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * @fileoverview 状态变更日志格式化工具
  * 将原始的 StateChangeLog 对象转换为人类可读的、具有游戏语义的格式。
@@ -102,7 +103,7 @@ function parseItemChange(change: StateChange): FormattedChange | null {
 
   // 货币（角色.背包.货币.<币种ID>.数量）
   if (key.startsWith('角色.背包.货币.') && key.endsWith('.数量')) {
-    const parts = key.split('.');
+    const parts = splitRecordPath(key);
     const currencyId = parts.length >= 4 ? parts[3] : '货币';
     const oldNum = typeof oldValue === 'number' ? oldValue : 0;
     const newNum = typeof newValue === 'number' ? newValue : 0;
@@ -155,14 +156,14 @@ function parsePlayerStatusChange(change: StateChange): FormattedChange | null {
   // 🔥 提取NPC名称（如果是NPC属性）
   let npcName: string | null = null;
   if (isNpcStatus) {
-    const parts = key.split('.');
+    const parts = splitRecordPath(key);
     // 路径格式：社交.关系.[NPC名].属性.xxx
     if (parts.length >= 3 && parts[0] === '社交' && parts[1] === '关系') {
-      npcName = parts[2];
+      npcName = change.targetName || parts[2];
     }
   }
 
-  const attributeName = key.split('.').pop() || '属性';
+  const attributeName = splitRecordPath(key).pop() || '属性';
 
   // 境界突破
   if (key === '角色.属性.境界.名称' || key.endsWith('.境界.名称')) {
@@ -207,7 +208,7 @@ function parsePlayerStatusChange(change: StateChange): FormattedChange | null {
 
   // 🔥 修复：识别"上限"和"当前"的单独变更
   // 路径格式: 角色.属性.气血.上限 / 角色.属性.气血.当前（以及其它属性同理）
-  const pathParts = key.split('.');
+  const pathParts = splitRecordPath(key);
   const fieldType = pathParts[pathParts.length - 1]; // "上限"/"当前"/"最大"
   const attributeBaseName = pathParts[pathParts.length - 2] || attributeName; // "气血"/"灵气"/"神识"
 
@@ -292,8 +293,8 @@ function parseRelationshipChange(change: StateChange): FormattedChange | null {
   const { key, action, oldValue, newValue } = change;
 
   if (key.startsWith('社交.关系.') || key.includes('.社交.关系.')) {
-    const parts = key.split('.');
-    const npcName = parts[2] || '某人'; // 社交.关系.云裳仙子.好感度 -> 云裳仙子
+    const parts = splitRecordPath(key);
+    const npcName = change.targetName || parts[2] || '某人'; // 社交.关系.云裳仙子.好感度 -> 云裳仙子
     const field = parts[parts.length - 1]; // 好感度
 
     // 好感度变化

@@ -1,3 +1,4 @@
+import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
 import { fixedInventoryCommandViolation } from './fixedInventoryContracts';
 import { getNarrativeAnchorEvent } from './runtime';
@@ -86,7 +87,7 @@ function readPath(root: unknown, path: string[]): unknown {
 }
 
 function normalizePath(path: string): string {
-  return path.trim().replace(/\[(\d+)\]/g, '.$1').replace(/^\.+|\.+$/g, '');
+  return path.trim().replace(/^社交\.关系\[/, '社交.关系.[').replace(/\[(\d+)\]/g, '.$1').replace(/^\.+|\.+$/g, '');
 }
 
 function pathsIntersect(left: string, right: string): boolean {
@@ -155,7 +156,7 @@ function getCommandTargetIdentity(
   }
   const prefix = '社交.关系.';
   if (!key.startsWith(prefix)) return null;
-  const characterName = key.slice(prefix.length).split('.')[0];
+  const characterName = splitRecordPath(key)[2];
   const character = (runtime.canon?.characters || []).find(entity =>
     entity.id === characterName || entity.name === characterName,
   );
@@ -163,7 +164,7 @@ function getCommandTargetIdentity(
 }
 
 function isContentAssignmentPath(key: string): boolean {
-  const parts = key.split('.');
+  const parts = splitRecordPath(key);
   if (key === '角色') return true;
   if (parts[0] === '社交' && parts[1] === '关系' && parts.length === 3) return true;
   const contentSegments = new Set(['技能', '功法', '背包', '装备', '灵根', '天赋', '特殊体质', '能力']);
@@ -250,7 +251,7 @@ function findCharacterAffiliationViolation(
   if (affiliations.length === 0) return null;
 
   const targetCategory = affiliationCategoryForPath(key);
-  const isWholeNpcWrite = key === `社交.关系.${character.name}` || key === '角色';
+  const isWholeNpcWrite = (key === `社交.关系.${character.name}` || key === npcRecordPath(character.id)) || key === '角色';
   if (!targetCategory && !isWholeNpcWrite) return null;
 
   let value = command.value;
@@ -435,10 +436,12 @@ export function compileScenarioProtectedPaths(saveData: SaveData): string[] {
   if (hasLock(runtime, 'canon.characters.*.name')) {
     for (const character of canon.characters || []) {
       addNamePaths(paths, `社交.关系.${character.name}`);
+      addNamePaths(paths, npcRecordPath(character.id));
       // 核心身份字段随 name 锁一并保护（G1 根因②）：这些是"天生不变"正典，AI 改写会存进档
       // （前例：凝羽灵根被改、NPC 性别被演反）。境界/性格等可成长字段不锁。
       for (const field of ['性别', '种族', '灵根', '出生日期']) {
         paths.add(`社交.关系.${character.name}.${field}`);
+        paths.add(npcRecordPath(character.id, field));
       }
     }
   }
@@ -556,8 +559,8 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
     const scenarioFlagViolation = key ? findScenarioFlagViolation(runtime, command as CommandLike, key) : null;
     // 承重保护：正典人物的花名册条目不可被整体删除（防即兴把关键角色从世界抹掉）
     if (['delete', 'remove', 'del'].includes(String(action)) && key.startsWith('社交.关系.')) {
-      const targetName = key.slice('社交.关系.'.length).split('.')[0];
-      if (key === `社交.关系.${targetName}` && (runtime.canon?.characters || []).some(c => c.name === targetName)) {
+      const targetName = splitRecordPath(key)[2];
+      if (splitRecordPath(key).length === 3 && (runtime.canon?.characters || []).some(c => (c.name === targetName || c.id === targetName))) {
         rejected.push({ command, reason: `剧本正典人物不可删除：${targetName}` });
         continue;
       }
@@ -565,8 +568,8 @@ export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]
     // #18 生死护栏：牵涉 rail 前方事件的正典角色，不得由模型命令写入死亡/失踪级状态
     //（先斩后奏会吞掉高光合同与生还 IF；在场事件与场外结算不走本通道，不受影响）
     if (railAheadNames.size > 0 && key.startsWith('社交.关系.')) {
-      const targetName = key.slice('社交.关系.'.length).split('.')[0];
-      if (railAheadNames.has(targetName) && RAIL_AHEAD_DEATH_RE.test(serializeCommandValue(command))) {
+      const targetName = splitRecordPath(key)[2];
+      if ((railAheadNames.has(targetName) || (runtime.canon?.characters || []).some(c=>c.id===targetName&&railAheadNames.has(c.name))) && RAIL_AHEAD_DEATH_RE.test(serializeCommandValue(command))) {
         rejected.push({
           command,
           reason: `「${targetName}」牵涉尚未到达的主线事件，其死亡/失踪只能由对应事件在场演出或场外结算落账`,

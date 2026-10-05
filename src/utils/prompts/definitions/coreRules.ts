@@ -12,7 +12,7 @@ action_options是顶层字段,不在tavern_commands内
 export const RESPONSE_FORMAT_RULES = `
 [V3路径规则]
 顶级路径:元数据./角色./社交./世界./系统.
-玩家:角色.xxx | NPC:社交.关系.{NPC名}.xxx | 时间:元数据.时间.xxx | 事件:社交.事件.事件记录
+玩家:角色.xxx | NPC:社交.关系.["角色ID"].xxx | 时间:元数据.时间.xxx | 事件:社交.事件.事件记录
 禁止:人物./事件./NPC名./玩家名. 开头的路径
 
 [数据同步]
@@ -31,7 +31,7 @@ NPC:新增set完整对象/好感add/记忆push/内心set/物品货币同玩家/�
 消耗:{"action":"add","key":"角色.背包.物品.item_xxx.数量","value":-1}
 删除:{"action":"delete","key":"角色.背包.物品.item_xxx"}
 大道:{"action":"set","key":"角色.大道.大道列表.剑道","value":{道名,当前阶段:0,当前经验:0,阶段列表,感悟记录,关联}}
-NPC:{"action":"set","key":"社交.关系.{名字}","value":{完整NPCData对象}}
+NPC:{"action":"set","key":"社交.关系.[\"角色ID\"]","value":{完整NPCData对象}}
 
 [交易规则]
 交易必须双向同步:买=玩家货币减+物品增+NPC货币增+物品减

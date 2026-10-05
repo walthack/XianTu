@@ -1,5 +1,10 @@
+import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
+import { projectNamingPacket, namingInstructions } from '@/modules/scenarioMods/ledger/naming';
+import { backfillRelationshipIds, npcRecordPath, splitRecordPath, normalizeNpcRecordPath, resolveRelationshipId, newLocalCharacterId, runtimeEntityName, annotatePersonChanges } from '@/modules/scenarioMods/ledger/affinityIdentity';
+import { genderShadowFindings, type GuardFinding } from '@/modules/scenarioMods/ledger/guardFramework';
+import { validateQingyuNarrativeFacts } from '@/modules/scenarioMods/narrativeBoundaries';
 import { wuyuanS0204Guidance } from '@/modules/scenarioMods/runtime';
-import { xiaoziDisclosure } from '@/modules/scenarioMods/characterResolver';
+import { xiaoziDisclosure, isDisclosureFactAllowed } from '@/modules/scenarioMods/characterResolver';
 import { isLocationLootInput, settleLocationLoot, validateLootNarrative } from '@/modules/scenarioMods/locationLoot';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { departedPresentNames } from '@/modules/scenarioMods/presence';
@@ -101,6 +106,7 @@ import {
 import {
   previewLegacyPilotSettlement,
   compileLegacyNarratorPacket,
+  buildCompactModuleNarrativePrompt,
   readLocalMemoryCapsule,
   buildLegacyNarratorPrompt,
   isLegacyPilotPromptWithinBudget,
@@ -407,7 +413,7 @@ class AIBidirectionalSystemClass {
       '请先检查“实时关注”名单；若名单非空，本回合必须推演并更新其💭当前状态（实时），即使不在玩家身边：',
       list,
       '要求：',
-      '- 必须更新 社交.关系.[NPC名].当前内心想法',
+      '- 必须更新 社交.关系.["角色ID"].当前内心想法',
       '- 如有变化，同步更新 当前位置 / 当前外貌状态 / 属性 等',
       '- 所有名单必须全部覆盖，可合并或分多条 tavern_commands 更新'
     ].join('\n');
@@ -485,25 +491,26 @@ class AIBidirectionalSystemClass {
 
       // 若本次事件引入了特殊NPC，则写入人物关系（同时更新 stateForAI 与 store，保证提示词/存档同步）
       if (npcToAdd && npcToAdd.名字) {
+        npcToAdd.角色ID ||= newLocalCharacterId();
         // v3 写入（用于后续提示词 stateForAI 继续携带）
         if (!v3.社交) v3.社交 = {};
         if (!v3.社交.关系 || typeof v3.社交.关系 !== 'object') v3.社交.关系 = {};
-        if (!v3.社交.关系[npcToAdd.名字]) {
-          v3.社交.关系[npcToAdd.名字] = npcToAdd;
+        if (!v3.社交.关系[npcToAdd.角色ID]) {
+          v3.社交.关系[npcToAdd.角色ID] = npcToAdd;
         }
 
         if (stateForAI?.社交) {
           if (!stateForAI.社交.关系 || typeof stateForAI.社交.关系 !== 'object') stateForAI.社交.关系 = {};
-          if (!stateForAI.社交.关系[npcToAdd.名字]) {
-            stateForAI.社交.关系[npcToAdd.名字] = npcToAdd;
+          if (!stateForAI.社交.关系[npcToAdd.角色ID]) {
+            stateForAI.社交.关系[npcToAdd.角色ID] = npcToAdd;
           }
         }
 
         const current = (gameStateStore.relationships && typeof gameStateStore.relationships === 'object')
           ? gameStateStore.relationships
           : {};
-        if (!current[npcToAdd.名字]) {
-          gameStateStore.updateState('relationships', { ...current, [npcToAdd.名字]: npcToAdd });
+        if (!current[npcToAdd.角色ID]) {
+          gameStateStore.updateState('relationships', { ...current, [npcToAdd.角色ID]: npcToAdd });
         }
       }
 
@@ -719,6 +726,8 @@ class AIBidirectionalSystemClass {
     }
     const candidates = [...getCurrentStoryEventActions(saveData), ...getCurrentStoryExplorationActions(saveData)];
     const selected = options?.eventAction;
+    const guidance = wuyuanS0204Guidance(saveData);
+    if (moduleOnly && !selected && guidance && /盘问|拉扯|逃奴/.test(userMessage)) return { text: guidance, mid_term_memory: '', tavern_commands: [], action_options: [], moduleReceipt: { id: generationId, path: 'local', text: guidance, promptChars: 0, foregroundMs: Date.now() - started } };
     const fresh = selected ? candidates.find(item => item.source === selected.source && item.eventId === selected.eventId
       && item.actionId === selected.actionId && item.contractHash === selected.contractHash) : undefined;
     if (moduleOnly && selected && !fresh) throw new Error('模块行动已失效，请重新选择当前行动。');
@@ -773,14 +782,15 @@ class AIBidirectionalSystemClass {
     const capsule = capsuleSelection ? readLocalMemoryCapsule(saveData, capsuleSelection) : null;
     const settledRuntime = (preview?.settled as any)?.世界?.状态?.剧本模组;
     const settledEvent = settledRuntime?.events?.find((item: any) => item.id === eventId);
-    const approvedSettledFact = card?.fixedFacts?.length ? card.fixedFacts.join('；') : preview?.progress.completed && settledEvent
-      ? localModuleGuardNarrative(undefined, true, resolveScenarioEventNarrative(settledEvent, settledRuntime.flags || {}, settledRuntime.divergences).description) : undefined;
+    let approvedSettledFact = card?.fixedFacts?.length ? card.fixedFacts.join('；') : preview?.progress.completed && settledEvent
+      ? localModuleGuardNarrative(undefined, true, resolveScenarioEventNarrative(settledEvent, settledRuntime.flags || {}, settledRuntime.divergences, settledRuntime).description) : undefined;
     // 完成整拍时，作者已批准的伤亡/安排要进入结果材料；不能只有通用“执行了目标”。
+    if (approvedSettledFact) approvedSettledFact = approvedSettledFact.split(/[；。]/).filter(fact => isDisclosureFactAllowed(fact, settledRuntime || runtime || {})).join('；');
     if (compiled && approvedSettledFact) compiled.packet.settledOutcome = approvedSettledFact;
-    if (compiled && card?.fixedFacts?.length) compiled.packet.publicFacts = [...card.fixedFacts, compiled.packet.location];
+    if (compiled && card?.fixedFacts?.length) compiled.packet.publicFacts = [...card.fixedFacts, compiled.packet.location].filter(fact => isDisclosureFactAllowed(fact, settledRuntime || runtime || {}));
     const { outputContract: _outputContract, ...baseScene } = compiled?.packet || {};
     const boundary = eventId ? narrativeBoundaryNote(eventId, Boolean(preview?.progress.completed)) : '';
-    const scene = compiled ? { ...baseScene, 本轮结算: { 行动: plan!.selection.actionId,
+    const unprojectedScene = compiled ? { ...baseScene, 本轮结算: { 行动: plan!.selection.actionId,
       当前步骤: plan!.selection.stepIndex, 总步骤: plan!.selection.stepTotal,
       本步骤完成: preview!.progress.attempted, 整件事件完成: preview!.progress.completed,
       ...(boundary ? { 边界: boundary } : {}) } } : {
@@ -790,7 +800,8 @@ class AIBidirectionalSystemClass {
       ...(options?.judgementResolution ? { 公开判定: formatVerifiedJudgementReceiptForPrompt(options.judgementResolution) } : {}),
       ...(options?.opportunityAction ? { 机会行动: options.opportunityAction.actionText } : {}),
     };
-    if (isNanhuangSceneStage(runtime?.modId)) Object.assign(scene, { 时段: card?.dayPart || sceneDayPart((sceneSave as any).元数据?.时间), 上一拍要点: card?.previousBeat || sceneLedgerSummary(saveData).上一拍要点, 世界事实: sceneLedgerSummary(saveData).世界事实, 账本摘要: sceneLedgerSummary(sceneSave), 固定要点: card?.fixedFacts || [], 禁止事项: card?.forbidden || [] });
+    if (isNanhuangSceneStage(runtime?.modId)) Object.assign(unprojectedScene, { 时段: card?.dayPart || sceneDayPart((sceneSave as any).元数据?.时间), 上一拍要点: card?.previousBeat || sceneLedgerSummary(saveData).上一拍要点, 世界事实: sceneLedgerSummary(saveData).世界事实, 账本摘要: sceneLedgerSummary(sceneSave), 固定要点: card?.fixedFacts || [], 禁止事项: card?.forbidden || [] });
+    const scene = projectNamingPacket(unprojectedScene, settledRuntime || runtime || {});
     if (lootPreview?.receipt) (scene as any).搜刮回执 = lootPreview.receipt.drops;
     const playerLine = plan?.playerLine || userMessage;
     // 记忆单一来源：短期记忆（模块记忆摘录已在其中替换原文），每条只取末尾 600 字防止上下文膨胀。
@@ -806,11 +817,14 @@ class AIBidirectionalSystemClass {
     try { const active = useCharacterStore().rootState.当前激活存档;
       if (active?.角色ID && active?.存档槽位) auditCorrections = readAuditLog(localStorage).filter(entry => entry.status === 'accepted' && entry.slotKey === `${active.角色ID}:${active.存档槽位}` && entry.modId === runtime?.modId).slice(-1).flatMap(entry => entry.findings.filter(f => ['voice_drift', 'state_mismatch'].includes(f.category)).map(f => f.issue));
     } catch { /* 没有活跃存档/本地存储时不跨槽取审计。 */ }
-    if (compiled) (scene as any).mustAppear = { ...compiled.packet.mustAppear, present: requiredCast };
+    if (compiled) (scene as any).mustAppear = projectNamingPacket({ ...compiled.packet.mustAppear, present: requiredCast }, settledRuntime || runtime || {});
     let guardFailure: ModuleNarrativeGuardError | undefined;
+    const ledgerFindings: GuardFinding[] = [];
     const narrativeRuntime = (sceneSave as any).世界?.状态?.剧本模组 || runtime;
     const reveal = xiaoziDisclosure(narrativeRuntime || {});
-    const system = instruction
+    const systemInstruction = instruction
+      + '\n黑魔海是与鬼王峒勾结的宗派，不是海域、凶地、海底遗迹或被封印的物体。苏荔是花苗族长，不是碧鲮族长，不是小紫的母亲。血虎由易虎改造，不以武二郎的虎斑作亲缘或身份线索；不编造死老头遗物及其传承。'
+      + (eventId === 'lcq.event.ningyu_regicide_offer' ? '\n本拍先由凝羽说出西门庆，主角听到后才能反应；不得让主角抢先知道或说出这个名字，不编造天竺往事。' : '')
       + '\n玩家主角姓名：' + String(runtime?.canon?.characters?.find((character: any) => character.isProtagonist || character.id === 'liuchao.character.cheng_zongyang')?.name || (saveData as any).角色?.身份?.名字 || '程宗扬') + '。第二人称你指这位主角；不得给主角另起姓名或化名。'
       + '\n出场者（包括不具名配角）全部为18岁以上成年人。缺年龄不猜年龄，不使用十五六岁、少年儿童等未成年年龄描写。present/presentActors是本步骤允许在场的人物，不要求逐一点名；只有明确列出的必须出场者才须实际参与，苏荔是花苗族长，云苍峰是人名；不得编造其他有名NPC、官职或门派。外貌及种族只按材料，描写明确记载的可见特征，不补未知身体构造，不在正文复述排除性约束。'
       + '\n已故/离场/尚未登场名单（只能提及已有历史，不得作为当前活人在场）：' + JSON.stringify(absentCast)
@@ -820,9 +834,10 @@ class AIBidirectionalSystemClass {
       + (auditCorrections.length ? '\n本存档上一轮审计纠正（仅用于演出，不写入世界真值）：' + JSON.stringify(auditCorrections) : '')
       + (endingText ? '\n本局已结束。只写1–2句承接玩家最后的选择，不演后续同行或逃脱，不代写完整死亡过程；后面由程序接入固定结局正文。' : '')
       + (nanhuang ? '\n南荒当前事实：' + (runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') ? '鬼巫王已死。' : '鬼王峒尚未平定，鬼巫王未死。')
-        + (reveal.mother ? '小紫已在阁罗当面称呼中揭为碧奴的女儿。' : '不得猜测小紫母亲或与碧姬相似。')
+        + (reveal.mother ? '小紫已在阁罗当面称呼中揭为碧姬的女儿。' : '不得猜测小紫母亲或与碧姬相似。')
+        + namingInstructions
         + (reveal.father ? '小紫父系已确证。' : reveal.suspectedFather ? '程宗扬只怀疑她是岳帅遗腹女，不能写成确证。' : '小紫父系尚未揭露，不得猜测。')
-        + '毒宗及殇侯师承在南荒不公开，不能写唯一传人。岳帅为男性，名岳鹏举；不是女性，没有丈夫。孟非卿/孟老大不在队伍里。易虎失踪后不能当普通活人使用，血虎是被炼成的怪物。阿葭死后不另造同名伴娘；苏荔外貌按角色材料。' : '')
+        + '毒宗名号按121章书信、122章对白开放；小紫师承未核，不随名号公开，不能写唯一传人。岳帅为男性，名岳鹏举；不是女性，没有丈夫。孟非卿/孟老大不在队伍里。易虎失踪后不能当普通活人使用，血虎是被炼成的怪物。阿葭死后不另造同名伴娘；苏荔外貌按角色材料。' : '')
       + (String(eventId) === 'lcq.event.ningyu_regicide_offer' ? '\n第32章既定条件：凝羽要除掉苏妲己，因保护她的誓言，要求出手时连自己一起杀；不得改为姓周的将军，也不得提及尚未登场的苏荔。' : '')
       + (nanhuang && /蛇彝村|蛇彝领地/.test(String((scene as any).location || '')) ? '\n蛇彝村已是空村，没有活村民、老彝婆或斥候；搜查只观察现场遗留，不编造活蛇祖或主角被咬伤。' : '')
       + (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') ? '\n乐明珠尚未使用“大笨瓜”称呼主角，不能借用小紫口头禅。' : '')
@@ -830,11 +845,12 @@ class AIBidirectionalSystemClass {
       + '\n物品只有本地回执能够写入背包；清单外物品只可看、端详，不带走。搜刮时只能描写搜刮回执已掷出的结果，不加奖励。'
       + '\n玩家行动句只表达意图，不把按钮标题、姓名确认或作者备注念成正文；用现场动作和对话展现本步骤的既定结果。'
       + '\n历史摘录只供承接，不重演已经完成的镜头；本轮只写当前步骤的新变化，不整段复述水镜通话或阴煞遭遇。'
-      + '\n场景材料：' + JSON.stringify(endingText ? { 玩家选择: playerLine, 结局: ending } : scene) + '\n历史摘录（只是已展示内容，不代表所有人物知情）：' + JSON.stringify(remembered);
-    if (system.length > 10000) {
-      if (moduleOnly) throw new Error("模块场景材料超过10000字，本轮未执行，请报告当前事件。");
-      return null;
-    }
+      ;
+    const prompt = buildCompactModuleNarrativePrompt(systemInstruction,
+      endingText ? { 玩家选择: playerLine, 结局: ending } : scene, remembered);
+    const system = prompt.system;
+    if (prompt.compacted) console.info('[模块材料精简]', { eventId, before: prompt.originalChars, after: system.length });
+    if (system.length > 10000) console.warn('[模块材料软预算]', { eventId, chars: system.length, retainedFacts: true });
     options?.onProgressUpdate?.('模块试玩：生成本轮演出…');
     noteBufferedFullResponse(true);
     notePromptBytes(new TextEncoder().encode(system + playerLine).length);
@@ -852,14 +868,18 @@ class AIBidirectionalSystemClass {
       if (shouldAbort()) throw new Error('请求已被取消');
       try {
         const text = endingText ? endingBridge(raw) : readModuleNarrative(raw);
-        if (!endingText) validateModuleCastNarrative(text, absentCast, remembered, requiredCast);
+        if (!endingText) {
+          validateModuleCastNarrative(text, absentCast, remembered, requiredCast);
+          ledgerFindings.push(...genderShadowFindings(text, (scene as any).presentActors || [], eventId, attemptNumber));
+          if (/^lcq\.stage_/.test(String(runtime?.modId || ''))) validateQingyuNarrativeFacts(text, eventId);
+        }
         if (lootPreview?.receipt) validateLootNarrative(text, lootPreview.receipt, narrativeRuntime.canon.items || []);
         if (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') && /大笨瓜/.test(text) && /乐明珠[^。！？\n]{0,35}大笨瓜/.test(text)) throw new ModuleNarrativeGuardError('声线时序冲突：乐明珠尚未使用大笨瓜称呼');
         if (!endingText && nanhuang) validateStepSceneNarrative(text, card, scene as any, remembered);
         if (!endingText && nanhuang) {
           const known = introducedScenarioCharacterNames(saveData);
           for (const name of card?.cast?.present || []) known.add(name.replace(/[（(].*$/, ''));
-          const namedGuard = stripNarrativeUnintroducedCharacters(text, known, card?.fixedFacts?.join('；') || plan?.selection.actionText || '');
+          const namedGuard = stripNarrativeUnintroducedCharacters(text, known, card?.fixedFacts?.join('；') || plan?.selection.actionText || '', narrativeRuntime);
           if (namedGuard.conflicts.length) throw new ModuleNarrativeGuardError(namedGuard.conflicts.join('；'));
         }
         if (!endingText) validateNanhuangCanonNarrative(text, String(runtime?.modId || ''), String((scene as any).location || ''), narrativeRuntime?.completedEventIds || [], narrativeRuntime);
@@ -891,7 +911,7 @@ class AIBidirectionalSystemClass {
       return { text, mid_term_memory: '', tavern_commands: [], action_options: [],
         moduleReceipt: { id: generationId, path: 'modular', route, eventId,
           promptChars: system.length + playerLine.length, foregroundMs: Date.now() - started,
-          text, memory: { status: 'pending' } } };
+          text, guard: ledgerFindings, memory: { status: 'pending' } } };
     }
     if (endingText) return { text: '', mid_term_memory: '', tavern_commands: [], action_options: [],
       moduleReceipt: { id: generationId, path: 'local', eventId, promptChars: system.length + playerLine.length, foregroundMs: Date.now() - started, text: '' } };
@@ -2894,8 +2914,8 @@ ${step1Text}
       const currentCard = stepScene((saveData as any).世界.状态.剧本模组, options?.eventAction?.eventId, options?.eventAction?.actionId);
       for (const name of currentCard?.cast?.present || []) introduced.add(name.replace(/[（(].*$/, ''));
       const authoredHistory = currentCard?.fixedFacts?.join('；') || sourceEvent?.playerCompletionContract?.actions?.find((action: any) => action.id === options?.eventAction?.actionId)?.actionText || '';
-      const guardText = stripNarrativeUnintroducedCharacters(textContent, introduced, authoredHistory);
-      const guardMemory = stripNarrativeUnintroducedCharacters(midTermContent, introduced, authoredHistory);
+      const guardText = stripNarrativeUnintroducedCharacters(textContent, introduced, authoredHistory, (saveData as any)?.世界?.状态?.剧本模组);
+      const guardMemory = stripNarrativeUnintroducedCharacters(midTermContent, introduced, authoredHistory, (saveData as any)?.世界?.状态?.剧本模组);
       if (guardText.conflicts.length || guardMemory.conflicts.length) {
         console.warn('[正典时间线守卫] 已移除提前登场人物：', [...guardText.conflicts, ...guardMemory.conflicts]);
       }
@@ -2973,10 +2993,10 @@ ${step1Text}
         const newNarrative = {
           type: 'gm' as const,
           role: 'assistant' as const,
-          content: `${timePrefix}${textContent}`,
+          content: composeShortTermMemoryEntry(timePrefix, textContent),
           time: timePrefix,
           userIntent: options?.playerIntentText || '',
-          image: ((saveData as any)?.世界?.状态?.剧本模组?.events || [])
+          image: settledEndingText ? endingPresentation(settledEnding).image || undefined : ((saveData as any)?.世界?.状态?.剧本模组?.events || [])
             .find((event: any) => event.id === (options?.eventAction?.eventId || (startingRuntime ? getScenarioFocusEvent(startingRuntime)?.id : undefined)))?.presentation?.image,
           // 重要桥段卡片仍激活时不保留 AI 选项：推进只走卡片，选项不得提前给出下一步。
           actionOptions: keyBeatAfterTurn ? [] : this.sanitizeActionOptionsForDisplay(response.action_options || [])
@@ -3477,7 +3497,8 @@ ${step1Text}
     // 因果就只存在于代码里。key 用标准路径，复用 stateChangeFormatter 既有的好感度格式化。
     for (const grant of scenarioResult.affinityGrants || []) {
       changes.push({
-        key: `社交.关系.${grant.name}.好感度`,
+        key: npcRecordPath(grant.characterId, '好感度'),
+        characterId: grant.characterId, targetName: grant.name,
         action: 'shared_experience',
         oldValue: grant.from,
         newValue: grant.to,
@@ -3514,6 +3535,7 @@ ${step1Text}
     }
 
     // 🔥 将状态变更添加到最新的叙事记录中
+    annotatePersonChanges(changes, saveData, saveDataSnapshotBeforeCommands);
     const stateChangesLog: StateChangeLog = { changes, timestamp: new Date().toISOString() };
     if ((saveData as any).系统?.历史?.叙事 && (saveData as any).系统.历史.叙事.length > 0) {
       const latestNarrative = (saveData as any).系统.历史.叙事[(saveData as any).系统.历史.叙事.length - 1];
@@ -4028,11 +4050,11 @@ ${saveDataJson}`;
       if ((cmd as any).action !== 'set') return null;
       if (typeof (cmd as any).key !== 'string') return null;
       const key = String((cmd as any).key);
-      if (!/^社交\.关系\.[^\.]+$/.test(key)) return null;
+      if (!(splitRecordPath(key).slice(0,2).join('.')==='社交.关系'&&splitRecordPath(key).length===3)) return null;
       const value = (cmd as any).value;
       if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
 
-      const npcNameFromKey = key.split('.')[2];
+      const npcNameFromKey = splitRecordPath(key)[2];
       const obj = value as Record<string, any>;
       const expanded: any[] = [];
 
@@ -4066,9 +4088,9 @@ ${saveDataJson}`;
         if (!npcName || typeof npcName !== 'string') continue;
         if (!npcValue || typeof npcValue !== 'object') continue;
         // 直接拆成字段 set，避免完整覆盖导致缺字段/被校验拒绝
-        const expandedNpc = expandNpcWholeSet({ action: 'set', key: `社交.关系.${npcName}`, value: npcValue });
+        const expandedNpc = expandNpcWholeSet({ action: 'set', key: npcRecordPath(npcName), value: npcValue });
         if (expandedNpc) expanded.push(...expandedNpc);
-        else expanded.push({ action: 'set', key: `社交.关系.${npcName}`, value: npcValue });
+        else expanded.push({ action: 'set', key: npcRecordPath(npcName), value: npcValue });
       }
 
       if (expanded.length > 0) {
@@ -4113,17 +4135,17 @@ ${saveDataJson}`;
       if ((cmd as any).action !== 'push') return null;
       if (typeof (cmd as any).key !== 'string') return null;
       const key = String((cmd as any).key);
-      if (!/^社交\.关系\.[^\.]+$/.test(key)) return null;
+      if (!(splitRecordPath(key).slice(0,2).join('.')==='社交.关系'&&splitRecordPath(key).length===3)) return null;
 
-      const npcName = key.split('.')[2];
+      const npcName = splitRecordPath(key)[2];
       const value = (cmd as any).value;
 
       if (typeof value === 'string') {
-        return [{ action: 'push', key: `社交.关系.${npcName}.记忆`, value }];
+        return [{ action: 'push', key: npcRecordPath(npcName, '记忆'), value }];
       }
 
       if (value && typeof value === 'object' && !Array.isArray(value)) {
-        const toSet = { action: 'set', key: `社交.关系.${npcName}`, value };
+        const toSet = { action: 'set', key: npcRecordPath(npcName), value };
         const expandedNpc = expandNpcWholeSet(toSet);
         return expandedNpc || [toSet];
       }
@@ -4138,12 +4160,12 @@ ${saveDataJson}`;
       if ((cmd as any).action !== 'add') return null;
       if (typeof (cmd as any).key !== 'string') return null;
       const key = String((cmd as any).key);
-      if (!/^社交\.关系\.[^\.]+$/.test(key)) return null;
+      if (!(splitRecordPath(key).slice(0,2).join('.')==='社交.关系'&&splitRecordPath(key).length===3)) return null;
 
-      const npcName = key.split('.')[2];
+      const npcName = splitRecordPath(key)[2];
       const value = (cmd as any).value;
       if (typeof value === 'number' && Number.isFinite(value)) {
-        return [{ action: 'add', key: `社交.关系.${npcName}.好感度`, value }];
+        return [{ action: 'add', key: npcRecordPath(npcName, '好感度'), value }];
       }
 
       return null;
@@ -4157,14 +4179,15 @@ ${saveDataJson}`;
     // 注入 lookup/capOf 后，好感上限（affinityCaps）也在此层执行。
     const gateAffinity = createAffinityCommandGate({
       lookup: (npcName: string) => {
-        const npc = get(saveData, `社交.关系.${npcName}`) as { 好感度?: unknown; 与玩家关系?: unknown } | undefined;
+        if (!saveData) return undefined;
+        const npc = get(saveData, npcRecordPath(resolveRelationshipId(saveData as SaveData, npcName) || npcName)) as { 好感度?: unknown; 与玩家关系?: unknown } | undefined;
         if (!npc || typeof npc !== 'object') return undefined;
         return {
           favorability: Number(npc.好感度) || 0,
           relationLabel: typeof npc.与玩家关系 === 'string' ? npc.与玩家关系 : undefined,
         };
       },
-      capOf: (npcName: string, relationLabel?: string) => affinityCapFor(npcName, relationLabel),
+      capOf: (npcName: string, relationLabel?: string) => affinityCapFor(npcName, relationLabel, (saveData as any)?.社交?.关系?.[npcName]?.名字),
     });
 
     const isInventoryRootSet = (cmd: any): boolean => (
@@ -4253,7 +4276,20 @@ ${saveDataJson}`;
       }
 
       if (typeof (cmd as any).key === 'string') {
-        const normalized = normalizeCommandKey((cmd as any).key);
+        let normalized = normalizeCommandKey((cmd as any).key);
+        if (saveData && typeof normalized === 'string') {
+          backfillRelationshipIds(saveData, (saveData as any).世界?.状态?.剧本模组?.canon?.characters);
+          const tokens=splitRecordPath(normalized);
+          if(tokens[0]==='社交'&&tokens[1]==='关系'&&tokens.length===3&&(cmd as any).action==='set') {
+            const value=(cmd as any).value;
+            if(value&&typeof value==='object'&&!Array.isArray(value)&&!resolveRelationshipId(saveData,tokens[2])) {
+              value.角色ID ||= newLocalCharacterId(); value.名字 ||= tokens[2];
+            }
+          }
+          const identityPath=normalizeNpcRecordPath(normalized,saveData,(cmd as any).value);
+          if(identityPath===null){console.warn('[人物指令待核] 身份不唯一，未执行',normalized);continue;}
+          normalized=identityPath;
+        }
         if (typeof normalized === 'string' && normalized !== (cmd as any).key) {
           console.warn(`[AI双向系统] 预处理: key 纠正 "${(cmd as any).key}" -> "${normalized}"`);
           (cmd as any).key = normalized;
@@ -4841,7 +4877,9 @@ ${saveDataJson}`;
       throw new Error('指令格式错误：缺少 action 或 key');
     }
 
-    const path = key.toString();
+    backfillRelationshipIds(saveData, (saveData as any).世界?.状态?.剧本模组?.canon?.characters);
+    const path = normalizeNpcRecordPath(key.toString(), saveData, value);
+    if (path === null) throw new Error('人物指令身份不唯一或未登记，请使用角色ID');
     const allowedRoots = ['元数据', '角色', '社交', '世界', '系统'] as const;
     const isV3Path = allowedRoots.some((root) => path === root || path.startsWith(`${root}.`));
     if (!isV3Path) {
@@ -4850,9 +4888,9 @@ ${saveDataJson}`;
 
     const playerName = typeof (saveData as any)?.角色?.身份?.名字 === 'string' ? (saveData as any).角色.身份.名字.trim() : '';
     if (playerName) {
-      const segments = path.split('.');
+      const segments = splitRecordPath(path);
       const npcKey = typeof segments[2] === 'string' ? segments[2].trim() : '';
-      const isPlayerInRelations = segments[0] === '社交' && segments[1] === '关系' && npcKey === playerName;
+      const isPlayerInRelations = segments[0] === '社交' && segments[1] === '关系' && (npcKey === playerName || npcKey === (saveData as any).世界?.状态?.剧本模组?.opening?.playerCharacterId);
       if (isPlayerInRelations && action !== 'delete') {
         console.warn(`[AI双向系统] 阻止将玩家本人写入社交.关系: ${path}`);
         return;
@@ -4860,10 +4898,14 @@ ${saveDataJson}`;
     }
 
     // 🔥 保护NPC骨干结构：当 AI 直接写入社交.关系.<NPC名> 的子路径时，确保该NPC根对象存在且至少具备名字
-    const segments = path.split('.');
+    const segments = splitRecordPath(path);
+    if (segments[0] === '社交' && segments[1] === '关系' && segments[3] === '角色ID' && (action !== 'set' || value !== segments[2])) {
+      console.warn('[人物ID保护] 拒绝改写身份', path); return;
+    }
     const isNpcSubPath = segments[0] === '社交' && segments[1] === '关系' && typeof segments[2] === 'string' && !!segments[2].trim();
     if (isNpcSubPath && action !== 'delete') {
-      const npcName = segments[2].trim();
+      const npcId = segments[2].trim();
+      const npcName = runtimeEntityName((saveData as any).世界?.状态?.剧本模组, npcId);
       if (!playerName || npcName !== playerName) {
         // 确保 社交.关系 是对象
         const relationsRoot = get(saveData, '社交.关系');
@@ -4871,13 +4913,13 @@ ${saveDataJson}`;
           set(saveData, '社交.关系', {});
         }
 
-        const npcRootPath = `社交.关系.${npcName}`;
+        const npcRootPath = npcRecordPath(npcId);
         const existingNpc = get(saveData, npcRootPath);
         if (protectionMode === 'strict') {
           const gameTime = (saveData as any)?.元数据?.时间;
           // 仅在缺失/明显无效时才补齐，避免每条指令都重复修复造成额外开销
           if (!isPlainObject(existingNpc)) {
-            const [ok, repaired] = validateAndRepairNpcProfile({ 名字: npcName }, gameTime);
+            const [ok, repaired] = validateAndRepairNpcProfile({ 角色ID: npcId, 名字: npcName }, gameTime);
             if (ok && repaired) set(saveData, npcRootPath, repaired);
           } else {
             const name = typeof (existingNpc as any).名字 === 'string' ? (existingNpc as any).名字.trim() : '';
@@ -4889,7 +4931,7 @@ ${saveDataJson}`;
         } else {
           // skeleton：只保证是对象 + 有名字，不做重度修复/覆盖
           if (!isPlainObject(existingNpc)) {
-            set(saveData, npcRootPath, { 名字: npcName });
+            set(saveData, npcRootPath, { 角色ID: npcId, 名字: npcName });
           } else {
             const name = typeof (existingNpc as any).名字 === 'string' ? (existingNpc as any).名字.trim() : '';
             if (!name) set(saveData, `${npcRootPath}.名字`, npcName);
@@ -4934,7 +4976,7 @@ ${saveDataJson}`;
     }
 
     if (action === 'set') {
-      const segments = path.split('.');
+      const segments = splitRecordPath(path);
 
       if (protectionMode === 'strict') {
         // 🔥 保护关键模块：使用合并而非覆盖，防止 AI 的 set 操作意外清空数据
@@ -5069,7 +5111,7 @@ ${saveDataJson}`;
             break;
           }
           const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
-          valueToPush = `${timePrefix}${valueToPush}`;
+          valueToPush = composeShortTermMemoryEntry(timePrefix, valueToPush);
         }
         array.push(valueToPush);
         // 如果路径不存在，set会创建它

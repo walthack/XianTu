@@ -1,3 +1,4 @@
+import { filterLedgerMemory } from '@/modules/scenarioMods/ledger/guardFramework';
 import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
@@ -5,7 +6,7 @@ import { useUIStore } from '@/stores/uiStore';
 import { getPrompt, MODULE_MEMORY_INSTRUCTION_PROMPT } from './defaultPrompts';
 import { runGameModelModule } from './gameModelModules';
 import {
-  MODULE_TURN_KEY, getModuleReceipts, moduleMemorySentences, replaceShortTermEntry, validateModuleSide,
+  MODULE_TURN_KEY, getModuleReceipts, ledgerMemoryCandidates, replaceShortTermEntry, validateLedgerMemorySide,
   type ModuleSideResult,
 } from '@/modules/scenarioMods/modularTurn';
 
@@ -44,6 +45,10 @@ function applyResult(item: PendingResult): boolean {
   if (item.characterId !== scope.characterId || item.slotId !== scope.slotId || item.epoch !== scope.epoch) return false;
   const receipt = findReceipt(item.receiptId);
   if (!receipt || receipt.text !== item.receiptText) return false;
+  if (item.result.status === 'accepted' && item.result.value) {
+    const safe = filterLedgerMemory(item.result.value, useGameStateStore().toSaveData(), receipt.guard);
+    item.result = safe ? { ...item.result, value: safe } : { ...item.result, status: 'rejected', value: undefined, error: '记忆落账前事实守卫拒收' };
+  }
   receipt.memory = item.result;
   if (item.result.status === 'accepted' && item.result.value) {
     const memory = useGameStateStore().memory;
@@ -77,6 +82,9 @@ export function startModuleBackground(): void {
   const scope = currentScope();
   const key = `${scope.characterId}:${scope.slotId}:${receipt.id}:memory`;
   if (jobs.has(key) || receipt.memory?.status === 'accepted') return;
+  const currentSave = state.toSaveData();
+  if (!currentSave) return;
+  const memorySnapshot = structuredClone(currentSave);
   const base = { ...scope, receiptId: receipt.id, receiptText: receipt.text };
   if (!useAPIManagementStore().isFunctionEnabled('memory_summary')) {
     if (receipt.memory?.status !== 'disabled') persist({ ...base, result: { status: 'disabled' } });
@@ -90,10 +98,10 @@ export function startModuleBackground(): void {
     const instruction = (await getPrompt('moduleMemoryInstruction')).trim() || MODULE_MEMORY_INSTRUCTION_PROMPT;
     return runGameModelModule('memory', {
       generationId: `module_${receipt.id}_memory`, signal: controller.signal, system: instruction,
-      input: JSON.stringify(moduleMemorySentences(receipt.text)),
+      input: JSON.stringify(ledgerMemoryCandidates(receipt.text, memorySnapshot, receipt.guard)),
     });
   })().then(({ raw, route }) => {
-    try { persist({ ...base, result: { status: 'accepted', route, value: validateModuleSide(raw, receipt.text, 'memory'), elapsedMs: Date.now() - started } }); }
+    try { persist({ ...base, result: { status: 'accepted', route, value: validateLedgerMemorySide(raw, receipt.text, memorySnapshot, receipt.guard), elapsedMs: Date.now() - started } }); }
     catch (error) { persist({ ...base, result: { status: 'rejected', route, error: String((error as Error).message), elapsedMs: Date.now() - started } }); }
   }).catch(error => {
     if (!controller.signal.aborted) persist({ ...base, result: { status: 'failed', route: error?.moduleModelRoute, error: String((error as Error)?.message || error).slice(0, 200), elapsedMs: Date.now() - started } });

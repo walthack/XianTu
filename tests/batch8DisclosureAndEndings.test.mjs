@@ -26,10 +26,10 @@ test('mother needs chapter78 performance receipt; father needs verified chapter1
  rt.completedEventIds.push('lcq.event.weapon_deal_with_geluo');syncNanhuangIdentityDisplay(rt);
  assert.doesNotMatch(c.profile.notes.join(' '),/碧奴|碧姬|岳鹏举/);assert.match(c.profile.notes.join(' '),/怀疑.*未证实/);assert.equal(c.profile.race,'碧鲮族');
  rt.sceneLedger={worldFacts:['小紫母系已演出：碧奴的女儿']};syncNanhuangIdentityDisplay(rt);
- assert.match(c.profile.notes.join(' '),/碧奴/);assert.doesNotMatch(c.profile.notes.join(' '),/岳鹏举/);assert.equal(c.profile.race,'碧鲮族（母系碧姬）');
- rt.modId='lcq.stage_05b';rt.activeEventIds=['lcq.event.s05b_09_temporary_pact_with_xiaozi'];rt.completedEventIds=[];syncNanhuangIdentityDisplay(rt);assert.equal(c.profile.race,'碧鲮族（母系碧姬）');assert.equal(xiaoziDisclosure(rt).father,false);
+ assert.match(c.profile.notes.join(' '),/碧奴/);assert.doesNotMatch(c.profile.notes.join(' '),/碧姬|岳鹏举/);assert.equal(c.profile.race,'碧鲮族（母系碧奴）');
+ rt.modId='lcq.stage_05b';rt.activeEventIds=['lcq.event.s05b_09_temporary_pact_with_xiaozi'];rt.completedEventIds=[];syncNanhuangIdentityDisplay(rt);assert.equal(c.profile.race,'碧鲮族（母系碧奴）');assert.equal(xiaoziDisclosure(rt).father,false);
  rt.eventActionStates={'lcq.event.s05b_09_temporary_pact_with_xiaozi':{preparations:['counterstrike_plan_formed']}};syncNanhuangIdentityDisplay(rt);
- assert.equal(c.profile.race,'碧鲮族（母系碧姬）');assert.match(c.profile.notes.join(' '),/岳鹏举/);assert.equal(xiaoziDisclosure(rt).father,true);
+ assert.equal(c.profile.race,'碧鲮族（母系碧奴）');assert.match(c.profile.notes.join(' '),/岳鹏举/);assert.equal(xiaoziDisclosure(rt).father,true);
  assert.throws(()=>validateNanhuangCanonNarrative('小紫是岳鹏举的女儿。',rt.modId,'鬼王宫',[]),/身世/);
  assert.doesNotThrow(()=>validateNanhuangCanonNarrative('小紫是岳鹏举的女儿。',rt.modId,'鬼王宫',[],rt));
  assert.throws(()=>validateNanhuangCanonNarrative('小紫是碧姬的女儿。','lcq.stage_04b_lingfei_baiyi_crisis','碧鲮村',['lcq.event.weapon_deal_with_geluo']),/身世/);

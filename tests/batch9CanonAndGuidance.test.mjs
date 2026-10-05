@@ -33,7 +33,7 @@ test('Xiaozi race starts Biling; maternal fixed performance precedes verified re
  const d=await stage('04b_lingfei_baiyi_crisis');const last=d.scenario.events.find(e=>e.id==='lcq.event.weapon_deal_with_geluo').playerCompletionContract.actions.at(-1);
  assert.throws(()=>validateStepSceneNarrative('你与阁罗谈兵器，定了一成利润。',last,{}),/固定要点/);
  assert.doesNotThrow(()=>validateStepSceneNarrative(last.fallbackText,last,{}));assert.match(last.fallbackText,/碧奴.*女儿/);
- r.completedEventIds.push('lcq.event.weapon_deal_with_geluo');syncNanhuangIdentityDisplay(r);assert.equal(xiaoziDisclosure(r).mother,false,'old completion without maternal performance is not proof');r.sceneLedger={worldFacts:['小紫母系已演出：碧奴的女儿']};syncNanhuangIdentityDisplay(r);assert.equal(c.profile.race,'碧鲮族（母系碧姬）');assert.match(c.profile.notes.join(''),/怀疑.*未证实/);
+ r.completedEventIds.push('lcq.event.weapon_deal_with_geluo');syncNanhuangIdentityDisplay(r);assert.equal(xiaoziDisclosure(r).mother,false,'old completion without maternal performance is not proof');r.sceneLedger={worldFacts:['小紫母系已演出：碧奴的女儿']};syncNanhuangIdentityDisplay(r);assert.equal(c.profile.race,'碧鲮族（母系碧奴）');assert.match(c.profile.notes.join(''),/怀疑.*未证实/);
  assert.doesNotThrow(()=>validateNanhuangCanonNarrative('你怀疑小紫是岳帅的遗腹女，尚未证实。',r.modId,'碧鲮村',r.completedEventIds,r));
  assert.throws(()=>validateNanhuangCanonNarrative('小紫就是岳帅的女儿。',r.modId,'碧鲮村',r.completedEventIds,r),/身世/);
  r.eventActionStates={'lcq.event.s05b_09_temporary_pact_with_xiaozi':{preparations:['counterstrike_plan_formed']}};syncNanhuangIdentityDisplay(r);assert.equal(xiaoziDisclosure(r).father,true);assert.doesNotMatch(c.profile.notes.join(''),/怀疑/);

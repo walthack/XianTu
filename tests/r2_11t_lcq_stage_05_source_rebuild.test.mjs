@@ -130,7 +130,7 @@ test('build-time and runtime gates preserve all fourteen stage-time projections'
     buildScenarioStoryPrompt(save, '我观察苏荔、祁远、易彪、阁罗、碧姬、阿夕、丹宸'),
   ];
   const focused = prompts.map(prompt => prompt.match(/## 当前相关人物正典约束（防 OOC）[\s\S]*?(?=\n【人物正典优先级】)/)?.[0] || '').join('\n');
-  for (const name of ['程宗扬', '乐明珠', '小紫', '谢艺', '云苍峰', '凝羽', '武二郎', '苏荔', '祁远', '易彪', '阁罗', '碧姬', '阿夕', '丹宸']) {
+  for (const name of ['程宗扬', '乐明珠', '小紫', '谢艺', '云苍峰', '凝羽', '武二郎', '苏荔', '祁远', '易彪', '骑白象的鬼王峒使者', '碧奴', '阿夕', '丹宸']) {
     assert.match(focused, new RegExp(name), name);
   }
   for (const marker of ['盘江程氏', '程氏商会', '紫妈妈', '毒宗唯一嫡传', '岳帅遗孤', '御姬奴', '凝奴']) {

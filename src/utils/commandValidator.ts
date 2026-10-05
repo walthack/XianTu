@@ -1,3 +1,4 @@
+import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 指令对象格式验证器
  *
@@ -338,7 +339,8 @@ export function validateCommand(command: unknown, index: number): ValidationResu
     // 性别/灵根/种族/出生日期 由剧本正典与本地初始化决定，LLM 指令不得改写或删除；
     // 与 value 无关，delete 同拦。合法写入路径（lifespanCalculator/dataValidation/修复脚本）不经指令通道。
     if (typeof cmd.key === 'string') {
-      const staticFieldMatch = cmd.key.match(/^社交\.关系\.[^.]+\.(性别|灵根|种族|出生日期)$/);
+      const staticTokens=splitRecordPath(cmd.key);
+      const staticFieldMatch=staticTokens[0]==='社交'&&staticTokens[1]==='关系'&&staticTokens.length===4&&['性别','灵根','种族','出生日期'].includes(staticTokens[3]) ? [cmd.key,staticTokens[3]]:null;
       if (staticFieldMatch) {
         errors.push(`指令${index}: NPC「${staticFieldMatch[1]}」为正典静态设定，禁止通过指令改写或删除`);
       }
@@ -496,7 +498,7 @@ function validateValueType(key: string, value: unknown, action: string): string[
     }
 
     // NPC 创建/覆盖（仅在 set 社交.关系.<npc> 时做轻量检查）
-    if (key.startsWith('社交.关系.') && (key.match(/\./g) || []).length === 2 && action === 'set') {
+    if (key.startsWith('社交.关系.') && splitRecordPath(key).length === 3 && action === 'set') {
       if (typeof value === 'object' && value !== null) {
         const val = value as Record<string, any>;
         if (val.境界 && (typeof val.境界 !== 'object' || val.境界 === null)) errors.push('NPC境界必须是对象类型');

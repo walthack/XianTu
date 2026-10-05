@@ -1,3 +1,4 @@
+import { projectNamingText } from './ledger/naming';
 import type { ScenarioCondition, ScenarioModEvent } from './schema';
 import type { ScenarioDivergence } from './divergenceLedger';
 import { locationWithin } from './travel/locationIds';
@@ -107,7 +108,7 @@ function projectFromDivergence(event: ScenarioModEvent, divergence: ScenarioDive
 }
 
 /** 返回当前存档分歧下可见的事件文案；事件 id / 完成条件不变，避免把追认误当重演。 */
-export function resolveScenarioEventNarrative(
+function resolveScenarioEventNarrativeRaw(
   event: ScenarioModEvent,
   flags: Record<string, unknown>,
   divergences?: ScenarioDivergence[],
@@ -128,6 +129,13 @@ export function resolveScenarioEventNarrative(
   if (divergence) return projectFromDivergence(event, divergence);
   const objective = resolveFixedQuestObjective(event);
   return objective && objective !== event.objective ? { ...event, objective } : event;
+}
+
+/** 页面与叙事共享称呼出口；投影副本，不改合同哈希或存档里的事件真值。 */
+export function resolveScenarioEventNarrative(event: ScenarioModEvent, flags: Record<string, unknown>, divergences?: ScenarioDivergence[], runtime?: Parameters<typeof projectNamingText>[1]): ScenarioModEvent {
+  const view = resolveScenarioEventNarrativeRaw(event, flags, divergences);
+  if (!runtime) return view;
+  return { ...view, name: projectNamingText(view.name, runtime), description: projectNamingText(view.description || '', runtime, 'narration'), objective: projectNamingText(view.objective || '', runtime), axisBeat: projectNamingText(view.axisBeat || '', runtime, 'narration') };
 }
 
 type QuestCompassRuntime = {
@@ -224,4 +232,19 @@ export function narrativeVariantReplacesCanonRail(
   const explicitReplacement = variants?.some(item => item.replacesCanonRail === true
     && item.when.every(condition => matches(condition, flags))) ?? false;
   return explicitReplacement || Boolean(relatedDivergence(event, divergences));
+}
+
+/** 认知/路径按已携带的编年史顺序跨关排，不比较不同关的本地回合。 */
+export function ledgerRecordOrder(runtime: any, record: { sourceEventId?: string }): number {
+  const entry = (runtime?.chronicle || []).find((c: any) => record.sourceEventId && String(c.id).endsWith('.' + record.sourceEventId));
+  if (entry) return Number(entry.sequence) || 0;
+  return runtime?.events?.some((e: any) => e.id === record.sourceEventId)
+    ? Math.max(0, ...(runtime.chronicle || []).map((c: any) => Number(c.sequence) || 0)) + 1 : 0;
+}
+export function ledgerRecordTurnLabel(runtime: any, record: { sourceEventId?: string }, turn: unknown): string {
+  const entry = (runtime?.chronicle || []).find((c: any) => record.sourceEventId && String(c.id).endsWith('.' + record.sourceEventId));
+  const stage = entry?.stageId || (runtime?.events?.some((e: any) => e.id === record.sourceEventId) ? runtime.modId : '');
+  const label = String(stage || '').match(/stage_(\d+b?)/)?.[1];
+  const local = Number(turn) > 0 ? `第 ${Number(turn)} 回合` : !record.sourceEventId ? '开场已知' : '回合未记录';
+  return `${label ? `第${label}关 · ` : ''}${local}`;
 }
