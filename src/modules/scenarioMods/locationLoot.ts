@@ -48,13 +48,16 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
   let rng = hash(`${state.seed}:${locationId}:${attempt}`);
   const seed = rng;
   const roll = () => { rng = (rng + 0x6D2B79F5) >>> 0; let t = Math.imul(rng ^ (rng >>> 15), 1 | rng); t ^= t + Math.imul(t ^ (t >>> 7), 61 | t); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  const knownItems = new Set((runtime.canon?.items || []).map((i: any) => i.id));
+  const knownItems = new Set((runtime.canon?.items || []).filter((i: any) => !i.storyItem).map((i: any) => i.id));
   // 当前关进度切关会清空；行旅账保留已结算事件，不反向污染当前关 rail。
   const completed = new Set([...(runtime.completedEventIds || []), ...(runtime.travelLedger?.doneEventIds || [])]);
+  // Palace search and the F10 reward are independent sources; search's own once marker remains authoritative.
+  const independentBattleLoot = (e: LocationLootEntry) => locationId === 'liuchao.location.gui_wang_gong'
+    && e.category !== 'key' && ['lcq.item.f10_broken_axe', 'lcq.item.nh_niche_crystal'].includes(e.itemId || '');
   const eligible = location.entries.filter(e => e.id && (e.category === 'currency' || (e.itemId && knownItems.has(e.itemId)))
     && (!e.afterEventIds || e.afterEventIds.every(id => completed.has(id)))
     && (!(e.once || e.category === 'key') || (!state.claimed.includes(`${locationId}:${e.id}`)
-      && !(e.itemId && (state.claimedItemIds.includes(e.itemId) || Number((save as any).角色?.背包?.物品?.[e.itemId]?.数量) > 0 || (runtime.inventoryTransferReceipts || []).some((r: any) => r.itemId === e.itemId))))));
+      && !(e.itemId && !independentBattleLoot(e) && (state.claimedItemIds.includes(e.itemId) || Number((save as any).角色?.背包?.物品?.[e.itemId]?.数量) > 0 || (runtime.inventoryTransferReceipts || []).some((r: any) => r.itemId === e.itemId))))));
   for (const e of eligible) if (!Number.isInteger(e.quantity?.[0]) || !Number.isInteger(e.quantity?.[1]) || e.quantity[0] < 1 || e.quantity[1] < e.quantity[0] || !Number.isFinite(e.weight ?? 1)) throw new Error('搜刮条目配置无效');
   for (const e of eligible) {
     if (!['key', 'common', 'rare', 'currency'].includes(e.category) || (e.category === 'currency' && e.currency && !['铜铢', '银铢', '金铢'].includes(e.currency)) || (e.weight !== undefined && e.weight <= 0) || (e.chance !== undefined && (!Number.isFinite(e.chance) || e.chance < 0 || e.chance > 1))) throw new Error('搜刮分类、币种或概率配置无效');

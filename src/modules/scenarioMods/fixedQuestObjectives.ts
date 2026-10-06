@@ -1,3 +1,4 @@
+import {entityText} from './namedEntities';
 /**
  * 玩家侧固定任务目标覆盖。
  *
@@ -53,8 +54,8 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
   'lcq.event.s07_03_xiaozi_appears': '应对突然现身的小紫与被制住的局面',
   'lcq.event.s07_09_hengtang_ambush': '先应对横塘别墅突遭的围攻',
   'lcq.event.wuerlang_joins': '问清走投无路的武二郎是否随队南行',
-  'lcq.event.wuerlang_slays_dagu': '撑住达古这一波围攻，看清武二郎能否打开缺口',
-  'lcq.event.s05b_02_xiaozi_exposed': '质问小紫，把阿夕的异常和黑舌死因问清楚',
+  'lcq.event.wuerlang_slays_dagu': entityText("撑住{{entity:character:lcq.character.nanhuang_dagu}}这一波围攻，看清武二郎能否打开缺口"),
+  'lcq.event.s05b_02_xiaozi_exposed': entityText("质问小紫，把阿夕的异常和{{entity:character:lcq.character.nanhuang_heishe}}死因问清楚"),
   'lcq.event.s04_03': '听清乐明珠为什么要假扮新娘',
   'lcq.event.xiao_opens_resources': '当面听清萧遥逸代表星月湖要给你什么',
   'lcq.event.palace_haunting_rumor': '用灵飞镜窥探宫城，记下眼前异常',

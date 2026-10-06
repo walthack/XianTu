@@ -144,7 +144,9 @@ test('a demo marker forces the module route even for a non-isolated profile', as
   const { aiService } = await isolatedJiti.import('../src/services/aiService.ts');
   const { useAPIManagementStore } = await isolatedJiti.import('../src/stores/apiManagementStore.ts');
   const api = useAPIManagementStore(); const originalConfigs = [...api.apiConfigs];
+  const originalAssignments = api.apiAssignments.map(a => ({ ...a }));
   api.apiConfigs = [{ id: 'fixture-minimax', name: 'fixture', provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: 'fixture-not-a-real-key', model: 'MiniMax-M3', enabled: true }];
+  api.assignAPI('main', 'fixture-minimax');
   const { readFile } = await import('node:fs/promises');
   const { parseScenarioMod } = await isolatedJiti.import('../src/modules/scenarioMods/validator.ts');
   const { createQingyuOpeningPlaytestSave } = await isolatedJiti.import('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
@@ -163,7 +165,7 @@ test('a demo marker forces the module route even for a non-isolated profile', as
   try {
     const response = await AIBidirectionalSystem.tryModularTurn(save, undefined, 'profile-test', ()=>false, '继续');
     assert.equal(response.moduleReceipt.path, 'modular');
-  } finally { aiService.generate = original; api.apiConfigs = originalConfigs; store.delete(m.MODULE_TURN_SWITCH); }
+  } finally { aiService.generate = original; api.apiConfigs = originalConfigs; api.apiAssignments = originalAssignments; store.delete(m.MODULE_TURN_SWITCH); }
 });
 
 

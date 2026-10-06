@@ -102,7 +102,7 @@ export function computeSectWarSide(saveData: SaveData, sectName: string): SectWa
   const mPower = clamp(int(management?.战力, 0), 0, 100);
   const stability = clamp(int(management?.安定, 60), 0, 100);
   const training = clamp(int(management?.外门训练度, 55), 0, 100);
-  const treasuryStone = int(management?.府库?.灵石, 0);
+  const treasuryStone = int(management?.府库?.铜铢, 0);
   const facilityAvg = computeFacilityAvg(management);
 
   // 各项加成：尽量“可解释”且幅度温和
@@ -128,7 +128,7 @@ export function computeSectWarSide(saveData: SaveData, sectName: string): SectWa
   breakdown.push({ label: '安定修正', value: stabilityBonus, note: `安定=${stability}` });
   breakdown.push({ label: '训练度修正', value: trainingBonus, note: `外门训练度=${training}` });
   breakdown.push({ label: '设施修正', value: facilityBonus, note: `设施均值≈${facilityAvg.toFixed(1)}` });
-  breakdown.push({ label: '府库修正', value: treasuryBonus, note: `灵石=${treasuryStone}` });
+  breakdown.push({ label: '府库修正', value: treasuryBonus, note: `铜铢=${treasuryStone}` });
 
   const totalPower = clamp(Math.round(base + memberScore + stabilityBonus + trainingBonus + facilityBonus + treasuryBonus), 1, 100);
   const morale = clamp(60 + stabilityBonus * 3 + trainingBonus * 2, 35, 95);

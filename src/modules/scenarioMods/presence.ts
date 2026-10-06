@@ -1,3 +1,8 @@
+import {namingChapter} from './ledger/naming';
+
+import {entityAliases} from './namedEntities';
+
+import {isNamedEntityLabel} from './namedEntities';
 import { runtimeEntityId, runtimeEntityName } from './ledger/affinityIdentity';
 /**
  * 在场判定（2026-08-15）——"此刻谁真的在你面前"的单一判据。
@@ -136,6 +141,8 @@ function eventIsCompleted(runtime: {
 }
 
 type DepartedRuntime = {
+  canon?: {characters?: {id:string;presenceWindow?: {firstChapter:number;lastPresentChapter:number}}[]};
+  events?: {id:string;axisAnchor?:string}[];
   flags?: Record<string, unknown>;
   completedEventIds?: unknown;
   offscreenResolvedEventIds?: unknown;
@@ -159,55 +166,59 @@ function qingyuStagePastWangZhe(runtime: DepartedRuntime | null | undefined): bo
 
 function nanhuangCastExclusions(runtime: DepartedRuntime | null | undefined, permanentOnly = false): string[] {
   const names: string[] = [];
+  const chapter=namingChapter(runtime as any || {});
+  if (!permanentOnly && String(runtime?.modId || '').startsWith('lcq.stage_')) for(const card of runtime?.canon?.characters || []) {
+    const w=card.presenceWindow;if(w && (chapter<w.firstChapter || chapter>w.lastPresentChapter)) names.push(...entityAliases('character',card.id));
+  }
   const done = (id: string) => eventIsCompleted(runtime, `lcq.event.${id}`);
   const entered = (id: string) => done(id) || Boolean((runtime as { activeEventIds?: string[] })?.activeEventIds?.includes(`lcq.event.${id}`));
   const stage = String(runtime?.modId || '');
-  if (!permanentOnly && ['lcq.stage_03b_snake_flower_bridge','lcq.stage_04'].includes(stage)) names.push('小紫');
+  if (!permanentOnly && ['lcq.stage_03b_snake_flower_bridge','lcq.stage_04'].includes(stage)) names.push(...entityAliases("character","liuchao.character.xiao_zi"));
   if (!permanentOnly && stage === 'lcq.stage_03b_snake_flower_bridge') {
-    if (!entered('s03b_snake_flower_bridge_06')) names.push('苏荔', '阿夕', '卡瓦', '阿葭');
-    if (!entered('s03b_snake_flower_bridge_07')) names.push('花苗新娘');
-    if (!(runtime as { eventActionStates?: Record<string, { preparations?: string[] }> })?.eventActionStates?.['lcq.event.s03b_yinzhu_xiongerpu']?.preparations?.includes('ajia_mourned') && !done('s03b_yinzhu_xiongerpu')) names.push('朱八八', '秦桧', '吴三桂');
+    if (!entered('s03b_snake_flower_bridge_06')) names.push(...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","liuchao.character.a_xi"), ...entityAliases("character","lcq.character.nanhuang_kawa"), ...entityAliases("character","lcq.character.nanhuang_ajia"));
+    if (!entered('s03b_snake_flower_bridge_07')) names.push(...entityAliases("character","liuchao.character.le_mingzhu"));
+    if (!(runtime as { eventActionStates?: Record<string, { preparations?: string[] }> })?.eventActionStates?.['lcq.event.s03b_yinzhu_xiongerpu']?.preparations?.includes('ajia_mourned') && !done('s03b_yinzhu_xiongerpu')) names.push(...entityAliases("character","liuchao.character.shang_zhen_yu"), ...entityAliases("character","liuchao.character.qin_hui"), ...entityAliases("character","liuchao.character.wu_san_gui"));
   }
   if (!permanentOnly && stage === 'lcq.stage_04') {
-    if (!entered('s04_04') || entered('s04_06')) names.push('叶媪');
-    if (done('s04_05')) names.push('易虎');
-    if (!entered('s04_07')) names.push('樨夫人', '白夷族长', '易勇');
+    if (!entered('s04_04') || entered('s04_06')) names.push(...entityAliases("character","lcq.character.nanhuang_yeao"));
+    if (done('s04_05')) names.push(...entityAliases("character","liuchao.character.yi_hu"));
+    if (!entered('s04_07')) names.push(...entityAliases("character","canon.character.15b71fd1c8"), '白夷族长', ...entityAliases("character","lcq.character.nanhuang_yiyong"));
   }
   if (!permanentOnly && stage === 'lcq.stage_04b_lingfei_baiyi_crisis') {
-    names.push('叶媪', '秦桧', '吴三桂', '碧姬', '碧奴');
-    if (!entered('xiaozi_first_appears')) names.push('小紫');
-    if (done('s04b_xi_furen_trade_route')) names.push('易虎');
-    if (!entered('regroup_caravan_envoy')) names.push('阁罗', '蛇傀', '黑舌');
-    if (!entered('yiyang_repels_yinsha')) names.push('弥骨', '六朝石匠');
-    if (done('s04b_lingfei_baiyi_crisis_19')) names.push('石刚');
-    if (done('s04b_lingfei_baiyi_crisis_19') && !entered('spot_dong_informant')) names.push('祁远');
-    if (done('s04b_lingfei_baiyi_crisis_17')) names.push('樨夫人', '易勇');
+    names.push(...entityAliases("character","lcq.character.nanhuang_yeao"), ...entityAliases("character","liuchao.character.qin_hui"), ...entityAliases("character","liuchao.character.wu_san_gui"), ...entityAliases("character","liuchao.character.bi_ji"), ...entityAliases("character","liuchao.character.bi_ji"));
+    if (!entered('xiaozi_first_appears')) names.push(...entityAliases("character","liuchao.character.xiao_zi"));
+    if (done('s04b_xi_furen_trade_route')) names.push(...entityAliases("character","liuchao.character.yi_hu"));
+    if (!entered('regroup_caravan_envoy')) names.push(...entityAliases("enemy","lcq.enemy.ge_luo"), '蛇傀', ...entityAliases("character","lcq.character.nanhuang_heishe"));
+    if (!entered('yiyang_repels_yinsha')) names.push(...entityAliases("character","lcq.character.mi_gu"), '六朝石匠');
+    if (done('s04b_lingfei_baiyi_crisis_19')) names.push(...entityAliases("character","lcq.character.nanhuang_shigang"));
+    if (done('s04b_lingfei_baiyi_crisis_19') && !entered('spot_dong_informant')) names.push(...entityAliases("character","liuchao.character.qi_yuan"));
+    if (done('s04b_lingfei_baiyi_crisis_17')) names.push(...entityAliases("character","canon.character.15b71fd1c8"), ...entityAliases("character","lcq.character.nanhuang_yiyong"));
   }
   if (!permanentOnly && stage === 'lcq.stage_05b') {
-    if (!entered('geluo_summons_biji')) names.push('碧姬');
-    if (!entered('s05b_03_saan_secret_path')) names.push('萨安');
-    if (!entered('s05b_05a_meet_ghost_king')) names.push('鬼巫王');
-    if (!entered('s05b_08b_altar_corpse_fight_and_danchen')) names.push('朱诺');
-    if (!entered('ghost_king_swallowed')) names.push('龙神');
-    if (!done('slay_dragon') || done('xieyi_entrustment')) names.push('黑衣丽人');
-    if (done('s05b_02_xiaozi_exposed')) names.push('阿夕');
-    if (done('s05b_09_temporary_pact_with_xiaozi')) names.push('弥骨', '卡瓦');
-    if (done('s05b_10_slave_revolt_and_phoenix_change')) names.push('萨安', '娄蒙', '丹宸');
-    if (!entered('shanghou_revealed')) names.push('叶媪');
-    if (!entered('s05b_yeao_palm_ningyu_stays')) names.push('秦桧');
-    if (!entered('shanghou_cures_ice_gu')) names.push('吴三桂');
-    if (done('s05b_wuer_suli_depart')) names.push('苏荔', '武二郎', '云苍峰', '小魏', '易彪', '吴战威');
-    if (done('xiaozi_kills_mother')) names.push('小紫', '阁罗');
+    if (!entered('geluo_summons_biji')) names.push(...entityAliases("character","liuchao.character.bi_ji"));
+    if (!entered('s05b_03_saan_secret_path')) names.push(...entityAliases("character","lcq.character.saan"));
+    if (!entered('s05b_05a_meet_ghost_king')) names.push(...entityAliases("enemy","lcq.enemy.gui_wu_wang"));
+    if (!entered('s05b_08b_altar_corpse_fight_and_danchen')) names.push(...entityAliases("character","lcq.character.zhu_nuo"));
+    if (!entered('ghost_king_swallowed')) names.push(...entityAliases("enemy","lcq.enemy.dragon_god"));
+    if (!done('slay_dragon') || done('xieyi_entrustment')) names.push(...entityAliases("character","lcq.character.nanhuang_blacksea_envoy"));
+    if (done('s05b_02_xiaozi_exposed')) names.push(...entityAliases("character","liuchao.character.a_xi"));
+    if (done('s05b_09_temporary_pact_with_xiaozi')) names.push(...entityAliases("character","lcq.character.mi_gu"), ...entityAliases("character","lcq.character.nanhuang_kawa"));
+    if (done('s05b_10_slave_revolt_and_phoenix_change')) names.push(...entityAliases("character","lcq.character.saan"), ...entityAliases("character","canon.character.81be8593ee"), ...entityAliases("enemy","lcq.enemy.dan_chen"));
+    if (!entered('shanghou_revealed')) names.push(...entityAliases("character","lcq.character.nanhuang_yeao"));
+    if (!entered('s05b_yeao_palm_ningyu_stays')) names.push(...entityAliases("character","liuchao.character.qin_hui"));
+    if (!entered('shanghou_cures_ice_gu')) names.push(...entityAliases("character","liuchao.character.wu_san_gui"));
+    if (done('s05b_wuer_suli_depart')) names.push(...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","liuchao.character.wu_er_lang"), ...entityAliases("character","liuchao.character.yun_cang_feng"), ...entityAliases("character","lcq.character.nanhuang_xiaowei"), ...entityAliases("character","lcq.character.np004"), ...entityAliases("character","lcq.character.np003"));
+    if (done('xiaozi_kills_mother')) names.push(...entityAliases("character","liuchao.character.xiao_zi"), ...entityAliases("enemy","lcq.enemy.ge_luo"));
   }
-  if (['lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b', 'lcq.stage_07_qingyuan_jiankang'].includes(stage)) names.push('阿葭');
-  if (['lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b', 'lcq.stage_07_qingyuan_jiankang'].includes(stage)) names.push('易虎');
+  if (['lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b', 'lcq.stage_07_qingyuan_jiankang'].includes(stage)) names.push(...entityAliases("character","lcq.character.nanhuang_ajia"));
+  if (['lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b', 'lcq.stage_07_qingyuan_jiankang'].includes(stage)) names.push(...entityAliases("character","liuchao.character.yi_hu"));
   for (const [event, departed] of [
-    ['s03b_yinzhu_xiongerpu', ['阿葭']], ['s04_05', ['易虎']], ['s04b_lingfei_baiyi_crisis_09', ['白夷族长']],
-    ['biling_bay_stance', ['黑舌', '蛇傀']], ['wuerlang_slays_dagu', ['达古']],
-    ['ghost_king_swallowed', ['鬼巫王']], ['slay_dragon', ['龙神']], ['xiaozi_kills_mother', ['碧姬']],
+    ['s03b_yinzhu_xiongerpu', [...entityAliases("character","lcq.character.nanhuang_ajia")]], ['s04_05', [...entityAliases("character","liuchao.character.yi_hu")]], ['s04b_lingfei_baiyi_crisis_09', ['白夷族长']],
+    ['biling_bay_stance', [...entityAliases("character","lcq.character.nanhuang_heishe"), '蛇傀']], ['wuerlang_slays_dagu', [...entityAliases("enemy","lcq.enemy.dagu")]],
+    ['ghost_king_swallowed', [...entityAliases("enemy","lcq.enemy.gui_wu_wang")]], ['slay_dragon', [...entityAliases("enemy","lcq.enemy.dragon_god")]], ['xiaozi_kills_mother', [...entityAliases("character","liuchao.character.bi_ji")]],
   ] as Array<[string, string[]]>) if (done(event)) names.push(...departed);
-  if (readRuntimeFlag(runtime?.flags, 'event.s06_03.done') === true) names.push('谢艺');
-  if (!permanentOnly && stage === 'lcq.stage_07_qingyuan_jiankang') names.push('凝羽', '武二郎', '苏荔', '石刚');
+  if (readRuntimeFlag(runtime?.flags, 'event.s06_03.done') === true) names.push(...entityAliases("character","liuchao.character.xie_yi"));
+  if (!permanentOnly && stage === 'lcq.stage_07_qingyuan_jiankang') names.push(...entityAliases("character","liuchao.character.ning_yu"), ...entityAliases("character","liuchao.character.wu_er_lang"), ...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","lcq.character.nanhuang_shigang"));
   // 正在演出死亡或首次出现的事件仍可展示当时演员；落账后才退场。
   return [...new Set(names)];
 }
@@ -220,8 +231,8 @@ export function departedPresentNames(runtime: DepartedRuntime | null | undefined
     const text = runtimeEntityName(runtime,String(name || '').trim());
     if (text) names.push(text);
   }
-  if (eventIsCompleted(runtime, 'lcq.event.s01_02') || qingyuStagePastOpening(runtime)) names.push('段强');
-  if (eventIsCompleted(runtime, 'lcq.event.s02_02') || qingyuStagePastWangZhe(runtime)) names.push('王哲');
+  if (eventIsCompleted(runtime, 'lcq.event.s01_02') || qingyuStagePastOpening(runtime)) names.push(...entityAliases("character","lcq.character.duan_qiang"));
+  if (eventIsCompleted(runtime, 'lcq.event.s02_02') || qingyuStagePastWangZhe(runtime)) names.push(...entityAliases("character","lcq.character.wang_zhe"));
   const recorded = runtime?.sceneLedger?.actors || {};
   const inferred = nanhuangCastExclusions(runtime).filter(name => recorded[runtimeEntityId(runtime,name)]?.status !== 'present');
   const out = Object.entries(recorded).filter(([, actor]) => actor.status !== 'present').map(([id]) => runtimeEntityName(runtime,id));
@@ -234,7 +245,7 @@ export function stampDepartedCast(runtime: DepartedRuntime | null | undefined): 
   if (runtime && typeof runtime === 'object') {
     const temporary = new Set(nanhuangCastExclusions(runtime));
     const permanent = new Set(nanhuangCastExclusions(runtime, true));
-    runtime.departedCast = names.filter(name => name !== '易虎' && (!temporary.has(name) || permanent.has(name))).map(name=>runtimeEntityId(runtime,name));
+    runtime.departedCast = names.filter(name => !isNamedEntityLabel("character","liuchao.character.yi_hu",name) && (!temporary.has(name) || permanent.has(name))).map(name=>runtimeEntityId(runtime,name));
   }
   return names;
 }

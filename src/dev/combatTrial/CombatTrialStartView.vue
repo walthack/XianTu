@@ -3,9 +3,10 @@
     <section class="trial-card">
       <div class="eyebrow">内部试玩 · 真实游戏界面</div>
       <h1>山涧雾战</h1>
-      <p class="lead">一拍剧情 → 遇敌 → 战斗 → 结束。进入后是正常的游戏界面：先读开场，点主线按钮「循着哨声迎向雾里」遇敌，战斗卡片出现在输入框上方；打完再点收尾按钮回到叙事，最后是本期结束卡片。</p>
+      <p v-if="newSceneModule" class="lead">使用游戏正式场面模块：输入打法，查看预览，确认掷骰；每拍保存结果，收束后接回剧情。</p>
+      <p v-else class="lead">一拍剧情 → 遇敌 → 战斗 → 结束。进入后是正常的游戏界面：先读开场，点主线按钮「循着哨声迎向雾里」遇敌，战斗卡片出现在输入框上方；打完再点收尾按钮回到叙事，最后是本期结束卡片。</p>
 
-      <div class="modes" role="radiogroup" aria-label="战斗模式">
+      <div v-if="!newSceneModule" class="modes" role="radiogroup" aria-label="战斗模式">
         <label :class="{ on: mode === 'B' }">
           <input v-model="mode" type="radio" value="B" data-testid="mode-B" />
           <strong>B · 分阶段判定</strong>
@@ -41,13 +42,17 @@ import { useCharacterStore } from '@/stores/characterStore'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins'
 import { QINGYU_OPENING_PLAYTEST_EXTENSION_KEY, QINGYU_OPENING_PLAYTEST_KIND } from '@/modules/scenarioMods/qingyuOpeningPlaytest'
+import { sceneModuleEnabled, writeExt, emptyExt, newActive } from '@/modules/sceneModule/host/ext'
+import { sceneContractForEvent } from '@/modules/sceneModule/contracts/registry'
+import { beginScene } from '@/modules/sceneModule'
 import type { BattleMode } from './engine'
 import { F03_UI } from './f03Scenario'
-import { COMBAT_TRIAL_CHARACTER_ID, COMBAT_TRIAL_MOD_ID, COMBAT_TRIAL_SLOT, createCombatTrialSave } from './overlay'
+import { COMBAT_TRIAL_CHARACTER_ID, COMBAT_TRIAL_MOD_ID, COMBAT_TRIAL_SLOT, createCombatTrialSave, createSceneCombatTrialSave } from './overlay'
 
 const router = useRouter()
 const characterStore = useCharacterStore()
 const gameStateStore = useGameStateStore()
+const newSceneModule = sceneModuleEnabled()
 const copy = F03_UI
 const busy = ref(false)
 const errorMessage = ref('')
@@ -76,12 +81,21 @@ async function startFresh() {
   try {
     const mod = BUILTIN_SCENARIO_MODS.find(item => item.manifest.id === COMBAT_TRIAL_MOD_ID)
     if (!mod) throw new Error(`缺少内置模组 ${COMBAT_TRIAL_MOD_ID}`)
+    const newModule = sceneModuleEnabled();
+    const save = newModule ? createSceneCombatTrialSave(mod, { mode: mode.value, seed, forced }) : createCombatTrialSave(mod, { mode: mode.value, seed, forced });
+    if (newModule) {
+      const contract = sceneContractForEvent('lcq.event.s04_02')!;
+      const ext = emptyExt();
+      ext.active = newActive({ contractId:contract.meta.id, eventId:contract.meta.hook.eventId!, actionId:contract.meta.hook.actionId!, playerLine:contract.objective.text, narrativeIndex:0, state:beginScene(contract,{seed:seed ?? undefined,forced:forced.length ? {action:forced} : undefined}).state });
+      ext.active.trial = true;
+      writeExt(save,ext);
+    }
     await characterStore.installIsolatedPlaytestCharacter({
       characterId: COMBAT_TRIAL_CHARACTER_ID,
       slotName: COMBAT_TRIAL_SLOT,
       markerKind: QINGYU_OPENING_PLAYTEST_KIND,
       markerExtensionKey: QINGYU_OPENING_PLAYTEST_EXTENSION_KEY,
-      saveData: createCombatTrialSave(mod, { mode: mode.value, seed, forced }),
+      saveData: save,
     })
     await router.replace('/game')
   } catch (error) {

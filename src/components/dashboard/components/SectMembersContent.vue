@@ -185,6 +185,7 @@
 </template>
 
 <script setup lang="ts">
+import {entityName} from "@/modules/scenarioMods/namedEntities";
 import { ref, computed } from 'vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useCharacterStore } from '@/stores/characterStore';
@@ -291,7 +292,7 @@ const sectMembers = computed(() => {
   return Object.entries(relations)
     .filter(([_, npc]: [string, any]) => {
       // 检查是否属于同一宗门
-      const npcSect = npc.势力归属 || npc.宗门;
+      const npcSect = entityName('faction',npc.势力归属 || npc.宗门 || '');
       return npcSect === playerSectName.value;
     })
     .map(([name, npc]: [string, any]) => ({

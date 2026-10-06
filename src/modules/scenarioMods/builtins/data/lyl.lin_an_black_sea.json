@@ -258,7 +258,7 @@
         "description": "主角",
         "role": "主角",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -331,7 +331,9 @@
             "程宗扬和武二郎处理鸦人尸体，发现其携带的空白羊皮纸，经云苍峰鉴定为秘法传讯信，推测黑魔海与鬼王峒勾结，目标指向白夷族。",
             "殇侯与程宗扬夜谈六朝兴亡之际，文士巾打扮的秦桧快步走来，躬身深揖：\"君侯，北地有讯。\"随后受命引程宗扬在山崖温泉间随意走走。其人举止温文尔雅，脸上总带一丝谦虚笑意；殇侯私评：\"灵敏有余，志浅易变。\""
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -339,7 +341,7 @@
         "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
         "role": "家臣",
         "gender": "男",
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -395,7 +397,9 @@
             "殇侯与程宗扬夜谈六朝兴亡之际，文士巾打扮的秦桧快步走来，躬身深揖：\"君侯，北地有讯。\"随后受命引程宗扬在山崖温泉间随意走走。其人举止温文尔雅，脸上总带一丝谦虚笑意；殇侯私评：\"灵敏有余，志浅易变。\"",
             "殇侯把秦桧、吴三桂等手下交给程宗扬差遣。秦桧恭敬改称程宗扬\"主公\"：\"能协助主公行事，是我等的福分。\"自此成为程宗扬身边第一智囊。"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.yu_zi_yuan",
@@ -403,7 +407,7 @@
         "description": "商人面孔、苍白如纸，华丽的丝袍下掩着一条齐膝而断的左腿，可他驾船追踪的本事比健全人更狠——星月湖大营的精锐，从不是靠双腿走出来的。",
         "role": "下属",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -447,7 +451,9 @@
             "尽职",
             "情感丰富"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lin_chong",
@@ -455,7 +461,7 @@
         "description": "身为禁军教头，林冲身材魁梧，性情沉稳内敛，喜怒不形于色，但忍让的底线一旦被突破，便会显露出狠辣与快意恩仇的一面。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.huang_cheng_si",
@@ -502,7 +508,9 @@
             "警惕"
           ],
           "origin": "皇城司教头"
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.li_shi_shi",
@@ -510,7 +518,7 @@
         "description": "白衣素裙的她眉目如画，看似柔弱窈窕，实则骨子里透着一股执拗与机锋——既是妙手仁心的医者，又早已在暗中展露公关天赋，一双秋水般的眼眸流转间，已将人心算计得分毫不差。",
         "role": "关键人物",
         "gender": "女",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.guang_ming_guan_tang",
@@ -555,7 +563,9 @@
             "独立坚韧"
           ],
           "origin": "光明观堂边缘/低阶弟子（因不肯盲从宗门伪善教条而被边缘化）"
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lu_zhi_shen",
@@ -563,7 +573,7 @@
         "description": "身披僧衣的魁梧壮汉，虽入空门却豪气冲天，性如烈火又粗中有细，路见不平一声吼，三拳下去便是天地清明。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.mingqing_temple",
@@ -608,7 +618,9 @@
             "【门规约束】作为和尚，应遵守佛门戒律，保持清净之身。"
           ],
           "origin": "僧人"
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xue_yan_shan",
@@ -616,7 +628,7 @@
         "description": "雪隼佣兵团团长薛延山，枯瘦如柴、眼结冰渣，躺在榻上口吐白气，奄奄一息中将团员托付给程宗扬。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xue_sun",
@@ -660,7 +672,9 @@
           "notes": [
             "【身体】浑身的精血仿佛被人抽走；血管从枯瘦的皮肤下一道道凸起；中寒毒后如吞噬血肉般痛苦"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lin_qing_pu",
@@ -668,7 +682,7 @@
         "description": "林清浦年纪甚轻，脸色苍白泛青，易红了脸，却善于以水镜术窥探天地，每日为程宗扬联络各地情报，是暗流下最安静的耳目。",
         "role": "术者",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -721,7 +735,9 @@
           "notes": [
             "【身体】红脸，讷讷说不出话；年纪甚轻"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ao_run",
@@ -729,7 +745,7 @@
         "description": "敖润虽然身材短小、貌不惊人，坐在那里总是一副臊眉耷眼的样子，但性情粗豪豪爽、心直口快，是程宗扬麾下最重情重义的铁杆兄弟。",
         "role": "下属",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -779,7 +795,9 @@
             "武艺扎实"
           ],
           "origin": "护卫头领"
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.feng_yuan",
@@ -806,7 +824,9 @@
             "为人没什么脾气",
             "胆小（易晕厥）"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.qing_mian_shou",
@@ -814,7 +834,7 @@
         "description": "青面兽生得一张青灰面孔，兽斑横斜，豹眼圆睁时骇人如恶煞，却是个老实憨直的兽蛮护卫。他脾性凶暴易怒，偏又对主人言听计从，嗜肉如命，这副大牲口般的身板往那儿一杵，便如铁塔一般护着身后之人。",
         "role": "仆从",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.pan_jiang_cheng",
@@ -863,7 +883,9 @@
           "notes": [
             "【身体】脸上有兽斑；手肘如牛头大"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
@@ -883,7 +905,7 @@
         "description": "高俅的养子，顶着正五品武职的外壳招摇过市，骨子里却是一头觊觎花魁与美人的恶犬，每到一个地方便洒下灾祸的种子。",
         "role": "敌对人物",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_wei_fu",
@@ -930,7 +952,9 @@
           "notes": [
             "【性癖】玩弄女性乳阴；群体淫乱"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lu_qian",
@@ -938,7 +962,7 @@
         "description": "一身武官服衬得他相貌堂堂，可那低垂的眉眼与窄瘦的脸庞，藏着比刀刃更锋利的歹毒——他是高衙内心腹的蛇，悄无声息地缠住林冲与威远镖局的命脉。",
         "role": "敌对人物",
         "gender": "男",
-        "realm": "金丹",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_wei_fu",
@@ -977,7 +1001,9 @@
             "气量狭小",
             "善于挑拨"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xiao_zi",
@@ -1042,7 +1068,7 @@
             "小紫倒戈、奴隶暴动、程宗扬反杀计划与乐明珠凤凰宝典异变共同把剧情推向最终决战。"
           ]
         },
-        "realm": "筑基",
+        "realm": "未知",
         "gender": "女",
         "affiliations": [
           {
@@ -1050,7 +1076,9 @@
             "category": "organization",
             "role": "岳帅遗孤"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       }
     ],
     "playerRelationships": [
@@ -1412,151 +1440,52 @@
     ]
   },
   "content": {
+    "items": [
+      {
+        "id": "liuchao.item.ghost_fang"
+      },
+      {
+        "id": "liuchao.item.coral_dagger"
+      },
+      {
+        "id": "liuchao.item.spirit_flying_mirror"
+      },
+      {
+        "id": "lyl.item.np001"
+      },
+      {
+        "id": "lyl.item.np002"
+      },
+      {
+        "id": "lyl.item.np004"
+      }
+    ],
     "skills": [
       {
-        "id": "liuchao.skill.death_root",
-        "name": "生死根",
-        "description": "程宗扬特有的唯一能力，并非传统灵根。可感应死亡气息，吸收外来剑气并引发丹田异变。",
-        "type": "唯一异能",
-        "effects": [
-          "感应死亡气息",
-          "吸收外来剑气",
-          "丹田异变"
-        ]
+        "id": "liuchao.skill.death_root"
       },
       {
-        "id": "liuchao.skill.bedroom_arts",
-        "name": "房中术",
-        "description": "太乙真宗所传双修秘术，可用于修炼与疗伤。",
-        "type": "秘术",
-        "effects": [
-          "双修时炼化真气杂质",
-          "提升真元"
-        ]
+        "id": "liuchao.skill.bedroom_arts"
       },
       {
-        "id": "liuchao.skill.shock_demon_finger",
-        "name": "惊魔指",
-        "description": "秦桧的独门指法，可一击令对手经脉麻痹。",
-        "type": "指法",
-        "effects": [
-          "经脉麻痹",
-          "真气惊变"
-        ]
+        "id": "liuchao.skill.shock_demon_finger"
       },
       {
-        "id": "liuchao.skill.golden_bell_cover",
-        "name": "金钟罩",
-        "description": "鲁智深的外门硬功，刀剑难伤。",
-        "type": "横练",
-        "effects": [
-          "刀枪不入",
-          "力大无穷"
-        ]
+        "id": "liuchao.skill.golden_bell_cover"
       },
       {
-        "id": "liuchao.skill.water_mirror",
-        "name": "水镜术",
-        "description": "林清浦的远程通讯法术，可两地实时影音沟通，消耗巨大。",
-        "type": "术法",
-        "effects": [
-          "远程通讯",
-          "需铜盆与法力"
-        ]
+        "id": "liuchao.skill.water_mirror"
       }
     ],
     "techniques": [
       {
-        "id": "liuchao.technique.taiyi_scripture",
-        "name": "太一经",
-        "description": "太乙真宗入门修炼心法，程宗扬当前主修。",
-        "grade": "中品",
-        "skillIds": [
-          "liuchao.skill.bedroom_arts"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.16,
-          "属性加成": {
-            "悟性": 2,
-            "灵性": 1
-          }
-        }
+        "id": "liuchao.technique.taiyi_scripture"
       },
       {
-        "id": "lyl.technique.np003",
-        "name": "寒毒",
-        "description": "薛延山身中寒毒，与云如瑶、月霜相似",
-        "grade": "下品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.08,
-          "属性加成": {
-            "悟性": 1,
-            "灵性": 1
-          }
-        }
+        "id": "lyl.technique.np003"
       },
       {
-        "id": "liuchao.technique.jiuyang_shengong",
-        "name": "九阳神功",
-        "description": "程宗扬另一门功法，阳气通神，但导致阳亢之症。",
-        "grade": "玄品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.24,
-          "属性加成": {
-            "悟性": 3,
-            "灵性": 2
-          }
-        }
-      }
-    ],
-    "items": [
-      {
-        "id": "liuchao.item.ghost_fang",
-        "name": "鬼牙",
-        "description": "萧遥逸所赠奇异物品，与寒毒有关。",
-        "type": "other",
-        "grade": "中品"
-      },
-      {
-        "id": "liuchao.item.coral_dagger",
-        "name": "珊瑚匕首",
-        "description": "锋利异常的匕首，程宗扬随身武器。",
-        "type": "weapon",
-        "grade": "仙品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      {
-        "id": "liuchao.item.spirit_flying_mirror",
-        "name": "灵飞镜",
-        "description": "林清浦使用的水镜法器。",
-        "type": "other",
-        "grade": "法器"
-      },
-      {
-        "id": "lyl.item.np001",
-        "name": "龙睛玉",
-        "type": "material",
-        "description": "龙睛玉用于铁傀儡，一块支撑不到二十分钟。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np002",
-        "name": "钓鱼竿（白龙鱼竿）",
-        "type": "other",
-        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
-        "grade": "仙品"
-      },
-      {
-        "id": "lyl.item.np004",
-        "name": "都卢难旦妖铃",
-        "type": "material",
-        "description": "小紫用玉瓶装阴魂。",
-        "grade": "极品"
+        "id": "liuchao.technique.jiuyang_shengong"
       }
     ]
   },

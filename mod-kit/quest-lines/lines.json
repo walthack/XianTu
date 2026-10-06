@@ -1,0 +1,312 @@
+{
+  "version": 1,
+  "lines": [
+    {
+      "id": "line.side.biling_algae_silk",
+      "kind": "side",
+      "ownerCharacterIds": [],
+      "loadBearing": false,
+      "entry": {
+        "all": [
+          {
+            "eventDone": "lcq.event.biling_bay_stance"
+          },
+          {
+            "atLocation": "liuchao.location.biyu_village"
+          }
+        ]
+      },
+      "closeWhen": {
+        "any": [
+          {
+            "eventDone": "lcq.event.ruins_ghost_warriors"
+          }
+        ]
+      },
+      "beats": [
+        {
+          "id": "beat.side.biling_algae_silk.01",
+          "mode": "standalone",
+          "hostEventId": null,
+          "eventId": "lcq.event.side_biling_algae_silk",
+          "requires": {
+            "all": [
+              {
+                "presentActor": "lcq.character.biling_woman_ch80"
+              },
+              {
+                "presentActor": "liuchao.character.qi_yuan"
+              },
+              {
+                "atLocation": "liuchao.location.biyu_village"
+              }
+            ]
+          },
+          "steps": [
+            {
+              "actionId": "act.ask_biling_for_nylon",
+              "kind": "prepare",
+              "grantsPreparation": "prep.nylon_asked",
+              "requiresPresentActors": [
+                "lcq.character.biling_woman_ch80"
+              ],
+              "labelId": "text.act.ask_biling_for_nylon",
+              "intentId": "intent.ask_biling_for_nylon",
+              "outcomeId": "outcome.act.ask_biling_for_nylon",
+              "intentMatchId": "match.ask_biling_for_nylon"
+            },
+            {
+              "actionId": "act.have_yun_examine_algae",
+              "kind": "prepare",
+              "optional": true,
+              "requiresPreparation": [
+                "prep.nylon_asked"
+              ],
+              "requiresPresentActors": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "grantsPreparation": "prep.algae_examined",
+              "labelId": "text.act.have_yun_examine_algae",
+              "intentId": "intent.have_yun_examine_algae",
+              "outcomeId": "outcome.act.have_yun_examine_algae",
+              "intentMatchId": "match.have_yun_examine_algae"
+            },
+            {
+              "actionId": "act.commission_algae_purchase",
+              "kind": "attempt",
+              "requiresPreparation": [
+                "prep.nylon_asked"
+              ],
+              "labelId": "text.act.commission_algae_purchase",
+              "intentId": "intent.commission_algae_purchase",
+              "outcomeId": "outcome.act.commission_algae_purchase",
+              "intentMatchId": "match.commission_algae_purchase"
+            }
+          ],
+          "completedBy": {
+            "eventActionReceipt": {
+              "eventId": "lcq.event.side_biling_algae_silk",
+              "actionId": "act.commission_algae_purchase"
+            }
+          },
+          "onComplete": [
+            {
+              "kind": "itemGrant",
+              "itemId": "lcq.item.biling_algae_sample",
+              "quantity": 1
+            },
+            {
+              "kind": "reveal",
+              "factId": "fact.biling_algae_as_nylon",
+              "source": "seen"
+            },
+            {
+              "kind": "npcKnowledge",
+              "actorIds": [
+                "liuchao.character.qi_yuan",
+                "lcq.character.np003",
+                "liuchao.character.yun_cang_feng"
+              ],
+              "factId": "fact.biling_algae_as_nylon"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.side.biling_algae_silk.ordered",
+              "consumeAtEventIds": []
+            }
+          ],
+          "sharedExperience": "default",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "chapterId": "lcq.chapter.s04b_lingfei_baiyi_crisis_aftermath",
+          "locationId": "liuchao.location.biyu_village",
+          "briefId": "brief.side.biling_algae_silk",
+          "presentActorIds": [
+            "lcq.character.biling_woman_ch80",
+            "liuchao.character.qi_yuan",
+            "lcq.character.np003",
+            "liuchao.character.yun_cang_feng"
+          ],
+          "canonChapter": 80,
+          "objectiveId": "text.line.biling_algae_silk.title"
+        }
+      ],
+      "nameId": "text.line.biling_algae_silk.title",
+      "entryHintId": "text.line.biling_algae_silk.title"
+    },
+    {
+      "id": "line.char.le_mingzhu",
+      "kind": "character",
+      "ownerCharacterIds": [
+        "liuchao.character.le_mingzhu"
+      ],
+      "entry": {
+        "all": [
+          {
+            "eventDone": "lcq.event.s04_03"
+          }
+        ]
+      },
+      "resolution": {
+        "endingId": null,
+        "endingKind": "character_resolution"
+      },
+      "beats": [
+        {
+          "id": "beat.le_mingzhu.s04_03.pan_secret",
+          "mode": "insert",
+          "hostEventId": "lcq.event.s04_03",
+          "eventId": "lcq.event.s04_03_ins_le_mingzhu_pan_secret",
+          "requires": {
+            "all": [
+              {
+                "eventDone": "lcq.event.s04_03"
+              },
+              {
+                "presentActor": "liuchao.character.le_mingzhu"
+              },
+              {
+                "atLocation": "liuchao.location.shan_jian"
+              }
+            ]
+          },
+          "closeWhen": {
+            "any": [
+              {
+                "eventActive": "lcq.event.s04_04"
+              }
+            ]
+          },
+          "ifOwnerAbsent": "no_trigger",
+          "completedBy": {
+            "anyOf": [
+              {
+                "eventActionReceipt": {
+                  "eventId": "lcq.event.s04_03_ins_le_mingzhu_pan_secret",
+                  "actionId": "act.lmz.promise_silence"
+                }
+              },
+              {
+                "eventActionReceipt": {
+                  "eventId": "lcq.event.s04_03_ins_le_mingzhu_pan_secret",
+                  "actionId": "act.lmz.hard_truth"
+                }
+              },
+              {
+                "eventActionReceipt": {
+                  "eventId": "lcq.event.s04_03_ins_le_mingzhu_pan_secret",
+                  "actionId": "act.lmz.tease_with_pan"
+                }
+              }
+            ]
+          },
+          "onComplete": [
+            {
+              "kind": "reveal",
+              "factId": "fact.lmz.ran_off_from_sect",
+              "source": "told_privately"
+            }
+          ],
+          "sharedExperience": "suppress",
+          "stageId": "lcq.stage_04",
+          "chapterId": "lcq.chapter.stage_04",
+          "locationId": "liuchao.location.shan_jian",
+          "briefId": "brief.lmz.pan_secret",
+          "presentActorIds": [
+            "liuchao.character.le_mingzhu"
+          ],
+          "steps": [
+            {
+              "actionId": "act.lmz.promise_silence",
+              "labelId": "text.act.lmz.promise_silence",
+              "intentId": "intent.lmz.promise_silence",
+              "kind": "attempt",
+              "outcomeId": "outcome.act.lmz.promise_silence",
+              "intentMatchId": "match.lmz.promise_silence"
+            },
+            {
+              "actionId": "act.lmz.hard_truth",
+              "labelId": "text.act.lmz.hard_truth",
+              "intentId": "intent.lmz.hard_truth",
+              "kind": "attempt",
+              "outcomeId": "outcome.act.lmz.hard_truth",
+              "intentMatchId": "match.lmz.hard_truth"
+            },
+            {
+              "actionId": "act.lmz.tease_with_pan",
+              "labelId": "text.act.lmz.tease_with_pan",
+              "intentId": "intent.lmz.tease_with_pan",
+              "kind": "attempt",
+              "outcomeId": "outcome.act.lmz.tease_with_pan",
+              "intentMatchId": "match.lmz.tease_with_pan"
+            }
+          ],
+          "byAction": {
+            "act.lmz.promise_silence": [
+              {
+                "kind": "affinityGrant",
+                "actorId": "liuchao.character.le_mingzhu",
+                "weightId": "aff.w.small_pos"
+              },
+              {
+                "kind": "memoryTicket",
+                "actorId": "liuchao.character.le_mingzhu",
+                "episodeTemplateId": "mem.lmz.pan_secret.promised"
+              },
+              {
+                "kind": "setReceipt",
+                "receiptId": "rcpt.lmz.pan_secret.promised",
+                "mutexGroupId": "mutex.lmz.pan_secret",
+                "consumeAtEventIds": []
+              },
+              {
+                "kind": "setState",
+                "stateId": "state.lmz.promise_pan_secret",
+                "value": "kept"
+              }
+            ],
+            "act.lmz.hard_truth": [
+              {
+                "kind": "affinityGrant",
+                "actorId": "liuchao.character.le_mingzhu",
+                "weightId": "aff.w.none"
+              },
+              {
+                "kind": "memoryTicket",
+                "actorId": "liuchao.character.le_mingzhu",
+                "episodeTemplateId": "mem.lmz.pan_secret.hard_truth"
+              },
+              {
+                "kind": "setReceipt",
+                "receiptId": "rcpt.lmz.pan_secret.hard_truth",
+                "mutexGroupId": "mutex.lmz.pan_secret",
+                "consumeAtEventIds": []
+              }
+            ],
+            "act.lmz.tease_with_pan": [
+              {
+                "kind": "affinityGrant",
+                "actorId": "liuchao.character.le_mingzhu",
+                "weightId": "aff.w.small_neg"
+              },
+              {
+                "kind": "memoryTicket",
+                "actorId": "liuchao.character.le_mingzhu",
+                "episodeTemplateId": "mem.lmz.pan_secret.teased"
+              },
+              {
+                "kind": "setReceipt",
+                "receiptId": "rcpt.lmz.pan_secret.teased",
+                "mutexGroupId": "mutex.lmz.pan_secret",
+                "consumeAtEventIds": []
+              }
+            ]
+          },
+          "canonChapter": 48,
+          "objectiveId": "text.line.le_mingzhu.title"
+        }
+      ],
+      "nameId": "text.line.le_mingzhu.title",
+      "entryHintId": "text.line.le_mingzhu.title"
+    }
+  ]
+}

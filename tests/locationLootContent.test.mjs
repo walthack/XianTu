@@ -21,8 +21,8 @@ test('validator rejects unregistered items, unknown events, metadata, aliases, i
   i=>i.table.locations['lcq.location.sheyi_village'].entries.push(structuredClone(i.table.locations['lcq.location.sheyi_village'].entries[0])),
   i=>i.table.rules.rareChance=3,
   i=>i.table.locations['lcq.location.sheyi_village'].entries[0].quantity=[0,1],
-  i=>i.table.locations['liuchao.location.guiwang_dong'].status='empty',
-  i=>i.table.locations['liuchao.location.gui_wang_dong']=i.table.locations['liuchao.location.guiwang_dong'],
+  i=>i.table.locations['liuchao.location.gui_wang_dong'].status='empty',
+  i=>i.table.locations['liuchao.location.guiwang_dong']=i.table.locations['liuchao.location.gui_wang_dong'],
  ]) {const i=structuredClone(inputs);mutate(i);assert.ok(auditLocationLoot(i).errors.length);}
 });
 test('every configured drop really settles using each target stage catalog and canonical location', () => {

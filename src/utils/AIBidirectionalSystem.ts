@@ -1,3 +1,12 @@
+import {entityName} from '@/modules/scenarioMods/namedEntities';
+
+import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
+
+import {entityAliases} from '@/modules/scenarioMods/namedEntities';
+
+import {containsEntityLabel} from '@/modules/scenarioMods/namedEntities';
+import { closedSceneFacts, closedSceneNarrativeProblems } from '@/modules/sceneModule/host/narrate';
+import { hostNeeded } from '@/modules/sceneModule/host/controller';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { projectNamingPacket, namingInstructions } from '@/modules/scenarioMods/ledger/naming';
 import { backfillRelationshipIds, npcRecordPath, splitRecordPath, normalizeNpcRecordPath, resolveRelationshipId, newLocalCharacterId, runtimeEntityName, annotatePersonChanges } from '@/modules/scenarioMods/ledger/affinityIdentity';
@@ -730,6 +739,7 @@ class AIBidirectionalSystemClass {
     if (moduleOnly && !selected && guidance && /盘问|拉扯|逃奴/.test(userMessage)) return { text: guidance, mid_term_memory: '', tavern_commands: [], action_options: [], moduleReceipt: { id: generationId, path: 'local', text: guidance, promptChars: 0, foregroundMs: Date.now() - started } };
     const fresh = selected ? candidates.find(item => item.source === selected.source && item.eventId === selected.eventId
       && item.actionId === selected.actionId && item.contractHash === selected.contractHash) : undefined;
+    if(fresh && selected && Number.isFinite(selected.lineAffinityDelta))fresh.lineAffinityDelta=selected.lineAffinityDelta;
     if (moduleOnly && selected && !fresh) throw new Error('模块行动已失效，请重新选择当前行动。');
     const oldPlan = moduleOnly ? null : planLegacyNarrativePilot({ saveData, eventAction: selected,
       eventActionProvenance: options?.eventActionProvenance, playerActionText: userMessage, storage: { getItem: () => 'true' } });
@@ -753,7 +763,7 @@ class AIBidirectionalSystemClass {
       return { text, mid_term_memory: '', tavern_commands: [], action_options: [],
         moduleReceipt: { id: generationId, path: 'local', eventId: ending.sourceEventId, promptChars: 0, foregroundMs: Date.now() - started, text } };
     }
-    const card = stepScene((saveData as any).世界?.状态?.剧本模组, plan?.selection.eventId, plan?.selection.actionId);
+    const card = stepScene((saveData as any).世界?.状态?.剧本模组, plan?.selection.eventId || getScenarioFocusEvent((saveData as any).世界?.状态?.剧本模组)?.id, plan?.selection.actionId);
     const fixedBeat = preview?.progress.attempted && !ending && (!card?.fixedFacts?.length || card.forceFixed)
       ? fixedBeatNarrative(plan?.selection.eventId, plan?.selection.actionId) || (card?.forceFixed ? card.fallbackText : undefined) : undefined;
     if (fixedBeat) return { text: fixedBeat, mid_term_memory: '', tavern_commands: [], action_options: [],
@@ -805,14 +815,14 @@ class AIBidirectionalSystemClass {
     if (lootPreview?.receipt) (scene as any).搜刮回执 = lootPreview.receipt.drops;
     const playerLine = plan?.playerLine || userMessage;
     // 记忆单一来源：短期记忆（模块记忆摘录已在其中替换原文），每条只取末尾 600 字防止上下文膨胀。
-    const remembered = recentModuleMemory(saveData, 2).filter(entry => !/护佑其遗孀|护佑.*遗孤|奉岳帅之命/.test(entry)).map(entry => entry.length > 600 ? entry.slice(-600) : entry);
+    const remembered = recentModuleMemory(saveData, 2).filter(entry => !new RegExp("护佑其遗孀|护佑.*遗孤|奉"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"之命","").test(entry)).map(entry => entry.length > 600 ? entry.slice(-600) : entry);
     const instruction = (await getPrompt('moduleNarrativeSystem')).trim() || MODULE_NARRATIVE_SYSTEM_PROMPT;
     const wangZheDead = Boolean(runtime?.completedEventIds?.includes('lcq.event.s02_02') || (/^lcq\.stage_/.test(String(runtime?.modId || '')) && Number(String(runtime.modId).match(/stage_(\d+)/)?.[1]) > 2));
-    const absentCast = [...departedPresentNames(runtime).filter(name => !card?.cast?.present?.includes(name) && !card?.cast?.exit?.some(person => person.name === name)), ...(/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime?.modId || '')) ? ['孟非卿', '孟老大'] : [])];
+    const absentCast = [...departedPresentNames(runtime).filter(name => !card?.cast?.present?.includes(name) && !card?.cast?.exit?.some(person => person.name === name)), ...(/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime?.modId || '')) ? [...entityAliases("character","liuchao.character.meng_fei_qing"), '孟老大'] : [])];
     const nanhuang = /^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime?.modId || ''));
     const iceGuPressure = nanhuang ? '本轮不主动描写冰蛊、寒意或南荒之约；这些只在指定的身体信号步骤由固定文本显示。不得沿历史摘录复写冰蛊，更不得推断发作时间、寿命或致命期限。' : '';
-    if (card?.cast?.present && !card.cast.present.includes('阁罗') && ['lcq.event.regroup_caravan_envoy', 'lcq.event.weapon_deal_with_geluo'].includes(String(eventId))) absentCast.push('阁罗');
-    const requiredCast = card?.cast?.enter?.filter(name => !/[（(]/.test(name)) || (eventId === 'lcq.event.s04_07' ? ['樨夫人', '易勇'] : []);
+    if (card?.cast?.present && !containsEntityLabel(card.cast.present,"enemy","lcq.enemy.ge_luo") && ['lcq.event.regroup_caravan_envoy', 'lcq.event.weapon_deal_with_geluo'].includes(String(eventId))) absentCast.push(...entityAliases("enemy","lcq.enemy.ge_luo"));
+    const requiredCast = card?.cast?.enter?.filter(name => !/[（(]/.test(name)) || (eventId === 'lcq.event.s04_07' ? [...entityAliases("character","canon.character.15b71fd1c8"), ...entityAliases("character","lcq.character.nanhuang_yiyong")] : []);
     let auditCorrections: string[] = [];
     try { const active = useCharacterStore().rootState.当前激活存档;
       if (active?.角色ID && active?.存档槽位) auditCorrections = readAuditLog(localStorage).filter(entry => entry.status === 'accepted' && entry.slotKey === `${active.角色ID}:${active.存档槽位}` && entry.modId === runtime?.modId).slice(-1).flatMap(entry => entry.findings.filter(f => ['voice_drift', 'state_mismatch'].includes(f.category)).map(f => f.issue));
@@ -823,9 +833,10 @@ class AIBidirectionalSystemClass {
     const narrativeRuntime = (sceneSave as any).世界?.状态?.剧本模组 || runtime;
     const reveal = xiaoziDisclosure(narrativeRuntime || {});
     const systemInstruction = instruction
+      + (closedSceneFacts(saveData).length ? '\n已收束交锋事实：' + closedSceneFacts(saveData).join('；') : '')
       + '\n黑魔海是与鬼王峒勾结的宗派，不是海域、凶地、海底遗迹或被封印的物体。苏荔是花苗族长，不是碧鲮族长，不是小紫的母亲。血虎由易虎改造，不以武二郎的虎斑作亲缘或身份线索；不编造死老头遗物及其传承。'
       + (eventId === 'lcq.event.ningyu_regicide_offer' ? '\n本拍先由凝羽说出西门庆，主角听到后才能反应；不得让主角抢先知道或说出这个名字，不编造天竺往事。' : '')
-      + '\n玩家主角姓名：' + String(runtime?.canon?.characters?.find((character: any) => character.isProtagonist || character.id === 'liuchao.character.cheng_zongyang')?.name || (saveData as any).角色?.身份?.名字 || '程宗扬') + '。第二人称你指这位主角；不得给主角另起姓名或化名。'
+      + '\n玩家主角姓名：' + String(runtime?.canon?.characters?.find((character: any) => character.isProtagonist || character.id === 'liuchao.character.cheng_zongyang')?.name || (saveData as any).角色?.身份?.名字 || entityName("character","liuchao.character.cheng_zongyang")) + '。第二人称你指这位主角；不得给主角另起姓名或化名。'
       + '\n出场者（包括不具名配角）全部为18岁以上成年人。缺年龄不猜年龄，不使用十五六岁、少年儿童等未成年年龄描写。present/presentActors是本步骤允许在场的人物，不要求逐一点名；只有明确列出的必须出场者才须实际参与，苏荔是花苗族长，云苍峰是人名；不得编造其他有名NPC、官职或门派。外貌及种族只按材料，描写明确记载的可见特征，不补未知身体构造，不在正文复述排除性约束。'
       + '\n已故/离场/尚未登场名单（只能提及已有历史，不得作为当前活人在场）：' + JSON.stringify(absentCast)
       + (requiredCast.length ? '\n必须实际在场并参与本步骤（不能写成未现身或只在回忆中）：' + requiredCast.join('、') : '')
@@ -839,7 +850,7 @@ class AIBidirectionalSystemClass {
         + (reveal.father ? '小紫父系已确证。' : reveal.suspectedFather ? '程宗扬只怀疑她是岳帅遗腹女，不能写成确证。' : '小紫父系尚未揭露，不得猜测。')
         + '毒宗名号按121章书信、122章对白开放；小紫师承未核，不随名号公开，不能写唯一传人。岳帅为男性，名岳鹏举；不是女性，没有丈夫。孟非卿/孟老大不在队伍里。易虎失踪后不能当普通活人使用，血虎是被炼成的怪物。阿葭死后不另造同名伴娘；苏荔外貌按角色材料。' : '')
       + (String(eventId) === 'lcq.event.ningyu_regicide_offer' ? '\n第32章既定条件：凝羽要除掉苏妲己，因保护她的誓言，要求出手时连自己一起杀；不得改为姓周的将军，也不得提及尚未登场的苏荔。' : '')
-      + (nanhuang && /蛇彝村|蛇彝领地/.test(String((scene as any).location || '')) ? '\n蛇彝村已是空村，没有活村民、老彝婆或斥候；搜查只观察现场遗留，不编造活蛇祖或主角被咬伤。' : '')
+      + (nanhuang && new RegExp("(?:"+entityNamePattern("location","lcq.location.sheyi_village")+")"+"|蛇彝领地","").test(String((scene as any).location || '')) ? '\n蛇彝村已是空村，没有活村民、老彝婆或斥候；搜查只观察现场遗留，不编造活蛇祖或主角被咬伤。' : '')
       + (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') ? '\n乐明珠尚未使用“大笨瓜”称呼主角，不能借用小紫口头禅。' : '')
       + (plan && !card?.fixedFacts?.length && !['lcq.event.wuerlang_joins', 'lcq.event.s03b_yinzhu_xiongerpu'].includes(String(eventId)) ? '\n作者步骤限定（不复述到正文）：' + plan.selection.actionText : '')
       + '\n物品只有本地回执能够写入背包；清单外物品只可看、端详，不带走。搜刮时只能描写搜刮回执已掷出的结果，不加奖励。'
@@ -870,12 +881,14 @@ class AIBidirectionalSystemClass {
         const text = endingText ? endingBridge(raw) : readModuleNarrative(raw);
         if (!endingText) {
           validateModuleCastNarrative(text, absentCast, remembered, requiredCast);
+          const sceneConflicts = closedSceneNarrativeProblems(saveData,text);
+          if(sceneConflicts.length) throw new ModuleNarrativeGuardError(sceneConflicts.join('；'));
           ledgerFindings.push(...genderShadowFindings(text, (scene as any).presentActors || [], eventId, attemptNumber));
           if (/^lcq\.stage_/.test(String(runtime?.modId || ''))) validateQingyuNarrativeFacts(text, eventId);
         }
         if (lootPreview?.receipt) validateLootNarrative(text, lootPreview.receipt, narrativeRuntime.canon.items || []);
-        if (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') && /大笨瓜/.test(text) && /乐明珠[^。！？\n]{0,35}大笨瓜/.test(text)) throw new ModuleNarrativeGuardError('声线时序冲突：乐明珠尚未使用大笨瓜称呼');
-        if (!endingText && nanhuang) validateStepSceneNarrative(text, card, scene as any, remembered);
+        if (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') && /大笨瓜/.test(text) && new RegExp("(?:"+entityNamePattern("character","liuchao.character.le_mingzhu")+")"+"[^。！？\\n]{0,35}大笨瓜","").test(text)) throw new ModuleNarrativeGuardError('声线时序冲突：乐明珠尚未使用大笨瓜称呼');
+        if (!endingText && (nanhuang || eventId==='lcq.event.ningyu_regicide_offer')) validateStepSceneNarrative(text, plan?card:card?{...card,factChecks:[]}:undefined, scene as any, remembered);
         if (!endingText && nanhuang) {
           const known = introducedScenarioCharacterNames(saveData);
           for (const name of card?.cast?.present || []) known.add(name.replace(/[（(].*$/, ''));
@@ -883,10 +896,10 @@ class AIBidirectionalSystemClass {
           if (namedGuard.conflicts.length) throw new ModuleNarrativeGuardError(namedGuard.conflicts.join('；'));
         }
         if (!endingText) validateNanhuangCanonNarrative(text, String(runtime?.modId || ''), String((scene as any).location || ''), narrativeRuntime?.completedEventIds || [], narrativeRuntime);
-        if (!endingText && nanhuang && !/冰蛊|解蛊|南荒之约|三个月/.test(userMessage)
-          && /冰蛊|三个月|南荒之约/.test(text)) throw new ModuleNarrativeGuardError('本轮不添加冰蛊或南荒之约的重复提醒，只演当前动作');
+        if (!endingText && nanhuang && !new RegExp("(?:"+entityNamePattern("ending","lcq.ending.death.ajiman_bond")+")"+"|解蛊|南荒之约|三个月","").test(userMessage)
+          && new RegExp("(?:"+entityNamePattern("ending","lcq.ending.death.ajiman_bond")+")"+"|三个月|南荒之约","").test(text)) throw new ModuleNarrativeGuardError('本轮不添加冰蛊或南荒之约的重复提醒，只演当前动作');
         if (!endingText && eventId) validateModuleSettlementNarrative(text, eventId, Boolean(preview?.progress.completed));
-        if (!endingText && wangZheDead && /王哲[^。！？\n]{0,40}(?:复活|活着|生还|伸出|伸出来|睁眼|醒来|站起|走出|开口)|焦土[^。！？\n]{0,25}(?:手|王哲)[^。！？\n]{0,15}伸/.test(text)) throw new Error('正典冲突：王哲已死，不得复活');
+        if (!endingText && wangZheDead && new RegExp("(?:"+entityNamePattern("character","lcq.character.wang_zhe")+")"+"[^。！？\\n]{0,40}(?:复活|活着|生还|伸出|伸出来|睁眼|醒来|站起|走出|开口)|焦土[^。！？\\n]{0,25}(?:手|"+"(?:"+entityNamePattern("character","lcq.character.wang_zhe")+")"+")[^。！？\\n]{0,15}伸","").test(text)) throw new Error('正典冲突：王哲已死，不得复活');
         // 道具正文不授予物品；实际背包变更在本地回执/指令权限入口校验。
         const check = compiled && !endingText ? validateLegacyVisibleNarrative(text, compiled.packet, { partial: true, userInput: playerLine, storyPrompt: compiled.storyPrompt, allowItemObservation: true }) : { valid: true, issues: [] };
         if (!endingText && moduleOnly) assertPlayerAgency(text, userMessage, compiled?.packet.present || []);
@@ -1166,6 +1179,8 @@ class AIBidirectionalSystemClass {
     const uiStore = useUIStore();
     const actionOptionsEnabled = this.isActionOptionsEnabled(uiStore);
     const shouldAbort = () => options?.shouldAbort?.() ?? false;
+    const routeSave = gameStateStore.toSaveData();
+    if (routeSave && hostNeeded(routeSave, options?.eventAction)) throw new Error('当前交锋须经场面预览与确认，不能由普通叙事结算');
 
     // 检查AI服务可用性（酒馆或自定义API）
     if (!tavernHelper) {
@@ -2960,7 +2975,7 @@ ${step1Text}
     // 每关首次已结算动作保留一个固定身体信号，避免冰蛊压力整关被写手省掉；不新增致命期限。
     if (response.moduleReceipt && eventProgress?.attempted && eventProgress.outcome === 'success'
       && ['lcq.event.s03b_snake_flower_bridge_01', 'lcq.event.s04_02', 'lcq.event.s04b_lingfei_baiyi_crisis_01'].includes(eventProgress.eventId || '')
-      && !/冰蛊|阴寒/.test(textContent)) {
+      && !new RegExp("(?:"+entityNamePattern("ending","lcq.ending.death.ajiman_bond")+")"+"|阴寒","").test(textContent)) {
       textContent += '\n\n你腹中忽然掠过一阵阴寒，冰蛊仍未解除。你压下寒意，想起南荒之约还未完成。';
       midTermContent = textContent;
     }

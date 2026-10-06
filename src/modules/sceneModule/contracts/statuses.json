@@ -1,0 +1,1156 @@
+[
+  {
+    "id": "wound.external.shoulder",
+    "label": "肩伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "肩头被斧锋带到",
+    "upgradesTo": "wound.external.heavy",
+    "afterScene": {
+      "minutes": 10080
+    },
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "肩部外伤，伤口在混战里裂开"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 10080
+      },
+      {
+        "kind": "rest"
+      }
+    ]
+  },
+  {
+    "id": "wound.external.back",
+    "label": "背伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "背后被铁斧拍中或撕开",
+    "upgradesTo": "wound.external.heavy",
+    "afterScene": {
+      "minutes": 10080
+    },
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "背部外伤，止得住血但难愈合"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 10080
+      },
+      {
+        "kind": "rest"
+      }
+    ]
+  },
+  {
+    "id": "wound.external.thigh",
+    "label": "腿伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "大腿被咬伤",
+    "upgradesTo": "wound.external.heavy",
+    "afterScene": {
+      "minutes": 10080
+    },
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "大腿咬伤"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 10080
+      },
+      {
+        "kind": "rest"
+      }
+    ]
+  },
+  {
+    "id": "wound.external.right_arm",
+    "label": "右臂伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "右臂被剑刺穿衣袖，流血",
+    "upgradesTo": "wound.external.heavy",
+    "afterScene": {
+      "minutes": 10080
+    },
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "右臂剑伤，流血"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 10080
+      },
+      {
+        "kind": "rest"
+      }
+    ]
+  },
+  {
+    "id": "gear.blade_damaged",
+    "label": "刀损",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "长刀被铁斧砍坏，没办法再用",
+    "afterScene": {
+      "minutes": null
+    },
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "长刀被砍坏了好几处，已经没办法再用"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "repair"
+      }
+    ]
+  },
+  {
+    "id": "gear.blades_dulled",
+    "label": "双刀卷刃",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "两把钢刀都卷了刃，只能摆样子",
+    "afterScene": {
+      "minutes": null
+    },
+    "effects": [
+      {
+        "kind": "lockLever",
+        "elements": [
+          "twin_sabers"
+        ]
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "两把钢刀都卷了刃，只能摆样子"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "repair"
+      }
+    ]
+  },
+  {
+    "id": "wound.external.waist",
+    "label": "腰伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "F05 第63章",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "腰部受伤，转身和发力受限"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.wound.external.waist.resolved"
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "wound.external.chest",
+    "label": "胸伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "F04 第57章",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "胸口疼痛，呼吸和出力受影响"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.wound.external.chest.resolved"
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "wound.burn",
+    "label": "灼伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "F07 第80章；F11 第99章",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "皮肤灼伤，衣物摩擦牵动伤处"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.wound.burn.resolved"
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "wound.drowning",
+    "label": "呛水伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "F06 第74章",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "呛水后呼吸不畅"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.wound.drowning.resolved"
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "wound.cold",
+    "label": "阴寒余伤",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "F09 第84章；F14 第113–115章",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "阴寒入体，疲倦与寒战"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.wound.cold.resolved"
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "wound.exhaustion",
+    "label": "真气透支",
+    "aliases": [
+      "真气耗尽",
+      "真元耗尽",
+      "内力耗尽"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "连续强行运功、催动秘术或久战，真气耗尽。原著出处：F09 第84章；F12 第102章；F14 第113–115章。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "真气不足，继续运功吃力"
+      }
+    ],
+    "afterScene": {
+      "minutes": 1440
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 1440
+      }
+    ]
+  },
+  {
+    "id": "wound.blood_loss",
+    "label": "失血",
+    "aliases": [
+      "失血过多"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "大量出血，或流血未止又再受伤。原著出处：F11 第98–100章。",
+    "upgradesTo": "dying",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "失血导致头晕乏力"
+      }
+    ],
+    "afterScene": {
+      "minutes": 4320
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "heal"
+      },
+      {
+        "kind": "time",
+        "minutes": 4320
+      }
+    ]
+  },
+  {
+    "id": "wound.soul_aftershock",
+    "label": "噬魂余波",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "F12 第102–103章",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "短期神志恍惚，记忆细节难以连贯"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.wound.soul_aftershock.resolved"
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "wound.fright",
+    "label": "惊惧",
+    "tier": "general",
+    "cause": "story",
+    "kind": "debuff",
+    "source": "目睹或亲历惨烈、诡异的险境，心有余悸。原著出处：F06 第74章；F09 第84章。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "对刚经历的险境仍心有余悸"
+      }
+    ],
+    "afterScene": {
+      "minutes": 1440
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 1440
+      }
+    ]
+  },
+  {
+    "id": "yin.sha_arm",
+    "label": "阴煞噬臂（轻）",
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "第109章102–104、114段；第111章82段；第113章55段（W-48，人物状态 B类4.3）",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "appearance",
+        "text": "被阴煞噬过的手臂细了一圈，血管鼓起；化虎时肌肉可暂鼓，不算治愈。"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "轻档阴寒与血肉萎缩残留，短期近战出力受影响，仍可挥刀、撞人、化形及参战；不是龙爪所致废功。"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.yin.sha_arm.resolved"
+      }
+    ]
+  },
+  {
+    "id": "wound.severe",
+    "label": "重伤",
+    "aliases": [
+      "身受重伤",
+      "伤势沉重",
+      "伤势严重",
+      "重伤未愈"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "战斗、意外或刑伤；无法明确内外伤时使用。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -3
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -3
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "需静养，不宜强战"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "heal"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "upgradesTo": "dying"
+  },
+  {
+    "id": "weak.body",
+    "label": "虚弱",
+    "aliases": [
+      "身体虚弱",
+      "体力不支",
+      "气息衰弱",
+      "体虚"
+    ],
+    "tier": "general",
+    "cause": "story",
+    "kind": "debuff",
+    "source": "伤病初愈、失血、真气透支、精血耗损、久病或饥寒。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "体力不济"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 4320
+      }
+    ],
+    "afterScene": {
+      "minutes": 4320
+    }
+  },
+  {
+    "id": "wound.soul",
+    "label": "神魂受创",
+    "aliases": [
+      "神魂虚弱",
+      "魂魄虚弱",
+      "神魂不稳",
+      "魂魄受创",
+      "魂魄不稳",
+      "神魂受损"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "神魂攻击、摄魂噬魂、离魂或强行催动伤神秘术。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "神思恍惚，难以专注"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "heal"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "upgradesTo": "unconscious"
+  },
+  {
+    "id": "unconscious",
+    "label": "昏迷",
+    "aliases": [
+      "昏迷不醒",
+      "不省人事",
+      "失去意识",
+      "昏死",
+      "晕厥",
+      "被迷倒",
+      "迷药发作"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "重伤、中毒、头部受击、药物（迷药昏倒并入此条）或神魂受创加重。合规标记：不得用于把强迫情节做成可玩内容。",
+    "effects": [
+      {
+        "kind": "downed"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "无法行动或回应"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 720
+      },
+      {
+        "kind": "item",
+        "ref": "antidote"
+      }
+    ],
+    "afterScene": {
+      "minutes": 720
+    }
+  },
+  {
+    "id": "poisoned",
+    "label": "中毒",
+    "aliases": [
+      "身中剧毒",
+      "毒发",
+      "中了毒",
+      "毒伤"
+    ],
+    "tier": "general",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "毒针、毒药、毒虫或毒瘴；环境类毒也用它，在来源里写明。原本书「毒伤」（F01 第30章；F02 第37章）并入此条。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "毒性未解"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "antidote"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "upgradesTo": "dying"
+  },
+  {
+    "id": "dying",
+    "label": "濒死",
+    "aliases": [
+      "垂危",
+      "奄奄一息",
+      "命悬一线",
+      "生命垂危",
+      "油尽灯枯"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "重伤、剧毒或失血加重；救治回执解除时同步改挂重伤。",
+    "effects": [
+      {
+        "kind": "downed"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "不救治将死"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "heal"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    }
+  },
+  {
+    "id": "poison.cold",
+    "label": "寒毒",
+    "aliases": [
+      "寒毒发作",
+      "寒疾发作",
+      "寒毒侵体",
+      "寒毒加重"
+    ],
+    "tier": "book",
+    "cause": "story",
+    "kind": "debuff",
+    "source": "黑魔海一系慢性寒毒，区别于阴寒劲力余伤。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "身体冰冷战栗、虚弱"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.poison.cold.resolved"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    }
+  },
+  {
+    "id": "poison.cold.suppressed",
+    "label": "寒毒受压制",
+    "aliases": [
+      "寒毒暂稳",
+      "寒疾缓解"
+    ],
+    "tier": "book",
+    "cause": "story",
+    "kind": "debuff",
+    "source": "真阳或纯阳之力暂时压住寒毒，未根除。",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "寒毒暂被压住，未根除"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.poison.cold.suppressed.resolved"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "upgradesTo": "poison.cold"
+  },
+  {
+    "id": "wound.external",
+    "label": "外伤",
+    "aliases": [
+      "砍伤",
+      "刀伤",
+      "剑伤",
+      "割伤",
+      "皮外伤"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "刀剑砍刺或其他外力破开皮肉。砍伤、刀伤、剑伤都并入这一条，不另立 id。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 10080
+      },
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "heal"
+      }
+    ],
+    "afterScene": {
+      "minutes": 10080
+    },
+    "upgradesTo": "wound.external.heavy"
+  },
+  {
+    "id": "bleeding",
+    "label": "流血",
+    "aliases": [
+      "血流不止",
+      "伤口出血"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "开放伤口未止血：刀剑伤、箭伤、撕咬等。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "伤口仍在流血，久战体力下滑"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "hemostatic"
+      },
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 120
+      }
+    ],
+    "afterScene": {
+      "minutes": 120
+    },
+    "upgradesTo": "wound.blood_loss"
+  },
+  {
+    "id": "fracture",
+    "label": "骨折",
+    "aliases": [
+      "断骨",
+      "骨裂",
+      "筋断骨折",
+      "骨头断了"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "重击、摔落、挤压造成骨骼断裂或开裂。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "伤处不能吃力，需要固定静养"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "splint"
+      },
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 43200
+      }
+    ],
+    "afterScene": {
+      "minutes": 43200
+    }
+  },
+  {
+    "id": "dizzy",
+    "label": "晕眩",
+    "aliases": [
+      "眩晕",
+      "头晕目眩",
+      "天旋地转",
+      "眼冒金星"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "头部受击、震荡、剧烈旋转或气血骤失。",
+    "effects": [
+      {
+        "kind": "disadvantage",
+        "scope": "action"
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      }
+    ],
+    "durationBeats": 2,
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 30
+      },
+      {
+        "kind": "rest"
+      }
+    ],
+    "afterScene": {
+      "minutes": 30
+    }
+  },
+  {
+    "id": "drunk",
+    "label": "醉酒",
+    "aliases": [
+      "酒醉",
+      "喝醉",
+      "大醉",
+      "酩酊"
+    ],
+    "tier": "general",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "饮酒过量，判断与手脚协调下降。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "酒意上头，出手和判断都慢半拍"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 360
+      },
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "sober"
+      }
+    ],
+    "afterScene": {
+      "minutes": 360
+    },
+    "upgradesTo": "unconscious"
+  },
+  {
+    "id": "acupoint.sealed",
+    "label": "被点穴",
+    "aliases": [
+      "穴道被封",
+      "穴道被制",
+      "被封住穴道",
+      "被点了穴道"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "被人以指力或重手封住穴道，身体或功力受制。合规标记：不得用于把强迫情节做成可玩内容。",
+    "effects": [
+      {
+        "kind": "disadvantage",
+        "scope": "action"
+      },
+      {
+        "kind": "disadvantage",
+        "scope": "defense"
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "穴道受制，半身发僵、运不起真气"
+      }
+    ],
+    "durationBeats": 2,
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 120
+      },
+      {
+        "kind": "item",
+        "ref": "unseal"
+      }
+    ],
+    "afterScene": {
+      "minutes": 120
+    }
+  },
+  {
+    "id": "paralyzed",
+    "label": "麻痹",
+    "aliases": [
+      "肢体麻痹",
+      "身体麻痹",
+      "浑身发麻",
+      "半身麻木"
+    ],
+    "tier": "general",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "麻药、带麻性的毒（蛇毒、毒虫）或击中麻筋，肢体失去知觉。合规标记：不得用于把强迫情节做成可玩内容。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "antidote"
+      },
+      {
+        "kind": "time",
+        "minutes": 720
+      }
+    ],
+    "afterScene": {
+      "minutes": 720
+    }
+  },
+  {
+    "id": "qi.disordered",
+    "label": "内力紊乱",
+    "aliases": [
+      "真气紊乱",
+      "内息紊乱",
+      "真气乱窜"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "内力对撞、强行运功、冲关失败或经脉受震，真气运行错乱。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "真气走岔，运功受阻"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 4320
+      }
+    ],
+    "afterScene": {
+      "minutes": 4320
+    }
+  }
+]

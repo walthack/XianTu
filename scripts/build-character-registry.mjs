@@ -127,7 +127,7 @@ const byId = new Map();
 const canonOnly = [];
 const collisions = [];
 for (const c of cards) {
-  let id = nameToId.get(c.canonicalName);
+  let id = c.id || nameToId.get(c.canonicalName);
   if (!id) for (const a of (c.aliases || [])) { if (nameToId.get(a)) { id = nameToId.get(a); break; } }
   const stagePresence = !!id;
   if (!id) { id = slug(c.canonicalName); canonOnly.push(c.canonicalName); }
@@ -135,6 +135,7 @@ for (const c of cards) {
   const entry = {
     id,
     canonicalName: c.canonicalName,
+    ...(c.idAliases ? {idAliases:c.idAliases} : {}),
     aliases: uniq(c.aliases),
     gender: c.gender,
     ...(c.entityType ? { entityType: c.entityType } : {}),
@@ -144,6 +145,7 @@ for (const c of cards) {
     staticProfile: withVisualLayers(c),
     region: deriveRegion(c) || undefined,
     phaseIdentities: c.phaseIdentities || [],
+    ...(c.presenceWindow ? {presenceWindow:c.presenceWindow} : {}),
     ...(c.naming ? { naming: c.naming } : {}),
     review: c.review || undefined,
     embedText: buildEmbedText(c),

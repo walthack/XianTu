@@ -325,6 +325,14 @@
           <ChevronDown :size="16" />
         </button>
 
+        <div v-if="currentScene && sceneTestControls">
+          <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,1,sceneTestControls))">测试：固定骰1（验证输局）</button>
+          <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,20,sceneTestControls))">测试：固定骰20</button>
+          <button :disabled="isAIProcessing" @click="runSceneOperation((save,deps)=>setSceneTestDice(save,deps,null,sceneTestControls))">恢复随机</button>
+        </div>
+        <SceneEncounterCard v-if="currentScene" :scene="currentScene" :brief="currentSceneBrief" :busy="isAIProcessing" :crystal="currentCrystalAvailable"
+          @confirm="runSceneOperation(confirmSceneAction)" @choice="runSceneOperation(confirmSceneChoice)"
+          @crystal="mode => runSceneOperation((save,deps) => useNicheCrystal(save,mode,deps))" @edit="runSceneOperation(editSceneAction)" @finish="runSceneOperation(finishScene)" />
         <div class="input-container">
           <!-- 图片预览区域 -->
           <div v-if="selectedImages.length > 0" class="image-preview-container">
@@ -349,7 +357,7 @@
               <h3>{{ scenarioGameOver.title }}</h3>
             </div>
             <p class="game-over-hint">这条路走到了尽头。本局结局如下。</p>
-            <p v-for="(fact, index) in scenarioGameOver.facts" :key="index" class="game-over-hint">{{ fact }}</p>
+            <p v-for="(fact, index) in scenarioEndingParagraphs" :key="index" class="game-over-hint">{{ fact }}</p>
             <div class="game-over-acts">
               <button v-if="canRollback" @click="rollbackToLastConversation" class="go-primary">回到上一轮</button>
               <button @click="router.push('/')" class="go-ghost">返回角色选择</button>
@@ -497,6 +505,12 @@
 </template>
 
 <script setup lang="ts">
+import {canBreakthrough} from '@/modules/scenarioMods/levelProgression';
+import { canUseNicheCrystal, useNicheCrystal } from '@/modules/sceneModule/host/loot';
+import SceneEncounterCard from './SceneEncounterCard.vue';
+import { activeScene } from '@/modules/sceneModule/host/ext';
+import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSceneChoice, editSceneAction, finishScene, setSceneTestDice, type HostDeps } from '@/modules/sceneModule/host/controller';
+import { fixedEndingNarrative } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { resolveEndingImage } from '@/assets/endings';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
@@ -635,6 +649,10 @@ const persistJudgementSave = async (save: any) => {
 };
 // 🔥 使用全局状态替代组件状态
 const isAIProcessing = computed(() => uiStore.isAIProcessing);
+const sceneTestControls = typeof window!=='undefined' && window.location.port==='8097' && new URLSearchParams(window.location.search).get('sceneTest')==='1';
+const currentScene = computed(() => activeScene(gameStateStore.toSaveData()));
+const currentCrystalAvailable = computed(() => canUseNicheCrystal(gameStateStore.toSaveData()));
+const currentSceneBrief = computed(() => sceneBrief(gameStateStore.toSaveData()!));
 const streamingContent = computed(() => uiStore.streamingContent);
 const currentGenerationId = computed(() => uiStore.currentGenerationId);
 const streamingCharCount = computed(() => uiStore.streamingContent.length);
@@ -881,6 +899,10 @@ const scenarioGameOver = computed<{ endingId: string; title: string; facts: stri
   const over = runtime?.gameOver;
   return over?.endingId ? over : null;
 });
+const scenarioEndingParagraphs = computed(() => {
+  const over = scenarioGameOver.value;
+  return over ? (fixedEndingNarrative(over)?.split(/\n\s*\n/).filter(Boolean) || over.facts) : [];
+});
 const scenarioEndingImage = computed(() => {
   const over = (gameStateStore.worldState as any)?.剧本模组?.gameOver;
   if (!over?.endingId) return undefined;
@@ -911,7 +933,7 @@ const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
   !qingyuOpeningDemo.value || option.source !== 'event_engine'
 );
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
-  if (isAIProcessing.value) return [];
+  if (isAIProcessing.value || currentScene.value) return [];
   const live = gameStateStore.toSaveData();
   const save = live ? advanceScenarioRuntime(live).saveData : null;
   if (!save || scenarioGameOver.value) return [];
@@ -930,11 +952,11 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
   ];
 });
 // 重要桥段推进卡片（剧情策划裁定 A）：卡片动作不再出现在正文末尾的小按钮里，只能点卡片推进。
-const keyBeatCard = computed(() => getActiveKeyBeatCard(gameStateStore.toSaveData()));
+const keyBeatCard = computed(() => currentScene.value ? null : getActiveKeyBeatCard(gameStateStore.toSaveData()));
 const keyBeatHighlight = ref(false);
 let keyBeatConfirmedByCard = false;
 // 锁定时只显示固定选项（见下方分支区块）；未激活的锁选项（如决定步之前的致命选项）不提前显示。
-const engineButtonOptions = computed(() => playtestFinished.value || branchDecision.value ? [] :
+const engineButtonOptions = computed(() => currentScene.value || playtestFinished.value || branchDecision.value ? [] :
   scenarioEngineActionOptions.value.filter(option => !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
     && !isDormantLockedOption(option as unknown as BranchDecisionCandidate)));
 /** 选项填入输入框时使用的原句（与 selectScenarioEngineAction 一致）。 */
@@ -967,7 +989,7 @@ const openEventsPanel = () => {
 
 const departToNextStage = async () => {
   const offer = stageDepartureOffer.value;
-  if (!offer || stageDeparturePending.value || isAIProcessing.value) return;
+  if (!offer || stageDeparturePending.value || isAIProcessing.value || currentScene.value) return;
   stageDeparturePending.value = true;
   try {
     const result = await gameStateStore.transitionToNextStage(offer.nextStageId);
@@ -1258,6 +1280,7 @@ const canRollback = computed(() => {
 
 // 回滚到上次对话
 const rollbackToLastConversation = async () => {
+  if (isAIProcessing.value) return;
   if (!canRollback.value) {
     toast.warning('没有可回滚的存档');
     return;
@@ -1358,6 +1381,7 @@ const rollbackToSnapshot = async (snapshotId: string) => {
 
 // 回退到最后一条快照
 const rollbackToLastSnapshot = async () => {
+  if (isAIProcessing.value) return;
   if (snapshots.value.length === 0) return;
   const lastSnapshot = snapshots.value[snapshots.value.length - 1];
   await rollbackToSnapshot(lastSnapshot.id);
@@ -1368,7 +1392,7 @@ const rollbackToLastSnapshot = async () => {
 const flatActions = computed(() => {
   const actions: ActionItem[] = [];
   actionCategories.value.forEach(category => {
-    actions.push(...category.actions);
+    actions.push(...category.actions.filter(action=>action.name!=='冲关'||canBreakthrough(gameStateStore.toSaveData())));
   });
   return actions;
 });
@@ -1391,6 +1415,9 @@ const actionCategories = ref<ActionCategory[]>([
     name: '修炼',
     icon: '',
     actions: [
+      {
+        name: '冲关',icon:'⚡',type:'cultivation',description:'后期进度满后冲击下一级；未满或达到本关练功上限时不升级。',timeRequired:true
+      },
       {
         name: '基础修炼',
         icon: '⚡',
@@ -1797,7 +1824,44 @@ const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   });
 };
 
+async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promise<unknown>) {
+  if (isAIProcessing.value || !hasActiveCharacter.value) return;
+  const save = gameStateStore.toSaveData();
+  if (!save) return;
+  const reset = aiResetToken;
+  const character = characterStore.rootState.当前激活存档?.角色ID;
+  uiStore.setAIProcessing(true);
+  persistAIProcessingState();
+  const aborted = () => aiResetToken !== reset || !uiStore.isAIProcessing || characterStore.rootState.当前激活存档?.角色ID !== character;
+  try {
+    const { runGameModelModule } = await import('@/services/gameModelModules');
+    const ask = (moduleId: string) => async (request: {system:string;user:string}) => {
+      if (aborted()) throw new Error('scene_host_aborted');
+      const result = await runGameModelModule(moduleId, { system: request.system, input: request.user, generationId: `scene_${moduleId}_${Date.now()}` });
+      if (aborted()) throw new Error('scene_host_aborted');
+      return result.raw;
+    };
+    await operation(save, {
+      persist: async next => { if (aborted()) throw new Error('scene_host_aborted'); await persistJudgementSave(next); },
+      askIntent: ask('intent'), askNarrative: ask('narrative'), aborted,
+    });
+  } catch (error) {
+    if (!aborted()) toast.error(`场面处理未完成：${String((error as Error).message)}。已结算的骰点保留。`);
+  } finally {
+    if (aiResetToken === reset) { uiStore.setAIProcessing(false); persistAIProcessingState(); }
+  }
+}
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
+  const sceneSave = gameStateStore.toSaveData();
+  if (sceneSave && hostNeeded(sceneSave, selectedScenarioEngineAction.value as any)) {
+    const text = composeJudgementAction(inputText.value, actionQueue.getActionPrompt());
+    if (!text) return;
+    const selected = selectedScenarioEngineAction.value as any;
+    await runSceneOperation((save, deps) => submitSceneInput(save, text, deps, selected));
+    inputText.value = ''; selectedScenarioEngineAction.value = null;
+    return;
+  }
+
   // 本次发送是否由点推进卡片发起；先取出再清零，任何提前返回都不会把确认带到下一次发送。
   const confirmedByCard = keyBeatConfirmedByCard;
   keyBeatConfirmedByCard = false;
@@ -1944,6 +2008,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
           return;
         }
+        if(fresh && 'lineAffinityDelta' in intent.selection && Number.isFinite(intent.selection.lineAffinityDelta)) (fresh as any).lineAffinityDelta=intent.selection.lineAffinityDelta;
         routedIntentAction = (fresh || intent.selection) as ScenarioEngineActionSelection;
       }
       continueAfterIntent = true;

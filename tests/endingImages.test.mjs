@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { loadTs } from './loadTs.mjs';
 const { endingPresentation } = await loadTs('../src/modules/scenarioMods/endingPresentation.ts');
-const { BATTLE_ROUT_ENDINGS } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+const { BATTLE_LOSS_ENDINGS } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
 const table = JSON.parse(await readFile(new URL('../mod-kit/ending-images.qingyu.json', import.meta.url), 'utf8'));
 test('all eight endings declare image or explicit null; assigned JPEGs are real bundled assets', async () => {
   assert.deepEqual(Object.keys(table.images).sort(), Array.from({length:8}, (_,i)=>`E0${i+1}`));
@@ -24,6 +24,6 @@ test('shared paolao id chooses E01/E03 by event; E07 uses v7 or approved v6 and 
   assert.match(endingPresentation({endingId:'lcq.ending.death.dragon_well',sourceEventId:'lcq.event.ghost_king_swallowed'}).image, /-v[67]\.jpg$/);
   assert.deepEqual(endingPresentation(undefined), {image:null});
   assert.deepEqual(endingPresentation({endingId:'unknown',sourceEventId:'unknown'}), {image:null});
-  assert.equal(BATTLE_ROUT_ENDINGS[1].presentation.image, table.images.E07);
-  assert.equal(BATTLE_ROUT_ENDINGS[0].presentation.image, null);
+  assert.equal(BATTLE_LOSS_ENDINGS[1].presentation.image, table.images.E07);
+  assert.equal(BATTLE_LOSS_ENDINGS[0].presentation.image, null);
 });

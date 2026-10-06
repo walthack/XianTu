@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "id": "combat.f01.iron_bridge",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.iron_bridge_ambush",
+      "actionId": "break_iron_bridge_ambush",
+      "required": true,
+      "ambushAfterStall": 1
+    }
+  },
+  "objective": {
+    "text": "在铁索桥撑过三回合",
+    "win": {
+      "kind": "beatAtLeast",
+      "beat": 4
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "assassins",
+      "side": "opposed",
+      "ref": "lcq.enemy.f01_axeman",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "勉强抵抗",
+            "倒下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "倒下",
+            "ceiling": 3,
+            "preserveOnWin": true
+          }
+        }
+      ],
+      "instanceId": "combat.f01.iron_bridge.assassins",
+      "enemyId": "lcq.enemy.f01_axeman"
+    },
+    {
+      "id": "archers",
+      "side": "opposed",
+      "ref": "lcq.enemy.f01_archer",
+      "enemyId": "lcq.enemy.f01_archer",
+      "group": {
+        "id": "f01.archers",
+        "label": "{{ref:lcq.enemy.f01_archer}}"
+      }
+    },
+    {
+      "id": "swordsman",
+      "side": "opposed",
+      "ref": "lcq.enemy.f01_swordsman",
+      "enemyId": "lcq.enemy.f01_swordsman",
+      "absent": true
+    }
+  ],
+  "goals": [
+    {
+      "id": "attack",
+      "label": "攻击对手",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 12
+    },
+    {
+      "id": "defend",
+      "label": "防守撑住",
+      "type": "support",
+      "baseDifficulty": 12
+    },
+    {
+      "id": "yield_guard",
+      "label": "停止抵抗、承受攻击",
+      "type": "support",
+      "baseDifficulty": 12,
+      "aliases": [
+        "张开双手不躲",
+        "不躲也不挡",
+        "不招架",
+        "不还手",
+        "放下刀",
+        "硬吃他们的刀"
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "assassins_attack",
+      "party": "assassins",
+      "label": "{{ref:lcq.enemy.f01_axeman}}正面攻击",
+      "target": "player",
+      "attack": {
+        "dc": 3
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    },
+    {
+      "id": "archers_attack",
+      "party": "archers",
+      "label": "{{ref:lcq.enemy.f01_archer}}射向桥面",
+      "target": "player",
+      "attack": {
+        "dc": 5
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "ending",
+      "endingId": "lcq.ending.fail.combat"
+    }
+  },
+  "closing": {
+    "win": {
+      "rewards": [],
+      "text": "你撑过三回合，黑纱女子出手，战斗结束。"
+    },
+    "lose": {
+      "text": "游戏结束",
+      "rewards": []
+    }
+  },
+  "narration": {
+    "requiredFacts": [
+      "开战前：敌方六名刺客；只有主角能够行动。",
+      "{{ref:liuchao.character.wu_er_lang}}中毒，{{ref:liuchao.character.ning_yu}}正为其行功，两人都无法行动。",
+      "剑手只盯失去行动能力的{{ref:liuchao.character.wu_er_lang}}，不与主角正面交手；主角正面对付斧手与弓手。"
+    ]
+  },
+  "settings": {},
+  "clock": {
+    "beats": 3,
+    "onTimeout": {
+      "type": "close",
+      "as": "win"
+    }
+  },
+  "levelContext": {
+    "chapter": 30
+  }
+}

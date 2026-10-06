@@ -88,6 +88,7 @@
 </template>
 
 <script setup lang="ts">
+import {LEVELS} from '@/utils/realmUtils';
 import { ref, computed } from 'vue';
 import { ClipboardList, RefreshCw, Info, List, Play, CheckCircle2 } from 'lucide-vue-next';
 import { useGameStateStore } from '@/stores/gameStateStore';
@@ -117,28 +118,7 @@ const canGenerate = computed(() => !!playerSectInfo.value?.宗门名称 && !!gam
 
 const hasTasks = computed(() => getSectTasks().length > 0);
 
-const REALM_ORDER_HINTS: Array<{ token: string; rank: number }> = [
-  { token: '凡人', rank: 0 },
-  { token: '练气', rank: 1 },
-  { token: '筑基', rank: 2 },
-  { token: '金丹', rank: 3 },
-  { token: '元婴', rank: 4 },
-  { token: '化神', rank: 5 },
-  { token: '炼虚', rank: 6 },
-  { token: '合体', rank: 7 },
-  { token: '大乘', rank: 8 },
-  { token: '渡劫', rank: 9 },
-  { token: '真仙', rank: 10 },
-  { token: '金仙', rank: 11 },
-  { token: '太乙', rank: 12 },
-  { token: '大罗', rank: 13 },
-  { token: '淬体', rank: 1 },
-  { token: '凝气', rank: 2 },
-  { token: '通玄', rank: 3 },
-  { token: '化真', rank: 4 },
-  { token: '破虚', rank: 5 },
-  { token: '登天', rank: 6 },
-];
+const REALM_ORDER_HINTS = LEVELS.map(e=>({token:e.name,rank:e.level}));
 
 const getRealmOrderRank = (realmName: string): number => {
   const raw = String(realmName || '').trim();
@@ -440,7 +420,7 @@ async function generateSectTasks() {
 - 【境界匹配约束（重要）】：任务难度和敌人/目标强度必须与玩家当前境界相适应
   - 玩家当前境界：${playerRealm}
   - 低难度任务应是该境界能轻松完成的，高难度任务需努力才能完成，极难度是极限挑战
-  - 禁止生成远超玩家当前境界能力范围的任务（如练气期玩家不应承接元婴级任务）
+  - 禁止生成远超玩家当前境界能力范围的任务（按原著级表与任务数据判断）
 - 【地图关联约束（重要）】：
   - 优先使用“已知二级地点”作为任务发生地（巡逻、护送、采集、除魔等都应落在这些地点或其周边）
   - 如确需新地点，必须与“已知一级地点（大陆/灵境）”建立明确隶属关系，并在任务描述中写清层级

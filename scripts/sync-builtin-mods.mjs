@@ -52,7 +52,7 @@ export async function syncBuiltinModData({ generatedRoot = gen, outputDir = outD
   await assertCanonAuthorityOverlaysApplied(appliedAuthority, authorityCatalog);
   const version = hash.digest('hex').slice(0, 12);
   // 先完成所有JSON、人工overlay、重复ID和全目录覆盖检查；任何漂移均不触碰现有内置关。
-  if (existsSync(outputDir)) await rm(outputDir, { recursive: true });
+  // Preserve files; overwrite only the fully validated prepared stages.
   await mkdir(outputDir, { recursive: true });
   for (const { id, pretty } of prepared) await writeFile(join(outputDir, `${id}.json`), pretty);
   await writeFile(join(outputDir, '..', 'manifest.json'), `${JSON.stringify({ version, ids }, null, 2)}\n`);

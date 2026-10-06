@@ -40,7 +40,9 @@ const TEST_PROFILE = {
 async function withStubbedGenerate(aiService, impl) {
   const { useAPIManagementStore } = await loadPipeline('../src/stores/apiManagementStore.ts');
   const api = useAPIManagementStore(); const originalApiConfigs = [...api.apiConfigs];
+  const originalApiAssignments = api.apiAssignments.map(a => ({ ...a }));
   api.apiConfigs = [{ id: 'fixture-minimax', name: 'fixture', provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: 'fixture-not-a-real-key', model: 'MiniMax-M3', enabled: true }];
+  api.assignAPI('main', 'fixture-minimax');
   const originalCheck = aiService.checkAvailability;
   const originalGenerate = aiService.generate;
   const originalGenerateRaw = aiService.generateRaw;
@@ -52,6 +54,7 @@ async function withStubbedGenerate(aiService, impl) {
   };
   return () => {
     api.apiConfigs = originalApiConfigs;
+    api.apiAssignments = originalApiAssignments;
     aiService.checkAvailability = originalCheck;
     aiService.generate = originalGenerate;
     aiService.generateRaw = originalGenerateRaw;

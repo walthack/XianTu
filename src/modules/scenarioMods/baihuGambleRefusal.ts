@@ -1,3 +1,5 @@
+
+import {entityNamePattern} from './namedEntities';
 import type { SaveData } from '@/types/game';
 
 import { getScenarioFocusEvent } from './runtime';
@@ -31,8 +33,8 @@ const RESPONSE_PHRASES: Record<BaihuGambleRefusalResponseId, readonly string[]> 
 };
 
 const PLAYER_SPEECH_CUE = /(?:我说|摇摇头|摇头|朝.{0,8}(?:说|道|摇)|答道|回答|开口)/;
-const REPORTED_SPEECH = /(?:她说|他说|凝羽说|苏妲己说|别人说|有人说|他们说|他问|她问)/;
-const ALLOWED_PHRASE_PREFIX = /^(?:我|我说|夫人|苏妲己|妲己|馆主|这|这场|这个|那|那种)?$/;
+const REPORTED_SPEECH = new RegExp("(?:她说|他说|"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"说|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"说|别人说|有人说|他们说|他问|她问)","");
+const ALLOWED_PHRASE_PREFIX = new RegExp("^(?:我|我说|夫人|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"|妲己|馆主|这|这场|这个|那|那种)?$","");
 const GAMBLE_PROPOSED_PREP = 'ningyu_gamble_debut_seen';
 
 export type BaihuGambleRefusalPhase = 'capture_ordered' | 'detained' | 'released';
@@ -293,7 +295,7 @@ export function isExplicitRefuseGambleText(text: string): boolean {
   if (hasNonAffirmativeIntentFrame(raw)) return false;
   if (REPORTED_SPEECH.test(raw) && playerOwnedQuoteBodies(raw).length === 0) return false;
   const compact = raw.replace(/\s+/g, '');
-  if (/^(凝羽|苏妲己|她|他|他们|别人)/.test(compact) && playerOwnedQuoteBodies(raw).length === 0) return false;
+  if (new RegExp("^("+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"|她|他|他们|别人)","").test(compact) && playerOwnedQuoteBodies(raw).length === 0) return false;
   const normalized = normalizeIntent(raw);
   if (!normalized || normalized.includes('不得不赌') || normalized.includes('不能不赌')) return false;
   return matchesAffirmativePhrase(raw, REFUSE_PHRASES);

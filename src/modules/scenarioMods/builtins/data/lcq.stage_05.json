@@ -479,9 +479,9 @@
     "factionRelationships": []
   },
   "content": {
+    "items": [],
     "skills": [],
-    "techniques": [],
-    "items": []
+    "techniques": []
   },
   "scenario": {
     "opening": {
@@ -789,6 +789,11 @@
               ]
             }
           ]
+        },
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.haishen_hall_merfolk",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
         }
       },
       {
@@ -858,6 +863,11 @@
               ]
             }
           ]
+        },
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.pull_harpoon_lemingzhu",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
         }
       },
       {
@@ -1355,6 +1365,11 @@
               ]
             }
           ]
+        },
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.ruins_ghost_warriors",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
         }
       },
       {
@@ -1426,6 +1441,11 @@
               ]
             }
           ]
+        },
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.wuerlang_slays_dagu",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
         }
       },
       {
@@ -1495,6 +1515,11 @@
               ]
             }
           ]
+        },
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.yiyang_repels_yinsha",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
         }
       },
       {

@@ -21,8 +21,13 @@ const steps = [
   ['归属投影 stage', 'node', ['scripts/project-affiliations-to-stages.mjs', '--apply']],
   ['同门/同族/同袍派生', 'node', ['scripts/derive-tongmen-edges.mjs', '--apply']],
   ['内置 mod 同步', 'node', ['scripts/sync-builtin-mods.mjs']],
+  ['统一实体索引重建', 'node', ['scripts/build-entity-index.mjs']],
+  ['道具技能功法总表校验', 'node', ['scripts/validate-entity-catalog.mjs']],
+  ['支线人物线引用校验', 'node', ['scripts/validate-quest-lines.mjs']],
   ['人工裁定执法', 'node', ['scripts/validate-canon-decisions.mjs']],
   ['主轴/存档契约校验', 'node', ['scripts/validate-axis-save-contract.mjs']],
+  ['人物时点级数引用校验', 'node', ['scripts/validate-character-levels.mjs']],
+  ['必经战胜率门槛', 'node', ['scripts/validate-required-combat-winrate.mjs']],
   ['地点 id 校验', 'node', ['scripts/validate-location-ids.mjs']],
 ];
 if (!FAST) {

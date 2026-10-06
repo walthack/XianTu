@@ -74,6 +74,9 @@ export function resolveTagTargets(contract: Contract, on: string): string[] {
 
 /** 给叙事 / 日志用的称呼：角色库 id 写成 {{ref:id}} 占位，由宿主换成显示名；字面标签原样输出。 */
 export function partyDisplay(contract: Contract, id: string): string {
-  const ref = partyOf(contract, id)?.ref || id;
+  const party=partyOf(contract,id);
+  if(party?.group)return party.group.label;
+  if(party?.instanceId)return `{{enemyInstance:${party.enemyId || party.ref}:${party.instanceId}}}`;
+  const ref = party?.ref || id;
   return /^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(ref) ? `{{ref:${ref}}}` : ref;
 }

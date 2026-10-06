@@ -187,7 +187,6 @@ const ALLOW_PATH_PREFIXES: string[] = [
   '角色.属性',
   '角色.位置',
   '角色.身体',
-  '角色.背包.灵石',
   '角色.背包.货币',
   '角色.功法',
   '角色.修炼',
@@ -291,6 +290,9 @@ export function validateCommand(command: unknown, index: number): ValidationResu
       errors.push(`指令${index}: 缺少key字段`);
     }
 
+    if(typeof cmd.key==='string' && (/^(?:角色\.属性\.境界(?:\.|$))/.test(cmd.key) || cmd.key==='角色.属性' && cmd.value?.境界 !== undefined || cmd.key==='角色' && cmd.value?.属性?.境界 !== undefined)) errors.push('境界只能由代码结算回执写入');
+
+    if(typeof cmd.key==='string' && /^社交\.关系\.[^.]+\.境界(?:\.|$)/.test(cmd.key)) errors.push('人物级数只能由代码回执写入');
     // 2. 检查action类型
     const validActions = ['set', 'add', 'push', 'delete', 'pull'];
     if (cmd.action && !validActions.includes(cmd.action)) {

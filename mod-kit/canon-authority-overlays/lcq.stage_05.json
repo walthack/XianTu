@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "stageId": "lcq.stage_05",
+  "ops": [
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lcq.event.s05_01]",
+      "afterKey": "playerCompletionContract",
+      "beforeKey": null,
+      "entries": {
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.haishen_hall_merfolk",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
+        }
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lcq.event.s05_02]",
+      "afterKey": "playerCompletionContract",
+      "beforeKey": null,
+      "entries": {
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.pull_harpoon_lemingzhu",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
+        }
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lcq.event.s05_08]",
+      "afterKey": "playerCompletionContract",
+      "beforeKey": null,
+      "entries": {
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.ruins_ghost_warriors",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
+        }
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lcq.event.s05_05]",
+      "afterKey": "playerCompletionContract",
+      "beforeKey": null,
+      "entries": {
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.wuerlang_slays_dagu",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
+        }
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lcq.event.s05_09]",
+      "afterKey": "playerCompletionContract",
+      "beforeKey": null,
+      "entries": {
+        "supersededBy": {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.yiyang_repels_yinsha",
+          "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
+        }
+      }
+    }
+  ]
+}

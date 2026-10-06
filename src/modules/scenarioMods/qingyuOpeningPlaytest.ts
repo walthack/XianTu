@@ -1,3 +1,4 @@
+import {entityName} from './namedEntities';
 import type { CharacterBaseInfo, SaveData } from '@/types/game';
 import { createMinimalSaveDataV3 } from '@/utils/dataRepair';
 
@@ -195,7 +196,7 @@ function applyQingyuOpeningDemoOverrides(mod: ScenarioMod): void {
 function applyCreationPreset(save: SaveData, mod: ScenarioMod): void {
   const preset = mod.scenario.opening.creationPreset;
   const identity = save.角色.身份 as CharacterBaseInfo;
-  identity.名字 = preset?.characterName || '程宗扬';
+  identity.名字 = preset?.characterName || entityName("character","liuchao.character.cheng_zongyang");
   if (preset?.gender) identity.性别 = preset.gender;
   if (preset?.race) identity.种族 = preset.race;
   identity.世界 = (mod.world?.name || '六朝') as unknown as CharacterBaseInfo['世界'];

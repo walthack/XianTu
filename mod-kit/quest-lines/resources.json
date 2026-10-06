@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "texts": {
+    "text.line.biling_algae_silk.title": "霓龙丝的着落",
+    "text.act.ask_biling_for_nylon": "向碧鲮人打听霓龙丝",
+    "text.act.have_yun_examine_algae": "请云苍峰看看这藻丝能不能织",
+    "text.act.commission_algae_purchase": "向碧鲮族下单收购各色藻丝",
+    "text.line.le_mingzhu.title": "乐明珠",
+    "text.act.lmz.promise_silence": "答应她：见到潘师姐不提南荒",
+    "text.act.lmz.hard_truth": "直说：邪不压正不是喊口号",
+    "text.act.lmz.tease_with_pan": "拿潘师姐吓唬她",
+    "intent.ask_biling_for_nylon": "我向碧鲮人打听霓龙丝。",
+    "intent.have_yun_examine_algae": "我请云苍峰看看这藻丝能不能织。",
+    "intent.commission_algae_purchase": "我向碧鲮族下单收购各色藻丝。",
+    "intent.lmz.promise_silence": "我答应她：见到潘师姐不提南荒。",
+    "intent.lmz.hard_truth": "我直说：邪不压正不是喊口号。",
+    "intent.lmz.tease_with_pan": "我拿潘师姐吓唬她。",
+    "brief.side.biling_algae_silk": "焚村次日天亮后，碧鲮族议事。问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。云苍峰嫌太细太薄，程宗扬却要透亮，完整不断、晒干不褪色，各色收购。只有明确下单才结算，打听并不等于已拿到样品。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+    "brief.lmz.pan_secret": "第48章，山涧巨蕈林边，乐明珠刚被认出是光明观堂弟子，两人分烤鹅掌菌。她心虚地求程宗扬：见到潘师姐千万别说在南荒见过她；来南荒行医，被花苗苏荔收留，替花苗当新娘是要刺杀鬼巫王、为民除害；师傅说邪不压正。只描写玩家当前回应：答应保密则松一口气；直说不是喊口号则张口结舌而不生气；吓唬则急着捂嘴、瞪人。不写她放弃刺杀计划，不写潘金莲其他事和后文章节，主持只在识别相关自由回应时提出好感变化，由代码限幅、与模板记忆同回执写入；正文不自行改好感或世界事实，记忆只影响语气。",
+    "outcome.act.ask_biling_for_nylon": "你向碧鲮女子打听霓龙丝。她说山里没有，却拿来一团湿藻丝，细得像头发，还要结实。",
+    "outcome.act.have_yun_examine_algae": "云苍峰看过藻丝，嫌它太细太薄，织不成衣料。你要的却正是透亮。",
+    "outcome.act.commission_algae_purchase": "你提出各色都要，完整不断、晒干不褪色，真金白银地收购。碧鲮女子交给你藻丝样品。",
+    "outcome.act.lmz.promise_silence": "你答应见到潘师姐不提南荒。乐明珠松了一口气。",
+    "outcome.act.lmz.hard_truth": "你直说邪不压正不是只喊口号。乐明珠张口结舌，却没有生气。",
+    "outcome.act.lmz.tease_with_pan": "你拿潘师姐吓唬她。乐明珠急着要捂你的嘴，瞪了你一眼。"
+  },
+  "memories": {
+    "mem.lmz.pan_secret.promised": {
+      "summary": "程宗扬答应她，见到潘师姐不说在南荒见过她。",
+      "salienceId": "sal.minor"
+    },
+    "mem.lmz.pan_secret.hard_truth": {
+      "summary": "程宗扬对她说，邪不压正不是喊口号就能做到；她当时答不上来。",
+      "salienceId": "sal.minor"
+    },
+    "mem.lmz.pan_secret.teased": {
+      "summary": "程宗扬拿潘师姐吓唬她，说要把她偷跑出来的事说出去。",
+      "salienceId": "sal.minor"
+    }
+  },
+  "facts": {
+    "fact.biling_algae_as_nylon": {
+      "subjectId": "lcq.item.biling_algae_sample",
+      "claim": "碧鲮海里有一种细如发丝、颜色多样的藻丝，可以拿来充作霓龙丝。"
+    },
+    "fact.lmz.ran_off_from_sect": {
+      "subjectId": "liuchao.character.le_mingzhu",
+      "claim": "乐明珠怕师姐知道她在南荒，多半是自己偷跑出来的。"
+    }
+  },
+  "affinityWeights": {
+    "aff.w.small_pos": 3,
+    "aff.w.none": 0,
+    "aff.w.small_neg": -3
+  },
+  "salience": {
+    "sal.minor": 1
+  },
+  "intentMatches": {
+    "match.lmz.promise_silence": {
+      "matchAny": [
+        "保密",
+        "绝口不提",
+        "不会告诉潘师姐",
+        "不告诉潘师姐",
+        "当从没在南荒见过",
+        "烂在我肚子里",
+        "见到潘师姐不提南荒"
+      ],
+      "rejectIf": [
+        "不替你保密",
+        "不会替你保密",
+        "要告诉潘师姐"
+      ]
+    },
+    "match.lmz.hard_truth": {
+      "matchAny": [
+        "不是喊口号",
+        "邪不压正没那么简单",
+        "光喊邪不压正",
+        "不是说说就行"
+      ]
+    },
+    "match.lmz.tease_with_pan": {
+      "matchAny": [
+        "吓唬",
+        "告诉潘师姐",
+        "跟潘师姐告状"
+      ],
+      "rejectIf": [
+        "不告诉",
+        "不会告诉",
+        "绝不告诉",
+        "不吓唬",
+        "不会吓唬"
+      ]
+    },
+    "match.ask_biling_for_nylon": {
+      "matchAny": [
+        "打听霓龙丝",
+        "哪里有霓龙丝",
+        "询问霓龙丝",
+        "找霓龙丝"
+      ]
+    },
+    "match.have_yun_examine_algae": {
+      "matchAny": [
+        "看看这藻丝",
+        "看看海藻丝",
+        "请云苍峰鉴定",
+        "能不能织"
+      ]
+    },
+    "match.commission_algae_purchase": {
+      "matchAny": [
+        "收购各色",
+        "下单收购",
+        "买下藻丝",
+        "收购藻丝",
+        "这些颜色我都要"
+      ],
+      "rejectIf": [
+        "不收购",
+        "不买",
+        "先不下单"
+      ]
+    }
+  }
+}

@@ -31,11 +31,6 @@ export default (env = {}, argv = {}) => {
     },
     devtool: false,
     plugins: [
-      // 临时垫片：绕开 gameStateStore.toSaveData() 改响应式关系表导致的无限重渲染，见垫片文件注释。
-      new webpack.NormalModuleReplacementPlugin(/ledger[\\/]affinityIdentity$/, resource => {
-        if (String(resource.contextInfo?.issuer || '').includes('combatTrial')) return
-        resource.request = path.resolve(__dirname, 'src/dev/combatTrial/shims/affinityIdentity.ts')
-      }),
       ...base.plugins.filter(plugin => plugin?.constructor?.name !== 'HtmlWebpackPlugin'),
       new HtmlWebpackPlugin({
         template: './dev/combat-trial/index.html',

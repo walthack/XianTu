@@ -72,6 +72,7 @@ const strengthColor = computed(() => {
 const durationDisplay = computed(() => {
   const duration = props.effect.持续时间分钟;
   if (duration === undefined || duration === null) return '';
+  if (duration < 0) return props.effect.状态描述?.includes('修复后解除') ? '修复后解除' : '按条件解除';
   if (duration === 99999) return '永久';
   if (duration >= 1440) return `${Math.floor(duration / 1440)}天`;
   if (duration >= 60) {

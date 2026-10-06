@@ -1,3 +1,4 @@
+import {GAME_NUMBERS} from '../../modules/sceneModule/numbers';
 // F03 山涧雾战与九名鬼王峒武士（原著第45–46章《袭击》《幻真》），
 // 依据 ~/Desktop/narrative/10-战斗系统_剧情侧需求.md §1.1 F03。
 // 两种模式共用同一场景卡、同一组基础因子和同一张后果表；差别只在「怎么掷、掷几次」。
@@ -19,8 +20,8 @@ export const F03_EVENT_ID = 'lcq.event.s04_02';
  * 所以难度按种类整体平移，胜率分布与原型一致。tests/combatTrialEngine.test.mjs 用真实判定因子校验这张表。
  * data/f03.json 里存的是原型难度，这里再平移。
  */
-export const PROTO_BASE_MODIFIER = 2;
-export const DIFFICULTY_SHIFT: Partial<Record<JudgementKind, number>> = { combat: 4, escape: 4, scheme: 5 };
+export const PROTO_BASE_MODIFIER = GAME_NUMBERS.historicalPrototype.baseModifier;
+export const DIFFICULTY_SHIFT: Partial<Record<JudgementKind, number>> = GAME_NUMBERS.historicalPrototype.difficultyShift;
 const d = (prototypeDifficulty: number, kind: JudgementKind): number => prototypeDifficulty + (DIFFICULTY_SHIFT[kind] ?? 0);
 
 export interface EpilogueData {

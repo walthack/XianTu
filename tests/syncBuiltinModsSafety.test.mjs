@@ -22,6 +22,6 @@ test('late overlay drift does not delete any builtin or change its manifest', as
 test('all preflight checks pass before replacing data and content-hashed manifest', async () => {
  const f=await fixture();const authorityCatalog={byStageId:new Map([['lcq.fixture',{version:1,stageId:'lcq.fixture',ops:[{op:'set',path:'canon.characters',from:[],to:[{id:'target'}]}]}]]),stageIds:['lcq.fixture']};
  const result=await syncBuiltinModData({...f,authorityCatalog});assert.deepEqual(result.ids,['lcq.fixture']);
- assert.deepEqual(await readdir(f.outputDir),['lcq.fixture.json']);assert.equal(JSON.parse(await readFile(join(f.outputDir,'lcq.fixture.json'),'utf8')).canon.characters[0].id,'target');
+ assert.deepEqual(await readdir(f.outputDir),['existing.json','lcq.fixture.json']);assert.equal(JSON.parse(await readFile(join(f.outputDir,'lcq.fixture.json'),'utf8')).canon.characters[0].id,'target');
  assert.equal(JSON.parse(await readFile(join(f.outputDir,'..','manifest.json'),'utf8')).version,result.version);
 });

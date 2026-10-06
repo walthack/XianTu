@@ -1,3 +1,4 @@
+import {LEVELS} from '../../utils/realmUtils';
 import { filterLedgerMemory, type GuardFinding } from './ledger/guardFramework';
 import type { SaveData } from '@/types/game';
 import { isScopedPlaytestSave, isScopedNaturalIntentSave } from './playtestNarrativeScope';
@@ -274,7 +275,7 @@ export function validateStepSceneNarrative(text: string, card: import('./schema'
   const conflicting = part && /夜|黄昏|傍晚/.test(part) ? /清晨|晨光|朝阳|日头高悬|正午/ : /深夜|子时|夜色笼罩|月光洒|夜幕降临/;
   if (part && conflicting.test(text)) throw new ModuleNarrativeGuardError(`昼夜冲突：当前时段是${part}`);
   const realm = scene.账本摘要?.主角?.境界;
-  if (/你[^。！？]{0,15}(?:突破|晋升|踏入|达到)[^。！？]{0,8}(?:筑基|金丹|二阳|三阳|四阳)/.test(text))
+  if (!card?.ledgerEffects?.level && new RegExp(`你[^。！？]{0,15}(?:突破|晋升|踏入|达到)[^。！？]{0,8}(?:${LEVELS.map(l=>l.name).join('|')}|第[一二三四五六七八九1-9]级|二阳|三阳|四阳)`).test(text))
     throw new ModuleNarrativeGuardError('境界变化没有本地回执');
   if (!card?.ledgerEffects?.jiuyang && realm?.九阳层次 !== '一阳' && /你[^。！？]{0,15}(?:突破|踏入|达到)[^。！？]{0,8}一阳/.test(text))
     throw new ModuleNarrativeGuardError('一阳境界尚未落账');

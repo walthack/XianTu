@@ -1,3 +1,4 @@
+import {namedEntityEntries,canonicalEntityId} from '../namedEntities';
 /**
  * 地点规范 id、别名、父子关系与规范名（P0-4 移动系统）。
  *
@@ -9,17 +10,12 @@
  *   4. 两个龙池是同一处，规范 id 取 liuchao.location.longchi；坐标冲突待校准。
  * 剧情裁定：海神殿是碧鲮（biyu_village）的子地点。
  */
-export const LOCATION_ID_ALIASES: Readonly<Record<string, string>> = {
-  'lcq.location.shuai_zhang': 'lcq.location.command_tent',
-  'liuchao.location.wu_yuan_cheng': 'liuchao.location.wuyuan',
-  'liuchao.location.xiong_er_pu': 'liuchao.location.xiongerpu',
-  'liuchao.location.guiwangdong': 'liuchao.location.guiwang_dong',
-  'liuchao.location.gui_wang_dong': 'liuchao.location.guiwang_dong',
-  'liuchao.location.biyu': 'liuchao.location.biyu_village',
-  'liuchao.location.gui_wang_dong_palace': 'liuchao.location.gui_wang_gong',
-  'liuchao.location.bai_yi_valley': 'liuchao.location.baiyi',
-  'lcq.location.longchi': 'liuchao.location.longchi',
-};
+export const LOCATION_ID_ALIASES: Readonly<Record<string,string>> = Object.freeze({
+  ...Object.fromEntries(namedEntityEntries('location').flatMap(e=>e.aliases.filter(id=>id.includes('.location.')).map(id=>[id,e.id]))),
+  'liuchao.location.xiong_er_pu':'liuchao.location.xiongerpu',
+  'liuchao.location.gui_wang_dong_palace':'liuchao.location.gui_wang_gong',
+  'liuchao.location.bai_yi_valley':'liuchao.location.baiyi',
+});
 
 /** 子地点 → 父地点（规范 id）。人在子地点算在父地点；人在父地点不算到了子地点。 */
 export const LOCATION_PARENTS: Readonly<Record<string, string>> = {
@@ -40,7 +36,7 @@ export function canonicalLocationId(id: string): string;
 export function canonicalLocationId(id: string | undefined): string | undefined;
 export function canonicalLocationId(id: string | undefined): string | undefined {
   if (!id) return id;
-  return LOCATION_ID_ALIASES[id] || id;
+  return canonicalEntityId('location',LOCATION_ID_ALIASES[id] || id);
 }
 
 export function sameCanonicalLocation(left: string | undefined, right: string | undefined): boolean {

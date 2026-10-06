@@ -72,7 +72,7 @@ const key = env.OPENROUTER_API_KEY || process.env.OPENROUTER_API_KEY;
 if (!key) throw new Error('缺 OPENROUTER_API_KEY');
 const axis = JSON.parse(await readFile(join(generated, 'character-canon', 'axis-binding.json'), 'utf8'));
 const axisById = new Map((axis.nodes || []).map(node => [node.axisId, node]));
-const profiles = parseGeneratedProfiles(await readFile(join(root, 'src/modules/scenarioMods/canonRailProfiles.generated.ts'), 'utf8'));
+const profiles = JSON.parse(await readFile(join(root, 'src/modules/scenarioMods/canonRailProfiles.generated.json'), 'utf8'));
 const targets = profiles.map(profile => {
   const stage = JSON.parse(readFileSync(join(root, 'src', 'modules', 'scenarioMods', 'builtins', 'data', `${profile.modId}.json`), 'utf8'));
   const eventById = new Map((stage.scenario?.events || []).map(event => [event.id, event]));

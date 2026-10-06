@@ -1,3 +1,4 @@
+import {entityName} from '@/modules/scenarioMods/namedEntities';
 import { cloneDeep } from 'lodash';
 import type { SaveData, SectSystemV2, WorldFaction } from '@/types/game';
 import { validateAndFixSectDataList } from '@/utils/worldGeneration/sectDataValidator';
@@ -17,7 +18,7 @@ const collectMembersBySect = (saveData: SaveData): Record<string, string[]> => {
 
   Object.entries(relationships).forEach(([key, npc]) => {
     if (!npc || typeof npc !== 'object') return;
-    const sectName = (npc as any).势力归属 || (npc as any).宗门 || (npc as any).势力;
+    const sectName = entityName('faction',(npc as any).势力归属 || (npc as any).宗门 || (npc as any).势力 || '');
     if (!sectName) return;
     const memberName = (npc as any).名字 || key;
     if (!membersBySect[sectName]) {

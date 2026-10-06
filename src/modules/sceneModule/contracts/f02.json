@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "id": "combat.f02.snake_assault",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.s03b_snake_flower_bridge_01",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 1
+    }
+  },
+  "objective": {
+    "text": "击倒或制住袭击的蛇彝男子",
+    "win": {
+      "party": "snake_man",
+      "track": "vit",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "snake_man",
+      "side": "opposed",
+      "ref": "lcq.enemy.sheyi_raider",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "勉强抵抗",
+            "倒下"
+          ],
+          "initial": 2,
+          "ending": {
+            "finalState": "倒下",
+            "ceiling": 3,
+            "preserveOnWin": false
+          }
+        }
+      ],
+      "instanceId": "combat.f02.snake_assault.snake_man"
+    }
+  ],
+  "goals": [
+    {
+      "id": "attack",
+      "label": "攻击对手",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 12
+    },
+    {
+      "id": "defend",
+      "label": "防守撑住",
+      "type": "support",
+      "baseDifficulty": 12
+    },
+    {
+      "id": "yield_guard",
+      "label": "停止抵抗、承受攻击",
+      "type": "support",
+      "baseDifficulty": 12,
+      "aliases": [
+        "张开双手不躲",
+        "不躲也不挡",
+        "不招架",
+        "不还手",
+        "放下刀",
+        "硬吃他们的刀"
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "snake_man_attack",
+      "party": "snake_man",
+      "label": "攻击",
+      "target": "player",
+      "attack": {
+        "dc": 12
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "ending",
+      "endingId": "lcq.ending.fail.combat"
+    }
+  },
+  "closing": {
+    "win": {
+      "rewards": []
+    },
+    "lose": {
+      "text": "游戏结束",
+      "rewards": []
+    }
+  },
+  "narration": {
+    "requiredFacts": [
+      "开战前：蛇彝男子带着重伤袭来。",
+      "{{ref:liuchao.character.ning_yu}}在主角身后，药效未退，无法行动。"
+    ]
+  },
+  "settings": {},
+  "levelContext": {
+    "chapter": 37
+  }
+}

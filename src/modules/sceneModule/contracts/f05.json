@@ -1,0 +1,269 @@
+{
+  "meta": {
+    "id": "combat.f05.dungeon_trap",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 1
+    }
+  },
+  "objective": {
+    "text": "撑过两回合",
+    "win": {
+      "kind": "beatAtLeast",
+      "beat": 3
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "wu",
+      "side": "player_side",
+      "ref": "liuchao.character.wu_er_lang"
+    },
+    {
+      "id": "warrior_1",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "勉强抵抗",
+            "倒下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "倒下",
+            "ceiling": 3,
+            "preserveOnWin": false
+          }
+        }
+      ],
+      "instanceId": "combat.f05.dungeon_trap.warrior_1"
+    },
+    {
+      "id": "warrior_2",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "勉强抵抗",
+            "倒下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "倒下",
+            "ceiling": 3,
+            "preserveOnWin": false
+          }
+        }
+      ],
+      "instanceId": "combat.f05.dungeon_trap.warrior_2"
+    },
+    {
+      "id": "shaman",
+      "side": "opposed",
+      "ref": "lcq.enemy.dungeon_shaman",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "勉强抵抗",
+            "倒下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "倒下",
+            "ceiling": 3,
+            "preserveOnWin": false
+          }
+        }
+      ],
+      "instanceId": "combat.f05.dungeon_trap.shaman"
+    },
+    {
+      "id": "blood_tiger",
+      "side": "opposed",
+      "ref": "liuchao.character.yi_hu",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "勉强抵抗",
+            "被制住"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "被制住",
+            "ceiling": 3,
+            "preserveOnWin": true
+          }
+        }
+      ],
+      "instanceId": "combat.f05.dungeon_trap.blood_tiger",
+      "enemyId": "lcq.enemy.blood_tiger_yi_hu"
+    }
+  ],
+  "goals": [
+    {
+      "id": "attack",
+      "label": "攻击对手",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 12
+    },
+    {
+      "id": "defend",
+      "label": "防守撑住",
+      "type": "support",
+      "baseDifficulty": 12
+    },
+    {
+      "id": "yield_guard",
+      "label": "停止抵抗、承受攻击",
+      "type": "support",
+      "baseDifficulty": 12,
+      "aliases": [
+        "张开双手不躲",
+        "不躲也不挡",
+        "不招架",
+        "不还手",
+        "放下刀",
+        "硬吃他们的刀"
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "warrior_1_attack",
+      "party": "warrior_1",
+      "label": "攻击",
+      "target": "player",
+      "attack": {
+        "dc": 1
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    },
+    {
+      "id": "warrior_2_attack",
+      "party": "warrior_2",
+      "label": "攻击",
+      "target": "player",
+      "attack": {
+        "dc": 1
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    },
+    {
+      "id": "shaman_attack",
+      "party": "shaman",
+      "label": "攻击",
+      "target": "player",
+      "attack": {
+        "dc": 1
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    },
+    {
+      "id": "blood_tiger_attack",
+      "party": "blood_tiger",
+      "label": "攻击",
+      "target": "player",
+      "attack": {
+        "dc": 1
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      },
+      "schedule": {
+        "untilBeat": 1
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "ending",
+      "endingId": "lcq.ending.fail.combat"
+    }
+  },
+  "closing": {
+    "win": {
+      "rewards": []
+    },
+    "lose": {
+      "text": "游戏结束",
+      "rewards": []
+    }
+  },
+  "narration": {
+    "requiredFacts": [
+      "开战前：花苗人被绑在塔柱上，不是战斗单位；使者若在场也不是战斗单位。",
+      "血虎是被改造的易虎，打到濒死时只能被制住，不会被杀死。",
+      "主角撑过两回合且未倒下即赢；花苗人脱险和血虎被制住由主持按实际经过描写。"
+    ]
+  },
+  "settings": {},
+  "clock": {
+    "beats": 2,
+    "onTimeout": {
+      "type": "close",
+      "as": "win"
+    }
+  },
+  "levelContext": {
+    "chapter": 63
+  }
+}

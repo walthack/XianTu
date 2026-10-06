@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { createJiti } from 'jiti';
 const root = new URL('../', import.meta.url);
 const jiti = createJiti(import.meta.url, { interopDefault: true });
+const {resolveScenarioContent}=await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/entityCatalog.ts',root)));
 const { canonicalLocationId } = await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/travel/locationIds.ts', root)));
 // 剧情15号稿的可搜刮关卡范围；与全图可见地点区分，不能要求未来关道具在此前全图卡上登记。
 export const LOOT_STAGE_COVERAGE = {
@@ -41,7 +42,7 @@ export const LOOT_STAGE_COVERAGE = {
   "liuchao.location.sea_temple": [
     "lcq.stage_04b_lingfei_baiyi_crisis"
   ],
-  "liuchao.location.guiwang_dong": [
+  "liuchao.location.gui_wang_dong": [
     "lcq.stage_04b_lingfei_baiyi_crisis",
     "lcq.stage_05b"
   ],
@@ -61,7 +62,7 @@ export const LOOT_STAGE_COVERAGE = {
 export function loadLootInputs() {
   return {
     table: JSON.parse(readFileSync(new URL('mod-kit/location-loot.qingyu.json', root), 'utf8')),
-    stages: [...new Set(Object.values(LOOT_STAGE_COVERAGE).flat())].map(id => JSON.parse(readFileSync(new URL(`src/modules/scenarioMods/builtins/data/${id}.json`, root), 'utf8'))),
+    stages: [...new Set(Object.values(LOOT_STAGE_COVERAGE).flat())].map(id => resolveScenarioContent(JSON.parse(readFileSync(new URL(`src/modules/scenarioMods/builtins/data/${id}.json`, root), 'utf8')))),
   };
 }
 export function auditLocationLoot({ table, stages, coverage = LOOT_STAGE_COVERAGE }) {

@@ -45,6 +45,16 @@
       "stageId": "lcq.stage_02",
       "file": "lcq.stage_02.json",
       "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "file": "lcq.stage_05.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lyg.mijing_rumen",
+      "file": "lyg.mijing_rumen.json",
+      "book": "yange"
     }
   ]
 }

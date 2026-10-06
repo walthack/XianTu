@@ -1,3 +1,6 @@
+import {contentName} from './entityCatalog';
+export const FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID='lcq.item.demo_short_knife';
+const KNIFE_NAME=contentName('item',FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID);
 import {
   getJudgementState,
   hashJudgementAction,
@@ -32,7 +35,8 @@ export type FastNarrativeDemoKnifeLocation = LegacyKnifeLocation;
 export interface FastNarrativeDemoSceneFact {
   id: typeof FAST_NARRATIVE_DEMO_KNIFE_FACT_ID;
   kind: 'grounded_scene_item';
-  itemName: '短刀';
+  itemId?: string;
+  itemName: string;
   quality: '凡品';
   source: StoredKnifeSource;
   sourceText: string;
@@ -55,7 +59,8 @@ export interface FastNarrativeDemoAdjudicationState {
   sceneFacts: FastNarrativeDemoSceneFact[];
   actionReceipts: FastNarrativeDemoActionReceipt[];
   knife: {
-    itemName: '短刀';
+    itemId?: string;
+  itemName: string;
     acquired: boolean;
     lastJudgementId: string;
   } | null;
@@ -66,7 +71,8 @@ export interface FastNarrativeDemoAdjudicationState {
 }
 
 export interface FastNarrativeDemoAdjudicationView {
-  itemName: '短刀';
+  itemId?: string;
+  itemName: string;
   source: FastNarrativeDemoKnifeSource;
   sourceText: string;
   acquired: boolean;
@@ -254,7 +260,7 @@ function readState(saveData: unknown): FastNarrativeDemoAdjudicationState | null
       const value = asRecord(fact);
       return value?.id === FAST_NARRATIVE_DEMO_KNIFE_FACT_ID
         && value.kind === 'grounded_scene_item'
-        && value.itemName === '短刀'
+        && (value.itemId === FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID || value.itemName === KNIFE_NAME)
         && value.quality === '凡品'
         && !!canonicalKnifeSource(value.source)
         && !!normalizeText(value.sourceText)
@@ -264,7 +270,7 @@ function readState(saveData: unknown): FastNarrativeDemoAdjudicationState | null
       return {
         id: FAST_NARRATIVE_DEMO_KNIFE_FACT_ID,
         kind: 'grounded_scene_item' as const,
-        itemName: '短刀' as const,
+        itemId: FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID, itemName: KNIFE_NAME,
         quality: '凡品' as const,
         source: canonicalKnifeSource(value.source) as StoredKnifeSource,
         sourceText: normalizeText(value.sourceText),
@@ -303,10 +309,10 @@ function readState(saveData: unknown): FastNarrativeDemoAdjudicationState | null
     : [];
   const rawKnife = asRecord(raw.knife);
   let knife: FastNarrativeDemoAdjudicationState['knife'] = null;
-  if (rawKnife?.itemName === '短刀' && !!normalizeText(rawKnife.lastJudgementId)) {
+  if ((rawKnife?.itemId === FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID || rawKnife?.itemName === KNIFE_NAME) && !!normalizeText(rawKnife.lastJudgementId)) {
     if (typeof rawKnife.acquired === 'boolean') {
       knife = {
-        itemName: '短刀',
+        itemId: FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID, itemName: KNIFE_NAME,
         acquired: rawKnife.acquired,
         lastJudgementId: normalizeText(rawKnife.lastJudgementId),
       };
@@ -314,7 +320,7 @@ function readState(saveData: unknown): FastNarrativeDemoAdjudicationState | null
       const acquired = acquiredFromLegacyLocation(rawKnife.location);
       if (acquired != null) {
         knife = {
-          itemName: '短刀',
+          itemId: FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID, itemName: KNIFE_NAME,
           acquired,
           lastJudgementId: normalizeText(rawKnife.lastJudgementId),
         };
@@ -378,7 +384,7 @@ function writeState(saveData: unknown, state: FastNarrativeDemoAdjudicationState
     actionReceipts: state.actionReceipts.map(persistReceipt),
     knife: state.knife
       ? {
-        itemName: '短刀' as const,
+        itemId: FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID, itemName: KNIFE_NAME,
         acquired: state.knife.acquired,
         lastJudgementId: state.knife.lastJudgementId,
       }
@@ -399,7 +405,7 @@ export function readFastNarrativeDemoAdjudicationView(
   const fact = state.sceneFacts.find(item => item.id === FAST_NARRATIVE_DEMO_KNIFE_FACT_ID);
   if (!receipt || !fact || !isIntactSceneReceipt(fact, knife, receipt)) return null;
   return {
-    itemName: '短刀',
+    itemId: FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID, itemName: KNIFE_NAME,
     source: FAST_NARRATIVE_DEMO_KNIFE_SOURCE,
     sourceText: fact.sourceText,
     acquired: knife.acquired,
@@ -458,7 +464,7 @@ export function settleFastNarrativeDemoAdjudication(
     state.sceneFacts.push({
       id: FAST_NARRATIVE_DEMO_KNIFE_FACT_ID,
       kind: 'grounded_scene_item',
-      itemName: '短刀',
+      itemId: FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID, itemName: KNIFE_NAME,
       quality: '凡品',
       source: FAST_NARRATIVE_DEMO_KNIFE_SOURCE,
       sourceText: '最近的战场尸体僵硬的手指间原本握着一把凡品短刀。',
@@ -477,7 +483,7 @@ export function settleFastNarrativeDemoAdjudication(
     ...actionReceipt,
     verificationHash: hashNewActionReceipt(actionReceipt),
   });
-  state.knife = { itemName: '短刀', acquired, lastJudgementId: resolution.id };
+  state.knife = { itemId: FAST_NARRATIVE_DEMO_KNIFE_ITEM_ID, itemName: KNIFE_NAME, acquired, lastJudgementId: resolution.id };
   if (!state.terminalBoundaries.some(boundary => boundary.eventId === FAST_NARRATIVE_DEMO_FIXED_TERMINAL_EVENT_ID)) {
     state.terminalBoundaries.push({
       eventId: FAST_NARRATIVE_DEMO_FIXED_TERMINAL_EVENT_ID,

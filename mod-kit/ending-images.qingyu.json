@@ -1,7 +1,7 @@
 {
   "version": 1,
   "images": {
-    "E01": "E01.jpg",
+    "E01": null,
     "E02": "E02.jpg",
     "E03": "E03.jpg",
     "E04": "E04-v2.jpg",
@@ -9,5 +9,15 @@
     "E06": null,
     "E07": "E07-v7.jpg",
     "E08": null
+  },
+  "byEndingId": {
+    "lcq.ending.death.baihu_beheading": null,
+    "lcq.ending.death.ajiman_bond": "E02.jpg",
+    "lcq.ending.death.paolao": "E03.jpg",
+    "lcq.ending.death.wangzhe_blast": "E04-v2.jpg",
+    "lcq.ending.death.shanghou_relic": null,
+    "lcq.ending.death.ghost_king_skull": null,
+    "lcq.ending.death.dragon_well": "E07-v7.jpg",
+    "lcq.ending.fail.dragon_essence": null
   }
 }

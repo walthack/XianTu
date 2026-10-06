@@ -104,7 +104,6 @@ export function useGameData() {
   /**
    * 灵石（分品阶）
    */
-  const spiritStones = computed(() => gameState.inventory?.灵石 ?? { 下品: 0, 中品: 0, 上品: 0, 极品: 0 });
 
   /**
    * 背包物品数量
@@ -226,7 +225,6 @@ export function useGameData() {
     characterName,
     currentRealm,
     currentLocation,
-    spiritStones,
     inventoryItemCount,
 
     // 更新方法

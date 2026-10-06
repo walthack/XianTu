@@ -1,3 +1,8 @@
+import {entityNamePattern} from '../namedEntities';
+import {entityName} from '../namedEntities';
+
+import {containsEntityLabel} from '../namedEntities';
+import {canonicalEntityId} from '../namedEntities';
 import type { GameTime, SaveData } from '@/types/game';
 import { computePresentNames, departedPresentNames } from '../presence';
 import { normalizeGameTime } from '@/utils/time';
@@ -126,11 +131,10 @@ export function locationFromPosition(positionDescription: unknown, locations: Lo
 
 /** 读存档的位置；locations 缺省取存档里当前剧本运行时的正典地点。 */
 export function currentLocation(saveData: SaveData | null | undefined, locations?: LocationList): CurrentLocation {
-  const save = saveData as { 角色?: { 位置?: { 描述?: unknown } }; 世界?: { 状态?: { 剧本模组?: { canon?: { characters?: Array<{ id: string; name: string; role?: string; description?: string; affiliations?: Array<{ role?: string }>; isProtagonist?: boolean }>; locations?: LocationList } } } } } | null | undefined;
-  return locationFromPosition(
-    save?.角色?.位置?.描述,
-    locations ?? save?.世界?.状态?.剧本模组?.canon?.locations,
-  );
+  const save = saveData as { 角色?: { 位置?: { 描述?: unknown; locationId?:string } }; 世界?: { 状态?: { 剧本模组?: { canon?: { characters?: Array<{ id: string; name: string; role?: string; description?: string; affiliations?: Array<{ role?: string }>; isProtagonist?: boolean }>; locations?: LocationList } } } } } | null | undefined;
+  const parsed=locationFromPosition(save?.角色?.位置?.描述,locations ?? save?.世界?.状态?.剧本模组?.canon?.locations);
+  const stored=save?.角色?.位置?.locationId;
+  return stored?{...parsed,locationId:stored,canonicalLocationId:canonicalLocationId(stored)}:parsed;
 }
 
 export const RELATIVE_DAY_LABEL = '数日后';
@@ -180,6 +184,7 @@ export interface TravelCard {
 }
 
 export interface NanhuangTravelLedger {
+  deferredDepartureEventIds?: string[];
   sliceId: string;
   state: OpenWorldSliceRuntime;
   /** 跨关累积的已完成事件（切关后 completedEventIds 从空开始，三态与触发要看全程）。 */
@@ -261,11 +266,12 @@ function zoneName(zoneId: string): string {
 
 /** 把位置串投影成账上的当前节点：`大陆·节点名`，坐标取正典。 */
 function projectPosition(saveData: SaveData, runtime: LedgerRuntime, zoneId: string): void {
-  const position = (saveData as { 角色?: { 位置?: { 描述?: unknown; x?: number; y?: number } } }).角色?.位置;
+  const position = (saveData as { 角色?: { 位置?: { 描述?: unknown; locationId?:string; x?: number; y?: number } } }).角色?.位置;
   if (!position || typeof position !== 'object') return;
   const area = (DEF.areas || []).find(item => item.id === areaIdOf(DEF, zoneId));
   position.描述 = `${area?.continent || '南荒'}·${zoneName(zoneId)}`;
   const target = canonicalLocationId(worldLocationIdOf(DEF, zoneId));
+  position.locationId=target ? canonicalEntityId('location',target) : undefined;
   const loc = (runtime.canon?.locations || []).find(item => canonicalLocationId(item.id) === target && typeof item.coordinates?.x === 'number');
   if (typeof loc?.coordinates?.x === 'number') position.x = loc.coordinates.x;
   if (typeof loc?.coordinates?.y === 'number') position.y = loc.coordinates.y;
@@ -290,7 +296,7 @@ export function currentTravelCompanions(saveData: SaveData, runtime: LedgerRunti
   // 早期stage_02卡缺武二郎；读取已经落账的加入合同，不能因此漏掉刚加入的队友。
   const joinedWuer = [...(runtime.completedEventIds || []), ...(runtime.travelLedger?.doneEventIds || [])].includes('lcq.event.wuerlang_joins');
   const wuer = (saveData as any).社交?.关系?.武二郎;
-  if (joinedWuer && wuer && !departedPresentNames(runtime).includes('武二郎')) names.add(String(wuer.名字 || '武二郎'));
+  if (joinedWuer && wuer && !containsEntityLabel(departedPresentNames(runtime),"character","liuchao.character.wu_er_lang")) names.add(String(wuer.名字 || entityName("character","liuchao.character.wu_er_lang")));
   return [...names];
 }
 
@@ -359,12 +365,12 @@ export function settleNanhuangForcedTravel(
 }
 
 /** 每回合：新完成的拍触发对应强制移动。旧档首次接入不回放已完成拍。 */
-export function syncNanhuangRailTravel(saveData: SaveData, runtime: LedgerRuntime): TravelCard[] {
+export function syncNanhuangRailTravel(saveData: SaveData, runtime: LedgerRuntime, deferDeparture?: (eventId:string)=>boolean): TravelCard[] {
   if (!isNanhuangTravelStage(runtime.modId)) return [];
   // 新离开五原时必须先记南下账；旧档已在路上则只回填0耗时。
   if (runtime.modId === 'lcq.stage_02' && !runtime.travelLedger?.state
     && runtime.completedEventIds?.includes('lcq.event.wuerlang_joins')
-    && /五原|白湖/.test(String((saveData as any).角色?.位置?.描述 || ''))) {
+    && new RegExp(`(?:${entityNamePattern('location','liuchao.location.wuyuan')})|白湖`).test(String((saveData as any).角色?.位置?.描述 || ''))) {
     settleNanhuangForcedTravel(saveData, runtime, { afterEventDone: 'lcq.event.wuerlang_joins' });
   }
   const ledger = ensureNanhuangLedger(saveData, runtime);
@@ -372,6 +378,9 @@ export function syncNanhuangRailTravel(saveData: SaveData, runtime: LedgerRuntim
   const cards: TravelCard[] = [];
   for (const eventId of runtime.completedEventIds || []) {
     if (ledger.doneEventIds.includes(eventId)) continue;
+    if (deferDeparture?.(eventId)){ledger.deferredDepartureEventIds=[...new Set([...(ledger.deferredDepartureEventIds||[]),eventId])];continue;}
+    // A different explicit journey can close an optional window: do not teleport back to replay its deferred route.
+    if (ledger.deferredDepartureEventIds?.includes(eventId) && forcedRoutesFor(DEF,{afterEventDone:eventId}).every(route=>route.fromZoneId!==ledger.state.currentZoneId)){ledger.doneEventIds.push(eventId);continue;}
     // 65章白夷闲聊可选：留下离城前窗口，实际选择去山谷时才记这段半日。
     if (eventId === 'lcq.event.s04b_lingfei_baiyi_crisis_13'
       && runtime.modId === 'lcq.stage_04b_lingfei_baiyi_crisis'

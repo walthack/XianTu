@@ -1,3 +1,4 @@
+import { twoHandConflict, NICHE_CRYSTAL } from '@/modules/sceneModule/host/loot';
 /**
  * 增强版动作队列系统
  * 支持装备/使用物品的直接操作和撤回恢复功能
@@ -88,9 +89,8 @@ export class EnhancedActionQueueManager {
   private ensureRoleBackpack(saveData: SaveData): any {
     const anySave = saveData as any;
     if (!anySave.角色) anySave.角色 = {};
-    if (!anySave.角色.背包) anySave.角色.背包 = { 物品: {}, 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 } };
+    if (!anySave.角色.背包) anySave.角色.背包 = { 物品: {}, };
     if (!anySave.角色.背包.物品) anySave.角色.背包.物品 = {};
-    if (!anySave.角色.背包.灵石) anySave.角色.背包.灵石 = { 下品: 0, 中品: 0, 上品: 0, 极品: 0 };
     return anySave.角色.背包;
   }
 
@@ -130,6 +130,8 @@ export class EnhancedActionQueueManager {
         toast.info(`《${item.名称}》已经装备在身上了`);
         return false;
       }
+
+      if(twoHandConflict(saveData,item.物品ID)){toast.info('双手兵器不能与另一件手持兵器同时装备，请先卸下。');return false;}
 
       // 检查互斥操作：如果队列中有同一物品的卸下操作，先移除它
       this.removeConflictingActions(item.物品ID, 'unequip');
@@ -367,6 +369,7 @@ export class EnhancedActionQueueManager {
         return false;
       }
 
+      if(item.物品ID===NICHE_CRYSTAL){toast.info('碎水晶在鬼王宫内的交锋卡选择护膜用途；出宫后只作稀罕物。');return false;}
       const originalQuantity = inventoryItem.数量;
       const itemToStore = JSON.parse(JSON.stringify(inventoryItem)); // Deep copy before modification
 

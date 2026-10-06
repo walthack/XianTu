@@ -2166,9 +2166,10 @@ class AIService {
           url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
         }) || {});
 
-    if (/^MiniMax-M3$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
+    if (/^MiniMax-(?:M3|M2\.7(?:-highspeed)?)$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
       && signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none') {
-      requestBody.thinking = { type: 'disabled' };
+      // M2.7/highspeed 不能关闭服务端思考；分离返回字段，正文不混入思考。
+      if (/^MiniMax-M3$/i.test(model)) requestBody.thinking = { type: 'disabled' };
       requestBody.reasoning_split = true;
     }
     // 如果指定了 JSON 格式，添加 response_format

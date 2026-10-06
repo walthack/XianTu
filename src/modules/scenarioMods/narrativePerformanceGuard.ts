@@ -1,3 +1,5 @@
+
+import {entityAliases} from './namedEntities';
 import { findInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
 
 export interface NarrativePerformanceCheck {
@@ -353,7 +355,7 @@ export function validateNarrativePerformance(
   );
   if (atomicClaimIssue) issues.push(`${HARD_ISSUE_PREFIX}${atomicClaimIssue}`);
   if (!DECISION_SCENE.test(userInput)) return { valid: issues.length === 0, issues };
-  for (const name of ['小紫', '贾文和']) {
+  for (const name of [...entityAliases("character","liuchao.character.xiao_zi"), ...entityAliases("character","liuchao.character.jia_wenhe")]) {
     if (!scenarioPrompt.includes(`【${name}·角色表演卡`) || !narrative.includes(name)) continue;
     const speech = namedSpeech(narrative, name);
     if (!ACTIVE_PLAN.test(speech)) {

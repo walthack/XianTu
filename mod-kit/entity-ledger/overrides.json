@@ -1203,5 +1203,15 @@
   ],
   "historicalNamePreservationIds": [
     "liuchao.character.yi_hu"
-  ]
+  ],
+  "contextOnlyAliases": [
+    "鬼王峒使者",
+    "二爷",
+    "老四"
+  ],
+  "recognitionLabels": {
+    "liuchao.character.a_jiman_bana": {
+      "short": "阿姬曼"
+    }
+  }
 }

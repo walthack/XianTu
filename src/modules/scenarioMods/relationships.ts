@@ -1,3 +1,5 @@
+import {realmAt} from './levelProgression';
+import {canonicalEntityId} from './namedEntities';
 import { backfillRelationshipIds, relationshipOf } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
 import { getRegistryAgeFacts, getRegistryNamesById } from './characterResolver';
@@ -176,7 +178,7 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     出生: profile.origin || character.role || '原作人物',
     外貌描述: profile.appearance || character.description || character.role || character.name,
     性格特征: profile.personality || [],
-    境界: { 名称: character.id === 'liuchao.character.xie_yi' && /独行客/.test(character.role || '') ? '未知' : character.realm || '凡人', 阶段: '初期', 当前进度: 0, 下一级所需: 100, 突破描述: '依剧情发展' },
+    境界: { 名称: character.id === 'liuchao.character.xie_yi' && /独行客/.test(character.role || '') ? '未知' : (Number.isInteger(character.level) ? realmAt(character.level!).名称 : '未知'), 阶段: '初期', 当前进度: 0, 下一级所需: 100, 突破描述: '依剧情发展' },
     灵根: {
       name: profile.spiritRoot?.name || '原作未载',
       tier: profile.spiritRoot?.tier || '凡品',
@@ -199,9 +201,11 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     },
     与玩家关系: relation,
     好感度: favorability,
-    当前位置: { 描述: location?.name || '位置未定', ...(locationCoordinates ? structuredClone(locationCoordinates) : {}) },
-    势力归属: faction?.name,
-    势力归属列表: affiliationNames,
+    当前位置: { locationId:location?canonicalEntityId('location',location.id):undefined, 描述: location?.name || '位置未定', ...(locationCoordinates ? structuredClone(locationCoordinates) : {}) },
+    factionId: faction ? canonicalEntityId('faction',faction.id) : undefined,
+    factionIds: (character.affiliations||[]).map(a=>canonicalEntityId('faction',a.factionId)),
+    势力归属: faction ? canonicalEntityId('faction',faction.id) : undefined,
+    势力归属列表: (character.affiliations||[]).map(a=>canonicalEntityId('faction',a.factionId)),
     宗门: factions.find(item => item.id === sect?.factionId)?.name,
     技能: { 掌握技能: nativeContent.skills },
     功法: { 修炼功法: nativeContent.primaryTechnique },
@@ -211,7 +215,7 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     当前内心想法: profile.currentThought || '依照剧本关系与当前事件行动。',
     头像: profile.avatar || '',
     立绘: profile.portrait || '',
-    背包: { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: nativeContent.items },
+    背包: { 物品: nativeContent.items },
     实时关注: true,
   };
 }
@@ -289,7 +293,7 @@ export function applyScenarioRelationshipsToSave(saveData: SaveData, source: Sce
     const nativeContent = buildNativeCharacterContent(source, playerCharacter);
     next.角色.技能 = next.角色.技能 || { 掌握技能: [], 装备栏: [], 冷却: {} };
     next.角色.技能.掌握技能 = nativeContent.skills;
-    next.角色.背包 = next.角色.背包 || { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: {} };
+    next.角色.背包 = next.角色.背包 || { 物品: {} };
     next.角色.背包.物品 = mergeFixedScenarioStarterInventory(next.角色.背包.物品 || {}, nativeContent.items);
     next.角色.修炼 = next.角色.修炼 || {};
     next.角色.修炼.修炼功法 = nativeContent.primaryTechnique;

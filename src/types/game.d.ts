@@ -266,15 +266,9 @@ export interface MasteredSkill {
 }
 
 export interface Inventory extends AIMetadata {
-  灵石: {
-    下品: number;
-    中品: number;
-    上品: number;
-    极品: number;
-  };
   /**
    * 新货币系统（可选，兼容旧存档）
-   * - key = 币种ID（建议：无点号`.`，例如：灵石_下品 / 铜铢 / 银铢 / 金铢）
+   * - key = 币种ID（建议：无点号`.`，例如：铜铢 / 银铢 / 金铢）
    * - value = 币种结构体（包含价值度/数量/描述等）
    */
   货币?: Record<string, CurrencyAsset>;
@@ -286,14 +280,14 @@ export interface CurrencyAsset extends AIMetadata {
   币种: string; // 币种ID（建议与 key 一致）
   名称: string; // 展示名称
   数量: number; // 余额（整数为主，允许小数但建议避免）
-  价值度: number; // 相对“基准币种”的价值（默认以 1 下品灵石为 1）
+  价值度: number; // 相对“基准币种”的价值（默认以 1 铜铢为 1）
   描述?: string;
   图标?: string; // lucide 图标名，如：Gem / Coins / HandCoins / BadgeDollarSign
 }
 
 export interface CurrencySettings extends AIMetadata {
   禁用币种: string[]; // 用户删除过的币种ID（避免数据修复再次自动补回）
-  基准币种?: string; // 默认：灵石_下品
+  基准币种?: string; // 默认：铜铢
 }
 
 /** 功法中的技能信息 */
@@ -433,7 +427,7 @@ export interface SectManagementState extends AIMetadata {
   安定?: number; // 0-100
   外门训练度?: number; // 0-100（用于战力与战损修正）
   府库?: {
-    灵石?: number;
+    铜铢?: number;
     灵材?: number;
     丹药?: number;
     阵材?: number;
@@ -627,7 +621,7 @@ export interface Realm {
   突破描述: string;    // 突破到下一阶段的描述
 }
 // 境界子阶段类型
-export type RealmStage = '初期' | '中期' | '后期' | '圆满' | '极境';
+export type RealmStage = '初期' | '中期' | '后期';
 
 // 境界子阶段定义
 export interface RealmStageDefinition {
@@ -657,6 +651,7 @@ export interface PlayerStatus extends AIMetadata {
   境界: Realm; // 境界包含了修为进度（当前进度 = 修为当前，下一级所需 = 修为最大）
   声望: number;
   位置: {
+    locationId?: string;
     描述: string;
     x?: number; // 世界地图 x 坐标 (0-10000)
     y?: number; // 世界地图 y 坐标 (0-10000)
@@ -1017,6 +1012,7 @@ export interface NpcProfile {
   与玩家关系: string; // 如：道侣、师徒、朋友、敌人、陌生人
   好感度: number; // -100 到 100
   当前位置: {
+    locationId?: string;
     描述: string;
     x?: number; // 世界地图 x 坐标 (0-10000)
     y?: number; // 世界地图 y 坐标 (0-10000)
@@ -1026,6 +1022,8 @@ export interface NpcProfile {
   };
   势力归属?: string;
   势力归属列表?: string[];
+  factionId?: string;
+  factionIds?: string[];
   宗门?: string;
   技能?: { 掌握技能: MasteredSkill[] };
   功法?: { 修炼功法: CultivationTechniqueReference | null };
@@ -1043,7 +1041,6 @@ export interface NpcProfile {
 
   // === 资产物品 ===
   背包: {
-    灵石: { 下品: number; 中品: number; 上品: number; 极品: number };
     货币?: Record<string, CurrencyAsset>;
     货币设置?: CurrencySettings;
     物品: Record<string, Item>;

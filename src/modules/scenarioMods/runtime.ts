@@ -1,4 +1,22 @@
-import { endingPresentation, type EndingPresentation } from './endingPresentation';
+import { DEFAULT_CURRENCIES } from '../../utils/currencySystem';
+
+import {entityNamePattern} from './namedEntities';
+
+import {entityAliases,canonicalEntityId} from './namedEntities';
+
+import {isNamedEntityLabel} from './namedEntities';
+import {refreshSaveEntityReferences} from './entitySaveRefs';
+import {catalogItem} from './entityCatalog';
+import statusCatalog from '../sceneModule/contracts/statuses.json';
+import {toPlayerStatusEffect} from '../sceneModule/statusAdapters';
+import {injuryStore,sceneTime,renderInjuryViews} from '../sceneModule/host/injuries';
+import {runtimeEntityName} from './ledger/affinityIdentity';
+import {questLineOffer,questLineContext,expireQuestLineWindows,deferOptionalDeparture} from './questLineContext';
+import {QUEST_LINES,LINE_RESOURCES,lineText,settleLineInsertion} from './questLines';
+import { activeScene, sceneModuleEnabled } from '@/modules/sceneModule/host/ext';
+import { sceneContractForEvent, sceneContractById } from '@/modules/sceneModule/contracts/registry';
+import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS } from './fixedEndingNarratives';
+import { endingPresentation, migrateLegacyE01Ending, type EndingPresentation } from './endingPresentation';
 import { projectNamingText } from './ledger/naming';
 import { backfillRelationshipIds, relationshipOf, resolveRelationshipId, migrateRuntimePersonRecords, runtimeEntityId } from './ledger/affinityIdentity';
 import { applyStepSceneLedger, stepScene } from './fixedEndingNarratives';
@@ -207,6 +225,8 @@ export interface ScenarioEventActionState {
 
 export interface ScenarioEventActionSelection {
   source: 'event_engine' | 'exploration_engine';
+  /** Free-input host assessment, accepted only for a currently offered optional beat. */
+  lineAffinityDelta?: number;
   eventId: string;
   actionId: string;
   label: string;
@@ -1028,7 +1048,7 @@ function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModE
     if (oldYinzhu) {
       const legacy = runtime as any;
       legacy.sceneLedger ||= { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [] };
-      for (const name of ['阿葭', '阴蛛']) legacy.sceneLedger.actors[runtimeEntityId(legacy, name)] = { name, status: 'dead', eventId: event.id, actionId: 'burn_yinzhu_victim' };
+      for (const name of [...entityAliases("character","lcq.character.nanhuang_ajia"), '阴蛛']) legacy.sceneLedger.actors[runtimeEntityId(legacy, name)] = { name, status: 'dead', eventId: event.id, actionId: 'burn_yinzhu_victim' };
       // 旧档焚尸已发生，不再演袭击/焚尸或推进其时钟；后面仍须选择向导。
       legacy.sceneLedger.lastBeat = { eventId: event.id, actionId: 'burn_yinzhu_victim', facts: ['阿葭已亡，营地里的后事已料理。'] };
     }
@@ -1044,7 +1064,7 @@ function getCurrentPlayerCompletionEvent(runtime: RuntimeState): ScenarioModEven
   return runtime.activeEventIds
     .map(id => runtime.events.find(event => event.id === id))
     .filter((event): event is ScenarioModEvent => Boolean(
-      event?.playerCompletionContract && !isEventSettled(runtime, event.id),
+      event?.playerCompletionContract && !(event as any).questLineBeatId && !isEventSettled(runtime, event.id),
     ))
     .sort((left, right) =>
       (left.axisSeq ?? Number.MAX_SAFE_INTEGER) - (right.axisSeq ?? Number.MAX_SAFE_INTEGER)
@@ -1053,9 +1073,9 @@ function getCurrentPlayerCompletionEvent(runtime: RuntimeState): ScenarioModEven
 
 function isAvailableExplorationEvent(runtime: RuntimeState, event: ScenarioModEvent | undefined): event is ScenarioModEvent {
   if (!event?.exploration || event.critical !== false || !event.playerCompletionContract) return false;
-  if (!runtime.activeEventIds.includes(event.id) || isEventSettled(runtime, event.id)) return false;
+  if (!(event as any).questLineBeatId && !runtime.activeEventIds.includes(event.id) || isEventSettled(runtime, event.id)) return false;
   const chapter = runtime.chapters.find(item => item.id === runtime.currentChapterId);
-  return Boolean(chapter?.eventIds?.includes(event.id));
+  return Boolean((event as any).questLineBeatId || chapter?.eventIds?.includes(event.id));
 }
 
 function requiredCharactersPresent(
@@ -1082,6 +1102,10 @@ function eventActionAvailable(
   runtime: RuntimeState,
   saveData?: SaveData,
 ): boolean {
+  if (saveData && (runtime.events.find(e=>e.playerCompletionContract?.actions.includes(action)) as any)?.questLineBeatId) {
+    const e=runtime.events.find(e=>e.playerCompletionContract?.actions.includes(action))!;const offer=questLineOffer(saveData,e.id);if(!offer || !(action.requiresPresentCharacterIds||[]).every(id=>offer.ctx.presentActorIds.includes(id)))return false;
+    const effects=offer.beat.byAction?.[action.id]||[];if(effects.some(e=>e.kind==='affinityGrant'&&!Number.isFinite((LINE_RESOURCES.affinityWeights as any)[e.weightId])))return false;
+  }
   const preparations = new Set(state.preparations || []);
   if (action.kind === 'prepare' && action.grantsPreparation && preparations.has(action.grantsPreparation)) return false;
   if (!(action.requiresPreparation || []).every(item => preparations.has(item))) return false;
@@ -1403,7 +1427,10 @@ function currentStoryEventActions(saveData: SaveData, includeAwayActions: boolea
     : undefined;
   const contractStep = currentContractStep(runtime);
   const travel = includeAwayActions ? undefined : questTravelSelection(saveData, runtime, event, state.contractHash);
-  const availableActions = travel ? [] : contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData));
+  let availableActions = travel ? [] : contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData));
+  const requiredScene = sceneModuleEnabled() && sceneContractForEvent(event.id, runtime.flags);
+  if (requiredScene && availableActions.some(action => action.id === requiredScene.meta.hook.actionId))
+    availableActions = availableActions.filter(action => action.id === requiredScene.meta.hook.actionId);
   const steps: ScenarioEventActionSelection[] = travel ? [travel] : availableActions.map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
@@ -1499,7 +1526,7 @@ export function resolveStoryEventActionFromPlayerText(
   // 问句、整句假设或转述不得靠去标点后的短语伪记同意。句中另有陈述时仍可匹配。
   if (/[？?]\s*$/.test(rawIntent)) return undefined;
   if (/^(?:如果|要是|假如|倘若|若是)/.test(rawIntent)) return undefined;
-  if (/^(?:她说|他说|凝羽说|苏妲己说|别人说|有人说|他们说)/.test(rawIntent)) return undefined;
+  if (new RegExp("^(?:她说|他说|"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"说|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"说|别人说|有人说|他们说)","").test(rawIntent)) return undefined;
   const runtime = getRuntime(saveData);
   const event = runtime ? getCurrentPlayerCompletionEvent(runtime) : undefined;
   const contract = event?.playerCompletionContract;
@@ -1541,7 +1568,8 @@ export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioE
   const runtime = getRuntime(saveData);
   if (!runtime || runtime.storyMode === 'world_sim') return [];
   const anchorId = getNarrativeAnchorEvent(runtime)?.id;
-  return runtime.activeEventIds
+  const offers=QUEST_LINES.flatMap(l=>l.beats).filter(b=>questLineOffer(saveData,b.eventId,anchorId)).map(b=>b.eventId);
+  return [...new Set([...runtime.activeEventIds,...offers])]
     .map(id => runtime.events.find(event => event.id === id))
     .filter((event): event is ScenarioModEvent => isAvailableExplorationEvent(runtime, event) && event.id !== anchorId)
     .sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0)
@@ -1613,7 +1641,7 @@ export function acknowledgeStageEntryPresentation(saveData: SaveData, toStageId:
   return true;
 }
 
-const SILK_POUCH_TAKE_RE = /(?:获得|接过|收下|王哲递给|放入背包|收入背包).{0,12}锦囊|锦囊.{0,12}(?:获得|接过|收下|放入背包|收入背包)/;
+const SILK_POUCH_TAKE_RE = new RegExp("(?:获得|接过|收下|"+"(?:"+entityNamePattern("character","lcq.character.wang_zhe")+")"+"递给|放入背包|收入背包).{0,12}锦囊|锦囊.{0,12}(?:获得|接过|收下|放入背包|收入背包)","");
 const SILK_POUCH_UNOBTAINED = '锦囊仍未到手。案上的锦囊没有因为这句话变成你的东西。';
 const JIN_NANG_TRANSFER_ID = 'lcq.event.s02_01.inventory.jin_nang';
 const SILK_POUCH_ALREADY_HELD_NEXT = '锦囊已经收妥，接下来需要认下托付。';
@@ -1795,6 +1823,15 @@ function recordStoryEventStructuredActionAt(
   if (isBaihuCaptureBlockingDefaultEvent(runtime, event.id)) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'gamble_refusal_capture' };
   }
+  const scene = activeScene(saveData);
+  const sceneContract = sceneModuleEnabled() || scene ? (scene?.contractId ? sceneContractById(scene.contractId) : sceneContractForEvent(event.id, runtime.flags)) : undefined;
+  const sceneSettlement = Boolean(sceneContract && scene?.eventId === event.id
+    && scene.actionId === selection.actionId && scene.phase === 'closing'
+    && scene.state.status === 'closed' && scene.state.contractId === sceneContract.meta.id
+    && scene.state.contractVersion === sceneContract.meta.version);
+  if (sceneContract && selection.actionId === sceneContract.meta.hook.actionId && !sceneSettlement) {
+    return { attempted: false, completed: false, eventId: event.id, reason: 'scene_module_required' };
+  }
   const state = reconcileEventActionContract(runtime, event);
   if (!state || state.contractHash !== selection.contractHash) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_contract' };
@@ -1812,6 +1849,7 @@ function recordStoryEventStructuredActionAt(
     return { attempted: false, completed: false, eventId: event.id, reason: 'not_on_site' };
   }
   // 绝路选项先于合同动作判定：它不推进本拍，直接结束本局。
+  // refuse_gamble_take_paolao仅为历史动作id；E01已改为画外斩首，保留动作id兼容引用。
   const fatalChoice = (event.fatalOutcomes?.choices || []).find(item => item.id === selection.actionId);
   if (fatalChoice) {
     if (event.id === 'lcq.event.shanghou_revealed'
@@ -1826,6 +1864,7 @@ function recordStoryEventStructuredActionAt(
       endingId: fatalChoice.ending.id,
       presentation: endingPresentation({ endingId: fatalChoice.ending.id, sourceEventId: event.id }),
       title: fatalChoice.ending.title,
+      // E03原事实仍含旧措辞，保留此兼容替换；与E01映射无关。
       facts: fatalChoice.ending.facts.map(fact => event.id === 'lcq.event.sudaji_south_pact' ? fact.replace('依约执行炮烙', '下令执行炮烙') : fact),
       sourceEventId: event.id,
       atTurn: Math.max(0, Number(runtime.worldTurn) || 0),
@@ -1854,7 +1893,9 @@ function recordStoryEventStructuredActionAt(
     return { attempted: false, completed: false, eventId: event.id, reason: 'open_world_prerequisites' };
   }
   let outcome: ScenarioPlayerCompletionOutcome;
-  if (action.judgement) {
+  if (sceneSettlement) {
+    outcome = 'success'; // Complete the encounter, not claim the player won.
+  } else if (action.judgement) {
     const resolution = options?.judgementResolution;
     if (!resolution || resolution.status !== 'resolved') {
       return { attempted: false, completed: false, eventId: event.id, reason: 'judgement_required' };
@@ -1872,8 +1913,8 @@ function recordStoryEventStructuredActionAt(
     const success = contract.kind === 'objective_action' || conditionsMatch(action.successWhen, saveData, runtime);
     outcome = success ? 'success' : action.unmetOutcome || 'failure';
   }
-  const detail = action.outcomeText[outcome];
-  if (!action.judgement && (selection.expectedOutcome !== outcome || selection.outcomeText !== detail)) {
+  const detail = sceneSettlement ? scene?.closing?.text || '场面已收束。' : action.outcomeText[outcome];
+  if (!sceneSettlement && !action.judgement && (selection.expectedOutcome !== outcome || selection.outcomeText !== detail)) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'stale_condition' };
   }
   if (hasPathReceiptConflict(runtime, event, action.outcomeEffects?.[outcome])) {
@@ -1883,7 +1924,7 @@ function recordStoryEventStructuredActionAt(
   state.lastOutcome = outcome;
   const attemptNumber = Math.max(0, Number(state.attemptCount) || 0) + 1;
   state.attemptCount = attemptNumber;
-  const factReceipts = (event.narrativeFactReceipts || [])
+  const factReceipts = (sceneSettlement ? [] : (event.narrativeFactReceipts || []))
     .filter(receipt => receipt.actionId === action.id && receipt.outcome === outcome)
     .map(receipt => structuredClone(receipt));
   state.attempts.push({
@@ -1908,7 +1949,7 @@ function recordStoryEventStructuredActionAt(
   );
   if (outcome === 'success') {
     settleEarlyStoryTrade(saveData, runtime, event.id, action.id);
-    applyStepSceneLedger(saveData, runtime, event.id, action.id);
+    if (!sceneSettlement) applyStepSceneLedger(saveData, runtime, event.id, action.id);
     inventorySettlements.push(...settleScenarioInventoryTransfers(saveData, runtime, { inventoryTransfers: action.ledgerEffects?.inventoryTransfers }, { eventId: event.id, actionId: action.id, outcome }));
   }
   const completed = action.kind !== 'prepare' && contract.settleOn.includes(outcome);
@@ -1918,6 +1959,7 @@ function recordStoryEventStructuredActionAt(
       { eventId: event.id, actionId: action.id, outcome },
     ));
   }
+  if (completed && (event as any).questLineBeatId) inventorySettlements.push(...settleOptionalLine(saveData,runtime,event,action.id,outcome,selection.lineAffinityDelta));
   if (completed) state.readyAtTurn = turn;
   if (outcome === 'success' && event.id === 'lcq.event.s05b_shanghou_reads_letter' && action.id === 'hand_blank_letter_to_shanghou') {
     runtime.flags['event.s05b_shanghou_reads_letter.ice_gu_cured'] = true;
@@ -1937,7 +1979,7 @@ function recordStoryEventStructuredActionAt(
   }
   syncEarlyEncounteredCharacters(saveData, runtime);
   const routeLocation = storyRouteLocation(event.id);
-  if (routeLocation && (saveData as any)?.角色?.位置) (saveData as any).角色.位置.描述 = `中州·${routeLocation}`;
+  if (routeLocation && (saveData as any)?.角色?.位置) { (saveData as any).角色.位置.描述 = `中州·${routeLocation}`; refreshSaveEntityReferences(saveData); }
   else if (action.locationId || event.locationId) movePlayerToEventLocation(saveData, runtime, action.locationId || event.locationId!);
   if (outcome === 'success' && event.id === 'lcq.event.s03b_yinzhu_xiongerpu' && action.id === 'burn_yinzhu_victim') {
     settleNanhuangForcedTravel(saveData, runtime, { afterEventDone: `${event.id}::${action.id}` });
@@ -2230,10 +2272,11 @@ function movePlayerToEventLocation(saveData: SaveData, runtime: RuntimeState, lo
     | undefined;
   const name = String(loc?.name || '').trim();
   if (!name) return;
-  const position = (saveData as { 角色?: { 位置?: { 描述?: unknown; x?: number; y?: number } } }).角色?.位置;
+  const position = (saveData as { 角色?: { 位置?: { 描述?: unknown; locationId?: string; x?: number; y?: number } } }).角色?.位置;
   if (!position || typeof position !== 'object') return;
   const current = String(position.描述 || '');
   const continent = current.includes('·') ? current.slice(0, current.indexOf('·')) : '';
+  position.locationId = canonicalEntityId('location', locationId);
   position.描述 = continent ? `${continent}·${name}` : name;
   if (typeof loc?.coordinates?.x === 'number') position.x = loc.coordinates.x;
   if (typeof loc?.coordinates?.y === 'number') position.y = loc.coordinates.y;
@@ -2254,7 +2297,10 @@ function questTravelSelection(
   contractHash: string,
 ): ScenarioEventActionSelection | undefined {
   const contract = event.playerCompletionContract;
-  const targetLocationId = stepScene(runtime, event.id)?.locationId || event.locationId;
+  const actionState = reconcileEventActionContract(runtime, event);
+  const requiredScene = sceneModuleEnabled() && sceneContractForEvent(event.id, runtime.flags);
+  const nextAction = contract?.actions.find(action => actionState && eventActionAvailable(action, actionState, runtime, saveData) && (!requiredScene || action.id === requiredScene.meta.hook.actionId));
+  const targetLocationId = nextAction?.locationId || stepScene(runtime, event.id)?.locationId || event.locationId;
   // 按固定顺序的多步合同同样适用：人不在场不能做任何一步，完成后也就无须瞬移。
   if (!contract || !targetLocationId || storyRouteLocation(event.id)) return undefined;
   if (OPEN_WORLD_OWNED_TRAVEL_EVENT_IDS.has(event.id)) return undefined;
@@ -2321,6 +2367,8 @@ function settleQuestTravel(
     settleNanhuangForcedTravel(saveData, runtime, { afterEventDone: 'lcq.event.s04b_lingfei_baiyi_crisis_13' });
     if (runtime.travelLedger && !runtime.travelLedger.doneEventIds.includes('lcq.event.s04b_lingfei_baiyi_crisis_13')) runtime.travelLedger.doneEventIds.push('lcq.event.s04b_lingfei_baiyi_crisis_13');
   }
+  // Explicit main-route movement skips optional insertions, while retaining the original journey/calendar receipt.
+  for(const eventId of runtime.completedEventIds)if(runtime.travelLedger&&!runtime.travelLedger.doneEventIds.includes(eventId)&&deferOptionalDeparture(saveData,eventId)){settleNanhuangForcedTravel(saveData,runtime,{afterEventDone:eventId});runtime.travelLedger.doneEventIds.push(eventId);}
   movePlayerToEventLocation(saveData, runtime, locationId);
   noteNanhuangArrival(runtime, locationId, `arrive:${event.id}`);
   const id = `arrive:${event.id}:${locationId}`;
@@ -2724,6 +2772,7 @@ function resolveOffscreenWorldEvents(
     // 多事件合同只结算仍未落账的成员：既不能重写已由玩家/IF 结算的成员，也不能因
     // 其中一个成员已结算而永久遗留同组其余世界事件。
     const unresolvedIds = knownIds.filter(id => !isEventSettled(runtime, id));
+    if (sceneModuleEnabled() && unresolvedIds.some(id => sceneContractForEvent(id, runtime.flags)?.meta.hook.required)) continue;
     if (!unresolvedIds.length) continue;
     const owner = runtime.events.find(event => event.offscreenResolution?.id === resolution.id)
       || runtime.events.find(event => knownIds.includes(event.id));
@@ -3019,12 +3068,12 @@ function recordChronicleTransitions(runtime: RuntimeState, transitions: Scenario
 
 function backfillCompletedEventChronicle(runtime: RuntimeState): void {
   for (const entry of runtime.chronicle || []) {
-    if (typeof entry.title === 'string') entry.title = entry.title.replace(/易虎之死/g, '易虎失踪');
-    if (entry.detail) entry.detail = entry.detail.replace(/易虎之死/g, '易虎失踪');
+    if (typeof entry.title === 'string') entry.title = entry.title.replace(new RegExp("(?:"+entityNamePattern("character","liuchao.character.yi_hu")+")"+"之死","g"), '易虎失踪');
+    if (entry.detail) entry.detail = entry.detail.replace(new RegExp("(?:"+entityNamePattern("character","liuchao.character.yi_hu")+")"+"之死","g"), '易虎失踪');
   }
   for (const entry of runtime.divergences || []) {
-    if (typeof entry.worldDelta === 'string') entry.worldDelta = entry.worldDelta.replace(/易虎之死/g, '易虎失踪');
-    if (typeof entry.evidence === 'string') entry.evidence = entry.evidence.replace(/易虎之死/g, '易虎失踪');
+    if (typeof entry.worldDelta === 'string') entry.worldDelta = entry.worldDelta.replace(new RegExp("(?:"+entityNamePattern("character","liuchao.character.yi_hu")+")"+"之死","g"), '易虎失踪');
+    if (typeof entry.evidence === 'string') entry.evidence = entry.evidence.replace(new RegExp("(?:"+entityNamePattern("character","liuchao.character.yi_hu")+")"+"之死","g"), '易虎失踪');
   }
   for (const eventId of runtime.completedEventIds || []) {
     if (!eventIsKnownToPlayer(runtime, eventId)) continue;
@@ -3581,7 +3630,7 @@ function settleSharedExperienceAffinity(
     for (const eventId of pending) {
       const event = eventById.get(eventId);
       granted.add(eventId);
-      if (!event) continue;
+      if (!event || (event as any).sharedExperience === 'suppress') continue;
       const grant = isCriticalStoryEvent(event) ? AFFINITY_EVENT_GRANT.critical : AFFINITY_EVENT_GRANT.normal;
       for (const characterId of event.relatedCharacterIds || []) {
         const name = nameById.get(characterId);
@@ -3658,7 +3707,7 @@ export function previewWangZheStayEnding(saveData: SaveData, playerText: string)
   if (!runtime?.activeEventIds?.includes('lcq.event.s02_02') || runtime.gameOver) return undefined;
   if (!runtime.eventActionStates?.['lcq.event.s02_02']?.attempts?.some(item => item.actionId === 'witness_wang_zhe_nine_suns' && item.outcome === 'success')) return undefined;
   if (/[？?“”"「」『』]|如果|假如|要是|他说|她说|并非|并未|不是|没有说|没说|才怪|曾经|之前|不(?:留|看)|离开|逃离|撤离/.test(raw)) return undefined;
-  if (!/(?:我不走|不逃|不撤|留下|留在(?:原地|战场)|留.{0,12}看.{0,8}王哲)/.test(raw)) return undefined;
+  if (!new RegExp("(?:我不走|不逃|不撤|留下|留在(?:原地|战场)|留.{0,12}看.{0,8}"+"(?:"+entityNamePattern("character","lcq.character.wang_zhe")+")"+")","").test(raw)) return undefined;
   return runtime.events.find(item => item.id === 'lcq.event.s02_02')?.fatalOutcomes?.deadline?.ending;
 }
 
@@ -3674,12 +3723,12 @@ function settleEarlyStoryTrade(saveData: SaveData, runtime: RuntimeState, eventI
   if (!inventory) return;
   if (fee || buy) {
     inventory.货币 ||= {};
-    const gold = inventory.货币.金铢 || { 币种: '金铢', 名称: '金铢', 数量: 0, 价值度: 1 };
-    inventory.货币.金铢 = { ...gold, 数量: Math.max(0, (Number(gold.数量) || 0) + (fee ? 60 : -50)) };
+    const gold = inventory.货币.金铢 || { ...DEFAULT_CURRENCIES.金铢, 数量: 0 };
+    inventory.货币.金铢 = { ...gold, ...DEFAULT_CURRENCIES.金铢, 数量: Math.max(0, (Number(gold.数量) || 0) + (fee ? 60 : -50)) };
   }
   const bondId = 'lcq.item.ajiman_bond';
   inventory.物品 ||= {};
-  if (buy) inventory.物品[bondId] = { 物品ID: bondId, 名称: '阿姬曼身契', 类型: '其他', 品质: { quality: '凡', grade: 0 }, 数量: 1, 描述: '从祁老四手中接过的阿姬曼身契。', 已装备: false } as any;
+  if (buy) {const item=catalogItem(bondId,runtime.modId)!;inventory.物品[bondId] = { 物品ID: item.id, 名称: item.name, 类型: '其他', 品质: { quality: '凡', grade: 0 }, 数量: 1, 描述: item.description, 已装备: false } as any;}
   if (tear) delete inventory.物品[bondId];
   runtime.flags[key] = true;
 }
@@ -3688,9 +3737,9 @@ function settleEarlyStoryTrade(saveData: SaveData, runtime: RuntimeState, eventI
 function syncEarlyEncounteredCharacters(saveData: SaveData, runtime: RuntimeState): void {
   const source = { ...(runtime.canon as any), ...(runtime as any).content, opening: runtime.opening || {} };
   for (const [eventId, characterId, name, gender] of [
-    ['lcq.event.free_ajiman', 'liuchao.character.a_jiman_bana', '阿姬曼', '女'],
-    ['lcq.event.wuerlang_joins', 'liuchao.character.wu_er_lang', '武二郎', '男'],
-    ['lcq.event.xiaozi_first_appears', 'liuchao.character.xiao_zi', '小紫', '女'],
+    ['lcq.event.free_ajiman', 'liuchao.character.a_jiman_bana', ...entityAliases("character","liuchao.character.a_jiman_bana"), '女'],
+    ['lcq.event.wuerlang_joins', 'liuchao.character.wu_er_lang', ...entityAliases("character","liuchao.character.wu_er_lang"), '男'],
+    ['lcq.event.xiaozi_first_appears', 'liuchao.character.xiao_zi', ...entityAliases("character","liuchao.character.xiao_zi"), '女'],
   ]) {
     if (runtime.completedEventIds?.includes(eventId) || runtime.eventActionStates?.[eventId]?.attempts?.some(item => item.outcome === 'success')) {
       ensureEncounteredScenarioCharacter(saveData, source, characterId, { name, gender });
@@ -3709,6 +3758,17 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   const next = structuredClone(saveData);
   const runtime = getRuntime(next);
   if (!runtime) return { saveData: next, transitions: [] };
+  migrateLegacyE01Ending(runtime.gameOver);
+  const lossEnding = BATTLE_LOSS_ENDINGS.find(ending => ['lcq.encounter.f13.tier', 'lcq.encounter.f14.tier'].includes(ending.tierFlag)
+    && (runtime.flags?.[ending.tierFlag] === ending.tier || runtime.flags?.[ending.tierFlag] === 'rout') // old-save alias only; no separate defeat tier
+    && (runtime.events || []).some(event => event.id === ending.sourceEventId));
+  if (!runtime.gameOver && lossEnding) {
+    runtime.gameOver = { endingId: lossEnding.endingId, title: lossEnding.title, facts: [...lossEnding.facts],
+      sourceEventId: lossEnding.sourceEventId, atTurn: runtime.worldTurn || 0, presentation: lossEnding.presentation };
+    next.系统.历史.叙事.push({type:'gm',content:[endingBridge('',lossEnding.endingId),fixedEndingNarrative(runtime.gameOver)].filter(Boolean).join('\n\n'),time:'',actionOptions:[],image:lossEnding.presentation.image || undefined});
+    return { saveData: next, transitions: [{ type: 'game_over', id: lossEnding.endingId }] };
+  }
+  if (activeScene(next)) return { saveData: next, transitions: [] };
   // 本局已结束：不再推进任何进度，也不再激活新拍。玩家只能读档。
   if ((runtime as RuntimeState).gameOver) return { saveData: next, transitions: [] };
   backfillRelationshipIds(next, runtime.canon?.characters);
@@ -3717,7 +3777,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   reconcileSaveWithRegistry(next, runtime as RuntimeState & { modId?: string });
   projectBottomLinesToNpcs(next);
   updateAcquaintanceLedger(next, runtime as RuntimeState & { modId?: string });
-  const affinityGrants = settleSharedExperienceAffinity(next, runtime as RuntimeState & { modId?: string });
+  const affinityGrants = [...settleSharedExperienceAffinity(next, runtime as RuntimeState & { modId?: string }), ...((runtime as any).pendingLineAffinityGrants||[])];
+  delete (runtime as any).pendingLineAffinityGrants;
   const reputationGrants = settleEventReputation(next, runtime as RuntimeState & { modId?: string });
   updateStanceStates(next, runtime as RuntimeState & { modId?: string });
   normalizeRuntimeFlags(runtime);
@@ -3745,7 +3806,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     const npc = relations?.[character.id];
     if (!npc) continue;
     npc.名字 = character.name;
-    if (character.name === '凝羽') {
+    if (isNamedEntityLabel("character","liuchao.character.ning_yu",character.name)) {
       const factualMemory = (note: string) => note.replace('被程宗扬用麻古迷奸', '曾遭程宗扬施用麻古造成的药物侵害，后来出现药物依赖（原著事实记忆，不作为可演出或可重复内容）');
       if (character.profile?.memories) character.profile.memories = character.profile.memories.map(factualMemory);
       npc.记忆 = (npc.记忆 || []).map(factualMemory);
@@ -3755,18 +3816,18 @@ export function advanceScenarioRuntime(saveData: SaveData): {
       npc.种族 = character.profile?.race; npc.出生 = character.profile?.origin;
       npc.外貌描述 = character.profile?.appearance; npc.性格特征 = character.profile?.personality;
       npc.当前外貌状态 = '状态正常';
-      if (/小紫势力|简介待补/.test(String(npc.势力归属 || ''))) delete npc.势力归属;
-      npc.势力归属列表 = (npc.势力归属列表 || []).filter((name: string) => !/小紫势力|简介待补/.test(name));
+      if (new RegExp("(?:"+entityNamePattern("faction","liuchao.faction.xe6bd0066c9")+")"+"|简介待补","").test(String(npc.势力归属 || ''))) delete npc.势力归属;
+      npc.势力归属列表 = (npc.势力归属列表 || []).filter((name: string) => !new RegExp("(?:"+entityNamePattern("faction","liuchao.faction.xe6bd0066c9")+")"+"|简介待补","").test(name));
       npc.记忆 = (npc.记忆 || []).filter((note: string) => !xiaoziUnrevealedFacts(runtime).test(String(note)));
       npc.记忆 = [...new Set([...npc.记忆, ...(character.profile?.notes || [])])];
     }
     if (character.id === 'liuchao.character.xie_yi') {
-      npc.记忆 = (npc.记忆 || []).filter((note: string) => !/护佑其遗孀|护佑.*遗孤|奉岳帅之命|当前关卡 lcq\./.test(String(note)) && (xiaoziDisclosure(runtime).father || !/碧姬|碧奴|小紫|遗孤|遗腹/.test(String(note))));
+      npc.记忆 = (npc.记忆 || []).filter((note: string) => !new RegExp("护佑其遗孀|护佑.*遗孤|奉"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"之命|当前关卡 lcq\\.","").test(String(note)) && (xiaoziDisclosure(runtime).father || !new RegExp("(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"|遗孤|遗腹","").test(String(note))));
       const hidden = isXieyiSkillHidden(runtime);
       npc.境界 = { ...npc.境界, 名称: hidden ? '未知' : character.realm || '凡人', 阶段: hidden ? '' : npc.境界?.阶段 || '初期' };
     }
     if (['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis'].includes(runtime.modId || '')
-      && ['凝羽', '苏荔', '阿夕', '谢艺', '武二郎', '祁远', '云苍峰'].includes(character.name)) {
+      && [...entityAliases("character","liuchao.character.ning_yu"), ...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","liuchao.character.a_xi"), ...entityAliases("character","liuchao.character.xie_yi"), ...entityAliases("character","liuchao.character.wu_er_lang"), ...entityAliases("character","liuchao.character.qi_yuan"), ...entityAliases("character","liuchao.character.yun_cang_feng")].includes(character.name)) {
       npc.出生 = character.profile?.origin || character.role || npc.出生;
       npc.外貌描述 = character.profile?.appearance || character.description || npc.外貌描述;
       npc.性格特征 = character.profile?.personality || npc.性格特征;
@@ -3873,7 +3934,8 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   }
 
   // 南荒：上一拍完成触发的强制移动先落回执、再投影位置，下一拍才在新地点激活。
-  syncNanhuangRailTravel(next, runtime);
+  syncNanhuangRailTravel(next, runtime, eventId=>deferOptionalDeparture(next,eventId));
+  expireQuestLineWindows(next);
   const activeChapter = runtime.chapters.find(chapter => chapter.id === runtime.currentChapterId);
   // rail跨章节但保留初始chapter的旧档：65章闲聊仍按事件条件开放。
   if (runtime.modId === 'lcq.stage_04b_lingfei_baiyi_crisis' && activeChapter
@@ -3882,7 +3944,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   // 可选探索窗口关闭后不再占活跃列表；不伪造完成/奖励，不影响主线。
   runtime.activeEventIds = runtime.activeEventIds.filter(id => {
     const event = runtime.events.find(item => item.id === id);
-    return !event?.exploration || conditionsMatch(event.conditions, next, runtime);
+    return (event as any)?.questLineBeatId ? !!questLineOffer(next,id) : !event?.exploration || conditionsMatch(event.conditions, next, runtime);
   });
   const chapterEventIds = new Set(activeChapter?.eventIds || []);
   syncEventTimelineEligibility(next, runtime);
@@ -3906,7 +3968,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     if (runtime.activeEventIds.includes(eventId) || isEventSettled(runtime, eventId)) continue;
     if (railProfile?.orderedEventIds.includes(eventId)) continue;
     const event = runtime.events.find(item => item.id === eventId);
-    if (event && conditionsMatch(event.conditions, next, runtime) && eventTimelineOpen(runtime, event)) {
+    if (event && (!(event as any).questLineBeatId || questLineOffer(next,event.id)) && conditionsMatch(event.conditions, next, runtime) && eventTimelineOpen(runtime, event)) {
       runtime.activeEventIds.push(eventId);
       const state = eventTimelineState(runtime, eventId);
       if (state && state.activatedAtTurn === undefined) state.activatedAtTurn = Math.max(0, Number(runtime.worldTurn) || 0);
@@ -3954,5 +4016,46 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   recordChronicleTransitions(runtime, transitions);
   releaseBaihuGambleRefusalIfEscaped(next);
 
+  refreshSaveEntityReferences(next);
   return { saveData: next, transitions, affinityGrants, reputationGrants };
+}
+
+export function clampLineAffinityDelta(value:number):number {return Number.isFinite(value)?Math.max(-15,Math.min(15,value)):0;}
+
+/** Own action receipt is the single write point for optional affection, memory and rewards. */
+function settleOptionalLine(save:SaveData,r:RuntimeState,event:ScenarioModEvent,actionId:string,outcome:string,hostDelta?:number):ScenarioInventorySettlement[] {
+ const offer=questLineOffer(save,event.id);if(!offer)return [];
+ const anyR=r as any,state=anyR.questLineState||={version:1,receipts:{}};
+ const receiptId=`line.${event.id}.${actionId}`;
+ const plan=settleLineInsertion(offer.line,offer.beat.id,{id:receiptId,eventId:event.id,actionId,outcome,turn:Number(r.worldTurn)||0},offer.ctx,state);if(!plan)return [];
+ // Validate all referenced resources before writing any effect.
+ for(const e of plan.effects){if(e.kind==='affinityGrant'&&!Number.isFinite((LINE_RESOURCES.affinityWeights as any)[e.weightId]))throw Error(`pending affinity weight ${e.weightId}`);if(e.kind==='memoryTicket'&&!(LINE_RESOURCES.memories as any)[e.episodeTemplateId])throw Error('unknown memory template');if(e.kind==='affinityGrant'&&!relationshipOf(save,e.actorId))throw Error('line owner missing');if(e.kind==='reveal'&&!(LINE_RESOURCES.facts as any)[e.factId])throw Error('unknown fact');if(e.kind==='status'&&!statusCatalog.some(d=>d.id===e.statusId))throw Error('unknown line status');}
+ const majorResponse=hostDelta!==undefined && Math.abs(clampLineAffinityDelta(hostDelta))>=10;
+ const effects:ScenarioPlayerCompletionEffects={},changes:any[]=[];
+ for(const e of plan.effects){
+  if(e.kind==='itemGrant')(effects.inventoryTransfers||=[]).push({transferId:`${receiptId}.${e.itemId}`,itemId:e.itemId,quantity:e.quantity});
+  if(e.kind==='memoryTicket'){const m=(LINE_RESOURCES.memories as any)[e.episodeTemplateId];(effects.memories||=[]).push({actorIds:[e.actorId],summary:m.summary,tags:[`receipt:${receiptId}`,`template:${e.episodeTemplateId}`,...(majorResponse?["major_episode"]:[])],salience:majorResponse?Math.max(80,(LINE_RESOURCES.salience as any)[m.salienceId]):(LINE_RESOURCES.salience as any)[m.salienceId]});}
+  if(e.kind==='npcKnowledge')(effects.npcKnowledge||=[]).push({actorIds:e.actorIds,factId:e.factId});
+  if(e.kind==='reveal'){const f=(LINE_RESOURCES.facts as any)[e.factId];if(!f)throw Error('unknown line fact');(effects.playerKnowledge||=[]).push({factId:e.factId,subjectId:f.subjectId,predicate:'known',claim:f.claim,status:'confirmed',disclosureScope:'player',source:{kind:e.source==='told_privately'?'npc_statement':'observed',label:offer.beat.objective}} as any);}
+  if(e.kind==='setReceipt')(effects.pathReceipts||=[]).push({receiptId:e.receiptId,sourceEventId:event.id,choiceId:actionId,mutexGroupId:e.mutexGroupId||e.receiptId,dimension:'method',label:offer.beat.objective,consumeAtEventIds:e.consumeAtEventIds});
+  if(e.kind==='setState')r.flags[e.stateId]=e.value;
+  if(e.kind==='affinityGrant'){
+   const npc=relationshipOf(save,e.actorId)?.profile;if(!npc)throw Error(`line owner missing ${e.actorId}`);
+   const delta=clampLineAffinityDelta(hostDelta ?? Number((LINE_RESOURCES.affinityWeights as any)[e.weightId])),from=Number(npc.好感度)||0,cap=affinityCapFor(e.actorId,typeof npc.与玩家关系==='string'?npc.与玩家关系:undefined,runtimeEntityName(r,e.actorId))?.cap??100;
+   const to=clampAffinity(delta>0?Math.max(from,Math.min(cap,from+delta)):from+delta);npc.好感度=to;
+   changes.push({characterId:e.actorId,from,to,weightId:e.weightId,receiptId,name:runtimeEntityName(r,e.actorId),eventId:event.id,eventName:event.name});
+  }
+  if(e.kind==='status'){
+   const def=statusCatalog.find(d=>d.id===e.statusId)! as any,minutes=def.afterScene?.minutes??null,store=injuryStore(save),now=sceneTime(save);
+   (store.actors[e.actorId]||=[]).push({player:e.actorId===r.opening?.playerCharacterId,statusId:def.id,label:def.label,sourceScene:receiptId,cause:def.cause,source:def.source,appliedAt:now,expiresAt:minutes===null?null:now+minutes,effects:def.effects,remove:def.remove});
+   if(e.actorId===r.opening?.playerCharacterId){const row={party:e.actorId,ref:e.actorId,status:def.id,label:def.label,minutes,cause:def.cause,source:receiptId};(save.角色.效果||=[]).push(toPlayerStatusEffect(row,(save as any).元数据.时间,def));}renderInjuryViews(save);
+  }
+  if(e.kind==='ending')anyR.gameOver={endingId:e.endingId,presentation:endingPresentation({endingId:e.endingId,sourceEventId:event.id}),sourceEventId:event.id,atTurn:r.worldTurn};
+
+ }
+ const inventory=applyStoryEventOutcomeEffects(save,r,event,actionId,'success',effects,1);
+ for(const e of plan.effects)if(e.kind==='memoryTicket'){const npc=relationshipOf(save,e.actorId)?.profile as any,m=(LINE_RESOURCES.memories as any)[e.episodeTemplateId];if(npc){npc.记忆=Array.isArray(npc.记忆)?npc.记忆:[];npc.记忆.push(m.summary);npc.记忆=npc.记忆.slice(-12);}}
+ (anyR.pendingLineAffinityGrants||=[]).push(...changes);
+ anyR.questLineState=plan.state;(anyR.questLineState.affinityChanges||=[]).push(...changes);
+ return inventory;
 }

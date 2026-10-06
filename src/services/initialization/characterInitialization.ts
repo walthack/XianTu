@@ -1,3 +1,4 @@
+import {levelName} from '../../utils/realmUtils';
 import { newLocalCharacterId, backfillRelationshipIds } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * @fileoverview 角色初始化服务
@@ -126,7 +127,7 @@ function getScenarioStartRealm(saveData: SaveData): string | undefined {
   const protagonist =
     characters.find((c: any) => c?.role === '主角') ||
     characters.find((c: any) => typeof c?.id === 'string' && c.id.includes('cheng_zongyang'));
-  const realm = protagonist?.realm;
+  const realm = levelName(Number.isInteger(protagonist?.level)?protagonist.level:0);
   return typeof realm === 'string' && realm.trim() ? realm.trim() : undefined;
 }
 
@@ -156,11 +157,11 @@ export function calculateInitialAttributes(baseInfo: CharacterBaseInfo, age: num
   console.log(`[角色初始化] 属性计算: 气血=${初始气血}, 灵气=${初始灵气}, 神识=${初始神识}, 年龄=${age}/${最大寿命}`);
   console.log(`[角色初始化] 先天六司: 根骨=${根骨}, 灵性=${灵性}, 悟性=${悟性}`);
 
-  const 起点境界 = startRealm && startRealm.trim() ? startRealm.trim() : "凡人";
+  const 起点境界 = startRealm && startRealm.trim() ? startRealm.trim() : "无修为";
   return {
     境界: {
       名称: 起点境界,
-      阶段: 起点境界 === "凡人" ? "" : "初期", // 凡人无子阶段，其余从初期起步
+      阶段: 起点境界 === "无修为" ? "初期" : "初期", // 凡人无子阶段，其余从初期起步
       当前进度: 0,
       下一级所需: 100,
       突破描述: "引气入体，感悟天地灵气，踏上修仙第一步"
@@ -272,7 +273,7 @@ function prepareInitialData(baseInfo: CharacterBaseInfo, age: number): { saveDat
     效果: [],
     // 🔥 时间：起始年 = 纪元基点 + age（确定性，由代码定；LLM 不得改，避免开局年份乱飘）
     时间: { 年: 计算起始年(age), 月: 临时时间.月, 日: 临时时间.日, 小时: 临时时间.小时, 分钟: 临时时间.分钟 },
-    背包: { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: {} },
+    背包: { 物品: {} },
     装备: { 装备1: null, 装备2: null, 装备3: null, 装备4: null, 装备5: null, 装备6: null },
     功法: {
       当前功法ID: null,
@@ -1237,7 +1238,7 @@ export async function initializeCharacter(
           ],
           当前外貌状态: "衣衫半解，媚眼如丝",
           当前内心想法: "观察着周围的人，寻找能让我感兴趣的猎物",
-          背包: { 灵石: { 下品: 5000, 中品: 500, 上品: 50, 极品: 0 }, 物品: {} },
+          背包: { 物品: {} },
           实时关注: true, // 关键：让AI主动关注此NPC
           私密信息: {
             是否为处女: true,

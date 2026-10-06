@@ -42,16 +42,16 @@ test('public phase cards survive registry resolution, retain protected true real
    const c=chars.find(c=>c.name===name);assert.doesNotMatch(c.profile.personality.join(' '),/外冷内媚|淫媚|小孩子气|富有情欲|顺从/);
    assert.equal(c.role,d.canon.characters.find(c=>c.name===name).role);
   }
-  const x=chars.find(c=>c.name==='谢艺');assert.equal(x.realm,'化神');assert.doesNotMatch(x.profile.appearance,/墨镜|折扇/);
+  const x=chars.find(c=>c.name==='谢艺');assert.equal(x.realm,'通幽');assert.doesNotMatch(x.profile.appearance,/墨镜|折扇/);
   const s=runtime.advanceScenarioRuntime(applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(),buildStrictScenarioInitialization(d))).saveData;
   ensureEncounteredScenarioCharacter(s,{characters:s.世界.状态.剧本模组.canon.characters,opening:d.scenario.opening},'liuchao.character.xie_yi');
   assert.equal(s.社交.关系.谢艺.境界.名称,'未知');
-  assert.doesNotMatch(buildScenarioStoryPrompt(s,'谢艺'),/谢艺（[^）]*化神/);
+  assert.doesNotMatch(buildScenarioStoryPrompt(s,'谢艺'),/谢艺（[^）]*通幽/);
   if(short==='04b_lingfei_baiyi_crisis') {
    s.世界.状态.剧本模组.completedEventIds.push('lcq.event.s04b_lingfei_baiyi_crisis_13');
    s.世界.状态.剧本模组.flags['event.s04b_lingfei_baiyi_crisis_13.done']=true;
    const revealed=runtime.advanceScenarioRuntime(s).saveData;
-   assert.equal(revealed.社交.关系.谢艺.境界.名称,'化神');
+   assert.equal(revealed.社交.关系.谢艺.境界.名称,'通幽');
   }
   for(const npc of Object.values(s.社交.关系))assert.ok((npc.记忆||[]).every(n=>!String(n).startsWith('【内部约束·不入正文】')));
  }

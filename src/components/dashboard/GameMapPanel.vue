@@ -382,6 +382,8 @@
 </template>
 
 <script setup lang="ts">
+import {LEVELS} from '@/utils/realmUtils';
+import {resolveNamedEntityId} from '@/modules/scenarioMods/namedEntities';
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Users, ChevronUp, ChevronDown, Plus, Menu } from 'lucide-vue-next';
 import { GameMapManager } from '@/utils/gameMapManager';
@@ -466,28 +468,7 @@ const playerRealm = computed(() => {
 /** 境界地图生成中状态 */
 const isGeneratingRealmMap = ref(false);
 
-const REALM_ORDER_HINTS: Array<{ token: string; rank: number }> = [
-  { token: '凡人', rank: 0 },
-  { token: '练气', rank: 1 },
-  { token: '筑基', rank: 2 },
-  { token: '金丹', rank: 3 },
-  { token: '元婴', rank: 4 },
-  { token: '化神', rank: 5 },
-  { token: '炼虚', rank: 6 },
-  { token: '合体', rank: 7 },
-  { token: '大乘', rank: 8 },
-  { token: '渡劫', rank: 9 },
-  { token: '真仙', rank: 10 },
-  { token: '金仙', rank: 11 },
-  { token: '太乙', rank: 12 },
-  { token: '大罗', rank: 13 },
-  { token: '淬体', rank: 1 },
-  { token: '凝气', rank: 2 },
-  { token: '通玄', rank: 3 },
-  { token: '化真', rank: 4 },
-  { token: '破虚', rank: 5 },
-  { token: '登天', rank: 6 },
-];
+const REALM_ORDER_HINTS = LEVELS.map(e=>({token:e.name,rank:e.level}));
 
 const getRealmOrderRank = (realmName: string): number => {
   const raw = String(realmName || '').trim();
@@ -1576,7 +1557,7 @@ const initializeMap = async () => {
           出生: "合欢宗",
           外貌描述: "身材极度丰满，拥有夸张的丰乳肥臀，腰肢纤细如蛇。面容妖媚，眼神含春，举手投足间散发着惊人的魅惑力。身着轻薄纱衣，曼妙身姿若隐若现。",
           性格特征: ["平易近人", "开放", "双性恋", "M体质", "S体质", "痴女(潜在)"],
-          境界: { 名称: "金丹", 阶段: "圆满", 当前进度: 0, 下一级所需: 100, 突破描述: "阴阳调和，丹破婴生" },
+          境界: { 名称: "未知", 阶段: "初期", 当前进度: 0, 下一级所需: 0, 突破描述: "按原著时点卡核定" },
           灵根: { name: "天阴灵根", tier: "天品" } as any,
           天赋: [{ name: "合欢圣体", description: "天生媚骨，极适合双修，采补效果翻倍" }] as any,
           先天六司: { 根骨: 8, 灵性: 9, 悟性: 8, 气运: 7, 魅力: 10, 心性: 5 },
@@ -1589,7 +1570,9 @@ const initializeMap = async () => {
           与玩家关系: "陌生人",
           好感度: 10,
           当前位置: { 描述: `${sectName}驻地` },
-          势力归属: sectName,
+          factionId: resolveNamedEntityId('faction',sectName),
+          factionIds: [resolveNamedEntityId('faction',sectName)].filter(Boolean),
+          势力归属: resolveNamedEntityId('faction',sectName) || '',
           人格底线: [],
           记忆: [
             "我是合欢宗的圣女，人称灰夫人。",
@@ -1598,7 +1581,7 @@ const initializeMap = async () => {
           ],
           当前外貌状态: "衣衫半解，媚眼如丝",
           当前内心想法: "观察着周围的人，寻找能让我感兴趣的猎物",
-          背包: { 灵石: { 下品: 5000, 中品: 500, 上品: 50, 极品: 0 }, 物品: {} },
+          背包: { 物品: {} },
           实时关注: true,
           私密信息: {
             是否为处女: true,
@@ -1750,7 +1733,7 @@ const generateAdditionalContent = async () => {
           出生: "合欢宗",
           外貌描述: "身材极度丰满，拥有夸张的丰乳肥臀，腰肢纤细如蛇。面容妖媚，眼神含春，举手投足间散发着惊人的魅惑力。身着轻薄纱衣，曼妙身姿若隐若现。",
           性格特征: ["平易近人", "开放", "双性恋", "M体质", "S体质", "痴女(潜在)"],
-          境界: { 名称: "金丹", 阶段: "圆满", 当前进度: 0, 下一级所需: 100, 突破描述: "阴阳调和，丹破婴生" },
+          境界: { 名称: "未知", 阶段: "初期", 当前进度: 0, 下一级所需: 0, 突破描述: "按原著时点卡核定" },
           灵根: { name: "天阴灵根", tier: "天品" } as any,
           天赋: [{ name: "合欢圣体", description: "天生媚骨，极适合双修，采补效果翻倍" }] as any,
           先天六司: { 根骨: 8, 灵性: 9, 悟性: 8, 气运: 7, 魅力: 10, 心性: 5 },
@@ -1763,7 +1746,9 @@ const generateAdditionalContent = async () => {
           与玩家关系: "陌生人",
           好感度: 10,
           当前位置: { 描述: `${sectName}驻地` },
-          势力归属: sectName,
+          factionId: resolveNamedEntityId('faction',sectName),
+          factionIds: [resolveNamedEntityId('faction',sectName)].filter(Boolean),
+          势力归属: resolveNamedEntityId('faction',sectName) || '',
           人格底线: [],
           记忆: [
             "我是合欢宗的圣女，人称灰夫人。",
@@ -1772,7 +1757,7 @@ const generateAdditionalContent = async () => {
           ],
           当前外貌状态: "衣衫半解，媚眼如丝",
           当前内心想法: "观察着周围的人，寻找能让我感兴趣的猎物",
-          背包: { 灵石: { 下品: 5000, 中品: 500, 上品: 50, 极品: 0 }, 物品: {} },
+          背包: { 物品: {} },
           实时关注: true,
           私密信息: {
             是否为处女: true,

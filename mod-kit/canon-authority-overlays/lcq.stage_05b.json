@@ -1742,18 +1742,6 @@
       "to": []
     },
     {
-      "op": "insertBefore",
-      "path": "content.items",
-      "beforeId": "liuchao.item.coral_dagger",
-      "value": {
-        "id": "lcq.item.xieyi_ashes",
-        "name": "谢艺骨灰",
-        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
       "op": "set",
       "path": "scenario.opening.text",
       "from": "碧鲮族海神殿事件后，程宗扬一行已被鬼王峒深处的危机牵引。小紫、乐明珠、阿夕等人的异常逐渐浮出水面，谢艺和程宗扬准备追索鬼王宫线索。",
@@ -1851,282 +1839,6 @@
       ]
     },
     {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.s05b_bone_tiger",
-      "value": {
-        "id": "lcq.item.nh_mountain_herb",
-        "name": "山草药",
-        "description": "一把晒得半干的南荒草药，捣碎了能敷伤口。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_mountain_herb",
-      "value": {
-        "id": "lcq.item.nh_small_hide",
-        "name": "小张兽皮",
-        "description": "硝得不算好的一张小兽皮，气味呛人。",
-        "type": "material",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_small_hide",
-      "value": {
-        "id": "lcq.item.nh_huamiao_flatbread",
-        "name": "花苗烙饼",
-        "description": "在篝火石板上烙熟的粗面饼。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_huamiao_flatbread",
-      "value": {
-        "id": "lcq.item.nh_torch",
-        "name": "火把",
-        "description": "捆扎好的松明火把。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_torch",
-      "value": {
-        "id": "lcq.item.nh_feed_cake",
-        "name": "料饼",
-        "description": "压实的豆料饼，掰碎了喂牲口。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_feed_cake",
-      "value": {
-        "id": "lcq.item.nh_goose_palm_mushroom",
-        "name": "鹅掌菌",
-        "description": "蕈盖狭长、色泽淡红的蘑菇。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_goose_palm_mushroom",
-      "value": {
-        "id": "lcq.item.nh_rat_pelt",
-        "name": "鼠皮",
-        "description": "灰褐色、手掌大小的鼠皮，叠得整整齐齐。",
-        "type": "material",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_rat_pelt",
-      "value": {
-        "id": "lcq.item.nh_tarnished_trinket",
-        "name": "黯淡旧首饰",
-        "description": "不知传了多少手的旧首饰，早没了光泽。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_tarnished_trinket",
-      "value": {
-        "id": "lcq.item.nh_pebble_necklace",
-        "name": "石子项链",
-        "description": "几粒磨圆的石子用草绳串成的项链。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_pebble_necklace",
-      "value": {
-        "id": "lcq.item.nh_realgar_sachet",
-        "name": "雄黄避蛊香囊",
-        "description": "一只褪色的布香囊，雄黄味冲鼻。",
-        "type": "other",
-        "grade": "下品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_realgar_sachet",
-      "value": {
-        "id": "lcq.item.nh_wild_fruit",
-        "name": "野果",
-        "description": "拳头大的林中野果。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_wild_fruit",
-      "value": {
-        "id": "lcq.item.nh_lava_glass",
-        "name": "凝岩黑晶",
-        "description": "岩浆冷却后留下的黑色玻璃状碎石，边缘很快。",
-        "type": "material",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_lava_glass",
-      "value": {
-        "id": "lcq.item.nh_bone_bead_string",
-        "name": "骨珠串",
-        "description": "一串磨得发亮的兽骨珠子，绳子断了一半。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_bone_bead_string",
-      "value": {
-        "id": "lcq.item.nh_dragon_scale_chip",
-        "name": "龙鳞碎屑",
-        "description": "指甲大小的一片苍黑碎鳞，敲起来有金属声。",
-        "type": "material",
-        "grade": "中品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_dragon_scale_chip",
-      "value": {
-        "id": "lcq.item.nh_red_copper_bead",
-        "name": "赤铜熔珠",
-        "description": "岩浆熔渣里结出的一粒赤红铜珠。",
-        "type": "material",
-        "grade": "下品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_red_copper_bead",
-      "value": {
-        "id": "lcq.item.nh_bean_bun",
-        "name": "豆沙包",
-        "description": "甜丝丝的豆沙包，已经凉了。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_bean_bun",
-      "value": {
-        "id": "lcq.item.nh_boshan_incense",
-        "name": "博山炉香屑",
-        "description": "从香炉边扫下的一撮香屑。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_boshan_incense",
-      "value": {
-        "id": "lcq.item.nh_candle_stub",
-        "name": "残烛",
-        "description": "灯台上烧剩的半截蜡烛。",
-        "type": "consumable",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_candle_stub",
-      "value": {
-        "id": "lcq.item.nh_crystal_wine_cup",
-        "name": "水晶酒盏",
-        "description": "一只剔透的水晶酒盏，杯沿有个小缺口。",
-        "type": "other",
-        "grade": "中品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_crystal_wine_cup",
-      "value": {
-        "id": "lcq.item.nh_crystal_bead",
-        "name": "水晶帘珠",
-        "description": "从水晶帘上脱落的一颗珠子。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_crystal_bead",
-      "value": {
-        "id": "lcq.item.nh_niche_crystal",
-        "name": "龛窟水晶",
-        "description": "一块从龛窟碎口掉落的透明晶块，握久了仿佛还在微微收缩。",
-        "type": "other",
-        "grade": "中品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_niche_crystal",
-      "value": {
-        "id": "lcq.item.nh_fine_crossbow_bolt",
-        "name": "无记号弩矢",
-        "description": "一支做工精良的弩矢，箭杆上没有任何记号。",
-        "type": "material",
-        "grade": "凡品"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.nh_fine_crossbow_bolt",
-      "value": {
-        "id": "lcq.item.nh_fine_crossbow_trigger",
-        "name": "精铁弩机牙",
-        "description": "一枚做工极细的精铁弩机牙，没有铭记。",
-        "type": "material",
-        "grade": "中品"
-      }
-    },
-    {
       "op": "set",
       "path": "canon.characters",
       "from": [
@@ -2136,7 +1848,7 @@
           "description": "现代穿越者",
           "role": "主角",
           "gender": "男",
-          "realm": "练气",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.bai_hu_shang_guan",
@@ -2213,7 +1925,9 @@
             "notes": [
               "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
             ]
-          }
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.le_mingzhu",
@@ -2221,7 +1935,7 @@
           "description": "她生着一张圆润童颜，温柔善良，天真活泼，对程宗扬一往情深，是故事中明艳动人的女主角。",
           "role": "女主角",
           "gender": "女",
-          "realm": "凡人",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.guang_ming_guan_tang",
@@ -2275,7 +1989,9 @@
               "对性事缺乏概念，容易被主角哄骗"
             ],
             "origin": "光明观堂弟子，潘金莲/义姁同门"
-          }
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.xiao_zi",
@@ -2283,7 +1999,7 @@
           "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
           "role": "碧鲮村少女",
           "gender": "女",
-          "realm": "凡人",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.biyu",
@@ -2336,7 +2052,9 @@
             "notes": [
               "【备注】阶段性表现规则：清羽早期刚认识程宗扬时，小紫以痴呆、天真、反常无知的形象接近，典型表现包括尝试用开水浇花；此阶段不得直接演成全知全能的后期紫妈妈。鬼王宫/小紫暴露线之后，才逐步显出残忍、伪装、操控、城府，以及她对岳鹏举身份线的特殊反应。和主角没有发生确实的插入关系，保留元红，偶尔会用嘴和手让主角发泄。对此觉得亏欠主角，所以对主角的性癖很包容，喜欢观察并调教其他后宫成员，尤其是卓云君。"
             ]
-          }
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.xie_yi",
@@ -2344,7 +2062,7 @@
           "description": "星月湖畔的沉默卫士，一身风尘仆仆的朴素衣衫下藏着不露锋芒的聪慧，言语虽少却总以温和态度让人如沐春风。他心中怀着对自己使命的骄傲，每一步都踏在湖光月影之间，守护着这片天地不为人知的秘密。",
           "role": "关键人物",
           "gender": "男",
-          "realm": "化神",
+          "realm": "通幽",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xing_yue_hu",
@@ -2387,7 +2105,9 @@
               "沉稳"
             ],
             "origin": "星月湖八骏之一，岳帅部属"
-          }
+          },
+          "level": 6,
+          "levelSource": "清羽L18220：臻于六级，达到通幽"
         },
         {
           "id": "liuchao.character.yun_cang_feng",
@@ -2428,7 +2148,7 @@
             ],
             "origin": "云氏家族（南荒势力）"
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -2436,7 +2156,9 @@
               "category": "organization",
               "role": "执事"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.ning_yu",
@@ -2485,7 +2207,7 @@
           "skillIds": [
             "lcq.skill.np005"
           ],
-          "realm": "练气",
+          "realm": "未知",
           "gender": "女",
           "affiliations": [
             {
@@ -2503,7 +2225,9 @@
               "category": "organization",
               "role": "御姬奴（凝奴）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.wu_er_lang",
@@ -2548,7 +2272,7 @@
             "lcq.skill.np001",
             "lcq.skill.np004"
           ],
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -2556,7 +2280,9 @@
               "category": "organization",
               "role": "成员"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.np003",
@@ -2597,7 +2323,7 @@
               "【身体】背脊有多道伤痕"
             ]
           },
-          "realm": "金丹",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -2610,7 +2336,9 @@
               "category": "organization",
               "role": "安保执事/护卫"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.su_li",
@@ -2653,7 +2381,7 @@
               "【身体】蜜穴敏感；丰满雪臀；修长美腿"
             ]
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "女",
           "affiliations": [
             {
@@ -2661,7 +2389,9 @@
               "category": "clan",
               "role": "族长"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.qi_yuan",
@@ -2697,7 +2427,7 @@
             ],
             "appearance": "商队老行商"
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -2715,7 +2445,9 @@
               "category": "organization",
               "role": "总管"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.np004",
@@ -2751,7 +2483,7 @@
             ],
             "appearance": "云氏护卫"
           },
-          "realm": "金丹",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -2769,7 +2501,9 @@
               "category": "organization",
               "role": "追随者"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.np006",
@@ -2809,7 +2543,7 @@
             "origin": "鬼巫王的仆从",
             "appearance": "鬼王峒使者"
           },
-          "realm": "筑基",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -2817,7 +2551,9 @@
               "category": "organization",
               "role": "峒中主事者（代理鬼巫王处理峒务）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.bi_ji",
@@ -2856,7 +2592,9 @@
               "category": "organization",
               "role": "武穆王姬妾"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.a_xi",
@@ -2881,7 +2619,9 @@
               "category": "organization",
               "role": "族人/献给鬼巫王的新娘"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.dan_chen",
@@ -2914,7 +2654,9 @@
               "category": "organization",
               "role": "被驯服的媚奴"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.shen_wan_ying",
@@ -2940,7 +2682,7 @@
               "【身体】首次性经验与程宗扬；高潮后阴精被采补"
             ]
           },
-          "realm": "金丹",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -2952,7 +2694,9 @@
               "category": "organization",
               "role": "申服君之女"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.gui_wu_wang",
@@ -2960,7 +2704,7 @@
           "description": "鬼巫王身披宽大黑袍，面容苍白如雪、俊美得令人心惊，一对幽深黑眸中藏着无尽诡计，他用巨斧与阴狠手段在暗处编织着致命的棋局。",
           "role": "反派",
           "gender": "男",
-          "realm": "金丹",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.gui_wang_dong",
@@ -3021,7 +2765,9 @@
             "notes": [
               "【性癖】喜好各种女人，每个洞都要塞满；长时间交合（一干就是很久）；要求女人会各种姿势；控制女人达到高潮（如丹宸在他的演说中高潮）"
             ]
-          }
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.dragon_god",
@@ -3029,7 +2775,7 @@
           "description": "上古龙神自星阵中降临，庞大的阴影碾碎凡人的傲慢，鬼巫王的献祭不过是为自己掘墓——祂会吞噬一切胆敢觊觎神力的蝼蚁。",
           "role": "神兽",
           "gender": "无",
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [],
           "locationId": "liuchao.location.guiwang_dong",
           "skillIds": [],
@@ -3064,7 +2810,9 @@
               "精力旺盛"
             ]
           },
-          "entityType": "creature"
+          "entityType": "creature",
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.xiao_yao_yi",
@@ -3105,7 +2853,7 @@
               "【身体】被蒙眼调戏妓女"
             ]
           },
-          "realm": "化神",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -3133,7 +2881,9 @@
               "category": "clan",
               "role": "萧氏子弟"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.qin_hui",
@@ -3180,7 +2930,7 @@
             ],
             "appearance": "殇侯属下文士"
           },
-          "realm": "化神",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -3198,7 +2948,9 @@
               "category": "organization",
               "role": "随程宗扬经商的随从"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.wu_san_gui",
@@ -3237,7 +2989,7 @@
               "【势力】殇侯旧部、黑魔海毒宗出身（字长伯）"
             ]
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -3260,7 +3012,9 @@
               "category": "organization",
               "role": "中尉连长"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.shang_zhen_yu",
@@ -3313,7 +3067,7 @@
               "【备注】与吕家(吕雉一系)是血海深仇——其屠吕家满门正因吕家逼死爱人。"
             ]
           },
-          "realm": "合体",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -3321,7 +3075,9 @@
               "category": "organization",
               "role": "首领/侯爷"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.lin_qing_pu",
@@ -3364,7 +3120,7 @@
               "【身体】红脸，讷讷说不出话；年纪甚轻"
             ]
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
           "affiliations": [
             {
@@ -3387,7 +3143,9 @@
               "category": "organization",
               "role": "传讯/情报人员"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.pan_jinlian",
@@ -3406,14 +3164,16 @@
             ],
             "origin": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐"
           },
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.guang_ming_guan_tang",
               "category": "organization",
               "role": "弟子/师姐"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.zhuo_yunjun",
@@ -3434,7 +3194,7 @@
               "【剧情弧】第一本被擒破处初调教→逃走→第三本再被捕获重新调教(顺从度重置后再堕落)"
             ]
           },
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -3456,7 +3216,9 @@
               "category": "organization",
               "role": "侍奴"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.meng_fei_qing",
@@ -3484,7 +3246,7 @@
               "【身体】身躯呈现出金属般的苍青色泽，皮肤与骨骼之间几乎看不到肌肉，只有无数外露的筋结，宛如一条条巨蟒盘绕在青铜色的皮肤下，又像一道道铁索在肩、臂、胸、肋上交错纵横；筋骨犹如镔铁"
             ]
           },
-          "realm": "炼虚",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xing_yue_hu",
@@ -3496,7 +3258,9 @@
               "category": "organization",
               "role": "大东家"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.zhang_shao_huang",
@@ -3524,7 +3288,9 @@
               "category": "organization",
               "role": "皇室外戚（晋帝小舅子）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.yan_er",
@@ -3562,7 +3328,9 @@
               "category": "organization",
               "role": "侍女（程宗扬未承认此主仆关系）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.feng_yuan",
@@ -3583,7 +3351,7 @@
             "race": "人族",
             "origin": "火法师/程宗扬属下"
           },
-          "realm": "金丹",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.x874bfaa9da",
@@ -3600,7 +3368,9 @@
               "category": "organization",
               "role": "法师/随从"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.yu_wu_yi",
@@ -3617,7 +3387,7 @@
             "race": "人族",
             "origin": "泊陵鱼氏的无夷公子"
           },
-          "realm": "元婴",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.x0ba5d2439c",
@@ -3629,7 +3399,9 @@
               "category": "organization",
               "role": "合作者/听命于剑玉姬"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.qiu_shao_jun",
@@ -3651,7 +3423,7 @@
             "race": "人族",
             "origin": "太乙真宗教御"
           },
-          "realm": "元婴",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -3663,7 +3435,9 @@
               "category": "sect",
               "role": "观主"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.wu_ma_ma",
@@ -3685,14 +3459,16 @@
             "race": "人族",
             "origin": "仆妇（西门庆手下）"
           },
-          "realm": "元婴",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.hei_mo_hai",
               "category": "organization",
               "role": "调教师（专管调教豢奴）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.yu_zi_wei",
@@ -3716,14 +3492,16 @@
             ],
             "origin": "配角"
           },
-          "realm": "元婴",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.dragon_chen",
               "category": "organization",
               "role": "杀手"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.meng_niang",
@@ -3762,7 +3540,9 @@
               "category": "organization",
               "role": "奴婢"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.hou_xuan",
@@ -3780,7 +3560,7 @@
             "race": "人族",
             "origin": "宋军将领/中校军官"
           },
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xing_yue_hu",
@@ -3797,7 +3577,9 @@
               "category": "organization",
               "role": "化名客卿边将（星月湖潜伏时期）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.cui_mao",
@@ -3817,7 +3599,7 @@
             "race": "人族",
             "origin": "第七军中校，星月湖大营军官"
           },
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xing_yue_hu",
@@ -3829,7 +3611,9 @@
               "category": "organization",
               "role": "商业参谋"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.wang_tao",
@@ -3847,7 +3631,7 @@
             "race": "人族",
             "origin": "星月湖八骏·七哥 / 中校军官"
           },
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xing_yue_hu",
@@ -3864,7 +3648,9 @@
               "category": "organization",
               "role": "成员（朱骅）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.shi_zhi_sun",
@@ -3882,14 +3668,16 @@
             "race": "人族",
             "origin": "雪隼佣兵团副团长"
           },
-          "realm": "元婴",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xue_sun",
               "category": "organization",
               "role": "副团长"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.zang_xiu",
@@ -3910,7 +3698,7 @@
               "【身体】皮肤苍青如金属，筋结外露如巨蟒；肌肉块块隆起"
             ]
           },
-          "realm": "元婴",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xing_yue_hu",
@@ -3922,7 +3710,9 @@
               "category": "organization",
               "role": "成员"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.ci_yin",
@@ -3946,14 +3736,16 @@
               "【身体】无"
             ]
           },
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.xe9675069af",
               "category": "organization",
               "role": "挂单比丘尼（暂居非常住）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.qin_han",
@@ -3978,7 +3770,7 @@
               "【身体】太监（阉人）；半显阳刚半显阴柔"
             ]
           },
-          "realm": "炼虚",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "lyg.faction.song_state",
@@ -3995,7 +3787,9 @@
               "category": "organization",
               "role": "出身（学员经历，现已离府）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.liu_yi_sun",
@@ -4016,14 +3810,16 @@
             "race": "人族",
             "origin": "龙卫左厢军新任命的军都指挥使"
           },
-          "realm": "金丹",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "lyg.faction.song_state",
               "category": "organization",
               "role": "捧日军左厢第六军军使（后降为副都头，又升为都头）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.xia_yong_he",
@@ -4041,14 +3837,16 @@
             "race": "人族",
             "origin": "宋国捧日军主将、夏夜眼"
           },
-          "realm": "化神",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "lyg.faction.song_state",
               "category": "organization",
               "role": "捧日军主将"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.zong_ze",
@@ -4069,14 +3867,16 @@
             "race": "人族",
             "origin": "选锋营勇将"
           },
-          "realm": "金丹",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "lyg.faction.song_state",
               "category": "organization",
               "role": "选锋营秉义郎"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.zhang_kang",
@@ -4101,7 +3901,7 @@
             "race": "人族",
             "origin": "宋军将领，进士出身，有都监资格"
           },
-          "realm": "金丹",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.jin_jun",
@@ -4123,7 +3923,9 @@
               "category": "military",
               "role": "军都指挥使（断后时指挥龙卫左厢一个军）"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.saan",
@@ -4150,7 +3952,9 @@
               "【主轴】提供鬼王宫位置与秘密小道情报，推动程宗扬一行从追索线索进入潜入行动。"
             ],
             "appearance": "熟悉鬼王宫密道的人"
-          }
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.zhu_nuo",
@@ -4177,7 +3981,9 @@
               "【主轴】祭台尸鬼战斗中出现，推动丹宸之死与程宗扬等人脱险。"
             ],
             "appearance": "祭台尸鬼"
-          }
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.mi_gu",
@@ -4204,7 +4010,9 @@
               "【主轴】作为追兵和集会压力出现，推动队伍突围与小紫倒戈前夜的紧迫感。"
             ],
             "appearance": "鬼王峒迎客者"
-          }
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.yue_shuang",
@@ -4225,7 +4033,7 @@
               "却以\"八骏新主人\"自居）"
             ]
           },
-          "realm": "元婴",
+          "realm": "未知",
           "affiliations": [
             {
               "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -4242,7 +4050,9 @@
               "category": "organization",
               "role": "岳帅遗孤"
             }
-          ]
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         }
       ],
       "to": [
@@ -4252,7 +4062,7 @@
           "description": "云氏同行商人、现代来客",
           "role": "云氏同行商人、现代来客",
           "gender": "男",
-          "realm": "练气",
+          "realm": "未知",
           "locationId": "liuchao.location.sea_temple",
           "skillIds": [
             "liuchao.skill.death_root",
@@ -4286,7 +4096,9 @@
               "有支配欲"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.ning_yu",
@@ -4306,9 +4118,11 @@
           "skillIds": [
             "lcq.skill.np005"
           ],
-          "realm": "练气",
+          "realm": "未知",
           "gender": "女",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.wu_er_lang",
@@ -4328,9 +4142,11 @@
             "lcq.skill.np001",
             "lcq.skill.np004"
           ],
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.qi_yuan",
@@ -4346,9 +4162,11 @@
               "有些婆妈"
             ]
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.np003",
@@ -4365,9 +4183,11 @@
               "对朋友讲义气，有忠心"
             ]
           },
-          "realm": "金丹",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.nanhuang_xiaowei",
@@ -4376,8 +4196,15 @@
           "profile": {
             "origin": "白湖商馆护卫"
           },
-          "description": "白湖商馆护卫",
-          "affiliations": []
+          "description": "白湖商馆护卫，弩手",
+          "affiliations": [],
+          "presenceWindow": {
+            "firstChapter": 34,
+            "lastPresentChapter": 118,
+            "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.np004",
@@ -4393,9 +4220,11 @@
               "坚韧"
             ]
           },
-          "realm": "金丹",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.xie_yi",
@@ -4403,7 +4232,7 @@
           "description": "云氏商队同行者",
           "role": "云氏商队同行者",
           "gender": "男",
-          "realm": "化神",
+          "realm": "通幽",
           "locationId": "liuchao.location.biyu_village",
           "skillIds": [
             "liuchao.skill.blade"
@@ -4420,7 +4249,9 @@
               "沉稳"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": 6,
+          "levelSource": "清羽L18220：臻于六级，达到通幽"
         },
         {
           "id": "liuchao.character.yun_cang_feng",
@@ -4441,9 +4272,11 @@
               "精明"
             ]
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.shang_zhen_yu",
@@ -4453,9 +4286,11 @@
           "profile": {
             "origin": "云氏雇用的老向导"
           },
-          "realm": "合体",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.su_li",
@@ -4470,9 +4305,11 @@
               "富有情欲"
             ]
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "女",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.a_xi",
@@ -4490,17 +4327,26 @@
               "任性"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.nanhuang_kawa",
           "name": "卡瓦",
-          "role": "花苗护卫",
+          "role": "花苗族汉子，随送亲队同行",
           "profile": {
             "origin": "花苗护卫"
           },
-          "description": "花苗护卫",
-          "affiliations": []
+          "description": "花苗族汉子，随送亲队同行",
+          "affiliations": [],
+          "presenceWindow": {
+            "firstChapter": 40,
+            "lastPresentChapter": 108,
+            "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.le_mingzhu",
@@ -4508,7 +4354,7 @@
           "description": "光明观堂弟子",
           "role": "光明观堂弟子",
           "gender": "女",
-          "realm": "凡人",
+          "realm": "未知",
           "locationId": "liuchao.location.sea_temple",
           "skillIds": [
             "liuchao.skill.acupuncture"
@@ -4531,7 +4377,9 @@
               "对性事缺乏概念，容易被主角哄骗"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.xiao_zi",
@@ -4539,7 +4387,7 @@
           "description": "穿紫衣的碧鲮族少女，住在碧鲮村。",
           "role": "碧鲮村少女",
           "gender": "女",
-          "realm": "凡人",
+          "realm": "未知",
           "locationId": "liuchao.location.biyu_village",
           "skillIds": [],
           "techniqueIds": [],
@@ -4555,7 +4403,9 @@
             "appearance": "穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。",
             "notes": []
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.np006",
@@ -4572,9 +4422,11 @@
               "粗鄙"
             ]
           },
-          "realm": "筑基",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.mi_gu",
@@ -4591,7 +4443,9 @@
               "负责追击与维持集会秩序"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.bi_ji",
@@ -4608,7 +4462,9 @@
               "软弱无助"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.dan_chen",
@@ -4625,7 +4481,9 @@
               "妖艳"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.nanhuang_loumeng",
@@ -4635,7 +4493,9 @@
             "origin": "红苗族长之子"
           },
           "description": "红苗族长之子",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.saan",
@@ -4652,7 +4512,9 @@
               "熟悉鬼王宫后厨与密道"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.zhu_nuo",
@@ -4669,7 +4531,9 @@
               "战斗节点角色"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.dragon_god",
@@ -4677,7 +4541,7 @@
           "description": "鬼王峒龙神",
           "role": "鬼王峒龙神",
           "gender": "无",
-          "realm": "化神",
+          "realm": "未知",
           "locationId": "liuchao.location.guiwang_dong",
           "skillIds": [],
           "techniqueIds": [],
@@ -4692,7 +4556,9 @@
             ]
           },
           "affiliations": [],
-          "entityType": "creature"
+          "entityType": "creature",
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.gui_wu_wang",
@@ -4700,7 +4566,7 @@
           "description": "鬼王峒之主",
           "role": "鬼王峒之主",
           "gender": "男",
-          "realm": "金丹",
+          "realm": "未知",
           "locationId": "liuchao.location.guiwang_dong",
           "skillIds": [
             "liuchao.skill.gui_yu_sword"
@@ -4722,7 +4588,9 @@
               "亢奋时苍白脸颊泛起红晕"
             ]
           },
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.nanhuang_blacksea_envoy",
@@ -4732,7 +4600,9 @@
             "origin": "黑魔海来客"
           },
           "description": "黑魔海来客",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.nanhuang_yeao",
@@ -4742,7 +4612,9 @@
             "origin": "山村养蛊老妇"
           },
           "description": "山村养蛊老妇",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.qin_hui",
@@ -4762,9 +4634,11 @@
               "遇明主忠义，遇昏主奸术自保"
             ]
           },
-          "realm": "化神",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "liuchao.character.wu_san_gui",
@@ -4780,9 +4654,11 @@
               "豪爽"
             ]
           },
-          "realm": "练气",
+          "realm": "未知",
           "gender": "男",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         },
         {
           "id": "lcq.character.nanhuang_stonemason",
@@ -4792,7 +4668,9 @@
             "origin": "峒口刻柱的六朝石匠"
           },
           "description": "峒口刻柱的六朝石匠",
-          "affiliations": []
+          "affiliations": [],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         }
       ]
     },

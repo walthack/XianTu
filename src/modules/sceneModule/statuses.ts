@@ -1,43 +1,12 @@
 // 状态：模块自己持有“场内状态账”，并通过事件把变化交给宿主的统一状态系统。
 // 解析顺序：宿主状态目录 ＞ 合同里的临时定义 ＞ 模块内置的临时通用定义（等总策划的目录落地后以目录为准）。
 
+import bookCatalog from './contracts/statuses.json';
+import builtinStatuses from './contracts/statuses.builtin.json';
 import type { ActiveStatus, Contract, SceneContext, SceneState, StatusApplyRef, StatusDef, StatusEffectSpec } from './types';
 
-/** 内置的临时通用状态：只为让模块和测试能独立运行，id 沿用剧情侧文档的写法。 */
-export const BUILTIN_STATUSES: StatusDef[] = [
-  {
-    id: 'wound.external', label: '外伤', tier: 'general', cause: 'combat', kind: 'debuff', provisional: true,
-    source: '战斗中被击中', upgradesTo: 'wound.external.heavy', afterScene: { minutes: 7 * 24 * 60 },
-    effects: [{ kind: 'rollModifier', scope: 'action', value: -1 }, { kind: 'rollModifier', scope: 'defense', value: -1 }],
-    remove: [{ kind: 'time', minutes: 7 * 24 * 60 }, { kind: 'rest' }],
-  },
-  {
-    id: 'wound.external.heavy', label: '外伤（重）', tier: 'general', cause: 'combat', kind: 'debuff', provisional: true,
-    source: '外伤再度加重', upgradesTo: 'incapacitated', afterScene: { minutes: 30 * 24 * 60 },
-    effects: [{ kind: 'rollModifier', scope: 'action', value: -3 }, { kind: 'rollModifier', scope: 'defense', value: -3 }],
-    remove: [{ kind: 'rest' }],
-  },
-  {
-    id: 'wound.internal', label: '内伤', tier: 'general', cause: 'combat', kind: 'debuff', provisional: true,
-    source: '被劲力震伤', upgradesTo: 'incapacitated', afterScene: { minutes: 14 * 24 * 60 },
-    effects: [{ kind: 'rollModifier', scope: 'action', value: -2 }],
-    remove: [{ kind: 'rest' }],
-  },
-  {
-    id: 'disarmed', label: '兵器脱手', tier: 'general', cause: 'combat', kind: 'debuff', provisional: true,
-    source: '兵器被击落或脱手', effects: [{ kind: 'lockLever', elementKinds: ['weapon'] }], remove: [{ kind: 'scene_end' }],
-  },
-  {
-    id: 'off_balance', label: '失衡', tier: 'general', cause: 'combat', kind: 'debuff', provisional: true,
-    source: '失手后架势散乱', durationBeats: 1,
-    effects: [{ kind: 'disadvantage', scope: 'action' }, { kind: 'disadvantage', scope: 'defense' }],
-    remove: [{ kind: 'scene_end' }],
-  },
-  {
-    id: 'incapacitated', label: '倒下', tier: 'general', cause: 'combat', kind: 'debuff', provisional: true,
-    source: '伤重倒地', afterScene: { minutes: null }, effects: [{ kind: 'downed' }], remove: [{ kind: 'rest' }],
-  },
-];
+/** 内置的临时通用状态：只为让模块和测试能独立运行，id 沿用剧情侧文档的写法。数值在 contracts/statuses.builtin.json。 */
+export const BUILTIN_STATUSES = builtinStatuses as unknown as StatusDef[];
 
 export interface StatusEvent {
   party: string;
@@ -54,8 +23,12 @@ export interface StatusEvent {
   persists: boolean;
 }
 
+/** Book directory is authoritative; six provisional generic fallbacks remain usable (N4). */
+export const STATUS_CATALOG = bookCatalog as unknown as StatusDef[];
+export function catalogStatus(id: string): StatusDef | undefined { return STATUS_CATALOG.find(def=>def.id===id); }
+
 export function resolveStatusDef(id: string, contract: Contract, ctx?: Pick<SceneContext, 'catalog'>): StatusDef | undefined {
-  return ctx?.catalog?.(id) || contract.statuses?.find(def => def.id === id) || BUILTIN_STATUSES.find(def => def.id === id);
+  return ctx?.catalog?.(id) || catalogStatus(id) || contract.statuses?.find(def => def.id === id) || BUILTIN_STATUSES.find(def => def.id === id);
 }
 
 const refOf = (contract: Contract, party: string): string => contract.parties.find(p => p.id === party)?.ref || party;
@@ -142,6 +115,11 @@ export function applyStatus(
       op = 'upgrade';
     }
   }
+  if(meta.cause==='combat' && base.id.startsWith('wound.external') && contract.parties.find(p=>p.id===party)?.player && state.itemEffects?.woundGuard){
+    delete state.itemEffects.woundGuard;
+    if(def.id===base.id && base.id!=='wound.external.heavy')return [];
+    def=resolveStatusDef(def.id==='incapacitated'?'wound.external.heavy':'wound.external',contract,ctx) || base;
+  }
   const duration = apply.durationBeats !== undefined ? apply.durationBeats : def.durationBeats ?? null;
   const active: ActiveStatus = {
     id: def.id,
@@ -191,3 +169,6 @@ export function persistentStatuses(state: SceneState, contract: Contract, ctx: P
   }
   return out;
 }
+
+/** Recognition only: catalog/builtin labels and declared aliases; missing ids never match. */
+export function statusNamePattern(id:string):string {const def=catalogStatus(id) || BUILTIN_STATUSES.find(d=>d.id===id);if(!def)return '(?!)';return [def.label,...(def.aliases || [])].map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');}

@@ -1,0 +1,44 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {loadTs} from './loadTs.mjs';
+const init=await loadTs('../src/modules/scenarioMods/strictInitializer.ts'),repair=await loadTs('../src/utils/dataRepair.ts'),rt=await loadTs('../src/modules/scenarioMods/runtime.ts'),q=await loadTs('../src/modules/scenarioMods/questLines.ts'),ctxmod=await loadTs('../src/modules/scenarioMods/questLineContext.ts');
+const rail=await loadTs('../src/modules/scenarioMods/canonRail.ts');
+const le='liuchao.character.le_mingzhu';
+function fixture(kind){let id=kind==='side'?'lcq.stage_04b_lingfei_baiyi_crisis':'lcq.stage_04',mod=JSON.parse(fs.readFileSync(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`,import.meta.url))),save=init.applyStrictScenarioInitializationToSave(repair.createMinimalSaveDataV3(),init.buildStrictScenarioInitialization(mod)),r=save.世界.状态.剧本模组,b=q.QUEST_LINES.find(l=>l.kind===kind).beats[0];r.currentChapterId=rail.getCanonRailProfile(r).chapterId;r.completedEventIds=[kind==='side'?'lcq.event.biling_bay_stance':'lcq.event.s04_03'];r.activeEventIds=[kind==='side'?'lcq.event.ruins_ghost_warriors':'lcq.event.s04_04'];r.affinityGrantedEventIds=[...r.completedEventIds];r.worldTurn=10;let loc=r.canon.locations.find(l=>l.id===b.locationId);save.角色.位置={描述:loc.name,地点ID:loc.id,x:loc.coordinates.x,y:loc.coordinates.y};save.社交.关系[le]||={角色ID:le,名字:'乐明珠',好感度:40};save.社交.关系[le].好感度=40;return {save,r,b};}
+function act(f,id){const a=rt.getCurrentStoryExplorationActions(f.save).find(a=>a.actionId===id);assert.ok(a,id);f.r.worldTurn++;return rt.recordStoryEventStructuredAction(f.save,a);}
+test('authored emotional insert opens after revelation at true location, with own choice receipt',()=>{const f=fixture('character');const actions=rt.getCurrentStoryExplorationActions(f.save).filter(a=>a.eventId===f.b.eventId);assert.ok(actions.some(a=>a.actionId==='act.lmz.promise_silence'));assert.ok(actions.some(a=>a.actionId==='act.lmz.hard_truth'));assert.equal(f.r.questLineState.receipts[f.b.id],undefined);const result=act(f,'act.lmz.promise_silence');assert.equal(result.completed,true);assert.equal(f.save.社交.关系[le].好感度,43);assert.match(f.save.社交.关系[le].记忆.at(-1),/答应她/);assert.ok(f.r.questLineState.receipts[f.b.id]);assert.equal(rt.getCurrentStoryExplorationActions(f.save).filter(a=>a.eventId===f.b.eventId).length,0);});
+test('zero option really gives zero and shared experience is suppressed',()=>{const f=fixture('character');act(f,'act.lmz.hard_truth');assert.equal(f.save.社交.关系[le].好感度,40);f.r.completedEventIds.push(f.b.eventId);const advanced=rt.advanceScenarioRuntime(f.save);assert.equal(advanced.saveData.社交.关系[le].好感度,40);assert.match(f.save.社交.关系[le].记忆.at(-1),/不是喊口号/);});
+test('wrong location, absent/departed owner and closed window cannot trigger or award',()=>{for(const patch of [f=>{f.save.角色.位置.地点ID='liuchao.location.baiyi';f.save.角色.位置.描述='南荒·白夷族';},f=>{(f.r.sceneLedger||={actors:{}}).actors[le]={status:'departed'};},f=>{f.r.completedEventIds=[];}]){const f=fixture('character');patch(f);assert.equal(rt.getCurrentStoryExplorationActions(f.save).filter(a=>a.eventId===f.b.eventId).length,0);}const f=fixture('character');f.save.角色.位置.地点ID=f.r.events.find(e=>e.id==='lcq.event.s04_04').locationId;f.save.角色.位置.描述='南荒·叶媪山村';ctxmod.expireQuestLineWindows(f.save);assert.ok(f.r.questLineState.expired[f.b.id]!==undefined);assert.equal(f.r.questLineState.receipts[f.b.id],undefined);});
+test('side preparation is progress only; optional examination is skippable; order settles once',()=>{const f=fixture('side');let x=act(f,'act.ask_biling_for_nylon');assert.equal(x.completed,false);assert.equal(f.r.questLineState.receipts[f.b.id],undefined);x=act(f,'act.commission_algae_purchase');assert.equal(x.completed,true);assert.ok(x.inventorySettlements.some(s=>s.receipt.itemId==='lcq.item.biling_algae_sample'));assert.ok(f.r.pathReceipts['rcpt.side.biling_algae_silk.ordered']);assert.ok(f.r.playerKnowledge['fact.biling_algae_as_nylon']);assert.ok(f.r.actorEngine.actorMemory['liuchao.character.qi_yuan'].knowledge.includes('fact.biling_algae_as_nylon'));assert.equal(rt.getCurrentStoryExplorationActions(f.save).filter(a=>a.eventId===f.b.eventId).length,0);});
+test('leaving the side window expires without pretending the order happened',()=>{const f=fixture('side');f.r.completedEventIds.push('lcq.event.ruins_ghost_warriors');ctxmod.expireQuestLineWindows(f.save);assert.ok(f.r.questLineState.expired[f.b.id]!==undefined);assert.equal(f.r.playerKnowledge['fact.biling_algae_as_nylon'],undefined);assert.equal(f.r.questLineState.receipts[f.b.id],undefined);});
+test('approved negative option is visible and settles minus three with one memory receipt',()=>{
+ const f=fixture('character');assert.equal(q.LINE_RESOURCES.affinityWeights['aff.w.small_neg'],-3);
+ const action=rt.getCurrentStoryExplorationActions(f.save).find(a=>a.actionId==='act.lmz.tease_with_pan');assert.ok(action);
+ const before=f.save.社交.关系[le].记忆?.length||0;const result=act(f,'act.lmz.tease_with_pan');assert.equal(result.completed,true);
+ assert.equal(f.save.社交.关系[le].好感度,37);assert.match(f.save.社交.关系[le].记忆.at(-1),/吓唬她/);
+ assert.equal(f.save.社交.关系[le].记忆.length,before+1);assert.equal(f.r.questLineState.affinityChanges.at(-1).to,37);
+ f.r.worldTurn++;rt.recordStoryEventStructuredAction(f.save,action);assert.equal(f.save.社交.关系[le].好感度,37);assert.equal(f.save.社交.关系[le].记忆.length,before+1);
+ const advanced=rt.advanceScenarioRuntime(f.save);assert.equal(advanced.saveData.社交.关系[le].好感度,37);
+});
+test('normal post-bay advance preserves the optional stop without replacing mandatory mainline actions',()=>{const f=fixture('side');const ordered=rail.getCanonRailProfile(f.r).orderedEventIds;f.r.completedEventIds=ordered.slice(0,ordered.indexOf('lcq.event.biling_bay_stance')+1);f.r.activeEventIds=['lcq.event.biling_bay_stance'];f.r.affinityGrantedEventIds=[...f.r.completedEventIds];for(const id of f.r.completedEventIds)f.r.flags['event.'+id.replace('lcq.event.','')+'.done']=true;let next=rt.advanceScenarioRuntime(f.save).saveData;assert.equal(next.角色.位置.地点ID,f.b.locationId);assert.ok(rt.getCurrentStoryExplorationActions(next).some(a=>a.eventId===f.b.eventId));const actions=rt.getCurrentStoryEventActions(next);assert.ok(actions.length>0);assert.ok(actions.every(a=>a.eventId!==f.b.eventId));assert.equal(next.世界.状态.剧本模组.questLineState.receipts[f.b.id],undefined);});
+
+test('host free-input affinity uses symmetric fifteen clamp and promotes both signs at ten',()=>{
+ for(const [requested,delta,major] of [[100,15,true],[-100,-15,true],[10,10,true],[-10,-10,true],[9,9,false],[-9,-9,false]]){
+  const f=fixture('character');const a=rt.getCurrentStoryExplorationActions(f.save).find(a=>a.actionId==='act.lmz.promise_silence');assert.ok(a);
+  f.r.worldTurn++;const result=rt.recordStoryEventStructuredAction(f.save,{...a,lineAffinityDelta:requested});assert.equal(result.completed,true);
+  assert.equal(f.save.社交.关系[le].好感度,40+delta);
+  const episodes=f.r.actorEngine.actorMemory[le].episodes;const ticket=episodes.find(e=>e.tags.some(t=>t.startsWith('template:')));assert.ok(ticket);
+  assert.equal(ticket.tags.includes('major_episode'),major);if(major)assert.ok(ticket.salience>=80);
+  const count=episodes.length;f.r.worldTurn++;rt.recordStoryEventStructuredAction(f.save,{...a,lineAffinityDelta:requested});
+  assert.equal(f.save.社交.关系[le].好感度,40+delta);assert.equal(f.r.actorEngine.actorMemory[le].episodes.length,count);
+ }
+ assert.equal(rt.clampLineAffinityDelta(NaN),0);
+});
+
+test('free emotional response carries host delta; unrelated input gets no receipt',async()=>{
+ const router=await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');
+ const f=fixture('character');f.save.系统.扩展['清羽记开局']={kind:'qingyu-demo-v1'};const text='我答应替你保密，绝口不提';
+ let prompt='';const matched=await router.resolveNaturalIntent({saveData:f.save,playerText:text,generate:async input=>{prompt=input.systemPrompt;return JSON.stringify({eventId:f.b.eventId,actionId:'act.lmz.promise_silence',evidence:text,certainty:'high',affinityDelta:-14});}});
+ assert.equal(matched.kind,'matched',matched.reason);assert.equal(matched.selection.lineAffinityDelta,-14);assert.ok(prompt.includes('-15..+15'));
+ f.r.worldTurn++;rt.recordStoryEventStructuredAction(f.save,matched.selection);assert.equal(f.save.社交.关系[le].好感度,26);assert.ok(f.r.actorEngine.actorMemory[le].episodes.some(e=>e.tags.includes('major_episode')));
+ const other=fixture('character');const result=await router.resolveNaturalIntent({saveData:other.save,playerText:'我看天色',generate:async()=>JSON.stringify({actionId:'none',certainty:'high',affinityDelta:15})});
+ assert.notEqual(result.kind,'matched');assert.equal(other.save.社交.关系[le].好感度,40);assert.equal(other.r.questLineState?.receipts?.[other.b.id],undefined);
+});

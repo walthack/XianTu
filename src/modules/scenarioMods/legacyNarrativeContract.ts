@@ -1,3 +1,4 @@
+import { statusNamePattern } from '../sceneModule/statuses';
 import { findInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
 import {
   hasHardNarrativeViolation,
@@ -42,7 +43,7 @@ export const PLAYER_VISIBLE_META_LEAK_RE = [
 
 const UNAUTHORIZED_ITEM_RE = /神兵|仙剑|飞剑|法宝|捡起一柄|获得了?(?:一[柄把件颗枚])/u;
 const UNAUTHORIZED_MOVE_RE = /(?:已走到|走到了|走进了|进入了|来到了|已至|抵达了|已到达)([^。！？\n]{1,16})/u;
-const UNAUTHORIZED_HARM_RE = /(?:重伤|身亡|死亡|被射杀|中箭身亡|刎颈|气绝)/u;
+const UNAUTHORIZED_HARM_RE = new RegExp(`(?:${statusNamePattern('wound.severe')}|身亡|死亡|被射杀|中箭身亡|刎颈|气绝)`, 'u');
 const UNAUTHORIZED_RELATION_RE = /结为(?:生死兄弟|道侣|夫妻|义兄|义弟)|拜把|生死与共的兄弟/u;
 const UNAUTHORIZED_COMPLETION_RE = /事件完成|本事件已(?:完成|结束|落账)|任务已完成|事件已落账/u;
 
@@ -134,7 +135,7 @@ function unauthorizedInvention(text: string, packet: LegacyNarratorPacket, allow
   if (move?.[1] && !placeIsAuthorized(move[1], packet)) {
     return '未经授权的地点移动';
   }
-  if (UNAUTHORIZED_HARM_RE.test(text) && !/(?:重伤|身亡|死亡|被射杀|中箭身亡|刎颈|气绝|受伤|击杀|惨案|尸体)/.test(authorized)) {
+  if (UNAUTHORIZED_HARM_RE.test(text) && !new RegExp(`(?:${statusNamePattern('wound.severe')}|身亡|死亡|被射杀|中箭身亡|刎颈|气绝|受伤|击杀|惨案|尸体)`).test(authorized)) {
     return '未经授权的受伤或死亡';
   }
   if (UNAUTHORIZED_RELATION_RE.test(text) && !UNAUTHORIZED_RELATION_RE.test(authorized)) {

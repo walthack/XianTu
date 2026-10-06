@@ -1,3 +1,4 @@
+import {GAME_NUMBERS} from './numbers';
 // 四档判定：d20 ＋ 加值 对 难度，按差值分 大成功 / 成功 / 失败 / 大失败（参考 D&D）。
 // 自然 20＝大成功；自然 1 默认降一档；优势 / 劣势并存互相抵消；多目标时按主目标定档（由调用方选目标）。
 
@@ -20,27 +21,7 @@ export interface ResolvedSettings {
 }
 
 /** 模块默认值（只有定价、封顶这类通用调参；没有任何胜负、拍数、人头数门槛）。 */
-export const DEFAULT_SETTINGS: ResolvedSettings = {
-  tiers: {
-    critSuccessMargin: 15,
-    critFailMargin: 15,
-    nat20: { grounded: 'crit', ungrounded: 'crit' },
-    nat1: 'stepDown',
-    critBonus: ['noExposure', 'tagPlus1', 'credit', 'flourish'],
-    failure: { edge: 2, spendOneShot: true },
-  },
-  pricing: { premium: { 1: 0, 2: 4, 3: 8 }, leverCap: 6, leverMax: 3, novelty: 1, tagCash: 2 },
-  attentionCap: {
-    combat: { primaryTargets: 1, rangeClaim: true },
-    court: { primaryTargets: 3 },
-    negotiation: { primaryTargets: 3 },
-    war: { primaryTargets: 3 },
-    custom: { primaryTargets: 3 },
-  },
-  allowPlayerHarmAllies: false,
-  enemyPhase: { maxRollsPerBeat: 8 },
-  brief: { maxChars: 1400, digestKeep: 4 },
-};
+export const DEFAULT_SETTINGS = GAME_NUMBERS.sceneDefaults as ResolvedSettings;
 
 function merge<T>(base: T, over: unknown): T {
   if (over === undefined || over === null) return base;
@@ -53,7 +34,7 @@ function merge<T>(base: T, over: unknown): T {
 }
 
 export function resolveSettings(settings?: SceneSettings): ResolvedSettings {
-  return merge(DEFAULT_SETTINGS, settings);
+  return merge(GAME_NUMBERS.sceneDefaults as ResolvedSettings, settings);
 }
 
 const ORDER: TierId[] = ['critical_failure', 'failure', 'success', 'great_success'];

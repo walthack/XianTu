@@ -1,0 +1,1213 @@
+{
+  "meta": {
+    "id": "combat.f10.ghost_king_clash",
+    "version": 6,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3
+    },
+    "compatibleStateVersions": [
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "objective": {
+    "text": "在鬼巫王面前撑住，再摆脱丹宸和骨虎",
+    "previewHint": "鬼巫王你伤不了，他也不急着杀你；他要的是活的你",
+    "win": {
+      "all": [
+        {
+          "party": "hu_sha",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "dan_chen",
+          "track": "resist",
+          "reach": "final"
+        }
+      ]
+    },
+    "phases": [
+      {
+        "when": {
+          "kind": "partyDeparted",
+          "party": "gui_wu_wang"
+        },
+        "text": "鬼巫王已经离开；摆脱丹宸和骨虎"
+      }
+    ]
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "gui_wu_wang",
+      "side": "opposed",
+      "ref": "liuchao.character.gui_wu_wang",
+      "aliases": [
+        "{{aliases:enemy:lcq.enemy.gui_wu_wang}}",
+        "他",
+        "那个巫王"
+      ],
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "轻",
+            "中",
+            "重",
+            "出局"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "withdraws_unharmed",
+            "finalState": "完好",
+            "causedBy": "self",
+            "ceiling": 0,
+            "previewText": "他不会在这里倒下。他更在意另一边的动静，迟早自己走",
+            "clampText": "刀锋离他只差一线，丹宸扑上来抱住你的腿，把你撞下祭坛",
+            "permittedMarks": [
+              {
+                "id": "haft_cut",
+                "requires": {
+                  "magnitude": 1
+                },
+                "text": "青铜斧柄被切断"
+              },
+              {
+                "id": "shaken",
+                "requires": {
+                  "magnitude": 1
+                },
+                "text": "头发披散，被挑得心神浮动"
+              }
+            ]
+          }
+        }
+      ],
+      "instanceId": "combat.f10.ghost_king_clash.gui_wu_wang",
+      "enemyId": "lcq.enemy.gui_wu_wang"
+    },
+    {
+      "id": "dan_chen",
+      "side": "opposed",
+      "ref": "liuchao.character.dan_chen",
+      "absent": true,
+      "aliases": [
+        "{{aliases:enemy:lcq.enemy.dan_chen}}",
+        "那个女子"
+      ],
+      "tracks": [
+        {
+          "id": "resist",
+          "kind": "harm",
+          "scale": [
+            "狂热",
+            "受挫",
+            "力衰",
+            "被按住",
+            "不再构成威胁",
+            "被赶走"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "captured",
+            "finalState": "不再构成威胁",
+            "causedBy": "player_side",
+            "ceiling": 2,
+            "previewText": "她失了骨虎就弱了一大半，你得把她按住",
+            "clampText": "你扔下刀去抓她手腕：苏荔交待过要照顾她",
+            "permittedMarks": [
+              {
+                "id": "axe_kicked_away",
+                "requires": {
+                  "magnitude": 1
+                },
+                "text": "铜斧被一脚踢开"
+              }
+            ],
+            "alternatives": [
+              "被赶走"
+            ]
+          }
+        }
+      ],
+      "instanceId": "combat.f10.ghost_king_clash.dan_chen",
+      "enemyId": "lcq.enemy.dan_chen"
+    },
+    {
+      "id": "hu_sha",
+      "side": "opposed",
+      "ref": "lcq.enemy.husha_bone_tiger",
+      "absent": true,
+      "resistance": 6,
+      "aliases": [
+        "骨虎",
+        "{{aliases:enemy:lcq.enemy.husha_bone_tiger}}",
+        "{{aliases:enemy:lcq.enemy.husha_bone_tiger}}",
+        "那头虎"
+      ],
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "沾血",
+            "解体"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "解体",
+            "causedBy": "player_side",
+            "ceiling": 2,
+            "previewText": "主角的血沾上骨虎，它便完全解体；普通刀砍不能消灭它",
+            "clampText": "钢刀砍在骨爪上，骨爪纹丝不动，刀反倒卷了刃"
+          },
+          "requiresLever": [
+            "true_yang_blood"
+          ]
+        }
+      ],
+      "instanceId": "combat.f10.ghost_king_clash.hu_sha"
+    }
+  ],
+  "clock": {
+    "beats": 3,
+    "onTimeout": {
+      "type": "continue",
+      "text": "{{ref:liuchao.character.gui_wu_wang}}冷哼一声，掠出拱形大厅",
+      "events": [
+        {
+          "depart": "gui_wu_wang"
+        }
+      ]
+    },
+    "fixedEvents": [
+      {
+        "id": "dan_chen_tackles",
+        "atBeat": 2,
+        "text": "眼看就要得手，一双手臂抱住你的腿，把你撞下祭坛",
+        "effects": [
+          {
+            "arrive": "dan_chen"
+          }
+        ]
+      },
+      {
+        "id": "mirror_allies",
+        "atBeat": 4,
+        "text": "银镜里：{{ref:liuchao.character.le_mingzhu}}溜出来了；同伴们正在别处和岩浆怪物缠斗",
+        "effects": []
+      },
+      {
+        "id": "order_take_alive",
+        "atBeat": 4,
+        "text": "「不要杀死他。」他顿了一下，「我要切开他的头颅，寻找天命的指引。」",
+        "effects": []
+      },
+      {
+        "id": "tiger_rises",
+        "atBeat": 4,
+        "text": "{{ref:liuchao.character.dan_chen}}举着断斧跃上穹顶，身下现出一头白骨猛虎，扑击而下",
+        "effects": [
+          {
+            "arrive": "hu_sha"
+          }
+        ]
+      },
+      {
+        "id": "blood_known",
+        "atBeat": 4,
+        "effects": [
+          {
+            "tag": {
+              "id": "blood_known",
+              "label": "血是阴魂的天敌",
+              "on": "pc",
+              "durationBeats": null,
+              "effect": "你的血是这些阴魂的天敌"
+            }
+          }
+        ]
+      },
+      {
+        "id": "mirror_frozen",
+        "atClose": true,
+        "text": "银镜只停在鬼巫王离开的那一幕",
+        "effects": []
+      }
+    ]
+  },
+  "beats": [
+    {
+      "id": "b1",
+      "title": "加入或为敌",
+      "prompt": "祭台上，他给你两个选择：加入他，或成为他的敌人。",
+      "reveal": [
+        "他身上的死气让你丹田前所未有地充沛",
+        "话能刺到他"
+      ]
+    },
+    {
+      "id": "b2",
+      "title": "抢上祭台",
+      "prompt": "他抄起车轮般的青铜巨斧，你抢上祭台。",
+      "reveal": [
+        "贴近到五尺之内，巨斧的威力减了一半",
+        "丹宸会舍身护主"
+      ]
+    },
+    {
+      "id": "b3",
+      "title": "鬼羽剑",
+      "prompt": "他抛下巨斧，拔出一柄古朴长剑：鬼羽。",
+      "reveal": [
+        "他实力远在你之上，被你挑动后只用出六成",
+        "他眼角一直在看别处，神色焦急"
+      ]
+    },
+    {
+      "id": "b4",
+      "title": "银镜与骨虎",
+      "prompt": "银镜里有你要找的人。他下了一道命令，然后走了。",
+      "reveal": [
+        "丹宸奉命要活的你",
+        "骨虎刀砍不动"
+      ]
+    },
+    {
+      "id": "b5",
+      "title": "石柱之间",
+      "prompt": "你靠近石柱，断斧与骨虎接连逼来；是否受伤以这一拍交锋结果为准。",
+      "reveal": [
+        "你的血是这些阴魂的天敌"
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "twin_sabers",
+      "kind": "weapon",
+      "label": "{{item:liuchao.item.shuang_dao}}",
+      "aliases": [
+        "钢刀",
+        "五虎断门刀",
+        "虎视鹰扬",
+        "虎战八方",
+        "虎落平阳"
+      ],
+      "source": "第97章 段2、22、61–63、73–78、103",
+      "owner": "pc",
+      "verbs": [
+        {
+          "id": "hard_clash",
+          "aliases": [
+            "硬拼"
+          ],
+          "power": 2,
+          "goalTags": [
+            "survive_duel",
+            "reach_altar"
+          ]
+        },
+        {
+          "id": "eagle_wing",
+          "aliases": [
+            "虎视鹰扬"
+          ],
+          "power": 2,
+          "goalTags": [
+            "survive_duel"
+          ]
+        },
+        {
+          "id": "feint_eight",
+          "aliases": [
+            "虎战八方"
+          ],
+          "power": 1,
+          "goalTags": [
+            "survive_duel"
+          ],
+          "creates": "glimpse_mirror"
+        },
+        {
+          "id": "ground_guard",
+          "aliases": [
+            "虎落平阳"
+          ],
+          "power": 1,
+          "goalTags": [
+            "survive_tiger"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "coral_dagger",
+      "kind": "item",
+      "label": "珊瑚铁匕首",
+      "aliases": [
+        "匕首"
+      ],
+      "source": "第97章 段38–39、100；第98章 段56",
+      "uses": 1,
+      "availability": {
+        "fromBeat": 2
+      },
+      "verbs": [
+        {
+          "id": "cut_haft",
+          "aliases": [
+            "斩断斧柄",
+            "换匕首"
+          ],
+          "power": 3,
+          "goalTags": [
+            "survive_duel"
+          ],
+          "creates": "haft_cut"
+        }
+      ]
+    },
+    {
+      "id": "taunt",
+      "kind": "ability",
+      "label": "言语挑拨",
+      "aliases": [
+        "嘲讽",
+        "激他",
+        "说他像蛇彝人"
+      ],
+      "source": "第97章 段19–21、24–26、35–36",
+      "availability": {
+        "fromBeat": 1,
+        "untilBeat": 3
+      },
+      "verbs": [
+        {
+          "id": "provoke",
+          "aliases": [
+            "挑拨"
+          ],
+          "power": 1,
+          "goalTags": [
+            "reach_altar",
+            "survive_duel"
+          ],
+          "creates": "shaken"
+        }
+      ]
+    },
+    {
+      "id": "death_qi",
+      "kind": "ability",
+      "label": "死气入丹田",
+      "aliases": [
+        "生死根",
+        "调息"
+      ],
+      "source": "第97章 段13、18、62；第98章 段3",
+      "verbs": [
+        {
+          "id": "surge",
+          "aliases": [
+            "运气",
+            "真气狂涌"
+          ],
+          "power": 1,
+          "goalTags": [
+            "survive_duel",
+            "survive_tiger"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "altar",
+      "kind": "terrain",
+      "label": "祭台",
+      "aliases": [
+        "祭坛",
+        "台上"
+      ],
+      "source": "第97章 段14、24、31、36",
+      "availability": {
+        "fromBeat": 1,
+        "untilBeat": 3
+      },
+      "verbs": [
+        {
+          "id": "step_up",
+          "aliases": [
+            "抢上祭台",
+            "贴身"
+          ],
+          "power": 1,
+          "goalTags": [
+            "reach_altar"
+          ],
+          "creates": "inside_reach"
+        }
+      ]
+    },
+    {
+      "id": "silver_mirror",
+      "kind": "terrain",
+      "label": "银镜",
+      "aliases": [
+        "镜子"
+      ],
+      "source": "第97章 段35、78–86；第98章 段27",
+      "availability": {
+        "fromBeat": 3,
+        "untilBeat": 5
+      },
+      "verbs": [
+        {
+          "id": "glance",
+          "aliases": [
+            "看银镜"
+          ],
+          "power": 0,
+          "goalTags": [
+            "read_situation"
+          ],
+          "creates": "heartened",
+          "requires": [
+            "tag:glimpse_mirror"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "crystal_niche",
+      "kind": "terrain",
+      "label": "{{item:lcq.item.nh_niche_crystal}}",
+      "aliases": [
+        "龛窟",
+        "水晶"
+      ],
+      "source": "第97章 段96–98",
+      "availability": {
+        "fromBeat": 4,
+        "untilBeat": 5
+      },
+      "verbs": [
+        {
+          "id": "hide",
+          "aliases": [
+            "躲进龛窟"
+          ],
+          "power": 1,
+          "goalTags": [
+            "survive_tiger"
+          ],
+          "cost": "水晶会合拢，必须马上出来"
+        }
+      ]
+    },
+    {
+      "id": "stone_pillar",
+      "kind": "terrain",
+      "label": "石柱",
+      "aliases": [
+        "柱子",
+        "绕柱"
+      ],
+      "source": "第97章 段104、109–110",
+      "availability": {
+        "fromBeat": 5,
+        "untilBeat": 5
+      },
+      "verbs": [
+        {
+          "id": "circle_pillar",
+          "aliases": [
+            "绕到柱后"
+          ],
+          "power": 1,
+          "goalTags": [
+            "survive_tiger"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "true_yang_blood",
+      "kind": "ability",
+      "label": "真阳之血",
+      "aliases": [
+        "我的血",
+        "沾血",
+        "血迹",
+        "鲜血"
+      ],
+      "source": "第98章 段11–12",
+      "availability": {
+        "fromBeat": 4
+      },
+      "verbs": [
+        {
+          "id": "use_blood",
+          "aliases": [
+            "用血",
+            "以血克制",
+            "让血沾上",
+            "抹血",
+            "沾血",
+            "鲜血",
+            "血迹"
+          ],
+          "power": 3,
+          "goalTags": [
+            "destroy_tiger"
+          ],
+          "requires": [
+            "tag:blood_known"
+          ]
+        }
+      ],
+      "actionPattern": "(?:用|抹|涂|洒|泼|以|让)[^，。；]{0,8}(?:血|沾血)|(?:把|将)[^，。；]{0,5}血[^，。；]{0,8}(?:抹|滴|涂|洒|泼|沾)"
+    },
+    {
+      "id": "broken_vial",
+      "kind": "item",
+      "label": "背包里撞破的药瓶",
+      "aliases": [],
+      "source": "第97章 段109；第98章 段24–26",
+      "availability": {
+        "fromBeat": 5,
+        "untilBeat": 5
+      },
+      "verbs": []
+    }
+  ],
+  "tags": [
+    {
+      "id": "shaken",
+      "label": "心神浮动",
+      "on": "gui_wu_wang",
+      "durationBeats": 1,
+      "effect": "主角易抢到位置"
+    },
+    {
+      "id": "inside_reach",
+      "label": "近身五尺",
+      "on": "pc",
+      "durationBeats": 1,
+      "effect": "巨斧威力减半"
+    },
+    {
+      "id": "haft_cut",
+      "label": "斧柄已断",
+      "on": "gui_wu_wang",
+      "durationBeats": null,
+      "effect": "改用鬼羽剑"
+    },
+    {
+      "id": "glimpse_mirror",
+      "label": "瞥见银镜",
+      "on": "pc",
+      "durationBeats": 1,
+      "effect": "可以看银镜"
+    },
+    {
+      "id": "heartened",
+      "label": "心头大石落地",
+      "on": "pc",
+      "durationBeats": 1,
+      "effect": "主角士气回升"
+    },
+    {
+      "id": "blood_known",
+      "label": "血是阴魂的天敌",
+      "on": "pc",
+      "durationBeats": null,
+      "effect": "你的血是这些阴魂的天敌"
+    }
+  ],
+  "goals": [
+    {
+      "id": "survive_duel",
+      "label": "在鬼巫王手下撑住",
+      "type": "support",
+      "baseDifficulty": 10,
+      "availability": {
+        "untilBeat": 3
+      }
+    },
+    {
+      "id": "reach_altar",
+      "label": "抢上祭台，近身",
+      "type": "support",
+      "baseDifficulty": 10,
+      "availability": {
+        "untilBeat": 3
+      }
+    },
+    {
+      "id": "read_situation",
+      "label": "看清同伴和乐明珠的处境",
+      "type": "support",
+      "baseDifficulty": 10
+    },
+    {
+      "id": "survive_tiger",
+      "label": "躲开骨虎和断斧",
+      "type": "support",
+      "baseDifficulty": 10,
+      "availability": {
+        "fromBeat": 4
+      }
+    },
+    {
+      "id": "subdue_alive",
+      "label": "制住丹宸，不伤她性命",
+      "type": "push",
+      "baseDifficulty": 10,
+      "track": "resist"
+    },
+    {
+      "id": "destroy_tiger",
+      "label": "让骨虎沾上主角的血",
+      "type": "push",
+      "baseDifficulty": 6,
+      "track": "vit",
+      "completeOnSuccess": true,
+      "availability": {
+        "fromBeat": 4
+      }
+    },
+    {
+      "id": "drive_away",
+      "label": "赶走丹宸",
+      "type": "push",
+      "baseDifficulty": 10,
+      "track": "resist",
+      "finishAs": "被赶走",
+      "aliases": [
+        "赶走",
+        "驱走"
+      ]
+    },
+    {
+      "id": "expose_self",
+      "label": "放弃防御，承受敌方攻击",
+      "aliases": [
+        "任咬",
+        "任骨虎咬",
+        "不动",
+        "任打",
+        "不抵抗",
+        "扔刀",
+        "跪地"
+      ],
+      "type": "support",
+      "baseDifficulty": 14,
+      "defensePenalty": -100
+    }
+  ],
+  "locks": [
+    {
+      "id": "ghost_king_untouchable",
+      "matchHints": [
+        "杀死鬼巫王",
+        "砍中鬼巫王",
+        "重伤鬼巫王",
+        "打退鬼巫王"
+      ],
+      "reply": "刀锋眼看就要到他身上，一双手臂抱住了你的腿。",
+      "redirectTo": "survive_duel"
+    },
+    {
+      "id": "spare_dan_chen",
+      "matchHints": [
+        "杀了丹宸",
+        "砍死丹宸",
+        "一刀了结她"
+      ],
+      "reply": "苏荔交待过要照顾丹宸。你扔下刀，去抓她的手腕。",
+      "redirectTo": "subdue_alive"
+    },
+    {
+      "id": "chase_ghost_king",
+      "matchHints": [
+        "追鬼巫王",
+        "拦住鬼巫王"
+      ],
+      "reply": "他已掠出大厅；丹宸骑着骨虎从穹顶扑下来。",
+      "redirectTo": "survive_tiger"
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "dan_chen_bite",
+      "party": "dan_chen",
+      "label": "扑咬",
+      "target": "player",
+      "attack": {
+        "dc": 10
+      },
+      "schedule": {
+        "onBeats": [
+          2
+        ]
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external.thigh"
+          }
+        ],
+        "text": "大腿被她咬伤"
+      },
+      "onBlocked": {
+        "text": "你踢开了她"
+      }
+    },
+    {
+      "id": "ghost_feather_sword",
+      "party": "gui_wu_wang",
+      "label": "鬼羽剑",
+      "target": "player",
+      "attack": {
+        "dc": 12
+      },
+      "schedule": {
+        "onBeats": [
+          3
+        ]
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external.right_arm"
+          }
+        ],
+        "text": "剑尖刺穿了你右臂的衣袖，血流了下来"
+      },
+      "onBlocked": {
+        "text": "你侧身让过剑尖"
+      }
+    },
+    {
+      "id": "axe_from_behind",
+      "party": "dan_chen",
+      "label": "断斧",
+      "target": "player",
+      "attack": {
+        "dc": 11
+      },
+      "schedule": {
+        "onBeats": [
+          5
+        ]
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external.back"
+          }
+        ],
+        "text": "背后被斧刃撕开，伤口没来得及包扎"
+      },
+      "onBlocked": {
+        "text": "你闪开了这一斧"
+      }
+    },
+    {
+      "id": "bone_claw",
+      "party": "hu_sha",
+      "label": "骨爪",
+      "target": "player",
+      "attack": {
+        "dc": 15
+      },
+      "schedule": {
+        "fromBeat": 4
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "gear.blades_dulled"
+          },
+          {
+            "status": "wound.external"
+          }
+        ],
+        "text": "骨爪击中你，伤势加重，刀刃也受损"
+      },
+      "onBlocked": {
+        "text": "你躲开了骨爪"
+      }
+    }
+  ],
+  "fumble": [
+    {
+      "id": "thigh",
+      "target": "actor",
+      "consequence": {
+        "kind": "status",
+        "status": "wound.external.thigh"
+      },
+      "text": "你被逼得露了破绽，大腿挨了一口"
+    },
+    {
+      "id": "right_arm",
+      "target": "actor",
+      "consequence": {
+        "kind": "status",
+        "status": "wound.external.right_arm"
+      },
+      "text": "你右臂挨了一下，流了血"
+    },
+    {
+      "id": "back",
+      "target": "actor",
+      "consequence": {
+        "kind": "status",
+        "status": "wound.external.back"
+      },
+      "text": "你背后被撕开一道口子"
+    },
+    {
+      "id": "blades",
+      "target": "actor",
+      "consequence": {
+        "kind": "status",
+        "status": "gear.blades_dulled"
+      },
+      "text": "钢刀磕在硬处，卷了刃"
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      },
+      {
+        "kind": "playerChoice",
+        "choices": [
+          {
+            "id": "join_or_yield",
+            "label": "答应他：加入或投降",
+            "matchHints": [
+              "加入鬼王峒",
+              "加入你",
+              "投降",
+              "答应他",
+              "跟你走"
+            ],
+            "endingId": "lcq.ending.death.ghost_king_skull",
+            "confirmText": "你要答应他吗？答应之后，这一局就此结束。"
+          }
+        ]
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "redLines": [
+    {
+      "party": "gui_wu_wang",
+      "track": "vit",
+      "forbiddenFinalState": "出局",
+      "forbiddenNarration": [
+        "鬼巫王被杀",
+        "击杀鬼巫王",
+        "鬼巫王死去"
+      ]
+    },
+    {
+      "party": "dan_chen",
+      "track": "resist",
+      "forbiddenFinalState": "死亡",
+      "forbiddenNarration": [
+        "丹宸被杀",
+        "丹宸死在本场"
+      ]
+    }
+  ],
+  "closing": {
+    "win": {
+      "text": "骨虎已碎成一地枯骨。丹宸已不再构成威胁。你独自留在大厅，同伴还在别处。",
+      "fixedCosts": [
+        {
+          "id": "vial_broken",
+          "target": "pc",
+          "effect": "背包里的药瓶撞破，药片掉出",
+          "anchorText": "第97章 段109；第98章 段25"
+        }
+      ],
+      "afterState": [
+        {
+          "id": "ghost_king_intact",
+          "ref": "liuchao.character.gui_wu_wang",
+          "requirement": "无伤离场，后面还要出场",
+          "forbiddenNarration": [
+            "鬼巫王受伤",
+            "鬼巫王流血",
+            "鬼巫王被击退",
+            "鬼巫王败逃"
+          ]
+        },
+        {
+          "id": "dan_chen_alive",
+          "ref": "liuchao.character.dan_chen",
+          "requirement": "丹宸活着，可以被打败、制住或赶走，不限定消除威胁的方式",
+          "forbiddenNarration": [
+            "丹宸死",
+            "丹宸清醒归队"
+          ]
+        },
+        {
+          "id": "hu_sha_gone",
+          "ref": "虎煞（白骨猛虎）",
+          "requirement": "骨虎已解体",
+          "forbiddenNarration": []
+        },
+        {
+          "id": "pc_alone",
+          "ref": "liuchao.character.cheng_zongyang",
+          "requirement": "主角独自一人，同伴在别处",
+          "forbiddenNarration": [
+            "同伴赶到大厅",
+            "武二郎来援"
+          ]
+        },
+        {
+          "id": "zhu_missing",
+          "ref": "liuchao.character.shang_zhen_yu",
+          "requirement": "银镜里十几人中只少朱老头，去向不写",
+          "forbiddenNarration": [
+            "朱老头的去向",
+            "殇侯"
+          ]
+        }
+      ],
+      "flags": {
+        "scene.f10.result": "win"
+      },
+      "rewards": [
+        {
+          "itemId": "lcq.item.f10_broken_axe",
+          "quantity": 1
+        },
+        {
+          "itemId": "lcq.item.nh_niche_crystal",
+          "quantity": 1
+        }
+      ],
+      "next": "lcq.event.s05b_06_breakout_and_reunion"
+    },
+    "lose": {
+      "text": "你没能撑住。等你勉强回过神来，鬼巫王已经离开，大厅里只剩下你一个人。",
+      "fixedCosts": [
+        {
+          "id": "vial_broken",
+          "target": "pc",
+          "effect": "背包里的药瓶撞破，药片掉出",
+          "anchorText": "第97章 段109；第98章 段25"
+        },
+        {
+          "id": "thigh",
+          "target": "pc",
+          "statuses": [
+            {
+              "status": "wound.external.thigh"
+            }
+          ],
+          "effect": "腿伤，移动与防御短期下降"
+        },
+        {
+          "id": "arm",
+          "target": "pc",
+          "statuses": [
+            {
+              "status": "wound.external.right_arm"
+            }
+          ],
+          "effect": "右臂伤，近战与防御短期下降"
+        },
+        {
+          "id": "back",
+          "target": "pc",
+          "statuses": [
+            {
+              "status": "wound.external.back"
+            }
+          ],
+          "effect": "背伤，动作与防御短期下降"
+        },
+        {
+          "id": "blades",
+          "target": "pc",
+          "statuses": [
+            {
+              "status": "gear.blades_dulled"
+            }
+          ],
+          "effect": "双刀卷刃，不能有效进攻，须修复"
+        }
+      ],
+      "flags": {
+        "scene.f10.result": "lose"
+      },
+      "rewards": [],
+      "next": "lcq.event.s05b_06_breakout_and_reunion"
+    },
+    "timeout": {
+      "text": "",
+      "flags": {
+        "scene.f10.result": "timeout"
+      },
+      "rewards": [],
+      "next": null
+    },
+    "playerChoices": {
+      "join_or_yield": {
+        "text": "你答应加入或投降，武士将你生擒，押入地牢。",
+        "flags": {
+          "scene.f10.result": "joined"
+        },
+        "rewards": []
+      }
+    }
+  },
+  "narration": {
+    "fixedTexts": {
+      "engage": "祭台上，他给你两个选择：加入他，或成为他的敌人。"
+    },
+    "requiredFacts": [
+      "鬼巫王实力高出主角不止一筹，被挑动后只用出六成",
+      "鬼巫王下令不杀，要活的",
+      "主角的血因生死根饱蕴真阳，是阴魂的天敌",
+      "丹宸被洗脑，对鬼巫王敬若神明"
+    ],
+    "forbidden": [
+      "丹宸死在本场"
+    ],
+    "outputChecks": [
+      {
+        "when": {
+          "kind": "partyDeparted",
+          "party": "gui_wu_wang"
+        },
+        "pattern": "{{pattern:enemy:lcq.enemy.gui_wu_wang}}[^。！？\\n]{0,12}(?:挥斧|拔剑|攻来|扑来|迎面|手下撑住|再次出手)",
+        "message": "已离场人物不能继续交锋"
+      },
+      {
+        "when": {
+          "kind": "not",
+          "cond": {
+            "party": "dan_chen",
+            "track": "resist",
+            "reach": "final"
+          }
+        },
+        "pattern": "(?:捆住|捆好|捆牢|绑住|绑好|制住|制服)[^。！？\\n]{0,10}{{pattern:enemy:lcq.enemy.dan_chen}}|{{pattern:enemy:lcq.enemy.dan_chen}}[^。！？\\n]{0,10}(?:被捆|被绑|被制住)",
+        "message": "未结算制伏，不能写成已经制伏"
+      },
+      {
+        "when": {
+          "kind": "not",
+          "cond": {
+            "any": [
+              {
+                "kind": "statusPresent",
+                "party": "pc",
+                "status": "wound.external.back"
+              },
+              {
+                "kind": "statusPresent",
+                "party": "pc",
+                "status": "wound.external"
+              },
+              {
+                "kind": "statusPresent",
+                "party": "pc",
+                "status": "wound.external.heavy"
+              },
+              {
+                "kind": "statusPresent",
+                "party": "pc",
+                "status": "incapacitated"
+              }
+            ]
+          }
+        },
+        "pattern": "(?:背上|背后|后背)[^。！？\\n]{0,8}(?:挨了|挨一|被斧|撕开|伤口)",
+        "message": "没有背伤回执，不得写背上受伤"
+      },
+      {
+        "when": {
+          "party": "hu_sha",
+          "track": "vit",
+          "reach": "final"
+        },
+        "pattern": "(?:骨虎|{{pattern:enemy:lcq.enemy.husha_bone_tiger}}|{{pattern:enemy:lcq.enemy.husha_bone_tiger}})[^。！？\\n]{0,12}(?:又扑|扑来|扑向|咬住|咬你|袭来|扑了|扑过|还在咬)",
+        "message": "骨虎已经解体，不得再次扑咬",
+        "afterScene": true
+      }
+    ]
+  },
+  "settings": {},
+  "rewardPolicy": {
+    "itemIds": [
+      "lcq.item.f10_broken_axe",
+      "lcq.item.nh_niche_crystal"
+    ]
+  },
+  "continuity": {
+    "facts": [
+      "鬼巫王在此战不被杀死；丹宸本场不能死亡，输局不能改写这两条承重事实。"
+    ]
+  },
+  "levelContext": {
+    "chapter": 97,
+    "chaptersByBeat": [
+      {
+        "fromBeat": 4,
+        "chapter": 98
+      }
+    ],
+    "variantWhen": [
+      {
+        "entityId": "lcq.enemy.dan_chen",
+        "variant": "without_husha",
+        "when": {
+          "any": [
+            {
+              "kind": "partyDeparted",
+              "party": "hu_sha"
+            },
+            {
+              "party": "hu_sha",
+              "track": "body",
+              "reach": "final"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

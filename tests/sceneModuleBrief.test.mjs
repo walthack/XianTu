@@ -64,7 +64,14 @@ test('结果卡由代码渲染：档位、骰点、夹紧、敌方出手、大�
   const input = mod.buildNarrationInput(contract, out.state, out.result);
   assert.equal(input.flourish, false);
   assert.deepEqual(input.required, ['一场遭遇战']);
-  assert.ok(input.forbidden.includes('天降神兵') && input.forbidden.includes('首领被杀') && input.forbidden.includes('被护者倒下'));
+  assert.ok(input.forbidden.includes('天降神兵') && input.forbidden.includes('首领被杀'), '局中：合同总则 + 红线');
+  assert.equal(input.forbidden.includes('被护者倒下'), false, '局中不套某一分支的事后状态（打输 / 超时不套打赢才有的原著锁）');
+  const won = structuredClone(out.state);
+  won.outcome = { kind: 'win', reason: 'x' };
+  assert.ok(mod.buildNarrationInput(contract, won, out.result).forbidden.includes('被护者倒下'), '分出打赢之后，加上打赢分支自己的事后状态');
+  const lost = structuredClone(out.state);
+  lost.outcome = { kind: 'lose', reason: 'x' };
+  assert.equal(mod.buildNarrationInput(contract, lost, out.result).forbidden.includes('被护者倒下'), false);
   const great = mod.confirmAction(contract, begin(contract, { action: [20], defense: passes(8) }).state, attack(['foe_a']), CTX);
   assert.equal(mod.buildNarrationInput(contract, great.state, great.result).flourish, true);
 });
@@ -102,5 +109,6 @@ test('状态适配器：留下来的状态能转成游戏现有的两种载体�
   assert.notEqual(effect.生成时间, now);
   assert.match(adapters.toInjuryNote(item, mod.resolveStatusDef(item.status, contract)), /^内伤：/);
   const permanent = adapters.toPlayerStatusEffect({ ...item, minutes: null }, now);
-  assert.equal(permanent.持续时间分钟, 99999);
+  assert.equal(permanent.持续时间分钟, -1);
+  assert.match(permanent.状态描述,/修复后解除/);
 });

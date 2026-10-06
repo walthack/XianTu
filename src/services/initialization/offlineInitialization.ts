@@ -60,7 +60,6 @@ export async function initializeCharacterOffline(
       位置: playerStatus.位置 as any,
       效果: [],
       背包: {
-        灵石: { 下品: 10, 中品: 0, 上品: 0, 极品: 0 },
         物品: {
           consumable_xinshou_danyao_01: {
             物品ID: 'consumable_xinshou_danyao_01',

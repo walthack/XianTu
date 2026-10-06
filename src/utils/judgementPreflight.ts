@@ -1,3 +1,5 @@
+import {GAME_NUMBERS,boundedStat,boundedLuck} from '../modules/sceneModule/numbers';
+import { equippedAxe } from '@/modules/sceneModule/host/loot';
 import {
   createJudgementProposal,
   environmentFactorFor,
@@ -51,12 +53,7 @@ export function composeJudgementAction(intentText: string, actionQueueText: stri
   return `${intent}\n\n${queue}`;
 }
 
-const STAT_WEIGHTS: Record<JudgementKind, Array<[string, number]>> = {
-  combat: [['根骨', .5], ['灵性', .3], ['气运', .2]], cultivate: [['悟性', .5], ['灵性', .3], ['心性', .2]],
-  craft: [['悟性', .5], ['灵性', .3], ['心性', .2]], explore: [['气运', .5], ['灵性', .3], ['悟性', .2]],
-  social: [['魅力', .5], ['悟性', .3], ['心性', .2]], escape: [['灵性', .5], ['气运', .3], ['根骨', .2]],
-  stealth: [['灵性', .5], ['气运', .3], ['心性', .2]], scheme: [['悟性', .5], ['心性', .3], ['魅力', .2]],
-};
+const STAT_WEIGHTS = GAME_NUMBERS.weights as Record<JudgementKind, Array<[string, number]>>;
 
 function numeric(value: unknown): number { const n = Number(value); return Number.isFinite(n) ? n : 0; }
 
@@ -64,7 +61,7 @@ function stateFactors(kind: JudgementKind, saveData: any) {
   const innate = saveData?.角色?.身份?.先天六司 || {};
   const acquired = saveData?.角色?.身份?.后天六司 || {};
   const weighted = STAT_WEIGHTS[kind].reduce((sum, [key, weight]) => sum + (numeric(innate[key]) + numeric(acquired[key])) * weight, 0);
-  const factors: any[] = [{ label: '六司', value: Math.round(weighted), source: 'attribute' }];
+  const factors: any[] = [{ label: '六司', value: boundedStat(weighted), source: 'attribute' }];
   const hp = saveData?.角色?.属性?.气血;
   if (numeric(hp?.上限) > 0 && numeric(hp?.当前) / numeric(hp?.上限) < .25) factors.push({ label: '重伤', value: -15, source: 'condition' });
   return factors;
@@ -112,7 +109,7 @@ function scenarioSkillFactors(kind: JudgementKind, actionText: string, saveData:
       || !SKILL_KIND_HINTS[kind].test(`${name}；${description}`)
     ) return [];
     const mastery = mastered.get(name) || 0;
-    return [{ label: `正典技能·${name}`, value: Math.min(12, 6 + Math.floor(mastery / 20)), source: 'skill' as const }];
+    return [{ label: `正典技能·${name}`, value: GAME_NUMBERS.factors.skillCap, source: 'skill' as const }];
   });
   return candidates.sort((a, b) => b.value - a.value).slice(0, 1);
 }
@@ -133,7 +130,8 @@ function explicitTalentFactors(kind: JudgementKind, actionText: string, saveData
 
 function difficultyFor(kind: JudgementKind): CreateJudgementProposalInput['difficulty'] {
   if (['combat', 'escape', 'stealth'].includes(kind)) return { band: 'hard', value: 20 };
-  if (['cultivate', 'craft'].includes(kind)) return { band: 'severe', value: 25 };
+  if (kind === 'cultivate') return {band:'normal',value:GAME_NUMBERS.combat.baselineDc};
+  if (kind === 'craft') return { band: 'severe', value: 25 };
   return { band: 'normal', value: 15 };
 }
 
@@ -169,7 +167,7 @@ export function buildLocalJudgementPreflight(
         ...stateFactors(kind, saveData),
         ...scenarioSkillFactors(kind, normalized, saveData),
         ...explicitTalentFactors(kind, normalized, saveData),
-        { label: '幸运', value: data.幸运点, source: 'condition' },
+        { label: '幸运', value: boundedLuck(Number(saveData?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center)+Number(saveData?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
         environmentFactorFor(kind, data),
       ],
       stakes: {
@@ -229,7 +227,7 @@ export function buildLocalJudgementPreflight(
       ...scenarioSkillFactors(kind, normalized, saveData),
       ...explicitTalentFactors(kind, normalized, saveData),
       ...(sceneItemFactor ? [sceneItemFactor] : []),
-      { label: '幸运', value: data.幸运点, source: 'condition' },
+      { label: '幸运', value: boundedLuck(Number(saveData?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center)+Number(saveData?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
       environmentFactorFor(kind, data),
     ],
     stakes,
@@ -333,11 +331,14 @@ export function buildEventActionJudgementProposal(
     difficulty: { band: spec.difficulty, value: spec.difficultyValue },
     factors: [
       ...stateFactors(kind, saveData),
+      ...(equippedAxe(saveData) && kind==='escape' ? [{label:'双手兵器闪避',value:-1,source:'condition' as const}] : []),
+      ...(equippedAxe(saveData) && kind!=='escape' && /砸|破障|破门|劈开障|击碎/.test(normalized) ? [{label:'砸击破障',value:1,source:'condition' as const}] : []),
+
       ...scenarioSkillFactors(kind, normalized, saveData),
       ...explicitTalentFactors(kind, normalized, saveData),
       ...allyFactorsFor(normalized, spec, saveData),
       ...receiptFactorsFor(spec, saveData),
-      { label: '幸运', value: data.幸运点, source: 'condition' },
+      { label: '幸运', value: boundedLuck(Number(saveData?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center)+Number(saveData?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
       environmentFactorFor(kind, data),
     ],
     stakes,

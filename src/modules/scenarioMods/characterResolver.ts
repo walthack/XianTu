@@ -1,3 +1,8 @@
+
+import {entityAliases} from './namedEntities';
+
+import {isNamedEntityLabel} from './namedEntities';
+import {entityNamePattern} from './namedEntities';
 /**
  * 角色档案运行时还原（Character Resolver）—— 全量 P4 的核心。
  *
@@ -255,6 +260,7 @@ const byId = new Map<string, RegistryEntry>();
 const byName = new Map<string, RegistryEntry>();
 for (const entry of (registryJson as { characters: RegistryEntry[] }).characters || []) {
   byId.set(entry.id, entry);
+  for(const alias of (entry as any).idAliases||[])byId.set(alias,entry);
   byName.set(entry.canonicalName, entry);
   for (const alias of entry.aliases || []) if (!byName.has(alias)) byName.set(alias, entry);
 }
@@ -342,8 +348,8 @@ function resolveOne(character: any, stageId: string): boolean {
   }
   // race：正典权威（种族形态基准/族裔文化规则按它匹配）——registry 有值则覆盖，
   // 抽取期默认的"人族"曾让兽蛮/碧鲮/羽族角色全部丢失族裔（青面兽被写成人类壮汉的病根）。
-  if (staticProfile.race && (!profile.race || profile.race === '人族' || entry.canonicalName === '祁远')) profile.race = staticProfile.race;
-  if (entry.canonicalName === '祁远' && /碧鲮族/.test(String(profile.origin || ''))) profile.origin = origin;
+  if (staticProfile.race && (!profile.race || profile.race === '人族' || isNamedEntityLabel("character","liuchao.character.qi_yuan",entry.canonicalName))) profile.race = staticProfile.race;
+  if (isNamedEntityLabel("character","liuchao.character.qi_yuan",entry.canonicalName) && new RegExp("(?:"+entityNamePattern("location","liuchao.location.biyu_village")+")","").test(String(profile.origin || ''))) profile.origin = origin;
   const personality = unique(asArray(phaseProfileValue(staticProfile, currentPhase, 'personality')));
   if (personality.length) profile.personality = personality;
 
@@ -359,7 +365,7 @@ function resolveOne(character: any, stageId: string): boolean {
   }
   // 第六批逐关公开卡以已批准的阶段身份为准，避免旧档沿用全书身份和外貌。
   if (['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis'].includes(stageId)
-    && ['程宗扬', '凝羽', '苏荔', '阿夕', '谢艺', '武二郎', '祁远', '云苍峰'].includes(entry.canonicalName)) {
+    && [...entityAliases("character","liuchao.character.cheng_zongyang"), ...entityAliases("character","liuchao.character.ning_yu"), ...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","liuchao.character.a_xi"), ...entityAliases("character","liuchao.character.xie_yi"), ...entityAliases("character","liuchao.character.wu_er_lang"), ...entityAliases("character","liuchao.character.qi_yuan"), ...entityAliases("character","liuchao.character.yun_cang_feng")].includes(entry.canonicalName)) {
     if (currentPhase?.description) character.description = currentPhase.description;
     if (currentPhase?.identity) profile.origin = currentPhase.identity;
   }
@@ -435,7 +441,7 @@ export function findRegistryIdentitiesByContext(context: string, limit = 12, sta
     const aliases = southern ? [...new Set(['panel','narration','protagonistAddress','protagonistThought'].flatMap(channel => (namingFor(entry.id, chapter, channel as any)?.text || '').split('／')).filter(Boolean))].filter(name=>name !== entry.canonicalName) : allAliases;
     const directlyMentioned = [entry.canonicalName, ...allAliases].some(key => key.length >= 2 && source.includes(key));
     // 只从已在当前场景出现的明确势力词补召回，避免把无关人物和未来剧情塞进上下文。
-    const factionMentioned = ['星月湖'].some(faction => source.includes(faction) && identity.includes(faction));
+    const factionMentioned = [...entityAliases("faction","liuchao.faction.xing_yue_hu")].some(faction => source.includes(faction) && identity.includes(faction));
     if (!directlyMentioned && !factionMentioned) continue;
     if (seen.has(entry.canonicalName)) continue;
     seen.add(entry.canonicalName);
@@ -568,9 +574,9 @@ export function xiaoziDisclosure(runtime: {
 /** 老档缓存也只能保留当前已公开的记忆；已揭母系／父系不因清理又丢失。 */
 export function xiaoziUnrevealedFacts(runtime: Parameters<typeof xiaoziDisclosure>[0]): RegExp {
   const reveal = xiaoziDisclosure(runtime);
-  return reveal.father ? /毒宗|黑魔海|殇侯|正宫|后宫|白切黑|病娇/ : reveal.mother
-    ? /岳帅|岳鹏举|父亲|遗孤|遗腹|毒宗|黑魔海|殇侯|正宫|后宫|白切黑|病娇/
-    : /岳帅|岳鹏举|碧姬|碧奴|母亲|父亲|血脉|遗孤|遗腹|毒宗|黑魔海|殇侯|正宫|后宫|白切黑|病娇/;
+  return reveal.father ? new RegExp("毒宗|"+"(?:"+entityNamePattern("faction","liuchao.faction.hei_mo_hai")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+"|正宫|后宫|白切黑|病娇","") : reveal.mother
+    ? new RegExp("(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|父亲|遗孤|遗腹|毒宗|"+"(?:"+entityNamePattern("faction","liuchao.faction.hei_mo_hai")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+"|正宫|后宫|白切黑|病娇","")
+    : new RegExp("(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"|母亲|父亲|血脉|遗孤|遗腹|毒宗|"+"(?:"+entityNamePattern("faction","liuchao.faction.hei_mo_hai")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+"|正宫|后宫|白切黑|病娇","");
 }
 
 /** 南荒身份展示只接受本地完成回执；不修改registry的人工身份。 */
@@ -615,7 +621,7 @@ export function syncNanhuangIdentityDisplay(runtime: {
       delete character.affiliations; delete character.factionId;
     }
     if (character.id === 'lcq.character.np006' && runtime.modId === 'lcq.stage_04b_lingfei_baiyi_crisis') {
-      character.name = runtime.sceneLedger?.names?.阁罗 === '阁罗' || settled('lcq.event.weapon_deal_with_geluo') ? '阁罗' : '鬼王峒使者';
+      character.name = isNamedEntityLabel("enemy","lcq.enemy.ge_luo",runtime.sceneLedger?.names?.阁罗) || settled('lcq.event.weapon_deal_with_geluo') ? '阁罗' : '鬼王峒使者';
     }
     if (character.id === 'liuchao.character.shang_zhen_yu') {
       const revealed = settled('lcq.event.shanghou_revealed');
@@ -655,8 +661,8 @@ export function sanitizeXieyiDisclosure(runtime: Parameters<typeof xiaoziDisclos
     if (c.id !== 'liuchao.character.xie_yi') continue;
     const profile = c.profile || {};
     for (const key of ['notes', 'memories', 'goals']) if (Array.isArray(profile[key])) {
-      profile[key] = profile[key].filter((note: string) => !/护佑其遗孀|护佑.*遗孤|奉岳帅之命/.test(String(note)) && (known || (chapter >= approvedChapterGates.xieyiSearch
-        ? !/小紫/.test(String(note)) && isDisclosureFactAllowed(String(note), runtime)
+      profile[key] = profile[key].filter((note: string) => !new RegExp("护佑其遗孀|护佑.*遗孤|奉"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"之命","").test(String(note)) && (known || (chapter >= approvedChapterGates.xieyiSearch
+        ? !new RegExp("(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")","").test(String(note)) && isDisclosureFactAllowed(String(note), runtime)
           && (chapter >= approvedChapterGates.generalPosthumousDaughter || !new RegExp(approvedChapterGates.searchDescendantsPattern).test(String(note)))
           && (chapter >= approvedChapterGates.searchDetailChapter || !new RegExp(approvedChapterGates.searchDetailPattern).test(String(note)))
         : !new RegExp(approvedChapterGates.searchPattern).test(String(note)))));

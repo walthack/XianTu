@@ -1,0 +1,2859 @@
+{
+  "version": 1,
+  "kind": "skill",
+  "entries": [
+    {
+      "id": "lcq.skill.death_root",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.skill.death_root",
+        "name": "生死根",
+        "description": "将死气化为生机的异能，能加速植物生长和伤口愈合。",
+        "type": "异能",
+        "effects": [
+          "感应死亡气息"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_01.json#content.skills[id=lcq.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json#content.skills[id=lcq.skill.death_root]"
+      ]
+    },
+    {
+      "id": "lcq.skill.np001",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.skill.np001",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。"
+      },
+      "stageVariants": {
+        "lcq.stage_04": {
+          "id": "lcq.skill.np001",
+          "name": "生死根",
+          "description": "程宗扬身上有将死气化为生机的异能，能加速植物生长和伤口愈合。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_01.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=lcq.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=lcq.skill.np001]"
+      ]
+    },
+    {
+      "id": "lcq.skill.nine_sun",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.skill.nine_sun",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。",
+        "type": "功法",
+        "effects": [
+          "修炼真气"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json#content.skills[id=lcq.skill.nine_sun]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.death_root",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬的异能，能吸收死亡气息转化为真阳。",
+        "type": "异能",
+        "effects": [
+          "吸收死气"
+        ]
+      },
+      "stageVariants": {
+        "lyg.dingtao_beijing": {
+          "id": "liuchao.skill.death_root",
+          "name": "生死根",
+          "description": "程宗扬的独有异能，可吸收死气转化为自身真气，但积累过多反噬。",
+          "type": "异能",
+          "effects": [
+            "吸收死气",
+            "真元转化"
+          ]
+        },
+        "lyg.mijing_rumen": {
+          "id": "liuchao.skill.death_root",
+          "name": "生死根",
+          "description": "感应死亡气息的异能，可吸收死气强化自身。并非传统灵根。",
+          "type": "异能",
+          "effects": [
+            "感应死亡气息",
+            "吸收死气以恢复真元"
+          ]
+        },
+        "lyl.jiangzhou_retreat": {
+          "id": "liuchao.skill.death_root",
+          "name": "生死根",
+          "description": "程宗扬的独特异能，能感应死亡气息并吸收死气。",
+          "type": "异能",
+          "effects": [
+            "感应死亡气息",
+            "吸收死气"
+          ]
+        },
+        "lyl.lin_an_black_sea": {
+          "id": "liuchao.skill.death_root",
+          "name": "生死根",
+          "description": "程宗扬特有的唯一能力，并非传统灵根。可感应死亡气息，吸收外来剑气并引发丹田异变。",
+          "type": "唯一异能",
+          "effects": [
+            "感应死亡气息",
+            "吸收外来剑气",
+            "丹田异变"
+          ]
+        },
+        "lyl.taiquan_expedition": {
+          "id": "liuchao.skill.death_root",
+          "name": "生死根",
+          "description": "程宗扬特有的唯一能力，并非传统灵根。可感应死亡气息，吸收外来剑气并引发丹田异变。",
+          "type": "唯一异能",
+          "effects": [
+            "感应死亡气息",
+            "吸收外来剑气",
+            "丹田异变"
+          ]
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.skills[id=liuchao.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.skills[id=liuchao.skill.death_root]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.acupuncture",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.acupuncture",
+        "name": "针灸术",
+        "description": "乐明珠的医术，用银针治疗。",
+        "type": "医术",
+        "effects": [
+          "治疗"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.acupuncture]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.acupuncture]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.blade",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.blade",
+        "name": "刀法",
+        "description": "谢艺的刀法技巧。",
+        "type": "武技",
+        "effects": []
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.blade]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.blade]"
+      ]
+    },
+    {
+      "id": "lcq.skill.np004",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.skill.np004",
+        "name": "五虎断门刀",
+        "description": "武二郎的刀法，未传授给程宗扬"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=lcq.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=lcq.skill.np004]"
+      ]
+    },
+    {
+      "id": "lcq.skill.np005",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.skill.np005",
+        "name": "双修功法",
+        "description": "凝羽与程宗扬通过性交交换真气"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=lcq.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=lcq.skill.np005]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.five_tiger_broken_gate_knife",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.five_tiger_broken_gate_knife",
+        "name": "五虎断门刀",
+        "description": "白武族刀法。",
+        "type": "刀法",
+        "effects": [
+          "猛虎扑食"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.five_tiger_broken_gate_knife]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.single_knife",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.single_knife",
+        "name": "单刀",
+        "description": "谢艺的刀法。",
+        "type": "刀法",
+        "effects": [
+          "一击必杀"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.single_knife]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.single_knife]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.phoenix_treasure_book",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.phoenix_treasure_book",
+        "name": "凤凰宝典",
+        "description": "光明观堂功法。",
+        "type": "功法",
+        "effects": [
+          "火属性"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.phoenix_treasure_book]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.phoenix_treasure_book]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.scorpion_tail",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.scorpion_tail",
+        "name": "蝎尾变身",
+        "description": "苏荔能变身蝎子。",
+        "type": "变身",
+        "effects": [
+          "蝎尾攻击"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.scorpion_tail]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.scorpion_tail]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.moon_light_shield",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.moon_light_shield",
+        "name": "月光盾",
+        "description": "凝羽的防御技能。",
+        "type": "防御",
+        "effects": [
+          "月光护盾"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.moon_light_shield]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.moon_light_shield]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.gui_yu_sword",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.gui_yu_sword",
+        "name": "鬼羽剑",
+        "description": "鬼巫王的剑法。",
+        "type": "剑法",
+        "effects": [
+          "召唤行尸"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.gui_yu_sword]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.gui_yu_sword]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.witchcraft",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.witchcraft",
+        "name": "巫术",
+        "description": "小紫的巫术。",
+        "type": "巫术",
+        "effects": [
+          "控制"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=liuchao.skill.witchcraft]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=liuchao.skill.witchcraft]"
+      ]
+    },
+    {
+      "id": "lcq.skill.np012",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.skill.np012",
+        "name": "太一经",
+        "description": "殇侯指出凝羽所习为太一经末技，程宗扬需以正确方法修习"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.skills[id=lcq.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.skills[id=lcq.skill.np012]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.wu_hu_duan_men_dao",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.wu_hu_duan_men_dao",
+        "name": "五虎断门刀",
+        "description": "武二郎传授的刀法，以疾劲为主。",
+        "type": "刀法",
+        "effects": [
+          "拔刀即出手",
+          "省略起手式"
+        ]
+      },
+      "stageVariants": {
+        "lyg.dingtao_beijing": {
+          "id": "liuchao.skill.wu_hu_duan_men_dao",
+          "name": "五虎断门刀",
+          "description": "程宗扬惯用的刚猛刀法，得自星月湖传承。",
+          "type": "刀法",
+          "effects": [
+            "刚猛无铸",
+            "大开大阖"
+          ]
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=liuchao.skill.wu_hu_duan_men_dao]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.wu_hu_duan_men_dao]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.dagger_art",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.dagger_art",
+        "name": "凝羽刀法",
+        "description": "凝羽自修刀法。",
+        "type": "刀法",
+        "effects": [
+          "冷冽"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=liuchao.skill.dagger_art]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.bow_art",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.bow_art",
+        "name": "苏荔弓术",
+        "description": "苏荔以弯弓射杀鬼王峒武士。",
+        "type": "弓术",
+        "effects": [
+          "精准"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=liuchao.skill.bow_art]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.healing_art",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.healing_art",
+        "name": "光明观堂医术",
+        "description": "乐明珠的医术，以法术与科学混合。",
+        "type": "医术",
+        "effects": [
+          "驱虫",
+          "疗伤"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=liuchao.skill.healing_art]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.sword_art",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.sword_art",
+        "name": "谢艺刀法",
+        "description": "谢艺自修刀法，可击碎卵石。",
+        "type": "刀法",
+        "effects": [
+          "取巧"
+        ]
+      },
+      "stageVariants": {
+        "lyg.dingtao_beijing": {
+          "id": "liuchao.skill.sword_art",
+          "name": "剑术",
+          "description": "通用剑法基础。",
+          "type": "剑法",
+          "effects": [
+            "基础剑招"
+          ]
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=liuchao.skill.sword_art]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.sword_art]"
+      ]
+    },
+    {
+      "id": "lcq.skill.np002",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.skill.np002",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.skills[id=lcq.skill.np002]"
+      ]
+    },
+    {
+      "id": "lyg.skill.death_root",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬从现代世界带来的唯一异能，能感应死亡气息，并非传统灵根。",
+        "type": "异能",
+        "effects": [
+          "感应死亡气息"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.death_root]"
+      ]
+    },
+    {
+      "id": "lyg.skill.purple_qi",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.purple_qi",
+        "name": "紫气内功",
+        "description": "小紫所修内功，可吸收死气魂魄，目前即将突破五级。",
+        "type": "内功",
+        "effects": [
+          "吸收魂魄",
+          "水下闭关"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.purple_qi]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.purple_qi]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.purple_qi]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.purple_qi]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.purple_qi]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.purple_qi]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np001",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np001",
+        "name": "五虎断门刀",
+        "description": "程宗扬使用的刀法，在昭阳殿战斗中施展。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=lyg.skill.np001]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np001]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np004",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np004",
+        "name": "太一经",
+        "description": "程宗扬修炼太一经炼化死气，但无法解决杂气问题。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np004",
+          "name": "九阳神功",
+          "description": "程宗扬改用九阳神功处理杂气，但导致杂气更深入真元。"
+        },
+        "lyg.dingtao_beijing": {
+          "id": "lyg.skill.np004",
+          "name": "九阳神功",
+          "description": "程宗扬改用九阳神功处理杂气，但导致杂气更深入真元。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=lyg.skill.np004]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np004]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np005",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np005",
+        "name": "九阳神功",
+        "description": "程宗扬改用九阳神功处理杂气，但导致杂气更深入真元。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np005",
+          "name": "双修鼎炉之术",
+          "description": "卓云君提出用双修法将杂气泄出鼎炉，程宗扬用来炼化部分死气。"
+        },
+        "lyg.dingtao_beijing": {
+          "id": "lyg.skill.np005",
+          "name": "双修鼎炉之术",
+          "description": "卓云君提出用双修法将杂气泄出鼎炉，程宗扬用来炼化部分死气。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=lyg.skill.np005]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np005]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np006",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np006",
+        "name": "双修鼎炉之术",
+        "description": "卓云君提出用双修法将杂气泄出鼎炉，程宗扬用来炼化部分死气。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=lyg.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np006]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np012",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np012",
+        "name": "程宗扬丹田隐患解除",
+        "description": "通过与赵合德交合，程宗扬借阴阳调和稳定了丹田气轮，缓解了先前的胀裂痛感。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np012]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np012]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np024",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np024",
+        "name": "妻媵制",
+        "description": "汉国贵族婚姻制度，正妻之妹或侄女可陪媵为妾，云丹琉即以此身份嫁入。"
+      },
+      "stageVariants": {
+        "lyg.mijing_rumen": {
+          "id": "lyg.skill.np024",
+          "name": "赵合德的玉涡体质",
+          "description": "赵合德拥有玉涡名器，穴内有漩涡状结构，能产生强大吸力，且阴精充沛。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np024]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np024]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np024]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np024]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np024]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=lyg.skill.np024]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np024]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np028",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np028",
+        "name": "房产预售方案",
+        "description": "程宗扬提出房产预售方案，只收纸钞，利用纸钞流通性回收纸钞、稳定纸钞信用、增加拍卖吸引力，实现一举三得。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np028",
+          "name": "真龙降世传言",
+          "description": "蛇夫人向赵飞燕称程宗扬为阳武侯之子、帝室嫡脉，通过帝陵血脉验证，为真龙降世。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np028]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np028]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np028]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np028]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np028]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np028]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np028]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np029",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np029",
+        "name": "真龙降世传言",
+        "description": "蛇夫人向赵飞燕称程宗扬为阳武侯之子、帝室嫡脉，通过帝陵血脉验证，为真龙降世。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np029",
+          "name": "丹田杂气危机",
+          "description": "程宗扬丹田气旋因吸纳洛都之乱大量死气而膨胀不稳，炼化缓慢，需大量上品鼎炉加速炼化，否则有突破失控风险。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np029]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np029]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np029]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np029]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np029]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np029]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np029]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np030",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np030",
+        "name": "丹田杂气危机",
+        "description": "程宗扬丹田气旋因吸纳洛都之乱大量死气而膨胀不稳，炼化缓慢，需大量上品鼎炉加速炼化，否则有突破失控风险。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np030]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np033",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np033",
+        "name": "生死根（功法）",
+        "description": "程宗扬丹田中因生死根吸收死气，加剧真气失控。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np033",
+          "name": "通幽境",
+          "description": "程宗扬已突破第六级通幽境，但积累负面情绪。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np033]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np033]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np033]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np033]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np033]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np033]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np033]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np035",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np035",
+        "name": "通幽境",
+        "description": "程宗扬已突破第六级通幽境，但积累负面情绪。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np035]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np035]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np035]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np035]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np035]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np035]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np040",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np040",
+        "name": "纸钞联盟计划",
+        "description": "程宗扬提议用水泥定金换取纸钞凭证，建立纸钞联盟，包括程氏商会、云氏商会和石家，在各地设钱庄进行发行与兑换。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np040]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np055",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np055",
+        "name": "纸钞发行权",
+        "description": "程宗扬主持的宋国宝钞局有权发行纸钞，宋主及贾师宪均认可纸钞合法。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np055]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np057",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np057",
+        "name": "宋国礼部侍郎衔",
+        "description": "程宗扬被宋国授为礼部侍郎、通问计议使，从三品，但差事临时。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np057]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np057]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np057]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np057]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np057]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np057]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np058",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np058",
+        "name": "晴州向宋国借款提议",
+        "description": "宋国向晴州商会借款一百万金铢，两年期，年息三成。晴州首领称有利可图则可接受。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np058]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np058]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np058]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np058]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np058]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np058]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np059",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np059",
+        "name": "精忠报国（歌曲）",
+        "description": "程宗扬在宴会上清唱此曲，以真气充沛震撼全场。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np059",
+          "name": "武穆秘籍（修改版）",
+          "description": "功法仅限女子修习，处子可练，破体反噬；岳鹏举修改后加入巫法，可避免反噬，但关键部分有禁制未解开。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np059]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np059]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np059]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np059]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np059]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np059]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np059]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np060",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np060",
+        "name": "滑步舞",
+        "description": "程宗扬展示倒滑步法，令诸王惊艳。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np060",
+          "name": "武穆秘籍",
+          "description": "小紫以银针帮义姁打通经脉，促其修炼此秘籍第二层；程宗扬曾表示怕练死人不让其他姬妾练。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np060]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np060]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np060]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np060]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np060]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np060]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np060]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np061",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np061",
+        "name": "舞都会社",
+        "description": "程宗扬提议成立以舞蹈交流与传授为宗旨的会社，避免教坊名声影响，计划在封地舞都举办大赛。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np061]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np061]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np061]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np061]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np061]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np061]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np064",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np064",
+        "name": "生死根（通幽境）",
+        "description": "程宗扬踏入通幽境后，对死气感应清晰，吸收死气不再不适，并思考生死逆转可能。"
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.skill.np064",
+          "name": "鸣鸾仙体",
+          "description": "赵飞燕的蜜穴为鸣鸾仙体，内有鸾关，需修短合度阳根才能破开；交合时淫声连绵如鸾凤清鸣。"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np064]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np064]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np064]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np064]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np064]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np064]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np064]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np067",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np067",
+        "name": "吸收死气",
+        "description": "程宗扬与王守澄交战时吸收了五道死气，已全部消耗，但杂质残留导致经脉重创。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np067]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np067]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np067]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np067]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np067]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np067]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np069",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np069",
+        "name": "鹏翼社情报网络",
+        "description": "程宗扬在长安依赖鹏翼社三名成员（任宏、净空、杜泉）及贾文和传递情报，但人力不足，信息有延迟。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np069]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np069]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np069]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np069]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np069]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np069]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np070",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np070",
+        "name": "内宅性奴训练知识",
+        "description": "程宗扬教导白霓裳乳交、后庭等性技巧，并令吕雉示范。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np070]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np070]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np070]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np070]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np070]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np070]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np072",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np072",
+        "name": "长安坊图",
+        "description": "贾文和绘制了长安城总图及各坊详图，标注了官署、寺观、居民分布，包括程宅所在的宣平坊。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np072]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np072]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np072]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np072]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np072]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np072]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np080",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np080",
+        "name": "武穆秘籍（修改版）",
+        "description": "功法仅限女子修习，处子可练，破体反噬；岳鹏举修改后加入巫法，可避免反噬，但关键部分有禁制未解开。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np080]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np080]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np080]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np080]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np080]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np080]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np081",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np081",
+        "name": "武穆秘籍",
+        "description": "小紫以银针帮义姁打通经脉，促其修炼此秘籍第二层；程宗扬曾表示怕练死人不让其他姬妾练。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np081]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np081]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np081]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np081]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np081]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np081]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np094",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np094",
+        "name": "离魂症",
+        "description": "燕姣然指出小紫有离魂症先兆，症状包括易倦、精神不宁；其母西施因此症最终神智丧失。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np094]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np094]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np094]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np094]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np094]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np094]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np097",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np097",
+        "name": "操控虫蚁",
+        "description": "小紫操控虫蚁的能力在王守澄一战中损失六成，剩余虫蚁数量锐减。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np097]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np097]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np097]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np097]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np097]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np097]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np099",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np099",
+        "name": "小紫的紫气内功",
+        "description": "小紫因吸收了墨枫林的魂魄和死气，修为压不住，即将晋级五级。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np099]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np100",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np100",
+        "name": "吕奉先送入皇图天策府",
+        "description": "程宗扬安排吕奉先离开洛都，前往长安皇图天策府。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np100]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np102",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np102",
+        "name": "西蕃灭佛情报",
+        "description": "白霓裳告知程宗扬西蕃正在灭佛，大量蕃密苯密僧人逃至六朝。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np102]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np102]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np102]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np102]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np102]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np102]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np110",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np110",
+        "name": "羽翼飞行",
+        "description": "吕雉具有羽族身份，背后伸展黑色羽翼飞行。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np110]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np110]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np110]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np110]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np110]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np110]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np113",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np113",
+        "name": "赵合德的玉涡体质",
+        "description": "赵合德拥有玉涡名器，穴内有漩涡状结构，能产生强大吸力，且阴精充沛。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np113]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np113]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np113]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np113]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np113]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np113]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np114",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np114",
+        "name": "白纻舞",
+        "description": "赵合德表演白纻舞，双袖丈长，后因踩到琉璃盏摔倒。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np114]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np114]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np114]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np114]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np114]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np114]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np115",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np115",
+        "name": "预知凶吉",
+        "description": "袁天罡自称能预知自身凶吉，但无法判断旁人。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np115]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np115]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np115]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np115]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np115]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np115]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np120",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np120",
+        "name": "潘金莲肛穴自刺",
+        "description": "潘金莲在程宗扬强暴后庭时，主动用长针刺破自己的肛洞，需伤口流血以示顺从。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np120]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np120]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np120]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np120]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np120]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np120]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np126",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np126",
+        "name": "血莲花种",
+        "description": "释特昧普在黛绮丝体内种下血莲花种，激发淫毒，欲使其肉身布施。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.skills[id=lyg.skill.np126]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.skills[id=lyg.skill.np126]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.skills[id=lyg.skill.np126]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.skills[id=lyg.skill.np126]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.skills[id=lyg.skill.np126]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.skills[id=lyg.skill.np126]"
+      ]
+    },
+    {
+      "id": "lyg.skill.five_tiger_broken_gate_knife",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.five_tiger_broken_gate_knife",
+        "name": "五虎断门刀",
+        "description": "程宗扬惯用的刀法，招数凶悍。",
+        "type": "刀法",
+        "effects": [
+          "势大力沉",
+          "适合混战"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.five_tiger_broken_gate_knife]"
+      ]
+    },
+    {
+      "id": "lyg.skill.life_death_root",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.life_death_root",
+        "name": "生死根",
+        "description": "程宗扬独一无二的异能，可吸收死气转化为真元，但阴阳失衡会带来巨大隐患。",
+        "type": "异能",
+        "effects": [
+          "吸收死气",
+          "转化真元",
+          "积累杂气导致丹田不稳"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.life_death_root]"
+      ]
+    },
+    {
+      "id": "lyg.skill.he_lv_sword",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.he_lv_sword",
+        "name": "鹤侣剑",
+        "description": "潘金莲的剑法，轻盈凌厉。",
+        "type": "剑法",
+        "effects": [
+          "矫若惊龙",
+          "剑出如鹤"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.he_lv_sword]"
+      ]
+    },
+    {
+      "id": "lyg.skill.precognition",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.precognition",
+        "name": "预知凶吉",
+        "description": "袁天罡独有的预知能力，只能预知自身凶吉。",
+        "type": "异能",
+        "effects": [
+          "预知自身凶吉"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.precognition]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np003",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np003",
+        "name": "太一经",
+        "description": "程宗扬修炼太一经炼化死气，但无法解决杂气问题。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np003]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=lyg.skill.np003]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np011",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np011",
+        "name": "程宗扬丹田隐患解除",
+        "description": "通过与赵合德交合，程宗扬借阴阳调和稳定了丹田气轮，缓解了先前的胀裂痛感。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np011]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=lyg.skill.np011]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np023",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np023",
+        "name": "妻媵制",
+        "description": "汉国贵族婚姻制度，正妻之妹或侄女可陪媵为妾，云丹琉即以此身份嫁入。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np023]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np027",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np027",
+        "name": "房产预售方案",
+        "description": "程宗扬提出房产预售方案，只收纸钞，利用纸钞流通性回收纸钞、稳定纸钞信用、增加拍卖吸引力，实现一举三得。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np027]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np032",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np032",
+        "name": "生死根（功法）",
+        "description": "程宗扬丹田中因生死根吸收死气，加剧真气失控。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np032]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np037",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np037",
+        "name": "纸钞联盟计划",
+        "description": "程宗扬提议用水泥定金换取纸钞凭证，建立纸钞联盟，包括程氏商会、云氏商会和石家，在各地设钱庄进行发行与兑换。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np037]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np043",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np043",
+        "name": "羽翼飞行",
+        "description": "吕雉具有羽族身份，背后伸展黑色羽翼飞行。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np043]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np051",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np051",
+        "name": "水泥生意",
+        "description": "江州水泥由十家共营，石超以五折拿货在唐国以两金铢每石出售，一年售出六十万石，净赚七十万金铢"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np051]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np053",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np053",
+        "name": "长安坊图",
+        "description": "贾文和绘制了长安城总图及各坊详图，标注了官署、寺观、居民分布，包括程宅所在的宣平坊。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np053]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np066",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np066",
+        "name": "赵合德的玉涡体质",
+        "description": "赵合德拥有玉涡名器，穴内有漩涡状结构，能产生强大吸力，且阴精充沛。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.skills[id=lyg.skill.np066]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.lian_zhu_arrow",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.lian_zhu_arrow",
+        "name": "连珠箭",
+        "description": "董卓一弓连射数箭的绝技，双手左右开弓。",
+        "type": "箭术",
+        "effects": [
+          "速射",
+          "双手并用"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.lian_zhu_arrow]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.zhong_axe",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.zhong_axe",
+        "name": "重斧术",
+        "description": "董卓双斧连击的招数，力道惊人。",
+        "type": "斧法",
+        "effects": [
+          "重击",
+          "破甲"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.zhong_axe]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.duan_ji",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.duan_ji",
+        "name": "短戟术",
+        "description": "董卓以短戟近战搏杀的技艺。",
+        "type": "戟法",
+        "effects": [
+          "投掷",
+          "近战"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.duan_ji]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.tie_bu_shan",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.tie_bu_shan",
+        "name": "铁布衫",
+        "description": "郭解修习的护体硬功，可挡利箭。",
+        "type": "内功",
+        "effects": [
+          "防御提升"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.tie_bu_shan]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.qin_long_zhua",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.qin_long_zhua",
+        "name": "擒龙爪",
+        "description": "郭解的擒拿功夫，可隔空取物。",
+        "type": "爪法",
+        "effects": [
+          "擒拿",
+          "制敌"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.qin_long_zhua]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.da_shuai_bei_shou",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.da_shuai_bei_shou",
+        "name": "大摔碑手",
+        "description": "郭解的掌功，力大如碑。",
+        "type": "掌法",
+        "effects": [
+          "拍击"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.da_shuai_bei_shou]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.qin_hui_sword",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.qin_hui_sword",
+        "name": "秦桧剑术",
+        "description": "秦桧的剑击技巧，轻灵诡变。",
+        "type": "剑法",
+        "effects": [
+          "速攻",
+          "刺杀"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.qin_hui_sword]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.yao_yi_sword",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.yao_yi_sword",
+        "name": "云丹琉刀法",
+        "description": "云丹琉使用青龙偃月刀的刀法，已斩杀华雄。",
+        "type": "刀法",
+        "effects": [
+          "势大力沉",
+          "刀意贯通"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.yao_yi_sword]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.strategy",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.strategy",
+        "name": "智谋",
+        "description": "贾文和的独有谋略。",
+        "type": "智略",
+        "effects": [
+          "设谋",
+          "看破"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.strategy]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.political_maneuver",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.political_maneuver",
+        "name": "政治手腕",
+        "description": "霍子孟的政治斡旋能力。",
+        "type": "政略",
+        "effects": [
+          "平衡",
+          "制衡"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.political_maneuver]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.royal_authority",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.royal_authority",
+        "name": "太后权威",
+        "description": "吕雉多年执政的威势。",
+        "type": "权术",
+        "effects": [
+          "令从",
+          "威慑"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.skills[id=liuchao.skill.royal_authority]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.poison_art",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.poison_art",
+        "name": "毒宗秘术",
+        "description": "小紫掌握的毒宗功法，精于用毒与解毒。",
+        "type": "毒术",
+        "effects": [
+          "施毒",
+          "解毒"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=liuchao.skill.poison_art]"
+      ]
+    },
+    {
+      "id": "lyg.skill.np019",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.skill.np019",
+        "name": "羽翼飞行",
+        "description": "吕雉具有羽族身份，背后伸展黑色羽翼飞行。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.skills[id=lyg.skill.np019]"
+      ]
+    },
+    {
+      "id": "lyl.skill.death_root",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬独有的异能，能感应死亡气息，与阴阳鱼融合后形成双旋涡丹田。",
+        "type": "唯一能力",
+        "effects": [
+          "感应死亡气息",
+          "加速修炼",
+          "极限生存"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.death_root]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.death_root]"
+      ]
+    },
+    {
+      "id": "lyl.skill.five_tiger_knife",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.five_tiger_knife",
+        "name": "五虎断门刀",
+        "description": "程宗扬早期习得的刀法，虽不精妙但在经历血战后已颇有火候。",
+        "type": "刀法",
+        "effects": [
+          "基础攻击"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.five_tiger_knife]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.five_tiger_knife]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.five_tiger_knife]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.five_tiger_knife]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.five_tiger_knife]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.five_tiger_knife]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np002",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np002",
+        "name": "房中术",
+        "description": "程宗扬习太乙真宗房中术"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np002]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np006",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np006",
+        "name": "九阳神功",
+        "description": "程宗扬在江州城外使用九阳神功，被蔺采泉知晓"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np006]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np006]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np008",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np008",
+        "name": "纸币发行权",
+        "description": "程宗扬通过两条章程获得宋国纸币发行权，即纸币必须用于支付赋税，且发行数量需经程氏钱庄认可。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np008]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np008]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np008]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np008]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np008]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.np008]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np008]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np008]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np009",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np009",
+        "name": "太一经",
+        "description": "程宗扬通过阮香凝发现太一经的淬炼法门。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np009]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np009]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np009]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np009]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np009]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.np009]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np009]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np009]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np030",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np030",
+        "name": "死气操控",
+        "description": "程宗扬可逼出死气，使赤阳藤等无法感知，但会消耗气轮能量。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np030]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np030]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np040",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np040",
+        "name": "气轮",
+        "description": "程宗扬拥有气轮，能吸收阴精"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np040]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np040]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np042",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np042",
+        "name": "双修效率提升",
+        "description": "程宗扬通过双修发现，与罂粟女和惊理双修可提升效率，罂粟女提升超过一半，惊理提升三成。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np042]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np042]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np042]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np042]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np042]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np042]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np049",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np049",
+        "name": "生死根与阴阳鱼融合",
+        "description": "程宗扬修为崩溃后，生死根与阴阳鱼融合丹田，形成双旋涡气旋，重修至坐照巅峰，伤势尽复。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np049]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np049]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np049]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np049]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np049]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np049]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np055",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np055",
+        "name": "虎视鹰扬",
+        "description": "程宗扬刀法招式"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np055]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np055]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np074",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np074",
+        "name": "毒蝶翅粉",
+        "description": "小紫从毒宗学得的毒术，可利用蝶翅粉末下毒。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np074]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np074]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np074]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np074]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np074]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np074]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np077",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np077",
+        "name": "玉盏铃花",
+        "description": "小紫毁掉玉盏铃花，导致交合时男子会迷失魂魄。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np077]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np077]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np077]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np077]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np077]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np077]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np079",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np079",
+        "name": "引魂术",
+        "description": "小紫拥有引魂术，能放大他人欲望"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np079]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np079]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np079]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np079]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np079]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np079]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np083",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np083",
+        "name": "六识禁绝丹",
+        "description": "能封闭六识之一，十二个时辰后恢复"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np083]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np083]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np083]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np083]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np083]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np083]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np084",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np084",
+        "name": "遁形术",
+        "description": "合德习得遁形术"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np084]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np084]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np084]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np084]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np084]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np084]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np085",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np085",
+        "name": "金针续命",
+        "description": "卢景以金针续命术救治剧孟"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np085]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np085]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np085]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np085]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np085]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np085]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np090",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np090",
+        "name": "算缗令",
+        "description": "刘骜颁布算缗令，对商贾征收算赋，并附带告缗令。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np090]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np090]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np090]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np090]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np090]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np090]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np093",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np093",
+        "name": "惊魔指",
+        "description": "秦桧有惊魔指"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np093]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np093]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np093]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np093]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np093]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np093]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np098",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np098",
+        "name": "瞑寂术",
+        "description": "阮香凝可催眠他人，使其如坠梦中"
+      },
+      "stageVariants": {
+        "lyl.luoyang_coup": {
+          "id": "lyl.skill.np098",
+          "name": "惊魔指",
+          "description": "秦桧有惊魔指"
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np098]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np098]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np098]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np098]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np098]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np098]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np098]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np099",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np099",
+        "name": "木行之鼎（阮香凝）",
+        "description": "珍品级木行鼎炉，玉液清润，与程宗扬交合可提升真元炼化效率十倍。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np099]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np099]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np100",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np100",
+        "name": "戊土生金传说",
+        "description": "骗术：声称以戊土配药埋金铢可生息。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np100]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np100]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np104",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np104",
+        "name": "水镜术",
+        "description": "林清浦使用水镜术与程宗扬联络。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.skills[id=lyl.skill.np104]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.skills[id=lyl.skill.np104]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.skills[id=lyl.skill.np104]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.skills[id=lyl.skill.np104]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.skills[id=lyl.skill.np104]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.skills[id=lyl.skill.np104]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np004",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np004",
+        "name": "惊魔指",
+        "description": "秦桧有惊魔指"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.skills[id=lyl.skill.np004]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np005",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np005",
+        "name": "金钟罩",
+        "description": "鲁智深有金钟罩"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.skills[id=lyl.skill.np005]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.bedroom_arts",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.bedroom_arts",
+        "name": "房中术",
+        "description": "太乙真宗所传双修秘术，可用于修炼与疗伤。",
+        "type": "秘术",
+        "effects": [
+          "双修时炼化真气杂质",
+          "提升真元"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.skills[id=liuchao.skill.bedroom_arts]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.skills[id=liuchao.skill.bedroom_arts]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.shock_demon_finger",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.shock_demon_finger",
+        "name": "惊魔指",
+        "description": "秦桧的独门指法，可一击令对手经脉麻痹。",
+        "type": "指法",
+        "effects": [
+          "经脉麻痹",
+          "真气惊变"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.skills[id=liuchao.skill.shock_demon_finger]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.skills[id=liuchao.skill.shock_demon_finger]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.golden_bell_cover",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.golden_bell_cover",
+        "name": "金钟罩",
+        "description": "鲁智深的外门硬功，刀剑难伤。",
+        "type": "横练",
+        "effects": [
+          "刀枪不入",
+          "力大无穷"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.skills[id=liuchao.skill.golden_bell_cover]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.skills[id=liuchao.skill.golden_bell_cover]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.water_mirror",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.water_mirror",
+        "name": "水镜术",
+        "description": "林清浦的远程通讯法术，可两地实时影音沟通，消耗巨大。",
+        "type": "术法",
+        "effects": [
+          "远程通讯",
+          "需铜盆与法力"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.skills[id=liuchao.skill.water_mirror]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.skills[id=liuchao.skill.water_mirror]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.black_feather",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.black_feather",
+        "name": "黑羽暗器",
+        "description": "吕雉作为羽族，可发射黑色羽毛作为暗器。",
+        "type": "暗器",
+        "effects": [
+          "高速穿透"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=liuchao.skill.black_feather]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.illusion",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.illusion",
+        "name": "高级幻术",
+        "description": "剑玉姬的招牌能力，可制造逼真幻象。",
+        "type": "法术",
+        "effects": [
+          "幻术",
+          "潜行"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=liuchao.skill.illusion]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.fire_method",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.fire_method",
+        "name": "平山火法",
+        "description": "蔡敬仲的施法能力，可引爆手雷等火药。",
+        "type": "法术",
+        "effects": [
+          "爆炸"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=liuchao.skill.fire_method]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.qinglong_saber",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.qinglong_saber",
+        "name": "青龙偃月刀法",
+        "description": "云丹琉的刀法，刚猛霸道。",
+        "type": "刀法",
+        "effects": [
+          "高伤害"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=liuchao.skill.qinglong_saber]"
+      ]
+    },
+    {
+      "id": "liuchao.skill.poison",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.skill.poison",
+        "name": "毒术",
+        "description": "小紫从毒宗学得的用毒能力。",
+        "type": "法术",
+        "effects": [
+          "下毒",
+          "解毒"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=liuchao.skill.poison]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np019",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np019",
+        "name": "生死根",
+        "description": "程宗扬将生死根反向引导，吸收剑玉姬的外来剑气，引发丹田异变。气轮破碎后重凝，真元大幅提升但变得浑沌。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np019]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.np019]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np033",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np033",
+        "name": "死气操控",
+        "description": "程宗扬可逼出死气，使赤阳藤等无法感知，但会消耗气轮能量。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np033]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np043",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np043",
+        "name": "气轮",
+        "description": "程宗扬拥有气轮，能吸收阴精"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np043]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np045",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np045",
+        "name": "双修效率提升",
+        "description": "程宗扬通过双修发现，与罂粟女和惊理双修可提升效率，罂粟女提升超过一半，惊理提升三成。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np045]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np052",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np052",
+        "name": "生死根与阴阳鱼融合",
+        "description": "程宗扬修为崩溃后，生死根与阴阳鱼融合丹田，形成双旋涡气旋，重修至坐照巅峰，伤势尽复。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np052]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np058",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np058",
+        "name": "五虎断门刀",
+        "description": "程宗扬常用刀法"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np058]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np059",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np059",
+        "name": "虎视鹰扬",
+        "description": "程宗扬刀法招式"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np059]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np072",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np072",
+        "name": "阴阳鱼",
+        "description": "程宗扬丹田内融入阴阳鱼"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np072]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np073",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np073",
+        "name": "遁形术",
+        "description": "合德习得遁形术"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np073]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np078",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np078",
+        "name": "戊土生金传说",
+        "description": "骗术：声称以戊土配药埋金铢可生息。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np078]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np080",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np080",
+        "name": "金针续命",
+        "description": "卢景以金针续命术救治剧孟"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np080]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np089",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np089",
+        "name": "毒蝶翅粉",
+        "description": "小紫从毒宗学得的毒术，可利用蝶翅粉末下毒。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np089]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np092",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np092",
+        "name": "玉盏铃花",
+        "description": "小紫毁掉玉盏铃花，导致交合时男子会迷失魂魄。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np092]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np094",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np094",
+        "name": "引魂术",
+        "description": "小紫拥有引魂术，能放大他人欲望"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np094]"
+      ]
+    },
+    {
+      "id": "lyl.skill.np101",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.np101",
+        "name": "算缗令",
+        "description": "刘骜颁布算缗令，对商贾征收算赋，并附带告缗令。"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.skills[id=lyl.skill.np101]"
+      ]
+    },
+    {
+      "id": "lyl.skill.death_root_sense",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.death_root_sense",
+        "name": "生死根感应",
+        "description": "感应死亡气息，增强对死气的操纵。",
+        "type": "异能",
+        "effects": [
+          "提升对死亡威胁的感知",
+          "可操纵少量死气"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.death_root_sense]"
+      ]
+    },
+    {
+      "id": "lyl.skill.coral_dagger_art",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.coral_dagger_art",
+        "name": "珊瑚匕首术",
+        "description": "使用珊瑚匕首的技巧，锋利无匹，可斩断赤阳藤。",
+        "type": "刀法",
+        "effects": [
+          "切割坚韧物品",
+          "提升近战攻击力"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.coral_dagger_art]"
+      ]
+    },
+    {
+      "id": "lyl.skill.duanyue_xian",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.duanyue_xian",
+        "name": "断月弦",
+        "description": "虞白樱的独门暗器丝弦，锋利如刀。",
+        "type": "暗器",
+        "effects": [
+          "远程攻击",
+          "切割"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.duanyue_xian]"
+      ]
+    },
+    {
+      "id": "lyl.skill.poison_techniques",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.poison_techniques",
+        "name": "毒术",
+        "description": "潘金莲的用毒技巧。",
+        "type": "毒法",
+        "effects": [
+          "施毒",
+          "解毒"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.poison_techniques]"
+      ]
+    },
+    {
+      "id": "lyl.skill.folding_fan_art",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.folding_fan_art",
+        "name": "折扇术",
+        "description": "萧遥逸的折扇战斗技巧。",
+        "type": "武器技法",
+        "effects": [
+          "近战攻击",
+          "远程投掷"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.folding_fan_art]"
+      ]
+    },
+    {
+      "id": "lyl.skill.strong_fists",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.strong_fists",
+        "name": "铁拳",
+        "description": "武二的蛮力拳法。",
+        "type": "拳法",
+        "effects": [
+          "高额物理伤害"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.strong_fists]"
+      ]
+    },
+    {
+      "id": "lyl.skill.yaksha_claw",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.skill.yaksha_claw",
+        "name": "夜叉爪",
+        "description": "小紫的妖族爪技，可召唤妖爪。",
+        "type": "妖术",
+        "effects": [
+          "远程攻击",
+          "夺取物品"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/skills.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.skills[id=lyl.skill.yaksha_claw]"
+      ]
+    }
+  ]
+}

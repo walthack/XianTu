@@ -102,6 +102,12 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
       if (party.side === 'player_side' && !entry.ending) continue;
       if (!entry.ending) { err(`${party.id}.${id}：缺 ending（finalState / ceiling）`); continue; }
       if (!info.scale.includes(entry.ending.finalState)) err(`${party.id}.${id}：finalState“${entry.ending.finalState}”不在刻度里`);
+      for (const label of entry.ending.alternatives || []) {
+        if (!info.scale.includes(label) || info.scale.indexOf(label) < info.limit) err(`${party.id}.${id}：备选终态不在终态区间`);
+      }
+      for (const element of entry.requiresLever || []) {
+        if (!contract.elements?.some(e => e.id === element)) err(`${party.id}.${id}：必需杠杆不存在`);
+      }
       const ceiling = Number(entry.ending.ceiling ?? 0);
       if (!(ceiling >= 0 && ceiling <= 3)) err(`${party.id}.${id}：ceiling 必须在 0–3`);
     }
@@ -146,6 +152,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
     for (const cond of conds) {
       const anyCond = cond as any;
       if (anyCond.party) knownParty(anyCond.party, where);
+      if ('party' in cond)knownParty(cond.party,where);
       if (cond.kind === 'trackReaches') {
         const info = trackInfo(contract, cond.party, cond.track);
         if (!info) err(`${where}：${cond.party} 没有轨道 ${cond.track}`);
@@ -194,8 +201,41 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
   if (clock?.onTimeout?.type === 'continue') checkEffects(clock.onTimeout.events, 'clock.onTimeout.events');
   for (const event of clock?.fixedEvents || []) {
     if (event.atBeat !== undefined && (!Number.isInteger(event.atBeat) || event.atBeat < 1)) err(`clock.fixedEvents.${event.id}：atBeat 必须是 ≥ 1 的整数`);
-    if (event.atBeat !== undefined && clock?.beats !== undefined && event.atBeat > clock.beats) err(`clock.fixedEvents.${event.id}：atBeat ${event.atBeat} 超出 clock.beats ${clock.beats}`);
+    if (event.atBeat !== undefined && clock?.beats !== undefined && clock.onTimeout?.type !== 'continue' && event.atBeat > clock.beats) err(`clock.fixedEvents.${event.id}：atBeat ${event.atBeat} 超出 clock.beats ${clock.beats}`);
     checkEffects(event.effects, `clock.fixedEvents.${event.id}`);
+  }
+
+  // Conditional event authoring, information gates and continuity are checked before play.
+  const fixedIds=new Set<string>();
+  for(const event of clock?.fixedEvents || []) {
+    if(!event.id)err('clock.fixedEvents：缺少事件id');
+    if(fixedIds.has(event.id))err(`clock.fixedEvents：重复事件 ${event.id}`);fixedIds.add(event.id);
+    if(event.when)checkConds(event.when,`clock.fixedEvents.${event.id}.when`);
+    if(event.when && (event.atBeat!==undefined || event.onStart || event.atClose))err(`clock.fixedEvents.${event.id}：条件触发不能同时写拍数/开场/收束`);
+    if(event.trigger && !['beatStart','afterAction','beforeEnemyAction','afterEnemyAction'].includes(event.trigger))err(`clock.fixedEvents.${event.id}：未知 trigger`);
+    if(event.trigger && !event.when)err(`clock.fixedEvents.${event.id}：trigger 必须有 when`);
+    if(event.enemyActionId && (!['beforeEnemyAction','afterEnemyAction'].includes(event.trigger || '') || !contract.enemyActions?.some(a=>a.id===event.enemyActionId)))err(`clock.fixedEvents.${event.id}：enemyActionId 必须引用敌方动作并指定敌方触发节点`);
+  }
+  for(const party of contract.parties || [])if(party.group && (!party.group.id || !party.group.label || party.player))err(`parties.${party.id}.group：必须有稳定id/标签，不能是主角`);
+  checkEffects(contract.continuity?.effects,'continuity.effects');
+  for(const cost of contract.continuity?.fixedCosts || []) {
+    knownParty(cost.target,'continuity.fixedCosts');for(const ref of cost.statuses || [])needStatus(ref.status,'continuity.fixedCosts');
+  }
+  for(const after of contract.continuity?.checks || [])if(after.check)checkConds(after.check,`continuity.checks.${after.id}`);
+  const info=contract.interrogation;
+  if(info) {
+    if(!Number.isInteger(info.maxChapter) || info.maxChapter<1)err('interrogation.maxChapter：必须是正整章号');
+    if(!info.goalIds.length)err('interrogation.goalIds：必须指定至少一个审问目标');
+    for(const id of info.goalIds)if(!goalsOf(contract).some(g=>g.id===id))err(`interrogation.goalIds：目标 ${id} 不存在`);
+    if(info.requires)checkConds(info.requires,'interrogation.requires');
+    const ids=new Set<string>();
+    for(const fact of info.facts) {
+      if(!fact.id || ids.has(fact.id) || !fact.text || !Number.isInteger(fact.fromChapter) || fact.fromChapter<1)err('interrogation.facts：id唯一、正文非空、章号为正整数');ids.add(fact.id);
+      if(fact.forbiddenBefore)try{new RegExp(fact.forbiddenBefore);}catch{err(`interrogation.${fact.id}：禁写表达式无效`);}
+    }
+  }
+  if(contract.rewardPolicy)for(const branch of [contract.closing?.win,contract.closing?.lose,contract.closing?.timeout,...Object.values(contract.closing?.playerChoices || {})]) {
+    for(const reward of branch?.rewards || [])if(typeof reward.itemId==='string' && !contract.rewardPolicy.itemIds.includes(reward.itemId))err(`rewardPolicy：未经授权的奖励 ${reward.itemId}`);
   }
 
   // ---- 败局 ----
@@ -308,7 +348,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
       if (info.ending?.finalState === line.forbiddenFinalState) err(`${where}.${track}：终态 finalState 正是禁止的“${line.forbiddenFinalState}”`);
       else if (index <= info.limit && index > info.initial) err(`${where}.${track}：玩家的主张可以推到“${line.forbiddenFinalState}”（ceiling 够高）；红线要求任何路径都到不了`);
       for (const key of settable) if (key === `${line.party}.${track}.${line.forbiddenFinalState}`) err(`${where}.${track}：有事件把它设成禁止的“${line.forbiddenFinalState}”`);
-      for (const branch of Object.values(contract.closing || {})) {
+      for (const branch of [contract.closing?.win,contract.closing?.lose,contract.closing?.timeout,...Object.values(contract.closing?.playerChoices || {})]) {
         for (const rule of branch?.settle || []) {
           if (rule.to === line.forbiddenFinalState && (!rule.party || rule.party === line.party)) err(`${where}.${track}：closing.settle 会把它设成禁止的“${line.forbiddenFinalState}”`);
         }
@@ -317,7 +357,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
   }
 
   // ---- 收束引用 ----
-  for (const [name, branch] of Object.entries(contract.closing || {})) {
+  for (const [name, branch] of Object.entries({win:contract.closing?.win,lose:contract.closing?.lose,timeout:contract.closing?.timeout,...contract.closing?.playerChoices})) {
     for (const cost of branch?.fixedCosts || []) {
       if (cost.target !== 'scene') knownParty(cost.target, `closing.${name}.fixedCosts.${cost.id}`);
       for (const ref of cost.statuses || []) needStatus(ref.status, `closing.${name}.fixedCosts.${cost.id}`);

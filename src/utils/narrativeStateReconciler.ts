@@ -1,3 +1,9 @@
+import { statusNamePattern } from '../modules/sceneModule/statuses';
+import {entityName} from '@/modules/scenarioMods/namedEntities';
+
+import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
+
+import {isNamedEntityLabel} from '@/modules/scenarioMods/namedEntities';
 import { splitRecordPath, npcRecordPath, resolveRelationshipId, backfillRelationshipIds, normalizeNpcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import { get, set, cloneDeep } from 'lodash';
 import type { SaveData, StateChange, StatusEffect } from '@/types/game';
@@ -123,35 +129,35 @@ const PARTY_STATUS_RULES: PartyStatusRule[] = [
     build: text => {
       const heart = affirmedClause(
         text,
-        '小紫',
-        /归海之心.{0,12}(?:温养|护住|稳住|渗入).{0,8}(?:小紫(?:的)?|她的|其)(?:神魂|魂魄)|小紫(?:的)?(?:神魂|魂魄).{0,12}(?:受|被|得到|由).{0,6}归海之心.{0,8}(?:温养|护住|稳住)/
+        entityName("character","liuchao.character.xiao_zi"),
+        new RegExp("归海之心.{0,12}(?:温养|护住|稳住|渗入).{0,8}(?:"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"(?:的)?|她的|其)(?:神魂|魂魄)|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"(?:的)?(?:神魂|魂魄).{0,12}(?:受|被|得到|由).{0,6}归海之心.{0,8}(?:温养|护住|稳住)","")
       );
-      const relieved = affirmedClause(text, '小紫', /小紫(?:的)?离魂症.{0,10}(?:缓解|好转|压制|稳定)|离魂症.{0,10}(?:缓解|好转|压制|稳定).{0,8}(?:小紫|她)/);
+      const relieved = affirmedClause(text, entityName("character","liuchao.character.xiao_zi"), new RegExp("(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"(?:的)?离魂症.{0,10}(?:缓解|好转|压制|稳定)|离魂症.{0,10}(?:缓解|好转|压制|稳定).{0,8}(?:"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"|她)",""));
       if (heart || relieved) return heart && relieved ? '归海之心正温养神魂，离魂症已有缓解' : heart ? '归海之心正温养神魂' : '离魂症已有缓解';
-      if (affirmedClause(text, '小紫', /(?:闭关|入定).{0,10}(?:晋级|突破|冲击).{0,6}五级|(?:晋级|突破|冲击).{0,6}五级.{0,10}(?:闭关|入定)/)) return '正在闭关冲击五级';
-      return affirmedClause(text, '小紫', /(?:神魂|身体).{0,8}虚弱|虚弱.{0,8}(?:休息|静养)|正在休息/) ? '神魂虚弱，正在休息' : '';
+      if (affirmedClause(text, entityName("character","liuchao.character.xiao_zi"), /(?:闭关|入定).{0,10}(?:晋级|突破|冲击).{0,6}五级|(?:晋级|突破|冲击).{0,6}五级.{0,10}(?:闭关|入定)/)) return '正在闭关冲击五级';
+      return affirmedClause(text, entityName("character","liuchao.character.xiao_zi"), new RegExp(`(?:${statusNamePattern('wound.soul')}|${statusNamePattern('weak.body')})|正在休息`)) ? '神魂虚弱，正在休息' : '';
     },
   },
   {
     npc: '凝羽',
     build: text => {
-      if (affirmedClause(text, '凝羽', /(?:冰蛊|毒瘾).{0,10}(?:解除|根治|祛除)|殇侯.{0,10}(?:解除|根治).{0,8}(?:冰蛊|毒瘾)/)) return '冰蛊毒性已解除';
-      return affirmedClause(text, '凝羽', /(?:冰蛊|毒瘾).{0,10}(?:发作|复发)|(?:毒性|寒意).{0,8}(?:发作|侵体)/)
+      if (affirmedClause(text, entityName("character","liuchao.character.ning_yu"), new RegExp("(?:"+"(?:"+entityNamePattern("ending","lcq.ending.death.ajiman_bond")+")"+"|毒瘾).{0,10}(?:解除|根治|祛除)|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+".{0,10}(?:解除|根治).{0,8}(?:"+"(?:"+entityNamePattern("ending","lcq.ending.death.ajiman_bond")+")"+"|毒瘾)",""))) return '冰蛊毒性已解除';
+      return affirmedClause(text, entityName("character","liuchao.character.ning_yu"), new RegExp("(?:"+"(?:"+entityNamePattern("ending","lcq.ending.death.ajiman_bond")+")"+"|毒瘾).{0,10}(?:发作|复发)|(?:毒性|寒意).{0,8}(?:发作|侵体)",""))
         ? '冰蛊毒性发作，需以真阳压制'
         : '';
     },
   },
-  { npc: '月霜', build: text => coldPoisonStatus(text, '月霜') },
-  { npc: '云如瑶', build: text => coldPoisonStatus(text, '云如瑶') },
+  { npc: '月霜', build: text => coldPoisonStatus(text, entityName("character","lcq.character.yue_shuang")) },
+  { npc: '云如瑶', build: text => coldPoisonStatus(text, entityName("character","liuchao.character.yun_ru_yao")) },
   {
     npc: '赵飞燕',
-    build: text => affirmedClause(text, '赵飞燕', /中毒.{0,8}(?:昏迷|不醒)|(?:昏迷|不醒).{0,8}中毒/)
+    build: text => affirmedClause(text, entityName("character","liuchao.character.zhao_feiyan"), new RegExp(`(?:${statusNamePattern('poisoned')}).{0,8}(?:${statusNamePattern('unconscious')}|不醒)|(?:${statusNamePattern('unconscious')}|不醒).{0,8}(?:${statusNamePattern('poisoned')})`))
       ? '中毒昏迷，正在救治'
       : '',
   },
   {
     npc: '剑玉姬',
-    build: text => affirmedClause(text, '剑玉姬', /(?:受伤|受创|见血|伤口).{0,12}(?:反噬|异动|失控)|(?:反噬|异动).{0,12}(?:伤势|体质)/)
+    build: text => affirmedClause(text, entityName("character","liuchao.character.jian_yu_ji"), /(?:受伤|受创|见血|伤口).{0,12}(?:反噬|异动|失控)|(?:反噬|异动).{0,12}(?:伤势|体质)/)
       ? '受创引发易碎体质反噬'
       : '',
   },
@@ -159,7 +165,7 @@ const PARTY_STATUS_RULES: PartyStatusRule[] = [
     npc: '友通期',
     build: text => affirmedClause(
       text,
-      '友通期',
+      entityName("character","lyl.character.np060"),
       /(?:失魂|神智尽失|不言不笑).{0,12}(?:瘫痪|不能动|无法动弹)|(?:瘫痪|不能动|无法动弹).{0,12}(?:失魂|神智尽失|不言不笑)/,
       CLAUSE_FACT_NEGATION_RE
     )
@@ -168,7 +174,7 @@ const PARTY_STATUS_RULES: PartyStatusRule[] = [
   },
   {
     npc: '齐羽仙',
-    build: text => affirmedClause(text, '齐羽仙', /(?:精血|全身精血).{0,10}(?:榨干|耗尽|近乎枯竭)|(?:唇裂血枯|精血枯竭)/)
+    build: text => affirmedClause(text, entityName("character","liuchao.character.qi_yu_xian"), /(?:精血|全身精血).{0,10}(?:榨干|耗尽|近乎枯竭)|(?:唇裂血枯|精血枯竭)/)
       ? '精血近乎耗尽，极度虚弱'
       : '',
   },
@@ -195,7 +201,7 @@ const PARTY_STATUS_RULES: PartyStatusRule[] = [
   },
   {
     npc: '薛延山',
-    build: text => affirmedClause(text, '薛延山', /寒毒.{0,10}(?:濒死|垂危|重伤)|(?:重伤|濒死).{0,10}寒毒/)
+    build: text => affirmedClause(text, '薛延山', new RegExp(`(?:${statusNamePattern('poison.cold')}).{0,10}(?:${statusNamePattern('dying')}|${statusNamePattern('wound.severe')})|(?:${statusNamePattern('dying')}|${statusNamePattern('wound.severe')}).{0,10}(?:${statusNamePattern('poison.cold')})`))
       ? '身中寒毒，重伤濒危'
       : coldPoisonStatus(text, '薛延山'),
   },
@@ -203,7 +209,7 @@ const PARTY_STATUS_RULES: PartyStatusRule[] = [
     npc: '袁天罡',
     build: text => affirmedSentence(
       text,
-      '袁天罡',
+      entityName("character","liuchao.character.yuan_tiangang"),
       /(?:鼻血|鼻中涌血|流鼻血).{0,16}(?:杀意|凶兆|凶险|危险|伏击|示警|预警)|(?:杀意|凶兆|凶险|危险|伏击).{0,16}(?:鼻血|鼻中涌血|流鼻血)/
     )
       ? '鼻血示警，预知自身正有凶险'
@@ -212,10 +218,12 @@ const PARTY_STATUS_RULES: PartyStatusRule[] = [
 ];
 
 function buildGenericPartyStatus(text: string, npc: string): string {
-  const unconscious = affirmedClause(text, npc, /(?:陷入|仍在|一直)?昏迷|不省人事|失去意识/);
+  const dying = affirmedClause(text, npc, new RegExp(statusNamePattern('dying')));
+  if (dying) return '濒死，需立即救治';
+  const unconscious = affirmedClause(text, npc, new RegExp(statusNamePattern('unconscious')));
   if (unconscious) return '昏迷未醒';
 
-  const severe = affirmedClause(text, npc, /(?:身受|受了?|伤势)?重伤|伤势.{0,6}(?:沉重|严重)/);
+  const severe = affirmedClause(text, npc, new RegExp(statusNamePattern('wound.severe')));
   const foundation = affirmedClause(text, npc, /根基.{0,8}(?:受损|受创|损伤)/);
   const stabilized = affirmedClause(text, npc, /(?:服药|用药).{0,8}(?:稍稳|稳定|缓和)|伤势.{0,8}(?:稍稳|稳定|缓和)/);
   if (foundation && stabilized) return '根基受损，服药后伤势稍稳，暂不宜强战';
@@ -224,15 +232,15 @@ function buildGenericPartyStatus(text: string, npc: string): string {
   if (severe) return '身受重伤，需静养';
   if (stabilized) return '伤势稍稳，仍需静养';
 
-  const spiritWeak = affirmedClause(text, npc, /(?:神魂|魂魄).{0,8}(?:虚弱|不稳|受创)/);
+  const spiritWeak = affirmedClause(text, npc, new RegExp(statusNamePattern('wound.soul')));
   if (spiritWeak) return '神魂虚弱，正在静养';
-  const bodyWeak = affirmedClause(text, npc, /(?:身体|体力|气息).{0,8}(?:虚弱|不支|衰弱)/);
+  const bodyWeak = affirmedClause(text, npc, new RegExp(statusNamePattern('weak.body')));
   if (bodyWeak) return '身体虚弱，正在休息';
   return affirmedClause(text, npc, /正在休息|卧床静养|正在静养|休息调养/) ? '正在休息静养' : '';
 }
 
 function hasDeathRoot(saveData: SaveData): boolean {
-  if (String(get(saveData, '角色.身份.名字') || '').trim() !== '程宗扬') return false;
+  if (!isNamedEntityLabel("character","liuchao.character.cheng_zongyang",String(get(saveData, '角色.身份.名字') || '').trim())) return false;
   const root = get(saveData, '角色.身份.灵根');
   const rootName = typeof root === 'string'
     ? root
@@ -451,20 +459,20 @@ export function reconcileImprovisedGoalsFromNarrative(input: NarrativeReconcileI
     /归海之心.{0,16}(?:到手|取得|温养|渗入|护住|稳住)/.test(compactText) ||
     /离魂症.{0,12}(?:缓解|好转|压制|稳定)/.test(compactText);
   if (xiaoziResolved) {
-    nextGoals = nextGoals.filter((goal) => !/(?:救治|医治|疗救|救醒).{0,6}小紫|小紫.{0,6}(?:离魂症|神魂)/.test(goal.标题));
+    nextGoals = nextGoals.filter((goal) => !new RegExp("(?:救治|医治|疗救|救醒).{0,6}"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+".{0,6}(?:离魂症|神魂)","").test(goal.标题));
   }
 
   const onlyHousekeeping = LOCAL_HOUSEKEEPING_RE.test(compactText) &&
     !/追查|查清|线索|共鸣|撤离|离开|启程|北上|安置|同行|恢复人身/.test(compactText);
   if (!onlyHousekeeping && !NEGATED_PURSUIT_RE.test(compactText)) {
     // 玉牌主人有三个名字（本名碧宛／通称碧姬／鬼王峒蔑称碧奴，见裁定 #11/#141），三者都要能匹配上
-    const hasBinuThread = /碧[姬宛奴]玉牌|星月湖船队|龙骥君/.test(compactText) && /追查|查清|线索|共鸣|关联/.test(compactText);
+    const hasBinuThread = new RegExp("碧[姬宛奴]玉牌|"+"(?:"+entityNamePattern("faction","liuchao.faction.xing_yue_hu")+")"+"船队|"+"(?:"+entityNamePattern("character","liuchao.character.xie_yi")+")"+"君","").test(compactText) && /追查|查清|线索|共鸣|关联/.test(compactText);
     if (hasBinuThread) {
       addGoal(nextGoals, '查清碧姬玉牌与星月湖船队、龙骥君的关联');
     }
 
     const hasEvacuation = /撤离|离开|启程|北上|登车|乘车/.test(compactText) &&
-      /荒废渔村|安全区域|泊陵鱼氏|黑魔海/.test(compactText);
+      new RegExp("荒废渔村|安全区域|"+"(?:"+entityNamePattern("faction","liuchao.faction.x0ba5d2439c")+")"+"|"+"(?:"+entityNamePattern("faction","liuchao.faction.hei_mo_hai")+")","").test(compactText);
     if (hasEvacuation) {
       addGoal(nextGoals, '带小紫与归海之心撤离荒废渔村，避开泊陵鱼氏与黑魔海追索');
     }
@@ -507,11 +515,11 @@ export function reconcilePartyNpcStateFromNarrative(input: NarrativeReconcileInp
 
   // 阮香凝的瞑寂是“施术者专属、状态落在目标身上”的跨角色机制。只有施术者和点名目标
   // 都是本轮前既存关系、正文同时明确施术与中术效果时才补；单纯介绍能力绝不落状态。
-  if (Object.prototype.hasOwnProperty.call(relationsBefore, '阮香凝')) {
+  if (Object.prototype.hasOwnProperty.call(relationsBefore, entityName("character","liuchao.character.ruan_xiang_ning"))) {
     for (const [target, relationBefore] of relationEntries) {
       if (
         !target ||
-        target === '阮香凝' ||
+        isNamedEntityLabel("character","liuchao.character.ruan_xiang_ning",target) ||
         !relationBefore ||
         typeof relationBefore !== 'object' ||
         Array.isArray(relationBefore)
@@ -528,7 +536,7 @@ export function reconcilePartyNpcStateFromNarrative(input: NarrativeReconcileInp
         relationPath.startsWith(`${normalizeNpcRecordPath(command.key, saveData)}.`)
       )) continue;
       const targetName = String((relationBefore as any).名字 || target);
-      const nextValue = hypnosisTargetStatus(text, '阮香凝', targetName).slice(0, 60);
+      const nextValue = hypnosisTargetStatus(text, entityName("character","liuchao.character.ruan_xiang_ning"), targetName).slice(0, 60);
       if (!nextValue) continue;
       set(saveData, statusPath, nextValue);
       console.warn(`[AI双向系统] 叙事状态补账: ${target}当前状态 → ${nextValue}`);

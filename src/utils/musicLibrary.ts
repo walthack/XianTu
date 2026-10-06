@@ -1,3 +1,5 @@
+
+import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
 import themeUrl from '@/assets/music/01-theme-cangmang.mp3';
 import dailyUrl from '@/assets/music/02-daily-shijing.mp3';
 import exploreUrl from '@/assets/music/03-explore-mijing.mp3';
@@ -179,17 +181,17 @@ const EVENT_MOOD_PRIORITY: MusicMood[] = ['climax', 'horror', 'lament', 'blackse
 
 const EVENT_TEXT_MOOD_RULES: Array<[RegExp, MusicMood]> = [
   [/决战|终局|终战|惊变|甘露|政变|宫变|弑君|弑母|夺舍|暴毙|驾崩|真身|八臂|龙吟|单骑破阵|长秋宫守卫战|吕巨君自焚|攻入/i, 'climax'],
-  [/阴煞|魔影|血符|发蛊|血虎|魔化|尸氛|失序|屠村痕迹|惨案|女尸|枯骨|深井|招魂|疑冢|金身法王|返老/i, 'horror'],
+  [new RegExp("(?:"+entityNamePattern("enemy","lcq.enemy.yinsha")+")"+"|魔影|血符|发蛊|"+"(?:"+entityNamePattern("enemy","lcq.enemy.blood_tiger_yi_hu")+")"+"|魔化|尸氛|失序|屠村痕迹|惨案|女尸|枯骨|深井|招魂|疑冢|金身法王|返老","i"), 'horror'],
   [/自爆|自尽殉|以身殉|殉国|殉道|阵亡|战殁|马革裹尸|忠烈|忠魂|挽歌|哀荣|壮烈殉|全军覆没/i, 'lament'],
-  [/东瀛|倭|忍者|塞外|鲛人|剑玉姬|小瀛洲/i, 'blacksea'],
+  [new RegExp("东瀛|倭|忍者|塞外|"+"(?:"+entityNamePattern("enemy","lcq.enemy.merfolk")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.jian_yu_ji")+")"+"|小瀛洲","i"), 'blacksea'],
   [/激战|鏖战|战斗|伏击|袭击|遇袭|围杀|围攻|攻占|守卫战|破阵|追击|追杀|刺杀|斩杀|击杀|救援|乱战|反击|突围|突袭|奇袭|夺宝|争夺|混战|杀局|下毒乱战|屠杀|被屠|斩乡兵|救下|救险|劫走|比武|之死|劫掠|暗战|火攻/i, 'battle'],
-  [/危机|暗流|疑云|阴谋|陷阱|设伏|下毒|中毒|剧毒|毒杀|毒计|逼近|警告|威胁|暴露|败退|被困|危局|失火|火计|上钩|被查|对峙|劫持|挟持|压力|黑魔海逼近|落棋|夜袭|受制|压制|戒严|报警|失踪|刺配|生变|密约谈崩|众叛|审问|调动.*围|认出|杀.*议|夺取.*兵权|怀疑/i, 'danger'],
+  [new RegExp("危机|暗流|疑云|阴谋|陷阱|设伏|下毒|中毒|剧毒|毒杀|毒计|逼近|警告|威胁|暴露|败退|被困|危局|失火|火计|上钩|被查|对峙|劫持|挟持|压力|"+"(?:"+entityNamePattern("faction","liuchao.faction.hei_mo_hai")+")"+"逼近|落棋|夜袭|受制|压制|戒严|报警|失踪|刺配|生变|密约谈崩|众叛|审问|调动.*围|认出|杀.*议|夺取.*兵权|怀疑","i"), 'danger'],
   [/权谋|算计|布局|谋划|设局|挑拨|离间|栽赃|嫁祸|操控|操盘|周旋|收买|拉拢|勾结|密谋|智斗|城府|做局|下套|借刀|反间/i, 'intrigue'],
   [/秘境|古阵|神庙|海底|迷窟|探索|侦察|潜入|秘道|机关|地宫|洞穴|入口|寻找|线索|情报|太泉|魔墟|迷楼|钥匙|调查|追索|旧案|旧事|复盘/i, 'explore'],
-  [/朝堂|宫廷|议事|商议|谈判|交易|买官|卖官|注册|情报收集|皇城司|诏|口谕|股东大会|渠道|名单|召见|密谈|公务|集会|高俅|西邸|吏部|工部|拜访|军资|粮战|粮仓|粮战令|供认|审判|分权|宗室|帝陵|拥立|赐死|兵器生意|见吕雉/i, 'court'],
+  [new RegExp("朝堂|宫廷|议事|商议|谈判|交易|买官|卖官|注册|情报收集|"+"(?:"+entityNamePattern("faction","liuchao.faction.huang_cheng_si")+")"+"|诏|口谕|股东大会|渠道|名单|召见|密谈|公务|集会|"+"(?:"+entityNamePattern("character","canon.character.8da99e7c5f")+")"+"|西邸|吏部|工部|拜访|军资|粮战|粮仓|粮战令|供认|审判|分权|宗室|帝陵|拥立|赐死|兵器生意|见"+"(?:"+entityNamePattern("character","liuchao.character.lv_zhi")+")","i"), 'court'],
   [/暧昧|情欲|欲望|春宵|云雨|媚术|媚惑|勾引|诱惑|风月|承欢|侍寝|采补|欢好|交合|榻上|身体控制/i, 'sensual'],
-  [/重逢|私奔|托付|送葬|痛哭|悲|哀|安抚|战后|余波|重伤|寒毒|相雅|凝羽.*双修|月霜强取|双修|输血救|做媒|病线|收尾/i, 'emotion'],
-  [/传功|突破|启程|集结|准备|壮志|砺行|筑基|晋级|出发|离开.*赴|同行|合作|联手|计划完成|护月霜|坚城|星月湖现身/i, 'aspire'],
+  [new RegExp("重逢|私奔|托付|送葬|痛哭|悲|哀|安抚|战后|余波|重伤|寒毒|"+"(?:"+entityNamePattern("character","liuchao.character.xiang_ya")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+".*双修|"+"(?:"+entityNamePattern("character","lcq.character.yue_shuang")+")"+"强取|双修|输血救|做媒|病线|收尾","i"), 'emotion'],
+  [new RegExp("传功|突破|启程|集结|准备|壮志|砺行|筑基|晋级|出发|离开.*赴|同行|合作|联手|计划完成|护"+"(?:"+entityNamePattern("character","lcq.character.yue_shuang")+")"+"|坚城|"+"(?:"+entityNamePattern("faction","liuchao.faction.xing_yue_hu")+")"+"现身","i"), 'aspire'],
   [/日常|市井|抵达|安顿|初遇|相识|欢迎|会面|饮酒|游|农居|瓦棚|拜祭|初探/i, 'daily'],
 ];
 

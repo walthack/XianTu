@@ -3,18 +3,6 @@
   "stageId": "lcq.stage_07_qingyuan_jiankang",
   "ops": [
     {
-      "op": "insertAfter",
-      "path": "content.items",
-      "afterId": "lcq.item.s05b_dragon_eye_jade",
-      "value": {
-        "id": "lcq.item.xieyi_ashes",
-        "name": "谢艺骨灰",
-        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
-        "type": "other",
-        "grade": "凡品"
-      }
-    },
-    {
       "op": "insertKeys",
       "path": "scenario.initialFlags",
       "afterKey": "event.shanghou_cures_ice_gu.done",

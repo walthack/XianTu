@@ -6,11 +6,11 @@ type Profile = { 角色ID?: string; 名字?: string; 好感度?: unknown; 与玩
 type Save = { 社交?: { 关系?: Record<string, unknown> } };
 const names = new Map<string, Set<string>>();
 for (const entity of registry.characters) {
-  for (const name of [entity.canonicalName, ...entity.aliases]) {
+  for (const name of [entity.id,entity.canonicalName,...entity.aliases,...((entity as any).idAliases||[])]) {
     const ids = names.get(name) || new Set<string>(); ids.add(entity.id); names.set(name, ids);
   }
 }
-for (const entity of overrides.entities) for (const alias of entity.aliases.filter(name => !/^(?:鬼王峒使者|二爷|老四)$/.test(name)).map(text => ({text}))) {
+for (const entity of overrides.entities) for (const alias of entity.aliases.filter(name => !overrides.contextOnlyAliases.includes(name)).map(text => ({text}))) {
   const ids = names.get(alias.text) || new Set<string>(); ids.add(entity.id); names.set(alias.text, ids);
 }
 
@@ -142,7 +142,7 @@ export function runtimeEntityName(runtime: any, id: string): string {
 export function migrateRuntimePersonRecords(runtime: any): void {
   if(!runtime)return;
   const ledger=runtime.sceneLedger;
-  if(ledger)for(const field of ['actors','injuries','names']) {
+  if(ledger)for(const field of ['actors','injuries','legacyInjuries','names']) {
     const records=ledger[field];if(!records)continue;
     for(const [key,value] of Object.entries(records)) {
       const id=runtimeEntityId(runtime,key);

@@ -1,0 +1,7183 @@
+{
+  "version": 1,
+  "stages": {
+    "lcq.stage_01": {
+      "items": [
+        {
+          "id": "lcq.item.backpack"
+        },
+        {
+          "id": "lcq.item.np002"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lcq.skill.death_root"
+        },
+        {
+          "id": "lcq.skill.np001"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lcq.technique.jiuyang"
+        }
+      ]
+    },
+    "lcq.stage_02": {
+      "items": [
+        {
+          "id": "lcq.item.backpack"
+        },
+        {
+          "id": "lcq.item.lingerie"
+        },
+        {
+          "id": "lcq.item.vibrator"
+        },
+        {
+          "id": "lcq.item.drug"
+        },
+        {
+          "id": "lcq.item.jin_nang"
+        },
+        {
+          "id": "lcq.item.horse"
+        },
+        {
+          "id": "lcq.item.np001"
+        },
+        {
+          "id": "lcq.item.zipper"
+        },
+        {
+          "id": "lcq.item.ajiman_bond"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lcq.skill.death_root"
+        },
+        {
+          "id": "lcq.skill.nine_sun"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lcq.technique.nine_sun_manual"
+        }
+      ]
+    },
+    "lcq.stage_03": {
+      "items": [],
+      "skills": [],
+      "techniques": []
+    },
+    "lcq.stage_03b_snake_flower_bridge": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        },
+        {
+          "id": "lcq.item.nh_mountain_herb"
+        },
+        {
+          "id": "lcq.item.nh_bird_feather"
+        },
+        {
+          "id": "lcq.item.nh_small_hide"
+        },
+        {
+          "id": "lcq.item.nh_salt_lump"
+        },
+        {
+          "id": "lcq.item.nh_snake_slough"
+        },
+        {
+          "id": "lcq.item.nh_clay_oil_lamp"
+        },
+        {
+          "id": "lcq.item.nh_sheyi_bone_flute"
+        },
+        {
+          "id": "lcq.item.nh_vine_fiber"
+        },
+        {
+          "id": "lcq.item.nh_ancient_vine_resin"
+        },
+        {
+          "id": "lcq.item.nh_huamiao_flatbread"
+        },
+        {
+          "id": "lcq.item.nh_wild_honey"
+        },
+        {
+          "id": "lcq.item.nh_bee_wax"
+        },
+        {
+          "id": "lcq.item.nh_cattail_smoke"
+        },
+        {
+          "id": "lcq.item.nh_tube_skirt_cloth"
+        },
+        {
+          "id": "lcq.item.nh_miao_silver_bell"
+        },
+        {
+          "id": "lcq.item.nh_torch"
+        },
+        {
+          "id": "lcq.item.nh_miao_silver_torque"
+        },
+        {
+          "id": "lcq.item.nh_ghostface_stinger"
+        },
+        {
+          "id": "lcq.item.nh_feed_cake"
+        },
+        {
+          "id": "lcq.item.nh_iron_nail"
+        },
+        {
+          "id": "lcq.item.nh_cuizhi_jade_scrap"
+        },
+        {
+          "id": "lcq.item.nh_flint_set"
+        },
+        {
+          "id": "lcq.item.nh_cuizhi_jade_fine"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_04": {
+      "items": [
+        {
+          "id": "liuchao.item.remote_control"
+        },
+        {
+          "id": "liuchao.item.long_jing_yu"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np004"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.nh_mountain_herb"
+        },
+        {
+          "id": "lcq.item.nh_bird_feather"
+        },
+        {
+          "id": "lcq.item.nh_salt_lump"
+        },
+        {
+          "id": "lcq.item.nh_torch"
+        },
+        {
+          "id": "lcq.item.nh_feed_cake"
+        },
+        {
+          "id": "lcq.item.nh_iron_nail"
+        },
+        {
+          "id": "lcq.item.nh_cuizhi_jade_scrap"
+        },
+        {
+          "id": "lcq.item.nh_flint_set"
+        },
+        {
+          "id": "lcq.item.nh_cuizhi_jade_fine"
+        },
+        {
+          "id": "lcq.item.nh_goose_palm_mushroom"
+        },
+        {
+          "id": "lcq.item.nh_beech_bark"
+        },
+        {
+          "id": "lcq.item.nh_ghost_horn_shard"
+        },
+        {
+          "id": "lcq.item.nh_rat_pelt"
+        },
+        {
+          "id": "lcq.item.nh_tarnished_trinket"
+        },
+        {
+          "id": "lcq.item.nh_pebble_necklace"
+        },
+        {
+          "id": "lcq.item.nh_realgar_sachet"
+        },
+        {
+          "id": "lcq.item.nh_clam_shell"
+        },
+        {
+          "id": "lcq.item.nh_orange"
+        },
+        {
+          "id": "lcq.item.nh_dried_fish"
+        },
+        {
+          "id": "lcq.item.nh_tea_brick_corner"
+        },
+        {
+          "id": "lcq.item.nh_silk_scrap"
+        },
+        {
+          "id": "lcq.item.nh_crowman_feather"
+        },
+        {
+          "id": "lcq.item.nh_baiyi_rice_pearl"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.wu_hu_duan_men_dao"
+        },
+        {
+          "id": "liuchao.skill.dagger_art"
+        },
+        {
+          "id": "liuchao.skill.bow_art"
+        },
+        {
+          "id": "liuchao.skill.healing_art"
+        },
+        {
+          "id": "liuchao.skill.sword_art"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np002"
+        },
+        {
+          "id": "lcq.skill.np005"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.sheng_si_gen"
+        },
+        {
+          "id": "liuchao.technique.inner_qi"
+        },
+        {
+          "id": "liuchao.technique.tiger_style"
+        }
+      ]
+    },
+    "lcq.stage_04b_lingfei_baiyi_crisis": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        },
+        {
+          "id": "lcq.item.nh_mountain_herb"
+        },
+        {
+          "id": "lcq.item.nh_bird_feather"
+        },
+        {
+          "id": "lcq.item.nh_small_hide"
+        },
+        {
+          "id": "lcq.item.nh_torch"
+        },
+        {
+          "id": "lcq.item.nh_goose_palm_mushroom"
+        },
+        {
+          "id": "lcq.item.nh_beech_bark"
+        },
+        {
+          "id": "lcq.item.nh_clam_shell"
+        },
+        {
+          "id": "lcq.item.nh_orange"
+        },
+        {
+          "id": "lcq.item.nh_dried_fish"
+        },
+        {
+          "id": "lcq.item.nh_tea_brick_corner"
+        },
+        {
+          "id": "lcq.item.nh_silk_scrap"
+        },
+        {
+          "id": "lcq.item.nh_crowman_feather"
+        },
+        {
+          "id": "lcq.item.nh_baiyi_rice_pearl"
+        },
+        {
+          "id": "lcq.item.nh_wild_fruit"
+        },
+        {
+          "id": "lcq.item.nh_yinzhu_silk"
+        },
+        {
+          "id": "lcq.item.nh_cracked_bronze_drum"
+        },
+        {
+          "id": "lcq.item.nh_coconut_shell"
+        },
+        {
+          "id": "lcq.item.nh_coral_twig"
+        },
+        {
+          "id": "lcq.item.nh_sea_glow_reef"
+        },
+        {
+          "id": "lcq.item.nh_biling_sea_pearl"
+        },
+        {
+          "id": "lcq.item.nh_verdigris_shard"
+        },
+        {
+          "id": "lcq.item.nh_rusty_arrowhead"
+        },
+        {
+          "id": "lcq.item.nh_golden_seasnake_horn"
+        },
+        {
+          "id": "lcq.item.nh_merfolk_scale_pouch"
+        },
+        {
+          "id": "lcq.item.nh_lava_glass"
+        },
+        {
+          "id": "lcq.item.nh_bone_bead_string"
+        },
+        {
+          "id": "lcq.item.nh_dragon_scale_chip"
+        },
+        {
+          "id": "lcq.item.nh_red_copper_bead"
+        },
+        {
+          "id": "lcq.item.crow_bamboo_tube"
+        },
+        {
+          "id": "lcq.item.biling_algae_sample"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_05": {
+      "items": [],
+      "skills": [],
+      "techniques": []
+    },
+    "lcq.stage_05b": {
+      "items": [
+        {
+          "id": "lcq.item.xieyi_ashes"
+        },
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        },
+        {
+          "id": "lcq.item.nh_mountain_herb"
+        },
+        {
+          "id": "lcq.item.nh_small_hide"
+        },
+        {
+          "id": "lcq.item.nh_huamiao_flatbread"
+        },
+        {
+          "id": "lcq.item.nh_torch"
+        },
+        {
+          "id": "lcq.item.nh_feed_cake"
+        },
+        {
+          "id": "lcq.item.nh_goose_palm_mushroom"
+        },
+        {
+          "id": "lcq.item.nh_rat_pelt"
+        },
+        {
+          "id": "lcq.item.nh_tarnished_trinket"
+        },
+        {
+          "id": "lcq.item.nh_pebble_necklace"
+        },
+        {
+          "id": "lcq.item.nh_realgar_sachet"
+        },
+        {
+          "id": "lcq.item.nh_wild_fruit"
+        },
+        {
+          "id": "lcq.item.nh_lava_glass"
+        },
+        {
+          "id": "lcq.item.nh_bone_bead_string"
+        },
+        {
+          "id": "lcq.item.nh_dragon_scale_chip"
+        },
+        {
+          "id": "lcq.item.nh_red_copper_bead"
+        },
+        {
+          "id": "lcq.item.crow_bamboo_tube"
+        },
+        {
+          "id": "lcq.item.nh_bean_bun"
+        },
+        {
+          "id": "lcq.item.nh_boshan_incense"
+        },
+        {
+          "id": "lcq.item.nh_candle_stub"
+        },
+        {
+          "id": "lcq.item.nh_crystal_wine_cup"
+        },
+        {
+          "id": "lcq.item.nh_crystal_bead"
+        },
+        {
+          "id": "lcq.item.nh_niche_crystal"
+        },
+        {
+          "id": "lcq.item.nh_fine_crossbow_bolt"
+        },
+        {
+          "id": "lcq.item.nh_fine_crossbow_trigger"
+        },
+        {
+          "id": "lcq.item.f10_broken_axe"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_06": {
+      "items": [],
+      "skills": [],
+      "techniques": []
+    },
+    "lcq.stage_07_qingyuan_jiankang": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.xieyi_ashes"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_08_jiankang_coup": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_09_trade_and_escape": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_10_jiangzhou_shadow_war": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_11_lieshan_battle": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lcq.stage_12_jiangzhou_counterwar": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.zhu_hu_guan"
+        },
+        {
+          "id": "liuchao.item.sunglasses"
+        },
+        {
+          "id": "lcq.item.np002"
+        },
+        {
+          "id": "lcq.item.np003"
+        },
+        {
+          "id": "lcq.item.np006"
+        },
+        {
+          "id": "lcq.item.np007"
+        },
+        {
+          "id": "lcq.item.np008"
+        },
+        {
+          "id": "lcq.item.np009"
+        },
+        {
+          "id": "lcq.item.np010"
+        },
+        {
+          "id": "lcq.item.np011"
+        },
+        {
+          "id": "lcq.item.np012"
+        },
+        {
+          "id": "lcq.item.np013"
+        },
+        {
+          "id": "liuchao.item.moon_crescent_knife"
+        },
+        {
+          "id": "liuchao.item.purple_scale_whip"
+        },
+        {
+          "id": "liuchao.item.gui_yu_sword"
+        },
+        {
+          "id": "lcq.item.np005"
+        },
+        {
+          "id": "lcq.item.np014"
+        },
+        {
+          "id": "lcq.item.np015"
+        },
+        {
+          "id": "lcq.item.np016"
+        },
+        {
+          "id": "lcq.item.s05b_dragon_eye_jade"
+        },
+        {
+          "id": "lcq.item.s05b_spiral_needle"
+        },
+        {
+          "id": "lcq.item.s05b_bone_tiger"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.acupuncture"
+        },
+        {
+          "id": "liuchao.skill.blade"
+        },
+        {
+          "id": "lcq.skill.np001"
+        },
+        {
+          "id": "lcq.skill.np004"
+        },
+        {
+          "id": "lcq.skill.np005"
+        },
+        {
+          "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "liuchao.skill.single_knife"
+        },
+        {
+          "id": "liuchao.skill.phoenix_treasure_book"
+        },
+        {
+          "id": "liuchao.skill.scorpion_tail"
+        },
+        {
+          "id": "liuchao.skill.moon_light_shield"
+        },
+        {
+          "id": "liuchao.skill.gui_yu_sword"
+        },
+        {
+          "id": "liuchao.skill.witchcraft"
+        },
+        {
+          "id": "lcq.skill.np012"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.yiyang"
+        },
+        {
+          "id": "liuchao.technique.phoenix"
+        },
+        {
+          "id": "liuchao.technique.nine_yang_divine_skill"
+        },
+        {
+          "id": "liuchao.technique.tai_yi_jing"
+        }
+      ]
+    },
+    "lyg.buddhist_conspiracy": {
+      "items": [
+        {
+          "id": "lyg.item.fubutsu_honmaru_hilt"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np003"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np011"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np015"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np018"
+        },
+        {
+          "id": "lyg.item.np019"
+        },
+        {
+          "id": "lyg.item.np020"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np023"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np027"
+        },
+        {
+          "id": "lyg.item.np031"
+        },
+        {
+          "id": "lyg.item.np032"
+        },
+        {
+          "id": "lyg.item.np034"
+        },
+        {
+          "id": "lyg.item.np036"
+        },
+        {
+          "id": "lyg.item.np037"
+        },
+        {
+          "id": "lyg.item.np038"
+        },
+        {
+          "id": "lyg.item.np039"
+        },
+        {
+          "id": "lyg.item.np041"
+        },
+        {
+          "id": "lyg.item.np042"
+        },
+        {
+          "id": "lyg.item.np043"
+        },
+        {
+          "id": "lyg.item.np044"
+        },
+        {
+          "id": "lyg.item.np045"
+        },
+        {
+          "id": "lyg.item.np046"
+        },
+        {
+          "id": "lyg.item.np047"
+        },
+        {
+          "id": "lyg.item.np048"
+        },
+        {
+          "id": "lyg.item.np049"
+        },
+        {
+          "id": "lyg.item.np051"
+        },
+        {
+          "id": "lyg.item.np052"
+        },
+        {
+          "id": "lyg.item.np053"
+        },
+        {
+          "id": "lyg.item.np054"
+        },
+        {
+          "id": "lyg.item.np063"
+        },
+        {
+          "id": "lyg.item.np065"
+        },
+        {
+          "id": "lyg.item.np066"
+        },
+        {
+          "id": "lyg.item.np068"
+        },
+        {
+          "id": "lyg.item.np071"
+        },
+        {
+          "id": "lyg.item.np073"
+        },
+        {
+          "id": "lyg.item.np076"
+        },
+        {
+          "id": "lyg.item.np077"
+        },
+        {
+          "id": "lyg.item.np079"
+        },
+        {
+          "id": "lyg.item.np082"
+        },
+        {
+          "id": "lyg.item.np083"
+        },
+        {
+          "id": "lyg.item.np084"
+        },
+        {
+          "id": "lyg.item.np085"
+        },
+        {
+          "id": "lyg.item.np086"
+        },
+        {
+          "id": "lyg.item.np087"
+        },
+        {
+          "id": "lyg.item.np088"
+        },
+        {
+          "id": "lyg.item.np089"
+        },
+        {
+          "id": "lyg.item.np090"
+        },
+        {
+          "id": "lyg.item.np091"
+        },
+        {
+          "id": "lyg.item.np092"
+        },
+        {
+          "id": "lyg.item.np093"
+        },
+        {
+          "id": "lyg.item.np095"
+        },
+        {
+          "id": "lyg.item.np096"
+        },
+        {
+          "id": "lyg.item.np098"
+        },
+        {
+          "id": "lyg.item.np101"
+        },
+        {
+          "id": "lyg.item.np104"
+        },
+        {
+          "id": "lyg.item.np105"
+        },
+        {
+          "id": "lyg.item.np106"
+        },
+        {
+          "id": "lyg.item.np107"
+        },
+        {
+          "id": "lyg.item.np108"
+        },
+        {
+          "id": "lyg.item.np109"
+        },
+        {
+          "id": "lyg.item.np111"
+        },
+        {
+          "id": "lyg.item.np112"
+        },
+        {
+          "id": "lyg.item.np116"
+        },
+        {
+          "id": "lyg.item.np117"
+        },
+        {
+          "id": "lyg.item.np118"
+        },
+        {
+          "id": "lyg.item.np119"
+        },
+        {
+          "id": "lyg.item.np121"
+        },
+        {
+          "id": "lyg.item.np123"
+        },
+        {
+          "id": "lyg.item.np124"
+        },
+        {
+          "id": "lyg.item.np125"
+        },
+        {
+          "id": "lyg.item.np127"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyg.skill.death_root"
+        },
+        {
+          "id": "lyg.skill.purple_qi"
+        },
+        {
+          "id": "lyg.skill.np001"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np006"
+        },
+        {
+          "id": "lyg.skill.np012"
+        },
+        {
+          "id": "lyg.skill.np024"
+        },
+        {
+          "id": "lyg.skill.np028"
+        },
+        {
+          "id": "lyg.skill.np029"
+        },
+        {
+          "id": "lyg.skill.np030"
+        },
+        {
+          "id": "lyg.skill.np033"
+        },
+        {
+          "id": "lyg.skill.np035"
+        },
+        {
+          "id": "lyg.skill.np040"
+        },
+        {
+          "id": "lyg.skill.np055"
+        },
+        {
+          "id": "lyg.skill.np057"
+        },
+        {
+          "id": "lyg.skill.np058"
+        },
+        {
+          "id": "lyg.skill.np059"
+        },
+        {
+          "id": "lyg.skill.np060"
+        },
+        {
+          "id": "lyg.skill.np061"
+        },
+        {
+          "id": "lyg.skill.np064"
+        },
+        {
+          "id": "lyg.skill.np067"
+        },
+        {
+          "id": "lyg.skill.np069"
+        },
+        {
+          "id": "lyg.skill.np070"
+        },
+        {
+          "id": "lyg.skill.np072"
+        },
+        {
+          "id": "lyg.skill.np080"
+        },
+        {
+          "id": "lyg.skill.np081"
+        },
+        {
+          "id": "lyg.skill.np094"
+        },
+        {
+          "id": "lyg.skill.np097"
+        },
+        {
+          "id": "lyg.skill.np099"
+        },
+        {
+          "id": "lyg.skill.np100"
+        },
+        {
+          "id": "lyg.skill.np102"
+        },
+        {
+          "id": "lyg.skill.np110"
+        },
+        {
+          "id": "lyg.skill.np113"
+        },
+        {
+          "id": "lyg.skill.np114"
+        },
+        {
+          "id": "lyg.skill.np115"
+        },
+        {
+          "id": "lyg.skill.np120"
+        },
+        {
+          "id": "lyg.skill.np126"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyg.technique.yaochi_secret_art"
+        },
+        {
+          "id": "lyg.technique.np016"
+        },
+        {
+          "id": "lyg.technique.np050"
+        },
+        {
+          "id": "lyg.technique.np056"
+        },
+        {
+          "id": "lyg.technique.np062"
+        },
+        {
+          "id": "lyg.technique.np074"
+        },
+        {
+          "id": "lyg.technique.np075"
+        },
+        {
+          "id": "lyg.technique.np078"
+        },
+        {
+          "id": "lyg.technique.np103"
+        },
+        {
+          "id": "lyg.technique.np122"
+        }
+      ]
+    },
+    "lyg.changgan_begins": {
+      "items": [
+        {
+          "id": "lyg.item.flashlight"
+        },
+        {
+          "id": "lyg.item.chi_tu_horse"
+        },
+        {
+          "id": "lyg.item.handgun"
+        },
+        {
+          "id": "lyg.item.np001"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np006"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np012"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np016"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np018"
+        },
+        {
+          "id": "lyg.item.np019"
+        },
+        {
+          "id": "lyg.item.np020"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np024"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np030"
+        },
+        {
+          "id": "lyg.item.np031"
+        },
+        {
+          "id": "lyg.item.np034"
+        },
+        {
+          "id": "lyg.item.np035"
+        },
+        {
+          "id": "lyg.item.np036"
+        },
+        {
+          "id": "lyg.item.np038"
+        },
+        {
+          "id": "lyg.item.np039"
+        },
+        {
+          "id": "lyg.item.np040"
+        },
+        {
+          "id": "lyg.item.np041"
+        },
+        {
+          "id": "lyg.item.np042"
+        },
+        {
+          "id": "lyg.item.np044"
+        },
+        {
+          "id": "lyg.item.np046"
+        },
+        {
+          "id": "lyg.item.np047"
+        },
+        {
+          "id": "lyg.item.np048"
+        },
+        {
+          "id": "lyg.item.np049"
+        },
+        {
+          "id": "lyg.item.np050"
+        },
+        {
+          "id": "lyg.item.np052"
+        },
+        {
+          "id": "lyg.item.np055"
+        },
+        {
+          "id": "lyg.item.np056"
+        },
+        {
+          "id": "lyg.item.np058"
+        },
+        {
+          "id": "lyg.item.np061"
+        },
+        {
+          "id": "lyg.item.np062"
+        },
+        {
+          "id": "lyg.item.np063"
+        },
+        {
+          "id": "lyg.item.np065"
+        },
+        {
+          "id": "lyg.item.np068"
+        },
+        {
+          "id": "lyg.item.np069"
+        },
+        {
+          "id": "lyg.item.np070"
+        },
+        {
+          "id": "lyg.item.np071"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyg.skill.five_tiger_broken_gate_knife"
+        },
+        {
+          "id": "lyg.skill.life_death_root"
+        },
+        {
+          "id": "lyg.skill.he_lv_sword"
+        },
+        {
+          "id": "lyg.skill.precognition"
+        },
+        {
+          "id": "lyg.skill.np003"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np011"
+        },
+        {
+          "id": "lyg.skill.np023"
+        },
+        {
+          "id": "lyg.skill.np027"
+        },
+        {
+          "id": "lyg.skill.np028"
+        },
+        {
+          "id": "lyg.skill.np029"
+        },
+        {
+          "id": "lyg.skill.np032"
+        },
+        {
+          "id": "lyg.skill.np033"
+        },
+        {
+          "id": "lyg.skill.np037"
+        },
+        {
+          "id": "lyg.skill.np043"
+        },
+        {
+          "id": "lyg.skill.np051"
+        },
+        {
+          "id": "lyg.skill.np053"
+        },
+        {
+          "id": "lyg.skill.np059"
+        },
+        {
+          "id": "lyg.skill.np060"
+        },
+        {
+          "id": "lyg.skill.np064"
+        },
+        {
+          "id": "lyg.skill.np066"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyg.technique.nine_sun_divine_art"
+        },
+        {
+          "id": "lyg.technique.taiji_art"
+        },
+        {
+          "id": "lyg.technique.np015"
+        },
+        {
+          "id": "lyg.technique.np045"
+        },
+        {
+          "id": "lyg.technique.np054"
+        },
+        {
+          "id": "lyg.technique.np057"
+        },
+        {
+          "id": "lyg.technique.np067"
+        }
+      ]
+    },
+    "lyg.changgan_interlude": {
+      "items": [
+        {
+          "id": "lyg.item.fubutsu_honmaru_hilt"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np003"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np011"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np015"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np018"
+        },
+        {
+          "id": "lyg.item.np019"
+        },
+        {
+          "id": "lyg.item.np020"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np023"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np027"
+        },
+        {
+          "id": "lyg.item.np031"
+        },
+        {
+          "id": "lyg.item.np032"
+        },
+        {
+          "id": "lyg.item.np034"
+        },
+        {
+          "id": "lyg.item.np036"
+        },
+        {
+          "id": "lyg.item.np037"
+        },
+        {
+          "id": "lyg.item.np038"
+        },
+        {
+          "id": "lyg.item.np039"
+        },
+        {
+          "id": "lyg.item.np041"
+        },
+        {
+          "id": "lyg.item.np042"
+        },
+        {
+          "id": "lyg.item.np043"
+        },
+        {
+          "id": "lyg.item.np044"
+        },
+        {
+          "id": "lyg.item.np045"
+        },
+        {
+          "id": "lyg.item.np046"
+        },
+        {
+          "id": "lyg.item.np047"
+        },
+        {
+          "id": "lyg.item.np048"
+        },
+        {
+          "id": "lyg.item.np049"
+        },
+        {
+          "id": "lyg.item.np051"
+        },
+        {
+          "id": "lyg.item.np052"
+        },
+        {
+          "id": "lyg.item.np053"
+        },
+        {
+          "id": "lyg.item.np054"
+        },
+        {
+          "id": "lyg.item.np063"
+        },
+        {
+          "id": "lyg.item.np065"
+        },
+        {
+          "id": "lyg.item.np066"
+        },
+        {
+          "id": "lyg.item.np068"
+        },
+        {
+          "id": "lyg.item.np071"
+        },
+        {
+          "id": "lyg.item.np073"
+        },
+        {
+          "id": "lyg.item.np076"
+        },
+        {
+          "id": "lyg.item.np077"
+        },
+        {
+          "id": "lyg.item.np079"
+        },
+        {
+          "id": "lyg.item.np082"
+        },
+        {
+          "id": "lyg.item.np083"
+        },
+        {
+          "id": "lyg.item.np084"
+        },
+        {
+          "id": "lyg.item.np085"
+        },
+        {
+          "id": "lyg.item.np086"
+        },
+        {
+          "id": "lyg.item.np087"
+        },
+        {
+          "id": "lyg.item.np088"
+        },
+        {
+          "id": "lyg.item.np089"
+        },
+        {
+          "id": "lyg.item.np090"
+        },
+        {
+          "id": "lyg.item.np091"
+        },
+        {
+          "id": "lyg.item.np092"
+        },
+        {
+          "id": "lyg.item.np093"
+        },
+        {
+          "id": "lyg.item.np095"
+        },
+        {
+          "id": "lyg.item.np096"
+        },
+        {
+          "id": "lyg.item.np098"
+        },
+        {
+          "id": "lyg.item.np101"
+        },
+        {
+          "id": "lyg.item.np104"
+        },
+        {
+          "id": "lyg.item.np105"
+        },
+        {
+          "id": "lyg.item.np106"
+        },
+        {
+          "id": "lyg.item.np107"
+        },
+        {
+          "id": "lyg.item.np108"
+        },
+        {
+          "id": "lyg.item.np109"
+        },
+        {
+          "id": "lyg.item.np111"
+        },
+        {
+          "id": "lyg.item.np112"
+        },
+        {
+          "id": "lyg.item.np116"
+        },
+        {
+          "id": "lyg.item.np117"
+        },
+        {
+          "id": "lyg.item.np118"
+        },
+        {
+          "id": "lyg.item.np119"
+        },
+        {
+          "id": "lyg.item.np121"
+        },
+        {
+          "id": "lyg.item.np123"
+        },
+        {
+          "id": "lyg.item.np124"
+        },
+        {
+          "id": "lyg.item.np125"
+        },
+        {
+          "id": "lyg.item.np127"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyg.skill.death_root"
+        },
+        {
+          "id": "lyg.skill.purple_qi"
+        },
+        {
+          "id": "lyg.skill.np001"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np006"
+        },
+        {
+          "id": "lyg.skill.np012"
+        },
+        {
+          "id": "lyg.skill.np024"
+        },
+        {
+          "id": "lyg.skill.np028"
+        },
+        {
+          "id": "lyg.skill.np029"
+        },
+        {
+          "id": "lyg.skill.np030"
+        },
+        {
+          "id": "lyg.skill.np033"
+        },
+        {
+          "id": "lyg.skill.np035"
+        },
+        {
+          "id": "lyg.skill.np040"
+        },
+        {
+          "id": "lyg.skill.np055"
+        },
+        {
+          "id": "lyg.skill.np057"
+        },
+        {
+          "id": "lyg.skill.np058"
+        },
+        {
+          "id": "lyg.skill.np059"
+        },
+        {
+          "id": "lyg.skill.np060"
+        },
+        {
+          "id": "lyg.skill.np061"
+        },
+        {
+          "id": "lyg.skill.np064"
+        },
+        {
+          "id": "lyg.skill.np067"
+        },
+        {
+          "id": "lyg.skill.np069"
+        },
+        {
+          "id": "lyg.skill.np070"
+        },
+        {
+          "id": "lyg.skill.np072"
+        },
+        {
+          "id": "lyg.skill.np080"
+        },
+        {
+          "id": "lyg.skill.np081"
+        },
+        {
+          "id": "lyg.skill.np094"
+        },
+        {
+          "id": "lyg.skill.np097"
+        },
+        {
+          "id": "lyg.skill.np099"
+        },
+        {
+          "id": "lyg.skill.np100"
+        },
+        {
+          "id": "lyg.skill.np102"
+        },
+        {
+          "id": "lyg.skill.np110"
+        },
+        {
+          "id": "lyg.skill.np113"
+        },
+        {
+          "id": "lyg.skill.np114"
+        },
+        {
+          "id": "lyg.skill.np115"
+        },
+        {
+          "id": "lyg.skill.np120"
+        },
+        {
+          "id": "lyg.skill.np126"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyg.technique.yaochi_secret_art"
+        },
+        {
+          "id": "lyg.technique.np016"
+        },
+        {
+          "id": "lyg.technique.np050"
+        },
+        {
+          "id": "lyg.technique.np056"
+        },
+        {
+          "id": "lyg.technique.np062"
+        },
+        {
+          "id": "lyg.technique.np074"
+        },
+        {
+          "id": "lyg.technique.np075"
+        },
+        {
+          "id": "lyg.technique.np078"
+        },
+        {
+          "id": "lyg.technique.np103"
+        },
+        {
+          "id": "lyg.technique.np122"
+        }
+      ]
+    },
+    "lyg.dingtao_beijing": {
+      "items": [
+        {
+          "id": "liuchao.item.shuang_dao"
+        },
+        {
+          "id": "liuchao.item.tie_tai_diao_gong"
+        },
+        {
+          "id": "liuchao.item.yue_ya_duan_ji"
+        },
+        {
+          "id": "liuchao.item.zhong_axe"
+        },
+        {
+          "id": "liuchao.item.rusty_cuo_dao"
+        },
+        {
+          "id": "lyg.item.np001"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np006"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np012"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np015"
+        },
+        {
+          "id": "lyg.item.np016"
+        },
+        {
+          "id": "lyg.item.np017"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.wu_hu_duan_men_dao"
+        },
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.lian_zhu_arrow"
+        },
+        {
+          "id": "liuchao.skill.zhong_axe"
+        },
+        {
+          "id": "liuchao.skill.duan_ji"
+        },
+        {
+          "id": "liuchao.skill.tie_bu_shan"
+        },
+        {
+          "id": "liuchao.skill.qin_long_zhua"
+        },
+        {
+          "id": "liuchao.skill.da_shuai_bei_shou"
+        },
+        {
+          "id": "liuchao.skill.sword_art"
+        },
+        {
+          "id": "liuchao.skill.qin_hui_sword"
+        },
+        {
+          "id": "liuchao.skill.yao_yi_sword"
+        },
+        {
+          "id": "liuchao.skill.strategy"
+        },
+        {
+          "id": "liuchao.skill.political_maneuver"
+        },
+        {
+          "id": "liuchao.skill.royal_authority"
+        },
+        {
+          "id": "lyg.skill.np003"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.taiji_jing"
+        },
+        {
+          "id": "liuchao.technique.jiuyang_shengong"
+        },
+        {
+          "id": "lyg.technique.np011"
+        }
+      ]
+    },
+    "lyg.ganlu_aftershock": {
+      "items": [
+        {
+          "id": "lyg.item.fubutsu_honmaru_hilt"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np003"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np011"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np015"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np018"
+        },
+        {
+          "id": "lyg.item.np019"
+        },
+        {
+          "id": "lyg.item.np020"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np023"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np027"
+        },
+        {
+          "id": "lyg.item.np031"
+        },
+        {
+          "id": "lyg.item.np032"
+        },
+        {
+          "id": "lyg.item.np034"
+        },
+        {
+          "id": "lyg.item.np036"
+        },
+        {
+          "id": "lyg.item.np037"
+        },
+        {
+          "id": "lyg.item.np038"
+        },
+        {
+          "id": "lyg.item.np039"
+        },
+        {
+          "id": "lyg.item.np041"
+        },
+        {
+          "id": "lyg.item.np042"
+        },
+        {
+          "id": "lyg.item.np043"
+        },
+        {
+          "id": "lyg.item.np044"
+        },
+        {
+          "id": "lyg.item.np045"
+        },
+        {
+          "id": "lyg.item.np046"
+        },
+        {
+          "id": "lyg.item.np047"
+        },
+        {
+          "id": "lyg.item.np048"
+        },
+        {
+          "id": "lyg.item.np049"
+        },
+        {
+          "id": "lyg.item.np051"
+        },
+        {
+          "id": "lyg.item.np052"
+        },
+        {
+          "id": "lyg.item.np053"
+        },
+        {
+          "id": "lyg.item.np054"
+        },
+        {
+          "id": "lyg.item.np063"
+        },
+        {
+          "id": "lyg.item.np065"
+        },
+        {
+          "id": "lyg.item.np066"
+        },
+        {
+          "id": "lyg.item.np068"
+        },
+        {
+          "id": "lyg.item.np071"
+        },
+        {
+          "id": "lyg.item.np073"
+        },
+        {
+          "id": "lyg.item.np076"
+        },
+        {
+          "id": "lyg.item.np077"
+        },
+        {
+          "id": "lyg.item.np079"
+        },
+        {
+          "id": "lyg.item.np082"
+        },
+        {
+          "id": "lyg.item.np083"
+        },
+        {
+          "id": "lyg.item.np084"
+        },
+        {
+          "id": "lyg.item.np085"
+        },
+        {
+          "id": "lyg.item.np086"
+        },
+        {
+          "id": "lyg.item.np087"
+        },
+        {
+          "id": "lyg.item.np088"
+        },
+        {
+          "id": "lyg.item.np089"
+        },
+        {
+          "id": "lyg.item.np090"
+        },
+        {
+          "id": "lyg.item.np091"
+        },
+        {
+          "id": "lyg.item.np092"
+        },
+        {
+          "id": "lyg.item.np093"
+        },
+        {
+          "id": "lyg.item.np095"
+        },
+        {
+          "id": "lyg.item.np096"
+        },
+        {
+          "id": "lyg.item.np098"
+        },
+        {
+          "id": "lyg.item.np101"
+        },
+        {
+          "id": "lyg.item.np104"
+        },
+        {
+          "id": "lyg.item.np105"
+        },
+        {
+          "id": "lyg.item.np106"
+        },
+        {
+          "id": "lyg.item.np107"
+        },
+        {
+          "id": "lyg.item.np108"
+        },
+        {
+          "id": "lyg.item.np109"
+        },
+        {
+          "id": "lyg.item.np111"
+        },
+        {
+          "id": "lyg.item.np112"
+        },
+        {
+          "id": "lyg.item.np116"
+        },
+        {
+          "id": "lyg.item.np117"
+        },
+        {
+          "id": "lyg.item.np118"
+        },
+        {
+          "id": "lyg.item.np119"
+        },
+        {
+          "id": "lyg.item.np121"
+        },
+        {
+          "id": "lyg.item.np123"
+        },
+        {
+          "id": "lyg.item.np124"
+        },
+        {
+          "id": "lyg.item.np125"
+        },
+        {
+          "id": "lyg.item.np127"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyg.skill.death_root"
+        },
+        {
+          "id": "lyg.skill.purple_qi"
+        },
+        {
+          "id": "lyg.skill.np001"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np006"
+        },
+        {
+          "id": "lyg.skill.np012"
+        },
+        {
+          "id": "lyg.skill.np024"
+        },
+        {
+          "id": "lyg.skill.np028"
+        },
+        {
+          "id": "lyg.skill.np029"
+        },
+        {
+          "id": "lyg.skill.np030"
+        },
+        {
+          "id": "lyg.skill.np033"
+        },
+        {
+          "id": "lyg.skill.np035"
+        },
+        {
+          "id": "lyg.skill.np040"
+        },
+        {
+          "id": "lyg.skill.np055"
+        },
+        {
+          "id": "lyg.skill.np057"
+        },
+        {
+          "id": "lyg.skill.np058"
+        },
+        {
+          "id": "lyg.skill.np059"
+        },
+        {
+          "id": "lyg.skill.np060"
+        },
+        {
+          "id": "lyg.skill.np061"
+        },
+        {
+          "id": "lyg.skill.np064"
+        },
+        {
+          "id": "lyg.skill.np067"
+        },
+        {
+          "id": "lyg.skill.np069"
+        },
+        {
+          "id": "lyg.skill.np070"
+        },
+        {
+          "id": "lyg.skill.np072"
+        },
+        {
+          "id": "lyg.skill.np080"
+        },
+        {
+          "id": "lyg.skill.np081"
+        },
+        {
+          "id": "lyg.skill.np094"
+        },
+        {
+          "id": "lyg.skill.np097"
+        },
+        {
+          "id": "lyg.skill.np099"
+        },
+        {
+          "id": "lyg.skill.np100"
+        },
+        {
+          "id": "lyg.skill.np102"
+        },
+        {
+          "id": "lyg.skill.np110"
+        },
+        {
+          "id": "lyg.skill.np113"
+        },
+        {
+          "id": "lyg.skill.np114"
+        },
+        {
+          "id": "lyg.skill.np115"
+        },
+        {
+          "id": "lyg.skill.np120"
+        },
+        {
+          "id": "lyg.skill.np126"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyg.technique.yaochi_secret_art"
+        },
+        {
+          "id": "lyg.technique.np016"
+        },
+        {
+          "id": "lyg.technique.np050"
+        },
+        {
+          "id": "lyg.technique.np056"
+        },
+        {
+          "id": "lyg.technique.np062"
+        },
+        {
+          "id": "lyg.technique.np074"
+        },
+        {
+          "id": "lyg.technique.np075"
+        },
+        {
+          "id": "lyg.technique.np078"
+        },
+        {
+          "id": "lyg.technique.np103"
+        },
+        {
+          "id": "lyg.technique.np122"
+        }
+      ]
+    },
+    "lyg.ganlu_bian": {
+      "items": [],
+      "skills": [],
+      "techniques": []
+    },
+    "lyg.han_succession": {
+      "items": [
+        {
+          "id": "lyg.item.fubutsu_honmaru_hilt"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np003"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np011"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np015"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np018"
+        },
+        {
+          "id": "lyg.item.np019"
+        },
+        {
+          "id": "lyg.item.np020"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np023"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np027"
+        },
+        {
+          "id": "lyg.item.np031"
+        },
+        {
+          "id": "lyg.item.np032"
+        },
+        {
+          "id": "lyg.item.np034"
+        },
+        {
+          "id": "lyg.item.np036"
+        },
+        {
+          "id": "lyg.item.np037"
+        },
+        {
+          "id": "lyg.item.np038"
+        },
+        {
+          "id": "lyg.item.np039"
+        },
+        {
+          "id": "lyg.item.np041"
+        },
+        {
+          "id": "lyg.item.np042"
+        },
+        {
+          "id": "lyg.item.np043"
+        },
+        {
+          "id": "lyg.item.np044"
+        },
+        {
+          "id": "lyg.item.np045"
+        },
+        {
+          "id": "lyg.item.np046"
+        },
+        {
+          "id": "lyg.item.np047"
+        },
+        {
+          "id": "lyg.item.np048"
+        },
+        {
+          "id": "lyg.item.np049"
+        },
+        {
+          "id": "lyg.item.np051"
+        },
+        {
+          "id": "lyg.item.np052"
+        },
+        {
+          "id": "lyg.item.np053"
+        },
+        {
+          "id": "lyg.item.np054"
+        },
+        {
+          "id": "lyg.item.np063"
+        },
+        {
+          "id": "lyg.item.np065"
+        },
+        {
+          "id": "lyg.item.np066"
+        },
+        {
+          "id": "lyg.item.np068"
+        },
+        {
+          "id": "lyg.item.np071"
+        },
+        {
+          "id": "lyg.item.np073"
+        },
+        {
+          "id": "lyg.item.np076"
+        },
+        {
+          "id": "lyg.item.np077"
+        },
+        {
+          "id": "lyg.item.np079"
+        },
+        {
+          "id": "lyg.item.np082"
+        },
+        {
+          "id": "lyg.item.np083"
+        },
+        {
+          "id": "lyg.item.np084"
+        },
+        {
+          "id": "lyg.item.np085"
+        },
+        {
+          "id": "lyg.item.np086"
+        },
+        {
+          "id": "lyg.item.np087"
+        },
+        {
+          "id": "lyg.item.np088"
+        },
+        {
+          "id": "lyg.item.np089"
+        },
+        {
+          "id": "lyg.item.np090"
+        },
+        {
+          "id": "lyg.item.np091"
+        },
+        {
+          "id": "lyg.item.np092"
+        },
+        {
+          "id": "lyg.item.np093"
+        },
+        {
+          "id": "lyg.item.np095"
+        },
+        {
+          "id": "lyg.item.np096"
+        },
+        {
+          "id": "lyg.item.np098"
+        },
+        {
+          "id": "lyg.item.np101"
+        },
+        {
+          "id": "lyg.item.np104"
+        },
+        {
+          "id": "lyg.item.np105"
+        },
+        {
+          "id": "lyg.item.np106"
+        },
+        {
+          "id": "lyg.item.np107"
+        },
+        {
+          "id": "lyg.item.np108"
+        },
+        {
+          "id": "lyg.item.np109"
+        },
+        {
+          "id": "lyg.item.np111"
+        },
+        {
+          "id": "lyg.item.np112"
+        },
+        {
+          "id": "lyg.item.np116"
+        },
+        {
+          "id": "lyg.item.np117"
+        },
+        {
+          "id": "lyg.item.np118"
+        },
+        {
+          "id": "lyg.item.np119"
+        },
+        {
+          "id": "lyg.item.np121"
+        },
+        {
+          "id": "lyg.item.np123"
+        },
+        {
+          "id": "lyg.item.np124"
+        },
+        {
+          "id": "lyg.item.np125"
+        },
+        {
+          "id": "lyg.item.np127"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyg.skill.death_root"
+        },
+        {
+          "id": "lyg.skill.purple_qi"
+        },
+        {
+          "id": "lyg.skill.np001"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np006"
+        },
+        {
+          "id": "lyg.skill.np012"
+        },
+        {
+          "id": "lyg.skill.np024"
+        },
+        {
+          "id": "lyg.skill.np028"
+        },
+        {
+          "id": "lyg.skill.np029"
+        },
+        {
+          "id": "lyg.skill.np030"
+        },
+        {
+          "id": "lyg.skill.np033"
+        },
+        {
+          "id": "lyg.skill.np035"
+        },
+        {
+          "id": "lyg.skill.np040"
+        },
+        {
+          "id": "lyg.skill.np055"
+        },
+        {
+          "id": "lyg.skill.np057"
+        },
+        {
+          "id": "lyg.skill.np058"
+        },
+        {
+          "id": "lyg.skill.np059"
+        },
+        {
+          "id": "lyg.skill.np060"
+        },
+        {
+          "id": "lyg.skill.np061"
+        },
+        {
+          "id": "lyg.skill.np064"
+        },
+        {
+          "id": "lyg.skill.np067"
+        },
+        {
+          "id": "lyg.skill.np069"
+        },
+        {
+          "id": "lyg.skill.np070"
+        },
+        {
+          "id": "lyg.skill.np072"
+        },
+        {
+          "id": "lyg.skill.np080"
+        },
+        {
+          "id": "lyg.skill.np081"
+        },
+        {
+          "id": "lyg.skill.np094"
+        },
+        {
+          "id": "lyg.skill.np097"
+        },
+        {
+          "id": "lyg.skill.np099"
+        },
+        {
+          "id": "lyg.skill.np100"
+        },
+        {
+          "id": "lyg.skill.np102"
+        },
+        {
+          "id": "lyg.skill.np110"
+        },
+        {
+          "id": "lyg.skill.np113"
+        },
+        {
+          "id": "lyg.skill.np114"
+        },
+        {
+          "id": "lyg.skill.np115"
+        },
+        {
+          "id": "lyg.skill.np120"
+        },
+        {
+          "id": "lyg.skill.np126"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyg.technique.yaochi_secret_art"
+        },
+        {
+          "id": "lyg.technique.np016"
+        },
+        {
+          "id": "lyg.technique.np050"
+        },
+        {
+          "id": "lyg.technique.np056"
+        },
+        {
+          "id": "lyg.technique.np062"
+        },
+        {
+          "id": "lyg.technique.np074"
+        },
+        {
+          "id": "lyg.technique.np075"
+        },
+        {
+          "id": "lyg.technique.np078"
+        },
+        {
+          "id": "lyg.technique.np103"
+        },
+        {
+          "id": "lyg.technique.np122"
+        }
+      ]
+    },
+    "lyg.liangzhou_league": {
+      "items": [
+        {
+          "id": "lyg.item.fubutsu_honmaru_hilt"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np003"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np011"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np015"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np018"
+        },
+        {
+          "id": "lyg.item.np019"
+        },
+        {
+          "id": "lyg.item.np020"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np023"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np027"
+        },
+        {
+          "id": "lyg.item.np031"
+        },
+        {
+          "id": "lyg.item.np032"
+        },
+        {
+          "id": "lyg.item.np034"
+        },
+        {
+          "id": "lyg.item.np036"
+        },
+        {
+          "id": "lyg.item.np037"
+        },
+        {
+          "id": "lyg.item.np038"
+        },
+        {
+          "id": "lyg.item.np039"
+        },
+        {
+          "id": "lyg.item.np041"
+        },
+        {
+          "id": "lyg.item.np042"
+        },
+        {
+          "id": "lyg.item.np043"
+        },
+        {
+          "id": "lyg.item.np044"
+        },
+        {
+          "id": "lyg.item.np045"
+        },
+        {
+          "id": "lyg.item.np046"
+        },
+        {
+          "id": "lyg.item.np047"
+        },
+        {
+          "id": "lyg.item.np048"
+        },
+        {
+          "id": "lyg.item.np049"
+        },
+        {
+          "id": "lyg.item.np051"
+        },
+        {
+          "id": "lyg.item.np052"
+        },
+        {
+          "id": "lyg.item.np053"
+        },
+        {
+          "id": "lyg.item.np054"
+        },
+        {
+          "id": "lyg.item.np063"
+        },
+        {
+          "id": "lyg.item.np065"
+        },
+        {
+          "id": "lyg.item.np066"
+        },
+        {
+          "id": "lyg.item.np068"
+        },
+        {
+          "id": "lyg.item.np071"
+        },
+        {
+          "id": "lyg.item.np073"
+        },
+        {
+          "id": "lyg.item.np076"
+        },
+        {
+          "id": "lyg.item.np077"
+        },
+        {
+          "id": "lyg.item.np079"
+        },
+        {
+          "id": "lyg.item.np082"
+        },
+        {
+          "id": "lyg.item.np083"
+        },
+        {
+          "id": "lyg.item.np084"
+        },
+        {
+          "id": "lyg.item.np085"
+        },
+        {
+          "id": "lyg.item.np086"
+        },
+        {
+          "id": "lyg.item.np087"
+        },
+        {
+          "id": "lyg.item.np088"
+        },
+        {
+          "id": "lyg.item.np089"
+        },
+        {
+          "id": "lyg.item.np090"
+        },
+        {
+          "id": "lyg.item.np091"
+        },
+        {
+          "id": "lyg.item.np092"
+        },
+        {
+          "id": "lyg.item.np093"
+        },
+        {
+          "id": "lyg.item.np095"
+        },
+        {
+          "id": "lyg.item.np096"
+        },
+        {
+          "id": "lyg.item.np098"
+        },
+        {
+          "id": "lyg.item.np101"
+        },
+        {
+          "id": "lyg.item.np104"
+        },
+        {
+          "id": "lyg.item.np105"
+        },
+        {
+          "id": "lyg.item.np106"
+        },
+        {
+          "id": "lyg.item.np107"
+        },
+        {
+          "id": "lyg.item.np108"
+        },
+        {
+          "id": "lyg.item.np109"
+        },
+        {
+          "id": "lyg.item.np111"
+        },
+        {
+          "id": "lyg.item.np112"
+        },
+        {
+          "id": "lyg.item.np116"
+        },
+        {
+          "id": "lyg.item.np117"
+        },
+        {
+          "id": "lyg.item.np118"
+        },
+        {
+          "id": "lyg.item.np119"
+        },
+        {
+          "id": "lyg.item.np121"
+        },
+        {
+          "id": "lyg.item.np123"
+        },
+        {
+          "id": "lyg.item.np124"
+        },
+        {
+          "id": "lyg.item.np125"
+        },
+        {
+          "id": "lyg.item.np127"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyg.skill.death_root"
+        },
+        {
+          "id": "lyg.skill.purple_qi"
+        },
+        {
+          "id": "lyg.skill.np001"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np006"
+        },
+        {
+          "id": "lyg.skill.np012"
+        },
+        {
+          "id": "lyg.skill.np024"
+        },
+        {
+          "id": "lyg.skill.np028"
+        },
+        {
+          "id": "lyg.skill.np029"
+        },
+        {
+          "id": "lyg.skill.np030"
+        },
+        {
+          "id": "lyg.skill.np033"
+        },
+        {
+          "id": "lyg.skill.np035"
+        },
+        {
+          "id": "lyg.skill.np040"
+        },
+        {
+          "id": "lyg.skill.np055"
+        },
+        {
+          "id": "lyg.skill.np057"
+        },
+        {
+          "id": "lyg.skill.np058"
+        },
+        {
+          "id": "lyg.skill.np059"
+        },
+        {
+          "id": "lyg.skill.np060"
+        },
+        {
+          "id": "lyg.skill.np061"
+        },
+        {
+          "id": "lyg.skill.np064"
+        },
+        {
+          "id": "lyg.skill.np067"
+        },
+        {
+          "id": "lyg.skill.np069"
+        },
+        {
+          "id": "lyg.skill.np070"
+        },
+        {
+          "id": "lyg.skill.np072"
+        },
+        {
+          "id": "lyg.skill.np080"
+        },
+        {
+          "id": "lyg.skill.np081"
+        },
+        {
+          "id": "lyg.skill.np094"
+        },
+        {
+          "id": "lyg.skill.np097"
+        },
+        {
+          "id": "lyg.skill.np099"
+        },
+        {
+          "id": "lyg.skill.np100"
+        },
+        {
+          "id": "lyg.skill.np102"
+        },
+        {
+          "id": "lyg.skill.np110"
+        },
+        {
+          "id": "lyg.skill.np113"
+        },
+        {
+          "id": "lyg.skill.np114"
+        },
+        {
+          "id": "lyg.skill.np115"
+        },
+        {
+          "id": "lyg.skill.np120"
+        },
+        {
+          "id": "lyg.skill.np126"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyg.technique.yaochi_secret_art"
+        },
+        {
+          "id": "lyg.technique.np016"
+        },
+        {
+          "id": "lyg.technique.np050"
+        },
+        {
+          "id": "lyg.technique.np056"
+        },
+        {
+          "id": "lyg.technique.np062"
+        },
+        {
+          "id": "lyg.technique.np074"
+        },
+        {
+          "id": "lyg.technique.np075"
+        },
+        {
+          "id": "lyg.technique.np078"
+        },
+        {
+          "id": "lyg.technique.np103"
+        },
+        {
+          "id": "lyg.technique.np122"
+        }
+      ]
+    },
+    "lyg.mijing_rumen": {
+      "items": [
+        {
+          "id": "liuchao.item.electric_rod"
+        },
+        {
+          "id": "liuchao.item.plate_armor_sword"
+        },
+        {
+          "id": "liuchao.item.snow_snow"
+        },
+        {
+          "id": "liuchao.item.parrot_fish_eye"
+        },
+        {
+          "id": "liuchao.item.green_dragon_sword"
+        },
+        {
+          "id": "liuchao.item.red_fan"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np003"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np012"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np023"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np027"
+        },
+        {
+          "id": "lyg.item.yangwuhou_xiaoshi"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.poison_art"
+        },
+        {
+          "id": "lyg.skill.np001"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np006"
+        },
+        {
+          "id": "lyg.skill.np011"
+        },
+        {
+          "id": "lyg.skill.np019"
+        },
+        {
+          "id": "lyg.skill.np024"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.xingyue_heart_method"
+        },
+        {
+          "id": "liuchao.technique.wuzong_di_method"
+        },
+        {
+          "id": "lyg.technique.np015"
+        },
+        {
+          "id": "lyg.technique.np016"
+        },
+        {
+          "id": "lyg.technique.np018"
+        },
+        {
+          "id": "lyg.technique.np020"
+        }
+      ]
+    },
+    "lyg.shituolin_endgame": {
+      "items": [
+        {
+          "id": "lyg.item.fubutsu_honmaru_hilt"
+        },
+        {
+          "id": "lyg.item.np002"
+        },
+        {
+          "id": "lyg.item.np003"
+        },
+        {
+          "id": "lyg.item.np007"
+        },
+        {
+          "id": "lyg.item.np008"
+        },
+        {
+          "id": "lyg.item.np009"
+        },
+        {
+          "id": "lyg.item.np010"
+        },
+        {
+          "id": "lyg.item.np011"
+        },
+        {
+          "id": "lyg.item.np013"
+        },
+        {
+          "id": "lyg.item.np014"
+        },
+        {
+          "id": "lyg.item.np015"
+        },
+        {
+          "id": "lyg.item.np017"
+        },
+        {
+          "id": "lyg.item.np018"
+        },
+        {
+          "id": "lyg.item.np019"
+        },
+        {
+          "id": "lyg.item.np020"
+        },
+        {
+          "id": "lyg.item.np021"
+        },
+        {
+          "id": "lyg.item.np022"
+        },
+        {
+          "id": "lyg.item.np023"
+        },
+        {
+          "id": "lyg.item.np025"
+        },
+        {
+          "id": "lyg.item.np026"
+        },
+        {
+          "id": "lyg.item.np027"
+        },
+        {
+          "id": "lyg.item.np031"
+        },
+        {
+          "id": "lyg.item.np032"
+        },
+        {
+          "id": "lyg.item.np034"
+        },
+        {
+          "id": "lyg.item.np036"
+        },
+        {
+          "id": "lyg.item.np037"
+        },
+        {
+          "id": "lyg.item.np038"
+        },
+        {
+          "id": "lyg.item.np039"
+        },
+        {
+          "id": "lyg.item.np041"
+        },
+        {
+          "id": "lyg.item.np042"
+        },
+        {
+          "id": "lyg.item.np043"
+        },
+        {
+          "id": "lyg.item.np044"
+        },
+        {
+          "id": "lyg.item.np045"
+        },
+        {
+          "id": "lyg.item.np046"
+        },
+        {
+          "id": "lyg.item.np047"
+        },
+        {
+          "id": "lyg.item.np048"
+        },
+        {
+          "id": "lyg.item.np049"
+        },
+        {
+          "id": "lyg.item.np051"
+        },
+        {
+          "id": "lyg.item.np052"
+        },
+        {
+          "id": "lyg.item.np053"
+        },
+        {
+          "id": "lyg.item.np054"
+        },
+        {
+          "id": "lyg.item.np063"
+        },
+        {
+          "id": "lyg.item.np065"
+        },
+        {
+          "id": "lyg.item.np066"
+        },
+        {
+          "id": "lyg.item.np068"
+        },
+        {
+          "id": "lyg.item.np071"
+        },
+        {
+          "id": "lyg.item.np073"
+        },
+        {
+          "id": "lyg.item.np076"
+        },
+        {
+          "id": "lyg.item.np077"
+        },
+        {
+          "id": "lyg.item.np079"
+        },
+        {
+          "id": "lyg.item.np082"
+        },
+        {
+          "id": "lyg.item.np083"
+        },
+        {
+          "id": "lyg.item.np084"
+        },
+        {
+          "id": "lyg.item.np085"
+        },
+        {
+          "id": "lyg.item.np086"
+        },
+        {
+          "id": "lyg.item.np087"
+        },
+        {
+          "id": "lyg.item.np088"
+        },
+        {
+          "id": "lyg.item.np089"
+        },
+        {
+          "id": "lyg.item.np090"
+        },
+        {
+          "id": "lyg.item.np091"
+        },
+        {
+          "id": "lyg.item.np092"
+        },
+        {
+          "id": "lyg.item.np093"
+        },
+        {
+          "id": "lyg.item.np095"
+        },
+        {
+          "id": "lyg.item.np096"
+        },
+        {
+          "id": "lyg.item.np098"
+        },
+        {
+          "id": "lyg.item.np101"
+        },
+        {
+          "id": "lyg.item.np104"
+        },
+        {
+          "id": "lyg.item.np105"
+        },
+        {
+          "id": "lyg.item.np106"
+        },
+        {
+          "id": "lyg.item.np107"
+        },
+        {
+          "id": "lyg.item.np108"
+        },
+        {
+          "id": "lyg.item.np109"
+        },
+        {
+          "id": "lyg.item.np111"
+        },
+        {
+          "id": "lyg.item.np112"
+        },
+        {
+          "id": "lyg.item.np116"
+        },
+        {
+          "id": "lyg.item.np117"
+        },
+        {
+          "id": "lyg.item.np118"
+        },
+        {
+          "id": "lyg.item.np119"
+        },
+        {
+          "id": "lyg.item.np121"
+        },
+        {
+          "id": "lyg.item.np123"
+        },
+        {
+          "id": "lyg.item.np124"
+        },
+        {
+          "id": "lyg.item.np125"
+        },
+        {
+          "id": "lyg.item.np127"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyg.skill.death_root"
+        },
+        {
+          "id": "lyg.skill.purple_qi"
+        },
+        {
+          "id": "lyg.skill.np001"
+        },
+        {
+          "id": "lyg.skill.np004"
+        },
+        {
+          "id": "lyg.skill.np005"
+        },
+        {
+          "id": "lyg.skill.np006"
+        },
+        {
+          "id": "lyg.skill.np012"
+        },
+        {
+          "id": "lyg.skill.np024"
+        },
+        {
+          "id": "lyg.skill.np028"
+        },
+        {
+          "id": "lyg.skill.np029"
+        },
+        {
+          "id": "lyg.skill.np030"
+        },
+        {
+          "id": "lyg.skill.np033"
+        },
+        {
+          "id": "lyg.skill.np035"
+        },
+        {
+          "id": "lyg.skill.np040"
+        },
+        {
+          "id": "lyg.skill.np055"
+        },
+        {
+          "id": "lyg.skill.np057"
+        },
+        {
+          "id": "lyg.skill.np058"
+        },
+        {
+          "id": "lyg.skill.np059"
+        },
+        {
+          "id": "lyg.skill.np060"
+        },
+        {
+          "id": "lyg.skill.np061"
+        },
+        {
+          "id": "lyg.skill.np064"
+        },
+        {
+          "id": "lyg.skill.np067"
+        },
+        {
+          "id": "lyg.skill.np069"
+        },
+        {
+          "id": "lyg.skill.np070"
+        },
+        {
+          "id": "lyg.skill.np072"
+        },
+        {
+          "id": "lyg.skill.np080"
+        },
+        {
+          "id": "lyg.skill.np081"
+        },
+        {
+          "id": "lyg.skill.np094"
+        },
+        {
+          "id": "lyg.skill.np097"
+        },
+        {
+          "id": "lyg.skill.np099"
+        },
+        {
+          "id": "lyg.skill.np100"
+        },
+        {
+          "id": "lyg.skill.np102"
+        },
+        {
+          "id": "lyg.skill.np110"
+        },
+        {
+          "id": "lyg.skill.np113"
+        },
+        {
+          "id": "lyg.skill.np114"
+        },
+        {
+          "id": "lyg.skill.np115"
+        },
+        {
+          "id": "lyg.skill.np120"
+        },
+        {
+          "id": "lyg.skill.np126"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyg.technique.yaochi_secret_art"
+        },
+        {
+          "id": "lyg.technique.np016"
+        },
+        {
+          "id": "lyg.technique.np050"
+        },
+        {
+          "id": "lyg.technique.np056"
+        },
+        {
+          "id": "lyg.technique.np062"
+        },
+        {
+          "id": "lyg.technique.np074"
+        },
+        {
+          "id": "lyg.technique.np075"
+        },
+        {
+          "id": "lyg.technique.np078"
+        },
+        {
+          "id": "lyg.technique.np103"
+        },
+        {
+          "id": "lyg.technique.np122"
+        }
+      ]
+    },
+    "lyg.shixiang_ambush": {
+      "items": [],
+      "skills": [],
+      "techniques": []
+    },
+    "lyl.han_palace_endgame": {
+      "items": [
+        {
+          "id": "lyl.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.fishing_rod"
+        },
+        {
+          "id": "lyl.item.xuexue"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np021"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np028"
+        },
+        {
+          "id": "lyl.item.np029"
+        },
+        {
+          "id": "lyl.item.np031"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        },
+        {
+          "id": "lyl.item.np037"
+        },
+        {
+          "id": "lyl.item.np038"
+        },
+        {
+          "id": "lyl.item.np039"
+        },
+        {
+          "id": "lyl.item.np041"
+        },
+        {
+          "id": "lyl.item.np043"
+        },
+        {
+          "id": "lyl.item.np044"
+        },
+        {
+          "id": "lyl.item.np045"
+        },
+        {
+          "id": "lyl.item.np046"
+        },
+        {
+          "id": "lyl.item.np047"
+        },
+        {
+          "id": "lyl.item.np048"
+        },
+        {
+          "id": "lyl.item.np050"
+        },
+        {
+          "id": "lyl.item.np051"
+        },
+        {
+          "id": "lyl.item.np053"
+        },
+        {
+          "id": "lyl.item.np054"
+        },
+        {
+          "id": "lyl.item.np057"
+        },
+        {
+          "id": "lyl.item.np058"
+        },
+        {
+          "id": "lyl.item.np060"
+        },
+        {
+          "id": "lyl.item.np061"
+        },
+        {
+          "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np063"
+        },
+        {
+          "id": "lyl.item.np064"
+        },
+        {
+          "id": "lyl.item.np065"
+        },
+        {
+          "id": "lyl.item.np066"
+        },
+        {
+          "id": "lyl.item.np067"
+        },
+        {
+          "id": "lyl.item.np068"
+        },
+        {
+          "id": "lyl.item.np069"
+        },
+        {
+          "id": "lyl.item.np070"
+        },
+        {
+          "id": "lyl.item.np071"
+        },
+        {
+          "id": "lyl.item.np073"
+        },
+        {
+          "id": "lyl.item.np075"
+        },
+        {
+          "id": "lyl.item.np076"
+        },
+        {
+          "id": "lyl.item.np078"
+        },
+        {
+          "id": "lyl.item.np080"
+        },
+        {
+          "id": "lyl.item.np086"
+        },
+        {
+          "id": "lyl.item.np087"
+        },
+        {
+          "id": "lyl.item.np088"
+        },
+        {
+          "id": "lyl.item.np089"
+        },
+        {
+          "id": "lyl.item.np091"
+        },
+        {
+          "id": "lyl.item.np092"
+        },
+        {
+          "id": "lyl.item.np094"
+        },
+        {
+          "id": "lyl.item.np096"
+        },
+        {
+          "id": "lyl.item.np097"
+        },
+        {
+          "id": "lyl.item.np101"
+        },
+        {
+          "id": "lyl.item.np103"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyl.skill.death_root"
+        },
+        {
+          "id": "lyl.skill.five_tiger_knife"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np030"
+        },
+        {
+          "id": "lyl.skill.np040"
+        },
+        {
+          "id": "lyl.skill.np042"
+        },
+        {
+          "id": "lyl.skill.np049"
+        },
+        {
+          "id": "lyl.skill.np055"
+        },
+        {
+          "id": "lyl.skill.np074"
+        },
+        {
+          "id": "lyl.skill.np077"
+        },
+        {
+          "id": "lyl.skill.np079"
+        },
+        {
+          "id": "lyl.skill.np083"
+        },
+        {
+          "id": "lyl.skill.np084"
+        },
+        {
+          "id": "lyl.skill.np085"
+        },
+        {
+          "id": "lyl.skill.np090"
+        },
+        {
+          "id": "lyl.skill.np093"
+        },
+        {
+          "id": "lyl.skill.np098"
+        },
+        {
+          "id": "lyl.skill.np099"
+        },
+        {
+          "id": "lyl.skill.np100"
+        },
+        {
+          "id": "lyl.skill.np104"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.taiyi_jing"
+        },
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np019"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np026"
+        },
+        {
+          "id": "lyl.technique.np027"
+        },
+        {
+          "id": "lyl.technique.np052"
+        },
+        {
+          "id": "lyl.technique.np056"
+        },
+        {
+          "id": "lyl.technique.np059"
+        },
+        {
+          "id": "lyl.technique.np072"
+        },
+        {
+          "id": "lyl.technique.np081"
+        },
+        {
+          "id": "lyl.technique.np082"
+        },
+        {
+          "id": "lyl.technique.np095"
+        },
+        {
+          "id": "lyl.technique.np102"
+        }
+      ]
+    },
+    "lyl.jiangzhou_retreat": {
+      "items": [
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np004"
+        },
+        {
+          "id": "lyl.skill.np005"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.taiji_manual"
+        },
+        {
+          "id": "liuchao.technique.jiuyang_shengong"
+        }
+      ]
+    },
+    "lyl.lin_an_black_sea": {
+      "items": [
+        {
+          "id": "liuchao.item.ghost_fang"
+        },
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "liuchao.item.spirit_flying_mirror"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np002"
+        },
+        {
+          "id": "lyl.item.np004"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.bedroom_arts"
+        },
+        {
+          "id": "liuchao.skill.shock_demon_finger"
+        },
+        {
+          "id": "liuchao.skill.golden_bell_cover"
+        },
+        {
+          "id": "liuchao.skill.water_mirror"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.taiyi_scripture"
+        },
+        {
+          "id": "lyl.technique.np003"
+        },
+        {
+          "id": "liuchao.technique.jiuyang_shengong"
+        }
+      ]
+    },
+    "lyl.lin_an_bridge": {
+      "items": [
+        {
+          "id": "lyl.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.fishing_rod"
+        },
+        {
+          "id": "lyl.item.xuexue"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np021"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np028"
+        },
+        {
+          "id": "lyl.item.np029"
+        },
+        {
+          "id": "lyl.item.np031"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        },
+        {
+          "id": "lyl.item.np037"
+        },
+        {
+          "id": "lyl.item.np038"
+        },
+        {
+          "id": "lyl.item.np039"
+        },
+        {
+          "id": "lyl.item.np041"
+        },
+        {
+          "id": "lyl.item.np043"
+        },
+        {
+          "id": "lyl.item.np044"
+        },
+        {
+          "id": "lyl.item.np045"
+        },
+        {
+          "id": "lyl.item.np046"
+        },
+        {
+          "id": "lyl.item.np047"
+        },
+        {
+          "id": "lyl.item.np048"
+        },
+        {
+          "id": "lyl.item.np050"
+        },
+        {
+          "id": "lyl.item.np051"
+        },
+        {
+          "id": "lyl.item.np053"
+        },
+        {
+          "id": "lyl.item.np054"
+        },
+        {
+          "id": "lyl.item.np057"
+        },
+        {
+          "id": "lyl.item.np058"
+        },
+        {
+          "id": "lyl.item.np060"
+        },
+        {
+          "id": "lyl.item.np061"
+        },
+        {
+          "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np063"
+        },
+        {
+          "id": "lyl.item.np064"
+        },
+        {
+          "id": "lyl.item.np065"
+        },
+        {
+          "id": "lyl.item.np066"
+        },
+        {
+          "id": "lyl.item.np067"
+        },
+        {
+          "id": "lyl.item.np068"
+        },
+        {
+          "id": "lyl.item.np069"
+        },
+        {
+          "id": "lyl.item.np070"
+        },
+        {
+          "id": "lyl.item.np071"
+        },
+        {
+          "id": "lyl.item.np073"
+        },
+        {
+          "id": "lyl.item.np075"
+        },
+        {
+          "id": "lyl.item.np076"
+        },
+        {
+          "id": "lyl.item.np078"
+        },
+        {
+          "id": "lyl.item.np080"
+        },
+        {
+          "id": "lyl.item.np086"
+        },
+        {
+          "id": "lyl.item.np087"
+        },
+        {
+          "id": "lyl.item.np088"
+        },
+        {
+          "id": "lyl.item.np089"
+        },
+        {
+          "id": "lyl.item.np091"
+        },
+        {
+          "id": "lyl.item.np092"
+        },
+        {
+          "id": "lyl.item.np094"
+        },
+        {
+          "id": "lyl.item.np096"
+        },
+        {
+          "id": "lyl.item.np097"
+        },
+        {
+          "id": "lyl.item.np101"
+        },
+        {
+          "id": "lyl.item.np103"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyl.skill.death_root"
+        },
+        {
+          "id": "lyl.skill.five_tiger_knife"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np030"
+        },
+        {
+          "id": "lyl.skill.np040"
+        },
+        {
+          "id": "lyl.skill.np042"
+        },
+        {
+          "id": "lyl.skill.np049"
+        },
+        {
+          "id": "lyl.skill.np055"
+        },
+        {
+          "id": "lyl.skill.np074"
+        },
+        {
+          "id": "lyl.skill.np077"
+        },
+        {
+          "id": "lyl.skill.np079"
+        },
+        {
+          "id": "lyl.skill.np083"
+        },
+        {
+          "id": "lyl.skill.np084"
+        },
+        {
+          "id": "lyl.skill.np085"
+        },
+        {
+          "id": "lyl.skill.np090"
+        },
+        {
+          "id": "lyl.skill.np093"
+        },
+        {
+          "id": "lyl.skill.np098"
+        },
+        {
+          "id": "lyl.skill.np099"
+        },
+        {
+          "id": "lyl.skill.np100"
+        },
+        {
+          "id": "lyl.skill.np104"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.taiyi_jing"
+        },
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np019"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np026"
+        },
+        {
+          "id": "lyl.technique.np027"
+        },
+        {
+          "id": "lyl.technique.np052"
+        },
+        {
+          "id": "lyl.technique.np056"
+        },
+        {
+          "id": "lyl.technique.np059"
+        },
+        {
+          "id": "lyl.technique.np072"
+        },
+        {
+          "id": "lyl.technique.np081"
+        },
+        {
+          "id": "lyl.technique.np082"
+        },
+        {
+          "id": "lyl.technique.np095"
+        },
+        {
+          "id": "lyl.technique.np102"
+        }
+      ]
+    },
+    "lyl.luoyang_cloud_secret": {
+      "items": [
+        {
+          "id": "lyl.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.fishing_rod"
+        },
+        {
+          "id": "lyl.item.xuexue"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np021"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np028"
+        },
+        {
+          "id": "lyl.item.np029"
+        },
+        {
+          "id": "lyl.item.np031"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        },
+        {
+          "id": "lyl.item.np037"
+        },
+        {
+          "id": "lyl.item.np038"
+        },
+        {
+          "id": "lyl.item.np039"
+        },
+        {
+          "id": "lyl.item.np041"
+        },
+        {
+          "id": "lyl.item.np043"
+        },
+        {
+          "id": "lyl.item.np044"
+        },
+        {
+          "id": "lyl.item.np045"
+        },
+        {
+          "id": "lyl.item.np046"
+        },
+        {
+          "id": "lyl.item.np047"
+        },
+        {
+          "id": "lyl.item.np048"
+        },
+        {
+          "id": "lyl.item.np050"
+        },
+        {
+          "id": "lyl.item.np051"
+        },
+        {
+          "id": "lyl.item.np053"
+        },
+        {
+          "id": "lyl.item.np054"
+        },
+        {
+          "id": "lyl.item.np057"
+        },
+        {
+          "id": "lyl.item.np058"
+        },
+        {
+          "id": "lyl.item.np060"
+        },
+        {
+          "id": "lyl.item.np061"
+        },
+        {
+          "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np063"
+        },
+        {
+          "id": "lyl.item.np064"
+        },
+        {
+          "id": "lyl.item.np065"
+        },
+        {
+          "id": "lyl.item.np066"
+        },
+        {
+          "id": "lyl.item.np067"
+        },
+        {
+          "id": "lyl.item.np068"
+        },
+        {
+          "id": "lyl.item.np069"
+        },
+        {
+          "id": "lyl.item.np070"
+        },
+        {
+          "id": "lyl.item.np071"
+        },
+        {
+          "id": "lyl.item.np073"
+        },
+        {
+          "id": "lyl.item.np075"
+        },
+        {
+          "id": "lyl.item.np076"
+        },
+        {
+          "id": "lyl.item.np078"
+        },
+        {
+          "id": "lyl.item.np080"
+        },
+        {
+          "id": "lyl.item.np086"
+        },
+        {
+          "id": "lyl.item.np087"
+        },
+        {
+          "id": "lyl.item.np088"
+        },
+        {
+          "id": "lyl.item.np089"
+        },
+        {
+          "id": "lyl.item.np091"
+        },
+        {
+          "id": "lyl.item.np092"
+        },
+        {
+          "id": "lyl.item.np094"
+        },
+        {
+          "id": "lyl.item.np096"
+        },
+        {
+          "id": "lyl.item.np097"
+        },
+        {
+          "id": "lyl.item.np101"
+        },
+        {
+          "id": "lyl.item.np103"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyl.skill.death_root"
+        },
+        {
+          "id": "lyl.skill.five_tiger_knife"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np030"
+        },
+        {
+          "id": "lyl.skill.np040"
+        },
+        {
+          "id": "lyl.skill.np042"
+        },
+        {
+          "id": "lyl.skill.np049"
+        },
+        {
+          "id": "lyl.skill.np055"
+        },
+        {
+          "id": "lyl.skill.np074"
+        },
+        {
+          "id": "lyl.skill.np077"
+        },
+        {
+          "id": "lyl.skill.np079"
+        },
+        {
+          "id": "lyl.skill.np083"
+        },
+        {
+          "id": "lyl.skill.np084"
+        },
+        {
+          "id": "lyl.skill.np085"
+        },
+        {
+          "id": "lyl.skill.np090"
+        },
+        {
+          "id": "lyl.skill.np093"
+        },
+        {
+          "id": "lyl.skill.np098"
+        },
+        {
+          "id": "lyl.skill.np099"
+        },
+        {
+          "id": "lyl.skill.np100"
+        },
+        {
+          "id": "lyl.skill.np104"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.taiyi_jing"
+        },
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np019"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np026"
+        },
+        {
+          "id": "lyl.technique.np027"
+        },
+        {
+          "id": "lyl.technique.np052"
+        },
+        {
+          "id": "lyl.technique.np056"
+        },
+        {
+          "id": "lyl.technique.np059"
+        },
+        {
+          "id": "lyl.technique.np072"
+        },
+        {
+          "id": "lyl.technique.np081"
+        },
+        {
+          "id": "lyl.technique.np082"
+        },
+        {
+          "id": "lyl.technique.np095"
+        },
+        {
+          "id": "lyl.technique.np102"
+        }
+      ]
+    },
+    "lyl.luoyang_coup": {
+      "items": [
+        {
+          "id": "liuchao.item.qinglong_saber"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np026"
+        },
+        {
+          "id": "lyl.item.np027"
+        },
+        {
+          "id": "lyl.item.np031"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        },
+        {
+          "id": "lyl.item.np037"
+        },
+        {
+          "id": "lyl.item.np038"
+        },
+        {
+          "id": "lyl.item.np039"
+        },
+        {
+          "id": "lyl.item.np040"
+        },
+        {
+          "id": "lyl.item.np041"
+        },
+        {
+          "id": "lyl.item.np042"
+        },
+        {
+          "id": "lyl.item.np044"
+        },
+        {
+          "id": "lyl.item.np046"
+        },
+        {
+          "id": "lyl.item.np047"
+        },
+        {
+          "id": "lyl.item.np048"
+        },
+        {
+          "id": "lyl.item.np049"
+        },
+        {
+          "id": "lyl.item.np050"
+        },
+        {
+          "id": "lyl.item.np051"
+        },
+        {
+          "id": "lyl.item.np053"
+        },
+        {
+          "id": "lyl.item.np054"
+        },
+        {
+          "id": "lyl.item.np056"
+        },
+        {
+          "id": "lyl.item.np057"
+        },
+        {
+          "id": "lyl.item.np061"
+        },
+        {
+          "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np064"
+        },
+        {
+          "id": "lyl.item.np065"
+        },
+        {
+          "id": "lyl.item.np066"
+        },
+        {
+          "id": "lyl.item.np067"
+        },
+        {
+          "id": "lyl.item.np068"
+        },
+        {
+          "id": "lyl.item.np069"
+        },
+        {
+          "id": "lyl.item.np070"
+        },
+        {
+          "id": "lyl.item.np071"
+        },
+        {
+          "id": "lyl.item.np074"
+        },
+        {
+          "id": "lyl.item.np075"
+        },
+        {
+          "id": "lyl.item.np076"
+        },
+        {
+          "id": "lyl.item.np079"
+        },
+        {
+          "id": "lyl.item.np081"
+        },
+        {
+          "id": "lyl.item.np082"
+        },
+        {
+          "id": "lyl.item.np083"
+        },
+        {
+          "id": "lyl.item.np084"
+        },
+        {
+          "id": "lyl.item.np085"
+        },
+        {
+          "id": "lyl.item.np086"
+        },
+        {
+          "id": "lyl.item.np088"
+        },
+        {
+          "id": "lyl.item.np090"
+        },
+        {
+          "id": "lyl.item.np091"
+        },
+        {
+          "id": "lyl.item.np093"
+        },
+        {
+          "id": "lyl.item.np095"
+        },
+        {
+          "id": "lyl.item.np099"
+        },
+        {
+          "id": "lyl.item.np102"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.black_feather"
+        },
+        {
+          "id": "liuchao.skill.illusion"
+        },
+        {
+          "id": "liuchao.skill.fire_method"
+        },
+        {
+          "id": "liuchao.skill.qinglong_saber"
+        },
+        {
+          "id": "liuchao.skill.poison"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np019"
+        },
+        {
+          "id": "lyl.skill.np033"
+        },
+        {
+          "id": "lyl.skill.np043"
+        },
+        {
+          "id": "lyl.skill.np045"
+        },
+        {
+          "id": "lyl.skill.np052"
+        },
+        {
+          "id": "lyl.skill.np058"
+        },
+        {
+          "id": "lyl.skill.np059"
+        },
+        {
+          "id": "lyl.skill.np072"
+        },
+        {
+          "id": "lyl.skill.np073"
+        },
+        {
+          "id": "lyl.skill.np078"
+        },
+        {
+          "id": "lyl.skill.np080"
+        },
+        {
+          "id": "lyl.skill.np089"
+        },
+        {
+          "id": "lyl.skill.np092"
+        },
+        {
+          "id": "lyl.skill.np094"
+        },
+        {
+          "id": "lyl.skill.np098"
+        },
+        {
+          "id": "lyl.skill.np101"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np021"
+        },
+        {
+          "id": "lyl.technique.np028"
+        },
+        {
+          "id": "lyl.technique.np029"
+        },
+        {
+          "id": "lyl.technique.np030"
+        },
+        {
+          "id": "lyl.technique.np055"
+        },
+        {
+          "id": "lyl.technique.np060"
+        },
+        {
+          "id": "lyl.technique.np063"
+        },
+        {
+          "id": "lyl.technique.np077"
+        },
+        {
+          "id": "lyl.technique.np087"
+        },
+        {
+          "id": "lyl.technique.np096"
+        },
+        {
+          "id": "lyl.technique.np097"
+        },
+        {
+          "id": "lyl.technique.np100"
+        },
+        {
+          "id": "lyl.technique.np103"
+        }
+      ]
+    },
+    "lyl.taiquan_afterfall": {
+      "items": [
+        {
+          "id": "lyl.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.fishing_rod"
+        },
+        {
+          "id": "lyl.item.xuexue"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np021"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np028"
+        },
+        {
+          "id": "lyl.item.np029"
+        },
+        {
+          "id": "lyl.item.np031"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        },
+        {
+          "id": "lyl.item.np037"
+        },
+        {
+          "id": "lyl.item.np038"
+        },
+        {
+          "id": "lyl.item.np039"
+        },
+        {
+          "id": "lyl.item.np041"
+        },
+        {
+          "id": "lyl.item.np043"
+        },
+        {
+          "id": "lyl.item.np044"
+        },
+        {
+          "id": "lyl.item.np045"
+        },
+        {
+          "id": "lyl.item.np046"
+        },
+        {
+          "id": "lyl.item.np047"
+        },
+        {
+          "id": "lyl.item.np048"
+        },
+        {
+          "id": "lyl.item.np050"
+        },
+        {
+          "id": "lyl.item.np051"
+        },
+        {
+          "id": "lyl.item.np053"
+        },
+        {
+          "id": "lyl.item.np054"
+        },
+        {
+          "id": "lyl.item.np057"
+        },
+        {
+          "id": "lyl.item.np058"
+        },
+        {
+          "id": "lyl.item.np060"
+        },
+        {
+          "id": "lyl.item.np061"
+        },
+        {
+          "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np063"
+        },
+        {
+          "id": "lyl.item.np064"
+        },
+        {
+          "id": "lyl.item.np065"
+        },
+        {
+          "id": "lyl.item.np066"
+        },
+        {
+          "id": "lyl.item.np067"
+        },
+        {
+          "id": "lyl.item.np068"
+        },
+        {
+          "id": "lyl.item.np069"
+        },
+        {
+          "id": "lyl.item.np070"
+        },
+        {
+          "id": "lyl.item.np071"
+        },
+        {
+          "id": "lyl.item.np073"
+        },
+        {
+          "id": "lyl.item.np075"
+        },
+        {
+          "id": "lyl.item.np076"
+        },
+        {
+          "id": "lyl.item.np078"
+        },
+        {
+          "id": "lyl.item.np080"
+        },
+        {
+          "id": "lyl.item.np086"
+        },
+        {
+          "id": "lyl.item.np087"
+        },
+        {
+          "id": "lyl.item.np088"
+        },
+        {
+          "id": "lyl.item.np089"
+        },
+        {
+          "id": "lyl.item.np091"
+        },
+        {
+          "id": "lyl.item.np092"
+        },
+        {
+          "id": "lyl.item.np094"
+        },
+        {
+          "id": "lyl.item.np096"
+        },
+        {
+          "id": "lyl.item.np097"
+        },
+        {
+          "id": "lyl.item.np101"
+        },
+        {
+          "id": "lyl.item.np103"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyl.skill.death_root"
+        },
+        {
+          "id": "lyl.skill.five_tiger_knife"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np030"
+        },
+        {
+          "id": "lyl.skill.np040"
+        },
+        {
+          "id": "lyl.skill.np042"
+        },
+        {
+          "id": "lyl.skill.np049"
+        },
+        {
+          "id": "lyl.skill.np055"
+        },
+        {
+          "id": "lyl.skill.np074"
+        },
+        {
+          "id": "lyl.skill.np077"
+        },
+        {
+          "id": "lyl.skill.np079"
+        },
+        {
+          "id": "lyl.skill.np083"
+        },
+        {
+          "id": "lyl.skill.np084"
+        },
+        {
+          "id": "lyl.skill.np085"
+        },
+        {
+          "id": "lyl.skill.np090"
+        },
+        {
+          "id": "lyl.skill.np093"
+        },
+        {
+          "id": "lyl.skill.np098"
+        },
+        {
+          "id": "lyl.skill.np099"
+        },
+        {
+          "id": "lyl.skill.np100"
+        },
+        {
+          "id": "lyl.skill.np104"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.taiyi_jing"
+        },
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np019"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np026"
+        },
+        {
+          "id": "lyl.technique.np027"
+        },
+        {
+          "id": "lyl.technique.np052"
+        },
+        {
+          "id": "lyl.technique.np056"
+        },
+        {
+          "id": "lyl.technique.np059"
+        },
+        {
+          "id": "lyl.technique.np072"
+        },
+        {
+          "id": "lyl.technique.np081"
+        },
+        {
+          "id": "lyl.technique.np082"
+        },
+        {
+          "id": "lyl.technique.np095"
+        },
+        {
+          "id": "lyl.technique.np102"
+        }
+      ]
+    },
+    "lyl.taiquan_core_conflict": {
+      "items": [
+        {
+          "id": "lyl.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np026"
+        },
+        {
+          "id": "lyl.item.np030"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyl.skill.death_root_sense"
+        },
+        {
+          "id": "lyl.skill.coral_dagger_art"
+        },
+        {
+          "id": "lyl.skill.duanyue_xian"
+        },
+        {
+          "id": "lyl.skill.poison_techniques"
+        },
+        {
+          "id": "lyl.skill.folding_fan_art"
+        },
+        {
+          "id": "lyl.skill.strong_fists"
+        },
+        {
+          "id": "lyl.skill.yaksha_claw"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np019"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.taiji_bridge"
+        },
+        {
+          "id": "lyl.technique.yin_yang_fish_reaction"
+        },
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np021"
+        },
+        {
+          "id": "lyl.technique.np027"
+        },
+        {
+          "id": "lyl.technique.np028"
+        },
+        {
+          "id": "lyl.technique.np029"
+        },
+        {
+          "id": "lyl.technique.np031"
+        },
+        {
+          "id": "lyl.technique.np037"
+        }
+      ]
+    },
+    "lyl.taiquan_expedition": {
+      "items": [
+        {
+          "id": "liuchao.item.ghost_fang"
+        },
+        {
+          "id": "liuchao.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np002"
+        },
+        {
+          "id": "liuchao.item.spirit_flying_mirror"
+        }
+      ],
+      "skills": [
+        {
+          "id": "liuchao.skill.death_root"
+        },
+        {
+          "id": "liuchao.skill.bedroom_arts"
+        },
+        {
+          "id": "liuchao.skill.shock_demon_finger"
+        },
+        {
+          "id": "liuchao.skill.water_mirror"
+        },
+        {
+          "id": "liuchao.skill.golden_bell_cover"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "liuchao.technique.taiyi_scripture"
+        },
+        {
+          "id": "liuchao.technique.jiuyang_shengong"
+        }
+      ]
+    },
+    "lyl.taiquan_sacred_fruit": {
+      "items": [
+        {
+          "id": "lyl.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.fishing_rod"
+        },
+        {
+          "id": "lyl.item.xuexue"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np021"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np028"
+        },
+        {
+          "id": "lyl.item.np029"
+        },
+        {
+          "id": "lyl.item.np031"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        },
+        {
+          "id": "lyl.item.np037"
+        },
+        {
+          "id": "lyl.item.np038"
+        },
+        {
+          "id": "lyl.item.np039"
+        },
+        {
+          "id": "lyl.item.np041"
+        },
+        {
+          "id": "lyl.item.np043"
+        },
+        {
+          "id": "lyl.item.np044"
+        },
+        {
+          "id": "lyl.item.np045"
+        },
+        {
+          "id": "lyl.item.np046"
+        },
+        {
+          "id": "lyl.item.np047"
+        },
+        {
+          "id": "lyl.item.np048"
+        },
+        {
+          "id": "lyl.item.np050"
+        },
+        {
+          "id": "lyl.item.np051"
+        },
+        {
+          "id": "lyl.item.np053"
+        },
+        {
+          "id": "lyl.item.np054"
+        },
+        {
+          "id": "lyl.item.np057"
+        },
+        {
+          "id": "lyl.item.np058"
+        },
+        {
+          "id": "lyl.item.np060"
+        },
+        {
+          "id": "lyl.item.np061"
+        },
+        {
+          "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np063"
+        },
+        {
+          "id": "lyl.item.np064"
+        },
+        {
+          "id": "lyl.item.np065"
+        },
+        {
+          "id": "lyl.item.np066"
+        },
+        {
+          "id": "lyl.item.np067"
+        },
+        {
+          "id": "lyl.item.np068"
+        },
+        {
+          "id": "lyl.item.np069"
+        },
+        {
+          "id": "lyl.item.np070"
+        },
+        {
+          "id": "lyl.item.np071"
+        },
+        {
+          "id": "lyl.item.np073"
+        },
+        {
+          "id": "lyl.item.np075"
+        },
+        {
+          "id": "lyl.item.np076"
+        },
+        {
+          "id": "lyl.item.np078"
+        },
+        {
+          "id": "lyl.item.np080"
+        },
+        {
+          "id": "lyl.item.np086"
+        },
+        {
+          "id": "lyl.item.np087"
+        },
+        {
+          "id": "lyl.item.np088"
+        },
+        {
+          "id": "lyl.item.np089"
+        },
+        {
+          "id": "lyl.item.np091"
+        },
+        {
+          "id": "lyl.item.np092"
+        },
+        {
+          "id": "lyl.item.np094"
+        },
+        {
+          "id": "lyl.item.np096"
+        },
+        {
+          "id": "lyl.item.np097"
+        },
+        {
+          "id": "lyl.item.np101"
+        },
+        {
+          "id": "lyl.item.np103"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyl.skill.death_root"
+        },
+        {
+          "id": "lyl.skill.five_tiger_knife"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np030"
+        },
+        {
+          "id": "lyl.skill.np040"
+        },
+        {
+          "id": "lyl.skill.np042"
+        },
+        {
+          "id": "lyl.skill.np049"
+        },
+        {
+          "id": "lyl.skill.np055"
+        },
+        {
+          "id": "lyl.skill.np074"
+        },
+        {
+          "id": "lyl.skill.np077"
+        },
+        {
+          "id": "lyl.skill.np079"
+        },
+        {
+          "id": "lyl.skill.np083"
+        },
+        {
+          "id": "lyl.skill.np084"
+        },
+        {
+          "id": "lyl.skill.np085"
+        },
+        {
+          "id": "lyl.skill.np090"
+        },
+        {
+          "id": "lyl.skill.np093"
+        },
+        {
+          "id": "lyl.skill.np098"
+        },
+        {
+          "id": "lyl.skill.np099"
+        },
+        {
+          "id": "lyl.skill.np100"
+        },
+        {
+          "id": "lyl.skill.np104"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.taiyi_jing"
+        },
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np019"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np026"
+        },
+        {
+          "id": "lyl.technique.np027"
+        },
+        {
+          "id": "lyl.technique.np052"
+        },
+        {
+          "id": "lyl.technique.np056"
+        },
+        {
+          "id": "lyl.technique.np059"
+        },
+        {
+          "id": "lyl.technique.np072"
+        },
+        {
+          "id": "lyl.technique.np081"
+        },
+        {
+          "id": "lyl.technique.np082"
+        },
+        {
+          "id": "lyl.technique.np095"
+        },
+        {
+          "id": "lyl.technique.np102"
+        }
+      ]
+    },
+    "lyl.xiaoyingzhou_blacksea_trap": {
+      "items": [
+        {
+          "id": "lyl.item.coral_dagger"
+        },
+        {
+          "id": "lyl.item.fishing_rod"
+        },
+        {
+          "id": "lyl.item.xuexue"
+        },
+        {
+          "id": "lyl.item.np001"
+        },
+        {
+          "id": "lyl.item.np003"
+        },
+        {
+          "id": "lyl.item.np004"
+        },
+        {
+          "id": "lyl.item.np005"
+        },
+        {
+          "id": "lyl.item.np007"
+        },
+        {
+          "id": "lyl.item.np010"
+        },
+        {
+          "id": "lyl.item.np011"
+        },
+        {
+          "id": "lyl.item.np013"
+        },
+        {
+          "id": "lyl.item.np014"
+        },
+        {
+          "id": "lyl.item.np015"
+        },
+        {
+          "id": "lyl.item.np016"
+        },
+        {
+          "id": "lyl.item.np017"
+        },
+        {
+          "id": "lyl.item.np018"
+        },
+        {
+          "id": "lyl.item.np021"
+        },
+        {
+          "id": "lyl.item.np022"
+        },
+        {
+          "id": "lyl.item.np023"
+        },
+        {
+          "id": "lyl.item.np024"
+        },
+        {
+          "id": "lyl.item.np025"
+        },
+        {
+          "id": "lyl.item.np028"
+        },
+        {
+          "id": "lyl.item.np029"
+        },
+        {
+          "id": "lyl.item.np031"
+        },
+        {
+          "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
+        },
+        {
+          "id": "lyl.item.np034"
+        },
+        {
+          "id": "lyl.item.np035"
+        },
+        {
+          "id": "lyl.item.np036"
+        },
+        {
+          "id": "lyl.item.np037"
+        },
+        {
+          "id": "lyl.item.np038"
+        },
+        {
+          "id": "lyl.item.np039"
+        },
+        {
+          "id": "lyl.item.np041"
+        },
+        {
+          "id": "lyl.item.np043"
+        },
+        {
+          "id": "lyl.item.np044"
+        },
+        {
+          "id": "lyl.item.np045"
+        },
+        {
+          "id": "lyl.item.np046"
+        },
+        {
+          "id": "lyl.item.np047"
+        },
+        {
+          "id": "lyl.item.np048"
+        },
+        {
+          "id": "lyl.item.np050"
+        },
+        {
+          "id": "lyl.item.np051"
+        },
+        {
+          "id": "lyl.item.np053"
+        },
+        {
+          "id": "lyl.item.np054"
+        },
+        {
+          "id": "lyl.item.np057"
+        },
+        {
+          "id": "lyl.item.np058"
+        },
+        {
+          "id": "lyl.item.np060"
+        },
+        {
+          "id": "lyl.item.np061"
+        },
+        {
+          "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np063"
+        },
+        {
+          "id": "lyl.item.np064"
+        },
+        {
+          "id": "lyl.item.np065"
+        },
+        {
+          "id": "lyl.item.np066"
+        },
+        {
+          "id": "lyl.item.np067"
+        },
+        {
+          "id": "lyl.item.np068"
+        },
+        {
+          "id": "lyl.item.np069"
+        },
+        {
+          "id": "lyl.item.np070"
+        },
+        {
+          "id": "lyl.item.np071"
+        },
+        {
+          "id": "lyl.item.np073"
+        },
+        {
+          "id": "lyl.item.np075"
+        },
+        {
+          "id": "lyl.item.np076"
+        },
+        {
+          "id": "lyl.item.np078"
+        },
+        {
+          "id": "lyl.item.np080"
+        },
+        {
+          "id": "lyl.item.np086"
+        },
+        {
+          "id": "lyl.item.np087"
+        },
+        {
+          "id": "lyl.item.np088"
+        },
+        {
+          "id": "lyl.item.np089"
+        },
+        {
+          "id": "lyl.item.np091"
+        },
+        {
+          "id": "lyl.item.np092"
+        },
+        {
+          "id": "lyl.item.np094"
+        },
+        {
+          "id": "lyl.item.np096"
+        },
+        {
+          "id": "lyl.item.np097"
+        },
+        {
+          "id": "lyl.item.np101"
+        },
+        {
+          "id": "lyl.item.np103"
+        }
+      ],
+      "skills": [
+        {
+          "id": "lyl.skill.death_root"
+        },
+        {
+          "id": "lyl.skill.five_tiger_knife"
+        },
+        {
+          "id": "lyl.skill.np002"
+        },
+        {
+          "id": "lyl.skill.np006"
+        },
+        {
+          "id": "lyl.skill.np008"
+        },
+        {
+          "id": "lyl.skill.np009"
+        },
+        {
+          "id": "lyl.skill.np030"
+        },
+        {
+          "id": "lyl.skill.np040"
+        },
+        {
+          "id": "lyl.skill.np042"
+        },
+        {
+          "id": "lyl.skill.np049"
+        },
+        {
+          "id": "lyl.skill.np055"
+        },
+        {
+          "id": "lyl.skill.np074"
+        },
+        {
+          "id": "lyl.skill.np077"
+        },
+        {
+          "id": "lyl.skill.np079"
+        },
+        {
+          "id": "lyl.skill.np083"
+        },
+        {
+          "id": "lyl.skill.np084"
+        },
+        {
+          "id": "lyl.skill.np085"
+        },
+        {
+          "id": "lyl.skill.np090"
+        },
+        {
+          "id": "lyl.skill.np093"
+        },
+        {
+          "id": "lyl.skill.np098"
+        },
+        {
+          "id": "lyl.skill.np099"
+        },
+        {
+          "id": "lyl.skill.np100"
+        },
+        {
+          "id": "lyl.skill.np104"
+        }
+      ],
+      "techniques": [
+        {
+          "id": "lyl.technique.taiyi_jing"
+        },
+        {
+          "id": "lyl.technique.np012"
+        },
+        {
+          "id": "lyl.technique.np019"
+        },
+        {
+          "id": "lyl.technique.np020"
+        },
+        {
+          "id": "lyl.technique.np026"
+        },
+        {
+          "id": "lyl.technique.np027"
+        },
+        {
+          "id": "lyl.technique.np052"
+        },
+        {
+          "id": "lyl.technique.np056"
+        },
+        {
+          "id": "lyl.technique.np059"
+        },
+        {
+          "id": "lyl.technique.np072"
+        },
+        {
+          "id": "lyl.technique.np081"
+        },
+        {
+          "id": "lyl.technique.np082"
+        },
+        {
+          "id": "lyl.technique.np095"
+        },
+        {
+          "id": "lyl.technique.np102"
+        }
+      ]
+    }
+  }
+}

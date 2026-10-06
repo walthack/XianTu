@@ -1,3 +1,5 @@
+import {GAME_NUMBERS} from './numbers';
+import {levelModifier} from './levels';
 // 玩家行动：识别层提议的校验（只许白名单），以及落地、定价、预览（只读，不改状态）。
 
 import { isPresent, partyOf, playerParty, trackInfo, trackStep } from './queries';
@@ -9,10 +11,10 @@ const BANNED_KEYS = /^(difficulty|dc|result|outcome|tier|roll|modifier|damage|su
 
 /** 战斗场面没写 goals[] 时的默认目标集（只有定价基准，没有任何胜负、拍数门槛）。 */
 export const DEFAULT_COMBAT_GOALS: GoalDef[] = [
-  { id: 'attack', label: '进攻', type: 'push', baseDifficulty: 12 },
+  { id: 'attack', label: '进攻', type: 'push', get baseDifficulty(){return GAME_NUMBERS.combat.baselineDc;} },
   {
-    id: 'guard', label: '掩护', type: 'support', baseDifficulty: 10,
-    onSuccess: { tagOn: 'allies', tag: { id: 'guarded', label: '受掩护', on: 'player_side', durationBeats: 1, effect: { defenseBonus: 3 } } },
+    id: 'guard', label: '掩护', type: 'support', get baseDifficulty(){return GAME_NUMBERS.combat.baselineDc;},
+    onSuccess: { tagOn: 'allies', tag: { id: 'guarded', label: '受掩护', on: 'player_side', get durationBeats(){return GAME_NUMBERS.combat.guard.durationBeats;}, effect: { get defenseBonus(){return GAME_NUMBERS.combat.guard.defenseBonus;} } } },
   },
 ];
 
@@ -62,6 +64,7 @@ export function validateProposal(
   const banned = Object.keys(raw).concat(Object.keys(raw.claim || {})).find(key => BANNED_KEYS.test(key));
   if (banned) return { plan: null, dropped: [`提议里出现了结算字段“${banned}”，整份丢弃`] };
   const goal = goalOf(contract, String(raw.goal || ''));
+  if (goal && ((goal.availability?.fromBeat || 1) > state.beat || (goal.availability?.untilBeat ?? Infinity) < state.beat)) return { plan:null, dropped:['该目标不在当前阶段'] };
   if (!goal) return { plan: null, dropped: [`目标“${raw.goal}”不在本场目标里`] };
   const claim = raw.claim || raw;
   const magnitude = Math.min(3, Math.max(1, Math.round(Number(claim.magnitude) || 1))) as 1 | 2 | 3;
@@ -88,6 +91,7 @@ export function validateProposal(
       dropped.push(`杠杆“${element.label}”所在分句是问句、假设或否定`);
       continue;
     }
+    if (element.actionPattern && !new RegExp(element.actionPattern).test(playerText)) { dropped.push(`杠杆“${element.label}”没有对应主动行为`); continue; }
     if (levers.some(l => l.element === element.id)) continue;
     if (levers.length >= settings.pricing.leverMax) {
       dropped.push(`杠杆“${element.label}”超出每拍 ${settings.pricing.leverMax} 个的上限`);
@@ -202,6 +206,14 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
       continue;
     }
     const from = trackStep(state, id, info.id);
+    if (goal.maxTargetGroups && from >= info.limit) continue;
+    if (goal.maxTargetGroups) {
+      const group = party.actionGroup || party.id;
+      const groups = new Set(targets.map(t => { const p = partyOf(contract,t.party); return p?.actionGroup || t.party; }));
+      if (!groups.has(group) && groups.size >= goal.maxTargetGroups) {
+        ignoredTargets.push(`${party.ref}：一次行动最多解决 ${goal.maxTargetGroups} 组`);continue;
+      }
+    }
     targets.push({
       party: id, ref: party.ref, track: info.id, from, limit: info.limit, claimed: plan.magnitude,
       realizable: Math.max(0, Math.min(plan.magnitude, info.limit - from)),
@@ -232,6 +244,14 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   }
   const okLevers = levers.filter(l => l.ok);
   const grounded = okLevers.length > 0;
+  for (const target of targets) {
+    const entry = partyOf(contract, target.party)?.tracks?.find(t => (t.track || t.id) === target.track);
+    if (entry?.requiresLever?.length && !okLevers.some(l => entry.requiresLever!.includes(l.element))) {
+      target.blocked = '这条轨道需要指定的有效要素'; target.realizable = 0;
+    }
+    if (!target.blocked && goal.completeOnSuccess) target.realizable = Math.max(0, target.limit - target.from);
+  }
+
 
   // ---- 态势兑现 ----
   const cash = (plan.cash || []).map(tagId => {
@@ -253,7 +273,7 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   const noveltyKey = grounded ? okLevers.map(l => `${l.element}:${l.verb}`).sort().join('+') : null;
   const leverSum = Math.min(settings.pricing.leverCap, okLevers.reduce((sum, l) => sum + l.power, 0));
   const modifierParts = {
-    factors: ctx.factors,
+    factors: ctx.factors + (state.levels && playerId && primary ? levelModifier(state.levels[playerId],state.levels[primary]) : 0),
     levers: leverSum,
     novelty: noveltyKey && !state.noveltySeen.includes(noveltyKey) ? settings.pricing.novelty : 0,
     cash: cash.reduce((sum, c) => sum + (c.ok ? c.bonus : 0), 0),

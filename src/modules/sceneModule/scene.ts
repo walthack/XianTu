@@ -128,12 +128,32 @@ function applyEffects(contract: Contract, state: SceneState, ctx: Pick<SceneCont
 function fireBeatEvents(contract: Contract, state: SceneState, ctx: Pick<SceneContext, 'catalog'> | undefined): Array<{ id: string; text?: string }> {
   const out: Array<{ id: string; text?: string }> = [];
   for (const event of contract.clock?.fixedEvents || []) {
-    if (state.firedEvents.includes(event.id)) continue;
+    if (event.when || state.firedEvents.includes(event.id)) continue;
     const due = (event.onStart && state.beat === 1) || event.atBeat === state.beat;
     if (!due) continue;
     state.firedEvents.push(event.id);
     applyEffects(contract, state, ctx, event.effects, `event:${event.id}`);
     out.push({ id: event.id, text: event.text });
+  }
+  out.push(...fireConditionalEvents(contract,state,ctx,'beatStart'));
+  return out;
+}
+
+/** Conditional events run at settled checkpoints, once per saved event id. No dice or model calls. */
+export function fireConditionalEvents(contract: Contract, state: SceneState, ctx: Pick<SceneContext, 'catalog'> | undefined, trigger: NonNullable<import('./types').FixedEvent['trigger']>, enemyActionId?: string): Array<{id:string;text?:string}> {
+  const out: Array<{id:string;text?:string}> = [];
+  // Bounded fixed point: one event can make a later/earlier authored condition true.
+  for (let pass=0; pass<(contract.clock?.fixedEvents?.length || 0); pass++) {
+    let fired=false;
+    for (const event of contract.clock?.fixedEvents || []) {
+      if (!event.when || event.atClose || state.firedEvents.includes(event.id)) continue;
+      if (event.trigger ? event.trigger!==trigger : trigger==='beforeEnemyAction') continue;
+      if (event.enemyActionId && event.enemyActionId!==enemyActionId) continue;
+      if (!evalExpr(event.when,contract,state,ctx)) continue;
+      state.firedEvents.push(event.id);applyEffects(contract,state,ctx,event.effects,`event:${event.id}`);
+      out.push({id:event.id,text:event.text});fired=true;
+    }
+    if (!fired) break;
   }
   return out;
 }
@@ -149,7 +169,7 @@ export function isLost(contract: Contract, state: SceneState, ctx?: Pick<SceneCo
 }
 
 export function isWon(contract: Contract, state: SceneState, ctx?: Pick<SceneContext, 'catalog'>): boolean {
-  return evalExpr(contract.objective.win, contract, state, ctx);
+  return !isLost(contract, state, ctx) && evalExpr(contract.objective.win, contract, state, ctx);
 }
 
 function decide(contract: Contract, state: SceneState, kind: SceneOutcome['kind'], reason: string): void {
@@ -298,11 +318,15 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
   for (const target of ev.targets) {
     if (!target.track) continue;
     const from = trackStep(state, target.party, target.track);
-    const realized = success && !target.blocked ? Math.max(0, Math.min(ev.plan.magnitude, target.limit - from)) : 0;
+    const realized = success && !target.blocked ? Math.max(0, Math.min(ev.goal.completeOnSuccess ? target.limit - from : ev.plan.magnitude, target.limit - from)) : 0;
     if (realized > 0) (state.tracks[target.party] ||= {})[target.track] = from + realized;
+    const info = trackInfo(contract, target.party, target.track);
+    if (realized > 0 && from + realized >= target.limit && ev.goal.finishAs && info?.ending?.alternatives?.includes(ev.goal.finishAs)) {
+      state.tracks[target.party][target.track] = info.scale.indexOf(ev.goal.finishAs);
+    }
     const label = trackLabel(state, contract, target.party, target.track);
     result.claims.push({
-      party: target.party, track: target.track, claimed: ev.plan.magnitude, realized, from, to: from + realized,
+      party: target.party, track: target.track, claimed: ev.plan.magnitude, realized, from, to: trackStep(state, target.party, target.track),
       clamped: success && !target.blocked && realized < ev.plan.magnitude, blocked: target.blocked,
       clampText: realized < ev.plan.magnitude ? target.clampText : undefined, label,
     });
@@ -361,6 +385,7 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
 
   // 6) 失败：局面往敌人那边偏，人不直接掉东西；大失败：另有一个具体后果挂到具体角色
   if (!success) {
+    for (const consequence of ev.goal.onFailure || []) statusEvents.push(...applyConsequence(contract, state, ctx, playerParty(contract)!.id, consequence, 'goal:failure'));
     result.edge = true;
     addTag(state, { id: 'edge', label: '敌占先', on: 'opposed', expiresBeat: state.beat, effect: { enemyDcBonus: settings.tiers.failure.edge, text: '本拍敌方出手更难防' }, sourceId });
     if (tier === 'critical_failure') {
@@ -386,9 +411,14 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
     if (isWon(contract, state, ctx)) { decide(contract, state, 'win', '胜利条件成立'); return true; }
     return false;
   };
+  result.events.push(...fireConditionalEvents(contract,state,ctx,'afterAction'));
   if (!ended()) {
     // 9) 敌方出手
-    const phase = resolveEnemyPhase(contract, state, ctx);
+    const phase = resolveEnemyPhase(contract, state, { ...ctx, playerDefense: (ctx.playerDefense || 0) + (ev.goal.defensePenalty || 0) }, (phase,actionId) => {
+      const fired=fireConditionalEvents(contract,state,ctx,phase,actionId);
+      result.events.push(...fired);
+      return fired.length>0 && ended();
+    });
     result.enemy = phase.rolls;
     result.enemyTruncated = phase.truncated;
     statusEvents.push(...phase.statusEvents);
@@ -504,7 +534,8 @@ export function matchPlayerChoice(contract: Contract, text: string): { id: strin
   for (const cond of contract.defeat?.conditions || []) {
     if ((cond as PlayerChoiceCond).kind !== 'playerChoice') continue;
     for (const choice of (cond as PlayerChoiceCond).choices) {
-      if (choice.matchHints.some(hint => body.includes(compact(hint)))) return choice;
+      if (choice.matchHints.some(hint => body.split(/[，。；,:：;]/).some(clause =>
+        clause.includes(compact(hint)) && !/不|别|拒绝|绝无|休想|宁死|不会|不肯|不愿|岂|怎会|假如|如果|要是|是否|吗|[？?]/.test(clause.replace(compact(hint), '')) && !/不$/.test(clause.slice(0, clause.indexOf(compact(hint))))))) return choice;
     }
   }
   return null;
@@ -518,7 +549,7 @@ export function applyPlayerChoice(contract: Contract, stateIn: SceneState, choic
   if (!choice) throw new Error(`没有这个主动选择：${choiceId}`);
   const state = structuredClone(stateIn);
   state.status = 'decided';
-  state.outcome = { kind: 'lose', reason: `玩家主动选择：${choice.label}`, endingId: choice.endingId };
+  state.outcome = { kind: 'lose', reason: `玩家主动选择：${choice.label}`, endingId: choice.endingId, choiceId: choice.id };
   return state;
 }
 
@@ -529,7 +560,7 @@ export interface WriteBack {
   beats: number;
   finalStates: Array<{ party: string; ref: string; track: string; label: string }>;
   statusEvents: StatusEvent[];
-  persistent: Array<{ party: string; ref: string; status: string; label: string; minutes: number | null; cause: string; source?: string }>;
+  persistent: Array<{ party: string; ref: string; status: string; label: string; originScene?: string; minutes: number | null; cause: string; source?: string }>;
   costs: Array<{ id: string; target: string; effect?: string; anchorText?: string }>;
   rewards: Array<Record<string, unknown>>;
   flags: Record<string, string | number | boolean>;
@@ -546,12 +577,15 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
   if (stateIn.status !== 'decided' || !stateIn.outcome) throw new Error('场面还没分出结果，不能收束');
   const state = structuredClone(stateIn);
   const outcome = state.outcome!;
-  const branch: ClosingBranch = contract.closing?.[outcome.kind] || {};
+  // Also normalize a saved, already-decided loss against the current contract.
+  if (outcome.kind === 'lose' && contract.defeat?.outcome?.type === 'ending') outcome.endingId = contract.defeat.outcome.endingId;
+  const branch: ClosingBranch = (outcome.choiceId ? contract.closing?.playerChoices?.[outcome.choiceId] : contract.closing?.[outcome.kind]) || {};
   const statusEvents: StatusEvent[] = [];
   const events: Array<{ id: string; text?: string }> = [];
 
   // 收束事件
   for (const event of contract.clock?.fixedEvents || []) {
+    if (outcome.choiceId) continue;
     if (!event.atClose || state.firedEvents.includes(event.id)) continue;
     state.firedEvents.push(event.id);
     statusEvents.push(...applyEffects(contract, state, ctx, event.effects, `event:${event.id}`));
@@ -561,7 +595,8 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
   // 过程与终态分离：赢的收束时，各轨道被置成合同规定的终态。
   if (outcome.kind === 'win') {
     for (const info of allTrackInfos(contract)) {
-      if (!info.ending?.finalState) continue;
+      if (!info.ending?.finalState || info.ending.preserveOnWin) continue;
+      if (info.ending.alternatives?.includes(trackLabel(state, contract, info.party, info.id))) continue;
       const index = info.scale.indexOf(info.ending.finalState);
       if (index >= 0) (state.tracks[info.party] ||= {})[info.id] = index;
     }
@@ -586,6 +621,14 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
   }
   Object.assign(state.flags, branch.flags || {});
 
+  statusEvents.push(...applyEffects(contract,state,ctx,contract.continuity?.effects,'continuity'));
+  for (const cost of contract.continuity?.fixedCosts || []) {
+    if (costs.some(item=>item.id===cost.id)) continue;
+    for (const ref of cost.statuses || []) statusEvents.push(...applyStatus(state,contract,ctx,cost.target,ref,{cause:'story',sourceId:`continuity:${cost.id}`}));
+    costs.push({id:cost.id,target:cost.target,effect:cost.effect,anchorText:cost.anchorText});
+  }
+  Object.assign(state.flags,contract.continuity?.flags || {});
+
   // 红线与事后状态：运行时再核一遍，违反的列出来（体检已证明不可达，这里是兜底）
   const violations = { redLines: [] as string[], afterState: [] as string[] };
   for (const line of contract.redLines || []) {
@@ -600,10 +643,13 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
     }
   }
 
+  for (const check of contract.continuity?.checks || []) if (check.check && !evalExpr(check.check,contract,state,ctx)) violations.afterState.push(check.id);
+
   const finalStates: WriteBack['finalStates'] = allTrackInfos(contract).map(info => ({
     party: info.party, ref: partyOf(contract, info.party)!.ref, track: info.id, label: trackLabel(state, contract, info.party, info.id),
   }));
   const persistent = persistentStatuses(state, contract, ctx).map(item => ({
+    originScene:item.active.originScene,
     party: item.party, ref: item.ref, status: item.def.id, label: item.def.label, minutes: item.def.afterScene?.minutes ?? null,
     cause: item.def.cause, source: item.def.source,
   }));
@@ -621,7 +667,7 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
   return {
     state,
     writeBack: {
-      outcome, beats: state.audit.length, finalStates, statusEvents, persistent, costs, rewards: branch.rewards || [], flags: branch.flags || {},
+      outcome, beats: state.audit.length, finalStates, statusEvents, persistent, costs, rewards: branch.rewards || [], flags: { ...(branch.flags || {}) },
       next: branch.next ?? null, credits: state.credits, closingText: branch.text, events, violations, memoryNote,
     },
   };

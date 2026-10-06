@@ -1,0 +1,1430 @@
+{
+  "version": 1,
+  "kind": "enemy",
+  "entries": [
+    {
+      "id": "lcq.enemy.iron_bridge_assassin",
+      "aliases": [
+        "刺客",
+        "六名刺客"
+      ],
+      "definition": {
+        "id": "lcq.enemy.iron_bridge_assassin",
+        "name": "刺客",
+        "type": "humanoid",
+        "unnamed": true,
+        "description": "铁索桥伏击的刺客，合同按六人一个群体结算。",
+        "instances": {
+          "combat.f01.iron_bridge.assassins": "六名刺客"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "事件 relatedFactionIds 只有 bai_hu_shang_guan（主角方），没写刺客归属"
+      },
+      "encounters": [
+        {
+          "combat": "F01",
+          "combatId": "combat.f01.iron_bridge",
+          "contract": "src/modules/sceneModule/contracts/f01.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.iron_bridge_ambush",
+          "partyId": "assassins",
+          "currentRef": "六名刺客",
+          "group": {
+            "id": "f01.assassins",
+            "label": "六名刺客",
+            "count": 6
+          },
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 4,
+            "initial": 0,
+            "ceiling": 3,
+            "finalState": "倒下",
+            "actions": [
+              {
+                "id": "assassins_attack",
+                "dc": 12,
+                "onHit": [
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "saveKey": "sceneLedger.statusRecords.groups['f01.assassins']",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f01.json#parties[id=assassins]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.sheyi_raider",
+      "aliases": [
+        "蛇彝男子",
+        "带重伤的蛇彝男子",
+        "lcq.enemy.sheyi_male"
+      ],
+      "definition": {
+        "id": "lcq.enemy.sheyi_raider",
+        "name": "蛇彝男子",
+        "type": "humanoid",
+        "unnamed": true,
+        "description": "蛇彝村袭击主角的蛇彝人，开战即带重伤（initial=2）。",
+        "instances": {
+          "combat.f02.snake_assault.snake_man": "带重伤的蛇彝男子"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "pending",
+        "note": "全项目没有蛇彝势力 id（atlas 39 个/关卡 122 个势力都没有）"
+      },
+      "encounters": [
+        {
+          "combat": "F02",
+          "combatId": "combat.f02.snake_assault",
+          "contract": "src/modules/sceneModule/contracts/f02.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_01",
+          "partyId": "snake_man",
+          "currentRef": "带重伤的蛇彝男子",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 4,
+            "initial": 2,
+            "ceiling": 3,
+            "finalState": "倒下",
+            "actions": [
+              {
+                "id": "snake_man_attack",
+                "dc": 12,
+                "onHit": [
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "saveKey": "sceneLedger.statusRecords.groups['combat.f02.snake_assault.snake_man']",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f02.json#parties[id=snake_man]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "鬼王峒武士",
+        "武士",
+        "利角武士",
+        "鬼王峒拦路武士",
+        "拦路者",
+        "鬼武士",
+        "鬼武士一",
+        "鬼武士二",
+        "lcq.enemy.guiwang_ghost_warrior",
+        "鬼王峒武士 9 名（card.enemies 文本）",
+        "lcq.enemy.guiwangdong_warrior"
+      ],
+      "definition": {
+        "id": "lcq.enemy.guiwang_warrior",
+        "name": "鬼王峒武士",
+        "type": "humanoid",
+        "unnamed": true,
+        "description": "光头、额生利角、手持铁斧的鬼王峒武士（外貌照录 f03.json 与试玩卡片）。",
+        "instances": {
+          "combat.f03.mountain_stream_fog.foe_engaged": "鬼王峒武士·暗红眼独角",
+          "combat.f03.mountain_stream_fog.foe_pack_1": "鬼王峒武士·第2人",
+          "combat.f03.mountain_stream_fog.foe_pack_2": "鬼王峒武士·第3人",
+          "combat.f03.mountain_stream_fog.foe_pack_3": "鬼王峒武士·第4人",
+          "combat.f03.mountain_stream_fog.foe_pack_4": "鬼王峒武士·第5人",
+          "combat.f03.mountain_stream_fog.foe_pack_5": "鬼王峒武士·第6人",
+          "combat.f03.mountain_stream_fog.foe_pack_6": "鬼王峒武士·第7人",
+          "combat.f03.mountain_stream_fog.foe_pack_7": "鬼王峒武士·第8人",
+          "combat.f03.mountain_stream_fog.foe_last": "鬼王峒武士·吸血变身者",
+          "combat.f03.escape_followup.entry_warriors": "鬼王峒拦路武士",
+          "combat.f05.dungeon_trap.warrior_1": "鬼武士一",
+          "combat.f05.dungeon_trap.warrior_2": "鬼武士二"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": "liuchao.faction.gui_wang_dong",
+        "status": "existing"
+      },
+      "encounters": [
+        {
+          "combat": "F03",
+          "combatId": "combat.f03.mountain_stream_fog",
+          "contract": "src/modules/sceneModule/contracts/f03.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_02",
+          "instances": [
+            {
+              "partyId": "foe_engaged",
+              "currentRef": "鬼王峒武士·暗红眼独角",
+              "variant": "首敌",
+              "resistance": 3,
+              "actionGroup": "foe_engaged",
+              "actions": [
+                {
+                  "id": "attack_ning_yu",
+                  "dc": 12,
+                  "target": "ning_yu",
+                  "onHit": [
+                    "wound.internal"
+                  ]
+                }
+              ]
+            },
+            {
+              "partyId": "foe_pack_1",
+              "currentRef": "鬼王峒武士·第2人",
+              "resistance": 2,
+              "actionGroup": "remaining_seven",
+              "actions": [
+                {
+                  "id": "attack_bride",
+                  "dc": 12,
+                  "target": "bride",
+                  "onHit": [
+                    "wound.external"
+                  ]
+                }
+              ]
+            },
+            {
+              "partyId": "foe_pack_2",
+              "currentRef": "鬼王峒武士·第3人",
+              "resistance": 2,
+              "actionGroup": "remaining_seven"
+            },
+            {
+              "partyId": "foe_pack_3",
+              "currentRef": "鬼王峒武士·第4人",
+              "resistance": 2,
+              "actionGroup": "remaining_seven"
+            },
+            {
+              "partyId": "foe_pack_4",
+              "currentRef": "鬼王峒武士·第5人",
+              "resistance": 2,
+              "actionGroup": "remaining_seven"
+            },
+            {
+              "partyId": "foe_pack_5",
+              "currentRef": "鬼王峒武士·第6人",
+              "resistance": 2,
+              "actionGroup": "remaining_seven"
+            },
+            {
+              "partyId": "foe_pack_6",
+              "currentRef": "鬼王峒武士·第7人",
+              "resistance": 2,
+              "actionGroup": "remaining_seven"
+            },
+            {
+              "partyId": "foe_pack_7",
+              "currentRef": "鬼王峒武士·第8人",
+              "resistance": 2,
+              "actionGroup": "remaining_seven"
+            },
+            {
+              "partyId": "foe_last",
+              "currentRef": "鬼王峒武士·吸血变身者",
+              "variant": "末敌（吸血变身）",
+              "resistance": 3,
+              "actionGroup": "foe_last",
+              "actions": [
+                {
+                  "id": "attack_a_xi",
+                  "dc": 12,
+                  "target": "a_xi",
+                  "onHit": [
+                    "wound.external"
+                  ]
+                }
+              ]
+            }
+          ],
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 6,
+            "scale": [
+              "完好",
+              "受创",
+              "重伤",
+              "被击倒",
+              "逃走",
+              "被俘"
+            ],
+            "initial": 0,
+            "ceiling": 3,
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "alternatives": [
+              "被俘"
+            ]
+          },
+          "saveKey": "sceneLedger.statusRecords.groups['combat.f03.mountain_stream_fog.<partyId>']",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "W07",
+          "combatId": "combat.f03.escape_followup",
+          "contract": "src/modules/sceneModule/contracts/f03-entry.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.enter_dong_with_migu",
+          "actionId": "fight_outer_sentry_intercept",
+          "partyId": "entry_warriors",
+          "currentRef": "鬼王峒拦路武士",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 3,
+            "scale": [
+              "拦路",
+              "受挫",
+              "被击退"
+            ],
+            "ceiling": 2,
+            "finalState": "被击退",
+            "actions": [
+              {
+                "id": "entry_attack",
+                "dc": 12,
+                "onHit": [
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "notes": "合同场景卡文字写“披犀甲鬼武士”，ref 却写“鬼王峒拦路武士”——同一合同内两种叫法",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F03(旧试玩)",
+          "combatId": null,
+          "contract": "src/dev/combatTrial/data/f03.json",
+          "readiness": "dev-trial",
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_02",
+          "currentRef": "鬼王峒武士 9 名（card.enemies 文本）",
+          "stats": {
+            "enemyHp": 40,
+            "playerHp": 28,
+            "winEnemyHp": 15,
+            "rescueRound": 5
+          },
+          "notes": "旧试玩引擎用气血条数值，与正式合同的刻度/resistance 是两套口径，同一批敌人定义了两次",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F05",
+          "combatId": "combat.f05.dungeon_trap",
+          "contract": "src/modules/sceneModule/contracts/f05.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+          "instances": [
+            {
+              "partyId": "warrior_1",
+              "currentRef": "鬼武士一",
+              "actions": [
+                {
+                  "id": "warrior_1_attack",
+                  "dc": 12,
+                  "onHit": [
+                    "wound.external"
+                  ]
+                }
+              ]
+            },
+            {
+              "partyId": "warrior_2",
+              "currentRef": "鬼武士二",
+              "actions": [
+                {
+                  "id": "warrior_2_attack",
+                  "dc": 12,
+                  "onHit": [
+                    "wound.external"
+                  ]
+                }
+              ]
+            }
+          ],
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 4,
+            "initial": 0,
+            "ceiling": 3,
+            "finalState": "倒下"
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F13",
+          "combatId": "combat.f13.ghost_king_final",
+          "contract": "src/modules/sceneModule/contracts/f13.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.ghost_king_swallowed",
+          "viaGroup": "lcq.enemy_group.well_front",
+          "notes": "只作为 well_front 的 aliases 出现，没有独立 party",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f03.json#parties[id=foe_engaged|foe_pack_1..7|foe_last]",
+        "src/modules/sceneModule/contracts/f03-entry.json#parties[id=entry_warriors]",
+        "src/dev/combatTrial/data/f03.json#card.enemies"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.crow_man",
+      "aliases": [
+        "鸦人",
+        "lcq.enemy.yaren"
+      ],
+      "definition": {
+        "id": "lcq.enemy.crow_man",
+        "name": "鸦人",
+        "type": "humanoid",
+        "unnamed": true,
+        "description": "白夷挟持阿夕的鸦人；身上携带竹筒 lcq.item.crow_bamboo_tube。",
+        "instances": {
+          "combat.f04.crow_man.crow_man": "鸦人"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "合同/事件没写归属；不按原著推断"
+      },
+      "encounters": [
+        {
+          "combat": "F04",
+          "combatId": "combat.f04.crow_man",
+          "contract": "src/modules/sceneModule/contracts/f04.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+          "partyId": "crow_man",
+          "currentRef": "鸦人",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 4,
+            "initial": 0,
+            "ceiling": 3,
+            "finalState": "倒下",
+            "actions": [
+              {
+                "id": "crow_man_attack",
+                "dc": 12,
+                "onHit": [
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "relatedItemIds": [
+            "lcq.item.crow_bamboo_tube"
+          ],
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f04.json#parties[id=crow_man]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.dungeon_shaman",
+      "aliases": [
+        "巫师",
+        "lcq.enemy.guiwangdong_envoy_f05"
+      ],
+      "definition": {
+        "id": "lcq.enemy.dungeon_shaman",
+        "name": "巫师",
+        "type": "humanoid",
+        "unnamed": true,
+        "description": "F05 地宫陷阱的无名巫师。",
+        "instances": {
+          "combat.f05.dungeon_trap.warrior_1": "鬼武士一",
+          "combat.f05.dungeon_trap.warrior_2": "鬼武士二",
+          "combat.f05.dungeon_trap.shaman": "巫师"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "nameCollision": [
+        "lcq.character.nanhuang_dagu（达古，关卡 role=鬼王峒巫师，F08 敌人）",
+        "lcq.character.nanhuang_shekui（蛇傀，关卡 role=鬼王峒巫师）"
+      ],
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed"
+      },
+      "encounters": [
+        {
+          "combat": "F05",
+          "combatId": "combat.f05.dungeon_trap",
+          "contract": "src/modules/sceneModule/contracts/f05.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+          "partyId": "shaman",
+          "currentRef": "巫师",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 4,
+            "initial": 0,
+            "ceiling": 3,
+            "finalState": "倒下",
+            "actions": [
+              {
+                "id": "shaman_attack",
+                "dc": 12,
+                "onHit": [
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f05.json#parties[id=shaman]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.blood_tiger_yi_hu",
+      "aliases": [
+        "血虎",
+        "liuchao.character.yi_hu"
+      ],
+      "characterId": "liuchao.character.yi_hu",
+      "definition": {
+        "id": "lcq.enemy.blood_tiger_yi_hu",
+        "name": "血虎",
+        "type": "character-state",
+        "description": "被鬼王峒改造的易虎；只能被制住，不能被杀（照录 f05 requiredFacts）。",
+        "instances": {
+          "combat.f05.dungeon_trap.warrior_1": "鬼武士一",
+          "combat.f05.dungeon_trap.warrior_2": "鬼武士二",
+          "combat.f05.dungeon_trap.shaman": "巫师",
+          "combat.f05.dungeon_trap.blood_tiger": "liuchao.character.yi_hu"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "易虎本人关卡 role=云氏护卫；改造后归属合同未写"
+      },
+      "encounters": [
+        {
+          "combat": "F05",
+          "combatId": "combat.f05.dungeon_trap",
+          "contract": "src/modules/sceneModule/contracts/f05.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+          "partyId": "blood_tiger",
+          "currentRef": "liuchao.character.yi_hu",
+          "side": "opposed",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 4,
+            "initial": 0,
+            "ceiling": 3,
+            "finalState": "被制住",
+            "preserveOnWin": true,
+            "actions": [
+              {
+                "id": "blood_tiger_attack",
+                "dc": 12,
+                "onHit": [
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "otherSides": [
+        {
+          "combat": "F03",
+          "partyId": "yi_hu",
+          "side": "player_side"
+        }
+      ],
+      "saveText": "sceneLedger.injuries['liuchao.character.yi_hu'] = \"被鬼王峒改造，血虎\"（自由文本）",
+      "realmSource": "lcq.stage_03b/04/04b canon.characters realm=凡人",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f05.json#parties[id=blood_tiger]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.gui_wu_wang",
+      "aliases": [
+        "鬼巫王",
+        "巫王",
+        "那个巫王",
+        "liuchao.character.gui_wu_wang"
+      ],
+      "characterId": "liuchao.character.gui_wu_wang",
+      "definition": {
+        "id": "lcq.enemy.gui_wu_wang",
+        "name": "鬼巫王",
+        "type": "character-ref",
+        "instances": {
+          "combat.f10.ghost_king_clash.gui_wu_wang": "liuchao.character.gui_wu_wang",
+          "combat.f13.ghost_king_final.gui_wu_wang": "liuchao.character.gui_wu_wang"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": "liuchao.faction.gui_wang_dong",
+        "status": "existing",
+        "note": "lcq.stage_06–12 affiliations 有；05b affiliations 为空"
+      },
+      "encounters": [
+        {
+          "combat": "F10",
+          "combatId": "combat.f10.ghost_king_clash",
+          "contract": "src/modules/sceneModule/contracts/f10.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "partyId": "gui_wu_wang",
+          "currentRef": "liuchao.character.gui_wu_wang",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 5,
+            "ceiling": 0,
+            "preset": "withdraws_unharmed",
+            "causedBy": "self",
+            "finalState": "完好",
+            "permittedMarks": [
+              "haft_cut",
+              "shaken"
+            ],
+            "actions": [
+              {
+                "id": "ghost_feather_sword",
+                "dc": 16,
+                "onBeats": [
+                  3
+                ],
+                "onHit": [
+                  "wound.external.right_arm"
+                ]
+              }
+            ]
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F13",
+          "combatId": "combat.f13.ghost_king_final",
+          "contract": "src/modules/sceneModule/contracts/f13.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.ghost_king_swallowed",
+          "partyId": "gui_wu_wang",
+          "currentRef": "liuchao.character.gui_wu_wang",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 2,
+            "ceiling": 0,
+            "causedBy": "third_party",
+            "finalState": "被龙神吞下"
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F14(草稿)",
+          "combatId": "combat.f14.dragon_god",
+          "readiness": "draft",
+          "notes": "目标文字“被鬼巫王意识占据的龙神”，不是独立 party",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": "lcq.stage_05b/07–12 canon.characters realm=金丹；lcq.stage_06 为 null；registry 无境界字段",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f10.json#parties[id=gui_wu_wang]",
+        "src/modules/sceneModule/contracts/f13.json#parties[id=gui_wu_wang]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.dan_chen",
+      "aliases": [
+        "丹宸",
+        "那个女子",
+        "liuchao.character.dan_chen"
+      ],
+      "characterId": "liuchao.character.dan_chen",
+      "definition": {
+        "id": "lcq.enemy.dan_chen",
+        "name": "丹宸",
+        "type": "character-ref",
+        "instances": {
+          "combat.f10.ghost_king_clash.gui_wu_wang": "liuchao.character.gui_wu_wang",
+          "combat.f10.ghost_king_clash.dan_chen": "liuchao.character.dan_chen"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": "liuchao.faction.hong_miao",
+        "status": "existing",
+        "note": "05/07–12 affiliations=hong_miao；05b（F10 所在关）affiliations 为空"
+      },
+      "encounters": [
+        {
+          "combat": "F10",
+          "combatId": "combat.f10.ghost_king_clash",
+          "contract": "src/modules/sceneModule/contracts/f10.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "partyId": "dan_chen",
+          "currentRef": "liuchao.character.dan_chen",
+          "absentAtStart": true,
+          "stats": {
+            "track": "resist",
+            "scaleSteps": 6,
+            "ceiling": 2,
+            "preset": "captured",
+            "finalState": "不再构成威胁",
+            "alternatives": [
+              "被赶走"
+            ],
+            "actions": [
+              {
+                "id": "dan_chen_bite",
+                "dc": 14,
+                "onBeats": [
+                  2
+                ],
+                "onHit": [
+                  "wound.external.thigh"
+                ]
+              },
+              {
+                "id": "axe_from_behind",
+                "dc": 15,
+                "onBeats": [
+                  5
+                ],
+                "onHit": [
+                  "wound.external.back"
+                ]
+              }
+            ]
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F12(未转合同)",
+          "eventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+          "readiness": "planned",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f10.json#parties[id=dan_chen]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.husha_bone_tiger",
+      "aliases": [
+        "虎煞",
+        "骨虎",
+        "白骨猛虎",
+        "那头虎",
+        "虎煞（白骨猛虎）",
+        "lcq.enemy.bone_tiger"
+      ],
+      "definition": {
+        "id": "lcq.enemy.husha_bone_tiger",
+        "name": "虎煞（白骨猛虎）",
+        "type": "construct",
+        "unnamed": false,
+        "description": "丹宸骑乘的白骨猛虎；只有沾上主角的血（lever true_yang_blood）才能解体。",
+        "instances": {
+          "combat.f10.ghost_king_clash.gui_wu_wang": "liuchao.character.gui_wu_wang",
+          "combat.f10.ghost_king_clash.dan_chen": "liuchao.character.dan_chen",
+          "combat.f10.ghost_king_clash.hu_sha": "虎煞（白骨猛虎）"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed"
+      },
+      "encounters": [
+        {
+          "combat": "F10",
+          "combatId": "combat.f10.ghost_king_clash",
+          "contract": "src/modules/sceneModule/contracts/f10.json",
+          "readiness": "registered",
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "partyId": "hu_sha",
+          "currentRef": "虎煞（白骨猛虎）",
+          "absentAtStart": true,
+          "resistance": 6,
+          "requiresLever": [
+            "true_yang_blood"
+          ],
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 3,
+            "ceiling": 2,
+            "preset": "eliminated",
+            "finalState": "解体",
+            "actions": [
+              {
+                "id": "bone_claw",
+                "dc": 15,
+                "fromBeat": 4,
+                "onHit": [
+                  "gear.blades_dulled",
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f10.json#parties[id=hu_sha]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.yinsha",
+      "aliases": [
+        "阴煞"
+      ],
+      "definition": {
+        "id": "lcq.enemy.yinsha",
+        "name": "阴煞",
+        "type": "spirit",
+        "unnamed": true,
+        "instances": {
+          "combat.f13.ghost_king_final.gui_wu_wang": "liuchao.character.gui_wu_wang"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed"
+      },
+      "encounters": [
+        {
+          "combat": "F13",
+          "combatId": "combat.f13.ghost_king_final",
+          "readiness": "registered",
+          "viaGroup": "lcq.enemy_group.well_front",
+          "notes": "只作为 well_front 的别名/轨道文字出现",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F09(未转合同)",
+          "eventIds": [
+            "lcq.event.yiyang_repels_yinsha（04b）",
+            "lcq.event.s05_09（05）"
+          ],
+          "readiness": "planned",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "relatedStatusIds": [
+        "statuses.json 中 label=阴煞噬臂（轻）的条目"
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f13.json#parties[id=well_front].aliases"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.yansha",
+      "aliases": [
+        "炎煞"
+      ],
+      "definition": {
+        "id": "lcq.enemy.yansha",
+        "name": "炎煞",
+        "type": "spirit",
+        "unnamed": true,
+        "instances": {
+          "combat.f13.ghost_king_final.gui_wu_wang": "liuchao.character.gui_wu_wang"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed"
+      },
+      "encounters": [
+        {
+          "combat": "F13",
+          "combatId": "combat.f13.ghost_king_final",
+          "readiness": "registered",
+          "viaGroup": "lcq.enemy_group.well_front",
+          "notes": "只在 aliases 和 track scale 文字“挡住阴煞与炎煞”里出现",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f13.json#parties[id=well_front].aliases"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.yanmei",
+      "aliases": [
+        "魇魅"
+      ],
+      "definition": {
+        "id": "lcq.enemy.yanmei",
+        "name": "魇魅",
+        "type": "spirit",
+        "unnamed": true,
+        "instances": {
+          "combat.f13.ghost_king_final.gui_wu_wang": "liuchao.character.gui_wu_wang"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed"
+      },
+      "encounters": [
+        {
+          "combat": "F13",
+          "combatId": "combat.f13.ghost_king_final",
+          "readiness": "registered",
+          "viaGroup": "lcq.enemy_group.well_front",
+          "notes": "只在 aliases 里出现",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f13.json#parties[id=well_front].aliases"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.dragon_god",
+      "aliases": [
+        "龙神",
+        "龙首",
+        "liuchao.character.dragon_god"
+      ],
+      "characterId": "liuchao.character.dragon_god",
+      "definition": {
+        "id": "lcq.enemy.dragon_god",
+        "name": "龙神",
+        "type": "character-ref",
+        "instances": {
+          "combat.f13.ghost_king_final.gui_wu_wang": "liuchao.character.gui_wu_wang",
+          "combat.f14.dragon_god.dragon": "liuchao.character.dragon_god"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "关卡 role=鬼王峒龙神，但 affiliations 全为空"
+      },
+      "encounters": [
+        {
+          "combat": "F14(草稿)",
+          "combatId": "combat.f14.dragon_god",
+          "contract": "src/modules/sceneModule/contracts/f14.draft.json",
+          "readiness": "draft",
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.slay_dragon",
+          "partyId": "dragon",
+          "currentRef": "liuchao.character.dragon_god",
+          "stats": {
+            "track": "vit",
+            "scaleSteps": 4,
+            "ceiling": 3,
+            "preset": "eliminated",
+            "finalState": "死亡",
+            "actions": [
+              {
+                "id": "claw",
+                "dc": 16,
+                "onHit": [
+                  "wound.external"
+                ]
+              }
+            ]
+          },
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F13",
+          "combatId": "combat.f13.ghost_king_final",
+          "readiness": "registered",
+          "notes": "第三方（吞下鬼巫王），不是 party",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": "lcq.stage_05b/07–12 canon.characters realm=化神、entityType=creature；lcq.stage_06 realm 为 null",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f14.draft.json#parties[id=dragon]"
+      ],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.merfolk",
+      "aliases": [
+        "鲛人",
+        "lcq.enemy.jiaoren"
+      ],
+      "definition": {
+        "id": "lcq.enemy.merfolk",
+        "name": "鲛人",
+        "type": "humanoid",
+        "unnamed": true,
+        "instances": {},
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "pending"
+      },
+      "encounters": [
+        {
+          "combat": "F06(未转合同)",
+          "eventIds": [
+            "lcq.event.haishen_hall_merfolk（04b）",
+            "lcq.event.s05_01（05）"
+          ],
+          "readiness": "planned",
+          "notes": "两关各有一份“海神殿抵御鲛人”事件",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.dagu",
+      "aliases": [
+        "达古",
+        "巫师达古"
+      ],
+      "characterId": "lcq.character.nanhuang_dagu",
+      "characterIdStatus": "只在 lcq.stage_04b canon.characters 和对应 overlay 里有，character-registry.json 没有",
+      "definition": {
+        "id": "lcq.enemy.dagu",
+        "name": "达古",
+        "type": "character-ref",
+        "instances": {},
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": "liuchao.faction.gui_wang_dong",
+        "status": "existing",
+        "note": "关卡 role=鬼王峒巫师；affiliations 为空；事件 relatedFactionIds 含 gui_wang_dong"
+      },
+      "encounters": [
+        {
+          "combat": "F08(未转合同)",
+          "eventIds": [
+            "lcq.event.wuerlang_slays_dagu（04b，地点 south_wild_valley）",
+            "lcq.event.s05_05（05，地点 turtle_road_ruins）"
+          ],
+          "readiness": "planned",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.ge_luo",
+      "aliases": [
+        "阁罗",
+        "鬼王峒使者"
+      ],
+      "characterId": "lcq.character.np006",
+      "definition": {
+        "id": "lcq.enemy.ge_luo",
+        "name": "阁罗",
+        "type": "character-ref",
+        "instances": {},
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": "liuchao.faction.gui_wang_dong",
+        "status": "existing"
+      },
+      "encounters": [
+        {
+          "combat": "F11(未转合同)",
+          "eventId": "lcq.event.s05b_06_breakout_and_reunion",
+          "readiness": "planned",
+          "notes": "docs/handoffs/2026-10-04/BATCH6-IMPLEMENTATION.md:34 “F11敌方补阁罗”",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F05",
+          "notes": "requiredFacts “使者若在场也不是战斗单位”——只按称呼出现，不是 party",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": "lcq.stage_04b/05b/07–12 realm=筑基；05、06 为 null",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.altar_corpse",
+      "aliases": [
+        "尸鬼"
+      ],
+      "definition": {
+        "id": "lcq.enemy.altar_corpse",
+        "name": "尸鬼",
+        "type": "undead",
+        "unnamed": true,
+        "instances": {},
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed"
+      },
+      "encounters": [
+        {
+          "combat": "F12(未转合同)",
+          "eventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+          "readiness": "planned",
+          "notes": "事件 relatedCharacterIds 含 lcq.character.zhu_nuo（朱诺）；BATCH6 记录 F12 另有“黑影”",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        },
+        {
+          "combat": "F13",
+          "notes": "redLines/文字里“尸鬼吸人代价（W-49）”，不是 party",
+          "level": null,
+          "levelSource": "待逐时点核定"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy_group.well_front",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.enemy_group.well_front",
+        "name": "井口战局",
+        "memberEnemyIds": [
+          "lcq.enemy.guiwang_warrior",
+          "lcq.enemy.yinsha",
+          "lcq.enemy.yansha",
+          "lcq.enemy.yanmei"
+        ],
+        "encounters": [
+          {
+            "combat": "F13",
+            "combatId": "combat.f13.ghost_king_final",
+            "contract": "src/modules/sceneModule/contracts/f13.json",
+            "readiness": "registered",
+            "stageId": "lcq.stage_05b",
+            "eventId": "lcq.event.ghost_king_swallowed",
+            "partyId": "well_front",
+            "currentRef": "井口战局",
+            "aliases": [
+              "井口",
+              "通道",
+              "阵线",
+              "鬼武士",
+              "阴煞",
+              "炎煞",
+              "魇魅"
+            ],
+            "stats": {
+              "tracks": [
+                {
+                  "id": "hold",
+                  "kind": "progress",
+                  "scaleSteps": 4,
+                  "ceiling": 3,
+                  "finalState": "撑到星阵成形"
+                },
+                {
+                  "id": "breach",
+                  "kind": "progress",
+                  "scaleSteps": 4,
+                  "ceiling": 3,
+                  "causedBy": "event",
+                  "finalState": "井口彻底失守"
+                }
+              ],
+              "actions": [
+                {
+                  "id": "assault",
+                  "dc": 14,
+                  "target": "rotate[pc,ning_yu,le_mingzhu,wu_er_lang]",
+                  "onHit": [
+                    "wound.external"
+                  ],
+                  "trackShift": "breach+1"
+                }
+              ]
+            }
+          }
+        ],
+        "notes": "这是“局面”轨道，不是单个敌人；aliases 里混着地形词（井口/通道/阵线）和敌人名（鬼武士/阴煞/炎煞/魇魅）",
+        "instances": {},
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "f01.assassins",
+      "aliases": [],
+      "definition": {
+        "id": "f01.assassins",
+        "name": "六名刺客",
+        "existing": true,
+        "memberEnemyIds": [
+          "lcq.enemy.iron_bridge_assassin"
+        ],
+        "count": 6,
+        "notes": "合同里已有的 group.id，存档已按此键写入；保留原 id",
+        "instances": {},
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.group.huamiao_men",
+      "aliases": [
+        "花苗汉子"
+      ],
+      "definition": {
+        "id": "lcq.group.huamiao_men",
+        "name": "花苗汉子",
+        "type": "group",
+        "side": "player_side",
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f03.json"
+      ]
+    },
+    {
+      "id": "lcq.group.caravan_guards",
+      "aliases": [
+        "商馆护卫"
+      ],
+      "definition": {
+        "id": "lcq.group.caravan_guards",
+        "name": "商馆护卫",
+        "type": "group",
+        "side": "player_side",
+        "level": null,
+        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f03.json"
+      ]
+    },
+    {
+      "id": "lcq.enemy.f01_swordsman",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.enemy.f01_swordsman",
+        "name": "刺客剑手",
+        "type": "humanoid",
+        "unnamed": true,
+        "level": null,
+        "levelSource": "见人物时点级数表；不以全书终点等级替代"
+      },
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "stageVariants": {},
+      "encounters": [],
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.enemy.f01_axeman",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.enemy.f01_axeman",
+        "name": "刺客斧手",
+        "type": "humanoid",
+        "unnamed": true,
+        "level": null,
+        "levelSource": "见人物时点级数表；不以全书终点等级替代"
+      },
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "stageVariants": {},
+      "encounters": [],
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.enemy.f01_archer",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.enemy.f01_archer",
+        "name": "刺客弓手",
+        "type": "humanoid",
+        "unnamed": true,
+        "level": null,
+        "levelSource": "见人物时点级数表；不以全书终点等级替代"
+      },
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "stageVariants": {},
+      "encounters": [],
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.enemy.f01_veiled_woman",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.enemy.f01_veiled_woman",
+        "name": "黑纱女子",
+        "type": "humanoid",
+        "unnamed": true,
+        "level": null,
+        "levelSource": "见人物时点级数表；不以全书终点等级替代"
+      },
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "stageVariants": {},
+      "encounters": [],
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.enemy.male_corpse",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.enemy.male_corpse",
+        "name": "男尸鬼",
+        "type": "undead",
+        "unnamed": true,
+        "level": null,
+        "levelSource": "见人物时点级数表；不以全书终点等级替代"
+      },
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "stageVariants": {},
+      "encounters": [],
+      "migratedFrom": []
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "kind": "level",
+  "entries": [
+    {
+      "id": "liuchao.level.0",
+      "aliases": [
+        "无修为"
+      ],
+      "definition": {
+        "id": "liuchao.level.0",
+        "name": "无修为",
+        "level": 0,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.1",
+      "aliases": [
+        "筑基"
+      ],
+      "definition": {
+        "id": "liuchao.level.1",
+        "name": "筑基",
+        "level": 1,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.2",
+      "aliases": [
+        "内视"
+      ],
+      "definition": {
+        "id": "liuchao.level.2",
+        "name": "内视",
+        "level": 2,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.3",
+      "aliases": [
+        "生象"
+      ],
+      "definition": {
+        "id": "liuchao.level.3",
+        "name": "生象",
+        "level": 3,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.4",
+      "aliases": [
+        "入微"
+      ],
+      "definition": {
+        "id": "liuchao.level.4",
+        "name": "入微",
+        "level": 4,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.5",
+      "aliases": [
+        "坐照"
+      ],
+      "definition": {
+        "id": "liuchao.level.5",
+        "name": "坐照",
+        "level": 5,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.6",
+      "aliases": [
+        "通幽"
+      ],
+      "definition": {
+        "id": "liuchao.level.6",
+        "name": "通幽",
+        "level": 6,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.7",
+      "aliases": [
+        "归元"
+      ],
+      "definition": {
+        "id": "liuchao.level.7",
+        "name": "归元",
+        "level": 7,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.8",
+      "aliases": [
+        "至臻"
+      ],
+      "definition": {
+        "id": "liuchao.level.8",
+        "name": "至臻",
+        "level": 8,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    },
+    {
+      "id": "liuchao.level.9",
+      "aliases": [
+        "入神"
+      ],
+      "definition": {
+        "id": "liuchao.level.9",
+        "name": "入神",
+        "level": 9,
+        "source": "清羽L6396/L18220–18245/L24436/L40961；云龙L1611/L31027"
+      },
+      "authoritySource": "mod-kit/entity-catalog/levels.json"
+    }
+  ]
+}

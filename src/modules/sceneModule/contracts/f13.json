@@ -1,0 +1,462 @@
+{
+  "meta": {
+    "id": "combat.f13.ghost_king_final",
+    "version": 6,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.ghost_king_swallowed",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3
+    },
+    "compatibleStateVersions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "objective": {
+    "text": "守住井口，护住同伴，把局面撑到星阵与龙神收场",
+    "previewHint": "你赢的是守住局面，不是亲手杀死鬼巫王；下井不是唤醒龙神的必要条件",
+    "win": {
+      "all": [
+        {
+          "party": "well_front",
+          "track": "hold",
+          "reach": "final"
+        },
+        {
+          "kind": "not",
+          "cond": {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        },
+        {
+          "kind": "not",
+          "cond": {
+            "party": "well_front",
+            "track": "breach",
+            "reach": "final"
+          }
+        }
+      ]
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "well_front",
+      "side": "opposed",
+      "ref": "lcq.enemy_group.well_front",
+      "aliases": [
+        "井口",
+        "通道",
+        "阵线",
+        "{{aliases:enemy:lcq.enemy.guiwang_warrior}}",
+        "{{aliases:enemy:lcq.enemy.yinsha}}",
+        "炎煞",
+        "魇魅"
+      ],
+      "tracks": [
+        {
+          "id": "hold",
+          "kind": "progress",
+          "scale": [
+            "阵线吃紧",
+            "守住通道",
+            "挡住阴煞与炎煞",
+            "撑到星阵成形"
+          ],
+          "ending": {
+            "finalState": "撑到星阵成形",
+            "ceiling": 3,
+            "causedBy": "player_side",
+            "previewText": "每次守口成功推动局面；不是杀死所有敌人"
+          }
+        },
+        {
+          "id": "breach",
+          "kind": "progress",
+          "scale": [
+            "井口仍在手中",
+            "守线受挫",
+            "通道岌岌可危",
+            "井口彻底失守"
+          ],
+          "ending": {
+            "finalState": "井口彻底失守",
+            "ceiling": 3,
+            "causedBy": "event",
+            "preserveOnWin": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "gui_wu_wang",
+      "side": "opposed",
+      "ref": "liuchao.character.gui_wu_wang",
+      "aliases": [
+        "{{aliases:enemy:lcq.enemy.gui_wu_wang}}",
+        "巫王"
+      ],
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "被龙神吞下"
+          ],
+          "ending": {
+            "finalState": "被龙神吞下",
+            "ceiling": 0,
+            "causedBy": "third_party",
+            "clampText": "你无法在此亲手杀死他；眼前要守住的是井口"
+          }
+        }
+      ],
+      "instanceId": "combat.f13.ghost_king_final.gui_wu_wang",
+      "enemyId": "lcq.enemy.gui_wu_wang"
+    },
+    {
+      "id": "ning_yu",
+      "side": "player_side",
+      "ref": "liuchao.character.ning_yu"
+    },
+    {
+      "id": "wu_er_lang",
+      "side": "player_side",
+      "ref": "liuchao.character.wu_er_lang"
+    },
+    {
+      "id": "su_li",
+      "side": "player_side",
+      "ref": "liuchao.character.su_li"
+    },
+    {
+      "id": "xie_yi",
+      "side": "player_side",
+      "ref": "liuchao.character.xie_yi"
+    },
+    {
+      "id": "le_mingzhu",
+      "side": "player_side",
+      "ref": "liuchao.character.le_mingzhu"
+    },
+    {
+      "id": "xiao_zi",
+      "side": "player_side",
+      "ref": "liuchao.character.xiao_zi"
+    }
+  ],
+  "goals": [
+    {
+      "id": "hold_well",
+      "label": "守住井口、逼退扑来的手下",
+      "type": "push",
+      "track": "hold",
+      "baseDifficulty": 14,
+      "aliases": [
+        "守住",
+        "守井口",
+        "挡住",
+        "护住",
+        "牵制",
+        "驱走",
+        "逼退"
+      ],
+      "onFailure": [
+        {
+          "kind": "trackShift",
+          "party": "well_front",
+          "track": "breach",
+          "steps": 1
+        }
+      ]
+    },
+    {
+      "id": "read_field",
+      "label": "看清战局",
+      "type": "support",
+      "baseDifficulty": 10
+    }
+  ],
+  "elements": [
+    {
+      "id": "blood",
+      "kind": "ability",
+      "label": "真阳之血",
+      "source": "109·112–114；110·67、78–80",
+      "aliases": [
+        "血",
+        "我的血",
+        "真阳之血"
+      ],
+      "verbs": [
+        {
+          "id": "ward",
+          "aliases": [
+            "用血",
+            "抹血",
+            "沾血",
+            "掷沾血的刀"
+          ],
+          "power": 2,
+          "goalTags": [
+            "hold_well"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "passage",
+      "kind": "terrain",
+      "label": "通向井底的唯一通道",
+      "source": "109·96",
+      "aliases": [
+        "井口",
+        "通道"
+      ],
+      "verbs": [
+        {
+          "id": "hold",
+          "aliases": [
+            "守住井口",
+            "守住通道",
+            "堵住通道"
+          ],
+          "power": 1,
+          "goalTags": [
+            "hold_well"
+          ]
+        }
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "assault",
+      "party": "well_front",
+      "label": "鬼武士与阴煞冲击通道",
+      "target": {
+        "rotate": [
+          "pc",
+          "ning_yu",
+          "le_mingzhu",
+          "wu_er_lang"
+        ]
+      },
+      "attack": {
+        "dc": 14
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ],
+        "text": "通道冲击中有人受伤，仍需守住井口",
+        "trackShifts": [
+          {
+            "party": "well_front",
+            "track": "breach",
+            "steps": 1
+          }
+        ]
+      },
+      "onBlocked": {
+        "text": "你挡住这一轮冲击"
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "all": [
+          {
+            "party": "well_front",
+            "track": "hold",
+            "reach": "final"
+          },
+          {
+            "any": [
+              {
+                "kind": "partyDowned",
+                "party": "ning_yu"
+              },
+              {
+                "kind": "partyDowned",
+                "party": "xie_yi"
+              },
+              {
+                "kind": "partyDowned",
+                "party": "le_mingzhu"
+              },
+              {
+                "kind": "partyDowned",
+                "party": "wu_er_lang"
+              },
+              {
+                "kind": "partyDowned",
+                "party": "su_li"
+              },
+              {
+                "kind": "statusPresent",
+                "party": "pc",
+                "status": "wound.external.heavy"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "playerChoice",
+        "choices": [
+          {
+            "id": "abandon_well",
+            "label": "放弃井口，带同伴逃入洞窟",
+            "matchHints": [
+              "不再守井口",
+              "放弃井口",
+              "弃守",
+              "往洞窟深处跑",
+              "往洞窟深处逃",
+              "离开井口",
+              "逃离井口",
+              "不守井口",
+              "逃跑",
+              "逃走",
+              "撤出井口",
+              "撤退",
+              "弃井",
+              "不再守"
+            ],
+            "endingId": "lcq.ending.death.dragon_well",
+            "confirmText": "放弃守口将导致守线崩溃，进入「龙首无人」结局。确定逃走吗？"
+          }
+        ]
+      },
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      },
+      {
+        "party": "well_front",
+        "track": "breach",
+        "reach": "final"
+      }
+    ],
+    "outcome": {
+      "type": "ending",
+      "endingId": "lcq.ending.death.dragon_well"
+    }
+  },
+  "closing": {
+    "win": {
+      "text": "你们仍站在井口。黑魔海与鬼巫王断交；苍龙星阵唤醒龙神，龙神吞下鬼巫王。",
+      "flags": {
+        "scene.f13.result": "win"
+      },
+      "rewards": [],
+      "next": "lcq.event.slay_dragon",
+      "fixedCosts": [
+        {
+          "id": "yin_sha_arm",
+          "target": "wu_er_lang",
+          "statuses": [
+            {
+              "status": "yin.sha_arm",
+              "severity": 1
+            }
+          ]
+        }
+      ]
+    },
+    "lose": {
+      "text": "井口守线崩溃，你抓起同伴的手往洞窟深处逃去。",
+      "flags": {
+        "scene.f13.result": "lose"
+      },
+      "rewards": []
+    },
+    "playerChoices": {
+      "abandon_well": {
+        "text": "井口守线崩溃，你抓起同伴的手往洞窟深处逃去。",
+        "flags": {
+          "scene.f13.result": "lose"
+        },
+        "rewards": []
+      }
+    }
+  },
+  "redLines": [
+    {
+      "party": "gui_wu_wang",
+      "track": "vit",
+      "forbiddenFinalState": "被玩家杀死",
+      "forbiddenNarration": [
+        "玩家杀死鬼巫王",
+        "主角跳井唤醒龙神"
+      ]
+    }
+  ],
+  "narration": {
+    "fixedTexts": {
+      "engage": "通向井底的唯一通道就在身后。鬼巫王与手下逼近，你要护住同伴，守住这条通道。"
+    },
+    "requiredFacts": [
+      "龙神由苍龙星阵唤醒，不是因为主角下井",
+      "鬼巫王不死于玩家之手，打赢时由龙神吞下",
+      "小紫真实立场、石匠所代主人与朱老头身份不揭示",
+      "娄蒙可以救下；萨安默认救不活，若硬救萨安必须另有人被尸鬼吸干，不能凭空免除这次吸人代价（W-49）",
+      "朱诺的心脏只作谢艺叙事物件，不进入玩家背包；苍龙星阵仍可拉心，不以玩家持有心脏为前提（W-50）"
+    ],
+    "forbidden": [
+      "主角跳井唤醒龙神",
+      "小紫真实立场揭晓"
+    ]
+  },
+  "rewardPolicy": {
+    "itemIds": []
+  },
+  "levelContext": {
+    "chapter": 109,
+    "chaptersByBeat": [
+      {
+        "fromBeat": 2,
+        "chapter": 110
+      }
+    ],
+    "nonLevelPartyIds": [
+      "well_front"
+    ]
+  },
+  "clock": {
+    "fixedEvents": [
+      {
+        "id": "chapter110_exhausted_companions",
+        "atBeat": 2,
+        "text": "武二郎与凝羽已经无力再战，退到战圈外。",
+        "effects": [
+          {
+            "depart": "wu_er_lang"
+          },
+          {
+            "depart": "ning_yu"
+          }
+        ]
+      }
+    ]
+  }
+}

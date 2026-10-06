@@ -24,8 +24,8 @@ async function walk(save) {
   let compassMoves = 0;
   for (let n = 0; n < 200 && !rt(save).nextStageReadyId; n++) {
     const actions = getCurrentStoryEventActions(save);
-    // 完整行旅夹具先体验已批准的可选闲聊，再检验后续强制路线；跳过分支另有batch12夹具。
-    const action = getCurrentStoryExplorationActions(save).find(item => item.eventId === 'lcq.event.zhu88_heimohai_chat') || actions.find(item => !item.judgement && !item.actionId.startsWith('travel:') && !item.actionId.startsWith('idle:')
+    // 完整行旅夹具先体验已批准的可选闲聊和支线，再检验后续强制路线；跳过分支另有batch12夹具。
+    const action = getCurrentStoryExplorationActions(save).find(item => item.eventId === 'lcq.event.zhu88_heimohai_chat' || rt(save).events.find(event=>event.id===item.eventId)?.questLineBeatId) || actions.find(item => !item.judgement && !item.actionId.startsWith('travel:') && !item.actionId.startsWith('idle:')
       && rt(save).events.find(event => event.id === item.eventId)?.playerCompletionContract?.actions.some(entry => entry.id === item.actionId))
       || actions.find(item => item.actionId.startsWith('travel:'));
     assert.ok(action, `stalled: ${JSON.stringify(actions.map(item => item.actionId))}`);

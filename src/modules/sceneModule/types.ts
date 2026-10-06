@@ -48,6 +48,7 @@ export type StatusRemoveRule =
 
 export interface StatusDef {
   id: string;
+  aliases?: string[];
   label: string;
   /** 通用状态 / 本书特有状态。 */
   tier: 'general' | 'book';
@@ -69,6 +70,7 @@ export interface StatusDef {
 }
 
 export interface ActiveStatus {
+  originScene?: string;
   id: string;
   appliedBeat: number;
   /** 场内到期拍（含）；null＝不自动过期。 */
@@ -91,7 +93,10 @@ export interface TrackDef {
 }
 
 export interface EndingDef {
+  preserveOnWin?: boolean;
   preset?: string;
+  /** Alternative terminal states selected by a goal, e.g. capture instead of kill. */
+  alternatives?: string[];
   finalState: string;
   causedBy?: 'player_side' | 'third_party' | 'self' | 'event';
   /** 过程中玩家的主张最多把这条轨道从起点推几格（累计，不是每次）。0＝推不动。 */
@@ -111,13 +116,21 @@ export interface PartyTrack {
   direction?: 'up' | 'down';
   initial?: number;
   ending?: EndingDef;
+  /** A push on this track requires one of these successfully grounded elements. */
+  requiresLever?: string[];
 }
 
 export interface PartyDef {
+  /** Stable group identity, never a fabricated character id. */
+  group?: { id: string; label: string };
+  actionGroup?: string;
+  recoveryStatus?: string;
   id: string;
   side: Side;
   /** 角色库 id 或字面标签；显示名运行时从角色数据取，模块代码里不写人名。 */
   ref: string;
+  enemyId?: string;
+  instanceId?: string;
   /** 恰有一个参与方是玩家本人。 */
   player?: boolean;
   protected?: boolean;
@@ -125,6 +138,8 @@ export interface PartyDef {
   defense?: { bonus?: number; label?: string };
   /** 目标抗性：直接加在玩家对它出手的难度上。 */
   resistance?: number;
+  /** 识别用的别称（玩家可能怎么称呼它）；显示名仍从角色数据取。 */
+  aliases?: string[];
   /** 开场是否在场，缺省在场。 */
   absent?: boolean;
   tracks?: PartyTrack[];
@@ -141,6 +156,7 @@ export interface VerbDef {
 }
 
 export interface ElementDef {
+  actionPattern?: string;
   id: string;
   kind: string;
   label: string;
@@ -165,7 +181,12 @@ export interface TagDef {
 }
 
 export interface GoalDef {
+  onFailure?: Consequence[];
+  availability?: { fromBeat?: number; untilBeat?: number };
+  defensePenalty?: number;
+  maxTargetGroups?: number;
   id: string;
+  aliases?: string[];
   label?: string;
   text?: string;
   baseDifficulty: number;
@@ -174,6 +195,8 @@ export interface GoalDef {
   /** push＝推敌方轨道；support＝只铺垫（成功时生成 onSuccess.tag）。 */
   type?: 'push' | 'support';
   judgementKind?: string;
+  finishAs?: string;
+  completeOnSuccess?: boolean;
   onSuccess?: { tag?: TagDef; tagOn?: 'targets' | 'allies' | 'self' };
 }
 
@@ -194,6 +217,9 @@ export interface FixedEventEffect {
 
 export interface FixedEvent {
   id: string;
+  when?: Cond | Expr;
+  trigger?: 'beatStart' | 'afterAction' | 'beforeEnemyAction' | 'afterEnemyAction';
+  enemyActionId?: string;
   atBeat?: number;
   atClose?: boolean;
   onStart?: boolean;
@@ -230,9 +256,9 @@ export interface EnemyActionDef {
   attack: { dc: number };
   /** 只用于显示：闪避 / 格挡 / 抵抗……。 */
   defense?: { label?: string };
-  onHit: { statuses: StatusApplyRef[]; text?: string };
+  onHit: { statuses: StatusApplyRef[]; text?: string; trackShifts?: Array<{ party: string; track: string; steps: number }> };
   /** 没挡住的差距 ≥ margin 时，改挂这组更重的状态。 */
-  onCrush?: { margin: number; statuses: StatusApplyRef[]; text?: string };
+  onCrush?: { margin: number; statuses: StatusApplyRef[]; text?: string; trackShifts?: Array<{ party: string; track: string; steps: number }> };
   onBlocked?: { text?: string };
   schedule?: { fromBeat?: number; untilBeat?: number; onBeats?: number[]; every?: number };
   when?: Cond | Expr;
@@ -339,13 +365,15 @@ export interface SceneSettings {
 }
 
 export interface Contract {
+  levelContext?: { chapter:number; variants?:Record<string,string>; nonLevelPartyIds?:string[]; variantWhen?:Array<{entityId:string;variant:string;when:Cond|Expr}>; chaptersByBeat?:Array<{fromBeat:number;chapter:number}> };
   meta: {
     id: string;
     version: number;
+    compatibleStateVersions?: number[];
     scene: { kind: string };
-    hook: { eventId?: string; required?: boolean; ambushAfterStall?: number; inputPolicy?: Record<string, unknown> };
+    hook: { eventId?: string; actionId?: string; required?: boolean; ambushAfterStall?: number; requiredFlag?: string; escapeFlag?: string; escapeState?: string; consumedFlag?: string; pendingDefeat?: boolean; inputPolicy?: Record<string, unknown> };
   };
-  objective: { text: string; previewHint?: string; win: Expr | Cond };
+  objective: { text: string; phases?: Array<{ when: Cond | Expr; text: string }>; previewHint?: string; win: Expr | Cond };
   parties: PartyDef[];
   tracks?: TrackDef[];
   statuses?: StatusDef[];
@@ -358,10 +386,14 @@ export interface Contract {
   enemyActions?: EnemyActionDef[];
   /** 大失败的后果表：按顺序找第一批适用的，用骰面在其中选一条（确定、可复现）。 */
   fumble?: FumbleEntry[];
-  closing?: { win?: ClosingBranch; lose?: ClosingBranch; timeout?: ClosingBranch };
+  closing?: { win?: ClosingBranch; lose?: ClosingBranch; timeout?: ClosingBranch; playerChoices?: Record<string, ClosingBranch> };
   defeat?: DefeatDef;
+  /** Continuity applies to every outcome; it never changes win/lose or awards victory rewards. */
+  continuity?: { effects?: FixedEventEffect[]; fixedCosts?: FixedCost[]; checks?: AfterState[]; facts?: string[]; flags?: Record<string, string | number | boolean> };
+  interrogation?: { maxChapter: number; goalIds: string[]; requires?: Cond | Expr; facts: Array<{ id: string; fromChapter: number; text: string; forbiddenBefore?: string }> };
+  rewardPolicy?: { itemIds: string[] };
   redLines?: RedLine[];
-  narration?: { fixedTexts?: Record<string, string> | string[]; requiredFacts?: string[]; forbidden?: string[] };
+  narration?: { outputChecks?: Array<{ afterScene?: boolean; when: Cond | Expr; pattern: string; message: string }>; fixedTexts?: Record<string, string> | string[]; requiredFacts?: string[]; forbidden?: string[] };
   settings?: SceneSettings;
 }
 
@@ -380,6 +412,7 @@ export interface ActiveTag {
 export type SceneOutcomeKind = 'win' | 'lose' | 'timeout';
 
 export interface SceneOutcome {
+  choiceId?: string;
   kind: SceneOutcomeKind;
   reason: string;
   endingId?: string;
@@ -409,6 +442,12 @@ export interface SceneState {
   status: 'engaged' | 'decided' | 'closed';
   /** 当前是第几拍（从 1 起）。 */
   beat: number;
+  levels?: Record<string, number>;
+  levelChapter?:number;
+  levelProjectionKey?:string;
+  levelFacts?: Record<string, {entityId:string;sourceRow:number;level:number|null;effectiveLevel?:number;confidence:string;available:boolean}>;
+  stages?: Record<string, number>;
+  itemEffects?: { defenseBonus?: number; woundGuard?: boolean };
   seed: number;
   cursors: { action: number; defense: number };
   /** 开发复现用的指定骰面（产品里不写）。 */

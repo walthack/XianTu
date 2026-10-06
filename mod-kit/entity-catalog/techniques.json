@@ -1,0 +1,1784 @@
+{
+  "version": 1,
+  "kind": "technique",
+  "entries": [
+    {
+      "id": "lcq.technique.jiuyang",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.technique.jiuyang",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。",
+        "grade": "神品",
+        "skillIds": [
+          "lcq.skill.death_root"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_01.json#content.techniques[id=lcq.technique.jiuyang]"
+      ]
+    },
+    {
+      "id": "lcq.technique.nine_sun_manual",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.technique.nine_sun_manual",
+        "name": "九阳神功口诀",
+        "description": "王哲传程宗扬的口诀，用于修炼九阳神功。",
+        "grade": "凡品",
+        "skillIds": [
+          "lcq.skill.nine_sun"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json#content.techniques[id=lcq.technique.nine_sun_manual]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.yiyang",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.yiyang",
+        "name": "一阳初生",
+        "description": "程宗扬从王哲处获得的功法，吸收死气后初成。",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.techniques[id=liuchao.technique.yiyang]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.techniques[id=liuchao.technique.yiyang]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.phoenix",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.phoenix",
+        "name": "凤凰宝典",
+        "description": "光明观堂的驻颜功法，乐明珠修炼。",
+        "grade": "凡品",
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.techniques[id=liuchao.technique.phoenix]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.techniques[id=liuchao.technique.phoenix]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.nine_yang_divine_skill",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.nine_yang_divine_skill",
+        "name": "九阳神功",
+        "description": "太乙真宗镇教神功。",
+        "grade": "神级",
+        "skillIds": [
+          "liuchao.skill.five_tiger_broken_gate_knife"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.techniques[id=liuchao.technique.nine_yang_divine_skill]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.tai_yi_jing",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.tai_yi_jing",
+        "name": "太一经",
+        "description": "黑魔海功法，双修法。",
+        "grade": "神级",
+        "skillIds": [
+          "liuchao.skill.moon_light_shield"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.techniques[id=liuchao.technique.tai_yi_jing]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.techniques[id=liuchao.technique.tai_yi_jing]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.sheng_si_gen",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.sheng_si_gen",
+        "name": "生死根",
+        "description": "程宗扬的异能灵根，可感应死亡气息。",
+        "grade": "唯一",
+        "skillIds": [
+          "liuchao.skill.wu_hu_duan_men_dao"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.techniques[id=liuchao.technique.sheng_si_gen]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.inner_qi",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.inner_qi",
+        "name": "内功",
+        "description": "凝羽修炼的内功。",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.dagger_art"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.techniques[id=liuchao.technique.inner_qi]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.tiger_style",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.tiger_style",
+        "name": "虎式",
+        "description": "武二郎的虎形功法。",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.wu_hu_duan_men_dao"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.techniques[id=liuchao.technique.tiger_style]"
+      ]
+    },
+    {
+      "id": "lyg.technique.yaochi_secret_art",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.yaochi_secret_art",
+        "name": "瑶池宗秘法",
+        "description": "瑶池宗越级提升之法，可强行将修为提升至六级，但会损伤潜力。",
+        "grade": "中品",
+        "skillIds": [
+          "lyg.skill.purple_qi"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.yaochi_secret_art]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.yaochi_secret_art]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.yaochi_secret_art]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.yaochi_secret_art]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.yaochi_secret_art]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.yaochi_secret_art]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np016",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np016",
+        "name": "超级管理员权限（系统内）",
+        "description": "程宗扬通过系统验证，成为超级管理员，拥有最高等级权限。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {
+        "lyg.mijing_rumen": {
+          "id": "lyg.technique.np016",
+          "name": "搜神诀",
+          "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
+          "grade": "中品",
+          "techniqueEffects": {
+            "修炼速度加成": 0.16,
+            "属性加成": {
+              "悟性": 2,
+              "灵性": 1
+            }
+          }
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.techniques[id=lyg.technique.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np016]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np050",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np050",
+        "name": "气轮炼化杂气",
+        "description": "以处子破体为鼎炉可高效炼化杂气，提升真元质量，气轮中出现星辰及阴阳鱼现象。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np050]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np050]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np050]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np050]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np050]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np050]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np056",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np056",
+        "name": "纸钞对昭南优惠兑换额度",
+        "description": "程宗扬提出昭南可用九折钱铢兑换宋国纸钞，额度每年100万-300万金铢，上限5年，由程氏商会兜底。昭南反要求八折、500万、10年。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np056]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np062",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np062",
+        "name": "十六臂天王像钥匙",
+        "description": "兴庆宫花萼相辉楼第三层曾有一尊十六臂天王像，十四条手臂对应秘境入口。程宗扬发现遗迹并判断青龙寺的摩诃迦罗像可供开启秘境。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np062]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np062]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np062]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np062]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np062]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np062]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np074",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np074",
+        "name": "三朝会盟（锦囊计）",
+        "description": "贾文和设锦囊计，以汉晋宋三方结盟为诱饵，稳住宋国并迫使廖群玉配合。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np074]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np074]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np074]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np074]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np074]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np074]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np075",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np075",
+        "name": "搜神诀",
+        "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np075]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np075]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np075]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np075]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np075]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np075]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np078",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np078",
+        "name": "超级用户权限（系统内）",
+        "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np078]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np078]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np078]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np078]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np078]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np078]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np103",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np103",
+        "name": "镇国大长公主开府权",
+        "description": "杨玉环九岁被封公主并开府，拥有干预政事资格，食邑最后达到五千户。",
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np103]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np103]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np103]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np103]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np103]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np103]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np122",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np122",
+        "name": "水晶球幻术",
+        "description": "徐君房可借水晶球制造逼真幻象（如黑龙、哪吒闹海等），用于伪装祥瑞。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.techniques[id=lyg.technique.np122]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.techniques[id=lyg.technique.np122]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.techniques[id=lyg.technique.np122]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.techniques[id=lyg.technique.np122]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.techniques[id=lyg.technique.np122]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.techniques[id=lyg.technique.np122]"
+      ]
+    },
+    {
+      "id": "lyg.technique.nine_sun_divine_art",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.nine_sun_divine_art",
+        "name": "九阳神功",
+        "description": "程宗扬的主修功法，阳刚霸道。",
+        "grade": "地品",
+        "skillIds": [
+          "lyg.skill.five_tiger_broken_gate_knife"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.32,
+          "属性加成": {
+            "悟性": 4,
+            "灵性": 2
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.techniques[id=lyg.technique.nine_sun_divine_art]"
+      ]
+    },
+    {
+      "id": "lyg.technique.taiji_art",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.taiji_art",
+        "name": "太一经",
+        "description": "程宗扬兼修的功法，阴阳相济。",
+        "grade": "地品",
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.32,
+          "属性加成": {
+            "悟性": 4,
+            "灵性": 2
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.techniques[id=lyg.technique.taiji_art]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np015",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np015",
+        "name": "超级管理员权限（系统内）",
+        "description": "程宗扬通过系统验证，成为超级管理员，拥有最高等级权限。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.techniques[id=lyg.technique.np015]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.techniques[id=lyg.technique.np015]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np045",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np045",
+        "name": "镇国大长公主开府权",
+        "description": "杨玉环九岁被封公主并开府，拥有干预政事资格，食邑最后达到五千户。",
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.techniques[id=lyg.technique.np045]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np054",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np054",
+        "name": "搜神诀",
+        "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.techniques[id=lyg.technique.np054]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np057",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np057",
+        "name": "超级用户权限（系统内）",
+        "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.techniques[id=lyg.technique.np057]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np067",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np067",
+        "name": "黑无常伪装",
+        "description": "中行说扮黑无常吓退周飞。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.techniques[id=lyg.technique.np067]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.taiji_jing",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.taiji_jing",
+        "name": "太一经",
+        "description": "程宗扬主修功法，可转化死气。",
+        "grade": "玄品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.24,
+          "属性加成": {
+            "悟性": 3,
+            "灵性": 2
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.techniques[id=liuchao.technique.taiji_jing]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.jiuyang_shengong",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.jiuyang_shengong",
+        "name": "九阳神功",
+        "description": "程宗扬另一门功法，阳气通神，但导致阳亢之症。",
+        "grade": "玄品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.24,
+          "属性加成": {
+            "悟性": 3,
+            "灵性": 2
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.techniques[id=liuchao.technique.jiuyang_shengong]",
+        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.techniques[id=liuchao.technique.jiuyang_shengong]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.techniques[id=liuchao.technique.jiuyang_shengong]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.techniques[id=liuchao.technique.jiuyang_shengong]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np011",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np011",
+        "name": "搜神诀",
+        "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.techniques[id=lyg.technique.np011]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.xingyue_heart_method",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.xingyue_heart_method",
+        "name": "星月心法",
+        "description": "星月湖大营通用功法，注重真元调和与实战结合。",
+        "grade": "中品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.techniques[id=liuchao.technique.xingyue_heart_method]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.wuzong_di_method",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.wuzong_di_method",
+        "name": "巫宗心法（毒支）",
+        "description": "小紫从巫宗获得的功法流派，偏重毒素控制与灵气利用。",
+        "grade": "中品",
+        "skillIds": [
+          "liuchao.skill.poison_art"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.techniques[id=liuchao.technique.wuzong_di_method]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np018",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np018",
+        "name": "超级用户权限（系统内）",
+        "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.techniques[id=lyg.technique.np018]"
+      ]
+    },
+    {
+      "id": "lyg.technique.np020",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.technique.np020",
+        "name": "食人花（催生）",
+        "description": "朱老头以毒药促使地下食人花提前开放，用于消灭林中入侵者；食人花巨大且有腐蚀性，藤蔓坚韧。",
+        "grade": "上品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.4,
+          "属性加成": {
+            "悟性": 5,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.techniques[id=lyg.technique.np020]"
+      ]
+    },
+    {
+      "id": "lyl.technique.taiyi_jing",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.taiyi_jing",
+        "name": "太一经",
+        "description": "程宗扬从黑魔海得到的修炼功法，已融入自身体系。",
+        "grade": "中品",
+        "skillIds": [
+          "lyl.skill.death_root"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.taiyi_jing]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.taiyi_jing]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.taiyi_jing]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.taiyi_jing]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.taiyi_jing]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.taiyi_jing]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np012",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np012",
+        "name": "纸币（程氏钱庄）",
+        "description": "程氏钱庄发行三批纸币，总计二百四十三万金铢流通。",
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np012]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np012]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np012]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np012]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np012]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np012]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np012]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np012]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np019",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np019",
+        "name": "五虎断门刀",
+        "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np019]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np019]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np019]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np019]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np019]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np019]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np020",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np020",
+        "name": "水泥技术",
+        "description": "水泥技术由程宗扬掌握，星月湖大营负责安全",
+        "grade": "仙品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {
+        "lyl.luoyang_coup": {
+          "id": "lyl.technique.np020",
+          "name": "五虎断门刀",
+          "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
+          "grade": "中品",
+          "techniqueEffects": {
+            "修炼速度加成": 0.16,
+            "属性加成": {
+              "悟性": 2,
+              "灵性": 1
+            }
+          }
+        },
+        "lyl.taiquan_core_conflict": {
+          "id": "lyl.technique.np020",
+          "name": "五虎断门刀",
+          "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
+          "grade": "中品",
+          "techniqueEffects": {
+            "修炼速度加成": 0.16,
+            "属性加成": {
+              "悟性": 2,
+              "灵性": 1
+            }
+          }
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np020]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np020]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np020]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np020]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np020]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np020]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np020]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np020]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np026",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np026",
+        "name": "生死根",
+        "description": "生死根能吞噬死气",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np026]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np026]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np026]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np026]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np026]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np026]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np027",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np027",
+        "name": "九阳神功",
+        "description": "九阳神功是程宗扬的内功",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {
+        "lyl.taiquan_core_conflict": {
+          "id": "lyl.technique.np027",
+          "name": "生死根",
+          "description": "生死根能吞噬死气",
+          "grade": "中品",
+          "techniqueEffects": {
+            "修炼速度加成": 0.16,
+            "属性加成": {
+              "悟性": 2,
+              "灵性": 1
+            }
+          }
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np027]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np027]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np027]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np027]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np027]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np027]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np027]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np052",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np052",
+        "name": "合籍",
+        "description": "程宗扬与程郑合籍为盘江程氏",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np052]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np052]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np052]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np052]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np052]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np052]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np056",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np056",
+        "name": "太一经仙火鼎炉双修法",
+        "description": "程宗扬在破云丹琉处子时发现其是罕见仙品火质鼎炉，可将太一经积留的阴寒杂气渡入云丹琉体内化去，有益无害并增进快感，二人以此法往复导引真气使双修效果显著。",
+        "grade": "仙品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np056]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np056]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np059",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np059",
+        "name": "双修功法",
+        "description": "程宗扬与云丹琉在温泉中双修，云丹琉服用的仙草叶片效力尚在。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np059]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np059]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np059]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np059]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np059]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np059]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np072",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np072",
+        "name": "守阵力士",
+        "description": "小紫改造守阵力士，使其能活动",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np072]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np072]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np072]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np072]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np072]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np072]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np081",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np081",
+        "name": "琥珀控魂",
+        "description": "小紫用琥珀控制孙寿魂魄",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np081]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np081]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np081]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np081]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np081]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np081]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np082",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np082",
+        "name": "毒品与法术结合药剂",
+        "description": "小紫将毒品致幻性与小法术结合，可产生操控幻境效果。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np082]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np082]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np082]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np082]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np082]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np082]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np095",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np095",
+        "name": "算缗令",
+        "description": "秦桧在算缗令中添入限田限奴条款，使其走向极端。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np095]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np095]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np095]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np095]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np095]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np095]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np102",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np102",
+        "name": "玄元仙剑",
+        "description": "华妙宗剑法，剑玉姬用此剑法施展出。",
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.techniques[id=lyl.technique.np102]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.techniques[id=lyl.technique.np102]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.techniques[id=lyl.technique.np102]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.techniques[id=lyl.technique.np102]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.techniques[id=lyl.technique.np102]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.techniques[id=lyl.technique.np102]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.taiji_manual",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.taiji_manual",
+        "name": "太一经",
+        "description": "程宗扬从太乙真宗学得的功法。",
+        "grade": "中品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.techniques[id=liuchao.technique.taiji_manual]"
+      ]
+    },
+    {
+      "id": "liuchao.technique.taiyi_scripture",
+      "aliases": [],
+      "definition": {
+        "id": "liuchao.technique.taiyi_scripture",
+        "name": "太一经",
+        "description": "太乙真宗入门修炼心法，程宗扬当前主修。",
+        "grade": "中品",
+        "skillIds": [
+          "liuchao.skill.bedroom_arts"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.techniques[id=liuchao.technique.taiyi_scripture]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.techniques[id=liuchao.technique.taiyi_scripture]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np003",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np003",
+        "name": "寒毒",
+        "description": "薛延山身中寒毒，与云如瑶、月霜相似",
+        "grade": "下品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.techniques[id=lyl.technique.np003]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np021",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np021",
+        "name": "水泥技术",
+        "description": "水泥技术由程宗扬掌握，星月湖大营负责安全",
+        "grade": "仙品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np021]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np021]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np028",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np028",
+        "name": "生死根",
+        "description": "生死根能吞噬死气",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {
+        "lyl.taiquan_core_conflict": {
+          "id": "lyl.technique.np028",
+          "name": "九阳神功",
+          "description": "九阳神功是程宗扬的内功",
+          "grade": "中品",
+          "techniqueEffects": {
+            "修炼速度加成": 0.16,
+            "属性加成": {
+              "悟性": 2,
+              "灵性": 1
+            }
+          }
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np028]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np028]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np029",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np029",
+        "name": "九阳神功",
+        "description": "九阳神功是程宗扬的内功",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {
+        "lyl.taiquan_core_conflict": {
+          "id": "lyl.technique.np029",
+          "name": "太一经",
+          "description": "太一经是程宗扬的内功",
+          "grade": "中品",
+          "techniqueEffects": {
+            "修炼速度加成": 0.16,
+            "属性加成": {
+              "悟性": 2,
+              "灵性": 1
+            }
+          }
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np029]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np029]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np030",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np030",
+        "name": "太一经",
+        "description": "太一经是程宗扬的内功",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np030]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np055",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np055",
+        "name": "合籍",
+        "description": "程宗扬与程郑合籍为盘江程氏",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np055]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np060",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np060",
+        "name": "太一经仙火鼎炉双修法",
+        "description": "程宗扬在破云丹琉处子时发现其是罕见仙品火质鼎炉，可将太一经积留的阴寒杂气渡入云丹琉体内化去，有益无害并增进快感，二人以此法往复导引真气使双修效果显著。",
+        "grade": "仙品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np060]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np063",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np063",
+        "name": "双修功法",
+        "description": "程宗扬与云丹琉在温泉中双修，云丹琉服用的仙草叶片效力尚在。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np063]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np077",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np077",
+        "name": "玄元仙剑",
+        "description": "华妙宗剑法，剑玉姬用此剑法施展出。",
+        "grade": "极品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.48,
+          "属性加成": {
+            "悟性": 6,
+            "灵性": 3
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np077]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np087",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np087",
+        "name": "守阵力士",
+        "description": "小紫改造守阵力士，使其能活动",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np087]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np096",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np096",
+        "name": "琥珀控魂",
+        "description": "小紫用琥珀控制孙寿魂魄",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np096]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np097",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np097",
+        "name": "毒品与法术结合药剂",
+        "description": "小紫将毒品致幻性与小法术结合，可产生操控幻境效果。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np097]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np100",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np100",
+        "name": "算缗令",
+        "description": "秦桧在算缗令中添入限田限奴条款，使其走向极端。",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np100]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np103",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np103",
+        "name": "六识禁绝丹",
+        "description": "义姁用六识禁绝丹封禁友通期六识，使其目不视物、耳不闻声、口不能言。",
+        "grade": "下品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.techniques[id=lyl.technique.np103]"
+      ]
+    },
+    {
+      "id": "lyl.technique.taiji_bridge",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.taiji_bridge",
+        "name": "太极桥",
+        "description": "程宗扬主修的功法，以阴阳鱼为基础。",
+        "grade": "地级",
+        "skillIds": [
+          "lyl.skill.death_root_sense",
+          "lyl.skill.coral_dagger_art"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.32,
+          "属性加成": {
+            "悟性": 4,
+            "灵性": 2
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.taiji_bridge]"
+      ]
+    },
+    {
+      "id": "lyl.technique.yin_yang_fish_reaction",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.yin_yang_fish_reaction",
+        "name": "阴阳鱼反制",
+        "description": "利用丹田中阴阳鱼的力量进行防御和反击，尚未完全熟练。",
+        "grade": "玄级",
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.24,
+          "属性加成": {
+            "悟性": 3,
+            "灵性": 2
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.yin_yang_fish_reaction]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np031",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np031",
+        "name": "断月弦",
+        "description": "断月弦是虞白樱的武器",
+        "grade": "下品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np031]"
+      ]
+    },
+    {
+      "id": "lyl.technique.np037",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.technique.np037",
+        "name": "守阵力士",
+        "description": "小紫改造守阵力士，使其能活动",
+        "grade": "中品",
+        "techniqueEffects": {
+          "修炼速度加成": 0.16,
+          "属性加成": {
+            "悟性": 2,
+            "灵性": 1
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/techniques.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.techniques[id=lyl.technique.np037]"
+      ]
+    }
+  ]
+}

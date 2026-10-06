@@ -1,3 +1,5 @@
+
+import {entityAliases} from './namedEntities';
 export interface VoiceCardContext {
   modId?: string;
 }
@@ -9,7 +11,7 @@ interface VoiceCard {
 
 const VOICE_CARDS: VoiceCard[] = [
   {
-    names: ['小紫'],
+    names: [...entityAliases("character","liuchao.character.xiao_zi")],
     render: ({ modId }) => {
       const earlyMask = /^lcq\.stage_0[1-4](?:$|b)/.test(modId || '');
       return earlyMask ? [
@@ -26,7 +28,7 @@ const VOICE_CARDS: VoiceCard[] = [
     },
   },
   {
-    names: ['贾文和', '贾诩'],
+    names: [...entityAliases("character","liuchao.character.jia_wenhe"), '贾诩'],
     render: () => [
       '声线：冷淡、短句、直言不讳，必要时以“蠢材”等冷嘲刺破自欺；从容，不用热血口号。',
       '称谓：作为部下/谋士，以主上利益为判断轴；不得忽然变成谄媚弄臣、温吞解说员或替所有人圆场的和事佬。',

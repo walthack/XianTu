@@ -1221,7 +1221,7 @@
         "description": "主角",
         "role": "主角",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1293,7 +1293,9 @@
             "程宗扬和武二郎处理鸦人尸体，发现其携带的空白羊皮纸，经云苍峰鉴定为秘法传讯信，推测黑魔海与鬼王峒勾结，目标指向白夷族。",
             "殇侯与程宗扬夜谈六朝兴亡之际，文士巾打扮的秦桧快步走来，躬身深揖：\"君侯，北地有讯。\"随后受命引程宗扬在山崖温泉间随意走走。其人举止温文尔雅，脸上总带一丝谦虚笑意；殇侯私评：\"灵敏有余，志浅易变。\""
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xiao_zi",
@@ -1301,7 +1303,7 @@
         "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
         "role": "伴侣",
         "gender": "女",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1372,7 +1374,9 @@
             "危机解除后，程宗扬以岳鹏举身份线影响小紫，双方围绕鬼巫王与龙神合体形成临时协定。",
             "小紫倒戈、奴隶暴动、程宗扬反杀计划与乐明珠凤凰宝典异变共同把剧情推向最终决战。"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xie_youdu",
@@ -1380,7 +1384,7 @@
         "description": "谢幼度俊美绝伦，脸上常带一抹红晕，气质飘逸洒然如谪仙，他是皇图天策府的高手，寸步不离地守护着月霜，剑已在鞘中低鸣。",
         "role": "高手",
         "gender": "男",
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1439,7 +1443,9 @@
             "有礼",
             "感伤"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -1447,7 +1453,7 @@
         "description": "一袭青衫的文士轻摇折扇，清秀面容上带着谦和笑意，唯有熟知其为人方才知晓这位被誉为‘殇侯智囊’的毒术高手，如何以温言软语布下杀机重重的罗网。",
         "role": "谋士",
         "gender": "男",
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -1518,7 +1524,9 @@
             "殇侯与程宗扬夜谈六朝兴亡之际，文士巾打扮的秦桧快步走来，躬身深揖：\"君侯，北地有讯。\"随后受命引程宗扬在山崖温泉间随意走走。其人举止温文尔雅，脸上总带一丝谦虚笑意；殇侯私评：\"灵敏有余，志浅易变。\"",
             "殇侯把秦桧、吴三桂等手下交给程宗扬差遣。秦桧恭敬改称程宗扬\"主公\"：\"能协助主公行事，是我等的福分。\"自此成为程宗扬身边第一智囊。"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.wang_tian_de",
@@ -1526,7 +1534,7 @@
         "description": "王团练手持铁尺，横行乡里，贪婪残暴的本性让他成为百姓心中最可怕的恶鬼；他狡诈似狐，以团练之名行尽歹事。",
         "role": "反派",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.wang_tuanlian",
@@ -1586,7 +1594,9 @@
           ],
           "origin": "前团练（原筠州团练）",
           "appearance": "胡须上全是白沫，脸上肉抖，面容扭曲"
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xiang_ya",
@@ -1594,7 +1604,7 @@
         "description": "荆溪女族长相雅，娇小身躯裹着素衣，眉间锁着哀愁——那是村寨覆灭前最后的宁静。",
         "role": "女族长",
         "gender": "女",
-        "realm": "凡人",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.jing_xi_ren",
@@ -1639,7 +1649,9 @@
             "刚烈",
             "忠诚"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.li_shi_shi",
@@ -1675,7 +1687,7 @@
           ],
           "origin": "光明观堂边缘/低阶弟子（因不肯盲从宗门伪善教条而被边缘化）"
         },
-        "realm": "筑基",
+        "realm": "未知",
         "gender": "女",
         "affiliations": [
           {
@@ -1698,7 +1710,9 @@
             "category": "organization",
             "role": "秘书/高级管理人员"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.qing_mian_shou",
@@ -1738,7 +1752,7 @@
             "【身体】脸上有兽斑；手肘如牛头大"
           ]
         },
-        "realm": "筑基",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1756,7 +1770,9 @@
             "category": "military",
             "role": "兽蛮军士兵"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ao_run",
@@ -1792,7 +1808,7 @@
           ],
           "origin": "护卫头领"
         },
-        "realm": "筑基",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1805,7 +1821,9 @@
             "category": "organization",
             "role": "队员"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lin_chong",
@@ -1844,7 +1862,7 @@
           ],
           "origin": "皇城司教头"
         },
-        "realm": "元婴",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1857,7 +1875,9 @@
             "category": "organization",
             "role": "皇城司人员"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.jin_wu_zhu",
@@ -1892,7 +1912,7 @@
           ],
           "origin": "兽蛮营首领出身，后加入盘江程氏"
         },
-        "realm": "元婴",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1915,7 +1935,9 @@
             "category": "organization",
             "role": "奴仆/兽蛮武士"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lu_zhi_shen",
@@ -1957,7 +1979,7 @@
           ],
           "origin": "僧人"
         },
-        "realm": "化神",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1970,7 +1992,9 @@
             "category": "sect",
             "role": "半路出家的门人（已叛离/被追杀）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.bao_zi_tou",
@@ -2007,7 +2031,7 @@
           ],
           "appearance": "似豹的兽蛮武士，面目狰狞，体型如大猫"
         },
-        "realm": "元婴",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -2030,7 +2054,9 @@
             "category": "organization",
             "role": "随从护卫"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.teng_fu",
@@ -2058,7 +2084,9 @@
             "category": "state",
             "role": "知州"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.pan_jinlian",
@@ -2080,14 +2108,16 @@
             "初登场时身份：光明观堂弟子，乐明珠的师姐，武二郎的准嫂嫂"
           ]
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.guang_ming_guan_tang",
             "category": "organization",
             "role": "弟子/师姐"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -2116,7 +2146,7 @@
             "程宗扬在沐羽城的新年庆典中，辨认出云中仙子正是仇敌卓云君，决定暗中复仇。"
           ]
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -2138,7 +2168,9 @@
             "category": "organization",
             "role": "侍奴"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -2184,7 +2216,9 @@
             "category": "organization",
             "role": "御姬奴（凝奴）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -2218,7 +2252,7 @@
             "孟非卿命程宗扬率一营三十人及雪隼佣兵团六百人赴烈山三川口，保护月霜，避免其擅自冲锋，并授予指挥权与计时器。"
           ]
         },
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -2235,7 +2269,9 @@
             "category": "organization",
             "role": "岳帅遗孤"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -2275,7 +2311,9 @@
             "category": "organization",
             "role": "弟子"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -2305,7 +2343,7 @@
             "易彪率领北府兵扮作禁军突袭，全歼州府兵，程宗扬一行得救，但萧遥逸识破身份。"
           ]
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -2332,7 +2370,9 @@
             "category": "clan",
             "role": "萧氏子弟"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       }
     ],
     "playerRelationships": [
@@ -2656,92 +2696,37 @@
     ]
   },
   "content": {
+    "items": [
+      {
+        "id": "liuchao.item.coral_dagger"
+      },
+      {
+        "id": "lyl.item.np001"
+      },
+      {
+        "id": "lyl.item.np003"
+      }
+    ],
     "skills": [
       {
-        "id": "liuchao.skill.death_root",
-        "name": "生死根",
-        "description": "程宗扬的独特异能，能感应死亡气息并吸收死气。",
-        "type": "异能",
-        "effects": [
-          "感应死亡气息",
-          "吸收死气"
-        ]
+        "id": "liuchao.skill.death_root"
       },
       {
-        "id": "lyl.skill.np002",
-        "name": "房中术",
-        "description": "程宗扬习太乙真宗房中术"
+        "id": "lyl.skill.np002"
       },
       {
-        "id": "lyl.skill.np004",
-        "name": "惊魔指",
-        "description": "秦桧有惊魔指"
+        "id": "lyl.skill.np004"
       },
       {
-        "id": "lyl.skill.np005",
-        "name": "金钟罩",
-        "description": "鲁智深有金钟罩"
+        "id": "lyl.skill.np005"
       }
     ],
     "techniques": [
       {
-        "id": "liuchao.technique.taiji_manual",
-        "name": "太一经",
-        "description": "程宗扬从太乙真宗学得的功法。",
-        "grade": "中品",
-        "skillIds": [
-          "liuchao.skill.death_root"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.16,
-          "属性加成": {
-            "悟性": 2,
-            "灵性": 1
-          }
-        }
+        "id": "liuchao.technique.taiji_manual"
       },
       {
-        "id": "liuchao.technique.jiuyang_shengong",
-        "name": "九阳神功",
-        "description": "程宗扬另一门功法，阳气通神，但导致阳亢之症。",
-        "grade": "玄品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.24,
-          "属性加成": {
-            "悟性": 3,
-            "灵性": 2
-          }
-        }
-      }
-    ],
-    "items": [
-      {
-        "id": "liuchao.item.coral_dagger",
-        "name": "珊瑚匕首",
-        "description": "程宗扬从萧遥逸处获得的武器。",
-        "type": "weapon",
-        "grade": "仙品",
-        "techniqueId": "liuchao.technique.taiji_manual",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      {
-        "id": "lyl.item.np001",
-        "name": "鬼牙",
-        "type": "other",
-        "description": "程宗扬从萧遥逸处获得鬼牙",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np003",
-        "name": "钓鱼竿（白龙鱼竿）",
-        "type": "other",
-        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
-        "grade": "仙品"
+        "id": "liuchao.technique.jiuyang_shengong"
       }
     ]
   },

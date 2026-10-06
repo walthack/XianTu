@@ -1,0 +1,160 @@
+[
+  {
+    "id": "wound.external",
+    "label": "外伤",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "战斗中被击中",
+    "upgradesTo": "wound.external.heavy",
+    "afterScene": {
+      "minutes": 10080
+    },
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 10080
+      },
+      {
+        "kind": "rest"
+      }
+    ]
+  },
+  {
+    "id": "wound.external.heavy",
+    "label": "外伤（重）",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "外伤再度加重",
+    "upgradesTo": "incapacitated",
+    "afterScene": {
+      "minutes": 43200
+    },
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -3
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -3
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      }
+    ]
+  },
+  {
+    "id": "wound.internal",
+    "label": "内伤",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "被劲力震伤",
+    "upgradesTo": "incapacitated",
+    "afterScene": {
+      "minutes": 20160
+    },
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      }
+    ]
+  },
+  {
+    "id": "disarmed",
+    "label": "兵器脱手",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "兵器被击落或脱手",
+    "effects": [
+      {
+        "kind": "lockLever",
+        "elementKinds": [
+          "weapon"
+        ]
+      }
+    ],
+    "remove": [
+      {
+        "kind": "scene_end"
+      }
+    ]
+  },
+  {
+    "id": "off_balance",
+    "label": "失衡",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "失手后架势散乱",
+    "durationBeats": 1,
+    "effects": [
+      {
+        "kind": "disadvantage",
+        "scope": "action"
+      },
+      {
+        "kind": "disadvantage",
+        "scope": "defense"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "scene_end"
+      }
+    ]
+  },
+  {
+    "id": "incapacitated",
+    "label": "倒下",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "provisional": true,
+    "source": "伤重倒地",
+    "afterScene": {
+      "minutes": null
+    },
+    "effects": [
+      {
+        "kind": "downed"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      }
+    ]
+  }
+]

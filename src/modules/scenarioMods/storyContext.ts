@@ -1,3 +1,5 @@
+import {namingFor} from './ledger/naming';
+import {questLineView} from './questLineView';
 import { namingInstructions, namingAliases } from './ledger/naming';
 import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
@@ -526,7 +528,7 @@ function formatFocusedCharacter(
   }
   // 未揭示身份不查询全书语音卡、别名和密档，避免显示名已遮蔽而资料仍泄底。
   if ((character.id === 'liuchao.character.shang_zhen_yu' && ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b'].includes(runtime.modId || ''))
-    || character.name === '花苗新娘') {
+    || character.name === namingFor('liuchao.character.le_mingzhu',0)?.text) {
     return `- ${character.name}：${character.description || character.profile?.origin || character.role || ''}。只使用当下已揭示身份，不关联全书真身与未来身世。${presentNames && !isProtagonist && !presentNames.has(character.name) ? formatAbsenceGuard(character.name) : ''}`;
   }
   if (character.id === 'liuchao.character.xie_yi' && isXieyiSkillHidden(runtime)) {
@@ -916,6 +918,9 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
             return `${secondaryLineDisplayName(l, currentWorldEvent)}——${l.entryHint}${current}`;
           }).join('；')}`);
         }
+        const insertedView = questLineView(saveData);
+        if (insertedView.secondary.length) lines.push(`- 可选支线：${insertedView.secondary.map(l=>`${l.name}——${l.hint}`).join('；')}`);
+        if (insertedView.character.length) lines.push(`- 人物插入目标：${insertedView.character.map(b=>`${b.name}——${b.objective}`).join('；')}`);
         // 人物任务：这一拍因为谁而不一样。空则整行省略，不得另写“本拍无人有戏”。
         const beats = characterBeatsAt(currentWorldEvent?.id);
         if (beats.length && currentWorldObjective) {

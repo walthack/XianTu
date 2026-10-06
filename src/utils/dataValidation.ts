@@ -36,7 +36,6 @@ export function validateAndFixSaveData(saveData: SaveData): SaveData {
   if (!anySave.角色 || typeof anySave.角色 !== 'object') anySave.角色 = {};
   if (!anySave.角色.背包 || typeof anySave.角色.背包 !== 'object') {
     anySave.角色.背包 = {
-      灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 },
       物品: {}
     };
   }
@@ -45,9 +44,6 @@ export function validateAndFixSaveData(saveData: SaveData): SaveData {
     anySave.角色.背包.物品 = {};
   }
 
-  if (!anySave.角色.背包.灵石 || typeof anySave.角色.背包.灵石 !== 'object') {
-    anySave.角色.背包.灵石 = { 下品: 0, 中品: 0, 上品: 0, 极品: 0 };
-  }
 
   // 兼容旧存档 + 新货币系统兜底
   normalizeBackpackCurrencies(anySave.角色.背包);
@@ -282,18 +278,15 @@ export function validateAndRepairNpcProfile(npcData: unknown, gameTime?: GameTim
     // 4. 结构检查与修复 (背包) - 防御性处理
     try {
       if (typeof repairedNpc.背包 !== 'object' || repairedNpc.背包 === null) {
-        repairedNpc.背包 = { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: {} };
+        repairedNpc.背包 = { 物品: {} };
       } else {
-        if (typeof repairedNpc.背包.灵石 !== 'object' || repairedNpc.背包.灵石 === null) {
-          repairedNpc.背包.灵石 = { 下品: 0, 中品: 0, 上品: 0, 极品: 0 };
-        }
         if (typeof repairedNpc.背包.物品 !== 'object' || repairedNpc.背包.物品 === null) {
           repairedNpc.背包.物品 = {};
         }
       }
     } catch (e) {
       console.warn('[NPC校验] 背包字段修复失败，使用默认值:', e);
-      repairedNpc.背包 = { 灵石: { 下品: 0, 中品: 0, 上品: 0, 极品: 0 }, 物品: {} };
+      repairedNpc.背包 = { 物品: {} };
     }
 
     // 5. 确保实时关注是布尔值

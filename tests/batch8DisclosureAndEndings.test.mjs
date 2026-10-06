@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { loadTs } from './loadTs.mjs';
 const { resolveScenarioCharacters, syncNanhuangIdentityDisplay, xiaoziDisclosure }=await loadTs('../src/modules/scenarioMods/characterResolver.ts');
-const { fixedEndingNarrative, endingBridge, BATTLE_ROUT_ENDINGS }=await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+const { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS }=await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
 const { validateNanhuangCanonNarrative }=await loadTs('../src/modules/scenarioMods/narrativeBoundaries.ts');
 const { departedPresentNames }=await loadTs('../src/modules/scenarioMods/presence.ts');
 const stage=async id=>JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`,import.meta.url),'utf8'));
@@ -40,10 +40,10 @@ test('small-purple cannot become present in03b/04, or in04b before chapter70 fir
  assert.ok(!departedPresentNames({modId:'lcq.stage_04b_lingfei_baiyi_crisis',activeEventIds:['lcq.event.xiaozi_first_appears']}).includes('小紫'));
 });
 test('E06/E07/E08 map to full fixed endings; failure survives but never offers continuation or death label',()=>{
- assert.equal(BATTLE_ROUT_ENDINGS.length,3);
- for(const e of BATTLE_ROUT_ENDINGS){const text=fixedEndingNarrative(e);assert.ok(text.length>550);assert.doesNotMatch(text,/殇侯/);assert.ok(endingBridge('<内部指令>',e.endingId));assert.equal(e.tier,'rout');}
- assert.equal(BATTLE_ROUT_ENDINGS[2].endingId,'lcq.ending.fail.dragon_essence');assert.equal(BATTLE_ROUT_ENDINGS[2].kind,'failure');
- assert.match(fixedEndingNarrative(BATTLE_ROUT_ENDINGS[2]),/你还活着/);
+ assert.equal(BATTLE_LOSS_ENDINGS.length,3);
+ for(const e of BATTLE_LOSS_ENDINGS){const text=fixedEndingNarrative(e);assert.ok(text.length>550);assert.doesNotMatch(text,/殇侯/);assert.ok(endingBridge('<内部指令>',e.endingId));assert.equal(e.tier,e.endingId === 'lcq.ending.death.ghost_king_skull' ? 'rout' : 'lose');}
+ assert.equal(BATTLE_LOSS_ENDINGS[2].endingId,'lcq.ending.fail.dragon_essence');assert.equal(BATTLE_LOSS_ENDINGS[2].kind,'failure');
+ assert.match(fixedEndingNarrative(BATTLE_LOSS_ENDINGS[2]),/你还活着/);
  assert.equal(fixedEndingNarrative({endingId:'lcq.ending.death.dragon_essence',sourceEventId:'lcq.event.slay_dragon'}),undefined);
 });
 
@@ -52,7 +52,7 @@ test('E08 uses existing terminal freeze without killing the protagonist', async(
  const {buildStrictScenarioInitialization,applyStrictScenarioInitializationToSave}=await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
  const {advanceScenarioRuntime,getCurrentStoryEventActions}=await loadTs('../src/modules/scenarioMods/runtime.ts');
  const s=applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(),buildStrictScenarioInitialization(await stage('lcq.stage_05b')));
- const rt=s.世界.状态.剧本模组;const hp=structuredClone(s.角色.属性);const ending=BATTLE_ROUT_ENDINGS[2];
+ const rt=s.世界.状态.剧本模组;const hp=structuredClone(s.角色.属性);const ending=BATTLE_LOSS_ENDINGS[2];
  rt.gameOver={endingId:ending.endingId,title:ending.title,facts:[...ending.facts],sourceEventId:ending.sourceEventId,atTurn:rt.worldTurn};
  const before={completed:[...rt.completedEventIds],chapter:rt.currentChapterId,turn:rt.worldTurn};
  assert.deepEqual(getCurrentStoryEventActions(s),[]);

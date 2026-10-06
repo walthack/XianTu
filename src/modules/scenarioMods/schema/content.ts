@@ -37,6 +37,8 @@ export interface ScenarioModTechnique {
 export type ScenarioModItemType = 'weapon' | 'armor' | 'consumable' | 'material' | 'other';
 
 export interface ScenarioModItem {
+  /** 剧情道具仅由剧情结算定向发放，不进入随机拾取/掉落。 */
+  storyItem?: boolean;
   id: string;
   name: string;
   description?: string;
@@ -53,3 +55,9 @@ export interface ScenarioModContent {
   techniques?: ScenarioModTechnique[];
   items?: ScenarioModItem[];
 }
+
+/** Published project stages reference the master tables; runtime initialization resolves full definitions. */
+export interface ScenarioContentReference {
+ id:string; availableWhen?:import('./scenario').ScenarioCondition[]; revealWhen?:import('./scenario').ScenarioCondition[];
+}
+export interface ScenarioModContentReferences {items?:ScenarioContentReference[];skills?:ScenarioContentReference[];techniques?:ScenarioContentReference[]}

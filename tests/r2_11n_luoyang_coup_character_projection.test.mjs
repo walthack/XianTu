@@ -141,7 +141,7 @@ test('added participants carry only this-stage minimal fields and zero future-st
   const cast = new Map(document.canon.characters.map(character => [character.id, character]));
   // 本关最小字段白名单（R2-11O）：静态档案由 canon:build 卡投影与运行时 registry 还原，
   // stage 条目不写 appearance/attributes/spiritRoot/talents/race；realm 与技能/物品引用是进度量，禁写。
-  const ALLOWED_TOP = new Set(['id', 'name', 'description', 'role', 'gender', 'affiliations', 'locationId', 'profile']);
+  const ALLOWED_TOP = new Set(['id', 'name', 'description', 'role', 'gender', 'affiliations', 'locationId', 'profile', 'level', 'levelSource', 'level', 'levelSource']);
   const ALLOWED_PROFILE = new Set(['origin', 'personality', 'notes']); // personality 只许来自总卡投影
   // 后期身份/经历/外貌标记：中行说「内宅总管」（燕歌行时区）、金蜜镝凉州军阵披麻叩首（第三本）、
   // 齐羽仙「玉姬之一」关联（裁定 #108 机密；「剑玉姬」为已登场人物名，不在此列）等一律不得出现在本关条目。
@@ -149,6 +149,8 @@ test('added participants carry only this-stage minimal fields and zero future-st
   for (const [id, name] of Object.entries(ADDED_CHARACTERS)) {
     const entry = cast.get(id);
     assert.ok(entry, `${id} (${name}) missing`);
+    assert.equal(entry.level, null, `${id} must not infer a level`);
+    assert.equal(entry.level, null, `${id} must not infer a level`);
     for (const key of Object.keys(entry)) {
       assert.ok(ALLOWED_TOP.has(key), `${id} (${name}) has non-whitelist field: ${key}`);
     }

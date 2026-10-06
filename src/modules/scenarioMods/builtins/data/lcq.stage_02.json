@@ -1211,7 +1211,7 @@
         "description": "现代穿越者",
         "role": "主角",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "lcq.faction.left_guard",
@@ -1281,7 +1281,9 @@
           "notes": [
             "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.wang_zhe",
@@ -1289,7 +1291,7 @@
         "description": "身为左武卫大将军与太乙真宗掌教，他气度不凡，既有高人风范又深谋远虑，坚毅如钢却可亲可敬，善于在纷争中平衡各方势力。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "合体",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "lcq.faction.left_guard",
@@ -1347,7 +1349,9 @@
               "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
             }
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -1355,7 +1359,7 @@
         "description": "岳帅遗孤之一、雪隼佣兵团副队长。冷艳绝色却傲娇自负、自以为是的\"圣母纸老虎\"，身负寒毒体质；王哲临终将其托付程宗扬。",
         "role": "关键人物",
         "gender": "女",
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -1418,7 +1422,9 @@
           "notes": [
             "【体质约束】月霜身具寒毒，需阳性能量调和（破坏后果：不调和则寒毒持续危害身体）"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.han_geng",
@@ -1426,7 +1432,7 @@
         "description": "韩庚，天武营主将，王哲最锐的剑——他面容冷峻，剑眉压眸，魁梧身材裹在布衣或黑色皮甲里，军伍气质如刀锋淬冰，却注定倒在下一场战役的血泊中。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "lcq.faction.left_guard",
@@ -1475,7 +1481,9 @@
             "决绝",
             "自信"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.agamenon",
@@ -1483,7 +1491,7 @@
         "description": "阿伽门侬，罗马联军统帅，凯撒长子——他金色鬈发披肩，蓝眸如冷海，浓密胡须间挂着傲慢冷笑，金黄铠甲映着烈日，马蹄踏过处，诸国皆颤。",
         "role": "关键人物",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "lcq.faction.roman",
@@ -1524,7 +1532,9 @@
             "易怒",
             "恐惧"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.dai_jixue",
@@ -1532,7 +1542,7 @@
         "description": "黛姬雪娜，拜火教金发女祭司——冷漠美貌如冰雪雕琢，她立于祭坛上念咒，却在王哲一箭之下，烈焰与血溅裂了圣袍。",
         "role": "关键人物",
         "gender": "女",
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "lcq.faction.roman",
@@ -1570,7 +1580,9 @@
             "(被洗脑后)提线傀儡",
             "接受十方丛林调教，自我尽失"
           ]
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -1619,7 +1631,7 @@
           ],
           "speechStyle": "短句，平淡，不加修饰，例如「鬼王峒的人。」"
         },
-        "realm": "练气",
+        "realm": "未知",
         "gender": "女",
         "affiliations": [
           {
@@ -1637,7 +1649,9 @@
             "category": "organization",
             "role": "御姬奴（凝奴）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.su_daji",
@@ -1685,7 +1699,7 @@
             "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
           ]
         },
-        "realm": "炼虚",
+        "realm": "未知",
         "gender": "女",
         "affiliations": [
           {
@@ -1693,7 +1707,9 @@
             "category": "organization",
             "role": "掌柜"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lin_cai_quan",
@@ -1728,7 +1744,7 @@
           ],
           "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。"
         },
-        "realm": "化神",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1736,7 +1752,9 @@
             "category": "sect",
             "role": "教御（首席教御）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.np001",
@@ -1773,7 +1791,7 @@
           ],
           "appearance": "身材高大的中年道人，负双手，冷冰冰，肩后披黑色披风，紫金帅冠，金属战甲"
         },
-        "realm": "化神",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1781,7 +1799,9 @@
             "category": "sect",
             "role": "教御"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -1799,7 +1819,7 @@
             "常年被太尉折磨出受虐底子"
           ]
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -1821,7 +1841,9 @@
             "category": "organization",
             "role": "侍奴"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "canon.character.55df25e1a5",
@@ -1844,7 +1866,10 @@
             "category": "organization",
             "role": "雇佣援兵首领"
           }
-        ]
+        ],
+        "level": null,
+        "realm": "未知",
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.wu_er_lang",
@@ -1861,9 +1886,11 @@
           ]
         },
         "skillIds": [],
-        "realm": "练气",
+        "realm": "未知",
         "gender": "男",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       }
     ],
     "playerRelationships": [
@@ -2142,93 +2169,46 @@
     ]
   },
   "content": {
-    "skills": [
+    "items": [
       {
-        "id": "lcq.skill.death_root",
-        "name": "生死根",
-        "description": "将死气化为生机的异能，能加速植物生长和伤口愈合。",
-        "type": "异能",
-        "effects": [
-          "感应死亡气息"
-        ]
+        "id": "lcq.item.backpack"
       },
       {
-        "id": "lcq.skill.nine_sun",
-        "name": "九阳神功",
-        "description": "太乙真宗核心功法，王哲传程宗扬口诀。",
-        "type": "功法",
-        "effects": [
-          "修炼真气"
-        ]
+        "id": "lcq.item.lingerie"
+      },
+      {
+        "id": "lcq.item.vibrator"
+      },
+      {
+        "id": "lcq.item.drug"
+      },
+      {
+        "id": "lcq.item.jin_nang"
+      },
+      {
+        "id": "lcq.item.horse"
+      },
+      {
+        "id": "lcq.item.np001"
+      },
+      {
+        "id": "lcq.item.zipper"
+      },
+      {
+        "id": "lcq.item.ajiman_bond"
+      }
+    ],
+    "skills": [
+      {
+        "id": "lcq.skill.death_root"
+      },
+      {
+        "id": "lcq.skill.nine_sun"
       }
     ],
     "techniques": [
       {
-        "id": "lcq.technique.nine_sun_manual",
-        "name": "九阳神功口诀",
-        "description": "王哲传程宗扬的口诀，用于修炼九阳神功。",
-        "grade": "凡品",
-        "skillIds": [
-          "lcq.skill.nine_sun"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.08,
-          "属性加成": {
-            "悟性": 1,
-            "灵性": 1
-          }
-        }
-      }
-    ],
-    "items": [
-      {
-        "id": "lcq.item.backpack",
-        "name": "背包",
-        "description": "程宗扬从现代世界带来的背包。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.lingerie",
-        "name": "情趣内衣",
-        "description": "程宗扬从现代世界带来的情趣内衣。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.vibrator",
-        "name": "按摩棒",
-        "description": "程宗扬从现代世界带来的按摩棒。",
-        "type": "other",
-        "grade": "中品"
-      },
-      {
-        "id": "lcq.item.drug",
-        "name": "摇头丸",
-        "description": "程宗扬从现代世界带来的摇头丸。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.jin_nang",
-        "name": "锦囊",
-        "description": "王哲给程宗扬的锦囊，火漆密封。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.horse",
-        "name": "马匹",
-        "description": "月霜骑乘的马匹。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.np001",
-        "name": "拉链",
-        "type": "other",
-        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
-        "grade": "仙品"
+        "id": "lcq.technique.nine_sun_manual"
       }
     ]
   },
@@ -3341,7 +3321,18 @@
                   "连她一起杀"
                 ]
               ],
-              "fallbackText": "你听凝羽提出条件：“替我除掉她。”你望着她的眼睛，问她说的是不是苏妲己。凝羽没有否认：“她一直知道我想杀她。但我在月亮下发过誓，会用我的生命保护她。所以，当你出手的时候，要连我一起杀了。”"
+              "fallbackText": "你听凝羽提出条件：“替我除掉她。”你望着她的眼睛，问她说的是不是苏妲己。凝羽没有否认：“她一直知道我想杀她。但我在月亮下发过誓，会用我的生命保护她。所以，当你出手的时候，要连我一起杀了。”",
+              "intentMatch": {
+                "matchAny": [
+                  "听她说明条件",
+                  "把话挑明",
+                  "替她办什么事",
+                  "问凝羽的条件",
+                  "要我杀谁",
+                  "开价",
+                  "说明交换条件"
+                ]
+              }
             },
             {
               "id": "trace_ningyu_cold_qi_source",
@@ -3377,7 +3368,17 @@
                   "阴寒",
                   "阴气"
                 ]
-              ]
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "阴寒之气",
+                  "寒意是谁",
+                  "寒气从哪里",
+                  "问她体内的寒气",
+                  "内息是谁留下",
+                  "寒意的来源"
+                ]
+              }
             }
           ]
         },
@@ -3818,11 +3819,12 @@
               "label": "不赌",
               "actionText": "我当面回绝这场赌局，不和苏妲己赌。",
               "ending": {
-                "id": "lcq.ending.death.paolao",
-                "title": "炮烙",
+                "id": "lcq.ending.death.baihu_beheading",
+                "title": "第六个",
                 "facts": [
                   "程宗扬当面回绝白湖商馆的赌局",
-                  "苏妲己下令执行炮烙",
+                  "苏妲己认定连赌都不敢的人所说产地不可信",
+                  "凝羽奉命一刀了结程宗扬，如刚处死的五个男奴；死亡在画外",
                   "赌局未开，卖身契未签"
                 ]
               }

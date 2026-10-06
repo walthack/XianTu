@@ -1,3 +1,8 @@
+import { statusNamePattern } from '../modules/sceneModule/statuses';
+
+import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
+
+import {containsEntityLabel} from '@/modules/scenarioMods/namedEntities';
 import { get } from 'lodash';
 import type { SaveData, StateChange } from '@/types/game';
 import { parseJsonSmart } from '@/utils/jsonExtract';
@@ -431,7 +436,7 @@ function explicitOutcomeSentence(text: string, pattern: RegExp): string {
   return text
     .split(/(?<=[。！？!?】])|\n+/)
     .map(sentence => sentence.trim())
-    .find(sentence => sentence.includes('谢艺')
+    .find(sentence => containsEntityLabel(sentence,"character","liuchao.character.xie_yi")
       && !/打算|设法|准备|试图|尝试|若能|希望|想要|计划|尚未/.test(sentence)
       && pattern.test(sentence)) || '';
 }
@@ -451,7 +456,7 @@ export function runDeterministicXieyiReconcile(saveData: SaveData, recentText: s
   const candidate = buildChainCandidates(runtime)[0];
   if (candidate?.id !== 'lcq.event.s06_03') return [];
 
-  const death = explicitOutcomeSentence(recentText, /战死|确认(?:其|谢艺)?(?:已经)?死亡|再无气息|呼吸(?:已经)?断绝|心跳(?:都)?已消失|重伤不治/);
+  const death = explicitOutcomeSentence(recentText, new RegExp("战死|确认(?:其|"+"(?:"+entityNamePattern("character","liuchao.character.xie_yi")+")"+")?(?:已经)?死亡|再无气息|呼吸(?:已经)?断绝|心跳(?:都)?已消失|重伤不治",""));
   const survival = explicitOutcomeSentence(recentText, /生还|活了下来|仍然活着|尚有气息|救回|抢救成功|保住(?:了)?性命|并未(?:当场)?(?:殒命|死亡)|最后一丝生机|胸口微微起伏|呼吸.{0,8}平稳|苏醒|睁开(?:了)?眼/);
   const missing = explicitOutcomeSentence(recentText, /失踪|下落不明|不知所踪|未找到遗体|生死未卜/);
 
@@ -459,7 +464,7 @@ export function runDeterministicXieyiReconcile(saveData: SaveData, recentText: s
   if (death && !survival && !missing) {
     accepted = [{ id: candidate.id, flagKey: candidate.flagKey, verdict: 'done', evidence: death }];
   } else if (survival && !death && !missing) {
-    const status = /重伤|昏迷|休养|长养/.test(recentText) ? 'longrest' : 'alive';
+    const status = new RegExp(`${statusNamePattern('wound.severe')}|${statusNamePattern('unconscious')}|休养|长养`).test(recentText) ? 'longrest' : 'alive';
     accepted = [{
       id: candidate.id,
       flagKey: candidate.flagKey,
@@ -516,13 +521,13 @@ export function runDeterministicBijiReconcile(saveData: SaveData, recentText: st
   const candidate = buildChainCandidates(runtime)[0];
   if (candidate?.id !== 'lcq.event.s06_04') return [];
 
-  const death = recentText.includes('小紫')
+  const death = containsEntityLabel(recentText,"character","liuchao.character.xiao_zi")
     ? recentText
       .split(/(?<=[。！？!?】])|\n+/)
       .map(sentence => sentence.trim())
-      .find(sentence => sentence.includes('碧姬')
+      .find(sentence => containsEntityLabel(sentence,"character","liuchao.character.bi_ji")
         && !/打算|设法|准备|试图|尝试|若能|希望|想要|计划|尚未/.test(sentence)
-        && /(?:亲手)?(?:杀死|刺死|杀了|处死)碧姬|碧姬.{0,24}(?:死去|死亡|断气|毙命|再无气息|最后一丝气息|尸体|尸身)|碧姬的尸体/.test(sentence)) || ''
+        && new RegExp("(?:亲手)?(?:杀死|刺死|杀了|处死)"+"(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+".{0,24}(?:死去|死亡|断气|毙命|再无气息|最后一丝气息|尸体|尸身)|"+"(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"的尸体","").test(sentence)) || ''
     : '';
   if (!death) return [];
 

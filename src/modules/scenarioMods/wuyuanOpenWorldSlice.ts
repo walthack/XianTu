@@ -1,3 +1,7 @@
+import {entityNamePattern,entityRecognitionLabel} from './namedEntities';
+import {entityName} from './namedEntities';
+import {refreshSaveEntityReferences} from './entitySaveRefs';
+import {canonicalEntityId} from './namedEntities';
 import type { SaveData } from '@/types/game';
 
 import {
@@ -219,7 +223,7 @@ function playerLocationDescription(saveData: SaveData): string {
 
 function playerInWuyuan(saveData: SaveData, runtime: RuntimeWithSlice): boolean {
   const desc = playerLocationDescription(saveData);
-  if (desc.includes('五原')) return true;
+  if (desc.includes(entityRecognitionLabel('location','liuchao.location.wuyuan','short'))) return true;
   const locId = locationFromPosition(desc, (runtime as { canon?: { locations?: Array<{ id: string; name: string }> } }).canon?.locations).locationId;
   return locId === 'liuchao.location.wuyuan';
 }
@@ -241,8 +245,8 @@ function inWuyuanSlice(runtime: RuntimeWithSlice, saveData: SaveData): boolean {
 function isWuyuanMarketTravelText(playerText: string): boolean {
   const normalized = playerText.normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
   if (!normalized) return false;
-  if (normalized.includes('点心铺') || normalized.includes('糕饼铺') || normalized.includes('后巷')) return false;
-  return /去五原|前往五原|去市集|前往五原露天市集/.test(normalized);
+  if (normalized.includes(entityName("location","lcq.zone.wuyuan.pastry_shop")) || normalized.includes('糕饼铺') || normalized.includes('后巷')) return false;
+  return new RegExp(`(?:去|前往)(?:${entityNamePattern('location','liuchao.location.wuyuan')})|去市集`).test(normalized);
 }
 
 function leafRank(zoneId: string): number {
@@ -294,6 +298,8 @@ function projectPlayerPosition(saveData: SaveData, state: OpenWorldSliceRuntime)
   const zone = WUYUAN_OPEN_WORLD_DEFINITION.zones.find(item => item.id === state.currentZoneId);
   const position = (saveData as any)?.角色?.位置;
   if (!zone || !position || typeof position !== 'object') return;
+  position.zoneId=zone.id;
+  position.locationId=canonicalEntityId('location',zone.worldLocationId || 'liuchao.location.wuyuan');
   position.描述 = `中州·五原·${zone.name}`;
 }
 
@@ -328,7 +334,7 @@ export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRu
   if (hasDepartedWuyuan(runtime)) {
     const focus = getScenarioFocusEvent(runtime as any);
     const location = focus ? storyRouteLocation(focus.id) : undefined;
-    if (location && (saveData as any)?.角色?.位置) (saveData as any).角色.位置.描述 = `中州·${location}`;
+    if (location && (saveData as any)?.角色?.位置) { (saveData as any).角色.位置.描述 = `中州·${location}`; refreshSaveEntityReferences(saveData); }
     return undefined;
   }
   if (!inWuyuanSlice(runtime, saveData)) return undefined;
@@ -343,7 +349,7 @@ function receiptId(state: OpenWorldSliceRuntime, kind: WuyuanOpenWorldSelection[
 }
 
 function marketArrivalSelection(saveData: SaveData): WuyuanOpenWorldSelection {
-  const from = playerLocationDescription(saveData) || '帅帐';
+  const from = playerLocationDescription(saveData) || entityName("location","lcq.location.shuai_zhang");
   const to = '五原露天市集';
   return {
     source: 'open_world_engine',
@@ -422,7 +428,7 @@ function settleArriveWuyuanMarket(saveData: SaveData, selection: WuyuanOpenWorld
   if (already && playerInWuyuan(saveData, runtime) && state.currentZoneId === MARKET_ZONE_ID) {
     return { settled: true, idempotent: true, settledFacts: selection.settledFacts };
   }
-  const fromName = playerLocationDescription(saveData) || '帅帐';
+  const fromName = playerLocationDescription(saveData) || entityName("location","lcq.location.shuai_zhang");
   const departedAtTurn = state.elapsedTurns;
   state.elapsedTurns += 1;
   state.currentZoneId = MARKET_ZONE_ID;

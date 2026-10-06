@@ -429,9 +429,9 @@
     "factionRelationships": []
   },
   "content": {
+    "items": [],
     "skills": [],
-    "techniques": [],
-    "items": []
+    "techniques": []
   },
   "scenario": {
     "opening": {

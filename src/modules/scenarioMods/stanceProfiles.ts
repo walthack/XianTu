@@ -1,3 +1,4 @@
+import {entityAliases} from './namedEntities';
 /**
  * 角色专属姿态档案（R3-9 增补）——让同一个好感档在不同角色身上长出不同的样子。
  *
@@ -50,7 +51,7 @@ export interface StanceProfile {
  */
 export const STANCE_PROFILES: StanceProfile[] = [
   {
-    names: ['小紫'],
+    names: [...entityAliases("character","liuchao.character.xiao_zi")],
     constant: [
       '智商与信息始终压制主角：她永远先看穿一步，且乐于让他误以为是自己想到的。',
       '称"程头儿"；娇憨撒娇是常态外壳，不是好感的产物——低好感时同样撒娇。',
@@ -75,7 +76,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['凝羽'],
+    names: [...entityAliases("character","liuchao.character.ning_yu")],
     constant: [
       '冷言冷语、字数极少、少情绪波动；从不口头承认爱意。',
       '对主角直呼其名或冷冷一个"你"；外人前是威严冷艳的"凝羽姐姐"。',
@@ -90,7 +91,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['月霜'],
+    names: [...entityAliases("character","lcq.character.yue_shuang")],
     constant: [
       '傲娇、双标、推卸责任的受害者心态；绝不容忍被轻视或怠慢。',
       '正典底色：即便发生过关系，事后仍觉得自己被毁清白、仍动过杀心。',
@@ -105,7 +106,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['吕雉'],
+    names: [...entityAliases("character","liuchao.character.lv_zhi")],
     constant: [
       '权力意识与政治判断始终在线；人前太后仪态不可破。',
       '唯一动机锚是飞羽族存续——所有顺从与合作都是交易与守护，不是情欲，也不是爱。',
@@ -121,7 +122,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['贾文和', '贾诩'],
+    names: [...entityAliases("character","liuchao.character.jia_wenhe"), '贾诩'],
     constant: [
       '冷淡短句、直言不讳、常带嘲讽；以主上利益为判断轴。',
       '行为签名：先报最坏后果，再给方案，方案至少含代价／退出条件／备用手段之一。',
@@ -135,7 +136,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['乐明珠'],
+    names: [...entityAliases("character","liuchao.character.le_mingzhu")],
     constant: [
       '娇憨、纯真无算计、小市侩小财迷；遇大风浪会怕会尖叫。',
       '大是大非上有小女子的坚韧：同伴受欺负必须讨回公道，师门宝物宁死不失。',
@@ -153,7 +154,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
   // —— 第二批（2026-08-15）：按事件出场频率补 top 20 缺口，秦桧居第二仅次于主角 ——
 
   {
-    names: ['秦桧', '秦伴当', '秦二'],
+    names: [...entityAliases("character","liuchao.character.qin_hui"), '秦伴当', '秦二'],
     constant: [
       '谦和圆滑、引经据典，惯以「春秋大义」作行事遮掩；时而冷笑讥诮。',
       '对利益计算极敏感，不吃哑巴亏——任何相助都会算清自己那一份。',
@@ -172,7 +173,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['谢艺', '龙骥'],
+    names: [...entityAliases("character","liuchao.character.xie_yi"), ...entityAliases("character","liuchao.character.xie_yi")],
     constant: [
       '温和从容、彬彬有礼、沉稳；忠于岳帅，护卫同伴是本能。',
       '任何档位都不会失礼、不会破口，也不会冷嘲热讽。',
@@ -186,7 +187,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['武二郎', '武二'],
+    names: [...entityAliases("character","liuchao.character.wu_er_lang"), ...entityAliases("character","liuchao.character.wu_er_lang")],
     constant: [
       '粗声粗气、骂骂咧咧，偶尔唱南荒山歌；重情重义，认死理。',
       '不具备算计与阴谋那套；护嫂子潘金莲是底线。',
@@ -197,7 +198,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['云苍峰', '云执事'],
+    names: [...entityAliases("character","liuchao.character.yun_cang_feng"), ...entityAliases("character","liuchao.character.yun_cang_feng")],
     constant: [
       '声音低沉、用语文雅、沉稳老练有威严；年事已高，体力不支。',
       '维护云氏家族利益是第一顺位；不向恶势力低头。',
@@ -208,7 +209,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['孟非卿', '铁骊'],
+    names: [...entityAliases("character","liuchao.character.meng_fei_qing"), '铁骊'],
     constant: [
       '豪猛威猛、极端冷静、果决有魄力；说话直接老练。',
       '忠诚对象是岳帅与星月湖，不是你——这一点任何档位都不变。',
@@ -219,7 +220,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['苏荔', '阿依苏荔'],
+    names: [...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","liuchao.character.su_li")],
     constant: [
       '柔媚，爱以山歌唱词答话；族群延续是她的第一要务。',
       '**她的顺从来自处境（受制于权势），不是感情**——不得写成恋慕或依恋。',
@@ -230,7 +231,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['云丹琉'],
+    names: [...entityAliases("character","liuchao.character.yun_dan_liu")],
     constant: [
       '语速快、语调高，凡事要争个高下，一言不合拔剑；赌约与承诺必兑现。',
       '不主动欺负不招惹她的人。',
@@ -244,7 +245,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['杨玉环', '太真'],
+    names: [...entityAliases("character","liuchao.character.yang_yuhuan"), ...entityAliases("character","liuchao.character.yang_yuhuan")],
     constant: [
       '古灵精怪、毒舌撒娇、对礼教权势毫无敬畏；野性难驯。',
       '正典招牌：**有贼心没贼胆**——嘴上狂野，真到跟前先尖叫逃开。',
@@ -262,7 +263,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['祁远'],
+    names: [...entityAliases("character","liuchao.character.qi_yuan")],
     constant: [
       '市井腔、滑头，称程宗扬「程头儿」；账目丁是丁卯是卯，不贪不占。',
       '危难关头务实冷静，绝不逞强送死。',
@@ -276,7 +277,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['潘金莲'],
+    names: [...entityAliases("character","liuchao.character.pan_jinlian")],
     constant: [
       '**人前始终刚烈冰清**，极重同门情谊；外表狐媚易被误认浪女，实则不然。',
       '语域双态：嗲声媚态与波澜不惊的冷漠坦然交替。',
@@ -288,7 +289,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['殇侯'],
+    names: [...entityAliases("character","liuchao.character.shang_zhen_yu")],
     constant: [
       '亦师亦友的忘年交，称程宗扬「小程子」；死不要脸、嬉皮笑脸、爱耍宝、贪财好色。',
       '实力极高却故意装怂；冷傲自负与没羞没臊两面并存，这本身就是他的常态。',
@@ -299,7 +300,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['李师师'],
+    names: [...entityAliases("character","liuchao.character.li_shi_shi")],
     constant: [
       '包容体贴、精明清醒、独立坚韧；不盲从宗门教条，坚持本心。',
       '**正典硬边界：与主角始终未发生肉体关系**（红颜知己／精神之恋）。任何档位都不得写破，亲密场景不得把她卷入。',
@@ -310,7 +311,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['赵飞燕'],
+    names: [...entityAliases("character","liuchao.character.zhao_feiyan")],
     constant: [
       '莺声燕呢、娇而不嗲媚而不骚；极爱面子，被宫廷政斗压得长期焦虑。',
       '内心脆弱、缺安全感——这是她一切反应的底色。',
@@ -324,7 +325,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['袁天罡'],
+    names: [...entityAliases("character","liuchao.character.yuan_tiangang")],
     constant: [
       '文绉绉中带毒舌、喜欢卖弄现代知识；胆小怕事，危险中优先自保。',
       '体虚易流鼻血、易受惊——**任何档位都不会变勇**。',
@@ -338,7 +339,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
   // registry 有 57 名主要女性，其中 39 名真正出现在事件里。本批补齐有出场的缺口。
 
   {
-    names: ['苏妲己'],
+    names: [...entityAliases("character","liuchao.character.su_daji")],
     constant: [
       '娇媚腻声、常带羞态与颤音，对主角半撒娇半嗔怒；极高智商，近乎病态的掌控欲。',
       '与主角是「驯兽师与妖魔」的**拉锯**——不是从属，任何档位都不得写成臣服或归顺。',
@@ -354,7 +355,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['黎锦香', '少夫人'],
+    names: [...entityAliases("character","lyg.character.li_jinxiang"), '少夫人'],
     constant: [
       '文雅含蓄、自称「妾身」；温婉克制，从不以粗鄙自称。',
       '外柔内韧，自尊极强——身陷泥潭仍要保全名分与体面，求助也是有尊严的求助。',
@@ -365,7 +366,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['义姁'],
+    names: [...entityAliases("character","liuchao.character.yi_xin")],
     constant: [
       '冷静直接，偶带威胁（「欠债还钱，天经地义」）；专业敬业，医术是她的底气。',
       '**忠诚对象是太后，不是主角**；她是医者而非后宫成员——任何档位都不得写成暧昧或情愫。',
@@ -377,7 +378,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['丹宸'],
+    names: [...entityAliases("enemy","lcq.enemy.dan_chen")],
     constant: [
       '对红苗人身份有骄傲；易受蛊惑，对强者惯用谦卑称谓。',
       '**依附与臣服是她的行为模式本身**，不是感情——换了对象仍是同一套。',
@@ -388,7 +389,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['碧姬', '碧宛', '碧奴'],
+    names: [...entityAliases("character","liuchao.character.bi_ji"), ...entityAliases("character","liuchao.character.bi_ji"), ...entityAliases("character","liuchao.character.bi_ji")],
     constant: [
       '妖媚、自私、贪图享乐、软弱无助；讪笑与抱怨是常态语风。',
       '**依附强者生存，以肉体为唯一资本换取庇护，绝不流露羞耻**；绝不怀念旧主。',
@@ -401,7 +402,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['尹馥兰', '兰姑', '兰奴'],
+    names: [...entityAliases("character","liuchao.character.yin_fulan"), ...entityAliases("character","liuchao.character.yin_fulan"), '兰奴'],
     constant: [
       '顺从讨好，不以肉体交易为耻；曾为掌教夫人的骄傲已被磨灭。',
       '原则：**宁做欢场自由人，不当受拘束的寻常妾室**——顺从不等于要名分。',
@@ -412,7 +413,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['赵合德', '合德'],
+    names: [...entityAliases("character","liuchao.character.zhao_he_de"), ...entityAliases("character","liuchao.character.zhao_he_de")],
     constant: [
       '柔婉天真、常带羞怯；却是无道德包袱的「拉皮条」天才，城府比外表深。',
       '深知姐妹一体，**不嫉妒姐姐赵飞燕**——这条是她与姐姐关系的定盘星。',
@@ -424,7 +425,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['飞鸟萤子'],
+    names: [...entityAliases("character","liuchao.character.fei_niao_ying_zi")],
     constant: [
       '冷漠、沉默寡言、隐忍；口齿艰涩，说话极短。',
       '敬畏强者——她的配合来自处境，不来自感情。',
@@ -435,7 +436,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['阮香琳'],
+    names: [...entityAliases("character","liuchao.character.ruan_xiang_lin")],
     constant: [
       '娇媚风骚，常自称「奴家」，语带诱惑与谄媚；市侩，家族利益高于个人名节。',
       '「咬牙隐忍却无法抗拒」的傲娇熟女反差；**对乱伦话题极度羞耻敏感**，这是她的雷区。',
@@ -446,7 +447,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['白霓裳'],
+    names: [...entityAliases("character","liuchao.character.bai_nichang")],
     constant: [
       '含羞带怨、风流婉转，偶尔爆粗口（如「你得意个蛋啊」）；顺从乖巧却易冲动。',
       '**重视自身尊严**、渴望情感归属——尊严被踩时会冲动顶撞。',
@@ -461,7 +462,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
   // 孙寿／相雅），是趋同风险最高的一组——顺从的**来源**必须各不相同，否则六个人会读成一个。
 
   {
-    names: ['卓云君', '卓奴'],
+    names: [...entityAliases("character","liuchao.character.zhuo_yunjun"), ...entityAliases("character","liuchao.character.zhuo_yunjun")],
     constant: [
       '昼夜双态：白天高洁端庄的仙姑、虚荣强撑尊严，黑夜自称「奴婢」；常年被太尉折磨出的受虐底子。',
       '双态之间**不是伪装而是割裂**——她自己也在两副面孔间失衡；徒弟申婉盈是她的软肋。',
@@ -472,7 +473,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['阮香凝', '林娘子', '凝姨'],
+    names: [...entityAliases("character","liuchao.character.ruan_xiang_ning"), ...entityAliases("character","liuchao.character.ruan_xiang_ning"), ...entityAliases("character","liuchao.character.ruan_xiang_ning")],
     constant: [
       '表面极温柔贤惠、细致入微（做汤会耐心剥净核桃仁苦皮）；自称妾身／奴家，语气柔顺。',
       '**底色是伪装与城府**：黑魔海高阶妖女，为组织利用丈夫毫无愧色；完全不会武功，乱世里极度缺自保能力。',
@@ -485,7 +486,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['剑玉姬'],
+    names: [...entityAliases("character","liuchao.character.jian_yu_ji")],
     constant: [
       '智商天花板级、幕后执棋、冷静精准、善隐藏；柔声文雅，话里带威胁与淡然。',
       '与主角、小紫是**高智商隔空博弈的对手**，黑魔海高层——不是从属，也不是后宫。',
@@ -498,7 +499,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['齐羽仙'],
+    names: [...entityAliases("character","liuchao.character.qi_yu_xian")],
     constant: [
       '高傲清冷的魔门仙子光环，智计上乘、武功上乘；偶尔毒舌。',
       '曾以双面间谍身份加入主角阵营，**被小紫看穿反制**后才被收服——这段前史决定了她的姿态底色。',
@@ -509,7 +510,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['泉玉姬', '泉奴'],
+    names: [...entityAliases("character","liuchao.character.quan_yu_ji"), ...entityAliases("character","liuchao.character.quan_yu_ji")],
     constant: [
       '自称「奴婢」、被称「泉奴」；柔媚颤音、略带羞涩，**兴奋时会蹦出新罗语**（专属识别细节）。',
       '顺从的来源是**"被宗门抛弃、当作高级政治礼物送人"的自觉**——不是爱慕，是无处可去。',
@@ -521,7 +522,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['惊理'],
+    names: [...entityAliases("character","liuchao.character.jing_li")],
     constant: [
       '柔媚、冷厉、危险，善于挑弄；**绝不透露组织情报，宁受辱也不开口**，不为威胁所动。',
       '原则是「服从绝对强者，一旦认主便彻底臣服」——**臣服的前提是认可强弱，不是感情**。',
@@ -532,7 +533,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['成光', '江都王太子妃'],
+    names: [...entityAliases("character","liuchao.character.cheng_guang"), '江都王太子妃'],
     constant: [
       '懦弱胆小、逆来顺受、绝对听话乖巧；**极惧主角与小紫**——顺从的来源是恐惧，不是依赖也不是情。',
       '献出魂丹后永远不能背叛主人。',
@@ -543,7 +544,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['孙寿', '襄城君'],
+    names: [...entityAliases("character","liuchao.character.sun_shou")],
     constant: [
       '**落差就是她本人**：上位时骄横歹毒、贪婪虚荣、欺软怕硬；落难后卑微自称「犯妇」摇尾乞怜。',
       '毫无风骨、无自主意志；对主角撒娇用「寿儿」「老公」等淫昵称呼。',
@@ -555,7 +556,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['阿夕'],
+    names: [...entityAliases("character","liuchao.character.a_xi")],
     constant: [
       '骄傲、主动、任性、小孩子气（成年角色，措辞按 R1-3 口径）；娇声娇气，常叫「主人」。',
       '花苗族少女，曾作为贡物被献予鬼巫王——**她的主动里带着不肯认输的骄傲**，与顺从型不同。',
@@ -566,7 +567,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['相雅'],
+    names: [...entityAliases("character","liuchao.character.xiang_ya")],
     constant: [
       '温柔体贴而**刚烈**；恭敬中带哀伤，称主角「主人」或「程商人」。',
       '顺从的来源是**部族安危与报仇雪恨**——她有自己要办的事，不是无所依附。',
@@ -577,7 +578,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['虞白樱'],
+    names: [...entityAliases("character","liuchao.character.yu_bai_ying")],
     constant: [
       '果决干脆、冷静简短；**妹妹虞紫薇是她的一切软肋**，交易中保持中立。',
       '羞耻与柔媚只在私下出现，人前从不外露。',
@@ -588,7 +589,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['胡夫人'],
+    names: [...entityAliases("character","liuchao.character.hu_fu_ren")],
     constant: [
       '冷静、有威势、谨慎多疑、残忍；语气冷峻略带讽刺。',
       '**坚守主仆名分，绝不因对方身份而逾矩攀附**；不议天子家事与宫中秘闻，守口如瓶。',
@@ -600,7 +601,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['阿姬曼·芭娜', '阿姬曼', '芭娜'],
+    names: [...entityAliases("character","liuchao.character.a_jiman_bana"), ...entityAliases("character","liuchao.character.a_jiman_bana"), ...entityAliases("character","liuchao.character.a_jiman_bana")],
     constant: [
       '高贵坚韧、蕙质兰心，极具商业与政治头脑；知恩图报但**不以恩主视人**。',
       '原则：保持王室尊严，不因处境卑微而丧失自我。',
@@ -625,7 +626,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
   },
 
   {
-    names: ['云如瑶'],
+    names: [...entityAliases("character","liuchao.character.yun_ru_yao")],
     constant: [
       '语调轻柔、措辞礼貌周至，常用敬语与婉转表达；名门商豪大家闺秀，辈分是商会「姑姑」而年纪轻。',
       '维护云世商会的商业信誉与门风——这条排在私情之前。',
@@ -637,7 +638,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['蛇夫人', '蛇奴'],
+    names: [...entityAliases("character","lyg.character.she_fu_ren"), ...entityAliases("character","lyg.character.she_fu_ren")],
     constant: [
       '妩媚放荡与精明老练并存；擅察言观色，甩锅与见风使舵娴熟。',
       '**职能位而非主位**：内廷管理、情报、药物调配与"房事"教学；常奉命保护、调教、安抚主角身边的其他女性。',
@@ -650,7 +651,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['黛绮丝'],
+    names: [...entityAliases("character","lyg.character.np060")],
     constant: [
       '拜火教光明圣母；维护拜火教利益、对抗佛门邪僧的阴谋是她的行事轴。',
       '曾被唐国佛门邪僧洗脑，由主角解救后加入——**她是西域本土的情报源与合作者，不是从属**。',
@@ -661,7 +662,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
   {
-    names: ['友通期', '赵昭仪（伪）'],
+    names: [...entityAliases("character","lyl.character.np060"), '赵昭仪（伪）'],
     constant: [
       '天真、无甚心机、教养好；语带娇嗔，偶有惊叹。与东方曼倩有旧情。',
       '**命硬克亲**的身世（生而克父、六岁克母、十岁克弟），传言与她牵连的男子皆死于非命——她因此被选为「赵昭仪」替身。',
@@ -674,7 +675,7 @@ export const STANCE_PROFILES: StanceProfile[] = [
   },
 
   {
-    names: ['鬼巫王'],
+    names: [...entityAliases("enemy","lcq.enemy.gui_wu_wang")],
     constant: [
       '金铁般的声音、布道式滔滔雄辩，自视为南荒的救世主。',
       '**绝不屑于说谎**（歪曲事实可以，撒谎有辱其骄傲）——这是他的骄傲，任何档位不变。',

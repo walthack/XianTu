@@ -44,7 +44,7 @@
 
         <div class="card">
           <div class="card-title">府库</div>
-          <div class="row"><span class="k">灵石</span><span class="v">{{ safeNum(management.府库?.灵石) }}</span></div>
+          <div class="row"><span class="k">铜铢</span><span class="v">{{ safeNum(management.府库?.铜铢) }}</span></div>
           <div class="row"><span class="k">灵材</span><span class="v">{{ safeNum(management.府库?.灵材) }}</span></div>
           <div class="row"><span class="k">丹药</span><span class="v">{{ safeNum(management.府库?.丹药) }}</span></div>
           <div class="row"><span class="k">阵材</span><span class="v">{{ safeNum(management.府库?.阵材) }}</span></div>
@@ -244,12 +244,12 @@ async function initManagement() {
 - 社交.宗门.宗门经营.${sectName} : 完整覆盖
 
 ## 对象结构（必须）
-{"宗门名称":"${sectName}","战力":number,"安定":number,"外门训练度":number,"府库":{"灵石":number,"灵材":number,"丹药":number,"阵材":number},"设施":{"练功房":number,"藏经阁":number,"炼丹房":number,"护山大阵":number},"最近结算":"${nowIso}","月报":[]}
+{"宗门名称":"${sectName}","战力":number,"安定":number,"外门训练度":number,"府库":{"铜铢":number,"灵材":number,"丹药":number,"阵材":number},"设施":{"练功房":number,"藏经阁":number,"炼丹房":number,"护山大阵":number},"最近结算":"${nowIso}","月报":[]}
 
 ## 数值约束（必须）
 - 战力：优先用宗门档案.领导层.综合战力（若缺失则 30-80）
 - 安定 55-85，外门训练度 35-75
-- 灵石 20000-200000，灵材/丹药/阵材 0-5000，设施等级 0-5
+- 铜铢 20000-200000，灵材/丹药/阵材 0-5000，设施等级 0-5
 - 所有数值不得为负
 
 ## 宗门档案（参考）
@@ -303,9 +303,9 @@ d20=${d20}
 - 不允许修改：元数据.时间
 - 所有数值不得为负
 - 战力/安定/训练度 单次变化不超过 8 点
-- 府库.灵石 单次变化建议在 -3000~+12000（根据d20与设施等级）
+- 府库.铜铢 单次变化建议在 -3000~+12000（根据d20与设施等级）
 - 必须追加月报：push 到 社交.宗门.宗门经营.${sectName}.月报 一个对象：
-  {"时间":"${nowIso}","摘要":"...","变化":{"灵石":+n,"安定":+n,"外门训练度":+n,"战力":+n}}
+  {"时间":"${nowIso}","摘要":"...","变化":{"铜铢":+n,"安定":+n,"外门训练度":+n,"战力":+n}}
 - 更新 最近结算 为 "${nowIso}"
 
 ## 当前经营数据（必须以此为准）

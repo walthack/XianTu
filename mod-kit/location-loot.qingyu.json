@@ -16,7 +16,7 @@
       "status": "pending",
       "entries": []
     },
-    "lcq.location.command_tent": {
+    "lcq.location.shuai_zhang": {
       "name": "帅帐",
       "status": "pending",
       "entries": []
@@ -960,7 +960,7 @@
       "status": "ready",
       "entries": []
     },
-    "liuchao.location.guiwang_dong": {
+    "liuchao.location.gui_wang_dong": {
       "name": "鬼王峒",
       "status": "ready",
       "entries": [
@@ -1104,7 +1104,7 @@
       "status": "pending",
       "entries": []
     },
-    "liuchao.location.jingxi": {
+    "liuchao.location.jingxi_village": {
       "name": "荆溪村寨",
       "status": "pending",
       "entries": []
@@ -1114,7 +1114,7 @@
       "status": "pending",
       "entries": []
     },
-    "liuchao.location.jinmingzhai": {
+    "liuchao.location.jinming_zhai": {
       "name": "金明寨",
       "status": "pending",
       "entries": []
@@ -1129,7 +1129,7 @@
       "status": "pending",
       "entries": []
     },
-    "liuchao.location.liangzhou": {
+    "lyg.location.liangzhou": {
       "name": "凉州",
       "status": "pending",
       "entries": []
@@ -1139,7 +1139,7 @@
       "status": "pending",
       "entries": []
     },
-    "liuchao.location.linan": {
+    "liuchao.location.lin_an": {
       "name": "临安",
       "status": "pending",
       "entries": []
@@ -1169,7 +1169,7 @@
       "status": "pending",
       "entries": []
     },
-    "liuchao.location.luoyang": {
+    "lyl.location.luoyang": {
       "name": "洛都",
       "status": "pending",
       "entries": []

@@ -1,13 +1,13 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-10-05-40d0c799ea1bcdbb",
-  "sourceHash": "40d0c799ea1bcdbb",
+  "version": "cr-2026-10-06-84050f86a449153c",
+  "sourceHash": "84050f86a449153c",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-10-05T05:24:38.030Z",
+  "generatedAt": "2026-10-06T11:48:04.059Z",
   "stats": {
-    "total": 315,
-    "stagePresent": 218,
-    "canonOnly": 97,
+    "total": 322,
+    "stagePresent": 227,
+    "canonOnly": 95,
     "collisionsMerged": 0
   },
   "characters": [
@@ -364,84 +364,6 @@
         "conflicts": []
       },
       "embedText": "蒲海云 ｜ 大宋泉州市舶司官员/异域胡商 ｜ 【昭南人物】 ｜ 广源行(商人/行商)、昭南(行商者) ｜ 登场于天佛阁（娑梵寺下院） ｜ 文质彬彬、圆滑世故、刻意迎合、胆大心细、包藏机心 ｜ 相识的后辈/合作伙伴 ｜ 对程宗扬：侯爷/程侯 / 被他人称呼：蒲兄/蒲海云 ｜ 以独孤谓为中介结识程宗扬；献异域处女欲送程宗扬；营救独孤谓并以此邀功；与九爷等人密谋结交索推事"
-    },
-    {
-      "id": "canon.character.15b71fd1c8",
-      "canonicalName": "樨夫人",
-      "aliases": [],
-      "gender": "女",
-      "books": [
-        "qingyu"
-      ],
-      "tier": "次要",
-      "stagePresence": false,
-      "staticProfile": {
-        "personality": [],
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "在白夷族时因受制于人而顺从程宗扬"
-        ],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [
-          "白夷族遭鬼王峒使者控制，作为族长夫人被胁迫役使",
-          "程宗扬后来据此推断鬼王峒以药物与幻觉控制诸族"
-        ],
-        "ending": [],
-        "identitySummary": "白夷族长夫人；鬼王峒使者控制白夷时被其胁迫役使，后受程宗扬影响",
-        "appearance": "紫红（酒红）色大波浪长卷发，蓬松垂散；红色眼眸，眼神妩媚；艳丽的成熟面孔，唇色淡红；成熟丰满；米白底浅黄印花的轻薄单衣（半褪、宽松），内里可见黄绿色织圆纹的裙料；绿珠金质长耳坠",
-        "affiliations": [
-          {
-            "faction": "白夷族",
-            "role": "族长夫人"
-          }
-        ],
-        "debutLocation": {
-          "location": "白夷族",
-          "locator": "六朝清羽记·第119章前后",
-          "scene": "白夷族受鬼王峒使者控制期间"
-        },
-        "visualIdentity": {
-          "hair": "紫红（酒红）色大波浪长卷发，蓬松垂散",
-          "eyes": "红色眼眸，眼神妩媚",
-          "face": "艳丽的成熟面孔，唇色淡红",
-          "build": "成熟丰满"
-        },
-        "visualOutfits": [
-          {
-            "id": "default",
-            "scope": "default",
-            "outfit": "米白底浅黄印花的轻薄单衣（半褪、宽松），内里可见黄绿色织圆纹的裙料",
-            "accessories": "绿珠金质长耳坠",
-            "palette": [
-              "酒红",
-              "米白",
-              "浅黄",
-              "黄绿"
-            ],
-            "props": "卧于窗下（情色场景）"
-          }
-        ]
-      },
-      "region": "南荒",
-      "phaseIdentities": [],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [
-          "portrait-canon-gap-recovered"
-        ],
-        "conflicts": [],
-        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
-        "humanNotes": [
-          "原文依据：使者尖声大笑……在这位白夷族长夫人湿淋淋的蜜穴中肆意搅弄起来（ch78）"
-        ]
-      },
-      "embedText": "樨夫人 ｜ 白夷族长夫人；鬼王峒使者控制白夷时被其胁迫役使，后受程宗扬影响 ｜ 【南荒人物】 ｜ 白夷族(族长夫人) ｜ 登场于白夷族 ｜ 在白夷族时因受制于人而顺从程宗扬 ｜ 白夷族遭鬼王峒使者控制，作为族长夫人被胁迫役使；程宗扬后来据此推断鬼王峒以药物与幻觉控制诸族"
     },
     {
       "id": "canon.character.16cd30ae70",
@@ -3755,68 +3677,6 @@
         "conflicts": []
       },
       "embedText": "贾师宪 ｜ 宋国太师 / 权臣 / 贾党领袖 ｜ 【宋国人物】 ｜ 宋国(太师兼平章军国重事) ｜ 登场于江州 ｜ 精明务实、城府极深、善于权谋、看重利益、临危不乱、威严 ｜ 利益合作伙伴 ｜ 程员外 / 被别人称为：老贾、贾太师、贾师宪 ｜ 与程宗扬合作发行纸币；从晴州借一百万金铢军饷；主导拆毁武穆王府开发；击垮王禹玉一党；在朝会主战面临户部账目质询"
-    },
-    {
-      "id": "canon.character.81be8593ee",
-      "canonicalName": "娄蒙",
-      "aliases": [],
-      "gender": "男",
-      "books": [
-        "qingyu"
-      ],
-      "tier": "次要",
-      "stagePresence": false,
-      "staticProfile": {
-        "personality": [],
-        "speechStyle": "",
-        "principles": [],
-        "goals": [],
-        "weaknesses": [],
-        "signatureAbilities": [],
-        "relationToProtagonist": [
-          "花苗—红苗结盟一方，与苏荔同阵营"
-        ],
-        "formsOfAddress": [],
-        "joining": [],
-        "keyEvents": [
-          "红苗与花苗因血缘相近、同受鬼王峒威胁而结盟，娄蒙夫妻是关键",
-          "在鬼王峒受巫师控制，嘶吼「杀了我」后被木杖击昏"
-        ],
-        "ending": [],
-        "identitySummary": "红苗族长之子、红苗未来的继承人；妻子丹宸（婚前是苏荔闺中密友），红苗与花苗结盟的关键",
-        "appearance": "额头刺青",
-        "affiliations": [
-          {
-            "faction": "红苗",
-            "role": "族长之子／继承人"
-          }
-        ],
-        "debutLocation": {
-          "location": "鬼王峒",
-          "locator": "六朝清羽记·第114章",
-          "scene": "额头刺青的红苗汉子单膝跪地，受鬼角巫师念诵控制"
-        },
-        "visualIdentity": {
-          "marks": [
-            "额头刺青"
-          ]
-        }
-      },
-      "region": "南荒",
-      "phaseIdentities": [],
-      "review": {
-        "approved": false,
-        "reviewed": true,
-        "flags": [
-          "portrait-canon-gap-recovered"
-        ],
-        "conflicts": [],
-        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
-        "humanNotes": [
-          "原文依据：娄蒙是红苗族长的儿子，也是红苗未来的继承人……娄蒙的妻子丹宸未嫁前是苏荔的闺中密友（ch114）"
-        ]
-      },
-      "embedText": "娄蒙 ｜ 红苗族长之子、红苗未来的继承人；妻子丹宸（婚前是苏荔闺中密友），红苗与花苗结盟的关键 ｜ 【南荒人物】 ｜ 红苗(族长之子／继承人) ｜ 登场于鬼王峒 ｜ 花苗—红苗结盟一方，与苏荔同阵营 ｜ 红苗与花苗因血缘相近、同受鬼王峒威胁而结盟，娄蒙夫妻是关键；在鬼王峒受巫师控制，嘶吼「杀了我」后被木杖击昏"
     },
     {
       "id": "canon.character.81d313b84d",
@@ -7338,6 +7198,30 @@
       "embedText": "阿伽门侬 ｜ 罗马军团统帅 ｜ 罗马军团(联军统帅) ｜ 登场于战场中央 ｜ 傲慢、自信、冷酷、易怒、恐惧 ｜ 敌对 ｜ 阿伽门侬 ｜ 与韩庚交战；被金发女子箭伤；被迫退出战场；决战·与大汉左武第一军团（左武、天武、天策、天霁营）在草原决战：神臂弓齐射摧毁罗马长弓手，盾阵龟缩防御→黄金骑士团冲锋突破，被月霜一剑斩杀→天策营陌刀方阵碾碎第六军团\"钢铁之壁\"→第三、第十军团投入僵持，阿伽门侬陷入两难抉择；转折：韩庚发动七阳神功，以一人之力击溃阿伽门侬身边全部精锐，包括游侠英豪、黄金骑士与蒙面女骑士；〔临终名场面〕韩庚七阳齐出，威力惊天动地——韩庚暴喝一声，双掌霍然翻开，周身火光大盛，在体内游走的硕大光球猛然一亮，带着尖啸的狂飙脱体而出。；〔临终名场面〕阿伽门侬被神功击中，狼狈不堪——忽然背后一股炙热的气劲涌来，坐骑四蹄一软，卧倒在地，坐在四角马鞍上的阿伽门侬被震得向前飞出，纵使他常年征战，修为不凡，也禁不住喷出一口鲜血。"
     },
     {
+      "id": "lcq.character.biling_woman_ch80",
+      "canonicalName": "碧鲮女子",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "第80章参与碧鲮族议事、拿来藻丝的女子，原文未点名。",
+        "race": "碧鲮族",
+        "appearance": "碧鲮女子",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "第80章议事的碧鲮女子，拿来湿藻丝说明颜色。",
+          "scope": "stage"
+        }
+      ],
+      "embedText": "碧鲮女子 ｜ 第80章参与碧鲮族议事、拿来藻丝的女子，原文未点名。"
+    },
+    {
       "id": "lcq.character.dai_jixue",
       "canonicalName": "黛姬雪娜",
       "aliases": [],
@@ -7757,6 +7641,354 @@
         "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
       },
       "embedText": "弥骨 ｜ 鬼王峒武将级人物，负责追击与维持集会秩序 ｜ 鬼王峒(武将/追兵) ｜ 登场于鬼王宫 ｜ 凶悍、服从鬼巫王、负责追击与维持集会秩序 ｜ 作为追兵向程宗扬一行施压 ｜ 承接突围、追击和小紫倒戈前夜的压力"
+    },
+    {
+      "id": "lcq.character.nanhuang_dagu",
+      "canonicalName": "达古",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "鬼王峒巫师",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "鬼王峒巫师",
+          "scope": "stage"
+        }
+      ],
+      "presenceWindow": {
+        "firstChapter": 82,
+        "lastPresentChapter": 83,
+        "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+      },
+      "embedText": "达古 ｜ 鬼王峒巫师"
+    },
+    {
+      "id": "lcq.character.nanhuang_heishe",
+      "canonicalName": "黑舌",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "阁罗的随从，鬼王峒的人",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "阁罗的随从，鬼王峒的人",
+          "scope": "stage"
+        }
+      ],
+      "presenceWindow": {
+        "firstChapter": 78,
+        "lastPresentChapter": 80,
+        "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+      },
+      "embedText": "黑舌 ｜ 阁罗的随从，鬼王峒的人"
+    },
+    {
+      "id": "lcq.character.nanhuang_kawa",
+      "canonicalName": "卡瓦",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "花苗族汉子，随送亲队同行",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "identity": "花苗族汉子，随送亲队同行",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "identity": "花苗族汉子，随送亲队同行",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "花苗族汉子，随送亲队同行",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "identity": "花苗族汉子，随送亲队同行",
+          "scope": "stage"
+        }
+      ],
+      "presenceWindow": {
+        "firstChapter": 40,
+        "lastPresentChapter": 108,
+        "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+      },
+      "embedText": "卡瓦 ｜ 花苗族汉子，随送亲队同行"
+    },
+    {
+      "id": "lcq.character.nanhuang_loumeng",
+      "canonicalName": "娄蒙",
+      "idAliases": [
+        "canon.character.81be8593ee"
+      ],
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "花苗—红苗结盟一方，与苏荔同阵营"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "红苗与花苗因血缘相近、同受鬼王峒威胁而结盟，娄蒙夫妻是关键",
+          "在鬼王峒受巫师控制，嘶吼「杀了我」后被木杖击昏"
+        ],
+        "ending": [],
+        "identitySummary": "红苗族长之子、红苗未来的继承人；妻子丹宸（婚前是苏荔闺中密友），红苗与花苗结盟的关键",
+        "appearance": "额头刺青",
+        "affiliations": [
+          {
+            "faction": "红苗",
+            "role": "族长之子／继承人"
+          }
+        ],
+        "debutLocation": {
+          "location": "鬼王峒",
+          "locator": "六朝清羽记·第114章",
+          "scene": "额头刺青的红苗汉子单膝跪地，受鬼角巫师念诵控制"
+        },
+        "visualIdentity": {
+          "marks": [
+            "额头刺青"
+          ]
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：娄蒙是红苗族长的儿子，也是红苗未来的继承人……娄蒙的妻子丹宸未嫁前是苏荔的闺中密友（ch114）"
+        ]
+      },
+      "embedText": "娄蒙 ｜ 红苗族长之子、红苗未来的继承人；妻子丹宸（婚前是苏荔闺中密友），红苗与花苗结盟的关键 ｜ 【南荒人物】 ｜ 红苗(族长之子／继承人) ｜ 登场于鬼王峒 ｜ 花苗—红苗结盟一方，与苏荔同阵营 ｜ 红苗与花苗因血缘相近、同受鬼王峒威胁而结盟，娄蒙夫妻是关键；在鬼王峒受巫师控制，嘶吼「杀了我」后被木杖击昏"
+    },
+    {
+      "id": "lcq.character.nanhuang_shekui",
+      "canonicalName": "蛇傀",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "鬼王峒使者阁罗的随从",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "鬼王峒使者阁罗的随从",
+          "scope": "stage"
+        }
+      ],
+      "presenceWindow": {
+        "firstChapter": 78,
+        "lastPresentChapter": 80,
+        "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+      },
+      "embedText": "蛇傀 ｜ 鬼王峒使者阁罗的随从"
+    },
+    {
+      "id": "lcq.character.nanhuang_shigang",
+      "canonicalName": "石刚",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "白湖商馆护卫",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "identity": "白湖商馆护卫",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "identity": "白湖商馆护卫",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "白湖商馆护卫",
+          "scope": "stage"
+        }
+      ],
+      "presenceWindow": {
+        "firstChapter": 31,
+        "lastPresentChapter": 73,
+        "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+      },
+      "embedText": "石刚 ｜ 白湖商馆护卫"
+    },
+    {
+      "id": "lcq.character.nanhuang_xi_furen",
+      "canonicalName": "樨夫人",
+      "idAliases": [
+        "canon.character.15b71fd1c8"
+      ],
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "personality": [],
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [
+          "在白夷族时因受制于人而顺从程宗扬"
+        ],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [
+          "白夷族遭鬼王峒使者控制，作为族长夫人被胁迫役使",
+          "程宗扬后来据此推断鬼王峒以药物与幻觉控制诸族"
+        ],
+        "ending": [],
+        "identitySummary": "白夷族长夫人；鬼王峒使者控制白夷时被其胁迫役使，后受程宗扬影响",
+        "appearance": "紫红（酒红）色大波浪长卷发，蓬松垂散；红色眼眸，眼神妩媚；艳丽的成熟面孔，唇色淡红；成熟丰满；米白底浅黄印花的轻薄单衣（半褪、宽松），内里可见黄绿色织圆纹的裙料；绿珠金质长耳坠",
+        "affiliations": [
+          {
+            "faction": "白夷族",
+            "role": "族长夫人"
+          }
+        ],
+        "debutLocation": {
+          "location": "白夷族",
+          "locator": "六朝清羽记·第119章前后",
+          "scene": "白夷族受鬼王峒使者控制期间"
+        },
+        "visualIdentity": {
+          "hair": "紫红（酒红）色大波浪长卷发，蓬松垂散",
+          "eyes": "红色眼眸，眼神妩媚",
+          "face": "艳丽的成熟面孔，唇色淡红",
+          "build": "成熟丰满"
+        },
+        "visualOutfits": [
+          {
+            "id": "default",
+            "scope": "default",
+            "outfit": "米白底浅黄印花的轻薄单衣（半褪、宽松），内里可见黄绿色织圆纹的裙料",
+            "accessories": "绿珠金质长耳坠",
+            "palette": [
+              "酒红",
+              "米白",
+              "浅黄",
+              "黄绿"
+            ],
+            "props": "卧于窗下（情色场景）"
+          }
+        ]
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "portrait-canon-gap-recovered"
+        ],
+        "conflicts": [],
+        "note": "立绘管线缺卡审计补建（2026-07-30）：该角色有官方插图但 canon 无角色卡，故无法参与别名归一。仅采原文明载事实，不外推原作未载内容。",
+        "humanNotes": [
+          "原文依据：使者尖声大笑……在这位白夷族长夫人湿淋淋的蜜穴中肆意搅弄起来（ch78）"
+        ]
+      },
+      "embedText": "樨夫人 ｜ 白夷族长夫人；鬼王峒使者控制白夷时被其胁迫役使，后受程宗扬影响 ｜ 【南荒人物】 ｜ 白夷族(族长夫人) ｜ 登场于白夷族 ｜ 在白夷族时因受制于人而顺从程宗扬 ｜ 白夷族遭鬼王峒使者控制，作为族长夫人被胁迫役使；程宗扬后来据此推断鬼王峒以药物与幻觉控制诸族"
+    },
+    {
+      "id": "lcq.character.nanhuang_xiaowei",
+      "canonicalName": "小魏",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "白湖商馆护卫，弩手",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "identity": "白湖商馆护卫，弩手",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "identity": "白湖商馆护卫，弩手",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "identity": "白湖商馆护卫，弩手",
+          "scope": "stage"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "identity": "白湖商馆护卫，弩手",
+          "scope": "stage"
+        }
+      ],
+      "presenceWindow": {
+        "firstChapter": 34,
+        "lastPresentChapter": 118,
+        "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+      },
+      "embedText": "小魏 ｜ 白湖商馆护卫，弩手"
     },
     {
       "id": "lcq.character.np001",

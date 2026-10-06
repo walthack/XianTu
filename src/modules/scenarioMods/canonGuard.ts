@@ -1,3 +1,4 @@
+import {canonicalEntityId} from './namedEntities';
 import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
 import { fixedInventoryCommandViolation } from './fixedInventoryContracts';
@@ -261,13 +262,13 @@ function findCharacterAffiliationViolation(
   }
   if (typeof value !== 'string' || value.trim() === '') return null;
 
-  const assignedFaction = factions.find(faction => faction.id === value || faction.name === value);
+  const assignedFaction = factions.find(faction => canonicalEntityId('faction',faction.id) === canonicalEntityId('faction',String(value)) || faction.name === value);
   const category = targetCategory && targetCategory !== 'organization'
     ? targetCategory
     : assignedFaction ? affiliationCategoryForFaction(assignedFaction) : null;
   const exclusiveAffiliations = affiliations.filter(item => item.exclusive !== false && (!category || item.category === category));
   if (exclusiveAffiliations.length === 0) return null;
-  if (assignedFaction && exclusiveAffiliations.some(item => item.factionId === assignedFaction.id)) return null;
+  if (assignedFaction && exclusiveAffiliations.some(item => canonicalEntityId('faction',item.factionId) === canonicalEntityId('faction',assignedFaction.id))) return null;
 
   const allowedNames = exclusiveAffiliations.map(item =>
     factions.find(faction => faction.id === item.factionId)?.name || item.factionId,

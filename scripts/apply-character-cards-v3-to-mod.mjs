@@ -148,6 +148,10 @@ function phaseProfileValue(profile, currentPhase, key) {
 // 本脚本只负责 slim 阶段字段与原始 notes 清理；派生 notes 只有运行时 resolver 一个实现，
 // 避免构建期存在一份从未执行、却容易与运行时漂移的重复实现。
 function applyCardToCharacter(character, card, stageId) {
+  character.level = Number.isInteger(card.level)?card.level:null;
+  character.levelSource = character.level===6 ? "清羽L18220：臻于六级，达到通幽" : "待剧情策划按原著逐时点核定；不从旧修仙名推导";
+  if ('realm' in character || character.level !== null) character.realm = character.level===6 && character.id==='liuchao.character.xie_yi' ? "通幽" : "未知";
+  if(card.presenceWindow) character.presenceWindow = structuredClone(card.presenceWindow);
   const profile = character.profile || {};
   const currentPhase = stagePhase(card, stageId);
 

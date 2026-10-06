@@ -1,3 +1,6 @@
+
+import {isNamedEntityLabel} from './namedEntities';
+import {entityNamePattern} from './namedEntities';
 import { namingAliases, namingFor, namingChapter, sceneBoundEntity } from './ledger/naming';
 import { syncNanhuangIdentityDisplay, xiaoziDisclosure, isDisclosureFactAllowed } from './characterResolver';
 import { stepScene, sceneLedgerSummary } from './fixedEndingNarratives';
@@ -144,8 +147,8 @@ function isRevealedName(ledger: AcquaintanceLedger, name: string, playerName: st
 
 function departedNames(saveData: SaveData, currentEventId: string): string[] {
   return departedPresentNames(runtimeOf(saveData))
-    .filter(name => !(currentEventId === 'lcq.event.s01_02' && name === '段强'))
-    .filter(name => !(currentEventId === 'lcq.event.s02_02' && name === '王哲'));
+    .filter(name => !(currentEventId === 'lcq.event.s01_02' && isNamedEntityLabel("character","lcq.character.duan_qiang",name)))
+    .filter(name => !(currentEventId === 'lcq.event.s02_02' && isNamedEntityLabel("character","lcq.character.wang_zhe",name)));
 }
 
 function readPresentNames(saveData: SaveData, eventId?: string): string[] {
@@ -214,7 +217,7 @@ function readPresentActors(saveData: SaveData, presentNames: string[], eventId?:
     const baseName = name.replace(/[（(].*$/, '');
     const bound = sceneBoundEntity(baseName, namingChapter(namingRuntime));
     const matched = rec || (bound && 'sceneBinding' in bound ? { id: bound.id, name: namingFor(bound.id, namingChapter(namingRuntime))?.text, role: bound.sceneBinding?.role } : undefined) || characters.find((c: any) => c.name === baseName);
-    const gender = matched?.gender || (/^(?:谢艺|云苍峰|祁远|武二郎|朱八八|易彪|易虎|吴战威|小魏|石刚|阁罗|弥骨|达古|鬼王峒使者)$/.test(baseName) ? '男' : /^(?:凝羽|苏荔|阿夕|阿葭|花苗新娘|乐明珠|樨夫人|小紫)$/.test(baseName) ? '女' : undefined);
+    const gender = matched?.gender || (new RegExp("^(?:"+"(?:"+entityNamePattern("character","liuchao.character.xie_yi")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.yun_cang_feng")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.qi_yuan")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.wu_er_lang")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.np004")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.yi_hu")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.np003")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.nanhuang_xiaowei")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.nanhuang_shigang")+")"+"|"+"(?:"+entityNamePattern("enemy","lcq.enemy.ge_luo")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.mi_gu")+")"+"|"+"(?:"+entityNamePattern("enemy","lcq.enemy.dagu")+")"+"|"+"(?:"+entityNamePattern("location","liuchao.location.gui_wang_dong")+")"+"使者)$","").test(baseName) ? '男' : new RegExp("^(?:"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.su_li")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.a_xi")+")"+"|阿葭|"+"(?:"+entityNamePattern("faction","liuchao.faction.hua_miao")+")"+"新娘|"+"(?:"+entityNamePattern("character","liuchao.character.le_mingzhu")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.15b71fd1c8")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+")$","").test(baseName) ? '女' : undefined);
     const addresses: Record<string, string> = { 云苍峰: '程小哥', 祁远: '程头儿', 吴战威: '程头儿', 谢艺: '程兄', 武二郎: '你小子（自称二爷）', 朱八八: '小程子', 樨夫人: '公子' };
     actors.push({
       characterId: matched?.id,
@@ -226,10 +229,10 @@ function readPresentActors(saveData: SaveData, presentNames: string[], eventId?:
       主角心称: namingFor(matched?.id, namingChapter(namingRuntime), 'protagonistThought')?.text,
       traits,
       role: baseName === '鬼王峒使者' ? '鬼王峒使者，尚未报名' : readText(matched?.role).slice(0, 80),
-      race: baseName === '小紫' ? readText(matched?.profile?.race) : readText(matched?.profile?.race).split(/[（(]/)[0].replace(/.*(?:之女|血统|身世).*/, '').slice(0, 40),
+      race: isNamedEntityLabel("character","liuchao.character.xiao_zi",baseName) ? readText(matched?.profile?.race) : readText(matched?.profile?.race).split(/[（(]/)[0].replace(/.*(?:之女|血统|身世).*/, '').slice(0, 40),
       appearance: readText(matched?.profile?.appearance).split(/[。！？]/)[0].replace(/(?:胸|乳|臀|私处|胯)[^，,；;]*/g, '').slice(0, 90),
       ...(gender ? { gender, pronoun: matched?.entityType === 'creature' ? '它' : /^(男|male)$/.test(gender) ? '他' : /^(女|female)$/.test(gender) ? '她' : '称姓名' } : {}),
-      称呼: { 对主角: namingFor(matched?.id, namingChapter(namingRuntime), 'npcAddress')?.text || addresses[baseName] || (Array.isArray(matched?.profile?.notes) ? matched.profile.notes.map((n: string) => n.match(/【称呼】(.+)/)?.[1]).filter(Boolean).join('；').slice(0, 70) : '') || '你', 主角对他: namingFor(matched?.id, namingChapter(namingRuntime), 'protagonistAddress')?.text || (baseName === '苏荔' ? '苏荔族长' : baseName) },
+      称呼: { 对主角: namingFor(matched?.id, namingChapter(namingRuntime), 'npcAddress')?.text || addresses[baseName] || (Array.isArray(matched?.profile?.notes) ? matched.profile.notes.map((n: string) => n.match(/【称呼】(.+)/)?.[1]).filter(Boolean).join('；').slice(0, 70) : '') || '你', 主角对他: namingFor(matched?.id, namingChapter(namingRuntime), 'protagonistAddress')?.text || (isNamedEntityLabel("character","liuchao.character.su_li",baseName) ? '苏荔族长' : baseName) },
       ...(speechStyle ? { speechStyle } : {}),
     });
     if (actors.length >= (/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime.modId || '')) ? 18 : 3)) break;

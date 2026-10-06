@@ -1159,9 +1159,9 @@ test('hard-coded option locks (user ruling 2026-10-02): only the deciding step l
   assert.equal(branch.branchDecisionAllowsSend(decision, accept, lineOf(accept), lineOf), true);
   assert.equal(refusal.isExplicitRefuseGambleText(lineOf(decline)), false, '不赌原句不会被识别成扣押分支的拒赌');
 
-  // 选「不赌」：复用致命选项机制，本局以炮烙结束（拒赌版事实）。
+  // 选「不赌」：历史动作id保留，本局以独立E01画外斩首结束。
   const declined = recordAndReload(rtm, cloneJson(proposed), decline).save;
-  assert.equal(runtimeOf(declined).gameOver?.endingId, 'lcq.ending.death.paolao');
+  assert.equal(runtimeOf(declined).gameOver?.endingId, 'lcq.ending.death.baihu_beheading');
   assert.match(runtimeOf(declined).gameOver.facts.join('；'), /回绝白湖商馆的赌局/);
   assert.equal(runtimeOf(declined).gameOver.sourceEventId, 'lcq.event.ningyu_enters_gamble');
 

@@ -76,6 +76,7 @@ export interface ScenarioModCharacterProfile {
 }
 
 export interface ScenarioModCharacter {
+  presenceWindow?: {firstChapter:number;lastPresentChapter:number;source:string};
   id: string;
   name: string;
   description?: string;
@@ -83,6 +84,8 @@ export interface ScenarioModCharacter {
   gender?: string;
   entityType?: 'character' | 'creature';
   realm?: string;
+  level?: number | null;
+  levelSource?: string;
   factionId?: string;
   affiliations?: ScenarioModCharacterAffiliation[];
   locationId?: string;

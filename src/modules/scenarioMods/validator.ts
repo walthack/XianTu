@@ -1,3 +1,4 @@
+import { resolveScenarioContent } from './entityCatalog';
 import {
   SCENARIO_MOD_SCHEMA,
   SCENARIO_MOD_VERSION,
@@ -60,6 +61,11 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     add('version', 'unsupported_version', `version must be ${SCENARIO_MOD_VERSION}.`);
   }
 
+  try { input = resolveScenarioContent(input); } catch (error) {
+    add('content', 'invalid_reference', String((error as Error).message));
+    return { valid: false, issues };
+  }
+  if (!isRecord(input)) return { valid: false, issues };
   const manifest = input.manifest;
   if (!isRecord(manifest)) {
     add('manifest', 'required_object', 'manifest is required.');
@@ -458,6 +464,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
               if (action.ledgerEffects !== undefined) {
                 if (!isRecord(action.ledgerEffects)) add(`${actionPath}.ledgerEffects`, 'invalid_type', 'Ledger effects must be an object.');
                 else {
+                  if (action.ledgerEffects.level !== undefined && (!isRecord(action.ledgerEffects.level) || !Number.isInteger(action.ledgerEffects.level.to) || Number(action.ledgerEffects.level.to) < 0 || Number(action.ledgerEffects.level.to) > 9 || typeof action.ledgerEffects.level.source !== 'string')) add(`${actionPath}.ledgerEffects.level`, 'invalid_value', 'Level receipt requires 0–9 and a canon source.');
                   if (action.ledgerEffects.jiuyang !== undefined && action.ledgerEffects.jiuyang !== '一阳') add(`${actionPath}.ledgerEffects.jiuyang`, 'invalid_enum', 'This pilot only supports one-yang.');
                   validateInventoryTransfers(action.ledgerEffects.inventoryTransfers, `${actionPath}.ledgerEffects.inventoryTransfers`, String(entity.id), false);
                 }

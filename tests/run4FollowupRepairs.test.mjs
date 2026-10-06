@@ -256,7 +256,9 @@ const TEST_PROFILE = {
 async function withStubbedGenerate(aiService, impl) {
   const { useAPIManagementStore } = await loadPipeline('../src/stores/apiManagementStore.ts');
   const api = useAPIManagementStore(); const originalApiConfigs = [...api.apiConfigs];
+  const originalApiAssignments = api.apiAssignments.map(a => ({ ...a }));
   api.apiConfigs = [{ id: 'fixture-minimax', name: 'fixture', provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: 'fixture-not-a-real-key', model: 'MiniMax-M3', enabled: true }];
+  api.assignAPI('main', 'fixture-minimax');
   const originalCheck = aiService.checkAvailability;
   const originalGenerate = aiService.generate;
   const originalGenerateRaw = aiService.generateRaw;
@@ -268,6 +270,7 @@ async function withStubbedGenerate(aiService, impl) {
   };
   return () => {
     api.apiConfigs = originalApiConfigs;
+    api.apiAssignments = originalApiAssignments;
     aiService.checkAvailability = originalCheck;
     aiService.generate = originalGenerate;
     aiService.generateRaw = originalGenerateRaw;
@@ -958,7 +961,11 @@ test('凝羽合同中的西门庆旧事保留完整对白，未授权当前登�
 });
 
 
-test('reported completed beats authorize their actual outcomes without demanding every present actor be named', async () => {
+test('reported completed beats authorize their actual outcomes without demanding every present actor be named', async t => {
+  // This fixture exercises the retained one-step path; scene-host coverage lives in sceneHostWiring.
+  const sceneSwitch = localStorage.getItem('xiantu.sceneModule.v1');
+  localStorage.setItem('xiantu.sceneModule.v1','off');
+  t.after(() => sceneSwitch === null ? localStorage.removeItem('xiantu.sceneModule.v1') : localStorage.setItem('xiantu.sceneModule.v1',sceneSwitch));
   setActivePinia(createPinia());
   const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
   const { useGameStateStore } = await loadPipeline('../src/stores/gameStateStore.ts');

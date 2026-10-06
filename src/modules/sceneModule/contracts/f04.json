@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "id": "combat.f04.crow_man",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 1
+    }
+  },
+  "objective": {
+    "text": "击倒鸦人",
+    "win": {
+      "party": "crow_man",
+      "track": "vit",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "le",
+      "side": "player_side",
+      "ref": "liuchao.character.le_mingzhu"
+    },
+    {
+      "id": "crow_man",
+      "side": "opposed",
+      "ref": "lcq.enemy.crow_man",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "倒下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "倒下",
+            "ceiling": 2,
+            "preserveOnWin": false
+          }
+        }
+      ],
+      "instanceId": "combat.f04.crow_man.crow_man"
+    }
+  ],
+  "goals": [
+    {
+      "id": "attack",
+      "label": "攻击对手",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 7
+    },
+    {
+      "id": "defend",
+      "label": "防守撑住",
+      "type": "support",
+      "baseDifficulty": 12
+    },
+    {
+      "id": "yield_guard",
+      "label": "停止抵抗、承受攻击",
+      "type": "support",
+      "baseDifficulty": 12,
+      "aliases": [
+        "张开双手不躲",
+        "不躲也不挡",
+        "不招架",
+        "不还手",
+        "放下刀",
+        "硬吃他们的刀"
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "crow_man_attack",
+      "party": "crow_man",
+      "label": "攻击",
+      "target": "player",
+      "attack": {
+        "dc": 8
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "ending",
+      "endingId": "lcq.ending.fail.combat"
+    }
+  },
+  "closing": {
+    "win": {
+      "rewards": [
+        {
+          "itemId": "lcq.item.crow_bamboo_tube",
+          "quantity": 1
+        }
+      ]
+    },
+    "lose": {
+      "text": "游戏结束",
+      "rewards": []
+    }
+  },
+  "narration": {
+    "requiredFacts": [
+      "开战前：阿夕失神，被鸦人抓着；阿夕不是战斗单位。",
+      "我方只有主角与{{ref:liuchao.character.le_mingzhu}}。"
+    ]
+  },
+  "settings": {},
+  "rewardPolicy": {
+    "itemIds": [
+      "lcq.item.crow_bamboo_tube"
+    ]
+  },
+  "levelContext": {
+    "chapter": 57
+  }
+}

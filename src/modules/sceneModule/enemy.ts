@@ -1,3 +1,4 @@
+import {levelModifier} from './levels';
 // 敌方出手：敌人按合同出手，被打的人用防御 / 豁免对抗；没挡住，就给那个人挂合同写的具体状态。
 // 防御检定用独立的骰流，增减敌方出手不会挪动玩家检定的骰面。
 
@@ -78,13 +79,17 @@ function targetsOf(contract: Contract, state: SceneState, ctx: Pick<SceneContext
   return contract.parties.filter(p => p.side === t.each && eligible(p.id)).map(p => p.id);
 }
 
-export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: SceneContext): EnemyPhaseResult {
+export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: SceneContext, checkpoint?: (phase: 'beforeEnemyAction' | 'afterEnemyAction', actionId:string) => boolean): EnemyPhaseResult {
   const settings = resolveSettings(contract.settings);
   const player = playerParty(contract)?.id;
   const result: EnemyPhaseResult = { rolls: [], statusEvents: [], truncated: false };
   for (const action of dueEnemyActions(contract, state, ctx)) {
+    if (checkpoint?.('beforeEnemyAction',action.id)) break;
+    if (!dueEnemyActions(contract,state,ctx).includes(action)) continue;
     const attacker = partyOf(contract, action.party)!;
     for (const targetId of targetsOf(contract, state, ctx, action)) {
+      // A conditional intervention may remove this attacker midway through a group attack.
+      if (!isPresent(state,action.party) || isDowned(state,contract,ctx,action.party)) break;
       if (result.rolls.length >= settings.enemyPhase.maxRollsPerBeat) { result.truncated = true; return result; }
       const target = partyOf(contract, targetId)!;
       const tagsFor = (id: string, side: string) => state.tags.filter(tag => tag.on === id || tag.on === side || tag.on === 'scene');
@@ -92,9 +97,11 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
         .filter(tag => tag.effect.enemyDcBonus && (tag.on === 'opposed' || tag.on === attacker.id || tag.on === attacker.side))
         .reduce((sum, tag) => sum + (tag.effect.enemyDcBonus || 0), 0);
       const dc = action.attack.dc + edgeBonus;
+      const crystalBonus=targetId===player ? state.itemEffects?.defenseBonus || 0 : 0;
       const defenseBonus =
         (targetId === player ? ctx.playerDefense ?? 0 : target.defense?.bonus ?? 0)
-        + statusRollModifier(state, contract, ctx, targetId, 'defense')
+        + (state.levels ? levelModifier(state.levels[targetId],state.levels[attacker.id]) : 0)
+        + crystalBonus + statusRollModifier(state, contract, ctx, targetId, 'defense')
         + tagsFor(targetId, target.side).reduce((sum, tag) => sum + (tag.effect.defenseBonus || 0), 0);
       const mode = statusMode(state, contract, ctx, targetId, 'defense');
       const rollKind = rollMode(mode.advantage, mode.disadvantage);
@@ -105,6 +112,7 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
         second = peekDefenseDie(state);
         state.cursors.defense += 1;
       }
+      if(crystalBonus && state.itemEffects)delete state.itemEffects.defenseBonus;
       const face = pickFace([first, second], rollKind);
       state.counters.defenseRolls += 1;
       const total = face + defenseBonus;
@@ -114,6 +122,10 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
       const events: StatusEvent[] = [];
       if (hit) {
         const plan = crushed ? action.onCrush! : action.onHit;
+        for (const shift of plan.trackShifts || []) {
+          const info = trackInfo(contract, shift.party, shift.track);
+          if (info) (state.tracks[shift.party] ||= {})[info.id] = Math.max(0, Math.min(info.scale.length - 1, trackStep(state, shift.party, info.id) + shift.steps));
+        }
         for (const ref of plan.statuses) events.push(...applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id }));
       }
       result.statusEvents.push(...events);
@@ -123,6 +135,7 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
         statuses: events,
         text: hit ? (crushed ? action.onCrush!.text : action.onHit.text) : action.onBlocked?.text,
       });
+      if (checkpoint?.('afterEnemyAction',action.id)) return result;
     }
   }
   return result;
@@ -137,6 +150,10 @@ export function applyWorstCaseEnemyPhase(contract: Contract, state: SceneState, 
       if (rolls >= settings.enemyPhase.maxRollsPerBeat) return;
       rolls += 1;
       const plan = action.onCrush || action.onHit;
+      for (const shift of plan.trackShifts || []) {
+        const info = trackInfo(contract,shift.party,shift.track);
+        if(info) (state.tracks[shift.party] ||= {})[info.id] = Math.max(0,Math.min(info.scale.length-1,trackStep(state,shift.party,info.id)+shift.steps));
+      }
       for (const ref of plan.statuses) applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id });
     }
   }

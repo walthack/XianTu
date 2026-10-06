@@ -16,9 +16,9 @@ function builtinStages() {
 test('规范 id（主策划裁定）：别名并到规范侧；子地点算在父地点，反之不算', async () => {
   const { canonicalLocationId, sameCanonicalLocation, locationWithin, locationIdByRegisteredName, LOCATION_ID_ALIASES } =
     await loadTs('../src/modules/scenarioMods/travel/locationIds.ts');
-  assert.equal(canonicalLocationId('lcq.location.shuai_zhang'), 'lcq.location.command_tent');
+  assert.equal(canonicalLocationId('lcq.location.command_tent'), 'lcq.location.shuai_zhang');
   assert.equal(canonicalLocationId('liuchao.location.biyu'), 'liuchao.location.biyu_village');
-  assert.equal(canonicalLocationId('liuchao.location.gui_wang_dong'), 'liuchao.location.guiwang_dong');
+  assert.equal(canonicalLocationId('liuchao.location.guiwang_dong'), 'liuchao.location.gui_wang_dong');
   assert.equal(canonicalLocationId('liuchao.location.gui_wang_dong_palace'), 'liuchao.location.gui_wang_gong');
   assert.equal(canonicalLocationId('liuchao.location.bai_yi_valley'), 'liuchao.location.baiyi');
   assert.equal(canonicalLocationId('lcq.location.longchi'), 'liuchao.location.longchi');

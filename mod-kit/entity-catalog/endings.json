@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "kind": "ending",
+  "entries": [
+    {
+      "id": "lcq.ending.death.wangzhe_blast",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.death.wangzhe_blast",
+        "title": "十里焦土",
+        "facts": [
+          "王哲以九阳神功合一，化为太阳之火与敌军同归于尽",
+          "草原化为十里焦土",
+          "程宗扬没有离开战场，被焰浪吞没",
+          "月霜没有被带走"
+        ],
+        "name": "十里焦土"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.death.paolao",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.death.paolao",
+        "title": "炮烙",
+        "facts": [
+          "程宗扬当面拒绝三个月南荒之约",
+          "苏妲己依约执行炮烙",
+          "霓龙丝无人去采，南荒之行未曾成行"
+        ],
+        "name": "炮烙"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.death.ajiman_bond",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.death.ajiman_bond",
+        "title": "冰蛊",
+        "facts": [
+          "程宗扬没有当面撕毁阿姬曼的身契，只把它收进了怀里",
+          "阿姬曼因此不信他，不肯跟他离开五原城",
+          "冰蛊是之后苏妲己在冰镇酸梅汤里给程宗扬种下的",
+          "苏妲己下令追查买走舞姬的人，那张没有撕掉的身契让她查到了程宗扬",
+          "苏妲己催动冰蛊，寒气冻住了程宗扬的心脏与脑浆，他当场毙命",
+          "阿姬曼被收回白湖商馆，镣铐加身，和箱笼货物一起被逐件清点、登记入册，押往黑魔海",
+          "那个没有舌头的哑奴母亲早被卖给了路过的晋国商人，阿姬曼再也见不到她",
+          "她的哥哥将永远等不到她回来",
+          "阿姬曼心里最后一点盼头熄灭了，没有人会来救她，也没有任何转机"
+        ],
+        "name": "冰蛊"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.death.baihu_beheading",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.death.baihu_beheading",
+        "title": "第六个",
+        "facts": [
+          "程宗扬当面回绝白湖商馆的赌局",
+          "苏妲己认定连赌都不敢的人所说产地不可信",
+          "凝羽奉命一刀了结程宗扬，如刚处死的五个男奴；死亡在画外",
+          "赌局未开，卖身契未签"
+        ],
+        "name": "第六个"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.death.shanghou_relic",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.death.shanghou_relic",
+        "title": "第一百六十八具白骨",
+        "facts": [
+          "主人让你触碰取自太泉古阵的神物，以测试天命之人。",
+          "你伸手触碰，当场烧成火球。",
+          "此前167人因这道测试埋骨荒野。",
+          "冰蛊尚未解除。"
+        ],
+        "name": "第一百六十八具白骨"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.fail.combat",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.fail.combat",
+        "name": "游戏结束"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f01.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.fail.dragon_essence",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.fail.dragon_essence",
+        "name": "龙精入体"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f14.draft.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.death.dragon_well",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.death.dragon_well",
+        "name": "龙首无人"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/sceneModule/contracts/f13.json"
+      ]
+    },
+    {
+      "id": "lcq.ending.death.ghost_king_skull",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.ending.death.ghost_king_skull",
+        "name": "天命的指引"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/endings.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/fixedEndingNarratives.ts",
+        "src/modules/sceneModule/contracts/f10.json#playerChoices"
+      ]
+    }
+  ]
+}

@@ -178,3 +178,16 @@ export function createCombatTrialSave(mod: ScenarioMod, options: CombatTrialSave
   save.社交.记忆.短期记忆 = [trialMod.scenario.opening.text];
   return save;
 }
+
+/** New isolated trial: preserve the real event contract and start the same scene host used by the game. */
+export function createSceneCombatTrialSave(mod: ScenarioMod, options: CombatTrialSaveOptions): SaveData {
+  const save = createCombatTrialSave(mod, options);
+  const runtime = (save.世界 as any).状态.剧本模组;
+  runtime.events = structuredClone(mod.scenario.events || []);
+  const before = runtime.events.find((event: any) => event.id === 'lcq.event.s04_01');
+  if (before) runtime.flags['event.s04_01.done'] = true;
+  runtime.completedEventIds = [...new Set([...(runtime.completedEventIds || []), 'lcq.event.s04_01'])];
+  runtime.activeEventIds = [F03_EVENT_ID];
+  runtime.completedEventIds = runtime.completedEventIds.filter((id:string) => id !== F03_EVENT_ID);
+  return save;
+}

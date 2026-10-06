@@ -1,3 +1,9 @@
+import {entityName} from './namedEntities';
+
+import {entityAliases} from './namedEntities';
+
+import {isNamedEntityLabel,containsEntityLabel} from './namedEntities';
+import {entityNamePattern} from './namedEntities';
 import type { LegacyNarratorPacket } from './legacyNarratorPacket';
 import type { LegacyRenderPlan } from './legacyRenderPlan';
 
@@ -26,7 +32,7 @@ export type LegacyPilotEventId = (typeof LEGACY_NARRATIVE_PILOT_EVENT_IDS)[numbe
 
 const OPENING_STOCK_RE = /这不是飞机|湿草撑起|跑道|舱壁|机舱里那点循环空气|抓住一把草，像抓住最后一点能证明这不是虚空/;
 
-const S01_04_CAST = ['卓云君', '月霜', '蔺采泉', '商乐轩', '夙未央'] as const;
+const S01_04_CAST = [...entityAliases("character","liuchao.character.zhuo_yunjun"), ...entityAliases("character","lcq.character.yue_shuang"), ...entityAliases("character","liuchao.character.lin_cai_quan"), ...entityAliases("character","lcq.character.np001"), '夙未央'] as const;
 
 export function isLegacyPilotEventId(eventId: string | undefined): eventId is LegacyPilotEventId {
   return !!eventId && (LEGACY_NARRATIVE_PILOT_EVENT_IDS as readonly string[]).includes(eventId);
@@ -47,7 +53,7 @@ function placeOf(packet: LegacyNarratorPacket): string {
 
 function isCommandTentLabel(value: unknown): boolean {
   const text = String(value || '').trim();
-  return text === '帅帐' || /(^|[·])帅帐$/.test(text);
+  return isNamedEntityLabel("location","lcq.location.shuai_zhang",text) || new RegExp("(^|[·])"+"(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")"+"$","").test(text);
 }
 
 function isQingyuCommandTent(value: unknown): boolean {
@@ -56,12 +62,12 @@ function isQingyuCommandTent(value: unknown): boolean {
 
 function isWuyuanCityLabel(value: unknown): boolean {
   const text = String(value || '').trim();
-  return text === '五原城' || /(^|[·])五原城$/.test(text);
+  return isNamedEntityLabel("location","liuchao.location.wuyuan",text) || new RegExp("(^|[·])"+"(?:"+entityNamePattern("location","liuchao.location.wuyuan")+")"+"$","").test(text);
 }
 
 function isWaterPrisonLabel(value: unknown): boolean {
   const text = String(value || '').trim();
-  return text === '白湖商馆水牢' || /(^|[·])白湖商馆水牢$/.test(text);
+  return text === entityName("location","lcq.zone.wuyuan.water_prison") || new RegExp("(^|[·])"+"(?:"+entityNamePattern("location","lcq.zone.wuyuan.water_prison")+")"+"$","").test(text);
 }
 
 function isBaihuHallLabel(value: unknown): boolean {
@@ -81,7 +87,7 @@ function isBaihuFrontStreetLabel(value: unknown): boolean {
 
 function isPastryShopLabel(value: unknown): boolean {
   const text = String(value || '').trim();
-  return text === '点心铺' || /(^|[·])点心铺$/.test(text);
+  return text === entityName("location","lcq.zone.wuyuan.pastry_shop") || new RegExp("(^|[·])"+"(?:"+entityNamePattern("location","lcq.zone.wuyuan.pastry_shop")+")"+"$","").test(text);
 }
 
 function atSameCityOrHall(packet: LegacyNarratorPacket): boolean {
@@ -97,7 +103,7 @@ function atSameWuyuanLeaf(
   return match(packet.location) && match(packet.mustAppear?.location);
 }
 
-const S02_02_CAST = ['王哲', '月霜'] as const;
+const S02_02_CAST = [...entityAliases("character","lcq.character.wang_zhe"), ...entityAliases("character","lcq.character.yue_shuang")] as const;
 
 const LEGACY_PILOT_FINAL_ACTION_IDS: Partial<Record<LegacyPilotEventId, string>> = {
   'lcq.event.ningyu_enters_gamble': 'answer_ningyu_on_debut',
@@ -120,7 +126,7 @@ export function filterLegacyPilotEventCharacterNames(eventId: string | undefined
     eventId === 'lcq.event.ningyu_enters_gamble'
     || eventId === 'lcq.event.gamble_bond_signed'
     || eventId === 'lcq.event.free_ajiman'
-  ) return names.filter(name => name === '凝羽');
+  ) return names.filter(name => isNamedEntityLabel("character","liuchao.character.ning_yu",name));
   if (eventId !== 'lcq.event.s02_02') return names;
   return names.filter(name => (S02_02_CAST as readonly string[]).includes(name));
 }
@@ -136,34 +142,34 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
   const eventId = legacyPilotEventIdOf(packet);
   if (!isLegacyPilotEventId(eventId)) return false;
   const names = presentNames(packet);
-  if (eventId === 'lcq.event.s01_01') return names.length === 1 && names[0] === '段强';
-  if (eventId === 'lcq.event.s01_02') return names.length === 1 && names[0] === '段强';
-  if (eventId === 'lcq.event.s01_03') return names.includes('月霜');
+  if (eventId === 'lcq.event.s01_01') return names.length === 1 && isNamedEntityLabel("character","lcq.character.duan_qiang",names[0]);
+  if (eventId === 'lcq.event.s01_02') return names.length === 1 && isNamedEntityLabel("character","lcq.character.duan_qiang",names[0]);
+  if (eventId === 'lcq.event.s01_03') return containsEntityLabel(names,"character","lcq.character.yue_shuang");
   if (eventId === 'lcq.event.s01_04') return names.some(name => (S01_04_CAST as readonly string[]).includes(name));
   if (eventId === 'lcq.event.s01_05') {
-    if (!names.includes('王哲')) return false;
-    const atTent = /帅帐/.test(packet.location || '') || /帅帐/.test(packet.mustAppear?.location || '');
-    const moving = packet.receipts?.move === true && /帅帐/.test(String(packet.receipts?.moveTo || ''));
+    if (!containsEntityLabel(names,"character","lcq.character.wang_zhe")) return false;
+    const atTent = new RegExp("(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")","").test(packet.location || '') || new RegExp("(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")","").test(packet.mustAppear?.location || '');
+    const moving = packet.receipts?.move === true && new RegExp("(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")","").test(String(packet.receipts?.moveTo || ''));
     return atTent || moving;
   }
-  if (eventId === 'lcq.event.s01_06') return names.includes('月霜') && !names.includes('段强');
+  if (eventId === 'lcq.event.s01_06') return containsEntityLabel(names,"character","lcq.character.yue_shuang") && !containsEntityLabel(names,"character","lcq.character.duan_qiang");
   if (eventId === 'lcq.event.s02_01') {
-    if (!names.includes('王哲') || names.includes('段强')) return false;
-    const atTent = /帅帐/.test(packet.location || '') || /帅帐/.test(packet.mustAppear?.location || '');
+    if (!containsEntityLabel(names,"character","lcq.character.wang_zhe") || containsEntityLabel(names,"character","lcq.character.duan_qiang")) return false;
+    const atTent = new RegExp("(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")","").test(packet.location || '') || new RegExp("(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")","").test(packet.mustAppear?.location || '');
     return atTent;
   }
   if (eventId === 'lcq.event.s02_03') {
-    if (!names.includes('月霜') || names.includes('段强')) return false;
+    if (!containsEntityLabel(names,"character","lcq.character.yue_shuang") || containsEntityLabel(names,"character","lcq.character.duan_qiang")) return false;
     const atTent = isCommandTentLabel(packet.location) && isCommandTentLabel(packet.mustAppear?.location);
     return atTent && packet.receipts?.move === false;
   }
   if (eventId === 'lcq.event.s02_02') {
-    if (names.length !== 2 || !names.includes('王哲') || !names.includes('月霜')) return false;
+    if (names.length !== 2 || !containsEntityLabel(names,"character","lcq.character.wang_zhe") || !containsEntityLabel(names,"character","lcq.character.yue_shuang")) return false;
     const atTent = isQingyuCommandTent(packet.location) && isQingyuCommandTent(packet.mustAppear?.location);
     return atTent && packet.receipts?.move === false && packet.receipts?.casualty === true;
   }
   if (eventId === 'lcq.event.s02_04') {
-    if (names.some(name => name !== '月霜')) return false;
+    if (names.some(name => !isNamedEntityLabel("character","lcq.character.yue_shuang",name))) return false;
     const atCity = atSameWuyuanLeaf(packet, isWuyuanCityLabel);
     const atPrison = atSameWuyuanLeaf(packet, isWaterPrisonLabel);
     const atPastry = atSameWuyuanLeaf(packet, isPastryShopLabel);
@@ -193,7 +199,7 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     return (atCity || atHall) && packet.receipts?.move === false;
   }
   if (eventId === 'lcq.event.ningyu_enters_gamble') {
-    if (names.length !== 1 || names[0] !== '凝羽') return false;
+    if (names.length !== 1 || !isNamedEntityLabel("character","liuchao.character.ning_yu",names[0])) return false;
     const atCity = isWuyuanCityLabel(packet.location) && isWuyuanCityLabel(packet.mustAppear?.location);
     const atHall = isBaihuHallLabel(packet.location) && isBaihuHallLabel(packet.mustAppear?.location);
     return (atCity || atHall) && packet.receipts?.move === false && packet.receipts?.casualty === false;
@@ -203,7 +209,7 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.gamble_bond_signed') {
-    if (names.length !== 1 || names[0] !== '凝羽') return false;
+    if (names.length !== 1 || !isNamedEntityLabel("character","liuchao.character.ning_yu",names[0])) return false;
     return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.charge_sudaji_fee') {
@@ -211,8 +217,8 @@ export function acceptLegacyPilotScene(packet: LegacyNarratorPacket): boolean {
     return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
   if (eventId === 'lcq.event.free_ajiman') {
-    if (!names.includes('凝羽')) return false;
-    const allowed = (name: string) => name === '凝羽' || name === '苏妲己' || name.includes('阿姬曼') || name === '芭娜';
+    if (!containsEntityLabel(names,"character","liuchao.character.ning_yu")) return false;
+    const allowed = (name: string) => isNamedEntityLabel("character","liuchao.character.ning_yu",name) || isNamedEntityLabel("character","liuchao.character.su_daji",name) || containsEntityLabel(name,"character","liuchao.character.a_jiman_bana") || isNamedEntityLabel("character","liuchao.character.a_jiman_bana",name);
     if (names.some(name => !allowed(name))) return false;
     return atSameCityOrHall(packet) && packet.receipts?.move === false && packet.receipts?.casualty === false;
   }
@@ -237,7 +243,7 @@ function openingPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan):
   const location = packet.location || '这片草地';
   const names = presentNames(packet);
   const companion = names[0] || '身边的人';
-  const answers = companion === '段强'
+  const answers = isNamedEntityLabel("character","lcq.character.duan_qiang",companion)
     ? `${companion}抬眼看你，喉咙动了动，终于挤出半句：“这……这不是飞机。”`
     : `${companion}就在几步开外，一时说不出完整的话。`;
   const sensory = {
@@ -287,7 +293,7 @@ function dangerPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
 }
 
 function interactPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
-  const companion = presentNames(packet).find(name => name === '月霜') || presentNames(packet)[0] || '伤者';
+  const companion = presentNames(packet).find(name => isNamedEntityLabel("character","lcq.character.yue_shuang",name)) || presentNames(packet)[0] || '伤者';
   const sensory = {
     grass_iron: `伤处的血把甲片粘在布上。风一过，铁锈味比草汁更先扑到脸上。`,
     wind_sky: `烟尘从战场那头翻过来。你看清那名受伤军士还在喘气，肩背抽动。`,
@@ -313,8 +319,8 @@ function interactPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan)
 
 function progressPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const names = presentNames(packet);
-  const fire = names.includes('卓云君') ? '卓云君' : '那名修士';
-  const wounded = names.includes('月霜') ? '月霜' : '伤者';
+  const fire = containsEntityLabel(names,"character","liuchao.character.zhuo_yunjun") ? '卓云君' : '那名修士';
+  const wounded = containsEntityLabel(names,"character","lcq.character.yue_shuang") ? '月霜' : '伤者';
   const place = placeOf(packet);
   const sensory = {
     grass_iron: `${place}这一侧，火光贴着兽影燎过去。焦糊味压过了血和草汁，弓弦声一下子乱了。`,
@@ -366,16 +372,16 @@ function martyrPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): 
 }
 
 function brandPlaceName(packet: LegacyNarratorPacket): string {
-  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || packet.location || '五原城');
+  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || packet.location || entityName("location","liuchao.location.wuyuan"));
   if (isPastryShopLabel(dest)) return '点心铺';
   if (isWaterPrisonLabel(dest)) return '白湖商馆水牢';
   if (isWuyuanCityLabel(dest)) return '五原城';
-  return dest.replace(/[·,，]/g, '') || '五原城';
+  return dest.replace(/[·,，]/g, '') || entityName("location","liuchao.location.wuyuan");
 }
 
 function brandPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
   const destName = brandPlaceName(packet);
-  const companion = presentNames(packet).find(name => name === '月霜');
+  const companion = presentNames(packet).find(name => isNamedEntityLabel("character","lcq.character.yue_shuang",name));
   const side = companion ? `${companion}被挡在人群外。` : '身边没有能替你回话的人。';
   const sensory = {
     grass_iron: `${destName}这一侧，马粪、铁锈和热烙铁的焦糊叠在一起。锁链先碰到手腕。`,
@@ -726,8 +732,8 @@ function frostPreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): s
 }
 
 function arrivePreferred(packet: LegacyNarratorPacket, plan: LegacyRenderPlan): string[] {
-  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || '帅帐');
-  const destName = /帅帐/.test(dest) ? '帅帐' : dest.replace(/[·,，]/g, '');
+  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || entityName("location","lcq.location.shuai_zhang"));
+  const destName = new RegExp("(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")","").test(dest) ? '帅帐' : dest.replace(/[·,，]/g, '');
   const sensory = {
     grass_iron: `${destName}里灯火压得很低。帐外还能听见远处的喊杀，铁锈味却被油灯盖住一层。`,
     wind_sky: `帐帘一落，天光没了。你看清案上未干的墨和对面那人的肩甲。`,
@@ -786,7 +792,7 @@ function openingPool(packet: LegacyNarratorPacket): string[] {
   const place = placeOf(packet);
   const nearby = companions.join('、');
   const named = companions.flatMap((companion) => {
-    if (companion !== '段强') return [`${companion}就在几步开外。`];
+    if (!isNamedEntityLabel("character","lcq.character.duan_qiang",companion)) return [`${companion}就在几步开外。`];
     return [
       `${companion}就在几步开外，肩背一起一伏，嘴唇发白，一时说不出完整的话。`,
       `“${companion}。”你低声叫了一声。他答应得晚半拍，声音发干，却毕竟应了。`,
@@ -878,7 +884,7 @@ function dangerPool(packet: LegacyNarratorPacket): string[] {
 
 function interactPool(packet: LegacyNarratorPacket): string[] {
   const names = presentNames(packet);
-  const companion = names.find(name => name === '月霜') || names[0] || '月霜';
+  const companion = names.find(name => isNamedEntityLabel("character","lcq.character.yue_shuang",name)) || names[0] || entityName("character","lcq.character.yue_shuang");
   const place = placeOf(packet);
   return [
     ...namedBeats(names, name => `${name}还在喘气，甲叶上的血已经凝成一条。`),
@@ -908,8 +914,8 @@ function interactPool(packet: LegacyNarratorPacket): string[] {
 
 function progressPool(packet: LegacyNarratorPacket): string[] {
   const names = presentNames(packet);
-  const fire = names.includes('卓云君') ? '卓云君' : '那名修士';
-  const wounded = names.includes('月霜') ? '月霜' : '伤者';
+  const fire = containsEntityLabel(names,"character","liuchao.character.zhuo_yunjun") ? '卓云君' : '那名修士';
+  const wounded = containsEntityLabel(names,"character","lcq.character.yue_shuang") ? '月霜' : '伤者';
   const place = placeOf(packet);
   return [
     ...namedBeats(names, name => `${name}就在火光能及的这一侧。`),
@@ -968,7 +974,7 @@ function martyrPool(packet: LegacyNarratorPacket): string[] {
 
 function brandPool(packet: LegacyNarratorPacket): string[] {
   const destName = brandPlaceName(packet);
-  const companion = presentNames(packet).find(name => name === '月霜');
+  const companion = presentNames(packet).find(name => isNamedEntityLabel("character","lcq.character.yue_shuang",name));
   const named = companion
     ? [
       `${companion}被挡在人群外，够不着你这一侧。`,
@@ -1456,8 +1462,8 @@ function frostPool(packet: LegacyNarratorPacket): string[] {
 }
 
 function arrivePool(packet: LegacyNarratorPacket): string[] {
-  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || '帅帐');
-  const destName = /帅帐/.test(dest) ? '帅帐' : dest.replace(/[·,，]/g, '') || '帅帐';
+  const dest = String(packet.receipts?.moveTo || packet.mustAppear?.location || entityName("location","lcq.location.shuai_zhang"));
+  const destName = new RegExp("(?:"+entityNamePattern("location","lcq.location.shuai_zhang")+")","").test(dest) ? '帅帐' : dest.replace(/[·,，]/g, '') || entityName("location","lcq.location.shuai_zhang");
   const names = presentNames(packet);
   const arrival = packet.receipts?.move
     ? [

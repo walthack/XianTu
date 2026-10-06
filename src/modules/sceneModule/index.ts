@@ -11,3 +11,5 @@ export * from './scene';
 export * from './brief';
 export * from './statusAdapters';
 export * from './inputPolicy';
+
+export * from './interrogation';

@@ -1,3 +1,4 @@
+import { STATUS_CATALOG } from '../modules/sceneModule/statuses';
 /**
  * 向量记忆服务
  *
@@ -72,14 +73,14 @@ const DEFAULT_CONFIG: VectorMemoryConfig = {
 // 修仙相关关键词词典
 const CULTIVATION_KEYWORDS = new Set([
   // 境界
-  '凡人', '练气', '筑基', '金丹', '元婴', '化神', '炼虚', '合体', '渡劫', '飞升',
-  '初期', '中期', '后期', '圆满', '极境', '突破', '瓶颈',
+  '无修为', '筑基', '内视', '生象', '入微', '坐照', '通幽', '归元', '至臻', '入神',
+  '初期', '中期', '后期', '突破', '瓶颈',
   // 修炼
   '修炼', '闭关', '悟道', '感悟', '丹田', '经脉', '灵气', '真气', '法力', '神识',
   // 战斗
-  '战斗', '交手', '斩杀', '击败', '重伤', '轻伤', '濒死', '陨落',
+  '战斗', '交手', '斩杀', '击败', ...STATUS_CATALOG.filter(s => s.id === 'wound.severe').flatMap(s => [s.label,...(s.aliases || [])]), '轻伤', ...STATUS_CATALOG.filter(s => s.id === 'dying').flatMap(s => [s.label,...(s.aliases || [])]), '陨落',
   // 物品
-  '丹药', '法宝', '灵石', '功法', '秘籍', '材料', '灵草',
+  '丹药', '法宝', '功法', '秘籍', '材料', '灵草',
   // 关系
   '师父', '徒弟', '道友', '敌人', '仇人', '盟友', '宗门', '门派',
   // 地点
@@ -154,7 +155,7 @@ export function extractTags(content: string): string[] {
  * 推断记忆分类
  */
 export function inferCategory(content: string, tags: string[]): VectorMemoryEntry['category'] {
-  const combatKeywords = ['战斗', '交手', '斩杀', '击败', '重伤', '攻击', '防御'];
+  const combatKeywords = ['战斗', '交手', '斩杀', '击败', ...STATUS_CATALOG.filter(s => s.id === 'wound.severe').flatMap(s => [s.label,...(s.aliases || [])]), '攻击', '防御'];
   const socialKeywords = ['师父', '徒弟', '道友', '拜师', '结交', '好感', '关系'];
   const cultivationKeywords = ['修炼', '闭关', '突破', '感悟', '境界', '功法'];
   const explorationKeywords = ['探索', '发现', '秘境', '历练', '寻找'];

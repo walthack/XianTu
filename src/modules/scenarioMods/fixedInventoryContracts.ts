@@ -1,3 +1,6 @@
+
+import {entityNamePattern} from './namedEntities';
+import {contentName} from './entityCatalog';
 import type { ScenarioPlayerCompletionEffects } from './schema';
 import type { SaveData } from '@/types/game';
 import { detectNarratedInventoryGainEntries, getInventoryItemIdentityKey } from '@/utils/narratedInventory';
@@ -5,7 +8,7 @@ import { detectNarratedInventoryGainEntries, getInventoryItemIdentityKey } from 
 export const SILK_POUCH_ITEM_ID = 'lcq.item.jin_nang';
 export const SILK_POUCH_TRANSFER_ID = 'lcq.event.s02_01.inventory.jin_nang';
 export const ZIPPER_ITEM_ID = 'lcq.item.zipper';
-const ZIPPER_ALIASES = new Set(['lcq.item.np001', 'lcq.item.np002']);
+const ZIPPER_ALIASES = new Set(['lcq.item.np001', 'lcq.item.np002', 'lcq.item.np003']);
 const ITEM_ID_PATTERN = /(?:lcq|liuchao|playtest)\.item\.[a-z0-9_]+/gi;
 export const ITEM_REFERENCE_PURPOSES = ['owned', 'scene', 'claim', 'grant'] as const;
 export type ItemReferencePurpose = typeof ITEM_REFERENCE_PURPOSES[number];
@@ -16,7 +19,7 @@ export interface StructuredItemReference {
 
 const CLAIM_VERB = /(?:接过|收下|获得|得到|购得|买下|捡起|缴获|收入(?:囊中|袋中|包中))/;
 const SCENE_MENTION_CUE = /(?:案上|桌上|台上|手里|手中|怀中|袖中|腰间|袋中|包里|地上|一旁|旁边)(?:还)?(?:放着|摆着|搁着|握着|拿着|装着|带着)/;
-const UNREGISTERED_POSSESSION = /(?:你(?!们)|程宗扬)(?:把|将)?(?:那|这)?(?:一)?(?:把|枚|只|个|条|件)?([^，。！？；\n]{2,16}?)(?:别在腰间|佩上|抽出|握在手中|拿在手里)/g;
+const UNREGISTERED_POSSESSION = new RegExp("(?:你(?!们)|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")"+")(?:把|将)?(?:那|这)?(?:一)?(?:把|枚|只|个|条|件)?([^，。！？；\\n]{2,16}?)(?:别在腰间|佩上|抽出|握在手中|拿在手里)","g");
 
 export interface RegisteredItemRecord {
   id: string;
@@ -43,7 +46,7 @@ export function collectRegisteredItemCatalog(save: SaveData | null | undefined):
   const catalog = items
     .filter((item): item is { id: string; name?: string } => !!item && typeof (item as { id?: unknown }).id === 'string')
     .map(item => ({ id: item.id, name: String(item.name || '') }));
-  if (usesFixedScenarioInventory(save as SaveData) && !catalog.some(item => item.id === 'lcq.item.ajiman_bond')) catalog.push({ id: 'lcq.item.ajiman_bond', name: '阿姬曼身契' });
+  if (usesFixedScenarioInventory(save as SaveData) && !catalog.some(item => item.id === 'lcq.item.ajiman_bond')) catalog.push({ id: 'lcq.item.ajiman_bond', name: contentName('item','lcq.item.ajiman_bond') });
   return catalog;
 }
 
@@ -191,7 +194,7 @@ function isAuthorizedGrantName(name: string, grantedNames: string[], context?: I
 }
 
 function isSceneMentionClause(clause: string): boolean {
-  if (CLAIM_VERB.test(clause) && /(?:你(?!们)|程宗扬)/.test(clause)) return false;
+  if (CLAIM_VERB.test(clause) && new RegExp("(?:你(?!们)|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")"+")","").test(clause)) return false;
   return SCENE_MENTION_CUE.test(clause) || /(?:看见|看到|望见|注意到|摆着|放着)/.test(clause);
 }
 
@@ -206,7 +209,7 @@ export function unsupportedInventoryGainNames(
     .map(item => item.名称)
     .filter(name => !isAuthorizedGrantName(name, grantedNames, context) && !allowed.has(getInventoryItemIdentityKey(name)));
   // Covers named props outside the old noun dictionary, including 锦囊 and arbitrary invented swords.
-  for (const match of text.matchAll(/(?:你(?!们)|程宗扬)(?:郑重|小心|顺手|当面)?(?:接过|收下|获得|得到|购得|买下|捡起|缴获)(?:了)?([^，。！？；\n]{1,22})/g)) {
+  for (const match of text.matchAll(new RegExp("(?:你(?!们)|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")"+")(?:郑重|小心|顺手|当面)?(?:接过|收下|获得|得到|购得|买下|捡起|缴获)(?:了)?([^，。！？；\\n]{1,22})","g"))) {
     const name = match[1].replace(/^(?:一|这|那)(?:枚|把|只|个|条|件|张|颗)/, '').trim();
     if (/消息|情报|线索|回答|回应|帮助|许可|允许|支持|机会|信任|认可|结果|答案|解释|喘息|托付|差事|委托/.test(name)) continue;
     if (isAuthorizedGrantName(name, grantedNames, context)) continue;
@@ -314,7 +317,7 @@ export function mergeFixedScenarioStarterInventory(
 ): Record<string, any> {
   const result = { ...current };
   const canonicalize = (id: string, item: any) =>
-    ZIPPER_ALIASES.has(id) && item?.名称 === '拉链' ? ZIPPER_ITEM_ID : id;
+    ZIPPER_ALIASES.has(id) && item?.名称 === contentName('item',ZIPPER_ITEM_ID) ? ZIPPER_ITEM_ID : id;
   for (const [id, item] of Object.entries(current)) {
     const key = canonicalize(id, item);
     if (key === id) continue;

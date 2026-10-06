@@ -1,3 +1,6 @@
+import {difficultySettings as readDifficultySettings} from '../modules/scenarioMods/levelProgression';
+import {migrateLegacyE01Ending} from '@/modules/scenarioMods/endingPresentation';
+import {assertEntitySaveFormat} from '@/modules/scenarioMods/entitySaveFormat';
 import { backfillRelationshipIds, resolveRelationshipId } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 仙途 (XianTu) - 游戏状态管理
@@ -117,6 +120,7 @@ interface GameState {
   saveMeta: any | null;
   onlineState: any | null;
   userSettings: any | null;
+  difficultySettings: any | null;
 
   character: CharacterBaseInfo | null;
   attributes: PlayerAttributes | null;
@@ -189,6 +193,7 @@ export const useGameStateStore = defineStore('gameState', {
     saveMeta: null,
     onlineState: buildSinglePlayerRuntimeState(),
     userSettings: null,
+    difficultySettings: null,
 
     character: null,
     attributes: null,
@@ -318,6 +323,8 @@ export const useGameStateStore = defineStore('gameState', {
      * @param saveData 完整的存档数据
      */
     loadFromSaveData(saveData: SaveData) {
+      assertEntitySaveFormat(saveData);
+      migrateLegacyE01Ending((saveData as any).世界?.状态?.剧本模组?.gameOver);
       backfillRelationshipIds(saveData, (saveData as any).世界?.状态?.剧本模组?.canon?.characters);
       const v3 = (isSaveDataV3(saveData) ? saveData : migrateSaveDataToLatest(saveData).migrated) as any;
 
@@ -338,6 +345,7 @@ export const useGameStateStore = defineStore('gameState', {
       this.saveMeta = v3?.元数据 ? deepCopy(v3.元数据) : null;
       this.onlineState = buildSinglePlayerRuntimeState();
       this.userSettings = v3?.系统?.设置 ? deepCopy(v3.系统.设置) : null;
+      this.difficultySettings = deepCopy(readDifficultySettings(v3));
       const normalizeQualitySuffix = (obj: any, field: string) => {
         if (!obj || typeof obj !== 'object') return;
 
@@ -647,6 +655,7 @@ export const useGameStateStore = defineStore('gameState', {
         },
         系统: {
           配置: this.systemConfig ?? {},
+          难度设置: deepCopy(this.difficultySettings || readDifficultySettings(null)),
           设置: settings,
           缓存: { 掌握技能: this.masteredSkills ?? (skillState as any)?.掌握技能 ?? [] },
           历史: { 叙事: this.narrativeHistory || [] },
@@ -751,6 +760,7 @@ export const useGameStateStore = defineStore('gameState', {
       this.saveMeta = null;
       this.onlineState = buildSinglePlayerRuntimeState();
       this.userSettings = null;
+      this.difficultySettings = null;
       this.character = null;
       this.attributes = null;
       this.location = null;

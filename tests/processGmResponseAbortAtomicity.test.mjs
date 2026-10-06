@@ -50,6 +50,7 @@ function eventReconcileAbortFinished() {
 function stage02Runtime() {
   return {
     modId: 'lcq.stage_02',
+    entitySaveFormat: 2,
     stallTurns: 10,
     worldTurn: 10,
     currentChapterId: 'lcq.chapter.s02',

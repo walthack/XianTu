@@ -1,0 +1,1429 @@
+{
+  "meta": {
+    "id": "combat.f03.mountain_stream_fog",
+    "version": 5,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.s04_02",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3,
+      "escapeFlag": "scene.f03.escaped",
+      "escapeState": "逃走"
+    },
+    "compatibleStateVersions": [
+      4
+    ]
+  },
+  "objective": {
+    "text": "浓雾里护住队伍，扛过鬼王峒武士的突袭",
+    "previewHint": "护住队伍；每次行动最多解决一组，雾散或拖满拍数不等于获胜。",
+    "win": {
+      "all": [
+        {
+          "party": "foe_engaged",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_pack_1",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_pack_2",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_pack_3",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_pack_4",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_pack_5",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_pack_6",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_pack_7",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "foe_last",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "kind": "not",
+          "cond": {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        }
+      ]
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "foe_engaged",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "暗红眼的武士",
+        "独角武士",
+        "光头武士",
+        "第一个武士",
+        "那个武士"
+      ],
+      "resistance": 3,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "你的刀砍在他手臂上，只留下一道浅浅的伤痕",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "foe_engaged",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_engaged"
+    },
+    {
+      "id": "foe_pack_1",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "其余武士",
+        "武士们",
+        "第2名武士"
+      ],
+      "resistance": 2,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "remaining_seven",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_pack_1"
+    },
+    {
+      "id": "foe_pack_2",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "其余武士",
+        "武士们",
+        "第3名武士"
+      ],
+      "resistance": 2,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "remaining_seven",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_pack_2"
+    },
+    {
+      "id": "foe_pack_3",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "其余武士",
+        "武士们",
+        "第4名武士"
+      ],
+      "resistance": 2,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "remaining_seven",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_pack_3"
+    },
+    {
+      "id": "foe_pack_4",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "其余武士",
+        "武士们",
+        "第5名武士"
+      ],
+      "resistance": 2,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "remaining_seven",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_pack_4"
+    },
+    {
+      "id": "foe_pack_5",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "其余武士",
+        "武士们",
+        "第6名武士"
+      ],
+      "resistance": 2,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "remaining_seven",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_pack_5"
+    },
+    {
+      "id": "foe_pack_6",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "其余武士",
+        "武士们",
+        "第7名武士"
+      ],
+      "resistance": 2,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "remaining_seven",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_pack_6"
+    },
+    {
+      "id": "foe_pack_7",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "其余武士",
+        "武士们",
+        "第8名武士"
+      ],
+      "resistance": 2,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "remaining_seven",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_pack_7"
+    },
+    {
+      "id": "foe_last",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "最后一个武士",
+        "最后那个",
+        "吸血的武士",
+        "变身的武士"
+      ],
+      "resistance": 3,
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "完好",
+            "受创",
+            "重伤",
+            "被击倒",
+            "逃走",
+            "被俘"
+          ],
+          "initial": 0,
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "被击倒",
+            "causedBy": "player_side",
+            "ceiling": 3,
+            "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+            "clampText": "刀砍见骨，他却不流血，胸前的鬼脸反而更红",
+            "alternatives": [
+              "被俘"
+            ]
+          }
+        }
+      ],
+      "actionGroup": "foe_last",
+      "instanceId": "combat.f03.mountain_stream_fog.foe_last"
+    },
+    {
+      "id": "wu_er_lang",
+      "side": "player_side",
+      "ref": "liuchao.character.wu_er_lang",
+      "absent": true
+    },
+    {
+      "id": "su_li",
+      "side": "player_side",
+      "ref": "liuchao.character.su_li"
+    },
+    {
+      "id": "ning_yu",
+      "side": "player_side",
+      "ref": "liuchao.character.ning_yu",
+      "protected": true,
+      "recoveryStatus": "wound.internal"
+    },
+    {
+      "id": "yi_biao",
+      "side": "player_side",
+      "ref": "lcq.character.np004",
+      "defense": {
+        "bonus": 1
+      }
+    },
+    {
+      "id": "qi_yuan",
+      "side": "player_side",
+      "ref": "liuchao.character.qi_yuan",
+      "defense": {
+        "bonus": 0
+      }
+    },
+    {
+      "id": "xiao_wei",
+      "side": "player_side",
+      "ref": "lcq.character.nanhuang_xiaowei"
+    },
+    {
+      "id": "kawa",
+      "side": "player_side",
+      "ref": "lcq.character.nanhuang_kawa"
+    },
+    {
+      "id": "yi_hu",
+      "side": "player_side",
+      "ref": "liuchao.character.yi_hu",
+      "instanceId": "combat.f05.dungeon_trap.blood_tiger",
+      "enemyId": "lcq.enemy.blood_tiger_yi_hu"
+    },
+    {
+      "id": "wu_zhan_wei",
+      "side": "player_side",
+      "ref": "lcq.character.np003"
+    },
+    {
+      "id": "huamiao_men",
+      "side": "player_side",
+      "ref": "lcq.group.huamiao_men",
+      "group": {
+        "id": "lcq.group.huamiao_men",
+        "label": "{{ref:lcq.group.huamiao_men}}"
+      }
+    },
+    {
+      "id": "caravan_guards",
+      "side": "player_side",
+      "ref": "lcq.group.caravan_guards",
+      "group": {
+        "id": "lcq.group.caravan_guards",
+        "label": "{{ref:lcq.group.caravan_guards}}"
+      }
+    },
+    {
+      "id": "bride",
+      "side": "player_side",
+      "ref": "liuchao.character.le_mingzhu",
+      "protected": true
+    },
+    {
+      "id": "a_xi",
+      "side": "player_side",
+      "ref": "liuchao.character.a_xi",
+      "protected": true
+    },
+    {
+      "id": "xie_yi",
+      "side": "neutral",
+      "ref": "liuchao.character.xie_yi"
+    },
+    {
+      "id": "zhu",
+      "side": "neutral",
+      "ref": "liuchao.character.shang_zhen_yu"
+    },
+    {
+      "id": "yun_cang_feng",
+      "side": "neutral",
+      "ref": "liuchao.character.yun_cang_feng"
+    },
+    {
+      "id": "shi_gang",
+      "side": "neutral",
+      "ref": "lcq.character.nanhuang_shigang"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "fog",
+      "kind": "progress",
+      "scale": [
+        "浓雾",
+        "渐散",
+        "散去大半"
+      ],
+      "owner": "scene",
+      "initial": 0
+    }
+  ],
+  "clock": {
+    "beats": 13,
+    "onTimeout": {
+      "type": "close",
+      "as": "timeout"
+    },
+    "fixedEvents": [
+      {
+        "id": "setup",
+        "onStart": true,
+        "effects": [
+          {
+            "tag": {
+              "id": "fog_cover",
+              "label": "雾中难辨",
+              "on": "scene",
+              "durationBeats": 2,
+              "effect": "远程难命中，敌我都看不清"
+            }
+          },
+          {
+            "tag": {
+              "id": "iron_body",
+              "label": "体如铁石",
+              "on": "foe_engaged",
+              "durationBeats": null,
+              "effect": "主角的普通刀伤只留浅痕"
+            }
+          }
+        ]
+      },
+      {
+        "id": "ning_yu_bursts_out",
+        "atBeat": 1,
+        "text": "{{ref:liuchao.character.ning_yu}}满身是血从雾中掠过山涧，力竭坠落，被一条青藤扯了回来",
+        "effects": []
+      },
+      {
+        "id": "scout_killed",
+        "atBeat": 1,
+        "text": "铁斧从雾里飞出；探路的花苗汉子一声惨呼，头颅被提在武士手里",
+        "effects": []
+      },
+      {
+        "id": "fog_thins",
+        "atBeat": 3,
+        "text": "一缕阳光透进林中，浓雾微微散开",
+        "effects": [
+          {
+            "setTrack": {
+              "track": "fog",
+              "to": "渐散"
+            }
+          }
+        ]
+      },
+      {
+        "id": "wu_er_lang_charges",
+        "atBeat": 3,
+        "text": "{{ref:liuchao.character.wu_er_lang}}从花苗人群里扑出，投入交锋；杀敌或牵制结果按本拍实际结算。",
+        "effects": [
+          {
+            "arrive": "wu_er_lang"
+          },
+          {
+            "tag": {
+              "id": "wu_acted",
+              "label": "武二郎已出手",
+              "on": "scene",
+              "durationBeats": null,
+              "effect": "武二郎出手，局面开始翻转"
+            }
+          }
+        ]
+      },
+      {
+        "id": "fog_mostly_gone",
+        "atBeat": 4,
+        "text": "浓雾消散大半，武士再也藏不住身形",
+        "effects": [
+          {
+            "setTrack": {
+              "track": "fog",
+              "to": "散去大半"
+            }
+          }
+        ]
+      },
+      {
+        "id": "blood_transform",
+        "atBeat": 4,
+        "text": "一名武士咬住受伤同伴的脖子吸血，胸前现出大笑鬼脸，身形暴涨",
+        "effects": [
+          {
+            "tag": {
+              "id": "bloodless",
+              "label": "伤而不血",
+              "on": "foe_last",
+              "durationBeats": null,
+              "effect": "刀伤不能让他倒下"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "beats": [
+    {
+      "id": "b1",
+      "title": "雾中来敌",
+      "prompt": "崖边浓雾，脚下是一丈来高的山涧。凝羽带伤冲出来喊「当心」，雾里飞出一柄铁斧。",
+      "reveal": [
+        "来的是鬼王峒的人",
+        "武士光头、暗红眼、额生利角、手持铁斧"
+      ]
+    },
+    {
+      "id": "b2",
+      "title": "刀斧相交",
+      "prompt": "暗红眼武士朝凝羽伸手，你挡在她身前拔刀。",
+      "reveal": [
+        "武士体如铁石，刀只能留下浅痕",
+        "鬼角硬如金铁，能像标枪一样刺穿胸膛",
+        "身边有人死，生死根会把死气送进丹田"
+      ]
+    },
+    {
+      "id": "b3",
+      "title": "雾散·武二郎出手",
+      "prompt": "阳光透进来，苏荔张弓；武二郎冲进战团。你已经撑不住了。",
+      "reveal": [
+        "武二郎拿到刀后局面翻转"
+      ]
+    },
+    {
+      "id": "b4",
+      "title": "变身与堕涧",
+      "prompt": "只剩一名武士。他吸干同伴的血，变成了另一副样子，扑向武二郎。",
+      "reveal": [
+        "刀砍见骨也不流血",
+        "他被逼到涧边会跳下去逃走"
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "fog",
+      "kind": "environment",
+      "label": "浓雾",
+      "aliases": [
+        "雾",
+        "白雾"
+      ],
+      "source": "第45章 段54；第46章 段10、32",
+      "availability": {
+        "untilBeat": 3
+      },
+      "verbs": [
+        {
+          "id": "use_cover",
+          "aliases": [
+            "借雾躲",
+            "隐蔽"
+          ],
+          "power": 1,
+          "goalTags": [
+            "capture",
+            "protect",
+            "harass",
+            "survive",
+            "turn_tide"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stream_edge",
+      "kind": "terrain",
+      "label": "山涧崖边",
+      "aliases": [
+        "山涧",
+        "涧边",
+        "石崖"
+      ],
+      "source": "第45章 段56–57；第46章 段37",
+      "verbs": [
+        {
+          "id": "drive_to_edge",
+          "aliases": [
+            "逼到涧边",
+            "推下山涧"
+          ],
+          "power": 1,
+          "goalTags": [
+            "harass",
+            "turn_tide",
+            "capture",
+            "finish_last"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "steel_saber",
+      "kind": "item",
+      "label": "钢刀",
+      "aliases": [
+        "刀"
+      ],
+      "source": "第45章 段84–85、107；第46章 段2–3",
+      "owner": "pc",
+      "verbs": [
+        {
+          "id": "draw_cut",
+          "aliases": [
+            "拔刀式",
+            "拔刀就砍"
+          ],
+          "power": 1,
+          "goalTags": [
+            "capture",
+            "protect",
+            "harass",
+            "survive",
+            "turn_tide"
+          ]
+        },
+        {
+          "id": "throw_to_ally",
+          "aliases": [
+            "把刀扔给武二",
+            "武二接住"
+          ],
+          "power": 2,
+          "goalTags": [
+            "harass",
+            "turn_tide",
+            "capture"
+          ],
+          "creates": "wu_armed",
+          "cost": "主角空手"
+        }
+      ]
+    },
+    {
+      "id": "dantian_wheel",
+      "kind": "ability",
+      "label": "丹田气轮",
+      "aliases": [
+        "生死根",
+        "吸死气",
+        "运气"
+      ],
+      "source": "第45章 段89、94；第46章 段48",
+      "availability": {
+        "fromBeat": 2
+      },
+      "verbs": [
+        {
+          "id": "rally",
+          "aliases": [
+            "回力",
+            "撑住"
+          ],
+          "power": 1,
+          "goalTags": [
+            "survive"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "iron_bow",
+      "kind": "item",
+      "label": "易彪的铁胎弓与火箭",
+      "aliases": [
+        "火箭",
+        "铁弓"
+      ],
+      "source": "第45章 段35、62–63、70–71",
+      "owner": "yi_biao",
+      "verbs": [
+        {
+          "id": "fire_into_fog",
+          "aliases": [
+            "往雾里射"
+          ],
+          "power": 0,
+          "goalTags": [
+            "reveal"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "su_li_bow",
+      "kind": "item",
+      "label": "苏荔的弯弓",
+      "aliases": [
+        "苏荔射箭"
+      ],
+      "source": "第45章 段101；第46章 段40、46",
+      "owner": "su_li",
+      "availability": {
+        "fromBeat": 3
+      },
+      "verbs": [
+        {
+          "id": "aimed_shot",
+          "aliases": [
+            "射鬼脸",
+            "一箭射穿"
+          ],
+          "power": 3,
+          "goalTags": [
+            "finish_last"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "xiao_wei_crossbow",
+      "kind": "item",
+      "label": "小魏的弩",
+      "aliases": [
+        "弩",
+        "弩矢"
+      ],
+      "source": "第46章 段19–20",
+      "owner": "xiao_wei",
+      "availability": {
+        "fromBeat": 4,
+        "untilBeat": 4
+      },
+      "verbs": [
+        {
+          "id": "snipe_eye",
+          "aliases": [
+            "射眼睛"
+          ],
+          "power": 0,
+          "goalTags": [
+            "harass"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "green_vine",
+      "kind": "terrain",
+      "label": "青藤",
+      "aliases": [
+        "藤"
+      ],
+      "source": "第45章 段66",
+      "uses": 1,
+      "availability": {
+        "fromBeat": 1,
+        "untilBeat": 1
+      },
+      "verbs": [
+        {
+          "id": "pull_out",
+          "aliases": [
+            "把人拉上来"
+          ],
+          "power": 1,
+          "goalTags": [
+            "protect"
+          ]
+        }
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "id": "fog_cover",
+      "label": "雾中难辨",
+      "on": "scene",
+      "durationBeats": 2,
+      "effect": "远程难命中，敌我都看不清"
+    },
+    {
+      "id": "iron_body",
+      "label": "体如铁石",
+      "on": "foe_engaged",
+      "durationBeats": null,
+      "effect": "主角的普通刀伤只留浅痕"
+    },
+    {
+      "id": "wu_acted",
+      "label": "武二郎已出手",
+      "on": "scene",
+      "durationBeats": null,
+      "effect": "武二郎出手，局面开始翻转"
+    },
+    {
+      "id": "wu_armed",
+      "label": "武二持刀",
+      "on": "wu_er_lang",
+      "durationBeats": null,
+      "effect": "武二郎出手，局面开始翻转"
+    },
+    {
+      "id": "bloodless",
+      "label": "伤而不血",
+      "on": "foe_last",
+      "durationBeats": null,
+      "effect": "刀伤不能让他倒下"
+    }
+  ],
+  "goals": [
+    {
+      "id": "survive",
+      "label": "在武士手下撑住",
+      "type": "support",
+      "baseDifficulty": 8
+    },
+    {
+      "id": "protect",
+      "label": "护住凝羽和后面的花苗女子",
+      "type": "support",
+      "baseDifficulty": 9,
+      "onSuccess": {
+        "tagOn": "allies",
+        "tag": {
+          "id": "guarded",
+          "label": "受掩护",
+          "on": "player_side",
+          "durationBeats": 1,
+          "effect": {
+            "defenseBonus": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "turn_tide",
+      "label": "让武二郎接手局面",
+      "type": "push",
+      "baseDifficulty": 10,
+      "track": "vit",
+      "maxTargetGroups": 1
+    },
+    {
+      "id": "finish_last",
+      "label": "别让最后一个跑了",
+      "type": "push",
+      "baseDifficulty": 12,
+      "track": "vit",
+      "maxTargetGroups": 1
+    },
+    {
+      "id": "reveal",
+      "label": "看清雾里的敌人",
+      "type": "support",
+      "baseDifficulty": 10
+    },
+    {
+      "id": "harass",
+      "label": "牵制",
+      "type": "push",
+      "baseDifficulty": 10,
+      "track": "vit",
+      "maxTargetGroups": 1
+    },
+    {
+      "id": "capture",
+      "label": "制服武士留下活口",
+      "type": "push",
+      "baseDifficulty": 10,
+      "track": "vit",
+      "finishAs": "被俘",
+      "aliases": [
+        "擒住",
+        "留活口",
+        "活捉",
+        "制服"
+      ],
+      "maxTargetGroups": 1,
+      "completeOnSuccess": true
+    },
+    {
+      "id": "interrogate",
+      "label": "审问已制住的活口",
+      "aliases": [
+        "审问",
+        "盘问",
+        "逼问"
+      ],
+      "type": "support",
+      "baseDifficulty": 10
+    },
+    {
+      "id": "yield_guard",
+      "label": "停止抵抗、承受攻击",
+      "type": "support",
+      "baseDifficulty": 8,
+      "aliases": [
+        "张开双手不躲",
+        "不躲也不挡",
+        "不招架",
+        "不还手",
+        "放下刀",
+        "硬吃他们的刀"
+      ]
+    }
+  ],
+  "locks": [
+    {
+      "id": "bride_veiled",
+      "matchHints": [
+        "掀面纱",
+        "新娘是谁",
+        "让新娘出手"
+      ],
+      "reply": "新娘被花苗女子围在中间，阿夕拉着不让她出来。",
+      "redirectTo": "protect"
+    },
+    {
+      "id": "zhu_hides",
+      "matchHints": [
+        "让朱老头出手",
+        "朱老头帮忙"
+      ],
+      "reply": "朱老头躲在最后面，紧紧拽着石刚的衣服。",
+      "redirectTo": "survive"
+    },
+    {
+      "id": "xie_yi_idle",
+      "matchHints": [
+        "请谢艺出手",
+        "谢艺帮忙"
+      ],
+      "reply": "谢艺拿着缰绳站在坐骑旁，神情漫不经心。",
+      "redirectTo": "survive"
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "attack_ning_yu",
+      "party": "foe_engaged",
+      "label": "铁斧逼近队伍",
+      "target": {
+        "party": "ning_yu"
+      },
+      "attack": {
+        "dc": 8
+      },
+      "allowProtected": true,
+      "when": {
+        "kind": "not",
+        "cond": {
+          "kind": "trackReaches",
+          "party": "foe_engaged",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.internal"
+          }
+        ],
+        "text": "护队的一侧受创"
+      },
+      "onBlocked": {
+        "text": "这一侧挡住了袭击"
+      }
+    },
+    {
+      "id": "attack_bride",
+      "party": "foe_pack_1",
+      "label": "铁斧逼近队伍",
+      "target": {
+        "party": "bride"
+      },
+      "attack": {
+        "dc": 8
+      },
+      "allowProtected": true,
+      "when": {
+        "kind": "not",
+        "cond": {
+          "kind": "trackReaches",
+          "party": "foe_pack_1",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ],
+        "text": "护队的一侧受创"
+      },
+      "onBlocked": {
+        "text": "这一侧挡住了袭击"
+      }
+    },
+    {
+      "id": "attack_a_xi",
+      "party": "foe_last",
+      "label": "铁斧逼近队伍",
+      "target": {
+        "party": "a_xi"
+      },
+      "attack": {
+        "dc": 8
+      },
+      "allowProtected": true,
+      "when": {
+        "kind": "not",
+        "cond": {
+          "kind": "trackReaches",
+          "party": "foe_last",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ],
+        "text": "护队的一侧受创"
+      },
+      "onBlocked": {
+        "text": "这一侧挡住了袭击"
+      }
+    }
+  ],
+  "fumble": [
+    {
+      "id": "pc_wound",
+      "target": "actor",
+      "consequence": {
+        "kind": "status",
+        "status": "wound.external"
+      },
+      "text": "你在混战里吃了一记，受了外伤"
+    },
+    {
+      "id": "qi_yuan_shoulder",
+      "target": {
+        "party": "qi_yuan"
+      },
+      "consequence": {
+        "kind": "status",
+        "status": "wound.external.shoulder"
+      },
+      "text": "祁远肩头被斧锋带到"
+    },
+    {
+      "id": "yi_biao_back",
+      "target": {
+        "party": "yi_biao"
+      },
+      "consequence": {
+        "kind": "status",
+        "status": "wound.external.back"
+      },
+      "text": "易彪背上被铁斧拍了一记"
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "text": "九名鬼王峒武士已被逐一击倒或制住，没有人逃走。队伍的伤情按本场实际经过记录。",
+      "fixedCosts": [
+        {
+          "id": "delay",
+          "target": "scene",
+          "effect": "耽误一个多时辰的路程",
+          "anchorText": "第47章 段53"
+        }
+      ],
+      "flags": {
+        "scene.f03.result": "win",
+        "scene.f03.escaped": false
+      },
+      "rewards": [],
+      "next": null
+    },
+    "lose": {
+      "text": "这一仗没能把来袭武士全部留下。未被击倒或制住的人借雾逃走；队伍伤情与代价按实际结果记账。",
+      "fixedCosts": [
+        {
+          "id": "guard_fallen",
+          "target": "caravan_guards",
+          "effect": "商馆护卫在这场败局中阵亡",
+          "anchorText": "45·97；31号验收后补定"
+        }
+      ],
+      "flags": {
+        "scene.f03.result": "lose",
+        "scene.f03.escaped": true
+      },
+      "rewards": [],
+      "next": null,
+      "settle": [
+        {
+          "side": "opposed",
+          "track": "vit",
+          "onlyUnfinished": true,
+          "to": "逃走"
+        }
+      ]
+    },
+    "timeout": {
+      "text": "这一仗没能把来袭武士全部留下。未被击倒或制住的人借雾逃走；队伍伤情与代价按实际结果记账。",
+      "settle": [
+        {
+          "side": "opposed",
+          "track": "vit",
+          "onlyUnfinished": true,
+          "to": "逃走"
+        }
+      ],
+      "fixedCosts": [
+        {
+          "id": "guard_fallen",
+          "target": "caravan_guards",
+          "effect": "商馆护卫在这场败局中阵亡",
+          "anchorText": "45·97；31号验收后补定"
+        }
+      ],
+      "flags": {
+        "scene.f03.result": "timeout",
+        "scene.f03.escaped": true
+      },
+      "rewards": [],
+      "next": null
+    }
+  },
+  "narration": {
+    "fixedTexts": {
+      "engage": "你循着哨声往前走了几步，雾里忽然传来一声闷哼。方才滑下涧去探路的花苗汉子倒在石缝里，再也没有起来。雾气翻开一道口子，一个光头的汉子走了出来：额心正中生着一支可怖的利角，手里的铁斧还在滴血，身后隐约还有影子在动。凝羽就在你几步之外，侧身戒备。这是你来到这个世界之后，第一次与人正式交手。"
+    },
+    "requiredFacts": [
+      "这是主角来到这个世界后第一次与人正式交手",
+      "武士额生鬼角、暗红眼、手持铁斧，舌头比常人短一截，只能发单调音节",
+      "凝羽说屠村的一共十个，她路上杀了一个",
+      "每名武士的伤亡以本拍结算为准；花苗人杀了其中谁不锁定，主持不得把未解决的人写成已死。凝羽身上是别人的血，本场不受外伤，战前内伤仍在。",
+      "花苗人杀敌人数不限，但只能描写本场实际已解决的武士，不能替代码判定。"
+    ],
+    "forbidden": [
+      "称最后那名武士为首领"
+    ]
+  },
+  "settings": {},
+  "rewardPolicy": {
+    "itemIds": []
+  },
+  "continuity": {
+    "fixedCosts": [
+      {
+        "id": "scout_dead",
+        "target": "huamiao_men",
+        "effect": "探路的花苗汉子阵亡",
+        "anchorText": "第45章 段72、77"
+      },
+      {
+        "id": "ning_yu_internal",
+        "target": "ning_yu",
+        "effect": "战后吐黑血、身体冰冷；正面交手受反震、真气逆行，十几天才能好",
+        "statuses": [
+          {
+            "status": "wound.internal"
+          }
+        ],
+        "anchorText": "第46章 段77–83；第47章 段2–3"
+      }
+    ],
+    "facts": [
+      "凝羽内伤属于固定代价，不以本场赢输取消；身上的血不是她在本场受外伤。"
+    ]
+  },
+  "interrogation": {
+    "maxChapter": 46,
+    "goalIds": [
+      "interrogate"
+    ],
+    "requires": {
+      "any": [
+        {
+          "party": "foe_engaged",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_pack_1",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_pack_2",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_pack_3",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_pack_4",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_pack_5",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_pack_6",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_pack_7",
+          "track": "vit",
+          "reach": "被俘"
+        },
+        {
+          "party": "foe_last",
+          "track": "vit",
+          "reach": "被俘"
+        }
+      ]
+    },
+    "facts": [
+      {
+        "id": "warrior_origin",
+        "fromChapter": 45,
+        "text": "这些武士来自鬼王峒；眼下只能确认这场袭击的来人，问不出后文才揭开的秘密。"
+      }
+    ]
+  },
+  "levelContext": {
+    "chapter": 45,
+    "chaptersByBeat": [
+      {
+        "fromBeat": 2,
+        "chapter": 46
+      }
+    ],
+    "nonLevelPartyIds": [
+      "huamiao_men",
+      "caravan_guards",
+      "bride"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "kind": "currency",
+  "entries": [
+    {
+      "id": "liuchao.currency.tong_zhu",
+      "aliases": [
+        "铜铢"
+      ],
+      "definition": {
+        "id": "liuchao.currency.tong_zhu",
+        "name": "铜铢",
+        "walletKey": "铜铢",
+        "icon": "Coins",
+        "valueRef": "currency.liuchao.currency.tong_zhu"
+      },
+      "authoritySource": "mod-kit/entity-catalog/currencies.json"
+    },
+    {
+      "id": "liuchao.currency.yin_zhu",
+      "aliases": [
+        "银铢"
+      ],
+      "definition": {
+        "id": "liuchao.currency.yin_zhu",
+        "name": "银铢",
+        "walletKey": "银铢",
+        "icon": "HandCoins",
+        "valueRef": "currency.liuchao.currency.yin_zhu"
+      },
+      "authoritySource": "mod-kit/entity-catalog/currencies.json"
+    },
+    {
+      "id": "liuchao.currency.jin_zhu",
+      "aliases": [
+        "金铢"
+      ],
+      "definition": {
+        "id": "liuchao.currency.jin_zhu",
+        "name": "金铢",
+        "walletKey": "金铢",
+        "icon": "BadgeDollarSign",
+        "valueRef": "currency.liuchao.currency.jin_zhu"
+      },
+      "authoritySource": "mod-kit/entity-catalog/currencies.json"
+    }
+  ]
+}

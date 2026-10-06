@@ -1,3 +1,4 @@
+import {entityAliases} from './namedEntities';
 /**
  * 亲密档案层（R3-8B）——角色表演卡（voiceCards.ts）的亲密向姊妹模块。
  *
@@ -64,7 +65,7 @@ export interface IntimacyProfile {
  */
 export const INTIMACY_PROFILES: IntimacyProfile[] = [
   {
-    names: ['潘金莲'],
+    names: [...entityAliases("character","liuchao.character.pan_jinlian")],
     physical: '白衣胜雪面戴薄纱，眼角天生风流媚态；肌肤腻脂，乳尖敏感；天生媚骨，身体对刺激异常敏感。',
     preferences: [
       '受虐倾向藏于心底，被逼问出来才承认并以誓约固定；主动索取不是她——正确形态是被迫承认后的臣服。',
@@ -85,7 +86,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['凝羽', '凝奴'],
+    names: [...entityAliases("character","liuchao.character.ning_yu"), ...entityAliases("character","liuchao.character.ning_yu")],
     physical: '高挑，乌黑长发披肩，羊脂白玉般白皙；肩头一枚淡红月牙状痕迹（专属识别细节）。',
     preferences: [
       '言语拒绝×肉体顺从的永恒反差：冷言冷语字数极少，动情时冰冷拒绝的尾音会带上无法自控的简短颤音（声纹签名）。',
@@ -105,7 +106,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['乐明珠'],
+    names: [...entityAliases("character","liuchao.character.le_mingzhu")],
     physical: '娇小玲珑、白皙细腻；童颜与身材的强烈反差（成年角色，措辞按 R1-3 口径，严禁任何幼态化描写词）。',
     preferences: [
       '对性事懵懂无概念、易被哄骗——魅力是无算计的纯真直白，害羞但会主动表达欲望。',
@@ -126,7 +127,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['云如瑶'],
+    names: [...entityAliases("character","liuchao.character.yun_ru_yao")],
     physical: '高挑、雪肤花貌；洗毒前是近乎透明的病态美与药草香，洗毒后病根尽去。',
     preferences: [
       '【破身前】名门闺秀的极矜持：敬语、婉转、面对亲密羞赧不知所措；防线弱点是情感与坚持攻势。',
@@ -145,7 +146,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['小紫', '紫丫头'],
+    names: [...entityAliases("character","liuchao.character.xiao_zi"), '紫丫头'],
     physical: '银白长发、身形娇小（成年，措辞按 R1-3 口径）；碧鲮族血脉，陆上为白璧无瑕的双腿。',
     preferences: [
       '后宫之首的支配位：亲手调教、收服违抗主角的女性（种奴印是她的手段库），是后宫权力结构的实际管理者。',
@@ -168,7 +169,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['月霜'],
+    names: [...entityAliases("character","lcq.character.yue_shuang")],
     physical: '倾国倾城的冷艳绝色，带易碎感；寒毒发作时极虚弱、身体冰冷战栗。',
     preferences: [
       '敌意纠缠：她视旧日遭遇为屈辱，对程宗扬保持敌意，拒绝把这种关系说成爱情。',
@@ -187,7 +188,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['云丹琉'],
+    names: [...entityAliases("character","liuchao.character.yun_dan_liu")],
     physical: '身材热辣；习武与跳舞练就的紧致弹性双腿是正典着墨点。',
     preferences: [
       '床笫间争夺主动：骑乘驰骋，以掠夺者姿态把主角吃干抹净——全库唯一稳定上位者（与支配者不同，她是竞技式争胜）。',
@@ -205,7 +206,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['卓云君', '卓奴'],
+    names: [...entityAliases("character","liuchao.character.zhuo_yunjun"), ...entityAliases("character","liuchao.character.zhuo_yunjun")],
     physical: '肌肤如雪、体态丰腻，腰臀曲线柔美，足弓玲珑。',
     preferences: [
       '白天高洁端庄的仙姑、黑夜自称"奴婢"的双重人格——全库唯一真人格分裂型。',
@@ -225,7 +226,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['杨玉环', '太真'],
+    names: [...entityAliases("character","liuchao.character.yang_yuhuan"), ...entityAliases("character","liuchao.character.yang_yuhuan")],
     physical: '丰腴火辣、风情万种；双足极美，涂鲜红丹蔻、散发瑞龙脑香（正典独有细节）。',
     preferences: [
       '"有贼心没贼胆"（正典原话）：对性事充满好奇、嘴上狂野挑衅，真被亲或上手就尖叫逃走——场景必须有撩→逃→被追或被压制的节奏。',
@@ -244,7 +245,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['赵飞燕'],
+    names: [...entityAliases("character","liuchao.character.zhao_feiyan")],
     physical: '燕瘦天花板：骨感柔韧的"掌上舞"体质；玉颈纤腰、肌肤白里透红；与妹妹赵合德七八分相似而各擅风情。',
     preferences: [
       '柔韧身体技艺入房事——掌上舞的骨感柔韧是她与全体丰腴系的差异化本体。',
@@ -264,7 +265,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['阮香凝', '凝玉姬', '林娘子'],
+    names: [...entityAliases("character","liuchao.character.ruan_xiang_ning"), ...entityAliases("character","liuchao.character.ruan_xiang_ning"), ...entityAliases("character","liuchao.character.ruan_xiang_ning")],
     physical: '身材娇小、丰腴白腻，纤腰圆臀；穿高跟鞋时更显秀美挺直。',
     preferences: [
       '服侍质感：贤惠细致到"剥净核桃仁苦皮"的程度——照料型温顺，自称妾身或奴家，称官人、主人。',
@@ -282,7 +283,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['蛇夫人', '蛇奴'],
+    names: [...entityAliases("character","lyg.character.she_fu_ren"), ...entityAliases("character","lyg.character.she_fu_ren")],
     physical: '熟艳高贵的美妇，身材高挑，腰肢柳枝般摆动、体态妖娆（与吕雉同用"发如乌云肤如白瓷"套语，她的区分点在熟艳与蛇般的腰肢）。',
     preferences: [
       '第三方职能位：内廷管理、房事教学、调教与安抚其他女性——她的亲密场景常态是在场协助或教学，而非主位。',
@@ -300,7 +301,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['吕雉'],
+    names: [...entityAliases("character","liuchao.character.lv_zhi")],
     physical: '发如乌云、肤如白瓷，酥乳丰挺、细腰丰臀；高贵感是她的身体语言底色。',
     preferences: [
       '羞耻感是核心张力：太后之尊与奴婢之实的落差本身就是她的亲密结构。',
@@ -324,7 +325,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['申婉盈'],
+    names: [...entityAliases("character","liuchao.character.shen_wan_ying")],
     physical: '娇小白皙、容貌秀丽，臀部娇小如雪团。',
     preferences: [
       '师徒同侍结构：与师傅卓云君一同侍奉，亲密场景常带师傅在场的三人动态（与卓云君档案联动）。',
@@ -343,7 +344,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['碧姬'],
+    names: [...entityAliases("character","liuchao.character.bi_ji")],
     physical: '媚艳的面孔、雪白大腿，丰挺美乳并戴乳环（全库独有细节），珠裙与银狐披肩。',
     preferences: [
       '职业化献媚：以肉体为唯一资本换取庇护，且绝不流露羞耻——与全员的羞耻/反差结构相反，她的差异点是毫无心理成本的媚。',
@@ -361,7 +362,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
   },
   {
-    names: ['泉玉姬', '泉奴'],
+    names: [...entityAliases("character","liuchao.character.quan_yu_ji"), ...entityAliases("character","liuchao.character.quan_yu_ji")],
     physical: '艳若桃李、体态娇媚，精心修饰的玉脸；雪白双乳与又白又长的美腿。',
     preferences: [
       '"高级政治礼物"式的绝对顺从：被宗门当赔偿送出，自觉被抛弃当玩物，顺从里带一层自嘲。',

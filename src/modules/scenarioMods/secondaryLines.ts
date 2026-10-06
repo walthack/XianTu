@@ -1,3 +1,4 @@
+import {entityText} from './namedEntities';
 /**
  * 二级线入口（R3-10）——把"能不能接到这条线"从模型自觉改成引擎确定性。
  *
@@ -481,14 +482,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '收拢残余商队，确认鬼王峒使者已抵达海湾', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.regroup_caravan_envoy' },
       { reviewSummary: '以兵器生意跟鬼王峒使者阁罗敲定交易，化解眼前危机', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.weapon_deal_with_geluo' },
       { reviewSummary: '处置偷听的鬼王峒眼线，厘清兵器交易背后的危险', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.spot_dong_informant' },
-      { reviewSummary: '赶到碧鲮湾斩杀蛇傀——碧鲮族获释后反攻鬼王峒', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.biling_bay_stance' },
+      { reviewSummary: entityText("赶到碧鲮湾斩杀{{entity:character:lcq.character.nanhuang_shekui}}——碧鲮族获释后反攻鬼王峒"), status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.biling_bay_stance' },
       { reviewSummary: '在古道废墟认出鬼王峒标记，帮易彪守住阵地', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.ruins_ghost_warriors' },
-      { reviewSummary: '撑住达古围攻，见证武二郎斩达古扭转战局', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.wuerlang_slays_dagu' },
+      { reviewSummary: entityText("撑住{{entity:character:lcq.character.nanhuang_dagu}}围攻，见证武二郎斩{{entity:character:lcq.character.nanhuang_dagu}}扭转战局"), status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.wuerlang_slays_dagu' },
       { reviewSummary: '护住苏荔以一阳境逼退阴煞', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.yiyang_repels_yinsha' },
       { reviewSummary: '跟花苗谈清进峒边界：与云氏平等合作，不是依附', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.huamiao_coop_boundary' },
       { reviewSummary: '安置旧伤复发的凝羽，与云氏、花苗谈成探峒同行', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.guiwangdong_coop_pact' },
       { reviewSummary: '随弥骨进峒，拦住接待冲突，记清路线与奴隶区', status: 'ready', stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', eventId: 'lcq.event.enter_dong_with_migu' },
-      { reviewSummary: '打开白纸信笺仍是白纸，小紫当着阁罗说破达古已死', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.blank_letter_and_dagu' },
+      { reviewSummary: entityText("打开白纸信笺仍是白纸，小紫当着阁罗说破{{entity:character:lcq.character.nanhuang_dagu}}已死"), status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.blank_letter_and_dagu' },
       { reviewSummary: '阁罗召来碧姬——当面见到谢艺要找的人', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.geluo_summons_biji' },
       { reviewSummary: '借机关异动摆脱看守，从岩壁找出可通行山洞', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.escape_cave_mechanism' },
       { reviewSummary: '看出红苗已被峒里控制，先把苏荔保下来', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.hongmiao_controlled' },
@@ -510,7 +511,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '循朱老头留下的路线进入村落，当面确认殇侯身份与天命之说', status: 'ready', stageId: 'lcq.stage_05b', eventId: 'lcq.event.shanghou_revealed' },
     ],
     pendingExpansion: '线形：商队进南荒 → 查清蛇彝 → 取得花苗／白夷／碧鲮立场（观望≠归附）→ 决战鬼巫王／龙神 → 散峒后三族真正归附。'
-      + '顶点＝三族真正归附（Z11 `s05b_tribes_pledge`）。隔离关 stage_05／06 不放出；斩蛇傀、合作边界挂04b，吞噬、杀龙、散峒挂05b。'
+      + entityText("顶点＝三族真正归附（Z11 `s05b_tribes_pledge`）。隔离关 stage_05／06 不放出；斩{{entity:character:lcq.character.nanhuang_shekui}}、合作边界挂04b，吞噬、杀龙、散峒挂05b。")
       + '上述五拍已挂接（2026-10-03方案R）。谢艺托付及生死承接不进本链（星月湖交接）。'
       + '麟趾朝廷、芈氏外家、阖闾破郢、凝羽回归仍是开放线扩展位，不进这 11 条。',
   },

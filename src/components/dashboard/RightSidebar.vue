@@ -425,6 +425,7 @@
 </template>
 
 <script setup lang="ts">
+import {questLineView} from '@/modules/scenarioMods/questLineView';
 import { computed, ref } from 'vue';
 import { User, Sparkles, Heart, Droplet, Brain, Clock, Star, Zap } from 'lucide-vue-next';
 import { LOCAL_TALENTS } from '@/data/creationData';
@@ -549,7 +550,7 @@ const availableLines = computed(() => {
           : '国家',
     hint: line.entryHint,
     objective: activeLineIds.has(line.id) ? visibleQuestObjective(rt, event) : '',
-  }));
+  })).concat(questLineView(gameStateStore.toSaveData()).secondary);
 });
 // 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
 // 与主线 UI / 主叙事同一锚，避免从 activeEventIds 抽出资料事件。
@@ -559,7 +560,7 @@ const characterBeats = computed(() => {
   const event = currentQuestEvent(rt);
   const objective = visibleQuestObjective(rt, event);
   if (!objective) return [];
-  return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective }));
+  return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective })).concat(questLineView(gameStateStore.toSaveData()).character);
 });
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {

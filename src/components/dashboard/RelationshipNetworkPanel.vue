@@ -148,7 +148,7 @@
                   </span>
                   <span class="race-badge">{{ selectedPerson.种族 || '人族' }}</span>
                   <span v-if="selectedPerson.势力归属" class="faction-badge">{{
-                    selectedPerson.势力归属
+                    entityName('faction',selectedPerson.势力归属)
                   }}</span>
                 </div>
               </div>
@@ -836,20 +836,6 @@
                 <div v-show="activeTab === 'inventory'" class="tab-panel">
                   <div class="detail-section">
                     <h5 class="section-title">背包</h5>
-                    <div v-if="selectedPerson.背包?.灵石" class="spirit-stones-grid">
-                      <div class="spirit-stone-item">
-                        <span>下品灵石</span><span>{{ selectedPerson.背包.灵石.下品 || 0 }}</span>
-                      </div>
-                      <div class="spirit-stone-item">
-                        <span>中品灵石</span><span>{{ selectedPerson.背包.灵石.中品 || 0 }}</span>
-                      </div>
-                      <div class="spirit-stone-item">
-                        <span>上品灵石</span><span>{{ selectedPerson.背包.灵石.上品 || 0 }}</span>
-                      </div>
-                      <div class="spirit-stone-item">
-                        <span>极品灵石</span><span>{{ selectedPerson.背包.灵石.极品 || 0 }}</span>
-                      </div>
-                    </div>
                     <div class="npc-inventory" style="margin-top: 1rem">
                       <div v-if="hasNpcItems(selectedPerson)" class="npc-items-grid">
                         <div
@@ -986,6 +972,7 @@
 </template>
 
 <script setup lang="ts">
+import {entityName} from "@/modules/scenarioMods/namedEntities";
 import { ref, computed, onMounted, onActivated, watch } from 'vue';
 import { useActionQueueStore } from '@/stores/actionQueueStore';
 import { useI18n } from '@/i18n';
@@ -1226,7 +1213,7 @@ const actionQueue = useActionQueueStore();
     // 1) 同势力：每个势力以“最强/核心”作为枢纽，把同门串起来（避免 O(n^2) 爆炸）
     const byFaction = new Map<string, NpcProfile[]>();
     for (const npc of npcs) {
-      const faction = normalizeNonEmptyString((npc as any)?.势力归属) ?? '';
+      const faction = normalizeNonEmptyString(entityName('faction',(npc as any)?.势力归属||'')) ?? '';
       if (!faction) continue;
       const list = byFaction.get(faction) ?? [];
       list.push(npc);
@@ -2567,7 +2554,7 @@ const exportToWorldBook = async () => {
     }
     entryContent += `- 境界：${getNpcRealm(npc)}\n`;
     entryContent += `- 灵根：${getNpcSpiritRoot(npc)}\n`;
-    if (npc.势力归属) entryContent += `- 势力：${npc.势力归属}\n`;
+    if (npc.势力归属) entryContent += `- 势力：${entityName('faction',npc.势力归属)}\n`;
     if (npc.出生) entryContent += `- 出生地：${getNpcOrigin(npc.出生)}\n`;
     if (npc.当前位置?.描述) entryContent += `- 当前位置：${npc.当前位置.描述}\n`;
 
@@ -2619,19 +2606,6 @@ const exportToWorldBook = async () => {
       });
     }
 
-    // 灵石
-    if (npc.背包?.灵石) {
-      const stones = npc.背包.灵石;
-      const total = (stones.下品 || 0) + (stones.中品 || 0) + (stones.上品 || 0) + (stones.极品 || 0);
-      if (total > 0) {
-        entryContent += `\n**灵石**\n`;
-        if (stones.下品) entryContent += `- 下品：${stones.下品}\n`;
-        if (stones.中品) entryContent += `- 中品：${stones.中品}\n`;
-        if (stones.上品) entryContent += `- 上品：${stones.上品}\n`;
-        if (stones.极品) entryContent += `- 极品：${stones.极品}\n`;
-      }
-    }
-
     // 与玩家关系
     entryContent += `\n**与玩家关系**\n`;
     entryContent += `- 关系：${npc.与玩家关系 || '相识'}\n`;
@@ -2648,7 +2622,7 @@ const exportToWorldBook = async () => {
       enabled: true,
       strategy: {
         type: 'selective' as const,
-        keys: [npcName, npc.种族 || '', npc.势力归属 || ''].filter(Boolean),
+        keys: [npcName, npc.种族 || '', entityName('faction',npc.势力归属 || '')].filter(Boolean),
         keys_secondary: { logic: 'and_any' as const, keys: [] },
         scan_depth: 'same_as_global' as const
       },

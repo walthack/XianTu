@@ -72,6 +72,8 @@
 </template>
 
 <script setup lang="ts">
+import {LEVELS} from '@/utils/realmUtils';
+import {entityName} from '@/modules/scenarioMods/namedEntities';
 import { ref, computed } from 'vue';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { generateLocationPlacement } from '@/utils/worldGeneration/locationPlacementGenerator';
@@ -136,29 +138,7 @@ function handleIgnore(name: string) {
   ignoredNpcs.value.add(name);
 }
 
-const REALM_RANK_HINTS: Array<{ token: string; rank: number }> = [
-  { token: '凡人', rank: 0 },
-  { token: '练气', rank: 1 },
-  { token: '筑基', rank: 2 },
-  { token: '金丹', rank: 3 },
-  { token: '元婴', rank: 4 },
-  { token: '化神', rank: 5 },
-  { token: '炼虚', rank: 6 },
-  { token: '合体', rank: 7 },
-  { token: '大乘', rank: 8 },
-  { token: '渡劫', rank: 9 },
-  { token: '真仙', rank: 10 },
-  { token: '金仙', rank: 11 },
-  { token: '太乙', rank: 12 },
-  { token: '大罗', rank: 13 },
-  // 武道体系
-  { token: '淬体', rank: 1 },
-  { token: '凝气', rank: 2 },
-  { token: '通玄', rank: 3 },
-  { token: '化真', rank: 4 },
-  { token: '破虚', rank: 5 },
-  { token: '登天', rank: 6 },
-];
+const REALM_RANK_HINTS=LEVELS.map(e=>({token:e.name,rank:e.level}));
 
 function getRealmRank(realmKey: string): number {
   const raw = String(realmKey || '').trim();
@@ -204,7 +184,7 @@ async function handleAdd(npc: UnmappedNpc) {
   const realm: string =
     npcData?.境界 ?? npcData?.属性?.境界 ?? npcData?.realm ?? '';
   const faction: string =
-    npcData?.势力归属 ?? npcData?.所属势力 ?? npcData?.faction ?? '';
+    entityName('faction',npcData?.factionId ?? npcData?.势力归属 ?? npcData?.所属势力 ?? npcData?.faction ?? '');
 
   // 在境界模式下，优先写入玩家当前/最高境界地图；否则用全局 worldInfo
   const realmKey = resolvePreferredRealmKey();

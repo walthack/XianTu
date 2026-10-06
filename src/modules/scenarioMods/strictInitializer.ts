@@ -1,3 +1,8 @@
+import {levelOf} from '../../utils/realmUtils';
+import {initializeLevel} from './levelProgression';
+import {canonicalEntityId} from './namedEntities';
+import {ENTITY_SAVE_FORMAT} from './entitySaveFormat';
+import { resolveScenarioContent } from './entityCatalog';
 import { sameCanonicalLocation } from './travel/locationIds';
 import { backfillRelationshipIds, migrateRuntimePersonRecords } from './ledger/affinityIdentity';
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
@@ -19,6 +24,8 @@ import {
 import { departedPresentNames } from './presence';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
+  entitySaveFormat: number;
+  questLineState: import('./questLines').LineState;
   schema: ScenarioMod['schema'];
   version: ScenarioMod['version'];
   modId: string;
@@ -71,7 +78,7 @@ export function buildStrictScenarioInitialization(
 ): StrictScenarioInitialization {
   // Pinia exposes the selected Mod as a reactive Proxy. Normalize the JSON
   // contract before cloning nested values into the save runtime.
-  mod = JSON.parse(JSON.stringify(mod)) as ScenarioMod;
+  mod = resolveScenarioContent(mod);
 
   if (mod.rules.mode !== 'strict') {
     throw new Error(`Scenario Mod "${mod.manifest.id}" is not configured for strict initialization.`);
@@ -119,7 +126,7 @@ export function buildStrictScenarioInitialization(
       const headquarters = locations.find(location => location.id === faction.headquartersLocationId);
       const continent = continents.find(item => item.id === headquarters?.continentId);
       return {
-        id: faction.id,
+        id: canonicalEntityId('faction',faction.id),
         名称: faction.name,
         类型: faction.type || '中立宗门',
         等级: faction.level || '三流',
@@ -140,6 +147,7 @@ export function buildStrictScenarioInitialization(
       const continent = continents.find(item => item.id === location.continentId);
       const faction = factions.find(item => item.id === location.factionId);
       return withNativeScenarioLocationType({
+        id: canonicalEntityId('location',location.id),
         名称: location.name,
         位置: continent?.name || firstContinentName,
         ...(location.region ? { 地域: location.region } : {}),
@@ -177,6 +185,8 @@ export function buildStrictScenarioInitialization(
     mode: 'strict',
     lockedFields: [...(mod.rules.lockedFields || [])],
     contentAccess: structuredClone(mod.rules.contentAccess || []),
+    entitySaveFormat: ENTITY_SAVE_FORMAT,
+    questLineState: {version:1,receipts:{}},
     currentChapterId: getInitialScenarioChapterId(mod),
     flags: { ...(mod.scenario.initialFlags || {}) },
     // 新档从建档起就是空数组：让"字段不存在"只代表旧档。
@@ -209,6 +219,7 @@ export function buildStrictScenarioInitialization(
     worldInfo,
     runtimeState,
     initialLocation: {
+      locationId: openingLocation ? canonicalEntityId('location',openingLocation.id) : undefined,
       描述: `${continentName}·${locationName}`,
       x: openingCoordinates.x,
       y: openingCoordinates.y,
@@ -230,6 +241,7 @@ export function applyStrictScenarioInitializationToSave(
     },
   };
   next.角色.位置 = initialization.initialLocation;
+  initializeLevel(next);
   next.系统.扩展 = {
     ...(next.系统.扩展 || {}),
     剧本模组: {
@@ -370,6 +382,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   }
   const inheritedWorldlineFlags = Object.fromEntries(Object.entries(rt.flags || {}).filter(([key]) =>
     key.startsWith('branch.')
+    || key.startsWith('scene.')
     || key.startsWith('character.')
     || key.endsWith('.void')
     || key.startsWith('world.baihu.')
@@ -387,13 +400,14 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     if (relations[name]) {
       const fresh = relations[name];
       const mergedMemories = [...new Set([...(old?.记忆 || []), ...(fresh?.记忆 || [])])];
-      relations[name] = { ...fresh, ...old, 名字: fresh.名字, 记忆: mergedMemories }; // 人物id不变；本关显示名不能被旧档覆盖
+      relations[name] = { ...fresh, ...old, 名字: fresh.名字, 境界: (levelOf(fresh.境界)??-1)>(levelOf(old.境界)??-1)?fresh.境界:old.境界||fresh.境界, 记忆: mergedMemories }; // 人物id不变；本关显示名不能被旧档覆盖
     } else {
       relations[name] = old; // 跨关携带旧 NPC（后宫/同行者不因换关消失）
     }
   }
   backfillRelationshipIds(next, (next as any).世界.状态.剧本模组?.canon?.characters);
   const newRuntime = (next as any).世界.状态.剧本模组;
+  if (rt.questLineState) newRuntime.questLineState = structuredClone(rt.questLineState);
   migrateRuntimePersonRecords(newRuntime);
   if (rt.storyMode === 'world_sim') {
     newRuntime.storyMode = 'world_sim';

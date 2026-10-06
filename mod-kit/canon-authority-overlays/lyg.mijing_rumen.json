@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "stageId": "lyg.mijing_rumen",
+  "ops": [
+    {
+      "op": "set",
+      "path": "canon.locations[id=liuchao.location.qilifang].coordinates",
+      "from": {
+        "x": 6114,
+        "y": 3929
+      },
+      "to": {
+        "x": 6838,
+        "y": 3577
+      }
+    }
+  ]
+}

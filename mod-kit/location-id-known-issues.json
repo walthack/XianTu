@@ -42,116 +42,6 @@
       "detail": "南荒散峒营地 无坐标"
     },
     {
-      "key": "unaliased_duplicate:liuchao.location.luoyang+lyl.location.luoyang",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.luoyang",
-        "lyl.location.luoyang"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：洛都@6838,3577"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.lin_an+liuchao.location.linan",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.lin_an",
-        "liuchao.location.linan"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：临安@7466,6532"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.jinming_zhai+liuchao.location.jinmingzhai",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.jinming_zhai",
-        "liuchao.location.jinmingzhai"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：金明寨@5050,6550"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.jingxi+liuchao.location.jingxi_village",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.jingxi",
-        "liuchao.location.jingxi_village"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：荆溪村寨@5600,6900"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.liangzhou+lyg.location.liangzhou",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.liangzhou",
-        "lyg.location.liangzhou"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：凉州@1430,2767"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.changqiu_palace+lyl.location.changqiu_palace",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.changqiu_palace",
-        "lyl.location.changqiu_palace"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：长秋宫@6838,3577"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.zhaoyang_hall+lyl.location.zhaoyang_palace",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.zhaoyang_hall",
-        "lyl.location.zhaoyang_palace"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：昭阳宫@6838,3577"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.nangong+lyl.location.nangong",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.nangong",
-        "lyl.location.nangong"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：南宫@6838,3577"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.beisi_yard+lyl.location.beisi_prison",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.beisi_yard",
-        "lyl.location.beisi_prison"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：北寺狱@6838,3577"
-    },
-    {
-      "key": "unaliased_duplicate:liuchao.location.yongan_palace+lyl.location.weiyang_palace",
-      "kind": "unaliased_duplicate",
-      "locationIds": [
-        "liuchao.location.yongan_palace",
-        "lyl.location.weiyang_palace"
-      ],
-      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
-      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
-      "detail": "同名同坐标未并到一个规范 id：永安宫@6838,3577"
-    },
-    {
       "key": "shared_anchor:lcq.location.beast_camp+lcq.location.command_tent+lcq.location.grassland+lcq.location.macedon_camp+lcq.location.roman_camp+lcq.location.taiyi_temple+liuchao.location.baihu_shang_guan+liuchao.location.longchi+liuchao.location.wuyuan+liuchao.location.yun_shi_shop",
       "kind": "shared_anchor",
       "locationIds": [
@@ -278,37 +168,14 @@
       "detail": "不同地点共用锚点 (8925,6374)"
     },
     {
-      "key": "shared_anchor:liuchao.location.jinming_zhai+liuchao.location.jinmingzhai",
+      "key": "shared_anchor:liuchao.location.shangyang_mountain+liuchao.location.wudu+liuchao.location.wudu_manor",
       "kind": "shared_anchor",
       "locationIds": [
-        "liuchao.location.jinming_zhai",
-        "liuchao.location.jinmingzhai"
-      ],
-      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
-      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
-      "detail": "不同地点共用锚点 (5050,6550)"
-    },
-    {
-      "key": "shared_anchor:liuchao.location.jingxi+liuchao.location.jingxi_village",
-      "kind": "shared_anchor",
-      "locationIds": [
-        "liuchao.location.jingxi",
-        "liuchao.location.jingxi_village"
-      ],
-      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
-      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
-      "detail": "不同地点共用锚点 (5600,6900)"
-    },
-    {
-      "key": "shared_anchor:liuchao.location.qilifang+liuchao.location.shangyang_mountain+liuchao.location.wudu+liuchao.location.wudu_manor",
-      "kind": "shared_anchor",
-      "locationIds": [
-        "liuchao.location.qilifang",
         "liuchao.location.shangyang_mountain",
         "liuchao.location.wudu",
         "liuchao.location.wudu_manor"
       ],
-      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准；补充18七里坊已按主id坐标移出本组，登记范围仅缩小为剩余三处，未新增豁免。原组含 liuchao.location.qilifang。",
       "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
       "detail": "不同地点共用锚点 (6114,3929)"
     },
@@ -448,6 +315,164 @@
       "reason": "同一规范地点在不同关坐标不一",
       "closeWhen": "主策划校准后各关坐标统一",
       "detail": "同一规范地点坐标不一：2830,3049 / 3159,2767"
+    }
+  ],
+  "closedIssues": [
+    {
+      "key": "unaliased_duplicate:liuchao.location.luoyang+lyl.location.luoyang",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.luoyang",
+        "lyl.location.luoyang"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：洛都@6838,3577",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.lin_an+liuchao.location.linan",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.lin_an",
+        "liuchao.location.linan"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：临安@7466,6532",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.jinming_zhai+liuchao.location.jinmingzhai",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.jinming_zhai",
+        "liuchao.location.jinmingzhai"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：金明寨@5050,6550",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.jingxi+liuchao.location.jingxi_village",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.jingxi",
+        "liuchao.location.jingxi_village"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：荆溪村寨@5600,6900",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.liangzhou+lyg.location.liangzhou",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.liangzhou",
+        "lyg.location.liangzhou"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：凉州@1430,2767",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.changqiu_palace+lyl.location.changqiu_palace",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.changqiu_palace",
+        "lyl.location.changqiu_palace"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：长秋宫@6838,3577",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.zhaoyang_hall+lyl.location.zhaoyang_palace",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.zhaoyang_hall",
+        "lyl.location.zhaoyang_palace"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：昭阳宫@6838,3577",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.nangong+lyl.location.nangong",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.nangong",
+        "lyl.location.nangong"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：南宫@6838,3577",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.beisi_yard+lyl.location.beisi_prison",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.beisi_yard",
+        "lyl.location.beisi_prison"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：北寺狱@6838,3577",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "unaliased_duplicate:liuchao.location.yongan_palace+lyl.location.weiyang_palace",
+      "kind": "unaliased_duplicate",
+      "locationIds": [
+        "liuchao.location.yongan_palace",
+        "lyl.location.weiyang_palace"
+      ],
+      "reason": "同名同坐标的重复 id，属云龙/阎歌既有数据，本轮移动改造只裁定了清羽记南荒",
+      "closeWhen": "主策划为该组裁定规范 id 并写入 LOCATION_ID_ALIASES",
+      "detail": "同名同坐标未并到一个规范 id：永安宫@6838,3577",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.jinming_zhai+liuchao.location.jinmingzhai",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.jinming_zhai",
+        "liuchao.location.jinmingzhai"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (5050,6550)",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
+    },
+    {
+      "key": "shared_anchor:liuchao.location.jingxi+liuchao.location.jingxi_village",
+      "kind": "shared_anchor",
+      "locationIds": [
+        "liuchao.location.jingxi",
+        "liuchao.location.jingxi_village"
+      ],
+      "reason": "不同地点共用同一锚点；按裁定 #53 真实底图锚点不得为防重叠挪位，需逐个确认是父子地点还是坐标待校准",
+      "closeWhen": "确认为父子地点后登记进 LOCATION_PARENTS，或主策划校准坐标",
+      "detail": "不同地点共用锚点 (5600,6900)",
+      "closedBy": "用户补充15别名合并；补充18收口，保留原记录",
+      "closedOn": "2026-10-06"
     }
   ]
 }

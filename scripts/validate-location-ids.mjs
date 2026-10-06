@@ -69,10 +69,12 @@ export async function auditNanhuangRailRoutes(stages) {
 }
 
 export async function evaluateLocationGate({ stages = loadStageLocationData(), known } = {}) {
-  const { auditLocationIds, locationIssueKey, UNWAIVABLE_LOCATION_ISSUES } = await ts('src/modules/scenarioMods/travel/locationIds.ts');
+  const { auditLocationIds, locationIssueKey, canonicalLocationId, UNWAIVABLE_LOCATION_ISSUES } = await ts('src/modules/scenarioMods/travel/locationIds.ts');
   const registry = known ?? JSON.parse(readFileSync(KNOWN_ISSUES_FILE, 'utf8')).issues;
   const issues = [...auditLocationIds(stages), ...await auditNanhuangRailRoutes(stages)];
-  const knownKeys = new Map(registry.map(entry => [entry.key, entry]));
+  // Identity aliases rename an existing debt key; they do not waive new geometry errors.
+  const normalizedKey=(entry)=>entry.kind==='shared_anchor'?`${entry.kind}:${[...new Set(entry.locationIds.map(id=>canonicalLocationId(id)))].sort().join('+')}`:entry.key;
+  const knownKeys = new Map(registry.map(entry => [normalizedKey(entry), entry]));
   const failures = [];
   const warnings = [];
   for (const issue of issues) {
@@ -82,7 +84,7 @@ export async function evaluateLocationGate({ stages = loadStageLocationData(), k
     else failures.push({ ...issue, key, reason: '未登记的新问题' });
   }
   const live = new Set(issues.map(issue => locationIssueKey(issue)));
-  const stale = registry.filter(entry => !live.has(entry.key));
+  const stale = registry.filter(entry => !live.has(normalizedKey(entry)));
   const invalidEntries = registry.filter(entry => !entry.key || !entry.kind || !entry.locationIds?.length || !entry.reason || !entry.closeWhen
     || UNWAIVABLE_LOCATION_ISSUES.includes(entry.kind));
   return { failures, warnings, stale, invalidEntries };

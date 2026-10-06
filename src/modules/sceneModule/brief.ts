@@ -1,3 +1,5 @@
+import {levelTier} from './levels';
+import { evalExpr } from './conditions';
 // 给主持模型的材料：一份短而固定结构的“场面简报”，每拍由代码从状态重新生成。
 // 模型不用记规则，也不用记场面：规则只有一小段常驻短句，场面事实全部以代码里的状态为准；
 // 硬规则（拍数、胜负、红线、结算）由代码执行，简报只负责让模型“看得懂”。
@@ -25,7 +27,7 @@ export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pic
   const sections: Section[] = [];
   const add = (key: string, text: string, keep = false): void => { if (text) sections.push({ key, text, keep }); };
 
-  add('head', `【场面】${contract.objective.text}｜第${state.beat}拍${beats ? `/共${beats}拍` : '（不限拍数）'}｜${state.status === 'engaged' ? '进行中' : '已分出结果'}`, true);
+  add('head', `【场面】${contract.objective.phases?.find(phase => evalExpr(phase.when,contract,state))?.text || contract.objective.text}｜第${state.beat}拍${beats ? `/共${beats}拍` : '（不限拍数）'}｜${state.status === 'engaged' ? '进行中' : '已分出结果'}`, true);
 
   const tracks: string[] = [];
   for (const party of contract.parties) {
@@ -69,6 +71,8 @@ export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pic
   if (warn !== 'none') add('warn', `【预警】${contract.defeat?.guards?.warnText || (warn === 'danger' ? '此拍若出差错将触发败局' : '败局临近')}`, true);
 
   if (state.digest.length) add('digest', `【已发生】${state.digestOlder ? `（更早 ${state.digestOlder} 拍已略）` : ''}${state.digest.join(' ／ ')}`);
+  const player=contract.parties.find(p=>p.player),opponent=contract.parties.find(p=>p.side==='opposed');
+  if(state.levels&&player&&opponent)add('level',`本场档位：${levelTier(state.levels[player.id],state.levels[opponent.id])}（代码按当前级数定）。碾压几招解决；占优主动；同级有来有回；吃力多守少攻；被碾压只能周旋或借外力。不得改变结算结果，不自报突破。`,true);
   add('rules', RULES, true);
 
   // 超出预算：先丢可有可无的段，再截断“已发生”；保留段永不丢。
@@ -121,36 +125,64 @@ export function buildNarrationInput(contract: Contract, state: SceneState, resul
   return {
     brief: buildSceneBrief(contract, state, ctx, result.warn),
     settled: renderResultLines(contract, result).join('\n'),
-    required: contract.narration?.requiredFacts || [],
-    forbidden: forbiddenWords(contract),
+    required: [...(contract.narration?.requiredFacts || []), ...(contract.continuity?.facts || [])],
+    forbidden: forbiddenWords(contract, state.outcome),
     events: result.events.map(e => e.text).filter((t): t is string => !!t),
     flourish: result.tier === 'great_success' && settings.tiers.critBonus.includes('flourish'),
   };
 }
 
-function forbiddenWords(contract: Contract): string[] {
-  const words = [...(contract.narration?.forbidden || [])];
+/**
+ * 禁写词：局中只有合同总则（narration.forbidden）和红线；结果还没分出来，不能套某一分支的事后状态。
+ * 分出结果之后，再加上那个分支自己的事后状态禁写词（打输 / 超时不套打赢才有的原著锁）。
+ */
+function forbiddenWords(contract: Contract, outcome?: SceneState['outcome']): string[] {
+  const words = [...(contract.narration?.forbidden || []), ...(contract.continuity?.checks || []).flatMap(check=>check.forbiddenNarration || [])];
   for (const line of contract.redLines || []) words.push(...(line.forbiddenNarration || []));
-  for (const branch of Object.values(contract.closing || {})) for (const after of branch?.afterState || []) words.push(...(after.forbiddenNarration || []));
+  if (outcome) for (const after of contract.closing?.[outcome.kind]?.afterState || []) words.push(...(after.forbiddenNarration || []));
   return [...new Set(words)];
 }
 
 /** 描写守卫：不得违反禁写词，不得写出没有被判定的结果（未被推到头的参与方，不能写出它的终态）。 */
-export function checkNarration(contract: Contract, state: SceneState, result: BeatResult, text: string): { ok: boolean; problems: string[] } {
+export function checkNarration(contract: Contract, state: SceneState, result: BeatResult, text: string, names?: (partyId: string) => string[]): { ok: boolean; problems: string[] } {
   const problems: string[] = [];
   const body = String(text || '');
   if (!body.trim()) problems.push('描写为空');
-  for (const word of forbiddenWords(contract)) if (word && body.includes(word)) problems.push(`出现了禁写内容“${word}”`);
+  for (const word of forbiddenWords(contract, state.outcome)) if (word && body.includes(word)) problems.push(`出现了禁写内容“${word}”`);
+  for (const check of contract.narration?.outputChecks || []) {
+    if (evalExpr(check.when,contract,state) && new RegExp(check.pattern).test(body)) problems.push(check.message);
+  }
   for (const party of contract.parties) {
     for (const entry of party.tracks || []) {
       const id = String(entry.track ?? entry.id ?? '');
       const info = trackInfo(contract, party.id, id);
       const final = info?.ending?.finalState;
       if (!info || !final) continue;
-      const reached = state.outcome?.kind === 'win' || (state.tracks[party.id]?.[id] >= info.limit && info.limit > info.initial);
-      if (!reached && body.includes(final)) problems.push(`写出了还没有被判定的结果“${final}”（${partyDisplay(contract, party.id)}）`);
+      const reached = (state.tracks[party.id]?.[id] >= info.limit && info.limit > info.initial);
+      if (!reached && assertsTerminal(contract, result, body, party.id, final, names)) problems.push(`写出了还没有被判定的结果“${final}”（${partyDisplay(contract, party.id)}）`);
     }
   }
   if ((result.tier === 'failure' || result.tier === 'critical_failure') && result.claims.some(c => c.realized > 0)) problems.push('结算结果与档位不一致');
   return { ok: problems.length === 0, problems };
+}
+
+/** Only direct, affirmative subject–predicate clauses are actionable. Ambiguous prose is not a verdict. */
+function assertsTerminal(contract: Contract, result: BeatResult, body: string, partyId: string, final: string, names?: (partyId: string) => string[]): boolean {
+  const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const subjects = (id: string) => [...new Set([partyDisplay(contract,id), ...(names?.(id) || [])])].filter(Boolean);
+  const own = subjects(partyId);
+  const other = contract.parties.filter(p => p.id !== partyId).flatMap(p => subjects(p.id));
+  const claimed = [...new Set(result.claims.map(c => c.party))];
+  // A lone action target gives an otherwise unnamed pronoun a unique referent; never infer it in multi-target prose.
+  const pronoun = claimed.length === 1 && claimed[0] === partyId;
+  const prefixes = '(?:已然|已经|已|终于|随即|立刻|当即|应声|就|也|便|径直|直接|重重|彻底|真的|确实|一齐|同时|都|全都|纷纷)*';
+  for (const clause of body.replace(/[“「『][^”」』]*[”」』]/g, '').split(/[，,。；;！!\n]/)) {
+    if (/[？?]|(?:如果|若是|假如|要是|只要|一旦|否则|险些|差点|差一点|似乎|仿佛|可能|也许|是否|不知|没说|没人说|没有人说|未说|传闻|听说)/.test(clause)) continue;
+    for (const subject of own) {
+      if (new RegExp(`${escape(subject)}${prefixes}${escape(final)}(?:了|$|[\\s、：:])`).test(clause)) return true;
+    }
+    if (pronoun && !other.some(s => clause.includes(s)) && /^(?:他|她|它)/.test(clause.trim()) &&
+      new RegExp(`^(?:他|她|它)${prefixes}${escape(final)}(?:了|$|[\\s、：:])`).test(clause.trim())) return true;
+  }
+  return false;
 }

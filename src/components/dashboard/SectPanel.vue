@@ -634,10 +634,10 @@ const getMainResources = (sect: WorldFaction): string => {
   if (type.includes('丹')) return '灵药、丹炉、药圃';
   if (type.includes('符') || type.includes('阵')) return '符纸、阵法、法器';
   if (type.includes('魔') || type.includes('邪')) return '魔石、煞气、秘法';
-  if (type.includes('商')) return '灵石、珍宝、情报';
+  if (type.includes('商')) return '铜铢、珍宝、情报';
   if (type.includes('世家')) return '传承、人脉、底蕴';
 
-  return '灵石、功法、修炼资源';
+  return '铜铢、功法、修炼资源';
 };
 
 // 获取宗门特色列表
@@ -785,23 +785,7 @@ const formatSectLevel = (level: string): string => {
 };
 
 // 格式化境界名称，智能处理"期"后缀
-const formatRealmName = (realm: string): string => {
-  if (!realm) return '未知';
-
-  // 如果已经包含"期"，直接返回
-  if (realm.includes('期')) return realm;
-
-  // 如果是完整的境界描述（如"练气初期"），直接返回
-  const fullRealmPattern = /(练气|筑基|金丹|元婴|化神|炼虚|合体|渡劫)(初期|中期|后期|圆满|极境)/;
-  if (fullRealmPattern.test(realm)) return realm;
-
-  // 如果只是境界名称（如"练气"、"筑基"），添加"期"后缀
-  const simpleRealmPattern = /^(练气|筑基|金丹|元婴|化神|炼虚|合体|渡劫)$/;
-  if (simpleRealmPattern.test(realm)) return realm + '期';
-
-  // 其他情况直接返回
-  return realm;
-};
+const formatRealmName = (realm:string):string => realm || '未知';
 
 const selectSect = (sect: WorldFaction) => {
   selectedSect.value = selectedSect.value?.名称 === sect.名称 ? null : sect;

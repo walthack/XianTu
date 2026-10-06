@@ -1,3 +1,5 @@
+
+import {entityNamePattern} from './namedEntities';
 export class PlayerAgencyViolationError extends Error {
   readonly code = 'PLAYER_AGENCY_VIOLATION';
   constructor(readonly actions: string[]) {
@@ -23,12 +25,12 @@ export function unauthorizedPlayerActions(narrative: string, playerIntent: strin
   const clauses = prose.split(/[。！？；\n]/);
   return ACTIONS.filter(action => {
     const acted = clauses.some(clause => {
-      const match = clause.match(/(?:你(?!们)|程宗扬)([^。！？\n]*)/);
+      const match = clause.match(new RegExp("(?:你(?!们)|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")"+")([^。！？\\n]*)",""));
       if (!match || !action.re.test(match[1])) return false;
       const before = match[1].slice(0, match[1].search(action.re));
       // 同一句中逗号后换成有名NPC作主语，不把NPC的动作算成玩家动作。
       const lastClause = before.split(/[，,]/).at(-1)?.trim() || '';
-      if (otherActors.some(name => name && lastClause.startsWith(name) && !/你|程宗扬/.test(lastClause))) return false;
+      if (otherActors.some(name => name && lastClause.startsWith(name) && !new RegExp("你|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")","").test(lastClause))) return false;
       return !NEGATIVE_OR_QUESTION.test(before.slice(-6)) && !/听说|看到|看见|看着|听见|观察|判断|问/.test(before);
     });
     if (!acted) return false;

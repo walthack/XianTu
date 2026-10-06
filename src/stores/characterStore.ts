@@ -1,3 +1,5 @@
+import {assertEntitySaveFormat} from '@/modules/scenarioMods/entitySaveFormat';
+import { checkpointWorkingCopy } from '@/utils/saveCheckpoint';
 import { resolveRelationshipId } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 仙途 (XianTu) - 角色数据管理
@@ -1094,6 +1096,20 @@ export const useCharacterStore = defineStore('characterV3', () => {
           activeSlotKey = workingKey;
         }
 
+        // Imported battle checkpoints remain reusable; autosave targets a fresh working slot.
+        const checkpointCopy = targetSlot.存档数据 && checkpointWorkingCopy(targetSlot.存档数据,slotKey);
+        if (profile.模式 === '单机' && checkpointCopy) {
+          let key = `${slotKey} · 复测 ${Date.now()}`;
+          while (profile.存档列表?.[key]) key += '-';
+          const data = checkpointCopy;
+          const slot = { ...targetSlot, 存档名: key, 存档数据: data };
+          profile.存档列表 ||= {};
+          await storage.saveSaveData(charId, key, data, { localOnly: Boolean(profile.隔离试玩信息?.localOnly) });
+          profile.存档列表[key] = slot;
+          targetSlot = slot;
+          activeSlotKey = key;
+        }
+
         // 2. 设置激活存档
         debug.log('角色商店', '设置当前激活存档');
       rootState.value.当前激活存档 = { 角色ID: charId, 存档槽位: activeSlotKey };
@@ -2075,6 +2091,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
    * @param saveData 要导入的存档数据
    */
   const importSave = async (charId: string, saveData: SaveSlot, options?: { overwrite?: boolean }) => {
+    if (saveData.存档数据) assertEntitySaveFormat(saveData.存档数据);
     const profile = rootState.value.角色列表[charId];
 
     if (!profile) {

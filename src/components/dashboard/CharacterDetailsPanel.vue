@@ -404,7 +404,7 @@
                      </div>
                       <div class="inv-stat">
                         <span class="num gold-text">{{ spiritStoneEquivalent }}</span>
-                        <span class="lbl">{{ t('灵石折算') }}</span>
+                        <span class="lbl">{{ t('铜铢折算') }}</span>
                      </div>
                   </div>
                   <div class="spirit-stones-grid">
@@ -720,20 +720,7 @@ const inventoryItemCount = computed(() => {
   return Object.keys(items).length;
 });
 
-type SpiritStoneGrade = '下品' | '中品' | '上品' | '极品';
-const getSpiritStoneCount = (grade: SpiritStoneGrade): number => {
-  const stones = inventory.value?.灵石;
-  if (!stones) return 0;
-  return stones[grade] ?? 0;
-};
-
-const spiritStoneEquivalent = computed(() => {
-  const low = getSpiritStoneCount('下品');
-  const mid = getSpiritStoneCount('中品');
-  const high = getSpiritStoneCount('上品');
-  const top = getSpiritStoneCount('极品');
-  return low + mid * 100 + high * 10000 + top * 1000000;
-});
+const spiritStoneEquivalent = computed(() => Object.values(inventory.value?.货币 || {}).reduce((sum:any,asset:any) => sum + asset.数量 * asset.价值度,0));
 
 const inventoryPreviewItems = computed<Item[]>(() => {
   const items = inventory.value?.物品;

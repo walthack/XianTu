@@ -1,0 +1,1237 @@
+{
+  "version": 1,
+  "source": "_newbot_tmp/2026-10-06-南荒人物武功级数表.csv / .md",
+  "idAliases": {
+    "canon.character.81be8593ee": "lcq.character.nanhuang_loumeng",
+    "canon.character.15b71fd1c8": "lcq.character.nanhuang_xi_furen",
+    "lcq.enemy.gui_wu_wang": "liuchao.character.gui_wu_wang",
+    "lcq.enemy.dan_chen": "liuchao.character.dan_chen",
+    "lcq.enemy.blood_tiger_yi_hu": "liuchao.character.yi_hu",
+    "lcq.enemy.sheyi_male": "lcq.enemy.sheyi_raider",
+    "lcq.enemy.guiwangdong_warrior": "lcq.enemy.guiwang_warrior",
+    "lcq.enemy.guiwangdong_envoy_f05": "lcq.enemy.dungeon_shaman",
+    "lcq.enemy.yaren": "lcq.enemy.crow_man",
+    "lcq.enemy.jiaoren": "lcq.enemy.merfolk",
+    "lcq.enemy.bone_tiger": "lcq.enemy.husha_bone_tiger"
+  },
+  "entries": [
+    {
+      "sourceRow": 1,
+      "entityId": "liuchao.character.cheng_zongyang",
+      "chapterRanges": [
+        [
+          30,
+          42
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "原文明写",
+      "evidence": "第15章第146行王哲为其筑基“达到了内视的境地”；第43章第8行凝羽判断他“刚刚越过第一级筑基，进入第二级内视的水准”。第30–42章在第43章之前，不会高于此（刚入第二级）",
+      "timepoint": "第30–42章（F01、F02）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 2,
+      "entityId": "liuchao.character.cheng_zongyang",
+      "chapterRanges": [
+        [
+          43,
+          96
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "原文明写",
+      "evidence": "第43章第8行同上；第56章第146行“乐明珠的修为比程宗扬高得有限”（南荒卷内没有任何突破第三级的描写）",
+      "timepoint": "第43–96章（03b、04、04b、05b前段；F03–F09）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 3,
+      "entityId": "liuchao.character.cheng_zongyang",
+      "chapterRanges": [
+        [
+          97,
+          108
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "第97章第18行吸入死气“真气从来没有这样充沛过”；第121章第69行殇侯：峒中死气“能转为真气直接施展，却无法化为己用”；第108章第72–74行死气没有转成修为。推断理由：境界仍是第二级高段，峒内死气让实战短时够到第三级（与第121章程宗扬自认第三级对照）（模拟可写成“境界2＋死气≈3”）",
+      "timepoint": "第97–108章（05b，F10–F12，鬼王峒内）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true,
+      "canonicalLevel": 2,
+      "effectiveLevel": 3
+    },
+    {
+      "sourceRow": 4,
+      "entityId": "liuchao.character.cheng_zongyang",
+      "chapterRanges": [
+        [
+          109,
+          115
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第121章第43行“凝羽说我的修为在二三级之间”；第121章第113行“第六级比自己只高三级”；L40954（第266章追述）第三级是在南荒、“也不知道是不是在鬼王峒时的事”。推断理由：第三级下限，刚入不稳",
+      "timepoint": "第109–115章（F13、F14）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 5,
+      "entityId": "liuchao.character.cheng_zongyang",
+      "chapterRanges": [
+        [
+          116,
+          124
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "原文明写",
+      "evidence": "第121章第113行他自认第三级；第121章第46行殇侯“较之凝羽还犹逊一筹，不过是平常而已”",
+      "timepoint": "第116–124章（南荒收尾）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 6,
+      "entityId": "liuchao.character.wu_er_lang",
+      "chapterRanges": [
+        [
+          30,
+          30
+        ]
+      ],
+      "level": 5,
+      "sourceKind": "推断",
+      "evidence": "第30章第105行真元耗尽；第30章第100–102行仅凭残力夺斧柄刺死斧手。境界第五级（第122章第7–8行），推断实战只够一击，按约第2级计（与同场斧手第3级对照：只能出其不意一击）（境界5，实战≈2，只有一击）",
+      "timepoint": "第30章（F01，中毒）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true,
+      "canonicalLevel": 5,
+      "effectiveLevel": 2
+    },
+    {
+      "sourceRow": 7,
+      "entityId": "liuchao.character.wu_er_lang",
+      "chapterRanges": [
+        [
+          31,
+          108
+        ]
+      ],
+      "level": 5,
+      "sourceKind": "原文明写",
+      "evidence": "第122章第7–8行程宗扬问“他怎么有第五级的修为？”殇侯答“武二天生虎威……进境远较常人为快”；第31章第20行“功力已复”；第33章第47行“余毒尽去”（第107章第36行一度精疲力竭，属场内状态）",
+      "timepoint": "第31–108章（余毒去后）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 8,
+      "entityId": "liuchao.character.wu_er_lang",
+      "chapterRanges": [
+        [
+          109,
+          109
+        ]
+      ],
+      "level": 5,
+      "sourceKind": "原文明写",
+      "evidence": "第109章第100行“武二郎已经砍翻了三名鬼武士”；第109章第102行阴煞缠住手臂",
+      "timepoint": "第109章（F13前段）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 9,
+      "entityId": "liuchao.character.wu_er_lang",
+      "chapterRanges": [
+        [
+          110,
+          112
+        ]
+      ],
+      "level": null,
+      "sourceKind": "原文明写",
+      "evidence": "【退场】第110章第11行“武二郎、凝羽已经无力再战”（退场，不参战）",
+      "timepoint": "第110–112章（F13后段）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": false
+    },
+    {
+      "sourceRow": 10,
+      "entityId": "liuchao.character.wu_er_lang",
+      "chapterRanges": [
+        [
+          115,
+          124
+        ]
+      ],
+      "level": null,
+      "sourceKind": "原文明写",
+      "evidence": "【武功全废】第118章第134行乐明珠：“被龙神抓那一下……功力也都废了”；第119章第74行“二爷武功是废了”（武功全废，不能按任何级数参战）",
+      "timepoint": "第115–124章（龙神一抓之后）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": false
+    },
+    {
+      "sourceRow": 11,
+      "entityId": "liuchao.character.ning_yu",
+      "chapterRanges": [
+        [
+          30,
+          45
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "原文明写",
+      "evidence": "第51章第42行“凝羽是第四级的实力”；第30章第85行商队里“能称得上高手的也就武二郎和凝羽两个”",
+      "timepoint": "第30–45章（F01、F02、F03开场）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 12,
+      "entityId": "liuchao.character.ning_yu",
+      "chapterRanges": [
+        [
+          46,
+          64
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第54章第9行“在与鬼王峒武士交手中受伤”；第64章第32行伤势连绵；第65章第95行才“伤势已经痊愈”。境界仍是第四级（第51章第42行），推断带伤实战降一级；第63章第102–105行她把使者逼上绝路但被反击吐血（境界4，带伤≈3）",
+      "timepoint": "第46–64章（F03后受伤、毒瘾未尽；F05）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true,
+      "canonicalLevel": 4,
+      "effectiveLevel": 3
+    },
+    {
+      "sourceRow": 13,
+      "entityId": "liuchao.character.ning_yu",
+      "chapterRanges": [
+        [
+          65,
+          108
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "原文明写",
+      "evidence": "第65章第95行伤势痊愈；第51章第42行第四级",
+      "timepoint": "第65–108章（伤愈；F06–F12）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 14,
+      "entityId": "liuchao.character.ning_yu",
+      "chapterRanges": [
+        [
+          109,
+          109
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第109章第3行“腰侧一个伤口鲜血直流”；第109章第121行被朱诺攻势压着打。推断：境界4，带伤仍在战",
+      "timepoint": "第109章（F13前段，带伤）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 15,
+      "entityId": "liuchao.character.ning_yu",
+      "chapterRanges": [
+        [
+          110,
+          112
+        ]
+      ],
+      "level": null,
+      "sourceKind": "原文明写",
+      "evidence": "【退场】第110章第11行“武二郎、凝羽已经无力再战”",
+      "timepoint": "第110–112章（F13后段）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": false
+    },
+    {
+      "sourceRow": 16,
+      "entityId": "liuchao.character.ning_yu",
+      "chapterRanges": [
+        [
+          113,
+          124
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "原文明写",
+      "evidence": "第121章第47行“凝羽是四级上的修为”；第116章第109行经络里有阴寒杂气（伤），第124章第71行殇侯谈她能否练至第六级“还在两可之间”（四级上，带内伤）",
+      "timepoint": "第113–124章（F14及之后）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 17,
+      "entityId": "liuchao.character.le_mingzhu",
+      "chapterRanges": [
+        [
+          48,
+          56
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "原文明写",
+      "evidence": "第56章第121行自述“去年到第二级内视，现在已经快第三级了”；第56章第146行“比程宗扬高得有限”（第二级高段）",
+      "timepoint": "第48–56章（04，未出手）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 18,
+      "entityId": "liuchao.character.le_mingzhu",
+      "chapterRanges": [
+        [
+          57,
+          98
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "原文明写",
+      "evidence": "第74章第66行“在朱狐冠的帮助下……比平常高了一个等级，至少有四级的实力”（程宗扬估计）（未戴冠时约3级）",
+      "timepoint": "第57–98章（戴朱狐冠；F04、F06）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 19,
+      "entityId": "liuchao.character.le_mingzhu",
+      "chapterRanges": [
+        [
+          99,
+          109
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "原文明写",
+      "evidence": "第110章第69行谢艺眼光：平常“不过三级上下，与易彪相仿”，“摘掉防身的朱狐冠，修为立刻升了一个等级，只比苏荔略逊一筹”；第99章第9行摘冠后“比她戴着朱狐冠的时候只高不低”（第74章与第110章对朱狐冠作用说法相反，但实战都是约4级）",
+      "timepoint": "第99–109章（失冠后；F11–F13前段）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 20,
+      "entityId": "liuchao.character.le_mingzhu",
+      "chapterRanges": [
+        [
+          110,
+          124
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "原文明写",
+      "evidence": "第110章第69行“已经有四级上的水准，隐隐超过了凝羽”。另：第121章第47行程宗扬自觉“小香瓜与自己不相伯仲”，是他的主观看法，不取（四级上）",
+      "timepoint": "第110–124章（突破后）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 21,
+      "entityId": "liuchao.character.xiao_zi",
+      "chapterRanges": [
+        [
+          78,
+          124
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "原文南荒卷没有她的级数，也没有正面交手；只靠细针、机巧出手（第111章第120行、第112章第4行），第110章第11行程宗扬不指望她参战。推断理由：低置信，暂取第2级（不高于失冠前的乐明珠），建议模拟里不让她正面接战（低置信；后期变化不套用）",
+      "timepoint": "第78–124章（南荒全程）",
+      "confidence": "low_placeholder",
+      "settingStatus": "placeholder",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 22,
+      "entityId": "liuchao.character.xie_yi",
+      "chapterRanges": [
+        [
+          35,
+          116
+        ]
+      ],
+      "level": 6,
+      "sourceKind": "原文明写",
+      "evidence": "第121章第112行殇侯：“他修为已臻于六级，达到通幽的境界，已可上窥第七级归元之境”；第51章第42行凝羽看不透，推断“至少已经进入第五级坐照”（用户已定第六级）",
+      "timepoint": "第35–116章（南荒全程）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 23,
+      "entityId": "liuchao.character.su_li",
+      "chapterRanges": [
+        [
+          38,
+          101
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第110章第69行乐明珠摘冠后（约4级）“只比苏荔略逊一筹”。推断理由：与失冠后的乐明珠对比，苏荔在第4级高段；原文没说到第5级（第121章第44行“五级以上者方可称为高手”且少之又少）（第4级高段）",
+      "timepoint": "第38–101章（常态）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 24,
+      "entityId": "liuchao.character.su_li",
+      "chapterRanges": [
+        [
+          102,
+          124
+        ]
+      ],
+      "level": 5,
+      "sourceKind": "推断",
+      "evidence": "第102章第45行“变身后的苏荔实力大增”；第102章第63行程宗扬预期她对男尸鬼有“压倒性的实力”。推断理由：常态4级高段，变身后上浮一级（变身状态）",
+      "timepoint": "第102–124章（变身后可用）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 25,
+      "entityId": "lcq.character.np003",
+      "chapterRanges": [
+        [
+          30,
+          124
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "原文明写",
+      "evidence": "L40952（第266章追述）吴战威、易彪属第三级生象；第121章第47行“吴战威和易彪也不比自己高太多”；第30章第88行剑手“武功远在自己之上”（第63章第77行负伤、第111章第104行重伤，均为场内状态）",
+      "timepoint": "第30–124章（南荒全程）",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 26,
+      "entityId": "liuchao.character.qi_yuan",
+      "chapterRanges": [
+        [
+          30,
+          124
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "原文无级数。第45章第83行与两名花苗汉子并肩对敌；第82章第106行与吴战威一道援救卡瓦；第30章第113行一刀劈空“胸口烦闷得几欲吐血”。推断理由：与商队护卫、卡瓦同档，低于吴战威（3）",
+      "timepoint": "第30–124章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 27,
+      "entityId": "liuchao.character.yun_cang_feng",
+      "chapterRanges": [
+        [
+          35,
+          124
+        ]
+      ],
+      "level": 1,
+      "sourceKind": "推断",
+      "evidence": "原文无级数，也无出手描写。第52章第79行山洪时要易彪背着上岸；第55章第119行请程宗扬手下出手相助；第109章第3行受伤。推断理由：按非战斗员处理，若必须给数取1（建议不进战斗名单）",
+      "timepoint": "第35–124章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 28,
+      "entityId": "lcq.character.np004",
+      "chapterRanges": [
+        [
+          35,
+          124
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "原文明写",
+      "evidence": "第110章第69行谢艺：乐明珠“不过三级上下，与易彪相仿”；L40952（第266章追述）第三级（第63章失魂、第111章第104行重伤为场内状态）",
+      "timepoint": "第35–124章",
+      "confidence": "explicit",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 29,
+      "entityId": "liuchao.character.yi_hu",
+      "chapterRanges": [
+        [
+          35,
+          52
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "原文无级数。第52章第83–86行一枪挑起易彪、千斤坠硬挨洪峰；第63章第69行改造后“仍保留着原来的武技”。推断理由：北府兵军官、易彪之兄，按易彪同级第3级，上限4",
+      "timepoint": "第35–52章（生前）",
+      "confidence": "low_placeholder",
+      "settingStatus": "placeholder",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 30,
+      "entityId": "liuchao.character.yi_hu",
+      "chapterRanges": [
+        [
+          63,
+          65
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第63章第65行“比起那些鬼武士高出不止一筹”，武二郎“一时间也被他的铁矛困住”；第63章第69、77行“无法攻克武二郎，却将他牢牢牵制住”，估计“要一两个时辰才能……分出胜负”。推断理由：比鬼武士（3）高，与武二郎（5）相持而攻不破，取4级高段（与易虎同一 id，按时点分行）",
+      "timepoint": "第63–65章（F05，被改造后）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 31,
+      "entityId": "lcq.character.nanhuang_shigang",
+      "chapterRanges": [
+        [
+          30,
+          124
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "原文无级数。第43章第8行刚入第二级的程宗扬“比商队那些护卫还略有不如”；第34章第100行白湖护卫“和云氏商会的手下一比就相形见绌”。推断理由：白湖普通护卫，第2级高段",
+      "timepoint": "第30–124章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 32,
+      "entityId": "lcq.character.nanhuang_xiaowei",
+      "chapterRanges": [
+        [
+          30,
+          124
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "同石刚（第43章第8行、第34章第100行）；第82章第101行“扔下弩机，提刀闯过去”；第109章第3行手臂筋腱挨刀（第109章起手臂伤）",
+      "timepoint": "第30–124章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 33,
+      "entityId": "lcq.character.nanhuang_kawa",
+      "chapterRanges": [
+        [
+          41,
+          108
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "原文无级数。第82章第106行卡瓦三人“分别迎向鬼战士”，若无程宗扬、吴战威、祁远来援，“在鬼战士第一波攻击下就会尽数送命”。推断理由：明显弱于鬼战士（3），取2",
+      "timepoint": "第41–108章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 34,
+      "entityId": "liuchao.character.a_xi",
+      "chapterRanges": [
+        [
+          41,
+          124
+        ]
+      ],
+      "level": 1,
+      "sourceKind": "推断",
+      "evidence": "原文无级数，无出手描写；第57章第42、58行被鸦人所擒、由乐明珠出手相救。推断理由：非战斗员（建议不进战斗名单）",
+      "timepoint": "第41–124章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 35,
+      "entityId": "lcq.character.np006",
+      "chapterRanges": [
+        [
+          78,
+          118
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "原文无级数，南荒卷里也没有和我方正面交手。第110章第31–33行长鞭“重重落在一根石柱上”；第110章第36行受命独自取铠甲；第117章第78行被白象压断四肢。推断理由：低置信，按鬼王峒头目、强于普通鬼武士（3）取4（低置信）",
+      "timepoint": "第78–118章",
+      "confidence": "low_placeholder",
+      "settingStatus": "placeholder",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 36,
+      "entityId": "lcq.character.nanhuang_shekui",
+      "chapterRanges": [
+        [
+          79,
+          80
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第80章第75行“打斗的过程平淡无奇……武二郎也只用了一个照面就斩下蛇傀的首级”。推断理由：被第5级一招斩杀，至少差两级，取上限3",
+      "timepoint": "第79–80章（F07）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 37,
+      "entityId": "lcq.character.nanhuang_heishe",
+      "chapterRanges": [
+        [
+          78,
+          80
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "原文无交手；第80章第15行被巨蚌夹住溺死。推断理由：阁罗随从，按低于蛇傀一级估",
+      "timepoint": "第78–80章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 38,
+      "entityId": "lcq.character.nanhuang_dagu",
+      "chapterRanges": [
+        [
+          82,
+          83
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第83章第2行起为施巫术、腹语的巫师；第83章第30、51–52行武二郎冲过鬼战士后一刀将其捅死。推断理由：以巫术和鬼战士为主，本身近战被第5级轻取，取3（巫术另计）（巫术、召唤另计）",
+      "timepoint": "第82–83章（F08）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 39,
+      "entityId": "liuchao.character.dan_chen",
+      "chapterRanges": [
+        [
+          97,
+          98
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第97章第91行一跃五米多高，“别说苏荔，就是把武二郎拉来，也只有抬头看的份儿”；第98章第12行从背后劈伤程宗扬；第98章第14行“失去虎煞的支撑，丹宸的力量减弱大半”。推断理由：力量来自虎煞，取4（低置信）",
+      "timepoint": "第97–98章（F10，骑骨虎、借虎煞）",
+      "confidence": "low_placeholder",
+      "settingStatus": "placeholder",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 40,
+      "entityId": "liuchao.character.dan_chen",
+      "chapterRanges": [
+        [
+          98,
+          98
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "第98章第14、18行失去虎煞后被程宗扬（≈3）徒手按住。推断理由：比程宗扬低一级",
+      "timepoint": "第98章（失去虎煞后）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true,
+      "variant": "without_husha"
+    },
+    {
+      "sourceRow": 41,
+      "entityId": "liuchao.character.dan_chen",
+      "chapterRanges": [
+        [
+          109,
+          110
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "第109章第100行以尸鬼之身攻苏荔，第110章第6行被蝎尾贯穿。尸鬼不适用九级体系。模拟当量建议约4（苏荔常态4级高段一时压不住，见第109章第100行）",
+      "timepoint": "第109–110章（F13）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true,
+      "effectiveLevel": 4,
+      "effectiveSource": "原表不适用九级；模拟当量建议，非境界"
+    },
+    {
+      "sourceRow": 42,
+      "entityId": "liuchao.character.gui_wu_wang",
+      "chapterRanges": [
+        [
+          97,
+          97
+        ]
+      ],
+      "level": 6,
+      "sourceKind": "推断",
+      "evidence": "第97章第36行“论实力，鬼巫王比程宗扬高出不止一筹”；第97章第49行“实力顶多施展出来六成”；第121章第50、69行殇侯说程宗扬靠的是峒中死气。推断理由：本身约6级（见下行），只施展六成，F10 实战当量取4（F10 专用当量）",
+      "timepoint": "第97章（F10，实战只用六成）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true,
+      "canonicalLevel": 6,
+      "effectiveLevel": 4
+    },
+    {
+      "sourceRow": 43,
+      "entityId": "liuchao.character.gui_wu_wang",
+      "chapterRanges": [
+        [
+          99,
+          112
+        ]
+      ],
+      "level": 6,
+      "sourceKind": "推断",
+      "evidence": "原文无级数。第110章第37行“鬼巫王现在的实力就足够压他们一头”（此时我方有谢艺）；第110章第83行“与鬼巫王正面硬拼……根本不可能胜过”；第112章第11–12行与谢艺刀剑相交，谢艺抓住“转瞬即逝的细微破绽”斩其手掌。推断理由：与谢艺（6）正面相持，取6；巫术、星阵另计（巫术另计）",
+      "timepoint": "第99–112章（F11–F13，全力）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 44,
+      "entityId": "liuchao.character.shang_zhen_yu",
+      "chapterRanges": [
+        [
+          43,
+          124
+        ]
+      ],
+      "level": 7,
+      "sourceKind": "推断",
+      "evidence": "南荒卷中不出手，原文无级数。第121章第112行能断定谢艺“已臻于六级”；第122章第46行“深藏不露，连谢艺都看走了眼”。推断理由：高于谢艺（6），下限取7（低置信），建议不进战斗名单（不参战）",
+      "timepoint": "第43–124章",
+      "confidence": "low_placeholder",
+      "settingStatus": "placeholder",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 45,
+      "entityId": "lcq.character.zhu_nuo",
+      "chapterRanges": [
+        [
+          102,
+          112
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "尸鬼，不适用九级体系。第102章第63行“朱诺实力明显在男尸之上”，以苏荔对她“即使能胜也要耗费一番工夫”；第109章第121行把带伤的凝羽压着打。模拟当量建议约4",
+      "timepoint": "第102–112章（F12、F13）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true,
+      "effectiveLevel": 4,
+      "effectiveSource": "原表不适用九级；模拟当量建议，非境界"
+    },
+    {
+      "sourceRow": 46,
+      "entityId": "liuchao.character.bi_ji",
+      "chapterRanges": [
+        [
+          78,
+          118
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "南荒卷中不出手，原文无级数，建议不进战斗名单",
+      "timepoint": "第78–118章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": false
+    },
+    {
+      "sourceRow": 47,
+      "entityId": "lcq.character.mi_gu",
+      "chapterRanges": [
+        [
+          86,
+          107
+        ]
+      ],
+      "level": 1,
+      "sourceKind": "推断",
+      "evidence": "原文无交手；鬼王峒仆人，第86章第40行“阁罗大人的仆人”，第107章第9行额头肿块。推断理由：非战斗员",
+      "timepoint": "第86–107章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 48,
+      "entityId": "lcq.character.saan",
+      "chapterRanges": [
+        [
+          91,
+          109
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "原文无级数；第95章第75行作向导；第109章第27–28行一条手臂被咬掉、重伤。推断理由：普通部族战士，与卡瓦同档（低置信）",
+      "timepoint": "第91–109章",
+      "confidence": "low_placeholder",
+      "settingStatus": "placeholder",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 49,
+      "entityId": "lcq.character.nanhuang_loumeng",
+      "chapterRanges": [
+        [
+          91,
+          112
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第91章第57行红苗族长之子；第107章第36行精疲力竭的武二郎“这一把竟然没能夺下娄蒙的铁矛”。推断理由：能在力竭的第5级手下不失兵器，取3（另有 registry id canon.character.81be8593ee）",
+      "timepoint": "第91–112章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 50,
+      "entityId": "lcq.character.nanhuang_yixiong",
+      "chapterRanges": [
+        [
+          35,
+          124
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "第82章第56、95行与卡瓦等守阵；第101章第46行重伤被凝羽救下。推断理由：云氏军士，高于白湖护卫（第34章第100行）但低于易彪（3），取2高段",
+      "timepoint": "第35–124章",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 51,
+      "entityId": "lcq.enemy.f01_swordsman",
+      "chapterRanges": [
+        [
+          30,
+          30
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第30章第88行“武功远在自己（吴战威）之上”；第30章第107、113行闪过祁远一刀、祁远反被震得胸闷；第30章第112行被黑纱女子一剑断腕。推断理由：吴战威3级，“远在其上”取4，不排除接近5",
+      "timepoint": "第30章（F01）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 52,
+      "entityId": "lcq.enemy.f01_axeman",
+      "chapterRanges": [
+        [
+          30,
+          30
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第30章第90–92行凭巨斧“以长对短占尽优势”压住吴战威；第30章第102行被中毒的武二郎残力一击刺死。推断理由：与吴战威同级，靠兵器和窄桥占优",
+      "timepoint": "第30章（F01）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 53,
+      "entityId": "lcq.enemy.f01_archer",
+      "chapterRanges": [
+        [
+          30,
+          30
+        ]
+      ],
+      "level": 2,
+      "sourceKind": "推断",
+      "evidence": "第30章第90行四人拉弓把两名护卫阻在半途，无交手描写。推断理由：与护卫（2）同档，上限3",
+      "timepoint": "第30章（F01）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 54,
+      "entityId": "lcq.enemy.f01_veiled_woman",
+      "chapterRanges": [
+        [
+          30,
+          30
+        ]
+      ],
+      "level": 5,
+      "sourceKind": "推断",
+      "evidence": "第30章第112行一剑斩断剑手（约4级）手腕后从容抛入谷中。推断理由：轻取4级，下限取5；建议作剧情第三方，不进对战名单（不对战）",
+      "timepoint": "第30章（F01，第三方）",
+      "confidence": "low_placeholder",
+      "settingStatus": "placeholder",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 55,
+      "entityId": "lcq.enemy.sheyi_raider",
+      "chapterRanges": [
+        [
+          37,
+          37
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第37章第42–54行重伤状态下主角苦撑仍被咬穿气管，第37章第54行凝羽一刀刺入眼眶毙命。推断理由：比主角（2）高约一级而非两级（苦撑不是秒杀）；体格力量来自种族",
+      "timepoint": "第37章（F02）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 56,
+      "entityId": "lcq.enemy.guiwang_warrior",
+      "chapterRanges": [
+        [
+          45,
+          112
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第45章第86–91行与刚入二级的程宗扬交手，程“手臂剧震”被撞退；第46章第9–12行武二郎连斩数人；第82章第106行卡瓦三人第一波就几乎送命；第63章第65行血虎“比起那些鬼武士高出不止一筹”；第82章第76行程宗扬猜测他们“都是被巫术炼制的行尸”。推断理由：高于程（2）、卡瓦（2），低于血虎（4），被武二郎（5）轻取，取3（行尸，按九级当量）",
+      "timepoint": "第45–112章（F03、F05、F08、F11、F13）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 57,
+      "entityId": "lcq.enemy.guiwang_warrior",
+      "chapterRanges": [
+        [
+          46,
+          46
+        ],
+        [
+          86,
+          124
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第46章第18–21行吸干同伴鲜血后一斧把武二郎砸得“两脚没入泥土”；第86章第34行披犀甲守卫“比废墟中遇到的那些鬼战士资历深得多”。推断理由：比普通鬼武士高一级（可做同一 id 的精英变体）",
+      "timepoint": "第46章末一名；第86章起进峒守卫（W-07）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true,
+      "variant": "elite"
+    },
+    {
+      "sourceRow": 58,
+      "entityId": "lcq.enemy.dungeon_shaman",
+      "chapterRanges": [
+        [
+          62,
+          63
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第63章第102–103行近身被凝羽（带伤≈3）追得“野狗般手脚并用地……逃窜”，随后以巫术反击；第62章第63行指使巨汉行凶。推断理由：近战不敌带伤的凝羽，取3，巫术另计（巫术另计）",
+      "timepoint": "第62–63章（F05）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 59,
+      "entityId": "lcq.enemy.crow_man",
+      "chapterRanges": [
+        [
+          57,
+          57
+        ]
+      ],
+      "level": 3,
+      "sourceKind": "推断",
+      "evidence": "第57章第74–77行与戴朱狐冠的乐明珠（约4级）交手，“十余招一过”乐明珠“占了上风”；羽毛如铁片、力量极大（第57章第76行）。推断理由：略逊于4级，取3级高段",
+      "timepoint": "第57章（F04）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 60,
+      "entityId": "lcq.enemy.merfolk",
+      "chapterRanges": [
+        [
+          74,
+          74
+        ]
+      ],
+      "level": 4,
+      "sourceKind": "推断",
+      "evidence": "第74章第66–67行戴冠的乐明珠（至少4级）被其鱼叉压制，“完全落在了下风”，但原文说部分原因是对方熟悉她的招式。推断理由：取4（不取5）（半人种族，按九级当量）",
+      "timepoint": "第74章（F06）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "nine_levels",
+      "available": true
+    },
+    {
+      "sourceRow": 61,
+      "entityId": "lcq.enemy.male_corpse",
+      "chapterRanges": [
+        [
+          102,
+          103
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "尸鬼，不适用九级体系。第102章第63行弱于朱诺，苏荔可以“压倒性的实力”速杀。模拟当量建议约3",
+      "timepoint": "第102–103章（F12）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true,
+      "effectiveLevel": 3,
+      "effectiveSource": "原表不适用九级；模拟当量建议，非境界"
+    },
+    {
+      "sourceRow": 62,
+      "entityId": "lcq.enemy.yanmei",
+      "chapterRanges": [
+        [
+          110,
+          111
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "鬼物，不适用九级体系。第110章第58行“比鬼武士更强悍，比尸鬼更灵活”，被谢艺砍中“也能迅速复原”。模拟当量建议约4，并带再生",
+      "timepoint": "第110–111章（F13）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true,
+      "effectiveLevel": 4,
+      "effectiveSource": "原表不适用九级；模拟当量建议，非境界"
+    },
+    {
+      "sourceRow": 63,
+      "entityId": "lcq.enemy.husha_bone_tiger",
+      "chapterRanges": [
+        [
+          97,
+          98
+        ],
+        [
+          109,
+          111
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "煞物，不适用九级体系。第98章第12行沾上程宗扬的血“就迅速解体”。建议按机制处理（真阳之血克制），不给级数",
+      "timepoint": "第97–98章（F10）、第109–111章（F13）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true
+    },
+    {
+      "sourceRow": 64,
+      "entityId": "lcq.enemy.yinsha",
+      "chapterRanges": [
+        [
+          84,
+          84
+        ],
+        [
+          109,
+          110
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "无形煞物，不适用九级体系。第84章第29行苏荔惊呼“阴煞！”，第109章第102行“水一样绕过刀锋”。F09 本就是非刀兵场，建议按机制处理",
+      "timepoint": "第84章（F09）、第109–110章（F13）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true
+    },
+    {
+      "sourceRow": 65,
+      "entityId": "lcq.enemy.yansha",
+      "chapterRanges": [
+        [
+          109,
+          111
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "煞物，不适用九级体系。第110章第9行“像一团燃烧的液体”；第111章第104行一击烧伤吴战威。建议按机制处理",
+      "timepoint": "第109–111章（F13）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true
+    },
+    {
+      "sourceRow": 66,
+      "entityId": "liuchao.character.dragon_god",
+      "chapterRanges": [
+        [
+          113,
+          115
+        ]
+      ],
+      "level": null,
+      "sourceKind": "不适用",
+      "evidence": "巨兽，不适用九级体系。第113章第25、31行破山而出；第115章第8行中刀、中弩后仍能恢复。建议按 Boss 机制处理",
+      "timepoint": "第113–115章（F14）",
+      "confidence": "inferred",
+      "settingStatus": "source_based",
+      "applicability": "not_applicable",
+      "available": true
+    }
+  ]
+}

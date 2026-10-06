@@ -551,7 +551,6 @@ import QuantitySelectModal from '@/components/common/QuantitySelectModal.vue'
 import {
   DEFAULT_BASE_CURRENCY_ID,
   DEFAULT_CURRENCIES,
-  syncWalletToLegacySpiritStones,
   normalizeInventoryCurrencies,
 } from '@/utils/currencySystem'
 
@@ -1361,7 +1360,7 @@ const totalValueInBase = computed(() => {
 const currentMarketLabel = computed(() => {
   const loc = marketLocationKey.value
   if (!loc) return ''
-  const m = getMarketMultiplier('灵石_下品')
+  const m = getMarketMultiplier('铜铢')
   if (m === 1) return `当前地区：${loc}（汇率平稳）`
   return `当前地区：${loc}（汇率波动系数：${m.toFixed(3)}）`
 })
@@ -1384,10 +1383,6 @@ const currencyCards = computed<CurrencyCard[]>(() => {
   const wallet: Record<string, any> = inv?.货币 && typeof inv.货币 === 'object' ? inv.货币 : {}
 
   const order = [
-    '灵石_下品',
-    '灵石_中品',
-    '灵石_上品',
-    '灵石_极品',
     '铜铢',
     '银铢',
     '金铢',
@@ -1411,10 +1406,6 @@ const currencyCards = computed<CurrencyCard[]>(() => {
     const fee = 0.02
     const baseRatio = 100
     const map: Record<string, { up?: string; down?: string }> = {
-      灵石_下品: { up: '灵石_中品' },
-      灵石_中品: { up: '灵石_上品', down: '灵石_下品' },
-      灵石_上品: { up: '灵石_极品', down: '灵石_中品' },
-      灵石_极品: { down: '灵石_上品' },
       铜铢: { up: '银铢' },
       银铢: { up: '金铢', down: '铜铢' },
       金铢: { down: '银铢' },
@@ -1427,7 +1418,7 @@ const currencyCards = computed<CurrencyCard[]>(() => {
     if (pair.up) {
       const toMult = getMarketMultiplier(pair.up)
       const ratio = toMult / fromMult
-      const cost = Math.max(1, Math.ceil(baseRatio * ratio * (1 + fee)))
+      const cost = Math.max(1, Math.ceil((Number(wallet[pair.up]?.价值度)/Number(wallet[id]?.价值度)) * ratio * (1 + fee)))
       out.exchangeUp = {
         cost,
         title: `兑换：${cost} ${wallet[id]?.名称 ?? id} → 1 ${wallet[pair.up]?.名称 ?? pair.up}（波动系数比值：${ratio.toFixed(3)}）`,
@@ -1436,7 +1427,7 @@ const currencyCards = computed<CurrencyCard[]>(() => {
     if (pair.down) {
       const toMult = getMarketMultiplier(pair.down)
       const ratio = toMult / fromMult
-      const yieldAmount = Math.max(1, Math.floor((baseRatio / ratio) * (1 - fee)))
+      const yieldAmount = Math.max(1, Math.floor((Number(wallet[id]?.价值度) / Number(wallet[pair.down]?.价值度) / ratio) * (1 - fee)))
       out.exchangeDown = {
         yield: yieldAmount,
         title: `分解：1 ${wallet[id]?.名称 ?? id} → ${yieldAmount} ${wallet[pair.down]?.名称 ?? pair.down}（波动系数比值：${ratio.toFixed(3)}）`,
@@ -1459,8 +1450,7 @@ const currencyCards = computed<CurrencyCard[]>(() => {
     const approx = toBaseValue(id, amount, valueDegree)
     const subLabel = `≈ ${formatNumber(approx)} ${baseCurrencyLabel.value}`
 
-    const colorClass =
-      id.startsWith('灵石_') ? (id === '灵石_极品' ? 'grade-legend' : id === '灵石_上品' ? 'grade-epic' : id === '灵石_中品' ? 'grade-rare' : 'grade-common') : 'grade-money'
+    const colorClass = 'grade-money'
 
     const canDelete = true
 
@@ -1490,14 +1480,13 @@ const confirmDeleteCurrency = (currencyId: string) => {
       inv.货币设置.基准币种 = remaining.includes(DEFAULT_BASE_CURRENCY_ID) ? DEFAULT_BASE_CURRENCY_ID : remaining[0] || DEFAULT_BASE_CURRENCY_ID
     }
 
-    syncWalletToLegacySpiritStones(inv)
     await characterStore.saveCurrentGame()
     toast.success('币种已删除')
   }
   showCustomConfirm.value = true
 }
 
-// 灵石兑换功能（动态汇率）
+// 铢系兑换（动态汇率）
 const handleExchange = async (fromCurrencyId: string, direction: 'up' | 'down') => {
   const inv = ensureCurrencyWalletWritable()
   if (!inv) return
@@ -1506,10 +1495,6 @@ const handleExchange = async (fromCurrencyId: string, direction: 'up' | 'down') 
   if (!wallet || typeof wallet !== 'object') return
 
   const map: Record<string, { up?: string; down?: string }> = {
-    灵石_下品: { up: '灵石_中品' },
-    灵石_中品: { up: '灵石_上品', down: '灵石_下品' },
-    灵石_上品: { up: '灵石_极品', down: '灵石_中品' },
-    灵石_极品: { down: '灵石_上品' },
     铜铢: { up: '银铢' },
     银铢: { up: '金铢', down: '铜铢' },
     金铢: { down: '银铢' },
@@ -1567,7 +1552,6 @@ const handleExchange = async (fromCurrencyId: string, direction: 'up' | 'down') 
     setMarketMultiplier(fromCurrencyId, fromMult * (1 - clamp(yieldAmount / 120000, 0, 0.006)))
   }
 
-  syncWalletToLegacySpiritStones(inv)
   await characterStore.saveCurrentGame()
 }
 

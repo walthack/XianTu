@@ -1255,7 +1255,7 @@
         "description": "白湖商馆执事，奉苏妲己之命带队走南荒找霓龙丝。",
         "role": "白湖商馆执事，南荒商队领队",
         "gender": "男",
-        "realm": "练气",
+        "realm": "未知",
         "skillIds": [
           "lcq.skill.np001",
           "lcq.skill.np005"
@@ -1281,7 +1281,9 @@
             "【内部约束·不入正文】现代来客的身份不向南荒人点破；不是云氏商会的人。"
           ]
         },
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -1309,9 +1311,11 @@
         "skillIds": [
           "lcq.skill.np005"
         ],
-        "realm": "练气",
+        "realm": "未知",
         "gender": "女",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.wu_er_lang",
@@ -1338,9 +1342,11 @@
         "skillIds": [
           "lcq.skill.np001"
         ],
-        "realm": "练气",
+        "realm": "未知",
         "gender": "男",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.qi_yuan",
@@ -1363,9 +1369,11 @@
             "【内部约束·不入正文】懂南荒的虫蛇药材（第34章 L5277–5279），刀法只够自保（补写）。"
           ]
         },
-        "realm": "练气",
+        "realm": "未知",
         "gender": "男",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.np003",
@@ -1382,9 +1390,11 @@
             "对朋友讲义气，有忠心"
           ]
         },
-        "realm": "金丹",
+        "realm": "未知",
         "gender": "男",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.nanhuang_xiaowei",
@@ -1393,8 +1403,15 @@
         "profile": {
           "origin": "白湖商馆护卫"
         },
-        "description": "白湖商馆护卫",
-        "affiliations": []
+        "description": "白湖商馆护卫，弩手",
+        "affiliations": [],
+        "presenceWindow": {
+          "firstChapter": 34,
+          "lastPresentChapter": 118,
+          "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.nanhuang_shigang",
@@ -1404,7 +1421,14 @@
           "origin": "白湖商馆护卫"
         },
         "description": "白湖商馆护卫",
-        "affiliations": []
+        "affiliations": [],
+        "presenceWindow": {
+          "firstChapter": 31,
+          "lastPresentChapter": 73,
+          "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.np004",
@@ -1420,9 +1444,11 @@
             "坚韧"
           ]
         },
-        "realm": "金丹",
+        "realm": "未知",
         "gender": "男",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.yi_hu",
@@ -1430,7 +1456,7 @@
         "description": "云氏护卫",
         "role": "云氏护卫",
         "gender": "男",
-        "realm": "凡人",
+        "realm": "未知",
         "locationId": "liuchao.location.shan_jian",
         "skillIds": [],
         "techniqueIds": [],
@@ -1445,7 +1471,9 @@
             "有担当"
           ]
         },
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xie_yi",
@@ -1453,7 +1481,7 @@
         "description": "随云氏商队同行的男子，自称谢艺，出身临安，说学些刀法只为防身。",
         "role": "与云氏商队结伴的独行客，自称出身临安",
         "gender": "男",
-        "realm": "化神",
+        "realm": "通幽",
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
@@ -1472,7 +1500,9 @@
             "【内部约束·不入正文】真实来历与身手本段不点破；对外只说出身临安、学刀防身（第39章 L5909）。"
           ]
         },
-        "affiliations": []
+        "affiliations": [],
+        "level": 6,
+        "levelSource": "清羽L18220：臻于六级，达到通幽"
       },
       {
         "id": "liuchao.character.yun_cang_feng",
@@ -1497,9 +1527,11 @@
             "【内部约束·不入正文】不是「云公子」；祁远称他「云执事」，程宗扬称他「云老哥」。"
           ]
         },
-        "realm": "练气",
+        "realm": "未知",
         "gender": "男",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.shang_zhen_yu",
@@ -1510,9 +1542,11 @@
           "origin": "云氏雇用的老向导，自称朱八八。",
           "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。"
         },
-        "realm": "合体",
+        "realm": "未知",
         "gender": "男",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.su_li",
@@ -1535,9 +1569,11 @@
             "【内部约束·不入正文】自称族长阿依苏荔，旁人叫她「苏荔」；程宗扬叫她「苏荔族长」（第63章 L9347）。"
           ]
         },
-        "realm": "练气",
+        "realm": "未知",
         "gender": "女",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.a_xi",
@@ -1561,17 +1597,26 @@
             "【内部约束·不入正文】她后来被人控制一事（第103章 L15363）在 03b–04b 不点破。"
           ]
         },
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.nanhuang_kawa",
         "name": "卡瓦",
-        "role": "花苗护卫",
+        "role": "花苗族汉子，随送亲队同行",
         "profile": {
           "origin": "花苗护卫"
         },
-        "description": "花苗护卫",
-        "affiliations": []
+        "description": "花苗族汉子，随送亲队同行",
+        "affiliations": [],
+        "presenceWindow": {
+          "firstChapter": 40,
+          "lastPresentChapter": 108,
+          "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -1579,7 +1624,7 @@
         "description": "光明观堂弟子",
         "role": "戴面纱的花苗新娘",
         "gender": "女",
-        "realm": "凡人",
+        "realm": "未知",
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
@@ -1587,7 +1632,9 @@
           "origin": "随花苗送亲队同行，身份尚未揭露。",
           "appearance": "戴着面纱的成年花苗新娘。"
         },
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.nanhuang_yeao",
@@ -1597,7 +1644,9 @@
           "origin": "山村养蛊老妇"
         },
         "description": "山村养蛊老妇",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.nanhuang_baiyi_chief",
@@ -1607,7 +1656,9 @@
           "origin": "白夷族长"
         },
         "description": "白夷族长",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.nanhuang_xi_furen",
@@ -1617,7 +1668,9 @@
           "origin": "白夷族夫人"
         },
         "description": "白夷族夫人",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.nanhuang_yiyong",
@@ -1627,7 +1680,9 @@
           "origin": "云氏护卫"
         },
         "description": "云氏护卫",
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       }
     ],
     "playerRelationships": [
@@ -1755,323 +1810,130 @@
     ]
   },
   "content": {
+    "items": [
+      {
+        "id": "liuchao.item.remote_control"
+      },
+      {
+        "id": "liuchao.item.long_jing_yu"
+      },
+      {
+        "id": "lcq.item.np003"
+      },
+      {
+        "id": "lcq.item.np004"
+      },
+      {
+        "id": "lcq.item.np006"
+      },
+      {
+        "id": "lcq.item.np007"
+      },
+      {
+        "id": "lcq.item.nh_mountain_herb"
+      },
+      {
+        "id": "lcq.item.nh_bird_feather"
+      },
+      {
+        "id": "lcq.item.nh_salt_lump"
+      },
+      {
+        "id": "lcq.item.nh_torch"
+      },
+      {
+        "id": "lcq.item.nh_feed_cake"
+      },
+      {
+        "id": "lcq.item.nh_iron_nail"
+      },
+      {
+        "id": "lcq.item.nh_cuizhi_jade_scrap"
+      },
+      {
+        "id": "lcq.item.nh_flint_set"
+      },
+      {
+        "id": "lcq.item.nh_cuizhi_jade_fine"
+      },
+      {
+        "id": "lcq.item.nh_goose_palm_mushroom"
+      },
+      {
+        "id": "lcq.item.nh_beech_bark"
+      },
+      {
+        "id": "lcq.item.nh_ghost_horn_shard"
+      },
+      {
+        "id": "lcq.item.nh_rat_pelt"
+      },
+      {
+        "id": "lcq.item.nh_tarnished_trinket"
+      },
+      {
+        "id": "lcq.item.nh_pebble_necklace"
+      },
+      {
+        "id": "lcq.item.nh_realgar_sachet"
+      },
+      {
+        "id": "lcq.item.nh_clam_shell"
+      },
+      {
+        "id": "lcq.item.nh_orange"
+      },
+      {
+        "id": "lcq.item.nh_dried_fish"
+      },
+      {
+        "id": "lcq.item.nh_tea_brick_corner"
+      },
+      {
+        "id": "lcq.item.nh_silk_scrap"
+      },
+      {
+        "id": "lcq.item.nh_crowman_feather"
+      },
+      {
+        "id": "lcq.item.nh_baiyi_rice_pearl"
+      }
+    ],
     "skills": [
       {
-        "id": "liuchao.skill.wu_hu_duan_men_dao",
-        "name": "五虎断门刀",
-        "description": "武二郎传授的刀法，以疾劲为主。",
-        "type": "刀法",
-        "effects": [
-          "拔刀即出手",
-          "省略起手式"
-        ]
+        "id": "liuchao.skill.wu_hu_duan_men_dao"
       },
       {
-        "id": "liuchao.skill.dagger_art",
-        "name": "凝羽刀法",
-        "description": "凝羽自修刀法。",
-        "type": "刀法",
-        "effects": [
-          "冷冽"
-        ]
+        "id": "liuchao.skill.dagger_art"
       },
       {
-        "id": "liuchao.skill.bow_art",
-        "name": "苏荔弓术",
-        "description": "苏荔以弯弓射杀鬼王峒武士。",
-        "type": "弓术",
-        "effects": [
-          "精准"
-        ]
+        "id": "liuchao.skill.bow_art"
       },
       {
-        "id": "liuchao.skill.healing_art",
-        "name": "光明观堂医术",
-        "description": "乐明珠的医术，以法术与科学混合。",
-        "type": "医术",
-        "effects": [
-          "驱虫",
-          "疗伤"
-        ]
+        "id": "liuchao.skill.healing_art"
       },
       {
-        "id": "liuchao.skill.sword_art",
-        "name": "谢艺刀法",
-        "description": "谢艺自修刀法，可击碎卵石。",
-        "type": "刀法",
-        "effects": [
-          "取巧"
-        ]
+        "id": "liuchao.skill.sword_art"
       },
       {
-        "id": "lcq.skill.np001",
-        "name": "生死根",
-        "description": "程宗扬身上有将死气化为生机的异能，能加速植物生长和伤口愈合。"
+        "id": "lcq.skill.np001"
       },
       {
-        "id": "lcq.skill.np002",
-        "name": "九阳神功",
-        "description": "太乙真宗核心功法，王哲传程宗扬口诀。"
+        "id": "lcq.skill.np002"
       },
       {
-        "id": "lcq.skill.np005",
-        "name": "双修功法",
-        "description": "凝羽与程宗扬通过性交交换真气"
+        "id": "lcq.skill.np005"
       }
     ],
     "techniques": [
       {
-        "id": "liuchao.technique.sheng_si_gen",
-        "name": "生死根",
-        "description": "程宗扬的异能灵根，可感应死亡气息。",
-        "grade": "唯一",
-        "skillIds": [
-          "liuchao.skill.wu_hu_duan_men_dao"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.48,
-          "属性加成": {
-            "悟性": 6,
-            "灵性": 3
-          }
-        }
+        "id": "liuchao.technique.sheng_si_gen"
       },
       {
-        "id": "liuchao.technique.inner_qi",
-        "name": "内功",
-        "description": "凝羽修炼的内功。",
-        "grade": "凡品",
-        "skillIds": [
-          "liuchao.skill.dagger_art"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.08,
-          "属性加成": {
-            "悟性": 1,
-            "灵性": 1
-          }
-        }
+        "id": "liuchao.technique.inner_qi"
       },
       {
-        "id": "liuchao.technique.tiger_style",
-        "name": "虎式",
-        "description": "武二郎的虎形功法。",
-        "grade": "凡品",
-        "skillIds": [
-          "liuchao.skill.wu_hu_duan_men_dao"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.08,
-          "属性加成": {
-            "悟性": 1,
-            "灵性": 1
-          }
-        }
-      }
-    ],
-    "items": [
-      {
-        "id": "liuchao.item.remote_control",
-        "name": "遥控器",
-        "description": "程宗扬从山民处购得的仿制遥控器。",
-        "type": "other",
-        "grade": "中品"
-      },
-      {
-        "id": "liuchao.item.long_jing_yu",
-        "name": "龙睛玉",
-        "description": "程宗扬从山民处购得的璞玉。",
-        "type": "material",
-        "grade": "中品"
-      },
-      {
-        "id": "lcq.item.np003",
-        "name": "拉链",
-        "type": "other",
-        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
-        "grade": "仙品"
-      },
-      {
-        "id": "lcq.item.np004",
-        "name": "按摩棒",
-        "type": "other",
-        "description": "程宗扬从现代带来的性玩具，后被苏妲己占有",
-        "grade": "中品"
-      },
-      {
-        "id": "lcq.item.np006",
-        "name": "麻古",
-        "type": "consumable",
-        "description": "段强留下的催情药，被程宗扬用于凝羽",
-        "grade": "中品"
-      },
-      {
-        "id": "lcq.item.np007",
-        "name": "朱箓蛇丹",
-        "type": "consumable",
-        "description": "云苍峰用于治疗蛇毒",
-        "grade": "中品"
-      },
-      {
-        "id": "lcq.item.nh_mountain_herb",
-        "name": "山草药",
-        "description": "一把晒得半干的南荒草药，捣碎了能敷伤口。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_bird_feather",
-        "name": "彩色鸟羽",
-        "description": "几根颜色鲜亮的林鸟长羽。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_salt_lump",
-        "name": "盐巴块",
-        "description": "油纸包着的一小块粗盐。南荒山里缺盐，盐巴有时比铜铢好使。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_torch",
-        "name": "火把",
-        "description": "捆扎好的松明火把。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_feed_cake",
-        "name": "料饼",
-        "description": "压实的豆料饼，掰碎了喂牲口。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_iron_nail",
-        "name": "铁钉",
-        "description": "几枚有点锈的方头铁钉。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_cuizhi_jade_scrap",
-        "name": "翠枝玉碎料",
-        "description": "带几抹绿纹的灰石碎块，不识货的人只当石头。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_flint_set",
-        "name": "火石火镰",
-        "description": "一块火石配一片旧火镰。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_cuizhi_jade_fine",
-        "name": "上等翠枝玉料",
-        "description": "一块绿纹透进石心的翠枝玉料。",
-        "type": "material",
-        "grade": "中品"
-      },
-      {
-        "id": "lcq.item.nh_goose_palm_mushroom",
-        "name": "鹅掌菌",
-        "description": "蕈盖狭长、色泽淡红的蘑菇。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_beech_bark",
-        "name": "山榉树皮",
-        "description": "一把干树皮，嚼起来又苦又涩。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_ghost_horn_shard",
-        "name": "鬼角残片",
-        "description": "一截从根部断裂的黑色弯角。",
-        "type": "material",
-        "grade": "下品"
-      },
-      {
-        "id": "lcq.item.nh_rat_pelt",
-        "name": "鼠皮",
-        "description": "灰褐色、手掌大小的鼠皮，叠得整整齐齐。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_tarnished_trinket",
-        "name": "黯淡旧首饰",
-        "description": "不知传了多少手的旧首饰，早没了光泽。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_pebble_necklace",
-        "name": "石子项链",
-        "description": "几粒磨圆的石子用草绳串成的项链。",
-        "type": "other",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_realgar_sachet",
-        "name": "雄黄避蛊香囊",
-        "description": "一只褪色的布香囊，雄黄味冲鼻。",
-        "type": "other",
-        "grade": "下品"
-      },
-      {
-        "id": "lcq.item.nh_clam_shell",
-        "name": "蚌壳片",
-        "description": "灰黑色的蚌壳，内面有一层珠光。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_orange",
-        "name": "橘子",
-        "description": "宴席上剩下的一个橘子。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_dried_fish",
-        "name": "碧鲮鱼干",
-        "description": "晒得发硬的咸鱼干，一股海腥味。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_tea_brick_corner",
-        "name": "茶饼一角",
-        "description": "掰下来的一角压制茶饼。",
-        "type": "consumable",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_silk_scrap",
-        "name": "丝绸零头",
-        "description": "裁剩下的一截丝绸，滑得握不住。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_crowman_feather",
-        "name": "鸦人黑羽",
-        "description": "一片又长又硬的黑羽，羽根带着腥气。",
-        "type": "material",
-        "grade": "凡品"
-      },
-      {
-        "id": "lcq.item.nh_baiyi_rice_pearl",
-        "name": "米粒湖珠",
-        "description": "一粒米粒大小的白夷湖珠。",
-        "type": "material",
-        "grade": "中品"
+        "id": "liuchao.technique.tiger_style"
       }
     ]
   },
@@ -2163,7 +2025,8 @@
           "lcq.event.s04_04",
           "lcq.event.s04_05",
           "lcq.event.s04_06",
-          "lcq.event.s04_07"
+          "lcq.event.s04_07",
+          "lcq.event.s04_03_ins_le_mingzhu_pan_secret"
         ]
       }
     ],
@@ -2368,7 +2231,7 @@
               ],
               "fallbackText": "黎明的熊耳铺外起了浓雾，鬼王峒武士追着凝羽杀来。你与商队、花苗人合力应战，武二郎双刀斩杀多名敌人。凝羽身上沾的是别人的血，并没有在此受伤；使者早已离开熊耳铺。",
               "forbidden": [
-                "凝羽受伤",
+                "凝羽在此战受外伤",
                 "凝羽中刀",
                 "凝羽重伤"
               ],
@@ -2874,6 +2737,18 @@
                 "names": {
                   "乐明珠": "乐明珠"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "为什么要假扮新娘",
+                  "冒充花苗新娘",
+                  "为什么要蒙着脸",
+                  "你到底是什么来路",
+                  "听清乐明珠",
+                  "交个底",
+                  "问新娘的来历",
+                  "询问她的来历"
+                ]
               }
             }
           ]
@@ -3411,6 +3286,143 @@
               "forbidden": [
                 "云公子"
               ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04_03_ins_le_mingzhu_pan_secret",
+        "name": "乐明珠",
+        "description": "第48章，山涧巨蕈林边，乐明珠刚被认出是光明观堂弟子，两人分烤鹅掌菌。她心虚地求程宗扬：见到潘师姐千万别说在南荒见过她；来南荒行医，被花苗苏荔收留，替花苗当新娘是要刺杀鬼巫王、为民除害；师傅说邪不压正。只描写玩家当前回应：答应保密则松一口气；直说不是喊口号则张口结舌而不生气；吓唬则急着捂嘴、瞪人。不写她放弃刺杀计划，不写潘金莲其他事和后文章节，主持只在识别相关自由回应时提出好感变化，由代码限幅、与模板记忆同回执写入；正文不自行改好感或世界事实，记忆只影响语气。",
+        "objective": "乐明珠",
+        "axisAnchor": "第48章",
+        "critical": false,
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.s04_03_ins_le_mingzhu_pan_secret.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.le_mingzhu"
+        ],
+        "locationId": "liuchao.location.shan_jian",
+        "exploration": {
+          "role": "seed"
+        },
+        "questLineBeatId": "beat.le_mingzhu.s04_03.pan_secret",
+        "sharedExperience": "suppress",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "act.lmz.promise_silence",
+              "label": "答应她：见到潘师姐不提南荒",
+              "actionText": "我答应她：见到潘师姐不提南荒。",
+              "timeCost": 1,
+              "kind": "attempt",
+              "requiresPreparation": [],
+              "requiresPresentCharacterIds": [],
+              "cast": {
+                "present": [
+                  "liuchao.character.le_mingzhu"
+                ]
+              },
+              "sceneLocation": "南荒山涧",
+              "sceneObjective": "第48章，山涧巨蕈林边，乐明珠刚被认出是光明观堂弟子，两人分烤鹅掌菌。她心虚地求程宗扬：见到潘师姐千万别说在南荒见过她；来南荒行医，被花苗苏荔收留，替花苗当新娘是要刺杀鬼巫王、为民除害；师傅说邪不压正。只描写玩家当前回应：答应保密则松一口气；直说不是喊口号则张口结舌而不生气；吓唬则急着捂嘴、瞪人。不写她放弃刺杀计划，不写潘金莲其他事和后文章节，主持只在识别相关自由回应时提出好感变化，由代码限幅、与模板记忆同回执写入；正文不自行改好感或世界事实，记忆只影响语气。",
+              "fallbackText": "你答应见到潘师姐不提南荒。乐明珠松了一口气。",
+              "outcomeText": {
+                "success": "你答应见到潘师姐不提南荒。乐明珠松了一口气。",
+                "partial": "你答应见到潘师姐不提南荒。乐明珠松了一口气。",
+                "failure": "你答应见到潘师姐不提南荒。乐明珠松了一口气。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "保密",
+                  "绝口不提",
+                  "不会告诉潘师姐",
+                  "不告诉潘师姐",
+                  "当从没在南荒见过",
+                  "烂在我肚子里",
+                  "见到潘师姐不提南荒"
+                ],
+                "rejectIf": [
+                  "不替你保密",
+                  "不会替你保密",
+                  "要告诉潘师姐"
+                ]
+              }
+            },
+            {
+              "id": "act.lmz.hard_truth",
+              "label": "直说：邪不压正不是喊口号",
+              "actionText": "我直说：邪不压正不是喊口号。",
+              "timeCost": 1,
+              "kind": "attempt",
+              "requiresPreparation": [],
+              "requiresPresentCharacterIds": [],
+              "cast": {
+                "present": [
+                  "liuchao.character.le_mingzhu"
+                ]
+              },
+              "sceneLocation": "南荒山涧",
+              "sceneObjective": "第48章，山涧巨蕈林边，乐明珠刚被认出是光明观堂弟子，两人分烤鹅掌菌。她心虚地求程宗扬：见到潘师姐千万别说在南荒见过她；来南荒行医，被花苗苏荔收留，替花苗当新娘是要刺杀鬼巫王、为民除害；师傅说邪不压正。只描写玩家当前回应：答应保密则松一口气；直说不是喊口号则张口结舌而不生气；吓唬则急着捂嘴、瞪人。不写她放弃刺杀计划，不写潘金莲其他事和后文章节，主持只在识别相关自由回应时提出好感变化，由代码限幅、与模板记忆同回执写入；正文不自行改好感或世界事实，记忆只影响语气。",
+              "fallbackText": "你直说邪不压正不是只喊口号。乐明珠张口结舌，却没有生气。",
+              "outcomeText": {
+                "success": "你直说邪不压正不是只喊口号。乐明珠张口结舌，却没有生气。",
+                "partial": "你直说邪不压正不是只喊口号。乐明珠张口结舌，却没有生气。",
+                "failure": "你直说邪不压正不是只喊口号。乐明珠张口结舌，却没有生气。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "不是喊口号",
+                  "邪不压正没那么简单",
+                  "光喊邪不压正",
+                  "不是说说就行"
+                ]
+              }
+            },
+            {
+              "id": "act.lmz.tease_with_pan",
+              "label": "拿潘师姐吓唬她",
+              "actionText": "我拿潘师姐吓唬她。",
+              "timeCost": 1,
+              "kind": "attempt",
+              "requiresPreparation": [],
+              "requiresPresentCharacterIds": [],
+              "cast": {
+                "present": [
+                  "liuchao.character.le_mingzhu"
+                ]
+              },
+              "sceneLocation": "南荒山涧",
+              "sceneObjective": "第48章，山涧巨蕈林边，乐明珠刚被认出是光明观堂弟子，两人分烤鹅掌菌。她心虚地求程宗扬：见到潘师姐千万别说在南荒见过她；来南荒行医，被花苗苏荔收留，替花苗当新娘是要刺杀鬼巫王、为民除害；师傅说邪不压正。只描写玩家当前回应：答应保密则松一口气；直说不是喊口号则张口结舌而不生气；吓唬则急着捂嘴、瞪人。不写她放弃刺杀计划，不写潘金莲其他事和后文章节，主持只在识别相关自由回应时提出好感变化，由代码限幅、与模板记忆同回执写入；正文不自行改好感或世界事实，记忆只影响语气。",
+              "fallbackText": "你拿潘师姐吓唬她。乐明珠急着要捂你的嘴，瞪了你一眼。",
+              "outcomeText": {
+                "success": "你拿潘师姐吓唬她。乐明珠急着要捂你的嘴，瞪了你一眼。",
+                "partial": "你拿潘师姐吓唬她。乐明珠急着要捂你的嘴，瞪了你一眼。",
+                "failure": "你拿潘师姐吓唬她。乐明珠急着要捂你的嘴，瞪了你一眼。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "吓唬",
+                  "告诉潘师姐",
+                  "跟潘师姐告状"
+                ],
+                "rejectIf": [
+                  "不告诉",
+                  "不会告诉",
+                  "绝不告诉",
+                  "不吓唬",
+                  "不会吓唬"
+                ]
+              }
             }
           ]
         }

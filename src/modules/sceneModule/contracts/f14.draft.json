@@ -1,0 +1,198 @@
+{
+  "meta": {
+    "id": "combat.f14.dragon_god",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.slay_dragon",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3
+    },
+    "readiness": "draft",
+    "source": "31号 F14；W-52 用户2026-10-05 14:16授权，114·16 → 118·134；用户最新裁定：输即E08，谢艺仅重伤，生死交托付",
+    "pendingDecisions": [],
+    "canonicalConsequences": [
+      {
+        "actorId": "liuchao.character.wu_er_lang",
+        "cause": "第114章段16：用背硬接龙神一爪",
+        "consequence": "功力废去",
+        "revealedAtChapter": 118,
+        "evidence": "第118章段134"
+      },
+      {
+        "actorId": "liuchao.character.xie_yi",
+        "consequence": "重伤不可避免；生死交 xieyi_entrustment，保留长休 IF 与原著死亡线"
+      }
+    ]
+  },
+  "objective": {
+    "text": "杀死被鬼巫王意识占据的龙神",
+    "previewHint": "伤口愈合只是局势压力，不按拍数自动判负",
+    "win": {
+      "party": "dragon",
+      "track": "vit",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "dragon",
+      "side": "opposed",
+      "ref": "liuchao.character.dragon_god",
+      "aliases": [
+        "{{aliases:enemy:lcq.enemy.dragon_god}}",
+        "龙首"
+      ],
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在肆虐",
+            "受创",
+            "垂死",
+            "死亡"
+          ],
+          "ending": {
+            "preset": "eliminated",
+            "finalState": "死亡",
+            "causedBy": "player_side",
+            "ceiling": 3
+          }
+        }
+      ],
+      "instanceId": "combat.f14.dragon_god.dragon",
+      "enemyId": "lcq.enemy.dragon_god"
+    },
+    {
+      "id": "wu_er_lang",
+      "side": "player_side",
+      "ref": "liuchao.character.wu_er_lang"
+    },
+    {
+      "id": "xie_yi",
+      "side": "player_side",
+      "ref": "liuchao.character.xie_yi"
+    },
+    {
+      "id": "le_mingzhu",
+      "side": "player_side",
+      "ref": "liuchao.character.le_mingzhu"
+    }
+  ],
+  "goals": [
+    {
+      "id": "slay",
+      "label": "击破龙脑",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 16
+    }
+  ],
+  "elements": [
+    {
+      "id": "dragon_brain",
+      "kind": "terrain",
+      "label": "龙脑所在处",
+      "source": "114·67–75",
+      "aliases": [
+        "龙脑"
+      ],
+      "verbs": [
+        {
+          "id": "pierce",
+          "aliases": [
+            "刺龙脑"
+          ],
+          "power": 3,
+          "goalTags": [
+            "slay"
+          ]
+        }
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "claw",
+      "party": "dragon",
+      "label": "龙爪",
+      "target": "player",
+      "attack": {
+        "dc": 16
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      },
+      "onBlocked": {
+        "text": "你避开了这一爪"
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "ending",
+      "endingId": "lcq.ending.fail.dragon_essence"
+    }
+  },
+  "closing": {
+    "win": {
+      "text": "龙神死去。陌生军队与涌入的外来力量，只留下眼前所见的现象。",
+      "fixedCosts": [
+        {
+          "id": "wu_back_claw",
+          "target": "wu_er_lang",
+          "effect": "用背硬接龙神一爪，喷血坠地",
+          "statuses": [
+            {
+              "status": "wound.external.back"
+            }
+          ],
+          "anchorText": "第114章段15–17；废功后果到第118章段134才公开"
+        }
+      ],
+      "flags": {
+        "scene.f14.result": "win"
+      },
+      "rewards": []
+    },
+    "lose": {
+      "text": "龙神死去，龙精携着鬼巫王的残念进入你的丹田，这段故事就此终结。",
+      "flags": {
+        "scene.f14.result": "lose"
+      },
+      "rewards": []
+    }
+  },
+  "narration": {
+    "requiredFacts": [
+      "武二郎背伤的起因是第114章用背硬接龙爪，不是其他伤势；当场不提前宣布第118章才揭明的废功。",
+      "外来力量只写现象，不解释来源；陌生军队身份、龙精去向不提前揭示。"
+    ]
+  },
+  "rewardPolicy": {
+    "itemIds": []
+  },
+  "levelContext": {
+    "chapter": 114
+  }
+}

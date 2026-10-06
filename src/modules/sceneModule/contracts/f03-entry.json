@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "id": "combat.f03.escape_followup",
+    "version": 2,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.enter_dong_with_migu",
+      "actionId": "fight_outer_sentry_intercept",
+      "required": true,
+      "requiredFlag": "scene.f03.escaped",
+      "consumedFlag": "scene.f03.entry_battle.done",
+      "ambushAfterStall": 1
+    }
+  },
+  "objective": {
+    "text": "过吊桥后在峡谷外围哨位击退拦路守卫，再去弥骨接待处",
+    "win": {
+      "party": "entry_warriors",
+      "track": "vit",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "entry_warriors",
+      "side": "opposed",
+      "ref": "lcq.enemy.guiwang_warrior",
+      "aliases": [
+        "武士",
+        "拦路者"
+      ],
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "拦路",
+            "受挫",
+            "被击退"
+          ],
+          "ending": {
+            "finalState": "被击退",
+            "ceiling": 2
+          }
+        }
+      ],
+      "instanceId": "combat.f03.escape_followup.entry_warriors"
+    },
+    {
+      "id": "wu",
+      "side": "player_side",
+      "ref": "liuchao.character.wu_er_lang"
+    },
+    {
+      "id": "front",
+      "side": "player_side",
+      "ref": "liuchao.character.yi_biao"
+    }
+  ],
+  "goals": [
+    {
+      "id": "break_through",
+      "label": "击退拦路武士",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 12
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "entry_attack",
+      "party": "entry_warriors",
+      "label": "拦截",
+      "target": "player",
+      "attack": {
+        "dc": 12
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      },
+      "onBlocked": {
+        "text": "你挡开了拦截"
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "text": "外围守卫溃退，商队通过哨位，继续前往弥骨接待处。接待交涉尚未开始。",
+      "flags": {
+        "scene.f03.entry_battle.done": true
+      },
+      "rewards": []
+    },
+    "lose": {
+      "text": "你们被守卫制住，带着伤被押往弥骨接待处。接待交涉尚未开始，后面的路线还要自己记。",
+      "flags": {
+        "scene.f03.entry_battle.done": true
+      },
+      "rewards": [],
+      "fixedCosts": [
+        {
+          "id": "shoulder",
+          "target": "pc",
+          "statuses": [
+            {
+              "status": "wound.external.shoulder"
+            }
+          ],
+          "effect": "肩臂外伤，短期近战与防御下降"
+        },
+        {
+          "id": "ally_wound",
+          "target": "wu",
+          "statuses": [
+            {
+              "status": "wound.external"
+            }
+          ],
+          "effect": "皮肉伤，衣袍破损"
+        },
+        {
+          "id": "front_wound",
+          "target": "front",
+          "statuses": [
+            {
+              "status": "wound.external"
+            }
+          ],
+          "effect": "前锋外伤一处"
+        }
+      ]
+    }
+  },
+  "narration": {
+    "requiredFacts": [
+      "过鸿沟吊桥后的峡谷外围哨位；披犀甲鬼武士收到逃兵报信，截住商队。弥骨和石匠不在场。",
+      "这是唯一追加战；没有好感惩罚、戒备加成或后续难度加成。收束接回原接待步骤，不自动完成。"
+    ]
+  },
+  "levelContext": {
+    "chapter": 86,
+    "variants": {
+      "lcq.enemy.guiwang_warrior": "elite"
+    }
+  }
+}

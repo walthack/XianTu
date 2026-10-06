@@ -238,7 +238,7 @@ export interface ScenarioStepScene {
   fallbackText?: string;
   forceFixed?: boolean;
   previousBeat?: string;
-  ledgerEffects?: { worldFacts?: string[]; names?: Record<string, string>; returnActors?: string[]; injuries?: Record<string, string>; jiuyang?: '一阳'; inventoryTransfers?: ScenarioPlayerCompletionEffects['inventoryTransfers'] };
+  ledgerEffects?: { level?: {to:number;source:string}; worldFacts?: string[]; names?: Record<string, string>; returnActors?: string[]; injuries?: Record<string, string>; jiuyang?: '一阳'; inventoryTransfers?: ScenarioPlayerCompletionEffects['inventoryTransfers'] };
 }
 
 export interface ScenarioPlayerCompletionContract {

@@ -1,3 +1,4 @@
+import { resolveScenarioContent } from './entityCatalog';
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
 
 import type { ScenarioMod } from './schema';
@@ -67,7 +68,7 @@ export function buildExpandScenarioInitialization(
   generatedWorld: WorldInfo,
 ): ExpandScenarioInitialization {
   // Character creation stores the selected Mod in reactive state.
-  mod = JSON.parse(JSON.stringify(mod)) as ScenarioMod;
+  mod = resolveScenarioContent(mod);
 
   if (mod.rules.mode !== 'expand') {
     throw new Error(`Scenario Mod "${mod.manifest.id}" is not configured for expand initialization.`);

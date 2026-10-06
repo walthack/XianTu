@@ -128,7 +128,7 @@
               <h4 class="section-title">3. 背包与物品</h4>
               <div class="section-content">
                 <pre class="code-block">背包:
-  - 灵石: {下品, 中品, 上品, 极品} (用add增减)
+  - 铜铢: {下品, 中品, 上品, 极品} (用add增减)
   - 物品: {物品ID: Item对象}
 
 物品类型:

@@ -1,3 +1,4 @@
+import {trainingRealm} from '../modules/scenarioMods/levelProgression';
 import { rollD20 } from './diceRoller';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
 import type { WorldSimulationAuthorityReceipt } from '@/modules/scenarioMods/worldSimulation';
@@ -509,6 +510,7 @@ function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementPropo
   if (['partial', 'success', 'great_success', 'perfect'].includes(outcome)) {
     effects.push(...cultivationRecoveryEffects(saveData, proposal, outcome));
   }
+  if(proposal.kind==='cultivate'){const realm=trainingRealm(saveData,proposal.actionText,outcome);if(realm)effects.push({key:'角色.属性.境界',action:'set',value:realm});}
   effects.push(...spiritCostEffects(saveData, proposal, outcome));
   if (!['partial', 'failure', 'critical_failure'].includes(outcome)) return effects;
   if (proposal.kind === 'combat') {

@@ -25,7 +25,7 @@ test('preflight only proposes cards for explicit risky actions', async () => {
   const proposal = buildLocalJudgementPreflight('我潜入守卫森严的府邸', save, 1);
   assert.equal(proposal.kind, 'stealth');
   assert.equal(proposal.status, 'pending');
-  assert.ok(proposal.factors.some(factor => factor.label === '六司' && factor.value === 7));
+  assert.ok(proposal.factors.some(factor => factor.label === '六司' && factor.value === 1));
   assert.match(proposal.stakes.greatSuccess, /大幅推进/);
   const queuedAction = composeJudgementAction('继续当前安排', '【操作】双修调息疗伤');
   assert.equal(buildLocalJudgementPreflight(queuedAction, save, 1).kind, 'cultivate');
@@ -126,7 +126,7 @@ test('preflight consumes only explicit source-verified mastered scenario skills'
   const verified = buildLocalJudgementPreflight('我运转九阳神功闭关修炼', save, 1);
   assert.deepEqual(
     verified.factors.filter(factor => factor.source === 'skill'),
-    [{ label: '正典技能·九阳神功', value: 8, source: 'skill' }],
+    [{ label: '正典技能·九阳神功', value: 2, source: 'skill' }],
   );
   assert.equal(
     buildLocalJudgementPreflight('我闭关修炼', save, 1).factors.some(factor => factor.source === 'skill'),

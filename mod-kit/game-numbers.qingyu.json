@@ -1,0 +1,256 @@
+{
+  "version": 1,
+  "levels": {
+    "min": 0,
+    "max": 9,
+    "gapOne": 4,
+    "gapMany": 12,
+    "phases": {
+      "初期": 0,
+      "中期": 1,
+      "后期": 2
+    }
+  },
+  "factors": {
+    "center": 5,
+    "statDivisor": 2,
+    "statCap": 2,
+    "luckDivisor": 3,
+    "luckCap": 1,
+    "fortuneMin": 0,
+    "fortuneMax": 10,
+    "skillCap": 2
+  },
+  "combat": {
+    "baselineDc": 11,
+    "simulation": {
+      "samples": 2000,
+      "seed": 6291462,
+      "seedStride": 7919,
+      "maxBeats": 48,
+      "minWinRate": 0.4,
+      "maxWinRate": 0.75,
+      "excluded": [
+        "combat.f03.escape_followup"
+      ],
+      "playerLevels": {
+        "combat.f10.ghost_king_clash": 3,
+        "combat.f13.ghost_king_final": 3
+      }
+    },
+    "guard": {
+      "durationBeats": 1,
+      "defenseBonus": 3
+    }
+  },
+  "training": {
+    "progressPerLevel": 100,
+    "successProgress": 10,
+    "greatProgress": 20,
+    "failureRetention": 0.5,
+    "storyRaiseStep": 1,
+    "canonExtra": 1
+  },
+  "difficulty": {
+    "defaultPreset": "标准",
+    "presets": {
+      "宽松": {
+        "autoRaiseLevel": true,
+        "trainingCap": "none"
+      },
+      "标准": {
+        "autoRaiseLevel": true,
+        "trainingCap": "canon"
+      },
+      "严苛": {
+        "autoRaiseLevel": false,
+        "trainingCap": "canon"
+      }
+    }
+  },
+  "currency": {
+    "liuchao.currency.tong_zhu": 1,
+    "liuchao.currency.yin_zhu": 100,
+    "liuchao.currency.jin_zhu": 2000
+  },
+  "weights": {
+    "combat": [
+      [
+        "根骨",
+        0.5
+      ],
+      [
+        "灵性",
+        0.3
+      ],
+      [
+        "气运",
+        0.2
+      ]
+    ],
+    "cultivate": [
+      [
+        "悟性",
+        0.5
+      ],
+      [
+        "灵性",
+        0.3
+      ],
+      [
+        "心性",
+        0.2
+      ]
+    ],
+    "craft": [
+      [
+        "悟性",
+        0.5
+      ],
+      [
+        "灵性",
+        0.3
+      ],
+      [
+        "心性",
+        0.2
+      ]
+    ],
+    "explore": [
+      [
+        "气运",
+        0.5
+      ],
+      [
+        "灵性",
+        0.3
+      ],
+      [
+        "悟性",
+        0.2
+      ]
+    ],
+    "social": [
+      [
+        "魅力",
+        0.5
+      ],
+      [
+        "悟性",
+        0.3
+      ],
+      [
+        "心性",
+        0.2
+      ]
+    ],
+    "escape": [
+      [
+        "灵性",
+        0.5
+      ],
+      [
+        "气运",
+        0.3
+      ],
+      [
+        "根骨",
+        0.2
+      ]
+    ],
+    "stealth": [
+      [
+        "灵性",
+        0.5
+      ],
+      [
+        "气运",
+        0.3
+      ],
+      [
+        "心性",
+        0.2
+      ]
+    ],
+    "scheme": [
+      [
+        "悟性",
+        0.5
+      ],
+      [
+        "心性",
+        0.3
+      ],
+      [
+        "魅力",
+        0.2
+      ]
+    ]
+  },
+  "sceneDefaults": {
+    "tiers": {
+      "critSuccessMargin": 15,
+      "critFailMargin": 15,
+      "nat20": {
+        "grounded": "crit",
+        "ungrounded": "crit"
+      },
+      "nat1": "stepDown",
+      "critBonus": [
+        "noExposure",
+        "tagPlus1",
+        "credit",
+        "flourish"
+      ],
+      "failure": {
+        "edge": 2,
+        "spendOneShot": true
+      }
+    },
+    "pricing": {
+      "premium": {
+        "1": 0,
+        "2": 4,
+        "3": 8
+      },
+      "leverCap": 6,
+      "leverMax": 3,
+      "novelty": 1,
+      "tagCash": 2
+    },
+    "attentionCap": {
+      "combat": {
+        "primaryTargets": 1,
+        "rangeClaim": true
+      },
+      "court": {
+        "primaryTargets": 3
+      },
+      "negotiation": {
+        "primaryTargets": 3
+      },
+      "war": {
+        "primaryTargets": 3
+      },
+      "custom": {
+        "primaryTargets": 3
+      }
+    },
+    "allowPlayerHarmAllies": false,
+    "enemyPhase": {
+      "maxRollsPerBeat": 8
+    },
+    "brief": {
+      "maxChars": 1400,
+      "digestKeep": 4
+    }
+  },
+  "historicalPrototype": {
+    "baseModifier": 2,
+    "difficultyShift": {
+      "combat": -1,
+      "escape": -1,
+      "scheme": -1
+    }
+  }
+}

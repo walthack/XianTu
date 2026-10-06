@@ -1311,7 +1311,7 @@
         "description": "主角",
         "role": "主角",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "locationId": "lyl.location.ant_hill",
         "skillIds": [
           "lyl.skill.death_root_sense",
@@ -1406,7 +1406,9 @@
             "category": "clan",
             "role": "少主/大少爷"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.pan_jinlian",
@@ -1414,7 +1416,7 @@
         "description": "身为程宗扬的女侍仙子，她瓜子脸桃花眼，面覆雪白口罩，虽冷艳风流却外冷心软，谨慎多疑中藏着一丝受虐的顺从。",
         "role": "光明观堂高阶医女，鹤羽剑姬，乐明珠的亲师姐",
         "gender": "女",
-        "realm": "化神",
+        "realm": "未知",
         "locationId": "lyl.location.taiquan_core",
         "skillIds": [
           "lyl.skill.poison_techniques"
@@ -1462,7 +1464,9 @@
             "category": "organization",
             "role": "弟子/师姐"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.yin_fulan",
@@ -1470,7 +1474,7 @@
         "description": "尹馥兰曾是青叶教的掌教夫人，如今却沦为程氏内宅的侍奴，她那娇艳含嗔的脸上总带着怯懦的顺从，生怕行差踏错便招来责罚——毕竟，她早已献出一魂一魄，只能以鼎炉之身战战兢兢地侍奉主人。",
         "role": "受制的青叶教掌教夫人",
         "gender": "女",
-        "realm": "筑基",
+        "realm": "未知",
         "locationId": "lyl.location.taiquan_core",
         "affiliations": [
           {
@@ -1522,7 +1526,9 @@
             "处境受制时谨慎自保"
           ],
           "origin": "掌教夫人（后沦为性奴）"
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lyl.character.he_yilian",
@@ -1530,7 +1536,7 @@
         "description": "洛帮帮主何漪莲生就一副娇艳面孔，面上总带着柔媚笑意，行事却极尽精明谨慎，暗藏心计；她甘为程宗扬奴婢，看似温婉顺从，实则步步为营，将洛帮上下打理得滴水不漏。",
         "role": "洛帮帮主",
         "gender": "女",
-        "realm": "筑基",
+        "realm": "未知",
         "locationId": "lyl.location.taiquan_core",
         "skillIds": [],
         "techniqueIds": [],
@@ -1576,7 +1582,9 @@
             "category": "organization",
             "role": "侍奴/从侍奴"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.yu_bai_ying",
@@ -1584,7 +1592,7 @@
         "description": "瑶池宗美女杀手虞白樱，银发如丝垂落玉冠，雪肤花貌艳光逼人。刚被程宗扬从行淫兽爪下救出，身段曼妙曲线毕露，与他之间是敌是友尚难分明。",
         "role": "女杀手，虞紫薇的双胞胎姐姐",
         "gender": "女",
-        "realm": "元婴",
+        "realm": "未知",
         "locationId": "lyl.location.ant_hill",
         "skillIds": [
           "lyl.skill.duanyue_xian"
@@ -1629,7 +1637,9 @@
             "category": "organization",
             "role": "杀手"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xu_junfang",
@@ -1637,7 +1647,7 @@
         "description": "徐君房着一袭玄青方士袍，手持龟甲，面上挂着谄媚又狡黠的笑，既是秦国派来的油滑使者，虽胆小如鼠却总在算计中保住性命与忠义。",
         "role": "向导",
         "gender": "男",
-        "realm": "练气",
+        "realm": "未知",
         "locationId": "lyl.location.ant_hill",
         "skillIds": [],
         "techniqueIds": [],
@@ -1674,7 +1684,9 @@
           ],
           "origin": "太泉古阵当地向导/方士，尚无官职",
           "appearance": "方士打扮，常携龟甲、水晶球等术具"
-        }
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xiao_yao_yi",
@@ -1682,7 +1694,7 @@
         "description": "萧遥逸风度翩翩，身居江州刺史之职，修为高深，但此刻受伤虚弱，他的眼里仍燃着对赤阳圣果的执着——那是他唯一的救赎。",
         "role": "伙伴",
         "gender": "男",
-        "realm": "化神",
+        "realm": "未知",
         "locationId": "lyl.location.taiquan_core",
         "skillIds": [
           "lyl.skill.folding_fan_art"
@@ -1763,7 +1775,9 @@
             "category": "clan",
             "role": "萧氏子弟"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.wu_er_lang",
@@ -1771,7 +1785,7 @@
         "description": "武二生得魁梧壮实，膀大腰圆如铁塔一般，正与萧遥逸结伴四处搜寻程宗扬的下落，粗犷豪爽的笑声常隔三条街就能听见。",
         "role": "伙伴",
         "gender": "男",
-        "realm": "筑基",
+        "realm": "未知",
         "locationId": "lyl.location.taiquan_core",
         "skillIds": [
           "lyl.skill.strong_fists",
@@ -1829,7 +1843,9 @@
             "category": "organization",
             "role": "成员"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xiao_zi",
@@ -1837,7 +1853,7 @@
         "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
         "role": "伙伴",
         "gender": "女",
-        "realm": "金丹",
+        "realm": "未知",
         "locationId": "lyl.location.taiquan_core",
         "skillIds": [
           "lyl.skill.yaksha_claw"
@@ -1917,7 +1933,9 @@
             "category": "organization",
             "role": "岳帅遗孤"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.shang_zhen_yu",
@@ -1970,7 +1988,7 @@
           ],
           "origin": "鸩羽殇侯·殇振羽（黑魔海/殇侯门「毒宗」头目，令人闻名色变）。一生数重身份：北寺狱囚徒刘病已→挟书求学的太学生刘次卿→仗剑游侠儿刘谋→离帝位仅一步之遥的阳武侯刘询→隐居化名「朱老头」(诨名朱八八)"
         },
-        "realm": "合体",
+        "realm": "未知",
         "gender": "男",
         "affiliations": [
           {
@@ -1978,7 +1996,9 @@
             "category": "organization",
             "role": "首领/侯爷"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.wang_hui",
@@ -2007,7 +2027,9 @@
             "category": "organization",
             "role": "内宅女眷/账房"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.bai_xian_er",
@@ -2030,7 +2052,7 @@
             "【身体】初次/性经历在文本中有暗示（如‘含羞带痛的娇靥’，‘二爷刚进去一半她就要死要活’）；敏感部位等无直接描写"
           ]
         },
-        "realm": "金丹",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "lyg.faction.danxia_sect",
@@ -2042,7 +2064,9 @@
             "category": "organization",
             "role": "老盟主之女"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ding_zhi_xiong",
@@ -2074,7 +2098,9 @@
             "category": "sect",
             "role": "弟子"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.mo_ye",
@@ -2106,7 +2132,9 @@
             "category": "organization",
             "role": "会首"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xi_ming_bo",
@@ -2134,7 +2162,9 @@
             "category": "clan",
             "role": "大主灶"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.mo_ru_lin",
@@ -2159,7 +2189,9 @@
             "category": "organization",
             "role": "岳帅门下旧部（自称忠心耿耿）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.fen_wu_chen",
@@ -2184,7 +2216,9 @@
             "category": "organization",
             "role": "长老"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.mo_feng_lin",
@@ -2205,7 +2239,7 @@
           "race": "人族",
           "origin": "天策府选锋营成员（后背叛）、投靠阉党王守澄门下"
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.yao_chi_zong",
@@ -2217,7 +2251,9 @@
             "category": "military",
             "role": "法师"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.fu_an",
@@ -2244,7 +2280,9 @@
             "category": "organization",
             "role": "管家"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.liu_zhao",
@@ -2262,7 +2300,7 @@
           "race": "人族",
           "origin": "鹏翼社成员"
         },
-        "realm": "金丹",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.jin_jun",
@@ -2274,7 +2312,9 @@
             "category": "organization",
             "role": "护卫（护卫高智商/高衙内）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ying_su_nv",
@@ -2301,14 +2341,16 @@
             "【身体】蜜穴湿腻，阴蒂鼓起有指尖大小，色泽赤红；双乳丰挺，乳头系银铃或硬翘如葡萄；雪臀丰满，臀肉白滑；体表有罂粟花海纹身"
           ]
         },
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xe6bd0066c9",
             "category": "organization",
             "role": "侍奴"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.yu_feng_wen",
@@ -2332,7 +2374,9 @@
             "category": "organization",
             "role": "学子"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.zheng_zi_qing",
@@ -2354,7 +2398,9 @@
             "category": "organization",
             "role": "学子"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.dong_xuan",
@@ -2371,7 +2417,7 @@
           "race": "人族",
           "origin": "配角"
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
@@ -2383,7 +2429,9 @@
             "category": "organization",
             "role": "廷尉"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.jiang_an_shi",
@@ -2404,7 +2452,7 @@
             "【身体】胸腹中数刀，皮肤冰冷"
           ]
         },
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.xing_yue_hu",
@@ -2416,7 +2464,9 @@
             "category": "organization",
             "role": "洛都分社管事"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.tang_ji_chen",
@@ -2428,7 +2478,9 @@
           "race": "人族",
           "origin": "吕氏门下管事/家臣"
         },
-        "affiliations": []
+        "affiliations": [],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.mao_yan_shou",
@@ -2453,7 +2505,9 @@
             "category": "organization",
             "role": "画师/丹青师"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.feng_zi_dou",
@@ -2492,7 +2546,9 @@
             "category": "state",
             "role": "羽林军将"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.xiang_cheng_jun",
@@ -2525,7 +2581,9 @@
             "category": "state",
             "role": "襄城君（封号）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.tang_heng",
@@ -2557,7 +2615,9 @@
             "category": "organization",
             "role": "天子心腹"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.dong_fang_man_qian",
@@ -2584,14 +2644,16 @@
             "【身体】唇上小胡子"
           ]
         },
-        "realm": "金丹",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.han_guo_chao_ting",
             "category": "state",
             "role": "执戟郎"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.dan_chao",
@@ -2620,7 +2682,9 @@
             "category": "organization",
             "role": "内侍/皇后近侍"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.jiang_ying_qiu",
@@ -2639,14 +2703,16 @@
           "race": "人族",
           "origin": "程府女管事/女傅"
         },
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "lyl.faction.changqiu",
             "category": "organization",
             "role": "女傅"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.han_ding_guo",
@@ -2663,7 +2729,7 @@
           "race": "人族",
           "origin": "军人/将领"
         },
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.hei_mo_hai",
@@ -2675,7 +2741,9 @@
             "category": "state",
             "role": "建威将军"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.yun_dan_liu",
@@ -2704,7 +2772,9 @@
             "category": "organization",
             "role": "女侍卫长"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.yun_ru_yao",
@@ -2733,7 +2803,9 @@
             "category": "organization",
             "role": "妻室"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.zhuo_yunjun",
@@ -2762,7 +2834,7 @@
             "程宗扬在沐羽城的新年庆典中，辨认出云中仙子正是仇敌卓云君，决定暗中复仇。"
           ]
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -2784,7 +2856,9 @@
             "category": "organization",
             "role": "侍奴"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ruan_xiang_ning",
@@ -2813,7 +2887,9 @@
             "category": "organization",
             "role": "禁军教头林冲之妻"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.zhao_he_de",
@@ -2846,7 +2922,9 @@
             "category": "state",
             "role": "昭仪（天子刘骜下诏入宫）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.lv_zhi",
@@ -2873,7 +2951,9 @@
             "category": "organization",
             "role": "核心成员"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.jing_li",
@@ -2907,7 +2987,9 @@
             "category": "organization",
             "role": "弃徒"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -2953,7 +3035,9 @@
             "category": "organization",
             "role": "御姬奴（凝奴）"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.ruan_xiang_lin",
@@ -2981,7 +3065,9 @@
             "category": "organization",
             "role": "弟子"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.zhao_feiyan",
@@ -3011,7 +3097,9 @@
             "category": "organization",
             "role": "宫主/皇后"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "lcq.character.yue_shuang",
@@ -3045,7 +3133,7 @@
             "孟非卿命程宗扬率一营三十人及雪隼佣兵团六百人赴烈山三川口，保护月霜，避免其擅自冲锋，并授予指挥权与计时器。"
           ]
         },
-        "realm": "元婴",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.tai_yi_zhen_zong",
@@ -3062,7 +3150,9 @@
             "category": "organization",
             "role": "岳帅遗孤"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.jian_yu_ji",
@@ -3081,7 +3171,7 @@
             "善隐藏"
           ]
         },
-        "realm": "炼虚",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.hei_mo_hai",
@@ -3093,7 +3183,9 @@
             "category": "sect",
             "role": "巫宗教徒"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -3133,7 +3225,9 @@
             "category": "organization",
             "role": "弟子"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -3162,7 +3256,7 @@
             "殇侯把秦桧、吴三桂等手下交给程宗扬差遣。秦桧恭敬改称程宗扬\"主公\"：\"能协助主公行事，是我等的福分。\"自此成为程宗扬身边第一智囊。"
           ]
         },
-        "realm": "化神",
+        "realm": "未知",
         "affiliations": [
           {
             "factionId": "liuchao.faction.hei_mo_hai",
@@ -3179,7 +3273,9 @@
             "category": "organization",
             "role": "随程宗扬经商的随从"
           }
-        ]
+        ],
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       }
     ],
     "playerRelationships": [
@@ -3429,454 +3525,151 @@
     ]
   },
   "content": {
+    "items": [
+      {
+        "id": "lyl.item.coral_dagger"
+      },
+      {
+        "id": "lyl.item.np001"
+      },
+      {
+        "id": "lyl.item.np003"
+      },
+      {
+        "id": "lyl.item.np004"
+      },
+      {
+        "id": "lyl.item.np005"
+      },
+      {
+        "id": "lyl.item.np007"
+      },
+      {
+        "id": "lyl.item.np010"
+      },
+      {
+        "id": "lyl.item.np011"
+      },
+      {
+        "id": "lyl.item.np013"
+      },
+      {
+        "id": "lyl.item.np014"
+      },
+      {
+        "id": "lyl.item.np015"
+      },
+      {
+        "id": "lyl.item.np016"
+      },
+      {
+        "id": "lyl.item.np017"
+      },
+      {
+        "id": "lyl.item.np018"
+      },
+      {
+        "id": "lyl.item.np022"
+      },
+      {
+        "id": "lyl.item.np023"
+      },
+      {
+        "id": "lyl.item.np024"
+      },
+      {
+        "id": "lyl.item.np025"
+      },
+      {
+        "id": "lyl.item.np026"
+      },
+      {
+        "id": "lyl.item.np030"
+      },
+      {
+        "id": "lyl.item.np032"
+      },
+      {
+        "id": "lyl.item.np033"
+      },
+      {
+        "id": "lyl.item.np034"
+      },
+      {
+        "id": "lyl.item.np035"
+      },
+      {
+        "id": "lyl.item.np036"
+      }
+    ],
     "skills": [
       {
-        "id": "lyl.skill.death_root_sense",
-        "name": "生死根感应",
-        "description": "感应死亡气息，增强对死气的操纵。",
-        "type": "异能",
-        "effects": [
-          "提升对死亡威胁的感知",
-          "可操纵少量死气"
-        ]
+        "id": "lyl.skill.death_root_sense"
       },
       {
-        "id": "lyl.skill.coral_dagger_art",
-        "name": "珊瑚匕首术",
-        "description": "使用珊瑚匕首的技巧，锋利无匹，可斩断赤阳藤。",
-        "type": "刀法",
-        "effects": [
-          "切割坚韧物品",
-          "提升近战攻击力"
-        ]
+        "id": "lyl.skill.coral_dagger_art"
       },
       {
-        "id": "lyl.skill.duanyue_xian",
-        "name": "断月弦",
-        "description": "虞白樱的独门暗器丝弦，锋利如刀。",
-        "type": "暗器",
-        "effects": [
-          "远程攻击",
-          "切割"
-        ]
+        "id": "lyl.skill.duanyue_xian"
       },
       {
-        "id": "lyl.skill.poison_techniques",
-        "name": "毒术",
-        "description": "潘金莲的用毒技巧。",
-        "type": "毒法",
-        "effects": [
-          "施毒",
-          "解毒"
-        ]
+        "id": "lyl.skill.poison_techniques"
       },
       {
-        "id": "lyl.skill.folding_fan_art",
-        "name": "折扇术",
-        "description": "萧遥逸的折扇战斗技巧。",
-        "type": "武器技法",
-        "effects": [
-          "近战攻击",
-          "远程投掷"
-        ]
+        "id": "lyl.skill.folding_fan_art"
       },
       {
-        "id": "lyl.skill.strong_fists",
-        "name": "铁拳",
-        "description": "武二的蛮力拳法。",
-        "type": "拳法",
-        "effects": [
-          "高额物理伤害"
-        ]
+        "id": "lyl.skill.strong_fists"
       },
       {
-        "id": "lyl.skill.yaksha_claw",
-        "name": "夜叉爪",
-        "description": "小紫的妖族爪技，可召唤妖爪。",
-        "type": "妖术",
-        "effects": [
-          "远程攻击",
-          "夺取物品"
-        ]
+        "id": "lyl.skill.yaksha_claw"
       },
       {
-        "id": "lyl.skill.np002",
-        "name": "房中术",
-        "description": "程宗扬习太乙真宗房中术"
+        "id": "lyl.skill.np002"
       },
       {
-        "id": "lyl.skill.np006",
-        "name": "九阳神功",
-        "description": "程宗扬在江州城外使用九阳神功，被蔺采泉知晓"
+        "id": "lyl.skill.np006"
       },
       {
-        "id": "lyl.skill.np008",
-        "name": "纸币发行权",
-        "description": "程宗扬通过两条章程获得宋国纸币发行权，即纸币必须用于支付赋税，且发行数量需经程氏钱庄认可。"
+        "id": "lyl.skill.np008"
       },
       {
-        "id": "lyl.skill.np009",
-        "name": "太一经",
-        "description": "程宗扬通过阮香凝发现太一经的淬炼法门。"
+        "id": "lyl.skill.np009"
       },
       {
-        "id": "lyl.skill.np019",
-        "name": "生死根",
-        "description": "程宗扬将生死根反向引导，吸收剑玉姬的外来剑气，引发丹田异变。气轮破碎后重凝，真元大幅提升但变得浑沌。"
+        "id": "lyl.skill.np019"
       }
     ],
     "techniques": [
       {
-        "id": "lyl.technique.taiji_bridge",
-        "name": "太极桥",
-        "description": "程宗扬主修的功法，以阴阳鱼为基础。",
-        "grade": "地级",
-        "skillIds": [
-          "lyl.skill.death_root_sense",
-          "lyl.skill.coral_dagger_art"
-        ],
-        "techniqueEffects": {
-          "修炼速度加成": 0.32,
-          "属性加成": {
-            "悟性": 4,
-            "灵性": 2
-          }
-        }
+        "id": "lyl.technique.taiji_bridge"
       },
       {
-        "id": "lyl.technique.yin_yang_fish_reaction",
-        "name": "阴阳鱼反制",
-        "description": "利用丹田中阴阳鱼的力量进行防御和反击，尚未完全熟练。",
-        "grade": "玄级",
-        "skillIds": [],
-        "techniqueEffects": {
-          "修炼速度加成": 0.24,
-          "属性加成": {
-            "悟性": 3,
-            "灵性": 2
-          }
-        }
+        "id": "lyl.technique.yin_yang_fish_reaction"
       },
       {
-        "id": "lyl.technique.np012",
-        "name": "纸币（程氏钱庄）",
-        "description": "程氏钱庄发行三批纸币，总计二百四十三万金铢流通。",
-        "grade": "极品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.48,
-          "属性加成": {
-            "悟性": 6,
-            "灵性": 3
-          }
-        }
+        "id": "lyl.technique.np012"
       },
       {
-        "id": "lyl.technique.np020",
-        "name": "五虎断门刀",
-        "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
-        "grade": "中品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.16,
-          "属性加成": {
-            "悟性": 2,
-            "灵性": 1
-          }
-        }
+        "id": "lyl.technique.np020"
       },
       {
-        "id": "lyl.technique.np021",
-        "name": "水泥技术",
-        "description": "水泥技术由程宗扬掌握，星月湖大营负责安全",
-        "grade": "仙品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.48,
-          "属性加成": {
-            "悟性": 6,
-            "灵性": 3
-          }
-        }
+        "id": "lyl.technique.np021"
       },
       {
-        "id": "lyl.technique.np027",
-        "name": "生死根",
-        "description": "生死根能吞噬死气",
-        "grade": "中品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.16,
-          "属性加成": {
-            "悟性": 2,
-            "灵性": 1
-          }
-        }
+        "id": "lyl.technique.np027"
       },
       {
-        "id": "lyl.technique.np028",
-        "name": "九阳神功",
-        "description": "九阳神功是程宗扬的内功",
-        "grade": "中品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.16,
-          "属性加成": {
-            "悟性": 2,
-            "灵性": 1
-          }
-        }
+        "id": "lyl.technique.np028"
       },
       {
-        "id": "lyl.technique.np029",
-        "name": "太一经",
-        "description": "太一经是程宗扬的内功",
-        "grade": "中品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.16,
-          "属性加成": {
-            "悟性": 2,
-            "灵性": 1
-          }
-        }
+        "id": "lyl.technique.np029"
       },
       {
-        "id": "lyl.technique.np031",
-        "name": "断月弦",
-        "description": "断月弦是虞白樱的武器",
-        "grade": "下品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.08,
-          "属性加成": {
-            "悟性": 1,
-            "灵性": 1
-          }
-        }
+        "id": "lyl.technique.np031"
       },
       {
-        "id": "lyl.technique.np037",
-        "name": "守阵力士",
-        "description": "小紫改造守阵力士，使其能活动",
-        "grade": "中品",
-        "techniqueEffects": {
-          "修炼速度加成": 0.16,
-          "属性加成": {
-            "悟性": 2,
-            "灵性": 1
-          }
-        }
-      }
-    ],
-    "items": [
-      {
-        "id": "lyl.item.coral_dagger",
-        "name": "珊瑚匕首",
-        "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。",
-        "type": "weapon",
-        "grade": "仙品",
-        "skillIds": [
-          "lyl.skill.coral_dagger_art"
-        ],
-        "techniqueId": "lyl.technique.taiji_bridge",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      {
-        "id": "lyl.item.np001",
-        "name": "鬼牙",
-        "type": "other",
-        "description": "程宗扬从萧遥逸处获得鬼牙",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np003",
-        "name": "屠龙刀",
-        "type": "weapon",
-        "description": "林冲以一千贯买下屠龙刀，刀由珊瑚铁打造，价值万金。",
-        "grade": "极品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      {
-        "id": "lyl.item.np004",
-        "name": "龙睛玉",
-        "type": "material",
-        "description": "龙睛玉用于铁傀儡，一块支撑不到二十分钟。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np005",
-        "name": "金瓶梅",
-        "type": "other",
-        "description": "程宗扬从悦生堂得到《金瓶梅》插图版。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np007",
-        "name": "雷霆刀",
-        "type": "weapon",
-        "description": "程宗扬从飞鸟熊藏处获得刀柄，可凝成刀刃",
-        "grade": "仙品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      {
-        "id": "lyl.item.np010",
-        "name": "纸币",
-        "type": "other",
-        "description": "程宗扬发行纸币，用于经济战。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np011",
-        "name": "手雷",
-        "type": "material",
-        "description": "龙睛玉手雷，由冯源使用",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np013",
-        "name": "通源行",
-        "type": "other",
-        "description": "程宗扬接手通源行，成为盘江程氏产业。",
-        "grade": "仙品"
-      },
-      {
-        "id": "lyl.item.np014",
-        "name": "武穆王府",
-        "type": "other",
-        "description": "程宗扬购得武穆王府，计划拆除改建。",
-        "grade": "仙品"
-      },
-      {
-        "id": "lyl.item.np015",
-        "name": "药丸（殇侯制）",
-        "type": "consumable",
-        "description": "程宗扬用其控制黄氏，疑似摇头丸与麻古混合。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np016",
-        "name": "袈裟符文",
-        "type": "consumable",
-        "description": "程宗扬从静善处誊录，记载叵密与十方丛林冲突内幕。",
-        "grade": "仙品"
-      },
-      {
-        "id": "lyl.item.np017",
-        "name": "雷射战刀",
-        "type": "weapon",
-        "description": "程宗扬从高俅处获得雷射战刀，可随修为变化",
-        "grade": "中品",
-        "attributeBonus": {
-          "气血上限": 30,
-          "后天六司": {
-            "根骨": 4
-          }
-        }
-      },
-      {
-        "id": "lyl.item.np018",
-        "name": "雷射宝刀",
-        "type": "weapon",
-        "description": "程宗扬藏于怀中，电光闪烁，突然刺穿剑玉姬手掌。",
-        "grade": "中品",
-        "attributeBonus": {
-          "气血上限": 30,
-          "后天六司": {
-            "根骨": 4
-          }
-        }
-      },
-      {
-        "id": "lyl.item.np022",
-        "name": "赤阳圣果",
-        "type": "other",
-        "description": "赤阳圣果为假货（老萝卜），由徐君房制作。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np023",
-        "name": "盘江程氏股票",
-        "type": "other",
-        "description": "盘江程氏股票每股价值五万金铢，可兑换资产。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np024",
-        "name": "龙鳞盾",
-        "type": "armor",
-        "description": "龙鳞盾为程宗扬携带的防具。",
-        "grade": "中品",
-        "attributeBonus": {
-          "气血上限": 80,
-          "后天六司": {
-            "根骨": 2
-          }
-        }
-      },
-      {
-        "id": "lyl.item.np025",
-        "name": "汽车",
-        "type": "other",
-        "description": "程宗扬在太泉古阵第一层发现并驾驶一辆汽车，使用电能驱动，可日行千里。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np026",
-        "name": "岳鹏举钥匙",
-        "type": "other",
-        "description": "程宗扬持有岳鹏举留下的钥匙，指向太泉熊谷一四七五。",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np030",
-        "name": "钓鱼竿（白龙鱼竿）",
-        "type": "other",
-        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
-        "grade": "仙品"
-      },
-      {
-        "id": "lyl.item.np032",
-        "name": "铁轨",
-        "type": "material",
-        "description": "武二郎在熊谷地铁站拆下两根铁轨作为武器，重约二三百斤。",
-        "grade": "下品"
-      },
-      {
-        "id": "lyl.item.np033",
-        "name": "都卢难旦妖铃",
-        "type": "material",
-        "description": "小紫用玉瓶装阴魂。",
-        "grade": "极品"
-      },
-      {
-        "id": "lyl.item.np034",
-        "name": "珊瑚紫蛇",
-        "type": "material",
-        "description": "小紫用龙睛玉和阴魂制成可操控的机械",
-        "grade": "极品"
-      },
-      {
-        "id": "lyl.item.np035",
-        "name": "春药",
-        "type": "consumable",
-        "description": "小紫用春药破解阮香凝脑中禁制",
-        "grade": "中品"
-      },
-      {
-        "id": "lyl.item.np036",
-        "name": "青冥琥珀",
-        "type": "material",
-        "description": "青冥琥珀为天青色，传说是天龙的碧血所化，比龙睛玉还少见。",
-        "grade": "下品"
+        "id": "lyl.technique.np037"
       }
     ]
   },

@@ -1,3 +1,5 @@
+import {entityName,entityRecognitionLabel} from './namedEntities';
+import {entityText} from './namedEntities';
 /**
  * Canon Rail keeps the default Six Dynasties route on its source-backed beats.
  *
@@ -66,42 +68,42 @@ const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       {
         eventId: 'lcq.event.s01_01',
         mustReach: '程宗扬与段强在航班上遭紫色雷电击中，并从现代世界消失、坠入异界草原。',
-        completionEvidence: ['程宗扬', '段强', '紫色雷电'],
+        completionEvidence: [entityName("character","liuchao.character.cheng_zongyang"), entityName("character","lcq.character.duan_qiang"), '紫色雷电'],
         forbiddenInCanon: ['改写穿越原因', '替换同行者', '提前抵达后续地点'],
         allowedElaboration: '可补足机舱异象、坠落后的感官与两人的即时应对；不得另造穿越原因或改写同行者。',
       },
       {
         eventId: 'lcq.event.s01_02',
         mustReach: '段强在异界草原遭半兽人袭击身亡，程宗扬被迫独自求生。',
-        completionEvidence: ['段强', '半兽人', '射杀'],
+        completionEvidence: [entityName("character","lcq.character.duan_qiang"), '半兽人', '射杀'],
         forbiddenInCanon: ['段强存活', '段强失踪', '替换死亡结果'],
         allowedElaboration: '可补足遭袭过程、程宗扬的反应与脱险衔接；不得让段强存活、失踪或换成其他结局。',
       },
       {
         eventId: 'lcq.event.s01_03',
         mustReach: '程宗扬在战场与受伤、女扮男装的月霜初遇，冲突由误触其胸部引发。',
-        completionEvidence: ['月霜', '初遇', '受伤'],
+        completionEvidence: [entityName("character","lcq.character.yue_shuang"), '初遇', '受伤'],
         forbiddenInCanon: ['提前揭露月霜身世', '提前引入后续人物'],
         allowedElaboration: '可补足战场混乱、彼此误解与短暂协作；不得提前揭露不在场人物的私密背景。',
       },
       {
         eventId: 'lcq.event.s01_04',
         mustReach: '卓云君施救，太乙真宗诸人介入并击退兽蛮，使程宗扬与月霜脱险。',
-        completionEvidence: ['卓云君', '兽蛮', '脱险'],
+        completionEvidence: [entityName("character","liuchao.character.zhuo_yunjun"), '兽蛮', '脱险'],
         forbiddenInCanon: ['无关人物获得太乙身份', '改写救援结果'],
         allowedElaboration: '可补足救援过程、战后安置与人物反应；不得把无关人物写成太乙弟子、教御或道门中人。',
       },
       {
         eventId: 'lcq.event.s01_06',
         mustReach: '月霜寒毒危急，真阳进入其体内并压制、化解寒毒。',
-        completionEvidence: ['月霜', '寒毒', '真阳'],
+        completionEvidence: [entityName("character","lcq.character.yue_shuang"), '寒毒', '真阳'],
         forbiddenInCanon: ['以替代疗法跳过寒毒', '将本拍作废'],
         allowedElaboration: '可补足伤势危机、救治的前因后果与事后关系张力；不得以“作废”或替代疗法跳过此一既定结果。',
       },
       {
         eventId: 'lcq.event.s01_05',
         mustReach: '王哲为程宗扬筑基疗伤，授其九阳神功口诀，程宗扬以自创文字记录。',
-        completionEvidence: ['王哲', '筑基', '九阳神功'],
+        completionEvidence: [entityName("character","lcq.character.wang_zhe"), '筑基', '九阳神功'],
         forbiddenInCanon: ['提前扩写下一关', '改写传功结果'],
         allowedElaboration: '可补足帅帐会面、问答与传功后的余波；不得提前扩写后续关卡剧情。',
       },
@@ -136,7 +138,7 @@ const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       {
         eventId: 'lcq.event.s02_01',
         mustReach: '王哲向程宗扬交付锦囊，并托付太泉祭祀与守护月霜之事。',
-        completionEvidence: ['王哲', '锦囊', '月霜'],
+        completionEvidence: [entityName("character","lcq.character.wang_zhe"), '锦囊', entityName("character","lcq.character.yue_shuang")],
         forbiddenInCanon: ['改写王哲的托付', '提前泄露太泉秘密'],
         allowedElaboration: '可补足帅帐问答、传功后的余波和临别反应；不得提前演出后续战局。',
       },
@@ -150,14 +152,14 @@ const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       {
         eventId: 'lcq.event.s02_02',
         mustReach: '左武第一军团覆灭，王哲留下以九阳神功牺牲，程宗扬带月霜离开。',
-        completionEvidence: ['王哲', '左武', '九阳'],
+        completionEvidence: [entityName("character","lcq.character.wang_zhe"), '左武', '九阳'],
         forbiddenInCanon: ['王哲存活', '左武军完整撤离', '替代牺牲结果'],
         allowedElaboration: '可补足撤离抉择、战场余波与人物反应；不得跳过王哲的托付与牺牲。',
       },
       {
         eventId: 'lcq.event.s02_04',
         mustReach: '程宗扬在五原城被误认为逃奴，遭殴打并被烙上奴隶印记。',
-        completionEvidence: ['五原城', '奴隶', '烙印'],
+        completionEvidence: [entityName("location","liuchao.location.wuyuan"), '奴隶', '烙印'],
         forbiddenInCanon: ['提前解除奴隶印记', '避免被误抓的既定结果'],
         allowedElaboration: '可补足入城过程、误会升级和程宗扬的应对；不得改写烙印已经落下的事实。',
       },
@@ -171,84 +173,84 @@ const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
       {
         eventId: 'lcq.event.s02_06',
         mustReach: '程宗扬识破苏妲己伪装后遭囚禁，并被追问霓龙丝情报。',
-        completionEvidence: ['苏妲己', '囚禁', '霓龙丝'],
+        completionEvidence: [entityName("character","liuchao.character.su_daji"), '囚禁', '霓龙丝'],
         forbiddenInCanon: ['将囚禁直接改写为合作交易', '提前解决商馆冲突'],
         allowedElaboration: '可补足对话试探、商馆氛围和信息博弈；不得替程宗扬直接脱身。',
       },
       {
         eventId: 'lcq.event.ningyu_enters_gamble',
         mustReach: '凝羽奉苏妲己之命进入赌局，程宗扬当面认清她被差遣入局的处境。',
-        completionEvidence: ['凝羽', '苏妲己', '打赌'],
+        completionEvidence: [entityName("character","liuchao.character.ning_yu"), entityName("character","liuchao.character.su_daji"), '打赌'],
         forbiddenInCanon: ['改写凝羽入局的主使', '把凝羽写成被卖之人', '提前写成卖身契已签'],
         allowedElaboration: '可补足差遣当场、试装入局与程宗扬的当面回应；不得预写落败签契，也不得改写入局主使。',
       },
       {
         eventId: 'lcq.event.sudaji_south_pact',
         mustReach: '程宗扬与苏妲己订下三个月内赴南荒采集霓龙丝、逾期受炮烙的约定。',
-        completionEvidence: ['霓龙丝', '炮烙', '南荒'],
+        completionEvidence: ['霓龙丝', entityName("ending","lcq.ending.death.paolao"), '南荒'],
         forbiddenInCanon: ['改写三个月期限', '取消炮烙违约后果', '把霓龙丝产地写成已核实的世界事实'],
         allowedElaboration: '可补足谈判语气、期限与炮烙威胁的当场压力；不得改写约定本身，也不得把程宗扬的产地说辞坐实为已探明的产地。',
       },
       {
         eventId: 'lcq.event.gamble_bond_signed',
         mustReach: '苏妲己作弊加速刻香，程宗扬赌局落败，被迫签下卖身契，成为白湖商馆奴隶。',
-        completionEvidence: ['刻香', '卖身契', '苏妲己'],
+        completionEvidence: ['刻香', '卖身契', entityName("character","liuchao.character.su_daji")],
         forbiddenInCanon: ['改写落败结果', '把卖身契写成凝羽被卖', '让旁人代签或赌局作废'],
         allowedElaboration: '可补足刻香计时、作弊迹象与签字现场；不得把被卖之人改成凝羽，也不得让程宗扬赢下此局。',
       },
       {
         eventId: 'lcq.event.charge_sudaji_fee',
         mustReach: '程宗扬在帮苏妲己取出器物前，谈定并预支六十金铢报酬。',
-        completionEvidence: ['六十金铢', '苏妲己', '工钱'],
+        completionEvidence: ['六十金铢', entityName("character","liuchao.character.su_daji"), '工钱'],
         forbiddenInCanon: ['改写六十金铢数额', '改写成先帮忙后空口赊账', '提前扩写南荒行程'],
         allowedElaboration: '可补足开价、写条据与取物前后的拉扯；不得改写先定价再动手的顺序。',
       },
       {
         eventId: 'lcq.event.free_ajiman',
         mustReach: '程宗扬取得阿姬曼身契并当面撕毁，随即遭遇出城路线被女侍卫搜查。',
-        completionEvidence: ['阿姬曼', '身契', '撕毁'],
+        completionEvidence: [entityRecognitionLabel('character','liuchao.character.a_jiman_bana','short'), '身契', '撕毁'],
         forbiddenInCanon: ['改写撕契还自由的结果', '把阿姬曼写成已被卖走或处死', '跳过身契这一步'],
         allowedElaboration: '可补足五十金铢赎买、当面撕契与发现搜查后的改道；不得把撕契写成未发生。',
       },
       {
         eventId: 'lcq.event.baihu_shangguan_escape',
         mustReach: '程宗扬从白湖商馆脱身出馆，在女侍卫搜查下改道躲避，人仍留在五原城内。',
-        completionEvidence: ['女侍卫', '搜查', '五原'],
+        completionEvidence: ['女侍卫', '搜查', entityRecognitionLabel('location','liuchao.location.wuyuan','short')],
         forbiddenInCanon: ['让程宗扬当场被抓回商馆死局', '提前写成已出五原城南下', '改写成与苏妲己和解离馆'],
         allowedElaboration: '可补足出馆路线、搜查气氛与改道藏匿；不得写成已离开五原城，也不得让商馆死局未解。',
       },
       {
         eventId: 'lcq.event.wuerlang_joins',
         mustReach: '武二郎去而复返后当面答应加入程宗扬的南荒队伍。',
-        completionEvidence: ['南荒', '两银铢', '武二郎'],
+        completionEvidence: ['南荒', '两银铢', entityName("character","liuchao.character.wu_er_lang")],
         forbiddenInCanon: ['让武二郎拒绝入队并离开', '替换南荒同行者', '把此前解铐写成已经随行'],
         allowedElaboration: '可补足先前否认同行、压价与当面应诺；不得跳过他一度拒约、被迫返回才入队的结果。',
       },
       {
         eventId: 'lcq.event.iron_bridge_ambush',
         mustReach: '程宗扬稳住武二郎伤势，商队在铁索桥遭伏击后脱困续行。',
-        completionEvidence: ['铁索桥', '武二郎', '凝羽'],
+        completionEvidence: ['铁索桥', entityName("character","liuchao.character.wu_er_lang"), entityName("character","liuchao.character.ning_yu")],
         forbiddenInCanon: ['改写伏击未发生', '让武二郎死在桥上', '跳过伤势与桥上冲突'],
         allowedElaboration: '可补足疗伤、桥头争夺与突围过程；不得改写商队在此桥遇伏、武二郎带伤随行的结果。',
       },
       {
         eventId: 'lcq.event.ningyu_regicide_offer',
         mustReach: '凝羽私下向程宗扬提出合作除掉苏妲己，并揭开体内阴寒之气来自西门庆。',
-        completionEvidence: ['凝羽', '除掉苏妲己', '西门庆'],
+        completionEvidence: [entityName("character","liuchao.character.ning_yu"), '除掉苏妲己', entityName("character","liuchao.character.xi_men_qing")],
         forbiddenInCanon: ['把提议写成已经弑主成功', '改写阴寒来源', '提前扩写苏妲己之死'],
         allowedElaboration: '可补足私下开价、双修探查与她自述旧事；不得把尚未执行的弑主写成既成事实。',
       },
       {
         eventId: 'lcq.event.zixi_taiyi_intercept',
         mustReach: '太乙真宗在紫溪拦截白湖船队，程宗扬被迫现身交涉，祁远被推落水中。',
-        completionEvidence: ['紫溪', '元行健', '祁远'],
+        completionEvidence: [entityName("location","nh.zixi"), '元行健', entityName("character","liuchao.character.qi_yuan")],
         forbiddenInCanon: ['改写拦船未发生', '让船队被太乙接管', '让祁远在本拍失踪不归'],
         allowedElaboration: '可补写船头交涉、落水与救回船上；不得改写太乙拦船与程宗扬必须出面的结果。',
       },
       {
         eventId: 'lcq.event.rainforest_black_shoal',
         mustReach: '商队承受雨林伤亡后，依凝羽岸边火堆指引，白湖与云氏两支商队渡过黑石滩。',
-        completionEvidence: ['黑石滩', '凝羽', '火堆'],
+        completionEvidence: ['黑石滩', entityName("character","liuchao.character.ning_yu"), '火堆'],
         forbiddenInCanon: ['改写渡河失败', '抹去雨林伤亡', '把火堆指引改成他人'],
         allowedElaboration: '可补足山洪、迷失与两队协作；不得跳过凝羽火堆指引，也不得改写两队渡河成功。',
       },
@@ -334,7 +336,7 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
     "contracts": [
       {
         "eventId": "lcq.event.xiaozi_first_appears",
-        "mustReach": "第70章末，碧鲮少女自称小紫，向众人问好。黑舌尚未死亡，不得提前质问他的死因。",
+        "mustReach": entityText("第70章末，碧鲮少女自称小紫，向众人问好。{{entity:character:lcq.character.nanhuang_heishe}}尚未死亡，不得提前质问他的死因。"),
         "completionEvidence": [],
         "forbiddenInCanon": [
           "提前演出后续剧情",
@@ -414,7 +416,7 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
       },
       {
         "eventId": "lcq.event.biling_bay_stance",
-        "mustReach": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀，碧鲮族获释后反攻鬼王峒。",
+        "mustReach": entityText("{{entity:character:lcq.character.nanhuang_shekui}}下令焚烧碧鲮族，程宗扬率众突袭斩杀{{entity:character:lcq.character.nanhuang_shekui}}，碧鲮族获释后反攻鬼王峒。"),
         "completionEvidence": [],
         "forbiddenInCanon": [
           "提前演出后续剧情",
@@ -434,7 +436,7 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
       },
       {
         "eventId": "lcq.event.wuerlang_slays_dagu",
-        "mustReach": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+        "mustReach": entityText("撑住{{entity:character:lcq.character.nanhuang_dagu}}率领的围攻，见证武二郎斩杀巫师扭转战局。"),
         "completionEvidence": [],
         "forbiddenInCanon": [
           "提前演出后续剧情",
@@ -496,7 +498,7 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
     "contracts": [
       {
         "eventId": "lcq.event.blank_letter_and_dagu",
-        "mustReach": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+        "mustReach": entityText("白纸信笺打开仍是白纸；小紫当着阁罗说破{{entity:character:lcq.character.nanhuang_dagu}}已死。"),
         "completionEvidence": [],
         "forbiddenInCanon": [
           "提前演出后续剧情",
@@ -550,7 +552,7 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
     "contracts": [
       {
         "eventId": "lcq.event.s05b_ice_gu_detour",
-        "mustReach": "祁远算出三个月之约只剩十几天，赶不及回五原或建康，朱老头指路山村一天多。云苍峰与小魏带货物和伤员去白龙江口，程宗扬、祁远、凝羽、乐明珠随朱老头去叶媪山村。期限仅叙事压力，无致命倒计时。",
+        "mustReach": entityText("祁远算出三个月之约只剩十几天，赶不及回五原或建康，朱老头指路山村一天多。云苍峰与{{entity:character:lcq.character.nanhuang_xiaowei}}带货物和伤员去白龙江口，程宗扬、祁远、凝羽、乐明珠随朱老头去叶媪山村。期限仅叙事压力，无致命倒计时。"),
         "completionEvidence": [],
         "forbiddenInCanon": [
           "提前演出后续剧情",

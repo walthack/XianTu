@@ -1,3 +1,5 @@
+
+import {entityNamePattern} from './namedEntities';
 import { rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
 import { computePresentNames, departedPresentNames } from './presence';
 import {
@@ -896,7 +898,7 @@ const COMMAND_JSON_RE = /"action"\s*:\s*"(set|add|remove|delete|upsert)"/i;
 const EXACT_INVENTORY_FACT_RE = /^获得(-?\d+(?:\.\d+)?)×(.+)$/;
 const UNAUTHORIZED_DURABLE_GAIN_RE = /永久获得|神器|据为己有/;
 const UNAUTHORIZED_BAG_STASH_RE = /收入背包|放进背包|放入背包/;
-const SILK_POUCH_TAKE_RE = /(?:获得|接过|收下|王哲递给|放入背包|收入背包).{0,12}锦囊|锦囊.{0,12}(?:获得|接过|收下|放入背包|收入背包)/;
+const SILK_POUCH_TAKE_RE = new RegExp("(?:获得|接过|收下|"+"(?:"+entityNamePattern("character","lcq.character.wang_zhe")+")"+"递给|放入背包|收入背包).{0,12}锦囊|锦囊.{0,12}(?:获得|接过|收下|放入背包|收入背包)","");
 
 function allowedExactGainedItemNames(packet: FastNarrativeRenderPacket): Set<string> {
   const names = new Set<string>();
