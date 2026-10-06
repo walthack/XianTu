@@ -101,6 +101,7 @@ function withVisualLayers(c) {
 
 function buildEmbedText(c) {
   const sp = c.staticProfile || {};
+  if (typeof c.searchSummary === 'string' && c.searchSummary.trim()) return c.searchSummary.trim();
   // 小紫全书归属和阶段链含未揭秘密；embedding无当前章上下文，只索引表面卡。
   if (c.canonicalName === '小紫') return [c.canonicalName, sp.identitySummary, sp.appearance, ...(sp.personality || [])].filter(Boolean).join(' ｜ ');
   const parts = [

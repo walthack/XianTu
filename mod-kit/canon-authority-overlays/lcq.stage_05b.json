@@ -27,1637 +27,6 @@
       "to": "这一势力的成员与来历尚未向玩家披露。"
     },
     {
-      "op": "insertAfter",
-      "path": "canon.locations",
-      "afterId": "liuchao.location.yongzhou_jin",
-      "value": {
-        "id": "lcq.location.yeao_village",
-        "name": "南荒山村",
-        "region": "南荒",
-        "description": "叶媪居住的山村。"
-      },
-      "from": [
-        {
-          "id": "liuchao.location.biyu_village",
-          "name": "碧鲮族",
-          "description": "碧鲮族村落，位于海湾。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.biyu",
-          "coordinates": {
-            "x": 1824,
-            "y": 8592
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.sea_temple",
-          "name": "海神殿",
-          "description": "碧鲮族废弃的海底神殿，内有海王与海后石像。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.biyu",
-          "coordinates": {
-            "x": 1824,
-            "y": 8592
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.wuyuan",
-          "name": "五原城",
-          "description": "白湖商馆所在地。 边境贸易重镇，商贾云集，市集有马匹、皮毛、香料等货物，城墙高耸，客栈酒肆热闹。（民俗：马市兴盛，五原马匹为六朝各地商队所青睐，亦是南来北往商旅的歇脚之地。） 以出产良驹著称，马匹身量不大但耳尖腿直、鼻正眼明。",
-          "type": "城池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "coordinates": {
-            "x": 881,
-            "y": 4366
-          },
-          "features": [],
-          "region": "塞外"
-        },
-        {
-          "id": "liuchao.location.guangming",
-          "name": "光明观堂",
-          "description": "乐明珠师门。",
-          "type": "城池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "coordinates": {
-            "x": 8925,
-            "y": 6374
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.guiwang_dong",
-          "name": "鬼王峒",
-          "description": "南荒地下洞窟，鬼王峒核心。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-          "type": "洞府",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.gui_wang_dong",
-          "coordinates": {
-            "x": 1641,
-            "y": 8690
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.mingzhou",
-          "name": "明州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国沿海州城，光明观堂据点所在。 东南沿海港城，光明观堂医宗所在，城中曾发瘟疫，街巷萧条，港口帆船往来，有大湖水域。（民俗：光明观堂以医术闻名，弟子多习医道，救死扶伤，受民众敬重。）",
-          "coordinates": {
-            "x": 8925,
-            "y": 6374
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.jiangzhou",
-          "name": "江州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "星月湖大营所在地，宋国边境重要城市。 长江南岸的战略要冲，城墙坚固，营寨密布，城郊有金明寨等驻军设施，城内已开设书院，商贾初兴，战火余烬未散。（民俗：晋、宋势力交汇之地，兵家必争，世家子弟图谋变革，欲建平等新秩序；商业萌芽，商会经营渐起。） 南陲边城，山势险峻，星月湖大营隐于其间，数千义士驻守（民俗：民风彪悍，尚武敢战，程侯领地，商旅往来频繁）",
-          "coordinates": {
-            "x": 4956,
-            "y": 6735
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.jiankang",
-          "name": "建康",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。 长江南岸重镇，台城宫阙壮丽，秦淮河畔烟火万家（民俗：六朝故都，风流文雅，士人尚清谈，寺院道观遍布）",
-          "coordinates": {
-            "x": 3380,
-            "y": 5992
-          },
-          "features": [],
-          "region": "晋国"
-        },
-        {
-          "id": "liuchao.location.luoyang",
-          "name": "洛都",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国都城，位于中州腹地。 汉国京师，宫殿巍峨，琼玉阙楼耸立，国宾驿馆宏伟大气，宫廷戒备森严，天子仪仗威严（民俗：皇家仪仗森严，权贵云集，各方势力暗流涌动） 宫阙巍峨，殿宇连绵，铜驼大街宽绰，两侧里坊规整，晨昏鼓声号令全城（民俗：士族好清谈，宫宴豪奢成风，婚丧仪礼繁复，禁婚二十七月）",
-          "coordinates": {
-            "x": 6838,
-            "y": 3577
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.changan",
-          "name": "长安",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
-          "coordinates": {
-            "x": 3159,
-            "y": 2767
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.linan",
-          "name": "临安",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国都城，江南繁华之地。 江南水乡名城，西湖烟柳繁华，蹴鞠相扑盛行，权贵聚集，市井热闹非凡。（民俗：山岳正赛为六朝顶级蹴鞠盛会，女子相扑大赛热闹开擂，鞠社文化蔚然成风。） 江南水乡，市桥繁华，街巷窄长多河渠，酒楼茶肆林立（民俗：商贾云集，物产丰饶，丝织业盛，宋女婉约好文墨）",
-          "coordinates": {
-            "x": 7466,
-            "y": 6532
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.junzhou",
-          "name": "筠州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国州城，王团练驻地，程宗扬运粮之处。 宋国西部商业重镇，浮凌江畔船来船往，粮铺商号林立，官府设常平仓储粮，军需供应繁忙。（民俗：商业气息浓厚，粮商与军政勾连，走私商路通达昭南。） 程宗扬施粥济民之地，仓廪开棚，平价粜粮，民生有所恢复（民俗：曾有程宗扬开棚施粥、平价粜粮之善政，数万民众受惠）",
-          "coordinates": {
-            "x": 5656,
-            "y": 6822
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.nanzhao",
-          "name": "昭南",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。 南方国度，都城麟趾城，地产巨木用于建筑，水系连通大江云水，婚俗保留古风。（民俗：妻媵制盛行，诸侯可一聘九女；沐羽城等地有昭南人受雇充当佣兵；建筑用巨木由昭南输出。） 六朝之一，都城为麟趾城，境内有帝丘、昆吾等地名。",
-          "coordinates": {
-            "x": 4916,
-            "y": 7778
-          },
-          "features": [],
-          "region": "昭南"
-        },
-        {
-          "id": "liuchao.location.diqiu",
-          "name": "帝丘",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒-中州交界处的重要城镇。 昭南境内地名，位于麟趾城附近。",
-          "coordinates": {
-            "x": 6096,
-            "y": 7831
-          },
-          "features": [],
-          "region": "昭南"
-        },
-        {
-          "id": "liuchao.location.kunwu",
-          "name": "昆吾",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域的重要城镇。 昭南南方重镇，城中有制刀工匠，相传以昆吾刀裁取霓龙丝，气候湿热，多云霞幻象。（民俗：昆吾刀锋利著称，相传可裁取霞光化为霓丝，为当地神秘特产。） 昭南境内地名，与帝丘之间夹杂着夭鸿、火渎等地名。",
-          "coordinates": {
-            "x": 4840,
-            "y": 7546
-          },
-          "features": [],
-          "region": "昭南"
-        },
-        {
-          "id": "liuchao.location.xiongerpu",
-          "name": "熊耳铺",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒入口处的村寨，程宗扬在此选向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
-          "coordinates": {
-            "x": 1623,
-            "y": 7612
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.baiyi",
-          "name": "白夷族",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒白夷族聚居地。 南荒丛林深处的部族聚居地，设有隐秘地宫，当地出产湖珠手串等南荒特产，有自己的武装力量与鬼王峒抗衡。 盘江以南的富庶山谷，纯白岩石门楼，香花遍路，女子娇美。（民俗：出产珍稀之物，女性地位较高，盛装迎接贵客。）",
-          "coordinates": {
-            "x": 1818,
-            "y": 8118
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.liuligu",
-          "name": "琉璃谷",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域山谷。 琉璃化的山谷，阳光下七彩纷呈，景色瑰丽绝美，为南荒胜境。",
-          "coordinates": {
-            "x": 1165,
-            "y": 8791
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.shenmu",
-          "name": "神木",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域重要地标。 巍峨神木如万仞之峰，枝干广袤需五日方至半腰，根节如群山层叠，云霞缭绕触手可及，树巅隐于天际不可望",
-          "coordinates": {
-            "x": 1341,
-            "y": 9521
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.haishanghuahuan",
-          "name": "海棠花環",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "险地",
-          "description": "南荒极南端的环状区域。",
-          "coordinates": {
-            "x": 3241,
-            "y": 9915
-          },
-          "features": [],
-          "region": "海上"
-        },
-        {
-          "id": "liuchao.location.guangyang",
-          "name": "广阳",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "晋国-汉国边境重镇。 广阳渠连接大江云水，商船往来频繁，沿岸街市繁华，赌场酒楼错落其间。（民俗：商贾汇聚，江湖势力活跃，云氏等大商族在此经营水道贸易，黑魔海亦设赌坊为据点。）",
-          "coordinates": {
-            "x": 4456,
-            "y": 5668
-          },
-          "features": [],
-          "region": "晋国"
-        },
-        {
-          "id": "liuchao.location.qingzhou",
-          "name": "晴州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "商贾云集的运河港埠，粮铺船行林立，鞠社热闹，商会势力盘根错节，南北货物汇聚之地。（民俗：蹴鞠之风盛行，商人重利轻义，慈幼院济贫，光明观堂弟子曾在此施医布善。） 沿海城市，泊陵鱼氏与黑魔海曾在此联手",
-          "coordinates": {
-            "x": 5400,
-            "y": 6000
-          },
-          "features": [],
-          "region": "海上"
-        },
-        {
-          "id": "liuchao.location.ningzhou",
-          "name": "宁州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。）",
-          "coordinates": {
-            "x": 4656,
-            "y": 6437
-          },
-          "features": [],
-          "region": "晋国"
-        },
-        {
-          "id": "liuchao.location.jinmingzhai",
-          "name": "金明寨",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋军大营，位于烈山附近。 江州城东南十五里的村寨旧址，宋军掘土垒墙、设壕为营，成为进攻江州的军事基地，辎重营曾遭焚烧。 宋军大营所在，捧日军右厢石元孙麾下诸将驻扎，营帐连绵（民俗：右厢都指挥使石元孙驻军于此，备有巢车、轒輼等攻城器械）",
-          "coordinates": {
-            "x": 5050,
-            "y": 6550
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.haoshuichuan",
-          "name": "好水川",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "烈山附近峡谷，大型战场。 山谷丘陵地带，荒凉旷野，宋夏两军交战之地，有山岗可俯瞰战场。 宋军败绩之地，战场荒凉，遗骸未收，士气低落之地（民俗：军事地名，龙卫左厢军曾在此惨败，主将任福战死）",
-          "coordinates": {
-            "x": 5104,
-            "y": 6476
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.jingxi",
-          "name": "荆溪村寨",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "荆溪人聚居地，位于筠州附近山区。 山间村寨，存粮充裕戒备森严，兼具仓储与防御功能，临江而近筠州，水路可通粮运。（民俗：作为临时粮仓重地，外人出入盘查严格，与官府关系密切。）",
-          "coordinates": {
-            "x": 5600,
-            "y": 6900
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.wudu",
-          "name": "舞都",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国境内的一座都邑。 首阳山下的晋国封邑，侯府深院，画舫往来，世家公子云集，纨绔声色犬马之地。（民俗：权贵奢靡成风，侯门子弟以豢养风虎、海东青等珍禽异兽为风尚，社交宴饮无度。） 南方边陲重镇，程侯规划取此地经营，图谋霸业（民俗：偏远之地，民风淳朴，亟待开发）",
-          "coordinates": {
-            "x": 6114,
-            "y": 3929
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.yong",
-          "name": "上庸",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "唐国与汉国之间的城池。",
-          "coordinates": {
-            "x": 5176,
-            "y": 3978
-          },
-          "features": [],
-          "region": "秦国"
-        },
-        {
-          "id": "liuchao.location.yongzhou",
-          "name": "永州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国-唐国交界附近的城市。",
-          "coordinates": {
-            "x": 4220,
-            "y": 4242
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.baijun",
-          "name": "巴郡",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国、唐国交界处的郡城。",
-          "coordinates": {
-            "x": 4763,
-            "y": 3063
-          },
-          "features": [],
-          "region": "秦国"
-        },
-        {
-          "id": "liuchao.location.dantu",
-          "name": "丹徒",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "晋国-宋国水路交通要地。",
-          "coordinates": {
-            "x": 8875,
-            "y": 4854
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.longchuan",
-          "name": "龙川",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国城市。 江湖术士聚集的边陲小镇，酒旗招展，街巷间多有占卜测字摊位，市井嘈杂而鱼龙混杂。（民俗：民间信奉铁口神算，术士在此地颇受欢迎，算命测字成为当地常见的营生。）",
-          "coordinates": {
-            "x": 7908,
-            "y": 6819
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.nanjun",
-          "name": "南郡",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国南部郡城。",
-          "coordinates": {
-            "x": 6876,
-            "y": 5276
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.chenzhou",
-          "name": "辰州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国-唐国边境城市。",
-          "coordinates": {
-            "x": 4704,
-            "y": 5011
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.liangzhou",
-          "name": "凉州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "唐国西北边境州城，凉州盟据点。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固） 铁马堂等帮会势力组成凉州盟，驰骋而来（民俗：凉州人士豪侠，结盟闯阵）",
-          "coordinates": {
-            "x": 1430,
-            "y": 2767
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.boling",
-          "name": "泊陵",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国沿海城市，鱼氏势力据点。 海岸岛礁中的楼船停泊处，山崖上有鱼氏伏击要塞，湖泊与海路交汇的险峻水域（民俗：海上岛民世家，以毒术和阴险报复闻名江湖，族中高手擅长用毒伏击） 泊陵鱼氏所在，濒海地区，与黑魔海有往来（民俗：鱼氏家族，掌握阴阳鱼等秘宝）",
-          "coordinates": {
-            "x": 9592,
-            "y": 6706
-          },
-          "features": [],
-          "region": "海上"
-        },
-        {
-          "id": "liuchao.location.yiyang",
-          "name": "夷陵",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国城市，长江沿岸。 江南丘陵商业城镇，长江沿岸水陆要冲，白湖商馆据点所在，商旅繁忙，钱庄林立，客栈酒肆遍布街巷。（民俗：白湖商馆醉月楼分号遍布，商贾云集消息灵通，以商贸和情报网络闻名，黑白两道均有往来。） 入山前最后一个城镇，马匹在此换成走骡",
-          "coordinates": {
-            "x": 7068,
-            "y": 7423
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.cuizhi",
-          "name": "翠枝港",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国沿海港口。",
-          "coordinates": {
-            "x": 9515,
-            "y": 5001
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.lie",
-          "name": "烈",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国-晋国交界的山脉区域。 险峻山地间一条狭窄山道蜿蜒而过，两侧山势陡峭难行，冬季积雪封路，宋军步阵在此难以展开。 金明寨附近区域，宋军右厢主力驻扎，前军应已接近此地（民俗：宋军行军至此，主力部队集结区域）",
-          "coordinates": {
-            "x": 5390,
-            "y": 6472
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.bailuojiang",
-          "name": "白龍江",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒-中州交界的重要河流。 大江支流，河水蜿蜒向西汇入滔滔江水。",
-          "coordinates": {
-            "x": 1905,
-            "y": 7162
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.longchi",
-          "name": "龙池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "宗门",
-          "description": "太乙真宗总部所在地，位于中州区域。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。） 太乙真宗圣地，龙阙山所在地，掌教就职大典举行地，山势险峻（民俗：道教圣地，太乙真宗总坛所在，九阳神功传承之地）",
-          "coordinates": {
-            "x": 5000,
-            "y": 5000
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.south_wild_valley",
-          "name": "南荒山谷",
-          "description": "龙神坠落之地。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "coordinates": {
-            "x": 4916,
-            "y": 7778
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.jiankang_yuji_xiang",
-          "name": "建康玉鸡巷",
-          "description": "程宗扬在晋都的宅邸。",
-          "type": "城池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "coordinates": {
-            "x": 7100,
-            "y": 4960
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.gui_wang_gong",
-          "name": "鬼王宫",
-          "description": "鬼王峒深处的巫王宫殿，潜入、交锋、深井救援与倒戈前夜的主要舞台。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.gui_wang_dong",
-          "coordinates": {
-            "x": 2620,
-            "y": 7200
-          },
-          "features": [
-            "岩浆结界",
-            "深井祭台",
-            "鬼巫王中枢",
-            "通往最终决战的前置地点"
-          ],
-          "safety": "极度危险",
-          "status": "敌对据点"
-        },
-        {
-          "id": "liuchao.location.gui_wang_gong.jingshen_tai",
-          "name": "鬼王宫深井祭台",
-          "description": "鬼王宫内部深井与祭台区域，苏荔救援、朱诺尸鬼、丹宸之死与龙睛玉护罩等关键进程在此交汇。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.gui_wang_dong",
-          "coordinates": {
-            "x": 2640,
-            "y": 7220
-          },
-          "features": [
-            "深井平台",
-            "祭台",
-            "尸鬼战斗",
-            "龙睛玉护罩"
-          ],
-          "safety": "极度危险",
-          "status": "敌对据点"
-        },
-        {
-          "id": "liuchao.location.canglan",
-          "name": "苍澜镇",
-          "continentId": "liuchao.continent.taiquan",
-          "type": "城池",
-          "description": "太泉古阵入口附近的镇子。 浮玉山脚下的荒芜集镇，四野红土不毛，唯镇周有零星草木，镇外常年雾气弥漫（雾瘴），进出太泉古阵的旅客在此落脚。（民俗：无本地出产，粮价百倍于外；兵器极廉，窝头换刀非神话；镇上弱肉强食，外来者须管住嘴少打听。）",
-          "coordinates": {
-            "x": 7500,
-            "y": 9000
-          },
-          "features": [],
-          "region": "太泉"
-        },
-        {
-          "id": "liuchao.location.taiquan",
-          "name": "太泉古阵",
-          "continentId": "liuchao.continent.taiquan",
-          "type": "秘境",
-          "description": "远古遗迹，太泉古阵入口。 古阵空间结构违背常识，头顶可见星空，西部有赤红巨石，残存焦黑树木与灰烬，黑暗无光处有魇狼出没（民俗：阵法设有灵性机关，需特定修为（六阳境）方可进入，藏有赤阳圣果等珍贵之物） 上古遗迹实为另一个时代的造物：金铁构筑的廊道厅堂、长明不灭的\"夜明珠\"、显影人像的\"光影幻璧\"、轻韧透亮的\"琉璃纸\"、不用牛马自行奔走的\"铁车\"残骸，六朝人以自身语汇敬畏称之。（民俗：入阵者以\"仙家遗泽\"解读诸般造物并各自命名；唯穿越者能认出真身，认知差微妙有趣。）",
-          "coordinates": {
-            "x": 7573,
-            "y": 9083
-          },
-          "features": [],
-          "region": "太泉"
-        },
-        {
-          "id": "liuchao.location.xianyang",
-          "name": "咸阳",
-          "type": "城池",
-          "description": "秦国国都，渭水之滨的雄城。",
-          "coordinates": {
-            "x": 5189,
-            "y": 1911
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.yongcheng",
-          "name": "雍",
-          "type": "城池",
-          "description": "秦国故都，岐山东麓的古邑。",
-          "coordinates": {
-            "x": 4805,
-            "y": 1728
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.lintao",
-          "name": "临洮",
-          "type": "城池",
-          "description": "秦国西北边城。",
-          "coordinates": {
-            "x": 4421,
-            "y": 941
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.shangjun",
-          "name": "上郡",
-          "type": "城池",
-          "description": "秦国北疆重镇。",
-          "coordinates": {
-            "x": 5422,
-            "y": 932
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.hanguguan",
-          "name": "函谷关",
-          "type": "城池",
-          "description": "秦国东出之咽喉雄关，扼守通往汉境的孔道。",
-          "coordinates": {
-            "x": 5750,
-            "y": 2432
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.hongmen",
-          "name": "鸿门",
-          "type": "城池",
-          "description": "咸阳东郊之地。",
-          "coordinates": {
-            "x": 5483,
-            "y": 2132
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.qishan",
-          "name": "歧山",
-          "type": "城池",
-          "description": "秦国西界山脉。",
-          "coordinates": {
-            "x": 4589,
-            "y": 2148
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.zhuoguang",
-          "name": "涿光",
-          "type": "城池",
-          "description": "秦国极北关隘，出关即皋落氏、勾龙氏诸部草原。",
-          "coordinates": {
-            "x": 4803,
-            "y": 584
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.qingyuan_jin",
-          "name": "清远",
-          "type": "城池",
-          "description": "晋国北境城邑。",
-          "coordinates": {
-            "x": 3167,
-            "y": 5628
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.rongzhou",
-          "name": "容州",
-          "type": "城池",
-          "description": "晋国北部州城。",
-          "coordinates": {
-            "x": 3685,
-            "y": 5654
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.hezhou",
-          "name": "和州",
-          "type": "城池",
-          "description": "晋国腹地州城。",
-          "coordinates": {
-            "x": 3031,
-            "y": 6216
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.linchuan",
-          "name": "临川",
-          "type": "城池",
-          "description": "晋国东部州城，临川王封地。",
-          "coordinates": {
-            "x": 4090,
-            "y": 6122
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.jingzhou_jin",
-          "name": "竞州",
-          "type": "城池",
-          "description": "晋国西陲州城。",
-          "coordinates": {
-            "x": 2188,
-            "y": 6465
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.zhuyajun",
-          "name": "珠崖郡",
-          "type": "城池",
-          "description": "晋国西南滨海之郡。",
-          "coordinates": {
-            "x": 2713,
-            "y": 7296
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.yongzhou_jin",
-          "name": "邕州",
-          "type": "城池",
-          "description": "晋国南部州城。",
-          "coordinates": {
-            "x": 4178,
-            "y": 6999
-          },
-          "features": []
-        }
-      ],
-      "to": [
-        {
-          "id": "liuchao.location.biyu_village",
-          "name": "碧鲮族",
-          "description": "碧鲮族村落，位于海湾。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.biyu",
-          "coordinates": {
-            "x": 1824,
-            "y": 8592
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.sea_temple",
-          "name": "海神殿",
-          "description": "碧鲮族废弃的海底神殿，内有海王与海后石像。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.biyu",
-          "coordinates": {
-            "x": 1824,
-            "y": 8592
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.wuyuan",
-          "name": "五原城",
-          "description": "白湖商馆所在地。 边境贸易重镇，商贾云集，市集有马匹、皮毛、香料等货物，城墙高耸，客栈酒肆热闹。（民俗：马市兴盛，五原马匹为六朝各地商队所青睐，亦是南来北往商旅的歇脚之地。） 以出产良驹著称，马匹身量不大但耳尖腿直、鼻正眼明。",
-          "type": "城池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "coordinates": {
-            "x": 881,
-            "y": 4366
-          },
-          "features": [],
-          "region": "塞外"
-        },
-        {
-          "id": "liuchao.location.guangming",
-          "name": "光明观堂",
-          "description": "乐明珠师门。",
-          "type": "城池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "coordinates": {
-            "x": 8925,
-            "y": 6374
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.guiwang_dong",
-          "name": "鬼王峒",
-          "description": "南荒地下洞窟，鬼王峒核心。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
-          "type": "洞府",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.gui_wang_dong",
-          "coordinates": {
-            "x": 1641,
-            "y": 8690
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.mingzhou",
-          "name": "明州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国沿海州城，光明观堂据点所在。 东南沿海港城，光明观堂医宗所在，城中曾发瘟疫，街巷萧条，港口帆船往来，有大湖水域。（民俗：光明观堂以医术闻名，弟子多习医道，救死扶伤，受民众敬重。）",
-          "coordinates": {
-            "x": 8925,
-            "y": 6374
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.jiangzhou",
-          "name": "江州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "星月湖大营所在地，宋国边境重要城市。 长江南岸的战略要冲，城墙坚固，营寨密布，城郊有金明寨等驻军设施，城内已开设书院，商贾初兴，战火余烬未散。（民俗：晋、宋势力交汇之地，兵家必争，世家子弟图谋变革，欲建平等新秩序；商业萌芽，商会经营渐起。） 南陲边城，山势险峻，星月湖大营隐于其间，数千义士驻守（民俗：民风彪悍，尚武敢战，程侯领地，商旅往来频繁）",
-          "coordinates": {
-            "x": 4956,
-            "y": 6735
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.jiankang",
-          "name": "建康",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。 长江南岸重镇，台城宫阙壮丽，秦淮河畔烟火万家（民俗：六朝故都，风流文雅，士人尚清谈，寺院道观遍布）",
-          "coordinates": {
-            "x": 3380,
-            "y": 5992
-          },
-          "features": [],
-          "region": "晋国"
-        },
-        {
-          "id": "liuchao.location.luoyang",
-          "name": "洛都",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国都城，位于中州腹地。 汉国京师，宫殿巍峨，琼玉阙楼耸立，国宾驿馆宏伟大气，宫廷戒备森严，天子仪仗威严（民俗：皇家仪仗森严，权贵云集，各方势力暗流涌动） 宫阙巍峨，殿宇连绵，铜驼大街宽绰，两侧里坊规整，晨昏鼓声号令全城（民俗：士族好清谈，宫宴豪奢成风，婚丧仪礼繁复，禁婚二十七月）",
-          "coordinates": {
-            "x": 6838,
-            "y": 3577
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.changan",
-          "name": "长安",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
-          "coordinates": {
-            "x": 3159,
-            "y": 2767
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.linan",
-          "name": "临安",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国都城，江南繁华之地。 江南水乡名城，西湖烟柳繁华，蹴鞠相扑盛行，权贵聚集，市井热闹非凡。（民俗：山岳正赛为六朝顶级蹴鞠盛会，女子相扑大赛热闹开擂，鞠社文化蔚然成风。） 江南水乡，市桥繁华，街巷窄长多河渠，酒楼茶肆林立（民俗：商贾云集，物产丰饶，丝织业盛，宋女婉约好文墨）",
-          "coordinates": {
-            "x": 7466,
-            "y": 6532
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.junzhou",
-          "name": "筠州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国州城，王团练驻地，程宗扬运粮之处。 宋国西部商业重镇，浮凌江畔船来船往，粮铺商号林立，官府设常平仓储粮，军需供应繁忙。（民俗：商业气息浓厚，粮商与军政勾连，走私商路通达昭南。） 程宗扬施粥济民之地，仓廪开棚，平价粜粮，民生有所恢复（民俗：曾有程宗扬开棚施粥、平价粜粮之善政，数万民众受惠）",
-          "coordinates": {
-            "x": 5656,
-            "y": 6822
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.nanzhao",
-          "name": "昭南",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。 南方国度，都城麟趾城，地产巨木用于建筑，水系连通大江云水，婚俗保留古风。（民俗：妻媵制盛行，诸侯可一聘九女；沐羽城等地有昭南人受雇充当佣兵；建筑用巨木由昭南输出。） 六朝之一，都城为麟趾城，境内有帝丘、昆吾等地名。",
-          "coordinates": {
-            "x": 4916,
-            "y": 7778
-          },
-          "features": [],
-          "region": "昭南"
-        },
-        {
-          "id": "liuchao.location.diqiu",
-          "name": "帝丘",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒-中州交界处的重要城镇。 昭南境内地名，位于麟趾城附近。",
-          "coordinates": {
-            "x": 6096,
-            "y": 7831
-          },
-          "features": [],
-          "region": "昭南"
-        },
-        {
-          "id": "liuchao.location.kunwu",
-          "name": "昆吾",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域的重要城镇。 昭南南方重镇，城中有制刀工匠，相传以昆吾刀裁取霓龙丝，气候湿热，多云霞幻象。（民俗：昆吾刀锋利著称，相传可裁取霞光化为霓丝，为当地神秘特产。） 昭南境内地名，与帝丘之间夹杂着夭鸿、火渎等地名。",
-          "coordinates": {
-            "x": 4840,
-            "y": 7546
-          },
-          "features": [],
-          "region": "昭南"
-        },
-        {
-          "id": "liuchao.location.xiongerpu",
-          "name": "熊耳铺",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒入口处的村寨，程宗扬在此选向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
-          "coordinates": {
-            "x": 1623,
-            "y": 7612
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.baiyi",
-          "name": "白夷族",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒白夷族聚居地。 南荒丛林深处的部族聚居地，设有隐秘地宫，当地出产湖珠手串等南荒特产，有自己的武装力量与鬼王峒抗衡。 盘江以南的富庶山谷，纯白岩石门楼，香花遍路，女子娇美。（民俗：出产珍稀之物，女性地位较高，盛装迎接贵客。）",
-          "coordinates": {
-            "x": 1818,
-            "y": 8118
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.liuligu",
-          "name": "琉璃谷",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域山谷。 琉璃化的山谷，阳光下七彩纷呈，景色瑰丽绝美，为南荒胜境。",
-          "coordinates": {
-            "x": 1165,
-            "y": 8791
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.shenmu",
-          "name": "神木",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒区域重要地标。 巍峨神木如万仞之峰，枝干广袤需五日方至半腰，根节如群山层叠，云霞缭绕触手可及，树巅隐于天际不可望",
-          "coordinates": {
-            "x": 1341,
-            "y": 9521
-          },
-          "features": [],
-          "region": "南荒"
-        },
-        {
-          "id": "liuchao.location.haishanghuahuan",
-          "name": "海棠花環",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "险地",
-          "description": "南荒极南端的环状区域。",
-          "coordinates": {
-            "x": 3241,
-            "y": 9915
-          },
-          "features": [],
-          "region": "海上"
-        },
-        {
-          "id": "liuchao.location.guangyang",
-          "name": "广阳",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "晋国-汉国边境重镇。 广阳渠连接大江云水，商船往来频繁，沿岸街市繁华，赌场酒楼错落其间。（民俗：商贾汇聚，江湖势力活跃，云氏等大商族在此经营水道贸易，黑魔海亦设赌坊为据点。）",
-          "coordinates": {
-            "x": 4456,
-            "y": 5668
-          },
-          "features": [],
-          "region": "晋国"
-        },
-        {
-          "id": "liuchao.location.qingzhou",
-          "name": "晴州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "商贾云集的运河港埠，粮铺船行林立，鞠社热闹，商会势力盘根错节，南北货物汇聚之地。（民俗：蹴鞠之风盛行，商人重利轻义，慈幼院济贫，光明观堂弟子曾在此施医布善。） 沿海城市，泊陵鱼氏与黑魔海曾在此联手",
-          "coordinates": {
-            "x": 5400,
-            "y": 6000
-          },
-          "features": [],
-          "region": "海上"
-        },
-        {
-          "id": "liuchao.location.ningzhou",
-          "name": "宁州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。）",
-          "coordinates": {
-            "x": 4656,
-            "y": 6437
-          },
-          "features": [],
-          "region": "晋国"
-        },
-        {
-          "id": "liuchao.location.jinmingzhai",
-          "name": "金明寨",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋军大营，位于烈山附近。 江州城东南十五里的村寨旧址，宋军掘土垒墙、设壕为营，成为进攻江州的军事基地，辎重营曾遭焚烧。 宋军大营所在，捧日军右厢石元孙麾下诸将驻扎，营帐连绵（民俗：右厢都指挥使石元孙驻军于此，备有巢车、轒輼等攻城器械）",
-          "coordinates": {
-            "x": 5050,
-            "y": 6550
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.haoshuichuan",
-          "name": "好水川",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "烈山附近峡谷，大型战场。 山谷丘陵地带，荒凉旷野，宋夏两军交战之地，有山岗可俯瞰战场。 宋军败绩之地，战场荒凉，遗骸未收，士气低落之地（民俗：军事地名，龙卫左厢军曾在此惨败，主将任福战死）",
-          "coordinates": {
-            "x": 5104,
-            "y": 6476
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.jingxi",
-          "name": "荆溪村寨",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "荆溪人聚居地，位于筠州附近山区。 山间村寨，存粮充裕戒备森严，兼具仓储与防御功能，临江而近筠州，水路可通粮运。（民俗：作为临时粮仓重地，外人出入盘查严格，与官府关系密切。）",
-          "coordinates": {
-            "x": 5600,
-            "y": 6900
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.wudu",
-          "name": "舞都",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国境内的一座都邑。 首阳山下的晋国封邑，侯府深院，画舫往来，世家公子云集，纨绔声色犬马之地。（民俗：权贵奢靡成风，侯门子弟以豢养风虎、海东青等珍禽异兽为风尚，社交宴饮无度。） 南方边陲重镇，程侯规划取此地经营，图谋霸业（民俗：偏远之地，民风淳朴，亟待开发）",
-          "coordinates": {
-            "x": 6114,
-            "y": 3929
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.yong",
-          "name": "上庸",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "唐国与汉国之间的城池。",
-          "coordinates": {
-            "x": 5176,
-            "y": 3978
-          },
-          "features": [],
-          "region": "秦国"
-        },
-        {
-          "id": "liuchao.location.yongzhou",
-          "name": "永州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国-唐国交界附近的城市。",
-          "coordinates": {
-            "x": 4220,
-            "y": 4242
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.baijun",
-          "name": "巴郡",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国、唐国交界处的郡城。",
-          "coordinates": {
-            "x": 4763,
-            "y": 3063
-          },
-          "features": [],
-          "region": "秦国"
-        },
-        {
-          "id": "liuchao.location.dantu",
-          "name": "丹徒",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "晋国-宋国水路交通要地。",
-          "coordinates": {
-            "x": 8875,
-            "y": 4854
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.longchuan",
-          "name": "龙川",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国城市。 江湖术士聚集的边陲小镇，酒旗招展，街巷间多有占卜测字摊位，市井嘈杂而鱼龙混杂。（民俗：民间信奉铁口神算，术士在此地颇受欢迎，算命测字成为当地常见的营生。）",
-          "coordinates": {
-            "x": 7908,
-            "y": 6819
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.nanjun",
-          "name": "南郡",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国南部郡城。",
-          "coordinates": {
-            "x": 6876,
-            "y": 5276
-          },
-          "features": [],
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.location.chenzhou",
-          "name": "辰州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "汉国-唐国边境城市。",
-          "coordinates": {
-            "x": 4704,
-            "y": 5011
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.liangzhou",
-          "name": "凉州",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "唐国西北边境州城，凉州盟据点。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固） 铁马堂等帮会势力组成凉州盟，驰骋而来（民俗：凉州人士豪侠，结盟闯阵）",
-          "coordinates": {
-            "x": 1430,
-            "y": 2767
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.boling",
-          "name": "泊陵",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国沿海城市，鱼氏势力据点。 海岸岛礁中的楼船停泊处，山崖上有鱼氏伏击要塞，湖泊与海路交汇的险峻水域（民俗：海上岛民世家，以毒术和阴险报复闻名江湖，族中高手擅长用毒伏击） 泊陵鱼氏所在，濒海地区，与黑魔海有往来（民俗：鱼氏家族，掌握阴阳鱼等秘宝）",
-          "coordinates": {
-            "x": 9592,
-            "y": 6706
-          },
-          "features": [],
-          "region": "海上"
-        },
-        {
-          "id": "liuchao.location.yiyang",
-          "name": "夷陵",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国城市，长江沿岸。 江南丘陵商业城镇，长江沿岸水陆要冲，白湖商馆据点所在，商旅繁忙，钱庄林立，客栈酒肆遍布街巷。（民俗：白湖商馆醉月楼分号遍布，商贾云集消息灵通，以商贸和情报网络闻名，黑白两道均有往来。） 入山前最后一个城镇，马匹在此换成走骡",
-          "coordinates": {
-            "x": 7068,
-            "y": 7423
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.cuizhi",
-          "name": "翠枝港",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国沿海港口。",
-          "coordinates": {
-            "x": 9515,
-            "y": 5001
-          },
-          "features": [],
-          "region": "唐国"
-        },
-        {
-          "id": "liuchao.location.lie",
-          "name": "烈",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "城池",
-          "description": "宋国-晋国交界的山脉区域。 险峻山地间一条狭窄山道蜿蜒而过，两侧山势陡峭难行，冬季积雪封路，宋军步阵在此难以展开。 金明寨附近区域，宋军右厢主力驻扎，前军应已接近此地（民俗：宋军行军至此，主力部队集结区域）",
-          "coordinates": {
-            "x": 5390,
-            "y": 6472
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.bailuojiang",
-          "name": "白龍江",
-          "continentId": "liuchao.continent.nanhuang",
-          "type": "城池",
-          "description": "南荒-中州交界的重要河流。 大江支流，河水蜿蜒向西汇入滔滔江水。",
-          "coordinates": {
-            "x": 1905,
-            "y": 7162
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.longchi",
-          "name": "龙池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "type": "宗门",
-          "description": "太乙真宗总部所在地，位于中州区域。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。） 太乙真宗圣地，龙阙山所在地，掌教就职大典举行地，山势险峻（民俗：道教圣地，太乙真宗总坛所在，九阳神功传承之地）",
-          "coordinates": {
-            "x": 5000,
-            "y": 5000
-          },
-          "features": [],
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.location.south_wild_valley",
-          "name": "南荒山谷",
-          "description": "龙神坠落之地。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "coordinates": {
-            "x": 4916,
-            "y": 7778
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.jiankang_yuji_xiang",
-          "name": "建康玉鸡巷",
-          "description": "程宗扬在晋都的宅邸。",
-          "type": "城池",
-          "continentId": "liuchao.continent.zhongzhou",
-          "coordinates": {
-            "x": 7100,
-            "y": 4960
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.gui_wang_gong",
-          "name": "鬼王宫",
-          "description": "鬼王峒深处的巫王宫殿，潜入、交锋、深井救援与倒戈前夜的主要舞台。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.gui_wang_dong",
-          "coordinates": {
-            "x": 2620,
-            "y": 7200
-          },
-          "features": [
-            "岩浆结界",
-            "深井祭台",
-            "鬼巫王中枢",
-            "通往最终决战的前置地点"
-          ],
-          "safety": "极度危险",
-          "status": "敌对据点"
-        },
-        {
-          "id": "liuchao.location.gui_wang_gong.jingshen_tai",
-          "name": "鬼王宫深井祭台",
-          "description": "鬼王宫内部深井与祭台区域，苏荔救援、朱诺尸鬼、丹宸之死与龙睛玉护罩等关键进程在此交汇。",
-          "type": "城池",
-          "continentId": "liuchao.continent.nanhuang",
-          "factionId": "liuchao.faction.gui_wang_dong",
-          "coordinates": {
-            "x": 2640,
-            "y": 7220
-          },
-          "features": [
-            "深井平台",
-            "祭台",
-            "尸鬼战斗",
-            "龙睛玉护罩"
-          ],
-          "safety": "极度危险",
-          "status": "敌对据点"
-        },
-        {
-          "id": "liuchao.location.canglan",
-          "name": "苍澜镇",
-          "continentId": "liuchao.continent.taiquan",
-          "type": "城池",
-          "description": "太泉古阵入口附近的镇子。 浮玉山脚下的荒芜集镇，四野红土不毛，唯镇周有零星草木，镇外常年雾气弥漫（雾瘴），进出太泉古阵的旅客在此落脚。（民俗：无本地出产，粮价百倍于外；兵器极廉，窝头换刀非神话；镇上弱肉强食，外来者须管住嘴少打听。）",
-          "coordinates": {
-            "x": 7500,
-            "y": 9000
-          },
-          "features": [],
-          "region": "太泉"
-        },
-        {
-          "id": "liuchao.location.taiquan",
-          "name": "太泉古阵",
-          "continentId": "liuchao.continent.taiquan",
-          "type": "秘境",
-          "description": "远古遗迹，太泉古阵入口。 古阵空间结构违背常识，头顶可见星空，西部有赤红巨石，残存焦黑树木与灰烬，黑暗无光处有魇狼出没（民俗：阵法设有灵性机关，需特定修为（六阳境）方可进入，藏有赤阳圣果等珍贵之物） 上古遗迹实为另一个时代的造物：金铁构筑的廊道厅堂、长明不灭的\"夜明珠\"、显影人像的\"光影幻璧\"、轻韧透亮的\"琉璃纸\"、不用牛马自行奔走的\"铁车\"残骸，六朝人以自身语汇敬畏称之。（民俗：入阵者以\"仙家遗泽\"解读诸般造物并各自命名；唯穿越者能认出真身，认知差微妙有趣。）",
-          "coordinates": {
-            "x": 7573,
-            "y": 9083
-          },
-          "features": [],
-          "region": "太泉"
-        },
-        {
-          "id": "liuchao.location.xianyang",
-          "name": "咸阳",
-          "type": "城池",
-          "description": "秦国国都，渭水之滨的雄城。",
-          "coordinates": {
-            "x": 5189,
-            "y": 1911
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.yongcheng",
-          "name": "雍",
-          "type": "城池",
-          "description": "秦国故都，岐山东麓的古邑。",
-          "coordinates": {
-            "x": 4805,
-            "y": 1728
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.lintao",
-          "name": "临洮",
-          "type": "城池",
-          "description": "秦国西北边城。",
-          "coordinates": {
-            "x": 4421,
-            "y": 941
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.shangjun",
-          "name": "上郡",
-          "type": "城池",
-          "description": "秦国北疆重镇。",
-          "coordinates": {
-            "x": 5422,
-            "y": 932
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.hanguguan",
-          "name": "函谷关",
-          "type": "城池",
-          "description": "秦国东出之咽喉雄关，扼守通往汉境的孔道。",
-          "coordinates": {
-            "x": 5750,
-            "y": 2432
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.hongmen",
-          "name": "鸿门",
-          "type": "城池",
-          "description": "咸阳东郊之地。",
-          "coordinates": {
-            "x": 5483,
-            "y": 2132
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.qishan",
-          "name": "歧山",
-          "type": "城池",
-          "description": "秦国西界山脉。",
-          "coordinates": {
-            "x": 4589,
-            "y": 2148
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.zhuoguang",
-          "name": "涿光",
-          "type": "城池",
-          "description": "秦国极北关隘，出关即皋落氏、勾龙氏诸部草原。",
-          "coordinates": {
-            "x": 4803,
-            "y": 584
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.qingyuan_jin",
-          "name": "清远",
-          "type": "城池",
-          "description": "晋国北境城邑。",
-          "coordinates": {
-            "x": 3167,
-            "y": 5628
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.rongzhou",
-          "name": "容州",
-          "type": "城池",
-          "description": "晋国北部州城。",
-          "coordinates": {
-            "x": 3685,
-            "y": 5654
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.hezhou",
-          "name": "和州",
-          "type": "城池",
-          "description": "晋国腹地州城。",
-          "coordinates": {
-            "x": 3031,
-            "y": 6216
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.linchuan",
-          "name": "临川",
-          "type": "城池",
-          "description": "晋国东部州城，临川王封地。",
-          "coordinates": {
-            "x": 4090,
-            "y": 6122
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.jingzhou_jin",
-          "name": "竞州",
-          "type": "城池",
-          "description": "晋国西陲州城。",
-          "coordinates": {
-            "x": 2188,
-            "y": 6465
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.zhuyajun",
-          "name": "珠崖郡",
-          "type": "城池",
-          "description": "晋国西南滨海之郡。",
-          "coordinates": {
-            "x": 2713,
-            "y": 7296
-          },
-          "features": []
-        },
-        {
-          "id": "liuchao.location.yongzhou_jin",
-          "name": "邕州",
-          "type": "城池",
-          "description": "晋国南部州城。",
-          "coordinates": {
-            "x": 4178,
-            "y": 6999
-          },
-          "features": []
-        },
-        {
-          "id": "lcq.location.yeao_village",
-          "name": "南荒山村",
-          "region": "南荒",
-          "description": "叶媪居住的山村。"
-        },
-        {
-          "id": "lcq.location.guiwang_inn",
-          "name": "鬼王峒驿馆",
-          "region": "南荒",
-          "description": "商队入峒当夜安置的驿馆。"
-        },
-        {
-          "id": "lcq.location.nanhuang_departure_camp",
-          "name": "南荒散峒营地",
-          "region": "南荒"
-        }
-      ]
-    },
-    {
-      "op": "insertAfter",
-      "path": "canon.locations",
-      "afterId": "lcq.location.yeao_village",
-      "value": {
-        "id": "lcq.location.guiwang_inn",
-        "name": "鬼王峒驿馆",
-        "region": "南荒",
-        "description": "商队入峒当夜安置的驿馆。"
-      }
-    },
-    {
-      "op": "insertAfter",
-      "path": "canon.locations",
-      "afterId": "lcq.location.guiwang_inn",
-      "value": {
-        "id": "lcq.location.nanhuang_departure_camp",
-        "name": "南荒散峒营地",
-        "region": "南荒"
-      }
-    },
-    {
       "op": "set",
       "path": "canon.relationships",
       "from": [
@@ -1795,47 +164,1022 @@
     },
     {
       "op": "set",
-      "path": "scenario.chapters[id=lcq.chapter.stage_05b_investigation].eventIds",
+      "path": "canon.factions",
       "from": [
-        "lcq.event.s05b_01_binu_reveals_xiaozi",
-        "lcq.event.s05b_02_xiaozi_exposed",
-        "lcq.event.debut_lemingzhu"
+        {
+          "id": "liuchao.faction.bai_hu_shang_guan",
+          "name": "白湖商馆",
+          "description": "五原城商馆，程宗扬所属。",
+          "type": "商馆",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.guang_ming_guan_tang",
+          "name": "光明观堂",
+          "description": "乐明珠所属的医道门派。",
+          "type": "宗门",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.biyu",
+          "name": "碧鲮族",
+          "description": "南荒海族，已衰落。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.gui_wang_dong",
+          "name": "鬼王峒",
+          "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。部族出自大地深处（凿岩而居、食青苔饮硫磺水）；与蛇彝人有灭族级血仇（部族女性曾被蛇彝灭绝殆尽）；得龙神庇护方存续至今。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xing_yue_hu",
+          "name": "星月湖",
+          "description": "星月湖，岳帅旧部所在。",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.jiangzhou",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hei_mo_hai",
+          "name": "黑魔海",
+          "description": "魔道宗派/黑魔海教众自称；总部/据点：未知；目标：大兴圣教，迎回魔尊，完成大祭；核心：魔尊（真身未明确）、剑玉姬（高层智囊/巫宗核心）、殇侯/殇君（毒宗元老）、泉玉姬（黑魔海玉姬之一）；人物：殇侯/殇君（毒宗元老）、小紫（毒宗唯一嫡脉）、齐羽仙（巫宗成员）、泉玉姬（玉姬之一）、游婵（黑魔海分部下级小头目，负责和飞鸟翔/飞鸟熊藏接头）、鱼朝恩（毒宗成员）、古冥隐（黑魔海供奉）；与程宗扬：敌对关系，程宗扬为圣教死敌，杀圣教供奉屈无伏，破坏圣教在晋国安插的人手，圣教下令血债血偿",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.nanzhao",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7700
+            }
+          ],
+          "features": [
+            "鼎炉献祭（玉姬/姬奴服侍主人）",
+            "洗脑脑控（通过赐药/秘术控制成员）",
+            "玉姬容器（剑玉姬、泉玉姬等作为容器/工具）",
+            "秘制神药（教母亲自赐药，神效无比）",
+            "巫毒双修（教主兼巫毒二宗之秘）"
+          ]
+        },
+        {
+          "id": "liuchao.faction.bai_wu",
+          "name": "白武族",
+          "description": "武二郎所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hua_miao",
+          "name": "花苗族",
+          "description": "苏荔所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hong_miao",
+          "name": "红苗族",
+          "description": "南荒苗族分支之一，本关作为萨安、丹宸等鬼王宫线索的族属背景出现。",
+          "type": "部族",
+          "level": "地方部族",
+          "features": [
+            "南荒部族",
+            "与鬼王峒冲突牵连",
+            "红苗厨师萨安提供潜入线索"
+          ]
+        },
+        {
+          "id": "liuchao.faction.pan_jiang_cheng",
+          "name": "盘江程氏",
+          "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.yun_shi_shang_hui",
+          "name": "云氏商会",
+          "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.tai_yi_zhen_zong",
+          "name": "太乙真宗",
+          "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x12f7726f47",
+          "name": "申服君封地",
+          "description": "申服君封地（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x898ded5bf1",
+          "name": "少陵侯府",
+          "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x8b538653d9",
+          "name": "殇侯势力",
+          "description": "黑魔海毒宗旗下的一个分支——殇侯（鸩羽殇侯·殇振羽）的私人班底，成员忠心于殇侯个人而非毒宗建制，**不等同于毒宗**。背景：黑魔海分巫、毒二宗且向来不睦（巫宗之主=秘御天王，外堂总执事=剑玉姬），两宗曾有内斗。核心成员：秦桧（门客二十余年，习毒宗绝学惊魔指）、石敬瑭（近卫/代理人）、仇雍；小紫幼时托庇殇侯门下，被殇侯指定为毒宗嫡传。",
+          "type": "宗门分支",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.cheng_shi_shang_hui",
+          "name": "程氏商会",
+          "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x7ef38c734e",
+          "name": "影月宗",
+          "description": "影月宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x4e30686b32",
+          "name": "临川王势力",
+          "description": "临川王势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyl.faction.pengyi",
+          "name": "鹏翼社",
+          "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.wuyang_houfu",
+          "name": "舞阳侯府",
+          "description": "舞阳侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.jin_state",
+          "name": "晋国",
+          "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x37741bab36",
+          "name": "石家（金谷园）",
+          "description": "石家（金谷园）（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x2d33e1eaf9",
+          "name": "程宗扬势力",
+          "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x874bfaa9da",
+          "name": "平山宗",
+          "description": "平山宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xue_sun",
+          "name": "雪隼佣兵团",
+          "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0ba5d2439c",
+          "name": "泊陵鱼氏",
+          "description": "泊陵鱼氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x94cc3fdd7b",
+          "name": "混元观",
+          "description": "混元观（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.dragon_chen",
+          "name": "龙宸",
+          "description": "杀手集团/刺客组织；总部/据点：晴州；目标：绝对中立，只为金铢服务，不涉及任何立场；核心：座主（真身未明）,长老焚无尘；架构：外围：三十六妖星（其他门派弃徒）；核心：二十八宿正星等；手段：色诱术,隐匿形迹,刺杀,暗杀法门,标记召唤；人物：虞白樱,虞紫薇,焚无尘,牛金牛,虚日鼠,女土蝠,室火猪,壁水貐,斗木獬,危月燕,惊理,罂奴；与程宗扬：敌对，程宗扬多次与龙宸杀手冲突，但亦有短暂合作（如请焚无尘开启魔墟禁制）；关键事件：龙宸刺杀岳鸟人及程宗扬同伴,与黑魔海联手袭击云家,在伊水之战中派遣六名杀手刺杀程宗扬,焚无尘被程宗扬设计击杀于太泉古阵。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe6bd0066c9",
+          "name": "小紫势力",
+          "description": "小紫势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.qin_state",
+          "name": "秦国",
+          "description": "秦国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0f21ed0f98",
+          "name": "太原王家",
+          "description": "太原王家（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe9675069af",
+          "name": "香竹寺",
+          "description": "香竹寺（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.song_state",
+          "name": "宋国",
+          "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x5a4fdd48cd",
+          "name": "选锋营",
+          "description": "选锋营（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.tiance_fu",
+          "name": "皇图天策府",
+          "description": "皇图天策府（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.jin_jun",
+          "name": "禁军",
+          "description": "隶属萧侯（萧遥逸之父）统领；皇城守卫禁军，兵力八千余人，兵甲精良胜过北府兵，守卫台城外廷；主将：萧侯；戒备森严，明哨暗哨俱全，由萧侯亲自训练布置，守卫台城宫禁。",
+          "type": "军队",
+          "features": [],
+          "polity": "晋国",
+          "region": "晋国"
+        },
+        {
+          "id": "lcq.faction.left_guard",
+          "name": "左武军",
+          "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
+          "type": "军队",
+          "features": [],
+          "polity": "大汉/六朝",
+          "region": "跨国（草原域外作战）"
+        },
+        {
+          "id": "liuchao.faction.x56f82fa2b5",
+          "name": "羽林军",
+          "description": "天子亲领；与期门武士并为最可靠兵力；太后、吕氏亦曾插手其人事安排；天子亲军/禁军；驻扎上林苑；设右营骑射等编制；兵力分散驻守各宫观；主将：义纵（右营骑射）、冯子都（羽林郎）、王子方（羽林郎）、霍少将军（后接管）；天子亲领精锐；盔带长羽；骑射为主；被视为最可靠兵力；可争取为皇位支撑。",
+          "type": "军队",
+          "features": [],
+          "polity": "汉国",
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.faction.x89db5b6118",
+          "name": "兰陵萧氏",
+          "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x739323b7a6",
+          "name": "八骏",
+          "description": "八骏（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x96f008a7cb",
+          "name": "捧日军",
+          "description": "宋国朝廷禁军，枢密院调兵，太尉府练兵，属上四军之一；宋国禁军精锐上四军之一，额定五万人编制，主力为步骑混编，骑兵额定八千但实有不足四千；设左厢、右厢，下辖数军；主将：夏用和（捧日军主将，绰号夏夜眼）、刘平（捧日左厢主将，前锋主将）、郭遵（第六军指挥使）、王信（第三军都指挥使）、卢政（第七军都指挥使）；禁军精锐，骑兵为主但战马短缺；采用募兵制、兵将分离制度；遭星月湖游击队袭扰，在烈山迟滞多日，伤亡数百人仍难突破。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.x14484c1b02",
+          "name": "龙卫军",
+          "description": "隶属宋国朝廷，枢密院调兵，太尉府练兵；宋国禁军上四军之一，野战精锐；左厢八军约两万人；右厢另有数军；总计参与江州之战约五万人；主将：任福（龙卫军左厢都指挥使）、葛怀敏（右厢指挥使）、桑怿（左厢第一军指挥使）、常鼎（左厢第四军指挥使）、刘肃（左厢第五军指挥使）、王庆（左厢第六军指挥使）、朱观（左厢第二军指挥使）、武英（左厢第三军指挥使）、赵津（左厢第七军指挥使）、王珪（左厢第八军指挥使）、任怀亮（任福之子，左厢军士）；宋军精锐禁军，兵将分离制度；缺乏神臂弓装备；好水川之战被星月湖大营以铁丝网、伏兵、地形分割围歼，左厢主将任福阵亡。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.bai_yi",
+          "name": "白夷",
+          "description": "南荒部族，出产珍珠与美玉。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.baiyi"
+        }
       ],
       "to": [
-        "lcq.event.s05b_01_binu_reveals_xiaozi",
-        "lcq.event.s05b_02_xiaozi_exposed",
-        "lcq.event.debut_lemingzhu",
-        "lcq.event.blank_letter_and_dagu",
-        "lcq.event.geluo_summons_biji",
-        "lcq.event.escape_cave_mechanism",
-        "lcq.event.hongmiao_controlled"
-      ]
-    },
-    {
-      "op": "set",
-      "path": "scenario.chapters[id=lcq.chapter.stage_05b_reversal].eventIds",
-      "from": [
-        "lcq.event.s05b_08a_rescue_suli",
-        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
-        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
-        "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
-      ],
-      "to": [
-        "lcq.event.s05b_08a_rescue_suli",
-        "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
-        "lcq.event.s05b_09_temporary_pact_with_xiaozi",
-        "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
-        "lcq.event.ghost_king_swallowed",
-        "lcq.event.slay_dragon",
-        "lcq.event.xieyi_entrustment",
-        "lcq.event.xiaozi_kills_mother",
-        "lcq.event.tribes_pledge",
-        "lcq.event.s05b_ice_gu_detour",
-        "lcq.event.s05b_wuer_suli_depart",
-        "lcq.event.shanghou_revealed",
-        "lcq.event.s05b_shanghou_reads_letter",
-        "lcq.event.s05b_yeao_palm_ningyu_stays",
-        "lcq.event.shanghou_cures_ice_gu"
+        {
+          "id": "liuchao.faction.bai_hu_shang_guan",
+          "name": "白湖商馆",
+          "description": "五原城商馆，程宗扬所属。",
+          "type": "商馆",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.guang_ming_guan_tang",
+          "name": "光明观堂",
+          "description": "乐明珠所属的医道门派。",
+          "type": "宗门",
+          "headquartersLocationId": "liuchao.location.mingzhou",
+          "territory": [
+            {
+              "x": 8800,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6300
+            },
+            {
+              "x": 9000,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6500
+            },
+            {
+              "x": 8800,
+              "y": 6300
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.biyu",
+          "name": "碧鲮族",
+          "description": "南荒海族，已衰落。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.gui_wang_dong",
+          "name": "鬼王峒",
+          "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。部族出自大地深处（凿岩而居、食青苔饮硫磺水）；与蛇彝人有灭族级血仇（部族女性曾被蛇彝灭绝殆尽）；得龙神庇护方存续至今。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.biyu_village",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xing_yue_hu",
+          "name": "星月湖",
+          "description": "星月湖，岳帅旧部所在。",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.jiangzhou",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6600
+            },
+            {
+              "x": 5100,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6800
+            },
+            {
+              "x": 4800,
+              "y": 6600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hei_mo_hai",
+          "name": "黑魔海",
+          "description": "这一势力的成员与来历尚未向玩家披露。",
+          "type": "组织",
+          "headquartersLocationId": "liuchao.location.nanzhao",
+          "territory": [
+            {
+              "x": 4800,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7700
+            },
+            {
+              "x": 5200,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7900
+            },
+            {
+              "x": 4800,
+              "y": 7700
+            }
+          ],
+          "features": [
+            "鼎炉献祭（玉姬/姬奴服侍主人）",
+            "洗脑脑控（通过赐药/秘术控制成员）",
+            "玉姬容器（剑玉姬、泉玉姬等作为容器/工具）",
+            "秘制神药（教母亲自赐药，神效无比）",
+            "巫毒双修（教主兼巫毒二宗之秘）"
+          ]
+        },
+        {
+          "id": "liuchao.faction.bai_wu",
+          "name": "白武族",
+          "description": "武二郎所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hua_miao",
+          "name": "花苗族",
+          "description": "苏荔所属部族。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.guiwang_dong",
+          "territory": [
+            {
+              "x": 1500,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8600
+            },
+            {
+              "x": 1700,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8800
+            },
+            {
+              "x": 1500,
+              "y": 8600
+            }
+          ],
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.hong_miao",
+          "name": "红苗族",
+          "description": "南荒苗族分支之一，本关作为萨安、丹宸等鬼王宫线索的族属背景出现。",
+          "type": "部族",
+          "level": "地方部族",
+          "features": [
+            "南荒部族",
+            "与鬼王峒冲突牵连",
+            "红苗厨师萨安提供潜入线索"
+          ]
+        },
+        {
+          "id": "liuchao.faction.pan_jiang_cheng",
+          "name": "盘江程氏",
+          "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.yun_shi_shang_hui",
+          "name": "云氏商会",
+          "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.tai_yi_zhen_zong",
+          "name": "太乙真宗",
+          "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x12f7726f47",
+          "name": "申服君封地",
+          "description": "申服君封地（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x898ded5bf1",
+          "name": "少陵侯府",
+          "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x8b538653d9",
+          "name": "未明来历的势力",
+          "description": "这一势力的成员与来历尚未向玩家披露。",
+          "type": "宗门分支",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.cheng_shi_shang_hui",
+          "name": "程氏商会",
+          "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x7ef38c734e",
+          "name": "影月宗",
+          "description": "影月宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x4e30686b32",
+          "name": "临川王势力",
+          "description": "临川王势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyl.faction.pengyi",
+          "name": "鹏翼社",
+          "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.wuyang_houfu",
+          "name": "舞阳侯府",
+          "description": "舞阳侯府（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.jin_state",
+          "name": "晋国",
+          "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x37741bab36",
+          "name": "石家（金谷园）",
+          "description": "石家（金谷园）（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x2d33e1eaf9",
+          "name": "程宗扬势力",
+          "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x874bfaa9da",
+          "name": "平山宗",
+          "description": "平山宗（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xue_sun",
+          "name": "雪隼佣兵团",
+          "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0ba5d2439c",
+          "name": "泊陵鱼氏",
+          "description": "泊陵鱼氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x94cc3fdd7b",
+          "name": "混元观",
+          "description": "混元观（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.dragon_chen",
+          "name": "龙宸",
+          "description": "杀手集团/刺客组织；总部/据点：晴州；目标：绝对中立，只为金铢服务，不涉及任何立场；核心：座主（真身未明）,长老焚无尘；架构：外围：三十六妖星（其他门派弃徒）；核心：二十八宿正星等；手段：色诱术,隐匿形迹,刺杀,暗杀法门,标记召唤；人物：虞白樱,虞紫薇,焚无尘,牛金牛,虚日鼠,女土蝠,室火猪,壁水貐,斗木獬,危月燕,惊理,罂奴；与程宗扬：敌对，程宗扬多次与龙宸杀手冲突，但亦有短暂合作（如请焚无尘开启魔墟禁制）；关键事件：龙宸刺杀岳鸟人及程宗扬同伴,与黑魔海联手袭击云家,在伊水之战中派遣六名杀手刺杀程宗扬,焚无尘被程宗扬设计击杀于太泉古阵。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe6bd0066c9",
+          "name": "小紫势力",
+          "description": "小紫势力（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.qin_state",
+          "name": "秦国",
+          "description": "秦国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x0f21ed0f98",
+          "name": "太原王家",
+          "description": "太原王家（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.xe9675069af",
+          "name": "香竹寺",
+          "description": "香竹寺（宗门）——简介待补，源自角色归属富化自动补录。",
+          "type": "宗门",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.song_state",
+          "name": "宋国",
+          "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x5a4fdd48cd",
+          "name": "选锋营",
+          "description": "选锋营（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "lyg.faction.tiance_fu",
+          "name": "皇图天策府",
+          "description": "皇图天策府（军队）——简介待补，源自角色归属富化自动补录。",
+          "type": "军队",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.jin_jun",
+          "name": "禁军",
+          "description": "隶属萧侯（萧遥逸之父）统领；皇城守卫禁军，兵力八千余人，兵甲精良胜过北府兵，守卫台城外廷；主将：萧侯；戒备森严，明哨暗哨俱全，由萧侯亲自训练布置，守卫台城宫禁。",
+          "type": "军队",
+          "features": [],
+          "polity": "晋国",
+          "region": "晋国"
+        },
+        {
+          "id": "lcq.faction.left_guard",
+          "name": "左武军",
+          "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
+          "type": "军队",
+          "features": [],
+          "polity": "大汉/六朝",
+          "region": "跨国（草原域外作战）"
+        },
+        {
+          "id": "liuchao.faction.x56f82fa2b5",
+          "name": "羽林军",
+          "description": "天子亲领；与期门武士并为最可靠兵力；太后、吕氏亦曾插手其人事安排；天子亲军/禁军；驻扎上林苑；设右营骑射等编制；兵力分散驻守各宫观；主将：义纵（右营骑射）、冯子都（羽林郎）、王子方（羽林郎）、霍少将军（后接管）；天子亲领精锐；盔带长羽；骑射为主；被视为最可靠兵力；可争取为皇位支撑。",
+          "type": "军队",
+          "features": [],
+          "polity": "汉国",
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.faction.x89db5b6118",
+          "name": "兰陵萧氏",
+          "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+          "type": "家族",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x739323b7a6",
+          "name": "八骏",
+          "description": "八骏（组织）——简介待补，源自角色归属富化自动补录。",
+          "type": "组织",
+          "features": []
+        },
+        {
+          "id": "liuchao.faction.x96f008a7cb",
+          "name": "捧日军",
+          "description": "宋国朝廷禁军，枢密院调兵，太尉府练兵，属上四军之一；宋国禁军精锐上四军之一，额定五万人编制，主力为步骑混编，骑兵额定八千但实有不足四千；设左厢、右厢，下辖数军；主将：夏用和（捧日军主将，绰号夏夜眼）、刘平（捧日左厢主将，前锋主将）、郭遵（第六军指挥使）、王信（第三军都指挥使）、卢政（第七军都指挥使）；禁军精锐，骑兵为主但战马短缺；采用募兵制、兵将分离制度；遭星月湖游击队袭扰，在烈山迟滞多日，伤亡数百人仍难突破。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.x14484c1b02",
+          "name": "龙卫军",
+          "description": "隶属宋国朝廷，枢密院调兵，太尉府练兵；宋国禁军上四军之一，野战精锐；左厢八军约两万人；右厢另有数军；总计参与江州之战约五万人；主将：任福（龙卫军左厢都指挥使）、葛怀敏（右厢指挥使）、桑怿（左厢第一军指挥使）、常鼎（左厢第四军指挥使）、刘肃（左厢第五军指挥使）、王庆（左厢第六军指挥使）、朱观（左厢第二军指挥使）、武英（左厢第三军指挥使）、赵津（左厢第七军指挥使）、王珪（左厢第八军指挥使）、任怀亮（任福之子，左厢军士）；宋军精锐禁军，兵将分离制度；缺乏神臂弓装备；好水川之战被星月湖大营以铁丝网、伏兵、地形分割围歼，左厢主将任福阵亡。",
+          "type": "军队",
+          "features": [],
+          "polity": "宋国",
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.faction.bai_yi",
+          "name": "白夷",
+          "description": "南荒部族，出产珍珠与美玉。",
+          "type": "部族",
+          "headquartersLocationId": "liuchao.location.baiyi"
+        }
       ]
     },
     {
@@ -2396,7 +1740,7 @@
         {
           "id": "liuchao.character.qi_yuan",
           "name": "祁远",
-          "role": "商业伙伴/属下",
+          "role": "白湖商馆老行商，管商队奴隶与行路",
           "description": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是账面上的银钱。",
           "profile": {
             "attributes": {
@@ -4152,7 +3496,7 @@
           "id": "liuchao.character.qi_yuan",
           "name": "祁远",
           "role": "商队老行商",
-          "description": "商队老行商",
+          "description": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。",
           "profile": {
             "origin": "商队老行商",
             "personality": [
@@ -4671,6 +4015,1609 @@
           "affiliations": [],
           "level": null,
           "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        }
+      ]
+    },
+    {
+      "op": "set",
+      "path": "canon.locations",
+      "from": [
+        {
+          "id": "liuchao.location.biyu_village",
+          "name": "碧鲮族",
+          "description": "碧鲮族村落，位于海湾。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.biyu",
+          "coordinates": {
+            "x": 1824,
+            "y": 8592
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.sea_temple",
+          "name": "海神殿",
+          "description": "碧鲮族废弃的海底神殿，内有海王与海后石像。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.biyu",
+          "coordinates": {
+            "x": 1824,
+            "y": 8592
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.wuyuan",
+          "name": "五原城",
+          "description": "白湖商馆所在地。 边境贸易重镇，商贾云集，市集有马匹、皮毛、香料等货物，城墙高耸，客栈酒肆热闹。（民俗：马市兴盛，五原马匹为六朝各地商队所青睐，亦是南来北往商旅的歇脚之地。） 以出产良驹著称，马匹身量不大但耳尖腿直、鼻正眼明。",
+          "type": "城池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "coordinates": {
+            "x": 881,
+            "y": 4366
+          },
+          "features": [],
+          "region": "塞外"
+        },
+        {
+          "id": "liuchao.location.guangming",
+          "name": "光明观堂",
+          "description": "乐明珠师门。",
+          "type": "城池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "coordinates": {
+            "x": 8925,
+            "y": 6374
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.guiwang_dong",
+          "name": "鬼王峒",
+          "description": "南荒地下洞窟，鬼王峒核心。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
+          "type": "洞府",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.gui_wang_dong",
+          "coordinates": {
+            "x": 1641,
+            "y": 8690
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.mingzhou",
+          "name": "明州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国沿海州城，光明观堂据点所在。 东南沿海港城，光明观堂医宗所在，城中曾发瘟疫，街巷萧条，港口帆船往来，有大湖水域。（民俗：光明观堂以医术闻名，弟子多习医道，救死扶伤，受民众敬重。）",
+          "coordinates": {
+            "x": 8925,
+            "y": 6374
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.jiangzhou",
+          "name": "江州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "星月湖大营所在地，宋国边境重要城市。 长江南岸的战略要冲，城墙坚固，营寨密布，城郊有金明寨等驻军设施，城内已开设书院，商贾初兴，战火余烬未散。（民俗：晋、宋势力交汇之地，兵家必争，世家子弟图谋变革，欲建平等新秩序；商业萌芽，商会经营渐起。） 南陲边城，山势险峻，星月湖大营隐于其间，数千义士驻守（民俗：民风彪悍，尚武敢战，程侯领地，商旅往来频繁）",
+          "coordinates": {
+            "x": 4956,
+            "y": 6735
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.jiankang",
+          "name": "建康",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。 长江南岸重镇，台城宫阙壮丽，秦淮河畔烟火万家（民俗：六朝故都，风流文雅，士人尚清谈，寺院道观遍布）",
+          "coordinates": {
+            "x": 3380,
+            "y": 5992
+          },
+          "features": [],
+          "region": "晋国"
+        },
+        {
+          "id": "liuchao.location.luoyang",
+          "name": "洛都",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国都城，位于中州腹地。 汉国京师，宫殿巍峨，琼玉阙楼耸立，国宾驿馆宏伟大气，宫廷戒备森严，天子仪仗威严（民俗：皇家仪仗森严，权贵云集，各方势力暗流涌动） 宫阙巍峨，殿宇连绵，铜驼大街宽绰，两侧里坊规整，晨昏鼓声号令全城（民俗：士族好清谈，宫宴豪奢成风，婚丧仪礼繁复，禁婚二十七月）",
+          "coordinates": {
+            "x": 6838,
+            "y": 3577
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.changan",
+          "name": "长安",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+          "coordinates": {
+            "x": 3159,
+            "y": 2767
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.linan",
+          "name": "临安",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国都城，江南繁华之地。 江南水乡名城，西湖烟柳繁华，蹴鞠相扑盛行，权贵聚集，市井热闹非凡。（民俗：山岳正赛为六朝顶级蹴鞠盛会，女子相扑大赛热闹开擂，鞠社文化蔚然成风。） 江南水乡，市桥繁华，街巷窄长多河渠，酒楼茶肆林立（民俗：商贾云集，物产丰饶，丝织业盛，宋女婉约好文墨）",
+          "coordinates": {
+            "x": 7466,
+            "y": 6532
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.junzhou",
+          "name": "筠州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国州城，王团练驻地，程宗扬运粮之处。 宋国西部商业重镇，浮凌江畔船来船往，粮铺商号林立，官府设常平仓储粮，军需供应繁忙。（民俗：商业气息浓厚，粮商与军政勾连，走私商路通达昭南。） 程宗扬施粥济民之地，仓廪开棚，平价粜粮，民生有所恢复（民俗：曾有程宗扬开棚施粥、平价粜粮之善政，数万民众受惠）",
+          "coordinates": {
+            "x": 5656,
+            "y": 6822
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.nanzhao",
+          "name": "昭南",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。 南方国度，都城麟趾城，地产巨木用于建筑，水系连通大江云水，婚俗保留古风。（民俗：妻媵制盛行，诸侯可一聘九女；沐羽城等地有昭南人受雇充当佣兵；建筑用巨木由昭南输出。） 六朝之一，都城为麟趾城，境内有帝丘、昆吾等地名。",
+          "coordinates": {
+            "x": 4916,
+            "y": 7778
+          },
+          "features": [],
+          "region": "昭南"
+        },
+        {
+          "id": "liuchao.location.diqiu",
+          "name": "帝丘",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒-中州交界处的重要城镇。 昭南境内地名，位于麟趾城附近。",
+          "coordinates": {
+            "x": 6096,
+            "y": 7831
+          },
+          "features": [],
+          "region": "昭南"
+        },
+        {
+          "id": "liuchao.location.kunwu",
+          "name": "昆吾",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域的重要城镇。 昭南南方重镇，城中有制刀工匠，相传以昆吾刀裁取霓龙丝，气候湿热，多云霞幻象。（民俗：昆吾刀锋利著称，相传可裁取霞光化为霓丝，为当地神秘特产。） 昭南境内地名，与帝丘之间夹杂着夭鸿、火渎等地名。",
+          "coordinates": {
+            "x": 4840,
+            "y": 7546
+          },
+          "features": [],
+          "region": "昭南"
+        },
+        {
+          "id": "liuchao.location.xiongerpu",
+          "name": "熊耳铺",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒入口处的村寨，程宗扬在此选向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
+          "coordinates": {
+            "x": 1623,
+            "y": 7612
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.baiyi",
+          "name": "白夷族",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒白夷族聚居地。 南荒丛林深处的部族聚居地，设有隐秘地宫，当地出产湖珠手串等南荒特产，有自己的武装力量与鬼王峒抗衡。 盘江以南的富庶山谷，纯白岩石门楼，香花遍路，女子娇美。（民俗：出产珍稀之物，女性地位较高，盛装迎接贵客。）",
+          "coordinates": {
+            "x": 1818,
+            "y": 8118
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.liuligu",
+          "name": "琉璃谷",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域山谷。 琉璃化的山谷，阳光下七彩纷呈，景色瑰丽绝美，为南荒胜境。",
+          "coordinates": {
+            "x": 1165,
+            "y": 8791
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.shenmu",
+          "name": "神木",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域重要地标。 巍峨神木如万仞之峰，枝干广袤需五日方至半腰，根节如群山层叠，云霞缭绕触手可及，树巅隐于天际不可望",
+          "coordinates": {
+            "x": 1341,
+            "y": 9521
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.haishanghuahuan",
+          "name": "海棠花環",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "险地",
+          "description": "南荒极南端的环状区域。",
+          "coordinates": {
+            "x": 3241,
+            "y": 9915
+          },
+          "features": [],
+          "region": "海上"
+        },
+        {
+          "id": "liuchao.location.guangyang",
+          "name": "广阳",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "晋国-汉国边境重镇。 广阳渠连接大江云水，商船往来频繁，沿岸街市繁华，赌场酒楼错落其间。（民俗：商贾汇聚，江湖势力活跃，云氏等大商族在此经营水道贸易，黑魔海亦设赌坊为据点。）",
+          "coordinates": {
+            "x": 4456,
+            "y": 5668
+          },
+          "features": [],
+          "region": "晋国"
+        },
+        {
+          "id": "liuchao.location.qingzhou",
+          "name": "晴州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "商贾云集的运河港埠，粮铺船行林立，鞠社热闹，商会势力盘根错节，南北货物汇聚之地。（民俗：蹴鞠之风盛行，商人重利轻义，慈幼院济贫，光明观堂弟子曾在此施医布善。） 沿海城市，泊陵鱼氏与黑魔海曾在此联手",
+          "coordinates": {
+            "x": 5400,
+            "y": 6000
+          },
+          "features": [],
+          "region": "海上"
+        },
+        {
+          "id": "liuchao.location.ningzhou",
+          "name": "宁州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。）",
+          "coordinates": {
+            "x": 4656,
+            "y": 6437
+          },
+          "features": [],
+          "region": "晋国"
+        },
+        {
+          "id": "liuchao.location.jinmingzhai",
+          "name": "金明寨",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋军大营，位于烈山附近。 江州城东南十五里的村寨旧址，宋军掘土垒墙、设壕为营，成为进攻江州的军事基地，辎重营曾遭焚烧。 宋军大营所在，捧日军右厢石元孙麾下诸将驻扎，营帐连绵（民俗：右厢都指挥使石元孙驻军于此，备有巢车、轒輼等攻城器械）",
+          "coordinates": {
+            "x": 5050,
+            "y": 6550
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.haoshuichuan",
+          "name": "好水川",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "烈山附近峡谷，大型战场。 山谷丘陵地带，荒凉旷野，宋夏两军交战之地，有山岗可俯瞰战场。 宋军败绩之地，战场荒凉，遗骸未收，士气低落之地（民俗：军事地名，龙卫左厢军曾在此惨败，主将任福战死）",
+          "coordinates": {
+            "x": 5104,
+            "y": 6476
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.jingxi",
+          "name": "荆溪村寨",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "荆溪人聚居地，位于筠州附近山区。 山间村寨，存粮充裕戒备森严，兼具仓储与防御功能，临江而近筠州，水路可通粮运。（民俗：作为临时粮仓重地，外人出入盘查严格，与官府关系密切。）",
+          "coordinates": {
+            "x": 5600,
+            "y": 6900
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.wudu",
+          "name": "舞都",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国境内的一座都邑。 首阳山下的晋国封邑，侯府深院，画舫往来，世家公子云集，纨绔声色犬马之地。（民俗：权贵奢靡成风，侯门子弟以豢养风虎、海东青等珍禽异兽为风尚，社交宴饮无度。） 南方边陲重镇，程侯规划取此地经营，图谋霸业（民俗：偏远之地，民风淳朴，亟待开发）",
+          "coordinates": {
+            "x": 6114,
+            "y": 3929
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.yong",
+          "name": "上庸",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "唐国与汉国之间的城池。",
+          "coordinates": {
+            "x": 5176,
+            "y": 3978
+          },
+          "features": [],
+          "region": "秦国"
+        },
+        {
+          "id": "liuchao.location.yongzhou",
+          "name": "永州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国-唐国交界附近的城市。",
+          "coordinates": {
+            "x": 4220,
+            "y": 4242
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.baijun",
+          "name": "巴郡",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国、唐国交界处的郡城。",
+          "coordinates": {
+            "x": 4763,
+            "y": 3063
+          },
+          "features": [],
+          "region": "秦国"
+        },
+        {
+          "id": "liuchao.location.dantu",
+          "name": "丹徒",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "晋国-宋国水路交通要地。",
+          "coordinates": {
+            "x": 8875,
+            "y": 4854
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.longchuan",
+          "name": "龙川",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国城市。 江湖术士聚集的边陲小镇，酒旗招展，街巷间多有占卜测字摊位，市井嘈杂而鱼龙混杂。（民俗：民间信奉铁口神算，术士在此地颇受欢迎，算命测字成为当地常见的营生。）",
+          "coordinates": {
+            "x": 7908,
+            "y": 6819
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.nanjun",
+          "name": "南郡",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国南部郡城。",
+          "coordinates": {
+            "x": 6876,
+            "y": 5276
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.chenzhou",
+          "name": "辰州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国-唐国边境城市。",
+          "coordinates": {
+            "x": 4704,
+            "y": 5011
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.liangzhou",
+          "name": "凉州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "唐国西北边境州城，凉州盟据点。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固） 铁马堂等帮会势力组成凉州盟，驰骋而来（民俗：凉州人士豪侠，结盟闯阵）",
+          "coordinates": {
+            "x": 1430,
+            "y": 2767
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.boling",
+          "name": "泊陵",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国沿海城市，鱼氏势力据点。 海岸岛礁中的楼船停泊处，山崖上有鱼氏伏击要塞，湖泊与海路交汇的险峻水域（民俗：海上岛民世家，以毒术和阴险报复闻名江湖，族中高手擅长用毒伏击） 泊陵鱼氏所在，濒海地区，与黑魔海有往来（民俗：鱼氏家族，掌握阴阳鱼等秘宝）",
+          "coordinates": {
+            "x": 9592,
+            "y": 6706
+          },
+          "features": [],
+          "region": "海上"
+        },
+        {
+          "id": "liuchao.location.yiyang",
+          "name": "夷陵",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国城市，长江沿岸。 江南丘陵商业城镇，长江沿岸水陆要冲，白湖商馆据点所在，商旅繁忙，钱庄林立，客栈酒肆遍布街巷。（民俗：白湖商馆醉月楼分号遍布，商贾云集消息灵通，以商贸和情报网络闻名，黑白两道均有往来。） 入山前最后一个城镇，马匹在此换成走骡",
+          "coordinates": {
+            "x": 7068,
+            "y": 7423
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.cuizhi",
+          "name": "翠枝港",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国沿海港口。",
+          "coordinates": {
+            "x": 9515,
+            "y": 5001
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.lie",
+          "name": "烈",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国-晋国交界的山脉区域。 险峻山地间一条狭窄山道蜿蜒而过，两侧山势陡峭难行，冬季积雪封路，宋军步阵在此难以展开。 金明寨附近区域，宋军右厢主力驻扎，前军应已接近此地（民俗：宋军行军至此，主力部队集结区域）",
+          "coordinates": {
+            "x": 5390,
+            "y": 6472
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.bailuojiang",
+          "name": "白龍江",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒-中州交界的重要河流。 大江支流，河水蜿蜒向西汇入滔滔江水。",
+          "coordinates": {
+            "x": 1905,
+            "y": 7162
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.longchi",
+          "name": "龙池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "宗门",
+          "description": "太乙真宗总部所在地，位于中州区域。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。） 太乙真宗圣地，龙阙山所在地，掌教就职大典举行地，山势险峻（民俗：道教圣地，太乙真宗总坛所在，九阳神功传承之地）",
+          "coordinates": {
+            "x": 5000,
+            "y": 5000
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.south_wild_valley",
+          "name": "南荒山谷",
+          "description": "龙神坠落之地。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "coordinates": {
+            "x": 4916,
+            "y": 7778
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.jiankang_yuji_xiang",
+          "name": "建康玉鸡巷",
+          "description": "程宗扬在晋都的宅邸。",
+          "type": "城池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "coordinates": {
+            "x": 7100,
+            "y": 4960
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.gui_wang_gong",
+          "name": "鬼王宫",
+          "description": "鬼王峒深处的巫王宫殿，潜入、交锋、深井救援与倒戈前夜的主要舞台。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.gui_wang_dong",
+          "coordinates": {
+            "x": 2620,
+            "y": 7200
+          },
+          "features": [
+            "岩浆结界",
+            "深井祭台",
+            "鬼巫王中枢",
+            "通往最终决战的前置地点"
+          ],
+          "safety": "极度危险",
+          "status": "敌对据点"
+        },
+        {
+          "id": "liuchao.location.gui_wang_gong.jingshen_tai",
+          "name": "鬼王宫深井祭台",
+          "description": "鬼王宫内部深井与祭台区域，苏荔救援、朱诺尸鬼、丹宸之死与龙睛玉护罩等关键进程在此交汇。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.gui_wang_dong",
+          "coordinates": {
+            "x": 2640,
+            "y": 7220
+          },
+          "features": [
+            "深井平台",
+            "祭台",
+            "尸鬼战斗",
+            "龙睛玉护罩"
+          ],
+          "safety": "极度危险",
+          "status": "敌对据点"
+        },
+        {
+          "id": "liuchao.location.canglan",
+          "name": "苍澜镇",
+          "continentId": "liuchao.continent.taiquan",
+          "type": "城池",
+          "description": "太泉古阵入口附近的镇子。 浮玉山脚下的荒芜集镇，四野红土不毛，唯镇周有零星草木，镇外常年雾气弥漫（雾瘴），进出太泉古阵的旅客在此落脚。（民俗：无本地出产，粮价百倍于外；兵器极廉，窝头换刀非神话；镇上弱肉强食，外来者须管住嘴少打听。）",
+          "coordinates": {
+            "x": 7500,
+            "y": 9000
+          },
+          "features": [],
+          "region": "太泉"
+        },
+        {
+          "id": "liuchao.location.taiquan",
+          "name": "太泉古阵",
+          "continentId": "liuchao.continent.taiquan",
+          "type": "秘境",
+          "description": "远古遗迹，太泉古阵入口。 古阵空间结构违背常识，头顶可见星空，西部有赤红巨石，残存焦黑树木与灰烬，黑暗无光处有魇狼出没（民俗：阵法设有灵性机关，需特定修为（六阳境）方可进入，藏有赤阳圣果等珍贵之物） 上古遗迹实为另一个时代的造物：金铁构筑的廊道厅堂、长明不灭的\"夜明珠\"、显影人像的\"光影幻璧\"、轻韧透亮的\"琉璃纸\"、不用牛马自行奔走的\"铁车\"残骸，六朝人以自身语汇敬畏称之。（民俗：入阵者以\"仙家遗泽\"解读诸般造物并各自命名；唯穿越者能认出真身，认知差微妙有趣。）",
+          "coordinates": {
+            "x": 7573,
+            "y": 9083
+          },
+          "features": [],
+          "region": "太泉"
+        },
+        {
+          "id": "liuchao.location.xianyang",
+          "name": "咸阳",
+          "type": "城池",
+          "description": "秦国国都，渭水之滨的雄城。",
+          "coordinates": {
+            "x": 5189,
+            "y": 1911
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.yongcheng",
+          "name": "雍",
+          "type": "城池",
+          "description": "秦国故都，岐山东麓的古邑。",
+          "coordinates": {
+            "x": 4805,
+            "y": 1728
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.lintao",
+          "name": "临洮",
+          "type": "城池",
+          "description": "秦国西北边城。",
+          "coordinates": {
+            "x": 4421,
+            "y": 941
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.shangjun",
+          "name": "上郡",
+          "type": "城池",
+          "description": "秦国北疆重镇。",
+          "coordinates": {
+            "x": 5422,
+            "y": 932
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.hanguguan",
+          "name": "函谷关",
+          "type": "城池",
+          "description": "秦国东出之咽喉雄关，扼守通往汉境的孔道。",
+          "coordinates": {
+            "x": 5750,
+            "y": 2432
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.hongmen",
+          "name": "鸿门",
+          "type": "城池",
+          "description": "咸阳东郊之地。",
+          "coordinates": {
+            "x": 5483,
+            "y": 2132
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.qishan",
+          "name": "歧山",
+          "type": "城池",
+          "description": "秦国西界山脉。",
+          "coordinates": {
+            "x": 4589,
+            "y": 2148
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.zhuoguang",
+          "name": "涿光",
+          "type": "城池",
+          "description": "秦国极北关隘，出关即皋落氏、勾龙氏诸部草原。",
+          "coordinates": {
+            "x": 4803,
+            "y": 584
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.qingyuan_jin",
+          "name": "清远",
+          "type": "城池",
+          "description": "晋国北境城邑。",
+          "coordinates": {
+            "x": 3167,
+            "y": 5628
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.rongzhou",
+          "name": "容州",
+          "type": "城池",
+          "description": "晋国北部州城。",
+          "coordinates": {
+            "x": 3685,
+            "y": 5654
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.hezhou",
+          "name": "和州",
+          "type": "城池",
+          "description": "晋国腹地州城。",
+          "coordinates": {
+            "x": 3031,
+            "y": 6216
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.linchuan",
+          "name": "临川",
+          "type": "城池",
+          "description": "晋国东部州城，临川王封地。",
+          "coordinates": {
+            "x": 4090,
+            "y": 6122
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.jingzhou_jin",
+          "name": "竞州",
+          "type": "城池",
+          "description": "晋国西陲州城。",
+          "coordinates": {
+            "x": 2188,
+            "y": 6465
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.zhuyajun",
+          "name": "珠崖郡",
+          "type": "城池",
+          "description": "晋国西南滨海之郡。",
+          "coordinates": {
+            "x": 2713,
+            "y": 7296
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.yongzhou_jin",
+          "name": "邕州",
+          "type": "城池",
+          "description": "晋国南部州城。",
+          "coordinates": {
+            "x": 4178,
+            "y": 6999
+          },
+          "features": []
+        }
+      ],
+      "to": [
+        {
+          "id": "liuchao.location.biyu_village",
+          "name": "碧鲮族",
+          "description": "碧鲮族村落，位于海湾。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.biyu",
+          "coordinates": {
+            "x": 1824,
+            "y": 8592
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.sea_temple",
+          "name": "海神殿",
+          "description": "碧鲮族废弃的海底神殿，内有海王与海后石像。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.biyu",
+          "coordinates": {
+            "x": 1824,
+            "y": 8592
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.wuyuan",
+          "name": "五原城",
+          "description": "白湖商馆所在地。 边境贸易重镇，商贾云集，市集有马匹、皮毛、香料等货物，城墙高耸，客栈酒肆热闹。（民俗：马市兴盛，五原马匹为六朝各地商队所青睐，亦是南来北往商旅的歇脚之地。） 以出产良驹著称，马匹身量不大但耳尖腿直、鼻正眼明。",
+          "type": "城池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "coordinates": {
+            "x": 881,
+            "y": 4366
+          },
+          "features": [],
+          "region": "塞外"
+        },
+        {
+          "id": "liuchao.location.guangming",
+          "name": "光明观堂",
+          "description": "乐明珠师门。",
+          "type": "城池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "coordinates": {
+            "x": 8925,
+            "y": 6374
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.guiwang_dong",
+          "name": "鬼王峒",
+          "description": "南荒地下洞窟，鬼王峒核心。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
+          "type": "洞府",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.gui_wang_dong",
+          "coordinates": {
+            "x": 1641,
+            "y": 8690
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.mingzhou",
+          "name": "明州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国沿海州城，光明观堂据点所在。 东南沿海港城，光明观堂医宗所在，城中曾发瘟疫，街巷萧条，港口帆船往来，有大湖水域。（民俗：光明观堂以医术闻名，弟子多习医道，救死扶伤，受民众敬重。）",
+          "coordinates": {
+            "x": 8925,
+            "y": 6374
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.jiangzhou",
+          "name": "江州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "星月湖大营所在地，宋国边境重要城市。 长江南岸的战略要冲，城墙坚固，营寨密布，城郊有金明寨等驻军设施，城内已开设书院，商贾初兴，战火余烬未散。（民俗：晋、宋势力交汇之地，兵家必争，世家子弟图谋变革，欲建平等新秩序；商业萌芽，商会经营渐起。） 南陲边城，山势险峻，星月湖大营隐于其间，数千义士驻守（民俗：民风彪悍，尚武敢战，程侯领地，商旅往来频繁）",
+          "coordinates": {
+            "x": 4956,
+            "y": 6735
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.jiankang",
+          "name": "建康",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。 长江南岸重镇，台城宫阙壮丽，秦淮河畔烟火万家（民俗：六朝故都，风流文雅，士人尚清谈，寺院道观遍布）",
+          "coordinates": {
+            "x": 3380,
+            "y": 5992
+          },
+          "features": [],
+          "region": "晋国"
+        },
+        {
+          "id": "liuchao.location.luoyang",
+          "name": "洛都",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国都城，位于中州腹地。 汉国京师，宫殿巍峨，琼玉阙楼耸立，国宾驿馆宏伟大气，宫廷戒备森严，天子仪仗威严（民俗：皇家仪仗森严，权贵云集，各方势力暗流涌动） 宫阙巍峨，殿宇连绵，铜驼大街宽绰，两侧里坊规整，晨昏鼓声号令全城（民俗：士族好清谈，宫宴豪奢成风，婚丧仪礼繁复，禁婚二十七月）",
+          "coordinates": {
+            "x": 6838,
+            "y": 3577
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.changan",
+          "name": "长安",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+          "coordinates": {
+            "x": 3159,
+            "y": 2767
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.linan",
+          "name": "临安",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国都城，江南繁华之地。 江南水乡名城，西湖烟柳繁华，蹴鞠相扑盛行，权贵聚集，市井热闹非凡。（民俗：山岳正赛为六朝顶级蹴鞠盛会，女子相扑大赛热闹开擂，鞠社文化蔚然成风。） 江南水乡，市桥繁华，街巷窄长多河渠，酒楼茶肆林立（民俗：商贾云集，物产丰饶，丝织业盛，宋女婉约好文墨）",
+          "coordinates": {
+            "x": 7466,
+            "y": 6532
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.junzhou",
+          "name": "筠州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国州城，王团练驻地，程宗扬运粮之处。 宋国西部商业重镇，浮凌江畔船来船往，粮铺商号林立，官府设常平仓储粮，军需供应繁忙。（民俗：商业气息浓厚，粮商与军政勾连，走私商路通达昭南。） 程宗扬施粥济民之地，仓廪开棚，平价粜粮，民生有所恢复（民俗：曾有程宗扬开棚施粥、平价粜粮之善政，数万民众受惠）",
+          "coordinates": {
+            "x": 5656,
+            "y": 6822
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.nanzhao",
+          "name": "昭南",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。 南方国度，都城麟趾城，地产巨木用于建筑，水系连通大江云水，婚俗保留古风。（民俗：妻媵制盛行，诸侯可一聘九女；沐羽城等地有昭南人受雇充当佣兵；建筑用巨木由昭南输出。） 六朝之一，都城为麟趾城，境内有帝丘、昆吾等地名。",
+          "coordinates": {
+            "x": 4916,
+            "y": 7778
+          },
+          "features": [],
+          "region": "昭南"
+        },
+        {
+          "id": "liuchao.location.diqiu",
+          "name": "帝丘",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒-中州交界处的重要城镇。 昭南境内地名，位于麟趾城附近。",
+          "coordinates": {
+            "x": 6096,
+            "y": 7831
+          },
+          "features": [],
+          "region": "昭南"
+        },
+        {
+          "id": "liuchao.location.kunwu",
+          "name": "昆吾",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域的重要城镇。 昭南南方重镇，城中有制刀工匠，相传以昆吾刀裁取霓龙丝，气候湿热，多云霞幻象。（民俗：昆吾刀锋利著称，相传可裁取霞光化为霓丝，为当地神秘特产。） 昭南境内地名，与帝丘之间夹杂着夭鸿、火渎等地名。",
+          "coordinates": {
+            "x": 4840,
+            "y": 7546
+          },
+          "features": [],
+          "region": "昭南"
+        },
+        {
+          "id": "liuchao.location.xiongerpu",
+          "name": "熊耳铺",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒入口处的村寨，程宗扬在此选向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
+          "coordinates": {
+            "x": 1623,
+            "y": 7612
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.baiyi",
+          "name": "白夷族",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒白夷族聚居地。 南荒丛林深处的部族聚居地，设有隐秘地宫，当地出产湖珠手串等南荒特产，有自己的武装力量与鬼王峒抗衡。 盘江以南的富庶山谷，纯白岩石门楼，香花遍路，女子娇美。（民俗：出产珍稀之物，女性地位较高，盛装迎接贵客。）",
+          "coordinates": {
+            "x": 1818,
+            "y": 8118
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.liuligu",
+          "name": "琉璃谷",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域山谷。 琉璃化的山谷，阳光下七彩纷呈，景色瑰丽绝美，为南荒胜境。",
+          "coordinates": {
+            "x": 1165,
+            "y": 8791
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.shenmu",
+          "name": "神木",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒区域重要地标。 巍峨神木如万仞之峰，枝干广袤需五日方至半腰，根节如群山层叠，云霞缭绕触手可及，树巅隐于天际不可望",
+          "coordinates": {
+            "x": 1341,
+            "y": 9521
+          },
+          "features": [],
+          "region": "南荒"
+        },
+        {
+          "id": "liuchao.location.haishanghuahuan",
+          "name": "海棠花環",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "险地",
+          "description": "南荒极南端的环状区域。",
+          "coordinates": {
+            "x": 3241,
+            "y": 9915
+          },
+          "features": [],
+          "region": "海上"
+        },
+        {
+          "id": "liuchao.location.guangyang",
+          "name": "广阳",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "晋国-汉国边境重镇。 广阳渠连接大江云水，商船往来频繁，沿岸街市繁华，赌场酒楼错落其间。（民俗：商贾汇聚，江湖势力活跃，云氏等大商族在此经营水道贸易，黑魔海亦设赌坊为据点。）",
+          "coordinates": {
+            "x": 4456,
+            "y": 5668
+          },
+          "features": [],
+          "region": "晋国"
+        },
+        {
+          "id": "liuchao.location.qingzhou",
+          "name": "晴州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "商贾云集的运河港埠，粮铺船行林立，鞠社热闹，商会势力盘根错节，南北货物汇聚之地。（民俗：蹴鞠之风盛行，商人重利轻义，慈幼院济贫，光明观堂弟子曾在此施医布善。） 沿海城市，泊陵鱼氏与黑魔海曾在此联手",
+          "coordinates": {
+            "x": 5400,
+            "y": 6000
+          },
+          "features": [],
+          "region": "海上"
+        },
+        {
+          "id": "liuchao.location.ningzhou",
+          "name": "宁州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。）",
+          "coordinates": {
+            "x": 4656,
+            "y": 6437
+          },
+          "features": [],
+          "region": "晋国"
+        },
+        {
+          "id": "liuchao.location.jinmingzhai",
+          "name": "金明寨",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋军大营，位于烈山附近。 江州城东南十五里的村寨旧址，宋军掘土垒墙、设壕为营，成为进攻江州的军事基地，辎重营曾遭焚烧。 宋军大营所在，捧日军右厢石元孙麾下诸将驻扎，营帐连绵（民俗：右厢都指挥使石元孙驻军于此，备有巢车、轒輼等攻城器械）",
+          "coordinates": {
+            "x": 5050,
+            "y": 6550
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.haoshuichuan",
+          "name": "好水川",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "烈山附近峡谷，大型战场。 山谷丘陵地带，荒凉旷野，宋夏两军交战之地，有山岗可俯瞰战场。 宋军败绩之地，战场荒凉，遗骸未收，士气低落之地（民俗：军事地名，龙卫左厢军曾在此惨败，主将任福战死）",
+          "coordinates": {
+            "x": 5104,
+            "y": 6476
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.jingxi",
+          "name": "荆溪村寨",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "荆溪人聚居地，位于筠州附近山区。 山间村寨，存粮充裕戒备森严，兼具仓储与防御功能，临江而近筠州，水路可通粮运。（民俗：作为临时粮仓重地，外人出入盘查严格，与官府关系密切。）",
+          "coordinates": {
+            "x": 5600,
+            "y": 6900
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.wudu",
+          "name": "舞都",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国境内的一座都邑。 首阳山下的晋国封邑，侯府深院，画舫往来，世家公子云集，纨绔声色犬马之地。（民俗：权贵奢靡成风，侯门子弟以豢养风虎、海东青等珍禽异兽为风尚，社交宴饮无度。） 南方边陲重镇，程侯规划取此地经营，图谋霸业（民俗：偏远之地，民风淳朴，亟待开发）",
+          "coordinates": {
+            "x": 6114,
+            "y": 3929
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.yong",
+          "name": "上庸",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "唐国与汉国之间的城池。",
+          "coordinates": {
+            "x": 5176,
+            "y": 3978
+          },
+          "features": [],
+          "region": "秦国"
+        },
+        {
+          "id": "liuchao.location.yongzhou",
+          "name": "永州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国-唐国交界附近的城市。",
+          "coordinates": {
+            "x": 4220,
+            "y": 4242
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.baijun",
+          "name": "巴郡",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国、唐国交界处的郡城。",
+          "coordinates": {
+            "x": 4763,
+            "y": 3063
+          },
+          "features": [],
+          "region": "秦国"
+        },
+        {
+          "id": "liuchao.location.dantu",
+          "name": "丹徒",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "晋国-宋国水路交通要地。",
+          "coordinates": {
+            "x": 8875,
+            "y": 4854
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.longchuan",
+          "name": "龙川",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国城市。 江湖术士聚集的边陲小镇，酒旗招展，街巷间多有占卜测字摊位，市井嘈杂而鱼龙混杂。（民俗：民间信奉铁口神算，术士在此地颇受欢迎，算命测字成为当地常见的营生。）",
+          "coordinates": {
+            "x": 7908,
+            "y": 6819
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.nanjun",
+          "name": "南郡",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国南部郡城。",
+          "coordinates": {
+            "x": 6876,
+            "y": 5276
+          },
+          "features": [],
+          "region": "汉国"
+        },
+        {
+          "id": "liuchao.location.chenzhou",
+          "name": "辰州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "汉国-唐国边境城市。",
+          "coordinates": {
+            "x": 4704,
+            "y": 5011
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.liangzhou",
+          "name": "凉州",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "唐国西北边境州城，凉州盟据点。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固） 铁马堂等帮会势力组成凉州盟，驰骋而来（民俗：凉州人士豪侠，结盟闯阵）",
+          "coordinates": {
+            "x": 1430,
+            "y": 2767
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.boling",
+          "name": "泊陵",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国沿海城市，鱼氏势力据点。 海岸岛礁中的楼船停泊处，山崖上有鱼氏伏击要塞，湖泊与海路交汇的险峻水域（民俗：海上岛民世家，以毒术和阴险报复闻名江湖，族中高手擅长用毒伏击） 泊陵鱼氏所在，濒海地区，与黑魔海有往来（民俗：鱼氏家族，掌握阴阳鱼等秘宝）",
+          "coordinates": {
+            "x": 9592,
+            "y": 6706
+          },
+          "features": [],
+          "region": "海上"
+        },
+        {
+          "id": "liuchao.location.yiyang",
+          "name": "夷陵",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国城市，长江沿岸。 江南丘陵商业城镇，长江沿岸水陆要冲，白湖商馆据点所在，商旅繁忙，钱庄林立，客栈酒肆遍布街巷。（民俗：白湖商馆醉月楼分号遍布，商贾云集消息灵通，以商贸和情报网络闻名，黑白两道均有往来。） 入山前最后一个城镇，马匹在此换成走骡",
+          "coordinates": {
+            "x": 7068,
+            "y": 7423
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.cuizhi",
+          "name": "翠枝港",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国沿海港口。",
+          "coordinates": {
+            "x": 9515,
+            "y": 5001
+          },
+          "features": [],
+          "region": "唐国"
+        },
+        {
+          "id": "liuchao.location.lie",
+          "name": "烈",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "城池",
+          "description": "宋国-晋国交界的山脉区域。 险峻山地间一条狭窄山道蜿蜒而过，两侧山势陡峭难行，冬季积雪封路，宋军步阵在此难以展开。 金明寨附近区域，宋军右厢主力驻扎，前军应已接近此地（民俗：宋军行军至此，主力部队集结区域）",
+          "coordinates": {
+            "x": 5390,
+            "y": 6472
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.bailuojiang",
+          "name": "白龍江",
+          "continentId": "liuchao.continent.nanhuang",
+          "type": "城池",
+          "description": "南荒-中州交界的重要河流。 大江支流，河水蜿蜒向西汇入滔滔江水。",
+          "coordinates": {
+            "x": 1905,
+            "y": 7162
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.longchi",
+          "name": "龙池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "type": "宗门",
+          "description": "太乙真宗总部所在地，位于中州区域。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。） 太乙真宗圣地，龙阙山所在地，掌教就职大典举行地，山势险峻（民俗：道教圣地，太乙真宗总坛所在，九阳神功传承之地）",
+          "coordinates": {
+            "x": 5000,
+            "y": 5000
+          },
+          "features": [],
+          "region": "宋国"
+        },
+        {
+          "id": "liuchao.location.south_wild_valley",
+          "name": "南荒山谷",
+          "description": "龙神坠落之地。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "coordinates": {
+            "x": 4916,
+            "y": 7778
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.jiankang_yuji_xiang",
+          "name": "建康玉鸡巷",
+          "description": "程宗扬在晋都的宅邸。",
+          "type": "城池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "coordinates": {
+            "x": 7100,
+            "y": 4960
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.gui_wang_gong",
+          "name": "鬼王宫",
+          "description": "鬼王峒深处的巫王宫殿，潜入、交锋、深井救援与倒戈前夜的主要舞台。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.gui_wang_dong",
+          "coordinates": {
+            "x": 2620,
+            "y": 7200
+          },
+          "features": [
+            "岩浆结界",
+            "深井祭台",
+            "鬼巫王中枢",
+            "通往最终决战的前置地点"
+          ],
+          "safety": "极度危险",
+          "status": "敌对据点"
+        },
+        {
+          "id": "liuchao.location.gui_wang_gong.jingshen_tai",
+          "name": "鬼王宫深井祭台",
+          "description": "鬼王宫内部深井与祭台区域，苏荔救援、朱诺尸鬼、丹宸之死与龙睛玉护罩等关键进程在此交汇。",
+          "type": "城池",
+          "continentId": "liuchao.continent.nanhuang",
+          "factionId": "liuchao.faction.gui_wang_dong",
+          "coordinates": {
+            "x": 2640,
+            "y": 7220
+          },
+          "features": [
+            "深井平台",
+            "祭台",
+            "尸鬼战斗",
+            "龙睛玉护罩"
+          ],
+          "safety": "极度危险",
+          "status": "敌对据点"
+        },
+        {
+          "id": "liuchao.location.canglan",
+          "name": "苍澜镇",
+          "continentId": "liuchao.continent.taiquan",
+          "type": "城池",
+          "description": "太泉古阵入口附近的镇子。 浮玉山脚下的荒芜集镇，四野红土不毛，唯镇周有零星草木，镇外常年雾气弥漫（雾瘴），进出太泉古阵的旅客在此落脚。（民俗：无本地出产，粮价百倍于外；兵器极廉，窝头换刀非神话；镇上弱肉强食，外来者须管住嘴少打听。）",
+          "coordinates": {
+            "x": 7500,
+            "y": 9000
+          },
+          "features": [],
+          "region": "太泉"
+        },
+        {
+          "id": "liuchao.location.taiquan",
+          "name": "太泉古阵",
+          "continentId": "liuchao.continent.taiquan",
+          "type": "秘境",
+          "description": "远古遗迹，太泉古阵入口。 古阵空间结构违背常识，头顶可见星空，西部有赤红巨石，残存焦黑树木与灰烬，黑暗无光处有魇狼出没（民俗：阵法设有灵性机关，需特定修为（六阳境）方可进入，藏有赤阳圣果等珍贵之物） 上古遗迹实为另一个时代的造物：金铁构筑的廊道厅堂、长明不灭的\"夜明珠\"、显影人像的\"光影幻璧\"、轻韧透亮的\"琉璃纸\"、不用牛马自行奔走的\"铁车\"残骸，六朝人以自身语汇敬畏称之。（民俗：入阵者以\"仙家遗泽\"解读诸般造物并各自命名；唯穿越者能认出真身，认知差微妙有趣。）",
+          "coordinates": {
+            "x": 7573,
+            "y": 9083
+          },
+          "features": [],
+          "region": "太泉"
+        },
+        {
+          "id": "liuchao.location.xianyang",
+          "name": "咸阳",
+          "type": "城池",
+          "description": "秦国国都，渭水之滨的雄城。",
+          "coordinates": {
+            "x": 5189,
+            "y": 1911
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.yongcheng",
+          "name": "雍",
+          "type": "城池",
+          "description": "秦国故都，岐山东麓的古邑。",
+          "coordinates": {
+            "x": 4805,
+            "y": 1728
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.lintao",
+          "name": "临洮",
+          "type": "城池",
+          "description": "秦国西北边城。",
+          "coordinates": {
+            "x": 4421,
+            "y": 941
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.shangjun",
+          "name": "上郡",
+          "type": "城池",
+          "description": "秦国北疆重镇。",
+          "coordinates": {
+            "x": 5422,
+            "y": 932
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.hanguguan",
+          "name": "函谷关",
+          "type": "城池",
+          "description": "秦国东出之咽喉雄关，扼守通往汉境的孔道。",
+          "coordinates": {
+            "x": 5750,
+            "y": 2432
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.hongmen",
+          "name": "鸿门",
+          "type": "城池",
+          "description": "咸阳东郊之地。",
+          "coordinates": {
+            "x": 5483,
+            "y": 2132
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.qishan",
+          "name": "歧山",
+          "type": "城池",
+          "description": "秦国西界山脉。",
+          "coordinates": {
+            "x": 4589,
+            "y": 2148
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.zhuoguang",
+          "name": "涿光",
+          "type": "城池",
+          "description": "秦国极北关隘，出关即皋落氏、勾龙氏诸部草原。",
+          "coordinates": {
+            "x": 4803,
+            "y": 584
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.qingyuan_jin",
+          "name": "清远",
+          "type": "城池",
+          "description": "晋国北境城邑。",
+          "coordinates": {
+            "x": 3167,
+            "y": 5628
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.rongzhou",
+          "name": "容州",
+          "type": "城池",
+          "description": "晋国北部州城。",
+          "coordinates": {
+            "x": 3685,
+            "y": 5654
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.hezhou",
+          "name": "和州",
+          "type": "城池",
+          "description": "晋国腹地州城。",
+          "coordinates": {
+            "x": 3031,
+            "y": 6216
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.linchuan",
+          "name": "临川",
+          "type": "城池",
+          "description": "晋国东部州城，临川王封地。",
+          "coordinates": {
+            "x": 4090,
+            "y": 6122
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.jingzhou_jin",
+          "name": "竞州",
+          "type": "城池",
+          "description": "晋国西陲州城。",
+          "coordinates": {
+            "x": 2188,
+            "y": 6465
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.zhuyajun",
+          "name": "珠崖郡",
+          "type": "城池",
+          "description": "晋国西南滨海之郡。",
+          "coordinates": {
+            "x": 2713,
+            "y": 7296
+          },
+          "features": []
+        },
+        {
+          "id": "liuchao.location.yongzhou_jin",
+          "name": "邕州",
+          "type": "城池",
+          "description": "晋国南部州城。",
+          "coordinates": {
+            "x": 4178,
+            "y": 6999
+          },
+          "features": []
+        },
+        {
+          "id": "lcq.location.yeao_village",
+          "name": "南荒山村",
+          "region": "南荒",
+          "description": "叶媪居住的山村。"
+        },
+        {
+          "id": "lcq.location.guiwang_inn",
+          "name": "鬼王峒驿馆",
+          "region": "南荒",
+          "description": "商队入峒当夜安置的驿馆。"
+        },
+        {
+          "id": "lcq.location.nanhuang_departure_camp",
+          "name": "南荒散峒营地",
+          "region": "南荒"
         }
       ]
     },
@@ -7718,1021 +8665,162 @@
     },
     {
       "op": "set",
-      "path": "canon.factions",
+      "path": "scenario.chapters",
       "from": [
         {
-          "id": "liuchao.faction.bai_hu_shang_guan",
-          "name": "白湖商馆",
-          "description": "五原城商馆，程宗扬所属。",
-          "type": "商馆",
-          "headquartersLocationId": "liuchao.location.mingzhou",
-          "territory": [
+          "id": "lcq.chapter.stage_05b_investigation",
+          "title": "小紫疑云",
+          "summary": "碧姬与阿夕暴露小紫线索，程宗扬意识到小紫并非单纯受害者，队伍转入追索鬼王宫。",
+          "completion": [
             {
-              "x": 8800,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6300
+              "path": "flags.chapter.lcq.stage_05b.investigation.done",
+              "operator": "eq",
+              "value": true
             }
           ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.guang_ming_guan_tang",
-          "name": "光明观堂",
-          "description": "乐明珠所属的医道门派。",
-          "type": "宗门",
-          "headquartersLocationId": "liuchao.location.mingzhou",
-          "territory": [
-            {
-              "x": 8800,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6300
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.biyu",
-          "name": "碧鲮族",
-          "description": "南荒海族，已衰落。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.biyu_village",
-          "territory": [
-            {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.gui_wang_dong",
-          "name": "鬼王峒",
-          "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。部族出自大地深处（凿岩而居、食青苔饮硫磺水）；与蛇彝人有灭族级血仇（部族女性曾被蛇彝灭绝殆尽）；得龙神庇护方存续至今。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.biyu_village",
-          "territory": [
-            {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xing_yue_hu",
-          "name": "星月湖",
-          "description": "星月湖，岳帅旧部所在。",
-          "type": "组织",
-          "headquartersLocationId": "liuchao.location.jiangzhou",
-          "territory": [
-            {
-              "x": 4800,
-              "y": 6600
-            },
-            {
-              "x": 5100,
-              "y": 6600
-            },
-            {
-              "x": 5100,
-              "y": 6800
-            },
-            {
-              "x": 4800,
-              "y": 6800
-            },
-            {
-              "x": 4800,
-              "y": 6600
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.hei_mo_hai",
-          "name": "黑魔海",
-          "description": "魔道宗派/黑魔海教众自称；总部/据点：未知；目标：大兴圣教，迎回魔尊，完成大祭；核心：魔尊（真身未明确）、剑玉姬（高层智囊/巫宗核心）、殇侯/殇君（毒宗元老）、泉玉姬（黑魔海玉姬之一）；人物：殇侯/殇君（毒宗元老）、小紫（毒宗唯一嫡脉）、齐羽仙（巫宗成员）、泉玉姬（玉姬之一）、游婵（黑魔海分部下级小头目，负责和飞鸟翔/飞鸟熊藏接头）、鱼朝恩（毒宗成员）、古冥隐（黑魔海供奉）；与程宗扬：敌对关系，程宗扬为圣教死敌，杀圣教供奉屈无伏，破坏圣教在晋国安插的人手，圣教下令血债血偿",
-          "type": "组织",
-          "headquartersLocationId": "liuchao.location.nanzhao",
-          "territory": [
-            {
-              "x": 4800,
-              "y": 7700
-            },
-            {
-              "x": 5200,
-              "y": 7700
-            },
-            {
-              "x": 5200,
-              "y": 7900
-            },
-            {
-              "x": 4800,
-              "y": 7900
-            },
-            {
-              "x": 4800,
-              "y": 7700
-            }
-          ],
-          "features": [
-            "鼎炉献祭（玉姬/姬奴服侍主人）",
-            "洗脑脑控（通过赐药/秘术控制成员）",
-            "玉姬容器（剑玉姬、泉玉姬等作为容器/工具）",
-            "秘制神药（教母亲自赐药，神效无比）",
-            "巫毒双修（教主兼巫毒二宗之秘）"
+          "eventIds": [
+            "lcq.event.s05b_01_binu_reveals_xiaozi",
+            "lcq.event.s05b_02_xiaozi_exposed",
+            "lcq.event.debut_lemingzhu"
           ]
         },
         {
-          "id": "liuchao.faction.bai_wu",
-          "name": "白武族",
-          "description": "武二郎所属部族。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.guiwang_dong",
-          "territory": [
+          "id": "lcq.chapter.stage_05b_palace",
+          "title": "鬼王宫潜入",
+          "summary": "萨安提供密道线索，程宗扬一行潜入鬼王宫，初见鬼巫王并在交锋后突围重逢。",
+          "activation": [
             {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
+              "path": "flags.chapter.lcq.stage_05b.investigation.done",
+              "operator": "eq",
+              "value": true
             }
           ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.hua_miao",
-          "name": "花苗族",
-          "description": "苏荔所属部族。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.guiwang_dong",
-          "territory": [
+          "completion": [
             {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
+              "path": "flags.chapter.lcq.stage_05b.palace.done",
+              "operator": "eq",
+              "value": true
             }
           ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.hong_miao",
-          "name": "红苗族",
-          "description": "南荒苗族分支之一，本关作为萨安、丹宸等鬼王宫线索的族属背景出现。",
-          "type": "部族",
-          "level": "地方部族",
-          "features": [
-            "南荒部族",
-            "与鬼王峒冲突牵连",
-            "红苗厨师萨安提供潜入线索"
+          "eventIds": [
+            "lcq.event.s05b_03_saan_secret_path",
+            "lcq.event.s05b_04_enter_ghost_palace",
+            "lcq.event.s05b_05a_meet_ghost_king",
+            "lcq.event.s05b_05b_ideology_duel_and_defeat",
+            "lcq.event.s05b_06_breakout_and_reunion",
+            "lcq.event.s05b_07_xiaozi_trap"
           ]
         },
         {
-          "id": "liuchao.faction.pan_jiang_cheng",
-          "name": "盘江程氏",
-          "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.yun_shi_shang_hui",
-          "name": "云氏商会",
-          "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.tai_yi_zhen_zong",
-          "name": "太乙真宗",
-          "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x12f7726f47",
-          "name": "申服君封地",
-          "description": "申服君封地（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x898ded5bf1",
-          "name": "少陵侯府",
-          "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x8b538653d9",
-          "name": "殇侯势力",
-          "description": "黑魔海毒宗旗下的一个分支——殇侯（鸩羽殇侯·殇振羽）的私人班底，成员忠心于殇侯个人而非毒宗建制，**不等同于毒宗**。背景：黑魔海分巫、毒二宗且向来不睦（巫宗之主=秘御天王，外堂总执事=剑玉姬），两宗曾有内斗。核心成员：秦桧（门客二十余年，习毒宗绝学惊魔指）、石敬瑭（近卫/代理人）、仇雍；小紫幼时托庇殇侯门下，被殇侯指定为毒宗嫡传。",
-          "type": "宗门分支",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.cheng_shi_shang_hui",
-          "name": "程氏商会",
-          "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x7ef38c734e",
-          "name": "影月宗",
-          "description": "影月宗（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x4e30686b32",
-          "name": "临川王势力",
-          "description": "临川王势力（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "lyl.faction.pengyi",
-          "name": "鹏翼社",
-          "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.wuyang_houfu",
-          "name": "舞阳侯府",
-          "description": "舞阳侯府（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.jin_state",
-          "name": "晋国",
-          "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x37741bab36",
-          "name": "石家（金谷园）",
-          "description": "石家（金谷园）（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x2d33e1eaf9",
-          "name": "程宗扬势力",
-          "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x874bfaa9da",
-          "name": "平山宗",
-          "description": "平山宗（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xue_sun",
-          "name": "雪隼佣兵团",
-          "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x0ba5d2439c",
-          "name": "泊陵鱼氏",
-          "description": "泊陵鱼氏（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x94cc3fdd7b",
-          "name": "混元观",
-          "description": "混元观（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.dragon_chen",
-          "name": "龙宸",
-          "description": "杀手集团/刺客组织；总部/据点：晴州；目标：绝对中立，只为金铢服务，不涉及任何立场；核心：座主（真身未明）,长老焚无尘；架构：外围：三十六妖星（其他门派弃徒）；核心：二十八宿正星等；手段：色诱术,隐匿形迹,刺杀,暗杀法门,标记召唤；人物：虞白樱,虞紫薇,焚无尘,牛金牛,虚日鼠,女土蝠,室火猪,壁水貐,斗木獬,危月燕,惊理,罂奴；与程宗扬：敌对，程宗扬多次与龙宸杀手冲突，但亦有短暂合作（如请焚无尘开启魔墟禁制）；关键事件：龙宸刺杀岳鸟人及程宗扬同伴,与黑魔海联手袭击云家,在伊水之战中派遣六名杀手刺杀程宗扬,焚无尘被程宗扬设计击杀于太泉古阵。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xe6bd0066c9",
-          "name": "小紫势力",
-          "description": "小紫势力（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.qin_state",
-          "name": "秦国",
-          "description": "秦国（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x0f21ed0f98",
-          "name": "太原王家",
-          "description": "太原王家（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xe9675069af",
-          "name": "香竹寺",
-          "description": "香竹寺（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.song_state",
-          "name": "宋国",
-          "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x5a4fdd48cd",
-          "name": "选锋营",
-          "description": "选锋营（军队）——简介待补，源自角色归属富化自动补录。",
-          "type": "军队",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.tiance_fu",
-          "name": "皇图天策府",
-          "description": "皇图天策府（军队）——简介待补，源自角色归属富化自动补录。",
-          "type": "军队",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.jin_jun",
-          "name": "禁军",
-          "description": "隶属萧侯（萧遥逸之父）统领；皇城守卫禁军，兵力八千余人，兵甲精良胜过北府兵，守卫台城外廷；主将：萧侯；戒备森严，明哨暗哨俱全，由萧侯亲自训练布置，守卫台城宫禁。",
-          "type": "军队",
-          "features": [],
-          "polity": "晋国",
-          "region": "晋国"
-        },
-        {
-          "id": "lcq.faction.left_guard",
-          "name": "左武军",
-          "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
-          "type": "军队",
-          "features": [],
-          "polity": "大汉/六朝",
-          "region": "跨国（草原域外作战）"
-        },
-        {
-          "id": "liuchao.faction.x56f82fa2b5",
-          "name": "羽林军",
-          "description": "天子亲领；与期门武士并为最可靠兵力；太后、吕氏亦曾插手其人事安排；天子亲军/禁军；驻扎上林苑；设右营骑射等编制；兵力分散驻守各宫观；主将：义纵（右营骑射）、冯子都（羽林郎）、王子方（羽林郎）、霍少将军（后接管）；天子亲领精锐；盔带长羽；骑射为主；被视为最可靠兵力；可争取为皇位支撑。",
-          "type": "军队",
-          "features": [],
-          "polity": "汉国",
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.faction.x89db5b6118",
-          "name": "兰陵萧氏",
-          "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x739323b7a6",
-          "name": "八骏",
-          "description": "八骏（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x96f008a7cb",
-          "name": "捧日军",
-          "description": "宋国朝廷禁军，枢密院调兵，太尉府练兵，属上四军之一；宋国禁军精锐上四军之一，额定五万人编制，主力为步骑混编，骑兵额定八千但实有不足四千；设左厢、右厢，下辖数军；主将：夏用和（捧日军主将，绰号夏夜眼）、刘平（捧日左厢主将，前锋主将）、郭遵（第六军指挥使）、王信（第三军都指挥使）、卢政（第七军都指挥使）；禁军精锐，骑兵为主但战马短缺；采用募兵制、兵将分离制度；遭星月湖游击队袭扰，在烈山迟滞多日，伤亡数百人仍难突破。",
-          "type": "军队",
-          "features": [],
-          "polity": "宋国",
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.faction.x14484c1b02",
-          "name": "龙卫军",
-          "description": "隶属宋国朝廷，枢密院调兵，太尉府练兵；宋国禁军上四军之一，野战精锐；左厢八军约两万人；右厢另有数军；总计参与江州之战约五万人；主将：任福（龙卫军左厢都指挥使）、葛怀敏（右厢指挥使）、桑怿（左厢第一军指挥使）、常鼎（左厢第四军指挥使）、刘肃（左厢第五军指挥使）、王庆（左厢第六军指挥使）、朱观（左厢第二军指挥使）、武英（左厢第三军指挥使）、赵津（左厢第七军指挥使）、王珪（左厢第八军指挥使）、任怀亮（任福之子，左厢军士）；宋军精锐禁军，兵将分离制度；缺乏神臂弓装备；好水川之战被星月湖大营以铁丝网、伏兵、地形分割围歼，左厢主将任福阵亡。",
-          "type": "军队",
-          "features": [],
-          "polity": "宋国",
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.faction.bai_yi",
-          "name": "白夷",
-          "description": "南荒部族，出产珍珠与美玉。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.baiyi"
+          "id": "lcq.chapter.stage_05b_reversal",
+          "title": "倒戈前夜",
+          "summary": "深井救援、祭台尸鬼、临时协定与鬼王峒集会倒戈，把剧情推向龙神最终决战。",
+          "activation": [
+            {
+              "path": "flags.chapter.lcq.stage_05b.palace.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.chapter.lcq.stage_05b.reversal.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "eventIds": [
+            "lcq.event.s05b_08a_rescue_suli",
+            "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+            "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+            "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+          ]
         }
       ],
       "to": [
         {
-          "id": "liuchao.faction.bai_hu_shang_guan",
-          "name": "白湖商馆",
-          "description": "五原城商馆，程宗扬所属。",
-          "type": "商馆",
-          "headquartersLocationId": "liuchao.location.mingzhou",
-          "territory": [
+          "id": "lcq.chapter.stage_05b_investigation",
+          "title": "小紫疑云",
+          "summary": "碧姬与阿夕暴露小紫线索，程宗扬意识到小紫并非单纯受害者，队伍转入追索鬼王宫。",
+          "completion": [
             {
-              "x": 8800,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6300
+              "path": "flags.chapter.lcq.stage_05b.investigation.done",
+              "operator": "eq",
+              "value": true
             }
           ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.guang_ming_guan_tang",
-          "name": "光明观堂",
-          "description": "乐明珠所属的医道门派。",
-          "type": "宗门",
-          "headquartersLocationId": "liuchao.location.mingzhou",
-          "territory": [
-            {
-              "x": 8800,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6300
-            },
-            {
-              "x": 9000,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6500
-            },
-            {
-              "x": 8800,
-              "y": 6300
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.biyu",
-          "name": "碧鲮族",
-          "description": "南荒海族，已衰落。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.biyu_village",
-          "territory": [
-            {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.gui_wang_dong",
-          "name": "鬼王峒",
-          "description": "南荒鬼王峒，鬼巫王统治的势力。鬼巫王妄图借黑魔海之力奴役南荒诸部族、实现其「大同」理想（与黑魔海仅合作-利用，非其信众）；峒中建筑由黑魔海工匠仿洛都国宾驿馆样式所建，峒务由阁罗代理，巫师以腹语传达峒主之命。部族出自大地深处（凿岩而居、食青苔饮硫磺水）；与蛇彝人有灭族级血仇（部族女性曾被蛇彝灭绝殆尽）；得龙神庇护方存续至今。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.biyu_village",
-          "territory": [
-            {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xing_yue_hu",
-          "name": "星月湖",
-          "description": "星月湖，岳帅旧部所在。",
-          "type": "组织",
-          "headquartersLocationId": "liuchao.location.jiangzhou",
-          "territory": [
-            {
-              "x": 4800,
-              "y": 6600
-            },
-            {
-              "x": 5100,
-              "y": 6600
-            },
-            {
-              "x": 5100,
-              "y": 6800
-            },
-            {
-              "x": 4800,
-              "y": 6800
-            },
-            {
-              "x": 4800,
-              "y": 6600
-            }
-          ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.hei_mo_hai",
-          "name": "黑魔海",
-          "description": "这一势力的成员与来历尚未向玩家披露。",
-          "type": "组织",
-          "headquartersLocationId": "liuchao.location.nanzhao",
-          "territory": [
-            {
-              "x": 4800,
-              "y": 7700
-            },
-            {
-              "x": 5200,
-              "y": 7700
-            },
-            {
-              "x": 5200,
-              "y": 7900
-            },
-            {
-              "x": 4800,
-              "y": 7900
-            },
-            {
-              "x": 4800,
-              "y": 7700
-            }
-          ],
-          "features": [
-            "鼎炉献祭（玉姬/姬奴服侍主人）",
-            "洗脑脑控（通过赐药/秘术控制成员）",
-            "玉姬容器（剑玉姬、泉玉姬等作为容器/工具）",
-            "秘制神药（教母亲自赐药，神效无比）",
-            "巫毒双修（教主兼巫毒二宗之秘）"
+          "eventIds": [
+            "lcq.event.s05b_01_binu_reveals_xiaozi",
+            "lcq.event.s05b_02_xiaozi_exposed",
+            "lcq.event.debut_lemingzhu",
+            "lcq.event.blank_letter_and_dagu",
+            "lcq.event.geluo_summons_biji",
+            "lcq.event.escape_cave_mechanism",
+            "lcq.event.hongmiao_controlled"
           ]
         },
         {
-          "id": "liuchao.faction.bai_wu",
-          "name": "白武族",
-          "description": "武二郎所属部族。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.guiwang_dong",
-          "territory": [
+          "id": "lcq.chapter.stage_05b_palace",
+          "title": "鬼王宫潜入",
+          "summary": "萨安提供密道线索，程宗扬一行潜入鬼王宫，初见鬼巫王并在交锋后突围重逢。",
+          "activation": [
             {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
+              "path": "flags.chapter.lcq.stage_05b.investigation.done",
+              "operator": "eq",
+              "value": true
             }
           ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.hua_miao",
-          "name": "花苗族",
-          "description": "苏荔所属部族。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.guiwang_dong",
-          "territory": [
+          "completion": [
             {
-              "x": 1500,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8600
-            },
-            {
-              "x": 1700,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8800
-            },
-            {
-              "x": 1500,
-              "y": 8600
+              "path": "flags.chapter.lcq.stage_05b.palace.done",
+              "operator": "eq",
+              "value": true
             }
           ],
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.hong_miao",
-          "name": "红苗族",
-          "description": "南荒苗族分支之一，本关作为萨安、丹宸等鬼王宫线索的族属背景出现。",
-          "type": "部族",
-          "level": "地方部族",
-          "features": [
-            "南荒部族",
-            "与鬼王峒冲突牵连",
-            "红苗厨师萨安提供潜入线索"
+          "eventIds": [
+            "lcq.event.s05b_03_saan_secret_path",
+            "lcq.event.s05b_04_enter_ghost_palace",
+            "lcq.event.s05b_05a_meet_ghost_king",
+            "lcq.event.s05b_05b_ideology_duel_and_defeat",
+            "lcq.event.s05b_06_breakout_and_reunion",
+            "lcq.event.s05b_07_xiaozi_trap"
           ]
         },
         {
-          "id": "liuchao.faction.pan_jiang_cheng",
-          "name": "盘江程氏",
-          "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.yun_shi_shang_hui",
-          "name": "云氏商会",
-          "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.tai_yi_zhen_zong",
-          "name": "太乙真宗",
-          "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x12f7726f47",
-          "name": "申服君封地",
-          "description": "申服君封地（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x898ded5bf1",
-          "name": "少陵侯府",
-          "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x8b538653d9",
-          "name": "未明来历的势力",
-          "description": "这一势力的成员与来历尚未向玩家披露。",
-          "type": "宗门分支",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.cheng_shi_shang_hui",
-          "name": "程氏商会",
-          "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x7ef38c734e",
-          "name": "影月宗",
-          "description": "影月宗（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x4e30686b32",
-          "name": "临川王势力",
-          "description": "临川王势力（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "lyl.faction.pengyi",
-          "name": "鹏翼社",
-          "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.wuyang_houfu",
-          "name": "舞阳侯府",
-          "description": "舞阳侯府（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.jin_state",
-          "name": "晋国",
-          "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x37741bab36",
-          "name": "石家（金谷园）",
-          "description": "石家（金谷园）（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x2d33e1eaf9",
-          "name": "程宗扬势力",
-          "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x874bfaa9da",
-          "name": "平山宗",
-          "description": "平山宗（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xue_sun",
-          "name": "雪隼佣兵团",
-          "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x0ba5d2439c",
-          "name": "泊陵鱼氏",
-          "description": "泊陵鱼氏（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x94cc3fdd7b",
-          "name": "混元观",
-          "description": "混元观（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.dragon_chen",
-          "name": "龙宸",
-          "description": "杀手集团/刺客组织；总部/据点：晴州；目标：绝对中立，只为金铢服务，不涉及任何立场；核心：座主（真身未明）,长老焚无尘；架构：外围：三十六妖星（其他门派弃徒）；核心：二十八宿正星等；手段：色诱术,隐匿形迹,刺杀,暗杀法门,标记召唤；人物：虞白樱,虞紫薇,焚无尘,牛金牛,虚日鼠,女土蝠,室火猪,壁水貐,斗木獬,危月燕,惊理,罂奴；与程宗扬：敌对，程宗扬多次与龙宸杀手冲突，但亦有短暂合作（如请焚无尘开启魔墟禁制）；关键事件：龙宸刺杀岳鸟人及程宗扬同伴,与黑魔海联手袭击云家,在伊水之战中派遣六名杀手刺杀程宗扬,焚无尘被程宗扬设计击杀于太泉古阵。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xe6bd0066c9",
-          "name": "小紫势力",
-          "description": "小紫势力（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.qin_state",
-          "name": "秦国",
-          "description": "秦国（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x0f21ed0f98",
-          "name": "太原王家",
-          "description": "太原王家（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.xe9675069af",
-          "name": "香竹寺",
-          "description": "香竹寺（宗门）——简介待补，源自角色归属富化自动补录。",
-          "type": "宗门",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.song_state",
-          "name": "宋国",
-          "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x5a4fdd48cd",
-          "name": "选锋营",
-          "description": "选锋营（军队）——简介待补，源自角色归属富化自动补录。",
-          "type": "军队",
-          "features": []
-        },
-        {
-          "id": "lyg.faction.tiance_fu",
-          "name": "皇图天策府",
-          "description": "皇图天策府（军队）——简介待补，源自角色归属富化自动补录。",
-          "type": "军队",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.jin_jun",
-          "name": "禁军",
-          "description": "隶属萧侯（萧遥逸之父）统领；皇城守卫禁军，兵力八千余人，兵甲精良胜过北府兵，守卫台城外廷；主将：萧侯；戒备森严，明哨暗哨俱全，由萧侯亲自训练布置，守卫台城宫禁。",
-          "type": "军队",
-          "features": [],
-          "polity": "晋国",
-          "region": "晋国"
-        },
-        {
-          "id": "lcq.faction.left_guard",
-          "name": "左武军",
-          "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
-          "type": "军队",
-          "features": [],
-          "polity": "大汉/六朝",
-          "region": "跨国（草原域外作战）"
-        },
-        {
-          "id": "liuchao.faction.x56f82fa2b5",
-          "name": "羽林军",
-          "description": "天子亲领；与期门武士并为最可靠兵力；太后、吕氏亦曾插手其人事安排；天子亲军/禁军；驻扎上林苑；设右营骑射等编制；兵力分散驻守各宫观；主将：义纵（右营骑射）、冯子都（羽林郎）、王子方（羽林郎）、霍少将军（后接管）；天子亲领精锐；盔带长羽；骑射为主；被视为最可靠兵力；可争取为皇位支撑。",
-          "type": "军队",
-          "features": [],
-          "polity": "汉国",
-          "region": "汉国"
-        },
-        {
-          "id": "liuchao.faction.x89db5b6118",
-          "name": "兰陵萧氏",
-          "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
-          "type": "家族",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x739323b7a6",
-          "name": "八骏",
-          "description": "八骏（组织）——简介待补，源自角色归属富化自动补录。",
-          "type": "组织",
-          "features": []
-        },
-        {
-          "id": "liuchao.faction.x96f008a7cb",
-          "name": "捧日军",
-          "description": "宋国朝廷禁军，枢密院调兵，太尉府练兵，属上四军之一；宋国禁军精锐上四军之一，额定五万人编制，主力为步骑混编，骑兵额定八千但实有不足四千；设左厢、右厢，下辖数军；主将：夏用和（捧日军主将，绰号夏夜眼）、刘平（捧日左厢主将，前锋主将）、郭遵（第六军指挥使）、王信（第三军都指挥使）、卢政（第七军都指挥使）；禁军精锐，骑兵为主但战马短缺；采用募兵制、兵将分离制度；遭星月湖游击队袭扰，在烈山迟滞多日，伤亡数百人仍难突破。",
-          "type": "军队",
-          "features": [],
-          "polity": "宋国",
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.faction.x14484c1b02",
-          "name": "龙卫军",
-          "description": "隶属宋国朝廷，枢密院调兵，太尉府练兵；宋国禁军上四军之一，野战精锐；左厢八军约两万人；右厢另有数军；总计参与江州之战约五万人；主将：任福（龙卫军左厢都指挥使）、葛怀敏（右厢指挥使）、桑怿（左厢第一军指挥使）、常鼎（左厢第四军指挥使）、刘肃（左厢第五军指挥使）、王庆（左厢第六军指挥使）、朱观（左厢第二军指挥使）、武英（左厢第三军指挥使）、赵津（左厢第七军指挥使）、王珪（左厢第八军指挥使）、任怀亮（任福之子，左厢军士）；宋军精锐禁军，兵将分离制度；缺乏神臂弓装备；好水川之战被星月湖大营以铁丝网、伏兵、地形分割围歼，左厢主将任福阵亡。",
-          "type": "军队",
-          "features": [],
-          "polity": "宋国",
-          "region": "宋国"
-        },
-        {
-          "id": "liuchao.faction.bai_yi",
-          "name": "白夷",
-          "description": "南荒部族，出产珍珠与美玉。",
-          "type": "部族",
-          "headquartersLocationId": "liuchao.location.baiyi"
+          "id": "lcq.chapter.stage_05b_reversal",
+          "title": "倒戈前夜",
+          "summary": "深井救援、祭台尸鬼、临时协定与鬼王峒集会倒戈，把剧情推向龙神最终决战。",
+          "activation": [
+            {
+              "path": "flags.chapter.lcq.stage_05b.palace.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "completion": [
+            {
+              "path": "flags.chapter.lcq.stage_05b.reversal.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "eventIds": [
+            "lcq.event.s05b_08a_rescue_suli",
+            "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+            "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+            "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+            "lcq.event.ghost_king_swallowed",
+            "lcq.event.slay_dragon",
+            "lcq.event.xieyi_entrustment",
+            "lcq.event.xiaozi_kills_mother",
+            "lcq.event.tribes_pledge",
+            "lcq.event.s05b_ice_gu_detour",
+            "lcq.event.s05b_wuer_suli_depart",
+            "lcq.event.shanghou_revealed",
+            "lcq.event.s05b_shanghou_reads_letter",
+            "lcq.event.s05b_yeao_palm_ningyu_stays",
+            "lcq.event.shanghou_cures_ice_gu"
+          ]
         }
       ]
     }

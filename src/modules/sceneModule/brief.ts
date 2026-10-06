@@ -51,7 +51,7 @@ export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pic
       statusLines.push(`${partyDisplay(contract, party)}：${def?.label || item.id}${left}`);
     }
   }
-  const tagLines = state.tags.map(tag => `${tag.label}@${tag.on === 'scene' || tag.on === 'opposed' || tag.on === 'player_side' ? tag.on : partyDisplay(contract, tag.on)}${tag.expiresBeat === null ? '' : `（余${Math.max(0, tag.expiresBeat - state.beat + 1)}拍）`}`);
+  const tagLines = [...new Map(state.tags.map(tag=>[`${tag.label}:${tag.on}`,tag])).values()].map(tag => `${tag.label}@${tag.on === 'scene' || tag.on === 'opposed' || tag.on === 'player_side' ? tag.on : partyDisplay(contract, tag.on)}${tag.expiresBeat === null ? '' : `（余${Math.max(0, tag.expiresBeat - state.beat + 1)}拍）`}`);
   add('status', `【状态】${statusLines.join('；') || '无'}${tagLines.length ? `｜态势：${tagLines.join('；')}` : ''}`, true);
 
   const usable = (contract.elements || [])

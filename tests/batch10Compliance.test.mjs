@@ -60,7 +60,9 @@ test('C01 source cards and generated registry preserve adulthood and approved ex
  const stage=await read('src/modules/scenarioMods/builtins/data/lcq.stage_05b.json');
  assert.ok(stage.canon.characters.find(c=>c.name==='阿夕').profile.personality.includes('天真跳脱'));
  const n=(await read('src/modules/scenarioMods/builtins/data/lcq.stage_02.json')).canon.characters.find(c=>c.name==='凝羽');
- assert.ok(n.profile.memories.some(m=>/药物侵害.*原著事实记忆/.test(m)));assert.ok(!n.profile.memories.some(m=>m.includes('迷奸')));
+ assert.ok(!n.profile.memories.some(m=>/药物侵害|迷奸/.test(m)));
+ // 补充22b：未来事实不得作为初始记忆；原批准措辞留在源卡历史备注，未改写。
+ assert.ok(c('凝羽').sourceCards[0].deferredStageMemories.memories.some(m=>/药物侵害.*原著事实记忆/.test(m)));
  const x=(await read('src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json')).canon.characters.find(c=>c.name==='小紫');
  assert.match(x.profile.appearance,/成年少女/);
 });

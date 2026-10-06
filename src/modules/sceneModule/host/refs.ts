@@ -11,19 +11,23 @@ export function runtimeOf(save: unknown): any {
 }
 
 export function displayName(runtime: unknown, ref: string): string {
+  if(namedEntity('character',ref)){const name=runtimeEntityName(runtime,ref);return name!==ref?name:entityName('character',ref,(runtime as any)?.modId);}
   for(const kind of ['enemy','location','faction','ending'] as const)if(namedEntity(kind,ref))return entityName(kind,ref,(runtime as any)?.modId);
-  return ID_LIKE.test(ref) ? runtimeEntityName(runtime, ref) : ref;
+  if(!ID_LIKE.test(ref))return ref;
+  const name=runtimeEntityName(runtime,ref);
+  return name!==ref?name:namedEntity('character',ref)?entityName('character',ref,(runtime as any)?.modId):ref;
 }
 
 export function partyName(contract: Contract, runtime: unknown, partyId: string): string {
   const party=contract.parties.find(p=>p.id===partyId);
-  if(party?.group)return namedEntity('enemy',party.group.id)?entityName('enemy',party.group.id):party.group.label;
+  if(party?.group)return namedEntity('enemy',party.group.id)?entityName('enemy',party.group.id):renderRefs(party.group.label,runtime);
   const instance=party?.instanceId && namedEntity('enemy',party.enemyId || party.ref)?.instances?.[party.instanceId];
-  if(instance)return instance;
+  if(instance)return ID_LIKE.test(instance)?displayName(runtime,instance):instance;
   const ref = party?.ref || partyId;
+  if(party?.enemyId && displayName(runtime,ref)===ref)return entityName('enemy',party.enemyId);
   return displayName(runtime, ref);
 }
 
 export function renderRefs(text: string, runtime: unknown): string {
-  return String(text || '').replace(/\{\{enemyInstance:([^:}]+):([^}]+)\}\}/g,(_,id:string,instance:string)=>namedEntity('enemy',id)?.instances?.[instance] || entityName('enemy',id)).replace(/\{\{ref:([^}]+)\}\}/g, (_, ref: string) => displayName(runtime, ref.trim())).replace(/\{\{item:([^}]+)\}\}/g,(_,id:string)=>contentName('item',id.trim())).replace(/\{\{itemDescription:([^}]+)\}\}/g,(_,id:string)=>catalogItem(id.trim())?.description||'');
+  return String(text || '').replace(/\{\{enemyInstance:([^:}]+):([^}]+)\}\}/g,(_,id:string,instance:string)=>{const label=namedEntity('enemy',id)?.instances?.[instance] || entityName('enemy',id);return ID_LIKE.test(label)?displayName(runtime,label):label;}).replace(/\{\{ref:([^}]+)\}\}/g, (_, ref: string) => displayName(runtime, ref.trim())).replace(/\{\{item:([^}]+)\}\}/g,(_,id:string)=>contentName('item',id.trim())).replace(/\{\{itemDescription:([^}]+)\}\}/g,(_,id:string)=>catalogItem(id.trim())?.description||'');
 }

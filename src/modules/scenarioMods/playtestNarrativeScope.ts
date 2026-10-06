@@ -61,9 +61,9 @@ export function isWithinBaihuEscapeNarrativeWindow(saveData: SaveData | null | u
   return !completed.includes(ESCAPE_EVENT_ID);
 }
 
-/** 清羽旧隔离 demo 或星月湖落地长版，且当前窗仍在白湖离馆（含）之前。 */
+/** 已授权清羽/星月湖试玩全剧情链的自然输入；世界模拟仍走独立入口。 */
 export function isScopedNaturalIntentSave(saveData: SaveData | null | undefined): boolean {
-  return isScopedPlaytestSave(saveData) && isWithinBaihuEscapeNarrativeWindow(saveData);
+  return isScopedPlaytestSave(saveData) && runtimeOf(saveData)?.storyMode !== 'world_sim';
 }
 
 export function isScopedPlayerPresentationEvent(eventId: string | undefined, storyMode?: string): boolean {

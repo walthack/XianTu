@@ -2061,7 +2061,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (prepared.kind === 'resolved') contractedJudgementResolution = prepared.resolution;
   }
   if (!shouldSkipJudgementPreflight({
-    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || skipKeywordPreflightFromIntent,
+    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || (skipKeywordPreflightFromIntent && !/练功|修炼|闭关|冲关|冲击境界/.test(inputText.value.trim())),
     selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
     selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
       ? selectedScenarioEngineAction.value.playerLine

@@ -1,0 +1,1167 @@
+{
+  "schema": "xiantu.canon-authority-overlay",
+  "version": 1,
+  "stageId": "lcq.stage_01",
+  "book": "qingyu",
+  "ops": [
+    {
+      "op": "set",
+      "path": "canon.characters",
+      "from": [
+        {
+          "id": "liuchao.character.cheng_zongyang",
+          "name": "程宗扬",
+          "description": "现代穿越者",
+          "role": "主角",
+          "gender": "男",
+          "realm": "未知",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "military",
+              "role": "客卿"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "少主/大少爷"
+            }
+          ],
+          "locationId": "lcq.location.grassland",
+          "skillIds": [
+            "lcq.skill.death_root",
+            "lcq.skill.np001"
+          ],
+          "techniqueIds": [
+            "lcq.technique.jiuyang"
+          ],
+          "itemIds": [
+            "lcq.item.backpack",
+            "lcq.item.np002"
+          ],
+          "profile": {
+            "appearance": "下巴有胡茬",
+            "personality": [
+              "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
+              "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
+              "冲动",
+              "偶尔愧疚",
+              "有支配欲"
+            ],
+            "race": "人类",
+            "origin": "现代穿越者",
+            "talents": [
+              {
+                "name": "天命主角",
+                "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
+              },
+              {
+                "name": "生死根",
+                "description": "程宗扬的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 9,
+              "comprehension": 10,
+              "fortune": 9,
+              "charm": 8,
+              "temperament": 10
+            },
+            "memories": [
+              "穿越到草原",
+              "被段强拖累",
+              "遇到王哲"
+            ],
+            "spiritRoot": {
+              "name": "变异灵根",
+              "tier": "天品",
+              "description": "灵根异变破常理，潜力无穷，修炼者似逆命而行，主颠覆与意外之变。"
+            },
+            "notes": [
+              "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
+            ]
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.duan_qiang",
+          "name": "段强",
+          "description": "段强，那个痴迷穿越的魁梧汉子，粗壮手臂胜过常人腰身，虬屈长发披散如兽鬃，颈挂野兽下颌骨，额隆面狞——却在半兽人的箭雨里轰然倒下，成为程宗扬记忆里一道永不愈合的伤疤。",
+          "role": "穿越同伴（程宗扬的死党）",
+          "gender": "男",
+          "realm": "未知",
+          "locationId": "lcq.location.grassland",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "personality": [
+              "热衷幻想",
+              "缺乏现实感",
+              "易恐惧"
+            ],
+            "race": "人类",
+            "origin": "现代穿越者",
+            "attributes": {
+              "rootBone": 4,
+              "spirituality": 6,
+              "comprehension": 4,
+              "fortune": 4,
+              "charm": 6,
+              "temperament": 4
+            },
+            "currentAppearance": "已死亡",
+            "memories": [
+              "与程宗扬一同穿越",
+              "在草原上死亡"
+            ],
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "黄品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "老实人",
+                "description": "木讷面孔下藏着万年算计，他的拳头总在敌人以为得逞时，从最朴素角度砸穿所有阴谋。"
+              }
+            ],
+            "appearance": "穿着乘机时便服的年轻人"
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.ning_yu",
+          "name": "凝羽",
+          "role": "白湖商馆侍卫长",
+          "description": "商队中那位雪肤乌发的女护卫，神色永远冷若冰霜，只在挥剑时才会让人注意到她肩头若隐若现的淡红月牙印记——没人知道她身怀太一经末技的玄妙功法，更无人敢触碰那冷艳外表下隐藏的忠诚与锋芒。",
+          "profile": {
+            "appearance": "身材高挑，肩宽腿长；长眉像一对飞扬的黑羽，眼睛大而空明，神情冷冰冰的；一头乌黑长发。黑色绫衣里衬皮甲，外披斗篷；左腰挂一面小圆盾，右侧佩月牙形弯刀，刀鞘是硬木的。",
+            "personality": [
+              "冷淡寡言，话短",
+              "倔强，不肯示弱",
+              "守誓，把护卫职责放在私情前面"
+            ],
+            "race": "羽族",
+            "origin": "穹羽族后裔",
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              },
+              {
+                "name": "月光盾",
+                "description": "凝羽的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "currentAppearance": "身姿矫健，神色冷峻",
+            "memories": [
+              "在五原城担任侍卫长",
+              "与程宗扬发生性关系"
+            ],
+            "spiritRoot": {
+              "name": "暗灵根",
+              "tier": "玄品",
+              "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
+            },
+            "notes": [
+              "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求",
+              "【身体】嘴上拒绝肉体却顺从；晶莹敏感圣躯；肩头淡红月牙痕"
+            ]
+          },
+          "realm": "未知",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "商队护卫"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "商队成员/护卫"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "御姬奴（凝奴）"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.yue_shuang",
+          "name": "月霜",
+          "role": "左武军骑手，王哲门下",
+          "description": "岳帅遗孤之一、雪隼佣兵团副队长。冷艳绝色却傲娇自负、自以为是的\"圣母纸老虎\"，身负寒毒体质；王哲临终将其托付程宗扬。",
+          "profile": {
+            "appearance": "倾国倾城冷艳绝色、易碎感；寒毒体质发作时极虚弱、身体冰冷战栗",
+            "personality": [
+              "极度傲娇自以为是的\"圣母纸老虎\"",
+              "自私虚伪",
+              "行事双标（濒死要救命恩人心头血作药引）",
+              "智商与江湖经验匮乏",
+              "推卸责任的受害者心态",
+              "复杂亲缘认同（嘴拒认岳帅是父",
+              "却以\"八骏新主人\"自居）"
+            ],
+            "race": "人族",
+            "origin": "岳鹏举之女",
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "currentAppearance": "女扮男装，英气逼人",
+            "memories": [
+              "在左武军担任骑手",
+              "与程宗扬有冲突"
+            ],
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "notes": [
+              "【体质约束】月霜身具寒毒，需阳性能量调和（破坏后果：不调和则寒毒持续危害身体）"
+            ]
+          },
+          "skillIds": [
+            "lcq.skill.np001"
+          ],
+          "realm": "未知",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲门下（九阳神功传承）"
+            },
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "成员（王哲军中）"
+            },
+            {
+              "factionId": "liuchao.faction.xing_yue_hu",
+              "category": "organization",
+              "role": "岳帅遗孤"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.su_daji",
+          "name": "苏妲己",
+          "role": "敌对方/妖族",
+          "description": "她是妖族中最为冶艳的祸水，慵懒一笑间便能让仙门覆灭，贪婪的舌尖舔过唇角，仿佛连天命都能吞噬。",
+          "profile": {
+            "appearance": "全书妖艳天花板；身材丰腴熟透，一颦一笑勾魂摄魄；眼神仿佛看穿男人皮囊、直刺灵魂深处的渴望",
+            "personality": [
+              "病态魅惑(侵蚀灵魂)",
+              "极高智商",
+              "近乎病态的掌控欲",
+              "喜怒无常",
+              "狠辣狡诈多疑与天真融合",
+              "视馆下男宠如掌中玩物毫不怜惜"
+            ],
+            "race": "狐族",
+            "origin": "白湖商馆主人",
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 5,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 8,
+              "temperament": 7
+            },
+            "currentAppearance": "妖艳绝伦",
+            "memories": [
+              "在五原城经营白湖商馆",
+              "收程宗扬为奴隶并下冰蛊"
+            ],
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "玄品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "多宝童子",
+                "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
+              },
+              {
+                "name": "冰蛊",
+                "description": "苏妲己的专属异能。"
+              }
+            ],
+            "notes": [
+              "【性癖】被现代性玩具（按摩棒）插入；在男性面前展示下体；被支配；后庭性爱；口交",
+              "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
+            ]
+          },
+          "realm": "未知",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "掌柜"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.lin_cai_quan",
+          "name": "蔺采泉",
+          "role": "教御",
+          "description": "蔺采泉——教御之职如暗影中的戒尺，无人知晓他的真容与来历，只道他目光落处，必有血光。",
+          "profile": {
+            "attributes": {
+              "rootBone": 7,
+              "spirituality": 8,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "雷灵根",
+              "tier": "地品",
+              "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "老奸巨猾",
+              "谦和",
+              "和气"
+            ],
+            "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。"
+          },
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御（首席教御）"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.wang_zhe",
+          "name": "王哲",
+          "role": "左武卫大将军/太乙真宗掌教",
+          "description": "身为左武卫大将军与太乙真宗掌教，他气度不凡，既有高人风范又深谋远虑，坚毅如钢却可亲可敬，善于在纷争中平衡各方势力。",
+          "profile": {
+            "appearance": "脸色微微有些发黯，腰背如标枪一样挺直",
+            "personality": [
+              "养气功夫深湛",
+              "严厉正直",
+              "沉稳干练",
+              "有军人气质"
+            ],
+            "race": "人类",
+            "origin": "太乙真宗掌教",
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 9,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 8
+            },
+            "currentAppearance": "已死亡",
+            "memories": [
+              "传授程宗扬九阳神功",
+              "与左武军一同战死"
+            ],
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ]
+          },
+          "skillIds": [
+            "lcq.skill.np001"
+          ],
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "宗师"
+            },
+            {
+              "factionId": "liuchao.faction.xb9033ecdb3",
+              "category": "organization",
+              "role": "师帅/主帅"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.han_geng",
+          "name": "韩庚",
+          "role": "天武营主将",
+          "description": "韩庚，天武营主将，王哲最锐的剑——他面容冷峻，剑眉压眸，魁梧身材裹在布衣或黑色皮甲里，军伍气质如刀锋淬冰，却注定倒在下一场战役的血泊中。",
+          "skillIds": [
+            "lcq.skill.np001"
+          ],
+          "profile": {
+            "attributes": {
+              "rootBone": 10,
+              "spirituality": 7,
+              "comprehension": 7,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "体修奇才",
+                "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
+              }
+            ],
+            "appearance": "中年人，身着布衣，面容沉静，身体挺得笔直，鹰隼般犀利的眼睛，乌黑眼睛目光沉静，神光内敛",
+            "origin": "天武营主将",
+            "personality": [
+              "傲慢",
+              "冷漠",
+              "决绝",
+              "自信"
+            ]
+          },
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "第一军团天武营主将"
+            },
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲爱徒（拟传掌教；后与王哲一同战死草原）"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.np001",
+          "name": "商乐轩",
+          "role": "教御",
+          "description": "商乐轩——教御袍下藏着沉默的法则，姓名如浮尘，只在生死簿上留一抹淡痕。",
+          "profile": {
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 8,
+              "comprehension": 8,
+              "fortune": 6,
+              "charm": 8,
+              "temperament": 8
+            },
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "地品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "眼高于顶",
+              "盛气凌人",
+              "刚愎自用",
+              "傲气",
+              "争权夺利"
+            ],
+            "appearance": "身材高大的中年道人，负双手，冷冰冰，肩后披黑色披风，紫金帅冠，金属战甲"
+          },
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.zhuo_yunjun",
+          "name": "卓云君",
+          "gender": "女",
+          "role": "太乙真宗教御",
+          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "profile": {
+            "appearance": "肌肤如雪，体态丰腻，容貌美艳，腰臀曲线柔美动人，足弓玲珑，通体如玉。",
+            "personality": [
+              "高傲端庄",
+              "重视宗门身份",
+              "虚荣且强撑尊严",
+              "处事谨慎"
+            ],
+            "origin": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
+            "notes": [
+              "【剧情弧】第一本被擒破处初调教→逃走→第三本再被捕获重新调教(顺从度重置后再堕落)"
+            ]
+          },
+          "realm": "未知",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "侍奴"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        }
+      ],
+      "to": [
+        {
+          "id": "liuchao.character.cheng_zongyang",
+          "name": "程宗扬",
+          "description": "现代穿越者",
+          "role": "主角",
+          "gender": "男",
+          "realm": "未知",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "military",
+              "role": "客卿"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "少主/大少爷"
+            }
+          ],
+          "locationId": "lcq.location.grassland",
+          "skillIds": [
+            "lcq.skill.death_root",
+            "lcq.skill.np001"
+          ],
+          "techniqueIds": [
+            "lcq.technique.jiuyang"
+          ],
+          "itemIds": [
+            "lcq.item.backpack",
+            "lcq.item.np002"
+          ],
+          "profile": {
+            "appearance": "下巴有胡茬",
+            "personality": [
+              "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
+              "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
+              "冲动",
+              "偶尔愧疚",
+              "有支配欲"
+            ],
+            "race": "人类",
+            "origin": "现代穿越者",
+            "talents": [
+              {
+                "name": "天命主角",
+                "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
+              },
+              {
+                "name": "生死根",
+                "description": "程宗扬的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 9,
+              "comprehension": 10,
+              "fortune": 9,
+              "charm": 8,
+              "temperament": 10
+            },
+            "memories": [
+              "与段强同乘航班，被紫色雷电卷入异界，刚落到草原"
+            ],
+            "spiritRoot": {
+              "name": "变异灵根",
+              "tier": "天品",
+              "description": "灵根异变破常理，潜力无穷，修炼者似逆命而行，主颠覆与意外之变。"
+            },
+            "notes": [
+              "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
+            ]
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.duan_qiang",
+          "name": "段强",
+          "description": "程宗扬从小的死党，富家公子哥，重度小说动漫迷，从九岁起就天天梦想穿越到另一个时空。这次他硬要跟程宗扬一起飞上海，还带了一整袋“穿越必备”。",
+          "role": "穿越同伴（程宗扬的死党）",
+          "gender": "男",
+          "realm": "未知",
+          "locationId": "lcq.location.grassland",
+          "skillIds": [],
+          "techniqueIds": [],
+          "itemIds": [],
+          "profile": {
+            "personality": [
+              "热衷幻想",
+              "缺乏现实感",
+              "易恐惧"
+            ],
+            "race": "人类",
+            "origin": "现代穿越者",
+            "attributes": {
+              "rootBone": 4,
+              "spirituality": 6,
+              "comprehension": 4,
+              "fortune": 4,
+              "charm": 6,
+              "temperament": 4
+            },
+            "currentAppearance": "刚从草地上爬起来，还穿着乘机时的便服",
+            "memories": [
+              "和程宗扬是从小的死党，九岁起就认定世上有穿越这回事",
+              "为了找穿越点，下雨天不打伞，在电梯里一层层开门看，还天天爬学校那扇窗",
+              "家里的企业迟早归自己，没工作也不愁，刚买了一辆黄色保时捷",
+              "约程宗扬打篮球时听说他下午飞上海面试，当场决定一起去：北纬三十度，坐飞机穿越的几率高一倍",
+              "带了一大袋穿越用品：帐篷、睡袋、防虫剂、药品、太阳能充电器、讲基础制作的书，还有潜水衣，塞进了头顶行李舱",
+              "飞机上和程宗扬玩“穿越只能带三样东西”，自己选的是《军工制造》、历史年表和一挺重机枪",
+              "飞机遇上雷暴，一道紫色电光从舷窗射进来，打在程宗扬右边太阳穴上"
+            ],
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "黄品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "老实人",
+                "description": "木讷面孔下藏着万年算计，他的拳头总在敌人以为得逞时，从最朴素角度砸穿所有阴谋。"
+              }
+            ],
+            "appearance": "穿着乘机时便服的年轻人"
+          },
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.ning_yu",
+          "name": "凝羽",
+          "role": "白湖商馆侍卫长",
+          "description": "商队中那位雪肤乌发的女护卫，神色永远冷若冰霜，只在挥剑时才会让人注意到她肩头若隐若现的淡红月牙印记——没人知道她身怀太一经末技的玄妙功法，更无人敢触碰那冷艳外表下隐藏的忠诚与锋芒。",
+          "profile": {
+            "appearance": "身材高挑，肩宽腿长；长眉像一对飞扬的黑羽，眼睛大而空明，神情冷冰冰的；一头乌黑长发。黑色绫衣里衬皮甲，外披斗篷；左腰挂一面小圆盾，右侧佩月牙形弯刀，刀鞘是硬木的。",
+            "personality": [
+              "冷淡寡言，话短",
+              "倔强，不肯示弱",
+              "守誓，把护卫职责放在私情前面"
+            ],
+            "race": "羽族",
+            "origin": "穹羽族后裔",
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              },
+              {
+                "name": "月光盾",
+                "description": "凝羽的专属异能。"
+              }
+            ],
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "currentAppearance": "身姿矫健，神色冷峻",
+            "memories": [],
+            "spiritRoot": {
+              "name": "暗灵根",
+              "tier": "玄品",
+              "description": "幽暗如渊噬光明，诡谲难测，修炼者似永夜降临，专精隐匿与吞噬之术。"
+            },
+            "notes": [
+              "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求",
+              "【身体】嘴上拒绝肉体却顺从；晶莹敏感圣躯；肩头淡红月牙痕"
+            ]
+          },
+          "realm": "未知",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "商队护卫"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "商队成员/护卫"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "御姬奴（凝奴）"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.yue_shuang",
+          "name": "月霜",
+          "role": "左武军骑手，王哲门下",
+          "description": "王哲门下的骑手，女扮男装，英气逼人。",
+          "profile": {
+            "appearance": "倾国倾城冷艳绝色、易碎感；寒毒体质发作时极虚弱、身体冰冷战栗",
+            "personality": [
+              "极度傲娇自以为是的\"圣母纸老虎\"",
+              "自私虚伪",
+              "行事双标（濒死要救命恩人心头血作药引）",
+              "智商与江湖经验匮乏",
+              "推卸责任的受害者心态",
+              "复杂亲缘认同（嘴拒认岳帅是父",
+              "却以\"八骏新主人\"自居）"
+            ],
+            "race": "人族",
+            "origin": "岳鹏举之女",
+            "attributes": {
+              "rootBone": 8,
+              "spirituality": 7,
+              "comprehension": 6,
+              "fortune": 7,
+              "charm": 6,
+              "temperament": 6
+            },
+            "currentAppearance": "女扮男装，英气逼人",
+            "memories": [
+              "在左武军担任骑手"
+            ],
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "notes": [
+              "【体质约束】月霜身具寒毒，需阳性能量调和（破坏后果：不调和则寒毒持续危害身体）"
+            ]
+          },
+          "skillIds": [
+            "lcq.skill.np001"
+          ],
+          "realm": "未知",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲门下（九阳神功传承）"
+            },
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "成员（王哲军中）"
+            },
+            {
+              "factionId": "liuchao.faction.xing_yue_hu",
+              "category": "organization",
+              "role": "岳帅遗孤"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.su_daji",
+          "name": "苏妲己",
+          "role": "敌对方/妖族",
+          "description": "她是妖族中最为冶艳的祸水，慵懒一笑间便能让仙门覆灭，贪婪的舌尖舔过唇角，仿佛连天命都能吞噬。",
+          "profile": {
+            "appearance": "全书妖艳天花板；身材丰腴熟透，一颦一笑勾魂摄魄；眼神仿佛看穿男人皮囊、直刺灵魂深处的渴望",
+            "personality": [
+              "病态魅惑(侵蚀灵魂)",
+              "极高智商",
+              "近乎病态的掌控欲",
+              "喜怒无常",
+              "狠辣狡诈多疑与天真融合",
+              "视馆下男宠如掌中玩物毫不怜惜"
+            ],
+            "race": "狐族",
+            "origin": "白湖商馆主人",
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 5,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 8,
+              "temperament": 7
+            },
+            "currentAppearance": "妖艳绝伦",
+            "memories": [
+              "在五原城经营白湖商馆"
+            ],
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "玄品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "多宝童子",
+                "description": "袖口是秘境，指尖藏乾坤，他咧嘴一笑便从七窍飞出法宝雨，砸得敌人抱头鼠窜。"
+              },
+              {
+                "name": "冰蛊",
+                "description": "苏妲己的专属异能。"
+              }
+            ],
+            "notes": [
+              "【性癖】被现代性玩具（按摩棒）插入；在男性面前展示下体；被支配；后庭性爱；口交",
+              "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
+            ]
+          },
+          "realm": "未知",
+          "gender": "女",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.bai_hu_shang_guan",
+              "category": "organization",
+              "role": "掌柜"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.lin_cai_quan",
+          "name": "蔺采泉",
+          "role": "教御",
+          "description": "蔺采泉——教御之职如暗影中的戒尺，无人知晓他的真容与来历，只道他目光落处，必有血光。",
+          "profile": {
+            "attributes": {
+              "rootBone": 7,
+              "spirituality": 8,
+              "comprehension": 6,
+              "fortune": 8,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "雷灵根",
+              "tier": "地品",
+              "description": "天雷炸响破云霄，速度无双，修炼者似电光火石，主攻杀与雷霆之势。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "老奸巨猾",
+              "谦和",
+              "和气"
+            ],
+            "appearance": "身着布衣，面容沉静，身体挺得笔直，有鹰隼般犀利的眼睛。"
+          },
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御（首席教御）"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.wang_zhe",
+          "name": "王哲",
+          "role": "左武卫大将军/太乙真宗掌教",
+          "description": "身为左武卫大将军与太乙真宗掌教，他气度不凡，既有高人风范又深谋远虑，坚毅如钢却可亲可敬，善于在纷争中平衡各方势力。",
+          "profile": {
+            "appearance": "脸色微微有些发黯，腰背如标枪一样挺直",
+            "personality": [
+              "养气功夫深湛",
+              "严厉正直",
+              "沉稳干练",
+              "有军人气质"
+            ],
+            "race": "人类",
+            "origin": "太乙真宗掌教",
+            "attributes": {
+              "rootBone": 9,
+              "spirituality": 7,
+              "comprehension": 9,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 8
+            },
+            "currentAppearance": "左武军大将军、太乙真宗掌教，尚在军中",
+            "memories": [],
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ]
+          },
+          "skillIds": [
+            "lcq.skill.np001"
+          ],
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "宗师"
+            },
+            {
+              "factionId": "liuchao.faction.xb9033ecdb3",
+              "category": "organization",
+              "role": "师帅/主帅"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.han_geng",
+          "name": "韩庚",
+          "role": "天武营主将",
+          "description": "韩庚，天武营主将，王哲最锐的剑——他面容冷峻，剑眉压眸，魁梧身材裹在布衣或黑色皮甲里，军伍气质如刀锋淬冰，却注定倒在下一场战役的血泊中。",
+          "skillIds": [
+            "lcq.skill.np001"
+          ],
+          "profile": {
+            "attributes": {
+              "rootBone": 10,
+              "spirituality": 7,
+              "comprehension": 7,
+              "fortune": 6,
+              "charm": 6,
+              "temperament": 6
+            },
+            "spiritRoot": {
+              "name": "火灵根",
+              "tier": "地品",
+              "description": "赤焰翻涌如龙，焚尽八荒，修炼者若烈阳骄阳，主狂暴与毁灭之道。"
+            },
+            "talents": [
+              {
+                "name": "体修奇才",
+                "description": "肉身是法器，筋骨刻阵纹，他怒吼时肌肉隆起如山脉隆起，一拳轰碎天穹的锁链。"
+              }
+            ],
+            "appearance": "中年人，身着布衣，面容沉静，身体挺得笔直，鹰隼般犀利的眼睛，乌黑眼睛目光沉静，神光内敛",
+            "origin": "天武营主将",
+            "personality": [
+              "傲慢",
+              "冷漠",
+              "决绝",
+              "自信"
+            ]
+          },
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "lcq.faction.left_guard",
+              "category": "organization",
+              "role": "第一军团天武营主将"
+            },
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "organization",
+              "role": "王哲爱徒（拟传掌教；后与王哲一同战死草原）"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "lcq.character.np001",
+          "name": "商乐轩",
+          "role": "教御",
+          "description": "商乐轩——教御袍下藏着沉默的法则，姓名如浮尘，只在生死簿上留一抹淡痕。",
+          "profile": {
+            "attributes": {
+              "rootBone": 6,
+              "spirituality": 8,
+              "comprehension": 8,
+              "fortune": 6,
+              "charm": 8,
+              "temperament": 8
+            },
+            "spiritRoot": {
+              "name": "冰灵根",
+              "tier": "地品",
+              "description": "寒冰凝霜封天地，冷冽彻骨，修炼者若雪域冰峰，主冻结与净化之能。"
+            },
+            "talents": [
+              {
+                "name": "剑骨天成",
+                "description": "脊梁是剑胚，血管淌剑意，他呼吸间骨骼铮鸣，随手一挥便切开空间如斩蚯蚓。"
+              }
+            ],
+            "origin": "太乙真宗教御",
+            "personality": [
+              "眼高于顶",
+              "盛气凌人",
+              "刚愎自用",
+              "傲气",
+              "争权夺利"
+            ],
+            "appearance": "身材高大的中年道人，负双手，冷冰冰，肩后披黑色披风，紫金帅冠，金属战甲"
+          },
+          "realm": "未知",
+          "gender": "男",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        },
+        {
+          "id": "liuchao.character.zhuo_yunjun",
+          "name": "卓云君",
+          "gender": "女",
+          "role": "太乙真宗教御",
+          "description": "教御卓云君生得一张美艳面孔，惯于察言观色，在宗门间左右逢源，处事老练圆滑，实则心思缜密，步步为营。",
+          "profile": {
+            "appearance": "肌肤如雪，体态丰腻，容貌美艳，腰臀曲线柔美动人，足弓玲珑，通体如玉。",
+            "personality": [
+              "高傲端庄",
+              "重视宗门身份",
+              "虚荣且强撑尊严",
+              "处事谨慎"
+            ],
+            "origin": "太乙真宗\"御教\"仙姑（地位极高）；名义夫为大汉太尉常炜（天狐族，常以药物邪术折磨她）",
+            "notes": [
+              "【剧情弧】第一本被擒破处初调教→逃走→第三本再被捕获重新调教(顺从度重置后再堕落)"
+            ]
+          },
+          "realm": "未知",
+          "affiliations": [
+            {
+              "factionId": "liuchao.faction.tai_yi_zhen_zong",
+              "category": "sect",
+              "role": "教御"
+            },
+            {
+              "factionId": "liuchao.faction.hei_mo_hai",
+              "category": "organization",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.pan_jiang_cheng",
+              "category": "clan",
+              "role": "奴婢"
+            },
+            {
+              "factionId": "liuchao.faction.x2d33e1eaf9",
+              "category": "organization",
+              "role": "侍奴"
+            }
+          ],
+          "level": null,
+          "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        }
+      ]
+    }
+  ]
+}

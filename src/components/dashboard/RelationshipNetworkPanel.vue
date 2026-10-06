@@ -1602,13 +1602,14 @@ const resetMemoryPagination = () => {
 // 获取NPC境界信息
 const getNpcRealm = (npc: NpcProfile): string => {
   const realmField = npc.境界;
-  if (!realmField) return '未知';
+  if (!realmField) return '不详';
 
   if (typeof realmField === 'object' && realmField !== null) {
     const name = realmField.名称 || '';
     const stage = realmField.阶段 || '';
     if (name) {
-      return stage ? `${name}${stage}` : name;
+      if(['未知','凡人','不详'].includes(name))return '不详';
+      return stage ? `${name}·${stage}` : name;
     }
   }
 

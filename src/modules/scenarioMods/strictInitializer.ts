@@ -2,7 +2,7 @@ import {levelOf} from '../../utils/realmUtils';
 import {initializeLevel} from './levelProgression';
 import {canonicalEntityId} from './namedEntities';
 import {ENTITY_SAVE_FORMAT} from './entitySaveFormat';
-import { resolveScenarioContent } from './entityCatalog';
+import { catalogItem, resolveScenarioContent } from './entityCatalog';
 import { sameCanonicalLocation } from './travel/locationIds';
 import { backfillRelationshipIds, migrateRuntimePersonRecords } from './ledger/affinityIdentity';
 import type { PlayerLocation, SaveData, WorldInfo } from '@/types/game';
@@ -242,6 +242,11 @@ export function applyStrictScenarioInitializationToSave(
   };
   next.角色.位置 = initialization.initialLocation;
   initializeLevel(next);
+  if(initialization.runtimeState.modId==='lcq.stage_01'){
+    const item=catalogItem('lcq.item.np012');
+    if(item){next.角色.背包 ||= {金钱:{},物品:{}} as any;next.角色.背包.物品 ||= {};
+      next.角色.背包.物品[item.id] ||= {物品ID:item.id,名称:item.name,描述:item.description,类型:'其他',数量:1,品质:{quality:'凡',grade:0},已装备:false} as any;}
+  }
   next.系统.扩展 = {
     ...(next.系统.扩展 || {}),
     剧本模组: {

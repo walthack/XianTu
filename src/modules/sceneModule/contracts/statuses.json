@@ -371,7 +371,8 @@
         "kind": "time",
         "minutes": 1440
       }
-    ]
+    ],
+    "freeText": "narrative"
   },
   {
     "id": "wound.blood_loss",
@@ -416,7 +417,8 @@
         "kind": "time",
         "minutes": 4320
       }
-    ]
+    ],
+    "freeText": "narrative"
   },
   {
     "id": "wound.soul_aftershock",
@@ -473,7 +475,8 @@
         "kind": "time",
         "minutes": 1440
       }
-    ]
+    ],
+    "freeText": "narrative"
   },
   {
     "id": "yin.sha_arm",
@@ -584,7 +587,8 @@
     ],
     "afterScene": {
       "minutes": 4320
-    }
+    },
+    "freeText": "narrative"
   },
   {
     "id": "wound.soul",
@@ -706,7 +710,8 @@
     "afterScene": {
       "minutes": null
     },
-    "upgradesTo": "dying"
+    "upgradesTo": "dying",
+    "freeText": "narrative"
   },
   {
     "id": "dying",
@@ -853,7 +858,8 @@
     "afterScene": {
       "minutes": 10080
     },
-    "upgradesTo": "wound.external.heavy"
+    "upgradesTo": "wound.external.heavy",
+    "freeText": "narrative"
   },
   {
     "id": "bleeding",
@@ -894,7 +900,8 @@
     "afterScene": {
       "minutes": 120
     },
-    "upgradesTo": "wound.blood_loss"
+    "upgradesTo": "wound.blood_loss",
+    "freeText": "narrative"
   },
   {
     "id": "fracture",
@@ -941,7 +948,8 @@
     ],
     "afterScene": {
       "minutes": 43200
-    }
+    },
+    "freeText": "narrative"
   },
   {
     "id": "dizzy",
@@ -979,7 +987,8 @@
     ],
     "afterScene": {
       "minutes": 30
-    }
+    },
+    "freeText": "narrative"
   },
   {
     "id": "drunk",
@@ -1027,7 +1036,8 @@
     "afterScene": {
       "minutes": 360
     },
-    "upgradesTo": "unconscious"
+    "upgradesTo": "unconscious",
+    "freeText": "input"
   },
   {
     "id": "acupoint.sealed",

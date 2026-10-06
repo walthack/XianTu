@@ -1,0 +1,591 @@
+{
+  "purpose": "补充22b ignored源卡最小差异记录；按canonicalName定位，逐项核对from后应用，不自动改写其他卡。未将原始大源卡强加git。",
+  "source": "mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json",
+  "characters": [
+    {
+      "canonicalName": "凝羽",
+      "ops": [
+        {
+          "op": "set",
+          "path": [
+            "sourceCards",
+            0,
+            "relationToProtagonist"
+          ],
+          "from": "与程宗扬极度契合的肉体伴侣；从不口头承认爱意，对他直呼其名或冷冷一个\"你\"；外人前是威严冷艳的\"凝羽姐姐\"，主角前嘴上拒绝、肉体极顺从，任其开发征服的极品尤物，身负苏妲己种下的冰蛊之毒，发作时可被男主的真阳缓解，后由殇候解除根治",
+          "to": "与程宗扬极度契合的肉体伴侣；从不口头承认爱意，对他直呼其名或冷冷一个\"你\"；外人前是威严冷艳的\"凝羽姐姐\"，主角前嘴上拒绝、肉体极顺从，任其开发征服的极品尤物，凝羽体内寒气来自西门庆；冰蛊在程宗扬身上，不在凝羽身上"
+        },
+        {
+          "op": "add",
+          "path": [
+            "sourceCards",
+            0,
+            "deferredStageMemories"
+          ],
+          "value": {
+            "stageId": "lcq.stage_02",
+            "reason": "出场初始时点尚未发生，只保留来源原句，不注入运行时初始记忆",
+            "memories": [
+              "曾遭程宗扬施用麻古造成的药物侵害，后来出现药物依赖（原著事实记忆，不作为可演出或可重复内容）",
+              "与程宗扬通过双修交换真气"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "canonicalName": "月霜",
+      "ops": [
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "relationToProtagonist"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "keyEvents"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "ending"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "goals"
+          ],
+          "value": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            0,
+            "role"
+          ],
+          "from": "雪隼佣兵团副队长、岳帅遗女",
+          "to": "左武军骑手，王哲门下"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            0,
+            "notes"
+          ],
+          "from": [
+            "【关系】王哲临终托付给程宗扬，她穴道解开后第一件事却试图杀男主；为\"取血\"解毒半强迫与其发生关系，事后不愧疚反觉被毁贞洁而委屈；后期寒毒发作时多次和男主勉强交合，每次结束都想杀了他。"
+          ],
+          "to": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "weaknesses"
+          ],
+          "value": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            0,
+            "identity"
+          ],
+          "from": "岳鹏举之女",
+          "to": "左武军骑手，王哲门下"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            0,
+            "description"
+          ],
+          "from": "岳帅遗孤之一、雪隼佣兵团副队长。冷艳绝色却傲娇自负、自以为是的\"圣母纸老虎\"，身负寒毒体质；王哲临终将其托付程宗扬。",
+          "to": "王哲门下的骑手，女扮男装，英气逼人。"
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "joining"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "relationToProtagonist"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "keyEvents"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "ending"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "goals"
+          ],
+          "value": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            1,
+            "role"
+          ],
+          "from": "关键人物",
+          "to": "左武军骑手，王哲门下"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            1,
+            "notes"
+          ],
+          "from": [
+            "【关系】王哲临终托付给程宗扬，她穴道解开后第一件事却试图杀男主；为\"取血\"解毒半强迫与其发生关系，事后不愧疚反觉被毁贞洁而委屈；后期寒毒发作时多次和男主勉强交合，每次结束都想杀了他。"
+          ],
+          "to": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "weaknesses"
+          ],
+          "value": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            1,
+            "identity"
+          ],
+          "from": "岳鹏举之女",
+          "to": "左武军骑手，王哲门下"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            1,
+            "description"
+          ],
+          "from": "岳帅遗孤之一、雪隼佣兵团副队长。冷艳绝色却傲娇自负、自以为是的\"圣母纸老虎\"，身负寒毒体质；王哲临终将其托付程宗扬。",
+          "to": "王哲门下的骑手，女扮男装，英气逼人。"
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "joining"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "searchSummary"
+          ],
+          "value": "月霜 ｜ 左武军骑手，王哲门下 ｜ 女扮男装，英气逼人"
+        }
+      ]
+    },
+    {
+      "canonicalName": "殇侯",
+      "ops": [
+        {
+          "op": "add",
+          "path": [
+            "searchSummary"
+          ],
+          "value": "朱老头 ｜ 云氏雇用的老向导，自称朱八八 ｜ 瘦小苍老"
+        }
+      ]
+    },
+    {
+      "canonicalName": "段强",
+      "ops": [
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "memories"
+          ],
+          "value": [
+            "和程宗扬是从小的死党，九岁起就认定世上有穿越这回事",
+            "为了找穿越点，下雨天不打伞，在电梯里一层层开门看，还天天爬学校那扇窗",
+            "家里的企业迟早归自己，没工作也不愁，刚买了一辆黄色保时捷",
+            "约程宗扬打篮球时听说他下午飞上海面试，当场决定一起去：北纬三十度，坐飞机穿越的几率高一倍",
+            "带了一大袋穿越用品：帐篷、睡袋、防虫剂、药品、太阳能充电器、讲基础制作的书，还有潜水衣，塞进了头顶行李舱",
+            "飞机上和程宗扬玩“穿越只能带三样东西”，自己选的是《军工制造》、历史年表和一挺重机枪",
+            "飞机遇上雷暴，一道紫色电光从舷窗射进来，打在程宗扬右边太阳穴上"
+          ]
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "appearance"
+          ],
+          "value": "穿着乘机时便服的年轻人"
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "keyEvents"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "ending"
+          ],
+          "value": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            0,
+            "role"
+          ],
+          "from": "已故",
+          "to": "穿越同伴（程宗扬的死党）"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            0,
+            "identity"
+          ],
+          "from": "现代穿越者",
+          "to": "穿越同伴（程宗扬的死党）"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            0,
+            "description"
+          ],
+          "from": "段强，那个痴迷穿越的魁梧汉子，粗壮手臂胜过常人腰身，虬屈长发披散如兽鬃，颈挂野兽下颌骨，额隆面狞——却在半兽人的箭雨里轰然倒下，成为程宗扬记忆里一道永不愈合的伤疤。",
+          "to": "程宗扬从小的死党，富家公子哥，重度小说动漫迷，从九岁起就天天梦想穿越到另一个时空。这次他硬要跟程宗扬一起飞上海，还带了一整袋“穿越必备”。"
+        },
+        {
+          "op": "add",
+          "path": [
+            "searchSummary"
+          ],
+          "value": "段强 ｜ 二世祖/穿越迷 ｜ 登场于现代世界（程宗扬所在城市） ｜ 热衷幻想、缺乏现实感、易恐惧 ｜ 最要好的朋友 ｜ 宗扬 ｜ 与程宗扬同乘飞往上海的航班，被紫色雷电卷入异界"
+        },
+        {
+          "op": "set",
+          "path": [
+            "staticProfile",
+            "appearance"
+          ],
+          "from": "",
+          "to": "穿着乘机时便服的年轻人"
+        },
+        {
+          "op": "set",
+          "path": [
+            "staticProfile",
+            "principles"
+          ],
+          "from": [
+            "穿越者必须保守身份秘密，不可随意泄露来历",
+            "随身携带毒品赴死，宁可穿越也不愿正常生活"
+          ],
+          "to": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "staticProfile",
+            "keyEvents"
+          ],
+          "from": [
+            "坐飞机被雷电击中而穿越",
+            "被长箭射穿颈部死亡"
+          ],
+          "to": [
+            "与程宗扬同乘飞往上海的航班，被紫色雷电卷入异界"
+          ]
+        },
+        {
+          "op": "set",
+          "path": [
+            "staticProfile",
+            "ending"
+          ],
+          "from": [
+            "被长箭射穿颈部而死"
+          ],
+          "to": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "staticProfile",
+            "debutLocation",
+            "locator"
+          ],
+          "from": "chapter4.html（第4章）",
+          "to": "第1章（1·66）"
+        }
+      ]
+    },
+    {
+      "canonicalName": "王哲",
+      "ops": [
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "keyEvents"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            0,
+            "ending"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "keyEvents"
+          ],
+          "value": []
+        },
+        {
+          "op": "add",
+          "path": [
+            "phaseIdentities",
+            1,
+            "ending"
+          ],
+          "value": []
+        }
+      ]
+    },
+    {
+      "canonicalName": "祁远",
+      "ops": [
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            2,
+            "description"
+          ],
+          "from": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是长安的银钱。",
+          "to": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            2,
+            "role"
+          ],
+          "from": "商业伙伴/属下",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            2,
+            "identity"
+          ],
+          "from": "白湖商馆商队成员/随从/熟悉南荒旧路",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            3,
+            "description"
+          ],
+          "from": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是长安的银钱。",
+          "to": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            3,
+            "role"
+          ],
+          "from": "商业伙伴/属下",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            3,
+            "identity"
+          ],
+          "from": "白湖商馆商队成员/随从/熟悉南荒旧路",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            4,
+            "role"
+          ],
+          "from": "商业伙伴/属下",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            4,
+            "identity"
+          ],
+          "from": "白湖商馆商队成员/随从/熟悉南荒旧路",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            4,
+            "description"
+          ],
+          "from": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是长安的银钱。",
+          "to": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            5,
+            "role"
+          ],
+          "from": "商业伙伴/属下",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            5,
+            "identity"
+          ],
+          "from": "白湖商馆商队成员/随从/熟悉南荒旧路",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            5,
+            "description"
+          ],
+          "from": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是长安的银钱。",
+          "to": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            6,
+            "role"
+          ],
+          "from": "商业伙伴/属下",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            6,
+            "identity"
+          ],
+          "from": "白湖商馆商队成员/随从/熟悉南荒旧路",
+          "to": "白湖商馆老行商，管商队奴隶与行路"
+        },
+        {
+          "op": "set",
+          "path": [
+            "phaseIdentities",
+            6,
+            "description"
+          ],
+          "from": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是长安的银钱。",
+          "to": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。"
+        }
+      ]
+    }
+  ]
+}

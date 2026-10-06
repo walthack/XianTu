@@ -67,6 +67,8 @@ export interface StatusDef {
   upgradesTo?: string;
   /** 仍是临时定义，等总策划的状态目录落地后以目录为准。 */
   provisional?: boolean;
+  /** 场外由代码按名称/别名从文字挂到主角：input＝玩家自述或正文均可；narrative＝只认正文；缺省＝不从文字挂。 */
+  freeText?: 'input' | 'narrative';
 }
 
 export interface ActiveStatus {

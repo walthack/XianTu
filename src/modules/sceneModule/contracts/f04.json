@@ -132,7 +132,13 @@
   "narration": {
     "requiredFacts": [
       "开战前：阿夕失神，被鸦人抓着；阿夕不是战斗单位。",
-      "我方只有主角与{{ref:liuchao.character.le_mingzhu}}。"
+      "我方只有主角与{{ref:liuchao.character.le_mingzhu}}。",
+      "{{item:lcq.item.crow_bamboo_tube}}保持完整；获胜时由代码定向发放，不得写成破碎或毁坏。"
+    ],
+    "forbidden": [
+      "{{item:lcq.item.crow_bamboo_tube}}碎了",
+      "{{item:lcq.item.crow_bamboo_tube}}已碎",
+      "{{item:lcq.item.crow_bamboo_tube}}破碎"
     ]
   },
   "settings": {},

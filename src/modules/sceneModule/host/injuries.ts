@@ -85,8 +85,11 @@ export function restoreSceneInjuries(save: SaveData, contract: Contract, state: 
     const groupId=party.group?.id || (namedEntity('enemy',party.ref)?`${contract.meta.id}.${party.id}`:undefined);
     const rows=groupId ? store.groups[groupId] : store.actors[actorKey(runtime,party.ref)];
     for(const row of rows || []) {
-      if(!resolveStatusDef(row.statusId,contract) || state.statuses[party.id]?.some(s=>s.id===row.statusId))continue;
-      (state.statuses[party.id] ||= []).push({id:row.statusId,appliedBeat:state.beat,expiresBeat:null,cause:row.cause,sourceId:row.sourceScene,originScene:row.sourceScene});
+      const def=resolveStatusDef(row.statusId,contract);
+      if(!def || state.statuses[party.id]?.some(s=>s.id===row.statusId))continue;
+      // Short statuses (晕眩、被点穴) keep their in-scene beat limit when carried into a new scene.
+      const beats=def.durationBeats ?? null;
+      (state.statuses[party.id] ||= []).push({id:row.statusId,appliedBeat:state.beat,expiresBeat:beats===null?null:state.beat+beats,cause:row.cause,sourceId:row.sourceScene,originScene:row.sourceScene});
     }
   }
 }

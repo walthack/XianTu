@@ -485,9 +485,7 @@
     {
       "id": "yi_hu",
       "side": "player_side",
-      "ref": "liuchao.character.yi_hu",
-      "instanceId": "combat.f05.dungeon_trap.blood_tiger",
-      "enemyId": "lcq.enemy.blood_tiger_yi_hu"
+      "ref": "liuchao.character.yi_hu"
     },
     {
       "id": "wu_zhan_wei",
@@ -970,6 +968,21 @@
     }
   ],
   "goals": [
+    {
+      "id": "attack",
+      "label": "攻击武士",
+      "type": "push",
+      "baseDifficulty": 10,
+      "track": "vit",
+      "maxTargetGroups": 1,
+      "aliases": [
+        "挥刀砍",
+        "挥刀攻击",
+        "砍倒",
+        "劈砍",
+        "攻击武士"
+      ]
+    },
     {
       "id": "survive",
       "label": "在武士手下撑住",

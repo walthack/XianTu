@@ -141,7 +141,7 @@
       "id": "defend",
       "label": "防守撑住",
       "type": "support",
-      "baseDifficulty": 12
+      "baseDifficulty": 11
     },
     {
       "id": "yield_guard",

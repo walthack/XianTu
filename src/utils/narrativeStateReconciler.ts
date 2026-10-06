@@ -1,4 +1,5 @@
 import { statusNamePattern } from '../modules/sceneModule/statuses';
+import { mountFreeTextStatuses } from '../modules/sceneModule/host/freeTextStatus';
 import {entityName} from '@/modules/scenarioMods/namedEntities';
 
 import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
@@ -631,6 +632,22 @@ export function reconcilePlayerCanonEffectsFromNarrative(input: NarrativeReconci
 }
 
 /**
+ * 主角通用状态（醉酒、晕眩等）：由代码按状态目录的名称/别名从正文与玩家输入裁决挂载，时长取目录。
+ */
+export function reconcilePlayerFreeTextStatuses(input: NarrativeReconcileInput): StateChange[] {
+  const { saveData, saveDataBefore, text } = input;
+  const summarize = input.summarize ?? ((_key, value) => value);
+  const oldRaw = cloneDeep(get(saveData, PLAYER_EFFECTS_KEY));
+  if (!mountFreeTextStatuses(saveData, saveDataBefore, text, input.userAction || '')) return [];
+  return [{
+    key: PLAYER_EFFECTS_KEY,
+    action: 'set',
+    oldValue: summarize(PLAYER_EFFECTS_KEY, oldRaw, 'set'),
+    newValue: summarize(PLAYER_EFFECTS_KEY, get(saveData, PLAYER_EFFECTS_KEY), 'set'),
+  }];
+}
+
+/**
  * 叙事状态兜底入口。位置、即兴目标、NPC 状态与主角专属机制互不覆盖。
  */
 export function reconcileNarrativeState(input: NarrativeReconcileInput): StateChange[] {
@@ -647,5 +664,6 @@ export function reconcileNarrativeState(input: NarrativeReconcileInput): StateCh
     ...reconcileImprovisedGoalsFromNarrative(input),
     ...reconcilePartyNpcStateFromNarrative(input),
     ...reconcilePlayerCanonEffectsFromNarrative(input),
+    ...reconcilePlayerFreeTextStatuses(input),
   ];
 }

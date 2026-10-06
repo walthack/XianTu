@@ -19,6 +19,8 @@ import { useI18n } from '@/i18n'
 import { useAPIManagementStore } from '@/stores/apiManagementStore'
 import CombatTrialStartView from './CombatTrialStartView.vue'
 import { sceneModuleEnabled } from '@/modules/sceneModule/host/ext'
+import { GAME_NUMBERS } from '@/modules/sceneModule/numbers'
+import { SCENE_CONTRACTS } from '@/modules/sceneModule/contracts/registry'
 import { applyTuning } from '@/modules/sceneModule/contracts/registry'
 import { installCombatTrialPortal } from './portal'
 import * as flow from './flow'
@@ -26,9 +28,12 @@ import * as trialState from './trialState'
 
 // ?tuning=1：开打前读 dist/tuning.json 覆盖合同数值、game-numbers 数值和状态数值（白名单＋lint，不过就整份拒绝）；没有这个文件就跳过。
 async function loadTuning() {
-  if (new URLSearchParams(window.location.search).get('tuning') !== '1') return
+  const builtin=JSON.stringify({numbers:GAME_NUMBERS,contracts:SCENE_CONTRACTS});
+  let builtinHash=0x811c9dc5;for(let i=0;i<builtin.length;i++)builtinHash=Math.imul(builtinHash^builtin.charCodeAt(i),0x01000193)>>>0;
+  const noTuning=()=>console.info(`【战斗试玩】未加载 tuning，使用内置数值（hash ${builtinHash.toString(16)}）`);
+  if (new URLSearchParams(window.location.search).get('tuning') !== '1') return noTuning()
   const response = await fetch('./tuning.json', { cache: 'no-store' }).catch(() => null)
-  if (!response?.ok) return console.warn('【战斗试玩】?tuning=1 但没有 tuning.json，按原合同数值运行')
+  if (!response?.ok) return noTuning()
   const text = await response.text()
   let hash = 0x811c9dc5
   for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 0x01000193) >>> 0

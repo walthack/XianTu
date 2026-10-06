@@ -34,7 +34,7 @@ test('training advances phases; only explicit full-phase breakthrough raises a l
  s.角色.属性.境界={...next,阶段:'后期',当前进度:next.下一级所需};next=levels.trainingRealm(s,'我冲关','success');assert.equal(realm.levelOf(next),2);assert.equal(next.阶段,'初期');
  s.角色.属性.境界={...levels.realmAt(2),阶段:'后期',当前进度:300};assert.equal(levels.trainingRealm(s,'我冲关','success'),null);
  s.系统.难度设置.trainingCap='none';assert.equal(realm.levelOf(levels.trainingRealm(s,'我冲关','success')),3);
- assert.equal(levels.trainingRealm(s,'我冲关','failure').当前进度,150);
+ assert.equal(levels.trainingRealm(s,'我冲关','failure').当前进度,nums.GAME_NUMBERS.training.progressPerLevel*nums.GAME_NUMBERS.training.failureRetention);
  assert.equal(levels.trainingRealm(s,'我闲聊','success'),null);
 });
 test('currency authority has no stone assets and one gold equals 20 silver or 2000 copper',()=>{

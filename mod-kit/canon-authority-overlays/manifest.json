@@ -55,6 +55,21 @@
       "stageId": "lyg.mijing_rumen",
       "file": "lyg.mijing_rumen.json",
       "book": "yange"
+    },
+    {
+      "stageId": "lcq.stage_01",
+      "file": "lcq.stage_01.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_09_trade_and_escape",
+      "file": "lcq.stage_09_trade_and_escape.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_03",
+      "file": "lcq.stage_03.json",
+      "book": "qingyu"
     }
   ]
 }

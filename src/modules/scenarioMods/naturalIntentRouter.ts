@@ -1,5 +1,6 @@
 
 import {entityNamePattern} from './namedEntities';
+import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import {QUEST_LINES} from './questLines';
 import type { SaveData } from '@/types/game';
 import {
@@ -19,7 +20,7 @@ import {
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 
-export const NATURAL_INTENT_MAX_TOKENS = 1024;
+export const NATURAL_INTENT_MAX_TOKENS = GAME_MODEL_MODULES.find(m=>m.id==='intent')!.policy.maxTokens;
 export const NATURAL_INTENT_TIMEOUT_MS = 10000;
 export const NATURAL_INTENT_CLARIFY_DEFAULT = '这一步我还没听清你要做什么。请直接说眼前这一动，或点按钮。';
 
@@ -319,6 +320,7 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
   const systemPrompt = [
     '你只做意图分类。只能从候选里选一个，或返回 none。',
     '禁止发明新动作，禁止把任务标成完成，禁止改写事实。',
+    '候选intentMatch.allowInquiry=true时，直接询问也可匹配；不要求玩家知道答案或人名。若报出错误来源、命中rejectIf，或者只是关心而没探问来源，返回none。',
     '实际交谈动作（我询问、请她说明、我答应保密、我直说不是喊口号）可匹配对应候选；纯问规则、假设、转述他人或互相冲突的复合选择返回none。按候选intentMatch语义归最近一档；无关输入必须none，不靠只提到人物名完成。',
     '候选带affinityAssessment时，由你作为主持评估这次相关回应的affinityDelta数值，普通和承重都为-15..+15；代码会钳制，绝对值达到10的回应会记为大事。只给这次回应的好感，不改世界事实，记忆只影响语气。缺评估或无关则不结算。',
     '只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0}',
@@ -357,6 +359,7 @@ export async function resolveNaturalIntent(input: {
   const fast = resolveNaturalIntentFastPath(input.saveData, input.playerText, input.selected);
   if (fast) return fast;
 
+  if(/练功|修炼|闭关|冲关|冲击境界/.test(input.playerText))return {kind:'free',skipKeywordPreflight:false,usedModel:false};
   const alias = input.resolveFromText?.(input.saveData, input.playerText);
   if (alias && !QUEST_LINES.some(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===alias.eventId))) {
     return { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
@@ -413,7 +416,11 @@ export async function resolveNaturalIntent(input: {
     if (!parsed.evidence || !evidenceBelongsToPlayer(String(input.playerText || ''), parsed.evidence)) {
       return narrateWithoutSettlement('bad_evidence', true);
     }
-    if (!evidenceClauseIsAffirmative(String(input.playerText || ''), parsed.evidence)) {
+    const chosenCandidate=candidates.find(c=>c.actionId===parsed.actionId&&(!parsed.eventId||c.eventId===parsed.eventId));
+    const match=chosenCandidate?.intentMatch as {allowInquiry?:boolean;rejectIf?:string[]}|undefined;
+    if((match?.rejectIf||[]).some(word=>compact(input.playerText).includes(compact(word))))return narrateWithoutSettlement('rejected_intent',true);
+    const inquiry=match?.allowInquiry===true && !/^(如果|要是|假如|倘若|她说|他说|别人说)/.test(input.playerText.trim());
+    if (!inquiry && !evidenceClauseIsAffirmative(String(input.playerText || ''), parsed.evidence)) {
       return narrateWithoutSettlement('non_affirmative_evidence', true);
     }
     const selection = verifyFreshSelection(input.saveData, parsed);

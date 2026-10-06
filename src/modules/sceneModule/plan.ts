@@ -272,8 +272,9 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   const difficulty = difficultyParts.base + difficultyParts.premium + difficultyParts.pressure + difficultyParts.resistance;
   const noveltyKey = grounded ? okLevers.map(l => `${l.element}:${l.verb}`).sort().join('+') : null;
   const leverSum = Math.min(settings.pricing.leverCap, okLevers.reduce((sum, l) => sum + l.power, 0));
+  const levelOpponent = pushGoal ? primary : contract.parties.find(p=>p.side==='opposed'&&isPresent(state,p.id)&&state.levels?.[p.id]!==undefined)?.id;
   const modifierParts = {
-    factors: ctx.factors + (state.levels && playerId && primary ? levelModifier(state.levels[playerId],state.levels[primary]) : 0),
+    factors: ctx.factors + (state.levels && playerId && levelOpponent ? levelModifier(state.levels[playerId],state.levels[levelOpponent]) : 0),
     levers: leverSum,
     novelty: noveltyKey && !state.noveltySeen.includes(noveltyKey) ? settings.pricing.novelty : 0,
     cash: cash.reduce((sum, c) => sum + (c.ok ? c.bonus : 0), 0),

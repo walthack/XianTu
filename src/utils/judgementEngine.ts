@@ -549,6 +549,7 @@ function applyDeterministicEffects(saveData: unknown, effects: JudgementResoluti
   if (!root.系统.扩展.行动门控) root.系统.扩展.行动门控 = { version: 1, recent: [] };
   if (!Array.isArray(root.系统.扩展.行动门控.recent)) root.系统.扩展.行动门控.recent = [];
   for (const effect of effects) {
+    if(effect.key==='角色.属性.境界'&&effect.action==='set'&&effect.value&&typeof effect.value==='object'){root.角色 ||= {};root.角色.属性 ||= {};root.角色.属性.境界=clone(effect.value);}
     if (effect.key === '角色.属性.气血.当前' && effect.action === 'add' && typeof effect.value === 'number') {
       root.角色 ??= {}; root.角色.属性 ??= {}; root.角色.属性.气血 ??= {};
       root.角色.属性.气血.当前 = Math.max(1, Number(root.角色.属性.气血.当前 || 1) + effect.value);

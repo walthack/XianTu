@@ -25,7 +25,7 @@ test('each module routes independently and carries its own policy',async()=>{
  const runtime=make(routes,{generate:async o=>{calls.push(o);return 'result';}});
  for(const [id,model] of [['intent','small-model'],['narrative','story-model'],['memory','memo-model'],['audit','audit-model']])assert.equal((await runtime.run(id,input)).route.model,model);
  const [intent,narrative,memory,audit]=calls;
- assert.equal(intent.reasoningEffort,'none');assert.equal(intent.maxTokens,1024);assert.equal(intent.timeoutMs,undefined);assert.equal(intent.timeoutMode,'content_idle');assert.equal(intent.should_stream,true);assert.equal(intent.background,false);
+ assert.equal(intent.reasoningEffort,'none');assert.equal(intent.maxTokens,4096);assert.equal(intent.timeoutMs,undefined);assert.equal(intent.timeoutMode,'content_idle');assert.equal(intent.should_stream,true);assert.equal(intent.background,false);
  assert.equal(narrative.background,false);assert.equal(narrative.usageType,'module_narrative');
  assert.equal(memory.background,true);assert.equal(memory.usageType,'memory_summary');
  assert.equal(audit.background,true);assert.equal(audit.usageType,'background_audit');assert.equal(audit.apiConfigOverride.provider,'openrouter');

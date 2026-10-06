@@ -268,6 +268,8 @@ export interface ScenarioPlayerCompletionContract {
       matchAny?: string[];
       matchAll?: string[];
       rejectIf?: string[];
+      /** 信息探问允许直接问句，不把问句当承诺或交易。 */
+      allowInquiry?: boolean;
     };
     /** 所列角色不在场时隐藏该动作。 */
     requiresPresentCharacterIds?: string[];

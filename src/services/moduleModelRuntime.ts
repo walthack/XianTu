@@ -47,7 +47,7 @@ export const GAME_MODEL_MODULES: readonly ModelModuleDefinition[] = [
     id: 'intent', purpose: '把玩家自然输入解释成当前合法动作，返回原文证据与置信度', phase: 'intake', blocking: true,
     inheritUsageType: 'main', write: 'proposal:actionId', consumers: ['settle'], lifecycle: 'production',
     onFail: 'hold_on_contract', onLate: 'drop',
-    policy: { maxTokens: 1024, reasoningEffort: 'none', responseMode: 'text', streaming: true, timeoutMode: 'content_idle' },
+    policy: { maxTokens: 4096, reasoningEffort: 'none', responseMode: 'text', streaming: true, timeoutMode: 'content_idle' },
   },
   {
     id: 'narrative', purpose: '把已结算的本轮行动演成第二人称正文', phase: 'render', blocking: true,

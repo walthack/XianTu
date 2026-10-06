@@ -66,6 +66,12 @@
           "reason": "默认主线归04b；05隔离历史副本，仅作废登记，不删除冻结id或前置"
         }
       }
+    },
+    {
+      "op": "set",
+      "path": "canon.characters[id=liuchao.character.qi_yuan].description",
+      "from": "熟悉南荒与交易门道的白湖商馆老伙计。",
+      "to": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。"
     }
   ]
 }
