@@ -1,5 +1,16 @@
 # 六朝仙途 · 当前项目状态
 
+## P0机制修复与合包完成 · 2026-10-11（功能PARTIAL，可进入小范围真人试玩）
+
+按用户“P0-EXECUTION-PLAN.md里的p0都修了再说”完成有限修复/验证。V03前置验证、V07语义识别、V02失败缓存重试三处机制已修，固定同类/边界组验完即停；不扩词表、骰或功能。源码提交99fdb3ee，未推送。type-check、npm test/canon:build绿（1641过/0败/5跳），Claude定向复审代码PASS；试玩包d75af9d6…从该提交重建逐字一致。[修复与验证](docs/handoffs/2026-10-11/P0-FIX-VERIFICATION.md)、[二审](docs/handoffs/2026-10-11/P0-READONLY-REVIEW.md)。
+
+- P0-A：V03固定组、V07真实固定组及同槽持久化收口；V06第65章杀使事件精确公开门过；F10第1次、F13第3次自然胜局，失败入分母。新清羽档连续20次提交（19文本+1分支发送）、经地方UI到点心铺/白湖商馆，中段同角色同槽保存刷新一致；15分48秒仅执行观察。第18次驱动因分支隐藏输入框报超时，合法接赌后继续；原超时保留。
+- 未验收：F05三次均败、血虎制伏未取得；V02自然失败死亡终态取得，成功骰终态未取得。按上限NOT_REACHED即停，不改骰或扩存活投降。V04奖励差异、完整回合30秒SLA仍未证明。总体仍PARTIAL，不等于正式P0/发布全PASS。
+- P0-B：隔离验收结束后已合包到8097，本机/LAN served SHA均d75af9d601d88df26114228a8b4cd19f4bdaf859a88e648f9ddadfdb5ea1dd05，PID65144未重启；旧JS已备份可回滚。本机/LAN两条入口新浏览器启动冒烟通过，无pageerror。15正式文件大小/mtime/哈希未变；隔离18412/9494关闭。
+- P0-C：[玩家指引](docs/PLAYTEST-GUIDE-SMALL-CIRCLE-2026-10-10.md)、[反馈台账](docs/PLAYTEST-FEEDBACK-LEDGER-2026-10.md)已更新基线，可用[局域网试玩入口](http://192.168.50.51:8097/)。真实反馈0，用户召集后满一周汇总，不编造真人理解度；下一轮按核实频次×严重度排序。P1未动，合规单列非blocker。
+
+以下为历史快照，以本节为当前状态。
+
 ## P0有限执行已交付 · 2026-10-10（功能 PARTIAL，真人试玩开收就绪）
 
 按用户授权完成[P0计划](docs/handoffs/2026-10-10/P0-EXECUTION-PLAN.md)的有限清单；本机续跑由Codex执行，Claude只读复核。A的每项已有通过、失败、未达成或证据缺口依据，停止本轮测试，不追加修复/样本。整体功能仍 **PARTIAL**，不等于8097行为、正式P0或发布PASS。[执行报告](../playtest-2026-09-28/REPORT-2026-10-10-luna-continuation.md)、[独立复核](docs/handoffs/2026-10-10/P0-READONLY-REVIEW.md)、[执行交付与勘误](docs/handoffs/2026-10-10/P0-EXECUTION-CLOSEOUT.md)。
