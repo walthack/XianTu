@@ -23,6 +23,15 @@ test('rerun4 #6: player input 「喝得酩酊大醉」 mounts 醉酒 by alias, e
  assert.deepEqual(judge('你连饮三坛，已是酩酊。'),['drunk'],'subject carries over inside one sentence');
 });
 
+test('V07 frozen input mounts only the catalog drunk status when modular narration paraphrases the drinking',()=>{
+ const s=save(),before=structuredClone(s),input='我喝醉了，脚步发飘，眼前发花。';
+ const changes=reconciler.reconcilePlayerFreeTextStatuses({saveDataBefore:before,saveData:s,text:'酒意是突然涌上来的。',commands:[],userAction:input});
+ assert.equal(changes.length,1);
+ assert.deepEqual(s.角色.效果.map(e=>e.状态名称),['醉酒']);
+ assert.equal(s.角色.效果[0].持续时间分钟,def('drunk').afterScene.minutes);
+ assert.equal(rt(s).sceneLedger.statusRecords.actors[HERO][0].statusId,'drunk');
+});
+
 test('code adjudication: other people, negation, pretence and narrative denial never mount',()=>{
  assert.deepEqual(judge('','我把他灌得大醉'),[]);
  assert.deepEqual(judge('','我假装喝醉，眯眼看她'),[]);

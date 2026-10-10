@@ -6,6 +6,7 @@ import type { SaveData } from '@/types/game';
 import {
   getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding,
   getTrackedStoryOpportunityActions,
+  reconcileNaturalIntentMetadata,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from './runtime';
@@ -135,6 +136,7 @@ export function intentSaveFingerprint(saveData: SaveData | null | undefined): st
 }
 
 export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCandidate[] {
+  reconcileNaturalIntentMetadata(saveData);
   const refusal = getBaihuGambleRefusalSelections(saveData).map(item => ({
     source: item.source,
     actionId: item.actionId,

@@ -166,7 +166,7 @@ import {
   verifyResolvedJudgementReceipt,
   type JudgementResolution,
 } from '@/utils/judgementEngine';
-import { reconcileNarrativeState } from '@/utils/narrativeStateReconciler';
+import { reconcileNarrativeState, reconcilePlayerFreeTextStatuses } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runDeterministicBijiReconcile, runDeterministicHighlightReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
 import { validateModelCommandPipeline } from '@/utils/modelCommandPipeline';
@@ -3276,6 +3276,17 @@ ${step1Text}
         summarize: this._summarizeValueForChangeLog.bind(this),
       });
       commandAppliedChanges.push(...narrativeStateChanges);
+    } else if (response.moduleReceipt?.path === 'modular' && !response.generationError) {
+      // 模块正文不能通过通用叙事兜底任意改存档；但目录已批准的自由文本状态
+      // 有独立的确定性裁决器，只允许它挂载状态目录中的既有条目。
+      commandAppliedChanges.push(...reconcilePlayerFreeTextStatuses({
+        saveDataBefore: saveDataSnapshotBeforeCommands,
+        saveData,
+        text: textContent,
+        commands: sortedCommands,
+        userAction: options?.userAction || '',
+        summarize: this._summarizeValueForChangeLog.bind(this),
+      }));
     }
 
     // #5：进度审计在上一轮写入的一次性“完成待回报”已经进入本轮 prompt。

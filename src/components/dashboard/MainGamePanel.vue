@@ -570,6 +570,7 @@ import {
   getStageEntryPresentation,
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
+  reconcileNaturalIntentMetadata,
   resolveStoryEventActionFromPlayerText,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
@@ -1906,6 +1907,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
 
   // 检查角色死亡状态
+  // Migrate only the V03 question-classifier metadata on the live runtime before
+  // taking a detached save snapshot; otherwise settlement still sees the old hash.
+  reconcileNaturalIntentMetadata({ 世界: { 状态: gameStateStore.worldState } } as any);
   const saveData = gameStateStore.toSaveData();
   if (saveData) {
     // 检查气血
@@ -2125,7 +2129,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const resolvedEventAction = resolvedGambleRefusalAction
     ? undefined
     : exactSelectedEventAction
-      || (routedIntentAction && routedIntentAction.source === 'event_engine'
+      || (routedIntentAction?.source === 'event_engine' || routedIntentAction?.source === 'exploration_engine'
         ? routedIntentAction
         : undefined)
       || (scenarioSaveAtSend ? resolveStoryEventActionFromPlayerText(scenarioSaveAtSend, userMessage) : undefined);

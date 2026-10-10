@@ -162,3 +162,36 @@ test('classifier failure degrades to a non-settling free action only when nothin
     assert.equal(held.hold, true, source);
   }
 });
+
+test('legacy V03 saves refresh only question-matcher metadata without resetting action progress', async () => {
+  const runtimeModule = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const stage02 = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url), 'utf8'));
+  const eventId = 'lcq.event.ningyu_regicide_offer';
+  const canonical = structuredClone(stage02.scenario.events.find(event => event.id === eventId));
+  const saved = structuredClone(canonical);
+  delete saved.playerCompletionContract.actions.find(action => action.id === 'hear_ningyu_regicide_price').intentMatch.allowInquiry;
+  const priorAttempt = { actionId: 'hear_ningyu_regicide_price', outcome: 'success', attemptedAtTurn: 55, detail: 'existing progress' };
+  const eventRuntime = {
+    modId: 'lcq.stage_02',
+    events: [saved],
+    eventActionStates: {
+      [eventId]: {
+        contractHash: 'e23c70e6',
+        attemptCount: 1,
+        preparations: ['existing_preparation'],
+        attempts: [priorAttempt],
+        lastAttemptAtTurn: 55,
+        lastOutcome: 'success',
+      },
+    },
+  };
+
+  const migrated = runtimeModule.reconcileNaturalIntentMetadata({ 世界: { 状态: { 剧本模组: eventRuntime } } }, stage02.scenario.events);
+
+  assert.equal(migrated, 1);
+  assert.equal(saved.playerCompletionContract.actions.find(action => action.id === 'hear_ningyu_regicide_price').intentMatch.allowInquiry, true);
+  assert.equal(eventRuntime.eventActionStates[eventId].attemptCount, 1);
+  assert.deepEqual(eventRuntime.eventActionStates[eventId].preparations, ['existing_preparation']);
+  assert.deepEqual(eventRuntime.eventActionStates[eventId].attempts, [priorAttempt]);
+  assert.notEqual(eventRuntime.eventActionStates[eventId].contractHash, 'e23c70e6');
+});

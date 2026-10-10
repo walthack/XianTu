@@ -1003,6 +1003,19 @@ function stableContractHash(contract: unknown): string {
   return (result >>> 0).toString(16).padStart(8, '0');
 }
 
+function stableContractHashWithoutIntentMatch(contract: unknown): string {
+  const copy = JSON.parse(JSON.stringify(contract, (key, value) => key === 'intentMatch'
+    || ['cast','sceneLocation', 'sceneObjective','dayPart','fixedFacts','factChecks','forbidden','fallbackText','previousBeat','ledgerEffects','forceFixed'].includes(key)
+      ? undefined
+      : value));
+  let result = 2166136261;
+  for (const char of stableOpportunityContract(copy)) {
+    result ^= char.charCodeAt(0);
+    result = Math.imul(result, 16777619);
+  }
+  return (result >>> 0).toString(16).padStart(8, '0');
+}
+
 // 第六批仅改变公开文案；精确双哈希迁移不放宽其他合同变化的失效保护。
 const BATCH6_TEXT_CONTRACT_REVISIONS: Record<string, { from: string; to: string }> = {
   // 第十一批碧姬规范名文案；只承接这一对精确合同，不重置旧档召见进度。
@@ -3306,6 +3319,11 @@ export function migrateBatch6TextContracts(runtime: Pick<RuntimeState, 'events' 
     const revision = BATCH6_TEXT_CONTRACT_REVISIONS[saved.id];
     const latest = canonicalEvents.find(e => e.id === saved.id);
     if (!latest?.playerCompletionContract || !saved.playerCompletionContract) continue;
+    if (saved.id === 'lcq.event.ningyu_regicide_offer'
+      && migrateV03NaturalIntentMetadata(runtime, [latest]) > 0) {
+      migrated++;
+      continue;
+    }
     const sameDeliveryContract = ['lcq.event.s03b_snake_flower_bridge_07', 'lcq.event.ningyu_regicide_offer', 'lcq.event.weapon_deal_with_geluo', 'lcq.event.s04b_lingfei_baiyi_crisis_11', 'lcq.event.s04b_lingfei_baiyi_crisis_18'].includes(saved.id)
       && stableContractHash(saved.playerCompletionContract) === stableContractHash(latest.playerCompletionContract);
     if (!sameDeliveryContract && (!revision
@@ -3319,6 +3337,47 @@ export function migrateBatch6TextContracts(runtime: Pick<RuntimeState, 'events' 
     migrated++;
   }
   return migrated;
+}
+
+function migrateV03NaturalIntentMetadata(
+  runtime: Pick<RuntimeState, 'events' | 'eventActionStates'>,
+  canonicalEvents: ScenarioModEvent[],
+): number {
+  const canonicalEvent = canonicalEvents.find(event => event.id === 'lcq.event.ningyu_regicide_offer');
+  if (!canonicalEvent?.playerCompletionContract) return 0;
+  const savedEvent = runtime.events?.find(event => event.id === canonicalEvent.id);
+  if (!savedEvent?.playerCompletionContract) return 0;
+  const savedContract = savedEvent.playerCompletionContract;
+  const canonicalContract = canonicalEvent.playerCompletionContract;
+  if (stableContractHashWithoutIntentMatch(savedContract) !== stableContractHashWithoutIntentMatch(canonicalContract)) return 0;
+
+  const state = runtime.eventActionStates?.[canonicalEvent.id];
+  const savedContractHash = stableContractHash(savedContract);
+  if (state && state.contractHash !== savedContractHash) return 0;
+  const canonicalActions = new Map(canonicalContract.actions.map(action => [action.id, action]));
+  let changed = false;
+  for (const action of savedContract.actions) {
+    const canonicalAction = canonicalActions.get(action.id);
+    if (!canonicalAction) continue;
+    if (JSON.stringify(action.intentMatch) === JSON.stringify(canonicalAction.intentMatch)) continue;
+    if (canonicalAction.intentMatch === undefined) delete action.intentMatch;
+    else action.intentMatch = structuredClone(canonicalAction.intentMatch);
+    changed = true;
+  }
+  if (!changed) return 0;
+  if (state) state.contractHash = stableContractHash(savedContract);
+  return 1;
+}
+
+/** Refresh only the V03 question-classifier metadata before natural-intent routing. */
+export function reconcileNaturalIntentMetadata(saveData: SaveData, canonicalEvents?: ScenarioModEvent[]): number {
+  const runtime = readPath(saveData, ['世界', '状态', '剧本模组']) as RuntimeState & { modId?: string } | undefined;
+  if (!runtime || runtime.modId !== 'lcq.stage_02') return 0;
+  const canonical = canonicalEvents || getReconcileDeps()?.mods.find(item => item.manifest?.id === runtime.modId)?.scenario.events || [];
+  const canonicalEvent = canonical.find(event => event.id === 'lcq.event.ningyu_regicide_offer');
+  if (!canonicalEvent?.playerCompletionContract) return 0;
+
+  return migrateV03NaturalIntentMetadata(runtime, [canonicalEvent]);
 }
 
 function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & { modId?: string; reconciledRegistryVersion?: string; canon?: { characters?: unknown[] } }): void {

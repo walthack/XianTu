@@ -1,0 +1,47 @@
+{
+  "updatedAt": "2026-10-08",
+  "candidateSha256": "80491efa90cea128d048e0f4cdf9a7ede1260925d33e4d8375a8d72e84470493",
+  "status": "PARTIAL",
+  "completed": [
+    "V03/V04 frozen sample batch executed; V03-H1 post-live-runtime exact-input UI regression passed with one successful attempt and no early event completion",
+    "V05 visible controlled-success action wrote cultivation progress from 0 to 20 percent; post-refresh UI readback was attempted",
+    "V06 checked legal pre-public save; no valid post-public chapter-65 save was available",
+    "V07 original frozen drunk-input UI sample before repair confirmed the structured-state writeback gap",
+    "F04 natural combat win settled and granted bamboo tube x1",
+    "20 real submissions completed on one UI-created new-save route with no checkpoint insertion",
+    "V03-H1 earlier replay exposed stale live hash; narrow live-runtime migration followed by final exact-input replay on candidate 80491efa confirmed success",
+    "Frozen V03 N1/N2 real classifier outputs were none with attemptCount 0; N1 narrative leaked event facts, N2 preserved its hypothetical framing",
+    "V07 successful modular receipts now invoke the existing deterministic free-text status reconciler; original failed frozen UI sample passed on the final candidate with one drunk effect and one 360-minute ledger row",
+    "V07 foreground classifier and narration requests both returned HTTP 200; one post-turn background chat request id 3 ended net::ERR_ABORTED and was recorded without retry",
+    "V05 identity resolved: success and readback share characterId char_combat_trial_v1 but point to different slot keys; no same-slot persistence conclusion"
+  ],
+  "next": [
+    "User stopped additional verification and requested archiving this repair round; no automatic continuation.",
+    "Implementation and existing evidence retained; full uninvolved holdout and boundary group acceptance is incomplete.",
+    "Any future module-planning work should use REPAIR-ROUND-ARCHIVE.md and preserve evidence-layer distinctions."
+  ],
+  "blocked": [
+    "V05 persistence remains unverified: same characterId, different slot keys; original success slot is not currently available in the UI slot list",
+    "V06 post-public legal checkpoint unavailable",
+    "20-submission route stopped at the objective requiring entry through the 地方 UI to the point shop"
+  ],
+  "closed": [
+    "This continuous-route sample closed at exactly 20 real submissions; do not extend it by inserting a checkpoint",
+    "F04 one-sample natural win and reward path closed successfully",
+    "Frozen V03 N1/N2 each executed once on the isolated UI; no event action attempt or preparation was written",
+    "Dedicated ports 8137 and 9491 stopped",
+    "V05 role/slot identity mismatch confirmed from activeRef values; readback was a different slot, so no persistence failure inferred"
+  ],
+  "out-of-scope": [
+    "Controlled wins for F05, F10, and F13: combat scene UI exposed no fixed-dice control",
+    "Further repeat of V03-H1, V07, N1, or N2 exact inputs: authorized post-fix regression replays are complete; do not repeat again",
+    "Previously failed F05/F10/F13 loss inputs: no repeat",
+    "Do not extend this batch to V05 persistence, V06 post-public checkpoint acquisition, remaining wins, or route tail"
+  ],
+  "evidenceRoot": "_newbot_tmp/acceptance-20261007-luna-a1/evidence/",
+  "executionStatus": "STOPPED_BY_USER_ARCHIVED",
+  "archive": "docs/handoffs/2026-10-08/REPAIR-ROUND-ARCHIVE.md",
+  "unverified": [
+    "V03/V04/V07 full uninvolved holdout and boundary-group closure is incomplete; absence of pre-repair registration is not an irreparable blocker."
+  ]
+}
