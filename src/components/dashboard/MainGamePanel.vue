@@ -505,6 +505,7 @@
 </template>
 
 <script setup lang="ts">
+import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
 import {canBreakthrough} from '@/modules/scenarioMods/levelProgression';
 import { canUseNicheCrystal, useNicheCrystal } from '@/modules/sceneModule/host/loot';
 import SceneEncounterCard from './SceneEncounterCard.vue';
@@ -1945,6 +1946,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     ),
   );
   let routedIntentAction: ScenarioEngineActionSelection | undefined;
+  let freeTextStatusResolution: FreeTextStatusResolution | undefined;
   let skipKeywordPreflightFromIntent = buttonSelected;
   let intentHeldProcessing = false;
   if (saveData && !buttonSelected) {
@@ -1991,6 +1993,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         return;
       }
       skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
+      freeTextStatusResolution = intent.freeTextStatusResolution;
+      if (freeTextStatusResolution?.state === 'clarify') {
+        intentHoldMessage.value = freeTextStatusResolution.reason || NATURAL_INTENT_CLARIFY_DEFAULT;
+        toast.info(intentHoldMessage.value);
+        return;
+      }
       if (intent.notice) toast.info(intent.notice);
       if (intent.kind === 'unclear' || intent.kind === 'failed') {
         if (intent.hold) intentHoldMessage.value = intent.clarification || NATURAL_INTENT_CLARIFY_DEFAULT;
@@ -2223,6 +2231,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           console.log('[AI进度]', progress);
         },
         playerIntentText: userMessage,
+        freeTextStatusResolution,
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };

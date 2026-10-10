@@ -373,3 +373,26 @@ test('old F13 rout flag is only a save alias for loss',async()=>{
  const save=await f10();runtime(save).flags['lcq.encounter.f13.tier']='rout';
  assert.equal(runtime(rt.advanceScenarioRuntime(save).saveData).gameOver.endingId,'lcq.ending.death.dragon_well');
 });
+
+
+test('a failed recognition remains retryable on the unchanged scene; old unresolved cache cannot trap it',async()=>{
+ enable();let calls=0;
+ const h=harness(await f03(),{askIntent:async()=>{
+  calls++; if(calls===1)throw new Error('first packet timeout');
+  return JSON.stringify({goal:'survive',claim:{magnitude:1,scope:'single',targets:[]},levers:[],inputClass:'action'});
+ }});
+ const input='我放低姿态，护住要害，等待这一击。';
+ await host.submitSceneInput(h.save,input,h.deps);
+ const a=ext.activeScene(h.save),cursor=a.state.cursors.action;
+ // Inject the persisted shape from the old failed request, not a successful action.
+ const c=registry.sceneContractById(a.contractId);
+ const key=JSON.stringify([c.meta.version,input,a.state.beat,a.state.cursors,a.state.tracks,a.state.statuses,a.state.tags,a.state.departed,a.state.leverUses]);
+ a.recognitionCache=[{key,recognized:{plan:null,dropped:['transport failure'],by:'rules'}}];
+ await host.submitSceneInput(h.save,input,h.deps);
+ assert.equal(calls,2,'explicit retry must actually reach the model');
+ assert.equal(ext.activeScene(h.save).state.cursors.action,cursor,'recognition must not roll');
+ assert.equal(ext.activeScene(h.save).pending?.plan.goal,'survive');
+ await host.submitSceneInput(h.save,input,h.deps);
+ assert.equal(calls,2,'verified positive receipt remains cacheable');
+ delete globalThis.location;
+});

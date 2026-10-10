@@ -1,3 +1,4 @@
+import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
 import { statusNamePattern } from '../modules/sceneModule/statuses';
 import { mountFreeTextStatuses } from '../modules/sceneModule/host/freeTextStatus';
 import {entityName} from '@/modules/scenarioMods/namedEntities';
@@ -37,6 +38,7 @@ export interface NarrativeReconcileInput {
   text: string;
   commands: ReconcileCommand[];
   userAction?: string;
+  freeTextStatusResolution?: FreeTextStatusResolution;
   /** 变更日志摘要器（可选，默认原样）。由调用方注入 class 的 _summarizeValueForChangeLog。 */
   summarize?: (key: string, value: unknown, action: string) => unknown;
 }
@@ -638,7 +640,7 @@ export function reconcilePlayerFreeTextStatuses(input: NarrativeReconcileInput):
   const { saveData, saveDataBefore, text } = input;
   const summarize = input.summarize ?? ((_key, value) => value);
   const oldRaw = cloneDeep(get(saveData, PLAYER_EFFECTS_KEY));
-  if (!mountFreeTextStatuses(saveData, saveDataBefore, text, input.userAction || '')) return [];
+  if (!mountFreeTextStatuses(saveData, saveDataBefore, text, input.userAction || '', input.freeTextStatusResolution)) return [];
   return [{
     key: PLAYER_EFFECTS_KEY,
     action: 'set',

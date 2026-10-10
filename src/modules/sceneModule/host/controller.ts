@@ -106,10 +106,15 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
   let modelClass: 'chat'|'action'|'unclear'|undefined;
   const ask=deps.askIntent ? async(req:ModelRequest)=>{const raw=await deps.askIntent!({...req,system:req.system+'\n另加 inputClass 字段：chat/action/unclear。闲聊必须没有任何行动。'});const obj=parseRecognition(raw);modelClass=['chat','action','unclear'].includes(String(obj?.inputClass))?obj!.inputClass as any:undefined;return raw;} : undefined;
   const recognitionKey = JSON.stringify([c.meta.version,text,a.state.beat,a.state.cursors,a.state.tracks,a.state.statuses,a.state.tags,a.state.departed,a.state.leverUses]);
-  const cached = a.recognitionCache?.find(entry => entry.key === recognitionKey);
+  // Only reusable model action receipts enter the cache. Transport/rule fallback
+  // and unresolved replies must remain retryable, including old persisted entries.
+  const cached = a.recognitionCache?.find(entry => entry.key === recognitionKey
+    && entry.recognized.by === 'model' && entry.recognized.plan && entry.modelClass === 'action');
   let recognized = cached ? structuredClone(cached.recognized) : await recognizeAction(c,a.state,text,runtimeOf(save),ask);
   if(cached)modelClass=cached.modelClass;
-  else a.recognitionCache=[...(a.recognitionCache || []).slice(-7),{key:recognitionKey,recognized:structuredClone(recognized),modelClass}];
+  else if (recognized.by === 'model' && recognized.plan && modelClass === 'action') {
+    a.recognitionCache=[...(a.recognitionCache || []).filter(entry => entry.key !== recognitionKey).slice(-7),{key:recognitionKey,recognized:structuredClone(recognized),modelClass}];
+  }
   checkAbort(deps);
   const interrogating=wantsInterrogation(c,text);
   if(interrogating) {

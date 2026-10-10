@@ -195,3 +195,45 @@ test('legacy V03 saves refresh only question-matcher metadata without resetting 
   assert.deepEqual(eventRuntime.eventActionStates[eventId].attempts, [priorAttempt]);
   assert.notEqual(eventRuntime.eventActionStates[eventId].contractHash, 'e23c70e6');
 });
+
+test('shared intent response carries validated V07 semantics without a second model request', async () => {
+ const router=await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');const {save}=await openingSave();
+ const input='我连灌了几碗烈酒，头重脚轻，站都站不稳。';let calls=0;
+ const result=await router.resolveNaturalIntent({saveData:save,playerText:input,generate:async request=>{
+  calls++;const data=JSON.parse(request.userPrompt);assert.ok(data.statusCatalog.some(d=>d.id==='drunk'));
+  assert.ok(data.statusCatalog.every(d=>d.evidenceFrom==='input'));assert.ok(!request.systemPrompt.includes('饮酒行为本身'));
+  return JSON.stringify({actionId:'none',certainty:'high',statusProposals:[{statusId:'drunk',actor:'player',assertion:'current',source:'input',evidence:input,confidence:.99}]});
+ }});
+ assert.equal(calls,1);assert.equal(result.kind,'free');assert.deepEqual(result.freeTextStatusResolution.statusIds,['drunk']);
+});
+
+test('shared status proposals: absent legacy compatible; denied safe; uncertainty and malformed held',async()=>{
+ const router=await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');
+ const text='我滴酒未沾，脑子清醒得很。';
+ for(const [field,expected] of [[undefined,'free'],[[],'free'],[[{statusId:'drunk',actor:'player',assertion:'denied',source:'input',evidence:text,confidence:.99}],'free'],[null,'unclear'],[[{statusId:'drunk',actor:'unknown',assertion:'uncertain',source:'input',evidence:text,confidence:.99}],'unclear'],[[{statusId:'invented',actor:'player',assertion:'current',source:'input',evidence:text,confidence:.99}],'unclear']]){
+  const {save}=await openingSave();const result=await router.resolveNaturalIntent({saveData:save,playerText:text,generate:async()=>JSON.stringify({actionId:'none',certainty:'high',statusProposals:field})});
+  assert.equal(result.kind,expected);if(expected==='unclear'){assert.equal(result.hold,true);assert.equal(result.selection,undefined);assert.deepEqual(result.freeTextStatusResolution.statusIds,[]);}else if(field!==undefined)assert.deepEqual(result.freeTextStatusResolution.statusIds,[]);else assert.equal(result.freeTextStatusResolution,undefined);
+ }
+});
+
+test('shared status recognition never bypasses snapshot validation or fast paths',async()=>{
+ const router=await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');const {save,action}=await openingSave();
+ const result=await router.resolveNaturalIntent({saveData:save,playerText:'我试着描述自己的状态。',generate:async()=>{
+  save.世界.状态.剧本模组.worldTurn++;
+  return JSON.stringify({actionId:'none',certainty:'high',statusProposals:[]});
+ }});assert.equal(result.reason,'state_changed');assert.equal(result.freeTextStatusResolution,undefined);
+ const quick=await router.resolveNaturalIntent({saveData:save,playerText:action.playerLine,selected:{playerLine:action.playerLine,actionText:action.actionText},generate:async()=>{throw Error('must not call');}});assert.equal(quick.kind,'button');assert.equal(quick.freeTextStatusResolution,undefined);
+});
+
+
+test('no action candidates still permit independent status recognition with the configured request',async()=>{
+ const router=await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');const {save}=await openingSave();
+ save.世界.状态.剧本模组.activeEventIds=[];
+ assert.equal(router.listNaturalIntentCandidates(save).length,0);
+ let calls=0;const input='我喝醉了。';
+ const r=await router.resolveNaturalIntent({saveData:save,playerText:input,generate:async q=>{
+  calls++;assert.deepEqual(JSON.parse(q.userPrompt).candidates,[]);
+  return JSON.stringify({actionId:'none',certainty:'high',statusProposals:[{statusId:'drunk',actor:'player',assertion:'current',source:'input',evidence:input,confidence:0.99}]});
+ }});
+ assert.equal(calls,1);assert.equal(r.kind,'free');assert.deepEqual(r.freeTextStatusResolution.statusIds,['drunk']);assert.equal(r.selection,undefined);
+});

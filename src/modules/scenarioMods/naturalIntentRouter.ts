@@ -2,6 +2,7 @@
 import {entityNamePattern} from './namedEntities';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import {QUEST_LINES} from './questLines';
+import { freeTextStatusSemanticRequest, validateFreeTextStatusProposals, type FreeTextStatusResolution } from '../sceneModule/host/freeTextStatusSemantic';
 import type { SaveData } from '@/types/game';
 import {
   getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding,
@@ -53,6 +54,8 @@ export type NaturalIntentSelection =
   | WuyuanOpenWorldSelection;
 
 export interface NaturalIntentResult {
+  /** Same request/snapshot validated catalog proposal; absent on legacy/fast paths. */
+  freeTextStatusResolution?: FreeTextStatusResolution;
   kind: NaturalIntentKind;
   selection?: NaturalIntentSelection;
   reason?: string;
@@ -220,6 +223,7 @@ export function parseIntentJson(raw: string): {
   evidence?: string;
   certainty?: string;
   affinityDelta?: number;
+  statusProposals?: unknown;
 } | null {
   const text = String(raw || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
   if (!text) return null;
@@ -235,6 +239,7 @@ export function parseIntentJson(raw: string): {
       contractHash: typeof parsed.contractHash === 'string' ? parsed.contractHash : undefined,
       evidence: typeof parsed.evidence === 'string' ? parsed.evidence : undefined,
       certainty: typeof parsed.certainty === 'string' ? parsed.certainty : undefined,
+      statusProposals: parsed.statusProposals,
       affinityDelta: typeof parsed.affinityDelta === 'number' && Number.isFinite(parsed.affinityDelta) ? parsed.affinityDelta : undefined,
     };
   } catch {
@@ -319,16 +324,21 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
   systemPrompt: string;
   userPrompt: string;
 } {
+  const statusRequest = freeTextStatusSemanticRequest(playerText, '');
+  const statusCatalog = JSON.parse(statusRequest.input).catalog.filter((d: { evidenceFrom: string }) => d.evidenceFrom === 'input');
   const systemPrompt = [
-    '你只做意图分类。只能从候选里选一个，或返回 none。',
+    '你只做意图分类及独立状态提案。动作只能从候选里选一个，或返回 none。',
     '禁止发明新动作，禁止把任务标成完成，禁止改写事实。',
     '候选intentMatch.allowInquiry=true时，直接询问也可匹配；不要求玩家知道答案或人名。若报出错误来源、命中rejectIf，或者只是关心而没探问来源，返回none。',
     '实际交谈动作（我询问、请她说明、我答应保密、我直说不是喊口号）可匹配对应候选；纯问规则、假设、转述他人或互相冲突的复合选择返回none。按候选intentMatch语义归最近一档；无关输入必须none，不靠只提到人物名完成。',
     '候选带affinityAssessment时，由你作为主持评估这次相关回应的affinityDelta数值，普通和承重都为-15..+15；代码会钳制，绝对值达到10的回应会记为大事。只给这次回应的好感，不改世界事实，记忆只影响语气。缺评估或无关则不结算。',
-    '只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0}',
+    statusRequest.system.replace(/返回纯JSON.*?。没有状态/, 'statusProposals条目字段为statusId、actor(player/other/unknown)、assertion(current/denied/hypothetical/uncertain)、source(input)、evidence(逐字证据)、confidence(0到1)。没有状态'),
+    '本次只有玩家输入，状态仅从statusCatalog的input条目提案，source必须input。statusProposals必须为数组，没有状态用空数组；动作none不等于没有状态。',
+    '只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]}',
   ].join('');
   const userPrompt = JSON.stringify({
     playerText,
+    statusCatalog,
     candidates: candidates.map(item => ({
       source: item.source,
       actionId: item.actionId,
@@ -377,9 +387,7 @@ export async function resolveNaturalIntent(input: {
 
   const fingerprint = intentSaveFingerprint(input.saveData);
   const candidates = listNaturalIntentCandidates(input.saveData);
-  if (!candidates.length) {
-    return { kind: 'free', skipKeywordPreflight: true, usedModel: false };
-  }
+  // An empty action catalog still permits independent catalog-constrained state recognition.
 
   abortInFlightNaturalIntent();
   const controller = new AbortController();
@@ -410,26 +418,34 @@ export async function resolveNaturalIntent(input: {
     }
     const parsed = parseIntentJson(output);
     if (!parsed) return onClassifierFailure('malformed', candidates);
-    if (parsed.certainty !== 'high') return narrateWithoutSettlement('low_certainty', true);
-    if (!parsed.actionId) return narrateWithoutSettlement('missing_action', true);
+    // Verified only after cancellation and snapshot checks; old responses may omit the new field.
+    const freeTextStatusResolution = parsed.statusProposals === undefined ? undefined
+      : validateFreeTextStatusProposals(JSON.stringify({ proposals: parsed.statusProposals }), input.playerText, '', 'input');
+    if (freeTextStatusResolution?.state === 'clarify') return {
+      kind: 'unclear', reason: 'uncertain_status_proposal', clarification: freeTextStatusResolution.reason,
+      hold: true, skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution,
+    };
+    const free = (reason: string): NaturalIntentResult => ({ ...narrateWithoutSettlement(reason, true), freeTextStatusResolution });
+    if (parsed.certainty !== 'high') return free('low_certainty');
+    if (!parsed.actionId) return free('missing_action');
     if (parsed.actionId === 'none') {
-      return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true };
+      return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution };
     }
     if (!parsed.evidence || !evidenceBelongsToPlayer(String(input.playerText || ''), parsed.evidence)) {
-      return narrateWithoutSettlement('bad_evidence', true);
+      return free('bad_evidence');
     }
     const chosenCandidate=candidates.find(c=>c.actionId===parsed.actionId&&(!parsed.eventId||c.eventId===parsed.eventId));
     const match=chosenCandidate?.intentMatch as {allowInquiry?:boolean;rejectIf?:string[]}|undefined;
-    if((match?.rejectIf||[]).some(word=>compact(input.playerText).includes(compact(word))))return narrateWithoutSettlement('rejected_intent',true);
+    if((match?.rejectIf||[]).some(word=>compact(input.playerText).includes(compact(word))))return free('rejected_intent');
     const inquiry=match?.allowInquiry===true && !/^(如果|要是|假如|倘若|她说|他说|别人说)/.test(input.playerText.trim());
     if (!inquiry && !evidenceClauseIsAffirmative(String(input.playerText || ''), parsed.evidence)) {
-      return narrateWithoutSettlement('non_affirmative_evidence', true);
+      return free('non_affirmative_evidence');
     }
     const selection = verifyFreshSelection(input.saveData, parsed);
-    if (!selection) return narrateWithoutSettlement('stale_or_ambiguous_candidate', true);
+    if (!selection) return free('stale_or_ambiguous_candidate');
     const affection=candidates.find(c=>c.actionId===parsed.actionId&&c.eventId===('eventId' in selection?selection.eventId:undefined))?.affinityAssessment;
-    if(affection){if(parsed.affinityDelta===undefined)return narrateWithoutSettlement('missing_affinity_assessment',true);(selection as ScenarioEventActionSelection).lineAffinityDelta=parsed.affinityDelta;}
-    return { kind: 'matched', selection, skipKeywordPreflight: true, usedModel: true };
+    if(affection){if(parsed.affinityDelta===undefined)return free('missing_affinity_assessment');(selection as ScenarioEventActionSelection).lineAffinityDelta=parsed.affinityDelta;}
+    return { kind: 'matched', selection, skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution };
   } catch {
     if (input.signal?.aborted) {
       return { kind: 'failed', reason: 'aborted', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };

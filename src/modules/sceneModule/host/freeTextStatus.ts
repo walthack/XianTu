@@ -4,6 +4,7 @@ import type { SaveData, StatusEffect } from '@/types/game';
 import { STATUS_CATALOG, statusNamePattern } from '../statuses';
 import { toPlayerStatusEffect } from '../statusAdapters';
 import type { StatusDef } from '../types';
+import type { FreeTextStatusResolution } from './freeTextStatusSemantic';
 import { injuryStore, renderInjuryViews, sceneTime } from './injuries';
 import { runtimeOf } from './refs';
 
@@ -54,13 +55,22 @@ const isMountableName = (name: string): StatusDef | undefined =>
  * 写入：角色.效果 一项 + sceneLedger.statusRecords 一行（与剧情线 status 效果同一写法），时长取目录 afterScene。
  * 模型本轮自己 push 的同名状态（目录里可由文字挂的那几条）一律撤掉，以代码裁决为准。返回是否有改动。
  */
-export function mountFreeTextStatuses(save: SaveData, before: SaveData, narrative: string, userAction: string): boolean {
+export function mountFreeTextStatuses(save: SaveData, before: SaveData, narrative: string, userAction: string, semantic?: FreeTextStatusResolution): boolean {
+  // An uncertain proposal must leave the snapshot intact; the caller returns recoverable clarification.
+  if (semantic?.state === 'clarify') return false;
   const effects: StatusEffect[] = Array.isArray(save.角色?.效果) ? save.角色.效果 : [];
   const prior = new Set((Array.isArray(before.角色?.效果) ? before.角色.效果 : []).map((e: StatusEffect) => JSON.stringify(e)));
   const kept = effects.filter(e => prior.has(JSON.stringify(e)) || !isMountableName(String(e?.状态名称 || '')));
   let changed = kept.length !== effects.length;
   const now = (save as any).元数据?.时间;
-  const ids = now ? adjudicateFreeTextStatuses(narrative, userAction) : [];
+  const narrativeIds = semantic?.evidenceScope === 'input'
+    ? adjudicateFreeTextStatuses(narrative, '')
+    : [];
+  const ids = now ? (semantic
+    ? STATUS_CATALOG.filter(d => d.freeText && (narrativeIds.includes(d.id)
+      || (semantic.statusIds.includes(d.id) && (semantic.evidenceScope !== 'input' || (d.freeText === 'input'
+        && !mentions(narrative, d).some(m => m.subject === '你' && !real(m.clause))))))).map(d => d.id)
+    : adjudicateFreeTextStatuses(narrative, userAction)) : [];
   const runtime = runtimeOf(save), playerId = runtime?.opening?.playerCharacterId;
   for (const id of ids) {
     const def = STATUS_CATALOG.find(d => d.id === id)!;

@@ -1,3 +1,5 @@
+import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
+import { settledStepScene } from '@/modules/scenarioMods/settledStepScene';
 import {entityName} from '@/modules/scenarioMods/namedEntities';
 
 import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
@@ -315,6 +317,7 @@ function applyPlainObjectPatchReplacingArrays(target: PlainObject, patch: PlainO
 
 export interface ProcessOptions {
   playerIntentText?: string;
+  freeTextStatusResolution?: FreeTextStatusResolution;
   onStreamChunk?: (chunk: string) => void;
   onStreamComplete?: () => void;
   onProgressUpdate?: (progress: string) => void;
@@ -763,7 +766,7 @@ class AIBidirectionalSystemClass {
       return { text, mid_term_memory: '', tavern_commands: [], action_options: [],
         moduleReceipt: { id: generationId, path: 'local', eventId: ending.sourceEventId, promptChars: 0, foregroundMs: Date.now() - started, text } };
     }
-    const card = stepScene((saveData as any).世界?.状态?.剧本模组, plan?.selection.eventId || getScenarioFocusEvent((saveData as any).世界?.状态?.剧本模组)?.id, plan?.selection.actionId);
+    const card = settledStepScene((saveData as any).世界?.状态?.剧本模组, plan?.selection, Boolean(preview?.progress.attempted));
     const fixedBeat = preview?.progress.attempted && !ending && (!card?.fixedFacts?.length || card.forceFixed)
       ? fixedBeatNarrative(plan?.selection.eventId, plan?.selection.actionId) || (card?.forceFixed ? card.fallbackText : undefined) : undefined;
     if (fixedBeat) return { text: fixedBeat, mid_term_memory: '', tavern_commands: [], action_options: [],
@@ -812,6 +815,9 @@ class AIBidirectionalSystemClass {
     };
     if (isNanhuangSceneStage(runtime?.modId)) Object.assign(unprojectedScene, { 时段: card?.dayPart || sceneDayPart((sceneSave as any).元数据?.时间), 上一拍要点: card?.previousBeat || sceneLedgerSummary(saveData).上一拍要点, 世界事实: sceneLedgerSummary(saveData).世界事实, 账本摘要: sceneLedgerSummary(sceneSave), 固定要点: card?.fixedFacts || [], 禁止事项: card?.forbidden || [] });
     const scene = projectNamingPacket(unprojectedScene, settledRuntime || runtime || {});
+    if (options?.freeTextStatusResolution?.state === 'resolved' && options.freeTextStatusResolution.statusIds.length) {
+      (scene as any).本轮已验证主角状态 = options.freeTextStatusResolution.statusIds;
+    }
     if (lootPreview?.receipt) (scene as any).搜刮回执 = lootPreview.receipt.drops;
     const playerLine = plan?.playerLine || userMessage;
     // 记忆单一来源：短期记忆（模块记忆摘录已在其中替换原文），每条只取末尾 600 字防止上下文膨胀。
@@ -835,7 +841,6 @@ class AIBidirectionalSystemClass {
     const systemInstruction = instruction
       + (closedSceneFacts(saveData).length ? '\n已收束交锋事实：' + closedSceneFacts(saveData).join('；') : '')
       + '\n黑魔海是与鬼王峒勾结的宗派，不是海域、凶地、海底遗迹或被封印的物体。苏荔是花苗族长，不是碧鲮族长，不是小紫的母亲。血虎由易虎改造，不以武二郎的虎斑作亲缘或身份线索；不编造死老头遗物及其传承。'
-      + (eventId === 'lcq.event.ningyu_regicide_offer' ? '\n本拍先由凝羽说出西门庆，主角听到后才能反应；不得让主角抢先知道或说出这个名字，不编造天竺往事。' : '')
       + '\n玩家主角姓名：' + String(runtime?.canon?.characters?.find((character: any) => character.isProtagonist || character.id === 'liuchao.character.cheng_zongyang')?.name || (saveData as any).角色?.身份?.名字 || entityName("character","liuchao.character.cheng_zongyang")) + '。第二人称你指这位主角；不得给主角另起姓名或化名。'
       + '\n出场者（包括不具名配角）全部为18岁以上成年人。缺年龄不猜年龄，不使用十五六岁、少年儿童等未成年年龄描写。present/presentActors是本步骤允许在场的人物，不要求逐一点名；只有明确列出的必须出场者才须实际参与，苏荔是花苗族长，云苍峰是人名；不得编造其他有名NPC、官职或门派。外貌及种族只按材料，描写明确记载的可见特征，不补未知身体构造，不在正文复述排除性约束。'
       + '\n已故/离场/尚未登场名单（只能提及已有历史，不得作为当前活人在场）：' + JSON.stringify(absentCast)
@@ -849,13 +854,13 @@ class AIBidirectionalSystemClass {
         + namingInstructions
         + (reveal.father ? '小紫父系已确证。' : reveal.suspectedFather ? '程宗扬只怀疑她是岳帅遗腹女，不能写成确证。' : '小紫父系尚未揭露，不得猜测。')
         + '毒宗名号按121章书信、122章对白开放；小紫师承未核，不随名号公开，不能写唯一传人。岳帅为男性，名岳鹏举；不是女性，没有丈夫。孟非卿/孟老大不在队伍里。易虎失踪后不能当普通活人使用，血虎是被炼成的怪物。阿葭死后不另造同名伴娘；苏荔外貌按角色材料。' : '')
-      + (String(eventId) === 'lcq.event.ningyu_regicide_offer' ? '\n第32章既定条件：凝羽要除掉苏妲己，因保护她的誓言，要求出手时连自己一起杀；不得改为姓周的将军，也不得提及尚未登场的苏荔。' : '')
       + (nanhuang && new RegExp("(?:"+entityNamePattern("location","lcq.location.sheyi_village")+")"+"|蛇彝领地","").test(String((scene as any).location || '')) ? '\n蛇彝村已是空村，没有活村民、老彝婆或斥候；搜查只观察现场遗留，不编造活蛇祖或主角被咬伤。' : '')
       + (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') ? '\n乐明珠尚未使用“大笨瓜”称呼主角，不能借用小紫口头禅。' : '')
       + (plan && !card?.fixedFacts?.length && !['lcq.event.wuerlang_joins', 'lcq.event.s03b_yinzhu_xiongerpu'].includes(String(eventId)) ? '\n作者步骤限定（不复述到正文）：' + plan.selection.actionText : '')
       + '\n物品只有本地回执能够写入背包；清单外物品只可看、端详，不带走。搜刮时只能描写搜刮回执已掷出的结果，不加奖励。'
       + '\n玩家行动句只表达意图，不把按钮标题、姓名确认或作者备注念成正文；用现场动作和对话展现本步骤的既定结果。'
       + '\n历史摘录只供承接，不重演已经完成的镜头；本轮只写当前步骤的新变化，不整段复述水镜通话或阴煞遭遇。'
+      + (!preview?.progress.attempted ? '\n本轮没有已确认剧情动作。候选或当前目标不授权演出其固定条件、答案或下一步结果；只回应玩家当前表达，不替玩家打听、答应或完成事件。' : '')
       ;
     const prompt = buildCompactModuleNarrativePrompt(systemInstruction,
       endingText ? { 玩家选择: playerLine, 结局: ending } : scene, remembered);
@@ -2016,6 +2021,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         options?.shouldAbort,
         {
           userAction: (userMessage && String(userMessage).trim()) || '继续当前活动',
+          freeTextStatusResolution: options?.freeTextStatusResolution,
           playerIntentText: options?.playerIntentText,
           opportunityAction: options?.opportunityAction,
           eventAction: options?.eventAction,
@@ -2681,6 +2687,7 @@ ${step1Text}
        * 本轮用户动作。用于窄触发的确定性补账，例如“查看/调查某物品”后同步物品描述。
        */
       userAction?: string;
+      freeTextStatusResolution?: FreeTextStatusResolution;
       playerIntentText?: string;
       opportunityAction?: ScenarioOpportunityActionSelection;
       eventAction?: ScenarioEventActionSelection;
@@ -3273,6 +3280,7 @@ ${step1Text}
         text: textContent,
         commands: sortedCommands,
         userAction: options?.userAction || '',
+        freeTextStatusResolution: options?.freeTextStatusResolution,
         summarize: this._summarizeValueForChangeLog.bind(this),
       });
       commandAppliedChanges.push(...narrativeStateChanges);
@@ -3285,6 +3293,7 @@ ${step1Text}
         text: textContent,
         commands: sortedCommands,
         userAction: options?.userAction || '',
+        freeTextStatusResolution: options?.freeTextStatusResolution,
         summarize: this._summarizeValueForChangeLog.bind(this),
       }));
     }
