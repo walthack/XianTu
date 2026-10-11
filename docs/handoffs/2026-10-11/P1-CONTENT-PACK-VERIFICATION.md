@@ -10,7 +10,7 @@
 | 战斗自动注册 | 注册表不再逐个 import；F14 从 JSON 清单启用；独立临时包使用全新 ID 经生产注册函数识别，非借用既有 F14 查找假证明 |
 | 试玩范围/入口 | 清羽、南荒一期/二期及落地声明迁移；原 kind/extensionKey/slot/范围保留；首页入口读取数据，通用路由支持 pack 查询；坏入口可恢复，查询切换响应更新 |
 | 固定正文 | 八个既有结局和两段开场逐字移入 texts；转场正文只对匹配的隔离试玩标记生效，不改普通模组开场 |
-| F06–F09 实证 | 作者原件 /Users/clawbot/Desktop/narrative/31-南荒全部固定战斗合同草案.md，W18–32 与正典裁定 #209；F06/F08/F09 在04b，旧05 ID不删除；F07 逃兵触发第87章条件盘问 |
+| F06–F09 实证 | 作者[原样归档](../../../mod-kit/source-documents/31-南荒全部固定战斗合同草案.md)（[来源与哈希](../../../mod-kit/source-documents/README.md)），W18–32 与正典裁定 #209；F06/F08/F09 在04b，旧05 ID不删除；F07 逃兵触发第87章条件盘问 |
 | 核心冻结 | AGENTS.md 与内容包合同明确 runtime/AI bugfix-only；新内容不在两文件加 ID 分支；runtime 本轮只有旧动作兼容门禁的通用 bugfix，AI文件无 diff |
 
 [内容包编辑合同](CONTENT-PACK-CONTRACT.md)。新战斗数值是实现初值；调参交给模块策划，不宣称长期平衡或真人体验通过。
