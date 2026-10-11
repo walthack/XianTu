@@ -60,9 +60,14 @@ test('world simulation playtest is a one-click isolated normal-game flow', () =>
   const savePanel = read('src/components/dashboard/SavePanel.vue');
   const characterManagement = read('src/components/character-creation/CharacterManagement.vue');
 
-  assert.match(modeSelection, /六朝世界试玩/);
-  assert.match(modeSelection, /清羽记开局/);
-  assert.match(modeSelection, /星月湖任务线试玩/);
+  const entries=JSON.parse(read('src/modules/contentPacks/packs/qingyu/entries.json'));
+  assert.match(modeSelection,/CONTENT_PACKS.entries/);
+  assert.match(modeSelection,/entry.label/);
+  assert.match(modeSelection,/entry.route/);
+  const entryLabels=entries.map(e=>e.label).join(' ');
+  assert.match(entryLabels, /六朝世界试玩/);
+  assert.match(entryLabels, /清羽记开局/);
+  assert.match(entryLabels, /星月湖任务线试玩/);
   assert.match(router, /path:\s*'\/world-sim-playtest'/);
   assert.match(router, /path:\s*'\/qingyu-opening-playtest'/);
   assert.match(router, /path:\s*'\/xingyuehu-quest-playtest'/);

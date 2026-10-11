@@ -3,14 +3,14 @@
     <section class="playtest-card">
       <button class="back-button" type="button" @click="router.push('/')">← 返回主页</button>
       <div class="eyebrow">可玩纵切 · 正常游戏界面</div>
-      <h1>清羽记开局</h1>
+      <h1>{{ entryTitle }}</h1>
       <p class="lead">
         你将以程宗扬身份从现代航班坠入异世界草原，在正常阅读面用自己的话行动。
         这一段是固定顺序：Canon Rail 覆盖全关十八拍，你可以决定怎么做，但不能改下一拍是什么。
         任务栏会给出当前合同，右栏有完成合同按钮。
       </p>
 
-      <label>试玩范围 <select v-model="nanhuangPhase"><option :value="1">一期：至第86章进入鬼王峒</option><option :value="2">二期：至第124章南荒尾声</option></select></label>
+      <label v-if="!packId">试玩范围 <select v-model="nanhuangPhase"><option :value="1">一期：至第86章进入鬼王峒</option><option :value="2">二期：至第124章南荒尾声</option></select></label>
       <div class="facts">
         <article><strong>南荒两期</strong><span>从草原落地、五原出发，继续南荒商路与鬼王峒主线</span></article>
         <article><strong>需要叙事 API</strong><span>使用你在“API 管理”中已有的配置</span></article>
@@ -26,10 +26,10 @@
 
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
       <div class="actions">
-        <button v-if="hasExistingPlaytest" class="secondary" type="button" :disabled="busy" @click="continuePlaytest">
+        <button v-if="hasExistingPlaytest" class="secondary" type="button" :disabled="busy || invalidPack" @click="continuePlaytest">
           继续上次试玩
         </button>
-        <button class="primary" data-testid="start-qingyu-opening-playtest" type="button" :disabled="busy" @click="startFresh">
+        <button class="primary" data-testid="start-qingyu-opening-playtest" type="button" :disabled="busy || invalidPack" @click="startFresh">
           {{ busy ? '正在建立隔离存档…' : hasExistingPlaytest ? '重置并重新开始' : '建立试玩角色并开始' }}
         </button>
       </div>
@@ -38,8 +38,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import {packPlaytest,CONTENT_PACKS} from '@/modules/contentPacks';
+import { computed, ref, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
@@ -54,29 +55,36 @@ import {
 } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 
 const router = useRouter();
+const route=useRoute();
+const packId=computed(()=>typeof route.query.pack==='string' ? route.query.pack : undefined);
+const candidate=computed(()=>CONTENT_PACKS.playtests.find(p=>p.id===(packId.value||'qingyu')));
+const invalidPack=computed(()=>Boolean(packId.value&&(!candidate.value?.characterId||!candidate.value?.slot)));
+const definition=computed(()=>invalidPack.value ? packPlaytest('qingyu') : candidate.value!);
+const entryTitle=computed(()=>packId.value ? CONTENT_PACKS.entries.find(e=>e.playtestId===packId.value)?.label || '内容包试玩' : '清羽记开局');
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const busy = ref(false);
 const nanhuangPhase = ref<1 | 2>(1);
-const errorMessage = ref('');
-const playtestMod = BUILTIN_SCENARIO_MODS.find(mod => mod.manifest.id === QINGYU_OPENING_PLAYTEST_MOD_ID);
+const errorMessage = ref(invalidPack.value ? '这个试玩入口不存在或未配置隔离存档，请返回主页选择有效入口。' : '');
+watch(invalidPack,bad=>{errorMessage.value=bad ? '这个试玩入口不存在或未配置隔离存档，请返回主页选择有效入口。' : '';});
+const playtestMod=computed(()=>BUILTIN_SCENARIO_MODS.find(mod=>mod.manifest.id===definition.value.startModId));
 const hasExistingPlaytest = computed(() => (
-  characterStore.rootState.角色列表[QINGYU_OPENING_PLAYTEST_CHARACTER_ID]?.隔离试玩信息?.kind
-    === QINGYU_OPENING_PLAYTEST_KIND
+  characterStore.rootState.角色列表[definition.value.characterId!]?.隔离试玩信息?.kind
+    === definition.value.kind
 ));
 
 async function startFresh() {
-  if (busy.value) return;
+  if (busy.value || invalidPack.value) return;
   busy.value = true;
   errorMessage.value = '';
   try {
-    if (!playtestMod) throw new Error('缺少清羽记开局内置模组');
+    if (!playtestMod.value) throw new Error('缺少清羽记开局内置模组');
     await characterStore.installIsolatedPlaytestCharacter({
-      characterId: QINGYU_OPENING_PLAYTEST_CHARACTER_ID,
-      slotName: QINGYU_OPENING_PLAYTEST_SLOT,
-      markerKind: QINGYU_OPENING_PLAYTEST_KIND,
-      markerExtensionKey: QINGYU_OPENING_PLAYTEST_EXTENSION_KEY,
-      saveData: createQingyuOpeningPlaytestSave(playtestMod, undefined, nanhuangPhase.value),
+      characterId: definition.value.characterId!,
+      slotName: definition.value.slot!,
+      markerKind: definition.value.kind,
+      markerExtensionKey: definition.value.extensionKey,
+      saveData: createQingyuOpeningPlaytestSave(playtestMod.value, undefined, packId.value ? undefined : nanhuangPhase.value,packId.value),
     });
     await router.replace('/game');
   } catch (error) {
@@ -87,13 +95,13 @@ async function startFresh() {
 }
 
 async function continuePlaytest() {
-  if (busy.value) return;
+  if (busy.value || invalidPack.value) return;
   busy.value = true;
   errorMessage.value = '';
   try {
     const loaded = await characterStore.loadGame(
-      QINGYU_OPENING_PLAYTEST_CHARACTER_ID,
-      QINGYU_OPENING_PLAYTEST_SLOT,
+      definition.value.characterId!,
+      definition.value.slot!,
     );
     if (!loaded || !gameStateStore.isGameLoaded) throw new Error('未能读取上次试玩档');
     await router.replace('/game');

@@ -1,3 +1,4 @@
+import {CONTENT_PACKS} from '../contentPacks';
 import registry from './builtins/character-registry.json';
 /** Project item/skill/technique authority. Stages carry only ids and access conditions. */
 import items from '../../../mod-kit/entity-catalog/items.json';
@@ -7,7 +8,8 @@ import index from '../../../mod-kit/entity-catalog/index.json';
 import type {ScenarioMod,ScenarioModItem,ScenarioModSkill,ScenarioModTechnique} from './schema';
 export type ContentKind='item'|'skill'|'technique';
 export interface CatalogEntry {id:string;aliases:string[];definition:Record<string,unknown>;stageVariants:Record<string,Record<string,unknown>>;authoritySource:string}
-const sources:Record<ContentKind,{entries:CatalogEntry[]}>= {item:items as unknown as {entries:CatalogEntry[]},skill:skills as unknown as {entries:CatalogEntry[]},technique:techniques as unknown as {entries:CatalogEntry[]}};
+const sources:Record<ContentKind,{entries:CatalogEntry[]}>= {item:{entries:[...items.entries] as unknown as CatalogEntry[]},skill:{entries:[...skills.entries] as unknown as CatalogEntry[]},technique:{entries:[...techniques.entries] as unknown as CatalogEntry[]}};
+for(const x of CONTENT_PACKS.entities){if(sources[x.kind].entries.some(e=>e.id===x.entry.id))throw Error(`内容包实体覆盖权威 ${x.entry.id}`);sources[x.kind].entries=[...sources[x.kind].entries,x.entry];}
 const tables=Object.fromEntries(Object.entries(sources).map(([kind,source])=>[kind,new Map(source.entries.map(e=>[e.id,e]))])) as Record<ContentKind,Map<string,CatalogEntry>>;
 export const ENTITY_INDEX=index;
 export function contentDefinition(kind:ContentKind,id:string,stageId?:string):Record<string,unknown>|undefined {

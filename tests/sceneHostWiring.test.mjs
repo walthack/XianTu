@@ -358,8 +358,8 @@ test('already settled back injury is published during battle, before closure or 
 });
 
 
-test('F14 draft has one loss outcome E08; runtime consumes loss once without killing the player',async()=>{
- const c=registry.SCENE_CONTRACT_DRAFTS.find(c=>c.meta.id==='combat.f14.dragon_god');
+test('F14 pack contract has one loss outcome E08; runtime consumes loss once without killing the player',async()=>{
+ const c=registry.sceneContractById('combat.f14.dragon_god');
  assert.equal(c.defeat.rout,undefined);assert.equal(c.closing.rout,undefined);
  let state=mod.beginScene(c).state;state.status='decided';state.outcome={kind:'lose',reason:'saved loss'};
  const closed=mod.closeScene(c,state,{factors:0});assert.equal(closed.writeBack.outcome.endingId,'lcq.ending.fail.dragon_essence');
@@ -395,4 +395,24 @@ test('a failed recognition remains retryable on the unchanged scene; old unresol
  await host.submitSceneInput(h.save,input,h.deps);
  assert.equal(calls,2,'verified positive receipt remains cacheable');
  delete globalThis.location;
+});
+test('F06-F09 closure persists canon deaths and outcome facts for both old and new event data',async()=>{
+ const {applyContentPackOverlays}=await loadTs('../src/modules/contentPacks/index.ts');
+ for(const overlay of [false,true])for(const [eventId,dead]of [['lcq.event.haishen_hall_merfolk','le'],['lcq.event.biling_bay_stance','黑舌'],['lcq.event.wuerlang_slays_dagu','达古'],['lcq.event.yiyang_repels_yinsha',null]])for(const outcome of ['win','lose']){
+  enable();let stage=await data('lcq.stage_04b_lingfei_baiyi_crisis');if(overlay)stage=applyContentPackOverlays(stage);
+  const save=init.applyStrictScenarioInitializationToSave(repair.createMinimalSaveDataV3(),init.buildStrictScenarioInitialization(stage));
+  const r=runtime(save),index=r.events.findIndex(e=>e.id===eventId);
+  for(const event of r.events.slice(0,index)){r.completedEventIds.push(event.id);for(const cond of event.completion||[])if(cond.path.startsWith('flags.'))r.flags[cond.path.slice(6)]=cond.value;}
+  r.activeEventIds=[eventId];const event=r.events[index];const oldAction=event.playerCompletionContract.actions.at(-1);
+  rt.getCurrentStoryEventActions(save);for(const prep of oldAction.requiresPreparation||[]){(r.eventActionStates[eventId]||={preparations:[],attempts:[]}).preparations.push(prep);}
+  const loc=r.canon.locations.find(l=>l.id===event.locationId);save.角色.位置={描述:loc.name,x:loc.coordinates.x,y:loc.coordinates.y,地点ID:loc.id};
+  const contractBefore=JSON.stringify(event.playerCompletionContract);
+  const h=harness(save);assert.equal(host.sceneCandidate(h.save)?.selection.eventId,eventId);assert.equal(rt.recordStoryEventStructuredAction(h.save,host.sceneCandidate(h.save).selection).reason,'scene_module_required');await host.submitSceneInput(h.save,'我观察现场',h.deps);
+  const a=ext.activeScene(h.save);assert.ok(a);a.state.status='decided';a.state.outcome={kind:outcome,reason:'controlled closure boundary'};await host.finishScene(h.save,h.deps);
+  assert.equal(JSON.stringify(runtime(h.save).events.find(e=>e.id===eventId).playerCompletionContract),contractBefore,'closure must not mutate authored contract or wipe preparations');
+  const ledger=runtime(h.save).sceneLedger;if(dead && dead!=='le')assert.ok(Object.values(ledger.actors).some(x=>x.name===dead&&x.status==='dead'),JSON.stringify({overlay,eventId,outcome,actors:ledger.actors}));
+  if(dead==='le')assert.ok(!Object.values(ledger.actors).some(x=>x.name==='乐明珠'&&x.status==='dead'));
+  if(!dead)assert.equal(h.save.角色.属性.境界.九阳层次,'一阳');
+  if(eventId.includes('biling')){assert.equal(Object.values(ledger.actors).some(x=>x.name==='蛇傀'&&x.status==='dead'),outcome==='win');assert.equal(runtime(h.save).flags['lcq.f07.escaped']===true,outcome==='lose');if(outcome==='lose')assert.ok(ledger.lastBeat.facts.some(x=>x.includes('有随从逃走')));}
+ }
 });

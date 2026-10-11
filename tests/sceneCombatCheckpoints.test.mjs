@@ -6,7 +6,7 @@ import {join} from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {loadTs} from './loadTs.mjs';
 
-test('fresh opening replay exports all seven registered combat checkpoints',async()=>{
+test('fresh opening replay exports all twelve registered combat checkpoints',async()=>{
  const dir=await mkdtemp(join(tmpdir(),'xiantu-scene-checkpoints-'));
  execFileSync(process.execPath,['scripts/generate-scene-combat-checkpoints.mjs',dir],{encoding:'utf8',maxBuffer:8*1024*1024});
  const rt=await loadTs('../src/modules/scenarioMods/runtime.ts');
@@ -15,7 +15,7 @@ test('fresh opening replay exports all seven registered combat checkpoints',asyn
  const host=await loadTs('../src/modules/sceneModule/host/controller.ts');
  globalThis.location={search:'?sceneModule=on',hostname:'localhost'};
  try{
-  const expected={F01:'lcq.event.iron_bridge_ambush',F02:'lcq.event.s03b_snake_flower_bridge_01',F04:'lcq.event.s04b_lingfei_baiyi_crisis_03',F05:'lcq.event.s04b_lingfei_baiyi_crisis_10',F03:'lcq.event.s04_02',F10:'lcq.event.s05b_05b_ideology_duel_and_defeat',F13:'lcq.event.ghost_king_swallowed'};
+  const expected={F01:'lcq.event.iron_bridge_ambush',F02:'lcq.event.s03b_snake_flower_bridge_01',F04:'lcq.event.s04b_lingfei_baiyi_crisis_03',F05:'lcq.event.s04b_lingfei_baiyi_crisis_10',F03:'lcq.event.s04_02',F10:'lcq.event.s05b_05b_ideology_duel_and_defeat',F13:'lcq.event.ghost_king_swallowed',F06:'lcq.event.haishen_hall_merfolk',F07:'lcq.event.biling_bay_stance',F08:'lcq.event.wuerlang_slays_dagu',F09:'lcq.event.yiyang_repels_yinsha',F14:'lcq.event.slay_dragon'};
   for(const [label,id]of Object.entries(expected)){
    const bundle=JSON.parse(await readFile(join(dir,label+'-before.json'),'utf8'));
    assert.equal(bundle.type,'saves');assert.equal(bundle.saves.length,1);assert.ok(bundle.saves[0].存档名);
@@ -31,7 +31,7 @@ test('fresh opening replay exports all seven registered combat checkpoints',asyn
    assert.equal(host.sceneCandidate(save)?.selection.eventId,id);assert.equal(save.系统.扩展.战斗检查点来源.newSceneReady,true);
   }
   const trace=JSON.parse(await readFile(join(dir,'replay.json'),'utf8'));
-  assert.equal(trace.filter(row=>row.mode==='new-host-controlled-success-fixture').length,6);
+  assert.equal(trace.filter(row=>row.mode==='new-host-controlled-success-fixture').length,11);
   assert.ok(trace.some(row=>row.stage==='lcq.stage_04b_lingfei_baiyi_crisis'));
  }finally{delete globalThis.location;}
 });

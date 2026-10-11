@@ -177,6 +177,12 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.haishen_hall_merfolk:advance_declared_objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.haishen_hall_merfolk:repel_merfolk_in_haishen_hall",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
       "aliases": []
@@ -1857,6 +1863,12 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.wuerlang_slays_dagu:advance_declared_objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.wuerlang_slays_dagu:hold_dagu_siege_line",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
       "aliases": []
@@ -1955,6 +1967,12 @@
       "kind": "action",
       "id": "lcq.event.yeying_seat_struggle:overhear_lin_shang_yeying",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.yiyang_repels_yinsha:advance_declared_objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -18946,6 +18964,30 @@
     },
     {
       "kind": "scene",
+      "id": "combat.f06.merfolk",
+      "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
+      "aliases": []
+    },
+    {
+      "kind": "scene",
+      "id": "combat.f07.biling_village",
+      "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
+      "aliases": []
+    },
+    {
+      "kind": "scene",
+      "id": "combat.f08.dagu_ruins",
+      "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
+      "aliases": []
+    },
+    {
+      "kind": "scene",
+      "id": "combat.f09.yinsha",
+      "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
+      "aliases": []
+    },
+    {
+      "kind": "scene",
       "id": "combat.f10.ghost_king_clash",
       "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
       "aliases": []
@@ -18959,6 +19001,12 @@
     {
       "kind": "scene",
       "id": "combat.f14.dragon_god",
+      "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
+      "aliases": []
+    },
+    {
+      "kind": "scene",
+      "id": "encounter.f07.geluo_suspicion",
       "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
       "aliases": []
     },
@@ -20470,6 +20518,54 @@
     },
     {
       "kind": "text",
+      "id": "lcq.ending.death.ajiman_bond",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lcq.ending.death.baihu_beheading",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lcq.ending.death.dragon_well",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lcq.ending.death.ghost_king_skull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lcq.ending.death.paolao",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lcq.ending.death.shanghou_relic",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lcq.ending.death.wangzhe_blast",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lcq.ending.fail.dragon_essence",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "outcome.act.ask_biling_for_nylon",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -20502,6 +20598,18 @@
       "kind": "text",
       "id": "outcome.act.lmz.tease_with_pan",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qingyu.opening",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qingyu.stage02.opening",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {

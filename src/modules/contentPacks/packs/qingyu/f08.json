@@ -1,0 +1,394 @@
+{
+  "meta": {
+    "id": "combat.f08.dagu_ruins",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.wuerlang_slays_dagu",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3,
+      "compatibleActionIds": [
+        "witness_wuerlang_turn_tide"
+      ],
+      "completionSceneByOutcome": {
+        "win": {
+          "sceneLocation": "古道秘营",
+          "cast": {
+            "present": [
+              "吴战威",
+              "小魏",
+              "易彪",
+              "卡瓦",
+              "祁远",
+              "达古"
+            ],
+            "exit": [
+              {
+                "name": "达古",
+                "status": "dead"
+              }
+            ]
+          },
+          "fixedFacts": [
+            "达古死去，鬼战士失去巫术支撑，商队无人送命。"
+          ],
+          "fallbackText": "达古死去，鬼战士失去巫术支撑，商队无人送命。",
+          "factChecks": []
+        },
+        "lose": {
+          "sceneLocation": "古道秘营",
+          "cast": {
+            "present": [
+              "吴战威",
+              "小魏",
+              "易彪",
+              "卡瓦",
+              "祁远",
+              "达古"
+            ],
+            "exit": [
+              {
+                "name": "达古",
+                "status": "dead"
+              }
+            ]
+          },
+          "fixedFacts": [
+            "达古仍被援手杀死；易伟腹伤、小魏臂伤、卡瓦与主角外伤，商队付出更重代价。"
+          ],
+          "fallbackText": "达古仍被援手杀死；易伟腹伤、小魏臂伤、卡瓦与主角外伤，商队付出更重代价。",
+          "factChecks": []
+        }
+      }
+    },
+    "source": "31号F08及W已定；P1-CONTENT-PACK-20261011",
+    "readiness": "ready"
+  },
+  "objective": {
+    "text": "撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局",
+    "win": {
+      "party": "dagu",
+      "track": "vit",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "dagu",
+      "side": "opposed",
+      "ref": "lcq.enemy.dagu",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "巫术仍在",
+            "受创",
+            "死亡"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "死亡",
+            "ceiling": 2,
+            "alternatives": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "formation",
+      "side": "opposed",
+      "ref": "阵形",
+      "tracks": [
+        {
+          "id": "collapse",
+          "kind": "progress",
+          "scale": [
+            "阵形完整",
+            "阵形松动",
+            "阵形崩溃"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "阵形崩溃",
+            "ceiling": 2,
+            "alternatives": [],
+            "preserveOnWin": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "wu",
+      "side": "player_side",
+      "ref": "liuchao.character.wu_er_lang",
+      "absent": true
+    },
+    {
+      "id": "suli",
+      "side": "player_side",
+      "ref": "liuchao.character.su_li",
+      "absent": true
+    },
+    {
+      "id": "yiwei",
+      "side": "player_side",
+      "ref": "易伟"
+    },
+    {
+      "id": "xiaowei",
+      "side": "player_side",
+      "ref": "lcq.character.nanhuang_xiaowei"
+    },
+    {
+      "id": "kawa",
+      "side": "player_side",
+      "ref": "lcq.character.nanhuang_kawa"
+    }
+  ],
+  "goals": [
+    {
+      "id": "attack",
+      "label": "了结达古",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 11,
+      "targetIds": [
+        "dagu"
+      ]
+    },
+    {
+      "id": "command",
+      "label": "组织防线攻击达古",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 11,
+      "targetIds": [
+        "dagu"
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "arrows",
+      "kind": "terrain",
+      "label": "祁远麻药箭",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "horns",
+      "kind": "terrain",
+      "label": "鬼角弱点",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "formation",
+      "kind": "terrain",
+      "label": "马阵与弓弩防线",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "suli_support",
+      "kind": "ally",
+      "label": "苏荔援手",
+      "owner": "suli",
+      "source": "83·15",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "wu_support",
+      "kind": "ally",
+      "label": "武二郎援手",
+      "owner": "wu",
+      "source": "83·18",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "focus",
+      "party": "dagu",
+      "label": "鬼战士集火",
+      "target": "player",
+      "attack": {
+        "dc": 11
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ],
+        "trackShifts": [
+          {
+            "party": "formation",
+            "track": "collapse",
+            "steps": 1
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "flags": {
+        "scene.f08.result": "win"
+      },
+      "rewards": [],
+      "text": "达古死去，鬼战士失去巫术支撑，商队无人送命。"
+    },
+    "lose": {
+      "flags": {
+        "scene.f08.result": "lose"
+      },
+      "rewards": [],
+      "text": "达古仍被援手杀死；易伟腹伤、小魏臂伤、卡瓦与主角外伤，商队付出更重代价。",
+      "fixedCosts": [
+        {
+          "id": "belly",
+          "target": "yiwei",
+          "effect": "wound.severe",
+          "statuses": [
+            {
+              "status": "wound.severe"
+            }
+          ]
+        },
+        {
+          "id": "arm",
+          "target": "xiaowei",
+          "effect": "wound.external.right_arm",
+          "statuses": [
+            {
+              "status": "wound.external.right_arm"
+            }
+          ]
+        },
+        {
+          "id": "cut",
+          "target": "kawa",
+          "effect": "wound.external",
+          "statuses": [
+            {
+              "status": "wound.external"
+            }
+          ]
+        },
+        {
+          "id": "pc",
+          "target": "pc",
+          "effect": "wound.external",
+          "statuses": [
+            {
+              "status": "wound.external"
+            }
+          ]
+        }
+      ],
+      "settle": [
+        {
+          "party": "dagu",
+          "track": "vit",
+          "to": "死亡"
+        }
+      ]
+    }
+  },
+  "rewardPolicy": {
+    "itemIds": []
+  },
+  "levelContext": {
+    "chapter": 83,
+    "nonLevelPartyIds": [
+      "formation",
+      "yiwei",
+      "kawa"
+    ]
+  },
+  "clock": {
+    "fixedEvents": [
+      {
+        "id": "reinforce",
+        "trigger": "afterEnemyAction",
+        "when": {
+          "any": [
+            {
+              "party": "formation",
+              "track": "collapse",
+              "reach": "final"
+            },
+            {
+              "party": "pc",
+              "status": "wound.severe"
+            }
+          ]
+        },
+        "text": "苏荔与武二郎赶到援手。",
+        "effects": [
+          {
+            "arrive": "wu"
+          },
+          {
+            "arrive": "suli"
+          },
+          {
+            "depart": "formation"
+          }
+        ]
+      }
+    ]
+  },
+  "continuity": {
+    "facts": [
+      "达古必须死；不强制由易彪指挥或由武二郎杀死；山榉麻药箭可用。"
+    ]
+  }
+}

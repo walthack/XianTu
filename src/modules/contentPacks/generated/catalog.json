@@ -1,0 +1,6450 @@
+{
+  "version": "68d6f9c82e579f22",
+  "contracts": [
+    {
+      "meta": {
+        "id": "combat.f01.iron_bridge",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.iron_bridge_ambush",
+          "actionId": "break_iron_bridge_ambush",
+          "required": true,
+          "ambushAfterStall": 1
+        }
+      },
+      "objective": {
+        "text": "在铁索桥撑过三回合",
+        "win": {
+          "kind": "beatAtLeast",
+          "beat": 4
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "assassins",
+          "side": "opposed",
+          "ref": "lcq.enemy.f01_axeman",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在抵抗",
+                "抵抗减弱",
+                "勉强抵抗",
+                "倒下"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "倒下",
+                "ceiling": 3,
+                "preserveOnWin": true
+              }
+            }
+          ],
+          "instanceId": "combat.f01.iron_bridge.assassins",
+          "enemyId": "lcq.enemy.f01_axeman"
+        },
+        {
+          "id": "archers",
+          "side": "opposed",
+          "ref": "lcq.enemy.f01_archer",
+          "enemyId": "lcq.enemy.f01_archer",
+          "group": {
+            "id": "f01.archers",
+            "label": "{{ref:lcq.enemy.f01_archer}}"
+          }
+        },
+        {
+          "id": "swordsman",
+          "side": "opposed",
+          "ref": "lcq.enemy.f01_swordsman",
+          "enemyId": "lcq.enemy.f01_swordsman",
+          "absent": true
+        }
+      ],
+      "goals": [
+        {
+          "id": "attack",
+          "label": "攻击对手",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 12
+        },
+        {
+          "id": "defend",
+          "label": "防守撑住",
+          "type": "support",
+          "baseDifficulty": 12
+        },
+        {
+          "id": "yield_guard",
+          "label": "停止抵抗、承受攻击",
+          "type": "support",
+          "baseDifficulty": 12,
+          "aliases": [
+            "张开双手不躲",
+            "不躲也不挡",
+            "不招架",
+            "不还手",
+            "放下刀",
+            "硬吃他们的刀"
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "assassins_attack",
+          "party": "assassins",
+          "label": "{{ref:lcq.enemy.f01_axeman}}正面攻击",
+          "target": "player",
+          "attack": {
+            "dc": 3
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        },
+        {
+          "id": "archers_attack",
+          "party": "archers",
+          "label": "{{ref:lcq.enemy.f01_archer}}射向桥面",
+          "target": "player",
+          "attack": {
+            "dc": 5
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "ending",
+          "endingId": "lcq.ending.fail.combat"
+        }
+      },
+      "closing": {
+        "win": {
+          "rewards": [],
+          "text": "你撑过三回合，黑纱女子出手，战斗结束。"
+        },
+        "lose": {
+          "text": "游戏结束",
+          "rewards": []
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "开战前：敌方六名刺客；只有主角能够行动。",
+          "{{ref:liuchao.character.wu_er_lang}}中毒，{{ref:liuchao.character.ning_yu}}正为其行功，两人都无法行动。",
+          "剑手只盯失去行动能力的{{ref:liuchao.character.wu_er_lang}}，不与主角正面交手；主角正面对付斧手与弓手。"
+        ]
+      },
+      "settings": {},
+      "clock": {
+        "beats": 3,
+        "onTimeout": {
+          "type": "close",
+          "as": "win"
+        }
+      },
+      "levelContext": {
+        "chapter": 30
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f02.snake_assault",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.s03b_snake_flower_bridge_01",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 1
+        }
+      },
+      "objective": {
+        "text": "击倒或制住袭击的蛇彝男子",
+        "win": {
+          "party": "snake_man",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "snake_man",
+          "side": "opposed",
+          "ref": "lcq.enemy.sheyi_raider",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在抵抗",
+                "抵抗减弱",
+                "勉强抵抗",
+                "倒下"
+              ],
+              "initial": 2,
+              "ending": {
+                "finalState": "倒下",
+                "ceiling": 3,
+                "preserveOnWin": false
+              }
+            }
+          ],
+          "instanceId": "combat.f02.snake_assault.snake_man"
+        }
+      ],
+      "goals": [
+        {
+          "id": "attack",
+          "label": "攻击对手",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 12
+        },
+        {
+          "id": "defend",
+          "label": "防守撑住",
+          "type": "support",
+          "baseDifficulty": 12
+        },
+        {
+          "id": "yield_guard",
+          "label": "停止抵抗、承受攻击",
+          "type": "support",
+          "baseDifficulty": 12,
+          "aliases": [
+            "张开双手不躲",
+            "不躲也不挡",
+            "不招架",
+            "不还手",
+            "放下刀",
+            "硬吃他们的刀"
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "snake_man_attack",
+          "party": "snake_man",
+          "label": "攻击",
+          "target": "player",
+          "attack": {
+            "dc": 12
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "ending",
+          "endingId": "lcq.ending.fail.combat"
+        }
+      },
+      "closing": {
+        "win": {
+          "rewards": []
+        },
+        "lose": {
+          "text": "游戏结束",
+          "rewards": []
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "开战前：蛇彝男子带着重伤袭来。",
+          "{{ref:liuchao.character.ning_yu}}在主角身后，药效未退，无法行动。"
+        ]
+      },
+      "settings": {},
+      "levelContext": {
+        "chapter": 37
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f03.mountain_stream_fog",
+        "version": 5,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.s04_02",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3,
+          "escapeFlag": "scene.f03.escaped",
+          "escapeState": "逃走"
+        },
+        "compatibleStateVersions": [
+          4
+        ]
+      },
+      "objective": {
+        "text": "浓雾里护住队伍，扛过鬼王峒武士的突袭",
+        "previewHint": "护住队伍；每次行动最多解决一组，雾散或拖满拍数不等于获胜。",
+        "win": {
+          "all": [
+            {
+              "party": "foe_engaged",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_pack_1",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_pack_2",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_pack_3",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_pack_4",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_pack_5",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_pack_6",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_pack_7",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "foe_last",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "kind": "not",
+              "cond": {
+                "kind": "partyDowned",
+                "party": "pc"
+              }
+            }
+          ]
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "foe_engaged",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "暗红眼的武士",
+            "独角武士",
+            "光头武士",
+            "第一个武士",
+            "那个武士"
+          ],
+          "resistance": 3,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "你的刀砍在他手臂上，只留下一道浅浅的伤痕",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "foe_engaged",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_engaged"
+        },
+        {
+          "id": "foe_pack_1",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "其余武士",
+            "武士们",
+            "第2名武士"
+          ],
+          "resistance": 2,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "remaining_seven",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_pack_1"
+        },
+        {
+          "id": "foe_pack_2",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "其余武士",
+            "武士们",
+            "第3名武士"
+          ],
+          "resistance": 2,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "remaining_seven",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_pack_2"
+        },
+        {
+          "id": "foe_pack_3",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "其余武士",
+            "武士们",
+            "第4名武士"
+          ],
+          "resistance": 2,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "remaining_seven",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_pack_3"
+        },
+        {
+          "id": "foe_pack_4",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "其余武士",
+            "武士们",
+            "第5名武士"
+          ],
+          "resistance": 2,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "remaining_seven",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_pack_4"
+        },
+        {
+          "id": "foe_pack_5",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "其余武士",
+            "武士们",
+            "第6名武士"
+          ],
+          "resistance": 2,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "remaining_seven",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_pack_5"
+        },
+        {
+          "id": "foe_pack_6",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "其余武士",
+            "武士们",
+            "第7名武士"
+          ],
+          "resistance": 2,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "remaining_seven",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_pack_6"
+        },
+        {
+          "id": "foe_pack_7",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "其余武士",
+            "武士们",
+            "第8名武士"
+          ],
+          "resistance": 2,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "钢刀砍在鬼角上溅起火花，砍不进去",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "remaining_seven",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_pack_7"
+        },
+        {
+          "id": "foe_last",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "最后一个武士",
+            "最后那个",
+            "吸血的武士",
+            "变身的武士"
+          ],
+          "resistance": 3,
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "受创",
+                "重伤",
+                "被击倒",
+                "逃走",
+                "被俘"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "被击倒",
+                "causedBy": "player_side",
+                "ceiling": 3,
+                "previewText": "按此人的实际结果记账，击倒与活捉都算解决；未倒下不算全灭",
+                "clampText": "刀砍见骨，他却不流血，胸前的鬼脸反而更红",
+                "alternatives": [
+                  "被俘"
+                ]
+              }
+            }
+          ],
+          "actionGroup": "foe_last",
+          "instanceId": "combat.f03.mountain_stream_fog.foe_last"
+        },
+        {
+          "id": "wu_er_lang",
+          "side": "player_side",
+          "ref": "liuchao.character.wu_er_lang",
+          "absent": true
+        },
+        {
+          "id": "su_li",
+          "side": "player_side",
+          "ref": "liuchao.character.su_li"
+        },
+        {
+          "id": "ning_yu",
+          "side": "player_side",
+          "ref": "liuchao.character.ning_yu",
+          "protected": true,
+          "recoveryStatus": "wound.internal"
+        },
+        {
+          "id": "yi_biao",
+          "side": "player_side",
+          "ref": "lcq.character.np004",
+          "defense": {
+            "bonus": 1
+          }
+        },
+        {
+          "id": "qi_yuan",
+          "side": "player_side",
+          "ref": "liuchao.character.qi_yuan",
+          "defense": {
+            "bonus": 0
+          }
+        },
+        {
+          "id": "xiao_wei",
+          "side": "player_side",
+          "ref": "lcq.character.nanhuang_xiaowei"
+        },
+        {
+          "id": "kawa",
+          "side": "player_side",
+          "ref": "lcq.character.nanhuang_kawa"
+        },
+        {
+          "id": "yi_hu",
+          "side": "player_side",
+          "ref": "liuchao.character.yi_hu"
+        },
+        {
+          "id": "wu_zhan_wei",
+          "side": "player_side",
+          "ref": "lcq.character.np003"
+        },
+        {
+          "id": "huamiao_men",
+          "side": "player_side",
+          "ref": "lcq.group.huamiao_men",
+          "group": {
+            "id": "lcq.group.huamiao_men",
+            "label": "{{ref:lcq.group.huamiao_men}}"
+          }
+        },
+        {
+          "id": "caravan_guards",
+          "side": "player_side",
+          "ref": "lcq.group.caravan_guards",
+          "group": {
+            "id": "lcq.group.caravan_guards",
+            "label": "{{ref:lcq.group.caravan_guards}}"
+          }
+        },
+        {
+          "id": "bride",
+          "side": "player_side",
+          "ref": "liuchao.character.le_mingzhu",
+          "protected": true
+        },
+        {
+          "id": "a_xi",
+          "side": "player_side",
+          "ref": "liuchao.character.a_xi",
+          "protected": true
+        },
+        {
+          "id": "xie_yi",
+          "side": "neutral",
+          "ref": "liuchao.character.xie_yi"
+        },
+        {
+          "id": "zhu",
+          "side": "neutral",
+          "ref": "liuchao.character.shang_zhen_yu"
+        },
+        {
+          "id": "yun_cang_feng",
+          "side": "neutral",
+          "ref": "liuchao.character.yun_cang_feng"
+        },
+        {
+          "id": "shi_gang",
+          "side": "neutral",
+          "ref": "lcq.character.nanhuang_shigang"
+        }
+      ],
+      "tracks": [
+        {
+          "id": "fog",
+          "kind": "progress",
+          "scale": [
+            "浓雾",
+            "渐散",
+            "散去大半"
+          ],
+          "owner": "scene",
+          "initial": 0
+        }
+      ],
+      "clock": {
+        "beats": 13,
+        "onTimeout": {
+          "type": "close",
+          "as": "timeout"
+        },
+        "fixedEvents": [
+          {
+            "id": "setup",
+            "onStart": true,
+            "effects": [
+              {
+                "tag": {
+                  "id": "fog_cover",
+                  "label": "雾中难辨",
+                  "on": "scene",
+                  "durationBeats": 2,
+                  "effect": "远程难命中，敌我都看不清"
+                }
+              },
+              {
+                "tag": {
+                  "id": "iron_body",
+                  "label": "体如铁石",
+                  "on": "foe_engaged",
+                  "durationBeats": null,
+                  "effect": "主角的普通刀伤只留浅痕"
+                }
+              }
+            ]
+          },
+          {
+            "id": "ning_yu_bursts_out",
+            "atBeat": 1,
+            "text": "{{ref:liuchao.character.ning_yu}}满身是血从雾中掠过山涧，力竭坠落，被一条青藤扯了回来",
+            "effects": []
+          },
+          {
+            "id": "scout_killed",
+            "atBeat": 1,
+            "text": "铁斧从雾里飞出；探路的花苗汉子一声惨呼，头颅被提在武士手里",
+            "effects": []
+          },
+          {
+            "id": "fog_thins",
+            "atBeat": 3,
+            "text": "一缕阳光透进林中，浓雾微微散开",
+            "effects": [
+              {
+                "setTrack": {
+                  "track": "fog",
+                  "to": "渐散"
+                }
+              }
+            ]
+          },
+          {
+            "id": "wu_er_lang_charges",
+            "atBeat": 3,
+            "text": "{{ref:liuchao.character.wu_er_lang}}从花苗人群里扑出，投入交锋；杀敌或牵制结果按本拍实际结算。",
+            "effects": [
+              {
+                "arrive": "wu_er_lang"
+              },
+              {
+                "tag": {
+                  "id": "wu_acted",
+                  "label": "武二郎已出手",
+                  "on": "scene",
+                  "durationBeats": null,
+                  "effect": "武二郎出手，局面开始翻转"
+                }
+              }
+            ]
+          },
+          {
+            "id": "fog_mostly_gone",
+            "atBeat": 4,
+            "text": "浓雾消散大半，武士再也藏不住身形",
+            "effects": [
+              {
+                "setTrack": {
+                  "track": "fog",
+                  "to": "散去大半"
+                }
+              }
+            ]
+          },
+          {
+            "id": "blood_transform",
+            "atBeat": 4,
+            "text": "一名武士咬住受伤同伴的脖子吸血，胸前现出大笑鬼脸，身形暴涨",
+            "effects": [
+              {
+                "tag": {
+                  "id": "bloodless",
+                  "label": "伤而不血",
+                  "on": "foe_last",
+                  "durationBeats": null,
+                  "effect": "刀伤不能让他倒下"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "beats": [
+        {
+          "id": "b1",
+          "title": "雾中来敌",
+          "prompt": "崖边浓雾，脚下是一丈来高的山涧。凝羽带伤冲出来喊「当心」，雾里飞出一柄铁斧。",
+          "reveal": [
+            "来的是鬼王峒的人",
+            "武士光头、暗红眼、额生利角、手持铁斧"
+          ]
+        },
+        {
+          "id": "b2",
+          "title": "刀斧相交",
+          "prompt": "暗红眼武士朝凝羽伸手，你挡在她身前拔刀。",
+          "reveal": [
+            "武士体如铁石，刀只能留下浅痕",
+            "鬼角硬如金铁，能像标枪一样刺穿胸膛",
+            "身边有人死，生死根会把死气送进丹田"
+          ]
+        },
+        {
+          "id": "b3",
+          "title": "雾散·武二郎出手",
+          "prompt": "阳光透进来，苏荔张弓；武二郎冲进战团。你已经撑不住了。",
+          "reveal": [
+            "武二郎拿到刀后局面翻转"
+          ]
+        },
+        {
+          "id": "b4",
+          "title": "变身与堕涧",
+          "prompt": "只剩一名武士。他吸干同伴的血，变成了另一副样子，扑向武二郎。",
+          "reveal": [
+            "刀砍见骨也不流血",
+            "他被逼到涧边会跳下去逃走"
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": "fog",
+          "kind": "environment",
+          "label": "浓雾",
+          "aliases": [
+            "雾",
+            "白雾"
+          ],
+          "source": "第45章 段54；第46章 段10、32",
+          "availability": {
+            "untilBeat": 3
+          },
+          "verbs": [
+            {
+              "id": "use_cover",
+              "aliases": [
+                "借雾躲",
+                "隐蔽"
+              ],
+              "power": 1,
+              "goalTags": [
+                "capture",
+                "protect",
+                "harass",
+                "survive",
+                "turn_tide"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "stream_edge",
+          "kind": "terrain",
+          "label": "山涧崖边",
+          "aliases": [
+            "山涧",
+            "涧边",
+            "石崖"
+          ],
+          "source": "第45章 段56–57；第46章 段37",
+          "verbs": [
+            {
+              "id": "drive_to_edge",
+              "aliases": [
+                "逼到涧边",
+                "推下山涧"
+              ],
+              "power": 1,
+              "goalTags": [
+                "harass",
+                "turn_tide",
+                "capture",
+                "finish_last"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "steel_saber",
+          "kind": "item",
+          "label": "钢刀",
+          "aliases": [
+            "刀"
+          ],
+          "source": "第45章 段84–85、107；第46章 段2–3",
+          "owner": "pc",
+          "verbs": [
+            {
+              "id": "draw_cut",
+              "aliases": [
+                "拔刀式",
+                "拔刀就砍"
+              ],
+              "power": 1,
+              "goalTags": [
+                "capture",
+                "protect",
+                "harass",
+                "survive",
+                "turn_tide"
+              ]
+            },
+            {
+              "id": "throw_to_ally",
+              "aliases": [
+                "把刀扔给武二",
+                "武二接住"
+              ],
+              "power": 2,
+              "goalTags": [
+                "harass",
+                "turn_tide",
+                "capture"
+              ],
+              "creates": "wu_armed",
+              "cost": "主角空手"
+            }
+          ]
+        },
+        {
+          "id": "dantian_wheel",
+          "kind": "ability",
+          "label": "丹田气轮",
+          "aliases": [
+            "生死根",
+            "吸死气",
+            "运气"
+          ],
+          "source": "第45章 段89、94；第46章 段48",
+          "availability": {
+            "fromBeat": 2
+          },
+          "verbs": [
+            {
+              "id": "rally",
+              "aliases": [
+                "回力",
+                "撑住"
+              ],
+              "power": 1,
+              "goalTags": [
+                "survive"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "iron_bow",
+          "kind": "item",
+          "label": "易彪的铁胎弓与火箭",
+          "aliases": [
+            "火箭",
+            "铁弓"
+          ],
+          "source": "第45章 段35、62–63、70–71",
+          "owner": "yi_biao",
+          "verbs": [
+            {
+              "id": "fire_into_fog",
+              "aliases": [
+                "往雾里射"
+              ],
+              "power": 0,
+              "goalTags": [
+                "reveal"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "su_li_bow",
+          "kind": "item",
+          "label": "苏荔的弯弓",
+          "aliases": [
+            "苏荔射箭"
+          ],
+          "source": "第45章 段101；第46章 段40、46",
+          "owner": "su_li",
+          "availability": {
+            "fromBeat": 3
+          },
+          "verbs": [
+            {
+              "id": "aimed_shot",
+              "aliases": [
+                "射鬼脸",
+                "一箭射穿"
+              ],
+              "power": 3,
+              "goalTags": [
+                "finish_last"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "xiao_wei_crossbow",
+          "kind": "item",
+          "label": "小魏的弩",
+          "aliases": [
+            "弩",
+            "弩矢"
+          ],
+          "source": "第46章 段19–20",
+          "owner": "xiao_wei",
+          "availability": {
+            "fromBeat": 4,
+            "untilBeat": 4
+          },
+          "verbs": [
+            {
+              "id": "snipe_eye",
+              "aliases": [
+                "射眼睛"
+              ],
+              "power": 0,
+              "goalTags": [
+                "harass"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "green_vine",
+          "kind": "terrain",
+          "label": "青藤",
+          "aliases": [
+            "藤"
+          ],
+          "source": "第45章 段66",
+          "uses": 1,
+          "availability": {
+            "fromBeat": 1,
+            "untilBeat": 1
+          },
+          "verbs": [
+            {
+              "id": "pull_out",
+              "aliases": [
+                "把人拉上来"
+              ],
+              "power": 1,
+              "goalTags": [
+                "protect"
+              ]
+            }
+          ]
+        }
+      ],
+      "tags": [
+        {
+          "id": "fog_cover",
+          "label": "雾中难辨",
+          "on": "scene",
+          "durationBeats": 2,
+          "effect": "远程难命中，敌我都看不清"
+        },
+        {
+          "id": "iron_body",
+          "label": "体如铁石",
+          "on": "foe_engaged",
+          "durationBeats": null,
+          "effect": "主角的普通刀伤只留浅痕"
+        },
+        {
+          "id": "wu_acted",
+          "label": "武二郎已出手",
+          "on": "scene",
+          "durationBeats": null,
+          "effect": "武二郎出手，局面开始翻转"
+        },
+        {
+          "id": "wu_armed",
+          "label": "武二持刀",
+          "on": "wu_er_lang",
+          "durationBeats": null,
+          "effect": "武二郎出手，局面开始翻转"
+        },
+        {
+          "id": "bloodless",
+          "label": "伤而不血",
+          "on": "foe_last",
+          "durationBeats": null,
+          "effect": "刀伤不能让他倒下"
+        }
+      ],
+      "goals": [
+        {
+          "id": "attack",
+          "label": "攻击武士",
+          "type": "push",
+          "baseDifficulty": 10,
+          "track": "vit",
+          "maxTargetGroups": 1,
+          "aliases": [
+            "挥刀砍",
+            "挥刀攻击",
+            "砍倒",
+            "劈砍",
+            "攻击武士"
+          ]
+        },
+        {
+          "id": "survive",
+          "label": "在武士手下撑住",
+          "type": "support",
+          "baseDifficulty": 8
+        },
+        {
+          "id": "protect",
+          "label": "护住凝羽和后面的花苗女子",
+          "type": "support",
+          "baseDifficulty": 9,
+          "onSuccess": {
+            "tagOn": "allies",
+            "tag": {
+              "id": "guarded",
+              "label": "受掩护",
+              "on": "player_side",
+              "durationBeats": 1,
+              "effect": {
+                "defenseBonus": 3
+              }
+            }
+          }
+        },
+        {
+          "id": "turn_tide",
+          "label": "让武二郎接手局面",
+          "type": "push",
+          "baseDifficulty": 10,
+          "track": "vit",
+          "maxTargetGroups": 1
+        },
+        {
+          "id": "finish_last",
+          "label": "别让最后一个跑了",
+          "type": "push",
+          "baseDifficulty": 12,
+          "track": "vit",
+          "maxTargetGroups": 1
+        },
+        {
+          "id": "reveal",
+          "label": "看清雾里的敌人",
+          "type": "support",
+          "baseDifficulty": 10
+        },
+        {
+          "id": "harass",
+          "label": "牵制",
+          "type": "push",
+          "baseDifficulty": 10,
+          "track": "vit",
+          "maxTargetGroups": 1
+        },
+        {
+          "id": "capture",
+          "label": "制服武士留下活口",
+          "type": "push",
+          "baseDifficulty": 10,
+          "track": "vit",
+          "finishAs": "被俘",
+          "aliases": [
+            "擒住",
+            "留活口",
+            "活捉",
+            "制服"
+          ],
+          "maxTargetGroups": 1,
+          "completeOnSuccess": true
+        },
+        {
+          "id": "interrogate",
+          "label": "审问已制住的活口",
+          "aliases": [
+            "审问",
+            "盘问",
+            "逼问"
+          ],
+          "type": "support",
+          "baseDifficulty": 10
+        },
+        {
+          "id": "yield_guard",
+          "label": "停止抵抗、承受攻击",
+          "type": "support",
+          "baseDifficulty": 8,
+          "aliases": [
+            "张开双手不躲",
+            "不躲也不挡",
+            "不招架",
+            "不还手",
+            "放下刀",
+            "硬吃他们的刀"
+          ]
+        }
+      ],
+      "locks": [
+        {
+          "id": "bride_veiled",
+          "matchHints": [
+            "掀面纱",
+            "新娘是谁",
+            "让新娘出手"
+          ],
+          "reply": "新娘被花苗女子围在中间，阿夕拉着不让她出来。",
+          "redirectTo": "protect"
+        },
+        {
+          "id": "zhu_hides",
+          "matchHints": [
+            "让朱老头出手",
+            "朱老头帮忙"
+          ],
+          "reply": "朱老头躲在最后面，紧紧拽着石刚的衣服。",
+          "redirectTo": "survive"
+        },
+        {
+          "id": "xie_yi_idle",
+          "matchHints": [
+            "请谢艺出手",
+            "谢艺帮忙"
+          ],
+          "reply": "谢艺拿着缰绳站在坐骑旁，神情漫不经心。",
+          "redirectTo": "survive"
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "attack_ning_yu",
+          "party": "foe_engaged",
+          "label": "铁斧逼近队伍",
+          "target": {
+            "party": "ning_yu"
+          },
+          "attack": {
+            "dc": 8
+          },
+          "allowProtected": true,
+          "when": {
+            "kind": "not",
+            "cond": {
+              "kind": "trackReaches",
+              "party": "foe_engaged",
+              "track": "vit",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.internal"
+              }
+            ],
+            "text": "护队的一侧受创"
+          },
+          "onBlocked": {
+            "text": "这一侧挡住了袭击"
+          }
+        },
+        {
+          "id": "attack_bride",
+          "party": "foe_pack_1",
+          "label": "铁斧逼近队伍",
+          "target": {
+            "party": "bride"
+          },
+          "attack": {
+            "dc": 8
+          },
+          "allowProtected": true,
+          "when": {
+            "kind": "not",
+            "cond": {
+              "kind": "trackReaches",
+              "party": "foe_pack_1",
+              "track": "vit",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ],
+            "text": "护队的一侧受创"
+          },
+          "onBlocked": {
+            "text": "这一侧挡住了袭击"
+          }
+        },
+        {
+          "id": "attack_a_xi",
+          "party": "foe_last",
+          "label": "铁斧逼近队伍",
+          "target": {
+            "party": "a_xi"
+          },
+          "attack": {
+            "dc": 8
+          },
+          "allowProtected": true,
+          "when": {
+            "kind": "not",
+            "cond": {
+              "kind": "trackReaches",
+              "party": "foe_last",
+              "track": "vit",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ],
+            "text": "护队的一侧受创"
+          },
+          "onBlocked": {
+            "text": "这一侧挡住了袭击"
+          }
+        }
+      ],
+      "fumble": [
+        {
+          "id": "pc_wound",
+          "target": "actor",
+          "consequence": {
+            "kind": "status",
+            "status": "wound.external"
+          },
+          "text": "你在混战里吃了一记，受了外伤"
+        },
+        {
+          "id": "qi_yuan_shoulder",
+          "target": {
+            "party": "qi_yuan"
+          },
+          "consequence": {
+            "kind": "status",
+            "status": "wound.external.shoulder"
+          },
+          "text": "祁远肩头被斧锋带到"
+        },
+        {
+          "id": "yi_biao_back",
+          "target": {
+            "party": "yi_biao"
+          },
+          "consequence": {
+            "kind": "status",
+            "status": "wound.external.back"
+          },
+          "text": "易彪背上被铁斧拍了一记"
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "text": "九名鬼王峒武士已被逐一击倒或制住，没有人逃走。队伍的伤情按本场实际经过记录。",
+          "fixedCosts": [
+            {
+              "id": "delay",
+              "target": "scene",
+              "effect": "耽误一个多时辰的路程",
+              "anchorText": "第47章 段53"
+            }
+          ],
+          "flags": {
+            "scene.f03.result": "win",
+            "scene.f03.escaped": false
+          },
+          "rewards": [],
+          "next": null
+        },
+        "lose": {
+          "text": "这一仗没能把来袭武士全部留下。未被击倒或制住的人借雾逃走；队伍伤情与代价按实际结果记账。",
+          "fixedCosts": [
+            {
+              "id": "guard_fallen",
+              "target": "caravan_guards",
+              "effect": "商馆护卫在这场败局中阵亡",
+              "anchorText": "45·97；31号验收后补定"
+            }
+          ],
+          "flags": {
+            "scene.f03.result": "lose",
+            "scene.f03.escaped": true
+          },
+          "rewards": [],
+          "next": null,
+          "settle": [
+            {
+              "side": "opposed",
+              "track": "vit",
+              "onlyUnfinished": true,
+              "to": "逃走"
+            }
+          ]
+        },
+        "timeout": {
+          "text": "这一仗没能把来袭武士全部留下。未被击倒或制住的人借雾逃走；队伍伤情与代价按实际结果记账。",
+          "settle": [
+            {
+              "side": "opposed",
+              "track": "vit",
+              "onlyUnfinished": true,
+              "to": "逃走"
+            }
+          ],
+          "fixedCosts": [
+            {
+              "id": "guard_fallen",
+              "target": "caravan_guards",
+              "effect": "商馆护卫在这场败局中阵亡",
+              "anchorText": "45·97；31号验收后补定"
+            }
+          ],
+          "flags": {
+            "scene.f03.result": "timeout",
+            "scene.f03.escaped": true
+          },
+          "rewards": [],
+          "next": null
+        }
+      },
+      "narration": {
+        "fixedTexts": {
+          "engage": "你循着哨声往前走了几步，雾里忽然传来一声闷哼。方才滑下涧去探路的花苗汉子倒在石缝里，再也没有起来。雾气翻开一道口子，一个光头的汉子走了出来：额心正中生着一支可怖的利角，手里的铁斧还在滴血，身后隐约还有影子在动。凝羽就在你几步之外，侧身戒备。这是你来到这个世界之后，第一次与人正式交手。"
+        },
+        "requiredFacts": [
+          "这是主角来到这个世界后第一次与人正式交手",
+          "武士额生鬼角、暗红眼、手持铁斧，舌头比常人短一截，只能发单调音节",
+          "凝羽说屠村的一共十个，她路上杀了一个",
+          "每名武士的伤亡以本拍结算为准；花苗人杀了其中谁不锁定，主持不得把未解决的人写成已死。凝羽身上是别人的血，本场不受外伤，战前内伤仍在。",
+          "花苗人杀敌人数不限，但只能描写本场实际已解决的武士，不能替代码判定。"
+        ],
+        "forbidden": [
+          "称最后那名武士为首领"
+        ]
+      },
+      "settings": {},
+      "rewardPolicy": {
+        "itemIds": []
+      },
+      "continuity": {
+        "fixedCosts": [
+          {
+            "id": "scout_dead",
+            "target": "huamiao_men",
+            "effect": "探路的花苗汉子阵亡",
+            "anchorText": "第45章 段72、77"
+          },
+          {
+            "id": "ning_yu_internal",
+            "target": "ning_yu",
+            "effect": "战后吐黑血、身体冰冷；正面交手受反震、真气逆行，十几天才能好",
+            "statuses": [
+              {
+                "status": "wound.internal"
+              }
+            ],
+            "anchorText": "第46章 段77–83；第47章 段2–3"
+          }
+        ],
+        "facts": [
+          "凝羽内伤属于固定代价，不以本场赢输取消；身上的血不是她在本场受外伤。"
+        ]
+      },
+      "interrogation": {
+        "maxChapter": 46,
+        "goalIds": [
+          "interrogate"
+        ],
+        "requires": {
+          "any": [
+            {
+              "party": "foe_engaged",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_pack_1",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_pack_2",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_pack_3",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_pack_4",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_pack_5",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_pack_6",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_pack_7",
+              "track": "vit",
+              "reach": "被俘"
+            },
+            {
+              "party": "foe_last",
+              "track": "vit",
+              "reach": "被俘"
+            }
+          ]
+        },
+        "facts": [
+          {
+            "id": "warrior_origin",
+            "fromChapter": 45,
+            "text": "这些武士来自鬼王峒；眼下只能确认这场袭击的来人，问不出后文才揭开的秘密。"
+          }
+        ]
+      },
+      "levelContext": {
+        "chapter": 45,
+        "chaptersByBeat": [
+          {
+            "fromBeat": 2,
+            "chapter": 46
+          }
+        ],
+        "nonLevelPartyIds": [
+          "huamiao_men",
+          "caravan_guards",
+          "bride"
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f04.crow_man",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 1
+        }
+      },
+      "objective": {
+        "text": "击倒鸦人",
+        "win": {
+          "party": "crow_man",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "le",
+          "side": "player_side",
+          "ref": "liuchao.character.le_mingzhu"
+        },
+        {
+          "id": "crow_man",
+          "side": "opposed",
+          "ref": "lcq.enemy.crow_man",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在抵抗",
+                "抵抗减弱",
+                "倒下"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "倒下",
+                "ceiling": 2,
+                "preserveOnWin": false
+              }
+            }
+          ],
+          "instanceId": "combat.f04.crow_man.crow_man"
+        }
+      ],
+      "goals": [
+        {
+          "id": "attack",
+          "label": "攻击对手",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 7
+        },
+        {
+          "id": "defend",
+          "label": "防守撑住",
+          "type": "support",
+          "baseDifficulty": 12
+        },
+        {
+          "id": "yield_guard",
+          "label": "停止抵抗、承受攻击",
+          "type": "support",
+          "baseDifficulty": 12,
+          "aliases": [
+            "张开双手不躲",
+            "不躲也不挡",
+            "不招架",
+            "不还手",
+            "放下刀",
+            "硬吃他们的刀"
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "crow_man_attack",
+          "party": "crow_man",
+          "label": "攻击",
+          "target": "player",
+          "attack": {
+            "dc": 8
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "ending",
+          "endingId": "lcq.ending.fail.combat"
+        }
+      },
+      "closing": {
+        "win": {
+          "rewards": [
+            {
+              "itemId": "lcq.item.crow_bamboo_tube",
+              "quantity": 1
+            }
+          ]
+        },
+        "lose": {
+          "text": "游戏结束",
+          "rewards": []
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "开战前：阿夕失神，被鸦人抓着；阿夕不是战斗单位。",
+          "我方只有主角与{{ref:liuchao.character.le_mingzhu}}。",
+          "{{item:lcq.item.crow_bamboo_tube}}保持完整；获胜时由代码定向发放，不得写成破碎或毁坏。"
+        ],
+        "forbidden": [
+          "{{item:lcq.item.crow_bamboo_tube}}碎了",
+          "{{item:lcq.item.crow_bamboo_tube}}已碎",
+          "{{item:lcq.item.crow_bamboo_tube}}破碎"
+        ]
+      },
+      "settings": {},
+      "rewardPolicy": {
+        "itemIds": [
+          "lcq.item.crow_bamboo_tube"
+        ]
+      },
+      "levelContext": {
+        "chapter": 57
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f05.dungeon_trap",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 1
+        }
+      },
+      "objective": {
+        "text": "撑过两回合",
+        "win": {
+          "kind": "beatAtLeast",
+          "beat": 3
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "wu",
+          "side": "player_side",
+          "ref": "liuchao.character.wu_er_lang"
+        },
+        {
+          "id": "warrior_1",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在抵抗",
+                "抵抗减弱",
+                "勉强抵抗",
+                "倒下"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "倒下",
+                "ceiling": 3,
+                "preserveOnWin": false
+              }
+            }
+          ],
+          "instanceId": "combat.f05.dungeon_trap.warrior_1"
+        },
+        {
+          "id": "warrior_2",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在抵抗",
+                "抵抗减弱",
+                "勉强抵抗",
+                "倒下"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "倒下",
+                "ceiling": 3,
+                "preserveOnWin": false
+              }
+            }
+          ],
+          "instanceId": "combat.f05.dungeon_trap.warrior_2"
+        },
+        {
+          "id": "shaman",
+          "side": "opposed",
+          "ref": "lcq.enemy.dungeon_shaman",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在抵抗",
+                "抵抗减弱",
+                "勉强抵抗",
+                "倒下"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "倒下",
+                "ceiling": 3,
+                "preserveOnWin": false
+              }
+            }
+          ],
+          "instanceId": "combat.f05.dungeon_trap.shaman"
+        },
+        {
+          "id": "blood_tiger",
+          "side": "opposed",
+          "ref": "liuchao.character.yi_hu",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在抵抗",
+                "抵抗减弱",
+                "勉强抵抗",
+                "被制住"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "被制住",
+                "ceiling": 3,
+                "preserveOnWin": true
+              }
+            }
+          ],
+          "instanceId": "combat.f05.dungeon_trap.blood_tiger",
+          "enemyId": "lcq.enemy.blood_tiger_yi_hu"
+        }
+      ],
+      "goals": [
+        {
+          "id": "attack",
+          "label": "攻击对手",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 12
+        },
+        {
+          "id": "defend",
+          "label": "防守撑住",
+          "type": "support",
+          "baseDifficulty": 11
+        },
+        {
+          "id": "yield_guard",
+          "label": "停止抵抗、承受攻击",
+          "type": "support",
+          "baseDifficulty": 12,
+          "aliases": [
+            "张开双手不躲",
+            "不躲也不挡",
+            "不招架",
+            "不还手",
+            "放下刀",
+            "硬吃他们的刀"
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "warrior_1_attack",
+          "party": "warrior_1",
+          "label": "攻击",
+          "target": "player",
+          "attack": {
+            "dc": 1
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        },
+        {
+          "id": "warrior_2_attack",
+          "party": "warrior_2",
+          "label": "攻击",
+          "target": "player",
+          "attack": {
+            "dc": 1
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        },
+        {
+          "id": "shaman_attack",
+          "party": "shaman",
+          "label": "攻击",
+          "target": "player",
+          "attack": {
+            "dc": 1
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        },
+        {
+          "id": "blood_tiger_attack",
+          "party": "blood_tiger",
+          "label": "攻击",
+          "target": "player",
+          "attack": {
+            "dc": 1
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          },
+          "schedule": {
+            "untilBeat": 1
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "ending",
+          "endingId": "lcq.ending.fail.combat"
+        }
+      },
+      "closing": {
+        "win": {
+          "rewards": []
+        },
+        "lose": {
+          "text": "游戏结束",
+          "rewards": []
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "开战前：花苗人被绑在塔柱上，不是战斗单位；使者若在场也不是战斗单位。",
+          "血虎是被改造的易虎，打到濒死时只能被制住，不会被杀死。",
+          "主角撑过两回合且未倒下即赢；花苗人脱险和血虎被制住由主持按实际经过描写。"
+        ]
+      },
+      "settings": {},
+      "clock": {
+        "beats": 2,
+        "onTimeout": {
+          "type": "close",
+          "as": "win"
+        }
+      },
+      "levelContext": {
+        "chapter": 63
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f10.ghost_king_clash",
+        "version": 6,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3
+        },
+        "compatibleStateVersions": [
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "objective": {
+        "text": "在鬼巫王面前撑住，再摆脱丹宸和骨虎",
+        "previewHint": "鬼巫王你伤不了，他也不急着杀你；他要的是活的你",
+        "win": {
+          "all": [
+            {
+              "party": "hu_sha",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "dan_chen",
+              "track": "resist",
+              "reach": "final"
+            }
+          ]
+        },
+        "phases": [
+          {
+            "when": {
+              "kind": "partyDeparted",
+              "party": "gui_wu_wang"
+            },
+            "text": "鬼巫王已经离开；摆脱丹宸和骨虎"
+          }
+        ]
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "gui_wu_wang",
+          "side": "opposed",
+          "ref": "liuchao.character.gui_wu_wang",
+          "aliases": [
+            "{{aliases:enemy:lcq.enemy.gui_wu_wang}}",
+            "他",
+            "那个巫王"
+          ],
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "轻",
+                "中",
+                "重",
+                "出局"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "withdraws_unharmed",
+                "finalState": "完好",
+                "causedBy": "self",
+                "ceiling": 0,
+                "previewText": "他不会在这里倒下。他更在意另一边的动静，迟早自己走",
+                "clampText": "刀锋离他只差一线，丹宸扑上来抱住你的腿，把你撞下祭坛",
+                "permittedMarks": [
+                  {
+                    "id": "haft_cut",
+                    "requires": {
+                      "magnitude": 1
+                    },
+                    "text": "青铜斧柄被切断"
+                  },
+                  {
+                    "id": "shaken",
+                    "requires": {
+                      "magnitude": 1
+                    },
+                    "text": "头发披散，被挑得心神浮动"
+                  }
+                ]
+              }
+            }
+          ],
+          "instanceId": "combat.f10.ghost_king_clash.gui_wu_wang",
+          "enemyId": "lcq.enemy.gui_wu_wang"
+        },
+        {
+          "id": "dan_chen",
+          "side": "opposed",
+          "ref": "liuchao.character.dan_chen",
+          "absent": true,
+          "aliases": [
+            "{{aliases:enemy:lcq.enemy.dan_chen}}",
+            "那个女子"
+          ],
+          "tracks": [
+            {
+              "id": "resist",
+              "kind": "harm",
+              "scale": [
+                "狂热",
+                "受挫",
+                "力衰",
+                "被按住",
+                "不再构成威胁",
+                "被赶走"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "captured",
+                "finalState": "不再构成威胁",
+                "causedBy": "player_side",
+                "ceiling": 2,
+                "previewText": "她失了骨虎就弱了一大半，你得把她按住",
+                "clampText": "你扔下刀去抓她手腕：苏荔交待过要照顾她",
+                "permittedMarks": [
+                  {
+                    "id": "axe_kicked_away",
+                    "requires": {
+                      "magnitude": 1
+                    },
+                    "text": "铜斧被一脚踢开"
+                  }
+                ],
+                "alternatives": [
+                  "被赶走"
+                ]
+              }
+            }
+          ],
+          "instanceId": "combat.f10.ghost_king_clash.dan_chen",
+          "enemyId": "lcq.enemy.dan_chen"
+        },
+        {
+          "id": "hu_sha",
+          "side": "opposed",
+          "ref": "lcq.enemy.husha_bone_tiger",
+          "absent": true,
+          "resistance": 6,
+          "aliases": [
+            "骨虎",
+            "{{aliases:enemy:lcq.enemy.husha_bone_tiger}}",
+            "{{aliases:enemy:lcq.enemy.husha_bone_tiger}}",
+            "那头虎"
+          ],
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "沾血",
+                "解体"
+              ],
+              "initial": 0,
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "解体",
+                "causedBy": "player_side",
+                "ceiling": 2,
+                "previewText": "主角的血沾上骨虎，它便完全解体；普通刀砍不能消灭它",
+                "clampText": "钢刀砍在骨爪上，骨爪纹丝不动，刀反倒卷了刃"
+              },
+              "requiresLever": [
+                "true_yang_blood"
+              ]
+            }
+          ],
+          "instanceId": "combat.f10.ghost_king_clash.hu_sha"
+        }
+      ],
+      "clock": {
+        "beats": 3,
+        "onTimeout": {
+          "type": "continue",
+          "text": "{{ref:liuchao.character.gui_wu_wang}}冷哼一声，掠出拱形大厅",
+          "events": [
+            {
+              "depart": "gui_wu_wang"
+            }
+          ]
+        },
+        "fixedEvents": [
+          {
+            "id": "dan_chen_tackles",
+            "atBeat": 2,
+            "text": "眼看就要得手，一双手臂抱住你的腿，把你撞下祭坛",
+            "effects": [
+              {
+                "arrive": "dan_chen"
+              }
+            ]
+          },
+          {
+            "id": "mirror_allies",
+            "atBeat": 4,
+            "text": "银镜里：{{ref:liuchao.character.le_mingzhu}}溜出来了；同伴们正在别处和岩浆怪物缠斗",
+            "effects": []
+          },
+          {
+            "id": "order_take_alive",
+            "atBeat": 4,
+            "text": "「不要杀死他。」他顿了一下，「我要切开他的头颅，寻找天命的指引。」",
+            "effects": []
+          },
+          {
+            "id": "tiger_rises",
+            "atBeat": 4,
+            "text": "{{ref:liuchao.character.dan_chen}}举着断斧跃上穹顶，身下现出一头白骨猛虎，扑击而下",
+            "effects": [
+              {
+                "arrive": "hu_sha"
+              }
+            ]
+          },
+          {
+            "id": "blood_known",
+            "atBeat": 4,
+            "effects": [
+              {
+                "tag": {
+                  "id": "blood_known",
+                  "label": "血是阴魂的天敌",
+                  "on": "pc",
+                  "durationBeats": null,
+                  "effect": "你的血是这些阴魂的天敌"
+                }
+              }
+            ]
+          },
+          {
+            "id": "mirror_frozen",
+            "atClose": true,
+            "text": "银镜只停在鬼巫王离开的那一幕",
+            "effects": []
+          }
+        ]
+      },
+      "beats": [
+        {
+          "id": "b1",
+          "title": "加入或为敌",
+          "prompt": "祭台上，他给你两个选择：加入他，或成为他的敌人。",
+          "reveal": [
+            "他身上的死气让你丹田前所未有地充沛",
+            "话能刺到他"
+          ]
+        },
+        {
+          "id": "b2",
+          "title": "抢上祭台",
+          "prompt": "他抄起车轮般的青铜巨斧，你抢上祭台。",
+          "reveal": [
+            "贴近到五尺之内，巨斧的威力减了一半",
+            "丹宸会舍身护主"
+          ]
+        },
+        {
+          "id": "b3",
+          "title": "鬼羽剑",
+          "prompt": "他抛下巨斧，拔出一柄古朴长剑：鬼羽。",
+          "reveal": [
+            "他实力远在你之上，被你挑动后只用出六成",
+            "他眼角一直在看别处，神色焦急"
+          ]
+        },
+        {
+          "id": "b4",
+          "title": "银镜与骨虎",
+          "prompt": "银镜里有你要找的人。他下了一道命令，然后走了。",
+          "reveal": [
+            "丹宸奉命要活的你",
+            "骨虎刀砍不动"
+          ]
+        },
+        {
+          "id": "b5",
+          "title": "石柱之间",
+          "prompt": "你靠近石柱，断斧与骨虎接连逼来；是否受伤以这一拍交锋结果为准。",
+          "reveal": [
+            "你的血是这些阴魂的天敌"
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": "twin_sabers",
+          "kind": "weapon",
+          "label": "{{item:liuchao.item.shuang_dao}}",
+          "aliases": [
+            "钢刀",
+            "五虎断门刀",
+            "虎视鹰扬",
+            "虎战八方",
+            "虎落平阳"
+          ],
+          "source": "第97章 段2、22、61–63、73–78、103",
+          "owner": "pc",
+          "verbs": [
+            {
+              "id": "hard_clash",
+              "aliases": [
+                "硬拼"
+              ],
+              "power": 2,
+              "goalTags": [
+                "survive_duel",
+                "reach_altar"
+              ]
+            },
+            {
+              "id": "eagle_wing",
+              "aliases": [
+                "虎视鹰扬"
+              ],
+              "power": 2,
+              "goalTags": [
+                "survive_duel"
+              ]
+            },
+            {
+              "id": "feint_eight",
+              "aliases": [
+                "虎战八方"
+              ],
+              "power": 1,
+              "goalTags": [
+                "survive_duel"
+              ],
+              "creates": "glimpse_mirror"
+            },
+            {
+              "id": "ground_guard",
+              "aliases": [
+                "虎落平阳"
+              ],
+              "power": 1,
+              "goalTags": [
+                "survive_tiger"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "coral_dagger",
+          "kind": "item",
+          "label": "珊瑚铁匕首",
+          "aliases": [
+            "匕首"
+          ],
+          "source": "第97章 段38–39、100；第98章 段56",
+          "uses": 1,
+          "availability": {
+            "fromBeat": 2
+          },
+          "verbs": [
+            {
+              "id": "cut_haft",
+              "aliases": [
+                "斩断斧柄",
+                "换匕首"
+              ],
+              "power": 3,
+              "goalTags": [
+                "survive_duel"
+              ],
+              "creates": "haft_cut"
+            }
+          ]
+        },
+        {
+          "id": "taunt",
+          "kind": "ability",
+          "label": "言语挑拨",
+          "aliases": [
+            "嘲讽",
+            "激他",
+            "说他像蛇彝人"
+          ],
+          "source": "第97章 段19–21、24–26、35–36",
+          "availability": {
+            "fromBeat": 1,
+            "untilBeat": 3
+          },
+          "verbs": [
+            {
+              "id": "provoke",
+              "aliases": [
+                "挑拨"
+              ],
+              "power": 1,
+              "goalTags": [
+                "reach_altar",
+                "survive_duel"
+              ],
+              "creates": "shaken"
+            }
+          ]
+        },
+        {
+          "id": "death_qi",
+          "kind": "ability",
+          "label": "死气入丹田",
+          "aliases": [
+            "生死根",
+            "调息"
+          ],
+          "source": "第97章 段13、18、62；第98章 段3",
+          "verbs": [
+            {
+              "id": "surge",
+              "aliases": [
+                "运气",
+                "真气狂涌"
+              ],
+              "power": 1,
+              "goalTags": [
+                "survive_duel",
+                "survive_tiger"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "altar",
+          "kind": "terrain",
+          "label": "祭台",
+          "aliases": [
+            "祭坛",
+            "台上"
+          ],
+          "source": "第97章 段14、24、31、36",
+          "availability": {
+            "fromBeat": 1,
+            "untilBeat": 3
+          },
+          "verbs": [
+            {
+              "id": "step_up",
+              "aliases": [
+                "抢上祭台",
+                "贴身"
+              ],
+              "power": 1,
+              "goalTags": [
+                "reach_altar"
+              ],
+              "creates": "inside_reach"
+            }
+          ]
+        },
+        {
+          "id": "silver_mirror",
+          "kind": "terrain",
+          "label": "银镜",
+          "aliases": [
+            "镜子"
+          ],
+          "source": "第97章 段35、78–86；第98章 段27",
+          "availability": {
+            "fromBeat": 3,
+            "untilBeat": 5
+          },
+          "verbs": [
+            {
+              "id": "glance",
+              "aliases": [
+                "看银镜"
+              ],
+              "power": 0,
+              "goalTags": [
+                "read_situation"
+              ],
+              "creates": "heartened",
+              "requires": [
+                "tag:glimpse_mirror"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "crystal_niche",
+          "kind": "terrain",
+          "label": "{{item:lcq.item.nh_niche_crystal}}",
+          "aliases": [
+            "龛窟",
+            "水晶"
+          ],
+          "source": "第97章 段96–98",
+          "availability": {
+            "fromBeat": 4,
+            "untilBeat": 5
+          },
+          "verbs": [
+            {
+              "id": "hide",
+              "aliases": [
+                "躲进龛窟"
+              ],
+              "power": 1,
+              "goalTags": [
+                "survive_tiger"
+              ],
+              "cost": "水晶会合拢，必须马上出来"
+            }
+          ]
+        },
+        {
+          "id": "stone_pillar",
+          "kind": "terrain",
+          "label": "石柱",
+          "aliases": [
+            "柱子",
+            "绕柱"
+          ],
+          "source": "第97章 段104、109–110",
+          "availability": {
+            "fromBeat": 5,
+            "untilBeat": 5
+          },
+          "verbs": [
+            {
+              "id": "circle_pillar",
+              "aliases": [
+                "绕到柱后"
+              ],
+              "power": 1,
+              "goalTags": [
+                "survive_tiger"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "true_yang_blood",
+          "kind": "ability",
+          "label": "真阳之血",
+          "aliases": [
+            "我的血",
+            "沾血",
+            "血迹",
+            "鲜血"
+          ],
+          "source": "第98章 段11–12",
+          "availability": {
+            "fromBeat": 4
+          },
+          "verbs": [
+            {
+              "id": "use_blood",
+              "aliases": [
+                "用血",
+                "以血克制",
+                "让血沾上",
+                "抹血",
+                "沾血",
+                "鲜血",
+                "血迹"
+              ],
+              "power": 3,
+              "goalTags": [
+                "destroy_tiger"
+              ],
+              "requires": [
+                "tag:blood_known"
+              ]
+            }
+          ],
+          "actionPattern": "(?:用|抹|涂|洒|泼|以|让)[^，。；]{0,8}(?:血|沾血)|(?:把|将)[^，。；]{0,5}血[^，。；]{0,8}(?:抹|滴|涂|洒|泼|沾)"
+        },
+        {
+          "id": "broken_vial",
+          "kind": "item",
+          "label": "背包里撞破的药瓶",
+          "aliases": [],
+          "source": "第97章 段109；第98章 段24–26",
+          "availability": {
+            "fromBeat": 5,
+            "untilBeat": 5
+          },
+          "verbs": []
+        }
+      ],
+      "tags": [
+        {
+          "id": "shaken",
+          "label": "心神浮动",
+          "on": "gui_wu_wang",
+          "durationBeats": 1,
+          "effect": "主角易抢到位置"
+        },
+        {
+          "id": "inside_reach",
+          "label": "近身五尺",
+          "on": "pc",
+          "durationBeats": 1,
+          "effect": "巨斧威力减半"
+        },
+        {
+          "id": "haft_cut",
+          "label": "斧柄已断",
+          "on": "gui_wu_wang",
+          "durationBeats": null,
+          "effect": "改用鬼羽剑"
+        },
+        {
+          "id": "glimpse_mirror",
+          "label": "瞥见银镜",
+          "on": "pc",
+          "durationBeats": 1,
+          "effect": "可以看银镜"
+        },
+        {
+          "id": "heartened",
+          "label": "心头大石落地",
+          "on": "pc",
+          "durationBeats": 1,
+          "effect": "主角士气回升"
+        },
+        {
+          "id": "blood_known",
+          "label": "血是阴魂的天敌",
+          "on": "pc",
+          "durationBeats": null,
+          "effect": "你的血是这些阴魂的天敌"
+        }
+      ],
+      "goals": [
+        {
+          "id": "survive_duel",
+          "label": "在鬼巫王手下撑住",
+          "type": "support",
+          "baseDifficulty": 10,
+          "availability": {
+            "untilBeat": 3
+          }
+        },
+        {
+          "id": "reach_altar",
+          "label": "抢上祭台，近身",
+          "type": "support",
+          "baseDifficulty": 10,
+          "availability": {
+            "untilBeat": 3
+          }
+        },
+        {
+          "id": "read_situation",
+          "label": "看清同伴和乐明珠的处境",
+          "type": "support",
+          "baseDifficulty": 10
+        },
+        {
+          "id": "survive_tiger",
+          "label": "躲开骨虎和断斧",
+          "type": "support",
+          "baseDifficulty": 10,
+          "availability": {
+            "fromBeat": 4
+          }
+        },
+        {
+          "id": "subdue_alive",
+          "label": "制住丹宸，不伤她性命",
+          "type": "push",
+          "baseDifficulty": 10,
+          "track": "resist"
+        },
+        {
+          "id": "destroy_tiger",
+          "label": "让骨虎沾上主角的血",
+          "type": "push",
+          "baseDifficulty": 6,
+          "track": "vit",
+          "completeOnSuccess": true,
+          "availability": {
+            "fromBeat": 4
+          }
+        },
+        {
+          "id": "drive_away",
+          "label": "赶走丹宸",
+          "type": "push",
+          "baseDifficulty": 10,
+          "track": "resist",
+          "finishAs": "被赶走",
+          "aliases": [
+            "赶走",
+            "驱走"
+          ]
+        },
+        {
+          "id": "expose_self",
+          "label": "放弃防御，承受敌方攻击",
+          "aliases": [
+            "任咬",
+            "任骨虎咬",
+            "不动",
+            "任打",
+            "不抵抗",
+            "扔刀",
+            "跪地"
+          ],
+          "type": "support",
+          "baseDifficulty": 14,
+          "defensePenalty": -100
+        }
+      ],
+      "locks": [
+        {
+          "id": "ghost_king_untouchable",
+          "matchHints": [
+            "杀死鬼巫王",
+            "砍中鬼巫王",
+            "重伤鬼巫王",
+            "打退鬼巫王"
+          ],
+          "reply": "刀锋眼看就要到他身上，一双手臂抱住了你的腿。",
+          "redirectTo": "survive_duel"
+        },
+        {
+          "id": "spare_dan_chen",
+          "matchHints": [
+            "杀了丹宸",
+            "砍死丹宸",
+            "一刀了结她"
+          ],
+          "reply": "苏荔交待过要照顾丹宸。你扔下刀，去抓她的手腕。",
+          "redirectTo": "subdue_alive"
+        },
+        {
+          "id": "chase_ghost_king",
+          "matchHints": [
+            "追鬼巫王",
+            "拦住鬼巫王"
+          ],
+          "reply": "他已掠出大厅；丹宸骑着骨虎从穹顶扑下来。",
+          "redirectTo": "survive_tiger"
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "dan_chen_bite",
+          "party": "dan_chen",
+          "label": "扑咬",
+          "target": "player",
+          "attack": {
+            "dc": 10
+          },
+          "schedule": {
+            "onBeats": [
+              2
+            ]
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external.thigh"
+              }
+            ],
+            "text": "大腿被她咬伤"
+          },
+          "onBlocked": {
+            "text": "你踢开了她"
+          }
+        },
+        {
+          "id": "ghost_feather_sword",
+          "party": "gui_wu_wang",
+          "label": "鬼羽剑",
+          "target": "player",
+          "attack": {
+            "dc": 12
+          },
+          "schedule": {
+            "onBeats": [
+              3
+            ]
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external.right_arm"
+              }
+            ],
+            "text": "剑尖刺穿了你右臂的衣袖，血流了下来"
+          },
+          "onBlocked": {
+            "text": "你侧身让过剑尖"
+          }
+        },
+        {
+          "id": "axe_from_behind",
+          "party": "dan_chen",
+          "label": "断斧",
+          "target": "player",
+          "attack": {
+            "dc": 11
+          },
+          "schedule": {
+            "onBeats": [
+              5
+            ]
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external.back"
+              }
+            ],
+            "text": "背后被斧刃撕开，伤口没来得及包扎"
+          },
+          "onBlocked": {
+            "text": "你闪开了这一斧"
+          }
+        },
+        {
+          "id": "bone_claw",
+          "party": "hu_sha",
+          "label": "骨爪",
+          "target": "player",
+          "attack": {
+            "dc": 15
+          },
+          "schedule": {
+            "fromBeat": 4
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "gear.blades_dulled"
+              },
+              {
+                "status": "wound.external"
+              }
+            ],
+            "text": "骨爪击中你，伤势加重，刀刃也受损"
+          },
+          "onBlocked": {
+            "text": "你躲开了骨爪"
+          }
+        }
+      ],
+      "fumble": [
+        {
+          "id": "thigh",
+          "target": "actor",
+          "consequence": {
+            "kind": "status",
+            "status": "wound.external.thigh"
+          },
+          "text": "你被逼得露了破绽，大腿挨了一口"
+        },
+        {
+          "id": "right_arm",
+          "target": "actor",
+          "consequence": {
+            "kind": "status",
+            "status": "wound.external.right_arm"
+          },
+          "text": "你右臂挨了一下，流了血"
+        },
+        {
+          "id": "back",
+          "target": "actor",
+          "consequence": {
+            "kind": "status",
+            "status": "wound.external.back"
+          },
+          "text": "你背后被撕开一道口子"
+        },
+        {
+          "id": "blades",
+          "target": "actor",
+          "consequence": {
+            "kind": "status",
+            "status": "gear.blades_dulled"
+          },
+          "text": "钢刀磕在硬处，卷了刃"
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          },
+          {
+            "kind": "playerChoice",
+            "choices": [
+              {
+                "id": "join_or_yield",
+                "label": "答应他：加入或投降",
+                "matchHints": [
+                  "加入鬼王峒",
+                  "加入你",
+                  "投降",
+                  "答应他",
+                  "跟你走"
+                ],
+                "endingId": "lcq.ending.death.ghost_king_skull",
+                "confirmText": "你要答应他吗？答应之后，这一局就此结束。"
+              }
+            ]
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "redLines": [
+        {
+          "party": "gui_wu_wang",
+          "track": "vit",
+          "forbiddenFinalState": "出局",
+          "forbiddenNarration": [
+            "鬼巫王被杀",
+            "击杀鬼巫王",
+            "鬼巫王死去"
+          ]
+        },
+        {
+          "party": "dan_chen",
+          "track": "resist",
+          "forbiddenFinalState": "死亡",
+          "forbiddenNarration": [
+            "丹宸被杀",
+            "丹宸死在本场"
+          ]
+        }
+      ],
+      "closing": {
+        "win": {
+          "text": "骨虎已碎成一地枯骨。丹宸已不再构成威胁。你独自留在大厅，同伴还在别处。",
+          "fixedCosts": [
+            {
+              "id": "vial_broken",
+              "target": "pc",
+              "effect": "背包里的药瓶撞破，药片掉出",
+              "anchorText": "第97章 段109；第98章 段25"
+            }
+          ],
+          "afterState": [
+            {
+              "id": "ghost_king_intact",
+              "ref": "liuchao.character.gui_wu_wang",
+              "requirement": "无伤离场，后面还要出场",
+              "forbiddenNarration": [
+                "鬼巫王受伤",
+                "鬼巫王流血",
+                "鬼巫王被击退",
+                "鬼巫王败逃"
+              ]
+            },
+            {
+              "id": "dan_chen_alive",
+              "ref": "liuchao.character.dan_chen",
+              "requirement": "丹宸活着，可以被打败、制住或赶走，不限定消除威胁的方式",
+              "forbiddenNarration": [
+                "丹宸死",
+                "丹宸清醒归队"
+              ]
+            },
+            {
+              "id": "hu_sha_gone",
+              "ref": "虎煞（白骨猛虎）",
+              "requirement": "骨虎已解体",
+              "forbiddenNarration": []
+            },
+            {
+              "id": "pc_alone",
+              "ref": "liuchao.character.cheng_zongyang",
+              "requirement": "主角独自一人，同伴在别处",
+              "forbiddenNarration": [
+                "同伴赶到大厅",
+                "武二郎来援"
+              ]
+            },
+            {
+              "id": "zhu_missing",
+              "ref": "liuchao.character.shang_zhen_yu",
+              "requirement": "银镜里十几人中只少朱老头，去向不写",
+              "forbiddenNarration": [
+                "朱老头的去向",
+                "殇侯"
+              ]
+            }
+          ],
+          "flags": {
+            "scene.f10.result": "win"
+          },
+          "rewards": [
+            {
+              "itemId": "lcq.item.f10_broken_axe",
+              "quantity": 1
+            },
+            {
+              "itemId": "lcq.item.nh_niche_crystal",
+              "quantity": 1
+            }
+          ],
+          "next": "lcq.event.s05b_06_breakout_and_reunion"
+        },
+        "lose": {
+          "text": "你没能撑住。等你勉强回过神来，鬼巫王已经离开，大厅里只剩下你一个人。",
+          "fixedCosts": [
+            {
+              "id": "vial_broken",
+              "target": "pc",
+              "effect": "背包里的药瓶撞破，药片掉出",
+              "anchorText": "第97章 段109；第98章 段25"
+            },
+            {
+              "id": "thigh",
+              "target": "pc",
+              "statuses": [
+                {
+                  "status": "wound.external.thigh"
+                }
+              ],
+              "effect": "腿伤，移动与防御短期下降"
+            },
+            {
+              "id": "arm",
+              "target": "pc",
+              "statuses": [
+                {
+                  "status": "wound.external.right_arm"
+                }
+              ],
+              "effect": "右臂伤，近战与防御短期下降"
+            },
+            {
+              "id": "back",
+              "target": "pc",
+              "statuses": [
+                {
+                  "status": "wound.external.back"
+                }
+              ],
+              "effect": "背伤，动作与防御短期下降"
+            },
+            {
+              "id": "blades",
+              "target": "pc",
+              "statuses": [
+                {
+                  "status": "gear.blades_dulled"
+                }
+              ],
+              "effect": "双刀卷刃，不能有效进攻，须修复"
+            }
+          ],
+          "flags": {
+            "scene.f10.result": "lose"
+          },
+          "rewards": [],
+          "next": "lcq.event.s05b_06_breakout_and_reunion"
+        },
+        "timeout": {
+          "text": "",
+          "flags": {
+            "scene.f10.result": "timeout"
+          },
+          "rewards": [],
+          "next": null
+        },
+        "playerChoices": {
+          "join_or_yield": {
+            "text": "你答应加入或投降，武士将你生擒，押入地牢。",
+            "flags": {
+              "scene.f10.result": "joined"
+            },
+            "rewards": []
+          }
+        }
+      },
+      "narration": {
+        "fixedTexts": {
+          "engage": "祭台上，他给你两个选择：加入他，或成为他的敌人。"
+        },
+        "requiredFacts": [
+          "鬼巫王实力高出主角不止一筹，被挑动后只用出六成",
+          "鬼巫王下令不杀，要活的",
+          "主角的血因生死根饱蕴真阳，是阴魂的天敌",
+          "丹宸被洗脑，对鬼巫王敬若神明"
+        ],
+        "forbidden": [
+          "丹宸死在本场"
+        ],
+        "outputChecks": [
+          {
+            "when": {
+              "kind": "partyDeparted",
+              "party": "gui_wu_wang"
+            },
+            "pattern": "{{pattern:enemy:lcq.enemy.gui_wu_wang}}[^。！？\\n]{0,12}(?:挥斧|拔剑|攻来|扑来|迎面|手下撑住|再次出手)",
+            "message": "已离场人物不能继续交锋"
+          },
+          {
+            "when": {
+              "kind": "not",
+              "cond": {
+                "party": "dan_chen",
+                "track": "resist",
+                "reach": "final"
+              }
+            },
+            "pattern": "(?:捆住|捆好|捆牢|绑住|绑好|制住|制服)[^。！？\\n]{0,10}{{pattern:enemy:lcq.enemy.dan_chen}}|{{pattern:enemy:lcq.enemy.dan_chen}}[^。！？\\n]{0,10}(?:被捆|被绑|被制住)",
+            "message": "未结算制伏，不能写成已经制伏"
+          },
+          {
+            "when": {
+              "kind": "not",
+              "cond": {
+                "any": [
+                  {
+                    "kind": "statusPresent",
+                    "party": "pc",
+                    "status": "wound.external.back"
+                  },
+                  {
+                    "kind": "statusPresent",
+                    "party": "pc",
+                    "status": "wound.external"
+                  },
+                  {
+                    "kind": "statusPresent",
+                    "party": "pc",
+                    "status": "wound.external.heavy"
+                  },
+                  {
+                    "kind": "statusPresent",
+                    "party": "pc",
+                    "status": "incapacitated"
+                  }
+                ]
+              }
+            },
+            "pattern": "(?:背上|背后|后背)[^。！？\\n]{0,8}(?:挨了|挨一|被斧|撕开|伤口)",
+            "message": "没有背伤回执，不得写背上受伤"
+          },
+          {
+            "when": {
+              "party": "hu_sha",
+              "track": "vit",
+              "reach": "final"
+            },
+            "pattern": "(?:骨虎|{{pattern:enemy:lcq.enemy.husha_bone_tiger}}|{{pattern:enemy:lcq.enemy.husha_bone_tiger}})[^。！？\\n]{0,12}(?:又扑|扑来|扑向|咬住|咬你|袭来|扑了|扑过|还在咬)",
+            "message": "骨虎已经解体，不得再次扑咬",
+            "afterScene": true
+          }
+        ]
+      },
+      "settings": {},
+      "rewardPolicy": {
+        "itemIds": [
+          "lcq.item.f10_broken_axe",
+          "lcq.item.nh_niche_crystal"
+        ]
+      },
+      "continuity": {
+        "facts": [
+          "鬼巫王在此战不被杀死；丹宸本场不能死亡，输局不能改写这两条承重事实。"
+        ]
+      },
+      "levelContext": {
+        "chapter": 97,
+        "chaptersByBeat": [
+          {
+            "fromBeat": 4,
+            "chapter": 98
+          }
+        ],
+        "variantWhen": [
+          {
+            "entityId": "lcq.enemy.dan_chen",
+            "variant": "without_husha",
+            "when": {
+              "any": [
+                {
+                  "kind": "partyDeparted",
+                  "party": "hu_sha"
+                },
+                {
+                  "party": "hu_sha",
+                  "track": "body",
+                  "reach": "final"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f13.ghost_king_final",
+        "version": 6,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.ghost_king_swallowed",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3
+        },
+        "compatibleStateVersions": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "objective": {
+        "text": "守住井口，护住同伴，把局面撑到星阵与龙神收场",
+        "previewHint": "你赢的是守住局面，不是亲手杀死鬼巫王；下井不是唤醒龙神的必要条件",
+        "win": {
+          "all": [
+            {
+              "party": "well_front",
+              "track": "hold",
+              "reach": "final"
+            },
+            {
+              "kind": "not",
+              "cond": {
+                "kind": "partyDowned",
+                "party": "pc"
+              }
+            },
+            {
+              "kind": "not",
+              "cond": {
+                "party": "well_front",
+                "track": "breach",
+                "reach": "final"
+              }
+            }
+          ]
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "well_front",
+          "side": "opposed",
+          "ref": "lcq.enemy_group.well_front",
+          "aliases": [
+            "井口",
+            "通道",
+            "阵线",
+            "{{aliases:enemy:lcq.enemy.guiwang_warrior}}",
+            "{{aliases:enemy:lcq.enemy.yinsha}}",
+            "炎煞",
+            "魇魅"
+          ],
+          "tracks": [
+            {
+              "id": "hold",
+              "kind": "progress",
+              "scale": [
+                "阵线吃紧",
+                "守住通道",
+                "挡住阴煞与炎煞",
+                "撑到星阵成形"
+              ],
+              "ending": {
+                "finalState": "撑到星阵成形",
+                "ceiling": 3,
+                "causedBy": "player_side",
+                "previewText": "每次守口成功推动局面；不是杀死所有敌人"
+              }
+            },
+            {
+              "id": "breach",
+              "kind": "progress",
+              "scale": [
+                "井口仍在手中",
+                "守线受挫",
+                "通道岌岌可危",
+                "井口彻底失守"
+              ],
+              "ending": {
+                "finalState": "井口彻底失守",
+                "ceiling": 3,
+                "causedBy": "event",
+                "preserveOnWin": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "gui_wu_wang",
+          "side": "opposed",
+          "ref": "liuchao.character.gui_wu_wang",
+          "aliases": [
+            "{{aliases:enemy:lcq.enemy.gui_wu_wang}}",
+            "巫王"
+          ],
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "完好",
+                "被龙神吞下"
+              ],
+              "ending": {
+                "finalState": "被龙神吞下",
+                "ceiling": 0,
+                "causedBy": "third_party",
+                "clampText": "你无法在此亲手杀死他；眼前要守住的是井口"
+              }
+            }
+          ],
+          "instanceId": "combat.f13.ghost_king_final.gui_wu_wang",
+          "enemyId": "lcq.enemy.gui_wu_wang"
+        },
+        {
+          "id": "ning_yu",
+          "side": "player_side",
+          "ref": "liuchao.character.ning_yu"
+        },
+        {
+          "id": "wu_er_lang",
+          "side": "player_side",
+          "ref": "liuchao.character.wu_er_lang"
+        },
+        {
+          "id": "su_li",
+          "side": "player_side",
+          "ref": "liuchao.character.su_li"
+        },
+        {
+          "id": "xie_yi",
+          "side": "player_side",
+          "ref": "liuchao.character.xie_yi"
+        },
+        {
+          "id": "le_mingzhu",
+          "side": "player_side",
+          "ref": "liuchao.character.le_mingzhu"
+        },
+        {
+          "id": "xiao_zi",
+          "side": "player_side",
+          "ref": "liuchao.character.xiao_zi"
+        }
+      ],
+      "goals": [
+        {
+          "id": "hold_well",
+          "label": "守住井口、逼退扑来的手下",
+          "type": "push",
+          "track": "hold",
+          "baseDifficulty": 14,
+          "aliases": [
+            "守住",
+            "守井口",
+            "挡住",
+            "护住",
+            "牵制",
+            "驱走",
+            "逼退"
+          ],
+          "onFailure": [
+            {
+              "kind": "trackShift",
+              "party": "well_front",
+              "track": "breach",
+              "steps": 1
+            }
+          ]
+        },
+        {
+          "id": "read_field",
+          "label": "看清战局",
+          "type": "support",
+          "baseDifficulty": 10
+        }
+      ],
+      "elements": [
+        {
+          "id": "blood",
+          "kind": "ability",
+          "label": "真阳之血",
+          "source": "109·112–114；110·67、78–80",
+          "aliases": [
+            "血",
+            "我的血",
+            "真阳之血"
+          ],
+          "verbs": [
+            {
+              "id": "ward",
+              "aliases": [
+                "用血",
+                "抹血",
+                "沾血",
+                "掷沾血的刀"
+              ],
+              "power": 2,
+              "goalTags": [
+                "hold_well"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "passage",
+          "kind": "terrain",
+          "label": "通向井底的唯一通道",
+          "source": "109·96",
+          "aliases": [
+            "井口",
+            "通道"
+          ],
+          "verbs": [
+            {
+              "id": "hold",
+              "aliases": [
+                "守住井口",
+                "守住通道",
+                "堵住通道"
+              ],
+              "power": 1,
+              "goalTags": [
+                "hold_well"
+              ]
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "assault",
+          "party": "well_front",
+          "label": "鬼武士与阴煞冲击通道",
+          "target": {
+            "rotate": [
+              "pc",
+              "ning_yu",
+              "le_mingzhu",
+              "wu_er_lang"
+            ]
+          },
+          "attack": {
+            "dc": 14
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ],
+            "text": "通道冲击中有人受伤，仍需守住井口",
+            "trackShifts": [
+              {
+                "party": "well_front",
+                "track": "breach",
+                "steps": 1
+              }
+            ]
+          },
+          "onBlocked": {
+            "text": "你挡住这一轮冲击"
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "all": [
+              {
+                "party": "well_front",
+                "track": "hold",
+                "reach": "final"
+              },
+              {
+                "any": [
+                  {
+                    "kind": "partyDowned",
+                    "party": "ning_yu"
+                  },
+                  {
+                    "kind": "partyDowned",
+                    "party": "xie_yi"
+                  },
+                  {
+                    "kind": "partyDowned",
+                    "party": "le_mingzhu"
+                  },
+                  {
+                    "kind": "partyDowned",
+                    "party": "wu_er_lang"
+                  },
+                  {
+                    "kind": "partyDowned",
+                    "party": "su_li"
+                  },
+                  {
+                    "kind": "statusPresent",
+                    "party": "pc",
+                    "status": "wound.external.heavy"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "playerChoice",
+            "choices": [
+              {
+                "id": "abandon_well",
+                "label": "放弃井口，带同伴逃入洞窟",
+                "matchHints": [
+                  "不再守井口",
+                  "放弃井口",
+                  "弃守",
+                  "往洞窟深处跑",
+                  "往洞窟深处逃",
+                  "离开井口",
+                  "逃离井口",
+                  "不守井口",
+                  "逃跑",
+                  "逃走",
+                  "撤出井口",
+                  "撤退",
+                  "弃井",
+                  "不再守"
+                ],
+                "endingId": "lcq.ending.death.dragon_well",
+                "confirmText": "放弃守口将导致守线崩溃，进入「龙首无人」结局。确定逃走吗？"
+              }
+            ]
+          },
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          },
+          {
+            "party": "well_front",
+            "track": "breach",
+            "reach": "final"
+          }
+        ],
+        "outcome": {
+          "type": "ending",
+          "endingId": "lcq.ending.death.dragon_well"
+        }
+      },
+      "closing": {
+        "win": {
+          "text": "你们仍站在井口。黑魔海与鬼巫王断交；苍龙星阵唤醒龙神，龙神吞下鬼巫王。",
+          "flags": {
+            "scene.f13.result": "win"
+          },
+          "rewards": [],
+          "next": "lcq.event.slay_dragon",
+          "fixedCosts": [
+            {
+              "id": "yin_sha_arm",
+              "target": "wu_er_lang",
+              "statuses": [
+                {
+                  "status": "yin.sha_arm",
+                  "severity": 1
+                }
+              ]
+            }
+          ]
+        },
+        "lose": {
+          "text": "井口守线崩溃，你抓起同伴的手往洞窟深处逃去。",
+          "flags": {
+            "scene.f13.result": "lose"
+          },
+          "rewards": []
+        },
+        "playerChoices": {
+          "abandon_well": {
+            "text": "井口守线崩溃，你抓起同伴的手往洞窟深处逃去。",
+            "flags": {
+              "scene.f13.result": "lose"
+            },
+            "rewards": []
+          }
+        }
+      },
+      "redLines": [
+        {
+          "party": "gui_wu_wang",
+          "track": "vit",
+          "forbiddenFinalState": "被玩家杀死",
+          "forbiddenNarration": [
+            "玩家杀死鬼巫王",
+            "主角跳井唤醒龙神"
+          ]
+        }
+      ],
+      "narration": {
+        "fixedTexts": {
+          "engage": "通向井底的唯一通道就在身后。鬼巫王与手下逼近，你要护住同伴，守住这条通道。"
+        },
+        "requiredFacts": [
+          "龙神由苍龙星阵唤醒，不是因为主角下井",
+          "鬼巫王不死于玩家之手，打赢时由龙神吞下",
+          "小紫真实立场、石匠所代主人与朱老头身份不揭示",
+          "娄蒙可以救下；萨安默认救不活，若硬救萨安必须另有人被尸鬼吸干，不能凭空免除这次吸人代价（W-49）",
+          "朱诺的心脏只作谢艺叙事物件，不进入玩家背包；苍龙星阵仍可拉心，不以玩家持有心脏为前提（W-50）"
+        ],
+        "forbidden": [
+          "主角跳井唤醒龙神",
+          "小紫真实立场揭晓"
+        ]
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      },
+      "levelContext": {
+        "chapter": 109,
+        "chaptersByBeat": [
+          {
+            "fromBeat": 2,
+            "chapter": 110
+          }
+        ],
+        "nonLevelPartyIds": [
+          "well_front"
+        ]
+      },
+      "clock": {
+        "fixedEvents": [
+          {
+            "id": "chapter110_exhausted_companions",
+            "atBeat": 2,
+            "text": "武二郎与凝羽已经无力再战，退到战圈外。",
+            "effects": [
+              {
+                "depart": "wu_er_lang"
+              },
+              {
+                "depart": "ning_yu"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f03.escape_followup",
+        "version": 2,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.enter_dong_with_migu",
+          "actionId": "fight_outer_sentry_intercept",
+          "required": true,
+          "requiredFlag": "scene.f03.escaped",
+          "consumedFlag": "scene.f03.entry_battle.done",
+          "ambushAfterStall": 1
+        }
+      },
+      "objective": {
+        "text": "过吊桥后在峡谷外围哨位击退拦路守卫，再去弥骨接待处",
+        "win": {
+          "party": "entry_warriors",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "entry_warriors",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "武士",
+            "拦路者"
+          ],
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "拦路",
+                "受挫",
+                "被击退"
+              ],
+              "ending": {
+                "finalState": "被击退",
+                "ceiling": 2
+              }
+            }
+          ],
+          "instanceId": "combat.f03.escape_followup.entry_warriors"
+        },
+        {
+          "id": "wu",
+          "side": "player_side",
+          "ref": "liuchao.character.wu_er_lang"
+        },
+        {
+          "id": "front",
+          "side": "player_side",
+          "ref": "liuchao.character.yi_biao"
+        }
+      ],
+      "goals": [
+        {
+          "id": "break_through",
+          "label": "击退拦路武士",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 12
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "entry_attack",
+          "party": "entry_warriors",
+          "label": "拦截",
+          "target": "player",
+          "attack": {
+            "dc": 12
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          },
+          "onBlocked": {
+            "text": "你挡开了拦截"
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "text": "外围守卫溃退，商队通过哨位，继续前往弥骨接待处。接待交涉尚未开始。",
+          "flags": {
+            "scene.f03.entry_battle.done": true
+          },
+          "rewards": []
+        },
+        "lose": {
+          "text": "你们被守卫制住，带着伤被押往弥骨接待处。接待交涉尚未开始，后面的路线还要自己记。",
+          "flags": {
+            "scene.f03.entry_battle.done": true
+          },
+          "rewards": [],
+          "fixedCosts": [
+            {
+              "id": "shoulder",
+              "target": "pc",
+              "statuses": [
+                {
+                  "status": "wound.external.shoulder"
+                }
+              ],
+              "effect": "肩臂外伤，短期近战与防御下降"
+            },
+            {
+              "id": "ally_wound",
+              "target": "wu",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ],
+              "effect": "皮肉伤，衣袍破损"
+            },
+            {
+              "id": "front_wound",
+              "target": "front",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ],
+              "effect": "前锋外伤一处"
+            }
+          ]
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "过鸿沟吊桥后的峡谷外围哨位；披犀甲鬼武士收到逃兵报信，截住商队。弥骨和石匠不在场。",
+          "这是唯一追加战；没有好感惩罚、戒备加成或后续难度加成。收束接回原接待步骤，不自动完成。"
+        ]
+      },
+      "levelContext": {
+        "chapter": 86,
+        "variants": {
+          "lcq.enemy.guiwang_warrior": "elite"
+        }
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f14.dragon_god",
+        "version": 2,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.slay_dragon",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3
+        },
+        "readiness": "ready",
+        "source": "31号 F14；W-52 用户2026-10-05 14:16授权，114·16 → 118·134；用户最新裁定：输即E08，谢艺仅重伤，生死交托付",
+        "pendingDecisions": [],
+        "canonicalConsequences": [
+          {
+            "actorId": "liuchao.character.wu_er_lang",
+            "cause": "第114章段16：用背硬接龙神一爪",
+            "consequence": "功力废去",
+            "revealedAtChapter": 118,
+            "evidence": "第118章段134"
+          },
+          {
+            "actorId": "liuchao.character.xie_yi",
+            "consequence": "重伤不可避免；生死交 xieyi_entrustment，保留长休 IF 与原著死亡线"
+          }
+        ],
+        "compatibleStateVersions": [
+          1
+        ]
+      },
+      "objective": {
+        "text": "杀死被鬼巫王意识占据的龙神",
+        "previewHint": "伤口愈合只是局势压力，不按拍数自动判负",
+        "win": {
+          "party": "dragon",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "dragon",
+          "side": "opposed",
+          "ref": "liuchao.character.dragon_god",
+          "aliases": [
+            "{{aliases:enemy:lcq.enemy.dragon_god}}",
+            "龙首"
+          ],
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在肆虐",
+                "受创",
+                "垂死",
+                "死亡"
+              ],
+              "ending": {
+                "preset": "eliminated",
+                "finalState": "死亡",
+                "causedBy": "player_side",
+                "ceiling": 3
+              }
+            }
+          ],
+          "instanceId": "combat.f14.dragon_god.dragon",
+          "enemyId": "lcq.enemy.dragon_god"
+        },
+        {
+          "id": "wu_er_lang",
+          "side": "player_side",
+          "ref": "liuchao.character.wu_er_lang"
+        },
+        {
+          "id": "xie_yi",
+          "side": "player_side",
+          "ref": "liuchao.character.xie_yi"
+        },
+        {
+          "id": "le_mingzhu",
+          "side": "player_side",
+          "ref": "liuchao.character.le_mingzhu"
+        }
+      ],
+      "goals": [
+        {
+          "id": "slay",
+          "label": "击破龙脑",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 16
+        }
+      ],
+      "elements": [
+        {
+          "id": "dragon_brain",
+          "kind": "terrain",
+          "label": "龙脑所在处",
+          "source": "114·67–75",
+          "aliases": [
+            "龙脑"
+          ],
+          "verbs": [
+            {
+              "id": "pierce",
+              "aliases": [
+                "刺龙脑"
+              ],
+              "power": 3,
+              "goalTags": [
+                "slay"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ally_opening",
+          "kind": "ally",
+          "label": "同伴牵制龙神留下空隙",
+          "owner": "wu_er_lang",
+          "source": "31号F14，114章协力",
+          "verbs": [
+            {
+              "id": "coordinate",
+              "power": 3,
+              "goalTags": [
+                "slay"
+              ]
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "claw",
+          "party": "dragon",
+          "label": "龙爪",
+          "target": "player",
+          "attack": {
+            "dc": 11
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          },
+          "onBlocked": {
+            "text": "你避开了这一爪"
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "ending",
+          "endingId": "lcq.ending.fail.dragon_essence"
+        }
+      },
+      "closing": {
+        "win": {
+          "text": "龙神死去。陌生军队与涌入的外来力量，只留下眼前所见的现象。",
+          "flags": {
+            "scene.f14.result": "win"
+          },
+          "rewards": []
+        },
+        "lose": {
+          "text": "龙神死去，龙精携着鬼巫王的残念进入你的丹田，这段故事就此终结。",
+          "flags": {
+            "scene.f14.result": "lose"
+          },
+          "rewards": []
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "武二郎背伤的起因是第114章用背硬接龙爪，不是其他伤势；当场不提前宣布第118章才揭明的废功。",
+          "外来力量只写现象，不解释来源；陌生军队身份、龙精去向不提前揭示。"
+        ]
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      },
+      "levelContext": {
+        "chapter": 114
+      },
+      "continuity": {
+        "fixedCosts": [
+          {
+            "id": "xieyi-heavy-wound",
+            "target": "xie_yi",
+            "effect": "谢艺重伤，生死交后续托付，不在本场写死",
+            "statuses": [
+              {
+                "status": "wound.severe"
+              }
+            ]
+          },
+          {
+            "id": "wu_back_claw",
+            "target": "wu_er_lang",
+            "effect": "用背硬接龙神一爪，喷血坠地",
+            "statuses": [
+              {
+                "status": "wound.external.back"
+              }
+            ],
+            "anchorText": "第114章段15–17；废功后果到第118章段134才公开"
+          }
+        ],
+        "facts": [
+          "外来力量在所有分支涌入，只写现象，不解释来源。",
+          "武二郎用背硬接龙爪，废功到第118章公开；谢艺重伤，生死另结。"
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f06.merfolk",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.haishen_hall_merfolk",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3,
+          "compatibleActionIds": [
+            "repel_merfolk_in_haishen_hall"
+          ],
+          "completionSceneByOutcome": {
+            "win": {
+              "dayPart": "夜",
+              "sceneLocation": "海神殿",
+              "cast": {
+                "present": [
+                  "乐明珠"
+                ]
+              },
+              "fixedFacts": [
+                "鲛人已被制服或放走，乐明珠活着。你拿到珊瑚匕首；旧仇的对象仍无人解释。"
+              ],
+              "fallbackText": "鲛人已被制服或放走，乐明珠活着。你拿到珊瑚匕首；旧仇的对象仍无人解释。",
+              "factChecks": []
+            },
+            "lose": {
+              "dayPart": "夜",
+              "sceneLocation": "海神殿",
+              "cast": {
+                "present": [
+                  "乐明珠"
+                ]
+              },
+              "fixedFacts": [
+                "你付出小腹伤与呛水的代价，乐明珠受伤但活着。鲛人退去，珊瑚匕首仍然到手。"
+              ],
+              "fallbackText": "你付出小腹伤与呛水的代价，乐明珠受伤但活着。鲛人退去，珊瑚匕首仍然到手。",
+              "factChecks": []
+            }
+          }
+        },
+        "source": "31号F06及W已定；P1-CONTENT-PACK-20261011",
+        "readiness": "ready"
+      },
+      "objective": {
+        "text": "在海神殿抵御鲛人，护住受困的乐明珠",
+        "win": {
+          "party": "merfolk",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "merfolk",
+          "side": "opposed",
+          "ref": "lcq.enemy.merfolk",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "逼近",
+                "受制",
+                "失去战力",
+                "被放走"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "失去战力",
+                "ceiling": 2,
+                "alternatives": [
+                  "被放走"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": "le",
+          "side": "player_side",
+          "ref": "liuchao.character.le_mingzhu",
+          "protected": true
+        }
+      ],
+      "goals": [
+        {
+          "id": "repel",
+          "label": "制服鲛人",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "merfolk"
+          ]
+        },
+        {
+          "id": "release",
+          "label": "制服后放走鲛人",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 11,
+          "finishAs": "被放走",
+          "targetIds": [
+            "merfolk"
+          ]
+        },
+        {
+          "id": "parley",
+          "label": "朱狐冠暴露前交涉",
+          "type": "support",
+          "baseDifficulty": 7,
+          "onSuccess": {
+            "tag": {
+              "id": "parley",
+              "label": "敌意降低",
+              "on": "scene",
+              "durationBeats": null,
+              "effect": {
+                "enemyDcBonus": -2
+              }
+            }
+          },
+          "when": {
+            "kind": "not",
+            "cond": {
+              "tag": "crest"
+            }
+          }
+        }
+      ],
+      "elements": [
+        {
+          "id": "shield",
+          "kind": "terrain",
+          "label": "水下锈铜盾",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "algae",
+          "kind": "terrain",
+          "label": "缠腕的海藻",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "horn",
+          "kind": "terrain",
+          "label": "金角海蛇角",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "fork",
+          "party": "merfolk",
+          "label": "骨叉扑击",
+          "target": "player",
+          "attack": {
+            "dc": 11
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          },
+          "onCrush": {
+            "margin": 5,
+            "statuses": [
+              {
+                "status": "wound.drowning"
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "flags": {
+            "scene.f06.result": "win"
+          },
+          "rewards": [
+            {
+              "type": "item",
+              "itemId": "liuchao.item.coral_dagger",
+              "quantity": 1
+            },
+            {
+              "itemId": "lcq.item.nh_golden_seasnake_horn",
+              "quantity": 1
+            },
+            {
+              "itemId": "lcq.item.nh_merfolk_scale_pouch",
+              "quantity": 1
+            }
+          ],
+          "text": "鲛人已被制服或放走，乐明珠活着。你拿到珊瑚匕首；旧仇的对象仍无人解释。"
+        },
+        "lose": {
+          "flags": {
+            "scene.f06.result": "lose"
+          },
+          "rewards": [
+            {
+              "type": "item",
+              "itemId": "liuchao.item.coral_dagger",
+              "quantity": 1
+            }
+          ],
+          "text": "你付出小腹伤与呛水的代价，乐明珠受伤但活着。鲛人退去，珊瑚匕首仍然到手。",
+          "fixedCosts": [
+            {
+              "id": "abdomen",
+              "target": "pc",
+              "effect": "wound.external",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ]
+            },
+            {
+              "id": "lung",
+              "target": "pc",
+              "effect": "wound.drowning",
+              "statuses": [
+                {
+                  "status": "wound.drowning"
+                }
+              ]
+            },
+            {
+              "id": "wrist",
+              "target": "le",
+              "effect": "wound.external",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "rewardPolicy": {
+        "itemIds": [
+          "liuchao.item.coral_dagger",
+          "lcq.item.nh_golden_seasnake_horn",
+          "lcq.item.nh_merfolk_scale_pouch"
+        ]
+      },
+      "levelContext": {
+        "chapter": 74
+      },
+      "tags": [
+        {
+          "id": "parley",
+          "label": "敌意降低",
+          "on": "scene",
+          "durationBeats": null,
+          "effect": {
+            "enemyDcBonus": -2
+          }
+        },
+        {
+          "id": "crest",
+          "label": "朱狐冠已经暴露",
+          "on": "scene",
+          "durationBeats": null,
+          "effect": {
+            "text": "鲛人转为死斗"
+          }
+        }
+      ],
+      "narration": {
+        "requiredFacts": [
+          "乐明珠不死；朱狐冠暴露后进入死斗；不得解释鲛人二十年前旧仇所指。"
+        ]
+      },
+      "clock": {
+        "fixedEvents": [
+          {
+            "id": "crest-revealed",
+            "trigger": "afterAction",
+            "when": {
+              "kind": "not",
+              "cond": {
+                "tag": "crest"
+              }
+            },
+            "text": "朱狐冠暴露，鲛人认出冠上的标记，转为死斗。旧仇的对象仍无人解释。",
+            "effects": [
+              {
+                "tag": {
+                  "id": "crest",
+                  "label": "朱狐冠已经暴露",
+                  "on": "scene",
+                  "durationBeats": null,
+                  "effect": {
+                    "text": "鲛人转为死斗"
+                  }
+                }
+              },
+              {
+                "tag": {
+                  "id": "parley",
+                  "label": "交涉效果结束",
+                  "on": "scene",
+                  "durationBeats": null,
+                  "effect": {
+                    "text": "朱狐冠暴露后交涉不再降低敌意"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f07.biling_village",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.biling_bay_stance",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3,
+          "completionSceneByOutcome": {
+            "win": {
+              "dayPart": "夜",
+              "sceneLocation": "碧鲮海湾",
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "凝羽",
+                  "易彪",
+                  "吴战威",
+                  "谢艺",
+                  "苏荔",
+                  "阿夕"
+                ],
+                "exit": [
+                  {
+                    "name": "黑舌",
+                    "status": "dead"
+                  },
+                  {
+                    "name": "蛇傀",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "fixedFacts": [
+                "火楼中的族人已获救，蛇傀与持械随从倒下，无人逃出回报。黑舌已经死了，原因未明。"
+              ],
+              "fallbackText": "火楼中的族人已获救，蛇傀与持械随从倒下，无人逃出回报。黑舌已经死了，原因未明。",
+              "factChecks": []
+            },
+            "lose": {
+              "dayPart": "夜",
+              "sceneLocation": "碧鲮海湾",
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "凝羽",
+                  "易彪",
+                  "吴战威",
+                  "谢艺",
+                  "苏荔",
+                  "阿夕"
+                ],
+                "exit": [
+                  {
+                    "name": "黑舌",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "fixedFacts": [
+                "小津和族人烧伤，凝羽旧伤加重；有随从逃走，阁罗在入峒时会起疑。"
+              ],
+              "fallbackText": "小津和族人烧伤，凝羽旧伤加重；有随从逃走，阁罗在入峒时会起疑。",
+              "factChecks": []
+            }
+          }
+        },
+        "source": "31号F07及W已定；P1-CONTENT-PACK-20261011",
+        "readiness": "ready"
+      },
+      "objective": {
+        "text": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+        "win": {
+          "all": [
+            {
+              "party": "armed",
+              "track": "vit",
+              "reach": "final"
+            },
+            {
+              "party": "fire",
+              "track": "rescue",
+              "reach": "final"
+            },
+            {
+              "party": "exit",
+              "track": "seal",
+              "reach": "final"
+            }
+          ]
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "armed",
+          "side": "opposed",
+          "ref": "蛇傀与持械随从",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "仍在战斗",
+                "被压制",
+                "全部倒下",
+                "被擒"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "全部倒下",
+                "ceiling": 2,
+                "alternatives": [
+                  "被擒"
+                ]
+              }
+            }
+          ],
+          "group": {
+            "id": "lcq.group.shekui_armed",
+            "label": "蛇傀与持械随从"
+          }
+        },
+        {
+          "id": "fire",
+          "side": "opposed",
+          "ref": "火楼",
+          "tracks": [
+            {
+              "id": "rescue",
+              "kind": "progress",
+              "scale": [
+                "老弱受困",
+                "出口打开",
+                "族人脱险"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "族人脱险",
+                "ceiling": 2,
+                "alternatives": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "exit",
+          "side": "opposed",
+          "ref": "村口",
+          "tracks": [
+            {
+              "id": "seal",
+              "kind": "progress",
+              "scale": [
+                "有人可能逃走",
+                "封锁收紧",
+                "无人逃出"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "无人逃出",
+                "ceiling": 2,
+                "alternatives": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "xiaojin",
+          "side": "player_side",
+          "ref": "小津"
+        },
+        {
+          "id": "biling",
+          "side": "player_side",
+          "ref": "碧鲮族人",
+          "group": {
+            "id": "lcq.group.biling_villagers",
+            "label": "碧鲮族人"
+          }
+        },
+        {
+          "id": "ningyu",
+          "side": "player_side",
+          "ref": "liuchao.character.ning_yu"
+        }
+      ],
+      "goals": [
+        {
+          "id": "command",
+          "label": "分派人手制服持械敌人",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "armed"
+          ]
+        },
+        {
+          "id": "capture",
+          "label": "留活口",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 11,
+          "finishAs": "被擒",
+          "targetIds": [
+            "armed"
+          ]
+        },
+        {
+          "id": "rescue",
+          "label": "打开火楼救人",
+          "type": "push",
+          "track": "rescue",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "fire"
+          ]
+        },
+        {
+          "id": "seal",
+          "label": "守村口不让人逃",
+          "type": "push",
+          "track": "seal",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "exit"
+          ]
+        },
+        {
+          "id": "stop_slaughter",
+          "label": "阻止滥杀奴隶",
+          "type": "support",
+          "baseDifficulty": 7,
+          "onSuccess": {
+            "tag": {
+              "id": "restraint",
+              "label": "阻止滥杀",
+              "on": "scene",
+              "durationBeats": null,
+              "effect": {
+                "text": "族人态度有所变化；不改变胜负"
+              }
+            }
+          }
+        }
+      ],
+      "elements": [
+        {
+          "id": "wuerlang",
+          "kind": "terrain",
+          "label": "武二郎突入",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "xieyi",
+          "kind": "terrain",
+          "label": "谢艺守村口",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "wall",
+          "kind": "terrain",
+          "label": "竹楼墙壁与出口",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "yibiao",
+          "kind": "terrain",
+          "label": "易彪与吴战威组织火力",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "burn",
+          "party": "armed",
+          "label": "火楼伤亡加重",
+          "target": {
+            "party": "xiaojin"
+          },
+          "attack": {
+            "dc": 11
+          },
+          "when": {
+            "kind": "not",
+            "cond": {
+              "party": "fire",
+              "track": "rescue",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.burn"
+              }
+            ]
+          }
+        },
+        {
+          "id": "attack",
+          "party": "armed",
+          "label": "持械随从反击指挥者",
+          "target": "player",
+          "attack": {
+            "dc": 11
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "flags": {
+            "scene.f07.result": "win"
+          },
+          "rewards": [],
+          "text": "火楼中的族人已获救，蛇傀与持械随从倒下，无人逃出回报。黑舌已经死了，原因未明。"
+        },
+        "lose": {
+          "flags": {
+            "scene.f07.result": "lose",
+            "lcq.f07.escaped": true
+          },
+          "rewards": [],
+          "text": "小津和族人烧伤，凝羽旧伤加重；有随从逃走，阁罗在入峒时会起疑。",
+          "fixedCosts": [
+            {
+              "id": "burn",
+              "target": "xiaojin",
+              "effect": "wound.burn",
+              "statuses": [
+                {
+                  "status": "wound.burn"
+                }
+              ]
+            },
+            {
+              "id": "group-burn",
+              "target": "biling",
+              "effect": "wound.burn",
+              "statuses": [
+                {
+                  "status": "wound.burn"
+                }
+              ]
+            },
+            {
+              "id": "old-wound",
+              "target": "ningyu",
+              "effect": "wound.external",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      },
+      "levelContext": {
+        "chapter": 80,
+        "nonLevelPartyIds": [
+          "armed",
+          "fire",
+          "exit",
+          "xiaojin",
+          "biling"
+        ]
+      },
+      "tags": [
+        {
+          "id": "restraint",
+          "label": "阻止滥杀",
+          "on": "scene",
+          "durationBeats": null,
+          "effect": {
+            "text": "族人态度有所变化；不改变胜负"
+          }
+        }
+      ],
+      "narration": {
+        "requiredFacts": [
+          "没有鬼武士，只有蛇傀、持械随从与奴隶。黑舌仅写已经死了；不解释死因或凶手。阻止滥杀只影响态度，不改变胜负。"
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f08.dagu_ruins",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.wuerlang_slays_dagu",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3,
+          "compatibleActionIds": [
+            "witness_wuerlang_turn_tide"
+          ],
+          "completionSceneByOutcome": {
+            "win": {
+              "sceneLocation": "古道秘营",
+              "cast": {
+                "present": [
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "卡瓦",
+                  "祁远",
+                  "达古"
+                ],
+                "exit": [
+                  {
+                    "name": "达古",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "fixedFacts": [
+                "达古死去，鬼战士失去巫术支撑，商队无人送命。"
+              ],
+              "fallbackText": "达古死去，鬼战士失去巫术支撑，商队无人送命。",
+              "factChecks": []
+            },
+            "lose": {
+              "sceneLocation": "古道秘营",
+              "cast": {
+                "present": [
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "卡瓦",
+                  "祁远",
+                  "达古"
+                ],
+                "exit": [
+                  {
+                    "name": "达古",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "fixedFacts": [
+                "达古仍被援手杀死；易伟腹伤、小魏臂伤、卡瓦与主角外伤，商队付出更重代价。"
+              ],
+              "fallbackText": "达古仍被援手杀死；易伟腹伤、小魏臂伤、卡瓦与主角外伤，商队付出更重代价。",
+              "factChecks": []
+            }
+          }
+        },
+        "source": "31号F08及W已定；P1-CONTENT-PACK-20261011",
+        "readiness": "ready"
+      },
+      "objective": {
+        "text": "撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局",
+        "win": {
+          "party": "dagu",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "dagu",
+          "side": "opposed",
+          "ref": "lcq.enemy.dagu",
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "巫术仍在",
+                "受创",
+                "死亡"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "死亡",
+                "ceiling": 2,
+                "alternatives": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "formation",
+          "side": "opposed",
+          "ref": "阵形",
+          "tracks": [
+            {
+              "id": "collapse",
+              "kind": "progress",
+              "scale": [
+                "阵形完整",
+                "阵形松动",
+                "阵形崩溃"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "阵形崩溃",
+                "ceiling": 2,
+                "alternatives": [],
+                "preserveOnWin": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "wu",
+          "side": "player_side",
+          "ref": "liuchao.character.wu_er_lang",
+          "absent": true
+        },
+        {
+          "id": "suli",
+          "side": "player_side",
+          "ref": "liuchao.character.su_li",
+          "absent": true
+        },
+        {
+          "id": "yiwei",
+          "side": "player_side",
+          "ref": "易伟"
+        },
+        {
+          "id": "xiaowei",
+          "side": "player_side",
+          "ref": "lcq.character.nanhuang_xiaowei"
+        },
+        {
+          "id": "kawa",
+          "side": "player_side",
+          "ref": "lcq.character.nanhuang_kawa"
+        }
+      ],
+      "goals": [
+        {
+          "id": "attack",
+          "label": "了结达古",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "dagu"
+          ]
+        },
+        {
+          "id": "command",
+          "label": "组织防线攻击达古",
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "dagu"
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": "arrows",
+          "kind": "terrain",
+          "label": "祁远麻药箭",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "horns",
+          "kind": "terrain",
+          "label": "鬼角弱点",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "formation",
+          "kind": "terrain",
+          "label": "马阵与弓弩防线",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "suli_support",
+          "kind": "ally",
+          "label": "苏荔援手",
+          "owner": "suli",
+          "source": "83·15",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "wu_support",
+          "kind": "ally",
+          "label": "武二郎援手",
+          "owner": "wu",
+          "source": "83·18",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "focus",
+          "party": "dagu",
+          "label": "鬼战士集火",
+          "target": "player",
+          "attack": {
+            "dc": 11
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.external"
+              }
+            ],
+            "trackShifts": [
+              {
+                "party": "formation",
+                "track": "collapse",
+                "steps": 1
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "flags": {
+            "scene.f08.result": "win"
+          },
+          "rewards": [],
+          "text": "达古死去，鬼战士失去巫术支撑，商队无人送命。"
+        },
+        "lose": {
+          "flags": {
+            "scene.f08.result": "lose"
+          },
+          "rewards": [],
+          "text": "达古仍被援手杀死；易伟腹伤、小魏臂伤、卡瓦与主角外伤，商队付出更重代价。",
+          "fixedCosts": [
+            {
+              "id": "belly",
+              "target": "yiwei",
+              "effect": "wound.severe",
+              "statuses": [
+                {
+                  "status": "wound.severe"
+                }
+              ]
+            },
+            {
+              "id": "arm",
+              "target": "xiaowei",
+              "effect": "wound.external.right_arm",
+              "statuses": [
+                {
+                  "status": "wound.external.right_arm"
+                }
+              ]
+            },
+            {
+              "id": "cut",
+              "target": "kawa",
+              "effect": "wound.external",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ]
+            },
+            {
+              "id": "pc",
+              "target": "pc",
+              "effect": "wound.external",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ]
+            }
+          ],
+          "settle": [
+            {
+              "party": "dagu",
+              "track": "vit",
+              "to": "死亡"
+            }
+          ]
+        }
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      },
+      "levelContext": {
+        "chapter": 83,
+        "nonLevelPartyIds": [
+          "formation",
+          "yiwei",
+          "kawa"
+        ]
+      },
+      "clock": {
+        "fixedEvents": [
+          {
+            "id": "reinforce",
+            "trigger": "afterEnemyAction",
+            "when": {
+              "any": [
+                {
+                  "party": "formation",
+                  "track": "collapse",
+                  "reach": "final"
+                },
+                {
+                  "party": "pc",
+                  "status": "wound.severe"
+                }
+              ]
+            },
+            "text": "苏荔与武二郎赶到援手。",
+            "effects": [
+              {
+                "arrive": "wu"
+              },
+              {
+                "arrive": "suli"
+              },
+              {
+                "depart": "formation"
+              }
+            ]
+          }
+        ]
+      },
+      "continuity": {
+        "facts": [
+          "达古必须死；不强制由易彪指挥或由武二郎杀死；山榉麻药箭可用。"
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f09.yinsha",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.yiyang_repels_yinsha",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3,
+          "compatibleActionIds": [
+            "repel_yinsha_with_yiyang_yang"
+          ],
+          "completionSceneByOutcome": {
+            "win": {
+              "sceneLocation": "南荒山谷",
+              "ledgerEffects": {
+                "jiuyang": "一阳"
+              },
+              "cast": {
+                "present": [
+                  "苏荔"
+                ]
+              },
+              "fixedFacts": [
+                "阴煞退入密林，苏荔仍在你身旁。阳气耗用和花苗女子的遭遇已留下后果。"
+              ],
+              "fallbackText": "阴煞退入密林，苏荔仍在你身旁。阳气耗用和花苗女子的遭遇已留下后果。",
+              "factChecks": []
+            },
+            "lose": {
+              "sceneLocation": "南荒山谷",
+              "ledgerEffects": {
+                "jiuyang": "一阳"
+              },
+              "cast": {
+                "present": [
+                  "苏荔"
+                ]
+              },
+              "fixedFacts": [
+                "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。"
+              ],
+              "fallbackText": "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。",
+              "factChecks": []
+            }
+          }
+        },
+        "source": "31号F09及W已定；P1-CONTENT-PACK-20261011",
+        "readiness": "ready"
+      },
+      "objective": {
+        "text": "护住苏荔并以一阳境阳气逼退阴煞",
+        "win": {
+          "party": "yinsha",
+          "track": "repel",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "yinsha",
+          "side": "opposed",
+          "ref": "lcq.enemy.yinsha",
+          "tracks": [
+            {
+              "id": "repel",
+              "kind": "progress",
+              "scale": [
+                "仍在逼近",
+                "被真阳逼开",
+                "退入密林"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "退入密林",
+                "ceiling": 2,
+                "alternatives": []
+              }
+            }
+          ]
+        },
+        {
+          "id": "yang",
+          "side": "opposed",
+          "ref": "真阳",
+          "tracks": [
+            {
+              "id": "spent",
+              "kind": "resource",
+              "scale": [
+                "阳气充足",
+                "阳气减弱",
+                "阳气将尽",
+                "阳气耗尽"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "阳气耗尽",
+                "ceiling": 3,
+                "alternatives": [],
+                "preserveOnWin": true
+              }
+            }
+          ]
+        },
+        {
+          "id": "suli",
+          "side": "player_side",
+          "ref": "liuchao.character.su_li",
+          "protected": true
+        },
+        {
+          "id": "woman",
+          "side": "opposed",
+          "ref": "小魏的花苗相好",
+          "tracks": [
+            {
+              "id": "safe",
+              "kind": "progress",
+              "scale": [
+                "仍受威胁",
+                "正在转移",
+                "已获救",
+                "未能救下"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "已获救",
+                "ceiling": 2,
+                "alternatives": [
+                  "未能救下"
+                ],
+                "preserveOnWin": true
+              }
+            }
+          ],
+          "protected": true
+        },
+        {
+          "id": "xiaowei",
+          "side": "player_side",
+          "ref": "lcq.character.nanhuang_xiaowei"
+        }
+      ],
+      "goals": [
+        {
+          "id": "repel",
+          "label": "以阳气与意志逼退阴煞",
+          "type": "push",
+          "track": "repel",
+          "baseDifficulty": 11,
+          "judgementKind": "阳气与意志",
+          "targetIds": [
+            "yinsha"
+          ]
+        },
+        {
+          "id": "rescue",
+          "label": "护住花苗女子",
+          "type": "push",
+          "track": "safe",
+          "baseDifficulty": 11,
+          "judgementKind": "阳气与意志",
+          "targetIds": [
+            "woman"
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": "yang",
+          "kind": "terrain",
+          "label": "稳住真阳与意志",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "blood",
+          "kind": "terrain",
+          "label": "指血破幻",
+          "source": "31号合同原著锚",
+          "verbs": [
+            {
+              "id": "use",
+              "power": 3
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "cold",
+          "party": "yinsha",
+          "label": "阴寒侵蚀真阳",
+          "target": "player",
+          "attack": {
+            "dc": 11
+          },
+          "onHit": {
+            "statuses": [
+              {
+                "status": "wound.cold"
+              }
+            ],
+            "trackShifts": [
+              {
+                "party": "yang",
+                "track": "spent",
+                "steps": 1
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "party": "yang",
+            "track": "spent",
+            "reach": "final"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "flags": {
+            "scene.f09.result": "win"
+          },
+          "rewards": [],
+          "text": "阴煞退入密林，苏荔仍在你身旁。阳气耗用和花苗女子的遭遇已留下后果。"
+        },
+        "lose": {
+          "flags": {
+            "scene.f09.result": "lose"
+          },
+          "rewards": [],
+          "text": "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。",
+          "fixedCosts": [
+            {
+              "id": "cold",
+              "target": "pc",
+              "effect": "wound.cold",
+              "statuses": [
+                {
+                  "status": "wound.cold"
+                }
+              ]
+            },
+            {
+              "id": "fright",
+              "target": "suli",
+              "effect": "wound.fright",
+              "statuses": [
+                {
+                  "status": "wound.fright"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      },
+      "levelContext": {
+        "chapter": 84,
+        "nonLevelPartyIds": [
+          "yinsha",
+          "yang",
+          "woman"
+        ]
+      },
+      "continuity": {
+        "facts": [
+          "一阳突破所有分支发生；阴煞只退不灭；不以刀兵作为本场出手依据。"
+        ]
+      },
+      "settings": {
+        "allowPlayerHarmAllies": true,
+        "judgement": {
+          "action": "cultivate",
+          "defense": "cultivate"
+        }
+      },
+      "redLines": [
+        {
+          "party": "yinsha",
+          "track": "repel",
+          "forbiddenFinalState": "死亡"
+        }
+      ],
+      "clock": {
+        "fixedEvents": [
+          {
+            "id": "unrescued-woman",
+            "atClose": true,
+            "when": {
+              "kind": "not",
+              "cond": {
+                "party": "woman",
+                "track": "safe",
+                "reach": "已获救"
+              }
+            },
+            "text": "没能救下那名花苗女子，小魏失去相好的悲伤留下。",
+            "effects": [
+              {
+                "setTrack": {
+                  "party": "woman",
+                  "track": "safe",
+                  "to": "未能救下"
+                }
+              },
+              {
+                "status": {
+                  "party": "xiaowei",
+                  "status": "wound.fright"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "meta": {
+        "id": "encounter.f07.geluo_suspicion",
+        "version": 1,
+        "scene": {
+          "kind": "social"
+        },
+        "hook": {
+          "eventId": "lcq.event.blank_letter_and_dagu",
+          "actionId": "face_xiaozi_dagu_reveal",
+          "requiredFlag": "lcq.f07.escaped",
+          "consumedFlag": "lcq.f07.geluo_checked",
+          "required": false
+        },
+        "source": "31号W21：第87章有逃兵则阁罗起疑，加过关检定，不改大走向"
+      },
+      "objective": {
+        "text": "接住阁罗的盘问，让商队继续通行",
+        "win": {
+          "party": "gate",
+          "track": "answer",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "gate",
+          "side": "opposed",
+          "ref": "阁罗的盘问",
+          "tracks": [
+            {
+              "id": "answer",
+              "kind": "progress",
+              "scale": [
+                "仍有疑问",
+                "说法被接受"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "说法被接受",
+                "ceiling": 1
+              }
+            },
+            {
+              "id": "suspicion",
+              "kind": "progress",
+              "scale": [
+                "起疑",
+                "追问",
+                "怀疑加深"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "怀疑加深",
+                "ceiling": 2
+              }
+            }
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "explain",
+          "label": "解释商队来意",
+          "type": "push",
+          "track": "answer",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "gate"
+          ]
+        }
+      ],
+      "elements": [
+        {
+          "id": "trade",
+          "kind": "fact",
+          "label": "商队货物与送亲身份",
+          "source": "31号W21与第87章",
+          "verbs": [
+            {
+              "id": "explain",
+              "power": 3
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "question",
+          "party": "gate",
+          "label": "追问逃兵消息",
+          "target": "player",
+          "attack": {
+            "dc": 11
+          },
+          "onHit": {
+            "statuses": [],
+            "trackShifts": [
+              {
+                "party": "gate",
+                "track": "suspicion",
+                "steps": 1
+              }
+            ]
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "party": "gate",
+            "track": "suspicion",
+            "reach": "final"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "text": "你接住阁罗的追问，商队继续通行。",
+          "flags": {
+            "lcq.f07.geluo_checked": true,
+            "lcq.f07.geluo_suspicious": false
+          }
+        },
+        "lose": {
+          "text": "阁罗仍怀疑商队的说法，眼下仍让商队通行；这份怀疑已留下。",
+          "flags": {
+            "lcq.f07.geluo_checked": true,
+            "lcq.f07.geluo_suspicious": true
+          }
+        }
+      },
+      "settings": {
+        "judgement": {
+          "action": "social",
+          "defense": "social"
+        }
+      },
+      "levelContext": {
+        "chapter": 87,
+        "nonLevelPartyIds": [
+          "gate"
+        ]
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      }
+    }
+  ],
+  "drafts": [],
+  "statuses": [],
+  "stages": [],
+  "overlays": [
+    {
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "events": [
+        {
+          "id": "lcq.event.haishen_hall_merfolk",
+          "name": "海神殿抵御鲛人",
+          "description": "程宗扬在废弃海神殿抵御鲛人袭击，护住受困的乐明珠。",
+          "axisId": "qingyu.76.1",
+          "axisAnchor": "六朝清羽记·#76·第74章·鲛人",
+          "axisSeq": 124,
+          "axisBeat": "程宗扬在废弃海神殿抵御鲛人袭击，护住受困的乐明珠。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.haishen_hall_merfolk.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.le_mingzhu"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.biyu"
+          ],
+          "locationId": "liuchao.location.sea_temple",
+          "objective": "在海神殿抵御鲛人，护住受困的乐明珠",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "在海神殿抵御鲛人，护住受困的乐明珠",
+                "actionText": "我面对眼前局势，采取行动。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "本场结果由战斗合同落账。",
+                  "failure": "本场结果由战斗合同落账。",
+                  "partial": "本场结果由战斗合同落账。"
+                },
+                "cast": {
+                  "present": [
+                    "乐明珠"
+                  ]
+                },
+                "dayPart": "夜",
+                "sceneLocation": "海神殿"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.biling_bay_stance",
+          "name": "碧鲮湾站出来",
+          "description": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀；碧鲮族获释后反攻鬼王峒。",
+          "axisId": "qingyu.82.2",
+          "axisAnchor": "六朝清羽记·#82·第80章·前路",
+          "axisSeq": 139,
+          "axisBeat": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀，碧鲮族获释后反攻鬼王峒。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.biling_bay_stance.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.wu_er_lang",
+            "liuchao.character.xie_yi"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.biyu",
+            "liuchao.faction.gui_wang_dong"
+          ],
+          "locationId": "liuchao.location.biyu_village",
+          "objective": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+                "actionText": "我面对眼前局势，采取行动。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "本场结果由战斗合同落账。",
+                  "failure": "本场结果由战斗合同落账。",
+                  "partial": "本场结果由战斗合同落账。"
+                },
+                "cast": {
+                  "present": [
+                    "武二郎",
+                    "凝羽",
+                    "易彪",
+                    "吴战威",
+                    "谢艺",
+                    "苏荔",
+                    "阿夕"
+                  ],
+                  "exit": [
+                    {
+                      "name": "黑舌",
+                      "status": "dead"
+                    }
+                  ]
+                },
+                "dayPart": "夜",
+                "sceneLocation": "碧鲮海湾"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.wuerlang_slays_dagu",
+          "name": "撑住围攻见证武二郎斩达古",
+          "description": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+          "axisId": "qingyu.85.2",
+          "axisAnchor": "六朝清羽记·#85·第83章·虎威",
+          "axisSeq": 145,
+          "axisBeat": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.wuerlang_slays_dagu.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.wu_er_lang",
+            "lcq.character.np004"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.gui_wang_dong",
+            "liuchao.faction.yun_shi_shang_hui"
+          ],
+          "locationId": "liuchao.location.south_wild_valley",
+          "objective": "撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局",
+                "actionText": "我面对眼前局势，采取行动。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "本场结果由战斗合同落账。",
+                  "failure": "本场结果由战斗合同落账。",
+                  "partial": "本场结果由战斗合同落账。"
+                },
+                "cast": {
+                  "present": [
+                    "吴战威",
+                    "小魏",
+                    "易彪",
+                    "卡瓦",
+                    "祁远",
+                    "达古"
+                  ],
+                  "exit": [
+                    {
+                      "name": "达古",
+                      "status": "dead"
+                    }
+                  ]
+                },
+                "sceneLocation": "古道秘营"
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.yiyang_repels_yinsha",
+          "name": "护住苏荔以一阳境逼退阴煞",
+          "description": "护住苏荔，并以一阳境阳气逼退阴煞。",
+          "axisId": "qingyu.86.2",
+          "axisAnchor": "六朝清羽记·#86·第84章·阴煞",
+          "axisSeq": 147,
+          "axisBeat": "护住苏荔，并以一阳境阳气逼退阴煞。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.yiyang_repels_yinsha.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.su_li"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.hua_miao"
+          ],
+          "locationId": "liuchao.location.south_wild_valley",
+          "objective": "护住苏荔并以一阳境阳气逼退阴煞",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "advance_declared_objective",
+                "label": "护住苏荔并以一阳境阳气逼退阴煞",
+                "actionText": "我面对眼前局势，采取行动。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "本场结果由战斗合同落账。",
+                  "failure": "本场结果由战斗合同落账。",
+                  "partial": "本场结果由战斗合同落账。"
+                },
+                "ledgerEffects": {
+                  "jiuyang": "一阳"
+                },
+                "cast": {
+                  "present": [
+                    "苏荔"
+                  ]
+                },
+                "sceneLocation": "南荒山谷"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "events": [
+        {
+          "id": "lcq.event.blank_letter_and_dagu",
+          "name": "白纸信笺与达古",
+          "description": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+          "axisId": "qingyu.89.2",
+          "axisAnchor": "六朝清羽记·#89·第87章·淫戏",
+          "axisSeq": 156,
+          "axisBeat": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+          "critical": true,
+          "completion": [
+            {
+              "path": "flags.event.blank_letter_and_dagu.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.cheng_zongyang",
+            "liuchao.character.xie_yi",
+            "liuchao.character.xiao_zi",
+            "lcq.character.np006"
+          ],
+          "relatedFactionIds": [
+            "liuchao.faction.gui_wang_dong"
+          ],
+          "locationId": "liuchao.location.guiwang_dong",
+          "objective": "确认白纸信笺仍是白纸，并应对小紫当着阁罗说破达古已死",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "open_blank_letter_in_person",
+                "label": "当面确认信笺仍是白纸",
+                "actionText": "我当着谢艺把信笺拆开，确认纸上仍是空白。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已确认白纸信笺仍是白纸；最终完成真值由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "kind": "prepare",
+                "grantsPreparation": "blank_letter_confirmed"
+              },
+              {
+                "id": "face_xiaozi_dagu_reveal",
+                "label": "应对小紫当着阁罗说破达古已死",
+                "actionText": "小紫当着阁罗说出达古已死后，我立刻接住现场，不让这话把商队当场钉成敌人。",
+                "timeCost": 1,
+                "outcomeText": {
+                  "success": "你已确认白纸信笺仍是白纸，并应对小紫当着阁罗说破达古已死；事件完成真值将由本地引擎落账。",
+                  "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                  "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                },
+                "requiresPreparation": [
+                  "blank_letter_confirmed"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "questLines": [],
+  "entities": [],
+  "texts": {
+    "qingyu.opening": "雷光是紫色的。\n\n机舱在那一瞬间失去了所有声音——引擎、广播、邻座的呼吸，一齐没了。等你重新听见东西，耳朵里只剩风，草叶擦过脸颊的窸窣，以及远处某种连成一片的低鸣，像是很多人在同时喊叫。\n\n你趴在草里。掌心下面是湿的泥土和草根，不是座椅，不是金属。段强在几步开外，还没爬起来。\n\n天是亮的。风里有血腥味。",
+    "qingyu.stage02.opening": "帅帐里灯火压得很低。\n\n帐外还能听见远处的喊杀，但这里已经静下来了。案上有一只未拆的锦囊，对面的人还坐着，像是有话要当面说完。\n\n帐帘刚落下。你站在门槛里。",
+    "lcq.ending.death.shanghou_relic": "指尖碰到那层凝固的灰尘时，你先听见了一声极轻的嗡鸣。\n那声音你太熟了。小区楼下的配电箱，地铁隧道里的变压器，夏夜空调外机旁的铁皮柜，都是这样低低的、不肯停歇的嗡嗡声。你在那个世界里从它们旁边走过一千次，从没多看一眼。它们的门上贴着同一个标记：黄底，黑边，一道红色的拐弯箭头。\n手臂上的汗毛先竖了起来，接着是头皮。空气里浮起一股焦甜的腥气，像雷雨落下之前的味道。你想把手缩回来，手指却不听使唤，像被一只看不见的铁钳攥住，五指反而越扣越紧。\n然后它进来了。\n起初不是疼，是一股蛮横的力量从指尖灌进来，顺着胳膊直撞胸口。全身的筋肉在同一瞬间抽紧，牙关咬得咯咯作响，你连一声都叫不出来。心口猛地一顿，又胡乱跳了几下，像一面被人乱擂的破鼓。丹田里那团真阳被惊醒了，生死根疯了一样翻涌，却不知该往哪里去。\n眼前白了一下。你闻到头发烧焦的味道，然后是皮肉。殇侯说过，以往的测试者一触之下便化作火球。那时你还在心里嘀咕：有这么厉害吗？现在你知道了，衣襟上已经蹿起了火苗。\n你忽然想起路边那些骨头。藤蔓底下一层压着一层，一直铺到土径尽头。一百六十七个。他们大概也是这样，被一句“天命之人”说动了心，伸出手去，以为前面就是荣华富贵。\n可你本来认得这个标记。你比他们中的任何一个都认得。\n隔着那片白光，你好像看见殇侯站了起来，又慢慢坐了回去。他捋了捋胡须，叹了口气，那声音很轻，像在惋惜一颗又被失手摔碎的夜明珠。\n最后一个念头竟有点好笑：苏妲己的冰蛊等了你三个月，到底没能等到。\n雨还在下。\n等雨停了，那条红土路边会多出一具焦黑的骨头。用不了几年，藤蔓就会把它盖住，空洞的眼窝里，也会长出青草。",
+    "lcq.ending.death.baihu_beheading": "苏妲己认定连赌都不敢的人所说产地不可信，命凝羽一刀了结你，如刚处死的五个男奴；镜头停在桌上背包，楼下传来一声闷响。",
+    "lcq.ending.death.ajiman_bond": "消息来得比你想象的快。祁老四记得买主的模样，凝羽这一次没有替你遮掩。黄昏时分，你被带进画楼，苏妲己斜倚在榻上，指间捏着那张身契。它完好无损，连一道撕痕都没有，是刚从你贴身的衣袋里搜出来的。\n“五十个金铢，买走妾身调教了一年多的舞姬。”她笑吟吟地把身契在灯下抖开，“你倒有眼光，可惜不懂规矩。商馆的奴才买下商馆的货，这货归谁，这奴才又归谁？”\n你张口想辩解，她却不等你说完，屈指一弹。\n起初只是一点凉，从小腹深处浮上来，像那盏冰镇酸梅汤还没化尽。下一刻，那点凉活了过来，开始游动。\n寒意顺着血脉往上爬，所过之处，皮肉一寸寸发紧。你低头看见手指泛起冰块般的光泽，想攥拳，指节却僵得发出细碎的脆响。呼出的气变成白雾，凝在眼前不肯散去。窗外还有夏日傍晚的蝉鸣，你却已经冷得听不真切。\n你忽然想起那张纸。你曾把它捏在手里，掂量过要不要撕掉。撕了，它只是一把碎屑。没撕，它就是一条铁链。你以为留着它是给自己留余地，此刻才明白，余地从来不在你手里。\n冷到了胸口。心跳变得又慢又重，每一下都像敲在冰面上。你跪倒在地，膝盖磕上青砖，竟觉不出疼。\n院外传来锁链拖地的声响。你拼尽力气扭过头，从门缝里看见阿姬曼被两名女侍卫押着走过，手腕和脚踝扣着乌沉沉的铁链，红褐色的长发垂在脸侧。她没有哭，也没有看你，碧蓝的眼睛空空的，像两口结了冰的井。\n“送往黑魔海。”苏妲己淡淡吩咐，声音里听不出半点波澜。\n你想喊她的名字，嘴唇却冻得张不开。她说过你像她哥哥。你连哥哥该做的一件事都没能做到。\n寒意漫进脑中，念头一点点变得透明、迟缓，像被封进冰里的虫子。眼前的灯火凝成一团模糊的光晕，然后慢慢熄灭。\n你最后听见的，是那张身契被折好、收进袖中的轻响。",
+    "lcq.ending.death.paolao": "你以为自己算准了。\n霓龙丝的产地只有你一个人知道，至少她这样相信。只要这个秘密还锁在你脑子里，她就杀不得你。九十天太短，条件太苛，你把它推回去，她自然会让一步，生意场上向来如此。你甚至已经在心里打好了下一轮的腹稿：放宽期限，要几成股份，再添几个护卫。\n苏妲己听完，没有还价。她端起茶盏浅浅抿了一口，又轻轻放下，瓷底碰在案上，一声脆响。\n“公子说得不错，那地方只有你知道。”她嫣然一笑，“可一个不肯去的人，知道什么又有何用？妾身院里的牡丹池下，埋过不少知道秘密的人。”\n她转向凝羽，语气平常得像在吩咐添茶：“原说三个月不回便尝炮烙，既然他连三个月都不要，那便今日吧。”\n你脸上的笑还挂着，脑子却空了一拍。你张嘴想换第二套说辞、第三套，那些在会议室里屡试不爽的话，双赢、让利、长期合作。话到嘴边，你才发现对面坐的根本不是客户。\n铜柱抬进来时，你闻到了炭火和热油的气味，浓得让人作呕。热浪先一步扑到脸上，皮肤绷紧发痛。你还在算，现在答应还来得及吗？九十天，六十天，三十天都行。你喊出来了，声音尖得不像自己。\n苏妲己笑吟吟地看着你，像在看一个出价太晚的买家。“晚了。”\n凝羽拧住你的手臂，把你推向那团暗红的光。贴上去的那一瞬，先是一声轻响，然后是白。不是疼，是白，铺天盖地的白，把所有念头都烧穿了。等疼追上来，你已经叫不出声，只听见油脂在耳边嗤嗤沸腾，像有人在一遍遍拨着算盘。\n原来从一开始你就没有筹码。她要霓龙丝，可她从不缺一个奴才。你把命当成底牌押上了桌，她连看都没看一眼。\n火光渐渐退成远处的一点红。你想起那个世界里打过的无数通电话，签过的无数份合同。最后一份，是你亲手推了回去。\n热度慢慢离你而去。\n再也没有下一轮了。",
+    "lcq.ending.death.wangzhe_blast": "天上先静了一瞬。\n你仰起头，看见那道天青色的身影悬在百丈高处，金冠碎成一蓬流星，黑发在风里散开。王哲的声音从极高的地方落下来，一个字，又一个字，临，兵，斗，者……每喝一声，他身上便多亮起一点光，像有人在天上一盏一盏地点灯。\n你知道你该走。他让你带着月霜往东南去，两刻之内离开，这句话还在耳朵里。可你的腿钉在原地，像被什么按住了。也许是不信，一个人怎么能把自己点成一轮太阳。也许是那一声“拜托”太重，重得你挪不动步。\n四周的厮杀停了。罗马人的铜盔，唐军的陌刀，满地横陈的尸骨，全都仰着脸。你忽然觉得小腹那团暖意在疯长，生死根贪婪地吞着满场死气，真阳一股股往经脉里灌，胀得你耳膜嗡嗡作响。\n“行！”\n八点光聚成一团，在他胸腹间旋转、膨胀。你脸上的皮肤先感觉到了，像贴着一扇刚刚拉开的炉门。汗还没流下来就干了。你眯起眼，泪水涌出，又被烤得发涩。\n你想起背包里那只锦囊，火漆还没拆。想起六阳，想起太泉古阵西边那块赤红的石头，你一样都没去成。想起那个总想一剑捅穿你的丫头，师帅把她托付给你，你却连她此刻在哪儿都顾不上去想。\n你甚至荒唐地想到了加班，想到地铁里挤得喘不过气的早高峰。那时候你总觉得日子烂透了，现在才知道，那些烂日子有多好。\n“极！”\n光落下来了。\n没有声音。或者说声音太大，大到耳朵直接放弃了。你看见自己的手在光里变得透明，能看见骨头的影子，然后连影子也被抹去。热不再是热，是一种干净而彻底的白，从皮肤一直灌进骨髓，再从骨髓里把你整个人推出去。疼来不及到，恐惧也来不及到。\n你最后一个念头很轻：原来他说两刻，是真心想让你活下去。\n然后草原裂开，焦土连成一片方圆十里的黑。\n那片黑里，已经没有你了。",
+    "lcq.ending.death.ghost_king_skull": "你听见自己说「好」。\n\n那两个字落地的时候，祭台上的年轻人只点了点头，像是验收一件迟交的供品。你本想再说点什么——嘲讽、讨价还价，哪怕问一句「老弟贵庚」——喉咙却被人从后面勒住。黑暗里涌出几名额生利角的武士，铁斧柄敲在你膝弯上，双刀当啷落地。\n\n你被拖进鬼王峒更深的一层。\n\n地牢没有假星河。这里只有潮气、苔藓，和墙上嵌着的一具具水晶。有的水晶里还封着人影，五官模糊，像隔着一层冬日的冰。你被推进一间空龛，那些水晶状的物质像活物一样涌过来，漫过脚踝、膝盖、胸口，最后停在下颌，只留出头脸——他说过，要留活的。\n\n不知过了多久。你数着太阳穴上那道伤痕的跳动，像数一盏快要灭的灯。丹田里的真阳推不出去，死气倒源源涌进来，把气轮撑得发烫。刀不在手里。血顺着晶壁往下流，一滴也够不着外面的世界。\n\n脚步声停在龛前。\n\n鬼巫王来了。他身上仍披着那件黑色斗篷，苍白得像从未见过太阳，双眸深邃而黝黑，如同望不到底的深潭。他的手指在水晶上一划，晶壁像水一样分开。他凝视着你额角的伤痕，那道伤痕在他目光下又霍霍跳起来。\n\n「天命者，」他平淡地说，「我给你过一次机会：加入我，或者成为我的敌人。你选了前者。现在，我要切开你的头颅，寻找天命的指引。」\n\n鬼羽剑的剑尖凉凉地抵上你的额角。\n\n你忽然很想知道银镜里的人现在怎样。谢艺、武二郎、凝羽、苏荔——他们离你那么近，近得只隔着几层石头，可谁也不知道该往这边看。你一张嘴，发不出声音。\n\n你想起那个世界很久没见过的星星。最后看见的这一片，在更上面的大厅里，是假的；这里连假的都没有。\n\n剑尖往里送了一分。\n\n那道伤痕跳了最后一下，停了。\n\n后来的事，你已经看不见了。\n\n鬼巫王在那颗头颅里什么也没有找到。当夜，一个刀锋般的黑影在空龛前站了很久，只说了两个字：「可惜。」\n\n两天之后，苍龙星阵在祭坛上亮起，龙神睁开眼睛，一口吞下了召唤它的人。南荒从此落进一只看不见的手里。银镜里那十几个人后来有没有走出鬼王峒，没有人说得清。只有满穹的假星星，还亮着，照着一间再也没有人的空龛。",
+    "lcq.ending.death.dragon_well": "井口守不住了。你抓起乐明珠的手，往洞窟深处那道裂缝跑。身后是尸鬼的嘶叫，脚下的地面在一下一下地发颤，像有什么东西在大地深处翻身。\n\n你算准了退路，偏偏算漏了背上的伤。跨过石缝那一步，伤口整个撕开，腿一软，你们俩一起滚下了碎石坡。你只来得及翻过身，把她护在胸前，背脊朝下砸在岩石上。\n\n身体里有什么东西断了，一根，又一根。\n\n“大笨瓜！你起来呀！”\n\n你起不来。头顶的岩壁裂开一道缝，缝里透出一只山丘般的眼睛。一点寒星亮在它眼前，然后是两点，四点……星芒一颗接一颗爬满它的瞳孔。巨大的眼珠翻开，映出一个人影：衣衫褴褛，满脸血污，唇角还挂着那点改不掉的坏笑。像极了从前那个挤在地铁里、为一滴蜜糖拼命的小职员。\n\n龙首开始抬起，成吨的玄武岩像饼干一样碎裂。你用尽最后的力气，把乐明珠推进龙角下那道缝隙：“抓紧！别松手！”\n\n她哭着伸手来拉你。你没有去握。\n\n岩石如雨落下。龙神昂身而起，带走了最后一线光。鬼巫王说过，鬼王峒的祖先来自大地深处。你最后也留在了那里。黑暗压下来，又沉又暖，像加完班倒头就睡的那张床。\n\n上面的洞窟里，龙神一口吞下了鬼巫王，那句“黑魔海”的咒骂被嚼碎在齿间。凝羽拉住每一个逃出来的人问：“见到他们了吗？”没有人回答她。\n\n龙首冲出山体，暴雨倾盆。满山逃出来的南荒人跪在泥水里，等着有人站在龙首上，喊一声“拿起你们的武器”。龙角下只有一个哭哑了嗓子的少女。\n\n他们就那样一直跪着。\n\n后来乐明珠回了花苗，再没穿过那身新娘的衣裳。每年雨季，她都独自走到鬼王峒塌掉的山口，坐上一整天。有人听见她对着山石说话，说的总是同一句：“大笨瓜，你骗人，你说过要带我出去的。”\n\n很多年后，南荒的部族照旧往鬼王峒送新娘，只是祭坛上换了一位不说话的神，替神传话的人，穿着黑衣。",
+    "lcq.ending.fail.dragon_essence": "匕首卡在龙颅的骨缝里，再也推不动半分。\n气轮空了。你跪在湿透的龙鳞上，听着暴雨砸在龙角上的声音，也听着自己的心跳一下慢过一下。\n就在这时，那股力量来了。它从刀柄灌进手臂，阴冷，蛮横，一往无前。枯竭的丹田猛然一震，气轮疯了一样转起来。你知道这不是你的力气，可你还是吼着把匕首压了下去。\n龙颅掀开，血珠凝成的星图在你眼前轰然碎裂。龙神哀鸣一声，翻滚着从空中坠落。\n那股力量却没有停。\n它顺着匕首倒流回来，带着碧青的光，带着龙脑里凝了十几年的东西。太阳穴上的伤痕先尝到了味道，像一头饿了太久的鲸，张口就吞。生死根把一条龙的死，整个吸进了你的身体。\n丹田深处多了一团冰冷的东西，正慢慢睁开眼睛。\n“天命者，”一个声音在你颅骨里轻轻说道，“现在，我们可以好好谈谈了。”\n你听出了那是谁的声音。\n龙神伏在碧潭边，再也没有动。乐明珠扑过来，又哭又笑：“你杀了龙神！”她伸手想摸你的眉毛，指尖却停在半空。她看着你的眼睛，往后缩了一下。\n黄昏时，那个黑衣女子站在剖开的龙颅旁，探手进去，摸了个空。她回头看你，目光像在清点一只已经装好货的箱子。“龙精我会来取。”说完，她便没入了密林。\n谢艺躺在山石上，胸口焦黑。他看了你很久，那句“你杀了龙神，很好”，终究没有说出口。小紫站在远处的岩石下，第一次没有笑。\n你站在龙首上，望着脚下那片阳光普照的南荒。你想像从前那样放声大喊“能活着真好”。张开嘴，说出来的却是：\n“他们需要秩序。”\n那声音很平静，也很耳熟。\n你还活着，还会一直活下去。南荒很快就会知道，鬼王峒有了新的主人。\n只是那个从地铁和加班里走出来的程宗扬，永远留在了龙颅里。"
+  },
+  "playtests": [
+    {
+      "id": "qingyu",
+      "extensionKey": "清羽记开局",
+      "kind": "qingyu-demo-v1",
+      "startModId": "lcq.stage_01",
+      "endModId": "lcq.stage_02",
+      "endEventId": "lcq.event.baihu_shangguan_escape",
+      "eventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02",
+        "lcq.event.s01_03",
+        "lcq.event.s01_04",
+        "lcq.event.s01_06",
+        "lcq.event.s01_05",
+        "lcq.event.s02_01",
+        "lcq.event.s02_03",
+        "lcq.event.s02_02",
+        "lcq.event.s02_04",
+        "lcq.event.s02_05",
+        "lcq.event.s02_06",
+        "lcq.event.ningyu_enters_gamble",
+        "lcq.event.sudaji_south_pact",
+        "lcq.event.gamble_bond_signed",
+        "lcq.event.charge_sudaji_fee",
+        "lcq.event.free_ajiman",
+        "lcq.event.baihu_shangguan_escape"
+      ],
+      "scope": "lcq.stage_01-lcq.stage_02/s01_01-baihu_shangguan_escape",
+      "characterId": "char_qingyu_opening_playtest_v1",
+      "slot": "清羽记开局",
+      "openingTextId": "qingyu.opening",
+      "stageOpeningTextIds": {
+        "lcq.stage_02": "qingyu.stage02.opening"
+      },
+      "autoStallTurns": 3,
+      "timerWeaveEventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02"
+      ]
+    },
+    {
+      "id": "nanhuang-1",
+      "extensionKey": "清羽记开局",
+      "kind": "qingyu-demo-v1",
+      "startModId": "lcq.stage_01",
+      "endModId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "endEventId": "lcq.event.enter_dong_with_migu",
+      "eventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02",
+        "lcq.event.s01_03",
+        "lcq.event.s01_04",
+        "lcq.event.s01_06",
+        "lcq.event.s01_05",
+        "lcq.event.s02_01",
+        "lcq.event.s02_03",
+        "lcq.event.s02_02",
+        "lcq.event.s02_04",
+        "lcq.event.s02_05",
+        "lcq.event.s02_06",
+        "lcq.event.ningyu_enters_gamble",
+        "lcq.event.sudaji_south_pact",
+        "lcq.event.gamble_bond_signed",
+        "lcq.event.charge_sudaji_fee",
+        "lcq.event.free_ajiman",
+        "lcq.event.baihu_shangguan_escape"
+      ],
+      "scope": "lcq.stage_01-enter_dong_with_migu",
+      "characterId": "char_qingyu_opening_playtest_v1",
+      "slot": "清羽记开局",
+      "openingTextId": "qingyu.opening",
+      "stageOpeningTextIds": {
+        "lcq.stage_02": "qingyu.stage02.opening"
+      },
+      "autoStallTurns": 3,
+      "timerWeaveEventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02"
+      ]
+    },
+    {
+      "id": "nanhuang-2",
+      "extensionKey": "清羽记开局",
+      "kind": "qingyu-demo-v1",
+      "startModId": "lcq.stage_01",
+      "endModId": "lcq.stage_05b",
+      "endEventId": "lcq.event.shanghou_cures_ice_gu",
+      "eventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02",
+        "lcq.event.s01_03",
+        "lcq.event.s01_04",
+        "lcq.event.s01_06",
+        "lcq.event.s01_05",
+        "lcq.event.s02_01",
+        "lcq.event.s02_03",
+        "lcq.event.s02_02",
+        "lcq.event.s02_04",
+        "lcq.event.s02_05",
+        "lcq.event.s02_06",
+        "lcq.event.ningyu_enters_gamble",
+        "lcq.event.sudaji_south_pact",
+        "lcq.event.gamble_bond_signed",
+        "lcq.event.charge_sudaji_fee",
+        "lcq.event.free_ajiman",
+        "lcq.event.baihu_shangguan_escape"
+      ],
+      "scope": "lcq.stage_01-shanghou_cures_ice_gu",
+      "characterId": "char_qingyu_opening_playtest_v1",
+      "slot": "清羽记开局",
+      "openingTextId": "qingyu.opening",
+      "stageOpeningTextIds": {
+        "lcq.stage_02": "qingyu.stage02.opening"
+      },
+      "autoStallTurns": 3,
+      "timerWeaveEventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02"
+      ]
+    },
+    {
+      "id": "landing",
+      "extensionKey": "星月湖落地连续试玩",
+      "kind": "xingyuehu-landing-through-v1",
+      "startModId": "lcq.stage_01",
+      "endModId": "lcq.stage_02",
+      "endEventId": "lcq.event.baihu_shangguan_escape",
+      "eventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02",
+        "lcq.event.s01_03",
+        "lcq.event.s01_04",
+        "lcq.event.s01_06",
+        "lcq.event.s01_05",
+        "lcq.event.s02_01",
+        "lcq.event.s02_03",
+        "lcq.event.s02_02",
+        "lcq.event.s02_04",
+        "lcq.event.s02_05",
+        "lcq.event.s02_06",
+        "lcq.event.ningyu_enters_gamble",
+        "lcq.event.sudaji_south_pact",
+        "lcq.event.gamble_bond_signed",
+        "lcq.event.charge_sudaji_fee",
+        "lcq.event.free_ajiman",
+        "lcq.event.baihu_shangguan_escape"
+      ]
+    }
+  ],
+  "entries": [
+    {
+      "id": "xingyuehu-quest",
+      "label": "星月湖任务线试玩",
+      "route": "/xingyuehu-quest-playtest",
+      "group": "primary",
+      "icon": "Moon",
+      "testId": "open-xingyuehu-quest-playtest"
+    },
+    {
+      "id": "world-sim",
+      "label": "六朝世界试玩",
+      "route": "/world-sim-playtest",
+      "group": "legacy",
+      "icon": "Orbit",
+      "testId": "open-world-sim-playtest"
+    },
+    {
+      "id": "qingyu",
+      "label": "清羽记开局",
+      "route": "/qingyu-opening-playtest",
+      "group": "legacy",
+      "icon": "Feather",
+      "testId": "open-qingyu-opening-playtest"
+    }
+  ]
+}

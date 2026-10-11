@@ -16,7 +16,7 @@ test('场面模块只依赖自己和类型：不引用 dev 试玩代码，不引
     for (const match of text.matchAll(/(?:import|export)[^'"]*from\s+'([^']+)'/g)) imports.push([name, match[1], /import type/.test(match[0])]);
   }
   const outside = imports.filter(([, spec]) => !spec.startsWith('./') && spec !== '../../../mod-kit/game-numbers.qingyu.json');
-  assert.deepEqual(outside.map(([name, spec, typeOnly]) => `${name} ${spec} ${typeOnly}`), ['statusAdapters.ts @/types/game true'], '唯一的外部引用是对游戏状态类型的 type import');
+  assert.deepEqual(outside.map(([name, spec, typeOnly]) => `${name} ${spec} ${typeOnly}`), ['statusAdapters.ts @/types/game true', 'statuses.ts ../contentPacks false'], '仅允许游戏状态类型与纯内容包数据；禁止引用应用或试玩执行代码');
 });
 
 test('场面模块的 .ts 不写死角色库里的任何姓名或别名（账本人名棘轮同一算法）', async () => {

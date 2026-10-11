@@ -1,3 +1,4 @@
+import {evalExpr} from './conditions';
 import {GAME_NUMBERS} from './numbers';
 import {levelModifier} from './levels';
 // 玩家行动：识别层提议的校验（只许白名单），以及落地、定价、预览（只读，不改状态）。
@@ -66,6 +67,7 @@ export function validateProposal(
   const goal = goalOf(contract, String(raw.goal || ''));
   if (goal && ((goal.availability?.fromBeat || 1) > state.beat || (goal.availability?.untilBeat ?? Infinity) < state.beat)) return { plan:null, dropped:['该目标不在当前阶段'] };
   if (!goal) return { plan: null, dropped: [`目标“${raw.goal}”不在本场目标里`] };
+  if(goal.when&&!evalExpr(goal.when,contract,state))return {plan:null,dropped:['该目标的前置条件尚未成立']};
   const claim = raw.claim || raw;
   const magnitude = Math.min(3, Math.max(1, Math.round(Number(claim.magnitude) || 1))) as 1 | 2 | 3;
   const scope = ['single', 'group', 'all'].includes(claim.scope) ? claim.scope : 'single';
@@ -73,8 +75,10 @@ export function validateProposal(
   for (const id of Array.isArray(claim.targets) ? claim.targets : []) {
     const party = partyOf(contract, String(id));
     if (!party) dropped.push(`目标“${id}”不在本场参与方里`);
+    else if (goal.targetIds&&!goal.targetIds.includes(party.id)) dropped.push(`目标${party.id}不属于本目标的作用对象`);
     else if (!targets.includes(party.id)) targets.push(party.id);
   }
+  if(goal.targetIds && (goal.type||'push')==='push' && !targets.length)return {plan:null,dropped:[...dropped,'没有属于该目标的合法作用对象']};
   const levers: PlanLever[] = [];
   for (const item of Array.isArray(raw.levers) ? raw.levers : []) {
     const element = contract.elements?.find(e => e.id === item?.element);
@@ -165,6 +169,7 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   const settings = resolveSettings(contract.settings);
   const goal = goalOf(contract, planIn.goal);
   if (!goal) throw new Error(`场面合同 ${contract.meta.id} 没有目标 ${planIn.goal}`);
+  if(goal.when&&!evalExpr(goal.when,contract,state,ctx))throw Error('该目标的前置条件尚未成立');
   const player = playerParty(contract);
   const playerId = player?.id || '';
   const plan: ActionPlan = { ...planIn, levers: planIn.levers.slice(), targets: planIn.targets.slice() };
@@ -178,6 +183,7 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   if (plan.scope === 'all' && pushGoal) {
     candidates = contract.parties.filter(p => p.side === 'opposed' && isPresent(state, p.id)).map(p => p.id);
   }
+  if(goal.targetIds)candidates=candidates.filter(id=>goal.targetIds!.includes(id));
   const range = !!cap.rangeClaim && (plan.scope === 'group' || plan.scope === 'all');
   if (!range && candidates.length > cap.primaryTargets) {
     for (const extra of candidates.slice(cap.primaryTargets)) ignoredTargets.push(`${partyOf(contract, extra)?.ref || extra}：超出一次行动 ${cap.primaryTargets} 个主目标的上限`);

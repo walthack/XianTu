@@ -1,3 +1,4 @@
+import {referencePlan} from './combat-reference-plan.mjs';
 // Fresh opening save + production contract replay; no imported checkpoint or direct done-flag writes.
 // Previous encounters use deterministic success fixtures, not real-LLM acceptance evidence.
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
@@ -8,8 +9,9 @@ const rt=await loadTs('../src/modules/scenarioMods/runtime.ts'),init=await loadT
 const registry=await loadTs('../src/modules/sceneModule/contracts/registry.ts');
 const host=await loadTs('../src/modules/sceneModule/host/controller.ts'),ext=await loadTs('../src/modules/sceneModule/host/ext.ts');
 const ids=['lcq.stage_01','lcq.stage_02','lcq.stage_03','lcq.stage_05','lcq.stage_03b_snake_flower_bridge','lcq.stage_04','lcq.stage_04b_lingfei_baiyi_crisis','lcq.stage_05b'];
-const mods=await Promise.all(ids.map(id=>readFile(`src/modules/scenarioMods/builtins/data/${id}.json`,'utf8').then(JSON.parse)));
-const targets=new Map([['lcq.event.iron_bridge_ambush','F01'],['lcq.event.s03b_snake_flower_bridge_01','F02'],['lcq.event.s04b_lingfei_baiyi_crisis_03','F04'],['lcq.event.s04b_lingfei_baiyi_crisis_10','F05'],['lcq.event.s04_02','F03'],['lcq.event.s05b_05b_ideology_duel_and_defeat','F10'],['lcq.event.ghost_king_swallowed','F13']]);
+const packs=await loadTs('../src/modules/contentPacks/index.ts');
+const mods=await Promise.all(ids.map(id=>readFile(`src/modules/scenarioMods/builtins/data/${id}.json`,'utf8').then(JSON.parse).then(packs.applyContentPackOverlays)));
+const targets=new Map([['lcq.event.iron_bridge_ambush','F01'],['lcq.event.s03b_snake_flower_bridge_01','F02'],['lcq.event.s04b_lingfei_baiyi_crisis_03','F04'],['lcq.event.s04b_lingfei_baiyi_crisis_10','F05'],['lcq.event.s04_02','F03'],['lcq.event.s05b_05b_ideology_duel_and_defeat','F10'],['lcq.event.ghost_king_swallowed','F13'],['lcq.event.haishen_hall_merfolk','F06'],['lcq.event.biling_bay_stance','F07'],['lcq.event.wuerlang_slays_dagu','F08'],['lcq.event.yiyang_repels_yinsha','F09'],['lcq.event.slay_dragon','F14']]);
 globalThis.location={search:'?sceneModule=on',hostname:'localhost'};
 let save=opening.createQingyuOpeningPlaytestSave(mods[0],new Date().toISOString(),2),trace=[];const done=new Set();
 for(let n=0;n<600;n++){
@@ -31,15 +33,14 @@ for(let n=0;n<600;n++){
     const target=contract.parties.find(p=>p.side==='opposed'&&p.id!=='blood_tiger'&&(state.tracks[p.id]?.vit||0)<p.tracks[0].scale.indexOf(p.tracks[0].ending.finalState))?.id;
     return JSON.stringify({goal:'attack',claim:{magnitude:3,scope:'single',targets:target?[target]:[]},levers:[],inputClass:'action'});
    }
-   if(state.contractId==='combat.f03.mountain_stream_fog')return JSON.stringify({goal:'capture',claim:{magnitude:3,scope:'all',targets:registry.sceneContractById(state.contractId).parties.filter(p=>p.side==='opposed').map(p=>p.id)},levers:[],inputClass:'action'});
-   if(state.beat<4)return JSON.stringify({goal:'survive_duel',claim:{magnitude:1,scope:'single',targets:['pc']},levers:[],inputClass:'action'});
-   const target=(state.tracks.hu_sha?.vit||0)<2?'hu_sha':'dan_chen';
-   return JSON.stringify({goal:target==='hu_sha'?'destroy_tiger':'subdue_alive',claim:{magnitude:3,scope:'single',targets:[target]},levers:target==='hu_sha'&&state.beat>=4?[{element:'true_yang_blood',verb:'use_blood',evidence:'抹血'}]:[],inputClass:'action'});
+   const c=registry.sceneContractById(state.contractId),plan=referencePlan(c,state,{factors:0,playerDefense:0});
+   if(!plan)throw Error('no fixture plan '+state.contractId);
+   return JSON.stringify({goal:plan.goal,claim:{magnitude:plan.magnitude,scope:plan.scope,targets:plan.targets},levers:plan.levers.map(l=>({...l,evidence:'使用'})),inputClass:'action'});
   }};
-  await host.submitSceneInput(save,event.id==='lcq.event.s04_02'?'我擒住所有武士留下活口':'我挡住袭击',deps);
+  await host.submitSceneInput(save,'我使用场景中的要素，抹血攻击骨虎，擒住敌人守住阵形',deps);
   ext.activeScene(save).state.forced={action:Array(30).fill(20),defense:Array(100).fill(20)};
   for(let beat=0;ext.activeScene(save)&&beat<30;beat++){
-   if(!ext.activeScene(save).pending)await host.submitSceneInput(save,event.id==='lcq.event.s04_02'?'我擒住所有武士留下活口':'我抹血攻击骨虎，制服丹宸',deps);
+   if(!ext.activeScene(save).pending)await host.submitSceneInput(save,'我使用场景中的要素，抹血攻击骨虎，擒住敌人守住阵形',deps);
    await host.confirmSceneAction(save,deps);
   }
   if(ext.activeScene(save))throw Error('unclosed scene');

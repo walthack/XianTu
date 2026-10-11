@@ -6,6 +6,7 @@
 //
 // Usage: node scripts/sync-builtin-mods.mjs
 
+import {writeContentPacks} from './content-packs.mjs';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, readdir, writeFile, rm, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -80,4 +81,6 @@ async function run() {
     console.warn('世界地图背景拷贝失败:', e.message);
   }
 }
-if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) run().catch(e => { console.error(e); process.exit(1); });
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  try { await run(); await writeContentPacks(); } catch(e) { console.error(e); process.exitCode=1; }
+}

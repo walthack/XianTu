@@ -1,31 +1,10 @@
+import {CONTENT_PACKS,packPlaytest} from '../contentPacks';
 import type { SaveData } from '@/types/game';
 
 /** 与清羽开局试玩事件窗对齐；本文件保持无环，避免 runtime 初始化时拿不到名单。 */
-export const SCOPED_NARRATIVE_EVENT_IDS = [
-  'lcq.event.s01_01',
-  'lcq.event.s01_02',
-  'lcq.event.s01_03',
-  'lcq.event.s01_04',
-  'lcq.event.s01_06',
-  'lcq.event.s01_05',
-  'lcq.event.s02_01',
-  'lcq.event.s02_03',
-  'lcq.event.s02_02',
-  'lcq.event.s02_04',
-  'lcq.event.s02_05',
-  'lcq.event.s02_06',
-  'lcq.event.ningyu_enters_gamble',
-  'lcq.event.sudaji_south_pact',
-  'lcq.event.gamble_bond_signed',
-  'lcq.event.charge_sudaji_fee',
-  'lcq.event.free_ajiman',
-  'lcq.event.baihu_shangguan_escape',
-] as const;
-
-const SCOPED_EVENT_IDS = new Set<string>(SCOPED_NARRATIVE_EVENT_IDS);
-const ESCAPE_EVENT_ID = 'lcq.event.baihu_shangguan_escape';
-const QINGYU_KIND = 'qingyu-demo-v1';
-const LANDING_KIND = 'xingyuehu-landing-through-v1';
+export const SCOPED_NARRATIVE_EVENT_IDS = packPlaytest('qingyu').eventIds;
+const SCOPED_EVENT_IDS=new Set(CONTENT_PACKS.playtests.flatMap(p=>p.eventIds));
+const ESCAPE_EVENT_ID=packPlaytest('qingyu').endEventId;
 
 type RuntimeLike = {
   storyMode?: string;
@@ -49,8 +28,7 @@ export function isQingyuOpeningPlaytestEventId(eventId: string | undefined): boo
 }
 
 export function isScopedPlaytestSave(saveData: SaveData | null | undefined): boolean {
-  return extensionKind(saveData, '清羽记开局') === QINGYU_KIND
-    || extensionKind(saveData, '星月湖落地连续试玩') === LANDING_KIND;
+  return CONTENT_PACKS.playtests.some(p=>extensionKind(saveData,p.extensionKey)===p.kind);
 }
 
 export function isWithinBaihuEscapeNarrativeWindow(saveData: SaveData | null | undefined): boolean {

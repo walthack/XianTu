@@ -3,6 +3,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createJiti } from 'jiti';
+import {effectivePackStages} from './content-pack-stages.mjs';
 const root = new URL('../', import.meta.url);
 const jiti = createJiti(import.meta.url, { interopDefault: true });
 const {resolveScenarioContent}=await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/entityCatalog.ts',root)));
@@ -62,7 +63,7 @@ export const LOOT_STAGE_COVERAGE = {
 export function loadLootInputs() {
   return {
     table: JSON.parse(readFileSync(new URL('mod-kit/location-loot.qingyu.json', root), 'utf8')),
-    stages: [...new Set(Object.values(LOOT_STAGE_COVERAGE).flat())].map(id => resolveScenarioContent(JSON.parse(readFileSync(new URL(`src/modules/scenarioMods/builtins/data/${id}.json`, root), 'utf8')))),
+    stages: [...new Set(Object.values(LOOT_STAGE_COVERAGE).flat())].map(id => resolveScenarioContent(effectivePackStages().find(s=>s.manifest.id===id))),
   };
 }
 export function auditLocationLoot({ table, stages, coverage = LOOT_STAGE_COVERAGE }) {

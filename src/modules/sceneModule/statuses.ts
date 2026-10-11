@@ -1,6 +1,7 @@
 // 状态：模块自己持有“场内状态账”，并通过事件把变化交给宿主的统一状态系统。
 // 解析顺序：宿主状态目录 ＞ 合同里的临时定义 ＞ 模块内置的临时通用定义（等总策划的目录落地后以目录为准）。
 
+import { CONTENT_PACKS } from '../contentPacks';
 import bookCatalog from './contracts/statuses.json';
 import builtinStatuses from './contracts/statuses.builtin.json';
 import type { ActiveStatus, Contract, SceneContext, SceneState, StatusApplyRef, StatusDef, StatusEffectSpec } from './types';
@@ -24,7 +25,7 @@ export interface StatusEvent {
 }
 
 /** Book directory is authoritative; six provisional generic fallbacks remain usable (N4). */
-export const STATUS_CATALOG = bookCatalog as unknown as StatusDef[];
+export const STATUS_CATALOG = [...bookCatalog, ...CONTENT_PACKS.statuses] as unknown as StatusDef[];
 export function catalogStatus(id: string): StatusDef | undefined { return STATUS_CATALOG.find(def=>def.id===id); }
 
 export function resolveStatusDef(id: string, contract: Contract, ctx?: Pick<SceneContext, 'catalog'>): StatusDef | undefined {

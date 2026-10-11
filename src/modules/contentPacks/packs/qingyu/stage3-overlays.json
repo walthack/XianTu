@@ -1,0 +1,311 @@
+[
+  {
+    "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "events": [
+      {
+        "id": "lcq.event.haishen_hall_merfolk",
+        "name": "海神殿抵御鲛人",
+        "description": "程宗扬在废弃海神殿抵御鲛人袭击，护住受困的乐明珠。",
+        "axisId": "qingyu.76.1",
+        "axisAnchor": "六朝清羽记·#76·第74章·鲛人",
+        "axisSeq": 124,
+        "axisBeat": "程宗扬在废弃海神殿抵御鲛人袭击，护住受困的乐明珠。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.haishen_hall_merfolk.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu"
+        ],
+        "locationId": "liuchao.location.sea_temple",
+        "objective": "在海神殿抵御鲛人，护住受困的乐明珠",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在海神殿抵御鲛人，护住受困的乐明珠",
+              "actionText": "我面对眼前局势，采取行动。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "本场结果由战斗合同落账。",
+                "failure": "本场结果由战斗合同落账。",
+                "partial": "本场结果由战斗合同落账。"
+              },
+              "cast": {
+                "present": [
+                  "乐明珠"
+                ]
+              },
+              "dayPart": "夜",
+              "sceneLocation": "海神殿"
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.biling_bay_stance",
+        "name": "碧鲮湾站出来",
+        "description": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀；碧鲮族获释后反攻鬼王峒。",
+        "axisId": "qingyu.82.2",
+        "axisAnchor": "六朝清羽记·#82·第80章·前路",
+        "axisSeq": 139,
+        "axisBeat": "蛇傀下令焚烧碧鲮族，程宗扬率众突袭斩杀蛇傀，碧鲮族获释后反攻鬼王峒。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.biling_bay_stance.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu",
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+              "actionText": "我面对眼前局势，采取行动。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "本场结果由战斗合同落账。",
+                "failure": "本场结果由战斗合同落账。",
+                "partial": "本场结果由战斗合同落账。"
+              },
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "凝羽",
+                  "易彪",
+                  "吴战威",
+                  "谢艺",
+                  "苏荔",
+                  "阿夕"
+                ],
+                "exit": [
+                  {
+                    "name": "黑舌",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "dayPart": "夜",
+              "sceneLocation": "碧鲮海湾"
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.wuerlang_slays_dagu",
+        "name": "撑住围攻见证武二郎斩达古",
+        "description": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+        "axisId": "qingyu.85.2",
+        "axisAnchor": "六朝清羽记·#85·第83章·虎威",
+        "axisSeq": 145,
+        "axisBeat": "撑住达古率领的围攻，见证武二郎斩杀巫师扭转战局。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.wuerlang_slays_dagu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "lcq.character.np004"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "撑住达古率领的围攻，并见证武二郎斩杀巫师扭转战局",
+              "actionText": "我面对眼前局势，采取行动。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "本场结果由战斗合同落账。",
+                "failure": "本场结果由战斗合同落账。",
+                "partial": "本场结果由战斗合同落账。"
+              },
+              "cast": {
+                "present": [
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "卡瓦",
+                  "祁远",
+                  "达古"
+                ],
+                "exit": [
+                  {
+                    "name": "达古",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "sceneLocation": "古道秘营"
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.yiyang_repels_yinsha",
+        "name": "护住苏荔以一阳境逼退阴煞",
+        "description": "护住苏荔，并以一阳境阳气逼退阴煞。",
+        "axisId": "qingyu.86.2",
+        "axisAnchor": "六朝清羽记·#86·第84章·阴煞",
+        "axisSeq": 147,
+        "axisBeat": "护住苏荔，并以一阳境阳气逼退阴煞。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.yiyang_repels_yinsha.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hua_miao"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "护住苏荔并以一阳境阳气逼退阴煞",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "护住苏荔并以一阳境阳气逼退阴煞",
+              "actionText": "我面对眼前局势，采取行动。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "本场结果由战斗合同落账。",
+                "failure": "本场结果由战斗合同落账。",
+                "partial": "本场结果由战斗合同落账。"
+              },
+              "ledgerEffects": {
+                "jiuyang": "一阳"
+              },
+              "cast": {
+                "present": [
+                  "苏荔"
+                ]
+              },
+              "sceneLocation": "南荒山谷"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "stageId": "lcq.stage_05b",
+    "events": [
+      {
+        "id": "lcq.event.blank_letter_and_dagu",
+        "name": "白纸信笺与达古",
+        "description": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+        "axisId": "qingyu.89.2",
+        "axisAnchor": "六朝清羽记·#89·第87章·淫戏",
+        "axisSeq": 156,
+        "axisBeat": "白纸信笺打开仍是白纸；小紫当着阁罗说破达古已死。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.blank_letter_and_dagu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.xiao_zi",
+          "lcq.character.np006"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.guiwang_dong",
+        "objective": "确认白纸信笺仍是白纸，并应对小紫当着阁罗说破达古已死",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "open_blank_letter_in_person",
+              "label": "当面确认信笺仍是白纸",
+              "actionText": "我当着谢艺把信笺拆开，确认纸上仍是空白。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认白纸信笺仍是白纸；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "blank_letter_confirmed"
+            },
+            {
+              "id": "face_xiaozi_dagu_reveal",
+              "label": "应对小紫当着阁罗说破达古已死",
+              "actionText": "小紫当着阁罗说出达古已死后，我立刻接住现场，不让这话把商队当场钉成敌人。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已确认白纸信笺仍是白纸，并应对小紫当着阁罗说破达古已死；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "blank_letter_confirmed"
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

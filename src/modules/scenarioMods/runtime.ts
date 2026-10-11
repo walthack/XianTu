@@ -17,7 +17,7 @@ import {runtimeEntityName} from './ledger/affinityIdentity';
 import {questLineOffer,questLineContext,expireQuestLineWindows,deferOptionalDeparture} from './questLineContext';
 import {QUEST_LINES,LINE_RESOURCES,lineText,settleLineInsertion} from './questLines';
 import { activeScene, sceneModuleEnabled } from '@/modules/sceneModule/host/ext';
-import { sceneContractForEvent, sceneContractById } from '@/modules/sceneModule/contracts/registry';
+import { sceneContractForEvent, sceneContractById, sceneContractSupportsAction } from '@/modules/sceneModule/contracts/registry';
 import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS } from './fixedEndingNarratives';
 import { endingPresentation, migrateLegacyE01Ending, type EndingPresentation } from './endingPresentation';
 import { projectNamingText } from './ledger/naming';
@@ -1445,8 +1445,8 @@ function currentStoryEventActions(saveData: SaveData, includeAwayActions: boolea
   const travel = includeAwayActions ? undefined : questTravelSelection(saveData, runtime, event, state.contractHash);
   let availableActions = travel ? [] : contract.actions.filter(action => eventActionAvailable(action, state, runtime, saveData));
   const requiredScene = sceneModuleEnabled() && sceneContractForEvent(event.id, runtime.flags);
-  if (requiredScene && availableActions.some(action => action.id === requiredScene.meta.hook.actionId))
-    availableActions = availableActions.filter(action => action.id === requiredScene.meta.hook.actionId);
+  if (requiredScene && availableActions.some(action => sceneContractSupportsAction(requiredScene,action.id)))
+    availableActions = availableActions.filter(action => sceneContractSupportsAction(requiredScene,action.id));
   const steps: ScenarioEventActionSelection[] = travel ? [travel] : availableActions.map(action => {
     const expectedOutcome: ScenarioPlayerCompletionOutcome = contract.kind === 'objective_action'
       ? 'success'
@@ -1845,7 +1845,7 @@ function recordStoryEventStructuredActionAt(
     && scene.actionId === selection.actionId && scene.phase === 'closing'
     && scene.state.status === 'closed' && scene.state.contractId === sceneContract.meta.id
     && scene.state.contractVersion === sceneContract.meta.version);
-  if (sceneContract && selection.actionId === sceneContract.meta.hook.actionId && !sceneSettlement) {
+  if (sceneContract && sceneContractSupportsAction(sceneContract,selection.actionId) && !sceneSettlement) {
     return { attempted: false, completed: false, eventId: event.id, reason: 'scene_module_required' };
   }
   const state = reconcileEventActionContract(runtime, event);
@@ -2315,7 +2315,7 @@ function questTravelSelection(
   const contract = event.playerCompletionContract;
   const actionState = reconcileEventActionContract(runtime, event);
   const requiredScene = sceneModuleEnabled() && sceneContractForEvent(event.id, runtime.flags);
-  const nextAction = contract?.actions.find(action => actionState && eventActionAvailable(action, actionState, runtime, saveData) && (!requiredScene || action.id === requiredScene.meta.hook.actionId));
+  const nextAction = contract?.actions.find(action => actionState && eventActionAvailable(action, actionState, runtime, saveData) && (!requiredScene || sceneContractSupportsAction(requiredScene,action.id)));
   const targetLocationId = nextAction?.locationId || stepScene(runtime, event.id)?.locationId || event.locationId;
   // 按固定顺序的多步合同同样适用：人不在场不能做任何一步，完成后也就无须瞬移。
   if (!contract || !targetLocationId || storyRouteLocation(event.id)) return undefined;

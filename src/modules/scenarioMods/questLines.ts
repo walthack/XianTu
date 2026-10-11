@@ -1,8 +1,9 @@
+import {CONTENT_PACKS} from '../contentPacks';
 /** Data-driven optional / character insertions. No third mandatory rail; progress only uses its own code receipt. */
 import source from '../../../mod-kit/quest-lines/lines.json';
 import resources from '../../../mod-kit/quest-lines/resources.json';
-export const LINE_RESOURCES = resources;
-export function lineText(id:string):string { const t=(resources.texts as Record<string,string>)[id]; if(t===undefined)throw Error(`unknown text ${id}`);return t; }
+export const LINE_RESOURCES = {...resources,texts:{...resources.texts,...CONTENT_PACKS.texts}};
+export function lineText(id:string):string { const t=(LINE_RESOURCES.texts as Record<string,string>)[id]; if(t===undefined)throw Error(`unknown text ${id}`);return t; }
 export type LineCondition = {all:LineCondition[]}|{any:LineCondition[]}|{not:LineCondition}|
  {canonChapterAtLeast:number}|{eventActive:string}|{eventDone:string}|{presentActor:string}|{knownFact:string}|{atLocation:string}|
  {chapterAtLeast:string}|{affinityAtLeast:{actorId:string;value:number}}|{flag:{id:string;value:string|number|boolean}};
@@ -42,8 +43,8 @@ function effect(x:unknown,where:string):asserts x is LineEffect {
  if(x.kind==='itemGrant'&&(!Number.isSafeInteger(x.quantity)||x.quantity<1))throw Error(`${where}: invalid quantity`);
  if(x.kind==='reveal'&&!['told_privately','heard','seen'].includes(x.source))throw Error(`${where}: invalid disclosure source`);
 }
-export function parseQuestLines(raw:unknown):QuestLineTable {
- raw=JSON.parse(JSON.stringify(raw));if(object(raw)&&Array.isArray(raw.lines))for(const l of raw.lines){if(l.nameId){l.name=lineText(l.nameId);delete l.nameId;}if(l.entryHintId){l.entryHint=lineText(l.entryHintId);delete l.entryHintId;}for(const b of l.beats||[])if(b.objectiveId){b.objective=lineText(b.objectiveId);delete b.objectiveId;}}
+export function parseQuestLines(raw:unknown,textLookup:(id:string)=>string=lineText):QuestLineTable {
+ raw=JSON.parse(JSON.stringify(raw));if(object(raw)&&Array.isArray(raw.lines))for(const l of raw.lines){if(l.nameId){l.name=textLookup(l.nameId);delete l.nameId;}if(l.entryHintId){l.entryHint=textLookup(l.entryHintId);delete l.entryHintId;}for(const b of l.beats||[])if(b.objectiveId){b.objective=textLookup(b.objectiveId);delete b.objectiveId;}}
  if(!object(raw)||raw.version!==1||!Array.isArray(raw.lines))throw Error('invalid quest line table');fields(raw,['version','lines'],'table');
  const lineIds=new Set<string>(),beatIds=new Set<string>();
  for(const line of raw.lines){
@@ -56,7 +57,7 @@ export function parseQuestLines(raw:unknown):QuestLineTable {
    beatIds.add(beat.id);if(beat.requires)condition(beat.requires,beat.id);if(beat.closeWhen)condition(beat.closeWhen,beat.id);
    if(beat.sharedExperience && !['default','suppress'].includes(beat.sharedExperience))throw Error('invalid sharedExperience');
    if(beat.ifOwnerAbsent && beat.ifOwnerAbsent!=='no_trigger')throw Error('unsupported absent variant; supply a separate authored beat');
-   if(beat.steps){if(!Array.isArray(beat.steps)||!beat.steps.length)throw Error('empty steps');const actions=new Set();for(const a of beat.steps){fields(a,['actionId','kind','optional','grantsPreparation','requiresPreparation','requiresPresentActors','labelId','intentId','outcomeId','intentMatchId'],'step');if(!id(a.actionId)||actions.has(a.actionId)||!['prepare','attempt'].includes(a.kind))throw Error('invalid step');actions.add(a.actionId);lineText(a.labelId);lineText(a.intentId);if(a.intentMatchId){const m=(resources.intentMatches as any)[a.intentMatchId];if(!m||!Array.isArray(m.matchAny)||!m.matchAny.length||Object.keys(m).some(k=>!['matchAny','matchAll','rejectIf'].includes(k))||Object.values(m).some(v=>!Array.isArray(v)||v.some(t=>typeof t!=='string'||!t.trim())))throw Error('invalid intentMatch reference');}}}
+   if(beat.steps){if(!Array.isArray(beat.steps)||!beat.steps.length)throw Error('empty steps');const actions=new Set();for(const a of beat.steps){fields(a,['actionId','kind','optional','grantsPreparation','requiresPreparation','requiresPresentActors','labelId','intentId','outcomeId','intentMatchId'],'step');if(!id(a.actionId)||actions.has(a.actionId)||!['prepare','attempt'].includes(a.kind))throw Error('invalid step');actions.add(a.actionId);textLookup(a.labelId);textLookup(a.intentId);if(a.intentMatchId){const m=(resources.intentMatches as any)[a.intentMatchId];if(!m||!Array.isArray(m.matchAny)||!m.matchAny.length||Object.keys(m).some(k=>!['matchAny','matchAll','rejectIf'].includes(k))||Object.values(m).some(v=>!Array.isArray(v)||v.some(t=>typeof t!=='string'||!t.trim())))throw Error('invalid intentMatch reference');}}}
    if(!object(beat.completedBy))throw Error('missing completion receipt');if(beat.completedBy.anyOf && (!Array.isArray(beat.completedBy.anyOf)||!beat.completedBy.anyOf.length))throw Error('empty completion choices');fields(beat.completedBy,['eventActionReceipt','anyOf'],'completedBy');
    for(const rc of completionReceipts(beat)){const r=rc.eventActionReceipt;if(!object(r)||r.eventId!==beat.eventId||!id(r.actionId))throw Error('insertion must use its own action receipt');}
    for(const es of Object.values(beat.byAction||{})) (es as unknown[]).forEach(e=>effect(e,beat.id));
@@ -66,7 +67,7 @@ export function parseQuestLines(raw:unknown):QuestLineTable {
  return JSON.parse(JSON.stringify(raw));
 }
 export function completionReceipts(beat:any):any[]{return beat.completedBy.anyOf||[beat.completedBy];}
-export const QUEST_LINES=parseQuestLines(source).lines;
+export const QUEST_LINES=parseQuestLines({...source,lines:[...source.lines,...CONTENT_PACKS.questLines]}).lines;
 export function lineConditionMet(c:LineCondition,ctx:LineContext):boolean {
  if('all'in c)return c.all.every(v=>lineConditionMet(v,ctx));if('any'in c)return c.any.some(v=>lineConditionMet(v,ctx));if('not'in c)return !lineConditionMet(c.not,ctx);
  if('canonChapterAtLeast'in c)return ctx.currentChapterOrder>=c.canonChapterAtLeast;if('eventActive'in c)return !!ctx.activeEventIds?.includes(c.eventActive);

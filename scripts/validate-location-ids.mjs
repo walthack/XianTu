@@ -18,9 +18,11 @@ const jiti = createJiti(import.meta.url, {
 });
 const ts = path => jiti.import(fileURLToPath(new URL(path, root)));
 
+import {effectivePackStages} from './content-pack-stages.mjs';
 export function loadStageLocationData(dir = DATA_DIR) {
-  return readdirSync(dir).filter(file => file.endsWith('.json')).map(file => {
-    const mod = JSON.parse(readFileSync(new URL(file, dir), 'utf8'));
+  const mods=dir===DATA_DIR ? effectivePackStages() : readdirSync(dir).filter(file=>file.endsWith('.json')).map(file=>JSON.parse(readFileSync(new URL(file,dir),'utf8')));
+  return mods.map(mod => {
+    const file=mod.manifest.id+'.json';
     const events = mod.scenario?.events || [];
     return {
       file,

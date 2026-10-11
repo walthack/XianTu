@@ -2,6 +2,7 @@
 import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {createJiti} from 'jiti';
+import {effectivePackStages} from './content-pack-stages.mjs';
 const root=new URL('../',import.meta.url),read=p=>JSON.parse(readFileSync(new URL(p,root),'utf8'));
 const jiti=createJiti(import.meta.url,{alias:{'@':fileURLToPath(new URL('src',root))}});
 const loc=await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/travel/locationIds.ts',root)));
@@ -35,6 +36,12 @@ export function buildEntityIndex(){
    walk(v);
   }};walk(m.scenario);
  }
+ const pack=read('src/modules/contentPacks/generated/catalog.json');
+ for(const e of pack.entities)add(e.kind,e.entry.id,'src/modules/contentPacks/generated/catalog.json',e.entry.aliases);
+ for(const e of pack.statuses)add('status',e.id,'src/modules/contentPacks/generated/catalog.json');
+ for(const [id]of Object.entries(pack.texts))add('text',id,'src/modules/contentPacks/generated/catalog.json');
+ for(const stage of effectivePackStages()){for(const e of stage.canon?.characters||[])add('character',e.id,'src/modules/contentPacks/generated/catalog.json',[e.name]);for(const e of stage.scenario?.chapters||[])add('chapter',e.id,'src/modules/contentPacks/generated/catalog.json');for(const e of stage.scenario?.events||[]){add('event',e.id,'src/modules/contentPacks/generated/catalog.json');for(const a of e.playerCompletionContract?.actions||[])add('action',`${e.id}:${a.id}`,'src/modules/contentPacks/generated/catalog.json');}}
+ for(const line of pack.questLines)add('line',line.id,'src/modules/contentPacks/generated/catalog.json');
  const resources=read('mod-kit/quest-lines/resources.json');
  for(const [plural,kind] of [['texts','text'],['memories','memoryTemplate'],['facts','fact'],['affinityWeights','affinityWeight'],['salience','salience']])for(const id of Object.keys(resources[plural]))add(kind,id,'mod-kit/quest-lines/resources.json');
  for(const line of read('mod-kit/quest-lines/lines.json').lines){add('line',line.id,'mod-kit/quest-lines/lines.json');for(const b of line.beats){for(const e of [...b.onComplete,...Object.values(b.byAction||{}).flat()]){if(e.kind==='setReceipt')add('receipt',e.receiptId,'mod-kit/quest-lines/lines.json');if(e.kind==='setState')add('state',e.stateId,'mod-kit/quest-lines/lines.json');}}}

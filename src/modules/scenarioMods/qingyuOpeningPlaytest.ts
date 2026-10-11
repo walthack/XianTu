@@ -1,3 +1,5 @@
+import {packPlaytest,packText,CONTENT_PACKS} from '../contentPacks';
+const definition=packPlaytest('qingyu');
 import {entityName} from './namedEntities';
 import type { CharacterBaseInfo, SaveData } from '@/types/game';
 import { createMinimalSaveDataV3 } from '@/utils/dataRepair';
@@ -9,38 +11,18 @@ import { QINGYU_OPENING_TEXT, QINGYU_STAGE_02_OPENING_TEXT } from './qingyuOpeni
 
 export { QINGYU_OPENING_TEXT, QINGYU_STAGE_02_OPENING_TEXT } from './qingyuOpeningTexts';
 
-export const QINGYU_OPENING_PLAYTEST_CHARACTER_ID = 'char_qingyu_opening_playtest_v1';
-export const QINGYU_OPENING_PLAYTEST_SLOT = '清羽记开局';
-export const QINGYU_OPENING_PLAYTEST_KIND = 'qingyu-demo-v1';
-export const QINGYU_OPENING_PLAYTEST_MOD_ID = 'lcq.stage_01';
-export const QINGYU_OPENING_PLAYTEST_END_MOD_ID = 'lcq.stage_02';
-export const QINGYU_OPENING_PLAYTEST_EXTENSION_KEY = '清羽记开局';
+export const QINGYU_OPENING_PLAYTEST_CHARACTER_ID = definition.characterId!;
+export const QINGYU_OPENING_PLAYTEST_SLOT = definition.slot!;
+export const QINGYU_OPENING_PLAYTEST_KIND = definition.kind;
+export const QINGYU_OPENING_PLAYTEST_MOD_ID = definition.startModId;
+export const QINGYU_OPENING_PLAYTEST_END_MOD_ID = definition.endModId;
+export const QINGYU_OPENING_PLAYTEST_EXTENSION_KEY = definition.extensionKey;
 
 /** Demo 里 s01_01 自由行动这么多回合后由世界自行结清，激活下一段。建档预跑占 1，玩家再输入 2 回合后到点。 */
-export const QINGYU_OPENING_S01_01_AUTO_STALL_TURNS = 3;
+export const QINGYU_OPENING_S01_01_AUTO_STALL_TURNS = definition.autoStallTurns!;
 /** Demo 仅这两拍到点织入当前行动：s01_01 过渡遇袭，s01_02 段强既定死亡。其它拍不默认自动推进叙事。 */
-export const QINGYU_DEMO_TIMER_WEAVE_EVENT_IDS = ['lcq.event.s01_01', 'lcq.event.s01_02'] as const;
-
-export const QINGYU_OPENING_PLAYTEST_EVENT_IDS = [
-  'lcq.event.s01_01',
-  'lcq.event.s01_02',
-  'lcq.event.s01_03',
-  'lcq.event.s01_04',
-  'lcq.event.s01_06',
-  'lcq.event.s01_05',
-  'lcq.event.s02_01',
-  'lcq.event.s02_03',
-  'lcq.event.s02_02',
-  'lcq.event.s02_04',
-  'lcq.event.s02_05',
-  'lcq.event.s02_06',
-  'lcq.event.ningyu_enters_gamble',
-  'lcq.event.sudaji_south_pact',
-  'lcq.event.gamble_bond_signed',
-  'lcq.event.charge_sudaji_fee',
-  'lcq.event.free_ajiman',
-  'lcq.event.baihu_shangguan_escape',
-] as const;
+export const QINGYU_DEMO_TIMER_WEAVE_EVENT_IDS=definition.timerWeaveEventIds!;
+export const QINGYU_OPENING_PLAYTEST_EVENT_IDS=definition.eventIds;
 
 export interface QingyuOpeningPlaytestMarker {
   kind: typeof QINGYU_OPENING_PLAYTEST_KIND;
@@ -222,8 +204,9 @@ function applyCreationPreset(save: SaveData, mod: ScenarioMod): void {
   }
 }
 
-export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = new Date().toISOString(), nanhuangPhase?: 1 | 2): SaveData {
-  if (mod.manifest.id !== QINGYU_OPENING_PLAYTEST_MOD_ID) {
+export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = new Date().toISOString(), nanhuangPhase?: 1 | 2, playtestId?: string): SaveData {
+  const selectedDefinition=packPlaytest(playtestId || (nanhuangPhase ? `nanhuang-${nanhuangPhase}` : 'qingyu'));
+  if (mod.manifest.id !== selectedDefinition.startModId) {
     throw new Error(`清羽记开局试玩需要内置模组 ${QINGYU_OPENING_PLAYTEST_MOD_ID}`);
   }
   // 开场正文已经把穿越落地演给玩家看，但 s01_01 仍要留 2-3 回合自由行动，
@@ -242,26 +225,27 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
 
   save.元数据 = {
     ...save.元数据,
-    存档ID: 'qingyu-opening-playtest-v1',
-    存档名: QINGYU_OPENING_PLAYTEST_SLOT,
+    存档ID: playtestId ? `pack-${playtestId}` : 'qingyu-opening-playtest-v1',
+    存档名: selectedDefinition.slot || QINGYU_OPENING_PLAYTEST_SLOT,
     创建时间: generatedAt,
     更新时间: generatedAt,
   };
   delete save.系统.扩展.开发验收;
+  const scopeDefinition=selectedDefinition;
   const marker: QingyuOpeningPlaytestMarker = {
-    kind: QINGYU_OPENING_PLAYTEST_KIND,
+    kind: scopeDefinition.kind,
     disposable: true,
     persistence: 'isolated-local',
-    scope: nanhuangPhase === 1 ? 'lcq.stage_01-enter_dong_with_migu' : nanhuangPhase === 2 ? 'lcq.stage_01-shanghou_cures_ice_gu' : 'lcq.stage_01-lcq.stage_02/s01_01-baihu_shangguan_escape',
-    startModId: QINGYU_OPENING_PLAYTEST_MOD_ID,
-    endModId: nanhuangPhase === 1 ? 'lcq.stage_04b_lingfei_baiyi_crisis' : nanhuangPhase === 2 ? 'lcq.stage_05b' : QINGYU_OPENING_PLAYTEST_END_MOD_ID,
-    ...(nanhuangPhase ? { endEventId: nanhuangPhase === 1 ? 'lcq.event.enter_dong_with_migu' : 'lcq.event.shanghou_cures_ice_gu' } : {}),
-    eventIds: [...QINGYU_OPENING_PLAYTEST_EVENT_IDS],
+    scope: scopeDefinition.scope!,
+    startModId: scopeDefinition.startModId,
+    endModId: scopeDefinition.endModId,
+    ...(nanhuangPhase || playtestId ? {endEventId:scopeDefinition.endEventId} : {}),
+    eventIds: [...scopeDefinition.eventIds],
   };
-  save.系统.扩展[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY] = marker;
+  save.系统.扩展[scopeDefinition.extensionKey] = marker;
   save.系统.历史.叙事 = [{
     type: 'gm',
-    content: QINGYU_OPENING_TEXT,
+    content: selectedDefinition.openingTextId ? packText(selectedDefinition.openingTextId) : QINGYU_OPENING_TEXT,
     time: '【清羽·草原落地】',
     actionOptions: [
       '先确认段强还在身边',
@@ -269,18 +253,18 @@ export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = 
       '找掩体观察四周',
     ],
   }];
-  save.社交.记忆.短期记忆 = [QINGYU_OPENING_TEXT];
+  save.社交.记忆.短期记忆 = [save.系统.历史.叙事[0].content];
   return save;
 }
 
 export function isQingyuOpeningPlaytestSave(saveData: SaveData | null | undefined): boolean {
-  return saveData?.系统?.扩展?.[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY]?.kind === QINGYU_OPENING_PLAYTEST_KIND;
+  return CONTENT_PACKS.playtests.some(p=>p.openingTextId&&saveData?.系统?.扩展?.[p.extensionKey]?.kind===p.kind);
 }
 
 /** 显式南荒发行终点；旧短版与星月湖长版不受新闸影响。 */
 export function isNanhuangDemoFinished(save: SaveData | null | undefined): boolean {
-  const marker = save?.系统?.扩展?.[QINGYU_OPENING_PLAYTEST_EXTENSION_KEY] as QingyuOpeningPlaytestMarker | undefined;
+  const marker=CONTENT_PACKS.playtests.map(p=>save?.系统?.扩展?.[p.extensionKey] as QingyuOpeningPlaytestMarker|undefined).find(m=>m?.endEventId && CONTENT_PACKS.playtests.some(p=>p.kind===m.kind));
   const runtime = (save as any)?.世界?.状态?.剧本模组;
-  return marker?.kind === QINGYU_OPENING_PLAYTEST_KIND && Boolean(marker.endEventId)
-    && runtime?.modId === marker.endModId && Boolean(runtime?.completedEventIds?.includes(marker.endEventId));
+  return Boolean(marker?.endEventId)
+    && runtime?.modId === marker?.endModId && Boolean(runtime?.completedEventIds?.includes(marker?.endEventId));
 }

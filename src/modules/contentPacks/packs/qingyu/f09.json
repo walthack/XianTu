@@ -1,0 +1,341 @@
+{
+  "meta": {
+    "id": "combat.f09.yinsha",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.yiyang_repels_yinsha",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3,
+      "compatibleActionIds": [
+        "repel_yinsha_with_yiyang_yang"
+      ],
+      "completionSceneByOutcome": {
+        "win": {
+          "sceneLocation": "南荒山谷",
+          "ledgerEffects": {
+            "jiuyang": "一阳"
+          },
+          "cast": {
+            "present": [
+              "苏荔"
+            ]
+          },
+          "fixedFacts": [
+            "阴煞退入密林，苏荔仍在你身旁。阳气耗用和花苗女子的遭遇已留下后果。"
+          ],
+          "fallbackText": "阴煞退入密林，苏荔仍在你身旁。阳气耗用和花苗女子的遭遇已留下后果。",
+          "factChecks": []
+        },
+        "lose": {
+          "sceneLocation": "南荒山谷",
+          "ledgerEffects": {
+            "jiuyang": "一阳"
+          },
+          "cast": {
+            "present": [
+              "苏荔"
+            ]
+          },
+          "fixedFacts": [
+            "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。"
+          ],
+          "fallbackText": "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。",
+          "factChecks": []
+        }
+      }
+    },
+    "source": "31号F09及W已定；P1-CONTENT-PACK-20261011",
+    "readiness": "ready"
+  },
+  "objective": {
+    "text": "护住苏荔并以一阳境阳气逼退阴煞",
+    "win": {
+      "party": "yinsha",
+      "track": "repel",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "yinsha",
+      "side": "opposed",
+      "ref": "lcq.enemy.yinsha",
+      "tracks": [
+        {
+          "id": "repel",
+          "kind": "progress",
+          "scale": [
+            "仍在逼近",
+            "被真阳逼开",
+            "退入密林"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "退入密林",
+            "ceiling": 2,
+            "alternatives": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "yang",
+      "side": "opposed",
+      "ref": "真阳",
+      "tracks": [
+        {
+          "id": "spent",
+          "kind": "resource",
+          "scale": [
+            "阳气充足",
+            "阳气减弱",
+            "阳气将尽",
+            "阳气耗尽"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "阳气耗尽",
+            "ceiling": 3,
+            "alternatives": [],
+            "preserveOnWin": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "suli",
+      "side": "player_side",
+      "ref": "liuchao.character.su_li",
+      "protected": true
+    },
+    {
+      "id": "woman",
+      "side": "opposed",
+      "ref": "小魏的花苗相好",
+      "tracks": [
+        {
+          "id": "safe",
+          "kind": "progress",
+          "scale": [
+            "仍受威胁",
+            "正在转移",
+            "已获救",
+            "未能救下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "已获救",
+            "ceiling": 2,
+            "alternatives": [
+              "未能救下"
+            ],
+            "preserveOnWin": true
+          }
+        }
+      ],
+      "protected": true
+    },
+    {
+      "id": "xiaowei",
+      "side": "player_side",
+      "ref": "lcq.character.nanhuang_xiaowei"
+    }
+  ],
+  "goals": [
+    {
+      "id": "repel",
+      "label": "以阳气与意志逼退阴煞",
+      "type": "push",
+      "track": "repel",
+      "baseDifficulty": 11,
+      "judgementKind": "阳气与意志",
+      "targetIds": [
+        "yinsha"
+      ]
+    },
+    {
+      "id": "rescue",
+      "label": "护住花苗女子",
+      "type": "push",
+      "track": "safe",
+      "baseDifficulty": 11,
+      "judgementKind": "阳气与意志",
+      "targetIds": [
+        "woman"
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "yang",
+      "kind": "terrain",
+      "label": "稳住真阳与意志",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "blood",
+      "kind": "terrain",
+      "label": "指血破幻",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "cold",
+      "party": "yinsha",
+      "label": "阴寒侵蚀真阳",
+      "target": "player",
+      "attack": {
+        "dc": 11
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.cold"
+          }
+        ],
+        "trackShifts": [
+          {
+            "party": "yang",
+            "track": "spent",
+            "steps": 1
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "party": "yang",
+        "track": "spent",
+        "reach": "final"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "flags": {
+        "scene.f09.result": "win"
+      },
+      "rewards": [],
+      "text": "阴煞退入密林，苏荔仍在你身旁。阳气耗用和花苗女子的遭遇已留下后果。"
+    },
+    "lose": {
+      "flags": {
+        "scene.f09.result": "lose"
+      },
+      "rewards": [],
+      "text": "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。",
+      "fixedCosts": [
+        {
+          "id": "cold",
+          "target": "pc",
+          "effect": "wound.cold",
+          "statuses": [
+            {
+              "status": "wound.cold"
+            }
+          ]
+        },
+        {
+          "id": "fright",
+          "target": "suli",
+          "effect": "wound.fright",
+          "statuses": [
+            {
+              "status": "wound.fright"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "rewardPolicy": {
+    "itemIds": []
+  },
+  "levelContext": {
+    "chapter": 84,
+    "nonLevelPartyIds": [
+      "yinsha",
+      "yang",
+      "woman"
+    ]
+  },
+  "continuity": {
+    "facts": [
+      "一阳突破所有分支发生；阴煞只退不灭；不以刀兵作为本场出手依据。"
+    ]
+  },
+  "settings": {
+    "allowPlayerHarmAllies": true,
+    "judgement": {
+      "action": "cultivate",
+      "defense": "cultivate"
+    }
+  },
+  "redLines": [
+    {
+      "party": "yinsha",
+      "track": "repel",
+      "forbiddenFinalState": "死亡"
+    }
+  ],
+  "clock": {
+    "fixedEvents": [
+      {
+        "id": "unrescued-woman",
+        "atClose": true,
+        "when": {
+          "kind": "not",
+          "cond": {
+            "party": "woman",
+            "track": "safe",
+            "reach": "已获救"
+          }
+        },
+        "text": "没能救下那名花苗女子，小魏失去相好的悲伤留下。",
+        "effects": [
+          {
+            "setTrack": {
+              "party": "woman",
+              "track": "safe",
+              "to": "未能救下"
+            }
+          },
+          {
+            "status": {
+              "party": "xiaowei",
+              "status": "wound.fright"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

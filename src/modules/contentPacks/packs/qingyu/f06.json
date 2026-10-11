@@ -1,0 +1,360 @@
+{
+  "meta": {
+    "id": "combat.f06.merfolk",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.haishen_hall_merfolk",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3,
+      "compatibleActionIds": [
+        "repel_merfolk_in_haishen_hall"
+      ],
+      "completionSceneByOutcome": {
+        "win": {
+          "dayPart": "夜",
+          "sceneLocation": "海神殿",
+          "cast": {
+            "present": [
+              "乐明珠"
+            ]
+          },
+          "fixedFacts": [
+            "鲛人已被制服或放走，乐明珠活着。你拿到珊瑚匕首；旧仇的对象仍无人解释。"
+          ],
+          "fallbackText": "鲛人已被制服或放走，乐明珠活着。你拿到珊瑚匕首；旧仇的对象仍无人解释。",
+          "factChecks": []
+        },
+        "lose": {
+          "dayPart": "夜",
+          "sceneLocation": "海神殿",
+          "cast": {
+            "present": [
+              "乐明珠"
+            ]
+          },
+          "fixedFacts": [
+            "你付出小腹伤与呛水的代价，乐明珠受伤但活着。鲛人退去，珊瑚匕首仍然到手。"
+          ],
+          "fallbackText": "你付出小腹伤与呛水的代价，乐明珠受伤但活着。鲛人退去，珊瑚匕首仍然到手。",
+          "factChecks": []
+        }
+      }
+    },
+    "source": "31号F06及W已定；P1-CONTENT-PACK-20261011",
+    "readiness": "ready"
+  },
+  "objective": {
+    "text": "在海神殿抵御鲛人，护住受困的乐明珠",
+    "win": {
+      "party": "merfolk",
+      "track": "vit",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "merfolk",
+      "side": "opposed",
+      "ref": "lcq.enemy.merfolk",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "逼近",
+            "受制",
+            "失去战力",
+            "被放走"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "失去战力",
+            "ceiling": 2,
+            "alternatives": [
+              "被放走"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "le",
+      "side": "player_side",
+      "ref": "liuchao.character.le_mingzhu",
+      "protected": true
+    }
+  ],
+  "goals": [
+    {
+      "id": "repel",
+      "label": "制服鲛人",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 11,
+      "targetIds": [
+        "merfolk"
+      ]
+    },
+    {
+      "id": "release",
+      "label": "制服后放走鲛人",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 11,
+      "finishAs": "被放走",
+      "targetIds": [
+        "merfolk"
+      ]
+    },
+    {
+      "id": "parley",
+      "label": "朱狐冠暴露前交涉",
+      "type": "support",
+      "baseDifficulty": 7,
+      "onSuccess": {
+        "tag": {
+          "id": "parley",
+          "label": "敌意降低",
+          "on": "scene",
+          "durationBeats": null,
+          "effect": {
+            "enemyDcBonus": -2
+          }
+        }
+      },
+      "when": {
+        "kind": "not",
+        "cond": {
+          "tag": "crest"
+        }
+      }
+    }
+  ],
+  "elements": [
+    {
+      "id": "shield",
+      "kind": "terrain",
+      "label": "水下锈铜盾",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "algae",
+      "kind": "terrain",
+      "label": "缠腕的海藻",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "horn",
+      "kind": "terrain",
+      "label": "金角海蛇角",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "fork",
+      "party": "merfolk",
+      "label": "骨叉扑击",
+      "target": "player",
+      "attack": {
+        "dc": 11
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      },
+      "onCrush": {
+        "margin": 5,
+        "statuses": [
+          {
+            "status": "wound.drowning"
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "flags": {
+        "scene.f06.result": "win"
+      },
+      "rewards": [
+        {
+          "type": "item",
+          "itemId": "liuchao.item.coral_dagger",
+          "quantity": 1
+        },
+        {
+          "itemId": "lcq.item.nh_golden_seasnake_horn",
+          "quantity": 1
+        },
+        {
+          "itemId": "lcq.item.nh_merfolk_scale_pouch",
+          "quantity": 1
+        }
+      ],
+      "text": "鲛人已被制服或放走，乐明珠活着。你拿到珊瑚匕首；旧仇的对象仍无人解释。"
+    },
+    "lose": {
+      "flags": {
+        "scene.f06.result": "lose"
+      },
+      "rewards": [
+        {
+          "type": "item",
+          "itemId": "liuchao.item.coral_dagger",
+          "quantity": 1
+        }
+      ],
+      "text": "你付出小腹伤与呛水的代价，乐明珠受伤但活着。鲛人退去，珊瑚匕首仍然到手。",
+      "fixedCosts": [
+        {
+          "id": "abdomen",
+          "target": "pc",
+          "effect": "wound.external",
+          "statuses": [
+            {
+              "status": "wound.external"
+            }
+          ]
+        },
+        {
+          "id": "lung",
+          "target": "pc",
+          "effect": "wound.drowning",
+          "statuses": [
+            {
+              "status": "wound.drowning"
+            }
+          ]
+        },
+        {
+          "id": "wrist",
+          "target": "le",
+          "effect": "wound.external",
+          "statuses": [
+            {
+              "status": "wound.external"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "rewardPolicy": {
+    "itemIds": [
+      "liuchao.item.coral_dagger",
+      "lcq.item.nh_golden_seasnake_horn",
+      "lcq.item.nh_merfolk_scale_pouch"
+    ]
+  },
+  "levelContext": {
+    "chapter": 74
+  },
+  "tags": [
+    {
+      "id": "parley",
+      "label": "敌意降低",
+      "on": "scene",
+      "durationBeats": null,
+      "effect": {
+        "enemyDcBonus": -2
+      }
+    },
+    {
+      "id": "crest",
+      "label": "朱狐冠已经暴露",
+      "on": "scene",
+      "durationBeats": null,
+      "effect": {
+        "text": "鲛人转为死斗"
+      }
+    }
+  ],
+  "narration": {
+    "requiredFacts": [
+      "乐明珠不死；朱狐冠暴露后进入死斗；不得解释鲛人二十年前旧仇所指。"
+    ]
+  },
+  "clock": {
+    "fixedEvents": [
+      {
+        "id": "crest-revealed",
+        "trigger": "afterAction",
+        "when": {
+          "kind": "not",
+          "cond": {
+            "tag": "crest"
+          }
+        },
+        "text": "朱狐冠暴露，鲛人认出冠上的标记，转为死斗。旧仇的对象仍无人解释。",
+        "effects": [
+          {
+            "tag": {
+              "id": "crest",
+              "label": "朱狐冠已经暴露",
+              "on": "scene",
+              "durationBeats": null,
+              "effect": {
+                "text": "鲛人转为死斗"
+              }
+            }
+          },
+          {
+            "tag": {
+              "id": "parley",
+              "label": "交涉效果结束",
+              "on": "scene",
+              "durationBeats": null,
+              "effect": {
+                "text": "朱狐冠暴露后交涉不再降低敌意"
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

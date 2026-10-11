@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "qingyu.core",
+  "contracts": [
+    "src/modules/sceneModule/contracts/f01.json",
+    "src/modules/sceneModule/contracts/f02.json",
+    "src/modules/sceneModule/contracts/f03.json",
+    "src/modules/sceneModule/contracts/f04.json",
+    "src/modules/sceneModule/contracts/f05.json",
+    "src/modules/sceneModule/contracts/f10.json",
+    "src/modules/sceneModule/contracts/f13.json",
+    "src/modules/sceneModule/contracts/f03-entry.json",
+    "f14.json",
+    "f06.json",
+    "f07.json",
+    "f08.json",
+    "f09.json",
+    "f07-geluo.json"
+  ],
+  "drafts": [],
+  "statuses": [],
+  "stages": [],
+  "overlays": [
+    "stage3-overlays.json"
+  ],
+  "questLines": [],
+  "entities": [],
+  "texts": "texts.json",
+  "playtests": "playtests.json",
+  "entries": "entries.json"
+}

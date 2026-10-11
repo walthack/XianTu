@@ -1,0 +1,440 @@
+{
+  "meta": {
+    "id": "combat.f07.biling_village",
+    "version": 1,
+    "scene": {
+      "kind": "combat"
+    },
+    "hook": {
+      "eventId": "lcq.event.biling_bay_stance",
+      "actionId": "advance_declared_objective",
+      "required": true,
+      "ambushAfterStall": 3,
+      "completionSceneByOutcome": {
+        "win": {
+          "dayPart": "夜",
+          "sceneLocation": "碧鲮海湾",
+          "cast": {
+            "present": [
+              "武二郎",
+              "凝羽",
+              "易彪",
+              "吴战威",
+              "谢艺",
+              "苏荔",
+              "阿夕"
+            ],
+            "exit": [
+              {
+                "name": "黑舌",
+                "status": "dead"
+              },
+              {
+                "name": "蛇傀",
+                "status": "dead"
+              }
+            ]
+          },
+          "fixedFacts": [
+            "火楼中的族人已获救，蛇傀与持械随从倒下，无人逃出回报。黑舌已经死了，原因未明。"
+          ],
+          "fallbackText": "火楼中的族人已获救，蛇傀与持械随从倒下，无人逃出回报。黑舌已经死了，原因未明。",
+          "factChecks": []
+        },
+        "lose": {
+          "dayPart": "夜",
+          "sceneLocation": "碧鲮海湾",
+          "cast": {
+            "present": [
+              "武二郎",
+              "凝羽",
+              "易彪",
+              "吴战威",
+              "谢艺",
+              "苏荔",
+              "阿夕"
+            ],
+            "exit": [
+              {
+                "name": "黑舌",
+                "status": "dead"
+              }
+            ]
+          },
+          "fixedFacts": [
+            "小津和族人烧伤，凝羽旧伤加重；有随从逃走，阁罗在入峒时会起疑。"
+          ],
+          "fallbackText": "小津和族人烧伤，凝羽旧伤加重；有随从逃走，阁罗在入峒时会起疑。",
+          "factChecks": []
+        }
+      }
+    },
+    "source": "31号F07及W已定；P1-CONTENT-PACK-20261011",
+    "readiness": "ready"
+  },
+  "objective": {
+    "text": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+    "win": {
+      "all": [
+        {
+          "party": "armed",
+          "track": "vit",
+          "reach": "final"
+        },
+        {
+          "party": "fire",
+          "track": "rescue",
+          "reach": "final"
+        },
+        {
+          "party": "exit",
+          "track": "seal",
+          "reach": "final"
+        }
+      ]
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "armed",
+      "side": "opposed",
+      "ref": "蛇傀与持械随从",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在战斗",
+            "被压制",
+            "全部倒下",
+            "被擒"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "全部倒下",
+            "ceiling": 2,
+            "alternatives": [
+              "被擒"
+            ]
+          }
+        }
+      ],
+      "group": {
+        "id": "lcq.group.shekui_armed",
+        "label": "蛇傀与持械随从"
+      }
+    },
+    {
+      "id": "fire",
+      "side": "opposed",
+      "ref": "火楼",
+      "tracks": [
+        {
+          "id": "rescue",
+          "kind": "progress",
+          "scale": [
+            "老弱受困",
+            "出口打开",
+            "族人脱险"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "族人脱险",
+            "ceiling": 2,
+            "alternatives": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "exit",
+      "side": "opposed",
+      "ref": "村口",
+      "tracks": [
+        {
+          "id": "seal",
+          "kind": "progress",
+          "scale": [
+            "有人可能逃走",
+            "封锁收紧",
+            "无人逃出"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "无人逃出",
+            "ceiling": 2,
+            "alternatives": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "xiaojin",
+      "side": "player_side",
+      "ref": "小津"
+    },
+    {
+      "id": "biling",
+      "side": "player_side",
+      "ref": "碧鲮族人",
+      "group": {
+        "id": "lcq.group.biling_villagers",
+        "label": "碧鲮族人"
+      }
+    },
+    {
+      "id": "ningyu",
+      "side": "player_side",
+      "ref": "liuchao.character.ning_yu"
+    }
+  ],
+  "goals": [
+    {
+      "id": "command",
+      "label": "分派人手制服持械敌人",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 11,
+      "targetIds": [
+        "armed"
+      ]
+    },
+    {
+      "id": "capture",
+      "label": "留活口",
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 11,
+      "finishAs": "被擒",
+      "targetIds": [
+        "armed"
+      ]
+    },
+    {
+      "id": "rescue",
+      "label": "打开火楼救人",
+      "type": "push",
+      "track": "rescue",
+      "baseDifficulty": 11,
+      "targetIds": [
+        "fire"
+      ]
+    },
+    {
+      "id": "seal",
+      "label": "守村口不让人逃",
+      "type": "push",
+      "track": "seal",
+      "baseDifficulty": 11,
+      "targetIds": [
+        "exit"
+      ]
+    },
+    {
+      "id": "stop_slaughter",
+      "label": "阻止滥杀奴隶",
+      "type": "support",
+      "baseDifficulty": 7,
+      "onSuccess": {
+        "tag": {
+          "id": "restraint",
+          "label": "阻止滥杀",
+          "on": "scene",
+          "durationBeats": null,
+          "effect": {
+            "text": "族人态度有所变化；不改变胜负"
+          }
+        }
+      }
+    }
+  ],
+  "elements": [
+    {
+      "id": "wuerlang",
+      "kind": "terrain",
+      "label": "武二郎突入",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "xieyi",
+      "kind": "terrain",
+      "label": "谢艺守村口",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "wall",
+      "kind": "terrain",
+      "label": "竹楼墙壁与出口",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    },
+    {
+      "id": "yibiao",
+      "kind": "terrain",
+      "label": "易彪与吴战威组织火力",
+      "source": "31号合同原著锚",
+      "verbs": [
+        {
+          "id": "use",
+          "power": 3
+        }
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "burn",
+      "party": "armed",
+      "label": "火楼伤亡加重",
+      "target": {
+        "party": "xiaojin"
+      },
+      "attack": {
+        "dc": 11
+      },
+      "when": {
+        "kind": "not",
+        "cond": {
+          "party": "fire",
+          "track": "rescue",
+          "reach": "final"
+        }
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.burn"
+          }
+        ]
+      }
+    },
+    {
+      "id": "attack",
+      "party": "armed",
+      "label": "持械随从反击指挥者",
+      "target": "player",
+      "attack": {
+        "dc": 11
+      },
+      "onHit": {
+        "statuses": [
+          {
+            "status": "wound.external"
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "flags": {
+        "scene.f07.result": "win"
+      },
+      "rewards": [],
+      "text": "火楼中的族人已获救，蛇傀与持械随从倒下，无人逃出回报。黑舌已经死了，原因未明。"
+    },
+    "lose": {
+      "flags": {
+        "scene.f07.result": "lose",
+        "lcq.f07.escaped": true
+      },
+      "rewards": [],
+      "text": "小津和族人烧伤，凝羽旧伤加重；有随从逃走，阁罗在入峒时会起疑。",
+      "fixedCosts": [
+        {
+          "id": "burn",
+          "target": "xiaojin",
+          "effect": "wound.burn",
+          "statuses": [
+            {
+              "status": "wound.burn"
+            }
+          ]
+        },
+        {
+          "id": "group-burn",
+          "target": "biling",
+          "effect": "wound.burn",
+          "statuses": [
+            {
+              "status": "wound.burn"
+            }
+          ]
+        },
+        {
+          "id": "old-wound",
+          "target": "ningyu",
+          "effect": "wound.external",
+          "statuses": [
+            {
+              "status": "wound.external"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "rewardPolicy": {
+    "itemIds": []
+  },
+  "levelContext": {
+    "chapter": 80,
+    "nonLevelPartyIds": [
+      "armed",
+      "fire",
+      "exit",
+      "xiaojin",
+      "biling"
+    ]
+  },
+  "tags": [
+    {
+      "id": "restraint",
+      "label": "阻止滥杀",
+      "on": "scene",
+      "durationBeats": null,
+      "effect": {
+        "text": "族人态度有所变化；不改变胜负"
+      }
+    }
+  ],
+  "narration": {
+    "requiredFacts": [
+      "没有鬼武士，只有蛇傀、持械随从与奴隶。黑舌仅写已经死了；不解释死因或凶手。阻止滥杀只影响态度，不改变胜负。"
+    ]
+  }
+}

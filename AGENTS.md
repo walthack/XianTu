@@ -45,3 +45,9 @@
 - 年龄不明、年龄存在冲突，或带 `AGE_PROTECTED` 的信息未核实时，禁止成人化处理；任何 `AGE_PROTECTED`、`AFF_PROTECTED`、`DEBUT_PROTECTED`、`USER_CANON` 字段仍以人工裁定为最高权威，不得被 Grok 输出覆盖。
 - 不委托或制作涉及未成年人的性内容、胁迫性性行为的色情化表达或性剥削内容。成人角色的产出仍须服从人物人格、阶段状态、知识权限、关系边界与世界事实，不能以“成人模式”为由绕开正典。
 - Grok 结果只作为外部草稿／第二意见，Codex 必须复核年龄、同意、正典一致性与内容边界；涉及 canon 或核心 prompt 的正式改动，仍须遵守裁定簿解锁、`npm run canon:build` 全绿及本文件的提交纪律。每次调用可能消耗用户的 Grok 额度或产生费用。
+
+## 内容包与核心文件冻结（2026-10-11 用户P1授权）
+
+- 新战斗、试玩范围/入口与固定文案先交付`src/modules/contentPacks/packs/*/manifest.json`及JSON资产，不逐个增加TS注册、事件id或角色分支；格式见`docs/handoffs/2026-10-11/CONTENT-PACK-CONTRACT.md`。
+- `src/modules/scenarioMods/runtime.ts`与`src/utils/AIBidirectionalSystem.ts`冻结为bugfix-only：改动必须对应可复现缺陷；不以新增内容为由追加分支。新通用规则进入sceneModule/host或合同字段，明确前置/结算/回归边界。
+- `generated/catalog.json`是构建产物，只由content-packs编译器写；草稿/待裁定合同不启用。已有保护字段与canon裁定纪律仍适用。

@@ -1,0 +1,84 @@
+[
+  {
+    "id": "qingyu",
+    "extensionKey": "清羽记开局",
+    "kind": "qingyu-demo-v1",
+    "startModId": "lcq.stage_01",
+    "endModId": "lcq.stage_02",
+    "endEventId": "lcq.event.baihu_shangguan_escape",
+    "eventIds": [
+      "lcq.event.s01_01",
+      "lcq.event.s01_02",
+      "lcq.event.s01_03",
+      "lcq.event.s01_04",
+      "lcq.event.s01_06",
+      "lcq.event.s01_05",
+      "lcq.event.s02_01",
+      "lcq.event.s02_03",
+      "lcq.event.s02_02",
+      "lcq.event.s02_04",
+      "lcq.event.s02_05",
+      "lcq.event.s02_06",
+      "lcq.event.ningyu_enters_gamble",
+      "lcq.event.sudaji_south_pact",
+      "lcq.event.gamble_bond_signed",
+      "lcq.event.charge_sudaji_fee",
+      "lcq.event.free_ajiman",
+      "lcq.event.baihu_shangguan_escape"
+    ],
+    "scope": "lcq.stage_01-lcq.stage_02/s01_01-baihu_shangguan_escape",
+    "characterId": "char_qingyu_opening_playtest_v1",
+    "slot": "清羽记开局",
+    "openingTextId": "qingyu.opening",
+    "stageOpeningTextIds": {
+      "lcq.stage_02": "qingyu.stage02.opening"
+    },
+    "autoStallTurns": 3,
+    "timerWeaveEventIds": [
+      "lcq.event.s01_01",
+      "lcq.event.s01_02"
+    ]
+  },
+  {
+    "id": "nanhuang-1",
+    "extends": "qingyu",
+    "endModId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "endEventId": "lcq.event.enter_dong_with_migu",
+    "scope": "lcq.stage_01-enter_dong_with_migu"
+  },
+  {
+    "id": "nanhuang-2",
+    "extends": "qingyu",
+    "endModId": "lcq.stage_05b",
+    "endEventId": "lcq.event.shanghou_cures_ice_gu",
+    "scope": "lcq.stage_01-shanghou_cures_ice_gu"
+  },
+  {
+    "id": "landing",
+    "extensionKey": "星月湖落地连续试玩",
+    "kind": "xingyuehu-landing-through-v1",
+    "startModId": "lcq.stage_01",
+    "endModId": "lcq.stage_02",
+    "endEventId": "lcq.event.baihu_shangguan_escape",
+    "eventIds": [
+      "lcq.event.s01_01",
+      "lcq.event.s01_02",
+      "lcq.event.s01_03",
+      "lcq.event.s01_04",
+      "lcq.event.s01_06",
+      "lcq.event.s01_05",
+      "lcq.event.s02_01",
+      "lcq.event.s02_03",
+      "lcq.event.s02_02",
+      "lcq.event.s02_04",
+      "lcq.event.s02_05",
+      "lcq.event.s02_06",
+      "lcq.event.ningyu_enters_gamble",
+      "lcq.event.sudaji_south_pact",
+      "lcq.event.gamble_bond_signed",
+      "lcq.event.charge_sudaji_fee",
+      "lcq.event.free_ajiman",
+      "lcq.event.baihu_shangguan_escape"
+    ]
+  }
+]

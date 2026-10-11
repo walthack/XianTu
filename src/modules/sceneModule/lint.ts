@@ -211,7 +211,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
     if(!event.id)err('clock.fixedEvents：缺少事件id');
     if(fixedIds.has(event.id))err(`clock.fixedEvents：重复事件 ${event.id}`);fixedIds.add(event.id);
     if(event.when)checkConds(event.when,`clock.fixedEvents.${event.id}.when`);
-    if(event.when && (event.atBeat!==undefined || event.onStart || event.atClose))err(`clock.fixedEvents.${event.id}：条件触发不能同时写拍数/开场/收束`);
+    if(event.when && (event.atBeat!==undefined || event.onStart))err(`clock.fixedEvents.${event.id}：条件触发不能同时写拍数/开场/收束`);
     if(event.trigger && !['beatStart','afterAction','beforeEnemyAction','afterEnemyAction'].includes(event.trigger))err(`clock.fixedEvents.${event.id}：未知 trigger`);
     if(event.trigger && !event.when)err(`clock.fixedEvents.${event.id}：trigger 必须有 when`);
     if(event.enemyActionId && (!['beforeEnemyAction','afterEnemyAction'].includes(event.trigger || '') || !contract.enemyActions?.some(a=>a.id===event.enemyActionId)))err(`clock.fixedEvents.${event.id}：enemyActionId 必须引用敌方动作并指定敌方触发节点`);
@@ -275,7 +275,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
       else if ('rotate' in t) t.rotate.forEach(id => knownParty(id, `${where}.target`));
       else if (!['player_side', 'opposed', 'neutral', 'third'].includes(t.each)) err(`${where}.target.each 不是合法阵营`);
     }
-    if (!action.onHit?.statuses?.length) err(`${where}：onHit.statuses 为空（没挡住要给具体的人挂具体状态）`);
+    if (!action.onHit?.statuses?.length && !action.onHit?.trackShifts?.length) err(`${where}：onHit.statuses 为空（没挡住要给具体的人挂具体状态）`);
     for (const ref of [...(action.onHit?.statuses || []), ...(action.onCrush?.statuses || [])]) needStatus(ref.status, where);
     if (action.when) checkConds(action.when, `${where}.when`);
   }
@@ -327,6 +327,8 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
     if (!['scene', 'player_side', 'opposed', 'neutral', 'third'].includes(tag.on) && !partyIds.has(tag.on)) err(`tags.${tag.id}：on“${tag.on}”不是参与方、阵营或 scene`);
   }
   for (const goal of goalsOf(contract)) {
+    if(goal.when)checkConds(goal.when,`goals.${goal.id}.when`);
+    for(const id of goal.targetIds||[])knownParty(id,`goals.${goal.id}.targetIds`);
     if (typeof goal.baseDifficulty !== 'number') err(`goals.${goal.id}：缺 baseDifficulty`);
     if (goal.onSuccess?.tag && !goal.onSuccess.tag.id) err(`goals.${goal.id}.onSuccess.tag 缺 id`);
   }

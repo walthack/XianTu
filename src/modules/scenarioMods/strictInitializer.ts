@@ -1,3 +1,4 @@
+import {overlayPackPlaytestOpening} from '../contentPacks';
 import {levelOf} from '../../utils/realmUtils';
 import {initializeLevel} from './levelProgression';
 import {canonicalEntityId} from './namedEntities';
@@ -346,6 +347,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     mod = overlayXingyuehuLandingPlaytestStage(mod);
   }
 
+  mod=overlayPackPlaytestOpening(mod,(saveData as any)?.系统?.扩展);
   backfillRelationshipIds(saveData, rt.canon?.characters);
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
   // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；

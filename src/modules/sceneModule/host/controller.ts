@@ -6,11 +6,11 @@ import { advanceScenarioRuntime, getCurrentStoryEventActions, recordStoryEventSt
 import { interrogationMaterial, interrogationChapter, wantsInterrogation } from './information';
 import { validateProposal } from '../plan';
 import { restoreSceneInjuries } from './injuries';
-import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS } from '@/modules/scenarioMods/fixedEndingNarratives';
+import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS, applyStepSceneLedger } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { advanceClock } from '@/modules/scenarioMods/travel/travelLedger';
 import { applyPlayerChoice, beginScene, buildSceneBrief, closeScene, confirmAction, matchPlayerChoice, previewAction, renderResultLines, classifyByRules, resolveInputPolicy, route, appendInput, type Contract } from '../index';
-import { sceneContractById, sceneContractForEvent } from '../contracts/registry';
+import { sceneContractById, sceneContractForEvent, sceneContractSupportsAction } from '../contracts/registry';
 import { activeScene, cloneSave, newActive, readExt, sceneModuleEnabled, writeExt, type ActiveScene } from './ext';
 import { sceneContext, snapshotLevels } from './factors';
 import { partyName, renderRefs, runtimeOf } from './refs';
@@ -43,7 +43,7 @@ export function sceneCandidate(save: SaveData, selected?: { eventId?: string; ac
   const actions = getCurrentStoryEventActions(save);
   const selection = actions.find(action => {
     const c = sceneContractForEvent(action.eventId,runtimeOf(save)?.flags);
-    return c && action.actionId === c.meta.hook.actionId && (!selected?.eventId || selected.eventId === action.eventId);
+    return c && sceneContractSupportsAction(c,action.actionId) && (!selected?.eventId || selected.eventId === action.eventId);
   });
   const contract = selection && sceneContractForEvent(selection.eventId,runtimeOf(save)?.flags);
   return contract && selection ? { contract, selection } : undefined;
@@ -177,9 +177,11 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     const fixed=fixedEndingNarrative(runtimeOf(save).gameOver);appendHistory(save,(fixed || [endingBridge('',id),a.closing.text].join('\n\n')),'',endingPresentation(runtimeOf(save).gameOver).image);
   } else {
     // The engine checks the persisted CLOSED state, event/action and contract version before honoring this completion.
+    const receiptScene=c.meta.hook.completionSceneByOutcome?.[closed.writeBack.outcome.kind as 'win'|'lose'];
     const selection=getCurrentStoryEventActions(save).find(s=>s.eventId===a.eventId&&s.actionId===a.actionId);
     if(!selection)throw new Error('场面收束对应的剧情动作已过期');
-    const settled=recordStoryEventStructuredAction(save,selection);if(!settled.attempted)throw new Error('场面剧情收束未成立：'+settled.reason);
+    const settled=recordStoryEventStructuredAction(save,selection);if(!settled.attempted || (receiptScene && !settled.completed))throw new Error('场面剧情收束未成立：'+settled.reason);
+    if(receiptScene)applyStepSceneLedger(save,runtimeOf(save),a.eventId,a.actionId,receiptScene as Parameters<typeof applyStepSceneLedger>[4]);
     const terminal=closed.writeBack.finalStates.filter(row=>c.parties.find(p=>p.id===row.party)?.side==='opposed').map(row=>`${partyName(c,runtimeOf(save),row.party)}：${row.label}`);
     appendHistory(save,[a.closing.text,...written.notes,...terminal].join('\n'));
   }

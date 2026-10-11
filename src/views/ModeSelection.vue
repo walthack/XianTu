@@ -65,20 +65,14 @@
           <Library :size="18" />
           <span>剧本模组</span>
         </button>
-        <button class="btn-ghost demo-entry" data-testid="open-xingyuehu-quest-playtest" @click="openXingyuehuQuestPlaytest">
-          <Moon :size="18" />
-          <span>星月湖任务线试玩</span>
+        <button v-for="entry in primaryEntries" :key="entry.id" class="btn-ghost demo-entry" :data-testid="entry.testId" @click="router.push(entry.playtestId ? {path:entry.route,query:{pack:entry.playtestId}} : entry.route)">
+          <component :is="entryIcons[entry.icon]" :size="18" /><span>{{ entry.label }}</span>
         </button>
         <details class="legacy-playtests" data-testid="legacy-playtests">
           <summary>历史试玩／开发测试</summary>
           <div class="legacy-playtest-actions">
-            <button class="btn-ghost demo-entry" data-testid="open-world-sim-playtest" @click="openWorldSimulationPlaytest">
-              <Orbit :size="18" />
-              <span>六朝世界试玩</span>
-            </button>
-            <button class="btn-ghost demo-entry" data-testid="open-qingyu-opening-playtest" @click="openQingyuOpeningPlaytest">
-              <Feather :size="18" />
-              <span>清羽记开局</span>
+            <button v-for="entry in legacyEntries" :key="entry.id" class="btn-ghost demo-entry" :data-testid="entry.testId" @click="router.push(entry.playtestId ? {path:entry.route,query:{pack:entry.playtestId}} : entry.route)">
+              <component :is="entryIcons[entry.icon]" :size="18" /><span>{{ entry.label }}</span>
             </button>
           </div>
         </details>
@@ -88,11 +82,15 @@
 </template>
 
 <script setup lang="ts">
+import {CONTENT_PACKS} from '@/modules/contentPacks';
 import VideoBackground from '@/components/common/VideoBackground.vue';
 import { Sparkles, History, User, Check, Library, Orbit, Feather, Moon } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
 const displayVersion = APP_VERSION;
+const primaryEntries=CONTENT_PACKS.entries.filter(e=>e.group==='primary');
+const legacyEntries=CONTENT_PACKS.entries.filter(e=>e.group==='legacy');
+const entryIcons={Moon,Orbit,Feather};
 
 const emit = defineEmits<{
   (e: 'start-creation', mode: 'single'): void;
@@ -113,17 +111,6 @@ const openScenarioMods = () => {
   router.push('/scenario-mods');
 };
 
-const openWorldSimulationPlaytest = () => {
-  router.push('/world-sim-playtest');
-};
-
-const openQingyuOpeningPlaytest = () => {
-  router.push('/qingyu-opening-playtest');
-};
-
-const openXingyuehuQuestPlaytest = () => {
-  router.push('/xingyuehu-quest-playtest');
-};
 </script>
 
 <style scoped>

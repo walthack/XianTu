@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "id": "encounter.f07.geluo_suspicion",
+    "version": 1,
+    "scene": {
+      "kind": "social"
+    },
+    "hook": {
+      "eventId": "lcq.event.blank_letter_and_dagu",
+      "actionId": "face_xiaozi_dagu_reveal",
+      "requiredFlag": "lcq.f07.escaped",
+      "consumedFlag": "lcq.f07.geluo_checked",
+      "required": false
+    },
+    "source": "31号W21：第87章有逃兵则阁罗起疑，加过关检定，不改大走向"
+  },
+  "objective": {
+    "text": "接住阁罗的盘问，让商队继续通行",
+    "win": {
+      "party": "gate",
+      "track": "answer",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "gate",
+      "side": "opposed",
+      "ref": "阁罗的盘问",
+      "tracks": [
+        {
+          "id": "answer",
+          "kind": "progress",
+          "scale": [
+            "仍有疑问",
+            "说法被接受"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "说法被接受",
+            "ceiling": 1
+          }
+        },
+        {
+          "id": "suspicion",
+          "kind": "progress",
+          "scale": [
+            "起疑",
+            "追问",
+            "怀疑加深"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "怀疑加深",
+            "ceiling": 2
+          }
+        }
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "id": "explain",
+      "label": "解释商队来意",
+      "type": "push",
+      "track": "answer",
+      "baseDifficulty": 11,
+      "targetIds": [
+        "gate"
+      ]
+    }
+  ],
+  "elements": [
+    {
+      "id": "trade",
+      "kind": "fact",
+      "label": "商队货物与送亲身份",
+      "source": "31号W21与第87章",
+      "verbs": [
+        {
+          "id": "explain",
+          "power": 3
+        }
+      ]
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "question",
+      "party": "gate",
+      "label": "追问逃兵消息",
+      "target": "player",
+      "attack": {
+        "dc": 11
+      },
+      "onHit": {
+        "statuses": [],
+        "trackShifts": [
+          {
+            "party": "gate",
+            "track": "suspicion",
+            "steps": 1
+          }
+        ]
+      }
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "party": "gate",
+        "track": "suspicion",
+        "reach": "final"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "text": "你接住阁罗的追问，商队继续通行。",
+      "flags": {
+        "lcq.f07.geluo_checked": true,
+        "lcq.f07.geluo_suspicious": false
+      }
+    },
+    "lose": {
+      "text": "阁罗仍怀疑商队的说法，眼下仍让商队通行；这份怀疑已留下。",
+      "flags": {
+        "lcq.f07.geluo_checked": true,
+        "lcq.f07.geluo_suspicious": true
+      }
+    }
+  },
+  "settings": {
+    "judgement": {
+      "action": "social",
+      "defense": "social"
+    }
+  },
+  "levelContext": {
+    "chapter": 87,
+    "nonLevelPartyIds": [
+      "gate"
+    ]
+  },
+  "rewardPolicy": {
+    "itemIds": []
+  }
+}

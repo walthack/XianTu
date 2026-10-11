@@ -587,6 +587,7 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
   for (const event of contract.clock?.fixedEvents || []) {
     if (outcome.choiceId) continue;
     if (!event.atClose || state.firedEvents.includes(event.id)) continue;
+    if(event.when&&!evalExpr(event.when,contract,state,ctx))continue;
     state.firedEvents.push(event.id);
     statusEvents.push(...applyEffects(contract, state, ctx, event.effects, `event:${event.id}`));
     events.push({ id: event.id, text: event.text });

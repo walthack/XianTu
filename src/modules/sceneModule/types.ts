@@ -183,6 +183,8 @@ export interface TagDef {
 }
 
 export interface GoalDef {
+  when?: Cond | Expr;
+  targetIds?: string[];
   onFailure?: Consequence[];
   availability?: { fromBeat?: number; untilBeat?: number };
   defensePenalty?: number;
@@ -345,6 +347,7 @@ export interface BeatDef {
 }
 
 export interface SceneSettings {
+  judgement?: {action:'combat'|'cultivate'|'craft'|'explore'|'social'|'escape'|'stealth'|'scheme';defense:'combat'|'cultivate'|'craft'|'explore'|'social'|'escape'|'stealth'|'scheme'};
   tiers?: {
     critSuccessMargin?: number;
     critFailMargin?: number;
@@ -373,7 +376,7 @@ export interface Contract {
     version: number;
     compatibleStateVersions?: number[];
     scene: { kind: string };
-    hook: { eventId?: string; actionId?: string; required?: boolean; ambushAfterStall?: number; requiredFlag?: string; escapeFlag?: string; escapeState?: string; consumedFlag?: string; pendingDefeat?: boolean; inputPolicy?: Record<string, unknown> };
+    hook: { eventId?: string; actionId?: string; compatibleActionIds?: string[]; completionSceneByOutcome?: Partial<Record<'win'|'lose', {fixedFacts?:string[];fallbackText?:string;factChecks?:string[][];cast?:{present?:string[];exit?:{name:string;status:'dead'|'missing'|'departed'|'present'}[]};dayPart?:string;sceneLocation?:string;ledgerEffects?:Record<string,unknown>}>>; required?: boolean; ambushAfterStall?: number; requiredFlag?: string; escapeFlag?: string; escapeState?: string; consumedFlag?: string; pendingDefeat?: boolean; inputPolicy?: Record<string, unknown> };
   };
   objective: { text: string; phases?: Array<{ when: Cond | Expr; text: string }>; previewHint?: string; win: Expr | Cond };
   parties: PartyDef[];

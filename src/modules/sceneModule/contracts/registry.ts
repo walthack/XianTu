@@ -2,15 +2,7 @@ import {entityAliases,entityNamePattern,type NamedEntityKind} from '@/modules/sc
 import {contentName} from '@/modules/scenarioMods/entityCatalog';
 // 本场合同注册表：事件 id → 合同。合同是纯 JSON（剧情策划维护），共用的本书临时状态定义在 statuses.json。
 // 这里不写任何人名；合同里的角色一律是角色库 id 或字面标签。
-import f01 from './f01.json';
-import f02 from './f02.json';
-import f04 from './f04.json';
-import f05 from './f05.json';
-import f03 from './f03.json';
-import f10 from './f10.json';
-import f13 from './f13.json';
-import f03Entry from './f03-entry.json';
-import f14Draft from './f14.draft.json';
+import { CONTENT_PACKS } from '../../contentPacks';
 import { BUILTIN_STATUSES, STATUS_CATALOG } from '../statuses';
 import { GAME_NUMBERS, applyGameNumbers } from '../numbers';
 import { lintContract } from '../lint';
@@ -29,13 +21,15 @@ function withSharedStatuses(raw: unknown): Contract {
   return contract;
 }
 
+export function registerSceneContracts(contracts:unknown[]):Contract[]{return contracts.map(withSharedStatuses);}
+
 // Drafts are linted but never selected by the game until the remaining author decisions are resolved.
-export const SCENE_CONTRACT_DRAFTS: Contract[] = [f14Draft].map(withSharedStatuses);
+export const SCENE_CONTRACT_DRAFTS: Contract[] = CONTENT_PACKS.drafts.map(withSharedStatuses);
 
-export const SCENE_CONTRACTS: Contract[] = [f01, f02, f03, f04, f05, f10, f13, f03Entry].map(withSharedStatuses);
+export const SCENE_CONTRACTS: Contract[] = registerSceneContracts(CONTENT_PACKS.contracts);
 
-export function sceneContractForEvent(eventId: string | undefined, flags: Record<string, unknown> = {}): Contract | undefined {
-  return eventId ? SCENE_CONTRACTS.find(contract => contract.meta.hook.eventId === eventId
+export function sceneContractForEvent(eventId: string | undefined, flags: Record<string, unknown> = {},contracts:Contract[]=SCENE_CONTRACTS): Contract | undefined {
+  return eventId ? contracts.find(contract => contract.meta.hook.eventId === eventId
     && (!contract.meta.hook.requiredFlag || flags[contract.meta.hook.requiredFlag] === true)
     && (!contract.meta.hook.consumedFlag || flags[contract.meta.hook.consumedFlag] !== true)) : undefined;
 }
@@ -160,3 +154,5 @@ export function applyTuning(tuning: unknown): { ok: boolean; errors: string[]; c
   for (const [list, defs] of statusNext) for (const [index, def] of defs) list[index] = def;
   return { ok: true, errors: [], contracts: [...next.values()].map(contract => contract.meta.id) };
 }
+
+export function sceneContractSupportsAction(contract:Contract,actionId:string):boolean {return actionId===contract.meta.hook.actionId || (contract.meta.hook.compatibleActionIds||[]).includes(actionId);}
