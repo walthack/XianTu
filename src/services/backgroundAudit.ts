@@ -1,3 +1,4 @@
+import { currentDiagnosticTurnId, diagnosticContext, reserveDiagnosticBackground, noteDiagnosticCancellation } from './requestLifecycleDiagnostics';
 import { watch } from 'vue';
 import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
@@ -18,6 +19,7 @@ import {
  */
 const auditDefinition = GAME_MODEL_MODULES.find(item => item.id === 'audit')!;
 let idleTimer: ReturnType<typeof setTimeout> | undefined;
+let releaseScheduledDiagnostic: (() => void) | undefined;
 let inFlight: { controller: AbortController; stopWatch: () => void } | null = null;
 
 function storage() {
@@ -27,7 +29,9 @@ function storage() {
 /** 前台开始时调用：取消在途审计。 */
 export function yieldBackgroundAudit(): void {
   clearTimeout(idleTimer); idleTimer = undefined;
+  releaseScheduledDiagnostic?.(); releaseScheduledDiagnostic = undefined;
   if (!inFlight) return;
+  noteDiagnosticCancellation(inFlight.controller.signal, 'foreground_yield');
   inFlight.controller.abort();
   inFlight.stopWatch();
   inFlight = null;
@@ -51,71 +55,80 @@ function summarizeState(save: any): Record<string, unknown> {
 }
 
 /** 前台提交并存档后调用；只在检查点、开关开启、预算内、前台空闲时发起。 */
-export function scheduleBackgroundAudit(): void {
+export function scheduleBackgroundAudit(diagnosticTurnId = currentDiagnosticTurnId()): void {
   clearTimeout(idleTimer);
-  idleTimer = setTimeout(() => { idleTimer = undefined; runIdleAudit(); }, 5000);
+  releaseScheduledDiagnostic?.();
+  const release = reserveDiagnosticBackground(diagnosticTurnId);
+  releaseScheduledDiagnostic = release;
+  idleTimer = setTimeout(() => { idleTimer = undefined; releaseScheduledDiagnostic = undefined; runIdleAudit(diagnosticTurnId, release); }, 5000);
 }
 
-function runIdleAudit(): void {
-  if (inFlight || useUIStore().isAIProcessing) return;
-  if (!isGameModuleEnabled(auditDefinition)) return;
-  const store = storage();
-  if (!store) return;
-  const active = useCharacterStore().rootState.当前激活存档;
-  if (!active?.角色ID || !active?.存档槽位) return;
-  const slotKey = `${active.角色ID}:${active.存档槽位}`;
-  const save: any = useGameStateStore().toSaveData();
-  const narrative: string[] = (save?.系统?.历史?.叙事 || [])
-    .filter((item: any) => item?.type === 'gm' && typeof item?.content === 'string' && item.content.trim())
-    .map((item: any) => item.content);
-  const modId: string | undefined = save?.世界?.状态?.剧本模组?.modId;
-  const state = readAuditState(store);
-  const slot = state.slots[slotKey];
-  if (!slot) {
-    // 首次见到该档：从当前进度起算，不回审历史。
-    state.slots[slotKey] = { auditedTurns: Math.max(0, narrative.length - 1), modId };
-    writeAuditState(store, state);
-    return;
-  }
-  if (!isAuditCheckpoint(slot, narrative.length, modId)) return;
-  const now = Date.now();
-  if (!withinHourlyBudget(state.calls, now)) return;
-  const turns = selectAuditTurns(narrative, slot.auditedTurns);
-  if (!turns.length) return;
-  state.calls = [...state.calls.filter(at => now - at < 3600_000), now];
-  writeAuditState(store, state);
-
-  const controller = new AbortController();
-  const stopWatch = watch(() => useUIStore().isAIProcessing, busy => { if (busy) yieldBackgroundAudit(); });
-  inFlight = { controller, stopWatch };
-  const started = Date.now();
-  const id = `audit_${now}_${Math.random().toString(36).slice(2, 8)}`;
-  const range: [number, number] = [turns[0].turn, turns[turns.length - 1].turn];
-  const finish = (entry: Omit<AuditLogEntry, 'id' | 'at' | 'slotKey' | 'modId' | 'turns' | 'elapsedMs'>) => {
-    appendAuditLog(store, { id, at: new Date().toISOString(), slotKey, modId, turns: range, elapsedMs: Date.now() - started, ...entry });
-    const latest = readAuditState(store);
-    latest.slots[slotKey] = { auditedTurns: range[1], modId };
-    writeAuditState(store, latest);
-  };
-  void (async () => {
-    const instruction = (await getPrompt('backgroundAuditInstruction')).trim() || BACKGROUND_AUDIT_INSTRUCTION_PROMPT;
-    return runGameModelModule('audit', {
-      system: instruction, input: buildAuditInput(turns, summarizeState(save)), generationId: id, signal: controller.signal,
-    });
-  })().then(({ raw, route }) => {
-    if (controller.signal.aborted) return;
-    try {
-      const { findings, rejected } = validateAuditFindings(raw, turns);
-      finish({ status: 'accepted', route, findings, rejectedFindings: rejected });
-    } catch (error) {
-      finish({ status: 'rejected', route, findings: [], rejectedFindings: 0, error: String((error as Error).message).slice(0, 200) });
+function runIdleAudit(diagnosticTurnId: string | null, releaseDiagnostic: () => void): void {
+  let launched = false;
+  try {
+    if (inFlight || useUIStore().isAIProcessing) return;
+    if (!isGameModuleEnabled(auditDefinition)) return;
+    const store = storage();
+    if (!store) return;
+    const active = useCharacterStore().rootState.当前激活存档;
+    if (!active?.角色ID || !active?.存档槽位) return;
+    const slotKey = `${active.角色ID}:${active.存档槽位}`;
+    const save: any = useGameStateStore().toSaveData();
+    const narrative: string[] = (save?.系统?.历史?.叙事 || [])
+      .filter((item: any) => item?.type === 'gm' && typeof item?.content === 'string' && item.content.trim())
+      .map((item: any) => item.content);
+    const modId: string | undefined = save?.世界?.状态?.剧本模组?.modId;
+    const state = readAuditState(store);
+    const slot = state.slots[slotKey];
+    if (!slot) {
+      // 首次见到该档：从当前进度起算，不回审历史。
+      state.slots[slotKey] = { auditedTurns: Math.max(0, narrative.length - 1), modId };
+      writeAuditState(store, state);
+      return;
     }
-  }).catch(error => {
-    if (controller.signal.aborted) return; // 让路取消：不记已审，下个检查点重来
-    finish({ status: 'failed', route: error?.moduleModelRoute, findings: [], rejectedFindings: 0, error: String((error as Error)?.message || error).slice(0, 200) });
-  }).finally(() => {
-    if (inFlight?.controller === controller) { inFlight.stopWatch(); inFlight = null; }
-  });
+    if (!isAuditCheckpoint(slot, narrative.length, modId)) return;
+    const now = Date.now();
+    if (!withinHourlyBudget(state.calls, now)) return;
+    const turns = selectAuditTurns(narrative, slot.auditedTurns);
+    if (!turns.length) return;
+    state.calls = [...state.calls.filter(at => now - at < 3600_000), now];
+    writeAuditState(store, state);
+
+    const controller = new AbortController();
+    const stopWatch = watch(() => useUIStore().isAIProcessing, busy => { if (busy) yieldBackgroundAudit(); });
+    inFlight = { controller, stopWatch };
+    const started = Date.now();
+    const id = `audit_${now}_${Math.random().toString(36).slice(2, 8)}`;
+    const range: [number, number] = [turns[0].turn, turns[turns.length - 1].turn];
+    const finish = (entry: Omit<AuditLogEntry, 'id' | 'at' | 'slotKey' | 'modId' | 'turns' | 'elapsedMs'>) => {
+      appendAuditLog(store, { id, at: new Date().toISOString(), slotKey, modId, turns: range, elapsedMs: Date.now() - started, ...entry });
+      const latest = readAuditState(store);
+      latest.slots[slotKey] = { auditedTurns: range[1], modId };
+      writeAuditState(store, latest);
+    };
+    launched = true;
+    void (async () => {
+      const instruction = (await getPrompt('backgroundAuditInstruction')).trim() || BACKGROUND_AUDIT_INSTRUCTION_PROMPT;
+      return runGameModelModule('audit', {
+        diagnostics: diagnosticContext('audit', id, true, diagnosticTurnId),
+        system: instruction, input: buildAuditInput(turns, summarizeState(save)), generationId: id, signal: controller.signal,
+      });
+    })().then(({ raw, route }) => {
+      if (controller.signal.aborted) return;
+      try {
+        const { findings, rejected } = validateAuditFindings(raw, turns);
+        finish({ status: 'accepted', route, findings, rejectedFindings: rejected });
+      } catch (error) {
+        finish({ status: 'rejected', route, findings: [], rejectedFindings: 0, error: String((error as Error).message).slice(0, 200) });
+      }
+    }).catch(error => {
+      if (controller.signal.aborted) return; // 让路取消：不记已审，下个检查点重来
+      finish({ status: 'failed', route: error?.moduleModelRoute, findings: [], rejectedFindings: 0, error: String((error as Error)?.message || error).slice(0, 200) });
+    }).finally(() => {
+      releaseDiagnostic();
+      if (inFlight?.controller === controller) { inFlight.stopWatch(); inFlight = null; }
+    });
+  } finally { if (!launched) releaseDiagnostic(); }
 }
 
 export function getBackgroundAuditLog(): AuditLogEntry[] {

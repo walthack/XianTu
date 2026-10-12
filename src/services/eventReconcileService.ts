@@ -1,3 +1,4 @@
+import { diagnosticContext } from './requestLifecycleDiagnostics';
 import { statusNamePattern } from '../modules/sceneModule/statuses';
 
 import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
@@ -625,6 +626,7 @@ function buildReconcileUserPrompt(candidates: ChainCandidate[], memoryContext: s
  * 只写 世界.状态.剧本模组.flags 的事件 done/void 标记；不碰叙事/角色/背包/关系。
  */
 export async function runEventReconcile(input: EventReconcileInput): Promise<StateChange[]> {
+  const requestDiagnostics = diagnosticContext('event_reconcile', undefined, true);
   const runtime = get(input.saveData, '世界.状态.剧本模组') as {
     events?: RuntimeEventLike[]; completedEventIds?: string[]; flags?: Record<string, unknown>;
     modId?: string;
@@ -645,13 +647,15 @@ export async function runEventReconcile(input: EventReconcileInput): Promise<Sta
       const { getPrompt } = await import('@/services/defaultPrompts');
       const { aiService } = await import('@/services/aiService');
       const systemPrompt = await getPrompt('eventReconcile');
+      const generationId = `event_reconcile_${Date.now()}`;
       return aiService.generateRaw({
+        diagnostics: { ...requestDiagnostics, generationId },
         ordered_prompts: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: userPrompt },
         ],
         should_stream: false,
-        generation_id: `event_reconcile_${Date.now()}`,
+        generation_id: generationId,
         usageType: 'event_reconcile',
       });
     };

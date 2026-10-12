@@ -1,3 +1,4 @@
+import type { RequestDiagnosticContext } from './requestLifecycleDiagnostics';
 import { STATUS_CATALOG } from '../modules/sceneModule/statuses';
 /**
  * 向量记忆服务
@@ -329,11 +330,11 @@ class VectorMemoryService {
     }
   }
 
-  private async embedBatch(texts: string[]): Promise<{ vectors: number[][]; model: string } | null> {
+  private async embedBatch(texts: string[], diagnostics?: RequestDiagnosticContext): Promise<{ vectors: number[][]; model: string } | null> {
     const cfg = this.getEmbeddingRequestConfig();
     if (!cfg) return null;
     try {
-      const vecs = await createEmbeddings(cfg, texts);
+      const vecs = await createEmbeddings(cfg, texts, diagnostics);
       return { vectors: vecs.map(v => normalizeToUnitVector(v)), model: cfg.model };
     } catch (e) {
       console.warn('[长期检索] Embedding 批量生成失败，跳过向量写入:', e);
@@ -385,6 +386,7 @@ class VectorMemoryService {
   async rebuildFromLongTermMemories(
     memories: string[],
     options?: {
+      diagnostics?: RequestDiagnosticContext;
       importance?: number;
       batchSize?: number;
       onProgress?: (done: number, total: number) => void;
@@ -461,6 +463,7 @@ class VectorMemoryService {
   async syncFromLongTermMemories(
     memories: string[],
     options?: {
+      diagnostics?: RequestDiagnosticContext;
       importance?: number;
       batchSize?: number;
       onProgress?: (done: number, total: number) => void;
@@ -493,7 +496,7 @@ class VectorMemoryService {
 
     for (let i = 0; i < pending.length; i += batchSize) {
       const chunk = pending.slice(i, i + batchSize);
-      const embedded = await this.embedBatch(chunk);
+      const embedded = await this.embedBatch(chunk, options?.diagnostics);
       if (!embedded || embedded.vectors.length !== chunk.length) {
         throw new Error('Embedding 生成失败，长期检索索引未写入完整');
       }

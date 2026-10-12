@@ -1,3 +1,4 @@
+import { currentDiagnosticTurnId, diagnosticContext, reserveDiagnosticBackground, noteDiagnosticCancellation } from './requestLifecycleDiagnostics';
 import { filterLedgerMemory } from '@/modules/scenarioMods/ledger/guardFramework';
 import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
@@ -26,7 +27,7 @@ let persistQueue: Promise<unknown> = Promise.resolve();
 export function cancelModuleBackground(): void {
   epoch += 1;
   pending.length = 0;
-  for (const controller of controllers) controller.abort();
+  for (const controller of controllers) { noteDiagnosticCancellation(controller.signal, 'scope_change'); controller.abort(); }
   controllers.clear();
 }
 
@@ -67,7 +68,7 @@ function persist(item: PendingResult): void {
 }
 
 /** 前台提交并存档后调用：先落账排队结果，再为最新模块回执启动记忆整理。 */
-export function startModuleBackground(): void {
+export function startModuleBackground(diagnosticTurnId = currentDiagnosticTurnId()): void {
   const character = useCharacterStore();
   const state = useGameStateStore();
   if (!character.activeCharacterProfile?.隔离试玩信息?.localOnly || useUIStore().isAIProcessing) return;
@@ -94,9 +95,11 @@ export function startModuleBackground(): void {
   const controller = new AbortController();
   controllers.add(controller);
   const started = Date.now();
+  const releaseDiagnostic = reserveDiagnosticBackground(diagnosticTurnId);
   void (async () => {
     const instruction = (await getPrompt('moduleMemoryInstruction')).trim() || MODULE_MEMORY_INSTRUCTION_PROMPT;
     return runGameModelModule('memory', {
+      diagnostics: diagnosticContext('memory', `module_${receipt.id}_memory`, true, diagnosticTurnId),
       generationId: `module_${receipt.id}_memory`, signal: controller.signal, system: instruction,
       input: JSON.stringify(ledgerMemoryCandidates(receipt.text, memorySnapshot, receipt.guard)),
     });
@@ -105,5 +108,5 @@ export function startModuleBackground(): void {
     catch (error) { persist({ ...base, result: { status: 'rejected', route, error: String((error as Error).message), elapsedMs: Date.now() - started } }); }
   }).catch(error => {
     if (!controller.signal.aborted) persist({ ...base, result: { status: 'failed', route: error?.moduleModelRoute, error: String((error as Error)?.message || error).slice(0, 200), elapsedMs: Date.now() - started } });
-  }).finally(() => { jobs.delete(key); controllers.delete(controller); });
+  }).finally(() => { jobs.delete(key); controllers.delete(controller); releaseDiagnostic(); });
 }

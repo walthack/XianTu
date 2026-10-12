@@ -1,3 +1,5 @@
+import { diagnosticBusyChanged } from '@/services/requestLifecycleDiagnostics';
+import { peekActiveQingyuTurnId } from '@/services/qingyuTurnLongRequests';
 import { defineStore } from 'pinia';
 import { ref, shallowRef, computed, type Component } from 'vue';
 import { sanitizeAITextForDisplay, extractTextFromJsonResponse } from '@/utils/textSanitizer';
@@ -153,6 +155,7 @@ export const useUIStore = defineStore('ui', () => {
   }
 
   function setAIProcessing(value: boolean) {
+    diagnosticBusyChanged(value, peekActiveQingyuTurnId());
     isAIProcessing.value = value;
     // 同步持久化到sessionStorage
     if (value) {

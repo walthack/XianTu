@@ -11,6 +11,8 @@
  *    - 可为不同功能分配不同的API
  */
 import axios from 'axios';
+import { diagnosticAxiosGet, diagnosticAxiosPost, diagnosticFetch, observeStreamContent, finishStreamDiagnostic } from './diagnosticTransport';
+import { bindRequestDiagnosticContext, diagnosticContext, inheritDiagnosticCancellation, noteDiagnosticCancellation, requestDiagnosticContext, startRequestDiagnostic, type RequestDiagnosticContext } from './requestLifecycleDiagnostics';
 import { AiRequestTimeoutError, isAiRequestTimeout, withAiRequestDeadline } from './aiRequestDeadline';
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
@@ -114,6 +116,8 @@ export interface AIMessage {
 export interface GenerateOptions {
   /** 模块运行时固定的本次连接配置，不写回API管理，也不随重试重新路由。 */
   apiConfigOverride?: Readonly<DirectAPIConfig>;
+  /** Observational attribution only; never sent to the provider. */
+  diagnostics?: RequestDiagnosticContext;
   user_input?: string;
   ordered_prompts?: AIMessage[];
   should_stream?: boolean;
@@ -225,6 +229,7 @@ class AIService {
     if (!set) return;
     console.log('[AI服务] 取消指定回合请求', turnId);
     for (const controller of [...set]) {
+      noteDiagnosticCancellation(controller.signal, 'turn_cancel');
       controller.abort();
       this.releaseRequestController(controller);
     }
@@ -236,7 +241,7 @@ class AIService {
    */
   cancelAllRequests() {
     console.log('[AI服务] 取消所有请求');
-    for (const controller of this.activeAbortControllers) controller.abort();
+    for (const controller of this.activeAbortControllers) { noteDiagnosticCancellation(controller.signal, 'cancel_all'); controller.abort(); }
     this.activeAbortControllers.clear();
     this.turnAbortControllers.clear();
     const tavernHelper = this.getTavernHelper();
@@ -431,7 +436,7 @@ class AIService {
     if (!requested) return requested;
 
     try {
-      const response = await axios.get(`${baseUrl}/api/tags`, {
+      const response = await diagnosticAxiosGet(`${baseUrl}/api/tags`, {
         timeout: 10000,
         signal
       });
@@ -512,7 +517,7 @@ class AIService {
     };
 
     try {
-      const response = await axios.post(`${baseUrl}/api/chat`, requestBody, {
+      const response = await diagnosticAxiosPost(`${baseUrl}/api/chat`, requestBody, {
         headers: { 'Content-Type': 'application/json' },
         timeout: 120000,
         signal
@@ -574,7 +579,7 @@ class AIService {
           // 注意：官方Gemini使用查询参数，但某些中转服务可能使用Bearer token
           try {
             // 首先尝试使用查询参数方式（官方Gemini格式）
-            const response = await axios.get(`${baseUrl}/v1beta/models?key=${apiKey}`, {
+            const response = await diagnosticAxiosGet(`${baseUrl}/v1beta/models?key=${apiKey}`, {
               signal,
               timeout: 10000
             });
@@ -589,7 +594,7 @@ class AIService {
             if (axios.isAxiosError(error) && error.response?.status === 401) {
               console.warn('[AI服务] Gemini查询参数认证失败，尝试Bearer token方式');
               try {
-                const response = await axios.get(`${baseUrl}/v1beta/models`, {
+                const response = await diagnosticAxiosGet(`${baseUrl}/v1beta/models`, {
                   headers: { 'Authorization': `Bearer ${apiKey}` },
                   signal,
                   timeout: 10000
@@ -633,7 +638,7 @@ class AIService {
         case 'siliconflow-embedding': {
           // 硅基流动 Embedding 模型：使用 sub_type=embedding 过滤
           try {
-            const response = await axios.get(`${buildOpenAICompatibleEndpoint(baseUrl, 'models')}?sub_type=embedding`, {
+            const response = await diagnosticAxiosGet(`${buildOpenAICompatibleEndpoint(baseUrl, 'models')}?sub_type=embedding`, {
               headers: { 'Authorization': `Bearer ${apiKey}` },
               signal,
               timeout: 10000
@@ -666,7 +671,7 @@ class AIService {
         default: {
           // OpenAI 兼容 API: GET /v1/models
           try {
-            const response = await axios.get(buildOpenAICompatibleEndpoint(baseUrl, 'models'), {
+            const response = await diagnosticAxiosGet(buildOpenAICompatibleEndpoint(baseUrl, 'models'), {
               headers: { 'Authorization': `Bearer ${apiKey}` },
               signal,
               timeout: 10000
@@ -832,7 +837,7 @@ class AIService {
     if (options.background) options = { ...options, qingyuTurnId: turnId };
     if (options.timeoutMode === 'content_idle') {
       const controller = this.createRequestController(turnId);
-      const onAbort = () => controller.abort(options.signal?.reason);
+      const onAbort = () => { inheritDiagnosticCancellation(options.signal, controller.signal); controller.abort(options.signal?.reason); };
       options.signal?.addEventListener('abort', onAbort, { once: true });
       try {
         if (options.signal?.aborted) onAbort();
@@ -848,7 +853,7 @@ class AIService {
     if (totalMs === null) return this.generateWithinBudget(options);
     if (totalMs <= 0) throw new AiRequestTimeoutError('total', 60000);
     const controller = this.createRequestController(turnId);
-    const onAbort = () => controller.abort(options.signal?.reason);
+    const onAbort = () => { inheritDiagnosticCancellation(options.signal, controller.signal); controller.abort(options.signal?.reason); };
     options.signal?.addEventListener('abort', onAbort, { once: true });
     try {
       if (options.signal?.aborted) onAbort();
@@ -902,6 +907,7 @@ class AIService {
 
   private bindQingyuTransportBudget(signal: AbortSignal | undefined, options: GenerateOptions): void {
     if (!signal) return;
+    bindRequestDiagnosticContext(signal, options.diagnostics || diagnosticContext(options.usageType || 'main', options.generation_id, !!options.background));
     qingyuTransportBudgetBySignal.set(signal, {
       usageType: options.usageType || 'main',
       reasoningEffort: options.reasoningEffort ?? (remainingQingyuTurnTimeMs(options.qingyuTurnId) !== null ? 'low' : undefined),
@@ -1101,7 +1107,10 @@ class AIService {
         maxTokens: apiConfig.maxTokens ?? 16000
     };
     return this.withRequestController(
-      signal => this.generateWithCustomAPI({ ...options, signal }, directConfig),
+      signal => {
+        bindRequestDiagnosticContext(signal, options.diagnostics || diagnosticContext(options.usageType || 'main', options.generation_id, !!options.background));
+        return this.generateWithCustomAPI({ ...options, signal }, directConfig);
+      },
       options.signal,
     );
   }
@@ -1130,7 +1139,10 @@ class AIService {
         maxTokens: apiConfig.maxTokens ?? 16000
     };
     return this.withRequestController(
-      signal => this.generateRawWithCustomAPI({ ...options, signal }, directConfig),
+      signal => {
+        bindRequestDiagnosticContext(signal, options.diagnostics || diagnosticContext(options.usageType || 'main', options.generation_id, !!options.background));
+        return this.generateRawWithCustomAPI({ ...options, signal }, directConfig);
+      },
       options.signal,
     );
   }
@@ -1152,7 +1164,13 @@ class AIService {
           throw new Error('请求已被取消');
         }
         this.chargeQingyuLongTransport(options.signal);
-        return await tavernHelper.generate(options);
+        const trace = startRequestDiagnostic(requestDiagnosticContext(options.signal) || options.diagnostics || diagnosticContext(options.usageType || 'main', options.generation_id, !!options.background), 'TavernHelper', options.signal);
+        const { diagnostics: _diagnostics, ...hostOptions } = options;
+        try {
+          const result = await tavernHelper.generate(hostOptions);
+          if (options.should_stream === false && String(result).trim()) trace.content();
+          trace.finish(); return result;
+        } catch (error) { trace.finish(error); throw error; }
       }, { retries: options.requestMaxRetries, signal: options.signal });
     } catch (error) {
       throw this.toUserFacingError(error);
@@ -1175,7 +1193,13 @@ class AIService {
           throw new Error('请求已被取消');
         }
         this.chargeQingyuLongTransport(options.signal);
-        return await tavernHelper.generateRaw(options);
+        const trace = startRequestDiagnostic(requestDiagnosticContext(options.signal) || options.diagnostics || diagnosticContext(options.usageType || 'main', options.generation_id, !!options.background), 'TavernHelper', options.signal);
+        const { diagnostics: _diagnostics, ...hostOptions } = options;
+        try {
+          const result = await tavernHelper.generateRaw(hostOptions);
+          if (options.should_stream === false && String(result).trim()) trace.content();
+          trace.finish(); return result;
+        } catch (error) { trace.finish(error); throw error; }
       }, { retries: options.requestMaxRetries, signal: options.signal });
       return String(result);
     } catch (error) {
@@ -1723,7 +1747,7 @@ class AIService {
           }
 
           this.chargeQingyuLongTransport(signal);
-          const response = await axios.post(
+          const response = await diagnosticAxiosPost(
             chatEndpoint,
             requestBody,
             {
@@ -1769,7 +1793,7 @@ class AIService {
         }
 
         this.chargeQingyuLongTransport(signal);
-        const response = await axios.post(
+        const response = await diagnosticAxiosPost(
           chatEndpoint,
           requestBody,
           {
@@ -1885,7 +1909,7 @@ class AIService {
           console.warn('[AI服务-Claude] 当前API可能不支持流式传输，已自动降级为非流式请求。');
 
           this.chargeQingyuLongTransport(signal);
-          const response = await axios.post(
+          const response = await diagnosticAxiosPost(
             `${baseUrl}/v1/messages`,
             buildRequestBody(),
             {
@@ -1912,7 +1936,7 @@ class AIService {
         }
       } else {
         this.chargeQingyuLongTransport(signal);
-        const response = await axios.post(
+        const response = await diagnosticAxiosPost(
           `${baseUrl}/v1/messages`,
           buildRequestBody(),
           {
@@ -2035,7 +2059,7 @@ class AIService {
       }
 
       this.chargeQingyuLongTransport(signal);
-      return axios.post(requestUrl, requestBody, {
+      return diagnosticAxiosPost(requestUrl, requestBody, {
         headers,
         timeout: 120000,
         signal
@@ -2192,7 +2216,7 @@ class AIService {
       ? `${normalizedUrl}/api/paas/v4/chat/completions`
       : buildOpenAICompatibleEndpoint(normalizedUrl, 'chat/completions');
 
-    const response = await fetch(chatEndpoint, {
+    const response = await diagnosticFetch(chatEndpoint, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -2221,6 +2245,7 @@ class AIService {
     let usage: unknown;
     const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
+      observeStreamContent(response, parsed);
       if (parsed.usage) usage = parsed.usage;
       const choice = parsed.choices?.[0];
       if (choice?.finish_reason) finishReason = choice.finish_reason;
@@ -2274,7 +2299,7 @@ class AIService {
       stream: true
     };
 
-    const response = await fetch(`${url}/v1/messages`, {
+    const response = await diagnosticFetch(`${url}/v1/messages`, {
       method: 'POST',
       headers: {
         'x-api-key': apiKey,
@@ -2301,6 +2326,7 @@ class AIService {
 
     const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
+      observeStreamContent(response, parsed);
 
       if (parsed.type === 'message_delta' && isTruncatedFinishReason(parsed.delta?.stop_reason)) {
         truncated = true;
@@ -2356,7 +2382,7 @@ class AIService {
       maxOutputTokens: maxTokens
     };
 
-    const response = await fetch(`${url}/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`, {
+    const response = await diagnosticFetch(`${url}/v1beta/models/${model}:streamGenerateContent?key=${apiKey}&alt=sse`, {
       method: 'POST',
       headers: { 'Accept': 'text/event-stream', 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -2382,6 +2408,7 @@ class AIService {
 
     const result = await this.processSSEStream(response, (data) => {
       const parsed = JSON.parse(data);
+      observeStreamContent(response, parsed);
       if (isTruncatedFinishReason(parsed.candidates?.[0]?.finishReason)) {
         truncated = true;
       }
@@ -2426,6 +2453,7 @@ class AIService {
 
     const reader = response.body?.getReader();
     if (!reader) {
+      finishStreamDiagnostic(response, new Error('missing_stream'));
       throw new Error('无法获取响应流');
     }
 
@@ -2481,7 +2509,11 @@ class AIService {
           }
         }
       }
+    } catch (error) {
+      finishStreamDiagnostic(response, error);
+      throw error;
     } finally {
+      finishStreamDiagnostic(response);
       reader.releaseLock();
     }
 

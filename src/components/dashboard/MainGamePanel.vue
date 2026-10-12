@@ -514,6 +514,7 @@ import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSc
 import { fixedEndingNarrative } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { resolveEndingImage } from '@/assets/endings';
+import { currentDiagnosticTurnId, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
 import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
@@ -1833,6 +1834,7 @@ async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promi
   const reset = aiResetToken;
   const character = characterStore.rootState.当前激活存档?.角色ID;
   uiStore.setAIProcessing(true);
+  const diagnosticTurnId = currentDiagnosticTurnId();
   persistAIProcessingState();
   const aborted = () => aiResetToken !== reset || !uiStore.isAIProcessing || characterStore.rootState.当前激活存档?.角色ID !== character;
   try {
@@ -1851,9 +1853,12 @@ async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promi
     if (!aborted()) toast.error(`场面处理未完成：${String((error as Error).message)}。已结算的骰点保留。`);
   } finally {
     if (aiResetToken === reset) { uiStore.setAIProcessing(false); persistAIProcessingState(); }
+    sealDiagnosticTurn(diagnosticTurnId);
   }
 }
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
+  let diagnosticTurnId: string | null = null;
+  try {
   const sceneSave = gameStateStore.toSaveData();
   if (sceneSave && hostNeeded(sceneSave, selectedScenarioEngineAction.value as any)) {
     const text = composeJudgementAction(inputText.value, actionQueue.getActionPrompt());
@@ -1892,6 +1897,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     return;
   }
   uiStore.setAIProcessing(true);
+  diagnosticTurnId = currentDiagnosticTurnId();
   persistAIProcessingState();
   if (!hasActiveCharacter.value) {
     uiStore.setAIProcessing(false);
@@ -1957,6 +1963,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       : null;
     const saveFingerprint = intentSaveFingerprint(saveData);
     uiStore.setAIProcessing(true);
+    diagnosticTurnId = currentDiagnosticTurnId();
     persistAIProcessingState();
     let continueAfterIntent = false;
     try {
@@ -2206,6 +2213,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const qingyuTurnId = beginQingyuTurnLongRequests(scenarioSaveAtSend);
   ownedQingyuTurnId = qingyuTurnId;
   uiStore.setAIProcessing(true);
+  diagnosticTurnId = currentDiagnosticTurnId();
   persistAIProcessingState();
 
   // 🔥 重置流式内容，准备接收新的流式输出
@@ -2549,8 +2557,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         }
         console.log('[AI响应处理] 最终统一存档完成');
         if (aiResponse.transactionCommitted) {
-          startModuleBackground();
-          scheduleBackgroundAudit();
+          startModuleBackground(diagnosticTurnId);
+          scheduleBackgroundAudit(diagnosticTurnId);
         }
       } catch (storageError) {
         console.error('[AI响应处理] 最终统一存档失败:', storageError);
@@ -2562,6 +2570,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       inputRef.value?.focus();
     }
   }
+  } finally { sealDiagnosticTurn(diagnosticTurnId); }
 };
 
 const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {

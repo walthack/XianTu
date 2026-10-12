@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { diagnosticAxiosConfig } from './diagnosticTransport';
+import { diagnosticContext, type RequestDiagnosticContext } from './requestLifecycleDiagnostics';
 import type { APIProvider } from '@/services/aiService';
 import { markEmbeddingCall } from '@/utils/turnTelemetry';
 
@@ -65,6 +67,7 @@ export function normalizeToUnitVector(vec: number[]): number[] {
 export async function createEmbeddings(
   config: EmbeddingRequestConfig,
   inputs: string[],
+  diagnostics: RequestDiagnosticContext = diagnosticContext('embedding'),
 ): Promise<number[][]> {
   markEmbeddingCall();
   const provider = config.provider;
@@ -85,12 +88,12 @@ export async function createEmbeddings(
         model,
         input: { texts: inputs },
       },
-      {
+      diagnosticAxiosConfig({
         headers: {
           Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
-      },
+      }, diagnostics),
     );
 
     // DashScope: { output: { embeddings: [{ text_index, embedding: number[] }] } }
@@ -118,12 +121,12 @@ export async function createEmbeddings(
         input: inputs,
         encoding_format: 'float',
       },
-      {
+      diagnosticAxiosConfig({
         headers: {
           Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
-      },
+      }, diagnostics),
     );
 
     const data = resp.data?.data;
@@ -148,12 +151,12 @@ export async function createEmbeddings(
         input: inputs,
         encoding_format: 'float',
       },
-      {
+      diagnosticAxiosConfig({
         headers: {
           Authorization: `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
-      },
+      }, diagnostics),
     );
 
     const data = resp.data?.data;

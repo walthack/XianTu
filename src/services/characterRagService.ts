@@ -1,3 +1,4 @@
+import type { RequestDiagnosticContext } from './requestLifecycleDiagnostics';
 /**
  * 角色表向量检索服务（Character RAG）
  *
@@ -133,11 +134,11 @@ class CharacterRagService {
     return { available: false, reason: '未配置独立 Embedding API，角色检索不会启用或注入' };
   }
 
-  private async embedBatch(texts: string[]): Promise<{ vectors: number[][]; model: string } | null> {
+  private async embedBatch(texts: string[], diagnostics?: RequestDiagnosticContext): Promise<{ vectors: number[][]; model: string } | null> {
     const cfg = this.getEmbeddingRequestConfig();
     if (!cfg) return null;
     try {
-      const vectors = await createEmbeddings(cfg, texts);
+      const vectors = await createEmbeddings(cfg, texts, diagnostics);
       return { vectors: vectors.map(v => normalizeToUnitVector(v)), model: cfg.model };
     } catch (error) {
       console.warn('[角色RAG] Embedding 生成失败，跳过角色检索:', error);
@@ -158,7 +159,7 @@ class CharacterRagService {
     return { hash, entries: characters as RegistryEntry[] };
   }
 
-  async ensureIndexed(options?: { batchSize?: number; onProgress?: (done: number, total: number) => void }): Promise<number> {
+  async ensureIndexed(options?: { diagnostics?: RequestDiagnosticContext; batchSize?: number; onProgress?: (done: number, total: number) => void }): Promise<number> {
     if (!this.db) return 0;
     if (!this.isEnabled()) return 0;
 
@@ -206,7 +207,7 @@ class CharacterRagService {
       for (let i = 0; i < pending.length; i += batchSize) {
         const batch = pending.slice(i, i + batchSize);
         const texts = batch.map(entry => entry.embedText);
-        const embedded = await this.embedBatch(texts);
+        const embedded = await this.embedBatch(texts, options?.diagnostics);
         if (!embedded || embedded.vectors.length !== batch.length) {
           console.warn('[角色RAG] Embedding 批次大小不匹配，跳过该批次');
           continue;

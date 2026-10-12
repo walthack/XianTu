@@ -1,3 +1,4 @@
+import { diagnosticContext, type RequestDiagnosticContext } from './requestLifecycleDiagnostics';
 import type { APIConfig, APIUsageType } from '@/stores/apiManagementStore';
 import type { GenerateOptions } from './aiService';
 
@@ -96,6 +97,7 @@ export interface ModuleRouteResolution {
 }
 
 export interface ModelModuleInput {
+  diagnostics?: RequestDiagnosticContext;
   system: string;
   input: string;
   generationId: string;
@@ -128,6 +130,7 @@ export function createModuleModelRuntime(dependencies: {
       const resolved = dependencies.resolveRoute(definition);
       const policy = definition.policy;
       const shared = {
+        diagnostics: input.diagnostics || diagnosticContext(moduleId, input.generationId, !definition.blocking),
         usageType: definition.transportUsageType || definition.inheritUsageType,
         background: !definition.blocking,
         timeoutMs: policy.timeoutMs, reasoningEffort: policy.reasoningEffort,

@@ -1,3 +1,4 @@
+import { inheritRequestDiagnostics, inheritDiagnosticCancellation, noteDiagnosticCancellation } from './requestLifecycleDiagnostics';
 export class AiRequestTimeoutError extends Error {
   readonly code = 'AI_REQUEST_TIMEOUT';
   constructor(readonly phase: 'first_byte' | 'total' | 'idle', readonly timeoutMs: number) {
@@ -20,12 +21,15 @@ export async function withAiRequestDeadline<T>(
   options: { signal?: AbortSignal; firstByteMs?: number; totalMs?: number | null; idleMs?: number } = {},
 ): Promise<T> {
   const controller = new AbortController();
+  inheritRequestDiagnostics(options.signal, controller.signal);
   const totalMs = options.totalMs === null ? null : options.totalMs ?? 120000;
   const firstByteMs = options.firstByteMs ?? 30000;
   let rejectDeadline!: (error: Error) => void;
   const deadline = new Promise<never>((_, reject) => { rejectDeadline = reject; });
   const fail = (error: Error) => {
     rejectDeadline(error);
+    if (error instanceof AiRequestTimeoutError) noteDiagnosticCancellation(controller.signal, 'deadline', error.phase);
+    else inheritDiagnosticCancellation(options.signal, controller.signal);
     controller.abort(error);
   };
   const onAbort = () => fail(new DOMException('请求已取消', 'AbortError'));

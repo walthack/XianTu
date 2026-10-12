@@ -1,3 +1,4 @@
+import { inheritDiagnosticCancellation, noteDiagnosticCancellation } from '@/services/requestLifecycleDiagnostics';
 
 import {entityNamePattern} from './namedEntities';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
@@ -98,6 +99,7 @@ let inFlight: AbortController | null = null;
 let latestRequestId = '';
 
 export function abortInFlightNaturalIntent(): void {
+  if (inFlight) noteDiagnosticCancellation(inFlight.signal, 'natural_intent_cancel');
   inFlight?.abort();
   inFlight = null;
 }
@@ -395,10 +397,11 @@ export async function resolveNaturalIntent(input: {
   const requestId = `intent_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   latestRequestId = requestId;
   if (input.signal?.aborted) {
+    inheritDiagnosticCancellation(input.signal, controller.signal);
     controller.abort();
     return { kind: 'failed', reason: 'aborted', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: false };
   }
-  const onAbort = () => controller.abort();
+  const onAbort = () => { inheritDiagnosticCancellation(input.signal, controller.signal); controller.abort(); };
   input.signal?.addEventListener('abort', onAbort, { once: true });
 
   try {

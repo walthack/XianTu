@@ -1,8 +1,10 @@
+import { diagnosticContext, reserveDiagnosticBackground, type RequestDiagnosticContext } from '@/services/requestLifecycleDiagnostics';
 import { cloneDeep } from 'lodash';
 import { noteBackgroundStartedAfterCommit } from './turnTelemetry';
 import type { SaveData } from '@/types/game';
 
 export interface BackgroundMemoryWorkTask {
+  diagnostics?: RequestDiagnosticContext;
   saveSlot: string;
   revision: number;
   snapshot: SaveData;
@@ -95,20 +97,20 @@ async function runDefaultIndex(task: BackgroundMemoryWorkTask): Promise<void> {
     if (task.isStale()) return;
     const memories = snapshot?.社交?.记忆?.长期记忆 || [];
     if (Array.isArray(memories) && memories.length > 0) {
-      await vectorMemoryService.syncFromLongTermMemories(memories);
+      await vectorMemoryService.syncFromLongTermMemories(memories, { diagnostics: task.diagnostics });
     }
   }
   if (narrativeRagService.isEnabled()) {
     if (task.isStale()) return;
     await task.waitIfForegroundBusy();
     if (task.isStale()) return;
-    await narrativeRagService.ensureIndexed(snapshot);
+    await narrativeRagService.ensureIndexed(snapshot, { diagnostics: task.diagnostics });
   }
   if (characterRagService.isEnabled()) {
     if (task.isStale()) return;
     await task.waitIfForegroundBusy();
     if (task.isStale()) return;
-    await characterRagService.ensureIndexed();
+    await characterRagService.ensureIndexed({ diagnostics: task.diagnostics });
   }
 }
 
@@ -122,8 +124,10 @@ export function scheduleBackgroundMemoryWork(
   noteBackgroundStartedAfterCommit();
   const revision = bumpMemoryWorkRevision(slot);
   const snapshot = cloneDeep(saveData);
+  const diagnostics = diagnosticContext('embedding_index', undefined, true);
+  const releaseDiagnostic = reserveDiagnosticBackground(diagnostics.turnId);
   void runExclusive(slot, async () => {
-    if (latestRevisionBySlot.get(slot) !== revision) return;
+    if (latestRevisionBySlot.get(slot) !== revision) { releaseDiagnostic(); return; }
     const isStale = () => latestRevisionBySlot.get(slot) !== revision;
     const waitIfForegroundBusy = async () => {
       while (foregroundDepth > 0) {
@@ -135,6 +139,7 @@ export function scheduleBackgroundMemoryWork(
       await waitIfForegroundBusy();
       if (isStale()) return;
       await runner({
+        diagnostics,
         saveSlot: slot,
         revision,
         snapshot,
@@ -143,7 +148,7 @@ export function scheduleBackgroundMemoryWork(
       });
     } catch (error) {
       console.warn('[后台记忆] 索引失败（不影响回合）:', error);
-    }
+    } finally { releaseDiagnostic(); }
   });
   return revision;
 }

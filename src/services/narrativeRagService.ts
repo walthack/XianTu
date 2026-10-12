@@ -1,3 +1,4 @@
+import type { RequestDiagnosticContext } from './requestLifecycleDiagnostics';
 /**
  * 叙事 RAG 检索服务
  *
@@ -180,11 +181,11 @@ class NarrativeRagService {
     return { available: false, reason: '未配置独立 Embedding API，叙事检索不会启用或注入' };
   }
 
-  private async embedBatch(texts: string[]): Promise<{ vectors: number[][]; model: string } | null> {
+  private async embedBatch(texts: string[], diagnostics?: RequestDiagnosticContext): Promise<{ vectors: number[][]; model: string } | null> {
     const cfg = this.getEmbeddingRequestConfig();
     if (!cfg) return null;
     try {
-      const vectors = await createEmbeddings(cfg, texts);
+      const vectors = await createEmbeddings(cfg, texts, diagnostics);
       return { vectors: vectors.map(v => normalizeToUnitVector(v)), model: cfg.model };
     } catch (error) {
       console.warn('[叙事检索] Embedding 生成失败，跳过叙事检索:', error);
@@ -219,7 +220,7 @@ class NarrativeRagService {
     return removed;
   }
 
-  async ensureIndexed(saveData: any, options?: { batchSize?: number; onProgress?: (done: number, total: number) => void }): Promise<number> {
+  async ensureIndexed(saveData: any, options?: { diagnostics?: RequestDiagnosticContext; batchSize?: number; onProgress?: (done: number, total: number) => void }): Promise<number> {
     if (!this.db) return 0;
     if (!this.getEmbeddingRequestConfig()) {
       throw new Error('未配置独立 Embedding API，无法同步叙事检索索引');
@@ -239,7 +240,7 @@ class NarrativeRagService {
     for (let i = 0; i < pending.length; i += batchSize) {
       const batch = pending.slice(i, i + batchSize);
       const texts = batch.map(item => item.content);
-      const embedded = await this.embedBatch(texts);
+      const embedded = await this.embedBatch(texts, options?.diagnostics);
       if (!embedded || embedded.vectors.length !== batch.length) {
         throw new Error('Embedding 生成失败，叙事检索索引未写入');
       }
