@@ -54,12 +54,16 @@ export function baseFactors(save: SaveData, contract: Contract, kind: JudgementK
 const sum = (factors: Factor[]): number => factors.reduce((total, factor) => total + factor.value, 0);
 
 /** 玩家一方的判定加值（进攻 / 支援类行动）与防御加值（身法类）。 */
-export function sceneContext(save: SaveData, contract: Contract, actionText=''): { factors: number; playerDefense: number; breakdown: { action: Factor[]; defense: Factor[] } } {
+export function sceneContext(save: SaveData, contract: Contract, actionText=''): { factors: number; factorProfiles: Record<string, number>; playerDefense: number; breakdown: { action: Factor[]; defense: Factor[] } } {
   const phase={label:'小阶段',value:stageBonus(save.角色.属性.境界)};
   const action = baseFactors(save, contract, contract.settings?.judgement?.action || 'combat',actionText);
   action.push(phase);
   const defense = baseFactors(save, contract, contract.settings?.judgement?.defense || 'escape');defense.push(phase);
-  return { factors: sum(action), playerDefense: sum(defense), breakdown: { action, defense } };
+  const factorProfiles: Record<string, number> = { scene: sum(action) };
+  for (const rule of Object.values(GAME_NUMBERS.goalModifiers)) {
+    if (rule.factorProfile !== 'scene') factorProfiles[rule.factorProfile] = sum(baseFactors(save, contract, rule.factorProfile as JudgementKind, actionText));
+  }
+  return { factors: sum(action), factorProfiles, playerDefense: sum(defense), breakdown: { action, defense } };
 }
 
 /** Snapshot stage facts at engagement; unknown enemies use same-level fallback, never infer from old realm names. */

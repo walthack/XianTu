@@ -187,6 +187,16 @@
       ]
     ]
   },
+  "goalModifiers": {
+    "default": {
+      "factorProfile": "scene",
+      "levelGap": true
+    },
+    "social": {
+      "factorProfile": "social",
+      "levelGap": false
+    }
+  },
   "sceneDefaults": {
     "tiers": {
       "critSuccessMargin": 15,

@@ -1,5 +1,5 @@
 {
-  "version": "68d6f9c82e579f22",
+  "version": "36bf821af27f80af",
   "contracts": [
     {
       "meta": {
@@ -4253,7 +4253,7 @@
     {
       "meta": {
         "id": "combat.f06.merfolk",
-        "version": 1,
+        "version": 2,
         "scene": {
           "kind": "combat"
         },
@@ -4297,7 +4297,10 @@
           }
         },
         "source": "31号F06及W已定；P1-CONTENT-PACK-20261011",
-        "readiness": "ready"
+        "readiness": "ready",
+        "compatibleStateVersions": [
+          1
+        ]
       },
       "objective": {
         "text": "在海神殿抵御鲛人，护住受困的乐明珠",
@@ -4389,7 +4392,8 @@
             "cond": {
               "tag": "crest"
             }
-          }
+          },
+          "modifierProfile": "social"
         }
       ],
       "elements": [
@@ -5788,7 +5792,7 @@
     {
       "meta": {
         "id": "encounter.f07.geluo_suspicion",
-        "version": 1,
+        "version": 2,
         "scene": {
           "kind": "social"
         },
@@ -5799,7 +5803,10 @@
           "consumedFlag": "lcq.f07.geluo_checked",
           "required": false
         },
-        "source": "31号W21：第87章有逃兵则阁罗起疑，加过关检定，不改大走向"
+        "source": "31号W21：第87章有逃兵则阁罗起疑，加过关检定，不改大走向",
+        "compatibleStateVersions": [
+          1
+        ]
       },
       "objective": {
         "text": "接住阁罗的盘问，让商队继续通行",
@@ -5860,7 +5867,8 @@
           "baseDifficulty": 11,
           "targetIds": [
             "gate"
-          ]
+          ],
+          "modifierProfile": "social"
         }
       ],
       "elements": [

@@ -1,6 +1,6 @@
 import {evalExpr} from './conditions';
 import {GAME_NUMBERS} from './numbers';
-import {levelModifier} from './levels';
+import {goalModifierRule,levelModifier} from './levels';
 // 玩家行动：识别层提议的校验（只许白名单），以及落地、定价、预览（只读，不改状态）。
 
 import { isPresent, partyOf, playerParty, trackInfo, trackStep } from './queries';
@@ -268,6 +268,7 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
 
   // ---- 难度与加值 ----
   const primaryParty = primary ? partyOf(contract, primary) : undefined;
+  const modifierRule=goalModifierRule(goal.modifierProfile);
   const pressure = contract.beats?.[state.beat - 1]?.pressure ?? 0;
   const difficultyParts = {
     base: goal.baseDifficulty,
@@ -278,9 +279,11 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   const difficulty = difficultyParts.base + difficultyParts.premium + difficultyParts.pressure + difficultyParts.resistance;
   const noveltyKey = grounded ? okLevers.map(l => `${l.element}:${l.verb}`).sort().join('+') : null;
   const leverSum = Math.min(settings.pricing.leverCap, okLevers.reduce((sum, l) => sum + l.power, 0));
-  const levelOpponent = pushGoal ? primary : contract.parties.find(p=>p.side==='opposed'&&isPresent(state,p.id)&&state.levels?.[p.id]!==undefined)?.id;
+  const levelOpponent = modifierRule.levelGap ? (pushGoal ? primary : contract.parties.find(p=>p.side==='opposed'&&isPresent(state,p.id)&&state.levels?.[p.id]!==undefined)?.id) : undefined;
+  const profileFactors=modifierRule.factorProfile === 'scene' ? ctx.factors : ctx.factorProfiles?.[modifierRule.factorProfile];
+  if (profileFactors === undefined || !Number.isFinite(profileFactors)) throw new Error(`缺少目标属性配置：${modifierRule.factorProfile}`);
   const modifierParts = {
-    factors: ctx.factors + (state.levels && playerId && levelOpponent ? levelModifier(state.levels[playerId],state.levels[levelOpponent]) : 0),
+    factors: profileFactors + (state.levels && playerId && levelOpponent ? levelModifier(state.levels[playerId],state.levels[levelOpponent]) : 0),
     levers: leverSum,
     novelty: noveltyKey && !state.noveltySeen.includes(noveltyKey) ? settings.pricing.novelty : 0,
     cash: cash.reduce((sum, c) => sum + (c.ok ? c.bonus : 0), 0),

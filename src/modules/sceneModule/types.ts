@@ -199,6 +199,8 @@ export interface GoalDef {
   /** push＝推敌方轨道；support＝只铺垫（成功时生成 onSuccess.tag）。 */
   type?: 'push' | 'support';
   judgementKind?: string;
+  /** Key into game-numbers.goalModifiers; omitted goals use the configured default profile. */
+  modifierProfile?: string;
   finishAs?: string;
   completeOnSuccess?: boolean;
   onSuccess?: { tag?: TagDef; tagOn?: 'targets' | 'allies' | 'self' };
@@ -498,6 +500,8 @@ export interface ActionPlan {
 export interface SceneContext {
   /** 玩家本人的判定加值（宿主用游戏判定引擎的真实因子求和）。 */
   factors: number;
+  /** Precomputed factor totals by configured profile (e.g. scene/social). */
+  factorProfiles?: Record<string, number>;
   /** 玩家本人的防御 / 豁免加值，缺省 0。 */
   playerDefense?: number;
   /** 宿主的统一状态目录；有则优先于合同里的临时定义。 */

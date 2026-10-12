@@ -111,6 +111,7 @@ export function endingBridge(raw: string, endingId?: string): string {
 export interface SceneLedger {
   receipts: string[]; actors: Record<string, { status: 'dead' | 'missing' | 'departed' | 'present'; eventId: string; actionId: string; name?: string; characterId?: string }>;
   injuries: Record<string, string>; names: Record<string, string>; worldFacts: string[];
+  cultivation?: Record<string, { stage: string; eventId: string; actionId: string }>;
   groupInjuries?: Record<string, { label: string; text: string }>;
   lastBeat?: { eventId: string; actionId: string; facts: string[] };
 }
@@ -156,6 +157,7 @@ export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: stri
     const realm = (save as any).角色.属性.境界;
     // 九阳层次没有通用等级换算记录；保留现有高手榜等级，只记原著已有层次。
     if (realm && typeof realm === 'object') realm.九阳层次 = scene.ledgerEffects.jiuyang;
+    (ledger.cultivation ||= {})['lcq.technique.jiuyang'] = { stage: scene.ledgerEffects.jiuyang, eventId, actionId };
   }
   ledger.lastBeat = { eventId, actionId, facts: scene.fixedFacts?.length ? [...scene.fixedFacts] : [scene.fallbackText || scene.previousBeat || '本步已经落账。'] };
   if (scene.dayPart && (save as any).元数据?.时间) {

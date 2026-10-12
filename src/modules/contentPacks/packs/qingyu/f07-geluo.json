@@ -1,7 +1,7 @@
 {
   "meta": {
     "id": "encounter.f07.geluo_suspicion",
-    "version": 1,
+    "version": 2,
     "scene": {
       "kind": "social"
     },
@@ -12,7 +12,10 @@
       "consumedFlag": "lcq.f07.geluo_checked",
       "required": false
     },
-    "source": "31号W21：第87章有逃兵则阁罗起疑，加过关检定，不改大走向"
+    "source": "31号W21：第87章有逃兵则阁罗起疑，加过关检定，不改大走向",
+    "compatibleStateVersions": [
+      1
+    ]
   },
   "objective": {
     "text": "接住阁罗的盘问，让商队继续通行",
@@ -73,7 +76,8 @@
       "baseDifficulty": 11,
       "targetIds": [
         "gate"
-      ]
+      ],
+      "modifierProfile": "social"
     }
   ],
   "elements": [

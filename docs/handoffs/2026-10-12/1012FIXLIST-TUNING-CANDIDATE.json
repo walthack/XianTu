@@ -1,0 +1,71 @@
+{
+  "combat.f07.biling_village": {
+    "goals": {
+      "command": {
+        "baseDifficulty": 19
+      },
+      "capture": {
+        "baseDifficulty": 19
+      },
+      "rescue": {
+        "baseDifficulty": 19
+      },
+      "seal": {
+        "baseDifficulty": 19
+      },
+      "stop_slaughter": {
+        "baseDifficulty": 15
+      }
+    },
+    "enemyActions": {
+      "burn": {
+        "dc": 19
+      },
+      "attack": {
+        "dc": 19
+      }
+    }
+  },
+  "combat.f08.dagu_ruins": {
+    "goals": {
+      "attack": {
+        "baseDifficulty": 19
+      },
+      "command": {
+        "baseDifficulty": 19
+      }
+    },
+    "enemyActions": {
+      "focus": {
+        "dc": 19
+      }
+    }
+  },
+  "combat.f09.yinsha": {
+    "goals": {
+      "repel": {
+        "baseDifficulty": 21
+      },
+      "rescue": {
+        "baseDifficulty": 21
+      }
+    },
+    "enemyActions": {
+      "cold": {
+        "dc": 21
+      }
+    }
+  },
+  "combat.f14.dragon_god": {
+    "goals": {
+      "slay": {
+        "baseDifficulty": 18
+      }
+    },
+    "enemyActions": {
+      "claw": {
+        "dc": 13
+      }
+    }
+  }
+}

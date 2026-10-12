@@ -1,7 +1,7 @@
 {
   "meta": {
     "id": "combat.f06.merfolk",
-    "version": 1,
+    "version": 2,
     "scene": {
       "kind": "combat"
     },
@@ -45,7 +45,10 @@
       }
     },
     "source": "31号F06及W已定；P1-CONTENT-PACK-20261011",
-    "readiness": "ready"
+    "readiness": "ready",
+    "compatibleStateVersions": [
+      1
+    ]
   },
   "objective": {
     "text": "在海神殿抵御鲛人，护住受困的乐明珠",
@@ -137,7 +140,8 @@
         "cond": {
           "tag": "crest"
         }
-      }
+      },
+      "modifierProfile": "social"
     }
   ],
   "elements": [

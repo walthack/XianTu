@@ -14,6 +14,8 @@ export function applyGameNumbers(patch: unknown): void {
  };
  merge(next,patch,'numbers');
  if(next.levels.gapOne<0||next.levels.gapMany<next.levels.gapOne||next.combat.simulation.minWinRate<0||next.combat.simulation.maxWinRate>1||next.combat.simulation.minWinRate>next.combat.simulation.maxWinRate||next.training.progressPerLevel<=0||Object.values(next.currency).some(v=>v<=0))throw Error('数值配置范围无效');
+ const goalProfiles=next.goalModifiers as Record<string,{factorProfile:string;levelGap:boolean}>;
+ if(!goalProfiles.default||Object.values(goalProfiles).some(profile=>!profile||typeof profile.factorProfile!=='string'||(profile.factorProfile!=='scene'&&!(profile.factorProfile in next.weights))||typeof profile.levelGap!=='boolean'))throw Error('目标修正配置无效');
  // Keep nested references alive for H1 readers and already-imported defaults.
  merge(GAME_NUMBERS,next,'numbers');
 }

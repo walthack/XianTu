@@ -14,3 +14,8 @@ export function overlayPackPlaytestOpening(input:ScenarioMod,extensions:Record<s
   if(!p)return input;
   const next=structuredClone(input);next.scenario.opening.text=packText(p.stageOpeningTextIds![input.manifest.id]);return next;
 }
+
+/** Contract hook flags are settled worldline facts needed by later scenes. */
+export function contentPackPersistentFlagIds(): ReadonlySet<string> {
+  return new Set(CONTENT_PACKS.contracts.flatMap(c => [c.meta.hook.requiredFlag, c.meta.hook.escapeFlag, c.meta.hook.consumedFlag].filter((id): id is string => !!id)));
+}

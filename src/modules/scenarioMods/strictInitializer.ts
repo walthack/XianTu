@@ -1,4 +1,4 @@
-import {overlayPackPlaytestOpening} from '../contentPacks';
+import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
 import {levelOf} from '../../utils/realmUtils';
 import {initializeLevel} from './levelProgression';
 import {canonicalEntityId} from './namedEntities';
@@ -387,8 +387,10 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
       sequence: chronicleSnapshot.length + 1,
     });
   }
+  const persistentContractFlags = contentPackPersistentFlagIds();
   const inheritedWorldlineFlags = Object.fromEntries(Object.entries(rt.flags || {}).filter(([key]) =>
-    key.startsWith('branch.')
+    persistentContractFlags.has(key)
+    || key.startsWith('branch.')
     || key.startsWith('scene.')
     || key.startsWith('character.')
     || key.endsWith('.void')

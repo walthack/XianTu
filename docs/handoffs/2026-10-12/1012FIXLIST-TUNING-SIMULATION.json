@@ -1,0 +1,340 @@
+{
+  "rows": [
+    {
+      "id": "combat.f06.merfolk",
+      "baseline": {
+        "contractId": "combat.f06.merfolk",
+        "n": 2000,
+        "wins": 2000,
+        "losses": 0,
+        "unresolved": 0,
+        "winRate": 1,
+        "missingLevels": []
+      },
+      "additionalScreen": [
+        {
+          "delta": 16,
+          "contractId": "combat.f06.merfolk",
+          "n": 250,
+          "wins": 241,
+          "losses": 0,
+          "unresolved": 9,
+          "winRate": 0.964,
+          "missingLevels": []
+        },
+        {
+          "delta": 20,
+          "contractId": "combat.f06.merfolk",
+          "n": 250,
+          "wins": 241,
+          "losses": 0,
+          "unresolved": 9,
+          "winRate": 0.964,
+          "missingLevels": []
+        },
+        {
+          "delta": 24,
+          "contractId": "combat.f06.merfolk",
+          "n": 250,
+          "wins": 241,
+          "losses": 0,
+          "unresolved": 9,
+          "winRate": 0.964,
+          "missingLevels": []
+        },
+        {
+          "delta": 28,
+          "contractId": "combat.f06.merfolk",
+          "n": 250,
+          "wins": 241,
+          "losses": 0,
+          "unresolved": 9,
+          "winRate": 0.964,
+          "missingLevels": []
+        },
+        {
+          "delta": 32,
+          "contractId": "combat.f06.merfolk",
+          "n": 250,
+          "wins": 241,
+          "losses": 0,
+          "unresolved": 9,
+          "winRate": 0.964,
+          "missingLevels": []
+        }
+      ],
+      "rejectedCandidate": {
+        "patch": {
+          "goals": {
+            "repel": {
+              "baseDifficulty": 23
+            },
+            "release": {
+              "baseDifficulty": 23
+            }
+          },
+          "enemyActions": {
+            "fork": {
+              "dc": 23
+            }
+          }
+        },
+        "simulated": {
+          "contractId": "combat.f06.merfolk",
+          "n": 2000,
+          "wins": 1899,
+          "losses": 0,
+          "unresolved": 101,
+          "winRate": 0.9495,
+          "missingLevels": []
+        },
+        "reason": "DC-only numeric grid +2..+32 never reaches 40-75%; higher values add unresolved rather than meaningful losses. Not in deployable tuning."
+      }
+    },
+    {
+      "id": "combat.f07.biling_village",
+      "baseline": {
+        "contractId": "combat.f07.biling_village",
+        "n": 2000,
+        "wins": 1996,
+        "losses": 4,
+        "unresolved": 0,
+        "winRate": 0.998,
+        "missingLevels": []
+      },
+      "proposal": {
+        "goals": {
+          "command": {
+            "baseDifficulty": 19
+          },
+          "capture": {
+            "baseDifficulty": 19
+          },
+          "rescue": {
+            "baseDifficulty": 19
+          },
+          "seal": {
+            "baseDifficulty": 19
+          },
+          "stop_slaughter": {
+            "baseDifficulty": 15
+          }
+        },
+        "enemyActions": {
+          "burn": {
+            "dc": 19
+          },
+          "attack": {
+            "dc": 19
+          }
+        }
+      },
+      "adjusted": {
+        "contractId": "combat.f07.biling_village",
+        "n": 2000,
+        "wins": 1295,
+        "losses": 705,
+        "unresolved": 0,
+        "winRate": 0.6475,
+        "missingLevels": []
+      }
+    },
+    {
+      "id": "combat.f08.dagu_ruins",
+      "baseline": {
+        "contractId": "combat.f08.dagu_ruins",
+        "n": 2000,
+        "wins": 1995,
+        "losses": 5,
+        "unresolved": 0,
+        "winRate": 0.9975,
+        "missingLevels": [
+          "lcq.enemy.dagu"
+        ]
+      },
+      "proposal": {
+        "goals": {
+          "attack": {
+            "baseDifficulty": 19
+          },
+          "command": {
+            "baseDifficulty": 19
+          }
+        },
+        "enemyActions": {
+          "focus": {
+            "dc": 19
+          }
+        }
+      },
+      "adjusted": {
+        "contractId": "combat.f08.dagu_ruins",
+        "n": 2000,
+        "wins": 1295,
+        "losses": 705,
+        "unresolved": 0,
+        "winRate": 0.6475,
+        "missingLevels": [
+          "lcq.enemy.dagu"
+        ]
+      }
+    },
+    {
+      "id": "combat.f09.yinsha",
+      "baseline": {
+        "contractId": "combat.f09.yinsha",
+        "n": 2000,
+        "wins": 1997,
+        "losses": 3,
+        "unresolved": 0,
+        "winRate": 0.9985,
+        "missingLevels": []
+      },
+      "proposal": {
+        "goals": {
+          "repel": {
+            "baseDifficulty": 21
+          },
+          "rescue": {
+            "baseDifficulty": 21
+          }
+        },
+        "enemyActions": {
+          "cold": {
+            "dc": 21
+          }
+        }
+      },
+      "adjusted": {
+        "contractId": "combat.f09.yinsha",
+        "n": 2000,
+        "wins": 1116,
+        "losses": 884,
+        "unresolved": 0,
+        "winRate": 0.558,
+        "missingLevels": []
+      }
+    },
+    {
+      "id": "combat.f14.dragon_god",
+      "baseline": {
+        "contractId": "combat.f14.dragon_god",
+        "n": 2000,
+        "wins": 1705,
+        "losses": 295,
+        "unresolved": 0,
+        "winRate": 0.8525,
+        "missingLevels": [
+          "lcq.enemy.dragon_god",
+          "liuchao.character.wu_er_lang"
+        ]
+      },
+      "proposal": {
+        "goals": {
+          "slay": {
+            "baseDifficulty": 18
+          }
+        },
+        "enemyActions": {
+          "claw": {
+            "dc": 13
+          }
+        }
+      },
+      "adjusted": {
+        "contractId": "combat.f14.dragon_god",
+        "n": 2000,
+        "wins": 1335,
+        "losses": 665,
+        "unresolved": 0,
+        "winRate": 0.6675,
+        "missingLevels": [
+          "lcq.enemy.dragon_god",
+          "liuchao.character.wu_er_lang"
+        ]
+      }
+    }
+  ],
+  "tuning": {
+    "combat.f07.biling_village": {
+      "goals": {
+        "command": {
+          "baseDifficulty": 19
+        },
+        "capture": {
+          "baseDifficulty": 19
+        },
+        "rescue": {
+          "baseDifficulty": 19
+        },
+        "seal": {
+          "baseDifficulty": 19
+        },
+        "stop_slaughter": {
+          "baseDifficulty": 15
+        }
+      },
+      "enemyActions": {
+        "burn": {
+          "dc": 19
+        },
+        "attack": {
+          "dc": 19
+        }
+      }
+    },
+    "combat.f08.dagu_ruins": {
+      "goals": {
+        "attack": {
+          "baseDifficulty": 19
+        },
+        "command": {
+          "baseDifficulty": 19
+        }
+      },
+      "enemyActions": {
+        "focus": {
+          "dc": 19
+        }
+      }
+    },
+    "combat.f09.yinsha": {
+      "goals": {
+        "repel": {
+          "baseDifficulty": 21
+        },
+        "rescue": {
+          "baseDifficulty": 21
+        }
+      },
+      "enemyActions": {
+        "cold": {
+          "dc": 21
+        }
+      }
+    },
+    "combat.f14.dragon_god": {
+      "goals": {
+        "slay": {
+          "baseDifficulty": 18
+        }
+      },
+      "enemyActions": {
+        "claw": {
+          "dc": 13
+        }
+      }
+    }
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "contracts": [
+      "combat.f07.biling_village",
+      "combat.f08.dagu_ruins",
+      "combat.f09.yinsha",
+      "combat.f14.dragon_god"
+    ]
+  },
+  "policy": "GAME_NUMBERS fixed seed 6291462 + i*7919; 250 screening then 2000 sample verification including screening seeds, not independent holdout; neutral expected-progress reference; 48 beats cap; no deployment"
+}

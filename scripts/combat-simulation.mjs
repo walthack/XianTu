@@ -19,7 +19,7 @@ export function simulateContract(c,n=N){let wins=0,losses=0,unresolved=0;const m
   s.stages[p.id]=0;if(fact&&!fact.available){s.present[p.id]=false;if(!s.departed.includes(p.id))s.departed.push(p.id);}
  }};
  for(let i=0;i<n;i++){let s=core.beginScene(c,{seed:SIM.seed+i*SIM.seedStride}).state;project(s);
-  const ctx={factors:0,playerDefense:0};
+  const ctx={factors:0,playerDefense:0,factorProfiles:Object.fromEntries(Object.keys(GAME_NUMBERS.weights).map(id=>[id,0]))};
   for(let t=0;t<SIM.maxBeats&&s.status==='engaged';t++){project(s);const plan=referencePlan(c,s,ctx);if(!plan)break;s=core.confirmAction(c,s,plan,ctx).state;}
   if(s.outcome?.kind==='win')wins++;else if(s.outcome)losses++;else unresolved++;
  }

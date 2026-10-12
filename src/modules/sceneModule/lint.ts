@@ -2,6 +2,7 @@
 // 通用模块不自带人头数、拍数、胜负门槛，所以凡是需要这些数的地方，合同没写就报出来，而不是悄悄补一个默认值。
 
 import { isExpr, normalizeCond } from './conditions';
+import { GAME_NUMBERS } from './numbers';
 import { goalsOf } from './plan';
 import { allTrackInfos, partyOf, partyTrackId, trackInfo } from './queries';
 import { resolveStatusDef } from './statuses';
@@ -327,6 +328,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
     if (!['scene', 'player_side', 'opposed', 'neutral', 'third'].includes(tag.on) && !partyIds.has(tag.on)) err(`tags.${tag.id}：on“${tag.on}”不是参与方、阵营或 scene`);
   }
   for (const goal of goalsOf(contract)) {
+    if (goal.modifierProfile !== undefined && !Object.hasOwn(GAME_NUMBERS.goalModifiers, goal.modifierProfile)) err(`goals.${goal.id}：未知modifierProfile ${goal.modifierProfile}`);
     if(goal.when)checkConds(goal.when,`goals.${goal.id}.when`);
     for(const id of goal.targetIds||[])knownParty(id,`goals.${goal.id}.targetIds`);
     if (typeof goal.baseDifficulty !== 'number') err(`goals.${goal.id}：缺 baseDifficulty`);
