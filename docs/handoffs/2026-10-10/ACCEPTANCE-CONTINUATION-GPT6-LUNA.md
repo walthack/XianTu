@@ -1,5 +1,12 @@
 # 六朝合包后续测执行书 · GPT-6 Luna
 
+## 固定开测步骤 · 1012TESTCFG（用户2026-10-12 22:16裁定）
+
+后续执行本文真机/复测前，先只读正式 `.xiantu-server/save-storage/user_config_api_management_v1.json` 的实际配置，注入本轮**测试私有浏览器profile**，不改原文件、不上传正式后台、密钥不外露；加载/刷新前在测试驱动中隔离API配置同步读取与写回，避免正式后台覆盖私有副本。私有副本main固定「minimax high speed」：`MiniMax-M2.7-highspeed`，`api_1782316385574_8wsfb6ors`；Jev/Deepseek按需付费，测试一律不用，所有指向它们的功能/模块/继承分配均在私有profile改到此ID，并禁用被禁连接以防回退。首个请求前核对页面实际路由与发送前payload.model，先把实际apiId/model写进报告；配置不可读、目标连接不可用、仍指向禁用模型或回退`gpt-4o`默认时，拦截请求、停下报告，不得用默认值开测。
+
+本条优先于下文旧模型选择/“沿用后台main”说明，只约束新轮测试，不改写历史结果；原环境与存档守卫继续有效。组织者在开测前完成配置，测试者不接触密钥。完整注入、继承检查与安全报告字段见[统一开测规则](../../TRUE-DEVICE-TEST-API-PREFLIGHT-1012TESTCFG.md)。
+
+
 日期：2026-10-10（Asia/Singapore）。起草：Claude（Opus 5.5），用户要求直接派给 GPT-6 Luna 无头执行。本文自包含；同时沿用 `docs/handoffs/2026-10-07/ACCEPTANCE-EXECUTION-GPT6-LUNA.md` 的全部环境守卫、记录与判定规则，冲突时以本文为准。
 
 批次名：`LUNA-CONTINUATION-20261010`。
@@ -35,7 +42,7 @@
 ## 4. 数据与模型
 
 - 新建 profile：`_newbot_tmp/acceptance-20261010-luna-<后缀>/profile/`。远程 save-storage 读写在隔离浏览器内拦截，不落正式后台。
-- 游戏模型沿用后台 main 配置；密钥只进私有 profile，不出现在命令行、截图、日志、报告。不全局 mock 模型。
+- 游戏模型按1012TESTCFG由正式配置只读派生到私有profile，main固定MiniMax-M2.7-highspeed，替换Jev/Deepseek分配且首请求前核实；密钥只进私有 profile，不出现在命令行、截图、日志、报告。不全局 mock 模型。
 - 检查点只能由生成脚本从生产回放得到，或由本轮在隔离 UI 中自然推进得到。禁止手改 done 标记、好感、章节、修为、战斗终态。
 
 ### 4.1 浏览器驱动（2026-10-10 01:20 补充，首次启动 BLOCKED 后）

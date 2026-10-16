@@ -56,3 +56,8 @@
 - 验证：`tests/requestLifecycleDiagnostics.test.mjs`；21项定向包含9项新测试。第一次XHR受控浏览器用例只flush头而不发body，平台直到body才暴露headers，严格时差断言未过；原日志保留，随后用合法JSON前缀触发HEADERS_RECEIVED，复核通过，无产品补丁或隐藏失败。
 - 独立诊断提交使用描述`feat: trace AI request and turn lifecycles without changing policy`；确切哈希以本线程回报或该Git记录为准，未执行推送。
 - 第二阶段未改变8097产物；15正式存档/API文件哈希/大小/mtime前后相同。旧包保留、受控测试浏览器/服务已结束；无文件删除，无合规/热调实施。
+
+
+## 后续裁定（1012DEPLOYTRACE，2026-10-12 09:02）
+
+用户已另行授权部署af7aa6d9诊断到8097，部署完成；上文“诊断未部署”属于DECIDE当时的历史口径。当前SHA、保护与日志导出见[DEPLOYTRACE指引](1012DEPLOYTRACE-TESTER-GUIDE.md)及PROJECT-STATUS。超时/重试/模型策略及热调仍不动。

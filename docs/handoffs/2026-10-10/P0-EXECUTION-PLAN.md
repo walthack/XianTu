@@ -1,5 +1,12 @@
 # 六朝仙途 · P0 总体执行计划（2026-10-10，Claude 起草，派其他模型执行）
 
+## 固定开测步骤 · 1012TESTCFG（用户2026-10-12 22:16裁定）
+
+后续执行本文真机/复测前，先只读正式 `.xiantu-server/save-storage/user_config_api_management_v1.json` 的实际配置，注入本轮**测试私有浏览器profile**，不改原文件、不上传正式后台、密钥不外露；加载/刷新前在测试驱动中隔离API配置同步读取与写回，避免正式后台覆盖私有副本。私有副本main固定「minimax high speed」：`MiniMax-M2.7-highspeed`，`api_1782316385574_8wsfb6ors`；Jev/Deepseek按需付费，测试一律不用，所有指向它们的功能/模块/继承分配均在私有profile改到此ID，并禁用被禁连接以防回退。首个请求前核对页面实际路由与发送前payload.model，先把实际apiId/model写进报告；配置不可读、目标连接不可用、仍指向禁用模型或回退`gpt-4o`默认时，拦截请求、停下报告，不得用默认值开测。
+
+本条优先于下文旧模型选择/“沿用后台main”说明，只约束新轮测试，不改写历史结果；原环境与存档守卫继续有效。组织者在开测前完成配置，测试者不接触密钥。完整注入、继承检查与安全报告字段见[统一开测规则](../../TRUE-DEVICE-TEST-API-PREFLIGHT-1012TESTCFG.md)。
+
+
 用户裁定（2026-10-10）：
 1. **真人试玩反馈取代内部验收矩阵，成为后续排序主依据。**
 2. **P0 立即开始**；10-10 验收债用**本机 Playwright** 收口，不再用 GPT-6 Luna 沙箱（两次 BLOCKED，原因均为沙箱禁止 Chromium mach bootstrap）。
