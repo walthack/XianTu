@@ -1579,9 +1579,9 @@
         "name": "小魏",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆护卫"
+          "origin": "白湖商馆的年轻护卫，曾走过南荒"
         },
-        "description": "白湖商馆护卫，弩手",
+        "description": "白湖商馆的年轻护卫，曾走过南荒",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 34,
@@ -1721,9 +1721,9 @@
         "name": "卡瓦",
         "role": "花苗族汉子，随送亲队同行",
         "profile": {
-          "origin": "花苗护卫"
+          "origin": "花苗的年轻汉子"
         },
-        "description": "花苗族汉子，随送亲队同行",
+        "description": "花苗的年轻汉子",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 40,
@@ -1875,9 +1875,9 @@
         "name": "娄蒙",
         "role": "红苗族长之子",
         "profile": {
-          "origin": "红苗族长之子"
+          "origin": "红苗族长之子，未来的继承人"
         },
-        "description": "红苗族长之子",
+        "description": "红苗族长之子，未来的继承人",
         "affiliations": [],
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"

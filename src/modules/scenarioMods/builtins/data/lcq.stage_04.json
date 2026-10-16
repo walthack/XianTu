@@ -1401,9 +1401,9 @@
         "name": "小魏",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆护卫"
+          "origin": "白湖商馆的年轻护卫，曾走过南荒"
         },
-        "description": "白湖商馆护卫，弩手",
+        "description": "白湖商馆的年轻护卫，曾走过南荒",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 34,
@@ -1418,9 +1418,9 @@
         "name": "石刚",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆护卫"
+          "origin": "白湖商馆的护卫，使雁翎刀"
         },
-        "description": "白湖商馆护卫",
+        "description": "白湖商馆的护卫，使雁翎刀",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 31,
@@ -1606,9 +1606,9 @@
         "name": "卡瓦",
         "role": "花苗族汉子，随送亲队同行",
         "profile": {
-          "origin": "花苗护卫"
+          "origin": "花苗的年轻汉子"
         },
-        "description": "花苗族汉子，随送亲队同行",
+        "description": "花苗的年轻汉子",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 40,
@@ -1665,9 +1665,9 @@
         "name": "樨夫人",
         "role": "白夷族夫人",
         "profile": {
-          "origin": "白夷族夫人"
+          "origin": "白夷族长的妻子"
         },
-        "description": "白夷族夫人",
+        "description": "白夷族长的妻子",
         "affiliations": [],
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
@@ -2678,7 +2678,7 @@
         "locationId": "liuchao.location.shan_jian",
         "axisId": "qingyu.50.1",
         "axisSeq": 73,
-        "axisAnchor": "六朝清羽记·#50·第48章·窥情",
+        "axisAnchor": "六朝清羽记·#49·第47章·神女",
         "axisBeat": "程宗扬得知乐明珠是光明观堂弟子，她自告奋勇作为新娘前往鬼王峒，目的是刺杀鬼巫王为民除害。",
         "objective": "听清乐明珠为什么要假扮新娘",
         "playerCompletionContract": {

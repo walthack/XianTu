@@ -1456,7 +1456,10 @@
         "name": "朱箓蛇丹",
         "type": "consumable",
         "description": "云苍峰用于治疗蛇毒",
-        "grade": "中品"
+        "grade": "中品",
+        "effectTags": [
+          "antidote"
+        ]
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -1534,7 +1537,10 @@
         "name": "朱箓蛇丹",
         "type": "consumable",
         "description": "云苍峰用于治疗蛇毒",
-        "grade": "中品"
+        "grade": "中品",
+        "effectTags": [
+          "antidote"
+        ]
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -3658,7 +3664,10 @@
         "name": "驱毒丸（改良版）",
         "type": "consumable",
         "description": "程宗扬服用小紫改良的驱毒丸，解除毒烟麻痹，但口感极辣。",
-        "grade": "中品"
+        "grade": "中品",
+        "effectTags": [
+          "antidote"
+        ]
       },
       "stageVariants": {
         "lyg.changgan_begins": {
@@ -4044,7 +4053,30 @@
         "name": "六识禁绝丹",
         "type": "consumable",
         "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
-        "grade": "中品"
+        "grade": "中品",
+        "effectTags": [
+          "sedative"
+        ],
+        "onUse": [
+          {
+            "statusId": "sense.sight"
+          },
+          {
+            "statusId": "sense.hearing"
+          },
+          {
+            "statusId": "sense.smell"
+          },
+          {
+            "statusId": "sense.taste"
+          },
+          {
+            "statusId": "sense.touch"
+          },
+          {
+            "statusId": "mind.confused"
+          }
+        ]
       },
       "stageVariants": {
         "lyg.changgan_begins": {
@@ -4386,7 +4418,16 @@
         "name": "六拂化清散",
         "type": "consumable",
         "description": "毒烟毒药，对常人无效，可缓慢侵蚀修炼者气海。",
-        "grade": "中品"
+        "grade": "中品",
+        "effectTags": [
+          "poison"
+        ],
+        "onUse": [
+          {
+            "statusId": "poisoned",
+            "doses": 1
+          }
+        ]
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -6284,7 +6325,15 @@
         "name": "假死药",
         "type": "consumable",
         "description": "程宗扬用假死药救出淖姬和平城君",
-        "grade": "仙品"
+        "grade": "仙品",
+        "effectTags": [
+          "sedative"
+        ],
+        "onUse": [
+          {
+            "statusId": "unconscious"
+          }
+        ]
       },
       "stageVariants": {
         "lyl.luoyang_coup": {
@@ -6344,7 +6393,15 @@
         "name": "假死药",
         "type": "consumable",
         "description": "程宗扬用假死药救出淖姬和平城君",
-        "grade": "仙品"
+        "grade": "仙品",
+        "effectTags": [
+          "sedative"
+        ],
+        "onUse": [
+          {
+            "statusId": "unconscious"
+          }
+        ]
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",

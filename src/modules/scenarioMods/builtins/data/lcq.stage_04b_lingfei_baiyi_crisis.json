@@ -1644,9 +1644,9 @@
         "name": "小魏",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆护卫"
+          "origin": "白湖商馆的年轻护卫，曾走过南荒"
         },
-        "description": "白湖商馆护卫，弩手",
+        "description": "白湖商馆的年轻护卫，曾走过南荒",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 34,
@@ -1661,9 +1661,9 @@
         "name": "石刚",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆护卫"
+          "origin": "白湖商馆的护卫，使雁翎刀"
         },
-        "description": "白湖商馆护卫",
+        "description": "白湖商馆的护卫，使雁翎刀",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 31,
@@ -1854,9 +1854,9 @@
         "name": "卡瓦",
         "role": "花苗族汉子，随送亲队同行",
         "profile": {
-          "origin": "花苗护卫"
+          "origin": "花苗的年轻汉子"
         },
-        "description": "花苗族汉子，随送亲队同行",
+        "description": "花苗的年轻汉子",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 40,
@@ -1904,9 +1904,9 @@
         "name": "樨夫人",
         "role": "白夷族夫人",
         "profile": {
-          "origin": "白夷族夫人"
+          "origin": "白夷族长的妻子"
         },
-        "description": "白夷族夫人",
+        "description": "白夷族长的妻子",
         "affiliations": [],
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
@@ -1987,9 +1987,9 @@
         "name": "蛇傀",
         "role": "鬼王峒使者阁罗的随从",
         "profile": {
-          "origin": "鬼王峒巫师"
+          "origin": "阁罗的随从，长得像蛇"
         },
-        "description": "鬼王峒使者阁罗的随从",
+        "description": "阁罗的随从，长得像蛇",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 78,
@@ -2004,9 +2004,9 @@
         "name": "黑舌",
         "role": "阁罗的随从，鬼王峒的人",
         "profile": {
-          "origin": "阁罗的随从，隶属鬼王峒"
+          "origin": "阁罗的随从"
         },
-        "description": "阁罗的随从，鬼王峒的人",
+        "description": "阁罗的随从",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 78,
@@ -2045,9 +2045,9 @@
         "name": "达古",
         "role": "鬼王峒巫师",
         "profile": {
-          "origin": "鬼王峒巫师"
+          "origin": "鬼王峒秘营的巫师，以腹语驱使鬼战士"
         },
-        "description": "鬼王峒巫师",
+        "description": "鬼王峒秘营的巫师，以腹语驱使鬼战士",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 82,

@@ -6,6 +6,8 @@ type Profile = { 角色ID?: string; 名字?: string; 好感度?: unknown; 与玩
 type Save = { 社交?: { 关系?: Record<string, unknown> } };
 const names = new Map<string, Set<string>>();
 for (const entity of registry.characters) {
+  // 敌人种类不是可建关系的人物：不进“姓名→人物 id”解析。
+  if ((entity as { entityType?: string }).entityType === 'enemy_kind') continue;
   for (const name of [entity.id,entity.canonicalName,...entity.aliases,...((entity as any).idAliases||[])]) {
     const ids = names.get(name) || new Set<string>(); ids.add(entity.id); names.set(name, ids);
   }

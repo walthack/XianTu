@@ -11,7 +11,7 @@
 //   node scripts/apply-character-cards-v3-to-mod.mjs [--dry-run] [--force]
 
 import { cp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const root = resolve(import.meta.dirname, '..');
@@ -22,81 +22,11 @@ const books = ['qingyu', 'yunlong', 'yange'];
 const dryRun = process.argv.includes('--dry-run');
 const force = process.argv.includes('--force');
 
-// 卡片是跨书静态档案；个别早期关卡只出现未揭示身份的称谓，不能按 alias
-// 自动补全真实身份与稳定画像。新增条目须在 CANON-DECISIONS.md 留原文依据。
-const CARD_TIME_GATE_EXCLUSIONS = new Map([
-  // R2-11U：长安 source69–84 只使用重建脚本内的本关身份与画像。
-  ['lyg.shixiang_ambush', new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.yang_yuhuan',
-    'liuchao.character.xiao_zi', 'liuchao.character.pan_jinlian',
-    'lyg.character.shi_temeipu', 'liuchao.character.fei_niao_ying_zi',
-    'lyg.character.np031', 'lyg.character.kuiji', 'lyg.character.guan_hai',
-    'lyg.character.np041', 'liuchao.character.li_ang', 'liuchao.character.xu_junfang',
-    'liuchao.character.yi_xin', 'liuchao.character.cheng_guang', 'liuchao.character.xin_yong',
-  ])],
-  // R2-11V：甘露前夜 source127–132 采用重建脚本内的时点最小投影。
-  ['lyg.ganlu_bian', new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.li_ang',
-    'liuchao.character.yang_yuhuan', 'lyg.character.li_jinxiang',
-    'liuchao.character.zhou_fei', 'liuchao.character.fei_niao_ying_zi',
-    'liuchao.character.li_fuguo', 'lyg.character.yu_chaoen',
-    'lyg.character.chou_shiliang', 'liuchao.character.tian_ling_zi',
-    'liuchao.character.jia_wenhe', 'liuchao.character.xiao_zi',
-    'liuchao.character.bai_nichang', 'liuchao.character.lv_zhi',
-  ])],
-  // R2-11T：本关开场停在第73章大潮之后。全局卡含后期程氏商会、紫妈妈、
-  // 凝羽/碧姬真相等信息；14 名演员均使用第74–92章时点最小投影。
-  ['lcq.stage_05', new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
-    'liuchao.character.xiao_zi', 'liuchao.character.xie_yi',
-    'liuchao.character.yun_cang_feng', 'liuchao.character.ning_yu',
-    'liuchao.character.wu_er_lang', 'liuchao.character.su_li',
-    'liuchao.character.qi_yuan', 'lcq.character.np004',
-    'lcq.character.np006', 'liuchao.character.bi_ji',
-    'liuchao.character.a_xi', 'liuchao.character.dan_chen',
-  ])],
-  // R2-11S：本关开场在第18章中段，九名演员的全局卡均含南荒后段或跨书信息；
-  // 使用重建脚本内的时点最小投影，由事件按第18–36章顺序逐步揭露。
-  ['lcq.stage_03', new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.su_daji',
-    'liuchao.character.ning_yu', 'liuchao.character.a_jiman_bana',
-    'liuchao.character.wu_er_lang', 'liuchao.character.xi_men_qing',
-    'liuchao.character.qi_yuan', 'liuchao.character.yun_cang_feng',
-    'liuchao.character.xie_yi',
-  ])],
-  // R2-11R：本关从鬼王峒决战前一直跨到殇侯揭面。全局卡混有星月湖大营、
-  // 盘江程氏、后期紫妈妈、凝羽功法真相等未来阶段信息；13 名演员均使用
-  // 重建脚本内的开场安全最小投影，由事件本身按序揭露后续事实。
-  ['lcq.stage_06', new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
-    'liuchao.character.xie_yi', 'liuchao.character.wu_er_lang',
-    'liuchao.character.ning_yu', 'liuchao.character.su_li',
-    'liuchao.character.xiao_zi', 'liuchao.character.gui_wu_wang',
-    'liuchao.character.dragon_god', 'lcq.character.np006',
-    'liuchao.character.yun_cang_feng', 'liuchao.character.bi_ji',
-    'liuchao.character.shang_zhen_yu',
-  ])],
-  ['lyl.lin_an_black_sea', new Set([
-    'liuchao.character.ruan_xiang_ning',
-  ])],
-  // R2-12：临安桥接 source9–11 仍只出现林娘子疑云，真实姓名、黑魔海身份与后宫关系未揭示。
-  ['lyl.lin_an_bridge', new Set([
-    'liuchao.character.ruan_xiang_ning',
-  ])],
-  // R2-12：小瀛洲关开场在 source15；真实身份到 source20、关系转折到 source23 才发生。
-  ['lyl.xiaoyingzhou_blacksea_trap', new Set([
-    'liuchao.character.ruan_xiang_ning',
-  ])],
-  // R2-11Q（源 12–14）：这五人均使用本关时点的最小投影。全局卡含后续身份、
-  // 关系或结局，构建期不得覆盖本关刚揭开的威远/林家/太尉府信息。
-  ['lyl.taiquan_expedition', new Set([
-    'canon.character.7718ae444a',
-    'liuchao.character.ruan_xiang_lin',
-    'liuchao.character.ruan_xiang_ning',
-    'liuchao.character.gao_zhishang',
-    'liuchao.character.lu_qian',
-  ])],
-]);
+// 角色总表（源数据 character-cards-v3.json）是跨书静态档案；个别早期关卡只出现未揭示身份的称谓，不能按 alias
+// 自动补全真实身份与稳定画像。数据在 mod-kit/entity-ledger/card-time-gates.json（与运行时共用一份）。
+const CARD_TIME_GATE_EXCLUSIONS = new Map(Object.entries(
+  JSON.parse(readFileSync(join(root, 'mod-kit/entity-ledger/card-time-gates.json'), 'utf8')).stages,
+).filter(([, gate]) => gate.at.includes('build')).map(([stageId, gate]) => [stageId, new Set(gate.exclude)]));
 
 const DERIVED_TAGS = [
   '【历程】', '【生辰】',
@@ -160,7 +90,7 @@ function applyCardToCharacter(character, card, stageId) {
   if (currentPhase?.role) character.role = currentPhase.role;
 
   // 只删【派生 notes】——它 100% 可由 registry 无损还原（等价性验证 notes 0 不一致）。
-  // appearance/origin 保留不动：场景/提取特定，卡强制覆盖会抹掉场景差异。
+  // appearance/origin 保留不动：场景/提取特定，总表强制覆盖会抹掉场景差异。
   const blockedPrefixes = asArray(currentPhase?.blockedStageNotePrefixes);
   const keptNotes = asArray(profile.notes).filter(note =>
     !DERIVED_TAGS.some(tag => String(note).startsWith(tag))

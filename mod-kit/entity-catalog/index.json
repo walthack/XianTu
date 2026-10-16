@@ -33,6 +33,24 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.charge_sudaji_fee_ins_baihu_price:act.baihu.o1.deferential",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.charge_sudaji_fee_ins_baihu_price:act.baihu.o1.priced",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.charge_sudaji_fee_ins_baihu_price:act.baihu.o1.probing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.charge_sudaji_fee:lock_fee_then_remove_device",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_02.json",
       "aliases": []
@@ -165,6 +183,42 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.ask.v_warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.bring.v_warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.stay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.stay.v_warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.guiwangdong_coop_pact:seal_guiwangdong_coop_pact",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
       "aliases": []
@@ -261,6 +315,24 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply:act.ningyu.o2.agree",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply:act.ningyu.o2.ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply:act.ningyu.o2.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.ningyu_regicide_offer:hear_ningyu_regicide_price",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_02.json",
       "aliases": []
@@ -315,6 +387,30 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon:act.lmz.l3.bandage",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon:act.lmz.l3.bandage.v_shielded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon:act.lmz.l3.pull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon:act.lmz.l3.pull.v_shielded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.pull_harpoon_lemingzhu:pull_harpoon_from_mingzhu",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
       "aliases": []
@@ -335,6 +431,24 @@
       "kind": "action",
       "id": "lcq.event.quanyuji_soul_pill:swallow_quanyuji_soul_pill",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.rainforest_black_shoal_ins_ningyu_fire:act.ningyu.y3.nothing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.rainforest_black_shoal_ins_ningyu_fire:act.ningyu.y3.private",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.rainforest_black_shoal_ins_ningyu_fire:act.ningyu.y3.public",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -705,6 +819,12 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.s04_03_ins_le_mingzhu_share_mushroom:act.lmz.l2.share",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.s04_03:advance_declared_objective",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
       "aliases": []
@@ -753,6 +873,24 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow:act.lmz.l1.rush",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow:act.lmz.l1.shield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow:act.lmz.l1.wait",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.s04b_lingfei_baiyi_crisis_02:advance_declared_objective",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
       "aliases": []
@@ -779,6 +917,24 @@
       "kind": "action",
       "id": "lcq.event.s04b_lingfei_baiyi_crisis_06:advance_declared_objective",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report:act.baihu.o3.full",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report:act.baihu.o3.lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report:act.baihu.o3.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -1101,6 +1257,42 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion:act.lmz.l4.laugh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion:act.lmz.l4.laugh.v_promised",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion:act.lmz.l4.run",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion:act.lmz.l4.run.v_promised",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion:act.lmz.l4.scold",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion:act.lmz.l4.scold.v_promised",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.s05b_06_breakout_and_reunion:advance_declared_objective",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
       "aliases": []
@@ -1143,8 +1335,50 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.s05b_10_slave_revolt_and_phoenix_change_ins_lmz_redlight:act.lmz.l5.witness",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.s05b_10_slave_revolt_and_phoenix_change:advance_declared_objective",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_ice_gu_detour_ins_baihu_return:act.baihu.o5.courier",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_ice_gu_detour_ins_baihu_return:act.baihu.o5.courier.v_lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_ice_gu_detour_ins_baihu_return:act.baihu.o5.sample",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_ice_gu_detour_ins_baihu_return:act.baihu.o5.sample.v_lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_ice_gu_detour_ins_baihu_return:act.baihu.o5.silent",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_ice_gu_detour_ins_baihu_return:act.baihu.o5.silent.v_lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -1181,6 +1415,60 @@
       "kind": "action",
       "id": "lcq.event.s05b_wuer_suli_depart:settle_with_wuer_and_part",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door:act.ningyu.y6.token",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door:act.ningyu.y6.token.v_plain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door:act.ningyu.y6.token.v_warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door:act.ningyu.y6.word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door:act.ningyu.y6.word.v_plain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door:act.ningyu.y6.word.v_warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_call:act.ningyu.y6.call",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_knock:act.ningyu.y6.knock",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_recall:act.ningyu.y6.recall",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -4570,6 +4858,14 @@
     },
     {
       "kind": "address",
+      "id": "lcq.character.nanhuang_xi_furen",
+      "authoritySource": "mod-kit/entity-ledger/overrides.json",
+      "aliases": [
+        "樨夫人"
+      ]
+    },
+    {
+      "kind": "address",
       "id": "lcq.character.nanhuang_yeao",
       "authoritySource": "mod-kit/entity-ledger/overrides.json",
       "aliases": [
@@ -4743,6 +5039,138 @@
         "云执事",
         "云老哥"
       ]
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.bonus_active",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.crow_rush",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.crow_shield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.crow_wait",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.harpoon_bandage",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.harpoon_pull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.reunion_laugh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.reunion_run",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.reunion_scold",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.share_mushroom",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.lmz.tease_penalty",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.care_none",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.care_public_thanks",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.care_warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.enter_ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.enter_bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.enter_stay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.farewell_token",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.farewell_word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.regicide_agree",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.regicide_ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "affinityWeight",
+      "id": "aff.w.ningyu.regicide_refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
     },
     {
       "kind": "affinityWeight",
@@ -5926,7 +6354,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_ajia",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "阿葭"
       ]
@@ -5934,7 +6362,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_baiyi_chief",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "白夷族长"
       ]
@@ -5942,7 +6370,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_blacksea_envoy",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "黑衣丽人"
       ]
@@ -5999,7 +6427,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_stonemason",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "六朝石匠"
       ]
@@ -6016,7 +6444,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_xiaojin",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "小津"
       ]
@@ -6032,7 +6460,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_yeao",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "叶媪"
       ]
@@ -6040,7 +6468,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_yixiong",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "易雄"
       ]
@@ -6048,7 +6476,7 @@
     {
       "kind": "character",
       "id": "lcq.character.nanhuang_yiyong",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "易勇"
       ]
@@ -6115,6 +6543,32 @@
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "朱诺"
+      ]
+    },
+    {
+      "kind": "character",
+      "id": "lcq.enemy.altar_corpse",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
+      "aliases": [
+        "男尸鬼",
+        "lcq.enemy.male_corpse"
+      ]
+    },
+    {
+      "kind": "character",
+      "id": "lcq.enemy.guiwang_warrior",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
+      "aliases": [
+        "lcq.enemy.guiwang_ghost_warrior",
+        "lcq.enemy.guiwangdong_warrior"
+      ]
+    },
+    {
+      "kind": "character",
+      "id": "lcq.enemy.merfolk",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
+      "aliases": [
+        "lcq.enemy.jiaoren"
       ]
     },
     {
@@ -6441,6 +6895,7 @@
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
         "莲儿",
+        "lyl.character.he_yilian",
         "何漪莲"
       ]
     },
@@ -6838,14 +7293,6 @@
     },
     {
       "kind": "character",
-      "id": "liuchao.character.ning_cheng",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
-      "aliases": [
-        "宁成"
-      ]
-    },
-    {
-      "kind": "character",
       "id": "liuchao.character.ning_yu",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
@@ -7108,6 +7555,7 @@
       "id": "liuchao.character.wang_hui",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
+        "lyl.character.np016",
         "王蕙"
       ]
     },
@@ -7480,6 +7928,7 @@
       "id": "liuchao.character.zhang_yun",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
+        "lyg.character.np011",
         "张恽"
       ]
     },
@@ -7627,14 +8076,6 @@
     },
     {
       "kind": "character",
-      "id": "lyg.character.np011",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
-      "aliases": [
-        "张恽"
-      ]
-    },
-    {
-      "kind": "character",
       "id": "lyg.character.np012",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
@@ -7756,14 +8197,6 @@
     },
     {
       "kind": "character",
-      "id": "lyl.character.he_yilian",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json",
-      "aliases": [
-        "何漪莲"
-      ]
-    },
-    {
-      "kind": "character",
       "id": "lyl.character.liu_jian",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
@@ -7814,14 +8247,6 @@
     },
     {
       "kind": "character",
-      "id": "lyl.character.np016",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json",
-      "aliases": [
-        "王蕙"
-      ]
-    },
-    {
-      "kind": "character",
       "id": "lyl.character.np039",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
@@ -7833,6 +8258,7 @@
       "id": "lyl.character.np043",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
+        "liuchao.character.ning_cheng",
         "宁成"
       ]
     },
@@ -7966,7 +8392,8 @@
       "id": "lcq.enemy.altar_corpse",
       "authoritySource": "mod-kit/entity-catalog/enemies.json",
       "aliases": [
-        "尸鬼"
+        "尸鬼",
+        "男尸鬼"
       ]
     },
     {
@@ -8111,12 +8538,6 @@
     },
     {
       "kind": "enemy",
-      "id": "lcq.enemy.male_corpse",
-      "authoritySource": "mod-kit/entity-catalog/enemies.json",
-      "aliases": []
-    },
-    {
-      "kind": "enemy",
       "id": "lcq.enemy.merfolk",
       "authoritySource": "mod-kit/entity-catalog/enemies.json",
       "aliases": [
@@ -8206,6 +8627,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.charge_sudaji_fee_ins_baihu_price",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.debut_lemingzhu",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
       "aliases": []
@@ -8278,6 +8705,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.haishen_hall_merfolk",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
       "aliases": []
@@ -8326,6 +8759,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.palace_haunting_rumor",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
       "aliases": []
@@ -8356,6 +8795,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.qiushaojun_breaks_with_linzhilan",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json",
       "aliases": []
@@ -8370,6 +8815,12 @@
       "kind": "event",
       "id": "lcq.event.rainforest_black_shoal",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_02.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.rainforest_black_shoal_ins_ningyu_fire",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -8608,6 +9059,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.s04_03_ins_le_mingzhu_share_mushroom",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.s04_04",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
       "aliases": []
@@ -8644,6 +9101,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.s04b_lingfei_baiyi_crisis_03",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
       "aliases": []
@@ -8670,6 +9133,12 @@
       "kind": "event",
       "id": "lcq.event.s04b_lingfei_baiyi_crisis_07",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -8890,6 +9359,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.s05b_07_xiaozi_trap",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
       "aliases": []
@@ -8920,8 +9395,20 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.s05b_10_slave_revolt_and_phoenix_change_ins_lmz_redlight",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.s05b_ice_gu_detour",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s05b_ice_gu_detour_ins_baihu_return",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -8940,6 +9427,30 @@
       "kind": "event",
       "id": "lcq.event.s05b_yeao_palm_ningyu_stays",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_call",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_knock",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_recall",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -11394,6 +11905,12 @@
       "kind": "fact",
       "id": "fact.biling_algae_as_nylon",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "fact",
+      "id": "fact.lmz.phoenix_change",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -17867,6 +18384,24 @@
     },
     {
       "kind": "line",
+      "id": "line.char.le_mingzhu.bond",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "line",
+      "id": "line.char.ning_yu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "line",
+      "id": "line.side.baihu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "line",
       "id": "line.side.biling_algae_silk",
       "authoritySource": "mod-kit/quest-lines/lines.json",
       "aliases": []
@@ -18880,6 +19415,60 @@
     },
     {
       "kind": "memoryTemplate",
+      "id": "mem.lmz.l1.rush",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l1.shield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l1.wait",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l2.share",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l3.bandage",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l3.pull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l4.laugh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l4.run",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.lmz.l4.scold",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
       "id": "mem.lmz.pan_secret.hard_truth",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -18894,6 +19483,180 @@
       "kind": "memoryTemplate",
       "id": "mem.lmz.pan_secret.teased",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.o2.agree",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.o2.ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.o2.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y3.nothing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y3.private",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y3.public",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y5.ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y5.stay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y6.token",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "memoryTemplate",
+      "id": "mem.ningyu.y6.word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o1.deferential",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o1.priced",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o1.probing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o3.full",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o3.lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o3.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o5.courier",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o5.sample",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.baihu.o5.silent",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l1.rush",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l1.shield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l1.wait",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l3.bandage",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l3.pull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l4.laugh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l4.run",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l4.scold",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.lmz.l5.witness",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -18916,6 +19679,72 @@
     },
     {
       "kind": "receipt",
+      "id": "rcpt.ningyu.o2.agree",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.o2.ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.o2.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y3.nothing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y3.private",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y3.public",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y5.ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y5.stay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y6.token",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y6.word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
       "id": "rcpt.side.biling_algae_silk.ordered",
       "authoritySource": "mod-kit/quest-lines/lines.json",
       "aliases": []
@@ -18924,6 +19753,12 @@
       "kind": "salience",
       "id": "sal.minor",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "salience",
+      "id": "sal.notable",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -19870,6 +20705,114 @@
     },
     {
       "kind": "state",
+      "id": "branch.baihu.first_bargain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.baihu.regicide_stance",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.baihu.report",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.baihu.return_message",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.lmz.first_rescue",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.lmz.harpoon",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.lmz.pan_secret",
+      "authoritySource": "mod-kit/quest-lines/lines.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.lmz.phoenix_change",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.lmz.reunion",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.lmz.shared_mushroom",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.lmz.title_upgraded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.ningyu.care",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.ningyu.door_called",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.ningyu.door_knocked",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.ningyu.door_recalled",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.ningyu.enter_dong",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.ningyu.farewell",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
+      "id": "branch.ningyu.regicide_reply",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
       "id": "state.lmz.promise_pan_secret",
       "authoritySource": "mod-kit/quest-lines/lines.json",
       "aliases": []
@@ -19882,7 +20825,31 @@
     },
     {
       "kind": "status",
+      "id": "addiction",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "addiction.maigu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "bleeding",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "disability.lame_leg",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "disability.one_eye",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
     },
@@ -19906,6 +20873,18 @@
     },
     {
       "kind": "status",
+      "id": "fatigue.mental",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "fatigue.weary",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "fracture",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -19919,6 +20898,12 @@
     {
       "kind": "status",
       "id": "gear.blades_dulled",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "mind.confused",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
     },
@@ -19949,6 +20934,48 @@
     {
       "kind": "status",
       "id": "qi.disordered",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "restrict.arm",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "restrict.leg",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "sense.hearing",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "sense.sight",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "sense.smell",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "sense.taste",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "sense.touch",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
     },
@@ -20470,8 +21497,98 @@
     },
     {
       "kind": "text",
+      "id": "brief.baihu.o1_price",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.baihu.o3_report",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.baihu.o5_deadline",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.lmz.l1_crow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.lmz.l2.share",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.lmz.l3_harpoon",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.lmz.l4_reunion",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.lmz.l5_redlight",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "brief.lmz.pan_secret",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.o2_regicide",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.y3_fire",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.y5_enter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.y6_door",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.y6.call",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.y6.knock",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.y6.recall",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -20482,8 +21599,872 @@
     },
     {
       "kind": "text",
+      "id": "ending.bridge.lcq.ending.death.dragon_well",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "ending.bridge.lcq.ending.death.ghost_king_skull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "ending.bridge.lcq.ending.death.shanghou_relic",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "ending.bridge.lcq.ending.death.wangzhe_blast",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "ending.bridge.lcq.ending.fail.dragon_essence",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.baihu_shangguan_escape.walk_out_wuyuan_shangguan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.charge_sudaji_fee.lock_fee_then_remove_device",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.charge_sudaji_fee.name_sixty_zhu_before_help",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.free_ajiman.pocket_ajiman_bond",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.free_ajiman.take_ajiman_bond_in_hand",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.free_ajiman.tear_bond_and_face_blockade",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.ningyu_enters_gamble.answer_ningyu_on_debut",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.s02_02.witness_wang_zhe_nine_suns",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.s03b_yinzhu_xiongerpu.burn_yinzhu_victim",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.s03b_yinzhu_xiongerpu.pick_zhu88_as_guide",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.s04_05.respond_to_flash_flood",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.s04_06.advance_declared_objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.s05b_shanghou_reads_letter.hand_blank_letter_to_shanghou",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.shanghou_revealed.confirm_zhu_is_shanghou",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.shanghou_revealed.follow_yeao_to_shanghou",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.shanghou_revealed.refuse_shanghou_relic_test",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.sudaji_south_pact.offer_nylon_clue_for_term",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.sudaji_south_pact.seal_three_month_south_pact",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.wuerlang_joins.confirm_wuerlang_no_prior_promise",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "fixed.beat.lcq.event.wuerlang_joins.secure_wuerlang_southbound",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.attack.block",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.attack.graze",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.attack.subdue",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.attack.wound",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.bandage.done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.bandage.failed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.deceive.deceived",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.deceive.seen_through",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.feed_pill.benefit_done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.feed_pill.sedative_done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.feed_pill.toxic_done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.feed_pill.toxic_dying",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.feed_pill.toxic_floor",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.flirt.accept",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.flirt.accept_shy",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.flirt.deflect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.flirt.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.budget_full",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.cooldown",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.equipped_or_story",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.item_mismatch",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.level_too_low",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.level_unknown",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.low_goodwill",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.no_item",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.no_resource",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.not_present",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.nothing_to_treat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.protected",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.scene_active",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gift.done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.grab.block",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.grab.subdue",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.heal.done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.heal.done_downgraded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.heal.failed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.invite.accept",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.invite.accept_shy",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.invite.deflect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.invite.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.kiss.accept",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.kiss.deflect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.kiss.rebuke",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.kiss.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.kiss.strike_back",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.protected",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.taunt.landed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.taunt.rebuffed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.threaten.landed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.threaten.rebuffed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.transfer_qi.backlash",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.transfer_qi.gain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.transfer_qi.no_gain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.attack.block",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.attack.graze",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.attack.subdue",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.attack.wound",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.bandage.done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.bandage.failed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.deceive.deceived",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.deceive.seen_through",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.feed_pill.benefit_done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.feed_pill.sedative_done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.feed_pill.toxic_done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.feed_pill.toxic_dying",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.feed_pill.toxic_floor",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.flirt.accept",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.flirt.accept_shy",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.flirt.deflect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.flirt.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.gift.done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.grab.block",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.grab.subdue",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.heal.done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.heal.done_downgraded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.heal.failed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.invite.accept",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.invite.accept_shy",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.invite.deflect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.invite.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.kiss.accept",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.kiss.deflect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.kiss.rebuke",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.kiss.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.kiss.strike_back",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.taunt.landed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.taunt.rebuffed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.threaten.landed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.threaten.rebuffed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.transfer_qi.gain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.transfer_qi.no_gain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.cast.criticalFailure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.cast.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.cast.greatSuccess",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.cast.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.cast.perfect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.cast.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.physical.criticalFailure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.physical.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.physical.greatSuccess",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.physical.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.physical.perfect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.physical.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.verbal.criticalFailure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.verbal.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.verbal.greatSuccess",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.verbal.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.verbal.perfect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.verbal.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "intent.ask_biling_for_nylon",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o1.deferential",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o1.priced",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o1.probing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o3.full",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o3.lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o3.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o5.courier",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o5.sample",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.baihu.o5.silent",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -20506,6 +22487,66 @@
     },
     {
       "kind": "text",
+      "id": "intent.lmz.l1.rush",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l1.shield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l1.wait",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l2.share",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l3.bandage",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l3.pull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l4.laugh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l4.run",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l4.scold",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.lmz.l5.witness",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "intent.lmz.promise_silence",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -20514,6 +22555,90 @@
       "kind": "text",
       "id": "intent.lmz.tease_with_pan",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.o2.agree",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.o2.ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.o2.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y3.nothing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y3.private",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y3.public",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y5.ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y5.stay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y6.call",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y6.knock",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y6.recall",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y6.token",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y6.word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -20572,6 +22697,60 @@
     },
     {
       "kind": "text",
+      "id": "outcome.act.baihu.o1.deferential",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o1.priced",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o1.probing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o3.full",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o3.lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o3.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o5.courier",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o5.sample",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.baihu.o5.silent",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "outcome.act.commission_algae_purchase",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -20590,6 +22769,66 @@
     },
     {
       "kind": "text",
+      "id": "outcome.act.lmz.l1.rush",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l1.shield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l1.wait",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l2.share",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l3.bandage",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l3.pull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l4.laugh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l4.run",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l4.scold",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.lmz.l5.witness",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "outcome.act.lmz.promise_silence",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -20598,6 +22837,114 @@
       "kind": "text",
       "id": "outcome.act.lmz.tease_with_pan",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.o2.agree",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.o2.ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.o2.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y3.nothing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y3.private",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y3.public",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y5.ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y5.stay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y6.call",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y6.knock",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y6.recall",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y6.token",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y6.word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.echo.ningyu.y6.token.plain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.echo.ningyu.y6.token.warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.echo.ningyu.y6.word.plain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.echo.ningyu.y6.word.warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -20620,6 +22967,60 @@
     },
     {
       "kind": "text",
+      "id": "text.act.baihu.o1.deferential",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o1.priced",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o1.probing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o3.full",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o3.lie",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o3.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o5.courier",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o5.sample",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.baihu.o5.silent",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "text.act.commission_algae_purchase",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -20638,6 +23039,66 @@
     },
     {
       "kind": "text",
+      "id": "text.act.lmz.l1.rush",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l1.shield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l1.wait",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l2.share",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l3.bandage",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l3.pull",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l4.laugh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l4.run",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l4.scold",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.lmz.l5.witness",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "text.act.lmz.promise_silence",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -20650,14 +23111,554 @@
     },
     {
       "kind": "text",
+      "id": "text.act.ningyu.o2.agree",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.o2.ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.o2.refuse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y3.nothing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y3.private",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y3.public",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y5.ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y5.stay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y6.call",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y6.knock",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y6.recall",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y6.token",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y6.word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o1_price.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o1_price.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o1_price.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o1_price.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o1_price.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o3_report.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o3_report.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o3_report.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o3_report.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o3_report.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o5_deadline.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o5_deadline.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o5_deadline.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o5_deadline.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.baihu.o5_deadline.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l1_crow.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l1_crow.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l1_crow.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l1_crow.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l1_crow.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l3_harpoon.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l3_harpoon.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l3_harpoon.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l3_harpoon.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l4_reunion.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l4_reunion.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l4_reunion.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l4_reunion.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l4_reunion.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l5_redlight.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l5_redlight.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.lmz.l5_redlight.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.o2_regicide.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.o2_regicide.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.o2_regicide.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.o2_regicide.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.o2_regicide.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y3_fire.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y3_fire.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y3_fire.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y3_fire.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y3_fire.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y5_enter.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y5_enter.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y5_enter.option3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y5_enter.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y5_enter.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y6_door.option1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y6_door.option2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y6_door.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.card.ningyu.y6_door.tension",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.echo.baihu.o5_deadline.lie.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.echo.lmz.l3_harpoon.shielded.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.echo.lmz.l4_reunion.promised.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.echo.ningyu.y5_enter.warm.previous",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "text.line.biling_algae_silk.title",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
     },
     {
       "kind": "text",
+      "id": "text.line.char.le_mingzhu.bond.hint",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line.char.le_mingzhu.bond.title",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line.char.ning_yu.hint",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line.char.ning_yu.title",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "text.line.le_mingzhu.title",
       "authoritySource": "mod-kit/quest-lines/resources.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line.side.baihu.hint",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line.side.baihu.title",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.baihu.o1_price",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.baihu.o3_report",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.baihu.o5_deadline",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.lmz.l1_crow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.lmz.l2.share",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.lmz.l3_harpoon",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.lmz.l4_reunion",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.lmz.l5_redlight",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.ningyu.o2_regicide",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.ningyu.y3_fire",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.ningyu.y5_enter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.ningyu.y6_door",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.ningyu.y6.call",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.ningyu.y6.knock",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.obj.ningyu.y6.recall",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     }
   ],

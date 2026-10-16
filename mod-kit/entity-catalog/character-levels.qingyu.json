@@ -12,7 +12,8 @@
     "lcq.enemy.guiwangdong_envoy_f05": "lcq.enemy.dungeon_shaman",
     "lcq.enemy.yaren": "lcq.enemy.crow_man",
     "lcq.enemy.jiaoren": "lcq.enemy.merfolk",
-    "lcq.enemy.bone_tiger": "lcq.enemy.husha_bone_tiger"
+    "lcq.enemy.bone_tiger": "lcq.enemy.husha_bone_tiger",
+    "lcq.enemy.male_corpse": "lcq.enemy.altar_corpse"
   },
   "entries": [
     {
@@ -1115,7 +1116,7 @@
     },
     {
       "sourceRow": 61,
-      "entityId": "lcq.enemy.male_corpse",
+      "entityId": "lcq.enemy.altar_corpse",
       "chapterRanges": [
         [
           102,

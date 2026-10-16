@@ -155,7 +155,8 @@ class CharacterRagService {
   private getRegistryInfo(): { hash: string; entries: RegistryEntry[] } {
     const reg = registryJson as unknown as RegistryMeta;
     const hash = reg?.sourceHash || '';
-    const characters = Array.isArray(reg?.characters) ? reg.characters : [];
+    // 敌人种类只有名字，没有可检索的人物设定，不进角色向量索引。
+    const characters = Array.isArray(reg?.characters) ? reg.characters.filter(c => (c as { entityType?: string }).entityType !== 'enemy_kind') : [];
     return { hash, entries: characters as RegistryEntry[] };
   }
 

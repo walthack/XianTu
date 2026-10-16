@@ -6,6 +6,10 @@ import {entityNamePattern} from './namedEntities';
 /**
  * 角色档案运行时还原（Character Resolver）—— 全量 P4 的核心。
  *
+ * 术语（docs/CHARACTER-DATA-STRUCTURE.md）：角色总表=character-registry.json（一人一 id）；
+ * 阶段档=各关 canon.characters[] 的一条（同 id 的动态字段）；角色卡=每回合现算给模型看的页面，不存档。
+ * 本文件只做“总表 → 阶段档”的静态还原，不产生任何独立存档。
+ *
  * mod 阶段文件里角色只保留动态字段（id/name/role/realm/affiliations/skillIds…），
  * 静态档案（appearance/personality/origin/派生 notes）从共享 character-registry.json
  * 在「物化到存档」那一刻按 id/name 还原回来。
@@ -16,8 +20,10 @@ import {entityNamePattern} from './namedEntities';
  * - 还原逻辑与构建期 scripts/apply-character-cards-v3-to-mod.mjs 的 buildNotes/applyCardToCharacter 一一对应。
  */
 import registryJson from './builtins/character-registry.json';
-import { syncCharacterNaming, namingChapter, namingFor, isSouthernStage } from './ledger/naming';
+import { syncCharacterNaming, namingChapter, namingFor, isSouthernStage, ledgerChapterGates } from './ledger/naming';
+import { ENEMY_KIND_TYPE, kindIdOf } from './actorInstances';
 import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
+import cardTimeGates from '../../../mod-kit/entity-ledger/card-time-gates.json';
 
 interface RegistryPhase {
   scope?: string;
@@ -41,6 +47,8 @@ interface RegistryPhase {
   keyEvents?: string[];
   ending?: string[] | string;
   hideCanonicalAlias?: boolean;
+  /** 本关不披露该人物的身份／职务：origin、role、description 取相位值（可空）而不回落总表概括与阶段档文字，也不带关系身份门禁；势力归属（affiliations／factionId）同样不带出。 */
+  identityWithheld?: boolean;
   blockedStageNotePrefixes?: string[];
 }
 /** 换装换不掉的体貌；与 visualOutfits 成对，见 portrait-visual-master.json 的分层说明 */
@@ -91,8 +99,14 @@ interface RegistryEntry {
   canonicalName: string;
   aliases?: string[];
   gender?: string;
-  entityType?: 'character' | 'creature';
+  /** enemy_kind = 敌人种类（鲛人、尸鬼…）：一个种类一个 id，只放基础属性，不是可对话/可建档的个人。 */
+  entityType?: 'character' | 'creature' | typeof ENEMY_KIND_TYPE;
   tier?: string;
+  idAliases?: string[];
+  /** 必须存活：缺省 false。只约束玩家自由行动的结算；剧情合同安排的死亡不受它限制。 */
+  mustSurvive?: boolean;
+  /** 基础属性（等级、战斗强度、属性）。各阶段档只存与此不同的覆盖项，合并规则见 characterStatsMerge.ts。 */
+  baseStats?: Record<string, unknown>;
   staticProfile?: RegistryStaticProfile;
   phaseIdentities?: RegistryPhase[];
   review?: { humanNotes?: string[]; aliasMerged?: string[]; followUps?: string[] };
@@ -202,10 +216,10 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
     }
   }
   if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
-  // 走向类字段（关系/入伙/情节/结局）在静态卡里是全书终点快照，只在两种情况下取值：
+  // 走向类字段（关系/入伙/情节/结局）在角色总表里是全书终点快照，只在两种情况下取值：
   // ① 本关 phase 覆盖了该字段；② 角色在关系链上声明了转折（allowed-after-turning-point），
   //    且本关有投影却留空——既有约定：转折前逐关写“尚未…”，转折后留空沿用终态。
-  // 没有转折声明的角色（凝羽、月霜等），或本关根本没有投影时，不回落静态卡，
+  // 没有转折声明的角色（凝羽、月霜等），或本关根本没有投影时，不回落总表静态字段，
   // 否则早期关卡会提前注入后期关系、成人情节与结局。
   const finalStateAllowed = Boolean(currentPhase)
     && relationshipPhases(entry).some(phase => phase.status === 'allowed-after-turning-point');
@@ -240,7 +254,7 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
     // 真正登场的关卡里失效：实测 33 名角色、302 个「角色×关卡」组合无一注入（小紫 33 关、
     // 卓云君 24 关、潘金莲 20 关、吕雉 18 关全丢）。现按本关身份判断后单独补回。
     const settled = AFTER_TURNING_POINT_RE.test(`${currentPhase.identity || ''} ${currentPhase.role || ''}`);
-    if (!settled) {
+    if (!settled && !currentPhase.identityWithheld) {
       for (const phase of relationshipPhases(entry)) {
         if (phase.status !== 'forbid-final-state-before-turning-point') continue;
         add('关系身份门禁', `${phase.seq || '转折前'}：${phase.identity || ''}`, 360);
@@ -261,65 +275,42 @@ const byName = new Map<string, RegistryEntry>();
 for (const entry of (registryJson as { characters: RegistryEntry[] }).characters || []) {
   byId.set(entry.id, entry);
   for(const alias of (entry as any).idAliases||[])byId.set(alias,entry);
+  // 敌人种类只按 id 查：它们的名字是物种/群体名，不能参与按人名的还原、召回与“人物被写成物品”的拦截。
+  if (entry.entityType === ENEMY_KIND_TYPE) continue;
   byName.set(entry.canonicalName, entry);
   for (const alias of entry.aliases || []) if (!byName.has(alias)) byName.set(alias, entry);
 }
 
-/** 年龄只取源卡事实，不解析角色称谓，也不把出生年当年龄。 */
+/** 必须存活标记：严格布尔，只认 true，缺省 false。实例 id 按其种类读。 */
+export function getRegistryMustSurvive(characterId: string): boolean {
+  return byId.get(kindIdOf(characterId))?.mustSurvive === true;
+}
+/** 总表里的基础属性（拷贝，未经过滤；过滤与合并见 characterStats.ts）。实例 id 按其种类读；没有则 undefined。 */
+export function getRegistryBaseStats(characterId: string): Record<string, unknown> | undefined {
+  const stats = byId.get(kindIdOf(characterId))?.baseStats;
+  return stats === undefined ? undefined : structuredClone(stats);
+}
+/** 该 id（含旧 id 别名、实例 id）对应的总表主 id；总表里没有则 undefined。 */
+export function getRegistryCanonicalId(characterId: string): string | undefined {
+  return byId.get(kindIdOf(characterId))?.id;
+}
+
+/** 年龄只取总表源数据里的事实，不解析角色称谓，也不把出生年当年龄。 */
 export function getRegistryAgeFacts(character: { id?: string; name?: string }) {
   const entry = byId.get(character.id || '') || byName.get(character.name || '');
   return { birthYear: entry?.staticProfile?.birthYear, storyAge: entry?.staticProfile?.storyAge };
 }
 
-// 与构建期 apply-character-cards-v3-to-mod.mjs 同步：早期关卡里的未揭示称谓
-// 不得因 alias 命中全局 registry 而在新档物化时补出未来身份或画像。
-const CARD_TIME_GATE_EXCLUSIONS: Record<string, Set<string>> = {
-  'lcq.stage_03b_snake_flower_bridge': new Set(['liuchao.character.shang_zhen_yu', 'liuchao.character.le_mingzhu']),
-  'lcq.stage_04': new Set(['liuchao.character.shang_zhen_yu', 'liuchao.character.le_mingzhu']),
-  'lcq.stage_04b_lingfei_baiyi_crisis': new Set(['liuchao.character.shang_zhen_yu']),
-  'lcq.stage_05b': new Set(['liuchao.character.shang_zhen_yu']),
-  'lcq.stage_05': new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
-    'liuchao.character.xiao_zi', 'liuchao.character.xie_yi',
-    'liuchao.character.yun_cang_feng', 'liuchao.character.ning_yu',
-    'liuchao.character.wu_er_lang', 'liuchao.character.su_li',
-    'liuchao.character.qi_yuan', 'lcq.character.np004',
-    'lcq.character.np006', 'liuchao.character.bi_ji',
-    'liuchao.character.a_xi', 'liuchao.character.dan_chen',
-  ]),
-  'lcq.stage_03': new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.su_daji',
-    'liuchao.character.ning_yu', 'liuchao.character.a_jiman_bana',
-    'liuchao.character.wu_er_lang', 'liuchao.character.xi_men_qing',
-    'liuchao.character.qi_yuan', 'liuchao.character.yun_cang_feng',
-    'liuchao.character.xie_yi',
-  ]),
-  'lcq.stage_06': new Set([
-    'liuchao.character.cheng_zongyang', 'liuchao.character.le_mingzhu',
-    'liuchao.character.xie_yi', 'liuchao.character.wu_er_lang',
-    'liuchao.character.ning_yu', 'liuchao.character.su_li',
-    'liuchao.character.xiao_zi', 'liuchao.character.gui_wu_wang',
-    'liuchao.character.dragon_god', 'lcq.character.np006',
-    'liuchao.character.yun_cang_feng', 'liuchao.character.bi_ji',
-    'liuchao.character.shang_zhen_yu',
-  ]),
-  'lyl.lin_an_black_sea': new Set([
-    'liuchao.character.ruan_xiang_ning',
-  ]),
-  'lyl.lin_an_bridge': new Set([
-    'liuchao.character.ruan_xiang_ning',
-  ]),
-  'lyl.xiaoyingzhou_blacksea_trap': new Set([
-    'liuchao.character.ruan_xiang_ning',
-  ]),
-  'lyl.taiquan_expedition': new Set([
-    'canon.character.7718ae444a',
-    'liuchao.character.ruan_xiang_lin',
-    'liuchao.character.ruan_xiang_ning',
-    'liuchao.character.gao_zhishang',
-    'liuchao.character.lu_qian',
-  ]),
-};
+// 总表优先：有本关相位 description／identity 的人物，阶段档文字以总表为准；待裁定者（账本 masterPrecedence）保持原行为。
+// 与构建期 apply-character-cards-v3-to-mod.mjs 共读账本同一份名单。
+const MASTER_PRECEDENCE_PENDING = new Set<string>((ledgerOverrides as unknown as { masterPrecedence: { pendingIds: string[] } }).masterPrecedence.pendingIds);
+
+// 与构建期 apply-character-cards-v3-to-mod.mjs 共用 mod-kit/entity-ledger/card-time-gates.json：
+// 早期关卡里的未揭示称谓不得因 alias 命中全局 registry 而在新档物化时补出未来身份或画像。
+const CARD_TIME_GATE_EXCLUSIONS: Record<string, Set<string>> = Object.fromEntries(
+  Object.entries((cardTimeGates as { stages: Record<string, { at: string[]; exclude: string[] }> }).stages)
+    .filter(([, gate]) => gate.at.includes('runtime')).map(([stageId, gate]) => [stageId, new Set(gate.exclude)]),
+);
 
 /**
  * 用注册表把一个精简角色还原为完整角色（原地修改 character.profile）。
@@ -332,14 +323,23 @@ function resolveOne(character: any, stageId: string): boolean {
   const profile = character.profile || {};
   const staticProfile = entry.staticProfile || {};
   const currentPhase = stagePhase(entry, stageId);
-  const origin = currentPhase?.identity || staticProfile.identitySummary || '';
+  const withheld = Boolean(currentPhase?.identityWithheld);
+  const origin = withheld ? '' : currentPhase?.identity || staticProfile.identitySummary || '';
 
-  // appearance/origin：场景/提取特定 → 仅缺失时才从正典填（保持 no-force）。
-  // personality：稳定属性，卡为准 → 卡(registry)非空则覆盖，让改卡传导到确定性字段（不截断，卡已人工控长）。
-  if (entry.entityType) character.entityType = entry.entityType;
+  // appearance：场景/提取特定 → 仅缺失时才从正典填（保持 no-force）；origin／description 见下，总表本关相位有值则以总表为准。
+  // personality：稳定属性，总表为准 → 总表非空则覆盖，让改总表传导到确定性字段（不截断，总表已人工控长）。
+  if (entry.entityType && entry.entityType !== ENEMY_KIND_TYPE) character.entityType = entry.entityType;
   if (entry.entityType === 'creature' || (entry.gender && (!character.gender || character.gender === '未知'))) character.gender = entry.gender;
-  if (currentPhase?.role) character.role = currentPhase.role;
-  if (origin && !profile.origin) profile.origin = origin;
+  if (withheld) {
+    character.role = currentPhase?.role || '';
+    character.description = currentPhase?.description || '';
+    profile.origin = currentPhase?.identity || '';
+    delete character.affiliations; delete character.factionId;
+  } else if (currentPhase?.role) character.role = currentPhase.role;
+  // description／identity 以总表本关相位为准（空则不动，阶段档文字作缺口兜底，不编造）。
+  const masterWins = !MASTER_PRECEDENCE_PENDING.has(entry.id);
+  if (origin && (!profile.origin || (masterWins && currentPhase?.identity))) profile.origin = origin;
+  if (masterWins && currentPhase?.description) character.description = currentPhase.description;
   if (currentPhase && Object.prototype.hasOwnProperty.call(currentPhase, 'appearance')) {
     if (currentPhase.appearance) profile.appearance = currentPhase.appearance;
     else delete profile.appearance;
@@ -359,16 +359,6 @@ function resolveOne(character: any, stageId: string): boolean {
     && !blockedPrefixes.some(prefix => String(note).startsWith(prefix)),
   );
   profile.notes = [...keptNotes, ...buildNotes(entry, currentPhase, stageId)];
-  // 70章刚见面的小紫仅投射表面性格；保留registry种族、外貌和当前阶段资料。
-  if (stageId === 'lcq.stage_04b_lingfei_baiyi_crisis' && character.id === 'liuchao.character.xiao_zi') {
-    profile.personality = ['看上去天真灵动，笑语亲切，言行令旁人难以捉摸。'];
-  }
-  // 第六批逐关公开卡以已批准的阶段身份为准，避免旧档沿用全书身份和外貌。
-  if (['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis'].includes(stageId)
-    && [...entityAliases("character","liuchao.character.cheng_zongyang"), ...entityAliases("character","liuchao.character.ning_yu"), ...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","liuchao.character.a_xi"), ...entityAliases("character","liuchao.character.xie_yi"), ...entityAliases("character","liuchao.character.wu_er_lang"), ...entityAliases("character","liuchao.character.qi_yuan"), ...entityAliases("character","liuchao.character.yun_cang_feng")].includes(entry.canonicalName)) {
-    if (currentPhase?.description) character.description = currentPhase.description;
-    if (currentPhase?.identity) profile.origin = currentPhase.identity;
-  }
   character.profile = profile;
   return true;
 }
@@ -420,7 +410,13 @@ export function getRegistryNamesById(characterId: string): string[] {
 
 /** 供当前人物提示词补回稳定谈吐；不携带阶段剧情，只用于避免角色被泛化为同一类口吻。 */
 export function getRegistrySpeechStyle(name: string): string {
-  const entry = byName.get(name);
+  return speechStyleOf(byName.get(name));
+}
+/** 同上，按人物 id 取（含 idAliases），不经显示名。 */
+export function getRegistrySpeechStyleById(characterId: string): string {
+  return speechStyleOf(byId.get(characterId));
+}
+function speechStyleOf(entry: RegistryEntry | undefined): string {
   return compact(unique(asArray(entry?.staticProfile?.speechStyle)).join('；'), 220);
 }
 
@@ -431,6 +427,7 @@ export function findRegistryIdentitiesByContext(context: string, limit = 12, sta
   const matches: Array<{ canonicalName: string; aliases: string[]; identity: string }> = [];
   const seen = new Set<string>();
   for (const entry of (registryJson as { characters: RegistryEntry[] }).characters || []) {
+    if (entry.entityType === ENEMY_KIND_TYPE) continue;
     const phase = stageId ? stagePhase(entry, stageId) : undefined;
     const identity = String(stageId?.startsWith('lcq.stage_0') ? phase?.identity || '' : entry.staticProfile?.identitySummary || '');
     if (isSouthernStage(stageId) && ledgerOverrides.blockedSouthernRecallIds.includes(entry.id)) continue;
@@ -540,6 +537,8 @@ export function disclosedNovelChapter(runtime: {
 }
 
 export const approvedChapterGates = ledgerOverrides.chapterGates;
+/** 南荒当前公开身份的展示文本（账本），按人物 id 取。 */
+const identityDisplays = (ledgerOverrides as unknown as { identityDisplays: Record<string, any> }).identityDisplays;
 
 /** 一般旧事与具体父女确证分门；未知章号从严，不能凭所在关猜章节。 */
 export function isDisclosureFactAllowed(text: string, runtime: Parameters<typeof xiaoziDisclosure>[0]): boolean {
@@ -553,7 +552,7 @@ export function isDisclosureFactAllowed(text: string, runtime: Parameters<typeof
 }
 
 /** 小说第78章交易拍揭母系；第105章父系劝说在临时协定第一步落账后成立。
- * seqLo/seqHi为主轴序号，不能当小说章号。未知进度保持表面卡。
+ * seqLo/seqHi为主轴序号，不能当小说章号。未知进度保持表面身份。
  */
 export function xiaoziDisclosure(runtime: {
   modId?: string; completedEventIds?: string[]; flags?: Record<string, unknown>;
@@ -599,47 +598,48 @@ export function syncNanhuangIdentityDisplay(runtime: {
       const reveal = xiaoziDisclosure(runtime);
       const old = character.profile || {};
       const hidden = xiaoziUnrevealedFacts(runtime);
-      character.role = '碧鲮村少女';
-      character.description = '穿紫衣的碧鲮族少女，住在碧鲮村。';
+      const entry = byId.get(character.id);
+      const phase = entry ? stagePhase(entry, runtime.modId || '') : undefined;
+      const display = identityDisplays[character.id];
+      character.role = phase?.role ?? character.role;
+      character.description = phase?.description ?? character.description;
       character.profile = {
         ...(old.attributes ? { attributes: old.attributes } : {}),
         ...(old.spiritRoot ? { spiritRoot: old.spiritRoot } : {}),
         ...(old.talents ? { talents: old.talents } : {}),
         ...(old.avatar ? { avatar: old.avatar } : {}), ...(old.portrait ? { portrait: old.portrait } : {}),
-        race: reveal.mother ? '碧鲮族（母系碧姬）' : '碧鲮族',
+        race: reveal.mother ? display.raceWhenMotherRevealed : entry?.staticProfile?.race,
         origin: character.description,
-        appearance: '穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。',
-        personality: ['天真俏皮', '偶露古怪狠劲', '对程宗扬好奇'],
+        appearance: phase?.appearance,
+        personality: [...asArray<string>(phase?.personality)],
         memories: asArray<string>(old.memories).filter(note => !hidden.test(String(note))),
         notes: [
-          ...(reveal.mother ? ['【已知身世】小紫是碧姬的女儿。'] : []),
-          ...(reveal.father ? ['【已知身世】小紫的生父是岳鹏举。'] : []),
-          ...(reveal.suspectedFather ? ['【未证实的猜测】程宗扬怀疑小紫是岳帅的遗腹女；尚未证实。'] : []),
+          ...(reveal.mother ? [display.knownFacts.mother] : []),
+          ...(reveal.father ? [display.knownFacts.father] : []),
+          ...(reveal.suspectedFather ? [display.knownFacts.suspectedFather] : []),
         ],
       };
-      // 全书阵营真值保留在registry；南荒公开卡不因血缘替她声明所属势力。
+      // 全书阵营真值保留在registry；南荒公开相位不因血缘替她声明所属势力。
       delete character.affiliations; delete character.factionId;
     }
-    if (character.id === 'lcq.character.np006' && runtime.modId === 'lcq.stage_04b_lingfei_baiyi_crisis') {
-      character.name = isNamedEntityLabel("enemy","lcq.enemy.ge_luo",runtime.sceneLedger?.names?.阁罗) || settled('lcq.event.weapon_deal_with_geluo') ? '阁罗' : '鬼王峒使者';
-    }
     if (character.id === 'liuchao.character.shang_zhen_yu') {
-      const revealed = settled('lcq.event.shanghou_revealed');
-      character.name = revealed ? '殇侯' : '朱八八';
-      character.role = revealed ? '山村中的殇侯' : '云氏雇用的老向导';
-      character.description = revealed ? '朱老头已当面显露殇侯身份。其他身世未揭露。' : '云氏雇用的老向导，自称朱八八。';
-      character.profile = { origin: character.description, appearance: '瘦小苍老的成年老向导，不是魁梧壮汉。' };
+      const display = identityDisplays[character.id];
+      const shown = settled('lcq.event.shanghou_revealed') ? display.revealed : display.hidden;
+      character.role = shown.role;
+      character.description = shown.description;
+      character.profile = { origin: character.description, appearance: display.appearance };
       delete character.affiliations; delete character.factionId;
     }
     if (character.id === 'liuchao.character.le_mingzhu' && !settled('lcq.event.ghost_king_swallowed')) {
       for (const key of ['notes', 'memories', 'formsOfAddress']) if (Array.isArray(character.profile?.[key])) character.profile[key] = character.profile[key].filter((note: string) => !/老公/.test(String(note)));
     }
     if (character.id === 'liuchao.character.le_mingzhu' && ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04'].includes(runtime.modId || '')) {
-      const revealed = settled('lcq.event.s04_03') || namingChapter(runtime) >= 47;
-      character.name = revealed ? '乐明珠' : '花苗新娘';
-      character.role = revealed ? '光明观堂弟子' : '戴面纱的花苗新娘';
-      character.description = revealed ? '送亲新娘的身份已揭露，是光明观堂弟子乐明珠。' : '随花苗送亲队同行，身份尚未揭露。';
-      character.profile = revealed ? { ...character.profile, origin: character.description } : { origin: character.description, appearance: '戴面纱的成年花苗新娘，暂不描写面纱下的容貌。' };
+      const revealed = settled('lcq.event.s04_03') || namingChapter(runtime) >= ledgerChapterGates.lemingzhuRevealFrom;
+      const display = identityDisplays[character.id];
+      const shown = revealed ? display.revealed : display.hidden;
+      character.role = shown.role;
+      character.description = shown.description;
+      character.profile = revealed ? { ...character.profile, origin: character.description } : { origin: character.description, appearance: display.hidden.appearance };
       delete character.affiliations; delete character.factionId;
     }
   }

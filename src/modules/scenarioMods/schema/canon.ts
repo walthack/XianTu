@@ -86,6 +86,8 @@ export interface ScenarioModCharacter {
   realm?: string;
   level?: number | null;
   levelSource?: string;
+  /** 本阶段与总表基础属性不同的覆盖项（等级、战斗强度、属性）；缺省项沿用总表。规则见 characterStatsMerge.ts。 */
+  stats?: { level?: number | null; levelSource?: string; combatStrength?: number | null; attributes?: Record<string, number | null> };
   factionId?: string;
   affiliations?: ScenarioModCharacterAffiliation[];
   locationId?: string;

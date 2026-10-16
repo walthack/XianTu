@@ -40,6 +40,7 @@ import {
   applyLoadedSaveToWorkingSlotMeta,
   isIsolatedLocalOnlyProfile,
   landingPlaytestWorkingSlot,
+  packPlaytestWorkingSlot,
   shouldReattachLandingPlaytestWorkingCopy,
   shouldSkipRemoteRootPersist,
   stampSlotSaveTimes,
@@ -1075,8 +1076,11 @@ export const useCharacterStore = defineStore('characterV3', () => {
         uiStore.updateLoadingText('天机重置完毕，正在加载存档...');
 
         let activeSlotKey = slotKey;
-        if (shouldReattachLandingPlaytestWorkingCopy(profile, slotKey) && targetSlot.存档数据) {
-          const workingKey = landingPlaytestWorkingSlot();
+        // 落地试玩的检查点、内容包试玩的手动存档位：工作副本接回固定试玩槽，被读的存档位不会被之后的自动存档覆盖。
+        const reattachKey = shouldReattachLandingPlaytestWorkingCopy(profile, slotKey) ? landingPlaytestWorkingSlot()
+          : packPlaytestWorkingSlot(profile, slotKey, targetSlot.存档数据);
+        if (reattachKey && targetSlot.存档数据) {
+          const workingKey = reattachKey;
           const workingData = cloneDeep(targetSlot.存档数据);
           if (!profile.存档列表) profile.存档列表 = {};
           const workingSlot = profile.存档列表[workingKey] || {

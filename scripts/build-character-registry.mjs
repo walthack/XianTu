@@ -10,12 +10,17 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve, join } from 'node:path';
+import { createJiti } from 'jiti';
 
 const root = resolve(import.meta.dirname, '..');
 const gen = join(root, 'mod-kit/generated/deepseek-v4-flash');
 const cardsPath = join(gen, 'character-canon/character-cards-v3.json');
 const outPath = join(root, 'src/modules/scenarioMods/builtins/character-registry.json');
 const books = ['qingyu', 'yunlong', 'yange'];
+// 基础属性与必须存活标记的校验规则与运行时同一份（characterStatsMerge.ts + game-numbers），不在脚本里另抄一遍。
+const jiti = createJiti(import.meta.url, { alias: { '@': join(root, 'src') } });
+const { validateCharacterStats } = await jiti.import(join(root, 'src/modules/scenarioMods/characterStatsMerge.ts'));
+const { statsRules } = await jiti.import(join(root, 'src/modules/scenarioMods/characterStatsRules.ts'));
 
 // 1) name -> stage id（权威，来自实际 stage 角色条目）
 const nameToId = new Map();
@@ -99,6 +104,21 @@ function withVisualLayers(c) {
   return sp;
 }
 
+// 基础属性：卡上的 baseStats；旧卡只有顶层 level/levelSource（整数才算数）时折成 baseStats，两者并存以 baseStats 为准。
+function baseStatsOf(c) {
+  const legacy = Number.isInteger(c.level) ? { level: c.level, ...(c.levelSource ? { levelSource: c.levelSource } : {}) } : undefined;
+  const stats = c.baseStats ?? legacy;
+  if (stats === undefined) return undefined;
+  const bad = validateCharacterStats(stats, statsRules(), `${c.canonicalName}.baseStats`);
+  if (bad.length) throw new Error(`角色卡基础属性含未知或越界字段：${bad.join('、')}`);
+  return stats;
+}
+function mustSurviveOf(c) {
+  if (c.mustSurvive === undefined) return undefined;
+  if (typeof c.mustSurvive !== 'boolean') throw new Error(`${c.canonicalName}.mustSurvive 必须是布尔值`);
+  return c.mustSurvive;
+}
+
 function buildEmbedText(c) {
   const sp = c.staticProfile || {};
   if (typeof c.searchSummary === 'string' && c.searchSummary.trim()) return c.searchSummary.trim();
@@ -130,7 +150,8 @@ const collisions = [];
 for (const c of cards) {
   let id = c.id || nameToId.get(c.canonicalName);
   if (!id) for (const a of (c.aliases || [])) { if (nameToId.get(a)) { id = nameToId.get(a); break; } }
-  const stagePresence = !!id;
+  // 敌人种类带的是合同里已有的敌人 id，不是阶段档里的人物条目，所以不算“stage 出场”。
+  const stagePresence = !!id && c.entityType !== 'enemy_kind';
   if (!id) { id = slug(c.canonicalName); canonOnly.push(c.canonicalName); }
 
   const entry = {
@@ -140,6 +161,8 @@ for (const c of cards) {
     aliases: uniq(c.aliases),
     gender: c.gender,
     ...(c.entityType ? { entityType: c.entityType } : {}),
+    ...(mustSurviveOf(c) !== undefined ? { mustSurvive: mustSurviveOf(c) } : {}),
+    ...(baseStatsOf(c) ? { baseStats: baseStatsOf(c) } : {}),
     books: c.books || [],
     tier: c.tier,
     stagePresence,
@@ -185,7 +208,8 @@ const registry = {
   stats: {
     total: entries.length,
     stagePresent: entries.filter(e => e.stagePresence).length,
-    canonOnly: entries.filter(e => !e.stagePresence).length,
+    canonOnly: entries.filter(e => !e.stagePresence && e.entityType !== 'enemy_kind').length,
+    enemyKinds: entries.filter(e => e.entityType === 'enemy_kind').length,
     collisionsMerged: collisions.length,
   },
   characters: entries,
@@ -194,7 +218,7 @@ writeFileSync(outPath, JSON.stringify(registry, null, 2));
 
 console.log('=== character-registry 生成完成 ===');
 console.log('输出:', outPath.replace(root + '/', ''));
-console.log('条目:', entries.length, '| stage 出场:', registry.stats.stagePresent, '| canon-only:', registry.stats.canonOnly, '| 撞卡合并:', collisions.length);
+console.log('条目:', entries.length, '| stage 出场:', registry.stats.stagePresent, '| canon-only:', registry.stats.canonOnly, '| 敌人种类:', registry.stats.enemyKinds, '| 撞卡合并:', collisions.length);
 console.log('立绘分层注入:', visualInjected, '人（visualIdentity / visualOutfits）');
 console.log('撞卡:', collisions.map(c => `${c.id}(留 ${c.kept} / 并 ${c.folded})`).join(' ; '));
 console.log('文件大小:', Math.round(JSON.stringify(registry).length / 1024) + 'KB');

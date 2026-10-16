@@ -2,7 +2,8 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { resolve, relative } from 'node:path';
 const root = resolve(import.meta.dirname, '..');
 const registry = JSON.parse(readFileSync(resolve(root, 'src/modules/scenarioMods/builtins/character-registry.json')));
-const names = new Set(registry.characters.flatMap(c => [c.canonicalName, ...c.aliases]).filter(n => /^[\u4e00-\u9fff]{2,8}$/.test(n)));
+// 敌人种类（entityType=enemy_kind）的名字是物种/群体名，不是人名，不进人名棘轮。
+const names = new Set(registry.characters.filter(c => c.entityType !== 'enemy_kind').flatMap(c => [c.canonicalName, ...c.aliases]).filter(n => /^[\u4e00-\u9fff]{2,8}$/.test(n)));
 const counts = {};
 function visit(dir) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {

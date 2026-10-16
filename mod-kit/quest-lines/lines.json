@@ -173,6 +173,9 @@
             "any": [
               {
                 "eventActive": "lcq.event.s04_04"
+              },
+              {
+                "canonChapterAtLeast": 56
               }
             ]
           },
@@ -262,6 +265,11 @@
                 "kind": "setState",
                 "stateId": "state.lmz.promise_pan_secret",
                 "value": "kept"
+              },
+              {
+                "kind": "setState",
+                "stateId": "branch.lmz.pan_secret",
+                "value": "promised"
               }
             ],
             "act.lmz.hard_truth": [
@@ -280,13 +288,18 @@
                 "receiptId": "rcpt.lmz.pan_secret.hard_truth",
                 "mutexGroupId": "mutex.lmz.pan_secret",
                 "consumeAtEventIds": []
+              },
+              {
+                "kind": "setState",
+                "stateId": "branch.lmz.pan_secret",
+                "value": "hard_truth"
               }
             ],
             "act.lmz.tease_with_pan": [
               {
                 "kind": "affinityGrant",
                 "actorId": "liuchao.character.le_mingzhu",
-                "weightId": "aff.w.small_neg"
+                "weightId": "aff.w.lmz.tease_penalty"
               },
               {
                 "kind": "memoryTicket",
@@ -298,11 +311,26 @@
                 "receiptId": "rcpt.lmz.pan_secret.teased",
                 "mutexGroupId": "mutex.lmz.pan_secret",
                 "consumeAtEventIds": []
+              },
+              {
+                "kind": "setState",
+                "stateId": "branch.lmz.pan_secret",
+                "value": "teased"
               }
             ]
           },
           "canonChapter": 48,
-          "objectiveId": "text.line.le_mingzhu.title"
+          "objectiveId": "text.line.le_mingzhu.title",
+          "onExpire": [
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.pan_secret",
+              "value": "none"
+            }
+          ],
+          "role": [
+            "choice"
+          ]
         }
       ],
       "nameId": "text.line.le_mingzhu.title",

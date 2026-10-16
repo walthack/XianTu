@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "note": "自由行动『亲近』类的人物边界：temperament（气质，键见 game-numbers.freeAction.classes.intimate.intimacy.temperamentRemap）与 intimacyGate（minTier=档位 id；afterEventId=可选，须先完成的事件 id）。没有条目的人用 intimacy.defaultTemperament / defaultGateTier（宁严勿松）。条目内容由剧情策划按原著填写，此处不预填。",
+  "profiles": []
+}

@@ -1633,9 +1633,9 @@
         "name": "小魏",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆护卫"
+          "origin": "白湖商馆的年轻护卫，曾走过南荒"
         },
-        "description": "白湖商馆护卫，弩手",
+        "description": "白湖商馆的年轻护卫，曾走过南荒",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 34,
@@ -1650,9 +1650,9 @@
         "name": "石刚",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆护卫"
+          "origin": "白湖商馆的护卫，使雁翎刀"
         },
-        "description": "白湖商馆护卫",
+        "description": "白湖商馆的护卫，使雁翎刀",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 31,
@@ -1827,9 +1827,9 @@
         "name": "卡瓦",
         "role": "花苗族汉子，随送亲队同行",
         "profile": {
-          "origin": "花苗护卫"
+          "origin": "花苗的年轻汉子"
         },
-        "description": "花苗族汉子，随送亲队同行",
+        "description": "花苗的年轻汉子",
         "affiliations": [],
         "presenceWindow": {
           "firstChapter": 40,

@@ -1,0 +1,490 @@
+{
+ "version": 1,
+ "note": "南荒“尚未登场/已离场”人物排除规则（presence.ts 的 nanhuangCastExclusions 读取）。按书写顺序逐条求值，结果去重保序。permanent=true 的规则在只算永久离场时也生效，其余仅在计算临时缺席时生效。stages=该规则只在这些关生效（缺省=所有关）。when=触发条件，缺省=恒真：done=事件已完成（flag/completedEventIds/offscreenResolvedEventIds），notDone=未完成，entered=已完成或正在进行，notEntered=尚未进入，notPrepared=该事件动作预备里没有此步骤，flagTrue=运行时 flag 为 true，all/any 为与/或。exclude 为“kind:id”，kind=character|enemy。2026-10-14 自 presence.ts 字面量逐条迁入；原先写死的名词“白夷族长/蛇傀/六朝石匠”改按 id。",
+ "rules": [
+  {
+   "stages": [
+    "lcq.stage_03b_snake_flower_bridge",
+    "lcq.stage_04"
+   ],
+   "exclude": [
+    "character:liuchao.character.xiao_zi"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_03b_snake_flower_bridge"
+   ],
+   "when": {
+    "notEntered": "lcq.event.s03b_snake_flower_bridge_06"
+   },
+   "exclude": [
+    "character:liuchao.character.su_li",
+    "character:liuchao.character.a_xi",
+    "character:lcq.character.nanhuang_kawa",
+    "character:lcq.character.nanhuang_ajia"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_03b_snake_flower_bridge"
+   ],
+   "when": {
+    "notEntered": "lcq.event.s03b_snake_flower_bridge_07"
+   },
+   "exclude": [
+    "character:liuchao.character.le_mingzhu"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_03b_snake_flower_bridge"
+   ],
+   "when": {
+    "all": [
+     {
+      "notPrepared": {
+       "event": "lcq.event.s03b_yinzhu_xiongerpu",
+       "step": "ajia_mourned"
+      }
+     },
+     {
+      "notDone": "lcq.event.s03b_yinzhu_xiongerpu"
+     }
+    ]
+   },
+   "exclude": [
+    "character:liuchao.character.shang_zhen_yu",
+    "character:liuchao.character.qin_hui",
+    "character:liuchao.character.wu_san_gui"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04"
+   ],
+   "when": {
+    "any": [
+     {
+      "notEntered": "lcq.event.s04_04"
+     },
+     {
+      "entered": "lcq.event.s04_06"
+     }
+    ]
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_yeao"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04"
+   ],
+   "when": {
+    "done": "lcq.event.s04_05"
+   },
+   "exclude": [
+    "character:liuchao.character.yi_hu"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04"
+   ],
+   "when": {
+    "notEntered": "lcq.event.s04_07"
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_xi_furen",
+    "character:lcq.character.nanhuang_baiyi_chief",
+    "character:lcq.character.nanhuang_yiyong"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "exclude": [
+    "character:lcq.character.nanhuang_yeao",
+    "character:liuchao.character.qin_hui",
+    "character:liuchao.character.wu_san_gui",
+    "character:liuchao.character.bi_ji"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "when": {
+    "notEntered": "lcq.event.xiaozi_first_appears"
+   },
+   "exclude": [
+    "character:liuchao.character.xiao_zi"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "when": {
+    "done": "lcq.event.s04b_xi_furen_trade_route"
+   },
+   "exclude": [
+    "character:liuchao.character.yi_hu"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "when": {
+    "notEntered": "lcq.event.regroup_caravan_envoy"
+   },
+   "exclude": [
+    "enemy:lcq.enemy.ge_luo",
+    "character:lcq.character.nanhuang_shekui",
+    "character:lcq.character.nanhuang_heishe"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "when": {
+    "notEntered": "lcq.event.yiyang_repels_yinsha"
+   },
+   "exclude": [
+    "character:lcq.character.mi_gu",
+    "character:lcq.character.nanhuang_stonemason"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "when": {
+    "done": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_shigang"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "when": {
+    "all": [
+     {
+      "done": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+     },
+     {
+      "notEntered": "lcq.event.spot_dong_informant"
+     }
+    ]
+   },
+   "exclude": [
+    "character:liuchao.character.qi_yuan"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "when": {
+    "done": "lcq.event.s04b_lingfei_baiyi_crisis_17"
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_xi_furen",
+    "character:lcq.character.nanhuang_yiyong"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.geluo_summons_biji"
+   },
+   "exclude": [
+    "character:liuchao.character.bi_ji"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.s05b_03_saan_secret_path"
+   },
+   "exclude": [
+    "character:lcq.character.saan"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.s05b_05a_meet_ghost_king"
+   },
+   "exclude": [
+    "enemy:lcq.enemy.gui_wu_wang"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+   },
+   "exclude": [
+    "character:lcq.character.zhu_nuo"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.ghost_king_swallowed"
+   },
+   "exclude": [
+    "enemy:lcq.enemy.dragon_god"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "any": [
+     {
+      "notDone": "lcq.event.slay_dragon"
+     },
+     {
+      "done": "lcq.event.xieyi_entrustment"
+     }
+    ]
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_blacksea_envoy"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "done": "lcq.event.s05b_02_xiaozi_exposed"
+   },
+   "exclude": [
+    "character:liuchao.character.a_xi"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "done": "lcq.event.s05b_09_temporary_pact_with_xiaozi"
+   },
+   "exclude": [
+    "character:lcq.character.mi_gu",
+    "character:lcq.character.nanhuang_kawa"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "done": "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+   },
+   "exclude": [
+    "character:lcq.character.saan",
+    "character:lcq.character.nanhuang_loumeng",
+    "enemy:lcq.enemy.dan_chen"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.shanghou_revealed"
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_yeao"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.s05b_yeao_palm_ningyu_stays"
+   },
+   "exclude": [
+    "character:liuchao.character.qin_hui"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "notEntered": "lcq.event.shanghou_cures_ice_gu"
+   },
+   "exclude": [
+    "character:liuchao.character.wu_san_gui"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "done": "lcq.event.s05b_wuer_suli_depart"
+   },
+   "exclude": [
+    "character:liuchao.character.su_li",
+    "character:liuchao.character.wu_er_lang",
+    "character:liuchao.character.yun_cang_feng",
+    "character:lcq.character.nanhuang_xiaowei",
+    "character:lcq.character.np004",
+    "character:lcq.character.np003"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "when": {
+    "done": "lcq.event.xiaozi_kills_mother"
+   },
+   "exclude": [
+    "character:liuchao.character.xiao_zi",
+    "enemy:lcq.enemy.ge_luo"
+   ]
+  },
+  {
+   "permanent": true,
+   "stages": [
+    "lcq.stage_04",
+    "lcq.stage_04b_lingfei_baiyi_crisis",
+    "lcq.stage_05b",
+    "lcq.stage_07_qingyuan_jiankang"
+   ],
+   "exclude": [
+    "character:lcq.character.nanhuang_ajia"
+   ]
+  },
+  {
+   "permanent": true,
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis",
+    "lcq.stage_05b",
+    "lcq.stage_07_qingyuan_jiankang"
+   ],
+   "exclude": [
+    "character:liuchao.character.yi_hu"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.s03b_yinzhu_xiongerpu"
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_ajia"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.s04_05"
+   },
+   "exclude": [
+    "character:liuchao.character.yi_hu"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.s04b_lingfei_baiyi_crisis_09"
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_baiyi_chief"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.biling_bay_stance"
+   },
+   "exclude": [
+    "character:lcq.character.nanhuang_heishe",
+    "character:lcq.character.nanhuang_shekui"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.wuerlang_slays_dagu"
+   },
+   "exclude": [
+    "enemy:lcq.enemy.dagu"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.ghost_king_swallowed"
+   },
+   "exclude": [
+    "enemy:lcq.enemy.gui_wu_wang"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.slay_dragon"
+   },
+   "exclude": [
+    "enemy:lcq.enemy.dragon_god"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "done": "lcq.event.xiaozi_kills_mother"
+   },
+   "exclude": [
+    "character:liuchao.character.bi_ji"
+   ]
+  },
+  {
+   "permanent": true,
+   "when": {
+    "flagTrue": "event.s06_03.done"
+   },
+   "exclude": [
+    "character:liuchao.character.xie_yi"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_07_qingyuan_jiankang"
+   ],
+   "exclude": [
+    "character:liuchao.character.ning_yu",
+    "character:liuchao.character.wu_er_lang",
+    "character:liuchao.character.su_li",
+    "character:lcq.character.nanhuang_shigang"
+   ]
+  }
+ ]
+}

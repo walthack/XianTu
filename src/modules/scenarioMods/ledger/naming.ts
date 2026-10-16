@@ -2,7 +2,7 @@ import overrides from '../../../../mod-kit/entity-ledger/overrides.json';
 
 /** 显示标签不是自报姓名。所有渠道以角色id读同一章门表，不反向以标签建人物。 */
 export type NamingChannel = 'panel' | 'narration' | 'protagonistAddress' | 'protagonistThought' | 'npcAddress' | 'selfReportedName';
-type Runtime = { modId?: string; events?: { id: string; axisAnchor?: string }[]; activeEventIds?: string[]; completedEventIds?: string[]; travelLedger?: { doneEventIds?: string[] }; canon?: { characters?: any[] } };
+type Runtime = { modId?: string; events?: { id: string; axisAnchor?: string }[]; activeEventIds?: string[]; completedEventIds?: string[]; travelLedger?: { doneEventIds?: string[] }; flags?: Record<string, unknown>; canon?: { characters?: any[] } };
 const entities = overrides.entities;
 export function namingChapter(runtime: Runtime): number {
   const done = new Set([...(runtime.completedEventIds || []), ...(runtime.travelLedger?.doneEventIds || [])]);
@@ -12,10 +12,28 @@ export function namingChapter(runtime: Runtime): number {
   const milestones = Object.entries(overrides.namingMilestones).filter(([id])=>done.has(id)).map(([,chapter])=>chapter);
   return Math.max(floor, ...milestones, ...(runtime.events || []).filter(e => done.has(e.id)).map(chapterOf), ...(active.length ? [Math.min(...active)] : []));
 }
-export function namingFor(id: string, chapter: number, channel: NamingChannel = 'panel') {
+/** 称呼档可选带 requiresState：只有该剧情状态（runtime.flags，值为 true）已写入才放开；没传状态一律不过门。 */
+type StateGate = { requiresState?: string };
+function stateGateOpen(step: unknown, flags?: Record<string, unknown>): boolean {
+  const key = (step as StateGate).requiresState;
+  return !key || flags?.[key] === true;
+}
+export function namingFor(id: string, chapter: number, channel: NamingChannel = 'panel', context: { flags?: Record<string, unknown> } = {}) {
   const entry = entities.find(e => e.id === id);
   const steps = entry?.naming[channel];
-  return steps?.filter(s => s.fromChapter <= chapter).at(-1);
+  return steps?.filter(s => s.fromChapter <= chapter && stateGateOpen(s, context.flags)).at(-1);
+}
+const wordsOf = (text: string) => text.split('／');
+/** 首档之后新增的称呼词，在所有含它的档都未放开（章节未到或状态未写）时视为尚未放开；首档词是基线，不算。 */
+export function npcAddressWithheld(id: string, runtime: Runtime, channel: NamingChannel = 'npcAddress'): string[] {
+  const steps = entities.find(e => e.id === id)?.naming[channel] || [];
+  const chapter = namingChapter(runtime);
+  const allowed = new Set([...(steps[0] ? wordsOf(steps[0].text) : []), ...steps.filter(s => s.fromChapter <= chapter && stateGateOpen(s, runtime.flags)).flatMap(s => wordsOf(s.text))]);
+  return [...new Set(steps.flatMap(s => wordsOf(s.text)))].filter(w => !allowed.has(w));
+}
+/** 正文里「角色名 + 35字内 + 尚未放开的称呼词」命中则返回该词；namePattern 由调用方给出（实体名正则）。 */
+export function withheldAddressUsed(id: string, runtime: Runtime, text: string, namePattern: string): string | undefined {
+  return npcAddressWithheld(id, runtime).find(w => text.includes(w) && new RegExp('(?:' + namePattern + ')[^。！？\\n]{0,35}' + w).test(text));
 }
 export function namingAliases(id: string): string[] { return entities.find(e => e.id === id)?.aliases || []; }
 export function projectNamingText(text: string, runtime: Runtime, channel: NamingChannel = 'panel'): string {
@@ -43,19 +61,45 @@ export function projectNamingText(text: string, runtime: Runtime, channel: Namin
   }
   return result;
 }
+/** 章级身份切换（账本 chapterIdentities）：某人物从某章起换一条身份文字，按人物 id 读表，不含人物专属代码。 */
+type IdentityStep = { fromChapter: number; identity: string; role?: string };
+const chapterIdentities = (overrides as unknown as { chapterIdentities: Record<string, { steps: IdentityStep[] }> }).chapterIdentities;
+export function identityFor(id: string, chapter: number): IdentityStep | undefined {
+  return chapterIdentities[id]?.steps.filter(s => s.fromChapter <= chapter).at(-1);
+}
+/** 把已放开的身份档写到阶段档：description／profile.origin／【阶段身份】备注同值；档里给了 role 才动 role。 */
+function applyIdentityStep(c: any, step: IdentityStep): void {
+  c.description = step.identity;
+  if (step.role) c.role = step.role;
+  const profile = c.profile ||= {};
+  profile.origin = step.identity;
+  const line = `【阶段身份】${step.identity}`;
+  const notes: string[] = Array.isArray(profile.notes) ? profile.notes : [];
+  const at = notes.findIndex(note => String(note).startsWith('【阶段身份】'));
+  if (at >= 0) notes[at] = line; else notes.push(line);
+  profile.notes = notes;
+}
+/** 章门直接读账本，不另存章号：改名章＝np006 面板称呼里首个 kind=name 档的 fromChapter；身份揭示章＝s04_03 命名里程碑。 */
+export const ledgerChapterGates = {
+  geluoRenameFrom: (entities.find(e => e.id === 'lcq.character.np006')!.naming.panel as { fromChapter: number; kind?: string }[]).find(s => s.kind === 'name')!.fromChapter,
+  lemingzhuRevealFrom: overrides.namingMilestones['lcq.event.s04_03'],
+};
+
 export function syncCharacterNaming(runtime: Runtime): void {
   if (!runtime.modId?.startsWith('lcq.')) return;
   const chapter = namingChapter(runtime);
   for (const c of runtime.canon?.characters || []) {
+    const shift = identityFor(c.id, chapter);
+    if (shift) applyIdentityStep(c, shift);
     const display = namingFor(c.id, chapter);
     if (!display) continue;
     c.name = display.text;
     // 母系是已知事实，名字仍按称呼门展示，不改变血缘真值。
     if (c.id === 'liuchao.character.xiao_zi' && c.profile) {
       const names = entities.find(e=>e.id==='liuchao.character.bi_ji')!.naming.panel;
-      const earlier=names[0].text, later=names[1].text;
-      for (const key of ['race','origin']) if (typeof c.profile[key] === 'string') c.profile[key] = chapter < 115 ? c.profile[key].split(later).join(earlier) : c.profile[key].split(earlier).join(later);
-      for (const key of ['notes','memories']) if (Array.isArray(c.profile[key])) c.profile[key] = c.profile[key].map((s: string) => chapter < 115 ? s.split(later).join(earlier) : s.split(earlier).join(later));
+      const earlier=names[0].text, later=names[1].text, laterFrom=names[1].fromChapter;
+      for (const key of ['race','origin']) if (typeof c.profile[key] === 'string') c.profile[key] = chapter < laterFrom ? c.profile[key].split(later).join(earlier) : c.profile[key].split(earlier).join(later);
+      for (const key of ['notes','memories']) if (Array.isArray(c.profile[key])) c.profile[key] = c.profile[key].map((s: string) => chapter < laterFrom ? s.split(later).join(earlier) : s.split(earlier).join(later));
     }
   }
 }

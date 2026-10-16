@@ -6,6 +6,8 @@ import {
   type ScenarioMod,
 } from './schema';
 import { getRegistryNamesById } from './characterResolver';
+import { statsRules } from './characterStatsRules';
+import { validateCharacterStats } from './characterStatsMerge';
 import { resolveReconcileBranchId } from './divergenceLedger';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 
@@ -197,6 +199,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.gender, `${entity.__path}.gender`, add);
       if (entity.entityType !== undefined && entity.entityType !== 'character' && entity.entityType !== 'creature') add(`${entity.__path}.entityType`, 'invalid_enum', 'must be character or creature');
       optionalString(entity.realm, `${entity.__path}.realm`, add);
+      for (const field of validateCharacterStats(entity.stats, statsRules(), `${entity.__path}.stats`)) add(field, 'invalid_stats', 'unknown or out-of-range stats field (see characterStatsMerge.ts).');
       optionalId(entity.factionId, `${entity.__path}.factionId`, add);
       validateCharacterAffiliations(entity.affiliations, `${entity.__path}.affiliations`, add);
       optionalId(entity.locationId, `${entity.__path}.locationId`, add);

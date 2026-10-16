@@ -1,3 +1,5 @@
+import { GAME_NUMBERS } from '../sceneModule/numbers';
+import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
 /**
  * 声望的确定性锚点（P1-4）——把"扬名"从模型自觉改成引擎因果。
  *
@@ -24,12 +26,7 @@
  *   数值是初值，按实玩手感调整——机制有没有是结构问题，涨多快是数值问题。
  *   （与 `AFFINITY_EVENT_GRANT` 同一句免责，那边也是这么写的。）
  */
-export const REPUTATION_EVENT_GRANT = {
-  /** 承重剧情事件（critical）。 */
-  critical: 20,
-  /** 普通事件。 */
-  normal: 6,
-} as const;
+export const REPUTATION_EVENT_GRANT = GAME_NUMBERS.reputation.eventGrant;
 
 /**
  * 关卡 → 地区／国家。声望必须**落到地区**，不能只有一个全局数
@@ -43,53 +40,9 @@ export const REPUTATION_EVENT_GRANT = {
  * 这样商队经营层可以直接消费同一套键，不必再做一次归属。
  * 南荒并入昭南（地图：昭南三地坐标全在南荒大陆内；蓝图 §6 昭南底牌明写「鬼王峒／南荒」）。
  * 塞外与太泉不是国家线，但地理上独立，单列。
+ * 数据在 `mod-kit/entity-ledger/overrides.json` 的 `stageRegions`（2026-10-14 自此处字面量迁入，顺序与内容不变）。
  */
-export const STAGE_REGION: Record<string, string> = {
-  // 塞外：五原城一带
-  'lcq.stage_01': '塞外',
-  'lcq.stage_02': '塞外',
-  'lcq.stage_03': '塞外',
-  // 昭南（含南荒腹地）
-  'lcq.stage_03b_snake_flower_bridge': '昭南',
-  'lcq.stage_04': '昭南',
-  'lcq.stage_04b_lingfei_baiyi_crisis': '昭南',
-  'lcq.stage_05': '昭南',
-  'lcq.stage_05b': '昭南',
-  'lcq.stage_06': '昭南',
-  // 晋国：清远至建康
-  'lcq.stage_07_qingyuan_jiankang': '晋国',
-  'lcq.stage_08_jiankang_coup': '晋国',
-  'lcq.stage_09_trade_and_escape': '晋国',
-  // 宋国：江州与临安
-  'lcq.stage_10_jiangzhou_shadow_war': '宋国',
-  'lcq.stage_11_lieshan_battle': '宋国',
-  'lcq.stage_12_jiangzhou_counterwar': '宋国',
-  'lyl.jiangzhou_retreat': '宋国',
-  'lyl.lin_an_black_sea': '宋国',
-  'lyl.lin_an_bridge': '宋国',
-  'lyl.taiquan_expedition': '宋国',
-  'lyl.xiaoyingzhou_blacksea_trap': '宋国',
-  // 太泉：古阵内外
-  'lyl.taiquan_sacred_fruit': '太泉',
-  'lyl.taiquan_core_conflict': '太泉',
-  'lyl.taiquan_afterfall': '太泉',
-  // 汉国：洛都与汉宫
-  'lyl.luoyang_cloud_secret': '汉国',
-  'lyl.luoyang_coup': '汉国',
-  'lyl.han_palace_endgame': '汉国',
-  'lyg.dingtao_beijing': '汉国',
-  'lyg.mijing_rumen': '汉国',
-  'lyg.han_succession': '汉国',
-  // 唐国：长安一线
-  'lyg.changgan_begins': '唐国',
-  'lyg.shixiang_ambush': '唐国',
-  'lyg.changgan_interlude': '唐国',
-  'lyg.ganlu_bian': '唐国',
-  'lyg.liangzhou_league': '唐国',
-  'lyg.buddhist_conspiracy': '唐国',
-  'lyg.ganlu_aftershock': '唐国',
-  'lyg.shituolin_endgame': '唐国',
-};
+export const STAGE_REGION: Record<string, string> = ledgerOverrides.stageRegions;
 
 /** 引擎侧一次声望结算的明细，供调用方推进玩家可见的状态流。 */
 export interface ReputationGrant {

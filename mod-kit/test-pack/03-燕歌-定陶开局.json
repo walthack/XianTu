@@ -1255,7 +1255,7 @@
         "realm": "金丹"
       },
       {
-        "id": "lyg.character.np011",
+        "id": "liuchao.character.zhang_yun",
         "name": "张恽",
         "role": "程侯府内侍/跑腿者",
         "description": "程侯府内侍/跑腿者",
@@ -1486,7 +1486,7 @@
         "favorability": 5
       },
       {
-        "characterId": "lyg.character.np011",
+        "characterId": "liuchao.character.zhang_yun",
         "relation": "阉奴属下",
         "favorability": 25
       }
@@ -3295,7 +3295,7 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.lv_zhi",
           "lyg.character.np004",
-          "lyg.character.np011",
+          "liuchao.character.zhang_yun",
           "lyg.character.zhong_hangyue"
         ]
       }

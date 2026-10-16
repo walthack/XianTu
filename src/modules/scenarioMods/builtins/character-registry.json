@@ -1,13 +1,14 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-10-10-fb2192f0bf20d813",
-  "sourceHash": "fb2192f0bf20d813",
+  "version": "cr-2026-10-16-1860022c9cc58660",
+  "sourceHash": "1860022c9cc58660",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-10-10T18:28:16.816Z",
+  "generatedAt": "2026-10-16T00:26:00.576Z",
   "stats": {
-    "total": 322,
-    "stagePresent": 227,
+    "total": 333,
+    "stagePresent": 235,
     "canonOnly": 95,
+    "enemyKinds": 3,
     "collisionsMerged": 0
   },
   "characters": [
@@ -7649,6 +7650,136 @@
       "embedText": "弥骨 ｜ 鬼王峒武将级人物，负责追击与维持集会秩序 ｜ 鬼王峒(武将/追兵) ｜ 登场于鬼王宫 ｜ 凶悍、服从鬼巫王、负责追击与维持集会秩序 ｜ 作为追兵向程宗扬一行施压 ｜ 承接突围、追击和小紫倒戈前夜的压力"
     },
     {
+      "id": "lcq.character.nanhuang_ajia",
+      "canonicalName": "阿葭",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "花苗族的少女，龙神新娘的伴娘",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "book": "qingyu",
+          "seqLo": 61,
+          "seqHi": 67,
+          "identity": "",
+          "role": "",
+          "description": "花苗族的少女，龙神新娘的伴娘",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "阿葭 ｜ 花苗族的少女，龙神新娘的伴娘"
+    },
+    {
+      "id": "lcq.character.nanhuang_baiyi_chief",
+      "canonicalName": "白夷族长",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "白夷族的族长",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04",
+          "book": "qingyu",
+          "seqLo": 68,
+          "seqHi": 87,
+          "identity": "",
+          "role": "",
+          "description": "白夷族的族长",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "book": "qingyu",
+          "seqLo": 88,
+          "seqHi": 122,
+          "identity": "",
+          "role": "",
+          "description": "白夷族的族长",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "白夷族长 ｜ 白夷族的族长"
+    },
+    {
+      "id": "lcq.character.nanhuang_blacksea_envoy",
+      "canonicalName": "黑衣丽人",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "黑魔海来的女子",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "book": "qingyu",
+          "seqLo": 163,
+          "seqHi": 195,
+          "identity": "",
+          "role": "",
+          "description": "黑魔海来的女子",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "黑衣丽人 ｜ 黑魔海来的女子"
+    },
+    {
       "id": "lcq.character.nanhuang_dagu",
       "canonicalName": "达古",
       "aliases": [],
@@ -7657,15 +7788,18 @@
       ],
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "鬼王峒巫师",
+        "identitySummary": "鬼王峒秘营的巫师，以腹语驱使鬼战士",
         "appearance": "",
         "personality": []
       },
       "phaseIdentities": [
         {
           "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
-          "identity": "鬼王峒巫师",
-          "scope": "stage"
+          "identity": "鬼王峒秘营的巫师，以腹语驱使鬼战士",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "鬼王峒秘营的巫师，以腹语驱使鬼战士",
+          "status": "stage-current"
         }
       ],
       "presenceWindow": {
@@ -7673,7 +7807,7 @@
         "lastPresentChapter": 83,
         "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
       },
-      "embedText": "达古 ｜ 鬼王峒巫师"
+      "embedText": "达古 ｜ 鬼王峒秘营的巫师，以腹语驱使鬼战士"
     },
     {
       "id": "lcq.character.nanhuang_heishe",
@@ -7684,15 +7818,18 @@
       ],
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "阁罗的随从，鬼王峒的人",
+        "identitySummary": "阁罗的随从",
         "appearance": "",
         "personality": []
       },
       "phaseIdentities": [
         {
           "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
-          "identity": "阁罗的随从，鬼王峒的人",
-          "scope": "stage"
+          "identity": "阁罗的随从",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "阁罗的随从",
+          "status": "stage-current"
         }
       ],
       "presenceWindow": {
@@ -7700,7 +7837,7 @@
         "lastPresentChapter": 80,
         "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
       },
-      "embedText": "黑舌 ｜ 阁罗的随从，鬼王峒的人"
+      "embedText": "黑舌 ｜ 阁罗的随从"
     },
     {
       "id": "lcq.character.nanhuang_kawa",
@@ -7711,30 +7848,42 @@
       ],
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "花苗族汉子，随送亲队同行",
+        "identitySummary": "花苗的年轻汉子",
         "appearance": "",
         "personality": []
       },
       "phaseIdentities": [
         {
           "stageId": "lcq.stage_03b_snake_flower_bridge",
-          "identity": "花苗族汉子，随送亲队同行",
-          "scope": "stage"
+          "identity": "花苗的年轻汉子",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "花苗的年轻汉子",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_04",
-          "identity": "花苗族汉子，随送亲队同行",
-          "scope": "stage"
+          "identity": "花苗的年轻汉子",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "花苗的年轻汉子",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
-          "identity": "花苗族汉子，随送亲队同行",
-          "scope": "stage"
+          "identity": "花苗的年轻汉子",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "花苗的年轻汉子",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_05b",
-          "identity": "花苗族汉子，随送亲队同行",
-          "scope": "stage"
+          "identity": "花苗的年轻汉子",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "花苗的年轻汉子",
+          "status": "stage-current"
         }
       ],
       "presenceWindow": {
@@ -7742,7 +7891,7 @@
         "lastPresentChapter": 108,
         "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
       },
-      "embedText": "卡瓦 ｜ 花苗族汉子，随送亲队同行"
+      "embedText": "卡瓦 ｜ 花苗的年轻汉子"
     },
     {
       "id": "lcq.character.nanhuang_loumeng",
@@ -7794,7 +7943,16 @@
         }
       },
       "region": "南荒",
-      "phaseIdentities": [],
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "book": "qingyu",
+          "identity": "红苗族长之子，未来的继承人",
+          "description": "红苗族长之子，未来的继承人",
+          "status": "stage-current"
+        }
+      ],
       "review": {
         "approved": false,
         "reviewed": true,
@@ -7818,15 +7976,18 @@
       ],
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "鬼王峒使者阁罗的随从",
+        "identitySummary": "阁罗的随从，长得像蛇",
         "appearance": "",
         "personality": []
       },
       "phaseIdentities": [
         {
           "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
-          "identity": "鬼王峒使者阁罗的随从",
-          "scope": "stage"
+          "identity": "阁罗的随从，长得像蛇",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "阁罗的随从，长得像蛇",
+          "status": "stage-current"
         }
       ],
       "presenceWindow": {
@@ -7834,7 +7995,7 @@
         "lastPresentChapter": 80,
         "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
       },
-      "embedText": "蛇傀 ｜ 鬼王峒使者阁罗的随从"
+      "embedText": "蛇傀 ｜ 阁罗的随从，长得像蛇"
     },
     {
       "id": "lcq.character.nanhuang_shigang",
@@ -7845,25 +8006,34 @@
       ],
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "白湖商馆护卫",
+        "identitySummary": "白湖商馆的护卫，使雁翎刀",
         "appearance": "",
         "personality": []
       },
       "phaseIdentities": [
         {
           "stageId": "lcq.stage_03b_snake_flower_bridge",
-          "identity": "白湖商馆护卫",
-          "scope": "stage"
+          "identity": "白湖商馆的护卫，使雁翎刀",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "白湖商馆的护卫，使雁翎刀",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_04",
-          "identity": "白湖商馆护卫",
-          "scope": "stage"
+          "identity": "白湖商馆的护卫，使雁翎刀",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "白湖商馆的护卫，使雁翎刀",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
-          "identity": "白湖商馆护卫",
-          "scope": "stage"
+          "identity": "白湖商馆的护卫，使雁翎刀",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "白湖商馆的护卫，使雁翎刀",
+          "status": "stage-current"
         }
       ],
       "presenceWindow": {
@@ -7871,7 +8041,59 @@
         "lastPresentChapter": 73,
         "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
       },
-      "embedText": "石刚 ｜ 白湖商馆护卫"
+      "embedText": "石刚 ｜ 白湖商馆的护卫，使雁翎刀"
+    },
+    {
+      "id": "lcq.character.nanhuang_stonemason",
+      "canonicalName": "六朝石匠",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "在峒口刻柱的六朝石匠",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "book": "qingyu",
+          "seqLo": 88,
+          "seqHi": 122,
+          "identity": "",
+          "role": "",
+          "description": "在峒口刻柱的六朝石匠",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "book": "qingyu",
+          "seqLo": 163,
+          "seqHi": 195,
+          "identity": "",
+          "role": "",
+          "description": "在峒口刻柱的六朝石匠",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "六朝石匠 ｜ 在峒口刻柱的六朝石匠"
     },
     {
       "id": "lcq.character.nanhuang_xi_furen",
@@ -7939,7 +8161,24 @@
         ]
       },
       "region": "南荒",
-      "phaseIdentities": [],
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04",
+          "book": "qingyu",
+          "identity": "白夷族长的妻子",
+          "description": "白夷族长的妻子",
+          "status": "stage-current"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "book": "qingyu",
+          "identity": "白夷族长的妻子",
+          "description": "白夷族长的妻子",
+          "status": "stage-current"
+        }
+      ],
       "review": {
         "approved": false,
         "reviewed": true,
@@ -7955,6 +8194,45 @@
       "embedText": "樨夫人 ｜ 白夷族长夫人；鬼王峒使者控制白夷时被其胁迫役使，后受程宗扬影响 ｜ 【南荒人物】 ｜ 白夷族(族长夫人) ｜ 登场于白夷族 ｜ 在白夷族时因受制于人而顺从程宗扬 ｜ 白夷族遭鬼王峒使者控制，作为族长夫人被胁迫役使；程宗扬后来据此推断鬼王峒以药物与幻觉控制诸族"
     },
     {
+      "id": "lcq.character.nanhuang_xiaojin",
+      "canonicalName": "小津",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "碧鲮族女子，祁远的救命恩人",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "book": "qingyu",
+          "seqLo": 88,
+          "seqHi": 122,
+          "identity": "",
+          "role": "",
+          "description": "碧鲮族女子，祁远的救命恩人",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "小津 ｜ 碧鲮族女子，祁远的救命恩人"
+    },
+    {
       "id": "lcq.character.nanhuang_xiaowei",
       "canonicalName": "小魏",
       "aliases": [],
@@ -7963,30 +8241,42 @@
       ],
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "白湖商馆护卫，弩手",
+        "identitySummary": "白湖商馆的年轻护卫，曾走过南荒",
         "appearance": "",
         "personality": []
       },
       "phaseIdentities": [
         {
           "stageId": "lcq.stage_03b_snake_flower_bridge",
-          "identity": "白湖商馆护卫，弩手",
-          "scope": "stage"
+          "identity": "白湖商馆的年轻护卫，曾走过南荒",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "白湖商馆的年轻护卫，曾走过南荒",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_04",
-          "identity": "白湖商馆护卫，弩手",
-          "scope": "stage"
+          "identity": "白湖商馆的年轻护卫，曾走过南荒",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "白湖商馆的年轻护卫，曾走过南荒",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
-          "identity": "白湖商馆护卫，弩手",
-          "scope": "stage"
+          "identity": "白湖商馆的年轻护卫，曾走过南荒",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "白湖商馆的年轻护卫，曾走过南荒",
+          "status": "stage-current"
         },
         {
           "stageId": "lcq.stage_05b",
-          "identity": "白湖商馆护卫，弩手",
-          "scope": "stage"
+          "identity": "白湖商馆的年轻护卫，曾走过南荒",
+          "scope": "stage-projection",
+          "book": "qingyu",
+          "description": "白湖商馆的年轻护卫，曾走过南荒",
+          "status": "stage-current"
         }
       ],
       "presenceWindow": {
@@ -7994,7 +8284,150 @@
         "lastPresentChapter": 118,
         "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
       },
-      "embedText": "小魏 ｜ 白湖商馆护卫，弩手"
+      "embedText": "小魏 ｜ 白湖商馆的年轻护卫，曾走过南荒"
+    },
+    {
+      "id": "lcq.character.nanhuang_yeao",
+      "canonicalName": "叶媪",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "南荒山村里养蛊的老妇",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04",
+          "book": "qingyu",
+          "seqLo": 68,
+          "seqHi": 87,
+          "identity": "",
+          "role": "",
+          "description": "南荒山村里养蛊的老妇",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_05b",
+          "book": "qingyu",
+          "seqLo": 163,
+          "seqHi": 195,
+          "identity": "",
+          "role": "",
+          "description": "南荒山村里养蛊的老妇",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "叶媪 ｜ 南荒山村里养蛊的老妇"
+    },
+    {
+      "id": "lcq.character.nanhuang_yixiong",
+      "canonicalName": "易雄",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "云氏商会的护卫",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "book": "qingyu",
+          "seqLo": 88,
+          "seqHi": 122,
+          "identity": "",
+          "role": "",
+          "description": "云氏商会的护卫",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "易雄 ｜ 云氏商会的护卫"
+    },
+    {
+      "id": "lcq.character.nanhuang_yiyong",
+      "canonicalName": "易勇",
+      "aliases": [],
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "云氏商会的护卫",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04",
+          "book": "qingyu",
+          "seqLo": 68,
+          "seqHi": 87,
+          "identity": "",
+          "role": "",
+          "description": "云氏商会的护卫",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        },
+        {
+          "scope": "stage-projection",
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "book": "qingyu",
+          "seqLo": 88,
+          "seqHi": 122,
+          "identity": "",
+          "role": "",
+          "description": "云氏商会的护卫",
+          "notes": [],
+          "status": "stage-current",
+          "source": "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        }
+      ],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [],
+        "conflicts": [],
+        "humanNotes": [
+          "用户2026-10-15 01:11 批准（总表描述逐字，不含章号）"
+        ]
+      },
+      "embedText": "易勇 ｜ 云氏商会的护卫"
     },
     {
       "id": "lcq.character.np001",
@@ -9258,6 +9691,7 @@
       "canonicalName": "王哲",
       "aliases": [],
       "gender": "男",
+      "mustSurvive": true,
       "books": [
         "qingyu",
         "yunlong",
@@ -9583,6 +10017,82 @@
         "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
       },
       "embedText": "朱诺 ｜ 江纳丝人族长；在鬼王宫祭台战斗中作为女尸鬼出现 ｜ 鬼王峒(尸鬼) ｜ 登场于鬼王宫祭台 ｜ 鬼王宫祭台战斗中的敌对尸鬼 ｜ 祭台尸鬼战斗中出现，推动丹宸之死与程宗扬等人脱险"
+    },
+    {
+      "id": "lcq.enemy.altar_corpse",
+      "canonicalName": "尸鬼",
+      "idAliases": [
+        "lcq.enemy.male_corpse"
+      ],
+      "aliases": [
+        "男尸鬼"
+      ],
+      "entityType": "enemy_kind",
+      "baseStats": {
+        "level": null,
+        "combatStrength": 3,
+        "levelSource": "尸鬼不适用九级体系；战斗强度 3 取自时点表第 61 行“模拟当量建议约3”（第102–103章，F12）。与男尸鬼 lcq.enemy.male_corpse 合并为同一种类（用户 2026-10-16 裁定，旧 id 留 idAliases）。"
+      },
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [],
+      "embedText": "尸鬼 ｜ 男尸鬼"
+    },
+    {
+      "id": "lcq.enemy.guiwang_warrior",
+      "canonicalName": "鬼王峒武士",
+      "idAliases": [
+        "lcq.enemy.guiwang_ghost_warrior",
+        "lcq.enemy.guiwangdong_warrior"
+      ],
+      "aliases": [],
+      "entityType": "enemy_kind",
+      "baseStats": {
+        "level": 3,
+        "levelSource": "mod-kit/entity-catalog/character-levels.qingyu.json sourceRow 56（第45–112章，推断）；精英变体 sourceRow 57 仍在时点表"
+      },
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [],
+      "embedText": "鬼王峒武士"
+    },
+    {
+      "id": "lcq.enemy.merfolk",
+      "canonicalName": "鲛人",
+      "idAliases": [
+        "lcq.enemy.jiaoren"
+      ],
+      "aliases": [],
+      "entityType": "enemy_kind",
+      "baseStats": {
+        "level": 4,
+        "levelSource": "mod-kit/entity-catalog/character-levels.qingyu.json sourceRow 60（第74章，推断）"
+      },
+      "books": [
+        "qingyu"
+      ],
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "",
+        "appearance": "",
+        "personality": []
+      },
+      "phaseIdentities": [],
+      "embedText": "鲛人"
     },
     {
       "id": "liuchao.character.a_he_ma",
@@ -16715,6 +17225,9 @@
     {
       "id": "liuchao.character.he_yilian",
       "canonicalName": "何漪莲",
+      "idAliases": [
+        "lyl.character.he_yilian"
+      ],
       "aliases": [
         "莲儿"
       ],
@@ -16848,16 +17361,12 @@
           "book": "yunlong",
           "seqLo": 559,
           "seqHi": 562,
-          "identity": "洛帮帮主",
-          "role": "洛帮帮主",
-          "description": "一帮之主，天生一张明星般的艳光面容，风尘媚态里藏着凌厉手段，与尹馥兰针锋相对。",
-          "notes": [
-            "【关系】洛帮帮主；尚未成为程宗扬内宅成员"
-          ],
+          "identity": "",
+          "role": "",
+          "description": "",
+          "notes": [],
           "status": "stage-current",
-          "relationToProtagonist": [
-            "洛帮帮主；尚未成为程宗扬内宅成员"
-          ],
+          "relationToProtagonist": [],
           "formsOfAddress": [],
           "goals": [],
           "weaknesses": [],
@@ -16871,7 +17380,8 @@
           "blockedStageNotePrefixes": [
             "【性癖】",
             "【身体】"
-          ]
+          ],
+          "identityWithheld": true
         },
         {
           "scope": "stage-projection",
@@ -17003,16 +17513,12 @@
           "book": "yunlong",
           "seqLo": 616,
           "seqHi": 664,
-          "identity": "洛帮帮主",
-          "role": "洛帮帮主",
-          "description": "一帮之主，天生一张明星般的艳光面容，风尘媚态里藏着凌厉手段，与尹馥兰针锋相对。",
-          "notes": [
-            "【关系】洛帮帮主；尚未成为程宗扬内宅成员"
-          ],
+          "identity": "",
+          "role": "",
+          "description": "",
+          "notes": [],
           "status": "stage-current",
-          "relationToProtagonist": [
-            "洛帮帮主；尚未成为程宗扬内宅成员"
-          ],
+          "relationToProtagonist": [],
           "formsOfAddress": [],
           "goals": [],
           "weaknesses": [],
@@ -17026,7 +17532,8 @@
           "blockedStageNotePrefixes": [
             "【性癖】",
             "【身体】"
-          ]
+          ],
+          "identityWithheld": true
         },
         {
           "scope": "stage-projection",
@@ -17034,16 +17541,12 @@
           "book": "yunlong",
           "seqLo": 567,
           "seqHi": 615,
-          "identity": "洛帮帮主",
-          "role": "洛帮帮主",
-          "description": "一帮之主，天生一张明星般的艳光面容，风尘媚态里藏着凌厉手段，与尹馥兰针锋相对。",
-          "notes": [
-            "【关系】洛帮帮主；尚未成为程宗扬内宅成员"
-          ],
+          "identity": "",
+          "role": "",
+          "description": "",
+          "notes": [],
           "status": "stage-current",
-          "relationToProtagonist": [
-            "洛帮帮主；尚未成为程宗扬内宅成员"
-          ],
+          "relationToProtagonist": [],
           "formsOfAddress": [],
           "goals": [],
           "weaknesses": [],
@@ -17057,7 +17560,8 @@
           "blockedStageNotePrefixes": [
             "【性癖】",
             "【身体】"
-          ]
+          ],
+          "identityWithheld": true
         }
       ],
       "review": {
@@ -29748,7 +30252,7 @@
           "seqLo": 61,
           "seqHi": 67,
           "identity": "云氏雇用的老向导，自称朱八八。",
-          "role": "老向导",
+          "role": "云氏雇用的老向导",
           "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
@@ -29777,7 +30281,7 @@
           "seqLo": 88,
           "seqHi": 122,
           "identity": "云氏雇用的老向导，自称朱八八。",
-          "role": "老向导",
+          "role": "云氏雇用的老向导",
           "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
@@ -29806,7 +30310,7 @@
           "seqLo": 163,
           "seqHi": 195,
           "identity": "云氏雇用的老向导，自称朱八八。",
-          "role": "老向导",
+          "role": "云氏雇用的老向导",
           "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
@@ -29835,7 +30339,7 @@
           "seqLo": 196,
           "seqHi": 231,
           "identity": "云氏雇用的老向导，自称朱八八。",
-          "role": "老向导",
+          "role": "云氏雇用的老向导",
           "description": "瘦小苍老的成年老向导。",
           "notes": [
             "【关系】合作者、导师（指点功法与生意）",
@@ -30071,7 +30575,7 @@
           "scope": "stage-projection",
           "stageId": "lcq.stage_04",
           "identity": "云氏雇用的老向导，自称朱八八。",
-          "role": "老向导",
+          "role": "云氏雇用的老向导",
           "status": "stage-current",
           "appearance": "面容苍老、身形瘦小的老向导，不是魁梧大汉。",
           "personality": [],
@@ -33075,6 +33579,9 @@
     {
       "id": "liuchao.character.wang_hui",
       "canonicalName": "王蕙",
+      "idAliases": [
+        "lyl.character.np016"
+      ],
       "aliases": [],
       "gender": "女",
       "books": [
@@ -37287,6 +37794,11 @@
         "龙骥"
       ],
       "gender": "男",
+      "mustSurvive": true,
+      "baseStats": {
+        "level": 6,
+        "levelSource": "清羽L18220"
+      },
       "books": [
         "qingyu",
         "yunlong"
@@ -43678,6 +44190,9 @@
     {
       "id": "liuchao.character.zhang_yun",
       "canonicalName": "张恽",
+      "idAliases": [
+        "lyg.character.np011"
+      ],
       "aliases": [],
       "gender": "男",
       "books": [
@@ -43767,7 +44282,7 @@
           "book": "yange",
           "seqLo": 948,
           "seqHi": 997,
-          "identity": "奴仆/内侍",
+          "identity": "程侯府内侍",
           "role": "程侯府内侍/跑腿者",
           "description": "程侯府的内侍跑腿者，穿梭于权贵之间，脚步匆匆，身份卑微却眼观六路。",
           "notes": [
@@ -43782,7 +44297,7 @@
           "book": "yange",
           "seqLo": 986,
           "seqHi": 1012,
-          "identity": "奴仆/内侍",
+          "identity": "程侯府内侍",
           "role": "程侯府内侍/跑腿者",
           "description": "程侯府的内侍跑腿者，穿梭于权贵之间，脚步匆匆，身份卑微却眼观六路。",
           "notes": [
@@ -43797,8 +44312,8 @@
           "book": "yunlong",
           "seqLo": 885,
           "seqHi": 899,
-          "identity": "奴仆/内侍",
-          "role": "内侍",
+          "identity": "程侯府内侍",
+          "role": "程侯府内侍",
           "description": "内侍张恽弓着脊背站在廊柱阴影里，袍角垂地不扬一丝尘埃，仿佛只是宫中一件会行走的摆设。",
           "notes": [
             "【关系】旧主人为吕氏，后投靠程宗扬被其收降为奴",
@@ -50252,6 +50767,9 @@
     {
       "id": "lyl.character.np043",
       "canonicalName": "宁成",
+      "idAliases": [
+        "liuchao.character.ning_cheng"
+      ],
       "aliases": [],
       "gender": "男",
       "books": [
@@ -50336,7 +50854,7 @@
           "book": "yange",
           "seqLo": 948,
           "seqHi": 997,
-          "identity": "舞都太守",
+          "identity": "逃犯",
           "role": "逃犯",
           "description": "宁成如同一只惊弓之鸟，在夜色中仓皇遁逃，身后追兵的脚步声步步紧逼。",
           "notes": [

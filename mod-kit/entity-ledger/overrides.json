@@ -146,7 +146,21 @@
         "npcAddress": [
           {
             "fromChapter": 47,
+            "text": "大笨蛋／大笨牛"
+          },
+          {
+            "fromChapter": 99,
+            "text": "大笨瓜",
+            "requiresState": "branch.lmz.title_upgraded"
+          },
+          {
+            "fromChapter": 111,
             "text": "大笨蛋／大笨牛／大笨瓜"
+          },
+          {
+            "fromChapter": 111,
+            "text": "大笨瓜",
+            "requiresState": "branch.lmz.title_upgraded"
           }
         ],
         "selfReportedName": [
@@ -380,7 +394,12 @@
           }
         ],
         "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
-        "npcAddress": [],
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "程头儿"
+          }
+        ],
         "selfReportedName": []
       }
     },
@@ -434,7 +453,12 @@
           }
         ],
         "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
-        "npcAddress": [],
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "你小子（自称二爷）"
+          }
+        ],
         "selfReportedName": []
       }
     },
@@ -487,7 +511,12 @@
           }
         ],
         "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
-        "npcAddress": [],
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "程小哥"
+          }
+        ],
         "selfReportedName": []
       }
     },
@@ -532,7 +561,12 @@
           }
         ],
         "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
-        "npcAddress": [],
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "程头儿"
+          }
+        ],
         "selfReportedName": []
       }
     },
@@ -620,7 +654,12 @@
           }
         ],
         "source": "28-南荒人物称呼核对.md / 用户2026-10-05 09:54–10:31",
-        "npcAddress": [],
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "程兄"
+          }
+        ],
         "selfReportedName": []
       }
     },
@@ -1118,6 +1157,26 @@
         "toChapter": 65,
         "role": "白夷地宫中受谢艺刑问的鬼王峒使者；原著未给姓名"
       }
+    },
+    {
+      "id": "lcq.character.nanhuang_xi_furen",
+      "aliases": [
+        "樨夫人"
+      ],
+      "naming": {
+        "panel": [],
+        "narration": [],
+        "protagonistAddress": [],
+        "protagonistThought": [],
+        "source": "legacyNarratorPacket.ts 称呼表迁入（原字面量：樨夫人→公子），2026-10-14",
+        "npcAddress": [
+          {
+            "fromChapter": 0,
+            "text": "公子"
+          }
+        ],
+        "selfReportedName": []
+      }
     }
   ],
   "chapterGates": {
@@ -1181,7 +1240,7 @@
     ]
   },
   "namingMilestones": {
-    "lcq.event.s04_03": 48,
+    "lcq.event.s04_03": 47,
     "lcq.event.shanghou_revealed": 120
   },
   "blockedSouthernRecallIds": [
@@ -1213,5 +1272,103 @@
     "liuchao.character.a_jiman_bana": {
       "short": "阿姬曼"
     }
+  },
+  "identityDisplays": {
+    "_note": "南荒公开卡的身份展示文本（按人物 id）。由 characterResolver.syncNanhuangIdentityDisplay 按“揭示状态”选档，不含任何剧情判定；判定仍在代码里。2026-10-14 自 characterResolver.ts 字面量逐字迁入。",
+    "liuchao.character.xiao_zi": {
+      "raceWhenMotherRevealed": "碧鲮族（母系碧姬）",
+      "knownFacts": {
+        "mother": "【已知身世】小紫是碧姬的女儿。",
+        "father": "【已知身世】小紫的生父是岳鹏举。",
+        "suspectedFather": "【未证实的猜测】程宗扬怀疑小紫是岳帅的遗腹女；尚未证实。"
+      }
+    },
+    "liuchao.character.shang_zhen_yu": {
+      "appearance": "瘦小苍老的成年老向导，不是魁梧壮汉。",
+      "hidden": {
+        "role": "云氏雇用的老向导",
+        "description": "云氏雇用的老向导，自称朱八八。"
+      },
+      "revealed": {
+        "role": "山村中的殇侯",
+        "description": "朱老头已当面显露殇侯身份。其他身世未揭露。"
+      }
+    },
+    "liuchao.character.le_mingzhu": {
+      "hidden": {
+        "role": "戴面纱的花苗新娘",
+        "description": "随花苗送亲队同行，身份尚未揭露。",
+        "appearance": "戴面纱的成年花苗新娘，暂不描写面纱下的容貌。"
+      },
+      "revealed": {
+        "role": "光明观堂弟子",
+        "description": "送亲新娘的身份已揭露，是光明观堂弟子乐明珠。"
+      }
+    }
+  },
+  "stageRegions": {
+    "lcq.stage_01": "塞外",
+    "lcq.stage_02": "塞外",
+    "lcq.stage_03": "塞外",
+    "lcq.stage_03b_snake_flower_bridge": "昭南",
+    "lcq.stage_04": "昭南",
+    "lcq.stage_04b_lingfei_baiyi_crisis": "昭南",
+    "lcq.stage_05": "昭南",
+    "lcq.stage_05b": "昭南",
+    "lcq.stage_06": "昭南",
+    "lcq.stage_07_qingyuan_jiankang": "晋国",
+    "lcq.stage_08_jiankang_coup": "晋国",
+    "lcq.stage_09_trade_and_escape": "晋国",
+    "lcq.stage_10_jiangzhou_shadow_war": "宋国",
+    "lcq.stage_11_lieshan_battle": "宋国",
+    "lcq.stage_12_jiangzhou_counterwar": "宋国",
+    "lyl.jiangzhou_retreat": "宋国",
+    "lyl.lin_an_black_sea": "宋国",
+    "lyl.lin_an_bridge": "宋国",
+    "lyl.taiquan_expedition": "宋国",
+    "lyl.xiaoyingzhou_blacksea_trap": "宋国",
+    "lyl.taiquan_sacred_fruit": "太泉",
+    "lyl.taiquan_core_conflict": "太泉",
+    "lyl.taiquan_afterfall": "太泉",
+    "lyl.luoyang_cloud_secret": "汉国",
+    "lyl.luoyang_coup": "汉国",
+    "lyl.han_palace_endgame": "汉国",
+    "lyg.dingtao_beijing": "汉国",
+    "lyg.mijing_rumen": "汉国",
+    "lyg.han_succession": "汉国",
+    "lyg.changgan_begins": "唐国",
+    "lyg.shixiang_ambush": "唐国",
+    "lyg.changgan_interlude": "唐国",
+    "lyg.ganlu_bian": "唐国",
+    "lyg.liangzhou_league": "唐国",
+    "lyg.buddhist_conspiracy": "唐国",
+    "lyg.ganlu_aftershock": "唐国",
+    "lyg.shituolin_endgame": "唐国"
+  },
+  "chapterIdentities": {
+    "lcq.character.nanhuang_shekui": {
+      "source": "用户2026-10-15 01:02 批准「阁罗的生意伙伴」（逐字取自用户指令；79章前身份取自总表04b相位，不在此重复）；role 同步切换，使模块化叙事包里的 role 随章变化。2026-10-15 第三轮用户批准补回旧限定语（旧描述「阁罗的随从，长得像蛇」、旧 role「鬼王峒使者阁罗的随从」），措辞取自第一轮前的旧 role／描述原文，仅把「随从」换成「生意伙伴」",
+      "steps": [
+        {
+          "fromChapter": 79,
+          "identity": "阁罗的生意伙伴，长得像蛇",
+          "role": "鬼王峒使者阁罗的生意伙伴"
+        }
+      ]
+    },
+    "lcq.character.nanhuang_heishe": {
+      "source": "用户2026-10-15 01:02 批准「阁罗的生意伙伴」（逐字取自用户指令；79章前身份取自总表04b相位，不在此重复）；role 同步切换，使模块化叙事包里的 role 随章变化。2026-10-15 第三轮用户批准补回旧限定语（旧描述「阁罗的随从」、旧 role「阁罗的随从，鬼王峒的人」），措辞取自第一轮前的旧 role／描述原文，仅把「随从」换成「生意伙伴」",
+      "steps": [
+        {
+          "fromChapter": 79,
+          "identity": "阁罗的生意伙伴",
+          "role": "阁罗的生意伙伴，鬼王峒的人"
+        }
+      ]
+    }
+  },
+  "masterPrecedence": {
+    "note": "总表优先（2026-10-15 用户批准）：有总表本关相位 description／identity 的人物，阶段档不留这两项、运行时按总表还原。pendingIds 内的人物待用户裁定，暂保持原行为（不剥离、不覆盖）；2026-10-15 第三轮殇侯已裁定（总表南荒 role＝「云氏雇用的老向导」），名单现为空。",
+    "pendingIds": []
   }
 }

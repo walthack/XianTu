@@ -1180,7 +1180,8 @@
     {
       "id": "lcq.enemy.altar_corpse",
       "aliases": [
-        "尸鬼"
+        "尸鬼",
+        "男尸鬼"
       ],
       "definition": {
         "id": "lcq.enemy.altar_corpse",
@@ -1189,7 +1190,7 @@
         "unnamed": true,
         "instances": {},
         "level": null,
-        "levelSource": "待剧情策划按原著核定；缺值按同级并告警"
+        "levelSource": "见人物时点级数表（第102–103章，不适用九级，模拟当量约3）；与男尸鬼 lcq.enemy.male_corpse 合并为同一种类（旧 id 见 migratedFrom 与总表 idAliases）"
       },
       "factionRef": {
         "id": null,
@@ -1213,7 +1214,9 @@
       ],
       "realmSource": null,
       "authoritySource": "mod-kit/entity-catalog/enemies.json",
-      "migratedFrom": [],
+      "migratedFrom": [
+        "lcq.enemy.male_corpse"
+      ],
       "stageVariants": {}
     },
     {
@@ -1401,22 +1404,6 @@
         "id": "lcq.enemy.f01_veiled_woman",
         "name": "黑纱女子",
         "type": "humanoid",
-        "unnamed": true,
-        "level": null,
-        "levelSource": "见人物时点级数表；不以全书终点等级替代"
-      },
-      "authoritySource": "mod-kit/entity-catalog/enemies.json",
-      "stageVariants": {},
-      "encounters": [],
-      "migratedFrom": []
-    },
-    {
-      "id": "lcq.enemy.male_corpse",
-      "aliases": [],
-      "definition": {
-        "id": "lcq.enemy.male_corpse",
-        "name": "男尸鬼",
-        "type": "undead",
         "unnamed": true,
         "level": null,
         "levelSource": "见人物时点级数表；不以全书终点等级替代"

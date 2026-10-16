@@ -177,6 +177,10 @@
                   "type": "string",
                   "pattern": "^[a-zA-Z0-9_.:-]+$"
                 },
+                "sceneLocationId": {
+                  "type": "string",
+                  "pattern": "^[a-zA-Z0-9_.:-]+$"
+                },
                 "presentActorIds": {
                   "type": "array",
                   "items": {
@@ -194,6 +198,108 @@
                 },
                 "objectiveId": {
                   "type": "string"
+                },
+                "role": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "enum": [
+                      "load_bearing",
+                      "choice",
+                      "color",
+                      "transition"
+                    ]
+                  }
+                },
+                "card": {
+                  "type": "object",
+                  "properties": {
+                    "previousId": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9_.:-]+$"
+                    },
+                    "tensionId": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9_.:-]+$"
+                    },
+                    "optionIds": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9_.:-]+$"
+                      }
+                    }
+                  },
+                  "required": [
+                    "previousId",
+                    "tensionId"
+                  ],
+                  "additionalProperties": false
+                },
+                "echo": {
+                  "type": "object",
+                  "properties": {
+                    "reads": {
+                      "type": "string",
+                      "pattern": "^[a-zA-Z0-9_.:-]+$"
+                    },
+                    "variants": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "previousId": {
+                            "type": "string",
+                            "pattern": "^[a-zA-Z0-9_.:-]+$"
+                          },
+                          "outcomeIds": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string",
+                              "pattern": "^[a-zA-Z0-9_.:-]+$"
+                            }
+                          }
+                        },
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "reads",
+                    "variants"
+                  ],
+                  "additionalProperties": false
+                },
+                "onExpire": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "const": "setState"
+                      },
+                      "stateId": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9_.:-]+$"
+                      },
+                      "value": {
+                        "type": [
+                          "string",
+                          "number",
+                          "boolean"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "stateId",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
                 }
               },
               "required": [
@@ -431,6 +537,56 @@
           },
           "required": [
             "affinityAtLeast"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "stateScoreAtLeast": {
+              "type": "object",
+              "properties": {
+                "terms": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "stateId": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9_.:-]+$"
+                      },
+                      "scores": {
+                        "type": "object",
+                        "minProperties": 1,
+                        "additionalProperties": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "required": [
+                      "stateId",
+                      "scores"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "plus": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "terms",
+                "value"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "stateScoreAtLeast"
           ],
           "additionalProperties": false
         },
@@ -755,6 +911,59 @@
         "intentMatchId": {
           "type": "string",
           "pattern": "^[a-zA-Z0-9_.:-]+$"
+        },
+        "visibleWhen": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "pattern": "^flags\\.[a-zA-Z0-9_.:-]+$"
+              },
+              "operator": {
+                "enum": [
+                  "eq",
+                  "neq"
+                ]
+              },
+              "value": {
+                "type": [
+                  "string",
+                  "number",
+                  "boolean"
+                ]
+              }
+            },
+            "required": [
+              "path",
+              "operator",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "previousId": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_.:-]+$"
+        },
+        "variantOf": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_.:-]+$"
+        },
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "replyMode": {
+          "enum": [
+            "fixed",
+            "model"
+          ]
         }
       },
       "required": [

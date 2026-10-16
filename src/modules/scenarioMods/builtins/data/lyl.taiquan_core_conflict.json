@@ -1531,7 +1531,7 @@
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
-        "id": "lyl.character.he_yilian",
+        "id": "liuchao.character.he_yilian",
         "name": "何漪莲",
         "description": "洛帮帮主何漪莲生就一副娇艳面孔，面上总带着柔媚笑意，行事却极尽精明谨慎，暗藏心计；她甘为程宗扬奴婢，看似温婉顺从，实则步步为营，将洛帮上下打理得滴水不漏。",
         "role": "洛帮帮主",
@@ -3296,7 +3296,7 @@
         ]
       },
       {
-        "characterId": "lyl.character.he_yilian",
+        "characterId": "liuchao.character.he_yilian",
         "relation": "施救者",
         "favorability": 40,
         "memeries": [
@@ -3357,7 +3357,7 @@
     "relationships": [
       {
         "fromCharacterId": "liuchao.character.yin_fulan",
-        "toCharacterId": "lyl.character.he_yilian",
+        "toCharacterId": "liuchao.character.he_yilian",
         "relation": "同伴",
         "score": 70,
         "direction": "bidirectional",
@@ -3405,7 +3405,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "lyl.character.he_yilian",
+        "toCharacterId": "liuchao.character.he_yilian",
         "relation": "控制",
         "score": 5,
         "direction": "bidirectional"
@@ -3433,7 +3433,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.yu_bai_ying",
-        "toCharacterId": "lyl.character.he_yilian",
+        "toCharacterId": "liuchao.character.he_yilian",
         "relation": "主仆",
         "score": 25,
         "direction": "bidirectional"
@@ -3918,7 +3918,7 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.yin_fulan",
-          "lyl.character.he_yilian"
+          "liuchao.character.he_yilian"
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
@@ -3957,7 +3957,7 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.yin_fulan",
-          "lyl.character.he_yilian"
+          "liuchao.character.he_yilian"
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
@@ -4091,7 +4091,7 @@
         ],
         "relatedCharacterIds": [
           "liuchao.character.yin_fulan",
-          "lyl.character.he_yilian"
+          "liuchao.character.he_yilian"
         ],
         "locationId": "lyl.location.taiquan_core",
         "axisId": null,
@@ -4242,7 +4242,7 @@
               },
               {
                 "kind": "related_npc",
-                "characterId": "lyl.character.he_yilian"
+                "characterId": "liuchao.character.he_yilian"
               },
               {
                 "kind": "messenger"
@@ -4289,7 +4289,7 @@
               },
               {
                 "kind": "related_npc",
-                "characterId": "lyl.character.he_yilian"
+                "characterId": "liuchao.character.he_yilian"
               },
               {
                 "kind": "messenger"
@@ -4426,7 +4426,7 @@
               },
               {
                 "kind": "related_npc",
-                "characterId": "lyl.character.he_yilian"
+                "characterId": "liuchao.character.he_yilian"
               },
               {
                 "kind": "messenger"

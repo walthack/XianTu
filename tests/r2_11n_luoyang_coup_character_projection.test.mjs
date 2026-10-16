@@ -29,7 +29,7 @@ const EXPECTED_RELATED = {
   'lyl.event.s06_02': [
     'liuchao.character.cheng_zongyang', 'liuchao.character.yun_dan_liu',
     'liuchao.character.qin_hui', 'liuchao.character.np069',
-    'lyl.character.np016', 'liuchao.character.np007',
+    'liuchao.character.wang_hui', 'liuchao.character.np007',
     'liuchao.character.guo_jie', 'lyl.character.np067',
     'liuchao.character.gao_zhishang', 'liuchao.character.wu_san_gui',
   ],

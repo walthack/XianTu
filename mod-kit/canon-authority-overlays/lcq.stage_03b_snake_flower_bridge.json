@@ -3242,7 +3242,7 @@
         {
           "id": "liuchao.character.shang_zhen_yu",
           "name": "殇侯",
-          "role": "老向导",
+          "role": "云氏雇用的老向导",
           "description": "殇侯常年一副威严尊贵的老年男子模样，身姿挺拔如布衣王侯，双目精光四射却深陷于眼眶，左手扶玉带，指戴翠绿戒指；他城府深不可测，手腕高明，言语间严厉直接，洞察力敏锐，仿佛一眼便能看穿人心，而外表可任意变换，必要时又会化作一个猥琐佝偻的朱老头，裹着破旧葛袍，混迹于市井之间。（真身殇振羽，即殇侯一系）",
           "profile": {
             "attributes": {
@@ -4442,9 +4442,9 @@
           "name": "小魏",
           "role": "白湖商馆护卫",
           "profile": {
-            "origin": "白湖商馆护卫"
+            "origin": "白湖商馆的年轻护卫，曾走过南荒"
           },
-          "description": "白湖商馆护卫，弩手",
+          "description": "白湖商馆的年轻护卫，曾走过南荒",
           "affiliations": [],
           "presenceWindow": {
             "firstChapter": 34,
@@ -4459,9 +4459,9 @@
           "name": "石刚",
           "role": "白湖商馆护卫",
           "profile": {
-            "origin": "白湖商馆护卫"
+            "origin": "白湖商馆的护卫，使雁翎刀"
           },
-          "description": "白湖商馆护卫",
+          "description": "白湖商馆的护卫，使雁翎刀",
           "affiliations": [],
           "presenceWindow": {
             "firstChapter": 31,
@@ -4636,9 +4636,9 @@
           "name": "卡瓦",
           "role": "花苗族汉子，随送亲队同行",
           "profile": {
-            "origin": "花苗护卫"
+            "origin": "花苗的年轻汉子"
           },
-          "description": "花苗族汉子，随送亲队同行",
+          "description": "花苗的年轻汉子",
           "affiliations": [],
           "presenceWindow": {
             "firstChapter": 40,

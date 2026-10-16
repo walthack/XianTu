@@ -2802,7 +2802,7 @@
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
-        "id": "lyg.character.np011",
+        "id": "liuchao.character.zhang_yun",
         "name": "张恽",
         "role": "程侯府内侍/跑腿者",
         "description": "程侯府的内侍跑腿者，穿梭于权贵之间，脚步匆匆，身份卑微却眼观六路。",
@@ -4298,7 +4298,7 @@
         "favorability": 5
       },
       {
-        "characterId": "lyg.character.np011",
+        "characterId": "liuchao.character.zhang_yun",
         "relation": "阉奴属下",
         "favorability": 25
       },
@@ -4483,7 +4483,7 @@
         "direction": "bidirectional"
       },
       {
-        "fromCharacterId": "lyg.character.np011",
+        "fromCharacterId": "liuchao.character.zhang_yun",
         "toCharacterId": "liuchao.character.lv_ji",
         "relation": "证人/死者",
         "score": -10,

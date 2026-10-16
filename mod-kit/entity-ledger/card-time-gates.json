@@ -1,0 +1,188 @@
+{
+  "version": 1,
+  "note": "卡片是跨书静态档案；早期关卡只出现未揭示身份的称谓时，不能按 alias 自动补全真实身份与稳定画像。exclude=该关不由 registry 还原/投影的人物 id。at 标明哪一侧生效：build=scripts/apply-character-cards-v3-to-mod.mjs（构建期投影），runtime=characterResolver.ts（新档物化）。两侧曾各抄一份且不一致（lyg.shixiang_ambush、lyg.ganlu_bian 只在构建期；lcq.stage_03b/04/04b/05b 只在运行时），2026-10-14 合并为本表并以 at 保留各自原行为；是否统一两侧由用户定。新增条目须在 CANON-DECISIONS.md 留原文依据。",
+  "stages": {
+    "lyg.shixiang_ambush": {
+      "note": "R2-11U：长安 source69–84 只使用重建脚本内的本关身份与画像。",
+      "at": [
+        "build"
+      ],
+      "exclude": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.yang_yuhuan",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.pan_jinlian",
+        "lyg.character.shi_temeipu",
+        "liuchao.character.fei_niao_ying_zi",
+        "lyg.character.np031",
+        "lyg.character.kuiji",
+        "lyg.character.guan_hai",
+        "lyg.character.np041",
+        "liuchao.character.li_ang",
+        "liuchao.character.xu_junfang",
+        "liuchao.character.yi_xin",
+        "liuchao.character.cheng_guang",
+        "liuchao.character.xin_yong"
+      ]
+    },
+    "lyg.ganlu_bian": {
+      "note": "R2-11V：甘露前夜 source127–132 采用重建脚本内的时点最小投影。",
+      "at": [
+        "build"
+      ],
+      "exclude": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.li_ang",
+        "liuchao.character.yang_yuhuan",
+        "lyg.character.li_jinxiang",
+        "liuchao.character.zhou_fei",
+        "liuchao.character.fei_niao_ying_zi",
+        "liuchao.character.li_fuguo",
+        "lyg.character.yu_chaoen",
+        "lyg.character.chou_shiliang",
+        "liuchao.character.tian_ling_zi",
+        "liuchao.character.jia_wenhe",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.bai_nichang",
+        "liuchao.character.lv_zhi"
+      ]
+    },
+    "lcq.stage_05": {
+      "note": "R2-11T：本关开场停在第73章大潮之后。全局卡含后期程氏商会、紫妈妈、凝羽/碧姬真相等信息；14 名演员均使用第74–92章时点最小投影。",
+      "at": [
+        "build",
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.le_mingzhu",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.xie_yi",
+        "liuchao.character.yun_cang_feng",
+        "liuchao.character.ning_yu",
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.su_li",
+        "liuchao.character.qi_yuan",
+        "lcq.character.np004",
+        "lcq.character.np006",
+        "liuchao.character.bi_ji",
+        "liuchao.character.a_xi",
+        "liuchao.character.dan_chen"
+      ]
+    },
+    "lcq.stage_03": {
+      "note": "R2-11S：本关开场在第18章中段，九名演员的全局卡均含南荒后段或跨书信息；使用重建脚本内的时点最小投影，由事件按第18–36章顺序逐步揭露。",
+      "at": [
+        "build",
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.su_daji",
+        "liuchao.character.ning_yu",
+        "liuchao.character.a_jiman_bana",
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.xi_men_qing",
+        "liuchao.character.qi_yuan",
+        "liuchao.character.yun_cang_feng",
+        "liuchao.character.xie_yi"
+      ]
+    },
+    "lcq.stage_06": {
+      "note": "R2-11R：本关从鬼王峒决战前一直跨到殇侯揭面。全局卡混有星月湖大营、盘江程氏、后期紫妈妈、凝羽功法真相等未来阶段信息；13 名演员均使用重建脚本内的开场安全最小投影，由事件本身按序揭露后续事实。",
+      "at": [
+        "build",
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.le_mingzhu",
+        "liuchao.character.xie_yi",
+        "liuchao.character.wu_er_lang",
+        "liuchao.character.ning_yu",
+        "liuchao.character.su_li",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.gui_wu_wang",
+        "liuchao.character.dragon_god",
+        "lcq.character.np006",
+        "liuchao.character.yun_cang_feng",
+        "liuchao.character.bi_ji",
+        "liuchao.character.shang_zhen_yu"
+      ]
+    },
+    "lyl.lin_an_black_sea": {
+      "at": [
+        "build",
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.ruan_xiang_ning"
+      ]
+    },
+    "lyl.lin_an_bridge": {
+      "at": [
+        "build",
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.ruan_xiang_ning"
+      ]
+    },
+    "lyl.xiaoyingzhou_blacksea_trap": {
+      "at": [
+        "build",
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.ruan_xiang_ning"
+      ]
+    },
+    "lyl.taiquan_expedition": {
+      "at": [
+        "build",
+        "runtime"
+      ],
+      "exclude": [
+        "canon.character.7718ae444a",
+        "liuchao.character.ruan_xiang_lin",
+        "liuchao.character.ruan_xiang_ning",
+        "liuchao.character.gao_zhishang",
+        "liuchao.character.lu_qian"
+      ]
+    },
+    "lcq.stage_03b_snake_flower_bridge": {
+      "at": [
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.shang_zhen_yu",
+        "liuchao.character.le_mingzhu"
+      ]
+    },
+    "lcq.stage_04": {
+      "at": [
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.shang_zhen_yu",
+        "liuchao.character.le_mingzhu"
+      ]
+    },
+    "lcq.stage_04b_lingfei_baiyi_crisis": {
+      "at": [
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.shang_zhen_yu"
+      ]
+    },
+    "lcq.stage_05b": {
+      "at": [
+        "runtime"
+      ],
+      "exclude": [
+        "liuchao.character.shang_zhen_yu"
+      ]
+    }
+  }
+}

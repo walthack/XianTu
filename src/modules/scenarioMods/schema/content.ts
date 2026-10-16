@@ -36,9 +36,22 @@ export interface ScenarioModTechnique {
 
 export type ScenarioModItemType = 'weapon' | 'armor' | 'consumable' | 'material' | 'other';
 
+/** 使用物品时挂到目标身上的状态（状态 id 必须在状态目录里，canon:build 校验）。 */
+export interface ScenarioModItemUse {
+  statusId: string;
+  /** 剂量（带下限计数的状态用），缺省 1，上限 game-numbers.status.onUse.maxDoses。 */
+  doses?: number;
+  /** 持续分钟，缺省按状态目录。 */
+  minutes?: number;
+}
+
 export interface ScenarioModItem {
   /** 剧情道具仅由剧情结算定向发放，不进入随机拾取/掉落。 */
   storyItem?: boolean;
+  /** 效果标签：解除类沿用状态目录 remove 规则里的 item 标签（heal/antidote/…），毒性类见 game-numbers.status.itemTags.toxic，药性类（sedative）见同处。只给毒/药相关物品标，其余留空。 */
+  effectTags?: string[];
+  /** 使用时挂状态。毒性物品必须有。 */
+  onUse?: ScenarioModItemUse[];
   id: string;
   name: string;
   description?: string;

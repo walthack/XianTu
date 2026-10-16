@@ -2643,7 +2643,7 @@
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
-        "id": "lyl.character.np016",
+        "id": "liuchao.character.wang_hui",
         "name": "王蕙",
         "role": "秦桧之妻",
         "description": "秦桧之妻，笑容里藏着玲珑心思，世人皆知她是丞相内助，却不知她另有盘算。",
@@ -2694,7 +2694,7 @@
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
       },
       {
-        "id": "lyl.character.he_yilian",
+        "id": "liuchao.character.he_yilian",
         "name": "何漪莲",
         "role": "洛帮帮主",
         "description": "洛帮帮主何漪莲生就一副娇艳面孔，面上总带着柔媚笑意，行事却极尽精明谨慎，暗藏心计；她甘为程宗扬奴婢，看似温婉顺从，实则步步为营，将洛帮上下打理得滴水不漏。",
@@ -3162,7 +3162,7 @@
         "id": "liuchao.character.zhang_yun",
         "name": "张恽",
         "gender": "男",
-        "role": "内侍",
+        "role": "程侯府内侍",
         "description": "内侍张恽弓着脊背站在廊柱阴影里，袍角垂地不扬一丝尘埃，仿佛只是宫中一件会行走的摆设。",
         "profile": {
           "origin": "奴仆/内侍",
@@ -4129,7 +4129,7 @@
         "favorability": -80
       },
       {
-        "characterId": "lyl.character.he_yilian",
+        "characterId": "liuchao.character.he_yilian",
         "relation": "救与被救",
         "favorability": 5
       },
@@ -4179,7 +4179,7 @@
         "favorability": 70
       },
       {
-        "characterId": "lyl.character.np016",
+        "characterId": "liuchao.character.wang_hui",
         "relation": "盟友",
         "favorability": 42
       },
@@ -4241,7 +4241,7 @@
         ]
       },
       {
-        "fromCharacterId": "lyl.character.np016",
+        "fromCharacterId": "liuchao.character.wang_hui",
         "toCharacterId": "liuchao.character.qin_hui",
         "relation": "夫妻",
         "score": 75,
@@ -4249,7 +4249,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.xiao_zi",
-        "toCharacterId": "lyl.character.he_yilian",
+        "toCharacterId": "liuchao.character.he_yilian",
         "relation": "控制",
         "score": 5,
         "direction": "bidirectional"
@@ -4305,7 +4305,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.cai_jingzhong",
-        "toCharacterId": "lyl.character.np016",
+        "toCharacterId": "liuchao.character.wang_hui",
         "relation": "合作",
         "score": 35,
         "direction": "bidirectional"
@@ -4375,7 +4375,7 @@
       },
       {
         "fromCharacterId": "liuchao.character.cheng_zongyang",
-        "toCharacterId": "lyl.character.np016",
+        "toCharacterId": "liuchao.character.wang_hui",
         "relation": "同族",
         "score": 30,
         "direction": "bidirectional",
@@ -5048,7 +5048,7 @@
           "liuchao.character.yun_dan_liu",
           "liuchao.character.qin_hui",
           "liuchao.character.np069",
-          "lyl.character.np016",
+          "liuchao.character.wang_hui",
           "liuchao.character.np007",
           "liuchao.character.guo_jie",
           "lyl.character.np067",

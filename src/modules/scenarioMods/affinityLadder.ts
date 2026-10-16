@@ -1,4 +1,5 @@
 import { splitRecordPath } from './ledger/affinityIdentity';
+import { GAME_NUMBERS } from '../sceneModule/numbers';
 /**
  * 好感阶梯（R3-9 / R3 项 5「好感分阶段化」）——`社交.关系.<NPC>.好感度` 的**单一真值源**。
  *
@@ -31,33 +32,31 @@ export interface AffinityTier {
   gist: string;
 }
 
-/** 八档阶梯。区间连续且不重叠，覆盖 [-100, 100]。 */
+/** 档位区间取自 game-numbers.affinity.tiers（按档 id）。 */
+const tierRange = (id: AffinityTierId) => ({ min: GAME_NUMBERS.affinity.tiers[id][0], max: GAME_NUMBERS.affinity.tiers[id][1] });
+
+/** 八档阶梯。区间连续且不重叠，覆盖 [-100, 100]。数值在 game-numbers.affinity。 */
 export const AFFINITY_TIERS: readonly AffinityTier[] = [
-  { id: 'nemesis',    name: '仇雠', min: -100, max: -60, stance: 'low',  gist: '已认定必须除掉你' },
-  { id: 'hostile',    name: '敌意', min: -59,  max: -25, stance: 'low',  gist: '视你为对手，可谈但每句都在算计' },
-  { id: 'wary',       name: '戒备', min: -24,  max: -10, stance: 'low',  gist: '不信任，保持距离' },
-  { id: 'stranger',   name: '陌路', min: -9,   max: 19,  stance: 'mid',  gist: '无所谓，按公事公办' },
-  { id: 'acquainted', name: '相识', min: 20,   max: 39,  stance: 'mid',  gist: '认得你，愿意搭话' },
-  { id: 'trusted',    name: '信重', min: 40,   max: 59,  stance: 'high', gist: '把你算进自己的盘子里' },
-  { id: 'close',      name: '亲厚', min: 60,   max: 79,  stance: 'high', gist: '关系本身有分量' },
-  { id: 'sworn',      name: '生死', min: 80,   max: 100, stance: 'high', gist: '你在其底线之内' },
+  { id: 'nemesis',    name: '仇雠', ...tierRange('nemesis'), stance: 'low',  gist: '已认定必须除掉你' },
+  { id: 'hostile',    name: '敌意', ...tierRange('hostile'), stance: 'low',  gist: '视你为对手，可谈但每句都在算计' },
+  { id: 'wary',       name: '戒备', ...tierRange('wary'), stance: 'low',  gist: '不信任，保持距离' },
+  { id: 'stranger',   name: '陌路', ...tierRange('stranger'), stance: 'mid',  gist: '无所谓，按公事公办' },
+  { id: 'acquainted', name: '相识', ...tierRange('acquainted'), stance: 'mid',  gist: '认得你，愿意搭话' },
+  { id: 'trusted',    name: '信重', ...tierRange('trusted'), stance: 'high', gist: '把你算进自己的盘子里' },
+  { id: 'close',      name: '亲厚', ...tierRange('close'), stance: 'high', gist: '关系本身有分量' },
+  { id: 'sworn',      name: '生死', ...tierRange('sworn'), stance: 'high', gist: '你在其底线之内' },
 ] as const;
 
 /** 姿态边界：low ≤ -10 ＜ mid ＜ 40 ≤ high。与上表 stance 列一致。 */
-export const STANCE_LOW_MAX = -10;
-export const STANCE_HIGH_MIN = 40;
+export const STANCE_LOW_MAX = GAME_NUMBERS.affinity.stance.lowMax;
+export const STANCE_HIGH_MIN = GAME_NUMBERS.affinity.stance.highMin;
 
 /**
  * 阈值锚点：供其它门禁引用，**不要在别处重新写数字**。
  * - `intimacyShallow/Deep/Bonded`：亲密档案揭示层级（deep 由 55 迁到 60，对齐亲厚入口）。
  * - `bottomLineReveal`：人格底线是否喂给 LLM（由 30 迁到 40，"把你算进盘子"才透底线）。
  */
-export const AFFINITY_THRESHOLDS = {
-  intimacyShallow: 20,
-  intimacyDeep: 60,
-  intimacyBonded: 80,
-  bottomLineReveal: 40,
-} as const;
+export const AFFINITY_THRESHOLDS = GAME_NUMBERS.affinity.thresholds;
 
 /**
  * 关系标签失配判据（storyContext 的确定性检出用）。
@@ -69,18 +68,11 @@ export const AFFINITY_THRESHOLDS = {
  * 亲密侧 §4.2 声明合法域应是 ≥40，但直接收紧会对存量存档产生误报风暴，
  * 故本轮保守沿用 `<=0`；收紧留到 §4 受控词表落地时连同标签迁移一起做。
  */
-export const MISMATCH_HOSTILE_ABOVE = 19;
-export const MISMATCH_INTIMATE_AT_OR_BELOW = 0;
+export const MISMATCH_HOSTILE_ABOVE = GAME_NUMBERS.affinity.mismatch.hostileAbove;
+export const MISMATCH_INTIMATE_AT_OR_BELOW = GAME_NUMBERS.affinity.mismatch.intimateAtOrBelow;
 
 /** 变化速率上限（§3.4）。底线触犯等确定性降档走引擎通道，不受 perTurn 限制。 */
-export const AFFINITY_LIMITS = {
-  /** LLM 日常互动单回合净变化上限。 */
-  perTurn: 15,
-  /** 单次重大事件上限。 */
-  majorEvent: 40,
-  /** 触犯人格底线的降幅下沿（唯一可超 majorEvent 的情形）。 */
-  bottomLineBreach: 60,
-} as const;
+export const AFFINITY_LIMITS = GAME_NUMBERS.affinity.limits;
 
 /**
  * 共历事件的好感增量（R3-9 §7 的"正典锚点"一类）。
@@ -92,16 +84,11 @@ export const AFFINITY_LIMITS = {
  * 这里给出**确定性锚点**：一起经历过的事，关系就该有变化，且变化可预期。
  * 数值是初值，按实玩手感调整——机制有没有是结构问题，涨多快是数值问题。
  */
-export const AFFINITY_EVENT_GRANT = {
-  /** 承重剧情事件（critical）。 */
-  critical: 8,
-  /** 普通事件。 */
-  normal: 3,
-} as const;
+export const AFFINITY_EVENT_GRANT = GAME_NUMBERS.affinity.eventGrant;
 
 /** 滞回参数：跨档需越过阈值这么多点，且新档维持这么多游戏日。 */
-const HYSTERESIS_MARGIN = 3;
-const HYSTERESIS_DAYS = 1;
+const HYSTERESIS_MARGIN = GAME_NUMBERS.affinity.hysteresis.margin;
+const HYSTERESIS_DAYS = GAME_NUMBERS.affinity.hysteresis.days;
 
 export const AFFINITY_MIN = -100;
 export const AFFINITY_MAX = 100;
