@@ -1412,12 +1412,12 @@
           "lyg.item.np002",
           "lyg.item.np003",
           "lyg.item.np007",
-          "lyg.item.np008",
           "lyg.item.np009",
           "lyg.item.np010",
+          "lyg.item.np011",
           "lyg.item.np012",
-          "lyg.item.np013",
-          "lyg.item.np014"
+          "lyg.item.np014",
+          "lyg.item.np015"
         ],
         "profile": {
           "attributes": {
@@ -1518,7 +1518,7 @@
         ],
         "itemIds": [
           "liuchao.item.snow_snow",
-          "lyg.item.np017"
+          "lyg.item.np076"
         ],
         "profile": {
           "attributes": {
@@ -1612,7 +1612,7 @@
         "itemIds": [
           "liuchao.item.parrot_fish_eye",
           "lyg.item.np012",
-          "lyg.item.np014"
+          "lyg.item.np015"
         ],
         "skillIds": [
           "lyg.skill.np019"
@@ -1954,8 +1954,8 @@
         "locationId": "liuchao.location.jiaoxi_di",
         "itemIds": [
           "liuchao.item.green_dragon_sword",
-          "lyg.item.np021",
-          "lyg.item.np022"
+          "lyg.item.silver_dragon_scale_armor",
+          "lyg.item.broken_jade_pendant"
         ],
         "profile": {
           "attributes": {
@@ -2386,7 +2386,7 @@
         "role": "汉国昭仪/赵飞燕之妹",
         "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
         "itemIds": [
-          "lyg.item.np023"
+          "lyg.item.np112"
         ],
         "skillIds": [
           "lyg.skill.np024"
@@ -2649,7 +2649,7 @@
         "description": "义姁是程宗扬麾下的一名女医，生得容貌过人，却总板着一张雪白的脸，显出几分与年纪不符的老气。她性子冷傲又市侩，说话办事从不老实，给人诊治时更是谨慎到近乎计较——唯有偶尔玉颊微红、流露慌乱的一瞬，才露出几分医者不该有的娇艳。作为线人，她深谙夹缝中求存的道理，谁都知道这女人不好惹，却谁也说不准她到底向着谁。",
         "itemIds": [
           "lyg.item.np025",
-          "lyg.item.np026"
+          "lyg.item.np127"
         ],
         "profile": {
           "attributes": {
@@ -2969,7 +2969,7 @@
           "lyg.technique.np018"
         ],
         "itemIds": [
-          "lyg.item.np027"
+          "lyg.item.wumu_manual_swapped"
         ],
         "profile": {
           "attributes": {
@@ -5331,43 +5331,43 @@
         "id": "lyg.item.np007"
       },
       {
-        "id": "lyg.item.np008"
-      },
-      {
         "id": "lyg.item.np009"
       },
       {
         "id": "lyg.item.np010"
       },
       {
-        "id": "lyg.item.np012"
+        "id": "lyg.item.np011"
       },
       {
-        "id": "lyg.item.np013"
+        "id": "lyg.item.np012"
       },
       {
         "id": "lyg.item.np014"
       },
       {
-        "id": "lyg.item.np017"
+        "id": "lyg.item.np015"
       },
       {
-        "id": "lyg.item.np021"
+        "id": "lyg.item.np076"
       },
       {
-        "id": "lyg.item.np022"
+        "id": "lyg.item.silver_dragon_scale_armor"
       },
       {
-        "id": "lyg.item.np023"
+        "id": "lyg.item.broken_jade_pendant"
+      },
+      {
+        "id": "lyg.item.np112"
       },
       {
         "id": "lyg.item.np025"
       },
       {
-        "id": "lyg.item.np026"
+        "id": "lyg.item.np127"
       },
       {
-        "id": "lyg.item.np027"
+        "id": "lyg.item.wumu_manual_swapped"
       },
       {
         "id": "lyg.item.yangwuhou_xiaoshi"
@@ -6632,7 +6632,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np010",
+        "contentId": "lyg.item.np011",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6640,7 +6640,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np013",
+        "contentId": "lyg.item.np014",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6648,7 +6648,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np021",
+        "contentId": "lyg.item.silver_dragon_scale_armor",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yun_dan_liu"
@@ -6656,7 +6656,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np022",
+        "contentId": "lyg.item.broken_jade_pendant",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yun_dan_liu"
@@ -6664,7 +6664,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np023",
+        "contentId": "lyg.item.np112",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.zhao_he_de"
@@ -6672,7 +6672,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np027",
+        "contentId": "lyg.item.wumu_manual_swapped",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_ling_er"

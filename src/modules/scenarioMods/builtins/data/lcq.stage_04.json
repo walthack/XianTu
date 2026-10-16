@@ -1262,7 +1262,7 @@
         ],
         "techniqueIds": [],
         "itemIds": [
-          "lcq.item.np003",
+          "lcq.item.zipper",
           "lcq.item.np006",
           "lcq.item.np007"
         ],
@@ -1818,7 +1818,7 @@
         "id": "liuchao.item.long_jing_yu"
       },
       {
-        "id": "lcq.item.np003"
+        "id": "lcq.item.zipper"
       },
       {
         "id": "lcq.item.np004"
@@ -3805,7 +3805,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lcq.item.np003",
+        "contentId": "lcq.item.zipper",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

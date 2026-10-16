@@ -1423,44 +1423,44 @@
           "lyl.item.np016",
           "lyl.item.np017",
           "lyl.item.np018",
+          "lyl.item.np021",
           "lyl.item.np022",
           "lyl.item.np023",
           "lyl.item.np024",
-          "lyl.item.np025",
           "lyl.item.np026",
           "lyl.item.np027",
+          "lyl.item.np028",
+          "lyl.item.np029",
           "lyl.item.np031",
           "lyl.item.np032",
+          "lyl.item.np033",
           "lyl.item.np034",
           "lyl.item.np035",
           "lyl.item.np036",
-          "lyl.item.np037",
-          "lyl.item.np038",
-          "lyl.item.np039",
           "lyl.item.np040",
-          "lyl.item.np041",
+          "lyl.item.np038",
           "lyl.item.np042",
+          "lyl.item.np041",
+          "lyl.item.np043",
           "lyl.item.np044",
-          "lyl.item.np046",
+          "lyl.item.np045",
+          "lyl.item.np049",
           "lyl.item.np047",
           "lyl.item.np048",
-          "lyl.item.np049",
           "lyl.item.np050",
           "lyl.item.np051",
-          "lyl.item.np053",
-          "lyl.item.np054",
           "lyl.item.np056",
+          "lyl.item.np054",
           "lyl.item.np057",
+          "lyl.item.np058",
+          "lyl.item.np060",
           "lyl.item.np061",
           "lyl.item.np062",
+          "lyl.item.np063",
           "lyl.item.np064",
           "lyl.item.np065",
           "lyl.item.np066",
-          "lyl.item.np067",
-          "lyl.item.np068",
-          "lyl.item.np069",
-          "lyl.item.np070",
-          "lyl.item.np071"
+          "lyl.item.np067"
         ],
         "profile": {
           "attributes": {
@@ -1535,7 +1535,7 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np053"
+          "lyl.item.np050"
         ],
         "profile": {
           "attributes": {
@@ -1852,8 +1852,8 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np075",
-          "lyl.item.np076"
+          "lyl.item.imperial_seal",
+          "lyl.item.tiger_tally"
         ],
         "profile": {
           "attributes": {
@@ -1967,7 +1967,7 @@
           "lyl.technique.np077"
         ],
         "itemIds": [
-          "lyl.item.np075"
+          "lyl.item.imperial_seal"
         ],
         "profile": {
           "attributes": {
@@ -2245,14 +2245,14 @@
           "lyl.item.np083",
           "lyl.item.np084",
           "lyl.item.np085",
-          "lyl.item.np086",
-          "lyl.item.np088",
+          "lyl.item.np071",
+          "lyl.item.np073",
           "lyl.item.np090",
-          "lyl.item.np091",
+          "lyl.item.np076",
           "lyl.item.np042",
           "lyl.item.np093",
           "lyl.item.np095",
-          "lyl.item.np057"
+          "lyl.item.np054"
         ],
         "profile": {
           "attributes": {
@@ -2324,7 +2324,7 @@
         ],
         "itemIds": [
           "lyl.item.np099",
-          "lyl.item.np023"
+          "lyl.item.np022"
         ],
         "profile": {
           "attributes": {
@@ -2547,7 +2547,7 @@
         "role": "世外高人参政者/被黑魔海诓骗/拒绝合作",
         "description": "世外高人，本不愿染指尘世，却被黑魔海以巧言诓去，终识破骗局，拂袖而去。",
         "itemIds": [
-          "lyl.item.np068"
+          "lyl.item.np064"
         ],
         "profile": {
           "attributes": {
@@ -4510,6 +4510,9 @@
         "id": "lyl.item.np018"
       },
       {
+        "id": "lyl.item.np021"
+      },
+      {
         "id": "lyl.item.np022"
       },
       {
@@ -4519,19 +4522,25 @@
         "id": "lyl.item.np024"
       },
       {
-        "id": "lyl.item.np025"
-      },
-      {
         "id": "lyl.item.np026"
       },
       {
         "id": "lyl.item.np027"
       },
       {
+        "id": "lyl.item.np028"
+      },
+      {
+        "id": "lyl.item.np029"
+      },
+      {
         "id": "lyl.item.np031"
       },
       {
         "id": "lyl.item.np032"
+      },
+      {
+        "id": "lyl.item.np033"
       },
       {
         "id": "lyl.item.np034"
@@ -4543,28 +4552,28 @@
         "id": "lyl.item.np036"
       },
       {
-        "id": "lyl.item.np037"
+        "id": "lyl.item.np040"
       },
       {
         "id": "lyl.item.np038"
       },
       {
-        "id": "lyl.item.np039"
-      },
-      {
-        "id": "lyl.item.np040"
+        "id": "lyl.item.np042"
       },
       {
         "id": "lyl.item.np041"
       },
       {
-        "id": "lyl.item.np042"
+        "id": "lyl.item.np043"
       },
       {
         "id": "lyl.item.np044"
       },
       {
-        "id": "lyl.item.np046"
+        "id": "lyl.item.np045"
+      },
+      {
+        "id": "lyl.item.np049"
       },
       {
         "id": "lyl.item.np047"
@@ -4573,31 +4582,34 @@
         "id": "lyl.item.np048"
       },
       {
-        "id": "lyl.item.np049"
-      },
-      {
         "id": "lyl.item.np050"
       },
       {
         "id": "lyl.item.np051"
       },
       {
-        "id": "lyl.item.np053"
+        "id": "lyl.item.np056"
       },
       {
         "id": "lyl.item.np054"
       },
       {
-        "id": "lyl.item.np056"
+        "id": "lyl.item.np057"
       },
       {
-        "id": "lyl.item.np057"
+        "id": "lyl.item.np058"
+      },
+      {
+        "id": "lyl.item.np060"
       },
       {
         "id": "lyl.item.np061"
       },
       {
         "id": "lyl.item.np062"
+      },
+      {
+        "id": "lyl.item.np063"
       },
       {
         "id": "lyl.item.np064"
@@ -4612,25 +4624,13 @@
         "id": "lyl.item.np067"
       },
       {
-        "id": "lyl.item.np068"
-      },
-      {
-        "id": "lyl.item.np069"
-      },
-      {
-        "id": "lyl.item.np070"
-      },
-      {
-        "id": "lyl.item.np071"
-      },
-      {
         "id": "lyl.item.np074"
       },
       {
-        "id": "lyl.item.np075"
+        "id": "lyl.item.imperial_seal"
       },
       {
-        "id": "lyl.item.np076"
+        "id": "lyl.item.tiger_tally"
       },
       {
         "id": "lyl.item.np079"
@@ -4651,16 +4651,16 @@
         "id": "lyl.item.np085"
       },
       {
-        "id": "lyl.item.np086"
+        "id": "lyl.item.np071"
       },
       {
-        "id": "lyl.item.np088"
+        "id": "lyl.item.np073"
       },
       {
         "id": "lyl.item.np090"
       },
       {
-        "id": "lyl.item.np091"
+        "id": "lyl.item.np076"
       },
       {
         "id": "lyl.item.np093"
@@ -6151,7 +6151,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np034",
+        "contentId": "lyl.item.np031",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6159,7 +6159,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np035",
+        "contentId": "lyl.item.np032",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6167,7 +6167,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np039",
+        "contentId": "lyl.item.np036",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6183,7 +6183,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np041",
+        "contentId": "lyl.item.np038",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6192,6 +6192,22 @@
       },
       {
         "contentId": "lyl.item.np042",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np044",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyl.item.np045",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6215,22 +6231,6 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np050",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
-        ],
-        "playerAllowed": false
-      },
-      {
-        "contentId": "lyl.item.np051",
-        "policy": "exclusive",
-        "allowedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
-        ],
-        "playerAllowed": false
-      },
-      {
         "contentId": "lyl.item.np056",
         "policy": "exclusive",
         "allowedCharacterIds": [
@@ -6239,7 +6239,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np062",
+        "contentId": "lyl.item.np058",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6247,7 +6247,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np075",
+        "contentId": "lyl.item.imperial_seal",
         "policy": "restricted",
         "allowedCharacterIds": [
           "lyl.character.liu_jian",
@@ -6256,7 +6256,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np076",
+        "contentId": "lyl.item.tiger_tally",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "lyl.character.liu_jian"

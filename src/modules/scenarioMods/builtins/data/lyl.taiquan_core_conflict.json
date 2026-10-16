@@ -1347,10 +1347,10 @@
           "lyl.item.np016",
           "lyl.item.np017",
           "lyl.item.np018",
+          "lyl.item.np021",
           "lyl.item.np022",
           "lyl.item.np023",
           "lyl.item.np024",
-          "lyl.item.np025",
           "lyl.item.np026",
           "lyl.item.np030"
         ],
@@ -1423,7 +1423,7 @@
         ],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np022"
+          "lyl.item.np021"
         ],
         "profile": {
           "attributes": {
@@ -1601,7 +1601,7 @@
           "lyl.technique.np031"
         ],
         "itemIds": [
-          "lyl.item.np022"
+          "lyl.item.np021"
         ],
         "profile": {
           "attributes": {
@@ -1701,8 +1701,8 @@
         ],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np022",
-          "lyl.item.np023"
+          "lyl.item.np021",
+          "lyl.item.np022"
         ],
         "profile": {
           "attributes": {
@@ -1793,8 +1793,8 @@
         ],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np023",
-          "lyl.item.np032"
+          "lyl.item.np022",
+          "lyl.item.iron_rail"
         ],
         "profile": {
           "attributes": {
@@ -1864,10 +1864,10 @@
         "itemIds": [
           "lyl.item.np001",
           "lyl.item.np004",
-          "lyl.item.np033",
-          "lyl.item.np034",
-          "lyl.item.np035",
-          "lyl.item.np036"
+          "lyl.item.np068",
+          "lyl.item.np069",
+          "lyl.item.np070",
+          "lyl.item.np071"
         ],
         "profile": {
           "attributes": {
@@ -3569,6 +3569,9 @@
         "id": "lyl.item.np018"
       },
       {
+        "id": "lyl.item.np021"
+      },
+      {
         "id": "lyl.item.np022"
       },
       {
@@ -3578,28 +3581,25 @@
         "id": "lyl.item.np024"
       },
       {
-        "id": "lyl.item.np025"
-      },
-      {
         "id": "lyl.item.np026"
       },
       {
         "id": "lyl.item.np030"
       },
       {
-        "id": "lyl.item.np032"
+        "id": "lyl.item.iron_rail"
       },
       {
-        "id": "lyl.item.np033"
+        "id": "lyl.item.np068"
       },
       {
-        "id": "lyl.item.np034"
+        "id": "lyl.item.np069"
       },
       {
-        "id": "lyl.item.np035"
+        "id": "lyl.item.np070"
       },
       {
-        "id": "lyl.item.np036"
+        "id": "lyl.item.np071"
       }
     ],
     "skills": [
@@ -4564,7 +4564,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np033",
+        "contentId": "lyl.item.np068",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"
@@ -4572,7 +4572,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np034",
+        "contentId": "lyl.item.np069",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"

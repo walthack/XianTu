@@ -1266,12 +1266,12 @@
         "itemIds": [
           "liuchao.item.shuang_dao",
           "lyg.item.np001",
-          "lyg.item.np002",
+          "lyg.item.np003",
           "lyg.item.np006",
-          "lyg.item.np007",
           "lyg.item.np008",
           "lyg.item.np009",
-          "lyg.item.np010"
+          "lyg.item.np010",
+          "lyg.item.np011"
         ],
         "profile": {
           "attributes": {
@@ -1954,8 +1954,8 @@
           "lyg.technique.np011"
         ],
         "itemIds": [
-          "lyg.item.np012",
-          "lyg.item.np013"
+          "lyg.item.np076",
+          "lyg.item.np077"
         ],
         "profile": {
           "attributes": {
@@ -2336,8 +2336,8 @@
         "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
         "description": "云如瑶的亲侄女。泼辣刁蛮、好胜张扬的世家小辣妹，习武身手矫健；少数在床笫间争主动的狂野女骑士。",
         "itemIds": [
-          "lyg.item.np014",
-          "lyg.item.np015"
+          "liuchao.item.green_dragon_sword",
+          "lyg.item.silver_dragon_scale_armor"
         ],
         "profile": {
           "attributes": {
@@ -2528,7 +2528,7 @@
         "description": "义姁是程宗扬麾下的一名女医，生得容貌过人，却总板着一张雪白的脸，显出几分与年纪不符的老气。她性子冷傲又市侩，说话办事从不老实，给人诊治时更是谨慎到近乎计较——唯有偶尔玉颊微红、流露慌乱的一瞬，才露出几分医者不该有的娇艳。作为线人，她深谙夹缝中求存的道理，谁都知道这女人不好惹，却谁也说不准她到底向着谁。",
         "itemIds": [
           "lyg.item.np016",
-          "lyg.item.np017"
+          "lyg.item.np127"
         ],
         "profile": {
           "attributes": {
@@ -4217,13 +4217,10 @@
         "id": "lyg.item.np001"
       },
       {
-        "id": "lyg.item.np002"
+        "id": "lyg.item.np003"
       },
       {
         "id": "lyg.item.np006"
-      },
-      {
-        "id": "lyg.item.np007"
       },
       {
         "id": "lyg.item.np008"
@@ -4235,22 +4232,25 @@
         "id": "lyg.item.np010"
       },
       {
-        "id": "lyg.item.np012"
+        "id": "lyg.item.np011"
       },
       {
-        "id": "lyg.item.np013"
+        "id": "lyg.item.np076"
       },
       {
-        "id": "lyg.item.np014"
+        "id": "lyg.item.np077"
       },
       {
-        "id": "lyg.item.np015"
+        "id": "liuchao.item.green_dragon_sword"
+      },
+      {
+        "id": "lyg.item.silver_dragon_scale_armor"
       },
       {
         "id": "lyg.item.np016"
       },
       {
-        "id": "lyg.item.np017"
+        "id": "lyg.item.np127"
       }
     ],
     "skills": [
@@ -9122,7 +9122,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np002",
+        "contentId": "lyg.item.np003",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -9138,7 +9138,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np007",
+        "contentId": "lyg.item.np008",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -9146,7 +9146,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np010",
+        "contentId": "lyg.item.np011",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -9154,7 +9154,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np015",
+        "contentId": "lyg.item.silver_dragon_scale_armor",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yun_dan_liu"

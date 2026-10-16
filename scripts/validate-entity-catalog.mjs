@@ -28,16 +28,27 @@ export function auditItemEffects(errors,items){
   if((def.effectTags||[]).some(tag=>numbers.itemTags.toxic.includes(tag))&&!(Array.isArray(def.onUse)&&def.onUse.length))errors.push(`${where}: 毒性物品必须有 onUse（挂哪个状态）`);
  }
 }
+// 同一 id 不得在关卡里换成另一件东西：变体可以改描述/数值，不得改名称或类型（暂缓项见 validation.config.json）。
+export function variantIdentityErrors(entry,stageId,variant,identity){
+ if(identity.severity==='off'||identity.pendingRename.some(p=>p.id===entry.id&&p.stageId===stageId))return [];
+ const changed=identity.forbid.filter(k=>variant[k]!==entry.definition[k]);
+ return changed.length?[`variant identity ${entry.id}@${stageId}: 变体不得改 ${changed.join('/')}（${changed.map(k=>`${String(entry.definition[k])}→${String(variant[k])}`).join('，')}）；应改用独立 id`]:[];
+}
 export function auditEntityCatalog(){
  const errors=[],byKind={};
+ const identity=read('mod-kit/entity-catalog/validation.config.json').variantIdentity;
  for(const [kind,plural] of [['item','items'],['skill','skills'],['technique','techniques'],['enemy','enemies'],['location','locations'],['faction','factions'],['ending','endings']]){
   const table=read(`mod-kit/entity-catalog/${plural}.json`),map=new Map();byKind[kind]=map;
   for(const entry of table.entries){if(map.has(entry.id))errors.push(`duplicate ${kind} ${entry.id}`);map.set(entry.id,entry);
    if(entry.definition.id!==entry.id||!entry.definition.name)errors.push(`invalid definition ${entry.id}`);
    if(entry.authoritySource!==`mod-kit/entity-catalog/${plural}.json`)errors.push(`wrong authority ${entry.id}`);
-   for(const v of Object.values(entry.stageVariants))if(v.id!==entry.id)errors.push(`variant id drift ${entry.id}`);
+   for(const [stageId,v] of Object.entries(entry.stageVariants)){
+    if(v.id!==entry.id)errors.push(`variant id drift ${entry.id}`);
+    if(kind==='item')errors.push(...variantIdentityErrors(entry,stageId,v,identity));
+   }
   }
  }
+ for(const p of identity.pendingRename){const v=byKind.item.get(p.id)?.stageVariants[p.stageId];if(!v||identity.forbid.every(k=>v[k]===byKind.item.get(p.id).definition[k]))errors.push(`stale pendingRename ${p.id}@${p.stageId}: 已不存在改名/改类型的变体，请从 validation.config.json 移除`);}
  auditItemEffects(errors,read('mod-kit/entity-catalog/items.json'));
  const index=read('mod-kit/entity-catalog/index.json');const indexed=new Set();
  for(const row of index.entries){const key=`${row.kind}:${row.id}`;if(indexed.has(key))errors.push(`duplicate index ${key}`);indexed.add(key);if(byKind[row.kind]&&!byKind[row.kind].has(row.id))errors.push(`dangling index ${key}`);}

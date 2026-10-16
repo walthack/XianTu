@@ -17092,7 +17092,25 @@
     },
     {
       "kind": "item",
+      "id": "lyg.item.broken_jade_pendant",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lyg.item.chi_tu_horse",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lyg.item.dragon_pearl",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lyg.item.economy_sneakers",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17704,6 +17722,18 @@
     },
     {
       "kind": "item",
+      "id": "lyg.item.silver_dragon_scale_armor",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lyg.item.wumu_manual_swapped",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lyg.item.yangwuhou_xiaoshi",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17717,6 +17747,18 @@
     {
       "kind": "item",
       "id": "lyl.item.fishing_rod",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lyl.item.imperial_seal",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lyl.item.iron_rail",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -18257,6 +18299,12 @@
     {
       "kind": "item",
       "id": "lyl.item.np103",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lyl.item.tiger_tally",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -21875,6 +21923,12 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.gate.item_unavailable",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.gate.level_too_low",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21924,6 +21978,18 @@
     {
       "kind": "text",
       "id": "free.fact.gate.scene_active",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.state_refused",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.target_unavailable",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

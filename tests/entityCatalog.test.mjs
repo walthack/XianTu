@@ -6,7 +6,7 @@ const cat=await loadTs('../src/modules/scenarioMods/entityCatalog.ts');
 const {buildStrictScenarioInitialization}=await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
 const {validateScenarioMod}=await loadTs('../src/modules/scenarioMods/validator.ts');
 test('three master tables have unique ids and all published stages carry only access references',async()=>{
- for(const [kind,total] of [['item',310],['skill',143],['technique',67]]){
+ for(const [kind,total] of [['item',318],['skill',143],['technique',67]]){
   const entries=cat.contentEntries(kind);assert.equal(entries.length,total);assert.equal(new Set(entries.map(e=>e.id)).size,total);
  }
  const access=JSON.parse(await readFile(new URL('../mod-kit/entity-catalog/stage-access.json',import.meta.url),'utf8'));

@@ -1306,35 +1306,35 @@
           "lyg.item.flashlight",
           "lyg.item.chi_tu_horse",
           "lyg.item.np001",
-          "lyg.item.np002",
+          "lyg.item.np003",
           "lyg.item.np006",
-          "lyg.item.np007",
           "lyg.item.np008",
           "lyg.item.np009",
           "lyg.item.np010",
+          "lyg.item.np011",
           "lyg.item.np012",
-          "lyg.item.np013",
           "lyg.item.np014",
+          "lyg.item.np015",
           "lyg.item.np016",
-          "lyg.item.np017",
           "lyg.item.np018",
           "lyg.item.np019",
           "lyg.item.np020",
           "lyg.item.np021",
           "lyg.item.np022",
+          "lyg.item.np023",
           "lyg.item.np024",
-          "lyg.item.np025",
           "lyg.item.np026",
+          "lyg.item.np027",
           "lyg.item.np030",
-          "lyg.item.np031",
-          "lyg.item.np034",
+          "lyg.item.np032",
+          "lyg.item.np037",
           "lyg.item.np035",
-          "lyg.item.np036",
-          "lyg.item.np038",
           "lyg.item.np039",
-          "lyg.item.np040",
           "lyg.item.np041",
-          "lyg.item.np042"
+          "lyg.item.np042",
+          "lyg.item.np040",
+          "lyg.item.np044",
+          "lyg.item.np045"
         ],
         "profile": {
           "attributes": {
@@ -1426,8 +1426,8 @@
         "techniqueIds": [],
         "itemIds": [
           "lyg.item.np012",
-          "lyg.item.np014",
-          "lyg.item.np044"
+          "lyg.item.np015",
+          "lyg.item.np111"
         ],
         "profile": {
           "attributes": {
@@ -1524,10 +1524,10 @@
         ],
         "itemIds": [
           "lyg.item.handgun",
-          "lyg.item.np046",
-          "lyg.item.np047",
-          "lyg.item.np048",
-          "lyg.item.np049"
+          "lyg.item.np104",
+          "lyg.item.np106",
+          "lyg.item.np082",
+          "lyg.item.np107"
         ],
         "profile": {
           "attributes": {
@@ -1788,7 +1788,7 @@
         "techniqueIds": [],
         "itemIds": [
           "lyg.item.np050",
-          "lyg.item.np052"
+          "lyg.item.economy_sneakers"
         ],
         "profile": {
           "attributes": {
@@ -1973,11 +1973,11 @@
           "lyg.item.np056",
           "lyg.item.np016",
           "lyg.item.np058",
-          "lyg.item.np025",
-          "lyg.item.np048",
+          "lyg.item.np026",
+          "lyg.item.np082",
           "lyg.item.np061",
           "lyg.item.np062",
-          "lyg.item.np063"
+          "lyg.item.np087"
         ],
         "skillIds": [
           "lyg.skill.np059",
@@ -2070,7 +2070,7 @@
           "lyg.skill.np064"
         ],
         "itemIds": [
-          "lyg.item.np039"
+          "lyg.item.np042"
         ],
         "profile": {
           "attributes": {
@@ -2139,7 +2139,7 @@
         "role": "汉国昭仪/赵飞燕之妹",
         "description": "赵合德生就一副绝色容颜，肌肤白腻如玉、丰姿弱骨，宛如一朵含露娇莲。她天性温柔羞怯，天真单纯，说话时总带着斯文有礼的语调，但凡心绪波动便会脸红到耳根，那副娇美温婉的模样，正是飞燕之妹、程宗扬身边最惹人怜惜的情妇。",
         "itemIds": [
-          "lyg.item.np065"
+          "lyg.item.np112"
         ],
         "skillIds": [
           "lyg.skill.np066"
@@ -2852,7 +2852,7 @@
         "description": "义姁是程宗扬麾下的一名女医，生得容貌过人，却总板着一张雪白的脸，显出几分与年纪不符的老气。她性子冷傲又市侩，说话办事从不老实，给人诊治时更是谨慎到近乎计较——唯有偶尔玉颊微红、流露慌乱的一瞬，才露出几分医者不该有的娇艳。作为线人，她深谙夹缝中求存的道理，谁都知道这女人不好惹，却谁也说不准她到底向着谁。",
         "itemIds": [
           "lyg.item.np068",
-          "lyg.item.np071"
+          "lyg.item.np127"
         ],
         "skillIds": [
           "lyg.skill.np060"
@@ -4381,13 +4381,10 @@
         "id": "lyg.item.np001"
       },
       {
-        "id": "lyg.item.np002"
+        "id": "lyg.item.np003"
       },
       {
         "id": "lyg.item.np006"
-      },
-      {
-        "id": "lyg.item.np007"
       },
       {
         "id": "lyg.item.np008"
@@ -4399,19 +4396,19 @@
         "id": "lyg.item.np010"
       },
       {
-        "id": "lyg.item.np012"
+        "id": "lyg.item.np011"
       },
       {
-        "id": "lyg.item.np013"
+        "id": "lyg.item.np012"
       },
       {
         "id": "lyg.item.np014"
       },
       {
-        "id": "lyg.item.np016"
+        "id": "lyg.item.np015"
       },
       {
-        "id": "lyg.item.np017"
+        "id": "lyg.item.np016"
       },
       {
         "id": "lyg.item.np018"
@@ -4429,37 +4426,31 @@
         "id": "lyg.item.np022"
       },
       {
-        "id": "lyg.item.np024"
+        "id": "lyg.item.np023"
       },
       {
-        "id": "lyg.item.np025"
+        "id": "lyg.item.np024"
       },
       {
         "id": "lyg.item.np026"
       },
       {
+        "id": "lyg.item.np027"
+      },
+      {
         "id": "lyg.item.np030"
       },
       {
-        "id": "lyg.item.np031"
+        "id": "lyg.item.np032"
       },
       {
-        "id": "lyg.item.np034"
+        "id": "lyg.item.np037"
       },
       {
         "id": "lyg.item.np035"
       },
       {
-        "id": "lyg.item.np036"
-      },
-      {
-        "id": "lyg.item.np038"
-      },
-      {
         "id": "lyg.item.np039"
-      },
-      {
-        "id": "lyg.item.np040"
       },
       {
         "id": "lyg.item.np041"
@@ -4468,25 +4459,34 @@
         "id": "lyg.item.np042"
       },
       {
+        "id": "lyg.item.np040"
+      },
+      {
         "id": "lyg.item.np044"
       },
       {
-        "id": "lyg.item.np046"
+        "id": "lyg.item.np045"
       },
       {
-        "id": "lyg.item.np047"
+        "id": "lyg.item.np111"
       },
       {
-        "id": "lyg.item.np048"
+        "id": "lyg.item.np104"
       },
       {
-        "id": "lyg.item.np049"
+        "id": "lyg.item.np106"
+      },
+      {
+        "id": "lyg.item.np082"
+      },
+      {
+        "id": "lyg.item.np107"
       },
       {
         "id": "lyg.item.np050"
       },
       {
-        "id": "lyg.item.np052"
+        "id": "lyg.item.economy_sneakers"
       },
       {
         "id": "lyg.item.np055"
@@ -4504,10 +4504,10 @@
         "id": "lyg.item.np062"
       },
       {
-        "id": "lyg.item.np063"
+        "id": "lyg.item.np087"
       },
       {
-        "id": "lyg.item.np065"
+        "id": "lyg.item.np112"
       },
       {
         "id": "lyg.item.np068"
@@ -4519,7 +4519,7 @@
         "id": "lyg.item.np070"
       },
       {
-        "id": "lyg.item.np071"
+        "id": "lyg.item.np127"
       }
     ],
     "skills": [
@@ -6309,7 +6309,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np002",
+        "contentId": "lyg.item.np003",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6325,7 +6325,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np007",
+        "contentId": "lyg.item.np008",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6333,7 +6333,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np010",
+        "contentId": "lyg.item.np011",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6341,7 +6341,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np013",
+        "contentId": "lyg.item.np014",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6349,7 +6349,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np022",
+        "contentId": "lyg.item.np023",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6357,7 +6357,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np031",
+        "contentId": "lyg.item.np032",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6365,7 +6365,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np034",
+        "contentId": "lyg.item.np037",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6381,7 +6381,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np039",
+        "contentId": "lyg.item.np042",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6397,7 +6397,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np041",
+        "contentId": "lyg.item.np044",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6405,7 +6405,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np046",
+        "contentId": "lyg.item.np104",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yang_yuhuan"
@@ -6413,7 +6413,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np047",
+        "contentId": "lyg.item.np106",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yang_yuhuan"
@@ -6421,7 +6421,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np049",
+        "contentId": "lyg.item.np107",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yang_yuhuan"
@@ -6454,7 +6454,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np063",
+        "contentId": "lyg.item.np087",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"
@@ -6462,7 +6462,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np065",
+        "contentId": "lyg.item.np112",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.zhao_he_de"

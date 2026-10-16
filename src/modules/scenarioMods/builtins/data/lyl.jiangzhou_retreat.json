@@ -1246,7 +1246,7 @@
         "itemIds": [
           "liuchao.item.coral_dagger",
           "lyl.item.np001",
-          "lyl.item.np003"
+          "lyl.item.np048"
         ],
         "profile": {
           "attributes": {
@@ -2704,7 +2704,7 @@
         "id": "lyl.item.np001"
       },
       {
-        "id": "lyl.item.np003"
+        "id": "lyl.item.np048"
       }
     ],
     "skills": [
@@ -3410,7 +3410,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np003",
+        "contentId": "lyl.item.np048",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

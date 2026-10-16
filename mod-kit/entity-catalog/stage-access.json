@@ -282,7 +282,7 @@
           "id": "liuchao.item.long_jing_yu"
         },
         {
-          "id": "lcq.item.np003"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np004"
@@ -2046,13 +2046,10 @@
           "id": "lyg.item.np001"
         },
         {
-          "id": "lyg.item.np002"
+          "id": "lyg.item.np003"
         },
         {
           "id": "lyg.item.np006"
-        },
-        {
-          "id": "lyg.item.np007"
         },
         {
           "id": "lyg.item.np008"
@@ -2064,19 +2061,19 @@
           "id": "lyg.item.np010"
         },
         {
-          "id": "lyg.item.np012"
+          "id": "lyg.item.np011"
         },
         {
-          "id": "lyg.item.np013"
+          "id": "lyg.item.np012"
         },
         {
           "id": "lyg.item.np014"
         },
         {
-          "id": "lyg.item.np016"
+          "id": "lyg.item.np015"
         },
         {
-          "id": "lyg.item.np017"
+          "id": "lyg.item.np016"
         },
         {
           "id": "lyg.item.np018"
@@ -2094,37 +2091,31 @@
           "id": "lyg.item.np022"
         },
         {
-          "id": "lyg.item.np024"
+          "id": "lyg.item.np023"
         },
         {
-          "id": "lyg.item.np025"
+          "id": "lyg.item.np024"
         },
         {
           "id": "lyg.item.np026"
         },
         {
+          "id": "lyg.item.np027"
+        },
+        {
           "id": "lyg.item.np030"
         },
         {
-          "id": "lyg.item.np031"
+          "id": "lyg.item.np032"
         },
         {
-          "id": "lyg.item.np034"
+          "id": "lyg.item.np037"
         },
         {
           "id": "lyg.item.np035"
         },
         {
-          "id": "lyg.item.np036"
-        },
-        {
-          "id": "lyg.item.np038"
-        },
-        {
           "id": "lyg.item.np039"
-        },
-        {
-          "id": "lyg.item.np040"
         },
         {
           "id": "lyg.item.np041"
@@ -2133,25 +2124,34 @@
           "id": "lyg.item.np042"
         },
         {
+          "id": "lyg.item.np040"
+        },
+        {
           "id": "lyg.item.np044"
         },
         {
-          "id": "lyg.item.np046"
+          "id": "lyg.item.np045"
         },
         {
-          "id": "lyg.item.np047"
+          "id": "lyg.item.np111"
         },
         {
-          "id": "lyg.item.np048"
+          "id": "lyg.item.np104"
         },
         {
-          "id": "lyg.item.np049"
+          "id": "lyg.item.np106"
+        },
+        {
+          "id": "lyg.item.np082"
+        },
+        {
+          "id": "lyg.item.np107"
         },
         {
           "id": "lyg.item.np050"
         },
         {
-          "id": "lyg.item.np052"
+          "id": "lyg.item.economy_sneakers"
         },
         {
           "id": "lyg.item.np055"
@@ -2169,10 +2169,10 @@
           "id": "lyg.item.np062"
         },
         {
-          "id": "lyg.item.np063"
+          "id": "lyg.item.np087"
         },
         {
-          "id": "lyg.item.np065"
+          "id": "lyg.item.np112"
         },
         {
           "id": "lyg.item.np068"
@@ -2184,7 +2184,7 @@
           "id": "lyg.item.np070"
         },
         {
-          "id": "lyg.item.np071"
+          "id": "lyg.item.np127"
         }
       ],
       "skills": [
@@ -2701,13 +2701,10 @@
           "id": "lyg.item.np001"
         },
         {
-          "id": "lyg.item.np002"
+          "id": "lyg.item.np003"
         },
         {
           "id": "lyg.item.np006"
-        },
-        {
-          "id": "lyg.item.np007"
         },
         {
           "id": "lyg.item.np008"
@@ -2719,22 +2716,25 @@
           "id": "lyg.item.np010"
         },
         {
-          "id": "lyg.item.np012"
+          "id": "lyg.item.np011"
         },
         {
-          "id": "lyg.item.np013"
+          "id": "lyg.item.np076"
         },
         {
-          "id": "lyg.item.np014"
+          "id": "lyg.item.np077"
         },
         {
-          "id": "lyg.item.np015"
+          "id": "liuchao.item.green_dragon_sword"
+        },
+        {
+          "id": "lyg.item.silver_dragon_scale_armor"
         },
         {
           "id": "lyg.item.np016"
         },
         {
-          "id": "lyg.item.np017"
+          "id": "lyg.item.np127"
         }
       ],
       "skills": [
@@ -4040,43 +4040,43 @@
           "id": "lyg.item.np007"
         },
         {
-          "id": "lyg.item.np008"
-        },
-        {
           "id": "lyg.item.np009"
         },
         {
           "id": "lyg.item.np010"
         },
         {
-          "id": "lyg.item.np012"
+          "id": "lyg.item.np011"
         },
         {
-          "id": "lyg.item.np013"
+          "id": "lyg.item.np012"
         },
         {
           "id": "lyg.item.np014"
         },
         {
-          "id": "lyg.item.np017"
+          "id": "lyg.item.np015"
         },
         {
-          "id": "lyg.item.np021"
+          "id": "lyg.item.np076"
         },
         {
-          "id": "lyg.item.np022"
+          "id": "lyg.item.silver_dragon_scale_armor"
         },
         {
-          "id": "lyg.item.np023"
+          "id": "lyg.item.broken_jade_pendant"
+        },
+        {
+          "id": "lyg.item.np112"
         },
         {
           "id": "lyg.item.np025"
         },
         {
-          "id": "lyg.item.np026"
+          "id": "lyg.item.np127"
         },
         {
-          "id": "lyg.item.np027"
+          "id": "lyg.item.wumu_manual_swapped"
         },
         {
           "id": "lyg.item.yangwuhou_xiaoshi"
@@ -4885,7 +4885,7 @@
           "id": "lyl.item.np001"
         },
         {
-          "id": "lyl.item.np003"
+          "id": "lyl.item.np048"
         }
       ],
       "skills": [
@@ -4923,13 +4923,13 @@
           "id": "liuchao.item.spirit_flying_mirror"
         },
         {
-          "id": "lyl.item.np001"
+          "id": "lyl.item.np004"
         },
         {
           "id": "lyl.item.np002"
         },
         {
-          "id": "lyl.item.np004"
+          "id": "lyl.item.np068"
         }
       ],
       "skills": [
@@ -5682,6 +5682,9 @@
           "id": "lyl.item.np018"
         },
         {
+          "id": "lyl.item.np021"
+        },
+        {
           "id": "lyl.item.np022"
         },
         {
@@ -5691,19 +5694,25 @@
           "id": "lyl.item.np024"
         },
         {
-          "id": "lyl.item.np025"
-        },
-        {
           "id": "lyl.item.np026"
         },
         {
           "id": "lyl.item.np027"
         },
         {
+          "id": "lyl.item.np028"
+        },
+        {
+          "id": "lyl.item.np029"
+        },
+        {
           "id": "lyl.item.np031"
         },
         {
           "id": "lyl.item.np032"
+        },
+        {
+          "id": "lyl.item.np033"
         },
         {
           "id": "lyl.item.np034"
@@ -5715,28 +5724,28 @@
           "id": "lyl.item.np036"
         },
         {
-          "id": "lyl.item.np037"
+          "id": "lyl.item.np040"
         },
         {
           "id": "lyl.item.np038"
         },
         {
-          "id": "lyl.item.np039"
-        },
-        {
-          "id": "lyl.item.np040"
+          "id": "lyl.item.np042"
         },
         {
           "id": "lyl.item.np041"
         },
         {
-          "id": "lyl.item.np042"
+          "id": "lyl.item.np043"
         },
         {
           "id": "lyl.item.np044"
         },
         {
-          "id": "lyl.item.np046"
+          "id": "lyl.item.np045"
+        },
+        {
+          "id": "lyl.item.np049"
         },
         {
           "id": "lyl.item.np047"
@@ -5745,31 +5754,34 @@
           "id": "lyl.item.np048"
         },
         {
-          "id": "lyl.item.np049"
-        },
-        {
           "id": "lyl.item.np050"
         },
         {
           "id": "lyl.item.np051"
         },
         {
-          "id": "lyl.item.np053"
+          "id": "lyl.item.np056"
         },
         {
           "id": "lyl.item.np054"
         },
         {
-          "id": "lyl.item.np056"
+          "id": "lyl.item.np057"
         },
         {
-          "id": "lyl.item.np057"
+          "id": "lyl.item.np058"
+        },
+        {
+          "id": "lyl.item.np060"
         },
         {
           "id": "lyl.item.np061"
         },
         {
           "id": "lyl.item.np062"
+        },
+        {
+          "id": "lyl.item.np063"
         },
         {
           "id": "lyl.item.np064"
@@ -5784,25 +5796,13 @@
           "id": "lyl.item.np067"
         },
         {
-          "id": "lyl.item.np068"
-        },
-        {
-          "id": "lyl.item.np069"
-        },
-        {
-          "id": "lyl.item.np070"
-        },
-        {
-          "id": "lyl.item.np071"
-        },
-        {
           "id": "lyl.item.np074"
         },
         {
-          "id": "lyl.item.np075"
+          "id": "lyl.item.imperial_seal"
         },
         {
-          "id": "lyl.item.np076"
+          "id": "lyl.item.tiger_tally"
         },
         {
           "id": "lyl.item.np079"
@@ -5823,16 +5823,16 @@
           "id": "lyl.item.np085"
         },
         {
-          "id": "lyl.item.np086"
+          "id": "lyl.item.np071"
         },
         {
-          "id": "lyl.item.np088"
+          "id": "lyl.item.np073"
         },
         {
           "id": "lyl.item.np090"
         },
         {
-          "id": "lyl.item.np091"
+          "id": "lyl.item.np076"
         },
         {
           "id": "lyl.item.np093"
@@ -6355,6 +6355,9 @@
           "id": "lyl.item.np018"
         },
         {
+          "id": "lyl.item.np021"
+        },
+        {
           "id": "lyl.item.np022"
         },
         {
@@ -6364,28 +6367,25 @@
           "id": "lyl.item.np024"
         },
         {
-          "id": "lyl.item.np025"
-        },
-        {
           "id": "lyl.item.np026"
         },
         {
           "id": "lyl.item.np030"
         },
         {
-          "id": "lyl.item.np032"
+          "id": "lyl.item.iron_rail"
         },
         {
-          "id": "lyl.item.np033"
+          "id": "lyl.item.np068"
         },
         {
-          "id": "lyl.item.np034"
+          "id": "lyl.item.np069"
         },
         {
-          "id": "lyl.item.np035"
+          "id": "lyl.item.np070"
         },
         {
-          "id": "lyl.item.np036"
+          "id": "lyl.item.np071"
         }
       ],
       "skills": [
@@ -6468,7 +6468,7 @@
           "id": "liuchao.item.coral_dagger"
         },
         {
-          "id": "lyl.item.np001"
+          "id": "lyl.item.np004"
         },
         {
           "id": "lyl.item.np002"

@@ -943,7 +943,7 @@
           "itemIds": [
             "liuchao.item.remote_control",
             "liuchao.item.long_jing_yu",
-            "lcq.item.np003",
+            "lcq.item.zipper",
             "lcq.item.np004",
             "lcq.item.np006"
           ],
@@ -1711,7 +1711,7 @@
           ],
           "techniqueIds": [],
           "itemIds": [
-            "lcq.item.np003",
+            "lcq.item.zipper",
             "lcq.item.np006",
             "lcq.item.np007"
           ],

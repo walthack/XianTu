@@ -185,7 +185,7 @@
         "itemIds": [
           "liuchao.item.ghost_fang",
           "liuchao.item.coral_dagger",
-          "lyl.item.np001",
+          "lyl.item.np004",
           "lyl.item.np002"
         ],
         "profile": {
@@ -854,7 +854,7 @@
         "id": "liuchao.item.coral_dagger"
       },
       {
-        "id": "lyl.item.np001"
+        "id": "lyl.item.np004"
       },
       {
         "id": "lyl.item.np002"

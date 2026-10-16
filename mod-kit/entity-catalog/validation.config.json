@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "variantIdentity": {
+    "severity": "error",
+    "forbid": [
+      "name",
+      "type"
+    ],
+    "pendingRename": [
+      {
+        "id": "lyg.item.np016",
+        "stageId": "lyg.dingtao_beijing",
+        "reason": "变体是不带标签的「六识禁绝丹」，同名本家只有带 sedative 标签的 lyg.item.np071；改指会扩大标签覆盖，待用户裁定（2026-10-16 决定4）"
+      },
+      {
+        "id": "lyg.item.np025",
+        "stageId": "lyg.mijing_rumen",
+        "reason": "同上：变体是不带标签的「六识禁绝丹」，改指 lyg.item.np071 会扩大标签覆盖，待裁定"
+      },
+      {
+        "id": "lyg.item.np068",
+        "stageId": "lyg.changgan_begins",
+        "reason": "用户 2026-10-16 明确：np068 改指带标签 np071 的「扩展标签覆盖」不做，列入待裁定"
+      },
+      {
+        "id": "lcq.item.np007",
+        "stageId": "lcq.stage_04",
+        "reason": "变体是不带标签的「朱箓蛇丹」，同名本家 lcq.item.np013/np016 带 antidote 标签；改指会扩大标签覆盖，按同一口径暂缓，待裁定"
+      }
+    ]
+  },
+  "storyLinks": {
+    "verbs": {
+      "obtain": "获得",
+      "use": "使用",
+      "consume": "消耗",
+      "give": "交出",
+      "hold": "持有"
+    },
+    "necessities": [
+      "must",
+      "optional"
+    ],
+    "mustAppearSeverity": "warn",
+    "requiresSeverity": "error",
+    "staleDerivedSeverity": "error",
+    "unlinkedGrantSeverity": "warn",
+    "optionalEventIsEvidence": false,
+    "appearanceScope": "tracked"
+  }
+}

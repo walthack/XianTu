@@ -283,7 +283,7 @@
         "itemIds": [
           "liuchao.item.ghost_fang",
           "liuchao.item.coral_dagger",
-          "lyl.item.np001",
+          "lyl.item.np004",
           "lyl.item.np002"
         ],
         "profile": {
@@ -917,7 +917,7 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np001"
+          "lyl.item.np004"
         ],
         "profile": {
           "attributes": {
@@ -1012,8 +1012,8 @@
         "description": "身为程宗扬的助手，小紫素来以娇俏灵动的紫衫丽人之姿示人，肤白如乳、玉脸精致皎洁，但那双星眸深处暗藏的算计与城府，却让各房后宫皆被她不动声色地收服；她善使毒与机关虫蚁，总是一脸天真无辜地靠近你，唇角微弯时，银环穿透的胸乳间银铃轻响，温柔如水的目光下却已悄然布下天罗地网。",
         "itemIds": [
           "liuchao.item.ghost_fang",
-          "lyl.item.np001",
-          "lyl.item.np004"
+          "lyl.item.np004",
+          "lyl.item.np068"
         ],
         "profile": {
           "attributes": {
@@ -1451,13 +1451,13 @@
         "id": "liuchao.item.spirit_flying_mirror"
       },
       {
-        "id": "lyl.item.np001"
+        "id": "lyl.item.np004"
       },
       {
         "id": "lyl.item.np002"
       },
       {
-        "id": "lyl.item.np004"
+        "id": "lyl.item.np068"
       }
     ],
     "skills": [
@@ -3341,7 +3341,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np004",
+        "contentId": "lyl.item.np068",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"
