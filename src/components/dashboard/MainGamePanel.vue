@@ -288,6 +288,10 @@
         <p class="key-beat-hint">{{ BRANCH_DECISION_HINT }}</p>
       </section>
       <div v-if="intentHoldMessage" class="intent-hold-message" data-testid="intent-hold-message" role="status">{{ intentHoldMessage }}</div>
+      <div v-if="freeActionReceipts.length" class="free-action-receipt" data-testid="free-action-receipt" role="status">
+        <p v-for="line in freeActionReceipts" :key="line">{{ line }}</p>
+        <button type="button" class="free-action-receipt-dismiss" data-testid="free-action-receipt-dismiss" @click="freeActionReceipts = []">{{ packText('free.receipt.dismiss') }}</button>
+      </div>
       <div v-if="!branchDecision" class="input-wrapper">
         <!-- 隐藏的文件选择器 -->
         <input
@@ -569,7 +573,9 @@ import {
 import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
-import { renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
+import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
+import { notePlayerText } from '@/modules/scenarioMods/freeAction/playerTextDebug';
+import { packText } from '@/modules/contentPacks';
 import type { FreeActionTicket } from '@/modules/scenarioMods/freeAction/ticket';
 import {
   advanceScenarioRuntime,
@@ -603,6 +609,8 @@ import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimu
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 import {
   abortInFlightNaturalIntent,
+  freeActionOwnsText,
+  hasUnclearIntentFrame,
   intentSaveFingerprint,
   NATURAL_INTENT_CLARIFY_DEFAULT,
   resolveNaturalIntent,
@@ -939,6 +947,8 @@ type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | Scenar
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
 /** 固定事件链上识别失败而停下时的常驻提示；玩家改输入或重新发送即清除。 */
 const intentHoldMessage = ref('');
+/** 自由行动持久回执（被拒 / 给予成功 / 其他）：不随 toast 消失，下一次发送或点“收起”才清除。 */
+const freeActionReceipts = ref<string[]>([]);
 const qingyuOpeningDemo = computed(() => isQingyuOpeningPlaytestSave(gameStateStore.toSaveData()));
 const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
   !qingyuOpeningDemo.value || option.source !== 'event_engine'
@@ -1907,6 +1917,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     return;
   }
   intentHoldMessage.value = '';
+  freeActionReceipts.value = [];
   // 剧情分支点：只接受已选中的选项原句；判定确认等后续执行沿用已选动作，不再拦。
   if (!isFollowUpExecution && branchDecision.value && !branchDecisionReady.value) {
     toast.info(`${BRANCH_DECISION_TITLE}：请从选项中选择一项后再发送`);
@@ -1977,6 +1988,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   let routedIntentAction: ScenarioEngineActionSelection | undefined;
   let routedFreeActionTickets: FreeActionTicket[] = [];
   let routedFreeActionRefusals: string[] = [];
+  let routedFreeActionOthers = 0;
+  let routedFreeText = false;
+  let intentUnsettled = false;
+  let intentRoute: { kind: string; usedModel: boolean; skipKeywordPreflight: boolean; reason?: string } | undefined;
   // 判定确认后的二次执行：票取自判定回执，不再重跑 intent。
   const followUpFreeAction = execution?.resolution?.authorityReceipt?.kind === 'free_action_judgement';
   let freeTextStatusResolution: FreeTextStatusResolution | undefined;
@@ -2031,9 +2046,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       }
       skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
       freeTextStatusResolution = intent.freeTextStatusResolution;
+      intentRoute = { kind: intent.kind, usedModel: intent.usedModel, skipKeywordPreflight: intent.skipKeywordPreflight, ...(intent.reason ? { reason: intent.reason } : {}) };
       if (intent.kind === 'free') {
+        routedFreeText = true;
         routedFreeActionTickets = intent.freeActionTickets ?? [];
         routedFreeActionRefusals = intent.freeActionRefusals ?? [];
+        routedFreeActionOthers = intent.freeActionOthers ?? 0;
+        intentUnsettled = intent.unsettled === true;
       }
       if (freeTextStatusResolution?.state === 'clarify') {
         intentHoldMessage.value = freeTextStatusResolution.reason || NATURAL_INTENT_CLARIFY_DEFAULT;
@@ -2115,8 +2134,21 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     freeActionRefusalBlock += issue.refusalBlock;
     freeActionRefusedFacts.push(...issue.refusedFacts);
   }
+  // 识别降级、或原话归自由行动变体（如传功）却没出票：本地什么都没结算，必须告诉叙事“未发生”，否则会照样写成功。
+  const typedText = inputText.value.trim();
+  const ownedByFreeAction = routedFreeText && freeActionOwnsText(saveData, typedText);
+  if (saveData && routedFreeText && !routedFreeActionTickets.length && !freeActionRefusalBlock
+    && (intentUnsettled || (ownedByFreeAction && !hasUnclearIntentFrame(typedText)))) {
+    const unrecognized = gateText('unrecognized', { player: String((saveData as any)?.角色?.身份?.名字 || '你'), target: '' });
+    freeActionRefusalBlock += renderRefusedBlock([unrecognized]);
+    if (ownedByFreeAction) freeActionRefusedFacts.push(unrecognized);
+  }
   // 本回合有票或有“未发生”事实：自由行动已接管，不再叫旧的关键词预检（含修炼词的句子也一样）。
   const freeActionHandled = routedFreeActionTickets.length > 0 || freeActionRefusalBlock !== '';
+  // 玩家原文调试通道（默认关）：自由行动没接管的自由输入，含不调模型的分支。
+  if (saveData && routedFreeText && !freeActionHandled && intentRoute) {
+    notePlayerText(saveData, { site: 'ui_unhandled', text: typedText, reported: null, reasons: intentRoute.reason ? [intentRoute.reason] : [], route: intentRoute });
+  }
   if (saveData && selectedEventJudgementAction && !contractedJudgementResolution) {
     const prepared = prepareEventActionJudgement(
       saveData,
@@ -2133,7 +2165,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (prepared.kind === 'resolved') contractedJudgementResolution = prepared.resolution;
   }
   if (!shouldSkipJudgementPreflight({
-    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || (skipKeywordPreflightFromIntent && !/练功|修炼|闭关|冲关|冲击境界/.test(inputText.value.trim())),
+    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || ownedByFreeAction || (skipKeywordPreflightFromIntent && !/练功|修炼|闭关|冲关|冲击境界/.test(inputText.value.trim())),
     selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
     selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
       ? selectedScenarioEngineAction.value.playerLine
@@ -2165,14 +2197,19 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	  // 自由行动结算放在“上次对话”备份之后：回滚到上次对话时，这次的好感/记忆/物品一并回滚。
 	  let freeActionBlock = freeActionRefusalBlock;
 	  const freeActionSave = routedFreeActionTickets.length || followUpFreeAction ? gameStateStore.toSaveData() : null;
+	  const inventoryBefore = inventoryCounts(freeActionSave ?? gameStateStore.toSaveData());
+	  let givenFacts: string[] = [];
 	  if (freeActionSave) {
 	    const settlement = settleFreeActionTurn(freeActionSave, routedFreeActionTickets, execution?.resolution);
 	    if (settlement.changed) await persistJudgementSave(freeActionSave);
 	    freeActionBlock += settlement.block;
 	    freeActionRefusedFacts.push(...settlement.refusedFacts);
+	    givenFacts = settlement.givenFacts;
 	  }
-	  // 回执：没成事的事要让玩家看见，不能只留在发给叙事的消息里。
-	  if (freeActionRefusedFacts.length) toast.info([...new Set(freeActionRefusedFacts)].join(' '));
+	  // 叙述包带上背包的实际账（增减 + 现有），叙事才不会把没发生的交付写成已成。
+	  if (freeActionBlock) freeActionBlock += renderInventoryBlock(inventoryBefore, gameStateStore.toSaveData());
+	  // 回执：被拒、给予成功、其他——持久显示（不是一闪而过的 toast），玩家下次发送或点“收起”才清除。
+	  freeActionReceipts.value = renderReceipts({ refused: [...new Set(freeActionRefusedFacts)], given: givenFacts, others: routedFreeActionOthers });
 
 	  const userMessage = inputText.value.trim();
 	  console.log('[前端] 用户输入 inputText.value:', inputText.value);
@@ -4136,6 +4173,28 @@ const syncGameState = async () => {
   background: var(--color-surface-light, var(--color-surface));
   font-size: 12px;
   line-height: 1.5;
+}
+
+.free-action-receipt {
+  /* 持久回执：与 intent-hold-message 同层同风格，点“收起”或下次发送才消失。 */
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border-left: 3px solid var(--color-info, #409eff);
+  border-radius: 3px;
+  background: var(--color-surface-light, var(--color-surface));
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.free-action-receipt p {
+  margin: 0;
+}
+
+.free-action-receipt-dismiss {
+  margin-top: 4px;
+  padding: 0 6px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .branch-decision-banner {

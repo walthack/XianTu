@@ -24,7 +24,11 @@ export interface RosterEntry { id: string; name: string }
 export interface ItemEntry { id: string; name: string }
 export interface TicketDiscard { reason: string; key?: string }
 /** refusals：证据已核对通过、但目标或手段物品无效的票——不结算，只留一行“未发生”事实给叙事与界面回执。 */
-export interface TicketValidation { tickets: FreeActionTicket[]; discards: TicketDiscard[]; refusals: string[] }
+export interface TicketValidation {
+  tickets: FreeActionTicket[]; discards: TicketDiscard[]; refusals: string[];
+  /** 模型明确报了“其他”（performed=yes）的票数：没有结算规则，只作叙述；界面据此给一条持久回执。 */
+  others: number;
+}
 
 const TICKET_KEYS = ['actionClass', 'variant', 'targetId', 'degree', 'performed', 'evidence', 'itemId'];
 const OPTIONAL_KEYS = ['targetId', 'itemId'];
@@ -78,7 +82,7 @@ export function freeActionItemListOf(save: SaveData): ItemEntry[] {
 }
 
 /** 去掉空白后的文本（不用正则）。 */
-function squash(text: string): string {
+export function squash(text: string): string {
   return [...String(text ?? '').normalize('NFKC')].filter(ch => ch.trim() !== '').join('');
 }
 
@@ -117,10 +121,10 @@ export function ticketPromptSection(save: SaveData): { system: string; payload: 
  * 名单一律从存档重新算，不信提示里发过的那份。
  */
 export function validateFreeActionTickets(raw: unknown, playerText: string, save: SaveData): TicketValidation {
-  const cfg = freeActionConfig(), result: TicketValidation = { tickets: [], discards: [], refusals: [] };
+  const cfg = freeActionConfig(), result: TicketValidation = { tickets: [], discards: [], refusals: [], others: 0 };
   const drop = (reason: string, key?: string) => { result.discards.push({ reason, ...(key ? { key } : {}) }); };
   const slots = { player: String((save as any)?.角色?.身份?.名字 || '你'), target: '' };
-  const refuse = (reason: 'target_unavailable' | 'item_unavailable', discard: string, key?: string) => {
+  const refuse = (reason: 'target_unavailable' | 'item_unavailable' | 'dropped', discard: string, key?: string) => {
     drop(discard, key);
     const text = gateText(reason, slots);
     if (!result.refusals.includes(text)) result.refusals.push(text);
@@ -137,7 +141,7 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     if (keys.some(key => !TICKET_KEYS.includes(key))) { drop('extra_fields', label); continue; }
     if (TICKET_KEYS.some(key => !OPTIONAL_KEYS.includes(key) && !(key in t))) { drop('missing_fields', label); continue; }
     if (!cfg.actionClasses.includes(t.actionClass as ActionClass)) { drop('bad_class'); continue; }
-    if (t.actionClass === 'other') continue; // 观察、闲聊等：不结算，也不算丢弃
+    if (t.actionClass === 'other') { if (t.performed === 'yes') result.others += 1; continue; } // 观察、闲聊等：不结算，也不算丢弃
     const spec = typeof t.variant === 'string' ? variantSpecOf(t.actionClass as string, t.variant) : undefined;
     if (!spec) { drop('bad_variant', label); continue; }
     if (!spec.enabled || spec.route === 'none') { drop('variant_disabled', label); continue; }
@@ -155,8 +159,9 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     else if (itemId !== null && (typeof itemId !== 'string' || !itemIds.has(itemId))) { refuse('item_unavailable', 'bad_item_id', label); continue; }
     // 每个目标最多一张：同一人被报了几张，留分量最重的（变体行的好感基础点绝对值最大者；并列取先报的），其余丢弃。
     const weight = Math.abs(spec.base ?? 0), prior = picked.get(targetId);
-    if (prior && prior.weight >= weight) { drop('duplicate_target', label); continue; }
-    if (prior) drop('duplicate_target', `${prior.ticket.actionClass}.${prior.ticket.variant}`);
+    // 被挤掉的那张证据已核对、确是玩家做的事：不结算，但要留一行“未发生”，否则叙事会把它写成已成。
+    if (prior && prior.weight >= weight) { refuse('dropped', 'duplicate_target', label); continue; }
+    if (prior) refuse('dropped', 'duplicate_target', `${prior.ticket.actionClass}.${prior.ticket.variant}`);
     picked.set(targetId, {
       weight,
       ticket: {

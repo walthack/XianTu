@@ -155,6 +155,14 @@ function plan(save: SaveData, ticket: FreeActionTicket, gate: GateOk, resolution
     };
   }
 
+  // 护卫：只给被护者挂限时状态（状态 id 与时长来自变体行）。与必须活着保护（protect.ts）是两套机制，本版不读这个状态改任何结算。
+  if (spec.effect === 'applyStatus') {
+    return {
+      resultKey: 'done', delta: beatClamp(base * degree), extraFacts: [],
+      apply: () => applyActorStatus(save, targetId, spec.statusId!, { sourceId: key, minutes: spec.maxStatusMinutes }).ok,
+    };
+  }
+
   // itemDefined：喂药 / 下毒共用一套结算，差别只来自物品效果标签
   const item = gate.item!;
   if (gate.toxic || item.onUse.length) {

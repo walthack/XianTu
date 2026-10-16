@@ -6,7 +6,7 @@
  */
 import type { SaveData } from '@/types/game';
 import type { JudgementProposal, JudgementResolution } from '@/utils/judgementEngine';
-import { variantSpecOf } from './config';
+import { freeActionConfig, variantSpecOf } from './config';
 import { renderRefusedBlock, renderSettledBlock } from './facts';
 import { prepareFreeAction } from './plan';
 import { settleFreeAction, settleFromResolution, type SettleDeps } from './settle';
@@ -39,23 +39,28 @@ export interface TurnSettlement {
   block: string;
   /** 本次“未发生”事实行（界面回执用）。 */
   refusedFacts: string[];
+  /** 本次结算成功的“给予”类事实行（界面回执用；类的回执归类在配置 classes.<类>.receipt）。 */
+  givenFacts: string[];
 }
 
 export function settleFreeActionTurn(
   save: SaveData, tickets: FreeActionTicket[], resolution: JudgementResolution | undefined, deps: SettleDeps = {},
 ): TurnSettlement {
-  const done: string[] = [], refused: string[] = [];
+  const done: string[] = [], refused: string[] = [], given: string[] = [];
   let changed = false;
-  const take = (result: ReturnType<typeof settleFreeAction> | null): void => {
+  const take = (result: ReturnType<typeof settleFreeAction> | null, actionClass?: string): void => {
     if (!result) return;
-    if (result.ok) { done.push(...result.facts); changed ||= !result.replay; }
+    if (result.ok) {
+      done.push(...result.facts); changed ||= !result.replay;
+      if (!result.replay && actionClass && freeActionConfig().classes[actionClass]?.receipt === 'given') given.push(...result.facts);
+    }
     else if (result.facts.length) refused.push(...result.facts);
   };
   if (resolution?.authorityReceipt?.kind === 'free_action_judgement') take(settleFromResolution(save, resolution, deps));
   else for (const ticket of tickets.filter(t => routeOf(t) === 'table')) {
     const prepared = prepareFreeAction(save, ticket, deps);
-    if (prepared.kind === 'settled') take(prepared.result);
+    if (prepared.kind === 'settled') take(prepared.result, ticket.actionClass);
     else if (prepared.kind === 'refused') refused.push(...prepared.facts);
   }
-  return { changed, block: (done.length ? renderSettledBlock(done) : '') + (refused.length ? renderRefusedBlock(refused) : ''), refusedFacts: refused };
+  return { changed, block: (done.length ? renderSettledBlock(done) : '') + (refused.length ? renderRefusedBlock(refused) : ''), refusedFacts: refused, givenFacts: given };
 }

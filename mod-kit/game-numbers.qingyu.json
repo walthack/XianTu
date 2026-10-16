@@ -454,6 +454,7 @@
       "intimate",
       "give",
       "cast",
+      "guard",
       "other"
     ],
     "degrees": [
@@ -492,6 +493,14 @@
       "logKeep": 20,
       "settledKeep": 30,
       "budgetKeep": 40
+    },
+    "debug": {
+      "playerTextLog": false,
+      "keep": 50,
+      "textChars": 200
+    },
+    "narration": {
+      "inventoryListMax": 8
     },
     "outcomeFactors": {
       "hostile": {
@@ -712,6 +721,7 @@
       },
       "give": {
         "label": "给予",
+        "receipt": "given",
         "defaults": {
           "route": "table",
           "needsGoodwill": true,
@@ -752,8 +762,18 @@
             "effect": "practiceProgress",
             "base": 3,
             "requires": {
-              "actorLevel": "ge_target"
+              "actorLevel": "ge_target",
+              "onLevelUnknown": "deny"
             },
+            "legacyGuardWords": [
+              "传功",
+              "渡功",
+              "输送真气",
+              "输送内力",
+              "灌输真气",
+              "灌注真气",
+              "真气输送给"
+            ],
             "cost": {
               "resource": "灵气",
               "onResolveRatio": 0.3,
@@ -790,6 +810,22 @@
               "hemostatic",
               "splint"
             ]
+          }
+        }
+      },
+      "guard": {
+        "label": "护卫",
+        "defaults": {
+          "route": "table",
+          "effect": "applyStatus",
+          "needsGoodwill": false
+        },
+        "variants": {
+          "shield": {
+            "label": "护住",
+            "base": 2,
+            "statusId": "guarded",
+            "maxStatusMinutes": 120
           }
         }
       },

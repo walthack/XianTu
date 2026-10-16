@@ -24,6 +24,8 @@ import {
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { freeActionConfig } from './freeAction/config';
 import { ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
+import { freeActionOwnerOf } from './freeAction/legacyGuard';
+import { notePlayerText, reportedTicketLabels } from './freeAction/playerTextDebug';
 
 export const NATURAL_INTENT_MAX_TOKENS = GAME_MODEL_MODULES.find(m=>m.id==='intent')!.policy.maxTokens;
 export const NATURAL_INTENT_TIMEOUT_MS = 10000;
@@ -63,6 +65,10 @@ export interface NaturalIntentResult {
   freeActionTickets?: FreeActionTicket[];
   /** 自由行动票：证据通过但目标/物品无效的“未发生”事实行（没有可结算的票时也会带）。 */
   freeActionRefusals?: string[];
+  /** 自由行动票：模型明确报了“其他”（有此动作但无结算规则）的张数；界面给持久回执。 */
+  freeActionOthers?: number;
+  /** 识别降级（模型超时/坏 JSON）：本回合没有任何本地结算，界面须告诉叙事“未发生”。 */
+  unsettled?: boolean;
   kind: NaturalIntentKind;
   selection?: NaturalIntentSelection;
   reason?: string;
@@ -91,7 +97,7 @@ export function onClassifierFailure(reason: string, candidates: readonly Natural
   if (candidates.some(candidate => candidate.source !== 'open_world_engine')) {
     return { kind: 'failed', reason, clarification: NATURAL_INTENT_CONTRACT_HOLD, hold: true, skipKeywordPreflight: true, usedModel: true };
   }
-  return { kind: 'free', reason, notice: NATURAL_INTENT_DEGRADED_NOTICE, skipKeywordPreflight: true, usedModel: true };
+  return { kind: 'free', reason, notice: NATURAL_INTENT_DEGRADED_NOTICE, skipKeywordPreflight: true, usedModel: true, unsettled: true };
 }
 
 type IntentGenerate = (input: {
@@ -123,6 +129,14 @@ export function hasUnclearIntentFrame(text: string): boolean {
   if (new RegExp("(我说.{0,12}(?:她|他|"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"|别人|他们).{0,12}(?:不赌|拒绝赌))","").test(raw)) return true;
   if (/(不是不|并不是要|并没有|并非|并未|才怪|才不是)/.test(raw)) return true;
   return false;
+}
+
+/**
+ * 这句话是否归自由行动自己的票据与结算（变体 legacyGuardWords，如传功）：自由行动开启、试玩范围存档、原话含该词。
+ * 为真时不回落旧关键词预检（旧 cultivate 会把传功写进玩家自己的境界）。
+ */
+export function freeActionOwnsText(saveData: SaveData | null | undefined, text: string): boolean {
+  return Boolean(saveData) && freeActionConfig().enabled && isScopedNaturalIntentSave(saveData as SaveData) && freeActionOwnerOf(text) !== undefined;
 }
 
 function compact(value: string): string {
@@ -413,12 +427,13 @@ export async function resolveNaturalIntent(input: {
   // 试玩范围内且自由行动开启时，含修炼词的句子也交给模型出票（“和她一起修炼”可能是对人做的事）；自我修炼句返回空票，由界面照旧走本地修炼预检。
   const isTrainingText = /练功|修炼|闭关|冲关|冲击境界/.test(input.playerText);
   const modelTicketsTraining = isTrainingText && freeActionConfig().enabled && isScopedNaturalIntentSave(input.saveData) && Boolean(input.generate);
-  if(isTrainingText&&!modelTicketsTraining)return {kind:'free',skipKeywordPreflight:false,usedModel:false};
+  const ownedByFreeAction = freeActionOwnsText(input.saveData, input.playerText);
+  if(isTrainingText&&!modelTicketsTraining)return {kind:'free',skipKeywordPreflight:ownedByFreeAction,usedModel:false};
   // 修炼句识别失败（坏 JSON / 报错）：回到旧的本地修炼判定，不像普通自由句那样被“固定事件链”拦住。
   const classifierFailure = (reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult => {
     if (!modelTicketsTraining) return onClassifierFailure(reason, candidates);
     noteTicketDiscard('intent', reason);
-    return { kind: 'free', reason, skipKeywordPreflight: false, usedModel: true };
+    return { kind: 'free', reason, skipKeywordPreflight: ownedByFreeAction, usedModel: true, unsettled: ownedByFreeAction };
   };
   const alias = input.resolveFromText?.(input.saveData, input.playerText);
   if (alias && !QUEST_LINES.some(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===alias.eventId))) {
@@ -479,17 +494,33 @@ export async function resolveNaturalIntent(input: {
       hold: true, skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution,
     };
     // 票只在“没有命中任何作者动作”的自由回合收：模型说 none / 缺动作 / 不确定。其余 free 原因（候选被否决）不收。
-    const withTickets = (): Pick<NaturalIntentResult, 'freeActionTickets' | 'freeActionRefusals'> => {
-      if (!freeActionConfig().enabled || parsed.tickets === undefined) return {};
+    const withTickets = (): Pick<NaturalIntentResult, 'freeActionTickets' | 'freeActionRefusals' | 'freeActionOthers'> => {
+      if (!freeActionConfig().enabled) return {};
+      if (parsed.tickets === undefined) {
+        notePlayerText(input.saveData, { site: 'ticket_validation', text: input.playerText, reported: null, reasons: ['tickets_field_missing'] });
+        return {};
+      }
       const checked = validateFreeActionTickets(parsed.tickets, String(input.playerText || ''), input.saveData);
       for (const drop of checked.discards) noteTicketDiscard('free_action', drop.reason, drop.key);
+      // 玩家原文调试通道（默认关）：没出票、也没留“未发生”事实的句子——模型报了什么、为何丢。
+      if (!checked.tickets.length && !checked.refusals.length) {
+        notePlayerText(input.saveData, {
+          site: 'ticket_validation', text: input.playerText, reported: reportedTicketLabels(parsed.tickets),
+          reasons: [...checked.discards.map(drop => drop.reason), ...(checked.others ? ['other_class'] : [])],
+        });
+      }
       return {
         ...(checked.tickets.length ? { freeActionTickets: checked.tickets } : {}),
         ...(checked.refusals.length ? { freeActionRefusals: checked.refusals } : {}),
+        ...(checked.others ? { freeActionOthers: checked.others } : {}),
       };
     };
     const free = (reason: string, tickets = false): NaturalIntentResult => {
       noteTicketDiscard('intent', reason, parsed.actionId);
+      // 候选被否决/不确定时模型报的票按设计不收；这里只留调试日志，看有多少真实自由行动因此没出票。
+      if (!tickets && Array.isArray(parsed.tickets) && parsed.tickets.length) {
+        notePlayerText(input.saveData, { site: 'tickets_not_collected', text: input.playerText, reported: reportedTicketLabels(parsed.tickets), reasons: [reason] });
+      }
       return { ...narrateWithoutSettlement(reason, true), freeTextStatusResolution, ...(tickets ? withTickets() : {}) };
     };
     if (parsed.certainty !== 'high') return free('low_certainty', true);

@@ -4,8 +4,9 @@
  */
 import { GAME_NUMBERS } from '../../sceneModule/numbers';
 import type { JudgementKind } from '@/utils/judgementEngine';
+import { catalogStatus } from '../../sceneModule/statuses';
 
-export type ActionClass = 'physical' | 'verbal' | 'intimate' | 'give' | 'cast' | 'other';
+export type ActionClass = 'physical' | 'verbal' | 'intimate' | 'give' | 'cast' | 'guard' | 'other';
 export type Degree = 'light' | 'normal' | 'heavy';
 export type Route = 'judge' | 'table' | 'none';
 export type EffectKind = 'none' | 'practiceProgress' | 'applyStatus' | 'removeStatus' | 'transferItem' | 'itemDefined';
@@ -41,7 +42,10 @@ export interface VariantSpec {
   consume?: number;
   denyEquipped?: boolean;
   denyStoryItem?: boolean;
-  requires?: { actorLevel?: 'ge_target' };
+  /** onLevelUnknown：目标级数查不到时 deny（拒绝，默认）/ assume_equal（按与施术者同级放行；仍要求目标有可涨的进度条）。 */
+  requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal' };
+  /** 玩家原话含其中任一词（且在自由行动范围内）= 这句归本变体的票据与结算，不再回落旧关键词判定。 */
+  legacyGuardWords?: string[];
   cost?: { resource: string; onResolveRatio: number; criticalFailureRatio: number };
   gain?: { base: number; perTransferCap: number; ceilingBelowNeed: number };
   cooldownMinutes?: number;
@@ -55,6 +59,8 @@ export interface VariantSpec {
 
 interface RawClass {
   label: string;
+  /** 界面持久回执的归类：given = 这类票结算成功时给一条“已给出”回执。 */
+  receipt?: 'given';
   defaults?: Record<string, unknown>;
   intimacy?: IntimacyConfig;
   variants: Record<string, Record<string, unknown>>;
@@ -79,6 +85,10 @@ export interface FreeActionConfig {
   /** 判定卡难度档的下界（难度值 < normal 为 easy）。 */
   judgement: { bands: { normal: number; hard: number; severe: number; extreme: number } };
   state: { logKeep: number; settledKeep: number; budgetKeep: number };
+  /** 调试通道（默认全关）：playerTextLog = 本地记录没出票的玩家原文；keep = 内存环形条数；textChars = 原文截取字数。 */
+  debug: { playerTextLog: boolean; keep: number; textChars: number };
+  /** 发给叙事的背包事实：inventoryListMax = 列出的物品种数上限。 */
+  narration: { inventoryListMax: number };
   outcomeFactors: Record<string, Record<Outcome, number>>;
   classes: Record<string, RawClass>;
 }
@@ -162,6 +172,12 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
           if (!reaction || !intimacyConfig(cfg)?.reactions.includes(reaction)) errors.push(`${where}: matrix.${band}.${gate} 缺格或反应无效`);
         }
       }
+      if (spec.effect === 'applyStatus' && spec.enabled) {
+        if (!spec.statusId || !catalogStatus(spec.statusId)) errors.push(`${where}: applyStatus 的 statusId 不在状态目录里`);
+        if (!(Number(spec.maxStatusMinutes) > 0)) errors.push(`${where}: applyStatus 缺 maxStatusMinutes`);
+      }
+      if (spec.requires?.onLevelUnknown !== undefined && !['deny', 'assume_equal'].includes(spec.requires.onLevelUnknown)) errors.push(`${where}: requires.onLevelUnknown 无效`);
+      if (spec.legacyGuardWords !== undefined && (!Array.isArray(spec.legacyGuardWords) || spec.legacyGuardWords.some(word => typeof word !== 'string' || !word.trim()))) errors.push(`${where}: legacyGuardWords 须为非空字符串数组`);
       if (spec.needsItem && spec.actionClass === 'cast' && !spec.itemTag && !spec.itemTags?.length) errors.push(`${where}: needsItem 的施术变体缺 itemTag(s)`);
       if (spec.gain) for (const key of ['base', 'perTransferCap', 'ceilingBelowNeed'] as const) if (!Number.isFinite(spec.gain[key])) errors.push(`${where}: gain.${key} 引用无法解析`);
     }
@@ -173,6 +189,8 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
       if (!intimacy.reactions.includes(from) || !intimacy.reactions.includes(to)) errors.push(`intimacy.temperamentRemap.${temperament} 引用了未知反应 ${from}→${to}`);
     }
   }
+  if (!(cfg.debug?.keep > 0) || !(cfg.debug?.textChars > 0) || typeof cfg.debug?.playerTextLog !== 'boolean') errors.push('debug 配置无效');
+  if (!(cfg.narration?.inventoryListMax > 0)) errors.push('narration.inventoryListMax 无效');
   if (cfg.affinity.perBeatCap !== GAME_NUMBERS.affinity.limits.perTurn) errors.push('affinity.perBeatCap 应与 affinity.limits.perTurn 同值');
   const attack = cfg.classes.physical?.variants?.attack;
   const physicalDifficulty = (cfg.classes.physical?.defaults as { difficulty?: number } | undefined)?.difficulty;

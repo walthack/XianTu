@@ -20717,6 +20717,12 @@
     },
     {
       "kind": "status",
+      "id": "guarded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "mind.confused",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -21563,6 +21569,54 @@
     },
     {
       "kind": "text",
+      "id": "free.block.inventory.changed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.block.inventory.delta.gain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.block.inventory.delta.lose",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.block.inventory.empty",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.block.inventory.item",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.block.inventory.unchanged",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.block.refused",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.block.settled",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.attack.block",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21677,6 +21731,12 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.gate.dropped",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.gate.equipped_or_story",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21756,6 +21816,12 @@
     {
       "kind": "text",
       "id": "free.fact.gate.target_unavailable",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.unrecognized",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -21852,6 +21918,12 @@
     {
       "kind": "text",
       "id": "free.fact.protected",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.shield.done",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22091,6 +22163,12 @@
     },
     {
       "kind": "text",
+      "id": "free.memory.shield.done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.memory.taunt.landed",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22122,6 +22200,30 @@
     {
       "kind": "text",
       "id": "free.memory.transfer_qi.no_gain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.receipt.dismiss",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.receipt.given",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.receipt.other",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.receipt.refused",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

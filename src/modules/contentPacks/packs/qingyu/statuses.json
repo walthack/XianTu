@@ -61,5 +61,28 @@
     "afterScene": {
       "minutes": null
     }
+  },
+  {
+    "id": "guarded",
+    "label": "受护卫",
+    "tier": "general",
+    "cause": "story",
+    "kind": "buff",
+    "source": "玩家自由行动「护住」挂上的持续状态，时长取 freeAction.classes.guard 配置。与必须活着保护（总表 mustSurvive → protectedCap / protectedForbid）不是同一机制：那是人物静态标记，这是行动产生的限时状态。到期时间由挂状态时的 maxStatusMinutes 决定，休整可解除（通用档状态不得由剧情旗标解除）。本版只记状态，不改任何结算。",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "有人护在身侧"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    }
   }
 ]

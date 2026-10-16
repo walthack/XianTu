@@ -766,3 +766,30 @@
 - 第三轮（合并为 6 类）新增的未核实项：`physical.grab`（抓住）的整行参数是我占位的，没有任何数据或裁定对应；`weights.craft` 与 `kind:'craft'` 在判定引擎里的完整支持度沿用上一轮结论、本轮未重读；`variantSpecOf` 的“类默认 ⊕ 变体行”浅合并、提示词清单生成、`content-packs.mjs` 的必填参数校验都是设计，**未写代码、未运行**。本轮只核实了一处代码事实：`sceneModule/numbers.ts:9` 对补丁未知键抛错（因此新变体要写进默认 JSON）。
 - 第四轮新增的未核实项：`mustSurvive` 字段能否经 `build-character-registry.mjs` 从源卡原样透传进总表、是直接读总表还是须经阶段档物化（`npcCardLayer.ts:3` 注释写“经阶段档物化”，我只核实了该注释）；「行动受限」状态的 id（`action.restricted`）与解除规则是占位；`lifeFloor.hpRatio` 与毒性数值全部占位；NPC 气血无写入方（§14.1 ③）意味着毒伤落点需 D25 定。本轮核实的只有：角色总表现有键里无 `mustSurvive`（读 JSON 键）、`CANON-DECISIONS.md` #90/#97 确有“谢艺之死”正典 Rail 与 `s06_03` 条目。
 
+
+## 15. 第五轮（2026-10-17）落地备注与设计备注
+
+### 15.1 本轮已实现（代码在 `src/modules/scenarioMods/freeAction/`，测试 `tests/freeActionRound1017.test.mjs`）
+- **玩家原文调试通道**：`playerTextDebug.ts`；开关 `freeAction.debug.playerTextLog`（默认 `false`），条数 `debug.keep`、截取字数 `debug.textChars`。只写 console 与内存环形缓冲，不落盘、不进存档、不发网络；与 `noteTicketDiscard`（有意不记原文）互相独立。接线三处：`naturalIntentRouter.withTickets`（校验后没出票也没“未发生”事实）、`free()` 里候选被否决而丢掉模型票的分支、`MainGamePanel.vue` 中 `freeActionHandled` 为假处。
+- **传功不回落旧 cultivate**：变体行 `legacyGuardWords`（`cast.transfer_qi` 上，词表在配置）+ `legacyGuard.ts`。试玩范围内含该词的句子：路由返回 `skipKeywordPreflight:true`，界面不再叫旧预检（含修炼词的句子也一样）；没出票或识别降级时给叙事发一行“未发生”（`free.fact.gate.unrecognized`）。传功自己的票据与结算（`kind:'craft'`、模板化 `actionText`）本来就不碰玩家境界。
+- **`level_unknown`**：结论见 §15.2；开关 `requires.onLevelUnknown`（`deny` 默认 / `assume_equal`）。
+- **护卫（`guard.shield`）最小版**：见 §15.3。
+- **回执持久化**：被拒 / 给予成功（类的 `receipt:"given"` 配置）/ 其他（模型报 `other` 且 `performed=yes`）改为界面持久提示，文案在 `texts.json` 的 `free.receipt.*`，下一次发送或点“收起”清除。
+- **叙述服从“未发生”**：事实块文案进 `texts.json`（`free.block.*`），被拒块加“不得写成已成”；每个有自由行动事实块的回合另附一行“背包事实”（本回合增减 + 背包现有，种数上限 `narration.inventoryListMax`）；同目标被挤掉的第二张票补一行“未发生”。不动 `runtime.ts` / `AIBidirectionalSystem.ts`。
+
+### 15.2 `level_unknown` 的判断
+- 触发条件（`gates.ts`）：目标在时点级数表里没有可用的九级行（无行 / 不可用 / 非九级体系 / 占位行），或关系档案的境界没有 `下一级所需>0`。
+- 数据面：`mod-kit/entity-catalog/character-levels.qingyu.json` 共 66 行，覆盖人物 id 不多；总表 333 个人物里能在该表里找到行的只有 33 个（按 id 与 `idAliases` 比对）。所以对多数原著人物，传功默认会被这条拒绝——**这是按设计的保守拒绝，不是 bug**，但覆盖面确实窄。
+- 处理：默认保持拒绝（T20 与初识登记测试锁定）；想放开就把该变体的 `requires.onLevelUnknown` 改成 `assume_equal`：查不到级数的目标按同级放行，仍要求目标有可涨的进度条、施术者有修为。是否放开由你定。
+
+### 15.3 护卫与必活保护是两套机制（命名区分）
+- 必活保护 = 总表人物的静态标记 `mustSurvive`，经 `protect.ts` 读取，作用是给敌对结算封顶（`protectedCap`）或直接拒绝（`protectedForbid`）。
+- 护卫 = 玩家行动产生的限时状态：类 `guard`、变体 `shield`（护住）、状态 id `guarded`（受护卫）；对象须在场，时长 `maxStatusMinutes`、好感 `base` 都在配置；只记状态，**本版没有任何结算读取它**。
+- 两者不共用字段与代码路径，名字里刻意不出现 `protect`。
+
+### 15.4 设计备注（只写文档，不实现）：逃走 / 带人逃跑
+- **不能逃走的战斗由合同标明**：交锋合同上应有显式字段声明“此战不可逃”，而不是靠关键词或模型判断。字段取值由内容作者定，代码只读该字段。
+- **逃走的两种合法结果**，合同二选一：① 逃走即失败，游戏结束（走现有结局通道，不另造死亡写入口）；② 直接逃不掉（闸门拒绝，给“未发生”事实，不掷骰、不扣任何东西）。两种都不允许“逃了但无事发生”。
+- **可以逃走的战斗**才谈判定：走 `escape` 判定类，成功后的位置变化由场景/开放世界的移动写入口完成；我未核实该写入口，实现前先查。
+- **带人逃跑**不做：它同时涉及闸门（双目标）、场景（位置变化）和票数上限（每回合 2 张、每目标 1 张），并与“不能逃走的战斗”规则相互牵制。要做时建议单设 `escort` 变体，由代码规定“成功则被带者随同转移”，模型只报一张票。
+- 以上均未实现，也没有真机验证。

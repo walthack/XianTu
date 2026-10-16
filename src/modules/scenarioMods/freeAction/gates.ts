@@ -104,15 +104,16 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
   const wantsGoodwill = spec.needsGoodwill === true || (spec.needsGoodwill === 'byItemTag' && !toxic);
   if (wantsGoodwill && stanceOf(Number((relationshipOf(save as any, targetId)?.profile as any)?.好感度) || 0) === 'low') return fail('low_goodwill');
 
-  // 施术者资格：功力不低于目标。目标级数必须有可用的九级时点行（占位行、非九级体系一律拒绝）。
+  // 施术者资格：功力不低于目标。目标级数默认必须有可用的九级时点行（占位行、非九级体系一律拒绝）；
+  // requires.onLevelUnknown = assume_equal 时，查不到级数的目标按与施术者同级放行（仍要求目标有可涨的进度条，否则没处落地；施术者须有修为）。
   if (spec.requires?.actorLevel === 'ge_target') {
     const fact = levelFact(targetId, namingChapter(runtime || {}));
     const realm = (relationshipOf(save as any, targetId)?.profile as any)?.境界;
     const targetLevel = effectiveLevel(fact);
-    if (!fact || !fact.available || fact.applicability !== 'nine_levels' || fact.settingStatus === 'placeholder' || targetLevel === undefined
-      || !(Number(realm?.下一级所需) > 0)) return fail('level_unknown');
+    const levelKnown = Boolean(fact && fact.available && fact.applicability === 'nine_levels' && fact.settingStatus !== 'placeholder' && targetLevel !== undefined);
+    if (!(Number(realm?.下一级所需) > 0) || (!levelKnown && spec.requires.onLevelUnknown !== 'assume_equal')) return fail('level_unknown');
     const mine = levelOf((save as any)?.角色?.属性?.境界);
-    if (mine === null || mine < targetLevel) return fail('level_too_low');
+    if (mine === null || (levelKnown ? mine < targetLevel! : !(mine > 0))) return fail('level_too_low'); // 查不到目标级数（assume_equal）时，施术者至少得有修为
   }
 
   // 施术者代价：付得起才行。

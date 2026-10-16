@@ -305,5 +305,6 @@ test('T33 施术只有传功、疗伤、包扎；类与变体白名单就是配�
   assert.deepEqual(Object.keys(classes.cast.variants), ['transfer_qi', 'heal', 'bandage']);
   assert.deepEqual(Object.keys(classes.give.variants), ['gift', 'feed_pill']);
   assert.deepEqual(Object.keys(classes.physical.variants), ['attack', 'grab', 'bind']);
-  assert.deepEqual(cfg().actionClasses, ['physical', 'verbal', 'intimate', 'give', 'cast', 'other']);
+  assert.deepEqual(Object.keys(classes.guard.variants), ['shield']);
+  assert.deepEqual(cfg().actionClasses, ['physical', 'verbal', 'intimate', 'give', 'cast', 'guard', 'other']);
 });

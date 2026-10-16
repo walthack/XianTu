@@ -146,5 +146,21 @@
   "free.stakes.cast.success": "运转如意，见到成效。",
   "free.stakes.cast.partial": "勉强见效，但耗费不小。",
   "free.stakes.cast.failure": "没能奏效，白费了力气。",
-  "free.stakes.cast.criticalFailure": "反噬自身，吃了苦头。"
+  "free.stakes.cast.criticalFailure": "反噬自身，吃了苦头。",
+  "free.fact.shield.done": "{player}护在{target}身侧，{target}在一段时间内由{player}护着。",
+  "free.memory.shield.done": "{player}曾护在{target}身侧。",
+  "free.fact.gate.unrecognized": "{player}这句话本地没有识别出可结算的动作，没有任何物品、状态或好感变化，只当作叙述。",
+  "free.fact.gate.dropped": "{player}同时做的另一个动作没能落实，没有成事。",
+  "free.block.settled": "\n【本地自由行动已结算】{facts}。好感与记忆已由本地写入，只演出这些既定事实，不得另行增减好感、写入记忆或杜撰额外后果。\n",
+  "free.block.refused": "\n【本地自由行动未发生】{facts}。这一下没有成事，没有任何状态、物品或好感变化，只演出这个结果；不得写成对方已经收下、已经生效或已经成功。\n",
+  "free.block.inventory.changed": "\n【背包事实】自由行动让背包变化：{changes}。背包现有：{items}。物品易手只以本地回执为准，未在此列出的交付、拿取、消耗都没有发生，不得写成已经发生；搜刮等其他本地回执另有说明的除外。\n",
+  "free.block.inventory.unchanged": "\n【背包事实】自由行动没有让背包物品增减。背包现有：{items}。自由行动没有交付、拿取、消耗任何物品，不得把送出、拿到、用掉物品写成已经发生；搜刮等其他本地回执另有说明的除外。\n",
+  "free.block.inventory.empty": "空无一物",
+  "free.block.inventory.item": "{name}×{count}",
+  "free.block.inventory.delta.gain": "得到{name}×{count}",
+  "free.block.inventory.delta.lose": "失去{name}×{count}",
+  "free.receipt.refused": "没成事：{facts}",
+  "free.receipt.given": "已给出：{facts}",
+  "free.receipt.other": "这一句没有对应的结算规则，只作叙述，不改变背包、状态或好感。",
+  "free.receipt.dismiss": "收起"
 }
