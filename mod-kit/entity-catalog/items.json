@@ -13,15 +13,7 @@
         "grade": "凡品",
         "techniqueId": "lcq.technique.jiuyang"
       },
-      "stageVariants": {
-        "lcq.stage_02": {
-          "id": "lcq.item.backpack",
-          "name": "背包",
-          "description": "程宗扬从现代世界带来的背包。",
-          "type": "other",
-          "grade": "凡品"
-        }
-      },
+      "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lcq.stage_01.json#content.items[id=lcq.item.backpack]",
@@ -1287,15 +1279,7 @@
         "description": "程宗扬从山民处购得",
         "grade": "中品"
       },
-      "stageVariants": {
-        "lcq.stage_04": {
-          "id": "lcq.item.np007",
-          "name": "朱箓蛇丹",
-          "type": "consumable",
-          "description": "云苍峰用于治疗蛇毒",
-          "grade": "中品"
-        }
-      },
+      "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=lcq.item.np007]",
@@ -1673,48 +1657,7 @@
           }
         }
       },
-      "stageVariants": {
-        "lyl.jiangzhou_retreat": {
-          "id": "liuchao.item.coral_dagger",
-          "name": "珊瑚匕首",
-          "description": "程宗扬从萧遥逸处获得的武器。",
-          "type": "weapon",
-          "grade": "仙品",
-          "techniqueId": "liuchao.technique.taiji_manual",
-          "attributeBonus": {
-            "气血上限": 90,
-            "后天六司": {
-              "根骨": 12
-            }
-          }
-        },
-        "lyl.lin_an_black_sea": {
-          "id": "liuchao.item.coral_dagger",
-          "name": "珊瑚匕首",
-          "description": "锋利异常的匕首，程宗扬随身武器。",
-          "type": "weapon",
-          "grade": "仙品",
-          "attributeBonus": {
-            "气血上限": 90,
-            "后天六司": {
-              "根骨": 12
-            }
-          }
-        },
-        "lyl.taiquan_expedition": {
-          "id": "liuchao.item.coral_dagger",
-          "name": "珊瑚匕首",
-          "description": "锋利异常的匕首，程宗扬随身武器。",
-          "type": "weapon",
-          "grade": "仙品",
-          "attributeBonus": {
-            "气血上限": 90,
-            "后天六司": {
-              "根骨": 12
-            }
-          }
-        }
-      },
+      "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=liuchao.item.coral_dagger]",
@@ -2585,15 +2528,7 @@
         "description": "实为玄妙子所著灵魂功法，被岳鹏举撕去封面改名为武穆秘籍，内页有批注。",
         "grade": "中品"
       },
-      "stageVariants": {
-        "lyg.dingtao_beijing": {
-          "id": "lyg.item.np016",
-          "name": "六识禁绝丹",
-          "type": "consumable",
-          "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
-          "grade": "中品"
-        }
-      },
+      "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np016]",
@@ -2784,15 +2719,7 @@
         "description": "以丝带将两女乳头扎结，用于洞房游戏。",
         "grade": "中品"
       },
-      "stageVariants": {
-        "lyg.mijing_rumen": {
-          "id": "lyg.item.np025",
-          "name": "六识禁绝丹",
-          "type": "consumable",
-          "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
-          "grade": "中品"
-        }
-      },
+      "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.items[id=lyg.item.np025]",
@@ -3529,15 +3456,7 @@
           }
         }
       },
-      "stageVariants": {
-        "lyg.changgan_begins": {
-          "id": "lyg.item.np068",
-          "name": "六识禁绝丹",
-          "type": "consumable",
-          "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
-          "grade": "中品"
-        }
-      },
+      "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.items[id=lyg.item.np068]",
@@ -4562,18 +4481,48 @@
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#scenario.events[id=lyg.event.mijing_superuser_roster]"
       ],
-      "story": {
-        "mustAppear": [
-          {
-            "eventId": "lyg.event.mijing_superuser_roster"
+      "deprecated": true,
+      "deprecatedNote": "2026-10-16 用户裁定：龙珠不是实际道具、只是举例；条目保留待用户裁定去留，不再作试验标注。"
+    },
+    {
+      "id": "lyg.item.green_dragon_blade_huaxiong",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.item.green_dragon_blade_huaxiong",
+        "name": "青龙偃月刀",
+        "type": "weapon",
+        "description": "云丹琉使用的长刀，斩杀华雄。",
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 30,
+          "后天六司": {
+            "根骨": 4
           }
-        ],
-        "requires": [
-          {
-            "eventDone": "lyg.event.s02_09"
-          }
-        ]
-      }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np014]"
+      ]
+    },
+    {
+      "id": "lyg.item.six_sense_seal_pill",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.item.six_sense_seal_pill",
+        "name": "六识禁绝丹",
+        "type": "consumable",
+        "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
+        "grade": "中品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np068]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np025]"
+      ]
     },
     {
       "id": "lyl.item.coral_dagger",
@@ -4591,25 +4540,7 @@
           }
         }
       },
-      "stageVariants": {
-        "lyl.taiquan_core_conflict": {
-          "id": "lyl.item.coral_dagger",
-          "name": "珊瑚匕首",
-          "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。",
-          "type": "weapon",
-          "grade": "仙品",
-          "skillIds": [
-            "lyl.skill.coral_dagger_art"
-          ],
-          "techniqueId": "lyl.technique.taiji_bridge",
-          "attributeBonus": {
-            "气血上限": 90,
-            "后天六司": {
-              "根骨": 12
-            }
-          }
-        }
-      },
+      "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.items[id=lyl.item.coral_dagger]",
@@ -6681,6 +6612,78 @@
       ]
     },
     {
+      "id": "lyl.item.coral_dagger_from_xiao_yaoyi",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.item.coral_dagger_from_xiao_yaoyi",
+        "name": "珊瑚匕首",
+        "description": "程宗扬从萧遥逸处获得的武器。",
+        "type": "weapon",
+        "grade": "仙品",
+        "techniqueId": "liuchao.technique.taiji_manual",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.items[id=liuchao.item.coral_dagger]"
+      ]
+    },
+    {
+      "id": "lyl.item.coral_dagger_carried",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.item.coral_dagger_carried",
+        "name": "珊瑚匕首",
+        "description": "锋利异常的匕首，程宗扬随身武器。",
+        "type": "weapon",
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.items[id=liuchao.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.items[id=liuchao.item.coral_dagger]"
+      ]
+    },
+    {
+      "id": "lyl.item.coral_dagger_cuts_vine",
+      "aliases": [],
+      "definition": {
+        "id": "lyl.item.coral_dagger_cuts_vine",
+        "name": "珊瑚匕首",
+        "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。",
+        "type": "weapon",
+        "grade": "仙品",
+        "skillIds": [
+          "lyl.skill.coral_dagger_art"
+        ],
+        "techniqueId": "lyl.technique.taiji_bridge",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.coral_dagger]"
+      ]
+    },
+    {
       "id": "lcq.item.zipper",
       "aliases": [],
       "definition": {
@@ -6731,6 +6734,38 @@
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.zhulu_snake_pill",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.zhulu_snake_pill",
+        "name": "朱箓蛇丹",
+        "type": "consumable",
+        "description": "云苍峰用于治疗蛇毒",
+        "grade": "中品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.items[id=lcq.item.np007]"
+      ]
+    },
+    {
+      "id": "lcq.item.backpack_plain",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.backpack_plain",
+        "name": "背包",
+        "description": "程宗扬从现代世界带来的背包。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json#content.items[id=lcq.item.backpack]"
+      ]
     }
   ]
 }

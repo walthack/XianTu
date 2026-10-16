@@ -1264,7 +1264,7 @@
         "itemIds": [
           "lcq.item.zipper",
           "lcq.item.np006",
-          "lcq.item.np007"
+          "lcq.item.zhulu_snake_pill"
         ],
         "profile": {
           "origin": "白湖商馆执事，南荒商队领队",
@@ -1827,7 +1827,7 @@
         "id": "lcq.item.np006"
       },
       {
-        "id": "lcq.item.np007"
+        "id": "lcq.item.zhulu_snake_pill"
       },
       {
         "id": "lcq.item.nh_mountain_herb"

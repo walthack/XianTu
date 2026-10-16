@@ -756,22 +756,21 @@
         }
       ]
     },
-    "item:lyg.item.dragon_pearl": {
+    "item:lcq.item.nh_baiyi_rice_pearl": {
       "chapters": [
-        26
+        57
       ],
       "events": [
         {
-          "stageId": "lyg.mijing_rumen",
-          "eventId": "lyg.event.mijing_superuser_roster",
-          "axisId": "yange.26.1",
-          "chapter": 26,
-          "critical": true,
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_07",
+          "axisId": "qingyu.57.1",
+          "chapter": 57,
           "source": "story-link",
-          "linkId": "link.demo.dragon_pearl.use",
-          "verb": "use",
+          "linkId": "link.demo.rice_pearl.obtain",
+          "verb": "obtain",
           "quantity": 1,
-          "necessity": "must"
+          "necessity": "optional"
         }
       ]
     }

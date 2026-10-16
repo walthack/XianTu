@@ -1,18 +1,17 @@
 {
   "version": 1,
   "coverage": {
-    "stages": ["lyg.mijing_rumen", "lcq.stage_02"]
+    "stages": ["lyg.mijing_rumen", "lcq.stage_02", "lcq.stage_04"]
   },
   "links": [
     {
-      "id": "link.demo.dragon_pearl.use",
-      "stageId": "lyg.mijing_rumen",
-      "eventId": "lyg.event.mijing_superuser_roster",
-      "actionId": "touch_pearl_verify_superuser_roster",
+      "id": "link.demo.rice_pearl.obtain",
+      "stageId": "lcq.stage_04",
+      "eventId": "lcq.event.s04_07",
       "actor": "liuchao.character.cheng_zongyang",
-      "verb": "use",
-      "object": { "kind": "item", "id": "lyg.item.dragon_pearl", "quantity": 1 },
-      "necessity": "must"
+      "verb": "obtain",
+      "object": { "kind": "item", "id": "lcq.item.nh_baiyi_rice_pearl", "quantity": 1 },
+      "necessity": "optional"
     },
     {
       "id": "link.stage02.jin_nang.obtain",

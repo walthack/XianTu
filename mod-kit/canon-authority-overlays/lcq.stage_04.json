@@ -1201,7 +1201,7 @@
           "skillIds": [],
           "techniqueIds": [],
           "itemIds": [
-            "lcq.item.np007"
+            "lcq.item.zhulu_snake_pill"
           ],
           "profile": {
             "attributes": {
@@ -1713,7 +1713,7 @@
           "itemIds": [
             "lcq.item.zipper",
             "lcq.item.np006",
-            "lcq.item.np007"
+            "lcq.item.zhulu_snake_pill"
           ],
           "profile": {
             "origin": "白湖商馆执事，南荒商队领队",

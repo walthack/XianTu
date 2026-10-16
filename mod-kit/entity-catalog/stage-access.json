@@ -27,7 +27,7 @@
     "lcq.stage_02": {
       "items": [
         {
-          "id": "lcq.item.backpack"
+          "id": "lcq.item.backpack_plain"
         },
         {
           "id": "lcq.item.lingerie"
@@ -291,7 +291,7 @@
           "id": "lcq.item.np006"
         },
         {
-          "id": "lcq.item.np007"
+          "id": "lcq.item.zhulu_snake_pill"
         },
         {
           "id": "lcq.item.nh_mountain_herb"
@@ -2175,7 +2175,7 @@
           "id": "lyg.item.np112"
         },
         {
-          "id": "lyg.item.np068"
+          "id": "lyg.item.six_sense_seal_pill"
         },
         {
           "id": "lyg.item.np069"
@@ -2725,13 +2725,13 @@
           "id": "lyg.item.np077"
         },
         {
-          "id": "liuchao.item.green_dragon_sword"
+          "id": "lyg.item.green_dragon_blade_huaxiong"
         },
         {
           "id": "lyg.item.silver_dragon_scale_armor"
         },
         {
-          "id": "lyg.item.np016"
+          "id": "lyg.item.six_sense_seal_pill"
         },
         {
           "id": "lyg.item.np127"
@@ -4070,7 +4070,7 @@
           "id": "lyg.item.np112"
         },
         {
-          "id": "lyg.item.np025"
+          "id": "lyg.item.six_sense_seal_pill"
         },
         {
           "id": "lyg.item.np127"
@@ -4879,7 +4879,7 @@
     "lyl.jiangzhou_retreat": {
       "items": [
         {
-          "id": "liuchao.item.coral_dagger"
+          "id": "lyl.item.coral_dagger_from_xiao_yaoyi"
         },
         {
           "id": "lyl.item.np001"
@@ -4917,7 +4917,7 @@
           "id": "liuchao.item.ghost_fang"
         },
         {
-          "id": "liuchao.item.coral_dagger"
+          "id": "lyl.item.coral_dagger_carried"
         },
         {
           "id": "liuchao.item.spirit_flying_mirror"
@@ -6313,7 +6313,7 @@
     "lyl.taiquan_core_conflict": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger"
+          "id": "lyl.item.coral_dagger_cuts_vine"
         },
         {
           "id": "lyl.item.np001"
@@ -6465,7 +6465,7 @@
           "id": "liuchao.item.ghost_fang"
         },
         {
-          "id": "liuchao.item.coral_dagger"
+          "id": "lyl.item.coral_dagger_carried"
         },
         {
           "id": "lyl.item.np004"

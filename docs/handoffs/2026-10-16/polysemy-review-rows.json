@@ -1,0 +1,1010 @@
+[
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np002",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np003",
+    "name": "成光魂丹",
+    "description": "闻清语代表剑玉姬送来成光魂丹，控制其生死。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np008",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np009",
+    "name": "鹿皮书写提示",
+    "description": "鹿皮上写有'欲启秘境，执棒尿之'，实为误导。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np009",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np010",
+    "name": "白石刻字",
+    "description": "白石背部刻有'不许小便'及笑脸，程宗扬尿后挖开后发现白光，疑似秘境入口。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np010",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np011",
+    "name": "八块羊脂玉牌（岳帅信物）",
+    "description": "八块玉牌来自刘奭玉牒，指向武帝秘境。线索可连成'日出东方，唯我不败'，缺'不'字。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np013",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np014",
+    "name": "电击棒",
+    "description": "程宗扬使用电击棒作为引雷器，抵御魔尊周围的雷击，效果为一透明屏障吸收闪电。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np014",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np015",
+    "name": "白石/岳鹏举画押石",
+    "description": "刻有岳鹏举画押与‘不许小便’的白色条石，用于替代陵墓石锁填充空洞开启大门，画押处为笑脸。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np017",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np018",
+    "name": "岳鹏举遗信",
+    "description": "六封借钱信，分别写给李药师、王真人、萧道凌、贾师宪及两位未具名者。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np018",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np019",
+    "name": "天策令",
+    "description": "黑铁令牌，凭此可入皇图天策府。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np019",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np020",
+    "name": "沉香",
+    "description": "萧侯赠予岳鹏举的礼物。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np020",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np021",
+    "name": "纸符",
+    "description": "王真人所赠符咒。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np021",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np022",
+    "name": "美人名单",
+    "description": "粉色纸笺，列有武则天、杨玉环等十六位美女名字及岳鹏举标记。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np022",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np023",
+    "name": "舞阳侯封地",
+    "description": "实封舞都，包括舞都城和首阳山等地。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np025",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np026",
+    "name": "慎恤胶",
+    "description": "南宫秘药，以炉炼百日，投于大瓮煮沸后换水十次才能使用，程宗扬因此药而性欲高涨。由蔡敬仲从宫中寻来，小紫用于程宗扬。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np026",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np027",
+    "name": "舞都房地产开发计划",
+    "description": "程宗扬计划在舞都以北开发商业区，首期一千五百亩土地，计划以每亩五百金铢售予商铺，预期回收十五万金铢。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np034",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np037",
+    "name": "可乐饮料",
+    "description": "程宗扬保留了数瓶可乐，提供给祁远品尝，祁远觉得是辣且甜的饮料。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np036",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np039",
+    "name": "宣平坊程宅位置",
+    "description": "程宅位于宣平坊中心十字街西北，面朝大路，对面是鼓吹署教坊。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np038",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np041",
+    "name": "霓龙丝衣",
+    "description": "出自建康盛银织坊，原料款式由程宗扬一手打理，包括乳罩、内裤、丝袜、高跟鞋等多种款式。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np039",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np042",
+    "name": "仙斛",
+    "description": "陶家公子所赠贺礼，程宗扬大婚时陶家赠两株仙斛，赵飞燕收入行囊，用于引诱潘金莲。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np042",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np045",
+    "name": "禁音符",
+    "description": "一种符箓，可禁绝声音内外传递。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np046",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np104",
+    "name": "密码箱（珊瑚铁制）",
+    "description": "岳鹏举遗留物品，由珊瑚铁制成，八位密码锁。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np047",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np106",
+    "name": "天文望远镜",
+    "description": "可用于观星，杨玉环用来偷窥。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np049",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np107",
+    "name": "手提箱",
+    "description": "杨玉环从死者处捡得，与岳帅无关，密码未知，内装物品不明。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np065",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np112",
+    "name": "龙槎星辰",
+    "description": "宝石被刘骜赏给赵合德，赵合德投缳自尽后宝石可能在其尸骸上。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np071",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np127",
+    "name": "空心针",
+    "description": "光明观堂有空心针，用于输血"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np002",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np003",
+    "name": "成光魂丹",
+    "description": "闻清语代表剑玉姬送来成光魂丹，控制其生死。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np008",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np009",
+    "name": "鹿皮书写提示",
+    "description": "鹿皮上写有'欲启秘境，执棒尿之'，实为误导。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np009",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np010",
+    "name": "白石刻字",
+    "description": "白石背部刻有'不许小便'及笑脸，程宗扬尿后挖开后发现白光，疑似秘境入口。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np010",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np011",
+    "name": "八块羊脂玉牌（岳帅信物）",
+    "description": "八块玉牌来自刘奭玉牒，指向武帝秘境。线索可连成'日出东方，唯我不败'，缺'不'字。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np017",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np127",
+    "name": "空心针",
+    "description": "光明观堂有空心针，用于输血"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np008",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np009",
+    "name": "鹿皮书写提示",
+    "description": "鹿皮上写有'欲启秘境，执棒尿之'，实为误导。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np009",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np010",
+    "name": "白石刻字",
+    "description": "白石背部刻有'不许小便'及笑脸，程宗扬尿后挖开后发现白光，疑似秘境入口。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np010",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np011",
+    "name": "八块羊脂玉牌（岳帅信物）",
+    "description": "八块玉牌来自刘奭玉牒，指向武帝秘境。线索可连成'日出东方，唯我不败'，缺'不'字。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np013",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np014",
+    "name": "电击棒",
+    "description": "程宗扬使用电击棒作为引雷器，抵御魔尊周围的雷击，效果为一透明屏障吸收闪电。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np014",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np015",
+    "name": "白石/岳鹏举画押石",
+    "description": "刻有岳鹏举画押与‘不许小便’的白色条石，用于替代陵墓石锁填充空洞开启大门，画押处为笑脸。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np023",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np112",
+    "name": "龙槎星辰",
+    "description": "宝石被刘骜赏给赵合德，赵合德投缳自尽后宝石可能在其尸骸上。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np026",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyg.item.np127",
+    "name": "空心针",
+    "description": "光明观堂有空心针，用于输血"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np023",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np022",
+    "name": "盘江程氏股票",
+    "description": "盘江程氏股票每股价值五万金铢，可兑换资产。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np024",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np023",
+    "name": "龙鳞盾",
+    "description": "龙鳞盾为程宗扬携带的防具。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np025",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np024",
+    "name": "汽车",
+    "description": "程宗扬在太泉古阵第一层发现并驾驶一辆汽车，使用电能驱动，可日行千里。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np031",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np028",
+    "name": "雷射刀（已损毁）",
+    "description": "程宗扬的武器，在此集与丁志雄交战后刀身承受重岩符后化为电光，仅剩刀柄，但仍可发射电光斩击。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np032",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np029",
+    "name": "旧摄像机",
+    "description": "程宗扬在山体裂缝中发现，内有一现代化都市影像，可立体显示。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np034",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np031",
+    "name": "雷射刀",
+    "description": "程宗扬使用雷射刀，电光状态消耗真气巨大"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np035",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np032",
+    "name": "铁箱",
+    "description": "铁箱内藏机械蜘蛛"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np038",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np035",
+    "name": "禁魂鬼偶",
+    "description": "程宗扬从朱老头处夺走禁魂鬼偶。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np041",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np038",
+    "name": "电锯",
+    "description": "在工具店找到的锯类武器，可套在臂上。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np044",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np041",
+    "name": "官印",
+    "description": "程宗扬从宁成处获得官印"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np047",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np044",
+    "name": "纸钞",
+    "description": "冯子都获得可兑换十万钱的纸钞。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np048",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np045",
+    "name": "琥珀",
+    "description": "程宗扬拥有琥珀，可感应苏妲己。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np050",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np047",
+    "name": "奴隶烙印",
+    "description": "程宗扬颈后有狐族印记，被襄城君认出"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np053",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np050",
+    "name": "求子仙符（假）",
+    "description": "程宗扬请卓云君绘制的一张静心养神符，附有赵合德的银链，用于引见皇后。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np054",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np051",
+    "name": "太阳能板",
+    "description": "程宗扬获得太阳能板，但不知用途。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np057",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np054",
+    "name": "幽海螺",
+    "description": "龙宸猎手使用的狐族天敌法器，被程宗扬缴获"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np061",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np057",
+    "name": "算缗令奏疏（原件）",
+    "description": "从宫中竹筐取出，素绢书写，沾过水，姓名洇墨，上疏人疑似云台书院陈升等。内容为四条新令：禁田、禁奴、算缗（资产税）、告缗（告发分半）。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np062",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np058",
+    "name": "塑料杯（替代品约定）",
+    "description": "冯子都为霍少将军求杯，程宗扬允诺次日送替代品（非原杯），原杯稀少，仅存几只留给建康纨绔。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np064",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np060",
+    "name": "琉璃天樽",
+    "description": "玻璃马桶，实为岳鸟人恶作剧"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np065",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np061",
+    "name": "玉牌",
+    "description": "七枚玉牌，用于寻找岳鸟人遗物"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np066",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np062",
+    "name": "秘卷",
+    "description": "皮卷，记录岳鸟人遗物线索"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np067",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np063",
+    "name": "岳帅手表（刘娥所有）",
+    "description": "伪劳力士手表，表后盖刻‘娥’字，由阮香琳从刘娥处带来，可用作信物。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np068",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np064",
+    "name": "最后一块玉牌（胶西城）",
+    "description": "玉牌刻‘胶西城’，背面有划掉的痕迹，对应缺‘不’字，属于八块玉牌之一。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np069",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np065",
+    "name": "狐裘（吕不疑赠）",
+    "description": "白狐腋下皮制成，价值千金，吕不疑赠定陶王，被程宗扬收走。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np070",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np066",
+    "name": "太后指纹汉白玉栏杆",
+    "description": "含太后及胡夫人指纹的两段栏杆，蔡敬仲从永安宫拆下送来。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np071",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np067",
+    "name": "珊瑚铁刀",
+    "description": "程宗扬购得珊瑚铁刀，并赠予云丹琉。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np086",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np071",
+    "name": "青冥琥珀",
+    "description": "青冥琥珀为天青色，传说是天龙的碧血所化，比龙睛玉还少见。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np091",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np076",
+    "name": "轩辕坟钥匙",
+    "description": "小紫在轩辕坟找到钥匙"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np023",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np022",
+    "name": "盘江程氏股票",
+    "description": "盘江程氏股票每股价值五万金铢，可兑换资产。"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np024",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np023",
+    "name": "龙鳞盾",
+    "description": "龙鳞盾为程宗扬携带的防具。"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np025",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np024",
+    "name": "汽车",
+    "description": "程宗扬在太泉古阵第一层发现并驾驶一辆汽车，使用电能驱动，可日行千里。"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np036",
+    "prevKind": "自动(唯一本家)",
+    "verdict": "keep",
+    "finalId": "lyl.item.np071",
+    "name": "青冥琥珀",
+    "description": "青冥琥珀为天青色，传说是天龙的碧血所化，比龙睛玉还少见。"
+  },
+  {
+    "stage": "lcq.stage_04",
+    "oldId": "lcq.item.np003",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lcq.item.zipper",
+    "name": "拉链",
+    "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np007",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np008",
+    "name": "电击棒（岳帅遗物）",
+    "description": "存放于胶西邸井中白石下瓷缸内，岳帅恶作剧道具，沾水导电以惩罚尝试者。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np031",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np032",
+    "name": "摄像机",
+    "description": "斯明信返回时将此物从袖内取出交还程宗扬。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np041",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np044",
+    "name": "阴阳鱼",
+    "description": "阴阳鱼已融入程宗扬丹田，来自泊陵鱼氏。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np044",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np111",
+    "name": "比目鱼珠",
+    "description": "吕雉用比目鱼珠探查到武穆秘籍位置，并用于追踪。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np048",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np082",
+    "name": "珊瑚铁",
+    "description": "一种复合金属，六朝无法冶炼，密码箱由整块珊瑚铁制成。小紫带走断剑可能含珊瑚铁。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np063",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np087",
+    "name": "手雷",
+    "description": "小紫用手雷炸开大雁塔禁制逃出。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np007",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np008",
+    "name": "电击棒（岳帅遗物）",
+    "description": "存放于胶西邸井中白石下瓷缸内，岳帅恶作剧道具，沾水导电以惩罚尝试者。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np012",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np076",
+    "name": "金属虫蚁箱",
+    "description": "小紫在永安宫精阁获得装有金属虫蚁的铁箱，箱内开启秘境机关的蜘蛛休眠。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np013",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np077",
+    "name": "雪雪",
+    "description": "小紫怀中的白狗名雪雪。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np014",
+    "prevKind": "多本家人工选",
+    "verdict": "split",
+    "finalId": "lyg.item.green_dragon_blade_huaxiong",
+    "name": "青龙偃月刀",
+    "description": "云丹琉使用的长刀，斩杀华雄。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np017",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyg.item.np076",
+    "name": "金属虫蚁箱",
+    "description": "小紫在永安宫精阁获得装有金属虫蚁的铁箱，箱内开启秘境机关的蜘蛛休眠。"
+  },
+  {
+    "stage": "lyl.jiangzhou_retreat",
+    "oldId": "lyl.item.np003",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np048",
+    "name": "钓鱼竿（白龙鱼竿）",
+    "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。"
+  },
+  {
+    "stage": "lyl.lin_an_black_sea",
+    "oldId": "lyl.item.np001",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np004",
+    "name": "龙睛玉",
+    "description": "龙睛玉用于铁傀儡，一块支撑不到二十分钟。"
+  },
+  {
+    "stage": "lyl.lin_an_black_sea",
+    "oldId": "lyl.item.np004",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np068",
+    "name": "都卢难旦妖铃",
+    "description": "小紫用玉瓶装阴魂。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np022",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np021",
+    "name": "赤阳圣果",
+    "description": "赤阳圣果为假货（老萝卜），由徐君房制作。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np036",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np033",
+    "name": "手电筒",
+    "description": "程宗扬从岳鹏举的箱子中分得手电筒，并分配给众人。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np037",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np034",
+    "name": "琉璃天珠",
+    "description": "程宗扬从寒冰中取出琉璃天珠，并暗中保留。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np039",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np036",
+    "name": "阴阳鱼",
+    "description": "程宗扬从鱼无夷处获得，后融入自身丹田，成为其身体一部分，可克制光明观堂净化术。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np046",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np043",
+    "name": "鲛绡",
+    "description": "鲛绡上绣有‘玉堂前殿’字样，与天子寝宫有关"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np051",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np048",
+    "name": "钓鱼竿（白龙鱼竿）",
+    "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np088",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np073",
+    "name": "紫鳞鞭",
+    "description": "小紫的武器，鞭身覆紫鳞，可用于勒杀和收魂。"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np022",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np021",
+    "name": "赤阳圣果",
+    "description": "赤阳圣果为假货（老萝卜），由徐君房制作。"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np033",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np068",
+    "name": "都卢难旦妖铃",
+    "description": "小紫用玉瓶装阴魂。"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np034",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np069",
+    "name": "珊瑚紫蛇",
+    "description": "小紫用龙睛玉和阴魂制成可操控的机械"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np035",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np070",
+    "name": "春药",
+    "description": "小紫用春药破解阮香凝脑中禁制"
+  },
+  {
+    "stage": "lyl.taiquan_expedition",
+    "oldId": "lyl.item.np001",
+    "prevKind": "多本家人工选",
+    "verdict": "keep",
+    "finalId": "lyl.item.np004",
+    "name": "龙睛玉",
+    "description": "龙睛玉用于铁傀儡，一块支撑不到二十分钟。"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np052",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyg.item.economy_sneakers",
+    "name": "经济牌跑鞋",
+    "description": "程宗扬送给祁远一双轻质防滑跑鞋，鞋底有花纹和银箍，祁远非常珍视。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np015",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyg.item.silver_dragon_scale_armor",
+    "name": "银龙鳞甲",
+    "description": "云丹琉用血符将银龙鳞甲解开，显露出胸前肌肤。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np021",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyg.item.silver_dragon_scale_armor",
+    "name": "银龙鳞甲",
+    "description": "云丹琉用血符将银龙鳞甲解开，显露出胸前肌肤。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np022",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyg.item.broken_jade_pendant",
+    "name": "残缺玉佩",
+    "description": "云传峰（云丹琉之父）的随身玉佩，被锯齿刀切过，发现于秘境林中，证明云传峰死于此地。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np027",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyg.item.wumu_manual_swapped",
+    "name": "《武穆秘籍》",
+    "description": "小玲儿在棺中抢走《武穆秘籍》（被掉包为空白本）。"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np075",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyl.item.imperial_seal",
+    "name": "传国玉玺",
+    "description": "刘建从宫中取得传国玉玺，用于矫诏"
+  },
+  {
+    "stage": "lyl.luoyang_coup",
+    "oldId": "lyl.item.np076",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyl.item.tiger_tally",
+    "name": "虎符",
+    "description": "刘建取得虎符，可调兵"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.np032",
+    "prevKind": "新建",
+    "verdict": "keep",
+    "finalId": "lyl.item.iron_rail",
+    "name": "铁轨",
+    "description": "武二郎在熊谷地铁站拆下两根铁轨作为武器，重约二三百斤。"
+  },
+  {
+    "stage": "lcq.stage_04",
+    "oldId": "lcq.item.np007",
+    "prevKind": "暂缓",
+    "verdict": "split",
+    "finalId": "lcq.item.zhulu_snake_pill",
+    "name": "朱箓蛇丹",
+    "description": "云苍峰用于治疗蛇毒"
+  },
+  {
+    "stage": "lyg.changgan_begins",
+    "oldId": "lyg.item.np068",
+    "prevKind": "暂缓",
+    "verdict": "split",
+    "finalId": "lyg.item.six_sense_seal_pill",
+    "name": "六识禁绝丹",
+    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。"
+  },
+  {
+    "stage": "lyg.dingtao_beijing",
+    "oldId": "lyg.item.np016",
+    "prevKind": "暂缓",
+    "verdict": "split",
+    "finalId": "lyg.item.six_sense_seal_pill",
+    "name": "六识禁绝丹",
+    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。"
+  },
+  {
+    "stage": "lyg.mijing_rumen",
+    "oldId": "lyg.item.np025",
+    "prevKind": "暂缓",
+    "verdict": "split",
+    "finalId": "lyg.item.six_sense_seal_pill",
+    "name": "六识禁绝丹",
+    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。"
+  },
+  {
+    "stage": "lcq.stage_02",
+    "oldId": "lcq.item.backpack",
+    "prevKind": "同名异描述",
+    "verdict": "split",
+    "finalId": "lcq.item.backpack_plain",
+    "name": "背包",
+    "description": "程宗扬从现代世界带来的背包。"
+  },
+  {
+    "stage": "lyl.jiangzhou_retreat",
+    "oldId": "liuchao.item.coral_dagger",
+    "prevKind": "同名异描述",
+    "verdict": "split",
+    "finalId": "lyl.item.coral_dagger_from_xiao_yaoyi",
+    "name": "珊瑚匕首",
+    "description": "程宗扬从萧遥逸处获得的武器。"
+  },
+  {
+    "stage": "lyl.lin_an_black_sea",
+    "oldId": "liuchao.item.coral_dagger",
+    "prevKind": "同名异描述",
+    "verdict": "split",
+    "finalId": "lyl.item.coral_dagger_carried",
+    "name": "珊瑚匕首",
+    "description": "锋利异常的匕首，程宗扬随身武器。"
+  },
+  {
+    "stage": "lyl.taiquan_expedition",
+    "oldId": "liuchao.item.coral_dagger",
+    "prevKind": "同名异描述",
+    "verdict": "split",
+    "finalId": "lyl.item.coral_dagger_carried",
+    "name": "珊瑚匕首",
+    "description": "锋利异常的匕首，程宗扬随身武器。"
+  },
+  {
+    "stage": "lyl.taiquan_core_conflict",
+    "oldId": "lyl.item.coral_dagger",
+    "prevKind": "同名异描述",
+    "verdict": "split",
+    "finalId": "lyl.item.coral_dagger_cuts_vine",
+    "name": "珊瑚匕首",
+    "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。"
+  }
+]

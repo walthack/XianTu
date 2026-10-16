@@ -6,11 +6,13 @@ import {loadInputs,buildAppearances,serializeAppearances,auditStoryLinks,expandS
 // 试验都在内存副本上做（structuredClone），不碰仓库里的关卡数据、总表和派生文件。
 const base=loadInputs();
 const copy=()=>structuredClone(base);
-const PEARL='lyg.item.dragon_pearl',ROSTER='lyg.event.mijing_superuser_roster',PRIOR='lyg.event.s02_09';
+const PEARL='lcq.item.nh_baiyi_rice_pearl',STAGE04='lcq.stage_04',ARRIVE='lcq.event.s04_07',PRIOR='lcq.event.s04_02';
 const NINGYU='liuchao.character.ning_yu',RAIN='lcq.event.rainforest_black_shoal',REGICIDE='lcq.event.ningyu_regicide_offer',GAMBLE='lcq.event.gamble_bond_signed';
 const event=(inp,stageId,id)=>inp.stages[stageId].scenario.events.find(e=>e.id===id);
 const fresh=inp=>{inp.appearancesText=serializeAppearances(buildAppearances(inp));return inp;}; // 副本改了数据后，派生文件也按副本重生成
 const pearlEntry=inp=>inp.items.entries.find(e=>e.id===PEARL);
+// 米粒湖珠在仓库里不挂 mustAppear/requires（演示项只做指针）；顺序/换线类用例在内存副本上临时挂一份标注。
+const withStory=inp=>{pearlEntry(inp).story={mustAppear:[{eventId:ARRIVE}],requires:[{eventDone:PRIOR}]};return inp;};
 
 test('1 基线：仓库当前数据零错误零警告，派生文件与重新生成的逐字节一致',()=>{
  const r=auditStoryLinks(base);
@@ -19,28 +21,34 @@ test('1 基线：仓库当前数据零错误零警告，派生文件与重新生
  assert.equal(base.appearancesText,readFileSync(new URL(`../${APPEARANCES_PATH}`,import.meta.url),'utf8'));
 });
 
-test('龙珠是总表里的语义 slug 物品：关卡与代码里没有写死名词，指针只引用 id+数量',()=>{
+test('演示物品是总表里已有的普通贵重品（米粒湖珠）：用现有 id，无效果标签，在对应关卡物品池里；指针只引用 id+数量，不挂 mustAppear/requires',()=>{
  const e=pearlEntry(base);
- assert.equal(e.definition.name,'龙珠');assert.equal(e.definition.storyItem,true);assert.ok(!/np\d+$/.test(e.id));
+ assert.equal(e.definition.name,'米粒湖珠');assert.ok(!e.definition.storyItem,'不是剧情物品，可正常变卖');
+ assert.ok(!e.definition.effectTags&&!e.definition.onUse&&!e.definition.attributeBonus);
+ assert.equal(e.story,undefined);
  const link=base.links.links.find(l=>l.object.id===PEARL);
- assert.deepEqual(Object.keys(link).sort(),['actionId','actor','eventId','id','necessity','object','stageId','verb']);
+ assert.deepEqual(Object.keys(link).sort(),['actor','eventId','id','necessity','object','stageId','verb']);
  assert.deepEqual(link.object,{kind:'item',id:PEARL,quantity:1});
- const refs=Object.values(base.stages).flatMap(m=>m.content.items.map(r=>r.id));
- assert.ok(!refs.includes(PEARL),'没有改任何关卡的物品池');
+ assert.equal(link.necessity,'optional');assert.equal(link.stageId,STAGE04);
+ assert.ok(base.stages[STAGE04].content.items.some(r=>r.id===PEARL),'在该关卡的物品池里');
+ assert.ok(!JSON.stringify(base.links).includes('dragon_pearl')&&!base.appearancesText.includes('dragon_pearl'),'龙珠已撤下试验标注');
+ const dragon=base.items.entries.find(x=>x.id==='lyg.item.dragon_pearl');
+ assert.equal(dragon.deprecated,true);assert.equal(dragon.story,undefined,'弃用条目保留但不再带剧情标注');
 });
 
 test('2 调换顺序：把前置事件挪到被要求事件之后，报顺序违反并指明物品与两个事件',()=>{
- const inp=copy();event(inp,'lyg.mijing_rumen',PRIOR).axisSeq=event(inp,'lyg.mijing_rumen',ROSTER).axisSeq+1;
+ const inp=withStory(copy());event(inp,STAGE04,ARRIVE).conditions=[]; // 本关事件有 flags 依赖链会优先判先后，这里清掉，只看 axisSeq
+ event(inp,STAGE04,PRIOR).axisSeq=event(inp,STAGE04,ARRIVE).axisSeq+1;
  const r=auditStoryLinks(fresh(inp));
  assert.equal(r.errors.length,1,r.errors.join('\n'));
- assert.match(r.errors[0],new RegExp(`物品 ${PEARL}.*顺序违反.*${PRIOR}.*${ROSTER}.*并不在其后`));
+ assert.match(r.errors[0],new RegExp(`物品 ${PEARL}.*顺序违反.*${PRIOR}.*${ARRIVE}.*并不在其后`));
  const chr=copy();event(chr,'lcq.stage_02',GAMBLE).axisSeq=999;
  assert.match(auditStoryLinks(fresh(chr)).errors.join('\n'),new RegExp(`角色 ${NINGYU}.*顺序违反.*${GAMBLE}`));
 });
 
 test('2b flags 依赖链优先于 axisSeq：被要求事件的 conditions 依赖前置事件时判先后正确',()=>{
- const inp=copy();const roster=event(inp,'lyg.mijing_rumen',ROSTER),prior=event(inp,'lyg.mijing_rumen',PRIOR);
- prior.axisSeq=roster.axisSeq+5;roster.conditions=[{path:'flags.event.s02_09.done',operator:'eq',value:true}];
+ const inp=withStory(copy());const arrive=event(inp,STAGE04,ARRIVE),prior=event(inp,STAGE04,PRIOR);
+ prior.axisSeq=arrive.axisSeq+5;arrive.conditions=[{path:'flags.event.s04_02.done',operator:'eq',value:true}];
  assert.deepEqual(auditStoryLinks(fresh(inp)).errors,[]);
 });
 
@@ -64,27 +72,27 @@ test('3b 可选事件（critical:false）不算必经出现的证据；配置放
  assert.deepEqual(auditStoryLinks(fresh(inp)).warnings,[]);
 });
 
-test('4 换线：只改关系（指针与总表 story 标注）把龙珠挪到别的事件，不动总表物品内容，校验仍全绿',()=>{
+test('4 换线：只改关系（指针与总表 story 标注）把米粒湖珠挪到别的事件，不动总表物品内容，校验仍全绿',()=>{
  const inp=copy();const before=JSON.stringify(pearlEntry(inp).definition);
- const other=inp.stages['lyg.mijing_rumen'].scenario.events.find(e=>e.id==='lyg.event.s02_08');
+ const other=inp.stages[STAGE04].scenario.events.find(e=>e.id==='lcq.event.s04_05');
  const link=inp.links.links.find(l=>l.object.id===PEARL);
  link.eventId=other.id;delete link.actionId;
- pearlEntry(inp).story={mustAppear:[{eventId:other.id}],requires:[{eventDone:'lyg.event.s02_06'}]};
+ pearlEntry(inp).story={mustAppear:[{eventId:other.id}],requires:[{eventDone:'lcq.event.s04_01'}]};
  const r=auditStoryLinks(fresh(inp));
  assert.deepEqual(r.errors,[]);assert.deepEqual(r.warnings,[]);
  assert.equal(JSON.stringify(pearlEntry(inp).definition),before);
  assert.deepEqual(r.appearances.entities[`item:${PEARL}`].events.map(x=>x.eventId),[other.id]);
  // 只挪指针不改总表标注 → 标注要求的事件上没有它的登场，警告
- const half=copy();half.links.links.find(l=>l.object.id===PEARL).eventId='lyg.event.s02_08';delete half.links.links.find(l=>l.object.id===PEARL).actionId;
- assert.match(auditStoryLinks(fresh(half)).warnings.join('\n'),new RegExp(`${PEARL}.*${ROSTER}.*没有它的登场`));
+ const half=withStory(copy());half.links.links.find(l=>l.object.id===PEARL).eventId='lcq.event.s04_05';delete half.links.links.find(l=>l.object.id===PEARL).actionId;
+ assert.match(auditStoryLinks(fresh(half)).warnings.join('\n'),new RegExp(`${PEARL}.*${ARRIVE}.*没有它的登场`));
 });
 
 test('5 漂移检测：手改派生文件一行、或关卡数据变了没重新生成，都报过期',()=>{
- const hand=copy();hand.appearancesText=hand.appearancesText.replace('"chapter": 26','"chapter": 27');
+ const hand=copy();hand.appearancesText=hand.appearancesText.replace('"chapter": 57','"chapter": 58');assert.notEqual(hand.appearancesText,base.appearancesText);
  assert.match(auditStoryLinks(hand).errors.join('\n'),/entity-appearances\.json.*过期或被手改.*build-entity-appearances/);
  const stale=copy();event(stale,'lyg.mijing_rumen','lyg.event.s02_08').axisId='yange.19.1';
  assert.equal(auditStoryLinks(stale).errors.length,0,'该事件不涉及被跟踪实体，派生文件不变');
- const moved=copy();event(moved,'lyg.mijing_rumen',ROSTER).axisId='yange.30.1';
+ const moved=copy();event(moved,STAGE04,ARRIVE).axisId='qingyu.58.1';
  assert.match(auditStoryLinks(moved).errors.join('\n'),/过期/);
  const missing=copy();missing.appearancesText=null;
  assert.match(auditStoryLinks(missing).errors.join('\n'),/不存在/);
@@ -99,22 +107,22 @@ test('6 确定性：连生成两次逐字节一致，键与事件顺序稳定',(
 
 test('7 展开查看：把指针还原成可读剧情（章号只展示，事件 id 在括号里）',()=>{
  const text=expandStoryLinks(base);
- assert.match(text,/第 26 章｜冰冰验明超级用户（lyg\.event\.mijing_superuser_roster）：程宗扬 使用 龙珠×1（必须/);
+ assert.match(text,/第 57 章｜白夷族到达（lcq\.event\.s04_07）：程宗扬 获得 米粒湖珠×1（可选/);
  assert.match(text,/凝羽.*必须出现于 第 35 章.*第 37 章.*须先完成 第 21 章/);
  assert.match(text,/锦囊×1（可选/);
 });
 
 test('指针校验：悬空事件/动作/物品/角色、坏词表、数量、重复 id 都有明确报错；多义物品 id 被拦',()=>{
  const inp=copy(),l=inp.links.links[0];
- l.eventId='lyg.event.nope';assert.match(auditStoryLinks(fresh(inp)).errors.join('\n'),/link link\.demo\.dragon_pearl\.use: 事件 lyg\.event\.nope 不在关卡 lyg\.mijing_rumen 里/);
+ l.eventId='lyg.event.nope';assert.match(auditStoryLinks(fresh(inp)).errors.join('\n'),/link link\.demo\.rice_pearl\.obtain: 事件 lyg\.event\.nope 不在关卡 lcq\.stage_04 里/);
  const a=copy();a.links.links[0].actionId='no_such_action';assert.match(auditStoryLinks(fresh(a)).errors.join('\n'),/动作 no_such_action/);
  const b=copy();b.links.links[0].object.id='lyg.item.not_there';assert.match(auditStoryLinks(fresh(b)).errors.join('\n'),/物品 lyg\.item\.not_there 不在道具总表/);
  const c=copy();c.links.links[0].actor='liuchao.character.nobody';assert.match(auditStoryLinks(fresh(c)).errors.join('\n'),/角色 liuchao\.character\.nobody/);
  const d=copy();d.links.links[0].verb='steal';assert.match(auditStoryLinks(fresh(d)).errors.join('\n'),/动词 steal/);
  const e=copy();e.links.links[0].object.quantity=0;assert.match(auditStoryLinks(fresh(e)).errors.join('\n'),/quantity/);
  const f=copy();f.links.links.push({...f.links.links[0]});assert.match(auditStoryLinks(fresh(f)).errors.join('\n'),/指针 id 重复/);
- const g=copy();pearlEntry(g).stageVariants['lyg.mijing_rumen']={...pearlEntry(g).definition,name:'冒牌珠'};
- assert.match(auditStoryLinks(fresh(g)).errors.join('\n'),/多义 id.*variant identity lyg\.item\.dragon_pearl@lyg\.mijing_rumen/);
+ const g=copy();pearlEntry(g).stageVariants[STAGE04]={...pearlEntry(g).definition,name:'冒牌珠'};
+ assert.match(auditStoryLinks(fresh(g)).errors.join('\n'),/多义 id.*variant identity lcq\.item\.nh_baiyi_rice_pearl@lcq\.stage_04/);
 });
 
 test('指针漏标：覆盖范围内关卡的事件里出现物品转移而没有指针，按配置警告；范围外不查',()=>{

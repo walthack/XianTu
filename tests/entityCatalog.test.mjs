@@ -6,7 +6,7 @@ const cat=await loadTs('../src/modules/scenarioMods/entityCatalog.ts');
 const {buildStrictScenarioInitialization}=await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
 const {validateScenarioMod}=await loadTs('../src/modules/scenarioMods/validator.ts');
 test('three master tables have unique ids and all published stages carry only access references',async()=>{
- for(const [kind,total] of [['item',318],['skill',143],['technique',67]]){
+ for(const [kind,total] of [['item',325],['skill',143],['technique',67]]){
   const entries=cat.contentEntries(kind);assert.equal(entries.length,total);assert.equal(new Set(entries.map(e=>e.id)).size,total);
  }
  const access=JSON.parse(await readFile(new URL('../mod-kit/entity-catalog/stage-access.json',import.meta.url),'utf8'));
@@ -18,13 +18,13 @@ test('three master tables have unique ids and all published stages carry only ac
  }
 });
 test('catalog hydration preserves stage-specific definitions without mutation or future-phase fallback',async()=>{
- const entry=cat.contentEntries('item').find(e=>Object.keys(e.stageVariants).length);
- const stageId=Object.keys(entry.stageVariants)[0],ref={manifest:{id:stageId},content:{items:[{id:entry.id}]}};
+ const entry=cat.contentEntries('skill').find(e=>Object.keys(e.stageVariants).length); // 物品的变体已全部拆成独立 id（2026-10-16），水合机制改用仍带变体的技能验证
+ const stageId=Object.keys(entry.stageVariants)[0],ref={manifest:{id:stageId},content:{skills:[{id:entry.id}]}};
  const hydrated=cat.resolveScenarioContent(ref);
- assert.deepEqual(hydrated.content.items[0],entry.stageVariants[stageId]);assert.deepEqual(ref.content.items,[{id:entry.id}]);
- hydrated.content.items[0].name='changed';assert.notEqual(cat.contentName('item',entry.id,stageId),'changed');
+ assert.deepEqual(hydrated.content.skills[0],entry.stageVariants[stageId]);assert.deepEqual(ref.content.skills,[{id:entry.id}]);
+ hydrated.content.skills[0].name='changed';assert.notEqual(cat.contentName('skill',entry.id,stageId),'changed');
  assert.throws(()=>cat.resolveScenarioContent({content:{items:[{id:'unknown'}]}}),/未知/);
- assert.throws(()=>cat.resolveScenarioContent({content:{items:[{id:entry.id,type:'weapon'}]}}),/定义字段/);
+ assert.throws(()=>cat.resolveScenarioContent({content:{skills:[{id:entry.id,type:'weapon'}]}}),/定义字段/);
 });
 test('new strict initialization resolves story-item type and id into the save catalog',async()=>{
  const mod=JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json',import.meta.url),'utf8'));

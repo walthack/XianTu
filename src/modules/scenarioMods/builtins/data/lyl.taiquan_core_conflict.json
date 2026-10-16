@@ -1333,7 +1333,7 @@
           "lyl.technique.np029"
         ],
         "itemIds": [
-          "lyl.item.coral_dagger",
+          "lyl.item.coral_dagger_cuts_vine",
           "lyl.item.np001",
           "lyl.item.np003",
           "lyl.item.np004",
@@ -3527,7 +3527,7 @@
   "content": {
     "items": [
       {
-        "id": "lyl.item.coral_dagger"
+        "id": "lyl.item.coral_dagger_cuts_vine"
       },
       {
         "id": "lyl.item.np001"
@@ -4516,7 +4516,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.coral_dagger",
+        "contentId": "lyl.item.coral_dagger_cuts_vine",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

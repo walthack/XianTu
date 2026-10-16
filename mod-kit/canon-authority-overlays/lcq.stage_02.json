@@ -36,7 +36,7 @@
             "lcq.technique.nine_sun_manual"
           ],
           "itemIds": [
-            "lcq.item.backpack",
+            "lcq.item.backpack_plain",
             "lcq.item.lingerie",
             "lcq.item.vibrator",
             "lcq.item.drug",
@@ -704,7 +704,7 @@
             "lcq.technique.nine_sun_manual"
           ],
           "itemIds": [
-            "lcq.item.backpack",
+            "lcq.item.backpack_plain",
             "lcq.item.lingerie",
             "lcq.item.vibrator",
             "lcq.item.drug",
