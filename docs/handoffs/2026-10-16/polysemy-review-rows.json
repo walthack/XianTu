@@ -706,9 +706,11 @@
     "oldId": "lyg.item.np014",
     "prevKind": "多本家人工选",
     "verdict": "split",
-    "finalId": "lyg.item.green_dragon_blade_huaxiong",
+    "finalId": "liuchao.item.green_dragon_sword",
     "name": "青龙偃月刀",
-    "description": "云丹琉使用的长刀，斩杀华雄。"
+    "description": "云丹琉使用的长刀，斩杀华雄。",
+    "splitId": "lyg.item.green_dragon_blade_huaxiong",
+    "unifiedDescription": "云丹琉的家传兵器"
   },
   {
     "stage": "lyg.mijing_rumen",
@@ -931,36 +933,40 @@
     "oldId": "lcq.item.np007",
     "prevKind": "暂缓",
     "verdict": "split",
-    "finalId": "lcq.item.zhulu_snake_pill",
+    "finalId": "lcq.item.np013",
     "name": "朱箓蛇丹",
-    "description": "云苍峰用于治疗蛇毒"
+    "description": "云苍峰用于治疗蛇毒",
+    "splitId": "lcq.item.zhulu_snake_pill"
   },
   {
     "stage": "lyg.changgan_begins",
     "oldId": "lyg.item.np068",
     "prevKind": "暂缓",
     "verdict": "split",
-    "finalId": "lyg.item.six_sense_seal_pill",
+    "finalId": "lyg.item.np071",
     "name": "六识禁绝丹",
-    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。"
+    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
+    "splitId": "lyg.item.six_sense_seal_pill"
   },
   {
     "stage": "lyg.dingtao_beijing",
     "oldId": "lyg.item.np016",
     "prevKind": "暂缓",
     "verdict": "split",
-    "finalId": "lyg.item.six_sense_seal_pill",
+    "finalId": "lyg.item.np071",
     "name": "六识禁绝丹",
-    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。"
+    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
+    "splitId": "lyg.item.six_sense_seal_pill"
   },
   {
     "stage": "lyg.mijing_rumen",
     "oldId": "lyg.item.np025",
     "prevKind": "暂缓",
     "verdict": "split",
-    "finalId": "lyg.item.six_sense_seal_pill",
+    "finalId": "lyg.item.np071",
     "name": "六识禁绝丹",
-    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。"
+    "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
+    "splitId": "lyg.item.six_sense_seal_pill"
   },
   {
     "stage": "lcq.stage_02",
@@ -976,35 +982,43 @@
     "oldId": "liuchao.item.coral_dagger",
     "prevKind": "同名异描述",
     "verdict": "split",
-    "finalId": "lyl.item.coral_dagger_from_xiao_yaoyi",
+    "finalId": "liuchao.item.coral_dagger",
     "name": "珊瑚匕首",
-    "description": "程宗扬从萧遥逸处获得的武器。"
+    "description": "程宗扬从萧遥逸处获得的武器。",
+    "splitId": "lyl.item.coral_dagger_from_xiao_yaoyi",
+    "unifiedDescription": "锋利异常的珊瑚铁匕首，能斩断赤阳藤等坚韧物体"
   },
   {
     "stage": "lyl.lin_an_black_sea",
     "oldId": "liuchao.item.coral_dagger",
     "prevKind": "同名异描述",
     "verdict": "split",
-    "finalId": "lyl.item.coral_dagger_carried",
+    "finalId": "liuchao.item.coral_dagger",
     "name": "珊瑚匕首",
-    "description": "锋利异常的匕首，程宗扬随身武器。"
+    "description": "锋利异常的匕首，程宗扬随身武器。",
+    "splitId": "lyl.item.coral_dagger_carried",
+    "unifiedDescription": "锋利异常的珊瑚铁匕首，能斩断赤阳藤等坚韧物体"
   },
   {
     "stage": "lyl.taiquan_expedition",
     "oldId": "liuchao.item.coral_dagger",
     "prevKind": "同名异描述",
     "verdict": "split",
-    "finalId": "lyl.item.coral_dagger_carried",
+    "finalId": "liuchao.item.coral_dagger",
     "name": "珊瑚匕首",
-    "description": "锋利异常的匕首，程宗扬随身武器。"
+    "description": "锋利异常的匕首，程宗扬随身武器。",
+    "splitId": "lyl.item.coral_dagger_carried",
+    "unifiedDescription": "锋利异常的珊瑚铁匕首，能斩断赤阳藤等坚韧物体"
   },
   {
     "stage": "lyl.taiquan_core_conflict",
     "oldId": "lyl.item.coral_dagger",
     "prevKind": "同名异描述",
     "verdict": "split",
-    "finalId": "lyl.item.coral_dagger_cuts_vine",
+    "finalId": "liuchao.item.coral_dagger",
     "name": "珊瑚匕首",
-    "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。"
+    "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。",
+    "splitId": "lyl.item.coral_dagger_cuts_vine",
+    "unifiedDescription": "锋利异常的珊瑚铁匕首，能斩断赤阳藤等坚韧物体"
   }
 ]

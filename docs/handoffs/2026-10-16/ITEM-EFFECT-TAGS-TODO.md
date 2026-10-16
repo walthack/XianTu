@@ -26,17 +26,17 @@
 
 > 注：用户任务里写的 `bandage` 是**变体名**，物品上对应的标签是 `hemostatic` / `splint`。
 
-## 已有标签的物品（7 条，仅供对照）
+## 已有标签的物品（5 条，仅供对照）
+
+> 2026-10-16 17:20：同文字的 `lcq.item.np016` 已并入 `lcq.item.np013`（原 7 条 → 6 条）；第四轮（用户裁定）假死药 `lyl.item.np056` 并入 `lyl.item.np053`（6 条 → 5 条，标签 sedative + `unconscious` 沿用 np053，无新增）。
 
 | id | 名称 | 类型 | 现有标签 | onUse |
 |---|---|---|---|---|
 | `lcq.item.np013` | 朱箓蛇丹 | consumable | antidote | — |
-| `lcq.item.np016` | 朱箓蛇丹 | consumable | antidote | — |
 | `lyg.item.np049` | 驱毒丸（改良版） | consumable | antidote | — |
 | `lyg.item.np071` | 六识禁绝丹 | consumable | sedative | 5 项感官状态 + `mind.confused` |
 | `lyg.item.np092` | 六拂化清散 | consumable | poison | `poisoned` ×1 |
 | `lyl.item.np053` | 假死药 | consumable | sedative | `unconscious` |
-| `lyl.item.np056` | 假死药 | consumable | sedative | `unconscious` |
 
 ## 候选（按物品类型）
 
@@ -59,7 +59,7 @@ consumable 里其余条目（紫水晶戒指、电击棒、传送石、遗信、
 
 | id | 名称 | 现有标签 | 候选标签 | 置信 | 依据 / 备注 |
 |---|---|---|---|---|---|
-| `lyg.item.np030`、`lyg.item.np031` | 赤阳圣果 | 无 | heal | 中 | 「卢景拒绝服用以疗伤，称其可救命」；原文没写效果机理。`np031` 在 `lyg.changgan_begins` 变体里叫「摄像机」（见下「id 复用」） |
+| `lyg.item.np031`（`np030` 已于第四轮并入） | 赤阳圣果 | 无 | heal | 中 | 「卢景拒绝服用以疗伤，称其可救命」；原文没写效果机理。`np031` 在 `lyg.changgan_begins` 变体里叫「摄像机」（见下「id 复用」） |
 | `lyl.item.np021` | 赤阳圣果（假货，老萝卜） | 无 | **不标** | — | 描述写明是假货 |
 | `liuchao.item.ghost_fang` | 鬼牙 | 无 | poison | 低 | 「与寒毒有关」；状态目录有 `poison.cold`（寒毒）/ `poison.cold.suppressed`，但鬼牙是否能用来下毒、挂哪个，描述不够，需设定 |
 | `lcq.item.nh_realgar_sachet` | 雄黄避蛊香囊 | 无 | 无合适标签 | 低 | 防蛊/避蛊，状态目录里没有防蛊类状态 |
@@ -89,13 +89,13 @@ armor（7 条）：无候选。
 
 | id | 名称 | 类型 |
 |---|---|---|
-| `lcq.item.np005`、`lcq.item.np006` | 麻古 | consumable |
+| `lcq.item.np006`（`lcq.item.np005` 已于 2026-10-16 17:20 并入） | 麻古 | consumable |
 | `lcq.item.drug` | 摇头丸 | other |
 | `lyg.item.np026` | 慎恤胶 | consumable |
 | `lyg.item.np065` | 薄荷油伪称催情露 | other |
 | `lyl.item.np015` | 药丸（殇侯制） | consumable |
-| `lyl.item.np070`、`lyl.item.np085` | 春药 | consumable |
-| `lyl.item.np082`、`lyl.item.np097` | 仙草叶片（催情作用） | other |
+| `lyl.item.np070`（`np085` 已于第四轮并入） | 春药 | consumable |
+| `lyl.item.np097`（`np082` 已于第四轮并入） | 仙草叶片（催情作用） | other |
 
 ## 需要用户裁定 / 注意
 

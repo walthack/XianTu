@@ -1,6 +1,6 @@
 # 内容为空的道具清单（只列不补）
 
-日期 2026-10-16。数据来源：`mod-kit/entity-catalog/items.json`（多义 id 拆分后，共 325 条，**含白湖/龙珠 demo 条目**：`lyg.item.dragon_pearl`（**已弃用**，2026-10-16 用户裁定龙珠不是实际道具、只是举例；条目保留待裁定去留）、`lcq.item.demo_short_knife`，已在备注栏标注）。
+日期 2026-10-16。数据来源：`mod-kit/entity-catalog/items.json`（多义 id 拆分、同文字合并后，共 279 条，**含白湖 demo 条目** `lcq.item.demo_short_knife`，已在备注栏标注；`lyg.item.dragon_pearl`（龙珠）已按 2026-10-16 17:20 用户裁定清掉；点名四组之外 31 组名称+描述逐字相同的 id 对已按用户后续裁定合并，见 `POLYSEMY-SPLIT-MAP.md` 第四轮）。
 **这份只是清单：没有改任何道具、没有补任何效果标签，也没有动任何合规标记内容（effectTags / onUse）。**
 
 ## 判定口径
@@ -15,18 +15,18 @@
 
 | 项 | 数量 |
 |---|---|
-| 总表条目 | 325 |
+| 总表条目 | 279 |
 | **无说明** | **0** |
-| **无效果标签**（无 effectTags 且无 onUse） | **318**（有标签的 7 条） |
+| **无效果标签**（无 effectTags 且无 onUse） | **274**（有标签的 5 条） |
 | 两者都缺 | 0 |
-| 无效果标签中：本轮新建 / 上一轮新建 | 7 / 7（新建 id 按裁定一律不带标签） |
-| 无效果标签按类型 | other 140 / material 74 / consumable 50 / weapon 46 / armor 8 |
+| 无效果标签中：本轮新建 / 上一轮新建 | 1 / 7（新建 id 按裁定一律不带标签；原本轮新建的 7 个里 6 个已并回本家） |
+| 无效果标签按类型 | other 120 / material 69 / consumable 41 / weapon 37 / armor 7 |
 
 ## 一、无说明（0 条）
 
 无。总表每一条都有 description。
 
-## 二、无效果标签（318 条）
+## 二、无效果标签（274 条）
 
 | id | 名称 | 类型 | 出现关卡 | 是否新建 | 备注 |
 |---|---|---|---|---|---|
@@ -98,11 +98,7 @@
 | `lcq.item.nh_wild_fruit` | 野果 | consumable | lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b | 否 |  |
 | `lcq.item.nh_wild_honey` | 竹筒野蜂蜜 | consumable | lcq.stage_03b_snake_flower_bridge | 否 |  |
 | `lcq.item.nh_yinzhu_silk` | 阴蛛蛛丝 | material | lcq.stage_04b_lingfei_baiyi_crisis | 否 |  |
-| `lcq.item.np001` | 拉链 | other | lcq.stage_02 | 否 |  |
-| `lcq.item.np002` | 拉链 | other | lcq.stage_01、lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
-| `lcq.item.np003` | 按摩棒 | other | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
-| `lcq.item.np004` | 按摩棒 | other | lcq.stage_04 | 否 |  |
-| `lcq.item.np005` | 麻古 | consumable | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
+| `lcq.item.np003` | 按摩棒 | other | lcq.stage_03b_snake_flower_bridge、lcq.stage_04、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
 | `lcq.item.np006` | 麻古 | consumable | lcq.stage_03b_snake_flower_bridge、lcq.stage_04、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
 | `lcq.item.np007` | 龙睛玉 | material | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
 | `lcq.item.np008` | 遥控器 | other | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
@@ -117,10 +113,10 @@
 | `lcq.item.s05b_spiral_needle` | 螺旋长针 | other | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
 | `lcq.item.vibrator` | 按摩棒 | other | lcq.stage_02 | 否 |  |
 | `lcq.item.xieyi_ashes` | 谢艺骨灰 | other | lcq.stage_05b、lcq.stage_07_qingyuan_jiankang | 否 |  |
-| `liuchao.item.coral_dagger` | 珊瑚匕首 | weapon | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
+| `liuchao.item.coral_dagger` | 珊瑚匕首 | weapon | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar、lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame、lyl.han_palace_endgame、lyl.jiangzhou_retreat、lyl.lin_an_black_sea、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_expedition、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `liuchao.item.electric_rod` | 电击棒（岳帅遗物） | weapon | lyg.mijing_rumen | 否 |  |
 | `liuchao.item.ghost_fang` | 鬼牙 | other | lyl.lin_an_black_sea、lyl.taiquan_expedition | 否 |  |
-| `liuchao.item.green_dragon_sword` | 青龙偃月刀 | weapon | lyg.mijing_rumen | 否 |  |
+| `liuchao.item.green_dragon_sword` | 青龙偃月刀 | weapon | lyg.dingtao_beijing、lyg.mijing_rumen | 否 |  |
 | `liuchao.item.gui_yu_sword` | 鬼羽剑 | weapon | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
 | `liuchao.item.long_jing_yu` | 龙睛玉 | material | lcq.stage_04 | 否 |  |
 | `liuchao.item.moon_crescent_knife` | 月牙弯刀 | weapon | lcq.stage_03b_snake_flower_bridge、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
@@ -143,44 +139,36 @@
 | `lyg.item.flashlight` | 手电筒 | other | lyg.changgan_begins | 否 |  |
 | `lyg.item.fubutsu_honmaru_hilt` | 布都御魂剑柄 | weapon | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.handgun` | 手枪 | weapon | lyg.changgan_begins | 否 |  |
-| `lyg.item.np001` | 皇后印玺 | weapon | lyg.changgan_begins、lyg.dingtao_beijing | 否 |  |
-| `lyg.item.np002` | 皇后印玺 | weapon | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np002` | 皇后印玺 | weapon | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np003` | 成光魂丹 | weapon | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np006` | 舞阳侯爵位 | other | lyg.changgan_begins、lyg.dingtao_beijing | 否 |  |
-| `lyg.item.np007` | 舞阳侯爵位 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np007` | 舞阳侯爵位 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np008` | 电击棒（岳帅遗物） | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np009` | 鹿皮书写提示 | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np010` | 白石刻字 | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np011` | 八块羊脂玉牌（岳帅信物） | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np012` | 白色长条石（传送石） | consumable | lyg.changgan_begins、lyg.mijing_rumen | 否 |  |
-| `lyg.item.np013` | 白色长条石（传送石） | consumable | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np013` | 白色长条石（传送石） | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np014` | 电击棒 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np015` | 白石/岳鹏举画押石 | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np016` | 武穆秘籍 | other | lyg.changgan_begins | 否 |  |
-| `lyg.item.np017` | 武穆秘籍 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np017` | 武穆秘籍 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np018` | 岳鹏举遗信 | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np019` | 天策令 | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np020` | 沉香 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np021` | 纸符 | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np022` | 美人名单 | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np023` | 舞阳侯封地 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np024` | 同心结（情趣用品） | other | lyg.changgan_begins | 否 |  |
-| `lyg.item.np025` | 同心结（情趣用品） | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np025` | 同心结（情趣用品） | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np026` | 慎恤胶 | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np027` | 舞都房地产开发计划 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np030` | 赤阳圣果 | other | lyg.changgan_begins | 否 |  |
-| `lyg.item.np031` | 赤阳圣果 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np031` | 赤阳圣果 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np032` | 摄像机 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np034` | 手电筒 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np035` | 鸦王座（钢轨模具相关？） | other | lyg.changgan_begins | 否 |  |
 | `lyg.item.np036` | 赤兔马 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np037` | 可乐饮料 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np038` | 鸦王座（钢轨模具相关？） | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np038` | 鸦王座（钢轨模具相关？） | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np039` | 宣平坊程宅位置 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np040` | 魂丹（泉玉姬） | consumable | lyg.changgan_begins | 否 |  |
 | `lyg.item.np041` | 霓龙丝衣 | armor | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np042` | 仙斛 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np043` | 魂丹（泉玉姬） | consumable | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np043` | 魂丹（泉玉姬） | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np044` | 阴阳鱼 | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np045` | 禁音符 | consumable | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np046` | 太阳能电池板（疑似） | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
@@ -191,24 +179,18 @@
 | `lyg.item.np052` | 皇图天策府令箭 | consumable | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np053` | 南霁云 | consumable | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np054` | 水晶念珠 | consumable | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np055` | 金属虫蚁箱 | material | lyg.changgan_begins | 否 |  |
-| `lyg.item.np056` | 雪雪 | other | lyg.changgan_begins | 否 |  |
-| `lyg.item.np058` | 机械螃蟹 | other | lyg.changgan_begins | 否 |  |
-| `lyg.item.np061` | 断剑 | weapon | lyg.changgan_begins | 否 |  |
-| `lyg.item.np062` | 铸铁炸弹 | material | lyg.changgan_begins | 否 |  |
 | `lyg.item.np063` | 琉璃天珠 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np065` | 薄荷油伪称催情露 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np066` | 珊瑚匕首 | weapon | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np068` | 布都御魂 | weapon | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np069` | 蹶张弩（大慈恩寺收藏） | weapon | lyg.changgan_begins | 否 |  |
 | `lyg.item.np070` | 皇后之宝 | material | lyg.changgan_begins | 否 |  |
 | `lyg.item.np073` | 无线充电灯泡（水晶灯） | consumable | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np076` | 金属虫蚁箱 | material | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np077` | 雪雪 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np079` | 机械螃蟹 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np076` | 金属虫蚁箱 | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.mijing_rumen、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np077` | 雪雪 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.dingtao_beijing、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np079` | 机械螃蟹 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np082` | 珊瑚铁 | weapon | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np083` | 断剑 | weapon | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
-| `lyg.item.np084` | 铸铁炸弹 | material | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np083` | 断剑 | weapon | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
+| `lyg.item.np084` | 铸铁炸弹 | material | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np085` | 贝叶经 | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np086` | 金塔（七层浮屠） | other | lyg.buddhist_conspiracy、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
 | `lyg.item.np087` | 手雷 | other | lyg.buddhist_conspiracy、lyg.changgan_begins、lyg.changgan_interlude、lyg.ganlu_aftershock、lyg.han_succession、lyg.liangzhou_league、lyg.shituolin_endgame | 否 |  |
@@ -243,13 +225,8 @@
 | `lyg.item.broken_jade_pendant` | 残缺玉佩 | weapon | lyg.mijing_rumen | 上一轮新建 |  |
 | `lyg.item.wumu_manual_swapped` | 《武穆秘籍》 | other | lyg.mijing_rumen | 上一轮新建 |  |
 | `lyg.item.economy_sneakers` | 经济牌跑鞋 | other | lyg.changgan_begins | 上一轮新建 |  |
-| `lyg.item.dragon_pearl` | 龙珠 | other | （无关卡引用） | 否 | **已弃用**（deprecated:true）：龙珠 demo（白湖，无关卡引用）；2026-10-16 起不再挂 story 标注、story-links 与派生索引也已撤下；去留待用户裁定 |
-| `lyg.item.green_dragon_blade_huaxiong` | 青龙偃月刀 | weapon | lyg.dingtao_beijing | **本轮新建** |  |
-| `lyg.item.six_sense_seal_pill` | 六识禁绝丹 | consumable | lyg.changgan_begins、lyg.dingtao_beijing、lyg.mijing_rumen | **本轮新建** |  |
-| `lyl.item.coral_dagger` | 珊瑚匕首 | weapon | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.fishing_rod` | 白龙鱼竿 | weapon | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np001` | 鬼牙 | other | lyl.han_palace_endgame、lyl.jiangzhou_retreat、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np002` | 钓鱼竿（白龙鱼竿） | other | lyl.lin_an_black_sea、lyl.taiquan_expedition | 否 |  |
 | `lyl.item.np003` | 屠龙刀 | weapon | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np004` | 龙睛玉 | material | lyl.han_palace_endgame、lyl.lin_an_black_sea、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_expedition、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np005` | 金瓶梅 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
@@ -266,31 +243,25 @@
 | `lyl.item.np022` | 盘江程氏股票 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np023` | 龙鳞盾 | armor | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np024` | 汽车 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np025` | 岳鹏举钥匙 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np026` | 岳鹏举钥匙 | other | lyl.luoyang_coup、lyl.taiquan_core_conflict | 否 |  |
-| `lyl.item.np027` | 珊瑚匕首 | weapon | lyl.luoyang_coup | 否 |  |
+| `lyl.item.np025` | 岳鹏举钥匙 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np028` | 雷射刀（已损毁） | weapon | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np029` | 旧摄像机 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np030` | 钓鱼竿（白龙鱼竿） | other | lyl.taiquan_core_conflict | 否 |  |
 | `lyl.item.np031` | 雷射刀 | weapon | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np032` | 铁箱 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np033` | 手电筒 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np034` | 琉璃天珠 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np035` | 禁魂鬼偶 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np036` | 阴阳鱼 | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np037` | 蛋屋 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np037` | 蛋屋 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np038` | 电锯 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np039` | 摄像机 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np040` | 蛋屋 | other | lyl.luoyang_coup | 否 |  |
+| `lyl.item.np039` | 摄像机 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np041` | 官印 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np042` | 摄像机 | other | lyl.luoyang_coup | 否 |  |
 | `lyl.item.np043` | 鲛绡 | armor | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np044` | 纸钞 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np045` | 琥珀 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np046` | 鲛帕 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np046` | 鲛帕 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np047` | 奴隶烙印 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np048` | 钓鱼竿（白龙鱼竿） | other | lyl.han_palace_endgame、lyl.jiangzhou_retreat、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np049` | 鲛帕 | material | lyl.luoyang_coup | 否 |  |
+| `lyl.item.np048` | 钓鱼竿（白龙鱼竿） | other | lyl.han_palace_endgame、lyl.jiangzhou_retreat、lyl.lin_an_black_sea、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_expedition、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np050` | 求子仙符（假） | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np051` | 太阳能板 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np054` | 幽海螺 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
@@ -304,47 +275,32 @@
 | `lyl.item.np065` | 狐裘（吕不疑赠） | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np066` | 太后指纹汉白玉栏杆 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np067` | 珊瑚铁刀 | weapon | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np068` | 都卢难旦妖铃 | material | lyl.han_palace_endgame、lyl.lin_an_black_sea、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np069` | 珊瑚紫蛇 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np070` | 春药 | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np068` | 都卢难旦妖铃 | material | lyl.han_palace_endgame、lyl.lin_an_black_sea、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np069` | 珊瑚紫蛇 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np070` | 春药 | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np071` | 青冥琥珀 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_core_conflict、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np073` | 紫鳞鞭 | weapon | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np074` | 白雉 | other | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np075` | 雪雪（三头魔犬） | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np075` | 雪雪（三头魔犬） | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np076` | 轩辕坟钥匙 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np078` | 五灵石 | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np079` | 胡夫人借据（十万金铢） | other | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np080` | 太泉古阵物品 | armor | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np081` | 陶氏十七万取款凭证（白鹿皮） | consumable | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np082` | 仙草叶片（催情作用） | consumable | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np083` | 都卢难旦妖铃 | material | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np084` | 珊瑚紫蛇 | material | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np085` | 春药 | consumable | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np086` | 白雉 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np078` | 五灵石 | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np080` | 太泉古阵物品 | armor | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np086` | 白雉 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np087` | 电子显微镜 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np088` | 石见之王 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np089` | 三条秀子 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np090` | 雪雪（三头魔犬） | other | lyl.luoyang_coup | 否 |  |
 | `lyl.item.np091` | 羽林天军腰牌 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np092` | 软晶玉杯 | material | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np093` | 五灵石 | consumable | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np094` | 黄泉蝶变 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np095` | 太泉古阵物品 | armor | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np096` | 陶氏十七万取款凭证（白鹿皮） | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np097` | 仙草叶片（催情作用） | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
-| `lyl.item.np099` | 黄泉蝶变 | other | lyl.luoyang_coup | 否 |  |
-| `lyl.item.np101` | 胡夫人借据（十万金铢） | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np094` | 黄泉蝶变 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np096` | 陶氏十七万取款凭证（白鹿皮） | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np097` | 仙草叶片（催情作用） | consumable | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
+| `lyl.item.np101` | 胡夫人借据（十万金铢） | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.luoyang_coup、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.np102` | 左武军产业 | other | lyl.luoyang_coup | 否 |  |
 | `lyl.item.np103` | 龙牙锥 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.xuexue` | 雪雪 | other | lyl.han_palace_endgame、lyl.lin_an_bridge、lyl.luoyang_cloud_secret、lyl.taiquan_afterfall、lyl.taiquan_sacred_fruit、lyl.xiaoyingzhou_blacksea_trap | 否 |  |
 | `lyl.item.iron_rail` | 铁轨 | material | lyl.taiquan_core_conflict | 上一轮新建 |  |
 | `lyl.item.imperial_seal` | 传国玉玺 | material | lyl.luoyang_coup | 上一轮新建 |  |
 | `lyl.item.tiger_tally` | 虎符 | consumable | lyl.luoyang_coup | 上一轮新建 |  |
-| `lyl.item.coral_dagger_from_xiao_yaoyi` | 珊瑚匕首 | weapon | lyl.jiangzhou_retreat | **本轮新建** |  |
-| `lyl.item.coral_dagger_carried` | 珊瑚匕首 | weapon | lyl.lin_an_black_sea、lyl.taiquan_expedition | **本轮新建** |  |
-| `lyl.item.coral_dagger_cuts_vine` | 珊瑚匕首 | weapon | lyl.taiquan_core_conflict | **本轮新建** |  |
-| `lcq.item.zipper` | 拉链 | other | lcq.stage_02、lcq.stage_04 | 否 |  |
+| `lcq.item.zipper` | 拉链 | other | lcq.stage_01、lcq.stage_02、lcq.stage_03b_snake_flower_bridge、lcq.stage_04、lcq.stage_04b_lingfei_baiyi_crisis、lcq.stage_05b、lcq.stage_07_qingyuan_jiankang、lcq.stage_08_jiankang_coup、lcq.stage_09_trade_and_escape、lcq.stage_10_jiangzhou_shadow_war、lcq.stage_11_lieshan_battle、lcq.stage_12_jiangzhou_counterwar | 否 |  |
 | `lcq.item.ajiman_bond` | 阿姬曼身契 | other | lcq.stage_02 | 否 |  |
 | `lcq.item.biling_algae_sample` | 霓龙丝（伪） | other | lcq.stage_04b_lingfei_baiyi_crisis | 否 |  |
-| `lcq.item.zhulu_snake_pill` | 朱箓蛇丹 | consumable | lcq.stage_04 | **本轮新建** |  |
 | `lcq.item.backpack_plain` | 背包 | other | lcq.stage_02 | **本轮新建** |  |

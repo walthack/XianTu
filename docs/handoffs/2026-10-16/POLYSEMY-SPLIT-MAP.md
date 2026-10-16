@@ -291,6 +291,8 @@
 
 ## 待用户裁定
 
+> 2026-10-16 17:20 用户已裁定其中 1–4 项（见文末「第三轮」）：1、2、3 按「文字相同才合并」处理，4 的四组已逐组复核合并。下面保留裁定前的原文。
+
 脚本自动检测的「仅标点差异」「同名但另有逐字一致目标」均为 0 行。以下是我拿不准、但已按「文字不一致即拆」或用户明确指令处理的点，**不要当作已批准**：
 
 1. **无标签独立 id 与带标签本家名称+描述逐字相同（4 行，2 个新 id）**
@@ -301,3 +303,131 @@
 3. **珊瑚匕首家族**：现有 `liuchao.item.coral_dagger`、`lyl.item.coral_dagger`、`lyg.item.np066`、`lyl.item.np027` 加上本轮拆出的 3 个（`lyl.item.coral_dagger_from_xiao_yaoyi`、`coral_dagger_carried`、`coral_dagger_cuts_vine`），同名「珊瑚匕首」共 7 个 id、描述各不相同。其中 `coral_dagger_cuts_vine`「一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体」与 `lyl.item.np027`「珊瑚匕首锋利无比，能斩断赤阳藤」语义几乎一样、只是文字不同。按严格口径都独立；哪些其实是同一把待裁。
 4. **预存的同名多 id（非本轮造成，未动）**：`lcq.item.np001` 与 `lcq.item.zipper`「拉链」（lcq.stage_02）、`lcq.item.np005` 与 `np006`「麻古」、`np013` 与 `np016`「朱箓蛇丹」（lcq 多个关卡）、另有不在同一关卡的 `lyg.item.np016` 与 `np017`「武穆秘籍」（描述也逐字相同）。这是「一个东西多个 id」的反向问题，是否合并待裁。
 5. 仅供记录：`lyg.item.wumu_manual_swapped`「《武穆秘籍》」与 `np016/np017`「武穆秘籍」只差书名号，已按用户明确指示保持独立。
+
+---
+
+# 第三轮：文字相同才合并（2026-10-16 17:20 用户裁定）
+
+由 `scripts/merge-same-text-item-ids-v3.mjs` 执行（一次性迁移，已执行，保留作审计；备份在 `_newbot_tmp/backup-1016j/`）。台账 `polysemy-review-rows.json` 里被并走的 9 行已把 `finalId` 改成并入后的 id（`splitId` 记原先拆出的 id；珊瑚匕首/青龙偃月刀行另带 `unifiedDescription`）。
+
+规则：**名称+描述逐字相同才合并，文字不同才拆；「不唯一」不是合并理由。** 合并脚本对「按文字相同」的并入逐字核对名称、描述与除标签外的其它字段，不一致即报错停下；并入不新增标签（`np071` 沿用 sedative + 6 项 onUse，`np013` 沿用 antidote）。总表 325 → 311（并入 13 个、清掉龙珠 1 个）。
+
+## 并入清单（13 个 id → 本家）
+
+| 被并走的 id | 并入 | 名称 | 原先被这些关卡引用 |
+|---|---|---|---|
+| `lyg.item.six_sense_seal_pill` | `lyg.item.np071` | 六识禁绝丹 | lyg.changgan_begins、lyg.dingtao_beijing、lyg.mijing_rumen |
+| `lcq.item.zhulu_snake_pill` | `lcq.item.np013` | 朱箓蛇丹 | lcq.stage_04 |
+| `lcq.item.np016` | `lcq.item.np013` | 朱箓蛇丹 | lcq.stage_03b…stage_12 共 9 关（这 9 关原本 np013、np016 同时引用） |
+| `lcq.item.np001` | `lcq.item.zipper` | 拉链 | lcq.stage_02（该关原本 np001 与 zipper 同时在物品池里） |
+| `lcq.item.np005` | `lcq.item.np006` | 麻古 | lcq.stage_03b…stage_12 共 9 关（均已同时引用 np006） |
+| `lyg.item.np016` | `lyg.item.np017` | 武穆秘籍 | lyg.changgan_begins |
+| `lyg.item.green_dragon_blade_huaxiong` | `liuchao.item.green_dragon_sword` | 青龙偃月刀 | lyg.dingtao_beijing |
+| `lyg.item.np066` | `liuchao.item.coral_dagger` | 珊瑚匕首 | lyg.buddhist_conspiracy 等 6 关 |
+| `lyl.item.coral_dagger` | `liuchao.item.coral_dagger` | 珊瑚匕首 | lyl.han_palace_endgame 等 6 关 |
+| `lyl.item.np027` | `liuchao.item.coral_dagger` | 珊瑚匕首 | lyl.luoyang_coup |
+| `lyl.item.coral_dagger_from_xiao_yaoyi` | `liuchao.item.coral_dagger` | 珊瑚匕首 | lyl.jiangzhou_retreat |
+| `lyl.item.coral_dagger_carried` | `liuchao.item.coral_dagger` | 珊瑚匕首 | lyl.lin_an_black_sea、lyl.taiquan_expedition |
+| `lyl.item.coral_dagger_cuts_vine` | `liuchao.item.coral_dagger` | 珊瑚匕首 | lyl.taiquan_core_conflict |
+
+另：`lyg.item.dragon_pearl`（龙珠）条目直接清掉，不留弃用标记；story-links、entity-appearances、测试里无残留。
+
+## 四组预存同名多 id 逐组复核
+
+| 组 | 成员（名称｜描述） | 结论 |
+|---|---|---|
+| 拉链 | `lcq.item.np001`、`lcq.item.zipper`：「拉链｜程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。」逐字相同，type/grade 也相同 | 合并，保留 `lcq.item.zipper`（运行时 `fixedInventoryContracts.ts` 的 `ZIPPER_ITEM_ID` 即此 id） |
+| 麻古 | `lcq.item.np005`、`np006`：「麻古｜段强留下的催情药，被程宗扬用于凝羽」逐字相同 | 合并，保留 `np006`（被引用关卡更多）。合规内容只合并，不改字、不加标签 |
+| 朱箓蛇丹 | `lcq.item.np013`、`np016`：「朱箓蛇丹｜云苍峰用于治疗蛇毒」逐字相同，两者都是 antidote | 合并，保留 `np013`（两者引用的关卡完全相同，取小号）。`lcq.item.np016` 与 `lyg.item.np016` 是两本书里两个不同的 id，互不相干 |
+| 武穆秘籍 | `lyg.item.np016`、`np017`：「武穆秘籍｜实为玄妙子所著灵魂功法，被岳鹏举撕去封面改名为武穆秘籍，内页有批注。」逐字相同 | 合并，保留 `np017`（6 关引用，np016 仅 1 关）。`lyg.item.wumu_manual_swapped`「《武穆秘籍》」名称带书名号、描述不同，保持独立 |
+
+## 青龙偃月刀与珊瑚匕首
+
+- 青龙偃月刀两个 id：`liuchao.item.green_dragon_sword`（普通版，描述改为「云丹琉的家传兵器」，华雄那条并入；类型/品阶/属性加成不变：weapon／中品／气血上限+30、根骨+4）、`liuchao.item.qinglong_saber`（珊瑚铁强化版，「云丹琉使用的长刀，由珊瑚铁强化过。」，未动）。
+- 珊瑚匕首：主 id 取 `liuchao.item.coral_dagger`（liuchao 是跨书系前缀，原先就被 9 个 lcq 关引用，合并后 lcq／lyg／lyl 三个书系共用），描述统一为「锋利异常的珊瑚铁匕首，能斩断赤阳藤等坚韧物体」，其余字段沿用该条原值（weapon／仙品／气血上限+90、根骨+12，`skillIds: []`）。
+
+## 仍待用户裁定（不要当作已批准）
+
+> 2026-10-16 后续：第 1 项（链接不挂回，列给剧情策划）、第 2 项（改回中品）、第 3 项（31 组一并合并）已由用户批准并执行，见下文「第四轮」；第 4 项「触龙珠」用户决定不改。以下保留第三轮当时的原文。
+
+1. **被并走的珊瑚匕首变体带的技能/功法链接随之不挂在任何道具上**：`lyl.item.coral_dagger_from_xiao_yaoyi` 带 `techniqueId: liuchao.technique.taiji_manual`，`lyl.item.coral_dagger_cuts_vine` 带 `techniqueId: lyl.technique.taiji_bridge` + `skillIds: [lyl.skill.coral_dagger_art]`；通用条目没有这些字段。三者仍在各自关卡的功法/技能池里，只是不再从珊瑚匕首指向它们。
+2. **`lyg.item.np066` 并入后数值升格**：它原是「中品、气血上限+30、根骨+4」，现 6 个 lyg 关的珊瑚匕首统一用通用条目的「仙品、气血上限+90、根骨+12」。
+3. **同样「名称+描述逐字相同」、但不在点名四组内的 id 对，未动**（`lcq.item.np002` 与 `zipper` 的「拉链」是离点名最近的一对；运行时 `ZIPPER_ALIASES` 已把 np001/np002/np003 当同一把拉链）：lcq np002/zipper、np003/np004（按摩棒）；lyg np001/np002（皇后印玺）、np006/np007（舞阳侯爵位）、np012/np013（白色长条石（传送石））、np024/np025（同心结（情趣用品））、np030/np031（赤阳圣果）、np035/np038（鸦王座）、np040/np043（魂丹（泉玉姬））、np055/np076（金属虫蚁箱）、np056/np077（雪雪）、np058/np079（机械螃蟹）、np061/np083（断剑）、np062/np084（铸铁炸弹）；lyl np002/np030/np048（钓鱼竿）、np025/np026（岳鹏举钥匙）、np037/np040（蛋屋）、np039/np042（摄像机）、np046/np049（鲛帕）、np053/np056（假死药，均带 sedative 标签）、np068/np083（都卢难旦妖铃）、np069/np084（珊瑚紫蛇）、np070/np085（春药）、np074/np086（白雉）、np075/np090（雪雪（三头魔犬））、np078/np093（五灵石）、np079/np101（胡夫人借据）、np080/np095（太泉古阵物品）、np081/np096（陶氏十七万取款凭证）、np082/np097（仙草叶片）、np094/np099（黄泉蝶变）。共 31 组。是否一并合并待裁；其中成人/合规相关的（按摩棒、同心结、春药、仙草叶片等）合并也只合并 id，不改字不加标签。
+4. **「触龙珠」**：核对结果见 CANON-DECISIONS #227 与本轮报告——原著写的是「抬手一按」，「触龙珠」是动宾短语，不是「接触龙珠」断错，故未改字；是否要把事件/行动文字润成「触碰龙珠」之类，待裁。
+
+---
+
+# 第四轮：珊瑚匕首数值改回 + 其余 31 组同文字 id 合并（2026-10-16 用户批准三项）
+
+由 `scripts/merge-same-text-item-ids-v4.mjs` 执行（一次性迁移，已执行，保留作审计；备份在 `_newbot_tmp/backup-1016k/`）。总表 311 → 279（并走 32 个 id）。
+
+## 一、珊瑚匕首通用条目数值改回原中品一档
+
+`liuchao.item.coral_dagger` 现为 weapon／**中品**／气血上限+30、根骨+4（以原 `lyg.item.np066` 的值为准），描述仍是上一轮用户统一的「锋利异常的珊瑚铁匕首，能斩断赤阳藤等坚韧物体」，`skillIds: []`，无 `techniqueId`。
+
+**与各关原值的差异**（并入前后同一件「珊瑚匕首」在各关的数值）：
+
+| 书系 / 关卡 | 并入前（原条目） | 现在 |
+|---|---|---|
+| lyg 6 关（buddhist_conspiracy、changgan_interlude、ganlu_aftershock、han_succession、liangzhou_league、shituolin_endgame） | `lyg.item.np066`：中品／+30／根骨+4 | 中品／+30／根骨+4（**回到原值**） |
+| lcq 9 关（stage_03b…stage_12，原 `liuchao.item.coral_dagger`） | 仙品／+90／根骨+12 | 中品／+30／根骨+4（**降档**） |
+| lyl 7 关（han_palace_endgame、lin_an_bridge、luoyang_cloud_secret、taiquan_afterfall、taiquan_core_conflict、taiquan_sacred_fruit、xiaoyingzhou_blacksea_trap，原 `lyl.item.coral_dagger`） | 仙品／+90／根骨+12 | 中品／+30／根骨+4（**降档**） |
+| lyl.luoyang_coup（原 `lyl.item.np027`） | 仙品／+90／根骨+12 | 中品／+30／根骨+4（**降档**） |
+| lyl.jiangzhou_retreat、lyl.lin_an_black_sea、lyl.taiquan_expedition（原 `lyl.item.coral_dagger_*` 与 `liuchao.item.coral_dagger`） | 仙品／+90／根骨+12 | 中品／+30／根骨+4（**降档**） |
+
+lcq／lyl 里原来的珊瑚匕首一律是仙品／+90／根骨+12，只有 lyg 的 `np066` 是中品；按用户裁定统一用中品一档，所以 lcq 与 lyl 各关降档。
+
+## 二、被并走变体的功法／技能链接——**没有挂回**，留给剧情策划
+
+| 原变体 id | 带的链接 | 原所在关卡 | 现状 |
+|---|---|---|---|
+| `lyl.item.coral_dagger_from_xiao_yaoyi` | `techniqueId: liuchao.technique.taiji_manual` | lyl.jiangzhou_retreat | 功法仍在本关功法池里，不再从珊瑚匕首指向它 |
+| `lyl.item.coral_dagger_cuts_vine` | `techniqueId: lyl.technique.taiji_bridge` + `skillIds: [lyl.skill.coral_dagger_art]` | lyl.taiquan_core_conflict | 同上；技能 `lyl.skill.coral_dagger_art` 仍在本关技能池里 |
+
+## 三、31 组同文字 id 合并清单（32 个 id → 保留 id）
+
+规则：名称＋描述逐字相同，且 type／grade／attributeBonus／effectTags／onUse 等其余字段逐项一致才合并（脚本逐项核对，不一致即报错停下）。**31 组全部一致，没有不合并的组。** 保留 id 取被更多关卡引用的那个，同数取小号；拉链例外保留运行时 `ZIPPER_ITEM_ID`（`lcq.item.zipper`）。同一组里没有哪一关同时引用两个 id，所以没有 availableWhen／revealWhen 冲突要处理。
+
+| 被并走的 id | 并入 | 名称 | 原先被这些关卡引用 |
+|---|---|---|---|
+| `lcq.item.np002` | `lcq.item.zipper` | 拉链 | lcq.stage_01、lcq.stage_03b_snake_flower_bridge…共 10 关 |
+| `lcq.item.np004` | `lcq.item.np003` | 按摩棒 | lcq.stage_04 |
+| `lyg.item.np001` | `lyg.item.np002` | 皇后印玺 | lyg.changgan_begins、lyg.dingtao_beijing |
+| `lyg.item.np006` | `lyg.item.np007` | 舞阳侯爵位 | lyg.changgan_begins、lyg.dingtao_beijing |
+| `lyg.item.np012` | `lyg.item.np013` | 白色长条石（传送石） | lyg.changgan_begins、lyg.mijing_rumen |
+| `lyg.item.np024` | `lyg.item.np025` | 同心结（情趣用品） | lyg.changgan_begins |
+| `lyg.item.np030` | `lyg.item.np031` | 赤阳圣果 | lyg.changgan_begins |
+| `lyg.item.np035` | `lyg.item.np038` | 鸦王座（钢轨模具相关？） | lyg.changgan_begins |
+| `lyg.item.np040` | `lyg.item.np043` | 魂丹（泉玉姬） | lyg.changgan_begins |
+| `lyg.item.np055` | `lyg.item.np076` | 金属虫蚁箱 | lyg.changgan_begins |
+| `lyg.item.np056` | `lyg.item.np077` | 雪雪 | lyg.changgan_begins |
+| `lyg.item.np058` | `lyg.item.np079` | 机械螃蟹 | lyg.changgan_begins |
+| `lyg.item.np061` | `lyg.item.np083` | 断剑 | lyg.changgan_begins |
+| `lyg.item.np062` | `lyg.item.np084` | 铸铁炸弹 | lyg.changgan_begins |
+| `lyl.item.np002` | `lyl.item.np048` | 钓鱼竿（白龙鱼竿） | lyl.lin_an_black_sea、lyl.taiquan_expedition |
+| `lyl.item.np030` | `lyl.item.np048` | 钓鱼竿（白龙鱼竿） | lyl.taiquan_core_conflict |
+| `lyl.item.np026` | `lyl.item.np025` | 岳鹏举钥匙 | lyl.luoyang_coup、lyl.taiquan_core_conflict |
+| `lyl.item.np040` | `lyl.item.np037` | 蛋屋 | lyl.luoyang_coup |
+| `lyl.item.np042` | `lyl.item.np039` | 摄像机 | lyl.luoyang_coup |
+| `lyl.item.np049` | `lyl.item.np046` | 鲛帕 | lyl.luoyang_coup |
+| `lyl.item.np056` | `lyl.item.np053` | 假死药 | lyl.luoyang_coup |
+| `lyl.item.np083` | `lyl.item.np068` | 都卢难旦妖铃 | lyl.luoyang_coup |
+| `lyl.item.np084` | `lyl.item.np069` | 珊瑚紫蛇 | lyl.luoyang_coup |
+| `lyl.item.np085` | `lyl.item.np070` | 春药 | lyl.luoyang_coup |
+| `lyl.item.np074` | `lyl.item.np086` | 白雉 | lyl.luoyang_coup |
+| `lyl.item.np090` | `lyl.item.np075` | 雪雪（三头魔犬） | lyl.luoyang_coup |
+| `lyl.item.np093` | `lyl.item.np078` | 五灵石 | lyl.luoyang_coup |
+| `lyl.item.np079` | `lyl.item.np101` | 胡夫人借据（十万金铢） | lyl.luoyang_coup |
+| `lyl.item.np095` | `lyl.item.np080` | 太泉古阵物品 | lyl.luoyang_coup |
+| `lyl.item.np081` | `lyl.item.np096` | 陶氏十七万取款凭证（白鹿皮） | lyl.luoyang_coup |
+| `lyl.item.np082` | `lyl.item.np097` | 仙草叶片（催情作用） | lyl.luoyang_coup |
+| `lyl.item.np099` | `lyl.item.np094` | 黄泉蝶变 | lyl.luoyang_coup |
+
+- **拉链**：`lcq.item.np002`（10 关）并入 `lcq.item.zipper`（2 关）。`fixedInventoryContracts.ts` 的 `ZIPPER_ALIASES`（`np001`、`np002`、`np003`）**未改**：它是旧存档里残留 id 的映射（要求名称＝「拉链」才转），`np001`、`np002` 现在都已并入 `zipper`，与合并后的引用一致；`np003` 现在是「按摩棒」，靠名称判断不会误转。
+- **假死药**：`lyl.item.np056` 并入 `lyl.item.np053`，两者原来就都带 `effectTags: [sedative]`＋`onUse: [{statusId: unconscious}]`，并入后沿用，无新增；`lyl.luoyang_coup` 里程宗扬原持有的 np056 现在持有 np053。带标签的药 6 件 → 5 件。
+- **合规相关**（按摩棒、同心结、春药、仙草叶片、魂丹、雪雪、摄像机等）只合并 id，不改字、不加标签。
+
+## 四、仍待用户裁定
+
+- 无新增待裁项。「触龙珠」按用户决定不改。
+- 旧存档若背包里存的是被并走的 id（如 `lyl.item.np056`），读档后会找不到总表条目；本轮没有写存档迁移，也没有测老存档（只有拉链有 `ZIPPER_ALIASES` 兜底）。
