@@ -944,7 +944,7 @@
             "liuchao.item.remote_control",
             "liuchao.item.long_jing_yu",
             "lcq.item.zipper",
-            "lcq.item.np004",
+            "lcq.item.np003",
             "lcq.item.np006"
           ],
           "profile": {
@@ -1201,7 +1201,7 @@
           "skillIds": [],
           "techniqueIds": [],
           "itemIds": [
-            "lcq.item.zhulu_snake_pill"
+            "lcq.item.np013"
           ],
           "profile": {
             "attributes": {
@@ -1713,7 +1713,7 @@
           "itemIds": [
             "lcq.item.zipper",
             "lcq.item.np006",
-            "lcq.item.zhulu_snake_pill"
+            "lcq.item.np013"
           ],
           "profile": {
             "origin": "白湖商馆执事，南荒商队领队",

@@ -1424,7 +1424,7 @@
           "lyl.technique.np059"
         ],
         "itemIds": [
-          "lyl.item.coral_dagger",
+          "liuchao.item.coral_dagger",
           "lyl.item.fishing_rod",
           "lyl.item.np001",
           "lyl.item.np003",
@@ -4817,7 +4817,7 @@
   "content": {
     "items": [
       {
-        "id": "lyl.item.coral_dagger"
+        "id": "liuchao.item.coral_dagger"
       },
       {
         "id": "lyl.item.fishing_rod"
@@ -7395,7 +7395,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.coral_dagger",
+        "contentId": "liuchao.item.coral_dagger",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

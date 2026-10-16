@@ -16831,31 +16831,7 @@
     },
     {
       "kind": "item",
-      "id": "lcq.item.np001",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lcq.item.np002",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lcq.item.np003",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lcq.item.np004",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lcq.item.np005",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -16924,12 +16900,6 @@
     },
     {
       "kind": "item",
-      "id": "lcq.item.np016",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lcq.item.s05b_bone_tiger",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -16955,12 +16925,6 @@
     {
       "kind": "item",
       "id": "lcq.item.xieyi_ashes",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lcq.item.zhulu_snake_pill",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17116,12 +17080,6 @@
     },
     {
       "kind": "item",
-      "id": "lyg.item.dragon_pearl",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyg.item.economy_sneakers",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17140,19 +17098,7 @@
     },
     {
       "kind": "item",
-      "id": "lyg.item.green_dragon_blade_huaxiong",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyg.item.handgun",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np001",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17165,12 +17111,6 @@
     {
       "kind": "item",
       "id": "lyg.item.np003",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np006",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17206,12 +17146,6 @@
     },
     {
       "kind": "item",
-      "id": "lyg.item.np012",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyg.item.np013",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17225,12 +17159,6 @@
     {
       "kind": "item",
       "id": "lyg.item.np015",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np016",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17278,12 +17206,6 @@
     },
     {
       "kind": "item",
-      "id": "lyg.item.np024",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyg.item.np025",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17302,12 +17224,6 @@
     },
     {
       "kind": "item",
-      "id": "lyg.item.np030",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyg.item.np031",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17321,12 +17237,6 @@
     {
       "kind": "item",
       "id": "lyg.item.np034",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np035",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17351,12 +17261,6 @@
     {
       "kind": "item",
       "id": "lyg.item.np039",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np040",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17446,36 +17350,6 @@
     },
     {
       "kind": "item",
-      "id": "lyg.item.np055",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np056",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np058",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np061",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np062",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyg.item.np063",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17483,12 +17357,6 @@
     {
       "kind": "item",
       "id": "lyg.item.np065",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyg.item.np066",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17746,12 +17614,6 @@
     },
     {
       "kind": "item",
-      "id": "lyg.item.six_sense_seal_pill",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyg.item.wumu_manual_swapped",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17759,30 +17621,6 @@
     {
       "kind": "item",
       "id": "lyg.item.yangwuhou_xiaoshi",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.coral_dagger",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.coral_dagger_carried",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.coral_dagger_cuts_vine",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.coral_dagger_from_xiao_yaoyi",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17807,12 +17645,6 @@
     {
       "kind": "item",
       "id": "lyl.item.np001",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np002",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -17920,18 +17752,6 @@
     },
     {
       "kind": "item",
-      "id": "lyl.item.np026",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np027",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyl.item.np028",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -17939,12 +17759,6 @@
     {
       "kind": "item",
       "id": "lyl.item.np029",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np030",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -18004,19 +17818,7 @@
     },
     {
       "kind": "item",
-      "id": "lyl.item.np040",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyl.item.np041",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np042",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -18058,12 +17860,6 @@
     },
     {
       "kind": "item",
-      "id": "lyl.item.np049",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyl.item.np050",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -18083,12 +17879,6 @@
     {
       "kind": "item",
       "id": "lyl.item.np054",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np056",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -18184,12 +17974,6 @@
     },
     {
       "kind": "item",
-      "id": "lyl.item.np074",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyl.item.np075",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -18208,43 +17992,7 @@
     },
     {
       "kind": "item",
-      "id": "lyl.item.np079",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyl.item.np080",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np081",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np082",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np083",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np084",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np085",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -18274,12 +18022,6 @@
     },
     {
       "kind": "item",
-      "id": "lyl.item.np090",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyl.item.np091",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -18292,19 +18034,7 @@
     },
     {
       "kind": "item",
-      "id": "lyl.item.np093",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lyl.item.np094",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np095",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -18317,12 +18047,6 @@
     {
       "kind": "item",
       "id": "lyl.item.np097",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
-      "id": "lyl.item.np099",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },

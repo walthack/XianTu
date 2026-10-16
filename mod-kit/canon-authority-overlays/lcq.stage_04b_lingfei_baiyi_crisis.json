@@ -1936,7 +1936,7 @@
           "playerAllowed": false
         },
         {
-          "contentId": "lcq.item.np002",
+          "contentId": "lcq.item.zipper",
           "policy": "exclusive",
           "allowedCharacterIds": [
             "liuchao.character.cheng_zongyang"
@@ -2050,7 +2050,7 @@
           "playerAllowed": false
         },
         {
-          "contentId": "lcq.item.np002",
+          "contentId": "lcq.item.zipper",
           "policy": "exclusive",
           "allowedCharacterIds": [
             "liuchao.character.cheng_zongyang"
@@ -2149,7 +2149,7 @@
           ],
           "itemIds": [
             "liuchao.item.coral_dagger",
-            "lcq.item.np002",
+            "lcq.item.zipper",
             "lcq.item.np003",
             "lcq.item.np006",
             "lcq.item.np007",
@@ -4344,7 +4344,7 @@
           ],
           "itemIds": [
             "liuchao.item.coral_dagger",
-            "lcq.item.np002",
+            "lcq.item.zipper",
             "lcq.item.np003",
             "lcq.item.np006",
             "lcq.item.np007",

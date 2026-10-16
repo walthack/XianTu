@@ -415,16 +415,14 @@ test('敌人个体也有外貌标签（按实例 id 读）', () => {
 // ───────── 物品 effectTags / onUse ─────────
 const TAGGED = {
   'lcq.item.np013': { tags: ['antidote'], onUse: [] },
-  'lcq.item.np016': { tags: ['antidote'], onUse: [] },
   'lyg.item.np049': { tags: ['antidote'], onUse: [] },
   'lyg.item.np092': { tags: ['poison'], onUse: [{ statusId: 'poisoned', doses: 1 }] },
   // C 步：用户裁定合规相关的两种药开放标注（假死药 → 昏迷；六识禁绝丹 → 五感受损 + 神志不清）。tag=sedative，喂药时要看对方态度（不是毒）。
   'lyl.item.np053': { tags: ['sedative'], onUse: [{ statusId: 'unconscious' }] },
-  'lyl.item.np056': { tags: ['sedative'], onUse: [{ statusId: 'unconscious' }] },
   'lyg.item.np071': { tags: ['sedative'], onUse: ['sense.sight', 'sense.hearing', 'sense.smell', 'sense.taste', 'sense.touch', 'mind.confused'].map(statusId => ({ statusId })) },
 };
 
-test('物品表：只有毒/药相关的 7 件补了 effectTags/onUse，其余 303 件两个字段都没有', () => {
+test('物品表：只有毒/药相关的 5 件补了 effectTags/onUse，其余 274 件两个字段都没有', () => {
   const marked = items.entries.filter(e => e.definition.effectTags !== undefined || e.definition.onUse !== undefined).map(e => e.id).sort();
   assert.deepEqual(marked, Object.keys(TAGGED).sort());
   for (const [id, want] of Object.entries(TAGGED)) {
@@ -441,7 +439,7 @@ test('南荒掉落物（lcq.item.nh_*，含山草药）的定义键被 locationL
 
 test('合规相关的药物类物品不补标签（麻古、春药、慎恤胶、催情仙草、魂丹类；假死药与六识禁绝丹已由用户裁定开放标注）', () => {
   const left = items.entries.filter(e => /麻古|春药|慎恤胶|催情|魂丹|药丸（殇侯制）|摇头丸/.test(e.definition.name + (e.definition.description || '')));
-  assert.ok(left.length >= 10);
+  assert.ok(left.length >= 9); // 同文字 id 合并后（第四轮）从 13 条降到 9 条；这里只是防正则失效的下限
   for (const e of left) assert.ok(e.definition.effectTags === undefined && e.definition.onUse === undefined, e.id);
 });
 

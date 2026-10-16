@@ -1305,34 +1305,34 @@
         "itemIds": [
           "lyg.item.flashlight",
           "lyg.item.chi_tu_horse",
-          "lyg.item.np001",
+          "lyg.item.np002",
           "lyg.item.np003",
-          "lyg.item.np006",
+          "lyg.item.np007",
           "lyg.item.np008",
           "lyg.item.np009",
           "lyg.item.np010",
           "lyg.item.np011",
-          "lyg.item.np012",
+          "lyg.item.np013",
           "lyg.item.np014",
           "lyg.item.np015",
-          "lyg.item.np016",
+          "lyg.item.np017",
           "lyg.item.np018",
           "lyg.item.np019",
           "lyg.item.np020",
           "lyg.item.np021",
           "lyg.item.np022",
           "lyg.item.np023",
-          "lyg.item.np024",
+          "lyg.item.np025",
           "lyg.item.np026",
           "lyg.item.np027",
-          "lyg.item.np030",
+          "lyg.item.np031",
           "lyg.item.np032",
           "lyg.item.np037",
-          "lyg.item.np035",
+          "lyg.item.np038",
           "lyg.item.np039",
           "lyg.item.np041",
           "lyg.item.np042",
-          "lyg.item.np040",
+          "lyg.item.np043",
           "lyg.item.np044",
           "lyg.item.np045"
         ],
@@ -1425,7 +1425,7 @@
         ],
         "techniqueIds": [],
         "itemIds": [
-          "lyg.item.np012",
+          "lyg.item.np013",
           "lyg.item.np015",
           "lyg.item.np111"
         ],
@@ -1969,14 +1969,14 @@
           "lyg.technique.np057"
         ],
         "itemIds": [
-          "lyg.item.np055",
-          "lyg.item.np056",
-          "lyg.item.np016",
-          "lyg.item.np058",
+          "lyg.item.np076",
+          "lyg.item.np077",
+          "lyg.item.np017",
+          "lyg.item.np079",
           "lyg.item.np026",
           "lyg.item.np082",
-          "lyg.item.np061",
-          "lyg.item.np062",
+          "lyg.item.np083",
+          "lyg.item.np084",
           "lyg.item.np087"
         ],
         "skillIds": [
@@ -2278,7 +2278,7 @@
         "role": "剑霄门门主、周飞妻子（名义）、程宗扬奴婢",
         "description": "剑霄门门主黎锦香梳着妇人发髻，眉眼间既有掌门的刚毅决断，又透着一丝温婉娇媚。她以女子之身执掌宗门，心性坚忍果决，纵使身陷奴婢之位，那双澄澈明眸也不曾染上半分屈辱之色。",
         "itemIds": [
-          "lyg.item.six_sense_seal_pill"
+          "lyg.item.np071"
         ],
         "profile": {
           "attributes": {
@@ -2851,7 +2851,7 @@
         "role": "女医，程宗扬控制下的线人",
         "description": "义姁是程宗扬麾下的一名女医，生得容貌过人，却总板着一张雪白的脸，显出几分与年纪不符的老气。她性子冷傲又市侩，说话办事从不老实，给人诊治时更是谨慎到近乎计较——唯有偶尔玉颊微红、流露慌乱的一瞬，才露出几分医者不该有的娇艳。作为线人，她深谙夹缝中求存的道理，谁都知道这女人不好惹，却谁也说不准她到底向着谁。",
         "itemIds": [
-          "lyg.item.six_sense_seal_pill",
+          "lyg.item.np071",
           "lyg.item.np127"
         ],
         "skillIds": [
@@ -4378,13 +4378,13 @@
         "id": "lyg.item.handgun"
       },
       {
-        "id": "lyg.item.np001"
+        "id": "lyg.item.np002"
       },
       {
         "id": "lyg.item.np003"
       },
       {
-        "id": "lyg.item.np006"
+        "id": "lyg.item.np007"
       },
       {
         "id": "lyg.item.np008"
@@ -4399,7 +4399,7 @@
         "id": "lyg.item.np011"
       },
       {
-        "id": "lyg.item.np012"
+        "id": "lyg.item.np013"
       },
       {
         "id": "lyg.item.np014"
@@ -4408,7 +4408,7 @@
         "id": "lyg.item.np015"
       },
       {
-        "id": "lyg.item.np016"
+        "id": "lyg.item.np017"
       },
       {
         "id": "lyg.item.np018"
@@ -4429,7 +4429,7 @@
         "id": "lyg.item.np023"
       },
       {
-        "id": "lyg.item.np024"
+        "id": "lyg.item.np025"
       },
       {
         "id": "lyg.item.np026"
@@ -4438,7 +4438,7 @@
         "id": "lyg.item.np027"
       },
       {
-        "id": "lyg.item.np030"
+        "id": "lyg.item.np031"
       },
       {
         "id": "lyg.item.np032"
@@ -4447,7 +4447,7 @@
         "id": "lyg.item.np037"
       },
       {
-        "id": "lyg.item.np035"
+        "id": "lyg.item.np038"
       },
       {
         "id": "lyg.item.np039"
@@ -4459,7 +4459,7 @@
         "id": "lyg.item.np042"
       },
       {
-        "id": "lyg.item.np040"
+        "id": "lyg.item.np043"
       },
       {
         "id": "lyg.item.np044"
@@ -4489,19 +4489,19 @@
         "id": "lyg.item.economy_sneakers"
       },
       {
-        "id": "lyg.item.np055"
+        "id": "lyg.item.np076"
       },
       {
-        "id": "lyg.item.np056"
+        "id": "lyg.item.np077"
       },
       {
-        "id": "lyg.item.np058"
+        "id": "lyg.item.np079"
       },
       {
-        "id": "lyg.item.np061"
+        "id": "lyg.item.np083"
       },
       {
-        "id": "lyg.item.np062"
+        "id": "lyg.item.np084"
       },
       {
         "id": "lyg.item.np087"
@@ -4510,7 +4510,7 @@
         "id": "lyg.item.np112"
       },
       {
-        "id": "lyg.item.six_sense_seal_pill"
+        "id": "lyg.item.np071"
       },
       {
         "id": "lyg.item.np069"
@@ -6301,7 +6301,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np001",
+        "contentId": "lyg.item.np002",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6317,7 +6317,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np006",
+        "contentId": "lyg.item.np007",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6373,7 +6373,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np035",
+        "contentId": "lyg.item.np038",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6389,7 +6389,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np040",
+        "contentId": "lyg.item.np043",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6438,7 +6438,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np061",
+        "contentId": "lyg.item.np083",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"
@@ -6446,7 +6446,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np062",
+        "contentId": "lyg.item.np084",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"

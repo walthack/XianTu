@@ -7,7 +7,7 @@
           "id": "lcq.item.backpack"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         }
       ],
       "skills": [
@@ -43,9 +43,6 @@
         },
         {
           "id": "lcq.item.horse"
-        },
-        {
-          "id": "lcq.item.np001"
         },
         {
           "id": "lcq.item.zipper"
@@ -85,7 +82,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -124,16 +121,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -285,13 +276,13 @@
           "id": "lcq.item.zipper"
         },
         {
-          "id": "lcq.item.np004"
+          "id": "lcq.item.np003"
         },
         {
           "id": "lcq.item.np006"
         },
         {
-          "id": "lcq.item.zhulu_snake_pill"
+          "id": "lcq.item.np013"
         },
         {
           "id": "lcq.item.nh_mountain_herb"
@@ -413,7 +404,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -452,16 +443,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -642,7 +627,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -681,16 +666,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -853,7 +832,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -892,16 +871,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -987,7 +960,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -1026,16 +999,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -1118,7 +1085,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -1157,16 +1124,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -1249,7 +1210,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -1288,16 +1249,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -1380,7 +1335,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -1419,16 +1374,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -1511,7 +1460,7 @@
           "id": "liuchao.item.sunglasses"
         },
         {
-          "id": "lcq.item.np002"
+          "id": "lcq.item.zipper"
         },
         {
           "id": "lcq.item.np003"
@@ -1550,16 +1499,10 @@
           "id": "liuchao.item.gui_yu_sword"
         },
         {
-          "id": "lcq.item.np005"
-        },
-        {
           "id": "lcq.item.np014"
         },
         {
           "id": "lcq.item.np015"
-        },
-        {
-          "id": "lcq.item.np016"
         },
         {
           "id": "lcq.item.s05b_dragon_eye_jade"
@@ -1762,7 +1705,7 @@
           "id": "lyg.item.np065"
         },
         {
-          "id": "lyg.item.np066"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyg.item.np068"
@@ -2043,13 +1986,13 @@
           "id": "lyg.item.handgun"
         },
         {
-          "id": "lyg.item.np001"
+          "id": "lyg.item.np002"
         },
         {
           "id": "lyg.item.np003"
         },
         {
-          "id": "lyg.item.np006"
+          "id": "lyg.item.np007"
         },
         {
           "id": "lyg.item.np008"
@@ -2064,7 +2007,7 @@
           "id": "lyg.item.np011"
         },
         {
-          "id": "lyg.item.np012"
+          "id": "lyg.item.np013"
         },
         {
           "id": "lyg.item.np014"
@@ -2073,7 +2016,7 @@
           "id": "lyg.item.np015"
         },
         {
-          "id": "lyg.item.np016"
+          "id": "lyg.item.np017"
         },
         {
           "id": "lyg.item.np018"
@@ -2094,7 +2037,7 @@
           "id": "lyg.item.np023"
         },
         {
-          "id": "lyg.item.np024"
+          "id": "lyg.item.np025"
         },
         {
           "id": "lyg.item.np026"
@@ -2103,7 +2046,7 @@
           "id": "lyg.item.np027"
         },
         {
-          "id": "lyg.item.np030"
+          "id": "lyg.item.np031"
         },
         {
           "id": "lyg.item.np032"
@@ -2112,7 +2055,7 @@
           "id": "lyg.item.np037"
         },
         {
-          "id": "lyg.item.np035"
+          "id": "lyg.item.np038"
         },
         {
           "id": "lyg.item.np039"
@@ -2124,7 +2067,7 @@
           "id": "lyg.item.np042"
         },
         {
-          "id": "lyg.item.np040"
+          "id": "lyg.item.np043"
         },
         {
           "id": "lyg.item.np044"
@@ -2154,19 +2097,19 @@
           "id": "lyg.item.economy_sneakers"
         },
         {
-          "id": "lyg.item.np055"
+          "id": "lyg.item.np076"
         },
         {
-          "id": "lyg.item.np056"
+          "id": "lyg.item.np077"
         },
         {
-          "id": "lyg.item.np058"
+          "id": "lyg.item.np079"
         },
         {
-          "id": "lyg.item.np061"
+          "id": "lyg.item.np083"
         },
         {
-          "id": "lyg.item.np062"
+          "id": "lyg.item.np084"
         },
         {
           "id": "lyg.item.np087"
@@ -2175,7 +2118,7 @@
           "id": "lyg.item.np112"
         },
         {
-          "id": "lyg.item.six_sense_seal_pill"
+          "id": "lyg.item.np071"
         },
         {
           "id": "lyg.item.np069"
@@ -2411,7 +2354,7 @@
           "id": "lyg.item.np065"
         },
         {
-          "id": "lyg.item.np066"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyg.item.np068"
@@ -2698,13 +2641,13 @@
           "id": "liuchao.item.rusty_cuo_dao"
         },
         {
-          "id": "lyg.item.np001"
+          "id": "lyg.item.np002"
         },
         {
           "id": "lyg.item.np003"
         },
         {
-          "id": "lyg.item.np006"
+          "id": "lyg.item.np007"
         },
         {
           "id": "lyg.item.np008"
@@ -2725,13 +2668,13 @@
           "id": "lyg.item.np077"
         },
         {
-          "id": "lyg.item.green_dragon_blade_huaxiong"
+          "id": "liuchao.item.green_dragon_sword"
         },
         {
           "id": "lyg.item.silver_dragon_scale_armor"
         },
         {
-          "id": "lyg.item.six_sense_seal_pill"
+          "id": "lyg.item.np071"
         },
         {
           "id": "lyg.item.np127"
@@ -2934,7 +2877,7 @@
           "id": "lyg.item.np065"
         },
         {
-          "id": "lyg.item.np066"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyg.item.np068"
@@ -3340,7 +3283,7 @@
           "id": "lyg.item.np065"
         },
         {
-          "id": "lyg.item.np066"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyg.item.np068"
@@ -3741,7 +3684,7 @@
           "id": "lyg.item.np065"
         },
         {
-          "id": "lyg.item.np066"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyg.item.np068"
@@ -4049,7 +3992,7 @@
           "id": "lyg.item.np011"
         },
         {
-          "id": "lyg.item.np012"
+          "id": "lyg.item.np013"
         },
         {
           "id": "lyg.item.np014"
@@ -4070,7 +4013,7 @@
           "id": "lyg.item.np112"
         },
         {
-          "id": "lyg.item.six_sense_seal_pill"
+          "id": "lyg.item.np071"
         },
         {
           "id": "lyg.item.np127"
@@ -4264,7 +4207,7 @@
           "id": "lyg.item.np065"
         },
         {
-          "id": "lyg.item.np066"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyg.item.np068"
@@ -4541,7 +4484,7 @@
     "lyl.han_palace_endgame": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.fishing_rod"
@@ -4879,7 +4822,7 @@
     "lyl.jiangzhou_retreat": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger_from_xiao_yaoyi"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.np001"
@@ -4917,7 +4860,7 @@
           "id": "liuchao.item.ghost_fang"
         },
         {
-          "id": "lyl.item.coral_dagger_carried"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "liuchao.item.spirit_flying_mirror"
@@ -4926,7 +4869,7 @@
           "id": "lyl.item.np004"
         },
         {
-          "id": "lyl.item.np002"
+          "id": "lyl.item.np048"
         },
         {
           "id": "lyl.item.np068"
@@ -4964,7 +4907,7 @@
     "lyl.lin_an_bridge": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.fishing_rod"
@@ -5302,7 +5245,7 @@
     "lyl.luoyang_cloud_secret": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.fishing_rod"
@@ -5694,10 +5637,10 @@
           "id": "lyl.item.np024"
         },
         {
-          "id": "lyl.item.np026"
+          "id": "lyl.item.np025"
         },
         {
-          "id": "lyl.item.np027"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.np028"
@@ -5724,13 +5667,13 @@
           "id": "lyl.item.np036"
         },
         {
-          "id": "lyl.item.np040"
+          "id": "lyl.item.np037"
         },
         {
           "id": "lyl.item.np038"
         },
         {
-          "id": "lyl.item.np042"
+          "id": "lyl.item.np039"
         },
         {
           "id": "lyl.item.np041"
@@ -5745,7 +5688,7 @@
           "id": "lyl.item.np045"
         },
         {
-          "id": "lyl.item.np049"
+          "id": "lyl.item.np046"
         },
         {
           "id": "lyl.item.np047"
@@ -5760,7 +5703,7 @@
           "id": "lyl.item.np051"
         },
         {
-          "id": "lyl.item.np056"
+          "id": "lyl.item.np053"
         },
         {
           "id": "lyl.item.np054"
@@ -5796,7 +5739,7 @@
           "id": "lyl.item.np067"
         },
         {
-          "id": "lyl.item.np074"
+          "id": "lyl.item.np086"
         },
         {
           "id": "lyl.item.imperial_seal"
@@ -5805,22 +5748,22 @@
           "id": "lyl.item.tiger_tally"
         },
         {
-          "id": "lyl.item.np079"
+          "id": "lyl.item.np101"
         },
         {
-          "id": "lyl.item.np081"
+          "id": "lyl.item.np096"
         },
         {
-          "id": "lyl.item.np082"
+          "id": "lyl.item.np097"
         },
         {
-          "id": "lyl.item.np083"
+          "id": "lyl.item.np068"
         },
         {
-          "id": "lyl.item.np084"
+          "id": "lyl.item.np069"
         },
         {
-          "id": "lyl.item.np085"
+          "id": "lyl.item.np070"
         },
         {
           "id": "lyl.item.np071"
@@ -5829,19 +5772,19 @@
           "id": "lyl.item.np073"
         },
         {
-          "id": "lyl.item.np090"
+          "id": "lyl.item.np075"
         },
         {
           "id": "lyl.item.np076"
         },
         {
-          "id": "lyl.item.np093"
+          "id": "lyl.item.np078"
         },
         {
-          "id": "lyl.item.np095"
+          "id": "lyl.item.np080"
         },
         {
-          "id": "lyl.item.np099"
+          "id": "lyl.item.np094"
         },
         {
           "id": "lyl.item.np102"
@@ -5975,7 +5918,7 @@
     "lyl.taiquan_afterfall": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.fishing_rod"
@@ -6313,7 +6256,7 @@
     "lyl.taiquan_core_conflict": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger_cuts_vine"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.np001"
@@ -6367,10 +6310,10 @@
           "id": "lyl.item.np024"
         },
         {
-          "id": "lyl.item.np026"
+          "id": "lyl.item.np025"
         },
         {
-          "id": "lyl.item.np030"
+          "id": "lyl.item.np048"
         },
         {
           "id": "lyl.item.iron_rail"
@@ -6465,13 +6408,13 @@
           "id": "liuchao.item.ghost_fang"
         },
         {
-          "id": "lyl.item.coral_dagger_carried"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.np004"
         },
         {
-          "id": "lyl.item.np002"
+          "id": "lyl.item.np048"
         },
         {
           "id": "liuchao.item.spirit_flying_mirror"
@@ -6506,7 +6449,7 @@
     "lyl.taiquan_sacred_fruit": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.fishing_rod"
@@ -6844,7 +6787,7 @@
     "lyl.xiaoyingzhou_blacksea_trap": {
       "items": [
         {
-          "id": "lyl.item.coral_dagger"
+          "id": "liuchao.item.coral_dagger"
         },
         {
           "id": "lyl.item.fishing_rod"

@@ -1476,7 +1476,7 @@
         ],
         "itemIds": [
           "liuchao.item.coral_dagger",
-          "lcq.item.np002",
+          "lcq.item.zipper",
           "lcq.item.np003",
           "lcq.item.np006",
           "lcq.item.np007",
@@ -3750,7 +3750,7 @@
         "id": "liuchao.item.sunglasses"
       },
       {
-        "id": "lcq.item.np002"
+        "id": "lcq.item.zipper"
       },
       {
         "id": "lcq.item.np003"
@@ -3789,16 +3789,10 @@
         "id": "liuchao.item.gui_yu_sword"
       },
       {
-        "id": "lcq.item.np005"
-      },
-      {
         "id": "lcq.item.np014"
       },
       {
         "id": "lcq.item.np015"
-      },
-      {
-        "id": "lcq.item.np016"
       },
       {
         "id": "lcq.item.s05b_dragon_eye_jade"
@@ -6228,7 +6222,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lcq.item.np002",
+        "contentId": "lcq.item.zipper",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

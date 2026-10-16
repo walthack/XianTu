@@ -1088,7 +1088,7 @@
         ],
         "itemIds": [
           "lcq.item.backpack",
-          "lcq.item.np002"
+          "lcq.item.zipper"
         ],
         "profile": {
           "appearance": "下巴有胡茬",
@@ -1871,7 +1871,7 @@
         "id": "lcq.item.backpack"
       },
       {
-        "id": "lcq.item.np002"
+        "id": "lcq.item.zipper"
       }
     ],
     "skills": [
@@ -3173,7 +3173,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lcq.item.np002",
+        "contentId": "lcq.item.zipper",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

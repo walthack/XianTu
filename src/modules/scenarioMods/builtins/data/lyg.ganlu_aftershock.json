@@ -1377,7 +1377,7 @@
           "lyg.item.np054",
           "lyg.item.np063",
           "lyg.item.np065",
-          "lyg.item.np066",
+          "liuchao.item.coral_dagger",
           "lyg.item.np068"
         ],
         "profile": {
@@ -4935,7 +4935,7 @@
         "id": "lyg.item.np065"
       },
       {
-        "id": "lyg.item.np066"
+        "id": "liuchao.item.coral_dagger"
       },
       {
         "id": "lyg.item.np068"

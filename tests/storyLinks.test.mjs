@@ -32,8 +32,7 @@ test('演示物品是总表里已有的普通贵重品（米粒湖珠）：用�
  assert.equal(link.necessity,'optional');assert.equal(link.stageId,STAGE04);
  assert.ok(base.stages[STAGE04].content.items.some(r=>r.id===PEARL),'在该关卡的物品池里');
  assert.ok(!JSON.stringify(base.links).includes('dragon_pearl')&&!base.appearancesText.includes('dragon_pearl'),'龙珠已撤下试验标注');
- const dragon=base.items.entries.find(x=>x.id==='lyg.item.dragon_pearl');
- assert.equal(dragon.deprecated,true);assert.equal(dragon.story,undefined,'弃用条目保留但不再带剧情标注');
+ assert.ok(!base.items.entries.some(x=>x.id==='lyg.item.dragon_pearl'),'龙珠条目已从总表清掉（2026-10-16 17:20 用户裁定）');
 });
 
 test('2 调换顺序：把前置事件挪到被要求事件之后，报顺序违反并指明物品与两个事件',()=>{

@@ -1139,47 +1139,6 @@
       ]
     },
     {
-      "id": "lcq.item.np001",
-      "aliases": [],
-      "definition": {
-        "id": "lcq.item.np001",
-        "name": "拉链",
-        "type": "other",
-        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json#content.items[id=lcq.item.np001]"
-      ]
-    },
-    {
-      "id": "lcq.item.np002",
-      "aliases": [],
-      "definition": {
-        "id": "lcq.item.np002",
-        "name": "拉链",
-        "type": "other",
-        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lcq.stage_01.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np002]"
-      ]
-    },
-    {
       "id": "lcq.item.np003",
       "aliases": [],
       "definition": {
@@ -1201,47 +1160,8 @@
         "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np003]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np003]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np003]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np003]"
-      ]
-    },
-    {
-      "id": "lcq.item.np004",
-      "aliases": [],
-      "definition": {
-        "id": "lcq.item.np004",
-        "name": "按摩棒",
-        "type": "other",
-        "description": "程宗扬从现代带来的性玩具，后被苏妲己占有",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np003]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.items[id=lcq.item.np004]"
-      ]
-    },
-    {
-      "id": "lcq.item.np005",
-      "aliases": [],
-      "definition": {
-        "id": "lcq.item.np005",
-        "name": "麻古",
-        "type": "consumable",
-        "description": "段强留下的催情药，被程宗扬用于凝羽",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np005]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np005]"
       ]
     },
     {
@@ -1266,7 +1186,16 @@
         "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np006]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np006]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np006]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np006]"
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np006]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np005]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np005]"
       ]
     },
     {
@@ -1448,7 +1377,17 @@
         "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np013]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np013]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np013]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np013]"
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np013]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.items[id=lcq.item.np007]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np016]"
       ]
     },
     {
@@ -1503,33 +1442,6 @@
         "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np015]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np015]",
         "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np015]"
-      ]
-    },
-    {
-      "id": "lcq.item.np016",
-      "aliases": [],
-      "definition": {
-        "id": "lcq.item.np016",
-        "name": "朱箓蛇丹",
-        "type": "consumable",
-        "description": "云苍峰用于治疗蛇毒",
-        "grade": "中品",
-        "effectTags": [
-          "antidote"
-        ]
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np016]"
       ]
     },
     {
@@ -1646,14 +1558,14 @@
       "definition": {
         "id": "liuchao.item.coral_dagger",
         "name": "珊瑚匕首",
-        "description": "从鲛人身上获得的珊瑚铁匕首，锋锐异常。",
+        "description": "锋利异常的珊瑚铁匕首，能斩断赤阳藤等坚韧物体",
         "type": "weapon",
-        "grade": "仙品",
+        "grade": "中品",
         "skillIds": [],
         "attributeBonus": {
-          "气血上限": 90,
+          "气血上限": 30,
           "后天六司": {
-            "根骨": 12
+            "根骨": 4
           }
         }
       },
@@ -1671,7 +1583,21 @@
         "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=liuchao.item.coral_dagger]",
         "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.items[id=liuchao.item.coral_dagger]",
         "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.items[id=liuchao.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.items[id=liuchao.item.coral_dagger]"
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.items[id=liuchao.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.items[id=lyg.item.np066]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.items[id=lyg.item.np066]",
+        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np066]",
+        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np066]",
+        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np066]",
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np066]",
+        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.items[id=lyl.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.items[id=lyl.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.coral_dagger]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np027]"
       ]
     },
     {
@@ -1719,7 +1645,7 @@
       "definition": {
         "id": "liuchao.item.green_dragon_sword",
         "name": "青龙偃月刀",
-        "description": "云丹琉的家传兵器，锋利沉重。",
+        "description": "云丹琉的家传兵器",
         "type": "weapon",
         "grade": "中品",
         "attributeBonus": {
@@ -1732,7 +1658,8 @@
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=liuchao.item.green_dragon_sword]"
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=liuchao.item.green_dragon_sword]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np014]"
       ]
     },
     {
@@ -2216,29 +2143,6 @@
       ]
     },
     {
-      "id": "lyg.item.np001",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np001",
-        "name": "皇后印玺",
-        "type": "weapon",
-        "description": "剑玉姬在会面后留下皇后印玺作为让步象征。",
-        "grade": "仙品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np001]",
-        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np001]"
-      ]
-    },
-    {
       "id": "lyg.item.np002",
       "aliases": [],
       "definition": {
@@ -2265,7 +2169,9 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np002]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np002]",
         "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np002]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np001]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np001]"
       ]
     },
     {
@@ -2297,23 +2203,6 @@
       ]
     },
     {
-      "id": "lyg.item.np006",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np006",
-        "name": "舞阳侯爵位",
-        "type": "other",
-        "description": "程宗扬获封舞阳侯，实封五千户，封地包括首阳山到舞都城七里坊一带。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np006]",
-        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np006]"
-      ]
-    },
-    {
       "id": "lyg.item.np007",
       "aliases": [],
       "definition": {
@@ -2334,7 +2223,9 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np007]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np007]",
         "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np007]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np007]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np007]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np006]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np006]"
       ]
     },
     {
@@ -2431,24 +2322,6 @@
       ]
     },
     {
-      "id": "lyg.item.np012",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np012",
-        "name": "白色长条石（传送石）",
-        "type": "consumable",
-        "description": "程宗扬持有的白色长条石背面有笑脸，能传送使用者，但会分散传送。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np012]",
-        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np012]",
-        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np012]"
-      ]
-    },
-    {
       "id": "lyg.item.np013",
       "aliases": [],
       "definition": {
@@ -2469,7 +2342,10 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np013]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np013]",
         "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np013]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np013]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np013]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np012]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np012]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np012]"
       ]
     },
     {
@@ -2519,23 +2395,6 @@
       ]
     },
     {
-      "id": "lyg.item.np016",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np016",
-        "name": "武穆秘籍",
-        "type": "other",
-        "description": "实为玄妙子所著灵魂功法，被岳鹏举撕去封面改名为武穆秘籍，内页有批注。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np016]"
-      ]
-    },
-    {
       "id": "lyg.item.np017",
       "aliases": [],
       "definition": {
@@ -2556,7 +2415,9 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np017]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np017]",
         "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np017]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np017]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np017]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np016]"
       ]
     },
     {
@@ -2694,22 +2555,6 @@
       ]
     },
     {
-      "id": "lyg.item.np024",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np024",
-        "name": "同心结（情趣用品）",
-        "type": "other",
-        "description": "以丝带将两女乳头扎结，用于洞房游戏。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np024]"
-      ]
-    },
-    {
       "id": "lyg.item.np025",
       "aliases": [],
       "definition": {
@@ -2729,7 +2574,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np025]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np025]",
         "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np025]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np025]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np025]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np024]"
       ]
     },
     {
@@ -2778,22 +2624,6 @@
       ]
     },
     {
-      "id": "lyg.item.np030",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np030",
-        "name": "赤阳圣果",
-        "type": "other",
-        "description": "卢景拒绝服用以疗伤，称其可救命；程宗扬提及后卢景打断。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np030]"
-      ]
-    },
-    {
       "id": "lyg.item.np031",
       "aliases": [],
       "definition": {
@@ -2812,7 +2642,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np031]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np031]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np031]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np031]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np031]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np030]"
       ]
     },
     {
@@ -2856,22 +2687,6 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np034]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np034]",
         "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np034]"
-      ]
-    },
-    {
-      "id": "lyg.item.np035",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np035",
-        "name": "鸦王座（钢轨模具相关？）",
-        "type": "other",
-        "description": "吕奉先收到皇图天策府功曹科录取通知书，要求正月初五报到。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np035]"
       ]
     },
     {
@@ -2936,7 +2751,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np038]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np038]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np038]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np038]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np038]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np035]"
       ]
     },
     {
@@ -2959,22 +2775,6 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np039]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np039]",
         "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np039]"
-      ]
-    },
-    {
-      "id": "lyg.item.np040",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np040",
-        "name": "魂丹（泉玉姬）",
-        "type": "consumable",
-        "description": "泉玉姬的魂丹已被程宗扬掌控，她无法背叛。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np040]"
       ]
     },
     {
@@ -3045,7 +2845,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np043]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np043]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np043]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np043]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np043]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np040]"
       ]
     },
     {
@@ -3284,92 +3085,6 @@
       ]
     },
     {
-      "id": "lyg.item.np055",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np055",
-        "name": "金属虫蚁箱",
-        "type": "material",
-        "description": "小紫在永安宫精阁获得装有金属虫蚁的铁箱，箱内开启秘境机关的蜘蛛休眠。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np055]"
-      ]
-    },
-    {
-      "id": "lyg.item.np056",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np056",
-        "name": "雪雪",
-        "type": "other",
-        "description": "小紫怀中的白狗名雪雪。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np056]"
-      ]
-    },
-    {
-      "id": "lyg.item.np058",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np058",
-        "name": "机械螃蟹",
-        "type": "other",
-        "description": "小紫操控的机关蟹，曾擒获小玲儿，后被东瀛忍者破坏。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np058]"
-      ]
-    },
-    {
-      "id": "lyg.item.np061",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np061",
-        "name": "断剑",
-        "type": "weapon",
-        "description": "吕雉提及的断剑，用于威胁吕巨君，现被小紫带走。",
-        "grade": "极品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np061]"
-      ]
-    },
-    {
-      "id": "lyg.item.np062",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np062",
-        "name": "铸铁炸弹",
-        "type": "material",
-        "description": "小紫持有的爆炸物，用于威胁僧人。",
-        "grade": "极品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np062]"
-      ]
-    },
-    {
       "id": "lyg.item.np063",
       "aliases": [],
       "definition": {
@@ -3411,33 +3126,6 @@
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np065]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np065]",
         "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np065]"
-      ]
-    },
-    {
-      "id": "lyg.item.np066",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.np066",
-        "name": "珊瑚匕首",
-        "type": "weapon",
-        "description": "锋锐无比，从王守澄处夺回",
-        "grade": "中品",
-        "attributeBonus": {
-          "气血上限": 30,
-          "后天六司": {
-            "根骨": 4
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.buddhist_conspiracy.json#content.items[id=lyg.item.np066]",
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json#content.items[id=lyg.item.np066]",
-        "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np066]",
-        "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np066]",
-        "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np066]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np066]"
       ]
     },
     {
@@ -3548,7 +3236,10 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np071]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np071]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np071]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np071]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np071]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np068]",
+        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np016]",
+        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np025]"
       ]
     },
     {
@@ -3590,7 +3281,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np076]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np076]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np076]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np076]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np076]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np055]"
       ]
     },
     {
@@ -3611,7 +3303,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np077]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np077]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np077]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np077]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np077]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np056]"
       ]
     },
     {
@@ -3632,7 +3325,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np079]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np079]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np079]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np079]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np079]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np058]"
       ]
     },
     {
@@ -3686,7 +3380,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np083]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np083]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np083]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np083]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np083]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np061]"
       ]
     },
     {
@@ -3707,7 +3402,8 @@
         "src/modules/scenarioMods/builtins/data/lyg.ganlu_aftershock.json#content.items[id=lyg.item.np084]",
         "src/modules/scenarioMods/builtins/data/lyg.han_succession.json#content.items[id=lyg.item.np084]",
         "src/modules/scenarioMods/builtins/data/lyg.liangzhou_league.json#content.items[id=lyg.item.np084]",
-        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np084]"
+        "src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json#content.items[id=lyg.item.np084]",
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np062]"
       ]
     },
     {
@@ -4467,92 +4163,6 @@
       ]
     },
     {
-      "id": "lyg.item.dragon_pearl",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.dragon_pearl",
-        "name": "龙珠",
-        "type": "other",
-        "description": "程宗扬触碰的龙珠；触之可触发AI冰冰、获得超级管理员权限，并让冰冰验明在场众人谁在超级用户名单上。",
-        "storyItem": true
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#scenario.events[id=lyg.event.mijing_superuser_roster]"
-      ],
-      "deprecated": true,
-      "deprecatedNote": "2026-10-16 用户裁定：龙珠不是实际道具、只是举例；条目保留待用户裁定去留，不再作试验标注。"
-    },
-    {
-      "id": "lyg.item.green_dragon_blade_huaxiong",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.green_dragon_blade_huaxiong",
-        "name": "青龙偃月刀",
-        "type": "weapon",
-        "description": "云丹琉使用的长刀，斩杀华雄。",
-        "grade": "中品",
-        "attributeBonus": {
-          "气血上限": 30,
-          "后天六司": {
-            "根骨": 4
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np014]"
-      ]
-    },
-    {
-      "id": "lyg.item.six_sense_seal_pill",
-      "aliases": [],
-      "definition": {
-        "id": "lyg.item.six_sense_seal_pill",
-        "name": "六识禁绝丹",
-        "type": "consumable",
-        "description": "广源行庞白鹄提供六识禁绝丹给吕冀，用以将赵昭仪做成活死人。义姁承认为其炼制。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#content.items[id=lyg.item.np068]",
-        "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json#content.items[id=lyg.item.np016]",
-        "src/modules/scenarioMods/builtins/data/lyg.mijing_rumen.json#content.items[id=lyg.item.np025]"
-      ]
-    },
-    {
-      "id": "lyl.item.coral_dagger",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.coral_dagger",
-        "name": "珊瑚匕首",
-        "description": "程宗扬从太泉古阵获得的宝物，锋利异常。",
-        "type": "weapon",
-        "grade": "仙品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json#content.items[id=lyl.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json#content.items[id=lyl.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.coral_dagger]"
-      ]
-    },
-    {
       "id": "lyl.item.fishing_rod",
       "aliases": [],
       "definition": {
@@ -4603,23 +4213,6 @@
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.items[id=lyl.item.np001]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np001]",
         "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np001]"
-      ]
-    },
-    {
-      "id": "lyl.item.np002",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np002",
-        "name": "钓鱼竿（白龙鱼竿）",
-        "type": "other",
-        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.items[id=lyl.item.np002]",
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.items[id=lyl.item.np002]"
       ]
     },
     {
@@ -5040,46 +4633,9 @@
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np025]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.np025]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np025]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np025]"
-      ]
-    },
-    {
-      "id": "lyl.item.np026",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np026",
-        "name": "岳鹏举钥匙",
-        "type": "other",
-        "description": "程宗扬持有岳鹏举留下的钥匙，指向太泉熊谷一四七五。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np025]",
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np026]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.np026]"
-      ]
-    },
-    {
-      "id": "lyl.item.np027",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np027",
-        "name": "珊瑚匕首",
-        "type": "weapon",
-        "description": "珊瑚匕首锋利无比，能斩断赤阳藤",
-        "grade": "仙品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np027]"
       ]
     },
     {
@@ -5128,22 +4684,6 @@
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np029]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np029]",
         "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np029]"
-      ]
-    },
-    {
-      "id": "lyl.item.np030",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np030",
-        "name": "钓鱼竿（白龙鱼竿）",
-        "type": "other",
-        "description": "可伸缩，最长两丈，鱼线透明坚韧，长度四丈，可切割敌人。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.np030]"
       ]
     },
     {
@@ -5307,7 +4847,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np037]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np037]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np037]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np037]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np037]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np040]"
       ]
     },
     {
@@ -5351,23 +4892,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np039]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np039]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np039]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np039]"
-      ]
-    },
-    {
-      "id": "lyl.item.np040",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np040",
-        "name": "蛋屋",
-        "type": "other",
-        "description": "气凝胶制成的便携式房屋，可膨胀成蛋形房间，程宗扬在户外用品店获得。",
-        "grade": "仙品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np040]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np039]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np042]"
       ]
     },
     {
@@ -5390,22 +4916,6 @@
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np041]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np041]",
         "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np041]"
-      ]
-    },
-    {
-      "id": "lyl.item.np042",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np042",
-        "name": "摄像机",
-        "type": "other",
-        "description": "小紫在太泉古阵核心区获得，可记录影像。",
-        "grade": "极品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np042]"
       ]
     },
     {
@@ -5497,7 +5007,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np046]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np046]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np046]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np046]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np046]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np049]"
       ]
     },
     {
@@ -5541,23 +5052,10 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np048]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np048]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np048]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np048]"
-      ]
-    },
-    {
-      "id": "lyl.item.np049",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np049",
-        "name": "鲛帕",
-        "type": "material",
-        "description": "出自长秋宫，绣有玉堂前殿字样",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np049]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np048]",
+        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.items[id=lyl.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.items[id=lyl.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.np030]"
       ]
     },
     {
@@ -5631,7 +5129,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np053]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np053]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np053]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np053]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np053]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np056]"
       ]
     },
     {
@@ -5654,30 +5153,6 @@
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np054]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np054]",
         "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np054]"
-      ]
-    },
-    {
-      "id": "lyl.item.np056",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np056",
-        "name": "假死药",
-        "type": "consumable",
-        "description": "程宗扬用假死药救出淖姬和平城君",
-        "grade": "仙品",
-        "effectTags": [
-          "sedative"
-        ],
-        "onUse": [
-          {
-            "statusId": "unconscious"
-          }
-        ]
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np056]"
       ]
     },
     {
@@ -5922,7 +5397,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np068]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np068]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np068]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np068]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np068]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np083]"
       ]
     },
     {
@@ -5944,7 +5420,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np069]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np069]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np069]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np069]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np069]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np084]"
       ]
     },
     {
@@ -5966,7 +5443,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np070]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np070]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np070]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np070]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np070]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np085]"
       ]
     },
     {
@@ -6019,22 +5497,6 @@
       ]
     },
     {
-      "id": "lyl.item.np074",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np074",
-        "name": "白雉",
-        "type": "other",
-        "description": "越裳国使者向吕冀进献白雉，被吕氏用作祥瑞",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np074]"
-      ]
-    },
-    {
       "id": "lyl.item.np075",
       "aliases": [],
       "definition": {
@@ -6053,7 +5515,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np075]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np075]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np075]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np075]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np075]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np090]"
       ]
     },
     {
@@ -6096,23 +5559,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.np078]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np078]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np078]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np078]"
-      ]
-    },
-    {
-      "id": "lyl.item.np079",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np079",
-        "name": "胡夫人借据（十万金铢）",
-        "type": "other",
-        "description": "胡夫人签名指印的借据，蔡敬仲藏在栏杆箱下。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np079]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np078]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np093]"
       ]
     },
     {
@@ -6139,87 +5587,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.np080]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np080]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np080]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np080]"
-      ]
-    },
-    {
-      "id": "lyl.item.np081",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np081",
-        "name": "陶氏十七万取款凭证（白鹿皮）",
-        "type": "consumable",
-        "description": "陶弘敏当面交给程宗扬，程宗扬转交云丹琉，可在任意陶氏钱庄支取十七万金铢（云丹琉赌酒所得）。背面有陶弘敏亲笔画押。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np081]"
-      ]
-    },
-    {
-      "id": "lyl.item.np082",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np082",
-        "name": "仙草叶片（催情作用）",
-        "type": "consumable",
-        "description": "陶弘敏提供，男子食茎可清心明目，女子食叶可洁体养颜且含催情效果。云丹琉一夜尽食六片，成为程宗扬与其一夜欢好的因素之一。",
-        "grade": "上品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np082]"
-      ]
-    },
-    {
-      "id": "lyl.item.np083",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np083",
-        "name": "都卢难旦妖铃",
-        "type": "material",
-        "description": "小紫用玉瓶装阴魂。",
-        "grade": "极品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np083]"
-      ]
-    },
-    {
-      "id": "lyl.item.np084",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np084",
-        "name": "珊瑚紫蛇",
-        "type": "material",
-        "description": "小紫用龙睛玉和阴魂制成可操控的机械",
-        "grade": "极品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np084]"
-      ]
-    },
-    {
-      "id": "lyl.item.np085",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np085",
-        "name": "春药",
-        "type": "consumable",
-        "description": "小紫用春药破解阮香凝脑中禁制",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np085]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np080]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np095]"
       ]
     },
     {
@@ -6241,7 +5610,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np086]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np086]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np086]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np086]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np086]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np074]"
       ]
     },
     {
@@ -6309,22 +5679,6 @@
       ]
     },
     {
-      "id": "lyl.item.np090",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np090",
-        "name": "雪雪（三头魔犬）",
-        "type": "other",
-        "description": "雪雪可变为三头魔犬，喷吐火焰、寒冰和毒雾。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np090]"
-      ]
-    },
-    {
       "id": "lyl.item.np091",
       "aliases": [],
       "definition": {
@@ -6368,22 +5722,6 @@
       ]
     },
     {
-      "id": "lyl.item.np093",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np093",
-        "name": "五灵石",
-        "type": "consumable",
-        "description": "小紫已有血如意、黄泉玉、青冥琥珀，缺玄水玉和龙槎星辰。",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np093]"
-      ]
-    },
-    {
       "id": "lyl.item.np094",
       "aliases": [],
       "definition": {
@@ -6401,29 +5739,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.np094]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np094]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np094]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np094]"
-      ]
-    },
-    {
-      "id": "lyl.item.np095",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np095",
-        "name": "太泉古阵物品",
-        "type": "armor",
-        "description": "小紫从太泉古阵获得衣物等物品",
-        "grade": "中品",
-        "attributeBonus": {
-          "气血上限": 80,
-          "后天六司": {
-            "根骨": 2
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np095]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np094]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np099]"
       ]
     },
     {
@@ -6444,7 +5761,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.np096]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np096]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np096]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np096]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np096]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np081]"
       ]
     },
     {
@@ -6465,23 +5783,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.np097]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np097]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np097]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np097]"
-      ]
-    },
-    {
-      "id": "lyl.item.np099",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.np099",
-        "name": "黄泉蝶变",
-        "type": "other",
-        "description": "秦桧使用黄泉蝶变破去巫术",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np099]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np097]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np082]"
       ]
     },
     {
@@ -6502,7 +5805,8 @@
         "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json#content.items[id=lyl.item.np101]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json#content.items[id=lyl.item.np101]",
         "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json#content.items[id=lyl.item.np101]",
-        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np101]"
+        "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json#content.items[id=lyl.item.np101]",
+        "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json#content.items[id=lyl.item.np079]"
       ]
     },
     {
@@ -6612,78 +5916,6 @@
       ]
     },
     {
-      "id": "lyl.item.coral_dagger_from_xiao_yaoyi",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.coral_dagger_from_xiao_yaoyi",
-        "name": "珊瑚匕首",
-        "description": "程宗扬从萧遥逸处获得的武器。",
-        "type": "weapon",
-        "grade": "仙品",
-        "techniqueId": "liuchao.technique.taiji_manual",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json#content.items[id=liuchao.item.coral_dagger]"
-      ]
-    },
-    {
-      "id": "lyl.item.coral_dagger_carried",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.coral_dagger_carried",
-        "name": "珊瑚匕首",
-        "description": "锋利异常的匕首，程宗扬随身武器。",
-        "type": "weapon",
-        "grade": "仙品",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json#content.items[id=liuchao.item.coral_dagger]",
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json#content.items[id=liuchao.item.coral_dagger]"
-      ]
-    },
-    {
-      "id": "lyl.item.coral_dagger_cuts_vine",
-      "aliases": [],
-      "definition": {
-        "id": "lyl.item.coral_dagger_cuts_vine",
-        "name": "珊瑚匕首",
-        "description": "一柄锋利无比的匕首，可斩断赤阳藤等坚韧物体。",
-        "type": "weapon",
-        "grade": "仙品",
-        "skillIds": [
-          "lyl.skill.coral_dagger_art"
-        ],
-        "techniqueId": "lyl.technique.taiji_bridge",
-        "attributeBonus": {
-          "气血上限": 90,
-          "后天六司": {
-            "根骨": 12
-          }
-        }
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json#content.items[id=lyl.item.coral_dagger]"
-      ]
-    },
-    {
       "id": "lcq.item.zipper",
       "aliases": [],
       "definition": {
@@ -6697,7 +5929,18 @@
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": [
         "src/modules/scenarioMods/fixedInventoryContracts.ts",
-        "src/modules/scenarioMods/runtime.ts"
+        "src/modules/scenarioMods/runtime.ts",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_02.json#content.items[id=lcq.item.np001]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_01.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_03b_snake_flower_bridge.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_09_trade_and_escape.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_10_jiangzhou_shadow_war.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json#content.items[id=lcq.item.np002]",
+        "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json#content.items[id=lcq.item.np002]"
       ]
     },
     {
@@ -6734,22 +5977,6 @@
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": []
-    },
-    {
-      "id": "lcq.item.zhulu_snake_pill",
-      "aliases": [],
-      "definition": {
-        "id": "lcq.item.zhulu_snake_pill",
-        "name": "朱箓蛇丹",
-        "type": "consumable",
-        "description": "云苍峰用于治疗蛇毒",
-        "grade": "中品"
-      },
-      "stageVariants": {},
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/builtins/data/lcq.stage_04.json#content.items[id=lcq.item.np007]"
-      ]
     },
     {
       "id": "lcq.item.backpack_plain",

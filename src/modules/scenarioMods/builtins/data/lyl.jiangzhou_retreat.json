@@ -1244,7 +1244,7 @@
           "liuchao.technique.jiuyang_shengong"
         ],
         "itemIds": [
-          "lyl.item.coral_dagger_from_xiao_yaoyi",
+          "liuchao.item.coral_dagger",
           "lyl.item.np001",
           "lyl.item.np048"
         ],
@@ -2698,7 +2698,7 @@
   "content": {
     "items": [
       {
-        "id": "lyl.item.coral_dagger_from_xiao_yaoyi"
+        "id": "liuchao.item.coral_dagger"
       },
       {
         "id": "lyl.item.np001"
@@ -3402,7 +3402,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.coral_dagger_from_xiao_yaoyi",
+        "contentId": "liuchao.item.coral_dagger",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

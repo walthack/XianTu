@@ -1023,7 +1023,9 @@ test('seeded loot preview narrates only local rolls and commits once; transport 
   const { save } = await openingSave();
   const runtime = save.世界.状态.剧本模组;
   const id = currentLocation(save, runtime.canon.locations).locationId;
-  const item = runtime.canon.items.find(item => !save.角色.背包?.物品?.[item.id]); assert.ok(item, 'fixture needs a registered item');
+  // 开局关只有背包和拉链两件登记物品（拉链 np002 并入 zipper 后不再有闲置的登记物品），所以取拉链并先从背包里拿掉
+  const item = runtime.canon.items.find(item => item.id === 'lcq.item.zipper'); assert.ok(item, 'fixture needs a registered item');
+  delete save.角色.背包.物品[item.id];
   const old = structuredClone(QINGYU_LOOT_TABLE.locations[id]);
   QINGYU_LOOT_TABLE.locations[id] = { name: '试玩搜刮点', status: 'ready', entries: [{id:'key',itemId:item.id,category:'key',quantity:[1,1]}] };
   let calls = 0;

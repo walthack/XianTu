@@ -184,9 +184,9 @@
         ],
         "itemIds": [
           "liuchao.item.ghost_fang",
-          "lyl.item.coral_dagger_carried",
+          "liuchao.item.coral_dagger",
           "lyl.item.np004",
-          "lyl.item.np002"
+          "lyl.item.np048"
         ],
         "profile": {
           "attributes": {
@@ -851,13 +851,13 @@
         "id": "liuchao.item.ghost_fang"
       },
       {
-        "id": "lyl.item.coral_dagger_carried"
+        "id": "liuchao.item.coral_dagger"
       },
       {
         "id": "lyl.item.np004"
       },
       {
-        "id": "lyl.item.np002"
+        "id": "lyl.item.np048"
       },
       {
         "id": "liuchao.item.spirit_flying_mirror"
@@ -1676,7 +1676,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.coral_dagger_carried",
+        "contentId": "liuchao.item.coral_dagger",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

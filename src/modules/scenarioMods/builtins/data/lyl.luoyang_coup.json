@@ -1427,8 +1427,8 @@
           "lyl.item.np022",
           "lyl.item.np023",
           "lyl.item.np024",
-          "lyl.item.np026",
-          "lyl.item.np027",
+          "lyl.item.np025",
+          "liuchao.item.coral_dagger",
           "lyl.item.np028",
           "lyl.item.np029",
           "lyl.item.np031",
@@ -1437,19 +1437,19 @@
           "lyl.item.np034",
           "lyl.item.np035",
           "lyl.item.np036",
-          "lyl.item.np040",
+          "lyl.item.np037",
           "lyl.item.np038",
-          "lyl.item.np042",
+          "lyl.item.np039",
           "lyl.item.np041",
           "lyl.item.np043",
           "lyl.item.np044",
           "lyl.item.np045",
-          "lyl.item.np049",
+          "lyl.item.np046",
           "lyl.item.np047",
           "lyl.item.np048",
           "lyl.item.np050",
           "lyl.item.np051",
-          "lyl.item.np056",
+          "lyl.item.np053",
           "lyl.item.np054",
           "lyl.item.np057",
           "lyl.item.np058",
@@ -1725,7 +1725,7 @@
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np074"
+          "lyl.item.np086"
         ],
         "profile": {
           "attributes": {
@@ -2038,7 +2038,7 @@
         ],
         "techniqueIds": [],
         "itemIds": [
-          "lyl.item.np079"
+          "lyl.item.np101"
         ],
         "profile": {
           "attributes": {
@@ -2168,8 +2168,8 @@
         ],
         "itemIds": [
           "liuchao.item.qinglong_saber",
-          "lyl.item.np081",
-          "lyl.item.np082"
+          "lyl.item.np096",
+          "lyl.item.np097"
         ],
         "profile": {
           "attributes": {
@@ -2242,16 +2242,16 @@
         "itemIds": [
           "lyl.item.np001",
           "lyl.item.np004",
-          "lyl.item.np083",
-          "lyl.item.np084",
-          "lyl.item.np085",
+          "lyl.item.np068",
+          "lyl.item.np069",
+          "lyl.item.np070",
           "lyl.item.np071",
           "lyl.item.np073",
-          "lyl.item.np090",
+          "lyl.item.np075",
           "lyl.item.np076",
-          "lyl.item.np042",
-          "lyl.item.np093",
-          "lyl.item.np095",
+          "lyl.item.np039",
+          "lyl.item.np078",
+          "lyl.item.np080",
           "lyl.item.np054"
         ],
         "profile": {
@@ -2323,7 +2323,7 @@
           "lyl.technique.np100"
         ],
         "itemIds": [
-          "lyl.item.np099",
+          "lyl.item.np094",
           "lyl.item.np022"
         ],
         "profile": {
@@ -4522,10 +4522,10 @@
         "id": "lyl.item.np024"
       },
       {
-        "id": "lyl.item.np026"
+        "id": "lyl.item.np025"
       },
       {
-        "id": "lyl.item.np027"
+        "id": "liuchao.item.coral_dagger"
       },
       {
         "id": "lyl.item.np028"
@@ -4552,13 +4552,13 @@
         "id": "lyl.item.np036"
       },
       {
-        "id": "lyl.item.np040"
+        "id": "lyl.item.np037"
       },
       {
         "id": "lyl.item.np038"
       },
       {
-        "id": "lyl.item.np042"
+        "id": "lyl.item.np039"
       },
       {
         "id": "lyl.item.np041"
@@ -4573,7 +4573,7 @@
         "id": "lyl.item.np045"
       },
       {
-        "id": "lyl.item.np049"
+        "id": "lyl.item.np046"
       },
       {
         "id": "lyl.item.np047"
@@ -4588,7 +4588,7 @@
         "id": "lyl.item.np051"
       },
       {
-        "id": "lyl.item.np056"
+        "id": "lyl.item.np053"
       },
       {
         "id": "lyl.item.np054"
@@ -4624,7 +4624,7 @@
         "id": "lyl.item.np067"
       },
       {
-        "id": "lyl.item.np074"
+        "id": "lyl.item.np086"
       },
       {
         "id": "lyl.item.imperial_seal"
@@ -4633,22 +4633,22 @@
         "id": "lyl.item.tiger_tally"
       },
       {
-        "id": "lyl.item.np079"
+        "id": "lyl.item.np101"
       },
       {
-        "id": "lyl.item.np081"
+        "id": "lyl.item.np096"
       },
       {
-        "id": "lyl.item.np082"
+        "id": "lyl.item.np097"
       },
       {
-        "id": "lyl.item.np083"
+        "id": "lyl.item.np068"
       },
       {
-        "id": "lyl.item.np084"
+        "id": "lyl.item.np069"
       },
       {
-        "id": "lyl.item.np085"
+        "id": "lyl.item.np070"
       },
       {
         "id": "lyl.item.np071"
@@ -4657,19 +4657,19 @@
         "id": "lyl.item.np073"
       },
       {
-        "id": "lyl.item.np090"
+        "id": "lyl.item.np075"
       },
       {
         "id": "lyl.item.np076"
       },
       {
-        "id": "lyl.item.np093"
+        "id": "lyl.item.np078"
       },
       {
-        "id": "lyl.item.np095"
+        "id": "lyl.item.np080"
       },
       {
-        "id": "lyl.item.np099"
+        "id": "lyl.item.np094"
       },
       {
         "id": "lyl.item.np102"
@@ -6143,7 +6143,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np027",
+        "contentId": "liuchao.item.coral_dagger",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6175,7 +6175,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np040",
+        "contentId": "lyl.item.np037",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6191,7 +6191,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np042",
+        "contentId": "lyl.item.np039",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6231,7 +6231,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np056",
+        "contentId": "lyl.item.np053",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -6264,7 +6264,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np082",
+        "contentId": "lyl.item.np097",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.yun_dan_liu"
@@ -6272,7 +6272,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np083",
+        "contentId": "lyl.item.np068",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"
@@ -6280,7 +6280,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyl.item.np084",
+        "contentId": "lyl.item.np069",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.xiao_zi"

@@ -1265,9 +1265,9 @@
         ],
         "itemIds": [
           "liuchao.item.shuang_dao",
-          "lyg.item.np001",
+          "lyg.item.np002",
           "lyg.item.np003",
-          "lyg.item.np006",
+          "lyg.item.np007",
           "lyg.item.np008",
           "lyg.item.np009",
           "lyg.item.np010",
@@ -2336,7 +2336,7 @@
         "role": "云如瑶亲侄女，云世商会家主侄女/女骑士",
         "description": "云如瑶的亲侄女。泼辣刁蛮、好胜张扬的世家小辣妹，习武身手矫健；少数在床笫间争主动的狂野女骑士。",
         "itemIds": [
-          "lyg.item.green_dragon_blade_huaxiong",
+          "liuchao.item.green_dragon_sword",
           "lyg.item.silver_dragon_scale_armor"
         ],
         "profile": {
@@ -2527,7 +2527,7 @@
         "role": "女医，程宗扬控制下的线人",
         "description": "义姁是程宗扬麾下的一名女医，生得容貌过人，却总板着一张雪白的脸，显出几分与年纪不符的老气。她性子冷傲又市侩，说话办事从不老实，给人诊治时更是谨慎到近乎计较——唯有偶尔玉颊微红、流露慌乱的一瞬，才露出几分医者不该有的娇艳。作为线人，她深谙夹缝中求存的道理，谁都知道这女人不好惹，却谁也说不准她到底向着谁。",
         "itemIds": [
-          "lyg.item.six_sense_seal_pill",
+          "lyg.item.np071",
           "lyg.item.np127"
         ],
         "profile": {
@@ -4214,13 +4214,13 @@
         "id": "liuchao.item.rusty_cuo_dao"
       },
       {
-        "id": "lyg.item.np001"
+        "id": "lyg.item.np002"
       },
       {
         "id": "lyg.item.np003"
       },
       {
-        "id": "lyg.item.np006"
+        "id": "lyg.item.np007"
       },
       {
         "id": "lyg.item.np008"
@@ -4241,13 +4241,13 @@
         "id": "lyg.item.np077"
       },
       {
-        "id": "lyg.item.green_dragon_blade_huaxiong"
+        "id": "liuchao.item.green_dragon_sword"
       },
       {
         "id": "lyg.item.silver_dragon_scale_armor"
       },
       {
-        "id": "lyg.item.six_sense_seal_pill"
+        "id": "lyg.item.np071"
       },
       {
         "id": "lyg.item.np127"
@@ -9114,7 +9114,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np001",
+        "contentId": "lyg.item.np002",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
@@ -9130,7 +9130,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lyg.item.np006",
+        "contentId": "lyg.item.np007",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"

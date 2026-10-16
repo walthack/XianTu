@@ -1237,7 +1237,7 @@
           "lcq.item.lingerie",
           "lcq.item.vibrator",
           "lcq.item.drug",
-          "lcq.item.np001"
+          "lcq.item.zipper"
         ],
         "profile": {
           "appearance": "下巴有胡茬",
@@ -2182,9 +2182,6 @@
       },
       {
         "id": "lcq.item.horse"
-      },
-      {
-        "id": "lcq.item.np001"
       },
       {
         "id": "lcq.item.zipper"
@@ -4341,7 +4338,7 @@
         "playerAllowed": true
       },
       {
-        "contentId": "lcq.item.np001",
+        "contentId": "lcq.item.zipper",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
