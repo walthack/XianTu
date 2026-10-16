@@ -25,6 +25,8 @@ const steps = [
   ['统一实体索引重建', 'node', ['scripts/build-entity-index.mjs']],
   ['道具技能功法总表校验', 'node', ['scripts/validate-entity-catalog.mjs']],
   ['支线人物线引用校验', 'node', ['scripts/validate-quest-lines.mjs']],
+  ['登场反向索引重建', 'node', ['scripts/build-entity-appearances.mjs']],
+  ['物品/角色↔剧情指针校验', 'node', ['scripts/validate-story-links.mjs']],
   ['人工裁定执法', 'node', ['scripts/validate-canon-decisions.mjs']],
   ['主轴/存档契约校验', 'node', ['scripts/validate-axis-save-contract.mjs']],
   ['人物时点级数引用校验', 'node', ['scripts/validate-character-levels.mjs']],

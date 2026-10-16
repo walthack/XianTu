@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "coverage": {
+    "stages": ["lyg.mijing_rumen", "lcq.stage_02"]
+  },
+  "links": [
+    {
+      "id": "link.demo.dragon_pearl.use",
+      "stageId": "lyg.mijing_rumen",
+      "eventId": "lyg.event.mijing_superuser_roster",
+      "actionId": "touch_pearl_verify_superuser_roster",
+      "actor": "liuchao.character.cheng_zongyang",
+      "verb": "use",
+      "object": { "kind": "item", "id": "lyg.item.dragon_pearl", "quantity": 1 },
+      "necessity": "must"
+    },
+    {
+      "id": "link.stage02.jin_nang.obtain",
+      "stageId": "lcq.stage_02",
+      "eventId": "lcq.event.s02_01",
+      "actionId": "accept_silk_bag",
+      "actor": "liuchao.character.cheng_zongyang",
+      "verb": "obtain",
+      "object": { "kind": "item", "id": "lcq.item.jin_nang", "quantity": 1 },
+      "necessity": "optional"
+    }
+  ],
+  "characterStory": {
+    "liuchao.character.ning_yu": {
+      "mustAppear": [
+        { "eventId": "lcq.event.ningyu_regicide_offer" },
+        { "eventId": "lcq.event.rainforest_black_shoal" }
+      ],
+      "requires": [{ "eventDone": "lcq.event.gamble_bond_signed" }]
+    },
+    "liuchao.character.le_mingzhu": {
+      "mustAppear": [{ "eventId": "lcq.event.s03b_snake_flower_bridge_07" }]
+    }
+  }
+}

@@ -1,0 +1,779 @@
+{
+  "version": 1,
+  "scope": "tracked",
+  "derivedFrom": [
+    "builtins/data scenario.events",
+    "story-links.json",
+    "items.json story"
+  ],
+  "entities": {
+    "character:liuchao.character.le_mingzhu": {
+      "chapters": [
+        43,
+        46,
+        48,
+        50,
+        56,
+        59,
+        61,
+        76,
+        77,
+        78,
+        79,
+        80,
+        96,
+        97,
+        100,
+        101,
+        108,
+        110,
+        114,
+        117,
+        120,
+        121,
+        136,
+        139
+      ],
+      "events": [
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_07",
+          "axisId": "qingyu.43.1",
+          "chapter": 43,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_yinzhu_xiongerpu",
+          "axisId": "qingyu.46.1",
+          "chapter": 46,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_02",
+          "axisId": "qingyu.48.1",
+          "chapter": 48,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_03",
+          "axisId": "qingyu.50.1",
+          "chapter": 50,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_06",
+          "axisId": "qingyu.56.1",
+          "chapter": 56,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_03_ins_le_mingzhu_pan_secret",
+          "critical": false,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+          "axisId": "qingyu.59.2",
+          "chapter": 59,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+          "axisId": "qingyu.59.3",
+          "chapter": 59,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+          "axisId": "qingyu.61.1",
+          "chapter": 61,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.haishen_hall_merfolk",
+          "axisId": "qingyu.76.1",
+          "chapter": 76,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.pull_harpoon_lemingzhu",
+          "axisId": "qingyu.77.1",
+          "chapter": 77,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.xieyi_biling_war",
+          "axisId": "qingyu.78.3",
+          "chapter": 78,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.regroup_caravan_envoy",
+          "axisId": "qingyu.79.3",
+          "chapter": 79,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.weapon_deal_with_geluo",
+          "axisId": "qingyu.80.3",
+          "chapter": 80,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05",
+          "eventId": "lcq.event.s05_01",
+          "axisId": "qingyu.76.1",
+          "chapter": 76,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05",
+          "eventId": "lcq.event.s05_02",
+          "axisId": "qingyu.77.1",
+          "chapter": 77,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05",
+          "eventId": "lcq.event.s05_03",
+          "axisId": "qingyu.78.3",
+          "chapter": 78,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_02_xiaozi_exposed",
+          "axisId": "qingyu.96.2",
+          "chapter": 96,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_04_enter_ghost_palace",
+          "axisId": "qingyu.97.3",
+          "chapter": 97,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_06_breakout_and_reunion",
+          "axisId": "qingyu.100.2",
+          "chapter": 100,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_07_xiaozi_trap",
+          "axisId": "qingyu.101.3",
+          "chapter": 101,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+          "axisId": "qingyu.108.2",
+          "chapter": 108,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+          "axisId": "qingyu.110.3",
+          "chapter": 110,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.ghost_king_swallowed",
+          "axisId": "qingyu.114.2",
+          "chapter": 114,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.slay_dragon",
+          "axisId": "qingyu.117.1",
+          "chapter": 117,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.xieyi_entrustment",
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_ice_gu_detour",
+          "axisId": "qingyu.120.1",
+          "chapter": 120,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.xiaozi_kills_mother",
+          "axisId": "qingyu.120.1",
+          "chapter": 120,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_wuer_suli_depart",
+          "axisId": "qingyu.121.1",
+          "chapter": 121,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.debut_lemingzhu",
+          "critical": false,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_06",
+          "eventId": "lcq.event.s06_01",
+          "axisId": "qingyu.114.2",
+          "chapter": 114,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_06",
+          "eventId": "lcq.event.s06_02",
+          "axisId": "qingyu.117.1",
+          "chapter": 117,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_06",
+          "eventId": "lcq.event.s06_04",
+          "axisId": "qingyu.120.1",
+          "chapter": 120,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.pan_settlement_clash",
+          "axisId": "yunlong.136.1",
+          "chapter": 136,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.pan_hetu_exit",
+          "axisId": "yunlong.139.1",
+          "chapter": 139,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        }
+      ]
+    },
+    "character:liuchao.character.ning_yu": {
+      "chapters": [
+        20,
+        21,
+        25,
+        26,
+        31,
+        32,
+        35,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        48,
+        50,
+        51,
+        54,
+        56,
+        68,
+        71,
+        74,
+        87,
+        97,
+        100,
+        117,
+        120,
+        121
+      ],
+      "events": [
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.ningyu_enters_gamble",
+          "axisId": "qingyu.20.1",
+          "chapter": 20,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.s02_06",
+          "axisId": "qingyu.20.1",
+          "chapter": 20,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.gamble_bond_signed",
+          "axisId": "qingyu.21.1",
+          "chapter": 21,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.free_ajiman",
+          "axisId": "qingyu.25.1",
+          "chapter": 25,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.iron_bridge_ambush",
+          "axisId": "qingyu.32.2",
+          "chapter": 32,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.ningyu_regicide_offer",
+          "axisId": "qingyu.35.1",
+          "chapter": 35,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.zixi_taiyi_intercept",
+          "axisId": "qingyu.35.2",
+          "chapter": 35,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.rainforest_black_shoal",
+          "axisId": "qingyu.37.2",
+          "chapter": 37,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.silent_sheyi_village",
+          "axisId": "qingyu.38.1",
+          "chapter": 38,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_01",
+          "axisId": "qingyu.20.2",
+          "chapter": 20,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_02",
+          "axisId": "qingyu.21.1",
+          "chapter": 21,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_04",
+          "axisId": "qingyu.25.1",
+          "chapter": 25,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_05",
+          "axisId": "qingyu.26.1",
+          "chapter": 26,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_06",
+          "axisId": "qingyu.31.2",
+          "chapter": 31,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_07",
+          "axisId": "qingyu.32.2",
+          "chapter": 32,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_09",
+          "axisId": "qingyu.35.1",
+          "chapter": 35,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_10",
+          "axisId": "qingyu.35.2",
+          "chapter": 35,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_11",
+          "axisId": "qingyu.37.2",
+          "chapter": 37,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.s03_12",
+          "axisId": "qingyu.38.1",
+          "chapter": 38,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03",
+          "eventId": "lcq.event.debut_ningyu",
+          "critical": false,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.zixi_intercept",
+          "axisId": "qingyu.35.2",
+          "chapter": 35,
+          "critical": false,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_01",
+          "axisId": "qingyu.39.1",
+          "chapter": 39,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_02",
+          "axisId": "qingyu.40.1",
+          "chapter": 40,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_03",
+          "axisId": "qingyu.40.2",
+          "chapter": 40,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_04",
+          "axisId": "qingyu.41.1",
+          "chapter": 41,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_05",
+          "axisId": "qingyu.42.1",
+          "chapter": 42,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_06",
+          "axisId": "qingyu.42.2",
+          "chapter": 42,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_07",
+          "axisId": "qingyu.43.1",
+          "chapter": 43,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_03b_snake_flower_bridge",
+          "eventId": "lcq.event.s03b_wanwu_night",
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_02",
+          "axisId": "qingyu.48.1",
+          "chapter": 48,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_03",
+          "axisId": "qingyu.50.1",
+          "chapter": 50,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_01",
+          "axisId": "qingyu.51.2",
+          "chapter": 51,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_05",
+          "axisId": "qingyu.54.1",
+          "chapter": 54,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04",
+          "eventId": "lcq.event.s04_06",
+          "axisId": "qingyu.56.1",
+          "chapter": 56,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.ice_gu_coercion",
+          "axisId": "qingyu.26.1",
+          "chapter": 26,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+          "axisId": "qingyu.68.1",
+          "chapter": 68,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_16",
+          "axisId": "qingyu.71.1",
+          "chapter": 71,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_18",
+          "axisId": "qingyu.74.1",
+          "chapter": 74,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+          "axisId": "qingyu.74.2",
+          "chapter": 74,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+          "eventId": "lcq.event.guiwangdong_coop_pact",
+          "axisId": "qingyu.87.4",
+          "chapter": 87,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05",
+          "eventId": "lcq.event.s05_10",
+          "axisId": "qingyu.87.4",
+          "chapter": 87,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_03_saan_secret_path",
+          "axisId": "qingyu.97.2",
+          "chapter": 97,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_04_enter_ghost_palace",
+          "axisId": "qingyu.97.3",
+          "chapter": 97,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_06_breakout_and_reunion",
+          "axisId": "qingyu.100.2",
+          "chapter": 100,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.slay_dragon",
+          "axisId": "qingyu.117.1",
+          "chapter": 117,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_ice_gu_detour",
+          "axisId": "qingyu.120.1",
+          "chapter": 120,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_wuer_suli_depart",
+          "axisId": "qingyu.121.1",
+          "chapter": 121,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_05b",
+          "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays",
+          "critical": true,
+          "source": "relatedCharacterIds"
+        },
+        {
+          "stageId": "lcq.stage_06",
+          "eventId": "lcq.event.s06_02",
+          "axisId": "qingyu.117.1",
+          "chapter": 117,
+          "critical": true,
+          "source": "relatedCharacterIds"
+        }
+      ]
+    },
+    "item:lcq.item.jin_nang": {
+      "chapters": [
+        10
+      ],
+      "events": [
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.s02_01",
+          "axisId": "qingyu.10.2",
+          "chapter": 10,
+          "source": "inventoryTransfers",
+          "quantity": 1
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.s02_01",
+          "axisId": "qingyu.10.2",
+          "chapter": 10,
+          "source": "inventoryTransfers",
+          "quantity": 1
+        },
+        {
+          "stageId": "lcq.stage_02",
+          "eventId": "lcq.event.s02_01",
+          "axisId": "qingyu.10.2",
+          "chapter": 10,
+          "source": "story-link",
+          "linkId": "link.stage02.jin_nang.obtain",
+          "verb": "obtain",
+          "quantity": 1,
+          "necessity": "optional"
+        }
+      ]
+    },
+    "item:lyg.item.dragon_pearl": {
+      "chapters": [
+        26
+      ],
+      "events": [
+        {
+          "stageId": "lyg.mijing_rumen",
+          "eventId": "lyg.event.mijing_superuser_roster",
+          "axisId": "yange.26.1",
+          "chapter": 26,
+          "critical": true,
+          "source": "story-link",
+          "linkId": "link.demo.dragon_pearl.use",
+          "verb": "use",
+          "quantity": 1,
+          "necessity": "must"
+        }
+      ]
+    }
+  }
+}
