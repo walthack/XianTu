@@ -2,6 +2,7 @@ import {trainingRealm} from '../modules/scenarioMods/levelProgression';
 import { rollD20 } from './diceRoller';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
 import type { WorldSimulationAuthorityReceipt } from '@/modules/scenarioMods/worldSimulation';
+import type { ActionClass, Degree } from '@/modules/scenarioMods/freeAction/config';
 
 export interface EventActionJudgementReceipt {
   kind: 'event_action_judgement';
@@ -10,7 +11,18 @@ export interface EventActionJudgementReceipt {
   contractHash: string;
 }
 
-export type JudgementAuthorityReceipt = WorldSimulationAuthorityReceipt | EventActionJudgementReceipt;
+/** 自由行动票的判定回执：票随判定存活，确认后不再重跑 intent；只由本地签发，前端不能伪造。 */
+export interface FreeActionJudgementReceipt {
+  kind: 'free_action_judgement';
+  ticketId: string;
+  actionClass: ActionClass;
+  variant: string;
+  targetId: string;
+  degree: Degree;
+  itemId: string | null;
+}
+
+export type JudgementAuthorityReceipt = WorldSimulationAuthorityReceipt | EventActionJudgementReceipt | FreeActionJudgementReceipt;
 
 export interface JudgementSpiritCost {
   onResolveRatio: number;
@@ -163,6 +175,20 @@ function normalizeAuthorityReceipt(raw: unknown): JudgementAuthorityReceipt | un
     const contractHash = normalizeText(receipt.contractHash);
     if (!eventId || !actionId || !contractHash) return undefined;
     return { kind: 'event_action_judgement', eventId, actionId, contractHash };
+  }
+  if (value.kind === 'free_action_judgement') {
+    const receipt = value as Partial<FreeActionJudgementReceipt>;
+    const ticketId = normalizeText(receipt.ticketId);
+    const actionClass = normalizeText(receipt.actionClass);
+    const variant = normalizeText(receipt.variant);
+    const targetId = normalizeText(receipt.targetId);
+    const degree = normalizeText(receipt.degree);
+    const itemId = normalizeText(receipt.itemId);
+    if (!ticketId || !actionClass || !variant || !targetId || !degree) return undefined;
+    return {
+      kind: 'free_action_judgement', ticketId, actionClass: actionClass as ActionClass, variant, targetId,
+      degree: degree as Degree, itemId: itemId || null,
+    };
   }
   if (value.kind !== 'world_sim_intervention') return undefined;
   const intervention = value as Partial<WorldSimulationAuthorityReceipt>;

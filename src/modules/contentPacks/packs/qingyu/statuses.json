@@ -1,0 +1,65 @@
+[
+  {
+    "id": "addiction",
+    "label": "成瘾",
+    "tier": "general",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "通用成瘾状态，任何人都可能中：长期接触某种药物、毒物或嗜好物后形成依赖。按「来源→效果→解除」建预设；来源写在具体预设里。通用档只能用物品解除（项目规则：general 档状态不得由剧情旗标解除）。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "依赖发作时心神不宁，难以安坐"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "item",
+        "ref": "detox"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    }
+  },
+  {
+    "id": "addiction.maigu",
+    "label": "麻古成瘾",
+    "tier": "book",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "预设：来源=麻古。红线：请求解毒不等于痊愈，任何内容都不得设置下面的解除旗标（#177）。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "依赖发作时难以安坐，冷汗直冒"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.addiction.maigu.resolved"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    }
+  }
+]

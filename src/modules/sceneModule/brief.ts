@@ -96,7 +96,7 @@ export function renderResultLines(contract: Contract, result: BeatResult): strin
   for (const claim of result.claims) {
     if (claim.blocked) lines.push(`${partyDisplay(contract, claim.party)}：${claim.blocked}`);
     else if (claim.realized > 0) lines.push(`${partyDisplay(contract, claim.party)}：推进 ${claim.realized} 格${claim.clamped ? `（主张 ${claim.claimed} 格，被合同夹紧）` : ''} → ${claim.label}`);
-    else if (result.tier === 'success' || result.tier === 'great_success') lines.push(`${partyDisplay(contract, claim.party)}：未能推进（已到你能推到的上限）`);
+    else if (claim.claimed > 0 && (result.tier === 'success' || result.tier === 'great_success')) lines.push(`${partyDisplay(contract, claim.party)}：未能推进（已到你能推到的上限）`);
   }
   if (result.edge) lines.push('局面往敌人那边偏：本拍敌方出手更难防');
   if (result.fumble) {

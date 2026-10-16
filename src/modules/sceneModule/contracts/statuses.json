@@ -532,6 +532,10 @@
         "value": -3
       },
       {
+        "kind": "appearance",
+        "tag": "面无血色"
+      },
+      {
         "kind": "note",
         "field": "text",
         "text": "需静养，不宜强战"
@@ -609,6 +613,10 @@
       {
         "kind": "rollModifier",
         "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "psyche",
         "value": -2
       },
       {
@@ -696,6 +704,14 @@
         "value": -1
       },
       {
+        "kind": "psyche",
+        "value": -1
+      },
+      {
+        "kind": "appearance",
+        "tag": "面色青灰"
+      },
+      {
         "kind": "note",
         "field": "text",
         "text": "毒性未解"
@@ -711,7 +727,11 @@
       "minutes": null
     },
     "upgradesTo": "dying",
-    "freeText": "narrative"
+    "freeText": "narrative",
+    "lifeFloor": {
+      "max": 10,
+      "perDose": 3
+    }
   },
   {
     "id": "dying",
@@ -1162,5 +1182,515 @@
     "afterScene": {
       "minutes": 4320
     }
+  },
+  {
+    "id": "mind.confused",
+    "label": "神志不清",
+    "aliases": [
+      "神志恍惚",
+      "意识模糊"
+    ],
+    "tier": "general",
+    "cause": "story",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。受惊、中毒、重击或药物后神志混乱，能行动但答非所问。",
+    "effects": [
+      {
+        "kind": "consciousness",
+        "level": "confused"
+      },
+      {
+        "kind": "psyche",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "神志恍惚，分不清眼前的人与事"
+      }
+    ],
+    "afterScene": {
+      "minutes": 360
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 360
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "sense.sight",
+    "label": "目力受损",
+    "aliases": [
+      "视物模糊",
+      "目眩不清"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。烟、毒、强光或头部受击后视力下降。",
+    "effects": [
+      {
+        "kind": "sense",
+        "sense": "sight",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "看不清远处与细处"
+      }
+    ],
+    "afterScene": {
+      "minutes": 720
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 720
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "sense.hearing",
+    "label": "耳力受损",
+    "aliases": [
+      "耳鸣",
+      "听觉受损"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。巨响、内伤或毒物后听力下降。",
+    "effects": [
+      {
+        "kind": "sense",
+        "sense": "hearing",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "听不清人声与脚步"
+      }
+    ],
+    "afterScene": {
+      "minutes": 720
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 720
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "sense.smell",
+    "label": "嗅觉受损",
+    "aliases": [
+      "嗅觉失灵",
+      "鼻塞不闻"
+    ],
+    "tier": "general",
+    "cause": "environment",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。毒烟、风寒或头部受击后嗅觉下降。",
+    "effects": [
+      {
+        "kind": "sense",
+        "sense": "smell",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "闻不出气味，辨不了烟毒与药香"
+      }
+    ],
+    "afterScene": {
+      "minutes": 720
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 720
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "sense.taste",
+    "label": "味觉受损",
+    "aliases": [
+      "味觉失灵",
+      "食不知味"
+    ],
+    "tier": "general",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。毒物、药物或内伤后味觉下降。",
+    "effects": [
+      {
+        "kind": "sense",
+        "sense": "taste",
+        "value": -2
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "尝不出饮食里的异味"
+      }
+    ],
+    "afterScene": {
+      "minutes": 720
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 720
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "sense.touch",
+    "label": "触觉迟钝",
+    "aliases": [
+      "触觉麻木",
+      "肌肤麻木"
+    ],
+    "tier": "general",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。麻药、寒毒或冻伤后触觉下降。",
+    "effects": [
+      {
+        "kind": "sense",
+        "sense": "touch",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "手上没有轻重，觉不出冷热痛痒"
+      }
+    ],
+    "afterScene": {
+      "minutes": 720
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 720
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "fatigue.weary",
+    "label": "疲惫",
+    "aliases": [
+      "精疲力尽",
+      "疲惫不堪"
+    ],
+    "tier": "general",
+    "cause": "story",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。长途奔波、通宵或久战后体力见底。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "psyche",
+        "value": -1
+      },
+      {
+        "kind": "restrict",
+        "actions": [
+          "run"
+        ]
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "筋疲力尽，跑不动"
+      }
+    ],
+    "afterScene": {
+      "minutes": 480
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 480
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "fatigue.mental",
+    "label": "心神耗竭",
+    "aliases": [
+      "心力交瘁",
+      "心神疲惫"
+    ],
+    "tier": "general",
+    "cause": "story",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。长时间紧绷、劳神或强行催动神识后心神疲惫。",
+    "effects": [
+      {
+        "kind": "psyche",
+        "value": -2
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "心神涣散，难以久思"
+      }
+    ],
+    "afterScene": {
+      "minutes": 480
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 480
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "restrict.arm",
+    "label": "单臂乏力",
+    "aliases": [
+      "手臂无力",
+      "一臂不能用力"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。臂膀受创，持握与出手受限；行动细分示例。",
+    "effects": [
+      {
+        "kind": "restrict",
+        "actions": [
+          "grip",
+          "attack"
+        ]
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -2
+      },
+      {
+        "kind": "appearance",
+        "tag": "手臂缠伤"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "这条手臂握不紧，使不上力"
+      }
+    ],
+    "afterScene": {
+      "minutes": 10080
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "heal"
+      },
+      {
+        "kind": "time",
+        "minutes": 10080
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "restrict.leg",
+    "label": "腿脚难行",
+    "aliases": [
+      "腿脚不便",
+      "难以奔跑"
+    ],
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。腿脚受创，奔跑受限；行动细分示例。",
+    "effects": [
+      {
+        "kind": "restrict",
+        "actions": [
+          "run"
+        ]
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
+      {
+        "kind": "appearance",
+        "tag": "行走不便"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "腿脚不便，跑不起来"
+      }
+    ],
+    "afterScene": {
+      "minutes": 10080
+    },
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "heal"
+      },
+      {
+        "kind": "time",
+        "minutes": 10080
+      }
+    ],
+    "provisional": true
+  },
+  {
+    "id": "disability.one_eye",
+    "label": "一目失明",
+    "aliases": [
+      "独眼",
+      "一眼失明"
+    ],
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。永久伤残示例：存档里单独存放，不随时间、休整、药物消退，只能由剧情旗标解除。",
+    "effects": [
+      {
+        "kind": "sense",
+        "sense": "sight",
+        "value": -2
+      },
+      {
+        "kind": "appearance",
+        "tag": "一目失明"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "一只眼已不能视物"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.disability.one_eye.resolved"
+      }
+    ],
+    "provisional": true,
+    "permanent": true
+  },
+  {
+    "id": "disability.lame_leg",
+    "label": "跛足",
+    "aliases": [
+      "腿瘸",
+      "落下跛疾"
+    ],
+    "tier": "book",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。永久伤残示例：存档里单独存放，不随时间、休整、药物消退，只能由剧情旗标解除。",
+    "effects": [
+      {
+        "kind": "restrict",
+        "actions": [
+          "run"
+        ]
+      },
+      {
+        "kind": "appearance",
+        "tag": "跛行"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "落下了跛疾，奔跑不得"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.disability.lame_leg.resolved"
+      }
+    ],
+    "provisional": true,
+    "permanent": true
   }
 ]

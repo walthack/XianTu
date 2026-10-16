@@ -71,6 +71,12 @@
     {
       "id": "explain",
       "label": "解释商队来意",
+      "aliases": [
+        "解释来意",
+        "解释商队来意",
+        "说明来意",
+        "回答盘问"
+      ],
       "type": "push",
       "track": "answer",
       "baseDifficulty": 11,

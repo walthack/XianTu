@@ -37,7 +37,13 @@ export type StatusEffectSpec =
   | { kind: 'advantage'; scope: 'action' | 'defense' }
   | { kind: 'lockLever'; elements?: string[]; elementKinds?: string[] }
   | { kind: 'downed' }
-  | { kind: 'note'; field: 'appearance' | 'memory' | 'attribute' | 'text'; text: string; attr?: string; delta?: number };
+  | { kind: 'note'; field: 'appearance' | 'memory' | 'attribute' | 'text'; text: string; attr?: string; delta?: number }
+  // 气血之外的分项效果（B 步）。取值范围与可用名单都在 game-numbers.status；消费方是 statusProfile.ts。
+  | { kind: 'psyche'; value: number }
+  | { kind: 'sense'; sense: string; value: number }
+  | { kind: 'consciousness'; level: string }
+  | { kind: 'restrict'; actions: string[] }
+  | { kind: 'appearance'; tag: string };
 
 export type StatusRemoveRule =
   | { kind: 'scene_end' }
@@ -69,6 +75,10 @@ export interface StatusDef {
   provisional?: boolean;
   /** 场外由代码按名称/别名从文字挂到主角：input＝玩家自述或正文均可；narrative＝只认正文；缺省＝不从文字挂。 */
   freeText?: 'input' | 'narrative';
+  /** 下限计数（如中毒）：每次剂量扣 perDose，计数从 max 往下；到下限即停（下限由调用方按角色定，见 freeAction/protect.ts），降到 0 才算致命。 */
+  lifeFloor?: { max: number; perDose: number };
+  /** 永久伤残：存档里单独存放（statusRecords.disabilities），不按时间、休整或药物消退，只能由 remove 里的剧情旗标解除。 */
+  permanent?: boolean;
 }
 
 export interface ActiveStatus {

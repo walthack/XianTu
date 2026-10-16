@@ -105,6 +105,11 @@
       "id": "armed",
       "side": "opposed",
       "ref": "蛇傀与持械随从",
+      "aliases": [
+        "蛇傀",
+        "持械随从",
+        "随从"
+      ],
       "tracks": [
         {
           "id": "vit",
@@ -134,6 +139,10 @@
       "id": "fire",
       "side": "opposed",
       "ref": "火楼",
+      "aliases": [
+        "火楼",
+        "火楼里的人"
+      ],
       "tracks": [
         {
           "id": "rescue",
@@ -156,6 +165,10 @@
       "id": "exit",
       "side": "opposed",
       "ref": "村口",
+      "aliases": [
+        "村口",
+        "出口"
+      ],
       "tracks": [
         {
           "id": "seal",
@@ -198,6 +211,12 @@
     {
       "id": "command",
       "label": "分派人手制服持械敌人",
+      "aliases": [
+        "分派人手",
+        "指挥人手",
+        "组织人手",
+        "制服蛇傀"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 11,
@@ -208,6 +227,11 @@
     {
       "id": "capture",
       "label": "留活口",
+      "aliases": [
+        "留活口",
+        "抓活的",
+        "活捉"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 11,
@@ -219,6 +243,13 @@
     {
       "id": "rescue",
       "label": "打开火楼救人",
+      "aliases": [
+        "救火楼",
+        "打开火楼",
+        "救族人",
+        "救火楼里的人",
+        "破开出口"
+      ],
       "type": "push",
       "track": "rescue",
       "baseDifficulty": 11,
@@ -229,6 +260,15 @@
     {
       "id": "seal",
       "label": "守村口不让人逃",
+      "aliases": [
+        "守村口",
+        "守住村口",
+        "堵住村口",
+        "封住村口",
+        "封锁村口",
+        "不让人逃",
+        "不让一个人跑"
+      ],
       "type": "push",
       "track": "seal",
       "baseDifficulty": 11,
@@ -239,6 +279,13 @@
     {
       "id": "stop_slaughter",
       "label": "阻止滥杀奴隶",
+      "aliases": [
+        "阻止滥杀",
+        "别杀奴隶",
+        "不许滥杀",
+        "喊话阻止",
+        "劝阻"
+      ],
       "type": "support",
       "baseDifficulty": 7,
       "onSuccess": {

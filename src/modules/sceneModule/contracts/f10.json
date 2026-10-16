@@ -573,7 +573,11 @@
             "抹血",
             "沾血",
             "鲜血",
-            "血迹"
+            "血迹",
+            "血喷",
+            "喷血",
+            "血洒",
+            "血溅"
           ],
           "power": 3,
           "goalTags": [
@@ -584,7 +588,7 @@
           ]
         }
       ],
-      "actionPattern": "(?:用|抹|涂|洒|泼|以|让)[^，。；]{0,8}(?:血|沾血)|(?:把|将)[^，。；]{0,5}血[^，。；]{0,8}(?:抹|滴|涂|洒|泼|沾)"
+      "actionPattern": "(?:用|抹|涂|洒|泼|喷|溅|以|让)[^，。；]{0,8}(?:血|沾血)|(?:把|将)[^，。；]{0,5}血[^，。；]{0,8}(?:抹|滴|涂|洒|泼|喷|溅|沾)|血[^，。；]{0,2}(?:喷|洒|泼|溅|抹|涂)"
     },
     {
       "id": "broken_vial",
@@ -680,31 +684,67 @@
     {
       "id": "subdue_alive",
       "label": "制住丹宸，不伤她性命",
+      "aliases": [
+        "制住丹宸",
+        "制住她",
+        "按住丹宸",
+        "按住她",
+        "压制丹宸",
+        "擒住丹宸",
+        "夺下断斧",
+        "打晕丹宸"
+      ],
       "type": "push",
       "baseDifficulty": 10,
-      "track": "resist"
+      "track": "resist",
+      "targetIds": [
+        "dan_chen"
+      ]
     },
     {
       "id": "destroy_tiger",
       "label": "让骨虎沾上主角的血",
+      "aliases": [
+        "用血克制骨虎",
+        "让血沾上骨虎",
+        "血喷骨虎",
+        "真阳之血喷骨虎",
+        "血洒骨虎",
+        "用血破骨虎"
+      ],
       "type": "push",
       "baseDifficulty": 6,
       "track": "vit",
       "completeOnSuccess": true,
       "availability": {
         "fromBeat": 4
-      }
+      },
+      "targetIds": [
+        "hu_sha"
+      ]
     },
     {
       "id": "drive_away",
       "label": "赶走丹宸",
+      "aliases": [
+        "赶走",
+        "驱走",
+        "逼退丹宸",
+        "击退丹宸",
+        "甩开丹宸",
+        "脱身",
+        "摆脱",
+        "外撤",
+        "撤出",
+        "突围",
+        "冲出"
+      ],
       "type": "push",
       "baseDifficulty": 10,
       "track": "resist",
       "finishAs": "被赶走",
-      "aliases": [
-        "赶走",
-        "驱走"
+      "targetIds": [
+        "dan_chen"
       ]
     },
     {

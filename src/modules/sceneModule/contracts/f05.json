@@ -133,6 +133,15 @@
     {
       "id": "attack",
       "label": "攻击对手",
+      "aliases": [
+        "攻击对手",
+        "出手攻击",
+        "挥刀攻击",
+        "一刀砍",
+        "砍倒",
+        "劈砍",
+        "进攻"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 12

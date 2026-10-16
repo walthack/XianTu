@@ -1,0 +1,402 @@
+{
+  "memories": {
+    "mem.ningyu.o2.agree": {
+      "summary": "南行途中，程宗扬应下了她弑主的开价，没有问她为什么。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.o2.refuse": {
+      "summary": "南行途中，程宗扬回绝了她的开价，说不替人弑主。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.o2.ask_why": {
+      "summary": "南行途中，程宗扬没有答应也没有回绝，只问她为什么。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y3.public": {
+      "summary": "黑石滩过河后，程宗扬当着众人向她道谢，她没有接话。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y3.private": {
+      "summary": "黑石滩过河后，程宗扬私下把干衣服递到她手边，她接了。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y3.nothing": {
+      "summary": "黑石滩过河后，程宗扬什么也没有做。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y5.bring": {
+      "summary": "进峒前，程宗扬让人扶着她一同进去。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y5.stay": {
+      "summary": "进峒前，程宗扬把她留在了峒外。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y5.ask": {
+      "summary": "进峒前，程宗扬先问了她自己的意思。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y6.word": {
+      "summary": "临别那天，程宗扬隔着门对她说了一句话，门没有开。",
+      "salienceId": "sal.notable"
+    },
+    "mem.ningyu.y6.token": {
+      "summary": "临别那天，程宗扬在她的门前留下了一样东西，门没有开。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l1.rush": {
+      "summary": "鸦人营地里，她冲出去时，程宗扬立刻跟着冲了出来。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l1.wait": {
+      "summary": "鸦人营地里，她冲出去时，程宗扬先按住性子等鸦人露出破绽。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l1.shield": {
+      "summary": "鸦人营地里，程宗扬先抢到她身前护住了她。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l2.share": {
+      "summary": "分烤鹅掌菌时，程宗扬掰了一半给她。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l4.laugh": {
+      "summary": "鬼王宫里重逢，她给了程宗扬一巴掌，他笑着认栽。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l4.scold": {
+      "summary": "鬼王宫里重逢，她给了程宗扬一巴掌，他数落了她两句。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l4.run": {
+      "summary": "鬼王宫里重逢，她给了程宗扬一巴掌，他二话不说拉着她就跑。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l3.pull": {
+      "summary": "海神殿里，程宗扬替她把卡住的鱼叉拔了下来。",
+      "salienceId": "sal.notable"
+    },
+    "mem.lmz.l3.bandage": {
+      "summary": "海神殿里，程宗扬替她拔下鱼叉，又把她的伤处仔细包好。",
+      "salienceId": "sal.notable"
+    }
+  },
+  "facts": {
+    "fact.lmz.phoenix_change": {
+      "subjectId": "liuchao.character.le_mingzhu",
+      "claim": "乐明珠在奴隶暴动中浑身发热，红光涌动，谢艺说与当年的情形如出一辙，不必担心。"
+    }
+  },
+  "affinityWeights": {
+    "aff.w.ningyu.regicide_agree": {
+      "$num": "lineBonds.ningyu.regicideAgree"
+    },
+    "aff.w.ningyu.regicide_refuse": {
+      "$num": "lineBonds.ningyu.regicideRefuse"
+    },
+    "aff.w.ningyu.regicide_ask_why": {
+      "$num": "lineBonds.ningyu.regicideAskWhy"
+    },
+    "aff.w.ningyu.care_public_thanks": {
+      "$num": "lineBonds.ningyu.carePublicThanks"
+    },
+    "aff.w.ningyu.care_warm": {
+      "$num": "lineBonds.ningyu.careWarm"
+    },
+    "aff.w.ningyu.care_none": {
+      "$num": "lineBonds.ningyu.careNone"
+    },
+    "aff.w.ningyu.enter_bring": {
+      "$num": "lineBonds.ningyu.enterBring"
+    },
+    "aff.w.ningyu.enter_stay": {
+      "$num": "lineBonds.ningyu.enterStay"
+    },
+    "aff.w.ningyu.enter_ask": {
+      "$num": "lineBonds.ningyu.enterAsk"
+    },
+    "aff.w.ningyu.farewell_word": {
+      "$num": "lineBonds.ningyu.farewellWord"
+    },
+    "aff.w.ningyu.farewell_token": {
+      "$num": "lineBonds.ningyu.farewellToken"
+    },
+    "aff.w.bonus_active": {
+      "$num": "lineBonds.bonusPerActiveAction"
+    },
+    "aff.w.lmz.crow_rush": {
+      "$num": "lineBonds.lemingzhu.crowRush"
+    },
+    "aff.w.lmz.crow_wait": {
+      "$num": "lineBonds.lemingzhu.crowWait"
+    },
+    "aff.w.lmz.crow_shield": {
+      "$num": "lineBonds.lemingzhu.crowShield"
+    },
+    "aff.w.lmz.tease_penalty": {
+      "$num": "lineBonds.lemingzhu.teasePenalty"
+    },
+    "aff.w.lmz.share_mushroom": {
+      "$num": "lineBonds.lemingzhu.shareMushroom"
+    },
+    "aff.w.lmz.reunion_laugh": {
+      "$num": "lineBonds.lemingzhu.reunionLaugh"
+    },
+    "aff.w.lmz.reunion_scold": {
+      "$num": "lineBonds.lemingzhu.reunionScold"
+    },
+    "aff.w.lmz.reunion_run": {
+      "$num": "lineBonds.lemingzhu.reunionRun"
+    },
+    "aff.w.lmz.harpoon_pull": {
+      "$num": "lineBonds.lemingzhu.harpoonPull"
+    },
+    "aff.w.lmz.harpoon_bandage": {
+      "$num": "lineBonds.lemingzhu.harpoonBandage"
+    }
+  },
+  "salience": {
+    "sal.notable": {
+      "$num": "lineBonds.salience.notable"
+    }
+  },
+  "intentMatches": {
+    "match.baihu.o1.priced": {
+      "matchAny": [
+        "说成买卖",
+        "一笔买卖",
+        "价钱先谈清楚",
+        "明码标价"
+      ]
+    },
+    "match.baihu.o1.probing": {
+      "matchAny": [
+        "先问她要什么",
+        "要我做什么",
+        "先问清楚"
+      ]
+    },
+    "match.baihu.o1.deferential": {
+      "matchAny": [
+        "价钱随她",
+        "低头应下",
+        "听凭"
+      ]
+    },
+    "match.baihu.o3.full": {
+      "matchAny": [
+        "照实说",
+        "如实相告",
+        "如实报告"
+      ]
+    },
+    "match.baihu.o3.partial": {
+      "matchAny": [
+        "按下不提",
+        "镜子不提",
+        "只报黑魔海"
+      ]
+    },
+    "match.baihu.o3.lie": {
+      "matchAny": [
+        "谎称",
+        "已有线索",
+        "换时间",
+        "编个线索"
+      ]
+    },
+    "match.baihu.o5.courier": {
+      "matchAny": [
+        "托云苍峰",
+        "捎信",
+        "带一封信回五原"
+      ]
+    },
+    "match.baihu.o5.silent": {
+      "matchAny": [
+        "谁也不通知",
+        "不托话",
+        "解了蛊再说"
+      ]
+    },
+    "match.baihu.o5.sample": {
+      "matchAny": [
+        "托小魏",
+        "带回白湖",
+        "另写一封信"
+      ]
+    },
+    "match.ningyu.o2.agree": {
+      "matchAny": [
+        "答应她",
+        "这件事我来办",
+        "我来办"
+      ]
+    },
+    "match.ningyu.o2.refuse": {
+      "matchAny": [
+        "拒绝她",
+        "不替人弑主",
+        "我不会动手"
+      ],
+      "rejectIf": [
+        "不拒绝"
+      ]
+    },
+    "match.ningyu.o2.ask_why": {
+      "matchAny": [
+        "先问她为什么",
+        "为什么要这样",
+        "不表态"
+      ]
+    },
+    "match.ningyu.y3.public": {
+      "matchAny": [
+        "当着众人",
+        "向她道谢",
+        "谢谢她"
+      ]
+    },
+    "match.ningyu.y3.private": {
+      "matchAny": [
+        "干衣服",
+        "递到她手边",
+        "私下"
+      ]
+    },
+    "match.ningyu.y3.nothing": {
+      "matchAny": [
+        "什么也不做",
+        "装没看见",
+        "不上前"
+      ]
+    },
+    "match.ningyu.y5.bring": {
+      "matchAny": [
+        "带她进峒",
+        "一同进峒",
+        "扶着她"
+      ]
+    },
+    "match.ningyu.y5.stay": {
+      "matchAny": [
+        "留她在外",
+        "留在峒外",
+        "派人守着"
+      ]
+    },
+    "match.ningyu.y5.ask": {
+      "matchAny": [
+        "问她自己",
+        "她自己的意思",
+        "先问她"
+      ]
+    },
+    "match.ningyu.y6.word": {
+      "matchAny": [
+        "隔着门",
+        "对她说",
+        "说一句话"
+      ]
+    },
+    "match.ningyu.y6.token": {
+      "matchAny": [
+        "留下一样东西",
+        "放在门前",
+        "留在门前"
+      ]
+    },
+    "match.ningyu.y6.knock": {
+      "matchAny": [
+        "敲门",
+        "敲了敲门"
+      ]
+    },
+    "match.ningyu.y6.call": {
+      "matchAny": [
+        "唤她",
+        "叫她的名字",
+        "喊她"
+      ]
+    },
+    "match.ningyu.y6.recall": {
+      "matchAny": [
+        "提起黑石滩",
+        "黑石滩的火",
+        "南行路上"
+      ]
+    },
+    "match.lmz.l1.rush": {
+      "matchAny": [
+        "立刻冲出去",
+        "冲出去",
+        "马上出手"
+      ]
+    },
+    "match.lmz.l1.wait": {
+      "matchAny": [
+        "等破绽",
+        "再等一等",
+        "按住性子"
+      ]
+    },
+    "match.lmz.l1.shield": {
+      "matchAny": [
+        "先护住她",
+        "护到身后",
+        "先护住"
+      ]
+    },
+    "match.lmz.l2.share": {
+      "matchAny": [
+        "分她一半",
+        "鹅掌菌",
+        "掰了一半"
+      ]
+    },
+    "match.lmz.l4.laugh": {
+      "matchAny": [
+        "笑着认栽",
+        "认栽",
+        "笑出声"
+      ]
+    },
+    "match.lmz.l4.scold": {
+      "matchAny": [
+        "数落她",
+        "下手没轻没重",
+        "埋怨她"
+      ]
+    },
+    "match.lmz.l4.run": {
+      "matchAny": [
+        "拉着她跑",
+        "拉住她",
+        "扭头就跑"
+      ]
+    },
+    "match.lmz.l5.witness": {
+      "matchAny": [
+        "看着她",
+        "在一旁",
+        "红光"
+      ]
+    },
+    "match.lmz.l3.pull": {
+      "matchAny": [
+        "替她拔叉",
+        "把叉拔",
+        "拔下鱼叉",
+        "拔出鱼叉"
+      ]
+    },
+    "match.lmz.l3.bandage": {
+      "matchAny": [
+        "包扎",
+        "包好",
+        "裹好",
+        "止血"
+      ]
+    }
+  }
+}

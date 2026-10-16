@@ -159,6 +159,12 @@
     {
       "id": "attack",
       "label": "了结达古",
+      "aliases": [
+        "了结达古",
+        "杀达古",
+        "攻击达古",
+        "砍达古"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 11,
@@ -169,6 +175,12 @@
     {
       "id": "command",
       "label": "组织防线攻击达古",
+      "aliases": [
+        "组织防线",
+        "指挥众人攻击",
+        "围攻达古",
+        "号令围攻"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 11,

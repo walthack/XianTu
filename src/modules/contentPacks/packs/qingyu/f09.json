@@ -155,6 +155,12 @@
     {
       "id": "repel",
       "label": "以阳气与意志逼退阴煞",
+      "aliases": [
+        "逼退阴煞",
+        "用阳气逼退",
+        "驱散阴煞",
+        "以真阳逼退"
+      ],
       "type": "push",
       "track": "repel",
       "baseDifficulty": 11,
@@ -166,6 +172,12 @@
     {
       "id": "rescue",
       "label": "护住花苗女子",
+      "aliases": [
+        "护住花苗女子",
+        "护住女子",
+        "救花苗女子",
+        "护送女子"
+      ],
       "type": "push",
       "track": "safe",
       "baseDifficulty": 11,

@@ -3,6 +3,7 @@ import defaults from '../../../mod-kit/location-loot.qingyu.json';
 import { canonicalLocationId } from './travel/locationIds';
 import { currentLocation } from './travel/travelLedger';
 import { settleScenarioInventoryTransfers } from './inventoryTransactions';
+import { DEFAULT_CURRENCIES, type DefaultCurrencyId } from '../../utils/currencySystem';
 
 export interface LocationLootEntry {
   id: string; itemId?: string; category: 'key' | 'common' | 'rare' | 'currency';
@@ -83,7 +84,7 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
     let quantity = ['key', 'rare'].includes(entry.category) ? 1 : lo + Math.floor(roll() * (hi - lo + 1));
     if (entry.category === 'currency') {
       const currency = entry.currency || '铜铢';
-      const rate = currency === '金铢' ? 2000 : currency === '银铢' ? 100 : 1;
+      const rate = DEFAULT_CURRENCIES[currency as DefaultCurrencyId]?.价值度 ?? 1;
       quantity = Math.min(quantity, Math.floor(moneyLeft / rate));
       if (!quantity) continue;
       moneyLeft -= quantity * rate;

@@ -69,6 +69,12 @@
     {
       "id": "break_through",
       "label": "击退拦路武士",
+      "aliases": [
+        "击退武士",
+        "击退拦路武士",
+        "冲破拦截",
+        "杀出一条路"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 12

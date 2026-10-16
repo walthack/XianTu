@@ -1,5 +1,6 @@
 import {GAME_NUMBERS,boundedStat,boundedLuck} from '../modules/sceneModule/numbers';
 import { equippedAxe } from '@/modules/sceneModule/host/loot';
+import { stripReportedSpeech } from '@/modules/sceneModule/inputPolicy';
 import {
   createJudgementProposal,
   environmentFactorFor,
@@ -57,7 +58,7 @@ const STAT_WEIGHTS = GAME_NUMBERS.weights as Record<JudgementKind, Array<[string
 
 function numeric(value: unknown): number { const n = Number(value); return Number.isFinite(n) ? n : 0; }
 
-function stateFactors(kind: JudgementKind, saveData: any) {
+export function stateFactors(kind: JudgementKind, saveData: any) {
   const innate = saveData?.角色?.身份?.先天六司 || {};
   const acquired = saveData?.角色?.身份?.后天六司 || {};
   const weighted = STAT_WEIGHTS[kind].reduce((sum, [key, weight]) => sum + (numeric(innate[key]) + numeric(acquired[key])) * weight, 0);
@@ -200,7 +201,9 @@ export function buildLocalJudgementPreflight(
       canonPolicy: 'if_only', sourceEventId: contract.eventId, createdAtTurn: currentTurn,
     });
   }
-  const matched = RISK_RULES.find(([, matcher]) => matcher.test(normalized));
+  // 转述别人的话（“他说你要攻击我”）不是玩家本轮的动作，不拿来触发关键词判定。
+  const riskText = stripReportedSpeech(normalized);
+  const matched = RISK_RULES.find(([, matcher]) => matcher.test(riskText));
   if (!matched) return null;
   const [kind] = matched;
   const data = calculateTurnJudgementData(

@@ -1,0 +1,441 @@
+[
+  {
+    "id": "line.side.baihu",
+    "kind": "side",
+    "ownerCharacterIds": [],
+    "entry": {
+      "canonChapterAtLeast": 18
+    },
+    "loadBearing": false,
+    "beats": [
+      {
+        "id": "beat.baihu.o1_price",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.charge_sudaji_fee_ins_baihu_price",
+        "requires": {
+          "all": [
+            {
+              "eventActive": "lcq.event.charge_sudaji_fee"
+            },
+            {
+              "presentActor": "liuchao.character.su_daji"
+            },
+            {
+              "atLocation": "liuchao.location.wuyuan"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.charge_sudaji_fee"
+            },
+            {
+              "canonChapterAtLeast": 23
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.charge_sudaji_fee_ins_baihu_price",
+                "actionId": "act.baihu.o1.priced"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.charge_sudaji_fee_ins_baihu_price",
+                "actionId": "act.baihu.o1.probing"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.charge_sudaji_fee_ins_baihu_price",
+                "actionId": "act.baihu.o1.deferential"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.baihu.o1.priced": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o1.priced",
+              "mutexGroupId": "mutex.baihu.o1",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.first_bargain",
+              "value": "priced"
+            }
+          ],
+          "act.baihu.o1.probing": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o1.probing",
+              "mutexGroupId": "mutex.baihu.o1",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.first_bargain",
+              "value": "probing"
+            }
+          ],
+          "act.baihu.o1.deferential": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o1.deferential",
+              "mutexGroupId": "mutex.baihu.o1",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.first_bargain",
+              "value": "deferential"
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.baihu.o1_price.previous",
+          "tensionId": "text.card.baihu.o1_price.tension",
+          "optionIds": [
+            "text.card.baihu.o1_price.option1",
+            "text.card.baihu.o1_price.option2",
+            "text.card.baihu.o1_price.option3"
+          ]
+        },
+        "steps": [
+          {
+            "actionId": "act.baihu.o1.priced",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o1.priced",
+            "intentId": "intent.baihu.o1.priced",
+            "outcomeId": "outcome.act.baihu.o1.priced",
+            "intentMatchId": "match.baihu.o1.priced"
+          },
+          {
+            "actionId": "act.baihu.o1.probing",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o1.probing",
+            "intentId": "intent.baihu.o1.probing",
+            "outcomeId": "outcome.act.baihu.o1.probing",
+            "intentMatchId": "match.baihu.o1.probing"
+          },
+          {
+            "actionId": "act.baihu.o1.deferential",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o1.deferential",
+            "intentId": "intent.baihu.o1.deferential",
+            "outcomeId": "outcome.act.baihu.o1.deferential",
+            "intentMatchId": "match.baihu.o1.deferential"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_02",
+        "locationId": "liuchao.location.wuyuan",
+        "presentActorIds": [
+          "liuchao.character.su_daji"
+        ],
+        "canonChapter": 21,
+        "briefId": "brief.baihu.o1_price",
+        "objectiveId": "text.obj.baihu.o1_price"
+      },
+      {
+        "id": "beat.baihu.o3_report",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report",
+        "requires": {
+          "all": [
+            {
+              "eventActive": "lcq.event.s04b_lingfei_baiyi_crisis_07"
+            },
+            {
+              "atLocation": "liuchao.location.baiyi"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.s04b_lingfei_baiyi_crisis_07"
+            },
+            {
+              "canonChapterAtLeast": 61
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report",
+                "actionId": "act.baihu.o3.full"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report",
+                "actionId": "act.baihu.o3.partial"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report",
+                "actionId": "act.baihu.o3.lie"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.baihu.o3.full": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o3.full",
+              "mutexGroupId": "mutex.baihu.o3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.report",
+              "value": "full"
+            }
+          ],
+          "act.baihu.o3.partial": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o3.partial",
+              "mutexGroupId": "mutex.baihu.o3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.report",
+              "value": "partial"
+            }
+          ],
+          "act.baihu.o3.lie": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o3.lie",
+              "mutexGroupId": "mutex.baihu.o3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.report",
+              "value": "lie"
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.baihu.o3_report.previous",
+          "tensionId": "text.card.baihu.o3_report.tension",
+          "optionIds": [
+            "text.card.baihu.o3_report.option1",
+            "text.card.baihu.o3_report.option2",
+            "text.card.baihu.o3_report.option3"
+          ]
+        },
+        "steps": [
+          {
+            "actionId": "act.baihu.o3.full",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o3.full",
+            "intentId": "intent.baihu.o3.full",
+            "outcomeId": "outcome.act.baihu.o3.full",
+            "intentMatchId": "match.baihu.o3.full"
+          },
+          {
+            "actionId": "act.baihu.o3.partial",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o3.partial",
+            "intentId": "intent.baihu.o3.partial",
+            "outcomeId": "outcome.act.baihu.o3.partial",
+            "intentMatchId": "match.baihu.o3.partial"
+          },
+          {
+            "actionId": "act.baihu.o3.lie",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o3.lie",
+            "intentId": "intent.baihu.o3.lie",
+            "outcomeId": "outcome.act.baihu.o3.lie",
+            "intentMatchId": "match.baihu.o3.lie"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+        "locationId": "liuchao.location.baiyi",
+        "presentActorIds": [
+          "lcq.character.nanhuang_yiyong",
+          "liuchao.character.su_li"
+        ],
+        "canonChapter": 60,
+        "briefId": "brief.baihu.o3_report",
+        "objectiveId": "text.obj.baihu.o3_report"
+      },
+      {
+        "id": "beat.baihu.o5_deadline",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s05b_ice_gu_detour_ins_baihu_return",
+        "requires": {
+          "all": [
+            {
+              "eventActive": "lcq.event.s05b_ice_gu_detour"
+            },
+            {
+              "atLocation": "lcq.location.nanhuang_departure_camp"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.s05b_ice_gu_detour"
+            },
+            {
+              "canonChapterAtLeast": 119
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_ice_gu_detour_ins_baihu_return",
+                "actionId": "act.baihu.o5.courier"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_ice_gu_detour_ins_baihu_return",
+                "actionId": "act.baihu.o5.silent"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_ice_gu_detour_ins_baihu_return",
+                "actionId": "act.baihu.o5.sample"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.baihu.o5.courier": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o5.courier",
+              "mutexGroupId": "mutex.baihu.o5",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.return_message",
+              "value": "courier"
+            }
+          ],
+          "act.baihu.o5.silent": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o5.silent",
+              "mutexGroupId": "mutex.baihu.o5",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.return_message",
+              "value": "silent"
+            }
+          ],
+          "act.baihu.o5.sample": [
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.baihu.o5.sample",
+              "mutexGroupId": "mutex.baihu.o5",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.return_message",
+              "value": "letter"
+            }
+          ]
+        },
+        "role": [
+          "load_bearing",
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.baihu.o5_deadline.previous",
+          "tensionId": "text.card.baihu.o5_deadline.tension",
+          "optionIds": [
+            "text.card.baihu.o5_deadline.option1",
+            "text.card.baihu.o5_deadline.option2",
+            "text.card.baihu.o5_deadline.option3"
+          ]
+        },
+        "echo": {
+          "reads": "branch.baihu.report",
+          "variants": {
+            "lie": {
+              "previousId": "text.echo.baihu.o5_deadline.lie.previous"
+            }
+          }
+        },
+        "steps": [
+          {
+            "actionId": "act.baihu.o5.courier",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o5.courier",
+            "intentId": "intent.baihu.o5.courier",
+            "outcomeId": "outcome.act.baihu.o5.courier",
+            "intentMatchId": "match.baihu.o5.courier"
+          },
+          {
+            "actionId": "act.baihu.o5.silent",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o5.silent",
+            "intentId": "intent.baihu.o5.silent",
+            "outcomeId": "outcome.act.baihu.o5.silent",
+            "intentMatchId": "match.baihu.o5.silent"
+          },
+          {
+            "actionId": "act.baihu.o5.sample",
+            "kind": "attempt",
+            "labelId": "text.act.baihu.o5.sample",
+            "intentId": "intent.baihu.o5.sample",
+            "outcomeId": "outcome.act.baihu.o5.sample",
+            "intentMatchId": "match.baihu.o5.sample"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_05b",
+        "locationId": "lcq.location.nanhuang_departure_camp",
+        "presentActorIds": [
+          "liuchao.character.qi_yuan",
+          "liuchao.character.yun_cang_feng",
+          "lcq.character.nanhuang_xiaowei"
+        ],
+        "canonChapter": 118,
+        "briefId": "brief.baihu.o5_deadline",
+        "objectiveId": "text.obj.baihu.o5_deadline"
+      }
+    ],
+    "nameId": "text.line.side.baihu.title",
+    "entryHintId": "text.line.side.baihu.hint"
+  }
+]

@@ -1,0 +1,884 @@
+[
+  {
+    "id": "line.char.le_mingzhu.bond",
+    "kind": "character",
+    "ownerCharacterIds": [
+      "liuchao.character.le_mingzhu"
+    ],
+    "entry": {
+      "canonChapterAtLeast": 47
+    },
+    "loadBearing": false,
+    "beats": [
+      {
+        "id": "beat.lmz.l1_crow",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow",
+        "requires": {
+          "all": [
+            {
+              "any": [
+                {
+                  "eventActive": "lcq.event.s04b_lingfei_baiyi_crisis_02"
+                },
+                {
+                  "eventActive": "lcq.event.s04b_lingfei_baiyi_crisis_03"
+                }
+              ]
+            },
+            {
+              "presentActor": "liuchao.character.le_mingzhu"
+            },
+            {
+              "atLocation": "liuchao.location.baiyi"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.s04b_lingfei_baiyi_crisis_03"
+            },
+            {
+              "canonChapterAtLeast": 58
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow",
+                "actionId": "act.lmz.l1.rush"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow",
+                "actionId": "act.lmz.l1.wait"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow",
+                "actionId": "act.lmz.l1.shield"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.lmz.l1.rush": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.crow_rush"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l1.rush"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l1.rush",
+              "mutexGroupId": "mutex.lmz.l1",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.first_rescue",
+              "value": "rushed"
+            }
+          ],
+          "act.lmz.l1.wait": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.crow_wait"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l1.wait"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l1.wait",
+              "mutexGroupId": "mutex.lmz.l1",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.first_rescue",
+              "value": "waited"
+            }
+          ],
+          "act.lmz.l1.shield": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.crow_shield"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l1.shield"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l1.shield",
+              "mutexGroupId": "mutex.lmz.l1",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.first_rescue",
+              "value": "shielded"
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.lmz.l1_crow.previous",
+          "tensionId": "text.card.lmz.l1_crow.tension",
+          "optionIds": [
+            "text.card.lmz.l1_crow.option1",
+            "text.card.lmz.l1_crow.option2",
+            "text.card.lmz.l1_crow.option3"
+          ]
+        },
+        "steps": [
+          {
+            "actionId": "act.lmz.l1.rush",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l1.rush",
+            "intentId": "intent.lmz.l1.rush",
+            "outcomeId": "outcome.act.lmz.l1.rush",
+            "intentMatchId": "match.lmz.l1.rush"
+          },
+          {
+            "actionId": "act.lmz.l1.wait",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l1.wait",
+            "intentId": "intent.lmz.l1.wait",
+            "outcomeId": "outcome.act.lmz.l1.wait",
+            "intentMatchId": "match.lmz.l1.wait"
+          },
+          {
+            "actionId": "act.lmz.l1.shield",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l1.shield",
+            "intentId": "intent.lmz.l1.shield",
+            "outcomeId": "outcome.act.lmz.l1.shield",
+            "intentMatchId": "match.lmz.l1.shield"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+        "locationId": "liuchao.location.baiyi",
+        "presentActorIds": [
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.a_xi",
+          "liuchao.character.wu_er_lang"
+        ],
+        "canonChapter": 57,
+        "briefId": "brief.lmz.l1_crow",
+        "objectiveId": "text.obj.lmz.l1_crow"
+      },
+      {
+        "id": "beat.lmz.l2.share",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s04_03_ins_le_mingzhu_share_mushroom",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.s04_03"
+            },
+            {
+              "presentActor": "liuchao.character.le_mingzhu"
+            },
+            {
+              "atLocation": "liuchao.location.shan_jian"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventActive": "lcq.event.s04_04"
+            },
+            {
+              "canonChapterAtLeast": 56
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s04_03_ins_le_mingzhu_share_mushroom",
+                "actionId": "act.lmz.l2.share"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.lmz.l2.share": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.share_mushroom"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l2.share"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.shared_mushroom",
+              "value": true
+            }
+          ]
+        },
+        "role": [
+          "color"
+        ],
+        "steps": [
+          {
+            "actionId": "act.lmz.l2.share",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l2.share",
+            "intentId": "intent.lmz.l2.share",
+            "outcomeId": "outcome.act.lmz.l2.share",
+            "intentMatchId": "match.lmz.l2.share"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_04",
+        "locationId": "liuchao.location.shan_jian",
+        "presentActorIds": [
+          "liuchao.character.le_mingzhu"
+        ],
+        "canonChapter": 48,
+        "briefId": "brief.lmz.l2.share",
+        "objectiveId": "text.obj.lmz.l2.share"
+      },
+      {
+        "id": "beat.lmz.l3_harpoon",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon",
+        "requires": {
+          "all": [
+            {
+              "any": [
+                {
+                  "eventActive": "lcq.event.pull_harpoon_lemingzhu"
+                },
+                {
+                  "eventDone": "lcq.event.pull_harpoon_lemingzhu"
+                }
+              ]
+            },
+            {
+              "presentActor": "liuchao.character.le_mingzhu"
+            },
+            {
+              "atLocation": "liuchao.location.sea_temple"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "canonChapterAtLeast": 77
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon",
+                "actionId": "act.lmz.l3.pull"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon",
+                "actionId": "act.lmz.l3.bandage"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.lmz.l3.pull": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.harpoon_pull"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l3.pull"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l3.pull",
+              "mutexGroupId": "mutex.lmz.l3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.harpoon",
+              "value": "pulled"
+            }
+          ],
+          "act.lmz.l3.bandage": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.harpoon_bandage"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l3.bandage"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l3.bandage",
+              "mutexGroupId": "mutex.lmz.l3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.harpoon",
+              "value": "bandaged"
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.lmz.l3_harpoon.previous",
+          "tensionId": "text.card.lmz.l3_harpoon.tension",
+          "optionIds": [
+            "text.card.lmz.l3_harpoon.option1",
+            "text.card.lmz.l3_harpoon.option2"
+          ]
+        },
+        "echo": {
+          "reads": "branch.lmz.first_rescue",
+          "variants": {
+            "shielded": {
+              "previousId": "text.echo.lmz.l3_harpoon.shielded.previous"
+            }
+          }
+        },
+        "steps": [
+          {
+            "actionId": "act.lmz.l3.pull",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l3.pull",
+            "intentId": "intent.lmz.l3.pull",
+            "outcomeId": "outcome.act.lmz.l3.pull",
+            "intentMatchId": "match.lmz.l3.pull"
+          },
+          {
+            "actionId": "act.lmz.l3.bandage",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l3.bandage",
+            "intentId": "intent.lmz.l3.bandage",
+            "outcomeId": "outcome.act.lmz.l3.bandage",
+            "intentMatchId": "match.lmz.l3.bandage"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+        "locationId": "liuchao.location.sea_temple",
+        "presentActorIds": [
+          "liuchao.character.le_mingzhu"
+        ],
+        "canonChapter": 75,
+        "briefId": "brief.lmz.l3_harpoon",
+        "objectiveId": "text.obj.lmz.l3_harpoon"
+      },
+      {
+        "id": "beat.lmz.l4_reunion",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion",
+        "requires": {
+          "all": [
+            {
+              "eventActive": "lcq.event.s05b_06_breakout_and_reunion"
+            },
+            {
+              "presentActor": "liuchao.character.le_mingzhu"
+            },
+            {
+              "atLocation": "liuchao.location.gui_wang_gong"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.s05b_06_breakout_and_reunion"
+            },
+            {
+              "canonChapterAtLeast": 101
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion",
+                "actionId": "act.lmz.l4.laugh"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion",
+                "actionId": "act.lmz.l4.scold"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_06_breakout_and_reunion_ins_lmz_reunion",
+                "actionId": "act.lmz.l4.run"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.lmz.l4.laugh": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.reunion_laugh"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l4.laugh"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l4.laugh",
+              "mutexGroupId": "mutex.lmz.l4",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.reunion",
+              "value": "laughed"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.title_upgraded",
+              "value": true,
+              "when": {
+                "stateScoreAtLeast": {
+                  "terms": [
+                    {
+                      "stateId": "branch.lmz.first_rescue",
+                      "scores": {
+                        "rushed": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Rush"
+                        },
+                        "waited": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Wait"
+                        },
+                        "shielded": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Shield"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.pan_secret",
+                      "scores": {
+                        "promised": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Promise"
+                        },
+                        "hard_truth": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2HardTruth"
+                        },
+                        "teased": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Tease"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.shared_mushroom",
+                      "scores": {
+                        "true": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Share"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.harpoon",
+                      "scores": {
+                        "pulled": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l3Pull"
+                        },
+                        "bandaged": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l3Bandage"
+                        }
+                      }
+                    }
+                  ],
+                  "plus": {
+                    "$num": "lineBonds.lemingzhu.activeScore.l4Laugh"
+                  },
+                  "value": {
+                    "$num": "lineBonds.lemingzhu.titleUpgradeActiveScore"
+                  }
+                }
+              }
+            }
+          ],
+          "act.lmz.l4.scold": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.reunion_scold"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l4.scold"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l4.scold",
+              "mutexGroupId": "mutex.lmz.l4",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.reunion",
+              "value": "scolded"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.title_upgraded",
+              "value": true,
+              "when": {
+                "stateScoreAtLeast": {
+                  "terms": [
+                    {
+                      "stateId": "branch.lmz.first_rescue",
+                      "scores": {
+                        "rushed": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Rush"
+                        },
+                        "waited": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Wait"
+                        },
+                        "shielded": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Shield"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.pan_secret",
+                      "scores": {
+                        "promised": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Promise"
+                        },
+                        "hard_truth": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2HardTruth"
+                        },
+                        "teased": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Tease"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.shared_mushroom",
+                      "scores": {
+                        "true": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Share"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.harpoon",
+                      "scores": {
+                        "pulled": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l3Pull"
+                        },
+                        "bandaged": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l3Bandage"
+                        }
+                      }
+                    }
+                  ],
+                  "plus": {
+                    "$num": "lineBonds.lemingzhu.activeScore.l4Scold"
+                  },
+                  "value": {
+                    "$num": "lineBonds.lemingzhu.titleUpgradeActiveScore"
+                  }
+                }
+              }
+            }
+          ],
+          "act.lmz.l4.run": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.le_mingzhu",
+              "weightId": "aff.w.lmz.reunion_run"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.le_mingzhu",
+              "episodeTemplateId": "mem.lmz.l4.run"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l4.run",
+              "mutexGroupId": "mutex.lmz.l4",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.reunion",
+              "value": "fled"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.title_upgraded",
+              "value": true,
+              "when": {
+                "stateScoreAtLeast": {
+                  "terms": [
+                    {
+                      "stateId": "branch.lmz.first_rescue",
+                      "scores": {
+                        "rushed": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Rush"
+                        },
+                        "waited": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Wait"
+                        },
+                        "shielded": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l1Shield"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.pan_secret",
+                      "scores": {
+                        "promised": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Promise"
+                        },
+                        "hard_truth": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2HardTruth"
+                        },
+                        "teased": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Tease"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.shared_mushroom",
+                      "scores": {
+                        "true": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l2Share"
+                        }
+                      }
+                    },
+                    {
+                      "stateId": "branch.lmz.harpoon",
+                      "scores": {
+                        "pulled": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l3Pull"
+                        },
+                        "bandaged": {
+                          "$num": "lineBonds.lemingzhu.activeScore.l3Bandage"
+                        }
+                      }
+                    }
+                  ],
+                  "plus": {
+                    "$num": "lineBonds.lemingzhu.activeScore.l4Run"
+                  },
+                  "value": {
+                    "$num": "lineBonds.lemingzhu.titleUpgradeActiveScore"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.lmz.l4_reunion.previous",
+          "tensionId": "text.card.lmz.l4_reunion.tension",
+          "optionIds": [
+            "text.card.lmz.l4_reunion.option1",
+            "text.card.lmz.l4_reunion.option2",
+            "text.card.lmz.l4_reunion.option3"
+          ]
+        },
+        "echo": {
+          "reads": "branch.lmz.pan_secret",
+          "variants": {
+            "promised": {
+              "previousId": "text.echo.lmz.l4_reunion.promised.previous"
+            }
+          }
+        },
+        "steps": [
+          {
+            "actionId": "act.lmz.l4.laugh",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l4.laugh",
+            "intentId": "intent.lmz.l4.laugh",
+            "outcomeId": "outcome.act.lmz.l4.laugh",
+            "intentMatchId": "match.lmz.l4.laugh"
+          },
+          {
+            "actionId": "act.lmz.l4.scold",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l4.scold",
+            "intentId": "intent.lmz.l4.scold",
+            "outcomeId": "outcome.act.lmz.l4.scold",
+            "intentMatchId": "match.lmz.l4.scold"
+          },
+          {
+            "actionId": "act.lmz.l4.run",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l4.run",
+            "intentId": "intent.lmz.l4.run",
+            "outcomeId": "outcome.act.lmz.l4.run",
+            "intentMatchId": "match.lmz.l4.run"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_05b",
+        "locationId": "liuchao.location.gui_wang_gong",
+        "presentActorIds": [
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.xie_yi",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.ning_yu"
+        ],
+        "canonChapter": 99,
+        "briefId": "brief.lmz.l4_reunion",
+        "objectiveId": "text.obj.lmz.l4_reunion"
+      },
+      {
+        "id": "beat.lmz.l5_redlight",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change_ins_lmz_redlight",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+            },
+            {
+              "presentActor": "liuchao.character.le_mingzhu"
+            },
+            {
+              "atLocation": "liuchao.location.gui_wang_gong"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.ghost_king_swallowed"
+            },
+            {
+              "canonChapterAtLeast": 115
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change_ins_lmz_redlight",
+                "actionId": "act.lmz.l5.witness"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.lmz.l5.witness": [
+            {
+              "kind": "reveal",
+              "factId": "fact.lmz.phoenix_change",
+              "source": "seen"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.lmz.l5.witness",
+              "mutexGroupId": "mutex.lmz.l5",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.lmz.phoenix_change",
+              "value": "seen"
+            }
+          ]
+        },
+        "role": [
+          "load_bearing"
+        ],
+        "card": {
+          "previousId": "text.card.lmz.l5_redlight.previous",
+          "tensionId": "text.card.lmz.l5_redlight.tension",
+          "optionIds": [
+            "text.card.lmz.l5_redlight.option1"
+          ]
+        },
+        "steps": [
+          {
+            "actionId": "act.lmz.l5.witness",
+            "kind": "attempt",
+            "labelId": "text.act.lmz.l5.witness",
+            "intentId": "intent.lmz.l5.witness",
+            "outcomeId": "outcome.act.lmz.l5.witness",
+            "intentMatchId": "match.lmz.l5.witness"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_05b",
+        "locationId": "liuchao.location.gui_wang_gong",
+        "presentActorIds": [
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.xie_yi"
+        ],
+        "canonChapter": 109,
+        "briefId": "brief.lmz.l5_redlight",
+        "objectiveId": "text.obj.lmz.l5_redlight"
+      }
+    ],
+    "nameId": "text.line.char.le_mingzhu.bond.title",
+    "entryHintId": "text.line.char.le_mingzhu.bond.hint"
+  }
+]

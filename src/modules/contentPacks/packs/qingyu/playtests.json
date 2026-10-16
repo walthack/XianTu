@@ -44,7 +44,8 @@
     "extends": "qingyu",
     "endModId": "lcq.stage_04b_lingfei_baiyi_crisis",
     "endEventId": "lcq.event.enter_dong_with_migu",
-    "scope": "lcq.stage_01-enter_dong_with_migu"
+    "scope": "lcq.stage_01-enter_dong_with_migu",
+    "nextId": "nanhuang-2"
   },
   {
     "id": "nanhuang-2",

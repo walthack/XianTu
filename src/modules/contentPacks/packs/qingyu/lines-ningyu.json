@@ -1,0 +1,976 @@
+[
+  {
+    "id": "line.char.ning_yu",
+    "kind": "character",
+    "ownerCharacterIds": [
+      "liuchao.character.ning_yu"
+    ],
+    "entry": {
+      "canonChapterAtLeast": 33
+    },
+    "loadBearing": false,
+    "beats": [
+      {
+        "id": "beat.ningyu.o2_regicide",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.ningyu_regicide_offer"
+            },
+            {
+              "presentActor": "liuchao.character.ning_yu"
+            },
+            {
+              "atLocation": "nh.caravan_camp"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "canonChapterAtLeast": 35
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
+                "actionId": "act.ningyu.o2.agree"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
+                "actionId": "act.ningyu.o2.refuse"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
+                "actionId": "act.ningyu.o2.ask_why"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.ningyu.o2.agree": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.regicide_agree"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.o2.agree"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.o2.agree",
+              "mutexGroupId": "mutex.ningyu.o2",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.regicide_stance",
+              "value": "yes"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.regicide_reply",
+              "value": "agreed"
+            }
+          ],
+          "act.ningyu.o2.refuse": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.regicide_refuse"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.o2.refuse"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.o2.refuse",
+              "mutexGroupId": "mutex.ningyu.o2",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.regicide_stance",
+              "value": "no"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.regicide_reply",
+              "value": "refused"
+            }
+          ],
+          "act.ningyu.o2.ask_why": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.regicide_ask_why"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.o2.ask_why"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.o2.ask_why",
+              "mutexGroupId": "mutex.ningyu.o2",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.baihu.regicide_stance",
+              "value": "deferred"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.regicide_reply",
+              "value": "asked_why"
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.ningyu.o2_regicide.previous",
+          "tensionId": "text.card.ningyu.o2_regicide.tension",
+          "optionIds": [
+            "text.card.ningyu.o2_regicide.option1",
+            "text.card.ningyu.o2_regicide.option2",
+            "text.card.ningyu.o2_regicide.option3"
+          ]
+        },
+        "steps": [
+          {
+            "actionId": "act.ningyu.o2.agree",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.o2.agree",
+            "intentId": "intent.ningyu.o2.agree",
+            "outcomeId": "outcome.act.ningyu.o2.agree",
+            "intentMatchId": "match.ningyu.o2.agree"
+          },
+          {
+            "actionId": "act.ningyu.o2.refuse",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.o2.refuse",
+            "intentId": "intent.ningyu.o2.refuse",
+            "outcomeId": "outcome.act.ningyu.o2.refuse",
+            "intentMatchId": "match.ningyu.o2.refuse"
+          },
+          {
+            "actionId": "act.ningyu.o2.ask_why",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.o2.ask_why",
+            "intentId": "intent.ningyu.o2.ask_why",
+            "outcomeId": "outcome.act.ningyu.o2.ask_why",
+            "intentMatchId": "match.ningyu.o2.ask_why"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_02",
+        "locationId": "liuchao.location.wuyuan",
+        "sceneLocationId": "nh.caravan_camp",
+        "presentActorIds": [
+          "liuchao.character.ning_yu"
+        ],
+        "canonChapter": 33,
+        "briefId": "brief.ningyu.o2_regicide",
+        "objectiveId": "text.obj.ningyu.o2_regicide"
+      },
+      {
+        "id": "beat.ningyu.y3_fire",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.rainforest_black_shoal_ins_ningyu_fire",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.rainforest_black_shoal"
+            },
+            {
+              "presentActor": "liuchao.character.ning_yu"
+            },
+            {
+              "atLocation": "nh.black_shoal"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.silent_sheyi_village"
+            },
+            {
+              "canonChapterAtLeast": 37
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.rainforest_black_shoal_ins_ningyu_fire",
+                "actionId": "act.ningyu.y3.public"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.rainforest_black_shoal_ins_ningyu_fire",
+                "actionId": "act.ningyu.y3.private"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.rainforest_black_shoal_ins_ningyu_fire",
+                "actionId": "act.ningyu.y3.nothing"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.ningyu.y3.public": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.care_public_thanks"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y3.public"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y3.public",
+              "mutexGroupId": "mutex.ningyu.y3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.care",
+              "value": "plain"
+            }
+          ],
+          "act.ningyu.y3.private": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.care_warm"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y3.private"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y3.private",
+              "mutexGroupId": "mutex.ningyu.y3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.care",
+              "value": "warm"
+            }
+          ],
+          "act.ningyu.y3.nothing": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.care_none"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y3.nothing"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y3.nothing",
+              "mutexGroupId": "mutex.ningyu.y3",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.care",
+              "value": "none"
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.ningyu.y3_fire.previous",
+          "tensionId": "text.card.ningyu.y3_fire.tension",
+          "optionIds": [
+            "text.card.ningyu.y3_fire.option1",
+            "text.card.ningyu.y3_fire.option2",
+            "text.card.ningyu.y3_fire.option3"
+          ]
+        },
+        "steps": [
+          {
+            "actionId": "act.ningyu.y3.public",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y3.public",
+            "intentId": "intent.ningyu.y3.public",
+            "outcomeId": "outcome.act.ningyu.y3.public",
+            "intentMatchId": "match.ningyu.y3.public"
+          },
+          {
+            "actionId": "act.ningyu.y3.private",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y3.private",
+            "intentId": "intent.ningyu.y3.private",
+            "outcomeId": "outcome.act.ningyu.y3.private",
+            "intentMatchId": "match.ningyu.y3.private"
+          },
+          {
+            "actionId": "act.ningyu.y3.nothing",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y3.nothing",
+            "intentId": "intent.ningyu.y3.nothing",
+            "outcomeId": "outcome.act.ningyu.y3.nothing",
+            "intentMatchId": "match.ningyu.y3.nothing"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_02",
+        "locationId": "liuchao.location.wuyuan",
+        "sceneLocationId": "nh.black_shoal",
+        "presentActorIds": [
+          "liuchao.character.ning_yu"
+        ],
+        "canonChapter": 35,
+        "briefId": "brief.ningyu.y3_fire",
+        "objectiveId": "text.obj.ningyu.y3_fire"
+      },
+      {
+        "id": "beat.ningyu.y5_enter",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.guiwangdong_coop_pact"
+            },
+            {
+              "presentActor": "liuchao.character.ning_yu"
+            },
+            {
+              "atLocation": "liuchao.location.south_wild_valley"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "canonChapterAtLeast": 87
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+                "actionId": "act.ningyu.y5.bring"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+                "actionId": "act.ningyu.y5.stay"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+                "actionId": "act.ningyu.y5.ask"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.ningyu.y5.bring": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.enter_bring"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y5.bring"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y5.bring",
+              "mutexGroupId": "mutex.ningyu.y5",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.enter_dong",
+              "value": "go"
+            }
+          ],
+          "act.ningyu.y5.stay": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.enter_stay"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y5.stay"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y5.stay",
+              "mutexGroupId": "mutex.ningyu.y5",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.enter_dong",
+              "value": "stay"
+            }
+          ],
+          "act.ningyu.y5.ask": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.enter_ask"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y5.ask"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y5.ask",
+              "mutexGroupId": "mutex.ningyu.y5",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.enter_dong",
+              "value": "go"
+            }
+          ]
+        },
+        "role": [
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.ningyu.y5_enter.previous",
+          "tensionId": "text.card.ningyu.y5_enter.tension",
+          "optionIds": [
+            "text.card.ningyu.y5_enter.option1",
+            "text.card.ningyu.y5_enter.option2",
+            "text.card.ningyu.y5_enter.option3"
+          ]
+        },
+        "echo": {
+          "reads": "branch.ningyu.care",
+          "variants": {
+            "warm": {
+              "previousId": "text.echo.ningyu.y5_enter.warm.previous"
+            }
+          }
+        },
+        "steps": [
+          {
+            "actionId": "act.ningyu.y5.bring",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y5.bring",
+            "intentId": "intent.ningyu.y5.bring",
+            "outcomeId": "outcome.act.ningyu.y5.bring",
+            "intentMatchId": "match.ningyu.y5.bring"
+          },
+          {
+            "actionId": "act.ningyu.y5.stay",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y5.stay",
+            "intentId": "intent.ningyu.y5.stay",
+            "outcomeId": "outcome.act.ningyu.y5.stay",
+            "intentMatchId": "match.ningyu.y5.stay"
+          },
+          {
+            "actionId": "act.ningyu.y5.ask",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y5.ask",
+            "intentId": "intent.ningyu.y5.ask",
+            "outcomeId": "outcome.act.ningyu.y5.ask",
+            "intentMatchId": "match.ningyu.y5.ask"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+        "locationId": "liuchao.location.south_wild_valley",
+        "presentActorIds": [
+          "liuchao.character.ning_yu",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.su_li"
+        ],
+        "canonChapter": 85,
+        "briefId": "brief.ningyu.y5_enter",
+        "objectiveId": "text.obj.ningyu.y5_enter"
+      },
+      {
+        "id": "beat.ningyu.y6_door",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.s05b_yeao_palm_ningyu_stays"
+            },
+            {
+              "presentActor": "liuchao.character.ning_yu"
+            },
+            {
+              "atLocation": "lcq.location.yeao_village"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.shanghou_cures_ice_gu"
+            },
+            {
+              "canonChapterAtLeast": 125
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door",
+                "actionId": "act.ningyu.y6.word"
+              }
+            },
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_door",
+                "actionId": "act.ningyu.y6.token"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.ningyu.y6.word": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.farewell_word"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y6.word"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y6.word",
+              "mutexGroupId": "mutex.ningyu.y6",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.farewell",
+              "value": "word"
+            }
+          ],
+          "act.ningyu.y6.token": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.ningyu.farewell_token"
+            },
+            {
+              "kind": "memoryTicket",
+              "actorId": "liuchao.character.ning_yu",
+              "episodeTemplateId": "mem.ningyu.y6.token"
+            },
+            {
+              "kind": "setReceipt",
+              "receiptId": "rcpt.ningyu.y6.token",
+              "mutexGroupId": "mutex.ningyu.y6",
+              "consumeAtEventIds": []
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.farewell",
+              "value": "token"
+            }
+          ]
+        },
+        "onExpire": [
+          {
+            "kind": "setState",
+            "stateId": "branch.ningyu.farewell",
+            "value": "silent"
+          }
+        ],
+        "role": [
+          "load_bearing",
+          "choice"
+        ],
+        "card": {
+          "previousId": "text.card.ningyu.y6_door.previous",
+          "tensionId": "text.card.ningyu.y6_door.tension",
+          "optionIds": [
+            "text.card.ningyu.y6_door.option1",
+            "text.card.ningyu.y6_door.option2"
+          ]
+        },
+        "echo": {
+          "reads": "branch.ningyu.care",
+          "variants": {
+            "warm": {
+              "outcomeIds": {
+                "act.ningyu.y6.word": "outcome.echo.ningyu.y6.word.warm",
+                "act.ningyu.y6.token": "outcome.echo.ningyu.y6.token.warm"
+              }
+            },
+            "plain": {
+              "outcomeIds": {
+                "act.ningyu.y6.word": "outcome.echo.ningyu.y6.word.plain",
+                "act.ningyu.y6.token": "outcome.echo.ningyu.y6.token.plain"
+              }
+            }
+          }
+        },
+        "steps": [
+          {
+            "actionId": "act.ningyu.y6.word",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y6.word",
+            "intentId": "intent.ningyu.y6.word",
+            "outcomeId": "outcome.act.ningyu.y6.word",
+            "intentMatchId": "match.ningyu.y6.word",
+            "replyMode": {
+              "$num": "lineBonds.ningyu.replyMode"
+            },
+            "forbidden": [
+              "爱",
+              "喜欢",
+              "舍不得",
+              "离不开",
+              "想你",
+              "等你",
+              "丢下一切",
+              "同行",
+              "心里有你",
+              "心里只有你",
+              "跟你走",
+              "随你走",
+              "跟你去",
+              "随你去"
+            ]
+          },
+          {
+            "actionId": "act.ningyu.y6.token",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y6.token",
+            "intentId": "intent.ningyu.y6.token",
+            "outcomeId": "outcome.act.ningyu.y6.token",
+            "intentMatchId": "match.ningyu.y6.token",
+            "replyMode": {
+              "$num": "lineBonds.ningyu.replyMode"
+            },
+            "forbidden": [
+              "爱",
+              "喜欢",
+              "舍不得",
+              "离不开",
+              "想你",
+              "等你",
+              "丢下一切",
+              "同行",
+              "心里有你",
+              "心里只有你",
+              "跟你走",
+              "随你走",
+              "跟你去",
+              "随你去"
+            ]
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_05b",
+        "locationId": "lcq.location.yeao_village",
+        "presentActorIds": [
+          "liuchao.character.ning_yu",
+          "lcq.character.nanhuang_yeao"
+        ],
+        "canonChapter": 123,
+        "briefId": "brief.ningyu.y6_door",
+        "objectiveId": "text.obj.ningyu.y6_door"
+      },
+      {
+        "id": "beat.ningyu.y6.knock",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_knock",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.s05b_yeao_palm_ningyu_stays"
+            },
+            {
+              "presentActor": "liuchao.character.ning_yu"
+            },
+            {
+              "atLocation": "lcq.location.yeao_village"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.shanghou_cures_ice_gu"
+            },
+            {
+              "canonChapterAtLeast": 125
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_knock",
+                "actionId": "act.ningyu.y6.knock"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.ningyu.y6.knock": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.bonus_active"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.door_knocked",
+              "value": true
+            }
+          ]
+        },
+        "role": [
+          "color"
+        ],
+        "steps": [
+          {
+            "actionId": "act.ningyu.y6.knock",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y6.knock",
+            "intentId": "intent.ningyu.y6.knock",
+            "outcomeId": "outcome.act.ningyu.y6.knock",
+            "intentMatchId": "match.ningyu.y6.knock"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_05b",
+        "locationId": "lcq.location.yeao_village",
+        "presentActorIds": [
+          "liuchao.character.ning_yu",
+          "lcq.character.nanhuang_yeao"
+        ],
+        "canonChapter": 123,
+        "briefId": "brief.ningyu.y6.knock",
+        "objectiveId": "text.obj.ningyu.y6.knock"
+      },
+      {
+        "id": "beat.ningyu.y6.call",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_call",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.s05b_yeao_palm_ningyu_stays"
+            },
+            {
+              "presentActor": "liuchao.character.ning_yu"
+            },
+            {
+              "atLocation": "lcq.location.yeao_village"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.shanghou_cures_ice_gu"
+            },
+            {
+              "canonChapterAtLeast": 125
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_call",
+                "actionId": "act.ningyu.y6.call"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.ningyu.y6.call": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.bonus_active"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.door_called",
+              "value": true
+            }
+          ]
+        },
+        "role": [
+          "color"
+        ],
+        "steps": [
+          {
+            "actionId": "act.ningyu.y6.call",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y6.call",
+            "intentId": "intent.ningyu.y6.call",
+            "outcomeId": "outcome.act.ningyu.y6.call",
+            "intentMatchId": "match.ningyu.y6.call"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_05b",
+        "locationId": "lcq.location.yeao_village",
+        "presentActorIds": [
+          "liuchao.character.ning_yu",
+          "lcq.character.nanhuang_yeao"
+        ],
+        "canonChapter": 123,
+        "briefId": "brief.ningyu.y6.call",
+        "objectiveId": "text.obj.ningyu.y6.call"
+      },
+      {
+        "id": "beat.ningyu.y6.recall",
+        "mode": "standalone",
+        "hostEventId": null,
+        "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_recall",
+        "requires": {
+          "all": [
+            {
+              "eventDone": "lcq.event.s05b_yeao_palm_ningyu_stays"
+            },
+            {
+              "presentActor": "liuchao.character.ning_yu"
+            },
+            {
+              "atLocation": "lcq.location.yeao_village"
+            }
+          ]
+        },
+        "closeWhen": {
+          "any": [
+            {
+              "eventDone": "lcq.event.shanghou_cures_ice_gu"
+            },
+            {
+              "canonChapterAtLeast": 125
+            }
+          ]
+        },
+        "completedBy": {
+          "anyOf": [
+            {
+              "eventActionReceipt": {
+                "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays_ins_ningyu_y6_recall",
+                "actionId": "act.ningyu.y6.recall"
+              }
+            }
+          ]
+        },
+        "onComplete": [],
+        "byAction": {
+          "act.ningyu.y6.recall": [
+            {
+              "kind": "affinityGrant",
+              "actorId": "liuchao.character.ning_yu",
+              "weightId": "aff.w.bonus_active"
+            },
+            {
+              "kind": "setState",
+              "stateId": "branch.ningyu.door_recalled",
+              "value": true
+            }
+          ]
+        },
+        "role": [
+          "color"
+        ],
+        "steps": [
+          {
+            "actionId": "act.ningyu.y6.recall",
+            "kind": "attempt",
+            "labelId": "text.act.ningyu.y6.recall",
+            "intentId": "intent.ningyu.y6.recall",
+            "outcomeId": "outcome.act.ningyu.y6.recall",
+            "intentMatchId": "match.ningyu.y6.recall"
+          }
+        ],
+        "sharedExperience": "default",
+        "stageId": "lcq.stage_05b",
+        "locationId": "lcq.location.yeao_village",
+        "presentActorIds": [
+          "liuchao.character.ning_yu",
+          "lcq.character.nanhuang_yeao"
+        ],
+        "canonChapter": 123,
+        "briefId": "brief.ningyu.y6.recall",
+        "objectiveId": "text.obj.ningyu.y6.recall"
+      }
+    ],
+    "nameId": "text.line.char.ning_yu.title",
+    "entryHintId": "text.line.char.ning_yu.hint"
+  }
+]

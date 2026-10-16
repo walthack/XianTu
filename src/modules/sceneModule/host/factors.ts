@@ -4,7 +4,8 @@ import {namingChapter} from '../../scenarioMods/ledger/naming';
 import {GAME_NUMBERS,boundedLuck} from '../numbers';
 import {levelOf,stageBonus,levelModifier} from '../../../utils/realmUtils';
 import {relationshipOf} from '../../scenarioMods/ledger/affinityIdentity';
-import {namedEntity,namedEntityEntries} from '../../scenarioMods/namedEntities';
+import {namedEntityEntries} from '../../scenarioMods/namedEntities';
+import {resolveActorStats,combatLevelOf} from '../../scenarioMods/characterStats';
 // 玩家的基础判定因子取自游戏判定引擎；幸运改按气运取固定值（可复现）。
 import { pruneSceneInjuries } from './injuries';
 import { runtimeOf } from './refs';
@@ -78,8 +79,9 @@ export function snapshotLevels(save:SaveData,c:Contract,state:import('../types')
  const playerLevel=levelOf(save.角色.属性.境界)??0;state.levels={};state.stages={};state.levelFacts={};
  for(const p of c.parties){
   const id=p.enemyId||p.ref, fact=levelFact(id,chapter,variants[id]);
-  const card=r?.canon?.characters?.find((x:any)=>x.id===p.ref),relationship=relationshipOf(save,p.ref),enemy=namedEntity('enemy',id);
-  const fallback=Math.max(levelOf((relationship?.profile as any)?.境界)??-1,Number.isInteger(card?.level)?card.level:-1,Number.isInteger(enemy?.level)?enemy?.level:-1);
+  // 总表基础属性 ⊕ 本关阶段档覆盖项（characterStats.ts）；敌人种类与人物同表，不再另读敌人目录或阶段档的 level。
+  const relationship=relationshipOf(save,p.ref),stats=combatLevelOf(resolveActorStats(r,id)?.stats)??combatLevelOf(resolveActorStats(r,p.ref)?.stats);
+  const fallback=Math.max(levelOf((relationship?.profile as any)?.境界)??-1,stats??-1);
   let value=fact?effectiveLevel(fact):(p.player?playerLevel:fallback<0?playerLevel:fallback);
   if(p.player&&fact&&value!==undefined)value=playerLevel+(value-(fact.level??value));
   if(c.levelContext?.nonLevelPartyIds?.includes(p.id))value=undefined;

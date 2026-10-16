@@ -18,14 +18,24 @@
     "f07-geluo.json"
   ],
   "drafts": [],
-  "statuses": [],
+  "statuses": [
+    "statuses.json"
+  ],
   "stages": [],
   "overlays": [
     "stage3-overlays.json"
   ],
-  "questLines": [],
+  "questLines": [
+    "lines-baihu.json",
+    "lines-ningyu.json",
+    "lines-lemingzhu.json"
+  ],
   "entities": [],
-  "texts": "texts.json",
+  "texts": [
+    "texts.json",
+    "lines-texts.json"
+  ],
+  "questLineResources": "lines-resources.json",
   "playtests": "playtests.json",
   "entries": "entries.json"
 }

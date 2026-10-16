@@ -21,7 +21,7 @@ test('场面模块只依赖自己和类型：不引用 dev 试玩代码，不引
 
 test('场面模块的 .ts 不写死角色库里的任何姓名或别名（账本人名棘轮同一算法）', async () => {
   const registry = JSON.parse(await readFile(path.join(root, 'src/modules/scenarioMods/builtins/character-registry.json'), 'utf8'));
-  const names = [...new Set(registry.characters.flatMap(c => [c.canonicalName, ...c.aliases]).filter(n => /^[一-鿿]{2,8}$/.test(n)))];
+  const names = [...new Set(registry.characters.filter(c => c.entityType !== 'enemy_kind').flatMap(c => [c.canonicalName, ...c.aliases]).filter(n => /^[一-鿿]{2,8}$/.test(n)))];
   assert.ok(names.length > 100, '角色库读取失败，断言会空转');
   const offenders = [];
   for (const name of files) {

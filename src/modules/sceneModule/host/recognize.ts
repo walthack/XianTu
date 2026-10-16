@@ -28,25 +28,81 @@ function explicitYield(contract: Contract, goal: GoalDef, text: string): boolean
  const affirmative=text.split(/[，。；！？]/).filter(clause=>!/(?:绝不|不会|不再|拒绝|不要|不愿|不肯|不打算).{0,8}(?:投降|放下|停止|任|不挡|不还手)/.test(clause));
  return affirmative.some(clause=>!/不(?:投降|放下|停止|任)/.test(clause) && (PASSIVE.test(clause)||(goal.aliases||[]).some(a=>clause.includes(a))||/^(?:我)?(?:投降|停止抵抗|放弃抵抗)$/.test(clause)));
 }
-function groundedProposal(contract: Contract, state: SceneState, raw: Record<string, unknown>, text: string): Record<string, unknown> {
+function groundedProposal(contract: Contract, state: SceneState, raw: Record<string, unknown>, text: string, runtime?: unknown): Record<string, unknown> {
   const next = { ...raw };
-  if(/砍|劈|刺|戳|斩|捅|击打/.test(text)&&!contract.parties.filter(p=>p.side==='player_side'&&!p.player).some(p=>(p.aliases||[]).some(a=>text.includes(a)))){const direct=goalsOf(contract).find(g=>available(g,state)&&g.type==='push'&&/攻击/.test(g.label||''));if(direct)next.goal=direct.id;}
+  const own = goalsOf(contract).find(g => g.id === next.goal);
+  const ownPush = !!own && (own.type || 'push') === 'push' && (own.aliases || []).some(a => compact(a).length >= 2 && compact(text).includes(compact(a)));
+  if(!ownPush&&/砍|劈|刺|戳|斩|捅|击打/.test(text)&&!contract.parties.filter(p=>p.side==='player_side'&&!p.player).some(p=>(p.aliases||[]).some(a=>text.includes(a)))){const direct=goalsOf(contract).find(g=>available(g,state)&&g.type==='push'&&/攻击/.test(g.label||''));if(direct)next.goal=direct.id;}
   if(NON_COMBAT.test(text)){next.goal='';return next;}
   if(PASSIVE.test(text)&&goalsOf(contract).some(g=>['yield_guard','expose_self'].includes(g.id)&&explicitYield(contract,g,text))){next.goal=goalsOf(contract).find(g=>g.id==='yield_guard'||g.id==='expose_self')?.id||'';next.levers=[];next.claim={magnitude:1,scope:'single',targets:[]};return next;}
-  const activeBlood = /(?:用|抹|涂|洒|泼|以|让)[^，。；]{0,8}(?:血|沾血)|(?:把|将)[^，。；]{0,5}血[^，。；]{0,8}(?:抹|滴|涂|洒|泼|沾)/.test(text) && !/不用血|不抹血|不让血/.test(text);
   const blood = (contract.elements || []).find(e => e.id === 'true_yang_blood');
+  const activeBlood = new RegExp(blood?.actionPattern || '$^').test(text) && !/不用血|不抹血|不让血/.test(text);
   if (blood && (!activeBlood || !available(blood, state))) {
     next.levers = (Array.isArray(raw.levers) ? raw.levers : []).filter((l: any) => l.element !== blood.id);
     if (next.goal === 'destroy_tiger') next.goal = state.beat >= 4 ? 'survive_tiger' : 'survive_duel';
+  } else if (blood && !(Array.isArray(raw.levers) ? raw.levers : []).some((l: any) => l.element === blood.id)) {
+    // 玩家主动用血、模型却漏了这个杠杆：按玩家原话补上（依据仍是原话里的词，照常过 validateProposal）。
+    const verb = (blood.verbs || []).find(v => (v.goalTags || []).includes('destroy_tiger')) || (blood.verbs || [])[0];
+    const evidence = [...wordsOf(blood), ...(verb?.aliases || [])].find(w => compact(text).includes(compact(w)));
+    if (verb && evidence) next.levers = [...(Array.isArray(raw.levers) ? raw.levers : []), { element: blood.id, verb: verb.id, evidence }];
   }
   const explicit = goalsOf(contract).find(g => available(g,state) && (g.aliases || []).some(alias => text.includes(alias)) && g.id === 'expose_self');
   if (explicit && !/不扔刀|不会不动|不任/.test(text)) { next.goal = explicit.id; next.levers = []; next.claim = { magnitude:1,scope:'single',targets:[] }; }
+  // 铺垫类目标只给标签、不推轨道：玩家原话命中某个推进目标的别称、或点名了有专属推进目标的参与方（村口、火楼……），又没提铺垫目标自己的词时，改归到那个推进目标，免得每拍都落在不改胜负的铺垫上。
+  const chosen = goalsOf(contract).find(g => g.id === next.goal);
+  if (chosen && (chosen.type || 'push') === 'support' && !wordsOf(chosen).some(w => compact(text).includes(compact(w)))) {
+    const routed = pushGoalFor(contract, state, text, (Array.isArray(next.levers) ? next.levers : []).map((l: any) => String(l?.element)), runtime);
+    if (routed) {
+      const claim = (next.claim && typeof next.claim === 'object' ? next.claim : {}) as Record<string, unknown>;
+      next.goal = routed.goal.id;
+      next.claim = { ...claim, targets: routed.targets };
+    }
+  }
   if (!goalsOf(contract).some(g => g.id === next.goal && available(g,state) && explicitYield(contract,g,text))) next.goal = '';
   return next;
 }
 
 function wordsOf(item: { label?: string; aliases?: string[] }): string[] {
   return [item.label, ...(item.aliases || [])].filter((w): w is string => !!w && compact(w).length >= 2);
+}
+
+/** 玩家原话点名的在场参与方（别称 / 组名 / 引用名，至少 2 字）。 */
+function namedParties(contract: Contract, state: SceneState, text: string, runtime?: unknown): string[] {
+  const t = compact(text);
+  const ids: string[] = [];
+  for (const party of contract.parties) {
+    if (!isPresent(state, party.id) || party.player) continue;
+    const shown = party.group?.label || displayName(runtime, party.ref);
+    const names = [...(party.aliases || []), ...(shown && shown !== party.ref ? [shown] : /^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(party.ref) ? [] : [party.ref])];
+    if (names.some(w => compact(w).length >= 2 && t.includes(compact(w)))) ids.push(party.id);
+  }
+  return ids;
+}
+/** 该推进目标在这个参与方身上是否还有空间（轨道没到终态）。 */
+function trackOpen(contract: Contract, state: SceneState, goal: GoalDef, partyId: string): boolean {
+  const party = partyOf(contract, partyId);
+  return !!party && (party.tracks || []).some(tr => (!goal.track || (tr.track ?? tr.id) === goal.track)
+    && (state.tracks[partyId]?.[String(tr.track ?? tr.id)] ?? 0) < (tr.ending?.finalState ? (tr.scale || []).indexOf(tr.ending.finalState) : (tr.scale || []).length - 1));
+}
+
+/** 该推进目标此刻能作用的参与方：合同指定的作用对象（没指定就是在场敌方）里轨道没到终态的；玩家点名的排在前面。轨道要求特定杠杆（如真阳之血）而提议里没有时不算。 */
+function openTargets(contract: Contract, state: SceneState, goal: GoalDef, named: string[], levers: string[] = []): string[] {
+  const needs = (id: string): boolean => (partyOf(contract, id)?.tracks || []).some(tr => (!goal.track || (tr.track ?? tr.id) === goal.track)
+    && (tr.requiresLever || []).some(element => !levers.includes(element)));
+  const live = contract.parties.filter(p => isPresent(state, p.id) && !p.player && !needs(p.id)
+    && (goal.targetIds ? goal.targetIds.includes(p.id) : p.side === 'opposed') && trackOpen(contract, state, goal, p.id)).map(p => p.id);
+  const picked = named.filter(id => live.includes(id));
+  return picked.length ? picked : live.slice(0, 1);
+}
+/** 玩家原话指向的推进目标：先看别称（取命中最长的），再看点名的参与方；轨道都已到终态的不算。 */
+function pushGoalFor(contract: Contract, state: SceneState, text: string, levers: string[], runtime?: unknown): { goal: GoalDef; targets: string[] } | undefined {
+  const t = compact(text), named = namedParties(contract, state, text, runtime);
+  const pushes = goalsOf(contract).filter(g => available(g, state) && (g.type || 'push') === 'push' && explicitYield(contract, g, text));
+  const hit = (g: GoalDef): number => Math.max(0, ...(g.aliases || []).filter(a => compact(a).length >= 2 && t.includes(compact(a))).map(a => compact(a).length));
+  const byAlias = pushes.filter(g => hit(g) && openTargets(contract, state, g, named, levers).length).sort((a, b) => hit(b) - hit(a))[0];
+  const byParty = pushes.find(g => (g.targetIds || []).some(id => named.includes(id)) && openTargets(contract, state, g, named, levers).some(id => named.includes(id)));
+  const goal = byAlias || byParty;
+  return goal && { goal, targets: openTargets(contract, state, goal, named, levers) };
 }
 
 export function buildRecognitionPrompt(contract: Contract, state: SceneState, text: string, runtime: unknown): ModelRequest {
@@ -91,7 +147,7 @@ export function parseRecognition(raw: string): Record<string, unknown> | null {
   }
 }
 
-function scoreGoal(goal: GoalDef, contract: Contract, text: string, hasAttack: boolean, hasProtect: boolean, hasObserve: boolean): number {
+function scoreGoal(goal: GoalDef, contract: Contract, text: string, hasAttack: boolean, hasProtect: boolean, hasObserve: boolean, named: string[] = []): number {
   const t = compact(text);
   let score = (goal.aliases || []).some(alias => compact(alias).length >= 2 && t.includes(compact(alias))) ? 12 : 0;
   const label = compact(goal.label || goal.text || '');
@@ -104,6 +160,7 @@ function scoreGoal(goal: GoalDef, contract: Contract, text: string, hasAttack: b
     }
   }
   const type = goal.type || 'push';
+  if (type === 'push' && (goal.targetIds || []).some(id => named.includes(id))) score += 10;
   if (hasProtect && type === 'support' && (goal.onSuccess?.tag || /防守|撑住|护|掩/.test(goal.label || ''))) score += 5;
   if (hasObserve && type === 'support' && /看|观察|察/.test(goal.label || '')) score += 5;
   if (hasAttack && type === 'push') score += /攻击|砍倒/.test(goal.label || '') ? 8 : 3;
@@ -118,24 +175,20 @@ export function recognizeByRules(contract: Contract, state: SceneState, text: st
   const hasAttack = ATTACK.test(text) && !(/防守|格挡|招架|挡开/.test(text)&&!/砍|劈|斩|捅|刺|射/.test(text));
   const hasProtect = PROTECT.test(text);
   const hasObserve = OBSERVE.test(text);
+  const named = namedParties(contract, state, text, runtime);
   const goals = goalsOf(contract).filter(g => available(g,state) && explicitYield(contract,g,text));
   if (!goals.length) return null;
-  const ranked = goals.map(goal => ({ goal, score: scoreGoal(goal, contract, text, hasAttack, hasProtect, hasObserve) })).sort((a, b) => b.score - a.score);
+  const ranked = goals.map(goal => ({ goal, score: scoreGoal(goal, contract, text, hasAttack, hasProtect, hasObserve, named) })).sort((a, b) => b.score - a.score);
   if(ranked[0].score<=0)return null;
   const best = ranked[0].goal;
   const goal = best;
   const push = (goal.type || 'push') === 'push';
 
-  const targets: string[] = [];
-  for (const party of contract.parties) {
-    if (!isPresent(state, party.id) || party.player) continue;
-    const shown = party.group?.label || displayName(runtime, party.ref);
-    const names = [...(party.aliases || []), ...(shown && shown !== party.ref ? [shown] : /^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(party.ref) ? [] : [party.ref])];
-    if (names.some(w => compact(w).length >= 2 && t.includes(compact(w)))) targets.push(party.id);
-  }
+  const owned = (id: string): boolean => !push || !goal.targetIds || goal.targetIds.includes(id);
+  const targets: string[] = named.filter(owned);
   let scope: 'single' | 'group' | 'all' = targets.length > 1 ? 'group' : 'single';
   if (push && !targets.length) {
-    const open = contract.parties.filter(p => p.side === 'opposed' && isPresent(state, p.id)
+    const open = contract.parties.filter(p => p.side === 'opposed' && isPresent(state, p.id) && owned(p.id)
       && (p.tracks || []).some(tr => (!goal.track || (tr.track ?? tr.id) === goal.track) && (state.tracks[p.id]?.[String(tr.track??tr.id)]??0)<(tr.ending?.finalState ? (tr.scale||[]).indexOf(tr.ending.finalState) : (tr.scale||[]).length-1)));
     if (ALL.test(text)) { scope = 'all'; targets.push(...open.map(p => p.id).slice(0, 1)); }
     else if (open[0]) targets.push(open[0].id);
@@ -184,7 +237,7 @@ export async function recognizeAction(
       const raw = await ask(buildRecognitionPrompt(contract, state, text, runtime));
       const parsed = parseRecognition(raw);
       if (parsed) {
-        const checked = validateProposal(contract, state, groundedProposal(contract,state,parsed,text), text);
+        const checked = validateProposal(contract, state, groundedProposal(contract,state,parsed,text,runtime), text);
         dropped.push(...checked.dropped);
         if (checked.plan) {
           const rule = recognizeByRules(contract, state, text, runtime);
@@ -198,7 +251,7 @@ export async function recognizeAction(
   }
   const fallback = recognizeByRules(contract, state, text, runtime);
   if (fallback) {
-    const checked = validateProposal(contract, state, groundedProposal(contract,state,fallback,text), text);
+    const checked = validateProposal(contract, state, groundedProposal(contract,state,fallback,text,runtime), text);
     dropped.push(...checked.dropped);
     if (checked.plan) return { plan: checked.plan, dropped, by: 'rules' };
   }

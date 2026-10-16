@@ -101,6 +101,12 @@
     {
       "id": "repel",
       "label": "制服鲛人",
+      "aliases": [
+        "制服鲛人",
+        "逼退鲛人",
+        "压制鲛人",
+        "按住鲛人"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 11,
@@ -111,6 +117,12 @@
     {
       "id": "release",
       "label": "制服后放走鲛人",
+      "aliases": [
+        "放走鲛人",
+        "放了鲛人",
+        "放鲛人走",
+        "制服后放走"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 11,

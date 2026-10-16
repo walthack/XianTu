@@ -96,6 +96,12 @@
     {
       "id": "slay",
       "label": "击破龙脑",
+      "aliases": [
+        "击破龙脑",
+        "攻击龙脑",
+        "砍龙脑",
+        "刺龙脑"
+      ],
       "type": "push",
       "track": "vit",
       "baseDifficulty": 16

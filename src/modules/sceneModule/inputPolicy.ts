@@ -62,6 +62,17 @@ const OBSERVE_VERBS = /看|观察|查看|搜|找|打量|环顾|瞧|听|留意|�
 const OBSERVE_WORDS = /周围|四周|附近|有没有|有什么|有啥|有无|能用|可以用/;
 const QUESTION = /[？?]|(?:吗|呢)\s*[。.!！]*\s*$/;
 const FRAME = /如果|要是|假如|倘若|若是|要不要|是不是|怎样|会怎样|她说|他说|别人说|有人说|他们说|他问|她问|并不是|并没有|并非|并未|才怪|才不是|不是要/;
+/**
+ * 转述他人的话（“她说你要砍我”）：从转述标记起到句末，都是别人的话，不是玩家这一刻的动作。
+ * “对她说 / 跟他说 / 告诉她说”是玩家自己在说话，“她说完 / 他说话”不带转述内容，都不算。
+ */
+const REPORTED_SPEECH = /(?<![对跟向朝和同给替诉])(?:她说|他说|别人说|有人说|他们说|他问|她问)(?![完话])[^。！？!?；;\n]*[。！？!?；;]?/g;
+
+/** 去掉转述片段后的玩家自述；行动词、观察词、场内要素只在这部分里找。 */
+export function stripReportedSpeech(text: string): string {
+  return String(text || '').replace(REPORTED_SPEECH, '');
+}
+
 const META = /^(?:\/|（|\(|【|\[)|剧情|设定|存档|读档|菜单|系统|提示词|指令/;
 const GREETING = /^(?:嗯+|哦+|啊+|哈+|呵+|好的?|行|谢谢|多谢|你好|再见|等等|等一下|稍等|没事|算了|知道了|明白|懂了|呃+|唉+|哎+)[。.!！~～…，, ]*$/;
 
@@ -84,14 +95,15 @@ export function classifyByRules(contract: Contract, text: string, deps: RuleDeps
   const raw = String(text || '').normalize('NFKC').trim();
   if (!raw) return { class: 'unclear', evidence: ['空输入'] };
   const evidence: string[] = [];
-  const actionHit = raw.match(ACTION_VERBS)?.[0];
-  const aliasHit = contractWords(contract).find(w => raw.includes(w));
-  const observeHit = raw.match(OBSERVE_VERBS)?.[0];
+  const own = stripReportedSpeech(raw);
+  const actionHit = own.match(ACTION_VERBS)?.[0];
+  const aliasHit = contractWords(contract).find(w => own.includes(w));
+  const observeHit = own.match(OBSERVE_VERBS)?.[0];
   const question = QUESTION.test(raw);
   const frame = FRAME.test(raw) || !!deps.isUnclearFrame?.(raw) || META.test(raw);
   const hasAction = !!actionHit;
 
-  const observeWord = raw.match(OBSERVE_WORDS)?.[0];
+  const observeWord = own.match(OBSERVE_WORDS)?.[0];
   if (!hasAction && (observeWord || (question && observeHit))) {
     return { class: 'action', evidence: [`观察 / 搜寻类提问“${observeWord || observeHit}”`], observe: true };
   }

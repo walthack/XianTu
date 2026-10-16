@@ -1,5 +1,6 @@
 /** Semantic proposals have no write authority; catalog validation precedes the existing status writer. */
 import { STATUS_CATALOG } from '../statuses';
+import { noteTicketDiscard } from '@/services/requestLifecycleDiagnostics';
 
 export interface FreeTextStatusResolution {
   state: 'resolved' | 'clarify';
@@ -21,36 +22,40 @@ export function freeTextStatusSemanticRequest(userAction: string, narrative: str
   };
 }
 
-const clarify = (reason: string): FreeTextStatusResolution => ({ state: 'clarify', statusIds: [], reason });
+/** code 只进丢弃日志（原因码 + 票键），reason 是给玩家看的文字。 */
+const clarify = (code: string, reason: string, key?: unknown): FreeTextStatusResolution => {
+  noteTicketDiscard('status', code, key);
+  return { state: 'clarify', statusIds: [], reason };
+};
 
 /** No names/aliases are extended here. Unsupported or uncertain proposals fail closed. */
 export function validateFreeTextStatusProposals(raw: string, userAction: string, narrative: string, evidenceScope: 'input' | 'all' = 'all'): FreeTextStatusResolution {
   let parsed: unknown;
   try { parsed = JSON.parse(raw.trim().replace(/^```(?:json)?\s*|\s*```$/g, '')); }
-  catch { return clarify('状态识别响应无法解析，请确认本轮主角的状态。'); }
-  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return clarify('状态识别结构无效。');
+  catch { return clarify('unparsable', '状态识别响应无法解析，请确认本轮主角的状态。'); }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return clarify('bad_structure', '状态识别结构无效。');
   const proposals = (parsed as { proposals?: unknown }).proposals;
-  if (!Array.isArray(proposals) || proposals.length > STATUS_CATALOG.length) return clarify('状态提案列表无效。');
+  if (!Array.isArray(proposals) || proposals.length > STATUS_CATALOG.length) return clarify('bad_list', '状态提案列表无效。');
   const accepted = new Set<string>(), denied = new Set<string>();
   for (const item of proposals) {
-    if (!item || typeof item !== 'object' || Array.isArray(item)) return clarify('状态提案无效。');
+    if (!item || typeof item !== 'object' || Array.isArray(item)) return clarify('bad_item', '状态提案无效。');
     const p = item as Record<string, unknown>;
-    if (Object.keys(p).some(k => !['statusId', 'actor', 'assertion', 'source', 'evidence', 'confidence'].includes(k))) return clarify('状态提案包含越权字段。');
+    if (Object.keys(p).some(k => !['statusId', 'actor', 'assertion', 'source', 'evidence', 'confidence'].includes(k))) return clarify('extra_fields', '状态提案包含越权字段。', p.statusId);
     const def = STATUS_CATALOG.find(d => d.id === p.statusId && d.freeText);
     if (!def || (evidenceScope === 'input' && def.freeText !== 'input') || !['player', 'other', 'unknown'].includes(String(p.actor))
       || !['current', 'denied', 'hypothetical', 'uncertain'].includes(String(p.assertion))
-      || !['input', 'narrative'].includes(String(p.source))) return clarify('状态提案不在许可目录或语义契约内。');
+      || !['input', 'narrative'].includes(String(p.source))) return clarify('out_of_contract', '状态提案不在许可目录或语义契约内。', p.statusId);
     const source = p.source === 'input' ? userAction : narrative;
     if (typeof p.evidence !== 'string' || !p.evidence.trim() || !source.includes(p.evidence)
-      || typeof p.confidence !== 'number' || !Number.isFinite(p.confidence) || p.confidence < 0 || p.confidence > 1) return clarify('状态提案缺少可核对原文证据。');
+      || typeof p.confidence !== 'number' || !Number.isFinite(p.confidence) || p.confidence < 0 || p.confidence > 1) return clarify('bad_evidence', '状态提案缺少可核对原文证据。', p.statusId);
     // Irrelevant/negative proposals cannot mount, so their confidence must not block a valid action.
-    if (p.actor === 'other' || p.assertion === 'hypothetical') continue;
+    if (p.actor === 'other' || p.assertion === 'hypothetical') { noteTicketDiscard('status', p.actor === 'other' ? 'ignored_other_actor' : 'ignored_hypothetical', def.id); continue; }
     if (p.assertion === 'denied') { denied.add(def.id); continue; }
-    if (p.actor === 'unknown' || p.assertion === 'uncertain' || p.confidence < 0.9) return clarify('主角状态或指代不确定，请确认后继续。');
-    if (p.source === 'input' && def.freeText !== 'input') return clarify('该状态不能仅由玩家自述结算。');
+    if (p.actor === 'unknown' || p.assertion === 'uncertain' || p.confidence < 0.9) return clarify('uncertain_actor', '主角状态或指代不确定，请确认后继续。', def.id);
+    if (p.source === 'input' && def.freeText !== 'input') return clarify('input_only_status', '该状态不能仅由玩家自述结算。', def.id);
     accepted.add(def.id);
   }
-  if ([...accepted].some(id => denied.has(id))) return clarify('状态证据相互矛盾，请确认后继续。');
+  if ([...accepted].some(id => denied.has(id))) return clarify('contradictory', '状态证据相互矛盾，请确认后继续。');
   return { state: 'resolved', statusIds: STATUS_CATALOG.filter(d => accepted.has(d.id)).map(d => d.id),
     ...(evidenceScope === 'input' ? { evidenceScope: 'input' as const } : {}) };
 }
@@ -58,5 +63,5 @@ export function validateFreeTextStatusProposals(raw: string, userAction: string,
 /** Caller supplies its configured module model and binds the result to the current turn/snapshot. */
 export async function recognizeFreeTextStatuses(userAction: string, narrative: string, ask: AskFreeTextStatus): Promise<FreeTextStatusResolution> {
   try { return validateFreeTextStatusProposals(await ask(freeTextStatusSemanticRequest(userAction, narrative)), userAction, narrative); }
-  catch { return clarify('状态识别暂时不可用，请确认状态后重试。'); }
+  catch { return clarify('ask_failed', '状态识别暂时不可用，请确认状态后重试。'); }
 }

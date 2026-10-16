@@ -1010,6 +1010,12 @@
     {
       "id": "turn_tide",
       "label": "让武二郎接手局面",
+      "aliases": [
+        "让武二郎接手",
+        "交给武二郎",
+        "换武二郎上",
+        "叫武二郎上"
+      ],
       "type": "push",
       "baseDifficulty": 10,
       "track": "vit",
@@ -1018,6 +1024,13 @@
     {
       "id": "finish_last",
       "label": "别让最后一个跑了",
+      "aliases": [
+        "拦住最后一个",
+        "追上最后一个",
+        "截住最后一个",
+        "别让最后一个跑",
+        "不让最后一个跑"
+      ],
       "type": "push",
       "baseDifficulty": 12,
       "track": "vit",
@@ -1032,6 +1045,12 @@
     {
       "id": "harass",
       "label": "牵制",
+      "aliases": [
+        "牵制",
+        "缠住",
+        "拖住",
+        "纠缠"
+      ],
       "type": "push",
       "baseDifficulty": 10,
       "track": "vit",

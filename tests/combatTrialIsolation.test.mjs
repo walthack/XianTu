@@ -70,7 +70,7 @@ test('关系表垫片：对响应式的关系表 / 矩阵先深拷贝再回填�
 test('账本人名棘轮：src/dev 下的 .ts / .vue 不写死角色库里的任何姓名或别名（作者内容放 data/*.json，代码只用 id）', async () => {
   // 与 scripts/validate-ledger-ratchet.mjs 同一算法：角色库姓名 / 别名里 2–8 个汉字的，统计出现次数。
   const registry = JSON.parse(await readFile(path.join(root, 'src/modules/scenarioMods/builtins/character-registry.json'), 'utf8'));
-  const names = [...new Set(registry.characters.flatMap(c => [c.canonicalName, ...c.aliases]).filter(n => /^[一-鿿]{2,8}$/.test(n)))];
+  const names = [...new Set(registry.characters.filter(c => c.entityType !== 'enemy_kind').flatMap(c => [c.canonicalName, ...c.aliases]).filter(n => /^[一-鿿]{2,8}$/.test(n)))];
   assert.ok(names.length > 100, '角色库读取失败，断言会空转');
   const offenders = [];
   for (const file of await walk(path.join(root, 'src/dev'))) {

@@ -1,4 +1,5 @@
 import {namedEntity} from '@/modules/scenarioMods/namedEntities';
+import {instanceId,isEnemyKindId,parseInstanceId} from '@/modules/scenarioMods/actorInstances';
 // Structured, id-keyed injury storage; old prose remains readable but is never parsed into mechanics.
 import type { SaveData } from '@/types/game';
 import { runtimeEntityId } from '@/modules/scenarioMods/ledger/affinityIdentity';
@@ -6,12 +7,27 @@ import { persistentStatuses, resolveStatusDef, type Contract, type SceneState, t
 import { toInjuryNote } from '../statusAdapters';
 import { runtimeOf } from './refs';
 
-const actorKey=(runtime:any,ref:string)=>/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(ref) ? ref : runtimeEntityId(runtime,ref);
+export const actorKey=(runtime:any,ref:string)=>/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(ref) ? ref : runtimeEntityId(runtime,ref);
 export interface InjuryRecord {
-  enemyId?:string; player?: boolean; statusId: string; label: string; sourceScene: string; cause: StatusDef['cause']; source?: string;
+  /** 敌人种类 id（只作归属说明；伤势从不写在种类名下）。 */
+  enemyId?:string;
+  /** 场上个体的实例 id（种类id#场景id:编号，见 actorInstances.ts）；人物与玩家没有。 */
+  instanceId?:string; player?: boolean; statusId: string; label: string; sourceScene: string; cause: StatusDef['cause']; source?: string;
   appliedAt: number; appliedBeat?: number; expiresAt: number | null; effects: StatusDef['effects']; remove: StatusDef['remove'];
+  /** 下限计数（如中毒）：life 从 max 往下扣，floor 是这个角色的下限；只由自由行动路径写（freeAction/actorStatus.ts）。 */
+  counter?: {life:number; max:number; floor:number};
 }
-interface InjuryStore { version: 1; actors: Record<string, InjuryRecord[]>; groups: Record<string, InjuryRecord[]>; groupLabels: Record<string,string> }
+export interface InjuryStore { version: 1; actors: Record<string, InjuryRecord[]>; groups: Record<string, InjuryRecord[]>; groupLabels: Record<string,string>;
+  /** 永久伤残，按角色 id 存放；旧存档没有这个字段，读取一律当空。不随时间、休整、药物消退，只能由剧情旗标解除。 */
+  disabilities?: Record<string, InjuryRecord[]> }
+/** 合同里敌人种类参战方的实例 id：n = 同种类参战方在本合同里的出场顺序（从 1 起）。 */
+export function partyInstanceId(contract:Contract,party:Contract['parties'][number]):string|undefined {
+  const kind=namedEntity('enemy',party.ref)?.id;
+  if(!kind||party.group||/[#:]/.test(contract.meta.id))return undefined;
+  const same=contract.parties.filter(p=>p.ref===party.ref&&!p.group);
+  return instanceId(kind,contract.meta.id,same.indexOf(party)+1);
+}
+const isEnemyParty=(party:Contract['parties'][number])=>!!namedEntity('enemy',party.ref)||isEnemyKindId(party.ref);
 export function sceneTime(save: SaveData): number {
   const t=(save as any).元数据?.时间 || {}, date=new Date(0);
   date.setUTCFullYear(t.年 || 1,(t.月 || 1)-1,t.日 || 1);date.setUTCHours(t.小时 || 0,t.分钟 || 0,0,0);
@@ -26,12 +42,16 @@ export function injuryStore(save: SaveData): InjuryStore {
   ledger.legacyInjuries ||= {...ledger.injuries};
   return ledger.statusRecords ||= {version:1,actors:{},groups:{},groupLabels:{}};
 }
+/** 这一行伤势此刻是否仍有效：没到期，且没被剧情旗标解除。只读，不改存档。 */
+export function injuryRowLive(row: InjuryRecord, now: number, runtime: any): boolean {
+  return (row.expiresAt===null || now<row.expiresAt)
+    && !(row.remove || []).some(rule=>rule.kind==='story' && runtime?.flags?.[rule.flag]===true);
+}
 export function pruneSceneInjuries(save: SaveData): InjuryStore {
   const store=injuryStore(save),now=sceneTime(save),runtime=runtimeOf(save);
-  for (const bank of [store.actors,store.groups]) for(const [id,rows] of Object.entries(bank)) {
+  for (const bank of [store.actors,store.groups,...(store.disabilities?[store.disabilities]:[])]) for(const [id,rows] of Object.entries(bank)) {
     const removed:InjuryRecord[]=[];
-    bank[id]=rows.filter(row=>{const keep=(row.expiresAt===null || now<row.expiresAt)
-      && !(row.remove || []).some(rule=>rule.kind==='story' && runtime.flags?.[rule.flag]===true);if(!keep)removed.push(row);return keep;});
+    bank[id]=rows.filter(row=>{const keep=injuryRowLive(row,now,runtime);if(!keep)removed.push(row);return keep;});
     clearPlayerEffects(save,removed);
   }
   return store;
@@ -51,7 +71,7 @@ export function recordSceneInjuries(save: SaveData, contract: Contract, rows: Wr
   // Each published beat replaces its source snapshot, so refreshes/upgrades do not accumulate obsolete prose.
   for(const bank of [store.actors,store.groups])for(const id of Object.keys(bank))bank[id]=bank[id].filter(row=>row.sourceScene!==contract.meta.id);
   if(state)for(const party of contract.parties) {
-    const group=party.group || (namedEntity('enemy',party.ref) || !/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(party.ref) ? {id:`${contract.meta.id}.${party.id}`,label:namedEntity('enemy',party.ref)?.name||party.ref}:undefined);
+    const group=party.group || (isEnemyParty(party) || !/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(party.ref) ? {id:`${contract.meta.id}.${party.id}`,label:namedEntity('enemy',party.ref)?.name||party.ref}:undefined);
     const bank=group?store.groups:store.actors,id=group?.id || actorKey(runtime,party.ref);
     // The restored state is the full snapshot of recognized injury ids for these participants.
     // Preserve unrecognized records for audit rather than guessing a replacement.
@@ -60,10 +80,10 @@ export function recordSceneInjuries(save: SaveData, contract: Contract, rows: Wr
   for(const item of rows) {
     const party=contract.parties.find(p=>p.id===item.party),def=resolveStatusDef(item.status,contract);
     if(!party || !def)continue;
-    const group=party.group || (namedEntity('enemy',party.ref) || !/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(party.ref) ? {id:`${contract.meta.id}.${party.id}`,label:namedEntity('enemy',party.ref)?.name||party.ref} : undefined);
+    const group=party.group || (isEnemyParty(party) || !/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(party.ref) ? {id:`${contract.meta.id}.${party.id}`,label:namedEntity('enemy',party.ref)?.name||party.ref} : undefined);
     const bank=group ? store.groups : store.actors,id=group?.id || actorKey(runtime,party.ref);
     if(group)store.groupLabels[id]=namedEntity('enemy',group.id)?.name || group.label;
-    const record: InjuryRecord={enemyId:namedEntity('enemy',party.ref)?.id,player:!!party.player,statusId:def.id,label:def.label,sourceScene:item.originScene || contract.meta.id,cause:def.cause,source:item.source,appliedAt:now,expiresAt:item.minutes===null ? null : now+item.minutes,effects:structuredClone(def.effects),remove:structuredClone(def.remove || [])};
+    const instance=partyInstanceId(contract,party),record: InjuryRecord={enemyId:namedEntity('enemy',party.ref)?.id,...(instance?{instanceId:instance}:{}),player:!!party.player,statusId:def.id,label:def.label,sourceScene:item.originScene || contract.meta.id,cause:def.cause,source:item.source,appliedAt:now,expiresAt:item.minutes===null ? null : now+item.minutes,effects:structuredClone(def.effects),remove:structuredClone(def.remove || [])};
     const old=(group ? previous.groups : previous.actors)[id]?.find(row=>row.sourceScene===record.sourceScene && row.statusId===def.id);
     if(old) { record.appliedAt=old.appliedAt;record.expiresAt=old.expiresAt; }
     (bank[id] ||= []).push(record);
@@ -74,15 +94,16 @@ export function renderInjuryViews(save: SaveData): void {
   const runtime=runtimeOf(save),ledger=runtime.sceneLedger,store=pruneSceneInjuries(save);
   ledger.injuries={...ledger.legacyInjuries};ledger.groupInjuries={};
   const note=(r:InjuryRecord)=>toInjuryNote({party:'',ref:'',status:r.statusId,label:r.label,minutes:r.expiresAt===null?null:Math.max(0,r.expiresAt-sceneTime(save)),cause:r.cause,source:r.source},{effects:r.effects} as StatusDef);
-  for(const [id,rows] of Object.entries(store.actors))if(rows.length)ledger.injuries[id]=[ledger.injuries[id],...rows.map(note)].filter(Boolean).join('；');
-  for(const [id,rows] of Object.entries(store.groups))if(rows.length)ledger.groupInjuries[id]={label:store.groupLabels[id],text:rows.map(note).join('；')};
+  const dis=store.disabilities||{},asGroup=(id:string)=>!!parseInstanceId(id);
+  for(const id of new Set([...Object.keys(store.actors),...Object.keys(dis).filter(k=>!asGroup(k))])){const rows=[...(store.actors[id]||[]),...(asGroup(id)?[]:dis[id]||[])];if(rows.length)ledger.injuries[id]=[ledger.injuries[id],...rows.map(note)].filter(Boolean).join('；');}
+  for(const id of new Set([...Object.keys(store.groups),...Object.keys(dis).filter(asGroup)])){const rows=[...(store.groups[id]||[]),...(asGroup(id)?dis[id]||[]:[])];if(rows.length)ledger.groupInjuries[id]={label:store.groupLabels[id]||id,text:rows.map(note).join('；')};}
 }
 /** Restore only structured records; a legacy note cannot create a penalty, death, or NPC. */
 export function restoreSceneInjuries(save: SaveData, contract: Contract, state: SceneState): void {
   const store=pruneSceneInjuries(save),runtime=runtimeOf(save);
   renderInjuryViews(save);
   for(const party of contract.parties) {
-    const groupId=party.group?.id || (namedEntity('enemy',party.ref)?`${contract.meta.id}.${party.id}`:undefined);
+    const groupId=party.group?.id || (isEnemyParty(party)?`${contract.meta.id}.${party.id}`:undefined);
     const rows=groupId ? store.groups[groupId] : store.actors[actorKey(runtime,party.ref)];
     for(const row of rows || []) {
       const def=resolveStatusDef(row.statusId,contract);

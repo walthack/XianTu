@@ -1,0 +1,5235 @@
+[
+  {
+    "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "events": [
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_01",
+        "name": "夺镜计划",
+        "description": "程宗扬说服武二郎参与夺取灵飞镜，行动前置条件完成。",
+        "axisId": "qingyu.58.1",
+        "axisAnchor": "六朝清羽记·#58·第56章·探险",
+        "axisSeq": 88,
+        "axisBeat": "程宗扬说服武二郎参与明晚夺取灵飞镜的行动，武二郎同意协助。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "与武二郎商议明晚夺镜计划",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与武二郎商议明晚夺镜计划",
+              "actionText": "我按当前主线目标行动：与武二郎商议明晚夺镜计划",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与武二郎商议明晚夺镜计划”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威",
+                  "小魏",
+                  "石刚",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "易勇",
+                  "白夷族长",
+                  "樨夫人"
+                ]
+              },
+              "sceneLocation": "白夷城客舍"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.a",
+          "sceneName": "山顶夜战",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+          "justHappened": "你说动武二郎一道去取灵飞镜：明晚三更动手，事成之后丝绸随他挑。",
+          "evidence": [
+            "第56章·探险"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+        "name": "鸦人激战",
+        "description": "乐明珠挺身迎战鸦人却被制，阿夕暗中反击制造转机。",
+        "axisId": "qingyu.59.2",
+        "axisAnchor": "六朝清羽记·#59·第57章·鸦人",
+        "axisSeq": 90,
+        "axisBeat": "乐明珠挺身而出与鸦人激战，但因经验不足被擒，鸦人得意之际遭阿夕暗算。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.a_xi",
+          "liuchao.character.wu_er_lang"
+        ],
+        "objective": "在鸦人营地救出乐明珠",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在鸦人营地救出乐明珠",
+              "actionText": "我按当前主线目标行动：在鸦人营地救出乐明珠",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在鸦人营地救出乐明珠”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "乐明珠",
+                  "阿夕"
+                ]
+              },
+              "sceneLocation": "白夷城外",
+              "dayPart": "夜"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.a",
+          "sceneName": "山顶夜战",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+          "justHappened": "月夜山顶，黑魔海的鸦使把阿夕抓上崖顶；乐明珠冲上去与它交手，被打倒摔在阿夕身旁；鸦使转向阿夕时，阿夕拔刀刺中了它的腰侧。",
+          "evidence": [
+            "第57章·鸦人"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+        "name": "斩杀鸦人",
+        "description": "程宗扬趁机斩杀鸦人，救下乐明珠和阿夕。",
+        "axisId": "qingyu.59.3",
+        "axisAnchor": "六朝清羽记·#59·第57章·鸦人",
+        "axisSeq": 91,
+        "axisBeat": "程宗扬趁机偷袭，一刀斩下鸦人首级，救下乐明珠和阿夕。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.a_xi",
+          "liuchao.character.wu_er_lang"
+        ],
+        "objective": "鸦人首领就在眼前，乐明珠落在他手里",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "趁机斩杀鸦人首领",
+              "actionText": "我按当前主线目标行动：趁机斩杀鸦人首领",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“趁机斩杀鸦人首领”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "乐明珠",
+                  "阿夕"
+                ]
+              },
+              "sceneLocation": "白夷城外",
+              "dayPart": "夜",
+              "sceneObjective": "鸦人首领刚吃了一刀，踉跄后退，乐明珠倒在它脚边，你还藏在山岩的阴影里——这一刻怎么出手？",
+              "previousBeat": "你说动武二郎一道去取灵飞镜：明晚三更动手，事成之后丝绸随他挑。月夜山顶，黑魔海的鸦使把阿夕抓上崖顶；乐明珠冲上去与它交手，被打倒摔在阿夕身旁；鸦使转向阿夕时，阿夕拔刀刺中了它的腰侧。"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.a",
+          "sceneName": "山顶夜战",
+          "stop": true,
+          "card": {
+            "previous": "你说动武二郎一道去取灵飞镜：明晚三更动手，事成之后丝绸随他挑。月夜山顶，黑魔海的鸦使把阿夕抓上崖顶；乐明珠冲上去与它交手，被打倒摔在阿夕身旁；鸦使转向阿夕时，阿夕拔刀刺中了它的腰侧。",
+            "tension": "鸦人首领刚吃了一刀，踉跄后退，乐明珠倒在它脚边，你还藏在山岩的阴影里——这一刻怎么出手？",
+            "options": [
+              "趁它负伤，从背后下手",
+              "先把乐明珠从它爪下拉开",
+              "等阿夕或乐明珠再牵制它一下"
+            ]
+          },
+          "fork": "battle",
+          "evidence": [
+            "第57章·鸦人"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_04",
+        "name": "秘法传讯信",
+        "description": "众人处理鸦人尸体时发现秘法传讯信，推测黑魔海与鬼王峒勾结。",
+        "axisId": "qingyu.60.2",
+        "axisAnchor": "六朝清羽记·#60·第58章·银铃",
+        "axisSeq": 93,
+        "axisBeat": "程宗扬和武二郎处理鸦人尸体，发现其携带的空白羊皮纸，经云苍峰鉴定为秘法传讯信，推测黑魔海与鬼王峒勾结，目标指向白夷族。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "送羊皮纸至云苍峰鉴定",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "送羊皮纸至云苍峰鉴定",
+              "actionText": "我按当前主线目标行动：送羊皮纸至云苍峰鉴定",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“送羊皮纸至云苍峰鉴定”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "云苍峰",
+                  "谢艺"
+                ]
+              },
+              "sceneLocation": "白夷客舍"
+            }
+          ]
+        },
+        "relatedFactionIds": [
+          "liuchao.faction.yun_shi_shang_hui",
+          "liuchao.faction.xing_yue_hu",
+          "liuchao.faction.biyu"
+        ],
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s04b_04.parchment",
+            "scope": "faction",
+            "summary": "空白羊皮被认成秘法传讯，先交给谁，等于先让哪一边知情。",
+            "domains": [
+              "intelligence"
+            ],
+            "geography": [
+              "南荒"
+            ],
+            "factionIds": [
+              "liuchao.faction.yun_shi_shang_hui",
+              "liuchao.faction.xing_yue_hu",
+              "liuchao.faction.biyu"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s04b_04.letter": {
+                "text": "鸦人随身空白羊皮经鉴定可作秘法传讯，风声指向白夷，黑魔海与鬼王峒的勾结尚未坐实。",
+                "access": "public",
+                "evidence": "lcq.event.s04b_lingfei_baiyi_crisis_04 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "neutralCustody",
+                "biyuBriefing"
+              ],
+              "initialValues": {
+                "neutralCustody": 40,
+                "biyuBriefing": 22
+              },
+              "limits": {
+                "neutralCustody": {
+                  "min": 0,
+                  "max": 100
+                },
+                "biyuBriefing": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "羊皮已经发现"
+              ],
+              "forbiddenBefore": [
+                "三族已经开战",
+                "传讯真意已经破译完毕"
+              ],
+              "processFreedom": [
+                "中立鉴定还是先通报碧鲮"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "liuchao.character.yun_cang_feng",
+                "identity": {
+                  "factionId": "liuchao.faction.yun_shi_shang_hui",
+                  "office": "云氏当家人",
+                  "rank": 5
+                },
+                "personality": {
+                  "caution": 4,
+                  "honor": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "stability": 5,
+                  "control": 3
+                },
+                "resources": {
+                  "influence": 5,
+                  "wealth": 4,
+                  "intelligence": 5,
+                  "troops": 1
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s04b_04.yun",
+                    "goal": "把羊皮留在商队手里做中立鉴定",
+                    "clock": 1,
+                    "escalation": [
+                      "收纸",
+                      "鉴定",
+                      "不选边"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "audit_resources",
+                  "delay_commitment"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：云苍峰为云氏当家人。",
+                  "personality.caution": "本拍先鉴定不选边。",
+                  "personality.honor": "本拍肯经手但不替一族出头。",
+                  "personality.ambition": "人物卡：商界领袖。",
+                  "motives.stability": "本拍避免三族因一张纸开战。",
+                  "motives.control": "纸在谁手里谁就先知情。",
+                  "resources.influence": "人物卡：云氏当家人。",
+                  "resources.wealth": "本拍不买卖这张纸。",
+                  "resources.intelligence": "axisBeat：由他鉴定。",
+                  "resources.troops": "本拍无兵。",
+                  "agendas.agenda.lcq.s04b_04.yun.clock": "纸已翻出，尚未送出。"
+                }
+              },
+              {
+                "characterId": "liuchao.character.xie_yi",
+                "identity": {
+                  "factionId": "liuchao.faction.xing_yue_hu",
+                  "office": "星月湖八骏",
+                  "rank": 4
+                },
+                "personality": {
+                  "honor": 4,
+                  "caution": 3,
+                  "ambition": 3
+                },
+                "motives": {
+                  "legitimacy": 3,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 3,
+                  "intelligence": 5,
+                  "wealth": 2,
+                  "troops": 2
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s04b_04.xie",
+                    "goal": "让碧鲮侧先知道这张纸在指谁",
+                    "clock": 0,
+                    "escalation": [
+                      "看纸",
+                      "通报",
+                      "护族"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "spread_message"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：谢艺为星月湖八骏，并提供碧鲮线索。",
+                  "personality.honor": "本拍护的是他给过线索的那一族。",
+                  "personality.caution": "本拍不把纸公开给三族同时看。",
+                  "personality.ambition": "人物卡：八骏。",
+                  "motives.legitimacy": "本拍要碧鲮先知情。",
+                  "motives.stability": "本拍仍要避免当场撕破。",
+                  "resources.influence": "人物卡：八骏。",
+                  "resources.intelligence": "axisBeat：他提供碧鲮线索。",
+                  "resources.wealth": "本拍不买纸。",
+                  "resources.troops": "本拍有随行武力。",
+                  "agendas.agenda.lcq.s04b_04.xie.clock": "纸已出现，通报尚未发生。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "audit_resources",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "把羊皮留在商队做中立鉴定",
+                "reason": "先分清能读的墨痕和不能读的猜测",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "mustNotInvent": [
+                  "已经交给其中一族"
+                ],
+                "visibleSignal": "云苍峰只在火边看墨痕，不把纸递给任何一族",
+                "offscreenAction": "中立保管并鉴定",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "neutralCustody": 12,
+                  "biyuBriefing": -2
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 8,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "neutralCustody": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "label": "暂不把鉴定结论送出商队",
+                "reason": "结论一出门就等于选边",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "mustNotInvent": [
+                  "已经公开结论"
+                ],
+                "visibleSignal": "纸被收回匣中，门外只听到“还不能定”",
+                "offscreenAction": "压住结论",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "neutralCustody": 6
+                },
+                "utility": {
+                  "expectedBenefit": 2
+                },
+                "visibility": "rumor",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "spread_message",
+                "actorIds": [
+                  "liuchao.character.xie_yi"
+                ],
+                "label": "先让碧鲮侧知道有这张传讯",
+                "reason": "纸若指向白夷，碧鲮不能最后一个听见",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s04b_04.letter"
+                ],
+                "mustNotInvent": [
+                  "三族已经同时知情"
+                ],
+                "visibleSignal": "谢艺把“有一张空白羊皮在指人”先递向碧鲮方向",
+                "offscreenAction": "先通报碧鲮",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "biyuBriefing": 14,
+                  "neutralCustody": -6
+                },
+                "utility": {
+                  "urgency": 7,
+                  "factionGoal": 7,
+                  "expectedBenefit": 7,
+                  "situation": {
+                    "biyuBriefing": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "三族已经开战",
+                "传讯已经全部破译"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s04b_04.neutral_appraisal",
+              "title": "把传讯交给云苍峰中立鉴定",
+              "characterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "whyNow": "纸一出门就等于先让某一族知情。留在云家手里，三族都不欠你，也不先恨你。",
+              "nextStep": "把羊皮交给云苍峰保管鉴定，不先通报任何一族。",
+              "stakes": "中立也会被看成不肯帮；真要选边时，三族都没有先收过你的情。",
+              "rewardPreview": "取得一次调用云氏秘法传讯中立鉴定的权限。",
+              "futureHint": "以后再有这种纸，云苍峰会记得你有没有把它留在商队。",
+              "actionText": "我追踪“把传讯交给云苍峰中立鉴定”：纸留商队，不先通报花苗、白夷或碧鲮。",
+              "rewardKey": "permission.lcq.yun.parchment_custody",
+              "rewardLabel": "云氏·传讯中立鉴定",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.yun_cang_feng"
+                ],
+                "actionIds": [
+                  "audit_resources"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "hand_yun",
+                    "label": "把羊皮交给云苍峰",
+                    "actions": [
+                      {
+                        "id": "give_parchment_to_yun",
+                        "label": "交云苍峰",
+                        "actionText": "我把空白羊皮交给云苍峰保管鉴定，不先送给任何一族。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "交给云苍峰",
+                      "不先送给任何一族"
+                    ],
+                    "rejectIf": [
+                      "先通报碧鲮",
+                      "交给谢艺"
+                    ]
+                  },
+                  {
+                    "id": "no_tribe",
+                    "label": "不先选边通报",
+                    "actions": [
+                      {
+                        "id": "withhold_tribe_brief",
+                        "label": "不选边",
+                        "actionText": "我明确在鉴定完成前，不把纸的存在单独通报花苗、白夷或碧鲮。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "鉴定完成前",
+                      "不把纸的存在单独通报"
+                    ],
+                    "rejectIf": [
+                      "先让碧鲮知道",
+                      "选边"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s04b_04.brief_biyu_first",
+              "title": "让谢艺先通报碧鲮",
+              "characterIds": [
+                "liuchao.character.xie_yi"
+              ],
+              "whyNow": "谢艺手里有碧鲮的线。先让这一族知情，等于在三族里先站了一边。",
+              "nextStep": "把纸的存在先告诉谢艺，由他通报碧鲮，不走云家中立匣。",
+              "stakes": "碧鲮会记你先通报；另外两族若事后得知，会把你看成偏过一边。",
+              "rewardPreview": "取得一次经谢艺向碧鲮先期通报的权限。",
+              "futureHint": "以后碧鲮再听到南荒的风声，会先问当时是谁让他们早知道。",
+              "actionText": "我追踪“让谢艺先通报碧鲮”：把纸的存在先交给他，不走云家中立匣。",
+              "rewardKey": "permission.lcq.biyu.first_brief",
+              "rewardLabel": "碧鲮·先期传讯通报",
+              "trigger": {
+                "actorIds": [
+                  "liuchao.character.xie_yi"
+                ],
+                "actionIds": [
+                  "spread_message"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "tell_xie",
+                    "label": "把纸的存在告诉谢艺",
+                    "actions": [
+                      {
+                        "id": "tell_xie_about_parchment",
+                        "label": "告知谢艺",
+                        "actionText": "我把空白羊皮的存在先告诉谢艺，请他决定如何通报碧鲮。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "告诉谢艺",
+                      "通报碧鲮"
+                    ],
+                    "rejectIf": [
+                      "交给云苍峰中立",
+                      "不先通报"
+                    ]
+                  },
+                  {
+                    "id": "no_neutral_box",
+                    "label": "不走云家中立匣",
+                    "actions": [
+                      {
+                        "id": "skip_yun_neutral_box",
+                        "label": "不入中立匣",
+                        "actionText": "我明确这张纸不先收入云氏中立匣，让碧鲮侧先知情。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不先收入云氏中立匣",
+                      "碧鲮",
+                      "先知情"
+                    ],
+                    "rejectIf": [
+                      "中立鉴定",
+                      "三族同时知情"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.b",
+          "sceneName": "祭坛之下",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+          "justHappened": "鸦使身上的竹筒里是一张空白羊皮纸，云苍峰认出这是只有送到收信人手中才会显字的秘法传讯信；众人推断收信人是鬼王峒，黑魔海与鬼王峒已在南荒勾结，白夷很可能就是目标。",
+          "evidence": [
+            "第58章·银铃"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+        "name": "取得灵飞镜",
+        "description": "程宗扬在白夷祭坛下触发机关坠洞，最终寻得灵飞镜。",
+        "axisId": "qingyu.61.1",
+        "axisAnchor": "六朝清羽记·#61·第59章·寻宝",
+        "axisSeq": 95,
+        "axisBeat": "程宗扬等人发现白夷祭坛下藏有灵飞镜，程宗扬触发机关坠入洞穴，武二郎相救，最终在洞中寻得灵飞镜。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.le_mingzhu"
+        ],
+        "objective": "白夷祭坛下面是空的，灵飞镜多半就在里面",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "前往白夷祭坛寻找灵飞镜",
+              "actionText": "我按当前主线目标行动：前往白夷祭坛寻找灵飞镜",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往白夷祭坛寻找灵飞镜”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "乐明珠"
+                ]
+              },
+              "sceneLocation": "白夷祭坛下洞穴",
+              "dayPart": "夜",
+              "sceneObjective": "祭坛底下是空的，兔眼的红宝石像是机关，灵飞镜多半就在下面——怎么下去？",
+              "previousBeat": "夜里你们潜进白夷宫墙，易勇的水镜术感应到灵飞镜就在祭坛附近，武二郎推了推祭坛，说底下是空的。鸦使身上的竹筒里是一张空白羊皮纸，云苍峰认出这是只有送到收信人手中才会显字的秘法传讯信；众人推断收信人是鬼王峒，黑魔海与鬼王峒已在南荒勾结，白夷很可能就是目标。"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "nh1.b",
+          "sceneName": "祭坛之下",
+          "stop": true,
+          "card": {
+            "previous": "夜里你们潜进白夷宫墙，易勇的水镜术感应到灵飞镜就在祭坛附近，武二郎推了推祭坛，说底下是空的。鸦使身上的竹筒里是一张空白羊皮纸，云苍峰认出这是只有送到收信人手中才会显字的秘法传讯信；众人推断收信人是鬼王峒，黑魔海与鬼王峒已在南荒勾结，白夷很可能就是目标。",
+            "tension": "祭坛底下是空的，兔眼的红宝石像是机关，灵飞镜多半就在下面——怎么下去？",
+            "options": [
+              "试试兔眼上的机关",
+              "让易彪、易勇守在外面，你和武二郎下去",
+              "先看清祭坛周围有没有守卫"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第59章·寻宝",
+            "第58章·银铃"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_06",
+        "name": "花白联手",
+        "description": "云苍峰与苏荔商议，花苗准备与白夷联手对抗鬼王峒勒索。",
+        "axisId": "qingyu.61.2",
+        "axisAnchor": "六朝清羽记·#61·第59章·寻宝",
+        "axisSeq": 96,
+        "axisBeat": "云苍峰与花苗族长苏荔商议，花苗欲与白夷联手对抗鬼王峒，苏荔自伤以示决心。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "与花苗族长商议联手之事",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与花苗族长商议联手之事",
+              "actionText": "我按当前主线目标行动：与花苗族长商议联手之事",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与花苗族长商议联手之事”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "云苍峰",
+                  "苏荔"
+                ]
+              },
+              "sceneLocation": "白夷客舍"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.c",
+          "sceneName": "镜中白夷宫",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+          "justHappened": "云苍峰问出白夷族长承认：鬼王峒月前勒索大量财物，声称会派使者来取；苏荔坦承花苗是去刺杀鬼巫王，如今失去了进鬼王峒的资格，想与白夷联手，并拔刀划腕，表示花苗人不惧死亡。",
+          "evidence": [
+            "第59章·寻宝"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_07",
+        "name": "水镜传讯苏妲己",
+        "description": "程宗扬借灵飞镜向苏妲己报告南荒黑魔海线，收到尽快寻找霓龙丝的警告。",
+        "axisId": "qingyu.62.4",
+        "axisAnchor": "六朝清羽记·#62·第60章·灵飞",
+        "axisSeq": 100,
+        "axisBeat": "程宗扬借助易勇的水镜术与苏妲己传讯，报告南荒遭遇黑魔海，苏妲己警告他不要招惹对方并尽快寻找霓龙丝。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.nanhuang_yiyong",
+          "liuchao.character.su_li"
+        ],
+        "objective": "用水镜传讯联系苏妲己",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "用水镜传讯联系苏妲己",
+              "actionText": "我按当前主线目标行动：用水镜传讯联系苏妲己",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“用水镜传讯联系苏妲己”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "易勇",
+                  "苏荔",
+                  "苏妲己（水镜）"
+                ]
+              },
+              "sceneLocation": "白夷客舍"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.c",
+          "sceneName": "镜中白夷宫",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+          "justHappened": "易勇借灵飞镜的灵力，让你与苏妲己隔着水镜传讯；她先问霓龙丝找到没有，听说对方是黑魔海后，叮嘱你们不要招惹，也不要说出她的名头。",
+          "evidence": [
+            "第60章·灵飞"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_08",
+        "name": "识破白夷阴谋",
+        "description": "程宗扬通过灵飞镜发现白夷族与鬼王峒勾结，急令接回同伴并准备撤离。",
+        "axisId": "qingyu.63.2",
+        "axisAnchor": "六朝清羽记·#63·第61章·兽虐",
+        "axisSeq": 102,
+        "axisBeat": "程宗扬通过灵飞镜目睹樨夫人受辱，识破白夷族与鬼王峒勾结的阴谋，紧急下令接回同伴并准备撤离。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_08.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.nanhuang_xi_furen",
+          "lcq.character.nanhuang_yiyong"
+        ],
+        "objective": "用灵飞镜查探白夷阴谋",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "用灵飞镜查探白夷阴谋",
+              "actionText": "我按当前主线目标行动：用灵飞镜查探白夷阴谋",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“用灵飞镜查探白夷阴谋”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "樨夫人（镜中）",
+                  "鬼王峒白夷使者（镜中）"
+                ]
+              },
+              "sceneLocation": "白夷宫外",
+              "dayPart": "深夜"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.c",
+          "sceneName": "镜中白夷宫",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+          "justHappened": "你用灵飞镜看见白夷宫殿里的景象，确认白夷已经沦为鬼王峒的附庸；你随即下令把云苍峰、苏荔和分散在城里的人手都接回商铺。",
+          "evidence": [
+            "第61章·兽虐"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+        "name": "白夷生变",
+        "description": "鬼王峒使者杀死白夷族长，樨夫人成为新族长并与鬼王峒勾结。",
+        "axisId": "qingyu.64.1",
+        "axisAnchor": "六朝清羽记·#64·第62章·生变",
+        "axisSeq": 103,
+        "axisBeat": "鬼王峒使者杀死白夷族长，其妻樨夫人成为新任族长，并与鬼王峒勾结。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_09.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.nanhuang_xi_furen",
+          "lcq.character.nanhuang_baiyi_chief",
+          "lcq.character.nanhuang_yiyong"
+        ],
+        "objective": "灵飞镜里，鬼王峒的使者坐上了白夷宫殿里的石座",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "观察白夷族长变动",
+              "actionText": "我按当前主线目标行动：观察白夷族长变动",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“观察白夷族长变动”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "樨夫人（镜中）",
+                  "血虎（镜中）",
+                  "鬼王峒白夷使者（镜中）"
+                ],
+                "exit": [
+                  {
+                    "name": "白夷族长",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "sceneLocation": "白夷宫外",
+              "dayPart": "深夜",
+              "fixedFacts": [
+                "深夜，你从灵飞镜里看见血虎拧断白夷族长的颈骨，白夷使者扶樨夫人为新族长",
+                "你回去告诉云苍峰，白夷族长刚刚死了"
+              ],
+              "factChecks": [
+                [
+                  "血虎"
+                ],
+                [
+                  "族长"
+                ],
+                [
+                  "死",
+                  "颈骨"
+                ],
+                [
+                  "樨夫人"
+                ]
+              ],
+              "fallbackText": "深夜，你从灵飞镜里看见血虎拧断白夷族长的颈骨，白夷使者扶樨夫人为新族长。你回去告诉云苍峰，白夷族长刚刚死了。",
+              "ledgerEffects": {
+                "worldFacts": [
+                  "樨夫人被扶为白夷族长，白夷仍附鬼王峒"
+                ]
+              },
+              "sceneObjective": "镜中，鬼王峒的使者坐在白夷宫殿的石座上，宫殿里已经是他说了算；云苍峰和苏荔还没接回——此刻你能做什么？",
+              "previousBeat": "云苍峰问出白夷族长承认：鬼王峒月前勒索大量财物，声称会派使者来取；苏荔坦承花苗是去刺杀鬼巫王，如今失去了进鬼王峒的资格，想与白夷联手，并拔刀划腕，表示花苗人不惧死亡。易勇借灵飞镜的灵力，让你与苏妲己隔着水镜传讯；她先问霓龙丝找到没有，听说对方是黑魔海后，叮嘱你们不要招惹，也不要说出她的名头。你用灵飞镜看见白夷宫殿里的景象，确认白夷已经沦为鬼王峒的附庸；你随即下令把云苍峰、苏荔和分散在城里的人手都接回商铺。"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "nh1.c",
+          "sceneName": "镜中白夷宫",
+          "stop": true,
+          "card": {
+            "previous": "云苍峰问出白夷族长承认：鬼王峒月前勒索大量财物，声称会派使者来取；苏荔坦承花苗是去刺杀鬼巫王，如今失去了进鬼王峒的资格，想与白夷联手，并拔刀划腕，表示花苗人不惧死亡。易勇借灵飞镜的灵力，让你与苏妲己隔着水镜传讯；她先问霓龙丝找到没有，听说对方是黑魔海后，叮嘱你们不要招惹，也不要说出她的名头。你用灵飞镜看见白夷宫殿里的景象，确认白夷已经沦为鬼王峒的附庸；你随即下令把云苍峰、苏荔和分散在城里的人手都接回商铺。",
+            "tension": "镜中，鬼王峒的使者坐在白夷宫殿的石座上，宫殿里已经是他说了算；云苍峰和苏荔还没接回——此刻你能做什么？",
+            "options": [
+              "继续盯着镜子，弄清使者要对族长做什么",
+              "先确认云苍峰、苏荔是否平安",
+              "叫人守住商铺门口，防备白夷人"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第61章·兽虐"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+        "name": "地宫陷阱",
+        "description": "程宗扬等人追入地宫甬道，遭鬼王峒使者陷阱与鬼武士围攻。",
+        "axisId": "qingyu.65.1",
+        "axisAnchor": "六朝清羽记·#65·第63章·陷阱",
+        "axisSeq": 105,
+        "axisBeat": "程宗扬等人追入地宫甬道，遭遇鬼王峒使者设下的陷阱，花苗人被绑在木塔上，鬼武士围攻众人，战斗爆发。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_10.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi"
+        ],
+        "objective": "甬道尽头，花苗人被捆在木塔上，鬼王峒使者站在塔顶",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "追入地宫甬道躲避陷阱",
+              "actionText": "我按当前主线目标行动：追入地宫甬道躲避陷阱",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“追入地宫甬道躲避陷阱”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "谢艺",
+                  "凝羽",
+                  "易彪",
+                  "花苗人",
+                  "鬼武士"
+                ]
+              },
+              "sceneLocation": "白夷地宫甬道",
+              "dayPart": "深夜",
+              "sceneObjective": "甬道尽头，花苗人被捆在圆木堆成的塔上，鬼王峒使者站在塔顶，鬼武士已经跃下来——先救人，还是先守住退路？",
+              "previousBeat": "白夷族长刚被鬼王峒使者杀死，樨夫人被扶为新族长，白夷仍附峒；你们追进了地宫甬道。"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.d",
+          "sceneName": "地宫甬道",
+          "stop": true,
+          "card": {
+            "previous": "白夷族长刚被鬼王峒使者杀死，樨夫人被扶为新族长，白夷仍附峒；你们追进了地宫甬道。",
+            "tension": "甬道尽头，花苗人被捆在圆木堆成的塔上，鬼王峒使者站在塔顶，鬼武士已经跃下来——先救人，还是先守住退路？",
+            "options": [
+              "先救木塔上的花苗人",
+              "退守甬道口，挡住鬼武士",
+              "找出陷阱的机关，反过来利用"
+            ]
+          },
+          "fork": "battle",
+          "evidence": [
+            "第63章·陷阱"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_11",
+        "name": "认出血虎",
+        "description": "被鬼王峒改造的易虎出现并攻击武二郎，易彪唤醒兄长失败。",
+        "axisId": "qingyu.65.2",
+        "axisAnchor": "六朝清羽记·#65·第63章·陷阱",
+        "axisSeq": 106,
+        "axisBeat": "被鬼王峒改造的易虎（血虎）出现，攻击武二郎，易彪试图唤醒兄长未果，血虎继续战斗。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_11.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "lcq.character.np004"
+        ],
+        "objective": "战阵里冲出一头异化的怪物，直扑武二郎",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在战场应对血虎攻击",
+              "actionText": "我按当前主线目标行动：在战场应对血虎攻击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在战场应对血虎攻击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "武二郎",
+                  "易彪",
+                  "血虎"
+                ]
+              },
+              "sceneLocation": "白夷地宫甬道",
+              "dayPart": "深夜",
+              "fixedFacts": [
+                "地宫中，血虎扑向武二郎",
+                "易彪认出那是易虎，喊了一声哥，却没能唤醒他",
+                "你挡住血虎的攻击"
+              ],
+              "factChecks": [
+                [
+                  "血虎"
+                ],
+                [
+                  "易彪"
+                ],
+                [
+                  "哥"
+                ]
+              ],
+              "fallbackText": "地宫中，血虎扑向武二郎。易彪认出那是易虎，喊了一声哥，却没能唤醒他。你挡住血虎的攻击。",
+              "ledgerEffects": {
+                "injuries": {
+                  "易虎": "被鬼王峒改造，血虎"
+                },
+                "worldFacts": [
+                  "易虎被炼成血虎的怪物，不再是能带路或帮忙的普通活人。"
+                ]
+              },
+              "sceneObjective": "一头被鬼王峒改造过的怪物从战阵里扑向武二郎——你挡，还是让武二郎自己接？",
+              "previousBeat": "地宫甬道里战斗已经打响，鬼王峒使者设下的陷阱发动了。"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "nh1.d",
+          "sceneName": "地宫甬道",
+          "stop": true,
+          "card": {
+            "previous": "地宫甬道里战斗已经打响，鬼王峒使者设下的陷阱发动了。",
+            "tension": "一头被鬼王峒改造过的怪物从战阵里扑向武二郎——你挡，还是让武二郎自己接？",
+            "options": [
+              "抢上去替武二郎挡住它",
+              "稳住阵脚，让武二郎正面接它",
+              "先看清它到底是什么"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第62章·生变"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_12",
+        "name": "凝羽突袭",
+        "description": "凝羽突袭鬼王峒使者并斩杀巫师，但毒术威胁仍未解除。",
+        "axisId": "qingyu.65.3",
+        "axisAnchor": "六朝清羽记·#65·第63章·陷阱",
+        "axisSeq": 107,
+        "axisBeat": "凝羽从暗处突袭，刺穿鬼王峒使者的手掌，斩杀巫师，但烟雾中的毒术威胁仍在。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_12.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.np004",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "协助凝羽突袭鬼王峒使者",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "协助凝羽突袭鬼王峒使者",
+              "actionText": "我按当前主线目标行动：协助凝羽突袭鬼王峒使者",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“协助凝羽突袭鬼王峒使者”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "鬼王峒白夷使者"
+                ]
+              },
+              "sceneLocation": "白夷地宫甬道",
+              "dayPart": "深夜"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.e",
+          "sceneName": "族长宫中",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_xi_furen_trade_route",
+          "justHappened": "凝羽从暗处突袭，划碎了鬼王峒使者的黑袍，斩杀了巫师，但烟雾里的毒术威胁仍在。",
+          "evidence": [
+            "第64章·俘虏"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_xi_furen_trade_route",
+        "name": "白夷商路",
+        "description": "白夷族长已被鬼王峒杀死。樨夫人接任族长，商路只向云氏和白湖商馆开放，金玉珠宝半价；白夷仍附峒观望，不是归附商队。易虎已被炼成血虎，留在白夷的是怪物，不能作为普通活人帮工或带路。只演交易，不演成人情节。",
+        "axisId": "qingyu.66.1",
+        "axisSeq": 108,
+        "axisAnchor": "六朝清羽记·#66·第64章·俘虏",
+        "axisBeat": "白夷族长已被鬼王峒杀死。樨夫人接任族长，商路只向云氏和白湖商馆开放，金玉珠宝半价；白夷仍附峒观望，不是归附商队。易虎已被炼成血虎，留在白夷的是怪物，不能作为普通活人帮工或带路。只演交易，不演成人情节。",
+        "critical": true,
+        "objective": "与樨夫人谈清白夷族长与商路的交换条件",
+        "completion": [
+          {
+            "path": "flags.event.s04b_xi_furen_trade_route.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.nanhuang_xi_furen",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan"
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_xi_furen_to_terms",
+              "label": "当面与樨夫人谈合作",
+              "actionText": "我当面与樨夫人谈合作。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "当面与樨夫人谈合作。",
+                "partial": "本动作无部分成功。",
+                "failure": "本动作无失败分支。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "xi_furen_terms_open",
+              "cast": {
+                "present": [
+                  "樨夫人",
+                  "云苍峰",
+                  "祁远"
+                ]
+              },
+              "sceneLocation": "白夷宫中",
+              "sceneObjective": "樨夫人刚成为白夷族长，白夷仍依附鬼王峒——这笔交易谈什么、让到哪一步？",
+              "previousBeat": "凝羽从暗处突袭，划碎了鬼王峒使者的黑袍，斩杀了巫师，但烟雾里的毒术威胁仍在。"
+            },
+            {
+              "id": "seal_baiyi_trade_route",
+              "label": "扶她接任族长，换取商路经营权和珠宝半价",
+              "actionText": "我扶她接任族长，换取商路经营权和珠宝半价。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "扶她接任族长，换取商路经营权和珠宝半价。",
+                "partial": "本动作无部分成功。",
+                "failure": "本动作无失败分支。"
+              },
+              "requiresPreparation": [
+                "xi_furen_terms_open"
+              ],
+              "cast": {
+                "present": [
+                  "樨夫人",
+                  "云苍峰",
+                  "祁远"
+                ]
+              },
+              "sceneLocation": "白夷宫中",
+              "sceneObjective": "樨夫人刚成为白夷族长，白夷仍依附鬼王峒——这笔交易谈什么、让到哪一步？"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.e",
+          "sceneName": "族长宫中",
+          "stop": true,
+          "card": {
+            "previous": "凝羽从暗处突袭，划碎了鬼王峒使者的黑袍，斩杀了巫师，但烟雾里的毒术威胁仍在。",
+            "tension": "樨夫人刚成为白夷族长，白夷仍依附鬼王峒——这笔交易谈什么、让到哪一步？",
+            "options": [
+              "摸清白夷对鬼王峒的真实立场",
+              "为商队争取商路和货价",
+              "先稳住局面，不逼樨夫人当场表态"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第65章·杀星"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_13",
+        "name": "谢艺杀使",
+        "description": "谢艺独入地宫，击杀鬼王峒使者与武士，商队威胁暂时解除。",
+        "axisId": "qingyu.67.2",
+        "axisAnchor": "六朝清羽记·#67·第65章·杀星",
+        "axisSeq": 111,
+        "axisBeat": "谢艺独入地宫，以残忍手段击杀鬼王峒使者及所有武士，拷问碧宛下落无果后斩首。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_13.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xie_yi",
+          "lcq.character.nanhuang_xi_furen"
+        ],
+        "objective": "潜入地宫查明碧宛下落",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "潜入地宫查明碧宛下落",
+              "actionText": "我按当前主线目标行动：潜入地宫查明碧宛下落",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“潜入地宫查明碧宛下落”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "谢艺",
+                  "鬼王峒白夷使者"
+                ],
+                "exit": [
+                  {
+                    "name": "鬼王峒白夷使者",
+                    "status": "dead"
+                  }
+                ]
+              },
+              "sceneLocation": "白夷地宫",
+              "dayPart": "夜",
+              "fixedFacts": [
+                "你守在甬道口，谢艺独自进入地宫，斩尽武士和奴隶",
+                "拷问碧宛的下落未果后，他一刀斩断白夷使者的脖颈；青衫上没有沾血"
+              ],
+              "factChecks": [
+                [
+                  "谢艺"
+                ],
+                [
+                  "碧宛"
+                ],
+                [
+                  "使者"
+                ],
+                [
+                  "斩",
+                  "杀"
+                ]
+              ],
+              "fallbackText": "你守在甬道口，谢艺独自进入地宫，斩尽武士和奴隶。拷问碧宛的下落未果后，他一刀斩断白夷使者的脖颈；青衫上没有沾血。",
+              "forbidden": [
+                "阁罗"
+              ]
+            }
+          ]
+        },
+        "locationId": "liuchao.location.baiyi",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.f",
+          "sceneName": "出白夷",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+          "justHappened": "你守在甬道口，谢艺独自进入地宫，斩尽鬼王峒的武士，拷问碧宛的下落未果，最后杀了使者。",
+          "evidence": [
+            "第65章·杀星"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+        "name": "同往碧鲮",
+        "description": "众人讨论下一步，苏荔坚持前往鬼王峒，最终决定先同往碧鲮族。 冰蛊仍在，南荒三个月之约只作身体与叙事压力，不设置致命期限。",
+        "axisId": "qingyu.68.1",
+        "axisAnchor": "六朝清羽记·#68·第66章·议聚",
+        "axisSeq": 113,
+        "axisBeat": "商队众人聚议，讨论下一步行动方向，苏荔坚持前往鬼王峒，武二郎反对但最终妥协，决定先同往碧鲮族再作商议。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_14.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "商队该往哪里走：苏荔要去鬼王峒，武二郎反对",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与商队商议前往碧鲮族",
+              "actionText": "我按当前主线目标行动：与商队商议前往碧鲮族",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与商队商议前往碧鲮族”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "苏荔",
+                  "武二郎",
+                  "凝羽",
+                  "云苍峰",
+                  "谢艺",
+                  "祁远"
+                ]
+              },
+              "sceneLocation": "白夷宫中（出发前）",
+              "fixedFacts": [
+                "你们商议下一程",
+                "苏荔仍要去鬼王峒，武二郎首先反对",
+                "你指出众人已经与峒中结怨，不知道使者是否传讯，最后决定先同往碧鲮",
+                "鬼巫王仍在世，鬼王峒还没有平定"
+              ],
+              "factChecks": [
+                [
+                  "苏荔"
+                ],
+                [
+                  "武二郎"
+                ],
+                [
+                  "碧鲮"
+                ]
+              ],
+              "fallbackText": "你们商议下一程。苏荔仍要去鬼王峒，武二郎首先反对。你指出众人已经与峒中结怨，不知道使者是否传讯，最后决定先同往碧鲮。鬼巫王仍在世，鬼王峒还没有平定。",
+              "ledgerEffects": {
+                "worldFacts": [
+                  "鬼巫王仍在世，鬼王峒可能派人拦截"
+                ]
+              },
+              "sceneObjective": "鬼王峒的使者死在地宫里，不知有没有传出消息；苏荔仍要去鬼王峒，武二郎首先反对——商队下一程怎么走？",
+              "previousBeat": "你守在甬道口，谢艺独自进入地宫，斩尽鬼王峒的武士，拷问碧宛的下落未果，最后杀了使者。"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.south_wild_valley",
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.f",
+          "sceneName": "出白夷",
+          "stop": true,
+          "card": {
+            "previous": "你守在甬道口，谢艺独自进入地宫，斩尽鬼王峒的武士，拷问碧宛的下落未果，最后杀了使者。",
+            "tension": "鬼王峒的使者死在地宫里，不知有没有传出消息；苏荔仍要去鬼王峒，武二郎首先反对——商队下一程怎么走？",
+            "options": [
+              "依苏荔，直奔鬼王峒",
+              "先去碧鲮，再作商议",
+              "避开鬼王峒，另找安全的落脚处"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第66章·议聚"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_15",
+        "name": "阿夕暗潮",
+        "description": "程宗扬发现阿夕异常并质问谢艺，谢艺暗示灵飞镜与鬼巫王冲突。 冰蛊仍在，南荒三个月之约只作身体与叙事压力，不设置致命期限。",
+        "axisId": "qingyu.70.1",
+        "axisAnchor": "六朝清羽记·#70·第68章·暗潮",
+        "axisSeq": 115,
+        "axisBeat": "程宗扬发现阿夕异常，质问谢艺，谢艺承认设计让程宗扬与阿葭接触，并透露灵飞镜和遥控器将在南荒重逢，暗示与鬼巫王冲突。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_15.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_li",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "质问谢艺关于阿夕异常",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "质问谢艺关于阿夕异常",
+              "actionText": "我按当前主线目标行动：质问谢艺关于阿夕异常",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“质问谢艺关于阿夕异常”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "谢艺",
+                  "苏荔",
+                  "云苍峰"
+                ]
+              },
+              "sceneLocation": "碧鲮途中"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.biyu_village",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.g",
+          "sceneName": "碧鲮村",
+          "stop": false,
+          "foldInto": "lcq.event.xiaozi_first_appears",
+          "justHappened": "你察觉阿夕有些异常，回头质问谢艺；谢艺承认当初是他设计让你与阿葭接触，还透露灵飞镜和遥控器将在南荒重逢，暗示南荒有人要与鬼巫王为敌。",
+          "evidence": [
+            "第68章·暗潮"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_16",
+        "name": "岳帅旧闻",
+        "description": "程宗扬从云苍峰处得知岳帅生平和星月湖渊源，谢艺目标浮出轮廓。",
+        "axisId": "qingyu.71.1",
+        "axisAnchor": "六朝清羽记·#71·第69章·双飞",
+        "axisSeq": 117,
+        "axisBeat": "程宗扬从云苍峰处得知岳帅生平及星月湖渊源，推测谢艺寻找的女子是岳帅姬妾。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_16.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "objective": "向云苍峰打听岳帅旧闻",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "向云苍峰打听岳帅旧闻",
+              "actionText": "我按当前主线目标行动：向云苍峰打听岳帅旧闻",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“向云苍峰打听岳帅旧闻”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "云苍峰",
+                  "凝羽"
+                ]
+              },
+              "sceneLocation": "碧鲮途中"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.biyu_village",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.g",
+          "sceneName": "碧鲮村",
+          "stop": false,
+          "foldInto": "lcq.event.xiaozi_first_appears",
+          "justHappened": "云苍峰向你讲起岳帅的生平和星月湖的渊源，你由此推测谢艺要找的女子是岳帅的姬妾。",
+          "evidence": [
+            "第69章·双飞"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_17",
+        "name": "鳄鱼险境",
+        "description": "队伍在湿热盆地遭鳄鱼袭击，祁远冒险取回龙睛玉，苏荔射杀鳄鱼救险。",
+        "axisId": "qingyu.72.1",
+        "axisAnchor": "六朝清羽记·#72·第70章·碧湾",
+        "axisSeq": 119,
+        "axisBeat": "队伍在湿热盆地遭遇鳄鱼袭击，一匹走骡被拖入泥潭，祁远为取回龙睛玉冒险与鳄鱼搏斗，苏荔射杀鳄鱼救险，众人惊险撤离。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_17.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qi_yuan",
+          "liuchao.character.su_li",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "在湿热盆地躲避鳄鱼袭击",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在湿热盆地躲避鳄鱼袭击",
+              "actionText": "我按当前主线目标行动：在湿热盆地躲避鳄鱼袭击",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在湿热盆地躲避鳄鱼袭击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威",
+                  "小魏",
+                  "石刚",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八"
+                ]
+              },
+              "sceneLocation": "湿热盆地",
+              "dayPart": "白天"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.biyu_village",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.g",
+          "sceneName": "碧鲮村",
+          "stop": false,
+          "foldInto": "lcq.event.xiaozi_first_appears",
+          "justHappened": "队伍在湿热盆地遭鳄鱼袭击，一匹走骡被拖进泥潭；祁远冒险去取龙睛玉，苏荔射杀了鳄鱼，众人惊险撤离。",
+          "evidence": [
+            "第70章·碧湾"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.xiaozi_first_appears",
+        "name": "小紫现身",
+        "description": "第70章末，碧鲮少女自称小紫，向众人问好。黑舌尚未死亡，不得提前质问他的死因。",
+        "axisId": "qingyu.72.2",
+        "axisAnchor": "六朝清羽记·#72·第70章·碧湾",
+        "axisSeq": 120,
+        "axisBeat": "第70章末，碧鲮少女自称小紫，向众人问好。黑舌尚未死亡，不得提前质问他的死因。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xiaozi_first_appears.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "看清刚来问好的碧鲮少女",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "recognize_xiaozi",
+              "label": "看清这名自称小紫的碧鲮少女",
+              "actionText": "我看清这名自称小紫的碧鲮少女。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你看清了这名自称小紫的少女，并回应她的问好。",
+                "partial": "该动作不产生partial。",
+                "failure": "该动作不产生failure。"
+              },
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威",
+                  "小魏",
+                  "石刚",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫"
+                ]
+              },
+              "sceneLocation": "碧鲮村玉盏铃花树下",
+              "dayPart": "白天",
+              "fixedFacts": [
+                "你见一名成年女子把铜壶中的开水浇在玉盏铃花树上，满树花朵烫枯落地",
+                "她抹着汗笑，说妈妈教她事情不能只做一半，随后鞠躬问好：我叫小紫"
+              ],
+              "factChecks": [
+                [
+                  "开水",
+                  "沸水"
+                ],
+                [
+                  "花",
+                  "树"
+                ],
+                [
+                  "小紫"
+                ]
+              ],
+              "fallbackText": "你见一名成年女子把铜壶中的开水浇在玉盏铃花树上，满树花朵烫枯落地。她抹着汗笑，说妈妈教她事情不能只做一半，随后鞠躬问好：我叫小紫。",
+              "forbidden": [
+                "碧姬",
+                "岳帅",
+                "混血",
+                "岳鹏举"
+              ],
+              "ledgerEffects": {
+                "names": {
+                  "小紫": "小紫"
+                }
+              },
+              "sceneObjective": "碧鲮村口，有人迎上来向众人问好——先看清她是谁。",
+              "previousBeat": "你察觉阿夕有些异常，回头质问谢艺；谢艺承认当初是他设计让你与阿葭接触，还透露灵飞镜和遥控器将在南荒重逢，暗示南荒有人要与鬼巫王为敌。云苍峰向你讲起岳帅的生平和星月湖的渊源，你由此推测谢艺要找的女子是岳帅的姬妾。队伍在湿热盆地遭鳄鱼袭击，一匹走骡被拖进泥潭；祁远冒险去取龙睛玉，苏荔射杀了鳄鱼，众人惊险撤离。"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "nh1.g",
+          "sceneName": "碧鲮村",
+          "stop": true,
+          "card": {
+            "previous": "你察觉阿夕有些异常，回头质问谢艺；谢艺承认当初是他设计让你与阿葭接触，还透露灵飞镜和遥控器将在南荒重逢，暗示南荒有人要与鬼巫王为敌。云苍峰向你讲起岳帅的生平和星月湖的渊源，你由此推测谢艺要找的女子是岳帅的姬妾。队伍在湿热盆地遭鳄鱼袭击，一匹走骡被拖进泥潭；祁远冒险去取龙睛玉，苏荔射杀了鳄鱼，众人惊险撤离。",
+            "tension": "碧鲮村口，有人迎上来向众人问好——先看清她是谁。",
+            "options": [
+              "先看清她，再回话",
+              "先问她是哪一家的人",
+              "让云苍峰出面应对"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第70章·碧湾"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_18",
+        "name": "谢艺谈旧事",
+        "description": "谢艺以现代装扮出现，向程宗扬谈及玻璃技术、岳帅晕血，以及岳帅有一名遗腹女的旧事，尚未确认女儿是谁。",
+        "axisId": "qingyu.74.1",
+        "axisAnchor": "六朝清羽记·#74·第72章·大潮",
+        "axisSeq": 121,
+        "axisBeat": "谢艺以现代休闲装扮出现，与程宗扬讨论玻璃制造技术，并谈及岳帅晕血及留有遗腹女的旧事，尚未确认女儿是谁。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_18.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.qi_yuan"
+        ],
+        "objective": "与谢艺讨论制造技术",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "与谢艺讨论制造技术",
+              "actionText": "我按当前主线目标行动：与谢艺讨论制造技术",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“与谢艺讨论制造技术”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "谢艺",
+                  "凝羽",
+                  "祁远",
+                  "小紫"
+                ]
+              },
+              "sceneLocation": "碧鲮竹楼"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.biyu_village",
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.h",
+          "sceneName": "大潮之夜",
+          "stop": false,
+          "foldInto": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+          "justHappened": "谢艺换上现代休闲装扮，与你谈起玻璃制造技术，又提到岳帅晕血、留有一名遗腹女，但没有说那个女儿是谁。",
+          "evidence": [
+            "第72章·大潮"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+        "name": "大潮突至",
+        "description": "夜间巨浪淹没竹楼，程宗扬与凝羽逃生，并决定寻找云苍峰。",
+        "axisId": "qingyu.74.2",
+        "axisAnchor": "六朝清羽记·#74·第72章·大潮",
+        "axisSeq": 122,
+        "axisBeat": "夜间突发巨浪，海水淹没竹楼，程宗扬与凝羽逃生，程宗扬决定寻找云苍峰。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s04b_lingfei_baiyi_crisis_19.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.qi_yuan"
+        ],
+        "objective": "从被巨浪淹没的竹楼里脱身",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "从被巨浪淹没的竹楼里脱身",
+              "actionText": "我从被巨浪淹没的竹楼里脱身",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你从被巨浪淹没的竹楼里脱身，与商队重新会合。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威",
+                  "小魏",
+                  "石刚",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫"
+                ],
+                "exit": [
+                  {
+                    "name": "祁远",
+                    "status": "missing"
+                  },
+                  {
+                    "name": "石刚",
+                    "status": "missing"
+                  }
+                ]
+              },
+              "sceneLocation": "碧鲮竹楼",
+              "dayPart": "夜",
+              "fixedFacts": [
+                "月夜，大潮淹没碧鲮竹楼",
+                "你随众人拼力逃出，商队折损近半，祁远、石刚和云氏四名护卫被卷走，下落不明"
+              ],
+              "factChecks": [
+                [
+                  "潮"
+                ],
+                [
+                  "祁远"
+                ],
+                [
+                  "石刚"
+                ],
+                [
+                  "下落不明",
+                  "失踪"
+                ]
+              ],
+              "fallbackText": "月夜，大潮淹没碧鲮竹楼。你随众人拼力逃出，商队折损近半，祁远、石刚和云氏四名护卫被卷走，下落不明。",
+              "sceneObjective": "月夜里海水漫上碧鲮的竹楼，商队被冲散在黑暗里——先保住谁？",
+              "previousBeat": "谢艺换上现代休闲装扮，与你谈起玻璃制造技术，又提到岳帅晕血、留有一名遗腹女，但没有说那个女儿是谁。"
+            }
+          ]
+        },
+        "locationId": "liuchao.location.biyu_village",
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "nh1.h",
+          "sceneName": "大潮之夜",
+          "stop": true,
+          "card": {
+            "previous": "谢艺换上现代休闲装扮，与你谈起玻璃制造技术，又提到岳帅晕血、留有一名遗腹女，但没有说那个女儿是谁。",
+            "tension": "月夜里海水漫上碧鲮的竹楼，商队被冲散在黑暗里——先保住谁？",
+            "options": [
+              "先护住凝羽",
+              "先招呼商队往高处撤",
+              "去抓住货物，别让湖珠冲走"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第72章·大潮"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.pull_harpoon_lemingzhu",
+        "name": "拔除鱼叉稳定乐明珠伤势",
+        "description": "拔除卡住乐明珠的鱼叉，并稳定她的伤势。",
+        "axisId": "qingyu.77.1",
+        "axisAnchor": "六朝清羽记·#77·第75章·戏问",
+        "axisSeq": 125,
+        "axisBeat": "拔除卡住乐明珠的鱼叉，并稳定她的伤势。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.pull_harpoon_lemingzhu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "liuchao.location.sea_temple",
+        "objective": "拔除鱼叉并稳定乐明珠伤势",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "pull_harpoon_from_mingzhu",
+              "label": "拔除卡住乐明珠的鱼叉",
+              "actionText": "我确认倒刺和伤口方向，稳住乐明珠后拔除鲛人留下的鱼叉。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已拔除卡住乐明珠的鱼叉；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "mingzhu_harpoon_pulled",
+              "cast": {
+                "present": [
+                  "乐明珠"
+                ]
+              },
+              "sceneLocation": "海神殿",
+              "dayPart": "夜"
+            },
+            {
+              "id": "stabilize_mingzhu_after_harpoon",
+              "label": "稳定乐明珠伤势",
+              "actionText": "鱼叉拔出后，我立刻止血包扎，确认乐明珠伤势稳住、能够行动。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已拔除鱼叉并稳定乐明珠伤势；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "mingzhu_harpoon_pulled"
+              ],
+              "cast": {
+                "present": [
+                  "乐明珠"
+                ]
+              },
+              "sceneLocation": "海神殿",
+              "dayPart": "夜"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.i",
+          "sceneName": "海神殿",
+          "stop": false,
+          "foldInto": "lcq.event.xieyi_biling_war",
+          "justHappened": "你拔出卡住乐明珠的鱼叉，止血包扎，稳住了她的伤势。",
+          "evidence": [
+            "第75章·戏问"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.xieyi_biling_war",
+        "name": "谢艺讲述碧鲮旧战",
+        "description": "谢艺讲述碧鲮族与鲛族旧战、朱狐冠来历，并希望程宗扬承接岳帅未竟之事。",
+        "axisId": "qingyu.78.3",
+        "axisAnchor": "六朝清羽记·#78·第76章·回忆",
+        "axisSeq": 128,
+        "axisBeat": "谢艺讲述碧鲮族与鲛族旧战、朱狐冠来历，并希望程宗扬承接岳帅未竟之事。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.xieyi_biling_war.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.le_mingzhu",
+          "liuchao.character.xie_yi"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.biyu",
+          "liuchao.faction.xing_yue_hu",
+          "liuchao.faction.guang_ming_guan_tang"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "听谢艺讲清碧鲮旧战与朱狐冠来历，并回应他希望你承接岳帅未竟之事",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_xieyi_biling_war_and_crown",
+              "label": "听清碧鲮旧战与朱狐冠来历",
+              "actionText": "我让谢艺当面把碧鲮族与鲛族旧战、朱狐冠的来历分别讲完。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听清碧鲮旧战与朱狐冠来历；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "biling_war_heard",
+              "cast": {
+                "present": [
+                  "谢艺",
+                  "乐明珠"
+                ]
+              },
+              "sceneLocation": "碧鲮村",
+              "sceneObjective": "谢艺讲起碧鲮族与鲛族的旧战和朱狐冠的来历，末了希望你接下岳帅没做完的事——你怎么回他？",
+              "previousBeat": "你拔出卡住乐明珠的鱼叉，止血包扎，稳住了她的伤势。"
+            },
+            {
+              "id": "answer_xieyi_yue_unfinished",
+              "label": "回应承接岳帅未竟之事",
+              "actionText": "谢艺说完后，我当面回应他希望我承接岳帅未竟之事，先把这句托付接住。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已听谢艺讲清碧鲮旧战与朱狐冠来历，并回应他希望你承接岳帅未竟之事；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "biling_war_heard"
+              ],
+              "cast": {
+                "present": [
+                  "谢艺",
+                  "乐明珠"
+                ]
+              },
+              "sceneLocation": "碧鲮村",
+              "sceneObjective": "谢艺讲起碧鲮族与鲛族的旧战和朱狐冠的来历，末了希望你接下岳帅没做完的事——你怎么回他？"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.j",
+          "sceneName": "碧鲮旧战",
+          "stop": true,
+          "card": {
+            "previous": "你拔出卡住乐明珠的鱼叉，止血包扎，稳住了她的伤势。",
+            "tension": "谢艺讲起碧鲮族与鲛族的旧战和朱狐冠的来历，末了希望你接下岳帅没做完的事——你怎么回他？",
+            "options": [
+              "接下这份托付",
+              "先问清岳帅未竟之事是什么",
+              "婉拒，只管眼前的路"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第76章·回忆"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.regroup_caravan_envoy",
+        "name": "收拢商队确认使者抵达",
+        "description": "收拢残余商队，确认鬼王峒使者已抵达海湾。 冰蛊仍在，南荒三个月之约只作身体与叙事压力，不设置致命期限。",
+        "axisId": "qingyu.79.3",
+        "axisAnchor": "六朝清羽记·#79·第77章·进贡",
+        "axisSeq": 131,
+        "axisBeat": "收拢残余商队，确认鬼王峒使者已抵达海湾。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.regroup_caravan_envoy.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.a_xi",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np006",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "收拢残余商队，并确认鬼王峒使者已抵达海湾",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "regroup_remaining_caravan",
+              "label": "收拢残余商队",
+              "actionText": "我清点仍失踪的祁远、石刚等人和还能行动的队员，先把残余商队收拢到可撤离的底线。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已收拢残余商队；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "remaining_caravan_regrouped",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫"
+                ]
+              },
+              "sceneLocation": "碧鲮村",
+              "dayPart": "深夜",
+              "fixedFacts": [
+                "深夜，搜救的人回来",
+                "你收拢剩下的商队，找到一名云氏护卫的遗体，祁远和石刚仍无音讯",
+                "此时还没有使者到场"
+              ],
+              "factChecks": [
+                [
+                  "搜救",
+                  "搜索"
+                ],
+                [
+                  "遗体",
+                  "尸体"
+                ],
+                [
+                  "祁远"
+                ],
+                [
+                  "石刚"
+                ]
+              ],
+              "fallbackText": "深夜，搜救的人回来。你收拢剩下的商队，找到一名云氏护卫的遗体，祁远和石刚仍无音讯。此时还没有使者到场。",
+              "forbidden": [
+                "阁罗",
+                "使者站",
+                "使者来到"
+              ]
+            },
+            {
+              "id": "confirm_guiwang_envoy_at_bay",
+              "label": "确认鬼王峒使者已抵达海湾",
+              "actionText": "白象与鬼王峒使者出现后，我停止贸然撤离，当面确认使者已抵达海湾。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已收拢残余商队，并确认鬼王峒使者已抵达海湾；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "remaining_caravan_regrouped"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "鬼王峒使者",
+                  "使者随从"
+                ],
+                "enter": [
+                  "鬼王峒使者"
+                ]
+              },
+              "sceneLocation": "碧鲮海湾",
+              "dayPart": "深夜",
+              "fixedFacts": [
+                "你看见巨大的白象踏出林子，象背凉亭中坐着鬼王峒使者",
+                "他挥鞭杀害碧鲮老者，收取贡物，没有报出姓名"
+              ],
+              "factChecks": [
+                [
+                  "白象"
+                ],
+                [
+                  "使者"
+                ],
+                [
+                  "贡物"
+                ]
+              ],
+              "fallbackText": "你看见巨大的白象踏出林子，象背凉亭中坐着鬼王峒使者。他挥鞭杀害碧鲮老者，收取贡物，没有报出姓名。",
+              "forbidden": [
+                "阁罗"
+              ],
+              "ledgerEffects": {
+                "names": {
+                  "阁罗": "鬼王峒使者"
+                }
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.k",
+          "sceneName": "海湾对峙",
+          "stop": false,
+          "foldInto": "lcq.event.weapon_deal_with_geluo",
+          "justHappened": "深夜搜救的人回来，只找到一名云氏护卫的遗体，祁远和石刚仍无音讯；这时一头白象从林中踏出，象背凉亭里的鬼王峒使者挥鞭杀了碧鲮老者，收走贡物，没有报姓名。",
+          "evidence": [
+            "第77章·进贡"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.weapon_deal_with_geluo",
+        "name": "兵器生意化解危机",
+        "description": "程宗扬以兵器生意与鬼王峒使者阁罗敲定交易，化解眼前危机。",
+        "axisId": "qingyu.80.3",
+        "axisAnchor": "六朝清羽记·#80·第78章·转机",
+        "axisSeq": 134,
+        "axisBeat": "程宗扬以兵器生意与鬼王峒使者阁罗敲定交易，化解眼前危机。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.weapon_deal_with_geluo.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qi_yuan",
+          "lcq.character.np006",
+          "liuchao.character.le_mingzhu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.gui_wang_dong"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "鬼王峒使者就在海湾收贡，你的商队残部就在一旁",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "open_weapon_talk_with_geluo",
+              "label": "向阁罗摊开兵器生意",
+              "actionText": "我当着阁罗把兵器货源和交易条件摊开，让他把我们当能供货的客商谈。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已向阁罗摊开兵器生意；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "geluo_weapon_talk_opened",
+              "cast": {
+                "present": [
+                  "鬼王峒使者",
+                  "祁远",
+                  "碧鲮女子",
+                  "乐明珠"
+                ],
+                "enter": [
+                  "祁远"
+                ]
+              },
+              "sceneLocation": "碧鲮海湾",
+              "dayPart": "白天",
+              "ledgerEffects": {
+                "returnActors": [
+                  "祁远"
+                ]
+              },
+              "fixedFacts": [
+                "你看见祁远被碧鲮女子带来缴贡",
+                "他自称白湖商馆的商人，说被海浪卷走后，幸而被碧鲮人救起",
+                "祁远平安归队",
+                "你向鬼王峒使者提出兵器生意，双方开始商议货源。"
+              ],
+              "factChecks": [
+                [
+                  "祁远"
+                ],
+                [
+                  "白湖商馆"
+                ],
+                [
+                  "救"
+                ],
+                [
+                  "兵器"
+                ]
+              ],
+              "fallbackText": "你看见祁远被碧鲮女子带来缴贡。他自称白湖商馆的商人，说被海浪卷走后，幸而被碧鲮人救起。祁远平安归队。你随即向使者提出兵器生意，请他先听货源和交易的条件。",
+              "sceneObjective": "鬼王峒使者当着碧鲮人收贡，你的商队残部就在一旁——怎么在他手下保住这支队伍？",
+              "previousBeat": "深夜搜救的人回来，只找到一名云氏护卫的遗体，祁远和石刚仍无音讯；这时一头白象从林中踏出，象背凉亭里的鬼王峒使者挥鞭杀了碧鲮老者，收走贡物，没有报姓名。"
+            },
+            {
+              "id": "close_weapon_deal_with_geluo",
+              "label": "敲定交易化解危机",
+              "actionText": "我把回扣和交货条件跟阁罗敲定，用这笔兵器生意把眼前危机压下去。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已以兵器生意与鬼王峒使者阁罗化解危机；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "geluo_weapon_talk_opened"
+              ],
+              "cast": {
+                "present": [
+                  "阁罗",
+                  "祁远",
+                  "碧鲮女子",
+                  "乐明珠",
+                  "小紫"
+                ]
+              },
+              "sceneLocation": "碧鲮海湾",
+              "dayPart": "白天",
+              "ledgerEffects": {
+                "names": {
+                  "阁罗": "阁罗"
+                },
+                "worldFacts": [
+                  "小紫母系已演出：碧姬的女儿"
+                ]
+              },
+              "fixedFacts": [
+                "你与使者谈兵器生意",
+                "他这才自报姓名：我叫阁罗，是鬼巫王大人的仆从",
+                "他要一成利润，交易的边界就此谈清",
+                "阁罗当面称小紫为“碧奴的女儿”，小紫提起自己的阿娘。程宗扬由此听清她的母亲是碧姬。"
+              ],
+              "factChecks": [
+                [
+                  "阁罗"
+                ],
+                [
+                  "兵器"
+                ],
+                [
+                  "一成"
+                ],
+                [
+                  "碧奴"
+                ],
+                [
+                  "女儿"
+                ]
+              ],
+              "fallbackText": "你与使者谈兵器生意。他这才自报姓名：我叫阁罗，是鬼巫王大人的仆从。他要一成利润，交易的边界就此谈清。阁罗看向小紫，称她“碧奴的女儿”。小紫说自己许久没见阿娘了。你这才听清小紫与碧姬的母女关系。",
+              "sceneObjective": "鬼王峒使者当着碧鲮人收贡，你的商队残部就在一旁——怎么在他手下保住这支队伍？"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.k",
+          "sceneName": "海湾对峙",
+          "stop": true,
+          "card": {
+            "previous": "深夜搜救的人回来，只找到一名云氏护卫的遗体，祁远和石刚仍无音讯；这时一头白象从林中踏出，象背凉亭里的鬼王峒使者挥鞭杀了碧鲮老者，收走贡物，没有报姓名。",
+            "tension": "鬼王峒使者当着碧鲮人收贡，你的商队残部就在一旁——怎么在他手下保住这支队伍？",
+            "options": [
+              "摊开兵器生意，让他把我们当供货的客商",
+              "先表明身份，请他放过商队",
+              "按兵不动，先探他的来意"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第78章·转机"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.spot_dong_informant",
+        "name": "处置鬼王峒眼线",
+        "description": "厘清兵器交易背后的危险，处置偷听的鬼王峒眼线。",
+        "axisId": "qingyu.81.3",
+        "axisAnchor": "六朝清羽记·#81·第79章·眼线",
+        "axisSeq": 137,
+        "axisBeat": "厘清兵器交易背后的危险，处置偷听的鬼王峒眼线。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.spot_dong_informant.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.yun_shi_shang_hui",
+          "liuchao.faction.biyu"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "厘清兵器交易背后的危险，并处置偷听的鬼王峒眼线",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "clarify_weapon_deal_danger",
+              "label": "厘清兵器交易背后的危险",
+              "actionText": "我与云苍峰把鬼王峒采购数量、用途和北上风险逐项对照，确认这不只是普通兵器生意。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已厘清兵器交易背后的危险；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "weapon_deal_danger_known",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "祁远",
+                  "阁罗的随从"
+                ]
+              },
+              "sceneLocation": "碧鲮村"
+            },
+            {
+              "id": "handle_dong_eavesdropper",
+              "label": "处置偷听的鬼王峒眼线",
+              "actionText": "发现偷听者后，我立即阻断其传讯并完成现场处置，避免商队判断外泄。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已厘清兵器交易背后的危险，并处置偷听的鬼王峒眼线；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "weapon_deal_danger_known"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "祁远",
+                  "阁罗的随从"
+                ]
+              },
+              "sceneLocation": "碧鲮村"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.l",
+          "sceneName": "焚村",
+          "stop": false,
+          "foldInto": "lcq.event.biling_bay_stance",
+          "justHappened": "你与云苍峰把鬼王峒的采购数量、用途和北上风险逐项对照，确认这不只是普通兵器生意；偷听的鬼王峒眼线被发现并处置。",
+          "evidence": [
+            "第79章·眼线"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ruins_ghost_warriors",
+        "name": "古道废墟迎击鬼战士",
+        "description": "在古道废墟识别鬼王峒标记，协助易彪守住阵地。",
+        "axisId": "qingyu.84.2",
+        "axisAnchor": "六朝清羽记·#84·第82章·迎敌",
+        "axisSeq": 143,
+        "axisBeat": "在古道废墟识别鬼王峒标记，协助易彪守住阵地。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ruins_ghost_warriors.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "lcq.character.np004"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "在古道废墟识别鬼王峒标记，并协助易彪守住阵地",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "identify_dong_marks_in_ruins",
+              "label": "识别古道废墟的鬼王峒标记",
+              "actionText": "我确认古道废墟中的鬼脸标记属于鬼王峒，立即把宿营转为迎敌准备。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在古道废墟识别鬼王峒标记；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ruins_dong_marks_known",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "祁远",
+                  "易雄"
+                ]
+              },
+              "sceneLocation": "古道废墟"
+            },
+            {
+              "id": "help_yibiao_hold_ruins",
+              "label": "协助易彪守住阵地",
+              "actionText": "鬼战士来袭后，我配合易彪的阵形与弓弩火力守住废墟入口。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在古道废墟识别鬼王峒标记，并协助易彪守住阵地；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ruins_dong_marks_known"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "祁远",
+                  "易雄"
+                ]
+              },
+              "sceneLocation": "古道废墟"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.m",
+          "sceneName": "古道秘营",
+          "stop": false,
+          "foldInto": "lcq.event.wuerlang_slays_dagu",
+          "justHappened": "古道废墟里你认出鬼王峒留下的标记，把宿营转成迎敌，与易彪守住了废墟入口。",
+          "evidence": [
+            "第82章·迎敌"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.huamiao_coop_boundary",
+        "name": "进峒合作边界",
+        "description": "云苍峰坦言云氏欲借机探鬼王峒底细并拉拢部族，程宗扬明确双方是平等合作不是依附。",
+        "axisId": "qingyu.87.3",
+        "axisAnchor": "六朝清羽记·#87·第85章·幽路",
+        "axisSeq": 150,
+        "axisBeat": "云苍峰坦言云氏欲借机探鬼王峒底细并拉拢部族，程宗扬明确双方是平等合作不是依附。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.biling_bay_stance.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.huamiao_coop_boundary.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.su_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.hua_miao",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "objective": "跟云苍峰谈清进鬼王峒的合作边界",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "跟云苍峰谈清进鬼王峒的合作边界",
+              "actionText": "我按当前主线目标行动：跟花苗谈清进鬼王峒的合作边界",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“跟花苗谈清进鬼王峒的合作边界”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "cast": {
+                "present": [
+                  "云苍峰",
+                  "苏荔"
+                ]
+              },
+              "sceneLocation": "碧鲮村"
+            }
+          ]
+        },
+        "presentation": {
+          "playerLine": "我跟云苍峰谈清进鬼王峒的合作边界。"
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "nh1.n",
+          "sceneName": "探峒前",
+          "stop": false,
+          "foldInto": "lcq.event.guiwangdong_coop_pact",
+          "justHappened": "云苍峰坦言云氏想借这次机会探鬼王峒的底细、拉拢部族；你明确表示双方是平等合作，不是依附。",
+          "evidence": [
+            "第85章·幽路"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.guiwangdong_coop_pact",
+        "name": "探峒同行约定",
+        "description": "程宗扬安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定。",
+        "axisId": "qingyu.87.4",
+        "axisAnchor": "六朝清羽记·#87·第85章·幽路",
+        "axisSeq": 151,
+        "axisBeat": "程宗扬安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.guiwangdong_coop_pact.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.su_li"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.yun_shi_shang_hui",
+          "liuchao.faction.hua_miao"
+        ],
+        "locationId": "liuchao.location.south_wild_valley",
+        "objective": "凝羽旧伤半夜复发，云氏和花苗都在等你一句话",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "settle_ningyu_relapse",
+              "label": "安置旧伤复发的凝羽",
+              "actionText": "谢艺带回旧伤复发的凝羽后，我先把她安顿下来，确认照护安排。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已安置旧伤复发的凝羽；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_relapse_settled",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔"
+                ]
+              },
+              "sceneLocation": "南荒山谷",
+              "sceneObjective": "凝羽旧伤半夜复发，谢艺把她带了回来；云氏和花苗都在等你一句话——探峒的同行怎么约？",
+              "previousBeat": "云苍峰坦言云氏想借这次机会探鬼王峒的底细、拉拢部族；你明确表示双方是平等合作，不是依附。"
+            },
+            {
+              "id": "seal_guiwangdong_coop_pact",
+              "label": "与云氏、花苗约定同行探峒",
+              "actionText": "凝羽安顿后，我当面与云苍峰、苏荔说清：云氏、花苗与我结成探查鬼王峒的同行约定。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_relapse_settled"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔"
+                ]
+              },
+              "sceneLocation": "南荒山谷",
+              "sceneObjective": "凝羽旧伤半夜复发，谢艺把她带了回来；云氏和花苗都在等你一句话——探峒的同行怎么约？"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.n",
+          "sceneName": "探峒前",
+          "stop": true,
+          "card": {
+            "previous": "云苍峰坦言云氏想借这次机会探鬼王峒的底细、拉拢部族；你明确表示双方是平等合作，不是依附。",
+            "tension": "凝羽旧伤半夜复发，谢艺把她带了回来；云氏和花苗都在等你一句话——探峒的同行怎么约？",
+            "options": [
+              "先安顿凝羽，再谈同行",
+              "先谈妥同行条件，再顾凝羽",
+              "请谢艺先去安置凝羽，你来谈约定"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第85章·幽路"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.enter_dong_with_migu",
+        "name": "随弥骨进入鬼王峒",
+        "description": "随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区。",
+        "axisId": "qingyu.88.3",
+        "axisAnchor": "六朝清羽记·#88·第86章·鬼峒",
+        "axisSeq": 154,
+        "axisBeat": "随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.enter_dong_with_migu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.wu_er_lang",
+          "liuchao.character.xie_yi",
+          "liuchao.character.yun_cang_feng",
+          "liuchao.character.su_li",
+          "lcq.character.mi_gu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.gui_wang_dong",
+          "liuchao.faction.hua_miao"
+        ],
+        "locationId": "liuchao.location.guiwang_dong",
+        "objective": "吊桥那头是鬼王峒的外围哨位，弥骨在接待处等着",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "fight_outer_sentry_intercept",
+              "label": "击退峡谷外围哨位的拦路守卫",
+              "actionText": "我在过吊桥后的峡谷外围哨位迎击拦路守卫，让商队继续去接待处。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "outer_sentry_clash_settled",
+              "locationId": "lcq.location.guiwang_outer_post",
+              "visibleWhen": [
+                {
+                  "path": "flags.scene.f03.escaped",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "outcomeText": {
+                "success": "外围拦截已结算；弥骨接待交涉尚未进行。",
+                "partial": "继续应对拦截。",
+                "failure": "继续应对拦截。"
+              },
+              "sceneLocation": "过鸿沟吊桥后的峡谷外围哨位，弥骨接待处之前",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "祁远"
+                ]
+              },
+              "sceneObjective": "吊桥那头是鬼王峒的外围哨位，弥骨在接待处等着——怎么走进这座峒？"
+            },
+            {
+              "id": "stop_migu_reception_clash",
+              "label": "阻止接待冲突升级",
+              "actionText": "弥骨要带走苏荔、武二郎拔刀时，我配合云苍峰与谢艺把冲突压回交涉，不让入口打起来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已阻止接待冲突升级；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "migu_reception_held",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "祁远",
+                  "弥骨",
+                  "六朝石匠"
+                ]
+              },
+              "sceneLocation": "鬼王峒口及峒内",
+              "fixedFacts": [
+                "你在峒口看到六朝石匠雕刻石柱",
+                "弥骨出来接待，自称阁罗的仆人，说主人已经安顿了宾客住处",
+                "小紫亲热地叫他弥骨阿叔，你制止了接待冲突"
+              ],
+              "factChecks": [
+                [
+                  "石匠"
+                ],
+                [
+                  "弥骨"
+                ],
+                [
+                  "阁罗"
+                ],
+                [
+                  "阿叔"
+                ]
+              ],
+              "fallbackText": "你在峒口看到六朝石匠雕刻石柱。弥骨出来接待，自称阁罗的仆人，说主人已经安顿了宾客住处。小紫亲热地叫他弥骨阿叔，你制止了接待冲突。",
+              "locationId": "liuchao.location.guiwang_dong",
+              "sceneObjective": "吊桥那头是鬼王峒的外围哨位，弥骨在接待处等着——怎么走进这座峒？"
+            },
+            {
+              "id": "follow_migu_and_map_slave_routes",
+              "label": "随弥骨入峒并记清路线与奴隶区",
+              "actionText": "冲突压住后，我随弥骨进入鬼王峒，沿途记下岔路、层级与奴隶区位置。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "migu_reception_held"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "吴战威",
+                  "小魏",
+                  "易彪",
+                  "谢艺",
+                  "云苍峰",
+                  "苏荔",
+                  "阿夕",
+                  "卡瓦",
+                  "乐明珠",
+                  "朱八八",
+                  "小紫",
+                  "祁远",
+                  "弥骨",
+                  "六朝石匠"
+                ]
+              },
+              "sceneLocation": "鬼王峒口及峒内",
+              "locationId": "liuchao.location.guiwang_dong",
+              "sceneObjective": "吊桥那头是鬼王峒的外围哨位，弥骨在接待处等着——怎么走进这座峒？"
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "nh1.o",
+          "sceneName": "鬼王峒口",
+          "stop": true,
+          "card": {
+            "tension": "吊桥那头是鬼王峒的外围哨位，弥骨在接待处等着——怎么走进这座峒？",
+            "options": [
+              "先清掉外围哨位的拦路守卫",
+              "压住冲突，按弥骨的安排入峒",
+              "一路记下洞内的路线和奴隶区"
+            ]
+          },
+          "fork": "battle",
+          "evidence": [
+            "第86章·鬼峒"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "stageId": "lcq.stage_02",
+    "events": [
+      {
+        "id": "lcq.event.s02_01",
+        "name": "王哲传功与托付",
+        "description": "王哲为程宗扬筑基并传九阳神功口诀，托付三件事：拆锦囊、去太泉古阵、守护月霜。",
+        "conditions": [
+          {
+            "path": "flags.chapter.lcq.stage_02.started",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.wang_zhe"
+        ],
+        "relatedFactionIds": [
+          "lcq.faction.left_guard",
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "locationId": "lcq.location.shuai_zhang",
+        "axisId": "qingyu.10.2",
+        "axisSeq": 20,
+        "axisAnchor": "六朝清羽记·#10·第9章·传功",
+        "axisBeat": "王哲托付程宗扬三件事：保管锦囊、修为达六阳后前往太泉古阵祭祀、守护岳帅后人月霜。",
+        "objective": "王哲还有事要当面交代，先听他把话说完",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "王哲还有事要当面交代，先听他把话说完",
+              "actionText": "我按当前主线目标行动：听他把话说完",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“前往王哲处，获取锦囊并接受托付”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "worldActor": {
+          "pressure": {
+            "id": "world.lcq.s02_01.silk_bag",
+            "scope": "faction",
+            "summary": "帅帐里锦囊与口诀册已单独收起。接下托付，还是只保管物件，还没落口。",
+            "domains": [
+              "sect"
+            ],
+            "geography": [
+              "帅帐"
+            ],
+            "factionIds": [
+              "liuchao.faction.tai_yi_zhen_zong",
+              "lcq.faction.left_guard"
+            ],
+            "intensity": 2,
+            "canonPolicy": "process_only"
+          },
+          "decisionCore": {
+            "knowledgeFacts": {
+              "knowledge.lcq.s02_01.charge": {
+                "text": "王哲要程宗扬保管锦囊、修为达六阳后去太泉古阵、并守护月霜；托付与物件还没分开说死。",
+                "access": "public",
+                "evidence": "lcq.event.s02_01 axisBeat。"
+              }
+            },
+            "situation": {
+              "whitelist": [
+                "mandateTaken",
+                "objectOnly"
+              ],
+              "initialValues": {
+                "mandateTaken": 35,
+                "objectOnly": 30
+              },
+              "limits": {
+                "mandateTaken": {
+                  "min": 0,
+                  "max": 100
+                },
+                "objectOnly": {
+                  "min": 0,
+                  "max": 100
+                }
+              }
+            },
+            "canonPolicy": {
+              "invariant": [
+                "锦囊已经摆在案上"
+              ],
+              "forbiddenBefore": [
+                "王哲已经身死",
+                "锦囊已经拆开宣读"
+              ],
+              "processFreedom": [
+                "认下托付还是只保管物件"
+              ]
+            },
+            "actors": [
+              {
+                "characterId": "lcq.character.wang_zhe",
+                "identity": {
+                  "factionId": "liuchao.faction.tai_yi_zhen_zong",
+                  "office": "太乙掌教",
+                  "rank": 7
+                },
+                "personality": {
+                  "honor": 5,
+                  "caution": 4,
+                  "ambition": 2
+                },
+                "motives": {
+                  "legitimacy": 5,
+                  "stability": 4
+                },
+                "resources": {
+                  "influence": 5,
+                  "intelligence": 4,
+                  "troops": 4,
+                  "wealth": 3
+                },
+                "relationships": {},
+                "knowledge": [
+                  "knowledge.lcq.s02_01.charge"
+                ],
+                "agendas": [
+                  {
+                    "id": "agenda.lcq.s02_01.wang",
+                    "goal": "决定托付是整份落下，还是先只把物件交出去",
+                    "clock": 0,
+                    "escalation": [
+                      "密召",
+                      "交物",
+                      "问口"
+                    ]
+                  }
+                ],
+                "allowedActionIds": [
+                  "offer_patronage",
+                  "delay_commitment"
+                ],
+                "wake": {
+                  "tier": "local_critical"
+                },
+                "evidence": {
+                  "identity.rank": "人物卡：王哲为太乙真宗掌教、左武卫师帅。",
+                  "personality.honor": "axisBeat：亲口托付三事。",
+                  "personality.caution": "本拍先密召再交物。",
+                  "personality.ambition": "本拍不趁机扩权。",
+                  "motives.legitimacy": "人物卡：掌教。",
+                  "motives.stability": "本拍要托付有人接。",
+                  "resources.influence": "人物卡：掌教／师帅。",
+                  "resources.intelligence": "本拍独知锦囊内容。",
+                  "resources.troops": "本拍亲兵拦帐。",
+                  "resources.wealth": "本拍不靠赏赐。",
+                  "agendas.agenda.lcq.s02_01.wang.clock": "帐内已静，口尚未落。"
+                }
+              }
+            ],
+            "actionBindings": [
+              {
+                "actionId": "offer_patronage",
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "label": "把清理门户与传功一并问出口",
+                "reason": "物件可以交，托付要当面认",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s02_01.charge"
+                ],
+                "mustNotInvent": [
+                  "清理门户已经完成"
+                ],
+                "visibleSignal": "王哲把锦囊按住，先问这三件事谁来认",
+                "offscreenAction": "摊开整份托付",
+                "costs": {
+                  "influence": 1
+                },
+                "effects": {
+                  "mandateTaken": 12,
+                  "objectOnly": -4
+                },
+                "utility": {
+                  "urgency": 8,
+                  "factionGoal": 9,
+                  "expectedBenefit": 8,
+                  "situation": {
+                    "mandateTaken": -3
+                  }
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              },
+              {
+                "actionId": "delay_commitment",
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "label": "先把锦囊交出去，不逼人把差事认死",
+                "reason": "物件先有人拿，话可以后说",
+                "knownFacts": [],
+                "knownFactIds": [
+                  "knowledge.lcq.s02_01.charge"
+                ],
+                "mustNotInvent": [
+                  "锦囊已经拆开"
+                ],
+                "visibleSignal": "锦囊被推向对面，口诀册仍封着",
+                "offscreenAction": "只交物件",
+                "costs": {
+                  "intelligence": 1
+                },
+                "effects": {
+                  "objectOnly": 12,
+                  "mandateTaken": -6
+                },
+                "utility": {
+                  "expectedBenefit": 4
+                },
+                "visibility": "public",
+                "durationTurns": 1
+              }
+            ],
+            "maxVisibleActions": 2,
+            "narrativeGuard": {
+              "forbiddenTerms": [
+                "锦囊已经拆开",
+                "清理门户已经完成"
+              ],
+              "rejectConcreteQuantities": true,
+              "allowUnverifiedQuantities": true
+            }
+          },
+          "opportunities": [
+            {
+              "id": "opportunity.lcq.s02_01.take_full_mandate",
+              "title": "接下锦囊，并认下清理门户的托付",
+              "characterIds": [
+                "lcq.character.wang_zhe"
+              ],
+              "whyNow": "帐内只剩这句还没出口。认下托付，锦囊就不是普通物件。",
+              "nextStep": "当面收下锦囊，并承认清理门户与传授九阳是你接下来要办的差事。",
+              "stakes": "以后有人问这只囊是谁的差事，会先问到你；话也收不回去。",
+              "rewardPreview": "取得一次以王哲托付名义保管锦囊并认差的权限。",
+              "futureHint": "以后再有人提起这只囊，会先看你当时认没认过差事。",
+              "actionText": "我追踪“接下锦囊，并认下清理门户的托付”：收下锦囊，当面承认这是我的差事。",
+              "rewardKey": "permission.lcq.taiyi.silk_mandate",
+              "rewardLabel": "太乙·锦囊托付",
+              "trigger": {
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "actionIds": [
+                  "offer_patronage"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "take_bag",
+                    "label": "当面收下锦囊",
+                    "outcomeEffects": {
+                      "inventoryTransfers": [
+                        {
+                          "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                          "itemId": "lcq.item.jin_nang",
+                          "quantity": 1
+                        }
+                      ]
+                    },
+                    "actions": [
+                      {
+                        "id": "accept_silk_bag",
+                        "label": "收下锦囊",
+                        "actionText": "我当面从王哲案上收下锦囊，不让它再留在帐内无人认领。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "收下锦囊",
+                      "不让它再留在帐内"
+                    ],
+                    "rejectIf": [
+                      "只看一眼",
+                      "不接手"
+                    ]
+                  },
+                  {
+                    "id": "own_charge",
+                    "label": "认下清理门户的差事",
+                    "actions": [
+                      {
+                        "id": "acknowledge_purge_charge",
+                        "label": "认下托付",
+                        "actionText": "我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "承认",
+                      "差事",
+                      "不改口说只是代为保管"
+                    ],
+                    "rejectIf": [
+                      "只保管",
+                      "不认差事"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "id": "opportunity.lcq.s02_01.keep_object_only",
+              "title": "只保管锦囊，不把清理门户说成你的差事",
+              "characterIds": [
+                "lcq.character.wang_zhe"
+              ],
+              "whyNow": "物件可以先离开帅帐。差事若不出口，日后也不算你已经领了。",
+              "nextStep": "收下锦囊实物，明确此刻不把清理门户认成自己的差事。",
+              "stakes": "宗门不会按托付来找你；有人问这只囊的差事，帐里也没有你的画押。",
+              "rewardPreview": "取得一次只保管锦囊实物、不认差事的权限。",
+              "futureHint": "以后若再问这只囊，王哲一侧会记得你当时只接了物件。",
+              "actionText": "我追踪“只保管锦囊，不把清理门户说成你的差事”：收下实物，不认差事。",
+              "rewardKey": "permission.lcq.taiyi.silk_custody",
+              "rewardLabel": "太乙·锦囊代管",
+              "trigger": {
+                "actorIds": [
+                  "lcq.character.wang_zhe"
+                ],
+                "actionIds": [
+                  "delay_commitment"
+                ]
+              },
+              "completionContract": {
+                "kind": "player_action_sequence",
+                "settlement": "immediate",
+                "expiry": "persistent",
+                "steps": [
+                  {
+                    "id": "hold_bag",
+                    "label": "收下锦囊实物",
+                    "outcomeEffects": {
+                      "inventoryTransfers": [
+                        {
+                          "transferId": "lcq.event.s02_01.inventory.jin_nang",
+                          "itemId": "lcq.item.jin_nang",
+                          "quantity": 1
+                        }
+                      ]
+                    },
+                    "actions": [
+                      {
+                        "id": "hold_silk_object",
+                        "label": "代管锦囊",
+                        "actionText": "我收下锦囊实物，答应先保管，不拆开、不宣读。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "收下锦囊实物",
+                      "先保管",
+                      "不拆开"
+                    ],
+                    "rejectIf": [
+                      "认下托付",
+                      "承认这是我的差事"
+                    ]
+                  },
+                  {
+                    "id": "no_charge",
+                    "label": "不认清理门户差事",
+                    "actions": [
+                      {
+                        "id": "refuse_purge_charge",
+                        "label": "不认差事",
+                        "actionText": "我明确此刻不把清理门户说成我的差事，也不画押认领。",
+                        "timeCost": 1
+                      }
+                    ],
+                    "matchAny": [
+                      "不把清理门户说成我的差事",
+                      "不画押"
+                    ],
+                    "rejectIf": [
+                      "承认",
+                      "差事",
+                      "认下托付"
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "q2.a",
+          "sceneName": "帅帐托付",
+          "stop": true,
+          "card": {
+            "previous": "王哲替你筑基，说要传你一篇口诀，再托三件事。",
+            "tension": "一篇口诀换三件事，还不知道是哪三件——听他说完，还是先追问？",
+            "options": [
+              "先听他把话说完",
+              "追问锦囊里是什么",
+              "问明“六阳”和太泉古阵意味着什么"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第9章·传功"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s02_02",
+        "name": "左武军与罗马军团大战",
+        "description": "左武军第一军团与罗马五个军团及马其顿军团激战，韩庚战死，王哲最终以九阳神功自爆，全军覆没。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_01.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "lcq.character.wang_zhe",
+          "lcq.character.han_geng",
+          "lcq.character.agamenon",
+          "lcq.character.yue_shuang",
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lcq.faction.left_guard",
+          "lcq.faction.roman",
+          "lcq.faction.macedon",
+          "lcq.faction.beast"
+        ],
+        "axisId": "qingyu.14.2",
+        "axisMethod": "deepseek",
+        "axisSeq": 30,
+        "axisAnchor": "六朝清羽记·#14·第12章·九阳",
+        "axisBeat": "半预制高光：先完整交代左武第一军团在罗马、马其顿、兽蛮联军围攻下伤亡殆尽、天霁营毁弩、帅帐卫士杀马毁械与文泽自刎；随后把镜头锁定王哲：脱甲悬空，九阳依次点亮并合一如日轮，阿伽门侬由轻蔑转为惊恐，毁灭性光球坠地将战场化为焦土，完成王哲以自身殉军的收束。不得把这一段概括成“一招自爆”，也不得让旁人抢走最后一击。",
+        "completionEvidence": [
+          "左武第一军团",
+          "王哲",
+          "九阳",
+          "日轮",
+          "阿伽门侬",
+          "焦土"
+        ],
+        "objective": "左武军已与联军开战，先保住自己和月霜，跟上战局变化",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s02_02",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lcq_event_s02_02.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s02_02"
+          ],
+          "worldDelta": "左武军与罗马军团的战事自行爆发，前线死伤与溃兵已经改变五原周边局势。",
+          "evidence": "R2-9 世界引力合同：左武军与罗马军团大战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_left_army_line",
+              "label": "守住左武军覆灭的前因视角",
+              "actionText": "我留在战局视角内，先确认左武军在多方围攻下伤亡殆尽及军械尽毁的前因。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_1",
+              "outcomeText": {
+                "success": "你已完成“守住左武军覆灭的前因视角”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "witness_wang_zhe_nine_suns",
+              "label": "见证王哲九阳合一",
+              "actionText": "我继续见证王哲脱甲悬空、九阳依次点亮并合一如日轮，不让旁人抢走这次收束。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "grantsPreparation": "sequence_step_2",
+              "requiresPreparation": [
+                "sequence_step_1"
+              ],
+              "outcomeText": {
+                "success": "你已完成“见证王哲九阳合一”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            },
+            {
+              "id": "record_battlefield_aftermath",
+              "label": "确认焦土余波与殉军结果",
+              "actionText": "我确认毁灭性光球坠地后的焦土余波，把王哲殉军与左武军覆灭完整落账。",
+              "timeCost": 1,
+              "requiresPreparation": [
+                "sequence_step_2"
+              ],
+              "outcomeText": {
+                "success": "你已完成“确认焦土余波与殉军结果”的当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该展示动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该展示动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        },
+        "fatalOutcomes": {
+          "deadline": {
+            "afterActionId": "witness_wang_zhe_nine_suns",
+            "turns": 3,
+            "approach": [
+              "热浪先一步到了，眼前的草叶卷曲发黑；身后的喊杀声正被一种更大的声音盖过去。",
+              "光墙已经推到近前，吸进去的空气是烫的；月霜在拽你的袖子，说不出话。"
+            ],
+            "ending": {
+              "id": "lcq.ending.death.wangzhe_blast",
+              "title": "十里焦土",
+              "facts": [
+                "王哲以九阳神功合一，化为太阳之火与敌军同归于尽",
+                "草原化为十里焦土",
+                "程宗扬没有离开战场，被焰浪吞没",
+                "月霜没有被带走"
+              ]
+            }
+          }
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "q2.b",
+          "sceneName": "九阳殉军",
+          "stop": true,
+          "card": {
+            "previous": "王哲已把三件事托付给你；左武军与罗马、马其顿、兽蛮联军的大战打响了。",
+            "tension": "左武军在多方围攻下正在覆灭，王哲就在阵中——你站在战场的哪里？",
+            "options": [
+              "守住月霜，先保住自己",
+              "盯住王哲，看清他要做什么",
+              "抓住时机，带月霜撤出战场"
+            ]
+          },
+          "fork": "fatal_deadline",
+          "evidence": [
+            "第12章·九阳"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s02_03",
+        "name": "秦军与罗马军团交战",
+        "description": "天武营秦军与罗马第十二军团交战；罗马军团以标枪和右刺战术重创秦军方阵，秦军最终溃散。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_02.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "lcq.character.yue_shuang"
+        ],
+        "axisId": "qingyu.11.1",
+        "axisMethod": "deepseek",
+        "axisSeq": 22,
+        "axisAnchor": "六朝清羽记·#11·第10章·军团",
+        "axisBeat": "天武营秦军与罗马第十二军团交战，弩手远程杀伤敌军，但罗马军团投掷标枪重创秦军方阵，短兵相接后秦军因罗马右刺战术而溃散。",
+        "objective": "在秦军与罗马军的交战中求生并观察战局",
+        "offscreenResolution": {
+          "id": "offscreen.r2_9.lcq_event_s02_03",
+          "afterStallTurns": 7,
+          "flagKey": "world.r2_9.lcq_event_s02_03.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s02_03"
+          ],
+          "worldDelta": "秦军随后卷入罗马军团战事，军情、俘虏与道路封锁成为玩家缺席后的既成事实。",
+          "evidence": "R2-9 世界引力合同：秦军与罗马军团交战属于不依赖玩家领取任务才会发生的世界事件；仅在该节点已激活且长期停滞时结算。"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在秦军与罗马军的交战中求生并观察战局",
+              "actionText": "我按当前主线目标行动：在秦军与罗马军的交战中求生并观察战局",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在秦军与罗马军的交战中求生并观察战局”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "q2.c",
+          "sceneName": "五原地牢",
+          "stop": false,
+          "foldInto": "lcq.event.s02_05",
+          "justHappened": "天武营秦军与罗马第十二军团交战：秦军弩手先杀伤敌军，罗马军团以标枪重创方阵，短兵相接后又被右刺战术打得溃散。",
+          "evidence": [
+            "第10章·军团"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s02_04",
+        "name": "程宗扬在五原城被误抓为奴隶",
+        "description": "程宗扬在五原城被白湖商馆的人误认为逃奴，遭毒打并烙上奴隶印记。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_03.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "axisId": "qingyu.17.1",
+        "axisMethod": "deepseek",
+        "axisSeq": 31,
+        "axisAnchor": "六朝清羽记·#17·第15章·冤屈",
+        "axisBeat": "程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。",
+        "objective": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
+              "actionText": "我按当前主线目标行动：应付眼前的盘问与拉扯",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在五原城中避免被误抓为奴隶”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "q2.c",
+          "sceneName": "五原地牢",
+          "stop": false,
+          "foldInto": "lcq.event.s02_05",
+          "justHappened": "你在五原城被戈龙和孙疤脸当成逃奴，遭毒打，并被烙上了奴隶印记。",
+          "evidence": [
+            "第15章·冤屈"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s02_05",
+        "name": "程宗扬与阿姬曼·芭娜相遇",
+        "description": "程宗扬在地牢中遇到天竺舞姬阿姬曼，她帮助程宗扬逃跑但实为圈套，程宗扬杀死孙疤脸。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "axisId": "qingyu.19.1",
+        "axisMethod": "deepseek",
+        "axisSeq": 33,
+        "axisAnchor": "六朝清羽记·#19·第17章·圈套",
+        "axisBeat": "程宗扬被故意放出牢房后遭戈龙伏击，被迫杀死孙疤脸并试图反抗。",
+        "objective": "地牢里有人靠近你，先判断她要带你去哪",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "地牢里有人靠近你，先判断她要带你去哪",
+              "actionText": "我按当前主线目标行动：判断她要带你去哪",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在五原城牢房外应对戈龙伏击”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "q2.c",
+          "sceneName": "五原地牢",
+          "stop": true,
+          "card": {
+            "previous": "天武营秦军与罗马第十二军团交战：秦军弩手先杀伤敌军，罗马军团以标枪重创方阵，短兵相接后又被右刺战术打得溃散。你在五原城被戈龙和孙疤脸当成逃奴，遭毒打，并被烙上了奴隶印记。",
+            "tension": "地牢里有人悄悄靠近你——是要放你出去，还是另有所图？",
+            "options": [
+              "跟她走，看她要带你去哪",
+              "先试探她的来意",
+              "不动声色，另找脱身的路"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第17章·圈套"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s02_06",
+        "name": "程宗扬见苏妲己",
+        "description": "程宗扬识破白湖商馆主人苏妲己的伪装后，被囚禁并遭追问霓龙丝情报。",
+        "conditions": [
+          {
+            "path": "flags.event.s02_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.s02_06.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "axisId": "qingyu.20.1",
+        "axisSeq": 35,
+        "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+        "axisBeat": "程宗扬识破商馆女主人苏妲己的伪装，揭露其外淫内端的实质，苏妲己下令处死男奴，并囚禁程宗扬逼问霓龙丝情报。",
+        "objective": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "advance_declared_objective",
+              "label": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+              "actionText": "我按当前主线目标行动：看清她究竟是谁",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已亲自执行“在商馆揭穿苏妲己伪装，脱身”；事件完成真值将由本地引擎落账。",
+                "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
+                "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "q2.d",
+          "sceneName": "白湖商馆·识破",
+          "stop": true,
+          "card": {
+            "previous": "地牢里的“放行”是个圈套：戈龙设伏，你被迫杀了孙疤脸，仍落在商馆手里。",
+            "tension": "商馆女主人在你面前装得端庄，你却觉得她不对劲——当面周旋到什么地步？",
+            "options": [
+              "顺着她演下去，探她的底",
+              "当面揭破她的伪装",
+              "拖时间，看商馆里还有谁在场"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第18章·妲己"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ningyu_enters_gamble",
+        "name": "凝羽进入赌局",
+        "description": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+        "axisId": "qingyu.20.1",
+        "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+        "axisSeq": 35,
+        "axisBeat": "凝羽奉苏妲己之命进入赌局，程宗扬认清她的处境并当面回应。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ningyu_enters_gamble.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "凝羽突然入局，当面看清她此刻的处境并回应",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "see_ningyu_sent_into_gamble",
+              "label": "看清凝羽奉命进入赌局",
+              "actionText": "苏妲己命凝羽上场后，我当面看清她是奉命进入这场赌局的商馆侍卫长，只认眼前处境，不把后续来历提前当成已知。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_gamble_debut_seen"
+            },
+            {
+              "id": "answer_ningyu_on_debut",
+              "label": "当面回应登场的凝羽",
+              "actionText": "我认清凝羽此刻被差遣进赌局的处境后当面回应她，把这拍当作她的登场，不借登场预写后来的经历。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已认清奉命进入赌局的凝羽的处境并当面回应；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_gamble_debut_seen"
+              ]
+            }
+          ]
+        },
+        "fatalOutcomes": {
+          "choices": [
+            {
+              "id": "refuse_gamble_take_paolao",
+              "label": "不赌",
+              "actionText": "我当面回绝这场赌局，不和苏妲己赌。",
+              "ending": {
+                "id": "lcq.ending.death.baihu_beheading",
+                "title": "第六个",
+                "facts": [
+                  "程宗扬当面回绝白湖商馆的赌局",
+                  "苏妲己认定连赌都不敢的人所说产地不可信",
+                  "凝羽奉命一刀了结程宗扬，如刚处死的五个男奴；死亡在画外",
+                  "赌局未开，卖身契未签"
+                ]
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "q2.e",
+          "sceneName": "白湖商馆·赌局",
+          "stop": true,
+          "card": {
+            "previous": "苏妲己已把你囚了起来，追问霓龙丝的下落，并处死了几名男奴。",
+            "tension": "凝羽奉命走进赌局，苏妲己等着你表态——接下这局，还是不赌？",
+            "options": [
+              "接赌",
+              "不赌"
+            ]
+          },
+          "fork": "fatal_alt",
+          "evidence": [
+            "第18章·妲己"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.sudaji_south_pact",
+        "name": "三个月南荒之约",
+        "description": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+        "axisId": "qingyu.20.2",
+        "axisAnchor": "六朝清羽记·#20·第18章·妲己",
+        "axisSeq": 36,
+        "axisBeat": "程宗扬与苏妲己订下三个月南荒之约：三个月内前往南荒采集霓龙丝，否则受炮烙之刑。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.sudaji_south_pact.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "offer_nylon_clue_for_term",
+              "label": "以霓龙丝线索换三个月期限",
+              "actionText": "我不当面硬拼，明确以自己掌握的霓龙丝产地线索，向苏妲己换取活命和三个月行动期限。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "south_pact_terms_opened"
+            },
+            {
+              "id": "seal_three_month_south_pact",
+              "label": "当面订下三个月南荒之约",
+              "actionText": "我当着苏妲己的面把约定说死：三个月内前往南荒采集霓龙丝，逾期受炮烙；这就是我南下的由头。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已与苏妲己订下三个月南荒之约；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "south_pact_terms_opened"
+              ]
+            }
+          ]
+        },
+        "fatalOutcomes": {
+          "choices": [
+            {
+              "id": "refuse_term_take_paolao",
+              "label": "拒绝期限，要她现在就动炮烙",
+              "actionText": "我不接三个月的条件，当面对苏妲己说：要炮烙就现在动手。",
+              "ending": {
+                "id": "lcq.ending.death.paolao",
+                "title": "炮烙",
+                "facts": [
+                  "程宗扬当面拒绝三个月南荒之约",
+                  "苏妲己依约执行炮烙",
+                  "霓龙丝无人去采，南荒之行未曾成行"
+                ]
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "q2.e",
+          "sceneName": "白湖商馆·赌局",
+          "stop": true,
+          "card": {
+            "tension": "苏妲己逼问霓龙丝的下落，你的命和这条线索都在她手里——拿线索换什么？",
+            "options": [
+              "以线索换活命和期限",
+              "当面拒绝，要她现在动手"
+            ]
+          },
+          "fork": "fatal_alt",
+          "evidence": [
+            "第18章·妲己"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.gamble_bond_signed",
+        "name": "落败签下卖身契",
+        "description": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
+        "axisId": "qingyu.21.1",
+        "axisAnchor": "六朝清羽记·#21·第19章·赌局",
+        "axisSeq": 37,
+        "axisBeat": "程宗扬为救凝羽与苏妲己对赌，苏妲己作弊加速刻香致其落败；程宗扬被迫签下卖身契，成为白湖商馆的奴隶。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.gamble_bond_signed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "赌局局面骤变，面对眼前的刻香与契书做出回应",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_rigged_wager_loss",
+              "label": "确认刻香被加速后赌局落败",
+              "actionText": "我当面核对赌局时限与刻香，确认苏妲己作弊加速刻香、此局已判我落败，不把规则说成尚未结束。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "rigged_wager_loss_seen"
+            },
+            {
+              "id": "sign_the_bond",
+              "label": "面对眼前的刻香与契书做出回应",
+              "actionText": "赌局落败后，我面对苏妲己作弊造成的结果，签下卖身契、成为白湖商馆的奴隶，不把这拍改写成赌局作废或由旁人代签。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已签下卖身契、落入白湖商馆奴籍；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "rigged_wager_loss_seen"
+              ]
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "q2.e",
+          "sceneName": "白湖商馆·赌局",
+          "stop": true,
+          "card": {
+            "tension": "赌局已经开始，刻香一寸寸烧下去，苏妲己的神情太从容了。",
+            "options": [
+              "当面核对时限与刻香",
+              "质疑赌局的公平",
+              "盯住苏妲己的手，看她有没有动手脚"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第19章·赌局"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.charge_sudaji_fee",
+        "name": "谈定六十金铢",
+        "description": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+        "axisId": "qingyu.23.1",
+        "axisAnchor": "六朝清羽记·#23·第21章·戏弄",
+        "axisSeq": 38,
+        "axisBeat": "程宗扬在帮苏妲己取出新奇器物前，谈定六十金铢报酬。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.charge_sudaji_fee.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "在帮苏妲己取出新奇器物前谈定六十金铢报酬",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "name_sixty_zhu_before_help",
+              "label": "先开出六十金铢工价",
+              "actionText": "苏妲己要我取出那件新奇器物之前，我先把工价说死：六十金铢，不预支就不动手。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sixty_zhu_named"
+            },
+            {
+              "id": "lock_fee_then_remove_device",
+              "label": "谈定报酬后再取出器物",
+              "actionText": "苏妲己当面应下六十金铢后，我才按约帮她取出新奇器物，不把这拍写成先帮忙后空口赊账。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在取出器物前谈定六十金铢报酬；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sixty_zhu_named"
+              ]
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "q2.f",
+          "sceneName": "工价与身契",
+          "stop": false,
+          "foldInto": "lcq.event.free_ajiman",
+          "justHappened": "你在帮苏妲己取出那件新奇器物之前，先开价六十金铢，她当面应下，你才动手。",
+          "evidence": [
+            "第21章·戏弄"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.free_ajiman",
+        "name": "撕毁阿姬曼身契",
+        "description": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+        "axisId": "qingyu.25.1",
+        "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+        "axisSeq": 40,
+        "axisBeat": "程宗扬取得阿姬曼身契当面撕毁，并应对被封锁的出城路线。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.free_ajiman.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "取得阿姬曼的身契并当面还她自由，再设法出城",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "take_ajiman_bond_in_hand",
+              "label": "取得阿姬曼身契",
+              "actionText": "我用五十金铢把阿姬曼的身契拿到自己手里，先确认契据已离开卖方，再准备当面处置。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ajiman_bond_in_hand"
+            },
+            {
+              "id": "tear_bond_and_face_blockade",
+              "label": "当面撕契并改道出城",
+              "actionText": "我当着阿姬曼的面撕毁身契还她自由；发现商馆侍卫封锁出城岔路后，立刻改道避开搜查。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已当面撕毁阿姬曼身契，并应对被封锁的出城路线；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ajiman_bond_in_hand"
+              ]
+            },
+            {
+              "id": "pocket_ajiman_bond",
+              "label": "先收起身契，出城再说",
+              "actionText": "我先把阿姬曼的身契收进怀里，不当面撕掉，出城再说。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你没有撕毁阿姬曼的身契，只把它收进怀里，先出城再说；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ajiman_bond_in_hand"
+              ],
+              "outcomeEffects": {
+                "success": {
+                  "pathReceipts": [
+                    {
+                      "receiptId": "lcq.event.free_ajiman.path.bond_pocketed",
+                      "sourceEventId": "lcq.event.free_ajiman",
+                      "choiceId": "pocket_ajiman_bond",
+                      "mutexGroupId": "lcq.event.free_ajiman.mutex.bond",
+                      "dimension": "method",
+                      "label": "没有撕掉阿姬曼的身契（苏妲己已下令追查买走舞姬的人）",
+                      "consumeAtEventIds": [
+                        "lcq.event.wuerlang_joins"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "q2.f",
+          "sceneName": "工价与身契",
+          "stop": true,
+          "card": {
+            "previous": "你在帮苏妲己取出那件新奇器物之前，先开价六十金铢，她当面应下，你才动手。",
+            "tension": "阿姬曼的身契已在你手里——当面撕掉，还是先收起来出城再说？",
+            "options": [
+              "当面撕契，还她自由，再改道出城",
+              "先收起身契，出城再说"
+            ]
+          },
+          "fork": "path_receipt",
+          "evidence": [
+            "第23章·赎身"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.baihu_shangguan_escape",
+        "name": "白湖脱身",
+        "description": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+        "axisId": "qingyu.25.2",
+        "axisAnchor": "六朝清羽记·#25·第23章·赎身",
+        "axisSeq": 41,
+        "axisBeat": "程宗扬从白湖商馆的死局里脱身，走出五原商馆。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.baihu_shangguan_escape.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.su_daji"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "从白湖商馆的死局里脱身，走出五原商馆",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "walk_out_wuyuan_shangguan",
+              "label": "走出五原商馆",
+              "actionText": "我从白湖商馆内院走到大门，确认自己已不在囚室与死局里，自行迈出五原商馆，人仍留在五原城里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已从白湖商馆的死局里脱身，走出五原商馆；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "q2.g",
+          "sceneName": "走出商馆",
+          "stop": true,
+          "card": {
+            "tension": "商馆里的死局还没解开，大门就在前面。",
+            "options": [
+              "径直走出大门",
+              "先确认没人跟着再出门"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第23章·赎身"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.wuerlang_joins",
+        "name": "武二郎入队",
+        "description": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+        "axisId": "qingyu.31.2",
+        "axisAnchor": "六朝清羽记·#31·第29章·伏虎",
+        "axisSeq": 47,
+        "axisBeat": "武二郎因满城围捕走投无路，被迫答应加入程宗扬的南荒队伍。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.wuerlang_joins.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "当面同武二郎谈定工钱，请他随商队南行",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_wuerlang_no_prior_promise",
+              "label": "确认武二郎此前并未应诺同行",
+              "actionText": "我问武二郎：先前说好的只是替他解开镣铐，这一趟南荒，他到底跟不跟？",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_cornered_known"
+            },
+            {
+              "id": "secure_wuerlang_southbound",
+              "label": "取得武二郎随队南行的明确承诺",
+              "actionText": "城里的护卫正四处搜人，我当面同武二郎把工钱说定：两枚银铢一月，月底给，每月先付一半，等从南荒回来再补齐。我请他随商队走这一趟。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "武二郎瞪了你半天，终究应下了这份工钱，答应随商队南行。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_cornered_known"
+              ]
+            }
+          ]
+        },
+        "fatalOutcomes": {
+          "deadline": {
+            "afterActionId": "confirm_wuerlang_no_prior_promise",
+            "when": [
+              {
+                "path": "pathReceipts.lcq.event.free_ajiman.path.bond_pocketed",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "turns": 0,
+            "approach": [],
+            "ending": {
+              "id": "lcq.ending.death.ajiman_bond",
+              "title": "冰蛊",
+              "facts": [
+                "程宗扬没有当面撕毁阿姬曼的身契，只把它收进了怀里",
+                "阿姬曼因此不信他，不肯跟他离开五原城",
+                "冰蛊是之后苏妲己在冰镇酸梅汤里给程宗扬种下的",
+                "苏妲己下令追查买走舞姬的人，那张没有撕掉的身契让她查到了程宗扬",
+                "苏妲己催动冰蛊，寒气冻住了程宗扬的心脏与脑浆，他当场毙命",
+                "阿姬曼被收回白湖商馆，镣铐加身，和箱笼货物一起被逐件清点、登记入册，押往黑魔海",
+                "那个没有舌头的哑奴母亲早被卖给了路过的晋国商人，阿姬曼再也见不到她",
+                "她的哥哥将永远等不到她回来",
+                "阿姬曼心里最后一点盼头熄灭了，没有人会来救她，也没有任何转机"
+              ]
+            }
+          }
+        },
+        "presentation": {
+          "stepGuardTerms": {
+            "secure_wuerlang_southbound": [
+              "返回",
+              "回来找",
+              "又回来",
+              "再见到",
+              "走投无路"
+            ]
+          }
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "q2.h",
+          "sceneName": "武二郎入队",
+          "stop": true,
+          "card": {
+            "tension": "满城都在搜人，武二郎走投无路——这一趟南荒，他跟不跟？",
+            "options": [
+              "当面问清他此前有没有应诺",
+              "把工钱说定，请他随队",
+              "先帮他躲过搜捕，再谈"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第29章·伏虎"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.iron_bridge_ambush",
+        "name": "铁索桥伏击",
+        "description": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+        "axisId": "qingyu.32.2",
+        "axisAnchor": "六朝清羽记·#32·第30章·险路",
+        "axisSeq": 50,
+        "axisBeat": "程宗扬稳定武二郎伤势，带队突破铁索桥伏击。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.iron_bridge_ambush.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu",
+          "liuchao.character.wu_er_lang"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "先稳住武二郎伤势，再带队过铁索桥",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "stabilize_wuerlang_on_route",
+              "label": "先稳住武二郎伤势",
+              "actionText": "我与凝羽先处理武二郎中毒带伤的伤口，确认他还能随队，不把他丢在桥前。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "wuerlang_wound_held",
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威"
+                ]
+              }
+            },
+            {
+              "id": "break_iron_bridge_ambush",
+              "label": "带队突破铁索桥伏击",
+              "actionText": "桥头被不明敌人抢占后，我护住伤员与货物，带队从进退两难的铁索桥上突过去。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已稳定武二郎伤势，并带队突破铁索桥伏击；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "wuerlang_wound_held"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽",
+                  "武二郎",
+                  "祁远",
+                  "吴战威"
+                ]
+              }
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "q2.i",
+          "sceneName": "铁索桥",
+          "stop": true,
+          "card": {
+            "tension": "桥头被不明敌人抢占，武二郎带伤中毒，进退两难。",
+            "options": [
+              "先稳住武二郎的伤",
+              "护住货物和伤员强行过桥",
+              "另找绕行的路"
+            ]
+          },
+          "fork": "battle",
+          "evidence": [
+            "第30章·险路"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.ningyu_regicide_offer",
+        "name": "凝羽开价弑主",
+        "description": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+        "axisId": "qingyu.35.1",
+        "axisAnchor": "六朝清羽记·#35·第33章·武请",
+        "axisSeq": 53,
+        "axisBeat": "苏妲己的护卫凝羽私下向程宗扬提出合作除掉苏妲己，并揭开她体内阴寒之气的来源。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.ningyu_regicide_offer.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "当面听清凝羽私下的合作条件，并探明她体内阴寒之气从何而来",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_ningyu_regicide_price",
+              "label": "听清并回应凝羽的弑主开价",
+              "actionText": "凝羽私下来找我，说有一件事要我答应。我请她把话说完，再给她答复。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "ningyu_regicide_price_heard",
+              "previousBeat": "凝羽尚未说明寒气来源。",
+              "forbidden": [
+                "西门庆",
+                "噬心蛊",
+                "采补残痕",
+                "姓周",
+                "星月湖的大将军",
+                "苏荔",
+                "清剿鬼王峒"
+              ],
+              "sceneLocation": "南荒途中",
+              "cast": {
+                "present": [
+                  "凝羽"
+                ]
+              },
+              "sceneObjective": "听凝羽说明条件",
+              "forceFixed": true,
+              "fixedFacts": [
+                "凝羽请程宗扬替她除掉苏妲己。",
+                "凝羽曾在月亮下起誓用生命保护苏妲己，因此要求程宗扬动手时连她一起杀。"
+              ],
+              "factChecks": [
+                [
+                  "苏妲己"
+                ],
+                [
+                  "连我一起杀",
+                  "连她一起杀"
+                ]
+              ],
+              "fallbackText": "你听凝羽提出条件：“替我除掉她。”你望着她的眼睛，问她说的是不是苏妲己。凝羽没有否认：“她一直知道我想杀她。但我在月亮下发过誓，会用我的生命保护她。所以，当你出手的时候，要连我一起杀了。”",
+              "intentMatch": {
+                "matchAny": [
+                  "听她说明条件",
+                  "把话挑明",
+                  "替她办什么事",
+                  "问凝羽的条件",
+                  "要我杀谁",
+                  "开价",
+                  "说明交换条件"
+                ],
+                "allowInquiry": true
+              }
+            },
+            {
+              "id": "trace_ningyu_cold_qi_source",
+              "label": "探明凝羽体内阴寒之气的来源",
+              "actionText": "运功时，我察觉到她体内有一股不属于她的寒气，便问她这股气是从哪里来的。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "凝羽告诉你，那股寒气是西门庆留在她体内的；她只知道西门庆是五原城有名的富商，修为远比你想的要高。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "ningyu_regicide_price_heard"
+              ],
+              "fixedFacts": [
+                "程宗扬察觉凝羽体内寒气不属于她，追问来源；不必先知道人名。",
+                "凝羽亲口说出西门庆，那股寒气是西门庆留在她体内的。",
+                "冰蛊在程宗扬身上，与凝羽体内寒气是两回事。"
+              ],
+              "forbidden": [
+                "噬心蛊",
+                "每三日服解药",
+                "寒气是凝羽自己留的",
+                "寒气是苏妲己留下的",
+                "寒气是冰蛊",
+                "她自己的寒气",
+                "程宗扬早已知道寒气来自西门庆"
+              ],
+              "cast": {
+                "present": [
+                  "凝羽"
+                ]
+              },
+              "fallbackText": "你继续追问阴寒之气的来源。凝羽说出西门庆的名字：那股阴寒之气是他当年留下的，并不是苏妲己种下的噬心蛊。",
+              "factChecks": [
+                [
+                  "西门庆"
+                ],
+                [
+                  "阴寒",
+                  "阴气"
+                ]
+              ],
+              "intentMatch": {
+                "matchAny": [
+                  "寒气从哪里来",
+                  "寒气是谁留下",
+                  "这股气息是谁的",
+                  "请她说明寒气的来历",
+                  "一起行功查明寒气根源",
+                  "是不是西门庆留下",
+                  "是不是外人留下的",
+                  "阴寒之气的来源"
+                ],
+                "rejectIf": [
+                  "凝羽自己留的",
+                  "她自己留的",
+                  "苏妲己留下的",
+                  "这股寒气是冰蛊",
+                  "寒气就是冰蛊",
+                  "天生体质",
+                  "羽族血脉",
+                  "程宗扬留下的"
+                ],
+                "allowInquiry": true
+              },
+              "previousBeat": "已听清弑主开价，但程宗扬尚不知道寒气是谁留下的。"
+            }
+          ]
+        },
+        "presentation": {
+          "stepGuardTerms": {
+            "hear_ningyu_regicide_price": [
+              "鼎炉",
+              "调教"
+            ],
+            "trace_ningyu_cold_qi_source": [
+              "鼎炉",
+              "调教",
+              "噬心蛊",
+              "冰蛊"
+            ]
+          }
+        },
+        "sceneBeat": {
+          "kind": "choice",
+          "scene": "q2.j",
+          "sceneName": "南行路上",
+          "stop": true,
+          "card": {
+            "tension": "凝羽私下来找你，说有一件事要你答应——先听她把话说完。",
+            "options": [
+              "听她把话说完再答复",
+              "追问她体内的寒气是怎么回事",
+              "当面拒绝，不谈这笔交易"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第33章·武请"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.zixi_taiyi_intercept",
+        "name": "紫溪太乙拦船",
+        "description": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+        "axisId": "qingyu.35.2",
+        "axisAnchor": "六朝清羽记·#35·第33章·武请",
+        "axisSeq": 54,
+        "axisBeat": "太乙真宗在紫溪拦截船队，程宗扬现身交涉并救回落水的祁远。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.zixi_taiyi_intercept.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan",
+          "liuchao.faction.tai_yi_zhen_zong"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "应对紫溪上太乙真宗拦船，护住船上的人",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "face_taiyi_at_zixi",
+              "label": "现身与太乙真宗交涉",
+              "actionText": "太乙真宗在紫溪拦住船队后，我现身船头与对方当面交涉，承认他们在追问，同时拒绝让他们直接接管商队。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "zixi_taiyi_faced"
+            },
+            {
+              "id": "pull_qiyuan_back_aboard",
+              "label": "救回落水的祁远",
+              "actionText": "交涉冲突里祁远被推落水后，我立刻组织船上人手把他救回船队，不把他丢在紫溪里。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在紫溪现身与太乙真宗交涉，并救回落水的祁远；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "zixi_taiyi_faced"
+              ]
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "q2.k",
+          "sceneName": "蛇彝村",
+          "stop": false,
+          "foldInto": "lcq.event.silent_sheyi_village",
+          "justHappened": "太乙真宗在紫溪拦住船队，你现身船头与对方交涉，拒绝让他们直接接管商队；冲突中祁远被推落水，你组织人手把他救回船上。",
+          "evidence": [
+            "第33章·武请"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.rainforest_black_shoal",
+        "name": "黑石滩渡河",
+        "description": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+        "axisId": "qingyu.37.2",
+        "axisAnchor": "六朝清羽记·#37·第35章·渡河",
+        "axisSeq": 58,
+        "axisBeat": "商队承受雨林伤亡，依凝羽的火光带两支商队渡过黑石滩。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.rainforest_black_shoal.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "收拢雨林里的伤员，按岸边火光把两支商队渡过黑石滩",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "bear_rainforest_losses",
+              "label": "收拢雨林伤亡后再渡",
+              "actionText": "我让人把被青蛇缠死的那名同伴埋了，清点人手和货物，趁雨势小些赶紧上路。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "rainforest_losses_borne"
+            },
+            {
+              "id": "follow_ningyu_fire_across_shoal",
+              "label": "依凝羽火光渡过黑石滩",
+              "actionText": "河对岸忽然亮起几堆火，我认出火边站着的是凝羽，招呼两队人马朝着火光涉水过滩。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已承受雨林伤亡，并依凝羽火光带两支商队渡过黑石滩；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "rainforest_losses_borne"
+              ]
+            }
+          ]
+        },
+        "sceneBeat": {
+          "kind": "transition",
+          "scene": "q2.k",
+          "sceneName": "蛇彝村",
+          "stop": false,
+          "foldInto": "lcq.event.silent_sheyi_village",
+          "justHappened": "商队承受了雨林里的伤亡，埋了被青蛇缠死的同伴，随后循凝羽在对岸点起的火光，带两支商队渡过了黑石滩。",
+          "evidence": [
+            "第35章·渡河",
+            "第34章·恶兆"
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.silent_sheyi_village",
+        "name": "抵达无声蛇彝村",
+        "description": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+        "axisId": "qingyu.38.1",
+        "axisAnchor": "六朝清羽记·#38·第36章·蛇村",
+        "axisSeq": 59,
+        "axisBeat": "商队抵达无灯火、无人声的蛇彝村，并在村中安置下来。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.silent_sheyi_village.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.bai_hu_shang_guan"
+        ],
+        "locationId": "liuchao.location.wuyuan",
+        "objective": "抵达蛇彝村，把商队安顿下来",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confirm_sheyi_dark_and_silent",
+              "label": "确认寨里无灯也无人声",
+              "actionText": "我在村口停下，四下看了一圈：没有一盏灯，也听不到半点人声。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已完成当前结构化步骤；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "sheyi_silence_confirmed"
+            },
+            {
+              "id": "settle_caravan_in_silent_sheyi",
+              "label": "在空村里安置商队",
+              "actionText": "我照云苍峰说的，带大家去村尾那间专给过路客人住的大屋歇脚，安排人轮流守夜，照看马匹和货物。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "商队已抵达无灯火无人声的蛇彝村并安置下来；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "sheyi_silence_confirmed"
+              ]
+            }
+          ]
+        },
+        "presentation": {
+          "stepGuardTerms": {
+            "confirm_sheyi_dark_and_silent": [
+              "灭村",
+              "屠村",
+              "惨案",
+              "尸体",
+              "血符"
+            ],
+            "settle_caravan_in_silent_sheyi": [
+              "灭村",
+              "屠村",
+              "惨案",
+              "尸体",
+              "血符"
+            ]
+          }
+        },
+        "sceneBeat": {
+          "kind": "load_bearing",
+          "scene": "q2.k",
+          "sceneName": "蛇彝村",
+          "stop": true,
+          "card": {
+            "previous": "太乙真宗在紫溪拦住船队，你现身船头与对方交涉，拒绝让他们直接接管商队；冲突中祁远被推落水，你组织人手把他救回船上。商队承受了雨林里的伤亡，埋了被青蛇缠死的同伴，随后循凝羽在对岸点起的火光，带两支商队渡过了黑石滩。",
+            "tension": "村里没有一盏灯，也听不到人声——商队今晚在哪里落脚？",
+            "options": [
+              "先在村口看清虚实",
+              "照云苍峰的话，去村尾的大屋安置",
+              "先派人探一圈再进村"
+            ]
+          },
+          "fork": "none",
+          "evidence": [
+            "第36章·蛇村"
+          ]
+        }
+      }
+    ]
+  }
+]
