@@ -57,6 +57,8 @@
 2. 8 个阶段档独有实体入总表、4 个记别名 id——已落地，见 §3、§4。
 3. `AIBidirectionalSystem.ts:830` 旧 id 换主 id——已落地。
 
+2026-10-16 第一步（只加校验，不改任何 builtins 数据）：`scripts/validate-character-references.mjs`（接入 `canon:build`）把阶段档里与总表重复的字段分成「副本」（与 `resolveScenarioCharacters` 还原结果逐项相同）和「分歧」（运行时被总表覆盖的死数据，视为手写，报错）。目前只覆盖 `profile.personality`（总表非空即整体覆盖，最纯）：37 关 1249 条全是副本、0 条分歧；`tests/characterReferences.test.mjs` 证明把这 1249 条全删后，各关还原结果与原来逐项相同。**没有物理删除**：合规落点标记（附录 A，R01–R52）按 builtin 行号定位、第十批才下发，现在删字段会让行号漂移；7 个 tracked overlay（lcq.stage_01／02／03b／04／04b／05b／07）的 `from`/`to` 也抄着这些字段。判定逻辑见 `scripts/character-inline-copies.mjs`（用哨兵交给 resolver 还原，不复制其规则）。
+
 仍待用户决定：
 - ~~是否合并 `lcq.enemy.*` 与人物 id~~（2026-10-15 22:21 用户已定方向：敌人种类作为总表条目、沿用原 id，不改合同；见 §8，裁定 #220）。
 - 角色卡静态部分是否改为每回合直接读总表，而不是读存档里的副本（现状让旧档在版本号变化前保持旧文字）。
