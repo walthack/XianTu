@@ -112,12 +112,12 @@ export function variantSpecOf(actionClass: string, variant: string, cfg: FreeAct
 }
 
 /** 提示词里的“类→变体”清单：只列启用的变体（other 类不列）。 */
-export function enabledVariants(cfg: FreeActionConfig = freeActionConfig()): Array<{ actionClass: ActionClass; variant: string; label: string }> {
+export function enabledVariants(cfg: FreeActionConfig = freeActionConfig()): Array<{ actionClass: ActionClass; variant: string; label: string; needsItem: boolean }> {
   return cfg.actionClasses.filter(cls => cls !== 'other').flatMap(cls =>
     Object.keys(cfg.classes[cls]?.variants || {})
       .map(variant => variantSpecOf(cls, variant, cfg)!)
       .filter(spec => spec.enabled)
-      .map(spec => ({ actionClass: cls, variant: spec.variant, label: spec.label })));
+      .map(spec => ({ actionClass: cls, variant: spec.variant, label: spec.label, needsItem: spec.needsItem === true })));
 }
 
 /** 变体可能产出的 NPC 侧事实档 / 反应（用于校验每个结果都有文本）。 */

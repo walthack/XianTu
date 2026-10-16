@@ -19,22 +19,26 @@ export interface IssueResult {
   issued?: JudgementProposal;
   /** 闸门不过的事实块（没有写任何东西）。 */
   refusalBlock: string;
+  /** 同一批“未发生”事实行（界面回执用）。 */
+  refusedFacts: string[];
 }
 
 export function issueFreeActionJudgement(save: SaveData, tickets: FreeActionTicket[], deps: SettleDeps = {}): IssueResult {
   const refusals: string[] = [];
   for (const ticket of tickets.filter(t => routeOf(t) === 'judge')) {
     const prepared = prepareFreeAction(save, ticket, deps);
-    if (prepared.kind === 'issued') return { issued: prepared.proposal, refusalBlock: '' };
+    if (prepared.kind === 'issued') return { issued: prepared.proposal, refusalBlock: '', refusedFacts: [] };
     if (prepared.kind === 'refused') refusals.push(...prepared.facts);
   }
-  return { refusalBlock: refusals.length ? renderRefusedBlock(refusals) : '' };
+  return { refusalBlock: refusals.length ? renderRefusedBlock(refusals) : '', refusedFacts: refusals };
 }
 
 export interface TurnSettlement {
   /** 存档是否被改写（调用方据此持久化）。 */
   changed: boolean;
   block: string;
+  /** 本次“未发生”事实行（界面回执用）。 */
+  refusedFacts: string[];
 }
 
 export function settleFreeActionTurn(
@@ -53,5 +57,5 @@ export function settleFreeActionTurn(
     if (prepared.kind === 'settled') take(prepared.result);
     else if (prepared.kind === 'refused') refused.push(...prepared.facts);
   }
-  return { changed, block: (done.length ? renderSettledBlock(done) : '') + (refused.length ? renderRefusedBlock(refused) : '') };
+  return { changed, block: (done.length ? renderSettledBlock(done) : '') + (refused.length ? renderRefusedBlock(refused) : ''), refusedFacts: refused };
 }

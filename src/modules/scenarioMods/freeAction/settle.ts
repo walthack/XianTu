@@ -16,6 +16,7 @@ import { affinityCapFor } from '../affinityCaps';
 import { relationshipOf, runtimeEntityName } from '../ledger/affinityIdentity';
 import npcProfiles from '../../../../mod-kit/entity-ledger/npc-profiles.json';
 import { applyActorStatus } from './actorStatus';
+import { withEncounteredTarget } from './encounter';
 import { applyItemOnUse } from './itemUse';
 import { checkGates, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
 import { freeActionConfig, intimacyConfig, variantSpecOf, type VariantSpec } from './config';
@@ -197,7 +198,12 @@ function writeAffinity(save: SaveData, targetId: string, delta: number, turn: nu
   return { from, to, applied: to !== from };
 }
 
+/** 结算入口：在场正典人物没有关系记录时先懒登记；这次没结算成（闸门不过、写入被拒、重放）就撤回。 */
 export function settleFreeAction(save: SaveData, ticket: FreeActionTicket, resolution?: JudgementResolution, deps: SettleDeps = {}): SettleResult {
+  return withEncounteredTarget(save, ticket.targetId, () => settleRegistered(save, ticket, resolution, deps), result => result.ok && !result.replay);
+}
+
+function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: JudgementResolution | undefined, deps: SettleDeps): SettleResult {
   const spec = variantSpecOf(ticket.actionClass, ticket.variant);
   if (!spec || !spec.enabled || spec.route === 'none' || !ticket.targetId) return { ok: false, reason: 'disabled', facts: [] };
   const turn = getNarrativeTurn(save), key = `fa.${resolution?.id ?? `t${turn}`}.${ticket.targetId}.${ticket.variant}`;
@@ -210,7 +216,7 @@ export function settleFreeAction(save: SaveData, ticket: FreeActionTicket, resol
 
   const slots: FactSlots = { ...gate.slots, player: gate.slots.player || playerNameOf(save), target: gate.slots.target || targetNameOf(save, ticket.targetId) };
   const planned = plan(save, ticket, gate, resolution, key, slots, deps);
-  if (!planned.apply()) return { ok: false, reason: 'refused_by_state', key, facts: [] };
+  if (!planned.apply()) return { ok: false, reason: 'refused_by_state', key, facts: [gateText('state_refused', slots)] };
 
   const resultKey = planned.resultKey, runtime = runtimeOf(save), cfg = freeActionConfig();
   const affinity = writeAffinity(save, ticket.targetId, planned.delta, turn);

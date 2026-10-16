@@ -9,6 +9,7 @@ import { relationshipOf } from '../ledger/affinityIdentity';
 import { readLocalMemoryCapsule } from '../legacyNarratorPacket';
 import { itemEffectOf } from './itemUse';
 import { freeActionConfig, variantSpecOf, enabledVariants, type ActionClass, type Degree } from './config';
+import { gateText } from './facts';
 
 export interface FreeActionTicket {
   actionClass: ActionClass;
@@ -22,22 +23,29 @@ export interface FreeActionTicket {
 export interface RosterEntry { id: string; name: string }
 export interface ItemEntry { id: string; name: string }
 export interface TicketDiscard { reason: string; key?: string }
-export interface TicketValidation { tickets: FreeActionTicket[]; discards: TicketDiscard[] }
+/** refusals：证据已核对通过、但目标或手段物品无效的票——不结算，只留一行“未发生”事实给叙事与界面回执。 */
+export interface TicketValidation { tickets: FreeActionTicket[]; discards: TicketDiscard[]; refusals: string[] }
 
 const TICKET_KEYS = ['actionClass', 'variant', 'targetId', 'degree', 'performed', 'evidence', 'itemId'];
 const OPTIONAL_KEYS = ['targetId', 'itemId'];
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
 export const playerIdOf = (save: unknown): string | undefined => runtimeOf(save)?.opening?.playerCharacterId;
+/** 本存档剧本正典里的人物条目（只读）。 */
+export const canonCharacterOf = (save: unknown, id: string): { id: string } | undefined =>
+  (runtimeOf(save)?.canon?.characters as Array<{ id: string }> | undefined)?.find(item => item?.id === id);
 
-/** 在场名单：叙事真正用的 readLocalMemoryCapsule().presentNames 对应的人物（带 id）；排除玩家自己与没有关系档案的人。 */
+/**
+ * 在场名单：叙事真正用的 readLocalMemoryCapsule().presentNames 对应的人物（带 id）；排除玩家自己。
+ * 要有关系档案或正典记录（后者的档案由 prepare/settle 在结算时懒登记，这里只读不写）。
+ */
 export function freeActionRosterOf(save: SaveData): RosterEntry[] {
   const capsule = readLocalMemoryCapsule(save, undefined, []);
   if (!capsule.presentNames.length) return [];
   const player = playerIdOf(save), seen = new Set<string>(), roster: RosterEntry[] = [];
   for (const actor of capsule.presentActors) {
     const id = actor.characterId;
-    if (!id || id === player || seen.has(id) || !relationshipOf(save as any, id)) continue;
+    if (!id || id === player || seen.has(id) || !(relationshipOf(save as any, id) || canonCharacterOf(save, id))) continue;
     seen.add(id);
     roster.push({ id, name: actor.panelName || actor.name });
     if (roster.length >= freeActionConfig().ticket.rosterMax) break;
@@ -82,15 +90,15 @@ export function evidenceBelongs(playerText: string, evidence: string): boolean {
 /** 追加到 intent 提示里的票说明（由 config 生成：只列启用的变体）。freeAction 关闭时不调用。 */
 export function ticketPromptSection(save: SaveData): { system: string; payload: Record<string, unknown> } {
   const cfg = freeActionConfig();
-  const byClass = new Map<string, Array<{ variant: string; label: string }>>();
+  const byClass = new Map<string, Array<{ variant: string; label: string; needsItem: boolean }>>();
   for (const row of enabledVariants()) {
     if (!byClass.has(row.actionClass)) byClass.set(row.actionClass, []);
-    byClass.get(row.actionClass)!.push({ variant: row.variant, label: row.label });
+    byClass.get(row.actionClass)!.push({ variant: row.variant, label: row.label, needsItem: row.needsItem });
   }
   const system = [
     `自由行动票：玩家这一句里若确实对在场某人做了动作，就在tickets数组里出票（最多${cfg.ticket.maxPerTurn}张，每个目标最多1张）；没有就返回空数组。`,
     '每张票字段恰好为actionClass、variant、targetId、degree、performed、evidence、itemId，不许有别的字段，也不要输出任何数值。',
-    'actionClass与variant只能取freeAction.classes里的；找不到合适变体就不出票，不要就近硬套。targetId只能取freeAction.roster里的id；itemId只能取freeAction.items里的id，用不到手段物品填null。',
+    'actionClass与variant只能取freeAction.classes里的；找不到合适变体就不出票，不要就近硬套。targetId只能取freeAction.roster里的id；itemId只能取freeAction.items里的id，用不到手段物品填null。needsItem为true的变体，玩家没有合用的物品也照样出票，itemId填null，本地会判定没成事并告知，不要因为没物品就不出票。',
     `degree取${cfg.degrees.join('|')}（轻描淡写/常规/全力或当众）。performed：玩家这一句里确实做了该动作填yes；问句、假设、转述、否定、只是想想填no；拿不准填unclear。`,
     `evidence必须逐字摘自玩家原话的连续片段（不超过${cfg.ticket.evidenceChars}字），不得改写或把两处拼起来；同一句里对几个人动手，每张票各摘一段原话里的连续片段（可以重叠）。观察、闲聊、吃饭、不可能的事不出票。`,
   ].join('');
@@ -109,8 +117,14 @@ export function ticketPromptSection(save: SaveData): { system: string; payload: 
  * 名单一律从存档重新算，不信提示里发过的那份。
  */
 export function validateFreeActionTickets(raw: unknown, playerText: string, save: SaveData): TicketValidation {
-  const cfg = freeActionConfig(), result: TicketValidation = { tickets: [], discards: [] };
+  const cfg = freeActionConfig(), result: TicketValidation = { tickets: [], discards: [], refusals: [] };
   const drop = (reason: string, key?: string) => { result.discards.push({ reason, ...(key ? { key } : {}) }); };
+  const slots = { player: String((save as any)?.角色?.身份?.名字 || '你'), target: '' };
+  const refuse = (reason: 'target_unavailable' | 'item_unavailable', discard: string, key?: string) => {
+    drop(discard, key);
+    const text = gateText(reason, slots);
+    if (!result.refusals.includes(text)) result.refusals.push(text);
+  };
   if (raw === undefined) return result;
   if (!Array.isArray(raw)) { drop('not_array'); return result; }
   if (raw.length > cfg.ticket.maxPerTurn) drop('too_many');
@@ -129,13 +143,16 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     if (!spec.enabled || spec.route === 'none') { drop('variant_disabled', label); continue; }
     if (!cfg.degrees.includes(t.degree as Degree)) { drop('bad_degree', label); continue; }
     if (t.performed !== 'yes') { drop(cfg.performed.includes(String(t.performed)) ? 'not_performed' : 'bad_performed', label); continue; }
+    // 证据先核对：证据不过的票连“未发生”事实也不发（防止凭空杜撰的票误伤）。
+    if (typeof t.evidence !== 'string' || !evidenceBelongs(playerText, t.evidence)) { drop('bad_evidence', label); continue; }
     // 模型常把“空”写成字符串 "null" / ""，按空处理。
     const targetId = t.targetId === 'null' || t.targetId === '' ? null : t.targetId;
-    if (typeof targetId !== 'string' || !roster.has(targetId)) { drop('target_not_present', label); continue; }
-    if (!relationshipOf(save as any, targetId)) { drop('target_no_record', label); continue; }
-    if (typeof t.evidence !== 'string' || !evidenceBelongs(playerText, t.evidence)) { drop('bad_evidence', label); continue; }
-    const itemId = t.itemId === 'null' || t.itemId === '' ? null : t.itemId ?? null;
-    if (itemId !== null && (typeof itemId !== 'string' || !spec.needsItem || !itemIds.has(itemId))) { drop('bad_item_id', label); continue; }
+    if (typeof targetId !== 'string' || !roster.has(targetId)) { refuse('target_unavailable', 'target_not_present', label); continue; }
+    if (!relationshipOf(save as any, targetId) && !canonCharacterOf(save, targetId)) { refuse('target_unavailable', 'target_no_record', label); continue; }
+    // 不需要物品的变体：模型顺手带的 itemId 直接置空，不让整张票作废。
+    let itemId = t.itemId === 'null' || t.itemId === '' ? null : t.itemId ?? null;
+    if (!spec.needsItem) itemId = null;
+    else if (itemId !== null && (typeof itemId !== 'string' || !itemIds.has(itemId))) { refuse('item_unavailable', 'bad_item_id', label); continue; }
     // 每个目标最多一张：同一人被报了几张，留分量最重的（变体行的好感基础点绝对值最大者；并列取先报的），其余丢弃。
     const weight = Math.abs(spec.base ?? 0), prior = picked.get(targetId);
     if (prior && prior.weight >= weight) { drop('duplicate_target', label); continue; }
@@ -144,7 +161,7 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
       weight,
       ticket: {
         actionClass: t.actionClass as ActionClass, variant: spec.variant, targetId, degree: t.degree as Degree,
-        performed: 'yes', evidence: [...t.evidence].slice(0, cfg.ticket.evidenceChars).join(''), itemId,
+        performed: 'yes', evidence: [...t.evidence].slice(0, cfg.ticket.evidenceChars).join(''), itemId: itemId as string | null,
       },
     });
   }

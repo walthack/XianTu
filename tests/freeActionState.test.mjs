@@ -251,14 +251,13 @@ test('E7 其余闸门：场面进行中不处理；自由行动写给 NPC 的状
   assert.match(rec.sourceScene, /^free:fa\./, 'sourceScene 带 free: 前缀，便于识别与审计');
 });
 
-test('T27 类/变体不匹配与编造：物品用在不带 needsItem 的变体、类下报别类变体、缺 variant，整张作废', () => {
+test('T27 类/变体不匹配与编造：类下报别类变体、缺 variant，整张作废；不带 needsItem 的变体带了 itemId 则置空、票照收', () => {
   const save = makeSave({ present: [WANG_ZHE], items: bag(POISON, 1) });
   const base = { targetId: WANG_ZHE, degree: 'normal', performed: 'yes', evidence: '动手', itemId: null };
   const cases = [
     [{ actionClass: 'physical', variant: 'kiss' }, 'bad_variant'],
     [{ actionClass: 'verbal', variant: 'humiliate' }, 'bad_variant'],
     [{ actionClass: 'physical' }, 'missing_fields'],
-    [{ actionClass: 'physical', variant: 'attack', itemId: POISON }, 'bad_item_id'],
     [{ actionClass: 'physical', variant: 'bind' }, 'variant_disabled'],
     [{ actionClass: 'sorcery', variant: 'attack' }, 'bad_class'],
   ];
@@ -269,6 +268,10 @@ test('T27 类/变体不匹配与编造：物品用在不带 needsItem 的变体�
     assert.equal(out.tickets.length, 0, reason);
     assert.equal(out.discards[0].reason, reason);
   }
+  const withItem = mods.ticket.validateFreeActionTickets([{ ...base, actionClass: 'physical', variant: 'attack', itemId: POISON }], '我对王哲动手', save);
+  assert.equal(withItem.tickets.length, 1, '不需要物品的变体：模型顺手带的 itemId 不让整张票作废');
+  assert.equal(withItem.tickets[0].itemId, null);
+  assert.deepEqual(withItem.refusals, []);
 });
 
 test('T28 新增变体只改 config + 内容包文本：physical 加一行 shove 即被提示清单列出、被校验接受、结算出好感与记忆，src 零改动；未知 effect 被体检拒绝', async () => {

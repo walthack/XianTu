@@ -34,6 +34,8 @@ export function effectResultKeys(spec: VariantSpec): string[] {
 export const GATE_REASONS = [
   'not_present', 'scene_active', 'low_goodwill', 'no_item', 'item_mismatch', 'equipped_or_story', 'nothing_to_treat',
   'level_too_low', 'level_unknown', 'no_resource', 'cooldown', 'budget_full', 'protected',
+  // 票校验阶段（目标/物品无效）与结算写入被状态拒绝时的“未发生”事实。
+  'target_unavailable', 'item_unavailable', 'state_refused',
 ] as const;
 export type GateReason = typeof GATE_REASONS[number];
 

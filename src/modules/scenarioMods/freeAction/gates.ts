@@ -2,6 +2,7 @@
  * 动作可行性闸门：纯函数，“只有真能做到才结算”。确认判定前后各跑一次（存档指纹、背包、状态可能已变）。
  * 闸门读变体参数（needsItem / needsGoodwill / requires / cost / cooldownMinutes …），不按变体名分支。
  * 不过 → 不出判定卡、不扣任何东西、不改任何状态，只拼“未发生”事实行给叙事。
+ * 本文件只读：没有关系记录的在场正典人物由 plan.ts / settle.ts 在进闸门前懒登记（encounter.ts），这里仍要求有记录。
  */
 import type { SaveData } from '@/types/game';
 import { GAME_NUMBERS } from '../../sceneModule/numbers';

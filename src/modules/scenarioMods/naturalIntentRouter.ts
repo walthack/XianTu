@@ -61,6 +61,8 @@ export interface NaturalIntentResult {
   freeTextStatusResolution?: FreeTextStatusResolution;
   /** 自由行动票：仅 kind==='free' 且校验通过的票；命中作者动作时不收（避免同拍双结算）。 */
   freeActionTickets?: FreeActionTicket[];
+  /** 自由行动票：证据通过但目标/物品无效的“未发生”事实行（没有可结算的票时也会带）。 */
+  freeActionRefusals?: string[];
   kind: NaturalIntentKind;
   selection?: NaturalIntentSelection;
   reason?: string;
@@ -408,7 +410,16 @@ export async function resolveNaturalIntent(input: {
   const fast = resolveNaturalIntentFastPath(input.saveData, input.playerText, input.selected);
   if (fast) return fast;
 
-  if(/练功|修炼|闭关|冲关|冲击境界/.test(input.playerText))return {kind:'free',skipKeywordPreflight:false,usedModel:false};
+  // 试玩范围内且自由行动开启时，含修炼词的句子也交给模型出票（“和她一起修炼”可能是对人做的事）；自我修炼句返回空票，由界面照旧走本地修炼预检。
+  const isTrainingText = /练功|修炼|闭关|冲关|冲击境界/.test(input.playerText);
+  const modelTicketsTraining = isTrainingText && freeActionConfig().enabled && isScopedNaturalIntentSave(input.saveData) && Boolean(input.generate);
+  if(isTrainingText&&!modelTicketsTraining)return {kind:'free',skipKeywordPreflight:false,usedModel:false};
+  // 修炼句识别失败（坏 JSON / 报错）：回到旧的本地修炼判定，不像普通自由句那样被“固定事件链”拦住。
+  const classifierFailure = (reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult => {
+    if (!modelTicketsTraining) return onClassifierFailure(reason, candidates);
+    noteTicketDiscard('intent', reason);
+    return { kind: 'free', reason, skipKeywordPreflight: false, usedModel: true };
+  };
   const alias = input.resolveFromText?.(input.saveData, input.playerText);
   if (alias && !QUEST_LINES.some(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===alias.eventId))) {
     return { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
@@ -459,7 +470,7 @@ export async function resolveNaturalIntent(input: {
       return { kind: 'failed', reason: 'state_changed', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };
     }
     const parsed = parseIntentJson(output);
-    if (!parsed) return onClassifierFailure('malformed', candidates);
+    if (!parsed) return classifierFailure('malformed', candidates);
     // Verified only after cancellation and snapshot checks; old responses may omit the new field.
     const freeTextStatusResolution = parsed.statusProposals === undefined ? undefined
       : validateFreeTextStatusProposals(JSON.stringify({ proposals: parsed.statusProposals }), input.playerText, '', 'input');
@@ -468,11 +479,14 @@ export async function resolveNaturalIntent(input: {
       hold: true, skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution,
     };
     // 票只在“没有命中任何作者动作”的自由回合收：模型说 none / 缺动作 / 不确定。其余 free 原因（候选被否决）不收。
-    const withTickets = (): Pick<NaturalIntentResult, 'freeActionTickets'> => {
+    const withTickets = (): Pick<NaturalIntentResult, 'freeActionTickets' | 'freeActionRefusals'> => {
       if (!freeActionConfig().enabled || parsed.tickets === undefined) return {};
       const checked = validateFreeActionTickets(parsed.tickets, String(input.playerText || ''), input.saveData);
       for (const drop of checked.discards) noteTicketDiscard('free_action', drop.reason, drop.key);
-      return checked.tickets.length ? { freeActionTickets: checked.tickets } : {};
+      return {
+        ...(checked.tickets.length ? { freeActionTickets: checked.tickets } : {}),
+        ...(checked.refusals.length ? { freeActionRefusals: checked.refusals } : {}),
+      };
     };
     const free = (reason: string, tickets = false): NaturalIntentResult => {
       noteTicketDiscard('intent', reason, parsed.actionId);
@@ -502,7 +516,7 @@ export async function resolveNaturalIntent(input: {
     if (input.signal?.aborted) {
       return { kind: 'failed', reason: 'aborted', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };
     }
-    return onClassifierFailure('classifier_error', candidates);
+    return classifierFailure('classifier_error', candidates);
   } finally {
     input.signal?.removeEventListener('abort', onAbort);
     if (inFlight === controller) inFlight = null;

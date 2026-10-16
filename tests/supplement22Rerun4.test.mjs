@@ -43,7 +43,7 @@ test('south optional emotional input invokes host classifier after Baihu escape 
 });
 test('training input goes through code judgement and uses configured progress requirement',async()=>{
  const s=save('lcq.stage_04');s.系统.扩展.清羽记开局={kind:'qingyu-demo-v1'};
- const out=await intent.resolveNaturalIntent({saveData:s,playerText:'我打坐练功',generate:async()=>{throw Error('must not classify training as a story action');}});assert.equal(out.skipKeywordPreflight,false);
+ let trainingCalls=0;const out=await intent.resolveNaturalIntent({saveData:s,playerText:'我打坐练功',generate:async()=>{trainingCalls++;throw Error('classifier down');}});assert.equal(trainingCalls,1,'2026-10-16：试玩范围的修炼句也交给模型出自由行动票');assert.equal(out.kind,'free');assert.equal(out.skipKeywordPreflight,false,'识别失败时回到旧的本地修炼判定');
  assert.equal(levels.realmAt(2).下一级所需,numbers.GAME_NUMBERS.training.progressPerLevel);
  s.角色.属性.境界={...levels.realmAt(2),下一级所需:300};const next=levels.trainingRealm(s,'我修炼','success');assert.equal(next.下一级所需,numbers.GAME_NUMBERS.training.progressPerLevel);assert.equal(next.当前进度,numbers.GAME_NUMBERS.training.successProgress);
 });

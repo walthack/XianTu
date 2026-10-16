@@ -569,6 +569,7 @@ import {
 import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
+import { renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
 import type { FreeActionTicket } from '@/modules/scenarioMods/freeAction/ticket';
 import {
   advanceScenarioRuntime,
@@ -647,7 +648,9 @@ const refreshPendingJudgement = () => {
   const save = gameStateStore.toSaveData();
   const state = save ? getJudgementState(save) : null;
   pendingJudgement.value = state?.pending || null;
-  latestJudgement.value = state?.recent.at(-1) || null;
+  // 本地判定结果块只在刚结算的那一回合及下一回合显示，之后的无判定回合不再残留旧结果。
+  const latest = state?.recent.at(-1) || null;
+  latestJudgement.value = latest && save && latest.resolvedAtTurn >= getNarrativeTurn(save) - 1 ? latest : null;
 };
 
 const persistJudgementSave = async (save: any) => {
@@ -1973,6 +1976,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   );
   let routedIntentAction: ScenarioEngineActionSelection | undefined;
   let routedFreeActionTickets: FreeActionTicket[] = [];
+  let routedFreeActionRefusals: string[] = [];
   // 判定确认后的二次执行：票取自判定回执，不再重跑 intent。
   const followUpFreeAction = execution?.resolution?.authorityReceipt?.kind === 'free_action_judgement';
   let freeTextStatusResolution: FreeTextStatusResolution | undefined;
@@ -2027,7 +2031,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       }
       skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
       freeTextStatusResolution = intent.freeTextStatusResolution;
-      if (intent.kind === 'free') routedFreeActionTickets = intent.freeActionTickets ?? [];
+      if (intent.kind === 'free') {
+        routedFreeActionTickets = intent.freeActionTickets ?? [];
+        routedFreeActionRefusals = intent.freeActionRefusals ?? [];
+      }
       if (freeTextStatusResolution?.state === 'clarify') {
         intentHoldMessage.value = freeTextStatusResolution.reason || NATURAL_INTENT_CLARIFY_DEFAULT;
         toast.info(intentHoldMessage.value);
@@ -2093,7 +2100,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     : undefined;
   let contractedJudgementResolution = execution?.resolution;
   // 自由行动票：判定类先签发待确认判定（至多一张），闸门不过的“未发生”事实留到拼消息时发给叙事。
-  let freeActionRefusalBlock = '';
+  // 票校验阶段就确定“没成事”的（目标/物品无效）也在这里并进拒绝块。
+  let freeActionRefusalBlock = routedFreeActionRefusals.length ? renderRefusedBlock(routedFreeActionRefusals) : '';
+  const freeActionRefusedFacts = [...routedFreeActionRefusals];
   if (saveData && routedFreeActionTickets.length) {
     const issue = issueFreeActionJudgement(saveData, routedFreeActionTickets);
     if (issue.issued) {
@@ -2103,8 +2112,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       toast.info('此行动存在风险，请先确认判定');
       return;
     }
-    freeActionRefusalBlock = issue.refusalBlock;
+    freeActionRefusalBlock += issue.refusalBlock;
+    freeActionRefusedFacts.push(...issue.refusedFacts);
   }
+  // 本回合有票或有“未发生”事实：自由行动已接管，不再叫旧的关键词预检（含修炼词的句子也一样）。
+  const freeActionHandled = routedFreeActionTickets.length > 0 || freeActionRefusalBlock !== '';
   if (saveData && selectedEventJudgementAction && !contractedJudgementResolution) {
     const prepared = prepareEventActionJudgement(
       saveData,
@@ -2121,7 +2133,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (prepared.kind === 'resolved') contractedJudgementResolution = prepared.resolution;
   }
   if (!shouldSkipJudgementPreflight({
-    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || (skipKeywordPreflightFromIntent && !/练功|修炼|闭关|冲关|冲击境界/.test(inputText.value.trim())),
+    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || (skipKeywordPreflightFromIntent && !/练功|修炼|闭关|冲关|冲击境界/.test(inputText.value.trim())),
     selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
     selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
       ? selectedScenarioEngineAction.value.playerLine
@@ -2157,7 +2169,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	    const settlement = settleFreeActionTurn(freeActionSave, routedFreeActionTickets, execution?.resolution);
 	    if (settlement.changed) await persistJudgementSave(freeActionSave);
 	    freeActionBlock += settlement.block;
+	    freeActionRefusedFacts.push(...settlement.refusedFacts);
 	  }
+	  // 回执：没成事的事要让玩家看见，不能只留在发给叙事的消息里。
+	  if (freeActionRefusedFacts.length) toast.info([...new Set(freeActionRefusedFacts)].join(' '));
 
 	  const userMessage = inputText.value.trim();
 	  console.log('[前端] 用户输入 inputText.value:', inputText.value);

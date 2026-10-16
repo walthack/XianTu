@@ -6,12 +6,15 @@ import { DUAN_QIANG, WANG_ZHE, makeSave, mods } from './freeActionFixture.mjs';
 const validate = (raw, text, save = makeSave({ present: [WANG_ZHE] })) => mods.ticket.validateFreeActionTickets(raw, text, save);
 const t = (variant, targetId, evidence, extra = {}) => ({ actionClass: variant === 'attack' || variant === 'grab' ? 'physical' : 'verbal', variant, targetId, degree: 'normal', performed: 'yes', evidence, itemId: null, ...extra });
 
-test('空值写成字符串 "null" / "" 按空处理（真机见过 itemId:"null"）；真正的名单外 id 仍整张作废', () => {
+test('空值写成字符串 "null" / "" 按空处理（真机见过 itemId:"null"）；名单外目标仍不收票', () => {
   const text = '我拔刀，一刀砍向王哲！';
   assert.equal(validate([t('attack', WANG_ZHE, '一刀砍向王哲', { itemId: 'null' })], text).tickets.length, 1);
   assert.equal(validate([t('attack', WANG_ZHE, '一刀砍向王哲', { itemId: '' })], text).tickets[0].itemId, null);
   assert.equal(validate([t('attack', 'null', '一刀砍向王哲')], text).discards[0].reason, 'target_not_present');
-  assert.equal(validate([t('attack', WANG_ZHE, '一刀砍向王哲', { itemId: 'lcq.item.not_mine' })], text).discards[0].reason, 'bad_item_id');
+  const stray = validate([t('attack', WANG_ZHE, '一刀砍向王哲', { itemId: 'lcq.item.not_mine' })], text);
+  assert.equal(stray.tickets.length, 1, '不需要物品的变体带了名单外 itemId：置空，票照收');
+  assert.equal(stray.tickets[0].itemId, null);
+  assert.deepEqual(stray.discards, []);
 });
 
 test('同一人被报几张票：留分量最重的（好感基础点绝对值最大），与报的先后无关；其余记 duplicate_target', () => {
