@@ -302,6 +302,20 @@ export const useGameStateStore = defineStore('gameState', {
       }
     },
 
+    /** 本期试玩结束后「继续到下一期」：同一份隔离档，终点标记挪到下一期，进度保留，随后落盘。 */
+    async continueToNextPlaytestPhase(): Promise<{ ok: boolean; reason?: string }> {
+      const { useUIStore } = await import('./uiStore');
+      if (useUIStore().isAIProcessing) return { ok: false, reason: '请等待本轮叙事结束' };
+      const save = this.toSaveData();
+      if (!save) return { ok: false, reason: '存档数据不完整' };
+      const { withNextNanhuangPhase } = await import('@/modules/scenarioMods/qingyuOpeningPlaytest');
+      const next = withNextNanhuangPhase(save);
+      if (!next) return { ok: false, reason: '没有可继续的下一期' };
+      this.loadFromSaveData(next);
+      await this.saveGame();
+      return { ok: true };
+    },
+
     async saveGame() {
       if (!this.isGameLoaded) {
         console.warn('[GameState] Game not loaded, skipping save.');

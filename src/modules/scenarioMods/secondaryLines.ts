@@ -35,6 +35,7 @@ import {entityText} from './namedEntities';
  */
 
 import { acquaintanceOf, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
+import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
 
 export type SecondaryLineKind = 'sect' | 'nation' | 'commerce' | 'expedition';
 
@@ -853,7 +854,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
 /** 121章书信揭出名号之前只显示黑魔海；按当前原著章节锚点开放后缀，不按认识朱老头解锁。 */
 export function secondaryLineDisplayName(line: SecondaryLine, event?: { axisAnchor?: string }): string {
   const chapter = Number(event?.axisAnchor?.match(/第(\d+)章/)?.[1] || 0);
-  return line.id === 'heimohai' && chapter >= 121 ? '黑魔海／毒宗' : line.name;
+  return line.id === 'heimohai' && chapter >= ledgerOverrides.chapterGates.poisonSectName ? '黑魔海／毒宗' : line.name;
 }
 
 export const LINE_ANCHOR_MIN_ACQUAINTANCE = 'encountered' as const;

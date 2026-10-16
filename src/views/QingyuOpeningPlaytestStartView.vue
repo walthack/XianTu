@@ -104,6 +104,8 @@ async function continuePlaytest() {
       definition.value.slot!,
     );
     if (!loaded || !gameStateStore.isGameLoaded) throw new Error('未能读取上次试玩档');
+    // 选了二期、上次档停在一期终点：同一份进度直接接着走，不用重玩。
+    if (!packId.value && nanhuangPhase.value === 2) await gameStateStore.continueToNextPlaytestPhase();
     await router.replace('/game');
   } catch (error) {
     errorMessage.value = String((error as Error)?.message || error);

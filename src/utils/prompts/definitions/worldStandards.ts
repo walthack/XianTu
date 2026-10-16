@@ -12,6 +12,8 @@
  * - 数值平衡标准
  */
 
+import {GAME_NUMBERS} from '../../../modules/sceneModule/numbers';
+
 export const REALM_ATTRIBUTE_STANDARDS = `
 [武功级数] 0无修为；1筑基、2内视、3生象、4入微、5坐照、6通幽、7归元、8至臻、9入神。
 级数和属性只读账本；小阶段仅初期/中期/后期，主持只描写代码已结算的变化，不自行升阶或扩张寿命。
@@ -43,7 +45,7 @@ export const EQUIPMENT_SYSTEM = `
 `.trim()
 
 export const CURRENCY_SYSTEM = `
-[货币] 只有铜铢/银铢/金铢。铜铢价值度1；银铢100；金铢2000。1银铢=100铜铢；1金铢=20银铢；1贯=1000铜铢。
+[货币] 只有铜铢/银铢/金铢。铜铢价值度${GAME_NUMBERS.currency['liuchao.currency.tong_zhu']}；银铢${GAME_NUMBERS.currency['liuchao.currency.yin_zhu']}；金铢${GAME_NUMBERS.currency['liuchao.currency.jin_zhu']}。1银铢=100铜铢；1金铢=20银铢；1贯=1000铜铢。
 南荒银铢少，叙事可写约110铜铢，代码换算仍用官价。货币只按结算回执变化，不凭空发钱。
 `.trim();
 

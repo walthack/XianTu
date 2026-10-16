@@ -10,7 +10,7 @@ import {containsEntityLabel} from '@/modules/scenarioMods/namedEntities';
 import { closedSceneFacts, closedSceneNarrativeProblems } from '@/modules/sceneModule/host/narrate';
 import { hostNeeded } from '@/modules/sceneModule/host/controller';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
-import { projectNamingPacket, namingInstructions } from '@/modules/scenarioMods/ledger/naming';
+import { projectNamingPacket, namingInstructions, npcAddressWithheld, withheldAddressUsed } from '@/modules/scenarioMods/ledger/naming';
 import { backfillRelationshipIds, npcRecordPath, splitRecordPath, normalizeNpcRecordPath, resolveRelationshipId, newLocalCharacterId, runtimeEntityName, annotatePersonChanges } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import { genderShadowFindings, type GuardFinding } from '@/modules/scenarioMods/ledger/guardFramework';
 import { validateQingyuNarrativeFacts } from '@/modules/scenarioMods/narrativeBoundaries';
@@ -791,8 +791,7 @@ class AIBidirectionalSystemClass {
     const focus = runtime ? getScenarioFocusEvent(runtime) : null;
     const eventId = plan?.selection.eventId || focus?.id;
     // 无事件动作的交谈不伪造完成回执，只读当前地点/在场人物/目标；世界时间仍由原引擎推进。
-    const capsuleSelection = candidates[0];
-    const capsule = capsuleSelection ? readLocalMemoryCapsule(saveData, capsuleSelection) : null;
+    const capsule = readLocalMemoryCapsule(saveData, candidates[0], candidates.slice(1));
     const settledRuntime = (preview?.settled as any)?.世界?.状态?.剧本模组;
     const settledEvent = settledRuntime?.events?.find((item: any) => item.id === eventId);
     let approvedSettledFact = card?.fixedFacts?.length ? card.fixedFacts.join('；') : preview?.progress.completed && settledEvent
@@ -828,7 +827,7 @@ class AIBidirectionalSystemClass {
     const nanhuang = /^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime?.modId || ''));
     const iceGuPressure = nanhuang ? '本轮不主动描写冰蛊、寒意或南荒之约；这些只在指定的身体信号步骤由固定文本显示。不得沿历史摘录复写冰蛊，更不得推断发作时间、寿命或致命期限。' : '';
     if (card?.cast?.present && !containsEntityLabel(card.cast.present,"enemy","lcq.enemy.ge_luo") && ['lcq.event.regroup_caravan_envoy', 'lcq.event.weapon_deal_with_geluo'].includes(String(eventId))) absentCast.push(...entityAliases("enemy","lcq.enemy.ge_luo"));
-    const requiredCast = card?.cast?.enter?.filter(name => !/[（(]/.test(name)) || (eventId === 'lcq.event.s04_07' ? [...entityAliases("character","canon.character.15b71fd1c8"), ...entityAliases("character","lcq.character.nanhuang_yiyong")] : []);
+    const requiredCast = card?.cast?.enter?.filter(name => !/[（(]/.test(name)) || (eventId === 'lcq.event.s04_07' ? [...entityAliases("character","lcq.character.nanhuang_xi_furen"), ...entityAliases("character","lcq.character.nanhuang_yiyong")] : []);
     let auditCorrections: string[] = [];
     try { const active = useCharacterStore().rootState.当前激活存档;
       if (active?.角色ID && active?.存档槽位) auditCorrections = readAuditLog(localStorage).filter(entry => entry.status === 'accepted' && entry.slotKey === `${active.角色ID}:${active.存档槽位}` && entry.modId === runtime?.modId).slice(-1).flatMap(entry => entry.findings.filter(f => ['voice_drift', 'state_mismatch'].includes(f.category)).map(f => f.issue));
@@ -855,7 +854,7 @@ class AIBidirectionalSystemClass {
         + (reveal.father ? '小紫父系已确证。' : reveal.suspectedFather ? '程宗扬只怀疑她是岳帅遗腹女，不能写成确证。' : '小紫父系尚未揭露，不得猜测。')
         + '毒宗名号按121章书信、122章对白开放；小紫师承未核，不随名号公开，不能写唯一传人。岳帅为男性，名岳鹏举；不是女性，没有丈夫。孟非卿/孟老大不在队伍里。易虎失踪后不能当普通活人使用，血虎是被炼成的怪物。阿葭死后不另造同名伴娘；苏荔外貌按角色材料。' : '')
       + (nanhuang && new RegExp("(?:"+entityNamePattern("location","lcq.location.sheyi_village")+")"+"|蛇彝领地","").test(String((scene as any).location || '')) ? '\n蛇彝村已是空村，没有活村民、老彝婆或斥候；搜查只观察现场遗留，不编造活蛇祖或主角被咬伤。' : '')
-      + (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') ? '\n乐明珠尚未使用“大笨瓜”称呼主角，不能借用小紫口头禅。' : '')
+      + (nanhuang && npcAddressWithheld('liuchao.character.le_mingzhu', narrativeRuntime).length ? '\n乐明珠尚未使用“' + npcAddressWithheld('liuchao.character.le_mingzhu', narrativeRuntime).join('／') + '”称呼主角，不能借用小紫口头禅。' : '')
       + (plan && !card?.fixedFacts?.length && !['lcq.event.wuerlang_joins', 'lcq.event.s03b_yinzhu_xiongerpu'].includes(String(eventId)) ? '\n作者步骤限定（不复述到正文）：' + plan.selection.actionText : '')
       + '\n物品只有本地回执能够写入背包；清单外物品只可看、端详，不带走。搜刮时只能描写搜刮回执已掷出的结果，不加奖励。'
       + '\n玩家行动句只表达意图，不把按钮标题、姓名确认或作者备注念成正文；用现场动作和对话展现本步骤的既定结果。'
@@ -892,7 +891,8 @@ class AIBidirectionalSystemClass {
           if (/^lcq\.stage_/.test(String(runtime?.modId || ''))) validateQingyuNarrativeFacts(text, eventId);
         }
         if (lootPreview?.receipt) validateLootNarrative(text, lootPreview.receipt, narrativeRuntime.canon.items || []);
-        if (nanhuang && !runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') && /大笨瓜/.test(text) && new RegExp("(?:"+entityNamePattern("character","liuchao.character.le_mingzhu")+")"+"[^。！？\\n]{0,35}大笨瓜","").test(text)) throw new ModuleNarrativeGuardError('声线时序冲突：乐明珠尚未使用大笨瓜称呼');
+        const withheldVoice = nanhuang ? withheldAddressUsed('liuchao.character.le_mingzhu', narrativeRuntime, text, entityNamePattern("character","liuchao.character.le_mingzhu")) : undefined;
+        if (withheldVoice) throw new ModuleNarrativeGuardError('声线时序冲突：乐明珠尚未使用' + withheldVoice + '称呼');
         if (!endingText && (nanhuang || eventId==='lcq.event.ningyu_regicide_offer')) validateStepSceneNarrative(text, plan?card:card?{...card,factChecks:[]}:undefined, scene as any, remembered);
         if (!endingText && nanhuang) {
           const known = introducedScenarioCharacterNames(saveData);

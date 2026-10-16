@@ -1,4 +1,5 @@
 import {GAOSHOUBANG_NARRATION_RULE} from '../../realmUtils';
+import {GAME_NUMBERS} from '../../../modules/sceneModule/numbers';
 /**
  * @fileoverview 游戏业务逻辑规则（AI友好格式）
  * 格式：[规则名];条目用;分隔;约束用()标注
@@ -291,7 +292,7 @@ export const SKILL_AND_SPELL_USAGE_RULES = `
 
 export const ECONOMY_AND_PRICING_RULES = `
 [经济定价]
-基准:铜铢=1价值度；银铢=100；金铢=2000；1贯=1000铜铢
+基准:铜铢=${GAME_NUMBERS.currency['liuchao.currency.tong_zhu']}价值度；银铢=${GAME_NUMBERS.currency['liuchao.currency.yin_zhu']}；金铢=${GAME_NUMBERS.currency['liuchao.currency.jin_zhu']}；1贯=1000铜铢
 定价规则:先判断物品类型+品质(凡/黄/玄/地/天/仙/神)+稀缺性+地点;同类同品质波动不超3x(超过需说明原因);地区波动系数0.6-1.6
 价格锚点（原著）：向导一天1金铢；晋国雇船四天10银铢；建康作坊每月一贯铜铢；50金铢约寻常人家全部家产。
 `.trim();

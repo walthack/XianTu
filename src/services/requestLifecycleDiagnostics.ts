@@ -137,6 +137,19 @@ export function peekRequestLifecycleDiagnostics() {
   return { version: 1, requests: requests.map(r => ({ ...r })), turns: [...turns.values()].map(t => ({ ...t })) };
 }
 export function clearRequestLifecycleDiagnostics(): void { requests.length = 0; }
+
+/** 一张票（意图候选、状态提案、将来的自由行动票）被丢弃的记录：只有类别、原因码、票键，没有玩家原文与模型原文。 */
+export interface TicketDiscard { kind: string; reason: string; key: string | null; turnId: string | null; at: number }
+const ticketDiscards: TicketDiscard[] = [];
+/** 观察用，不改变任何结算；不满足 token 规则（含中文、过长、像密钥）的内容一律记为 null / 'unknown'。 */
+export function noteTicketDiscard(kind: string, reason: string, key?: unknown): void {
+  const row: TicketDiscard = { kind: token(kind) || 'unknown', reason: token(reason) || 'unknown', key: token(typeof key === 'string' ? key : null), turnId: token(current), at: Date.now() };
+  ticketDiscards.push(row);
+  if (ticketDiscards.length > LIMIT) ticketDiscards.shift();
+  info('[票丢弃]', row);
+}
+export function peekTicketDiscards(): TicketDiscard[] { return ticketDiscards.map(r => ({ ...r })); }
+export function clearTicketDiscards(): void { ticketDiscards.length = 0; }
 // Console export contains only the fields above. No headers, URL, key, prompt, body or raw error.
 if (typeof window !== 'undefined') {
   Object.assign(window, { __xiantuRequestDiagnostics: { snapshot: peekRequestLifecycleDiagnostics } });

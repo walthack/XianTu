@@ -1,7 +1,7 @@
 
 import {isNamedEntityLabel} from './namedEntities';
 import {entityNamePattern} from './namedEntities';
-import { namingAliases, namingFor, namingChapter, sceneBoundEntity } from './ledger/naming';
+import { namingAliases, namingFor, namingChapter, sceneBoundEntity, ledgerChapterGates } from './ledger/naming';
 import { syncNanhuangIdentityDisplay, xiaoziDisclosure, isDisclosureFactAllowed } from './characterResolver';
 import { stepScene, sceneLedgerSummary } from './fixedEndingNarratives';
 import { cloneDeep } from 'lodash';
@@ -15,6 +15,10 @@ import {
   type ScenarioEventActionSelection,
 } from './runtime';
 import { buildScenarioStoryPrompt } from './storyContext';
+import { readNpcCard } from './npcCardLayer';
+import { getNarrativeTurn } from '@/utils/actionGate';
+import { questLineContext } from './questLineContext';
+import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { filterLegacyPilotEventCharacterNames } from './legacyPilotScenes';
 import { resolveScenarioEventNarrative } from './eventNarrativeView';
 import { ensureWuyuanOpenWorldSlice } from './wuyuanOpenWorldSlice';
@@ -62,6 +66,8 @@ export interface LegacyPresentActor {
   gender?: string;
   pronoun?: string;
   称呼?: { 对主角: string; 主角对他: string };
+  /** 当前场景内对话人物的有界角色卡（立场/阶段门/底线/承重保护/近期记忆与事件），见 npcCardLayer。 */
+  card?: string[];
 }
 
 export interface LegacyLocalReceipt {
@@ -185,6 +191,15 @@ function readPresentNames(saveData: SaveData, eventId?: string): string[] {
   })].filter(name => name !== playerName && !dead.has(name)).sort();
 }
 
+/** 内容包按钮拍的 cast.present 写的是角色 id，作者步骤写的是人名；统一成画像里的人名，后面按名匹配才对得上。 */
+function castNames(runtime: RuntimeLike, refs: unknown): string[] {
+  const characters = Array.isArray(runtime.canon?.characters) ? runtime.canon.characters : [];
+  return (Array.isArray(refs) ? refs : []).map(ref => {
+    const text = readText(ref);
+    return readText(characters.find((item: any) => item?.id === text)?.name) || text;
+  }).filter(Boolean);
+}
+
 function isSafePersonalityTrait(trait: string): boolean {
   const text = readText(trait);
   if (!text) return false;
@@ -201,7 +216,7 @@ function readPresentActors(saveData: SaveData, presentNames: string[], eventId?:
   const byName = new Map<string, any>();
   for (const character of characters) {
     const name = readText(character?.name);
-    for (const alias of [name, ...namingAliases(character.id).filter(alias => alias !== '鬼王峒使者' || namingChapter(namingRuntime) >= 77)]) if (alias && allowed.has(alias) && !byName.has(alias)) byName.set(alias, character);
+    for (const alias of [name, ...namingAliases(character.id).filter(alias => alias !== '鬼王峒使者' || namingChapter(namingRuntime) >= ledgerChapterGates.geluoRenameFrom)]) if (alias && allowed.has(alias) && !byName.has(alias)) byName.set(alias, character);
   }
   const actors: LegacyPresentActor[] = [];
   for (const name of presentNames) {
@@ -217,8 +232,7 @@ function readPresentActors(saveData: SaveData, presentNames: string[], eventId?:
     const baseName = name.replace(/[（(].*$/, '');
     const bound = sceneBoundEntity(baseName, namingChapter(namingRuntime));
     const matched = rec || (bound && 'sceneBinding' in bound ? { id: bound.id, name: namingFor(bound.id, namingChapter(namingRuntime))?.text, role: bound.sceneBinding?.role } : undefined) || characters.find((c: any) => c.name === baseName);
-    const gender = matched?.gender || (new RegExp("^(?:"+"(?:"+entityNamePattern("character","liuchao.character.xie_yi")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.yun_cang_feng")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.qi_yuan")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.wu_er_lang")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.np004")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.yi_hu")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.np003")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.nanhuang_xiaowei")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.nanhuang_shigang")+")"+"|"+"(?:"+entityNamePattern("enemy","lcq.enemy.ge_luo")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.mi_gu")+")"+"|"+"(?:"+entityNamePattern("enemy","lcq.enemy.dagu")+")"+"|"+"(?:"+entityNamePattern("location","liuchao.location.gui_wang_dong")+")"+"使者)$","").test(baseName) ? '男' : new RegExp("^(?:"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.su_li")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.a_xi")+")"+"|阿葭|"+"(?:"+entityNamePattern("faction","liuchao.faction.hua_miao")+")"+"新娘|"+"(?:"+entityNamePattern("character","liuchao.character.le_mingzhu")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.15b71fd1c8")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+")$","").test(baseName) ? '女' : undefined);
-    const addresses: Record<string, string> = { 云苍峰: '程小哥', 祁远: '程头儿', 吴战威: '程头儿', 谢艺: '程兄', 武二郎: '你小子（自称二爷）', 朱八八: '小程子', 樨夫人: '公子' };
+    const gender = matched?.gender || (new RegExp("^(?:"+"(?:"+entityNamePattern("character","liuchao.character.xie_yi")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.yun_cang_feng")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.qi_yuan")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.wu_er_lang")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.np004")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.yi_hu")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.np003")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.nanhuang_xiaowei")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.nanhuang_shigang")+")"+"|"+"(?:"+entityNamePattern("enemy","lcq.enemy.ge_luo")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.mi_gu")+")"+"|"+"(?:"+entityNamePattern("enemy","lcq.enemy.dagu")+")"+"|"+"(?:"+entityNamePattern("location","liuchao.location.gui_wang_dong")+")"+"使者)$","").test(baseName) ? '男' : new RegExp("^(?:"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.su_li")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.a_xi")+")"+"|阿葭|"+"(?:"+entityNamePattern("faction","liuchao.faction.hua_miao")+")"+"新娘|"+"(?:"+entityNamePattern("character","liuchao.character.le_mingzhu")+")"+"|"+"(?:"+entityNamePattern("character","lcq.character.nanhuang_xi_furen")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+")$","").test(baseName) ? '女' : undefined);
     actors.push({
       characterId: matched?.id,
       ...(matched?.entityType ? { entityType: matched.entityType } : {}),
@@ -232,10 +246,20 @@ function readPresentActors(saveData: SaveData, presentNames: string[], eventId?:
       race: isNamedEntityLabel("character","liuchao.character.xiao_zi",baseName) ? readText(matched?.profile?.race) : readText(matched?.profile?.race).split(/[（(]/)[0].replace(/.*(?:之女|血统|身世).*/, '').slice(0, 40),
       appearance: readText(matched?.profile?.appearance).split(/[。！？]/)[0].replace(/(?:胸|乳|臀|私处|胯)[^，,；;]*/g, '').slice(0, 90),
       ...(gender ? { gender, pronoun: matched?.entityType === 'creature' ? '它' : /^(男|male)$/.test(gender) ? '他' : /^(女|female)$/.test(gender) ? '她' : '称姓名' } : {}),
-      称呼: { 对主角: namingFor(matched?.id, namingChapter(namingRuntime), 'npcAddress')?.text || addresses[baseName] || (Array.isArray(matched?.profile?.notes) ? matched.profile.notes.map((n: string) => n.match(/【称呼】(.+)/)?.[1]).filter(Boolean).join('；').slice(0, 70) : '') || '你', 主角对他: namingFor(matched?.id, namingChapter(namingRuntime), 'protagonistAddress')?.text || (isNamedEntityLabel("character","liuchao.character.su_li",baseName) ? '苏荔族长' : baseName) },
+      称呼: { 对主角: namingFor(matched?.id, namingChapter(namingRuntime), 'npcAddress', { flags: namingRuntime.flags })?.text || (Array.isArray(matched?.profile?.notes) ? matched.profile.notes.map((n: string) => n.match(/【称呼】(.+)/)?.[1]).filter(Boolean).join('；').slice(0, 70) : '') || '你', 主角对他: namingFor(matched?.id, namingChapter(namingRuntime), 'protagonistAddress')?.text || (isNamedEntityLabel("character","liuchao.character.su_li",baseName) ? '苏荔族长' : baseName) },
       ...(speechStyle ? { speechStyle } : {}),
     });
-    if (actors.length >= (/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime.modId || '')) ? 18 : 3)) break;
+    if (actors.length >= (/^lcq\.stage_0(?:3b|4|4b|5b)/.test(String(runtime.modId || '')) ? GAME_NUMBERS.npcCard.maxPresentActorsSouthern : GAME_NUMBERS.npcCard.maxPresentActorsDefault)) break;
+  }
+  // 本回合被自由行动作用的人排到前面，保证他们的角色卡（含新写的记忆）进得了 maxCards；目标不在名单里就不注入。
+  const focus = runtime.freeAction?.focus as { turn?: number; targetIds?: string[] } | undefined;
+  const focused = focus?.turn === getNarrativeTurn(saveData) ? new Set(focus?.targetIds || []) : new Set<string>();
+  const carded = [...actors.filter(actor => actor.characterId && focused.has(actor.characterId)), ...actors.filter(actor => !(actor.characterId && focused.has(actor.characterId)))];
+  for (const actor of carded.slice(0, GAME_NUMBERS.npcCard.maxCards)) {
+    const layer = actor.characterId ? readNpcCard(saveData, actor.characterId) : undefined;
+    if (!layer) continue;
+    if (layer.card.length) actor.card = layer.card;
+    if (!actor.speechStyle && isSafePersonalityTrait(layer.speechStyle || '')) actor.speechStyle = layer.speechStyle;
   }
   return actors;
 }
@@ -256,29 +280,40 @@ function uniqueFacts(values: Array<string | undefined>): string[] {
   return [...new Set(values.map(item => playerFacingFact(item)).filter(Boolean))];
 }
 
-export function readLocalMemoryCapsule(saveData: SaveData, selection: ScenarioEventActionSelection): LegacyMemoryCapsule {
+/**
+ * 自由输入（freeInputOffered 传入，即同时提供的其他候选）没有选中的作者步骤：selection 可缺省，
+ * 其他候选的演员表也算场景内人物；一个都没有时回落到代码声明的在场人物（questLineContext），
+ * 不让模型在一个人都没有的场景里即兴。
+ */
+export function readLocalMemoryCapsule(saveData: SaveData, selection?: ScenarioEventActionSelection, freeInputOffered?: ScenarioEventActionSelection[]): LegacyMemoryCapsule {
   const runtime = runtimeOf(saveData);
-  const selectedEvent = (runtime.events || []).find((item: any) => item?.id === selection.eventId);
+  const selectedEvent = (runtime.events || []).find((item: any) => item?.id === selection?.eventId);
   const focus = selectedEvent || getScenarioFocusEvent(runtime as never);
+  const eventId = selection?.eventId ?? focus?.id ?? '';
   const recent = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-1).join('\n');
-  const card = stepScene(runtime, selection.eventId, selection.actionId);
+  const card = selection ? stepScene(runtime, selection.eventId, selection.actionId) : undefined;
   const currentObjective = playerFacingFact(card ? card.sceneObjective || (card as any).label : focus?.objective);
   const view = focus ? resolveScenarioEventNarrative(focus, runtime.flags || {}, runtime.divergences, runtime) : null;
   const completed = runtime.completedEventIds?.includes(focus?.id) || runtime.eventActionStates?.[focus?.id]?.readyAtTurn !== undefined;
   const facts = uniqueFacts([
-    ...(card?.fixedFacts?.length ? [] : [playerFacingFact(selection.outcomeText)]),
+    ...(card?.fixedFacts?.length ? [] : [playerFacingFact(selection?.outcomeText)]),
     currentObjective,
     ...(card?.fixedFacts || []),
     ...(completed && !card?.fixedFacts?.length && /^lcq\.stage_0(?:3b|4|4b)/.test(String(runtime.modId || '')) ? [playerFacingFact(view?.description)] : []),
     ...(focus?.id === 'lcq.event.s04b_lingfei_baiyi_crisis_18' && xiaoziDisclosure(runtime).father ? ['【已知身世】小紫是岳帅的遗腹女。'] : []),
     readLocation(saveData),
   ]).filter(fact => isDisclosureFactAllowed(fact, runtime)).slice(0, 6);
-  const presentNames = card?.cast?.present ? [...card.cast.present] : readPresentNames(saveData, selection.eventId);
+  const ownNames = card?.cast?.present ? castNames(runtime, card.cast.present) : readPresentNames(saveData, eventId);
+  const offeredNames = (freeInputOffered || []).flatMap(offered => castNames(runtime, stepScene(runtime, offered.eventId, offered.actionId)?.cast?.present));
+  const declaredNames = [...new Set([...ownNames, ...offeredNames])];
+  const presentNames = freeInputOffered && !declaredNames.length && !card?.cast?.present
+    ? castNames(runtime, questLineContext(cloneDeep(saveData) as any, focus?.id).presentActorIds).slice(0, GAME_NUMBERS.npcCard.maxFallbackActors)
+    : declaredNames;
   return {
     location: card?.sceneLocation || readLocation(saveData),
     presentNames,
-    presentActors: readPresentActors(saveData, presentNames, selection.eventId),
-    eventId: selection.eventId,
+    presentActors: readPresentActors(saveData, presentNames, eventId),
+    eventId,
     facts,
     recentNarrative: readText(recent).slice(0, CAPSULE_CHAR_LIMIT),
     currentObjective,

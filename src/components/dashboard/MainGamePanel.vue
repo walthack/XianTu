@@ -366,8 +366,11 @@
 
           <div v-else-if="nanhuangDemoFinished" class="game-over-card">
             <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
-            <p class="game-over-hint">进度已保留，可返回入口选择下一期重新试玩。</p>
-            <button class="go-primary" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
+            <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，可直接继续到下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
+            <div class="game-over-acts">
+              <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinuePending || isAIProcessing" @click="continueToNextPhase">继续到下一期</button>
+              <button :class="nextPlaytestPhase ? 'go-ghost' : 'go-primary'" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
+            </div>
           </div>
           <div v-else-if="xingyuehuPlaytestFinished" class="game-over-card">
             <div class="game-over-head">
@@ -514,7 +517,7 @@ import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSc
 import { fixedEndingNarrative } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { resolveEndingImage } from '@/assets/endings';
-import { currentDiagnosticTurnId, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
+import { currentDiagnosticTurnId, noteTicketDiscard, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
 import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
@@ -565,6 +568,8 @@ import {
 } from '@/utils/judgementEngine';
 import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
+import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
+import type { FreeActionTicket } from '@/modules/scenarioMods/freeAction/ticket';
 import {
   advanceScenarioRuntime,
   getCurrentStoryEventActions,
@@ -594,7 +599,7 @@ import {
   settleWorldSimulationJudgement,
 } from '@/modules/scenarioMods/worldSimulation';
 import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
-import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
+import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 import {
   abortInFlightNaturalIntent,
   intentSaveFingerprint,
@@ -985,6 +990,21 @@ const stageDepartureOffer = computed(() => {
   return save && !scenarioGameOver.value && !isNanhuangDemoFinished(save) ? getStageDepartureOffer(save) : null;
 });
 const stageDeparturePending = ref(false);
+const nextPlaytestPhase = computed(() => nanhuangDemoFinished.value ? nextNanhuangPhase(gameStateStore.toSaveData()) : undefined);
+const phaseContinuePending = ref(false);
+const continueToNextPhase = async () => {
+  if (phaseContinuePending.value || isAIProcessing.value) return;
+  phaseContinuePending.value = true;
+  try {
+    const result = await gameStateStore.continueToNextPlaytestPhase();
+    if (!result.ok) toast.warning(result.reason || '此刻还不能继续到下一期');
+    else toast.success('已继续到下一期');
+  } catch (error) {
+    toast.error(String((error as Error)?.message || error));
+  } finally {
+    phaseContinuePending.value = false;
+  }
+};
 
 const openEventsPanel = () => {
   router.push('/game/events');
@@ -1952,10 +1972,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     ),
   );
   let routedIntentAction: ScenarioEngineActionSelection | undefined;
+  let routedFreeActionTickets: FreeActionTicket[] = [];
+  // 判定确认后的二次执行：票取自判定回执，不再重跑 intent。
+  const followUpFreeAction = execution?.resolution?.authorityReceipt?.kind === 'free_action_judgement';
   let freeTextStatusResolution: FreeTextStatusResolution | undefined;
   let skipKeywordPreflightFromIntent = buttonSelected;
   let intentHeldProcessing = false;
-  if (saveData && !buttonSelected) {
+  if (saveData && !buttonSelected && !followUpFreeAction) {
     const intentReset = aiResetToken;
     const inputSnapshot = inputText.value.trim();
     const activeSnapshot = characterStore.rootState.当前激活存档
@@ -1984,6 +2007,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       });
       if (!uiStore.isAIProcessing || aiResetToken !== intentReset) return;
       if (inputText.value.trim() !== inputSnapshot) {
+        noteTicketDiscard('intent', 'input_changed', intent.selection?.actionId);
         toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
         return;
       }
@@ -1991,16 +2015,19 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (!activeSnapshot || !activeNow
         || activeNow.角色ID !== activeSnapshot.角色ID
         || activeNow.存档槽位 !== activeSnapshot.存档槽位) {
+        noteTicketDiscard('intent', 'slot_changed', intent.selection?.actionId);
         toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
         return;
       }
       const latestSave = gameStateStore.toSaveData();
       if (!latestSave || intentSaveFingerprint(latestSave) !== saveFingerprint) {
+        noteTicketDiscard('intent', 'save_changed', intent.selection?.actionId);
         toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
         return;
       }
       skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
       freeTextStatusResolution = intent.freeTextStatusResolution;
+      if (intent.kind === 'free') routedFreeActionTickets = intent.freeActionTickets ?? [];
       if (freeTextStatusResolution?.state === 'clarify') {
         intentHoldMessage.value = freeTextStatusResolution.reason || NATURAL_INTENT_CLARIFY_DEFAULT;
         toast.info(intentHoldMessage.value);
@@ -2024,6 +2051,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           })
           : intent.selection;
         if (intent.kind === 'matched' && !fresh) {
+          noteTicketDiscard('intent', 'fresh_selection_failed', intent.selection.actionId);
           toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
           return;
         }
@@ -2064,6 +2092,19 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     ? selectedScenarioEngineAction.value
     : undefined;
   let contractedJudgementResolution = execution?.resolution;
+  // 自由行动票：判定类先签发待确认判定（至多一张），闸门不过的“未发生”事实留到拼消息时发给叙事。
+  let freeActionRefusalBlock = '';
+  if (saveData && routedFreeActionTickets.length) {
+    const issue = issueFreeActionJudgement(saveData, routedFreeActionTickets);
+    if (issue.issued) {
+      await persistJudgementSave(saveData);
+      uiStore.setAIProcessing(false);
+      persistAIProcessingState();
+      toast.info('此行动存在风险，请先确认判定');
+      return;
+    }
+    freeActionRefusalBlock = issue.refusalBlock;
+  }
   if (saveData && selectedEventJudgementAction && !contractedJudgementResolution) {
     const prepared = prepareEventActionJudgement(
       saveData,
@@ -2108,6 +2149,15 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       // 备份失败不阻止发送消息
     }
   }
+
+	  // 自由行动结算放在“上次对话”备份之后：回滚到上次对话时，这次的好感/记忆/物品一并回滚。
+	  let freeActionBlock = freeActionRefusalBlock;
+	  const freeActionSave = routedFreeActionTickets.length || followUpFreeAction ? gameStateStore.toSaveData() : null;
+	  if (freeActionSave) {
+	    const settlement = settleFreeActionTurn(freeActionSave, routedFreeActionTickets, execution?.resolution);
+	    if (settlement.changed) await persistJudgementSave(freeActionSave);
+	    freeActionBlock += settlement.block;
+	  }
 
 	  const userMessage = inputText.value.trim();
 	  console.log('[前端] 用户输入 inputText.value:', inputText.value);
@@ -2194,6 +2244,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     const effectSummary = result.appliedEffects.map(describeJudgementEffect).join('；') || '无';
     finalUserMessage += `\n【本地判定已结算】判定ID=${result.id}；类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}；已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
   }
+  if (freeActionBlock) finalUserMessage += freeActionBlock;
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 
   // 清空动作队列（动作已经添加到消息中）

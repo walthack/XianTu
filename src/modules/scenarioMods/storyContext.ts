@@ -452,7 +452,8 @@ function formatCharacterRelationship(
 // 2026-08-14 迁到 40 ——「把你算进自己的盘子里」才透底线。
 const BOTTOMLINE_REVEAL_FAVOR = AFFINITY_THRESHOLDS.bottomLineReveal;
 const ALLY_RELATION = /同伴|伙伴|队友|道侣|伴侣|挚友|知己|情人|爱慕|恋|妾|后宫|侍妾|奴|婢|主仆|仆|结义|亲密|归顺|臣服|忠/;
-function shouldRevealBottomLine(fav: number, label: string): boolean {
+export const BOTTOMLINE_HIDDEN_NOTE = '【底线】（尚未与其深交，未摸透此人底线/原则；按其性格与当前立场行事即可，勿臆断其道德红线）';
+export function shouldRevealBottomLine(fav: number, label: string): boolean {
   return fav >= BOTTOMLINE_REVEAL_FAVOR || ALLY_RELATION.test(label || '');
 }
 
@@ -512,15 +513,27 @@ const CHARACTER_SECRET_KNOWLEDGE_BOUNDARIES: Readonly<Record<string, string>> = 
   阮香凝: '“凝玉姬”、黑魔海玉姬/高层、潜伏暗桩等均属黑魔海内部机密。除黑魔海内部知情者、程宗扬以及当前存档/近期正文已明确获知者外，所有其他人物（吕雉、霍子孟仅为例）都不得先知式识别、说出内部称号或拿秘密真身作为既知前提审问；可以依据亲眼所见的施术、伤势、言行矛盾等可见异常保持怀疑并盘问来历。若此前已明确向某人公开，该人物后续应延续知情，未在场或未被告知者不得自动继承。阮香凝本人主动公开由她承担选择与反应；程宗扬向外披露则属于玩家泄密决策，必须有玩家明确授权并呈现可信的政治风险或关系后果，不得替玩家把机密当普通履历介绍。',
 };
 
-function formatFocusedCharacter(
+/** 承重角色：尚未完成的关键剧情事件所系人物 id（不含主角排除，由调用方处理）。 */
+export function loadBearingCharacterIds(runtime: StoryRuntime): Set<string> {
+  const completed = new Set(runtime.completedEventIds || []);
+  return new Set<string>(
+    runtime.events
+      .filter(event => isCriticalStoryEvent(event) && !completed.has(event.id))
+      .flatMap(event => event.relatedCharacterIds || []),
+  );
+}
+
+export function formatLoadBearingProtection(names: string[]): string {
+  return `【承重角色保护】以下人物承担本关尚未完成的关键剧情：${names.join('、')}。他们不得死亡、永久残疾、被永久囚禁或从此无法寻见；可以受挫、遇险、暂时离场，但必须保留后续登场能力。`;
+}
+
+/** 身份未揭示/昏迷等「封口」人物：只给当下可见的一行，不查全书语音卡、别名和密档。聚焦人物与模块 NPC 卡共用。 */
+export function formatSealedCharacter(
   character: ScenarioModCharacter,
   runtime: StoryRuntime,
-  favByName?: Map<string, { fav: number; label: string }>,
-  intimacyGate?: { sceneText: string },
-  playerName?: string,
+  isProtagonist: boolean,
   presentNames?: Set<string>,
-): string {
-  const isProtagonist = Boolean(playerName) && character.name === playerName;
+): string | undefined {
   if (character.id === 'liuchao.character.xie_yi'
     && (runtime.flags?.['event.s06_03.void'] === true || readPath(runtime.flags, ['event', 's06_03', 'void']) === true)
     && (runtime.flags?.['branch.lcq.if_xieyi_longrest.active'] === true || readPath(runtime.flags, ['branch', 'lcq', 'if_xieyi_longrest', 'active']) === true)) {
@@ -534,6 +547,20 @@ function formatFocusedCharacter(
   if (character.id === 'liuchao.character.xie_yi' && isXieyiSkillHidden(runtime)) {
     return `- 谢艺：随云氏商队同行的男子，自称出身临安、学刀防身。${character.profile?.appearance || '衣着行李普通，鞍侧挂一柄寻常钢刀。'}温和斯文，称程宗扬「程兄」。真实身手尚未揭露，不能写出境界或星月湖身份。`;
   }
+  return undefined;
+}
+
+function formatFocusedCharacter(
+  character: ScenarioModCharacter,
+  runtime: StoryRuntime,
+  favByName?: Map<string, { fav: number; label: string }>,
+  intimacyGate?: { sceneText: string },
+  playerName?: string,
+  presentNames?: Set<string>,
+): string {
+  const isProtagonist = Boolean(playerName) && character.name === playerName;
+  const sealed = formatSealedCharacter(character, runtime, isProtagonist, presentNames);
+  if (sealed !== undefined) return sealed;
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
   const base = compactText(character.description || profile.origin || '');
@@ -590,7 +617,7 @@ function formatFocusedCharacter(
     ? rawNotes
     : [
         ...rawNotes.filter(note => !note.startsWith('【底线】')),
-        ...(hasBottom ? ['【底线】（尚未与其深交，未摸透此人底线/原则；按其性格与当前立场行事即可，勿臆断其道德红线）'] : []),
+        ...(hasBottom ? [BOTTOMLINE_HIDDEN_NOTE] : []),
       ];
   const notes = formatList(gatedNotes, 8, 220);
   if (notes) lines.push(`  正典备注：${notes}`);
@@ -1129,11 +1156,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : `【个人目标槽】当玩家明确形成需跨轮追踪的临时打算（如"取回某物""赴某约"），可用 set 写入 系统.扩展.任务追踪.即兴目标（数组，元素 {"标题":"..."}，上限 3 条）；达成/失效必须清除。它只是个人备忘，不是动态委托，不产生奖励、期限或任务落账，**不得盖过主线**。`;
 
   // 承重角色保护：尚未完成的关键剧情事件所系人物，不得被即兴写死/永久失能（只报名字，不泄事件细节）
-  const loadBearingIds = new Set<string>(
-    runtime.events
-      .filter(event => isCriticalStoryEvent(event) && !completedIds.has(event.id))
-      .flatMap(event => event.relatedCharacterIds || []),
-  );
+  const loadBearingIds = loadBearingCharacterIds(runtime);
   // 同上：opening.playerCharacterId 恒空，主角一直留在承重保护名单里白占 20 人上限的名额。
   for (const id of [...loadBearingIds]) {
     if (characters.find(character => character.id === id)?.name === playerName) loadBearingIds.delete(id);
@@ -1143,7 +1166,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     .filter((name): name is string => !!name)
     .slice(0, 20);
   const loadBearingLine = !worldMode && loadBearingNames.length
-    ? `【承重角色保护】以下人物承担本关尚未完成的关键剧情：${loadBearingNames.join('、')}。他们不得死亡、永久残疾、被永久囚禁或从此无法寻见；可以受挫、遇险、暂时离场，但必须保留后续登场能力。`
+    ? formatLoadBearingProtection(loadBearingNames)
     : '';
 
   // 偏离收束：剧情停滞分档提示（≤3 轮自由发挥；4-6 软引子；≥7 强路标）

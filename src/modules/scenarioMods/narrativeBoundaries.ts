@@ -1,6 +1,6 @@
 import {entityName} from './namedEntities';
 import {entityNamePattern} from './namedEntities';
-import { xiaoziDisclosure, isDisclosureFactAllowed } from './characterResolver';
+import { xiaoziDisclosure, isDisclosureFactAllowed, approvedChapterGates } from './characterResolver';
 /**
  * 事件级叙事边界（数据表）。
  *
@@ -88,7 +88,7 @@ export function validateNanhuangCanonNarrative(text: string, stageId: string, lo
   }
   const xiaozi = xiaoziDisclosure({ ...disclosureContext, modId: stageId, completedEventIds: completed });
   for (const sentence of sentences) {
-    if (!isDisclosureFactAllowed(sentence, { ...disclosureContext, modId: stageId, completedEventIds: completed })) throw new Error('父系身世秘密尚未揭露：一般旧事须到72章，具体父系须经105章确证');
+    if (!isDisclosureFactAllowed(sentence, { ...disclosureContext, modId: stageId, completedEventIds: completed })) throw new Error(`父系身世秘密尚未揭露：一般旧事须到${approvedChapterGates.generalPosthumousDaughter}章，具体父系须经${approvedChapterGates.xiaoziFather}章确证`);
     if (new RegExp("(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")","").test(sentence) && new RegExp("毒宗|"+"(?:"+entityNamePattern("character","liuchao.character.shang_zhen_yu")+")"+"[^，。]{0,10}(?:弟子|传人)|唯一[^，。]{0,10}(?:嫡传|传人)","").test(sentence)) throw new Error('小紫师承在南荒尚未公开，清羽范围不开放唯一传人');
     if (!new RegExp("(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")","").test(sentence) || !/神似|肖似|相似|女儿|父亲|母亲|亲生|血缘/.test(sentence)) continue;
     const fatherConflict = !xiaozi.father && new RegExp("(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"|"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")","").test(sentence)

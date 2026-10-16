@@ -149,7 +149,7 @@ type QuestCompassRuntime = {
 /** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
   if (modId === 'lcq.stage_04' && eventId) return ({
-    'lcq.event.s04_02': '第46章·袭击', 'lcq.event.s04_03': '第48章·新娘身份',
+    'lcq.event.s04_02': '第46章·袭击', 'lcq.event.s04_03': '第47章·新娘身份',
     'lcq.event.s04_01': '第49章·刺王密谋', 'lcq.event.s04_04': '第51章·发蛊',
     'lcq.event.s04_05': '第52章·旱洪', 'lcq.event.s04_06': '第54章·穿山',
     'lcq.event.s04_07': '第55章·白夷迎客',
@@ -170,6 +170,8 @@ export function storyChapterTitle(modId: string | undefined, eventId: string | u
 }
 
 export function storyRouteLocation(eventId: string): string | undefined {
+  // 可选姿态拍（`<主线事件>_ins_<线>`）演在主线事件所在的路上，不另起地点。
+  eventId = eventId.split('_ins_')[0];
   return ({
     'lcq.event.iron_bridge_ambush': '南荒途中·铁索桥',
     'lcq.event.ningyu_regicide_offer': '南荒途中·商队宿处',

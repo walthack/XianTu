@@ -1,4 +1,4 @@
-import { inheritDiagnosticCancellation, noteDiagnosticCancellation } from '@/services/requestLifecycleDiagnostics';
+import { inheritDiagnosticCancellation, noteDiagnosticCancellation, noteTicketDiscard } from '@/services/requestLifecycleDiagnostics';
 
 import {entityNamePattern} from './namedEntities';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
@@ -22,6 +22,8 @@ import {
   type WuyuanOpenWorldSelection,
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
+import { freeActionConfig } from './freeAction/config';
+import { ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
 
 export const NATURAL_INTENT_MAX_TOKENS = GAME_MODEL_MODULES.find(m=>m.id==='intent')!.policy.maxTokens;
 export const NATURAL_INTENT_TIMEOUT_MS = 10000;
@@ -57,6 +59,8 @@ export type NaturalIntentSelection =
 export interface NaturalIntentResult {
   /** Same request/snapshot validated catalog proposal; absent on legacy/fast paths. */
   freeTextStatusResolution?: FreeTextStatusResolution;
+  /** 自由行动票：仅 kind==='free' 且校验通过的票；命中作者动作时不收（避免同拍双结算）。 */
+  freeActionTickets?: FreeActionTicket[];
   kind: NaturalIntentKind;
   selection?: NaturalIntentSelection;
   reason?: string;
@@ -81,6 +85,7 @@ export interface NaturalIntentResult {
 export const NATURAL_INTENT_DEGRADED_NOTICE = '行动识别没有及时完成，本回合按自由行动处理，不结算剧情动作。';
 export const NATURAL_INTENT_CONTRACT_HOLD = '这一步关系到当前剧情进度，行动没能识别，本回合没有推进。输入已保留，请点选上方选项，或换个说法再发送。';
 export function onClassifierFailure(reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult {
+  noteTicketDiscard('intent', reason);
   if (candidates.some(candidate => candidate.source !== 'open_world_engine')) {
     return { kind: 'failed', reason, clarification: NATURAL_INTENT_CONTRACT_HOLD, hold: true, skipKeywordPreflight: true, usedModel: true };
   }
@@ -111,7 +116,8 @@ export function hasUnclearIntentFrame(text: string): boolean {
   if (/(吗|呢)\s*[。.!！]*\s*$/.test(raw)) return true;
   if (/(如果|要是|假如|倘若|若是|怎样|会怎样)/.test(raw)) return true;
   if (/(还没决定|要不要|是不是|有没有|没有说|并不是|并没有|不是要|才怪|才不是|并非|并未)/.test(raw)) return true;
-  if (new RegExp("(她说|他说|"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"说|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"说|别人说|有人说|他们说|他问|她问)","").test(raw)) return true;
+  // 转述标记前面紧跟“对/跟/向…”是玩家自己在说话（我对她说…），“她说完/他说话”也不是转述；与 inputPolicy.stripReportedSpeech 同口径。
+  if (new RegExp("(?<![对跟向朝和同给替诉])(?:她说|他说|"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"说|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"说|别人说|有人说|他们说|他问|她问)(?![完话])","").test(raw)) return true;
   if (new RegExp("(我说.{0,12}(?:她|他|"+"(?:"+entityNamePattern("character","liuchao.character.ning_yu")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.su_daji")+")"+"|别人|他们).{0,12}(?:不赌|拒绝赌))","").test(raw)) return true;
   if (/(不是不|并不是要|并没有|并非|并未|才怪|才不是)/.test(raw)) return true;
   return false;
@@ -226,6 +232,7 @@ export function parseIntentJson(raw: string): {
   certainty?: string;
   affinityDelta?: number;
   statusProposals?: unknown;
+  tickets?: unknown;
 } | null {
   const text = String(raw || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
   if (!text) return null;
@@ -242,6 +249,7 @@ export function parseIntentJson(raw: string): {
       evidence: typeof parsed.evidence === 'string' ? parsed.evidence : undefined,
       certainty: typeof parsed.certainty === 'string' ? parsed.certainty : undefined,
       statusProposals: parsed.statusProposals,
+      tickets: parsed.tickets,
       affinityDelta: typeof parsed.affinityDelta === 'number' && Number.isFinite(parsed.affinityDelta) ? parsed.affinityDelta : undefined,
     };
   } catch {
@@ -322,10 +330,12 @@ export function resolveNaturalIntentFastPath(
   return undefined;
 }
 
-function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidate[]): {
+function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidate[], saveData?: SaveData): {
   systemPrompt: string;
   userPrompt: string;
 } {
+  // 自由行动票：freeAction 关闭时提示词与今天逐字一致。
+  const tickets = saveData && freeActionConfig().enabled ? ticketPromptSection(saveData) : undefined;
   const statusRequest = freeTextStatusSemanticRequest(playerText, '');
   const statusCatalog = JSON.parse(statusRequest.input).catalog.filter((d: { evidenceFrom: string }) => d.evidenceFrom === 'input');
   const systemPrompt = [
@@ -336,11 +346,13 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
     '候选带affinityAssessment时，由你作为主持评估这次相关回应的affinityDelta数值，普通和承重都为-15..+15；代码会钳制，绝对值达到10的回应会记为大事。只给这次回应的好感，不改世界事实，记忆只影响语气。缺评估或无关则不结算。',
     statusRequest.system.replace(/返回纯JSON.*?。没有状态/, 'statusProposals条目字段为statusId、actor(player/other/unknown)、assertion(current/denied/hypothetical/uncertain)、source(input)、evidence(逐字证据)、confidence(0到1)。没有状态'),
     '本次只有玩家输入，状态仅从statusCatalog的input条目提案，source必须input。statusProposals必须为数组，没有状态用空数组；动作none不等于没有状态。',
-    '只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]}',
+    ...(tickets ? [tickets.system] : []),
+    `只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]${tickets ? ',"tickets":[]' : ''}}`,
   ].join('');
   const userPrompt = JSON.stringify({
     playerText,
     statusCatalog,
+    ...(tickets ? { freeAction: tickets.payload } : {}),
     candidates: candidates.map(item => ({
       source: item.source,
       actionId: item.actionId,
@@ -352,6 +364,29 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
     })),
   });
   return { systemPrompt, userPrompt };
+}
+
+/**
+ * 非人物线（白湖商馆等）当前开放的可选停靠点：按内容包 intentMatch 的明文短语确定性匹配，不等模型。
+ * 人物线要主持评估好感，仍交给模型；问句、假设、转述、否定框，以及一句话命中多个选项，一律不在这里结算。
+ */
+export function resolveOptionalLineAlias(saveData: SaveData, playerText: string): ScenarioEventActionSelection | undefined {
+  const raw = compact(String(playerText || ''));
+  if (!raw || hasUnclearIntentFrame(String(playerText))) return undefined;
+  const events = (saveData as any).世界?.状态?.剧本模组?.events as Array<{ id: string; playerCompletionContract?: { actions?: Array<{ id: string; intentMatch?: { matchAny?: string[]; matchAll?: string[]; rejectIf?: string[] } }> } }> | undefined;
+  const hits = getCurrentStoryExplorationActions(saveData).filter(item => {
+    const line = QUEST_LINES.find(l => l.beats.some(b => b.eventId === item.eventId));
+    if (!line || line.kind === 'character') return false;
+    const match = events?.find(e => e.id === item.eventId)?.playerCompletionContract?.actions?.find(a => a.id === item.actionId)?.intentMatch;
+    if (!match) return false;
+    const phrases = (list?: string[]) => (list || []).map(compact).filter(Boolean);
+    const any = phrases(match.matchAny), all = phrases(match.matchAll);
+    if (phrases(match.rejectIf).some(word => raw.includes(word))) return false;
+    if (any.length > 0 && !any.some(word => raw.includes(word))) return false;
+    if (all.length > 0 && !all.every(word => raw.includes(word))) return false;
+    return any.length > 0 || all.length > 0;
+  });
+  return hits.length === 1 ? hits[0] : undefined;
 }
 
 /** 拿不准：照常让 NPC 回应，但不结算任何候选，也不回落关键词判定。 */
@@ -382,6 +417,8 @@ export async function resolveNaturalIntent(input: {
   if (!isScopedNaturalIntentSave(input.saveData)) {
     return { kind: 'free', skipKeywordPreflight: false, usedModel: false };
   }
+  const optional = resolveOptionalLineAlias(input.saveData, input.playerText);
+  if (optional) return { kind: 'alias', selection: optional, skipKeywordPreflight: true, usedModel: false };
 
   if (!input.generate) {
     return narrateWithoutSettlement('no_classifier', false);
@@ -405,7 +442,7 @@ export async function resolveNaturalIntent(input: {
   input.signal?.addEventListener('abort', onAbort, { once: true });
 
   try {
-    const { systemPrompt, userPrompt } = buildIntentPrompt(String(input.playerText || '').trim(), candidates);
+    const { systemPrompt, userPrompt } = buildIntentPrompt(String(input.playerText || '').trim(), candidates, input.saveData);
     const output = await input.generate({
       systemPrompt,
       userPrompt,
@@ -414,9 +451,11 @@ export async function resolveNaturalIntent(input: {
       requestId,
     });
     if (controller.signal.aborted || latestRequestId !== requestId) {
+      noteTicketDiscard('intent', 'stale');
       return { kind: 'failed', reason: 'stale', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };
     }
     if (intentSaveFingerprint(input.saveData) !== fingerprint) {
+      noteTicketDiscard('intent', 'state_changed');
       return { kind: 'failed', reason: 'state_changed', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };
     }
     const parsed = parseIntentJson(output);
@@ -428,11 +467,21 @@ export async function resolveNaturalIntent(input: {
       kind: 'unclear', reason: 'uncertain_status_proposal', clarification: freeTextStatusResolution.reason,
       hold: true, skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution,
     };
-    const free = (reason: string): NaturalIntentResult => ({ ...narrateWithoutSettlement(reason, true), freeTextStatusResolution });
-    if (parsed.certainty !== 'high') return free('low_certainty');
-    if (!parsed.actionId) return free('missing_action');
+    // 票只在“没有命中任何作者动作”的自由回合收：模型说 none / 缺动作 / 不确定。其余 free 原因（候选被否决）不收。
+    const withTickets = (): Pick<NaturalIntentResult, 'freeActionTickets'> => {
+      if (!freeActionConfig().enabled || parsed.tickets === undefined) return {};
+      const checked = validateFreeActionTickets(parsed.tickets, String(input.playerText || ''), input.saveData);
+      for (const drop of checked.discards) noteTicketDiscard('free_action', drop.reason, drop.key);
+      return checked.tickets.length ? { freeActionTickets: checked.tickets } : {};
+    };
+    const free = (reason: string, tickets = false): NaturalIntentResult => {
+      noteTicketDiscard('intent', reason, parsed.actionId);
+      return { ...narrateWithoutSettlement(reason, true), freeTextStatusResolution, ...(tickets ? withTickets() : {}) };
+    };
+    if (parsed.certainty !== 'high') return free('low_certainty', true);
+    if (!parsed.actionId) return free('missing_action', true);
     if (parsed.actionId === 'none') {
-      return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution };
+      return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution, ...withTickets() };
     }
     if (!parsed.evidence || !evidenceBelongsToPlayer(String(input.playerText || ''), parsed.evidence)) {
       return free('bad_evidence');

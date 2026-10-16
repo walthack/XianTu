@@ -1,4 +1,5 @@
 import type { CharacterProfile, LocalStorageRoot, SaveData, SaveSlot } from '@/types/game';
+import { CONTENT_PACKS } from '@/modules/contentPacks';
 import {
   XINGYUEHU_LANDING_PLAYTEST_KIND,
   XINGYUEHU_LANDING_PLAYTEST_SLOT,
@@ -25,6 +26,20 @@ export function shouldReattachLandingPlaytestWorkingCopy(
   return isLandingPlaytestIsolatedProfile(profile)
     && Boolean(slotKey)
     && slotKey !== XINGYUEHU_LANDING_PLAYTEST_SLOT;
+}
+
+/**
+ * 内容包试玩（清羽等）：自动存档只写固定的试玩槽。读的若是别的存档位（手动存档），工作副本接回这个槽，
+ * 手动存档位本身只由手动存档 / 覆盖改写，不会被之后的自动存档盖掉。战斗检查点另有自己的保护，不在此列。
+ */
+export function packPlaytestWorkingSlot(
+  profile: CharacterProfile | null | undefined,
+  slotKey: string,
+  saveData?: SaveData | null,
+): string | null {
+  if (!isIsolatedLocalOnlyProfile(profile) || !slotKey || (saveData as { 系统?: { 扩展?: Record<string, unknown> } } | null | undefined)?.系统?.扩展?.战斗检查点来源) return null;
+  const working = CONTENT_PACKS.playtests.find(p => p.kind === profile?.隔离试玩信息?.kind)?.slot;
+  return working && working !== slotKey ? working : null;
 }
 
 export function stampSlotSaveTimes(slot: SaveSlot, now: string): SaveSlot {

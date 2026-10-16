@@ -63,37 +63,13 @@ export function fixedEndingNarrative(ending: { endingId: string; sourceEventId: 
 
 /** 关键动作已由引擎预结算；不让写手追加条件、选择或道具。 */
 export function fixedBeatNarrative(eventId: string | undefined, actionId: string | undefined): string | undefined {
-  return ({
-    'lcq.event.s04_06::advance_declared_objective': '凝羽被麻古毒瘾折磨得难以安坐。她强撑着不肯出声，额上却沁出了冷汗。你向乐明珠求助，请她替凝羽解毒。乐明珠点头应下，取出针具，小心察看凝羽的状况；她对这种毒瘾还缺乏经验，你留在一旁照应。',
-    'lcq.event.s04_05::respond_to_flash_flood': '山洪骤然涌下。易虎先把易彪送到安全处，随即转身救起那名年轻军士，将他也推离洪流。你看清了这先后两次救援，救起两人的都是易虎。',
-    'lcq.event.s03b_yinzhu_xiongerpu::burn_yinzhu_victim': '祁远认出阴蛛，说它吸血、怕火，还可能产卵，必须烧尸。花苗人用蕉叶包住阿葭的遗体，阿夕抱着她痛哭，苏荔双眉紧锁。你认定是鬼王峒豢养的阴蛛。武二郎从林中回来，拎着被他拧断腿的阴蛛；腿上还有你留下的刀痕。他听清原委，把阴蛛踢给苏荔。你随众人在营地焚化阿葭的遗体。',
-    'lcq.event.s03b_yinzhu_xiongerpu::pick_zhu88_as_guide': '你在熊耳铺找向导。秦桧与吴三桂分别上前，你没有选他们，而是请自称朱八八的老向导带路。送亲队的新娘仍戴着面纱，鬼王峒使者已先走；你与商队收拾行装，同送亲队继续前行。',
-    'lcq.event.s02_02::witness_wang_zhe_nine_suns': '你抬头望向战场上空。王哲脱去甲胄，天青道袍在风中展开，他的身形离开地面，升上高空。金冠爆散，声音从天上传来，九阳随真言依次点亮，光芒逐渐汇成日轮。你眼前再也不是帐中的师帅，而是悬在战场上方、以自身撑起最后一击的人。日轮的光芒照在你脸上，你仰头看着他，四周的喊声被天上传来的真言压了下去。',
-    'lcq.event.charge_sudaji_fee::name_sixty_zhu_before_help': '你没有立刻动手，先向苏妲己开出六十金铢工价。苏妲己就在面前，器物也还留在原处；你把价钱说清，等她当面答复。她看着你，尚未作答，你也没有抢先动手。',
-    'lcq.event.charge_sudaji_fee::lock_fee_then_remove_device': '苏妲己当面应下六十金铢的报酬，将钱交到你手里。你收下报酬，才按说定的办法帮她取出那件新奇器物。苏妲己亲自接下器物，你收回手，这件事至此办完。',
-    'lcq.event.baihu_shangguan_escape::walk_out_wuyuan_shangguan': '你走过白湖商馆的大门，来到五原城里的街上。囚室和内院已经在身后；下一步去向仍由你决定。',
-    'lcq.event.wuerlang_joins::confirm_wuerlang_no_prior_promise': '眼前这名汉子是武二郎。你向他问清先前的条件：他当时只求解开镣铐，并未答应随队南行。同行的事还要另谈。',
-    'lcq.event.wuerlang_joins::secure_wuerlang_southbound': '你同武二郎把报酬和南行的事谈清。武二郎当面答应加入南荒队伍，这一句话终于不再含糊。他留在队伍里，你也有了一个明确答应同行的人。',
-    'lcq.event.sudaji_south_pact::offer_nylon_clue_for_term': '你向苏妲己提出，用霓龙丝的产地线索换取三个月行动期限。苏妲己听过条件，等你当面订约。',
-    'lcq.event.sudaji_south_pact::seal_three_month_south_pact': '你当面与苏妲己订下南荒之约：三个月内前往南荒采集霓龙丝，逾期受炮烙。这份约定成为你南下的由头。',
-    'lcq.event.free_ajiman::take_ajiman_bond_in_hand': '你用五十金铢从祁老四手里买下阿姬曼，接过她的身契。阿姬曼就在眼前；契纸仍拿在你手中，你尚未决定如何处置。',
-    'lcq.event.free_ajiman::tear_bond_and_face_blockade': '你在阿姬曼面前展开身契，把它撕成两半。纸张裂开的声音落下，你将她的自由还给她。阿姬曼盯着你手里的两半契纸，神色却没有软下来。她生气地别开脸，没有道谢，也没有立刻相信这场赎身会改变她的处境。你们随后遇上商馆侍卫封住出城岔路，只得改道避开搜查。',
-    'lcq.event.free_ajiman::pocket_ajiman_bond': '你把阿姬曼的身契收进怀里，决定出城后再说。阿姬曼看着你，没有答应跟你离开。',
-    'lcq.event.shanghou_revealed::follow_yeao_to_shanghou': '你随叶媪进堂。主人打开裹着鲨皮的红木箱，里面的物件上有黄底黑边的三角和红色拐弯箭头。他说，先前一百六十七人触碰它后化为火球，埋骨路边；他要你也伸手一试。你尚未碰它。',
-    'lcq.event.s05b_shanghou_reads_letter::hand_blank_letter_to_shanghou': '你喝下殇侯用一斤三两精盐兑成的盐水，玄冰掌随即落下。你吐出裹着蛊虫的冰块，冰蛊终于被解除。喘息稍定，你把黑鸦使者的白纸信交给殇侯，等他辨认。',
-    'lcq.event.shanghou_revealed::confirm_zhu_is_shanghou': '主人终于现出熟悉的面孔。你认出他就是一路同行的朱老头，也当面听清了殇侯与天命之人的说法。',
-    'lcq.event.shanghou_revealed::refuse_shanghou_relic_test': '你把手缩了回来：这是高压危险的警示标记，你不碰。堂中主人的目光沉了下来。',
-    'lcq.event.ningyu_enters_gamble::answer_ningyu_on_debut': '你当面回应凝羽，接下苏妲己提出的赌局。凝羽奉命上场，赌局就此开始。',
-  } as Record<string, string>)[`${eventId}::${actionId}`];
+  return CONTENT_PACKS.texts[`fixed.beat.${eventId}.${actionId}`];
 }
 
 /** 结局承接只保留1–2个完整句；长句/格式异常直接舍弃，固定结局始终可发布。 */
 export function endingBridge(raw: string, endingId?: string): string {
-  if (endingId === 'lcq.ending.death.ghost_king_skull') return '你听见自己说「好」。武士的铁斧柄随即敲在你膝弯上。';
-  if (endingId === 'lcq.ending.death.dragon_well') return '你抓起乐明珠的手，转身往洞窟深处的裂缝跑去。';
-  if (endingId === 'lcq.ending.fail.dragon_essence') return '你双手握紧匕首，再一次朝龙颅的裂缝压了下去。';
-  if (endingId === 'lcq.ending.death.shanghou_relic') return '你伸出手，指尖朝那块黄底黑边的三角落了下去。';
-  if (endingId === 'lcq.ending.death.wangzhe_blast') return '你仍留在战场上，天光刺得你难以睁眼。';
+  const fixedBridge = endingId ? ENDING_TEXTS[`ending.bridge.${endingId}`] : undefined;
+  if (fixedBridge) return fixedBridge;
   try {
     let text = visibleModuleText(raw).replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
     if (text.startsWith('{')) text = String(JSON.parse(text).text || '');

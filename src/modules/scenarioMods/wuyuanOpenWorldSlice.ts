@@ -333,8 +333,11 @@ export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRu
   if (!runtime) return undefined;
   if (hasDepartedWuyuan(runtime)) {
     const focus = getScenarioFocusEvent(runtime as any);
-    const location = focus ? storyRouteLocation(focus.id) : undefined;
-    if (location && (saveData as any)?.角色?.位置) { (saveData as any).角色.位置.描述 = `中州·${location}`; refreshSaveEntityReferences(saveData); }
+    const ledger = (runtime as { travelLedger?: unknown }).travelLedger as { doneEventIds?: string[]; deferredDepartureEventIds?: string[] } | undefined;
+    // 可选姿态拍的窗口开着时，玩家停在上一拍的路上节点（行程账负责），不跟着下一主线拍的地点走。
+    const held = (ledger?.deferredDepartureEventIds || []).some(id => !ledger?.doneEventIds?.includes(id));
+    const location = focus && !held ? storyRouteLocation(focus.id) : undefined;
+    if (location &&(saveData as any)?.角色?.位置) { (saveData as any).角色.位置.描述 = `中州·${location}`; refreshSaveEntityReferences(saveData); }
     return undefined;
   }
   if (!inWuyuanSlice(runtime, saveData)) return undefined;

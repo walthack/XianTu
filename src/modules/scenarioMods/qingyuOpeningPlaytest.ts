@@ -1,4 +1,4 @@
-import {packPlaytest,packText,CONTENT_PACKS} from '../contentPacks';
+import {packPlaytest,packText,CONTENT_PACKS,type PackPlaytest} from '../contentPacks';
 const definition=packPlaytest('qingyu');
 import {entityName} from './namedEntities';
 import type { CharacterBaseInfo, SaveData } from '@/types/game';
@@ -267,4 +267,29 @@ export function isNanhuangDemoFinished(save: SaveData | null | undefined): boole
   const runtime = (save as any)?.世界?.状态?.剧本模组;
   return Boolean(marker?.endEventId)
     && runtime?.modId === marker?.endModId && Boolean(runtime?.completedEventIds?.includes(marker?.endEventId));
+}
+
+/** 当前存档所在这一期的下一期（按终点标记认当前期，数据里 nextId 指定）；最后一期或没有终点标记的试玩返回 undefined。 */
+export function nextNanhuangPhase(save: SaveData | null | undefined): PackPlaytest | undefined {
+  for (const p of CONTENT_PACKS.playtests) {
+    const marker = (save as any)?.系统?.扩展?.[p.extensionKey] as QingyuOpeningPlaytestMarker | undefined;
+    if (marker?.kind !== p.kind || !marker.endEventId) continue;
+    const current = CONTENT_PACKS.playtests.find(c => c.kind === marker.kind && c.endModId === marker.endModId && c.endEventId === marker.endEventId);
+    if (current?.nextId) return packPlaytest(current.nextId);
+  }
+  return undefined;
+}
+
+/**
+ * 「继续到下一期」：同一份隔离档，只把终点标记挪到下一期的终点，玩家进度原样保留。
+ * 引擎是否拦住转场、界面是否判为本期结束，都只看这个标记（见 isNanhuangDemoFinished / transitionToNextScenarioStage）。
+ * 返回新存档，不改入参；没有下一期时返回 null。
+ */
+export function withNextNanhuangPhase(save: SaveData): SaveData | null {
+  const next = nextNanhuangPhase(save);
+  if (!next) return null;
+  const extensions = (save as any).系统.扩展;
+  return { ...save, 系统: { ...(save as any).系统, 扩展: { ...extensions, [next.extensionKey]: {
+    ...extensions[next.extensionKey], scope: next.scope, endModId: next.endModId, endEventId: next.endEventId,
+  } } } } as SaveData;
 }
