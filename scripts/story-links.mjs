@@ -137,6 +137,7 @@ export function auditStoryLinks(inputs) {
     for (const r of a.requires) {
       const before = eventHit(r.eventDone);
       if (!before) { errors.push(`${who}: requires 事件 ${r.eventDone} 不存在（悬空引用，${a.source}）`); continue; }
+      if (!cfg.requiresEnabled) continue; // 顺序校验默认关（validation.config.json: storyLinks.requiresEnabled）；悬空引用上面照查
       for (const m of a.mustAppear) {
         const after = eventHit(m.eventId);
         if (!after) continue;

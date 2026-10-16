@@ -21,6 +21,7 @@
       "optional"
     ],
     "mustAppearSeverity": "warn",
+    "requiresEnabled": false,
     "requiresSeverity": "error",
     "staleDerivedSeverity": "error",
     "unlinkedGrantSeverity": "warn",

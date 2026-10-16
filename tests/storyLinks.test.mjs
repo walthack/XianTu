@@ -36,17 +36,18 @@ test('演示物品是总表里已有的普通贵重品（米粒湖珠）：用�
 });
 
 test('2 调换顺序：把前置事件挪到被要求事件之后，报顺序违反并指明物品与两个事件',()=>{
- const inp=withStory(copy());event(inp,STAGE04,ARRIVE).conditions=[]; // 本关事件有 flags 依赖链会优先判先后，这里清掉，只看 axisSeq
+ const inp=withStory(copy());inp.config.storyLinks.requiresEnabled=true; // 顺序校验默认关，本用例显式打开
+ event(inp,STAGE04,ARRIVE).conditions=[]; // 本关事件有 flags 依赖链会优先判先后，这里清掉，只看 axisSeq
  event(inp,STAGE04,PRIOR).axisSeq=event(inp,STAGE04,ARRIVE).axisSeq+1;
  const r=auditStoryLinks(fresh(inp));
  assert.equal(r.errors.length,1,r.errors.join('\n'));
  assert.match(r.errors[0],new RegExp(`物品 ${PEARL}.*顺序违反.*${PRIOR}.*${ARRIVE}.*并不在其后`));
- const chr=copy();event(chr,'lcq.stage_02',GAMBLE).axisSeq=999;
+ const chr=copy();chr.config.storyLinks.requiresEnabled=true;event(chr,'lcq.stage_02',GAMBLE).axisSeq=999;
  assert.match(auditStoryLinks(fresh(chr)).errors.join('\n'),new RegExp(`角色 ${NINGYU}.*顺序违反.*${GAMBLE}`));
 });
 
 test('2b flags 依赖链优先于 axisSeq：被要求事件的 conditions 依赖前置事件时判先后正确',()=>{
- const inp=withStory(copy());const arrive=event(inp,STAGE04,ARRIVE),prior=event(inp,STAGE04,PRIOR);
+ const inp=withStory(copy());inp.config.storyLinks.requiresEnabled=true;const arrive=event(inp,STAGE04,ARRIVE),prior=event(inp,STAGE04,PRIOR);
  prior.axisSeq=arrive.axisSeq+5;arrive.conditions=[{path:'flags.event.s04_02.done',operator:'eq',value:true}];
  assert.deepEqual(auditStoryLinks(fresh(inp)).errors,[]);
 });
@@ -69,6 +70,18 @@ test('3b 可选事件（critical:false）不算必经出现的证据；配置放
  assert.match(r.warnings.join('\n'),/可选事件.*不算必经出现的证据/);
  inp.config.storyLinks.optionalEventIsEvidence=true;
  assert.deepEqual(auditStoryLinks(fresh(inp)).warnings,[]);
+});
+
+test('2c 顺序校验默认关：配置缺省/false 时顺序颠倒不报；「必须出现」缺失仍是警告，requires 指向不存在的事件仍报悬空',()=>{
+ assert.equal(base.config.storyLinks.requiresEnabled,false);
+ const inp=withStory(copy());event(inp,STAGE04,ARRIVE).conditions=[];
+ event(inp,STAGE04,PRIOR).axisSeq=event(inp,STAGE04,ARRIVE).axisSeq+1;
+ const r=auditStoryLinks(fresh(inp));
+ assert.deepEqual(r.errors,[]);assert.deepEqual(r.warnings,[]);
+ const miss=withStory(copy());delete miss.links.links.find(l=>l.object.id===PEARL).actionId;miss.links.links.find(l=>l.object.id===PEARL).eventId='lcq.event.s04_05';
+ assert.match(auditStoryLinks(fresh(miss)).warnings.join('\n'),/没有它的登场/);
+ const dangling=withStory(copy());pearlEntry(dangling).story.requires=[{eventDone:'lcq.event.not_exist'}];
+ assert.match(auditStoryLinks(fresh(dangling)).errors.join('\n'),/requires 事件 lcq\.event\.not_exist 不存在/);
 });
 
 test('4 换线：只改关系（指针与总表 story 标注）把米粒湖珠挪到别的事件，不动总表物品内容，校验仍全绿',()=>{

@@ -2,7 +2,7 @@
  * 动作可行性闸门：纯函数，“只有真能做到才结算”。确认判定前后各跑一次（存档指纹、背包、状态可能已变）。
  * 闸门读变体参数（needsItem / needsGoodwill / requires / cost / cooldownMinutes …），不按变体名分支。
  * 不过 → 不出判定卡、不扣任何东西、不改任何状态，只拼“未发生”事实行给叙事。
- * 本文件只读：没有关系记录的在场正典人物由 plan.ts / settle.ts 在进闸门前懒登记（encounter.ts），这里仍要求有记录。
+ * 本文件只读：没有关系记录的在场正典人物由 plan.ts / settle.ts 在进闸门前懒登记（encounter.ts），这里目标认“关系表”或“总表里的在场原著角色”任一命中（双保险），在场再由名单兜住。
  */
 import type { SaveData } from '@/types/game';
 import { GAME_NUMBERS } from '../../sceneModule/numbers';
@@ -18,7 +18,7 @@ import { levelOf } from '@/utils/realmUtils';
 import type { InjuryRecord } from '../../sceneModule/host/injuries';
 import { itemEffectOf, type ItemEffect } from './itemUse';
 import { variantSpecOf, type VariantSpec } from './config';
-import { freeActionRosterOf, playerIdOf, type FreeActionTicket } from './ticket';
+import { canonCharacterOf, freeActionRosterOf, playerIdOf, type FreeActionTicket } from './ticket';
 import { readFreeActionState, runtimeOf } from './state';
 import { protectedForbids } from './protect';
 import type { GateReason } from './facts';
@@ -69,7 +69,7 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
   const fail = (reason: GateReason): GateFail => ({ ok: false, reason, slots });
 
   if (activeScene(save)) return fail('scene_active');
-  if (targetId === playerIdOf(save) || !relationshipOf(save as any, targetId) || !freeActionRosterOf(save).some(entry => entry.id === targetId)) return fail('not_present');
+  if (targetId === playerIdOf(save) || !(relationshipOf(save as any, targetId) || canonCharacterOf(save, targetId)) || !freeActionRosterOf(save).some(entry => entry.id === targetId)) return fail('not_present');
   if (protectedForbids(targetId, spec)) return fail('protected');
 
   // 手段物品
@@ -102,12 +102,12 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
 
   // 目标态度：低姿态（敌对/戒备）不肯接受；byItemTag 时毒性物品不看态度。
   const wantsGoodwill = spec.needsGoodwill === true || (spec.needsGoodwill === 'byItemTag' && !toxic);
-  if (wantsGoodwill && stanceOf(Number((relationshipOf(save as any, targetId)!.profile as any).好感度) || 0) === 'low') return fail('low_goodwill');
+  if (wantsGoodwill && stanceOf(Number((relationshipOf(save as any, targetId)?.profile as any)?.好感度) || 0) === 'low') return fail('low_goodwill');
 
   // 施术者资格：功力不低于目标。目标级数必须有可用的九级时点行（占位行、非九级体系一律拒绝）。
   if (spec.requires?.actorLevel === 'ge_target') {
     const fact = levelFact(targetId, namingChapter(runtime || {}));
-    const realm = (relationshipOf(save as any, targetId)!.profile as any).境界;
+    const realm = (relationshipOf(save as any, targetId)?.profile as any)?.境界;
     const targetLevel = effectiveLevel(fact);
     if (!fact || !fact.available || fact.applicability !== 'nine_levels' || fact.settingStatus === 'placeholder' || targetLevel === undefined
       || !(Number(realm?.下一级所需) > 0)) return fail('level_unknown');

@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { DUAN_QIANG, NING_YU, XIE_YI, advanceTurn, itemEntry, makeSave, mods, profileOf, runJudged, runtimeOf, ticket } from './freeActionFixture.mjs';
+import { DUAN_QIANG, NING_YU, XIE_YI, advanceTurn, itemEntry, load, makeSave, mods, profileOf, runJudged, runtimeOf, ticket } from './freeActionFixture.mjs';
 
 const GIFT = 'test.item.gift';
 const CHENG = 'liuchao.character.cheng_zongyang'; // 夹具的正典里有、没关系记录、也不在场
@@ -147,4 +147,18 @@ test('玩家本人不会被登记', () => {
   const prepared = mods.plan.prepareFreeAction(save, gift(playerId));
   assert.equal(prepared.kind, 'refused');
   assert.equal(hasRecord(save, playerId), false);
+});
+
+test('闸门目标双保险：关系表或总表在场原著角色任一命中即过；两者都不中仍是 not_present（闸门只读，不登记）', async () => {
+  const { checkGates } = await load('../src/modules/scenarioMods/freeAction/gates.ts');
+  const save = saveWithXie();
+  const before = JSON.stringify(save.社交.关系);
+  assert.equal(hasRecord(save, XIE_YI), false);
+  const canonOnly = checkGates(save, gift());
+  assert.equal(canonOnly.ok, true, '无关系记录、仅总表在场原著角色：直接过闸');
+  assert.equal(JSON.stringify(save.社交.关系), before);
+  const relationOnly = checkGates(makeSave({ items: { [GIFT]: itemEntry(GIFT, { 数量: 3 }) }, present: [DUAN_QIANG] }), gift(DUAN_QIANG));
+  assert.equal(relationOnly.ok, true, '有关系记录：照常过闸');
+  const none = checkGates(save, gift('liuchao.character.not_in_canon'));
+  assert.deepEqual([none.ok, none.reason], [false, 'not_present']);
 });
