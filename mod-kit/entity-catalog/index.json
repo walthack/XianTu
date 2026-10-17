@@ -16327,12 +16327,6 @@
     },
     {
       "kind": "item",
-      "id": "lcq.item.demo_short_knife",
-      "authoritySource": "mod-kit/entity-catalog/items.json",
-      "aliases": []
-    },
-    {
-      "kind": "item",
       "id": "lcq.item.drug",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -16907,6 +16901,12 @@
     {
       "kind": "item",
       "id": "liuchao.item.rusty_cuo_dao",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "liuchao.item.short_knife",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },

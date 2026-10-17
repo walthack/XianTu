@@ -38,21 +38,19 @@
       ]
     },
     {
-      "id": "lcq.item.demo_short_knife",
+      "id": "liuchao.item.short_knife",
       "aliases": [],
       "definition": {
-        "id": "lcq.item.demo_short_knife",
+        "id": "liuchao.item.short_knife",
         "name": "短刀",
         "type": "weapon",
         "grade": "凡品",
-        "description": "最近的战场尸体手指间原本握着的短刀。",
+        "description": "寻常的短刀。",
         "storyItem": false
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
-      "migratedFrom": [
-        "src/modules/scenarioMods/fastNarrativeDemoAdjudication.ts"
-      ]
+      "migratedFrom": []
     },
     {
       "id": "lcq.item.drug",
