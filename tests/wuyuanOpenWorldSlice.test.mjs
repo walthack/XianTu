@@ -311,15 +311,6 @@ test('travel is explicit and both local solutions converge to the canon capture 
   assert.equal(settled.settled, true);
   assert.equal(settled.canonEventCompleted, true);
   assert.equal(companion.世界.状态.剧本模组.openWorldSlice.problemStates['lcq.problem.wuyuan.pastry_capture'], 'captured_injured');
-
-  const world = save('world_sim');
-  const worldTravel = getWuyuanOpenWorldSelections(world).find(item => item.kind === 'travel');
-  settleWuyuanOpenWorldSelection(world, worldTravel);
-  const worldAction = getWuyuanOpenWorldSelections(world).find(item => item.kind === 'problem_action');
-  const worldSettled = settleWuyuanOpenWorldSelection(world, worldAction);
-  assert.equal(worldSettled.settled, true);
-  assert.equal(worldSettled.canonEventCompleted, undefined);
-  assert.equal(world.世界.状态.剧本模组.eventActionStates, undefined);
 });
 
 test('direct s02_04 structured action from 帅帐 is rejected without water-prison hop', async () => {

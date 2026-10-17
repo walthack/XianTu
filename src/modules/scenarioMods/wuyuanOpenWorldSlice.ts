@@ -197,7 +197,7 @@ export type WuyuanOpenWorldSelection = {
 
 type RuntimeWithSlice = {
   modId?: string;
-  storyMode?: 'canon_companion' | 'world_sim';
+  storyMode?: string;
   worldTurn?: number;
   activeEventIds?: string[];
   completedEventIds?: string[];
@@ -504,7 +504,7 @@ export function settleWuyuanOpenWorldSelection(saveData: SaveData, selection: Wu
   }
   projectPlayerPosition(saveData, state);
   let canonEventCompleted = false;
-  if (selection.kind === 'problem_action' && runtime.storyMode !== 'world_sim') {
+  if (selection.kind === 'problem_action') {
     const eventSelection = getCurrentStoryEventActions(saveData)
       .find(item => item.eventId === 'lcq.event.s02_04');
     if (eventSelection) canonEventCompleted = recordStoryEventStructuredAction(saveData, eventSelection).completed;

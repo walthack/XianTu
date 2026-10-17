@@ -216,7 +216,7 @@ function gambleHasBeenProposed(runtime: RuntimeLike | undefined, currentId: stri
 
 export function isBaihuGambleRefusalWindow(saveData: SaveData | null | undefined): boolean {
   const runtime = runtimeOf(saveData);
-  if (!runtime || runtime.storyMode === 'world_sim') return false;
+  if (!runtime) return false;
   if (runtime.modId && runtime.modId !== 'lcq.stage_02') return false;
   const currentId = focusEventId(runtime);
   // 用户裁定 2026-10-02：拒赌窗口只开在凝羽入局这一拍；契书拍不再新开（已在扣押中的旧档仍按原窗口应对）。
@@ -420,7 +420,7 @@ function isOnRefusalSourceWindow(runtime: RuntimeLike | undefined, ledger: Baihu
 
 export function getBaihuGambleRefusalSelections(saveData: SaveData | null | undefined): BaihuGambleRefusalSelection[] {
   const runtime = runtimeOf(saveData);
-  if (!runtime || runtime.storyMode === 'world_sim') return [];
+  if (!runtime) return [];
   const currentId = focusEventId(runtime);
   const ledger = readBaihuGambleRefusal(saveData);
   if (ledger?.phase === 'capture_ordered' && isOnRefusalSourceWindow(runtime, ledger)) {
@@ -590,9 +590,6 @@ export function settleBaihuGambleRefusalSelection(
   const runtime = runtimeOf(saveData);
   if (!runtime || selection?.source !== BAIHU_GAMBLE_REFUSAL_SOURCE) {
     return { settled: false, idempotent: false, reason: 'inactive_slice', settledFacts: [] };
-  }
-  if (runtime.storyMode === 'world_sim') {
-    return { settled: false, idempotent: false, reason: 'world_sim', settledFacts: [] };
   }
   if (selection.contractHash !== BAIHU_GAMBLE_REFUSAL_CONTRACT) {
     return { settled: false, idempotent: false, reason: 'stale_selection', settledFacts: [] };

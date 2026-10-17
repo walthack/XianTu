@@ -50,55 +50,6 @@ test('character creation has one local session mode while explicit cloud materia
   assert.doesNotMatch(preview, /isLocalCreation|联机模式下/);
 });
 
-test('world simulation playtest is a one-click isolated normal-game flow', { skip: 'world_sim 入口已隐藏（/world-sim-playtest 路由与入口条目已移除，cleanup/remove-world-sim 第一步），待第二步彻底移除后删除本测试' }, () => {
-  const modeSelection = read('src/views/ModeSelection.vue');
-  const router = read('src/router/index.ts');
-  const start = read('src/views/WorldSimulationPlaytestStartView.vue');
-  const store = read('src/stores/characterStore.ts');
-  const storage = read('src/utils/indexedDBManager.ts');
-  const mainPanel = read('src/components/dashboard/MainGamePanel.vue');
-  const savePanel = read('src/components/dashboard/SavePanel.vue');
-  const characterManagement = read('src/components/character-creation/CharacterManagement.vue');
-
-  const entries=JSON.parse(read('src/modules/contentPacks/packs/qingyu/entries.json'));
-  assert.match(modeSelection,/CONTENT_PACKS.entries/);
-  assert.match(modeSelection,/entry.label/);
-  assert.match(modeSelection,/entry.route/);
-  const entryLabels=entries.map(e=>e.label).join(' ');
-  assert.match(entryLabels, /六朝世界试玩/);
-  assert.match(entryLabels, /清羽记开局/);
-  assert.match(entryLabels, /星月湖任务线试玩/);
-  assert.match(router, /path:\s*'\/world-sim-playtest'/);
-  assert.match(router, /path:\s*'\/qingyu-opening-playtest'/);
-  assert.match(router, /path:\s*'\/xingyuehu-quest-playtest'/);
-  assert.match(start, /installIsolatedPlaytestCharacter/);
-  assert.match(start, /router\.replace\('\/game'\)/);
-  assert.match(store, /固定 ID 只允许覆盖同 kind 的试玩档/);
-  assert.match(store, /existing\.隔离试玩信息\?\.kind !== payload\.markerKind/);
-  assert.match(store, /隔离试玩信息:[\s\S]*localOnly:\s*true/);
-  assert.match(store, /saveSaveData\(payload\.characterId, payload\.slotName,[\s\S]*\{ localOnly: true \}/);
-  assert.match(store, /deleteAllSaveDataForCharacter\(charId,[\s\S]*localOnly:/);
-  assert.match(store, /saveSaveData\(charId, importName, v3Data,[\s\S]*localOnly:/);
-  assert.match(store, /saveSaveData\(newCharId, finalSaveName, v3Data,[\s\S]*profileData\.隔离试玩信息\?\.localOnly/);
-  assert.match(store, /profile\.隔离试玩信息\?\.localOnly[\s\S]*loadLocalSaveData\(charId, slotKey\)/);
-  assert.match(storage, /profile\?\.隔离试玩信息\?\.localOnly === true/);
-  assert.match(storage, /本机隔离试玩档/);
-  assert.match(storage, /lastRemoteRoot\?\.当前激活存档/);
-  assert.match(storage, /if \(options\.localOnly\) \{/);
-  assert.match(store, /shouldSkipRemoteRootPersist/);
-  assert.match(store, /shouldReattachLandingPlaytestWorkingCopy/);
-  assert.match(store, /commitMetadataToStorage\(\{ mutatedProfileIds \}\)/);
-  assert.match(mainPanel, /setAIProcessing\(true\)[\s\S]*resolveNaturalIntent/);
-  assert.match(mainPanel, /inputText\.value\.trim\(\) !== inputSnapshot/);
-  assert.match(mainPanel, /intentSaveFingerprint\(latestSave\) !== saveFingerprint/);
-  assert.doesNotMatch(savePanel, /const \{ loadSaveData \} = await import\('@\/utils\/indexedDBManager'\)/);
-  assert.match(savePanel, /localOnly: characterStore\.activeCharacterProfile\?\.隔离试玩信息\?\.localOnly === true/);
-  assert.match(mainPanel, /saveSaveData\(active\.角色ID, active\.存档槽位, restored,[\s\S]*localOnly:/);
-  assert.doesNotMatch(characterManagement, /const \{ loadSaveData \} = await import\('@\/utils\/indexedDBManager'\)/);
-  assert.match(mainPanel, /<WorldSimulationPlaytestPanel/);
-  assert.match(mainPanel, /playtestFinished/);
-});
-
 test('gameplay surfaces no longer expose travel state or network side effects', () => {
   const sidebar = read('src/components/dashboard/LeftSidebar.vue');
   const worldMap = read('src/components/dashboard/WorldMapRoute.vue');
@@ -170,8 +121,6 @@ test('edited Vue single-player surfaces compile as SFCs', () => {
     'src/components/dashboard/WorldMapRoute.vue',
     'src/components/dashboard/GameMapPanel.vue',
     'src/components/dashboard/MainGamePanel.vue',
-    'src/components/dashboard/WorldSimulationPlaytestPanel.vue',
-    'src/views/WorldSimulationPlaytestStartView.vue',
     'src/components/dashboard/PromptManagementPanel.vue',
   ];
 

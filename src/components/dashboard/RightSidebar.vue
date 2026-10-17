@@ -187,8 +187,8 @@
         </div>
       </div>
 
-      <!-- 任务目标（剧情主线 + 即兴目标；canon_companion 形态，含逐拍/回轨/启程） -->
-      <div v-if="!worldMode && (questMain || questGoals.length)" class="collapsible-section quest-section">
+      <!-- 任务目标（剧情主线 + 即兴目标；含逐拍/回轨/启程） -->
+      <div v-if="(questMain || questGoals.length)" class="collapsible-section quest-section">
         <div class="section-header" @click="questCollapsed = !questCollapsed">
           <h3 class="section-title">
             <Clock :size="14" class="section-icon" />
@@ -224,35 +224,6 @@
           <div v-if="questGoals.length" class="quest-improv">
             <div class="quest-improv-label"><span class="quest-tag quest-tag-side">个人</span>{{ t('个人目标（可选）') }}</div>
             <div v-for="(g, i) in questGoals" :key="i" class="quest-goal"><span class="quest-mark-side">·</span>{{ g }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 任务目标（world_sim：长期方向 + 本关主轴节点 + 当前可切入点；不催、不逐拍、无回轨/启程） -->
-      <div v-if="worldMode && worldQuestAxis" class="collapsible-section quest-section">
-        <div class="section-header" @click="questCollapsed = !questCollapsed">
-          <h3 class="section-title">
-            <Clock :size="14" class="section-icon" />
-            <span>{{ t('任务目标') }}</span>
-          </h3>
-          <button class="collapse-toggle" :class="{ 'collapsed': questCollapsed }">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 10l4-4H4l4 4z"/>
-            </svg>
-          </button>
-        </div>
-        <div v-show="!questCollapsed" class="quest-body">
-          <div class="quest-main">
-            <div class="quest-chapter">
-              <span class="quest-tag quest-tag-main">主线</span>{{ worldQuestAxis.direction }}
-            </div>
-            <div v-if="worldQuestAxis.nodes" class="quest-event">
-              <span class="quest-mark-main">◆</span>{{ t('当前主轴目标') }}：{{ worldQuestAxis.nodes }}
-            </div>
-            <div v-if="worldQuestAxis.entry" class="quest-event">
-              <span class="quest-mark-main">◆</span>{{ t('当前可切入点') }}：{{ worldQuestAxis.entry }}
-            </div>
-            <div class="quest-more">{{ t('可无限期搁置，无进度惩罚') }}</div>
           </div>
         </div>
       </div>
@@ -312,7 +283,7 @@
         <div class="section-header" @click="actorCollapsed = !actorCollapsed">
           <h3 class="section-title">
             <Sparkles :size="14" class="section-icon gold" />
-            <span>{{ worldMode ? t('当前局势') : t('世界正在行动') }}</span>
+            <span>{{ t('世界正在行动') }}</span>
           </h3>
           <button class="collapse-toggle" :class="{ 'collapsed': actorCollapsed }">
             <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
@@ -326,18 +297,6 @@
             <span class="quest-mark-main">◆</span>
             <span><strong>{{ decision.actorName }}</strong>：{{ decision.signal }}</span>
           </div>
-          <div v-if="actorView.pendingDivergence" class="actor-card actor-pending-divergence">
-            <div class="actor-card-title">本地行动已触及世界线分叉</div>
-            <div class="actor-card-line"><span>变化</span>{{ actorView.pendingDivergence.worldDelta }}</div>
-            <div class="actor-card-risk">确认后将激活正式 IF；仍保留本段承重锚点。若默认结果已先行结算，确认会被拒绝。</div>
-            <button class="quest-next-btn" :disabled="worldDivergenceBusy" @click="confirmWorldDivergence">确认这条世界线</button>
-            <button class="quest-next-btn" :disabled="worldDivergenceBusy" @click="cancelWorldDivergence">保留默认未来</button>
-          </div>
-          <div v-for="intervention in actorView.interventions" :key="intervention.id" class="actor-card">
-            <div class="actor-card-title">可分叉介入 · {{ intervention.label }}</div>
-            <div class="actor-card-line"><span>门槛</span>本地 {{ intervention.kind === 'combat' ? '战斗' : '疗伤' }}判定；成功后仍须确认 IF</div>
-            <button class="quest-next-btn" @click="prefillWorldIntervention(intervention.actionText)">采用这项做法</button>
-          </div>
           <div v-for="card in actorView.opportunities" :key="card.id" class="actor-card">
             <div class="actor-card-title">{{ card.title }}</div>
             <div class="actor-card-line"><span>现在</span>{{ card.whyNow }}</div>
@@ -345,7 +304,7 @@
             <div v-if="card.progressTotal" class="actor-card-line">
               <span>进度</span>{{ card.progressCurrent }}/{{ card.progressTotal }}<template v-if="card.currentStep"> · {{ card.currentStep }}</template>
             </div>
-            <div v-if="card.windowText && !worldMode" class="actor-card-line" :class="{ 'actor-window-tight': card.windowTight }">
+            <div v-if="card.windowText" class="actor-card-line" :class="{ 'actor-window-tight': card.windowTight }">
               <span>时间</span>{{ card.windowText }}
             </div>
             <div class="actor-card-line"><span>可能获得</span>{{ card.rewardPreview }}</div>
@@ -364,9 +323,6 @@
           </div>
           <div v-for="permission in actorView.entitlements" :key="permission.key" class="actor-permission">
             已解锁：{{ permission.label }}
-          </div>
-          <div v-for="receipt in actorView.simulationReceipts" :key="receipt.id" class="actor-receipt">
-            ◇ 世界介入：{{ receipt.detail }}
           </div>
           <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
         </div>
@@ -444,13 +400,6 @@ import {
   trackStoryOpportunity,
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
-import {
-  cancelWorldSimulationDivergence,
-  confirmWorldSimulationDivergence,
-  getCurrentWorldSituation,
-  isWorldSimulationRuntime,
-} from '@/modules/scenarioMods/worldSimulation';
-import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from '@/modules/scenarioMods/mainQuestAxis';
 import { secondaryLineDisplayName, resolveAvailableLines, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
@@ -490,13 +439,9 @@ const stageSwitching = ref(false);
 const stageSwitchError = ref('');
 const returningToCanon = ref(false);
 const trackingOpportunity = ref('');
-const worldDivergenceBusy = ref(false);
 const epistemicRuntime = computed(() => (gameStateStore.worldState as any)?.剧本模组);
-const worldMode = computed(() => isWorldSimulationRuntime(epistemicRuntime.value));
 const currentQuestEvent = (rt: any): any => {
-  const sourceEventId = getCurrentWorldSituation(rt)?.sourceEventId;
-  return (sourceEventId && (rt.events || []).find((event: any) => event?.id === sourceEventId))
-    || getScenarioFocusEvent(rt);
+  return getScenarioFocusEvent(rt);
 };
 const playerLocationDescription = (): string => String(gameStateStore.location?.描述 || '');
 const questAtLocationId = (rt: any): string | undefined => locationFromPosition(
@@ -508,26 +453,6 @@ const visibleQuestObjective = (rt: any, event: any): string => {
   const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt);
   return formatQuestCompass(view, rt, questAtLocationId(rt)) || String(view.objective || '').trim();
 };
-// world_sim 主线轴：长期方向（当前层）+ 本关节点 + 局势源事件 objective；不含层六、无逐拍列表。
-const worldQuestAxis = computed(() => {
-  if (!worldMode.value) return null;
-  const rt: any = epistemicRuntime.value;
-  if (!rt || typeof rt !== 'object') return null;
-  const layer = resolveMainQuestLayer(rt.modId);
-  if (!layer?.text) return null;
-  // 当前地点：隔离关被默认路线跳过时，节点靠地点锚仍要显示（见 MainQuestNode.locationId）。
-  // 存档里存的是中文描述串，按地点名做最长匹配还原成 id——与 storyContext 的解析同口径。
-  const curLocId = locationFromPosition(playerLocationDescription(), rt.canon?.locations).locationId;
-  const event = currentQuestEvent(rt);
-  const objective = visibleQuestObjective(rt, event);
-  const mainNode = resolveCurrentMainQuestNode(rt.modId, curLocId, event?.id);
-  return {
-    direction: layer.text,
-    // 同关未来节点的 reviewSummary 不再提前摊给玩家；只显示当前 event 的固定 objective。
-    nodes: mainNode ? objective : '',
-    entry: mainNode ? '' : objective,
-  };
-});
 // 二级线：锚一满足就作为待办显示，不需要玩家确认（用户裁定 2026-08-16）。
 const availableLines = computed(() => {
   const rt: any = epistemicRuntime.value;
@@ -628,22 +553,9 @@ const actorView = computed(() => {
       signal: String(agenda.visibleSignal || ''),
     });
   }
-  const situation = getCurrentWorldSituation(rt);
-  const situationOutcomes = new Set(situation?.outcomeIds || []);
-  const interventions = worldMode.value && !rt.worldSimulationState?.pendingDivergence
-    ? (rt.worldSimulation?.forkableOutcomes || [])
-      .filter((outcome: any) => situationOutcomes.has(outcome.id))
-      .flatMap((outcome: any) => (outcome.replacementBranches || []).map((branch: any) => branch.intervention))
-      .filter(Boolean)
-    : [];
   return {
     pressure: String(contract?.pressure?.summary || ''),
     decisions,
-    interventions,
-    pendingDivergence: rt.worldSimulationState?.pendingDivergence || null,
-    simulationReceipts: Array.isArray(rt.worldSimulationState?.actionReceipts)
-      ? rt.worldSimulationState.actionReceipts.slice(-3).reverse()
-      : [],
     opportunities: Array.isArray(contract?.opportunities)
       ? contract.opportunities
         .filter((item: any) =>
@@ -696,41 +608,6 @@ const actorView = computed(() => {
     entitlements,
   };
 });
-const prefillWorldIntervention = (actionText: string) => prefillChat(actionText, true);
-const confirmWorldDivergence = async () => {
-  if (worldDivergenceBusy.value) return;
-  worldDivergenceBusy.value = true;
-  stageSwitchError.value = '';
-  try {
-    const save = gameStateStore.toSaveData();
-    if (!save) throw new Error('存档数据不完整');
-    const result = confirmWorldSimulationDivergence(save);
-    if (!result.ok) throw new Error(result.reason || '世界线确认失败');
-    gameStateStore.loadFromSaveData(save);
-    await gameStateStore.saveGame();
-  } catch (error) {
-    stageSwitchError.value = String((error as Error)?.message || error);
-  } finally {
-    worldDivergenceBusy.value = false;
-  }
-};
-const cancelWorldDivergence = async () => {
-  if (worldDivergenceBusy.value) return;
-  worldDivergenceBusy.value = true;
-  stageSwitchError.value = '';
-  try {
-    const save = gameStateStore.toSaveData();
-    if (!save) throw new Error('存档数据不完整');
-    const result = cancelWorldSimulationDivergence(save);
-    if (!result.ok) throw new Error(result.reason || '世界线取消失败');
-    gameStateStore.loadFromSaveData(save);
-    await gameStateStore.saveGame();
-  } catch (error) {
-    stageSwitchError.value = String((error as Error)?.message || error);
-  } finally {
-    worldDivergenceBusy.value = false;
-  }
-};
 const trackOpportunity = async (opportunityId: string) => {
   if (trackingOpportunity.value) return;
   trackingOpportunity.value = opportunityId;

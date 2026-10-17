@@ -75,7 +75,6 @@ test('玩家消费面不再读取三级表的 reviewSummary', () => {
   }
   assert.match(sidebar, /visibleQuestObjective\(rt, event\)/);
   assert.match(sidebar, /resolveScenarioEventNarrative\(event, rt\.flags/);
-  assert.match(prompt, /当前主轴目标：\$\{currentWorldObjective\}/);
 });
 
 test('复审通过的坏目标由固定表现层覆盖，不改 event 合同', async () => {

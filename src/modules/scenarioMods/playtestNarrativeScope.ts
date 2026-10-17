@@ -34,17 +34,15 @@ export function isScopedPlaytestSave(saveData: SaveData | null | undefined): boo
 export function isWithinBaihuEscapeNarrativeWindow(saveData: SaveData | null | undefined): boolean {
   const runtime = runtimeOf(saveData);
   if (!runtime) return false;
-  if (runtime.storyMode === 'world_sim') return false;
   const completed = Array.isArray(runtime.completedEventIds) ? runtime.completedEventIds : [];
   return !completed.includes(ESCAPE_EVENT_ID);
 }
 
 /** 已授权清羽/星月湖试玩全剧情链的自然输入；世界模拟仍走独立入口。 */
 export function isScopedNaturalIntentSave(saveData: SaveData | null | undefined): boolean {
-  return isScopedPlaytestSave(saveData) && runtimeOf(saveData)?.storyMode !== 'world_sim';
+  return isScopedPlaytestSave(saveData);
 }
 
 export function isScopedPlayerPresentationEvent(eventId: string | undefined, storyMode?: string): boolean {
-  if (storyMode === 'world_sim') return false;
   return isQingyuOpeningPlaytestEventId(eventId);
 }

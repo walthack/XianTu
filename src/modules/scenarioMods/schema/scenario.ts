@@ -755,73 +755,14 @@ export interface ScenarioModChapter {
 
 export type ScenarioStoryMode = 'canon_companion' | 'world_sim';
 
-export interface ScenarioWorldSituation {
-  id: string;
-  title: string;
-  summary: string;
-  /** 复用既有事件的 NPC core、地点、人物和机会卡；不继承其逐拍完成权。 */
-  sourceEventId: string;
-  /** 任一条件组成立即表示该局势已经收束；组内为 AND，组间为 OR。 */
-  settledWhenAny: ScenarioCondition[][];
-  anchorIds?: string[];
-  outcomeIds?: string[];
-  /** 该局势收束前的一次性征兆；只演出，不改结算谓词。 */
-  omen?: ScenarioWorldOmen;
-}
-
-export interface ScenarioStructuralAnchor {
-  id: string;
-  summary: string;
-  sourceEventIds: string[];
-  satisfiedWhenAny: ScenarioCondition[][];
-}
-
-export interface ScenarioWorldIntervention {
-  id: string;
-  label: string;
-  actionText: string;
-  kind: 'combat' | 'cultivate';
-  difficulty: 'hard' | 'severe' | 'extreme';
-  difficultyValue: number;
-  matchAny: string[];
-  rejectIf?: string[];
-  successOutcomes: Array<'success' | 'great_success' | 'perfect'>;
-  characterState: { characterId: string; status: 'alive' | 'longrest' | 'incapacitated' };
-  worldDelta: string;
-  evidence: string;
-}
-
-export interface ScenarioForkableOutcome {
-  id: string;
-  sourceEventId: string;
-  defaultResolutionId: string;
-  defaultWhen: ScenarioCondition[];
-  defaultSummary: string;
-  replacementBranches: Array<{
-    branchId: string;
-    activeWhen: ScenarioCondition[];
-    summary: string;
-    intervention: ScenarioWorldIntervention;
-  }>;
-  preserveAnchorIds: string[];
-}
-
-export interface ScenarioReferenceBeat {
-  id: string;
-  sourceEventId: string;
-  situationId: string;
-  /** 只有默认结果已经由本地引擎坐实时才可投影完整原著拍。 */
-  availableWhen: ScenarioCondition[];
-  invalidWhen?: ScenarioCondition[];
-  summary: string;
-}
-
+/**
+ * 最小类型 stub：world_sim 已移除。仅因 runtime.ts（冻结，待批准）仍引用而保留；
+ * runtime.ts 清理后删除。
+ */
 export interface ScenarioWorldSimulation {
-  version: 1;
-  situations: ScenarioWorldSituation[];
-  structuralAnchors: ScenarioStructuralAnchor[];
-  forkableOutcomes: ScenarioForkableOutcome[];
-  referenceBeats: ScenarioReferenceBeat[];
+  version?: number;
+  situations?: Array<{ id: string; omen?: ScenarioWorldOmen; [key: string]: unknown }>;
+  [key: string]: unknown;
 }
 
 export interface ScenarioModScenario {
@@ -835,6 +776,6 @@ export interface ScenarioModScenario {
   initialNpcPrivateKnowledge?: ScenarioInitialNpcPrivateKnowledgeFact[];
   chapters?: ScenarioModChapter[];
   events?: ScenarioModEvent[];
-  /** 实验性六朝世界模式合同；存在不等于启用，模式只能由新档初始化显式选择。 */
+  /** @deprecated world_sim 已移除；旧数据残留字段，仅作类型 stub，不再被校验/使用。 */
   worldSimulation?: ScenarioWorldSimulation;
 }

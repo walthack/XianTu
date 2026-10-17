@@ -35,8 +35,7 @@ export interface ItemReferenceContext {
 
 export function usesFixedScenarioInventory(save: SaveData): boolean {
   const runtime = (save as any)?.世界?.状态?.剧本模组;
-  return runtime?.storyMode !== 'world_sim'
-    && /^(?:lcq\.|playtest\.xingyuehu\.)/.test(String(runtime?.modId || ''));
+  return /^(?:lcq\.|playtest\.xingyuehu\.)/.test(String(runtime?.modId || ''));
 }
 
 export function collectRegisteredItemCatalog(save: SaveData | null | undefined): RegisteredItemRecord[] {

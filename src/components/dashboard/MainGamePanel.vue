@@ -598,12 +598,6 @@ import {
   resolveBaihuGambleRefusalFromText,
   type BaihuGambleRefusalSelection,
 } from '@/modules/scenarioMods/baihuGambleRefusal';
-import {
-  getCurrentWorldSituation,
-  getWorldSimulationPresentationNotices,
-  settleWorldSimulationJudgement,
-} from '@/modules/scenarioMods/worldSimulation';
-import { WORLD_SIMULATION_PLAYTEST_KIND } from '@/modules/scenarioMods/worldSimulationPlaytest';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 import {
   abortInFlightNaturalIntent,
@@ -925,19 +919,12 @@ const scenarioEndingImage = computed(() => {
   if (!over?.endingId) return undefined;
   return resolveEndingImage(over.presentation?.image || endingPresentation(over).image);
 });
-const worldSimulationPlaytestFinished = computed(() => {
-  const marker = (gameStateStore.systemExtensions as any)?.六朝世界试玩;
-  const runtime = (gameStateStore.worldState as any)?.剧本模组;
-  return marker?.kind === WORLD_SIMULATION_PLAYTEST_KIND
-    && runtime?.storyMode === 'world_sim'
-    && !getCurrentWorldSituation(runtime);
-});
 const xingyuehuLandingFinished = computed(() => isXingyuehuLandingPlaytestFinished(gameStateStore.toSaveData()));
 const xingyuehuPlaytestFinished = computed(() => (
   isXingyuehuQuestPlaytestFinished(gameStateStore.toSaveData()) || xingyuehuLandingFinished.value
 ));
 const nanhuangDemoFinished = computed(() => isNanhuangDemoFinished(gameStateStore.toSaveData()));
-const playtestFinished = computed(() => worldSimulationPlaytestFinished.value || xingyuehuPlaytestFinished.value || nanhuangDemoFinished.value);
+const playtestFinished = computed(() => xingyuehuPlaytestFinished.value || nanhuangDemoFinished.value);
 const isTavernEnvFlag = isTavernEnv();
 const enhancedActionQueue = EnhancedActionQueueManager.getInstance();
 const bidirectionalSystem = AIBidirectionalSystem;
@@ -1145,15 +1132,10 @@ const currentNarrative = computed(() => {
   // 从叙事历史获取actionOptions和stateChanges
   if (narrativeHistory && narrativeHistory.length > 0) {
     const latestNarrative = narrativeHistory[narrativeHistory.length - 1];
-    const runtime = (gameStateStore.worldState as any)?.剧本模组;
-    const notices = getWorldSimulationPresentationNotices(runtime, latestNarrative.stateChanges?.changes);
-    const noticeText = notices
-      .map(notice => notice.detail)
-      .join('\n\n');
     return {
       type: latestNarrative.type || 'narrative',
       userIntent: (latestNarrative as { userIntent?: string }).userIntent || '',
-      content: [latestNarrative.content.replace(/^【.*?】\s*/, '') || content || '...', noticeText].filter(Boolean).join('\n\n'),
+      content: [latestNarrative.content.replace(/^【.*?】\s*/, '') || content || '...'].filter(Boolean).join('\n\n'),
       time: currentTimeString,
       stateChanges: latestNarrative.stateChanges || { changes: [] },
       image: latestNarrative.image,
@@ -2683,15 +2665,7 @@ const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
     ...(testOutcome ? { testOutcome } : {}),
   });
   settleFastNarrativeDemoAdjudication(save, resolution);
-  const worldSimulationResult = settleWorldSimulationJudgement(save, resolution);
   await persistJudgementSave(save);
-  if (worldSimulationResult.pending) {
-    toast.info('本地判定已达到改写枢纽的门槛；请在右栏确认是否进入正式 IF 世界线');
-    return;
-  }
-  if (worldSimulationResult.expired) {
-    toast.warning('局势已先行结算，这次旧判定不能再改写世界结果');
-  }
   await sendMessage({ skipPreflight: true, resolution });
 };
 

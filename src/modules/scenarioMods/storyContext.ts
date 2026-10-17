@@ -1,5 +1,4 @@
 import {namingFor} from './ledger/naming';
-import {questLineView} from './questLineView';
 import { namingInstructions, namingAliases } from './ledger/naming';
 import type { SaveData } from '@/types/game';
 import { formatEarnedTitles } from './milestoneRewards';
@@ -25,10 +24,6 @@ import {
   privateFactNeedsNarrativeAssociationGuard,
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
-import { resolveCurrentMainQuestNode, resolveMainQuestLayer } from './mainQuestAxis';
-import { secondaryLineDisplayName, resolveAvailableLines, secondaryLinesAtEvent } from './secondaryLines';
-import { characterBeatsAt } from './characterQuests';
-import { formatWorldSimulationPrompt, getCurrentWorldSituation, isWorldSimulationRuntime } from './worldSimulation';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
 import { getBaihuGambleRefusalPrompt } from './baihuGambleRefusal';
 
@@ -51,9 +46,7 @@ interface StoryRuntime {
   modId: string;
   modName?: string;
   mode: 'strict' | 'expand';
-  storyMode?: 'canon_companion' | 'world_sim';
-  worldSimulation?: unknown;
-  worldSimulationState?: unknown;
+  storyMode?: string;
   axisVersion?: string;
   axisOrder?: number;
   axisSeqLo?: number | null;
@@ -781,8 +774,8 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   delete runtime.npcPrivateKnowledge;
   // 世界模式合同包含后续局势、默认死亡与 IF 门槛；只允许下方显式编译当前局势，
   // 不得把整份作者合同作为通用状态 JSON 泄给模型。
-  delete runtime.worldSimulation;
-  delete runtime.worldSimulationState;
+  delete (runtime as any).worldSimulation;
+  delete (runtime as any).worldSimulationState;
   // 局部空间账含内部 route/action/receipt ID；模型只消费 buildScenarioStoryPrompt
   // 编译后的当前位置、已知去处与人物状态，不能看到或仿写原始账本。
   delete (runtime as any).openWorldSlice;
@@ -795,12 +788,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const runtime = getRuntime(saveData);
   if (!runtime) return '';
 
-  const worldMode = isWorldSimulationRuntime(runtime as any);
   const chapter = runtime.chapters.find(item => item.id === runtime.currentChapterId);
   const anchor = getScenarioFocusEvent(runtime as any);
   const optionalEvents = selectContextualOptionalEvents(runtime, anchor, contextText);
   const canonRail = getCanonRailProfile(runtime as any);
-  const currentContractStep = worldMode ? undefined : getCurrentContractStep(saveData);
+  const currentContractStep = getCurrentContractStep(saveData);
   const activeEvents = [...(anchor ? [anchor] : []), ...optionalEvents];
   const activeIds = new Set(activeEvents.map(event => event.id));
   const characters = runtime.canon?.characters || [];
@@ -808,9 +800,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const locations = runtime.canon?.locations || [];
   const currentLocation = resolveCurrentScenarioLocation(runtime, saveData);
 
-  const chapterSection = worldMode
-    ? `## 当前世界阶段：${runtime.modName || runtime.modId || '六朝'}\n世界会按人物行动与期限继续；玩家可以介入，也可以忽略机会。`
-    : chapter
+  const chapterSection = chapter
     ? `## 当前章节：${chapter.title}\n${chapter.summary}\n章节完成条件：${formatConditions(chapter.completion)}`
     : '## 当前章节\n暂无已激活章节。不要自行使用或透露后续章节内容。';
   // 当前地域风貌：活跃事件所在地点的正典描述（否则 LLM 查看环境时裸猜，南荒写成中原样）
@@ -826,9 +816,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     .filter(Boolean)
     .join('\n');
 
-  const eventSection = worldMode
-    ? (formatWorldSimulationPrompt(runtime as any) || '- 当前世界合同没有可用局势；不得自行补造后续事实。')
-    : activeEvents.length
+  const eventSection = activeEvents.length
     ? activeEvents.map(rawEvent => {
         const event = resolveScenarioEventNarrative(rawEvent, runtime.flags || {}, runtime.divergences, runtime);
         const context = [
@@ -897,68 +885,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     !activeIds.has(event.id),
   );
   // 仅给出下一拍事件名称作为推进方向，不带 description，避免提前泄露未来剧情细节
-  // world_sim：长期方向（层）+ 本关主线节点 + 当前可切入点；不催、不卡、无进度惩罚。
-  // 二级线关卡节点为空则整行省略，不得另写“本关无主线／不重要”。
-  const nextSection = worldMode
-    ? (() => {
-        const layer = resolveMainQuestLayer(runtime.modId);
-        const lines: string[] = [];
-        if (layer?.text) {
-          lines.push(`- 长期方向（常驻可见，玩家可无限期搁置）：${layer.text}`);
-        }
-        const situation = getCurrentWorldSituation(runtime as any);
-        const sourceEventId = situation?.sourceEventId;
-        let currentWorldEvent: ScenarioModEvent | undefined;
-        let currentWorldObjective = '';
-        if (sourceEventId) {
-          const sourceEvent = (runtime.events || []).find(event => event.id === sourceEventId);
-          currentWorldEvent = sourceEvent;
-          currentWorldObjective = sourceEvent
-            ? String(resolveScenarioEventNarrative(sourceEvent, runtime.flags || {}, runtime.divergences, runtime).objective || '').trim()
-            : '';
-        }
-        if (!currentWorldEvent && anchor) {
-          currentWorldEvent = anchor;
-          currentWorldObjective = String(
-            resolveScenarioEventNarrative(anchor, runtime.flags || {}, runtime.divergences, runtime).objective || '',
-          ).trim();
-        }
-        // 结果摘要只供制作审阅；玩家与 LLM 只拿当前绑定 event 的固定 objective。
-        const mainNode = resolveCurrentMainQuestNode(runtime.modId, currentLocation?.id, currentWorldEvent?.id);
-        if (mainNode && currentWorldObjective) {
-          lines.push(`- 当前主轴目标：${currentWorldObjective}`);
-        } else if (currentWorldObjective) {
-          lines.push(`- 当前可切入点：${currentWorldObjective}`);
-        }
-        // 二级线：走到地方／认识对的人／知道了那件事，就该让玩家知道有这条门路，不设"接受任务"手续。
-        const openLines = resolveAvailableLines(
-          currentLocation?.id,
-          (runtime as any).acquaintances,
-          runtime.completedEventIds,
-        );
-        if (openLines.length) {
-          const activeLineIds = new Set(secondaryLinesAtEvent(currentWorldEvent?.id).map(line => line.id));
-          lines.push(`- 此刻可投的门路：${openLines.map(l => {
-            const current = activeLineIds.has(l.id) && currentWorldObjective
-              ? `；当前目标：${currentWorldObjective}`
-              : '';
-            return `${secondaryLineDisplayName(l, currentWorldEvent)}——${l.entryHint}${current}`;
-          }).join('；')}`);
-        }
-        const insertedView = questLineView(saveData);
-        if (insertedView.secondary.length) lines.push(`- 可选支线：${insertedView.secondary.map(l=>`${l.name}——${l.hint}`).join('；')}`);
-        if (insertedView.character.length) lines.push(`- 人物插入目标：${insertedView.character.map(b=>`${b.name}——${b.objective}`).join('；')}`);
-        // 人物任务：这一拍因为谁而不一样。空则整行省略，不得另写“本拍无人有戏”。
-        const beats = characterBeatsAt(currentWorldEvent?.id);
-        if (beats.length && currentWorldObjective) {
-          lines.push(`- 人物任务切入：${beats.map(b => `${b.name}——${currentWorldObjective}`).join('；')}`);
-        }
-        lines.push(
-          '- 纪律：没有需要玩家逐拍完成的任务，也没有进度惩罚。玩家可立刻着手、绕路，或把上述方向搁置任意多轮。当玩家问「主线是什么／我该往哪走」时，据此如实作答，并给出此刻可行的切入方式（找谁、去哪、打听什么）。不得替玩家决定下一步，不得提前演出该方向的结果，也不得因玩家不朝它走而制造追兵、压力或惩罚。',
-        );
-        return lines.join('\n');
-      })()
-    : nextEvents.length
+  const nextSection = nextEvents.length
     ? nextEvents.map(event => {
         const axisLine = formatAxisBeat(event, '下一拍');
         return `- ${event.name}${axisLine ? `（${axisLine}）` : ''}`;
@@ -1165,7 +1092,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     .map(id => characters.find(character => character.id === id)?.name)
     .filter((name): name is string => !!name)
     .slice(0, 20);
-  const loadBearingLine = !worldMode && loadBearingNames.length
+  const loadBearingLine = loadBearingNames.length
     ? formatLoadBearingProtection(loadBearingNames)
     : '';
 
@@ -1185,7 +1112,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 主线偏移冷却（引擎专属，存于 runtime 世界.状态.剧本模组.steeringCooldown，由 processGmResponse 甲/乙置入）：
   // >0 时不推送任何引子（尊重玩家自主选择，由引擎逐轮递减，见 runtime.advanceScenarioRuntime）。
   const steeringCooldown = Number((runtime as { steeringCooldown?: number }).steeringCooldown ?? 0) || 0;
-  const steeringLine = worldMode || steeringCooldown > 0
+  const steeringLine = steeringCooldown > 0
     ? ''
     : stallTurns >= 7
     ? `【回主线路标（玩家可忽略）】剧情已停滞多轮：本轮必须给玩家一条明确、此刻就能采取的回主线下一步。从下述“最近主线节点”里提取尚未揭晓的悬念/待解之谜/人物去向，以过渡钩子牵引，切勿复现该场景原貌、也不得提前演出该桥段：${dirHint}。用旁人指路、一封急报、路上传闻、同伴提议往某地或环境指向等自然方式带出，让玩家清楚“下一步可以往哪走”。严禁以新增敌袭、追兵或战斗充当压力（除非玩家主动招惹）。仅为可选引导：不得替玩家做决定，不得直接完成事件或强行触发主线高潮。`
@@ -1193,13 +1120,13 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
       ? `【回主线轻引子（玩家可忽略）】剧情已数轮未推进：本轮给一个轻量可选线索，指向下述“最近主线节点”的悬念（提取待解之谜/人物去向牵引，不复现场景、不提前演出）：${dirHint}。可用旁人一句话、一则传闻、环境异样或同伴提议带出，让玩家知道“想推进主线可以往这走”。不得强行触发主线高潮，不得直接完成事件，不得用新增战斗/追兵充当引子。`
       : '';
   const divergenceSignal = (runtime as any).divergenceSignal;
-  const divergenceControlLine = worldMode ? '' : divergenceSignal?.level === 'high'
+  const divergenceControlLine = divergenceSignal?.level === 'high'
     ? `【大偏离·必须给玩家选择】近轮剧情与主轴明显分离（确定性评分 ${divergenceSignal.score}/100）。不得催促或替玩家回归；本轮把当前衍生线明确表述为“本世界线支流”，并同时给出两个可执行选择：继续支流，或自然接回“${dirHint}”。`
     : divergenceSignal?.level === 'medium'
       ? `【中偏离·收编桥】近轮剧情开始偏离主轴（确定性评分 ${divergenceSignal.score}/100）。本轮把现有支线的人物、后果或线索收编为“${dirHint}”的前奏或余波；不得梦醒抹除，不得强制玩家行动。`
       : '';
   const returnBridge = (runtime as any).returnBridge;
-  const returnBridgeLine = !worldMode && returnBridge
+  const returnBridgeLine = returnBridge
     ? `【玩家已主动斩线回轨·本轮最高优先级】玩家选择结束衍生支线“${returnBridge.branchSummary}”。保留它已经造成的关系与后果，但立即用章节转场、来信、人物提议或局势变化把镜头接回“${returnBridge.anchorObjective}”。不得继续扩建旧支线，不得写成梦境或清空经历；本轮必须让玩家抵达该承重节点的可行动入口。`
     : '';
   const stageEntry = runtime.stageEntryPresentation;
@@ -1293,10 +1220,10 @@ ${openWorldLine ? `${openWorldLine}\n` : ''}${gambleRefusalLine ? `${gambleRefus
 - 鲛人：似人更似大鱼——灰白细鳞、硬颅无发、蓝脉薄膜眼睑、趾间生蹼、脊生黑鳍；水中呼吸、瞬息百里；深海鲛魁梧凶暴、湖鲛体小发绿；与碧鲮为死敌（斥其"背叛海洋"）。
 - 碧鲮：人形棕肤、无鳞无翼，水性极佳（游时美腿如鱼尾摆动）；长离大海患离魂症（神魂枯萎、心智渐塞）；原据碧鲮海湾今仅存一村；与鲛族、青鲨族敌对。
 
-${locationLine ? `## 当前地域风貌（环境/建筑/民俗描写以此为准）\n${locationLine}\n\n` : ''}## ${worldMode ? '当前局势（世界此刻正在运转的压力）' : '当前事件（玩家此刻所处的剧情节点）'}
+${locationLine ? `## 当前地域风貌（环境/建筑/民俗描写以此为准）\n${locationLine}\n\n` : ''}## 当前事件（玩家此刻所处的剧情节点）
 ${eventSection}
 
-## ${worldMode ? '世界走向' : '下一步（达成当前完成条件后，剧情将推进到）'}
+## 下一步（达成当前完成条件后，剧情将推进到）
 ${nextSection}
 
 ## 剧情标记
@@ -1309,13 +1236,7 @@ ${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKn
 4. ${introducedLine}
 5. 当前事件正文里出现、但没有列入“相关正典”的纯文本临时人物只用于本场演出：不得为其创建或更新 社交.关系、身份、属性、灵根、技能、背包等持久状态；除非玩家在后续明确将其收为长期同行者。
 
-${worldMode ? `【让世界行动，不替玩家补演原著】：
-
-1. 依据本地已经给出的局势、NPC 决策与行动回执推进眼前因果；玩家可以介入、旁观、换路线或忽略机会。不得把原著参考拍当成必须逐句复演的任务。
-2. 玩家输入只是行动提案；本地判定回执才是成功、失败与代价的权威。不得从玩家措辞、模型正文或 tavern_commands 推断锚点成立、人物死亡/生还、IF 激活、世界期限到达或秘密获知。
-3. reference beat 只有在上文明确标为可用时才能用于演出；玩家缺席时只写消息与余波，IF 已替代默认结果时不得复演旧结局。
-4. 可以输出普通物品、货币、伤势、声望与关系指令，但不得写 世界.状态.剧本模组 下任何路径，不得写 event.*.done、branch.*、character.*.status 或 world.r2_* 真值键。
-5. 不新增陌生宗门、法宝、系统任务、能力来源或精确兵力；重要人物、势力、地点与能力必须来自上文正典。` : `【主动推进剧情，不要停在原地等玩家】：
+【主动推进剧情，不要停在原地等玩家】：
 
 1. 每一段叙事都要朝“当前事件”的完成条件前进——主动设置场景、引入相关人物、制造契机，引导玩家走向该事件的达成，而不是只描述当前一幕然后停下。
 2. 【每轮必做的收尾核对——叙事与数据必须同步】逐项检查本轮叙事，凡发生以下情况**必须**输出对应指令（只写在正文不发指令＝东西凭空消失，实测：云苍峰赠玉简正文收下了背包却没有）：
@@ -1326,5 +1247,5 @@ ${worldMode ? `【让世界行动，不替玩家补演原著】：
    ⑤ 扬名/败名 → set 角色.属性.声望；NPC 好感/记忆变化 → add 好感度 / push 记忆
 3. 关键剧情事件未完成时，不要建议切换下一关；先推动当前关内关键剧情触发。
 4. 避免反复描写同一幕或原地打转；玩家若无明确行动，由你主动顺着主轴往下带。
-5. 不要猜测、引用或泄露后续章节，以及“下一步”之后尚未触发的事件细节。`}`;
+5. 不要猜测、引用或泄露后续章节，以及“下一步”之后尚未触发的事件细节。`;
 }

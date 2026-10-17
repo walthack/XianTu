@@ -3,7 +3,6 @@ import { rollD20 } from './diceRoller';
 import { GAME_NUMBERS } from '../modules/sceneModule/numbers';
 import { affinityOf } from '../modules/scenarioMods/ledger/affinityIdentity';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
-import type { WorldSimulationAuthorityReceipt } from '@/modules/scenarioMods/worldSimulation';
 import type { ActionClass, Degree } from '@/modules/scenarioMods/freeAction/config';
 
 export interface EventActionJudgementReceipt {
@@ -26,7 +25,7 @@ export interface FreeActionJudgementReceipt {
   affinityDelta?: number;
 }
 
-export type JudgementAuthorityReceipt = WorldSimulationAuthorityReceipt | EventActionJudgementReceipt | FreeActionJudgementReceipt;
+export type JudgementAuthorityReceipt = EventActionJudgementReceipt | FreeActionJudgementReceipt;
 
 export interface JudgementSpiritCost {
   onResolveRatio: number;
@@ -195,18 +194,7 @@ function normalizeAuthorityReceipt(raw: unknown): JudgementAuthorityReceipt | un
       degree: degree as Degree, itemId: itemId || null, ...(affinityDelta !== undefined ? { affinityDelta } : {}),
     };
   }
-  if (value.kind !== 'world_sim_intervention') return undefined;
-  const intervention = value as Partial<WorldSimulationAuthorityReceipt>;
-  const fields = ['situationId', 'outcomeId', 'sourceEventId', 'branchId', 'interventionId'] as const;
-  if (fields.some(field => !normalizeText(intervention[field]))) return undefined;
-  return {
-    kind: 'world_sim_intervention',
-    situationId: normalizeText(intervention.situationId),
-    outcomeId: normalizeText(intervention.outcomeId),
-    sourceEventId: normalizeText(intervention.sourceEventId),
-    branchId: normalizeText(intervention.branchId),
-    interventionId: normalizeText(intervention.interventionId),
-  };
+  return undefined;
 }
 
 function normalizeProposal(raw: unknown): JudgementProposal | null {
