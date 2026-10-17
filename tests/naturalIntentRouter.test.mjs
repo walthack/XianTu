@@ -49,6 +49,19 @@ test('pawn-phone negotiation does not match the south-pact contract and skips ke
   }), true);
 });
 
+test('修炼句和其他自由句一样交给意图模型：返回结果（含空票）就跳过旧预检，不再有修炼词例外', async () => {
+  const router = await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');
+  const { save } = await openingSave();
+  for (const playerText of ['我闭关修炼，冲击境界。', '我独自练功。']) {
+    let generateCalls = 0;
+    const result = await router.resolveNaturalIntent({
+      saveData: save, playerText,
+      generate: async () => { generateCalls += 1; return '{"actionId":"none","evidence":"","certainty":"high","statusProposals":[],"tickets":[]}'; },
+    });
+    assert.deepEqual([result.kind, result.skipKeywordPreflight, result.usedModel, generateCalls], ['free', true, true, 1], playerText);
+  }
+});
+
 const pickOpening = evidence => async () => JSON.stringify({ actionId: 'advance_declared_objective', eventId: 'lcq.event.s01_01', evidence, certainty: 'high' });
 
 function assertNarratedWithoutSettlement(result, reason) {
@@ -154,8 +167,10 @@ test('classifier failure degrades to a non-settling free action only when nothin
   const router = await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');
   const local = router.onClassifierFailure('classifier_error', [{ source: 'open_world_engine', actionId: 'walk', label: '去点心铺' }]);
   assert.equal(local.kind, 'free');
-  assert.equal(local.skipKeywordPreflight, true);
+  assert.equal(local.skipKeywordPreflight, false, '识别失败才回落旧关键词预检');
+  assert.equal(local.unsettled, true, '回落的同时仍告诉叙事“未发生”');
   assert.equal(local.notice, router.NATURAL_INTENT_DEGRADED_NOTICE);
+  assert.equal(router.onClassifierFailure('classifier_error', [{ source: 'open_world_engine', actionId: 'walk', label: '去点心铺' }], true).skipKeywordPreflight, true, '原话归自由行动变体时不回落');
   for (const source of ['event_engine', 'baihu_gamble_refusal_engine', 'opportunity_engine']) {
     const held = router.onClassifierFailure('malformed', [{ source: 'open_world_engine', actionId: 'walk', label: '去点心铺' }, { source, actionId: 'x', label: '合同动作' }]);
     assert.equal(held.kind, 'failed', source);

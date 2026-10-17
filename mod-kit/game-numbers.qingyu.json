@@ -327,6 +327,10 @@
     "tiers": {
       "nemesis": [
         -100,
+        -80
+      ],
+      "grudge": [
+        -79,
         -60
       ],
       "hostile": [
@@ -357,6 +361,17 @@
         80,
         100
       ]
+    },
+    "tierDesc": {
+      "nemesis": "不死不休",
+      "grudge": "结下深仇，见面必有一战",
+      "hostile": "明确敌视，随时可能动手",
+      "wary": "互相提防，话不投机",
+      "stranger": "萍水相逢，刚刚认识",
+      "acquainted": "渐渐熟悉，能说上几句话",
+      "trusted": "知心朋友，彼此信得过",
+      "close": "相当亲近，托付得起的人",
+      "sworn": "情感羁绊至深，灵魂伴侣或生死之交"
     },
     "stance": {
       "lowMax": -10,
@@ -462,6 +477,8 @@
       "give",
       "cast",
       "guard",
+      "solo",
+      "field",
       "other"
     ],
     "degrees": [
@@ -566,6 +583,7 @@
           },
           "grab": {
             "label": "抓住",
+            "hint": "擒拿制住对方；握手、牵手等亲近动作不算。",
             "base": -4,
             "npcOutcomes": {
               "critical_failure": "block",
@@ -585,7 +603,7 @@
           },
           "drain_qi": {
             "label": "夺元",
-            "hint": "单方面夺取对方真气修为；只有对方已无力设防时才成立；双方自愿的是传功，不是本项。",
+            "hint": "单方面夺取对方真气修为；对方昏迷、被制住也出票，成立与否本地判定；自愿的是传功，不是本项。",
             "enabled": true,
             "base": -12,
             "difficulty": 9,
@@ -738,6 +756,7 @@
         "variants": {
           "flirt": {
             "label": "调情",
+            "hint": "明确的调情撩拨；寻常寒暄、夸月色不算。",
             "matrix": {
               "low": {
                 "open": "refuse",
@@ -772,6 +791,7 @@
           },
           "invite": {
             "label": "邀请",
+            "hint": "邀约亲近；邀请双修属双修项。",
             "matrix": {
               "low": {
                 "open": "refuse",
@@ -785,6 +805,30 @@
                 "open": "accept",
                 "closed": "deflect"
               }
+            }
+          },
+          "dual_cultivate": {
+            "label": "双修",
+            "hint": "邀请对方双修或与对方合修功法（长句亦是），必须有对象；独自修炼不是本项。",
+            "route": "judge",
+            "kind": "cultivate",
+            "modifierProfile": "social",
+            "difficulty": 11,
+            "effect": "selfBuff",
+            "buffRef": "dualCultivation.buff",
+            "applyRecovery": true,
+            "base": 0,
+            "outcomeFactor": "benefit",
+            "requires": {
+              "minGoodwill": "freeAction.dualCultivation.requires.minGoodwill"
+            },
+            "npcOutcomes": {
+              "critical_failure": "unsynced",
+              "failure": "unsynced",
+              "partial": "shallow",
+              "success": "harmonized",
+              "great_success": "harmonized",
+              "perfect": "harmonized"
             }
           }
         }
@@ -829,6 +873,7 @@
         "variants": {
           "transfer_qi": {
             "label": "传功",
+            "hint": "把自己的真气传给对方（传功、渡功）；自愿的，不是夺元。",
             "effect": "practiceProgress",
             "base": 3,
             "requires": {
@@ -901,6 +946,57 @@
           }
         }
       },
+      "solo": {
+        "label": "自修",
+        "defaults": {
+          "enabled": true,
+          "target": "none",
+          "route": "judge",
+          "kind": "cultivate",
+          "modifierProfile": "default",
+          "difficulty": 11,
+          "effect": "none"
+        },
+        "variants": {
+          "train": {
+            "label": "修炼",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】打坐练功修炼；与人双修、传功不是本项。",
+            "requires": {
+              "realmMoves": true
+            }
+          },
+          "breakthrough": {
+            "label": "冲关",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】冲关突破境界。",
+            "requires": {
+              "realmMoves": true
+            }
+          },
+          "recover": {
+            "label": "调息疗伤",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息运功平复气血，满血也算；双修、为他人疗伤不是本项。",
+            "applyRecovery": true
+          }
+        }
+      },
+      "field": {
+        "label": "场面",
+        "defaults": {
+          "enabled": true,
+          "target": "none",
+          "route": "judge",
+          "kind": "escape",
+          "modifierProfile": "default",
+          "difficulty": 20,
+          "effect": "none"
+        },
+        "variants": {
+          "scene_act": {
+            "label": "逃跑潜行探索",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】逃跑、潜行、探索四周搜寻线索，不算观察。"
+          }
+        }
+      },
       "other": {
         "label": "其他/无效",
         "variants": {
@@ -922,6 +1018,149 @@
     "dualCultivation": {
       "requires": {
         "minGoodwill": 60
+      },
+      "buff": {
+        "name": "阴阳调和",
+        "type": "buff",
+        "minutesByOutcome": {
+          "partial": 120,
+          "success": 240,
+          "great_success": 360,
+          "perfect": 480
+        },
+        "strength": 1,
+        "source": "本地判定",
+        "descKey": "free.buff.dual_cultivation.desc"
+      }
+    },
+    "aftermath": {
+      "hpLoss": {
+        "kinds": [
+          "combat"
+        ],
+        "ratio": {
+          "partial": 0.05,
+          "failure": 0.15,
+          "critical_failure": 0.4
+        },
+        "minLoss": 1,
+        "keepHp": 1
+      },
+      "gate": {
+        "ttlTurns": 3,
+        "labelChars": 48,
+        "defaultScope": "scene",
+        "scopeByKind": {
+          "combat": "combat",
+          "escape": "combat",
+          "social": "social",
+          "scheme": "social"
+        },
+        "outcomeByResult": {
+          "partial": "partial",
+          "failure": "failure",
+          "critical_failure": "failure"
+        }
+      }
+    },
+    "skillMatch": {
+      "skillBonus": "factors.skillCap",
+      "talentBonus": 4,
+      "maxSkill": 1,
+      "maxTalent": 1,
+      "unavailableMarks": [
+        "未传授",
+        "并未传授",
+        "尚未传授",
+        "未学会",
+        "尚未掌握",
+        "不会施展",
+        "不能使用",
+        "不可使用"
+      ],
+      "tags": {
+        "combat": [
+          "刀",
+          "剑",
+          "拳",
+          "掌",
+          "枪",
+          "矛",
+          "弓",
+          "战",
+          "攻",
+          "杀",
+          "破甲",
+          "护体",
+          "真气",
+          "劲"
+        ],
+        "cultivate": [
+          "功法",
+          "内功",
+          "心法",
+          "修炼",
+          "真气",
+          "灵气",
+          "疗伤",
+          "调息",
+          "双修",
+          "生机",
+          "经脉"
+        ],
+        "craft": [
+          "炼丹",
+          "炼器",
+          "制符",
+          "布阵",
+          "锻造",
+          "药",
+          "丹",
+          "器",
+          "阵",
+          "符"
+        ],
+        "explore": [
+          "探查",
+          "探索",
+          "感应",
+          "追踪",
+          "辨识",
+          "寻路",
+          "侦察",
+          "生死气息"
+        ],
+        "social": [
+          "口才",
+          "交涉",
+          "说服",
+          "威慑",
+          "魅惑",
+          "礼法",
+          "辩"
+        ],
+        "escape": [
+          "身法",
+          "轻功",
+          "遁",
+          "逃",
+          "步法",
+          "疾行"
+        ],
+        "stealth": [
+          "潜行",
+          "隐匿",
+          "敛息",
+          "藏形",
+          "暗杀"
+        ],
+        "scheme": [
+          "谋略",
+          "计策",
+          "筹算",
+          "布局",
+          "权谋"
+        ]
       }
     }
   }

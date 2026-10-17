@@ -11,7 +11,7 @@ import type { SaveData } from '@/types/game';
 import { freeActionConfig } from './config';
 
 export interface FreeActionLogRow {
-  key: string; turn: number; actionClass: string; variant: string; targetId: string;
+  key: string; turn: number; actionClass: string; variant: string; targetId: string | null;
   resultKey?: string; delta?: number; major?: boolean;
 }
 export interface FreeActionState {

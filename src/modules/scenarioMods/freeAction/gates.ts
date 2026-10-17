@@ -15,9 +15,11 @@ import { relationshipOf, runtimeEntityName } from '../ledger/affinityIdentity';
 import { stanceOf } from '../affinityLadder';
 import { actorStatusRecords } from '../actorStatusRead';
 import { levelOf } from '@/utils/realmUtils';
+import { trainingRealm } from '../levelProgression';
 import type { InjuryRecord } from '../../sceneModule/host/injuries';
 import { itemEffectOf, type ItemEffect } from './itemUse';
 import { variantSpecOf, type VariantSpec } from './config';
+import { freeActionText } from './judgement';
 import { canonCharacterOf, freeActionRosterOf, playerIdOf, type FreeActionTicket } from './ticket';
 import { readFreeActionState, runtimeOf } from './state';
 import { protectedForbids } from './protect';
@@ -62,9 +64,27 @@ export function isToxic(item: ItemEffect): boolean {
   return item.tags.some(tag => toxic.includes(tag));
 }
 
+/** 自修试算：按旧引擎同一套修炼结算，成功档下境界（名称 / 阶段 / 进度）会不会变。 */
+function realmWouldMove(save: SaveData, spec: VariantSpec): boolean {
+  const now = (save as any)?.角色?.属性?.境界, next = trainingRealm(save, freeActionText(spec, ''), 'success');
+  return Boolean(now && next && (next.名称 !== now.名称 || next.阶段 !== now.阶段 || Number(next.当前进度) !== Number(now.当前进度)));
+}
+
+/**
+ * 无对象的票（自修、场面）只在“出判定卡前”过闸门：不查名单、好感、物品、代价，只看场面是否在进行，和自修的境界试算。
+ * 确认判定时旧引擎已按 kind 落账（境界、气血、余波），所以结算侧不再回头过闸门（见 settle.ts）。
+ */
+function checkTargetlessGates(save: SaveData, spec: VariantSpec): GateOk | GateFail {
+  const slots: GateSlots = { player: playerNameOf(save), target: '' };
+  if (activeScene(save)) return { ok: false, reason: 'scene_active', slots };
+  if (spec.requires?.realmMoves && !realmWouldMove(save, spec)) return { ok: false, reason: 'not_ready', slots };
+  return { ok: true, spec, slots, toxic: false };
+}
+
 export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeActionDeps = {}): GateOk | GateFail {
   const spec = variantSpecOf(ticket.actionClass, ticket.variant);
   if (!spec || !spec.enabled) throw new Error(`自由行动变体不可用：${ticket.actionClass}.${ticket.variant}`);
+  if (spec.target === 'none') return checkTargetlessGates(save, spec);
   const targetId = ticket.targetId!, runtime = runtimeOf(save);
   const slots: GateSlots = { player: playerNameOf(save), target: targetNameOf(save, targetId) };
   const fail = (reason: GateReason): GateFail => ({ ok: false, reason, slots });

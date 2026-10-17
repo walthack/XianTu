@@ -143,7 +143,7 @@
                 </div>
                 <div class="detail-badges">
                   <span class="relationship-badge">{{ selectedPerson.与玩家关系 || '相识' }}</span>
-                  <span class="intimacy-badge" :class="getIntimacyClass(selectedPerson.好感度)">
+                  <span class="intimacy-badge" :class="getIntimacyClass(selectedPerson.好感度)" :title="getIntimacyTierDesc(selectedPerson.好感度)">
                     {{ getIntimacyTierName(selectedPerson.好感度) }} {{ selectedPerson.好感度 || 0 }}
                   </span>
                   <span class="race-badge">{{ selectedPerson.种族 || '人族' }}</span>
@@ -1857,6 +1857,7 @@ const INTIMACY_CLASS_BY_TIER: Record<AffinityTierId, string> = {
   wary: 'dislike',
   hostile: 'hostile',
   nemesis: 'enemy',
+  grudge: 'enemy',
 };
 
 const getIntimacyLevel = (intimacy: number | undefined): string => {
@@ -1865,6 +1866,9 @@ const getIntimacyLevel = (intimacy: number | undefined): string => {
 
 /** 档位名，与 CharacterDetailsPanel 同源，让玩家在两处看到同一套说法。 */
 const getIntimacyTierName = (intimacy: number | undefined): string => tierOf(intimacy || 0).name;
+
+/** 档位描述取自配置 game-numbers.affinity.tierDesc；缺省则不显示。 */
+const getIntimacyTierDesc = (intimacy: number | undefined): string | undefined => tierOf(intimacy || 0).desc;
 
 const getIntimacyClass = (intimacy: number | undefined): string => {
   return `intimacy-${getIntimacyLevel(intimacy)}`;

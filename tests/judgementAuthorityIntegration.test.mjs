@@ -10,6 +10,10 @@ test('all three player entry forms converge on the same preflight before AI gene
   assert.match(source, /const judgementAction = composeJudgementAction\(inputText\.value, actionQueueText\)/);
   assert.match(source, /buildLocalJudgementPreflight\(judgementAction, saveData, getNarrativeTurn\(saveData\)\)/);
   assert.match(source, /shouldSkipJudgementPreflight/);
+  // 迁移第 3 步：意图模型返回结果（含空票）就跳过旧预检，修炼词不再是例外；识别失败才回落
+  const skipLine = source.split('\n').find(row => /skipPreflight: execution\?\.skipPreflight/.test(row));
+  assert.match(skipLine, /skipKeywordPreflightFromIntent,/);
+  assert.doesNotMatch(skipLine, /练功|修炼|闭关|冲关|冲击境界/);
   assert.match(source, /const selectActionOption[\s\S]*inputText\.value = trimmed/);
   assert.match(source, /行动判定（尚未掷骰）/);
   assert.match(source, /确认并掷骰/);

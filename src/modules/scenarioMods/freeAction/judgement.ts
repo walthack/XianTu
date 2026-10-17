@@ -1,6 +1,6 @@
 /**
  * 自由行动签发判定卡：按变体行的 kind / difficulty / modifierProfile 组因子，票写进 authorityReceipt。
- * 因子只有六司加权、重伤、幸运、环境，以及 modifierProfile 声明 levelGap 时的“境界差”（source:'realm'）；
+ * 因子有六司加权、重伤、幸运、环境，modifierProfile 声明 levelGap 时的“境界差”（source:'realm'），以及按行动类匹配的技能/天赋加成（没有则一行“未掌握”提示，值 0，见 skillMatch.ts）；
  * 玩家原话不进判定（actionText 由模板生成），所以不会命中任何关键词判定或修炼进度的正则。
  */
 import type { SaveData } from '@/types/game';
@@ -16,7 +16,8 @@ import { relationshipOf } from '../ledger/affinityIdentity';
 import { namingChapter } from '../ledger/naming';
 import { combatLevelOf, resolveActorStats } from '../characterStats';
 import { freeActionConfig, type VariantSpec } from './config';
-import { whyNowText } from './facts';
+import { whyNowText, whySelfText } from './facts';
+import { skillTalentFactors } from './skillMatch';
 import type { FreeActionTicket } from './ticket';
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
@@ -34,6 +35,14 @@ export function targetLevelOf(save: SaveData, targetId: string): number | undefi
   return fallback < 0 ? undefined : fallback;
 }
 
+/**
+ * 判定卡上的行动文本，由模板生成，不含玩家原话。无对象的自修靠模板里的变体名命中旧引擎的修炼结算（trainingRealm 认“修炼/冲关”），
+ * 所以变体 label 是接口的一部分——改名要同步 tests/freeActionSolo.test.mjs。
+ */
+export function freeActionText(spec: VariantSpec, targetName: string): string {
+  return spec.target === 'none' ? `自行「${spec.label}」（自由行动）` : `对${targetName}施行「${spec.label}」（自由行动）`;
+}
+
 export function buildFreeActionJudgementProposal(
   save: SaveData, currentTurn: number, ticket: FreeActionTicket, spec: VariantSpec, names: { player: string; target: string },
 ): JudgementProposal {
@@ -41,19 +50,20 @@ export function buildFreeActionJudgementProposal(
   const data = calculateTurnJudgementData(root?.角色?.身份?.先天六司, root?.角色?.身份?.后天六司, root?.角色?.位置);
   const factors: JudgementFactor[] = [
     ...stateFactors(kind, root),
+    ...skillTalentFactors(save, spec),
     { label: '幸运', value: boundedLuck(Number(root?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center) + Number(root?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
     environmentFactorFor(kind, data),
   ];
-  if (goalModifierRule(spec.modifierProfile).levelGap) {
-    const mine = levelOf(root?.角色?.属性?.境界) ?? 0, theirs = targetLevelOf(save, ticket.targetId!);
+  if (ticket.targetId && goalModifierRule(spec.modifierProfile).levelGap) {
+    const mine = levelOf(root?.角色?.属性?.境界) ?? 0, theirs = targetLevelOf(save, ticket.targetId);
     factors.splice(1, 0, { label: theirs === undefined ? '境界差（无级数数据，按同级）' : '境界差', value: levelModifier(mine, theirs), source: 'realm' });
   }
   const stakeKey = `free.stakes.${spec.actionClass}.`, stake = (name: string) => packText(`${stakeKey}${name}`);
   return createJudgementProposal({
-    actionText: `对${names.target}施行「${spec.label}」（自由行动）`,
+    actionText: freeActionText(spec, names.target),
     kind,
-    target: ticket.targetId!,
-    whyNow: whyNowText({ ...names, label: spec.label }),
+    target: ticket.targetId ?? undefined,
+    whyNow: (ticket.targetId ? whyNowText : whySelfText)({ ...names, label: spec.label }),
     difficulty: { band: bandFor(spec.difficulty!), value: spec.difficulty! },
     factors,
     stakes: {
@@ -62,11 +72,11 @@ export function buildFreeActionJudgementProposal(
     },
     canonPolicy: 'route_process_only',
     authorityReceipt: {
-      kind: 'free_action_judgement', ticketId: `${currentTurn}.${ticket.targetId}.${spec.variant}`,
-      actionClass: ticket.actionClass, variant: ticket.variant, targetId: ticket.targetId!, degree: ticket.degree, itemId: ticket.itemId,
+      kind: 'free_action_judgement', ticketId: `${currentTurn}.${ticket.targetId ?? spec.actionClass}.${spec.variant}`,
+      actionClass: ticket.actionClass, variant: ticket.variant, targetId: ticket.targetId, degree: ticket.degree, itemId: ticket.itemId,
       ...(ticket.affinityDelta !== undefined ? { affinityDelta: ticket.affinityDelta } : {}),
     },
-    applyCultivationRecovery: false,
+    applyCultivationRecovery: spec.applyRecovery === true,
     createdAtTurn: currentTurn,
   });
 }

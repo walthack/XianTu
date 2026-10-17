@@ -92,12 +92,13 @@ export interface NaturalIntentResult {
  */
 export const NATURAL_INTENT_DEGRADED_NOTICE = '行动识别没有及时完成，本回合按自由行动处理，不结算剧情动作。';
 export const NATURAL_INTENT_CONTRACT_HOLD = '这一步关系到当前剧情进度，行动没能识别，本回合没有推进。输入已保留，请点选上方选项，或换个说法再发送。';
-export function onClassifierFailure(reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult {
+export function onClassifierFailure(reason: string, candidates: readonly NaturalIntentCandidate[], ownedByFreeAction = false): NaturalIntentResult {
   noteTicketDiscard('intent', reason);
   if (candidates.some(candidate => candidate.source !== 'open_world_engine')) {
     return { kind: 'failed', reason, clarification: NATURAL_INTENT_CONTRACT_HOLD, hold: true, skipKeywordPreflight: true, usedModel: true };
   }
-  return { kind: 'free', reason, notice: NATURAL_INTENT_DEGRADED_NOTICE, skipKeywordPreflight: true, usedModel: true, unsettled: true };
+  // 识别失败（超时 / 坏 JSON）才回落旧关键词预检；原话归某个自由行动变体（legacyGuardWords）的除外，旧预检会把它判成别的。界面在没有任何判定卡时照旧告诉叙事“未发生”。
+  return { kind: 'free', reason, notice: NATURAL_INTENT_DEGRADED_NOTICE, skipKeywordPreflight: ownedByFreeAction, usedModel: true, unsettled: true };
 }
 
 type IntentGenerate = (input: {
@@ -424,17 +425,13 @@ export async function resolveNaturalIntent(input: {
   const fast = resolveNaturalIntentFastPath(input.saveData, input.playerText, input.selected);
   if (fast) return fast;
 
-  // 试玩范围内且自由行动开启时，含修炼词的句子也交给模型出票（“和她一起修炼”可能是对人做的事）；自我修炼句返回空票，由界面照旧走本地修炼预检。
-  const isTrainingText = /练功|修炼|闭关|冲关|冲击境界/.test(input.playerText);
-  const modelTicketsTraining = isTrainingText && freeActionConfig().enabled && isScopedNaturalIntentSave(input.saveData) && Boolean(input.generate);
+  // 自由行动接管的存档（试玩范围、开启、有意图模型）里，修炼词的句子和其他句子一样交给意图模型，各类由 freeAction 自己判定；模型返回结果（含空票）就不再落旧预检。
+  // 没接管的存档（非试玩、关闭、没有模型）不出票，旧预检是它们唯一的判定来源：含修炼词的句子照旧交给旧预检（不进作者动作别名匹配）。
   const ownedByFreeAction = freeActionOwnsText(input.saveData, input.playerText);
-  if(isTrainingText&&!modelTicketsTraining)return {kind:'free',skipKeywordPreflight:ownedByFreeAction,usedModel:false};
-  // 修炼句识别失败（坏 JSON / 报错）：回到旧的本地修炼判定，不像普通自由句那样被“固定事件链”拦住。
-  const classifierFailure = (reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult => {
-    if (!modelTicketsTraining) return onClassifierFailure(reason, candidates);
-    noteTicketDiscard('intent', reason);
-    return { kind: 'free', reason, skipKeywordPreflight: ownedByFreeAction, usedModel: true, unsettled: ownedByFreeAction };
-  };
+  if (!(freeActionConfig().enabled && isScopedNaturalIntentSave(input.saveData) && Boolean(input.generate)) && /练功|修炼|闭关|冲关|冲击境界/.test(input.playerText)) {
+    return { kind: 'free', skipKeywordPreflight: ownedByFreeAction, usedModel: false };
+  }
+  const classifierFailure = (reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult => onClassifierFailure(reason, candidates, ownedByFreeAction);
   const alias = input.resolveFromText?.(input.saveData, input.playerText);
   if (alias && !QUEST_LINES.some(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===alias.eventId))) {
     return { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
@@ -527,6 +524,11 @@ export async function resolveNaturalIntent(input: {
     if (!parsed.actionId) return free('missing_action', true);
     if (parsed.actionId === 'none') {
       return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution, ...withTickets() };
+    }
+    // 模型常把票的变体名（train / scene_act / cast.transfer_qi）填进 actionId：它不是任何候选的 id，等于没命中作者动作，票照收（票自己仍要过全套校验与闸门）。
+    if (!candidates.some(item => item.actionId === parsed.actionId)) {
+      noteTicketDiscard('intent', 'unknown_action', parsed.actionId);
+      return { kind: 'free', reason: 'unknown_action', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution, ...withTickets() };
     }
     if (!parsed.evidence || !evidenceBelongsToPlayer(String(input.playerText || ''), parsed.evidence)) {
       return free('bad_evidence');

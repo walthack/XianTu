@@ -6,9 +6,9 @@ import { loadTs } from './loadTs.mjs';
 const ladderPromise = loadTs('../src/modules/scenarioMods/affinityLadder.ts');
 const stancePromise = loadTs('../src/modules/scenarioMods/relationStance.ts');
 
-test('八档区间连续、不重叠、完整覆盖 [-100, 100]', async () => {
+test('九档区间连续、不重叠、完整覆盖 [-100, 100]', async () => {
   const { AFFINITY_TIERS, tierOf } = await ladderPromise;
-  assert.equal(AFFINITY_TIERS.length, 8);
+  assert.equal(AFFINITY_TIERS.length, 9);
   assert.equal(AFFINITY_TIERS[0].min, -100);
   assert.equal(AFFINITY_TIERS[AFFINITY_TIERS.length - 1].max, 100);
   for (let i = 1; i < AFFINITY_TIERS.length; i += 1) {
@@ -25,7 +25,7 @@ test('八档区间连续、不重叠、完整覆盖 [-100, 100]', async () => {
 test('档位边界落在用户裁定的位置', async () => {
   const { tierOf } = await ladderPromise;
   const expected = [
-    [-100, 'nemesis'], [-60, 'nemesis'], [-59, 'hostile'], [-25, 'hostile'],
+    [-100, 'nemesis'], [-80, 'nemesis'], [-79, 'grudge'], [-60, 'grudge'], [-59, 'hostile'], [-25, 'hostile'],
     [-24, 'wary'], [-10, 'wary'], [-9, 'stranger'], [19, 'stranger'],
     [20, 'acquainted'], [39, 'acquainted'], [40, 'trusted'], [59, 'trusted'],
     [60, 'close'], [79, 'close'], [80, 'sworn'], [100, 'sworn'],
@@ -164,8 +164,9 @@ test('高档姿态不得盖掉表演卡声线（贾文和「他不会变热」�
 test('合同头部不得携带 tier.gist（它不属于五维度且措辞更强）', async () => {
   const { formatRelationStance } = await stancePromise;
   const nemesis = formatRelationStance('鬼巫王', { favorability: -80 });
-  assert.ok(nemesis.includes('仇雠'), '档位名仍要有');
+  assert.ok(nemesis.includes('不共戴天'), '档位名仍要有');
   assert.ok(!nemesis.includes('已认定必须除掉你'), 'gist 不得进 LLM 合同，只服务 UI/文档');
+  assert.ok(!nemesis.includes('不死不休'), 'desc 只服务玩家 UI，不得进 LLM 合同');
 });
 
 // —— 姿态渲染合同 ——
@@ -188,7 +189,7 @@ test('姿态合同三档内容互不相同，且带档位名', async () => {
   const high = formatRelationStance('吕雉', { favorability: 90 });
   assert.notEqual(low, mid);
   assert.notEqual(mid, high);
-  assert.ok(low.includes('仇雠'));
+  assert.ok(low.includes('不共戴天'));
   assert.ok(mid.includes('陌路'));
   assert.ok(high.includes('生死'));
 });
@@ -646,4 +647,17 @@ test('姿态可由外部传入以覆盖瞬时投影（供滞回接线）', async
   const forced = formatRelationStance('贾文和', { favorability: 90, stance: 'low' });
   assert.ok(forced.includes('不等于失去智性或机械敌对'), '应使用传入姿态而非好感瞬时值');
   assert.ok(forced.includes('生死'), '档位名仍反映真实好感');
+});
+
+test('低立场判断不变：不共戴天／积怨已久／敌意／戒备均为 low，且 desc 取自配置', async () => {
+  const { AFFINITY_TIERS, stanceOf, tierOf } = await ladderPromise;
+  for (const fav of [-100, -80, -79, -60, -59, -25, -24, -10]) assert.equal(stanceOf(fav), 'low', `好感 ${fav}`);
+  assert.equal(tierOf(-80).name, '不共戴天');
+  assert.equal(tierOf(-79).name, '积怨已久');
+  const expected = {
+    nemesis: '不死不休', grudge: '结下深仇，见面必有一战', hostile: '明确敌视，随时可能动手',
+    wary: '互相提防，话不投机', stranger: '萍水相逢，刚刚认识', acquainted: '渐渐熟悉，能说上几句话',
+    trusted: '知心朋友，彼此信得过', close: '相当亲近，托付得起的人', sworn: '情感羁绊至深，灵魂伴侣或生死之交',
+  };
+  for (const tier of AFFINITY_TIERS) assert.equal(tier.desc, expected[tier.id], `${tier.id} 描述`);
 });

@@ -102,7 +102,7 @@ export function ticketPromptSection(save: SaveData): { system: string; payload: 
     byClass.get(row.actionClass)!.push({ variant: row.variant, label: row.label, needsItem: row.needsItem, ...(row.hint ? { hint: row.hint } : {}) });
   }
   const system = [
-    `自由行动票：玩家这一句里若确实对在场某人做了动作，就在tickets数组里出票（最多${cfg.ticket.maxPerTurn}张，每个目标最多1张）；没有就返回空数组。`,
+    `自由行动票：玩家这句若确实对在场某人或自身做了动作，就在tickets数组出票（最多${cfg.ticket.maxPerTurn}张，每个目标最多1张）；没有就返回空数组。`,
     '每张票字段为actionClass、variant、targetId、degree、performed、evidence、itemId，外加可选的affinityDelta，不许有别的字段；除affinityDelta外不要输出任何数值。',
     `affinityDelta（可选）：你作为主持评估这次举动让对方对玩家的好感变化，整数，范围-${cfg.affinity.perBeatCap}..+${cfg.affinity.perBeatCap}，口径同候选的好感评估；代码以自己算的基础值为准，只在其上下小幅采纳你的值，对方拒绝或没做成时一律不采纳。拿不准就省略。`,
     'actionClass与variant只能取freeAction.classes里的；找不到合适变体就不出票，不要就近硬套。targetId只能取freeAction.roster里的id；itemId只能取freeAction.items里的id，用不到手段物品填null。needsItem为true的变体，玩家没有合用的物品也照样出票，itemId填null，本地会判定没成事并告知，不要因为没物品就不出票。',
@@ -152,23 +152,27 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     if (t.performed !== 'yes') { drop(cfg.performed.includes(String(t.performed)) ? 'not_performed' : 'bad_performed', label); continue; }
     // 证据先核对：证据不过的票连“未发生”事实也不发（防止凭空杜撰的票误伤）。
     if (typeof t.evidence !== 'string' || !evidenceBelongs(playerText, t.evidence)) { drop('bad_evidence', label); continue; }
-    // 模型常把“空”写成字符串 "null" / ""，按空处理。
-    const targetId = t.targetId === 'null' || t.targetId === '' ? null : t.targetId;
-    if (typeof targetId !== 'string' || !roster.has(targetId)) { refuse('target_unavailable', 'target_not_present', label); continue; }
-    if (!relationshipOf(save as any, targetId) && !canonCharacterOf(save, targetId)) { refuse('target_unavailable', 'target_no_record', label); continue; }
+    // 模型常把“空”写成字符串 "null" / ""，按空处理。无对象的变体（自修、场面）不看模型报的 targetId，一律置空，也不查名单与关系。
+    const targetless = spec.target === 'none';
+    const reported = t.targetId === 'null' || t.targetId === '' ? null : t.targetId;
+    if (!targetless) {
+      if (typeof reported !== 'string' || !roster.has(reported)) { refuse('target_unavailable', 'target_not_present', label); continue; }
+      if (!relationshipOf(save as any, reported) && !canonCharacterOf(save, reported)) { refuse('target_unavailable', 'target_no_record', label); continue; }
+    }
+    const targetId = targetless ? null : reported as string;
     // 不需要物品的变体：模型顺手带的 itemId 直接置空，不让整张票作废。
     let itemId = t.itemId === 'null' || t.itemId === '' ? null : t.itemId ?? null;
     if (!spec.needsItem) itemId = null;
     else if (itemId !== null && (typeof itemId !== 'string' || !itemIds.has(itemId))) { refuse('item_unavailable', 'bad_item_id', label); continue; }
-    // 每个目标最多一张：同一人被报了几张，留分量最重的（变体行的好感基础点绝对值最大者；并列取先报的），其余丢弃。
-    const weight = Math.abs(spec.base ?? 0), prior = picked.get(targetId);
+    // 每个目标最多一张：同一人被报了几张，留分量最重的（变体行的好感基础点绝对值最大者；并列取先报的），其余丢弃。无对象的票按类去重。
+    const pickKey = targetId ?? `class:${spec.actionClass}`, weight = Math.abs(spec.base ?? 0), prior = picked.get(pickKey);
     // 被挤掉的那张证据已核对、确是玩家做的事：不结算，但要留一行“未发生”，否则叙事会把它写成已成。
     if (prior && prior.weight >= weight) { refuse('dropped', 'duplicate_target', label); continue; }
     if (prior) refuse('dropped', 'duplicate_target', `${prior.ticket.actionClass}.${prior.ticket.variant}`);
     // 好感浮动位：不是有限数字就当没报（不作废整张票）；先钳到单拍上限。
-    const floated = typeof t.affinityDelta === 'number' && Number.isFinite(t.affinityDelta)
+    const floated = !targetless && typeof t.affinityDelta === 'number' && Number.isFinite(t.affinityDelta)
       ? Math.max(-cfg.affinity.perBeatCap, Math.min(cfg.affinity.perBeatCap, Math.round(t.affinityDelta))) : undefined;
-    picked.set(targetId, {
+    picked.set(pickKey, {
       weight,
       ticket: {
         actionClass: t.actionClass as ActionClass, variant: spec.variant, targetId, degree: t.degree as Degree,

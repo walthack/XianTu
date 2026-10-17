@@ -15,7 +15,7 @@ import { GAME_NUMBERS } from '../sceneModule/numbers';
  */
 
 export type AffinityTierId =
-  | 'nemesis' | 'hostile' | 'wary' | 'stranger'
+  | 'nemesis' | 'grudge' | 'hostile' | 'wary' | 'stranger'
   | 'acquainted' | 'trusted' | 'close' | 'sworn';
 
 /** 三档姿态：表现层（R3-9）消费的粒度。LLM 只看姿态，不看八档。 */
@@ -30,21 +30,29 @@ export interface AffinityTier {
   stance: AffinityStance;
   /** 一句话语义，供 prompt 与 UI 提示复用。 */
   gist: string;
+  /** 玩家可见的一句话描述，取自 game-numbers.affinity.tierDesc；配置缺省则无此字段，UI 不显示。 */
+  desc?: string;
 }
 
 /** 档位区间取自 game-numbers.affinity.tiers（按档 id）。 */
 const tierRange = (id: AffinityTierId) => ({ min: GAME_NUMBERS.affinity.tiers[id][0], max: GAME_NUMBERS.affinity.tiers[id][1] });
 
-/** 八档阶梯。区间连续且不重叠，覆盖 [-100, 100]。数值在 game-numbers.affinity。 */
+const tierDesc = (id: AffinityTierId) => {
+  const desc = (GAME_NUMBERS.affinity.tierDesc as Partial<Record<AffinityTierId, string>>)[id];
+  return typeof desc === 'string' && desc ? { desc } : {};
+};
+
+/** 九档阶梯。区间连续且不重叠，覆盖 [-100, 100]。数值与描述在 game-numbers.affinity。 */
 export const AFFINITY_TIERS: readonly AffinityTier[] = [
-  { id: 'nemesis',    name: '仇雠', ...tierRange('nemesis'), stance: 'low',  gist: '已认定必须除掉你' },
-  { id: 'hostile',    name: '敌意', ...tierRange('hostile'), stance: 'low',  gist: '视你为对手，可谈但每句都在算计' },
-  { id: 'wary',       name: '戒备', ...tierRange('wary'), stance: 'low',  gist: '不信任，保持距离' },
-  { id: 'stranger',   name: '陌路', ...tierRange('stranger'), stance: 'mid',  gist: '无所谓，按公事公办' },
-  { id: 'acquainted', name: '相识', ...tierRange('acquainted'), stance: 'mid',  gist: '认得你，愿意搭话' },
-  { id: 'trusted',    name: '信重', ...tierRange('trusted'), stance: 'high', gist: '把你算进自己的盘子里' },
-  { id: 'close',      name: '亲厚', ...tierRange('close'), stance: 'high', gist: '关系本身有分量' },
-  { id: 'sworn',      name: '生死', ...tierRange('sworn'), stance: 'high', gist: '你在其底线之内' },
+  { id: 'nemesis', name: '不共戴天', ...tierRange('nemesis'), ...tierDesc('nemesis'), stance: 'low', gist: '已认定必须除掉你' },
+  { id: 'grudge', name: '积怨已久', ...tierRange('grudge'), ...tierDesc('grudge'), stance: 'low', gist: '结下深仇，不愿善罢甘休' },
+  { id: 'hostile', name: '敌意', ...tierRange('hostile'), ...tierDesc('hostile'), stance: 'low', gist: '视你为对手，可谈但每句都在算计' },
+  { id: 'wary', name: '戒备', ...tierRange('wary'), ...tierDesc('wary'), stance: 'low', gist: '不信任，保持距离' },
+  { id: 'stranger', name: '陌路', ...tierRange('stranger'), ...tierDesc('stranger'), stance: 'mid', gist: '无所谓，按公事公办' },
+  { id: 'acquainted', name: '相识', ...tierRange('acquainted'), ...tierDesc('acquainted'), stance: 'mid', gist: '认得你，愿意搭话' },
+  { id: 'trusted', name: '信重', ...tierRange('trusted'), ...tierDesc('trusted'), stance: 'high', gist: '把你算进自己的盘子里' },
+  { id: 'close', name: '亲厚', ...tierRange('close'), ...tierDesc('close'), stance: 'high', gist: '关系本身有分量' },
+  { id: 'sworn', name: '生死', ...tierRange('sworn'), ...tierDesc('sworn'), stance: 'high', gist: '你在其底线之内' },
 ] as const;
 
 /** 姿态边界：low ≤ -10 ＜ mid ＜ 40 ≤ high。与上表 stance 列一致。 */
@@ -101,7 +109,7 @@ export function clampAffinity(value: number): number {
 /** 好感值 → 档位。越界值先钳制，永不返回 undefined。 */
 export function tierOf(favorability: number): AffinityTier {
   const fav = clampAffinity(favorability);
-  return AFFINITY_TIERS.find(tier => fav >= tier.min && fav <= tier.max) ?? AFFINITY_TIERS[3];
+  return AFFINITY_TIERS.find(tier => fav >= tier.min && fav <= tier.max) ?? AFFINITY_TIERS.find(tier => tier.id === 'stranger')!;
 }
 
 /** 好感值 → 姿态（无滞回的瞬时投影）。需要稳定姿态时用 `projectStance`。 */

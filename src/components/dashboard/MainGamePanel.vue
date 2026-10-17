@@ -2113,14 +2113,17 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // 识别降级、或原话归自由行动变体（如传功）却没出票：本地什么都没结算，必须告诉叙事“未发生”，否则会照样写成功。
   const typedText = inputText.value.trim();
   const ownedByFreeAction = routedFreeText && freeActionOwnsText(saveData, typedText);
+  // 识别失败（意图模型超时/坏 JSON）且原话不归任何自由行动变体：旧关键词预检仍有机会出判定卡；它不出卡时，下面这行“未发生”照旧发给叙事。
+  let intentFailedOpen = false;
   if (saveData && routedFreeText && !routedFreeActionTickets.length && !freeActionRefusalBlock
     && (intentUnsettled || (ownedByFreeAction && !hasUnclearIntentFrame(typedText)))) {
     const unrecognized = gateText('unrecognized', { player: String((saveData as any)?.角色?.身份?.名字 || '你'), target: '' });
     freeActionRefusalBlock += renderRefusedBlock([unrecognized]);
     if (ownedByFreeAction) freeActionRefusedFacts.push(unrecognized);
+    else intentFailedOpen = true;
   }
   // 本回合有票或有“未发生”事实：自由行动已接管，不再叫旧的关键词预检（含修炼词的句子也一样）。
-  const freeActionHandled = routedFreeActionTickets.length > 0 || freeActionRefusalBlock !== '';
+  const freeActionHandled = routedFreeActionTickets.length > 0 || (freeActionRefusalBlock !== '' && !intentFailedOpen);
   // 玩家原文调试通道（默认关）：自由行动没接管的自由输入，含不调模型的分支。
   if (saveData && routedFreeText && !freeActionHandled && intentRoute) {
     notePlayerText(saveData, { site: 'ui_unhandled', text: typedText, reported: null, reasons: intentRoute.reason ? [intentRoute.reason] : [], route: intentRoute });
@@ -2141,7 +2144,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (prepared.kind === 'resolved') contractedJudgementResolution = prepared.resolution;
   }
   if (!shouldSkipJudgementPreflight({
-    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || ownedByFreeAction || (skipKeywordPreflightFromIntent && !/练功|修炼|闭关|冲关|冲击境界/.test(inputText.value.trim())),
+    skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || ownedByFreeAction || skipKeywordPreflightFromIntent,
     selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
     selectedPlayerLine: selectedScenarioEngineAction.value && 'playerLine' in selectedScenarioEngineAction.value
       ? selectedScenarioEngineAction.value.playerLine
