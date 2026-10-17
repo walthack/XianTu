@@ -772,10 +772,6 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   // 私有知情账本含世界真值 claim。通用状态 JSON 必须完全剥离；只有下方按当前
   // 聚焦角色定向编译的最小行为提示可以进入主叙事 prompt。
   delete runtime.npcPrivateKnowledge;
-  // 世界模式合同包含后续局势、默认死亡与 IF 门槛；只允许下方显式编译当前局势，
-  // 不得把整份作者合同作为通用状态 JSON 泄给模型。
-  delete (runtime as any).worldSimulation;
-  delete (runtime as any).worldSimulationState;
   // 局部空间账含内部 route/action/receipt ID；模型只消费 buildScenarioStoryPrompt
   // 编译后的当前位置、已知去处与人物状态，不能看到或仿写原始账本。
   delete (runtime as any).openWorldSlice;

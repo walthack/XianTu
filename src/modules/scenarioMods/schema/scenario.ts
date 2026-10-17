@@ -753,17 +753,7 @@ export interface ScenarioModChapter {
   eventIds?: string[];
 }
 
-export type ScenarioStoryMode = 'canon_companion' | 'world_sim';
-
-/**
- * 最小类型 stub：world_sim 已移除。仅因 runtime.ts（冻结，待批准）仍引用而保留；
- * runtime.ts 清理后删除。
- */
-export interface ScenarioWorldSimulation {
-  version?: number;
-  situations?: Array<{ id: string; omen?: ScenarioWorldOmen; [key: string]: unknown }>;
-  [key: string]: unknown;
-}
+export type ScenarioStoryMode = 'canon_companion';
 
 export interface ScenarioModScenario {
   /** 主角自己还不知道的自身设定；见该接口注释。 */
@@ -776,6 +766,4 @@ export interface ScenarioModScenario {
   initialNpcPrivateKnowledge?: ScenarioInitialNpcPrivateKnowledgeFact[];
   chapters?: ScenarioModChapter[];
   events?: ScenarioModEvent[];
-  /** @deprecated world_sim 已移除；旧数据残留字段，仅作类型 stub，不再被校验/使用。 */
-  worldSimulation?: ScenarioWorldSimulation;
 }

@@ -125,7 +125,6 @@ export function overlayXingyuehuQuestPlaytestStage(mod: ScenarioMod): ScenarioMo
     activation: [],
     completion: structuredClone(events.at(-1)?.completion || []),
   }];
-  delete next.scenario.worldSimulation;
   next.scenario.opening = {
     ...next.scenario.opening,
     text: config.opening,

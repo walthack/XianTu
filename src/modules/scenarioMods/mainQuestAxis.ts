@@ -258,7 +258,7 @@ export const STAGE_ORDER: string[] = [
 
 /**
  * 主轴关卡 15 关（其余 22 关归二级线）。
- * 归属经数据核实：只扫 `scenario.events` 与 `worldSimulation`——整文件关键词扫描会被
+ * 归属经数据核实：只扫 `scenario.events`——整文件关键词扫描会被
  * 共享正典与地图注入污染（`taiquan_core_conflict` 会假阳性扫出「太泉／核心区」）。
  */
 /**
