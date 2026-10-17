@@ -3,7 +3,9 @@
  * - log：最近结算摘要（只给人看/审计，不进提示词）；settled：幂等键 → 当时的事实行（重试/读档同键不再写）；
  * - focus：本回合被作用的人（让角色卡把他们排到前面）；
  * - affinityTurn：每个人上次被自由行动改好感的回合（同一人同一回合只改一次）；
- * - transferBudget / cooldowns：传功的阶段预算与冷却。
+ * - transferBudget / cooldowns：传功的阶段预算与冷却；
+ * - drainLedger：夺取类变体按目标记的已夺次数与上次时刻（收益递减用）；
+ * - repeatLedger：“目标:行动类”的正向好感窗口内次数与窗口起点（同类重复递减用）。
  */
 import type { SaveData } from '@/types/game';
 import { freeActionConfig } from './config';
@@ -19,6 +21,8 @@ export interface FreeActionState {
   affinityTurn: Record<string, number>;
   transferBudget: Record<string, { phase: string; used: number }>;
   cooldowns: Record<string, number>;
+  drainLedger: Record<string, { count: number; lastAt: number }>;
+  repeatLedger: Record<string, { count: number; since: number }>;
 }
 
 export const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
@@ -33,6 +37,8 @@ export function readFreeActionState(save: SaveData): FreeActionState {
     affinityTurn: raw?.affinityTurn && typeof raw.affinityTurn === 'object' ? raw.affinityTurn : {},
     transferBudget: raw?.transferBudget && typeof raw.transferBudget === 'object' ? raw.transferBudget : {},
     cooldowns: raw?.cooldowns && typeof raw.cooldowns === 'object' ? raw.cooldowns : {},
+    drainLedger: raw?.drainLedger && typeof raw.drainLedger === 'object' ? raw.drainLedger : {},
+    repeatLedger: raw?.repeatLedger && typeof raw.repeatLedger === 'object' ? raw.repeatLedger : {},
   };
 }
 
@@ -49,7 +55,15 @@ export function writableFreeActionState(save: SaveData): FreeActionState {
   state.settled = trim(state.settled, cfg.settledKeep);
   state.affinityTurn = trim(state.affinityTurn, cfg.budgetKeep);
   state.cooldowns = trim(state.cooldowns, cfg.budgetKeep);
+  state.drainLedger = trim(state.drainLedger, cfg.budgetKeep);
+  state.repeatLedger = trim(state.repeatLedger, cfg.budgetKeep);
   return state;
+}
+
+/** 这一拍这个人的好感是否已被动过：自由行动本拍写过，或有待取走的作者回执。共历事件通道若要纳入“同一拍只结算一次”，就查它。 */
+export function affinityBeatTaken(save: SaveData, targetId: string, turn: number): boolean {
+  return readFreeActionState(save).affinityTurn[targetId] === turn
+    || ((runtimeOf(save)?.pendingLineAffinityGrants as Array<{ characterId?: string }> | undefined) || []).some(grant => grant.characterId === targetId);
 }
 
 export function noteSettled(state: FreeActionState, key: string, entry: { facts: string[]; resultKey?: string }): void {

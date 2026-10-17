@@ -17,7 +17,13 @@ export function fillSlots(template: string, slots: FactSlots): string {
 
 export const factText = (variant: string, key: string, slots: FactSlots): string => fillSlots(packText(`free.fact.${variant}.${key}`), slots);
 export const memoryText = (variant: string, key: string, slots: FactSlots): string => fillSlots(packText(`free.memory.${variant}.${key}`), slots);
-export const gateText = (reason: string, slots: FactSlots): string => fillSlots(packText(`free.fact.gate.${reason}`), slots);
+/** 闸门“未发生”事实；传了变体时先找 free.fact.gate.<原因>.<变体> 的变体专用文本，没有再回落通用文本。 */
+export function gateText(reason: string, slots: FactSlots, variant?: string): string {
+  const specific = variant ? `free.fact.gate.${reason}.${variant}` : '';
+  return fillSlots(packText(specific && CONTENT_PACKS.texts[specific] !== undefined ? specific : `free.fact.gate.${reason}`), slots);
+}
+/** 好感没有因这次举动再涨的原因：worn = 同类重复已递减到 0；capped = 已到阶段上限。 */
+export const affinityNoteText = (kind: 'worn' | 'capped', slots: FactSlots): string => fillSlots(packText(`free.fact.affinity.${kind}`), slots);
 export const protectedText = (slots: FactSlots): string => fillSlots(packText('free.fact.protected'), slots);
 export const whyNowText = (slots: FactSlots): string => fillSlots(packText('free.why'), slots);
 
@@ -25,6 +31,7 @@ export const whyNowText = (slots: FactSlots): string => fillSlots(packText('free
 export function effectResultKeys(spec: VariantSpec): string[] {
   switch (spec.effect) {
     case 'practiceProgress': return ['gain', 'no_gain', 'backlash'];
+    case 'drainProgress': return ['backlash', 'self_cost'];
     case 'removeStatus': return ['done', 'failed', ...(spec.downgrade ? ['done_downgraded'] : [])];
     case 'transferItem': return ['done'];
     case 'applyStatus': return ['done'];
@@ -33,8 +40,8 @@ export function effectResultKeys(spec: VariantSpec): string[] {
   }
 }
 export const GATE_REASONS = [
-  'not_present', 'scene_active', 'low_goodwill', 'no_item', 'item_mismatch', 'equipped_or_story', 'nothing_to_treat',
-  'level_too_low', 'level_unknown', 'no_resource', 'cooldown', 'budget_full', 'protected',
+  'not_present', 'scene_active', 'low_goodwill', 'goodwill_below_min', 'no_item', 'item_mismatch', 'equipped_or_story', 'nothing_to_treat',
+  'level_too_low', 'level_unknown', 'no_resource', 'cooldown', 'budget_full', 'protected', 'guard_up', 'drain_empty', 'hp_too_low',
   // 票校验阶段（目标/物品无效）与结算写入被状态拒绝时的“未发生”事实。
   'target_unavailable', 'item_unavailable', 'state_refused',
   // 没落实的动作（同目标被挤掉的第二张票）/ 本地没有识别出可结算动作（识别降级、传功语义无票）。
@@ -95,12 +102,13 @@ export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_
     const keys = [...new Set([...resultKeysOf(spec), ...effectResultKeys(spec)])];
     for (const key of keys) {
       need(`free.fact.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
-      if (key !== 'backlash') need(`free.memory.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
+      if (key !== 'backlash' && key !== 'self_cost') need(`free.memory.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
     }
     if (spec.route === 'judge') for (const name of ['success', 'partial', 'failure']) need(`free.stakes.${row.actionClass}.${name}`, row.actionClass);
   }
   for (const reason of GATE_REASONS) need(`free.fact.gate.${reason}`, 'gate');
   need('free.fact.protected', 'protected');
+  for (const kind of ['worn', 'capped']) need(`free.fact.affinity.${kind}`, 'affinity');
   need('free.why', 'why');
   for (const id of ['free.block.settled', 'free.block.refused', 'free.block.inventory.changed', 'free.block.inventory.unchanged', 'free.block.inventory.empty', 'free.block.inventory.item',
     'free.block.inventory.delta.gain', 'free.block.inventory.delta.lose', 'free.receipt.refused', 'free.receipt.given', 'free.receipt.other', 'free.receipt.dismiss']) need(id, 'block');

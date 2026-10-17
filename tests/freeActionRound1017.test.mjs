@@ -147,31 +147,69 @@ test('L5 界面：传功语义句即使带修炼词也跳过旧预检；有票�
 });
 
 // ───────── level_unknown ─────────
-test('U1 level_unknown：默认拒绝（行为不变）；onLevelUnknown=assume_equal 放行查不到级数的目标，但没进度条仍拒、功力为零仍拒', async () => {
+test('U1 level_unknown：默认放行（assume_equal，只看好感）；改成 deny 回到拒绝；功力为零仍拒，没进度条的目标由预算检查兜底', async () => {
   const save = () => makeSave({ present: [NING_YU], favor: { [DUAN_QIANG]: 60 }, chapter: 40, realm: mods.realm.levelName(4) });
-  assert.equal(mods.plan.prepareFreeAction(save(), ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_unknown');
+  assert.equal(mods.config.variantSpecOf('cast', 'transfer_qi').requires.onLevelUnknown, 'assume_equal', '默认值在配置里');
+  assert.equal(mods.plan.prepareFreeAction(save(), ticket('cast', 'transfer_qi', DUAN_QIANG)).kind, 'issued');
+  const noTrack = save();
+  profileOf(noTrack, DUAN_QIANG).境界.下一级所需 = 0;
+  assert.equal(mods.plan.prepareFreeAction(noTrack, ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'budget_full', '没处落地：不是 level_unknown');
+  const weak = makeSave({ favor: { [DUAN_QIANG]: 60 }, realm: '无修为' });
+  assert.equal(mods.plan.prepareFreeAction(weak, ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_too_low');
   const set = value => ({ freeAction: { classes: { cast: { variants: { transfer_qi: { requires: { onLevelUnknown: value } } } } } } });
-  await patched(set('assume_equal'), set('deny'), () => {
-    assert.equal(mods.plan.prepareFreeAction(save(), ticket('cast', 'transfer_qi', DUAN_QIANG)).kind, 'issued');
-    const noTrack = save();
-    profileOf(noTrack, DUAN_QIANG).境界.下一级所需 = 0;
-    assert.equal(mods.plan.prepareFreeAction(noTrack, ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_unknown');
-    const weak = makeSave({ favor: { [DUAN_QIANG]: 60 }, realm: '无修为' });
-    assert.equal(mods.plan.prepareFreeAction(weak, ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_too_low');
+  await patched(set('deny'), set('assume_equal'), () => {
+    assert.equal(mods.plan.prepareFreeAction(save(), ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_unknown');
+    const noTrackDeny = save();
+    profileOf(noTrackDeny, DUAN_QIANG).境界.下一级所需 = 0;
+    assert.equal(mods.plan.prepareFreeAction(noTrackDeny, ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_unknown');
   });
-  assert.equal(mods.plan.prepareFreeAction(save(), ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_unknown', '已还原');
+  assert.equal(mods.plan.prepareFreeAction(save(), ticket('cast', 'transfer_qi', DUAN_QIANG)).kind, 'issued', '已还原');
   assert.deepEqual(mods.config.validateFreeActionConfig(), []);
 });
 
-test('U2 配置体检：onLevelUnknown / legacyGuardWords / applyStatus 缺项 / debug 无效值都点名', () => {
+test('U1b 传功好感门槛：低于 requires.minGoodwill 拒绝（先于级数检查，含级数不明的目标），恰好等于放行；门槛是配置', async () => {
+  const spec = mods.config.variantSpecOf('cast', 'transfer_qi');
+  assert.equal(spec.requires.minGoodwill, 20, '默认门槛在配置里');
+  const build = (favor, id = NING_YU) => makeSave({ present: [NING_YU], favor: { [id]: favor }, chapter: 40, realm: mods.realm.levelName(4) });
+  for (const id of [NING_YU, DUAN_QIANG]) {
+    const low = build(spec.requires.minGoodwill - 1, id), before = structuredClone(low);
+    const refused = mods.plan.prepareFreeAction(low, ticket('cast', 'transfer_qi', id));
+    assert.deepEqual([refused.kind, refused.reason], ['refused', 'goodwill_below_min'], id);
+    assert.match(refused.facts[0], /交情未到/);
+    assert.deepEqual(low, before, '零写入');
+    assert.equal(mods.plan.prepareFreeAction(build(spec.requires.minGoodwill, id), ticket('cast', 'transfer_qi', id)).kind, 'issued', `${id} 恰好等于门槛放行`);
+  }
+  const set = value => ({ freeAction: { classes: { cast: { variants: { transfer_qi: { requires: { minGoodwill: value } } } } } } });
+  await patched(set(5), set(spec.requires.minGoodwill), () => {
+    assert.equal(mods.plan.prepareFreeAction(build(10), ticket('cast', 'transfer_qi', NING_YU)).kind, 'issued');
+    assert.equal(mods.plan.prepareFreeAction(build(4), ticket('cast', 'transfer_qi', NING_YU)).reason, 'goodwill_below_min');
+  });
+  assert.equal(mods.plan.prepareFreeAction(build(spec.requires.minGoodwill - 1), ticket('cast', 'transfer_qi', NING_YU)).reason, 'goodwill_below_min', '已还原');
+});
+
+test('U1c 传功级别：目标级别已知且高于玩家 → 拒绝（level_too_low）；同级或更低按原规则放行', () => {
+  const at = realmName => makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, chapter: 40, realm: realmName }); // 凝羽此时第 4 级
+  const higher = at(mods.realm.levelName(3)), before = structuredClone(higher);
+  const refused = mods.plan.prepareFreeAction(higher, ticket('cast', 'transfer_qi', NING_YU));
+  assert.deepEqual([refused.kind, refused.reason], ['refused', 'level_too_low']);
+  assert.deepEqual(higher, before, '零写入');
+  assert.equal(mods.plan.prepareFreeAction(at(mods.realm.levelName(4)), ticket('cast', 'transfer_qi', NING_YU)).kind, 'issued', '同级');
+  assert.equal(mods.plan.prepareFreeAction(at(mods.realm.levelName(5)), ticket('cast', 'transfer_qi', NING_YU)).kind, 'issued', '更低');
+});
+
+test('U2 配置体检：onLevelUnknown / minGoodwill / legacyGuardWords / applyStatus 缺项 / debug 无效值都点名', () => {
   const cfg = structuredClone(mods.config.freeActionConfig());
   cfg.classes.cast.variants.transfer_qi.requires.onLevelUnknown = 'sometimes';
   cfg.classes.cast.variants.transfer_qi.legacyGuardWords = ['传功', ''];
+  cfg.classes.cast.variants.transfer_qi.requires.minGoodwill = 'high';
+  cfg.classes.guard.variants.shield.enabled = true; // 默认关闭；开着才查 applyStatus 缺项
   cfg.classes.guard.variants.shield.statusId = 'no.such.status';
   cfg.classes.guard.variants.shield.maxStatusMinutes = 0;
   cfg.debug.keep = 0;
   const errors = mods.config.validateFreeActionConfig(cfg).join('\n');
-  for (const part of ['onLevelUnknown 无效', 'legacyGuardWords', 'statusId 不在状态目录', 'maxStatusMinutes', 'debug 配置无效']) assert.ok(errors.includes(part), part);
+  for (const part of ['onLevelUnknown 无效', 'minGoodwill', 'legacyGuardWords', 'statusId 不在状态目录', 'maxStatusMinutes', 'debug 配置无效']) assert.ok(errors.includes(part), part);
+  cfg.classes.cast.variants.transfer_qi.requires.minGoodwill = 101;
+  assert.ok(mods.config.validateFreeActionConfig(cfg).some(e => e.includes('minGoodwill')), '越界也点名');
 });
 
 // ───────── 回执 / 背包事实 / 文案 ─────────
@@ -253,71 +291,101 @@ test('R7 同目标被挤掉的第二张票：留一行“未发生”事实（�
   assert.match(out.refusals[0], /另一个动作没能落实/);
 });
 
-// ───────── 护卫（shield）最小版 ─────────
+// ───────── 护卫（shield）最小版（默认关闭：配置 enabled:false；代码、文案、状态保留，这些用例临时打开它）─────────
+const shieldOn = fn => patched({ freeAction: { classes: { guard: { variants: { shield: { enabled: true } } } } } }, { freeAction: { classes: { guard: { variants: { shield: { enabled: false } } } } } }, fn);
 const withNing = (extra = {}) => makeSave({ present: [NING_YU], favor: { [NING_YU]: 30 }, ...extra });
 const guarded = (save, id) => mods.statusRead.actorStatusRecords(save, id).filter(row => row.statusId === 'guarded');
 
-test('G1 护卫：在场者被挂“受护卫”限时状态（时长走配置），不掷骰、不耗物、好感按配置、事实与记忆来自 texts', () => {
-  const save = withNing();
-  const now = mods.injuries.sceneTime(save);
-  const spec = mods.config.variantSpecOf('guard', 'shield');
-  assert.equal(spec.route, 'table');
-  const prepared = mods.plan.prepareFreeAction(save, ticket('guard', 'shield', NING_YU));
-  assert.equal(prepared.kind, 'settled');
-  assert.equal(prepared.result.resultKey, 'done');
-  const rows = guarded(save, NING_YU);
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].expiresAt, now + spec.maxStatusMinutes, '时长取 maxStatusMinutes 配置');
-  assert.equal(rows[0].sourceScene.startsWith('free:'), true);
-  assert.match(prepared.result.facts[0], /护在.*身侧/);
-  assert.equal(profileOf(save, NING_YU).好感度, 30 + spec.base);
-  assert.equal(mods.state.readFreeActionState(save).log.at(-1).variant, 'shield');
+test('G1 护卫：在场者被挂“受护卫”限时状态（时长走配置），不掷骰、不耗物、好感按配置、事实与记忆来自 texts', async () => {
+  await shieldOn(async () => {
+    const save = withNing();
+    const now = mods.injuries.sceneTime(save);
+    const spec = mods.config.variantSpecOf('guard', 'shield');
+    assert.equal(spec.route, 'table');
+    const prepared = mods.plan.prepareFreeAction(save, ticket('guard', 'shield', NING_YU));
+    assert.equal(prepared.kind, 'settled');
+    assert.equal(prepared.result.resultKey, 'done');
+    const rows = guarded(save, NING_YU);
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].expiresAt, now + spec.maxStatusMinutes, '时长取 maxStatusMinutes 配置');
+    assert.equal(rows[0].sourceScene.startsWith('free:'), true);
+    assert.match(prepared.result.facts[0], /护在.*身侧/);
+    assert.equal(profileOf(save, NING_YU).好感度, 30 + spec.base);
+    assert.equal(mods.state.readFreeActionState(save).log.at(-1).variant, 'shield');
+  });
 });
 
 test('G2 护卫的时长是配置：改配置就改状态时长；再护一次是刷新而不是叠加', async () => {
   const set = minutes => ({ freeAction: { classes: { guard: { variants: { shield: { maxStatusMinutes: minutes } } } } } });
-  const save = withNing();
-  const now = mods.injuries.sceneTime(save);
-  await patched(set(30), set(120), () => {
-    mods.plan.prepareFreeAction(save, ticket('guard', 'shield', NING_YU));
-    assert.equal(guarded(save, NING_YU)[0].expiresAt, now + 30);
+  await shieldOn(async () => {
+    const save = withNing();
+    const now = mods.injuries.sceneTime(save);
+    await patched(set(30), set(120), () => {
+      mods.plan.prepareFreeAction(save, ticket('guard', 'shield', NING_YU));
+      assert.equal(guarded(save, NING_YU)[0].expiresAt, now + 30);
+    });
+    mods.state.writableFreeActionState(save).settled = {};
+    mods.settle.settleFreeAction(save, ticket('guard', 'shield', NING_YU), undefined);
+    assert.equal(guarded(save, NING_YU).length, 1);
   });
-  mods.state.writableFreeActionState(save).settled = {};
-  mods.settle.settleFreeAction(save, ticket('guard', 'shield', NING_YU), undefined);
-  assert.equal(guarded(save, NING_YU).length, 1);
 });
 
-test('G3 护卫要求对象在场：不在场、是玩家自己、场面进行中 → 拒绝，零写入', () => {
-  const absent = makeSave({ favor: { [NING_YU]: 30 } });
-  const before = JSON.stringify(absent);
-  const refused = mods.plan.prepareFreeAction(absent, ticket('guard', 'shield', NING_YU));
-  assert.deepEqual([refused.kind, refused.reason], ['refused', 'not_present']);
-  assert.equal(JSON.stringify(absent), before);
-  const save = withNing();
-  const self = mods.plan.prepareFreeAction(save, ticket('guard', 'shield', runtimeOf(save).opening.playerCharacterId));
-  assert.deepEqual([self.kind, self.reason], ['refused', 'not_present']);
+test('G3 护卫要求对象在场：不在场、是玩家自己、场面进行中 → 拒绝，零写入', async () => {
+  await shieldOn(async () => {
+    const absent = makeSave({ favor: { [NING_YU]: 30 } });
+    const before = JSON.stringify(absent);
+    const refused = mods.plan.prepareFreeAction(absent, ticket('guard', 'shield', NING_YU));
+    assert.deepEqual([refused.kind, refused.reason], ['refused', 'not_present']);
+    assert.equal(JSON.stringify(absent), before);
+    const save = withNing();
+    const self = mods.plan.prepareFreeAction(save, ticket('guard', 'shield', runtimeOf(save).opening.playerCharacterId));
+    assert.deepEqual([self.kind, self.reason], ['refused', 'not_present']);
+  });
 });
 
-test('G4 护卫不是必活保护：两套机制各管各的——shield 行没有 protectedCap/protectedForbid，必活目标照样能被护，且攻击钳制仍只看总表', () => {
+test('G4 护卫不是必活保护：两套机制各管各的——shield 行没有 protectedCap/protectedForbid，必活目标照样能被护，且攻击钳制仍只看总表', async () => {
+  await shieldOn(async () => {
+    const spec = mods.config.variantSpecOf('guard', 'shield');
+    assert.equal(spec.protectedCap, undefined);
+    assert.equal(spec.protectedForbid, undefined);
+    const save = makeSave({ present: [WANG_ZHE], favor: { [WANG_ZHE]: 55 } });
+    assert.equal(mods.plan.prepareFreeAction(save, ticket('guard', 'shield', WANG_ZHE)).kind, 'settled');
+    assert.equal(guarded(save, WANG_ZHE).length, 1);
+    const { result } = runJudged(save, ticket('physical', 'attack', WANG_ZHE), 'perfect');
+    assert.equal(result.resultKey, 'wound', '必活钳制（subdue→wound）不受“受护卫”状态影响');
+    const status = CONTENT_PACKS.statuses.find(def => def.id === 'guarded');
+    assert.ok(status && status.effects.every(effect => effect.kind === 'note'), '状态只记，不带任何数值效果');
+  });
+});
+
+test('G5 护卫默认关闭：配置 enabled:false，提示词里不列护卫类/变体，模型报票被丢弃（variant_disabled）；代码、文案、状态仍在', () => {
   const spec = mods.config.variantSpecOf('guard', 'shield');
-  assert.equal(spec.protectedCap, undefined);
-  assert.equal(spec.protectedForbid, undefined);
-  const save = makeSave({ present: [WANG_ZHE], favor: { [WANG_ZHE]: 55 } });
-  assert.equal(mods.plan.prepareFreeAction(save, ticket('guard', 'shield', WANG_ZHE)).kind, 'settled');
-  assert.equal(guarded(save, WANG_ZHE).length, 1);
-  const { result } = runJudged(save, ticket('physical', 'attack', WANG_ZHE), 'perfect');
-  assert.equal(result.resultKey, 'wound', '必活钳制（subdue→wound）不受“受护卫”状态影响');
-  const status = CONTENT_PACKS.statuses.find(def => def.id === 'guarded');
-  assert.ok(status && status.effects.every(effect => effect.kind === 'note'), '状态只记，不带任何数值效果');
-});
-
-test('G5 提示词里列出护卫变体；体检（配置 + 文本）为空', () => {
-  const section = mods.ticket.ticketPromptSection(withNing());
-  const guardClass = section.payload.classes.find(c => c.actionClass === 'guard');
-  assert.deepEqual(guardClass.variants.map(v => v.variant), ['shield']);
+  assert.equal(N.GAME_NUMBERS.freeAction.classes.guard.variants.shield.enabled, false, '默认值在配置里');
+  assert.equal(spec.enabled, false);
+  assert.deepEqual(mods.config.enabledVariants().filter(row => row.actionClass === 'guard'), []);
+  const save = withNing();
+  const section = mods.ticket.ticketPromptSection(save);
+  assert.equal(section.payload.classes.some(c => c.actionClass === 'guard'), false);
+  assert.equal(/shield|guard|护住|护卫/.test(JSON.stringify(section)), false, '提示词里不再出现护卫');
+  const raw = [{ actionClass: 'guard', variant: 'shield', targetId: NING_YU, degree: 'normal', performed: 'yes', evidence: '护住宁羽', itemId: null }];
+  const out = mods.ticket.validateFreeActionTickets(raw, '我护住宁羽', save);
+  assert.equal(out.tickets.length, 0);
+  assert.deepEqual(out.discards.map(d => d.reason), ['variant_disabled']);
+  assert.ok(CONTENT_PACKS.texts['free.fact.shield.done'] && CONTENT_PACKS.texts['free.memory.shield.done'], '文案保留');
+  assert.ok(CONTENT_PACKS.statuses.some(def => def.id === 'guarded'), '状态保留');
   assert.deepEqual(mods.config.validateFreeActionConfig(), []);
   assert.deepEqual(mods.facts.validateFreeActionTexts(), []);
-  const texts = { ...CONTENT_PACKS.texts };
-  delete texts['free.memory.shield.done'];
-  assert.ok(mods.facts.validateFreeActionTexts(texts).some(e => e.includes('free.memory.shield.done')), '缺文案体检点名');
+});
+
+test('G6 打开护卫后提示词列出它；体检（配置 + 文本）为空，缺文案点名', async () => {
+  await shieldOn(async () => {
+    const section = mods.ticket.ticketPromptSection(withNing());
+    const guardClass = section.payload.classes.find(c => c.actionClass === 'guard');
+    assert.deepEqual(guardClass.variants.map(v => v.variant), ['shield']);
+    assert.deepEqual(mods.config.validateFreeActionConfig(), []);
+    assert.deepEqual(mods.facts.validateFreeActionTexts(), []);
+    const texts = { ...CONTENT_PACKS.texts };
+    delete texts['free.memory.shield.done'];
+    assert.ok(mods.facts.validateFreeActionTexts(texts).some(e => e.includes('free.memory.shield.done')), '缺文案体检点名');
+  });
 });

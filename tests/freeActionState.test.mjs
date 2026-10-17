@@ -12,7 +12,7 @@ const refusedBlock = (save, tk, deps) => mods.turn.issueFreeActionJudgement(save
 const lvl4 = () => mods.realm.levelName(4);
 
 // ───────── 传功 ─────────
-test('T20 传功闸门：功力不及 / 对方级数不明 → 不出判定卡、不扣真气、不改进度，有“未发生”事实行', () => {
+test('T20 传功闸门：功力不及 → 不出判定卡、不扣真气、不改进度，有“未发生”事实行；对方级数不明不再拦（只看好感，按同级）', () => {
   const low = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, chapter: 40, realm: '无修为' });
   const before = structuredClone(low);
   const prepared = mods.plan.prepareFreeAction(low, ticket('cast', 'transfer_qi', NING_YU));
@@ -22,7 +22,7 @@ test('T20 传功闸门：功力不及 / 对方级数不明 → 不出判定卡�
   assert.match(refusedBlock(low, ticket('cast', 'transfer_qi', NING_YU)), /本地自由行动未发生/);
 
   const unknown = makeSave({ favor: { [DUAN_QIANG]: 60 }, realm: lvl4() });
-  assert.equal(mods.plan.prepareFreeAction(unknown, ticket('cast', 'transfer_qi', DUAN_QIANG)).reason, 'level_unknown');
+  assert.equal(mods.plan.prepareFreeAction(unknown, ticket('cast', 'transfer_qi', DUAN_QIANG)).kind, 'issued', '段强级数查不到：按同级放行');
 });
 
 test('T20b 传功成功：只涨“当前进度”，不改境界名/阶段/下一级所需与时点级数；付真气；记冷却与预算', () => {
@@ -304,7 +304,8 @@ test('T33 施术只有传功、疗伤、包扎；类与变体白名单就是配�
   const classes = cfg().classes;
   assert.deepEqual(Object.keys(classes.cast.variants), ['transfer_qi', 'heal', 'bandage']);
   assert.deepEqual(Object.keys(classes.give.variants), ['gift', 'feed_pill']);
-  assert.deepEqual(Object.keys(classes.physical.variants), ['attack', 'grab', 'bind']);
+  assert.deepEqual(Object.keys(classes.physical.variants), ['attack', 'grab', 'bind', 'drain_qi']);
+  assert.equal(classes.physical.variants.drain_qi.enabled, true, '夺元默认启用（2026-10-17 用户裁定）');
   assert.deepEqual(Object.keys(classes.guard.variants), ['shield']);
   assert.deepEqual(cfg().actionClasses, ['physical', 'verbal', 'intimate', 'give', 'cast', 'guard', 'other']);
 });

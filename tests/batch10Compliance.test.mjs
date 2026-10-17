@@ -30,14 +30,18 @@ function resolve(text,overrides={}){
  persistPendingJudgement(s,p);
  const r=resolvePendingJudgement(s,p.id,{currentTurn:1,roll:()=>20,...overrides});return {s,r,p};
 }
-test('C02 unconfirmed or coerced cultivation cannot gain even with high roll/external effects/test override',()=>{
- for(const word of ['强迫','胁迫','迷药','制住','制服','下药','昏迷','不愿','拒绝','麻古']){
-  const {s,r,p}=resolve(`双方同意，但我用${word}后双修疗伤`,{testOutcome:'perfect',appliedEffects:[{key:'角色.效果',action:'upsert',value:{状态名称:'阴阳调和',类型:'buff'}}]});
-  assert.equal(r.outcome,'failure');assert.deepEqual(r.appliedEffects,[]);assert.deepEqual(s.角色.效果,[]);assert.equal(s.角色.属性.气血.当前,100);
-  assert.deepEqual(resolvePendingJudgement(s,p.id,{currentTurn:2,roll:()=>20}),r);
+test('C02 用户裁定（2026-10-17）：双修/采补不再有同意检查与正则强制失败，走统一判定',async()=>{
+ const engine=await loadTs('../src/utils/judgementEngine.ts');
+ assert.equal(engine.mutualCultivationConsent,undefined,'同意检查已移除');
+ for(const word of ['强迫','迷药','制住','不愿','昏迷','拒绝']){
+  const {s,r}=resolve(`我用${word}后双修疗伤`);
+  assert.equal(r.outcome,'great_success',`${word}：结果只由掷骰与难度决定`);
+  assert.ok(r.appliedEffects.length>0);assert.ok(s.角色.属性.气血.当前>100);
  }
- assert.equal(resolve('与同伴双修调息疗伤').r.outcome,'failure');
- const yes=resolve('双方自愿双修调息疗伤');assert.equal(yes.r.outcome,'great_success');assert.equal(yes.s.角色.效果[0].状态名称,'阴阳调和');
+ const forced=resolve('双修疗伤',{testOutcome:'perfect',appliedEffects:[{key:'角色.效果',action:'upsert',value:{状态名称:'阴阳调和',类型:'buff'}}]});
+ assert.equal(forced.r.outcome,'perfect');assert.equal(forced.s.角色.效果[0].状态名称,'阴阳调和');
+ assert.equal(resolve('采补调息',{roll:()=>1}).r.outcome,'partial','采补：roll 1 + 难度 5 → 按统一阈值得 partial，不再强制 failure');
+ assert.equal(resolve('双方自愿双修调息疗伤').r.outcome,'great_success');
  assert.ok(resolve('独自运功调息疗伤').s.角色.属性.气血.当前>100,'普通调息不变');
 });
 test('C02 Zhuo forced cultivation absent from tasks; other audit beats retained',()=>{

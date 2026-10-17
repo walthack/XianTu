@@ -446,6 +446,13 @@
       "maxDoses": 3
     }
   },
+  "techniques": {
+    "allowMultiEquipDefault": false,
+    "applyBonusToAttributes": false,
+    "cultivationSpeedBonus": {
+      "semantics": "fraction_increment"
+    }
+  },
   "freeAction": {
     "enabled": true,
     "actionClasses": [
@@ -476,7 +483,17 @@
     "affinity": {
       "perBeatCap": 15,
       "majorAbs": 10,
-      "majorSalienceFloor": 80
+      "majorSalienceFloor": 80,
+      "floatBand": 2,
+      "repeat": {
+        "windowMinutes": 1440,
+        "factors": [
+          1,
+          0.5,
+          0.25,
+          0
+        ]
+      }
     },
     "degreeFactor": {
       "light": 0.5,
@@ -565,6 +582,59 @@
             "effect": "applyStatus",
             "statusId": "action.restricted",
             "protectedForbid": true
+          },
+          "drain_qi": {
+            "label": "夺元",
+            "hint": "单方面夺取对方真气修为；只有对方已无力设防时才成立；双方自愿的是传功，不是本项。",
+            "enabled": true,
+            "base": -12,
+            "difficulty": 9,
+            "effect": "drainProgress",
+            "requires": {
+              "targetDefenseDown": {
+                "statusIds": [
+                  "unconscious",
+                  "dying",
+                  "acupoint.sealed",
+                  "paralyzed",
+                  "wound.severe"
+                ],
+                "effectKinds": [
+                  "downed"
+                ]
+              }
+            },
+            "drain": {
+              "lossRatio": 0.08,
+              "perUseCapRatio": 0.2,
+              "outcomeFactor": "benefit",
+              "qiGainRatio": 0.15,
+              "selfCostHpRatio": 0.05,
+              "diminish": {
+                "perUse": 0.6,
+                "floor": 0.2,
+                "recoverMinutes": 10080
+              },
+              "afterStatuses": [
+                "wound.fright",
+                "qi.drained"
+              ],
+              "statusMinutes": {
+                "wound.fright": 1440,
+                "qi.drained": 10080
+              }
+            },
+            "backlash": {
+              "critical_failure": "qi.disordered"
+            },
+            "npcOutcomes": {
+              "critical_failure": "recoil",
+              "failure": "resisted",
+              "partial": "trace",
+              "success": "drained",
+              "great_success": "drained",
+              "perfect": "drained_deep"
+            }
           }
         }
       },
@@ -763,7 +833,8 @@
             "base": 3,
             "requires": {
               "actorLevel": "ge_target",
-              "onLevelUnknown": "deny"
+              "onLevelUnknown": "assume_equal",
+              "minGoodwill": 20
             },
             "legacyGuardWords": [
               "传功",
@@ -823,6 +894,7 @@
         "variants": {
           "shield": {
             "label": "护住",
+            "enabled": false,
             "base": 2,
             "statusId": "guarded",
             "maxStatusMinutes": 120
@@ -845,6 +917,11 @@
         "hard": 15,
         "severe": 21,
         "extreme": 28
+      }
+    },
+    "dualCultivation": {
+      "requires": {
+        "minGoodwill": 60
       }
     }
   }

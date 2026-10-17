@@ -84,5 +84,34 @@
     "afterScene": {
       "minutes": null
     }
+  },
+  {
+    "id": "qi.drained",
+    "label": "真元亏损",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "玩家自由行动「夺元」得手后，目标被夺走一部分真气修为留下的限时状态，时长取 freeAction.classes.physical 配置。通用档状态不得由剧情旗标解除，只按时间消退。合规标记：C02（夺元不得做成强迫情节的可玩内容，见 docs/COMPLIANCE-REQUIREMENTS.md）。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "真元亏损，气力不继"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "time",
+        "minutes": 10080
+      }
+    ],
+    "afterScene": {
+      "minutes": 10080
+    }
   }
 ]

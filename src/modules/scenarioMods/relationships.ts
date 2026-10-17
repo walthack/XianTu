@@ -1,4 +1,5 @@
 import {realmAt} from './levelProgression';
+import {GAME_NUMBERS} from '../sceneModule/numbers';
 import {canonicalEntityId} from './namedEntities';
 import { backfillRelationshipIds, relationshipOf } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
@@ -129,7 +130,9 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
         const skill = skills.find(item => item.id === id);
         return skill ? [{ 技能名称: skill.name, 技能描述: skill.description || '', 熟练度要求: 0 }] : [];
       }),
-      ...(technique.techniqueEffects ? { 功法效果: technique.techniqueEffects } : {}),
+      // 目录的 bonus 与装备增幅同构；存档里的功法效果沿用原版字段（属性加成＝后天六司）。
+      ...(technique.bonus ? { 功法效果: { 修炼速度加成: technique.bonus.修炼速度加成, 属性加成: technique.bonus.后天六司 } } : {}),
+      ...((technique.allowMultiEquip ?? GAME_NUMBERS.techniques.allowMultiEquipDefault) ? { 允许多部装备: true } : {}),
     };
   }
   for (const id of character.itemIds || []) {

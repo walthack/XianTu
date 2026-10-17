@@ -18,12 +18,12 @@ import npcProfiles from '../../../../mod-kit/entity-ledger/npc-profiles.json';
 import { applyActorStatus } from './actorStatus';
 import { withEncounteredTarget } from './encounter';
 import { applyItemOnUse } from './itemUse';
-import { checkGates, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
+import { checkGates, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
 import { freeActionConfig, intimacyConfig, variantSpecOf, type VariantSpec } from './config';
-import { factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
+import { affinityNoteText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
 import { pushLightMemory, pushMajorEpisode } from './memory';
 import { protectedCapFor } from './protect';
-import { noteSettled, readFreeActionState, runtimeOf, writableFreeActionState } from './state';
+import { affinityBeatTaken, noteSettled, readFreeActionState, runtimeOf, writableFreeActionState } from './state';
 import type { FreeActionTicket } from './ticket';
 import { playerIdOf } from './ticket';
 
@@ -91,6 +91,49 @@ function payCost(save: SaveData, spec: VariantSpec, outcome: string | undefined)
 
 interface Planned { resultKey: string; delta: number; extraFacts: string[]; apply: () => boolean }
 
+/**
+ * 夺取类：目标“当前进度”按配置比例扣下（不改境界名/阶段/下一级所需，不致死），玩家灵气按实际夺走量回收；
+ * 玩家自己的境界进度不涨；每次施行先扣玩家气血（上限 × drain.selfCostHpRatio，闸门已保证付得起），无冷却。好感走 base × 轻重 × 敌意结果系数，和攻击同一条路径（beatClamp）。
+ * 夺走量 = round(need × lossRatio × 轻重 × 结果档系数 × 递减) 夹在 [0, min(单次上限, 目标现有进度)]；递减按目标记次数，随时间恢复。
+ * 夺走量为 0 = 无所获：不挂状态、不记次数，事实取 failure 档。
+ */
+function planDrain(save: SaveData, ticket: FreeActionTicket, spec: VariantSpec, outcome: NonNullable<JudgementResolution['outcome']>, key: string, slots: FactSlots): Planned {
+  const cfg = freeActionConfig(), drain = spec.drain!, targetId = ticket.targetId!, degree = cfg.degreeFactor[ticket.degree];
+  const realm = (relationshipOf(save as any, targetId)!.profile as any).境界, need = Number(realm.下一级所需), now = sceneTime(save);
+  const ledger = readFreeActionState(save).drainLedger[targetId];
+  const effCount = ledger ? Math.max(0, ledger.count - Math.floor((now - ledger.lastAt) / drain.diminish.recoverMinutes)) : 0;
+  const diminish = Math.max(drain.diminish.floor, Math.pow(drain.diminish.perUse, effCount));
+  const full = Math.round(need * drain.lossRatio);
+  const room = Math.round(need * drain.perUseCapRatio), current = Number(realm.当前进度) || 0;
+  const loss = clamp(Math.round(need * drain.lossRatio * degree * drain.outcomeFactor[outcome] * diminish), 0, Math.min(room, current));
+  const drained = loss > 0 || drain.outcomeFactor[outcome] <= 0;
+  const resultKey = spec.npcOutcomes![drained ? outcome : 'failure'];
+  const backlash = outcome === 'critical_failure' ? spec.backlash?.critical_failure : undefined, selfCost = drainSelfCost(save, spec);
+  const write = (): boolean => {
+    // 最可能被拒的先写：玩家反噬 → 目标状态 → 目标进度/账 → 玩家灵气。
+    if (backlash && !applyActorStatus(save, playerIdOf(save)!, backlash, { sourceId: key }).ok) return false;
+    if (loss > 0) for (const id of drain.afterStatuses) if (!applyActorStatus(save, targetId, id, { sourceId: key, minutes: drain.statusMinutes[id] }).ok) return false;
+    realm.当前进度 = current - loss;
+    const state = writableFreeActionState(save);
+    if (loss > 0) state.drainLedger[targetId] = { count: effCount + 1, lastAt: now };
+    const qi = (save as any).角色.属性.灵气;
+    if (loss > 0 && full > 0 && Number(qi?.上限) > 0) qi.当前 = Math.min(Number(qi.上限), (Number(qi.当前) || 0) + Math.round(Number(qi.上限) * drain.qiGainRatio * loss / full));
+    return true;
+  };
+  return {
+    resultKey, delta: beatClamp((spec.base ?? 0) * degree * (spec.outcomeFactor?.[outcome] ?? 1)),
+    extraFacts: [factText(spec.variant, 'self_cost', slots), ...(backlash ? [factText(spec.variant, 'backlash', slots)] : [])],
+    apply: () => {
+      // 先扣玩家气血（不论结果档）；后面的写入被状态拒绝就原样退回。
+      const hp = (save as any).角色.属性.气血, hpBefore = Number(hp.当前);
+      hp.当前 = hpBefore - selfCost;
+      if (write()) return true;
+      hp.当前 = hpBefore;
+      return false;
+    },
+  };
+}
+
 /** 算出本次的结果与“怎么写”，不改存档；apply() 里才写，且按“最可能失败的先写”排序。 */
 function plan(save: SaveData, ticket: FreeActionTicket, gate: GateOk, resolution: JudgementResolution | undefined, key: string, slots: FactSlots, deps: SettleDeps): Planned {
   const spec = gate.spec, cfg = freeActionConfig(), targetId = ticket.targetId!, degree = cfg.degreeFactor[ticket.degree];
@@ -104,6 +147,9 @@ function plan(save: SaveData, ticket: FreeActionTicket, gate: GateOk, resolution
     const { reaction, delta } = intimateReaction(save, ticket, spec, deps);
     return { resultKey: reaction, delta, extraFacts: [], apply: none };
   }
+
+  // 夺取类（drainProgress）——对方已设防失效（gates.ts 闸门）才走到这里；必须排在下面的敌意分支之前，否则会被它的空 apply 截走。
+  if (spec.effect === 'drainProgress' && spec.npcOutcomes && outcome) return planDrain(save, ticket, spec, outcome, key, slots);
 
   // 敌意（肢体/言语）：判定结果档决定事实，好感按 base × 轻重 × 结果系数
   if (spec.npcOutcomes && outcome) {
@@ -192,18 +238,32 @@ function plan(save: SaveData, ticket: FreeActionTicket, gate: GateOk, resolution
   };
 }
 
-/** 好感写入：同一人同一回合只改一次；上限只限向上。 */
-function writeAffinity(save: SaveData, targetId: string, delta: number, turn: number): { from: number; to: number; applied: boolean } {
-  const runtime = runtimeOf(save), profile = relationshipOf(save as any, targetId)!.profile as any, from = Number(profile.好感度) || 0;
-  const state = readFreeActionState(save);
-  const already = state.affinityTurn[targetId] === turn
-    || ((runtime.pendingLineAffinityGrants as Array<{ characterId?: string }> | undefined) || []).some(grant => grant.characterId === targetId);
-  if (delta === 0 || already) return { from, to: from, applied: false };
-  const cap = affinityCapFor(targetId, typeof profile.与玩家关系 === 'string' ? profile.与玩家关系 : undefined, runtimeEntityName(runtime, targetId))?.cap ?? 100;
+/**
+ * 基础值（plan 算出）→ 实际要写的好感变化：
+ *   1. 正向按“目标:行动类”窗口内的次数乘 affinity.repeat.factors（敌意不递减）；
+ *   2. 递减后的基础值为 0 就是 0，不看票上的浮动位（被拒、没做成、失败的基础值本来就是 0）；
+ *   3. 否则票上的浮动位在 [基础 − floatBand, 基础 + floatBand] 内采纳，再钳到单拍上限。
+ */
+function shapeDelta(save: SaveData, ticket: FreeActionTicket, base: number, now: number): { delta: number; worn: boolean; group: string; used: number; since: number } {
+  const { floatBand, repeat } = freeActionConfig().affinity, group = `${ticket.targetId}:${ticket.actionClass}`;
+  const ledger = readFreeActionState(save).repeatLedger[group];
+  const inWindow = ledger !== undefined && now - ledger.since < repeat.windowMinutes, used = inWindow ? ledger.count : 0, since = inWindow ? ledger.since : now;
+  const effective = base > 0 ? beatClamp(base * repeat.factors[Math.min(used, repeat.factors.length - 1)]) : base;
+  const worn = base > 0 && effective === 0;
+  if (effective === 0 || ticket.affinityDelta === undefined) return { delta: effective, worn, group, used, since };
+  return { delta: beatClamp(clamp(ticket.affinityDelta, effective - floatBand, effective + floatBand)), worn, group, used, since };
+}
+
+/** 好感写入：同一人同一回合只改一次（blocked = 这一拍已被动过）；上限只限向上。 */
+function writeAffinity(save: SaveData, targetId: string, delta: number, turn: number): { from: number; to: number; applied: boolean; blocked: boolean } {
+  const profile = relationshipOf(save as any, targetId)!.profile as any, from = Number(profile.好感度) || 0;
+  const blocked = affinityBeatTaken(save, targetId, turn);
+  if (delta === 0 || blocked) return { from, to: from, applied: false, blocked };
+  const cap = affinityCapFor(targetId, typeof profile.与玩家关系 === 'string' ? profile.与玩家关系 : undefined, runtimeEntityName(runtimeOf(save), targetId))?.cap ?? 100;
   const to = clampAffinity(delta > 0 ? Math.max(from, Math.min(cap, from + delta)) : from + delta);
   profile.好感度 = to;
   writableFreeActionState(save).affinityTurn[targetId] = turn;
-  return { from, to, applied: to !== from };
+  return { from, to, applied: to !== from, blocked };
 }
 
 /** 结算入口：在场正典人物没有关系记录时先懒登记；这次没结算成（闸门不过、写入被拒、重放）就撤回。 */
@@ -220,15 +280,23 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
   if (spec.route === 'judge' && (!resolution || resolution.status !== 'resolved' || !resolution.outcome)) return { ok: false, reason: 'unresolved', facts: [] };
 
   const gate = checkGates(save, ticket, deps);
-  if (!gate.ok) return { ok: false, reason: gate.reason, key, facts: [gateText(gate.reason, gate.slots)] };
+  if (!gate.ok) return { ok: false, reason: gate.reason, key, facts: [gateText(gate.reason, gate.slots, spec.variant)] };
 
   const slots: FactSlots = { ...gate.slots, player: gate.slots.player || playerNameOf(save), target: gate.slots.target || targetNameOf(save, ticket.targetId) };
   const planned = plan(save, ticket, gate, resolution, key, slots, deps);
-  if (!planned.apply()) return { ok: false, reason: 'refused_by_state', key, facts: [gateText('state_refused', slots)] };
+  if (!planned.apply()) return { ok: false, reason: 'refused_by_state', key, facts: [gateText('state_refused', slots, spec.variant)] };
 
-  const resultKey = planned.resultKey, runtime = runtimeOf(save), cfg = freeActionConfig();
-  const affinity = writeAffinity(save, ticket.targetId, planned.delta, turn);
-  const major = Math.abs(planned.delta) >= cfg.affinity.majorAbs;
+  const resultKey = planned.resultKey, runtime = runtimeOf(save), cfg = freeActionConfig(), now = sceneTime(save);
+  const shaped = shapeDelta(save, ticket, planned.delta, now);
+  const affinity = writeAffinity(save, ticket.targetId, shaped.delta, turn);
+  // 大事看实际生效的变化：同拍被拦、被上限卡住都不算。
+  const major = affinity.applied && Math.abs(affinity.to - affinity.from) >= cfg.affinity.majorAbs;
+  if (planned.delta > 0 && !affinity.blocked) {
+    writableFreeActionState(save).repeatLedger[shaped.group] = { count: Math.min(shaped.used + 1, cfg.affinity.repeat.factors.length), since: shaped.since };
+  }
+  // 好感没涨的原因交给叙事（不然会把关系写得更近）：重复到 0 / 已到上限。
+  const notes = shaped.worn ? [affinityNoteText('worn', slots)]
+    : shaped.delta > 0 && !affinity.blocked && affinity.to < affinity.from + shaped.delta ? [affinityNoteText('capped', slots)] : [];
   const text = memoryText(spec.variant, resultKey, slots);
   pushLightMemory(save, ticket.targetId, text);
   if (major) {
@@ -244,13 +312,13 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
       receiptId: key, name: slots.target,
     });
   }
-  const facts = [factText(spec.variant, resultKey, slots), ...planned.extraFacts];
+  const facts = [factText(spec.variant, resultKey, slots), ...planned.extraFacts, ...notes];
   const state = writableFreeActionState(save);
-  state.log.push({ key, turn, actionClass: spec.actionClass, variant: spec.variant, targetId: ticket.targetId, resultKey, delta: planned.delta, major });
+  state.log.push({ key, turn, actionClass: spec.actionClass, variant: spec.variant, targetId: ticket.targetId, resultKey, delta: shaped.delta, major });
   state.log = state.log.slice(-cfg.state.logKeep);
   state.focus = { turn, targetIds: [...new Set([...(state.focus?.turn === turn ? state.focus.targetIds : []), ticket.targetId])] };
   noteSettled(state, key, { facts, resultKey });
-  return { ok: true, key, resultKey, facts, affinity: { ...affinity, delta: planned.delta }, major };
+  return { ok: true, key, resultKey, facts, affinity: { from: affinity.from, to: affinity.to, applied: affinity.applied, delta: shaped.delta }, major };
 }
 
 /** 判定确认后：票取自判定回执（不重跑 intent），回执必须与判定账本一致。 */
@@ -261,6 +329,7 @@ export function ticketFromResolution(save: SaveData, resolution: JudgementResolu
   return {
     actionClass: receipt.actionClass, variant: receipt.variant, targetId: receipt.targetId, degree: receipt.degree,
     performed: 'yes', evidence: '', itemId: receipt.itemId,
+    ...(receipt.affinityDelta !== undefined ? { affinityDelta: receipt.affinityDelta } : {}),
   };
 }
 

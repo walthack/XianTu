@@ -9,16 +9,38 @@ import { catalogStatus } from '../../sceneModule/statuses';
 export type ActionClass = 'physical' | 'verbal' | 'intimate' | 'give' | 'cast' | 'guard' | 'other';
 export type Degree = 'light' | 'normal' | 'heavy';
 export type Route = 'judge' | 'table' | 'none';
-export type EffectKind = 'none' | 'practiceProgress' | 'applyStatus' | 'removeStatus' | 'transferItem' | 'itemDefined';
-export const EFFECT_KINDS: readonly EffectKind[] = ['none', 'practiceProgress', 'applyStatus', 'removeStatus', 'transferItem', 'itemDefined'];
+// drainProgress 是单方面扣取对方修为进度的 effect，只在配置里启用的变体上生效，闸门要求对方设防失效（见 gates.ts / defenseDown.ts）。
+export type EffectKind = 'none' | 'practiceProgress' | 'drainProgress' | 'applyStatus' | 'removeStatus' | 'transferItem' | 'itemDefined';
+export const EFFECT_KINDS: readonly EffectKind[] = ['none', 'practiceProgress', 'drainProgress', 'applyStatus', 'removeStatus', 'transferItem', 'itemDefined'];
 export const OUTCOMES = ['critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect'] as const;
 export type Outcome = typeof OUTCOMES[number];
 export type Stance = 'low' | 'mid' | 'high';
+
+/** 目标“设防失效”的判据：身上有活着的状态记录，其 statusId 在名单里，或其效果种类在 effectKinds 里。 */
+export interface DefenseDownRule { statusIds?: string[]; effectKinds?: string[] }
+/**
+ * drainProgress 的参数（全在配置里）：
+ * lossRatio / perUseCapRatio 是占目标“下一级所需”的比例；outcomeFactor 是夺走量的结果档系数表（配置里写表名，variantSpecOf 解析成表）；
+ * qiGainRatio 是玩家灵气回收占上限的比例；selfCostHpRatio 是每次施行先扣的玩家气血占上限的比例（气血不够不能施行）；diminish 按目标记次数递减（perUse^次数，下限 floor，每 recoverMinutes 恢复一次）；
+ * afterStatuses / statusMinutes 是夺走量>0 时目标挂的状态与时长。
+ */
+export interface DrainSpec {
+  lossRatio: number;
+  perUseCapRatio: number;
+  outcomeFactor: Record<Outcome, number>;
+  qiGainRatio: number;
+  selfCostHpRatio: number;
+  diminish: { perUse: number; floor: number; recoverMinutes: number };
+  afterStatuses: string[];
+  statusMinutes: Record<string, number>;
+}
 
 export interface VariantSpec {
   actionClass: ActionClass;
   variant: string;
   label: string;
+  /** 给模型的变体说明（进票提示词），不是代码拦截。 */
+  hint?: string;
   enabled: boolean;
   route: Route;
   effect: EffectKind;
@@ -42,12 +64,16 @@ export interface VariantSpec {
   consume?: number;
   denyEquipped?: boolean;
   denyStoryItem?: boolean;
-  /** onLevelUnknown：目标级数查不到时 deny（拒绝，默认）/ assume_equal（按与施术者同级放行；仍要求目标有可涨的进度条）。 */
-  requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal' };
+  /**
+   * onLevelUnknown：目标级数查不到时 deny（拒绝）/ assume_equal（按与施术者同级放行，只看好感；没处落地由后面的预算检查兜底）。
+   * minGoodwill：目标好感（-100~100）低于它就不肯接受，与 needsGoodwill 的“低姿态”检查并存。
+   */
+  requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal'; minGoodwill?: number; targetDefenseDown?: DefenseDownRule };
   /** 玩家原话含其中任一词（且在自由行动范围内）= 这句归本变体的票据与结算，不再回落旧关键词判定。 */
   legacyGuardWords?: string[];
   cost?: { resource: string; onResolveRatio: number; criticalFailureRatio: number };
   gain?: { base: number; perTransferCap: number; ceilingBelowNeed: number };
+  drain?: DrainSpec;
   cooldownMinutes?: number;
   phaseBudgetRatio?: number;
   maxStatusMinutes?: number;
@@ -78,7 +104,11 @@ export interface FreeActionConfig {
   degrees: Degree[];
   performed: string[];
   ticket: { maxPerTurn: number; evidenceChars: number; rosterMax: number; itemListMax: number };
-  affinity: { perBeatCap: number; majorAbs: number; majorSalienceFloor: number };
+  /**
+   * floatBand：票上的好感浮动位只能在“代码基础值 ± floatBand”内生效。
+   * repeat：同一目标同一行动类的正向好感按次数递减——factors[n] 是窗口内第 n+1 次的系数（超出表长取最后一项），windowMinutes 从窗口内第一次起算，窗口外重算；敌意不递减。
+   */
+  affinity: { perBeatCap: number; majorAbs: number; majorSalienceFloor: number; floatBand: number; repeat: { windowMinutes: number; factors: number[] } };
   degreeFactor: Record<Degree, number>;
   lethalAllowed: boolean;
   memory: { keep: number; chars: number; episodeKeep: number };
@@ -91,6 +121,8 @@ export interface FreeActionConfig {
   narration: { inventoryListMax: number };
   outcomeFactors: Record<string, Record<Outcome, number>>;
   classes: Record<string, RawClass>;
+  /** 双修专属收益（阴阳调和）的好感门槛，结构同变体 requires.minGoodwill；判定带目标时才检查。 */
+  dualCultivation: { requires: { minGoodwill: number } };
 }
 
 export const freeActionConfig = (): FreeActionConfig => GAME_NUMBERS.freeAction as unknown as FreeActionConfig;
@@ -118,16 +150,18 @@ export function variantSpecOf(actionClass: string, variant: string, cfg: FreeAct
   if (typeof factor === 'string') merged.outcomeFactor = cfg.outcomeFactors[factor];
   const gain = merged.gain as Record<string, unknown> | undefined;
   if (gain) merged.gain = { base: resolveNumberRef(gain.base), perTransferCap: resolveNumberRef(gain.perTransferCap), ceilingBelowNeed: resolveNumberRef(gain.ceilingBelowNeed) };
+  const drain = merged.drain as Record<string, unknown> | undefined;
+  if (drain && typeof drain.outcomeFactor === 'string') merged.drain = { ...drain, outcomeFactor: cfg.outcomeFactors[drain.outcomeFactor] };
   return { ...merged, actionClass, variant, enabled: merged.enabled !== false } as unknown as VariantSpec;
 }
 
 /** 提示词里的“类→变体”清单：只列启用的变体（other 类不列）。 */
-export function enabledVariants(cfg: FreeActionConfig = freeActionConfig()): Array<{ actionClass: ActionClass; variant: string; label: string; needsItem: boolean }> {
+export function enabledVariants(cfg: FreeActionConfig = freeActionConfig()): Array<{ actionClass: ActionClass; variant: string; label: string; needsItem: boolean; hint?: string }> {
   return cfg.actionClasses.filter(cls => cls !== 'other').flatMap(cls =>
     Object.keys(cfg.classes[cls]?.variants || {})
       .map(variant => variantSpecOf(cls, variant, cfg)!)
       .filter(spec => spec.enabled)
-      .map(spec => ({ actionClass: cls, variant: spec.variant, label: spec.label, needsItem: spec.needsItem === true })));
+      .map(spec => ({ actionClass: cls, variant: spec.variant, label: spec.label, needsItem: spec.needsItem === true, ...(spec.hint ? { hint: spec.hint } : {}) })));
 }
 
 /** 变体可能产出的 NPC 侧事实档 / 反应（用于校验每个结果都有文本）。 */
@@ -177,8 +211,10 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
         if (!(Number(spec.maxStatusMinutes) > 0)) errors.push(`${where}: applyStatus 缺 maxStatusMinutes`);
       }
       if (spec.requires?.onLevelUnknown !== undefined && !['deny', 'assume_equal'].includes(spec.requires.onLevelUnknown)) errors.push(`${where}: requires.onLevelUnknown 无效`);
+      if (spec.requires?.minGoodwill !== undefined && !(Number.isFinite(spec.requires.minGoodwill) && spec.requires.minGoodwill >= -100 && spec.requires.minGoodwill <= 100)) errors.push(`${where}: requires.minGoodwill 须为 -100~100 的数`);
       if (spec.legacyGuardWords !== undefined && (!Array.isArray(spec.legacyGuardWords) || spec.legacyGuardWords.some(word => typeof word !== 'string' || !word.trim()))) errors.push(`${where}: legacyGuardWords 须为非空字符串数组`);
       if (spec.needsItem && spec.actionClass === 'cast' && !spec.itemTag && !spec.itemTags?.length) errors.push(`${where}: needsItem 的施术变体缺 itemTag(s)`);
+      if (spec.effect === 'drainProgress') errors.push(...validateDrain(spec, where));
       if (spec.gain) for (const key of ['base', 'perTransferCap', 'ceilingBelowNeed'] as const) if (!Number.isFinite(spec.gain[key])) errors.push(`${where}: gain.${key} 引用无法解析`);
     }
   }
@@ -191,10 +227,40 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
   }
   if (!(cfg.debug?.keep > 0) || !(cfg.debug?.textChars > 0) || typeof cfg.debug?.playerTextLog !== 'boolean') errors.push('debug 配置无效');
   if (!(cfg.narration?.inventoryListMax > 0)) errors.push('narration.inventoryListMax 无效');
+  const { floatBand, repeat } = cfg.affinity;
+  if (!(Number.isFinite(floatBand) && floatBand >= 0)) errors.push('affinity.floatBand 须为非负数');
+  if (!(Number.isFinite(repeat?.windowMinutes) && repeat.windowMinutes > 0)) errors.push('affinity.repeat.windowMinutes 须为正数');
+  if (!Array.isArray(repeat?.factors) || !repeat.factors.length || repeat.factors.some(factor => !(Number.isFinite(factor) && factor >= 0 && factor <= 1))) errors.push('affinity.repeat.factors 须为非空的 0~1 数组');
   if (cfg.affinity.perBeatCap !== GAME_NUMBERS.affinity.limits.perTurn) errors.push('affinity.perBeatCap 应与 affinity.limits.perTurn 同值');
+  const dualMin = cfg.dualCultivation?.requires?.minGoodwill;
+  if (!(Number.isFinite(dualMin) && dualMin >= -100 && dualMin <= 100)) errors.push('dualCultivation.requires.minGoodwill 须为 -100~100 的数');
   const attack = cfg.classes.physical?.variants?.attack;
   const physicalDifficulty = (cfg.classes.physical?.defaults as { difficulty?: number } | undefined)?.difficulty;
   if (attack && physicalDifficulty !== GAME_NUMBERS.combat.baselineDc) errors.push('physical 默认难度应与 combat.baselineDc 同值');
+  return errors;
+}
+
+/** drainProgress 变体的参数体检（不论是否启用都查，免得开关一开才发现配置残缺）。 */
+function validateDrain(spec: VariantSpec, where: string): string[] {
+  const errors: string[] = [], drain = spec.drain, finite = (value: unknown): boolean => typeof value === 'number' && Number.isFinite(value);
+  if (!drain) return [`${where}: drainProgress 缺 drain`];
+  if (!(finite(drain.lossRatio) && drain.lossRatio > 0)) errors.push(`${where}: drain.lossRatio 须为正数`);
+  if (!(finite(drain.perUseCapRatio) && drain.perUseCapRatio > 0)) errors.push(`${where}: drain.perUseCapRatio 须为正数`);
+  if (!(finite(drain.qiGainRatio) && drain.qiGainRatio >= 0)) errors.push(`${where}: drain.qiGainRatio 须为非负数`);
+  if (!(finite(drain.selfCostHpRatio) && drain.selfCostHpRatio >= 0 && drain.selfCostHpRatio < 1)) errors.push(`${where}: drain.selfCostHpRatio 须在 [0,1)`);
+  for (const outcome of OUTCOMES) if (!finite(drain.outcomeFactor?.[outcome])) errors.push(`${where}: drain.outcomeFactor 缺 ${outcome}`);
+  const { perUse, floor, recoverMinutes } = drain.diminish || ({} as Partial<DrainSpec['diminish']>);
+  if (!(finite(perUse) && perUse! > 0 && perUse! <= 1)) errors.push(`${where}: drain.diminish.perUse 须在 (0,1]`);
+  if (!(finite(floor) && floor! >= 0 && floor! <= 1)) errors.push(`${where}: drain.diminish.floor 须在 [0,1]`);
+  if (!(finite(recoverMinutes) && recoverMinutes! > 0)) errors.push(`${where}: drain.diminish.recoverMinutes 须为正数`);
+  for (const id of drain.afterStatuses || []) {
+    if (!catalogStatus(id)) errors.push(`${where}: drain.afterStatuses 的 ${id} 不在状态目录里`);
+    if (!(drain.statusMinutes?.[id] > 0)) errors.push(`${where}: drain.statusMinutes 缺 ${id} 的时长`);
+  }
+  for (const id of Object.values(spec.backlash || {})) if (!catalogStatus(id)) errors.push(`${where}: backlash 的 ${id} 不在状态目录里`);
+  const down = spec.requires?.targetDefenseDown;
+  if (!down || !(down.statusIds?.length || down.effectKinds?.length)) errors.push(`${where}: drainProgress 缺 requires.targetDefenseDown（statusIds / effectKinds 至少一项）`);
+  for (const id of down?.statusIds || []) if (!catalogStatus(id)) errors.push(`${where}: targetDefenseDown.statusIds 的 ${id} 不在状态目录里`);
   return errors;
 }
 

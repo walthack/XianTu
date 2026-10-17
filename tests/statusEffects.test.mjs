@@ -454,7 +454,7 @@ test('物品标签与状态目录对得上：解除类标签是目录 remove 规
 });
 
 test('canon:build 的物品校验能抓出错误：onUse 引用不存在的状态、未知标签、坏剂量、毒性物品没有 onUse、空数组', () => {
-  const mk = def => ({ entries: [{ id: 'x.item', definition: { id: 'x.item', name: 'x', ...def } }] });
+  const mk = def => ({ entries: [{ id: 'x.item', definition: { id: 'x.item', name: 'x', type: 'consumable', ...def } }] });
   const run = def => { const errors = []; audit.auditItemEffects(errors, mk(def)); return errors.join('|'); };
   assert.equal(run({}), '');
   assert.equal(run({ effectTags: ['antidote'] }), '');
@@ -469,6 +469,11 @@ test('canon:build 的物品校验能抓出错误：onUse 引用不存在的状�
   assert.match(run({ onUse: [{ statusId: 'poisoned', minutes: -5 }] }), /minutes/);
   assert.match(run({ onUse: [{ statusId: 'poisoned', hp: 5 }] }), /只允许 statusId/);
   assert.match(run({ effectTags: ['poison'] }), /毒性物品必须有 onUse/);
+  // 标签词表独立成文件后：标签要适用该 activation，道具的 activation 随类型
+  assert.match(run({ type: 'weapon', effectTags: ['heal'] }), /效果标签 heal 不适用于 equipped/);
+  assert.match(run({ type: 'material', effectTags: ['heal'] }), /没有生效方式/);
+  assert.match(run({ type: 'weapon', onUse: [{ statusId: 'poisoned' }] }), /onUse 只用于 consumable/);
+  assert.match(run({ activation: 'equipped' }), /activation equipped 与类型 consumable 不一致/);
 });
 
 test('毒物品 → 状态：使用六拂化清散，目标身上挂中毒并按下限计数；必须活着者停在下限，其余人可致死', () => {

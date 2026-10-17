@@ -122,6 +122,35 @@ test('successful double-cultivation recovery writes core values and one temporar
   assert.equal(save.角色.效果.length, 1, '重试不会重复叠加状态');
 });
 
+test('双修专属收益（阴阳调和）按配置里的好感门槛放行；门槛在 freeAction.dualCultivation，代码不写死', async () => {
+  const { GAME_NUMBERS, applyGameNumbers } = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const { resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
+  const min = GAME_NUMBERS.freeAction.dualCultivation.requires.minGoodwill;
+  assert.equal(min, 60, '默认值在配置里');
+  const run = async (favor, target = 'npc.test.partner') => {
+    const save = {
+      角色: { 属性: { 气血: { 当前: 100, 上限: 1000 }, 神识: { 当前: 100, 上限: 1000 } }, 效果: [] },
+      社交: { 关系: { 伙伴: { 角色ID: 'npc.test.partner', 好感度: favor } } },
+      元数据: { 时间: { 年: 220, 月: 1, 日: 1, 小时: 1, 分钟: 1 } }, 系统: { 扩展: {} },
+    };
+    const pending = await createPending(save, { actionText: '与同伴双修调息疗伤', kind: 'cultivate', ...(target ? { target } : {}), difficulty: { band: 'normal', value: 5 }, factors: [] });
+    const result = resolvePendingJudgement(save, pending.id, { currentTurn: 5, roll: () => 20 });
+    return { save, result };
+  };
+  const below = await run(min - 1);
+  assert.equal(below.result.outcome, 'great_success', '低于门槛不改判定结果');
+  assert.deepEqual(below.save.角色.效果, [], '低于门槛：不发阴阳调和');
+  assert.ok(below.save.角色.属性.气血.当前 > 100, '普通调息回复照常');
+  assert.deepEqual((await run(min)).save.角色.效果.map(e => e.状态名称), ['阴阳调和'], '恰好等于门槛放行');
+  assert.deepEqual((await run(100)).save.角色.效果.map(e => e.状态名称), ['阴阳调和']);
+  assert.deepEqual((await run(-50, null)).save.角色.效果.map(e => e.状态名称), ['阴阳调和'], '判定没有目标时不查门槛');
+  applyGameNumbers({ freeAction: { dualCultivation: { requires: { minGoodwill: 10 } } } });
+  try {
+    assert.deepEqual((await run(10)).save.角色.效果.map(e => e.状态名称), ['阴阳调和'], '门槛读配置');
+    assert.deepEqual((await run(9)).save.角色.效果, []);
+  } finally { applyGameNumbers({ freeAction: { dualCultivation: { requires: { minGoodwill: min } } } }); }
+});
+
 test('test outcome override is explicit, auditable, and still uses deterministic effects', async () => {
   const save = { 角色: { 属性: { 气血: { 当前: 100, 上限: 1000 }, 神识: { 当前: 100, 上限: 1000 } } }, 系统: { 扩展: {} } };
   const pending = await createPending(save, {

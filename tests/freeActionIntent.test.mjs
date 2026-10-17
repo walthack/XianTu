@@ -32,7 +32,7 @@ test('试玩存档的 intent 提示里带票说明、在场名单、背包名单
   const payload = JSON.parse(userPrompt).freeAction;
   assert.deepEqual(payload.roster.map(r => r.id).sort(), [DUAN_QIANG, WANG_ZHE].sort());
   const variants = Object.fromEntries(payload.classes.map(c => [c.actionClass, c.variants.map(v => v.variant)]));
-  assert.deepEqual(variants.physical, ['attack', 'grab']);
+  assert.deepEqual(variants.physical, ['attack', 'grab', 'drain_qi']);
   assert.deepEqual(variants.cast, ['transfer_qi', 'heal', 'bandage']);
   assert.equal('other' in variants, false);
   assert.ok(Array.isArray(payload.items));

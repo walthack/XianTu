@@ -19,6 +19,8 @@ export interface FreeActionTicket {
   performed: 'yes';
   evidence: string;
   itemId: string | null;
+  /** 模型对这次举动好感变化的评估（可选）；只在代码基础值 ± affinity.floatBand 内生效，基础值为 0 时不采用。 */
+  affinityDelta?: number;
 }
 export interface RosterEntry { id: string; name: string }
 export interface ItemEntry { id: string; name: string }
@@ -30,8 +32,8 @@ export interface TicketValidation {
   others: number;
 }
 
-const TICKET_KEYS = ['actionClass', 'variant', 'targetId', 'degree', 'performed', 'evidence', 'itemId'];
-const OPTIONAL_KEYS = ['targetId', 'itemId'];
+const TICKET_KEYS = ['actionClass', 'variant', 'targetId', 'degree', 'performed', 'evidence', 'itemId', 'affinityDelta'];
+const OPTIONAL_KEYS = ['targetId', 'itemId', 'affinityDelta'];
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
 export const playerIdOf = (save: unknown): string | undefined => runtimeOf(save)?.opening?.playerCharacterId;
@@ -94,14 +96,15 @@ export function evidenceBelongs(playerText: string, evidence: string): boolean {
 /** 追加到 intent 提示里的票说明（由 config 生成：只列启用的变体）。freeAction 关闭时不调用。 */
 export function ticketPromptSection(save: SaveData): { system: string; payload: Record<string, unknown> } {
   const cfg = freeActionConfig();
-  const byClass = new Map<string, Array<{ variant: string; label: string; needsItem: boolean }>>();
+  const byClass = new Map<string, Array<{ variant: string; label: string; needsItem: boolean; hint?: string }>>();
   for (const row of enabledVariants()) {
     if (!byClass.has(row.actionClass)) byClass.set(row.actionClass, []);
-    byClass.get(row.actionClass)!.push({ variant: row.variant, label: row.label, needsItem: row.needsItem });
+    byClass.get(row.actionClass)!.push({ variant: row.variant, label: row.label, needsItem: row.needsItem, ...(row.hint ? { hint: row.hint } : {}) });
   }
   const system = [
     `自由行动票：玩家这一句里若确实对在场某人做了动作，就在tickets数组里出票（最多${cfg.ticket.maxPerTurn}张，每个目标最多1张）；没有就返回空数组。`,
-    '每张票字段恰好为actionClass、variant、targetId、degree、performed、evidence、itemId，不许有别的字段，也不要输出任何数值。',
+    '每张票字段为actionClass、variant、targetId、degree、performed、evidence、itemId，外加可选的affinityDelta，不许有别的字段；除affinityDelta外不要输出任何数值。',
+    `affinityDelta（可选）：你作为主持评估这次举动让对方对玩家的好感变化，整数，范围-${cfg.affinity.perBeatCap}..+${cfg.affinity.perBeatCap}，口径同候选的好感评估；代码以自己算的基础值为准，只在其上下小幅采纳你的值，对方拒绝或没做成时一律不采纳。拿不准就省略。`,
     'actionClass与variant只能取freeAction.classes里的；找不到合适变体就不出票，不要就近硬套。targetId只能取freeAction.roster里的id；itemId只能取freeAction.items里的id，用不到手段物品填null。needsItem为true的变体，玩家没有合用的物品也照样出票，itemId填null，本地会判定没成事并告知，不要因为没物品就不出票。',
     `degree取${cfg.degrees.join('|')}（轻描淡写/常规/全力或当众）。performed：玩家这一句里确实做了该动作填yes；问句、假设、转述、否定、只是想想填no；拿不准填unclear。`,
     `evidence必须逐字摘自玩家原话的连续片段（不超过${cfg.ticket.evidenceChars}字），不得改写或把两处拼起来；同一句里对几个人动手，每张票各摘一段原话里的连续片段（可以重叠）。观察、闲聊、吃饭、不可能的事不出票。`,
@@ -162,11 +165,15 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     // 被挤掉的那张证据已核对、确是玩家做的事：不结算，但要留一行“未发生”，否则叙事会把它写成已成。
     if (prior && prior.weight >= weight) { refuse('dropped', 'duplicate_target', label); continue; }
     if (prior) refuse('dropped', 'duplicate_target', `${prior.ticket.actionClass}.${prior.ticket.variant}`);
+    // 好感浮动位：不是有限数字就当没报（不作废整张票）；先钳到单拍上限。
+    const floated = typeof t.affinityDelta === 'number' && Number.isFinite(t.affinityDelta)
+      ? Math.max(-cfg.affinity.perBeatCap, Math.min(cfg.affinity.perBeatCap, Math.round(t.affinityDelta))) : undefined;
     picked.set(targetId, {
       weight,
       ticket: {
         actionClass: t.actionClass as ActionClass, variant: spec.variant, targetId, degree: t.degree as Degree,
         performed: 'yes', evidence: [...t.evidence].slice(0, cfg.ticket.evidenceChars).join(''), itemId: itemId as string | null,
+        ...(floated !== undefined ? { affinityDelta: floated } : {}),
       },
     });
   }

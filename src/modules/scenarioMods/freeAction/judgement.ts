@@ -64,6 +64,7 @@ export function buildFreeActionJudgementProposal(
     authorityReceipt: {
       kind: 'free_action_judgement', ticketId: `${currentTurn}.${ticket.targetId}.${spec.variant}`,
       actionClass: ticket.actionClass, variant: ticket.variant, targetId: ticket.targetId!, degree: ticket.degree, itemId: ticket.itemId,
+      ...(ticket.affinityDelta !== undefined ? { affinityDelta: ticket.affinityDelta } : {}),
     },
     applyCultivationRecovery: false,
     createdAtTurn: currentTurn,

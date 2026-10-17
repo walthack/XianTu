@@ -89,11 +89,11 @@ test('判定类票：签发时不留记录；玩家确认后结算才登记', ()
   assert.equal(profileOf(save, XIE_YI).名字, '谢艺');
 });
 
-test('被拒的票不登记：传功（谢艺境界未知 → level_unknown）、没有手段物品（no_item）、已有待确认判定（blocked）', () => {
+test('被拒的票不登记：传功（谢艺好感未到门槛 → goodwill_below_min）、没有手段物品（no_item）、已有待确认判定（blocked）', () => {
   const save = saveWithXie({ favorGift: false });
   const before = JSON.stringify(save.社交.关系);
   const qi = mods.plan.prepareFreeAction(save, ticket('cast', 'transfer_qi', XIE_YI));
-  assert.deepEqual([qi.kind, qi.reason], ['refused', 'level_unknown']);
+  assert.deepEqual([qi.kind, qi.reason], ['refused', 'goodwill_below_min']);
   const noItem = mods.plan.prepareFreeAction(save, gift());
   assert.deepEqual([noItem.kind, noItem.reason], ['refused', 'no_item']);
   assert.equal(JSON.stringify(save.社交.关系), before);

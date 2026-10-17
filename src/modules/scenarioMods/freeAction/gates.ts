@@ -21,6 +21,7 @@ import { variantSpecOf, type VariantSpec } from './config';
 import { canonCharacterOf, freeActionRosterOf, playerIdOf, type FreeActionTicket } from './ticket';
 import { readFreeActionState, runtimeOf } from './state';
 import { protectedForbids } from './protect';
+import { defenseDownOf } from './defenseDown';
 import type { GateReason } from './facts';
 
 export interface FreeActionDeps {
@@ -71,6 +72,8 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
   if (activeScene(save)) return fail('scene_active');
   if (targetId === playerIdOf(save) || !(relationshipOf(save as any, targetId) || canonCharacterOf(save, targetId)) || !freeActionRosterOf(save).some(entry => entry.id === targetId)) return fail('not_present');
   if (protectedForbids(targetId, spec)) return fail('protected');
+  // drainProgress 类变体只对“设防失效”（配置名单里的状态）的目标成立；读状态记录，不读原话。
+  if (spec.requires?.targetDefenseDown && !defenseDownOf(save, targetId, spec.requires.targetDefenseDown)) return fail('guard_up');
 
   // 手段物品
   let item: ItemEffect | undefined, toxic = false, treat: GateOk['treat'];
@@ -104,14 +107,19 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
   const wantsGoodwill = spec.needsGoodwill === true || (spec.needsGoodwill === 'byItemTag' && !toxic);
   if (wantsGoodwill && stanceOf(Number((relationshipOf(save as any, targetId)?.profile as any)?.好感度) || 0) === 'low') return fail('low_goodwill');
 
-  // 施术者资格：功力不低于目标。目标级数默认必须有可用的九级时点行（占位行、非九级体系一律拒绝）；
-  // requires.onLevelUnknown = assume_equal 时，查不到级数的目标按与施术者同级放行（仍要求目标有可涨的进度条，否则没处落地；施术者须有修为）。
+  // 目标好感门槛：低于 requires.minGoodwill 不肯接受（与上面的“低姿态”检查并存）。
+  const minGoodwill = spec.requires?.minGoodwill;
+  if (minGoodwill !== undefined && (Number((relationshipOf(save as any, targetId)?.profile as any)?.好感度) || 0) < minGoodwill) return fail('goodwill_below_min');
+
+  // 施术者资格：功力不低于目标。目标级数已知（可用的九级时点行）时，高于施术者就拒绝；
+  // 查不到级数（占位行、非九级体系、无行）：requires.onLevelUnknown = assume_equal 时按与施术者同级放行（施术者须有修为，只看上面的好感），
+  // 否则（deny）拒绝；deny 下目标没有可涨的进度条也拒绝。assume_equal 下没处落地的目标由后面的预算检查兜底（budget_full）。
   if (spec.requires?.actorLevel === 'ge_target') {
     const fact = levelFact(targetId, namingChapter(runtime || {}));
     const realm = (relationshipOf(save as any, targetId)?.profile as any)?.境界;
     const targetLevel = effectiveLevel(fact);
     const levelKnown = Boolean(fact && fact.available && fact.applicability === 'nine_levels' && fact.settingStatus !== 'placeholder' && targetLevel !== undefined);
-    if (!(Number(realm?.下一级所需) > 0) || (!levelKnown && spec.requires.onLevelUnknown !== 'assume_equal')) return fail('level_unknown');
+    if (spec.requires.onLevelUnknown !== 'assume_equal' && (!levelKnown || !(Number(realm?.下一级所需) > 0))) return fail('level_unknown');
     const mine = levelOf((save as any)?.角色?.属性?.境界);
     if (mine === null || (levelKnown ? mine < targetLevel! : !(mine > 0))) return fail('level_too_low'); // 查不到目标级数（assume_equal）时，施术者至少得有修为
   }
@@ -133,6 +141,8 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
     const room = transferRoom(save, targetId, spec);
     if (room <= 0) return fail('budget_full');
   }
+  if (spec.drain && drainRoom(save, targetId, spec) <= 0) return fail('drain_empty');
+  if (spec.drain && !drainHpAffordable(save, spec)) return fail('hp_too_low');
   return { ok: true, spec, slots, ...(item ? { item } : {}), toxic, ...(treat ? { treat } : {}) };
 }
 
@@ -146,4 +156,24 @@ export function transferRoom(save: SaveData, targetId: string, spec: VariantSpec
   const budgetLeft = Math.floor(need * spec.phaseBudgetRatio) - used;
   const ceilingLeft = need - spec.gain.ceilingBelowNeed - current;
   return Math.max(0, Math.min(budgetLeft, ceilingLeft));
+}
+
+/** 夺取类单次最多还能扣多少进度：min(单次上限占“下一级所需”的比例, 目标现有进度)；没有进度条的目标是 0。 */
+export function drainRoom(save: SaveData, targetId: string, spec: VariantSpec): number {
+  const realm = (relationshipOf(save as any, targetId)?.profile as any)?.境界;
+  const need = Number(realm?.下一级所需), current = Number(realm?.当前进度) || 0;
+  if (!(need > 0) || !spec.drain) return 0;
+  return Math.max(0, Math.min(Math.round(need * spec.drain.perUseCapRatio), current));
+}
+
+/** 夺取类每次施行先扣的玩家气血：上限 × drain.selfCostHpRatio（四舍五入）；不是夺取类、没有气血记录是 0。 */
+export function drainSelfCost(save: SaveData, spec: VariantSpec): number {
+  const max = Number((save as any)?.角色?.属性?.气血?.上限);
+  return spec.drain && max > 0 ? Math.round(max * spec.drain.selfCostHpRatio) : 0;
+}
+
+/** 气血付得起：当前气血须大于自损量（施行后至少剩一点，不能靠自损把自己耗死）；没有气血记录的存档付不起。 */
+export function drainHpAffordable(save: SaveData, spec: VariantSpec): boolean {
+  const hp = (save as any)?.角色?.属性?.气血;
+  return Number(hp?.上限) > 0 && Number(hp?.当前) > drainSelfCost(save, spec);
 }
