@@ -41,6 +41,8 @@ export function validateFreeTextStatusProposals(raw: string, userAction: string,
     if (!item || typeof item !== 'object' || Array.isArray(item)) return clarify('bad_item', '状态提案无效。');
     const p = item as Record<string, unknown>;
     if (Object.keys(p).some(k => !['statusId', 'actor', 'assertion', 'source', 'evidence', 'confidence'].includes(k))) return clarify('extra_fields', '状态提案包含越权字段。', p.statusId);
+    // Statuses of someone else (e.g. a drained, unconscious target) never mount on the player, so they cannot hold the action even off-catalog.
+    if (p.actor === 'other') { noteTicketDiscard('status', 'ignored_other_actor', p.statusId); continue; }
     const def = STATUS_CATALOG.find(d => d.id === p.statusId && d.freeText);
     if (!def || (evidenceScope === 'input' && def.freeText !== 'input') || !['player', 'other', 'unknown'].includes(String(p.actor))
       || !['current', 'denied', 'hypothetical', 'uncertain'].includes(String(p.assertion))
@@ -49,7 +51,7 @@ export function validateFreeTextStatusProposals(raw: string, userAction: string,
     if (typeof p.evidence !== 'string' || !p.evidence.trim() || !source.includes(p.evidence)
       || typeof p.confidence !== 'number' || !Number.isFinite(p.confidence) || p.confidence < 0 || p.confidence > 1) return clarify('bad_evidence', '状态提案缺少可核对原文证据。', p.statusId);
     // Irrelevant/negative proposals cannot mount, so their confidence must not block a valid action.
-    if (p.actor === 'other' || p.assertion === 'hypothetical') { noteTicketDiscard('status', p.actor === 'other' ? 'ignored_other_actor' : 'ignored_hypothetical', def.id); continue; }
+    if (p.assertion === 'hypothetical') { noteTicketDiscard('status', 'ignored_hypothetical', def.id); continue; }
     if (p.assertion === 'denied') { denied.add(def.id); continue; }
     if (p.actor === 'unknown' || p.assertion === 'uncertain' || p.confidence < 0.9) return clarify('uncertain_actor', '主角状态或指代不确定，请确认后继续。', def.id);
     if (p.source === 'input' && def.freeText !== 'input') return clarify('input_only_status', '该状态不能仅由玩家自述结算。', def.id);

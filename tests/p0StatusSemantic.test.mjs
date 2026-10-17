@@ -71,3 +71,12 @@ test('low-confidence other, denied and hypothetical proposals do not hold unrela
  }
  assert.equal(validate([proposal(input,{confidence:0.8})]).state,'clarify');
 });
+test('other-actor proposals are ignored before catalog validation, player out-of-contract still clarifies',()=>{
+ const drained='我吸干了昏迷的他的元气。';
+ const other=validate([proposal('昏迷的他',{statusId:'unconscious',actor:'other'})],drained);
+ assert.equal(other.state,'resolved');assert.ok(!other.statusIds.includes('unconscious'));
+ const mixed=validate([proposal('昏迷的他',{statusId:'unconscious',actor:'other'}),proposal(input)]);
+ assert.equal(mixed.state,'resolved');assert.deepEqual(mixed.statusIds,['drunk']);
+ assert.equal(validate([proposal('昏迷的他',{statusId:'unconscious',actor:'player'})],drained).state,'clarify');
+ assert.equal(validate([proposal(input,{actor:'other',minutes:999})]).state,'clarify');
+});
