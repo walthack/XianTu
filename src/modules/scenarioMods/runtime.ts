@@ -46,7 +46,6 @@ import type {
   ScenarioPathReceipt,
   ScenarioStoryOpportunity,
   ScenarioStoryMode,
-  ScenarioWorldSimulation,
 } from './schema';
 import {
   applyNpcDecisionEffectsWithAudit,
@@ -82,11 +81,6 @@ import {
 } from '@/utils/judgementEngine';
 import { getCanonRailOrder, getCanonRailProfile, isCanonRailChapter, type CanonRailProfile } from './canonRail';
 import { updateDivergenceControl, type DivergenceSignal, type WorldPushState } from './divergenceControl';
-import {
-  deliverDueWorldOmens,
-  getWorldSimulationFocusEvent,
-  type WorldSimulationRuntimeState,
-} from './worldSimulation';
 import {
   settleScenarioInventoryTransfers,
   type ScenarioInventorySettlement,
@@ -332,10 +326,8 @@ export interface RuntimeState extends ScenarioProgressState {
   modId?: string;
   currentChapterId: string | null;
   flags: Record<string, ScenarioFlagValue>;
-  /** 缺省视为 canon_companion；world_sim 只由新档初始化显式写入。 */
+  /** 缺省视为 canon_companion。 */
   storyMode?: ScenarioStoryMode;
-  worldSimulation?: ScenarioWorldSimulation;
-  worldSimulationState?: WorldSimulationRuntimeState;
   nextStageId?: string | null;
   nextStageReadyId?: string | null;
   /** 剧情停滞轮数：连续多少轮无事件/章节推进（供收束提示分档），推进即清零 */
@@ -1073,8 +1065,6 @@ function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModE
 }
 
 function getCurrentPlayerCompletionEvent(runtime: RuntimeState): ScenarioModEvent | undefined {
-  // 世界模式只借用事件的人物/场景素材，绝不开放 Canon Rail 的玩家完成合同。
-  if (runtime.storyMode === 'world_sim') return undefined;
   const anchor = getScenarioFocusEvent(runtime);
   if (anchor?.playerCompletionContract) return anchor;
   return runtime.activeEventIds
@@ -1582,7 +1572,7 @@ export function resolveStoryEventActionFromPlayerText(
 /** 当前章节显式开放的非承重探索动作；可忽略，且永远不能替代唯一主线锚点。 */
 export function getCurrentStoryExplorationActions(saveData: SaveData): ScenarioEventActionSelection[] {
   const runtime = getRuntime(saveData);
-  if (!runtime || runtime.storyMode === 'world_sim') return [];
+  if (!runtime) return [];
   const anchorId = getNarrativeAnchorEvent(runtime)?.id;
   const offers=QUEST_LINES.flatMap(l=>l.beats).filter(b=>questLineOffer(saveData,b.eventId,anchorId)).map(b=>b.eventId);
   return [...new Set([...runtime.activeEventIds,...offers])]
@@ -1825,9 +1815,6 @@ function recordStoryEventStructuredActionAt(
   const runtime = getRuntime(saveData);
   if (!runtime || !['event_engine', 'exploration_engine'].includes(selection?.source)) {
     return { attempted: false, completed: false, reason: 'invalid_selection' };
-  }
-  if (runtime.storyMode === 'world_sim') {
-    return { attempted: false, completed: false, reason: 'world_sim' };
   }
   const event = selection.source === 'exploration_engine'
     ? runtime.events.find(item => item.id === selection.eventId && item.exploration !== undefined)
@@ -3133,12 +3120,8 @@ export function getNarrativeAnchorEvent(runtime: Pick<RuntimeState, 'chapters' |
       || (order.get(a.id)! - order.get(b.id)!))[0] || null;
 }
 
-/**
- * 当前叙事中心。同行线仍是唯一 Canon Rail；世界模式只读当前未结局势所引用的
- * 既有事件资产。合同缺失、引用失效或局势耗尽时返回 null，不能静默复活 Rail 完成权。
- */
+/** 当前叙事中心：同行线唯一 Canon Rail 的当前锚点事件。 */
 export function getScenarioFocusEvent(runtime: RuntimeState): ScenarioModEvent | null {
-  if (runtime.storyMode === 'world_sim') return getWorldSimulationFocusEvent(runtime as any) || null;
   return getNarrativeAnchorEvent(runtime);
 }
 
@@ -3281,17 +3264,10 @@ export function backfillRuntimeEventRevealPresentations(
  * 已结算事件只把对应 ID 记作过期，防止后续配置迁移倒带补播。
  */
 export function backfillRuntimeWorldOmens(
-  runtime: Pick<RuntimeState, 'events' | 'worldSimulation' | 'storyMode'>,
+  runtime: Pick<RuntimeState, 'events'>,
   canonicalEvents: ScenarioModEvent[],
-  canonicalWorldSimulation?: ScenarioWorldSimulation,
 ): number {
   let updated = 0;
-  // 全 stage baseline 发布前已经创建的 world_sim 旧档可能没有合同快照；
-  // 只对显式 world_sim 补入当前 stage 的合同，兼容模式绝不被升级。
-  if (runtime.storyMode === 'world_sim' && !runtime.worldSimulation && canonicalWorldSimulation) {
-    runtime.worldSimulation = structuredClone(canonicalWorldSimulation);
-    updated += canonicalWorldSimulation.situations?.length || 1;
-  }
   const canonicalById = new Map(canonicalEvents.map(event => [event.id, event]));
   for (const savedEvent of runtime.events || []) {
     const savedTimeline = savedEvent.timeline;
@@ -3299,16 +3275,6 @@ export function backfillRuntimeWorldOmens(
     if (!savedTimeline || savedTimeline.omen || !canonicalOmen) continue;
     savedTimeline.omen = structuredClone(canonicalOmen);
     updated += 1;
-  }
-  const savedSituations = runtime.worldSimulation?.situations;
-  if (savedSituations && canonicalWorldSimulation?.situations) {
-    const canonicalSituationById = new Map(canonicalWorldSimulation.situations.map(item => [item.id, item]));
-    for (const situation of savedSituations) {
-      const canonicalOmen = canonicalSituationById.get(situation.id)?.omen;
-      if (situation.omen || !canonicalOmen) continue;
-      situation.omen = structuredClone(canonicalOmen);
-      updated += 1;
-    }
   }
   return updated;
 }
@@ -3394,7 +3360,7 @@ function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & {
     }
     migrateBatch6TextContracts(runtime, mod.scenario.events || []);
     backfillRuntimeEventRevealPresentations(runtime, mod.scenario.events || []);
-    backfillRuntimeWorldOmens(runtime, mod.scenario.events || [], mod.scenario.worldSimulation);
+    backfillRuntimeWorldOmens(runtime, mod.scenario.events || []);
   }
   if (runtime.reconciledRegistryVersion === deps.version) return;
   try {
@@ -4070,7 +4036,6 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     runtime.steeringCooldown = steeringCooldown - 1;
   }
 
-  deliverDueWorldOmens(runtime, transitions);
   updateDivergenceControl(next, progressed);
   syncActorEngine(runtime);
   refreshEventTimelineRevelations(runtime, transitions);
