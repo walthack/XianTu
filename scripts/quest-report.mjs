@@ -128,7 +128,6 @@ const chapterOf = new Map();   // eventId → 所属章（大场景）
 const gateOf = new Map();      // eventId → 前置拍的 id 尾段（该拍 done 才开）
 for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.json'))) {
   const j = JSON.parse(fs.readFileSync(path.join(ROOT, DATA, f), 'utf8'));
-  if (!j.scenario?.worldSimulation) continue;
   stageWindows.set(j.manifest.id, [j.manifest.axisSeqLo, j.manifest.axisSeqHi]);
   // 触发关系（核实 2026-08-19，读 `runtime.ts` 的推进循环得出）：
   //   关→关   本关无 active 且无未结 critical → `stage_ready`
@@ -137,7 +136,7 @@ for (const f of fs.readdirSync(path.join(ROOT, DATA)).filter(x => x.endsWith('.j
   //            而 `conditionsMatch` 首行是 `!conditions?.length` —— **空条件＝无条件放行**。
   // 故章内默认**无先后**，除非某拍的 conditions 指向同章另一拍的 `flags.event.X.done`。
   // 全库实测：524 拍中有 conditions 的 177（34%），指向另一拍的 143，**同章的仅 71（14%）**。
-  // 严格顺序来自 canonRail（一次只放一拍）：37 个 world_sim 关里 29 关有 rail profile，
+  // 严格顺序来自 canonRail（一次只放一拍）：37 关里 29 关有 rail profile，
   // 但每个 profile 只覆盖**一个章**的一串 orderedEventIds，章外的拍仍是池。
   // 用户 2026-08-19：「接下去这个 event 怎么触发没有显示在文档内，所以前后 event 会让我觉得没啥关系」——
   // 感觉是准的，故在此把门控读出来标进报告。

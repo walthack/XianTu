@@ -14,11 +14,10 @@ import { loadTs } from './loadTs.mjs';
 
 const DIR = 'src/modules/scenarioMods/builtins/data/';
 
-function worldSimStages() {
+function allStages() {
   const out = [];
   for (const f of fs.readdirSync(DIR).filter(x => x.endsWith('.json'))) {
-    const j = JSON.parse(fs.readFileSync(DIR + f, 'utf8'));
-    if (j.scenario?.worldSimulation) out.push(j);
+    out.push(JSON.parse(fs.readFileSync(DIR + f, 'utf8')));
   }
   return out;
 }
@@ -26,7 +25,7 @@ function worldSimStages() {
 test('场外结算合同不得挂在被默认路线跳过的关上', async () => {
   const { DEFAULT_LINE_QUARANTINED_STAGE_IDS } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
   const dead = [];
-  for (const stage of worldSimStages()) {
+  for (const stage of allStages()) {
     if (!DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(stage.manifest.id)) continue;
     for (const event of stage.scenario.events || []) {
       if (event.offscreenResolution) {
@@ -52,7 +51,7 @@ test('场外结算合同不得挂在被默认路线跳过的关上', async () =>
 
 test('场外合同的字段齐全，否则结算时静默失效', () => {
   const bad = [];
-  for (const stage of worldSimStages()) {
+  for (const stage of allStages()) {
     for (const event of stage.scenario.events || []) {
       const c = event.offscreenResolution;
       if (!c) continue;
@@ -73,7 +72,7 @@ test('传闻版 event 由亲历拍门控，且门控指向真实存在的 event'
   // 场外结算写的是自己的 flagKey，schema 明写「不计作玩家完成」。
   const ids = new Set();
   const gated = [];
-  for (const stage of worldSimStages()) {
+  for (const stage of allStages()) {
     for (const event of stage.scenario.events || []) {
       ids.add(event.id);
       for (const cond of event.conditions || []) {

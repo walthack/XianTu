@@ -120,7 +120,6 @@ test('锚事件还没写出来的线，退回粗锚，不得变成永远打不�
   const real = new Set();
   for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
     const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
-    if (!j.scenario?.worldSimulation) continue;
     for (const e of j.scenario.events || []) real.add(e.id);
   }
   for (const line of SECONDARY_LINES) {
@@ -158,7 +157,6 @@ test('每条线都有入口指引，且说清"去哪／找谁"', async () => {
   const dir = 'src/modules/scenarioMods/builtins/data/';
   for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
     const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
-    if (!j.scenario?.worldSimulation) continue;
     for (const loc of j.canon?.locations || []) {
       if (loc?.id && loc.name) names.set(loc.id, loc.name);
     }
@@ -214,7 +212,6 @@ test('地点锚收齐孪生 id，覆盖该线全部关卡', async () => {
   const byName = {};
   for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
     const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
-    if (!j.scenario?.worldSimulation) continue;
     for (const l of j.canon?.locations || []) {
       (byName[l.name] ||= new Map()).set(l.id, (byName[l.name].get(l.id) || 0) + 1);
     }

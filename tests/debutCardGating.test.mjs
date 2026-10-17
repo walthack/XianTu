@@ -45,7 +45,6 @@ test('登场卡必须有 conditions，否则关一开就无条件摆给玩家', 
   const ungated = [];
   for (const file of fs.readdirSync(DIR).filter(name => name.endsWith('.json'))) {
     const mod = JSON.parse(fs.readFileSync(DIR + file, 'utf8'));
-    if (!mod.scenario?.worldSimulation) continue;
     const bound = new Set((mod.scenario.chapters || []).flatMap(chapter => chapter.eventIds || []));
     for (const event of mod.scenario.events || []) {
       if (!event.id.split('.').pop().startsWith('debut_')) continue;

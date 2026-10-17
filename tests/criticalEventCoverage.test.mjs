@@ -22,7 +22,6 @@ test('每条 critical event 都被三级链认领；欠账只减不增', async (
   const critical = new Map();
   for (const f of fs.readdirSync(DIR).filter(x => x.endsWith('.json'))) {
     const j = JSON.parse(fs.readFileSync(DIR + f, 'utf8'));
-    if (!j.scenario?.worldSimulation) continue;
     // 隔离关默认路线静默跳过，其中的 event 玩家取不到，不计入
     if (DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(j.manifest.id)) continue;
     for (const e of j.scenario.events || []) {

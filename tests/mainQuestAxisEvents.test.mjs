@@ -33,7 +33,6 @@ test('ready 节点指向的 stage 与 event 真实存在', async () => {
   const stageEvents = new Map();
   for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
     const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
-    if (!j.scenario?.worldSimulation) continue;
     stageEvents.set(j.manifest.id, new Set((j.scenario.events || []).map(e => e.id)));
   }
   const missing = [];
@@ -55,7 +54,6 @@ test('ready 节点按全书时间线序排列，不让玩家往回跑', async ()
   const seqOf = new Map();
   for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.json'))) {
     const j = JSON.parse(fs.readFileSync(dir + f, 'utf8'));
-    if (!j.scenario?.worldSimulation) continue;
     for (const e of j.scenario.events || []) {
       if (typeof e.axisSeq === 'number') seqOf.set(e.id, e.axisSeq);
     }

@@ -52,8 +52,6 @@ test('23 supplement: Xieyi male pronouns agree in executable sources and decisio
     const text = await readFile(new URL(path, root), 'utf8');
     assert.doesNotMatch(text, /由她通报碧鲮|先交给她，不走云家中立匣|请她决定如何通报碧鲮|本拍护的是她给过线索|axisBeat：她提供碧鲮线索/);
   }
-  assert.match(JSON.stringify(m.scenario.worldSimulation), /追问阿夕的异常/);
-  assert.doesNotMatch(JSON.stringify(m.scenario.worldSimulation), /堵住谢艺，追问她的异常/);
   const r = (await registry()).characters.find(x => x.canonicalName === '谢艺');
   assert.equal(r.gender, '男');
 });

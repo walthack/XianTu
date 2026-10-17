@@ -115,7 +115,6 @@ test('critical event 必须绑在章里或 rail 上，否则玩家永远够不�
   const unreachable = [];
   for (const file of fs.readdirSync(DIR).filter(name => name.endsWith('.json'))) {
     const mod = JSON.parse(fs.readFileSync(DIR + file, 'utf8'));
-    if (!mod.scenario?.worldSimulation) continue;
     if (DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(mod.manifest.id)) continue;
     const bound = new Set((mod.scenario.chapters || []).flatMap(chapter => chapter.eventIds || []));
     for (const event of mod.scenario.events || []) {
