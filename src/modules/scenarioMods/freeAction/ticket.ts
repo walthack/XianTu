@@ -102,7 +102,7 @@ export function ticketPromptSection(save: SaveData): { system: string; payload: 
     byClass.get(row.actionClass)!.push({ variant: row.variant, label: row.label, needsItem: row.needsItem, ...(row.hint ? { hint: row.hint } : {}) });
   }
   const system = [
-    `自由行动票：玩家这一句里若确实对在场某人做了动作，就在tickets数组里出票（最多${cfg.ticket.maxPerTurn}张，每个目标最多1张）；没有就返回空数组。`,
+    `自由行动票：玩家这句若确实对在场某人或自身做了动作，就在tickets数组出票（最多${cfg.ticket.maxPerTurn}张，每个目标最多1张）；没有就返回空数组。`,
     '每张票字段为actionClass、variant、targetId、degree、performed、evidence、itemId，外加可选的affinityDelta，不许有别的字段；除affinityDelta外不要输出任何数值。',
     `affinityDelta（可选）：你作为主持评估这次举动让对方对玩家的好感变化，整数，范围-${cfg.affinity.perBeatCap}..+${cfg.affinity.perBeatCap}，口径同候选的好感评估；代码以自己算的基础值为准，只在其上下小幅采纳你的值，对方拒绝或没做成时一律不采纳。拿不准就省略。`,
     'actionClass与variant只能取freeAction.classes里的；找不到合适变体就不出票，不要就近硬套。targetId只能取freeAction.roster里的id；itemId只能取freeAction.items里的id，用不到手段物品填null。needsItem为true的变体，玩家没有合用的物品也照样出票，itemId填null，本地会判定没成事并告知，不要因为没物品就不出票。',
