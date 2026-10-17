@@ -26,7 +26,6 @@ const RISK_RULES: Array<[JudgementKind, RegExp]> = [
   ['scheme', /欺骗|骗(?:过|他|她|取|到)|撒谎|说谎|伪装|冒充|设局|布局|策反|栽赃|蒙混过关/],
   ['explore', /探索|搜查|搜索|搜寻|探查|调查|侦察|勘察|追踪|查验|检查伤势|翻越|闯入|寻找(?:暗门|机关|线索|入口)/],
 ];
-const EXPLICIT_IF_INTENT = /收服|招揽|结盟|策反|纳入后宫|纳妾|改写命运|救下.*不死|提前杀死/;
 
 /** Clicked event/open-world contracts are already locally settled; keyword risk cards must not intercept them. */
 export function shouldSkipJudgementPreflight(input: {
@@ -146,15 +145,6 @@ export function buildLocalJudgementPreflight(
   const activeEventId = getNarrativeAnchorEvent(runtime || {})?.id
     || (Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined);
   const contract = activeEventId ? getCanonRailContract(profile, activeEventId) : null;
-  // IF 改写是正典边界，不依赖“战斗/潜入”等普通风险词命中。
-  if (contract && EXPLICIT_IF_INTENT.test(normalized)) {
-    return createJudgementProposal({
-      actionText: normalized, kind: 'scheme', whyNow: '此行动会改写活动正典拍，默认线必须先进入显式 IF。',
-      difficulty: { band: 'extreme', value: 100 }, factors: [],
-      stakes: { greatSuccess: '仅 IF 支线可继续裁定。', success: '仅 IF 支线可继续裁定。', partial: '默认线不产生部分成功。', failure: '默认线拒绝执行。' },
-      canonPolicy: 'if_only', sourceEventId: contract.eventId, createdAtTurn: currentTurn,
-    });
-  }
   // 转述别人的话（“他说你要攻击我”）不是玩家本轮的动作，不拿来触发关键词判定。
   const riskText = stripReportedSpeech(normalized);
   const matched = RISK_RULES.find(([, matcher]) => matcher.test(riskText));
@@ -254,7 +244,7 @@ export function findResolvedEventActionJudgement(
 }
 
 /**
- * 由事件动作合同签发一次本地判定。不走关键词分类，也不签发 if_only/100。
+ * 由事件动作合同签发一次本地判定。不走关键词分类。
  */
 export function buildEventActionJudgementProposal(
   saveData: any,

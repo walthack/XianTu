@@ -99,7 +99,7 @@ test('shouldSkipJudgementPreflight 对普通事件动作仍跳过关键词预检
   }), true);
 });
 
-test('合同判定签发 cultivate/severe 25，不走 if_only/100，也不套用自我疗伤', async () => {
+test('合同判定签发 cultivate/severe 25，不走 100 难度墙，也不套用自我疗伤', async () => {
   const {
     buildEventActionJudgementProposal,
     prepareEventActionJudgement,
@@ -113,13 +113,13 @@ test('合同判定签发 cultivate/severe 25，不走 if_only/100，也不套用
 
   const keyword = buildLocalJudgementPreflight(rescue.actionText, save, 3);
   assert.equal(keyword?.kind, 'cultivate', '关键词路径只会当成普通疗伤，结构化点击还会被 skip 掉');
-  const ifOnly = buildLocalJudgementPreflight(
+  const railed = buildLocalJudgementPreflight(
     rescue.actionText,
     { 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_01', activeEventIds: ['lcq.event.s01_04'] } } } },
     1,
   );
-  assert.equal(ifOnly?.canonPolicy, 'if_only');
-  assert.equal(ifOnly?.difficulty?.value, 100);
+  assert.equal(railed?.canonPolicy, 'route_process_only');
+  assert.notEqual(railed?.difficulty?.value, 100);
 
   const proposal = buildEventActionJudgementProposal(save, 3, rescue);
   assert.equal(proposal.kind, 'cultivate');

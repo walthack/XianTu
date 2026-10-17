@@ -46,7 +46,7 @@ export type JudgementKind =
 
 export type JudgementDifficultyBand = 'easy' | 'normal' | 'hard' | 'severe' | 'extreme';
 export type JudgementOutcome = 'critical_failure' | 'failure' | 'partial' | 'success' | 'great_success' | 'perfect';
-export type JudgementCanonPolicy = 'free' | 'route_process_only' | 'if_only';
+export type JudgementCanonPolicy = 'free' | 'route_process_only';
 
 export interface JudgementFactor {
   label: string;
@@ -218,7 +218,7 @@ function normalizeProposal(raw: unknown): JudgementProposal | null {
 
   const stakes = value.stakes;
   if (!stakes || !normalizeText(stakes.success) || !normalizeText(stakes.partial) || !normalizeText(stakes.failure)) return null;
-  const canonPolicy: JudgementCanonPolicy = ['free', 'route_process_only', 'if_only'].includes(String(value.canonPolicy))
+  const canonPolicy: JudgementCanonPolicy = ['free', 'route_process_only'].includes(String(value.canonPolicy))
     ? value.canonPolicy as JudgementCanonPolicy
     : 'free';
   const factors = Array.isArray(value.factors)

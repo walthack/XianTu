@@ -200,16 +200,15 @@
           <span v-for="factor in pendingJudgement.factors" :key="factor.label">{{ factor.label }} {{ factor.value >= 0 ? '+' : '' }}{{ factor.value }}</span>
           <span>难度 {{ pendingJudgement.difficulty.value }}</span>
         </div>
-        <small v-if="pendingJudgement.canonPolicy === 'if_only'">此行动会改写正典，须先进入显式 IF 支线；默认线不可执行。</small>
-        <small v-else>
+        <small>
           <template v-if="pendingJudgement.stakes.perfect">完美成功：{{ pendingJudgement.stakes.perfect }}　</template>
           <template v-if="pendingJudgement.stakes.greatSuccess">大成功：{{ pendingJudgement.stakes.greatSuccess }}　</template>
           成功：{{ pendingJudgement.stakes.success }}　部分成功：{{ pendingJudgement.stakes.partial }}　失败：{{ pendingJudgement.stakes.failure }}
           <template v-if="pendingJudgement.stakes.criticalFailure">　大失败：{{ pendingJudgement.stakes.criticalFailure }}</template>
         </small>
         <div class="judgement-preflight-actions">
-          <button @click="executePendingJudgement" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">确认并掷骰</button>
-          <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing || pendingJudgement.canonPolicy === 'if_only'">大成功（测试）</button>
+          <button @click="executePendingJudgement" :disabled="isAIProcessing">确认并掷骰</button>
+          <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing">大成功（测试）</button>
           <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
           <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
         </div>
