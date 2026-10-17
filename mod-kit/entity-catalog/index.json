@@ -21623,6 +21623,12 @@
     },
     {
       "kind": "text",
+      "id": "free.buff.dual_cultivation.desc",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.affinity.capped",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21630,6 +21636,12 @@
     {
       "kind": "text",
       "id": "free.fact.affinity.worn",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.aftermath.hp",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -21761,6 +21773,30 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.dual_cultivate.buff",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.dual_cultivate.harmonized",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.dual_cultivate.shallow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.dual_cultivate.unsynced",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.feed_pill.benefit_done",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21846,6 +21882,12 @@
     {
       "kind": "text",
       "id": "free.fact.gate.goodwill_below_min",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.goodwill_below_min.dual_cultivate",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22283,6 +22325,24 @@
     },
     {
       "kind": "text",
+      "id": "free.memory.dual_cultivate.harmonized",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.dual_cultivate.shallow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.dual_cultivate.unsynced",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.memory.feed_pill.benefit_done",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22493,6 +22553,18 @@
     },
     {
       "kind": "text",
+      "id": "free.skill.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.skill.none",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.stakes.cast.criticalFailure",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22560,6 +22632,42 @@
     {
       "kind": "text",
       "id": "free.stakes.field.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.intimate.criticalFailure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.intimate.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.intimate.greatSuccess",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.intimate.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.intimate.perfect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.intimate.success",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22668,6 +22776,12 @@
     {
       "kind": "text",
       "id": "free.stakes.verbal.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.talent.label",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22914,6 +23028,36 @@
     {
       "kind": "text",
       "id": "intent.ningyu.y6.word",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "judge.aftermath.effect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "judge.aftermath.reason",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "judge.aftermath.severity.critical_failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "judge.aftermath.severity.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "judge.aftermath.severity.partial",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

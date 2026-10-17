@@ -803,6 +803,30 @@
                 "closed": "deflect"
               }
             }
+          },
+          "dual_cultivate": {
+            "label": "双修",
+            "hint": "与对方自愿合练功法，必须有对象；自己一人修炼不是本项。",
+            "route": "judge",
+            "kind": "cultivate",
+            "modifierProfile": "social",
+            "difficulty": 11,
+            "effect": "selfBuff",
+            "buffRef": "dualCultivation.buff",
+            "applyRecovery": true,
+            "base": 0,
+            "outcomeFactor": "benefit",
+            "requires": {
+              "minGoodwill": "freeAction.dualCultivation.requires.minGoodwill"
+            },
+            "npcOutcomes": {
+              "critical_failure": "unsynced",
+              "failure": "unsynced",
+              "partial": "shallow",
+              "success": "harmonized",
+              "great_success": "harmonized",
+              "perfect": "harmonized"
+            }
           }
         }
       },
@@ -921,7 +945,7 @@
       "solo": {
         "label": "自修",
         "defaults": {
-          "enabled": false,
+          "enabled": true,
           "target": "none",
           "route": "judge",
           "kind": "cultivate",
@@ -932,7 +956,7 @@
         "variants": {
           "train": {
             "label": "修炼",
-            "hint": "自己一人练功修炼；无对象，targetId填null；为他人传功不是本项。",
+            "hint": "自己一人练功修炼；无对象，targetId填null；与人双修、传功不是本项。",
             "requires": {
               "realmMoves": true
             }
@@ -946,7 +970,7 @@
           },
           "recover": {
             "label": "调息疗伤",
-            "hint": "自己调息疗伤恢复；无对象，targetId填null；为他人疗伤不是本项。",
+            "hint": "自己调息疗伤；无对象，targetId填null；与人双修、为他人疗伤不是本项。",
             "applyRecovery": true
           }
         }
@@ -954,7 +978,7 @@
       "field": {
         "label": "场面",
         "defaults": {
-          "enabled": false,
+          "enabled": true,
           "target": "none",
           "route": "judge",
           "kind": "escape",
@@ -990,6 +1014,149 @@
     "dualCultivation": {
       "requires": {
         "minGoodwill": 60
+      },
+      "buff": {
+        "name": "阴阳调和",
+        "type": "buff",
+        "minutesByOutcome": {
+          "partial": 120,
+          "success": 240,
+          "great_success": 360,
+          "perfect": 480
+        },
+        "strength": 1,
+        "source": "本地判定",
+        "descKey": "free.buff.dual_cultivation.desc"
+      }
+    },
+    "aftermath": {
+      "hpLoss": {
+        "kinds": [
+          "combat"
+        ],
+        "ratio": {
+          "partial": 0.05,
+          "failure": 0.15,
+          "critical_failure": 0.4
+        },
+        "minLoss": 1,
+        "keepHp": 1
+      },
+      "gate": {
+        "ttlTurns": 3,
+        "labelChars": 48,
+        "defaultScope": "scene",
+        "scopeByKind": {
+          "combat": "combat",
+          "escape": "combat",
+          "social": "social",
+          "scheme": "social"
+        },
+        "outcomeByResult": {
+          "partial": "partial",
+          "failure": "failure",
+          "critical_failure": "failure"
+        }
+      }
+    },
+    "skillMatch": {
+      "skillBonus": "factors.skillCap",
+      "talentBonus": 4,
+      "maxSkill": 1,
+      "maxTalent": 1,
+      "unavailableMarks": [
+        "未传授",
+        "并未传授",
+        "尚未传授",
+        "未学会",
+        "尚未掌握",
+        "不会施展",
+        "不能使用",
+        "不可使用"
+      ],
+      "tags": {
+        "combat": [
+          "刀",
+          "剑",
+          "拳",
+          "掌",
+          "枪",
+          "矛",
+          "弓",
+          "战",
+          "攻",
+          "杀",
+          "破甲",
+          "护体",
+          "真气",
+          "劲"
+        ],
+        "cultivate": [
+          "功法",
+          "内功",
+          "心法",
+          "修炼",
+          "真气",
+          "灵气",
+          "疗伤",
+          "调息",
+          "双修",
+          "生机",
+          "经脉"
+        ],
+        "craft": [
+          "炼丹",
+          "炼器",
+          "制符",
+          "布阵",
+          "锻造",
+          "药",
+          "丹",
+          "器",
+          "阵",
+          "符"
+        ],
+        "explore": [
+          "探查",
+          "探索",
+          "感应",
+          "追踪",
+          "辨识",
+          "寻路",
+          "侦察",
+          "生死气息"
+        ],
+        "social": [
+          "口才",
+          "交涉",
+          "说服",
+          "威慑",
+          "魅惑",
+          "礼法",
+          "辩"
+        ],
+        "escape": [
+          "身法",
+          "轻功",
+          "遁",
+          "逃",
+          "步法",
+          "疾行"
+        ],
+        "stealth": [
+          "潜行",
+          "隐匿",
+          "敛息",
+          "藏形",
+          "暗杀"
+        ],
+        "scheme": [
+          "谋略",
+          "计策",
+          "筹算",
+          "布局",
+          "权谋"
+        ]
       }
     }
   }

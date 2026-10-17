@@ -5,6 +5,7 @@ import { affinityOf } from '../modules/scenarioMods/ledger/affinityIdentity';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
 import type { WorldSimulationAuthorityReceipt } from '@/modules/scenarioMods/worldSimulation';
 import type { ActionClass, Degree } from '@/modules/scenarioMods/freeAction/config';
+import { dualBuffConfig, failureAftermathEffects, selfBuffEffect } from '@/modules/scenarioMods/freeAction/outcomeEffects';
 
 export interface EventActionJudgementReceipt {
   kind: 'event_action_judgement';
@@ -458,11 +459,8 @@ function archiveResolution(state: JudgementState, resolution: JudgementResolutio
   };
 }
 
-function gateScopeFor(kind: JudgementKind): string {
-  if (kind === 'combat' || kind === 'escape') return 'combat';
-  if (kind === 'social' || kind === 'scheme') return 'social';
-  return 'scene';
-}
+/** 自由行动的判定：失败余波（扣气血、行动门控）和双修的阴阳调和由 freeAction/settle.ts 落账，引擎不再自己写。 */
+const isFreeActionJudgement = (proposal: JudgementProposal): boolean => proposal.authorityReceipt?.kind === 'free_action_judgement';
 
 const CULTIVATION_RECOVERY_KEYWORDS = /疗伤|疗愈|调息|恢复|修复|经脉|丹田|双修/;
 const CULTIVATION_RECOVERY_RATIO: Partial<Record<JudgementOutcome, number>> = {
@@ -509,7 +507,8 @@ function cultivationRecoveryEffects(saveData: unknown, proposal: JudgementPropos
     proposal.applyCultivationRecovery === false
     || proposal.kind !== 'cultivate'
     || !ratio
-    || !CULTIVATION_RECOVERY_KEYWORDS.test(proposal.actionText)
+    // 自由行动的变体显式声明 applyRecovery（true）就回血，不看文本；没声明的旧判定仍按关键词。
+    || (proposal.applyCultivationRecovery !== true && !CULTIVATION_RECOVERY_KEYWORDS.test(proposal.actionText))
   ) return [];
   const root = saveData as any;
   const effects: JudgementResolution['appliedEffects'] = [];
@@ -517,18 +516,10 @@ function cultivationRecoveryEffects(saveData: unknown, proposal: JudgementPropos
     const target = targetAfterRecovery(root, attribute, ratio);
     if (target !== null) effects.push({ key: `角色.属性.${attribute}.当前`, action: 'set', value: target });
   }
-  if (/双修/.test(proposal.actionText) && dualCultivationGoodwillMet(saveData, proposal)) {
-    const durationByOutcome: Partial<Record<JudgementOutcome, number>> = {
-      partial: 120, success: 240, great_success: 360, perfect: 480,
-    };
-    effects.push({
-      key: '角色.效果', action: 'upsert', value: {
-        状态名称: '阴阳调和', 类型: 'buff', 生成时间: clone(root?.元数据?.时间 || {}),
-        持续时间分钟: durationByOutcome[outcome] || 120,
-        状态描述: '本地双修疗伤结算获得：修炼速度+10%，伤势恢复速度+20%，双修效果+30%。',
-        强度: 1, 来源: '本地判定',
-      },
-    });
+  // 旧判定（关键词预检）的双修收益；自由行动的双修走 intimate 变体，门槛在闸门、收益在 settle.ts。
+  if (!isFreeActionJudgement(proposal) && /双修/.test(proposal.actionText) && dualCultivationGoodwillMet(saveData, proposal)) {
+    const buff = selfBuffEffect(root, dualBuffConfig(), outcome);
+    if (buff) effects.push(buff);
   }
   return effects;
 }
@@ -540,36 +531,12 @@ function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementPropo
   }
   if(proposal.kind==='cultivate'){const realm=trainingRealm(saveData,proposal.actionText,outcome);if(realm)effects.push({key:'角色.属性.境界',action:'set',value:realm});}
   effects.push(...spiritCostEffects(saveData, proposal, outcome));
-  if (!['partial', 'failure', 'critical_failure'].includes(outcome)) return effects;
-  if (proposal.kind === 'combat') {
-    const root = saveData as any;
-    const current = Number(root?.角色?.属性?.气血?.当前);
-    const max = Number(root?.角色?.属性?.气血?.上限);
-    const ratio = outcome === 'critical_failure' ? .4 : outcome === 'failure' ? .15 : .05;
-    if (Number.isFinite(current) && Number.isFinite(max) && current > 1 && max > 0) {
-      effects.push({ key: '角色.属性.气血.当前', action: 'add', value: -Math.min(current - 1, Math.max(1, Math.round(max * ratio))) });
-    }
-  }
-  const gateOutcome = outcome === 'partial' ? 'partial' : 'failure';
-  const severity = outcome === 'critical_failure' ? '局势明显恶化' : outcome === 'failure' ? '行动受阻' : '目标虽有进展但留下破绽';
-  effects.push({
-    key: '系统.扩展.行动门控.recent',
-    action: 'push',
-    value: {
-      actionLabel: proposal.actionText.slice(0, 48),
-      outcome: gateOutcome,
-      scope: gateScopeFor(proposal.kind),
-      ...(proposal.target ? { target: proposal.target } : {}),
-      reason: `${severity}（本地判定：${outcome}）`,
-      effect: '重复同一路线须承接既有余波，改做准备、绕行或换目标可降低风险。',
-      createdAtTurn: currentTurn,
-      ttlTurns: 3,
-    },
-  });
+  if (isFreeActionJudgement(proposal)) return effects;
+  effects.push(...failureAftermathEffects(saveData, { kind: proposal.kind, actionText: proposal.actionText, target: proposal.target, outcome, turn: currentTurn }));
   return effects;
 }
 
-function applyDeterministicEffects(saveData: unknown, effects: JudgementResolution['appliedEffects']): void {
+export function applyDeterministicEffects(saveData: unknown, effects: JudgementResolution['appliedEffects']): void {
   if (!effects.length) return;
   const root = saveData as any;
   if (!root.系统) root.系统 = {};

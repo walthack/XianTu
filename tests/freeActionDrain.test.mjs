@@ -248,15 +248,19 @@ function stepped(save, outcome) {
   return { hpMid, result: mods.settle.settleFromResolution(save, resolution) };
 }
 
-test('自损气血：不论结果档都先扣（判定自带的失败伤害之外）；比例来自配置；比例改了扣量跟着变', () => {
+test('自损气血：不论结果档都先扣（失败伤害由结算在自损之后另扣）；比例来自配置；比例改了扣量跟着变', () => {
   const ratio = row().drain.selfCostHpRatio;
+  const { hpLoss } = cfg().aftermath;
   try {
     for (const outcome of ['critical_failure', 'failure', 'partial', 'success', 'perfect']) {
       const save = fixture();
       const hp = save.角色.属性.气血;
       const { hpMid, result } = stepped(save, outcome);
       assert.equal(result.ok, true, outcome);
-      assert.equal(hp.当前, hpMid - Math.round(hp.上限 * ratio), outcome);
+      // 旧引擎不再对 free_action 回执扣失败伤害（hpMid 就是满血）；结算先自损、再按配置扣失败伤害（最低留 keepHp 点）。
+      const afterSelf = hpMid - Math.round(hp.上限 * ratio);
+      const failLoss = hpLoss.ratio[outcome] === undefined ? 0 : Math.min(afterSelf - hpLoss.keepHp, Math.max(hpLoss.minLoss, Math.round(hp.上限 * hpLoss.ratio[outcome])));
+      assert.equal(hp.当前, afterSelf - failLoss, outcome);
       assert.equal(result.facts.includes(mods.facts.factText('drain_qi', 'self_cost', { player: save.角色.身份.名字 || '你', target: nameOf(save) })), true, `${outcome} 事实`);
     }
     row().drain.selfCostHpRatio = 0.2;

@@ -5,13 +5,15 @@
 import { GAME_NUMBERS } from '../../sceneModule/numbers';
 import type { JudgementKind } from '@/utils/judgementEngine';
 import { catalogStatus } from '../../sceneModule/statuses';
+import type { AftermathConfig, SelfBuffConfig } from './outcomeEffects';
 
 export type ActionClass = 'physical' | 'verbal' | 'intimate' | 'give' | 'cast' | 'guard' | 'solo' | 'field' | 'other';
 export type Degree = 'light' | 'normal' | 'heavy';
 export type Route = 'judge' | 'table' | 'none';
 // drainProgress 是单方面扣取对方修为进度的 effect，只在配置里启用的变体上生效，闸门要求对方设防失效（见 gates.ts / defenseDown.ts）。
-export type EffectKind = 'none' | 'practiceProgress' | 'drainProgress' | 'applyStatus' | 'removeStatus' | 'transferItem' | 'itemDefined';
-export const EFFECT_KINDS: readonly EffectKind[] = ['none', 'practiceProgress', 'drainProgress', 'applyStatus', 'removeStatus', 'transferItem', 'itemDefined'];
+// selfBuff 是判定有成效时给玩家自己挂一个限时增益（双修的阴阳调和），增益定义在变体行 buffRef 指向的配置段。
+export type EffectKind = 'none' | 'practiceProgress' | 'drainProgress' | 'applyStatus' | 'removeStatus' | 'transferItem' | 'itemDefined' | 'selfBuff';
+export const EFFECT_KINDS: readonly EffectKind[] = ['none', 'practiceProgress', 'drainProgress', 'applyStatus', 'removeStatus', 'transferItem', 'itemDefined', 'selfBuff'];
 export const OUTCOMES = ['critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect'] as const;
 export type Outcome = typeof OUTCOMES[number];
 export type Stance = 'low' | 'mid' | 'high';
@@ -44,8 +46,10 @@ export interface VariantSpec {
   enabled: boolean;
   /** 'none' = 无对象（自修、场面）：票的 targetId 为 null，不查名单与关系，不写好感与记忆；效果由判定引擎按 kind 在确认时落账。 */
   target?: 'none';
-  /** 自修的调息疗伤：判定卡放开旧引擎的“回气血/神识”结算（其余变体一律关）。 */
+  /** 自修的调息疗伤、双修：判定卡放开旧引擎的“回气血/神识”结算（其余变体一律关）。 */
   applyRecovery?: boolean;
+  /** selfBuff 用：增益定义所在的配置路径（freeAction 段下，如 dualCultivation.buff）。 */
+  buffRef?: string;
   route: Route;
   effect: EffectKind;
   kind?: JudgementKind;
@@ -70,7 +74,7 @@ export interface VariantSpec {
   denyStoryItem?: boolean;
   /**
    * onLevelUnknown：目标级数查不到时 deny（拒绝）/ assume_equal（按与施术者同级放行，只看好感；没处落地由后面的预算检查兜底）。
-   * minGoodwill：目标好感（-100~100）低于它就不肯接受，与 needsGoodwill 的“低姿态”检查并存。
+   * minGoodwill：目标好感（-100~100）低于它就不肯接受，与 needsGoodwill 的“低姿态”检查并存；配置里可写数，也可写 "freeAction.xxx" 这样的数值引用（variantSpecOf 解析成数）。
    * realmMoves：自修用——按旧引擎同一套修炼结算（trainingRealm）试算，境界进度没有变化（时机未到、已满）就不出判定卡。
    */
   requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal'; minGoodwill?: number; targetDefenseDown?: DefenseDownRule; realmMoves?: boolean };
@@ -126,8 +130,15 @@ export interface FreeActionConfig {
   narration: { inventoryListMax: number };
   outcomeFactors: Record<string, Record<Outcome, number>>;
   classes: Record<string, RawClass>;
-  /** 双修专属收益（阴阳调和）的好感门槛，结构同变体 requires.minGoodwill；判定带目标时才检查。 */
-  dualCultivation: { requires: { minGoodwill: number } };
+  /** 双修：好感门槛（intimate.dual_cultivate 的 requires.minGoodwill 引用它；旧关键词判定的阴阳调和也读它）与专属收益（阴阳调和）的定义。 */
+  dualCultivation: { requires: { minGoodwill: number }; buff: SelfBuffConfig };
+  /** 判定非成功档的余波：combat 类扣气血、行动门控；见 outcomeEffects.ts。 */
+  aftermath: AftermathConfig;
+  /**
+   * 判定卡的技能/天赋因子：玩家已学的正典技能、身上的天赋，其名称与描述含该行动类（键取 类.变体 / 类 / 判定 kind，先中先用）标签词时给加成，
+   * 否则只在卡上提示未掌握、无加成。skillBonus 可写数值引用；unavailableMarks 出现在技能描述里表示该技能眼下不能用。
+   */
+  skillMatch: { skillBonus: number | string; talentBonus: number; maxSkill: number; maxTalent: number; unavailableMarks: string[]; tags: Record<string, string[]> };
 }
 
 export const freeActionConfig = (): FreeActionConfig => GAME_NUMBERS.freeAction as unknown as FreeActionConfig;
@@ -157,7 +168,17 @@ export function variantSpecOf(actionClass: string, variant: string, cfg: FreeAct
   if (gain) merged.gain = { base: resolveNumberRef(gain.base), perTransferCap: resolveNumberRef(gain.perTransferCap), ceilingBelowNeed: resolveNumberRef(gain.ceilingBelowNeed) };
   const drain = merged.drain as Record<string, unknown> | undefined;
   if (drain && typeof drain.outcomeFactor === 'string') merged.drain = { ...drain, outcomeFactor: cfg.outcomeFactors[drain.outcomeFactor] };
+  const requires = merged.requires as Record<string, unknown> | undefined;
+  if (requires && typeof requires.minGoodwill === 'string') merged.requires = { ...requires, minGoodwill: resolveNumberRef(requires.minGoodwill) };
   return { ...merged, actionClass, variant, enabled: merged.enabled !== false } as unknown as VariantSpec;
+}
+
+/** selfBuff 变体的增益定义：buffRef 是 freeAction 段下的路径；找不到（体检会报错）时抛错。 */
+export function selfBuffOf(spec: VariantSpec, cfg: FreeActionConfig = freeActionConfig()): SelfBuffConfig {
+  let node: unknown = cfg;
+  for (const part of (spec.buffRef ?? '').split('.')) node = (node as Record<string, unknown> | undefined)?.[part];
+  if (!node || typeof node !== 'object') throw new Error(`${spec.actionClass}.${spec.variant}: buffRef ${String(spec.buffRef)} 找不到`);
+  return node as SelfBuffConfig;
 }
 
 /** 提示词里的“类→变体”清单：只列启用的变体（other 类不列）。 */
@@ -219,6 +240,12 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
           if (!reaction || !intimacyConfig(cfg)?.reactions.includes(reaction)) errors.push(`${where}: matrix.${band}.${gate} 缺格或反应无效`);
         }
       }
+      if (spec.effect === 'selfBuff') {
+        try {
+          const buff = selfBuffOf(spec, cfg);
+          if (!buff.name || !buff.descKey || !Object.keys(buff.minutesByOutcome || {}).length || !Object.values(buff.minutesByOutcome).every(minutes => Number(minutes) > 0)) errors.push(`${where}: buffRef 的增益缺 name / descKey / 各档时长`);
+        } catch (error) { errors.push((error as Error).message); }
+      }
       if (spec.effect === 'applyStatus' && spec.enabled) {
         if (!spec.statusId || !catalogStatus(spec.statusId)) errors.push(`${where}: applyStatus 的 statusId 不在状态目录里`);
         if (!(Number(spec.maxStatusMinutes) > 0)) errors.push(`${where}: applyStatus 缺 maxStatusMinutes`);
@@ -245,6 +272,11 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
   if (!(Number.isFinite(repeat?.windowMinutes) && repeat.windowMinutes > 0)) errors.push('affinity.repeat.windowMinutes 须为正数');
   if (!Array.isArray(repeat?.factors) || !repeat.factors.length || repeat.factors.some(factor => !(Number.isFinite(factor) && factor >= 0 && factor <= 1))) errors.push('affinity.repeat.factors 须为非空的 0~1 数组');
   if (cfg.affinity.perBeatCap !== GAME_NUMBERS.affinity.limits.perTurn) errors.push('affinity.perBeatCap 应与 affinity.limits.perTurn 同值');
+  const hpLoss = cfg.aftermath?.hpLoss, gate = cfg.aftermath?.gate;
+  if (!hpLoss || !(hpLoss.minLoss >= 0) || !(hpLoss.keepHp >= 0) || !Object.values(hpLoss.ratio || {}).every(ratio => ratio >= 0 && ratio <= 1)) errors.push('aftermath.hpLoss 配置无效');
+  if (!gate || !(gate.ttlTurns > 0) || !(gate.labelChars > 0) || !gate.defaultScope || !Object.keys(gate.outcomeByResult || {}).length) errors.push('aftermath.gate 配置无效');
+  const match = cfg.skillMatch;
+  if (!match || !Number.isFinite(resolveNumberRef(match.skillBonus)) || !Number.isFinite(match.talentBonus) || !(match.maxSkill >= 0) || !(match.maxTalent >= 0) || !Object.values(match.tags || {}).every(words => Array.isArray(words) && words.length && words.every(word => typeof word === 'string' && word)) || !Array.isArray(match.unavailableMarks)) errors.push('skillMatch 配置无效');
   const dualMin = cfg.dualCultivation?.requires?.minGoodwill;
   if (!(Number.isFinite(dualMin) && dualMin >= -100 && dualMin <= 100)) errors.push('dualCultivation.requires.minGoodwill 须为 -100~100 的数');
   const attack = cfg.classes.physical?.variants?.attack;

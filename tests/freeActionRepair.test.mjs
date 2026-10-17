@@ -39,15 +39,26 @@ test('“和凝羽一起修炼”模型若报了对人的票：照常过校验�
   assert.equal(result.freeActionTickets[0].itemId, null);
 });
 
-test('修炼句识别失败（坏 JSON / 报错）：回到旧的本地修炼判定，不被固定事件链 hold 住；普通自由句失败仍照旧 hold', async () => {
+test('修炼句识别失败（坏 JSON / 报错）：和其它句子一样处理——固定事件链上 hold；没有合同候选时回落旧预检（skipKeywordPreflight=false）并仍标未结算', async () => {
   const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } });
   assert.ok(router.listNaturalIntentCandidates(save).length > 0, '夹具里应有合同候选，否则 hold 分支不会触发');
   for (const generate of [stub('这不是 JSON').generate, async () => { throw new Error('timeout'); }]) {
-    const training = await run(save, '我独自修炼了一会儿', generate);
-    assert.deepEqual([training.kind, training.skipKeywordPreflight, training.hold], ['free', false, undefined]);
-    const plain = await run(save, '我拔刀，一刀砍向王哲！', generate);
-    assert.deepEqual([plain.kind, plain.hold], ['failed', true]);
+    for (const text of ['我独自修炼了一会儿', '我拔刀，一刀砍向王哲！']) {
+      const held = await run(save, text, generate);
+      assert.deepEqual([held.kind, held.hold], ['failed', true], text);
+    }
   }
+  // 只剩开放世界地方行动（没有合同候选）：识别失败回落旧关键词预检，同时告诉叙事“未发生”
+  const degraded = router.onClassifierFailure('malformed', [{ source: 'open_world_engine', actionId: 'walk', label: '去点心铺' }]);
+  assert.deepEqual([degraded.kind, degraded.skipKeywordPreflight, degraded.unsettled], ['free', false, true]);
+});
+
+test('修炼句识别成功（含空票）：不落旧预检，修炼词不再是例外', async () => {
+  const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } });
+  const none = await run(save, '我独自修炼了一会儿', stub(reply([])).generate);
+  assert.deepEqual([none.kind, none.skipKeywordPreflight, none.usedModel], ['free', true, true]);
+  const ticketed = await run(save, '我闭关修炼', stub(reply([raw('solo', 'train', null, '修炼')])).generate);
+  assert.deepEqual([ticketed.skipKeywordPreflight, ticketed.freeActionTickets?.map(t => `${t.actionClass}.${t.variant}`)], [true, ['solo.train']]);
 });
 
 test('回滚口径：freeAction 关闭 / 没有 generate 时，修炼词句子仍走旧路径（不调模型、不跳过旧预检）', async () => {

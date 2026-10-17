@@ -1,6 +1,6 @@
 // 自由行动的无对象大类：solo（自修：修炼 / 冲关 / 调息疗伤）与 field（场面：逃跑·潜行·探索合一）。
-// 默认关（配置 classes.<类>.defaults.enabled=false），旧流程零变化；打开后票仍是 7 个 key，targetId 为 null，
-// 效果由旧判定引擎按 kind 在确认判定时落账，freeAction 这边只签发判定卡、出既定事实行。
+// 迁移第 3 步起默认启用（配置 classes.<类>.defaults.enabled=true）；关掉开关即回到第 2 步的旧流程。票仍是 7 个 key，targetId 为 null，
+// 境界进度、自修回血由旧判定引擎按 kind 在确认判定时落账，失败余波（气血、行动门控）由 settle.ts 落账，freeAction 这边签发判定卡、出既定事实行。
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import test from 'node:test';
@@ -14,12 +14,14 @@ const N = () => mods.numbers.GAME_NUMBERS;
 const NEW_CLASSES = ['solo', 'field'];
 const OUTCOMES = ['critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect'];
 
-/** 临时打开 solo / field（测试进程内改配置对象，用完还原）。 */
-function switchedOn(fn) {
+/** 临时打开 / 关掉 solo / field（测试进程内改配置对象，用完还原）。 */
+function switched(enabled, fn) {
   const c = cfg(), prior = NEW_CLASSES.map(k => c.classes[k].defaults.enabled);
-  NEW_CLASSES.forEach(k => { c.classes[k].defaults.enabled = true; });
+  NEW_CLASSES.forEach(k => { c.classes[k].defaults.enabled = enabled; });
   try { return fn(); } finally { NEW_CLASSES.forEach((k, i) => { c.classes[k].defaults.enabled = prior[i]; }); }
 }
+const switchedOn = fn => switched(true, fn);
+const switchedOff = fn => switched(false, fn);
 const solo = (variant, extra = {}) => ticket('solo', variant, null, extra);
 const field = (extra = {}) => ticket('field', 'scene_act', null, extra);
 
@@ -36,20 +38,26 @@ const rawTicket = (actionClass, variant, targetId, evidence, extra = {}) => ({ a
 
 // ───────────── 默认关闭 = 旧流程零变化 ─────────────
 
-test('默认关闭：solo / field 不进提示词、不收票（variant_disabled），配置与文本体检仍通过', () => {
+test('默认启用：solo / field 进提示词、收票；关掉开关回到迁移前（不进提示词、票被丢弃 variant_disabled），配置与文本体检仍通过', () => {
   for (const name of NEW_CLASSES) {
-    assert.equal(cfg().classes[name].defaults.enabled, false, name);
+    assert.equal(cfg().classes[name].defaults.enabled, true, name);
     assert.equal(cfg().classes[name].defaults.target, 'none', name);
   }
-  assert.ok(!mods.config.enabledVariants().some(row => NEW_CLASSES.includes(row.actionClass)));
   const save = makeSave({ present: [WANG_ZHE] });
-  const section = mods.ticket.ticketPromptSection(save);
-  assert.deepEqual(section.payload.classes.map(row => row.actionClass), ['physical', 'verbal', 'intimate', 'give', 'cast']);
-  assert.equal(section.system.length, 700, '关闭时提示词主体与迁移前逐字一致（长度 700）');
-  const checked = validate([rawTicket('solo', 'train', null, '修炼')], '我闭关修炼', save);
-  assert.deepEqual([checked.tickets, checked.discards], [[], [{ reason: 'variant_disabled', key: 'solo.train' }]]);
+  assert.deepEqual(mods.ticket.ticketPromptSection(save).payload.classes.map(row => row.actionClass), ['physical', 'verbal', 'intimate', 'give', 'cast', 'solo', 'field']);
+  assert.equal(validate([rawTicket('solo', 'train', null, '修炼')], '我闭关修炼', save).tickets.length, 1);
   assert.deepEqual(mods.config.validateFreeActionConfig(), []);
   assert.deepEqual(mods.facts.validateFreeActionTexts(), []);
+  switchedOff(() => {
+    assert.ok(!mods.config.enabledVariants().some(row => NEW_CLASSES.includes(row.actionClass)));
+    const section = mods.ticket.ticketPromptSection(save);
+    assert.deepEqual(section.payload.classes.map(row => row.actionClass), ['physical', 'verbal', 'intimate', 'give', 'cast']);
+    assert.equal(section.system.length, 700, '提示词主体长度 700（与迁移前逐字一致）');
+    const checked = validate([rawTicket('solo', 'train', null, '修炼')], '我闭关修炼', save);
+    assert.deepEqual([checked.tickets, checked.discards], [[], [{ reason: 'variant_disabled', key: 'solo.train' }]]);
+    assert.deepEqual(mods.config.validateFreeActionConfig(), []);
+    assert.deepEqual(mods.facts.validateFreeActionTexts(), []);
+  });
 });
 
 test('配置：数值与口径全在 game-numbers 里——solo 难度 = 旧 cultivate 预检难度，field 难度 20，两类都无对象', () => {
@@ -135,21 +143,21 @@ test('打开后：去重按类，不按目标——同类两张只留一张并�
   });
 });
 
-test('打开后：提示词主体一字不变，只多出每个变体一行 hint（≤ 40 字），名单不变', () => {
+test('提示词：主体一字不变，solo / field 只多出每个变体一行 hint（≤ 40 字），名单不变；自修的 hint 明说双修、传功不是本项', () => {
   const save = makeSave({ present: [WANG_ZHE] });
-  const off = mods.ticket.ticketPromptSection(save);
-  switchedOn(() => {
-    const on = mods.ticket.ticketPromptSection(save);
-    assert.equal(on.system, off.system, '不增加提示词主体');
-    assert.deepEqual(on.payload.roster, off.payload.roster);
-    assert.deepEqual(on.payload.items, off.payload.items);
-    const added = on.payload.classes.filter(row => NEW_CLASSES.includes(row.actionClass));
-    assert.deepEqual(added.map(row => row.actionClass), ['solo', 'field']);
-    const rows = added.flatMap(row => row.variants);
-    assert.deepEqual(rows.map(row => row.variant), ['train', 'breakthrough', 'recover', 'scene_act']);
-    for (const row of rows) assert.ok(row.hint.length <= 40, `${row.variant} hint ${row.hint.length} 字`);
-    assert.ok(JSON.stringify(on.payload).length - JSON.stringify(off.payload).length < 600, '新增负担小于 600 字符');
-  });
+  const off = switchedOff(() => mods.ticket.ticketPromptSection(save));
+  const on = mods.ticket.ticketPromptSection(save);
+  assert.equal(on.system, off.system, '不增加提示词主体');
+  assert.deepEqual(on.payload.roster, off.payload.roster);
+  assert.deepEqual(on.payload.items, off.payload.items);
+  const added = on.payload.classes.filter(row => NEW_CLASSES.includes(row.actionClass));
+  assert.deepEqual(added.map(row => row.actionClass), ['solo', 'field']);
+  const rows = added.flatMap(row => row.variants);
+  assert.deepEqual(rows.map(row => row.variant), ['train', 'breakthrough', 'recover', 'scene_act']);
+  for (const row of rows) assert.ok(row.hint.length <= 40, `${row.variant} hint ${row.hint.length} 字`);
+  assert.ok(JSON.stringify(on.payload).length - JSON.stringify(off.payload).length < 600, '新增负担小于 600 字符');
+  assert.match(rows.find(row => row.variant === 'train').hint, /双修/);
+  assert.match(rows.find(row => row.variant === 'recover').hint, /双修/);
 });
 
 // ───────────── 打开后：签发 → 确认 → 结算 ─────────────
@@ -312,9 +320,9 @@ test('有对象的变体缺 targetId（回执被剥）：不出卡、不结算�
   assert.equal(profileOf(save, WANG_ZHE).好感度, 55);
 });
 
-// ───────────── 旧引擎对 freeAction 判定卡的未声明效果（迁移前基线，写进报告） ─────────────
+// ───────────── 失败余波的最终存档（第 2 步基线；第 3 步起由 settle.ts 按配置落账，最终结果不变，逐项见 freeActionMigration3.test.mjs） ─────────────
 
-test('基线：旧引擎对 freeAction 有对象判定卡落的、freeAction 代码没声明的效果——combat 类失败扣气血，所有非成功档写行动余波', () => {
+test('基线：有对象判定卡走完“确认 + 结算”后的存档——combat 类失败扣气血，所有非成功档写行动余波（第 3 步由旧引擎改为结算落账，结果与第 2 步一致）', () => {
   const run = (cls, variant, outcome, target = WANG_ZHE) => {
     const save = makeSave({ present: [target], favor: { [target]: 55 } });
     save.角色.属性.气血 = { 当前: 100, 上限: 100 };

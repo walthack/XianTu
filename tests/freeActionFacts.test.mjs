@@ -82,8 +82,8 @@ test('事实行用词：任何事实/闸门/记忆模板渲染结果（含整块
 });
 
 test('事实行与记忆模板只有代码填的显示名槽位，不含玩家原话槽位', () => {
-  // facts/changes/items/name/count：回合事实块、背包事实、回执里由代码填的槽位（事实行、物品名、数量），同样不收玩家原话。
-  const allowed = new Set(['player', 'target', 'item', 'status', 'label', 'facts', 'changes', 'items', 'name', 'count']);
+  // facts/changes/items/name/count/amount：回合事实块、背包事实、回执里由代码填的槽位（事实行、物品名、数量），同样不收玩家原话。
+  const allowed = new Set(['player', 'target', 'item', 'status', 'label', 'facts', 'changes', 'items', 'name', 'count', 'amount']);
   for (const [id, text] of Object.entries(CONTENT_PACKS.texts).filter(([id]) => id.startsWith('free.'))) {
     for (const part of text.split('{').slice(1)) assert.ok(allowed.has(part.split('}')[0]), `${id} 含未知槽位`);
   }

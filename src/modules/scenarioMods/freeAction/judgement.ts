@@ -1,6 +1,6 @@
 /**
  * 自由行动签发判定卡：按变体行的 kind / difficulty / modifierProfile 组因子，票写进 authorityReceipt。
- * 因子只有六司加权、重伤、幸运、环境，以及 modifierProfile 声明 levelGap 时的“境界差”（source:'realm'）；
+ * 因子有六司加权、重伤、幸运、环境，modifierProfile 声明 levelGap 时的“境界差”（source:'realm'），以及按行动类匹配的技能/天赋加成（没有则一行“未掌握”提示，值 0，见 skillMatch.ts）；
  * 玩家原话不进判定（actionText 由模板生成），所以不会命中任何关键词判定或修炼进度的正则。
  */
 import type { SaveData } from '@/types/game';
@@ -17,6 +17,7 @@ import { namingChapter } from '../ledger/naming';
 import { combatLevelOf, resolveActorStats } from '../characterStats';
 import { freeActionConfig, type VariantSpec } from './config';
 import { whyNowText, whySelfText } from './facts';
+import { skillTalentFactors } from './skillMatch';
 import type { FreeActionTicket } from './ticket';
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
@@ -49,6 +50,7 @@ export function buildFreeActionJudgementProposal(
   const data = calculateTurnJudgementData(root?.角色?.身份?.先天六司, root?.角色?.身份?.后天六司, root?.角色?.位置);
   const factors: JudgementFactor[] = [
     ...stateFactors(kind, root),
+    ...skillTalentFactors(save, spec),
     { label: '幸运', value: boundedLuck(Number(root?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center) + Number(root?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
     environmentFactorFor(kind, data),
   ];

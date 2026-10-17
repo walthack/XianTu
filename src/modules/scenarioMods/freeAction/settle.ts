@@ -8,7 +8,7 @@
  * 必须活着的保护只在自由行动路径里生效（经 protect.ts）；剧情合同安排的死亡不受它限制。
  */
 import type { SaveData } from '@/types/game';
-import { getJudgementState, verifyResolvedJudgementReceipt, type JudgementResolution } from '@/utils/judgementEngine';
+import { applyDeterministicEffects, getJudgementState, verifyResolvedJudgementReceipt, type JudgementResolution } from '@/utils/judgementEngine';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { removeSceneInjury, sceneTime } from '../../sceneModule/host/injuries';
 import { AFFINITY_TIERS, clampAffinity, stanceOf, tierOf } from '../affinityLadder';
@@ -19,8 +19,9 @@ import { applyActorStatus } from './actorStatus';
 import { withEncounteredTarget } from './encounter';
 import { applyItemOnUse } from './itemUse';
 import { checkGates, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
-import { freeActionConfig, intimacyConfig, variantSpecOf, type VariantSpec } from './config';
-import { affinityNoteText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
+import { freeActionConfig, intimacyConfig, selfBuffOf, variantSpecOf, type VariantSpec } from './config';
+import { affinityNoteText, aftermathHpText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
+import { failureAftermathEffects, selfBuffEffect } from './outcomeEffects';
 import { pushLightMemory, pushMajorEpisode } from './memory';
 import { protectedCapFor } from './protect';
 import { affinityBeatTaken, noteSettled, readFreeActionState, runtimeOf, writableFreeActionState } from './state';
@@ -148,6 +149,15 @@ function plan(save: SaveData, ticket: FreeActionTicket, gate: GateOk, resolution
     return { resultKey: reaction, delta, extraFacts: [], apply: none };
   }
 
+  // 自身增益（双修的阴阳调和）：判定档决定事实与有没有增益，增益写在玩家身上；好感照 base × 轻重 × 结果系数（base 为 0 就不动）。
+  if (spec.effect === 'selfBuff' && spec.npcOutcomes && outcome) {
+    const buff = selfBuffEffect(save, selfBuffOf(spec), outcome);
+    return {
+      resultKey: spec.npcOutcomes[outcome], delta: beatClamp(base * degree * factor), extraFacts: buff ? [factText(spec.variant, 'buff', slots)] : [],
+      apply: () => { if (buff) applyDeterministicEffects(save, [buff]); return true; },
+    };
+  }
+
   // 夺取类（drainProgress）——对方已设防失效（gates.ts 闸门）才走到这里；必须排在下面的敌意分支之前，否则会被它的空 apply 截走。
   if (spec.effect === 'drainProgress' && spec.npcOutcomes && outcome) return planDrain(save, ticket, spec, outcome, key, slots);
 
@@ -272,11 +282,24 @@ export function settleFreeAction(save: SaveData, ticket: FreeActionTicket, resol
 }
 
 /**
- * 无对象的票（自修、场面）：旧引擎在确认判定时已按 kind 落账（境界进度、气血、行动余波），这里只记账，并给叙事一行按结果档取的既定事实。
+ * 判定非成功档的余波（combat 类扣气血、行动门控）：旧引擎对 free_action 回执不再写（见 judgementEngine），由这里落账，数值全在配置 freeAction.aftermath。
+ * 只在判定路由且已结算成功时调用；幂等键拦住重放，所以只写一次。返回给叙事的事实行（扣了气血才有）。
+ */
+function writeAftermath(save: SaveData, resolution: JudgementResolution | undefined, slots: FactSlots): string[] {
+  if (!resolution?.outcome) return [];
+  const effects = failureAftermathEffects(save, { kind: resolution.kind, actionText: resolution.actionText, target: resolution.target, outcome: resolution.outcome, turn: resolution.resolvedAtTurn });
+  applyDeterministicEffects(save, effects);
+  const hp = effects.find(effect => effect.key === '角色.属性.气血.当前');
+  return hp ? [aftermathHpText({ ...slots, amount: String(Math.abs(Number(hp.value))) })] : [];
+}
+
+/**
+ * 无对象的票（自修、场面）：旧引擎在确认判定时已按 kind 落账境界进度与自修回血；失败余波（气血、行动门控）由这里写。并给叙事一行按结果档取的既定事实。
  * 不写好感、记忆、重复账，也不回头过闸门（落账之后境界已变，再试算会把已发生的事判成“没发生”）。
  */
-function settleTargetless(save: SaveData, spec: VariantSpec, outcome: NonNullable<JudgementResolution['outcome']>, key: string, turn: number): SettleResult {
-  const facts = [factText(spec.variant, outcome, { player: playerNameOf(save), target: '' })];
+function settleTargetless(save: SaveData, spec: VariantSpec, resolution: JudgementResolution, key: string, turn: number): SettleResult {
+  const outcome = resolution.outcome!, slots = { player: playerNameOf(save), target: '' };
+  const facts = [factText(spec.variant, outcome, slots), ...writeAftermath(save, resolution, slots)];
   const state = writableFreeActionState(save);
   state.log.push({ key, turn, actionClass: spec.actionClass, variant: spec.variant, targetId: null, resultKey: outcome, delta: 0, major: false });
   state.log = state.log.slice(-freeActionConfig().state.logKeep);
@@ -291,7 +314,7 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
   const prior = readFreeActionState(save).settled[key];
   if (prior) return { ok: true, replay: true, key, resultKey: prior.resultKey, facts: prior.facts };
   if (spec.route === 'judge' && (!resolution || resolution.status !== 'resolved' || !resolution.outcome)) return { ok: false, reason: 'unresolved', facts: [] };
-  if (spec.target === 'none') return settleTargetless(save, spec, resolution!.outcome!, key, turn);
+  if (spec.target === 'none') return settleTargetless(save, spec, resolution!, key, turn);
   const targetId = ticket.targetId!; // 有对象的变体：缺 targetId 的票上面已按 disabled 退回
 
   const gate = checkGates(save, ticket, deps);
@@ -300,6 +323,7 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
   const slots: FactSlots = { ...gate.slots, player: gate.slots.player || playerNameOf(save), target: gate.slots.target || targetNameOf(save, targetId) };
   const planned = plan(save, ticket, gate, resolution, key, slots, deps);
   if (!planned.apply()) return { ok: false, reason: 'refused_by_state', key, facts: [gateText('state_refused', slots, spec.variant)] };
+  const aftermath = writeAftermath(save, resolution, slots);
 
   const resultKey = planned.resultKey, runtime = runtimeOf(save), cfg = freeActionConfig(), now = sceneTime(save);
   const shaped = shapeDelta(save, ticket, planned.delta, now);
@@ -327,7 +351,7 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
       receiptId: key, name: slots.target,
     });
   }
-  const facts = [factText(spec.variant, resultKey, slots), ...planned.extraFacts, ...notes];
+  const facts = [factText(spec.variant, resultKey, slots), ...planned.extraFacts, ...aftermath, ...notes];
   const state = writableFreeActionState(save);
   state.log.push({ key, turn, actionClass: spec.actionClass, variant: spec.variant, targetId: targetId, resultKey, delta: shaped.delta, major });
   state.log = state.log.slice(-cfg.state.logKeep);
