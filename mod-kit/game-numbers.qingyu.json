@@ -583,6 +583,7 @@
           },
           "grab": {
             "label": "抓住",
+            "hint": "擒拿制住对方；握手、牵手等亲近动作不算。",
             "base": -4,
             "npcOutcomes": {
               "critical_failure": "block",
@@ -755,6 +756,7 @@
         "variants": {
           "flirt": {
             "label": "调情",
+            "hint": "明确的调情撩拨；寻常寒暄、夸月色不算。",
             "matrix": {
               "low": {
                 "open": "refuse",
@@ -789,6 +791,7 @@
           },
           "invite": {
             "label": "邀请",
+            "hint": "邀约亲近；邀请双修属双修项。",
             "matrix": {
               "low": {
                 "open": "refuse",
@@ -806,7 +809,7 @@
           },
           "dual_cultivate": {
             "label": "双修",
-            "hint": "与对方自愿合练功法，必须有对象；自己一人修炼不是本项。",
+            "hint": "邀请对方双修或与对方合修功法（长句亦是），必须有对象；独自修炼不是本项。",
             "route": "judge",
             "kind": "cultivate",
             "modifierProfile": "social",

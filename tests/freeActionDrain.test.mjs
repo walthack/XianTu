@@ -44,7 +44,7 @@ test('提示词清单带 label 与 hint；校验与文本体检通过', () => {
   const listed = mods.ticket.ticketPromptSection(save).payload.classes.find(c => c.actionClass === 'physical').variants.find(v => v.variant === 'drain_qi');
   assert.equal(listed.label, '夺元');
   assert.equal(listed.hint, row().hint);
-  assert.ok(mods.ticket.ticketPromptSection(save).payload.classes.find(c => c.actionClass === 'physical').variants.filter(v => v.variant !== 'drain_qi').every(v => !('hint' in v)), '没有 hint 的变体形状不变');
+  assert.ok(mods.ticket.ticketPromptSection(save).payload.classes.find(c => c.actionClass === 'physical').variants.every(v => ('hint' in v) === Boolean(mods.config.variantSpecOf('physical', v.variant).hint)), '只有配了 hint 的变体带 hint 字段，形状不变');
   assert.deepEqual(mods.config.validateFreeActionConfig(), []);
   assert.deepEqual(mods.facts.validateFreeActionTexts(), []);
 });

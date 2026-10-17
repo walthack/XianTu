@@ -151,14 +151,6 @@ test('寒暄：模型不出票就什么都不结算——不记调情、不加�
   }
 });
 
-test('传功句仍归自由行动（不回落旧修炼预检）；出票后不再显示“没有识别出可结算的动作”', async () => {
-  const text = '我给凝羽传功';
-  assert.equal(router.freeActionOwnsText(base(), text), true);
-  const result = await run(base(), text, replyOf([rawTicket('cast', 'transfer_qi', NING_YU, '传功')], 'transfer_qi'));
-  assert.equal(result.freeActionTickets.length, 1);
-  assert.equal(mods.plan.prepareFreeAction(base(), result.freeActionTickets[0]).kind, 'issued');
-});
-
 test('hint：每个出问题的变体都写明认领范围与边界，进入 intent 提示词的变体清单', () => {
   const section = mods.ticket.ticketPromptSection(base());
   const listed = Object.fromEntries(section.payload.classes.flatMap(c => c.variants.map(v => [`${c.actionClass}.${v.variant}`, v.hint ?? ''])));
@@ -169,9 +161,38 @@ test('hint：每个出问题的变体都写明认领范围与边界，进入 int
     'field.scene_act': [/不针对在场某人也出票/, /targetId填null/, /逃跑/, /潜行/, /探索/, /不算观察/],
     'cast.transfer_qi': [/传功/, /渡功/, /自愿/, /不是夺元/],
     'physical.drain_qi': [/昏迷/, /被制住/, /本地判定/, /传功/],
+    'physical.grab': [/握手/, /牵手/, /亲近动作不算/],
+    'intimate.flirt': [/明确/, /寒暄/, /月色/],
+    'intimate.invite': [/双修属双修项/],
+    'intimate.dual_cultivate': [/邀请对方双修/, /长句/, /必须有对象/, /独自修炼不是本项/],
   })) {
     assert.equal(listed[key], hintOf(...key.split('.')), `${key} 清单里的 hint 就是配置里的 hint`);
     for (const pattern of patterns) assert.match(listed[key], pattern, key);
   }
 });
 
+test('体量与格式：提示词主体一字不变（700 字）；变体清单比本次修复前增加不超过 200 字符；每条 hint ≤ 60 字；不加任何拦截词', () => {
+  const section = mods.ticket.ticketPromptSection(base());
+  assert.equal(section.system.length, 700, '不改提示词主体');
+  const BEFORE_CLASSES_LENGTH = 1548; // 本次修复前（HEAD afaae50b）变体清单 JSON 的长度
+  const grown = JSON.stringify(section.payload.classes).length - BEFORE_CLASSES_LENGTH;
+  assert.ok(grown > 0 && grown <= 200, `变体清单增加 ${grown} 字符`);
+  for (const row of mods.config.enabledVariants()) {
+    const hint = hintOf(row.actionClass, row.variant);
+    assert.ok(hint.length <= 60, `${row.actionClass}.${row.variant} hint ${hint.length} 字`);
+  }
+  const text = readFileSync(new URL('../mod-kit/game-numbers.qingyu.json', import.meta.url), 'utf8');
+  assert.equal(text.includes('denyWords'), false, '没有 denyWords');
+  const guarded = mods.config.enabledVariants().filter(row => mods.config.variantSpecOf(row.actionClass, row.variant).legacyGuardWords?.length);
+  assert.deepEqual(guarded.map(row => `${row.actionClass}.${row.variant}`), ['cast.transfer_qi'], 'legacyGuardWords 仍只有传功');
+  assert.deepEqual(mods.config.validateFreeActionConfig(), []);
+  assert.deepEqual(mods.facts.validateFreeActionTexts(), []);
+});
+
+test('传功句仍归自由行动（不回落旧修炼预检）；出票后不再显示“没有识别出可结算的动作”', async () => {
+  const text = '我给凝羽传功';
+  assert.equal(router.freeActionOwnsText(base(), text), true);
+  const result = await run(base(), text, replyOf([rawTicket('cast', 'transfer_qi', NING_YU, '传功')], 'transfer_qi'));
+  assert.equal(result.freeActionTickets.length, 1);
+  assert.equal(mods.plan.prepareFreeAction(base(), result.freeActionTickets[0]).kind, 'issued');
+});
