@@ -26,6 +26,8 @@ export function gateText(reason: string, slots: FactSlots, variant?: string): st
 export const affinityNoteText = (kind: 'worn' | 'capped', slots: FactSlots): string => fillSlots(packText(`free.fact.affinity.${kind}`), slots);
 export const protectedText = (slots: FactSlots): string => fillSlots(packText('free.fact.protected'), slots);
 export const whyNowText = (slots: FactSlots): string => fillSlots(packText('free.why'), slots);
+/** 无对象的票（自修、场面）的理解说明：没有 {target}。 */
+export const whySelfText = (slots: FactSlots): string => fillSlots(packText('free.why.self'), slots);
 
 /** 按 effect 种类决定的结果键（config 不列，由代码按物品效果与骰面决定）；校验与单测用它核对文本齐全。 */
 export function effectResultKeys(spec: VariantSpec): string[] {
@@ -44,6 +46,8 @@ export const GATE_REASONS = [
   'level_too_low', 'level_unknown', 'no_resource', 'cooldown', 'budget_full', 'protected', 'guard_up', 'drain_empty', 'hp_too_low',
   // 票校验阶段（目标/物品无效）与结算写入被状态拒绝时的“未发生”事实。
   'target_unavailable', 'item_unavailable', 'state_refused',
+  // 自修：按修炼结算试算境界进度不会变（时机未到 / 已满）。
+  'not_ready',
   // 没落实的动作（同目标被挤掉的第二张票）/ 本地没有识别出可结算动作（识别降级、传功语义无票）。
   'dropped', 'unrecognized',
 ] as const;
@@ -102,7 +106,8 @@ export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_
     const keys = [...new Set([...resultKeysOf(spec), ...effectResultKeys(spec)])];
     for (const key of keys) {
       need(`free.fact.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
-      if (key !== 'backlash' && key !== 'self_cost') need(`free.memory.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
+      // 无对象的票不写 NPC 记忆，没有 memory 文本。
+      if (key !== 'backlash' && key !== 'self_cost' && spec.target !== 'none') need(`free.memory.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
     }
     if (spec.route === 'judge') for (const name of ['success', 'partial', 'failure']) need(`free.stakes.${row.actionClass}.${name}`, row.actionClass);
   }
@@ -110,6 +115,7 @@ export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_
   need('free.fact.protected', 'protected');
   for (const kind of ['worn', 'capped']) need(`free.fact.affinity.${kind}`, 'affinity');
   need('free.why', 'why');
+  need('free.why.self', 'why');
   for (const id of ['free.block.settled', 'free.block.refused', 'free.block.inventory.changed', 'free.block.inventory.unchanged', 'free.block.inventory.empty', 'free.block.inventory.item',
     'free.block.inventory.delta.gain', 'free.block.inventory.delta.lose', 'free.receipt.refused', 'free.receipt.given', 'free.receipt.other', 'free.receipt.dismiss']) need(id, 'block');
   return errors;

@@ -307,5 +307,5 @@ test('T33 施术只有传功、疗伤、包扎；类与变体白名单就是配�
   assert.deepEqual(Object.keys(classes.physical.variants), ['attack', 'grab', 'bind', 'drain_qi']);
   assert.equal(classes.physical.variants.drain_qi.enabled, true, '夺元默认启用（2026-10-17 用户裁定）');
   assert.deepEqual(Object.keys(classes.guard.variants), ['shield']);
-  assert.deepEqual(cfg().actionClasses, ['physical', 'verbal', 'intimate', 'give', 'cast', 'guard', 'other']);
+  assert.deepEqual(cfg().actionClasses, ['physical', 'verbal', 'intimate', 'give', 'cast', 'guard', 'solo', 'field', 'other']); // solo / field 默认关（tests/freeActionSolo.test.mjs）
 });

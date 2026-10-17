@@ -24,7 +24,7 @@ export type PrepareResult =
 
 export function prepareFreeAction(save: SaveData, ticket: FreeActionTicket, deps: SettleDeps & FreeActionDeps = {}): PrepareResult {
   const spec = variantSpecOf(ticket.actionClass, ticket.variant);
-  if (!spec || !spec.enabled || spec.route === 'none' || !ticket.targetId) return { kind: 'blocked' };
+  if (!spec || !spec.enabled || spec.route === 'none' || (!ticket.targetId && spec.target !== 'none')) return { kind: 'blocked' };
   return withEncounteredTarget(save, ticket.targetId, () => prepareRegistered(save, ticket, spec, deps), result => result.kind === 'settled' && result.result.ok);
 }
 

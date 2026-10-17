@@ -6,7 +6,7 @@ import { GAME_NUMBERS } from '../../sceneModule/numbers';
 import type { JudgementKind } from '@/utils/judgementEngine';
 import { catalogStatus } from '../../sceneModule/statuses';
 
-export type ActionClass = 'physical' | 'verbal' | 'intimate' | 'give' | 'cast' | 'guard' | 'other';
+export type ActionClass = 'physical' | 'verbal' | 'intimate' | 'give' | 'cast' | 'guard' | 'solo' | 'field' | 'other';
 export type Degree = 'light' | 'normal' | 'heavy';
 export type Route = 'judge' | 'table' | 'none';
 // drainProgress 是单方面扣取对方修为进度的 effect，只在配置里启用的变体上生效，闸门要求对方设防失效（见 gates.ts / defenseDown.ts）。
@@ -42,6 +42,10 @@ export interface VariantSpec {
   /** 给模型的变体说明（进票提示词），不是代码拦截。 */
   hint?: string;
   enabled: boolean;
+  /** 'none' = 无对象（自修、场面）：票的 targetId 为 null，不查名单与关系，不写好感与记忆；效果由判定引擎按 kind 在确认时落账。 */
+  target?: 'none';
+  /** 自修的调息疗伤：判定卡放开旧引擎的“回气血/神识”结算（其余变体一律关）。 */
+  applyRecovery?: boolean;
   route: Route;
   effect: EffectKind;
   kind?: JudgementKind;
@@ -67,8 +71,9 @@ export interface VariantSpec {
   /**
    * onLevelUnknown：目标级数查不到时 deny（拒绝）/ assume_equal（按与施术者同级放行，只看好感；没处落地由后面的预算检查兜底）。
    * minGoodwill：目标好感（-100~100）低于它就不肯接受，与 needsGoodwill 的“低姿态”检查并存。
+   * realmMoves：自修用——按旧引擎同一套修炼结算（trainingRealm）试算，境界进度没有变化（时机未到、已满）就不出判定卡。
    */
-  requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal'; minGoodwill?: number; targetDefenseDown?: DefenseDownRule };
+  requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal'; minGoodwill?: number; targetDefenseDown?: DefenseDownRule; realmMoves?: boolean };
   /** 玩家原话含其中任一词（且在自由行动范围内）= 这句归本变体的票据与结算，不再回落旧关键词判定。 */
   legacyGuardWords?: string[];
   cost?: { resource: string; onResolveRatio: number; criticalFailureRatio: number };
@@ -167,6 +172,7 @@ export function enabledVariants(cfg: FreeActionConfig = freeActionConfig()): Arr
 /** 变体可能产出的 NPC 侧事实档 / 反应（用于校验每个结果都有文本）。 */
 export function resultKeysOf(spec: VariantSpec, cfg: FreeActionConfig = freeActionConfig()): string[] {
   const keys = new Set<string>();
+  if (spec.target === 'none') OUTCOMES.forEach(outcome => keys.add(outcome)); // 无对象：事实文本直接按结果档取
   Object.values(spec.npcOutcomes || {}).forEach(key => keys.add(key));
   Object.values(spec.protectedCap || {}).forEach(key => keys.add(key));
   if (spec.matrix) {
@@ -192,11 +198,18 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
       if (!spec.label) errors.push(`${where}: 缺 label`);
       if (!['judge', 'table', 'none'].includes(spec.route)) errors.push(`${where}: route 无效`);
       if (!EFFECT_KINDS.includes(spec.effect ?? 'none')) errors.push(`${where}: effect ${String(spec.effect)} 不在代码认得的种类内`);
-      if (spec.route === 'judge' && spec.enabled) {
-        for (const key of ['kind', 'modifierProfile', 'difficulty', 'outcomeFactor'] as const) if (spec[key] === undefined) errors.push(`${where}: judge 缺 ${key}`);
-        if (spec.base === undefined) errors.push(`${where}: judge 缺 base`);
+      // 无对象的类不论开关都体检：免得开关一开才发现配置残缺。
+      if (spec.target !== undefined && spec.target !== 'none') errors.push(`${where}: target 只能是 none`);
+      if (spec.target === 'none') {
+        if (spec.route !== 'judge') errors.push(`${where}: 无对象的变体只能走 judge`);
+        if (spec.needsItem || spec.needsGoodwill || spec.cost || spec.drain || spec.requires?.targetDefenseDown) errors.push(`${where}: 无对象的变体不能带物品、好感、代价、夺取参数`);
+      }
+      if (spec.route === 'judge' && (spec.enabled || spec.target === 'none')) {
+        const targetless = spec.target === 'none';
+        for (const key of targetless ? ['kind', 'modifierProfile', 'difficulty'] as const : ['kind', 'modifierProfile', 'difficulty', 'outcomeFactor'] as const) if (spec[key] === undefined) errors.push(`${where}: judge 缺 ${key}`);
+        if (spec.base === undefined && !targetless) errors.push(`${where}: judge 缺 base`);
         for (const outcome of OUTCOMES) if (spec.outcomeFactor && !Number.isFinite(spec.outcomeFactor[outcome])) errors.push(`${where}: outcomeFactor 缺 ${outcome}`);
-        if (spec.actionClass !== 'cast' && spec.actionClass !== 'give') {
+        if (spec.actionClass !== 'cast' && spec.actionClass !== 'give' && !targetless) {
           for (const outcome of OUTCOMES) if (!spec.npcOutcomes?.[outcome]) errors.push(`${where}: npcOutcomes 缺 ${outcome}`);
         }
       }

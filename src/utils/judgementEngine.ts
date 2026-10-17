@@ -19,7 +19,8 @@ export interface FreeActionJudgementReceipt {
   ticketId: string;
   actionClass: ActionClass;
   variant: string;
-  targetId: string;
+  /** 无对象的变体（自修、场面）为 null；有对象的变体缺它，结算侧一律不认。 */
+  targetId: string | null;
   degree: Degree;
   itemId: string | null;
   /** 票上的好感浮动位（可选），随回执存活到结算。 */
@@ -185,10 +186,10 @@ function normalizeAuthorityReceipt(raw: unknown): JudgementAuthorityReceipt | un
     const ticketId = normalizeText(receipt.ticketId);
     const actionClass = normalizeText(receipt.actionClass);
     const variant = normalizeText(receipt.variant);
-    const targetId = normalizeText(receipt.targetId);
+    const targetId = normalizeText(receipt.targetId) || null;
     const degree = normalizeText(receipt.degree);
     const itemId = normalizeText(receipt.itemId);
-    if (!ticketId || !actionClass || !variant || !targetId || !degree) return undefined;
+    if (!ticketId || !actionClass || !variant || !degree) return undefined;
     const affinityDelta = typeof receipt.affinityDelta === 'number' && Number.isFinite(receipt.affinityDelta) ? receipt.affinityDelta : undefined;
     return {
       kind: 'free_action_judgement', ticketId, actionClass: actionClass as ActionClass, variant, targetId,

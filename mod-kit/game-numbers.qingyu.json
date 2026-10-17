@@ -462,6 +462,8 @@
       "give",
       "cast",
       "guard",
+      "solo",
+      "field",
       "other"
     ],
     "degrees": [
@@ -898,6 +900,57 @@
             "base": 2,
             "statusId": "guarded",
             "maxStatusMinutes": 120
+          }
+        }
+      },
+      "solo": {
+        "label": "自修",
+        "defaults": {
+          "enabled": false,
+          "target": "none",
+          "route": "judge",
+          "kind": "cultivate",
+          "modifierProfile": "default",
+          "difficulty": 11,
+          "effect": "none"
+        },
+        "variants": {
+          "train": {
+            "label": "修炼",
+            "hint": "自己一人练功修炼；无对象，targetId填null；为他人传功不是本项。",
+            "requires": {
+              "realmMoves": true
+            }
+          },
+          "breakthrough": {
+            "label": "冲关",
+            "hint": "自己冲关突破境界；无对象，targetId填null。",
+            "requires": {
+              "realmMoves": true
+            }
+          },
+          "recover": {
+            "label": "调息疗伤",
+            "hint": "自己调息疗伤恢复；无对象，targetId填null；为他人疗伤不是本项。",
+            "applyRecovery": true
+          }
+        }
+      },
+      "field": {
+        "label": "场面",
+        "defaults": {
+          "enabled": false,
+          "target": "none",
+          "route": "judge",
+          "kind": "escape",
+          "modifierProfile": "default",
+          "difficulty": 20,
+          "effect": "none"
+        },
+        "variants": {
+          "scene_act": {
+            "label": "逃跑潜行探索",
+            "hint": "逃跑、潜行、探索中有风险或成败悬念的；无对象，targetId填null。"
           }
         }
       },
