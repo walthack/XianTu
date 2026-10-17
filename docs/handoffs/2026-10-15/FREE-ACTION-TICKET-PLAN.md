@@ -781,6 +781,7 @@
 - 触发条件（`gates.ts`）：目标在时点级数表里没有可用的九级行（无行 / 不可用 / 非九级体系 / 占位行），或关系档案的境界没有 `下一级所需>0`。
 - 数据面：`mod-kit/entity-catalog/character-levels.qingyu.json` 共 66 行，覆盖人物 id 不多；总表 333 个人物里能在该表里找到行的只有 33 个（按 id 与 `idAliases` 比对）。所以对多数原著人物，传功默认会被这条拒绝——**这是按设计的保守拒绝，不是 bug**，但覆盖面确实窄。
 - 处理：默认保持拒绝（T20 与初识登记测试锁定）；想放开就把该变体的 `requires.onLevelUnknown` 改成 `assume_equal`：查不到级数的目标按同级放行，仍要求目标有可涨的进度条、施术者有修为。是否放开由你定。
+- **（已被 §15.5 取代）** 默认已改为 `assume_equal`。
 
 ### 15.3 护卫与必活保护是两套机制（命名区分）
 - 必活保护 = 总表人物的静态标记 `mustSurvive`，经 `protect.ts` 读取，作用是给敌对结算封顶（`protectedCap`）或直接拒绝（`protectedForbid`）。
@@ -793,3 +794,21 @@
 - **可以逃走的战斗**才谈判定：走 `escape` 判定类，成功后的位置变化由场景/开放世界的移动写入口完成；我未核实该写入口，实现前先查。
 - **带人逃跑**不做：它同时涉及闸门（双目标）、场景（位置变化）和票数上限（每回合 2 张、每目标 1 张），并与“不能逃走的战斗”规则相互牵制。要做时建议单设 `escort` 变体，由代码规定“成功则被带者随同转移”，模型只报一张票。
 - 以上均未实现，也没有真机验证。
+
+### 15.5 传功闸门收紧 / 护卫先关（2026-10-17 后续）
+- **传功好感门槛**：`cast.transfer_qi.requires.minGoodwill`（`game-numbers.qingyu.json`），目标好感低于它 → 闸门拒绝，原因码 `goodwill_below_min`，文案 `free.fact.gate.goodwill_below_min`。默认 **20**（2026-10-17 用户裁定，原估算 40 作废；**数值未经实玩验证**）。与 `needsGoodwill` 的“低姿态”检查并存，且先于级数检查：好感不够时不看级数。
+- **级别**：目标级数已知（九级时点行可用）且高于玩家 → 照旧 `level_too_low`；同级或更低按原规则走。
+- **`onLevelUnknown` 默认改为 `assume_equal`**：级数查不到的目标不再因 `level_unknown` 拒绝，按同级对待、只看好感（施术者仍须有修为）。改回 `deny` 即恢复旧行为（`level_unknown` 原因码与文案保留）。副作用：`assume_equal` 下目标没有可涨的进度条时，不再报 `level_unknown`，由后面的预算检查报 `budget_full`（文案“眼下已受不住更多的传功”，对这种情形不太贴切）。
+- **护卫 `guard.shield` 关闭**：变体行 `enabled:false`。提示词只列启用变体，所以护卫类整体不再出现；模型若仍报票，校验丢弃（`variant_disabled`）。代码、`free.fact/memory.shield.*` 文案、`guarded` 状态都保留；改回 `true` 即恢复。
+
+### 15.6 正向社交好感的整形（2026-10-17，用户已批准）
+- **基础值在代码**：`settle.ts` 的 `plan()` 算出 `base × 轻重 × 结果系数`（或亲近查表值）。被拒、没发生、判定失败时基础值本来就是 0。
+- **票上的可选浮动位 `affinityDelta`**：模型按 −15..+15 的口径报；`validateFreeActionTickets` 取整并钳到单拍上限，不是有限数字就当没报（票照收）。判定类票把它存进判定回执（`FreeActionJudgementReceipt.affinityDelta`），确认后结算取回。
+- **整形顺序（`shapeDelta`）**：基础值 → 正向按“目标:行动类”窗口内次数乘 `affinity.repeat.factors` → 递减后为 0 就是 0（不看浮动位）→ 否则浮动位在 `[基础 − floatBand, 基础 + floatBand]` 内采纳 → `perBeatCap` 钳制。敌意（基础值<0）不递减。
+- **配置**（`freeAction.affinity`）：`floatBand: 2`；`repeat.windowMinutes: 1440`（从窗口内第一次起算，满一整段后重算）、`repeat.factors: [1, 0.5, 0.25, 0]`（超出表长取最后一项）。**全是占位，未经实玩验证。**
+- **递减账**：`runtime.freeAction.repeatLedger["<目标>:<行动类>"] = { count, since }`，随 `state.budgetKeep` 修剪。同拍被拦下的不计次。
+- **叙事事实**：递减到 0 → `free.fact.affinity.worn`；好感已到上限或被上限截短 → `free.fact.affinity.capped`。追加在该次结算的事实行末尾，也会随幂等重放原样返回。没有加持久回执。
+- **大事**：`major` 看实际生效的变化（`applied` 且 `|to − from| ≥ majorAbs`），不再看计划值。
+- **冷却**：没有给 flirt/kiss/invite/gift 配 `cooldownMinutes`——那会让闸门把整件事写成“没发生”；用递减窗口代替。需要时仍可在变体行上加。
+- **共历事件通道未纳入“同一拍只结算一次”**：该通道在 `runtime.ts`（本轮禁改）。已导出 `state.ts` 的 `affinityBeatTaken(save, targetId, turn)` 作为判据，接入需要在 `settleSharedExperienceAffinity` 的循环里改动。
+
