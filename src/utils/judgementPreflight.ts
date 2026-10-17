@@ -15,7 +15,6 @@ import type { ScenarioEventActionJudgement } from '@/modules/scenarioMods/schema
 import { calculateTurnJudgementData } from './judgementRules';
 import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
-import { findWorldSimulationIntervention } from '@/modules/scenarioMods/worldSimulation';
 import { fastNarrativeDemoShortKnifeFactor } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 
 const RISK_RULES: Array<[JudgementKind, RegExp]> = [
@@ -149,7 +148,7 @@ export function buildLocalJudgementPreflight(
   const activeEventId = getNarrativeAnchorEvent(runtime || {})?.id
     || (Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined);
   const contract = activeEventId ? getCanonRailContract(profile, activeEventId) : null;
-  const worldIntervention = findWorldSimulationIntervention(saveData, normalized);
+  const worldIntervention = undefined as { [k: string]: any } | undefined; // world_sim 介入判定已停用
   if (worldIntervention) {
     const { situation, outcome, branchId, intervention } = worldIntervention;
     const kind = intervention.kind;

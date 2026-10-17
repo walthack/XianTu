@@ -1,6 +1,5 @@
 <template>
   <div class="main-game-panel">
-    <WorldSimulationPlaytestPanel />
     <aside v-if="currentTravelCard" class="travel-card" aria-label="路途卡">
       <strong>{{ currentTravelCard.from }} → {{ currentTravelCard.to }} · {{ currentTravelCard.duration }}</strong>
       <p>{{ currentTravelCard.summary || currentTravelCard.label }}</p>
@@ -555,7 +554,6 @@ import {
 } from '@/services/qingyuTurnLongRequests';
 import { isAiRequestTimeout } from '@/services/aiRequestDeadline';
 import FormattedText from '@/components/common/FormattedText.vue';
-import WorldSimulationPlaytestPanel from '@/components/dashboard/WorldSimulationPlaytestPanel.vue';
 import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlaytestHud.vue';
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
 import { useGameStateStore } from '@/stores/gameStateStore';

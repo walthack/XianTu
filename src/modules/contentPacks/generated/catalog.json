@@ -1,5 +1,5 @@
 {
-  "version": "c6f185fb02ba028b",
+  "version": "305a7a72b841b1c3",
   "contracts": [
     {
       "meta": {
@@ -12903,14 +12903,6 @@
       "group": "primary",
       "icon": "Moon",
       "testId": "open-xingyuehu-quest-playtest"
-    },
-    {
-      "id": "world-sim",
-      "label": "六朝世界试玩",
-      "route": "/world-sim-playtest",
-      "group": "legacy",
-      "icon": "Orbit",
-      "testId": "open-world-sim-playtest"
     },
     {
       "id": "qingyu",

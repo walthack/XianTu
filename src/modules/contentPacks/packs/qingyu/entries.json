@@ -8,14 +8,6 @@
     "testId": "open-xingyuehu-quest-playtest"
   },
   {
-    "id": "world-sim",
-    "label": "六朝世界试玩",
-    "route": "/world-sim-playtest",
-    "group": "legacy",
-    "icon": "Orbit",
-    "testId": "open-world-sim-playtest"
-  },
-  {
     "id": "qingyu",
     "label": "清羽记开局",
     "route": "/qingyu-opening-playtest",

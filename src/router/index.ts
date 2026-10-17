@@ -8,8 +8,6 @@ import ModeSelection from '../views/ModeSelection.vue';
 import CharacterCreation from '../views/CharacterCreation.vue';
 import GameView from '../views/GameView.vue';
 import ScenarioModManagerView from '../views/ScenarioModManagerView.vue';
-import WorldSimulationDemoView from '../views/WorldSimulationDemoView.vue';
-import WorldSimulationPlaytestStartView from '../views/WorldSimulationPlaytestStartView.vue';
 import QingyuOpeningPlaytestStartView from '../views/QingyuOpeningPlaytestStartView.vue';
 import XingyuehuQuestPlaytestStartView from '../views/XingyuehuQuestPlaytestStartView.vue';
 
@@ -81,11 +79,6 @@ const routes = [
     component: ScenarioModManagerView,
   },
   {
-    path: '/world-sim-playtest',
-    name: 'WorldSimulationPlaytest',
-    component: WorldSimulationPlaytestStartView,
-  },
-  {
     path: '/qingyu-opening-playtest',
     name: 'QingyuOpeningPlaytest',
     component: QingyuOpeningPlaytestStartView,
@@ -94,11 +87,6 @@ const routes = [
     path: '/xingyuehu-quest-playtest',
     name: 'XingyuehuQuestPlaytest',
     component: XingyuehuQuestPlaytestStartView,
-  },
-  {
-    path: '/world-sim-demo',
-    name: 'WorldSimulationDemo',
-    component: WorldSimulationDemoView,
   },
   {
     // 提示词管理 - 独立顶级路由，不需要加载游戏数据

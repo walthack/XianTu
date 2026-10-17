@@ -876,6 +876,7 @@ export const useCharacterCreationStore = defineStore('characterCreation', () => 
     }
   }
   function setScenarioStoryMode(mode: ScenarioStoryMode) {
+    if ((mode as string) === 'world_sim') throw new Error('world_sim 入口已停用');
     if (mode === 'world_sim' && (
       selectedScenarioMod.value?.rules.mode !== 'strict'
       || !selectedScenarioMod.value.scenario.worldSimulation

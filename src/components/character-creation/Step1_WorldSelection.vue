@@ -78,7 +78,7 @@
           <p class="era">【{{ activeWorld.era || $t('时代未知') }}】</p>
 
           <section
-            v-if="store.selectedScenarioMod?.rules.mode === 'strict' && store.selectedScenarioMod.scenario.worldSimulation"
+            v-if="false /* 步骤1隐藏 world_sim 入口(六朝世界卡片) */"
             class="story-mode-card"
             data-testid="scenario-story-mode"
           >

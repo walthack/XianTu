@@ -50,7 +50,7 @@ test('character creation has one local session mode while explicit cloud materia
   assert.doesNotMatch(preview, /isLocalCreation|联机模式下/);
 });
 
-test('world simulation playtest is a one-click isolated normal-game flow', () => {
+test('world simulation playtest is a one-click isolated normal-game flow', { skip: 'world_sim 入口已隐藏（/world-sim-playtest 路由与入口条目已移除，cleanup/remove-world-sim 第一步），待第二步彻底移除后删除本测试' }, () => {
   const modeSelection = read('src/views/ModeSelection.vue');
   const router = read('src/router/index.ts');
   const start = read('src/views/WorldSimulationPlaytestStartView.vue');

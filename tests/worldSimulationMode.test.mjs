@@ -178,7 +178,7 @@ test('route A: zero-LLM non-intervention lets all three world situations settle 
   assert.notEqual(runtime.actorEngine?.anchorEventId, 'lyg.event.s01_08');
 });
 
-test('only a locally signed successful rescue judgement can create and confirm Guo Jie IF', async () => {
+test('only a locally signed successful rescue judgement can create and confirm Guo Jie IF', { skip: 'world_sim 入口已隐藏（cleanup/remove-world-sim 第一步：judgement 介入判定停用），待第二步彻底移除后删除本测试' }, async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const { persistPendingJudgement, resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
   const {
@@ -272,7 +272,7 @@ test('world mode never exposes source-event completion actions or stale Rail jud
   assert.equal(genericRisk.authorityReceipt, undefined);
 });
 
-test('failed or partial rescues never create an IF candidate', async () => {
+test('failed or partial rescues never create an IF candidate', { skip: 'world_sim 入口已隐藏（cleanup/remove-world-sim 第一步：judgement 介入判定停用），待第二步彻底移除后删除本测试' }, async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const { persistPendingJudgement, resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
   const { settleWorldSimulationJudgement } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
@@ -288,7 +288,7 @@ test('failed or partial rescues never create an IF candidate', async () => {
   }
 });
 
-test('a default deadline that settles before confirmation expires the old rescue receipt', async () => {
+test('a default deadline that settles before confirmation expires the old rescue receipt', { skip: 'world_sim 入口已隐藏（cleanup/remove-world-sim 第一步：judgement 介入判定停用），待第二步彻底移除后删除本测试' }, async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const { persistPendingJudgement, resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
   const { confirmWorldSimulationDivergence, settleWorldSimulationJudgement } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
@@ -308,7 +308,7 @@ test('a default deadline that settles before confirmation expires the old rescue
   assert.equal(runtime.worldSimulationState.pendingDivergence, undefined);
 });
 
-test('Dong Zhuo rescue uses the same deterministic gate and survives JSON reload without rerolling', async () => {
+test('Dong Zhuo rescue uses the same deterministic gate and survives JSON reload without rerolling', { skip: 'world_sim 入口已隐藏（cleanup/remove-world-sim 第一步：judgement 介入判定停用），待第二步彻底移除后删除本测试' }, async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const { persistPendingJudgement, resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
   const { confirmWorldSimulationDivergence, settleWorldSimulationJudgement } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
@@ -364,7 +364,7 @@ test('world mode without a stage contract stays fail-closed instead of falling b
   assert.doesNotMatch(prompt, /Canon Rail|完成写入键|本拍必须达成/);
 });
 
-test('an existing pending divergence blocks a second intervention receipt from replacing it', async () => {
+test('an existing pending divergence blocks a second intervention receipt from replacing it', { skip: 'world_sim 入口已隐藏（cleanup/remove-world-sim 第一步：judgement 介入判定停用），待第二步彻底移除后删除本测试' }, async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const { persistPendingJudgement, resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
   const { findWorldSimulationIntervention, settleWorldSimulationJudgement } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
@@ -381,7 +381,7 @@ test('an existing pending divergence blocks a second intervention receipt from r
   assert.deepEqual(save.世界.状态.剧本模组.worldSimulationState.pendingDivergence, original);
 });
 
-test('confirmation checks the existing IF registry before writing any divergence or character flags', async () => {
+test('confirmation checks the existing IF registry before writing any divergence or character flags', { skip: 'world_sim 入口已隐藏（cleanup/remove-world-sim 第一步：judgement 介入判定停用），待第二步彻底移除后删除本测试' }, async () => {
   const { buildLocalJudgementPreflight } = await loadTs('../src/utils/judgementPreflight.ts');
   const { persistPendingJudgement, resolvePendingJudgement } = await loadTs('../src/utils/judgementEngine.ts');
   const { confirmWorldSimulationDivergence, settleWorldSimulationJudgement } = await loadTs('../src/modules/scenarioMods/worldSimulation.ts');
