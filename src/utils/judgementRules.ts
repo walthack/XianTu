@@ -56,24 +56,6 @@ export function calculateTurnJudgementData(
   };
 }
 
-function signed(value: number): string {
-  return `${value >= 0 ? '+' : ''}${value}`;
-}
-
-export function formatTurnJudgementPrompt(data: TurnJudgementData): string {
-  return `# 本回合判定数据（前端已计算）
-**幸运点**: ${signed(data.幸运点)}
-**环境修正**:
-  - 灵气浓度: ${data.环境.灵气浓度}
-  - 修炼/突破: ${signed(data.环境.修炼修正)}
-  - 炼丹/炼器: ${signed(data.环境.炼制修正)}
-  - 战斗施法: ${signed(data.环境.战斗修正)}
-
-⚠️ **重要**：判定时直接使用以上数值，不要自己计算！
-- 幸运点固定为: ${signed(data.幸运点)}
-- 环境修正根据判定类型选择对应的值`;
-}
-
 /** P0 仅观测旧正文标签，绝不把模型声称的结果写回存档。 */
 export function extractLegacyJudgementMarkers(text: string): string[] {
   return [...text.matchAll(/[〔〖]([^〕〗]*(?:骰点|判定值|最终值|总值|难度)[^〕〗]*)[〕〗]/g)].map(match => match[1]);
