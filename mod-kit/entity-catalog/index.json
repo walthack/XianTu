@@ -20759,6 +20759,12 @@
     },
     {
       "kind": "status",
+      "id": "qi.drained",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "restrict.arm",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -21617,6 +21623,18 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.affinity.capped",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.affinity.worn",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.attack.block",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21660,6 +21678,48 @@
     {
       "kind": "text",
       "id": "free.fact.deceive.seen_through",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.backlash",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.drained",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.drained_deep",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.recoil",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.resisted",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.self_cost",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.trace",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -21731,6 +21791,12 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.gate.drain_empty",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.gate.dropped",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21738,6 +21804,24 @@
     {
       "kind": "text",
       "id": "free.fact.gate.equipped_or_story",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.goodwill_below_min",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.guard_up",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.hp_too_low",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22014,6 +22098,36 @@
     {
       "kind": "text",
       "id": "free.memory.deceive.seen_through",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.drain_qi.drained",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.drain_qi.drained_deep",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.drain_qi.recoil",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.drain_qi.resisted",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.drain_qi.trace",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "note": "道具、装备、功法共用的效果标签词表与生效方式（activation）。校验器 scripts/validate-entity-catalog.mjs 与 validator.ts 都读本文件；状态目录 remove 规则里的 item 标签、game-numbers.status.itemTags 必须是这里的子集（见 canon:build 的对账）。",
+  "activations": {
+    "consumable": {
+      "label": "使用即生效",
+      "kinds": ["item"],
+      "itemTypes": ["consumable"],
+      "note": "用掉即没；沿用 onUse 挂状态。"
+    },
+    "equipped": {
+      "label": "装备期间生效",
+      "kinds": ["item"],
+      "itemTypes": ["weapon", "armor"],
+      "note": "放进装备槽期间生效，卸下即取消。"
+    },
+    "active": {
+      "label": "功法运行期间生效",
+      "kinds": ["technique"],
+      "note": "功法已装备并在修炼期间生效，停止即取消；存档里 已装备=true 即视为修炼中（修炼中是旧字段）。"
+    }
+  },
+  "tags": {
+    "heal": {
+      "label": "疗伤",
+      "activation": ["consumable"],
+      "note": "解除外伤、失血、重伤、神魂受创、濒死、单臂乏力、腿脚难行（状态目录 remove 规则）。"
+    },
+    "hemostatic": {
+      "label": "止血",
+      "activation": ["consumable"],
+      "note": "解除流血。"
+    },
+    "splint": {
+      "label": "接骨",
+      "activation": ["consumable"],
+      "note": "解除骨折。"
+    },
+    "antidote": {
+      "label": "解毒",
+      "activation": ["consumable"],
+      "note": "解除昏迷、中毒、麻痹。"
+    },
+    "sober": {
+      "label": "醒酒",
+      "activation": ["consumable"],
+      "note": "解除醉酒。"
+    },
+    "unseal": {
+      "label": "解穴",
+      "activation": ["consumable"],
+      "note": "解除被点穴。"
+    },
+    "repair": {
+      "label": "修复",
+      "activation": ["consumable"],
+      "note": "解除刀损、双刀卷刃。"
+    },
+    "detox": {
+      "label": "戒断",
+      "activation": ["consumable"],
+      "note": "解除成瘾（内容包 qingyu 的 addiction 状态 remove 规则）。"
+    },
+    "poison": {
+      "label": "毒性",
+      "activation": ["consumable"],
+      "note": "必须带 onUse 指向要挂的状态（毒性分组见 game-numbers.status.itemTags.toxic）。"
+    },
+    "sedative": {
+      "label": "镇静",
+      "activation": ["consumable"],
+      "note": "喂药时要看对方态度，不是毒（见 game-numbers.status.itemTags.sedative）。"
+    }
+  }
+}

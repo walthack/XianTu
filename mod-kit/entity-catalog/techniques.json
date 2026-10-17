@@ -13,9 +13,10 @@
         "skillIds": [
           "lcq.skill.death_root"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.56,
-          "属性加成": {
+          "后天六司": {
             "悟性": 7,
             "灵性": 4
           }
@@ -38,9 +39,10 @@
         "skillIds": [
           "lcq.skill.nine_sun"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -63,9 +65,10 @@
         "skillIds": [
           "liuchao.skill.death_root"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -94,9 +97,10 @@
         "description": "光明观堂的驻颜功法，乐明珠修炼。",
         "grade": "凡品",
         "skillIds": [],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -127,9 +131,10 @@
         "skillIds": [
           "liuchao.skill.five_tiger_broken_gate_knife"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.56,
-          "属性加成": {
+          "后天六司": {
             "悟性": 7,
             "灵性": 4
           }
@@ -160,9 +165,10 @@
         "skillIds": [
           "liuchao.skill.moon_light_shield"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.56,
-          "属性加成": {
+          "后天六司": {
             "悟性": 7,
             "灵性": 4
           }
@@ -193,9 +199,10 @@
         "skillIds": [
           "liuchao.skill.wu_hu_duan_men_dao"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -218,9 +225,10 @@
         "skillIds": [
           "liuchao.skill.dagger_art"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -243,9 +251,10 @@
         "skillIds": [
           "liuchao.skill.wu_hu_duan_men_dao"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -268,9 +277,10 @@
         "skillIds": [
           "lyg.skill.purple_qi"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -295,9 +305,10 @@
         "name": "超级管理员权限（系统内）",
         "description": "程宗扬通过系统验证，成为超级管理员，拥有最高等级权限。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -309,9 +320,10 @@
           "name": "搜神诀",
           "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
           "grade": "中品",
-          "techniqueEffects": {
+          "activation": "active",
+          "bonus": {
             "修炼速度加成": 0.16,
-            "属性加成": {
+            "后天六司": {
               "悟性": 2,
               "灵性": 1
             }
@@ -337,9 +349,10 @@
         "name": "气轮炼化杂气",
         "description": "以处子破体为鼎炉可高效炼化杂气，提升真元质量，气轮中出现星辰及阴阳鱼现象。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -364,9 +377,10 @@
         "name": "纸钞对昭南优惠兑换额度",
         "description": "程宗扬提出昭南可用九折钱铢兑换宋国纸钞，额度每年100万-300万金铢，上限5年，由程氏商会兜底。昭南反要求八折、500万、10年。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -391,9 +405,10 @@
         "name": "十六臂天王像钥匙",
         "description": "兴庆宫花萼相辉楼第三层曾有一尊十六臂天王像，十四条手臂对应秘境入口。程宗扬发现遗迹并判断青龙寺的摩诃迦罗像可供开启秘境。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -418,9 +433,10 @@
         "name": "三朝会盟（锦囊计）",
         "description": "贾文和设锦囊计，以汉晋宋三方结盟为诱饵，稳住宋国并迫使廖群玉配合。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -445,9 +461,10 @@
         "name": "搜神诀",
         "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -472,9 +489,10 @@
         "name": "超级用户权限（系统内）",
         "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -499,9 +517,10 @@
         "name": "镇国大长公主开府权",
         "description": "杨玉环九岁被封公主并开府，拥有干预政事资格，食邑最后达到五千户。",
         "grade": "极品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -526,9 +545,10 @@
         "name": "水晶球幻术",
         "description": "徐君房可借水晶球制造逼真幻象（如黑龙、哪吒闹海等），用于伪装祥瑞。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -556,9 +576,10 @@
         "skillIds": [
           "lyg.skill.five_tiger_broken_gate_knife"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.32,
-          "属性加成": {
+          "后天六司": {
             "悟性": 4,
             "灵性": 2
           }
@@ -579,9 +600,10 @@
         "description": "程宗扬兼修的功法，阴阳相济。",
         "grade": "地品",
         "skillIds": [],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.32,
-          "属性加成": {
+          "后天六司": {
             "悟性": 4,
             "灵性": 2
           }
@@ -601,9 +623,10 @@
         "name": "超级管理员权限（系统内）",
         "description": "程宗扬通过系统验证，成为超级管理员，拥有最高等级权限。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -624,9 +647,10 @@
         "name": "镇国大长公主开府权",
         "description": "杨玉环九岁被封公主并开府，拥有干预政事资格，食邑最后达到五千户。",
         "grade": "极品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -646,9 +670,10 @@
         "name": "搜神诀",
         "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -668,9 +693,10 @@
         "name": "超级用户权限（系统内）",
         "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -690,9 +716,10 @@
         "name": "黑无常伪装",
         "description": "中行说扮黑无常吓退周飞。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -715,9 +742,10 @@
         "skillIds": [
           "liuchao.skill.death_root"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.24,
-          "属性加成": {
+          "后天六司": {
             "悟性": 3,
             "灵性": 2
           }
@@ -737,9 +765,10 @@
         "name": "九阳神功",
         "description": "程宗扬另一门功法，阳气通神，但导致阳亢之症。",
         "grade": "玄品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.24,
-          "属性加成": {
+          "后天六司": {
             "悟性": 3,
             "灵性": 2
           }
@@ -762,9 +791,10 @@
         "name": "搜神诀",
         "description": "小紫从仇傻瓜处敲来《搜神诀》，对吕雉施展，读取其神魂片段。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -787,9 +817,10 @@
         "skillIds": [
           "liuchao.skill.death_root"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -812,9 +843,10 @@
         "skillIds": [
           "liuchao.skill.poison_art"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -834,9 +866,10 @@
         "name": "超级用户权限（系统内）",
         "description": "小紫、朱老头、小玲儿均被系统认定为超级用户，拥有高权限。小紫通过染色体验证，朱老头是武皇后裔，小玲儿身份不明。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -856,9 +889,10 @@
         "name": "食人花（催生）",
         "description": "朱老头以毒药促使地下食人花提前开放，用于消灭林中入侵者；食人花巨大且有腐蚀性，藤蔓坚韧。",
         "grade": "上品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.4,
-          "属性加成": {
+          "后天六司": {
             "悟性": 5,
             "灵性": 3
           }
@@ -881,9 +915,10 @@
         "skillIds": [
           "lyl.skill.death_root"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -908,9 +943,10 @@
         "name": "纸币（程氏钱庄）",
         "description": "程氏钱庄发行三批纸币，总计二百四十三万金铢流通。",
         "grade": "极品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -937,9 +973,10 @@
         "name": "五虎断门刀",
         "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -964,9 +1001,10 @@
         "name": "水泥技术",
         "description": "水泥技术由程宗扬掌握，星月湖大营负责安全",
         "grade": "仙品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -978,9 +1016,10 @@
           "name": "五虎断门刀",
           "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
           "grade": "中品",
-          "techniqueEffects": {
+          "activation": "active",
+          "bonus": {
             "修炼速度加成": 0.16,
-            "属性加成": {
+            "后天六司": {
               "悟性": 2,
               "灵性": 1
             }
@@ -991,9 +1030,10 @@
           "name": "五虎断门刀",
           "description": "武二郎传授，程宗扬用屠龙刀施展，但为剑玉姬所破。",
           "grade": "中品",
-          "techniqueEffects": {
+          "activation": "active",
+          "bonus": {
             "修炼速度加成": 0.16,
-            "属性加成": {
+            "后天六司": {
               "悟性": 2,
               "灵性": 1
             }
@@ -1020,9 +1060,10 @@
         "name": "生死根",
         "description": "生死根能吞噬死气",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1047,9 +1088,10 @@
         "name": "九阳神功",
         "description": "九阳神功是程宗扬的内功",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1061,9 +1103,10 @@
           "name": "生死根",
           "description": "生死根能吞噬死气",
           "grade": "中品",
-          "techniqueEffects": {
+          "activation": "active",
+          "bonus": {
             "修炼速度加成": 0.16,
-            "属性加成": {
+            "后天六司": {
               "悟性": 2,
               "灵性": 1
             }
@@ -1089,9 +1132,10 @@
         "name": "合籍",
         "description": "程宗扬与程郑合籍为盘江程氏",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1116,9 +1160,10 @@
         "name": "太一经仙火鼎炉双修法",
         "description": "程宗扬在破云丹琉处子时发现其是罕见仙品火质鼎炉，可将太一经积留的阴寒杂气渡入云丹琉体内化去，有益无害并增进快感，二人以此法往复导引真气使双修效果显著。",
         "grade": "仙品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -1143,9 +1188,10 @@
         "name": "双修功法",
         "description": "程宗扬与云丹琉在温泉中双修，云丹琉服用的仙草叶片效力尚在。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1170,9 +1216,10 @@
         "name": "守阵力士",
         "description": "小紫改造守阵力士，使其能活动",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1197,9 +1244,10 @@
         "name": "琥珀控魂",
         "description": "小紫用琥珀控制孙寿魂魄",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1224,9 +1272,10 @@
         "name": "毒品与法术结合药剂",
         "description": "小紫将毒品致幻性与小法术结合，可产生操控幻境效果。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1251,9 +1300,10 @@
         "name": "算缗令",
         "description": "秦桧在算缗令中添入限田限奴条款，使其走向极端。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1278,9 +1328,10 @@
         "name": "玄元仙剑",
         "description": "华妙宗剑法，剑玉姬用此剑法施展出。",
         "grade": "极品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -1308,9 +1359,10 @@
         "skillIds": [
           "liuchao.skill.death_root"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1333,9 +1385,10 @@
         "skillIds": [
           "liuchao.skill.bedroom_arts"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1356,9 +1409,10 @@
         "name": "寒毒",
         "description": "薛延山身中寒毒，与云如瑶、月霜相似",
         "grade": "下品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -1378,9 +1432,10 @@
         "name": "水泥技术",
         "description": "水泥技术由程宗扬掌握，星月湖大营负责安全",
         "grade": "仙品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -1401,9 +1456,10 @@
         "name": "生死根",
         "description": "生死根能吞噬死气",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1415,9 +1471,10 @@
           "name": "九阳神功",
           "description": "九阳神功是程宗扬的内功",
           "grade": "中品",
-          "techniqueEffects": {
+          "activation": "active",
+          "bonus": {
             "修炼速度加成": 0.16,
-            "属性加成": {
+            "后天六司": {
               "悟性": 2,
               "灵性": 1
             }
@@ -1438,9 +1495,10 @@
         "name": "九阳神功",
         "description": "九阳神功是程宗扬的内功",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1452,9 +1510,10 @@
           "name": "太一经",
           "description": "太一经是程宗扬的内功",
           "grade": "中品",
-          "techniqueEffects": {
+          "activation": "active",
+          "bonus": {
             "修炼速度加成": 0.16,
-            "属性加成": {
+            "后天六司": {
               "悟性": 2,
               "灵性": 1
             }
@@ -1475,9 +1534,10 @@
         "name": "太一经",
         "description": "太一经是程宗扬的内功",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1497,9 +1557,10 @@
         "name": "合籍",
         "description": "程宗扬与程郑合籍为盘江程氏",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1519,9 +1580,10 @@
         "name": "太一经仙火鼎炉双修法",
         "description": "程宗扬在破云丹琉处子时发现其是罕见仙品火质鼎炉，可将太一经积留的阴寒杂气渡入云丹琉体内化去，有益无害并增进快感，二人以此法往复导引真气使双修效果显著。",
         "grade": "仙品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -1541,9 +1603,10 @@
         "name": "双修功法",
         "description": "程宗扬与云丹琉在温泉中双修，云丹琉服用的仙草叶片效力尚在。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1563,9 +1626,10 @@
         "name": "玄元仙剑",
         "description": "华妙宗剑法，剑玉姬用此剑法施展出。",
         "grade": "极品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.48,
-          "属性加成": {
+          "后天六司": {
             "悟性": 6,
             "灵性": 3
           }
@@ -1585,9 +1649,10 @@
         "name": "守阵力士",
         "description": "小紫改造守阵力士，使其能活动",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1607,9 +1672,10 @@
         "name": "琥珀控魂",
         "description": "小紫用琥珀控制孙寿魂魄",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1629,9 +1695,10 @@
         "name": "毒品与法术结合药剂",
         "description": "小紫将毒品致幻性与小法术结合，可产生操控幻境效果。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1651,9 +1718,10 @@
         "name": "算缗令",
         "description": "秦桧在算缗令中添入限田限奴条款，使其走向极端。",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }
@@ -1673,9 +1741,10 @@
         "name": "六识禁绝丹",
         "description": "义姁用六识禁绝丹封禁友通期六识，使其目不视物、耳不闻声、口不能言。",
         "grade": "下品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -1699,9 +1768,10 @@
           "lyl.skill.death_root_sense",
           "lyl.skill.coral_dagger_art"
         ],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.32,
-          "属性加成": {
+          "后天六司": {
             "悟性": 4,
             "灵性": 2
           }
@@ -1722,9 +1792,10 @@
         "description": "利用丹田中阴阳鱼的力量进行防御和反击，尚未完全熟练。",
         "grade": "玄级",
         "skillIds": [],
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.24,
-          "属性加成": {
+          "后天六司": {
             "悟性": 3,
             "灵性": 2
           }
@@ -1744,9 +1815,10 @@
         "name": "断月弦",
         "description": "断月弦是虞白樱的武器",
         "grade": "下品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.08,
-          "属性加成": {
+          "后天六司": {
             "悟性": 1,
             "灵性": 1
           }
@@ -1766,9 +1838,10 @@
         "name": "守阵力士",
         "description": "小紫改造守阵力士，使其能活动",
         "grade": "中品",
-        "techniqueEffects": {
+        "activation": "active",
+        "bonus": {
           "修炼速度加成": 0.16,
-          "属性加成": {
+          "后天六司": {
             "悟性": 2,
             "灵性": 1
           }

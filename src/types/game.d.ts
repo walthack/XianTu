@@ -234,6 +234,7 @@ export interface TechniqueItem extends BaseItem {
   修炼进度?: number; // 0-100 百分比
   修炼中?: boolean; // 是否正在修炼（兼容旧代码）
   已解锁技能?: string[]; // ✅ 已解锁的技能名称列表
+  允许多部装备?: boolean; // 目录 allowMultiEquip：可与已装备的第一部功法同时生效
   // 注意：新代码应使用 已装备 字段，修炼中 仅为向后兼容
 }
 

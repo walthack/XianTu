@@ -1,6 +1,7 @@
 import type { InnateAttributes, Item, Equipment, SaveData } from '@/types/game';
 import type { Talent } from '../types/index';
 import { LOCAL_TALENTS } from '../data/creationData';
+import { GAME_NUMBERS } from '../modules/sceneModule/numbers';
 
 /**
  * 中文键名到英文键名的映射（用于组件传参）
@@ -204,6 +205,7 @@ export function calculateTalentBonuses(talents: Talent[]): InnateAttributes {
 
 /**
  * 计算已装备功法提供的属性加成
+ * 只取第一部已装备功法；带「允许多部装备」标记的功法可与它叠加。
  */
 export function calculateTechniqueBonuses(saveData: SaveData): InnateAttributes {
   const bonuses: InnateAttributes = { 根骨: 0, 灵性: 0, 悟性: 0, 气运: 0, 魅力: 0, 心性: 0 };
@@ -215,10 +217,13 @@ export function calculateTechniqueBonuses(saveData: SaveData): InnateAttributes 
 
   // 查找已装备的功法
   const items = (itemsMap ?? {}) as Record<string, Item>;
-  const equippedTechnique = Object.values(items).find((item) => item.类型 === '功法' && item.已装备 === true);
+  const equipped = Object.values(items).filter((item) => item.类型 === '功法' && item.已装备 === true);
+  const effective = equipped.filter((item, index) => index === 0 || (item.类型 === '功法' && item.允许多部装备 === true));
 
-  if (equippedTechnique && equippedTechnique.类型 === '功法' && equippedTechnique.功法效果?.属性加成) {
-    const attributeBonuses = equippedTechnique.功法效果.属性加成;
+  for (const technique of effective) {
+    if (technique.类型 !== '功法') continue;
+    const attributeBonuses = technique.功法效果?.属性加成;
+    if (!attributeBonuses) continue;
     for (const key in attributeBonuses) {
       if (key in bonuses) {
         bonuses[key as keyof InnateAttributes] += attributeBonuses[key as keyof InnateAttributes] || 0;
@@ -227,6 +232,19 @@ export function calculateTechniqueBonuses(saveData: SaveData): InnateAttributes 
   }
 
   return bonuses;
+}
+
+/**
+ * 装备与功法加成的统一读取入口（后天六司）：装备槽里的装备 + 已装备的功法。
+ * 功法部分受 game-numbers.techniques.applyBonusToAttributes 控制，关闭时已装备功法不影响面板。
+ */
+export function calculateEquippedBonuses(saveData: SaveData): InnateAttributes {
+  const equipmentBonuses = calculateEquipmentBonuses((saveData as any).角色?.装备 ?? null, (saveData as any).角色?.背包 ?? null);
+  if (!GAME_NUMBERS.techniques.applyBonusToAttributes) return equipmentBonuses;
+  const techniqueBonuses = calculateTechniqueBonuses(saveData);
+  const total = { ...equipmentBonuses };
+  for (const key of Object.keys(total) as Array<keyof InnateAttributes>) total[key] += techniqueBonuses[key];
+  return total;
 }
 
 /**
@@ -247,10 +265,8 @@ export function calculateFinalAttributes(
     根骨: 0, 灵性: 0, 悟性: 0, 气运: 0, 魅力: 0, 心性: 0
   };
 
-  // 2. 计算装备加成（实时计算，确保准确）
-  const equipmentState = (saveData as any).角色?.装备 ?? null;
-  const inventoryState = (saveData as any).角色?.背包 ?? null;
-  const equipmentBonuses = calculateEquipmentBonuses(equipmentState, inventoryState);
+  // 2. 计算装备与功法加成（实时计算，确保准确；同一读取入口）
+  const equipmentBonuses = calculateEquippedBonuses(saveData);
 
   // 3. 计算天赋加成
   const talentBonuses = calculateTalentBonusesFromCharacter(saveData);

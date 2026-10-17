@@ -1,5 +1,5 @@
 {
-  "version": "2b93f020f4fd5453",
+  "version": "c6f185fb02ba028b",
   "contracts": [
     {
       "meta": {
@@ -6234,6 +6234,35 @@
       "afterScene": {
         "minutes": null
       }
+    },
+    {
+      "id": "qi.drained",
+      "label": "真元亏损",
+      "tier": "general",
+      "cause": "combat",
+      "kind": "debuff",
+      "source": "玩家自由行动「夺元」得手后，目标被夺走一部分真气修为留下的限时状态，时长取 freeAction.classes.physical 配置。通用档状态不得由剧情旗标解除，只按时间消退。合规标记：C02（夺元不得做成强迫情节的可玩内容，见 docs/COMPLIANCE-REQUIREMENTS.md）。",
+      "effects": [
+        {
+          "kind": "rollModifier",
+          "scope": "action",
+          "value": -1
+        },
+        {
+          "kind": "note",
+          "field": "text",
+          "text": "真元亏损，气力不继"
+        }
+      ],
+      "remove": [
+        {
+          "kind": "time",
+          "minutes": 10080
+        }
+      ],
+      "afterScene": {
+        "minutes": 10080
+      }
     }
   ],
   "stages": [],
@@ -12407,15 +12436,25 @@
     "free.fact.transfer_qi.gain": "{player}运功为{target}传功，{target}的修为添了几分。",
     "free.fact.transfer_qi.no_gain": "{player}运功为{target}传功，却没能传进去，白耗了真气。",
     "free.fact.transfer_qi.backlash": "{player}的真气反噬，伤了自己。",
+    "free.fact.drain_qi.recoil": "{player}想趁{target}无力设防夺其真元，反被{target}残存的真气震了回来。",
+    "free.fact.drain_qi.resisted": "{player}想趁{target}无力设防夺其真元，却什么也没能夺到。",
+    "free.fact.drain_qi.trace": "{player}夺走了{target}一丝真元，{target}元气略损。",
+    "free.fact.drain_qi.drained": "{player}强行夺走了{target}一部分真元，{target}元气大损，惊惧难平。事后{player}心头发沉，难以释怀。",
+    "free.fact.drain_qi.drained_deep": "{player}几乎抽空了{target}的真元，{target}气息衰微，惊惧难平。事后{player}心头发沉，难以释怀。",
+    "free.fact.drain_qi.backlash": "{player}夺来的真气失了控，反噬自身。",
+    "free.fact.drain_qi.self_cost": "{player}施此术先折损了自身气血。",
     "free.fact.heal.done": "{player}用{item}为{target}疗伤，{target}的{status}已经除去。",
     "free.fact.heal.done_downgraded": "{player}用{item}为{target}疗伤，{target}性命暂时保住，但仍是重伤。",
     "free.fact.heal.failed": "{player}用{item}为{target}疗伤，没能奏效，{item}用尽了。",
     "free.fact.bandage.done": "{player}用{item}为{target}包扎，{target}的{status}已经处理妥当。",
     "free.fact.bandage.failed": "{player}用{item}为{target}包扎，没能处理好，{item}用尽了。",
     "free.fact.protected": "{target}的伤到此为止，不会更重，更不会因此丧命。",
+    "free.fact.affinity.worn": "这类举动{target}已领受过几回，不再添新的亲近。",
+    "free.fact.affinity.capped": "{target}对{player}眼下的亲近已到此刻所能到的顶，这回没有更近一步。",
     "free.fact.gate.not_present": "{target}此刻不在眼前，这一下落了空。",
     "free.fact.gate.scene_active": "此刻有紧要的交锋在身，顾不上这件事。",
     "free.fact.gate.low_goodwill": "{target}对{player}戒备太深，不肯接受。",
+    "free.fact.gate.goodwill_below_min": "{target}与{player}交情未到，不肯受{player}传功。",
     "free.fact.gate.no_item": "{player}手边没有合用的东西。",
     "free.fact.gate.item_mismatch": "{player}手里的东西对不上这件事。",
     "free.fact.gate.equipped_or_story": "那件东西{player}不能随手送人。",
@@ -12424,6 +12463,9 @@
     "free.fact.gate.level_unknown": "{target}的底子{player}摸不清，不敢贸然传功。",
     "free.fact.gate.no_resource": "{player}真气不足，无法传功。",
     "free.fact.gate.cooldown": "{player}刚传过功，真气未复，此刻不宜再传。",
+    "free.fact.gate.guard_up": "{target}尚有防备，{player}这一下没能成事。",
+    "free.fact.gate.drain_empty": "{target}身上已没有可夺的真元。",
+    "free.fact.gate.hp_too_low": "{player}气血不足，经不起施术所耗，这一下没能施行。",
     "free.fact.gate.budget_full": "{target}眼下已受不住更多的传功。",
     "free.fact.gate.protected": "{target}的安危不容这样处置。",
     "free.fact.gate.target_unavailable": "{player}想对其做这件事的人此刻不在身边，这一下落了空。",
@@ -12462,6 +12504,11 @@
     "free.memory.feed_pill.toxic_dying": "{player}让{target}服了带毒的{item}，{target}命悬一线。",
     "free.memory.transfer_qi.gain": "{player}曾运功为{target}传功。",
     "free.memory.transfer_qi.no_gain": "{player}曾想为{target}传功，没能成。",
+    "free.memory.drain_qi.recoil": "{player}曾想夺{target}的真元，被震了回来。",
+    "free.memory.drain_qi.resisted": "{player}曾想夺{target}的真元，没能成。",
+    "free.memory.drain_qi.trace": "{player}曾夺走{target}一丝真元。",
+    "free.memory.drain_qi.drained": "{player}曾趁{target}无力设防，夺走了{target}的真元。",
+    "free.memory.drain_qi.drained_deep": "{player}曾趁{target}无力设防，几乎抽空了{target}的真元。",
     "free.memory.heal.done": "{player}曾用{item}为{target}疗伤。",
     "free.memory.heal.done_downgraded": "{player}曾用{item}从鬼门关前保住{target}的性命。",
     "free.memory.heal.failed": "{player}曾想用{item}为{target}疗伤，没能奏效。",

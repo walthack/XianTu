@@ -17,12 +17,13 @@ export interface ScenarioModAttributeBonus {
   神识上限?: number;
   后天六司?: ScenarioModSixFaculties;
 }
-/** 功法效果(运行时直接映射到原版 功法效果 TechniqueEffects)。 */
-export interface ScenarioModTechniqueEffects {
+/** 数值加成：与装备 attributeBonus 同构，功法另可带修炼速度加成（口径见 game-numbers.techniques.cultivationSpeedBonus）。 */
+export interface ScenarioModBonus extends ScenarioModAttributeBonus {
   修炼速度加成?: number;
-  属性加成?: ScenarioModSixFaculties;
-  特殊能力?: string[];
 }
+
+/** 生效方式（词表见 mod-kit/entity-catalog/effect-tags.json）：consumable 使用即生效，equipped 装备期间生效，active 功法运行期间生效。 */
+export type ScenarioModActivation = 'consumable' | 'equipped' | 'active';
 
 export interface ScenarioModTechnique {
   id: string;
@@ -30,8 +31,14 @@ export interface ScenarioModTechnique {
   description?: string;
   grade?: string;
   skillIds?: string[];
-  /** 机制数值：修炼速度/属性加成(按品级类型确定性赋值)。 */
-  techniqueEffects?: ScenarioModTechniqueEffects;
+  /** 缺省即 active（目录里必填，自定义 mod 可省）。 */
+  activation?: ScenarioModActivation;
+  /** 效果标签，与道具共用词表。 */
+  effectTags?: string[];
+  /** 机制数值：与装备 attributeBonus 同构（目前是按品级生成的占位值）。 */
+  bonus?: ScenarioModBonus;
+  /** 可同时装备多部的功法；缺省取 game-numbers.techniques.allowMultiEquipDefault。 */
+  allowMultiEquip?: boolean;
 }
 
 export type ScenarioModItemType = 'weapon' | 'armor' | 'consumable' | 'material' | 'other';
@@ -46,9 +53,11 @@ export interface ScenarioModItemUse {
 }
 
 export interface ScenarioModItem {
+  /** 缺省按 type 推：consumable→consumable，weapon/armor→equipped；填了必须与类型一致。 */
+  activation?: ScenarioModActivation;
   /** 剧情道具仅由剧情结算定向发放，不进入随机拾取/掉落。 */
   storyItem?: boolean;
-  /** 效果标签：解除类沿用状态目录 remove 规则里的 item 标签（heal/antidote/…），毒性类见 game-numbers.status.itemTags.toxic，药性类（sedative）见同处。只给毒/药相关物品标，其余留空。 */
+  /** 效果标签，词表见 mod-kit/entity-catalog/effect-tags.json（解除类对应状态目录 remove 规则里的 item 标签，毒性/药性见 game-numbers.status.itemTags）。只给毒/药相关物品标，其余留空。 */
   effectTags?: string[];
   /** 使用时挂状态。毒性物品必须有。 */
   onUse?: ScenarioModItemUse[];

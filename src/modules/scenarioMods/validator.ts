@@ -10,6 +10,7 @@ import { statsRules } from './characterStatsRules';
 import { validateCharacterStats } from './characterStatsMerge';
 import { resolveReconcileBranchId } from './divergenceLedger';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
+import { effectProblems } from './effectTags';
 
 export interface ScenarioModValidationIssue {
   path: string;
@@ -226,6 +227,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.description, `${entity.__path}.description`, add);
       optionalString(entity.grade, `${entity.__path}.grade`, add);
       validateIdArray(entity.skillIds, `${entity.__path}.skillIds`, add);
+      for (const message of effectProblems('technique', entity)) add(`${entity.__path}.effects`, 'invalid_effects', message);
     });
     validateEntityArray(content.items, 'content.items', itemIds, add, entity => {
       optionalString(entity.description, `${entity.__path}.description`, add);
@@ -235,6 +237,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       }
       validateIdArray(entity.skillIds, `${entity.__path}.skillIds`, add);
       optionalId(entity.techniqueId, `${entity.__path}.techniqueId`, add);
+      for (const message of effectProblems('item', entity)) add(`${entity.__path}.effects`, 'invalid_effects', message);
     });
   }
 
