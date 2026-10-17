@@ -222,12 +222,12 @@ test('narrative failure policy: retry once on the same snapshot, then fall back 
 });
 
 
-test('demo refuses legacy/fast/card paths before storing a receipt, even with the old switch off', () => {
+test('demo refuses legacy/card paths before storing a receipt, even with the old switch off', () => {
   const save = { 系统: { 扩展: { 清羽记开局: { kind: 'qingyu-demo-v1' } } }, 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_02' } } } };
   store.set(m.MODULE_TURN_SWITCH, 'false');
   assert.equal(m.isDemoModuleOnly(save), true);
   assert.equal(m.isModularTurnEnabled(save), true);
-  for (const path of ['legacy', 'fast', 'card']) {
+  for (const path of ['legacy', 'card']) {
     assert.throws(() => m.assertDemoModulePath(save, path), /DEMO_LEGACY_BLOCKED/);
     assert.throws(() => m.appendModuleReceipt(save, { id: path, path, text: '' }), /DEMO_LEGACY_BLOCKED/);
   }

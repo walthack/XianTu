@@ -15,7 +15,6 @@
     "src/modules/scenarioMods/characterResolver.ts": 71,
     "src/modules/scenarioMods/divergenceLedger.ts": 14,
     "src/modules/scenarioMods/eventNarrativeView.ts": 27,
-    "src/modules/scenarioMods/fastNarrativeDemo.ts": 2,
     "src/modules/scenarioMods/fixedEndingNarratives.ts": 108,
     "src/modules/scenarioMods/fixedInventoryContracts.ts": 4,
     "src/modules/scenarioMods/fixedQuestObjectives.ts": 45,

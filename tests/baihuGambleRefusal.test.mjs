@@ -1431,7 +1431,6 @@ test('no-legacy demo: s02_02 publishes and progresses; free questions remain unc
   const submit = (line, action) => AIBidirectionalSystem.processPlayerAction(line, profile, { ...(action ? { eventAction: action, eventActionProvenance: 'selected' } : {}), playerIntentText: line });
   try {
     localStorage.setItem('xiantu.modularTurnPlaytest.v1', 'false');
-    localStorage.setItem('xiantu.fastNarrativeDemo.v1', 'true');
     const battle = await walkFrom(fixtures.tools, await earnStage02(fixtures.tools, fixtures.mods), 'lcq.event.s02_02');
     store.loadFromSaveData(battle);
     const action = fixtures.tools.rtm.getCurrentStoryEventActions(battle)[0];
@@ -1455,7 +1454,7 @@ test('no-legacy demo: s02_02 publishes and progresses; free questions remain unc
     assert.deepEqual(afterFailure, before);
   } finally {
     aiService.generate = original; aiService.checkAvailability = check;
-    localStorage.removeItem('xiantu.modularTurnPlaytest.v1'); localStorage.removeItem('xiantu.fastNarrativeDemo.v1');
+    localStorage.removeItem('xiantu.modularTurnPlaytest.v1'); 
   }
 });
 

@@ -92,7 +92,6 @@ function countSilkPouches(save) {
 async function setupMinimal() {
   setActivePinia(createPinia());
   globalThis.localStorage.setItem('narrative-state-reconcile', 'off');
-  globalThis.localStorage.setItem('xiantu.fastNarrativeDemo.v1', 'false');
   const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
   const { AIBidirectionalSystem } = await loadTs('../src/utils/AIBidirectionalSystem.ts');
   const { useGameStateStore } = await loadTs('../src/stores/gameStateStore.ts');
@@ -324,19 +323,16 @@ test('processPlayerAction fails, cancels, and retries without resolving judgemen
   assert.match(panel, /skipPreflight: true, resolution/);
 });
 
-test('Fast off still settles event, opportunity, and open-world actions once', async () => {
+test('event, opportunity, and open-world actions settle once', async () => {
   setActivePinia(createPinia());
   globalThis.localStorage.setItem('narrative-state-reconcile', 'off');
-  globalThis.localStorage.removeItem('xiantu.fastNarrativeDemo.v1');
   const { AIBidirectionalSystem } = await loadTs('../src/utils/AIBidirectionalSystem.ts');
-  const { isFastNarrativeDemoEnabled } = await loadTs('../src/modules/scenarioMods/fastNarrativeDemo.ts');
   const {
     getCurrentStoryEventActions,
     getTrackedStoryOpportunityActions,
     trackStoryOpportunity,
   } = await loadTs('../src/modules/scenarioMods/runtime.ts');
   const { getWuyuanOpenWorldSelections, settleWuyuanOpenWorldSelection } = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
-  assert.equal(isFastNarrativeDemoEnabled({ getItem: () => null }), false);
 
   const eventSave = await stage02Fixture();
   locateEvent(eventSave, S02_01, {

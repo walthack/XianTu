@@ -170,25 +170,6 @@
         <div class="settings-list">
           <div class="setting-item">
             <div class="setting-info">
-              <label class="setting-name">{{ t('清羽快速叙事（实验）') }}</label>
-              <span class="setting-desc">{{
-                t('默认关闭，开启后仅用于清羽实验路线；关闭后走 Legacy')
-              }}</span>
-            </div>
-            <div class="setting-control">
-              <label class="setting-switch">
-                <input
-                  type="checkbox"
-                  v-model="fastNarrativeDemoEnabled"
-                  @change="onFastNarrativeDemoChange"
-                />
-                <span class="switch-slider"></span>
-              </label>
-            </div>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
               <label class="setting-name">{{ t('Legacy 第一幕提速试验') }}</label>
               <span class="setting-desc">{{
                 t('默认关闭；仅点击清羽第一幕的本地行动时生成纯正文，其他回合仍走完整 Legacy')
@@ -442,46 +423,13 @@ import {DIFFICULTY_PRESETS} from '@/modules/scenarioMods/levelProgression';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useUIStore } from '@/stores/uiStore';
 import { unwrapDadBundle } from '@/utils/dadBundle';
-import { FAST_NARRATIVE_DEMO_STORAGE_KEY } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
 import { LEGACY_NARRATIVE_PILOT_STORAGE_KEY } from '@/modules/scenarioMods/legacyNarrativePilot';
 
 const { t, setLanguage, currentLanguage } = useI18n();
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const uiStore = useUIStore();
-const fastNarrativeDemoEnabled = ref(false);
 const legacyNarrativePilotEnabled = ref(false);
-
-const readFastNarrativeDemoSetting = () => {
-  try {
-    const raw = localStorage.getItem(FAST_NARRATIVE_DEMO_STORAGE_KEY);
-    if (raw == null || raw === '') return false;
-    return raw === 'true';
-  } catch {
-    return false;
-  }
-};
-
-const persistFastNarrativeDemoSetting = (enabled: boolean, showToast = true) => {
-  try {
-    if (enabled) {
-      localStorage.setItem(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'true');
-    } else {
-      localStorage.setItem(FAST_NARRATIVE_DEMO_STORAGE_KEY, 'false');
-    }
-    if (showToast) {
-      toast.success(enabled ? '清羽快速叙事已开启' : '清羽快速叙事已关闭');
-    }
-  } catch (error) {
-    fastNarrativeDemoEnabled.value = readFastNarrativeDemoSetting();
-    console.error('保存清羽快速叙事开关失败:', error);
-    toast.error('快速叙事开关保存失败，请重试');
-  }
-};
-
-const onFastNarrativeDemoChange = () => {
-  persistFastNarrativeDemoSetting(fastNarrativeDemoEnabled.value);
-};
 
 const readLegacyNarrativePilotSetting = () => {
   try {
@@ -843,8 +791,6 @@ const resetSettings = () => {
     cancelText: '取消',
     onConfirm: () => {
       debug.log('设置面板', '开始重置设置');
-      fastNarrativeDemoEnabled.value = false;
-      persistFastNarrativeDemoSetting(false, false);
       legacyNarrativePilotEnabled.value = false;
       persistLegacyNarrativePilotSetting(false, false);
       Object.assign(settings, {
@@ -1005,7 +951,6 @@ const router = useRouter();
 // 组件挂载时加载设置
 onMounted(() => {
   debug.log('设置面板', '组件已加载');
-  fastNarrativeDemoEnabled.value = readFastNarrativeDemoSetting();
   legacyNarrativePilotEnabled.value = readLegacyNarrativePilotSetting();
   loadSettings();
   loadVectorMemoryConfig();

@@ -95,20 +95,7 @@ import {
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
-import {
-  FAST_NARRATIVE_DEADLINE_MS,
-  FAST_NARRATIVE_GENERATE_OPTIONS,
-  armFastNarrativeNeedDice,
-  buildFastNarrativeActionOptions,
-  finalizeFastNarrativeText,
-  isFastNarrativeDemoScope,
-  isFastNarrativeHoldResponse,
-  previewQingyuOpportunityNarrative,
-  routeFastNarrativeDemo,
-  splitFastNarrativeOutput,
-  wrapFastNarrativeGmResponse,
-  wrapFastNarrativeHoldResponse,
-} from '@/modules/scenarioMods/fastNarrativeDemo';
+import { previewQingyuOpportunityNarrative } from '@/modules/scenarioMods/qingyuOpportunityNarrative';
 import {
   LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
   areLegacyPilotPromptsEnabled,
@@ -164,7 +151,6 @@ import {
 } from '@/utils/judgementRules';
 import {
   formatVerifiedJudgementReceiptForPrompt,
-  persistPendingJudgement,
   verifyResolvedJudgementReceipt,
   type JudgementResolution,
 } from '@/utils/judgementEngine';
@@ -336,7 +322,7 @@ export interface ProcessOptions {
   openWorldAction?: WuyuanOpenWorldSelection;
   /** 白湖拒赌冲突的本地过程合同；成功响应后才消费。 */
   gambleRefusalAction?: BaihuGambleRefusalSelection;
-  /** 本轮已经本地落账的判定回执只读副本；Legacy 与实验快路共用，须经存档核验。 */
+  /** 本轮已经本地落账的判定回执只读副本；须经存档核验。 */
   judgementResolution?: JudgementResolution;
   /** 清羽长请求预算所属回合，供嵌套 generate 与 end 对齐。 */
   qingyuTurnId?: string;
@@ -949,99 +935,6 @@ class AIBidirectionalSystemClass {
     return null;
   }
 
-  private async tryFastNarrativeDemo(
-    saveData: SaveData,
-    userMessage: string,
-    options: (ProcessOptions & { generation_id?: string }) | undefined,
-    generationId: string,
-    shouldAbort: () => boolean,
-  ): Promise<GM_Response | null> {
-    if (shouldAbort()) {
-      throw new Error('请求已被取消');
-    }
-    const routeInput = {
-      saveData,
-      playerAction: userMessage,
-      judgementResolution: options?.judgementResolution,
-      aborted: false,
-      eventAction: options?.eventAction,
-      opportunityAction: options?.opportunityAction,
-      openWorldAction: options?.openWorldAction,
-    };
-    if (options?.gambleRefusalAction || isKeyBeatCardAction(options?.eventAction)) return null;
-    if (!isFastNarrativeDemoScope(routeInput)) return null;
-    const route = routeFastNarrativeDemo(routeInput);
-    if (route.outcome === 'legacy') return null;
-    if (route.outcome === 'need_dice') {
-      if (route.proposal) {
-        try {
-          persistPendingJudgement(saveData, route.proposal);
-        } catch {
-          armFastNarrativeNeedDice(saveData, route.proposal.actionText);
-        }
-      } else {
-        armFastNarrativeNeedDice(saveData, userMessage);
-      }
-      return wrapFastNarrativeHoldResponse('need_dice');
-    }
-    if (route.outcome === 'clarify') {
-      return wrapFastNarrativeHoldResponse('clarify', route.text);
-    }
-    if (route.outcome !== 'fast') {
-      return wrapFastNarrativeGmResponse(route.text);
-    }
-    const plan = route.plan;
-    options?.onProgressUpdate?.('实验快路：写现场正文…');
-    const { aiService } = await import('@/services/aiService');
-    let raw = '';
-    let timedOut = false;
-    let userCancelled = false;
-    const controller = new AbortController();
-    const deadline = setTimeout(() => {
-      timedOut = true;
-      controller.abort();
-    }, FAST_NARRATIVE_DEADLINE_MS);
-    const cancelWatcher = setInterval(() => {
-      if (!shouldAbort()) return;
-      userCancelled = true;
-      controller.abort();
-    }, 100);
-    try {
-      raw = await aiService.generate({
-        ...FAST_NARRATIVE_GENERATE_OPTIONS,
-        injects: [{
-          content: plan.systemPrompt,
-          role: 'system',
-          depth: 4,
-          position: 'in_chat',
-        }],
-        user_input: plan.userPrompt,
-        generation_id: generationId,
-        signal: controller.signal,
-      });
-    } catch (error) {
-      if (userCancelled || shouldAbort()) {
-        throw new Error('请求已被取消');
-      }
-      raw = '';
-    } finally {
-      clearTimeout(deadline);
-      clearInterval(cancelWatcher);
-    }
-    if (userCancelled || shouldAbort()) {
-      throw new Error('请求已被取消');
-    }
-    if (timedOut) {
-      options?.onProgressUpdate?.('实验快路：超时，使用本地收束文本。');
-    }
-    const split = splitFastNarrativeOutput(raw);
-    const text = finalizeFastNarrativeText(split.body, plan.packet, plan.forbiddenNames);
-    const actionOptions = this.isActionOptionsEnabled(useUIStore())
-      ? buildFastNarrativeActionOptions(plan.packet, text, split.options, plan.forbiddenNames)
-      : [];
-    return wrapFastNarrativeGmResponse(text, actionOptions);
-  }
-
   // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
   private async tryLegacyNarrativePilot(
     saveData: SaveData,
@@ -1224,8 +1117,8 @@ class AIBidirectionalSystemClass {
     options?.onProgressUpdate?.('构建提示词并请求AI生成…');
     let gmResponse: GM_Response = { text: '', mid_term_memory: '', tavern_commands: [], action_options: [] };
     let usedLegacyNarrativePilot = false;
-    // 回执标记：本回合实际怎样出正文。只用于回执，不影响流程；未命中下列本地/快路径即为原链路。
-    let receiptPath: 'legacy' | 'fast' | 'local' | 'card' = 'legacy';
+    // 回执标记：本回合实际怎样出正文。只用于回执，不影响流程；未命中下列本地路径即为原链路。
+    let receiptPath: 'legacy' | 'local' | 'card' = 'legacy';
     // UI 会对占位响应发起一次结构化重试；失败响应本身必须是零副作用的。
     let generationFailed = false;
     beginTurnTelemetry(moduleOnly ? 'modular' : 'legacy');
@@ -1235,26 +1128,14 @@ class AIBidirectionalSystemClass {
     try {
     try {
       const modularResponse = await this.tryModularTurn(saveData, options, generationId, shouldAbort, userMessage);
-      const fastNarrativeResponse = modularResponse || (!moduleOnly ? await this.tryFastNarrativeDemo(
-        saveData,
-        userMessage,
-        options,
-        generationId,
-        shouldAbort,
-      ) : null);
       if (modularResponse?.generationError) return modularResponse;
-      if (modularResponse) usedLegacyNarrativePilot = true;
-      if (fastNarrativeResponse) {
-        noteTurnPath(modularResponse ? 'modular' : 'fast');
-        if (!modularResponse) receiptPath = 'fast';
-        gmResponse = fastNarrativeResponse;
-      }
-      if (isFastNarrativeHoldResponse(fastNarrativeResponse)) {
-        gameStateStore.loadFromSaveData(saveData);
-        return fastNarrativeResponse;
+      if (modularResponse) {
+        usedLegacyNarrativePilot = true;
+        noteTurnPath('modular');
+        gmResponse = modularResponse;
       }
       // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
-      if (!fastNarrativeResponse) {
+      if (!modularResponse) {
       if (moduleOnly) assertDemoModulePath(saveData, 'legacy');
       const legacyNarrativePilotResponse = await this.tryLegacyNarrativePilot(
         saveData,

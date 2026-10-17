@@ -9,8 +9,8 @@ export const MODULE_TURN_KEY = '回合模块试玩';
 export const MODULE_TURN_SWITCH = 'xiantu.modularTurnPlaytest.v1';
 export interface ModuleReceipt {
   id: string;
-  /** 本回合正文来源：modular=模块演出；legacy=原链路；fast=快演出；local=本地合同正文（不请求模型）；card=重要桥段卡片结果句（不请求模型）。 */
-  path: 'modular' | 'legacy' | 'fast' | 'local' | 'card';
+  /** 本回合正文来源：modular=模块演出；legacy=原链路；local=本地合同正文（不请求模型）；card=重要桥段卡片结果句（不请求模型）。 */
+  path: 'modular' | 'legacy' | 'local' | 'card';
   route?: import('@/services/moduleModelRuntime').ModuleModelRoute;
   eventId?: string;
   promptChars: number;

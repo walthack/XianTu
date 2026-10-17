@@ -16,7 +16,6 @@ if (!globalThis.localStorage || typeof globalThis.localStorage.getItem !== 'func
 
 const stage01Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url);
 const stage02Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url);
-const ON_STORAGE = { getItem: key => (key === 'xiantu.fastNarrativeDemo.v1' ? 'true' : null) };
 const TAKE_MANDATE = 'opportunity.lcq.s02_01.take_full_mandate';
 const SILK_ITEM = 'lcq.item.jin_nang';
 const WITNESS = 'witness_wang_zhe_nine_suns';
@@ -68,11 +67,10 @@ async function loadMods() {
 
 async function loadTools() {
   const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
-  const demo = await loadTs('../src/modules/scenarioMods/fastNarrativeDemo.ts');
   const playtest = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const init = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
   const wuyuan = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
-  return { rtm, demo, playtest, init, wuyuan };
+  return { rtm, playtest, init, wuyuan };
 }
 
 function contractSelection(rtm, save) {
@@ -82,30 +80,6 @@ function contractSelection(rtm, save) {
   // 到达≠完成：人不在本拍地点时先走罗盘移动，到场后下一步才是合同动作。
   return actions.find(item => contractIds.has(item.actionId))
     || actions.find(item => item.actionId.startsWith('travel:'));
-}
-
-function assertFast(demo, save, extra) {
-  const playerAction = extra.eventAction?.actionText
-    || extra.opportunityAction?.actionText
-    || extra.playerAction
-    || '我按当前合同行动';
-  const before = JSON.stringify(save);
-  const route = demo.routeFastNarrativeDemo({
-    saveData: save,
-    playerAction,
-    storage: ON_STORAGE,
-    ...extra,
-  });
-  assert.notEqual(route.outcome, 'legacy', JSON.stringify({
-    extra: Object.keys(extra),
-    eventId: extra.eventAction?.eventId || extra.opportunityAction?.eventId,
-    actionId: extra.eventAction?.actionId || extra.opportunityAction?.actionId,
-    outcome: route.outcome,
-    text: route.text,
-  }));
-  assert.equal(route.outcome, 'fast', route.text || route.outcome);
-  assert.ok(route.plan, 'fresh selection must produce a Fast plan');
-  assert.equal(JSON.stringify(save), before, 'Fast planner must not mutate the live save');
 }
 
 function recordAndReload(rtm, save, selection) {
@@ -151,9 +125,8 @@ async function earnStage02(tools, mods) {
 }
 
 function playOpenWorld(tools, save, selection) {
-  const { rtm, demo, wuyuan } = tools;
+  const { rtm, wuyuan } = tools;
   assert.ok(selection, 's02_04 局部合同缺失');
-  assertFast(demo, save, { openWorldAction: selection, playerAction: selection.actionText });
   const settled = wuyuan.settleWuyuanOpenWorldSelection(save, selection);
   assert.equal(settled.settled, true, settled.reason);
   return rtm.advanceScenarioRuntime(cloneJson(save)).saveData;
@@ -173,13 +146,12 @@ function completeS0204ViaPastry(tools, save) {
   return current;
 }
 
-function takeSilkMandate(rtm, demo, save) {
+function takeSilkMandate(rtm, save) {
   const tracked = rtm.trackStoryOpportunity(save, TAKE_MANDATE);
   assert.equal(tracked.ok, true, tracked.reason || 's02_01 必须能追踪整份托付，锦囊才有合同入口');
   for (let step = 0; step < 4; step += 1) {
     const [selection] = rtm.getTrackedStoryOpportunityActions(save);
     if (!selection) break;
-    assertFast(demo, save, { opportunityAction: selection, playerAction: selection.actionText });
     const result = rtm.recordStoryOpportunityStructuredAction(save, selection);
     assert.equal(result.progressed, true, result.reason || selection.actionId);
     save = rtm.advanceScenarioRuntime(cloneJson(save)).saveData;
@@ -189,7 +161,7 @@ function takeSilkMandate(rtm, demo, save) {
 }
 
 async function walkHappyPath(tools, mods, stopWhen) {
-  const { rtm, demo } = tools;
+  const { rtm } = tools;
   let save = await earnStage02(tools, mods);
   const completed = [];
   for (const beat of STAGE02_BEATS) {
@@ -198,7 +170,7 @@ async function walkHappyPath(tools, mods, stopWhen) {
       runtimeOf(save).activeEventIds.includes(beat),
       `下一拍应是 ${beat}，实际 active=${JSON.stringify(runtimeOf(save).activeEventIds)} completed=${JSON.stringify(runtimeOf(save).completedEventIds)}`,
     );
-    if (beat === 'lcq.event.s02_01') save = takeSilkMandate(rtm, demo, save);
+    if (beat === 'lcq.event.s02_01') save = takeSilkMandate(rtm, save);
     if (beat === 'lcq.event.s02_04') {
       save = completeS0204ViaPastry(tools, save);
     } else {
@@ -208,7 +180,6 @@ async function walkHappyPath(tools, mods, stopWhen) {
         assert.ok(selection, `${beat} 第 ${step + 1} 步没有合同动作`);
         assert.equal(selection.eventId, beat);
         assert.notEqual(selection.actionId, PAOLAO);
-        assertFast(demo, save, { eventAction: selection, playerAction: selection.actionText });
         const settled = recordAndReload(rtm, save, selection);
         assert.equal(settled.result.attempted, true, settled.result.reason);
         save = settled.save;
@@ -223,22 +194,16 @@ async function walkHappyPath(tools, mods, stopWhen) {
   return { save, completed };
 }
 
-test('后半 12 拍合同 walker：真实切关、rail 激活序、锦囊一次、Fast 不回 Legacy', async () => {
+test('后半 12 拍合同 walker：真实切关、rail 激活序、锦囊一次', async () => {
   const tools = await loadTools();
   const mods = await loadMods();
-  const { rtm, demo } = tools;
+  const { rtm } = tools;
   const { save, completed } = await walkHappyPath(tools, mods);
   assert.deepEqual(completed, STAGE02_BEATS);
   assert.equal(silkCount(save), 1);
   assert.equal(runtimeOf(save).inventoryTransferReceipts?.length, 1);
   assert.equal(runtimeOf(save).gameOver, undefined);
   assert.ok(runtimeOf(save).completedEventIds.includes('lcq.event.baihu_shangguan_escape'));
-  const closedRoute = demo.routeFastNarrativeDemo({
-    saveData: save,
-    playerAction: '我再走进白湖商馆',
-    storage: ON_STORAGE,
-  });
-  assert.equal(closedRoute.outcome, 'legacy', '白湖脱身之后 Fast 必须 fail-close');
   const replay = rtm.advanceScenarioRuntime(cloneJson(save)).saveData;
   const replay2 = rtm.advanceScenarioRuntime(cloneJson(save)).saveData;
   assert.equal(JSON.stringify(replay), JSON.stringify(replay2));
@@ -262,7 +227,7 @@ test('A 类 10 拍没有合法动作不得自结', async () => {
       assert.equal(rt.gameOver, undefined, `${beat} 闲逛不得 gameOver`);
       proven.push(beat);
     }
-    if (beat === 'lcq.event.s02_01') save = takeSilkMandate(rtm, tools.demo, save);
+    if (beat === 'lcq.event.s02_01') save = takeSilkMandate(rtm, save);
     if (beat === 'lcq.event.s02_04') {
       save = completeS0204ViaPastry(tools, save);
     } else {
@@ -278,7 +243,7 @@ test('A 类 10 拍没有合法动作不得自结', async () => {
 test('B 类 s02_03 / s02_02 玩家参与与停滞 7 回合场外都能结清', async () => {
   const tools = await loadTools();
   const mods = await loadMods();
-  const { rtm, demo } = tools;
+  const { rtm } = tools;
 
   for (const beat of ['lcq.event.s02_03', 'lcq.event.s02_02']) {
     const walked = await walkHappyPath(tools, mods, ({ save, phase }) => (
@@ -289,7 +254,6 @@ test('B 类 s02_03 / s02_02 玩家参与与停滞 7 回合场外都能结清', a
     let participating = cloneJson(walked.save);
     while (!runtimeOf(participating).completedEventIds.includes(beat)) {
       const selection = contractSelection(rtm, participating);
-      assertFast(demo, participating, { eventAction: selection, playerAction: selection.actionText });
       participating = recordAndReload(rtm, participating, selection).save;
     }
     assert.equal(runtimeOf(participating).gameOver, undefined, `${beat} 参与路径不得死`);

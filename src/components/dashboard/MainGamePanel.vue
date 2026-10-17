@@ -610,10 +610,6 @@ import {
 } from '@/modules/scenarioMods/naturalIntentRouter';
 import { isXingyuehuQuestPlaytestFinished } from '@/modules/scenarioMods/xingyuehuQuestPlaytest';
 import { isXingyuehuLandingPlaytestFinished } from '@/modules/scenarioMods/xingyuehuLandingPlaytest';
-import { settleFastNarrativeDemoAdjudication } from '@/modules/scenarioMods/fastNarrativeDemoAdjudication';
-import {
-  isFastNarrativeHoldResponse,
-} from '@/modules/scenarioMods/fastNarrativeDemo';
 import type {  CharacterProfile } from '@/types/game';
 import type { GM_Response } from '@/types/AIGameMaster'; // AIGameMaster.d.ts 仍然需要保留
 
@@ -2375,17 +2371,6 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (aiResponse?.transactionCommitted && aiResponse.narrativeNotice) toast.warning(aiResponse.narrativeNotice);
 
       // 验证AI响应结构
-      if (isFastNarrativeHoldResponse(aiResponse)) {
-        const save = gameStateStore.toSaveData();
-        if (save) await persistJudgementSave(save);
-        else refreshPendingJudgement();
-        if (pendingJudgement.value) toast.info('此行动存在风险，请先确认判定');
-        else {
-          const notice = String((aiResponse as { fastNarrativeHoldNotice?: unknown }).fastNarrativeHoldNotice || '').trim();
-          if (notice) toast.info(notice);
-        }
-        return;
-      }
       if (aiResponse) {
         if (aiResponse.generationError) throw Object.assign(new Error(aiResponse.generationError.message), { code: aiResponse.generationError.code });
         if (aiResponse.outputTruncated) {
@@ -2664,7 +2649,6 @@ const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
     currentTurn: getNarrativeTurn(save),
     ...(testOutcome ? { testOutcome } : {}),
   });
-  settleFastNarrativeDemoAdjudication(save, resolution);
   await persistJudgementSave(save);
   await sendMessage({ skipPreflight: true, resolution });
 };
