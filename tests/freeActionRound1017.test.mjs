@@ -52,7 +52,10 @@ test('D2 开关打开：没出票/归入其他的句子记下原文、模型报�
 
 test('D3 候选被否决时模型报的票按设计不收：只在调试通道留 tickets_not_collected，行为不变', async () => {
   const save = makeSave({ present: [WANG_ZHE] });
-  const bad = reply([{ actionClass: 'physical', variant: 'attack', targetId: WANG_ZHE, degree: 'normal', performed: 'yes', evidence: '一刀砍向王哲', itemId: null }], { actionId: 'whatever', evidence: '对不上的话' });
+  // 报一个真实存在的候选 id，但证据对不上原话：候选被否决（不是乱写的 actionId——乱写的 id 等于没命中作者动作，票照收，见 freeActionIntentHints.test.mjs）
+  const pick = router.listNaturalIntentCandidates(save).find(c => c.eventId && c.source === 'event_engine');
+  assert.ok(pick, '夹具里应有事件候选');
+  const bad = reply([{ actionClass: 'physical', variant: 'attack', targetId: WANG_ZHE, degree: 'normal', performed: 'yes', evidence: '一刀砍向王哲', itemId: null }], { actionId: pick.actionId, source: pick.source, eventId: pick.eventId, evidence: '对不上的话' });
   const withLog = await debugOn(() => quiet(async () => {
     const result = await run(save, '我一刀砍向王哲', stub(bad).generate);
     const rows = debug.peekPlayerTextDebug();

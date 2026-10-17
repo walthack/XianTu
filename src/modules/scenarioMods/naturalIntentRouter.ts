@@ -525,6 +525,11 @@ export async function resolveNaturalIntent(input: {
     if (parsed.actionId === 'none') {
       return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution, ...withTickets() };
     }
+    // 模型常把票的变体名（train / scene_act / cast.transfer_qi）填进 actionId：它不是任何候选的 id，等于没命中作者动作，票照收（票自己仍要过全套校验与闸门）。
+    if (!candidates.some(item => item.actionId === parsed.actionId)) {
+      noteTicketDiscard('intent', 'unknown_action', parsed.actionId);
+      return { kind: 'free', reason: 'unknown_action', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution, ...withTickets() };
+    }
     if (!parsed.evidence || !evidenceBelongsToPlayer(String(input.playerText || ''), parsed.evidence)) {
       return free('bad_evidence');
     }
