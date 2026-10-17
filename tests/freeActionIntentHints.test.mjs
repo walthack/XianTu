@@ -158,3 +158,20 @@ test('传功句仍归自由行动（不回落旧修炼预检）；出票后不�
   assert.equal(result.freeActionTickets.length, 1);
   assert.equal(mods.plan.prepareFreeAction(base(), result.freeActionTickets[0]).kind, 'issued');
 });
+
+test('hint：每个出问题的变体都写明认领范围与边界，进入 intent 提示词的变体清单', () => {
+  const section = mods.ticket.ticketPromptSection(base());
+  const listed = Object.fromEntries(section.payload.classes.flatMap(c => c.variants.map(v => [`${c.actionClass}.${v.variant}`, v.hint ?? ''])));
+  for (const [key, patterns] of Object.entries({
+    'solo.train': [/不针对在场某人也出票/, /targetId填null/, /双修/, /传功/],
+    'solo.breakthrough': [/不针对在场某人也出票/, /targetId填null/],
+    'solo.recover': [/不针对在场某人也出票/, /targetId填null/, /满血也算/, /为他人疗伤不是本项/],
+    'field.scene_act': [/不针对在场某人也出票/, /targetId填null/, /逃跑/, /潜行/, /探索/, /不算观察/],
+    'cast.transfer_qi': [/传功/, /渡功/, /自愿/, /不是夺元/],
+    'physical.drain_qi': [/昏迷/, /被制住/, /本地判定/, /传功/],
+  })) {
+    assert.equal(listed[key], hintOf(...key.split('.')), `${key} 清单里的 hint 就是配置里的 hint`);
+    for (const pattern of patterns) assert.match(listed[key], pattern, key);
+  }
+});
+

@@ -154,8 +154,8 @@ test('提示词：主体一字不变，solo / field 只多出每个变体一行 
   assert.deepEqual(added.map(row => row.actionClass), ['solo', 'field']);
   const rows = added.flatMap(row => row.variants);
   assert.deepEqual(rows.map(row => row.variant), ['train', 'breakthrough', 'recover', 'scene_act']);
-  for (const row of rows) assert.ok(row.hint.length <= 40, `${row.variant} hint ${row.hint.length} 字`);
-  assert.ok(JSON.stringify(on.payload).length - JSON.stringify(off.payload).length < 600, '新增负担小于 600 字符');
+  for (const row of rows) assert.ok(row.hint.length <= 60, `${row.variant} hint ${row.hint.length} 字`);
+  assert.ok(JSON.stringify(on.payload).length - JSON.stringify(off.payload).length < 700, '新增负担小于 700 字符');
   assert.match(rows.find(row => row.variant === 'train').hint, /双修/);
   assert.match(rows.find(row => row.variant === 'recover').hint, /双修/);
 });

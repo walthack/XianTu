@@ -602,7 +602,7 @@
           },
           "drain_qi": {
             "label": "夺元",
-            "hint": "单方面夺取对方真气修为；只有对方已无力设防时才成立；双方自愿的是传功，不是本项。",
+            "hint": "单方面夺取对方真气修为；对方昏迷、被制住也出票，成立与否本地判定；自愿的是传功，不是本项。",
             "enabled": true,
             "base": -12,
             "difficulty": 9,
@@ -870,6 +870,7 @@
         "variants": {
           "transfer_qi": {
             "label": "传功",
+            "hint": "把自己的真气传给对方（传功、渡功）；自愿的，不是夺元。",
             "effect": "practiceProgress",
             "base": 3,
             "requires": {
@@ -956,21 +957,21 @@
         "variants": {
           "train": {
             "label": "修炼",
-            "hint": "自己一人练功修炼；无对象，targetId填null；与人双修、传功不是本项。",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】打坐练功修炼；与人双修、传功不是本项。",
             "requires": {
               "realmMoves": true
             }
           },
           "breakthrough": {
             "label": "冲关",
-            "hint": "自己冲关突破境界；无对象，targetId填null。",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】冲关突破境界。",
             "requires": {
               "realmMoves": true
             }
           },
           "recover": {
             "label": "调息疗伤",
-            "hint": "自己调息疗伤；无对象，targetId填null；与人双修、为他人疗伤不是本项。",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息运功平复气血，满血也算；双修、为他人疗伤不是本项。",
             "applyRecovery": true
           }
         }
@@ -989,7 +990,7 @@
         "variants": {
           "scene_act": {
             "label": "逃跑潜行探索",
-            "hint": "逃跑、潜行、探索中有风险或成败悬念的；无对象，targetId填null。"
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】逃跑、潜行、探索四周搜寻线索，不算观察。"
           }
         }
       },
