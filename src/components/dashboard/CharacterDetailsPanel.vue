@@ -369,7 +369,7 @@
                           <span class="rel-realm">{{ formatRealmDisplay(npc.境界) }}</span>
                         </div>
                       </div>
-                      <div class="rel-fav" :class="getFavorabilityClass(npc.好感度)">
+                      <div class="rel-fav" :class="getFavorabilityClass(npc.好感度)" :title="getFavorabilityTierDesc(npc.好感度)">
                         <span class="rel-fav-tier">{{ getFavorabilityTierName(npc.好感度) }}</span>
                         <span class="rel-fav-value">{{ npc.好感度 }}</span>
                       </div>
@@ -770,6 +770,9 @@ const getFavorabilityClass = (favorability: number) => {
 
 /** UI 是玩家唯一能看到阶梯的地方——显示档位名而非裸数字，否则 5 与 10 的区别对玩家不存在。 */
 const getFavorabilityTierName = (favorability: number) => tierOf(favorability).name;
+
+/** 档位描述取自配置 game-numbers.affinity.tierDesc；缺省则不显示。 */
+const getFavorabilityTierDesc = (favorability: number) => tierOf(favorability).desc;
 
 const isSpecialNpc = (npc: NpcProfile): boolean => {
   const ext = (npc as any)?.扩展 as any;
