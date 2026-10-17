@@ -12,7 +12,6 @@ import {
   deepEqual,
   loadTrackedCanonAuthorityOverlays,
 } from '../scripts/canon-authority-overlay.mjs';
-import { applyTrackedWorldSimRefinements } from '../scripts/world-sim-refinement-overlay.mjs';
 import { loadTs } from './loadTs.mjs';
 
 const generatedRoot = new URL('../mod-kit/generated/deepseek-v4-flash/', import.meta.url);
@@ -22,7 +21,6 @@ const gitignoreUrl = new URL('../.gitignore', import.meta.url);
 const STAGES = [
   { stageId: 'lcq.stage_04b_lingfei_baiyi_crisis', book: 'qingyu' },
   { stageId: 'lcq.stage_05b', book: 'qingyu' },
-  { stageId: 'lcq.stage_06', book: 'qingyu' },
   { stageId: 'lcq.stage_07_qingyuan_jiankang', book: 'qingyu' },
   { stageId: 'lcq.stage_08_jiankang_coup', book: 'qingyu' },
   { stageId: 'lyl.lin_an_bridge', book: 'yunlong' },
@@ -270,10 +268,10 @@ test('id-addressed source keeps a valid id-array; malformed target or source fai
   );
 });
 
-test('tracked overlays are exactly the fourteen generated→builtin closures', async () => {
+test('tracked overlays are exactly the thirteen generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
-  assert.equal(catalog.manifest.overlays.length, 14);
+  assert.equal(catalog.manifest.overlays.length, 13);
 });
 
 test('generated plus tracked overlay reconstructs the Git-tracked builtins', async () => {
@@ -282,7 +280,6 @@ test('generated plus tracked overlay reconstructs the Git-tracked builtins', asy
     const generated = await loadGenerated(stage);
     const builtin = await loadBuiltin(stage.stageId);
     assert.equal(deepEqual(generated, builtin), false, `${stage.stageId} generated already equals builtin`);
-    await applyTrackedWorldSimRefinements(generated);
     const result = await applyTrackedCanonAuthorityOverlay(generated, catalog);
     assert.equal(result.matched, true, stage.stageId);
     assert.equal(result.applied > 0, true, stage.stageId);
@@ -302,7 +299,6 @@ test('source drift in a load-bearing generated field fails closed', async () => 
   const generated = await loadGenerated(STAGES.find(stage => stage.stageId === 'lcq.stage_05b'));
   const slay = generated.scenario.events.find(event => event.id === 'lcq.event.slay_dragon');
   slay.description = 'drifted source';
-  await applyTrackedWorldSimRefinements(generated);
   assert.throws(
     () => applyCanonAuthorityOverlay(generated, catalog.byStageId.get('lcq.stage_05b')),
     /source drift/,
@@ -355,11 +351,6 @@ test('stage_06 quarantine and frozen s06_03 ids stay in place', async () => {
     ['lcq.event.s06_06', 'qingyu.126.2', 226],
   ]);
   assert.equal(stage06.scenario.events.find(event => event.id === 'lcq.event.s06_03').axisMethod, 'source-rebuilt-frozen-if-anchor');
-
-  const overlay = (await loadTrackedCanonAuthorityOverlays()).byStageId.get('lcq.stage_06');
-  assert.equal(overlay.ops.length, 1);
-  assert.equal(overlay.ops[0].path.includes('s06_03'), true);
-  assert.equal(JSON.stringify(overlay).includes('missing'), false);
 });
 
 test('generated stage tree stays gitignored; overlay is the tracked authority delta', async () => {

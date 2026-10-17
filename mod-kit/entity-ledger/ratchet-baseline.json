@@ -4,7 +4,6 @@
   "note": "Per-file literal-name occurrence budget; generated data and author JSON excluded. Lower budget only after migration evidence.",
   "counts": {
     "src/components/dashboard/MainGamePanel.vue": 1,
-    "src/components/dashboard/WorldSimulationPlaytestPanel.vue": 3,
     "src/modules/scenarioMods/acquaintanceLedger.ts": 15,
     "src/modules/scenarioMods/affinityCaps.ts": 26,
     "src/modules/scenarioMods/baihuGambleRefusal.ts": 18,
@@ -45,7 +44,6 @@
     "src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts": 10,
     "src/modules/scenarioMods/travel/travelLedger.ts": 8,
     "src/modules/scenarioMods/voiceCards.ts": 7,
-    "src/modules/scenarioMods/worldSimulationPlaytest.ts": 13,
     "src/modules/scenarioMods/wuyuanOpenWorldSlice.ts": 5,
     "src/modules/scenarioMods/xingyuehuQuestPlaytest.ts": 10,
     "src/modules/scenarioMods/xingyuehuQuestPlaytestExperience.ts": 36,
@@ -57,8 +55,6 @@
     "src/utils/narrativeStateReconciler.ts": 52,
     "src/utils/prompts/definitions/worldStandards.ts": 1,
     "src/views/QingyuOpeningPlaytestStartView.vue": 4,
-    "src/views/WorldSimulationDemoView.vue": 12,
-    "src/views/WorldSimulationPlaytestStartView.vue": 4,
     "src/views/XingyuehuQuestPlaytestStartView.vue": 4
   }
 }

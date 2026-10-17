@@ -18,7 +18,6 @@ import {
   loadTrackedCanonAuthorityOverlays,
 } from './canon-authority-overlay.mjs';
 import { validateQingyuStage01AuthorityFile } from './validate-qingyu-stage01-authority.mjs';
-import { applyTrackedWorldSimRefinements } from './world-sim-refinement-overlay.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const gen = join(root, 'mod-kit', 'generated', 'deepseek-v4-flash');
@@ -36,7 +35,6 @@ export async function syncBuiltinModData({ generatedRoot = gen, outputDir = outD
     for (const f of (await readdir(stageDir)).filter(n => n.endsWith('.json') && !n.endsWith('.uncertainties.json')).sort()) {
       const text = await readFile(join(stageDir, f), 'utf8');
       const mod = JSON.parse(text);
-      await applyTrackedWorldSimRefinements(mod);
       const id = mod.manifest?.id;
       if (!id) throw new Error(`${book}/${f} 缺 manifest.id`);
       // generated remains the source; tracked overlays close I1-I4 builtins without unignoring generated.

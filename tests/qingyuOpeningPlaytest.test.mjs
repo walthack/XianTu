@@ -30,7 +30,6 @@ test('qingyu opening playtest save is isolated canon_companion with player compl
   assert.equal(save.系统.扩展.清羽记开局.kind, QINGYU_OPENING_PLAYTEST_KIND);
   assert.equal(save.系统.扩展.六朝世界试玩, undefined);
   assert.equal(runtime.modId, QINGYU_OPENING_PLAYTEST_MOD_ID);
-  assert.notEqual(runtime.storyMode, 'world_sim');
   assert.equal(save.系统.扩展.剧本模组.storyMode, undefined);
   assert.equal(save.角色.身份.名字, '程宗扬');
   assert.equal(QINGYU_OPENING_PLAYTEST_EVENT_IDS.length, 18);

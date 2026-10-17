@@ -14945,12 +14945,6 @@
     },
     {
       "kind": "flag",
-      "id": "event.s05_09.offscreen",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
       "id": "event.s05_10.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05.json",
       "aliases": []
@@ -16289,108 +16283,6 @@
     },
     {
       "kind": "flag",
-      "id": "world.r2_10.lyg_event_s01_06.occurred",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_10.lyg_event_s01_07.occurred",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lcq_event_s01_02.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_01.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lcq_event_s01_04.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_01.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lcq_event_s02_02.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_02.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lcq_event_s02_03.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_02.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lcq_event_s04_02.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lcq_event_s04_04.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lcq_event_s04_05.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_04.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyg_event_s01_05.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyg_event_s03_03.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyl_event_s01_01.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyl_event_s01_03.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyl_event_s06_01.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyl_event_s06_03.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyl_event_s06_04.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
-      "id": "world.r2_9.lyl_event_s06_06.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_coup.json",
-      "aliases": []
-    },
-    {
-      "kind": "flag",
       "id": "world.xieyi_absence.active",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
       "aliases": []
@@ -16398,7 +16290,7 @@
     {
       "kind": "flag",
       "id": "world.xingyuehu_war.offscreen_resolved",
-      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_11_lieshan_battle.json",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json",
       "aliases": []
     },
     {
