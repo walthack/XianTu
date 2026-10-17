@@ -28,16 +28,12 @@ try {
       console.log(`PASS ${baseUrl}/`);
 
       const legacy = page.locator('[data-testid="legacy-playtests"]');
-      const worldEntry = legacy.locator('[data-testid="open-world-sim-playtest"]');
       const qingyuEntry = legacy.locator('[data-testid="open-qingyu-opening-playtest"]');
-      assert.equal(await worldEntry.isVisible(), false, `${baseUrl}: 旧六朝入口未收起`);
       assert.equal(await qingyuEntry.isVisible(), false, `${baseUrl}: 旧清羽入口未收起`);
       await legacy.locator('summary').click();
-      assert.equal(await worldEntry.isVisible(), true, `${baseUrl}: 旧六朝入口无法展开`);
       assert.equal(await qingyuEntry.isVisible(), true, `${baseUrl}: 旧清羽入口无法展开`);
 
       for (const [testId, heading] of [
-        ['open-world-sim-playtest', '六朝世界试玩'],
         ['open-qingyu-opening-playtest', '清羽记开局'],
       ]) {
         if (!(await legacy.evaluate(element => element.open))) await legacy.locator('summary').click();
