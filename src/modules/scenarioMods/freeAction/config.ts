@@ -71,7 +71,8 @@ export interface VariantSpec {
   effect: EffectKind;
   kind?: JudgementKind;
   modifierProfile?: string;
-  difficulty?: number;
+  /** 数，或数值键引用（如 combat.baselineDc，variantSpecOf 解析成数）。 */
+  difficulty?: number | string;
   /** 好感基础点（单位=好感点，负为敌意）。 */
   base?: number;
   /** feed_pill 毒性物品的好感基础点。 */
@@ -177,6 +178,7 @@ export function variantSpecOf(actionClass: string, variant: string, cfg: FreeAct
   const row = cls?.variants?.[variant];
   if (!cls || !row) return undefined;
   const merged: Record<string, unknown> = { ...(cls.defaults || {}), ...row };
+  if (typeof merged.difficulty === 'string') merged.difficulty = resolveNumberRef(merged.difficulty);
   const factor = merged.outcomeFactor;
   if (typeof factor === 'string') merged.outcomeFactor = cfg.outcomeFactors[factor];
   const gain = merged.gain as Record<string, unknown> | undefined;
@@ -307,7 +309,7 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
   const dualMin = cfg.dualCultivation?.requires?.minGoodwill;
   if (!(Number.isFinite(dualMin) && dualMin >= -100 && dualMin <= 100)) errors.push('dualCultivation.requires.minGoodwill 须为 -100~100 的数');
   const attack = cfg.classes.physical?.variants?.attack;
-  const physicalDifficulty = (cfg.classes.physical?.defaults as { difficulty?: number } | undefined)?.difficulty;
+  const physicalDifficulty = resolveNumberRef((cfg.classes.physical?.defaults as { difficulty?: number | string } | undefined)?.difficulty);
   if (attack && physicalDifficulty !== GAME_NUMBERS.combat.baselineDc) errors.push('physical 默认难度应与 combat.baselineDc 同值');
   return errors;
 }

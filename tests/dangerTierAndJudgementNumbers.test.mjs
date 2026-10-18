@@ -213,8 +213,8 @@ test('预检难度：默认五种取值不变，cultivate 跟着 combat.baseline
   assert.deepEqual(difficulty('我要闭关修炼'), { band: 'normal', value: N().combat.baselineDc });
   assert.deepEqual(difficulty('我要探索四周'), { band: 'normal', value: 15 });
   await restoring(() => {
-    // 体检要求 physical 默认难度与 baselineDc 同值，所以热改 baselineDc 要连 physical 一起改。
-    mods.numbers.applyGameNumbers({ combat: { baselineDc: 13 }, freeAction: { classes: { physical: { defaults: { difficulty: 13 } } } }, judgement: { preflight: { difficulty: { default: { value: 17 }, byKind: { escape: { value: 22 } } } } } });
+    // physical 默认难度直接引用 combat.baselineDc，改一处即可。
+    mods.numbers.applyGameNumbers({ combat: { baselineDc: 13 }, judgement: { preflight: { difficulty: { default: { value: 17 }, byKind: { escape: { value: 22 } } } } } });
     assert.deepEqual(difficulty('我要闭关修炼'), { band: 'normal', value: 13 });
     assert.deepEqual(difficulty('我要探索四周'), { band: 'normal', value: 17 });
     assert.deepEqual(difficulty('我要逃跑'), { band: 'hard', value: 22 });
@@ -286,4 +286,16 @@ test('入口接线：src/main.ts 先 await loadRuntimeTuning 再挂载；打包�
   const main = readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
   assert.ok(main.indexOf('await loadRuntimeTuning()') > 0 && main.indexOf('await loadRuntimeTuning()') < main.indexOf('app.mount'));
   assert.match(readFileSync(new URL('../webpack.config.js', import.meta.url), 'utf8'), /clean: \{ keep: [^}]*tuning\\\.json/);
+});
+
+test('physical 默认难度引用 combat.baselineDc：只改 baselineDc 即生效；写死不同的数仍被体检拒绝', async () => {
+  assert.equal(mods.config.freeActionConfig().classes.physical.defaults.difficulty, 'combat.baselineDc');
+  assert.equal(mods.config.variantSpecOf('physical', 'attack').difficulty, N().combat.baselineDc);
+  await restoring(() => {
+    const r = mods.numbers.applyGameNumbers({ combat: { baselineDc: 14 } });
+    assert.ok(r === undefined || r.ok !== false, '只改 baselineDc 不应被拒');
+    assert.equal(N().combat.baselineDc, 14);
+    assert.equal(mods.config.variantSpecOf('physical', 'attack').difficulty, 14);
+    assert.deepEqual(mods.config.validateFreeActionConfig(), []);
+  });
 });

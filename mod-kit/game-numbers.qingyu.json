@@ -573,7 +573,7 @@
           "route": "judge",
           "kind": "combat",
           "modifierProfile": "default",
-          "difficulty": 11,
+          "difficulty": "combat.baselineDc",
           "effect": "none",
           "outcomeFactor": "hostile"
         },
