@@ -14,7 +14,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install
@@ -23,11 +23,19 @@ jobs:
       - name: Type Check
         run: npm run type-check
 
+      # Node 20 的测试运行器在默认并发下偶发 “Unable to deserialize cloned data”（运行器自身的问题，每次换不同文件），串行跑稳定。
       - name: Test
-        run: npm test
+        run: npm run test:ci
 
       - name: Lint
         run: npm run lint:check
 
       - name: Build
         run: npm run build
+
+      # 生产依赖漏洞报告：先不阻塞（continue-on-error），只在日志与 Job Summary 里报告；以后要拦截再去掉 continue-on-error 并设 --audit-level。
+      - name: Audit production dependencies (report only)
+        continue-on-error: true
+        run: |
+          npm audit --omit=dev | tee audit.txt
+          { echo '### npm audit (生产依赖，仅报告)'; echo '```'; tail -n 40 audit.txt; echo '```'; } >> "$GITHUB_STEP_SUMMARY"

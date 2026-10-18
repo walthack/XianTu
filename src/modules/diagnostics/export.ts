@@ -2,15 +2,16 @@
 import { SESSION_ID, logError } from './log';
 import { logStore, type LogEntry } from './store';
 import { getBuildInfo } from './buildInfo';
+import { collectStats } from './statsProviders';
 
-export interface LogExport { app: string; version: string; buildId: string; contentPackVersion: string; exportedAt: string; sessionId: string; count: number; entries: LogEntry[] }
+export interface LogExport { app: string; version: string; buildId: string; contentPackVersion: string; exportedAt: string; sessionId: string; count: number; /** 各层登记的聚合统计（statsProviders）；perf = 回合/模型耗时（p50/p95 等，见 turnTelemetry）。 */ stats: Record<string, unknown>; entries: LogEntry[] }
 
 const APP_NAME = 'XianTu';
 
 export async function buildLogExport(): Promise<LogExport> {
   const entries = (await logStore.all()).map(({ seq: _seq, ...entry }) => entry);
   const { version, buildId, contentPackVersion } = getBuildInfo();
-  return { app: APP_NAME, version, buildId, contentPackVersion, exportedAt: new Date().toISOString(), sessionId: SESSION_ID, count: entries.length, entries };
+  return { app: APP_NAME, version, buildId, contentPackVersion, exportedAt: new Date().toISOString(), sessionId: SESSION_ID, count: entries.length, stats: collectStats(), entries };
 }
 
 export const exportFileName = (at: Date = new Date()): string => `lcq-log-${at.toISOString().replace(/[:.]/g, '-')}.json`;
