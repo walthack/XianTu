@@ -2,7 +2,7 @@
  * 自由行动票的配置读取：所有数值与白名单在 game-numbers.qingyu.json 的 freeAction 段，代码不写字面量。
  * 变体 = 类默认 ⊕ 变体行（浅合并，变体行优先）；代码只认类的路由家族（judge / table / none）与有限的 effect 种类，不认变体名。
  */
-import { GAME_NUMBERS } from '../../sceneModule/numbers';
+import { GAME_NUMBERS, registerNumbersValidator, resolveNumberRef } from '../../sceneModule/numbers';
 import type { JudgementKind } from '@/utils/judgementEngine';
 import { catalogStatus } from '../../sceneModule/statuses';
 import type { AftermathConfig, SelfBuffConfig } from './outcomeEffects';
@@ -114,6 +114,8 @@ interface RawClass {
   /** 界面持久回执的归类：given = 这类票结算成功时给一条“已给出”回执。 */
   receipt?: 'given';
   defaults?: Record<string, unknown>;
+  /** 地点危险档 id → 难度加值；没写的档、没写这张表的类都是 0（见 dangerTier.ts）。 */
+  dangerTierShift?: Record<string, number>;
   intimacy?: IntimacyConfig;
   variants: Record<string, Record<string, unknown>>;
 }
@@ -126,6 +128,9 @@ export interface IntimacyConfig {
 }
 export interface FreeActionConfig {
   enabled: boolean;
+  /** 地点危险档词表（地点总表 definition.dangerTier 只能取其中之一）与没标时的默认档。 */
+  dangerTiers: string[];
+  defaultDangerTier: string;
   actionClasses: ActionClass[];
   degrees: Degree[];
   performed: string[];
@@ -160,14 +165,7 @@ export interface FreeActionConfig {
 
 export const freeActionConfig = (): FreeActionConfig => GAME_NUMBERS.freeAction as unknown as FreeActionConfig;
 
-/** "training.successProgress" 这类对已有数值键的引用；数字原样返回。 */
-export function resolveNumberRef(value: unknown): number {
-  if (typeof value === 'number') return value;
-  if (typeof value !== 'string') return NaN;
-  let node: unknown = GAME_NUMBERS;
-  for (const part of value.split('.')) node = (node as Record<string, unknown> | undefined)?.[part];
-  return typeof node === 'number' ? node : NaN;
-}
+export { resolveNumberRef };
 
 export function intimacyConfig(cfg: FreeActionConfig = freeActionConfig()): IntimacyConfig | undefined {
   return cfg.classes.intimate?.intimacy;
@@ -275,6 +273,16 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
       if (spec.gain) for (const key of ['base', 'perTransferCap', 'ceilingBelowNeed'] as const) if (!Number.isFinite(spec.gain[key])) errors.push(`${where}: gain.${key} 引用无法解析`);
     }
   }
+  if (!Array.isArray(cfg.dangerTiers) || !cfg.dangerTiers.length || cfg.dangerTiers.some(tier => typeof tier !== 'string' || !tier) || new Set(cfg.dangerTiers).size !== cfg.dangerTiers.length) errors.push('dangerTiers 须为不重复的非空字符串数组');
+  else if (!cfg.dangerTiers.includes(cfg.defaultDangerTier)) errors.push(`defaultDangerTier ${String(cfg.defaultDangerTier)} 不在 dangerTiers 里`);
+  for (const [cls, raw] of Object.entries(cfg.classes)) {
+    if (raw.dangerTierShift === undefined) continue;
+    if (!raw.dangerTierShift || typeof raw.dangerTierShift !== 'object' || Array.isArray(raw.dangerTierShift)) { errors.push(`${cls}.dangerTierShift 须为对象`); continue; }
+    for (const [tier, shift] of Object.entries(raw.dangerTierShift)) {
+      if (!cfg.dangerTiers?.includes(tier)) errors.push(`${cls}.dangerTierShift 的 ${tier} 不是已知危险档（dangerTiers）`);
+      if (typeof shift !== 'number' || !Number.isFinite(shift)) errors.push(`${cls}.dangerTierShift.${tier} 须为数`);
+    }
+  }
   const intimacy = intimacyConfig(cfg);
   if (intimacy) {
     for (const reaction of intimacy.reactions) if (!Number.isFinite(intimacy.reactionEffect[reaction]?.delta)) errors.push(`intimacy.reactionEffect 缺 ${reaction}`);
@@ -343,3 +351,5 @@ function validateDrain(spec: VariantSpec, where: string): string[] {
 function actionNeedsMatrix(spec: VariantSpec): boolean {
   return spec.actionClass === 'intimate';
 }
+
+registerNumbersValidator(() => validateFreeActionConfig());

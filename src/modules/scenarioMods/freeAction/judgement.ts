@@ -16,6 +16,7 @@ import { relationshipOf } from '../ledger/affinityIdentity';
 import { namingChapter } from '../ledger/naming';
 import { combatLevelOf, resolveActorStats } from '../characterStats';
 import { freeActionConfig, type VariantSpec } from './config';
+import { adjustedDifficulty } from './dangerTier';
 import { whyNowText, whySelfText } from './facts';
 import { skillTalentFactors } from './skillMatch';
 import type { FreeActionTicket } from './ticket';
@@ -46,7 +47,7 @@ export function freeActionText(spec: VariantSpec, targetName: string): string {
 export function buildFreeActionJudgementProposal(
   save: SaveData, currentTurn: number, ticket: FreeActionTicket, spec: VariantSpec, names: { player: string; target: string },
 ): JudgementProposal {
-  const kind = spec.kind!, root = save as any;
+  const kind = spec.kind!, root = save as any, difficulty = adjustedDifficulty(save, ticket, spec);
   const data = calculateTurnJudgementData(root?.角色?.身份?.先天六司, root?.角色?.身份?.后天六司, root?.角色?.位置);
   const factors: JudgementFactor[] = [
     ...stateFactors(kind, root),
@@ -64,7 +65,7 @@ export function buildFreeActionJudgementProposal(
     kind,
     target: ticket.targetId ?? undefined,
     whyNow: (ticket.targetId ? whyNowText : whySelfText)({ ...names, label: spec.label }),
-    difficulty: { band: bandFor(spec.difficulty!), value: spec.difficulty! },
+    difficulty: { band: bandFor(difficulty), value: difficulty },
     factors,
     stakes: {
       perfect: stake('perfect'), greatSuccess: stake('greatSuccess'), success: stake('success'),

@@ -1,4 +1,5 @@
 import { statusNamePattern } from '../modules/sceneModule/statuses';
+import { judgementNumbers } from './judgementConfig';
 import { get } from 'lodash';
 import type { SaveData } from '@/types/game';
 
@@ -59,9 +60,10 @@ function hasExplicitPlayerDamageNarration(text: string): boolean {
 }
 
 function getMinorDamageRatio(text: string): number {
-  if (new RegExp(`(?:${statusNamePattern('wound.severe')}|重创|贯穿|洞穿|撕裂|喷溅|血流如注|鲜血淋漓|震飞|击飞|撞飞|扫飞|掀翻|眼前发黑|喉头一甜|(?:胸|腹|咽喉)[^。；\\n]{0,12}(?:贯穿|洞穿|撕裂|割破|划破|鲜血|剧痛))`).test(text)) return 0.15;
-  if (/(?:刺中|砍中|斩中|击中|命中|割破|划破|撕开|伤口|鲜血|血珠|血花|血痕|见血|中招|震退|击退|砸倒|摔倒|气血翻涌|气息紊乱|经脉震荡|胸口发闷)/.test(text)) return 0.10;
-  return 0.05;
+  const narrated = judgementNumbers().injury.narrated;
+  if (new RegExp(`(?:${statusNamePattern('wound.severe')}|重创|贯穿|洞穿|撕裂|喷溅|血流如注|鲜血淋漓|震飞|击飞|撞飞|扫飞|掀翻|眼前发黑|喉头一甜|(?:胸|腹|咽喉)[^。；\\n]{0,12}(?:贯穿|洞穿|撕裂|割破|划破|鲜血|剧痛))`).test(text)) return narrated.severeRatio;
+  if (/(?:刺中|砍中|斩中|击中|命中|割破|划破|撕开|伤口|鲜血|血珠|血花|血痕|见血|中招|震退|击退|砸倒|摔倒|气血翻涌|气息紊乱|经脉震荡|胸口发闷)/.test(text)) return narrated.moderateRatio;
+  return narrated.lightRatio;
 }
 
 export function detectNarratedPlayerDamage(
@@ -80,8 +82,9 @@ export function detectNarratedPlayerDamage(
   if (typeof current !== 'number' || typeof max !== 'number') return null;
   if (!Number.isFinite(current) || !Number.isFinite(max) || current <= 1 || max <= 0) return null;
 
-  const severity: NarratedPlayerDamage['severity'] = judgement.margin <= -15 ? 'major' : 'minor';
-  const ratio = severity === 'major' ? 0.4 : getMinorDamageRatio(text);
+  const narrated = judgementNumbers().injury.narrated;
+  const severity: NarratedPlayerDamage['severity'] = judgement.margin <= narrated.majorMargin ? 'major' : 'minor';
+  const ratio = severity === 'major' ? narrated.majorRatio : getMinorDamageRatio(text);
   // 自动补账只补“受伤”，没有明确死亡叙事时绝不可把气血扣到 UI 的死亡值 0。
   const amount = -Math.min(current - 1, Math.max(1, Math.round(max * ratio)));
 
