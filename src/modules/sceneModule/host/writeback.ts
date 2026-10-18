@@ -1,3 +1,4 @@
+import { GAME_NUMBERS } from '../numbers';
 import {statusNamePattern} from '../statuses';
 // 收束时把场面结果写回游戏现有载体：主角状态 → 角色.效果；同伴 / NPC / 群体状态 → sceneLedger.statusRecords（结构化，兼容 injury 文本）；
 // 承重代价、旗标 → sceneLedger.worldFacts / runtime.flags。状态定义由统一目录解析。
@@ -19,7 +20,7 @@ export function recoverDownedAfterScene(contract: Contract, state: SceneState, w
     if(item.status!=='incapacitated')continue;
     const recovery=contract.parties.find(p=>p.id===item.party)?.recoveryStatus || 'wound.external.heavy';
     const def=resolveStatusDef(recovery,contract)!;
-    item.status=def.id;item.label=def.label;item.minutes=def.afterScene?.minutes || 43200;item.source=def.source;
+    item.status=def.id;item.label=def.label;item.minutes=def.afterScene?.minutes || GAME_NUMBERS.status.afterSceneDefaultMinutes;item.source=def.source;
     state.statuses[item.party]=(state.statuses[item.party] || []).filter(s=>s.id!=='incapacitated' && s.id!==def.id);
     state.statuses[item.party].push({id:def.id,appliedBeat:state.beat,expiresBeat:null,cause:'combat',sourceId:'scene:recovery'});
   }

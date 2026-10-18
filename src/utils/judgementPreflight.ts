@@ -1,4 +1,4 @@
-import {GAME_NUMBERS,boundedStat,boundedLuck} from '../modules/sceneModule/numbers';
+import {GAME_NUMBERS,boundedStat,boundedLuck,resolveNumberRef} from '../modules/sceneModule/numbers';
 import { equippedAxe } from '@/modules/sceneModule/host/loot';
 import { stripReportedSpeech } from '@/modules/sceneModule/inputPolicy';
 import {
@@ -13,6 +13,7 @@ import {
 } from './judgementEngine';
 import type { ScenarioEventActionJudgement } from '@/modules/scenarioMods/schema';
 import { calculateTurnJudgementData } from './judgementRules';
+import { judgementNumbers } from './judgementConfig';
 import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMods/canonRail';
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
 
@@ -61,21 +62,14 @@ export function stateFactors(kind: JudgementKind, saveData: any) {
   const weighted = STAT_WEIGHTS[kind].reduce((sum, [key, weight]) => sum + (numeric(innate[key]) + numeric(acquired[key])) * weight, 0);
   const factors: any[] = [{ label: '六司', value: boundedStat(weighted), source: 'attribute' }];
   const hp = saveData?.角色?.属性?.气血;
-  if (numeric(hp?.上限) > 0 && numeric(hp?.当前) / numeric(hp?.上限) < .25) factors.push({ label: '重伤', value: -15, source: 'condition' });
+  const injury = judgementNumbers().injury;
+  if (numeric(hp?.上限) > 0 && numeric(hp?.当前) / numeric(hp?.上限) < injury.hpRatioBelow) factors.push({ label: '重伤', value: injury.penalty, source: 'condition' });
   return factors;
 }
 
-const SKILL_KIND_HINTS: Record<JudgementKind, RegExp> = {
-  combat: /刀|剑|拳|掌|枪|矛|弓|战|攻|杀|破甲|护体|真气|劲/,
-  cultivate: /功法|内功|心法|修炼|真气|灵气|疗伤|调息|双修|生机|经脉/,
-  craft: /炼丹|炼器|制符|布阵|锻造|药|丹|器|阵|符/,
-  explore: /探查|探索|感应|追踪|辨识|寻路|侦察|生死气息/,
-  social: /口才|交涉|说服|威慑|魅惑|礼法|辩/,
-  escape: /身法|轻功|遁|逃|步法|疾行/,
-  stealth: /潜行|隐匿|敛息|藏形|暗杀/,
-  scheme: /谋略|计策|筹算|布局|权谋/,
-};
-const UNAVAILABLE_SKILL = /未传授|并未传授|尚未传授|未学会|尚未掌握|不会施展|不能使用|不可使用/;
+/** 技能 / 天赋是否适配该判定类型：标签词与自由行动共用一份（配置 freeAction.skillMatch.tags），表里没有的类型一律不适配。 */
+const kindFits = (kind: JudgementKind, haystack: string): boolean => (GAME_NUMBERS.freeAction.skillMatch.tags as Record<string, string[]>)[kind]?.some(word => haystack.includes(word)) ?? false;
+const skillUnavailable = (description: string): boolean => GAME_NUMBERS.freeAction.skillMatch.unavailableMarks.some(mark => description.includes(mark));
 
 function masteredSkillEntries(saveData: any): Array<{ name: string; mastery: number }> {
   const raw = saveData?.角色?.技能?.掌握技能;
@@ -103,8 +97,8 @@ function scenarioSkillFactors(kind: JudgementKind, actionText: string, saveData:
       name.length < 2
       || !actionText.includes(name)
       || !mastered.has(name)
-      || UNAVAILABLE_SKILL.test(description)
-      || !SKILL_KIND_HINTS[kind].test(`${name}；${description}`)
+      || skillUnavailable(description)
+      || !kindFits(kind, `${name}；${description}`)
     ) return [];
     const mastery = mastered.get(name) || 0;
     return [{ label: `正典技能·${name}`, value: GAME_NUMBERS.factors.skillCap, source: 'skill' as const }];
@@ -121,16 +115,14 @@ function explicitTalentFactors(kind: JudgementKind, actionText: string, saveData
     const description = typeof entry === 'object'
       ? String(entry?.description || entry?.描述 || entry?.effect || entry?.效果 || '')
       : '';
-    if (name.length < 2 || !actionText.includes(name) || !SKILL_KIND_HINTS[kind].test(`${name}；${description}`)) return [];
-    return [{ label: `天赋·${name}`, value: 4, source: 'talent' as const }];
+    if (name.length < 2 || !actionText.includes(name) || !kindFits(kind, `${name}；${description}`)) return [];
+    return [{ label: `天赋·${name}`, value: judgementNumbers().preflight.talentBonus, source: 'talent' as const }];
   }).slice(0, 1);
 }
 
 function difficultyFor(kind: JudgementKind): CreateJudgementProposalInput['difficulty'] {
-  if (['combat', 'escape', 'stealth'].includes(kind)) return { band: 'hard', value: 20 };
-  if (kind === 'cultivate') return {band:'normal',value:GAME_NUMBERS.combat.baselineDc};
-  if (kind === 'craft') return { band: 'severe', value: 25 };
-  return { band: 'normal', value: 15 };
+  const { byKind, default: fallback } = judgementNumbers().preflight.difficulty, spec = byKind[kind] ?? fallback;
+  return { band: spec.band, value: resolveNumberRef(spec.value) };
 }
 
 /** Conservative local classifier: uncertainty is left to normal narration, never silently rolled. */

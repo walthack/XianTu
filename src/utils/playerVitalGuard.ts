@@ -1,5 +1,6 @@
 import { get, set } from 'lodash';
 import type { SaveData } from '@/types/game';
+import { judgementNumbers } from './judgementConfig';
 
 const HEALTH_PATH = '角色.属性.气血.当前';
 const HEALTH_MAX_PATH = '角色.属性.气血.上限';
@@ -40,7 +41,7 @@ export function recoverUnmarkedPlayerZeroHealth(
   if (typeof current !== 'number' || current > 0 || typeof max !== 'number' || max <= 0) return null;
   if (hasExplicitPlayerDeathNarration(saveData, narration)) return null;
 
-  const restored = Math.max(1, Math.ceil(max * 0.01));
+  const restored = Math.max(1, Math.ceil(max * judgementNumbers().injury.zeroHealthRecoveryRatio));
   set(saveData, HEALTH_PATH, restored);
   return {
     oldValue: current,

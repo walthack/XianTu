@@ -67,7 +67,8 @@ export default (env, argv) => {
       path: path.resolve(__dirname, 'dist'),
       filename: (isWatch || isSingleFile) ? 'inline.js' : 'XianTu.js',
       // clean 时保留世界地图背景：prebuild(sync-builtin-mods)先拷图 → 若全清会把图抹掉(地图底图丢失bug 2026-07-03)
-      clean: { keep: /liuchao-world-map\.jpg/ },
+      // 也保留手放的 tuning.json（数值热改文件，见 src/modules/sceneModule/runtimeTuning.ts），重打包不抹掉。
+      clean: { keep: /liuchao-world-map\.jpg|tuning\.json/ },
       publicPath: (isProduction || isWatch) ? './' : '/', // dev server 用 /，打包用 ./
     },
     devtool: isProduction ? false : (isWatch ? false : 'eval-source-map'),

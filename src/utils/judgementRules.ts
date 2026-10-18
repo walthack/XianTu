@@ -5,6 +5,9 @@
  * 掷骰结算或写入系统.扩展.判定。这些状态预留给后续本地判定引擎。
  */
 
+import { GAME_NUMBERS } from '../modules/sceneModule/numbers';
+import { judgementNumbers } from './judgementConfig';
+
 export const JUDGEMENT_STATE_PATH = '系统.扩展.判定';
 
 export interface TurnJudgementData {
@@ -36,22 +39,24 @@ export function calculateTurnJudgementData(
   location: LocationStats | null | undefined,
   random: () => number = Math.random,
 ): TurnJudgementData {
-  const innateFortune = Number(innate?.气运) || 5;
+  const { luck, environment } = judgementNumbers();
+  const innateFortune = Number(innate?.气运) || luck.defaultInnate;
   const acquiredFortune = Number(acquired?.气运) || 0;
-  const fortune = Math.min(10, Math.max(0, innateFortune + acquiredFortune));
-  const baseRandom = Math.floor(random() * 16) - 10;
+  const fortune = Math.min(GAME_NUMBERS.factors.fortuneMax, Math.max(GAME_NUMBERS.factors.fortuneMin, innateFortune + acquiredFortune));
+  const baseRandom = Math.floor(random() * luck.randomSpan) + luck.randomOffset;
   const fortuneUpperBonus = Math.floor(random() * (fortune + 1));
-  const fortuneLowerBonus = Math.ceil(fortune * 0.5);
-  const spiritDensity = Number(location?.灵气浓度) || 50;
+  const fortuneLowerBonus = Math.ceil(fortune * luck.lowerBonusRatio);
+  const spiritDensity = Number(location?.灵气浓度) || environment.defaultSpiritDensity;
+  const offset = spiritDensity - environment.neutralSpiritDensity;
 
   return {
     幸运点: baseRandom + fortuneUpperBonus + fortuneLowerBonus,
     气运值: fortune,
     环境: {
       灵气浓度: spiritDensity,
-      修炼修正: Math.round((spiritDensity - 50) / 10),
-      炼制修正: Math.round((spiritDensity - 50) / 15),
-      战斗修正: Math.round((spiritDensity - 50) / 20),
+      修炼修正: Math.round(offset / environment.divisor.cultivate),
+      炼制修正: Math.round(offset / environment.divisor.craft),
+      战斗修正: Math.round(offset / environment.divisor.combat),
     },
   };
 }

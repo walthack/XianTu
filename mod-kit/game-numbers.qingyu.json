@@ -446,6 +446,7 @@
       "min": 1
     },
     "freeActionMaxMinutes": 1440,
+    "afterSceneDefaultMinutes": 43200,
     "permanent": {
       "maxPerActor": 4
     },
@@ -470,6 +471,13 @@
   },
   "freeAction": {
     "enabled": true,
+    "dangerTiers": [
+      "safe",
+      "guarded",
+      "hostile",
+      "fortress"
+    ],
+    "defaultDangerTier": "safe",
     "actionClasses": [
       "physical",
       "verbal",
@@ -565,7 +573,7 @@
           "route": "judge",
           "kind": "combat",
           "modifierProfile": "default",
-          "difficulty": 11,
+          "difficulty": "combat.baselineDc",
           "effect": "none",
           "outcomeFactor": "hostile"
         },
@@ -1011,6 +1019,12 @@
           "difficulty": 20,
           "effect": "none"
         },
+        "dangerTierShift": {
+          "safe": 0,
+          "guarded": 2,
+          "hostile": 4,
+          "fortress": 6
+        },
         "variants": {
           "scene_act": {
             "label": "逃跑潜行探索",
@@ -1166,7 +1180,10 @@
           "遁",
           "逃",
           "步法",
-          "疾行"
+          "疾行",
+          "潜行",
+          "隐匿",
+          "敛息"
         ],
         "stealth": [
           "潜行",
@@ -1183,6 +1200,88 @@
           "权谋"
         ]
       }
+    }
+  },
+  "tuning": {
+    "file": "./tuning.json",
+    "timeoutMs": 3000
+  },
+  "judgement": {
+    "dice": {
+      "sides": 20,
+      "rerollOnOneChance": 0.5
+    },
+    "outcomeLines": {
+      "perfect": 30,
+      "greatSuccess": 15,
+      "success": 0,
+      "partial": -5,
+      "failure": -15
+    },
+    "injury": {
+      "hpRatioBelow": 0.25,
+      "penalty": -15,
+      "narrated": {
+        "majorMargin": -15,
+        "majorRatio": 0.4,
+        "severeRatio": 0.15,
+        "moderateRatio": 0.1,
+        "lightRatio": 0.05
+      },
+      "zeroHealthRecoveryRatio": 0.01
+    },
+    "environment": {
+      "defaultSpiritDensity": 50,
+      "neutralSpiritDensity": 50,
+      "divisor": {
+        "cultivate": 10,
+        "craft": 15,
+        "combat": 20
+      }
+    },
+    "luck": {
+      "defaultInnate": 5,
+      "randomSpan": 16,
+      "randomOffset": -10,
+      "lowerBonusRatio": 0.5
+    },
+    "preflight": {
+      "talentBonus": 4,
+      "difficulty": {
+        "default": {
+          "band": "normal",
+          "value": 15
+        },
+        "byKind": {
+          "combat": {
+            "band": "hard",
+            "value": 20
+          },
+          "escape": {
+            "band": "hard",
+            "value": 20
+          },
+          "stealth": {
+            "band": "hard",
+            "value": 20
+          },
+          "cultivate": {
+            "band": "normal",
+            "value": "combat.baselineDc"
+          },
+          "craft": {
+            "band": "severe",
+            "value": 25
+          }
+        }
+      }
+    },
+    "recentKeep": 20,
+    "cultivationRecovery": {
+      "partial": 0.05,
+      "success": 0.15,
+      "great_success": 0.3,
+      "perfect": 0.4
     }
   }
 }

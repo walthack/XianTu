@@ -17,7 +17,22 @@ export function applyGameNumbers(patch: unknown): void {
  const goalProfiles=next.goalModifiers as Record<string,{factorProfile:string;levelGap:boolean}>;
  if(!goalProfiles.default||Object.values(goalProfiles).some(profile=>!profile||typeof profile.factorProfile!=='string'||(profile.factorProfile!=='scene'&&!(profile.factorProfile in next.weights))||typeof profile.levelGap!=='boolean'))throw Error('目标修正配置无效');
  // Keep nested references alive for H1 readers and already-imported defaults.
+ const before=structuredClone(GAME_NUMBERS);
  merge(GAME_NUMBERS,next,'numbers');
+ // 模块自带的体检（自由行动、判定线等）：不过就退回合并前的数值并报错，热改整份拒绝。
+ const problems=numbersValidators.flatMap(check=>check());
+ if(problems.length){merge(GAME_NUMBERS,before,'numbers');throw Error(`数值体检未通过：${problems.join('；')}`);}
+}
+const numbersValidators:Array<()=>string[]>=[];
+/** 模块在加载时登记自己的数值体检（读 GAME_NUMBERS，返回错误列表，空 = 通过）；applyGameNumbers 合并后逐个跑。 */
+export function registerNumbersValidator(check:()=>string[]):void{if(!numbersValidators.includes(check))numbersValidators.push(check);}
+/** "training.successProgress" 这类对已有数值键的引用；数字原样返回，查不到是 NaN。 */
+export function resolveNumberRef(value:unknown):number{
+ if(typeof value==='number')return value;
+ if(typeof value!=='string')return NaN;
+ let node:unknown=GAME_NUMBERS;
+ for(const part of value.split('.'))node=(node as Record<string,unknown>|undefined)?.[part];
+ return typeof node==='number'?node:NaN;
 }
 export const boundedStat=(n:number):number=>Math.max(-GAME_NUMBERS.factors.statCap,Math.min(GAME_NUMBERS.factors.statCap,Math.round((n-GAME_NUMBERS.factors.center)/GAME_NUMBERS.factors.statDivisor)));
 export const boundedLuck=(n:number):number=>Math.max(-GAME_NUMBERS.factors.luckCap,Math.min(GAME_NUMBERS.factors.luckCap,Math.round((n-GAME_NUMBERS.factors.center)/GAME_NUMBERS.factors.luckDivisor)));

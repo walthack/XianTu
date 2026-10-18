@@ -28,12 +28,16 @@ import './modules/scenarioMods/builtins/register'
 import { migrateData } from './utils/indexedDBManager'
 import { useI18n } from './i18n'
 import { useAPIManagementStore } from '@/stores/apiManagementStore'
+import { loadRuntimeTuning } from '@/modules/sceneModule/runtimeTuning'
 
 async function initializeApp() {
   console.log('【应用启动】开始初始化流程...');
 
   // 首先执行数据迁移检查
   await migrateData();
+
+  // 数值热改：读与 index.html 同级的 tuning.json，失败静默用打包内默认值（见 runtimeTuning.ts）。
+  await loadRuntimeTuning();
 
   console.log('【应用启动】数据迁移检查完成，开始挂载Vue应用');
   const app = createApp(App);

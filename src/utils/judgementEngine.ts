@@ -1,5 +1,6 @@
 import {trainingRealm} from '../modules/scenarioMods/levelProgression';
 import { rollD20 } from './diceRoller';
+import { judgementNumbers } from './judgementConfig';
 import { GAME_NUMBERS } from '../modules/sceneModule/numbers';
 import { affinityOf } from '../modules/scenarioMods/ledger/affinityIdentity';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
@@ -110,7 +111,6 @@ export interface ResolveJudgementOptions {
   testOutcome?: JudgementOutcome;
 }
 
-const MAX_RECENT_RESOLUTIONS = 20;
 let judgementInstanceSequence = 0;
 
 function normalizeText(value: unknown): string {
@@ -266,7 +266,7 @@ function normalizeResolution(raw: unknown): JudgementResolution | null {
   const testOverride = isOutcome(value.testOverride) ? value.testOverride : undefined;
   if (
     status === 'resolved' &&
-    (typeof roll !== 'number' || !Number.isInteger(roll) || roll < 1 || roll > 20 ||
+    (typeof roll !== 'number' || !Number.isInteger(roll) || roll < 1 || roll > judgementNumbers().dice.sides ||
       typeof total !== 'number' || !Number.isFinite(total) || !isOutcome(outcome))
   ) return null;
   const appliedEffects = Array.isArray(value.appliedEffects)
@@ -294,7 +294,7 @@ export function getJudgementState(saveData: unknown): JudgementState {
   const value = raw as Partial<JudgementState>;
   const pending = normalizeProposal(value.pending);
   const recent = Array.isArray(value.recent)
-    ? value.recent.map(normalizeResolution).filter((resolution): resolution is JudgementResolution => !!resolution).slice(-MAX_RECENT_RESOLUTIONS)
+    ? value.recent.map(normalizeResolution).filter((resolution): resolution is JudgementResolution => !!resolution).slice(-judgementNumbers().recentKeep)
     : [];
   return { version: 1, ...(pending ? { pending } : {}), recent };
 }
@@ -431,19 +431,20 @@ export function persistPendingJudgement(saveData: unknown, proposal: JudgementPr
 }
 
 export function outcomeForTotal(total: number, difficulty: number): JudgementOutcome {
-  if (total >= difficulty + 30) return 'perfect';
-  if (total >= difficulty + 15) return 'great_success';
-  if (total >= difficulty) return 'success';
+  const lines = judgementNumbers().outcomeLines;
+  if (total >= difficulty + lines.perfect) return 'perfect';
+  if (total >= difficulty + lines.greatSuccess) return 'great_success';
+  if (total >= difficulty + lines.success) return 'success';
   // P1 的适度软化：接近难度时保留代价成功空间；P2 UI 会明确展示该后果。
-  if (total >= difficulty - 5) return 'partial';
-  if (total >= difficulty - 15) return 'failure';
+  if (total >= difficulty + lines.partial) return 'partial';
+  if (total >= difficulty + lines.failure) return 'failure';
   return 'critical_failure';
 }
 
 function archiveResolution(state: JudgementState, resolution: JudgementResolution): JudgementState {
   return {
     version: 1,
-    recent: [...state.recent.filter(item => item.id !== resolution.id), resolution].slice(-MAX_RECENT_RESOLUTIONS),
+    recent: [...state.recent.filter(item => item.id !== resolution.id), resolution].slice(-judgementNumbers().recentKeep),
   };
 }
 
@@ -451,12 +452,6 @@ function archiveResolution(state: JudgementState, resolution: JudgementResolutio
 const isFreeActionJudgement = (proposal: JudgementProposal): boolean => proposal.authorityReceipt?.kind === 'free_action_judgement';
 
 const CULTIVATION_RECOVERY_KEYWORDS = /疗伤|疗愈|调息|恢复|修复|经脉|丹田|双修/;
-const CULTIVATION_RECOVERY_RATIO: Partial<Record<JudgementOutcome, number>> = {
-  partial: .05,
-  success: .15,
-  great_success: .3,
-  perfect: .4,
-};
 
 function targetAfterRecovery(root: any, attribute: '气血' | '神识', ratio: number): number | null {
   const current = Number(root?.角色?.属性?.[attribute]?.当前);
@@ -490,7 +485,7 @@ function dualCultivationGoodwillMet(saveData: unknown, proposal: JudgementPropos
 }
 
 function cultivationRecoveryEffects(saveData: unknown, proposal: JudgementProposal, outcome: JudgementOutcome): JudgementResolution['appliedEffects'] {
-  const ratio = CULTIVATION_RECOVERY_RATIO[outcome];
+  const ratio = (judgementNumbers().cultivationRecovery as Partial<Record<JudgementOutcome, number>>)[outcome];
   if (
     proposal.applyCultivationRecovery === false
     || proposal.kind !== 'cultivate'
@@ -591,7 +586,7 @@ export function resolvePendingJudgement(
   if (existing) return clone(existing);
   if (!state.pending || state.pending.id !== judgementId) throw new Error('找不到待确认判定');
 
-  const roll = Math.max(1, Math.min(20, Math.floor((options.roll || rollD20)())));
+  const roll = Math.max(1, Math.min(judgementNumbers().dice.sides, Math.floor((options.roll || rollD20)())));
   const total = roll + state.pending.factors.reduce((sum, factor) => sum + factor.value, 0);
   const testOutcome = options.testOutcome && isOutcome(options.testOutcome) ? options.testOutcome : undefined;
   const outcome = testOutcome || outcomeForTotal(total, state.pending.difficulty.value);
