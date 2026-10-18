@@ -7,6 +7,7 @@ import type { SaveData } from '@/types/game';
 import { logEvent } from '@/modules/diagnostics/log';
 import { toast } from '@/utils/toast';
 import * as storage from '@/utils/indexedDBManager';
+import { checkSaveSchemaVersion, futureSaveMessage } from '@/utils/saveMigration';
 import { readWithRotationFallback, rotationKeepFor, rotationSlotName } from '@/utils/saveRotation';
 
 const notifiedSlots = new Set<string>();
@@ -41,4 +42,17 @@ export async function loadSaveWithFallback(
       logEvent({ code: 'LCQ-SAV-013', detail: { characterId, slotId, problem: result.primaryProblem } });
       return result.primary; // 沿用旧行为：读得出的原值照旧交给下游（如存档修复），读不出则为 null
   }
+}
+
+/**
+ * 读档版本守卫：存档版本高于当前游戏时记 LCQ-SAV-014、给玩家可读提示，返回 true（调用方应中止加载，且不得迁移或写回该槽）。
+ * 版本不高于当前、或存档为空，返回 false。
+ */
+export function rejectFutureSaveVersion(characterId: string, slotId: string, saveData: SaveData | null | undefined): boolean {
+  if (!saveData) return false;
+  const check = checkSaveSchemaVersion(saveData);
+  if (check.supported) return false;
+  logEvent({ code: 'LCQ-SAV-014', detail: { characterId, slotId, saveVersion: check.saveVersion, currentVersion: check.currentVersion } });
+  toast.error(futureSaveMessage(slotId, check), { duration: 10000 });
+  return true;
 }

@@ -1,4 +1,5 @@
 import type { GameTime, SaveData } from '@/types/game';
+import { CURRENT_SAVE_SCHEMA_VERSION } from '@/utils/saveMigration';
 
 export interface SaveValidationResult {
   isValid: boolean;
@@ -61,7 +62,8 @@ export function validateSaveDataV3(saveData: SaveData): SaveValidationResult {
   const anySave = saveData as any;
 
   const version = anySave.元数据?.版本号;
-  if (version !== 3) errors.push('元数据.版本号 必须为 3');
+  if (typeof version === 'number' && version > CURRENT_SAVE_SCHEMA_VERSION) errors.push(`元数据.版本号 ${version} 高于当前游戏支持的 ${CURRENT_SAVE_SCHEMA_VERSION}（存档来自更新版本）`);
+  else if (version !== CURRENT_SAVE_SCHEMA_VERSION) errors.push(`元数据.版本号 必须为 ${CURRENT_SAVE_SCHEMA_VERSION}`);
   if (typeof anySave.元数据?.存档ID !== 'string' || !anySave.元数据.存档ID.trim()) errors.push('元数据.存档ID 必填');
   if (typeof anySave.元数据?.存档名 !== 'string' || !anySave.元数据.存档名.trim()) errors.push('元数据.存档名 必填');
   if (typeof anySave.元数据?.创建时间 !== 'string') errors.push('元数据.创建时间 必须是字符串(ISO8601)');

@@ -5,7 +5,7 @@
  */
 import type { SaveData } from '@/types/game';
 import { GAME_NUMBERS, registerNumbersValidator } from '@/modules/sceneModule/numbers';
-import { detectLegacySaveData } from '@/utils/saveMigration';
+import { checkSaveSchemaVersion, detectLegacySaveData } from '@/utils/saveMigration';
 import { isSaveDataV3Shape, validateSaveDataV3 } from '@/utils/saveValidationV3';
 
 export const ROTATION_SLOT_PREFIX = '__rot__';
@@ -61,10 +61,12 @@ export function planRotation(slotId: string, keep: number = rotationKeep()): Arr
 /**
  * 读出的存档是否可用：是对象；V3 形状须过 validateSaveDataV3 的致命校验；
  * 旧结构（还没迁移）只要认得出旧字段就算可用——迁移流程自会处理，不能在这里把它当损坏。
+ * 版本高于当前游戏的档不是损坏：算可用，交给读档处拒载（回退到旧备份会让玩家悄悄丢进度）。
  */
 export function isUsableSave(data: unknown): boolean {
   if (!data || typeof data !== 'object' || Array.isArray(data)) return false;
   try {
+    if (!checkSaveSchemaVersion(data as SaveData).supported) return true;
     if (isSaveDataV3Shape(data as SaveData)) return validateSaveDataV3(data as SaveData).criticalErrors.length === 0;
     return detectLegacySaveData(data as SaveData).legacyKeysFound.length > 0;
   } catch {

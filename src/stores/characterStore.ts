@@ -14,7 +14,7 @@ import { debug } from '@/utils/debug';
 import { useUIStore } from './uiStore'; // 导入UI Store
 import { useCharacterCreationStore } from './characterCreationStore'; // 导入创角Store
 import * as storage from '@/utils/indexedDBManager';
-import { loadSaveWithFallback } from '@/utils/saveLoadFallback';
+import { loadSaveWithFallback, rejectFutureSaveVersion } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
 import { ensureSaveDataHasTavernNsfw } from '@/utils/nsfw';
 import { initializeCharacter } from '@/services/characterInitialization';
@@ -987,6 +987,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
           return false;
         }
       }
+
+      // 版本守卫：存档版本高于当前游戏则拒绝加载（不迁移、不写回），须先于旧结构检测
+      if (rejectFutureSaveVersion(charId, slotKey, targetSlot.存档数据)) return false;
 
       // V3 迁移：检测到旧结构必须先迁移（写回同槽位），否则不允许加载
       if (targetSlot.存档数据) {
