@@ -1328,5 +1328,11 @@
   },
   "e2eSmoke": {
     "scriptTimeoutMs": 300000
+  },
+  "perf": {
+    "sampleWindow": 50,
+    "minSamplesForPercentile": 5,
+    "turnWarnMs": 90000,
+    "modelWarnMs": 60000
   }
 }

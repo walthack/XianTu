@@ -175,6 +175,7 @@ export async function buildFeedbackPack(options: FeedbackOptions = {}, deps: Fee
     exportedAt: now.toISOString(), sessionId: SESSION_ID, userAgent: nav?.userAgent, language: nav?.language,
   });
   addJson('logs.json', logs);
+  addJson('perf.json', logs.stats.perf ?? {});
   addJson('model-config.json', (deps.readModelConfig ?? readModelConfig)());
 
   const save: FeedbackManifest['save'] = { requested: !!options.includeSave, included: false };

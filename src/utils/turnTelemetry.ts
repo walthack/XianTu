@@ -1,7 +1,13 @@
+import { logEvent } from '../modules/diagnostics/log';
+import { perfConfig } from '../modules/diagnostics/perfConfig';
+import { registerStatsProvider } from '../modules/diagnostics/statsProviders';
+
 export type TurnTelemetryPath = 'legacy' | 'legacy_pilot' | 'modular' | 'open_world' | 'local_contract';
 
 export interface TurnTelemetry {
   path: TurnTelemetryPath;
+  /** 回合开始时刻（beginTurnTelemetry）；回合总耗时 = 结束 − 它。 */
+  beganAt: number;
   promptBytes: number;
   requestStartedAt: number | null;
   responseHeadersAt: number | null;
@@ -21,6 +27,72 @@ export interface TurnTelemetry {
   jsonObject: boolean;
   bufferedFullResponse: boolean;
 }
+
+// ───────────── 耗时聚合（p50/p95）与超阈值告警 ─────────────
+// 全部在 endTurnTelemetry 内部完成：调用方（AIBidirectionalSystem）的调用点不变。数值见 game-numbers.perf。
+
+export interface PerfSample { path: TurnTelemetryPath; turnMs: number; modelMs: number | null; at: number }
+export interface PerfSeries { count: number; p50: number | null; p95: number | null; max: number | null }
+export interface PerfStats {
+  /** 当前窗口里的样本数 / 窗口上限。 */
+  window: { samples: number; max: number };
+  turn: PerfSeries;
+  /** 只统计走了模型、且收到完整响应的回合。 */
+  model: PerfSeries;
+  thresholds: { turnWarnMs: number; modelWarnMs: number };
+  /** 本会话累计触发的告警次数（不受窗口限制）。 */
+  warned: { turn: number; model: number };
+  byPath: Record<string, number>;
+}
+
+const perfSamples: PerfSample[] = [];
+let turnWarnCount = 0;
+let modelWarnCount = 0;
+
+/** 最近邻（nearest-rank）分位数；空数组返回 null。 */
+export function percentile(values: readonly number[], p: number): number | null {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.min(sorted.length - 1, Math.max(0, Math.ceil((p / 100) * sorted.length) - 1))];
+}
+
+function series(values: number[], minSamples: number): PerfSeries {
+  const enough = values.length >= minSamples;
+  return { count: values.length, p50: enough ? percentile(values, 50) : null, p95: enough ? percentile(values, 95) : null, max: values.length ? Math.max(...values) : null };
+}
+
+function recordPerf(t: TurnTelemetry): void {
+  try {
+    const cfg = perfConfig();
+    const ended = now();
+    const turnMs = Math.max(0, ended - t.beganAt);
+    const modelMs = t.requestStartedAt != null && t.responseCompletedAt != null ? Math.max(0, t.responseCompletedAt - t.requestStartedAt) : null;
+    perfSamples.push({ path: t.path, turnMs, modelMs, at: ended });
+    while (perfSamples.length > cfg.sampleWindow) perfSamples.shift();
+    const detail = { path: t.path, turnMs, modelMs, retryCount: t.retryCount, provider: t.provider, model: t.model, promptBytes: t.promptBytes };
+    if (turnMs > cfg.turnWarnMs) { turnWarnCount += 1; logEvent({ code: 'LCQ-NET-010', detail: { ...detail, thresholdMs: cfg.turnWarnMs } }); }
+    if (modelMs != null && modelMs > cfg.modelWarnMs) { modelWarnCount += 1; logEvent({ code: 'LCQ-NET-011', detail: { ...detail, thresholdMs: cfg.modelWarnMs } }); }
+  } catch {
+    // lcq-allow: 观察用的聚合不得影响回合收尾（配置异常、日志故障都吞掉）
+  }
+}
+
+/** 当前耗时统计快照（诊断导出与反馈包取用）。永不抛错。 */
+export function getPerfStats(): PerfStats {
+  const cfg = perfConfig();
+  const byPath: Record<string, number> = {};
+  for (const s of perfSamples) byPath[s.path] = (byPath[s.path] ?? 0) + 1;
+  return {
+    window: { samples: perfSamples.length, max: cfg.sampleWindow },
+    turn: series(perfSamples.map(s => s.turnMs), cfg.minSamplesForPercentile),
+    model: series(perfSamples.flatMap(s => (s.modelMs == null ? [] : [s.modelMs])), cfg.minSamplesForPercentile),
+    thresholds: { turnWarnMs: cfg.turnWarnMs, modelWarnMs: cfg.modelWarnMs },
+    warned: { turn: turnWarnCount, model: modelWarnCount },
+    byPath,
+  };
+}
+
+registerStatsProvider('perf', getPerfStats);
 
 const REASONING_RE = /<(?:think|reasoning)|"reasoning"|reasoning_content/i;
 
@@ -47,6 +119,7 @@ export function noteTurnPath(path: TurnTelemetryPath): void {
 export function beginTurnTelemetry(path: TurnTelemetryPath): TurnTelemetry {
   active = {
     path,
+    beganAt: now(),
     promptBytes: 0,
     requestStartedAt: null,
     responseHeadersAt: null,
@@ -138,6 +211,7 @@ export function endTurnTelemetry(): TurnTelemetry | null {
   if (!active) return last;
   last = active;
   active = null;
+  recordPerf(last);
   const line = `[回合埋点] ${JSON.stringify(last)}`;
   // 单幕试验必须总能在控制台拆时间；完整 Legacy 仍走 info，受调试开关约束。
   if (last.path === 'legacy_pilot' || last.path === 'modular') console.error(line);
@@ -155,6 +229,9 @@ export function getLastTurnTelemetry(): TurnTelemetry | null {
 
 export function resetTurnTelemetryForTests(): void {
   embeddingCount = 0;
+  perfSamples.length = 0;
+  turnWarnCount = 0;
+  modelWarnCount = 0;
   active = null;
   last = null;
 }

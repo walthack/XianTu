@@ -91,6 +91,8 @@ export const ERROR_CODES = {
   'LCQ-NET-007': spec('warn', 'userCloudStorage', '后端云存储请求失败，回退本地缓存'),
   'LCQ-NET-008': spec('warn', 'aiService', 'AI 请求失败，退避等待后自动重试'),
   'LCQ-NET-009': spec('warn', 'aiService', 'AI 请求自动重试未能成功，已转为玩家可读提示'),
+  'LCQ-NET-010': spec('warn', 'turnTelemetry', '回合总耗时超过阈值（perf.turnWarnMs）'),
+  'LCQ-NET-011': spec('warn', 'turnTelemetry', '模型调用耗时超过阈值（perf.modelWarnMs）'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),

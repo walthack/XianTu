@@ -181,7 +181,7 @@ test('默认（不传选项）不含存档：不会去读存档，文件清单�
     const pack = await feedback.buildFeedbackPack({}, { loadSave: async () => { reads++; return { slot: 's', data: sampleSave() }; } });
     assert.equal(reads, 0, '没勾选就不碰存档');
     const files = readZip(pack.bytes);
-    assert.deepEqual([...files.keys()].sort(), ['logs.json', 'manifest.json', 'model-config.json', 'version.json']);
+    assert.deepEqual([...files.keys()].sort(), ['logs.json', 'manifest.json', 'model-config.json', 'perf.json', 'version.json']);
     assert.equal(files.has('save.json'), false);
     assert.deepEqual(jsonOf(files, 'manifest.json').save, { requested: false, included: false });
     assert.ok(!allText(files).includes('NARR_SECRET_TEXT_1'));
@@ -197,7 +197,7 @@ test('勾选 includeSave：多出 save.json（可解析），manifest 记槽位�
   await withEnv({}, async () => {
     const pack = await feedback.buildFeedbackPack({ includeSave: true }, { loadSave: async () => ({ slot: '存档1', data: sampleSave() }) });
     const files = readZip(pack.bytes);
-    assert.deepEqual([...files.keys()].sort(), ['logs.json', 'manifest.json', 'model-config.json', 'save.json', 'version.json']);
+    assert.deepEqual([...files.keys()].sort(), ['logs.json', 'manifest.json', 'model-config.json', 'perf.json', 'save.json', 'version.json']);
     const save = jsonOf(files, 'save.json');
     assert.equal(save.角色.身份.名字, '李逍遥');
     assert.equal(save.元数据.存档名, '测试档');
@@ -205,7 +205,7 @@ test('勾选 includeSave：多出 save.json（可解析），manifest 记槽位�
     assert.deepEqual(manifest.save, { requested: true, included: true, slot: '存档1', narrativeRedacted: true });
     assert.deepEqual(manifest, pack.manifest);
     for (const entry of manifest.files) assert.equal(files.get(entry.name).length, entry.bytes, entry.name);
-    assert.deepEqual(manifest.files.map(entry => entry.name).sort(), ['logs.json', 'model-config.json', 'save.json', 'version.json']);
+    assert.deepEqual(manifest.files.map(entry => entry.name).sort(), ['logs.json', 'model-config.json', 'perf.json', 'save.json', 'version.json']);
   });
 });
 
