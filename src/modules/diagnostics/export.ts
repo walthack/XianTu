@@ -15,15 +15,19 @@ export async function buildLogExport(): Promise<LogExport> {
 
 export const exportFileName = (at: Date = new Date()): string => `lcq-log-${at.toISOString().replace(/[:.]/g, '-')}.json`;
 
+/** 经临时 <a download> 触发浏览器下载（日志导出与反馈包共用）。 */
+export function saveBlob(blob: Blob, fileName: string): void {
+  const url = URL.createObjectURL(blob), link = document.createElement('a');
+  link.href = url; link.download = fileName;
+  document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
 /** 触发下载；成功返回 true，失败记 LCQ-UI-003 并返回 false（不抛错）。 */
 export async function downloadLogs(): Promise<boolean> {
   try {
     await logStore.flush();
-    const blob = new Blob([JSON.stringify(await buildLogExport(), null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob), link = document.createElement('a');
-    link.href = url; link.download = exportFileName();
-    document.body.appendChild(link); link.click(); link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 0);
+    saveBlob(new Blob([JSON.stringify(await buildLogExport(), null, 2)], { type: 'application/json' }), exportFileName());
     return true;
   } catch (error) {
     logError('LCQ-UI-003', error);

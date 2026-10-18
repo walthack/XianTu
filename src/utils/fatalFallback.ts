@@ -4,6 +4,7 @@
  * 被 src/main.ts 引用；doc / 导出 / 重新载入都可注入，便于测试。
  */
 import { downloadLogs } from '@/modules/diagnostics/export';
+import { downloadFeedbackPack, feedbackConfig, type FeedbackResult } from '@/modules/diagnostics/feedback';
 import { logError } from '@/modules/diagnostics/log';
 
 export const FATAL_FALLBACK_ID = 'lcq-fatal-fallback';
@@ -18,6 +19,7 @@ export interface FallbackNode {
   id: string;
   textContent: string | null;
   disabled?: boolean;
+  checked?: boolean;
   type?: string;
   style: { cssText: string };
   onclick: ((ev?: unknown) => unknown) | null;
@@ -29,6 +31,8 @@ export interface FatalFallbackOptions {
   code?: string;
   doc?: FallbackDoc;
   exportLogs?: () => Promise<boolean> | boolean;
+  /** 导出反馈包（日志 + 版本 + 模型配置摘要，可选存档）；includeSave 来自界面上的勾选框，默认不勾。 */
+  exportFeedback?: (options: { includeSave: boolean }) => Promise<FeedbackResult> | FeedbackResult;
   reload?: () => void;
 }
 
@@ -41,6 +45,7 @@ export function showFatalFallback(options: FatalFallbackOptions = {}): boolean {
   const doc = options.doc ?? (typeof document === 'undefined' ? undefined : (document as unknown as FallbackDoc));
   if (!doc?.body || doc.getElementById(FATAL_FALLBACK_ID)) return false;
   const exportLogs = options.exportLogs ?? downloadLogs;
+  const exportFeedback = options.exportFeedback ?? (({ includeSave }) => downloadFeedbackPack({ includeSave }));
   const reload = options.reload ?? (() => location.reload());
 
   const el = (tag: string, text: string | null, style: string): FallbackNode => {
@@ -64,6 +69,24 @@ export function showFatalFallback(options: FatalFallbackOptions = {}): boolean {
     status.textContent = ok ? '日志已导出，反馈问题时请附上该文件。' : '日志导出失败，请换个浏览器再试，或直接重新载入。';
     exportButton.disabled = false;
   };
+  const saveBox = el('input', null, 'margin-right:6px;');
+  saveBox.type = 'checkbox';
+  saveBox.checked = false;
+  const saveLabel = el('label', null, 'display:block;margin-top:14px;font-size:13px;color:#b9a888;');
+  saveLabel.appendChild(saveBox);
+  saveLabel.appendChild(el('span', `附带当前存档（含叙事原文${feedbackConfig().redactSaveNarrative ? '，已按配置脱敏为字数' : '，不脱敏、会原样带出'}；不勾选则不含存档）`, 'vertical-align:middle;'));
+  const feedbackButton = el('button', '导出反馈包', BUTTON_STYLE);
+  feedbackButton.type = 'button';
+  feedbackButton.onclick = async () => {
+    feedbackButton.disabled = true;
+    status.textContent = '正在导出…';
+    let result: FeedbackResult = { ok: false, saveIncluded: false };
+    try { result = await exportFeedback({ includeSave: saveBox.checked === true }); } catch { /* lcq-allow: 导出失败只在界面提示，downloadFeedbackPack 自身已记 LCQ-UI-006 */ }
+    status.textContent = !result.ok ? '反馈包导出失败，请改用「导出日志」，或换个浏览器再试。'
+      : saveBox.checked && !result.saveIncluded ? `反馈包已导出，但没能带上存档（${result.saveNote ?? '原因未知'}）。`
+      : '反馈包已导出，反馈问题时请附上该文件。';
+    feedbackButton.disabled = false;
+  };
   const reloadButton = el('button', '重新载入', BUTTON_STYLE);
   reloadButton.type = 'button';
   reloadButton.onclick = () => { reload(); };
@@ -71,7 +94,9 @@ export function showFatalFallback(options: FatalFallbackOptions = {}): boolean {
   card.appendChild(el('div', '出错了', 'font-size:20px;font-weight:bold;color:#e8c987;margin-bottom:8px;'));
   card.appendChild(el('div', '游戏遇到了无法继续的问题。你的存档不会因此被清除或改写；建议先点「导出日志」留存，再点「重新载入」重试。', 'font-size:15px;'));
   if (options.code) card.appendChild(el('div', `错误码：${options.code}`, 'margin-top:8px;font-size:13px;color:#b9a888;'));
+  card.appendChild(saveLabel);
   card.appendChild(exportButton);
+  card.appendChild(feedbackButton);
   card.appendChild(reloadButton);
   card.appendChild(status);
   overlay.appendChild(card);

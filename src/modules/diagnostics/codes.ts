@@ -80,6 +80,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-015': spec('warn', 'saveValidation', '读档校验发现非致命问题（缺字段或类型不对），已照常加载'),
   'LCQ-SAV-016': spec('warn', 'saveValidation', '读档校验发现存档结构损坏，已回退到滚动备份', true),
   'LCQ-SAV-017': spec('warn', 'saveValidation', '读档校验发现存档结构损坏，且没有可用的滚动备份，已拒绝加载', true),
+  'LCQ-SAV-018': spec('warn', 'feedbackPack', '反馈包读取当前存档失败，已不带存档导出'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),
@@ -100,6 +101,7 @@ export const ERROR_CODES = {
   'LCQ-UI-003': spec('warn', 'diagnostics', '导出日志失败'),
   'LCQ-UI-004': spec('error', 'vue', 'Vue 组件未捕获异常（app.config.errorHandler）', true),
   'LCQ-UI-005': spec('error', 'startup', '启动阶段失败，已显示兜底界面'),
+  'LCQ-UI-006': spec('warn', 'diagnostics', '导出反馈包失败'),
 } as const satisfies Record<string, CodeSpec>;
 
 export type ErrorCode = keyof typeof ERROR_CODES;

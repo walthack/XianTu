@@ -29,7 +29,7 @@ function fakeDoc() {
 }
 const buttonOf = (doc, text) => doc.all('button').find(button => button.textContent === text);
 
-test('showFatalFallback：渲染中文提示、错误码与「导出日志」「重新载入」两个按钮，样式全是内联', () => {
+test('showFatalFallback：渲染中文提示、错误码与「导出日志」「导出反馈包」「重新载入」三个按钮，样式全是内联', () => {
   const doc = fakeDoc();
   assert.equal(fb.showFatalFallback({ doc, code: 'LCQ-UI-005' }), true);
   assert.ok(doc.getElementById(fb.FATAL_FALLBACK_ID));
@@ -72,7 +72,7 @@ test('重复触发不重复渲染；没有 body 时不渲染', () => {
   assert.equal(fb.showFatalFallback({ doc }), false);
   assert.equal(fb.showFatalFallback({ doc, code: 'LCQ-UI-005' }), false);
   assert.equal(doc.body.children.length, 1);
-  assert.equal(doc.all('button').length, 2);
+  assert.equal(doc.all('button').length, 3);
   assert.equal(fb.showFatalFallback({ doc: { body: null, getElementById: () => null, createElement: () => ({}) } }), false);
 });
 
@@ -111,7 +111,7 @@ test('failStartup 记 LCQ-UI-005（detail.stage）并显示兜底界面，重复
   await quiet(() => { fb.failStartup('migrateData', new Error('迁移炸了'), { doc }); fb.failStartup('mount', new Error('又炸'), { doc }); });
   const entries = store.logStore.recent(10).filter(item => item.code === 'LCQ-UI-005');
   assert.deepEqual(entries.map(item => item.detail.stage).sort(), ['migrateData', 'mount']);
-  assert.equal(doc.all('button').length, 2, '界面只渲染一份');
+  assert.equal(doc.all('button').length, 3, '界面只渲染一份（导出日志 / 导出反馈包 / 重新载入）');
   assert.ok(doc.all('div').some(div => (div.textContent ?? '').includes('LCQ-UI-005')));
   await log.resetLogState();
 });

@@ -30,7 +30,7 @@ export function scrubString(text: string, cfg: DiagnosticsConfig = diagnosticsCo
   return chars.length > limit ? `${chars.slice(0, limit).join('')}…（共${chars.length}字）` : out;
 }
 
-const isSecretKey = (key: string, cfg: DiagnosticsConfig): boolean => {
+export const isSecretKey = (key: string, cfg: DiagnosticsConfig): boolean => {
   const k = normalizeKey(key);
   return cfg.redactKeys.some(entry => { const e = normalizeKey(entry); return k === e || k.endsWith(e); });
 };

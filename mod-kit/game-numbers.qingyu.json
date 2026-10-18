@@ -1320,5 +1320,10 @@
     "jitter": 0.25,
     "retryOnTimeout": false,
     "retryAfterMaxMs": 20000
+  },
+  "feedback": {
+    "redactSaveNarrative": true,
+    "narrativePaths": [["系统", "历史", "叙事"], ["社交", "记忆"]],
+    "narrativeKeepKeys": ["type", "time"]
   }
 }

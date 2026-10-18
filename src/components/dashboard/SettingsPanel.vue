@@ -392,6 +392,16 @@
 
           <div class="setting-item">
             <div class="setting-info">
+              <label class="setting-name">{{ t('导出反馈包') }}</label>
+              <span class="setting-desc">{{ t('把日志、版本信息和模型连接摘要打成一个文件，反馈问题时附上；存档默认不含，勾选才带') }}</span>
+            </div>
+            <div class="setting-control">
+              <FeedbackPackExport />
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
               <label class="setting-name">{{ t('导出设置') }}</label>
               <span class="setting-desc">{{ t('备份当前设置配置') }}</span>
             </div>
@@ -416,6 +426,7 @@ import { debug } from '@/utils/debug';
 import { useI18n } from '@/i18n';
 import { DEFAULT_MUSIC_SETTINGS, notifyMusicSettingsChanged } from '@/utils/musicEngine';
 import TextReplaceRulesModal from '@/components/common/TextReplaceRulesModal.vue';
+import FeedbackPackExport from '@/components/common/FeedbackPackExport.vue';
 import PromptManagementPanel from '@/components/dashboard/PromptManagementPanel.vue';
 import type { TextReplaceRule } from '@/types/textRules';
 import { useCharacterStore } from '@/stores/characterStore';
