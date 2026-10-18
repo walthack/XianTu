@@ -2,6 +2,7 @@
 // 同类正向重复按次数递减（窗口外重算，敌意不递减）；“到顶/已习以为常”交给叙事；major 看实际生效的变化。数值全读配置。
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { loadTs } from './loadTs.mjs';
 import { DUAN_QIANG, NING_YU, WANG_ZHE, advanceTurn, itemEntry, makeSave, mods, profileOf, runJudged, runtimeOf, ticket } from './freeActionFixture.mjs';
 
 const N = mods.numbers, cfg = () => mods.config.freeActionConfig();
@@ -13,6 +14,7 @@ const settle = (save, tk, deps) => mods.settle.settleFreeAction(save, tk, undefi
 const days = (save, n) => { save.元数据.时间.日 += n; };
 const patched = async (patch, restore, fn) => { N.applyGameNumbers(patch); try { return await fn(); } finally { N.applyGameNumbers(restore); } };
 const note = (save, id, kind) => mods.facts.affinityNoteText(kind, { player: save.角色.身份.名字, target: profileOf(save, id).名字 });
+const runtimePromise = loadTs('../src/modules/scenarioMods/runtime.ts');
 const base = () => mods.config.variantSpecOf('give', 'gift').base;
 const band = () => cfg().affinity.floatBand;
 
@@ -232,7 +234,7 @@ test('A16 账有上限：repeatLedger 随 budgetKeep 修剪；旧档没有这个
   assert.ok(`x${keep + 14}:give` in trimmed, '留下最新的');
 });
 
-test('A17 同拍判据可复用：affinityBeatTaken 看本拍自由行动写过，或有待取走的作者回执（共历事件通道接入时用它）', () => {
+test('A17 同拍判据可复用：affinityBeatTaken 看本拍自由行动写过，或有待取走的作者回执（共历事件通道已接入）', () => {
   const save = saveWith({ favor: { [DUAN_QIANG]: 50 } });
   const turn = () => save.系统.历史.叙事.length;
   assert.equal(mods.state.affinityBeatTaken(save, DUAN_QIANG, turn()), false);
@@ -243,4 +245,41 @@ test('A17 同拍判据可复用：affinityBeatTaken 看本拍自由行动写过�
   (runtimeOf(save).pendingLineAffinityGrants ||= []).push({ characterId: DUAN_QIANG });
   assert.equal(mods.state.affinityBeatTaken(save, DUAN_QIANG, turn()), true);
   assert.equal(mods.state.affinityBeatTaken(save, WANG_ZHE, turn()), false);
+});
+
+/** 往存档塞一个待结算共历事件（已完成、未记入 affinityGrantedEventIds）。 */
+const queueShared = (save, characterId, eventId = 'test.shared.beat') => {
+  const r = runtimeOf(save);
+  r.events.push({ id: eventId, name: '共闯试炼', critical: true, relatedCharacterIds: [characterId] });
+  (r.completedEventIds ||= []).push(eventId);
+  return eventId;
+};
+
+test('A18 共历被同拍自由行动拦住：本拍已送礼改过好感，再推进共历事件不加分，但事件仍登记', async () => {
+  const { advanceScenarioRuntime } = await runtimePromise;
+  const save = saveWith({ favor: { [DUAN_QIANG]: 50 } });
+  settle(save, gift(DUAN_QIANG));
+  const afterGift = favorOf(save, DUAN_QIANG);
+  const eventId = queueShared(save, DUAN_QIANG);
+  const { saveData, affinityGrants } = advanceScenarioRuntime(save);
+  assert.equal(favorOf(saveData, DUAN_QIANG), afterGift, '同拍共历不得再改好感');
+  assert.ok(!(affinityGrants || []).some(g => g.characterId === DUAN_QIANG && g.eventId === eventId));
+  assert.ok(runtimeOf(saveData).affinityGrantedEventIds.includes(eventId), '事件仍须登记，避免下拍补发');
+});
+
+test('A19 共历写入后同拍自由行动被拦：先结算共历好感，同拍再送礼好感不动', async () => {
+  const { advanceScenarioRuntime } = await runtimePromise;
+  const save = saveWith({ favor: { [DUAN_QIANG]: 50 } });
+  const eventId = queueShared(save, DUAN_QIANG);
+  const { saveData } = advanceScenarioRuntime(save);
+  assert.equal(favorOf(saveData, DUAN_QIANG), 58, 'critical 共历 +8');
+  assert.ok(runtimeOf(saveData).affinityGrantedEventIds.includes(eventId));
+  assert.equal(mods.state.affinityBeatTaken(saveData, DUAN_QIANG, saveData.系统.历史.叙事.length), true);
+  const before = favorOf(saveData, DUAN_QIANG);
+  // advance 用了 structuredClone，礼物在克隆档上；补一件再结算自由行动。
+  (saveData.角色.背包.物品 ||= {})[GIFT] = itemEntry(GIFT, { 数量: 4 });
+  const r = settle(saveData, gift(DUAN_QIANG));
+  assert.equal(favorOf(saveData, DUAN_QIANG), before, '同拍自由行动不得再改好感');
+  assert.equal(r.affinity.applied, false);
+  assert.equal(r.ok, true);
 });

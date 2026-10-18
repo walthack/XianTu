@@ -810,5 +810,5 @@
 - **叙事事实**：递减到 0 → `free.fact.affinity.worn`；好感已到上限或被上限截短 → `free.fact.affinity.capped`。追加在该次结算的事实行末尾，也会随幂等重放原样返回。没有加持久回执。
 - **大事**：`major` 看实际生效的变化（`applied` 且 `|to − from| ≥ majorAbs`），不再看计划值。
 - **冷却**：没有给 flirt/kiss/invite/gift 配 `cooldownMinutes`——那会让闸门把整件事写成“没发生”；用递减窗口代替。需要时仍可在变体行上加。
-- **共历事件通道未纳入“同一拍只结算一次”**：该通道在 `runtime.ts`（本轮禁改）。已导出 `state.ts` 的 `affinityBeatTaken(save, targetId, turn)` 作为判据，接入需要在 `settleSharedExperienceAffinity` 的循环里改动。
+- **共历事件通道已接入“同一拍只结算一次”**：`settleSharedExperienceAffinity` 写好感前查 `affinityBeatTaken`，写入成功后记 `affinityTurn`（与自由行动共用）。
 

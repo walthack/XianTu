@@ -68,6 +68,8 @@ import {
   type StanceState,
 } from './affinityLadder';
 import { affinityCapFor } from './affinityCaps';
+import { getNarrativeTurn } from '@/utils/actionGate';
+import { affinityBeatTaken, writableFreeActionState } from './freeAction/state';
 import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
 import { lineCriticalFrozen } from './secondaryLines';
 import { currentLocation, locationFromPosition, noteNanhuangArrival, settleNanhuangForcedTravel, syncNanhuangRailTravel, type NanhuangTravelLedger } from './travel/travelLedger';
@@ -3655,6 +3657,7 @@ function settleSharedExperienceAffinity(
     const nameById = new Map((rt.canon?.characters || []).map(item => [item.id, item.name]));
     const eventById = new Map((rt.events || []).map(event => [event.id, event]));
 
+    const turn = getNarrativeTurn(saveData);
     for (const eventId of pending) {
       const event = eventById.get(eventId);
       granted.add(eventId);
@@ -3670,8 +3673,11 @@ function settleSharedExperienceAffinity(
         const cap = affinityCapFor(characterId, label, name);
         const ceiling = cap ? cap.cap : 100;
         if (current >= ceiling) continue;
+        // 与自由行动共用同一拍：本拍已改过此人好感则跳过，事件仍记入 affinityGrantedEventIds。
+        if (affinityBeatTaken(saveData, characterId, turn)) continue;
         const settled = clampAffinity(Math.min(ceiling, current + grant));
         npc.好感度 = settled;
+        writableFreeActionState(saveData).affinityTurn[characterId] = turn;
         // 记录明细：引擎侧的变化必须能进玩家可见的状态流，否则因果只存在于代码里。
         grants.push({ name, characterId, from: current, to: settled, eventId, eventName: event.name });
       }

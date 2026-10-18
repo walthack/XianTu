@@ -16,6 +16,15 @@ const CRITICAL_AFFINITY_GRANT = 8;
 
 const runtimeOf = save => save.世界.状态.剧本模组;
 
+/** 叙事拍 = getNarrativeTurn；本文件用 advance 模拟逐拍时须推进叙事长度，否则共历/自由行动同拍闸会串拍。 */
+function bumpNarrativeBeat(save) {
+  save.系统 ||= {};
+  save.系统.历史 ||= {};
+  (save.系统.历史.叙事 ||= []).push({ role: 'assistant', content: '…' });
+  return save;
+}
+
+
 function reloadSave(save) {
   return JSON.parse(JSON.stringify(save));
 }
@@ -135,7 +144,8 @@ async function productionSave(api, stage) {
     api.buildStrictScenarioInitialization(stage, '2026-09-13T00:00:00.000Z'),
   );
   seedExistingXieyiRelation(save);
-  return api.advanceScenarioRuntime(save).saveData;
+  const next = api.advanceScenarioRuntime(save).saveData;
+  return bumpNarrativeBeat(next);
 }
 
 function playAvailableAction(api, save) {
@@ -154,7 +164,8 @@ function playAvailableAction(api, save) {
   } else if (!recorded.attempted) {
     throw new Error(`prior action blocked: ${recorded.reason} ${action.actionId}`);
   }
-  return api.advanceScenarioRuntime(save).saveData;
+  const next = api.advanceScenarioRuntime(save).saveData;
+  return bumpNarrativeBeat(next);
 }
 
 // 第106章战前锁（裁定 #168）：默认选【支援】，与此前逐拍点第一个可用动作的行为一致。
@@ -165,7 +176,7 @@ async function walkToEntrustment(api, stage, supportChoice = 'support_xieyi_coun
     const lockChoice = api.getCurrentStoryEventActions(save).find(item => item.actionId === supportChoice);
     if (lockChoice) {
       assert.equal(api.recordStoryEventStructuredAction(save, lockChoice).attempted, true, supportChoice);
-      save = api.advanceScenarioRuntime(save).saveData;
+      save = bumpNarrativeBeat(api.advanceScenarioRuntime(save).saveData);
       runtimeOf(save).worldTurn = (Number(runtimeOf(save).worldTurn) || 0) + 1;
       continue;
     }
@@ -175,7 +186,7 @@ async function walkToEntrustment(api, stage, supportChoice = 'support_xieyi_coun
         // 上一拍在同一轮 advance 里才写入 completedEventIds，共历好感要再推一轮才入账。
         // 这一轮不是玩家行动，不能消耗场外 afterStallTurns 窗口。
         const stallBefore = Number(runtimeOf(save).stallTurns) || 0;
-        save = api.advanceScenarioRuntime(save).saveData;
+        save = bumpNarrativeBeat(api.advanceScenarioRuntime(save).saveData);
         runtimeOf(save).stallTurns = stallBefore;
         assertNoFateInjected(save, '走到命运拍');
         assert.ok(
@@ -195,9 +206,9 @@ async function walkToEntrustment(api, stage, supportChoice = 'support_xieyi_coun
 }
 
 function settleChoice(api, save) {
-  let next = api.advanceScenarioRuntime(save).saveData;
+  let next = bumpNarrativeBeat(api.advanceScenarioRuntime(save).saveData);
   runtimeOf(next).worldTurn = (Number(runtimeOf(next).worldTurn) || 0) + 1;
-  next = api.advanceScenarioRuntime(next).saveData;
+  next = bumpNarrativeBeat(api.advanceScenarioRuntime(next).saveData);
   return next;
 }
 
@@ -220,7 +231,7 @@ function stallInPlaceUntilEntrustmentSettled(api, save, { pendingId } = {}) {
         '阈值前须保持 rescue pending，settleAbandoned 不得因同场提前清掉',
       );
     }
-    save = api.advanceScenarioRuntime(save).saveData;
+    save = bumpNarrativeBeat(api.advanceScenarioRuntime(save).saveData);
     if (
       runtimeOf(save).flags['character.xie_yi.status'] === 'dead'
       || runtimeOf(save).flags['event.xieyi_entrustment.done'] === true
@@ -580,7 +591,7 @@ test('B1 现场签发 rescue pending 后原地停滞到 afterStallTurns，默认
   assertNoFateInjected(save, '签发 pending 后');
 
   save = stallInPlaceUntilEntrustmentSettled(api, save, { pendingId: issued.proposal.id });
-  save = api.advanceScenarioRuntime(save).saveData;
+  save = bumpNarrativeBeat(api.advanceScenarioRuntime(save).saveData);
   assert.match(String(save.角色.位置.描述 || ''), /鬼王峒/, '默认收束后仍须在命运拍现场');
   assertDeadFate(save, '原地停滞默认收束');
   assertXieyiCriticalAffinity(save, beforeFav, '原地停滞默认收束');
@@ -679,7 +690,7 @@ test('第106章锁：临时协定先完成准备步，再二选一【支援】/�
     const fork = reloadSave(save);
     const option = api.getCurrentStoryEventActions(fork).find(item => item.actionId === choice);
     api.recordStoryEventStructuredAction(fork, option);
-    const after = api.advanceScenarioRuntime(fork).saveData;
+    const after = bumpNarrativeBeat(api.advanceScenarioRuntime(fork).saveData);
     assert.ok(runtimeOf(after).completedEventIds.includes('lcq.event.s05b_09_temporary_pact_with_xiaozi'), choice);
     assertNoFateInjected(after, `${choice} 不提前决定谢艺命运`);
   }
