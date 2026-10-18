@@ -23,6 +23,8 @@ const rowsOf = (save, id) => mods.statusRead.actorStatusRecords(save, id).map(r 
 function fixture({ status = 'unconscious', progress = 50 } = {}) {
   const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, chapter: 40, realm: mods.realm.levelName(4) });
   realmOf(save).当前进度 = progress;
+  // 可夺量含六司差：玩家先天六司对齐凝羽（权重项），Δa=0；章 40 凝羽 4 级、玩家 4 级初期，Δp=0 → 可夺量就是 基数×lossRatio。
+  for (const key of Object.keys(resolvedDrain().amount.attrWeights)) save.角色.身份.先天六司[key] = profileOf(save, NING_YU).先天六司[key];
   save.角色.属性.灵气.当前 = 10;
   if (status) assert.ok(mods.actorStatus.applyActorStatus(save, NING_YU, status, { sourceId: 'test' }).ok);
   return save;
@@ -184,12 +186,14 @@ test('无冷却、递减与恢复：连着夺不被冷却拦；每次夺走量�
   assert.equal(mods.state.readFreeActionState(save).drainLedger[NING_YU].count, 5);
 });
 
-test('drain_empty：目标已无进度可夺 → 闸门不过，零写入', () => {
-  const save = fixture({ progress: 0 });
+test('drain_empty：玩家功力远低于对方，可夺量压到 0 → 闸门不过，零写入；文案不再说“已没有”', () => {
+  const save = fixture();
+  save.角色.属性.境界.名称 = mods.realm.levelName(0); // 无修为对 4 级：Δp = −4
   const before = structuredClone(save);
   const prepared = mods.plan.prepareFreeAction(save, drainTicket());
   assert.deepEqual([prepared.kind, prepared.reason], ['refused', 'drain_empty']);
   assert.deepEqual(save, before);
+  assert.match(prepared.facts[0], /功力深厚.*夺不动其真元/);
 });
 
 test('同拍冲突：攻击 + 夺元报同一目标 → 留夺元（|base| 更大），攻击被丢并发“未发生”事实', () => {
@@ -212,6 +216,13 @@ test('配置体检：drainProgress 参数残缺 / 状态不在目录 / 自损比
     };
     patch(v => { delete v.drain; }, 'drainProgress 缺 drain');
     patch(v => { v.drain.lossRatio = 0; }, 'lossRatio');
+    patch(v => { delete v.drain.amount; }, 'drain.amount 缺失');
+    patch(v => { v.drain.amount.attrWeights = {}; }, 'attrWeights');
+    patch(v => { v.drain.amount.attrWeights = { 根骨: 0 }; }, 'attrWeights');
+    patch(v => { v.drain.amount.attrStep = 'x'; }, 'attrStep');
+    patch(v => { v.drain.amount.levelStep = null; }, 'levelStep');
+    patch(v => { v.drain.amount.phasesPerLevel = 0; }, 'phasesPerLevel');
+    patch(v => { v.drain.amount.unknownTargetAttr = 'factors.nope'; }, 'unknownTargetAttr');
     patch(v => { v.drain.afterStatuses = ['nope.status']; }, 'afterStatuses');
     patch(v => { delete v.drain.statusMinutes['qi.drained']; }, 'statusMinutes');
     patch(v => { v.drain.diminish.perUse = 2; }, 'perUse');

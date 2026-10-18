@@ -18,7 +18,7 @@ import npcProfiles from '../../../../mod-kit/entity-ledger/npc-profiles.json';
 import { applyActorStatus } from './actorStatus';
 import { withEncounteredTarget } from './encounter';
 import { applyItemOnUse } from './itemUse';
-import { checkGates, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
+import { checkGates, drainAmount, drainBase, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
 import { freeActionConfig, intimacyConfig, selfBuffOf, variantSpecOf, type VariantSpec } from './config';
 import { affinityNoteText, aftermathHpText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
 import { failureAftermathEffects, selfBuffEffect } from './outcomeEffects';
@@ -95,18 +95,18 @@ interface Planned { resultKey: string; delta: number; extraFacts: string[]; appl
 /**
  * 夺取类：目标“当前进度”按配置比例扣下（不改境界名/阶段/下一级所需，不致死），玩家灵气按实际夺走量回收；
  * 玩家自己的境界进度不涨；每次施行先扣玩家气血（上限 × drain.selfCostHpRatio，闸门已保证付得起），无冷却。好感走 base × 轻重 × 敌意结果系数，和攻击同一条路径（beatClamp）。
- * 夺走量 = round(need × lossRatio × 轻重 × 结果档系数 × 递减) 夹在 [0, min(单次上限, 目标现有进度)]；递减按目标记次数，随时间恢复。
+ * 夺走量 = round(默认可夺量 × 轻重 × 结果档系数 × 递减) 夹在 [0, 单次上限]（默认可夺量见 gates.ts drainAmount，闸门同一个函数）；不看目标现有进度，扣减后进度不低于 0；递减按目标记次数，随时间恢复。
  * 夺走量为 0 = 无所获：不挂状态、不记次数，事实取 failure 档。
  */
 function planDrain(save: SaveData, ticket: FreeActionTicket, spec: VariantSpec, outcome: NonNullable<JudgementResolution['outcome']>, key: string, slots: FactSlots): Planned {
   const cfg = freeActionConfig(), drain = spec.drain!, targetId = ticket.targetId!, degree = cfg.degreeFactor[ticket.degree];
-  const realm = (relationshipOf(save as any, targetId)!.profile as any).境界, need = Number(realm.下一级所需), now = sceneTime(save);
+  const realm = (relationshipOf(save as any, targetId)!.profile as any).境界, base = drainBase(save, targetId), now = sceneTime(save);
   const ledger = readFreeActionState(save).drainLedger[targetId];
   const effCount = ledger ? Math.max(0, ledger.count - Math.floor((now - ledger.lastAt) / drain.diminish.recoverMinutes)) : 0;
   const diminish = Math.max(drain.diminish.floor, Math.pow(drain.diminish.perUse, effCount));
-  const full = Math.round(need * drain.lossRatio);
-  const room = Math.round(need * drain.perUseCapRatio), current = Number(realm.当前进度) || 0;
-  const loss = clamp(Math.round(need * drain.lossRatio * degree * drain.outcomeFactor[outcome] * diminish), 0, Math.min(room, current));
+  const full = Math.round(base * drain.lossRatio);
+  const room = Math.round(base * drain.perUseCapRatio), current = Number(realm?.当前进度) || 0;
+  const loss = clamp(Math.round(drainAmount(save, targetId, spec) * degree * drain.outcomeFactor[outcome] * diminish), 0, room);
   const drained = loss > 0 || drain.outcomeFactor[outcome] <= 0;
   const resultKey = spec.npcOutcomes![drained ? outcome : 'failure'];
   const backlash = outcome === 'critical_failure' ? spec.backlash?.critical_failure : undefined, selfCost = drainSelfCost(save, spec);
@@ -114,7 +114,7 @@ function planDrain(save: SaveData, ticket: FreeActionTicket, spec: VariantSpec, 
     // 最可能被拒的先写：玩家反噬 → 目标状态 → 目标进度/账 → 玩家灵气。
     if (backlash && !applyActorStatus(save, playerIdOf(save)!, backlash, { sourceId: key }).ok) return false;
     if (loss > 0) for (const id of drain.afterStatuses) if (!applyActorStatus(save, targetId, id, { sourceId: key, minutes: drain.statusMinutes[id] }).ok) return false;
-    realm.当前进度 = current - loss;
+    if (realm) realm.当前进度 = Math.max(0, current - loss); // 没有境界记录的档案没有进度条可扣
     const state = writableFreeActionState(save);
     if (loss > 0) state.drainLedger[targetId] = { count: effCount + 1, lastAt: now };
     const qi = (save as any).角色.属性.灵气;

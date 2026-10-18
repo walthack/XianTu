@@ -1,5 +1,5 @@
 {
-  "version": "4d74f87a082a25fa",
+  "version": "fc491e02776609e6",
   "contracts": [
     {
       "meta": {
@@ -12459,12 +12459,12 @@
     "free.fact.gate.item_mismatch": "{player}手里的东西对不上这件事。",
     "free.fact.gate.equipped_or_story": "那件东西{player}不能随手送人。",
     "free.fact.gate.nothing_to_treat": "{target}身上并没有这种能治的伤。",
-    "free.fact.gate.level_too_low": "{player}功力不及{target}，传功行不通。",
+    "free.fact.gate.level_too_low": "{player}功力不及{target}，需修到{level}级方可传功。",
     "free.fact.gate.level_unknown": "{target}的底子{player}摸不清，不敢贸然传功。",
     "free.fact.gate.no_resource": "{player}真气不足，无法传功。",
     "free.fact.gate.cooldown": "{player}刚传过功，真气未复，此刻不宜再传。",
-    "free.fact.gate.guard_up": "{target}尚有防备，{player}这一下没能成事。",
-    "free.fact.gate.drain_empty": "{target}身上已没有可夺的真元。",
+    "free.fact.gate.guard_up": "{target}尚有防备，须其昏迷、被制住或重伤，{player}才夺得了元。",
+    "free.fact.gate.drain_empty": "{target}功力深厚，{player}一时夺不动其真元。",
     "free.fact.gate.hp_too_low": "{player}气血不足，经不起施术所耗，这一下没能施行。",
     "free.fact.gate.budget_full": "{target}眼下已受不住更多的传功。",
     "free.fact.gate.protected": "{target}的安危不容这样处置。",

@@ -7,7 +7,7 @@ import { CONTENT_PACKS, packText } from '@/modules/contentPacks';
 import { enabledVariants, freeActionConfig, resultKeysOf, variantSpecOf, type VariantSpec } from './config';
 import { aftermathConfig } from './outcomeEffects';
 
-export interface FactSlots { player: string; target: string; item?: string; status?: string; label?: string; amount?: string }
+export interface FactSlots { player: string; target: string; item?: string; status?: string; label?: string; amount?: string; level?: string }
 
 /** 槽位替换：模板是我们自己的文本，用 split/join，不碰玩家原话。 */
 export function fillSlots(template: string, slots: FactSlots): string {

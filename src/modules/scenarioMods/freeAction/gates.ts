@@ -18,8 +18,8 @@ import { levelOf } from '@/utils/realmUtils';
 import { trainingRealm } from '../levelProgression';
 import type { InjuryRecord } from '../../sceneModule/host/injuries';
 import { itemEffectOf, type ItemEffect } from './itemUse';
-import { variantSpecOf, type VariantSpec } from './config';
-import { freeActionText } from './judgement';
+import { resolveNumberRef, variantSpecOf, type VariantSpec } from './config';
+import { freeActionText, targetLevelOf } from './judgement';
 import { canonCharacterOf, freeActionRosterOf, playerIdOf, type FreeActionTicket } from './ticket';
 import { readFreeActionState, runtimeOf } from './state';
 import { protectedForbids } from './protect';
@@ -31,7 +31,7 @@ export interface FreeActionDeps {
   itemEffect?: (itemId: string) => ItemEffect;
 }
 
-export interface GateSlots { player: string; target: string; item?: string; status?: string }
+export interface GateSlots { player: string; target: string; item?: string; status?: string; level?: string }
 export interface GateOk {
   ok: true;
   spec: VariantSpec;
@@ -141,7 +141,10 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
     const levelKnown = Boolean(fact && fact.available && fact.applicability === 'nine_levels' && fact.settingStatus !== 'placeholder' && targetLevel !== undefined);
     if (spec.requires.onLevelUnknown !== 'assume_equal' && (!levelKnown || !(Number(realm?.下一级所需) > 0))) return fail('level_unknown');
     const mine = levelOf((save as any)?.角色?.属性?.境界);
-    if (mine === null || (levelKnown ? mine < targetLevel! : !(mine > 0))) return fail('level_too_low'); // 查不到目标级数（assume_equal）时，施术者至少得有修为
+    if (mine === null || (levelKnown ? mine < targetLevel! : !(mine > 0))) {
+      slots.level = String(levelKnown ? targetLevel : 1); // 文案写明要修到几级；目标级数不明时，至少得有 1 级
+      return fail('level_too_low'); // 查不到目标级数（assume_equal）时，施术者至少得有修为
+    }
   }
 
   // 施术者代价：付得起才行。
@@ -161,7 +164,7 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
     const room = transferRoom(save, targetId, spec);
     if (room <= 0) return fail('budget_full');
   }
-  if (spec.drain && drainRoom(save, targetId, spec) <= 0) return fail('drain_empty');
+  if (spec.drain && drainAmount(save, targetId, spec) <= 0) return fail('drain_empty');
   if (spec.drain && !drainHpAffordable(save, spec)) return fail('hp_too_low');
   return { ok: true, spec, slots, ...(item ? { item } : {}), toxic, ...(treat ? { treat } : {}) };
 }
@@ -178,12 +181,39 @@ export function transferRoom(save: SaveData, targetId: string, spec: VariantSpec
   return Math.max(0, Math.min(budgetLeft, ceilingLeft));
 }
 
-/** 夺取类单次最多还能扣多少进度：min(单次上限占“下一级所需”的比例, 目标现有进度)；没有进度条的目标是 0。 */
-export function drainRoom(save: SaveData, targetId: string, spec: VariantSpec): number {
-  const realm = (relationshipOf(save as any, targetId)?.profile as any)?.境界;
-  const need = Number(realm?.下一级所需), current = Number(realm?.当前进度) || 0;
-  if (!(need > 0) || !spec.drain) return 0;
-  return Math.max(0, Math.min(Math.round(need * spec.drain.perUseCapRatio), current));
+/** 夺取类的基数：目标“下一级所需”；没有进度条（≤0）取 training.progressPerLevel。 */
+export function drainBase(save: SaveData, targetId: string): number {
+  const need = Number((relationshipOf(save as any, targetId)?.profile as any)?.境界?.下一级所需);
+  return need > 0 ? need : GAME_NUMBERS.training.progressPerLevel;
+}
+
+/** 级数加“小阶段序号/phasesPerLevel”；阶段不明按初期（序号 0）。 */
+const levelWithPhase = (level: number, stage: unknown, phasesPerLevel: number): number =>
+  level + (GAME_NUMBERS.levels.phases[stage as keyof typeof GAME_NUMBERS.levels.phases] ?? 0) / phasesPerLevel;
+
+/**
+ * 夺取类单次默认可夺量（闸门与结算共用）：round(基数 × clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio))。
+ * Δa = Σ 权重·玩家（先天+后天六司）− Σ 权重·目标先天六司（缺失按 amount.unknownTargetAttr）；
+ * Δp = 玩家（级数+小阶段/phasesPerLevel）− 目标同；目标级数不明（targetLevelOf 查不到）时 Δp = 0，即按同级。
+ * 不看目标现有进度：NPC 进度条多为 0，这里只回答“这一下夺不夺得动”。不是夺取类返回 0。
+ */
+export function drainAmount(save: SaveData, targetId: string, spec: VariantSpec): number {
+  const drain = spec.drain;
+  if (!drain) return 0;
+  const { attrWeights, attrStep, levelStep, phasesPerLevel, unknownTargetAttr } = drain.amount;
+  const identity = (save as any)?.角色?.身份, theirs = (relationshipOf(save as any, targetId)?.profile as any)?.先天六司;
+  const center = GAME_NUMBERS.factors.center, fallback = resolveNumberRef(unknownTargetAttr);
+  const num = (value: unknown, missing: number): number => (typeof value === 'number' && Number.isFinite(value) ? value : missing);
+  let deltaAttr = 0;
+  for (const [key, weight] of Object.entries(attrWeights)) {
+    const mine = num(identity?.先天六司?.[key], center) + num(identity?.后天六司?.[key], 0);
+    deltaAttr += weight * (mine - num(theirs?.[key], fallback));
+  }
+  const realm = (save as any)?.角色?.属性?.境界, theirLevel = targetLevelOf(save, targetId);
+  const deltaLevel = theirLevel === undefined ? 0
+    : levelWithPhase(levelOf(realm) ?? 0, realm?.阶段, phasesPerLevel) - levelWithPhase(theirLevel, (relationshipOf(save as any, targetId)?.profile as any)?.境界?.阶段, phasesPerLevel);
+  const ratio = Math.min(drain.perUseCapRatio, Math.max(0, drain.lossRatio + attrStep * deltaAttr + levelStep * deltaLevel));
+  return Math.round(drainBase(save, targetId) * ratio);
 }
 
 /** 夺取类每次施行先扣的玩家气血：上限 × drain.selfCostHpRatio（四舍五入）；不是夺取类、没有气血记录是 0。 */

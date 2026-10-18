@@ -625,6 +625,18 @@
             "drain": {
               "lossRatio": 0.08,
               "perUseCapRatio": 0.2,
+              "amount": {
+                "attrWeights": {
+                  "根骨": 0.4,
+                  "心性": 0.3,
+                  "悟性": 0.2,
+                  "魅力": 0.1
+                },
+                "attrStep": 0.01,
+                "levelStep": 0.04,
+                "phasesPerLevel": 3,
+                "unknownTargetAttr": "factors.center"
+              },
               "outcomeFactor": "benefit",
               "qiGainRatio": 0.15,
               "selfCostHpRatio": 0.05,

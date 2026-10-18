@@ -70,7 +70,7 @@ test('事实行用词：任何事实/闸门/记忆模板渲染结果（含整块
   for (const control of ['我不走，留下来看王哲', '我留在原地', '我不逃也不撤']) {
     assert.ok(rt.previewWangZheStayEnding(save, control), `对照：${control} 应触发守卫，夹具才有意义`);
   }
-  const slots = { player: '程宗扬', target: '王哲', item: '解毒丸', status: '重伤', label: '攻击' };
+  const slots = { player: '程宗扬', target: '王哲', item: '解毒丸', status: '重伤', label: '攻击', level: '3' };
   const ids = Object.keys(CONTENT_PACKS.texts).filter(id => id.startsWith('free.'));
   assert.ok(ids.length > 100);
   for (const id of ids) {
@@ -83,7 +83,7 @@ test('事实行用词：任何事实/闸门/记忆模板渲染结果（含整块
 
 test('事实行与记忆模板只有代码填的显示名槽位，不含玩家原话槽位', () => {
   // facts/changes/items/name/count/amount：回合事实块、背包事实、回执里由代码填的槽位（事实行、物品名、数量），同样不收玩家原话。
-  const allowed = new Set(['player', 'target', 'item', 'status', 'label', 'facts', 'changes', 'items', 'name', 'count', 'amount']);
+  const allowed = new Set(['player', 'target', 'item', 'status', 'label', 'facts', 'changes', 'items', 'name', 'count', 'amount', 'level']);
   for (const [id, text] of Object.entries(CONTENT_PACKS.texts).filter(([id]) => id.startsWith('free.'))) {
     for (const part of text.split('{').slice(1)) assert.ok(allowed.has(part.split('}')[0]), `${id} 含未知槽位`);
   }

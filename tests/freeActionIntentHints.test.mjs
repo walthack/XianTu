@@ -107,10 +107,10 @@ test('闸门：传功——好感 ≥ 20 且功力不低于对方才出判定卡
   assert.equal(mods.plan.prepareFreeAction(absent, tk).reason, 'not_present');
 });
 
-test('闸门：夺元——目标昏迷且身上有可夺的进度才出判定卡；清醒 guard_up、没进度 drain_empty', () => {
+test('闸门：夺元——目标昏迷且这一下夺得动才出判定卡；清醒 guard_up、功力差太大 drain_empty；目标进度条为 0 不再拦', () => {
   const tk = ticket('physical', 'drain_qi', NING_YU);
-  const knocked = (progress, status = 'unconscious') => {
-    const save = base();
+  const knocked = (progress, status = 'unconscious', opts = {}) => {
+    const save = base(opts);
     profileOf(save, NING_YU).境界.当前进度 = progress;
     if (status) assert.ok(mods.actorStatus.applyActorStatus(save, NING_YU, status, { sourceId: 'test' }).ok);
     return save;
@@ -119,7 +119,9 @@ test('闸门：夺元——目标昏迷且身上有可夺的进度才出判定�
   assert.equal(issued.kind, 'issued');
   assert.equal(issued.proposal.actionText, '对凝羽施行「夺元」（自由行动）');
   assert.equal(mods.plan.prepareFreeAction(knocked(50, null), tk).reason, 'guard_up');
-  assert.equal(mods.plan.prepareFreeAction(knocked(0), tk).reason, 'drain_empty');
+  assert.equal(mods.plan.prepareFreeAction(knocked(0), tk).kind, 'issued', 'NPC 进度条为 0 也夺得动（可夺量不看对方现有进度）');
+  // 第 40 章凝羽 4 级，玩家内视（1 级）：Δp = −3，比例压到 0 → 夺不动
+  assert.equal(mods.plan.prepareFreeAction(knocked(50, 'unconscious', { chapter: 40 }), tk).reason, 'drain_empty');
 });
 
 test('双修长句：模型归 dual_cultivate 才出双修判定卡（kind=cultivate，不是抓住）；好感 59 被拒、60 出卡', async () => {

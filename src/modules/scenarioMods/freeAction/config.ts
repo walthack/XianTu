@@ -22,13 +22,24 @@ export type Stance = 'low' | 'mid' | 'high';
 export interface DefenseDownRule { statusIds?: string[]; effectKinds?: string[] }
 /**
  * drainProgress 的参数（全在配置里）：
- * lossRatio / perUseCapRatio 是占目标“下一级所需”的比例；outcomeFactor 是夺走量的结果档系数表（配置里写表名，variantSpecOf 解析成表）；
+ * lossRatio 是同属性同功力时占“基数”（目标下一级所需，≤0 取 training.progressPerLevel）的默认比例，perUseCapRatio 是单次上限比例；
+ * amount 是默认可夺量的修正：比例 = clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio)，Δa 按 attrWeights 的权重算玩家（先天+后天六司）与目标（先天六司，缺失取 unknownTargetAttr）之差，Δp 是级数加“小阶段序号/phasesPerLevel”之差；
+ * outcomeFactor 是夺走量的结果档系数表（配置里写表名，variantSpecOf 解析成表）；
  * qiGainRatio 是玩家灵气回收占上限的比例；selfCostHpRatio 是每次施行先扣的玩家气血占上限的比例（气血不够不能施行）；diminish 按目标记次数递减（perUse^次数，下限 floor，每 recoverMinutes 恢复一次）；
  * afterStatuses / statusMinutes 是夺走量>0 时目标挂的状态与时长。
  */
+export interface DrainAmountSpec {
+  attrWeights: Record<string, number>;
+  attrStep: number;
+  levelStep: number;
+  phasesPerLevel: number;
+  /** 目标缺六司项时的取值：数，或 "factors.center" 这类数值键引用。 */
+  unknownTargetAttr: number | string;
+}
 export interface DrainSpec {
   lossRatio: number;
   perUseCapRatio: number;
+  amount: DrainAmountSpec;
   outcomeFactor: Record<Outcome, number>;
   qiGainRatio: number;
   selfCostHpRatio: number;
@@ -291,6 +302,16 @@ function validateDrain(spec: VariantSpec, where: string): string[] {
   if (!drain) return [`${where}: drainProgress 缺 drain`];
   if (!(finite(drain.lossRatio) && drain.lossRatio > 0)) errors.push(`${where}: drain.lossRatio 须为正数`);
   if (!(finite(drain.perUseCapRatio) && drain.perUseCapRatio > 0)) errors.push(`${where}: drain.perUseCapRatio 须为正数`);
+  const amount = drain.amount;
+  if (!amount) errors.push(`${where}: drain.amount 缺失`);
+  else {
+    const weights = Object.values(amount.attrWeights || {});
+    if (!weights.length || weights.some(weight => !(finite(weight) && weight >= 0)) || !weights.some(weight => weight > 0)) errors.push(`${where}: drain.amount.attrWeights 须为非空的非负数表且至少一项为正`);
+    if (!finite(amount.attrStep)) errors.push(`${where}: drain.amount.attrStep 须为数`);
+    if (!finite(amount.levelStep)) errors.push(`${where}: drain.amount.levelStep 须为数`);
+    if (!(finite(amount.phasesPerLevel) && amount.phasesPerLevel > 0)) errors.push(`${where}: drain.amount.phasesPerLevel 须为正数`);
+    if (!Number.isFinite(resolveNumberRef(amount.unknownTargetAttr))) errors.push(`${where}: drain.amount.unknownTargetAttr 须为数或有效的数值键引用`);
+  }
   if (!(finite(drain.qiGainRatio) && drain.qiGainRatio >= 0)) errors.push(`${where}: drain.qiGainRatio 须为非负数`);
   if (!(finite(drain.selfCostHpRatio) && drain.selfCostHpRatio >= 0 && drain.selfCostHpRatio < 1)) errors.push(`${where}: drain.selfCostHpRatio 须在 [0,1)`);
   for (const outcome of OUTCOMES) if (!finite(drain.outcomeFactor?.[outcome])) errors.push(`${where}: drain.outcomeFactor 缺 ${outcome}`);
