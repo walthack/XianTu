@@ -33,6 +33,6 @@ function prepareRegistered(save: SaveData, ticket: FreeActionTicket, spec: Varia
   if (!gate.ok) return { kind: 'refused', reason: gate.reason, facts: [gateText(gate.reason, gate.slots, spec.variant)] };
   if (spec.route === 'table') return { kind: 'settled', result: settleFreeAction(save, ticket, undefined, deps) };
   if (getJudgementState(save).pending) return { kind: 'blocked' };
-  const proposal = buildFreeActionJudgementProposal(save, getNarrativeTurn(save), ticket, spec, gate.slots, gate.lethal === true);
+  const proposal = buildFreeActionJudgementProposal(save, getNarrativeTurn(save), ticket, spec, gate.slots);
   return { kind: 'issued', proposal: persistPendingJudgement(save, proposal) };
 }

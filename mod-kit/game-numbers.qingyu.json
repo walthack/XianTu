@@ -531,7 +531,11 @@
     "debug": {
       "playerTextLog": false,
       "keep": 50,
-      "textChars": 200
+      "textChars": 200,
+      "drainLog": {
+        "enabled": true,
+        "fields": ["actor", "target", "qi", "hp", "dying"]
+      }
     },
     "narration": {
       "inventoryListMax": 8

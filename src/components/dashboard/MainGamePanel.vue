@@ -207,7 +207,7 @@
           <template v-if="pendingJudgement.stakes.criticalFailure">　大失败：{{ pendingJudgement.stakes.criticalFailure }}</template>
         </small>
         <div class="judgement-preflight-actions">
-          <button @click="executePendingJudgement" :disabled="isAIProcessing">{{ pendingJudgementLethal ? packText('free.confirm.lethal.button') : '确认并掷骰' }}</button>
+          <button @click="executePendingJudgement" :disabled="isAIProcessing">确认并掷骰</button>
           <button v-if="showJudgementTestControls" class="test-great-success-button" @click="executePendingJudgement('great_success')" :disabled="isAIProcessing">大成功（测试）</button>
           <button @click="changePendingJudgement" :disabled="isAIProcessing">换一种做法</button>
           <button @click="cancelPendingJudgement" :disabled="isAIProcessing">撤回</button>
@@ -636,8 +636,6 @@ const inputText = computed({
 });
 const isInputFocused = ref(false);
 const pendingJudgement = ref<JudgementProposal | null>(null);
-// 致死的夺元（回执 lethal，由本地闸门标记）：确认按钮改写成明示“继续将致死”，说明在 whyNow。
-const pendingJudgementLethal = computed(() => { const receipt = pendingJudgement.value?.authorityReceipt; return receipt?.kind === 'free_action_judgement' && receipt.lethal === true; });
 const latestJudgement = ref<JudgementResolution | null>(null);
 const showJudgementTestControls = JUDGEMENT_TEST_CONTROLS;
 

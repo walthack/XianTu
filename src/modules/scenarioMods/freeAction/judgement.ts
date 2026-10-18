@@ -16,7 +16,7 @@ import { relationshipOf } from '../ledger/affinityIdentity';
 import { namingChapter } from '../ledger/naming';
 import { combatLevelOf, resolveActorStats } from '../characterStats';
 import { freeActionConfig, type VariantSpec } from './config';
-import { whyLethalText, whyNowText, whySelfText } from './facts';
+import { whyNowText, whySelfText } from './facts';
 import { skillTalentFactors } from './skillMatch';
 import type { FreeActionTicket } from './ticket';
 
@@ -44,7 +44,7 @@ export function freeActionText(spec: VariantSpec, targetName: string): string {
 }
 
 export function buildFreeActionJudgementProposal(
-  save: SaveData, currentTurn: number, ticket: FreeActionTicket, spec: VariantSpec, names: { player: string; target: string }, lethal = false,
+  save: SaveData, currentTurn: number, ticket: FreeActionTicket, spec: VariantSpec, names: { player: string; target: string },
 ): JudgementProposal {
   const kind = spec.kind!, root = save as any;
   const data = calculateTurnJudgementData(root?.角色?.身份?.先天六司, root?.角色?.身份?.后天六司, root?.角色?.位置);
@@ -63,7 +63,7 @@ export function buildFreeActionJudgementProposal(
     actionText: freeActionText(spec, names.target),
     kind,
     target: ticket.targetId ?? undefined,
-    whyNow: (lethal ? whyLethalText : ticket.targetId ? whyNowText : whySelfText)({ ...names, label: spec.label }),
+    whyNow: (ticket.targetId ? whyNowText : whySelfText)({ ...names, label: spec.label }),
     difficulty: { band: bandFor(spec.difficulty!), value: spec.difficulty! },
     factors,
     stakes: {
@@ -75,7 +75,6 @@ export function buildFreeActionJudgementProposal(
       kind: 'free_action_judgement', ticketId: `${currentTurn}.${ticket.targetId ?? spec.actionClass}.${spec.variant}`,
       actionClass: ticket.actionClass, variant: ticket.variant, targetId: ticket.targetId, degree: ticket.degree, itemId: ticket.itemId,
       ...(ticket.affinityDelta !== undefined ? { affinityDelta: ticket.affinityDelta } : {}),
-      ...(lethal ? { lethal: true } : {}),
     },
     applyCultivationRecovery: spec.applyRecovery === true,
     createdAtTurn: currentTurn,

@@ -25,6 +25,7 @@ import { affinityNoteText, aftermathHpText, factText, gateText, memoryText, prot
 import { failureAftermathEffects, selfBuffEffect } from './outcomeEffects';
 import { pushLightMemory, pushMajorEpisode } from './memory';
 import { lethalForbidden, protectedCapFor } from './protect';
+import { noteDrain } from './playerTextDebug';
 import { affinityBeatTaken, noteSettled, readFreeActionState, runtimeOf, writableFreeActionState } from './state';
 import type { FreeActionTicket } from './ticket';
 import { playerIdOf } from './ticket';
@@ -96,8 +97,9 @@ interface Planned { resultKey: string; delta: number; extraFacts: string[]; appl
 /**
  * 夺取类：先吸目标灵气、灵气吸空后再吸气血（gates.ts drainPlan，闸门同一个函数；气血最多吸到 drain.hpFloor）；
  * 吸到的量按 drain.gain 补给玩家灵气，并折成玩家修炼进度（drainedRealm，满了按现有小阶段升级逻辑结算）；不再扣目标的境界进度。
- * 目标已在 hpFloor 再吸 = 致死：只有判定回执带 lethalConfirmed（玩家在判定卡上确认过）且目标不是必须活着的角色才执行，
- * 执行时气血归零并挂 drain.lethalStatus（致命只落成状态，不写 dead / missing / departed，见 actorStatus.ts）；没确认就按“吸不到气血”处理，什么也不写。
+ * 目标已在 hpFloor 再吸 = 吸到对方倒下：不再要玩家确认，目标不是必须活着的角色就直接结算，
+ * 气血归零并挂 drain.lethalStatus（只落成状态，不写 dead / missing / departed，见 actorStatus.ts）；必须活着的角色闸门已拒绝（drain_survivor）。
+ * 每次施行结算成功后记一条后台日志（playerTextDebug.noteDrain）。
  * 每次施行先扣玩家气血（上限 × drain.selfCostHpRatio，闸门已保证付得起），无冷却。好感走 base × 轻重 × 敌意结果系数，和攻击同一条路径（beatClamp）。
  * 吸取量 = drainPlan(scale = 轻重 × 结果档系数 × 递减)；递减按目标记次数，随时间恢复。吸到 0 = 无所获：不挂状态、不记次数，事实取 failure 档。
  */
@@ -107,7 +109,7 @@ function planDrain(save: SaveData, ticket: FreeActionTicket, spec: VariantSpec, 
   const effCount = ledger ? Math.max(0, ledger.count - Math.floor((now - ledger.lastAt) / drain.diminish.recoverMinutes)) : 0;
   const diminish = Math.max(drain.diminish.floor, Math.pow(drain.diminish.perUse, effCount));
   const wanted = drainPlan(save, targetId, spec, degree * drain.outcomeFactor[outcome] * diminish);
-  const kills = wanted.lethal && ticket.lethalConfirmed === true && !lethalForbidden(targetId);
+  const kills = wanted.lethal && !lethalForbidden(targetId);
   const qi = wanted.qi, hp = wanted.lethal && !kills ? 0 : wanted.hp, taken = qi + hp;
   const gainQi = Math.round(taken * drain.gain.qiPerPoint), nextRealm = drainedRealm(save, Math.round(taken * drain.gain.progressPerPoint));
   const drained = taken > 0 || drain.outcomeFactor[outcome] <= 0;
@@ -142,7 +144,7 @@ function planDrain(save: SaveData, ticket: FreeActionTicket, spec: VariantSpec, 
       // 先扣玩家气血（不论结果档）；后面的写入被状态拒绝就原样退回。
       const hpNow = (save as any).角色.属性.气血, hpBefore = Number(hpNow.当前);
       hpNow.当前 = hpBefore - selfCost;
-      if (write()) return true;
+      if (write()) { noteDrain({ actor: slots.player, target: slots.target, qi, hp, dying: kills }); return true; }
       hpNow.当前 = hpBefore;
       return false;
     },
@@ -333,8 +335,6 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
 
   const gate = checkGates(save, ticket, deps);
   if (!gate.ok) return { ok: false, reason: gate.reason, key, facts: [gateText(gate.reason, gate.slots, spec.variant)] };
-  // 致死的一击必须有玩家在判定卡上的确认（回执 lethal → ticket.lethalConfirmed）；没有就什么都不发生。
-  if (gate.lethal && ticket.lethalConfirmed !== true) return { ok: false, reason: 'lethal_unconfirmed', key, facts: [gateText('lethal_unconfirmed', gate.slots, spec.variant)] };
 
   const slots: FactSlots = { ...gate.slots, player: gate.slots.player || playerNameOf(save), target: gate.slots.target || targetNameOf(save, targetId) };
   const planned = plan(save, ticket, gate, resolution, key, slots, deps);
@@ -385,7 +385,6 @@ export function ticketFromResolution(save: SaveData, resolution: JudgementResolu
     actionClass: receipt.actionClass, variant: receipt.variant, targetId: receipt.targetId, degree: receipt.degree,
     performed: 'yes', evidence: '', itemId: receipt.itemId,
     ...(receipt.affinityDelta !== undefined ? { affinityDelta: receipt.affinityDelta } : {}),
-    ...(receipt.lethal === true ? { lethalConfirmed: true } : {}),
   };
 }
 

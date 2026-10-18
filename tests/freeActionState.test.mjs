@@ -12,12 +12,12 @@ const refusedBlock = (save, tk, deps) => mods.turn.issueFreeActionJudgement(save
 const lvl4 = () => mods.realm.levelName(4);
 
 // ───────── 传功 ─────────
-test('T20 传功闸门：功力不及 → 不出判定卡、不扣真气、不改进度，有“未发生”事实行；对方级数不明不再拦（只看好感，按同级）', () => {
+test('T20 传功闸门：功力不及（软性婉拒，不报级数）→ 不出判定卡、不扣真气、不改进度，有“未发生”事实行；对方级数不明不再拦（只看好感，按同级）', () => {
   const low = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, chapter: 40, realm: '无修为' });
   const before = structuredClone(low);
   const prepared = mods.plan.prepareFreeAction(low, ticket('cast', 'transfer_qi', NING_YU));
   assert.deepEqual([prepared.kind, prepared.reason], ['refused', 'level_too_low']);
-  assert.match(prepared.facts[0], /功力不及/);
+  assert.match(prepared.facts[0], /功力比.*婉言谢绝/);
   assert.deepEqual(low, before, '零写入');
   assert.match(refusedBlock(low, ticket('cast', 'transfer_qi', NING_YU)), /本地自由行动未发生/);
 

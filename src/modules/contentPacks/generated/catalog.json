@@ -1,5 +1,5 @@
 {
-  "version": "c3939b4875220831",
+  "version": "990e8d3506cc779b",
   "contracts": [
     {
       "meta": {
@@ -12441,7 +12441,7 @@
     "free.fact.drain_qi.trace": "{player}夺走了{target}一丝真元，{target}元气略损。",
     "free.fact.drain_qi.drained": "{player}强行夺走了{target}一部分真元，{target}元气大损，惊惧难平。事后{player}心头发沉，难以释怀。",
     "free.fact.drain_qi.drained_deep": "{player}几乎抽空了{target}的真元，{target}气息衰微，惊惧难平。事后{player}心头发沉，难以释怀。",
-    "free.fact.drain_qi.drained_lethal": "{player}把{target}最后一线气血也吸干了，{target}气绝倒地，命悬一线，不救即亡。事后{player}心头发沉，难以释怀。",
+    "free.fact.drain_qi.drained_lethal": "{player}把{target}残存的最后一缕气血也吸了去，{target}面色灰败、气若游丝，整个人像油尽的灯，软软地倒了下去。事后{player}心头发沉，难以释怀。",
     "free.fact.drain_qi.took_qi": "{player}夺走了{target}灵气{amount}点。",
     "free.fact.drain_qi.took_hp": "{player}夺走了{target}气血{amount}点。",
     "free.fact.drain_qi.realm_up": "{player}夺来的真气化入己身，修为精进，升入{label}。",
@@ -12463,7 +12463,7 @@
     "free.fact.gate.item_mismatch": "{player}手里的东西对不上这件事。",
     "free.fact.gate.equipped_or_story": "那件东西{player}不能随手送人。",
     "free.fact.gate.nothing_to_treat": "{target}身上并没有这种能治的伤。",
-    "free.fact.gate.level_too_low": "{player}功力不及{target}，需修到{level}级方可传功。",
+    "free.fact.gate.level_too_low": "{target}的功力比{player}高出一截，{player}自觉这口真气递过去不合适，便含笑婉言谢绝了，改日再说。",
     "free.fact.gate.level_unknown": "{target}的底子{player}摸不清，不敢贸然传功。",
     "free.fact.gate.no_resource": "{player}真气不足，无法传功。",
     "free.fact.gate.cooldown": "{player}刚传过功，真气未复，此刻不宜再传。",
@@ -12471,7 +12471,6 @@
     "free.fact.gate.drain_empty": "{target}灵气气血皆已竭，{player}已无可夺之元。",
     "free.fact.gate.drain_resisted": "{target}功力深厚，{player}一时夺不动其真元。",
     "free.fact.gate.drain_survivor": "{target}灵气已竭、气血仅存一线，再夺必致其死；{target}与主线牵连甚深，眼下绝不能死，{player}不能再夺。",
-    "free.fact.gate.lethal_unconfirmed": "{player}没有确认夺走{target}最后一线气血，什么也没发生。",
     "free.fact.gate.hp_too_low": "{player}气血不足，经不起施术所耗，这一下没能施行。",
     "free.fact.gate.budget_full": "{target}眼下已受不住更多的传功。",
     "free.fact.gate.protected": "{target}的安危不容这样处置。",
@@ -12515,7 +12514,7 @@
     "free.memory.drain_qi.resisted": "{player}曾想夺{target}的真元，没能成。",
     "free.memory.drain_qi.trace": "{player}曾夺走{target}一丝真元。",
     "free.memory.drain_qi.drained": "{player}曾趁{target}无力设防，夺走了{target}的真元。",
-    "free.memory.drain_qi.drained_lethal": "{player}曾把{target}最后一线气血也吸干，{target}气绝倒地。",
+    "free.memory.drain_qi.drained_lethal": "{player}曾把{target}残存的最后一缕气血也吸了去，{target}油尽灯枯般软倒下去。",
     "free.memory.drain_qi.drained_deep": "{player}曾趁{target}无力设防，几乎抽空了{target}的真元。",
     "free.memory.heal.done": "{player}曾用{item}为{target}疗伤。",
     "free.memory.heal.done_downgraded": "{player}曾用{item}从鬼门关前保住{target}的性命。",
@@ -12546,8 +12545,6 @@
     "free.fact.gate.unrecognized": "{player}这句话本地没有识别出可结算的动作，没有任何物品、状态或好感变化，只当作叙述。",
     "free.fact.gate.dropped": "{player}同时做的另一个动作没能落实，没有成事。",
     "free.fact.gate.not_ready": "{player}眼下境界进度还不到这一步，这件事没能做成。",
-    "free.confirm.lethal.button": "确认（继续将致死）并掷骰",
-    "free.why.lethal": "我理解为：{player}对{target}{label}。{target}灵气已竭、气血只剩最后一线，继续将致死，无法挽回。点「确认并掷骰」即视为同意；不愿如此，请撤回或换一种做法。",
     "free.why.self": "我理解为：{player}自行{label}。若理解有误，请撤回后换个说法。",
     "free.fact.train.perfect": "{player}修炼如有神助，功力大有精进。",
     "free.fact.train.great_success": "{player}修炼进境顺畅，功力有明显精进。",

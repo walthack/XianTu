@@ -54,7 +54,7 @@ test('“未发生”事实行同样进入叙事提示，叙事不会自行写�
   const refusal = mods.turn.issueFreeActionJudgement(save, [ticket('cast', 'transfer_qi', NING_YU)]);
   assert.ok(refusal.refusalBlock.includes('本地自由行动未发生'));
   const { input } = await capture(save, `<行动趋向>我给凝羽传功</行动趋向>\n${refusal.refusalBlock}`);
-  assert.ok(input.includes('本地自由行动未发生') && input.includes('功力不及'));
+  assert.ok(input.includes('本地自由行动未发生') && input.includes('婉言谢绝'));
 });
 
 test('被作用者排在在场名单第 3 位以后也进得了前两张角色卡（focus 排序）', async () => {

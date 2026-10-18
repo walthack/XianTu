@@ -40,8 +40,6 @@ export interface GateOk {
   toxic: boolean;
   /** heal / bandage / 有解除标签的药：要解除的那一条状态记录与对应标签。 */
   treat?: { row: InjuryRecord; tag: string };
-  /** 夺取类：这一下会把对方吸到气血归零（致死）。出判定卡时标在回执上让玩家确认；结算侧没有确认就不执行（settle.ts）。 */
-  lethal?: boolean;
 }
 export interface GateFail { ok: false; reason: GateReason; slots: GateSlots }
 
@@ -166,17 +164,15 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
     const room = transferRoom(save, targetId, spec);
     if (room <= 0) return fail('budget_full');
   }
-  let lethal = false;
   if (spec.drain) {
     const plan = drainPlan(save, targetId, spec);
     if (plan.empty) return fail('drain_empty');
     if (plan.qi + plan.hp <= 0) return fail('drain_resisted');
     if (!drainHpAffordable(save, spec)) return fail('hp_too_low');
-    // 致死：必须活着的角色（总表标记，见 protect.ts）直接拒绝；其余的由出票处标记、玩家确认后才执行。
+    // 吸到对方倒下：必须活着的角色（总表标记，见 protect.ts）直接拒绝；其余的照常结算。
     if (plan.lethal && lethalForbidden(targetId)) return fail('drain_survivor');
-    lethal = plan.lethal;
   }
-  return { ok: true, spec, slots, ...(item ? { item } : {}), toxic, ...(treat ? { treat } : {}), ...(lethal ? { lethal } : {}) };
+  return { ok: true, spec, slots, ...(item ? { item } : {}), toxic, ...(treat ? { treat } : {}) };
 }
 
 /** 传功还能再加多少进度：min(阶段预算余量, 离“下一级所需−1”的距离)。 */
@@ -218,7 +214,7 @@ export interface DrainPlan {
   /** 本次吸到的目标灵气 / 气血点数。 */
   qi: number;
   hp: number;
-  /** 目标灵气已空、气血只剩 hpFloor 以内，且这一下有量可吸：吸下去气血归零（hp = 剩下的全部气血）。 */
+  /** 目标灵气已空、气血只剩 hpFloor 以内，且这一下有量可吸：吸下去气血归零（hp = 剩下的全部气血），目标倒下（挂 lethalStatus）。 */
   lethal: boolean;
   /** 目标灵气与气血都已竭。 */
   empty: boolean;
@@ -227,7 +223,7 @@ export interface DrainPlan {
 /**
  * 夺取类单次吸取（闸门与结算共用）：先吸灵气，每池按“池上限 × 吸取比例”（单池不超过 上限×perUseCapRatio）；
  * 灵气不够吸时，没吸满的那部分比例折到气血（气血 = 气血上限 × 比例 × 缺口占比），气血最多吸到 hpFloor；
- * 目标灵气已空且气血在 hpFloor 以内（>0）时再吸 = 致死，lethal 为真，hp 取剩下的全部气血。
+ * 目标灵气已空且气血在 hpFloor 以内（>0）时再吸 = 吸到对方倒下，lethal 为真，hp 取剩下的全部气血。
  * scale 是结算时的轻重 × 结果档 × 递减（闸门取 1）。不看目标的修炼进度；没有灵气 / 气血记录的池按 0。
  */
 export function drainPlan(save: SaveData, targetId: string, spec: VariantSpec, scale = 1): DrainPlan {

@@ -1,6 +1,6 @@
 // 自由行动「夺元」变体（physical.drain_qi，effect=drainProgress）：默认启用；只对“设防失效”的目标成立；
 // 先吸对方灵气、吸空后再吸气血（气血最多吸到 drain.hpFloor），吸到的量补给玩家灵气并折成玩家修炼进度，不扣对方的境界进度；
-// 每次施行先扣玩家气血（drain.selfCostHpRatio），无冷却，吸取量按目标记次数递减。致死确认、灵气→气血顺序、境界提升见 freeActionDrainFlow.test.mjs。
+// 每次施行先扣玩家气血（drain.selfCostHpRatio），无冷却，吸取量按目标记次数递减。吸倒对方（无确认卡）、灵气→气血顺序、境界提升见 freeActionDrainFlow.test.mjs。
 // 数值全在 game-numbers 的 freeAction 配置；测试按配置取值断言，改配置的用例结束时还原。
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -202,7 +202,7 @@ test('drain_resisted：玩家功力远低于对方，吸取比例压到 0 → �
   assert.match(prepared.facts[0], /功力深厚.*夺不动其真元/);
 });
 
-test('drain_empty：对方灵气与气血都已竭 → 闸门不过，零写入；文案写明“灵气气血皆已竭”；只剩一点气血不算竭（见致死确认）', () => {
+test('drain_empty：对方灵气与气血都已竭 → 闸门不过，零写入；文案写明“灵气气血皆已竭”；只剩一点气血不算竭（照常出卡，见 freeActionDrainFlow）', () => {
   const save = fixture();
   poolOf(save, '灵气').当前 = 0;
   poolOf(save, '气血').当前 = 0;
@@ -212,7 +212,7 @@ test('drain_empty：对方灵气与气血都已竭 → 闸门不过，零写入�
   assert.deepEqual(save, before);
   assert.match(prepared.facts[0], /灵气气血皆已竭/);
   poolOf(save, '气血').当前 = 1;
-  assert.equal(mods.plan.prepareFreeAction(save, drainTicket()).kind, 'issued', '气血还剩 1 点：出致死确认卡，不是 drain_empty');
+  assert.equal(mods.plan.prepareFreeAction(save, drainTicket()).kind, 'issued', '气血还剩 1 点：照常出判定卡，不是 drain_empty');
 });
 
 test('同拍冲突：攻击 + 夺元报同一目标 → 留夺元（|base| 更大），攻击被丢并发“未发生”事实', () => {
@@ -270,7 +270,7 @@ test('夺元文本齐全：每个结果档、自损、反噬、气血不足都�
   }
   assert.ok(mods.facts.effectResultKeys(spec).includes('self_cost'));
   for (const key of ['drained_lethal', 'took_qi', 'took_hp', 'realm_up']) assert.ok(mods.facts.effectResultKeys(spec).includes(key), key);
-  for (const reason of ['guard_up', 'drain_empty', 'drain_resisted', 'drain_survivor', 'lethal_unconfirmed', 'hp_too_low']) assert.ok(CONTENT_PACKS.texts[`free.fact.gate.${reason}`], reason);
+  for (const reason of ['guard_up', 'drain_empty', 'drain_resisted', 'drain_survivor', 'hp_too_low']) assert.ok(CONTENT_PACKS.texts[`free.fact.gate.${reason}`], reason);
   assert.equal(CONTENT_PACKS.texts['free.fact.gate.cooldown.drain_qi'], undefined);
 });
 

@@ -29,8 +29,6 @@ export const affinityNoteText = (kind: 'worn' | 'capped', slots: FactSlots): str
 export const aftermathHpText = (slots: FactSlots): string => fillSlots(packText('free.fact.aftermath.hp'), slots);
 export const protectedText = (slots: FactSlots): string => fillSlots(packText('free.fact.protected'), slots);
 export const whyNowText = (slots: FactSlots): string => fillSlots(packText('free.why'), slots);
-/** 致死确认卡的说明（明写“继续将致死”）：判定卡上的 whyNow 换成它。 */
-export const whyLethalText = (slots: FactSlots): string => fillSlots(packText('free.why.lethal'), slots);
 /** 无对象的票（自修、场面）的理解说明：没有 {target}。 */
 export const whySelfText = (slots: FactSlots): string => fillSlots(packText('free.why.self'), slots);
 
@@ -50,8 +48,8 @@ export function effectResultKeys(spec: VariantSpec): string[] {
 export const GATE_REASONS = [
   'not_present', 'scene_active', 'low_goodwill', 'goodwill_below_min', 'no_item', 'item_mismatch', 'equipped_or_story', 'nothing_to_treat',
   'level_too_low', 'level_unknown', 'no_resource', 'cooldown', 'budget_full', 'protected', 'guard_up', 'drain_empty', 'drain_resisted', 'hp_too_low',
-  // 夺元致死：必须活着的角色直接拒绝；没有玩家确认的致命一击不执行。
-  'drain_survivor', 'lethal_unconfirmed',
+  // 夺元吸到对方倒下：必须活着的角色直接拒绝。
+  'drain_survivor',
   // 票校验阶段（目标/物品无效）与结算写入被状态拒绝时的“未发生”事实。
   'target_unavailable', 'item_unavailable', 'state_refused',
   // 自修：按修炼结算试算境界进度不会变（时机未到 / 已满）。
@@ -128,8 +126,6 @@ export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_
   for (const outcome of Object.keys(aftermathConfig().gate.outcomeByResult)) need(`judge.aftermath.severity.${outcome}`, 'aftermath');
   for (const kind of ['worn', 'capped']) need(`free.fact.affinity.${kind}`, 'affinity');
   need('free.why', 'why');
-  need('free.why.lethal', 'why');
-  need('free.confirm.lethal.button', 'why');
   need('free.why.self', 'why');
   for (const id of ['free.block.settled', 'free.block.refused', 'free.block.inventory.changed', 'free.block.inventory.unchanged', 'free.block.inventory.empty', 'free.block.inventory.item',
     'free.block.inventory.delta.gain', 'free.block.inventory.delta.lose', 'free.receipt.refused', 'free.receipt.given', 'free.receipt.other', 'free.receipt.dismiss']) need(id, 'block');

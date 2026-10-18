@@ -1,7 +1,7 @@
 // 夺元吸取比例：clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio)，作用在对方灵气上限（灵气吸空后才到气血）；闸门与结算共用 gates.drainPlan。
 // Δa = 玩家（先天+后天六司）与对方先天六司按权重之差；Δp = 级数 + 小阶段/phasesPerLevel 之差；对方级数不明 Δp = 0。
 // 期望值手算：lossRatio 0.08 / attrStep 0.01 / levelStep 0.04 / phasesPerLevel 3 / perUseCapRatio 0.2，凝羽灵气池 100/100（关系档案默认值，所以吸到的灵气点数 = 100 × 比例）；先断言配置没变，免得数值漂了测试悄悄失去意义。
-// 末尾是默认开局存档夹具的复现（不依赖模型）：玩家无修为对昏迷凝羽夺元不再 drain_empty，灵气被吸、玩家境界进度增加；传功仍 level_too_low 且文案写出级数。
+// 末尾是默认开局存档夹具的复现（不依赖模型）：玩家无修为对昏迷凝羽夺元不再 drain_empty，灵气被吸、玩家境界进度增加；传功仍 level_too_low 且文案软性婉拒、不写级数。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { NING_YU, load, makeSave, mods, profileOf, runJudged, ticket } from './freeActionFixture.mjs';
@@ -141,32 +141,34 @@ test('闸门与结算共用 drainPlan：success 档吸走量 = 闸门算出的�
   assert.deepEqual(weak, before, '零写入');
 });
 
-test('传功 level_too_low 文案写明要修到几级：已知取对方级数，不明取 1 级', () => {
+test('传功 level_too_low 文案软性婉拒：体现对方功力更高，不报级数', () => {
   const tk = ticket('cast', 'transfer_qi', NING_YU);
   const known = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, chapter: 40, realm: mods.realm.levelName(1) });
   const refusedKnown = mods.plan.prepareFreeAction(known, tk);
   assert.deepEqual([refusedKnown.kind, refusedKnown.reason], ['refused', 'level_too_low']);
-  assert.match(refusedKnown.facts[0], /功力不及.*需修到4级方可传功/);
+  assert.match(refusedKnown.facts[0], /功力比.*高.*婉言谢绝/);
+  assert.equal(/\d+级|需修到/.test(refusedKnown.facts[0]), false, '不报级数');
   const unknown = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } });
   const refusedUnknown = mods.plan.prepareFreeAction(unknown, tk);
   assert.equal(refusedUnknown.reason, 'level_too_low');
-  assert.match(refusedUnknown.facts[0], /功力不及.*需修到1级方可传功/);
+  assert.match(refusedUnknown.facts[0], /功力比.*高.*婉言谢绝/);
+  assert.equal(/\d+级|需修到/.test(refusedUnknown.facts[0]), false, '不报级数');
   assert.equal(refusedUnknown.facts[0].includes('{'), false, '没有残留占位符');
 });
 
-test('拒绝文案：槽位全部被填，没有残留占位符；写明传功要修到几级 / 夺元皆竭 / 须昏迷被制住或重伤', () => {
+test('拒绝文案：槽位全部被填，没有残留占位符；传功软性婉拒 / 夺元皆竭 / 须昏迷被制住或重伤', () => {
   const slots = { player: '程宗扬', target: '凝羽', level: '4' };
-  assert.equal(mods.facts.gateText('level_too_low', slots), '程宗扬功力不及凝羽，需修到4级方可传功。');
+  assert.equal(mods.facts.gateText('level_too_low', slots), '凝羽的功力比程宗扬高出一截，程宗扬自觉这口真气递过去不合适，便含笑婉言谢绝了，改日再说。');
   assert.equal(mods.facts.gateText('drain_empty', slots), '凝羽灵气气血皆已竭，程宗扬已无可夺之元。');
   assert.equal(mods.facts.gateText('drain_resisted', slots), '凝羽功力深厚，程宗扬一时夺不动其真元。');
   assert.equal(mods.facts.gateText('guard_up', slots), '凝羽尚有防备，须其昏迷、被制住或重伤，程宗扬才夺得了元。');
   assert.match(mods.facts.gateText('drain_survivor', slots), /主线牵连甚深.*不能再夺/);
-  assert.match(mods.facts.whyLethalText(slots), /继续将致死/);
-  for (const reason of ['drain_survivor', 'lethal_unconfirmed']) assert.equal(mods.facts.gateText(reason, slots).includes('{'), false, reason);
+  assert.equal(mods.facts.gateText('drain_survivor', slots).includes('{'), false, 'drain_survivor');
+  assert.equal(mods.facts.GATE_REASONS.includes('lethal_unconfirmed'), false, '致死确认卡已去掉');
 });
 
 // ---- 默认开局存档夹具复现（不依赖模型）----
-test('默认开局复现：玩家无修为对昏迷凝羽夺元 → 不再 drain_empty，灵气被吸、玩家境界进度增加；传功仍 level_too_low 且写出级数', () => {
+test('默认开局复现：玩家无修为对昏迷凝羽夺元 → 不再 drain_empty，灵气被吸、玩家境界进度增加；传功仍 level_too_low 且软性婉拒不写级数', () => {
   const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } }); // 不动六司、不动境界：开局原样
   assert.equal(save.角色.属性.境界.名称, '无修为');
   assert.ok(mods.actorStatus.applyActorStatus(save, NING_YU, 'unconscious', { sourceId: 'test' }).ok);
@@ -189,5 +191,5 @@ test('默认开局复现：玩家无修为对昏迷凝羽夺元 → 不再 drain
   assert.equal(poolOf(save, '气血').当前, hpBefore.当前, '气血没动');
   assert.equal(save.角色.属性.境界.当前进度, (Number(mineBefore.当前进度) || 0) + 3, '玩家境界进度 +6×0.5');
   assert.equal(transfer.reason, 'level_too_low');
-  assert.match(transfer.facts[0], /功力不及.*需修到1级方可传功/);
+  assert.match(transfer.facts[0], /功力比.*高.*婉言谢绝/);
 });

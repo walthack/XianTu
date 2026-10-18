@@ -12,6 +12,8 @@ export type Degree = 'light' | 'normal' | 'heavy';
 export type Route = 'judge' | 'table' | 'none';
 // drainProgress 是单方面扣取对方修为进度的 effect，只在配置里启用的变体上生效，闸门要求对方设防失效（见 gates.ts / defenseDown.ts）。
 // selfBuff 是判定有成效时给玩家自己挂一个限时增益（双修的阴阳调和），增益定义在变体行 buffRef 指向的配置段。
+/** 夺元后台日志可选字段：actor = 吸取者，target = 目标，qi / hp = 吸到的灵气 / 气血点数，dying = 是否把对方吸到倒下（挂 dying）。 */
+export const DRAIN_LOG_FIELDS: readonly string[] = ['actor', 'target', 'qi', 'hp', 'dying'];
 export type EffectKind = 'none' | 'practiceProgress' | 'drainProgress' | 'applyStatus' | 'removeStatus' | 'transferItem' | 'itemDefined' | 'selfBuff';
 export const EFFECT_KINDS: readonly EffectKind[] = ['none', 'practiceProgress', 'drainProgress', 'applyStatus', 'removeStatus', 'transferItem', 'itemDefined', 'selfBuff'];
 export const OUTCOMES = ['critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect'] as const;
@@ -22,7 +24,7 @@ export type Stance = 'low' | 'mid' | 'high';
 export interface DefenseDownRule { statusIds?: string[]; effectKinds?: string[] }
 /**
  * drainProgress（夺元）的参数（全在配置里）：
- * 每次先吸对方灵气，灵气吸空后（本次吸不满的余量折算）再吸气血，气血最多吸到 hpFloor；已在 hpFloor 的目标再吸即致死（须玩家确认，施行后挂 lethalStatus，必须活着的目标直接拒绝）；
+ * 每次先吸对方灵气，灵气吸空后（本次吸不满的余量折算）再吸气血，气血最多吸到 hpFloor；已在 hpFloor 的目标再吸即直接结算、气血归零并挂 lethalStatus（倒下，不写死亡；必须活着的目标直接拒绝）；
  * lossRatio 是同属性同功力时一次吸取占对方灵气上限 / 气血上限的默认比例，perUseCapRatio 是单次上限比例；
  * amount 是比例的修正：比例 = clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio)，Δa 按 attrWeights 的权重算玩家（先天+后天六司）与目标（先天六司，缺失取 unknownTargetAttr）之差，Δp 是级数加“小阶段序号/phasesPerLevel”之差；
  * outcomeFactor 是吸取量的结果档系数表（配置里写表名，variantSpecOf 解析成表）；
@@ -139,8 +141,8 @@ export interface FreeActionConfig {
   /** 判定卡难度档的下界（难度值 < normal 为 easy）。 */
   judgement: { bands: { normal: number; hard: number; severe: number; extreme: number } };
   state: { logKeep: number; settledKeep: number; budgetKeep: number };
-  /** 调试通道（默认全关）：playerTextLog = 本地记录没出票的玩家原文；keep = 内存环形条数；textChars = 原文截取字数。 */
-  debug: { playerTextLog: boolean; keep: number; textChars: number };
+  /** 调试通道：playerTextLog = 本地记录没出票的玩家原文（默认关）；keep = 内存环形条数；textChars = 原文截取字数；drainLog = 夺元后台日志，enabled 开关，fields 是每条记录带的字段（DRAIN_LOG_FIELDS 的子集）。 */
+  debug: { playerTextLog: boolean; keep: number; textChars: number; drainLog: { enabled: boolean; fields: string[] } };
   /** 发给叙事的背包事实：inventoryListMax = 列出的物品种数上限。 */
   narration: { inventoryListMax: number };
   outcomeFactors: Record<string, Record<Outcome, number>>;
@@ -281,6 +283,8 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
     }
   }
   if (!(cfg.debug?.keep > 0) || !(cfg.debug?.textChars > 0) || typeof cfg.debug?.playerTextLog !== 'boolean') errors.push('debug 配置无效');
+  const drainLog = cfg.debug?.drainLog;
+  if (typeof drainLog?.enabled !== 'boolean' || !Array.isArray(drainLog.fields) || !drainLog.fields.length || drainLog.fields.some(field => !DRAIN_LOG_FIELDS.includes(field))) errors.push(`debug.drainLog 配置无效（fields 须为 ${DRAIN_LOG_FIELDS.join(' / ')} 的非空子集）`);
   if (!(cfg.narration?.inventoryListMax > 0)) errors.push('narration.inventoryListMax 无效');
   const { floatBand, repeat } = cfg.affinity;
   if (!(Number.isFinite(floatBand) && floatBand >= 0)) errors.push('affinity.floatBand 须为非负数');

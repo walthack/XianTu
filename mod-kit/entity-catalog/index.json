@@ -21521,12 +21521,6 @@
     },
     {
       "kind": "text",
-      "id": "free.confirm.lethal.button",
-      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
-      "aliases": []
-    },
-    {
-      "kind": "text",
       "id": "free.fact.affinity.capped",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21846,12 +21840,6 @@
     {
       "kind": "text",
       "id": "free.fact.gate.item_unavailable",
-      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
-      "aliases": []
-    },
-    {
-      "kind": "text",
-      "id": "free.fact.gate.lethal_unconfirmed",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22734,12 +22722,6 @@
     {
       "kind": "text",
       "id": "free.why",
-      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
-      "aliases": []
-    },
-    {
-      "kind": "text",
-      "id": "free.why.lethal",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

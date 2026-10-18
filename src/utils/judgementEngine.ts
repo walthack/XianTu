@@ -25,8 +25,6 @@ export interface FreeActionJudgementReceipt {
   itemId: string | null;
   /** 票上的好感浮动位（可选），随回执存活到结算。 */
   affinityDelta?: number;
-  /** 本次夺元是致死的一击：出判定卡时由本地闸门标记，玩家点确认即视为确认致死；结算侧据此才执行（freeAction/settle.ts）。 */
-  lethal?: boolean;
 }
 
 export type JudgementAuthorityReceipt = EventActionJudgementReceipt | FreeActionJudgementReceipt;
@@ -196,7 +194,6 @@ function normalizeAuthorityReceipt(raw: unknown): JudgementAuthorityReceipt | un
     return {
       kind: 'free_action_judgement', ticketId, actionClass: actionClass as ActionClass, variant, targetId,
       degree: degree as Degree, itemId: itemId || null, ...(affinityDelta !== undefined ? { affinityDelta } : {}),
-      ...(receipt.lethal === true ? { lethal: true } : {}),
     };
   }
   return undefined;
