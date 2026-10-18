@@ -86,6 +86,8 @@
 | LCQ-UI-001 | error | window | 页面未捕获异常（window error） | 页面脚本抛出未捕获异常（组件渲染、事件回调） | 看 stack 与 detail.file/line；复现步骤 + 导出日志提交 | 否 |
 | LCQ-UI-002 | error | window | 未处理的 Promise 拒绝（unhandledrejection） | 某个 Promise 失败且无人处理 | 看 stack 找到未 await/未 catch 的调用；业务上应补 catch 并改用专属码 | 否 |
 | LCQ-UI-003 | warn | diagnostics | 导出日志失败 | 导出日志时浏览器拒绝创建下载（沙箱、权限） | 换浏览器或重试；不影响游戏 | 否 |
+| LCQ-UI-004 | error | vue | Vue 组件未捕获异常（app.config.errorHandler） | 组件渲染、生命周期钩子、事件处理器或 watcher 抛出未捕获异常（Vue 已接管，不会再触发 window error） | 看 stack 与 detail.info（Vue 给出的出错位置，如 render function / mounted hook）、detail.component；玩家提示按码 30 秒去重，不会刷屏；复现步骤 + 导出日志提交 | 是 |
+| LCQ-UI-005 | error | startup | 启动阶段失败，已显示兜底界面 | 挂载前的启动步骤抛错（目前是 migrateData 存档迁移检查），或挂载 Vue 应用时抛错；此时页面显示原生兜底界面（导出日志 / 重新载入） | 看 detail.stage（migrateData / mount）与 cause；先导出日志，再重新载入；migrateData 失败多为浏览器存储不可用，按 LCQ-SAV-001 / LCQ-SAV-005 排查 | 否 |
 
 ## 已作废
 

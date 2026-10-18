@@ -92,6 +92,8 @@ export const ERROR_CODES = {
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),
   'LCQ-UI-003': spec('warn', 'diagnostics', '导出日志失败'),
+  'LCQ-UI-004': spec('error', 'vue', 'Vue 组件未捕获异常（app.config.errorHandler）', true),
+  'LCQ-UI-005': spec('error', 'startup', '启动阶段失败，已显示兜底界面'),
 } as const satisfies Record<string, CodeSpec>;
 
 export type ErrorCode = keyof typeof ERROR_CODES;

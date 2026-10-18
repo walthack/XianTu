@@ -29,36 +29,52 @@ import { migrateData } from './utils/indexedDBManager'
 import { useI18n } from './i18n'
 import { useAPIManagementStore } from '@/stores/apiManagementStore'
 import { loadRuntimeTuning } from '@/modules/sceneModule/runtimeTuning'
+import { failStartup, handleVueError } from './utils/fatalFallback'
 
 async function initializeApp() {
   console.log('【应用启动】开始初始化流程...');
 
-  // 首先执行数据迁移检查
-  await migrateData();
+  // 首先执行数据迁移检查；失败不白屏：记 LCQ-UI-005 后显示原生兜底界面（导出日志 / 重新载入），不再挂载。
+  try {
+    await migrateData();
+  } catch (error) {
+    // lcq-allow: failStartup 内记 LCQ-UI-005
+    failStartup('migrateData', error);
+    return;
+  }
 
   // 数值热改：读与 index.html 同级的 tuning.json，失败静默用打包内默认值（见 runtimeTuning.ts）。
   await loadRuntimeTuning();
 
   console.log('【应用启动】数据迁移检查完成，开始挂载Vue应用');
-  const app = createApp(App);
-  const pinia = createPinia();
+  try {
+    const app = createApp(App);
+    const pinia = createPinia();
 
-  // 全局注册 i18n
-  const { t } = useI18n();
-  app.config.globalProperties.$t = t;
+    // 组件运行期未捕获异常：记 LCQ-UI-004 + 限频提示（见 fatalFallback.ts）
+    app.config.errorHandler = handleVueError;
 
-  // 全局混入，让所有组件都能使用 t 函数
-  app.mixin({
-    methods: {
-      t(key: string): string {
-        return t(key);
+    // 全局注册 i18n
+    const { t } = useI18n();
+    app.config.globalProperties.$t = t;
+
+    // 全局混入，让所有组件都能使用 t 函数
+    app.mixin({
+      methods: {
+        t(key: string): string {
+          return t(key);
+        }
       }
-    }
-  });
+    });
 
-  app.use(pinia);
-  app.use(router);
-  app.mount('#app');
+    app.use(pinia);
+    app.use(router);
+    app.mount('#app');
+  } catch (error) {
+    // lcq-allow: failStartup 内记 LCQ-UI-005
+    failStartup('mount', error);
+    return;
+  }
 
   void useAPIManagementStore().loadFromStorage();
 
