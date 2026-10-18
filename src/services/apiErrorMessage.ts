@@ -1,8 +1,4 @@
-function readStatus(error: unknown): number | undefined {
-  const value = error as any;
-  const status = value?.status ?? value?.response?.status ?? value?.cause?.status ?? value?.cause?.response?.status;
-  return typeof status === 'number' ? status : undefined;
-}
+import { readHttpStatus } from './aiRetryPolicy';
 
 function readMessage(error: unknown): string {
   if (!error) return '未知错误';
@@ -14,9 +10,11 @@ function readMessage(error: unknown): string {
   return String(error);
 }
 
-export function toUserFacingAIError(error: unknown): Error {
-  const status = readStatus(error);
+/** retries = 已自动重试的次数；大于 0 时文案如实写“已自动重试 N 次仍失败”，为 0/缺省则不声称重试过。 */
+export function toUserFacingAIError(error: unknown, info: { retries?: number } = {}): Error {
+  const status = readHttpStatus(error);
   const message = readMessage(error);
+  const retried = (info.retries ?? 0) > 0 ? `已自动重试 ${info.retries} 次仍失败。` : '';
   const quota = /insufficient[_ -]?quota|quota.{0,20}(?:exceed|耗尽|不足)|credit|余额|billing|payment required/i.test(message);
 
   let userMessage: string;
@@ -27,9 +25,13 @@ export function toUserFacingAIError(error: unknown): Error {
   } else if (status === 403) {
     userMessage = 'API 拒绝访问（403）。请检查密钥权限、模型访问权限和账户状态。';
   } else if (status === 429 || /\b429\b/.test(message)) {
-    userMessage = 'AI 请求过于频繁（429）。系统已自动重试；仍失败请稍后再试或降低并发。';
+    userMessage = `AI 请求过于频繁（429）。${retried}请稍后再试或降低并发。`;
   } else if (status === 503 || /service unavailable/i.test(message)) {
-    userMessage = 'AI 服务暂不可用（503）。系统已自动重试；请检查提供方状态，或稍后再试。';
+    userMessage = `AI 服务暂不可用（503）。${retried}请检查提供方状态，或稍后再试。`;
+  } else if (status !== undefined && (status === 408 || status >= 500)) {
+    userMessage = `AI 服务暂时出错（${status}）。${retried}请稍后再试。`;
+  } else if ((error as { kind?: string } | null)?.kind === 'network') {
+    userMessage = `无法连接到 AI 服务器。${retried}请检查网络和“API管理”里的地址后再试。`;
   } else {
     userMessage = message || 'AI 调用失败';
   }

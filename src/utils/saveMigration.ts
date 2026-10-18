@@ -2,6 +2,13 @@ import type { SaveData, GameTime, EventSystem } from '@/types/game';
 import type { SaveDataV3 } from '@/types/saveSchemaV3';
 import { normalizeBackpackCurrencies } from '@/utils/currencySystem';
 
+/** 当前游戏写档、读档所认的存档 schema 版本（= 元数据.版本号）。改 V3 字段形状时加一步迁移并同步抬高它。 */
+export const CURRENT_SAVE_SCHEMA_VERSION = 3;
+/** V3 形态的版本号；内置迁移步骤的 to 用它而不用 CURRENT，免得以后抬高 CURRENT 时改义。 */
+const SAVE_SCHEMA_V3 = 3;
+/** 未盖版本号 / V3 之前的旧形态，统一记作 0，由 0→3 一步收口。 */
+export const LEGACY_SAVE_SCHEMA_VERSION = 0;
+
 export type SaveMigrationIssue =
   | 'legacy-root-keys'
   | 'missing-required-keys'
@@ -293,25 +300,23 @@ const buildDefaultIdentity = () => ({
   后天六司: { 根骨: 0, 灵性: 0, 悟性: 0, 气运: 0, 魅力: 0, 心性: 0 },
 });
 
-export function migrateSaveDataToLatest(raw: SaveData): { migrated: SaveDataV3; report: SaveMigrationReport } {
-  const sourceRaw = deepClone(raw ?? ({} as any)) as any;
-  const source = stripAIFieldsDeep(sourceRaw) as any;
+/** V3 兜底归一化：旧版本的 V3 档可能缺记忆四段、只有“灵石”字段而未初始化“货币”结构。幂等。 */
+const normalizeV3Shape = (source: any): any => {
+  const normalized = deepClone(source) as any;
+  if (!isPlainObject(normalized.社交)) normalized.社交 = {};
+  normalized.社交.记忆 = normalizeMemory(normalized.社交.记忆);
+  if (normalized?.角色?.背包 && typeof normalized.角色.背包 === 'object') {
+    normalizeBackpackCurrencies(normalized.角色.背包);
+  }
+  return normalized;
+};
 
-  const report: SaveMigrationReport = {
-    legacyKeysFound: [],
-    removedLegacyKeys: [],
-    warnings: [],
-  };
-
+/** v0 → v3：V3 之前的任意旧形态（含 V3 形状但没盖版本号的档）→ V3。入参已是深拷贝且去掉了 AI 字段。 */
+const migrateLegacyToV3 = (source: any, report: SaveMigrationReport): SaveDataV3 => {
   if (isSaveDataV3(source)) {
-    const normalized = deepClone(source) as any;
-    if (!isPlainObject(normalized.社交)) normalized.社交 = {};
-    normalized.社交.记忆 = normalizeMemory(normalized.社交.记忆);
-    // V3 兜底：旧版本可能仍然只有“灵石”字段而未初始化“货币”结构
-    if (normalized?.角色?.背包 && typeof normalized.角色.背包 === 'object') {
-      normalizeBackpackCurrencies(normalized.角色.背包);
-    }
-    return { migrated: normalized as SaveDataV3, report };
+    const normalized = normalizeV3Shape(source);
+    normalized.元数据.版本号 = SAVE_SCHEMA_V3;
+    return normalized as SaveDataV3;
   }
 
   report.legacyKeysFound = LEGACY_ROOT_KEYS.filter((k) => k in source) as string[];
@@ -468,5 +473,96 @@ export function migrateSaveDataToLatest(raw: SaveData): { migrated: SaveDataV3; 
   }
   if (!migrated.角色?.身份) report.warnings.push('迁移后仍缺少 角色.身份（将导致部分界面无法展示）');
 
+  return migrated as SaveDataV3;
+};
+
+// ───────────── 版本迁移链 ─────────────
+
+/** 升级一步：把 from 版本形态的存档（已深拷贝、已去 AI 字段，可原地改）变成 to 版本形态。 */
+export interface SaveMigrationStep {
+  from: number;
+  to: number;
+  fn: (save: any, report: SaveMigrationReport) => any;
+}
+
+const migrationSteps: SaveMigrationStep[] = [{ from: LEGACY_SAVE_SCHEMA_VERSION, to: SAVE_SCHEMA_V3, fn: migrateLegacyToV3 }];
+
+/** 注册后续版本的升级步（vN→vN+1，也允许跨版）。from 不得重复；返回注销函数（测试用）。 */
+export function registerSaveMigrationStep(step: SaveMigrationStep): () => void {
+  if (!Number.isInteger(step.from) || !Number.isInteger(step.to) || step.from < 0 || step.to <= step.from) {
+    throw new Error(`存档迁移步骤版本号无效：${step.from}→${step.to}`);
+  }
+  if (migrationSteps.some((s) => s.from === step.from)) throw new Error(`存档迁移步骤重复：from=${step.from}`);
+  migrationSteps.push(step);
+  return () => {
+    const index = migrationSteps.indexOf(step);
+    if (index >= 0) migrationSteps.splice(index, 1);
+  };
+}
+
+export const listSaveMigrationSteps = (): ReadonlyArray<Readonly<SaveMigrationStep>> => migrationSteps.map((s) => ({ ...s }));
+
+/**
+ * 读出存档的 schema 版本。V3 及以上取 元数据.版本号；
+ * 缺版本号、版本号非法、低于 V3，或盖了 3 但不是 V3 形状，一律当旧档（0）。
+ */
+export function detectSaveSchemaVersion(saveData: SaveData | null | undefined): number {
+  if (!saveData || typeof saveData !== 'object') return LEGACY_SAVE_SCHEMA_VERSION;
+  const stamped = Number((saveData as any).元数据?.版本号);
+  if (Number.isInteger(stamped) && stamped > SAVE_SCHEMA_V3) return stamped;
+  if (stamped === SAVE_SCHEMA_V3 && isSaveDataV3(saveData)) return SAVE_SCHEMA_V3;
+  return LEGACY_SAVE_SCHEMA_VERSION;
+}
+
+export interface SaveVersionCheck {
+  supported: boolean;
+  saveVersion: number;
+  currentVersion: number;
+}
+
+/** 存档版本是否在当前游戏能读的范围内（高于 CURRENT_SAVE_SCHEMA_VERSION 即不支持）。 */
+export function checkSaveSchemaVersion(saveData: SaveData | null | undefined): SaveVersionCheck {
+  const saveVersion = detectSaveSchemaVersion(saveData);
+  return { supported: saveVersion <= CURRENT_SAVE_SCHEMA_VERSION, saveVersion, currentVersion: CURRENT_SAVE_SCHEMA_VERSION };
+}
+
+/** 给玩家看的拒载提示。 */
+export const futureSaveMessage = (slotLabel: string, check: SaveVersionCheck): string =>
+  `存档【${slotLabel}】来自更新版本的游戏（存档版本 ${check.saveVersion}，当前游戏最高支持 ${check.currentVersion}），为避免损坏存档已拒绝读取。请升级游戏后再读取（LCQ-SAV-014）`;
+
+export class SaveVersionTooNewError extends Error {
+  readonly code = 'LCQ-SAV-014';
+  constructor(readonly saveVersion: number, readonly currentVersion: number) {
+    super(`存档版本 ${saveVersion} 高于当前游戏支持的版本 ${currentVersion}`);
+    this.name = 'SaveVersionTooNewError';
+  }
+}
+
+/**
+ * 沿迁移链把存档升到 targetVersion（默认当前版本）。不改入参；已在目标版本的档只做 V3 兜底归一化（幂等）。
+ * 存档版本高于 targetVersion 抛 SaveVersionTooNewError；链上缺步骤抛普通 Error。
+ */
+export function migrateSaveData(
+  raw: SaveData,
+  targetVersion: number = CURRENT_SAVE_SCHEMA_VERSION,
+): { migrated: any; report: SaveMigrationReport; fromVersion: number; toVersion: number } {
+  const report: SaveMigrationReport = { legacyKeysFound: [], removedLegacyKeys: [], warnings: [] };
+  let current = stripAIFieldsDeep(deepClone(raw ?? ({} as any))) as any;
+  const fromVersion = detectSaveSchemaVersion(current);
+  if (fromVersion > targetVersion) throw new SaveVersionTooNewError(fromVersion, targetVersion);
+
+  let version = fromVersion;
+  if (version === SAVE_SCHEMA_V3) current = normalizeV3Shape(current);
+  while (version < targetVersion) {
+    const step = migrationSteps.find((s) => s.from === version);
+    if (!step) throw new Error(`存档迁移链缺少从版本 ${version} 出发的步骤（目标 ${targetVersion}）`);
+    current = step.fn(current, report);
+    version = step.to;
+  }
+  return { migrated: current, report, fromVersion, toVersion: version };
+}
+
+export function migrateSaveDataToLatest(raw: SaveData): { migrated: SaveDataV3; report: SaveMigrationReport } {
+  const { migrated, report } = migrateSaveData(raw, CURRENT_SAVE_SCHEMA_VERSION);
   return { migrated: migrated as SaveDataV3, report };
 }

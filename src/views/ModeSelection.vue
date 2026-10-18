@@ -10,7 +10,7 @@
           <span class="status-dot"></span>
           <span>{{ $t('单机模式') }}</span>
         </div>
-        <div class="version-tag">V{{ displayVersion }}</div>
+        <div class="version-tag" :title="versionDetail">{{ versionLabel }}</div>
       </div>
 
       <!-- 标题区域 -->
@@ -83,11 +83,14 @@
 
 <script setup lang="ts">
 import {CONTENT_PACKS} from '@/modules/contentPacks';
+import { getBuildInfo, formatVersionLabel, formatVersionDetail } from '@/modules/diagnostics/buildInfo';
 import VideoBackground from '@/components/common/VideoBackground.vue';
 import { Sparkles, History, User, Check, Library, Orbit, Feather, Moon } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
 
-const displayVersion = APP_VERSION;
+const buildInfo = getBuildInfo();
+const versionLabel = formatVersionLabel(buildInfo);
+const versionDetail = formatVersionDetail(buildInfo);
 const primaryEntries=CONTENT_PACKS.entries.filter(e=>e.group==='primary');
 const legacyEntries=CONTENT_PACKS.entries.filter(e=>e.group==='legacy');
 const entryIcons={Moon,Orbit,Feather};

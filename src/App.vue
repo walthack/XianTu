@@ -177,7 +177,7 @@
         </div>
 
         <div class="help-body">
-          <div class="help-version">v{{ displayVersion }}</div>
+          <div class="help-version" :title="versionDetail">{{ versionLabel }} · 内容包 {{ contentPackVersion }}</div>
 
           <p class="help-desc">AI驱动的沉浸式修仙文字冒险游戏</p>
 
@@ -219,6 +219,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, watchEffect, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { getBuildInfo, formatVersionLabel, formatVersionDetail } from '@/modules/diagnostics/buildInfo';
 import $ from 'jquery'; // 导入 jQuery
 import { BookOpen, X, Maximize2, Minimize2, Moon, Sun, Settings, Globe, Heart, ArrowRight, Plug, FileText } from 'lucide-vue-next'; // 导入图标
 import ToastContainer from './components/common/ToastContainer.vue';
@@ -258,7 +259,10 @@ const showSettingsModal = ref(false);
 const showAPIModal = ref(false);
 const showSponsorModal = ref(false);
 const showPromptModal = ref(false);
-const displayVersion = APP_VERSION;
+const buildInfo = getBuildInfo();
+const versionLabel = formatVersionLabel(buildInfo);
+const versionDetail = formatVersionDetail(buildInfo);
+const contentPackVersion = buildInfo.contentPackVersion;
 
 // --- 路由与视图管理 ---
 const router = useRouter();

@@ -223,7 +223,7 @@
 
     <!-- 版本号显示 -->
     <div class="sidebar-footer">
-      <span class="app-version">V{{ displayVersion }}</span>
+      <span class="app-version" :title="versionDetail">{{ versionLabel }}</span>
       <div class="footer-links">
         <a href="https://github.com/qianye60/XianTu" target="_blank" class="footer-link github" title="GitHub">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
@@ -262,6 +262,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { getBuildInfo, formatVersionLabel, formatVersionDetail } from '@/modules/diagnostics/buildInfo';
 import { Package, User, Users, BookOpen, Zap, Brain, Map, Save, Settings, LogOut, Home, Bell, ChevronRight, Database, Clock, FileText, Plug, LayoutGrid, Heart, Hammer } from 'lucide-vue-next';
 import { useCharacterStore } from '@/stores/characterStore';
 import { toast } from '@/utils/toast';
@@ -275,7 +276,9 @@ const { t, currentLanguage } = useI18n();
 
 // 版本号相关
 const showSponsorModal = ref(false);
-const displayVersion = APP_VERSION;
+const buildInfo = getBuildInfo();
+const versionLabel = formatVersionLabel(buildInfo);
+const versionDetail = formatVersionDetail(buildInfo);
 
 // 实时北京时间
 const currentRealTime = ref('');

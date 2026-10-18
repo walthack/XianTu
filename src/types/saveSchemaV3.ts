@@ -30,6 +30,7 @@ export interface SaveMetaV3 {
   存档ID: string;
   存档名: string;
   游戏版本?: string;
+  内容包版本?: string;
   创建时间: string;
   更新时间: string;
   游戏时长秒: number;

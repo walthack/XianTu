@@ -10,12 +10,14 @@
 - 兜底码 `LCQ-SYS-000`「未登记」：console.error / console.warn 捕获，以及调用方传了没登记的码，都落到这里。
 - 级别列是码的默认级别；个别接入点会按场景调整（如后台 AI 请求超时降为 warn、tuning.json 404 级别取配置 `diagnostics.tuning404Level`）。
 - 日志不记玩家原文、不记请求头/URL/正文/密钥：detail 经脱敏（`diagnostics.redactKeys / redactPatterns / textKeys / textChars`），textChars 默认 0。这是有意的，不要为了排查把原文加进 detail。
-- 数值全部在 `mod-kit/game-numbers.qingyu.json` 的 `diagnostics` 段（可经 tuning.json 热改，体检登记在 numbers.ts）。
+- 数值全部在 `mod-kit/game-numbers.qingyu.json` 的 `diagnostics` 段（可经 tuning.json 热改，体检登记在 numbers.ts）；反馈包的存档脱敏配置在同文件 `feedback` 段（体检登记在 feedback.ts）。
 - 新代码的 catch 必须含 logError/logEvent，或写 `// lcq-allow: 原因`；存量 catch 记在 `tests/errorCodeGuard.baseline.json`，只拦新增。
 
 ## 日志字段
 
 `ts`、`level`、`code`、`module`、`sessionId`、`turnId`、`requestId?`、`msg`、`detail`（已脱敏）、`stack?`。落在独立 IndexedDB 库 `lcq-log`（环形，不碰存档库）；IndexedDB 不可用时降级 localStorage 小缓存。调试模式下页面左下角出现错误角标，点开可看最近条目并导出 JSON。
+
+**反馈包**：设置页「高级设置 → 导出反馈包」与启动失败兜底界面（均非仅调试模式可见）可导出单个 zip（`lcq-feedback-<时间>.zip`，store 模式）：`manifest.json`、`version.json`（游戏版本/构建号/GIT_SHA/内容包版本）、`logs.json`、`model-config.json`（模型连接摘要，只记“是否填了密钥”，URL 去掉账号与查询串）；勾选“附带存档”才多一个 `save.json`（当前激活存档）。存档里的叙事原文是否脱敏由 `game-numbers` 的 `feedback.redactSaveNarrative` 决定（默认脱敏，范围 `feedback.narrativePaths`）；密钥无论如何都脱敏。
 
 ## 码表
 
@@ -59,6 +61,8 @@
 | LCQ-NET-005 | warn | aiService | AI 请求失败（网络或传输层错误） | 网络断开、DNS/证书失败、CORS 拦截或连接被重置 | 看 cause；检查网络与 API 地址、浏览器控制台的 CORS 报错 | 否 |
 | LCQ-NET-006 | warn | aiService | AI 流式分片解析失败，已跳过该分片 | 流式某一分片不是合法 JSON，已跳过 | 偶发可忽略；频繁出现说明中转服务返回格式异常 | 否 |
 | LCQ-NET-007 | warn | userCloudStorage | 后端云存储请求失败，回退本地缓存 | 后端云存储不可达或返回异常，已使用本地缓存（每会话只记一次） | 检查后端地址与登录状态；仅影响云同步 | 否 |
+| LCQ-NET-008 | warn | aiService | AI 请求失败，退避等待后自动重试 | 请求收到 aiRetry.retryStatuses 内的 HTTP 状态（如 429/503）或网络错误，且重试次数未用完；detail 含 delayMs、source（backoff 指数退避 / retry-after 服务端要求）、status | 偶发正常；频繁出现说明服务商不稳或在限流，可调 game-numbers 的 aiRetry 段（退避、次数） | 否 |
+| LCQ-NET-009 | warn | aiService | AI 请求自动重试未能成功，已转为玩家可读提示 | 可重试的失败（限流、5xx、网络）重试次数用完，或本回合剩余时间不够再等一轮（detail.why = retries_exhausted / turn_time_short）；玩家看到的是“已自动重试 N 次仍失败”类提示 | 看 detail.status 与同一请求的 LCQ-NET-004/005；限流就降频或换提供商；持续 5xx 查服务商状态 | 否 |
 | LCQ-NUM-001 | error | numbers | 数值配置对象无效 | tuning.json numbers 段里某处应为对象却写成了别的类型 | 按消息里的路径修正为对象 | 否 |
 | LCQ-NUM-002 | error | numbers | 数值配置含未知键 | numbers 段含 game-numbers.qingyu.json 里不存在的键（拼写错误或已删除的键） | 按消息里的路径核对键名；只能改已有键，不能新增 | 否 |
 | LCQ-NUM-003 | error | numbers | 数值配置类型无效 | numbers 段某个值的类型与默认值不同（数字写成字符串等）或为非有限数 | 按消息里的路径改成与默认值相同类型 | 否 |
@@ -78,11 +82,22 @@
 | LCQ-SAV-008 | warn | indexedDB | 合并远程与本机根数据失败，回退本机数据 | 远程与本机根数据合并时抛错，已回退本机数据 | 看 cause；检查远程返回的数据结构 | 否 |
 | LCQ-SAV-009 | warn | indexedDB | 存档库统计信息获取失败 | 读取库统计信息（条数/大小）失败 | 只影响统计显示，可忽略；反复出现则按 LCQ-SAV-001 排查 | 否 |
 | LCQ-SAV-010 | warn | characterRag | 角色 RAG 的 IndexedDB 库初始化失败，该功能本次不可用 | 角色 RAG 用的 IndexedDB 打开失败 | 功能降级为不可用；按 LCQ-SAV-001 思路排查浏览器存储 | 否 |
+| LCQ-SAV-011 | warn | indexedDB | 存档滚动备份写入失败，主存档写入不受影响 | 覆盖写前把旧值挪进 `__rot__<槽>_N` 备份槽的事务失败（配额紧张、库被关闭） | 看 detail.op / slotId；主存档仍会照常写入，只是这次没有新备份；腾出站点存储空间 | 否 |
+| LCQ-SAV-012 | warn | indexedDB | 存档损坏或读取失败，已回退到滚动备份 | 槽位读出来不是对象、过不了 V3 致命校验或读取抛错，已改用最近一份可用的 `__rot__<槽>_N` | 看 detail.backupIndex（回退到第几份）与 detail.problem；提示只在同一会话同一槽弹一次（由读档处直接弹，不走日志 toast 的 error 级别线）；回退的是较早的进度，建议核对后手动存档 | 是 |
+| LCQ-SAV-013 | error | indexedDB | 存档损坏或读取失败，且没有可用的滚动备份 | 主槽损坏/读不出，`__rot__<槽>_1..N` 也都不存在或同样损坏 | 勿覆盖该槽；导出日志与浏览器存储留证，用手动导出的存档文件恢复 | 是 |
+| LCQ-SAV-014 | warn | saveMigration | 存档版本高于当前游戏，已拒绝加载 | 存档的 `元数据.版本号` 大于游戏支持的 `CURRENT_SAVE_SCHEMA_VERSION`（存档由更新版本的游戏写出，或玩家回退了游戏版本） | 看 detail.saveVersion / currentVersion；升级游戏后再读取，不要用旧版本覆盖该槽；该槽数据未被改动（不迁移、不回退到滚动备份）；提示由读档处直接弹（不走日志 toast 的 error 级别线） | 是 |
+| LCQ-SAV-015 | warn | saveValidation | 读档校验发现非致命问题（缺字段或类型不对），已照常加载 | 迁移之后的 `validateSaveDataV3` 报了 errors / warnings（常见于旧档缺新字段、装备引用了不存在的物品），但结构仍是 V3 | 看 detail.problems 与 count；仅告警，存档照常加载、不拒绝；同一问题反复出现再考虑补迁移步骤 | 否 |
+| LCQ-SAV-016 | warn | saveValidation | 读档校验发现存档结构损坏，已回退到滚动备份 | 迁移之后的存档不是 V3 结构（`validateSaveDataV3` 的 criticalErrors），改用最近一份可用的 `__rot__<槽>_N`（旧结构的备份会在内存里迁移，不写回） | 看 detail.backupIndex 与 detail.problems；回退的是较早的进度；原槽未被改写，下次存档才覆盖；提示只在同一会话同一槽弹一次（由读档处直接弹，不走日志 toast 的 error 级别线） | 是 |
+| LCQ-SAV-017 | warn | saveValidation | 读档校验发现存档结构损坏，且没有可用的滚动备份，已拒绝加载 | 存档过不了致命校验，`__rot__<槽>_1..N` 也都不存在、同样损坏或来自更新版本 | 勿覆盖该槽；看 detail.problems；导出日志与浏览器存储留证，用手动导出的存档文件恢复；提示由读档处直接弹（不走日志 toast 的 error 级别线） | 是 |
+| LCQ-SAV-018 | warn | feedbackPack | 反馈包读取当前存档失败，已不带存档导出 | 玩家勾选了“附带存档”，但读本机 IndexedDB 的当前激活存档时抛错（存储库不可用、存档记录损坏） | 看 stack 与 cause；反馈包里的 manifest.json 会写明“读取存档失败，反馈包未带存档”，其余日志/版本/模型配置照常；按 LCQ-SAV-001 / LCQ-SAV-002 排查存储库，必要时让玩家走存档页的存档导出 | 否 |
 | LCQ-SYS-000 | warn | diagnostics | 未登记 | console.error / console.warn 被日志捕获；或调用方传了没登记的码（原码在 detail.originalCode） | 看 msg 与 stack 定位调用点；若是业务上要长期保留的错误，给它登记专属码并改成 logError | 否 |
 | LCQ-SYS-001 | warn | diagnostics | 日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存 | 浏览器禁用或不支持 IndexedDB（隐私模式、存储被清理策略禁用），或 lcq-log 库打开失败 | 日志仍在内存环形缓冲里，可照常导出；换普通窗口或检查浏览器站点存储设置 | 否 |
 | LCQ-UI-001 | error | window | 页面未捕获异常（window error） | 页面脚本抛出未捕获异常（组件渲染、事件回调） | 看 stack 与 detail.file/line；复现步骤 + 导出日志提交 | 否 |
 | LCQ-UI-002 | error | window | 未处理的 Promise 拒绝（unhandledrejection） | 某个 Promise 失败且无人处理 | 看 stack 找到未 await/未 catch 的调用；业务上应补 catch 并改用专属码 | 否 |
 | LCQ-UI-003 | warn | diagnostics | 导出日志失败 | 导出日志时浏览器拒绝创建下载（沙箱、权限） | 换浏览器或重试；不影响游戏 | 否 |
+| LCQ-UI-004 | error | vue | Vue 组件未捕获异常（app.config.errorHandler） | 组件渲染、生命周期钩子、事件处理器或 watcher 抛出未捕获异常（Vue 已接管，不会再触发 window error） | 看 stack 与 detail.info（Vue 给出的出错位置，如 render function / mounted hook）、detail.component；玩家提示按码 30 秒去重，不会刷屏；复现步骤 + 导出日志提交 | 是 |
+| LCQ-UI-005 | error | startup | 启动阶段失败，已显示兜底界面 | 挂载前的启动步骤抛错（目前是 migrateData 存档迁移检查），或挂载 Vue 应用时抛错；此时页面显示原生兜底界面（导出日志 / 重新载入） | 看 detail.stage（migrateData / mount）与 cause；先导出日志，再重新载入；migrateData 失败多为浏览器存储不可用，按 LCQ-SAV-001 / LCQ-SAV-005 排查 | 否 |
+| LCQ-UI-006 | warn | diagnostics | 导出反馈包失败 | 组包或触发下载时抛错：浏览器拒绝创建下载（沙箱、权限），或内存不足以容纳带存档的大包 | 看 cause；换浏览器或重试；先不勾选“附带存档”再导出（只含日志/版本/模型配置摘要，体积很小）；不影响游戏 | 否 |
 
 ## 已作废
 

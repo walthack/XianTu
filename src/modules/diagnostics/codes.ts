@@ -73,6 +73,14 @@ export const ERROR_CODES = {
   'LCQ-SAV-008': spec('warn', 'indexedDB', '合并远程与本机根数据失败，回退本机数据'),
   'LCQ-SAV-009': spec('warn', 'indexedDB', '存档库统计信息获取失败'),
   'LCQ-SAV-010': spec('warn', 'characterRag', '角色 RAG 的 IndexedDB 库初始化失败，该功能本次不可用'),
+  'LCQ-SAV-011': spec('warn', 'indexedDB', '存档滚动备份写入失败，主存档写入不受影响'),
+  'LCQ-SAV-012': spec('warn', 'indexedDB', '存档损坏或读取失败，已回退到滚动备份', true),
+  'LCQ-SAV-013': spec('error', 'indexedDB', '存档损坏或读取失败，且没有可用的滚动备份', true),
+  'LCQ-SAV-014': spec('warn', 'saveMigration', '存档版本高于当前游戏，已拒绝加载', true),
+  'LCQ-SAV-015': spec('warn', 'saveValidation', '读档校验发现非致命问题（缺字段或类型不对），已照常加载'),
+  'LCQ-SAV-016': spec('warn', 'saveValidation', '读档校验发现存档结构损坏，已回退到滚动备份', true),
+  'LCQ-SAV-017': spec('warn', 'saveValidation', '读档校验发现存档结构损坏，且没有可用的滚动备份，已拒绝加载', true),
+  'LCQ-SAV-018': spec('warn', 'feedbackPack', '反馈包读取当前存档失败，已不带存档导出'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),
@@ -81,6 +89,8 @@ export const ERROR_CODES = {
   'LCQ-NET-005': spec('warn', 'aiService', 'AI 请求失败（网络或传输层错误）'),
   'LCQ-NET-006': spec('warn', 'aiService', 'AI 流式分片解析失败，已跳过该分片'),
   'LCQ-NET-007': spec('warn', 'userCloudStorage', '后端云存储请求失败，回退本地缓存'),
+  'LCQ-NET-008': spec('warn', 'aiService', 'AI 请求失败，退避等待后自动重试'),
+  'LCQ-NET-009': spec('warn', 'aiService', 'AI 请求自动重试未能成功，已转为玩家可读提示'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),
@@ -89,6 +99,9 @@ export const ERROR_CODES = {
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),
   'LCQ-UI-003': spec('warn', 'diagnostics', '导出日志失败'),
+  'LCQ-UI-004': spec('error', 'vue', 'Vue 组件未捕获异常（app.config.errorHandler）', true),
+  'LCQ-UI-005': spec('error', 'startup', '启动阶段失败，已显示兜底界面'),
+  'LCQ-UI-006': spec('warn', 'diagnostics', '导出反馈包失败'),
 } as const satisfies Record<string, CodeSpec>;
 
 export type ErrorCode = keyof typeof ERROR_CODES;

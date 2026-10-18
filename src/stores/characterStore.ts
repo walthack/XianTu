@@ -14,12 +14,12 @@ import { debug } from '@/utils/debug';
 import { useUIStore } from './uiStore'; // 导入UI Store
 import { useCharacterCreationStore } from './characterCreationStore'; // 导入创角Store
 import * as storage from '@/utils/indexedDBManager';
+import { loadSaveWithFallback, rejectFutureSaveVersion, validateLoadedSave } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
 import { ensureSaveDataHasTavernNsfw } from '@/utils/nsfw';
 import { initializeCharacter } from '@/services/characterInitialization';
 import { createCharacter as createCharacterAPI, fetchCharacterProfile, updateCharacterSave, verifyStoredToken } from '@/services/request';
 import { isBackendConfigured } from '@/services/backendConfig';
-import { validateGameData } from '@/utils/dataValidation';
 import { getAIDataRepairSystemPrompt } from '@/utils/prompts/tasks/dataRepairPrompts';
 import { updateLifespanFromGameTime, updateNpcLifespanFromGameTime } from '@/utils/lifespanCalculator'; // <-- 导入寿命计算工具
 import { updateMasteredSkills } from '@/utils/masteredSkillsCalculator'; // <-- 导入掌握技能计算工具
@@ -970,9 +970,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
         console.log('[14] 加载Key:', { 角色ID: charId, 存档槽位: slotKey })
         debug.log('角色商店', `存档数据不在内存中，从 IndexedDB 加载: ${charId}/${slotKey}`);
         try {
-          const saveData = profile.隔离试玩信息?.localOnly
-            ? await storage.loadLocalSaveData(charId, slotKey)
-            : await storage.loadSaveData(charId, slotKey);
+          const saveData = await loadSaveWithFallback(charId, slotKey, { localOnly: profile.隔离试玩信息?.localOnly === true });
           if (saveData) {
             console.log('[15] 从IndexedDB加载的角色.背包.灵石数据:', (saveData as any).角色?.背包?.灵石)
             targetSlot.存档数据 = saveData;
@@ -988,6 +986,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
           return false;
         }
       }
+
+      // 版本守卫：存档版本高于当前游戏则拒绝加载（不迁移、不写回），须先于旧结构检测
+      if (rejectFutureSaveVersion(charId, slotKey, targetSlot.存档数据)) return false;
 
       // V3 迁移：检测到旧结构必须先迁移（写回同槽位），否则不允许加载
       if (targetSlot.存档数据) {
@@ -1051,22 +1052,12 @@ export const useCharacterStore = defineStore('characterV3', () => {
         }
       }
 
-      // 在加载前执行数据骨架验证
-      // if (targetSlot.存档数据) {
-      //   const validationResult = validateGameData(targetSlot.存档数据, profile);
-      //   if (!validationResult.isValid) {
-      //     debug.error('角色商店', '存档数据验证失败', validationResult.errors);
-      //     uiStore.showDataValidationErrorDialog(
-      //       validationResult.errors,
-      //       () => {
-      //         // [核心改造] 用户确认后，调用AI进行智能修复
-      //         repairCharacterDataWithAI(charId, slotKey);
-      //       },
-      //       'loading' // [核心改造] 明确告知UI这是"加载"场景
-      //     );
-      //     return false; // 中断加载流程
-      //   }
-      // }
+      // 读档前校验（迁移之后）：致命 → 回退滚动备份，没有可用备份就中止；非致命只记日志，不拒绝合法旧档
+      if (targetSlot.存档数据) {
+        const outcome = await validateLoadedSave(charId, slotKey, targetSlot.存档数据);
+        if (outcome.status === 'rejected') return false;
+        targetSlot.存档数据 = outcome.data;
+      }
 
       try {
         uiStore.startLoading('开始加载存档...');
@@ -1213,9 +1204,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
     try {
       // 🔥 新架构：从 IndexedDB 加载存档数据
-      const saveData = profile.隔离试玩信息?.localOnly
-        ? await storage.loadLocalSaveData(active.角色ID, active.存档槽位)
-        : await storage.loadSaveData(active.角色ID, active.存档槽位);
+      const saveData = await loadSaveWithFallback(active.角色ID, active.存档槽位, { localOnly: profile.隔离试玩信息?.localOnly === true });
 
       if (!saveData) {
         debug.warn('角色商店', 'IndexedDB 中没有存档数据');

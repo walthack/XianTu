@@ -3,6 +3,7 @@ import type { LocalStorageRoot, SaveData } from '@/types/game';
 import { buildBackendUrl, isBackendConfigured } from '@/services/backendConfig';
 import { toast } from '@/utils/toast';
 import { logError, logEventOnce } from '@/modules/diagnostics/log';
+import { isInternalBackupKey, isRotationSlotOf, isUsableSave, planRotation } from '@/utils/saveRotation';
 
 /**
  * @fileoverview
@@ -507,7 +508,8 @@ export async function getStorageStats(): Promise<{ itemCount: number; estimatedS
           const estimatedMB = (estimatedBytes / 1024 / 1024).toFixed(2);
 
           resolve({
-            itemCount,
+            // 滚动备份/迁移备份槽不算“存档”条数；体积照实计入（它们确实占着站点存储）。
+            itemCount: (allData as Array<{ id?: unknown }>).filter(record => !(typeof record?.id === 'string' && isInternalBackupKey(record.id))).length,
             estimatedSize: `~${estimatedMB} MB`
           });
         };
@@ -531,6 +533,58 @@ export async function getStorageStats(): Promise<{ itemCount: number; estimatedS
 }
 
 /**
+ * 覆盖写前滚动备份：同一事务里把 当前槽→_1、_1→_2… 挪好（planRotation 给顺序）。
+ * 当前槽旧值不可用（损坏/不完整）时整体跳过，免得坏数据几次保存就把好备份挤掉。只写本机，不碰远端。
+ */
+async function rotateSaveBackups(characterId: string, slotId: string): Promise<void> {
+  const moves = planRotation(slotId);
+  if (moves.length === 0) return;
+  const keyOf = (slot: string) => `${SAVEDATA_KEY_PREFIX}${characterId}_${slot}`;
+  const db = await openDatabase();
+  await new Promise<void>((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const objectStore = transaction.objectStore(STORE_NAME);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error);
+
+    const records = new Map<string, any>();
+    let pending = moves.length;
+    for (const { from } of moves) {
+      const request = objectStore.get(keyOf(from));
+      request.onsuccess = () => {
+        records.set(from, request.result);
+        if (--pending > 0) return;
+        if (!records.get(slotId)?.data || !isUsableSave(records.get(slotId).data)) return;
+        for (const move of moves) {
+          const record = records.get(move.from);
+          if (record?.data) objectStore.put({ ...record, id: keyOf(move.to) });
+        }
+      };
+    }
+  });
+}
+
+/** 删掉某槽位的全部滚动备份（按键扫描，份数配置以前更大也清得干净）。 */
+async function deleteRotationBackups(characterId: string, slotId: string): Promise<void> {
+  const prefix = `${SAVEDATA_KEY_PREFIX}${characterId}_`;
+  const db = await openDatabase();
+  await new Promise<void>((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const objectStore = transaction.objectStore(STORE_NAME);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error);
+    const keysRequest = objectStore.getAllKeys();
+    keysRequest.onsuccess = () => {
+      for (const key of keysRequest.result as string[]) {
+        if (typeof key === 'string' && key.startsWith(prefix) && isRotationSlotOf(key.slice(prefix.length), slotId)) objectStore.delete(key);
+      }
+    };
+  });
+}
+
+/**
  * 🔥 新增：保存激活存档的 SaveData 到 IndexedDB
  * 用于替代酒馆变量存储
  * @param characterId 角色ID
@@ -545,6 +599,11 @@ export async function saveSaveData(
 ): Promise<void> {
   try {
     const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
+    try {
+      await rotateSaveBackups(characterId, slotId);
+    } catch (rotateError) {
+      logError('LCQ-SAV-011', rotateError, { detail: { op: 'rotateSaveBackups', characterId, slotId } });
+    }
     const remoteSaved = await saveData(key, saveDataContent, { localOnly: options.localOnly });
     if (remoteSaved && slotId !== '上次对话') {
       toast.success(`存档【${slotId}】已保存到远程仙途服务器`, {
@@ -640,17 +699,27 @@ export async function loadSaveData(
   slotId: string
 ): Promise<SaveData | null> {
   try {
-    const key = `${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`;
-    const remoteData = await loadRemoteRecord<SaveData>(key);
-    if (remoteData) {
-      console.log(`【乾坤宝库-远程】SaveData 已加载 (${characterId}/${slotId})`);
-      return remoteData;
-    }
-    return await loadLocalSaveDataRecord(characterId, slotId);
+    return await loadSaveDataStrict(characterId, slotId);
   } catch (error) {
     logError('LCQ-SAV-002', error, { detail: { op: 'loadSaveData', characterId, slotId } });
     return null;
   }
+}
+
+/** 同 loadSaveData / loadLocalSaveData，但读取抛错时照常向上抛（读档回退要靠它分辨“读不出”和“不存在”）。 */
+export async function loadSaveDataStrict(
+  characterId: string,
+  slotId: string,
+  options: { localOnly?: boolean } = {},
+): Promise<SaveData | null> {
+  if (!options.localOnly) {
+    const remoteData = await loadRemoteRecord<SaveData>(`${SAVEDATA_KEY_PREFIX}${characterId}_${slotId}`);
+    if (remoteData) {
+      console.log(`【乾坤宝库-远程】SaveData 已加载 (${characterId}/${slotId})`);
+      return remoteData;
+    }
+  }
+  return loadLocalSaveDataRecord(characterId, slotId);
 }
 
 /**
@@ -669,7 +738,7 @@ export async function deleteSaveData(
 
     const db = await openDatabase();
 
-    return new Promise((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
       const objectStore = transaction.objectStore(STORE_NAME);
       const request = objectStore.delete(key);
@@ -684,6 +753,13 @@ export async function deleteSaveData(
         reject(request.error);
       };
     });
+
+    // 槽位删了，它的滚动备份也一并清掉（清不掉不影响本次删除）。
+    try {
+      await deleteRotationBackups(characterId, slotId);
+    } catch (backupError) {
+      logError('LCQ-SAV-004', backupError, { detail: { op: 'deleteRotationBackups', characterId, slotId } });
+    }
   } catch (error) {
     logError('LCQ-SAV-004', error, { detail: { op: 'deleteSaveData', characterId, slotId } });
     throw error;

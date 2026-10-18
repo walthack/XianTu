@@ -13,6 +13,9 @@ declare module '*.mp3' {
 }
 
 declare const APP_VERSION: string;
+declare const BUILD_ID: string;
+declare const GIT_SHA: string;
+declare const CONTENT_PACK_VERSION: string;
 declare const BACKEND_BASE_URL: string;
 declare const REMOTE_SAVE_STORAGE_ENABLED: boolean;
 declare const JUDGEMENT_TEST_CONTROLS: boolean;
