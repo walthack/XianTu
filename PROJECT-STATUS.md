@@ -6,7 +6,7 @@
 
 ## 一句话现状
 
-HEAD `ca555b6f`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 65144 未重启）；numbers 三分包已落 `3b8c1be2`；真机通过；**同拍闸已落**（共历好感接入 `affinityBeatTaken`，`3763e22e`）；**到顶轻回执已落**（`affinity.lightReceipt` 默认 true）；角色总表合入／补人中；**角色按拍卡（身份／官爵／结缘转换）记为内容扩展待办**；战内逃跑搁置；遇敌草案已定体验三步（危区叙事→几率检→遇敌叙事→开战，禁检中直接开战）；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行。**优先级：底座优先，内容可同步但略低。** 时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
+HEAD `ac32513d`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 65144 未重启）；numbers 三分包已落 `3b8c1be2`；真机通过；**同拍闸已落**（共历好感接入 `affinityBeatTaken`，`3763e22e`）；**到顶轻回执已落**（`affinity.lightReceipt` 默认 true）；角色总表合入／补人中；**角色按拍卡（身份／官爵／结缘转换）记为内容扩展待办**；战内逃跑搁置；遇敌草案已定体验三步（危区叙事→几率检→遇敌叙事→开战，禁检中直接开战）；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行。**优先级：底座优先，内容可同步但略低。** 时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
 
 ## 优先级口径（底座 vs 内容）
 
@@ -22,7 +22,7 @@ HEAD `ca555b6f`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 | 项 | 值 |
 |---|---|
 | 分支 | `feat/fast-no-legacy`（跟踪 `origin/feat/fast-no-legacy`） |
-| HEAD | `ca555b6f`（全长 `ca555b6fbe4c17f6b0fdd5d5ec8195a35f1afce5`）— 到顶轻回执 + 遇敌体验三步设计 |
+| HEAD | `ac32513d`（全长 `ac32513dff9d54aff50082e225550e32dbdf9be8`）— 到顶轻回执 + 遇敌体验三步设计 |
 | 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`1f2c41525ce2`**；进程 `node … serve.mjs --port 8097` PID **65144**（长期未重启；包文件已更新到该哈希） |
 | numbers 三分包 | `mod-kit/numbers-combat.json` / `numbers-progress.json` / `numbers-runtime.json` + `NUMBERS-AUTHORITY.md`；生成物 `mod-kit/game-numbers.qingyu.json`；提交 **`3b8c1be2`** |
 | 最近合入基线 | diagnostics / drain / scene-danger / baseline-p0·p1·p2 已 merge；同拍闸 `3763e22e` |
