@@ -13,7 +13,7 @@ test('author conflict 1: approved original facts',async()=>{for(const s of ['03b
 
 test('author conflict 2: approved original facts',async()=>{assert.match(JSON.stringify(c(await stage('04b_lingfei_baiyi_crisis'),'lcq.character.nanhuang_heishe')),/阁罗的随从/);assert.doesNotMatch(JSON.stringify(c(await stage('04b_lingfei_baiyi_crisis'),'lcq.character.nanhuang_heishe')),/碧鲮族人/);});
 
-test('author conflict 3: approved original facts',async()=>{assert.equal(c(await stage('04b_lingfei_baiyi_crisis'),'lcq.character.nanhuang_dagu').role,'鬼王峒巫师');});
+test('author conflict 3: approved original facts',async()=>{assert.equal(c(await stage('04b_lingfei_baiyi_crisis'),'lcq.character.nanhuang_dagu').role,'鬼王峒秘营巫师');});
 
 test('author conflict 4: approved original facts',async()=>{const m=await stage('05b');assert.equal(c(m,'lcq.character.nanhuang_loumeng').role,'红苗族长之子');assert.equal(c(m,'liuchao.character.dan_chen').role,'红苗女子，娄蒙之妻');});
 
