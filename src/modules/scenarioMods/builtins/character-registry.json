@@ -1,7 +1,7 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-10-18-1860022c9cc58660",
-  "sourceHash": "1860022c9cc58660",
+  "version": "cr-2026-10-18-155ed4d4c154dd84",
+  "sourceHash": "155ed4d4c154dd84",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
   "generatedAt": "2026-10-18T04:26:43.987Z",
   "stats": {
@@ -34486,7 +34486,7 @@
       "tier": "主要",
       "stagePresence": true,
       "staticProfile": {
-        "identitySummary": "",
+        "identitySummary": "白武族刀客，与白湖商馆／程宗扬商队同行",
         "personality": [
           "粗犷威猛",
           "直率暴躁",
@@ -34528,7 +34528,7 @@
         "affiliations": [
           {
             "faction": "白湖商馆",
-            "role": ""
+            "role": "同行刀客"
           }
         ],
         "crossStageMemories": [
@@ -51332,6 +51332,104 @@
         "note": "结构化缺卡审计补建；仅采用已入库关卡正典，不外推原作未载事实"
       },
       "embedText": "左悺 ｜ 中常侍（内臣/宦官） ｜ 【汉国人物】 ｜ 宦官集团(中常侍) ｜ 登场于洛都南宫玉堂前殿 ｜ 胆小怕事、急于自保 ｜ 被程宗扬一行从玉堂前殿救出 ｜ 洛都政变中被吕氏擒拿关押，受审时赌咒发誓自证；程宗扬、云丹琉斩铁镣将其救出；长秋宫守卫战中被蔡敬仲拖到阵前、推入敌阵，下落不明"
+    },
+    {
+      "id": "lcq.character.nanhuang_aling",
+      "canonicalName": "阿伶",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "花苗女子，与石刚相好",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "花苗",
+            "role": "族人"
+          }
+        ],
+        "debutLocation": {
+          "location": "南荒",
+          "locator": "六朝清羽记·第58章",
+          "scene": "花苗女子，与石刚相好"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "nanhuang-debut-gap-filled-2026-10-19"
+        ],
+        "conflicts": [],
+        "note": "南荒登场漏档补建（2026-10-19）：不论敌友凡登场须进总表；简介仅首见可知事实，不剧透。阶段 stub 已有 id 则复用。"
+      },
+      "embedText": "阿伶 ｜ 花苗女子，与石刚相好 ｜ 【南荒人物】 ｜ 花苗(族人) ｜ 登场约第58章"
+    },
+    {
+      "id": "lcq.character.nanhuang_hongmiao_chief",
+      "canonicalName": "红苗族长",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "红苗族的族长，娄蒙之父",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "红苗",
+            "role": "族长"
+          }
+        ],
+        "debutLocation": {
+          "location": "红苗（被点名）",
+          "locator": "六朝清羽记·第91章",
+          "scene": "红苗族的族长，娄蒙之父"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "nanhuang-debut-gap-filled-2026-10-19"
+        ],
+        "conflicts": [],
+        "note": "南荒登场漏档补建（2026-10-19）：不论敌友凡登场须进总表；简介仅首见可知事实，不剧透。阶段 stub 已有 id 则复用。"
+      },
+      "embedText": "红苗族长 ｜ 红苗族的族长，娄蒙之父 ｜ 【南荒人物】 ｜ 红苗(族长) ｜ 登场约第91章"
     }
   ]
 }

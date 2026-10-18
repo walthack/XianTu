@@ -2047,12 +2047,12 @@
       },
       {
         "id": "lcq.character.nanhuang_stonemason",
-        "name": "六朝石匠",
-        "role": "峒口刻柱的六朝石匠",
+        "name": "石匠",
+        "role": "峒口刻柱的石匠",
         "profile": {
-          "origin": "峒口刻柱的六朝石匠"
+          "origin": "峒口刻柱的石匠"
         },
-        "description": "峒口刻柱的六朝石匠",
+        "description": "峒口刻柱的石匠",
         "affiliations": [],
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"

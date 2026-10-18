@@ -2002,7 +2002,7 @@
       {
         "id": "lcq.character.nanhuang_heishe",
         "name": "黑舌",
-        "role": "阁罗的随从，鬼王峒的人",
+        "role": "阁罗的随从",
         "profile": {
           "origin": "阁罗的随从"
         },
@@ -2043,7 +2043,8 @@
       {
         "id": "lcq.character.nanhuang_dagu",
         "name": "达古",
-        "role": "鬼王峒巫师",
+        "gender": "女",
+        "role": "鬼王峒秘营巫师",
         "profile": {
           "origin": "鬼王峒秘营的巫师，以腹语驱使鬼战士"
         },
@@ -2078,12 +2079,12 @@
       },
       {
         "id": "lcq.character.nanhuang_stonemason",
-        "name": "六朝石匠",
-        "role": "峒口刻柱的六朝石匠",
+        "name": "石匠",
+        "role": "峒口刻柱的石匠",
         "profile": {
-          "origin": "峒口刻柱的六朝石匠"
+          "origin": "峒口刻柱的石匠"
         },
-        "description": "峒口刻柱的六朝石匠",
+        "description": "峒口刻柱的石匠",
         "affiliations": [],
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
