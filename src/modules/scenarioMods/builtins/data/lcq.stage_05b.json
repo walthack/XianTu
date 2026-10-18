@@ -316,7 +316,7 @@
         "name": "白武族",
         "description": "武二郎所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.guiwang_dong",
+        "headquartersLocationId": "liuchao.location.gui_wang_dong",
         "territory": [
           {
             "x": 1500,
@@ -346,7 +346,7 @@
         "name": "花苗族",
         "description": "苏荔所属部族。",
         "type": "部族",
-        "headquartersLocationId": "liuchao.location.guiwang_dong",
+        "headquartersLocationId": "liuchao.location.gui_wang_dong",
         "territory": [
           {
             "x": 1500,
@@ -623,13 +623,6 @@
         "features": [],
         "polity": "宋国",
         "region": "宋国"
-      },
-      {
-        "id": "liuchao.faction.bai_yi",
-        "name": "白夷",
-        "description": "南荒部族，出产珍珠与美玉。",
-        "type": "部族",
-        "headquartersLocationId": "liuchao.location.baiyi"
       }
     ],
     "locations": [
@@ -1168,6 +1161,20 @@
         "region": "宋国"
       },
       {
+        "id": "liuchao.location.gui_wang_dong",
+        "name": "鬼王峒",
+        "description": "鬼巫王统治的洞窟，龙神出没之地。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
+        "type": "洞府",
+        "continentId": "liuchao.continent.nanhuang",
+        "factionId": "liuchao.faction.gui_wang_dong",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
         "id": "liuchao.location.south_wild_valley",
         "name": "南荒山谷",
         "description": "龙神坠落之地。",
@@ -1190,6 +1197,19 @@
           "y": 4960
         },
         "features": []
+      },
+      {
+        "id": "liuchao.location.biyu",
+        "name": "碧鲮族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
+        "coordinates": {
+          "x": 1824,
+          "y": 8592
+        },
+        "features": [],
+        "region": "南荒"
       },
       {
         "id": "liuchao.location.gui_wang_gong",
@@ -1447,7 +1467,7 @@
         "description": "云氏同行商人、现代来客",
         "role": "云氏同行商人、现代来客",
         "gender": "男",
-        "realm": "未知",
+        "realm": "练气",
         "locationId": "liuchao.location.sea_temple",
         "skillIds": [
           "liuchao.skill.death_root",
@@ -1461,7 +1481,7 @@
         ],
         "itemIds": [
           "liuchao.item.coral_dagger",
-          "lcq.item.zipper",
+          "lcq.item.np002",
           "lcq.item.np003",
           "lcq.item.np006",
           "lcq.item.np007",
@@ -1481,9 +1501,7 @@
             "有支配欲"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.ning_yu",
@@ -1503,11 +1521,9 @@
         "skillIds": [
           "lcq.skill.np005"
         ],
-        "realm": "未知",
+        "realm": "练气",
         "gender": "女",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.wu_er_lang",
@@ -1527,17 +1543,15 @@
           "lcq.skill.np001",
           "lcq.skill.np004"
         ],
-        "realm": "未知",
+        "realm": "练气",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.qi_yuan",
         "name": "祁远",
         "role": "商队老行商",
-        "description": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。",
+        "description": "商队老行商",
         "profile": {
           "origin": "商队老行商",
           "personality": [
@@ -1547,11 +1561,9 @@
             "有些婆妈"
           ]
         },
-        "realm": "未知",
+        "realm": "练气",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.np003",
@@ -1568,28 +1580,19 @@
             "对朋友讲义气，有忠心"
           ]
         },
-        "realm": "未知",
+        "realm": "金丹",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_xiaowei",
         "name": "小魏",
         "role": "白湖商馆护卫",
         "profile": {
-          "origin": "白湖商馆的年轻护卫，曾走过南荒"
+          "origin": "白湖商馆护卫"
         },
-        "description": "白湖商馆的年轻护卫，曾走过南荒",
-        "affiliations": [],
-        "presenceWindow": {
-          "firstChapter": 34,
-          "lastPresentChapter": 118,
-          "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
-        },
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "description": "白湖商馆护卫",
+        "affiliations": []
       },
       {
         "id": "lcq.character.np004",
@@ -1605,11 +1608,9 @@
             "坚韧"
           ]
         },
-        "realm": "未知",
+        "realm": "金丹",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.xie_yi",
@@ -1617,7 +1618,7 @@
         "description": "云氏商队同行者",
         "role": "云氏商队同行者",
         "gender": "男",
-        "realm": "通幽",
+        "realm": "化神",
         "locationId": "liuchao.location.biyu_village",
         "skillIds": [
           "liuchao.skill.blade"
@@ -1634,9 +1635,7 @@
             "沉稳"
           ]
         },
-        "affiliations": [],
-        "level": 6,
-        "levelSource": "清羽L18220：臻于六级，达到通幽"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.yun_cang_feng",
@@ -1657,11 +1656,9 @@
             "精明"
           ]
         },
-        "realm": "未知",
+        "realm": "练气",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.shang_zhen_yu",
@@ -1671,11 +1668,9 @@
         "profile": {
           "origin": "云氏雇用的老向导"
         },
-        "realm": "未知",
+        "realm": "合体",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.su_li",
@@ -1690,11 +1685,9 @@
             "富有情欲"
           ]
         },
-        "realm": "未知",
+        "realm": "练气",
         "gender": "女",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.a_xi",
@@ -1708,30 +1701,21 @@
             "骄傲",
             "主动",
             "淫媚",
-            "天真跳脱",
+            "小孩子气",
             "任性"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_kawa",
         "name": "卡瓦",
-        "role": "花苗族汉子，随送亲队同行",
+        "role": "花苗护卫",
         "profile": {
-          "origin": "花苗的年轻汉子"
+          "origin": "花苗护卫"
         },
-        "description": "花苗的年轻汉子",
-        "affiliations": [],
-        "presenceWindow": {
-          "firstChapter": 40,
-          "lastPresentChapter": 108,
-          "source": "2026-10-06-F06F08F09归关与六人出场.md §五"
-        },
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "description": "花苗护卫",
+        "affiliations": []
       },
       {
         "id": "liuchao.character.le_mingzhu",
@@ -1739,7 +1723,7 @@
         "description": "光明观堂弟子",
         "role": "光明观堂弟子",
         "gender": "女",
-        "realm": "未知",
+        "realm": "凡人",
         "locationId": "liuchao.location.sea_temple",
         "skillIds": [
           "liuchao.skill.acupuncture"
@@ -1762,35 +1746,32 @@
             "对性事缺乏概念，容易被主角哄骗"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.xiao_zi",
         "name": "小紫",
-        "description": "穿紫衣的碧鲮族少女，住在碧鲮村。",
-        "role": "碧鲮村少女",
+        "description": "碧鲮少女",
+        "role": "碧鲮少女",
         "gender": "女",
-        "realm": "未知",
+        "realm": "凡人",
         "locationId": "liuchao.location.biyu_village",
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
         "profile": {
-          "origin": "穿紫衣的碧鲮族少女，住在碧鲮村。",
+          "origin": "碧鲮少女",
           "personality": [
-            "天真俏皮",
-            "偶露古怪狠劲",
-            "对程宗扬好奇"
-          ],
-          "race": "南荒人",
-          "appearance": "穿紫衣的成年少女，黑发垂落，眼睛明亮，陆上以双腿行走。",
-          "notes": []
+            "白切黑病娇",
+            "初识程宗扬时以痴呆、天真、反常无知的形象接近，曾出现用开水浇花等伪装行为",
+            "表面天真烂漫娇憨黏人",
+            "实则心狠手辣城府极深",
+            "视人命如草芥",
+            "智商碾压全场",
+            "喜欢亲手调教、收服违抗程宗扬的女性敌人（种奴印/驯服）"
+          ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.np006",
@@ -1807,11 +1788,9 @@
             "粗鄙"
           ]
         },
-        "realm": "未知",
+        "realm": "筑基",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.mi_gu",
@@ -1828,9 +1807,7 @@
             "负责追击与维持集会秩序"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.bi_ji",
@@ -1847,18 +1824,16 @@
             "软弱无助"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.dan_chen",
         "name": "丹宸",
         "gender": "女",
-        "role": "红苗女子，娄蒙之妻",
-        "description": "红苗女子，娄蒙之妻",
+        "role": "鬼王宫中的道士",
+        "description": "鬼王宫中的道士",
         "profile": {
-          "origin": "红苗女子，娄蒙之妻",
+          "origin": "鬼王宫中的道士",
           "personality": [
             "谦卑",
             "亢奋",
@@ -1866,21 +1841,17 @@
             "妖艳"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_loumeng",
         "name": "娄蒙",
-        "role": "红苗族长之子",
+        "role": "鬼王峒武士",
         "profile": {
-          "origin": "红苗族长之子，未来的继承人"
+          "origin": "鬼王峒武士"
         },
-        "description": "红苗族长之子，未来的继承人",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "description": "鬼王峒武士",
+        "affiliations": []
       },
       {
         "id": "lcq.character.saan",
@@ -1888,7 +1859,7 @@
         "description": "熟悉鬼王宫密道的人",
         "role": "熟悉鬼王宫密道的人",
         "gender": "男",
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.gui_wang_dong",
         "profile": {
           "origin": "熟悉鬼王宫密道的人",
           "personality": [
@@ -1897,9 +1868,7 @@
             "熟悉鬼王宫后厨与密道"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.zhu_nuo",
@@ -1916,18 +1885,16 @@
             "战斗节点角色"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.dragon_god",
         "name": "龙神",
         "description": "鬼王峒龙神",
         "role": "鬼王峒龙神",
-        "gender": "无",
-        "realm": "未知",
-        "locationId": "liuchao.location.guiwang_dong",
+        "gender": "男",
+        "realm": "化神",
+        "locationId": "liuchao.location.gui_wang_dong",
         "skillIds": [],
         "techniqueIds": [],
         "itemIds": [],
@@ -1940,10 +1907,7 @@
             "精力旺盛"
           ]
         },
-        "affiliations": [],
-        "entityType": "creature",
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.gui_wu_wang",
@@ -1951,8 +1915,8 @@
         "description": "鬼王峒之主",
         "role": "鬼王峒之主",
         "gender": "男",
-        "realm": "未知",
-        "locationId": "liuchao.location.guiwang_dong",
+        "realm": "金丹",
+        "locationId": "liuchao.location.gui_wang_dong",
         "skillIds": [
           "liuchao.skill.gui_yu_sword"
         ],
@@ -1973,9 +1937,7 @@
             "亢奋时苍白脸颊泛起红晕"
           ]
         },
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_blacksea_envoy",
@@ -1985,9 +1947,7 @@
           "origin": "黑魔海来客"
         },
         "description": "黑魔海来客",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_yeao",
@@ -1997,9 +1957,7 @@
           "origin": "山村养蛊老妇"
         },
         "description": "山村养蛊老妇",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.qin_hui",
@@ -2019,11 +1977,9 @@
             "遇明主忠义，遇昏主奸术自保"
           ]
         },
-        "realm": "未知",
+        "realm": "化神",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "liuchao.character.wu_san_gui",
@@ -2039,23 +1995,19 @@
             "豪爽"
           ]
         },
-        "realm": "未知",
+        "realm": "练气",
         "gender": "男",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "affiliations": []
       },
       {
         "id": "lcq.character.nanhuang_stonemason",
-        "name": "六朝石匠",
-        "role": "峒口刻柱的六朝石匠",
+        "name": "石匠",
+        "role": "峒口刻柱的石匠",
         "profile": {
-          "origin": "峒口刻柱的六朝石匠"
+          "origin": "峒口刻柱的石匠"
         },
-        "description": "峒口刻柱的六朝石匠",
-        "affiliations": [],
-        "level": null,
-        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+        "description": "峒口刻柱的石匠",
+        "affiliations": []
       }
     ],
     "playerRelationships": [],
@@ -2063,205 +2015,398 @@
     "factionRelationships": []
   },
   "content": {
-    "items": [
-      {
-        "id": "lcq.item.xieyi_ashes"
-      },
-      {
-        "id": "liuchao.item.coral_dagger"
-      },
-      {
-        "id": "liuchao.item.zhu_hu_guan"
-      },
-      {
-        "id": "liuchao.item.sunglasses"
-      },
-      {
-        "id": "lcq.item.zipper"
-      },
-      {
-        "id": "lcq.item.np003"
-      },
-      {
-        "id": "lcq.item.np006"
-      },
-      {
-        "id": "lcq.item.np007"
-      },
-      {
-        "id": "lcq.item.np008"
-      },
-      {
-        "id": "lcq.item.np009"
-      },
-      {
-        "id": "lcq.item.np010"
-      },
-      {
-        "id": "lcq.item.np011"
-      },
-      {
-        "id": "lcq.item.np012"
-      },
-      {
-        "id": "lcq.item.np013"
-      },
-      {
-        "id": "liuchao.item.moon_crescent_knife"
-      },
-      {
-        "id": "liuchao.item.purple_scale_whip"
-      },
-      {
-        "id": "liuchao.item.gui_yu_sword"
-      },
-      {
-        "id": "lcq.item.np014"
-      },
-      {
-        "id": "lcq.item.np015"
-      },
-      {
-        "id": "lcq.item.s05b_dragon_eye_jade"
-      },
-      {
-        "id": "lcq.item.s05b_spiral_needle"
-      },
-      {
-        "id": "lcq.item.s05b_bone_tiger"
-      },
-      {
-        "id": "lcq.item.nh_mountain_herb"
-      },
-      {
-        "id": "lcq.item.nh_small_hide"
-      },
-      {
-        "id": "lcq.item.nh_huamiao_flatbread"
-      },
-      {
-        "id": "lcq.item.nh_torch"
-      },
-      {
-        "id": "lcq.item.nh_feed_cake"
-      },
-      {
-        "id": "lcq.item.nh_goose_palm_mushroom"
-      },
-      {
-        "id": "lcq.item.nh_rat_pelt"
-      },
-      {
-        "id": "lcq.item.nh_tarnished_trinket"
-      },
-      {
-        "id": "lcq.item.nh_pebble_necklace"
-      },
-      {
-        "id": "lcq.item.nh_realgar_sachet"
-      },
-      {
-        "id": "lcq.item.nh_wild_fruit"
-      },
-      {
-        "id": "lcq.item.nh_lava_glass"
-      },
-      {
-        "id": "lcq.item.nh_bone_bead_string"
-      },
-      {
-        "id": "lcq.item.nh_dragon_scale_chip"
-      },
-      {
-        "id": "lcq.item.nh_red_copper_bead"
-      },
-      {
-        "id": "lcq.item.crow_bamboo_tube"
-      },
-      {
-        "id": "lcq.item.nh_bean_bun"
-      },
-      {
-        "id": "lcq.item.nh_boshan_incense"
-      },
-      {
-        "id": "lcq.item.nh_candle_stub"
-      },
-      {
-        "id": "lcq.item.nh_crystal_wine_cup"
-      },
-      {
-        "id": "lcq.item.nh_crystal_bead"
-      },
-      {
-        "id": "lcq.item.nh_niche_crystal"
-      },
-      {
-        "id": "lcq.item.nh_fine_crossbow_bolt"
-      },
-      {
-        "id": "lcq.item.nh_fine_crossbow_trigger"
-      },
-      {
-        "id": "lcq.item.f10_broken_axe"
-      }
-    ],
     "skills": [
       {
-        "id": "liuchao.skill.death_root"
+        "id": "liuchao.skill.death_root",
+        "name": "生死根",
+        "description": "程宗扬的异能，能吸收死亡气息转化为真阳。",
+        "type": "异能",
+        "effects": [
+          "吸收死气"
+        ]
       },
       {
-        "id": "liuchao.skill.acupuncture"
+        "id": "liuchao.skill.acupuncture",
+        "name": "针灸术",
+        "description": "乐明珠的医术，用银针治疗。",
+        "type": "医术",
+        "effects": [
+          "治疗"
+        ]
       },
       {
-        "id": "liuchao.skill.blade"
+        "id": "liuchao.skill.blade",
+        "name": "刀法",
+        "description": "谢艺的刀法技巧。",
+        "type": "武技",
+        "effects": []
       },
       {
-        "id": "lcq.skill.np001"
+        "id": "lcq.skill.np001",
+        "name": "九阳神功",
+        "description": "太乙真宗核心功法，王哲传程宗扬口诀。"
       },
       {
-        "id": "lcq.skill.np004"
+        "id": "lcq.skill.np004",
+        "name": "五虎断门刀",
+        "description": "武二郎的刀法，未传授给程宗扬"
       },
       {
-        "id": "lcq.skill.np005"
+        "id": "lcq.skill.np005",
+        "name": "双修功法",
+        "description": "凝羽与程宗扬通过性交交换真气"
       },
       {
-        "id": "liuchao.skill.five_tiger_broken_gate_knife"
+        "id": "liuchao.skill.five_tiger_broken_gate_knife",
+        "name": "五虎断门刀",
+        "description": "白武族刀法。",
+        "type": "刀法",
+        "effects": [
+          "猛虎扑食"
+        ]
       },
       {
-        "id": "liuchao.skill.single_knife"
+        "id": "liuchao.skill.single_knife",
+        "name": "单刀",
+        "description": "谢艺的刀法。",
+        "type": "刀法",
+        "effects": [
+          "一击必杀"
+        ]
       },
       {
-        "id": "liuchao.skill.phoenix_treasure_book"
+        "id": "liuchao.skill.phoenix_treasure_book",
+        "name": "凤凰宝典",
+        "description": "光明观堂功法。",
+        "type": "功法",
+        "effects": [
+          "火属性"
+        ]
       },
       {
-        "id": "liuchao.skill.scorpion_tail"
+        "id": "liuchao.skill.scorpion_tail",
+        "name": "蝎尾变身",
+        "description": "苏荔能变身蝎子。",
+        "type": "变身",
+        "effects": [
+          "蝎尾攻击"
+        ]
       },
       {
-        "id": "liuchao.skill.moon_light_shield"
+        "id": "liuchao.skill.moon_light_shield",
+        "name": "月光盾",
+        "description": "凝羽的防御技能。",
+        "type": "防御",
+        "effects": [
+          "月光护盾"
+        ]
       },
       {
-        "id": "liuchao.skill.gui_yu_sword"
+        "id": "liuchao.skill.gui_yu_sword",
+        "name": "鬼羽剑",
+        "description": "鬼巫王的剑法。",
+        "type": "剑法",
+        "effects": [
+          "召唤行尸"
+        ]
       },
       {
-        "id": "liuchao.skill.witchcraft"
+        "id": "liuchao.skill.witchcraft",
+        "name": "巫术",
+        "description": "小紫的巫术。",
+        "type": "巫术",
+        "effects": [
+          "控制"
+        ]
       },
       {
-        "id": "lcq.skill.np012"
+        "id": "lcq.skill.np012",
+        "name": "太一经",
+        "description": "殇侯指出凝羽所习为太一经末技，程宗扬需以正确方法修习"
       }
     ],
     "techniques": [
       {
-        "id": "liuchao.technique.yiyang"
+        "id": "liuchao.technique.yiyang",
+        "name": "一阳初生",
+        "description": "程宗扬从王哲处获得的功法，吸收死气后初成。",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.death_root"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       },
       {
-        "id": "liuchao.technique.phoenix"
+        "id": "liuchao.technique.phoenix",
+        "name": "凤凰宝典",
+        "description": "光明观堂的驻颜功法，乐明珠修炼。",
+        "grade": "凡品",
+        "skillIds": [],
+        "techniqueEffects": {
+          "修炼速度加成": 0.08,
+          "属性加成": {
+            "悟性": 1,
+            "灵性": 1
+          }
+        }
       },
       {
-        "id": "liuchao.technique.nine_yang_divine_skill"
+        "id": "liuchao.technique.nine_yang_divine_skill",
+        "name": "九阳神功",
+        "description": "太乙真宗镇教神功。",
+        "grade": "神级",
+        "skillIds": [
+          "liuchao.skill.five_tiger_broken_gate_knife"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
       },
       {
-        "id": "liuchao.technique.tai_yi_jing"
+        "id": "liuchao.technique.tai_yi_jing",
+        "name": "太一经",
+        "description": "黑魔海功法，双修法。",
+        "grade": "神级",
+        "skillIds": [
+          "liuchao.skill.moon_light_shield"
+        ],
+        "techniqueEffects": {
+          "修炼速度加成": 0.56,
+          "属性加成": {
+            "悟性": 7,
+            "灵性": 4
+          }
+        }
+      }
+    ],
+    "items": [
+      {
+        "id": "lcq.item.xieyi_ashes",
+        "name": "谢艺骨灰",
+        "description": "谢艺伤重辞世后留下的骨灰。只在死亡线生成一次，生还线不得出现。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
+        "id": "liuchao.item.coral_dagger",
+        "name": "珊瑚匕首",
+        "description": "从鲛人身上获得的珊瑚铁匕首，锋锐异常。",
+        "type": "weapon",
+        "grade": "仙品",
+        "skillIds": [],
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
+      },
+      {
+        "id": "liuchao.item.zhu_hu_guan",
+        "name": "朱狐冠",
+        "description": "乐明珠的师门宝物，白色狐毛冠。",
+        "type": "other",
+        "grade": "极品",
+        "techniqueId": "liuchao.technique.phoenix"
+      },
+      {
+        "id": "liuchao.item.sunglasses",
+        "name": "墨镜",
+        "description": "谢艺的随身物品。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      {
+        "id": "lcq.item.np002",
+        "name": "拉链",
+        "type": "other",
+        "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
+        "grade": "仙品"
+      },
+      {
+        "id": "lcq.item.np003",
+        "name": "按摩棒",
+        "type": "other",
+        "description": "程宗扬从现代带来的性玩具，后被苏妲己占有",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np006",
+        "name": "麻古",
+        "type": "consumable",
+        "description": "段强留下的催情药，被程宗扬用于凝羽",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np007",
+        "name": "龙睛玉",
+        "type": "material",
+        "description": "程宗扬从山民处购得",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np008",
+        "name": "遥控器",
+        "type": "other",
+        "description": "程宗扬从山民处购得",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np009",
+        "name": "灵飞镜",
+        "type": "other",
+        "description": "灵飞镜是十六比九比例的显示屏，可用遥控器开启，显示实时影像。",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np010",
+        "name": "安全套",
+        "type": "other",
+        "description": "程宗扬从现代带来的安全套。",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np011",
+        "name": "珊瑚铁",
+        "type": "weapon",
+        "description": "程宗扬获得珊瑚铁匕首",
+        "grade": "仙品",
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
+      },
+      {
+        "id": "lcq.item.np012",
+        "name": "霓龙丝",
+        "type": "other",
+        "description": "程宗扬在碧鲮族获得霓龙丝",
+        "grade": "仙品"
+      },
+      {
+        "id": "lcq.item.np013",
+        "name": "朱箓蛇丹",
+        "type": "consumable",
+        "description": "云苍峰用于治疗蛇毒",
+        "grade": "中品"
+      },
+      {
+        "id": "liuchao.item.moon_crescent_knife",
+        "name": "月牙弯刀",
+        "description": "凝羽的武器。",
+        "type": "weapon",
+        "grade": "凡品",
+        "skillIds": [
+          "liuchao.skill.moon_light_shield"
+        ],
+        "attributeBonus": {
+          "气血上限": 15,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
+      },
+      {
+        "id": "liuchao.item.purple_scale_whip",
+        "name": "紫鳞鞭",
+        "description": "小紫的武器。",
+        "type": "weapon",
+        "grade": "极品",
+        "skillIds": [
+          "liuchao.skill.witchcraft"
+        ],
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
+      },
+      {
+        "id": "liuchao.item.gui_yu_sword",
+        "name": "鬼羽剑",
+        "description": "鬼巫王的武器。",
+        "type": "weapon",
+        "grade": "极品",
+        "skillIds": [
+          "liuchao.skill.gui_yu_sword"
+        ],
+        "attributeBonus": {
+          "气血上限": 90,
+          "后天六司": {
+            "根骨": 12
+          }
+        }
+      },
+      {
+        "id": "lcq.item.np005",
+        "name": "麻古",
+        "type": "consumable",
+        "description": "段强留下的催情药，被程宗扬用于凝羽",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.np014",
+        "name": "鲛绡",
+        "type": "armor",
+        "description": "乐明珠用鲛绡束胸",
+        "grade": "中品",
+        "attributeBonus": {
+          "气血上限": 80,
+          "后天六司": {
+            "根骨": 2
+          }
+        }
+      },
+      {
+        "id": "lcq.item.np015",
+        "name": "紫水晶戒指",
+        "type": "consumable",
+        "description": "小紫使用紫水晶戒指施法",
+        "grade": "极品"
+      },
+      {
+        "id": "lcq.item.np016",
+        "name": "朱箓蛇丹",
+        "type": "consumable",
+        "description": "云苍峰用于治疗蛇毒",
+        "grade": "中品"
+      },
+      {
+        "id": "lcq.item.s05b_dragon_eye_jade",
+        "name": "龙睛玉护罩",
+        "description": "云苍峰一系可激发的龙睛玉用法，在深井祭台形成限时护罩，支撑救援与突围。",
+        "type": "material",
+        "grade": "珍稀",
+        "skillIds": []
+      },
+      {
+        "id": "lcq.item.s05b_spiral_needle",
+        "name": "螺旋长针",
+        "description": "鬼王宫控制与解除控制相关的关键道具，推动苏荔受制、救援和控制解除节点。",
+        "type": "other",
+        "grade": "特殊",
+        "skillIds": []
+      },
+      {
+        "id": "lcq.item.s05b_bone_tiger",
+        "name": "骨虎",
+        "description": "丹宸相关的战斗怪物/坐骑意象，在鬼巫王交锋中作为压制程宗扬的环境威胁。",
+        "type": "other",
+        "grade": "特殊",
+        "skillIds": []
       }
     ]
   },
@@ -2469,7 +2614,7 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.biyu",
         "objective": "向碧姬追问小紫的过往",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -2524,7 +2669,7 @@
         "relatedFactionIds": [
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.biyu",
         "objective": "质问小紫，揭穿其控制手段",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -2580,7 +2725,7 @@
           "liuchao.faction.gui_wang_dong",
           "liuchao.faction.hong_miao"
         ],
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.gui_wang_dong",
         "objective": "从萨安处获取鬼王宫密道",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3169,11 +3314,11 @@
       {
         "id": "lcq.event.ghost_king_swallowed",
         "name": "祭台吞王",
-        "description": "第109–112章祭台决战：众人与鬼巫王交锋，鬼巫王布下苍龙星阵，以祭品唤醒龙神，最终反被龙神吞食。",
+        "description": "祭台决战中，鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
         "axisId": "qingyu.114.2",
-        "axisAnchor": "qingyu.111.1+qingyu.111.2+qingyu.112.1+qingyu.112.2+qingyu.112.3+qingyu.113.1+qingyu.113.2+qingyu.113.3+qingyu.114.1+qingyu.114.2",
+        "axisAnchor": "六朝清羽记·#114·第112章·唤龙",
         "axisSeq": 205,
-        "axisBeat": "原著第109–112章：第109–112章祭台决战：众人与鬼巫王交锋，鬼巫王布下苍龙星阵，以祭品唤醒龙神，最终反被龙神吞食。",
+        "axisBeat": "鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
         "critical": true,
         "conditions": [
           {
@@ -3258,7 +3403,7 @@
           "liuchao.faction.gui_wang_dong",
           "liuchao.faction.xing_yue_hu"
         ],
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.gui_wang_dong",
         "objective": "了结龙神",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3315,7 +3460,7 @@
         "relatedFactionIds": [
           "liuchao.faction.xing_yue_hu"
         ],
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.gui_wang_dong",
         "objective": "听清谢艺把小紫带往星月湖的托付，并决定承接遗言或施针救治",
         "presentation": {
           "targetLabel": "谢艺"
@@ -3467,7 +3612,7 @@
           "liuchao.faction.biyu",
           "liuchao.faction.gui_wang_dong"
         ],
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.gui_wang_dong",
         "objective": "散峒之后，听清三族是否真的站到你这边",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3547,7 +3692,7 @@
           "liuchao.character.bi_ji",
           "liuchao.character.le_mingzhu"
         ],
-        "locationId": "liuchao.location.guiwang_dong",
+        "locationId": "liuchao.location.gui_wang_dong",
         "objective": "追上小紫，见证她与母亲碧姬对质后的决断并承接余波",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -3680,11 +3825,11 @@
       {
         "id": "lcq.event.geluo_summons_biji",
         "name": "阁罗召来碧姬",
-        "description": "阁罗召来碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "description": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
         "axisId": "qingyu.90.2",
         "axisAnchor": "六朝清羽记·#90·第88章·碧奴",
         "axisSeq": 158,
-        "axisBeat": "阁罗召来碧姬，程宗扬第一次当面见到谢艺要找的人。",
+        "axisBeat": "阁罗召来被称作碧奴的碧姬，程宗扬第一次当面见到谢艺要找的人。",
         "critical": true,
         "completion": [
           {
@@ -3704,7 +3849,7 @@
           "liuchao.faction.biyu"
         ],
         "locationId": "liuchao.location.guiwang_dong",
-        "objective": "在阁罗召来碧姬时，当面见到谢艺要找的人",
+        "objective": "在阁罗召来被称作碧奴的碧姬时，当面见到谢艺要找的人",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -3713,11 +3858,11 @@
           "actions": [
             {
               "id": "watch_geluo_summon_binu",
-              "label": "看阁罗召来碧姬",
-              "actionText": "我看着阁罗召来碧姬，当面见到谢艺要找的人。",
+              "label": "看阁罗召来被称作碧奴的人",
+              "actionText": "我看着阁罗把峒里称作碧奴的人召到面前，先记下这个称呼。",
               "timeCost": 1,
               "outcomeText": {
-                "success": "阁罗已召来碧姬；最终完成真值由本地引擎落账。",
+                "success": "阁罗已召来被称作碧奴的人；最终完成真值由本地引擎落账。",
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
@@ -3870,11 +4015,11 @@
       {
         "id": "lcq.event.shanghou_revealed",
         "name": "殇侯现身",
-        "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
+        "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。",
         "axisId": "qingyu.122.2",
         "axisAnchor": "六朝清羽记·#122·第120章·殇侯",
         "axisSeq": 222,
-        "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
+        "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。",
         "critical": true,
         "completion": [
           {
@@ -3956,8 +4101,8 @@
                 "value": true
               }
             ],
-            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
-            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。"
+            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。",
+            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺长休：近死昏睡，整个二期不醒，不说话不参战；没有火化和骨灰，墨镜等物仍归本人。随程宗扬去山村，由叶媪照看；凝羽留下疗伤并看护。离开南荒时秘密带走，交萧遥逸接走伤员。"
           },
           {
             "when": [
@@ -3967,8 +4112,8 @@
                 "value": true
               }
             ],
-            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。",
-            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。 身份确认后，殇侯谈及鬼巫王是他的徒弟（原著第120章）。"
+            "description": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。",
+            "axisBeat": "程宗扬在叶媪引导下见到鸩羽殇侯，确认他就是朱老头；殇侯称他是天命之人。 进村前见路边白骨，叶媪说再迟一天便是死人。堂中主人展示鲨皮红木箱里的黄底黑边三角、红色拐弯箭头，警告此前167人触碰后化作火球；选择前不解释电或高压，也不揭露朱老头本相。拒绝后才确认身份。 谢艺死亡线：已伤重辞世；散峒后火化，祁远携骨灰，程宗扬携墨镜。不得复活。"
           }
         ],
         "fatalOutcomes": {
@@ -4447,7 +4592,579 @@
         ],
         "locationId": "lcq.location.yeao_village"
       }
-    ]
+    ],
+    "worldSimulation": {
+      "version": 1,
+      "situations": [
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_01_binu_reveals_xiaozi",
+          "title": "碧姬避谈小紫",
+          "summary": "碧鲮族侧，碧姬见紫衫少女便收了笑意，母女旧隙被旁人闲话挑起，却无人把话说全。",
+          "sourceEventId": "lcq.event.s05b_01_binu_reveals_xiaozi",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_01.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_01_binu_reveals_xiaozi",
+            "afterTurns": 1,
+            "observableFacts": [
+              "碧姬对紫衫少女只冷眼点头，不肯并肩落座",
+              "族中有人嘀咕她早年弃养，又立刻改口",
+              "谢艺留意程宗扬神色，并未打断旁人的闲谈"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.bi_ji"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "碧鲮族廊外纱幔轻晃，舞姬歇处笑语忽然断了一截，远处鼓点仍按旧节拍敲着。",
+            "presentation": {
+              "title": "冷眼相看",
+              "text": "碧姬从紫衫少女身边走过，连招呼都懒得给全。廊外有人把“弃养”二字咬得很轻，又像怕惹祸似的改了口。空气里只剩一层说不清的生分。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_02_xiaozi_exposed",
+          "title": "阿夕神色不对",
+          "summary": "花苗少女阿夕举止忽然滞涩，目光像被人牵着走；小紫仍笑得无辜，队里开始对不上口径。",
+          "sourceEventId": "lcq.event.s05b_02_xiaozi_exposed",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_02.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_02_xiaozi_exposed",
+            "afterTurns": 1,
+            "observableFacts": [
+              "阿夕说话断断续续，手指无意识地抠着袖口",
+              "小紫凑近时她身子一僵，随即又换上任性的口吻",
+              "乐明珠反复确认她是否中暑，并未得到干脆答复"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.a_xi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "驻地灯火未乱，却有虫鸣忽然齐停一瞬；紫衫衣角掠过处，有人下意识把话咽回去。",
+            "presentation": {
+              "title": "笑意发僵",
+              "text": "阿夕应了一句半截的话，眼神却飘向别处。小紫仍旧一脸娇憨地挨过去，那一瞬僵硬很快被笑声盖住。旁人只觉得哪里不对，又说不出实据。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_03_saan_secret_path",
+          "title": "红苗厨子失联",
+          "summary": "鬼王峒外围，红苗厨师萨安的行踪对不上灶间班次；谢艺压低声音核对后厨口令，密道之说只在传言里打架。",
+          "sourceEventId": "lcq.event.s05b_03_saan_secret_path",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_03.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_03_saan_secret_path",
+            "afterTurns": 1,
+            "observableFacts": [
+              "灶间缺了一名红苗厨子，班次牌被人翻过",
+              "有人说他熟识宫后暗道，又有人骂那是吓破胆的胡话",
+              "谢艺把两套互相矛盾的口令抄在掌心里"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.saan"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "峒口油烟与硫磺混在一起，更夫换岗比往日提早半炷香，远处石门开合声沉闷。",
+            "presentation": {
+              "title": "灶间缺人",
+              "text": "后厨班次牌被翻得卷边，红苗厨子萨安对不上岗。有人咬定他走过宫后暗道，有人只当他吓跑了。谢艺听完两套口令，只把纸片收进袖里。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_04_enter_ghost_palace",
+          "title": "宫道上的紫痕",
+          "summary": "鬼王宫外廊换防匆忙，地面留下细碎虫壳与紫纱线头；乐明珠去向对不上队里报备。",
+          "sourceEventId": "lcq.event.s05b_04_enter_ghost_palace",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_04.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_04_enter_ghost_palace",
+            "afterTurns": 1,
+            "observableFacts": [
+              "偏廊地面有碾碎的虫壳与一缕紫纱",
+              "武二郎摸到墙缝潮热，凝羽示意先别出声",
+              "内卫口令改了两遍，乐明珠的名字在花名册上空着"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.ning_yu"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "宫墙内岩浆气蒸得石面发烫，远处甲叶相撞，像有人把巡路次序临时打乱。",
+            "presentation": {
+              "title": "偏廊异迹",
+              "text": "偏廊潮热，碎虫壳黏着一缕紫纱。武二郎刚要开口，凝羽按住他手腕。内卫口令连改两遍，花名册上乐明珠那一格仍空着。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05a_meet_ghost_king",
+          "title": "岩浆结界加温",
+          "summary": "殿前岩浆结界比往日更亮，黑袍人影在热雾后演说南荒一统；丹宸蒙着眼侍立，无人敢走近。",
+          "sourceEventId": "lcq.event.s05b_05a_meet_ghost_king",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_05.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_05a_meet_ghost_king",
+            "afterTurns": 1,
+            "observableFacts": [
+              "结界石纹发红，守卫把闲人拦在热雾外",
+              "黑袍人影嗓音平稳，反复提到族群存续",
+              "蒙眼红裙女子立在斧影旁，一动不动"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gui_wu_wang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.dan_chen"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "殿廊热浪一波波扑面，石缝里岩浆低鸣，远处鼓声被压成单一长音。",
+            "presentation": {
+              "title": "热雾演说",
+              "text": "岩浆结界把廊道烫得发亮。热雾后头，黑袍人影把“南荒一统”说得像既定功课。蒙眼的红裙女子立在斧影边，谁也没被放近一步。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "title": "殿内杀意收紧",
+          "summary": "鬼巫王谈锋未歇，骨虎在丹宸脚边低吼；珊瑚匕首的寒意刚露一线，四面甲叶已悄悄合拢。",
+          "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_06.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_05b_ideology_duel_and_defeat",
+            "afterTurns": 1,
+            "observableFacts": [
+              "鬼巫王话锋从政见落到近身距离",
+              "丹宸握着断斧，骨虎颈毛竖起",
+              "两侧卫士换位，把退路收成一条窄廊"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gui_wu_wang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.dan_chen"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "殿柱上的纹路被热气映得发颤，远处铁环相撞，像有人把围场一点点收小。",
+            "presentation": {
+              "title": "退路收窄",
+              "text": "鬼巫王仍在说，脚步却近了半尺。丹宸身侧骨虎低吼，两侧甲叶无声换位。退路只剩一条窄廊，谁先动手都还没定。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_06_breakout_and_reunion",
+          "title": "宫内号令对不上",
+          "summary": "乐明珠的呼声从侧殿断续传来，谢艺重新编排退路；弥骨的追兵甲叶已在外廊换防。",
+          "sourceEventId": "lcq.event.s05b_06_breakout_and_reunion",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_07.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_06_breakout_and_reunion",
+            "afterTurns": 1,
+            "observableFacts": [
+              "侧殿传来乐明珠压低的呼喊，随即被甲叶盖住",
+              "谢艺用手势改了退路，武二郎与凝羽分据两角",
+              "外廊点名声换成弥骨的调门，步距比巡更密"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xie_yi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "宫道灯火忽明忽暗，远处点名声乱了一拍，石阶上多了匆忙的湿脚印。",
+            "presentation": {
+              "title": "侧殿呼声",
+              "text": "侧殿里乐明珠的声音断了一截。谢艺只抬手改了退路，武二郎与凝羽各自卡住转角。外廊点名换成更密的步距，像网正在收口。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_07_xiaozi_trap",
+          "title": "深井方向封路",
+          "summary": "乐明珠再出现时已被人引向祭台一侧；小紫笑容无恙，阁罗的喝骂把通往深井的路封死半边。",
+          "sourceEventId": "lcq.event.s05b_07_xiaozi_trap",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_08.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_07_xiaozi_trap",
+            "afterTurns": 1,
+            "observableFacts": [
+              "乐明珠衣角沾着井沿青苔，脚步发飘",
+              "小紫指着深井方向，语调仍旧软而急",
+              "阁罗在岔口吼人换防，半边石梯被拦绳封住"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "lcq.character.np006"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "井口阴风带着土腥，铁链轻撞井壁；远处喝骂与虫鸣搅在一处，方向难以辨清。",
+            "presentation": {
+              "title": "井沿青苔",
+              "text": "乐明珠衣角带着井沿青苔，脚步虚了一截。小紫仍软声指着深处，阁罗已在岔口把半边石梯拦起来。谁先下去，谁也没说死。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08a_rescue_suli",
+          "title": "井台银针反光",
+          "summary": "深井平台上苏荔被缚于祭桩，螺旋长针在灯火里一闪；小紫立在井沿，丹宸的脚步声从上层传来。",
+          "sourceEventId": "lcq.event.s05b_08a_rescue_suli",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_09.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_08a_rescue_suli",
+            "afterTurns": 1,
+            "observableFacts": [
+              "苏荔红裙被绳索勒住，蝎尾被铁环扣着",
+              "祭桩旁一支螺旋长针反着冷光",
+              "上层石梯传来蒙眼女子的步履，不疾不徐"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.su_li"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "井底潮气贴着石壁往上爬，灯火只照得半个平台；铁环偶尔一响，像有人在试松紧。",
+            "presentation": {
+              "title": "祭桩反光",
+              "text": "井台灯火只照半圈。苏荔被扣在祭桩上，螺旋长针冷光一闪。小紫立在井沿不说话，上层石梯已响起不疾不徐的步履。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+          "title": "祭台尸气翻涌",
+          "summary": "鬼巫王抬手时祭台雾气变厚，女尸般的轮廓在雾中站直；丹宸握斧的手抖了一下，龙睛玉微微发热。",
+          "sourceEventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_10.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+            "afterTurns": 1,
+            "observableFacts": [
+              "雾中站起一具女尸轮廓，甲片上还留着旧族徽",
+              "丹宸蒙眼的丝带被风掀起一角，握斧发紧",
+              "腰间龙睛玉忽然温热，护罩纹路若隐若现"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.gui_wu_wang"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.dan_chen"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "祭台硫磺更重，雾气贴地打转；远处铁链拖地，像有什么被从石室里拖出来。",
+            "presentation": {
+              "title": "雾中轮廓",
+              "text": "雾气贴着祭台翻起来，一具带着旧族徽的女尸轮廓站直了。丹宸握斧的指节发白。龙睛玉忽然温热，护罩纹路只亮了一息。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_09_temporary_pact_with_xiaozi",
+          "title": "药效未退议和",
+          "summary": "鬼巫王的脚步声暂时远了；乐明珠呼吸发急，小紫听“岳鹏举”三字时眼神一滞，却未应承任何条件。",
+          "sourceEventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_11.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_09_temporary_pact_with_xiaozi",
+            "afterTurns": 1,
+            "observableFacts": [
+              "殿外甲叶远去，热雾里只剩余震般的鼓点",
+              "乐明珠额汗未干，苏荔按住她手腕探脉",
+              "小紫听见旧名时手指停在袖里，没有立刻回话"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.le_mingzhu"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "殿角灯火跳了两下，药香与硫磺混在一起；远处鼓点稀了，却没有完全停。",
+            "presentation": {
+              "title": "旧名一滞",
+              "text": "甲叶远了，乐明珠呼吸仍乱。苏荔按着她脉门不放。小紫听见那个旧名，手指在袖里停了一息，谁也没先把话说死。"
+            }
+          }
+        },
+        {
+          "id": "world-sim.baseline.lcq.stage_05b.lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+          "title": "集会秩序松动",
+          "summary": "鬼王峒集会场上号令对不齐，小紫立处出现空档；奴隶锁链响成一片，乐明珠袖间火光乱跳。",
+          "sourceEventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+          "settledWhenAny": [
+            [
+              {
+                "path": "flags.event.s05b_12.done",
+                "operator": "eq",
+                "value": true
+              }
+            ]
+          ],
+          "anchorIds": [],
+          "outcomeIds": [],
+          "omen": {
+            "id": "omen.baseline.lcq.stage_05b.lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+            "afterTurns": 1,
+            "observableFacts": [
+              "弥骨维持秩序的喝令被后排锁链声盖住",
+              "武二郎与谢艺分处两侧，奴隶班次被悄悄打乱",
+              "乐明珠指尖掠过一缕不属于灯火的暖光"
+            ],
+            "transmitters": [
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.xiao_zi"
+              },
+              {
+                "kind": "related_npc",
+                "characterId": "liuchao.character.wu_er_lang"
+              },
+              {
+                "kind": "messenger"
+              },
+              {
+                "kind": "environment"
+              }
+            ],
+            "environmentFallback": "广场火把被风吹斜，点名声乱了拍；远处宫门未关严，热风从缝里灌出来。",
+            "presentation": {
+              "title": "锁链乱拍",
+              "text": "弥骨的喝令被锁链声盖住。武二郎与谢艺各占一侧，奴隶班次乱了一截。乐明珠袖间掠过不属于火把的暖光，小紫立处忽然空出半步。"
+            }
+          }
+        }
+      ],
+      "structuralAnchors": [],
+      "forkableOutcomes": [],
+      "referenceBeats": []
+    }
   },
   "rules": {
     "mode": "strict",
@@ -4549,7 +5266,7 @@
         "playerAllowed": false
       },
       {
-        "contentId": "lcq.item.zipper",
+        "contentId": "lcq.item.np002",
         "policy": "exclusive",
         "allowedCharacterIds": [
           "liuchao.character.cheng_zongyang"
