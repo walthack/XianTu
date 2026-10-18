@@ -1310,5 +1310,15 @@
   "saves": {
     "rotationKeep": 3,
     "rotationExcludeSlots": ["上次对话"]
+  },
+  "aiRetry": {
+    "maxRetries": 1,
+    "retryStatuses": [408, 409, 425, 429, 500, 502, 503, 504],
+    "baseDelayMs": 1000,
+    "maxDelayMs": 8000,
+    "factor": 2,
+    "jitter": 0.25,
+    "retryOnTimeout": false,
+    "retryAfterMaxMs": 20000
   }
 }

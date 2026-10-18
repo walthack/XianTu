@@ -88,6 +88,8 @@ export const ERROR_CODES = {
   'LCQ-NET-005': spec('warn', 'aiService', 'AI 请求失败（网络或传输层错误）'),
   'LCQ-NET-006': spec('warn', 'aiService', 'AI 流式分片解析失败，已跳过该分片'),
   'LCQ-NET-007': spec('warn', 'userCloudStorage', '后端云存储请求失败，回退本地缓存'),
+  'LCQ-NET-008': spec('warn', 'aiService', 'AI 请求失败，退避等待后自动重试'),
+  'LCQ-NET-009': spec('warn', 'aiService', 'AI 请求自动重试未能成功，已转为玩家可读提示'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),

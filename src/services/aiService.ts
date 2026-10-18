@@ -17,7 +17,8 @@ import { AiRequestTimeoutError, isAiRequestTimeout, withAiRequestDeadline } from
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
 import { toUserFacingAIError } from './apiErrorMessage';
-import { logError } from '@/modules/diagnostics/log';
+import { logError, logEvent } from '@/modules/diagnostics/log';
+import { AiHttpError, abortableDelay, aiRetryConfig, planAiRetry, readRetryAfterHeader, type AiRetryPlan } from './aiRetryPolicy';
 import {
   isTruncatedFinishReason,
   isOutputTruncationError,
@@ -52,7 +53,7 @@ export interface AIConfig {
   streaming?: boolean;
   memorySummaryMode?: 'raw' | 'standard';
   initMode?: 'generate' | 'generateRaw';
-  maxRetries?: number; // API调用失败后的重试次数，默认1
+  maxRetries?: number; // API调用失败后的重试次数；未设置时取 game-numbers aiRetry.maxRetries
   customAPI?: {
     provider: APIProvider;  // API提供商
     url: string;
@@ -202,7 +203,6 @@ class AIService {
     streaming: true,
     memorySummaryMode: 'raw',
     initMode: 'generate',
-    maxRetries: 1, // 默认重试1次
     customAPI: {
       provider: 'openai',
       url: '',
@@ -295,62 +295,60 @@ class AIService {
     }
   }
 
+  /** 重试次数：调用方显式指定 > 玩家在“API管理”里设的 > game-numbers aiRetry.maxRetries。 */
+  private resolveMaxRetries(override?: number): number {
+    return override ?? this.config.maxRetries ?? aiRetryConfig().maxRetries;
+  }
+
   /**
-   * 带重试的执行函数
+   * 带重试的执行函数：只对 aiRetry.retryStatuses 内的 HTTP 状态与网络错误重试（超时看 aiRetry.retryOnTimeout，
+   * 取消/截断/回合预算用尽/其它 4xx 一律不重试）；等待 = 指数退避+抖动，服务端给了 Retry-After 则取较大者（有上限）；等待期间可取消。
    */
   private async executeWithRetry<T>(
     fn: () => Promise<T>,
     operationName: string,
     maxRetriesOverride?: number,
     signal?: AbortSignal,
+    turnId?: string,
   ): Promise<T> {
-    const maxRetries = maxRetriesOverride ?? this.config.maxRetries ?? 1;
-    let lastError: Error | null = null;
+    const maxRetries = this.resolveMaxRetries(maxRetriesOverride);
 
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    for (let attempt = 0; ; attempt++) {
+      // 在每次尝试前检查是否已取消
+      if (signal?.aborted) {
+        console.log(`[AI服务] ${operationName} 已被取消，停止执行`);
+        throw new Error('请求已被取消');
+      }
+      if (attempt > 0) console.log(`[AI服务] ${operationName} 重试第 ${attempt}/${maxRetries} 次`);
+
       try {
-        // 在每次尝试前检查是否已取消
-        if (signal?.aborted) {
-          console.log(`[AI服务] ${operationName} 已被取消，停止执行`);
-          throw new Error('请求已被取消');
-        }
-
-        if (attempt > 0) {
-          console.log(`[AI服务] ${operationName} 重试第 ${attempt}/${maxRetries} 次`);
-        }
-
         return await fn();
       } catch (error) {
-        lastError = error as Error;
-
-        // 如果是取消操作，立即停止，不重试
-        if (signal?.aborted || lastError.message?.includes('取消') || lastError.message?.includes('abort')) {
+        if (signal?.aborted) {
           console.log(`[AI服务] ${operationName} 检测到取消信号，立即停止`);
-          throw lastError;
+          throw error;
         }
-        if (isNonRetryableAiError(lastError)) {
-          throw lastError;
-        }
+        const plan = planAiRetry({ error, attempt, maxRetries, remainingMs: remainingQingyuTurnTimeMs(turnId) });
+        if (!plan.retry) throw this.finalizeRetryFailure(error, plan, attempt, operationName);
 
-        // 如果还有重试机会，等待后继续
-        if (attempt < maxRetries) {
-          console.warn(`[AI服务] ${operationName} 失败，准备重试:`, lastError.message);
-
-          // 在延迟期间也检查取消状态
-          const delayMs = 1000 * (attempt + 1);
-          const checkInterval = 100; // 每100ms检查一次
-          for (let waited = 0; waited < delayMs; waited += checkInterval) {
-            if (signal?.aborted) {
-              console.log(`[AI服务] ${operationName} 在重试等待期间被取消`);
-              throw new Error('请求已被取消');
-            }
-            await new Promise(resolve => setTimeout(resolve, Math.min(checkInterval, delayMs - waited)));
-          }
-        }
+        logEvent({ code: 'LCQ-NET-008', cause: error, detail: { operationName, attempt: attempt + 1, maxRetries, delayMs: plan.delayMs, source: plan.source, status: plan.verdict.status } });
+        console.warn(`[AI服务] ${operationName} 失败，${plan.delayMs}ms 后重试（${plan.source}）:`, error instanceof Error ? error.message : error);
+        await abortableDelay(plan.delayMs, signal);
       }
     }
+  }
 
-    throw lastError || new Error(`${operationName} 失败`);
+  /**
+   * 不再重试时的最终错误。HTTP 状态/网络类失败换成玩家读得懂的提示（保留 status 与 cause，并标记 retriesSpent 免得外层再重试一轮）；
+   * 超时、取消、截断、回合预算与未知错误原样抛出，它们各自已有明确文案或调用方依赖其类型。
+   */
+  private finalizeRetryFailure(error: unknown, plan: Extract<AiRetryPlan, { retry: false }>, attempt: number, operationName: string): unknown {
+    const { verdict } = plan;
+    if (verdict.reason !== 'status' && verdict.reason !== 'status_not_retryable' && verdict.reason !== 'network') return error;
+    if (plan.reason === 'retries_exhausted' || plan.reason === 'turn_time_short') {
+      logEvent({ code: 'LCQ-NET-009', cause: error, detail: { operationName, retries: attempt, why: plan.reason, status: verdict.status } });
+    }
+    return Object.assign(toUserFacingAIError(error, { retries: attempt }), { status: verdict.status, retryAttempts: attempt, retriesSpent: true });
   }
 
   private syncModeWithEnvironment() {
@@ -1005,7 +1003,7 @@ class AIService {
 
       // 网页模式默认
       return this.generateWithCustomAPI(requestOptions);
-        }, `generate[${options.usageType || 'main'}]`, options.requestMaxRetries, signal);
+        }, `generate[${options.usageType || 'main'}]`, options.requestMaxRetries, signal, options.qingyuTurnId);
       } finally {
         noteGenerateComplete();
       }
@@ -1083,7 +1081,7 @@ class AIService {
 
       // 网页模式默认
       return this.generateRawWithCustomAPI(requestOptions);
-    }, `generateRaw[${withTurn.usageType || 'main'}]`, withTurn.requestMaxRetries, signal);
+    }, `generateRaw[${withTurn.usageType || 'main'}]`, withTurn.requestMaxRetries, signal, withTurn.qingyuTurnId);
     }, options.signal, withTurn.qingyuTurnId);
   }
 
@@ -1215,12 +1213,12 @@ class AIService {
   private async withRetry<T>(
     label: string,
     fn: () => Promise<T>,
-    opts?: { retries?: number; baseDelayMs?: number; signal?: AbortSignal },
+    opts?: { retries?: number; signal?: AbortSignal },
   ): Promise<T> {
-    const retries = opts?.retries ?? this.config.maxRetries ?? 2;
-    const baseDelayMs = opts?.baseDelayMs ?? 800;
+    const retries = this.resolveMaxRetries(opts?.retries);
 
     let lastError: unknown;
+    let retried = 0;
     for (let attempt = 0; attempt <= retries; attempt++) {
       // 检查是否已取消
       if (opts?.signal?.aborted) {
@@ -1258,71 +1256,24 @@ class AIService {
         }
 
         lastError = error;
-        const retryable = this.isRetryableError(error);
-        if (!retryable || attempt >= retries) break;
+        const plan = planAiRetry({ error, attempt, maxRetries: retries });
+        if (!plan.retry) break;
 
-        const jitter = Math.floor(Math.random() * 250);
-        const delay = baseDelayMs * Math.pow(2, attempt) + jitter;
-        console.warn(`[AI服务] ${label} 失败，准备重试 (${attempt + 1}/${retries + 1})，${delay}ms`, error);
-
-        // 使用可中断的延迟
-        await new Promise((resolve, reject) => {
-          let timer: NodeJS.Timeout | null = null;
-          let checkAbort: NodeJS.Timeout | null = null;
-
-          const cleanup = () => {
-            if (timer) clearTimeout(timer);
-            if (checkAbort) clearInterval(checkAbort);
-          };
-
-          timer = setTimeout(() => {
-            cleanup();
-            resolve(undefined);
-          }, delay);
-
-          // 如果在等待期间被取消，立即结束
-          checkAbort = setInterval(() => {
-            if (opts?.signal?.aborted) {
-              cleanup();
-              reject(new Error('请求已取消'));
-            }
-          }, 100);
-        });
+        console.warn(`[AI服务] ${label} 失败，准备重试 (${attempt + 1}/${retries + 1})，${plan.delayMs}ms`, error);
+        logEvent({ code: 'LCQ-NET-008', cause: error, detail: { operationName: label, attempt: attempt + 1, maxRetries: retries, delayMs: plan.delayMs, source: plan.source, status: plan.verdict.status } });
+        await abortableDelay(plan.delayMs, opts?.signal);
+        retried = attempt + 1;
       }
     }
+    if (lastError && typeof lastError === 'object') Object.assign(lastError, { retryAttempts: retried });
     throw lastError;
-  }
-
-  private isRetryableError(error: unknown): boolean {
-    if (isNonRetryableAiError(error)) return false;
-    const message = (() => {
-      if (!error) return '';
-      if (typeof error === 'string') return error;
-      if (error instanceof Error) return error.message || '';
-      return String(error);
-    })();
-
-    // axios / fetch-like errors
-    const status = (() => {
-      const anyErr = error as any;
-      return anyErr?.status ?? anyErr?.response?.status ?? anyErr?.cause?.status ?? anyErr?.cause?.response?.status;
-    })();
-
-    if (typeof status === 'number') {
-      return [408, 409, 425, 429, 500, 502, 503, 504].includes(status);
-    }
-
-    // SillyTavern/OpenAI proxy errors often只有 message
-    if (/service unavailable/i.test(message)) return true;
-    if (/\b(429|500|502|503|504)\b/.test(message)) return true;
-    if (/timeout|timed out|network error|fetch failed/i.test(message)) return true;
-
-    return false;
   }
 
   private toUserFacingError(error: unknown): Error {
     if (error instanceof Error && isNonRetryableAiError(error)) return error;
-    return toUserFacingAIError(error);
+    const retries = (error as { retryAttempts?: number } | null)?.retryAttempts ?? 0;
+    // 酒馆路径的内层 withRetry 已经重试过，外层 executeWithRetry 不要再来一轮。
+    return Object.assign(toUserFacingAIError(error, { retries }), { retriesSpent: true });
   }
 
   /**
@@ -1824,6 +1775,7 @@ class AIService {
     } catch (error) {
       console.error('[AI服务-OpenAI] 失败:', error);
       if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      if (error instanceof AiHttpError) throw error;
       if (isAiRequestTimeout(error)) throw error;
       if (isOutputTruncationError(error)) throw error;
       if (axios.isAxiosError(error)) {
@@ -1831,9 +1783,9 @@ class AIService {
           throw new AiRequestTimeoutError('total', Number(error.config?.timeout) || 120000);
         }
         if (error.response) {
-          throw new Error(`API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`);
+          throw new AiHttpError(`API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`, { status: error.response.status, retryAfter: readRetryAfterHeader(error.response.headers), cause: error });
         } else if (error.request) {
-          throw new Error('网络错误：无法连接到API服务器');
+          throw new AiHttpError('网络错误：无法连接到API服务器', { kind: 'network', cause: error });
         }
       }
       throw new Error(`OpenAI API调用失败: ${error instanceof Error ? error.message : '未知错误'}`);
@@ -1969,11 +1921,12 @@ class AIService {
     } catch (error) {
       console.error('[AI服务-Claude] 失败:', error);
       if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      if (error instanceof AiHttpError) throw error;
       if (isAiRequestTimeout(error)) throw error;
       if (isOutputTruncationError(error)) throw error;
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          throw new Error(`Claude API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`);
+          throw new AiHttpError(`Claude API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`, { status: error.response.status, retryAfter: readRetryAfterHeader(error.response.headers), cause: error });
         }
       }
       throw new Error(`Claude API调用失败: ${error instanceof Error ? error.message : '未知错误'}`);
@@ -2129,11 +2082,12 @@ class AIService {
     } catch (error) {
       console.error('[AI服务-Gemini] 失败:', error);
       if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      if (error instanceof AiHttpError) throw error;
       if (isAiRequestTimeout(error)) throw error;
       if (isOutputTruncationError(error)) throw error;
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          throw new Error(`Gemini API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`);
+          throw new AiHttpError(`Gemini API错误 ${error.response.status}: ${JSON.stringify(error.response.data)}`, { status: error.response.status, retryAfter: readRetryAfterHeader(error.response.headers), cause: error });
         }
       }
       throw new Error(`Gemini API调用失败: ${error instanceof Error ? error.message : '未知错误'}`);
@@ -2233,7 +2187,7 @@ class AIService {
     });
 
     if (!response.ok) {
-      throw new Error(`API错误 ${response.status}: ${await response.text()}`);
+      throw new AiHttpError(`API错误 ${response.status}: ${await response.text()}`, { status: response.status, retryAfter: readRetryAfterHeader(response.headers) });
     }
 
     const contentType = response.headers.get('content-type') || '';
@@ -2317,7 +2271,7 @@ class AIService {
     });
 
     if (!response.ok) {
-      throw new Error(`Claude API错误 ${response.status}: ${await response.text()}`);
+      throw new AiHttpError(`Claude API错误 ${response.status}: ${await response.text()}`, { status: response.status, retryAfter: readRetryAfterHeader(response.headers) });
     }
 
     const contentType = response.headers.get('content-type') || '';
@@ -2399,7 +2353,7 @@ class AIService {
     });
 
     if (!response.ok) {
-      throw new Error(`Gemini API错误 ${response.status}: ${await response.text()}`);
+      throw new AiHttpError(`Gemini API错误 ${response.status}: ${await response.text()}`, { status: response.status, retryAfter: readRetryAfterHeader(response.headers) });
     }
 
     const contentType = response.headers.get('content-type') || '';

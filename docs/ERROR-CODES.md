@@ -59,6 +59,8 @@
 | LCQ-NET-005 | warn | aiService | AI 请求失败（网络或传输层错误） | 网络断开、DNS/证书失败、CORS 拦截或连接被重置 | 看 cause；检查网络与 API 地址、浏览器控制台的 CORS 报错 | 否 |
 | LCQ-NET-006 | warn | aiService | AI 流式分片解析失败，已跳过该分片 | 流式某一分片不是合法 JSON，已跳过 | 偶发可忽略；频繁出现说明中转服务返回格式异常 | 否 |
 | LCQ-NET-007 | warn | userCloudStorage | 后端云存储请求失败，回退本地缓存 | 后端云存储不可达或返回异常，已使用本地缓存（每会话只记一次） | 检查后端地址与登录状态；仅影响云同步 | 否 |
+| LCQ-NET-008 | warn | aiService | AI 请求失败，退避等待后自动重试 | 请求收到 aiRetry.retryStatuses 内的 HTTP 状态（如 429/503）或网络错误，且重试次数未用完；detail 含 delayMs、source（backoff 指数退避 / retry-after 服务端要求）、status | 偶发正常；频繁出现说明服务商不稳或在限流，可调 game-numbers 的 aiRetry 段（退避、次数） | 否 |
+| LCQ-NET-009 | warn | aiService | AI 请求自动重试未能成功，已转为玩家可读提示 | 可重试的失败（限流、5xx、网络）重试次数用完，或本回合剩余时间不够再等一轮（detail.why = retries_exhausted / turn_time_short）；玩家看到的是“已自动重试 N 次仍失败”类提示 | 看 detail.status 与同一请求的 LCQ-NET-004/005；限流就降频或换提供商；持续 5xx 查服务商状态 | 否 |
 | LCQ-NUM-001 | error | numbers | 数值配置对象无效 | tuning.json numbers 段里某处应为对象却写成了别的类型 | 按消息里的路径修正为对象 | 否 |
 | LCQ-NUM-002 | error | numbers | 数值配置含未知键 | numbers 段含 game-numbers.qingyu.json 里不存在的键（拼写错误或已删除的键） | 按消息里的路径核对键名；只能改已有键，不能新增 | 否 |
 | LCQ-NUM-003 | error | numbers | 数值配置类型无效 | numbers 段某个值的类型与默认值不同（数字写成字符串等）或为非有限数 | 按消息里的路径改成与默认值相同类型 | 否 |
