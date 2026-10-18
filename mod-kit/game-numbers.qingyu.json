@@ -1325,5 +1325,8 @@
     "redactSaveNarrative": true,
     "narrativePaths": [["系统", "历史", "叙事"], ["社交", "记忆"]],
     "narrativeKeepKeys": ["type", "time"]
+  },
+  "e2eSmoke": {
+    "scriptTimeoutMs": 300000
   }
 }

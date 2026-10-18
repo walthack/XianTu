@@ -34,6 +34,7 @@
   "lint:check": "eslint . --ext .ts,.vue",
   "type-check": "tsc --noEmit",
   "smoke:browser": "node scripts/smoke-browser-entry.mjs",
+  "e2e:smoke": "node scripts/e2e-smoke.mjs",
   "validate:all": "npm run type-check && npm run canon:validate && npm test && npm run if:validate && npm run mod:validate -- src/modules/scenarioMods/builtins/data/*.json",
   "canon:build": "node scripts/canon-build.mjs"
  },
