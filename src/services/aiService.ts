@@ -17,6 +17,7 @@ import { AiRequestTimeoutError, isAiRequestTimeout, withAiRequestDeadline } from
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
 import { toUserFacingAIError } from './apiErrorMessage';
+import { logError } from '@/modules/diagnostics/log';
 import {
   isTruncatedFinishReason,
   isOutputTruncationError,
@@ -851,7 +852,11 @@ class AIService {
     const totalMs = options.timeoutMs === undefined ? remaining
       : remaining === null ? options.timeoutMs : Math.min(options.timeoutMs, remaining);
     if (totalMs === null) return this.generateWithinBudget(options);
-    if (totalMs <= 0) throw new AiRequestTimeoutError('total', 60000);
+    if (totalMs <= 0) {
+      const exhausted = new AiRequestTimeoutError('total', 60000);
+      logError(exhausted.lcqCode, exhausted, { turnId: turnId ?? null, detail: { stage: 'turn_budget_exhausted', usageType: options.usageType || 'main' } });
+      throw exhausted;
+    }
     const controller = this.createRequestController(turnId);
     const onAbort = () => { inheritDiagnosticCancellation(options.signal, controller.signal); controller.abort(options.signal?.reason); };
     options.signal?.addEventListener('abort', onAbort, { once: true });
@@ -2505,7 +2510,7 @@ class AIService {
               sendChunk(content);
             }
           } catch (e) {
-            console.warn('[AI服务-流式] 解析chunk失败:', data.substring(0, 100));
+            logError('LCQ-NET-006', e, { detail: { chunkChars: data.length } });
           }
         }
       }

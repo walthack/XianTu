@@ -572,6 +572,7 @@ import { getNarrativeTurn } from '@/utils/actionGate';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
 import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
 import { notePlayerText } from '@/modules/scenarioMods/freeAction/playerTextDebug';
+import { logGateRefusal } from '@/modules/scenarioMods/freeAction/refusalLog';
 import { packText } from '@/modules/contentPacks';
 import type { FreeActionTicket } from '@/modules/scenarioMods/freeAction/ticket';
 import {
@@ -2117,6 +2118,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   if (saveData && routedFreeText && !routedFreeActionTickets.length && !freeActionRefusalBlock
     && (intentUnsettled || (ownedByFreeAction && !hasUnclearIntentFrame(typedText)))) {
     const unrecognized = gateText('unrecognized', { player: String((saveData as any)?.角色?.身份?.名字 || '你'), target: '' });
+    logGateRefusal('unrecognized', 'ui', undefined, { ownedByFreeAction: !!ownedByFreeAction, intentUnsettled: !!intentUnsettled });
     freeActionRefusalBlock += renderRefusedBlock([unrecognized]);
     if (ownedByFreeAction) freeActionRefusedFacts.push(unrecognized);
     else intentFailedOpen = true;

@@ -20,6 +20,8 @@ import { useAPIManagementStore } from '@/stores/apiManagementStore'
 import CombatTrialStartView from './CombatTrialStartView.vue'
 import { sceneModuleEnabled } from '@/modules/sceneModule/host/ext'
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers'
+import { diagnosticsConfig } from '@/modules/diagnostics/config'
+import { logError, logEvent } from '@/modules/diagnostics/log'
 import { SCENE_CONTRACTS } from '@/modules/sceneModule/contracts/registry'
 import { applyTuning } from '@/modules/sceneModule/contracts/registry'
 import { installCombatTrialPortal } from './portal'
@@ -32,16 +34,23 @@ async function loadTuning() {
   let builtinHash=0x811c9dc5;for(let i=0;i<builtin.length;i++)builtinHash=Math.imul(builtinHash^builtin.charCodeAt(i),0x01000193)>>>0;
   const noTuning=()=>console.info(`【战斗试玩】未加载 tuning，使用内置数值（hash ${builtinHash.toString(16)}）`);
   if (new URLSearchParams(window.location.search).get('tuning') !== '1') return noTuning()
-  const response = await fetch('./tuning.json', { cache: 'no-store' }).catch(() => null)
-  if (!response?.ok) return noTuning()
+  let fetchError: unknown
+  const response = await fetch('./tuning.json', { cache: 'no-store' }).catch(error => { fetchError = error; return null })
+  if (!response?.ok) {
+    // 与主入口 runtimeTuning 同码：404 info（常态），网络错 / 超时 warn，其它 HTTP 状态 warn。
+    if (!response) logError((fetchError as { name?: string } | null)?.name === 'TimeoutError' ? 'LCQ-CFG-003' : 'LCQ-CFG-002', fetchError)
+    else if (response.status === 404) logEvent({ code: 'LCQ-CFG-001', level: diagnosticsConfig().tuning404Level, detail: { status: response.status } })
+    else logEvent({ code: 'LCQ-CFG-006', detail: { status: response.status } })
+    return noTuning()
+  }
   const text = await response.text()
   let hash = 0x811c9dc5
   for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 0x01000193) >>> 0
   let parsed: unknown
-  try { parsed = JSON.parse(text) } catch (e) { return console.error('【战斗试玩】tuning.json 不是合法 JSON，整份拒绝', e) }
+  try { parsed = JSON.parse(text) } catch (e) { logError('LCQ-CFG-004', e); return }
   const result = applyTuning(parsed)
   if (result.ok) console.log(`【战斗试玩】已应用 tuning.json（hash ${hash.toString(16)}）：${result.contracts.join('、')}`)
-  else console.error('【战斗试玩】tuning.json 整份拒绝：\n' + result.errors.join('\n'))
+  else logEvent({ code: 'LCQ-CFG-005', detail: { errors: result.errors } })
 }
 
 async function initializeTrial() {

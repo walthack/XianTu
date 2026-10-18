@@ -1283,5 +1283,28 @@
       "great_success": 0.3,
       "perfect": 0.4
     }
+  },
+  "diagnostics": {
+    "enabled": true,
+    "minLevel": "info",
+    "consoleLevel": "warn",
+    "persistLevel": "info",
+    "ringMax": 500,
+    "maxBytes": 524288,
+    "detailChars": 400,
+    "stackChars": 1200,
+    "maxDepth": 4,
+    "maxKeys": 20,
+    "flushMs": 500,
+    "repeatMs": 5000,
+    "repeatKeys": 200,
+    "localFallbackMax": 50,
+    "redactKeys": ["apikey", "token", "accesstoken", "authorization", "password", "secret", "cookie", "bearer"],
+    "redactPatterns": ["sk-[A-Za-z0-9_-]{8,}", "Bearer\\s+[A-Za-z0-9._~+/=-]{8,}", "AIza[0-9A-Za-z_-]{20,}", "[?&](?:key|api_key|apikey|token|access_token)=[^&\\s]+"],
+    "textKeys": ["text", "input", "playertext", "usertext", "userinput", "prompt", "content", "evidence", "narrative", "reply", "response"],
+    "textChars": 0,
+    "toast": { "enabled": true, "minLevel": "error", "dedupeMs": 30000 },
+    "panel": { "recent": 30 },
+    "tuning404Level": "info"
   }
 }
