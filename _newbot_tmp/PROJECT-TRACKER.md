@@ -1,7 +1,8 @@
-# 六朝仙途 · 项目进度跟踪表（权威勾选）
+# 六朝仙途 · 项目进度跟踪表（草稿勾选 · 非权威）
 
 更新：2026-10-19（Asia/Singapore）  
-**叙述与差距校对以仓库根目录 `PROJECT-STATUS.md` 为准**；本表只做可勾选跟踪，避免发散。
+**非权威**。权威进度 = 仓库根目录 [`PROJECT-STATUS.md`](../PROJECT-STATUS.md) + [`docs/MASTER-GANTT.md`](../docs/MASTER-GANTT.md)。  
+本表可保留为草稿勾选；勿当作第二份 status。与权威不一致时以 STATUS+甘特为准。
 
 基线：HEAD `3b8c1be2` · 8097 包 `1f2c41525ce2` · numbers 三分包 `3b8c1be2`
 
@@ -28,9 +29,10 @@
 ## In progress
 
 - [ ] 同拍共历
-- [ ] 角色总表补人
+- [ ] 角色总表合入／补人
 - [ ] 已批未落扫描
 - [ ] Sol 周一/周四 03:00（Asia/Singapore）例行
+- [ ] PROJECT-STATUS 日更（与总甘特同步）
 
 ## Approved-not-done
 

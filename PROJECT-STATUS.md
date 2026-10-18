@@ -1,11 +1,12 @@
 # 六朝仙途 · 当前项目状态
 
 更新时间：2026-10-19（Asia/Singapore）；分支 `feat/fast-no-legacy`。  
-**权威进度入口**：本文件。跟踪勾选表见 [`_newbot_tmp/PROJECT-TRACKER.md`](_newbot_tmp/PROJECT-TRACKER.md)。历史全文见 [PROJECT-STATUS-ARCHIVE-2026-10-12.md](PROJECT-STATUS-ARCHIVE-2026-10-12.md)。
+**权威进度入口（双件）**：本文件（叙述与勾选总表）+ [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)（总甘特时间线）。勿另造第二份 status。  
+`_newbot_tmp/PROJECT-TRACKER.md` **非权威**（草稿勾选；权威=本文件+总甘特）。历史全文见 [PROJECT-STATUS-ARCHIVE-2026-10-12.md](PROJECT-STATUS-ARCHIVE-2026-10-12.md)。
 
 ## 一句话现状
 
-HEAD `3b8c1be2`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 65144 未重启）；numbers 三分包已落 `3b8c1be2`；真机通过；战内逃跑搁置；遇敌+连续战斗草案待拍；同拍共历进行中；角色总表补人中；Sol 周一/周四 03:00（Asia/Singapore）；已批未落扫描中。
+HEAD `3b8c1be2`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 65144 未重启）；numbers 三分包已落 `3b8c1be2`；真机通过；战内逃跑搁置；遇敌+连续战斗草案待拍；同拍共历进行中；角色总表合入／补人中；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行；已批未落扫描中。时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
 
 ## 当前交付与版本
 
@@ -21,7 +22,9 @@ HEAD `3b8c1be2`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 
 ### Done（已完成）
 
-- [x] 诊断/错误码日志系统合入（`cceb2e7a` → merge）
+> 甘特泳道「已完成」主线：diagnostics → P0 → P1 → P2 → numbers 三分包 → 真机（日期见总甘特）。
+
+- [x] 诊断/错误码日志系统合入（diagnostics；`cceb2e7a` → merge）
 - [x] 存档滚动备份与损坏回退（`fb01fdd2` 等）
 - [x] 全局异常兜底：Vue errorHandler + 启动失败兜底页（`3915e2d5`）
 - [x] 版本号与构建号注入 + 存档盖章（`13d0c524`）
@@ -32,16 +35,17 @@ HEAD `3b8c1be2`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 - [x] e2e:smoke 聚合（`6add1bcb`）
 - [x] CI Node 20+、串行 test:ci、非阻塞 npm audit（`0753d051`）
 - [x] turnTelemetry p50/p95 超阈值 warn（`101fc986`）
-- [x] numbers registry + 三分包 + 6 条硬编码迁入（`3b8c1be2`）
-- [x] 8097 现包对齐 `1f2c41525ce2`；**真机通过**（本轮产品口径）
+- [x] numbers registry + **三分包** + 6 条硬编码迁入（`3b8c1be2`；甘特「已完成」）
+- [x] 8097 现包对齐 `1f2c41525ce2`；**真机通过**（本轮产品口径；甘特「已完成」）
 - [x] 地点危险档 dangerTier + 判定数值进配置（scene-danger 合入）
 
 ### In progress（进行中）
 
-- [ ] **同拍共历**：设计/实现进行中（避免拍间历法分叉）
-- [ ] **角色总表补人**：总表补齐进行中（对照约 333 条规模，见近期核对笔记）
+- [ ] **同拍共历**：设计/实现进行中（避免拍间历法分叉；甘特泳道「进行中」）
+- [ ] **角色总表合入／补人**：总表补齐与合入进行中（对照约 333 条规模，见近期核对笔记；甘特泳道「进行中」）
 - [ ] **已批未落扫描**：对照 GAP / 裁定 / 已批方案，扫清「批了但未落盘」项
-- [ ] Sol 例行：**周一、周四 03:00（Asia/Singapore）**
+- [ ] Sol 例行：**周一、周四 03:00（Asia/Singapore）**（甘特泳道「例行」）
+- [ ] **PROJECT-STATUS 日更**：与总甘特同步维护（甘特泳道「例行」）
 
 ### Approved-not-done（已批未落 / 扫描中）
 
@@ -55,11 +59,11 @@ HEAD `3b8c1be2`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 
 ### Shelved（搁置）
 
-- [ ] **战内逃跑**：用户已定先不做（尚无随机遇敌）；草案仅预留 `flee` outcome 名，不实装 UI/规则（见 `_newbot_tmp/DESIGN-ENCOUNTER-AND-CHAINED-COMBAT-2026-10-19.md`）
+- [ ] **战内逃跑**：用户已定先不做（尚无随机遇敌）；草案仅预留 `flee` outcome 名，不实装 UI/规则（甘特泳道「搁置」；见 `_newbot_tmp/DESIGN-ENCOUNTER-AND-CHAINED-COMBAT-2026-10-19.md`）
 
 ### Waiting-user（待拍 / 待用户）
 
-- [ ] **随机遇敌 + 连续战斗**设计草案待拍板（同文件；概率/冷却/触发时机等示意值勿当已定）
+- [ ] **随机遇敌 + 连续战斗**设计草案待拍板（甘特泳道「待拍」；同文件；概率/冷却/触发时机等示意值勿当已定）
 - [ ] 冻结文件改动类 numbers 迁入（需显式批准后再动 `runtime.ts` / `AIBidirectionalSystem.ts`）
 
 ## 与旧文档差距校对（过期条目）
@@ -68,7 +72,7 @@ HEAD `3b8c1be2`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 
 | 旧说法 | 2026-10-19 判定 |
 |---|---|
-| 当前执行批次 1012TESTCFG / 1012FIXLIST / 1012DEPLOYTRACE 为「当前」 | **过期**。已归档口径；现权威以本文件 10-19 一句话与进度总表为准 |
+| 当前执行批次 1012TESTCFG / 1012FIXLIST / 1012DEPLOYTRACE 为「当前」 | **过期**。已归档口径；现权威以本文件 10-19 一句话、进度总表与 docs/MASTER-GANTT.md 为准 |
 | 8097 为诊断提交 `af7aa6d9…`、combat-trial SHA `f112193c…` | **过期**。现包 SHA 前缀 **`1f2c41525ce2`**；PID 65144 仍在 |
 | 修复源码 `2886f559…` 为最新修复焦点 | **过期**。后续已大量合入；HEAD 现为 **`3b8c1be2`** |
 | P0「社交目标错误扣战斗级差」「F07 逃兵旗标跨关丢失」作当前 P0 | **过期（已修已发）**。保留历史证据链接，不再作当前 P0 |
@@ -83,7 +87,8 @@ HEAD `3b8c1be2`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 
 ## 记录入口
 
-- 跟踪勾选：[`_newbot_tmp/PROJECT-TRACKER.md`](_newbot_tmp/PROJECT-TRACKER.md)
+- **总甘特（权威双件之一）**：[docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)
+- 草稿勾选（**非权威**；权威=本文件+总甘特）：[`_newbot_tmp/PROJECT-TRACKER.md`](_newbot_tmp/PROJECT-TRACKER.md)
 - numbers 交接：[`_newbot_tmp/HANDOFF-NUMBERS-REGISTRY-2026-10-19.md`](_newbot_tmp/HANDOFF-NUMBERS-REGISTRY-2026-10-19.md)
 - 遇敌草案：[`_newbot_tmp/DESIGN-ENCOUNTER-AND-CHAINED-COMBAT-2026-10-19.md`](_newbot_tmp/DESIGN-ENCOUNTER-AND-CHAINED-COMBAT-2026-10-19.md)
 - 工程健壮性核对（多项已落，附录硬编码仍有效）：[`_newbot_tmp/GAP-TABLE-2026-10-18.md`](_newbot_tmp/GAP-TABLE-2026-10-18.md)
