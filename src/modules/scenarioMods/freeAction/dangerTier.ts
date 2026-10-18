@@ -28,5 +28,5 @@ export function difficultyModifiers(_ctx: DifficultyContext): number {
 /** 签发判定卡的最终难度。 */
 export function adjustedDifficulty(save: SaveData, ticket: FreeActionTicket, spec: VariantSpec, cfg = freeActionConfig()): number {
   const tier = dangerTierOf(save, cfg), shift = cfg.classes[spec.actionClass]?.dangerTierShift?.[tier] ?? 0;
-  return spec.difficulty! + shift + difficultyModifiers({ save, spec, ticket, tier });
+  return (spec.difficulty as number) + shift + difficultyModifiers({ save, spec, ticket, tier });
 }
