@@ -249,5 +249,6 @@
   "free.stakes.intimate.criticalFailure": "真气相冲，反受其扰。",
   "free.skill.label": "正典技能·{name}",
   "free.talent.label": "天赋·{name}",
-  "free.skill.none": "未掌握相关技能或天赋（无加成）"
+  "free.skill.none": "未掌握相关技能或天赋（无加成）",
+  "free.receipt.affinity": "亲近未再加深：{facts}"
 }

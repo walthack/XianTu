@@ -40,6 +40,8 @@ export interface SettleResult {
   key?: string;
   resultKey?: string;
   facts: string[];
+  /** 到顶／习以为常的叙事附注（与 facts 末尾 notes 同文）；界面轻回执可选用。 */
+  affinityNotes?: string[];
   affinity?: { from: number; to: number; delta: number; applied: boolean };
   major?: boolean;
 }
@@ -380,7 +382,7 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
   state.log = state.log.slice(-cfg.state.logKeep);
   state.focus = { turn, targetIds: [...new Set([...(state.focus?.turn === turn ? state.focus.targetIds : []), targetId])] };
   noteSettled(state, key, { facts, resultKey });
-  return { ok: true, key, resultKey, facts, affinity: { from: affinity.from, to: affinity.to, applied: affinity.applied, delta: shaped.delta }, major };
+  return { ok: true, key, resultKey, facts, ...(notes.length ? { affinityNotes: notes } : {}), affinity: { from: affinity.from, to: affinity.to, applied: affinity.applied, delta: shaped.delta }, major };
 }
 
 /** 判定确认后：票取自判定回执（不重跑 intent），回执必须与判定账本一致。 */

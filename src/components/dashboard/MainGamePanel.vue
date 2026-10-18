@@ -570,6 +570,7 @@ import {
 import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
+import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
 import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
 import { notePlayerText } from '@/modules/scenarioMods/freeAction/playerTextDebug';
 import { logGateRefusal } from '@/modules/scenarioMods/freeAction/refusalLog';
@@ -928,7 +929,7 @@ type ScenarioEngineActionSelection = ScenarioOpportunityActionSelection | Scenar
 const selectedScenarioEngineAction = ref<ScenarioEngineActionSelection | null>(null);
 /** 固定事件链上识别失败而停下时的常驻提示；玩家改输入或重新发送即清除。 */
 const intentHoldMessage = ref('');
-/** 自由行动持久回执（被拒 / 给予成功 / 其他）：不随 toast 消失，下一次发送或点“收起”才清除。 */
+/** 自由行动持久回执（被拒 / 给予成功 / 到顶轻回执 / 其他）：不随 toast 消失，下一次发送或点“收起”才清除。 */
 const freeActionReceipts = ref<string[]>([]);
 const qingyuOpeningDemo = computed(() => isQingyuOpeningPlaytestSave(gameStateStore.toSaveData()));
 const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
@@ -2179,17 +2180,24 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	  const freeActionSave = routedFreeActionTickets.length || followUpFreeAction ? gameStateStore.toSaveData() : null;
 	  const inventoryBefore = inventoryCounts(freeActionSave ?? gameStateStore.toSaveData());
 	  let givenFacts: string[] = [];
+	  let affinityNotes: string[] = [];
 	  if (freeActionSave) {
 	    const settlement = settleFreeActionTurn(freeActionSave, routedFreeActionTickets, execution?.resolution);
 	    if (settlement.changed) await persistJudgementSave(freeActionSave);
 	    freeActionBlock += settlement.block;
 	    freeActionRefusedFacts.push(...settlement.refusedFacts);
 	    givenFacts = settlement.givenFacts;
+	    affinityNotes = settlement.affinityNotes;
 	  }
 	  // 叙述包带上背包的实际账（增减 + 现有），叙事才不会把没发生的交付写成已成。
 	  if (freeActionBlock) freeActionBlock += renderInventoryBlock(inventoryBefore, gameStateStore.toSaveData());
-	  // 回执：被拒、给予成功、其他——持久显示（不是一闪而过的 toast），玩家下次发送或点“收起”才清除。
-	  freeActionReceipts.value = renderReceipts({ refused: [...new Set(freeActionRefusedFacts)], given: givenFacts, others: routedFreeActionOthers });
+	  // 回执：被拒、给予成功、到顶轻回执（可关）、其他——持久显示（不是一闪而过的 toast），玩家下次发送或点“收起”才清除。
+	  freeActionReceipts.value = renderReceipts({
+	    refused: [...new Set(freeActionRefusedFacts)],
+	    given: givenFacts,
+	    others: routedFreeActionOthers,
+	    ...(freeActionConfig().affinity.lightReceipt && affinityNotes.length ? { affinity: affinityNotes } : {}),
+	  });
 
 	  const userMessage = inputText.value.trim();
 	  console.log('[前端] 用户输入 inputText.value:', inputText.value);

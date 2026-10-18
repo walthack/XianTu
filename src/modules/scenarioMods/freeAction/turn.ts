@@ -41,18 +41,21 @@ export interface TurnSettlement {
   refusedFacts: string[];
   /** 本次结算成功的“给予”类事实行（界面回执用；类的回执归类在配置 classes.<类>.receipt）。 */
   givenFacts: string[];
+  /** 到顶／习以为常附注（界面轻回执用；是否展示由 affinity.lightReceipt 决定）。 */
+  affinityNotes: string[];
 }
 
 export function settleFreeActionTurn(
   save: SaveData, tickets: FreeActionTicket[], resolution: JudgementResolution | undefined, deps: SettleDeps = {},
 ): TurnSettlement {
-  const done: string[] = [], refused: string[] = [], given: string[] = [];
+  const done: string[] = [], refused: string[] = [], given: string[] = [], affinityNotes: string[] = [];
   let changed = false;
   const take = (result: ReturnType<typeof settleFreeAction> | null, actionClass?: string): void => {
     if (!result) return;
     if (result.ok) {
       done.push(...result.facts); changed ||= !result.replay;
       if (!result.replay && actionClass && freeActionConfig().classes[actionClass]?.receipt === 'given') given.push(...result.facts);
+      if (!result.replay && result.affinityNotes?.length) affinityNotes.push(...result.affinityNotes);
     }
     else if (result.facts.length) refused.push(...result.facts);
   };
@@ -62,5 +65,5 @@ export function settleFreeActionTurn(
     if (prepared.kind === 'settled') take(prepared.result, ticket.actionClass);
     else if (prepared.kind === 'refused') refused.push(...prepared.facts);
   }
-  return { changed, block: (done.length ? renderSettledBlock(done) : '') + (refused.length ? renderRefusedBlock(refused) : ''), refusedFacts: refused, givenFacts: given };
+  return { changed, block: (done.length ? renderSettledBlock(done) : '') + (refused.length ? renderRefusedBlock(refused) : ''), refusedFacts: refused, givenFacts: given, affinityNotes };
 }

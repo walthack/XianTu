@@ -94,12 +94,14 @@ export function renderInventoryBlock(before: Map<string, { name: string; count: 
   return template.split('{changes}').join(changes.join('；')).split('{items}').join(items);
 }
 
-/** 界面持久回执：被拒 / 给予成功 / 其他。 */
-export function renderReceipts(input: { refused: string[]; given: string[]; others: number }): string[] {
+/** 界面持久回执：被拒 / 给予成功 / 到顶轻回执 / 其他。affinity 行由调用方按 affinity.lightReceipt 决定是否传入。 */
+export function renderReceipts(input: { refused: string[]; given: string[]; others: number; affinity?: string[] }): string[] {
   const line = (key: string, facts: string[]) => packText(key).split('{facts}').join([...new Set(facts)].join(' '));
+  const affinity = input.affinity ?? [];
   return [
     ...(input.refused.length ? [line('free.receipt.refused', input.refused)] : []),
     ...(input.given.length ? [line('free.receipt.given', input.given)] : []),
+    ...(affinity.length ? [line('free.receipt.affinity', affinity)] : []),
     ...(input.others > 0 ? [packText('free.receipt.other')] : []),
   ];
 }
@@ -128,6 +130,6 @@ export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_
   need('free.why', 'why');
   need('free.why.self', 'why');
   for (const id of ['free.block.settled', 'free.block.refused', 'free.block.inventory.changed', 'free.block.inventory.unchanged', 'free.block.inventory.empty', 'free.block.inventory.item',
-    'free.block.inventory.delta.gain', 'free.block.inventory.delta.lose', 'free.receipt.refused', 'free.receipt.given', 'free.receipt.other', 'free.receipt.dismiss']) need(id, 'block');
+    'free.block.inventory.delta.gain', 'free.block.inventory.delta.lose', 'free.receipt.refused', 'free.receipt.given', 'free.receipt.affinity', 'free.receipt.other', 'free.receipt.dismiss']) need(id, 'block');
   return errors;
 }

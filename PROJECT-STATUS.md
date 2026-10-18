@@ -6,13 +6,13 @@
 
 ## 一句话现状
 
-HEAD `3763e22e`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 65144 未重启）；numbers 三分包已落 `3b8c1be2`；真机通过；**同拍闸已落**（共历好感接入 `affinityBeatTaken`，`3763e22e`）；**轻回执仍已批未落**；角色总表合入／补人中；**角色按拍卡（身份／官爵／结缘转换）记为内容扩展待办**；战内逃跑搁置；遇敌+连续战斗草案待拍；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行。**优先级：底座优先，内容可同步但略低。** 时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
+HEAD `ca555b6f`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 65144 未重启）；numbers 三分包已落 `3b8c1be2`；真机通过；**同拍闸已落**（共历好感接入 `affinityBeatTaken`，`3763e22e`）；**到顶轻回执已落**（`affinity.lightReceipt` 默认 true）；角色总表合入／补人中；**角色按拍卡（身份／官爵／结缘转换）记为内容扩展待办**；战内逃跑搁置；遇敌草案已定体验三步（危区叙事→几率检→遇敌叙事→开战，禁检中直接开战）；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行。**优先级：底座优先，内容可同步但略低。** 时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
 
 ## 优先级口径（底座 vs 内容）
 
 | 层 | 含义 | 本轮项 | 排期 |
 |---|---|---|---|
-| **底座** | 引擎／结算闸／配置／健壮性——挡住玩法正确性的 | 同拍共历收口、轻回执、numbers 冻结迁入（需再批）、已批未落扫描 | **优先** |
+| **底座** | 引擎／结算闸／配置／健壮性——挡住玩法正确性的 | 同拍共历收口观察、numbers 冻结迁入（需再批）、已批未落扫描 | **优先** |
 | **内容** | 剧情／人设／拍卡文案／总表补人——可与底座并行 | 角色总表合入／补人、**角色按拍卡扩展（身份／官爵／结缘转换）** | **可同步，优先级略低**；不抢底座解禁／合入带宽 |
 
 说明：内容扩展**不阻塞**底座开工；底座缺口（尤其已批未落）不因内容热闹而降档。
@@ -22,12 +22,13 @@ HEAD `3763e22e`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 | 项 | 值 |
 |---|---|
 | 分支 | `feat/fast-no-legacy`（跟踪 `origin/feat/fast-no-legacy`） |
-| HEAD | `3763e22e`（全长 `3763e22e834ecf41f47613c67cb1afd1bba8381f`）— 共历好感接入同拍闸 |
+| HEAD | `ca555b6f`（全长 `ca555b6fbe4c17f6b0fdd5d5ec8195a35f1afce5`）— 到顶轻回执 + 遇敌体验三步设计 |
 | 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`1f2c41525ce2`**；进程 `node … serve.mjs --port 8097` PID **65144**（长期未重启；包文件已更新到该哈希） |
 | numbers 三分包 | `mod-kit/numbers-combat.json` / `numbers-progress.json` / `numbers-runtime.json` + `NUMBERS-AUTHORITY.md`；生成物 `mod-kit/game-numbers.qingyu.json`；提交 **`3b8c1be2`** |
 | 最近合入基线 | diagnostics / drain / scene-danger / baseline-p0·p1·p2 已 merge；同拍闸 `3763e22e` |
 
 ## 进度总表（防发散）
+- [x] **到顶「可选轻回执」**（1016z 第 4 项；非冻结）：叙事事实保留；界面轻回执 `free.receipt.affinity`；配置 `freeAction.affinity.lightReceipt` 默认 true。
 
 ### Done（已完成）
 
@@ -70,7 +71,6 @@ HEAD `3763e22e`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 
 #### 底座（优先）
 
-- [ ] **到顶「可选轻回执」**（1016z 第 4 项可选；P2）：叙事事实 `free.fact.affinity.worn`／`capped` 已落；持久轻回执 UI（`MainGamePanel.vue`／回执渲染）**未做**。批文写「可选」；非冻结。
 - [ ] numbers 剩余硬编码（冻结侧／**需再批**）：南荒每拍 120 分钟（❄ AIBidirectionalSystem）
 - [ ] numbers 剩余：节奏 10/6/4、对账停滞 10（❄ runtime + eventReconcile 成对）
 - [ ] numbers 剩余：态度钳制 -100..100（runtime 冻结部分需再批）
@@ -88,7 +88,7 @@ HEAD `3763e22e`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 
 ### Waiting-user（待拍 / 待用户）
 
-- [ ] **随机遇敌 + 连续战斗**设计草案待拍板（甘特泳道「待拍」；同文件；概率/冷却/触发时机等示意值勿当已定）
+- [ ] **随机遇敌 + 连续战斗**草案其余项待拍（甘特「待拍」；同文件）：**已定**体验三步——LLM 危区叙事→几率检→命中后 LLM「碰到敌人」再进战（禁检中直接开战）；概率/冷却/触发集合/敌池等示意值仍勿当已定
 - [ ] 冻结文件改动类 numbers 迁入（需显式批准后再动 `runtime.ts` / `AIBidirectionalSystem.ts`）
 
 ## 与旧文档差距校对（过期条目）
@@ -109,7 +109,7 @@ HEAD `3763e22e`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 | GAP 表 P2：性能监控缺聚合告警 | **已落盘（过期为缺口）** — `101fc986` |
 | GAP / numbers 草案：硬编码「全未搬」 | **部分过期**：已搬 6 条（`3b8c1be2`）；附录 **11 条仍未搬** 仍有效 |
 | PROGRESS-0b：待 push p2 / 周审 | **过期**：p2 已 merge（`7ea583a7`）并已 push；其后又有 numbers／同拍闸提交 |
-| APPROVED-BACKLOG：同拍共历第 6 项因冻结未进 HEAD | **过期（已落）** — `3763e22e`；轻回执仍未落 |
+| APPROVED-BACKLOG：同拍共历第 6 项／到顶轻回执 | **过期（已落）** — 同拍闸 `3763e22e`；轻回执本轮已落（`affinity.lightReceipt`） |
 | STATUS 文内 HEAD 仍写 `3b8c1be2` 为当前 HEAD | **过期** — numbers 交付点保留；当前 HEAD=`3763e22e` |
 
 ## 记录入口

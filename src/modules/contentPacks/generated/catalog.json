@@ -1,5 +1,5 @@
 {
-  "version": "990e8d3506cc779b",
+  "version": "81f36a77b1e10fa9",
   "contracts": [
     {
       "meta": {
@@ -12618,6 +12618,7 @@
     "free.skill.label": "正典技能·{name}",
     "free.talent.label": "天赋·{name}",
     "free.skill.none": "未掌握相关技能或天赋（无加成）",
+    "free.receipt.affinity": "亲近未再加深：{facts}",
     "text.act.baihu.o1.priced": "挺直腰板，把话说成一笔买卖",
     "intent.baihu.o1.priced": "我挺直腰板对苏妲己说：这是一笔买卖，价钱先谈清楚。",
     "outcome.act.baihu.o1.priced": "你没有低头，把话说成了一笔买卖。苏妲己抬眼看了你一下，没有打断。",

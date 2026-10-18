@@ -805,9 +805,10 @@
 - **基础值在代码**：`settle.ts` 的 `plan()` 算出 `base × 轻重 × 结果系数`（或亲近查表值）。被拒、没发生、判定失败时基础值本来就是 0。
 - **票上的可选浮动位 `affinityDelta`**：模型按 −15..+15 的口径报；`validateFreeActionTickets` 取整并钳到单拍上限，不是有限数字就当没报（票照收）。判定类票把它存进判定回执（`FreeActionJudgementReceipt.affinityDelta`），确认后结算取回。
 - **整形顺序（`shapeDelta`）**：基础值 → 正向按“目标:行动类”窗口内次数乘 `affinity.repeat.factors` → 递减后为 0 就是 0（不看浮动位）→ 否则浮动位在 `[基础 − floatBand, 基础 + floatBand]` 内采纳 → `perBeatCap` 钳制。敌意（基础值<0）不递减。
-- **配置**（`freeAction.affinity`）：`floatBand: 2`；`repeat.windowMinutes: 1440`（从窗口内第一次起算，满一整段后重算）、`repeat.factors: [1, 0.5, 0.25, 0]`（超出表长取最后一项）。**全是占位，未经实玩验证。**
+- **配置**（`freeAction.affinity`）：`floatBand: 2`；`lightReceipt: true`；`repeat.windowMinutes: 1440`（从窗口内第一次起算，满一整段后重算）、`repeat.factors: [1, 0.5, 0.25, 0]`（超出表长取最后一项）。**数值占位，未经实玩验证。**
 - **递减账**：`runtime.freeAction.repeatLedger["<目标>:<行动类>"] = { count, since }`，随 `state.budgetKeep` 修剪。同拍被拦下的不计次。
-- **叙事事实**：递减到 0 → `free.fact.affinity.worn`；好感已到上限或被上限截短 → `free.fact.affinity.capped`。追加在该次结算的事实行末尾，也会随幂等重放原样返回。没有加持久回执。
+- **叙事事实**：递减到 0 → `free.fact.affinity.worn`；好感已到上限或被上限截短 → `free.fact.affinity.capped`。追加在该次结算的事实行末尾，也会随幂等重放原样返回。
+- **到顶轻回执**（可选，默认开）：同一附注经 `SettleResult.affinityNotes` → 回合 `affinityNotes` → `renderReceipts({ affinity })` → 界面持久条 `free.receipt.affinity`；由 `freeAction.affinity.lightReceipt`（默认 `true`）开关，关则只留叙事事实。
 - **大事**：`major` 看实际生效的变化（`applied` 且 `|to − from| ≥ majorAbs`），不再看计划值。
 - **冷却**：没有给 flirt/kiss/invite/gift 配 `cooldownMinutes`——那会让闸门把整件事写成“没发生”；用递减窗口代替。需要时仍可在变体行上加。
 - **共历事件通道已接入“同一拍只结算一次”**：`settleSharedExperienceAffinity` 写好感前查 `affinityBeatTaken`，写入成功后记 `affinityTurn`（与自由行动共用）。

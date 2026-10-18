@@ -221,20 +221,23 @@ test('U2 配置体检：onLevelUnknown / minGoodwill / legacyGuardWords / applyS
 });
 
 // ───────── 回执 / 背包事实 / 文案 ─────────
-test('R1 回执：被拒 / 给予成功 / 其他 各一条持久文案，来自 texts；无内容不出', () => {
-  const lines = mods.facts.renderReceipts({ refused: ['甲没成', '甲没成', '乙没成'], given: ['丙收下了'], others: 2 });
+test('R1 回执：被拒 / 给予成功 / 到顶轻回执 / 其他 各一条持久文案，来自 texts；无内容不出', () => {
+  const lines = mods.facts.renderReceipts({ refused: ['甲没成', '甲没成', '乙没成'], given: ['丙收下了'], others: 2, affinity: ['已到顶', '已到顶'] });
   assert.deepEqual(lines, [
     CONTENT_PACKS.texts['free.receipt.refused'].replace('{facts}', '甲没成 乙没成'),
     CONTENT_PACKS.texts['free.receipt.given'].replace('{facts}', '丙收下了'),
+    CONTENT_PACKS.texts['free.receipt.affinity'].replace('{facts}', '已到顶'),
     CONTENT_PACKS.texts['free.receipt.other'],
   ]);
   assert.deepEqual(mods.facts.renderReceipts({ refused: [], given: [], others: 0 }), []);
 });
 
-test('R2 界面：回执是持久元素而不是 toast（被拒事实不再走 toast.info）', async () => {
+test('R2 界面：回执是持久元素而不是 toast（被拒事实不再走 toast.info）；到顶轻回执走 affinity.lightReceipt', async () => {
   const source = await readFile(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
   assert.match(source, /data-testid="free-action-receipt"/);
   assert.match(source, /freeActionReceipts\.value = renderReceipts\(/);
+  assert.match(source, /affinity\.lightReceipt/);
+  assert.match(source, /affinityNotes/);
   assert.equal(/toast\.\w+\([^)]*freeActionRefusedFacts/.test(source), false);
 });
 

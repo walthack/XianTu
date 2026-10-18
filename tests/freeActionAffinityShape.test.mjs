@@ -18,12 +18,14 @@ const runtimePromise = loadTs('../src/modules/scenarioMods/runtime.ts');
 const base = () => mods.config.variantSpecOf('give', 'gift').base;
 const band = () => cfg().affinity.floatBand;
 
-test('A1 配置：floatBand 与 repeat 在 freeAction.affinity 里，体检通过；坏值点名', () => {
+test('A1 配置：floatBand、repeat、lightReceipt 在 freeAction.affinity 里，体检通过；坏值点名', () => {
   assert.deepEqual(mods.config.validateFreeActionConfig(), []);
   assert.equal(band(), 2);
+  assert.equal(cfg().affinity.lightReceipt, true, '到顶轻回执默认开');
   assert.deepEqual(cfg().affinity.repeat.factors, [1, 0.5, 0.25, 0]);
   const bad = mutate => { const c = structuredClone(cfg()); mutate(c.affinity); return mods.config.validateFreeActionConfig(c); };
   assert.ok(bad(a => { a.floatBand = -1; }).some(e => e.includes('floatBand')));
+  assert.ok(bad(a => { a.lightReceipt = 'yes'; }).some(e => e.includes('lightReceipt')));
   assert.ok(bad(a => { a.repeat.windowMinutes = 0; }).some(e => e.includes('windowMinutes')));
   assert.ok(bad(a => { a.repeat.factors = []; }).some(e => e.includes('factors')));
   assert.ok(bad(a => { a.repeat.factors = [1, 1.5]; }).some(e => e.includes('factors')));
@@ -282,4 +284,38 @@ test('A19 共历写入后同拍自由行动被拦：先结算共历好感，同�
   assert.equal(favorOf(saveData, DUAN_QIANG), before, '同拍自由行动不得再改好感');
   assert.equal(r.affinity.applied, false);
   assert.equal(r.ok, true);
+});
+
+test('A20 到顶轻回执：结算带 affinityNotes；回合汇入；renderReceipts 可挂；关 lightReceipt 仍保留叙事事实', async () => {
+  const full = saveWith({ favor: { [DUAN_QIANG]: 100 } });
+  const atTop = settle(full, gift(DUAN_QIANG));
+  assert.deepEqual(atTop.affinityNotes, [note(full, DUAN_QIANG, 'capped')]);
+  assert.equal(atTop.facts.at(-1), note(full, DUAN_QIANG, 'capped'), '叙事事实仍在');
+
+  const wornSave = saveWith({ favor: { [DUAN_QIANG]: 50 } });
+  for (let n = 0; n < 3; n++) { settle(wornSave, gift(DUAN_QIANG)); advanceTurn(wornSave); }
+  const worn = settle(wornSave, gift(DUAN_QIANG));
+  assert.deepEqual(worn.affinityNotes, [note(wornSave, DUAN_QIANG, 'worn')]);
+
+  const mid = saveWith({ favor: { [DUAN_QIANG]: 50 } });
+  assert.equal(settle(mid, gift(DUAN_QIANG)).affinityNotes, undefined, '没到顶不带 notes');
+
+  const turnSave = saveWith({ favor: { [DUAN_QIANG]: 100 }, items: { [GIFT]: itemEntry(GIFT, { 数量: 2 }) } });
+  const turn = mods.turn.settleFreeActionTurn(turnSave, [gift(DUAN_QIANG)], undefined);
+  assert.deepEqual(turn.affinityNotes, [note(turnSave, DUAN_QIANG, 'capped')]);
+  assert.ok(turn.givenFacts.length >= 1, '给予回执仍在');
+
+  const lines = mods.facts.renderReceipts({ refused: [], given: turn.givenFacts, others: 0, affinity: turn.affinityNotes });
+  assert.equal(lines.length, 2);
+  assert.match(lines[1], /亲近未再加深/);
+  assert.ok(lines[1].includes(note(turnSave, DUAN_QIANG, 'capped')));
+  assert.deepEqual(mods.facts.renderReceipts({ refused: [], given: [], others: 0 }), []);
+
+  await patched({ freeAction: { affinity: { lightReceipt: false } } }, { freeAction: { affinity: { lightReceipt: true } } }, () => {
+    assert.equal(cfg().affinity.lightReceipt, false);
+    const again = saveWith({ favor: { [DUAN_QIANG]: 100 } });
+    const r = settle(again, gift(DUAN_QIANG));
+    assert.deepEqual(r.affinityNotes, [note(again, DUAN_QIANG, 'capped')]);
+    assert.equal(r.facts.at(-1), note(again, DUAN_QIANG, 'capped'));
+  });
 });

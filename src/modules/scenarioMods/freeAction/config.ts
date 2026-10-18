@@ -139,8 +139,9 @@ export interface FreeActionConfig {
   /**
    * floatBand：票上的好感浮动位只能在“代码基础值 ± floatBand”内生效。
    * repeat：同一目标同一行动类的正向好感按次数递减——factors[n] 是窗口内第 n+1 次的系数（超出表长取最后一项），windowMinutes 从窗口内第一次起算，窗口外重算；敌意不递减。
+   * lightReceipt：到顶／习以为常时，除叙事事实外是否再挂一条界面轻回执（默认 true）。
    */
-  affinity: { perBeatCap: number; majorAbs: number; majorSalienceFloor: number; floatBand: number; repeat: { windowMinutes: number; factors: number[] } };
+  affinity: { perBeatCap: number; majorAbs: number; majorSalienceFloor: number; floatBand: number; lightReceipt: boolean; repeat: { windowMinutes: number; factors: number[] } };
   degreeFactor: Record<Degree, number>;
   lethalAllowed: boolean;
   memory: { keep: number; chars: number; episodeKeep: number };
@@ -296,8 +297,9 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
   const drainLog = cfg.debug?.drainLog;
   if (typeof drainLog?.enabled !== 'boolean' || !Array.isArray(drainLog.fields) || !drainLog.fields.length || drainLog.fields.some(field => !DRAIN_LOG_FIELDS.includes(field))) errors.push(`debug.drainLog 配置无效（fields 须为 ${DRAIN_LOG_FIELDS.join(' / ')} 的非空子集）`);
   if (!(cfg.narration?.inventoryListMax > 0)) errors.push('narration.inventoryListMax 无效');
-  const { floatBand, repeat } = cfg.affinity;
+  const { floatBand, repeat, lightReceipt } = cfg.affinity;
   if (!(Number.isFinite(floatBand) && floatBand >= 0)) errors.push('affinity.floatBand 须为非负数');
+  if (typeof lightReceipt !== 'boolean') errors.push('affinity.lightReceipt 须为布尔');
   if (!(Number.isFinite(repeat?.windowMinutes) && repeat.windowMinutes > 0)) errors.push('affinity.repeat.windowMinutes 须为正数');
   if (!Array.isArray(repeat?.factors) || !repeat.factors.length || repeat.factors.some(factor => !(Number.isFinite(factor) && factor >= 0 && factor <= 1))) errors.push('affinity.repeat.factors 须为非空的 0~1 数组');
   if (cfg.affinity.perBeatCap !== GAME_NUMBERS.affinity.limits.perTurn) errors.push('affinity.perBeatCap 应与 affinity.limits.perTurn 同值');
