@@ -1,14 +1,16 @@
 /** 日志导出：整份（含磁盘里旧会话的记录）打成 JSON，经 Blob 触发浏览器下载。内容已在写入时脱敏。 */
 import { SESSION_ID, logError } from './log';
 import { logStore, type LogEntry } from './store';
+import { getBuildInfo } from './buildInfo';
 
-export interface LogExport { app: string; exportedAt: string; sessionId: string; count: number; entries: LogEntry[] }
+export interface LogExport { app: string; version: string; buildId: string; contentPackVersion: string; exportedAt: string; sessionId: string; count: number; entries: LogEntry[] }
 
 const APP_NAME = 'XianTu';
 
 export async function buildLogExport(): Promise<LogExport> {
   const entries = (await logStore.all()).map(({ seq: _seq, ...entry }) => entry);
-  return { app: APP_NAME, exportedAt: new Date().toISOString(), sessionId: SESSION_ID, count: entries.length, entries };
+  const { version, buildId, contentPackVersion } = getBuildInfo();
+  return { app: APP_NAME, version, buildId, contentPackVersion, exportedAt: new Date().toISOString(), sessionId: SESSION_ID, count: entries.length, entries };
 }
 
 export const exportFileName = (at: Date = new Date()): string => `lcq-log-${at.toISOString().replace(/[:.]/g, '-')}.json`;

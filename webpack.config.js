@@ -6,9 +6,12 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import HtmlInlineScriptPlugin from 'html-inline-script-webpack-plugin'
 import TavernLiveReloadPlugin from './webpack/TavernLiveReloadPlugin.js'
 import { fileURLToPath } from 'url'
+import { createRequire } from 'module'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+
+const { buildDefines } = createRequire(import.meta.url)('./scripts/buildInfo.cjs')
 
 const packageJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, './package.json'), 'utf8'));
 
@@ -166,6 +169,8 @@ export default (env, argv) => {
         __VUE_PROD_DEVTOOLS__: JSON.stringify(false),
         __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: JSON.stringify(false),
         'APP_VERSION': JSON.stringify(packageJson.version),
+        // 构建号 / git 短哈希 / 内容包版本（scripts/buildInfo.cjs，8097 战斗试玩配置经 base.plugins 同样继承）
+        ...buildDefines(),
         'BACKEND_BASE_URL': JSON.stringify(backendBaseUrl), // 后端路径；开发/局域网测试默认走同源 /api 代理
         'REMOTE_SAVE_STORAGE_ENABLED': JSON.stringify(process.env.REMOTE_SAVE_STORAGE_ENABLED !== 'false'),
         // Test-only deterministic judgement controls. Production bundles erase

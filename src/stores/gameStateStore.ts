@@ -36,6 +36,7 @@ import { detectPlayerSectLeadership } from '@/utils/sectLeadershipUtils';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import { composeShortTermMemoryEntry, sanitizePersistedMemoryArray } from '@/utils/memorySanitizer';
 import { stripInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
+import { getBuildInfo } from '@/modules/diagnostics/buildInfo';
 
 function buildTechniqueProgress(inventory: Inventory | null) {
   const progress: Record<string, { 熟练度: number; 已解锁技能: string[] }> = {};
@@ -597,7 +598,9 @@ export const useGameStateStore = defineStore('gameState', {
         版本号: 3,
         存档ID: (this.saveMeta as any)?.存档ID ?? `save_${Date.now()}`,
         存档名: (this.saveMeta as any)?.存档名 ?? '自动存档',
-        游戏版本: (this.saveMeta as any)?.游戏版本,
+        // 写档盖章：始终为当前构建的游戏版本/内容包版本（旧档缺字段时自动补上）
+        游戏版本: getBuildInfo().version,
+        内容包版本: getBuildInfo().contentPackVersion,
         创建时间: (this.saveMeta as any)?.创建时间 ?? nowIso,
         更新时间: nowIso,
         游戏时长秒: Number((this.saveMeta as any)?.游戏时长秒 ?? 0),
