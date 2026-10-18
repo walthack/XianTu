@@ -14,13 +14,12 @@ import { debug } from '@/utils/debug';
 import { useUIStore } from './uiStore'; // 导入UI Store
 import { useCharacterCreationStore } from './characterCreationStore'; // 导入创角Store
 import * as storage from '@/utils/indexedDBManager';
-import { loadSaveWithFallback, rejectFutureSaveVersion } from '@/utils/saveLoadFallback';
+import { loadSaveWithFallback, rejectFutureSaveVersion, validateLoadedSave } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
 import { ensureSaveDataHasTavernNsfw } from '@/utils/nsfw';
 import { initializeCharacter } from '@/services/characterInitialization';
 import { createCharacter as createCharacterAPI, fetchCharacterProfile, updateCharacterSave, verifyStoredToken } from '@/services/request';
 import { isBackendConfigured } from '@/services/backendConfig';
-import { validateGameData } from '@/utils/dataValidation';
 import { getAIDataRepairSystemPrompt } from '@/utils/prompts/tasks/dataRepairPrompts';
 import { updateLifespanFromGameTime, updateNpcLifespanFromGameTime } from '@/utils/lifespanCalculator'; // <-- 导入寿命计算工具
 import { updateMasteredSkills } from '@/utils/masteredSkillsCalculator'; // <-- 导入掌握技能计算工具
@@ -1053,22 +1052,12 @@ export const useCharacterStore = defineStore('characterV3', () => {
         }
       }
 
-      // 在加载前执行数据骨架验证
-      // if (targetSlot.存档数据) {
-      //   const validationResult = validateGameData(targetSlot.存档数据, profile);
-      //   if (!validationResult.isValid) {
-      //     debug.error('角色商店', '存档数据验证失败', validationResult.errors);
-      //     uiStore.showDataValidationErrorDialog(
-      //       validationResult.errors,
-      //       () => {
-      //         // [核心改造] 用户确认后，调用AI进行智能修复
-      //         repairCharacterDataWithAI(charId, slotKey);
-      //       },
-      //       'loading' // [核心改造] 明确告知UI这是"加载"场景
-      //     );
-      //     return false; // 中断加载流程
-      //   }
-      // }
+      // 读档前校验（迁移之后）：致命 → 回退滚动备份，没有可用备份就中止；非致命只记日志，不拒绝合法旧档
+      if (targetSlot.存档数据) {
+        const outcome = await validateLoadedSave(charId, slotKey, targetSlot.存档数据);
+        if (outcome.status === 'rejected') return false;
+        targetSlot.存档数据 = outcome.data;
+      }
 
       try {
         uiStore.startLoading('开始加载存档...');

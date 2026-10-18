@@ -82,6 +82,9 @@
 | LCQ-SAV-012 | warn | indexedDB | 存档损坏或读取失败，已回退到滚动备份 | 槽位读出来不是对象、过不了 V3 致命校验或读取抛错，已改用最近一份可用的 `__rot__<槽>_N` | 看 detail.backupIndex（回退到第几份）与 detail.problem；提示只在同一会话同一槽弹一次（由读档处直接弹，不走日志 toast 的 error 级别线）；回退的是较早的进度，建议核对后手动存档 | 是 |
 | LCQ-SAV-013 | error | indexedDB | 存档损坏或读取失败，且没有可用的滚动备份 | 主槽损坏/读不出，`__rot__<槽>_1..N` 也都不存在或同样损坏 | 勿覆盖该槽；导出日志与浏览器存储留证，用手动导出的存档文件恢复 | 是 |
 | LCQ-SAV-014 | warn | saveMigration | 存档版本高于当前游戏，已拒绝加载 | 存档的 `元数据.版本号` 大于游戏支持的 `CURRENT_SAVE_SCHEMA_VERSION`（存档由更新版本的游戏写出，或玩家回退了游戏版本） | 看 detail.saveVersion / currentVersion；升级游戏后再读取，不要用旧版本覆盖该槽；该槽数据未被改动（不迁移、不回退到滚动备份）；提示由读档处直接弹（不走日志 toast 的 error 级别线） | 是 |
+| LCQ-SAV-015 | warn | saveValidation | 读档校验发现非致命问题（缺字段或类型不对），已照常加载 | 迁移之后的 `validateSaveDataV3` 报了 errors / warnings（常见于旧档缺新字段、装备引用了不存在的物品），但结构仍是 V3 | 看 detail.problems 与 count；仅告警，存档照常加载、不拒绝；同一问题反复出现再考虑补迁移步骤 | 否 |
+| LCQ-SAV-016 | warn | saveValidation | 读档校验发现存档结构损坏，已回退到滚动备份 | 迁移之后的存档不是 V3 结构（`validateSaveDataV3` 的 criticalErrors），改用最近一份可用的 `__rot__<槽>_N`（旧结构的备份会在内存里迁移，不写回） | 看 detail.backupIndex 与 detail.problems；回退的是较早的进度；原槽未被改写，下次存档才覆盖；提示只在同一会话同一槽弹一次（由读档处直接弹，不走日志 toast 的 error 级别线） | 是 |
+| LCQ-SAV-017 | warn | saveValidation | 读档校验发现存档结构损坏，且没有可用的滚动备份，已拒绝加载 | 存档过不了致命校验，`__rot__<槽>_1..N` 也都不存在、同样损坏或来自更新版本 | 勿覆盖该槽；看 detail.problems；导出日志与浏览器存储留证，用手动导出的存档文件恢复；提示由读档处直接弹（不走日志 toast 的 error 级别线） | 是 |
 | LCQ-SYS-000 | warn | diagnostics | 未登记 | console.error / console.warn 被日志捕获；或调用方传了没登记的码（原码在 detail.originalCode） | 看 msg 与 stack 定位调用点；若是业务上要长期保留的错误，给它登记专属码并改成 logError | 否 |
 | LCQ-SYS-001 | warn | diagnostics | 日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存 | 浏览器禁用或不支持 IndexedDB（隐私模式、存储被清理策略禁用），或 lcq-log 库打开失败 | 日志仍在内存环形缓冲里，可照常导出；换普通窗口或检查浏览器站点存储设置 | 否 |
 | LCQ-UI-001 | error | window | 页面未捕获异常（window error） | 页面脚本抛出未捕获异常（组件渲染、事件回调） | 看 stack 与 detail.file/line；复现步骤 + 导出日志提交 | 否 |
