@@ -26,6 +26,7 @@ import { failureAftermathEffects, selfBuffEffect } from './outcomeEffects';
 import { pushLightMemory, pushMajorEpisode } from './memory';
 import { lethalForbidden, protectedCapFor } from './protect';
 import { noteDrain } from './playerTextDebug';
+import { logGateRefusal } from './refusalLog';
 import { affinityBeatTaken, noteSettled, readFreeActionState, runtimeOf, writableFreeActionState } from './state';
 import type { FreeActionTicket } from './ticket';
 import { playerIdOf } from './ticket';
@@ -334,11 +335,17 @@ function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: 
   const targetId = ticket.targetId!; // 有对象的变体：缺 targetId 的票上面已按 disabled 退回
 
   const gate = checkGates(save, ticket, deps);
-  if (!gate.ok) return { ok: false, reason: gate.reason, key, facts: [gateText(gate.reason, gate.slots, spec.variant)] };
+  if (!gate.ok) {
+    logGateRefusal(gate.reason, 'settle', ticket);
+    return { ok: false, reason: gate.reason, key, facts: [gateText(gate.reason, gate.slots, spec.variant)] };
+  }
 
   const slots: FactSlots = { ...gate.slots, player: gate.slots.player || playerNameOf(save), target: gate.slots.target || targetNameOf(save, targetId) };
   const planned = plan(save, ticket, gate, resolution, key, slots, deps);
-  if (!planned.apply()) return { ok: false, reason: 'refused_by_state', key, facts: [gateText('state_refused', slots, spec.variant)] };
+  if (!planned.apply()) {
+    logGateRefusal('state_refused', 'settle', ticket);
+    return { ok: false, reason: 'refused_by_state', key, facts: [gateText('state_refused', slots, spec.variant)] };
+  }
   const aftermath = writeAftermath(save, resolution, slots);
 
   const resultKey = planned.resultKey, runtime = runtimeOf(save), cfg = freeActionConfig(), now = sceneTime(save);

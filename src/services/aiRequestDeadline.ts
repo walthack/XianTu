@@ -1,12 +1,16 @@
+import { NET_TIMEOUT_CODES } from '@/modules/diagnostics/codes';
 import { inheritRequestDiagnostics, inheritDiagnosticCancellation, noteDiagnosticCancellation } from './requestLifecycleDiagnostics';
 export class AiRequestTimeoutError extends Error {
   readonly code = 'AI_REQUEST_TIMEOUT';
+  /** 错误码（按 phase 分：首字节 / 总耗时 / 空闲），由 requestLifecycleDiagnostics 在请求收尾时记入诊断日志。 */
+  readonly lcqCode: string;
   constructor(readonly phase: 'first_byte' | 'total' | 'idle', readonly timeoutMs: number) {
     super(phase === 'first_byte'
       ? `AI请求等待首个响应超时（${timeoutMs / 1000}秒），请手动重试。`
       : phase === 'idle' ? `AI正文流空闲超时（${timeoutMs / 1000}秒），请手动重试。`
       : `AI请求总耗时超时（${timeoutMs / 1000}秒），请手动重试。`);
     this.name = 'AiRequestTimeoutError';
+    this.lcqCode = NET_TIMEOUT_CODES[phase];
   }
 }
 

@@ -1,27 +1,29 @@
 import defaults from '../../../mod-kit/game-numbers.qingyu.json';
 /** Shared numeric authority. H1 may call applyGameNumbers after validating tuning.json. */
 export const GAME_NUMBERS = structuredClone(defaults);
+/** 带错误码的数值配置错误（码表见 docs/ERROR-CODES.md）；码放在消息开头，.code 供调用方读。 */
+const numError=(code:string,message:string):Error=>Object.assign(Error(`[${code}] ${message}`),{code});
 export function applyGameNumbers(patch: unknown): void {
  const next=structuredClone(GAME_NUMBERS);
  const merge=(target:any,value:any,path:string):void=>{
-  if(!value||typeof value!=='object'||Array.isArray(value))throw Error(`数值配置对象无效：${path}`);
+  if(!value||typeof value!=='object'||Array.isArray(value))throw numError('LCQ-NUM-001',`数值配置对象无效：${path}`);
   for(const [key,v] of Object.entries(value)){
-   if(!(key in target))throw Error(`未知数值配置：${path}.${key}`);
+   if(!(key in target))throw numError('LCQ-NUM-002',`未知数值配置：${path}.${key}`);
    if(v&&typeof v==='object'&&!Array.isArray(v))merge(target[key],v,`${path}.${key}`);
-   else if(typeof v!==typeof target[key]||typeof v==='number'&&!Number.isFinite(v))throw Error(`数值配置类型无效：${path}.${key}`);
+   else if(typeof v!==typeof target[key]||typeof v==='number'&&!Number.isFinite(v))throw numError('LCQ-NUM-003',`数值配置类型无效：${path}.${key}`);
    else target[key]=v;
   }
  };
  merge(next,patch,'numbers');
- if(next.levels.gapOne<0||next.levels.gapMany<next.levels.gapOne||next.combat.simulation.minWinRate<0||next.combat.simulation.maxWinRate>1||next.combat.simulation.minWinRate>next.combat.simulation.maxWinRate||next.training.progressPerLevel<=0||Object.values(next.currency).some(v=>v<=0))throw Error('数值配置范围无效');
+ if(next.levels.gapOne<0||next.levels.gapMany<next.levels.gapOne||next.combat.simulation.minWinRate<0||next.combat.simulation.maxWinRate>1||next.combat.simulation.minWinRate>next.combat.simulation.maxWinRate||next.training.progressPerLevel<=0||Object.values(next.currency).some(v=>v<=0))throw numError('LCQ-NUM-004','数值配置范围无效');
  const goalProfiles=next.goalModifiers as Record<string,{factorProfile:string;levelGap:boolean}>;
- if(!goalProfiles.default||Object.values(goalProfiles).some(profile=>!profile||typeof profile.factorProfile!=='string'||(profile.factorProfile!=='scene'&&!(profile.factorProfile in next.weights))||typeof profile.levelGap!=='boolean'))throw Error('目标修正配置无效');
+ if(!goalProfiles.default||Object.values(goalProfiles).some(profile=>!profile||typeof profile.factorProfile!=='string'||(profile.factorProfile!=='scene'&&!(profile.factorProfile in next.weights))||typeof profile.levelGap!=='boolean'))throw numError('LCQ-NUM-005','目标修正配置无效');
  // Keep nested references alive for H1 readers and already-imported defaults.
  const before=structuredClone(GAME_NUMBERS);
  merge(GAME_NUMBERS,next,'numbers');
  // 模块自带的体检（自由行动、判定线等）：不过就退回合并前的数值并报错，热改整份拒绝。
  const problems=numbersValidators.flatMap(check=>check());
- if(problems.length){merge(GAME_NUMBERS,before,'numbers');throw Error(`数值体检未通过：${problems.join('；')}`);}
+ if(problems.length){merge(GAME_NUMBERS,before,'numbers');throw numError('LCQ-NUM-006',`数值体检未通过：${problems.join('；')}`);}
 }
 const numbersValidators:Array<()=>string[]>=[];
 /** 模块在加载时登记自己的数值体检（读 GAME_NUMBERS，返回错误列表，空 = 通过）；applyGameNumbers 合并后逐个跑。 */

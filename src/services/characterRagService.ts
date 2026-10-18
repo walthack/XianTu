@@ -13,6 +13,7 @@ import type { RequestDiagnosticContext } from './requestLifecycleDiagnostics';
  * - 索引元数据键控：registryHash + embeddingModel + dimension
  */
 import { openDB, type IDBPDatabase } from 'idb';
+import { logError } from '@/modules/diagnostics/log';
 import type { APIProvider } from '@/services/aiService';
 import {
   createEmbeddings,
@@ -93,7 +94,7 @@ class CharacterRagService {
       });
       console.log('[角色RAG] 初始化完成: character-rag');
     } catch (error) {
-      console.warn('[角色RAG] IndexedDB 初始化失败:', error);
+      logError('LCQ-SAV-010', error);
       this.db = null;
     }
   }

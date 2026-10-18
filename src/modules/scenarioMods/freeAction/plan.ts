@@ -12,6 +12,7 @@ import { variantSpecOf, type VariantSpec } from './config';
 import { checkGates, type FreeActionDeps } from './gates';
 import { withEncounteredTarget } from './encounter';
 import { gateText } from './facts';
+import { logGateRefusal } from './refusalLog';
 import { buildFreeActionJudgementProposal } from './judgement';
 import { settleFreeAction, type SettleResult, type SettleDeps } from './settle';
 import type { FreeActionTicket } from './ticket';
@@ -30,7 +31,10 @@ export function prepareFreeAction(save: SaveData, ticket: FreeActionTicket, deps
 
 function prepareRegistered(save: SaveData, ticket: FreeActionTicket, spec: VariantSpec, deps: SettleDeps & FreeActionDeps): PrepareResult {
   const gate = checkGates(save, ticket, deps);
-  if (!gate.ok) return { kind: 'refused', reason: gate.reason, facts: [gateText(gate.reason, gate.slots, spec.variant)] };
+  if (!gate.ok) {
+    logGateRefusal(gate.reason, 'prepare', ticket);
+    return { kind: 'refused', reason: gate.reason, facts: [gateText(gate.reason, gate.slots, spec.variant)] };
+  }
   if (spec.route === 'table') return { kind: 'settled', result: settleFreeAction(save, ticket, undefined, deps) };
   if (getJudgementState(save).pending) return { kind: 'blocked' };
   const proposal = buildFreeActionJudgementProposal(save, getNarrativeTurn(save), ticket, spec, gate.slots);

@@ -2,6 +2,7 @@
 import type { LocalStorageRoot, SaveData } from '@/types/game';
 import { buildBackendUrl, isBackendConfigured } from '@/services/backendConfig';
 import { toast } from '@/utils/toast';
+import { logError, logEventOnce } from '@/modules/diagnostics/log';
 
 /**
  * @fileoverview
@@ -96,18 +97,18 @@ async function remoteStorageRequest<T>(url: string, options: RequestInit = {}): 
     }
     if (response.status === 405 || response.status === 501) {
       remoteStorageDisabledForSession = true;
-      console.warn('【乾坤宝库-远程】远程存档接口不可用，本次会话回退 IndexedDB');
+      logEventOnce('sav-remote-unavailable', { code: 'LCQ-SAV-006', detail: { status: response.status } });
       return undefined;
     }
     if (!response.ok) {
-      console.warn(`【乾坤宝库-远程】请求失败(${response.status})，回退 IndexedDB`);
+      logEventOnce('sav-remote-failed', { code: 'LCQ-SAV-007', detail: { status: response.status } });
       return undefined;
     }
     if (response.status === 204) return null;
     const rawText = await response.text();
     return rawText ? (JSON.parse(rawText) as T) : null;
   } catch (error) {
-    console.warn('【乾坤宝库-远程】请求异常，回退 IndexedDB:', error);
+    logEventOnce('sav-remote-failed', { code: 'LCQ-SAV-007', cause: error, detail: { stage: 'exception' } });
     return undefined;
   }
 }
@@ -168,7 +169,7 @@ function openDatabase(): Promise<IDBDatabase> {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onerror = () => {
-      console.error('【乾坤宝库-IDB】数据库打开失败:', request.error);
+      logError('LCQ-SAV-001', request.error);
       reject(request.error);
     };
 
@@ -239,7 +240,7 @@ async function loadLocalRootData(): Promise<LocalStorageRoot> {
       activeSaveReq.onerror = () => reject(activeSaveReq.error);
     });
   } catch (error) {
-    console.error('【乾坤宝库-IDB】加载根数据时出错:', error);
+    logError('LCQ-SAV-002', error, { detail: { op: 'loadLocalRootData' } });
     return getEmptyRoot();
   }
 }
@@ -283,7 +284,7 @@ export async function loadRootData(): Promise<LocalStorageRoot> {
       当前激活存档: activeSave,
     };
   } catch (error) {
-    console.error('【乾坤宝库】合并根数据时出错，回退本机数据:', error);
+    logError('LCQ-SAV-008', error);
     return loadLocalRootData();
   }
 }
@@ -323,7 +324,7 @@ export async function saveCharacters(
     await saveData(CHARACTERS_KEY, characters, options);
     console.log('[IndexedDB-保存角色] ✅ 角色列表已保存到 IndexedDB');
   } catch (error) {
-    console.error('[IndexedDB-保存角色] ❌ 保存角色列表失败:', error);
+    logError('LCQ-SAV-003', error, { detail: { op: 'saveCharacters' } });
     throw error;
   }
 }
@@ -336,7 +337,7 @@ export async function saveActiveSave(
     await saveData(ACTIVE_SAVE_KEY, activeSave, options);
     console.log('【乾坤宝库-IDB】当前激活存档已保存');
   } catch (error) {
-    console.error('【乾坤宝库-IDB】保存当前激活存档失败:', error);
+    logError('LCQ-SAV-003', error, { detail: { op: 'saveActiveSave' } });
     throw error;
   }
 }
@@ -376,7 +377,7 @@ export async function saveRootData(root: LocalStorageRoot, options: { remoteRoot
 
     console.log('[IndexedDB-保存] ✅ 根数据（分片）保存成功');
   } catch (error) {
-    console.error('[IndexedDB-保存] ❌ 保存根数据时出错:', error);
+    logError('LCQ-SAV-003', error, { detail: { op: 'saveRootData' } });
     throw error;
   }
 }
@@ -412,7 +413,7 @@ export async function clearAllLocalData(): Promise<void> {
       };
     });
   } catch (error) {
-    console.error('【乾坤宝库-IDB】清除数据时出错:', error);
+    logError('LCQ-SAV-004', error, { detail: { op: 'clearAll' } });
     throw error;
   }
 }
@@ -463,7 +464,7 @@ export async function migrateData(): Promise<boolean> {
                reject(deleteReq.error);
             };
           } catch (error) {
-            console.error('【乾坤宝库-IDB】❌ 分片迁移失败:', error);
+            logError('LCQ-SAV-005', error, { detail: { stage: 'shard' } });
             reject(error);
           }
         } else {
@@ -477,7 +478,7 @@ export async function migrateData(): Promise<boolean> {
       };
     });
   } catch (error) {
-    console.error('【乾坤宝库-IDB】❌ 数据迁移过程出错:', error);
+    logError('LCQ-SAV-005', error, { detail: { stage: 'migrate' } });
     return false;
   }
 }
@@ -524,7 +525,7 @@ export async function getStorageStats(): Promise<{ itemCount: number; estimatedS
       };
     });
   } catch (error) {
-    console.error('【乾坤宝库-IDB】获取统计信息失败:', error);
+    logError('LCQ-SAV-009', error);
     return { itemCount: 0, estimatedSize: '未知' };
   }
 }
@@ -552,7 +553,7 @@ export async function saveSaveData(
     }
     console.log(`【乾坤宝库-IDB】SaveData 已保存 (${characterId}/${slotId})`);
   } catch (error) {
-    console.error('【乾坤宝库-IDB】保存 SaveData 失败:', error);
+    logError('LCQ-SAV-003', error, { detail: { op: 'saveSaveData', characterId, slotId } });
     throw error;
   }
 }
@@ -629,7 +630,7 @@ export async function loadLocalSaveData(
   try {
     return await loadLocalSaveDataRecord(characterId, slotId);
   } catch (error) {
-    console.error('【乾坤宝库-IDB】加载本地 SaveData 时出错:', error);
+    logError('LCQ-SAV-002', error, { detail: { op: 'loadLocalSaveData', characterId, slotId } });
     return null;
   }
 }
@@ -647,7 +648,7 @@ export async function loadSaveData(
     }
     return await loadLocalSaveDataRecord(characterId, slotId);
   } catch (error) {
-    console.error('【乾坤宝库-IDB】加载 SaveData 时出错:', error);
+    logError('LCQ-SAV-002', error, { detail: { op: 'loadSaveData', characterId, slotId } });
     return null;
   }
 }
@@ -684,7 +685,7 @@ export async function deleteSaveData(
       };
     });
   } catch (error) {
-    console.error('【乾坤宝库-IDB】删除 SaveData 时出错:', error);
+    logError('LCQ-SAV-004', error, { detail: { op: 'deleteSaveData', characterId, slotId } });
     throw error;
   }
 }
@@ -762,7 +763,7 @@ export async function deleteAllSaveDataForCharacter(
       };
     });
   } catch (error) {
-    console.error('【乾坤宝库-IDB】批量删除存档数据时出错:', error);
+    logError('LCQ-SAV-004', error, { detail: { op: 'deleteCharacterData' } });
     throw error;
   }
 }
@@ -805,7 +806,7 @@ export async function loadFromIndexedDB(key: string): Promise<any | null> {
       };
     });
   } catch (error) {
-    console.error(`【乾坤宝库-IDB】从 IndexedDB 加载数据失败 (key: ${key}):`, error);
+    logError('LCQ-SAV-002', error, { detail: { op: 'loadFromIndexedDB', key } });
     return null;
   }
 }

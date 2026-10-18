@@ -1,4 +1,5 @@
 import { buildBackendUrl, isBackendConfigured } from '@/services/backendConfig';
+import { logEventOnce } from '@/modules/diagnostics/log';
 
 const REMOTE_STORE_PREFIX = '/api/v1/save-storage';
 
@@ -30,7 +31,7 @@ async function requestRemote<T>(key: string, options: RequestInit): Promise<T | 
     const raw = await response.text();
     return raw ? (JSON.parse(raw) as T) : null;
   } catch (error) {
-    console.warn('[用户云配置] 远程请求失败，使用本地缓存:', error);
+    logEventOnce('net-user-cloud-failed', { code: 'LCQ-NET-007', cause: error, detail: { stage: 'request' } });
     return undefined;
   }
 }
@@ -86,6 +87,7 @@ export async function saveUserCloudDataDetailed(key: string, data: unknown): Pro
 
     return { success: false, status: response.status, message };
   } catch (error) {
+    logEventOnce('net-user-cloud-failed', { code: 'LCQ-NET-007', cause: error, detail: { stage: 'save' } });
     return {
       success: false,
       message: error instanceof Error ? error.message : '网络连接失败',

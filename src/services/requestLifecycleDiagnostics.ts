@@ -1,3 +1,6 @@
+import { logEvent, setLogContextProvider } from '@/modules/diagnostics/log';
+import { NET_TIMEOUT_CODES } from '@/modules/diagnostics/codes';
+
 /** Observational only: never changes a request, deadline, retry or game state. */
 export interface RequestDiagnosticContext {
   module: string;
@@ -36,6 +39,24 @@ let sequence = 0;
 const token = (s: string | null | undefined) => typeof s === 'string' && s && /^[\w.:-]{1,160}$/.test(s) && !/^(sk-|bearer)/i.test(s) ? s : null;
 
 export function currentDiagnosticTurnId(): string | null { return current; }
+// 错误码日志（src/modules/diagnostics）默认带上当前回合 id。
+setLogContextProvider(() => ({ turnId: current }));
+/** 请求收尾时记一条错误码日志：超时按 phase 分码，HTTP 错误 / 传输层失败各一码；取消与成功不记。只取元数据，不含 URL、请求头、正文。 */
+function noteRequestOutcome(entry: RequestLifecycleDiagnostic, error: unknown): void {
+  const detail = {
+    transport: entry.transport, module: entry.module, background: entry.background, httpStatus: entry.httpStatus,
+    timeoutPhase: entry.timeoutPhase, timeoutStage: entry.timeoutStage, cancelSource: entry.cancelSource,
+    durationMs: entry.endedAt !== null ? entry.endedAt - entry.startedAt : null, finishReason: entry.finishReason,
+  };
+  const ctx = { turnId: entry.turnId, requestId: entry.requestId };
+  // 后台任务（记忆 / 审计 / 向量）失败不阻塞主流程，降一级记 warn。
+  const level = entry.background ? 'warn' as const : undefined;
+  if (entry.status === 'timeout') {
+    const phase = entry.timeoutPhase as keyof typeof NET_TIMEOUT_CODES;
+    logEvent({ code: NET_TIMEOUT_CODES[phase] ?? NET_TIMEOUT_CODES.total, level, detail, cause: error, ctx });
+  } else if (entry.status === 'http_error') logEvent({ code: 'LCQ-NET-004', detail, cause: error, ctx });
+  else if (entry.status === 'failed' && error) logEvent({ code: 'LCQ-NET-005', detail, cause: error, ctx });
+}
 export function diagnosticContext(module: string, generationId?: string, background = !busy, turnId = current): RequestDiagnosticContext {
   return { module: token(module) || 'unknown', generationId: token(generationId), turnId: token(turnId), background };
 }
@@ -103,6 +124,7 @@ export function startRequestDiagnostic(context: RequestDiagnosticContext, transp
     entry.cancelSource = cause?.source || (signal?.aborted ? 'caller' : null);
     entry.status = entry.timeoutPhase ? 'timeout' : status || (signal?.aborted || e?.name === 'AbortError' || e?.code === 'ERR_CANCELED' ? 'cancelled' : error ? 'failed' : 'completed');
     entry.endedAt = Date.now(); signal?.removeEventListener('abort', onAbort);
+    noteRequestOutcome(entry, error);
     info('[AI请求诊断]', { ...entry });
     if (turn) turn.inFlightRequests--;
     release(); drain(context.turnId);

@@ -1,0 +1,735 @@
+{
+ "src/App.vue": {
+  "promise|(err => { console.error(' ', err); toast.error(explainFullscreenError(err)); })": 2,
+  "try|{ break; }": 1,
+  "try|{ console.error(\" \", error); const errorMessage = error instanceof Error ? error.message : \" \"; if (": 1,
+  "try|{ console.error(\" \", error); const errorMsg = error instanceof Error ? error.message : String(error)": 1,
+  "try|{ console.error(\" \", error); toast.error(\" \"); switchView(' '); }": 1,
+  "try|{ console.error(' ', e); }": 1,
+  "try|{ console.error(' ', error); }": 1,
+  "try|{ console.warn(' ', error); personaName = rawPayload.characterName || ' '; }": 1,
+  "try|{ }": 2
+ },
+ "src/components/character-creation/CharacterManagement.vue": {
+  "try|{ console.error(' ', error); toast.error(' ' + (error as Error).message); resetInput(); }": 1,
+  "try|{ console.error(' ', error); toast.error(' ' + (error as Error).message); }": 2,
+  "try|{ console.error(' ', error); toast.error(' ' + (error instanceof Error ? error.message : ' ')); }": 3,
+  "try|{ console.error(' ', error); toast.error(` error instanceof Error ? error.message : String(error) `)": 1,
+  "try|{ console.error(' ', error); toast.error(error instanceof Error ? error.message : ' '); }": 1,
+  "try|{ console.error(' ', error); }": 1,
+  "try|{ console.warn(' ', error); return null; }": 1,
+  "try|{ console.warn(` charId `, error); }": 1,
+  "try|{ console.warn(` s.存档名 `, e); return { ...s, 存档数据: rawSaveData }; }": 1,
+  "try|{ console.warn(` s.存档名 `, migrateError); }": 1,
+  "try|{ migrationWarning = ' '; console.warn(' ', migrateError); }": 1
+ },
+ "src/components/character-creation/LegacySaveMigrationModal.vue": {
+  "try|{ const msg = err instanceof Error ? err.message : ' ' analysis.value = { typeLabel: ' ', totalSaves": 1,
+  "try|{ toast.error(` err instanceof Error ? err.message : ' ' `) }": 2,
+  "try|{ warnings.push( ` idx + 1 slot?.存档名 ?? ' ' ` ) console.warn(' ', migrateError) }": 1
+ },
+ "src/components/character-creation/RedemptionCodeModal.vue": {
+  "try|{ error.value = ' '; }": 1
+ },
+ "src/components/character-creation/Step1_WorldSelection.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2,
+  "try|{ console.error(' ', e); toast.error(` e.message `, { id: toastId }); }": 1,
+  "try|{ console.error(' ', error); }": 1,
+  "try|{ console.error(' ', parseError); toast.error(' ', { id: toastId }); return; }": 1,
+  "try|{ console.error(` id `, error); }": 1
+ },
+ "src/components/character-creation/Step2_TalentTierSelection.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2,
+  "try|{ console.error(' ', e); toast.error(` e.message `, { id: toastId }); }": 1,
+  "try|{ console.error(' ', parseError); toast.error(' ', { id: toastId }); return; }": 1,
+  "try|{ console.error(` id `, error); }": 1
+ },
+ "src/components/character-creation/Step3_OriginSelection.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2,
+  "try|{ console.error(' ', e); toast.error(` e.message `, { id: toastId }); }": 1,
+  "try|{ console.error(' ', parseError); toast.error(' ', { id: toastId }); return; }": 1,
+  "try|{ console.error(` id `, error); }": 1
+ },
+ "src/components/character-creation/Step4_SpiritRootSelection.vue": {
+  "try|{ console.error(' ', e); const errorMessage = e instanceof Error ? e.message : ' '; toast.error(` er": 1,
+  "try|{ console.error(' ', e); toast.error(' '); }": 2,
+  "try|{ console.error(' ', parseError); toast.error(' ', { id: toastId }); return; }": 1,
+  "try|{ console.error(` id `, error); }": 1
+ },
+ "src/components/character-creation/Step5_TalentSelection.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2,
+  "try|{ console.error(' ', e); toast.error(` e.message `, { id: toastId }); }": 1,
+  "try|{ console.error(' ', parseError); toast.error(' ', { id: toastId }); return; }": 1,
+  "try|{ console.error(` id `, error); }": 1
+ },
+ "src/components/character-creation/Step7_Preview.vue": {
+  "try|{ console.error(' ', error) }": 1,
+  "try|{ console.warn(' ', e) }": 3
+ },
+ "src/components/common/CloudDataSync.vue": {
+  "try|{ console.error(' ', error); const message = error instanceof Error ? error.message : t(' '); toast.": 1
+ },
+ "src/components/common/DataClearButtons.vue": {
+  "try|{ console.error(' ', error); }": 1
+ },
+ "src/components/common/LoadingPreSeting.vue": {
+  "try|{ console.error(' ', error); const message = error instanceof Error ? error.message : ' '; toast.err": 1
+ },
+ "src/components/common/PresetExportModal.vue": {
+  "try|{ console.error(' ', error); const message = error instanceof Error ? error.message : ' '; toast.err": 1,
+  "try|{ console.error(' ', error); toast.error(' '); presets.value = []; }": 1
+ },
+ "src/components/common/PresetImportModal.vue": {
+  "try|{ console.error(' ', error); const message = error instanceof Error ? error.message : ' '; importRes": 1
+ },
+ "src/components/common/PresetLoadModal.vue": {
+  "try|{ console.error(' ', error); toast.error(' '); presets.value = []; }": 1,
+  "try|{ console.error(' ', error); toast.error(' '); }": 1
+ },
+ "src/components/common/TextReplaceRulesModal.vue": {
+  "try|{ const msg = e instanceof Error ? e.message : String(e); return ` msg `; }": 1
+ },
+ "src/components/common/VideoBackground.vue": {
+  "try|{ const handleUserInteraction = async () => { if (!videoRef.value) return try { await videoRef.value": 1,
+  "try|{ if (!videoRef.value) return videoRef.value.src = originalUrl; videoRef.value.load(); }": 1,
+  "try|{ }": 1
+ },
+ "src/components/dashboard/APIManagementPanel.vue": {
+  "try|{ apiTestResults.value[api.id] = ' '; toast.error(` api.name t(' ') error instanceof Error ? error.m": 1,
+  "try|{ ok = response.toLowerCase().includes(' ') || response.toLowerCase().includes(' '); }": 1,
+  "try|{ return {}; }": 1,
+  "try|{ toast.error(error instanceof Error ? error.message : t(' ')); }": 1,
+  "try|{ toast.error(t(' ')); }": 1
+ },
+ "src/components/dashboard/CraftingPanel.vue": {
+  "try|{ console.error(e); toast.error(e instanceof Error ? e.message : ' '); }": 1,
+  "try|{ console.warn(' ', e); resetSimulation(); }": 1,
+  "try|{ return null; }": 1
+ },
+ "src/components/dashboard/EventPanel.vue": {
+  "try|{ console.error(' ', error); toast.error(' '); }": 3
+ },
+ "src/components/dashboard/GameMapPanel.vue": {
+  "try|{ console.error(' ', continent, error); }": 1,
+  "try|{ console.error(' ', e); toast.error(' '); }": 1,
+  "try|{ console.error(' ', e); }": 1,
+  "try|{ console.error(' ', error); mapStatus.value = ' '; const errorMessage = (error as Error).message; i": 1,
+  "try|{ console.error(' ', error); mapStatus.value = ' '; toast.error(' ' + (error as Error).message); }": 1,
+  "try|{ console.error(' ', error); toast.error(' ' + (error as Error).message); }": 2,
+  "try|{ console.error(' ', faction, error); }": 1,
+  "try|{ console.error(' ', location, error); }": 1,
+  "try|{ console.warn(' ', e); }": 1
+ },
+ "src/components/dashboard/GameVariablePanel.vue": {
+  "try|{ console.error(' ', error) toast.error(t(' ') + (error instanceof Error ? error.message : t(' '))) ": 1,
+  "try|{ console.error(' ', error) toast.error(t(' ')) }": 2,
+  "try|{ const errorMsg = error instanceof Error ? error.message : t(' ') toast.error(t(' ') + ` errorMsg `": 1,
+  "try|{ }": 1
+ },
+ "src/components/dashboard/InventoryPanel.vue": {
+  "try|{ console.error(' ', error) toast.error(t(' ')) }": 1,
+  "try|{ console.warn(' ', e) }": 1,
+  "try|{ debug.error(t(' '), t(' '), error) toast.error(t(' ')) }": 3,
+  "try|{ debug.error(t(' '), t(' '), error) }": 1
+ },
+ "src/components/dashboard/LeftSidebar.vue": {
+  "try|{ console.error(' ', error); toast.error(t(' ')); }": 1
+ },
+ "src/components/dashboard/MainGamePanel.vue": {
+  "try|{ console.error(' ', error); toast.error(` error instanceof Error ? error.message : ' ' `); }": 3,
+  "try|{ console.error(' ', error); }": 4,
+  "try|{ console.error(' ', storageError); toast.error(' '); }": 1,
+  "try|{ console.warn(' ', backupError); }": 1,
+  "try|{ console.warn(' ', error); }": 3,
+  "try|{ if (!aborted()) toast.error(` String((error as Error).message) `); }": 1,
+  "try|{ if (isAiRequestTimeout(error) || (error && typeof error === ' ' && ' ' in error && (error.code ===": 1,
+  "try|{ if (isCanceledError(aiError) || !uiStore.isAIProcessing || aiResetToken !== resetSnapshot) { conso": 1,
+  "try|{ if (isCanceledError(error) || !uiStore.isAIProcessing || aiResetToken !== resetSnapshot) { console": 1,
+  "try|{ toast.error(String((error as Error)?.message || error)); }": 2
+ },
+ "src/components/dashboard/MemoryCenterPanel.vue": {
+  "promise|(error => { debug.error(' ', ' ', error); })": 1,
+  "try|{ console.error(' ', error); toast.error(t(' ')); }": 2,
+  "try|{ const message = error instanceof Error ? error.message : String(error || ''); narrativeRagError.va": 1,
+  "try|{ const message = error instanceof Error ? error.message : String(error || ''); toast.error(message ": 5,
+  "try|{ const message = error instanceof Error ? error.message : String(error || ''); vectorError.value = ": 1,
+  "try|{ debug.error(' ', ' ', error); const errorMsg = error instanceof Error ? error.message : ' '; toast": 1,
+  "try|{ debug.error(' ', ' ', error); throw error; }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(' '); }": 2,
+  "try|{ debug.error(' ', ' ', error); toast.error(t(' ')); }": 1,
+  "try|{ debug.error(' ', ' ', error); }": 1,
+  "try|{ return null; }": 1,
+  "try|{ }": 1
+ },
+ "src/components/dashboard/PromptManagementPanel.vue": {
+  "try|{ return false; }": 1,
+  "try|{ toast.error(' '); }": 1
+ },
+ "src/components/dashboard/RelationshipNetworkPanel.vue": {
+  "try|{ console.error(' ', error); const errorMsg = error instanceof Error ? error.message : ' '; uiStore.": 1,
+  "try|{ console.error(' ', error); uiStore.showToast(' ', { type: ' ' }); }": 3,
+  "try|{ console.warn(' ', error); }": 1,
+  "try|{ const errorMsg = error instanceof Error ? error.message : ' '; uiStore.showToast(` errorMsg `, { t": 3,
+  "try|{ const textFieldMatch = fenced.match(/ /); if (textFieldMatch?.[1]) { try { summary = JSON.parse(' ": 1,
+  "try|{ rawErrorMsg.value = ' ' + (e instanceof Error ? e.message : String(e)); return; }": 1,
+  "try|{ rawErrorMsg.value = ' ' + (e instanceof Error ? e.message : String(e)); }": 1,
+  "try|{ return true; }": 1,
+  "try|{ summary = responseText.trim(); }": 1,
+  "try|{ summary = textFieldMatch[1].trim(); }": 1,
+  "try|{ }": 1
+ },
+ "src/components/dashboard/RightSidebar.vue": {
+  "try|{ stageSwitchError.value = String((error as Error)?.message || error); }": 3
+ },
+ "src/components/dashboard/SavePanel.vue": {
+  "try|{ console.error(' ', error); debug.error(' ', ' ', error); toast.error(` error instanceof Error ? er": 1,
+  "try|{ console.error(' ', error); toast.error(` error instanceof Error ? error.message : ' ' `); }": 2,
+  "try|{ console.warn(' ', migrateError); }": 1,
+  "try|{ console.warn(` s.存档名 `, e); return { ...s, 存档数据: rawSaveData }; }": 1,
+  "try|{ console.warn(` s.存档名 `, migrateError); }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(' ' + (error as Error).message); }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(' '); }": 7,
+  "try|{ debug.error(' ', ' ', error); toast.error(` error instanceof Error ? error.message : ' ' `); }": 2
+ },
+ "src/components/dashboard/SectPanel.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 1,
+  "try|{ return ' '; }": 1
+ },
+ "src/components/dashboard/SettingsPanel.vue": {
+  "try|{ console.error(' ', error); toast.error(' '); }": 1,
+  "try|{ debug.error(' ', ' ', error); throw error; }": 1,
+  "try|{ debug.error(' ', ' ', error); throw new Error(' '); }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(' '); }": 3,
+  "try|{ debug.error(' ', ' ', error); toast.error(` error instanceof Error ? error.message : ' ' `); }": 2,
+  "try|{ legacyNarrativePilotEnabled.value = readLegacyNarrativePilotSetting(); console.error(' ', error); ": 1,
+  "try|{ return false; }": 1,
+  "try|{ }": 1
+ },
+ "src/components/dashboard/SkillsPanel.vue": {
+  "try|{ console.error(' ', error); }": 3
+ },
+ "src/components/dashboard/TopBar.vue": {
+  "promise|(err => { console.error(explainFullscreenError(err)) })": 2,
+  "try|{ console.error(' ', e) return '' }": 1,
+  "try|{ console.error(' ', e) return ` t(' ') t(' ') t(' ') t(' ') ` }": 1,
+  "try|{ console.error(' ', e) return t(' ') }": 2,
+  "try|{ return 0 }": 1
+ },
+ "src/components/dashboard/components/GameVariableEditModal.vue": {
+  "try|{ jsonError.value = ' ' + (e instanceof Error ? e.message : ' ') }": 2,
+  "try|{ return null }": 1
+ },
+ "src/components/dashboard/components/GameVariableFormatGuideModal.vue": {
+  "try|{ console.error(' ', error) toast.error(' ') }": 1
+ },
+ "src/components/dashboard/components/GameVariableSaveDataSection.vue": {
+  "try|{ debug.error(' ', ' ', error) toast.error(` error instanceof Error ? error.message : ' ' `) }": 1
+ },
+ "src/components/dashboard/components/SectContributionContent.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2
+ },
+ "src/components/dashboard/components/SectLibraryContent.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2
+ },
+ "src/components/dashboard/components/SectManagementContent.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2
+ },
+ "src/components/dashboard/components/SectMembersContent.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 2,
+  "try|{ console.error(' ', e); toast.error(` member.name `); }": 1,
+  "try|{ return dateStr; }": 1
+ },
+ "src/components/dashboard/components/SectMigrationModal.vue": {
+  "try|{ toast.error(` error instanceof Error ? error.message : ' ' `); }": 1
+ },
+ "src/components/dashboard/components/SectTasksContent.vue": {
+  "try|{ console.error(' ', error); toast.error(' '); }": 1
+ },
+ "src/components/dashboard/components/SectWarContent.vue": {
+  "try|{ console.error(' ', e); toast.error(' '); }": 7
+ },
+ "src/dev/combatTrial/CombatEncounterCard.vue": {
+  "try|{ error.value = String((cause as Error)?.message || cause) }": 1
+ },
+ "src/dev/combatTrial/CombatTrialStartView.vue": {
+  "try|{ errorMessage.value = String((error as Error)?.message || error) }": 2
+ },
+ "src/dev/combatTrial/main.ts": {
+  "promise|(error => { fetchError = error; return null })": 1
+ },
+ "src/modules/diagnostics/config.ts": {
+  "try|{ errors.push(` pattern `); }": 1
+ },
+ "src/modules/diagnostics/log.ts": {
+  "try|{ return ''; }": 1,
+  "try|{ return String(value); }": 1
+ },
+ "src/modules/diagnostics/store.ts": {
+  "try|{ const fallback = ls(); options.onDegrade?.(error, fallback.kind); return fallback; }": 1,
+  "try|{ return 0; }": 1,
+  "try|{ return []; }": 1
+ },
+ "src/modules/scenarioMods/backgroundAuditCore.ts": {
+  "try|{ return fallback; }": 1,
+  "try|{ }": 2
+ },
+ "src/modules/scenarioMods/canonGuard.ts": {
+  "try|{ return String(value ?? ''); }": 1,
+  "try|{ serializedValue = String(command.value ?? ''); }": 1
+ },
+ "src/modules/scenarioMods/farewellReplyGuard.ts": {
+  "try|{ return true; }": 1,
+  "try|{ return { ok: false, text: fallback, reason: ' ' }; }": 1
+ },
+ "src/modules/scenarioMods/fixedEndingNarratives.ts": {
+  "try|{ return ''; }": 1
+ },
+ "src/modules/scenarioMods/freeAction/config.ts": {
+  "try|{ errors.push((error as Error).message); }": 1
+ },
+ "src/modules/scenarioMods/freeAction/encounter.ts": {
+  "try|{ if (created) unregisterEncounteredTarget(save, targetId!); throw error; }": 1
+ },
+ "src/modules/scenarioMods/freeAction/playerTextDebug.ts": {
+  "try|{ }": 2
+ },
+ "src/modules/scenarioMods/ledger/guardFramework.ts": {
+  "try|{ return false; }": 1
+ },
+ "src/modules/scenarioMods/legacyNarrativePilot.ts": {
+  "try|{ return false; }": 1
+ },
+ "src/modules/scenarioMods/legacyNarrativePilotGenerate.ts": {
+  "try|{ lastError = error; if (input.shouldAbort?.()) throw error; if (!isPilotGenerateTimeout(error) && a": 1
+ },
+ "src/modules/scenarioMods/legacyRenderPlan.ts": {
+  "try|{ return fallback; }": 1
+ },
+ "src/modules/scenarioMods/modularTurn.ts": {
+  "try|{ if (options.isFatal(error)) throw error; options.onRejected?.(error, attempts); lastError = error;": 1,
+  "try|{ return false; }": 1,
+  "try|{ }": 1
+ },
+ "src/modules/scenarioMods/narrativePerformanceGuard.ts": {
+  "try|{ return []; }": 1,
+  "try|{ }": 2
+ },
+ "src/modules/scenarioMods/naturalIntentRouter.ts": {
+  "try|{ if (input.signal?.aborted) { return { kind: ' ', reason: ' ', clarification: NATURAL_INTENT_CLARIF": 1,
+  "try|{ return null; }": 1
+ },
+ "src/modules/scenarioMods/runtime.ts": {
+  "try|{ console.warn(' ', error); }": 5,
+  "try|{ return null; }": 1,
+  "try|{ }": 1
+ },
+ "src/modules/scenarioMods/strictInitializer.ts": {
+  "try|{ return { saveData, ok: false, reason: ' ' }; }": 1
+ },
+ "src/modules/scenarioMods/validator.ts": {
+  "try|{ add(' ', ' ', String((error as Error).message)); return { valid: false, issues }; }": 1
+ },
+ "src/modules/sceneModule/contracts/registry.ts": {
+  "try|{ errors.push(` (e as Error).message `); }": 1
+ },
+ "src/modules/sceneModule/host/controller.ts": {
+  "try|{ }": 1
+ },
+ "src/modules/sceneModule/host/ext.ts": {
+  "try|{ return JSON.parse(JSON.stringify(save)) as T; }": 1,
+  "try|{ return typeof globalThis.location !== ' '; }": 1,
+  "try|{ }": 2
+ },
+ "src/modules/sceneModule/host/freeTextStatusSemantic.ts": {
+  "try|{ return clarify(' ', ' '); }": 2
+ },
+ "src/modules/sceneModule/host/narrate.ts": {
+  "try|{ problems.push(String((error as Error).message)); }": 2,
+  "try|{ problems.push(` String((error as Error)?.message || error).slice(0, 80) `); break; }": 1
+ },
+ "src/modules/sceneModule/host/recognize.ts": {
+  "try|{ dropped.push(` String((error as Error)?.message || error).slice(0, 80) `); }": 1,
+  "try|{ return null; }": 1
+ },
+ "src/modules/sceneModule/lint.ts": {
+  "try|{err(` fact.id `);}": 1
+ },
+ "src/services/aiService.ts": {
+  "try|{ break; }": 1,
+  "try|{ console.error(' ', bearerError); }": 1,
+  "try|{ console.error(' ', e); }": 1,
+  "try|{ console.error(' ', error); if (axios.isAxiosError(error)) { const detail = typeof error.response?.": 1,
+  "try|{ console.error(' ', error); if (axios.isAxiosError(error)) { if (error.response?.status === 401) { ": 1,
+  "try|{ console.error(' ', error); if (error instanceof QingyuTurnLongRequestBudgetError) throw error; if ": 3,
+  "try|{ console.warn(' ', e); return null; }": 1,
+  "try|{ console.warn(' ', error); }": 1,
+  "try|{ console.warn(' ', fetchError); return this.getPresetModels(provider, baseUrl); }": 1,
+  "try|{ console.warn(' ', fetchError); }": 1,
+  "try|{ const msg = e instanceof Error ? e.message : String(e); if (!this.isStreamUnsupportedError(msg) ||": 1,
+  "try|{ const msg = e instanceof Error ? e.message : String(e); if (!this.isStreamUnsupportedError(msg)) t": 2,
+  "try|{ const recovered = salvageTruncationError(retryError); if (recovered) return recovered; if (isOutpu": 1,
+  "try|{ finishStreamDiagnostic(response, error); throw error; }": 1,
+  "try|{ if (axios.isAxiosError(error) && error.response?.status === 401) { console.warn(' '); try { const ": 1,
+  "try|{ if (axios.isAxiosError(queryError) && queryError.response?.status === 401) { console.warn(' '); co": 2,
+  "try|{ if (checkInterval) clearInterval(checkInterval); throw error; }": 1,
+  "try|{ if (error instanceof QingyuTurnLongRequestBudgetError) throw error; const salvaged = salvageTrunca": 1,
+  "try|{ if (opts?.signal?.aborted) { console.log(` label `); throw new Error(' '); } lastError = error; co": 1,
+  "try|{ if (proxyBaseUrl && this.isNetworkError(error)) { console.warn(' ', error); return this.testOllama": 1,
+  "try|{ lastError = error as Error; if (signal?.aborted || lastError.message?.includes(' ') || lastError.m": 1,
+  "try|{ throw this.toUserFacingError(error); }": 2,
+  "try|{ trace.finish(error); throw error; }": 2,
+  "try|{ }": 2
+ },
+ "src/services/api/auth.ts": {
+  "try|{ return false; }": 1
+ },
+ "src/services/api/cloudData.ts": {
+  "try|{ return []; }": 5
+ },
+ "src/services/backendConfig.ts": {
+  "try|{ return null; }": 1
+ },
+ "src/services/backgroundAudit.ts": {
+  "promise|(error => { if (controller.signal.aborted) return; finish({ status: ' ', route: error?.moduleModelRo": 1,
+  "try|{ finish({ status: ' ', route, findings: [], rejectedFindings: 0, error: String((error as Error).mes": 1
+ },
+ "src/services/characterRagService.ts": {
+  "try|{ console.warn(' ', error); return ''; }": 1,
+  "try|{ console.warn(' ', error); return 0; }": 1,
+  "try|{ console.warn(' ', error); return []; }": 1,
+  "try|{ console.warn(' ', error); return null; }": 1,
+  "try|{ console.warn(' ', error); return { total: 0 }; }": 1,
+  "try|{ console.warn(' ', error); }": 1,
+  "try|{ return null; }": 1
+ },
+ "src/services/diagnosticTransport.ts": {
+  "try|{ trace.finish(error); throw error; }": 2,
+  "try|{ }": 1
+ },
+ "src/services/embeddingService.ts": {
+  "try|{ const lower = (url || '').toString().toLowerCase(); return lower.includes(' ') || lower.includes('": 1,
+  "try|{ const lower = (url || '').toString().toLowerCase(); return lower.includes(' '); }": 1,
+  "try|{ if (trimmed.endsWith(' ')) return ` trimmed `; return ` trimmed fullPath `; }": 1
+ },
+ "src/services/eventReconcileService.ts": {
+  "try|{ console.warn(' '); return []; }": 1,
+  "try|{ console.warn(' ', error); return []; }": 1
+ },
+ "src/services/httpClient.ts": {
+  "try|{ const errorMessage = normalizeRequestErrorMessage( error instanceof Error ? error.message : ' ' );": 1,
+  "try|{ errorMessage = rawText.substring(0, 100) || ' '; }": 1,
+  "try|{ throw new Error(' '); }": 1
+ },
+ "src/services/initialization/characterInitialization.ts": {
+  "try|{ console.error(' ', error); console.error(' ', error instanceof Error ? error.stack : ' '); throw e": 1,
+  "try|{ console.error(' ', jsonError); processedBaseInfo = baseInfo; }": 1,
+  "try|{ console.error(` `, error); throw error; }": 1,
+  "try|{ lastError = error instanceof Error ? error : new Error(String(error)); console.warn(` attempt `, l": 1
+ },
+ "src/services/modularTurnBackground.ts": {
+  "promise|(() => {})": 2,
+  "promise|(error => console.warn(' ', error))": 2,
+  "promise|(error => { if (!controller.signal.aborted) persist({ ...base, result: { status: ' ', route: error?.": 1,
+  "try|{ persist({ ...base, result: { status: ' ', route, error: String((error as Error).message), elapsedM": 1
+ },
+ "src/services/moduleModelRuntime.ts": {
+  "try|{ try { if (error && typeof error === ' ') Object.assign(error, { moduleModelRoute: route }); } catc": 1,
+  "try|{ }": 1
+ },
+ "src/services/narrativeRagService.ts": {
+  "try|{ console.warn(' ', error); return null; }": 1,
+  "try|{ return null; }": 1,
+  "try|{ this.config = { ...DEFAULT_CONFIG }; }": 1
+ },
+ "src/services/narrativeResponseSalvage.ts": {
+  "try|{ const start = candidate.indexOf(' '); const end = candidate.lastIndexOf(' '); if (start >= 0 && en": 1,
+  "try|{ }": 1
+ },
+ "src/services/optionalReasoningParams.ts": {
+  "try|{ }": 1
+ },
+ "src/services/progressAuditService.ts": {
+  "try|{ console.warn(' '); return []; }": 1,
+  "try|{ console.warn(' ', error); return []; }": 1
+ },
+ "src/services/prompts/promptConfig.ts": {
+  "try|{ console.warn(' ', error); return null; }": 1
+ },
+ "src/services/prompts/promptStorage.ts": {
+  "try|{ console.warn(' ', error); this.memoryOnly = true; }": 1
+ },
+ "src/services/requestLifecycleDiagnostics.ts": {
+  "try|{ }": 1
+ },
+ "src/services/security/turnstile.ts": {
+  "try|{ }": 2
+ },
+ "src/services/userCloudStorage.ts": {
+  "try|{ }": 1
+ },
+ "src/services/vectorMemoryService.ts": {
+  "try|{ console.warn(' '); }": 1,
+  "try|{ console.warn(' ', e); return null; }": 2,
+  "try|{ return null; }": 1
+ },
+ "src/stores/actionQueueStore.ts": {
+  "try|{ console.warn(' ', error); }": 2
+ },
+ "src/stores/apiManagementStore.ts": {
+  "try|{ console.error(' ', error); return { success: false, message: error instanceof Error ? error.messag": 1,
+  "try|{ console.error(' ', error); throw error; }": 1,
+  "try|{ console.error(' ', error); }": 1,
+  "try|{ isApplyingRemoteConfig = false; console.error(' ', error); return { success: false, message: error": 1,
+  "try|{ isApplyingRemoteConfig = false; console.error(' ', error); }": 1,
+  "try|{ return null; }": 1
+ },
+ "src/stores/characterCreationStore.ts": {
+  "try|{ console.error(\" \", e); error.value = \" \"; creationData.value.talentTiers = LOCAL_TALENT_TIERS.map(": 1,
+  "try|{ console.error(\" \", e); error.value = ` e instanceof Error ? e.message : ' ' `; const localWorlds =": 2,
+  "try|{ console.error(' ', error); }": 1,
+  "try|{ console.warn(\" \", error); }": 1,
+  "try|{ console.warn(' ', error); characterPayload.value.character_name = ' '; }": 1,
+  "try|{ console.warn(' ', error); character_name = ' '; }": 1,
+  "try|{ console.warn(` `, e); }": 1,
+  "try|{ }": 5
+ },
+ "src/stores/characterStore.ts": {
+  "try|{ console.error(' ', e); const errorMessage = e instanceof Error ? e.message : String(e); throw new ": 1,
+  "try|{ console.error(' ', e); toast.error(' '); resolve(false); }": 1,
+  "try|{ console.error(' ', error); toast.warning(' '); }": 2,
+  "try|{ console.warn(' ', e); }": 1,
+  "try|{ debug.error(' ', ' ', e); }": 2,
+  "try|{ debug.error(' ', ' ', error); const errorMessage = error instanceof Error ? error.message : ' '; t": 2,
+  "try|{ debug.error(' ', ' ', error); const errorMessage = error instanceof Error ? error.message : String": 1,
+  "try|{ debug.error(' ', ' ', error); rootState.value = { 当前激活存档: null, 角色列表: {} }; initialized.value = tr": 1,
+  "try|{ debug.error(' ', ' ', error); throw error; }": 2,
+  "try|{ debug.error(' ', ' ', error); toast.error(' '); return false; }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(' '); return null; }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(' '); throw error; }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(' '); }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(` error instanceof Error ? error.message : ' ' `); }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.error(isTavernEnv() ? ' ' : ' '); }": 1,
+  "try|{ debug.error(' ', ' ', error); toast.warning(' '); backendCreationSuccess = false; }": 1,
+  "try|{ debug.error(' ', ' ', error); }": 2,
+  "try|{ debug.error(' ', ' ', { error: e, response: aiResponse }); throw new Error(' '); }": 1,
+  "try|{ debug.error(' ', ` charId `, error); }": 1,
+  "try|{ debug.error(' ', ` npcName `, error); relationships[npcKey] = backupNpc; debug.log(' ', ` npcName ": 1,
+  "try|{ debug.error(' ', ` slotName `, error); throw error; }": 1,
+  "try|{ debug.warn(' ', ' ', error); const errorMessage = error instanceof Error ? error.message : ' '; to": 1,
+  "try|{ debug.warn(' ', ' ', error); const errorOnlineSlot = getOnlineSaveSlot(profile); if (errorOnlineSl": 1,
+  "try|{ debug.warn(' ', ' ', error); return; }": 1,
+  "try|{ debug.warn(' ', ' ', error); }": 8,
+  "try|{ debug.warn(' ', ` npcProfile.名字 `, npcError); }": 1,
+  "try|{ }": 1
+ },
+ "src/stores/gameStateStore.ts": {
+  "try|{ console.warn(' ', e); }": 1,
+  "try|{ return 5; }": 1
+ },
+ "src/stores/uiStore.ts": {
+  "try|{ backendStatus.value.connected = false; return false; }": 1
+ },
+ "src/utils/AIBidirectionalSystem.ts": {
+  "try|{ console.error(' ', String((error as Error)?.message || error), error); const truncated = String((e": 1,
+  "try|{ console.error(' ', error); if (error instanceof PlayerAgencyViolationError) { return { text: '', m": 1,
+  "try|{ console.error(' ', error); return text; }": 1,
+  "try|{ console.error(' ', error); throw new Error(` error instanceof Error ? error.message : ' ' `); }": 1,
+  "try|{ console.error(' ', parseError); const responseText = String(response).trim(); let extractedText = ": 1,
+  "try|{ console.error(' ', parseError); const salvaged = salvageCompleteNarrativeResponse(String(response)": 1,
+  "try|{ console.error(` `, command, error); hadExecutionError = true; commandErrorChanges.unshift({ key: '": 1,
+  "try|{ console.warn(' ', e); }": 6,
+  "try|{ console.warn(' ', error); }": 6,
+  "try|{ console.warn(` attempt `, e); }": 2,
+  "try|{ const codeBlockMatch = cleaned.match(/ /i); if (codeBlockMatch?.[1]) { try { const obj = JSON.pars": 1,
+  "try|{ const errorMsg = error instanceof Error ? error.message : ' '; console.error(' ', error); if (!sil": 1,
+  "try|{ const message = error instanceof Error ? error.message : String(error); throw new Error(` message ": 1,
+  "try|{ const textMatch = responseText.match(/ /); if (textMatch && textMatch[1]) { extractedText = textMa": 2,
+  "try|{ extractedText = responseText; }": 1,
+  "try|{ lastStep1Error = error instanceof Error ? error.message : String(error); console.info(' ', { step:": 1,
+  "try|{ lastStep2Error = e instanceof Error ? e.message : String(e); console.info(' ', { step: 2, attempt,": 1,
+  "try|{ result = codeBlockMatch[1].trim(); }": 1,
+  "try|{ return cleaned; }": 1,
+  "try|{ return false; }": 2,
+  "try|{ return true; }": 1,
+  "try|{ settings = {}; }": 1,
+  "try|{ throw error instanceof ModuleNarrativeGuardError ? error : new ModuleNarrativeGuardError(String((e": 1,
+  "try|{ useRawMode = aiConfig.memorySummaryMode === ' '; }": 1,
+  "try|{ }": 4
+ },
+ "src/utils/backgroundMemorySummary.ts": {
+  "promise|(onError)": 1
+ },
+ "src/utils/backgroundMemoryWork.ts": {
+  "promise|(() => undefined)": 1,
+  "try|{ console.warn(' ', error); }": 1
+ },
+ "src/utils/boundedAuxiliaryTask.ts": {
+  "try|{ return { status: ' ', error }; }": 1
+ },
+ "src/utils/cloudDataSync.ts": {
+  "try|{ console.error(' ', error); toast.error(' '); return { success: false, newItems: { worlds: 0, talen": 1,
+  "try|{ return false; }": 1
+ },
+ "src/utils/commandValidator.ts": {
+  "try|{ console.error(' ', e); warnings.push(` index `); }": 1,
+  "try|{ console.error(' ', error); errors.push(` error instanceof Error ? error.message : String(error) `)": 1,
+  "try|{ console.error(' ', error); errors.push(` index `); return { valid: false, errors, warnings }; }": 1,
+  "try|{ console.error(' ', error); return { valid: false, errors: [' '], warnings: [], invalidCommands: []": 1,
+  "try|{ console.error(` index `, error); allErrors.push(` index `); allWarnings.push(` index `); }": 1
+ },
+ "src/utils/commandValueValidator.ts": {
+  "try|{ console.error(' ', error); return { valid: false, errors: [` error instanceof Error ? error.messag": 1
+ },
+ "src/utils/dataRepair.ts": {
+  "try|{ console.error(' ', error); return createMinimalSaveDataV3(); }": 1
+ },
+ "src/utils/dataValidation.ts": {
+  "try|{ console.error(' ', error); return [false, null]; }": 1,
+  "try|{ console.warn(' ', e); repairedNpc.境界 = { 名称: ' ', 阶段: '', 当前进度: 0, 下一级所需: 100, 突破描述: ' ' }; }": 1,
+  "try|{ console.warn(' ', e); repairedNpc.背包 = { 物品: {} }; }": 1,
+  "try|{ console.warn(' ', error); }": 1,
+  "try|{ repairedNpc.与玩家关系 = ' '; }": 1,
+  "try|{ repairedNpc.人格底线 = []; }": 1,
+  "try|{ repairedNpc.先天六司 = { 根骨: 5, 灵性: 5, 悟性: 5, 气运: 5, 魅力: 5, 心性: 5 }; }": 1,
+  "try|{ repairedNpc.出生 = ' '; }": 1,
+  "try|{ repairedNpc.出生日期 = { 年: Math.max(1, fallbackYear - 18), 月: fallbackMonth, 日: fallbackDay }; }": 1,
+  "try|{ repairedNpc.外貌描述 = ' '; }": 1,
+  "try|{ repairedNpc.天赋 = []; }": 1,
+  "try|{ repairedNpc.好感度 = 0; }": 1,
+  "try|{ repairedNpc.实时关注 = false; }": 1,
+  "try|{ repairedNpc.属性 = { 气血: { 当前: 100, 上限: 100 }, 灵气: { 当前: 50, 上限: 50 }, 神识: { 当前: 30, 上限: 30 }, 寿元上限:": 1,
+  "try|{ repairedNpc.当前位置 = { 描述: ' ' }; }": 1,
+  "try|{ repairedNpc.当前内心想法 = ' '; }": 1,
+  "try|{ repairedNpc.当前外貌状态 = ' '; }": 1,
+  "try|{ repairedNpc.性别 = ' '; }": 1,
+  "try|{ repairedNpc.性格特征 = []; }": 1,
+  "try|{ repairedNpc.灵根 = ' '; }": 1,
+  "try|{ repairedNpc.种族 = ' '; }": 1,
+  "try|{ repairedNpc.记忆 = []; }": 1
+ },
+ "src/utils/debug.ts": {
+  "try|{ console.error(' ', error); this.debugMode = false; this.consoleDebug = false; this.performanceMoni": 1,
+  "try|{ }": 2
+ },
+ "src/utils/enhancedActionQueue.ts": {
+  "try|{ console.error(' ', error); toast.error(' '); return false; }": 7,
+  "try|{ console.warn(' ', e); }": 2
+ },
+ "src/utils/equipmentBonusApplier.ts": {
+  "try|{ console.error(' ', error); }": 1,
+  "try|{ console.error(` `, error); return false; }": 2
+ },
+ "src/utils/fullscreen.ts": {
+  "try|{ return true; }": 1
+ },
+ "src/utils/gameMapManager.ts": {
+  "try|{ console.error(' ', error); this.app = new PIXI.Application({ view: canvas, width: canvasWidth, hei": 1,
+  "try|{ console.warn(' ', e); }": 1,
+  "try|{ }": 4
+ },
+ "src/utils/generators/eventGenerators.ts": {
+  "try|{ console.error(' ', error); return null; }": 2
+ },
+ "src/utils/jsonExtract.ts": {
+  "try|{ console.warn(' ', error); const snippet = extractFirstJsonSnippet(cleanedText); if (!snippet) { th": 1
+ },
+ "src/utils/judgementEngine.ts": {
+  "try|{ return null; }": 1
+ },
+ "src/utils/legacyForegroundRecall.ts": {
+  "promise|(() => {})": 1,
+  "try|{ console.warn(' ', error); }": 3,
+  "try|{ }": 1
+ },
+ "src/utils/legacyOnlineSaveMigration.ts": {
+  "try|{ if (previousTarget) profiles[targetCharacterId] = previousTarget; else delete profiles[targetChara": 1
+ },
+ "src/utils/machineCode.ts": {
+  "try|{ console.error(' ', error); const fallbackCode = ` Date.now().toString(36).toUpperCase() Math.rando": 1,
+  "try|{ console.warn(' '); }": 1,
+  "try|{ console.warn(' ', e); }": 1,
+  "try|{ features.push(' '); }": 6,
+  "try|{ }": 2
+ },
+ "src/utils/memorySanitizer.ts": {
+  "try|{ }": 1
+ },
+ "src/utils/modelCommandPipeline.ts": {
+  "try|{ rejectedCommands.push({ command: cmd, errors: [` index e instanceof Error ? e.message : String(e) ": 1
+ },
+ "src/utils/musicEngine.ts": {
+  "try|{ return { ...DEFAULT_MUSIC_SETTINGS }; }": 1,
+  "try|{ this.activeAudio = previous; audio.pause(); audio.src = ''; this.waitForUserGesture(); }": 1,
+  "try|{ this.waitForUserGesture(); return; }": 1,
+  "try|{ this.waitForUserGesture(); }": 1
+ },
+ "src/utils/nsfw.ts": {
+  "try|{ }": 1
+ },
+ "src/utils/presetManager.ts": {
+  "try|{ console.error(' ', error); return []; }": 1,
+  "try|{ console.error(' ', error); return null; }": 1,
+  "try|{ console.error(' ', error); throw error; }": 6,
+  "try|{ console.error(' ', preset, error); failedCount++; }": 1
+ },
+ "src/utils/repairCommandPipeline.ts": {
+  "try|{ errors.push(` JSON.stringify(command) `); debug.error(' ', ' ', e); }": 1
+ },
+ "src/utils/statusEffectManager.ts": {
+  "try|{ console.error(' ', error); return []; }": 1,
+  "try|{ console.error(' ', error); return false; }": 2,
+  "try|{ console.error(' ', error); return null; }": 1,
+  "try|{ console.error(' ', error); return { removedEffects }; }": 1
+ },
+ "src/utils/tavern.ts": {
+  "try|{ break; }": 1,
+  "try|{ console.error(' ', error); throw error; }": 1,
+  "try|{ console.warn(' ', error); return null; }": 1,
+  "try|{ console.warn(' ', error); }": 1,
+  "try|{ if (debug) console.log(' ', e); }": 1,
+  "try|{ if (debug) console.log(` i + 1 `, e); break; }": 1,
+  "try|{ return false; }": 1,
+  "try|{ }": 1
+ },
+ "src/utils/tavernCore.ts": {
+  "try|{ console.error(' ', error); throw error; }": 1
+ },
+ "src/utils/textSanitizer.ts": {
+  "try|{ return value.replace(/ /g, ' ').replace(/ /g, ' ').replace(/ /g, ' '); }": 1,
+  "try|{ return { replaceRules: [] }; }": 1,
+  "try|{ }": 2
+ },
+ "src/utils/videoCache.ts": {
+  "try|{ console.error(` key `, error); return undefined; }": 1,
+  "try|{ console.error(` key `, error); throw error; }": 1
+ },
+ "src/utils/worldGeneration/enhancedWorldGenerator.ts": {
+  "try|{ const message = error instanceof Error ? error.message : String(error); console.error(' ', message": 1,
+  "try|{ const message = error instanceof Error ? error.message : String(error); this.previousErrors = [mes": 1,
+  "try|{ const message = error instanceof Error ? error.message : String(error); throw new Error(` message ": 1,
+  "try|{ const msg = err instanceof Error ? err.message : String(err); console.warn(` attempt + 1 `, msg); ": 1
+ },
+ "src/utils/worldGeneration/locationPlacementGenerator.ts": {
+  "try|{ const message = error instanceof Error ? error.message : String(error); console.error(' ', message": 1
+ },
+ "src/utils/worldGeneration/regionMapGenerator.ts": {
+  "try|{ const message = error instanceof Error ? error.message : String(error); console.error(' ', message": 1
+ },
+ "src/views/CharacterCreation.vue": {
+  "try|{ console.error(' ', error); store.characterPayload.character_name = ' '; }": 1,
+  "try|{ console.error(' ', error); store.failCreation(error instanceof Error ? error.message : ' '); emit(": 1,
+  "try|{ console.error(' ', error); toast.error(' '); }": 2
+ },
+ "src/views/GameView.vue": {
+  "try|{ console.error(' ', error); }": 1
+ },
+ "src/views/QingyuOpeningPlaytestStartView.vue": {
+  "try|{ errorMessage.value = String((error as Error)?.message || error); }": 2
+ },
+ "src/views/ScenarioModManagerView.vue": {
+  "try|{ showError(error); }": 6
+ },
+ "src/views/XingyuehuQuestPlaytestStartView.vue": {
+  "try|{ errorMessage.value = String((error as Error)?.message || error); }": 4
+ }
+}

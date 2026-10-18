@@ -10,6 +10,7 @@ import { readLocalMemoryCapsule } from '../legacyNarratorPacket';
 import { itemEffectOf } from './itemUse';
 import { freeActionConfig, variantSpecOf, enabledVariants, type ActionClass, type Degree } from './config';
 import { gateText } from './facts';
+import { logGateRefusal } from './refusalLog';
 
 export interface FreeActionTicket {
   actionClass: ActionClass;
@@ -129,6 +130,7 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
   const slots = { player: String((save as any)?.角色?.身份?.名字 || '你'), target: '' };
   const refuse = (reason: 'target_unavailable' | 'item_unavailable' | 'dropped', discard: string, key?: string) => {
     drop(discard, key);
+    logGateRefusal(reason, 'ticket', undefined, { discard, ...(key ? { ticketKey: key } : {}) });
     const text = gateText(reason, slots);
     if (!result.refusals.includes(text)) result.refusals.push(text);
   };

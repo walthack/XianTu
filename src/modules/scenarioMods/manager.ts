@@ -1,6 +1,7 @@
 import type { ScenarioMod } from './schema';
 import { analyzeScenarioMod, type ScenarioAnalysisSeverity } from './analyzer';
 import { validateScenarioMod } from './validator';
+import { logError, logEvent } from '../diagnostics/log';
 
 export interface ScenarioModImportDiagnostic {
   severity: ScenarioAnalysisSeverity;
@@ -118,6 +119,7 @@ export class ScenarioModManager {
     try {
       raw = JSON.parse(jsonText);
     } catch (error) {
+      logError('LCQ-PCK-002', error, { detail: { chars: jsonText.length } });
       return {
         mod: null,
         diagnostics: [{
@@ -133,6 +135,7 @@ export class ScenarioModManager {
 
     const validation = validateScenarioMod(raw);
     if (!validation.valid || !validation.value) {
+      logEvent({ code: 'LCQ-PCK-003', detail: { stage: 'schema', issues: validation.issues.map(issue => ({ path: issue.path, code: issue.code })) } });
       return {
         mod: null,
         diagnostics: validation.issues.map(issue => ({ ...issue, severity: 'error' as const })),
@@ -143,6 +146,7 @@ export class ScenarioModManager {
 
     const mod = validation.value;
     const analysis = analyzeScenarioMod(mod);
+    if (!analysis.valid) logEvent({ code: 'LCQ-PCK-003', detail: { stage: 'analysis', modId: mod.manifest.id, issues: analysis.issues.map(issue => ({ path: issue.path, code: issue.code, severity: issue.severity })) } });
     const library = await this.loadLibrary();
     const existingIndex = library.mods.findIndex(entry => entry.mod.manifest.id === mod.manifest.id);
     return {
@@ -207,6 +211,7 @@ export class ScenarioModManager {
   private async loadLibrary(): Promise<ScenarioModLibrary> {
     await this.ensureSeeded();
     const stored = await this.storage.load();
+    if (stored && !Array.isArray(stored.mods)) logEvent({ code: 'LCQ-PCK-001', detail: { storedType: typeof stored.mods } });
     if (!stored || !Array.isArray(stored.mods)) return { mods: [] };
     return { mods: stored.mods };
   }

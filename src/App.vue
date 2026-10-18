@@ -10,6 +10,7 @@
 <template>
   <div id="app-container">
     <ToastContainer />
+    <DiagnosticsBadge />
     <GlobalLoadingOverlay />
     <RetryConfirmDialog />
     <DataValidationErrorDialog />
@@ -221,6 +222,7 @@ import { useRouter, useRoute } from 'vue-router';
 import $ from 'jquery'; // 导入 jQuery
 import { BookOpen, X, Maximize2, Minimize2, Moon, Sun, Settings, Globe, Heart, ArrowRight, Plug, FileText } from 'lucide-vue-next'; // 导入图标
 import ToastContainer from './components/common/ToastContainer.vue';
+import DiagnosticsBadge from './components/common/DiagnosticsBadge.vue';
 import GlobalLoadingOverlay from './components/common/GlobalLoadingOverlay.vue';
 import RetryConfirmDialog from './components/common/RetryConfirmDialog.vue';
 import DataValidationErrorDialog from './components/common/DataValidationErrorDialog.vue';
