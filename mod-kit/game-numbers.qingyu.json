@@ -637,8 +637,13 @@
                 "phasesPerLevel": 3,
                 "unknownTargetAttr": "factors.center"
               },
+              "hpFloor": 1,
+              "lethalStatus": "dying",
               "outcomeFactor": "benefit",
-              "qiGainRatio": 0.15,
+              "gain": {
+                "qiPerPoint": 1,
+                "progressPerPoint": 0.5
+              },
               "selfCostHpRatio": 0.05,
               "diminish": {
                 "perUse": 0.6,

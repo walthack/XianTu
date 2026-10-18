@@ -1,5 +1,6 @@
 // 自由行动「夺元」变体（physical.drain_qi，effect=drainProgress）：默认启用；只对“设防失效”的目标成立；
-// 每次施行先扣玩家气血（drain.selfCostHpRatio），无冷却，夺走量按目标记次数递减。
+// 先吸对方灵气、吸空后再吸气血（气血最多吸到 drain.hpFloor），吸到的量补给玩家灵气并折成玩家修炼进度，不扣对方的境界进度；
+// 每次施行先扣玩家气血（drain.selfCostHpRatio），无冷却，吸取量按目标记次数递减。致死确认、灵气→气血顺序、境界提升见 freeActionDrainFlow.test.mjs。
 // 数值全在 game-numbers 的 freeAction 配置；测试按配置取值断言，改配置的用例结束时还原。
 import assert from 'node:assert/strict';
 import test from 'node:test';
@@ -19,11 +20,11 @@ const nameOf = save => profileOf(save, NING_YU).名字;
 const resolvedDrain = () => mods.config.variantSpecOf('physical', 'drain_qi').drain;
 const rowsOf = (save, id) => mods.statusRead.actorStatusRecords(save, id).map(r => r.statusId);
 
-/** 清羽存档：宁瑜在场、有 50 点进度；玩家灵气压低以便看回收；target 状态按 status 挂上。 */
+/** 清羽存档：宁瑜在场（灵气 / 气血各 100/100）、有 50 点进度（夺元不动它）；玩家灵气压低以便看回收；target 状态按 status 挂上。 */
 function fixture({ status = 'unconscious', progress = 50 } = {}) {
   const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, chapter: 40, realm: mods.realm.levelName(4) });
   realmOf(save).当前进度 = progress;
-  // 可夺量含六司差：玩家先天六司对齐凝羽（权重项），Δa=0；章 40 凝羽 4 级、玩家 4 级初期，Δp=0 → 可夺量就是 基数×lossRatio。
+  // 吸取比例含六司差：玩家先天六司对齐凝羽（权重项），Δa=0；章 40 凝羽 4 级、玩家 4 级初期，Δp=0 → 比例就是 lossRatio，灵气池 100 → 吸 8 点。
   for (const key of Object.keys(resolvedDrain().amount.attrWeights)) save.角色.身份.先天六司[key] = profileOf(save, NING_YU).先天六司[key];
   save.角色.属性.灵气.当前 = 10;
   if (status) assert.ok(mods.actorStatus.applyActorStatus(save, NING_YU, status, { sourceId: 'test' }).ok);
@@ -95,22 +96,25 @@ test('喂假死药（昏迷）→ 下一拍夺元可行', () => {
   assert.equal(mods.plan.prepareFreeAction(save, drainTicket()).kind, 'issued');
 });
 
-test('成功：目标进度按比例下降、好感 -12、升格大事、挂惊惧与真元亏损；玩家灵气回收、先扣气血，玩家境界进度不涨；不改境界名/阶段/下一级所需', () => {
+test('成功：先吸灵气（气血不动）、好感 -12、升格大事、挂惊惧与真元亏损；玩家灵气按比例补给、先扣气血，玩家境界进度按比例涨；不改对方的境界', () => {
   const save = fixture();
-  const realm = structuredClone(realmOf(save)), playerRealm = JSON.stringify(save.角色.属性.境界);
-  const d = resolvedDrain(), need = realm.下一级所需, full = Math.round(need * d.lossRatio);
+  const realm = structuredClone(realmOf(save)), playerRealm = save.角色.属性.境界;
+  const d = resolvedDrain(), taken = Math.round(100 * d.lossRatio);
   const hpBefore = save.角色.属性.气血.当前, selfCost = Math.round(save.角色.属性.气血.上限 * d.selfCostHpRatio);
+  const playerProgress = Number(playerRealm.当前进度) || 0;
   const { prepared, result } = runJudged(save, drainTicket(), 'success');
   assert.equal(prepared.kind, 'issued');
   assert.equal(result.ok, true, JSON.stringify(result));
   assert.equal(result.resultKey, 'drained');
-  assert.ok(selfCost > 0);
+  assert.ok(selfCost > 0 && taken > 0);
   assert.equal(save.角色.属性.气血.当前, hpBefore - selfCost, '先扣玩家气血');
   assert.equal(result.facts[1], CONTENT_PACKS.texts['free.fact.drain_qi.self_cost'].split('{player}').join(save.角色.身份.名字 || '你'), '事实里补上自损一句');
-  assert.equal(realmOf(save).当前进度, 50 - full);
-  assert.deepEqual([realmOf(save).名称, realmOf(save).阶段, realmOf(save).下一级所需], [realm.名称, realm.阶段, realm.下一级所需]);
-  assert.equal(JSON.stringify(save.角色.属性.境界), playerRealm, '玩家境界进度不涨（D5）');
-  assert.equal(save.角色.属性.灵气.当前, 10 + Math.round(save.角色.属性.灵气.上限 * d.qiGainRatio), '满额得手：回收 上限×qiGainRatio');
+  assert.equal(result.facts[2], CONTENT_PACKS.texts['free.fact.drain_qi.took_qi'].split('{player}').join(save.角色.身份.名字 || '你').split('{target}').join(nameOf(save)).split('{amount}').join(String(taken)), '事实写明夺走灵气多少');
+  assert.equal(poolOf(save, '灵气').当前, 100 - taken, '先吸灵气');
+  assert.equal(poolOf(save, '气血').当前, 100, '灵气没吸空，气血不动');
+  assert.deepEqual(realmOf(save), realm, '不再扣对方的境界进度');
+  assert.equal(save.角色.属性.境界.当前进度, playerProgress + Math.round(taken * d.gain.progressPerPoint), '玩家境界进度按 gain.progressPerPoint 折算');
+  assert.equal(save.角色.属性.灵气.当前, 10 + Math.round(taken * d.gain.qiPerPoint), '玩家灵气按 gain.qiPerPoint 补给');
   assert.equal(favorOf(save), 60 - 12);
   assert.equal(result.major, true);
   assert.ok(profileOf(save, NING_YU).记忆.length > 0);
@@ -127,11 +131,12 @@ test('成功：目标进度按比例下降、好感 -12、升格大事、挂惊�
   // 重放不再写
   const replay = mods.settle.settleFromResolution(save, runJudgedLast(save));
   assert.equal(replay?.replay, true);
-  assert.equal(realmOf(save).当前进度, 50 - full);
+  assert.equal(poolOf(save, '灵气').当前, 100 - taken);
 });
+const poolOf = (save, key) => profileOf(save, NING_YU).属性[key];
 const runJudgedLast = save => mods.judgement.getJudgementState(save).recent.at(-1);
 
-test('结果档：大成/完美/部分/失败/大失败 → 夺走量与好感与反噬', () => {
+test('结果档：大成/完美/部分/失败/大失败 → 吸取量与好感与反噬', () => {
   const d = resolvedDrain(), base = row().base;
   const cases = [
     ['partial', 'trace', 0.5, -12], ['great_success', 'drained', 1.5, -12], ['perfect', 'drained_deep', 2, -12],
@@ -139,10 +144,11 @@ test('结果档：大成/完美/部分/失败/大失败 → 夺走量与好感�
   ];
   for (const [outcome, key, factor, delta] of cases) {
     const save = fixture();
-    const need = realmOf(save).下一级所需, expected = Math.min(Math.round(need * d.perUseCapRatio), Math.round(need * d.lossRatio * factor));
+    const expected = Math.round(100 * Math.min(d.perUseCapRatio, d.lossRatio * factor));
     const { result } = runJudged(save, drainTicket(), outcome);
     assert.equal(result.resultKey, key, outcome);
-    assert.equal(realmOf(save).当前进度, 50 - expected, outcome);
+    assert.equal(100 - poolOf(save, '灵气').当前, expected, outcome);
+    assert.equal(poolOf(save, '气血').当前, 100, `${outcome} 气血不动`);
     assert.equal(favorOf(save), 60 + delta, `${outcome} 好感`);
     assert.equal(d.outcomeFactor[outcome], factor);
     assert.equal(rowsOf(save, NING_YU).includes('qi.drained'), expected > 0, `${outcome} 状态`);
@@ -163,13 +169,13 @@ test('好感：轻重度走同一条 beatClamp（±15）；light 不升格大事
   assert.equal(favorOf(heavy), 60 - cfg().affinity.perBeatCap, '-18 被钳到 -15');
 });
 
-test('无冷却、递减与恢复：连着夺不被冷却拦；每次夺走量按 perUse 递减，下限 floor，满一个周期恢复一次', () => {
-  const save = fixture({ progress: 90 });
-  const d = resolvedDrain(), need = realmOf(save).下一级所需, full = need * d.lossRatio;
+test('无冷却、递减与恢复：连着夺不被冷却拦；每次吸取量按 perUse 递减，下限 floor，满一个周期恢复一次', () => {
+  const save = fixture();
+  const d = resolvedDrain(), full = 100 * d.lossRatio;
   const losses = [];
   // 昏迷 720 分钟会自己过期（设防失效须在场）；每次出手前重新挂上，模拟目标一直无力设防。
   const down = () => mods.actorStatus.applyActorStatus(save, NING_YU, 'unconscious', { sourceId: 'test' });
-  const run = () => { down(); const before = realmOf(save).当前进度; const out = runJudged(save, drainTicket(), 'success'); assert.ok(out.result?.ok, JSON.stringify(out.prepared)); losses.push(before - realmOf(save).当前进度); };
+  const run = () => { down(); const before = poolOf(save, '灵气').当前; const out = runJudged(save, drainTicket(), 'success'); assert.ok(out.result?.ok, JSON.stringify(out.prepared)); losses.push(before - poolOf(save, '灵气').当前); };
   run();
   down();
   assert.equal(row().cooldownMinutes, undefined);
@@ -179,21 +185,34 @@ test('无冷却、递减与恢复：连着夺不被冷却拦；每次夺走量�
   assert.ok(expected[4] >= Math.round(full * d.diminish.floor) && expected[4] < expected[0], '递减且不低于下限');
   // 满一个恢复周期后少算一次
   days(save, d.diminish.recoverMinutes / 1440); advanceTurn(save);
-  const before = realmOf(save).当前进度;
+  const before = poolOf(save, '灵气').当前;
   down();
   runJudged(save, drainTicket(), 'success');
-  assert.equal(before - realmOf(save).当前进度, Math.round(full * Math.max(d.diminish.floor, d.diminish.perUse ** 4)), '已夺 5 次，隔一个恢复周期少算 1 次 → 按 4 次递减');
+  assert.equal(before - poolOf(save, '灵气').当前, Math.round(full * Math.max(d.diminish.floor, d.diminish.perUse ** 4)), '已夺 5 次，隔一个恢复周期少算 1 次 → 按 4 次递减');
   assert.equal(mods.state.readFreeActionState(save).drainLedger[NING_YU].count, 5);
 });
 
-test('drain_empty：玩家功力远低于对方，可夺量压到 0 → 闸门不过，零写入；文案不再说“已没有”', () => {
+test('drain_resisted：玩家功力远低于对方，吸取比例压到 0 → 闸门不过，零写入；文案是“夺不动”', () => {
   const save = fixture();
   save.角色.属性.境界.名称 = mods.realm.levelName(0); // 无修为对 4 级：Δp = −4
   const before = structuredClone(save);
   const prepared = mods.plan.prepareFreeAction(save, drainTicket());
-  assert.deepEqual([prepared.kind, prepared.reason], ['refused', 'drain_empty']);
+  assert.deepEqual([prepared.kind, prepared.reason], ['refused', 'drain_resisted']);
   assert.deepEqual(save, before);
   assert.match(prepared.facts[0], /功力深厚.*夺不动其真元/);
+});
+
+test('drain_empty：对方灵气与气血都已竭 → 闸门不过，零写入；文案写明“灵气气血皆已竭”；只剩一点气血不算竭（见致死确认）', () => {
+  const save = fixture();
+  poolOf(save, '灵气').当前 = 0;
+  poolOf(save, '气血').当前 = 0;
+  const before = structuredClone(save);
+  const prepared = mods.plan.prepareFreeAction(save, drainTicket());
+  assert.deepEqual([prepared.kind, prepared.reason], ['refused', 'drain_empty']);
+  assert.deepEqual(save, before);
+  assert.match(prepared.facts[0], /灵气气血皆已竭/);
+  poolOf(save, '气血').当前 = 1;
+  assert.equal(mods.plan.prepareFreeAction(save, drainTicket()).kind, 'issued', '气血还剩 1 点：出致死确认卡，不是 drain_empty');
 });
 
 test('同拍冲突：攻击 + 夺元报同一目标 → 留夺元（|base| 更大），攻击被丢并发“未发生”事实', () => {
@@ -231,6 +250,10 @@ test('配置体检：drainProgress 参数残缺 / 状态不在目录 / 自损比
     patch(v => { delete v.drain.selfCostHpRatio; }, 'selfCostHpRatio');
   patch(v => { v.drain.selfCostHpRatio = -0.1; }, 'selfCostHpRatio');
   patch(v => { v.drain.selfCostHpRatio = 1; }, 'selfCostHpRatio');
+    patch(v => { v.drain.hpFloor = -1; }, 'hpFloor');
+    patch(v => { v.drain.lethalStatus = 'nope.status'; }, 'lethalStatus');
+    patch(v => { delete v.drain.gain; }, 'drain.gain.qiPerPoint');
+    patch(v => { v.drain.gain.progressPerPoint = -1; }, 'drain.gain.progressPerPoint');
     patch(v => { v.backlash = { critical_failure: 'nope.status' }; }, 'backlash');
     } finally {
     Object.keys(variant).forEach(k => delete variant[k]);
@@ -243,10 +266,11 @@ test('夺元文本齐全：每个结果档、自损、反噬、气血不足都�
   const spec = mods.config.variantSpecOf('physical', 'drain_qi');
   for (const key of [...mods.config.resultKeysOf(spec), ...mods.facts.effectResultKeys(spec)]) {
     assert.ok(CONTENT_PACKS.texts[`free.fact.drain_qi.${key}`], `缺 free.fact.drain_qi.${key}`);
-    if (key !== 'backlash' && key !== 'self_cost') assert.ok(CONTENT_PACKS.texts[`free.memory.drain_qi.${key}`], `缺 free.memory.drain_qi.${key}`);
+    if (!['backlash', 'self_cost', 'took_qi', 'took_hp', 'realm_up'].includes(key)) assert.ok(CONTENT_PACKS.texts[`free.memory.drain_qi.${key}`], `缺 free.memory.drain_qi.${key}`);
   }
   assert.ok(mods.facts.effectResultKeys(spec).includes('self_cost'));
-  for (const reason of ['guard_up', 'drain_empty', 'hp_too_low']) assert.ok(CONTENT_PACKS.texts[`free.fact.gate.${reason}`], reason);
+  for (const key of ['drained_lethal', 'took_qi', 'took_hp', 'realm_up']) assert.ok(mods.facts.effectResultKeys(spec).includes(key), key);
+  for (const reason of ['guard_up', 'drain_empty', 'drain_resisted', 'drain_survivor', 'lethal_unconfirmed', 'hp_too_low']) assert.ok(CONTENT_PACKS.texts[`free.fact.gate.${reason}`], reason);
   assert.equal(CONTENT_PACKS.texts['free.fact.gate.cooldown.drain_qi'], undefined);
 });
 
@@ -314,7 +338,7 @@ test('签发后气血掉到不够：确认判定时闸门再跑一次 → hp_too
   assert.equal(save.角色.属性.气血.当前, 1);
 });
 
-test('后面的写入被状态拒绝：气血原样退回，进度与好感都不动', () => {
+test('后面的写入被状态拒绝：气血原样退回，对方灵气与好感都不动', () => {
   const afterStatuses = row().drain.afterStatuses;
   try {
     row().drain.afterStatuses = ['nope.status'];
@@ -323,17 +347,17 @@ test('后面的写入被状态拒绝：气血原样退回，进度与好感都�
     const { result } = runJudged(save, drainTicket(), 'success');
     assert.deepEqual([result.ok, result.reason], [false, 'refused_by_state']);
     assert.equal(save.角色.属性.气血.当前, hp);
-    assert.equal(realmOf(save).当前进度, 50);
+    assert.equal(poolOf(save, '灵气').当前, 100);
     assert.equal(favorOf(save), 60);
   } finally { row().drain.afterStatuses = afterStatuses; }
 });
 
-test('夺元不致死：完美档也只掉进度，不写 dying', () => {
+test('灵气还有时不致死：完美档也只吸灵气，不动气血、不写 dying', () => {
   const save = fixture();
   const { result } = runJudged(save, drainTicket(), 'perfect');
   assert.equal(result.ok, true);
   assert.equal(rowsOf(save, NING_YU).includes('dying'), false);
-  assert.ok(realmOf(save).当前进度 >= 0);
+  assert.equal(poolOf(save, '气血').当前, 100);
 });
 
 test('确认判定时闸门再跑一次：签发后目标不再无力设防（状态过期）→ guard_up，不写进度、好感、气血', () => {

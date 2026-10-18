@@ -107,7 +107,7 @@ test('闸门：传功——好感 ≥ 20 且功力不低于对方才出判定卡
   assert.equal(mods.plan.prepareFreeAction(absent, tk).reason, 'not_present');
 });
 
-test('闸门：夺元——目标昏迷且这一下夺得动才出判定卡；清醒 guard_up、功力差太大 drain_empty；目标进度条为 0 不再拦', () => {
+test('闸门：夺元——目标昏迷且这一下夺得动才出判定卡；清醒 guard_up、功力差太大 drain_resisted、灵气气血皆竭 drain_empty；目标进度条为 0 不再拦', () => {
   const tk = ticket('physical', 'drain_qi', NING_YU);
   const knocked = (progress, status = 'unconscious', opts = {}) => {
     const save = base(opts);
@@ -121,7 +121,11 @@ test('闸门：夺元——目标昏迷且这一下夺得动才出判定卡；�
   assert.equal(mods.plan.prepareFreeAction(knocked(50, null), tk).reason, 'guard_up');
   assert.equal(mods.plan.prepareFreeAction(knocked(0), tk).kind, 'issued', 'NPC 进度条为 0 也夺得动（可夺量不看对方现有进度）');
   // 第 40 章凝羽 4 级，玩家内视（1 级）：Δp = −3，比例压到 0 → 夺不动
-  assert.equal(mods.plan.prepareFreeAction(knocked(50, 'unconscious', { chapter: 40 }), tk).reason, 'drain_empty');
+  assert.equal(mods.plan.prepareFreeAction(knocked(50, 'unconscious', { chapter: 40 }), tk).reason, 'drain_resisted');
+  const drained = knocked(50);
+  Object.assign(profileOf(drained, NING_YU).属性.灵气, { 当前: 0 });
+  Object.assign(profileOf(drained, NING_YU).属性.气血, { 当前: 0 });
+  assert.equal(mods.plan.prepareFreeAction(drained, tk).reason, 'drain_empty');
 });
 
 test('双修长句：模型归 dual_cultivate 才出双修判定卡（kind=cultivate，不是抓住）；好感 59 被拒、60 出卡', async () => {

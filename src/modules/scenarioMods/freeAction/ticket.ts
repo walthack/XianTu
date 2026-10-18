@@ -21,6 +21,8 @@ export interface FreeActionTicket {
   itemId: string | null;
   /** 模型对这次举动好感变化的评估（可选）；只在代码基础值 ± affinity.floatBand 内生效，基础值为 0 时不采用。 */
   affinityDelta?: number;
+  /** 玩家在判定卡上确认过致死的一击：只由 settle.ticketFromResolution 从本地签发的回执里带出，模型的票不收这个字段（TICKET_KEYS 里没有）。 */
+  lethalConfirmed?: boolean;
 }
 export interface RosterEntry { id: string; name: string }
 export interface ItemEntry { id: string; name: string }

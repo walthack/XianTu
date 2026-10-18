@@ -19,8 +19,19 @@ export function trainingRealm(save:any,text:string,outcome:string):any|null {
  const success=['success','great_success','perfect'].includes(outcome),need=Math.max(1,Number(r.下一级所需)||GAME_NUMBERS.training.progressPerLevel);
  if(/冲关|冲击境界/.test(text)) {if(r.阶段!=='后期'||r.当前进度<need||level>=cap)return null;return success?{...realmAt(level+1),九阳层次:r.九阳层次}:{...r,当前进度:Math.floor(need*GAME_NUMBERS.training.failureRetention)};}
  if(!success)return null;
- r.当前进度=Math.min(need,Math.max(0,Number(r.当前进度)||0)+(outcome==='success'?GAME_NUMBERS.training.successProgress:GAME_NUMBERS.training.greatProgress));
+ advanceProgress(r,outcome==='success'?GAME_NUMBERS.training.successProgress:GAME_NUMBERS.training.greatProgress,need);
+ return r;
+}
+/** 修炼进度累加（自修与夺元共用）：进度封顶在 need；满额且不在后期则升一个小阶段、进度清零；后期满额停在满额，冲关另走 trainingRealm 的冲关分支。 */
+export function advanceProgress(r:any,gain:number,need:number):void {
+ r.当前进度=Math.min(need,Math.max(0,Number(r.当前进度)||0)+gain);
  if(r.当前进度>=need&&r.阶段!=='后期'){r.阶段=r.阶段==='中期'?'后期':'中期';r.当前进度=0;}
+}
+/** 夺元换算的修炼进度：纯函数，返回新的玩家境界（不改存档）；没有境界记录或进度≤0返回 null。 */
+export function drainedRealm(save:any,gain:number):any|null {
+ const current=save?.角色?.属性?.境界;if(!current||!(gain>0))return null;
+ const r=structuredClone(current);r.下一级所需=GAME_NUMBERS.training.progressPerLevel;
+ advanceProgress(r,gain,r.下一级所需);
  return r;
 }
 

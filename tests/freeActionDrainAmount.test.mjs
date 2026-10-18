@@ -1,16 +1,17 @@
-// 夺元默认可夺量：round(基数 × clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio))，闸门与结算共用 gates.drainAmount。
+// 夺元吸取比例：clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio)，作用在对方灵气上限（灵气吸空后才到气血）；闸门与结算共用 gates.drainPlan。
 // Δa = 玩家（先天+后天六司）与对方先天六司按权重之差；Δp = 级数 + 小阶段/phasesPerLevel 之差；对方级数不明 Δp = 0。
-// 期望值手算：lossRatio 0.08 / attrStep 0.01 / levelStep 0.04 / phasesPerLevel 3 / perUseCapRatio 0.2，基数 100；先断言配置没变，免得数值漂了测试悄悄失去意义。
-// 末尾是默认开局存档夹具的复现（不依赖模型）：玩家无修为对昏迷凝羽夺元不再 drain_empty，传功仍 level_too_low 且文案写出级数。
+// 期望值手算：lossRatio 0.08 / attrStep 0.01 / levelStep 0.04 / phasesPerLevel 3 / perUseCapRatio 0.2，凝羽灵气池 100/100（关系档案默认值，所以吸到的灵气点数 = 100 × 比例）；先断言配置没变，免得数值漂了测试悄悄失去意义。
+// 末尾是默认开局存档夹具的复现（不依赖模型）：玩家无修为对昏迷凝羽夺元不再 drain_empty，灵气被吸、玩家境界进度增加；传功仍 level_too_low 且文案写出级数。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { NING_YU, load, makeSave, mods, profileOf, runJudged, ticket } from './freeActionFixture.mjs';
 
 const gates = await load('../src/modules/scenarioMods/freeAction/gates.ts');
 const spec = () => mods.config.variantSpecOf('physical', 'drain_qi');
-const amountOf = save => gates.drainAmount(save, NING_YU, spec());
+const amountOf = save => gates.drainPlan(save, NING_YU, spec()).qi;
 const drainTicket = () => ticket('physical', 'drain_qi', NING_YU);
 const realmOf = save => profileOf(save, NING_YU).境界;
+const poolOf = (save, key) => profileOf(save, NING_YU).属性[key];
 const WEIGHTED = ['根骨', '心性', '悟性', '魅力'];
 
 /** 章 40 凝羽 4 级初期；玩家先天六司对齐凝羽的权重项（Δa = 0），境界 4 级（Δp = 0）；凝羽昏迷。 */
@@ -27,6 +28,7 @@ test('配置：drain.amount 的数值与权重（公式期望值的前提）', (
   assert.deepEqual(amount.attrWeights, { 根骨: 0.4, 心性: 0.3, 悟性: 0.2, 魅力: 0.1 });
   assert.deepEqual([amount.attrStep, amount.levelStep, amount.phasesPerLevel, amount.unknownTargetAttr], [0.01, 0.04, 3, 'factors.center']);
   assert.deepEqual([lossRatio, perUseCapRatio], [0.08, 0.2]);
+  assert.deepEqual([spec().drain.hpFloor, spec().drain.lethalStatus, spec().drain.gain], [1, 'dying', { qiPerPoint: 1, progressPerPoint: 0.5 }]);
   assert.equal(mods.numbers.GAME_NUMBERS.factors.center, 5);
   assert.equal(mods.numbers.GAME_NUMBERS.training.progressPerLevel, 100);
   assert.deepEqual(mods.config.validateFreeActionConfig(), []);
@@ -99,48 +101,43 @@ test('对方级数不明：Δp = 0（同级放行），玩家功力高低都一�
   }
 });
 
-test('基数：下一级所需 ≤ 0 取 training.progressPerLevel；否则就是下一级所需；单次上限按基数', () => {
+test('池子：吸取量 = 池上限 × 比例，单池不超过 上限 × perUseCapRatio；对方灵气 / 气血没有记录的池按 0（直接吸气血）', () => {
   const save = fixture();
-  realmOf(save).下一级所需 = 0;
-  assert.equal(amountOf(save), 8);
-  realmOf(save).下一级所需 = 250;
-  assert.equal(amountOf(save), 20);
+  poolOf(save, '灵气').上限 = poolOf(save, '灵气').当前 = 250;
+  assert.equal(amountOf(save), 20, '250 × 0.08');
   setPlayerRealm(save, 8, '后期');
-  assert.equal(amountOf(save), 50, '封顶 250×0.2');
-  assert.equal(gates.drainBase(save, NING_YU), 250);
-  realmOf(save).下一级所需 = -5;
-  assert.equal(gates.drainBase(save, NING_YU), 100);
+  assert.equal(amountOf(save), 50, '封顶 250 × 0.2');
+  delete profileOf(save, NING_YU).属性.灵气;
+  assert.deepEqual(gates.drainPlan(save, NING_YU, spec()), { qi: 0, hp: 20, lethal: false, empty: false }, '没有灵气记录 → 全部折到气血（气血池 100 × 比例，此时封顶 0.2）');
+  delete profileOf(save, NING_YU).属性;
+  assert.equal(gates.drainPlan(save, NING_YU, spec()).empty, true, '两池都没记录 = 皆已竭');
 });
 
-test('不看对方现有进度：进度 0 也夺得动；扣减后进度不低于 0', () => {
+test('不看对方的修炼进度：进度 0 也吸得动；对方境界（名称 / 阶段 / 进度 / 下一级所需）一概不动', () => {
   const zero = fixture();
   realmOf(zero).当前进度 = 0;
+  const realm = structuredClone(realmOf(zero));
   const { prepared, result } = runJudged(zero, drainTicket(), 'success');
   assert.equal(prepared.kind, 'issued');
   assert.equal(result.ok, true, JSON.stringify(result));
   assert.equal(result.resultKey, 'drained');
-  assert.equal(realmOf(zero).当前进度, 0, '0 − 8 夹到 0，不出负数');
-  assert.ok(mods.statusRead.actorStatusRecords(zero, NING_YU).some(r => r.statusId === 'qi.drained'), '夺走量 > 0 照常挂状态');
-  const few = fixture();
-  realmOf(few).当前进度 = 3;
-  runJudged(few, drainTicket(), 'success');
-  assert.equal(realmOf(few).当前进度, 0, '3 − 8 → 0');
+  assert.deepEqual(realmOf(zero), realm);
+  assert.equal(poolOf(zero, '灵气').当前, 92);
+  assert.ok(mods.statusRead.actorStatusRecords(zero, NING_YU).some(r => r.statusId === 'qi.drained'), '吸到量 > 0 照常挂状态');
 });
 
-test('闸门与结算共用 drainAmount：success 档夺走量 = 可夺量；闸门在可夺量为 0 时 drain_empty', () => {
+test('闸门与结算共用 drainPlan：success 档吸走量 = 闸门算出的量；功力差太大时闸门 drain_resisted', () => {
   for (const [level, expected] of [[5, 12], [4, 8], [3, 4]]) {
     const save = fixture();
     setPlayerRealm(save, level, '初期');
-    realmOf(save).当前进度 = 90;
     assert.equal(amountOf(save), expected);
     runJudged(save, drainTicket(), 'success');
-    assert.equal(90 - realmOf(save).当前进度, expected, `玩家 ${level} 级`);
+    assert.equal(100 - poolOf(save, '灵气').当前, expected, `玩家 ${level} 级`);
   }
   const weak = fixture();
   setPlayerRealm(weak, 2, '初期');
-  realmOf(weak).当前进度 = 90;
   const before = structuredClone(weak);
-  assert.equal(mods.plan.prepareFreeAction(weak, drainTicket()).reason, 'drain_empty');
+  assert.equal(mods.plan.prepareFreeAction(weak, drainTicket()).reason, 'drain_resisted');
   assert.deepEqual(weak, before, '零写入');
 });
 
@@ -157,30 +154,40 @@ test('传功 level_too_low 文案写明要修到几级：已知取对方级数�
   assert.equal(refusedUnknown.facts[0].includes('{'), false, '没有残留占位符');
 });
 
-test('三条拒绝文案：槽位全部被填，没有残留占位符', () => {
+test('拒绝文案：槽位全部被填，没有残留占位符；写明传功要修到几级 / 夺元皆竭 / 须昏迷被制住或重伤', () => {
   const slots = { player: '程宗扬', target: '凝羽', level: '4' };
   assert.equal(mods.facts.gateText('level_too_low', slots), '程宗扬功力不及凝羽，需修到4级方可传功。');
-  assert.equal(mods.facts.gateText('drain_empty', slots), '凝羽功力深厚，程宗扬一时夺不动其真元。');
+  assert.equal(mods.facts.gateText('drain_empty', slots), '凝羽灵气气血皆已竭，程宗扬已无可夺之元。');
+  assert.equal(mods.facts.gateText('drain_resisted', slots), '凝羽功力深厚，程宗扬一时夺不动其真元。');
   assert.equal(mods.facts.gateText('guard_up', slots), '凝羽尚有防备，须其昏迷、被制住或重伤，程宗扬才夺得了元。');
+  assert.match(mods.facts.gateText('drain_survivor', slots), /主线牵连甚深.*不能再夺/);
+  assert.match(mods.facts.whyLethalText(slots), /继续将致死/);
+  for (const reason of ['drain_survivor', 'lethal_unconfirmed']) assert.equal(mods.facts.gateText(reason, slots).includes('{'), false, reason);
 });
 
 // ---- 默认开局存档夹具复现（不依赖模型）----
-test('默认开局复现：玩家无修为对昏迷凝羽夺元 → 不再 drain_empty，能出判定卡并结算；传功仍 level_too_low 且写出级数', () => {
+test('默认开局复现：玩家无修为对昏迷凝羽夺元 → 不再 drain_empty，灵气被吸、玩家境界进度增加；传功仍 level_too_low 且写出级数', () => {
   const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } }); // 不动六司、不动境界：开局原样
   assert.equal(save.角色.属性.境界.名称, '无修为');
   assert.ok(mods.actorStatus.applyActorStatus(save, NING_YU, 'unconscious', { sourceId: 'test' }).ok);
-  const progress = realmOf(save).当前进度, need = realmOf(save).下一级所需;
-  const amount = amountOf(save);
+  const qiBefore = { ...poolOf(save, '灵气') }, hpBefore = { ...poolOf(save, '气血') };
+  const mineBefore = structuredClone(save.角色.属性.境界), myQiBefore = save.角色.属性.灵气.当前;
+  const plan = gates.drainPlan(save, NING_YU, spec());
   const out = runJudged(save, drainTicket(), 'success'), drained = out.prepared;
   const transfer = mods.plan.prepareFreeAction(makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } }), ticket('cast', 'transfer_qi', NING_YU));
   console.log('[复现] 凝羽境界', JSON.stringify(realmOf(save)), '玩家先天六司', JSON.stringify(save.角色.身份.先天六司), '凝羽先天六司', JSON.stringify(profileOf(save, NING_YU).先天六司));
-  console.log('[复现] 进度/下一级所需', progress, need, '默认可夺量', amount, '夺元 prepare', drained.kind, drained.reason ?? '', '结算', out.result?.ok, out.result?.resultKey);
+  console.log('[复现] 吸取比例', gates.drainRatio(save, NING_YU, spec()), '闸门 drainPlan', JSON.stringify(plan), '夺元 prepare', drained.kind, drained.reason ?? '', '结算', out.result?.ok, out.result?.resultKey);
+  console.log('[复现] 凝羽灵气', JSON.stringify(qiBefore), '→', JSON.stringify(poolOf(save, '灵气')), '气血', JSON.stringify(hpBefore), '→', JSON.stringify(poolOf(save, '气血')));
+  console.log('[复现] 玩家境界', JSON.stringify(mineBefore), '→', JSON.stringify(save.角色.属性.境界), '玩家灵气', myQiBefore, '→', save.角色.属性.灵气.当前);
+  console.log('[复现] 结算事实', JSON.stringify(out.result?.facts));
   console.log('[复现] 传功', transfer.kind, transfer.reason, transfer.facts?.[0]);
-  assert.equal(progress, 0, '凝羽进度条为 0（线上的常态）');
-  assert.equal(amount, 6, '无修为 Δp = 0（凝羽级数不明）；Δa = 0.4×(5−9)+0.1×(5−6) = −1.7 → 100×0.063');
+  assert.equal(plan.qi, 6, '无修为 Δp = 0（凝羽级数不明）；Δa = 0.4×(5−9)+0.1×(5−6) = −1.7 → 100×0.063 = 6');
   assert.equal(drained.kind, 'issued');
   assert.equal(out.result.ok, true);
   assert.equal(out.result.resultKey, 'drained');
+  assert.equal(poolOf(save, '灵气').当前, qiBefore.当前 - 6, '凝羽灵气被吸');
+  assert.equal(poolOf(save, '气血').当前, hpBefore.当前, '气血没动');
+  assert.equal(save.角色.属性.境界.当前进度, (Number(mineBefore.当前进度) || 0) + 3, '玩家境界进度 +6×0.5');
   assert.equal(transfer.reason, 'level_too_low');
   assert.match(transfer.facts[0], /功力不及.*需修到1级方可传功/);
 });

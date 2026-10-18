@@ -21521,6 +21521,12 @@
     },
     {
       "kind": "text",
+      "id": "free.confirm.lethal.button",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.affinity.capped",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21641,6 +21647,18 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.drain_qi.drained_lethal",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.realm_up",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.drain_qi.recoil",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21654,6 +21672,18 @@
     {
       "kind": "text",
       "id": "free.fact.drain_qi.self_cost",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.took_hp",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.drain_qi.took_qi",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -21761,6 +21791,18 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.gate.drain_resisted",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.drain_survivor",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.gate.dropped",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -21804,6 +21846,12 @@
     {
       "kind": "text",
       "id": "free.fact.gate.item_unavailable",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.lethal_unconfirmed",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22194,6 +22242,12 @@
     {
       "kind": "text",
       "id": "free.memory.drain_qi.drained_deep",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.drain_qi.drained_lethal",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22680,6 +22734,12 @@
     {
       "kind": "text",
       "id": "free.why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.why.lethal",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

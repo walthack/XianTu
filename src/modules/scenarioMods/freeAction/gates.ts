@@ -22,7 +22,7 @@ import { resolveNumberRef, variantSpecOf, type VariantSpec } from './config';
 import { freeActionText, targetLevelOf } from './judgement';
 import { canonCharacterOf, freeActionRosterOf, playerIdOf, type FreeActionTicket } from './ticket';
 import { readFreeActionState, runtimeOf } from './state';
-import { protectedForbids } from './protect';
+import { lethalForbidden, protectedForbids } from './protect';
 import { defenseDownOf } from './defenseDown';
 import type { GateReason } from './facts';
 
@@ -40,6 +40,8 @@ export interface GateOk {
   toxic: boolean;
   /** heal / bandage / 有解除标签的药：要解除的那一条状态记录与对应标签。 */
   treat?: { row: InjuryRecord; tag: string };
+  /** 夺取类：这一下会把对方吸到气血归零（致死）。出判定卡时标在回执上让玩家确认；结算侧没有确认就不执行（settle.ts）。 */
+  lethal?: boolean;
 }
 export interface GateFail { ok: false; reason: GateReason; slots: GateSlots }
 
@@ -164,9 +166,17 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
     const room = transferRoom(save, targetId, spec);
     if (room <= 0) return fail('budget_full');
   }
-  if (spec.drain && drainAmount(save, targetId, spec) <= 0) return fail('drain_empty');
-  if (spec.drain && !drainHpAffordable(save, spec)) return fail('hp_too_low');
-  return { ok: true, spec, slots, ...(item ? { item } : {}), toxic, ...(treat ? { treat } : {}) };
+  let lethal = false;
+  if (spec.drain) {
+    const plan = drainPlan(save, targetId, spec);
+    if (plan.empty) return fail('drain_empty');
+    if (plan.qi + plan.hp <= 0) return fail('drain_resisted');
+    if (!drainHpAffordable(save, spec)) return fail('hp_too_low');
+    // 致死：必须活着的角色（总表标记，见 protect.ts）直接拒绝；其余的由出票处标记、玩家确认后才执行。
+    if (plan.lethal && lethalForbidden(targetId)) return fail('drain_survivor');
+    lethal = plan.lethal;
+  }
+  return { ok: true, spec, slots, ...(item ? { item } : {}), toxic, ...(treat ? { treat } : {}), ...(lethal ? { lethal } : {}) };
 }
 
 /** 传功还能再加多少进度：min(阶段预算余量, 离“下一级所需−1”的距离)。 */
@@ -181,23 +191,12 @@ export function transferRoom(save: SaveData, targetId: string, spec: VariantSpec
   return Math.max(0, Math.min(budgetLeft, ceilingLeft));
 }
 
-/** 夺取类的基数：目标“下一级所需”；没有进度条（≤0）取 training.progressPerLevel。 */
-export function drainBase(save: SaveData, targetId: string): number {
-  const need = Number((relationshipOf(save as any, targetId)?.profile as any)?.境界?.下一级所需);
-  return need > 0 ? need : GAME_NUMBERS.training.progressPerLevel;
-}
-
 /** 级数加“小阶段序号/phasesPerLevel”；阶段不明按初期（序号 0）。 */
 const levelWithPhase = (level: number, stage: unknown, phasesPerLevel: number): number =>
   level + (GAME_NUMBERS.levels.phases[stage as keyof typeof GAME_NUMBERS.levels.phases] ?? 0) / phasesPerLevel;
 
-/**
- * 夺取类单次默认可夺量（闸门与结算共用）：round(基数 × clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio))。
- * Δa = Σ 权重·玩家（先天+后天六司）− Σ 权重·目标先天六司（缺失按 amount.unknownTargetAttr）；
- * Δp = 玩家（级数+小阶段/phasesPerLevel）− 目标同；目标级数不明（targetLevelOf 查不到）时 Δp = 0，即按同级。
- * 不看目标现有进度：NPC 进度条多为 0，这里只回答“这一下夺不夺得动”。不是夺取类返回 0。
- */
-export function drainAmount(save: SaveData, targetId: string, spec: VariantSpec): number {
+/** 夺取类吸取比例 = clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio)；Δa、Δp 的算法见 config.ts 的 DrainSpec 说明。 */
+export function drainRatio(save: SaveData, targetId: string, spec: VariantSpec): number {
   const drain = spec.drain;
   if (!drain) return 0;
   const { attrWeights, attrStep, levelStep, phasesPerLevel, unknownTargetAttr } = drain.amount;
@@ -212,8 +211,40 @@ export function drainAmount(save: SaveData, targetId: string, spec: VariantSpec)
   const realm = (save as any)?.角色?.属性?.境界, theirLevel = targetLevelOf(save, targetId);
   const deltaLevel = theirLevel === undefined ? 0
     : levelWithPhase(levelOf(realm) ?? 0, realm?.阶段, phasesPerLevel) - levelWithPhase(theirLevel, (relationshipOf(save as any, targetId)?.profile as any)?.境界?.阶段, phasesPerLevel);
-  const ratio = Math.min(drain.perUseCapRatio, Math.max(0, drain.lossRatio + attrStep * deltaAttr + levelStep * deltaLevel));
-  return Math.round(drainBase(save, targetId) * ratio);
+  return Math.min(drain.perUseCapRatio, Math.max(0, drain.lossRatio + attrStep * deltaAttr + levelStep * deltaLevel));
+}
+
+export interface DrainPlan {
+  /** 本次吸到的目标灵气 / 气血点数。 */
+  qi: number;
+  hp: number;
+  /** 目标灵气已空、气血只剩 hpFloor 以内，且这一下有量可吸：吸下去气血归零（hp = 剩下的全部气血）。 */
+  lethal: boolean;
+  /** 目标灵气与气血都已竭。 */
+  empty: boolean;
+}
+
+/**
+ * 夺取类单次吸取（闸门与结算共用）：先吸灵气，每池按“池上限 × 吸取比例”（单池不超过 上限×perUseCapRatio）；
+ * 灵气不够吸时，没吸满的那部分比例折到气血（气血 = 气血上限 × 比例 × 缺口占比），气血最多吸到 hpFloor；
+ * 目标灵气已空且气血在 hpFloor 以内（>0）时再吸 = 致死，lethal 为真，hp 取剩下的全部气血。
+ * scale 是结算时的轻重 × 结果档 × 递减（闸门取 1）。不看目标的修炼进度；没有灵气 / 气血记录的池按 0。
+ */
+export function drainPlan(save: SaveData, targetId: string, spec: VariantSpec, scale = 1): DrainPlan {
+  const drain = spec.drain, attrs = (relationshipOf(save as any, targetId)?.profile as any)?.属性;
+  const pool = (key: '灵气' | '气血'): { cur: number; max: number } => {
+    const cur = Number(attrs?.[key]?.当前), max = Number(attrs?.[key]?.上限);
+    return { cur: Number.isFinite(cur) ? Math.max(0, cur) : 0, max: Number.isFinite(max) ? Math.max(0, max) : 0 };
+  };
+  const qi = pool('灵气'), hp = pool('气血');
+  const empty = qi.cur <= 0 && hp.cur <= 0;
+  if (!drain || empty) return { qi: 0, hp: 0, lethal: false, empty };
+  const ratio = Math.min(drain.perUseCapRatio, drainRatio(save, targetId, spec) * Math.max(0, scale));
+  const qiWant = Math.round(qi.max * ratio), qiTake = Math.min(qi.cur, qiWant);
+  const gap = qiWant > 0 ? (qiWant - qiTake) / qiWant : ratio > 0 ? 1 : 0;
+  const hpWant = Math.round(hp.max * ratio * gap), hpRoom = Math.max(0, hp.cur - drain.hpFloor);
+  const lethal = qi.cur <= 0 && hp.cur > 0 && hp.cur <= drain.hpFloor && hpWant > 0;
+  return { qi: qiTake, hp: lethal ? hp.cur : Math.min(hpRoom, hpWant), lethal, empty };
 }
 
 /** 夺取类每次施行先扣的玩家气血：上限 × drain.selfCostHpRatio（四舍五入）；不是夺取类、没有气血记录是 0。 */
