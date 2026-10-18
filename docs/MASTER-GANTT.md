@@ -5,7 +5,7 @@
 **权威进度入口（双件）**：本文件（时间线）+ 仓库根目录 [`PROJECT-STATUS.md`](../PROJECT-STATUS.md)（叙述与勾选总表）。  
 勿另造第二份 status；`_newbot_tmp/PROJECT-TRACKER.md` 仅为草稿勾选，**非权威**。
 
-基线快照：同拍闸 `3763e22e` · 轻回执本轮合入 · 8097 包 SHA 前缀 `1f2c41525ce2` · numbers 三分包 `3b8c1be2`；遇敌已定体验三步（危区→检→遇敌叙事→开战）。
+基线快照：tip `ae76909a`（含 `3763e22e` 同拍 · `ac32513d` 轻回执＋遇敌三步 · `ee856f26` 回滚 · `a1e9ba66` 安全补档 · `ae76909a` 测修）· 8097 包 SHA 前缀 `1f2c41525ce2` · numbers 三分包 `3b8c1be2`；**全量剩冻结门禁 1 红**；遇敌已定体验三步（危区→检→遇敌叙事→开战）。
 
 **优先级**：底座优先；内容（总表补人／角色按拍卡）可同步、优先级略低。
 
@@ -28,11 +28,14 @@ gantt
     numbers 三分包 + 6 条迁入  :done, num, 2026-10-19, 1d
     真机通过（8097 现包）      :done, td, 2026-10-19, 1d
     同拍闸（共历×affinityBeat）:done, gate, 2026-10-19, 1d
+    轻回执（1016z）            :done, rcpt, 2026-10-19, 1d
+    回滚误伤总表（ee856f26）   :done, rb, 2026-10-19, 1d
+    总表补档＋测修（a1/ae）    :done, fix, 2026-10-19, 1d
 
     section 进行中·底座
     同拍共历收口观察           :active, cal, 2026-10-19, 5d
     已批未落扫描               :active, gap, 2026-10-19, 5d
-    轻回执（1016z）            :done, rcpt, 2026-10-19, 1d
+    冻结门禁 1 红（待批）      :active, frz, 2026-10-19, 5d
 
     section 进行中·内容（略低）
     角色总表合入／补人         :active, cast, 2026-10-19, 7d
@@ -61,8 +64,10 @@ gantt
 | 已完成 | 同拍闸 | Done | 底座 | `3763e22e`；`settleSharedExperienceAffinity` ↔ `affinityBeatTaken` |
 | 进行中·底座 | 同拍共历收口 | In progress | 底座 | 闸已落；边角／历法分叉跟扫描收口 |
 | 进行中·底座 | 已批未落扫描 | In progress / Approved-not-done | 底座 | 扫 GAP／裁定；样板见 APPROVED-BACKLOG |
-| 已完成 | 轻回执 | Done | 底座 | 1016z；`lightReceipt` 默认 true；`free.receipt.affinity` |
-| 进行中·内容 | 角色总表合入 | In progress | 内容 | 总表补人／合入；可同步、略低 |
+| 已完成 | 轻回执 | Done | 底座 | `ac32513d`；1016z；`lightReceipt` 默认 true；`free.receipt.affinity`；遇敌体验三步写入设计 |
+| 已完成 | 回滚／补档／测修 | Done | 底座＋内容 | `ee856f26` 回滚（132→1）→ `a1e9ba66` append／stub → `ae76909a` 达古／overlay；tip=`ae76909a` |
+| 进行中·底座 | 冻结门禁 1 红 | In progress | 底座 | 全量剩 `runtime.ts` 冻结差分；不回滚同拍闸、待批放行 |
+| 进行中·内容 | 角色总表合入 | In progress | 内容 | 总表补人／合入（本轮已 append 阿伶／红苗族长）；可同步、略低 |
 | 进行中·内容 | 角色按拍卡扩展 | 内容扩展待办 | 内容 | 身份／官爵／结缘转换等按拍卡；可同步、略低 |
 | 搁置 | 逃跑 | Shelved | — | 用户已定先不做；仅预留 `flee` 名 |
 | 待拍 | 遇敌 | Waiting-user | — | 已定体验三步：危区叙事→几率检→遇敌叙事→开战（禁检中直接开战）；其余数值／池仍待拍 |
