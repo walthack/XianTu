@@ -7,7 +7,7 @@ import type { SaveData } from '@/types/game';
 import { logEvent } from '@/modules/diagnostics/log';
 import { toast } from '@/utils/toast';
 import * as storage from '@/utils/indexedDBManager';
-import { readWithRotationFallback, rotationSlotName } from '@/utils/saveRotation';
+import { readWithRotationFallback, rotationKeepFor, rotationSlotName } from '@/utils/saveRotation';
 
 const notifiedSlots = new Set<string>();
 
@@ -20,6 +20,7 @@ export async function loadSaveWithFallback(
   options: { localOnly?: boolean } = {},
 ): Promise<SaveData | null> {
   const result = await readWithRotationFallback<SaveData>({
+    keep: rotationKeepFor(slotId),
     readPrimary: () => storage.loadSaveDataStrict(characterId, slotId, options),
     readBackup: index => storage.loadLocalSaveData(characterId, rotationSlotName(slotId, index)),
   });

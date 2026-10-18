@@ -15,12 +15,23 @@ const SAVEDATA_KEY_PREFIX = 'savedata_';
 /** 体检上限：防止热改把份数改到撑爆站点存储。 */
 const ROTATION_KEEP_MAX = 20;
 
-export const rotationKeep = (): number => (GAME_NUMBERS as { saves: { rotationKeep: number } }).saves.rotationKeep;
+type SavesConfig = { rotationKeep?: unknown; rotationExcludeSlots?: unknown };
 
-export function validateSavesConfig(cfg: { rotationKeep?: unknown } | undefined = (GAME_NUMBERS as { saves?: { rotationKeep?: unknown } }).saves): string[] {
+export const rotationKeep = (): number => (GAME_NUMBERS as { saves: { rotationKeep: number } }).saves.rotationKeep;
+/** 不做滚动备份的槽名（自动存档槽，如每回合覆盖的“上次对话”）。 */
+export const rotationExcludeSlots = (): readonly string[] => (GAME_NUMBERS as { saves: { rotationExcludeSlots: string[] } }).saves.rotationExcludeSlots;
+export const isRotationExcludedSlot = (slotId: string): boolean => rotationExcludeSlots().includes(slotId);
+/** 该槽实际保留的滚动备份份数：排除槽为 0（读档回退也不会去翻它早年遗留的旧备份）。 */
+export const rotationKeepFor = (slotId: string): number => (isRotationExcludedSlot(slotId) ? 0 : rotationKeep());
+
+export function validateSavesConfig(cfg: SavesConfig | undefined = (GAME_NUMBERS as { saves?: SavesConfig }).saves): string[] {
   if (!cfg || typeof cfg !== 'object') return ['saves 段缺失'];
+  const problems: string[] = [];
   const n = cfg.rotationKeep;
-  return Number.isInteger(n) && (n as number) >= 0 && (n as number) <= ROTATION_KEEP_MAX ? [] : [`saves.rotationKeep 须为 0–${ROTATION_KEEP_MAX} 的整数（0 = 关闭滚动备份与读档回退）`];
+  if (!(Number.isInteger(n) && (n as number) >= 0 && (n as number) <= ROTATION_KEEP_MAX)) problems.push(`saves.rotationKeep 须为 0–${ROTATION_KEEP_MAX} 的整数（0 = 关闭滚动备份与读档回退）`);
+  const excluded = cfg.rotationExcludeSlots;
+  if (!Array.isArray(excluded) || excluded.some(slot => typeof slot !== 'string' || slot.length === 0)) problems.push('saves.rotationExcludeSlots 须为非空字符串组成的数组（槽名）');
+  return problems;
 }
 registerNumbersValidator(() => validateSavesConfig());
 
@@ -38,9 +49,9 @@ export const rotationSlotName = (slotId: string, n: number): string => `${ROTATI
 export const isRotationSlotOf = (slotId: string, ownerSlot: string): boolean =>
   slotId.startsWith(`${ROTATION_SLOT_PREFIX}${ownerSlot}_`) && /^\d+$/.test(slotId.slice(ROTATION_SLOT_PREFIX.length + ownerSlot.length + 1));
 
-/** 一次滚动要做的挪动，按执行顺序（最老的先挪，避免覆盖），最后一步是当前槽旧值 → _1。keep=0 或内部槽返回空。 */
+/** 一次滚动要做的挪动，按执行顺序（最老的先挪，避免覆盖），最后一步是当前槽旧值 → _1。keep=0、内部槽或排除槽返回空。 */
 export function planRotation(slotId: string, keep: number = rotationKeep()): Array<{ from: string; to: string }> {
-  if (isInternalBackupSlot(slotId) || !(keep > 0)) return [];
+  if (isInternalBackupSlot(slotId) || isRotationExcludedSlot(slotId) || !(keep > 0)) return [];
   const moves: Array<{ from: string; to: string }> = [];
   for (let i = keep - 1; i >= 1; i--) moves.push({ from: rotationSlotName(slotId, i), to: rotationSlotName(slotId, i + 1) });
   moves.push({ from: slotId, to: rotationSlotName(slotId, 1) });

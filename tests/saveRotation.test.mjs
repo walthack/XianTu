@@ -116,6 +116,10 @@ test('saves.rotationKeep 默认 3，在 game-numbers.qingyu.json 里；坏值被
     assert.throws(() => numbers.applyGameNumbers({ saves: { rotationKeep: bad } }), err => err.code === 'LCQ-NUM-006' && /rotationKeep/.test(err.message), String(bad));
   }
   assert.throws(() => numbers.applyGameNumbers({ saves: { rotationKeep: '3' } }), err => err.code === 'LCQ-NUM-003');
+  assert.throws(() => numbers.applyGameNumbers({ saves: { rotationExcludeSlots: 'x' } }), err => err.code === 'LCQ-NUM-003', '排除列表须为数组（类型不符直接拒）');
+  assert.throws(() => numbers.applyGameNumbers({ saves: { rotationExcludeSlots: [''] } }), err => err.code === 'LCQ-NUM-006' && /rotationExcludeSlots/.test(err.message), '槽名不能为空串');
+  assert.throws(() => numbers.applyGameNumbers({ saves: { rotationExcludeSlots: [1] } }), err => err.code === 'LCQ-NUM-006', '槽名须为字符串');
+  assert.deepEqual(rot.rotationExcludeSlots(), ['上次对话'], '被拒绝后原值仍在');
   assert.throws(() => numbers.applyGameNumbers({ saves: { nope: 1 } }), err => err.code === 'LCQ-NUM-002');
   assert.equal(rot.rotationKeep(), 3, '被拒绝后原值仍在');
   numbers.applyGameNumbers({ saves: { rotationKeep: 5 } });
@@ -206,6 +210,43 @@ test('份数热改为 1 / 0：只留 1 份 / 不再产生备份', async () => {
       await writeVersions('c1', 'A', [1, 2]);
       assert.deepEqual(savedKeys(), [keyOf('c1', 'A')]);
     } finally { numbers.applyGameNumbers({ saves: { rotationKeep: 3 } }); }
+  });
+});
+
+test('排除槽（默认“上次对话”）：多次覆盖写不产生 __rot__ 备份，普通槽照常产生', async () => {
+  await reset();
+  await quiet(async () => {
+    const json = JSON.parse(await readFile(new URL('../mod-kit/game-numbers.qingyu.json', import.meta.url), 'utf8'));
+    assert.deepEqual(json.saves.rotationExcludeSlots, ['上次对话'], '排除列表在 game-numbers 的 saves 段');
+    assert.deepEqual(rot.planRotation('上次对话', 3), []);
+    await writeVersions('c1', '上次对话', [1, 2, 3, 4]);
+    await writeVersions('c1', 'A', [1, 2, 3]);
+    assert.equal(versionOf(rawData('c1', '上次对话')), 4);
+    assert.deepEqual(savedKeys().filter(key => key.includes('上次对话')), [keyOf('c1', '上次对话')], '上次对话没有任何 __rot__ 键');
+    assert.deepEqual(['A', '__rot__A_1', '__rot__A_2'].map(slot => versionOf(rawData('c1', slot))), [3, 2, 1], '普通槽仍滚动');
+  });
+});
+
+test('排除列表热改：加进去的槽停止滚动，清空后“上次对话”也滚动；排除槽的读档回退不翻旧备份', async () => {
+  await reset();
+  await quiet(async () => {
+    try {
+      numbers.applyGameNumbers({ saves: { rotationExcludeSlots: ['A'] } });
+      await writeVersions('c1', 'A', [1, 2]);
+      await writeVersions('c1', 'B', [1, 2]);
+      assert.equal(rawData('c1', '__rot__A_1'), undefined, 'A 已被排除');
+      assert.equal(versionOf(rawData('c1', '__rot__B_1')), 1);
+      numbers.applyGameNumbers({ saves: { rotationExcludeSlots: [] } });
+      await writeVersions('c1', '上次对话', [1, 2]);
+      assert.equal(versionOf(rawData('c1', '__rot__上次对话_1')), 1, '清空排除列表后“上次对话”也滚动');
+      // 早年遗留的旧备份：槽重新被排除后，主槽损坏也不拿陈年备份顶替
+      numbers.applyGameNumbers({ saves: { rotationExcludeSlots: ['上次对话'] } });
+      stores.get(SAVES).get(keyOf('c1', '上次对话')).data = '坏';
+      assert.equal(rot.rotationKeepFor('上次对话'), 0);
+      assert.equal(await fallback.loadSaveWithFallback('c1', '上次对话', { localOnly: true }), '坏');
+      assert.ok(logCodes().includes('LCQ-SAV-013'));
+      assert.ok(!logCodes().includes('LCQ-SAV-012'));
+    } finally { numbers.applyGameNumbers({ saves: { rotationExcludeSlots: ['上次对话'] } }); }
   });
 });
 

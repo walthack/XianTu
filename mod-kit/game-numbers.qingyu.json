@@ -1308,6 +1308,7 @@
     "tuning404Level": "info"
   },
   "saves": {
-    "rotationKeep": 3
+    "rotationKeep": 3,
+    "rotationExcludeSlots": ["上次对话"]
   }
 }
