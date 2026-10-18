@@ -1,10 +1,9 @@
 /**
- * 诊断日志的配置读取：数值全部在 game-numbers.qingyu.json 的 diagnostics 段，代码里不写数字。
- * 内置兜底 = 打包进来的这份 JSON（日志模块自己直接 import，不依赖任何初始化顺序）；
+ * 诊断日志的配置读取：数值全部在 game-numbers（三分包合并）的 diagnostics 段，代码里不写数字。
+ * 内置兜底 = 模块加载时 GAME_NUMBERS.diagnostics 快照（权威源为 numbers 三分包）；
  * 热改（tuning.json 的 numbers.diagnostics）经 applyGameNumbers 合并后生效，这里登记的体检不过则整份退回。
  * 一律调用时再读，不要在模块顶层缓存数值，否则热改不生效。
  */
-import defaults from '../../../mod-kit/game-numbers.qingyu.json';
 import { GAME_NUMBERS, registerNumbersValidator } from '../sceneModule/numbers';
 
 export const LOG_LEVELS = ['debug', 'info', 'warn', 'error'] as const;
@@ -29,7 +28,7 @@ export interface DiagnosticsConfig {
   tuning404Level: LogLevel;
 }
 
-export const BUILTIN_DIAGNOSTICS: DiagnosticsConfig = defaults.diagnostics as DiagnosticsConfig;
+export const BUILTIN_DIAGNOSTICS: DiagnosticsConfig = structuredClone(GAME_NUMBERS.diagnostics) as DiagnosticsConfig;
 export const diagnosticsConfig = (): DiagnosticsConfig => (GAME_NUMBERS as { diagnostics?: DiagnosticsConfig }).diagnostics ?? BUILTIN_DIAGNOSTICS;
 
 export const levelRank = (level: string): number => LOG_LEVELS.indexOf(level as LogLevel);

@@ -592,7 +592,7 @@ test('toast：带「进玩家提示」标记的码（SAV-003）按 toast 配置�
 
 test('诊断模块只依赖自己、numbers 与类型（可被任何层引用，不反向依赖应用 / Vue / 服务层）', async () => {
   const dir = fileURLToPath(new URL('../src/modules/diagnostics', import.meta.url));
-  const allowed = new Set(['../sceneModule/numbers', '../../../mod-kit/game-numbers.qingyu.json']);
+  const allowed = new Set(['../sceneModule/numbers', '../../../mod-kit/game-numbers.qingyu.json', '../../../mod-kit/numbers-combat.json', '../../../mod-kit/numbers-progress.json', '../../../mod-kit/numbers-runtime.json']);
   const offenders = [];
   for (const name of (await readdir(dir)).filter(n => n.endsWith('.ts'))) {
     const text = await readFile(path.join(dir, name), 'utf8');

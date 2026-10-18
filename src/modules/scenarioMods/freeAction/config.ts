@@ -268,7 +268,7 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
         if (!(Number(spec.maxStatusMinutes) > 0)) errors.push(`${where}: applyStatus 缺 maxStatusMinutes`);
       }
       if (spec.requires?.onLevelUnknown !== undefined && !['deny', 'assume_equal'].includes(spec.requires.onLevelUnknown)) errors.push(`${where}: requires.onLevelUnknown 无效`);
-      if (spec.requires?.minGoodwill !== undefined && !(Number.isFinite(spec.requires.minGoodwill) && spec.requires.minGoodwill >= -100 && spec.requires.minGoodwill <= 100)) errors.push(`${where}: requires.minGoodwill 须为 -100~100 的数`);
+      if (spec.requires?.minGoodwill !== undefined && !(Number.isFinite(spec.requires.minGoodwill) && spec.requires.minGoodwill >= GAME_NUMBERS.affinity.range.min && spec.requires.minGoodwill <= GAME_NUMBERS.affinity.range.max)) errors.push(`${where}: requires.minGoodwill 须为 ${GAME_NUMBERS.affinity.range.min}~${GAME_NUMBERS.affinity.range.max} 的数`);
       if (spec.legacyGuardWords !== undefined && (!Array.isArray(spec.legacyGuardWords) || spec.legacyGuardWords.some(word => typeof word !== 'string' || !word.trim()))) errors.push(`${where}: legacyGuardWords 须为非空字符串数组`);
       if (spec.needsItem && spec.actionClass === 'cast' && !spec.itemTag && !spec.itemTags?.length) errors.push(`${where}: needsItem 的施术变体缺 itemTag(s)`);
       if (spec.effect === 'drainProgress') errors.push(...validateDrain(spec, where));
@@ -307,7 +307,7 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
   const match = cfg.skillMatch;
   if (!match || !Number.isFinite(resolveNumberRef(match.skillBonus)) || !Number.isFinite(match.talentBonus) || !(match.maxSkill >= 0) || !(match.maxTalent >= 0) || !Object.values(match.tags || {}).every(words => Array.isArray(words) && words.length && words.every(word => typeof word === 'string' && word)) || !Array.isArray(match.unavailableMarks)) errors.push('skillMatch 配置无效');
   const dualMin = cfg.dualCultivation?.requires?.minGoodwill;
-  if (!(Number.isFinite(dualMin) && dualMin >= -100 && dualMin <= 100)) errors.push('dualCultivation.requires.minGoodwill 须为 -100~100 的数');
+  if (!(Number.isFinite(dualMin) && dualMin >= GAME_NUMBERS.affinity.range.min && dualMin <= GAME_NUMBERS.affinity.range.max)) errors.push(`dualCultivation.requires.minGoodwill 须为 ${GAME_NUMBERS.affinity.range.min}~${GAME_NUMBERS.affinity.range.max} 的数`);
   const attack = cfg.classes.physical?.variants?.attack;
   const physicalDifficulty = resolveNumberRef((cfg.classes.physical?.defaults as { difficulty?: number | string } | undefined)?.difficulty);
   if (attack && physicalDifficulty !== GAME_NUMBERS.combat.baselineDc) errors.push('physical 默认难度应与 combat.baselineDc 同值');

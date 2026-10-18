@@ -2,6 +2,7 @@
 // 读档、回滚回到某一拍之前，该拍的骰面不变，所以不能靠回滚换骰面；玩家检定和防御检定各有独立的骰流，
 // 增减防御检定不会挪动玩家检定的骰面。
 
+import { GAME_NUMBERS } from './numbers';
 import type { SceneState } from './types';
 
 export type DiceStream = 'action' | 'action2' | 'defense';
@@ -15,14 +16,15 @@ function mix32(value: number): number {
   return (z ^ (z >>> 14)) >>> 0;
 }
 
-/** 第 index 颗骰（1–20）。拒绝采样，保证 20 个面等概率。 */
+/** 第 index 颗骰（1–sides）。拒绝采样，保证 sides 个面等概率；sides 读 judgement.dice.sides。 */
 export function dieAt(seed: number, stream: DiceStream, index: number): number {
-  const limit = Math.floor(0x100000000 / 20) * 20;
+  const sides = GAME_NUMBERS.judgement.dice.sides;
+  const limit = Math.floor(0x100000000 / sides) * sides;
   for (let attempt = 0; attempt < 64; attempt++) {
     const h = mix32((seed >>> 0) ^ mix32(STREAM_SALT[stream] + Math.imul(index + 1, 0x27d4eb2d) + attempt));
-    if (h < limit) return (h % 20) + 1;
+    if (h < limit) return (h % sides) + 1;
   }
-  return (mix32(seed ^ index) % 20) + 1;
+  return (mix32(seed ^ index) % sides) + 1;
 }
 
 export function newSeed(): number {

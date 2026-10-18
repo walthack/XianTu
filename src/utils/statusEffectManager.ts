@@ -5,6 +5,7 @@
 
 import type { SaveData, StatusEffect, GameTime } from '@/types/game';
 import { get, set } from 'lodash';
+import { GAME_NUMBERS } from '../modules/sceneModule/numbers';
 
 /**
  * 兼容旧格式的状态效果类型
@@ -41,7 +42,7 @@ export function gameTimeToTotalMinutes(gameTime: GameTime): number {
  */
 export function formatMinutesToDuration(minutes: number): string {
   if (minutes <= 0) return '已过期';
-  if (minutes >= 99999) return '永久';
+  if (minutes >= GAME_NUMBERS.status.permanentMinutesThreshold) return '永久';
 
   const years = Math.floor(minutes / (365 * 24 * 60));
   const months = Math.floor((minutes % (365 * 24 * 60)) / (30 * 24 * 60));
@@ -105,7 +106,7 @@ export function parseDurationToMinutes(duration: string): number {
  */
 export function isStatusEffectExpired(effect: StatusEffect, currentGameTime: GameTime): boolean {
   if (effect.生成时间 && typeof effect.持续时间分钟 === 'number') {
-    if (effect.持续时间分钟 < 0 || effect.持续时间分钟 >= 99999) {
+    if (effect.持续时间分钟 < 0 || effect.持续时间分钟 >= GAME_NUMBERS.status.permanentMinutesThreshold) {
       return false;
     }
 
@@ -132,8 +133,8 @@ export function isStatusEffectExpired(effect: StatusEffect, currentGameTime: Gam
  */
 export function calculateRemainingMinutes(effect: StatusEffect, currentGameTime: GameTime): number {
   if (effect.生成时间 && typeof effect.持续时间分钟 === 'number') {
-    if (effect.持续时间分钟 < 0 || effect.持续时间分钟 >= 99999) {
-      return 99999;
+    if (effect.持续时间分钟 < 0 || effect.持续时间分钟 >= GAME_NUMBERS.status.permanentMinutesThreshold) {
+      return GAME_NUMBERS.status.permanentMinutesThreshold;
     }
 
     const effectStartTime = gameTimeToTotalMinutes(effect.生成时间);

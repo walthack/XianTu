@@ -2,6 +2,7 @@
 // 合同决定一切内容与门槛（胜负、拍数、敌方出手、大失败后果）；模块只执行规则。
 
 import { evalExpr } from './conditions';
+import { GAME_NUMBERS } from './numbers';
 import { peekActionDice, newSeed } from './dice';
 import { applyWorstCaseEnemyPhase, resolveEnemyPhase, type EnemyRoll } from './enemy';
 import { lintContract } from './lint';
@@ -15,9 +16,7 @@ import {
   type FixedEventEffect, type FumbleEntry, type PlayerChoiceCond, type SceneContext, type SceneOutcome, type SceneState, type TagDef, type TierId,
 } from './types';
 
-/** 存档里最多留多少条行动审计（计数器 counters 不受影响）。 */
-const AUDIT_KEEP = 200;
-
+/** 存档里最多留多少条行动审计（计数器 counters 不受影响）；份数读 sceneDefaults.auditKeep。 */
 export class SceneContractError extends Error {
   constructor(readonly problems: string[]) {
     super(`场面合同体检未通过：\n- ${problems.join('\n- ')}`);
@@ -403,7 +402,8 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
     difficulty: ev.difficulty, margin: check.margin, mode: ev.mode, tier, baseTier: check.baseTier, natTriggered: check.natTriggered, grounded: ev.grounded,
   });
 
-  if (state.audit.length > AUDIT_KEEP) state.audit.splice(0, state.audit.length - AUDIT_KEEP);
+  const auditKeep = GAME_NUMBERS.sceneDefaults.auditKeep;
+  if (state.audit.length > auditKeep) state.audit.splice(0, state.audit.length - auditKeep);
 
   // 8) 玩家这一动作之后：先看败，再看胜
   const ended = (): boolean => {

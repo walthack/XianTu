@@ -98,12 +98,14 @@ export const AFFINITY_EVENT_GRANT = GAME_NUMBERS.affinity.eventGrant;
 const HYSTERESIS_MARGIN = GAME_NUMBERS.affinity.hysteresis.margin;
 const HYSTERESIS_DAYS = GAME_NUMBERS.affinity.hysteresis.days;
 
-export const AFFINITY_MIN = -100;
-export const AFFINITY_MAX = 100;
+/** 好感两端：读 affinity.range（与 tiers.nemesis[0] / sworn[1] 对齐，registry 冷启动校验）。 */
+export const AFFINITY_MIN = GAME_NUMBERS.affinity.range.min;
+export const AFFINITY_MAX = GAME_NUMBERS.affinity.range.max;
 
 export function clampAffinity(value: number): number {
   if (!Number.isFinite(value)) return 0;
-  return Math.min(AFFINITY_MAX, Math.max(AFFINITY_MIN, Math.round(value)));
+  const min = GAME_NUMBERS.affinity.range.min, max = GAME_NUMBERS.affinity.range.max;
+  return Math.min(max, Math.max(min, Math.round(value)));
 }
 
 /** 好感值 → 档位。越界值先钳制，永不返回 undefined。 */

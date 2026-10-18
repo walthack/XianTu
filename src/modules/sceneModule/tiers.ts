@@ -17,7 +17,8 @@ export interface ResolvedSettings {
   attentionCap: Record<string, { primaryTargets: number; rangeClaim?: boolean }>;
   allowPlayerHarmAllies: boolean;
   enemyPhase: { maxRollsPerBeat: number };
-  brief: { maxChars: number; digestKeep: number };
+  brief: { maxChars: number; digestKeep: number; narrateMaxChars: number };
+  auditKeep: number;
 }
 
 /** 模块默认值（只有定价、封顶这类通用调参；没有任何胜负、拍数、人头数门槛）。 */
@@ -86,7 +87,8 @@ export function resolveCheck(input: CheckInput, s: ResolvedSettings): CheckResul
   const margin = total - input.difficulty;
   const baseTier = baseTierFor(margin, s);
   let tier = baseTier;
-  if (input.face === 20) {
+  const sides = GAME_NUMBERS.judgement.dice.sides;
+  if (input.face === sides) {
     const rule = input.grounded ? s.tiers.nat20.grounded : s.tiers.nat20.ungrounded;
     if (rule === 'crit') tier = 'great_success';
     else if (rule === 'success') tier = tierRank(baseTier) >= tierRank('success') ? baseTier : 'success';
@@ -94,7 +96,7 @@ export function resolveCheck(input: CheckInput, s: ResolvedSettings): CheckResul
     if (s.tiers.nat1 === 'stepDown') tier = stepDownTier(baseTier);
     else if (s.tiers.nat1 === 'fumble') tier = 'critical_failure';
   }
-  const natTriggered = tier !== baseTier ? (input.face === 20 ? 'nat20' : 'nat1') : null;
+  const natTriggered = tier !== baseTier ? (input.face === sides ? 'nat20' : 'nat1') : null;
   return { face: input.face, total, margin, baseTier, tier, natTriggered };
 }
 
@@ -102,8 +104,9 @@ export function resolveCheck(input: CheckInput, s: ResolvedSettings): CheckResul
 export function oddsFor(input: Omit<CheckInput, 'face'> & { mode: RollMode }, s: ResolvedSettings): Record<TierId, number> {
   const counts: Record<TierId, number> = { great_success: 0, success: 0, failure: 0, critical_failure: 0 };
   let n = 0;
-  for (let a = 1; a <= 20; a++) {
-    for (let b = 1; b <= (input.mode === 'normal' ? 1 : 20); b++) {
+  const sides = GAME_NUMBERS.judgement.dice.sides;
+  for (let a = 1; a <= sides; a++) {
+    for (let b = 1; b <= (input.mode === 'normal' ? 1 : sides); b++) {
       const face = pickFace([a, b], input.mode);
       counts[resolveCheck({ ...input, face }, s).tier] += 1;
       n += 1;

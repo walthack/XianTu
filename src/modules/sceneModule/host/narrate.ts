@@ -1,3 +1,4 @@
+import { GAME_NUMBERS } from '../numbers';
 import { interrogationProblems } from '../interrogation';
 import { interrogationChapter, interrogationMaterial } from './information';
 import { readExt } from './ext';
@@ -10,7 +11,6 @@ import { buildNarrationInput, checkNarration, type BeatResult, type Contract, ty
 import { partyName, renderRefs } from './refs';
 import type { ModelRequest } from './recognize';
 
-const MAX_CHARS = 700;
 
 export function buildNarrationPrompt(contract: Contract, state: SceneState, result: BeatResult, playerText: string, runtime: unknown): ModelRequest {
   const input = buildNarrationInput(contract, state, result);
@@ -64,7 +64,7 @@ export function templateNarration(contract: Contract, state: SceneState, result:
 function acceptable(contract: Contract, state: SceneState, result: BeatResult, text: string, runtime?:unknown): string[] {
   const problems = [...checkNarration(contract, state, result, text, id => [partyName(contract,runtime,id)]).problems, ...interrogationProblems(contract,interrogationChapter(contract,runtime),text)];
   for(const word of contract.narration?.forbidden||[])if(text.includes(renderRefs(word,runtime)))problems.push('描写与已结算物品状态冲突');
-  if (text.length > MAX_CHARS) problems.push('描写过长');
+  if (text.length > GAME_NUMBERS.sceneDefaults.brief.narrateMaxChars) problems.push('描写过长');
   try { validateModuleInstructionLeak(text); } catch (error) { problems.push(String((error as Error).message)); }
   try { validateModuleCastNarrative(text, [], [], []); } catch (error) { problems.push(String((error as Error).message)); }
   return problems;

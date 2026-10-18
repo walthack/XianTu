@@ -1,0 +1,979 @@
+{
+  "levels": {
+    "min": 0,
+    "max": 9,
+    "gapOne": 4,
+    "gapMany": 12,
+    "phases": {
+      "初期": 0,
+      "中期": 1,
+      "后期": 2
+    }
+  },
+  "training": {
+    "progressPerLevel": 100,
+    "successProgress": 10,
+    "greatProgress": 20,
+    "failureRetention": 0.5,
+    "storyRaiseStep": 1,
+    "canonExtra": 1
+  },
+  "techniques": {
+    "allowMultiEquipDefault": false,
+    "applyBonusToAttributes": false,
+    "cultivationSpeedBonus": {
+      "semantics": "fraction_increment"
+    }
+  },
+  "status": {
+    "senses": [
+      "sight",
+      "hearing",
+      "smell",
+      "taste",
+      "touch"
+    ],
+    "senseRange": {
+      "min": -3,
+      "max": 0
+    },
+    "psycheRange": {
+      "min": -3,
+      "max": 3
+    },
+    "consciousnessLevels": [
+      "clear",
+      "dazed",
+      "confused",
+      "unconscious"
+    ],
+    "actionKinds": [
+      "move",
+      "run",
+      "grip",
+      "speak",
+      "cast",
+      "attack"
+    ],
+    "appearance": {
+      "maxTags": 3,
+      "tagChars": 12
+    },
+    "lifeFloor": {
+      "ratio": 0.1,
+      "min": 1
+    },
+    "freeActionMaxMinutes": 1440,
+    "afterSceneDefaultMinutes": 43200,
+    "permanent": {
+      "maxPerActor": 4
+    },
+    "itemTags": {
+      "toxic": [
+        "poison"
+      ],
+      "sedative": [
+        "sedative"
+      ]
+    },
+    "onUse": {
+      "maxDoses": 3
+    },
+    "permanentMinutesThreshold": 99999,
+    "freeText": {
+      "minConfidence": 0.9
+    }
+  },
+  "currency": {
+    "liuchao.currency.tong_zhu": 1,
+    "liuchao.currency.yin_zhu": 100,
+    "liuchao.currency.jin_zhu": 2000
+  },
+  "freeAction": {
+    "enabled": true,
+    "dangerTiers": [
+      "safe",
+      "guarded",
+      "hostile",
+      "fortress"
+    ],
+    "defaultDangerTier": "safe",
+    "actionClasses": [
+      "physical",
+      "verbal",
+      "intimate",
+      "give",
+      "cast",
+      "guard",
+      "solo",
+      "field",
+      "other"
+    ],
+    "degrees": [
+      "light",
+      "normal",
+      "heavy"
+    ],
+    "performed": [
+      "yes",
+      "no",
+      "unclear"
+    ],
+    "ticket": {
+      "maxPerTurn": 2,
+      "evidenceChars": 30,
+      "rosterMax": 6,
+      "itemListMax": 6
+    },
+    "affinity": {
+      "perBeatCap": 15,
+      "majorAbs": 10,
+      "majorSalienceFloor": 80,
+      "floatBand": 2,
+      "repeat": {
+        "windowMinutes": 1440,
+        "factors": [
+          1,
+          0.5,
+          0.25,
+          0
+        ]
+      }
+    },
+    "degreeFactor": {
+      "light": 0.5,
+      "normal": 1,
+      "heavy": 1.5
+    },
+    "lethalAllowed": false,
+    "memory": {
+      "keep": 12,
+      "chars": 80,
+      "episodeKeep": 12
+    },
+    "state": {
+      "logKeep": 20,
+      "settledKeep": 30,
+      "budgetKeep": 40
+    },
+    "debug": {
+      "playerTextLog": false,
+      "keep": 50,
+      "textChars": 200,
+      "drainLog": {
+        "enabled": true,
+        "fields": [
+          "actor",
+          "target",
+          "qi",
+          "hp",
+          "dying"
+        ]
+      }
+    },
+    "narration": {
+      "inventoryListMax": 8
+    },
+    "outcomeFactors": {
+      "hostile": {
+        "critical_failure": 1.5,
+        "failure": 1.25,
+        "partial": 1,
+        "success": 1,
+        "great_success": 1,
+        "perfect": 1
+      },
+      "benefit": {
+        "critical_failure": 0,
+        "failure": 0,
+        "partial": 0.5,
+        "success": 1,
+        "great_success": 1.5,
+        "perfect": 2
+      }
+    },
+    "classes": {
+      "physical": {
+        "label": "肢体冲突",
+        "defaults": {
+          "route": "judge",
+          "kind": "combat",
+          "modifierProfile": "default",
+          "difficulty": "combat.baselineDc",
+          "effect": "none",
+          "outcomeFactor": "hostile"
+        },
+        "variants": {
+          "attack": {
+            "label": "攻击",
+            "base": -10,
+            "npcOutcomes": {
+              "critical_failure": "block",
+              "failure": "block",
+              "partial": "graze",
+              "success": "wound",
+              "great_success": "wound",
+              "perfect": "subdue"
+            },
+            "protectedCap": {
+              "subdue": "wound"
+            }
+          },
+          "grab": {
+            "label": "抓住",
+            "hint": "擒拿制住对方；握手、牵手等亲近动作不算。",
+            "base": -4,
+            "npcOutcomes": {
+              "critical_failure": "block",
+              "failure": "block",
+              "partial": "block",
+              "success": "subdue",
+              "great_success": "subdue",
+              "perfect": "subdue"
+            }
+          },
+          "bind": {
+            "label": "捆绑",
+            "enabled": false,
+            "effect": "applyStatus",
+            "statusId": "action.restricted",
+            "protectedForbid": true
+          },
+          "drain_qi": {
+            "label": "夺元",
+            "hint": "单方面夺取对方真气修为；对方昏迷、被制住也出票，成立与否本地判定；自愿的是传功，不是本项。",
+            "enabled": true,
+            "base": -12,
+            "difficulty": 9,
+            "effect": "drainProgress",
+            "requires": {
+              "targetDefenseDown": {
+                "statusIds": [
+                  "unconscious",
+                  "dying",
+                  "acupoint.sealed",
+                  "paralyzed",
+                  "wound.severe"
+                ],
+                "effectKinds": [
+                  "downed"
+                ]
+              }
+            },
+            "drain": {
+              "lossRatio": 0.08,
+              "perUseCapRatio": 0.2,
+              "amount": {
+                "attrWeights": {
+                  "根骨": 0.4,
+                  "心性": 0.3,
+                  "悟性": 0.2,
+                  "魅力": 0.1
+                },
+                "attrStep": 0.01,
+                "levelStep": 0.04,
+                "phasesPerLevel": 3,
+                "unknownTargetAttr": "factors.center"
+              },
+              "hpFloor": 1,
+              "lethalStatus": "dying",
+              "outcomeFactor": "benefit",
+              "gain": {
+                "qiPerPoint": 1,
+                "progressPerPoint": 0.5
+              },
+              "selfCostHpRatio": 0.05,
+              "diminish": {
+                "perUse": 0.6,
+                "floor": 0.2,
+                "recoverMinutes": 10080
+              },
+              "afterStatuses": [
+                "wound.fright",
+                "qi.drained"
+              ],
+              "statusMinutes": {
+                "wound.fright": 1440,
+                "qi.drained": 10080
+              }
+            },
+            "backlash": {
+              "critical_failure": "qi.disordered"
+            },
+            "npcOutcomes": {
+              "critical_failure": "recoil",
+              "failure": "resisted",
+              "partial": "trace",
+              "success": "drained",
+              "great_success": "drained",
+              "perfect": "drained_deep"
+            }
+          }
+        }
+      },
+      "verbal": {
+        "label": "言语施压",
+        "defaults": {
+          "route": "judge",
+          "kind": "social",
+          "modifierProfile": "social",
+          "difficulty": 11,
+          "effect": "none",
+          "outcomeFactor": "hostile"
+        },
+        "variants": {
+          "taunt": {
+            "label": "嘲讽",
+            "base": -4,
+            "npcOutcomes": {
+              "critical_failure": "rebuffed",
+              "failure": "rebuffed",
+              "partial": "landed",
+              "success": "landed",
+              "great_success": "landed",
+              "perfect": "landed"
+            }
+          },
+          "threaten": {
+            "label": "威胁",
+            "base": -6,
+            "difficulty": 13,
+            "npcOutcomes": {
+              "critical_failure": "rebuffed",
+              "failure": "rebuffed",
+              "partial": "landed",
+              "success": "landed",
+              "great_success": "landed",
+              "perfect": "landed"
+            }
+          },
+          "deceive": {
+            "label": "欺骗",
+            "base": -4,
+            "difficulty": 13,
+            "kind": "scheme",
+            "npcOutcomes": {
+              "critical_failure": "seen_through",
+              "failure": "seen_through",
+              "partial": "deceived",
+              "success": "deceived",
+              "great_success": "deceived",
+              "perfect": "deceived"
+            }
+          }
+        }
+      },
+      "intimate": {
+        "label": "亲近",
+        "defaults": {
+          "route": "table",
+          "effect": "none"
+        },
+        "intimacy": {
+          "defaultGateTier": "close",
+          "defaultTemperament": "reserved",
+          "reactions": [
+            "accept",
+            "accept_shy",
+            "deflect",
+            "refuse",
+            "rebuke",
+            "strike_back"
+          ],
+          "temperamentRemap": {
+            "reserved": {
+              "accept": "deflect",
+              "accept_shy": "deflect"
+            },
+            "warm": {}
+          },
+          "reactionEffect": {
+            "accept": {
+              "delta": 3
+            },
+            "accept_shy": {
+              "delta": 4
+            },
+            "deflect": {
+              "delta": 1
+            },
+            "refuse": {
+              "delta": -5
+            },
+            "rebuke": {
+              "delta": -10
+            },
+            "strike_back": {
+              "delta": -15
+            }
+          }
+        },
+        "variants": {
+          "flirt": {
+            "label": "调情",
+            "hint": "明确的调情撩拨；寻常寒暄、夸月色不算。",
+            "matrix": {
+              "low": {
+                "open": "refuse",
+                "closed": "refuse"
+              },
+              "mid": {
+                "open": "accept_shy",
+                "closed": "deflect"
+              },
+              "high": {
+                "open": "accept",
+                "closed": "deflect"
+              }
+            }
+          },
+          "kiss": {
+            "label": "亲吻",
+            "matrix": {
+              "low": {
+                "open": "strike_back",
+                "closed": "strike_back"
+              },
+              "mid": {
+                "open": "refuse",
+                "closed": "rebuke"
+              },
+              "high": {
+                "open": "accept",
+                "closed": "deflect"
+              }
+            }
+          },
+          "invite": {
+            "label": "邀请",
+            "hint": "邀约亲近；邀请双修属双修项。",
+            "matrix": {
+              "low": {
+                "open": "refuse",
+                "closed": "refuse"
+              },
+              "mid": {
+                "open": "accept_shy",
+                "closed": "deflect"
+              },
+              "high": {
+                "open": "accept",
+                "closed": "deflect"
+              }
+            }
+          },
+          "dual_cultivate": {
+            "label": "双修",
+            "hint": "邀请对方双修或与对方合修功法（长句亦是），必须有对象；独自修炼不是本项。",
+            "route": "judge",
+            "kind": "cultivate",
+            "modifierProfile": "social",
+            "difficulty": 11,
+            "effect": "selfBuff",
+            "buffRef": "dualCultivation.buff",
+            "applyRecovery": true,
+            "base": 0,
+            "outcomeFactor": "benefit",
+            "requires": {
+              "minGoodwill": "freeAction.dualCultivation.requires.minGoodwill"
+            },
+            "npcOutcomes": {
+              "critical_failure": "unsynced",
+              "failure": "unsynced",
+              "partial": "shallow",
+              "success": "harmonized",
+              "great_success": "harmonized",
+              "perfect": "harmonized"
+            }
+          }
+        }
+      },
+      "give": {
+        "label": "给予",
+        "receipt": "given",
+        "defaults": {
+          "route": "table",
+          "needsGoodwill": true,
+          "needsItem": true,
+          "consume": 1
+        },
+        "variants": {
+          "gift": {
+            "label": "赠物",
+            "effect": "transferItem",
+            "base": 3,
+            "denyEquipped": true,
+            "denyStoryItem": true
+          },
+          "feed_pill": {
+            "label": "喂药/下毒",
+            "effect": "itemDefined",
+            "needsGoodwill": "byItemTag",
+            "base": 2,
+            "toxicBase": -12
+          }
+        }
+      },
+      "cast": {
+        "label": "施术",
+        "defaults": {
+          "route": "judge",
+          "kind": "craft",
+          "modifierProfile": "social",
+          "difficulty": 11,
+          "maxStatusMinutes": 1440,
+          "needsGoodwill": true,
+          "outcomeFactor": "benefit"
+        },
+        "variants": {
+          "transfer_qi": {
+            "label": "传功",
+            "hint": "把自己的真气传给对方（传功、渡功）；自愿的，不是夺元。",
+            "effect": "practiceProgress",
+            "base": 3,
+            "requires": {
+              "actorLevel": "ge_target",
+              "onLevelUnknown": "assume_equal",
+              "minGoodwill": 20
+            },
+            "legacyGuardWords": [
+              "传功",
+              "渡功",
+              "输送真气",
+              "输送内力",
+              "灌输真气",
+              "灌注真气",
+              "真气输送给"
+            ],
+            "cost": {
+              "resource": "灵气",
+              "onResolveRatio": 0.3,
+              "criticalFailureRatio": 0.5
+            },
+            "gain": {
+              "base": "training.successProgress",
+              "perTransferCap": "training.greatProgress",
+              "ceilingBelowNeed": 1
+            },
+            "cooldownMinutes": 1440,
+            "phaseBudgetRatio": 0.5,
+            "backlash": {
+              "failure": "wound.exhaustion",
+              "critical_failure": "qi.disordered"
+            }
+          },
+          "heal": {
+            "label": "疗伤",
+            "effect": "removeStatus",
+            "base": 4,
+            "needsItem": true,
+            "itemTag": "heal",
+            "downgrade": {
+              "dying": "wound.severe"
+            }
+          },
+          "bandage": {
+            "label": "包扎",
+            "effect": "removeStatus",
+            "base": 3,
+            "needsItem": true,
+            "itemTags": [
+              "hemostatic",
+              "splint"
+            ]
+          }
+        }
+      },
+      "guard": {
+        "label": "护卫",
+        "defaults": {
+          "route": "table",
+          "effect": "applyStatus",
+          "needsGoodwill": false
+        },
+        "variants": {
+          "shield": {
+            "label": "护住",
+            "enabled": false,
+            "base": 2,
+            "statusId": "guarded",
+            "maxStatusMinutes": 120
+          }
+        }
+      },
+      "solo": {
+        "label": "自修",
+        "defaults": {
+          "enabled": true,
+          "target": "none",
+          "route": "judge",
+          "kind": "cultivate",
+          "modifierProfile": "default",
+          "difficulty": 11,
+          "effect": "none"
+        },
+        "variants": {
+          "train": {
+            "label": "修炼",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】打坐练功修炼；与人双修、传功不是本项。",
+            "requires": {
+              "realmMoves": true
+            }
+          },
+          "breakthrough": {
+            "label": "冲关",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】冲关突破境界。",
+            "requires": {
+              "realmMoves": true
+            }
+          },
+          "recover": {
+            "label": "调息疗伤",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息运功平复气血，满血也算；双修、为他人疗伤不是本项。",
+            "applyRecovery": true
+          }
+        }
+      },
+      "field": {
+        "label": "场面",
+        "defaults": {
+          "enabled": true,
+          "target": "none",
+          "route": "judge",
+          "kind": "escape",
+          "modifierProfile": "default",
+          "difficulty": 20,
+          "effect": "none"
+        },
+        "dangerTierShift": {
+          "safe": 0,
+          "guarded": 2,
+          "hostile": 4,
+          "fortress": 6
+        },
+        "variants": {
+          "scene_act": {
+            "label": "逃跑潜行探索",
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】逃跑、潜行、探索四周搜寻线索，不算观察。"
+          }
+        }
+      },
+      "other": {
+        "label": "其他/无效",
+        "variants": {
+          "none": {
+            "label": "无",
+            "route": "none"
+          }
+        }
+      }
+    },
+    "judgement": {
+      "bands": {
+        "normal": 9,
+        "hard": 15,
+        "severe": 21,
+        "extreme": 28
+      }
+    },
+    "dualCultivation": {
+      "requires": {
+        "minGoodwill": 60
+      },
+      "buff": {
+        "name": "阴阳调和",
+        "type": "buff",
+        "minutesByOutcome": {
+          "partial": 120,
+          "success": 240,
+          "great_success": 360,
+          "perfect": 480
+        },
+        "strength": 1,
+        "source": "本地判定",
+        "descKey": "free.buff.dual_cultivation.desc"
+      }
+    },
+    "aftermath": {
+      "hpLoss": {
+        "kinds": [
+          "combat"
+        ],
+        "ratio": {
+          "partial": 0.05,
+          "failure": 0.15,
+          "critical_failure": 0.4
+        },
+        "minLoss": 1,
+        "keepHp": 1
+      },
+      "gate": {
+        "ttlTurns": 3,
+        "labelChars": 48,
+        "defaultScope": "scene",
+        "scopeByKind": {
+          "combat": "combat",
+          "escape": "combat",
+          "social": "social",
+          "scheme": "social"
+        },
+        "outcomeByResult": {
+          "partial": "partial",
+          "failure": "failure",
+          "critical_failure": "failure"
+        }
+      }
+    },
+    "skillMatch": {
+      "skillBonus": "factors.skillCap",
+      "talentBonus": 4,
+      "maxSkill": 1,
+      "maxTalent": 1,
+      "unavailableMarks": [
+        "未传授",
+        "并未传授",
+        "尚未传授",
+        "未学会",
+        "尚未掌握",
+        "不会施展",
+        "不能使用",
+        "不可使用"
+      ],
+      "tags": {
+        "combat": [
+          "刀",
+          "剑",
+          "拳",
+          "掌",
+          "枪",
+          "矛",
+          "弓",
+          "战",
+          "攻",
+          "杀",
+          "破甲",
+          "护体",
+          "真气",
+          "劲"
+        ],
+        "cultivate": [
+          "功法",
+          "内功",
+          "心法",
+          "修炼",
+          "真气",
+          "灵气",
+          "疗伤",
+          "调息",
+          "双修",
+          "生机",
+          "经脉"
+        ],
+        "craft": [
+          "炼丹",
+          "炼器",
+          "制符",
+          "布阵",
+          "锻造",
+          "药",
+          "丹",
+          "器",
+          "阵",
+          "符"
+        ],
+        "explore": [
+          "探查",
+          "探索",
+          "感应",
+          "追踪",
+          "辨识",
+          "寻路",
+          "侦察",
+          "生死气息"
+        ],
+        "social": [
+          "口才",
+          "交涉",
+          "说服",
+          "威慑",
+          "魅惑",
+          "礼法",
+          "辩"
+        ],
+        "escape": [
+          "身法",
+          "轻功",
+          "遁",
+          "逃",
+          "步法",
+          "疾行",
+          "潜行",
+          "隐匿",
+          "敛息"
+        ],
+        "stealth": [
+          "潜行",
+          "隐匿",
+          "敛息",
+          "藏形",
+          "暗杀"
+        ],
+        "scheme": [
+          "谋略",
+          "计策",
+          "筹算",
+          "布局",
+          "权谋"
+        ]
+      }
+    }
+  },
+  "affinity": {
+    "tiers": {
+      "nemesis": [
+        -100,
+        -80
+      ],
+      "grudge": [
+        -79,
+        -60
+      ],
+      "hostile": [
+        -59,
+        -25
+      ],
+      "wary": [
+        -24,
+        -10
+      ],
+      "stranger": [
+        -9,
+        19
+      ],
+      "acquainted": [
+        20,
+        39
+      ],
+      "trusted": [
+        40,
+        59
+      ],
+      "close": [
+        60,
+        79
+      ],
+      "sworn": [
+        80,
+        100
+      ]
+    },
+    "tierDesc": {
+      "nemesis": "不死不休",
+      "grudge": "结下深仇，见面必有一战",
+      "hostile": "明确敌视，随时可能动手",
+      "wary": "互相提防，话不投机",
+      "stranger": "萍水相逢，刚刚认识",
+      "acquainted": "渐渐熟悉，能说上几句话",
+      "trusted": "知心朋友，彼此信得过",
+      "close": "相当亲近，托付得起的人",
+      "sworn": "情感羁绊至深，灵魂伴侣或生死之交"
+    },
+    "stance": {
+      "lowMax": -10,
+      "highMin": 40
+    },
+    "thresholds": {
+      "intimacyShallow": 20,
+      "intimacyDeep": 60,
+      "intimacyBonded": 80,
+      "bottomLineReveal": 40
+    },
+    "mismatch": {
+      "hostileAbove": 19,
+      "intimateAtOrBelow": 0
+    },
+    "limits": {
+      "perTurn": 15,
+      "majorEvent": 40,
+      "bottomLineBreach": 60
+    },
+    "eventGrant": {
+      "critical": 8,
+      "normal": 3
+    },
+    "hysteresis": {
+      "margin": 3,
+      "days": 1
+    },
+    "range": {
+      "min": -100,
+      "max": 100
+    }
+  },
+  "reputation": {
+    "eventGrant": {
+      "critical": 20,
+      "normal": 6
+    }
+  },
+  "lineBonds": {
+    "bonusPerActiveAction": 1,
+    "salience": {
+      "notable": 30
+    },
+    "ningyu": {
+      "replyMode": "fixed",
+      "regicideAgree": 1,
+      "regicideRefuse": -1,
+      "regicideAskWhy": 3,
+      "carePublicThanks": 1,
+      "careWarm": 4,
+      "careNone": 0,
+      "enterBring": 1,
+      "enterStay": -2,
+      "enterAsk": 2,
+      "farewellWord": 6,
+      "farewellToken": 6
+    },
+    "lemingzhu": {
+      "teasePenalty": -3,
+      "shareMushroom": 2,
+      "crowRush": 2,
+      "crowWait": 0,
+      "crowShield": 3,
+      "reunionLaugh": 3,
+      "reunionScold": -1,
+      "reunionRun": 2,
+      "harpoonPull": 2,
+      "harpoonBandage": 3,
+      "titleUpgradeActiveScore": 8,
+      "activeScore": {
+        "l1Rush": 2,
+        "l1Wait": 0,
+        "l1Shield": 3,
+        "l2Promise": 3,
+        "l2HardTruth": 0,
+        "l2Tease": -3,
+        "l2Share": 2,
+        "l3Pull": 2,
+        "l3Bandage": 3,
+        "l4Laugh": 3,
+        "l4Scold": -1,
+        "l4Run": 2
+      }
+    }
+  },
+  "npcCard": {
+    "maxCards": 2,
+    "maxFallbackActors": 6,
+    "maxMemories": 3,
+    "memoryChars": 80,
+    "maxEvents": 2,
+    "eventChars": 70,
+    "maxGateNotes": 3,
+    "noteChars": 160,
+    "maxCardChars": 1400,
+    "maxPresentActorsSouthern": 18,
+    "maxPresentActorsDefault": 3
+  }
+}

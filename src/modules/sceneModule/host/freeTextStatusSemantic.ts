@@ -1,3 +1,4 @@
+import { GAME_NUMBERS } from '../numbers';
 /** Semantic proposals have no write authority; catalog validation precedes the existing status writer. */
 import { STATUS_CATALOG } from '../statuses';
 import { noteTicketDiscard } from '@/services/requestLifecycleDiagnostics';
@@ -53,7 +54,7 @@ export function validateFreeTextStatusProposals(raw: string, userAction: string,
     // Irrelevant/negative proposals cannot mount, so their confidence must not block a valid action.
     if (p.assertion === 'hypothetical') { noteTicketDiscard('status', 'ignored_hypothetical', def.id); continue; }
     if (p.assertion === 'denied') { denied.add(def.id); continue; }
-    if (p.actor === 'unknown' || p.assertion === 'uncertain' || p.confidence < 0.9) return clarify('uncertain_actor', '主角状态或指代不确定，请确认后继续。', def.id);
+    if (p.actor === 'unknown' || p.assertion === 'uncertain' || p.confidence < GAME_NUMBERS.status.freeText.minConfidence) return clarify('uncertain_actor', '主角状态或指代不确定，请确认后继续。', def.id);
     if (p.source === 'input' && def.freeText !== 'input') return clarify('input_only_status', '该状态不能仅由玩家自述结算。', def.id);
     accepted.add(def.id);
   }

@@ -252,8 +252,10 @@
     },
     "brief": {
       "maxChars": 1400,
-      "digestKeep": 4
-    }
+      "digestKeep": 4,
+      "narrateMaxChars": 700
+    },
+    "auditKeep": 200
   },
   "historicalPrototype": {
     "baseModifier": 2,
@@ -399,6 +401,10 @@
     "hysteresis": {
       "margin": 3,
       "days": 1
+    },
+    "range": {
+      "min": -100,
+      "max": 100
     }
   },
   "reputation": {
@@ -460,6 +466,10 @@
     },
     "onUse": {
       "maxDoses": 3
+    },
+    "permanentMinutesThreshold": 99999,
+    "freeText": {
+      "minConfidence": 0.9
     }
   },
   "techniques": {
@@ -542,7 +552,13 @@
       "textChars": 200,
       "drainLog": {
         "enabled": true,
-        "fields": ["actor", "target", "qi", "hp", "dying"]
+        "fields": [
+          "actor",
+          "target",
+          "qi",
+          "hp",
+          "dying"
+        ]
       }
     },
     "narration": {
@@ -1299,21 +1315,64 @@
     "repeatMs": 5000,
     "repeatKeys": 200,
     "localFallbackMax": 50,
-    "redactKeys": ["apikey", "token", "accesstoken", "authorization", "password", "secret", "cookie", "bearer"],
-    "redactPatterns": ["sk-[A-Za-z0-9_-]{8,}", "Bearer\\s+[A-Za-z0-9._~+/=-]{8,}", "AIza[0-9A-Za-z_-]{20,}", "[?&](?:key|api_key|apikey|token|access_token)=[^&\\s]+"],
-    "textKeys": ["text", "input", "playertext", "usertext", "userinput", "prompt", "content", "evidence", "narrative", "reply", "response"],
+    "redactKeys": [
+      "apikey",
+      "token",
+      "accesstoken",
+      "authorization",
+      "password",
+      "secret",
+      "cookie",
+      "bearer"
+    ],
+    "redactPatterns": [
+      "sk-[A-Za-z0-9_-]{8,}",
+      "Bearer\\s+[A-Za-z0-9._~+/=-]{8,}",
+      "AIza[0-9A-Za-z_-]{20,}",
+      "[?&](?:key|api_key|apikey|token|access_token)=[^&\\s]+"
+    ],
+    "textKeys": [
+      "text",
+      "input",
+      "playertext",
+      "usertext",
+      "userinput",
+      "prompt",
+      "content",
+      "evidence",
+      "narrative",
+      "reply",
+      "response"
+    ],
     "textChars": 0,
-    "toast": { "enabled": true, "minLevel": "error", "dedupeMs": 30000 },
-    "panel": { "recent": 30 },
+    "toast": {
+      "enabled": true,
+      "minLevel": "error",
+      "dedupeMs": 30000
+    },
+    "panel": {
+      "recent": 30
+    },
     "tuning404Level": "info"
   },
   "saves": {
     "rotationKeep": 3,
-    "rotationExcludeSlots": ["上次对话"]
+    "rotationExcludeSlots": [
+      "上次对话"
+    ]
   },
   "aiRetry": {
     "maxRetries": 1,
-    "retryStatuses": [408, 409, 425, 429, 500, 502, 503, 504],
+    "retryStatuses": [
+      408,
+      409,
+      425,
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
     "baseDelayMs": 1000,
     "maxDelayMs": 8000,
     "factor": 2,
@@ -1323,8 +1382,21 @@
   },
   "feedback": {
     "redactSaveNarrative": true,
-    "narrativePaths": [["系统", "历史", "叙事"], ["社交", "记忆"]],
-    "narrativeKeepKeys": ["type", "time"]
+    "narrativePaths": [
+      [
+        "系统",
+        "历史",
+        "叙事"
+      ],
+      [
+        "社交",
+        "记忆"
+      ]
+    ],
+    "narrativeKeepKeys": [
+      "type",
+      "time"
+    ]
   },
   "e2eSmoke": {
     "scriptTimeoutMs": 300000
