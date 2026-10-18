@@ -531,7 +531,11 @@
     "debug": {
       "playerTextLog": false,
       "keep": 50,
-      "textChars": 200
+      "textChars": 200,
+      "drainLog": {
+        "enabled": true,
+        "fields": ["actor", "target", "qi", "hp", "dying"]
+      }
     },
     "narration": {
       "inventoryListMax": 8
@@ -625,8 +629,25 @@
             "drain": {
               "lossRatio": 0.08,
               "perUseCapRatio": 0.2,
+              "amount": {
+                "attrWeights": {
+                  "根骨": 0.4,
+                  "心性": 0.3,
+                  "悟性": 0.2,
+                  "魅力": 0.1
+                },
+                "attrStep": 0.01,
+                "levelStep": 0.04,
+                "phasesPerLevel": 3,
+                "unknownTargetAttr": "factors.center"
+              },
+              "hpFloor": 1,
+              "lethalStatus": "dying",
               "outcomeFactor": "benefit",
-              "qiGainRatio": 0.15,
+              "gain": {
+                "qiPerPoint": 1,
+                "progressPerPoint": 0.5
+              },
               "selfCostHpRatio": 0.05,
               "diminish": {
                 "perUse": 0.6,

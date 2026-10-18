@@ -12,6 +12,8 @@ export type Degree = 'light' | 'normal' | 'heavy';
 export type Route = 'judge' | 'table' | 'none';
 // drainProgress 是单方面扣取对方修为进度的 effect，只在配置里启用的变体上生效，闸门要求对方设防失效（见 gates.ts / defenseDown.ts）。
 // selfBuff 是判定有成效时给玩家自己挂一个限时增益（双修的阴阳调和），增益定义在变体行 buffRef 指向的配置段。
+/** 夺元后台日志可选字段：actor = 吸取者，target = 目标，qi / hp = 吸到的灵气 / 气血点数，dying = 是否把对方吸到倒下（挂 dying）。 */
+export const DRAIN_LOG_FIELDS: readonly string[] = ['actor', 'target', 'qi', 'hp', 'dying'];
 export type EffectKind = 'none' | 'practiceProgress' | 'drainProgress' | 'applyStatus' | 'removeStatus' | 'transferItem' | 'itemDefined' | 'selfBuff';
 export const EFFECT_KINDS: readonly EffectKind[] = ['none', 'practiceProgress', 'drainProgress', 'applyStatus', 'removeStatus', 'transferItem', 'itemDefined', 'selfBuff'];
 export const OUTCOMES = ['critical_failure', 'failure', 'partial', 'success', 'great_success', 'perfect'] as const;
@@ -21,16 +23,31 @@ export type Stance = 'low' | 'mid' | 'high';
 /** 目标“设防失效”的判据：身上有活着的状态记录，其 statusId 在名单里，或其效果种类在 effectKinds 里。 */
 export interface DefenseDownRule { statusIds?: string[]; effectKinds?: string[] }
 /**
- * drainProgress 的参数（全在配置里）：
- * lossRatio / perUseCapRatio 是占目标“下一级所需”的比例；outcomeFactor 是夺走量的结果档系数表（配置里写表名，variantSpecOf 解析成表）；
- * qiGainRatio 是玩家灵气回收占上限的比例；selfCostHpRatio 是每次施行先扣的玩家气血占上限的比例（气血不够不能施行）；diminish 按目标记次数递减（perUse^次数，下限 floor，每 recoverMinutes 恢复一次）；
- * afterStatuses / statusMinutes 是夺走量>0 时目标挂的状态与时长。
+ * drainProgress（夺元）的参数（全在配置里）：
+ * 每次先吸对方灵气，灵气吸空后（本次吸不满的余量折算）再吸气血，气血最多吸到 hpFloor；已在 hpFloor 的目标再吸即直接结算、气血归零并挂 lethalStatus（倒下，不写死亡；必须活着的目标直接拒绝）；
+ * lossRatio 是同属性同功力时一次吸取占对方灵气上限 / 气血上限的默认比例，perUseCapRatio 是单次上限比例；
+ * amount 是比例的修正：比例 = clamp(lossRatio + attrStep·Δa + levelStep·Δp, 0, perUseCapRatio)，Δa 按 attrWeights 的权重算玩家（先天+后天六司）与目标（先天六司，缺失取 unknownTargetAttr）之差，Δp 是级数加“小阶段序号/phasesPerLevel”之差；
+ * outcomeFactor 是吸取量的结果档系数表（配置里写表名，variantSpecOf 解析成表）；
+ * gain：吸到的每 1 点（灵气、气血同算）补给玩家的灵气点数 qiPerPoint，折成玩家修炼进度的点数 progressPerPoint（进度满了由 levelProgression 的小阶段升级逻辑结算）；
+ * selfCostHpRatio 是每次施行先扣的玩家气血占上限的比例（气血不够不能施行）；diminish 按目标记次数递减（perUse^次数，下限 floor，每 recoverMinutes 恢复一次）；
+ * afterStatuses / statusMinutes 是吸到的量>0 时目标挂的状态与时长。
  */
+export interface DrainAmountSpec {
+  attrWeights: Record<string, number>;
+  attrStep: number;
+  levelStep: number;
+  phasesPerLevel: number;
+  /** 目标缺六司项时的取值：数，或 "factors.center" 这类数值键引用。 */
+  unknownTargetAttr: number | string;
+}
 export interface DrainSpec {
   lossRatio: number;
   perUseCapRatio: number;
+  amount: DrainAmountSpec;
+  hpFloor: number;
+  lethalStatus: string;
   outcomeFactor: Record<Outcome, number>;
-  qiGainRatio: number;
+  gain: { qiPerPoint: number; progressPerPoint: number };
   selfCostHpRatio: number;
   diminish: { perUse: number; floor: number; recoverMinutes: number };
   afterStatuses: string[];
@@ -124,8 +141,8 @@ export interface FreeActionConfig {
   /** 判定卡难度档的下界（难度值 < normal 为 easy）。 */
   judgement: { bands: { normal: number; hard: number; severe: number; extreme: number } };
   state: { logKeep: number; settledKeep: number; budgetKeep: number };
-  /** 调试通道（默认全关）：playerTextLog = 本地记录没出票的玩家原文；keep = 内存环形条数；textChars = 原文截取字数。 */
-  debug: { playerTextLog: boolean; keep: number; textChars: number };
+  /** 调试通道：playerTextLog = 本地记录没出票的玩家原文（默认关）；keep = 内存环形条数；textChars = 原文截取字数；drainLog = 夺元后台日志，enabled 开关，fields 是每条记录带的字段（DRAIN_LOG_FIELDS 的子集）。 */
+  debug: { playerTextLog: boolean; keep: number; textChars: number; drainLog: { enabled: boolean; fields: string[] } };
   /** 发给叙事的背包事实：inventoryListMax = 列出的物品种数上限。 */
   narration: { inventoryListMax: number };
   outcomeFactors: Record<string, Record<Outcome, number>>;
@@ -266,6 +283,8 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
     }
   }
   if (!(cfg.debug?.keep > 0) || !(cfg.debug?.textChars > 0) || typeof cfg.debug?.playerTextLog !== 'boolean') errors.push('debug 配置无效');
+  const drainLog = cfg.debug?.drainLog;
+  if (typeof drainLog?.enabled !== 'boolean' || !Array.isArray(drainLog.fields) || !drainLog.fields.length || drainLog.fields.some(field => !DRAIN_LOG_FIELDS.includes(field))) errors.push(`debug.drainLog 配置无效（fields 须为 ${DRAIN_LOG_FIELDS.join(' / ')} 的非空子集）`);
   if (!(cfg.narration?.inventoryListMax > 0)) errors.push('narration.inventoryListMax 无效');
   const { floatBand, repeat } = cfg.affinity;
   if (!(Number.isFinite(floatBand) && floatBand >= 0)) errors.push('affinity.floatBand 须为非负数');
@@ -291,7 +310,19 @@ function validateDrain(spec: VariantSpec, where: string): string[] {
   if (!drain) return [`${where}: drainProgress 缺 drain`];
   if (!(finite(drain.lossRatio) && drain.lossRatio > 0)) errors.push(`${where}: drain.lossRatio 须为正数`);
   if (!(finite(drain.perUseCapRatio) && drain.perUseCapRatio > 0)) errors.push(`${where}: drain.perUseCapRatio 须为正数`);
-  if (!(finite(drain.qiGainRatio) && drain.qiGainRatio >= 0)) errors.push(`${where}: drain.qiGainRatio 须为非负数`);
+  const amount = drain.amount;
+  if (!amount) errors.push(`${where}: drain.amount 缺失`);
+  else {
+    const weights = Object.values(amount.attrWeights || {});
+    if (!weights.length || weights.some(weight => !(finite(weight) && weight >= 0)) || !weights.some(weight => weight > 0)) errors.push(`${where}: drain.amount.attrWeights 须为非空的非负数表且至少一项为正`);
+    if (!finite(amount.attrStep)) errors.push(`${where}: drain.amount.attrStep 须为数`);
+    if (!finite(amount.levelStep)) errors.push(`${where}: drain.amount.levelStep 须为数`);
+    if (!(finite(amount.phasesPerLevel) && amount.phasesPerLevel > 0)) errors.push(`${where}: drain.amount.phasesPerLevel 须为正数`);
+    if (!Number.isFinite(resolveNumberRef(amount.unknownTargetAttr))) errors.push(`${where}: drain.amount.unknownTargetAttr 须为数或有效的数值键引用`);
+  }
+  if (!(finite(drain.hpFloor) && drain.hpFloor >= 0)) errors.push(`${where}: drain.hpFloor 须为非负数`);
+  if (!drain.lethalStatus || !catalogStatus(drain.lethalStatus)) errors.push(`${where}: drain.lethalStatus 不在状态目录里`);
+  for (const key of ['qiPerPoint', 'progressPerPoint'] as const) if (!(finite(drain.gain?.[key]) && drain.gain[key] >= 0)) errors.push(`${where}: drain.gain.${key} 须为非负数`);
   if (!(finite(drain.selfCostHpRatio) && drain.selfCostHpRatio >= 0 && drain.selfCostHpRatio < 1)) errors.push(`${where}: drain.selfCostHpRatio 须在 [0,1)`);
   for (const outcome of OUTCOMES) if (!finite(drain.outcomeFactor?.[outcome])) errors.push(`${where}: drain.outcomeFactor 缺 ${outcome}`);
   const { perUse, floor, recoverMinutes } = drain.diminish || ({} as Partial<DrainSpec['diminish']>);

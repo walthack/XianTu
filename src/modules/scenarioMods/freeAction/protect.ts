@@ -16,6 +16,11 @@ export function protectedForbids(actorId: string, spec: { protectedForbid?: bool
   return spec.protectedForbid === true && isMustSurvive(actorId);
 }
 
+/** 夺取类致死的一击：受保护的目标一律拒绝（不论玩家有没有确认）。 */
+export function lethalForbidden(actorId: string): boolean {
+  return isMustSurvive(actorId);
+}
+
 /** 受保护的目标：结果档超出封顶表时降成封顶的档（如攻击最多到“受创”）；不受保护或不在表里返回 undefined。 */
 export function protectedCapFor(actorId: string, spec: { protectedCap?: Record<string, string> }, resultKey: string): string | undefined {
   return isMustSurvive(actorId) ? spec.protectedCap?.[resultKey] : undefined;

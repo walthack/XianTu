@@ -7,7 +7,7 @@ import { CONTENT_PACKS, packText } from '@/modules/contentPacks';
 import { enabledVariants, freeActionConfig, resultKeysOf, variantSpecOf, type VariantSpec } from './config';
 import { aftermathConfig } from './outcomeEffects';
 
-export interface FactSlots { player: string; target: string; item?: string; status?: string; label?: string; amount?: string }
+export interface FactSlots { player: string; target: string; item?: string; status?: string; label?: string; amount?: string; level?: string }
 
 /** 槽位替换：模板是我们自己的文本，用 split/join，不碰玩家原话。 */
 export function fillSlots(template: string, slots: FactSlots): string {
@@ -36,7 +36,7 @@ export const whySelfText = (slots: FactSlots): string => fillSlots(packText('fre
 export function effectResultKeys(spec: VariantSpec): string[] {
   switch (spec.effect) {
     case 'practiceProgress': return ['gain', 'no_gain', 'backlash'];
-    case 'drainProgress': return ['backlash', 'self_cost'];
+    case 'drainProgress': return ['backlash', 'self_cost', 'drained_lethal', 'took_qi', 'took_hp', 'realm_up'];
     case 'removeStatus': return ['done', 'failed', ...(spec.downgrade ? ['done_downgraded'] : [])];
     case 'transferItem': return ['done'];
     case 'applyStatus': return ['done'];
@@ -47,7 +47,9 @@ export function effectResultKeys(spec: VariantSpec): string[] {
 }
 export const GATE_REASONS = [
   'not_present', 'scene_active', 'low_goodwill', 'goodwill_below_min', 'no_item', 'item_mismatch', 'equipped_or_story', 'nothing_to_treat',
-  'level_too_low', 'level_unknown', 'no_resource', 'cooldown', 'budget_full', 'protected', 'guard_up', 'drain_empty', 'hp_too_low',
+  'level_too_low', 'level_unknown', 'no_resource', 'cooldown', 'budget_full', 'protected', 'guard_up', 'drain_empty', 'drain_resisted', 'hp_too_low',
+  // 夺元吸到对方倒下：必须活着的角色直接拒绝。
+  'drain_survivor',
   // 票校验阶段（目标/物品无效）与结算写入被状态拒绝时的“未发生”事实。
   'target_unavailable', 'item_unavailable', 'state_refused',
   // 自修：按修炼结算试算境界进度不会变（时机未到 / 已满）。
@@ -102,6 +104,9 @@ export function renderReceipts(input: { refused: string[]; given: string[]; othe
   ];
 }
 
+/** 只给叙事的附注事实，不写 NPC 记忆。 */
+const NO_MEMORY_KEYS = ['backlash', 'self_cost', 'buff', 'took_qi', 'took_hp', 'realm_up'];
+
 /** 文本体检：每个启用变体的每个可能结果都有事实文本与记忆文本，闸门原因、保护、判定卡文案齐全。返回错误列表。 */
 export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_PACKS.texts): string[] {
   const errors: string[] = [], need = (id: string, where: string) => { if (typeof texts[id] !== 'string' || !texts[id]) errors.push(`${where}: 缺文本 ${id}`); };
@@ -111,7 +116,7 @@ export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_
     for (const key of keys) {
       need(`free.fact.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
       // 无对象的票不写 NPC 记忆，没有 memory 文本。
-      if (key !== 'backlash' && key !== 'self_cost' && key !== 'buff' && spec.target !== 'none') need(`free.memory.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
+      if (!NO_MEMORY_KEYS.includes(key) && spec.target !== 'none') need(`free.memory.${row.variant}.${key}`, `${row.actionClass}.${row.variant}`);
     }
     if (spec.route === 'judge') for (const name of ['success', 'partial', 'failure']) need(`free.stakes.${row.actionClass}.${name}`, row.actionClass);
   }

@@ -3,6 +3,8 @@
  * 与 requestLifecycleDiagnostics.noteTicketDiscard 相互独立——那条有意不记原文，不得改动或复用。
  * 仅本机、仅 freeAction.debug.playerTextLog 打开时输出：写 console.info 与内存环形缓冲，不落盘、不进存档、不发网络。
  * 纯观察，不改任何结算或界面行为。
+ * 夺元后台日志（freeAction.debug.drainLog）沿用同一机制：每次夺元结算记吸取者、目标、吸到的灵气 / 气血、是否把对方吸到倒下（dying），
+ * 写 console.info 与另一条内存环形缓冲，不落盘、不进存档、不进玩家界面；字段由配置 drainLog.fields 决定。
  */
 import type { SaveData } from '@/types/game';
 import { activeScene } from '../../sceneModule/host/ext';
@@ -25,6 +27,11 @@ export interface PlayerTextRow {
 
 const rows: PlayerTextRow[] = [];
 export const playerTextDebugEnabled = (): boolean => freeActionConfig().debug?.playerTextLog === true;
+
+/** 夺元日志一行：at 必带，其余字段只带配置 drainLog.fields 里列出的。 */
+export interface DrainLogRow { at: number; actor?: string; target?: string; qi?: number; hp?: number; dying?: boolean }
+const drainRows: DrainLogRow[] = [];
+export const drainLogEnabled = (): boolean => freeActionConfig().debug?.drainLog?.enabled === true;
 
 function sceneOf(save: SaveData | null | undefined): PlayerTextRow['scene'] {
   const active = activeScene(save);
@@ -55,3 +62,15 @@ export function notePlayerText(save: SaveData | null | undefined, input: Pick<Pl
 
 export function peekPlayerTextDebug(): PlayerTextRow[] { return rows.map(row => ({ ...row })); }
 export function clearPlayerTextDebug(): void { rows.length = 0; }
+
+export function noteDrain(input: Required<Omit<DrainLogRow, 'at'>>): void {
+  if (!drainLogEnabled()) return;
+  const { keep, drainLog } = freeActionConfig().debug;
+  const row: DrainLogRow = { at: Date.now(), ...Object.fromEntries(drainLog.fields.filter(field => field in input).map(field => [field, input[field as keyof typeof input]])) };
+  drainRows.push(row);
+  while (drainRows.length > keep) drainRows.shift();
+  try { console.info('[夺元]', row); } catch { /* 调试输出不得影响回合 */ }
+}
+
+export function peekDrainLog(): DrainLogRow[] { return drainRows.map(row => ({ ...row })); }
+export function clearDrainLog(): void { drainRows.length = 0; }
