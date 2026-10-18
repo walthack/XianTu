@@ -1,6 +1,6 @@
 # 六朝仙途 · 当前项目状态
 
-更新时间：2026-10-19（Asia/Singapore）；分支 `feat/fast-no-legacy`。  
+更新时间：2026-10-19（Asia/Singapore）；分支 `feat/fast-no-legacy`。
 **权威进度入口（双件）**：本文件（叙述与勾选总表）+ [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)（总甘特时间线）。勿另造第二份 status。  
 `_newbot_tmp/PROJECT-TRACKER.md` **非权威**（草稿勾选；权威=本文件+总甘特）。历史全文见 [PROJECT-STATUS-ARCHIVE-2026-10-12.md](PROJECT-STATUS-ARCHIVE-2026-10-12.md)。
 
@@ -31,6 +31,9 @@ HEAD `3763e22e`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 
 ### Done（已完成）
 
+- [x] **npm test 内容回归修复**：恢复 `2ee6fa09` 误伤的 character-registry + 4 南荒阶段 JSON 至 `2ee6fa09^`（132→1；非 numbers 引入）。笔记 `_newbot_tmp/NPM-TEST-FAILURES-2026-10-19.md`
+
+
 > 甘特泳道「已完成」主线：diagnostics → P0 → P1 → P2 → numbers 三分包 → 真机 → **同拍闸**（日期见总甘特）。
 
 - [x] 诊断/错误码日志系统合入（diagnostics；`cceb2e7a` → merge）
@@ -50,6 +53,9 @@ HEAD `3763e22e`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 - [x] **同拍共历 · 同拍闸**：`settleSharedExperienceAffinity` 查 `affinityBeatTaken`／记 `affinityTurn`（`3763e22e`；§15.6 已接入；底座）
 
 ### In progress（进行中）
+
+- [ ] **npm test 冻结门禁 1 红**：`perfTelemetry`「冻结文件零改动…runtime.ts 同」——因 `3763e22e` 同拍闸改了 `runtime.ts`；不回滚功能、不擅自放宽门禁。详见 `_newbot_tmp/NPM-TEST-FAILURES-2026-10-19.md`
+
 
 - [ ] **同拍共历 · 收口观察**：同拍闸已落；是否还有拍间历法分叉边角，跟已批未落扫描一并收口（甘特「进行中」；底座）
 - [ ] **角色总表合入／补人**：总表补齐与合入进行中（对照约 333 条规模；甘特「进行中」；**内容**，可同步、略低）
