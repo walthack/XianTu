@@ -73,6 +73,9 @@ export const ERROR_CODES = {
   'LCQ-SAV-008': spec('warn', 'indexedDB', '合并远程与本机根数据失败，回退本机数据'),
   'LCQ-SAV-009': spec('warn', 'indexedDB', '存档库统计信息获取失败'),
   'LCQ-SAV-010': spec('warn', 'characterRag', '角色 RAG 的 IndexedDB 库初始化失败，该功能本次不可用'),
+  'LCQ-SAV-011': spec('warn', 'indexedDB', '存档滚动备份写入失败，主存档写入不受影响'),
+  'LCQ-SAV-012': spec('warn', 'indexedDB', '存档损坏或读取失败，已回退到滚动备份', true),
+  'LCQ-SAV-013': spec('error', 'indexedDB', '存档损坏或读取失败，且没有可用的滚动备份', true),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

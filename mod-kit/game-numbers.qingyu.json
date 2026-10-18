@@ -1306,5 +1306,8 @@
     "toast": { "enabled": true, "minLevel": "error", "dedupeMs": 30000 },
     "panel": { "recent": 30 },
     "tuning404Level": "info"
+  },
+  "saves": {
+    "rotationKeep": 3
   }
 }

@@ -14,6 +14,7 @@ import { debug } from '@/utils/debug';
 import { useUIStore } from './uiStore'; // 导入UI Store
 import { useCharacterCreationStore } from './characterCreationStore'; // 导入创角Store
 import * as storage from '@/utils/indexedDBManager';
+import { loadSaveWithFallback } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
 import { ensureSaveDataHasTavernNsfw } from '@/utils/nsfw';
 import { initializeCharacter } from '@/services/characterInitialization';
@@ -970,9 +971,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
         console.log('[14] 加载Key:', { 角色ID: charId, 存档槽位: slotKey })
         debug.log('角色商店', `存档数据不在内存中，从 IndexedDB 加载: ${charId}/${slotKey}`);
         try {
-          const saveData = profile.隔离试玩信息?.localOnly
-            ? await storage.loadLocalSaveData(charId, slotKey)
-            : await storage.loadSaveData(charId, slotKey);
+          const saveData = await loadSaveWithFallback(charId, slotKey, { localOnly: profile.隔离试玩信息?.localOnly === true });
           if (saveData) {
             console.log('[15] 从IndexedDB加载的角色.背包.灵石数据:', (saveData as any).角色?.背包?.灵石)
             targetSlot.存档数据 = saveData;
@@ -1213,9 +1212,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
     try {
       // 🔥 新架构：从 IndexedDB 加载存档数据
-      const saveData = profile.隔离试玩信息?.localOnly
-        ? await storage.loadLocalSaveData(active.角色ID, active.存档槽位)
-        : await storage.loadSaveData(active.角色ID, active.存档槽位);
+      const saveData = await loadSaveWithFallback(active.角色ID, active.存档槽位, { localOnly: profile.隔离试玩信息?.localOnly === true });
 
       if (!saveData) {
         debug.warn('角色商店', 'IndexedDB 中没有存档数据');

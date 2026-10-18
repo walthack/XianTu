@@ -78,6 +78,9 @@
 | LCQ-SAV-008 | warn | indexedDB | 合并远程与本机根数据失败，回退本机数据 | 远程与本机根数据合并时抛错，已回退本机数据 | 看 cause；检查远程返回的数据结构 | 否 |
 | LCQ-SAV-009 | warn | indexedDB | 存档库统计信息获取失败 | 读取库统计信息（条数/大小）失败 | 只影响统计显示，可忽略；反复出现则按 LCQ-SAV-001 排查 | 否 |
 | LCQ-SAV-010 | warn | characterRag | 角色 RAG 的 IndexedDB 库初始化失败，该功能本次不可用 | 角色 RAG 用的 IndexedDB 打开失败 | 功能降级为不可用；按 LCQ-SAV-001 思路排查浏览器存储 | 否 |
+| LCQ-SAV-011 | warn | indexedDB | 存档滚动备份写入失败，主存档写入不受影响 | 覆盖写前把旧值挪进 `__rot__<槽>_N` 备份槽的事务失败（配额紧张、库被关闭） | 看 detail.op / slotId；主存档仍会照常写入，只是这次没有新备份；腾出站点存储空间 | 否 |
+| LCQ-SAV-012 | warn | indexedDB | 存档损坏或读取失败，已回退到滚动备份 | 槽位读出来不是对象、过不了 V3 致命校验或读取抛错，已改用最近一份可用的 `__rot__<槽>_N` | 看 detail.backupIndex（回退到第几份）与 detail.problem；提示只在同一会话同一槽弹一次（由读档处直接弹，不走日志 toast 的 error 级别线）；回退的是较早的进度，建议核对后手动存档 | 是 |
+| LCQ-SAV-013 | error | indexedDB | 存档损坏或读取失败，且没有可用的滚动备份 | 主槽损坏/读不出，`__rot__<槽>_1..N` 也都不存在或同样损坏 | 勿覆盖该槽；导出日志与浏览器存储留证，用手动导出的存档文件恢复 | 是 |
 | LCQ-SYS-000 | warn | diagnostics | 未登记 | console.error / console.warn 被日志捕获；或调用方传了没登记的码（原码在 detail.originalCode） | 看 msg 与 stack 定位调用点；若是业务上要长期保留的错误，给它登记专属码并改成 logError | 否 |
 | LCQ-SYS-001 | warn | diagnostics | 日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存 | 浏览器禁用或不支持 IndexedDB（隐私模式、存储被清理策略禁用），或 lcq-log 库打开失败 | 日志仍在内存环形缓冲里，可照常导出；换普通窗口或检查浏览器站点存储设置 | 否 |
 | LCQ-UI-001 | error | window | 页面未捕获异常（window error） | 页面脚本抛出未捕获异常（组件渲染、事件回调） | 看 stack 与 detail.file/line；复现步骤 + 导出日志提交 | 否 |
