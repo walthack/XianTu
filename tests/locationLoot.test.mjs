@@ -8,7 +8,7 @@ const rt = s => s.世界.状态.剧本模组;
 function table(entries=[], rules={}) { return {version:1, rules:{ maxSearches:3,commonSlots:[.65,.25],rareChance:.03,largeCurrencyChance:.02,maxCopperPerSearch:80,...rules },locations:{'liuchao.location.wuyuan':{name:'五原',status:'ready',entries}}}; }
 const key={id:'key',itemId:'item.key',category:'key',quantity:[1,1]};
 test('approved defaults and canonical pending tables consume no attempt or seed', () => {
- const s=save();assert.deepEqual(QINGYU_LOOT_TABLE.rules,{maxSearches:3,commonSlots:[.65,.25],rareChance:.03,largeCurrencyChance:.02,maxCopperPerSearch:80});
+ const s=save();assert.deepEqual(QINGYU_LOOT_TABLE.rules,{maxSearches:3,commonSlots:[.65,.25],rareChance:.03,largeCurrencyChance:.02,maxCopperPerSearch:80,bossChance:.6}); // bossChance：2026-10-20 boss 场景专属
  assert.equal(Object.values(QINGYU_LOOT_TABLE.locations).filter(l=>l.status==='ready').length,15);
  assert.ok(Object.values(QINGYU_LOOT_TABLE.locations).filter(l=>l.status==='pending').every(l=>l.entries.length===0));
  assert.equal(settleLocationLoot(s).status,'pending');assert.equal(rt(s).locationLoot,undefined);

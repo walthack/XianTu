@@ -2266,6 +2266,39 @@
       },
       {
         "id": "lcq.item.qingxin_san"
+      },
+      {
+        "id": "lcq.item.nh_dragon_scale"
+      },
+      {
+        "id": "lcq.item.nh_dragon_bone"
+      },
+      {
+        "id": "lcq.item.nh_dragon_horn"
+      },
+      {
+        "id": "lcq.item.nh_dragon_fang"
+      },
+      {
+        "id": "lcq.item.nh_dragon_sinew"
+      },
+      {
+        "id": "lcq.item.nh_dragon_blood"
+      },
+      {
+        "id": "lcq.item.nh_fly_agaric"
+      },
+      {
+        "id": "lcq.item.nilong_fake"
+      },
+      {
+        "id": "lcq.item.nh_white_coral"
+      },
+      {
+        "id": "lcq.item.nh_red_coral"
+      },
+      {
+        "id": "lcq.item.nh_coral_iron_ore"
       }
     ],
     "skills": [

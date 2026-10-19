@@ -5,12 +5,12 @@ import { loadTs } from './loadTs.mjs';
 const { settleLocationLoot } = await loadTs('../src/modules/scenarioMods/locationLoot.ts');
 const { canonicalLocationId } = await loadTs('../src/modules/scenarioMods/travel/locationIds.ts');
 const inputs = loadLootInputs();
-test('approved 15 locations / 144 entries (2026-10-20 +4 清心散稀有) / 60 item identities validate in all covered stage catalogs', () => {
- const result = auditLocationLoot(inputs);assert.deepEqual(result.errors,[]);assert.equal(result.ready,15);assert.equal(result.entries,144);
+test('approved 15 locations / 161 entries (2026-10-20 +4 清心散稀有，+17 boss 场景专属) / 73 item identities validate in all covered stage catalogs', () => {
+ const result = auditLocationLoot(inputs);assert.deepEqual(result.errors,[]);assert.equal(result.ready,15);assert.equal(result.entries,161);
  const items = new Map(inputs.stages.flatMap(s=>s.content.items.filter(i=>i.id.startsWith('lcq.item.nh_')).map(i=>[i.id,i])));
- assert.equal(items.size,60);
+ assert.equal(items.size,73);
  for(const item of items.values()) assert.deepEqual(Object.keys(item).sort(),['description','grade','id','name','type']);
- assert.equal(inputs.stages.find(s=>s.manifest.id==='lcq.stage_04').content.items.filter(i=>i.id.startsWith('lcq.item.nh_')).length,23);
+ assert.equal(inputs.stages.find(s=>s.manifest.id==='lcq.stage_04').content.items.filter(i=>i.id.startsWith('lcq.item.nh_')).length,24);
  assert.equal(JSON.stringify(inputs.table).includes('"_'),false);
 });
 test('validator rejects unregistered items, unknown events, metadata, aliases, invalid probabilities and duplicate entries', () => {
@@ -34,7 +34,7 @@ test('every configured drop really settles using each target stage catalog and c
    assert.ok(location,`${stageId}/${id}`);
    for(const entry of loc.entries) {
     const save={元数据:{创建时间:'batch7'},角色:{身份:{名字:'程宗扬'},位置:{描述:`南荒·${location.name}`},背包:{物品:{},货币:{}}},世界:{状态:{剧本模组:{modId:stageId,worldTurn:1,completedEventIds:[],travelLedger:{doneEventIds:entry.afterEventIds||[]},canon:{locations:stage.canon.locations,items:stage.content.items}}}}};
-    const table=structuredClone(inputs.table);table.locations[id].entries=[entry];delete table.locations[id].rareChance;table.rules={...table.rules,commonSlots:[1,0],rareChance:1,largeCurrencyChance:1};
+    const table=structuredClone(inputs.table);table.locations[id].entries=[{...entry,chance:entry.category==='boss'?1:entry.chance}];delete table.locations[id].rareChance;table.rules={...table.rules,commonSlots:[1,0],rareChance:1,largeCurrencyChance:1,bossChance:1};
     const result=settleLocationLoot(save,table);
     assert.equal(result.receipt?.locationId,id,`${stageId}/${entry.id}: position`);
     assert.equal(result.receipt.drops.length,1,`${stageId}/${entry.id}: missing drop`);

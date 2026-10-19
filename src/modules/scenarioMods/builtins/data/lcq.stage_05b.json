@@ -2222,6 +2222,33 @@
       },
       {
         "id": "lcq.item.qingxin_san"
+      },
+      {
+        "id": "lcq.item.nh_dragon_scale"
+      },
+      {
+        "id": "lcq.item.nh_dragon_bone"
+      },
+      {
+        "id": "lcq.item.nh_dragon_horn"
+      },
+      {
+        "id": "lcq.item.nh_dragon_fang"
+      },
+      {
+        "id": "lcq.item.nh_dragon_sinew"
+      },
+      {
+        "id": "lcq.item.nh_dragon_blood"
+      },
+      {
+        "id": "lcq.item.nh_dragon_saliva"
+      },
+      {
+        "id": "lcq.item.nh_dragon_eye_jade_shard"
+      },
+      {
+        "id": "lcq.item.nh_witch_trinkets"
       }
     ],
     "skills": [

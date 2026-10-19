@@ -1338,8 +1338,8 @@
         "id": "lcq.item.np012",
         "name": "霓龙丝（真）",
         "type": "other",
-        "description": "程宗扬穿越时随身携带的尼龙丝，在六朝称霓龙丝；与碧鲮女子提供的海藻丝不是同一物品。",
-        "grade": "仙品",
+        "description": "程宗扬穿越时随身带来的尼龙丝，在六朝被当成霓龙丝（第17章）；剧情道具，与碧鲮的海藻丝不是同一物品。",
+        "grade": "珍品",
         "storyItem": true
       },
       "stageVariants": {},
@@ -6089,6 +6089,206 @@
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json"
+    },
+    {
+      "id": "lcq.item.nh_dragon_scale",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_scale",
+        "name": "龙鳞",
+        "description": "龙神身上剥下的整片鳞甲，坚硬沉重，可作护甲材料，也能高价卖出。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_dragon_bone",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_bone",
+        "name": "龙骨",
+        "description": "一截龙神的骨头，坚硬之极，可作兵器或护具材料。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_dragon_horn",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_horn",
+        "name": "龙角",
+        "description": "龙神头上折下的一段角，数量极少，可入药或炼器，价钱很高。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_dragon_fang",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_fang",
+        "name": "龙牙",
+        "description": "弯刀般的龙牙，可作兵器材料。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_dragon_sinew",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_sinew",
+        "name": "龙筋",
+        "description": "从龙尸上抽出的一段龙筋，韧性极好，可作弓弦或绳索。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_dragon_blood",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_blood",
+        "name": "龙血",
+        "description": "用器皿盛下的龙血，珍贵的药材，眼下只能收着或卖掉。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_dragon_saliva",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_saliva",
+        "name": "龙涎",
+        "description": "鬼王宫深处岩石青苔上淌下的透明液体，带着奇异的香气。珍贵的药材，眼下只能收着或卖掉。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_dragon_eye_jade_shard",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_dragon_eye_jade_shard",
+        "name": "龙睛玉碎料",
+        "description": "祭台上崩落的龙睛玉碎块，可作宝石材料或护符。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_witch_trinkets",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_witch_trinkets",
+        "name": "鬼王峒巫师杂物",
+        "description": "骨饰、符布之类的巫师零碎，不值大钱，可以卖掉。",
+        "type": "other",
+        "grade": "凡品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_fly_agaric",
+      "aliases": [
+        "蛤蟆菌"
+      ],
+      "definition": {
+        "id": "lcq.item.nh_fly_agaric",
+        "name": "毒蝇伞",
+        "description": "又叫蛤蟆菌，有毒，可作毒药材料，采到的不多。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nilong_fake",
+      "aliases": [
+        "霓龙丝（伪）"
+      ],
+      "definition": {
+        "id": "lcq.item.nilong_fake",
+        "name": "海藻丝",
+        "description": "海神殿礁石上生满的细丝般海藻，比头发还结实，颜色有黑、绿、红、白、黄几种。",
+        "type": "material",
+        "grade": "凡品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_white_coral",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_white_coral",
+        "name": "白珊瑚",
+        "description": "一段白色珊瑚，可卖，也可作饰品材料。",
+        "type": "material",
+        "grade": "凡品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_red_coral",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_red_coral",
+        "name": "红珊瑚",
+        "description": "一段色泽鲜红的珊瑚，比白珊瑚值钱，可作饰品材料。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_coral_iron_ore",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.nh_coral_iron_ore",
+        "name": "珊瑚铁原料",
+        "description": "被珊瑚覆盖的海底寒铁，质地锋锐，要锻造后才能用。",
+        "type": "material",
+        "grade": "珍品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
     }
   ]
 }

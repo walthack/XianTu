@@ -77,7 +77,8 @@ export function auditLocationLoot({ table, stages, coverage = LOOT_STAGE_COVERAG
   allowed(table, ['version','rules','locations'], 'table');
   if (table?.version !== 1) fail('version', '不支持版本');
   const rules = table?.rules || {};
-  allowed(rules, ['maxSearches','commonSlots','rareChance','largeCurrencyChance','maxCopperPerSearch'], 'rules');
+  allowed(rules, ['maxSearches','commonSlots','rareChance','largeCurrencyChance','maxCopperPerSearch','bossChance'], 'rules');
+  if (rules.bossChance !== undefined && !probability(rules.bossChance)) fail('rules', 'boss 几率无效');
   if (!Number.isInteger(rules.maxSearches) || rules.maxSearches < 1) fail('maxSearches', '次数无效');
   if (!Array.isArray(rules.commonSlots) || rules.commonSlots.length !== 2 || !rules.commonSlots.every(probability) || !probability(rules.rareChance) || !probability(rules.largeCurrencyChance)) fail('rules', '槽位／概率无效');
   if (!Number.isInteger(rules.maxCopperPerSearch) || rules.maxCopperPerSearch < 0 || rules.maxCopperPerSearch > 80) fail('rules', '普通货币上限无效');
@@ -103,7 +104,8 @@ export function auditLocationLoot({ table, stages, coverage = LOOT_STAGE_COVERAG
       allowed(e, ['id','itemId','category','currency','large','weight','chance','quantity','once','afterEventIds'], at);
       if (typeof e.id !== 'string' || !e.id || seen.has(e.id)) fail(at, '条目 id 缺失／重复');
       seen.add(e.id);
-      if (!['key','common','rare','currency'].includes(e.category)) fail(at, '分类无效');
+      if (!['key','common','rare','currency','boss'].includes(e.category)) fail(at, '分类无效');
+      if (e.category === 'boss' && (e.once !== true || !e.afterEventIds?.length)) fail(at, 'boss 专属须 once 且挂 boss 倒下事件');
       if (!Array.isArray(e.quantity) || e.quantity.length !== 2 || !e.quantity.every(Number.isInteger) || e.quantity[0] < 1 || e.quantity[1] < e.quantity[0]) fail(at, '数量区间无效');
       if (['key','rare'].includes(e.category) && (e.quantity?.[0] !== 1 || e.quantity?.[1] !== 1)) fail(at, '关键／稀有物一次一件');
       if (e.weight !== undefined && (!Number.isFinite(e.weight) || e.weight <= 0)) fail(at, '权重无效');

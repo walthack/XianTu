@@ -6,13 +6,13 @@ import { settleScenarioInventoryTransfers } from './inventoryTransactions';
 import { DEFAULT_CURRENCIES, type DefaultCurrencyId } from '../../utils/currencySystem';
 
 export interface LocationLootEntry {
-  id: string; itemId?: string; category: 'key' | 'common' | 'rare' | 'currency';
+  id: string; itemId?: string; category: 'key' | 'common' | 'rare' | 'currency' | 'boss';
   currency?: '铜铢' | '银铢' | '金铢'; large?: boolean; weight?: number; chance?: number;
   quantity: [number, number]; once?: boolean; afterEventIds?: string[];
 }
 export interface LocationLootTable {
   version: number;
-  rules: { maxSearches: number; commonSlots: number[]; rareChance: number; largeCurrencyChance: number; maxCopperPerSearch: number };
+  rules: { maxSearches: number; commonSlots: number[]; rareChance: number; largeCurrencyChance: number; maxCopperPerSearch: number; /** boss 场景专属：每次搜刮各自独立判定的缺省几率（条目 chance 可覆盖）。 */ bossChance?: number };
   locations: Record<string, { name: string; status: 'pending' | 'ready'; entries: LocationLootEntry[]; maxCopper?: number; kind?: 'ordinary' | 'special'; /** 可选：本地点的稀有几率，覆盖 rules.rareChance。 */ rareChance?: number }>;
 }
 export interface LocationLootReceipt {
@@ -64,7 +64,7 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
       && !(e.itemId && !independentBattleLoot(e) && (state.claimedItemIds.includes(e.itemId) || Number((save as any).角色?.背包?.物品?.[e.itemId]?.数量) > 0 || (runtime.inventoryTransferReceipts || []).some((r: any) => r.itemId === e.itemId))))));
   for (const e of eligible) if (!Number.isInteger(e.quantity?.[0]) || !Number.isInteger(e.quantity?.[1]) || e.quantity[0] < 1 || e.quantity[1] < e.quantity[0] || !Number.isFinite(e.weight ?? 1)) throw new Error('搜刮条目配置无效');
   for (const e of eligible) {
-    if (!['key', 'common', 'rare', 'currency'].includes(e.category) || (e.category === 'currency' && e.currency && !['铜铢', '银铢', '金铢'].includes(e.currency)) || (e.weight !== undefined && e.weight <= 0) || (e.chance !== undefined && (!Number.isFinite(e.chance) || e.chance < 0 || e.chance > 1))) throw new Error('搜刮分类、币种或概率配置无效');
+    if (!['key', 'common', 'rare', 'currency', 'boss'].includes(e.category) || (e.category === 'currency' && e.currency && !['铜铢', '银铢', '金铢'].includes(e.currency)) || (e.weight !== undefined && e.weight <= 0) || (e.chance !== undefined && (!Number.isFinite(e.chance) || e.chance < 0 || e.chance > 1))) throw new Error('搜刮分类、币种或概率配置无效');
   }
   if (!Number.isInteger(table.rules.maxSearches) || table.rules.maxSearches < 1 || ![...table.rules.commonSlots, table.rules.rareChance, table.rules.largeCurrencyChance].every(p => Number.isFinite(p) && p >= 0 && p <= 1)) throw new Error('搜刮规则配置无效');
   const picked: LocationLootEntry[] = [];
@@ -76,6 +76,8 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
     for (const entry of pool) { cursor -= Math.max(0, entry.weight ?? 1); if (cursor < 0) { picked.push(entry); return; } }
   };
   for (const e of eligible.filter(e => e.category === 'key')) if (roll() < (e.chance ?? 1)) picked.push(e);
+  // 2026-10-20 boss 场景专属：只在 boss 倒下后（afterEventIds）、各只一次（once），按份数入账，几率高于普通稀有槽。
+  for (const e of eligible.filter(e => e.category === 'boss')) if (roll() < (e.chance ?? table.rules.bossChance ?? 0)) picked.push(e);
   for (const chance of table.rules.commonSlots) if (roll() < chance) pick(eligible.filter(e => e.category === 'common' || (e.category === 'currency' && !e.large)));
   // 稀有几率：地点可选覆盖 rareChance（boss 地 / 宫殿等高价值场景），缺省用全局 rules.rareChance。
   if (roll() < (location.rareChance ?? table.rules.rareChance)) pick(eligible.filter(e => e.category === 'rare'));

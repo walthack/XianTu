@@ -8,7 +8,8 @@
     ],
     "rareChance": 0.03,
     "largeCurrencyChance": 0.02,
-    "maxCopperPerSearch": 80
+    "maxCopperPerSearch": 80,
+    "bossChance": 0.6
   },
   "locations": {
     "lcq.location.beast_camp": {
@@ -866,6 +867,20 @@
             1,
             1
           ]
+        },
+        {
+          "id": "baiyi.boss.fly_agaric",
+          "itemId": "lcq.item.nh_fly_agaric",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.s04b_lingfei_baiyi_crisis_10"
+          ],
+          "chance": 0.4
         }
       ]
     },
@@ -976,6 +991,47 @@
             1,
             1
           ]
+        },
+        {
+          "id": "biyu.boss.white_coral",
+          "itemId": "lcq.item.nh_white_coral",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.biling_bay_stance"
+          ]
+        },
+        {
+          "id": "biyu.boss.red_coral",
+          "itemId": "lcq.item.nh_red_coral",
+          "category": "boss",
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.biling_bay_stance"
+          ],
+          "chance": 0.3
+        },
+        {
+          "id": "biyu.boss.coral_iron",
+          "itemId": "lcq.item.nh_coral_iron_ore",
+          "category": "boss",
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.biling_bay_stance"
+          ],
+          "chance": 0.3
         }
       ],
       "maxCopper": 60
@@ -1143,6 +1199,19 @@
             1,
             1
           ]
+        },
+        {
+          "id": "palace.boss.witch_trinkets",
+          "itemId": "lcq.item.nh_witch_trinkets",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.s05b_06_breakout_and_reunion"
+          ]
         }
       ]
     },
@@ -1172,6 +1241,32 @@
           "quantity": [
             1,
             1
+          ]
+        },
+        {
+          "id": "altar.boss.dragon_saliva",
+          "itemId": "lcq.item.nh_dragon_saliva",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.ghost_king_swallowed"
+          ]
+        },
+        {
+          "id": "altar.boss.dragon_eye_jade_shard",
+          "itemId": "lcq.item.nh_dragon_eye_jade_shard",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
           ]
         }
       ]
@@ -1300,6 +1395,85 @@
           "quantity": [
             1,
             1
+          ]
+        },
+        {
+          "id": "dong.boss.dragon_scale",
+          "itemId": "lcq.item.nh_dragon_scale",
+          "category": "boss",
+          "quantity": [
+            2,
+            4
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
+          ]
+        },
+        {
+          "id": "dong.boss.dragon_bone",
+          "itemId": "lcq.item.nh_dragon_bone",
+          "category": "boss",
+          "quantity": [
+            1,
+            3
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
+          ]
+        },
+        {
+          "id": "dong.boss.dragon_horn",
+          "itemId": "lcq.item.nh_dragon_horn",
+          "category": "boss",
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
+          ],
+          "chance": 0.3
+        },
+        {
+          "id": "dong.boss.dragon_fang",
+          "itemId": "lcq.item.nh_dragon_fang",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
+          ]
+        },
+        {
+          "id": "dong.boss.dragon_sinew",
+          "itemId": "lcq.item.nh_dragon_sinew",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
+          ]
+        },
+        {
+          "id": "dong.boss.dragon_blood",
+          "itemId": "lcq.item.nh_dragon_blood",
+          "category": "boss",
+          "quantity": [
+            1,
+            3
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
           ]
         }
       ]
@@ -1553,6 +1727,60 @@
             1,
             1
           ]
+        },
+        {
+          "id": "temple.boss.algae_silk",
+          "itemId": "lcq.item.nilong_fake",
+          "category": "boss",
+          "quantity": [
+            1,
+            3
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ]
+        },
+        {
+          "id": "temple.boss.white_coral",
+          "itemId": "lcq.item.nh_white_coral",
+          "category": "boss",
+          "quantity": [
+            1,
+            2
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ]
+        },
+        {
+          "id": "temple.boss.red_coral",
+          "itemId": "lcq.item.nh_red_coral",
+          "category": "boss",
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ],
+          "chance": 0.3
+        },
+        {
+          "id": "temple.boss.coral_iron",
+          "itemId": "lcq.item.nh_coral_iron_ore",
+          "category": "boss",
+          "quantity": [
+            1,
+            1
+          ],
+          "once": true,
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ],
+          "chance": 0.3
         }
       ]
     },

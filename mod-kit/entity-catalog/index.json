@@ -1557,6 +1557,24 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.s07_00a_shanghou_trading_house:hear_shanghou_trading_house",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s07_00b_return_north:leave_nanhuang_north",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.s07_00c_arrive_jiankang:settle_in_yuji_lane",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.s07_01_old_case:advance_declared_objective",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
       "aliases": []
@@ -5289,6 +5307,12 @@
     {
       "kind": "chapter",
       "id": "lcq.chapter.stage_07_qingyuan_jiankang_qingyuan",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lcq.chapter.stage_07_qingyuan_jiankang_return",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
       "aliases": []
     },
@@ -9515,6 +9539,24 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.s07_00a_shanghou_trading_house",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s07_00b_return_north",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.s07_00c_arrive_jiankang",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.s07_01_old_case",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
       "aliases": []
@@ -13085,6 +13127,12 @@
     },
     {
       "kind": "flag",
+      "id": "chapter.lcq.stage_07_qingyuan_jiankang.return.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "chapter.lcq.stage_08_jiankang_coup.ambush.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_08_jiankang_coup.json",
       "aliases": []
@@ -15179,6 +15227,24 @@
     },
     {
       "kind": "flag",
+      "id": "event.s07_00a_shanghou_trading_house.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.s07_00b_return_north.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.s07_00c_arrive_jiankang.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "event.s07_01.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
       "aliases": []
@@ -16483,6 +16549,12 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.nh_coral_iron_ore",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.nh_coral_twig",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -16525,7 +16597,55 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.nh_dragon_blood",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_dragon_bone",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_dragon_eye_jade_shard",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_dragon_fang",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_dragon_horn",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_dragon_saliva",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_dragon_scale",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.nh_dragon_scale_chip",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_dragon_sinew",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -16558,6 +16678,14 @@
       "id": "lcq.item.nh_flint_set",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nh_fly_agaric",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": [
+        "蛤蟆菌"
+      ]
     },
     {
       "kind": "item",
@@ -16663,6 +16791,12 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.nh_red_coral",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.nh_rusty_arrowhead",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -16741,6 +16875,12 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.nh_white_coral",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.nh_wild_fruit",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -16753,9 +16893,23 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.nh_witch_trinkets",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.nh_yinzhu_silk",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.nilong_fake",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": [
+        "霓龙丝（伪）"
+      ]
     },
     {
       "kind": "item",
@@ -19590,6 +19744,18 @@
     {
       "kind": "scene",
       "id": "combat.f10.ghost_king_clash",
+      "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
+      "aliases": []
+    },
+    {
+      "kind": "scene",
+      "id": "combat.f11.ghost_palace_breakout",
+      "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
+      "aliases": []
+    },
+    {
+      "kind": "scene",
+      "id": "combat.f12.altar_corpses",
       "authoritySource": "src/modules/sceneModule/contracts/registry.ts",
       "aliases": []
     },
