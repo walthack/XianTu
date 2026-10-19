@@ -80,6 +80,19 @@ function advance(tools, save) {
   return tools.advanceScenarioRuntime(save).saveData;
 }
 
+// 10-20 方案 A(2)：07 开头先走「返程入建康」三拍，萧遥逸在第126章建康登门。
+const RETURN_TO_JIANKANG = ['lcq.event.s07_00a_shanghou_trading_house', 'lcq.event.s07_00b_return_north', 'lcq.event.s07_00c_arrive_jiankang'];
+const RETURN_ACTIONS = { 'lcq.event.s07_00a_shanghou_trading_house': 'hear_shanghou_trading_house', 'lcq.event.s07_00b_return_north': 'leave_nanhuang_north', 'lcq.event.s07_00c_arrive_jiankang': 'settle_in_yuji_lane' };
+function walkReturnToJiankang(tools, save) {
+  let current = save;
+  for (const eventId of RETURN_TO_JIANKANG) {
+    if (!runtimeOf(current).activeEventIds.includes(eventId)) continue;
+    assert.equal(takeAction(tools, current, RETURN_ACTIONS[eventId]).completed, true, eventId);
+    current = advance(tools, current);
+  }
+  return current;
+}
+
 function eventIdsOf(mod) {
   return (mod.scenario.events || []).map(event => event.id);
 }
@@ -216,7 +229,7 @@ test('切关单测：沿正式 transition 走完整主路并跳过隔离关，�
 
   assert.deepEqual(hops.map(item => item.to), ROUTE_STAGE_IDS.slice(1));
   assert.equal(runtimeOf(save).modId, 'lcq.stage_07_qingyuan_jiankang');
-  assert.ok(runtimeOf(save).activeEventIds.includes('lcq.event.xiaoyaoyi_arrives'));
+  assert.ok(runtimeOf(save).activeEventIds.includes('lcq.event.s07_00a_shanghou_trading_house'));
   assert.equal(runtimeOf(save).flags['event.xieyi_entrustment.done'], false);
   assert.equal(runtimeOf(save).flags['event.xiao_opens_resources.done'], false);
 });
@@ -293,6 +306,7 @@ test('生死两条经真实命运动作接到开库，进 07 不预置托付 don
     assert.equal(jumped.to, 'lcq.stage_07_qingyuan_jiankang');
     save = jumped.saveData;
     assert.equal(runtimeOf(save).flags['event.xieyi_entrustment.done'], false, '进 07 不得预置托付 done');
+    save = walkReturnToJiankang(tools, save);
     assert.equal(runtimeOf(save).flags['character.xie_yi.status'], choose === 'dead' ? 'dead' : 'longrest');
 
     if (choose === 'dead') {

@@ -177,9 +177,13 @@ test('B3：05b 未挂章 critical 不挡切关，命运 IF 可带进 07', async 
   assert.equal(dest.flags['branch.lcq.if_xieyi_longrest.active'], true);
   assert.equal(dest.flags['character.xie_yi.status'], 'longrest');
   assert.equal(dest.flags['event.s06_03.void'], true);
-  assert.ok(dest.activeEventIds.includes('lcq.event.xiaoyaoyi_arrives'));
+  // 10-20 方案 A(2)：07 先走「返程入建康」三拍（殇侯交代商号→返程→到建康），萧遥逸在第126章建康登门。
+  assert.ok(dest.activeEventIds.includes('lcq.event.s07_00a_shanghou_trading_house'));
+  const rail07 = (await loadTs('../src/modules/scenarioMods/canonRail.ts')).getCanonRailProfile({ modId: STAGE_IDS.stage07 }).orderedEventIds;
+  const atDebut = await walkRailUntil(jumped.saveData, 'lcq.event.xiaoyaoyi_arrives', rail07);
+  assert.ok(runtimeOf(atDebut).activeEventIds.includes('lcq.event.xiaoyaoyi_arrives'));
   assert.deepEqual(
-    getCurrentStoryEventActions(jumped.saveData).map(item => item.actionId),
+    getCurrentStoryEventActions(atDebut).map(item => item.actionId),
     ['escort_wounded'],
   );
 });
@@ -190,7 +194,8 @@ test('B4：07 生产入口在 s07_05 之后激活星月开库', async () => {
     await loadTs('../src/modules/scenarioMods/runtime.ts');
   const stage = await loadStage(STAGE_IDS.stage07);
   const rail = getCanonRailProfile({ modId: stage.manifest.id }).orderedEventIds;
-  let save = await productionSave(stage);
+  let save = await productionSave(stage); 
+  save = await walkRailUntil(save, 'lcq.event.xiaoyaoyi_arrives', rail);
   const first = getCurrentStoryEventActions(save).find(item => item.actionId === 'deliver_ashes');
   assert.ok(first, '死亡线应先见到交骨灰');
   assert.equal(recordStoryEventStructuredAction(save, first).completed, true);
@@ -248,7 +253,8 @@ test('B6：07 登场回执跨关继承后，08 不再二次死亡登场', async 
   const stage08 = await loadStage(STAGE_IDS.stage08);
   const rail = getCanonRailProfile({ modId: stage07.manifest.id }).orderedEventIds;
 
-  let save = await productionSave(stage07);
+  let save = await productionSave(stage07); 
+  save = await walkRailUntil(save, 'lcq.event.xiaoyaoyi_arrives', rail);
   const debut = getCurrentStoryEventActions(save).find(item => item.actionId === 'deliver_ashes');
   assert.equal(recordStoryEventStructuredAction(save, debut).completed, true);
   save = await finishRail(save, rail);

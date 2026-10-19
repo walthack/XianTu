@@ -1,6 +1,6 @@
-// 2026-10-20 建康线方案 A (1) 核查：切入 stage_07 时「托付已完成」旗标确被重置为 false，但萧遥逸上门照样开启——发现一不成立，未改切关逻辑。
+// 2026-10-20 建康线方案 A (1) 核查（(2) 落地后：先走返程入建康三拍）：切入 stage_07 时「托付已完成」旗标确被重置为 false，但萧遥逸上门照样开启——发现一不成立，未改切关逻辑。
 import test from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {loadTs} from './loadTs.mjs';
-const init=await loadTs('../src/modules/scenarioMods/strictInitializer.ts');const opening=await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');const pack=await loadTs('../src/modules/contentPacks/index.ts');
+const init=await loadTs('../src/modules/scenarioMods/strictInitializer.ts');const opening=await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');const pack=await loadTs('../src/modules/contentPacks/index.ts');const rt=await loadTs('../src/modules/scenarioMods/runtime.ts');
 const read=async id=>pack.applyContentPackOverlays(JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`,import.meta.url))));
 const first=await read('lcq.stage_01'),s05=await read('lcq.stage_05b'),s07=await read('lcq.stage_07_qingyuan_jiankang');
 const deep=(o,f)=>{if(!o||typeof o!=='object')return;if(f(o))return o;for(const v of Object.values(o)){const r=deep(v,f);if(r)return r;}};
@@ -18,6 +18,15 @@ test('核查结论：正式切关进 stage_07 时托付 done 虽重置为 false�
     const out=init.transitionToNextScenarioStage(JSON.parse(JSON.stringify(save)),[s07]);assert.equal(out.ok,true,out.reason);
     const n=out.saveData.世界.状态.剧本模组;
     assert.equal(n.flags['event.xieyi_entrustment.done'],false,'按既有设计不预置');
-    assert.ok(n.activeEventIds.includes('lcq.event.xiaoyaoyi_arrives'),branch);
+    // 10-20 方案 A(2)：先走返程入建康三拍，再到萧遥逸登门。
+    let cur=out.saveData;
+    for(const id of ['lcq.event.s07_00a_shanghou_trading_house','lcq.event.s07_00b_return_north','lcq.event.s07_00c_arrive_jiankang']){
+      assert.ok(cur.世界.状态.剧本模组.activeEventIds.includes(id),id);
+      const act=rt.getCurrentStoryEventActions(cur).find(x=>x.eventId===id&&!x.actionId.startsWith('travel:'))||rt.getCurrentStoryEventActions(cur).find(x=>x.eventId===id&&!x.actionId.startsWith('travel:'));
+      const travel=rt.getCurrentStoryEventActions(cur).find(x=>x.actionId.startsWith('travel:'));if(travel)rt.recordStoryEventStructuredAction(cur,travel);
+      const a2=rt.getCurrentStoryEventActions(cur).find(x=>x.eventId===id&&!x.actionId.startsWith('travel:'));
+      assert.equal(rt.recordStoryEventStructuredAction(cur,a2||act).completed,true,id);cur=rt.advanceScenarioRuntime(cur).saveData;
+    }
+    assert.ok(cur.世界.状态.剧本模组.activeEventIds.includes('lcq.event.xiaoyaoyi_arrives'),branch);
   }
 });

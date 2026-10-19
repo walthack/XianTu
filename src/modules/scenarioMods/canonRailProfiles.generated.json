@@ -591,8 +591,11 @@
   {
     "id": "qingyu.stage_07_qingyuan_jiankang",
     "modId": "lcq.stage_07_qingyuan_jiankang",
-    "chapterId": "lcq.chapter.stage_07_qingyuan_jiankang_qingyuan",
+    "chapterId": "lcq.chapter.stage_07_qingyuan_jiankang_return",
     "orderedEventIds": [
+      "lcq.event.s07_00a_shanghou_trading_house",
+      "lcq.event.s07_00b_return_north",
+      "lcq.event.s07_00c_arrive_jiankang",
       "lcq.event.xiaoyaoyi_arrives",
       "lcq.event.s07_01_old_case",
       "lcq.event.s07_02_kill_wu",
@@ -607,13 +610,44 @@
     ],
     "contracts": [
       {
+        "eventId": "lcq.event.s07_00a_shanghou_trading_house",
+        "mustReach": "殇侯交代程宗扬去建康开商号：云氏总号在建康，就从晋国的建康宫开始。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "重复施治冰蛊",
+          "提前演出建康见闻"
+        ],
+        "allowedElaboration": "可补足殇侯与程宗扬的对话。"
+      },
+      {
+        "eventId": "lcq.event.s07_00b_return_north",
+        "mustReach": "夜行出南荒，经天藤、白龙江口离开南荒；祁远带白湖商馆的货沿江北上。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "死亡线写成谢艺随行",
+          "长养线发丧或交出骨灰"
+        ],
+        "allowedElaboration": "可补足沿途景色与同伴分别。"
+      },
+      {
+        "eventId": "lcq.event.s07_00c_arrive_jiankang",
+        "mustReach": "程宗扬与云苍峰一同到达晋都建康，住进玉鸡巷的宅子。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出萧遥逸亮明星月湖身份",
+          "提前演出清远之行"
+        ],
+        "allowedElaboration": "可补足建康街景与安家。"
+      },
+      {
         "eventId": "lcq.event.xiaoyaoyi_arrives",
-        "mustReach": "萧遥逸在左武旧案之前上门：谢艺已死则接骨灰，长养则接伤员并安排密送。",
+        "mustReach": "萧遥逸登门玉鸡巷（第126章建康）：谢艺已死则接骨灰，长养则接伤员并安排密送。",
         "completionEvidence": [],
         "forbiddenInCanon": [
           "把首次登场排到左武旧案之后",
           "生还线交出骨灰或发丧",
-          "死亡线写成接伤员"
+          "死亡线写成接伤员",
+          "提前亮明星月湖八骏身份"
         ],
         "allowedElaboration": "可补足失态、哭骂或密送巷线，不得改写死／生真值。"
       },

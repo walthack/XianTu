@@ -3866,7 +3866,7 @@
   },
   "scenario": {
     "opening": {
-      "text": "南荒终局之后，程宗扬随萧遥逸进入晋国清远与建康。左武军旧案、卓云君失势、小紫伪装下的本性，以及宫城异动一并浮出水面。",
+      "text": "南荒终局之后，冰蛊已解，殇侯交代程宗扬去建康开商号。一行人连夜出南荒、沿江北上，前往晋都建康；左武军旧案、卓云君失势、小紫伪装下的本性，以及宫城异动随后一并浮出水面。",
       "relatedCharacterIds": [
         "liuchao.character.cheng_zongyang"
       ]
@@ -3882,7 +3882,9 @@
       "event.s07_08.done": false,
       "event.s07_09.done": false,
       "event.s07_10.done": false,
-      "chapter.lcq.stage_07_qingyuan_jiankang.qingyuan.started": true,
+      "chapter.lcq.stage_07_qingyuan_jiankang.return.started": true,
+      "chapter.lcq.stage_07_qingyuan_jiankang.return.done": false,
+      "chapter.lcq.stage_07_qingyuan_jiankang.qingyuan.started": false,
       "chapter.lcq.stage_07_qingyuan_jiankang.qingyuan.done": false,
       "chapter.lcq.stage_07_qingyuan_jiankang.jiankang.started": false,
       "chapter.lcq.stage_07_qingyuan_jiankang.jiankang.done": false,
@@ -3896,9 +3898,30 @@
       "event.palace_haunting_rumor.done": false,
       "event.shanghou_cures_ice_gu.done": false,
       "event.xieyi_entrustment.done": false,
-      "event.xiaoyaoyi_arrives.done": false
+      "event.xiaoyaoyi_arrives.done": false,
+      "event.s07_00a_shanghou_trading_house.done": false,
+      "event.s07_00b_return_north.done": false,
+      "event.s07_00c_arrive_jiankang.done": false
     },
     "chapters": [
+      {
+        "id": "lcq.chapter.stage_07_qingyuan_jiankang_return",
+        "title": "返程入建康",
+        "summary": "冰蛊已解，殇侯交代去建康开商号；连夜出南荒沿江北上，到建康玉鸡巷安家，萧遥逸登门。",
+        "completion": [
+          {
+            "path": "flags.chapter.lcq.stage_07_qingyuan_jiankang.return.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lcq.event.s07_00a_shanghou_trading_house",
+          "lcq.event.s07_00b_return_north",
+          "lcq.event.s07_00c_arrive_jiankang",
+          "lcq.event.xiaoyaoyi_arrives"
+        ]
+      },
       {
         "id": "lcq.chapter.stage_07_qingyuan_jiankang_qingyuan",
         "title": "清远内斗",
@@ -3911,13 +3934,19 @@
           }
         ],
         "eventIds": [
-          "lcq.event.xiaoyaoyi_arrives",
           "lcq.event.s07_01_old_case",
           "lcq.event.s07_02_kill_wu",
           "lcq.event.s07_03_xiaozi_appears",
           "lcq.event.s07_04_zhuo_subdued",
           "lcq.event.s07_debut_qinhui",
           "lcq.event.s07_qinhui_join"
+        ],
+        "activation": [
+          {
+            "path": "flags.chapter.lcq.stage_07_qingyuan_jiankang.return.done",
+            "operator": "eq",
+            "value": true
+          }
         ]
       },
       {
@@ -3974,12 +4003,12 @@
       {
         "id": "lcq.event.xiaoyaoyi_arrives",
         "name": "萧遥逸上门",
-        "description": "少陵侯嫡子萧遥逸在左武旧案之前上门。谢艺已死则接骨灰；谢艺长养则接伤员、安排秘密转移，不得发丧。",
+        "description": "萧遥逸登门玉鸡巷。谢艺已死则接骨灰、痛哭；谢艺长养则接走伤员、秘密转移，不发丧。",
         "axisId": null,
-        "axisMethod": "carrier-before-s07_01",
-        "axisAnchor": "六朝清羽记·#132·第130章·同门",
-        "axisSeq": 231,
-        "axisBeat": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员。",
+        "axisMethod": "moved-to-ch126-jiankang",
+        "axisAnchor": "六朝清羽记·#128·第126章·名士",
+        "axisSeq": 230,
+        "axisBeat": "萧遥逸登门：死则接骨灰，生还则秘密接走伤员。",
         "critical": true,
         "conditions": [
           {
@@ -4036,7 +4065,7 @@
                 ]
               },
               "outcomeText": {
-                "success": "萧遥逸接过骨灰。这是他的首次登场，左武旧案还没开口。",
+                "success": "萧遥逸登门玉鸡巷，接过谢艺的骨灰，失声痛哭。这是他的首次登场，左武旧案还没开口。",
                 "partial": "该动作不产生 partial。",
                 "failure": "该动作不产生 failure。"
               },
@@ -4083,7 +4112,7 @@
                 ]
               },
               "outcomeText": {
-                "success": "萧遥逸接走伤员并安排密送。不得发丧，不得把谢艺写成已死。",
+                "success": "萧遥逸登门玉鸡巷，悄悄接走昏睡的谢艺，安排秘密转移。不得发丧，不得把谢艺写成已死。",
                 "partial": "该动作不产生 partial。",
                 "failure": "该动作不产生 failure。"
               },
@@ -5754,6 +5783,145 @@
                 "success": "你已用灵飞镜撞见假山大汉，并记下宫禁闹鬼传闻；事件完成真值由本地引擎落账。",
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s07_00a_shanghou_trading_house",
+        "name": "殇侯交代商号",
+        "description": "冰蛊已解，殇侯要程宗扬去建康开商号：云氏总号在建康，就从晋国的建康宫开始。",
+        "axisId": null,
+        "axisMethod": "return-to-jiankang-transition",
+        "axisAnchor": "六朝清羽记·#124·第122–124章·天才/双美/授艺",
+        "axisSeq": 227,
+        "axisBeat": "冰蛊已解，殇侯要程宗扬去建康开商号：云氏总号在建康，就从晋国的建康宫开始。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s07_00a_shanghou_trading_house.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.shang_zhen_yu"
+        ],
+        "objective": "听殇侯交代去建康开商号",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_shanghou_trading_house",
+              "label": "听殇侯交代去建康开商号",
+              "actionText": "我听殇侯交代去建康开商号。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "殇侯交代：云氏总号在建康，商号就从晋国的建康宫开始。解蛊的人情、要开的商号，加上谢艺托付的事，都指向建康。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.s07_00b_return_north",
+        "name": "返程",
+        "description": "夜行出南荒，经天藤、白龙江口离开南荒；祁远带白湖商馆的货沿江北上。到了建康要先想办法找到星月湖的人。",
+        "axisId": null,
+        "axisMethod": "return-to-jiankang-transition",
+        "axisAnchor": "六朝清羽记·#127·第125章·返程",
+        "axisSeq": 228,
+        "axisBeat": "夜行出南荒，经天藤、白龙江口离开南荒；祁远带白湖商馆的货沿江北上。到了建康要先想办法找到星月湖的人。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s07_00b_return_north.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qi_yuan"
+        ],
+        "objective": "离开南荒，沿江北上",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "leave_nanhuang_north",
+              "label": "连夜出南荒，沿江北上",
+              "actionText": "我连夜出南荒，沿江北上。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "一行人连夜出了南荒，过天藤、白龙江口，祁远押着白湖商馆的货沿江北上。到了建康，要先想办法找到星月湖的人，把谢艺的骨灰交给他们。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
+              }
+            }
+          ]
+        },
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "description": "夜行出南荒，经天藤、白龙江口离开南荒；昏睡的谢艺被秘密带在队中，不发丧、不火化。",
+            "axisBeat": "返程时秘密带着长养的谢艺。"
+          }
+        ]
+      },
+      {
+        "id": "lcq.event.s07_00c_arrive_jiankang",
+        "name": "晋都建康",
+        "description": "程宗扬与云苍峰一同到达晋都建康，住进玉鸡巷的宅子。",
+        "axisId": null,
+        "axisMethod": "return-to-jiankang-transition",
+        "axisAnchor": "六朝清羽记·#128·第126章·名士",
+        "axisSeq": 229,
+        "axisBeat": "程宗扬与云苍峰一同到达晋都建康，住进玉鸡巷的宅子。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.s07_00c_arrive_jiankang.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_cang_feng"
+        ],
+        "objective": "在建康玉鸡巷安顿下来",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "settle_in_yuji_lane",
+              "label": "到建康玉鸡巷安家",
+              "actionText": "我到建康玉鸡巷安家。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "晋都，建康。你与云苍峰一同到达，住进了玉鸡巷的宅子。",
+                "partial": "该动作不产生 partial。",
+                "failure": "该动作不产生 failure。"
               }
             }
           ]

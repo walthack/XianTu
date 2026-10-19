@@ -45,7 +45,8 @@ test('萧遥逸首次登场在 s07_01 之前，且按命运露出交骨灰或密
   const stage = JSON.parse(await readFile(stageUrl, 'utf8'));
   const rail = (await loadTs('../src/modules/scenarioMods/canonRail.ts')).CANON_RAIL_PROFILES
     .find(profile => profile.modId === 'lcq.stage_07_qingyuan_jiankang');
-  assert.equal(rail.orderedEventIds[0], 'lcq.event.xiaoyaoyi_arrives');
+  // 10-20 方案 A(2)(3)：先走返程入建康三拍，萧遥逸在第126章建康登门，仍在 s07_01 之前。
+  assert.deepEqual(rail.orderedEventIds.slice(0, 4), ['lcq.event.s07_00a_shanghou_trading_house', 'lcq.event.s07_00b_return_north', 'lcq.event.s07_00c_arrive_jiankang', 'lcq.event.xiaoyaoyi_arrives']);
   assert.ok(rail.orderedEventIds.indexOf('lcq.event.xiaoyaoyi_arrives')
     < rail.orderedEventIds.indexOf('lcq.event.s07_01_old_case'));
 
