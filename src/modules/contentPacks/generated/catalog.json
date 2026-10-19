@@ -1,5 +1,5 @@
 {
-  "version": "03660f6518d514d2",
+  "version": "13aceba9d8ad4677",
   "contracts": [
     {
       "meta": {
@@ -6184,6 +6184,925 @@
         "chapter": 87,
         "nonLevelPartyIds": [
           "gate"
+        ]
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f11.ghost_palace_breakout",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.s05b_06_breakout_and_reunion",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3
+        },
+        "source": "原著第99章·遗珠 段2–75（文件第14743–14812行）；W-39 小紫劫走乐明珠所有分支固定；W-40 阁罗可擒不可杀；W-41 人情只进叙事；W-44 输了照样被带走"
+      },
+      "objective": {
+        "text": "在石柱洞窟里顶住阁罗的长鞭，制住他脱身",
+        "win": {
+          "party": "geluo",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "geluo",
+          "side": "opposed",
+          "ref": "lcq.enemy.ge_luo",
+          "aliases": [
+            "阁罗",
+            "长鞭",
+            "鞭子"
+          ],
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "挥鞭进逼",
+                "鞭势受阻",
+                "长鞭被断",
+                "被制住"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "被制住",
+                "ceiling": 3
+              }
+            }
+          ]
+        },
+        {
+          "id": "warriors",
+          "side": "opposed",
+          "ref": "lcq.enemy.guiwang_warrior",
+          "aliases": [
+            "鬼武士",
+            "武士"
+          ],
+          "group": {
+            "id": "lcq.group.f11_ghost_warriors",
+            "label": "围上来的鬼武士"
+          },
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "围攻",
+                "被打散"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "被打散",
+                "ceiling": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "le_mingzhu",
+          "side": "player_side",
+          "ref": "liuchao.character.le_mingzhu",
+          "role": "assist"
+        },
+        {
+          "id": "migu",
+          "side": "opposed",
+          "ref": "lcq.character.mi_gu",
+          "aliases": [
+            "弥骨"
+          ],
+          "tracks": [
+            {
+              "id": "grip",
+              "kind": "harm",
+              "scale": [
+                "扑在背上",
+                "被甩开"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "被甩开",
+                "ceiling": 1
+              }
+            }
+          ]
+        },
+        {
+          "id": "encircle",
+          "side": "opposed",
+          "ref": "鬼武士的合围",
+          "aliases": [
+            "合围",
+            "包围"
+          ],
+          "tracks": [
+            {
+              "id": "threat",
+              "kind": "progress",
+              "scale": [
+                "合围未成",
+                "合围收紧",
+                "退路将断",
+                "被困死在洞窟"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "被困死在洞窟",
+                "ceiling": 3
+              }
+            }
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "attack",
+          "label": "双刀劈鞭，压住阁罗",
+          "aliases": [
+            "攻击阁罗",
+            "劈鞭",
+            "双刀劈",
+            "压住阁罗",
+            "砍阁罗"
+          ],
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 14,
+          "targetIds": [
+            "geluo"
+          ]
+        },
+        {
+          "id": "cut_whip",
+          "label": "换珊瑚匕首斩断长鞭、抵住喉咙",
+          "aliases": [
+            "斩断长鞭",
+            "换匕首",
+            "珊瑚匕首",
+            "抵住他的喉咙",
+            "匕首断鞭"
+          ],
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 13,
+          "targetIds": [
+            "geluo"
+          ]
+        },
+        {
+          "id": "cover_le",
+          "label": "和乐明珠背靠背打散鬼武士",
+          "aliases": [
+            "打散鬼武士",
+            "背靠背",
+            "帮乐明珠",
+            "对付鬼武士"
+          ],
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 11,
+          "targetIds": [
+            "warriors"
+          ]
+        },
+        {
+          "id": "shake_migu",
+          "label": "甩开背上的弥骨",
+          "aliases": [
+            "甩开弥骨",
+            "甩掉弥骨",
+            "把弥骨揪下来"
+          ],
+          "type": "push",
+          "track": "grip",
+          "baseDifficulty": 10,
+          "targetIds": [
+            "migu"
+          ]
+        },
+        {
+          "id": "defend",
+          "label": "防守撑住",
+          "type": "support",
+          "baseDifficulty": 12
+        }
+      ],
+      "elements": [
+        {
+          "id": "coral_dagger",
+          "kind": "item",
+          "label": "珊瑚铁匕首",
+          "aliases": [
+            "匕首"
+          ],
+          "source": "第99章 段33、71–72",
+          "owner": "pc",
+          "verbs": [
+            {
+              "id": "cut",
+              "aliases": [
+                "斩断长鞭"
+              ],
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "pillars",
+          "kind": "terrain",
+          "label": "林立的石柱",
+          "source": "第99章 段1、71",
+          "verbs": [
+            {
+              "id": "use",
+              "aliases": [
+                "踏石柱翻过去",
+                "借石柱"
+              ],
+              "power": 2
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "whip",
+          "party": "geluo",
+          "label": "长鞭卷刀",
+          "target": "player",
+          "attack": {
+            "dc": 14
+          },
+          "onHit": {
+            "statuses": [],
+            "text": "长鞭卷住钢刀，卷刃的刀几乎脱手"
+          },
+          "onBlocked": {
+            "text": "双刀把长鞭弹了回去"
+          },
+          "woundRule": "default",
+          "woundParams": {
+            "bodyPart": "手臂"
+          }
+        },
+        {
+          "id": "migu_bite",
+          "party": "migu",
+          "label": "弥骨扑咬、喷脓汁",
+          "target": "player",
+          "attack": {
+            "dc": 12
+          },
+          "when": {
+            "kind": "not",
+            "cond": {
+              "party": "migu",
+              "track": "grip",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [],
+            "text": "脓汁滴在肩上，衣服嗤地冒出白烟"
+          },
+          "onBlocked": {
+            "text": "你侧身躲开了他的牙齿"
+          },
+          "woundRule": "default",
+          "woundParams": {
+            "bodyPart": "肩"
+          }
+        },
+        {
+          "id": "surround",
+          "party": "warriors",
+          "label": "鬼武士合围",
+          "target": "player",
+          "attack": {
+            "dc": 16
+          },
+          "when": {
+            "kind": "not",
+            "cond": {
+              "party": "warriors",
+              "track": "vit",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [],
+            "text": "又有鬼武士从黑暗里跳出，退路越来越窄",
+            "trackShifts": [
+              {
+                "party": "encircle",
+                "track": "threat",
+                "steps": 1
+              }
+            ]
+          },
+          "onBlocked": {
+            "text": "你和乐明珠背靠背，把扑上来的鬼武士逼退"
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          },
+          {
+            "party": "encircle",
+            "track": "threat",
+            "reach": "final"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "flags": {
+            "scene.f11.result": "win",
+            "lcq.f11.geluo_spared": true
+          },
+          "rewards": [],
+          "text": "长鞭断成数截，匕尖抵住了阁罗的喉咙；你用刀柄敲在他额上，放他倒在石柱间。可就在这时，小紫用针刺昏了乐明珠，抱着她消失在洞窟深处。",
+          "afterState": [
+            {
+              "id": "geluo_alive",
+              "ref": "lcq.enemy.ge_luo",
+              "requirement": "阁罗被制住后放走，不死",
+              "forbiddenNarration": [
+                "阁罗死",
+                "杀了阁罗"
+              ]
+            },
+            {
+              "id": "xiaozi_takes_le",
+              "ref": "liuchao.character.xiao_zi",
+              "requirement": "小紫劫走乐明珠，所有分支固定发生；小紫不死、来历不揭",
+              "forbiddenNarration": [
+                "小紫死",
+                "救回乐明珠"
+              ]
+            }
+          ]
+        },
+        "lose": {
+          "flags": {
+            "scene.f11.result": "lose",
+            "lcq.f11.geluo_spared": false
+          },
+          "rewards": [],
+          "text": "你被长鞭和鬼武士缠住，背上的伤口又裂开了；阁罗退入黑暗。小紫用针刺昏了乐明珠，抱着她消失在洞窟深处。",
+          "fixedCosts": [
+            {
+              "id": "back_wound",
+              "target": "pc",
+              "effect": "wound.external",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ],
+              "anchorText": "第98章 背伤未包扎"
+            }
+          ],
+          "afterState": [
+            {
+              "id": "geluo_alive",
+              "ref": "lcq.enemy.ge_luo",
+              "requirement": "阁罗不死",
+              "forbiddenNarration": [
+                "阁罗死"
+              ]
+            },
+            {
+              "id": "xiaozi_takes_le",
+              "ref": "liuchao.character.xiao_zi",
+              "requirement": "小紫劫走乐明珠",
+              "forbiddenNarration": [
+                "小紫死",
+                "救回乐明珠"
+              ]
+            }
+          ]
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "开战前：主角背伤没包扎，双刀已卷刃；乐明珠没了朱狐冠，赤手打倒鬼武士，反而比平时更强。",
+          "阁罗怒斥主角欺骗了他；他只能被制住、不能被杀。",
+          "小紫装作扭伤，最后用针刺昏乐明珠带走——这件事无论输赢都发生。合规段（第99章段97–132）只标不写。"
+        ]
+      },
+      "settings": {},
+      "levelContext": {
+        "chapter": 99,
+        "nonLevelPartyIds": [
+          "warriors",
+          "migu",
+          "encircle"
+        ]
+      },
+      "rewardPolicy": {
+        "itemIds": []
+      }
+    },
+    {
+      "meta": {
+        "id": "combat.f12.altar_corpses",
+        "version": 1,
+        "scene": {
+          "kind": "combat"
+        },
+        "hook": {
+          "eventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+          "actionId": "advance_declared_objective",
+          "required": true,
+          "ambushAfterStall": 3
+        },
+        "source": "原著第102章·斗尸 段2–100（文件第15246–15345行），第103章 段1–45；W-42 不一定接朱诺但丹宸之死固定；W-43 削发在胜利收束必定发生；W-45 可以不拿小紫当人质"
+      },
+      "objective": {
+        "text": "在祭台前挡住尸鬼，让苏荔把乐明珠带离祭台",
+        "win": {
+          "all": [
+            {
+              "party": "altar",
+              "track": "rescue",
+              "reach": "final"
+            },
+            {
+              "party": "spear_corpse",
+              "track": "vit",
+              "reach": "final"
+            }
+          ]
+        }
+      },
+      "parties": [
+        {
+          "id": "pc",
+          "side": "player_side",
+          "ref": "liuchao.character.cheng_zongyang",
+          "player": true
+        },
+        {
+          "id": "spear_corpse",
+          "side": "opposed",
+          "ref": "lcq.enemy.altar_corpse",
+          "aliases": [
+            "持矛尸鬼",
+            "男尸鬼",
+            "尸鬼武士",
+            "长矛"
+          ],
+          "tracks": [
+            {
+              "id": "vit",
+              "kind": "harm",
+              "scale": [
+                "挺矛逼近",
+                "矛被斩短",
+                "额头被刺穿",
+                "颈骨碎裂"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "颈骨碎裂",
+                "ceiling": 3
+              }
+            }
+          ]
+        },
+        {
+          "id": "zhunuo",
+          "side": "opposed",
+          "ref": "lcq.character.zhu_nuo",
+          "aliases": [
+            "朱诺",
+            "女尸鬼",
+            "铁链"
+          ],
+          "tracks": [
+            {
+              "id": "hold",
+              "kind": "harm",
+              "scale": [
+                "铁链呼啸",
+                "被缠住",
+                "被逼退"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "被逼退",
+                "ceiling": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "altar",
+          "side": "opposed",
+          "ref": "龙神祭台",
+          "aliases": [
+            "祭台",
+            "乐明珠",
+            "链子"
+          ],
+          "tracks": [
+            {
+              "id": "rescue",
+              "kind": "progress",
+              "scale": [
+                "乐明珠被绑在祭台上",
+                "链子松开",
+                "苏荔卷走乐明珠"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "苏荔卷走乐明珠",
+                "ceiling": 2
+              }
+            }
+          ]
+        },
+        {
+          "id": "su_li",
+          "side": "player_side",
+          "ref": "liuchao.character.su_li",
+          "role": "assist"
+        },
+        {
+          "id": "le_mingzhu",
+          "side": "player_side",
+          "ref": "liuchao.character.le_mingzhu",
+          "protected": true
+        },
+        {
+          "id": "chain",
+          "side": "opposed",
+          "ref": "祭台上的链子",
+          "aliases": [
+            "链子收紧"
+          ],
+          "tracks": [
+            {
+              "id": "tighten",
+              "kind": "progress",
+              "scale": [
+                "链子尚松",
+                "链子收紧",
+                "勒进皮肉",
+                "乐明珠昏死过去"
+              ],
+              "initial": 0,
+              "ending": {
+                "finalState": "乐明珠昏死过去",
+                "ceiling": 3
+              }
+            }
+          ]
+        }
+      ],
+      "goals": [
+        {
+          "id": "strike_corpse",
+          "label": "匕首斩矛、刺穿尸鬼额头",
+          "aliases": [
+            "斩矛",
+            "刺尸鬼",
+            "攻击持矛尸鬼",
+            "对付男尸鬼"
+          ],
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 13,
+          "targetIds": [
+            "spear_corpse"
+          ]
+        },
+        {
+          "id": "hold_zhunuo",
+          "label": "接下朱诺，缠住她的铁链",
+          "aliases": [
+            "接下朱诺",
+            "对付朱诺",
+            "缠住铁链",
+            "挡住女尸鬼"
+          ],
+          "type": "push",
+          "track": "hold",
+          "baseDifficulty": 14,
+          "targetIds": [
+            "zhunuo"
+          ]
+        },
+        {
+          "id": "free_altar",
+          "label": "挡在祭台前，让苏荔带走乐明珠",
+          "aliases": [
+            "救乐明珠",
+            "解开链子",
+            "护住祭台",
+            "让苏荔带她走",
+            "挡在祭台前"
+          ],
+          "type": "push",
+          "track": "rescue",
+          "baseDifficulty": 13,
+          "targetIds": [
+            "altar"
+          ]
+        },
+        {
+          "id": "break_soul",
+          "label": "咬破舌尖，挣脱噬魂术",
+          "aliases": [
+            "咬破舌尖",
+            "挣脱噬魂",
+            "稳住心神"
+          ],
+          "type": "support",
+          "baseDifficulty": 11
+        },
+        {
+          "id": "defend",
+          "label": "防守撑住",
+          "type": "support",
+          "baseDifficulty": 12
+        }
+      ],
+      "elements": [
+        {
+          "id": "coral_dagger",
+          "kind": "item",
+          "label": "珊瑚铁匕首",
+          "aliases": [
+            "匕首"
+          ],
+          "source": "第102章 段1、27",
+          "owner": "pc",
+          "verbs": [
+            {
+              "id": "cut",
+              "aliases": [
+                "斩断长矛"
+              ],
+              "power": 3
+            }
+          ]
+        },
+        {
+          "id": "stone_pillars",
+          "kind": "terrain",
+          "label": "祭台边的石柱",
+          "source": "第102章 段21、57",
+          "verbs": [
+            {
+              "id": "use",
+              "aliases": [
+                "躲到石柱后"
+              ],
+              "power": 2
+            }
+          ]
+        }
+      ],
+      "enemyActions": [
+        {
+          "id": "spear",
+          "party": "spear_corpse",
+          "label": "长矛疾刺",
+          "target": "player",
+          "attack": {
+            "dc": 14
+          },
+          "when": {
+            "kind": "not",
+            "cond": {
+              "party": "spear_corpse",
+              "track": "vit",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [],
+            "text": "矛杆扫在肋下，几乎吐出血来"
+          },
+          "onBlocked": {
+            "text": "长矛擦着颈侧穿进石柱"
+          },
+          "woundRule": "default",
+          "woundParams": {
+            "bodyPart": "肋"
+          }
+        },
+        {
+          "id": "chain",
+          "party": "zhunuo",
+          "label": "铁链横扫",
+          "target": "player",
+          "attack": {
+            "dc": 15
+          },
+          "onHit": {
+            "statuses": [],
+            "text": "铁链缠住手臂，丹田真气大量流失"
+          },
+          "onBlocked": {
+            "text": "你闪身从祭台掠出，铁链落空"
+          },
+          "woundRule": "default",
+          "woundParams": {
+            "bodyPart": "手臂"
+          }
+        },
+        {
+          "id": "soul_bite",
+          "party": "zhunuo",
+          "label": "小紫的噬魂巫术",
+          "target": "player",
+          "attack": {
+            "dc": 13
+          },
+          "schedule": {
+            "onBeats": [
+              3
+            ]
+          },
+          "onHit": {
+            "statuses": [],
+            "text": "小紫的声音在心头回响，眼前一片模糊"
+          },
+          "onBlocked": {
+            "text": "额角的伤痕一热，你清醒过来"
+          },
+          "woundRule": "default"
+        },
+        {
+          "id": "tighten",
+          "party": "zhunuo",
+          "label": "拖住你，祭台上的链子越收越紧",
+          "target": "player",
+          "attack": {
+            "dc": 16
+          },
+          "when": {
+            "kind": "not",
+            "cond": {
+              "party": "altar",
+              "track": "rescue",
+              "reach": "final"
+            }
+          },
+          "onHit": {
+            "statuses": [],
+            "text": "你被缠在祭台外，乐明珠身上的链子又收紧了一圈",
+            "trackShifts": [
+              {
+                "party": "chain",
+                "track": "tighten",
+                "steps": 1
+              }
+            ]
+          },
+          "onBlocked": {
+            "text": "你抢回祭台边，链子暂时没有再收"
+          }
+        }
+      ],
+      "defeat": {
+        "conditions": [
+          {
+            "kind": "partyDowned",
+            "party": "pc"
+          },
+          {
+            "party": "chain",
+            "track": "tighten",
+            "reach": "final"
+          }
+        ],
+        "outcome": {
+          "type": "continue"
+        }
+      },
+      "closing": {
+        "win": {
+          "flags": {
+            "scene.f12.result": "win"
+          },
+          "rewards": [],
+          "text": "丹宸不知何时醒来，扑上去挡下了朱诺刺向你的一击，被铁链勒住，低声叫了一句「主人」便没了气息。苏荔蝎尾绞碎了持矛尸鬼的颈骨，卷起乐明珠掠出祭台。你掷出匕首，削断了鬼巫王的一柄鬼羽剑和一蓬头发；一个黑影拦在了鬼巫王面前。",
+          "afterState": [
+            {
+              "id": "gwk_intact",
+              "ref": "liuchao.character.gui_wu_wang",
+              "requirement": "鬼巫王无伤，只断剑断发",
+              "forbiddenNarration": [
+                "鬼巫王受伤",
+                "鬼巫王流血"
+              ]
+            },
+            {
+              "id": "zhunuo_not_destroyed",
+              "ref": "lcq.character.zhu_nuo",
+              "requirement": "朱诺不能被消灭",
+              "forbiddenNarration": [
+                "朱诺被消灭",
+                "朱诺粉碎"
+              ]
+            },
+            {
+              "id": "danchen_dies",
+              "ref": "liuchao.character.dan_chen",
+              "requirement": "丹宸之死固定发生",
+              "forbiddenNarration": [
+                "丹宸活下来"
+              ]
+            },
+            {
+              "id": "shadow_unknown",
+              "ref": "黑影",
+              "requirement": "黑影身份不揭",
+              "forbiddenNarration": []
+            }
+          ]
+        },
+        "lose": {
+          "flags": {
+            "scene.f12.result": "lose"
+          },
+          "rewards": [],
+          "text": "你被铁链与长矛逼到祭台边，真气几乎耗尽；丹宸扑出挡下朱诺的一击，叫了一句「主人」便没了气息。苏荔拼尽余力卷起乐明珠撤离，你在黑影拦住鬼巫王的空当里跟着退了出去。",
+          "fixedCosts": [
+            {
+              "id": "ribs",
+              "target": "pc",
+              "effect": "wound.external",
+              "statuses": [
+                {
+                  "status": "wound.external"
+                }
+              ],
+              "anchorText": "第102章 肋下剧痛"
+            }
+          ],
+          "afterState": [
+            {
+              "id": "gwk_intact",
+              "ref": "liuchao.character.gui_wu_wang",
+              "requirement": "鬼巫王无伤",
+              "forbiddenNarration": [
+                "鬼巫王受伤"
+              ]
+            },
+            {
+              "id": "danchen_dies",
+              "ref": "liuchao.character.dan_chen",
+              "requirement": "丹宸之死固定发生",
+              "forbiddenNarration": [
+                "丹宸活下来"
+              ]
+            }
+          ]
+        }
+      },
+      "narration": {
+        "requiredFacts": [
+          "开战前：鬼巫王最后一次招揽，主角要乐明珠，被拒；乐明珠被当作龙神祭品绑在祭台上，身上的链子会越收越紧。",
+          "先是持矛男尸鬼，然后朱诺尸鬼出场；苏荔认出她是江纳丝人的族长。",
+          "合规段（第102章段25–28、48–51、58–60、68、72、75、82，丹宸叫「主人」与药片的关系）只标不写；尸身不做性化描写。"
+        ]
+      },
+      "settings": {},
+      "levelContext": {
+        "chapter": 102,
+        "nonLevelPartyIds": [
+          "altar",
+          "le_mingzhu",
+          "chain"
         ]
       },
       "rewardPolicy": {
