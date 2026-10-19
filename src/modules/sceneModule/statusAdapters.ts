@@ -9,7 +9,8 @@ type Persisted = WriteBack['persistent'][number];
 
 function describe(def: StatusDef | undefined, item: Persisted): string {
   const notes = (def?.effects || []).filter(e => e.kind === 'note').map(e => (e as { text: string }).text);
-  return [...new Set([item.source || item.label, ...notes, ...(item.minutes === null ? ['修复后解除，不按时间消退'] : [])])].join('；');
+  const where = item.params?.bodyPart ? [`部位：${item.params.bodyPart}`] : [];
+  return [...new Set([...where, item.source || item.label, ...notes, ...(item.minutes === null ? ['修复后解除，不按时间消退'] : [])])].join('；');
 }
 
 /** 主角的状态 → 角色.效果 的一项。minutes 为 null 不按时间消退，沿用游戏已有负数时长表示，修复后解除。 */

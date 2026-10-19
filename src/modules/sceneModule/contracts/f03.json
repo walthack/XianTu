@@ -1312,7 +1312,10 @@
       },
       "consequence": {
         "kind": "status",
-        "status": "wound.external.shoulder"
+        "status": "wound.external",
+        "params": {
+          "bodyPart": "肩"
+        }
       },
       "text": "祁远肩头被斧锋带到"
     },
@@ -1323,7 +1326,10 @@
       },
       "consequence": {
         "kind": "status",
-        "status": "wound.external.back"
+        "status": "wound.external",
+        "params": {
+          "bodyPart": "背"
+        }
       },
       "text": "易彪背上被铁斧拍了一记"
     }

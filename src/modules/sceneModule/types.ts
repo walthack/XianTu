@@ -40,10 +40,16 @@ export type StatusEffectSpec =
   | { kind: 'note'; field: 'appearance' | 'memory' | 'attribute' | 'text'; text: string; attr?: string; delta?: number }
   // 气血之外的分项效果（B 步）。取值范围与可用名单都在 game-numbers.status；消费方是 statusProfile.ts。
   | { kind: 'psyche'; value: number }
+  // sense 写 "$senses" 时按挂状态时带入的 params.senses 展开成逐识的效果（见 statuses.ts resolveEffects）。
   | { kind: 'sense'; sense: string; value: number }
   | { kind: 'consciousness'; level: string }
   | { kind: 'restrict'; actions: string[] }
-  | { kind: 'appearance'; tag: string };
+  | { kind: 'appearance'; tag: string }
+  // 真气上限压低：比例在 GAME_NUMBERS.status.bingGu.qiCapRatio（冰蛊）；消费方是 scenarioMods/freeAction/bingGu.ts。
+  | { kind: 'qiCap' };
+
+/** 挂状态时带入的参数：只作描述或展开占位，不改数值。bodyPart＝外伤部位；senses＝六识受损的哪几识。 */
+export interface StatusParams { bodyPart?: string; senses?: string[] }
 
 export type StatusRemoveRule =
   | { kind: 'scene_end' }
@@ -79,6 +85,10 @@ export interface StatusDef {
   lifeFloor?: { max: number; perDose: number };
   /** 永久伤残：存档里单独存放（statusRecords.disabilities），不按时间、休整或药物消退，只能由 remove 里的剧情旗标解除。 */
   permanent?: boolean;
+  /** 剧情来源：这些旗标任一为真、或当前剧本段在 stages 里，且 remove 里的剧情旗标都没为真时，自动挂到主角身上（scenarioMods/freeAction/bingGu.ts syncStoryStatuses）。 */
+  storyApply?: { flags?: string[]; stages?: string[] };
+  /** 这条状态接受哪些挂伤参数（给人看的说明；实际值由合同/物品在挂状态时带入）。 */
+  params?: Partial<Record<keyof StatusParams, string>>;
 }
 
 export interface ActiveStatus {
@@ -90,6 +100,7 @@ export interface ActiveStatus {
   severity?: number;
   cause: StatusDef['cause'];
   sourceId: string;
+  params?: StatusParams;
 }
 
 // ---------- 合同 ----------
@@ -263,6 +274,7 @@ export interface StatusApplyRef {
   status: string;
   severity?: number;
   durationBeats?: number | null;
+  params?: StatusParams;
 }
 
 /** 挂伤规则引用：GAME_NUMBERS.combat.woundRules.profiles 的配置项名，或 {profile, 覆盖字段}（见 woundRules.ts）。 */
@@ -293,12 +305,14 @@ export interface EnemyActionDef {
   when?: Cond | Expr;
   /** 走通用挂伤结算（按档几率、连续重击升级）；写了它，onHit.statuses 只放剧情指定的额外状态。 */
   woundRule?: WoundRuleRef;
+  /** 通用挂伤挂上状态时带入的参数（如外伤部位 bodyPart）。 */
+  woundParams?: StatusParams;
 }
 
 export type ConsequenceTarget = 'actor' | 'committed' | { party: string };
 
 export type Consequence =
-  | { kind: 'status'; status: string; severity?: number; durationBeats?: number | null }
+  | { kind: 'status'; status: string; severity?: number; durationBeats?: number | null; params?: StatusParams }
   | { kind: 'trackShift'; party?: string; track: string; steps: number };
 
 export interface FumbleEntry {

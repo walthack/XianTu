@@ -3,7 +3,8 @@ import {instanceId,isEnemyKindId,parseInstanceId} from '@/modules/scenarioMods/a
 // Structured, id-keyed injury storage; old prose remains readable but is never parsed into mechanics.
 import type { SaveData } from '@/types/game';
 import { runtimeEntityId } from '@/modules/scenarioMods/ledger/affinityIdentity';
-import { persistentStatuses, resolveStatusDef, type Contract, type SceneState, type StatusDef, type WriteBack } from '../index';
+import { catalogStatus, persistentStatuses, resolveEffects, resolveStatusDef, type Contract, type SceneState, type StatusDef, type StatusParams, type WriteBack } from '../index';
+import { STATUS_MIGRATIONS } from './statusMigration';
 import { toInjuryNote } from '../statusAdapters';
 import { EFFECT_VOCAB } from '@/modules/scenarioMods/effectTags';
 import { runtimeOf } from './refs';
@@ -15,6 +16,8 @@ export interface InjuryRecord {
   /** 场上个体的实例 id（种类id#场景id:编号，见 actorInstances.ts）；人物与玩家没有。 */
   instanceId?:string; player?: boolean; statusId: string; label: string; sourceScene: string; cause: StatusDef['cause']; source?: string;
   appliedAt: number; appliedBeat?: number; expiresAt: number | null; effects: StatusDef['effects']; remove: StatusDef['remove'];
+  /** 挂伤参数（外伤部位、六识受损的哪几识）；旧存档没有。 */
+  params?: StatusParams;
   /** 下限计数（如中毒）：life 从 max 往下扣，floor 是这个角色的下限；只由自由行动路径写（freeAction/actorStatus.ts）。 */
   counter?: {life:number; max:number; floor:number};
 }
@@ -41,7 +44,51 @@ function clearPlayerEffects(save:SaveData,rows:InjuryRecord[]):void {
 export function injuryStore(save: SaveData): InjuryStore {
   const runtime=runtimeOf(save),ledger=runtime.sceneLedger ||= {receipts:[],actors:{},injuries:{},names:{},worldFacts:[]};
   ledger.legacyInjuries ||= {...ledger.injuries};
-  return ledger.statusRecords ||= {version:1,actors:{},groups:{},groupLabels:{}};
+  const store:InjuryStore=ledger.statusRecords ||= {version:1,actors:{},groups:{},groupLabels:{}};
+  migrateStatusIds(save,store);
+  return store;
+}
+
+export { STATUS_MIGRATIONS } from './statusMigration';
+/**
+ * 旧存档里挂着已删除 / 已合并 id 的伤势：按迁移表改挂新状态（效果、解除规则、标签取新定义，到期时间沿用旧行），
+ * 或者直接移除；主角 角色.效果 里同来源、同名的那一项同步改名或删掉。同一角色迁移后重复的同 id 行只留一行（部位合并）。幂等。
+ */
+export function migrateStatusIds(save: SaveData, store: InjuryStore): number {
+  let changed=0;
+  const effects:any[]|undefined=Array.isArray((save as any)?.角色?.效果)?(save as any).角色.效果:undefined;
+  for(const bank of [store.actors,store.groups,...(store.disabilities?[store.disabilities]:[])])for(const [id,rows] of Object.entries(bank)){
+    if(!rows.some(row=>STATUS_MIGRATIONS[row.statusId]))continue;
+    const next:InjuryRecord[]=[];
+    for(const row of rows){
+      const rule=STATUS_MIGRATIONS[row.statusId];
+      if(!rule){next.push(row);continue;}
+      changed++;
+      const def=rule.to?catalogStatus(rule.to):undefined;
+      const at=effects?effects.findIndex(e=>e?.来源===row.sourceScene && e?.状态名称===row.label):-1;
+      if(rule.remove || !def){ if(effects && at>=0)effects.splice(at,1); continue; }
+      const params=mergeRowParams(row.params,rule.params);
+      const twin=next.find(other=>other.statusId===def.id && other.sourceScene===row.sourceScene);
+      if(twin){ twin.params=mergeRowParams(twin.params,params); twin.effects=resolveEffects(structuredClone(def.effects),twin.params); if(effects && at>=0)effects.splice(at,1); continue; }
+      const moved:InjuryRecord={...row,statusId:def.id,label:def.label,cause:def.cause,effects:resolveEffects(structuredClone(def.effects),params),remove:structuredClone(def.remove || []),...(params?{params}:{})};
+      if(!params)delete moved.params;
+      next.push(moved);
+      if(effects && at>=0)effects[at]={...effects[at],状态名称:def.label};
+    }
+    bank[id]=next;
+  }
+  if(effects && STATUS_LABEL_REMOVALS.size){
+    // 没有结构化记录对应的旧效果（更早的写法）：按迁移表里记的旧名称直接移除，避免挂上就清不掉。
+    for(let i=effects.length-1;i>=0;i--)if(STATUS_LABEL_REMOVALS.has(effects[i]?.状态名称) && !Object.values(store.actors).some(rows=>rows.some(row=>row.player && row.label===effects[i].状态名称 && row.sourceScene===effects[i].来源))){effects.splice(i,1);changed++;}
+  }
+  return changed;
+}
+const STATUS_LABEL_REMOVALS=new Set(Object.values(STATUS_MIGRATIONS).filter(rule=>rule.remove && rule.label).map(rule=>rule.label!));
+function mergeRowParams(a?:StatusParams,b?:StatusParams):StatusParams|undefined{
+  if(!a && !b)return undefined;
+  const parts=[...new Set([...(a?.bodyPart||'').split('、'),...(b?.bodyPart||'').split('、')].filter(Boolean))],senses=[...new Set([...(a?.senses||[]),...(b?.senses||[])])];
+  const out:StatusParams={...(parts.length?{bodyPart:parts.join('、')}:{}),...(senses.length?{senses}:{})};
+  return Object.keys(out).length?out:undefined;
 }
 /** 这一行伤势此刻是否仍有效：没到期，且没被剧情旗标解除。只读，不改存档。 */
 export function injuryRowLive(row: InjuryRecord, now: number, runtime: any): boolean {
@@ -94,7 +141,7 @@ export function recordSceneInjuries(save: SaveData, contract: Contract, rows: Wr
     const group=party.group || (isEnemyParty(party) || !/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(party.ref) ? {id:`${contract.meta.id}.${party.id}`,label:namedEntity('enemy',party.ref)?.name||party.ref} : undefined);
     const bank=group ? store.groups : store.actors,id=group?.id || actorKey(runtime,party.ref);
     if(group)store.groupLabels[id]=namedEntity('enemy',group.id)?.name || group.label;
-    const instance=partyInstanceId(contract,party),record: InjuryRecord={enemyId:namedEntity('enemy',party.ref)?.id,...(instance?{instanceId:instance}:{}),player:!!party.player,statusId:def.id,label:def.label,sourceScene:item.originScene || contract.meta.id,cause:def.cause,source:item.source,appliedAt:now,expiresAt:item.minutes===null ? null : now+item.minutes,effects:structuredClone(def.effects),remove:structuredClone(def.remove || [])};
+    const instance=partyInstanceId(contract,party),record: InjuryRecord={enemyId:namedEntity('enemy',party.ref)?.id,...(instance?{instanceId:instance}:{}),player:!!party.player,statusId:def.id,label:def.label,sourceScene:item.originScene || contract.meta.id,cause:def.cause,source:item.source,appliedAt:now,expiresAt:item.minutes===null ? null : now+item.minutes,effects:resolveEffects(structuredClone(def.effects),item.params),remove:structuredClone(def.remove || []),...(item.params?{params:structuredClone(item.params)}:{})};
     const old=(group ? previous.groups : previous.actors)[id]?.find(row=>row.sourceScene===record.sourceScene && row.statusId===def.id);
     if(old) { record.appliedAt=old.appliedAt;record.expiresAt=old.expiresAt; }
     (bank[id] ||= []).push(record);
@@ -104,7 +151,7 @@ export function recordSceneInjuries(save: SaveData, contract: Contract, rows: Wr
 export function renderInjuryViews(save: SaveData): void {
   const runtime=runtimeOf(save),ledger=runtime.sceneLedger,store=pruneSceneInjuries(save);
   ledger.injuries={...ledger.legacyInjuries};ledger.groupInjuries={};
-  const note=(r:InjuryRecord)=>toInjuryNote({party:'',ref:'',status:r.statusId,label:r.label,minutes:r.expiresAt===null?null:Math.max(0,r.expiresAt-sceneTime(save)),cause:r.cause,source:r.source},{effects:r.effects,remove:r.remove} as StatusDef,tag=>(EFFECT_VOCAB.tags as Record<string,{label?:string}>)[tag]?.label);
+  const note=(r:InjuryRecord)=>toInjuryNote({party:'',ref:'',status:r.statusId,label:r.label,minutes:r.expiresAt===null?null:Math.max(0,r.expiresAt-sceneTime(save)),cause:r.cause,source:r.source,...(r.params?{params:r.params}:{})},{effects:r.effects,remove:r.remove} as StatusDef,tag=>(EFFECT_VOCAB.tags as Record<string,{label?:string}>)[tag]?.label);
   const dis=store.disabilities||{},asGroup=(id:string)=>!!parseInstanceId(id);
   for(const id of new Set([...Object.keys(store.actors),...Object.keys(dis).filter(k=>!asGroup(k))])){const rows=[...(store.actors[id]||[]),...(asGroup(id)?[]:dis[id]||[])];if(rows.length)ledger.injuries[id]=[ledger.injuries[id],...rows.map(note)].filter(Boolean).join('；');}
   for(const id of new Set([...Object.keys(store.groups),...Object.keys(dis).filter(asGroup)])){const rows=[...(store.groups[id]||[]),...(asGroup(id)?dis[id]||[]:[])];if(rows.length)ledger.groupInjuries[id]={label:store.groupLabels[id]||id,text:rows.map(note).join('；')};}
@@ -121,7 +168,7 @@ export function restoreSceneInjuries(save: SaveData, contract: Contract, state: 
       if(!def || state.statuses[party.id]?.some(s=>s.id===row.statusId))continue;
       // Short statuses (晕眩、被点穴) keep their in-scene beat limit when carried into a new scene.
       const beats=def.durationBeats ?? null;
-      (state.statuses[party.id] ||= []).push({id:row.statusId,appliedBeat:state.beat,expiresBeat:beats===null?null:state.beat+beats,cause:row.cause,sourceId:row.sourceScene,originScene:row.sourceScene});
+      (state.statuses[party.id] ||= []).push({id:row.statusId,appliedBeat:state.beat,expiresBeat:beats===null?null:state.beat+beats,cause:row.cause,sourceId:row.sourceScene,originScene:row.sourceScene,...(row.params?{params:structuredClone(row.params)}:{})});
     }
   }
 }

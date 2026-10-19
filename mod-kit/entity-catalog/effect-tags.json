@@ -24,7 +24,7 @@
     "heal": {
       "label": "疗伤",
       "activation": ["consumable"],
-      "note": "解除外伤、失血、重伤、神魂受创、濒死、单臂乏力、腿脚难行（状态目录 remove 规则）。"
+      "note": "解除外伤、灼伤、失血、重伤、神魂受创、濒死（状态目录 remove 规则）。"
     },
     "hemostatic": {
       "label": "止血",
@@ -50,11 +50,6 @@
       "label": "解穴",
       "activation": ["consumable"],
       "note": "解除被点穴。"
-    },
-    "repair": {
-      "label": "修复",
-      "activation": ["consumable"],
-      "note": "解除刀损、双刀卷刃。"
     },
     "detox": {
       "label": "戒断",

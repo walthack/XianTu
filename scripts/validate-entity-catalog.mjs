@@ -33,11 +33,12 @@ export function auditItemEffects(errors,table,kind='item'){
    if(def.onUse!==undefined){
     if(!Array.isArray(def.onUse)||!def.onUse.length)errors.push(`${where}: onUse 需为非空数组（没有就整个字段省略）`);
     else for(const use of def.onUse){
-     if(!use||typeof use!=='object'||Object.keys(use).some(k=>!['statusId','doses','minutes'].includes(k)))errors.push(`${where}: onUse 项只允许 statusId/doses/minutes`);
+     if(!use||typeof use!=='object'||Object.keys(use).some(k=>!['statusId','doses','minutes','params'].includes(k)))errors.push(`${where}: onUse 项只允许 statusId/doses/minutes/params`);
      else{
       if(!known.has(use.statusId))errors.push(`${where}: onUse 引用了不存在的状态 ${String(use.statusId)}`);
       if(use.doses!==undefined&&!(Number.isInteger(use.doses)&&use.doses>=1&&use.doses<=numbers.onUse.maxDoses))errors.push(`${where}: doses 需为 1..${numbers.onUse.maxDoses} 的整数`);
       if(use.minutes!==undefined&&!(Number.isInteger(use.minutes)&&use.minutes>0))errors.push(`${where}: minutes 需为正整数`);
+      if(use.params!==undefined&&(!use.params||typeof use.params!=='object'||Object.keys(use.params).some(k=>!['bodyPart','senses'].includes(k))))errors.push(`${where}: params 只允许 bodyPart/senses`);
      }
     }
    }

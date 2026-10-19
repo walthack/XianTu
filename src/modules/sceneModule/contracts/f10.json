@@ -813,7 +813,10 @@
       "onHit": {
         "statuses": [
           {
-            "status": "wound.external.thigh"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "大腿"
+            }
           }
         ],
         "text": "大腿被她咬伤"
@@ -838,7 +841,10 @@
       "onHit": {
         "statuses": [
           {
-            "status": "wound.external.right_arm"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "右臂"
+            }
           }
         ],
         "text": "剑尖刺穿了你右臂的衣袖，血流了下来"
@@ -863,7 +869,10 @@
       "onHit": {
         "statuses": [
           {
-            "status": "wound.external.back"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "背"
+            }
           }
         ],
         "text": "背后被斧刃撕开，伤口没来得及包扎"
@@ -886,13 +895,10 @@
       "onHit": {
         "statuses": [
           {
-            "status": "gear.blades_dulled"
-          },
-          {
             "status": "wound.external"
           }
         ],
-        "text": "骨爪击中你，伤势加重，刀刃也受损"
+        "text": "骨爪击中你，伤势加重"
       },
       "onBlocked": {
         "text": "你躲开了骨爪"
@@ -905,7 +911,10 @@
       "target": "actor",
       "consequence": {
         "kind": "status",
-        "status": "wound.external.thigh"
+        "status": "wound.external",
+        "params": {
+          "bodyPart": "大腿"
+        }
       },
       "text": "你被逼得露了破绽，大腿挨了一口"
     },
@@ -914,7 +923,10 @@
       "target": "actor",
       "consequence": {
         "kind": "status",
-        "status": "wound.external.right_arm"
+        "status": "wound.external",
+        "params": {
+          "bodyPart": "右臂"
+        }
       },
       "text": "你右臂挨了一下，流了血"
     },
@@ -923,18 +935,12 @@
       "target": "actor",
       "consequence": {
         "kind": "status",
-        "status": "wound.external.back"
+        "status": "wound.external",
+        "params": {
+          "bodyPart": "背"
+        }
       },
       "text": "你背后被撕开一道口子"
-    },
-    {
-      "id": "blades",
-      "target": "actor",
-      "consequence": {
-        "kind": "status",
-        "status": "gear.blades_dulled"
-      },
-      "text": "钢刀磕在硬处，卷了刃"
     }
   ],
   "defeat": {
@@ -1073,40 +1079,13 @@
           "target": "pc",
           "statuses": [
             {
-              "status": "wound.external.thigh"
+              "status": "wound.external",
+              "params": {
+                "bodyPart": "大腿、右臂、背"
+              }
             }
           ],
-          "effect": "腿伤，移动与防御短期下降"
-        },
-        {
-          "id": "arm",
-          "target": "pc",
-          "statuses": [
-            {
-              "status": "wound.external.right_arm"
-            }
-          ],
-          "effect": "右臂伤，近战与防御短期下降"
-        },
-        {
-          "id": "back",
-          "target": "pc",
-          "statuses": [
-            {
-              "status": "wound.external.back"
-            }
-          ],
-          "effect": "背伤，动作与防御短期下降"
-        },
-        {
-          "id": "blades",
-          "target": "pc",
-          "statuses": [
-            {
-              "status": "gear.blades_dulled"
-            }
-          ],
-          "effect": "双刀卷刃，不能有效进攻，须修复"
+          "effect": "腿伤，移动与防御短期下降；右臂伤，近战与防御短期下降；背伤，动作与防御短期下降"
         }
       ],
       "flags": {
@@ -1172,11 +1151,6 @@
           "kind": "not",
           "cond": {
             "any": [
-              {
-                "kind": "statusPresent",
-                "party": "pc",
-                "status": "wound.external.back"
-              },
               {
                 "kind": "statusPresent",
                 "party": "pc",

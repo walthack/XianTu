@@ -314,10 +314,13 @@
         {
           "id": "arm",
           "target": "xiaowei",
-          "effect": "wound.external.right_arm",
+          "effect": "wound.external",
           "statuses": [
             {
-              "status": "wound.external.right_arm"
+              "status": "wound.external",
+              "params": {
+                "bodyPart": "右臂"
+              }
             }
           ]
         },

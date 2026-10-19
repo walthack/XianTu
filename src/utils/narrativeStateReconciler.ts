@@ -9,6 +9,7 @@ import {isNamedEntityLabel} from '@/modules/scenarioMods/namedEntities';
 import { splitRecordPath, npcRecordPath, resolveRelationshipId, backfillRelationshipIds, normalizeNpcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import { get, set, cloneDeep } from 'lodash';
 import type { SaveData, StateChange, StatusEffect } from '@/types/game';
+import { syncStoryStatuses } from '@/modules/scenarioMods/freeAction/bingGu';
 
 /**
  * 叙事-数据同步兜底（位置 + 跨轮即兴目标 + 少量队伍状态）。
@@ -650,6 +651,21 @@ export function reconcilePlayerFreeTextStatuses(input: NarrativeReconcileInput):
 }
 
 /**
+ * 剧情来源状态（如冰蛊）：状态目录 storyApply 的旗标为真且未被剧情解除时补挂到主角身上（freeAction/bingGu.ts）。
+ */
+export function reconcileStoryStatuses(input: NarrativeReconcileInput): StateChange[] {
+  const summarize = input.summarize ?? ((_key, value) => value);
+  const oldRaw = cloneDeep(get(input.saveData, PLAYER_EFFECTS_KEY));
+  if (!syncStoryStatuses(input.saveData).length) return [];
+  return [{
+    key: PLAYER_EFFECTS_KEY,
+    action: 'set',
+    oldValue: summarize(PLAYER_EFFECTS_KEY, oldRaw, 'set'),
+    newValue: summarize(PLAYER_EFFECTS_KEY, get(input.saveData, PLAYER_EFFECTS_KEY), 'set'),
+  }];
+}
+
+/**
  * 叙事状态兜底入口。位置、即兴目标、NPC 状态与主角专属机制互不覆盖。
  */
 export function reconcileNarrativeState(input: NarrativeReconcileInput): StateChange[] {
@@ -667,5 +683,6 @@ export function reconcileNarrativeState(input: NarrativeReconcileInput): StateCh
     ...reconcilePartyNpcStateFromNarrative(input),
     ...reconcilePlayerCanonEffectsFromNarrative(input),
     ...reconcilePlayerFreeTextStatuses(input),
+    ...reconcileStoryStatuses(input),
   ];
 }

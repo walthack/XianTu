@@ -15,7 +15,7 @@ import { pickFace, resolveCheck, resolveSettings, type ResolvedSettings } from '
 import {
   TIER_LABELS,
   type ActionPlan, type ActiveTag, type ClosingBranch, type Consequence, type Contract, type Cond, type Expr,
-  type FixedEventEffect, type FumbleEntry, type PlayerChoiceCond, type SceneContext, type SceneOutcome, type SceneState, type TagDef, type TierId,
+  type FixedEventEffect, type FumbleEntry, type PlayerChoiceCond, type SceneContext, type SceneOutcome, type SceneState, type StatusParams, type TagDef, type TierId,
 } from './types';
 
 /** 存档里最多留多少条行动审计（计数器 counters 不受影响）；份数读 sceneDefaults.auditKeep。 */
@@ -569,7 +569,7 @@ export interface WriteBack {
   beats: number;
   finalStates: Array<{ party: string; ref: string; track: string; label: string }>;
   statusEvents: StatusEvent[];
-  persistent: Array<{ party: string; ref: string; status: string; label: string; originScene?: string; minutes: number | null; cause: string; source?: string }>;
+  persistent: Array<{ party: string; ref: string; status: string; label: string; originScene?: string; minutes: number | null; cause: string; source?: string; params?: StatusParams }>;
   costs: Array<{ id: string; target: string; effect?: string; anchorText?: string }>;
   rewards: Array<Record<string, unknown>>;
   flags: Record<string, string | number | boolean>;
@@ -660,6 +660,7 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
   }));
   const persistent = persistentStatuses(state, contract, ctx).map(item => ({
     originScene:item.active.originScene,
+    ...(item.active.params ? { params: structuredClone(item.active.params) } : {}),
     party: item.party, ref: item.ref, status: item.def.id, label: item.def.label, minutes: item.def.afterScene?.minutes ?? null,
     cause: item.def.cause, source: item.def.source,
   }));

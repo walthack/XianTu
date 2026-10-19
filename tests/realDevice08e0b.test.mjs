@@ -41,10 +41,9 @@ test('7) F06 真机第 18 拍：原来的 -12 全是级差（程宗扬 2 级 vs 
   assert.equal(r.preview.modifier,-GAME_NUMBERS.levels.gapOne);
   assert.deepEqual(r.preview.modifierParts,{factors:-GAME_NUMBERS.levels.gapOne,levers:0,novelty:0,cash:0,status:0,assist:0},'受保护的乐明珠不出助战效果');
   assert.ok(r.preview.odds.success+r.preview.odds.great_success>0,'不再是 0%');
-  assert.equal(r.state.statuses.pc.filter(s=>s.id==='wound.drowning').length,1,'呛水伤仍只有一层，没有升级链（败局路径待拍板）');
-  assert.equal(r.state.hpLoss?.pc,undefined,'onCrush 取代通用挂伤：连扣血也跳过（待拍板）');
+  assert.equal(r.state.statuses.pc.filter(s=>s.id==='wound.drowning').length,0,'呛水伤是编造的书内状态，已删除；旧档迁移时移除');
  }
- assert.equal(h.save.角色.属性.气血.当前,hp);
+ assert.ok(h.save.角色.属性.气血.当前<hp,'旧 onCrush（挂呛水伤、跳过扣血）已删：普通打中按通用挂伤规则只扣气血');
 });
 
 test('7) 拍数门禁：F06 真机存档继续打，超过 combat.beatLimit.max 记 LCQ-SAV-020（error），每多一拍记一次；只记录，不改判', async()=>{
@@ -98,10 +97,10 @@ test('8) 同伴与玩家同一套挂伤规则：普通打中只扣气血、不�
  for(const id of ['pc','ally'])assert.ok((s.statuses[id]||[]).some(x=>x.id==='wound.external.heavy'),id);
 });
 
-test('8) 全部合同：普通打中直接挂通用伤（外伤/内伤/外伤（重））只剩剧情指定的 F10（按拍出手的定点伤）', async()=>{
+test('8) 全部合同：普通打中直接挂通用伤（外伤/内伤/外伤（重））只剩剧情指定的 F10（按拍出手的定点伤；部位伤已并入外伤，部位写在 params.bodyPart）', async()=>{
  const general=new Set(['wound.external','wound.external.heavy','wound.internal']),left=[];
  for(const c of registry.SCENE_CONTRACTS)for(const act of c.enemyActions||[])for(const s of act.onHit?.statuses||[])if(general.has(s.status))left.push(`${c.meta.id}/${act.id}`);
- assert.deepEqual(left,['combat.f10.ghost_king_clash/bone_claw']);
+ assert.deepEqual(left,['combat.f10.ghost_king_clash/dan_chen_bite','combat.f10.ghost_king_clash/ghost_feather_sword','combat.f10.ghost_king_clash/axe_from_behind','combat.f10.ghost_king_clash/bone_claw']);
 });
 
 test('9) F03 真机预览「攻击武士」难度 17 加值 -4：17＝基础 10＋幅度 2 的加价 4（模型报“击退”＝幅度 2，头目轨道还剩 3 步，可兑现 2 步，不触发封顶）＋头目抗性 3；-4＝级差（2 级 vs 3 级）', async()=>{

@@ -78,7 +78,7 @@ test('1) 连续两拍都被重击才升外伤（重）；这一点战后不清�
 });
 
 test('2) 赢后清轻伤：真机 seed 的 F01 只留轻伤 → 收尾战后休整清掉，存档效果与记忆摘要都不再带外伤',async()=>{
- assert.deepEqual(GAME_NUMBERS.combat.woundRules.afterWin.statuses,['wound.external'],'“轻伤”＝配置 afterWin.statuses 里列的状态');
+ assert.deepEqual(GAME_NUMBERS.combat.woundRules.afterWin.statuses,['wound.external','wound.burn'],'“轻伤”＝配置 afterWin.statuses 里列的状态（2026-10-19 灼伤改通用后也算轻伤）');
  const h=harness(await f01Save(),['defend','defend','attack']);
  await playBeats(h,'我稳住防守，护住要害撑过这一拍',{seed:F01_SEED});
  const done=lastHistory(h.save);

@@ -129,7 +129,10 @@
           "target": "pc",
           "statuses": [
             {
-              "status": "wound.external.shoulder"
+              "status": "wound.external",
+              "params": {
+                "bodyPart": "肩"
+              }
             }
           ],
           "effect": "肩臂外伤，短期近战与防御下降"

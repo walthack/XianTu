@@ -17,6 +17,7 @@ import { relationshipOf, runtimeEntityName } from '../ledger/affinityIdentity';
 import { drainedRealm } from '../levelProgression';
 import npcProfiles from '../../../../mod-kit/entity-ledger/npc-profiles.json';
 import { applyActorStatus } from './actorStatus';
+import { enforceQiCap, isQiAction } from './bingGu';
 import { withEncounteredTarget } from './encounter';
 import { applyItemOnUse } from './itemUse';
 import { checkGates, drainPlan, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
@@ -297,7 +298,14 @@ function writeAffinity(save: SaveData, targetId: string, delta: number, turn: nu
 
 /** 结算入口：在场正典人物没有关系记录时先懒登记；这次没结算成（闸门不过、写入被拒、重放）就撤回。 */
 export function settleFreeAction(save: SaveData, ticket: FreeActionTicket, resolution?: JudgementResolution, deps: SettleDeps = {}): SettleResult {
-  return withEncounteredTarget(save, ticket.targetId, () => settleRegistered(save, ticket, resolution, deps), result => result.ok && !result.replay);
+  return withEncounteredTarget(save, ticket.targetId, () => {
+    const result = settleRegistered(save, ticket, resolution, deps);
+    // 冰蛊：运功 / 传功 / 双修 / 夺元结算后，当前真气超过压低的上限＝强行超上限运功，做一次寒气反噬检定（bingGu.ts，数值在 status.bingGu）。
+    if (result.ok && !result.replay && isQiAction(ticket.actionClass, ticket.variant)) {
+      result.facts.push(...enforceQiCap(save, resolution, { player: playerNameOf(save), target: ticket.targetId ? targetNameOf(save, ticket.targetId) : '' }));
+    }
+    return result;
+  }, result => result.ok && !result.replay);
 }
 
 /**

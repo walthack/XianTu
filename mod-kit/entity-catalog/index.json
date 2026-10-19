@@ -6361,6 +6361,12 @@
     },
     {
       "kind": "character",
+      "id": "lcq.character.nanhuang_aling",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
+      "aliases": []
+    },
+    {
+      "kind": "character",
       "id": "lcq.character.nanhuang_baiyi_chief",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
@@ -6390,6 +6396,12 @@
       "aliases": [
         "黑舌"
       ]
+    },
+    {
+      "kind": "character",
+      "id": "lcq.character.nanhuang_hongmiao_chief",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
+      "aliases": []
     },
     {
       "kind": "character",
@@ -6429,7 +6441,7 @@
       "id": "lcq.character.nanhuang_stonemason",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
-        "六朝石匠"
+        "石匠"
       ]
     },
     {
@@ -20549,18 +20561,6 @@
     },
     {
       "kind": "status",
-      "id": "disability.lame_leg",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "disability.one_eye",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
       "id": "dizzy",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -20579,31 +20579,7 @@
     },
     {
       "kind": "status",
-      "id": "fatigue.mental",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "fatigue.weary",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
       "id": "fracture",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "gear.blade_damaged",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "gear.blades_dulled",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
     },
@@ -20639,6 +20615,12 @@
     },
     {
       "kind": "status",
+      "id": "poison.ice_gu",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "poisoned",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -20657,43 +20639,7 @@
     },
     {
       "kind": "status",
-      "id": "restrict.arm",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "restrict.leg",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "sense.hearing",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "sense.sight",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "sense.smell",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "sense.taste",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "sense.touch",
+      "id": "sense.impaired",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
     },
@@ -20723,18 +20669,6 @@
     },
     {
       "kind": "status",
-      "id": "wound.cold",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "wound.drowning",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
       "id": "wound.exhaustion",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -20747,43 +20681,7 @@
     },
     {
       "kind": "status",
-      "id": "wound.external.back",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "wound.external.chest",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
       "id": "wound.external.heavy",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "wound.external.right_arm",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "wound.external.shoulder",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "wound.external.thigh",
-      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
-      "aliases": []
-    },
-    {
-      "kind": "status",
-      "id": "wound.external.waist",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
     },
@@ -21581,6 +21479,18 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.bingGu.backlash_fail",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.bingGu.backlash_pass",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.breakthrough.critical_failure",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22055,6 +21965,12 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.recover.rest_removed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.recover.success",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22464,6 +22380,12 @@
     {
       "kind": "text",
       "id": "free.memory.transfer_qi.no_gain",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.receipt.affinity",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

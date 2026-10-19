@@ -6,8 +6,9 @@
 import type { SaveData } from '@/types/game';
 import { contentDefinition } from '../entityCatalog';
 import { applyActorStatus, type ApplyStatusResult } from './actorStatus';
+import type { StatusParams } from '../../sceneModule/types';
 
-export interface ItemOnUse { statusId: string; doses?: number; minutes?: number }
+export interface ItemOnUse { statusId: string; doses?: number; minutes?: number; params?: StatusParams }
 export interface ItemEffect { tags: string[]; onUse: ItemOnUse[] }
 
 export function itemEffectOf(itemId: string): ItemEffect {
@@ -16,5 +17,5 @@ export function itemEffectOf(itemId: string): ItemEffect {
 }
 
 export function applyItemOnUse(save: SaveData, actorId: string, itemId: string, sourceId?: string): ApplyStatusResult[] {
-  return itemEffectOf(itemId).onUse.map(use => applyActorStatus(save, actorId, use.statusId, { sourceId: sourceId ?? itemId, doses: use.doses, ...(use.minutes !== undefined ? { minutes: use.minutes } : {}) }));
+  return itemEffectOf(itemId).onUse.map(use => applyActorStatus(save, actorId, use.statusId, { sourceId: sourceId ?? itemId, doses: use.doses, ...(use.minutes !== undefined ? { minutes: use.minutes } : {}), ...(use.params ? { params: use.params } : {}) }));
 }

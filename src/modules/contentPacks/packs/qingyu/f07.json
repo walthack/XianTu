@@ -372,11 +372,15 @@
         }
       },
       "onHit": {
-        "statuses": [
-          {
+        "statuses": []
+      },
+      "woundRule": {
+        "profile": "default",
+        "tiers": {
+          "great_success": {
             "status": "wound.burn"
           }
-        ]
+        }
       }
     },
     {

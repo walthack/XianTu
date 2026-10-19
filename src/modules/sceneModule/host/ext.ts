@@ -2,6 +2,7 @@
 import type { SaveData } from '@/types/game';
 import type { ActionPlan, ActionPreview, BeatResult, SceneState } from '../index';
 import { newInputLog, type InputLog } from '../inputPolicy';
+import { migrateSceneStateStatuses } from './statusMigration';
 
 export const SCENE_HOST_KEY = '场面模块';
 /** 旧战斗路径开关（localStorage）：'off' 退回旧路径；也可用 URL 参数 ?sceneModule=off|on 切换并记住。 */
@@ -73,7 +74,10 @@ export function emptyExt(): SceneHostExt {
 
 export function readExt(save: SaveData | null | undefined): SceneHostExt {
   const raw = (save as any)?.系统?.扩展?.[SCENE_HOST_KEY] as SceneHostExt | undefined;
-  return raw && raw.version === 1 ? raw : emptyExt();
+  if (!raw || raw.version !== 1) return emptyExt();
+  // 旧档里打到一半的场面可能还挂着已删除 / 已合并的状态 id：读出时按迁移表改挂或移除（幂等）。
+  if (raw.active?.state) migrateSceneStateStatuses(raw.active.state);
+  return raw;
 }
 
 export function writeExt(save: SaveData, ext: SceneHostExt): void {

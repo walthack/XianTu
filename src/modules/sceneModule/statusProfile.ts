@@ -6,7 +6,7 @@ import type { StatusDef, StatusEffectSpec } from './types';
 export interface StatusProfile {
   /** 精神：各状态之和，夹在 psycheRange 内（负＝受损）。 */
   psyche: number;
-  /** 五感：每一感各状态之和，夹在 senseRange 内；没受影响的感官不出现。 */
+  /** 六识（眼耳鼻舌身意，名单在 status.senses）：每一识各状态之和，夹在 senseRange 内；没受影响的感官不出现。 */
   senses: Record<string, number>;
   /** 神志：取最重的一档；`downed` 效果按最重档计。 */
   consciousness: string;
@@ -48,7 +48,7 @@ export function validateStatusDef(def: StatusDef): string[] {
     const at = `${where}.effects[${i}]`;
     if (effect.kind === 'psyche' && !inRange(effect.value, cfg.psycheRange)) errors.push(`${at}：精神值需为 ${cfg.psycheRange.min}..${cfg.psycheRange.max} 的整数`);
     if (effect.kind === 'sense') {
-      if (!cfg.senses.includes(effect.sense)) errors.push(`${at}：未知感官 ${String(effect.sense)}`);
+      if (!cfg.senses.includes(effect.sense) && effect.sense !== '$senses') errors.push(`${at}：未知感官 ${String(effect.sense)}`);
       if (!inRange(effect.value, cfg.senseRange)) errors.push(`${at}：五感值需为 ${cfg.senseRange.min}..${cfg.senseRange.max} 的整数`);
     }
     if (effect.kind === 'consciousness' && !cfg.consciousnessLevels.includes(effect.level)) errors.push(`${at}：未知神志档 ${String(effect.level)}`);

@@ -1,274 +1,22 @@
 [
   {
-    "id": "wound.external.shoulder",
-    "label": "肩伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "provisional": true,
-    "source": "肩头被斧锋带到",
-    "upgradesTo": "wound.external.heavy",
-    "afterScene": {
-      "minutes": 10080
-    },
-    "effects": [
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -1
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "defense",
-        "value": -1
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "肩部外伤，伤口在混战里裂开"
-      }
-    ],
-    "remove": [
-      {
-        "kind": "time",
-        "minutes": 10080
-      },
-      {
-        "kind": "rest"
-      }
-    ]
-  },
-  {
-    "id": "wound.external.back",
-    "label": "背伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "provisional": true,
-    "source": "背后被铁斧拍中或撕开",
-    "upgradesTo": "wound.external.heavy",
-    "afterScene": {
-      "minutes": 10080
-    },
-    "effects": [
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -1
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "defense",
-        "value": -1
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "背部外伤，止得住血但难愈合"
-      }
-    ],
-    "remove": [
-      {
-        "kind": "time",
-        "minutes": 10080
-      },
-      {
-        "kind": "rest"
-      }
-    ]
-  },
-  {
-    "id": "wound.external.thigh",
-    "label": "腿伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "provisional": true,
-    "source": "大腿被咬伤",
-    "upgradesTo": "wound.external.heavy",
-    "afterScene": {
-      "minutes": 10080
-    },
-    "effects": [
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -1
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "defense",
-        "value": -1
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "大腿咬伤"
-      }
-    ],
-    "remove": [
-      {
-        "kind": "time",
-        "minutes": 10080
-      },
-      {
-        "kind": "rest"
-      }
-    ]
-  },
-  {
-    "id": "wound.external.right_arm",
-    "label": "右臂伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "provisional": true,
-    "source": "右臂被剑刺穿衣袖，流血",
-    "upgradesTo": "wound.external.heavy",
-    "afterScene": {
-      "minutes": 10080
-    },
-    "effects": [
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -1
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "defense",
-        "value": -1
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "右臂剑伤，流血"
-      }
-    ],
-    "remove": [
-      {
-        "kind": "time",
-        "minutes": 10080
-      },
-      {
-        "kind": "rest"
-      }
-    ]
-  },
-  {
-    "id": "gear.blade_damaged",
-    "label": "刀损",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "provisional": true,
-    "source": "长刀被铁斧砍坏，没办法再用",
-    "afterScene": {
-      "minutes": null
-    },
-    "effects": [
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "长刀被砍坏了好几处，已经没办法再用"
-      }
-    ],
-    "remove": [
-      {
-        "kind": "item",
-        "ref": "repair"
-      }
-    ]
-  },
-  {
-    "id": "gear.blades_dulled",
-    "label": "双刀卷刃",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "provisional": true,
-    "source": "两把钢刀都卷了刃，只能摆样子",
-    "afterScene": {
-      "minutes": null
-    },
-    "effects": [
-      {
-        "kind": "lockLever",
-        "elements": [
-          "twin_sabers"
-        ]
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "两把钢刀都卷了刃，只能摆样子"
-      }
-    ],
-    "remove": [
-      {
-        "kind": "item",
-        "ref": "repair"
-      }
-    ]
-  },
-  {
-    "id": "wound.external.waist",
-    "label": "腰伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "F05 第63章",
-    "effects": [
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "腰部受伤，转身和发力受限"
-      }
-    ],
-    "afterScene": {
-      "minutes": null
-    },
-    "remove": [
-      {
-        "kind": "story",
-        "flag": "scene.status.wound.external.waist.resolved"
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "wound.external.chest",
-    "label": "胸伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "F04 第57章",
-    "effects": [
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "胸口疼痛，呼吸和出力受影响"
-      }
-    ],
-    "afterScene": {
-      "minutes": null
-    },
-    "remove": [
-      {
-        "kind": "story",
-        "flag": "scene.status.wound.external.chest.resolved"
-      }
-    ],
-    "provisional": true
-  },
-  {
     "id": "wound.burn",
     "label": "灼伤",
-    "tier": "book",
+    "tier": "general",
     "cause": "combat",
     "kind": "debuff",
-    "source": "F07 第80章；F11 第99章",
+    "source": "火焰、热油、雷火或炽热劲力灼伤皮肉。原著出处：F07 第80章；F11 第99章。",
     "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -1
+      },
       {
         "kind": "note",
         "field": "text",
@@ -276,65 +24,28 @@
       }
     ],
     "afterScene": {
-      "minutes": null
+      "minutes": 10080
     },
     "remove": [
       {
-        "kind": "story",
-        "flag": "scene.status.wound.burn.resolved"
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "wound.drowning",
-    "label": "呛水伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "F06 第74章",
-    "effects": [
+        "kind": "rest"
+      },
       {
-        "kind": "note",
-        "field": "text",
-        "text": "呛水后呼吸不畅"
-      }
-    ],
-    "afterScene": {
-      "minutes": null
-    },
-    "remove": [
+        "kind": "item",
+        "ref": "heal"
+      },
       {
-        "kind": "story",
-        "flag": "scene.status.wound.drowning.resolved"
+        "kind": "time",
+        "minutes": 10080
       }
     ],
-    "provisional": true
-  },
-  {
-    "id": "wound.cold",
-    "label": "阴寒余伤",
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "F09 第84章；F14 第113–115章",
-    "effects": [
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "阴寒入体，疲倦与寒战"
-      }
+    "aliases": [
+      "烧伤",
+      "烫伤",
+      "火伤",
+      "灼伤未愈"
     ],
-    "afterScene": {
-      "minutes": null
-    },
-    "remove": [
-      {
-        "kind": "story",
-        "flag": "scene.status.wound.cold.resolved"
-      }
-    ],
-    "provisional": true
+    "freeText": "narrative"
   },
   {
     "id": "wound.exhaustion",
@@ -426,8 +137,21 @@
     "tier": "book",
     "cause": "combat",
     "kind": "debuff",
-    "source": "F12 第102–103章",
+    "source": "只由噬魂类特殊攻击挂上（以对方鲜血或魂魄为媒介的噬魂巫术）。原著依据：第102章段92–100、第103章段3–5，小紫（liuchao.character.xiao_zi）用主角的血施噬魂巫术，主角咬破舌尖挣脱（见 mod-kit/source-documents/31-南荒全部固定战斗合同草案.md 第459、472行）。",
     "effects": [
+      {
+        "kind": "consciousness",
+        "level": "dazed"
+      },
+      {
+        "kind": "psyche",
+        "value": -1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -1
+      },
       {
         "kind": "note",
         "field": "text",
@@ -435,15 +159,21 @@
       }
     ],
     "afterScene": {
-      "minutes": null
+      "minutes": 1440
     },
     "remove": [
       {
-        "kind": "story",
-        "flag": "scene.status.wound.soul_aftershock.resolved"
+        "kind": "rest"
+      },
+      {
+        "kind": "time",
+        "minutes": 1440
       }
     ],
-    "provisional": true
+    "aliases": [
+      "噬魂反噬",
+      "噬魂余悸"
+    ]
   },
   {
     "id": "wound.fright",
@@ -603,12 +333,15 @@
       "神魂不稳",
       "魂魄受创",
       "魂魄不稳",
-      "神魂受损"
+      "神魂受损",
+      "心神耗竭",
+      "心力交瘁",
+      "心神疲惫"
     ],
     "tier": "general",
     "cause": "combat",
     "kind": "debuff",
-    "source": "神魂攻击、摄魂噬魂、离魂或强行催动伤神秘术。",
+    "source": "神魂攻击、摄魂噬魂、离魂或强行催动伤神秘术；长时间紧绷、劳神或强行催动神识导致的心神耗竭也并入此条。",
     "effects": [
       {
         "kind": "rollModifier",
@@ -837,6 +570,51 @@
     "upgradesTo": "poison.cold"
   },
   {
+    "id": "poison.ice_gu",
+    "label": "冰蛊",
+    "aliases": [
+      "冰蛊毒性",
+      "冰蛊发作",
+      "体内冰蛊"
+    ],
+    "tier": "book",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "苏妲己在冰镇酸梅汤里给程宗扬种下冰蛊，以此逼他南行（lcq.event.ice_gu_coercion）；只由剧情解除：殇侯解蛊（lcq.event.shanghou_cures_ice_gu，或殇侯读白纸信那一步 event.s05b_shanghou_reads_letter.ice_gu_cured）。第 05、05b 两段剧本整段都在中蛊期（换段时旗标会重置，按剧本段补挂）。",
+    "storyApply": {
+      "flags": [
+        "event.ice_gu_coercion.done"
+      ],
+      "stages": [
+        "lcq.stage_05",
+        "lcq.stage_05b"
+      ]
+    },
+    "effects": [
+      {
+        "kind": "qiCap"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "体内冰蛊压着真气，运功时一股阴寒从丹田升起"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    },
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "event.shanghou_cures_ice_gu.done"
+      },
+      {
+        "kind": "story",
+        "flag": "event.s05b_shanghou_reads_letter.ice_gu_cured"
+      }
+    ]
+  },
+  {
     "id": "wound.external",
     "label": "外伤",
     "aliases": [
@@ -844,12 +622,18 @@
       "刀伤",
       "剑伤",
       "割伤",
-      "皮外伤"
+      "皮外伤",
+      "肩伤",
+      "背伤",
+      "腿伤",
+      "右臂伤",
+      "腰伤",
+      "胸伤"
     ],
     "tier": "general",
     "cause": "combat",
     "kind": "debuff",
-    "source": "刀剑砍刺或其他外力破开皮肉。砍伤、刀伤、剑伤都并入这一条，不另立 id。",
+    "source": "刀剑砍刺、撕咬或其他外力破开皮肉。砍伤、刀伤、剑伤与肩、背、腿、臂、腰、胸各部位的外伤都并入这一条，不另立 id；部位由合同挂伤时写在参数 params.bodyPart 里。",
     "effects": [
       {
         "kind": "rollModifier",
@@ -879,7 +663,10 @@
       "minutes": 10080
     },
     "upgradesTo": "wound.external.heavy",
-    "freeText": "narrative"
+    "freeText": "narrative",
+    "params": {
+      "bodyPart": "受伤部位（可选，合同挂伤时带入，只作描述，不改数值）"
+    }
   },
   {
     "id": "wound.external.heavy",
@@ -1263,173 +1050,31 @@
     "provisional": true
   },
   {
-    "id": "sense.sight",
-    "label": "目力受损",
+    "id": "sense.impaired",
+    "label": "六识受损",
     "aliases": [
+      "六识禁绝",
+      "五感受损",
+      "目力受损",
       "视物模糊",
-      "目眩不清"
-    ],
-    "tier": "general",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。烟、毒、强光或头部受击后视力下降。",
-    "effects": [
-      {
-        "kind": "sense",
-        "sense": "sight",
-        "value": -2
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -1
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "看不清远处与细处"
-      }
-    ],
-    "afterScene": {
-      "minutes": 720
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "time",
-        "minutes": 720
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "sense.hearing",
-    "label": "耳力受损",
-    "aliases": [
+      "耳力受损",
       "耳鸣",
-      "听觉受损"
-    ],
-    "tier": "general",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。巨响、内伤或毒物后听力下降。",
-    "effects": [
-      {
-        "kind": "sense",
-        "sense": "hearing",
-        "value": -2
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "听不清人声与脚步"
-      }
-    ],
-    "afterScene": {
-      "minutes": 720
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "time",
-        "minutes": 720
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "sense.smell",
-    "label": "嗅觉受损",
-    "aliases": [
-      "嗅觉失灵",
-      "鼻塞不闻"
-    ],
-    "tier": "general",
-    "cause": "environment",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。毒烟、风寒或头部受击后嗅觉下降。",
-    "effects": [
-      {
-        "kind": "sense",
-        "sense": "smell",
-        "value": -2
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "闻不出气味，辨不了烟毒与药香"
-      }
-    ],
-    "afterScene": {
-      "minutes": 720
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "time",
-        "minutes": 720
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "sense.taste",
-    "label": "味觉受损",
-    "aliases": [
-      "味觉失灵",
-      "食不知味"
-    ],
-    "tier": "general",
-    "cause": "item",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。毒物、药物或内伤后味觉下降。",
-    "effects": [
-      {
-        "kind": "sense",
-        "sense": "taste",
-        "value": -2
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "尝不出饮食里的异味"
-      }
-    ],
-    "afterScene": {
-      "minutes": 720
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "time",
-        "minutes": 720
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "sense.touch",
-    "label": "触觉迟钝",
-    "aliases": [
-      "触觉麻木",
+      "嗅觉受损",
+      "味觉受损",
+      "触觉迟钝",
       "肌肤麻木"
     ],
     "tier": "general",
-    "cause": "item",
+    "cause": "combat",
     "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。麻药、寒毒或冻伤后触觉下降。",
+    "source": "封识手法、禁绝丹药、毒烟、强光、巨响、麻药或伤及感官后，六识（眼耳鼻舌身意）中某几识受损。挂上时由来源在参数 params.senses 里写明是哪几识（取值见数值配置 status.senses）。",
+    "params": {
+      "senses": "受损的识（数组，取值见 status.senses）；不写则只有行动减值"
+    },
     "effects": [
       {
         "kind": "sense",
-        "sense": "touch",
+        "sense": "$senses",
         "value": -2
       },
       {
@@ -1440,7 +1085,7 @@
       {
         "kind": "note",
         "field": "text",
-        "text": "手上没有轻重，觉不出冷热痛痒"
+        "text": "六识受损，看、听、闻、尝、触或心念有一处不灵"
       }
     ],
     "afterScene": {
@@ -1454,277 +1099,6 @@
         "kind": "time",
         "minutes": 720
       }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "fatigue.weary",
-    "label": "疲惫",
-    "aliases": [
-      "精疲力尽",
-      "疲惫不堪"
-    ],
-    "tier": "general",
-    "cause": "story",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。长途奔波、通宵或久战后体力见底。",
-    "effects": [
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -1
-      },
-      {
-        "kind": "psyche",
-        "value": -1
-      },
-      {
-        "kind": "restrict",
-        "actions": [
-          "run"
-        ]
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "筋疲力尽，跑不动"
-      }
-    ],
-    "afterScene": {
-      "minutes": 480
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "time",
-        "minutes": 480
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "fatigue.mental",
-    "label": "心神耗竭",
-    "aliases": [
-      "心力交瘁",
-      "心神疲惫"
-    ],
-    "tier": "general",
-    "cause": "story",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。长时间紧绷、劳神或强行催动神识后心神疲惫。",
-    "effects": [
-      {
-        "kind": "psyche",
-        "value": -2
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -1
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "心神涣散，难以久思"
-      }
-    ],
-    "afterScene": {
-      "minutes": 480
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "time",
-        "minutes": 480
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "restrict.arm",
-    "label": "单臂乏力",
-    "aliases": [
-      "手臂无力",
-      "一臂不能用力"
-    ],
-    "tier": "general",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。臂膀受创，持握与出手受限；行动细分示例。",
-    "effects": [
-      {
-        "kind": "restrict",
-        "actions": [
-          "grip",
-          "attack"
-        ]
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "action",
-        "value": -2
-      },
-      {
-        "kind": "appearance",
-        "tag": "手臂缠伤"
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "这条手臂握不紧，使不上力"
-      }
-    ],
-    "afterScene": {
-      "minutes": 10080
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "item",
-        "ref": "heal"
-      },
-      {
-        "kind": "time",
-        "minutes": 10080
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "restrict.leg",
-    "label": "腿脚难行",
-    "aliases": [
-      "腿脚不便",
-      "难以奔跑"
-    ],
-    "tier": "general",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。腿脚受创，奔跑受限；行动细分示例。",
-    "effects": [
-      {
-        "kind": "restrict",
-        "actions": [
-          "run"
-        ]
-      },
-      {
-        "kind": "rollModifier",
-        "scope": "defense",
-        "value": -1
-      },
-      {
-        "kind": "appearance",
-        "tag": "行走不便"
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "腿脚不便，跑不起来"
-      }
-    ],
-    "afterScene": {
-      "minutes": 10080
-    },
-    "remove": [
-      {
-        "kind": "rest"
-      },
-      {
-        "kind": "item",
-        "ref": "heal"
-      },
-      {
-        "kind": "time",
-        "minutes": 10080
-      }
-    ],
-    "provisional": true
-  },
-  {
-    "id": "disability.one_eye",
-    "label": "一目失明",
-    "aliases": [
-      "独眼",
-      "一眼失明"
-    ],
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。永久伤残示例：存档里单独存放，不随时间、休整、药物消退，只能由剧情旗标解除。",
-    "effects": [
-      {
-        "kind": "sense",
-        "sense": "sight",
-        "value": -2
-      },
-      {
-        "kind": "appearance",
-        "tag": "一目失明"
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "一只眼已不能视物"
-      }
-    ],
-    "afterScene": {
-      "minutes": null
-    },
-    "remove": [
-      {
-        "kind": "story",
-        "flag": "scene.status.disability.one_eye.resolved"
-      }
-    ],
-    "provisional": true,
-    "permanent": true
-  },
-  {
-    "id": "disability.lame_leg",
-    "label": "跛足",
-    "aliases": [
-      "腿瘸",
-      "落下跛疾"
-    ],
-    "tier": "book",
-    "cause": "combat",
-    "kind": "debuff",
-    "source": "状态效果扩展（B 步）：分项效果为实施时的提议，数值待真机后调，未经用户裁定。永久伤残示例：存档里单独存放，不随时间、休整、药物消退，只能由剧情旗标解除。",
-    "effects": [
-      {
-        "kind": "restrict",
-        "actions": [
-          "run"
-        ]
-      },
-      {
-        "kind": "appearance",
-        "tag": "跛行"
-      },
-      {
-        "kind": "note",
-        "field": "text",
-        "text": "落下了跛疾，奔跑不得"
-      }
-    ],
-    "afterScene": {
-      "minutes": null
-    },
-    "remove": [
-      {
-        "kind": "story",
-        "flag": "scene.status.disability.lame_leg.resolved"
-      }
-    ],
-    "provisional": true,
-    "permanent": true
+    ]
   }
 ]

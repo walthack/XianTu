@@ -3206,19 +3206,16 @@
         ],
         "onUse": [
           {
-            "statusId": "sense.sight"
-          },
-          {
-            "statusId": "sense.hearing"
-          },
-          {
-            "statusId": "sense.smell"
-          },
-          {
-            "statusId": "sense.taste"
-          },
-          {
-            "statusId": "sense.touch"
+            "statusId": "sense.impaired",
+            "params": {
+              "senses": [
+                "sight",
+                "hearing",
+                "smell",
+                "taste",
+                "touch"
+              ]
+            }
           },
           {
             "statusId": "mind.confused"

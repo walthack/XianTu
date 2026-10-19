@@ -665,7 +665,7 @@
                   3
                 ],
                 "onHit": [
-                  "wound.external.right_arm"
+                  "wound.external"
                 ]
               }
             ]
@@ -761,7 +761,7 @@
                   2
                 ],
                 "onHit": [
-                  "wound.external.thigh"
+                  "wound.external"
                 ]
               },
               {
@@ -771,7 +771,7 @@
                   5
                 ],
                 "onHit": [
-                  "wound.external.back"
+                  "wound.external"
                 ]
               }
             ]
@@ -849,7 +849,6 @@
                 "dc": 15,
                 "fromBeat": 4,
                 "onHit": [
-                  "gear.blades_dulled",
                   "wound.external"
                 ]
               }

@@ -4,7 +4,14 @@
 import { CONTENT_PACKS } from '../contentPacks';
 import bookCatalog from './contracts/statuses.json';
 import builtinStatuses from './contracts/statuses.builtin.json';
-import type { ActiveStatus, Contract, SceneContext, SceneState, StatusApplyRef, StatusDef, StatusEffectSpec } from './types';
+import type { ActiveStatus, Contract, SceneContext, SceneState, StatusApplyRef, StatusDef, StatusEffectSpec, StatusParams } from './types';
+
+/** 挂状态时带入的参数展开效果占位：sense 写 "$senses" 的按 params.senses 逐识展开；没给参数就去掉这一项（其余效果照常）。 */
+export function resolveEffects(effects: StatusEffectSpec[], params?: StatusParams): StatusEffectSpec[] {
+  return effects.flatMap(effect => effect.kind === 'sense' && effect.sense === '$senses'
+    ? (params?.senses || []).map(sense => ({ ...effect, sense }))
+    : [effect]);
+}
 
 /** 内置的临时通用状态：只为让模块和测试能独立运行，id 沿用剧情侧文档的写法。数值在 contracts/statuses.builtin.json。 */
 export const BUILTIN_STATUSES = builtinStatuses as unknown as StatusDef[];
@@ -42,7 +49,7 @@ export function effectsOf(state: SceneState, contract: Contract, ctx: Pick<Scene
   const out: StatusEffectSpec[] = [];
   for (const active of activeStatuses(state, party)) {
     const def = resolveStatusDef(active.id, contract, ctx);
-    if (def) out.push(...def.effects);
+    if (def) out.push(...resolveEffects(def.effects, active.params));
   }
   return out;
 }
@@ -101,17 +108,23 @@ export function applyStatus(
   const remove = (item: ActiveStatus): void => { list.splice(list.indexOf(item), 1); };
   let def = base;
   let op: StatusEvent['op'] = 'apply';
+  let previousParams: StatusParams | undefined;
   const present = forwardChain(contract, ctx, base.id).map(id => list.find(item => item.id === id)).filter((item): item is ActiveStatus => !!item);
   if (present.length) {
     const latest = present[present.length - 1];
     const latestDef = resolveStatusDef(latest.id, contract, ctx) || base;
     const next = latestDef.upgradesTo ? resolveStatusDef(latestDef.upgradesTo, contract, ctx) : undefined;
+    previousParams = latest.params;
+    // 部位参数：伤在还没伤过的部位＝又添一处伤，并进同一条（部位合并），不算旧伤加重；同一部位或不指明部位才沿升级链加重。
+    const parts = (p?: StatusParams): string[] => (p?.bodyPart || '').split('、').filter(Boolean);
+    const elsewhere = parts(apply.params).some(part => !parts(latest.params).includes(part));
     remove(latest);
-    def = next || latestDef;
-    op = next ? 'upgrade' : 'refresh';
+    def = elsewhere ? latestDef : next || latestDef;
+    op = next && !elsewhere ? 'upgrade' : 'refresh';
   } else {
     const earlier = list.find(item => forwardChain(contract, ctx, item.id).includes(base.id));
     if (earlier) {
+      previousParams = earlier.params;
       remove(earlier);
       op = 'upgrade';
     }
@@ -131,11 +144,24 @@ export function applyStatus(
     sourceId: meta.sourceId,
   };
   if (active.severity === undefined) delete active.severity;
+  const params = mergeParams(previousParams, apply.params);
+  if (params) active.params = params;
   list.push(active);
   return [{
     party, ref: refOf(contract, party), status: def.id, label: def.label, op, severity: active.severity,
     cause: meta.cause, sourceId: meta.sourceId, beat: state.beat, expiresBeat: active.expiresBeat, persists: !!def.afterScene,
   }];
+}
+
+/** 同一条升级链上前后两次挂伤的参数合并：部位并列（去重）、六识取并集。 */
+export function mergeParams(a?: StatusParams, b?: StatusParams): StatusParams | undefined {
+  if (!a && !b) return undefined;
+  const out: StatusParams = {};
+  const parts = [...new Set([...(a?.bodyPart || '').split('、'), ...(b?.bodyPart || '').split('、')].filter(Boolean))];
+  if (parts.length) out.bodyPart = parts.join('、');
+  const senses = [...new Set([...(a?.senses || []), ...(b?.senses || [])])];
+  if (senses.length) out.senses = senses;
+  return Object.keys(out).length ? out : undefined;
 }
 
 /** 一拍结束：到期的场内状态移除。 */

@@ -223,11 +223,7 @@
         "dc": 11
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.cold"
-          }
-        ],
+        "statuses": [],
         "trackShifts": [
           {
             "party": "yang",
@@ -235,7 +231,8 @@
             "steps": 1
           }
         ]
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {
@@ -265,16 +262,6 @@
       "rewards": [],
       "text": "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。",
       "fixedCosts": [
-        {
-          "id": "cold",
-          "target": "pc",
-          "effect": "wound.cold",
-          "statuses": [
-            {
-              "status": "wound.cold"
-            }
-          ]
-        },
         {
           "id": "fright",
           "target": "suli",

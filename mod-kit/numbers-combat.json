@@ -97,7 +97,8 @@
       "afterWin": {
         "clearLight": true,
         "statuses": [
-          "wound.external"
+          "wound.external",
+          "wound.burn"
         ],
         "sides": [
           "player_side"

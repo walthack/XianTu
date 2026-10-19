@@ -2,6 +2,7 @@ import {GAME_NUMBERS,boundedStat,boundedLuck,resolveNumberRef} from '../modules/
 import { equippedAxe } from '@/modules/sceneModule/host/loot';
 import { stripReportedSpeech } from '@/modules/sceneModule/inputPolicy';
 import {
+  CULTIVATION_RECOVERY_KEYWORDS,
   createJudgementProposal,
   environmentFactorFor,
   getJudgementState,
@@ -56,14 +57,18 @@ const STAT_WEIGHTS = GAME_NUMBERS.weights as Record<JudgementKind, Array<[string
 
 function numeric(value: unknown): number { const n = Number(value); return Number.isFinite(n) ? n : 0; }
 
-export function stateFactors(kind: JudgementKind, saveData: any) {
+/**
+ * recovery＝这次判定本身是疗伤 / 调息（回气血的自修）：不吃气血过低的“重伤”减值，否则越伤越难治。
+ * 只免这一条；六司、技能、环境照常。
+ */
+export function stateFactors(kind: JudgementKind, saveData: any, options: { recovery?: boolean } = {}) {
   const innate = saveData?.角色?.身份?.先天六司 || {};
   const acquired = saveData?.角色?.身份?.后天六司 || {};
   const weighted = STAT_WEIGHTS[kind].reduce((sum, [key, weight]) => sum + (numeric(innate[key]) + numeric(acquired[key])) * weight, 0);
   const factors: any[] = [{ label: '六司', value: boundedStat(weighted), source: 'attribute' }];
   const hp = saveData?.角色?.属性?.气血;
   const injury = judgementNumbers().injury;
-  if (numeric(hp?.上限) > 0 && numeric(hp?.当前) / numeric(hp?.上限) < injury.hpRatioBelow) factors.push({ label: '重伤', value: injury.penalty, source: 'condition' });
+  if (!options.recovery && numeric(hp?.上限) > 0 && numeric(hp?.当前) / numeric(hp?.上限) < injury.hpRatioBelow) factors.push({ label: '重伤', value: injury.penalty, source: 'condition' });
   return factors;
 }
 
@@ -161,7 +166,7 @@ export function buildLocalJudgementPreflight(
     whyNow: '该行动存在可见风险或资源代价，需在叙事前确认。',
     difficulty: difficultyFor(kind),
     factors: [
-      ...stateFactors(kind, saveData),
+      ...stateFactors(kind, saveData, { recovery: kind === 'cultivate' && CULTIVATION_RECOVERY_KEYWORDS.test(normalized) }),
       ...scenarioSkillFactors(kind, normalized, saveData),
       ...explicitTalentFactors(kind, normalized, saveData),
       { label: '幸运', value: boundedLuck(Number(saveData?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center)+Number(saveData?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
@@ -267,7 +272,7 @@ export function buildEventActionJudgementProposal(
     whyNow: spec.whyNow || '此行动由事件合同签发一次本地判定。',
     difficulty: { band: spec.difficulty, value: spec.difficultyValue },
     factors: [
-      ...stateFactors(kind, saveData),
+      ...stateFactors(kind, saveData, { recovery: kind === 'cultivate' && spec.applyCultivationRecovery === true }),
       ...(equippedAxe(saveData) && kind==='escape' ? [{label:'双手兵器闪避',value:-1,source:'condition' as const}] : []),
       ...(equippedAxe(saveData) && kind!=='escape' && /砸|破障|破门|劈开障|击碎/.test(normalized) ? [{label:'砸击破障',value:1,source:'condition' as const}] : []),
 

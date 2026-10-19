@@ -1,5 +1,5 @@
 {
-  "version": "c376ba9823f390e9",
+  "version": "46507b265fd22d57",
   "contracts": [
     {
       "meta": {
@@ -1632,7 +1632,10 @@
           },
           "consequence": {
             "kind": "status",
-            "status": "wound.external.shoulder"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "肩"
+            }
           },
           "text": "祁远肩头被斧锋带到"
         },
@@ -1643,7 +1646,10 @@
           },
           "consequence": {
             "kind": "status",
-            "status": "wound.external.back"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "背"
+            }
           },
           "text": "易彪背上被铁斧拍了一记"
         }
@@ -3089,7 +3095,10 @@
           "onHit": {
             "statuses": [
               {
-                "status": "wound.external.thigh"
+                "status": "wound.external",
+                "params": {
+                  "bodyPart": "大腿"
+                }
               }
             ],
             "text": "大腿被她咬伤"
@@ -3114,7 +3123,10 @@
           "onHit": {
             "statuses": [
               {
-                "status": "wound.external.right_arm"
+                "status": "wound.external",
+                "params": {
+                  "bodyPart": "右臂"
+                }
               }
             ],
             "text": "剑尖刺穿了你右臂的衣袖，血流了下来"
@@ -3139,7 +3151,10 @@
           "onHit": {
             "statuses": [
               {
-                "status": "wound.external.back"
+                "status": "wound.external",
+                "params": {
+                  "bodyPart": "背"
+                }
               }
             ],
             "text": "背后被斧刃撕开，伤口没来得及包扎"
@@ -3162,13 +3177,10 @@
           "onHit": {
             "statuses": [
               {
-                "status": "gear.blades_dulled"
-              },
-              {
                 "status": "wound.external"
               }
             ],
-            "text": "骨爪击中你，伤势加重，刀刃也受损"
+            "text": "骨爪击中你，伤势加重"
           },
           "onBlocked": {
             "text": "你躲开了骨爪"
@@ -3181,7 +3193,10 @@
           "target": "actor",
           "consequence": {
             "kind": "status",
-            "status": "wound.external.thigh"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "大腿"
+            }
           },
           "text": "你被逼得露了破绽，大腿挨了一口"
         },
@@ -3190,7 +3205,10 @@
           "target": "actor",
           "consequence": {
             "kind": "status",
-            "status": "wound.external.right_arm"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "右臂"
+            }
           },
           "text": "你右臂挨了一下，流了血"
         },
@@ -3199,18 +3217,12 @@
           "target": "actor",
           "consequence": {
             "kind": "status",
-            "status": "wound.external.back"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "背"
+            }
           },
           "text": "你背后被撕开一道口子"
-        },
-        {
-          "id": "blades",
-          "target": "actor",
-          "consequence": {
-            "kind": "status",
-            "status": "gear.blades_dulled"
-          },
-          "text": "钢刀磕在硬处，卷了刃"
         }
       ],
       "defeat": {
@@ -3349,40 +3361,13 @@
               "target": "pc",
               "statuses": [
                 {
-                  "status": "wound.external.thigh"
+                  "status": "wound.external",
+                  "params": {
+                    "bodyPart": "大腿、右臂、背"
+                  }
                 }
               ],
-              "effect": "腿伤，移动与防御短期下降"
-            },
-            {
-              "id": "arm",
-              "target": "pc",
-              "statuses": [
-                {
-                  "status": "wound.external.right_arm"
-                }
-              ],
-              "effect": "右臂伤，近战与防御短期下降"
-            },
-            {
-              "id": "back",
-              "target": "pc",
-              "statuses": [
-                {
-                  "status": "wound.external.back"
-                }
-              ],
-              "effect": "背伤，动作与防御短期下降"
-            },
-            {
-              "id": "blades",
-              "target": "pc",
-              "statuses": [
-                {
-                  "status": "gear.blades_dulled"
-                }
-              ],
-              "effect": "双刀卷刃，不能有效进攻，须修复"
+              "effect": "腿伤，移动与防御短期下降；右臂伤，近战与防御短期下降；背伤，动作与防御短期下降"
             }
           ],
           "flags": {
@@ -3448,11 +3433,6 @@
               "kind": "not",
               "cond": {
                 "any": [
-                  {
-                    "kind": "statusPresent",
-                    "party": "pc",
-                    "status": "wound.external.back"
-                  },
                   {
                     "kind": "statusPresent",
                     "party": "pc",
@@ -4151,7 +4131,10 @@
               "target": "pc",
               "statuses": [
                 {
-                  "status": "wound.external.shoulder"
+                  "status": "wound.external",
+                  "params": {
+                    "bodyPart": "肩"
+                  }
                 }
               ],
               "effect": "肩臂外伤，短期近战与防御下降"
@@ -4416,7 +4399,10 @@
             "effect": "用背硬接龙神一爪，喷血坠地",
             "statuses": [
               {
-                "status": "wound.external.back"
+                "status": "wound.external",
+                "params": {
+                  "bodyPart": "背"
+                }
               }
             ],
             "anchorText": "第114章段15–17；废功后果到第118章段134才公开"
@@ -4636,14 +4622,6 @@
           "onHit": {
             "statuses": []
           },
-          "onCrush": {
-            "margin": 5,
-            "statuses": [
-              {
-                "status": "wound.drowning"
-              }
-            ]
-          },
           "woundRule": "default"
         }
       ],
@@ -4700,16 +4678,6 @@
               "statuses": [
                 {
                   "status": "wound.external"
-                }
-              ]
-            },
-            {
-              "id": "lung",
-              "target": "pc",
-              "effect": "wound.drowning",
-              "statuses": [
-                {
-                  "status": "wound.drowning"
                 }
               ]
             },
@@ -5175,11 +5143,15 @@
             }
           },
           "onHit": {
-            "statuses": [
-              {
+            "statuses": []
+          },
+          "woundRule": {
+            "profile": "default",
+            "tiers": {
+              "great_success": {
                 "status": "wound.burn"
               }
-            ]
+            }
           }
         },
         {
@@ -5602,10 +5574,13 @@
             {
               "id": "arm",
               "target": "xiaowei",
-              "effect": "wound.external.right_arm",
+              "effect": "wound.external",
               "statuses": [
                 {
-                  "status": "wound.external.right_arm"
+                  "status": "wound.external",
+                  "params": {
+                    "bodyPart": "右臂"
+                  }
                 }
               ]
             },
@@ -5914,11 +5889,7 @@
             "dc": 11
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.cold"
-              }
-            ],
+            "statuses": [],
             "trackShifts": [
               {
                 "party": "yang",
@@ -5926,7 +5897,8 @@
                 "steps": 1
               }
             ]
-          }
+          },
+          "woundRule": "default"
         }
       ],
       "defeat": {
@@ -5956,16 +5928,6 @@
           "rewards": [],
           "text": "你阴寒入体，苏荔惊惧；阴煞仍只退不灭，一阳突破已经发生。",
           "fixedCosts": [
-            {
-              "id": "cold",
-              "target": "pc",
-              "effect": "wound.cold",
-              "statuses": [
-                {
-                  "status": "wound.cold"
-                }
-              ]
-            },
             {
               "id": "fright",
               "target": "suli",
@@ -12609,6 +12571,8 @@
     "free.fact.gate.dropped": "{player}同时做的另一个动作没能落实，没有成事。",
     "free.fact.gate.not_ready": "{player}眼下境界进度还不到这一步，这件事没能做成。",
     "free.why.self": "我理解为：{player}自行{label}。若理解有误，请撤回后换个说法。",
+    "free.fact.bingGu.backlash_pass": "{player}强行催动超出冰蛊压制的真气，一股寒气直冲经脉，硬生生扛了下来，真气被压回原处。",
+    "free.fact.bingGu.backlash_fail": "{player}强行催动超出冰蛊压制的真气，寒气反噬，经脉一阵冰冷刺痛，气血受损、真气走岔。",
     "free.fact.train.perfect": "{player}修炼如有神助，功力大有精进。",
     "free.fact.train.great_success": "{player}修炼进境顺畅，功力有明显精进。",
     "free.fact.train.success": "{player}静心修炼，功力略有精进。",

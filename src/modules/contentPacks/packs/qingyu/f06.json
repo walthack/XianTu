@@ -206,14 +206,6 @@
       "onHit": {
         "statuses": []
       },
-      "onCrush": {
-        "margin": 5,
-        "statuses": [
-          {
-            "status": "wound.drowning"
-          }
-        ]
-      },
       "woundRule": "default"
     }
   ],
@@ -270,16 +262,6 @@
           "statuses": [
             {
               "status": "wound.external"
-            }
-          ]
-        },
-        {
-          "id": "lung",
-          "target": "pc",
-          "effect": "wound.drowning",
-          "statuses": [
-            {
-              "status": "wound.drowning"
             }
           ]
         },

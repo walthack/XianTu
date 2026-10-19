@@ -31,7 +31,8 @@
       "hearing",
       "smell",
       "taste",
-      "touch"
+      "touch",
+      "mind"
     ],
     "senseRange": {
       "min": -3,
@@ -80,6 +81,16 @@
       "maxDoses": 3
     },
     "permanentMinutesThreshold": 99999,
+    "bingGu": {
+      "note": "冰蛊（状态 poison.ice_gu，效果 qiCap）：生效时玩家可用真气（灵气）上限 = 灵气.上限 × qiCapRatio；qiActions 里的自由行动（运功、传功、双修、夺元）按此上限算可用真气。施行时当前真气已超过上限＝强行超上限运功，用这次判定的骰面做一次寒气反噬检定：骰面 < backlash.dc 为失败，扣 气血上限 × hpLossRatio（不低于 1）并挂 failStatus；之后真气压回上限。解除只走剧情（见状态目录 remove）。",
+      "qiCapRatio": 0.7,
+      "qiActions": ["solo.train", "solo.breakthrough", "cast.transfer_qi", "intimate.dual_cultivate", "physical.drain_qi"],
+      "backlash": {
+        "dc": 11,
+        "hpLossRatio": 0.1,
+        "failStatus": "qi.disordered"
+      }
+    },
     "freeText": {
       "minConfidence": 0.9
     }

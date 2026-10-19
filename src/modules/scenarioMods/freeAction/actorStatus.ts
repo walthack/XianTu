@@ -10,7 +10,8 @@
  */
 import type { SaveData } from '@/types/game';
 import { GAME_NUMBERS } from '../../sceneModule/numbers';
-import { catalogStatus } from '../../sceneModule/statuses';
+import { catalogStatus, resolveEffects } from '../../sceneModule/statuses';
+import type { StatusParams } from '../../sceneModule/types';
 import { injuryStore, renderInjuryViews, sceneTime, type InjuryRecord } from '../../sceneModule/host/injuries';
 import { toPlayerStatusEffect } from '../../sceneModule/statusAdapters';
 import { namedEntity } from '../namedEntities';
@@ -40,6 +41,8 @@ export interface ApplyStatusOptions {
   minutes?: number | null;
   /** 剂量数（带 lifeFloor 的状态），缺省 1。 */
   doses?: number;
+  /** 挂状态参数（外伤部位、六识受损的哪几识）。 */
+  params?: StatusParams;
 }
 
 function labelOf(actorId: string): string {
@@ -74,7 +77,8 @@ export function applyActorStatus(save: SaveData, actorId: string, statusId: stri
     ...(instance ? { enemyId: instance.kindId, instanceId: actorId } : {}),
     player: isPlayer, statusId: def.id, label: def.label, sourceScene, cause: def.cause, source: def.source,
     appliedAt: prior?.appliedAt ?? now, expiresAt: minutes === null ? null : now + minutes,
-    effects: structuredClone(def.effects), remove: structuredClone(def.remove || []),
+    effects: resolveEffects(structuredClone(def.effects), options.params), remove: structuredClone(def.remove || []),
+    ...(options.params ? { params: structuredClone(options.params) } : {}),
   };
 
   const result: ApplyStatusResult = { ok: true, record };

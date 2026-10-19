@@ -50,7 +50,7 @@ const rows = (s, id) => rt(s).sceneLedger.statusRecords.actors[id] || [];
 
 // ───────── 状态效果配置 ─────────
 test('game-numbers.status：名单、范围、下限计数、时长与物品标签都在配置里', () => {
-  assert.deepEqual(NUM.senses, ['sight', 'hearing', 'smell', 'taste', 'touch'], '五感');
+  assert.deepEqual(NUM.senses, ['sight', 'hearing', 'smell', 'taste', 'touch', 'mind'], '六识（眼耳鼻舌身意）');
   assert.deepEqual(NUM.consciousnessLevels, ['clear', 'dazed', 'confused', 'unconscious'], '神志档（由轻到重）');
   assert.ok(NUM.actionKinds.includes('run') && NUM.actionKinds.includes('grip'));
   assert.ok(NUM.lifeFloor.ratio > 0 && NUM.lifeFloor.ratio < 1 && NUM.lifeFloor.min >= 1);
@@ -60,9 +60,12 @@ test('game-numbers.status：名单、范围、下限计数、时长与物品标�
 
 test('状态目录：计划里的既有 id 都在，新增的分项状态 id 全表齐全', () => {
   for (const id of ['poisoned', 'wound.severe', 'wound.external', 'wound.soul', 'weak.body', 'wound.exhaustion', 'unconscious', 'dying']) assert.ok(catalog(id), id);
-  const added = ['mind.confused', 'sense.sight', 'sense.hearing', 'sense.smell', 'sense.taste', 'sense.touch', 'fatigue.weary', 'fatigue.mental', 'restrict.arm', 'restrict.leg', 'disability.one_eye', 'disability.lame_leg'];
-  for (const id of added) { const d = catalog(id); assert.ok(d, id); assert.equal(d.provisional, true, `${id} 是提议，不是裁定`); }
-  assert.deepEqual(statuses.STATUS_CATALOG.filter(d => d.permanent).map(d => d.id).sort(), ['disability.lame_leg', 'disability.one_eye']);
+  // 2026-10-19 整改：五感五条并成六识受损 sense.impaired（参数 senses 指明哪几识）；疲惫、行动细分、永久伤残全部删除。
+  for (const id of ['mind.confused', 'sense.impaired']) assert.ok(catalog(id), id);
+  assert.equal(catalog('mind.confused').provisional, true, '神志不清的 provisional 待用户确认后再去');
+  assert.equal(catalog('sense.impaired').provisional, undefined);
+  for (const id of ['sense.sight', 'sense.hearing', 'sense.smell', 'sense.taste', 'sense.touch', 'fatigue.weary', 'fatigue.mental', 'restrict.arm', 'restrict.leg', 'disability.one_eye', 'disability.lame_leg']) assert.equal(catalog(id), undefined, `${id} 已删除或合并`);
+  assert.deepEqual(statuses.STATUS_CATALOG.filter(d => d.permanent).map(d => d.id), [], '游戏里没有永久伤残');
   assert.deepEqual(statuses.STATUS_CATALOG.filter(d => d.lifeFloor).map(d => d.id), ['poisoned'], '只有中毒带下限计数');
 });
 
@@ -113,23 +116,24 @@ test('分项状态确实表达了气血之外的效果：神志不清、五感�
   const of = id => profile.summarizeEffects(catalog(id).effects);
   assert.equal(of('mind.confused').consciousness, 'confused');
   assert.ok(of('mind.confused').psyche < 0);
-  for (const sense of NUM.senses) assert.ok(of(`sense.${sense}`).senses[sense] < 0, sense);
-  assert.ok(of('fatigue.weary').restricted.includes('run') && of('fatigue.weary').psyche < 0);
-  assert.ok(of('fatigue.mental').psyche < 0);
-  assert.deepEqual(of('restrict.arm').restricted.sort(), ['attack', 'grip']);
-  assert.ok(of('restrict.leg').appearance.length > 0);
+  const impaired = senses => profile.summarizeEffects(statuses.resolveEffects(catalog('sense.impaired').effects, { senses }));
+  for (const sense of NUM.senses) assert.ok(impaired([sense]).senses[sense] < 0, sense);
+  assert.deepEqual(Object.keys(impaired(['sight', 'hearing']).senses).sort(), ['hearing', 'sight'], '参数指明哪几识，只压这几识');
+  assert.deepEqual(impaired(undefined).senses, {}, '没给参数时不凭空压任何一识');
   assert.ok(of('poisoned').appearance.includes('面色青灰') && of('poisoned').psyche < 0, '中毒带精神和外貌');
   assert.equal(of('unconscious').consciousness, 'unconscious', '昏迷（未改动）按 downed 归最重档');
 });
 
 test('既有状态只追加新维度：去掉新维度后与提交里的版本逐字相同（原有数值、note、来源文字含合规标记都没动）', () => {
   const NEW_KINDS = ['psyche', 'sense', 'consciousness', 'restrict', 'appearance'];
+  // 2026-10-19 整改按用户方案重写的条目（合并、补实效、去 provisional）与迁移表里删掉 / 并走的旧 id 不比。
+  const REWORKED = new Set(['wound.external', 'wound.burn', 'wound.soul_aftershock', 'wound.soul', ...Object.keys(injuries.STATUS_MIGRATIONS)]);
   const strip = d => { const { lifeFloor, permanent, ...rest } = d; return { ...rest, effects: d.effects.filter(e => !NEW_KINDS.includes(e.kind)) }; };
   let committed;
   try { committed = JSON.parse(execFileSync('git', ['show', 'HEAD:src/modules/sceneModule/contracts/statuses.json'], { cwd: fileURLToPath(rootUrl), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })); } catch { committed = undefined; }
   if (!committed) return; // 不在 git 仓库里（例如打包后）
   const now = new Map(readJson('src/modules/sceneModule/contracts/statuses.json').map(d => [d.id, d]));
-  for (const old of committed) assert.deepEqual(strip(now.get(old.id)), strip(old), old.id);
+  for (const old of committed) if (!REWORKED.has(old.id)) assert.deepEqual(strip(now.get(old.id)), strip(old), old.id);
   for (const id of ['unconscious', 'paralyzed', 'acupoint.sealed', 'dying', 'drunk']) assert.deepEqual(now.get(id), committed.find(d => d.id === id), `${id}（含合规标记）整条没动`);
 });
 
@@ -164,8 +168,8 @@ test('目录里没有时限的状态，自由行动路径写成有限时长（st
 
 test('到期后状态消失（视图与画像同步），没到期时存在', () => {
   const s = save();
-  apply.applyActorStatus(s, DUAN_QIANG, 'fatigue.weary');
-  assert.equal(read.actorStatusProfile(s, DUAN_QIANG).restricted[0], 'run');
+  apply.applyActorStatus(s, DUAN_QIANG, 'sense.impaired', { params: { senses: ['sight'] } });
+  assert.ok(read.actorStatusProfile(s, DUAN_QIANG).senses.sight < 0);
   s.元数据.时间.日 += 1;
   assert.deepEqual(read.actorStatusRecords(s, DUAN_QIANG), [], '读取不改存档但已按到期过滤');
   injuries.renderInjuryViews(s);
@@ -184,7 +188,7 @@ test('拒绝：状态 id 不存在、非法角色 id、敌人种类 id（伤势�
 test('敌人个体（实例 id）：状态写在实例名下，带种类 id，互不影响；种类名下永远没有记录', () => {
   const s = save();
   const a = inst.instanceId(MERFOLK, 'combat.free.demo', 1), b = inst.instanceId(MERFOLK, 'combat.free.demo', 2);
-  assert.equal(apply.applyActorStatus(s, a, 'restrict.arm').ok, true);
+  assert.equal(apply.applyActorStatus(s, a, 'wound.external', { params: { bodyPart: '右臂' } }).ok, true);
   const store = rt(s).sceneLedger.statusRecords;
   assert.deepEqual(Object.keys(store.groups), [a]);
   assert.equal(store.groups[a][0].instanceId, a);
@@ -192,45 +196,27 @@ test('敌人个体（实例 id）：状态写在实例名下，带种类 id，�
   assert.deepEqual(read.actorStatusRecords(s, b), [], '同种类的另一个个体不受影响');
   assert.deepEqual(read.actorStatusRecords(s, MERFOLK), [], '种类名下没有记录');
   assert.ok(![...Object.keys(store.actors), ...Object.keys(store.groups)].includes(MERFOLK));
-  assert.match(rt(s).sceneLedger.groupInjuries[a].text, /单臂乏力/);
+  assert.match(rt(s).sceneLedger.groupInjuries[a].text, /外伤/);
+  assert.match(rt(s).sceneLedger.groupInjuries[a].text, /右臂/, '部位参数进视图');
   assert.equal(rt(s).sceneLedger.groupInjuries[a].label.length > 0, true);
 });
 
-// ───────── 永久伤残字段 ─────────
-test('永久伤残写进单独的存档字段 disabilities：不进普通伤势库，不随时间、休整、药物消退，只由剧情旗标解除', () => {
+// ───────── 永久伤残（2026-10-19 用户定：游戏里没有永久伤残）─────────
+test('旧存档里的永久伤残（disabilities 字段）与已删除的状态 id 按迁移表移除；部位伤改挂外伤并带部位；幂等', () => {
   const s = save();
-  const r = apply.applyActorStatus(s, DUAN_QIANG, 'disability.one_eye');
-  assert.equal(r.ok, true);
-  assert.equal(r.permanent, true);
+  const row = (statusId, label, sourceScene = 'combat.f10.ghost_king_clash') => ({ statusId, label, sourceScene, cause: 'combat', appliedAt: 0, expiresAt: null, effects: [], remove: [] });
+  rt(s).sceneLedger = { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [], statusRecords: { version: 1, groups: {}, groupLabels: {},
+    actors: { [DUAN_QIANG]: [row('wound.external.thigh', '腿伤'), row('wound.external.back', '背伤'), row('gear.blades_dulled', '双刀卷刃'), row('fatigue.mental', '心神疲惫', 'free:x')] },
+    disabilities: { [DUAN_QIANG]: [row('disability.one_eye', '一目失明', 'free:y')] } } };
+  injuries.pruneSceneInjuries(s);
   const store = rt(s).sceneLedger.statusRecords;
-  assert.equal(store.disabilities[DUAN_QIANG][0].statusId, 'disability.one_eye');
-  assert.equal(store.disabilities[DUAN_QIANG][0].expiresAt, null);
-  assert.deepEqual(store.actors[DUAN_QIANG] || [], []);
-  s.元数据.时间.年 += 50;
-  assert.equal(read.disabilitiesOf(s, DUAN_QIANG).length, 1, '过了五十年仍在');
-  assert.equal(injuries.removeSceneInjury(s, { actorId: DUAN_QIANG }, 'disability.one_eye', 'rest'), false);
-  assert.equal(injuries.removeSceneInjury(s, { actorId: DUAN_QIANG }, 'disability.one_eye', 'item', 'heal'), false);
-  assert.equal(read.disabilitiesOf(s, DUAN_QIANG).length, 1, '休整与药物都解除不了');
-  assert.match(rt(s).sceneLedger.injuries[DUAN_QIANG], /一目失明/);
-  assert.deepEqual(read.appearanceTagsOf(s, DUAN_QIANG), ['一目失明']);
-  assert.equal(read.actorStatusProfile(s, DUAN_QIANG).senses.sight, -2);
-  rt(s).flags['scene.status.disability.one_eye.resolved'] = true;
-  injuries.renderInjuryViews(s);
-  assert.deepEqual(read.disabilitiesOf(s, DUAN_QIANG), [], '剧情旗标可以解除');
-});
-
-test('永久伤残：同一种再写是刷新不重复；每个角色有数量上限（status.permanent.maxPerActor）', () => {
-  const s = save();
-  apply.applyActorStatus(s, DUAN_QIANG, 'disability.lame_leg');
-  apply.applyActorStatus(s, DUAN_QIANG, 'disability.lame_leg');
-  assert.equal(read.disabilitiesOf(s, DUAN_QIANG).length, 1);
-  const original = NUM.permanent.maxPerActor;
-  try {
-    numbers.applyGameNumbers({ status: { permanent: { maxPerActor: 1 } } });
-    assert.deepEqual(apply.applyActorStatus(s, DUAN_QIANG, 'disability.one_eye'), { ok: false, reason: 'permanent_cap' });
-    assert.equal(apply.applyActorStatus(s, DUAN_QIANG, 'disability.lame_leg').ok, true, '已有的那种仍可刷新');
-    assert.equal(read.disabilitiesOf(s, DUAN_QIANG).length, 1);
-  } finally { numbers.applyGameNumbers({ status: { permanent: { maxPerActor: original } } }); }
+  assert.deepEqual(store.actors[DUAN_QIANG].map(r => r.statusId).sort(), ['wound.external', 'wound.soul']);
+  assert.equal(store.actors[DUAN_QIANG].find(r => r.statusId === 'wound.external').params.bodyPart, '大腿、背', '同一来源两处部位伤并成一条外伤');
+  assert.deepEqual(store.disabilities[DUAN_QIANG], []);
+  const before = JSON.stringify(store);
+  injuries.pruneSceneInjuries(s);
+  assert.equal(JSON.stringify(rt(s).sceneLedger.statusRecords), before, '再迁移一次不变');
+  for (const id of Object.keys(injuries.STATUS_MIGRATIONS)) assert.equal(catalog(id), undefined, `${id} 已不在目录`);
 });
 
 test('旧存档兼容：没有 statusRecords / 没有 disabilities / 没有 sceneLedger 时读取一律为空，写入与视图渲染不报错', () => {
@@ -248,11 +234,6 @@ test('旧存档兼容：没有 statusRecords / 没有 disabilities / 没有 scen
   injuries.renderInjuryViews(old);
   injuries.pruneSceneInjuries(old);
   assert.equal('disabilities' in rt(old).sceneLedger.statusRecords, false, '读取、修剪、渲染都不凭空加字段');
-  assert.equal(apply.applyActorStatus(old, DUAN_QIANG, 'disability.lame_leg').ok, true);
-  assert.equal(rt(old).sceneLedger.statusRecords.disabilities[DUAN_QIANG].length, 1, '第一次写入永久伤残时才建字段');
-
-  const roundTrip = JSON.parse(JSON.stringify(old));
-  assert.equal(read.disabilitiesOf(roundTrip, DUAN_QIANG).length, 1, '字段随存档序列化往返');
 });
 
 test('旧存档里已有的普通伤势记录（没有 counter）照常被读到，也能被中毒状态按默认上限接管', () => {
@@ -385,16 +366,17 @@ test('角色身上的外貌标签进角色卡：一行“外貌：…”，条�
   assert.doesNotMatch(text(), /外貌：/, '没有状态时没有外貌行');
   apply.applyActorStatus(s, WANG_ZHE, 'poisoned');
   assert.match(text(), /外貌：面色青灰/);
-  apply.applyActorStatus(s, WANG_ZHE, 'restrict.leg');
-  apply.applyActorStatus(s, WANG_ZHE, 'restrict.arm');
   apply.applyActorStatus(s, WANG_ZHE, 'wound.severe');
-  const line = text().split('\n').find(l => l.startsWith('外貌：'));
-  assert.equal(line.slice('外貌：'.length).split('、').length, NUM.appearance.maxTags);
-  assert.ok(line.includes('面色青灰'), '先挂的先出');
-  apply.applyActorStatus(s, WANG_ZHE, 'disability.lame_leg');
+  assert.match(text(), /外貌：面色青灰、面无血色/);
+  const original = NUM.appearance.maxTags;
+  try {
+    numbers.applyGameNumbers({ status: { appearance: { maxTags: 1 } } });
+    const line = text().split('\n').find(l => l.startsWith('外貌：'));
+    assert.equal(line.slice('外貌：'.length).split('、').length, 1);
+    assert.ok(line.includes('面色青灰'), '先挂的先出');
+  } finally { numbers.applyGameNumbers({ status: { appearance: { maxTags: original } } }); }
   s.元数据.时间.日 += 40;
-  assert.match(text(), /外貌：跛行/, '到期的状态外貌消失，永久伤残外貌仍在');
-  assert.doesNotMatch(text(), /面色青灰/);
+  assert.doesNotMatch(text(), /外貌：/, '到期的状态外貌消失');
 });
 
 test('外貌行遵守角色卡总字数上限：超出时先丢末尾，不撑破 maxCardChars', () => {
@@ -407,8 +389,8 @@ test('外貌行遵守角色卡总字数上限：超出时先丢末尾，不撑�
 test('敌人个体也有外貌标签（按实例 id 读）', () => {
   const s = save();
   const id = inst.instanceId(MERFOLK, 'combat.free.demo', 3);
-  apply.applyActorStatus(s, id, 'restrict.leg');
-  assert.deepEqual(read.appearanceTagsOf(s, id), ['行走不便']);
+  apply.applyActorStatus(s, id, 'poisoned');
+  assert.deepEqual(read.appearanceTagsOf(s, id), ['面色青灰']);
   assert.deepEqual(read.appearanceTagsOf(s, MERFOLK), []);
 });
 
@@ -417,9 +399,9 @@ const TAGGED = {
   'lcq.item.np013': { tags: ['antidote'], onUse: [] },
   'lyg.item.np049': { tags: ['antidote'], onUse: [] },
   'lyg.item.np092': { tags: ['poison'], onUse: [{ statusId: 'poisoned', doses: 1 }] },
-  // C 步：用户裁定合规相关的两种药开放标注（假死药 → 昏迷；六识禁绝丹 → 五感受损 + 神志不清）。tag=sedative，喂药时要看对方态度（不是毒）。
+  // C 步：用户裁定合规相关的两种药开放标注（假死药 → 昏迷；六识禁绝丹 → 六识受损（五识全压）+ 神志不清）。tag=sedative，喂药时要看对方态度（不是毒）。
   'lyl.item.np053': { tags: ['sedative'], onUse: [{ statusId: 'unconscious' }] },
-  'lyg.item.np071': { tags: ['sedative'], onUse: ['sense.sight', 'sense.hearing', 'sense.smell', 'sense.taste', 'sense.touch', 'mind.confused'].map(statusId => ({ statusId })) },
+  'lyg.item.np071': { tags: ['sedative'], onUse: [{ statusId: 'sense.impaired', params: { senses: ['sight', 'hearing', 'smell', 'taste', 'touch'] } }, { statusId: 'mind.confused' }] },
 };
 
 test('物品表：只有毒/药相关的 5 件补了 effectTags/onUse，其余 274 件两个字段都没有', () => {

@@ -356,7 +356,7 @@ test('already settled back injury is published during battle, before closure or 
  enable();const h=harness(await f10());await host.submitSceneInput(h.save,'我观察四周',h.deps);
  const a=ext.activeScene(h.save),c=registry.sceneContractById(a.contractId);a.state.beat=5;a.state.present.dan_chen=true;a.state.present.hu_sha=true;a.state.departed.push('gui_wu_wang');a.pending=null;
  force(h.save,10,1);await host.submitSceneInput(h.save,'我观察四周',h.deps);await host.confirmSceneAction(h.save,h.deps);
- assert.ok(h.save.角色.效果.some(effect=>effect.状态名称==='背伤'||effect.状态名称==='外伤（重）'));assert.equal(runtime(h.save).flags['scene.'+c.meta.id+'.done'],undefined);
+ assert.ok(h.save.角色.效果.some(effect=>effect.状态名称==='外伤'||effect.状态名称==='外伤（重）'||effect.状态名称==='倒下'));assert.equal(runtime(h.save).flags['scene.'+c.meta.id+'.done'],undefined);
 });
 
 

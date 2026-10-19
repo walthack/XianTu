@@ -1,0 +1,26 @@
+{
+  "note": "旧状态 id 迁移表（2026-10-19 状态清单整改）：旧存档里挂着这些 id 的伤势，读档时由 host/injuries.ts migrateStatusIds 改挂 to（带 params），或 remove 直接移除；label 是旧名称，用于清掉没有结构化记录的旧 角色.效果。",
+  "migrations": {
+    "wound.external.shoulder": { "to": "wound.external", "params": { "bodyPart": "肩" }, "label": "肩伤" },
+    "wound.external.back": { "to": "wound.external", "params": { "bodyPart": "背" }, "label": "背伤" },
+    "wound.external.thigh": { "to": "wound.external", "params": { "bodyPart": "大腿" }, "label": "腿伤" },
+    "wound.external.right_arm": { "to": "wound.external", "params": { "bodyPart": "右臂" }, "label": "右臂伤" },
+    "wound.external.waist": { "to": "wound.external", "params": { "bodyPart": "腰" }, "label": "腰伤" },
+    "wound.external.chest": { "to": "wound.external", "params": { "bodyPart": "胸" }, "label": "胸伤" },
+    "wound.drowning": { "remove": true, "label": "呛水伤" },
+    "wound.cold": { "remove": true, "label": "阴寒余伤" },
+    "gear.blade_damaged": { "remove": true, "label": "刀损" },
+    "gear.blades_dulled": { "remove": true, "label": "双刀卷刃" },
+    "restrict.arm": { "remove": true, "label": "单臂乏力" },
+    "restrict.leg": { "remove": true, "label": "腿脚难行" },
+    "fatigue.weary": { "remove": true, "label": "疲惫" },
+    "disability.one_eye": { "remove": true, "label": "一目失明" },
+    "disability.lame_leg": { "remove": true, "label": "跛足" },
+    "sense.sight": { "to": "sense.impaired", "params": { "senses": ["sight"] }, "label": "目力受损" },
+    "sense.hearing": { "to": "sense.impaired", "params": { "senses": ["hearing"] }, "label": "耳力受损" },
+    "sense.smell": { "to": "sense.impaired", "params": { "senses": ["smell"] }, "label": "嗅觉受损" },
+    "sense.taste": { "to": "sense.impaired", "params": { "senses": ["taste"] }, "label": "味觉受损" },
+    "sense.touch": { "to": "sense.impaired", "params": { "senses": ["touch"] }, "label": "触觉迟钝" },
+    "fatigue.mental": { "to": "wound.soul", "label": "心神耗竭" }
+  }
+}

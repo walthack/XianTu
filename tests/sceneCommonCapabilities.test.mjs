@@ -38,12 +38,12 @@ test('repeated publication replaces old severity, keeps initial expiry, and leav
  const second=structuredClone(c);second.meta.id='other.scene';injuries.recordSceneInjuries(s,second,[row(second,'ally','wound.internal')]);
  injuries.recordSceneInjuries(s,c,[row(c,'ally','wound.external.heavy')]);const rows=rt(s).sceneLedger.statusRecords.actors['test.character.ally'];assert.equal(rows.length,2);assert.ok(!rows.some(r=>r.statusId==='wound.external'));
 });
-test('expiry and authorized rest remove mechanics and derived prose; indefinite gear needs repair',()=>{
+test('expiry and authorized rest remove mechanics and derived prose; item-only status needs its item (兵器损坏类已删除)',()=>{
  const c=makeContract(),s=save();injuries.recordSceneInjuries(s,c,[row(c,'ally')]);s.元数据.时间.月+=1;
  const state=mod.beginScene(c).state;injuries.restoreSceneInjuries(s,c,state);assert.equal(state.statuses.ally.length,0);assert.equal(rt(s).sceneLedger.injuries['test.character.ally'],undefined);
  injuries.recordSceneInjuries(s,c,[row(c,'ally','wound.internal')]);assert.equal(injuries.removeSceneInjury(s,{actorId:'test.character.ally'},'wound.internal','rest'),true);
- injuries.recordSceneInjuries(s,c,[row(c,'ally','gear.blades_dulled')]);assert.equal(injuries.removeSceneInjury(s,{actorId:'test.character.ally'},'gear.blades_dulled','rest'),false);
- assert.equal(injuries.removeSceneInjury(s,{actorId:'test.character.ally'},'gear.blades_dulled','item','repair'),true);
+ injuries.recordSceneInjuries(s,c,[row(c,'ally','acupoint.sealed')]);assert.equal(injuries.removeSceneInjury(s,{actorId:'test.character.ally'},'acupoint.sealed','rest'),false);
+ assert.equal(injuries.removeSceneInjury(s,{actorId:'test.character.ally'},'acupoint.sealed','item','unseal'),true);
 });
 test('legacy injury prose is preserved but not guessed into penalties or death',()=>{
  const c=makeContract(),s=save();rt(s).sceneLedger={injuries:{'test.character.ally':'历史重伤记录'},actors:{},names:{},receipts:[],worldFacts:[]};

@@ -122,7 +122,7 @@ function persistSceneInjuries(save: SaveData, contract: Contract, rows: WriteBac
 
 /** Publish only already-settled injuries during a beat, never rewards, flags or event completion. */
 export function syncSceneStatuses(save: SaveData, contract: Contract, state: SceneState): void {
-  const rows=persistentStatuses(state,contract,undefined).map(({party,ref,def,active})=>({party,ref,originScene:active.originScene,status:def.id,label:def.label,minutes:def.afterScene?.minutes ?? null,cause:active.cause,source:def.source}));
+  const rows=persistentStatuses(state,contract,undefined).map(({party,ref,def,active})=>({party,ref,originScene:active.originScene,status:def.id,label:def.label,minutes:def.afterScene?.minutes ?? null,cause:active.cause,source:def.source,...(active.params?{params:structuredClone(active.params)}:{})}));
   applySceneHpLoss(save,contract,state);
   persistSceneInjuries(save,contract,rows,state);
 }

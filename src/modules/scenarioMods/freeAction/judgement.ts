@@ -46,7 +46,8 @@ export function buildFreeActionJudgementProposal(
   const kind = spec.kind!, root = save as any, difficulty = adjustedDifficulty(save, ticket, spec);
   const data = calculateTurnJudgementData(root?.角色?.身份?.先天六司, root?.角色?.身份?.后天六司, root?.角色?.位置);
   const factors: JudgementFactor[] = [
-    ...stateFactors(kind, root),
+    // 调息疗伤（applyRecovery）不吃“重伤”减值：越伤越难治是底座 bug（2026-10-19 用户定）。
+    ...stateFactors(kind, root, { recovery: spec.applyRecovery === true }),
     ...skillTalentFactors(save, spec),
     { label: '幸运', value: boundedLuck(Number(root?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center) + Number(root?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
     environmentFactorFor(kind, data),

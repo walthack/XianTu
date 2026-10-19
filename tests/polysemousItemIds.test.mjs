@@ -142,7 +142,7 @@ test('第三轮：同文字多 id 并回一个——拉链/麻古/朱箓蛇丹/�
  assert.ok(accessIds('lcq.stage_04').includes('lcq.item.np013')&&accessIds('lcq.stage_03b_snake_flower_bridge').includes('lcq.item.np013'));
  assert.ok(accessIds('lyg.changgan_begins').includes('lyg.item.np017'),'changgan_begins 的武穆秘籍并到 np017');
  for(const st of ['lyg.changgan_begins','lyg.dingtao_beijing','lyg.mijing_rumen'])assert.ok(accessIds(st).includes('lyg.item.np071'),`${st} 的六识禁绝丹并回 np071`);
- assert.deepEqual(byId.get('lyg.item.np071').definition.onUse.map(x=>x.statusId),['sense.sight','sense.hearing','sense.smell','sense.taste','sense.touch','mind.confused'],'沿用 np071 原有标签，不新增');
+ assert.deepEqual(byId.get('lyg.item.np071').definition.onUse.map(x=>x.statusId),['sense.impaired','mind.confused'],'沿用 np071 原有标签，不新增');
 });
 
 test('第三轮：青龙偃月刀两个 id（普通版/珊瑚铁强化版），珊瑚匕首统一为一个通用条目',()=>{

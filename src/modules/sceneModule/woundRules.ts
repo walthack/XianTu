@@ -112,7 +112,7 @@ export function applyWoundRule(
   const escalate = tier === 'great_success' && streaks[targetId] >= profile.streak.count && !!profile.streak.status;
   const status = escalate ? profile.streak.status : rule.status;
   if (!escalate && (state.statuses[targetId] || []).some(active => active.id === status)) return [];
-  return applyStatus(state, contract, ctx, targetId, { status }, { cause: 'combat', sourceId: action.id });
+  return applyStatus(state, contract, ctx, targetId, { status, ...(action.woundParams ? { params: action.woundParams } : {}) }, { cause: 'combat', sourceId: action.id });
 }
 
 /** 回执字样：敌方这一下的档在配置里的标注（重击等）。 */

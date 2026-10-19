@@ -455,7 +455,7 @@ function archiveResolution(state: JudgementState, resolution: JudgementResolutio
 /** 自由行动的判定：失败余波（扣气血、行动门控）和双修的阴阳调和由 freeAction/settle.ts 落账，引擎不再自己写。 */
 const isFreeActionJudgement = (proposal: JudgementProposal): boolean => proposal.authorityReceipt?.kind === 'free_action_judgement';
 
-const CULTIVATION_RECOVERY_KEYWORDS = /疗伤|疗愈|调息|恢复|修复|经脉|丹田|双修/;
+export const CULTIVATION_RECOVERY_KEYWORDS = /疗伤|疗愈|调息|恢复|修复|经脉|丹田|双修/;
 
 function targetAfterRecovery(root: any, attribute: '气血' | '神识', ratio: number): number | null {
   const current = Number(root?.角色?.属性?.[attribute]?.当前);

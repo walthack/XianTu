@@ -222,7 +222,10 @@
         "effect": "用背硬接龙神一爪，喷血坠地",
         "statuses": [
           {
-            "status": "wound.external.back"
+            "status": "wound.external",
+            "params": {
+              "bodyPart": "背"
+            }
           }
         ],
         "anchorText": "第114章段15–17；废功后果到第118章段134才公开"

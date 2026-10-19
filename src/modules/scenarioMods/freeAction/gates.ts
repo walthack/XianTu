@@ -24,6 +24,7 @@ import { canonCharacterOf, freeActionRosterOf, playerIdOf, type FreeActionTicket
 import { readFreeActionState, runtimeOf } from './state';
 import { lethalForbidden, protectedForbids } from './protect';
 import { defenseDownOf } from './defenseDown';
+import { availableQi } from './bingGu';
 import type { GateReason } from './facts';
 
 export interface FreeActionDeps {
@@ -151,7 +152,8 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
   // 施术者代价：付得起才行。
   if (spec.cost) {
     const resource = (save as any)?.角色?.属性?.[spec.cost.resource];
-    const max = Number(resource?.上限), current = Number(resource?.当前);
+    // 灵气按可用真气算（冰蛊压低上限时取压低后的值，见 bingGu.ts）。
+    const max = Number(resource?.上限), current = spec.cost.resource === '灵气' ? availableQi(save) : Number(resource?.当前);
     if (!(max > 0) || !(current >= Math.round(max * spec.cost.onResolveRatio))) return fail('no_resource');
   }
 
