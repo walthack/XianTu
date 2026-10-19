@@ -6,7 +6,7 @@
 
 ## 一句话现状
 
-**状态清单整改（2026-10-19 晚，`691d18c5`，基于 tip `cca8d41c`；8097 未重建）**：statuses.json 从 45 条精简到 25 条，再加冰蛊共 26 条：部位伤并入外伤（bodyPart 参数）、五感并成六识受损、删掉编造伤／兵器损坏／永久伤残；旧档迁移表 `statuses.migrations.json`；调息等恢复判定不再吃「重伤」-15；冰蛊已实装（真气上限比例、寒气反噬，剧情解除）；麻古三段机制因合规冲突未实装，待用户定。详见 [docs/status-audit-2026-10-19.md](docs/status-audit-2026-10-19.md)。
+**状态清单整改（2026-10-19 晚，`691d18c5`，基于 tip `cca8d41c`；8097 已于 23:08 重建为 `fee49d5f0124`，served 核对一致）**：statuses.json 从 45 条精简到 25 条，再加冰蛊共 26 条：部位伤并入外伤（bodyPart 参数）、五感并成六识受损、删掉编造伤／兵器损坏／永久伤残；旧档迁移表 `statuses.migrations.json`；调息等恢复判定不再吃「重伤」-15；冰蛊已实装（真气上限比例、寒气反噬，剧情解除）；麻古三段机制因合规冲突未实装，待用户定。详见 [docs/status-audit-2026-10-19.md](docs/status-audit-2026-10-19.md)。
 
 HEAD `5837d7cb`（同伴助战 assist＋F03/F13 护人戏改威胁进度；**8097 未重建**，可重建、由用户定时机）；前 tip `14c26037`（08e0 真机复测修复 `51347d23`／`213a0305`／`14c26037`）；8097 现包 `combat-trial.js` SHA 前缀 **`ca414354432d`**（PID 65144 **未重启**；**新包尚未真机复测**）；级数以存档为准、无名敌人按种类预设（`combat.enemyPresets`，可热调）；受保护同行者不出防御行；拍数门禁 LCQ-SAV-020；全量测试仅剩既有红 `chapterIdentitySwitch`。上一轮：F02 卡点底座修复 `d2fa5334`…`a0455dd4`（包 `08e0987da150`）。以下为此前状态：numbers 三分包已落 `3b8c1be2`；真机通过；**同拍闸已落**（`3763e22e`）；**到顶轻回执已落**（`ac32513d`，`affinity.lightReceipt` 默认 true）；遇敌草案已定体验三步（危区叙事→几率检→遇敌叙事→开战，禁检中直接开战）；`ee856f26`／`a1e9ba66`／`ae76909a`／`606a5f3c` 后；**用户拍板方案 A**：冻结门禁基线已更新（允许 `3763e22e` runtime 同拍闸＋`781b656a` AIBS 自由行动有限 diff；对照清理 `63fdf031`／`cd3d3706`）；**全量冻结门禁应变绿**；不回滚同拍闸、不迁出 runtime、不改 8097；角色总表合入／补人中；**角色按拍卡记为内容扩展待办**；战内逃跑搁置；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行。**优先级：底座优先，内容可同步但略低。** 时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
 
@@ -25,7 +25,7 @@ HEAD `5837d7cb`（同伴助战 assist＋F03/F13 护人戏改威胁进度；**809
 |---|---|
 | 分支 | `feat/fast-no-legacy`（跟踪 `origin/feat/fast-no-legacy`） |
 | HEAD | `5837d7cb` — 同伴助战＋护人戏威胁进度（8097 **未重建**，仍是 `ca414354432d`）；此前 `14c26037` — 08e0 真机复测修复（`51347d23` 挂伤按档/逐拍/标签/记忆说明＋交涉配置＋自由行动本地补票＋真机夹具；`213a0305` 拍数门禁 LCQ-SAV-020＋F13 同伴 woundRule；`14c26037` 级数以存档为准＋无名敌人种类预设＋受保护同行者不出防御行）；此前 `a0455dd4` — F02 卡点底座修复（`d2fa5334` 挂伤数据驱动＋外伤（重）＋休整解伤；`8c003b12` 幅度加价封顶；`9870e464` 偏离专名过滤；`b991f58a` 出生年；`a0455dd4` 无交涉提示＋单测）；此前 `69936fe3`（全长 `69936fe33c3ab1360ee6df76067fbe3798441230`）— 冻结门禁方案 A；前 tip `606a5f3c`；含 `3763e22e` 同拍、`ac32513d` 轻回执＋遇敌三步、`ee856f26`／`a1e9ba66`／`ae76909a` |
-| 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`ca414354432d`**（全长 `ca414354432d240c5ecdd1a9a84200fe57077800ffde19524777c562d4701453`；2026-10-19 20:39 Asia/Singapore 由 `14c26037` 重建；磁盘与 127.0.0.1:8097 所发一致）；进程 `node … serve.mjs --port 8097` PID **65144**（**未重启**）；上一包 `08e0987da150` 备份于 `dist-backup-20261019-203934`；**新包尚未真机复测** |
+| 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`fee49d5f0124`**（全长 `fee49d5f0124dce16aa5f774e94891c834a92fd1271b22bcd661aad5bb4d6789`，md5 `263446bc01cfb65cb687b3a27cff9bfd`，23090549 字节；2026-10-19 23:08 Asia/Singapore 由 `5d28c65a` 重建（用户批准）；127.0.0.1:8097 实际所发 SHA-256／md5 与磁盘一致；进程 PID 65144 未重启、未杀（serve.mjs 每次请求读磁盘）；旧包 `ca414354432d` 备份于 `dev/combat-trial/dist-backup-20261019-230823/`；**新包尚未真机复测**） |
 | numbers 三分包 | `mod-kit/numbers-combat.json` / `numbers-progress.json` / `numbers-runtime.json` + `NUMBERS-AUTHORITY.md`；生成物 `mod-kit/game-numbers.qingyu.json`；提交 **`3b8c1be2`** |
 | 最近合入基线 | diagnostics / drain / scene-danger / baseline-p0·p1·p2 已 merge；同拍闸 `3763e22e` → … → `606a5f3c`；**用户拍 A：冻结门禁基线已更新，全量冻结门禁应变绿**（不重启 8097） |
 
