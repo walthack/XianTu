@@ -2,6 +2,10 @@
   <section class="scene-encounter" aria-label="场面行动">
     <h3>交锋 · 第 {{ scene.state.beat }} 拍</h3>
     <pre>{{ brief }}</pre>
+    <div v-for="bar in progressBars" :key="bar.key" class="scene-progress" :data-testid="`scene-progress-${bar.key}`">
+      <span>{{ bar.label }}：{{ bar.text }}（{{ bar.step }}/{{ bar.max }}）</span>
+      <progress :value="bar.step" :max="bar.max"></progress>
+    </div>
     <p v-if="scene.notice">{{ scene.notice }}</p>
     <div v-if="scene.pending">
       <p>{{ scene.pending.text }}</p>
@@ -24,14 +28,21 @@
   </section>
 </template>
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { ActiveScene } from '@/modules/sceneModule/host/ext';
-defineProps<{scene:ActiveScene;brief:string;busy:boolean;crystal?:boolean}>();
+import { sceneContractById } from '@/modules/sceneModule/contracts/registry';
+import { sceneProgressBars } from '@/modules/sceneModule/host/progressBars';
+const props = defineProps<{scene:ActiveScene;brief:string;busy:boolean;crystal?:boolean}>();
+// fee4 F03：护人戏的威胁进度条（中立方的进度轨道）显示在交锋卡上。
+const progressBars = computed(() => sceneProgressBars(sceneContractById(props.scene.contractId), props.scene.state));
 defineEmits(['confirm', 'edit', 'choice', 'finish', 'crystal']);
 const tierName = (tier:string) => ({great_success:'大成功',success:'成功',failure:'失败',critical_failure:'大失败'}[tier] || tier);
 </script>
 <style scoped>
 .scene-encounter { margin:12px 0; padding:16px; border:1px solid var(--color-border); border-radius:10px; background:var(--color-background); }
 pre { white-space:pre-wrap; font:inherit; line-height:1.6; }
+progress { width:100%; height:8px; }
+.scene-progress { margin:6px 0; }
 button { padding:8px 12px; margin:6px; border:1px solid var(--color-border); border-radius:6px; }
 button:disabled { opacity:.5; }
 </style>

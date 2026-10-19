@@ -143,7 +143,7 @@ test('F03 capture persists as capture, zero escapes, and creates no extra penalt
 });
 test('F03 escaped flag survives stage transition; entry battle settles once without affinity penalty',async()=>{
  enable();const h=harness(await f03());
- for(let n=0;n<registry.sceneContractById('combat.f03.mountain_stream_fog').clock.beats;n++) {await host.submitSceneInput(h.save,'我守住队伍保护凝羽',h.deps);force(h.save);await host.confirmSceneAction(h.save,h.deps);}
+ for(let n=0;n<registry.sceneContractById('combat.f03.mountain_stream_fog').clock.beats;n++) {await host.submitSceneInput(h.save,'我守住队伍保护凝羽',h.deps);if(!ext.activeScene(h.save))break;force(h.save);await host.confirmSceneAction(h.save,h.deps);}
  assert.equal(runtime(h.save).flags['scene.f03.escaped'],true);
  delete h.save.系统.扩展.清羽记开局; // isolated F03 fixture stop is not the product campaign stop
  runtime(h.save).stageStatus='completed';runtime(h.save).nextStageId='lcq.stage_04b_lingfei_baiyi_crisis';runtime(h.save).nextStageReadyId=runtime(h.save).nextStageId;

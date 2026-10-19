@@ -4,8 +4,9 @@ const wb=await loadTs('../src/modules/sceneModule/host/writeback.ts');const st=a
 const N=JSON.parse(readFileSync(new URL('../mod-kit/numbers-combat.json',import.meta.url),'utf8')).combat.woundRules;
 const contract={meta:{id:'combat.f14.dragon_god'},parties:[{id:'pc',player:true,side:'ally'},{id:'foe',side:'foe'}],statusDefs:[]};
 const mk=(cur,max,loss)=>({save:{角色:{属性:{气血:{当前:cur,上限:max}}},世界:{状态:{剧本模组:{}}}},state:{statuses:{},hpLoss:{pc:loss}}});
-test('配置：F14 打开气血保底即倒下；其余合同（F03 待重做）不受影响', () => { assert.ok(N.hp.downedAtKeepContracts.includes('combat.f14.dragon_god')); assert.equal(typeof N.hp.keepHp,'number');
-  const other={...contract,meta:{id:'combat.f03.mountain_stream_fog'}},o=mk(10,100,0.5);wb.applySceneHpLoss(o.save,other,o.state);assert.equal(o.state.hpDowned,undefined); });
+test('配置：气血保底即倒下已全局打开（F03 等也算）', () => { assert.equal(N.hp.downedAtKeep,true); assert.equal(typeof N.hp.keepHp,'number');
+  const other={...contract,meta:{id:'combat.f03.mountain_stream_fog'}},o=mk(10,100,0.5);wb.applySceneHpLoss(o.save,other,o.state);assert.equal(o.state.hpDowned?.pc,true); });
+test('模拟器按同一规则扣气血', () => { const src=readFileSync(new URL('../scripts/combat-simulation.mjs',import.meta.url),'utf8'); assert.match(src,/hpDowned/); assert.match(src,/keepHp/); });
 test('气血被打到保底值 → 记倒下；没到保底不记', () => {
   const a=mk(10,100,0.5);wb.applySceneHpLoss(a.save,contract,a.state);
   assert.equal(a.save.角色.属性.气血.当前,N.hp.keepHp);assert.equal(a.state.hpDowned?.pc,true);

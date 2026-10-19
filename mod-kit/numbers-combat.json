@@ -93,9 +93,9 @@
       },
       "hp": {
         "keepHp": 1,
-        "downedAtKeep": false,
+        "downedAtKeep": true,
         "downedAtKeepContracts": ["combat.f14.dragon_god"],
-        "downedAtKeepNote": "气血打到 keepHp 即算倒下（fee4 B4）。先只对 F14 打开：F03 现版每拍固定扣 10%，打满拍数必到保底，要等 F03 助战重做（B2）调好再放开。"
+        "downedAtKeepNote": "气血打到 keepHp 即算倒下（fee4 B4）。2026-10-20 全局打开：模拟（combat-simulation.mjs 已按同一规则扣气血）参考玩家胜率均不低于 minWinRate，F03 74.5%、F13 65%。"
       },
       "afterWin": {
         "clearLight": true,
