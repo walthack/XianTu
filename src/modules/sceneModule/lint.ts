@@ -193,17 +193,18 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
   }
 
   // ---- 拍数（全部来自合同；默认不设拍数） ----
+  if ((contract.closing as any)?.timeout !== undefined) err('closing.timeout 已废弃：场面只有赢 / 输两态，限时战到时按 clock.onTimeout 判赢或输');
   const clock = contract.clock;
   const timeoutRule = clock?.onTimeout as unknown;
   if (timeoutRule !== undefined) {
     const rule = timeoutRule as { type?: string; as?: string };
-    const okClose = rule && typeof rule === 'object' && rule.type === 'close' && ['timeout', 'win', 'lose'].includes(String(rule.as));
+    const okClose = rule && typeof rule === 'object' && rule.type === 'close' && ['win', 'lose'].includes(String(rule.as));
     const okContinue = rule && typeof rule === 'object' && rule.type === 'continue';
-    if (!okClose && !okContinue) err('clock.onTimeout 必须写成 {type:"close", as:"timeout"|"win"|"lose"} 或 {type:"continue", events, text}（写成字符串或别的形状会被当成“超时收束”，不会算赢）');
+    if (!okClose && !okContinue) err('clock.onTimeout 必须写成 {type:"close", as:"win"|"lose"} 或 {type:"continue", events, text}（限时战到时只判赢或输，没有“超时收束”第三态）');
   }
   if (clock?.beats !== undefined) {
     if (!Number.isInteger(clock.beats) || clock.beats < 1) err('clock.beats 必须是 ≥ 1 的整数；不设拍数就不要写这个字段');
-    if (!clock.onTimeout) warn('clock.beats 已设置但没写 onTimeout：拖满拍数按“超时收束”处理（不算赢）。只有合同明写 {type:"close",as:"win"} 才算赢');
+    if (!clock.onTimeout) err('clock.beats 已设置但没写 onTimeout：限时战必须写明到时判赢或输 {type:"close",as:"win"|"lose"}（或 {type:"continue"}）；不限时就不要写 clock.beats');
     if (contract.beats && contract.beats.length < clock.beats) infos.push(`beats[] 只有 ${contract.beats.length} 条局势文字，少于 clock.beats ${clock.beats}`);
   } else if (clock?.onTimeout) warn('clock.onTimeout 已写但没有 clock.beats，不会触发');
   if (clock?.onTimeout?.type === 'continue') checkEffects(clock.onTimeout.events, 'clock.onTimeout.events');
@@ -242,7 +243,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
       if(fact.forbiddenBefore)try{new RegExp(fact.forbiddenBefore);}catch{err(`interrogation.${fact.id}：禁写表达式无效`);}
     }
   }
-  if(contract.rewardPolicy)for(const branch of [contract.closing?.win,contract.closing?.lose,contract.closing?.timeout,...Object.values(contract.closing?.playerChoices || {})]) {
+  if(contract.rewardPolicy)for(const branch of [contract.closing?.win,contract.closing?.lose,...Object.values(contract.closing?.playerChoices || {})]) {
     for(const reward of branch?.rewards || [])if(typeof reward.itemId==='string' && !contract.rewardPolicy.itemIds.includes(reward.itemId))err(`rewardPolicy：未经授权的奖励 ${reward.itemId}`);
   }
 
@@ -366,7 +367,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
       if (info.ending?.finalState === line.forbiddenFinalState) err(`${where}.${track}：终态 finalState 正是禁止的“${line.forbiddenFinalState}”`);
       else if (index <= info.limit && index > info.initial) err(`${where}.${track}：玩家的主张可以推到“${line.forbiddenFinalState}”（ceiling 够高）；红线要求任何路径都到不了`);
       for (const key of settable) if (key === `${line.party}.${track}.${line.forbiddenFinalState}`) err(`${where}.${track}：有事件把它设成禁止的“${line.forbiddenFinalState}”`);
-      for (const branch of [contract.closing?.win,contract.closing?.lose,contract.closing?.timeout,...Object.values(contract.closing?.playerChoices || {})]) {
+      for (const branch of [contract.closing?.win,contract.closing?.lose,...Object.values(contract.closing?.playerChoices || {})]) {
         for (const rule of branch?.settle || []) {
           if (rule.to === line.forbiddenFinalState && (!rule.party || rule.party === line.party)) err(`${where}.${track}：closing.settle 会把它设成禁止的“${line.forbiddenFinalState}”`);
         }
@@ -375,7 +376,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
   }
 
   // ---- 收束引用 ----
-  for (const [name, branch] of Object.entries({win:contract.closing?.win,lose:contract.closing?.lose,timeout:contract.closing?.timeout,...contract.closing?.playerChoices})) {
+  for (const [name, branch] of Object.entries({win:contract.closing?.win,lose:contract.closing?.lose,...contract.closing?.playerChoices})) {
     for (const cost of branch?.fixedCosts || []) {
       if (cost.target !== 'scene') knownParty(cost.target, `closing.${name}.fixedCosts.${cost.id}`);
       for (const ref of cost.statuses || []) needStatus(ref.status, `closing.${name}.fixedCosts.${cost.id}`);

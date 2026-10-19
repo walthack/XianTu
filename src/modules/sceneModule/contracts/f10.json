@@ -1094,14 +1094,6 @@
       "rewards": [],
       "next": "lcq.event.s05b_06_breakout_and_reunion"
     },
-    "timeout": {
-      "text": "",
-      "flags": {
-        "scene.f10.result": "timeout"
-      },
-      "rewards": [],
-      "next": null
-    },
     "playerChoices": {
       "join_or_yield": {
         "text": "你答应加入或投降，武士将你生擒，押入地牢。",

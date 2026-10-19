@@ -484,8 +484,10 @@ const characterBeats = computed(() => {
   if (!rt || typeof rt !== 'object') return [];
   const event = currentQuestEvent(rt);
   const objective = visibleQuestObjective(rt, event);
-  if (!objective) return [];
-  return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective })).concat(questLineView(gameStateStore.toSaveData()).character);
+  const view = questLineView(gameStateStore.toSaveData());
+  // 角色归宿（人物线已收束）不依赖当前拍，始终可见。
+  if (!objective) return view.resolved;
+  return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective })).concat(view.character, view.resolved);
 });
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const questMain = computed(() => {

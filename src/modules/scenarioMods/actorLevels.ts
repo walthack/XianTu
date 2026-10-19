@@ -16,6 +16,7 @@ import { getRegistryCanonicalId } from './characterResolver';
 import { relationshipOf } from './ledger/affinityIdentity';
 import { GAME_NUMBERS, registerNumbersValidator } from '../sceneModule/numbers';
 import { levelOf } from '../../utils/realmUtils';
+import { realmAt } from './levelProgression';
 
 export interface EnemyPreset { protagonistOffset?: number; combatStrength?: number; levelGap?: boolean; variants?: Record<string, EnemyPreset> }
 export interface EnemyPresetConfig { baseActorId: string; default: EnemyPreset; types: Record<string, EnemyPreset> }
@@ -108,4 +109,22 @@ export function currentActorLevel(id: string, opts: { chapter: number; variant?:
   // 玩家的表行只当初始值（initializeLevel 已按难度设置落到存档），存档为准，不再拿表级数抬高。
   const bare = player ? (saved ?? tableLevel!) : Math.max(saved ?? -Infinity, tableLevel ?? -Infinity);
   return { level: bare + suppression, source: player || fromSave ? 'save' : 'table', present: true, fact };
+}
+
+/**
+ * 关系档 npc.境界 的展示值以存档为准（2026-10-19 用户定：等级/属性/修为以存档为准、会变）。
+ * - 存档没有可识别的九级境界：用角色等级表当章行补；表上也没有（level 为 null / 查不到）且存档完全没写，才补“不详”。
+ * - 存档已有境界：只在表上当章级数更高时抬到表级（剧情节点的定向提升，与 currentActorLevel 的 max(存档, 表) 一致）；
+ *   从不往下改，也不把当章“暂时压制”烘进存档。
+ */
+export function reconcileNpcRealm(npc: any, characterId: string, chapter: number): void {
+  const fact = levelFact(characterId, chapter);
+  const table = typeof fact?.level === 'number' ? fact.level : null;
+  const saved = levelOf(npc.境界);
+  if (saved === null) {
+    if (table !== null) npc.境界 = realmAt(table);
+    else if (!npc.境界 || typeof npc.境界 !== 'object' || !npc.境界.名称) npc.境界 = { 名称: '不详', 阶段: '', 当前进度: 0, 下一级所需: 0, 突破描述: '' };
+    return;
+  }
+  if (table !== null && table > saved) npc.境界 = realmAt(table);
 }

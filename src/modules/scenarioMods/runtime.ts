@@ -1,7 +1,7 @@
 import {levelFact} from './characterLevels';
 import {realmAt} from './levelProgression';
 import {namingChapter} from './ledger/naming';
-import { DEFAULT_CURRENCIES } from '../../utils/currencySystem';
+import { settleStoryTrade } from './storyTrades';
 
 import {entityNamePattern} from './namedEntities';
 
@@ -9,13 +9,10 @@ import {entityAliases,canonicalEntityId} from './namedEntities';
 
 import {isNamedEntityLabel} from './namedEntities';
 import {refreshSaveEntityReferences} from './entitySaveRefs';
-import {catalogItem} from './entityCatalog';
-import statusCatalog from '../sceneModule/contracts/statuses.json';
-import {toPlayerStatusEffect} from '../sceneModule/statusAdapters';
-import {injuryStore,sceneTime,renderInjuryViews} from '../sceneModule/host/injuries';
-import {runtimeEntityName} from './ledger/affinityIdentity';
+import { settleQuestLineEffects } from './questLineEffects';
+import { reconcileNpcRealm } from './actorLevels';
 import {questLineOffer,questLineContext,expireQuestLineWindows,deferOptionalDeparture} from './questLineContext';
-import {QUEST_LINES,LINE_RESOURCES,lineText,settleLineInsertion} from './questLines';
+import {QUEST_LINES,LINE_RESOURCES} from './questLines';
 import { activeScene, sceneModuleEnabled } from '@/modules/sceneModule/host/ext';
 import { sceneContractForEvent, sceneContractById, sceneContractSupportsAction } from '@/modules/sceneModule/contracts/registry';
 import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS } from './fixedEndingNarratives';
@@ -3747,24 +3744,7 @@ export function previewWangZheStayEnding(saveData: SaveData, playerText: string)
 
 /** 已验证剧情动作的固定交易；回执避免读档/重复结算再次收付。 */
 function settleEarlyStoryTrade(saveData: SaveData, runtime: RuntimeState, eventId: string, actionId: string): void {
-  const key = `trade.${eventId}.${actionId}`;
-  if (runtime.flags[key]) return;
-  const fee = eventId === 'lcq.event.charge_sudaji_fee' && actionId === 'lock_fee_then_remove_device';
-  const buy = eventId === 'lcq.event.free_ajiman' && actionId === 'take_ajiman_bond_in_hand';
-  const tear = eventId === 'lcq.event.free_ajiman' && actionId === 'tear_bond_and_face_blockade';
-  if (!fee && !buy && !tear) return;
-  const inventory = saveData.角色?.背包;
-  if (!inventory) return;
-  if (fee || buy) {
-    inventory.货币 ||= {};
-    const gold = inventory.货币.金铢 || { ...DEFAULT_CURRENCIES.金铢, 数量: 0 };
-    inventory.货币.金铢 = { ...gold, ...DEFAULT_CURRENCIES.金铢, 数量: Math.max(0, (Number(gold.数量) || 0) + (fee ? 60 : -50)) };
-  }
-  const bondId = 'lcq.item.ajiman_bond';
-  inventory.物品 ||= {};
-  if (buy) {const item=catalogItem(bondId,runtime.modId)!;inventory.物品[bondId] = { 物品ID: item.id, 名称: item.name, 类型: '其他', 品质: { quality: '凡', grade: 0 }, 数量: 1, 描述: item.description, 已装备: false } as any;}
-  if (tear) delete inventory.物品[bondId];
-  runtime.flags[key] = true;
+  settleStoryTrade(saveData, runtime, eventId, actionId);
 }
 
 /** 初识与旧检查点补登记只读已结算动作，不依赖早期关卡缺失的 relatedCharacterIds。 */
@@ -3840,7 +3820,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     const npc = relations?.[character.id];
     if (!npc) continue;
     npc.名字 = character.name;
-    if(character.id!=='liuchao.character.xie_yi'){const fact=levelFact(character.id,namingChapter(runtime));npc.境界=fact?.level!==null&&fact?.level!==undefined?realmAt(fact.level):{名称:'不详',阶段:'',当前进度:0,下一级所需:0,突破描述:''};}
+    if(character.id!=='liuchao.character.xie_yi')reconcileNpcRealm(npc,character.id,namingChapter(runtime));
     if (isNamedEntityLabel("character","liuchao.character.ning_yu",character.name)) {
       const factualMemory = (note: string) => note.replace('被程宗扬用麻古迷奸', '曾遭程宗扬施用麻古造成的药物侵害，后来出现药物依赖（原著事实记忆，不作为可演出或可重复内容）');
       if (character.profile?.memories) character.profile.memories = character.profile.memories.map(factualMemory);
@@ -4055,42 +4035,9 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   return { saveData: next, transitions, affinityGrants, reputationGrants };
 }
 
-export function clampLineAffinityDelta(value:number):number {return Number.isFinite(value)?Math.max(-15,Math.min(15,value)):0;}
+export { clampLineAffinityDelta } from './questLineEffects';
 
 /** Own action receipt is the single write point for optional affection, memory and rewards. */
 function settleOptionalLine(save:SaveData,r:RuntimeState,event:ScenarioModEvent,actionId:string,outcome:string,hostDelta?:number):ScenarioInventorySettlement[] {
- const offer=questLineOffer(save,event.id);if(!offer)return [];
- const anyR=r as any,state=anyR.questLineState||={version:1,receipts:{}};
- const receiptId=`line.${event.id}.${actionId}`;
- const plan=settleLineInsertion(offer.line,offer.beat.id,{id:receiptId,eventId:event.id,actionId,outcome,turn:Number(r.worldTurn)||0},offer.ctx,state);if(!plan)return [];
- // Validate all referenced resources before writing any effect.
- for(const e of plan.effects){if(e.kind==='affinityGrant'&&!Number.isFinite((LINE_RESOURCES.affinityWeights as any)[e.weightId]))throw Error(`pending affinity weight ${e.weightId}`);if(e.kind==='memoryTicket'&&!(LINE_RESOURCES.memories as any)[e.episodeTemplateId])throw Error('unknown memory template');if(e.kind==='affinityGrant'&&!relationshipOf(save,e.actorId))throw Error('line owner missing');if(e.kind==='reveal'&&!(LINE_RESOURCES.facts as any)[e.factId])throw Error('unknown fact');if(e.kind==='status'&&!statusCatalog.some(d=>d.id===e.statusId))throw Error('unknown line status');}
- const majorResponse=hostDelta!==undefined && Math.abs(clampLineAffinityDelta(hostDelta))>=10;
- const effects:ScenarioPlayerCompletionEffects={},changes:any[]=[];
- for(const e of plan.effects){
-  if(e.kind==='itemGrant')(effects.inventoryTransfers||=[]).push({transferId:`${receiptId}.${e.itemId}`,itemId:e.itemId,quantity:e.quantity});
-  if(e.kind==='memoryTicket'){const m=(LINE_RESOURCES.memories as any)[e.episodeTemplateId];(effects.memories||=[]).push({actorIds:[e.actorId],summary:m.summary,tags:[`receipt:${receiptId}`,`template:${e.episodeTemplateId}`,...(majorResponse?["major_episode"]:[])],salience:majorResponse?Math.max(80,(LINE_RESOURCES.salience as any)[m.salienceId]):(LINE_RESOURCES.salience as any)[m.salienceId]});}
-  if(e.kind==='npcKnowledge')(effects.npcKnowledge||=[]).push({actorIds:e.actorIds,factId:e.factId});
-  if(e.kind==='reveal'){const f=(LINE_RESOURCES.facts as any)[e.factId];if(!f)throw Error('unknown line fact');(effects.playerKnowledge||=[]).push({factId:e.factId,subjectId:f.subjectId,predicate:'known',claim:f.claim,status:'confirmed',disclosureScope:'player',source:{kind:e.source==='told_privately'?'npc_statement':'observed',label:offer.beat.objective}} as any);}
-  if(e.kind==='setReceipt')(effects.pathReceipts||=[]).push({receiptId:e.receiptId,sourceEventId:event.id,choiceId:actionId,mutexGroupId:e.mutexGroupId||e.receiptId,dimension:'method',label:offer.beat.objective,consumeAtEventIds:e.consumeAtEventIds});
-  if(e.kind==='setState')r.flags[e.stateId]=e.value;
-  if(e.kind==='affinityGrant'){
-   const npc=relationshipOf(save,e.actorId)?.profile;if(!npc)throw Error(`line owner missing ${e.actorId}`);
-   const delta=clampLineAffinityDelta(hostDelta ?? Number((LINE_RESOURCES.affinityWeights as any)[e.weightId])),from=Number(npc.好感度)||0,cap=affinityCapFor(e.actorId,typeof npc.与玩家关系==='string'?npc.与玩家关系:undefined,runtimeEntityName(r,e.actorId))?.cap??100;
-   const to=clampAffinity(delta>0?Math.max(from,Math.min(cap,from+delta)):from+delta);npc.好感度=to;
-   changes.push({characterId:e.actorId,from,to,weightId:e.weightId,receiptId,name:runtimeEntityName(r,e.actorId),eventId:event.id,eventName:event.name});
-  }
-  if(e.kind==='status'){
-   const def=statusCatalog.find(d=>d.id===e.statusId)! as any,minutes=def.afterScene?.minutes??null,store=injuryStore(save),now=sceneTime(save);
-   (store.actors[e.actorId]||=[]).push({player:e.actorId===r.opening?.playerCharacterId,statusId:def.id,label:def.label,sourceScene:receiptId,cause:def.cause,source:def.source,appliedAt:now,expiresAt:minutes===null?null:now+minutes,effects:def.effects,remove:def.remove});
-   if(e.actorId===r.opening?.playerCharacterId){const row={party:e.actorId,ref:e.actorId,status:def.id,label:def.label,minutes,cause:def.cause,source:receiptId};(save.角色.效果||=[]).push(toPlayerStatusEffect(row,(save as any).元数据.时间,def));}renderInjuryViews(save);
-  }
-  if(e.kind==='ending')anyR.gameOver={endingId:e.endingId,presentation:endingPresentation({endingId:e.endingId,sourceEventId:event.id}),sourceEventId:event.id,atTurn:r.worldTurn};
-
- }
- const inventory=applyStoryEventOutcomeEffects(save,r,event,actionId,'success',effects,1);
- for(const e of plan.effects)if(e.kind==='memoryTicket'){const npc=relationshipOf(save,e.actorId)?.profile as any,m=(LINE_RESOURCES.memories as any)[e.episodeTemplateId];if(npc){npc.记忆=Array.isArray(npc.记忆)?npc.记忆:[];npc.记忆.push(m.summary);npc.记忆=npc.记忆.slice(-12);}}
- (anyR.pendingLineAffinityGrants||=[]).push(...changes);
- anyR.questLineState=plan.state;(anyR.questLineState.affinityChanges||=[]).push(...changes);
- return inventory;
+ return settleQuestLineEffects(save,r,event,actionId,outcome,hostDelta,effects=>applyStoryEventOutcomeEffects(save,r,event,actionId,'success',effects,1));
 }

@@ -15,7 +15,7 @@ export type LineCondition = {all:LineCondition[]}|{any:LineCondition[]}|{not:Lin
 export type LineEffect = LineEffectBody & {when?:LineCondition};
 type LineEffectBody = {kind:'affinityGrant';actorId:string;weightId:string}|{kind:'memoryTicket';actorId:string;episodeTemplateId:string}|
  {kind:'reveal';factId:string;source:'told_privately'|'heard'|'seen'}|{kind:'itemGrant';itemId:string;quantity:number}|
- {kind:'status';actorId:string;statusId:string}|{kind:'ending';endingId:string}|{kind:'npcKnowledge';actorIds:string[];factId:string}|{kind:'setReceipt';receiptId:string;mutexGroupId?:string;consumeAtEventIds:string[]}|{kind:'setState';stateId:string;value:string|number|boolean};
+ {kind:'status';actorId:string;statusId:string}|{kind:'ending';endingId:string;actorId?:string;textId?:string}|{kind:'npcKnowledge';actorIds:string[];factId:string}|{kind:'setReceipt';receiptId:string;mutexGroupId?:string;consumeAtEventIds:string[]}|{kind:'setState';stateId:string;value:string|number|boolean};
 export type LineRole='load_bearing'|'choice'|'color'|'transition';
 /** Optional authoring cards. Unset fields keep the old behaviour. */
 export interface LineCard {previous:string;tension:string;options:string[]}
@@ -27,7 +27,9 @@ export interface LineContext {completedEventIds:readonly string[];activeEventIds
 export interface LineReceipt {id:string;eventId:string;actionId:string;outcome:string;turn:number}
 /** 主动得分明细（只读快照，供存档导出核对）：每个按得分过线才写入的状态，各项当时得几分、合计与过线分。判定仍由 lineConditionMet 现算，这里不参与判定。 */
 export interface LineScoreSnapshot {line:string;beat:string;action:string;terms:Array<{stateId:string;value:string|null;score:number}>;plus:number;total:number;needed:number;passed:boolean}
-export interface LineState {version:1;receipts:Record<string,{receiptId:string;turn:number;outcome:string}>;expired?:Record<string,number>;activeScores?:Record<string,LineScoreSnapshot>}
+/** 角色归宿（人物线结局只归角色，与整局结局无关）：resolutionId = 结局 id，textId 可选的归宿文字，label 为面板显示。 */
+export interface ActorResolution {lineId:string;actorIds:string[];resolutionId:string;textId?:string;label:string;atTurn:number;sourceEventId:string}
+export interface LineState {version:1;receipts:Record<string,{receiptId:string;turn:number;outcome:string}>;expired?:Record<string,number>;activeScores?:Record<string,LineScoreSnapshot>;/** lineId → 归宿 */actorResolutions?:Record<string,ActorResolution>;/** lineId → 关线回合（走到角色归宿后这条线不再提供任何拍） */closedLines?:Record<string,number>}
 export type ReferenceKind='character'|'event'|'action'|'location'|'chapter'|'fact'|'flag'|'item'|'status'|'ending'|'affinityWeight'|'memoryTemplate'|'text'|'receipt'|'state';
 export type ReferenceLookup=(kind:ReferenceKind,id:string,eventId?:string)=>boolean;
 const object=(x:unknown):x is Record<string,any>=>!!x&&typeof x==='object'&&!Array.isArray(x);
@@ -47,7 +49,7 @@ function condition(x:unknown,where:string,depth=0):asserts x is LineCondition {
 }
 function effect(x:unknown,where:string):asserts x is LineEffect {
  if(!object(x))throw Error(`${where}: invalid effect`);
- const allowed:Record<string,string[]>={affinityGrant:['actorId','weightId'],memoryTicket:['actorId','episodeTemplateId'],reveal:['factId','source'],itemGrant:['itemId','quantity'],status:['actorId','statusId'],ending:['endingId'],npcKnowledge:['actorIds','factId'],setReceipt:['receiptId','mutexGroupId','consumeAtEventIds'],setState:['stateId','value']};
+ const allowed:Record<string,string[]>={affinityGrant:['actorId','weightId'],memoryTicket:['actorId','episodeTemplateId'],reveal:['factId','source'],itemGrant:['itemId','quantity'],status:['actorId','statusId'],ending:['endingId','actorId','textId'],npcKnowledge:['actorIds','factId'],setReceipt:['receiptId','mutexGroupId','consumeAtEventIds'],setState:['stateId','value']};
  const keys=allowed[x.kind];if(!keys)throw Error(`${where}: effect not whitelisted`);fields(x,['kind','when',...keys],where);if(x.when!==undefined)condition(x.when,`${where}.when`);
  for(const k of keys)if(k.endsWith('Id')&&x[k]!==undefined&&!id(x[k]))throw Error(`${where}: invalid ${k}`);
  if(x.kind==='npcKnowledge'&&(!Array.isArray(x.actorIds)||!x.actorIds.every(id)))throw Error('invalid knowledge actors');
@@ -97,11 +99,11 @@ export function lineConditionMet(c:LineCondition,ctx:LineContext):boolean {
  return ctx.flags[c.flag.id]===c.flag.value;
 }
 export function lineInsertionsAt(lines:QuestLine[],eventId:string|undefined,ctx:LineContext,state?:LineState){
- return lines.filter(l=>lineConditionMet(l.entry,ctx)&&(!l.closeWhen||!lineConditionMet(l.closeWhen,ctx))).flatMap(line=>line.beats.filter(b=>(b.mode==='standalone'||b.hostEventId===eventId||ctx.completedEventIds.includes(b.hostEventId!))&&!state?.receipts[b.id]&&state?.expired?.[b.id]===undefined&&(!b.closeWhen||!lineConditionMet(b.closeWhen,ctx))&&(!b.requires||lineConditionMet(b.requires,ctx))).map(beat=>({line,beat})));
+ return lines.filter(l=>state?.closedLines?.[l.id]===undefined&&lineConditionMet(l.entry,ctx)&&(!l.closeWhen||!lineConditionMet(l.closeWhen,ctx))).flatMap(line=>line.beats.filter(b=>(b.mode==='standalone'||b.hostEventId===eventId||ctx.completedEventIds.includes(b.hostEventId!))&&!state?.receipts[b.id]&&state?.expired?.[b.id]===undefined&&(!b.closeWhen||!lineConditionMet(b.closeWhen,ctx))&&(!b.requires||lineConditionMet(b.requires,ctx))).map(beat=>({line,beat})));
 }
 /** Returns a whitelisted effect plan once; the host owns atomic effect application and persistence. */
 export function settleLineInsertion(line:QuestLine,beatId:string,receipt:LineReceipt,ctx:LineContext,state:LineState){
- const beat=line.beats.find(b=>b.id===beatId);if(!beat||state.receipts[beatId]||state.expired?.[beatId]!==undefined||(line.closeWhen&&lineConditionMet(line.closeWhen,ctx))||(beat.closeWhen&&lineConditionMet(beat.closeWhen,ctx))||!lineConditionMet(line.entry,ctx)|| (beat.requires&&!lineConditionMet(beat.requires,ctx)))return null;
+ const beat=line.beats.find(b=>b.id===beatId);if(!beat||state.closedLines?.[line.id]!==undefined||state.receipts[beatId]||state.expired?.[beatId]!==undefined||(line.closeWhen&&lineConditionMet(line.closeWhen,ctx))||(beat.closeWhen&&lineConditionMet(beat.closeWhen,ctx))||!lineConditionMet(line.entry,ctx)|| (beat.requires&&!lineConditionMet(beat.requires,ctx)))return null;
  const r=completionReceipts(beat).map(x=>x.eventActionReceipt).find(x=>x.actionId===receipt.actionId);if(!r)return null;
  if(!id(receipt.id)||receipt.eventId!==r.eventId||receipt.actionId!==r.actionId||receipt.outcome!=='success'||!Number.isSafeInteger(receipt.turn)||receipt.turn<0)return null;
  const next=JSON.parse(JSON.stringify(state)) as LineState;next.receipts[beatId]={receiptId:receipt.id,turn:receipt.turn,outcome:receipt.outcome};
@@ -126,6 +128,6 @@ export function validateQuestLineReferences(table:QuestLineTable,has:ReferenceLo
  const cond=(c:LineCondition):void=>{if('all'in c){c.all.forEach(cond);return;}if('any'in c){c.any.forEach(cond);return;}if('not'in c){cond(c.not);return;}
   if('canonChapterAtLeast'in c)return;else if('eventActive'in c)ref('event',c.eventActive);else if('eventDone'in c)ref('event',c.eventDone);else if('presentActor'in c)ref('character',c.presentActor);else if('knownFact'in c)ref('fact',c.knownFact);else if('atLocation'in c)ref('location',c.atLocation);else if('chapterAtLeast'in c)ref('chapter',c.chapterAtLeast);else if('affinityAtLeast'in c)ref('character',c.affinityAtLeast.actorId);else if('stateScoreAtLeast'in c)c.stateScoreAtLeast.terms.forEach(t=>ref('state',t.stateId));else ref('flag',c.flag.id);};
  for(const l of table.lines){l.ownerCharacterIds.forEach(i=>ref('character',i));cond(l.entry);if(l.closeWhen)cond(l.closeWhen);if(l.resolution?.endingId)ref('ending',l.resolution.endingId);for(const b of l.beats){if(b.hostEventId)ref('event',b.hostEventId);if(b.sceneLocationId)ref('location',b.sceneLocationId);ref('event',b.eventId);for(const r of completionReceipts(b))ref('action',r.eventActionReceipt.actionId,b.eventId);for(const a of b.steps||[]){ref('text',a.labelId);ref('text',a.intentId);if(a.previousId)ref('text',a.previousId);(a.requiresPresentActors||[]).forEach((id:string)=>ref('character',id));}for(const v of Object.values(b.echo?.variants||{})){if(v.previousId)ref('text',v.previousId);for(const t of Object.values(v.outcomeIds||{}))ref('text',t);}if(b.closeWhen)cond(b.closeWhen);if(b.requires)cond(b.requires);if(b.endingId)ref('ending',b.endingId);
- for(const e of [...b.onComplete,...Object.values(b.byAction||{}).flat(),...(b.onExpire||[])]){if(e.when)cond(e.when);if('actorId'in e)ref('character',e.actorId);if(e.kind==='affinityGrant')ref('affinityWeight',e.weightId);if(e.kind==='memoryTicket')ref('memoryTemplate',e.episodeTemplateId);if(e.kind==='reveal')ref('fact',e.factId);if(e.kind==='itemGrant')ref('item',e.itemId);if(e.kind==='status')ref('status',e.statusId);if(e.kind==='ending')ref('ending',e.endingId);if(e.kind==='npcKnowledge'){e.actorIds.forEach(id=>ref('character',id));ref('fact',e.factId);}if(e.kind==='setState')ref('state',e.stateId);if(e.kind==='setReceipt'){ref('receipt',e.receiptId);e.consumeAtEventIds.forEach(id=>ref('event',id));}}}}
+ for(const e of [...b.onComplete,...Object.values(b.byAction||{}).flat(),...(b.onExpire||[])]){if(e.when)cond(e.when);if('actorId'in e&&e.actorId)ref('character',e.actorId);if(e.kind==='affinityGrant')ref('affinityWeight',e.weightId);if(e.kind==='memoryTicket')ref('memoryTemplate',e.episodeTemplateId);if(e.kind==='ending'&&e.textId)ref('text',e.textId as string);if(e.kind==='reveal')ref('fact',e.factId);if(e.kind==='itemGrant')ref('item',e.itemId);if(e.kind==='status')ref('status',e.statusId);if(e.kind==='ending')ref('ending',e.endingId);if(e.kind==='npcKnowledge'){e.actorIds.forEach(id=>ref('character',id));ref('fact',e.factId);}if(e.kind==='setState')ref('state',e.stateId);if(e.kind==='setReceipt'){ref('receipt',e.receiptId);e.consumeAtEventIds.forEach(id=>ref('event',id));}}}}
  return [...new Set(errors)];
 }

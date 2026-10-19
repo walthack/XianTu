@@ -127,8 +127,8 @@
       }
     },
     "beatLimit": {
-      "note": "场面战斗拍数门禁（sceneModule/beatLimit.ts）：一场还没分出胜负、已打完的拍数超过 max，就记 LCQ-SAV-020（error，持久日志），每多打一拍记一次。只记录、不改判：到上限之后怎么判（判负、按超时收场或其它）尚待拍板。",
-      "max": 20
+      "note": "场面战斗拍数门禁（sceneModule/beatLimit.ts）。max=0（默认）＝不设上限：战斗打到一方倒下或达成胜负条件才结束；只有合同显式声明为限时战（clock.beats + clock.onTimeout {type:close, as:win|lose}）才在时限到时按合同判赢或输。max 设为正整数时只作诊断：一场还没分出胜负、已打完的拍数超过 max 就记 LCQ-SAV-020（error），每多打一拍记一次，不改判。",
+      "max": 0
     },
     "negotiation": {
       "note": "场面里的交涉说法（sceneModule/host/recognize.ts）：玩家原话命中 patterns（正则片段，任一即可），且去掉交涉说法与 ignoreNouns（指人的称呼，如“袭击者”里的“击”不算动手）、合同参与方别称后不剩动手字眼，就算交涉；合同没有交涉目标时在模型识别之前给 notice，不归到攻击或防守。",

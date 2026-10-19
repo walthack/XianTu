@@ -202,7 +202,7 @@ test('默认不设拍数：打到一方倒下才结束，不会因为拖得久�
   assert.ok(s.audit.length <= 200);
 });
 
-test('合同设了拍数：拖满默认不算赢（超时收束）；只有合同明写 win 才算赢', () => {
+test('只有合同显式声明限时（clock.beats + onTimeout）才在时限到时判赢或输；没有“超时收束”第三态', () => {
   const run = clock => {
     const contract = makeContract({ clock, enemyActions: [] });
     const { state } = begin(contract, { action: [4, 4, 4] });
@@ -210,12 +210,8 @@ test('合同设了拍数：拖满默认不算赢（超时收束）；只有合�
     for (let i = 0; i < 2; i++) s = mod.confirmAction(contract, s, attack(['boss']), CTX).state;
     return { contract, state: s };
   };
-  const implicit = run({ beats: 2 });
-  assert.equal(implicit.state.outcome.kind, 'timeout');
-  const timeout = mod.closeScene(implicit.contract, implicit.state, CTX);
-  const final = Object.fromEntries(timeout.writeBack.finalStates.map(f => [f.party, f.label]));
-  assert.equal(final.foe_a, '重', '合同写的超时收束：未完成的敌方置成“重”');
-  assert.equal(run({ beats: 2, onTimeout: { type: 'close', as: 'timeout' } }).state.outcome.kind, 'timeout');
+  assert.throws(() => run({ beats: 2 }), /没写 onTimeout/, '只写 clock.beats 不写 onTimeout：合同体检不通过，不能开场');
+  assert.throws(() => run({ beats: 2, onTimeout: { type: 'close', as: 'timeout' } }), /win"\|"lose"/, 'onTimeout 只能判赢或输');
   assert.equal(run({ beats: 2, onTimeout: { type: 'close', as: 'win' } }).state.outcome.kind, 'win');
   assert.equal(run({ beats: 2, onTimeout: { type: 'close', as: 'lose' } }).state.outcome.kind, 'lose');
 });

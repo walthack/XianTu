@@ -155,7 +155,7 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   const context=sceneContext(save,c,p.text);
   if(p.plan.goal==='yield_guard'||p.plan.goal==='expose_self')context.playerDefense=-100;
   const confirmed=confirmAction(c,a.state,p.plan,context);a.state=confirmed.state;a.pending=null;
-  // 拍数门禁：超过 combat.beatLimit.max 仍未分胜负就记 LCQ-SAV-020（只记录，不改判）。
+  // 拍数门禁：combat.beatLimit.max 默认 0＝不限；设了正整数时超过仍未分胜负就记 LCQ-SAV-020（只记录，不改判）。
   checkBeatLimit(c,a.state);
   if(c.levelContext)snapshotLevels(save,c,a.state);
   const lines=renderResultLines(c,confirmed.result).map(line=>renderRefs(line,runtimeOf(save)));

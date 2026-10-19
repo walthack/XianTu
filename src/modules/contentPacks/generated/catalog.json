@@ -1,5 +1,5 @@
 {
-  "version": "46507b265fd22d57",
+  "version": "02288c2f75b31964",
   "contracts": [
     {
       "meta": {
@@ -1707,31 +1707,6 @@
               "to": "逃走"
             }
           ]
-        },
-        "timeout": {
-          "text": "这一仗没能把来袭武士全部留下。未被击倒或制住的人借雾逃走；队伍伤情与代价按实际结果记账。",
-          "settle": [
-            {
-              "side": "opposed",
-              "track": "vit",
-              "onlyUnfinished": true,
-              "to": "逃走"
-            }
-          ],
-          "fixedCosts": [
-            {
-              "id": "guard_fallen",
-              "target": "caravan_guards",
-              "effect": "商馆护卫在这场败局中阵亡",
-              "anchorText": "45·97；31号验收后补定"
-            }
-          ],
-          "flags": {
-            "scene.f03.result": "timeout",
-            "scene.f03.escaped": true
-          },
-          "rewards": [],
-          "next": null
         }
       },
       "narration": {
@@ -3375,14 +3350,6 @@
           },
           "rewards": [],
           "next": "lcq.event.s05b_06_breakout_and_reunion"
-        },
-        "timeout": {
-          "text": "",
-          "flags": {
-            "scene.f10.result": "timeout"
-          },
-          "rewards": [],
-          "next": null
         },
         "playerChoices": {
           "join_or_yield": {

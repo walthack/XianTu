@@ -14,7 +14,7 @@ test('场面简报：每拍由代码从状态重新生成，结构固定，短�
   assert.match(brief.text, /【红线】.*不得出局/);
   assert.match(brief.text, /不得写“天降神兵”/);
   assert.ok(brief.chars < 700, `${brief.chars}`);
-  const timed = makeContract({ clock: { beats: 4, onTimeout: { type: 'close', as: 'timeout' } } });
+  const timed = makeContract({ clock: { beats: 4, onTimeout: { type: 'close', as: 'lose' } } });
   assert.match(mod.buildSceneBrief(timed, begin(timed, {}).state).text, /第1拍\/共4拍/);
   assert.equal(mod.buildSceneBrief(contract, state).text, brief.text, '同一状态生成同一份简报');
 });

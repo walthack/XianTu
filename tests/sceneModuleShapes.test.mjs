@@ -13,16 +13,16 @@ const base = {
   closing: { win: { next: 'x' }, lose: { next: 'x' } },
 };
 
-test('“限拍 + 拍满剩下的对手逃走”型（防止逃脱）：不赢也不输，剩下的按合同置成“逃走”', () => {
+test('“限拍 + 拍满剩下的对手逃走”型（防止逃脱）：时限到按合同判输，剩下的按败局分支置成“逃走”', () => {
   const contract = {
     ...base,
     meta: { id: 'shape.escape', version: 1, scene: { kind: 'combat' }, hook: { required: true, ambushAfterStall: 3 } },
     objective: { text: '一个也别放走', win: { all: ['f1', 'f2', 'f3'].map(party => ({ party, track: 'vit', reach: 'final' })) } },
     parties: [pc, ...['f1', 'f2', 'f3'].map(id => ({ ...foe(id, `test.foe.${id}`, { finalState: '倒下', ceiling: 3 }), tracks: [{ id: 'vit', scale: FLEE_SCALE, ending: { finalState: '倒下', ceiling: 3 } }] }))],
     tracks: [{ id: 'vit', kind: 'harm', scale: FLEE_SCALE }],
-    clock: { beats: 4, onTimeout: { type: 'close', as: 'timeout' } },
+    clock: { beats: 4, onTimeout: { type: 'close', as: 'lose' } },
     defeat: { conditions: [{ kind: 'partyDowned', party: 'pc' }], outcome: { type: 'continue' } },
-    closing: { win: { next: 'after' }, lose: { next: 'after' }, timeout: { settle: [{ side: 'opposed', onlyUnfinished: true, to: '逃走' }], next: 'after_escape' } },
+    closing: { win: { next: 'after' }, lose: { settle: [{ side: 'opposed', onlyUnfinished: true, to: '逃走' }], next: 'after_escape' } },
   };
   assert.deepEqual(mod.lintContract(contract).errors, []);
   let { state } = begin(contract, { action: [10, 10, 10, 10, 10], defense: [] });
@@ -34,7 +34,7 @@ test('“限拍 + 拍满剩下的对手逃走”型（防止逃脱）：不赢�
     if (out.result.claims[0].label) killed.push(out.result.claims[0].label);
   }
   assert.equal(state.status, 'decided');
-  assert.equal(state.outcome.kind, 'timeout', '拖满拍数不算赢');
+  assert.equal(state.outcome.kind, 'lose', '限时战到时按合同判输，不算赢');
   const { writeBack } = mod.closeScene(contract, state, CTX);
   const final = Object.fromEntries(writeBack.finalStates.map(f => [f.party, f.label]));
   assert.equal(final.f1, '倒下', '已被推到头的保持原样');

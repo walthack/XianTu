@@ -6,6 +6,7 @@ import { runtimeEntityId, runtimeEntityName, migrateRuntimePersonRecords } from 
 import type { SaveData } from '@/types/game';
 import type { ScenarioStepScene } from './schema';
 import { advanceClock } from './travel/travelLedger';
+import { isStepSceneStage } from './travel/stepScene';
 import { visibleModuleText } from './modularTurn';
 /** 剧情交接 2026-10-02：固定死亡正文；配图由 endingPresentation 提供。 */
 const ENDING_TEXTS: Readonly<Record<string,string>> = CONTENT_PACKS.texts;
@@ -101,7 +102,8 @@ export function sceneDayPart(time: any): string {
   const hour = Number(time?.小时) || 0;
   return hour < 5 ? '深夜' : hour < 8 ? '清晨' : hour < 12 ? '上午' : hour < 17 ? '白天' : hour < 20 ? '黄昏' : '夜';
 }
-export function isNanhuangSceneStage(id?: string): boolean { return /^lcq\.stage_0(?:3b|4|4b)/.test(id || ''); }
+/** 逐拍演出关卡判断改读行旅数据（travel/stepScene），保留旧名供现有调用方使用。 */
+export function isNanhuangSceneStage(id?: string): boolean { return isStepSceneStage(id); }
 
 /** 只由成功的本地步骤调用；同一步重复回执不重复改生死、物品或时间。 */
 export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: string, actionId: string, sceneOverride?: Partial<ScenarioStepScene>): void {

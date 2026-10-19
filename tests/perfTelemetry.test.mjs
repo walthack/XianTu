@@ -6,10 +6,14 @@
 //   1. 3763e22e — runtime.ts 同拍闸（settleSharedExperienceAffinity ↔ affinityBeatTaken，+约 6 行）
 //   2. 781b656a — AIBidirectionalSystem.ts 自由行动接线（放行说明；口径不完全是「仅 bugfix/已批清理」；
 //                该提交已在 baseline-p1 祖先内，相对当前 merge-base 通常无 name-only 差分）
+//   3. 2026-10-19 22:31 用户批准的小批解冻（runtime.ts / AIBidirectionalSystem.ts）：任务线效果结算迁至 questLineEffects.ts
+//      （角色结局只记归宿、不写 gameOver）、NPC 境界走 actorLevels.reconcileNpcRealm、剧情交易金额读 story.trades、
+//      逐拍演出关卡读行旅数据 + story.stepScene.minutesPerBeat。改完重新上锁：内容哈希基线 tests/frozen-baseline.json。
 // 已批、可对照但不需再「新批」的清理：63fdf031（runtime world_sim 移除）、cd3d3706（AIBS 快速演示删除）。
 // 禁止：回滚同拍闸、把同拍闸迁出 runtime、为过门禁改游戏运行时逻辑。
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -210,6 +214,12 @@ test('冻结门禁：AIBS 遥测 begin/end 各一处；runtime/AIBS 仅允许方
   assert.equal((ai.match(/beginTurnTelemetry\(/g) ?? []).length, 1);
   assert.equal((ai.match(/endTurnTelemetry\(/g) ?? []).length, 1);
   assert.ok(!/getPerfStats|recordPerf/.test(ai), '聚合在 turnTelemetry 内部，调用方不感知');
+  // 内容哈希锁（不依赖 baseline-p1 分支是否在本地）：两份冻结文件须与 tests/frozen-baseline.json 一致。
+  const baseline = JSON.parse(readFileSync(`${root}tests/frozen-baseline.json`, 'utf8'));
+  for (const file of ['src/utils/AIBidirectionalSystem.ts', 'src/modules/scenarioMods/runtime.ts']) {
+    const sha = createHash('sha256').update(readFileSync(`${root}${file}`)).digest('hex');
+    assert.equal(sha, baseline.files[file], `冻结文件内容与基线不符: ${file}（解冻须用户批准并更新 tests/frozen-baseline.json）`);
+  }
   // 与 feat/baseline-p1 merge-base 相比：仅允许 ALLOWED_FROZEN_NAME_DIFF 内文件出现；无 tip 时跳过。
   let base = '';
   try { base = execFileSync('git', ['merge-base', 'HEAD', 'feat/baseline-p1'], { cwd: root, encoding: 'utf8' }).trim(); } catch { return; }
@@ -221,14 +231,12 @@ test('冻结门禁：AIBS 遥测 begin/end 各一处；runtime/AIBS 仅允许方
   for (const file of changed) {
     assert.ok(ALLOWED_FROZEN_NAME_DIFF.has(file), `未放行的冻结差分: ${file}`);
   }
-  // 有限 diff：runtime 若触碰，须仍是已批同拍闸接线（3763e22e），且相对基线增删行数不大。
+  // 2026-10-19 22:31 用户批准小批解冻（任务线效果结算迁出 questLineEffects、NPC 境界以存档为准、剧情交易金额进 story.trades、
+  // 逐拍演出关卡读行旅数据 + story.stepScene.minutesPerBeat）。改完重新锁上：两份冻结文件的内容哈希必须等于基线
+  // tests/frozen-baseline.json；再动须重新获批并更新基线（取代原 +20/-50 行数上限）。
   if (changed.includes('src/modules/scenarioMods/runtime.ts')) {
     const runtime = readFileSync(`${root}src/modules/scenarioMods/runtime.ts`, 'utf8');
     assert.ok(runtime.includes('affinityBeatTaken'), 'runtime 同拍闸：须保留 affinityBeatTaken');
     assert.ok(runtime.includes('writableFreeActionState'), 'runtime 同拍闸：须保留 affinityTurn 记账');
-    const numstat = execFileSync('git', ['diff', '--numstat', base, 'HEAD', '--', 'src/modules/scenarioMods/runtime.ts'], { cwd: root, encoding: 'utf8' }).trim();
-    const [added, deleted] = numstat.split('\t').map(s => Number(s));
-    assert.ok(Number.isFinite(added) && Number.isFinite(deleted), `runtime numstat 不可解析: ${numstat}`);
-    assert.ok(added <= 20 && deleted <= 50, `runtime 差分超出方案 A 有限范围 (+${added}/-${deleted})；对照 3763e22e / 63fdf031`);
   }
 });

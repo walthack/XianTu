@@ -968,6 +968,12 @@
   },
   "lineBonds": {
     "bonusPerActiveAction": 1,
+    "majorResponse": {
+      "note": "任务线一次回应算“重大”的门槛（好感变化绝对值，先按 freeAction.affinity.perBeatCap 截断）、重大回应记忆的显著度下限、人物记忆保留条数",
+      "delta": 10,
+      "salienceFloor": 80,
+      "memoryKeep": 12
+    },
     "salience": {
       "notable": 30
     },
@@ -1025,5 +1031,16 @@
     "maxCardChars": 1400,
     "maxPresentActorsSouthern": 18,
     "maxPresentActorsDefault": 3
+  },
+  "story": {
+    "note": "剧情固定数值：已验证剧情动作的固定交易（按事件+动作回执只结算一次）；逐拍演出关卡每拍默认推进的分钟数（卡片自带 dayPart 时不另推进）",
+    "trades": [
+      { "eventId": "lcq.event.charge_sudaji_fee", "actionId": "lock_fee_then_remove_device", "goldDelta": 60 },
+      { "eventId": "lcq.event.free_ajiman", "actionId": "take_ajiman_bond_in_hand", "goldDelta": -50, "grantItemId": "lcq.item.ajiman_bond" },
+      { "eventId": "lcq.event.free_ajiman", "actionId": "tear_bond_and_face_blockade", "removeItemId": "lcq.item.ajiman_bond" }
+    ],
+    "stepScene": {
+      "minutesPerBeat": 120
+    }
   }
 }

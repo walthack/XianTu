@@ -19,6 +19,7 @@ import { xiaoziDisclosure, isDisclosureFactAllowed } from '@/modules/scenarioMod
 import { isLocationLootInput, settleLocationLoot, validateLootNarrative } from '@/modules/scenarioMods/locationLoot';
 import { resolveScenarioEventNarrative } from '@/modules/scenarioMods/eventNarrativeView';
 import { departedPresentNames } from '@/modules/scenarioMods/presence';
+import { isStepSceneStage, stepSceneMinutesPerBeat } from '@/modules/scenarioMods/travel/stepScene';
 import { fixedEndingNarrative, fixedBeatNarrative, endingBridge, stepScene, sceneLedgerSummary, sceneDayPart, isNanhuangSceneStage } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { isDemoModuleOnly, assertDemoModulePath, isModulePlaytestSelected, isModularTurnEnabled, validateModuleSettlementNarrative, validateModuleCastNarrative, ModuleNarrativeGuardError, validateNanhuangCanonNarrative, localModuleGuardNarrative, getModuleReceipts, readModuleNarrative, parseModuleObject, visibleModuleText, appendModuleReceipt, recentModuleMemory, attemptModuleNarrative } from '@/modules/scenarioMods/modularTurn';
 import { narrativeBoundaryNote, stripNarrativeBoundaryClauses } from '@/modules/scenarioMods/narrativeBoundaries';
@@ -764,10 +765,10 @@ class AIBidirectionalSystemClass {
         > ((saveData as any).世界?.状态?.剧本模组?.travelLedger?.state?.travelReceipts?.length || 0));
     if (travelledAfterStep) (sceneSave as any).角色.位置 = cloneDeep((saveData as any).角色.位置);
     const sceneReceipts = travelledAfterStep ? { move: false, casualty: preview!.receipts.casualty } : preview?.receipts;
-    if (preview && isNanhuangSceneStage((saveData as any).世界?.状态?.剧本模组?.modId)) {
+    if (preview && isStepSceneStage((saveData as any).世界?.状态?.剧本模组?.modId)) {
       // 当前步回执供演出，上一拍要点仍从开拍前取，避免把本拍当作历史重演。
       (sceneSave as any).世界.状态.剧本模组.sceneLedger = { ...((sceneSave as any).世界.状态.剧本模组.sceneLedger || {}), lastBeat: (saveData as any).世界.状态.剧本模组.sceneLedger?.lastBeat };
-      if (!card?.dayPart) advanceClock(sceneSave, { minutes: 120 }, 'scene_preview');
+      if (!card?.dayPart) advanceClock(sceneSave, { minutes: stepSceneMinutesPerBeat() }, 'scene_preview');
     }
     const compiled = moduleOnly
       ? (plan && preview ? { ...compileLegacyNarratorPacket(sceneSave, plan, '', '', '', sceneReceipts), storyPrompt: '', settlementAttempted: true } : null)
@@ -2739,7 +2740,7 @@ ${step1Text}
       && (eventProgress?.attempted || (openWorldProgress?.settled && !openWorldProgress.idempotent)
         || (!options?.eventAction && !options?.openWorldAction))) {
       const currentCard = stepScene((saveData as any).世界?.状态?.剧本模组, eventProgress?.eventId, eventProgress?.actionId);
-      const cost = isNanhuangSceneStage((saveData as any).世界?.状态?.剧本模组?.modId) ? (currentCard?.dayPart ? 0 : 120) : Math.max(1, Number(options?.eventAction?.timeCost || options?.openWorldAction?.timeCost) || 1);
+      const cost = isStepSceneStage((saveData as any).世界?.状态?.剧本模组?.modId) ? (currentCard?.dayPart ? 0 : stepSceneMinutesPerBeat()) : Math.max(1, Number(options?.eventAction?.timeCost || options?.openWorldAction?.timeCost) || 1);
       const advanced = advanceClock(saveData, { minutes: cost }, 'module_turn');
       if (advanced) changes.push({ key: '元数据.时间', action: 'set', oldValue: advanced.oldValue, newValue: advanced.newValue });
     }

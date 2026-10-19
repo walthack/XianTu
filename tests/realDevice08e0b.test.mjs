@@ -46,16 +46,28 @@ test('7) F06 真机第 18 拍：原来的 -12 全是级差（程宗扬 2 级 vs 
  assert.ok(h.save.角色.属性.气血.当前<hp,'旧 onCrush（挂呛水伤、跳过扣血）已删：普通打中按通用挂伤规则只扣气血');
 });
 
-test('7) 拍数门禁：F06 真机存档继续打，超过 combat.beatLimit.max 记 LCQ-SAV-020（error），每多一拍记一次；只记录，不改判', async()=>{
- const max=GAME_NUMBERS.combat.beatLimit.max;assert.ok(Number.isInteger(max)&&max>=1);
- const h=harness(await readSaveFixture(F06),{goal:'repel',claim:{magnitude:1,scope:'single',targets:['merfolk']},levers:[]});
- const a=active(h);a.state.forced={action:Array(60).fill(10),defense:Array(120).fill(8)};a.state.cursors={action:0,defense:0};
- const before=sav020().length;let played=a.state.beat-1;
- while(played<=max+1){await beat(h,'我挥刀制服鲛人');played=active(h).state.beat-1;}
+test('7) 拍数门禁：combat.beatLimit.max 默认 0＝不限，F06 真机存档打过 20 拍也不记 LCQ-SAV-020、不改判；设成正整数时超过上限每多一拍记一次（只记录，不改判）', async()=>{
+ assert.equal(GAME_NUMBERS.combat.beatLimit.max,0,'默认不设上限');
+ const run=async(limit)=>{
+  const h=harness(await readSaveFixture(F06),{goal:'repel',claim:{magnitude:1,scope:'single',targets:['merfolk']},levers:[]});
+  const a=active(h);a.state.forced={action:Array(80).fill(10),defense:Array(160).fill(8)};a.state.cursors={action:0,defense:0};
+  const before=sav020().length;let played=a.state.beat-1;
+  while(played<=limit+1){await beat(h,'我挥刀制服鲛人');played=active(h).state.beat-1;}
+  return {h,played,logs:sav020().slice(before)};
+ };
+ const free=await run(21);
+ assert.equal(free.logs.length,0,'不限拍数时不记错误码');
+ assert.equal(active(free.h).state.status,'engaged','不限拍数：未分胜负就继续打');
+ // 设成正整数（热改 max）时只作诊断：在同一场继续打的真实局面上按 max=5 检查，超过的每一拍各记一次，不改判。
+ const {checkBeatLimit,validateBeatLimit}=await loadTs('../src/modules/sceneModule/beatLimit.ts');
+ assert.deepEqual(validateBeatLimit({max:0}),[]);assert.ok(validateBeatLimit({max:-1}).length);assert.ok(validateBeatLimit({max:1.5}).length);
+ const c=registry.sceneContractById(active(free.h).contractId),st=structuredClone(active(free.h).state),before=sav020().length;
+ for(let beatNo=2;beatNo<=9;beatNo++){st.beat=beatNo;checkBeatLimit(c,st,{max:5});}
  const logs=sav020().slice(before);
- assert.equal(logs.length,played-max,'超过上限的每一拍各记一次');
- assert.equal(logs[0].level,'error');assert.equal(logs[0].detail.contractId,'combat.f06.merfolk');assert.deepEqual(logs.map(e=>e.detail.beat).sort((x,y)=>x-y)[0],max+1);
- assert.equal(active(h).state.status,'engaged','到上限后怎么判尚待拍板：现在只记录');
+ assert.equal(logs.length,3,'已打 6、7、8 拍各记一次');
+ assert.equal(logs[0].level,'error');assert.equal(logs[0].detail.contractId,'combat.f06.merfolk');assert.deepEqual(logs.map(e=>e.detail.beat).sort((x,y)=>x-y),[6,7,8]);
+ assert.equal(st.status,'engaged','门禁只记录，不改判');
+ assert.equal(checkBeatLimit(c,st,{max:0}),false,'max=0 不限');
 });
 
 test('7) 模拟和真机为什么对不上：同一拍局面，参考打法用两个要素（加值、新意、优势），真机原话没提要素只剩级差', async()=>{

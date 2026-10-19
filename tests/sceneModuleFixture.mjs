@@ -61,7 +61,6 @@ export function makeContract(patch = {}) {
              afterState: [{ id: 'keep_ward', ref: 'ward', requirement: '须在场', check: { party: 'ward', present: true }, forbiddenNarration: ['被护者倒下'] }],
              flags: { 'test.done': true }, next: 'test.after_win' },
       lose: { next: 'test.after_lose' },
-      timeout: { settle: [{ side: 'opposed', onlyUnfinished: true, to: '重' }], next: null },
     },
     narration: { forbidden: ['天降神兵'], requiredFacts: ['一场遭遇战'] },
   };

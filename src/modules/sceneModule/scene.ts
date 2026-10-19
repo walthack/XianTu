@@ -468,12 +468,13 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
 
 function clockTimeout(contract: Contract, state: SceneState): ({ type: 'close'; as: SceneOutcome['kind'] } | { type: 'continue'; events?: FixedEventEffect[]; text?: string }) | null {
   const beats = contract.clock?.beats;
-  if (!beats || state.beat < beats || state.firedEvents.includes('clock:timeout')) return null;
+  if (!beats || !contract.clock?.onTimeout || state.beat < beats || state.firedEvents.includes('clock:timeout')) return null;
   state.firedEvents.push('clock:timeout');
   const rule = contract.clock?.onTimeout;
   if (rule?.type === 'continue') return rule;
-  // 拖满拍数默认不算赢：没写规则、或写了 timeout，都按“超时收束”；只有合同明写 win 才算赢。
-  return { type: 'close', as: rule?.type === 'close' ? rule.as : 'timeout' };
+  // 限时战只认合同明写的 {type:'close', as:'win'|'lose'}；没写 onTimeout 就不是限时战，不收场（lint 另报错）。
+  if (rule?.type === 'close' && (rule.as === 'win' || rule.as === 'lose')) return { type: 'close', as: rule.as };
+  return null;
 }
 
 function pushDigest(state: SceneState, settings: ResolvedSettings, line: string): void {

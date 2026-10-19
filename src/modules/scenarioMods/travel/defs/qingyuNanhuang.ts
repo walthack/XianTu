@@ -21,6 +21,15 @@ export const NANHUANG_STAGE_IDS = [
   'lcq.stage_05b',
 ] as const;
 
+/**
+ * 逐拍演出的关卡（每拍有固定演出卡，非卡片 dayPart 时按 story.stepScene.minutesPerBeat 推进时间）。
+ * 按前缀匹配，与原 isNanhuangSceneStage 正则 ^lcq\.stage_0(?:3b|4|4b) 同义；不含 stage_02 / stage_05b。
+ */
+export const NANHUANG_STEP_SCENE_STAGE_IDS = [
+  'lcq.stage_03b',
+  'lcq.stage_04',
+] as const;
+
 const E = (short: string): string => `lcq.event.${short}`;
 const B03 = (n: string): string => E(`s03b_snake_flower_bridge_${n}`);
 const B04B = (n: string): string => E(`s04b_lingfei_baiyi_crisis_${n}`);

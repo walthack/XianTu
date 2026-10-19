@@ -17,10 +17,10 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (name) => JSON.parse(readFileSync(resolve(root, 'mod-kit', name), 'utf8'));
 
 const COMBAT = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'];
-const PROGRESS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard'];
+const PROGRESS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story'];
 const RUNTIME = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'];
 const ASSIST = ['assist'];
-const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'assist'];
+const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'assist', 'story'];
 
 const parts = [
   ['numbers-combat.json', COMBAT],

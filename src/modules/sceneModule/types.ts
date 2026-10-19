@@ -260,11 +260,12 @@ export interface FixedEvent {
 }
 
 export type TimeoutRule =
-  | { type: 'close'; as: 'timeout' | 'win' | 'lose' }
+  /** 限时战：拍数用完按合同判赢或输（2026-10-19 去掉“超时收束”第三态）。 */
+  | { type: 'close'; as: 'win' | 'lose' }
   | { type: 'continue'; events?: FixedEventEffect[]; text?: string };
 
 export interface ClockDef {
-  /** 总拍数。缺省＝不设拍数（打到一方倒下才结束）。 */
+  /** 总拍数。缺省＝不设拍数（打到一方倒下才结束）。只有同时写了 onTimeout 才算限时战。 */
   beats?: number;
   onTimeout?: TimeoutRule;
   fixedEvents?: FixedEvent[];
@@ -431,7 +432,7 @@ export interface Contract {
   enemyActions?: EnemyActionDef[];
   /** 大失败的后果表：按顺序找第一批适用的，用骰面在其中选一条（确定、可复现）。 */
   fumble?: FumbleEntry[];
-  closing?: { win?: ClosingBranch; lose?: ClosingBranch; timeout?: ClosingBranch; playerChoices?: Record<string, ClosingBranch> };
+  closing?: { win?: ClosingBranch; lose?: ClosingBranch; playerChoices?: Record<string, ClosingBranch> };
   defeat?: DefeatDef;
   /** Continuity applies to every outcome; it never changes win/lose or awards victory rewards. */
   continuity?: { effects?: FixedEventEffect[]; fixedCosts?: FixedCost[]; checks?: AfterState[]; facts?: string[]; flags?: Record<string, string | number | boolean> };
@@ -456,7 +457,8 @@ export interface ActiveTag {
   sourceId: string;
 }
 
-export type SceneOutcomeKind = 'win' | 'lose' | 'timeout';
+/** 场面只有赢 / 输两态；旧存档里残留的 'timeout' 只在 host/ext 的历史记录类型里保留读取。 */
+export type SceneOutcomeKind = 'win' | 'lose';
 
 export interface SceneOutcome {
   choiceId?: string;

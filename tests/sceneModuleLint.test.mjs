@@ -41,11 +41,12 @@ test('已取消的旧字段（伤害点、战败代价梯度、野心附加）�
   assert.ok(has(lint({ defeat: { conditions: [{ kind: 'fatalBeat', beat: 3 }] } }).errors, /fatalBeat/));
 });
 
-test('通用模块不自带门槛：必经合同没写 ambushAfterStall 报错；设了拍数没写 onTimeout 给警告；拍数非法报错', () => {
+test('通用模块不自带门槛：必经合同没写 ambushAfterStall 报错；设了拍数没写 onTimeout 报错；onTimeout 只能判赢或输；拍数非法报错', () => {
   assert.ok(has(lint({ meta: { id: 'a', version: 1, scene: { kind: 'combat' }, hook: { required: true } } }).errors, /ambushAfterStall/));
   assert.deepEqual(lint({ meta: { id: 'a', version: 1, scene: { kind: 'combat' }, hook: { required: true, ambushAfterStall: 3 } } }).errors, []);
-  assert.ok(has(lint({ clock: { beats: 4 } }).warnings, /不算赢/));
-  assert.ok(has(lint({ clock: { beats: 0, onTimeout: { type: 'close', as: 'timeout' } } }).errors, /beats/));
+  assert.ok(has(lint({ clock: { beats: 4 } }).errors, /没写 onTimeout/));
+  assert.ok(has(lint({ clock: { beats: 4, onTimeout: { type: 'close', as: 'timeout' } } }).errors, /as:"win"\|"lose"/));
+  assert.ok(has(lint({ clock: { beats: 0, onTimeout: { type: 'close', as: 'lose' } } }).errors, /beats/));
   assert.ok(has(lint({ clock: { beats: 2, fixedEvents: [{ id: 'late', atBeat: 3, effects: [] }] } }).errors, /超出 clock.beats/));
   assert.deepEqual(lint({ clock: undefined }).errors, [], '不写 clock＝不设拍数');
 });
@@ -68,7 +69,8 @@ test('红线：合同声明某参与方不得到达某终态，体检证明没�
   reachable.redLines = [{ party: 'boss', track: 'vit', forbiddenFinalState: '重' }];
   assert.ok(has(mod.lintContract(reachable).errors, /可以推到/), 'ceiling 3 能把轨道推到第 3 格“重”');
   assert.ok(has(lint({ clock: { fixedEvents: [{ id: 'bad', atBeat: 2, effects: [{ setTrack: { party: 'boss', track: 'vit', to: '出局' } }] }] } }).errors, /有事件把它设成/));
-  assert.ok(has(lint({ closing: { timeout: { settle: [{ party: 'boss', to: '出局' }] } } }).errors, /closing.settle/));
+  assert.ok(has(lint({ closing: { lose: { settle: [{ party: 'boss', to: '出局' }] } } }).errors, /closing.settle/));
+  assert.ok(has(lint({ closing: { timeout: { next: null } } }).errors, /closing.timeout 已废弃/));
 });
 
 test('状态引用：未知状态报错；内置临时状态给提示；宿主目录优先；败局依赖“倒下”却没有路径给警告', () => {
