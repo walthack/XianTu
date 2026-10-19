@@ -106,7 +106,8 @@ test('大成功：只表示动作完整做成——不多推一格，不结束�
   assert.equal(tagOf(out.state), tagOf(normal.state) + 1, '大成功：标签多留一拍');
   // 底子不够时，是自然 20 把它抬成大成功（审计里标出来）
   const lucky = begin(contract, { action: [20], defense: passes(8) });
-  const bare = mod.confirmAction(contract, lucky.state, attack(['boss'], 3), { factors: 0 });
+  // 幅度加价只按能兑现的步数收（boss 的 ceiling 为 0，主张 3 格也不加价），底子不够改由属性因子体现
+  const bare = mod.confirmAction(contract, lucky.state, attack(['boss'], 3), { factors: -10 });
   assert.equal(bare.result.baseTier, 'failure');
   assert.equal(bare.result.tier, 'great_success');
   assert.equal(bare.result.natTriggered, 'nat20');

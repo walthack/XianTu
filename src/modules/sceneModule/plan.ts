@@ -267,12 +267,13 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   });
 
   // ---- 难度与加值 ----
+  // 幅度加价只按“这一下真能推进的步数”收：主张 3 步但轨道只剩 1 步，就按 1 步收；支援/防守类目标不收幅度加价。
   const primaryParty = primary ? partyOf(contract, primary) : undefined;
   const modifierRule=goalModifierRule(goal.modifierProfile);
   const pressure = contract.beats?.[state.beat - 1]?.pressure ?? 0;
   const difficultyParts = {
     base: goal.baseDifficulty,
-    premium: settings.pricing.premium[String(plan.magnitude)] ?? 0,
+    premium: pushGoal ? settings.pricing.premium[String(premiumMagnitude(plan.magnitude, targets))] ?? 0 : 0,
     pressure,
     resistance: pushGoal ? primaryParty?.resistance ?? 0 : 0,
   };
@@ -335,4 +336,10 @@ function whyNotLanded(
     } else return `前置条件“${need}”无法识别`;
   }
   return null;
+}
+
+/** 幅度加价用的步数：主张幅度与未被拦下的目标里最多能兑现的步数取小（没有可兑现的目标就是 0）。 */
+export function premiumMagnitude(magnitude: number, targets: Array<{ realizable: number; blocked?: string }>): number {
+  const realizable = targets.filter(t => !t.blocked).reduce((max, t) => Math.max(max, t.realizable), 0);
+  return Math.max(0, Math.min(magnitude, realizable));
 }
