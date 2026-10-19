@@ -38,14 +38,33 @@ test('给药 → 感官亢奋（配置时长）+ 成瘾 + 渴求计时；超时�
   assert.ok(rows(save, NING_YU).includes(CFG.addictionStatus), '成瘾仍在（只由剧情旗标解除，#177）');
 });
 
-test('撑过戒断期：神志不清到期消失，渴求计时重新开始（不会立刻再挂）', () => {
+test('撑过戒断期（addiction.quitMinutes，用户 2026-10-20 00:26 定）：不再给药即戒除成瘾；治疗只解神志不清不算戒除，戒断期照算', () => {
+  const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } });
+  assert.equal(typeof CFG.addiction.quitMinutes, 'number');
+  maigu.afterItemFed(save, NING_YU, MAIGU);
+  minutes(save, CFG.addiction.cravingMinutes); maigu.syncMaigu(save);
+  assert.ok(rows(save, NING_YU).includes(CFG.withdrawalStatus));
+  // 治疗：神志不清被别的途径解掉（这里直接删行模拟其自身解除规则）
+  const store = mods.injuries.injuryStore(save);
+  store.actors[NING_YU] = store.actors[NING_YU].filter(r => r.statusId !== CFG.withdrawalStatus);
+  minutes(save, 1); maigu.syncMaigu(save);
+  assert.ok(rows(save, NING_YU).includes(CFG.addictionStatus), '治疗不算戒除');
+  assert.ok(!rows(save, NING_YU).includes(CFG.withdrawalStatus), '治好后戒断期内不再重挂');
+  minutes(save, CFG.addiction.quitMinutes - 2); maigu.syncMaigu(save);
+  assert.ok(rows(save, NING_YU).includes(CFG.addictionStatus), '戒断期未满');
+  minutes(save, 1); assert.deepEqual(maigu.syncMaigu(save), [`-${NING_YU}:${CFG.addictionStatus}`]);
+  assert.deepEqual(rows(save, NING_YU).filter(id => [CFG.addictionStatus, CFG.withdrawalStatus].includes(id)), [], '成瘾戒除');
+  minutes(save, CFG.addiction.cravingMinutes * 2); assert.deepEqual(maigu.syncMaigu(save), [], '戒除后不再计时');
+});
+
+test('戒断期内再给药：回到渴求计时，不戒除', () => {
   const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } });
   maigu.afterItemFed(save, NING_YU, MAIGU);
   minutes(save, CFG.addiction.cravingMinutes); maigu.syncMaigu(save);
-  minutes(save, CFG.addiction.withdrawalMinutes + 1); maigu.syncMaigu(save);
-  assert.ok(!rows(save, NING_YU).includes(CFG.withdrawalStatus));
-  minutes(save, 1); maigu.syncMaigu(save);
-  assert.ok(!rows(save, NING_YU).includes(CFG.withdrawalStatus), '刚撑过不立刻再挂');
+  minutes(save, Math.floor(CFG.addiction.quitMinutes / 2)); maigu.afterItemFed(save, NING_YU, MAIGU);
+  minutes(save, CFG.addiction.quitMinutes); maigu.syncMaigu(save);
+  assert.ok(rows(save, NING_YU).includes(CFG.addictionStatus));
+  assert.ok(!rows(save, NING_YU).includes(CFG.withdrawalStatus), '还没到下一次渴求');
 });
 
 test('不是麻古的物品不触发；判定因子：持有麻古对成瘾者交涉加值，主角感官亢奋时交涉加值、修炼劣势，其余判定（含双修走的路径）零影响', () => {
@@ -73,12 +92,14 @@ test('喂药路径（自由行动 give/feed_pill）真实挂上感官亢奋与�
   assert.ok(rows(save, NING_YU).includes(CFG.addictionStatus));
 });
 
-test('预设：凝羽在配置所列关卡且有关系时自动带成瘾；其它关卡不挂', () => {
+test('预设成瘾：用户 2026-10-20 00:26 定先不预设（presetActors 为空），任何关卡都不自动挂', () => {
+  assert.deepEqual(CFG.presetActors, {});
   const save = makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 } });
-  assert.deepEqual(maigu.syncMaigu(save), [], 'stage_01 不预设');
-  runtimeOf(save).modId = CFG.presetActors[NING_YU][0];
-  assert.deepEqual(maigu.syncMaigu(save), [`${NING_YU}:${CFG.addictionStatus}`]);
-  assert.deepEqual(maigu.syncMaigu(save), [], '不重复挂');
+  for (const stage of ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05b']) {
+    runtimeOf(save).modId = stage;
+    assert.deepEqual(maigu.syncMaigu(save), [], stage);
+  }
+  assert.ok(!rows(save, NING_YU).includes(CFG.addictionStatus));
 });
 
 test('四品品级：凡/灵/仙/神，旧 grade 按映射归档，空值取默认凡品', () => {

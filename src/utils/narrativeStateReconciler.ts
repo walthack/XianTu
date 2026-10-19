@@ -657,7 +657,7 @@ export function reconcilePlayerFreeTextStatuses(input: NarrativeReconcileInput):
 export function reconcileStoryStatuses(input: NarrativeReconcileInput): StateChange[] {
   const summarize = input.summarize ?? ((_key, value) => value);
   const oldRaw = cloneDeep(get(input.saveData, PLAYER_EFFECTS_KEY));
-  // 麻古（预设成瘾、渴求计时到点挂戒断）与剧情来源状态同一入口。
+  // 麻古（预设成瘾、渴求计时到点挂戒断、撑过戒断期戒除）与剧情来源状态同一入口。
   const added = syncStoryStatuses(input.saveData).length + syncMaigu(input.saveData).length;
   if (!added) return [];
   return [{

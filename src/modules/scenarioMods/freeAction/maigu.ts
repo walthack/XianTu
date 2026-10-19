@@ -4,8 +4,9 @@
  *   解除戒断挂上的「神志不清」，渴求计时从此刻重新开始。
  * - syncMaigu（每回合叙事兜底入口调用）：
  *   · presetActors：原著已成瘾的角色在所列关卡自动带成瘾（成瘾只由状态目录里的剧情旗标解除，#177）；
- *   · 成瘾者距上次给药超过 addiction.cravingMinutes：挂「神志不清」addiction.withdrawalMinutes 分钟（戒断）；
- *     神志不清因治疗（其自身解除规则）或撑过戒断期而消失后，渴求计时重新开始。
+ *   · 成瘾者距上次给药超过 addiction.cravingMinutes：挂「神志不清」addiction.withdrawalMinutes 分钟（戒断开始）；
+ *     治疗（神志不清自身解除规则）只解神志不清，戒断期照算；戒断开始起 addiction.quitMinutes 内没再给药＝撑过戒断期，
+ *     成瘾戒除（用户 2026-10-20 00:26 定）。给药则回到渴求计时。
  * - maiguFactors：判定卡因子。主角持有麻古、对成瘾者交涉 +addiction.holdSocialBonus；
  *   主角自己感官亢奋时交涉 +heightened.socialBonus、心性判定（heightened.mindKinds）heightened.mindPenalty。
  * 数值全部来自 GAME_NUMBERS.status.maigu；本文件不写数值。性格提示在状态目录的 note 里，写成按原本性格偏移的通用规则。
@@ -22,13 +23,13 @@ import { applyActorStatus } from './actorStatus';
 export interface MaiguConfig {
   itemId: string; heightenedStatus: string; addictionStatus: string; withdrawalStatus: string;
   heightened: { minutes: number; socialBonus: number; mindPenalty: number; mindKinds: string[] };
-  addiction: { cravingMinutes: number; withdrawalMinutes: number; holdSocialBonus: number };
+  addiction: { cravingMinutes: number; withdrawalMinutes: number; quitMinutes: number; holdSocialBonus: number };
   presetActors: Record<string, string[]>;
 }
 export const maiguConfig = (): MaiguConfig => (GAME_NUMBERS.status as unknown as { maigu: MaiguConfig }).maigu;
 
 const WITHDRAWAL_SOURCE = 'maigu.withdrawal';
-type Clock = { lastDoseAt: number; withdrawal?: boolean };
+type Clock = { lastDoseAt: number; withdrawal?: boolean; withdrawalAt?: number };
 const runtimeOf = (save: SaveData): any => (save as any)?.世界?.状态?.剧本模组;
 const playerIdOf = (save: SaveData): string | undefined => runtimeOf(save)?.opening?.playerCharacterId;
 const clocks = (save: SaveData): Record<string, Clock> => (runtimeOf(save).maiguClock ||= {});
@@ -56,7 +57,15 @@ export function afterItemFed(save: SaveData, actorId: string, itemId: string): v
 const addictionResolved = (flags: Record<string, unknown>, cfg: MaiguConfig): boolean =>
   (catalogStatus(cfg.addictionStatus)?.remove || []).some(rule => rule.kind === 'story' && flags[rule.flag] === true);
 
-/** 每回合：预设成瘾、渴求计时到点挂戒断、戒断结束后重新计时。返回这次新挂上的 `角色:状态`。 */
+/** 撑过戒断期：成瘾与戒断挂的神志不清一并解除。 */
+function quitAddiction(save: SaveData, actorId: string, cfg: MaiguConfig): void {
+  const store = injuryStore(save), rows = store.actors[actorId] || [];
+  store.actors[actorId] = rows.filter(row => row.statusId !== cfg.addictionStatus && !isWithdrawalRow(row, cfg));
+  delete clocks(save)[actorId];
+  renderInjuryViews(save);
+}
+
+/** 每回合：预设成瘾、渴求计时到点挂戒断、撑过戒断期戒除。返回这次的变化（新挂 `角色:状态`，戒除 `-角色:状态`）。 */
 export function syncMaigu(save: SaveData): string[] {
   const cfg = maiguConfig(), runtime = runtimeOf(save);
   if (!cfg || !runtime || !(save as any)?.元数据?.时间) return [];
@@ -72,11 +81,14 @@ export function syncMaigu(save: SaveData): string[] {
   for (const actorId of Object.keys(store.actors)) {
     if (!has(save, actorId, cfg.addictionStatus)) { delete clocks(save)[actorId]; continue; }
     const clock = clocks(save)[actorId] ||= { lastDoseAt: now };
-    const inWithdrawal = (store.actors[actorId] || []).some(row => isWithdrawalRow(row, cfg));
-    if (clock.withdrawal && !inWithdrawal) { clocks(save)[actorId] = { lastDoseAt: now }; continue; }
-    if (!clock.withdrawal && now - clock.lastDoseAt >= cfg.addiction.cravingMinutes) {
+    if (clock.withdrawal) {
+      clock.withdrawalAt ??= now; // 旧档的计时没有戒断起点：从此刻算
+      if (now - clock.withdrawalAt >= cfg.addiction.quitMinutes) { quitAddiction(save, actorId, cfg); added.push(`-${actorId}:${cfg.addictionStatus}`); }
+      continue;
+    }
+    if (now - clock.lastDoseAt >= cfg.addiction.cravingMinutes) {
       if (applyActorStatus(save, actorId, cfg.withdrawalStatus, { sourceId: WITHDRAWAL_SOURCE, minutes: cfg.addiction.withdrawalMinutes }).ok) {
-        clock.withdrawal = true; added.push(`${actorId}:${cfg.withdrawalStatus}`);
+        clock.withdrawal = true; clock.withdrawalAt = now; added.push(`${actorId}:${cfg.withdrawalStatus}`);
       }
     }
   }
