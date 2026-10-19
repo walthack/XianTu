@@ -1,20 +1,128 @@
 {
-  "version": 2,
-  "note": "道具四品——唯一权威（用户 2026-10-19 定凡品 / 灵品 / 仙品 / 神品；2026-10-20 定原著无道具品级体系，00:44 改「灵品」为「珍品」（原著有珍品，从无灵品），旧档「灵」迁成「珍」，UI 与提示词直接显示四品）。short＝写进存档 品质.quality 的单字；save＝新写入存档的 {quality, grade}（grade 只为兼容旧字段，道具不再显示上中下品）。color/rarity＝UI 颜色与给 AI 的品质说明。legacyAliases：剧本 grade 字符串 → 四品（按 2026-10-19 盘点报告第 0 节）。legacySaveQualities：旧存档 品质.quality 七档单字 → 四品（读档修复与显示都按它换算）。只管道具，功法品级不走这张表。",
+  "version": 3,
+  "note": "道具四品——唯一权威（用户 2026-10-19 定凡品 / 灵品 / 仙品 / 神品；2026-10-20 定原著无道具品级体系，00:44 改「灵品」为「珍品」（原著有珍品，从无灵品），旧档「灵」迁成「珍」，UI 与提示词直接显示四品）。short＝写进存档 品质.quality 的单字；save＝新写入存档的 {quality, grade}（grade 只为兼容旧字段，道具不再显示上中下品）。color/rarity＝UI 颜色与给 AI 的品质说明。legacyAliases：剧本 grade 字符串 → 四品（按 2026-10-19 盘点报告第 0 节）。legacySaveQualities：旧存档 品质.quality 七档单字 → 四品（读档修复与显示都按它换算）。只管道具，功法品级不走这张表。 2026-10-20 03:05：功法也改走这张四品表（用户定「功法改四品，共用道具品级表」）；technique 段是功法专属数值（修炼速度、突破率、businessRules 进度系数、藏经阁楼层、排序），旧档功法七档按 legacySaveQualities 自动换算。",
   "tiers": [
-    { "id": "fan", "name": "凡品", "short": "凡", "order": 1, "save": { "quality": "凡", "grade": 1 }, "color": "#808080", "rarity": "世间寻常之物：市面上绝大多数兵刃、杂物、药材都在此列。" },
-    { "id": "zhen", "name": "珍品", "short": "珍", "order": 2, "save": { "quality": "珍", "grade": 4 }, "color": "#9370DB", "rarity": "稀有珍品：名匠精制、深山老药、险地所得，一地难求。" },
-    { "id": "xian", "name": "仙品", "short": "仙", "order": 3, "save": { "quality": "仙", "grade": 7 }, "color": "#FFD700", "rarity": "传说之物：有名有姓的正典奇物与续命灵丹，不得凭空新造。" },
-    { "id": "shen", "name": "神品", "short": "神", "order": 4, "save": { "quality": "神", "grade": 10 }, "color": "#9932CC", "rarity": "禁忌至宝：举世罕见，非剧情明示不得出现。" }
+    {
+      "id": "fan",
+      "name": "凡品",
+      "short": "凡",
+      "order": 1,
+      "save": {
+        "quality": "凡",
+        "grade": 1
+      },
+      "color": "#808080",
+      "rarity": "世间寻常之物：市面上绝大多数兵刃、杂物、药材都在此列。"
+    },
+    {
+      "id": "zhen",
+      "name": "珍品",
+      "short": "珍",
+      "order": 2,
+      "save": {
+        "quality": "珍",
+        "grade": 4
+      },
+      "color": "#9370DB",
+      "rarity": "稀有珍品：名匠精制、深山老药、险地所得，一地难求。"
+    },
+    {
+      "id": "xian",
+      "name": "仙品",
+      "short": "仙",
+      "order": 3,
+      "save": {
+        "quality": "仙",
+        "grade": 7
+      },
+      "color": "#FFD700",
+      "rarity": "传说之物：有名有姓的正典奇物与续命灵丹，不得凭空新造。"
+    },
+    {
+      "id": "shen",
+      "name": "神品",
+      "short": "神",
+      "order": 4,
+      "save": {
+        "quality": "神",
+        "grade": 10
+      },
+      "color": "#9932CC",
+      "rarity": "禁忌至宝：举世罕见，非剧情明示不得出现。"
+    }
   ],
   "defaultTier": "fan",
   "legacyAliases": {
-    "凡品": "fan", "下品": "fan", "凡": "fan",
-    "中品": "zhen", "上品": "zhen", "玄品": "zhen", "珍品": "zhen", "灵品": "zhen", "法器": "zhen", "珍稀": "zhen", "特殊": "zhen", "珍": "zhen",
-    "仙品": "xian", "极品": "xian", "仙": "xian",
-    "神器": "shen", "神品": "shen", "神": "shen"
+    "凡品": "fan",
+    "下品": "fan",
+    "凡": "fan",
+    "中品": "zhen",
+    "上品": "zhen",
+    "玄品": "zhen",
+    "珍品": "zhen",
+    "灵品": "zhen",
+    "法器": "zhen",
+    "珍稀": "zhen",
+    "特殊": "zhen",
+    "珍": "zhen",
+    "仙品": "xian",
+    "极品": "xian",
+    "仙": "xian",
+    "神器": "shen",
+    "神品": "shen",
+    "神": "shen",
+    "神级": "shen",
+    "唯一": "xian",
+    "天品": "xian",
+    "天级": "xian",
+    "地品": "zhen",
+    "地级": "zhen",
+    "玄级": "zhen",
+    "黄品": "zhen",
+    "黄级": "zhen"
   },
   "legacySaveQualities": {
-    "凡": "fan", "黄": "zhen", "玄": "zhen", "地": "zhen", "灵": "zhen", "天": "xian", "仙": "xian", "神": "shen"
+    "凡": "fan",
+    "黄": "zhen",
+    "玄": "zhen",
+    "地": "zhen",
+    "灵": "zhen",
+    "天": "xian",
+    "仙": "xian",
+    "神": "shen"
+  },
+  "technique": {
+    "note": "功法四品数值。speedBonus=技能面板修炼速度倍率（旧七档 凡1.0/黄1.1/玄1.3/地1.5/天1.8/仙3.0/神2.5 归并）；breakthroughChance=面板突破基础成功率%（上限 breakthroughCap）；progressFactor=给 AI 的修炼进度速率系数，越大越慢（旧 凡1.5/黄1.0/玄0.7/地0.5/天0.3 归并）；libraryFloor=宗门藏经阁所在层（1–4）；sortRank=列表排序，小的在前。",
+    "breakthroughCap": 95,
+    "tiers": {
+      "fan": {
+        "speedBonus": 1.0,
+        "breakthroughChance": 85,
+        "progressFactor": 1.5,
+        "libraryFloor": 1,
+        "sortRank": 4
+      },
+      "zhen": {
+        "speedBonus": 1.3,
+        "breakthroughChance": 75,
+        "progressFactor": 0.8,
+        "libraryFloor": 2,
+        "sortRank": 3
+      },
+      "xian": {
+        "speedBonus": 2.0,
+        "breakthroughChance": 50,
+        "progressFactor": 0.4,
+        "libraryFloor": 3,
+        "sortRank": 2
+      },
+      "shen": {
+        "speedBonus": 3.0,
+        "breakthroughChance": 35,
+        "progressFactor": 0.25,
+        "libraryFloor": 4,
+        "sortRank": 1
+      }
+    }
   }
 }

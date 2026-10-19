@@ -90,6 +90,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { techniqueTierOf, techniqueNumbersOf } from '@/data/techniqueQuality';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import {
   Coins, Package, ShoppingCart, Info, RefreshCw,
@@ -161,13 +162,10 @@ const filteredItems = computed(() => {
 });
 
 // 品质样式
+// 四品（mod-kit/item-grades.json）；旧七档字样按配置换算。
+const QUALITY_CLASS: Record<string, string> = { fan: 'quality-common', zhen: 'quality-xuan', xian: 'quality-yellow', shen: 'quality-heaven' };
 function getQualityClass(quality: string): string {
-  if (quality.includes('凡')) return 'quality-common';
-  if (quality.includes('黄')) return 'quality-yellow';
-  if (quality.includes('玄')) return 'quality-xuan';
-  if (quality.includes('地')) return 'quality-earth';
-  if (quality.includes('天')) return 'quality-heaven';
-  return 'quality-common';
+  return QUALITY_CLASS[techniqueTierOf(quality).id] || 'quality-common';
 }
 
 // 按钮文字
@@ -360,7 +358,7 @@ async function generateShopContent() {
   "name": "string（物品名）",
   "icon": "string（1-2字符）",
   "type": "丹药|功法|装备|材料|其他",
-  "quality": "凡品|黄品|玄品|地品|天品|仙品|神品",
+  "quality": "凡品|珍品|仙品|神品",
   "description": "string（20-80字）",
   "cost": number（贡献点）
 }

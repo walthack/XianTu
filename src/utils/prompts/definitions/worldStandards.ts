@@ -24,7 +24,7 @@ export const QUALITY_SYSTEM = `
 [品质系统]
 道具(装备/丹药/材料/其他)只分${ITEM_TIER_TABLE.length}品:格式{"quality":"${ITEM_TIER_TABLE.map(t => t.short).join('|')}","grade":数字(沿用字段,不表示品级)}
 ${ITEM_TIER_TABLE.map(t => `${t.name}:${t.rarity}`).join('|')}
-功法另计七档:{"quality":"凡|黄|玄|地|天|仙|神","grade":0-10}
+功法与道具同用四品:{"quality":"凡|珍|仙|神","grade":0-10}
 `.trim()
 
 export const MARTIAL_SYSTEM = `

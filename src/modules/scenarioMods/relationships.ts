@@ -1,6 +1,7 @@
 import {realmAt} from './levelProgression';
 import {GAME_NUMBERS} from '../sceneModule/numbers';
 import { itemSaveQuality } from './itemGrades';
+import { techniqueSaveQuality } from '../../data/techniqueQuality';
 import {canonicalEntityId} from './namedEntities';
 import { backfillRelationshipIds, relationshipOf } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
@@ -123,7 +124,7 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
       物品ID: technique.id,
       名称: technique.name,
       类型: '功法',
-      品质: parseQuality(technique.grade),
+      品质: techniqueSaveQuality(technique.grade),
       数量: 1,
       描述: technique.description || '',
       已装备: false,

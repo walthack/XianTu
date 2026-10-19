@@ -2,12 +2,12 @@
  * 道具品质：四品（凡品 / 珍品 / 仙品 / 神品），唯一权威是 mod-kit/item-grades.json（用户 2026-10-20 定，原著无道具品级体系）。
  * 存档 品质 = { quality: 四品单字, grade: 数字（只为兼容旧字段，道具不再显示上中下品） }。
  * 旧存档的七档单字（凡黄玄地天仙神）按配置 legacySaveQualities 换算成四品：读档修复（dataRepair）与 UI 显示都走这里。
- * 功法品级不走这张表（仍是七档 LegacyQuality，留待功法品级另定）。
+ * 功法自 2026-10-20 起也走这张四品表（见 techniqueQuality.ts）；LegacyQuality 只剩旧存档读入用。
  */
 import table from '../../mod-kit/item-grades.json';
 
 export type ItemTierShort = '凡' | '珍' | '仙' | '神';
-/** 旧七档单字（功法仍在用；旧存档里的道具也可能是这些值）。 */
+/** 旧七档单字（只在旧存档里出现，读档按配置换算成四品）。 */
 export type LegacyQuality = '神' | '仙' | '天' | '地' | '玄' | '黄' | '凡';
 export type QualityType = ItemTierShort | LegacyQuality;
 export type GradeType = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;

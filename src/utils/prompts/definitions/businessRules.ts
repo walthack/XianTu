@@ -1,5 +1,10 @@
 import {GAOSHOUBANG_NARRATION_RULE} from '../../realmUtils';
 import {GAME_NUMBERS} from '../../../modules/sceneModule/numbers';
+import {ITEM_TIER_TABLE} from '../../../data/itemQuality';
+import {techniqueNumbersOf} from '../../../data/techniqueQuality';
+
+// 功法进度速率系数：四品，数值在 mod-kit/item-grades.json technique 段。
+const TECHNIQUE_PROGRESS_FACTORS = ITEM_TIER_TABLE.map(t => `${t.name}×${techniqueNumbersOf(t.short).progressFactor}`).join('|');
 /**
  * @fileoverview 游戏业务逻辑规则（AI友好格式）
  * 格式：[规则名];条目用;分隔;约束用()标注
@@ -202,7 +207,7 @@ export const CULTIVATION_SPEED_RULES = `
 2.应用进度速率系数(越大越慢):
   □ 灵气浓度:稀薄×2.5|普通×1.5|充沛×1.0|浓郁×0.7|极盛×0.5
   □ 灵根品级:下品×2.0|中品×1.0|上品×0.6|天品×0.3
-  □ 功法品质:凡品×1.5|黄品×1.0|玄品×0.7|地品×0.5|天品×0.3
+  □ 功法品质:${TECHNIQUE_PROGRESS_FACTORS}
 3.本回合修炼涨幅=基准(按投入时长)×灵气×灵根×功法;不计算"突破需多少年",只推进进度
 
 [修炼请求响应规则]
@@ -293,7 +298,7 @@ export const SKILL_AND_SPELL_USAGE_RULES = `
 export const ECONOMY_AND_PRICING_RULES = `
 [经济定价]
 基准:铜铢=${GAME_NUMBERS.currency['liuchao.currency.tong_zhu']}价值度；银铢=${GAME_NUMBERS.currency['liuchao.currency.yin_zhu']}；金铢=${GAME_NUMBERS.currency['liuchao.currency.jin_zhu']}；1贯=1000铜铢
-定价规则:先判断物品类型+品质(凡/黄/玄/地/天/仙/神)+稀缺性+地点;同类同品质波动不超3x(超过需说明原因);地区波动系数0.6-1.6
+定价规则:先判断物品类型+品质(凡/珍/仙/神四品)+稀缺性+地点;同类同品质波动不超3x(超过需说明原因);地区波动系数0.6-1.6
 价格锚点（原著）：向导一天1金铢；晋国雇船四天10银铢；建康作坊每月一贯铜铢；50金铢约寻常人家全部家产。
 `.trim();
 

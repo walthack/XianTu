@@ -238,7 +238,7 @@ export function buildCraftingFinalizePrompts(input: CraftingFinalizeInput): { sy
     "物品ID": "",
     "名称": "string",
     "类型": "装备|丹药|材料|其他|功法",
-    "品质": { "quality": "道具填 凡|珍|仙|神；功法填 凡|黄|玄|地|天|仙|神", "grade": 0-10 },
+    "品质": { "quality": "道具与功法都填 凡|珍|仙|神", "grade": 0-10 },
     "数量": number,
     "描述": "string",
     "可叠加": boolean

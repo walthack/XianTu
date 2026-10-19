@@ -91,6 +91,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { techniqueTierOf, techniqueNumbersOf } from '@/data/techniqueQuality';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { Lock, ChevronDown, BookOpen, Coins, Info, RefreshCw } from 'lucide-vue-next';
 import { toast } from '@/utils/toast';
@@ -159,7 +160,7 @@ const libraryFloors = computed(() => {
       requirement: '外门弟子可入',
       minPosition: 1,
       accessible: playerPositionLevel.value >= 1,
-      techniques: techniques.filter(t => ['凡', '黄'].includes(t.qualityTier))
+      techniques: techniques.filter(t => techniqueNumbersOf(t.qualityTier).libraryFloor === 1)
     },
     {
       level: 2,
@@ -168,7 +169,7 @@ const libraryFloors = computed(() => {
       requirement: '内门弟子可入',
       minPosition: 2,
       accessible: playerPositionLevel.value >= 2,
-      techniques: techniques.filter(t => t.qualityTier === '玄')
+      techniques: techniques.filter(t => techniqueNumbersOf(t.qualityTier).libraryFloor === 2)
     },
     {
       level: 3,
@@ -177,7 +178,7 @@ const libraryFloors = computed(() => {
       requirement: '真传弟子可入',
       minPosition: 3,
       accessible: playerPositionLevel.value >= 3,
-      techniques: techniques.filter(t => t.qualityTier === '地')
+      techniques: techniques.filter(t => techniqueNumbersOf(t.qualityTier).libraryFloor === 3)
     },
     {
       level: 4,
@@ -186,7 +187,7 @@ const libraryFloors = computed(() => {
       requirement: '核心弟子+长老令牌',
       minPosition: 4,
       accessible: playerPositionLevel.value >= 4,
-      techniques: techniques.filter(t => ['天', '仙', '神'].includes(t.qualityTier))
+      techniques: techniques.filter(t => techniqueNumbersOf(t.qualityTier).libraryFloor >= 4)
     }
   ];
 });
@@ -203,8 +204,9 @@ type LibraryTechnique = {
 };
 
 const extractQualityTier = (quality: string) => {
-  const match = quality.match(/[凡黄玄地天仙神]/);
-  return match ? match[0] : '凡';
+  // 旧七档字样（黄/玄/地/天）按四品表换算。
+  const match = quality.match(/[凡珍黄玄地天仙神]/);
+  return techniqueTierOf(match ? match[0] : '凡').short;
 };
 
 // 获取可用功法列表（来自宗门系统）
@@ -244,13 +246,10 @@ function toggleFloor(floor: { level: number; accessible: boolean }) {
   expandedFloor.value = expandedFloor.value === floor.level ? null : floor.level;
 }
 
+// 四品（mod-kit/item-grades.json）；旧七档字样按配置换算。
+const QUALITY_CLASS: Record<string, string> = { fan: 'quality-common', zhen: 'quality-xuan', xian: 'quality-yellow', shen: 'quality-heaven' };
 function getQualityClass(quality: string): string {
-  if (quality.includes('凡')) return 'quality-common';
-  if (quality.includes('黄')) return 'quality-yellow';
-  if (quality.includes('玄')) return 'quality-xuan';
-  if (quality.includes('地')) return 'quality-earth';
-  if (quality.includes('天')) return 'quality-heaven';
-  return 'quality-common';
+  return QUALITY_CLASS[techniqueTierOf(quality).id] || 'quality-common';
 }
 
 function learnTechnique(tech: { id: string; name: string; cost: number }) {
@@ -386,7 +385,7 @@ async function generateLibraryContent() {
 {
   "id": "string（唯一）",
   "name": "string（功法名）",
-  "quality": "凡品|黄品|玄品|地品|天品|仙品|神品",
+  "quality": "凡品|珍品|仙品|神品",
   "cost": number（贡献点）,
   "description": "string（20-80字）"
 }

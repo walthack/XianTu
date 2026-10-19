@@ -77,7 +77,7 @@
         <div v-if="cultivationSkills" class="cultivation-stats">
           <div class="stat-item">
             <span class="stat-label">{{ t('品质') }}</span>
-            <span class="stat-value" :class="getQualityTextClass(cultivationSkills)">{{ cultivationSkills.品质?.quality || '凡' }}品</span>
+            <span class="stat-value" :class="getQualityTextClass(cultivationSkills)">{{ techniqueTierLabel(cultivationSkills.品质?.quality) }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">{{ t('进度') }}</span>
@@ -205,7 +205,7 @@
           </div>
           <p class="technique-desc">{{ technique.描述 || t('暂无描述') }}</p>
           <div class="technique-footer">
-            <span class="quality-tag" :class="getQualityTextClass(technique)">{{ (technique.品质?.quality || '凡') }}品</span>
+            <span class="quality-tag" :class="getQualityTextClass(technique)">{{ techniqueTierLabel(technique.品质?.quality) }}</span>
             <span class="skill-count">{{ technique.功法技能?.length || 0 }} {{ t('技能') }}</span>
           </div>
           <div class="technique-actions">
@@ -236,6 +236,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import { techniqueNumbersOf, techniqueTierLabel, techniqueTierShort, TECHNIQUE_BREAKTHROUGH_CAP } from '@/data/techniqueQuality';
 import { BookOpen, Clock, Moon, ScrollText, Search, Sparkles, TrendingUp, X, Zap } from 'lucide-vue-next';
 import DeepCultivationModal from '@/components/common/DeepCultivationModal.vue';
 import { useI18n } from '@/i18n';
@@ -344,12 +345,7 @@ const canBreakthrough = computed(() => {
   return (cultivationSkills.value.修炼进度 || 0) >= 100;
 });
 
-const getQualitySpeedBonus = (quality?: string): number => {
-  const bonusMap: Record<string, number> = {
-    仙: 3.0, 神: 2.5, 圣: 2.0, 天: 1.8, 地: 1.5, 玄: 1.3, 黄: 1.1, 凡: 1.0
-  };
-  return bonusMap[quality || '凡'] || 1.0;
-};
+const getQualitySpeedBonus = (quality?: string): number => techniqueNumbersOf(quality).speedBonus;
 
 const cultivationSpeed = computed(() => {
   const technique = cultivationSkills.value;
@@ -364,9 +360,7 @@ const breakthroughChance = computed(() => {
   if (!canBreakthrough.value) return 0;
   const technique = cultivationSkills.value;
   if (!technique) return 0;
-  const qualityChanceMap: Record<string, number> = { 仙: 30, 神: 40, 圣: 50, 天: 60, 地: 70, 玄: 75, 黄: 80, 凡: 85 };
-  const baseChance = qualityChanceMap[technique.品质?.quality || '凡'] || 70;
-  return Math.min(95, baseChance);
+  return Math.min(TECHNIQUE_BREAKTHROUGH_CAP, techniqueNumbersOf(technique.品质?.quality).breakthroughChance);
 });
 
 const startCultivation = async (type: 'normal' | 'secluded') => {
@@ -413,9 +407,9 @@ const techniqueForModal = computed((): TechniqueItem | null => cultivationSkills
 
 const formatProgress = (progress?: number): string => Math.min(100, Math.max(0, progress || 0)).toFixed(1);
 
-const getQualityTextClass = (item: TechniqueItem): string => `text-quality-${item?.品质?.quality || '凡'}`;
-const getQualityBorderClass = (item: TechniqueItem): string => `border-quality-${item?.品质?.quality || '凡'}`;
-const getQualityBgClass = (item: TechniqueItem): string => `bg-quality-${item?.品质?.quality || '凡'}`;
+const getQualityTextClass = (item: TechniqueItem): string => `text-quality-${techniqueTierShort(item?.品质?.quality)}`;
+const getQualityBorderClass = (item: TechniqueItem): string => `border-quality-${techniqueTierShort(item?.品质?.quality)}`;
+const getQualityBgClass = (item: TechniqueItem): string => `bg-quality-${techniqueTierShort(item?.品质?.quality)}`;
 
 const isEquipped = (technique: TechniqueItem): boolean => {
   return (technique as any).已装备 === true || (technique as any).修炼中 === true;
@@ -542,13 +536,12 @@ const filteredInventoryTechniques = computed(() => {
     return name.includes(q) || desc.includes(q);
   });
 
-  const qualityRank: Record<string, number> = { 仙: 1, 神: 2, 圣: 3, 道: 4, 天: 5, 地: 6, 玄: 7, 黄: 8, 凡: 9 };
   return [...list].sort((a, b) => {
     const ae = (a as any).已装备 === true || (a as any).修炼中 === true;
     const be = (b as any).已装备 === true || (b as any).修炼中 === true;
     if (ae !== be) return ae ? -1 : 1;
-    const qa = qualityRank[a.品质?.quality || '凡'] ?? 99;
-    const qb = qualityRank[b.品质?.quality || '凡'] ?? 99;
+    const qa = techniqueNumbersOf(a.品质?.quality).sortRank;
+    const qb = techniqueNumbersOf(b.品质?.quality).sortRank;
     if (qa !== qb) return qa - qb;
     return String(a.名称 || '').localeCompare(String(b.名称 || ''), 'zh-Hans-CN');
   });
@@ -1043,6 +1036,7 @@ const filteredInventoryTechniques = computed(() => {
 .text-quality-地 { color: #4f97ab; }
 .text-quality-玄 { color: #8a6fa8; }
 .text-quality-黄 { color: #bd9a2e; }
+.text-quality-珍 { color: #8a6fa8; }
 .text-quality-凡 { color: var(--color-text-secondary); }
 
 /* 品质边框 */
@@ -1054,6 +1048,7 @@ const filteredInventoryTechniques = computed(() => {
 .border-quality-地 { border-color: rgba(6, 182, 212, 0.4); }
 .border-quality-玄 { border-color: rgba(138, 111, 168, 0.4); }
 .border-quality-黄 { border-color: rgba(234, 179, 8, 0.4); }
+.border-quality-珍 { border-color: rgba(138, 111, 168, 0.4); }
 .border-quality-凡 { border-color: var(--color-border); }
 
 /* 品质背景 */
@@ -1065,6 +1060,7 @@ const filteredInventoryTechniques = computed(() => {
 .bg-quality-地 { background: rgba(6, 182, 212, 0.15); color: #4f97ab; }
 .bg-quality-玄 { background: rgba(138, 111, 168, 0.15); color: #8a6fa8; }
 .bg-quality-黄 { background: rgba(234, 179, 8, 0.15); color: #bd9a2e; }
+.bg-quality-珍 { background: rgba(138, 111, 168, 0.15); color: #8a6fa8; }
 .bg-quality-凡 { background: rgba(var(--color-primary-rgb), 0.1); }
 
 /* 功法库网格 */

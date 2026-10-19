@@ -34,7 +34,8 @@ test('旧档迁移：读档修复把道具的七档换成四品，功法不动�
   assert.deepEqual(items.a, { quality: '珍', grade: table.tiers[1].save.grade });
   assert.deepEqual(items.b, { quality: '仙', grade: table.tiers[2].save.grade });
   assert.deepEqual(items.c, { quality: '仙', grade: 8 });
-  assert.match(src('src/utils/dataRepair.ts'), /repaired\.类型 !== '功法'\) \{\n\s+repaired\.品质 = normalizeItemQuality\(repaired\.品质\);/);
+  // 03:05 起功法也走四品（normalizeTechniqueQuality，见 techniqueFourTiers1020）。
+  assert.match(src('src/utils/dataRepair.ts'), /repaired\.类型 === '功法' \? normalizeTechniqueQuality\(repaired\.品质\) : normalizeItemQuality\(repaired\.品质\)/);
   void repair;
 });
 
@@ -57,10 +58,11 @@ test('炼制产出四品：材料旧七档按配置换算，成品 quality 只�
   for (const s of shorts) assert.ok(['凡', '珍', '仙', '神'].includes(s));
 });
 
-test('UI：背包/人物详情/人物关系三处道具显示四品名，功法仍显示原品级', () => {
+test('UI：背包/人物详情/人物关系三处道具显示四品名（功法 10-20 起同样只显示四品）', () => {
   const inv = src('src/components/dashboard/InventoryPanel.vue');
   assert.match(inv, /itemTierOf\(item\.品质\)\.name/);
-  assert.equal((inv.match(/&& isTechnique\(/g) || []).length, 4, '上中下品与 grade 数字只给功法显示');
+  assert.equal((inv.match(/&& showsSubGrade\(/g) || []).length, 4);
+  assert.match(inv, /const showsSubGrade = \(_item\?: Item \| null\): boolean => false/, '四品之内不再显示上中下品');
   assert.match(inv, /\.text-quality-珍,/);
   assert.match(src('src/components/dashboard/CharacterDetailsPanel.vue'), /itemTierOf\(item\.品质\)\.short/);
   assert.match(src('src/components/dashboard/RelationshipNetworkPanel.vue'), /itemTierOf\(item\.品质\)\.name/);

@@ -97,7 +97,7 @@
                 <div class="modal-meta">
                   {{ t(selectedItem?.类型 ?? '未知') }} / {{ selectedItem?.品质?.quality ? t(qualityText(selectedItem)) : t('未知') }}
                   <span
-                    v-if="selectedItem?.品质?.grade !== undefined && isTechnique(selectedItem)"
+                    v-if="selectedItem?.品质?.grade !== undefined && showsSubGrade(selectedItem)"
                     class="grade-display"
                     :class="getItemGradeClass(selectedItem)"
                   >
@@ -209,7 +209,7 @@
             <div class="item-bottom-section">
               <div class="item-type-label">{{ t(item.类型) }}</div>
               <div
-                v-if="item.品质?.grade !== undefined && isTechnique(item)"
+                v-if="item.品质?.grade !== undefined && showsSubGrade(item)"
                 class="item-grade-info"
                 :class="getItemGradeClass(item)"
               >
@@ -231,7 +231,7 @@
                 <div class="details-meta">
                   {{ t(selectedItem.类型) }} / {{ selectedItem.品质?.quality ? t(qualityText(selectedItem)) : t('未知') }}
                   <span
-                    v-if="selectedItem.品质?.grade !== undefined && isTechnique(selectedItem)"
+                    v-if="selectedItem.品质?.grade !== undefined && showsSubGrade(selectedItem)"
                     class="grade-display"
                     :class="getItemGradeClass(selectedItem)"
                   >
@@ -410,7 +410,7 @@
                   </div>
                   <div class="equipped-grade">
                     <span
-                      v-if="slot.item.品质?.grade !== undefined && isTechnique(slot.item)"
+                      v-if="slot.item.品质?.grade !== undefined && showsSubGrade(slot.item)"
                       class="grade-badge"
                       :class="getItemGradeClass(slot.item)"
                     >
@@ -761,23 +761,6 @@ const itemCategories = computed(() => {
   return ['装备', '功法', '丹药', '材料', '其他']
 })
 
-// 品质排序映射，兼容 "*阶" 与简写
-const qualityOrder: { [key: string]: number } = {
-  凡: 1,
-  凡阶: 1,
-  黄: 2,
-  黄阶: 2,
-  玄: 3,
-  玄阶: 3,
-  地: 4,
-  地阶: 4,
-  天: 5,
-  天阶: 5,
-  仙: 6,
-  仙阶: 6,
-  神: 7,
-  神阶: 7,
-}
 
 const filteredItems = computed(() => {
   let items = [...itemList.value]
@@ -829,7 +812,7 @@ const filteredItems = computed(() => {
 
   if (sortBy.value === 'quality') {
     // 道具按四品 order 排，功法按旧七档；两者折到同一刻度（四品 order × 2 对齐旧七档的大致高低）。
-    const rank = (item: Item) => isTechnique(item) ? (qualityOrder[String(item.品质?.quality ?? '凡')] || 0) : itemTierOf(item.品质).order * 2 - 1
+    const rank = (item: Item) => itemTierOf(item.品质).order * 2 - 1
     items.sort((a, b) => rank(b) - rank(a))
   } else if (sortBy.value === 'name') {
     items.sort((a, b) => a.名称.localeCompare(b.名称))
@@ -909,14 +892,15 @@ const equippedCount = computed(() => {
 })
 
 // 质量等阶规范化（兼容 "凡阶/黄阶/…" 与 "凡/黄/…"；支持自定义品质）
-const PRESET_QUALITIES = ['凡', '珍', '黄', '玄', '地', '天', '仙', '神']
-// 道具按四品（mod-kit/item-grades.json）显示，旧档七档单字换算；功法仍显示原七档与上中下品。
-const isTechnique = (item?: Item | null): boolean => item?.类型 === '功法'
+const PRESET_QUALITIES = ['凡', '珍', '仙', '神']
+// 道具与功法都按四品（mod-kit/item-grades.json）显示，旧档七档单字换算，不显示上中下品（2026-10-20 功法改四品）。
+/** 四品之内不再细分：道具与功法都不显示上中下品。 */
+const showsSubGrade = (_item?: Item | null): boolean => false
 const qualityText = (item?: Item | null): string => {
   if (!item?.品质) return '未知'
-  return isTechnique(item) ? String(item.品质.quality) : itemTierOf(item.品质).name
+  return itemTierOf(item.品质).name
 }
-const qualityKey = (item?: Item | null): unknown => (item && !isTechnique(item) && item.品质 ? itemTierOf(item.品质).short : item?.品质?.quality)
+const qualityKey = (item?: Item | null): unknown => (item?.品质 ? itemTierOf(item.品质).short : undefined)
 const getNormalizedQuality = (quality: unknown): { value: string; isCustom: boolean } => {
   const raw = String(quality || '').trim()
   if (!raw) return { value: '未知', isCustom: false }
