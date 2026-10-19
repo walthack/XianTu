@@ -1,6 +1,7 @@
 import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
 import {levelOf} from '../../utils/realmUtils';
 import {initializeLevel} from './levelProgression';
+import { logEvent } from '../diagnostics/log';
 import {canonicalEntityId} from './namedEntities';
 import {ENTITY_SAVE_FORMAT} from './entitySaveFormat';
 import { catalogItem, resolveScenarioContent } from './entityCatalog';
@@ -210,6 +211,25 @@ export function buildStrictScenarioInitialization(
   };
 }
 
+/**
+ * 开局对齐出生年：出生年 = 当前年 − 年龄。年龄取 角色.属性.寿命.当前，没有就取开局预设的 age；都没有记 LCQ-SAV-019，不猜。
+ * 出生的月日晚于开局日期时改成开局当天，免得刚开局就少算一岁。寿元（寿命.上限）不动。
+ */
+export function alignBirthWithStartYear(save: SaveData, presetAge?: unknown): boolean {
+  const now = (save as any)?.元数据?.时间, identity = (save as any)?.角色?.身份;
+  const life = Number((save as any)?.角色?.属性?.寿命?.当前), preset = Number(presetAge), year = Number(now?.年);
+  const age = Number.isFinite(life) && life > 0 ? life : Number.isFinite(preset) && preset > 0 ? preset : NaN;
+  if (!identity || !Number.isFinite(year) || !Number.isFinite(age)) {
+    logEvent({ code: 'LCQ-SAV-019', detail: { hasIdentity: !!identity, year: now?.年 ?? null, life: (save as any)?.角色?.属性?.寿命?.当前 ?? null, presetAge: presetAge ?? null } });
+    return false;
+  }
+  const birth = identity.出生日期 && typeof identity.出生日期 === 'object' ? identity.出生日期 : {};
+  const month = Number(birth.月) || 1, day = Number(birth.日) || 1, nowMonth = Number(now.月) || 1, nowDay = Number(now.日) || 1;
+  const later = month > nowMonth || (month === nowMonth && day > nowDay);
+  identity.出生日期 = { ...birth, 年: year - Math.floor(age), 月: later ? nowMonth : month, 日: later ? nowDay : day };
+  return true;
+}
+
 export function applyStrictScenarioInitializationToSave(
   saveData: SaveData,
   initialization: StrictScenarioInitialization,
@@ -225,6 +245,7 @@ export function applyStrictScenarioInitializationToSave(
   };
   next.角色.位置 = initialization.initialLocation;
   initializeLevel(next);
+  alignBirthWithStartYear(next, initialization.runtimeState.opening?.creationPreset?.age);
   if(initialization.runtimeState.modId==='lcq.stage_01'){
     const item=catalogItem('lcq.item.np012');
     if(item){next.角色.背包 ||= {金钱:{},物品:{}} as any;next.角色.背包.物品 ||= {};

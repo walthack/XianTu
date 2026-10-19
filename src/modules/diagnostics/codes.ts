@@ -84,6 +84,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-016': spec('warn', 'saveValidation', '读档校验发现存档结构损坏，已回退到滚动备份', true),
   'LCQ-SAV-017': spec('warn', 'saveValidation', '读档校验发现存档结构损坏，且没有可用的滚动备份，已拒绝加载', true),
   'LCQ-SAV-018': spec('warn', 'feedbackPack', '反馈包读取当前存档失败，已不带存档导出'),
+  'LCQ-SAV-019': spec('warn', 'strictInitializer', '开局无法对齐出生年：缺年龄或当前年'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

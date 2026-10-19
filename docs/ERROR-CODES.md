@@ -95,6 +95,7 @@
 | LCQ-SAV-016 | warn | saveValidation | 读档校验发现存档结构损坏，已回退到滚动备份 | 迁移之后的存档不是 V3 结构（`validateSaveDataV3` 的 criticalErrors），改用最近一份可用的 `__rot__<槽>_N`（旧结构的备份会在内存里迁移，不写回） | 看 detail.backupIndex 与 detail.problems；回退的是较早的进度；原槽未被改写，下次存档才覆盖；提示只在同一会话同一槽弹一次（由读档处直接弹，不走日志 toast 的 error 级别线） | 是 |
 | LCQ-SAV-017 | warn | saveValidation | 读档校验发现存档结构损坏，且没有可用的滚动备份，已拒绝加载 | 存档过不了致命校验，`__rot__<槽>_1..N` 也都不存在、同样损坏或来自更新版本 | 勿覆盖该槽；看 detail.problems；导出日志与浏览器存储留证，用手动导出的存档文件恢复；提示由读档处直接弹（不走日志 toast 的 error 级别线） | 是 |
 | LCQ-SAV-018 | warn | feedbackPack | 反馈包读取当前存档失败，已不带存档导出 | 玩家勾选了“附带存档”，但读本机 IndexedDB 的当前激活存档时抛错（存储库不可用、存档记录损坏） | 看 stack 与 cause；反馈包里的 manifest.json 会写明“读取存档失败，反馈包未带存档”，其余日志/版本/模型配置照常；按 LCQ-SAV-001 / LCQ-SAV-002 排查存储库，必要时让玩家走存档页的存档导出 | 否 |
+| LCQ-SAV-019 | warn | strictInitializer | 开局无法对齐出生年：缺年龄或当前年 | 严格剧本开局要按“当前年 − 年龄”写出生年，但存档缺 角色.身份，或 元数据.时间.年 不是数，或 角色.属性.寿命.当前 与开局预设 age 都没有 | 看 detail 里的 year / life / presetAge；补全开局预设的 age 或角色寿命；出生日期保持原样，年龄显示可能不对 | 否 |
 | LCQ-SYS-000 | warn | diagnostics | 未登记 | console.error / console.warn 被日志捕获；或调用方传了没登记的码（原码在 detail.originalCode） | 看 msg 与 stack 定位调用点；若是业务上要长期保留的错误，给它登记专属码并改成 logError | 否 |
 | LCQ-SYS-001 | warn | diagnostics | 日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存 | 浏览器禁用或不支持 IndexedDB（隐私模式、存储被清理策略禁用），或 lcq-log 库打开失败 | 日志仍在内存环形缓冲里，可照常导出；换普通窗口或检查浏览器站点存储设置 | 否 |
 | LCQ-UI-001 | error | window | 页面未捕获异常（window error） | 页面脚本抛出未捕获异常（组件渲染、事件回调） | 看 stack 与 detail.file/line；复现步骤 + 导出日志提交 | 否 |
