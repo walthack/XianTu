@@ -1,3 +1,4 @@
+import { recordShiweimoEnding, F02_CONTRACT_ID } from '@/modules/scenarioMods/shiweimoRescue';
 import { GAME_NUMBERS } from '../numbers';
 import { applyCombatHeal } from './combatHeal';
 import {statusNamePattern} from '../statuses';
@@ -191,6 +192,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
   if(closed.writeBack.violations.redLines.length || closed.writeBack.violations.afterState.length)throw new Error('场面红线校验未过，未推进剧情');
   a.state=closed.state;a.phase='closing';a.closing={text:renderRefs(closed.writeBack.closingText||closed.writeBack.memoryNote,runtimeOf(save)),outcome:closed.writeBack.outcome.kind,reason:closed.writeBack.outcome.reason};
   const written=applyWriteBack(save,c,a.state,closed.writeBack);writeExt(save,ext);
+  if(c.meta.id===F02_CONTRACT_ID&&closed.writeBack.outcome.kind==='win'){const row=closed.writeBack.finalStates.find(r=>r.party==='snake_man');if(row)recordShiweimoEnding(save,row.label);}
   if(closed.writeBack.outcome.endingId) {
     const id=closed.writeBack.outcome.endingId;
     runtimeOf(save).gameOver={endingId:id,title:id==='lcq.ending.fail.combat' ? combatLossTitle(c) : BATTLE_LOSS_ENDINGS.find(ending=>ending.endingId===id)?.title || '本局结束',facts:[a.closing.text],sourceEventId:a.eventId,atTurn:runtimeOf(save).worldTurn,presentation:endingPresentation({endingId:id,sourceEventId:a.eventId})};

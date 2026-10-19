@@ -11,6 +11,8 @@ import { renderRefusedBlock, renderSettledBlock } from './facts';
 import { prepareFreeAction } from './plan';
 import { settleFreeAction, settleFromResolution, type SettleDeps } from './settle';
 import type { FreeActionTicket } from './ticket';
+import { settleShiweimoAction } from '../shiweimoRescue';
+import { getNarrativeTurn } from '@/utils/actionGate';
 
 const routeOf = (ticket: FreeActionTicket) => variantSpecOf(ticket.actionClass, ticket.variant)?.route;
 
@@ -59,6 +61,13 @@ export function settleFreeActionTurn(
     }
     else if (result.facts.length) refused.push(...result.facts);
   };
+  // F02 诗薇莫救治（story.shiweimo）：目标是她且带药的票先按救治规则结算，不再走常规用药。
+  const rescueRoll = ((Number(getNarrativeTurn(save as any)) || 0) * 37 % 100) / 100;
+  tickets = tickets.filter(ticket => {
+    const r = settleShiweimoAction(save, ticket, undefined, rescueRoll);
+    if (r.handled) { done.push(...r.facts); changed = true; }
+    return !r.handled;
+  });
   if (resolution?.authorityReceipt?.kind === 'free_action_judgement') take(settleFromResolution(save, resolution, deps));
   else for (const ticket of tickets.filter(t => routeOf(t) === 'table')) {
     const prepared = prepareFreeAction(save, ticket, deps);

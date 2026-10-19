@@ -23,3 +23,16 @@ test('救治：珍品药可救，凡品无效，蛇丹禁用并降好感，窗�
  assert.equal(R.judgeRescue('被制住',1,{kind:'skill',skillLevel:S.skillThreshold,roll:S.skillDifficulty}).ok,true);
  assert.equal(R.judgeRescue('被制住',1,{kind:'skill',skillLevel:S.skillThreshold,roll:20},S.skillTries).reason,'no_tries');
 });
+const turn=await loadTs('../src/modules/scenarioMods/freeAction/turn.ts');
+const mkSave=()=>({元数据:{时间:{年:1,月:3,日:5,小时:22,分钟:0}},角色:{背包:{物品:{'lcq.item.qiannian_renshen':{名称:'千年人参',数量:1},'lcq.item.liaoshang_yao':{名称:'疗伤药',数量:1}}}},社交:{关系:{}},系统:{扩展:{}},世界:{状态:{剧本模组:{canon:{characters:[]}}}}});
+const tk=(itemId)=>({actionClass:'give',variant:'feed',targetId:R.SHIWEIMO_ID,degree:'normal',performed:'yes',evidence:'喂她',itemId});
+test('接线：F02 制住后登记诗薇莫；战后用凡品无效但消耗，珍品救活收侍从、好感按收场；天亮后再救判死', ()=>{
+ const s=mkSave();R.recordShiweimoEnding(s,'被制住');
+ const rel=()=>Object.values(s.社交.关系).find(p=>p.角色ID===R.SHIWEIMO_ID);assert.ok(rel(),'已登记关系');
+ let out=turn.settleFreeActionTurn(s,[tk('lcq.item.liaoshang_yao')],undefined);assert.match(out.block,/解不了咒/);assert.ok(!s.角色.背包.物品['lcq.item.liaoshang_yao']);
+ out=turn.settleFreeActionTurn(s,[tk('lcq.item.qiannian_renshen')],undefined);assert.match(out.block,/侍从/);
+ assert.equal(R.shiweimoRecord(s).status,'saved');assert.equal(rel().好感度,GN.story.shiweimo.affinityOnRescue['被制住']);assert.equal(rel().人物关系,'侍从');
+ const s2=mkSave();R.recordShiweimoEnding(s2,'松口退开');s2.元数据.时间.日=6;s2.元数据.时间.小时=12;
+ out=turn.settleFreeActionTurn(s2,[tk('lcq.item.qiannian_renshen')],undefined);assert.match(out.block,/天已亮/);assert.equal(R.shiweimoRecord(s2).status,'dead');
+ const s3=mkSave();R.recordShiweimoEnding(s3,'倒下');assert.ok(!Object.keys(s3.社交.关系).length,'击倒不登记');
+});

@@ -38,3 +38,52 @@ export function judgeRescue(ending: ShiweimoEnding, hoursSinceEnd: number, attem
   if (attempt.skillLevel < Number(c.skillThreshold)) return { ok: false, reason: 'skill_too_low' };
   return attempt.roll >= Number(c.skillDifficulty) ? { ok: true, reason: 'saved', affinity } : { ok: false, reason: 'skill_failed' };
 }
+
+// ---- 接线：F02 收场登记 + 战后自由行动结算 ----
+import type { SaveData } from '@/types/game';
+import { ensureEncounteredScenarioCharacter } from './relationships';
+import { relationshipOf } from './ledger/affinityIdentity';
+import { sceneTime } from '../sceneModule/host/injuries';
+
+export const SHIWEIMO_ID = 'lcq.character.nanhuang_shiweimo';
+export const F02_CONTRACT_ID = 'combat.f02.snake_assault';
+export interface ShiweimoRecord { ending: ShiweimoEnding; endedAt: number; status: 'pending' | 'saved' | 'dead' | 'left'; skillTries: number; shedanSeen?: boolean }
+
+const ext = (save: SaveData): any => (((save as any).系统 ||= {}).扩展 ||= {});
+export function shiweimoRecord(save: SaveData): ShiweimoRecord | undefined { return ext(save).lcq_shiweimo; }
+
+/** F02 赢后由 host 调用：记下收场方式和时刻；制住/化解时登记关系（好感 0），让战后自由行动能指向她。 */
+export function recordShiweimoEnding(save: SaveData, ending: string): void {
+  if (!['倒下', '被制住', '松口退开'].includes(ending)) return;
+  ext(save).lcq_shiweimo = { ending: ending as ShiweimoEnding, endedAt: sceneTime(save), status: ending === '倒下' ? 'dead' : 'pending', skillTries: 0 } satisfies ShiweimoRecord;
+  if (ending === '倒下') return;
+  const source = (save as any).世界?.状态?.剧本模组?.canon || {};
+  ensureEncounteredScenarioCharacter(save, source, SHIWEIMO_ID, { name: '诗薇莫', gender: '女' });
+}
+
+export interface ShiweimoSettle { handled: boolean; facts: string[] }
+/** 战后自由行动：目标是诗薇莫、带着药（itemId）或治疗技能（skillLevel/roll）时按救治规则结算。其余交回常规结算。 */
+export function settleShiweimoAction(save: SaveData, t: { targetId: string | null; itemId: string | null }, skill?: { skillLevel: number; roll: number }, leaveRoll = 1): ShiweimoSettle {
+  const rec = shiweimoRecord(save);
+  if (t.targetId !== SHIWEIMO_ID || !rec || rec.status !== 'pending' || (!t.itemId && !skill)) return { handled: false, facts: [] };
+  const hours = (sceneTime(save) - rec.endedAt) / 60;
+  if (!rescueWindowOpen(rec.ending, hours)) { rec.status = 'dead'; return { handled: true, facts: ['天已亮，诗薇莫体内的咒毒发作，没能撑过去。'] }; }
+  const v = judgeRescue(rec.ending, hours, t.itemId ? { kind: 'item', itemId: t.itemId } : { kind: 'skill', ...skill! }, rec.skillTries);
+  const rel = relationshipOf(save as any, SHIWEIMO_ID)?.profile as any;
+  if (!t.itemId) rec.skillTries++;
+  if (v.reason === 'forbidden') {
+    rec.shedanSeen = true; if (rel) rel.好感度 = v.affinity;
+    if (leaveRoll < Number(cfg().leaveChanceOnShedanTruth)) { rec.status = 'left'; return { handled: true, facts: ['诗薇莫认出了朱箓蛇丹，眼瞳骤然竖起，拖着伤体离开了。'] }; }
+    return { handled: true, facts: ['诗薇莫认出了朱箓蛇丹，再看众人的眼神只剩冰冷。'] };
+  }
+  const items = (save as any).角色?.背包?.物品 || {};
+  if (t.itemId && items[t.itemId] && ['saved', 'tier_too_low'].includes(v.reason)) {
+    items[t.itemId].数量 = Number(items[t.itemId].数量) - 1; if (items[t.itemId].数量 <= 0) delete items[t.itemId];
+  }
+  if (v.ok) {
+    rec.status = 'saved'; if (rel) { rel.好感度 = v.affinity; rel.人物关系 = '侍从'; }
+    return { handled: true, facts: ['诗薇莫的气息稳住了，咒毒被压了下去；她醒来后留在了主角身边，做了侍从。'] };
+  }
+  const why: Record<string, string> = { tier_too_low: '寻常药物解得了毒，解不了咒，诗薇莫的气息没有起色。', wrong_item: '这东西对她的伤没有用处。', skill_too_low: '医术不够，压不住她体内的咒毒。', skill_failed: '施救没有成功，她的气息仍在变弱。', no_tries: '已经试过太多次，再强行施救只会伤她。' };
+  return { handled: true, facts: [why[v.reason] || '施救没有起效。'] };
+}
