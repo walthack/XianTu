@@ -1,5 +1,13 @@
 // 回合/模型耗时监控：turnTelemetry 内部聚合（p50/p95）、超阈值 warn 日志（新错误码）、数值体检登记、
-// 诊断导出与反馈包带统计，以及 AIBidirectionalSystem 的调用点保持原样（冻结文件零改动）。
+// 诊断导出与反馈包带统计，以及 AIBidirectionalSystem 的遥测调用点保持原样。
+//
+// 冻结门禁（相对 feat/baseline-p1 merge-base）：默认 runtime.ts / AIBidirectionalSystem.ts
+// 不得再扩无批差分。用户拍板方案 A（2026-10-19）允许下列有限触碰——写入期望而非回滚功能：
+//   1. 3763e22e — runtime.ts 同拍闸（settleSharedExperienceAffinity ↔ affinityBeatTaken，+约 6 行）
+//   2. 781b656a — AIBidirectionalSystem.ts 自由行动接线（放行说明；口径不完全是「仅 bugfix/已批清理」；
+//                该提交已在 baseline-p1 祖先内，相对当前 merge-base 通常无 name-only 差分）
+// 已批、可对照但不需再「新批」的清理：63fdf031（runtime world_sim 移除）、cd3d3706（AIBS 快速演示删除）。
+// 禁止：回滚同拍闸、把同拍闸迁出 runtime、为过门禁改游戏运行时逻辑。
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -191,14 +199,36 @@ test('反馈包带 perf.json，且在 manifest 文件清单里', async () => {
   });
 });
 
-test('冻结文件零改动：AIBidirectionalSystem 的遥测调用点仍是原来的 begin/end 各一处；runtime.ts 同', () => {
+/** 相对 feat/baseline-p1 允许出现 name-only 差分的冻结文件（方案 A 有限放行）。 */
+const ALLOWED_FROZEN_NAME_DIFF = new Set([
+  'src/modules/scenarioMods/runtime.ts', // 3763e22e 同拍闸
+  'src/utils/AIBidirectionalSystem.ts', // 781b656a 自由行动接线（说明用；基线内时常无差分）
+]);
+
+test('冻结门禁：AIBS 遥测 begin/end 各一处；runtime/AIBS 仅允许方案 A 有限已批差分', () => {
   const ai = readFileSync(`${root}src/utils/AIBidirectionalSystem.ts`, 'utf8');
   assert.equal((ai.match(/beginTurnTelemetry\(/g) ?? []).length, 1);
   assert.equal((ai.match(/endTurnTelemetry\(/g) ?? []).length, 1);
   assert.ok(!/getPerfStats|recordPerf/.test(ai), '聚合在 turnTelemetry 内部，调用方不感知');
-  // 与本分支起点（feat/fast-no-legacy 合并点）相比不得有任何差异；仓库里没有该提示点时跳过。
+  // 与 feat/baseline-p1 merge-base 相比：仅允许 ALLOWED_FROZEN_NAME_DIFF 内文件出现；无 tip 时跳过。
   let base = '';
   try { base = execFileSync('git', ['merge-base', 'HEAD', 'feat/baseline-p1'], { cwd: root, encoding: 'utf8' }).trim(); } catch { return; }
-  const diff = execFileSync('git', ['diff', '--name-only', base, 'HEAD', '--', 'src/utils/AIBidirectionalSystem.ts', 'src/modules/scenarioMods/runtime.ts'], { cwd: root, encoding: 'utf8' }).trim();
-  assert.equal(diff, '');
+  const paths = ['src/utils/AIBidirectionalSystem.ts', 'src/modules/scenarioMods/runtime.ts'];
+  const changed = execFileSync('git', ['diff', '--name-only', base, 'HEAD', '--', ...paths], { cwd: root, encoding: 'utf8' })
+    .trim()
+    .split('\n')
+    .filter(Boolean);
+  for (const file of changed) {
+    assert.ok(ALLOWED_FROZEN_NAME_DIFF.has(file), `未放行的冻结差分: ${file}`);
+  }
+  // 有限 diff：runtime 若触碰，须仍是已批同拍闸接线（3763e22e），且相对基线增删行数不大。
+  if (changed.includes('src/modules/scenarioMods/runtime.ts')) {
+    const runtime = readFileSync(`${root}src/modules/scenarioMods/runtime.ts`, 'utf8');
+    assert.ok(runtime.includes('affinityBeatTaken'), 'runtime 同拍闸：须保留 affinityBeatTaken');
+    assert.ok(runtime.includes('writableFreeActionState'), 'runtime 同拍闸：须保留 affinityTurn 记账');
+    const numstat = execFileSync('git', ['diff', '--numstat', base, 'HEAD', '--', 'src/modules/scenarioMods/runtime.ts'], { cwd: root, encoding: 'utf8' }).trim();
+    const [added, deleted] = numstat.split('\t').map(s => Number(s));
+    assert.ok(Number.isFinite(added) && Number.isFinite(deleted), `runtime numstat 不可解析: ${numstat}`);
+    assert.ok(added <= 20 && deleted <= 50, `runtime 差分超出方案 A 有限范围 (+${added}/-${deleted})；对照 3763e22e / 63fdf031`);
+  }
 });
