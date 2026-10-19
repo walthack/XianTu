@@ -674,6 +674,40 @@
         "failStatus": "qi.disordered"
       }
     },
+    "maigu": {
+      "note": "麻古（物品 itemId）：普通依赖 debuff，不涉性与意愿，对双修无任何加成（双修仍只看好感）。给药（自由行动喂药，物品 onUse）后挂 heightenedStatus「感官亢奋」heightened.minutes 分钟，并挂 / 续 addictionStatus「麻古成瘾」、重置渴求计时；感官亢奋者自己的交涉判定 +heightened.socialBonus，心性判定（mindKinds 里的判定类型）heightened.mindPenalty。成瘾者距上次给药超过 addiction.cravingMinutes 分钟挂 withdrawalStatus「神志不清」addiction.withdrawalMinutes 分钟；给药、治疗（神志不清自身的解除规则）或撑过戒断期都会解除，并重新开始渴求计时。主角持有麻古时与成瘾者交涉 +addiction.holdSocialBonus。成瘾本身只由状态目录里的剧情旗标解除（#177：请求解毒不等于痊愈）。presetActors：原著已成瘾的角色在所列关卡自动带成瘾。",
+      "itemId": "lcq.item.np006",
+      "heightenedStatus": "sense.heightened",
+      "addictionStatus": "addiction.maigu",
+      "withdrawalStatus": "mind.confused",
+      "heightened": {
+        "minutes": 240,
+        "socialBonus": 1,
+        "mindPenalty": -1,
+        "mindKinds": [
+          "cultivate"
+        ]
+      },
+      "addiction": {
+        "cravingMinutes": 4320,
+        "withdrawalMinutes": 1440,
+        "holdSocialBonus": 2
+      },
+      "presetActors": {
+        "liuchao.character.ning_yu": [
+          "lcq.stage_03b_snake_flower_bridge",
+          "lcq.stage_04",
+          "lcq.stage_04b_lingfei_baiyi_crisis",
+          "lcq.stage_05b"
+        ]
+      }
+    },
+    "itemTagDowngrade": {
+      "note": "按物品效果标签的降级规则：用带该标签的药解除左列状态时改挂右列状态（缓解但没治好）。疗伤动作（removeStatus）与使用物品（itemDefined）两条结算路径都读这张表。stabilize＝吊命（濒死→重伤）；revive（还魂）不在表里＝直接解除。",
+      "stabilize": {
+        "dying": "wound.severe"
+      }
+    },
     "freeText": {
       "minConfidence": 0.9
     }
@@ -1186,10 +1220,12 @@
             "effect": "removeStatus",
             "base": 4,
             "needsItem": true,
-            "itemTag": "heal",
-            "downgrade": {
-              "dying": "wound.severe"
-            }
+            "itemTags": [
+              "heal",
+              "salve",
+              "stabilize",
+              "revive"
+            ]
           },
           "bandage": {
             "label": "包扎",

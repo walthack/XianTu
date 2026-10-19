@@ -39,7 +39,7 @@ test('目录功法不带 allowMultiEquip（缺省取配置，初值 false）；�
 
 test('词表文件：每个标签标注适用 activation；功法（active）目前没有可用标签，道具标签全是 consumable', () => {
   assert.deepEqual(Object.keys(vocab.activations).sort(), ['active', 'consumable', 'equipped']);
-  assert.deepEqual(Object.keys(vocab.tags).sort(), ['antidote', 'detox', 'heal', 'hemostatic', 'poison', 'sedative', 'sober', 'splint', 'unseal']);
+  assert.deepEqual(Object.keys(vocab.tags).sort(), ['antidote', 'detox', 'heal', 'hemostatic', 'poison', 'revive', 'salve', 'sedative', 'sober', 'splint', 'stabilize', 'unseal']);
   for (const [tag, spec] of Object.entries(vocab.tags)) assert.ok(spec.activation.length && spec.activation.every(a => a in vocab.activations), tag);
   assert.deepEqual(Object.entries(vocab.tags).filter(([, s]) => s.activation.includes('active')), []);
   const errors = []; audit.auditEffectVocabulary(errors); assert.deepEqual(errors, []);

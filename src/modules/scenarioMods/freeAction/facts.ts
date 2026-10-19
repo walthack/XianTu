@@ -6,6 +6,7 @@
 import { CONTENT_PACKS, packText } from '@/modules/contentPacks';
 import { enabledVariants, freeActionConfig, resultKeysOf, variantSpecOf, type VariantSpec } from './config';
 import { aftermathConfig } from './outcomeEffects';
+import { tagsHaveDowngrade } from './itemUse';
 
 export interface FactSlots { player: string; target: string; item?: string; status?: string; label?: string; amount?: string; level?: string }
 
@@ -37,11 +38,11 @@ export function effectResultKeys(spec: VariantSpec): string[] {
   switch (spec.effect) {
     case 'practiceProgress': return ['gain', 'no_gain', 'backlash'];
     case 'drainProgress': return ['backlash', 'self_cost', 'drained_lethal', 'took_qi', 'took_hp', 'realm_up'];
-    case 'removeStatus': return ['done', 'failed', ...(spec.downgrade ? ['done_downgraded'] : [])];
+    case 'removeStatus': return tagsHaveDowngrade(spec.itemTag ? [spec.itemTag] : spec.itemTags || []) ? ['done', 'failed', 'done_downgraded'] : ['done', 'failed'];
     case 'transferItem': return ['done'];
     case 'applyStatus': return ['done'];
     case 'selfBuff': return ['buff'];
-    case 'itemDefined': return ['benefit_done', 'sedative_done', 'toxic_done', 'toxic_floor', 'toxic_dying'];
+    case 'itemDefined': return ['benefit_done', 'benefit_downgraded', 'sedative_done', 'toxic_done', 'toxic_floor', 'toxic_dying'];
     default: return [];
   }
 }

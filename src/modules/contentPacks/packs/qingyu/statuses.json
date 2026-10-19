@@ -50,6 +50,11 @@
         "kind": "note",
         "field": "text",
         "text": "依赖发作时难以安坐，冷汗直冒"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "性格提示：烦躁、患得患失，按此人原本性格偏移——内敛寡言者强压焦躁、偶尔失态，外向者易怒、话里带刺；不改变其立场与好恶"
       }
     ],
     "remove": [
@@ -112,6 +117,35 @@
     ],
     "afterScene": {
       "minutes": 10080
+    }
+  },
+  {
+    "id": "sense.heightened",
+    "label": "感官亢奋",
+    "aliases": ["药性亢奋"],
+    "tier": "general",
+    "cause": "item",
+    "kind": "debuff",
+    "source": "服下麻古等药物后的药效期（freeAction/maigu.ts；时长与加值在 game-numbers status.maigu.heightened）。非性化普通药效：五感敏锐、情绪放大、胆气变大；交涉更敢开口，心性判定小幅劣势；对双修无任何加成。",
+    "effects": [
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "五感敏锐、情绪被放大、胆气变大，更敢开口"
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "性格提示：药性放大情绪，按此人原本性格偏移——少言寡语者强忍压抑、偶尔破功，外向者更张扬；不改变其立场与好恶"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
     }
   }
 ]

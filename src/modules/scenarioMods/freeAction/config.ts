@@ -109,6 +109,7 @@ export interface VariantSpec {
   phaseBudgetRatio?: number;
   maxStatusMinutes?: number;
   backlash?: Partial<Record<'failure' | 'critical_failure', string>>;
+  /** 已废弃：降级改按物品标签读 status.itemTagDowngrade。 */
   downgrade?: Record<string, string>;
   statusId?: string;
   protectedForbid?: boolean;

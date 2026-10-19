@@ -5,6 +5,7 @@
 import type { SaveData } from '@/types/game';
 import { DEFAULT_CURRENCIES } from '../../utils/currencySystem';
 import { catalogItem } from './entityCatalog';
+import { itemTierOf } from './itemGrades';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 
 export interface StoryTrade { eventId: string; actionId: string; goldDelta?: number; grantItemId?: string; removeItemId?: string }
@@ -26,7 +27,7 @@ export function settleStoryTrade(saveData: SaveData, runtime: { flags: Record<st
   inventory.物品 ||= {};
   if (trade.grantItemId) {
     const item = catalogItem(trade.grantItemId, runtime.modId)!;
-    inventory.物品[trade.grantItemId] = { 物品ID: item.id, 名称: item.name, 类型: '其他', 品质: { quality: '凡', grade: 0 }, 数量: 1, 描述: item.description, 已装备: false };
+    inventory.物品[trade.grantItemId] = { 物品ID: item.id, 名称: item.name, 类型: '其他', 品质: { ...(itemTierOf((item as { grade?: string }).grade) ?? itemTierOf(undefined)!).save }, 数量: 1, 描述: item.description, 已装备: false };
   }
   if (trade.removeItemId) delete inventory.物品[trade.removeItemId];
   runtime.flags[key] = true;

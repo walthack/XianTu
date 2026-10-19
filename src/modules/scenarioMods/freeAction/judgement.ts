@@ -17,6 +17,7 @@ import { freeActionConfig, type VariantSpec } from './config';
 import { adjustedDifficulty } from './dangerTier';
 import { whyNowText, whySelfText } from './facts';
 import { skillTalentFactors } from './skillMatch';
+import { maiguFactors } from './maigu';
 import type { FreeActionTicket } from './ticket';
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
@@ -51,6 +52,8 @@ export function buildFreeActionJudgementProposal(
     ...skillTalentFactors(save, spec),
     { label: '幸运', value: boundedLuck(Number(root?.角色?.身份?.先天六司?.气运 ?? GAME_NUMBERS.factors.center) + Number(root?.角色?.身份?.后天六司?.气运 ?? 0)), source: 'condition' },
     environmentFactorFor(kind, data),
+    // 麻古：持药对成瘾者交涉加值、感官亢奋的交涉加值 / 心性劣势（数值在 status.maigu）。
+    ...maiguFactors(save, kind, ticket.targetId),
   ];
   if (ticket.targetId && goalModifierRule(spec.modifierProfile).levelGap) {
     const mine = levelOf(root?.角色?.属性?.境界) ?? 0, theirs = targetLevelOf(save, ticket.targetId);

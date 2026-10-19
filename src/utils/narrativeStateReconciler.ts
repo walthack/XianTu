@@ -10,6 +10,7 @@ import { splitRecordPath, npcRecordPath, resolveRelationshipId, backfillRelation
 import { get, set, cloneDeep } from 'lodash';
 import type { SaveData, StateChange, StatusEffect } from '@/types/game';
 import { syncStoryStatuses } from '@/modules/scenarioMods/freeAction/bingGu';
+import { syncMaigu } from '@/modules/scenarioMods/freeAction/maigu';
 
 /**
  * 叙事-数据同步兜底（位置 + 跨轮即兴目标 + 少量队伍状态）。
@@ -656,7 +657,9 @@ export function reconcilePlayerFreeTextStatuses(input: NarrativeReconcileInput):
 export function reconcileStoryStatuses(input: NarrativeReconcileInput): StateChange[] {
   const summarize = input.summarize ?? ((_key, value) => value);
   const oldRaw = cloneDeep(get(input.saveData, PLAYER_EFFECTS_KEY));
-  if (!syncStoryStatuses(input.saveData).length) return [];
+  // 麻古（预设成瘾、渴求计时到点挂戒断）与剧情来源状态同一入口。
+  const added = syncStoryStatuses(input.saveData).length + syncMaigu(input.saveData).length;
+  if (!added) return [];
   return [{
     key: PLAYER_EFFECTS_KEY,
     action: 'set',

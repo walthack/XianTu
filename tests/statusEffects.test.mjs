@@ -128,13 +128,18 @@ test('既有状态只追加新维度：去掉新维度后与提交里的版本�
   const NEW_KINDS = ['psyche', 'sense', 'consciousness', 'restrict', 'appearance'];
   // 2026-10-19 整改按用户方案重写的条目（合并、补实效、去 provisional）与迁移表里删掉 / 并走的旧 id 不比。
   const REWORKED = new Set(['wound.external', 'wound.burn', 'wound.soul_aftershock', 'wound.soul', ...Object.keys(injuries.STATUS_MIGRATIONS)]);
-  const strip = d => { const { lifeFloor, permanent, ...rest } = d; return { ...rest, effects: d.effects.filter(e => !NEW_KINDS.includes(e.kind)) }; };
+  const strip = d => { const { lifeFloor, permanent, ...rest } = d; return { ...rest, effects: d.effects.filter(e => !NEW_KINDS.includes(e.kind)), ...(d.id === 'dying' ? { remove: undefined } : {}) }; }; // dying.remove 按 2026-10-19 药品分级改，见下
   let committed;
   try { committed = JSON.parse(execFileSync('git', ['show', 'HEAD:src/modules/sceneModule/contracts/statuses.json'], { cwd: fileURLToPath(rootUrl), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })); } catch { committed = undefined; }
   if (!committed) return; // 不在 git 仓库里（例如打包后）
   const now = new Map(readJson('src/modules/sceneModule/contracts/statuses.json').map(d => [d.id, d]));
   for (const old of committed) if (!REWORKED.has(old.id)) assert.deepEqual(strip(now.get(old.id)), strip(old), old.id);
-  for (const id of ['unconscious', 'paralyzed', 'acupoint.sealed', 'dying', 'drunk']) assert.deepEqual(now.get(id), committed.find(d => d.id === id), `${id}（含合规标记）整条没动`);
+  for (const id of ['unconscious', 'paralyzed', 'acupoint.sealed', 'dying', 'drunk']) {
+    // 2026-10-19 用户指示（药品分级 B2）：heal 不再解濒死——dying 只改 remove（stabilize 降级 / revive 解除），其余字段（含合规标记）整条没动。
+    const omitRemove = d => id === 'dying' ? { ...d, remove: undefined } : d;
+    assert.deepEqual(omitRemove(now.get(id)), omitRemove(committed.find(d => d.id === id)), `${id}（含合规标记）整条没动`);
+  }
+  assert.deepEqual(now.get('dying').remove.map(r => r.ref), ['stabilize', 'revive']);
 });
 
 // ───────── 角色身上按 id 写状态 ─────────
@@ -402,9 +407,17 @@ const TAGGED = {
   // C 步：用户裁定合规相关的两种药开放标注（假死药 → 昏迷；六识禁绝丹 → 六识受损（五识全压）+ 神志不清）。tag=sedative，喂药时要看对方态度（不是毒）。
   'lyl.item.np053': { tags: ['sedative'], onUse: [{ statusId: 'unconscious' }] },
   'lyg.item.np071': { tags: ['sedative'], onUse: [{ statusId: 'sense.impaired', params: { senses: ['sight', 'hearing', 'smell', 'taste', 'touch'] } }, { statusId: 'mind.confused' }] },
+  // 2026-10-19 用户确认（#177）：麻古按非性化普通依赖 debuff 实装，只挂「感官亢奋」，不带任何标签。
+  'lcq.item.np006': { tags: [], onUse: [{ statusId: 'sense.heightened' }] },
+  // 2026-10-19 药品分级 B2：新增五件药。
+  'lcq.item.jinchuang_yao': { tags: ['salve'], onUse: [] },
+  'lcq.item.liaoshang_yao': { tags: ['heal'], onUse: [] },
+  'lcq.item.qiannian_renshen': { tags: ['stabilize'], onUse: [] },
+  'lcq.item.tianshan_xuelian': { tags: ['stabilize'], onUse: [] },
+  'lcq.item.jiuzhuan_huanhun_dan': { tags: ['revive'], onUse: [] },
 };
 
-test('物品表：只有毒/药相关的 5 件补了 effectTags/onUse，其余 274 件两个字段都没有', () => {
+test('物品表：只有毒/药相关的条目（原 5 件 + 麻古 + 新增五件药）补了 effectTags/onUse，其余两个字段都没有', () => {
   const marked = items.entries.filter(e => e.definition.effectTags !== undefined || e.definition.onUse !== undefined).map(e => e.id).sort();
   assert.deepEqual(marked, Object.keys(TAGGED).sort());
   for (const [id, want] of Object.entries(TAGGED)) {
@@ -422,7 +435,9 @@ test('南荒掉落物（lcq.item.nh_*，含山草药）的定义键被 locationL
 test('合规相关的药物类物品不补标签（麻古、春药、慎恤胶、催情仙草、魂丹类；假死药与六识禁绝丹已由用户裁定开放标注）', () => {
   const left = items.entries.filter(e => /麻古|春药|慎恤胶|催情|魂丹|药丸（殇侯制）|摇头丸/.test(e.definition.name + (e.definition.description || '')));
   assert.ok(left.length >= 9); // 同文字 id 合并后（第四轮）从 13 条降到 9 条；这里只是防正则失效的下限
-  for (const e of left) assert.ok(e.definition.effectTags === undefined && e.definition.onUse === undefined, e.id);
+  // 例外（均为用户 2026-10-19 指示）：麻古（#177 非性化普通依赖 debuff，只挂感官亢奋、无标签）；九转还魂丹是新增的吊命药，名字含「魂丹」但与合规魂丹类无关。
+  const EXEMPT = { 'lcq.item.np006': e => e.definition.effectTags === undefined && JSON.stringify(e.definition.onUse) === JSON.stringify([{ statusId: 'sense.heightened' }]), 'lcq.item.jiuzhuan_huanhun_dan': e => JSON.stringify(e.definition.effectTags) === '["revive"]' && e.definition.onUse === undefined };
+  for (const e of left) assert.ok(EXEMPT[e.id] ? EXEMPT[e.id](e) : e.definition.effectTags === undefined && e.definition.onUse === undefined, e.id);
 });
 
 test('物品标签与状态目录对得上：解除类标签是目录 remove 规则里的 item 标签，毒性标签在配置里，onUse 的状态 id 都存在', () => {

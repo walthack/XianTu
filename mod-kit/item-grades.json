@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "note": "道具四品（用户 2026-10-19 定：凡品 / 灵品 / 仙品 / 神品；上中下品等留到制作系统再加）。save＝写进存档 品质 {quality, grade} 的值，沿用原版 7 档 UI 的颜色（灵品暂存成「玄」，UI 加「灵」档前不改）。legacyAliases：旧 grade 字符串 → 四品（按 2026-10-19 盘点报告第 0 节）；四品名称本身也在表里。只管道具，功法品级不走这张表。",
+  "tiers": [
+    { "id": "fan", "name": "凡品", "order": 1, "save": { "quality": "凡", "grade": 0 } },
+    { "id": "ling", "name": "灵品", "order": 2, "save": { "quality": "玄", "grade": 4 } },
+    { "id": "xian", "name": "仙品", "order": 3, "save": { "quality": "仙", "grade": 9 } },
+    { "id": "shen", "name": "神品", "order": 4, "save": { "quality": "神", "grade": 10 } }
+  ],
+  "defaultTier": "fan",
+  "legacyAliases": {
+    "凡品": "fan", "下品": "fan", "凡": "fan",
+    "中品": "ling", "上品": "ling", "玄品": "ling", "灵品": "ling", "法器": "ling", "珍稀": "ling", "特殊": "ling",
+    "仙品": "xian", "极品": "xian",
+    "神器": "shen", "神品": "shen"
+  }
+}

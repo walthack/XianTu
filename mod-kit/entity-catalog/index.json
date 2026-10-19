@@ -16363,6 +16363,24 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.jinchuang_yao",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.jiuzhuan_huanhun_dan",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.liaoshang_yao",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.lingerie",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -16798,6 +16816,12 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.qiannian_renshen",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.s05b_bone_tiger",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -16811,6 +16835,12 @@
     {
       "kind": "item",
       "id": "lcq.item.s05b_spiral_needle",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
+      "id": "lcq.item.tianshan_xuelian",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
     },
@@ -20639,6 +20669,12 @@
     },
     {
       "kind": "status",
+      "id": "sense.heightened",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "sense.impaired",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -21635,6 +21671,12 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.feed_pill.benefit_downgraded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.feed_pill.sedative_done",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22200,6 +22242,12 @@
     {
       "kind": "text",
       "id": "free.memory.feed_pill.benefit_done",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.memory.feed_pill.benefit_downgraded",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

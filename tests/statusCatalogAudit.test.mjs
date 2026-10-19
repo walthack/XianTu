@@ -19,7 +19,6 @@ const WHITELIST = {
   'yin.sha_arm': { rules: ['mechanical', 'removal'], why: '原著剧情（F13 赢后阴煞入臂，第 109 章起的长线伤），只写叙事；解除旗标要等后续剧情事件接上，按“不改原著剧情”保留。' },
   'poison.cold': { rules: ['removal'], why: '寒毒（与已删的阴寒余伤不是一回事）：原著里只由剧情解毒，解除旗标尚无剧情事件写入。' },
   'poison.cold.suppressed': { rules: ['mechanical', 'removal'], why: '寒毒被压制的阶段（原著里压住未根除），只写叙事；解除只走剧情，旗标尚无剧情事件写入。' },
-  'dying': { rules: ['removal'], why: '濒死是带合规标记的条目，按要求整条不碰；解除规则是 heal 标签物品，但物品表里目前没有带 heal 标签的药，待补物品。' },
   'mind.confused': { rules: ['provisional'], why: '用户要求：去掉 provisional 之前先报告，等拍板。' },
 };
 

@@ -103,11 +103,23 @@ test('T22 玩家自涨与敌对传功：目标不能是玩家；低好感（敌�
 });
 
 // ───────── 疗伤 / 包扎 ─────────
-const HEAL = 'test.item.heal_pill', STICK = 'test.item.hemostatic';
-const tags = { [HEAL]: ['heal'], [STICK]: ['hemostatic'] };
-const withItems = id => makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, items: { [HEAL]: itemEntry(HEAL), [STICK]: itemEntry(STICK) }, ...id });
+// 2026-10-19 药品分级：heal 不再解濒死；stabilize（千年人参/天山雪莲）把濒死降为重伤（status.itemTagDowngrade），revive（九转还魂丹）整条解除。
+const HEAL = 'test.item.stabilize_pill', STICK = 'test.item.hemostatic', PLAIN = 'test.item.heal_pill', REVIVE = 'test.item.revive_pill';
+const tags = { [HEAL]: ['stabilize'], [STICK]: ['hemostatic'], [PLAIN]: ['heal'], [REVIVE]: ['revive'] };
+const withItems = id => makeSave({ present: [NING_YU], favor: { [NING_YU]: 60 }, items: { [HEAL]: itemEntry(HEAL), [STICK]: itemEntry(STICK), [PLAIN]: itemEntry(PLAIN), [REVIVE]: itemEntry(REVIVE) }, ...id });
 
-test('T23 疗伤：濒死 → 解除并改挂重伤，消耗一件；无物品/物品不对/无可治之伤 → 不可、不扣', () => {
+test('T23c 药品分级：heal 药对濒死无可治；revive 整条解除濒死、不改挂重伤', () => {
+  const deps = { itemEffect: injected(tags) };
+  const save = withItems({});
+  mods.actorStatus.applyActorStatus(save, NING_YU, 'dying');
+  assert.equal(mods.plan.prepareFreeAction(save, ticket('cast', 'heal', NING_YU, { itemId: PLAIN }), deps).reason, 'nothing_to_treat');
+  const { result } = runJudged(save, ticket('cast', 'heal', NING_YU, { itemId: REVIVE }), 'success', deps);
+  assert.equal(result.resultKey, 'done');
+  assert.deepEqual(rows(save, NING_YU), []);
+  assert.equal(save.角色.背包.物品[REVIVE], undefined, '消耗一件');
+});
+
+test('T23 疗伤：濒死 + 吊命药 → 解除并改挂重伤，消耗一件；无物品/物品不对/无可治之伤 → 不可、不扣', () => {
   const deps = { itemEffect: injected(tags) };
   const save = withItems({});
   mods.actorStatus.applyActorStatus(save, NING_YU, 'dying');

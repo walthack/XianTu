@@ -1,5 +1,6 @@
 import {realmAt} from './levelProgression';
 import {GAME_NUMBERS} from '../sceneModule/numbers';
+import { itemSaveQuality } from './itemGrades';
 import {canonicalEntityId} from './namedEntities';
 import { backfillRelationshipIds, relationshipOf } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
@@ -142,7 +143,7 @@ function buildNativeCharacterContent(source: ScenarioRelationshipSource, charact
       物品ID: item.id,
       名称: item.name,
       类型: itemType(item.type),
-      品质: parseQuality(item.grade),
+      品质: itemSaveQuality(item.grade, parseQuality),
       数量: 1,
       描述: item.description || '',
       已装备: false,

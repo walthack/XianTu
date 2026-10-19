@@ -13,7 +13,7 @@ export interface LocationLootEntry {
 export interface LocationLootTable {
   version: number;
   rules: { maxSearches: number; commonSlots: number[]; rareChance: number; largeCurrencyChance: number; maxCopperPerSearch: number };
-  locations: Record<string, { name: string; status: 'pending' | 'ready'; entries: LocationLootEntry[]; maxCopper?: number; kind?: 'ordinary' | 'special' }>;
+  locations: Record<string, { name: string; status: 'pending' | 'ready'; entries: LocationLootEntry[]; maxCopper?: number; kind?: 'ordinary' | 'special'; /** 可选：本地点的稀有几率，覆盖 rules.rareChance。 */ rareChance?: number }>;
 }
 export interface LocationLootReceipt {
   id: string; locationId: string; attempt: number; seed: number; turn: number;
@@ -74,7 +74,8 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
   };
   for (const e of eligible.filter(e => e.category === 'key')) if (roll() < (e.chance ?? 1)) picked.push(e);
   for (const chance of table.rules.commonSlots) if (roll() < chance) pick(eligible.filter(e => e.category === 'common' || (e.category === 'currency' && !e.large)));
-  if (roll() < table.rules.rareChance) pick(eligible.filter(e => e.category === 'rare'));
+  // 稀有几率：地点可选覆盖 rareChance（boss 地 / 宫殿等高价值场景），缺省用全局 rules.rareChance。
+  if (roll() < (location.rareChance ?? table.rules.rareChance)) pick(eligible.filter(e => e.category === 'rare'));
   if (roll() < table.rules.largeCurrencyChance) pick(eligible.filter(e => e.category === 'currency' && e.large));
   const receipt: LocationLootReceipt = { id, locationId, attempt, seed, turn, drops: [] };
   let moneyLeft = Math.max(0, location.kind === 'special' ? location.maxCopper ?? 80 : Math.min(80, location.maxCopper ?? table.rules.maxCopperPerSearch));

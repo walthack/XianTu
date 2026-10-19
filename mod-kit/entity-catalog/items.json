@@ -593,7 +593,7 @@
         "name": "鬼角残片",
         "description": "一截从根部断裂的黑色弯角。",
         "type": "material",
-        "grade": "下品"
+        "grade": "灵品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -609,7 +609,7 @@
         "name": "鬼面蜂尾针",
         "description": "一根血红色的弯钩尾针，用叶子包着。",
         "type": "material",
-        "grade": "下品"
+        "grade": "灵品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -844,7 +844,7 @@
         "name": "雄黄避蛊香囊",
         "description": "一只褪色的布香囊，雄黄味冲鼻。",
         "type": "other",
-        "grade": "下品"
+        "grade": "灵品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -861,7 +861,7 @@
         "name": "赤铜熔珠",
         "description": "岩浆熔渣里结出的一粒赤红铜珠。",
         "type": "material",
-        "grade": "下品"
+        "grade": "灵品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -1144,7 +1144,7 @@
         "name": "按摩棒",
         "type": "other",
         "description": "程宗扬从现代带来的性玩具，后被苏妲己占有",
-        "grade": "中品"
+        "grade": "凡品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -1170,7 +1170,12 @@
         "name": "麻古",
         "type": "consumable",
         "description": "段强留下的催情药，被程宗扬用于凝羽",
-        "grade": "中品"
+        "grade": "凡品",
+        "onUse": [
+          {
+            "statusId": "sense.heightened"
+          }
+        ]
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -1229,7 +1234,7 @@
         "name": "遥控器",
         "type": "other",
         "description": "程宗扬从山民处购得",
-        "grade": "中品"
+        "grade": "凡品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -1277,7 +1282,7 @@
         "name": "安全套",
         "type": "other",
         "description": "程宗扬从现代带来的安全套。",
-        "grade": "中品"
+        "grade": "凡品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -1525,7 +1530,7 @@
         "name": "按摩棒",
         "description": "程宗扬从现代世界带来的按摩棒。",
         "type": "other",
-        "grade": "中品"
+        "grade": "凡品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -1859,7 +1864,7 @@
         "name": "遥控器",
         "description": "程宗扬从山民处购得的仿制遥控器。",
         "type": "other",
-        "grade": "中品"
+        "grade": "凡品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -5918,7 +5923,7 @@
         "name": "拉链",
         "type": "other",
         "description": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
-        "grade": "仙品"
+        "grade": "凡品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -5988,6 +5993,86 @@
       "migratedFrom": [
         "src/modules/scenarioMods/builtins/data/lcq.stage_02.json#content.items[id=lcq.item.backpack]"
       ]
+    },
+    {
+      "id": "lcq.item.jinchuang_yao",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.jinchuang_yao",
+        "name": "金创药",
+        "description": "行走江湖常备的金疮外敷药，敷上能止住寻常外伤。",
+        "type": "consumable",
+        "grade": "凡品",
+        "effectTags": [
+          "salve"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json"
+    },
+    {
+      "id": "lcq.item.liaoshang_yao",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.liaoshang_yao",
+        "name": "疗伤药",
+        "description": "内外兼治的疗伤丸散，可治较重的外伤与内伤，却救不回垂死之人。",
+        "type": "consumable",
+        "grade": "凡品",
+        "effectTags": [
+          "heal"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json"
+    },
+    {
+      "id": "lcq.item.qiannian_renshen",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.qiannian_renshen",
+        "name": "千年人参",
+        "description": "年份极老的山参，含一片可吊住一口气，把濒死之人从鬼门关前拉回来，但伤仍未愈。",
+        "type": "consumable",
+        "grade": "灵品",
+        "effectTags": [
+          "stabilize"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json"
+    },
+    {
+      "id": "lcq.item.tianshan_xuelian",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.tianshan_xuelian",
+        "name": "天山雪莲",
+        "description": "远方商队辗转带来的雪莲，药性清冽，能吊住垂死者的性命，但伤仍未愈。",
+        "type": "consumable",
+        "grade": "灵品",
+        "effectTags": [
+          "stabilize"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json"
+    },
+    {
+      "id": "lcq.item.jiuzhuan_huanhun_dan",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.jiuzhuan_huanhun_dan",
+        "name": "九转还魂丹",
+        "description": "传说中的续命灵丹，服下可将濒死之人彻底救回。",
+        "type": "consumable",
+        "grade": "仙品",
+        "effectTags": [
+          "revive"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json"
     }
   ]
 }

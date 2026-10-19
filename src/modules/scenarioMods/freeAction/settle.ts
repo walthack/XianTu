@@ -19,7 +19,8 @@ import npcProfiles from '../../../../mod-kit/entity-ledger/npc-profiles.json';
 import { applyActorStatus } from './actorStatus';
 import { enforceQiCap, isQiAction } from './bingGu';
 import { withEncounteredTarget } from './encounter';
-import { applyItemOnUse } from './itemUse';
+import { applyItemOnUse, tagDowngradeOf } from './itemUse';
+import { afterItemFed } from './maigu';
 import { checkGates, drainPlan, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
 import { freeActionConfig, intimacyConfig, selfBuffOf, variantSpecOf, type VariantSpec } from './config';
 import { affinityNoteText, aftermathHpText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
@@ -219,7 +220,8 @@ function plan(save: SaveData, ticket: FreeActionTicket, gate: GateOk, resolution
 
   if (spec.effect === 'removeStatus') {
     const worked = factor > 0 && gate.treat;
-    const downgrade = worked ? spec.downgrade?.[gate.treat!.row.statusId] : undefined;
+    // 降级按物品标签读 status.itemTagDowngrade（与使用物品路径同一张表）。
+    const downgrade = worked ? tagDowngradeOf(gate.treat!.tag, gate.treat!.row.statusId) : undefined;
     return {
       resultKey: worked ? (downgrade ? 'done_downgraded' : 'done') : 'failed', delta: beatClamp(base * degree * factor), extraFacts: [],
       apply: () => {
@@ -253,15 +255,20 @@ function plan(save: SaveData, ticket: FreeActionTicket, gate: GateOk, resolution
       apply: () => {
         outcomes.push(...applyItemOnUse(save, targetId, itemId!, key));
         if (outcomes.some(r => !r.ok)) return false;
+        afterItemFed(save, targetId, itemId!);
         consume();
         return true;
       },
     };
   }
+  // 使用物品直接解除状态时同样按标签降级（堵上“换条路就能全解濒死”的漏洞）。
+  const benefitDowngrade = gate.treat ? tagDowngradeOf(gate.treat.tag, gate.treat.row.statusId) : undefined;
   return {
-    resultKey: 'benefit_done', delta: beatClamp(base * degree), extraFacts: [],
+    resultKey: benefitDowngrade ? 'benefit_downgraded' : 'benefit_done', delta: beatClamp(base * degree), extraFacts: [],
     apply: () => {
       if (gate.treat && !removeSceneInjury(save, { actorId: targetId }, gate.treat.row.statusId, 'item', gate.treat.tag)) return false;
+      if (benefitDowngrade && !applyActorStatus(save, targetId, benefitDowngrade, { sourceId: key }).ok) return false;
+      afterItemFed(save, targetId, itemId!);
       consume();
       return true;
     },

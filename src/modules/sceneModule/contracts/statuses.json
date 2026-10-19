@@ -493,7 +493,11 @@
     "remove": [
       {
         "kind": "item",
-        "ref": "heal"
+        "ref": "stabilize"
+      },
+      {
+        "kind": "item",
+        "ref": "revive"
       }
     ],
     "afterScene": {
@@ -657,6 +661,10 @@
       {
         "kind": "item",
         "ref": "heal"
+      },
+      {
+        "kind": "item",
+        "ref": "salve"
       }
     ],
     "afterScene": {

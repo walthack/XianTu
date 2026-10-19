@@ -86,7 +86,8 @@ export function auditLocationLoot({ table, stages, coverage = LOOT_STAGE_COVERAG
   const locations = new Set(stages.flatMap(s => (s.canon?.locations || []).map(l => canonicalLocationId(l.id))));
   let entryCount = 0;
   for (const [id, loc] of Object.entries(table?.locations || {})) {
-    allowed(loc, ['name','status','entries','maxCopper','kind'], id);
+    allowed(loc, ['name','status','entries','maxCopper','kind','rareChance'], id);
+    if (loc.rareChance !== undefined && !probability(loc.rareChance)) fail(id, '稀有几率无效');
     if (canonicalLocationId(id) !== id) fail(id, '必须使用规范地点 id');
     if (coverage[id] && !locations.has(id)) fail(id, '地点不存在');
     if (!['pending','ready'].includes(loc.status) || !loc.name?.trim()) fail(id, '状态／名称无效');

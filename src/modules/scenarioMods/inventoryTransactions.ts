@@ -1,6 +1,7 @@
 import type { SaveData } from '@/types/game';
 
 import type { ScenarioModItem, ScenarioPlayerCompletionEffects, ScenarioPlayerCompletionOutcome } from './schema';
+import { itemSaveQuality } from './itemGrades';
 
 export interface ScenarioInventoryTransferReceipt {
   transferId: string;
@@ -58,7 +59,7 @@ function canonicalInventoryItem(item: ScenarioModItem, quantity: number, existin
     物品ID: item.id,
     名称: item.name,
     类型: inventoryType(item.type),
-    品质: parseQuality(item.grade),
+    品质: itemSaveQuality(item.grade, parseQuality),
     数量: quantity,
     描述: item.description || '',
     已装备: existing?.已装备 === true,

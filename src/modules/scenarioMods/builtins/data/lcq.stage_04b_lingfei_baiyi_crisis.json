@@ -2248,6 +2248,21 @@
       },
       {
         "id": "lcq.item.biling_algae_sample"
+      },
+      {
+        "id": "lcq.item.jinchuang_yao"
+      },
+      {
+        "id": "lcq.item.liaoshang_yao"
+      },
+      {
+        "id": "lcq.item.qiannian_renshen"
+      },
+      {
+        "id": "lcq.item.tianshan_xuelian"
+      },
+      {
+        "id": "lcq.item.jiuzhuan_huanhun_dan"
       }
     ],
     "skills": [

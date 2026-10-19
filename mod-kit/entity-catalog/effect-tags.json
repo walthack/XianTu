@@ -24,7 +24,22 @@
     "heal": {
       "label": "疗伤",
       "activation": ["consumable"],
-      "note": "解除外伤、灼伤、失血、重伤、神魂受创、濒死（状态目录 remove 规则）。"
+      "note": "解除外伤、外伤（重）、灼伤、失血、重伤、神魂受创（状态目录 remove 规则）；不解濒死（2026-10-19 用户定，濒死只认 stabilize / revive）。"
+    },
+    "salve": {
+      "label": "金疮外敷",
+      "activation": ["consumable"],
+      "note": "解除外伤（状态目录 remove 规则）。"
+    },
+    "stabilize": {
+      "label": "吊命",
+      "activation": ["consumable"],
+      "note": "濒死降为重伤：解除濒死后改挂重伤（降级表 game-numbers status.itemTagDowngrade.stabilize）。"
+    },
+    "revive": {
+      "label": "还魂",
+      "activation": ["consumable"],
+      "note": "直接解除濒死，不留重伤。"
     },
     "hemostatic": {
       "label": "止血",

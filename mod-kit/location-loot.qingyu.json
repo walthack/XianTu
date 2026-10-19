@@ -160,6 +160,26 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "inn.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "inn.liaoshang_yao",
+          "itemId": "lcq.item.liaoshang_yao",
+          "category": "common",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 40
@@ -281,6 +301,16 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "huamiao.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 80
@@ -391,6 +421,26 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "camp.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "camp.liaoshang_yao",
+          "itemId": "lcq.item.liaoshang_yao",
+          "category": "common",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 80
@@ -501,6 +551,16 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "sheyi.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 80
@@ -590,6 +650,16 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "yeao.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 60
@@ -612,6 +682,8 @@
     "liuchao.location.baiyi": {
       "name": "白夷族",
       "status": "ready",
+      "maxCopper": 80,
+      "rareChance": 0.08,
       "entries": [
         {
           "id": "baiyi.shell",
@@ -718,9 +790,54 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "baiyi.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "baiyi.liaoshang_yao",
+          "itemId": "lcq.item.liaoshang_yao",
+          "category": "common",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "baiyi.jiuzhuan_huanhun_dan",
+          "itemId": "lcq.item.jiuzhuan_huanhun_dan",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.s04b_lingfei_baiyi_crisis_10"
+          ]
+        },
+        {
+          "id": "baiyi.qiannian_renshen",
+          "itemId": "lcq.item.qiannian_renshen",
+          "category": "rare",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.s04b_lingfei_baiyi_crisis_10"
+          ]
         }
-      ],
-      "maxCopper": 80
+      ]
     },
     "liuchao.location.biyu_village": {
       "name": "碧鲮族",
@@ -819,6 +936,16 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "biyu.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 60
@@ -876,6 +1003,8 @@
     "liuchao.location.gui_wang_gong": {
       "name": "鬼王宫",
       "status": "ready",
+      "maxCopper": 40,
+      "rareChance": 0.2,
       "entries": [
         {
           "id": "palace.torch",
@@ -951,18 +1080,77 @@
           "afterEventIds": [
             "lcq.event.s05b_05b_ideology_duel_and_defeat"
           ]
+        },
+        {
+          "id": "palace.jiuzhuan_huanhun_dan",
+          "itemId": "lcq.item.jiuzhuan_huanhun_dan",
+          "category": "rare",
+          "weight": 2,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.s05b_05b_ideology_duel_and_defeat"
+          ]
+        },
+        {
+          "id": "palace.qiannian_renshen",
+          "itemId": "lcq.item.qiannian_renshen",
+          "category": "rare",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "palace.tianshan_xuelian",
+          "itemId": "lcq.item.tianshan_xuelian",
+          "category": "rare",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
         }
-      ],
-      "maxCopper": 40
+      ]
     },
     "liuchao.location.gui_wang_gong.jingshen_tai": {
       "name": "鬼王宫深井祭台",
       "status": "ready",
-      "entries": []
+      "rareChance": 0.25,
+      "entries": [
+        {
+          "id": "altar.jiuzhuan_huanhun_dan",
+          "itemId": "lcq.item.jiuzhuan_huanhun_dan",
+          "category": "rare",
+          "weight": 2,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+          ]
+        },
+        {
+          "id": "altar.tianshan_xuelian",
+          "itemId": "lcq.item.tianshan_xuelian",
+          "category": "rare",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
+        }
+      ]
     },
     "liuchao.location.gui_wang_dong": {
       "name": "鬼王峒",
       "status": "ready",
+      "maxCopper": 80,
+      "rareChance": 0.1,
       "entries": [
         {
           "id": "dong.torch",
@@ -1060,9 +1248,31 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "dong.jiuzhuan_huanhun_dan",
+          "itemId": "lcq.item.jiuzhuan_huanhun_dan",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.slay_dragon"
+          ]
+        },
+        {
+          "id": "dong.qiannian_renshen",
+          "itemId": "lcq.item.qiannian_renshen",
+          "category": "rare",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
         }
-      ],
-      "maxCopper": 80
+      ]
     },
     "liuchao.location.haishanghuahuan": {
       "name": "海棠花環",
@@ -1217,6 +1427,8 @@
     "liuchao.location.sea_temple": {
       "name": "海神殿",
       "status": "ready",
+      "maxCopper": 0,
+      "rareChance": 0.1,
       "entries": [
         {
           "id": "temple.shell",
@@ -1288,9 +1500,31 @@
           "afterEventIds": [
             "lcq.event.haishen_hall_merfolk"
           ]
+        },
+        {
+          "id": "temple.jiuzhuan_huanhun_dan",
+          "itemId": "lcq.item.jiuzhuan_huanhun_dan",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.haishen_hall_merfolk"
+          ]
+        },
+        {
+          "id": "temple.tianshan_xuelian",
+          "itemId": "lcq.item.tianshan_xuelian",
+          "category": "rare",
+          "weight": 2,
+          "quantity": [
+            1,
+            1
+          ]
         }
-      ],
-      "maxCopper": 0
+      ]
     },
     "liuchao.location.shan_jian": {
       "name": "南荒山涧",
@@ -1398,6 +1632,8 @@
     "liuchao.location.south_wild_valley": {
       "name": "南荒山谷",
       "status": "ready",
+      "maxCopper": 40,
+      "rareChance": 0.08,
       "entries": [
         {
           "id": "valley.mushroom",
@@ -1486,9 +1722,31 @@
           "afterEventIds": [
             "lcq.event.ruins_ghost_warriors"
           ]
+        },
+        {
+          "id": "valley.jiuzhuan_huanhun_dan",
+          "itemId": "lcq.item.jiuzhuan_huanhun_dan",
+          "category": "rare",
+          "weight": 1,
+          "quantity": [
+            1,
+            1
+          ],
+          "afterEventIds": [
+            "lcq.event.wuerlang_slays_dagu"
+          ]
+        },
+        {
+          "id": "valley.qiannian_renshen",
+          "itemId": "lcq.item.qiannian_renshen",
+          "category": "rare",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
         }
-      ],
-      "maxCopper": 40
+      ]
     },
     "liuchao.location.taiquan": {
       "name": "太泉古阵",
@@ -1616,6 +1874,26 @@
             1
           ],
           "once": true
+        },
+        {
+          "id": "xep.jinchuang_yao",
+          "itemId": "lcq.item.jinchuang_yao",
+          "category": "common",
+          "weight": 7,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "xep.liaoshang_yao",
+          "itemId": "lcq.item.liaoshang_yao",
+          "category": "common",
+          "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 80

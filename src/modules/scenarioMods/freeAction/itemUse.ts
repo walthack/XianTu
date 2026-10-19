@@ -7,6 +7,7 @@ import type { SaveData } from '@/types/game';
 import { contentDefinition } from '../entityCatalog';
 import { applyActorStatus, type ApplyStatusResult } from './actorStatus';
 import type { StatusParams } from '../../sceneModule/types';
+import { GAME_NUMBERS } from '../../sceneModule/numbers';
 
 export interface ItemOnUse { statusId: string; doses?: number; minutes?: number; params?: StatusParams }
 export interface ItemEffect { tags: string[]; onUse: ItemOnUse[] }
@@ -18,4 +19,16 @@ export function itemEffectOf(itemId: string): ItemEffect {
 
 export function applyItemOnUse(save: SaveData, actorId: string, itemId: string, sourceId?: string): ApplyStatusResult[] {
   return itemEffectOf(itemId).onUse.map(use => applyActorStatus(save, actorId, use.statusId, { sourceId: sourceId ?? itemId, doses: use.doses, ...(use.minutes !== undefined ? { minutes: use.minutes } : {}), ...(use.params ? { params: use.params } : {}) }));
+}
+
+/** 用带 tag 标签的药解除 statusId 时要改挂的状态（status.itemTagDowngrade）；没有降级＝直接解除。 */
+/** 这些标签里是否有任何一个带降级规则（决定该变体要不要备 done_downgraded 文本）。 */
+export function tagsHaveDowngrade(tags: readonly string[]): boolean {
+  const table = (GAME_NUMBERS.status as unknown as { itemTagDowngrade?: Record<string, Record<string, string> | string> }).itemTagDowngrade || {};
+  return tags.some(tag => { const row = table[tag]; return !!row && typeof row === 'object' && Object.keys(row).length > 0; });
+}
+export function tagDowngradeOf(tag: string, statusId: string): string | undefined {
+  const table = (GAME_NUMBERS.status as unknown as { itemTagDowngrade?: Record<string, Record<string, string> | string> }).itemTagDowngrade || {};
+  const row = table[tag];
+  return row && typeof row === 'object' ? row[statusId] : undefined;
 }
