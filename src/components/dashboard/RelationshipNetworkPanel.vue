@@ -842,7 +842,7 @@
                           v-for="(item, itemId) in selectedPerson.背包.物品"
                           :key="itemId"
                           class="npc-item-card"
-                          :class="getItemQualityClass(item.品质?.quality)"
+                          :class="getItemQualityClass(item.类型 === '功法' ? item.品质?.quality : itemTierOf(item.品质).short)"
                         >
                           <div class="item-header">
                             <span class="item-name">{{ item.名称 || itemId }}</span>
@@ -850,8 +850,7 @@
                           </div>
                           <div class="item-quality" v-if="item.品质">
                             <span class="quality-text"
-                              >{{ item.品质?.quality || '未知'
-                              }}{{ item.品质?.grade ? getGradeText(item.品质.grade) : '' }}</span
+                              >{{ item.类型 === '功法' ? (item.品质?.quality || '未知') + (item.品质?.grade ? getGradeText(item.品质.grade) : '') : itemTierOf(item.品质).name }}</span
                             >
                           </div>
                           <div class="item-quantity" v-if="item.数量 > 1">
@@ -972,6 +971,7 @@
 </template>
 
 <script setup lang="ts">
+import { itemTierOf } from '@/data/itemQuality';
 import {entityName} from "@/modules/scenarioMods/namedEntities";
 import { ref, computed, onMounted, onActivated, watch } from 'vue';
 import { useActionQueueStore } from '@/stores/actionQueueStore';
@@ -4083,6 +4083,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   border-left: 3px solid #c69431;
 }
 
+.npc-item-card.quality-灵,
 .npc-item-card.quality-玄 {
   border-left: 3px solid #8a6fa8;
 }

@@ -40,6 +40,7 @@ gantt
     战斗拍数默认不限＋去 timeout 态 :done, beatl, 2026-10-19, 1d
     麻古普通 debuff＋道具四品＋五件药＋谢艺境界 :done, maigu, 2026-10-19, 1d
     麻古撤预设＋撑过戒断期戒除 :done, maigu2, 2026-10-20, 1d
+    道具四品落地 UI＋提示词＋旧档迁移 :done, tier4, 2026-10-20, 1d
 
     section 待复测
     8097 新包 fee49d5f0124 真机复测 :active, rt, 2026-10-19, 2d
@@ -62,7 +63,7 @@ gantt
     助战待拍（8097 重建时机／F03 真机链路偏低／高胜率场未调） :milestone, asd, 2026-10-19, 0d
     解冻批待拍（谢弈境界分支／表级下调不生效／旧档 timeout 结局） :milestone, unfzd, 2026-10-19, 0d
     状态待拍（神志不清 provisional／白名单剧情解除／麻古合规／0% 不输） :milestone, stad, 2026-10-19, 0d
-    药品待拍（灵品存档档位／心性判定口径／九转六处／boss 战后掉落／戒瘾药选名／品质 UI 对齐方案） :milestone, drugd, 2026-10-20, 0d
+    药品待拍（灵品存档档位／心性判定口径／九转六处／boss 战后掉落／戒瘾药选名／功法品级是否也改） :milestone, drugd, 2026-10-20, 0d
 
     section 例行
     Sol 周一／周四 03:00 SGT   :active, sol, 2026-10-19, 14d

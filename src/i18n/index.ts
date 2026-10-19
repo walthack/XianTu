@@ -205,7 +205,7 @@ const autoTranslateMap: Record<string, string> = {
   '火': 'Fire', '水': 'Water', '木': 'Wood', '金': 'Metal', '土': 'Earth', '风': 'Wind',
   '雷': 'Thunder', '冰': 'Ice', '光': 'Light', '暗': 'Dark', '空间': 'Space', '时间': 'Time',
   '凡品': 'Common', '下品': 'Low', '中品': 'Middle', '上品': 'High', '极品': 'Supreme',
-  '仙品': 'Heaven', '神品': 'Divine', '特殊': 'Special', '请选择灵根类型': 'Select root type',
+  '仙品': 'Heaven', '神品': 'Divine', '灵品': 'Rare', '特殊': 'Special', '请选择灵根类型': 'Select root type',
   '请选择灵根品级': 'Select grade', '确认选择': 'Confirm', '请完整选择灵根类型和品级': 'Complete selection',
   '选择的灵根配置无效': 'Invalid config', '自定义灵根 "{0}" 已创建！': 'Root "{0}" created!',
   '修炼倍率:': 'Multiplier:', '消耗天道点:': 'Cost:', '请选择一种灵根，或听天由命。': 'Select a spirit root',

@@ -138,7 +138,7 @@ test('local inventory transfer settles from catalog exactly once across retries'
     物品ID: 'item.demo.token',
     名称: '太乙通行令',
     类型: '其他',
-    品质: { quality: '玄', grade: 4 },
+    品质: { quality: '灵', grade: 4 }, // 2026-10-20 道具四品：灵品存「灵」（mod-kit/item-grades.json）
     数量: 1,
     描述: '太乙真宗发出的通行信物。',
     已装备: false,

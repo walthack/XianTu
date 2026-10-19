@@ -148,7 +148,7 @@ export interface EnglishValuePair<T> {
 /** 物品品质信息 - 新版本 */
 
 export interface ItemQuality {
-  quality: QualityType; // 品质等级：神、仙、天、地、玄、黄、凡
+  quality: QualityType; // 道具：凡、灵、仙、神（四品，mod-kit/item-grades.json）；功法仍为七档 神、仙、天、地、玄、黄、凡
   grade: GradeType; // 品级：0-10
 }
 

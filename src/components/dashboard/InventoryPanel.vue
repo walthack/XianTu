@@ -95,9 +95,9 @@
               </div>
               <div class="modal-info">
                 <div class="modal-meta">
-                  {{ t(selectedItem?.类型 ?? '未知') }} / {{ selectedItem?.品质?.quality ? t(selectedItem.品质.quality) : t('未知') }}
+                  {{ t(selectedItem?.类型 ?? '未知') }} / {{ selectedItem?.品质?.quality ? t(qualityText(selectedItem)) : t('未知') }}
                   <span
-                    v-if="selectedItem?.品质?.grade !== undefined"
+                    v-if="selectedItem?.品质?.grade !== undefined && isTechnique(selectedItem)"
                     class="grade-display"
                     :class="getItemGradeClass(selectedItem)"
                   >
@@ -192,7 +192,7 @@
               <div class="item-icon-area" :class="getItemQualityClass(item, 'border')">
                 <div class="item-type-icon">{{ getItemTypeIcon(item.类型) }}</div>
                 <div class="item-quality-badge" :class="getItemQualityClass(item, 'text')">
-                  {{ item.品质?.quality ? t(item.品质.quality) : t('未知') }}
+                  {{ item.品质?.quality ? t(qualityText(item)) : t('未知') }}
                 </div>
               </div>
             </div>
@@ -209,7 +209,7 @@
             <div class="item-bottom-section">
               <div class="item-type-label">{{ t(item.类型) }}</div>
               <div
-                v-if="item.品质?.grade !== undefined"
+                v-if="item.品质?.grade !== undefined && isTechnique(item)"
                 class="item-grade-info"
                 :class="getItemGradeClass(item)"
               >
@@ -229,9 +229,9 @@
               <div class="details-title-area">
                 <h3>{{ selectedItem.名称 }}</h3>
                 <div class="details-meta">
-                  {{ t(selectedItem.类型) }} / {{ selectedItem.品质?.quality ? t(selectedItem.品质.quality) : t('未知') }}
+                  {{ t(selectedItem.类型) }} / {{ selectedItem.品质?.quality ? t(qualityText(selectedItem)) : t('未知') }}
                   <span
-                    v-if="selectedItem.品质?.grade !== undefined"
+                    v-if="selectedItem.品质?.grade !== undefined && isTechnique(selectedItem)"
                     class="grade-display"
                     :class="getItemGradeClass(selectedItem)"
                   >
@@ -399,7 +399,7 @@
                     </div>
                   </div>
                   <div class="quality-badge" :class="getItemQualityClass(slot.item, 'badge')">
-                    {{ slot.item.品质?.quality ? t(slot.item.品质.quality) : '？' }}
+                    {{ slot.item.品质?.quality ? t(qualityText(slot.item)) : '？' }}
                   </div>
                 </div>
 
@@ -410,7 +410,7 @@
                   </div>
                   <div class="equipped-grade">
                     <span
-                      v-if="slot.item.品质?.grade !== undefined"
+                      v-if="slot.item.品质?.grade !== undefined && isTechnique(slot.item)"
                       class="grade-badge"
                       :class="getItemGradeClass(slot.item)"
                     >
@@ -545,6 +545,7 @@ import { useActionQueueStore } from '@/stores/actionQueueStore'
 import { EnhancedActionQueueManager } from '@/utils/enhancedActionQueue'
 import { isTavernEnv } from '@/utils/tavern'
 import type { Item, ConsumableItem } from '@/types/game'
+import { itemTierOf } from '@/data/itemQuality'
 import { toast } from '@/utils/toast'
 import { debug } from '@/utils/debug'
 import QuantitySelectModal from '@/components/common/QuantitySelectModal.vue'
@@ -827,8 +828,9 @@ const filteredItems = computed(() => {
   }
 
   if (sortBy.value === 'quality') {
-    const rank = (q: unknown) => qualityOrder[String(q ?? '凡')] || 0
-    items.sort((a, b) => rank(b.品质?.quality) - rank(a.品质?.quality))
+    // 道具按四品 order 排，功法按旧七档；两者折到同一刻度（四品 order × 2 对齐旧七档的大致高低）。
+    const rank = (item: Item) => isTechnique(item) ? (qualityOrder[String(item.品质?.quality ?? '凡')] || 0) : itemTierOf(item.品质).order * 2 - 1
+    items.sort((a, b) => rank(b) - rank(a))
   } else if (sortBy.value === 'name') {
     items.sort((a, b) => a.名称.localeCompare(b.名称))
   }
@@ -907,7 +909,14 @@ const equippedCount = computed(() => {
 })
 
 // 质量等阶规范化（兼容 "凡阶/黄阶/…" 与 "凡/黄/…"；支持自定义品质）
-const PRESET_QUALITIES = ['凡', '黄', '玄', '地', '天', '仙', '神']
+const PRESET_QUALITIES = ['凡', '灵', '黄', '玄', '地', '天', '仙', '神']
+// 道具按四品（mod-kit/item-grades.json）显示，旧档七档单字换算；功法仍显示原七档与上中下品。
+const isTechnique = (item?: Item | null): boolean => item?.类型 === '功法'
+const qualityText = (item?: Item | null): string => {
+  if (!item?.品质) return '未知'
+  return isTechnique(item) ? String(item.品质.quality) : itemTierOf(item.品质).name
+}
+const qualityKey = (item?: Item | null): unknown => (item && !isTechnique(item) && item.品质 ? itemTierOf(item.品质).short : item?.品质?.quality)
 const getNormalizedQuality = (quality: unknown): { value: string; isCustom: boolean } => {
   const raw = String(quality || '').trim()
   if (!raw) return { value: '未知', isCustom: false }
@@ -1208,7 +1217,7 @@ const getItemQualityClass = (
   type: 'border' | 'text' | 'badge' | 'card' | 'glow' = 'border',
 ): string => {
   if (!item) return ''
-  const { value: q, isCustom } = getNormalizedQuality(item.品质?.quality)
+  const { value: q, isCustom } = getNormalizedQuality(qualityKey(item))
   if (q === '未知') return ''
   // 自定义品质使用特殊样式
   if (isCustom) return type === 'glow' ? 'q-custom-glow' : `${type}-quality-custom`
@@ -2875,6 +2884,7 @@ const refreshFromTavern = async () => {
 }
 
 /* 玄阶 - 紫色 */
+.text-quality-灵,
 .text-quality-玄,
 .text-quality-玄阶 {
   color: white !important;
@@ -2933,6 +2943,7 @@ const refreshFromTavern = async () => {
   border-color: #c69431 !important;
 }
 
+.border-quality-灵,
 .border-quality-玄 {
   border-color: #8a6fa8 !important;
 }
@@ -3159,6 +3170,7 @@ const refreshFromTavern = async () => {
 
 .icon-glow.q-凡-glow { background: #807b72; }
 .icon-glow.q-黄-glow { background: #daa520; }
+.icon-glow.q-灵-glow,
 .icon-glow.q-玄-glow { background: #9370db; }
 .icon-glow.q-地-glow { background: #00ced1; }
 .icon-glow.q-天-glow { background: #ff69b4; }
@@ -3205,6 +3217,7 @@ const refreshFromTavern = async () => {
 
 .quality-badge.q-凡-badge { background: linear-gradient(135deg, #807b72, #696969); }
 .quality-badge.q-黄-badge { background: linear-gradient(135deg, #daa520, #b8860b); }
+.quality-badge.q-灵-badge,
 .quality-badge.q-玄-badge { background: linear-gradient(135deg, #9370db, #8a2be2); }
 .quality-badge.q-地-badge { background: linear-gradient(135deg, #00ced1, #20b2aa); }
 .quality-badge.q-天-badge { background: linear-gradient(135deg, #ff69b4, #ff1493); }
@@ -3338,6 +3351,7 @@ const refreshFromTavern = async () => {
 /* 品质边框颜色 */
 .q-凡-border { border-color: #807b72; }
 .q-黄-border { border-color: #daa520; }
+.q-灵-border,
 .q-玄-border { border-color: #9370db; }
 .q-地-border { border-color: #00ced1; }
 .q-天-border { border-color: #ff69b4; }
@@ -3347,6 +3361,7 @@ const refreshFromTavern = async () => {
 /* 品质文字颜色 */
 .q-凡-text { color: #807b72; }
 .q-黄-text { color: #daa520; }
+.q-灵-text,
 .q-玄-text { color: #9370db; }
 .q-地-text { color: #00ced1; }
 .q-天-text { color: #ff69b4; }

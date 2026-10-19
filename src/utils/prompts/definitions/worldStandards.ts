@@ -13,6 +13,7 @@
  */
 
 import {GAME_NUMBERS} from '../../../modules/sceneModule/numbers';
+import {ITEM_TIER_TABLE} from '../../../data/itemQuality';
 
 export const REALM_ATTRIBUTE_STANDARDS = `
 [武功级数] 0无修为；1筑基、2内视、3生象、4入微、5坐照、6通幽、7归元、8至臻、9入神。
@@ -21,8 +22,9 @@ export const REALM_ATTRIBUTE_STANDARDS = `
 
 export const QUALITY_SYSTEM = `
 [品质系统]
-格式:{"quality":"凡|黄|玄|地|天|仙|神","grade":0-10}
-凡/黄:开局常见|玄/地:中期核心|天:高级稀有|仙:顶级传说|神:禁忌
+道具(装备/丹药/材料/其他)只分${ITEM_TIER_TABLE.length}品:格式{"quality":"${ITEM_TIER_TABLE.map(t => t.short).join('|')}","grade":数字(沿用字段,不表示品级)}
+${ITEM_TIER_TABLE.map(t => `${t.name}:${t.rarity}`).join('|')}
+功法另计七档:{"quality":"凡|黄|玄|地|天|仙|神","grade":0-10}
 `.trim()
 
 export const MARTIAL_SYSTEM = `
@@ -39,7 +41,7 @@ export const EQUIPMENT_SYSTEM = `
 类型词表:兵刃(刀枪剑戟弓弩鞭)|甲胄(札甲皮甲软甲头盔)|军械(神臂弓/床弩/攻城器)|奇物(太泉造物/魔道法器/上古遗珍,稀少)|杂物/丹药/材料/功法照旧
 命名写实,随国别风:唐=横刀/陌刀/马槊|宋=神臂弓/朴刀|秦=青铜戈/强弩/环首刀|汉=环首刀/戟;名匠可具名(如"张记铁铺打制")
 ❌严禁泛修仙命名:XX仙剑/九天神甲/混沌XX/灭世XX之类一律不得出现
-品质分布(六朝写实):市面绝大多数=凡品;黄品=名匠/军械监制式;玄品=传世名器(一城之宝);地品+=传说奇物(灵飞镜/妖铃级,有名有姓的正典物品,不得凭空新造)
+品质分布(六朝写实):市面绝大多数=凡品;灵品=名匠精制/传世名器(一城之宝);仙品+=传说奇物(灵飞镜/妖铃级,有名有姓的正典物品,不得凭空新造)
 来历落地:军中制式/名匠打造/战场缴获/祖传/当铺淘得——写清来路,禁止"上古大能遗留"式空来历
 奇物=认知差词汇优先(六朝人叫法,见太泉词典);魔道法器归奇物且多有代价
 `.trim()

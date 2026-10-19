@@ -1,17 +1,20 @@
 {
-  "version": 1,
-  "note": "道具四品（用户 2026-10-19 定：凡品 / 灵品 / 仙品 / 神品；上中下品等留到制作系统再加）。save＝写进存档 品质 {quality, grade} 的值，沿用原版 7 档 UI 的颜色（灵品暂存成「玄」，UI 加「灵」档前不改）。legacyAliases：旧 grade 字符串 → 四品（按 2026-10-19 盘点报告第 0 节）；四品名称本身也在表里。只管道具，功法品级不走这张表。",
+  "version": 2,
+  "note": "道具四品——唯一权威（用户 2026-10-19 定凡品 / 灵品 / 仙品 / 神品；2026-10-20 定原著无道具品级体系，UI 与提示词直接显示四品）。short＝写进存档 品质.quality 的单字；save＝新写入存档的 {quality, grade}（grade 只为兼容旧字段，道具不再显示上中下品）。color/rarity＝UI 颜色与给 AI 的品质说明。legacyAliases：剧本 grade 字符串 → 四品（按 2026-10-19 盘点报告第 0 节）。legacySaveQualities：旧存档 品质.quality 七档单字 → 四品（读档修复与显示都按它换算）。只管道具，功法品级不走这张表。",
   "tiers": [
-    { "id": "fan", "name": "凡品", "order": 1, "save": { "quality": "凡", "grade": 0 } },
-    { "id": "ling", "name": "灵品", "order": 2, "save": { "quality": "玄", "grade": 4 } },
-    { "id": "xian", "name": "仙品", "order": 3, "save": { "quality": "仙", "grade": 9 } },
-    { "id": "shen", "name": "神品", "order": 4, "save": { "quality": "神", "grade": 10 } }
+    { "id": "fan", "name": "凡品", "short": "凡", "order": 1, "save": { "quality": "凡", "grade": 1 }, "color": "#808080", "rarity": "世间寻常之物：市面上绝大多数兵刃、杂物、药材都在此列。" },
+    { "id": "ling", "name": "灵品", "short": "灵", "order": 2, "save": { "quality": "灵", "grade": 4 }, "color": "#9370DB", "rarity": "稀有珍品：名匠精制、深山老药、险地所得，一地难求。" },
+    { "id": "xian", "name": "仙品", "short": "仙", "order": 3, "save": { "quality": "仙", "grade": 7 }, "color": "#FFD700", "rarity": "传说之物：有名有姓的正典奇物与续命灵丹，不得凭空新造。" },
+    { "id": "shen", "name": "神品", "short": "神", "order": 4, "save": { "quality": "神", "grade": 10 }, "color": "#9932CC", "rarity": "禁忌至宝：举世罕见，非剧情明示不得出现。" }
   ],
   "defaultTier": "fan",
   "legacyAliases": {
     "凡品": "fan", "下品": "fan", "凡": "fan",
-    "中品": "ling", "上品": "ling", "玄品": "ling", "灵品": "ling", "法器": "ling", "珍稀": "ling", "特殊": "ling",
-    "仙品": "xian", "极品": "xian",
-    "神器": "shen", "神品": "shen"
+    "中品": "ling", "上品": "ling", "玄品": "ling", "灵品": "ling", "法器": "ling", "珍稀": "ling", "特殊": "ling", "灵": "ling",
+    "仙品": "xian", "极品": "xian", "仙": "xian",
+    "神器": "shen", "神品": "shen", "神": "shen"
+  },
+  "legacySaveQualities": {
+    "凡": "fan", "黄": "ling", "玄": "ling", "地": "ling", "天": "xian", "仙": "xian", "神": "shen"
   }
 }

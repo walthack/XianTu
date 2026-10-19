@@ -1,5 +1,5 @@
 import type { InnateAttributes, Item, ItemQuality, ThousandDaoSystem } from '@/types/game';
-import type { QualityType, GradeType } from '@/data/itemQuality';
+import { ITEM_TIER_TABLE, itemTierOf, type QualityType, type GradeType } from '@/data/itemQuality';
 
 export type CraftingType = '炼丹' | '炼器';
 
@@ -50,7 +50,8 @@ export interface CraftingComputationResult {
   daoBonusStage: number;
 }
 
-const QUALITY_ORDER: QualityType[] = ['凡', '黄', '玄', '地', '天', '仙', '神'];
+// 道具四品（mod-kit/item-grades.json 为唯一权威），旧七档材料按配置换算。
+const TIER_COUNT = ITEM_TIER_TABLE.length;
 
 function clampInt(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, Math.round(value)));
@@ -68,7 +69,7 @@ function toGradeNumber(grade: unknown): number {
 export function getItemQualityScore(item: Item): number {
   const quality = item.品质?.quality ?? '凡';
   const grade = toGradeNumber(item.品质?.grade);
-  const rank = Math.max(1, QUALITY_ORDER.indexOf(quality) + 1);
+  const rank = itemTierOf(quality).order;
   const normalizedGrade = Math.max(0, Math.min(10, grade)) / 10;
   return rank + normalizedGrade;
 }
@@ -207,14 +208,14 @@ export function computeCrafting(input: CraftingComputationInput): CraftingComput
     // 神识投入对精细度（品质）略有加成
     qualityBonus += (p - 40) / 80;
   }
-  const avgRank = materialQualityScore > 0 ? Math.max(1, Math.min(7, Math.round(materialQualityScore))) : 1;
-  const targetRank = Math.max(1, Math.min(7, avgRank + (success ? qualityBonus : -2)));
+  const avgRank = materialQualityScore > 0 ? Math.max(1, Math.min(TIER_COUNT, Math.round(materialQualityScore))) : 1;
+  const targetRank = Math.max(1, Math.min(TIER_COUNT, Math.round(avgRank + (success ? qualityBonus : -2))));
 
   const successGradeBase = clampInt((successRate / 100) * 10, 1, 10);
   const gradeVariance = clampInt((rng() - 0.5) * 4, -2, 2);
   const targetGrade = clampInt(successGradeBase + gradeVariance + (success ? qualityBonus : -5), 0, 10);
 
-  const quality: QualityType = success ? (QUALITY_ORDER[targetRank - 1] ?? '凡') : '凡';
+  const quality = (success ? (ITEM_TIER_TABLE.find(t => t.order === targetRank) ?? itemTierOf(undefined)) : itemTierOf(undefined)).short as QualityType;
   const grade: GradeType = clampInt(success ? targetGrade : 0, 0, 10) as GradeType;
 
   const resultQuality: ItemQuality = { quality, grade };

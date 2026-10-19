@@ -506,6 +506,7 @@
 </template>
 
 <script setup lang="ts">
+import { itemTierOf } from '@/data/itemQuality';
 import { computed, onActivated, onMounted, ref } from 'vue';
 import { useI18n } from '@/i18n';
 import { useCharacterStore } from '@/stores/characterStore';
@@ -730,8 +731,10 @@ const inventoryPreviewItems = computed<Item[]>(() => {
   return Object.values(items)
     .filter((it): it is Item => !!it && typeof it === 'object')
     .sort((a, b) => {
-      const qa = qualityRank[a.品质?.quality ?? '凡'] ?? 99;
-      const qb = qualityRank[b.品质?.quality ?? '凡'] ?? 99;
+      // 道具按四品（mod-kit/item-grades.json）高低排，功法按旧七档。
+      const rankOf = (it: Item) => it.类型 === '功法' ? (qualityRank[it.品质?.quality ?? '凡'] ?? 99) : 9 - itemTierOf(it.品质).order * 2;
+      const qa = rankOf(a);
+      const qb = rankOf(b);
       if (qa !== qb) return qa - qb;
       const ta = String(a.类型 || '');
       const tb = String(b.类型 || '');
@@ -1032,7 +1035,9 @@ const toggleTechniqueDetails = () => {
 
 const getItemQualityClass = (item: { 品质?: ItemQuality | { quality: string } | string } | null): string => {
   if (!item?.品质) return 'quality-common';
-  const quality = typeof item.品质 === 'string' ? item.品质 : (item.品质 as ItemQuality).quality;
+  const raw = typeof item.品质 === 'string' ? item.品质 : (item.品质 as ItemQuality).quality;
+  // 道具（非功法）按四品换算，旧档七档单字也落到四品。
+  const quality = (item as { 类型?: string }).类型 === '功法' ? raw : itemTierOf(item.品质).short;
   const q = String(quality || '凡').trim();
   const map: Record<string, string> = {
     仙: 'xian',
@@ -1042,6 +1047,7 @@ const getItemQualityClass = (item: { 品质?: ItemQuality | { quality: string } 
     天: 'tian',
     地: 'di',
     玄: 'xuan',
+    灵: 'xuan',
     黄: 'huang',
     凡: 'common',
   };

@@ -1,150 +1,67 @@
 /**
- * 物品品质系统定义
- * 品质等级：神、仙、天、地、玄、黄、凡
- * 品级：0 残缺；1-3 下品；4-6 中品；7-9 上品；10 极品
+ * 道具品质：四品（凡品 / 灵品 / 仙品 / 神品），唯一权威是 mod-kit/item-grades.json（用户 2026-10-20 定，原著无道具品级体系）。
+ * 存档 品质 = { quality: 四品单字, grade: 数字（只为兼容旧字段，道具不再显示上中下品） }。
+ * 旧存档的七档单字（凡黄玄地天仙神）按配置 legacySaveQualities 换算成四品：读档修复（dataRepair）与 UI 显示都走这里。
+ * 功法品级不走这张表（仍是七档 LegacyQuality，留待功法品级另定）。
  */
+import table from '../../mod-kit/item-grades.json';
 
-export interface QualityInfo {
-  color: string;
-  rarity: string; // 文案描述
+export type ItemTierShort = '凡' | '灵' | '仙' | '神';
+/** 旧七档单字（功法仍在用；旧存档里的道具也可能是这些值）。 */
+export type LegacyQuality = '神' | '仙' | '天' | '地' | '玄' | '黄' | '凡';
+export type QualityType = ItemTierShort | LegacyQuality;
+export type GradeType = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+
+export interface ItemTierDef {
+  id: string; name: string; short: string; order: number;
+  save: { quality: string; grade: number }; color: string; rarity: string;
 }
 
-export interface GradeInfo {
-  name: string; // 残缺/下品/中品/上品/极品
-  description: string;
-  effect: string; // 可用于UI特效描述
+export const ITEM_TIER_TABLE: readonly ItemTierDef[] = table.tiers;
+const byId = new Map(ITEM_TIER_TABLE.map(t => [t.id, t]));
+const DEFAULT_TIER = byId.get(table.defaultTier)!;
+
+/** 任意写法（四品名、四品单字、旧七档单字、剧本 grade 字符串，带不带「品 / 阶」）→ 四品；认不出返回 undefined。 */
+export function itemTierOfQuality(raw: unknown): ItemTierDef | undefined {
+  const s = String(raw ?? '').trim();
+  if (!s) return undefined;
+  const direct = ITEM_TIER_TABLE.find(t => t.short === s || t.name === s);
+  if (direct) return direct;
+  const aliases = table.legacyAliases as Record<string, string>;
+  const legacy = table.legacySaveQualities as Record<string, string>;
+  const base = s.replace(/[品阶级]$/, '');
+  const id = aliases[s] ?? legacy[s] ?? legacy[base] ?? aliases[base];
+  return id ? byId.get(id) : undefined;
 }
 
-export interface ItemQualitySystem {
-  // 品质等级（神、仙、天、地、玄、黄、凡）
-  qualities: {
-    神: QualityInfo;
-    仙: QualityInfo;
-    天: QualityInfo;
-    地: QualityInfo;
-    玄: QualityInfo;
-    黄: QualityInfo;
-    凡: QualityInfo;
-  };
-
-  // 品级（0 残缺；1-3 下品；4-6 中品；7-9 上品；10 极品）
-  grades: {
-    0: GradeInfo;
-    1: GradeInfo;
-    2: GradeInfo;
-    3: GradeInfo;
-    4: GradeInfo;
-    5: GradeInfo;
-    6: GradeInfo;
-    7: GradeInfo;
-    8: GradeInfo;
-    9: GradeInfo;
-    10: GradeInfo;
-  };
+/** 道具存档品质 → 四品（认不出按默认凡品）。 */
+export function itemTierOf(quality: unknown): ItemTierDef {
+  const q = quality && typeof quality === 'object' ? (quality as { quality?: unknown }).quality : quality;
+  return itemTierOfQuality(q) ?? DEFAULT_TIER;
 }
 
-export const ITEM_QUALITY_SYSTEM: ItemQualitySystem = {
-  qualities: {
-    神: { color: '#9932CC', rarity: '亘古未有，蕴含大道法则，三界之内绝无仅有之神物。' },
-    仙: { color: '#FFD700', rarity: '源自顶级仙家圣地，汇聚天地灵气，是修士梦寐以求的瑰宝。' },
-    天: { color: '#FF69B4', rarity: '由超级宗门或顶尖势力倾力打造，威能赫赫，足以镇压一方气运。' },
-    地: { color: '#00CED1', rarity: '产自大型地级宗门，材质与工艺俱佳，是修真界的中坚力量。' },
-    玄: { color: '#9370DB', rarity: '出自玄门修士之手，蕴含奇特功效，是行走江湖的必备秘宝。' },
-    黄: { color: '#DAA520', rarity: '修真界广泛流通的珍品，虽不顶尖，但已具备不凡效力。' },
-    凡: { color: '#808080', rarity: '世俗凡人所用之物，未入修行门槛，仅具基本功能。' },
-  },
+/** 显示用：「凡品 / 灵品 / 仙品 / 神品」。 */
+export const itemTierLabel = (quality: unknown): string => itemTierOf(quality).name;
+export const itemTierColor = (quality: unknown): string => itemTierOf(quality).color;
 
-  grades: {
-    0: { name: '残缺', description: '破损不堪', effect: '破损效果' },
-    1: { name: '下品', description: '品质一般', effect: '淡色光效' },
-    2: { name: '下品', description: '品质一般', effect: '淡色光效' },
-    3: { name: '下品', description: '品质一般', effect: '淡色光效' },
-    4: { name: '中品', description: '品质中等', effect: '中等光效' },
-    5: { name: '中品', description: '品质中等', effect: '中等光效' },
-    6: { name: '中品', description: '品质中等', effect: '中等光效' },
-    7: { name: '上品', description: '品质上乘', effect: '强烈光效' },
-    8: { name: '上品', description: '品质上乘', effect: '强烈光效' },
-    9: { name: '上品', description: '品质上乘', effect: '强烈光效' },
-    10: { name: '极品', description: '完美无瑕', effect: '炫目特效' },
-  },
-};
-
-export type QualityType = keyof typeof ITEM_QUALITY_SYSTEM.qualities;
-export type GradeType = keyof typeof ITEM_QUALITY_SYSTEM.grades;
-
-export function getQualityInfo(quality: QualityType): QualityInfo {
-  return ITEM_QUALITY_SYSTEM.qualities[quality];
+/** 旧档迁移：把道具的 品质 换成四品写法（已是四品的保持不变，返回新对象）。 */
+export function normalizeItemQuality(quality: unknown): { quality: ItemTierShort; grade: GradeType } {
+  const raw = quality && typeof quality === 'object' ? (quality as { quality?: unknown }).quality : quality;
+  const tier = itemTierOfQuality(raw) ?? DEFAULT_TIER;
+  const already = raw === tier.short && quality && typeof quality === 'object' && Number.isFinite((quality as { grade?: unknown }).grade);
+  return { quality: tier.short as ItemTierShort, grade: (already ? (quality as { grade: number }).grade : tier.save.grade) as GradeType };
 }
 
-export function getGradeInfo(grade: GradeType): GradeInfo {
-  return ITEM_QUALITY_SYSTEM.grades[grade];
-}
-
-export function getFullQualityDescription(quality: QualityType, grade: GradeType): string {
-  const qualityInfo = getQualityInfo(quality);
-  const gradeInfo = getGradeInfo(grade);
-  return `${quality}·${gradeInfo.name} - ${qualityInfo.rarity}`;
-}
-
-export function getItemColor(quality: QualityType, grade: GradeType): string {
-  if (grade === 0) return '#666666';
-  return getQualityInfo(quality).color;
-}
-
-export function getGradeRange(grade: number): string {
-  if (grade === 0) return '残缺';
-  if (grade >= 1 && grade <= 3) return '下品';
-  if (grade >= 4 && grade <= 6) return '中品';
-  if (grade >= 7 && grade <= 9) return '上品';
-  if (grade === 10) return '极品';
-  return '未知';
-}
-
+/** 给 AI 的道具品质说明（四品，按配置生成）。 */
 export function generateQualitySystemPrompt(): string {
+  const lines = ITEM_TIER_TABLE.map(t => `- ${t.name}（quality:"${t.short}"）：${t.rarity}`).join('\n');
   return `
 ## 物品品质系统 (重要参考)
-此世界的物品分为两个维度：品质等级 与 品级
+道具只分四品（从低到高），四品之内不再细分：
+${lines}
 
-### 品质等级 (从低到高):
-- 凡品: ${ITEM_QUALITY_SYSTEM.qualities.凡.rarity}
-- 黄品: ${ITEM_QUALITY_SYSTEM.qualities.黄.rarity}
-- 玄品: ${ITEM_QUALITY_SYSTEM.qualities.玄.rarity}
-- 地品: ${ITEM_QUALITY_SYSTEM.qualities.地.rarity}
-- 天品: ${ITEM_QUALITY_SYSTEM.qualities.天.rarity}
-- 仙品: ${ITEM_QUALITY_SYSTEM.qualities.仙.rarity}
-- 神品: ${ITEM_QUALITY_SYSTEM.qualities.神.rarity}
-
-### 品级 (物品完美程度):
-- 残缺 (0): 破损不堪，效果大减
-- 下品 (1-3): 品质一般，淡色光效
-- 中品 (4-6): 品质中等，中等光效
-- 上品 (7-9): 品质上乘，强烈光效
-- 极品 (10): 完美无瑕，炫目特效
-
-### 物品命名规则 (建议):
-两种推荐的命名格式：
-
-格式1 - 简洁版（推荐）: [物品名]
-示例：
-- "引气丹" (凡品下品的引气丹)
-- "聚灵丹" (凡品中品的聚灵丹)
-- "铁剑" (凡品下品的铁剑)
-- "玄铁剑" (玄品中品的玄铁剑)
-
-格式2 - 完整版（特殊情况）: [品质][品级][物品名]
-示例：
-- "凡品下品引气丹"
-- "玄品中品聚灵丹"
-- "天品上品破虚剑"
-- "仙品极品九转金丹"
-
-命名建议：
-- 日常物品使用简洁版命名
-- 高品质或特殊物品可使用完整版
-- 避免使用 "凡下" 这种连写格式
-- 如需标注品级，使用 "凡品下品" 的分离格式
-
-重要提示：初始角色通常只有凡品或黄品的下品物品，高品质物品极其稀少。
+存档格式：品质 {quality:"${ITEM_TIER_TABLE.map(t => t.short).join('|')}", grade: 数字（沿用字段，不表示品级）}。
+命名直接用物品名（如"铁剑""金创药"），不要在名字前加品质。
+重要提示：初始角色通常只有凡品物品，灵品以上极其稀少。
 `;
 }
-

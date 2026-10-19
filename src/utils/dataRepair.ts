@@ -12,7 +12,7 @@ import {realmAt} from '../modules/scenarioMods/levelProgression';
  */
 
 import type { SaveData, Item, NpcProfile, GameTime, Realm, PlayerAttributes, PlayerLocation } from '@/types/game';
-import type { GradeType } from '@/data/itemQuality';
+import { normalizeItemQuality, type GradeType, type QualityType } from '@/data/itemQuality';
 import { cloneDeep } from 'lodash';
 import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
@@ -379,11 +379,13 @@ function repairItem(item: Item): Item {
   repaired.名称 = repaired.名称 || '未命名物品';
   repaired.数量 = validateNumber(repaired.数量, 1, 999999, 1);
 
-  // 修复品质
-  if (!repaired.品质 || typeof repaired.品质 !== 'object') {
+  // 修复品质：道具按四品（mod-kit/item-grades.json）迁移旧七档；功法品级仍是七档，不走四品表。
+  if (repaired.类型 !== '功法') {
+    repaired.品质 = normalizeItemQuality(repaired.品质);
+  } else if (!repaired.品质 || typeof repaired.品质 !== 'object') {
     repaired.品质 = { quality: '凡', grade: 1 };
   } else {
-    const validQualities = ['凡', '黄', '玄', '地', '天', '仙', '神'];
+    const validQualities: QualityType[] = ['凡', '黄', '玄', '地', '天', '仙', '神'];
     if (!validQualities.includes(repaired.品质.quality)) {
       repaired.品质.quality = '凡';
     }
