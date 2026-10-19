@@ -321,7 +321,8 @@ test('F10 passive biting and cutting the haft cannot invent blood; repeated hits
   const result=await rec.recognizeAction(registry.sceneContractById(a.contractId),a.state,text,runtime(h.save),bogus);
   assert.notEqual(result.plan?.goal,'destroy_tiger');assert.ok(!result.plan?.levers.some(l=>l.element==='true_yang_blood'));
  }
- force(h.save,10,20);
+ // 2026-10-20 1aae：骨爪改走通用挂伤规则（普通命中不挂伤），这里用防御骰 1（敌方重击）复现“连续被咬到倒下”。
+ force(h.save,10,1);
  for(let n=0;n<5&&ext.activeScene(h.save);n++){
   await host.submitSceneInput(h.save,'我任骨虎咬',h.deps);assert.equal(ext.activeScene(h.save).pending.plan.goal,'expose_self');await host.confirmSceneAction(h.save,h.deps);
  }

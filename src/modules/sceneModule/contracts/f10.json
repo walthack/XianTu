@@ -1,7 +1,7 @@
 {
   "meta": {
     "id": "combat.f10.ghost_king_clash",
-    "version": 6,
+    "version": 7,
     "scene": {
       "kind": "combat"
     },
@@ -15,7 +15,8 @@
       2,
       3,
       4,
-      5
+      5,
+      6
     ]
   },
   "objective": {
@@ -884,16 +885,14 @@
         "fromBeat": 4
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ],
-        "text": "骨爪击中你，伤势加重"
+        "statuses": [],
+        "text": "骨爪击中你"
       },
       "onBlocked": {
         "text": "你躲开了骨爪"
-      }
+      },
+      "woundRule": "default",
+      "woundRuleNote": "2026-10-20 1aae 真机：骨爪原来每次打中都直挂外伤，普通命中也会「外伤（重）（加重）」；改走通用挂伤规则（只有重击挂伤）。"
     }
   ],
   "fumble": [

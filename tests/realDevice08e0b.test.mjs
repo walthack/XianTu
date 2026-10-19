@@ -113,7 +113,8 @@ test('8) 全部合同：普通打中直接挂通用伤（外伤/内伤/外伤（
  const general=new Set(['wound.external','wound.external.heavy','wound.internal']),left=[];
  for(const c of registry.SCENE_CONTRACTS)for(const act of c.enemyActions||[])for(const s of act.onHit?.statuses||[])if(general.has(s.status))left.push(`${c.meta.id}/${act.id}`);
  // 2026-10-20 fee4：F12 普通命中改走伤势规则（部位进 woundParams），只剩剧情指定的骨爪加重。
- assert.deepEqual(left,['combat.f10.ghost_king_clash/bone_claw']);
+ // 2026-10-20 1aae 真机：骨爪普通命中也挂「外伤（重）（加重）」，用户定为 bug，改走通用挂伤规则；现在一个都不剩。
+ assert.deepEqual(left,[]);
 });
 
 test('9) F03 真机预览「攻击武士」难度 17 加值 -4：17＝基础 10＋幅度 2 的加价 4（模型报“击退”＝幅度 2，头目轨道还剩 3 步，可兑现 2 步，不触发封顶）＋头目抗性 3；-4＝级差（2 级 vs 3 级）', async()=>{

@@ -1,7 +1,7 @@
 {
   "meta": {
     "id": "combat.f13.ghost_king_final",
-    "version": 7,
+    "version": 8,
     "scene": {
       "kind": "combat"
     },
@@ -17,7 +17,8 @@
       3,
       4,
       5,
-      6
+      6,
+      7
     ]
   },
   "objective": {
@@ -192,7 +193,8 @@
       "label": "守住井口、逼退扑来的手下",
       "type": "push",
       "track": "hold",
-      "baseDifficulty": 14,
+      "baseDifficulty": 10,
+      "baseDifficultyNote": "2026-10-20 1aae 真机 F13 0/5：14→10。按真机玩家画像（只用井口地形，不用真阳之血）模拟 24.5%→47.8%，全抓手 65%→83%（见 combat.simulation.plainPlayer）。",
       "aliases": [
         "守住",
         "守井口",

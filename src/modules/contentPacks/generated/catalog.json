@@ -1,5 +1,5 @@
 {
-  "version": "09553307a15bc48d",
+  "version": "e6ceba6fbf702f57",
   "contracts": [
     {
       "meta": {
@@ -2342,7 +2342,7 @@
     {
       "meta": {
         "id": "combat.f10.ghost_king_clash",
-        "version": 6,
+        "version": 7,
         "scene": {
           "kind": "combat"
         },
@@ -2356,7 +2356,8 @@
           2,
           3,
           4,
-          5
+          5,
+          6
         ]
       },
       "objective": {
@@ -3225,16 +3226,14 @@
             "fromBeat": 4
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.external"
-              }
-            ],
-            "text": "骨爪击中你，伤势加重"
+            "statuses": [],
+            "text": "骨爪击中你"
           },
           "onBlocked": {
             "text": "你躲开了骨爪"
-          }
+          },
+          "woundRule": "default",
+          "woundRuleNote": "2026-10-20 1aae 真机：骨爪原来每次打中都直挂外伤，普通命中也会「外伤（重）（加重）」；改走通用挂伤规则（只有重击挂伤）。"
         }
       ],
       "fumble": [
@@ -3552,7 +3551,7 @@
     {
       "meta": {
         "id": "combat.f13.ghost_king_final",
-        "version": 7,
+        "version": 8,
         "scene": {
           "kind": "combat"
         },
@@ -3568,7 +3567,8 @@
           3,
           4,
           5,
-          6
+          6,
+          7
         ]
       },
       "objective": {
@@ -3743,7 +3743,8 @@
           "label": "守住井口、逼退扑来的手下",
           "type": "push",
           "track": "hold",
-          "baseDifficulty": 14,
+          "baseDifficulty": 10,
+          "baseDifficultyNote": "2026-10-20 1aae 真机 F13 0/5：14→10。按真机玩家画像（只用井口地形，不用真阳之血）模拟 24.5%→47.8%，全抓手 65%→83%（见 combat.simulation.plainPlayer）。",
           "aliases": [
             "守住",
             "守井口",
@@ -4106,7 +4107,7 @@
         {
           "id": "front",
           "side": "player_side",
-          "ref": "liuchao.character.yi_biao"
+          "ref": "lcq.character.np004"
         }
       ],
       "goals": [

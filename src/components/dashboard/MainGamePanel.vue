@@ -370,7 +370,7 @@
             <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
             <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，可直接继续到下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
             <div class="game-over-acts">
-              <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinuePending || isAIProcessing" @click="continueToNextPhase">继续到下一期</button>
+              <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinueBlocked({ pending: phaseContinuePending, processing: isAIProcessing, finished: nanhuangDemoFinished })" @click="continueToNextPhase">继续到下一期</button>
               <button :class="nextPlaytestPhase ? 'go-ghost' : 'go-primary'" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
             </div>
           </div>
@@ -517,6 +517,7 @@ import { canUseNicheCrystal, useNicheCrystal } from '@/modules/sceneModule/host/
 import SceneEncounterCard from './SceneEncounterCard.vue';
 import { activeScene } from '@/modules/sceneModule/host/ext';
 import { writePreBattleSave } from '@/modules/sceneModule/host/preBattleSlot';
+import { phaseContinueBlocked } from '@/modules/scenarioMods/phaseContinue';
 import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSceneChoice, editSceneAction, finishScene, setSceneTestDice, type HostDeps } from '@/modules/sceneModule/host/controller';
 import { fixedEndingNarrative } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingKey, endingPresentation } from '@/modules/scenarioMods/endingPresentation';
@@ -995,7 +996,9 @@ const stageDeparturePending = ref(false);
 const nextPlaytestPhase = computed(() => nanhuangDemoFinished.value ? nextNanhuangPhase(gameStateStore.toSaveData()) : undefined);
 const phaseContinuePending = ref(false);
 const continueToNextPhase = async () => {
-  if (phaseContinuePending.value || isAIProcessing.value) return;
+  if (phaseContinueBlocked({ pending: phaseContinuePending.value, processing: isAIProcessing.value, finished: nanhuangDemoFinished.value })) return;
+  // 本期已收束：残留的生成中标记（自动推进）作废，免得后续输入也一直被挡。
+  if (isAIProcessing.value) { uiStore.setAIProcessing(false); persistAIProcessingState(); }
   phaseContinuePending.value = true;
   try {
     const result = await gameStateStore.continueToNextPlaytestPhase();

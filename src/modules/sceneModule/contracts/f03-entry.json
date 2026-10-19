@@ -62,7 +62,7 @@
     {
       "id": "front",
       "side": "player_side",
-      "ref": "liuchao.character.yi_biao"
+      "ref": "lcq.character.np004"
     }
   ],
   "goals": [

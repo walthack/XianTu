@@ -30,6 +30,11 @@
       "maxBeats": 48,
       "minWinRate": 0.4,
       "maxWinRate": 0.75,
+      "plainPlayer": {
+        "note": "2026-10-20 1aae 真机 F13 0/5：模拟器与真机规则一致（同一 core，同一打法真机 host 重放 68%），差在参考玩家每拍都用「真阳之血」（ability 抓手，+2），真机玩家只写「守住井口」。列入 contracts 的合同按真机画像（只用 leverKinds 种类的抓手）算门槛。",
+        "contracts": ["combat.f13.ghost_king_final"],
+        "leverKinds": ["terrain"]
+      },
       "excluded": [
         "combat.f03.escape_followup"
       ],
