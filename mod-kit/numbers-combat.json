@@ -137,7 +137,7 @@
         "lcq.enemy.f01_axeman": { "protagonistOffset": 1 },
         "lcq.enemy.f01_archer": { "protagonistOffset": 0 },
         "lcq.enemy.f01_veiled_woman": { "protagonistOffset": 1 },
-        "lcq.enemy.sheyi_raider": { "protagonistOffset": 1 },
+        "lcq.enemy.sheyi_shiweimo": { "protagonistOffset": 1 },
         "lcq.enemy.guiwang_warrior": { "protagonistOffset": 1, "variants": { "elite": { "protagonistOffset": 1 } } },
         "lcq.enemy.dungeon_shaman": { "protagonistOffset": 1 },
         "lcq.enemy.crow_man": { "protagonistOffset": 1 },

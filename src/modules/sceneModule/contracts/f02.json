@@ -13,7 +13,7 @@
     }
   },
   "objective": {
-    "text": "击倒或制住袭击的蛇彝男子",
+    "text": "击倒、制住或说服袭击的蛇彝女子诗薇莫",
     "win": {
       "party": "snake_man",
       "track": "vit",
@@ -30,7 +30,7 @@
     {
       "id": "snake_man",
       "side": "opposed",
-      "ref": "lcq.enemy.sheyi_raider",
+      "ref": "lcq.enemy.sheyi_shiweimo",
       "tracks": [
         {
           "id": "vit",
@@ -39,17 +39,28 @@
             "仍在抵抗",
             "抵抗减弱",
             "勉强抵抗",
-            "倒下"
+            "倒下",
+            "被制住",
+            "松口退开"
           ],
           "initial": 2,
           "ending": {
             "finalState": "倒下",
-            "ceiling": 3,
-            "preserveOnWin": false
+            "ceiling": 1,
+            "preserveOnWin": false,
+            "alternatives": [
+              "被制住",
+              "松口退开"
+            ]
           }
         }
       ],
-      "instanceId": "combat.f02.snake_assault.snake_man"
+      "instanceId": "combat.f02.snake_assault.snake_man",
+      "aliases": [
+        "诗薇莫",
+        "蛇彝女子",
+        "蛇彝人"
+      ]
     }
   ],
   "goals": [
@@ -68,6 +79,49 @@
       "type": "push",
       "track": "vit",
       "baseDifficulty": 12
+    },
+    {
+      "id": "subdue",
+      "label": "制住她、留活口",
+      "aliases": [
+        "制住她",
+        "压住她",
+        "留活口",
+        "别杀她",
+        "卸掉下巴",
+        "把刀偏开",
+        "按住她",
+        "捆住她"
+      ],
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 12,
+      "finishAs": "被制住",
+      "targetIds": [
+        "snake_man"
+      ]
+    },
+    {
+      "id": "persuade",
+      "label": "表明不是凶手、劝她松口",
+      "aliases": [
+        "我们不是凶手",
+        "不是我们干的",
+        "劝她",
+        "说服她",
+        "解释",
+        "表明身份",
+        "拿出药材",
+        "赔礼药材",
+        "我们刚进村"
+      ],
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 14,
+      "finishAs": "松口退开",
+      "targetIds": [
+        "snake_man"
+      ]
     },
     {
       "id": "defend",
@@ -119,7 +173,10 @@
   },
   "closing": {
     "win": {
-      "rewards": []
+      "rewards": [],
+      "flags": {
+        "lcq.f02.shiweimo_met": true
+      }
     },
     "lose": {
       "text": "游戏结束",
@@ -128,8 +185,9 @@
   },
   "narration": {
     "requiredFacts": [
-      "开战前：蛇彝男子带着重伤袭来。",
-      "{{ref:liuchao.character.ning_yu}}在主角身后，药效未退，无法行动。"
+      "开战前：蛇彝女子诗薇莫带着重伤从屋檐扑下，她以为商队是屠村的人回来了。",
+      "{{ref:liuchao.character.ning_yu}}在主角身后，药效未退，只在收尾时出刀。",
+      "无论哪种收场，主角都已被咬中毒，仍要服朱箓蛇丹；诗薇莫不能看见蛇丹。"
     ]
   },
   "settings": {},

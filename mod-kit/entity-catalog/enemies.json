@@ -69,20 +69,25 @@
       "stageVariants": {}
     },
     {
-      "id": "lcq.enemy.sheyi_raider",
+      "id": "lcq.enemy.sheyi_shiweimo",
       "aliases": [
+        "诗薇莫",
+        "蛇彝女子",
+        "带重伤的蛇彝女子",
         "蛇彝男子",
         "带重伤的蛇彝男子",
-        "lcq.enemy.sheyi_male"
+        "lcq.enemy.sheyi_male",
+        "lcq.enemy.sheyi_raider"
       ],
       "definition": {
-        "id": "lcq.enemy.sheyi_raider",
-        "name": "蛇彝男子",
+        "id": "lcq.enemy.sheyi_shiweimo",
+        "name": "诗薇莫",
         "type": "humanoid",
-        "unnamed": true,
-        "description": "蛇彝村袭击主角的蛇彝人，开战即带重伤（initial=2）。",
+        "unnamed": false,
+        "characterRef": "lcq.character.nanhuang_shiweimo",
+        "description": "黑石滩蛇彝村的女子诗薇莫（游戏原创，替换原著无名蛇彝男子，10-20 用户定），误认商队为屠村者而袭击，开战即带重伤（initial=2）。",
         "instances": {
-          "combat.f02.snake_assault.snake_man": "带重伤的蛇彝男子"
+          "combat.f02.snake_assault.snake_man": "带重伤的蛇彝女子"
         },
         "level": null,
         "levelSource": "待剧情策划按原著核定；缺值按同级并告警"

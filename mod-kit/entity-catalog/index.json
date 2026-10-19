@@ -6438,6 +6438,14 @@
     },
     {
       "kind": "character",
+      "id": "lcq.character.nanhuang_shiweimo",
+      "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
+      "aliases": [
+        "蛇彝女子"
+      ]
+    },
+    {
+      "kind": "character",
       "id": "lcq.character.nanhuang_stonemason",
       "authoritySource": "src/modules/scenarioMods/builtins/character-registry.json",
       "aliases": [
@@ -8559,12 +8567,16 @@
     },
     {
       "kind": "enemy",
-      "id": "lcq.enemy.sheyi_raider",
+      "id": "lcq.enemy.sheyi_shiweimo",
       "authoritySource": "mod-kit/entity-catalog/enemies.json",
       "aliases": [
+        "诗薇莫",
+        "蛇彝女子",
+        "带重伤的蛇彝女子",
         "蛇彝男子",
         "带重伤的蛇彝男子",
-        "lcq.enemy.sheyi_male"
+        "lcq.enemy.sheyi_male",
+        "lcq.enemy.sheyi_raider"
       ]
     },
     {

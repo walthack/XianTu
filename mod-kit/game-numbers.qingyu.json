@@ -212,7 +212,7 @@
         "lcq.enemy.f01_veiled_woman": {
           "protagonistOffset": 1
         },
-        "lcq.enemy.sheyi_raider": {
+        "lcq.enemy.sheyi_shiweimo": {
           "protagonistOffset": 1
         },
         "lcq.enemy.guiwang_warrior": {
@@ -2044,6 +2044,30 @@
     }
   },
   "story": {
+    "shiweimo": {
+      "note": "F02 诗薇莫（10-20 用户定）：制服/化解后到天亮为救治窗口；珍品及以上疗伤/解毒药或治疗技能达门槛可救；凡品无效；朱箓蛇丹不可用；救活收为侍从，好感按收场方式；得知蛇丹真相降到 -10 并可能离队",
+      "rescueWindowHours": 6,
+      "minItemTier": "珍品",
+      "itemTags": [
+        "heal",
+        "antidote",
+        "detox",
+        "revive",
+        "stabilize"
+      ],
+      "forbiddenItemIds": [
+        "lcq.item.np013"
+      ],
+      "skillThreshold": 3,
+      "skillDifficulty": 15,
+      "skillTries": 2,
+      "affinityOnRescue": {
+        "松口退开": 5,
+        "被制住": 2
+      },
+      "affinityOnShedanTruth": -10,
+      "leaveChanceOnShedanTruth": 0.5
+    },
     "note": "剧情固定数值：已验证剧情动作的固定交易（按事件+动作回执只结算一次）；逐拍演出关卡每拍默认推进的分钟数（卡片自带 dayPart 时不另推进）",
     "trades": [
       {
