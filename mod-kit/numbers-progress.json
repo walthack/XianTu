@@ -123,7 +123,29 @@
       "maxPerTurn": 2,
       "evidenceChars": 30,
       "rosterMax": 6,
-      "itemListMax": 6
+      "itemListMax": 6,
+      "local": {
+        "negators": "不没别勿未莫",
+        "helperMarks": "替帮给助",
+        "excludeWords": [
+          "为他",
+          "替他",
+          "给他",
+          "帮他",
+          "为她",
+          "替她",
+          "给她",
+          "帮她",
+          "为他们",
+          "替他们",
+          "给他们",
+          "帮他们",
+          "双修",
+          "传功",
+          "渡功"
+        ],
+        "degree": "normal"
+      }
     },
     "affinity": {
       "perBeatCap": 15,
@@ -631,6 +653,15 @@
           "recover": {
             "label": "调息疗伤",
             "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息休整或休息一整夜，满血也算；双修、为他人疗伤不是本项。",
+            "localTicketWords": [
+              "调息",
+              "疗伤",
+              "休整",
+              "休息",
+              "睡一觉",
+              "歇息",
+              "养伤"
+            ],
             "applyRecovery": true,
             "restRemoval": {
               "outcomes": [

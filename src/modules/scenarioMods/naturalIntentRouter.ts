@@ -23,7 +23,7 @@ import {
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { freeActionConfig } from './freeAction/config';
-import { ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
+import { localTargetlessTickets, ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
 import { freeActionOwnerOf } from './freeAction/legacyGuard';
 import { notePlayerText, reportedTicketLabels } from './freeAction/playerTextDebug';
 
@@ -411,14 +411,32 @@ function narrateWithoutSettlement(reason: string, usedModel: boolean): NaturalIn
   return { kind: 'free', reason, skipKeywordPreflight: true, usedModel };
 }
 
-export async function resolveNaturalIntent(input: {
+type NaturalIntentInput = {
   saveData: SaveData;
   playerText: string;
   selected?: { playerLine?: string; actionText?: string; source?: string } | null;
   generate?: IntentGenerate;
   signal?: AbortSignal;
   resolveFromText?: (saveData: SaveData, playerText: string) => ScenarioEventActionSelection | undefined;
-}): Promise<NaturalIntentResult> {
+};
+
+/**
+ * 自由回合的本地兜底票：模型没给“调息疗伤 / 休整”这类无对象自身行动出票（空票、票被丢、或模型没命中候选），原话又明说了，就按配置词表本地补一张，
+ * 免得同一句话这回出判定、下回只有叙事（真机：读档后休息 4 次只有 1 次出判定）。票照常过闸门与判定；问句、假设句不补。
+ */
+function withLocalTickets(input: NaturalIntentInput, result: NaturalIntentResult): NaturalIntentResult {
+  if (result.kind !== 'free' || !freeActionConfig().enabled || !isScopedNaturalIntentSave(input.saveData) || hasUnclearIntentFrame(input.playerText)) return result;
+  const existing = result.freeActionTickets ?? [], local = localTargetlessTickets(String(input.playerText || ''), existing);
+  if (!local.length) return result;
+  for (const ticket of local) noteTicketDiscard('free_action', 'local_fallback_issued', `${ticket.actionClass}.${ticket.variant}`);
+  return { ...result, freeActionTickets: [...existing, ...local], skipKeywordPreflight: true };
+}
+
+export async function resolveNaturalIntent(input: NaturalIntentInput): Promise<NaturalIntentResult> {
+  return withLocalTickets(input, await resolveNaturalIntentByModel(input));
+}
+
+async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<NaturalIntentResult> {
   if (input.signal?.aborted) {
     return { kind: 'failed', reason: 'aborted', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: false };
   }

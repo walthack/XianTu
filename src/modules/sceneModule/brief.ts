@@ -7,6 +7,7 @@ import { evalExpr } from './conditions';
 import { isPresent, partyDisplay, trackInfo, trackLabel } from './queries';
 import { resolveStatusDef } from './statuses';
 import { resolveSettings } from './tiers';
+import { woundTierLabel } from './woundRules';
 import type { BeatResult } from './scene';
 import type { Contract, SceneContext, SceneState } from './types';
 
@@ -105,7 +106,8 @@ export function renderResultLines(contract: Contract, result: BeatResult): strin
   }
   for (const roll of result.enemy) {
     const names = roll.statuses.filter(e => e.op !== 'skipped').map(e => `${e.label}${e.op === 'upgrade' ? '（加重）' : ''}`).join('、');
-    lines.push(`${roll.label}→${partyDisplay(contract, roll.target)}：防御 ${roll.face}＋${roll.defenseBonus}＝${roll.total} 对 ${roll.dc}，${roll.outcome === 'hit' ? `没挡住${names ? `，挂「${names}」` : ''}` : '挡住了'}`);
+    const tierMark = woundTierLabel(roll.woundTier);
+    lines.push(`${roll.label}→${partyDisplay(contract, roll.target)}：防御 ${roll.face}＋${roll.defenseBonus}＝${roll.total} 对 ${roll.dc}，${roll.outcome === 'hit' ? `没挡住${tierMark ? `（${tierMark}）` : ''}${names ? `，挂「${names}」` : ''}` : `挡住了${tierMark ? `（${tierMark}）` : ''}`}`);
   }
   if (result.outcome) lines.push(`场面结果：${result.outcome.kind === 'win' ? '胜' : result.outcome.kind === 'lose' ? '败' : '超时收束'}`);
   return lines;

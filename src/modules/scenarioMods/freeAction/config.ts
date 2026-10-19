@@ -100,6 +100,8 @@ export interface VariantSpec {
   requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal'; minGoodwill?: number; targetDefenseDown?: DefenseDownRule; realmMoves?: boolean };
   /** 玩家原话含其中任一词（且在自由行动范围内）= 这句归本变体的票据与结算，不再回落旧关键词判定。 */
   legacyGuardWords?: string[];
+  /** 无对象自身行动的本地兜底词（见 ticket.local）：模型没出这一类的票、原话又明说了，就本地出票。 */
+  localTicketWords?: string[];
   cost?: { resource: string; onResolveRatio: number; criticalFailureRatio: number };
   gain?: { base: number; perTransferCap: number; ceilingBelowNeed: number };
   drain?: DrainSpec;
@@ -137,7 +139,11 @@ export interface FreeActionConfig {
   actionClasses: ActionClass[];
   degrees: Degree[];
   performed: string[];
-  ticket: { maxPerTurn: number; evidenceChars: number; rosterMax: number; itemListMax: number };
+  /**
+   * local：意图模型没给无对象自身行动（调息、休整……）出票时的本地兜底。原话里有该变体 localTicketWords 的词、所在小句没有 negators 里的否定字和 helperMarks 里替他人做的字（替/帮/给…）、模型一张票都没给、
+   * 也不含 excludeWords（为他人疗伤、双修、传功这类指向别人的说法），就本地出一张票（degree 取 local.degree），照常过闸门和判定。
+   */
+  ticket: { maxPerTurn: number; evidenceChars: number; rosterMax: number; itemListMax: number; local: { negators: string; helperMarks: string; excludeWords: string[]; degree: Degree } };
   /**
    * floatBand：票上的好感浮动位只能在“代码基础值 ± floatBand”内生效。
    * repeat：同一目标同一行动类的正向好感按次数递减——factors[n] 是窗口内第 n+1 次的系数（超出表长取最后一项），windowMinutes 从窗口内第一次起算，窗口外重算；敌意不递减。
@@ -274,12 +280,16 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
       if (spec.requires?.minGoodwill !== undefined && !(Number.isFinite(spec.requires.minGoodwill) && spec.requires.minGoodwill >= GAME_NUMBERS.affinity.range.min && spec.requires.minGoodwill <= GAME_NUMBERS.affinity.range.max)) errors.push(`${where}: requires.minGoodwill 须为 ${GAME_NUMBERS.affinity.range.min}~${GAME_NUMBERS.affinity.range.max} 的数`);
       if (spec.restRemoval !== undefined && (!Array.isArray(spec.restRemoval?.outcomes) || !spec.restRemoval.outcomes.length || spec.restRemoval.outcomes.some(o => !(OUTCOMES as readonly string[]).includes(o)))) errors.push(`${where}: restRemoval.outcomes 须为非空判定档数组`);
       if (spec.restRemoval !== undefined && spec.target !== 'none') errors.push(`${where}: restRemoval 只用于无对象的自身行动`);
+      if (spec.localTicketWords !== undefined && (!Array.isArray(spec.localTicketWords) || !spec.localTicketWords.length || spec.localTicketWords.some(word => typeof word !== 'string' || !word.trim()))) errors.push(`${where}: localTicketWords 须为非空字符串数组`);
+      if (spec.localTicketWords !== undefined && spec.target !== 'none') errors.push(`${where}: localTicketWords 只用于无对象的自身行动`);
       if (spec.legacyGuardWords !== undefined && (!Array.isArray(spec.legacyGuardWords) || spec.legacyGuardWords.some(word => typeof word !== 'string' || !word.trim()))) errors.push(`${where}: legacyGuardWords 须为非空字符串数组`);
       if (spec.needsItem && spec.actionClass === 'cast' && !spec.itemTag && !spec.itemTags?.length) errors.push(`${where}: needsItem 的施术变体缺 itemTag(s)`);
       if (spec.effect === 'drainProgress') errors.push(...validateDrain(spec, where));
       if (spec.gain) for (const key of ['base', 'perTransferCap', 'ceilingBelowNeed'] as const) if (!Number.isFinite(spec.gain[key])) errors.push(`${where}: gain.${key} 引用无法解析`);
     }
   }
+  const local = cfg.ticket?.local;
+  if (!local || typeof local.negators !== 'string' || typeof local.helperMarks !== 'string' || !Array.isArray(local.excludeWords) || local.excludeWords.some(word => typeof word !== 'string' || !word.trim()) || !cfg.degrees.includes(local.degree)) errors.push('ticket.local 须有 negators、helperMarks（字符串）、excludeWords（非空字符串数组）、degree（degrees 之一）');
   if (!Array.isArray(cfg.dangerTiers) || !cfg.dangerTiers.length || cfg.dangerTiers.some(tier => typeof tier !== 'string' || !tier) || new Set(cfg.dangerTiers).size !== cfg.dangerTiers.length) errors.push('dangerTiers 须为不重复的非空字符串数组');
   else if (!cfg.dangerTiers.includes(cfg.defaultDangerTier)) errors.push(`defaultDangerTier ${String(cfg.defaultDangerTier)} 不在 dangerTiers 里`);
   for (const [cls, raw] of Object.entries(cfg.classes)) {

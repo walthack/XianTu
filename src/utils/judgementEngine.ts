@@ -91,6 +91,8 @@ export interface JudgementResolution extends Omit<JudgementProposal, 'status'> {
   /** Present only when a development-only test control forced the result. */
   testOverride?: JudgementOutcome;
   appliedEffects: Array<{ key: string; action: string; value: unknown }>;
+  /** 判定之后、结算那一步才落账的效果（如休整解伤），只用于回执展示；不进权威快照，不再执行。 */
+  settledEffects?: Array<{ key: string; action: string; value: unknown }>;
   resolvedAtTurn: number;
 }
 
@@ -269,16 +271,18 @@ function normalizeResolution(raw: unknown): JudgementResolution | null {
     (typeof roll !== 'number' || !Number.isInteger(roll) || roll < 1 || roll > judgementNumbers().dice.sides ||
       typeof total !== 'number' || !Number.isFinite(total) || !isOutcome(outcome))
   ) return null;
-  const appliedEffects = Array.isArray(value.appliedEffects)
-    ? value.appliedEffects.filter(effect => effect && typeof effect === 'object' && normalizeText((effect as any).key) && normalizeText((effect as any).action))
+  const effectsOf = (list: unknown) => Array.isArray(list)
+    ? list.filter(effect => effect && typeof effect === 'object' && normalizeText((effect as any).key) && normalizeText((effect as any).action))
         .map(effect => ({ key: normalizeText((effect as any).key), action: normalizeText((effect as any).action), value: (effect as any).value }))
     : [];
+  const appliedEffects = effectsOf(value.appliedEffects), settledEffects = effectsOf(value.settledEffects);
   return {
     ...proposal,
     status,
     ...(status === 'resolved' ? { roll, total, outcome } : {}),
     ...(testOverride ? { testOverride } : {}),
     appliedEffects,
+    ...(settledEffects.length ? { settledEffects } : {}),
     resolvedAtTurn: normalizeTurn(value.resolvedAtTurn),
   };
 }
@@ -568,6 +572,7 @@ export function describeJudgementEffect(effect: JudgementResolution['appliedEffe
   if (effect.key === '角色.属性.气血.当前') return effect.action === 'set' ? `气血恢复至 ${effect.value}` : `气血 ${Number(effect.value) >= 0 ? '+' : ''}${effect.value}`;
   if (effect.key === '角色.属性.神识.当前') return effect.action === 'set' ? `神识恢复至 ${effect.value}` : `神识 ${Number(effect.value) >= 0 ? '+' : ''}${effect.value}`;
   if (effect.key === '角色.效果' && effect.action === 'upsert') return `获得临时状态「${(effect.value as any)?.状态名称 || '未知'}」`;
+  if (effect.key === '角色.效果' && effect.action === 'remove') return `解除「${(effect.value as any)?.状态名称 || '未知'}」`;
   if (effect.key === '系统.扩展.行动门控.recent') return '写入行动余波';
   return `${effect.key} ${effect.action}`;
 }
@@ -604,6 +609,22 @@ export function resolvePendingJudgement(
   applyDeterministicEffects(saveData, appliedEffects);
   writeJudgementState(saveData, archiveResolution(state, resolution));
   return clone(resolution);
+}
+
+/**
+ * 结算之后才落账的效果（自由行动休整解伤等）补记到同一判定的 settledEffects，界面“已写入”才看得到。只记账，不再执行；同一条不重复记。
+ * 不碰 appliedEffects：它在权威快照里，改了叙事侧的回执校验（verifyResolvedJudgementReceipt）就对不上。
+ */
+export function noteResolutionEffects(saveData: unknown, judgementId: string, effects: JudgementResolution['appliedEffects']): void {
+  if (!effects.length) return;
+  const state = getJudgementState(saveData), at = state.recent.findIndex(item => item.id === judgementId);
+  if (at < 0) return;
+  const row = state.recent[at], prior = row.settledEffects || [], seen = new Set(prior.map(effect => JSON.stringify(effect)));
+  const added = effects.filter(effect => !seen.has(JSON.stringify(effect)));
+  if (!added.length) return;
+  const recent = [...state.recent];
+  recent[at] = { ...row, settledEffects: [...prior, ...clone(added)] };
+  writeJudgementState(saveData, { ...state, recent });
 }
 
 /** Cancellation is an auditable no-op: no die roll and no applied effects. */

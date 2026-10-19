@@ -8,7 +8,7 @@
  * 必须活着的保护只在自由行动路径里生效（经 protect.ts）；剧情合同安排的死亡不受它限制。
  */
 import type { SaveData } from '@/types/game';
-import { applyDeterministicEffects, getJudgementState, verifyResolvedJudgementReceipt, type JudgementResolution } from '@/utils/judgementEngine';
+import { applyDeterministicEffects, getJudgementState, noteResolutionEffects, verifyResolvedJudgementReceipt, type JudgementResolution } from '@/utils/judgementEngine';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { removePlayerInjuriesByRest, removeSceneInjury, sceneTime } from '../../sceneModule/host/injuries';
 import { AFFINITY_TIERS, clampAffinity, stanceOf, tierOf } from '../affinityLadder';
@@ -321,7 +321,12 @@ function settleTargetless(save: SaveData, spec: VariantSpec, resolution: Judgeme
   const facts = [factText(spec.variant, outcome, slots), ...writeAftermath(save, resolution, slots)];
   if (spec.restRemoval?.outcomes.includes(outcome)) {
     const removed = removePlayerInjuriesByRest(save);
-    if (removed.length) facts.push(factText(spec.variant, 'rest_removed', { ...slots, status: [...new Set(removed.map(row => row.label))].join('、') }));
+    if (removed.length) {
+      const labels = [...new Set(removed.map(row => row.label))];
+      facts.push(factText(spec.variant, 'rest_removed', { ...slots, status: labels.join('、') }));
+      // 判定卡“已写入”只列判定时落账的效果；休整解伤在结算这一步才发生，补记进同一判定的回执，玩家才看得到外伤已解除。
+      noteResolutionEffects(save, resolution.id, labels.map(label => ({ key: '角色.效果', action: 'remove', value: { 状态名称: label } })));
+    }
   }
   const state = writableFreeActionState(save);
   state.log.push({ key, turn, actionClass: spec.actionClass, variant: spec.variant, targetId: null, resultKey: outcome, delta: 0, major: false });

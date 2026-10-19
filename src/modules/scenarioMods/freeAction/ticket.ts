@@ -186,3 +186,27 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
   result.tickets = [...picked.values()].map(entry => entry.ticket);
   return result;
 }
+
+/**
+ * 本地兜底票：意图模型没给无对象自身行动（调息疗伤、休整……）出票时，按变体的 localTicketWords 在原话里找明说的词。
+ * 词所在小句里有否定字（ticket.local.negators）、或原话含 excludeWords（为他人疗伤、双修这类）就不出；同一类已经有票、或票数到顶也不出。
+ * 出的票和模型的票一样过闸门与判定，证据就是命中的那个词（原话子串）。
+ */
+export function localTargetlessTickets(playerText: string, existing: readonly FreeActionTicket[] = []): FreeActionTicket[] {
+  const cfg = freeActionConfig(), local = cfg.ticket.local, hay = squash(playerText), out: FreeActionTicket[] = [];
+  // 只在模型一张票都没给时补票：模型已报的票（含对人的票）原样保留，不再叠一张自身恢复。
+  if (!hay || existing.length || local.excludeWords.some(word => hay.includes(squash(word)))) return out;
+  const clauseStart = (at: number): number => Math.max(...[...'，。；！,.;!、'].map(mark => hay.lastIndexOf(mark, at - 1))) + 1;
+  // 同一分句里、词前出现否定字或“替/帮/给…”这类为他人做的字，就不算自己在做。
+  const negated = (at: number): boolean => [...hay.slice(clauseStart(at), at)].some(ch => local.negators.includes(ch) || local.helperMarks.includes(ch));
+  for (const row of enabledVariants()) {
+    if (existing.length + out.length >= cfg.ticket.maxPerTurn) break;
+    const spec = variantSpecOf(row.actionClass, row.variant);
+    if (!spec || spec.target !== 'none' || spec.route === 'none' || !spec.localTicketWords?.length) continue;
+    if ([...existing, ...out].some(ticket => ticket.actionClass === spec.actionClass)) continue;
+    const word = spec.localTicketWords.map(squash).find(needle => { const at = hay.indexOf(needle); return needle.length >= 2 && at >= 0 && !negated(at); });
+    if (!word) continue;
+    out.push({ actionClass: spec.actionClass as ActionClass, variant: spec.variant, targetId: null, degree: local.degree, performed: 'yes', evidence: [...word].slice(0, cfg.ticket.evidenceChars).join(''), itemId: null });
+  }
+  return out;
+}

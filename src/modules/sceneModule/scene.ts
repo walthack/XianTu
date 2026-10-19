@@ -9,6 +9,7 @@ import { lintContract } from './lint';
 import { applyLocks, evaluatePlan, type PlanEvaluation } from './plan';
 import { allTrackInfos, isPresent, partyDisplay, partyOf, playerParty, resolveTagTargets, trackInfo, trackLabel, trackStep } from './queries';
 import { applyStatus, expireStatuses, persistentStatuses, type StatusEvent } from './statuses';
+import { afterWinClears } from './woundRules';
 import { pickFace, resolveCheck, resolveSettings, type ResolvedSettings } from './tiers';
 import {
   TIER_LABELS,
@@ -655,9 +656,11 @@ export function closeScene(contract: Contract, stateIn: SceneState, ctx: SceneCo
     cause: item.def.cause, source: item.def.source,
   }));
   const label = outcome.kind === 'win' ? '胜' : outcome.kind === 'lose' ? '败' : '超时收束';
+  // 赢了之后战后休整会清掉的轻伤（numbers combat.woundRules.afterWin，宿主写回时清）不算“留下的状态”。
+  const lasting = outcome.kind === 'win' ? persistent.filter(p => !afterWinClears(contract, p.party, p.status)) : persistent;
   const memoryNote = [
     `${contract.objective.text}：${label}（共 ${state.audit.length} 拍行动）。`,
-    persistent.length ? `留下的状态：${persistent.map(p => `${partyDisplay(contract, p.party)}${p.label}`).join('、')}。` : '',
+    lasting.length ? `留下的状态：${lasting.map(p => `${partyDisplay(contract, p.party)}${p.label}`).join('、')}。` : '',
     state.credits.length ? `玩家有 ${state.credits.length} 次大成功的功劳。` : '',
   ].filter(Boolean).join('');
 

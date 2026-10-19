@@ -4,6 +4,7 @@ import { validateProposal, type ActionPlan, type Contract, type GoalDef, type Sc
 import { isPresent, partyOf } from '../queries';
 import { goalsOf } from '../plan';
 import { displayName } from './refs';
+import { GAME_NUMBERS, registerNumbersValidator } from '../numbers';
 
 export interface ModelRequest { system: string; user: string }
 
@@ -15,8 +16,6 @@ const MEDIUM = /重创|砍倒|击倒|逼退|制服|按住|制住|压制|摧毁|�
 const ALL = /所有|全部|每一个|每个|他们|它们|一网打尽/;
 
 const PASSIVE = /张开双手不躲|不躲.{0,5}不挡|不招架|不还手|放下刀|硬吃.{0,8}刀/;
-/** 交涉类说法：放下兵刃讲道理、劝对方住手、谈判讲和。 */
-const NEGOTIATE = /交涉|谈判|谈一谈|谈谈|讲和|求和|和谈|议和|停战|休战|罢斗|讲道理|有话好说|好好说|说清(?:缘由|来意|原委)|劝(?:他|她|它|他们|她们|对方|诸位)?(?:住手|罢手|停手|收手)/;
 const NON_COMBAT = /看.*天色|雾什么时候.*散|聊天气|哼.*曲|泡面/;
 const compact = (value: string): string => String(value || '').normalize('NFKC').replace(/\s+/g, '');
 
@@ -175,10 +174,32 @@ export function contractSupportsNegotiation(contract: Contract): boolean {
   return goalsOf(contract).some(goal => goal.modifierProfile === 'social' || goal.judgementKind === 'social');
 }
 
-/** 玩家这句是交涉（没有动手的字眼），而本场合同没有交涉目标：宿主给一句明确提示，不改判成防守。 */
+/** 交涉说法的词表（GAME_NUMBERS.combat.negotiation）：patterns 是交涉说法（正则片段），ignoreNouns 是指人的称呼（“袭击者”里的“击”不算动手）。 */
+export interface NegotiationConfig { patterns: string[]; ignoreNouns: string[]; notice: string }
+export const negotiationConfig = (): NegotiationConfig => (GAME_NUMBERS.combat as unknown as { negotiation: NegotiationConfig }).negotiation;
+/** 配置体检：交涉词表每条都得是能编译的正则片段，提示文字不能空。 */
+export function validateNegotiationConfig(cfg: NegotiationConfig = negotiationConfig()): string[] {
+  const errors: string[] = [];
+  if (!Array.isArray(cfg?.patterns) || !cfg.patterns.length) return ['combat.negotiation.patterns 须为非空数组'];
+  for (const pattern of cfg.patterns) { try { new RegExp(pattern); } catch { /* lcq-allow: 体检把坏正则记进错误列表，由 numbers 校验（LCQ-NUM-006）报出 */ errors.push(`combat.negotiation.patterns 里 ${pattern} 不是合法正则`); } }
+  if (!Array.isArray(cfg.ignoreNouns) || cfg.ignoreNouns.some(noun => typeof noun !== 'string' || !noun.trim())) errors.push('combat.negotiation.ignoreNouns 须为非空字符串数组');
+  if (typeof cfg.notice !== 'string' || !cfg.notice.trim()) errors.push('combat.negotiation.notice 不能为空');
+  return errors;
+}
+registerNumbersValidator(() => validateNegotiationConfig());
+
+/** 玩家这句是不是交涉：命中交涉说法，且去掉交涉说法、指人的称呼（配置里的、合同参与方的别称）之后不剩动手的字眼。 */
+export function isNegotiationText(contract: Contract, text: string, cfg: NegotiationConfig = negotiationConfig()): boolean {
+  const said = compact(text), pattern = cfg.patterns.join('|');
+  if (!pattern || !new RegExp(pattern).test(said)) return false;
+  const nouns = [...cfg.ignoreNouns, ...contract.parties.flatMap(p => p.aliases || [])].map(compact).filter(Boolean).sort((a, b) => b.length - a.length);
+  const rest = nouns.reduce((left, noun) => left.split(noun).join('，'), said.replace(new RegExp(pattern, 'g'), '，'));
+  return !ATTACK.test(rest);
+}
+
+/** 玩家这句是交涉，而本场合同没有交涉目标：宿主给一句明确提示，不改判成攻击或防守。在模型识别之前判，模型说什么都不影响。 */
 export function negotiationUnsupported(contract: Contract, text: string): boolean {
-  if (!NEGOTIATE.test(text) || contractSupportsNegotiation(contract)) return false;
-  return !ATTACK.test(text.replace(NEGOTIATE, ''));
+  return !contractSupportsNegotiation(contract) && isNegotiationText(contract, text);
 }
 
 export function recognizeByRules(contract: Contract, state: SceneState, text: string, runtime?: unknown): Record<string, unknown> | null {

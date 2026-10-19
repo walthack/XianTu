@@ -223,7 +223,7 @@
           <span>策略 {{ latestJudgement.canonPolicy }}</span>
           <span v-if="latestJudgement.testOverride">测试强制 {{ latestJudgement.testOverride }}</span>
         </div>
-        <small v-if="latestJudgement.appliedEffects.length">已写入：{{ latestJudgement.appliedEffects.map(describeJudgementEffect).join('、') }}</small>
+        <small v-if="latestJudgement.appliedEffects.length || latestJudgement.settledEffects?.length">已写入：{{ [...latestJudgement.appliedEffects, ...(latestJudgement.settledEffects || [])].map(describeJudgementEffect).join('、') }}</small>
         <small v-else>本次没有确定性状态余波。</small>
       </section>
       <!-- 动作队列显示区域 -->
