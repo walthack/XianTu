@@ -1,5 +1,5 @@
 /**
- * 道具四品（配置 mod-kit/item-grades.json）：凡品 / 灵品 / 仙品 / 神品，含旧 grade 字符串的映射。
+ * 道具四品（配置 mod-kit/item-grades.json）：凡品 / 珍品 / 仙品 / 神品，含旧 grade 字符串的映射。
  * - itemTierOf：grade 字符串 → 四品；表里没有的（其他书的天品、地品等）返回 undefined，由调用方按旧规则兜底。
  * - itemSaveQuality：写进存档 品质 的值；没填 grade 按 defaultTier。
  */

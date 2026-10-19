@@ -16822,6 +16822,12 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.qingxin_san",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": []
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.s05b_bone_tiger",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []

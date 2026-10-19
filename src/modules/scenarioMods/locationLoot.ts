@@ -25,7 +25,10 @@ export interface LocationLootState {
 }
 export const QINGYU_LOOT_TABLE = defaults as unknown as LocationLootTable;
 export function isLocationLootInput(input: string): boolean {
-  return /^(?:我)?(?:要|想|试着|打算)?搜刮(?:这里|此处|当前地点|一番|一下)?[。！!\s]*$/.test(input.trim());
+  const text = input.trim();
+  if (/^(?:我)?(?:要|想|试着|打算)?搜刮(?:这里|此处|当前地点|一番|一下)?[。！!\s]*$/.test(text)) return true;
+  // 2026-10-20 用户定：boss 不做死亡掉落；打倒后「搜尸身／搜周围」都走本地点搜刮池。
+  return /^(?:我)?(?:要|想|试着|打算|去|上前)?(?:搜刮|搜查|搜一搜|搜搜|翻找|搜)(?:一下|一番)?(?:[^，。！!？?\s]{0,8}?的?)?(?:尸身|尸体|尸首|遗骸|残骸|身上|周围|四周|附近|周遭|现场|战场|这里|此处)(?:一下|一番)?[。！!\s]*$/.test(text);
 }
 function hash(text: string): number {
   let n = 2166136261;

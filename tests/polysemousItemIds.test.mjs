@@ -106,7 +106,7 @@ test('复核后拆出的独立 id：不带 effectTags/onUse、没有变体，各
 
 test('并回带标签本家后，带标签的条目没有新增：原 5 件（假死药 np056 并入 np053）＋ 2026-10-19 麻古（#177）与新增五件药',()=>{
  const tags=items.entries.filter(e=>e.definition.effectTags!==undefined||e.definition.onUse!==undefined).map(e=>e.id).sort();
- assert.deepEqual(tags,['lcq.item.jinchuang_yao','lcq.item.jiuzhuan_huanhun_dan','lcq.item.liaoshang_yao','lcq.item.np006','lcq.item.np013','lcq.item.qiannian_renshen','lcq.item.tianshan_xuelian','lyg.item.np049','lyg.item.np071','lyg.item.np092','lyl.item.np053']);
+ assert.deepEqual(tags,['lcq.item.jinchuang_yao','lcq.item.jiuzhuan_huanhun_dan','lcq.item.liaoshang_yao','lcq.item.np006','lcq.item.np013','lcq.item.qiannian_renshen','lcq.item.qingxin_san','lcq.item.tianshan_xuelian','lyg.item.np049','lyg.item.np071','lyg.item.np092','lyl.item.np053']);
  assert.deepEqual(byId.get('lyg.item.np071').definition.effectTags,['sedative']);assert.deepEqual(byId.get('lcq.item.np013').definition.effectTags,['antidote']);
  assert.deepEqual(auditEntityCatalog().errors,[]);
 });

@@ -61,6 +61,10 @@
       {
         "kind": "story",
         "flag": "scene.status.addiction.maigu.resolved"
+      },
+      {
+        "kind": "item",
+        "ref": "detox"
       }
     ],
     "afterScene": {

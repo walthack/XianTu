@@ -4083,7 +4083,7 @@ const confirmDeleteNpc = (person: NpcProfile) => {
   border-left: 3px solid #c69431;
 }
 
-.npc-item-card.quality-灵,
+.npc-item-card.quality-珍,
 .npc-item-card.quality-玄 {
   border-left: 3px solid #8a6fa8;
 }

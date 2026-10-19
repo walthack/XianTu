@@ -1,5 +1,5 @@
 {
-  "version": "3c95af38953a986e",
+  "version": "ab9e17eeda95e831",
   "contracts": [
     {
       "meta": {
@@ -6203,6 +6203,10 @@
         {
           "kind": "story",
           "flag": "scene.status.addiction.maigu.resolved"
+        },
+        {
+          "kind": "item",
+          "ref": "detox"
         }
       ],
       "afterScene": {

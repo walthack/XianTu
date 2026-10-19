@@ -1,12 +1,12 @@
 /**
- * 道具品质：四品（凡品 / 灵品 / 仙品 / 神品），唯一权威是 mod-kit/item-grades.json（用户 2026-10-20 定，原著无道具品级体系）。
+ * 道具品质：四品（凡品 / 珍品 / 仙品 / 神品），唯一权威是 mod-kit/item-grades.json（用户 2026-10-20 定，原著无道具品级体系）。
  * 存档 品质 = { quality: 四品单字, grade: 数字（只为兼容旧字段，道具不再显示上中下品） }。
  * 旧存档的七档单字（凡黄玄地天仙神）按配置 legacySaveQualities 换算成四品：读档修复（dataRepair）与 UI 显示都走这里。
  * 功法品级不走这张表（仍是七档 LegacyQuality，留待功法品级另定）。
  */
 import table from '../../mod-kit/item-grades.json';
 
-export type ItemTierShort = '凡' | '灵' | '仙' | '神';
+export type ItemTierShort = '凡' | '珍' | '仙' | '神';
 /** 旧七档单字（功法仍在用；旧存档里的道具也可能是这些值）。 */
 export type LegacyQuality = '神' | '仙' | '天' | '地' | '玄' | '黄' | '凡';
 export type QualityType = ItemTierShort | LegacyQuality;
@@ -40,7 +40,7 @@ export function itemTierOf(quality: unknown): ItemTierDef {
   return itemTierOfQuality(q) ?? DEFAULT_TIER;
 }
 
-/** 显示用：「凡品 / 灵品 / 仙品 / 神品」。 */
+/** 显示用：「凡品 / 珍品 / 仙品 / 神品」。 */
 export const itemTierLabel = (quality: unknown): string => itemTierOf(quality).name;
 export const itemTierColor = (quality: unknown): string => itemTierOf(quality).color;
 
@@ -62,6 +62,6 @@ ${lines}
 
 存档格式：品质 {quality:"${ITEM_TIER_TABLE.map(t => t.short).join('|')}", grade: 数字（沿用字段，不表示品级）}。
 命名直接用物品名（如"铁剑""金创药"），不要在名字前加品质。
-重要提示：初始角色通常只有凡品物品，灵品以上极其稀少。
+重要提示：初始角色通常只有凡品物品，珍品以上极其稀少。
 `;
 }

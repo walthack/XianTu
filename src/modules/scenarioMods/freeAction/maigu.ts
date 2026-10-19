@@ -79,7 +79,11 @@ export function syncMaigu(save: SaveData): string[] {
   }
   const store = injuryStore(save);
   for (const actorId of Object.keys(store.actors)) {
-    if (!has(save, actorId, cfg.addictionStatus)) { delete clocks(save)[actorId]; continue; }
+    if (!has(save, actorId, cfg.addictionStatus)) {
+      // 成瘾被 detox 药（清心散）等途径解除：戒断挂的神志不清一并清掉，算戒除。
+      if (clocks(save)[actorId]) { clearWithdrawal(save, actorId, cfg); added.push(`-${actorId}:${cfg.addictionStatus}`); }
+      delete clocks(save)[actorId]; continue;
+    }
     const clock = clocks(save)[actorId] ||= { lastDoseAt: now };
     if (clock.withdrawal) {
       clock.withdrawalAt ??= now; // 旧档的计时没有戒断起点：从此刻算

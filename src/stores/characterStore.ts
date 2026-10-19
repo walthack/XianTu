@@ -14,6 +14,7 @@ import { debug } from '@/utils/debug';
 import { useUIStore } from './uiStore'; // 导入UI Store
 import { useCharacterCreationStore } from './characterCreationStore'; // 导入创角Store
 import * as storage from '@/utils/indexedDBManager';
+import { applyLoadRepairs } from '@/modules/scenarioMods/loadRepairs';
 import { loadSaveWithFallback, rejectFutureSaveVersion, validateLoadedSave } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
 import { ensureSaveDataHasTavernNsfw } from '@/utils/nsfw';
@@ -1057,6 +1058,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
         const outcome = await validateLoadedSave(charId, slotKey, targetSlot.存档数据);
         if (outcome.status === 'rejected') return false;
         targetSlot.存档数据 = outcome.data;
+        // 读档修复：旧伤势按迁移表改挂（幂等）
+        applyLoadRepairs(targetSlot.存档数据);
       }
 
       try {

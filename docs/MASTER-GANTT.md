@@ -63,7 +63,7 @@ gantt
     助战待拍（8097 重建时机／F03 真机链路偏低／高胜率场未调） :milestone, asd, 2026-10-19, 0d
     解冻批待拍（谢弈境界分支／表级下调不生效／旧档 timeout 结局） :milestone, unfzd, 2026-10-19, 0d
     状态待拍（神志不清 provisional／白名单剧情解除／麻古合规／0% 不输） :milestone, stad, 2026-10-19, 0d
-    药品待拍（灵品存档档位／心性判定口径／九转六处／boss 战后掉落／戒瘾药选名／功法品级是否也改） :milestone, drugd, 2026-10-20, 0d
+    药品待拍（珍品存档档位／心性判定口径／九转六处／boss 战后掉落／戒瘾药选名／功法品级是否也改） :milestone, drugd, 2026-10-20, 0d
 
     section 例行
     Sol 周一／周四 03:00 SGT   :active, sol, 2026-10-19, 14d

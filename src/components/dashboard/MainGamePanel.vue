@@ -355,7 +355,7 @@
           <div v-if="scenarioGameOver" class="game-over-card">
             <img v-if="scenarioEndingImage && resolveEndingImage(currentNarrative?.image) !== scenarioEndingImage" :src="scenarioEndingImage" :alt="scenarioGameOver.title" class="ending-image" />
             <div class="game-over-head">
-              <span class="game-over-tag">本局结束</span>
+              <span class="game-over-tag">本局结束<template v-if="scenarioEndingCode"> · 结局 {{ scenarioEndingCode }}</template></span>
               <h3>{{ scenarioGameOver.title }}</h3>
             </div>
             <p class="game-over-hint">这条路走到了尽头。本局结局如下。</p>
@@ -517,7 +517,7 @@ import SceneEncounterCard from './SceneEncounterCard.vue';
 import { activeScene } from '@/modules/sceneModule/host/ext';
 import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSceneChoice, editSceneAction, finishScene, setSceneTestDice, type HostDeps } from '@/modules/sceneModule/host/controller';
 import { fixedEndingNarrative } from '@/modules/scenarioMods/fixedEndingNarratives';
-import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
+import { endingKey, endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { resolveEndingImage } from '@/assets/endings';
 import { currentDiagnosticTurnId, noteTicketDiscard, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
@@ -906,6 +906,11 @@ const scenarioGameOver = computed<{ endingId: string; title: string; facts: stri
   const runtime = (gameStateStore.worldState as any)?.剧本模组;
   const over = runtime?.gameOver;
   return over?.endingId ? over : null;
+});
+// 结局编号（E01–E08）：按结局 id 与来源事件取，旧档的 gameOver 也能显示。
+const scenarioEndingCode = computed(() => {
+  const over = (gameStateStore.worldState as any)?.剧本模组?.gameOver;
+  return over?.endingId ? endingKey(over) : '';
 });
 const scenarioEndingParagraphs = computed(() => {
   const over = scenarioGameOver.value;

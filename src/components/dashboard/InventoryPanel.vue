@@ -909,7 +909,7 @@ const equippedCount = computed(() => {
 })
 
 // 质量等阶规范化（兼容 "凡阶/黄阶/…" 与 "凡/黄/…"；支持自定义品质）
-const PRESET_QUALITIES = ['凡', '灵', '黄', '玄', '地', '天', '仙', '神']
+const PRESET_QUALITIES = ['凡', '珍', '黄', '玄', '地', '天', '仙', '神']
 // 道具按四品（mod-kit/item-grades.json）显示，旧档七档单字换算；功法仍显示原七档与上中下品。
 const isTechnique = (item?: Item | null): boolean => item?.类型 === '功法'
 const qualityText = (item?: Item | null): string => {
@@ -2884,7 +2884,7 @@ const refreshFromTavern = async () => {
 }
 
 /* 玄阶 - 紫色 */
-.text-quality-灵,
+.text-quality-珍,
 .text-quality-玄,
 .text-quality-玄阶 {
   color: white !important;
@@ -2943,7 +2943,7 @@ const refreshFromTavern = async () => {
   border-color: #c69431 !important;
 }
 
-.border-quality-灵,
+.border-quality-珍,
 .border-quality-玄 {
   border-color: #8a6fa8 !important;
 }
@@ -3170,7 +3170,7 @@ const refreshFromTavern = async () => {
 
 .icon-glow.q-凡-glow { background: #807b72; }
 .icon-glow.q-黄-glow { background: #daa520; }
-.icon-glow.q-灵-glow,
+.icon-glow.q-珍-glow,
 .icon-glow.q-玄-glow { background: #9370db; }
 .icon-glow.q-地-glow { background: #00ced1; }
 .icon-glow.q-天-glow { background: #ff69b4; }
@@ -3217,7 +3217,7 @@ const refreshFromTavern = async () => {
 
 .quality-badge.q-凡-badge { background: linear-gradient(135deg, #807b72, #696969); }
 .quality-badge.q-黄-badge { background: linear-gradient(135deg, #daa520, #b8860b); }
-.quality-badge.q-灵-badge,
+.quality-badge.q-珍-badge,
 .quality-badge.q-玄-badge { background: linear-gradient(135deg, #9370db, #8a2be2); }
 .quality-badge.q-地-badge { background: linear-gradient(135deg, #00ced1, #20b2aa); }
 .quality-badge.q-天-badge { background: linear-gradient(135deg, #ff69b4, #ff1493); }
@@ -3351,7 +3351,7 @@ const refreshFromTavern = async () => {
 /* 品质边框颜色 */
 .q-凡-border { border-color: #807b72; }
 .q-黄-border { border-color: #daa520; }
-.q-灵-border,
+.q-珍-border,
 .q-玄-border { border-color: #9370db; }
 .q-地-border { border-color: #00ced1; }
 .q-天-border { border-color: #ff69b4; }
@@ -3361,7 +3361,7 @@ const refreshFromTavern = async () => {
 /* 品质文字颜色 */
 .q-凡-text { color: #807b72; }
 .q-黄-text { color: #daa520; }
-.q-灵-text,
+.q-珍-text,
 .q-玄-text { color: #9370db; }
 .q-地-text { color: #00ced1; }
 .q-天-text { color: #ff69b4; }

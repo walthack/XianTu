@@ -92,7 +92,7 @@
       }
     },
     "maigu": {
-      "note": "麻古（物品 itemId）：普通依赖 debuff，不涉性与意愿，对双修无任何加成（双修仍只看好感）。给药（自由行动喂药，物品 onUse）后挂 heightenedStatus「感官亢奋」heightened.minutes 分钟，并挂 / 续 addictionStatus「麻古成瘾」、重置渴求计时；感官亢奋者自己的交涉判定 +heightened.socialBonus，心性判定（mindKinds 里的判定类型）heightened.mindPenalty。成瘾者距上次给药超过 addiction.cravingMinutes 分钟挂 withdrawalStatus「神志不清」addiction.withdrawalMinutes 分钟；给药会解除神志不清并重新开始渴求计时；治疗（神志不清自身的解除规则）只解神志不清、不算戒除。从戒断开始起 addiction.quitMinutes 分钟内不再给药＝撑过戒断期，成瘾随之戒除（用户 2026-10-20 00:26 定）。主角持有麻古时与成瘾者交涉 +addiction.holdSocialBonus。成瘾另可由状态目录里的剧情旗标解除（#177：请求解毒不等于痊愈，任何内容不设置该旗标）；戒瘾药待用户定。presetActors：在所列关卡自动带成瘾的角色（用户 00:26 定：先不预设，等剧情实际接触麻古时再挂）。",
+      "note": "麻古（物品 itemId）：普通依赖 debuff，不涉性与意愿，对双修无任何加成（双修仍只看好感）。给药（自由行动喂药，物品 onUse）后挂 heightenedStatus「感官亢奋」heightened.minutes 分钟，并挂 / 续 addictionStatus「麻古成瘾」、重置渴求计时；感官亢奋者自己的交涉判定 +heightened.socialBonus，心性判定（mindKinds 里的判定类型）heightened.mindPenalty。成瘾者距上次给药超过 addiction.cravingMinutes 分钟挂 withdrawalStatus「神志不清」addiction.withdrawalMinutes 分钟；给药会解除神志不清并重新开始渴求计时；治疗（神志不清自身的解除规则）只解神志不清、不算戒除。从戒断开始起 addiction.quitMinutes 分钟内不再给药＝撑过戒断期，成瘾随之戒除（用户 2026-10-20 00:26 定）。主角持有麻古时与成瘾者交涉 +addiction.holdSocialBonus。成瘾另可由 detox 标签的药（清心散 lcq.item.qingxin_san，用户 2026-10-20 定）解除，成瘾与戒断挂的神志不清一起清掉、算戒除；剧情旗标仍不由任何内容设置（#177）。presetActors：在所列关卡自动带成瘾的角色（用户 00:26 定：先不预设，等剧情实际接触麻古时再挂）。",
       "itemId": "lcq.item.np006",
       "heightenedStatus": "sense.heightened",
       "addictionStatus": "addiction.maigu",
@@ -627,7 +627,7 @@
             "effect": "removeStatus",
             "base": 4,
             "needsItem": true,
-            "itemTags": ["heal", "salve", "stabilize", "revive"]
+            "itemTags": ["heal", "salve", "stabilize", "revive", "detox"]
           },
           "bandage": {
             "label": "包扎",
@@ -1064,6 +1064,14 @@
     ],
     "stepScene": {
       "minutesPerBeat": 120
+    }
+  },
+  "shop": {
+    "note": "药铺／商人进货（scenarioMods/shopStock.ts）：sites 键为规范地点 id，stock 为在售物品与单价（金铢）。用户 2026-10-20 定：清心散可在南荒药铺或商人处买。",
+    "sites": {
+      "liuchao.location.xiongerpu": { "name": "熊耳铺药铺", "stock": [{ "itemId": "lcq.item.qingxin_san", "price": 3 }] },
+      "lcq.location.guiwang_inn": { "name": "鬼王峒驿馆行商", "stock": [{ "itemId": "lcq.item.qingxin_san", "price": 4 }] },
+      "lcq.location.nanhuang_departure_camp": { "name": "南荒散峒营地商人", "stock": [{ "itemId": "lcq.item.qingxin_san", "price": 3 }] }
     }
   }
 }

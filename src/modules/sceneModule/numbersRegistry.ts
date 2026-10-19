@@ -20,7 +20,7 @@ export interface FieldSpec {
 /** 三分包顶层段归属（与 mod-kit/numbers-*.json 一致）。 */
 export const SECTION_KEYS: Record<NumbersSection, readonly string[]> = {
   combat: ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'],
-  progress: ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story'],
+  progress: ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop'],
   runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'],
   assist: ['assist'],
 };
@@ -55,11 +55,13 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'perf', kind: 'object', section: 'runtime' },
   { key: 'assist', kind: 'object', section: 'assist' },
   { key: 'story', kind: 'object', section: 'progress' },
+  { key: 'shop', kind: 'object', section: 'progress' },
 ];
 
 /** 高频叶子：挡住缺字段 / 类型 / 粗范围；其余叶子仍靠补丁 typeof 对齐默认。 */
 export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.trades', kind: 'array', required: true, section: 'progress' },
+  { path: 'shop.sites', kind: 'object', required: true, section: 'progress' },
   { path: 'story.stepScene.minutesPerBeat', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'lineBonds.majorResponse.delta', kind: 'number', required: true, min: 0, section: 'progress' },
   { path: 'lineBonds.majorResponse.salienceFloor', kind: 'number', required: true, min: 0, section: 'progress' },

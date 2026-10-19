@@ -1047,7 +1047,7 @@ const getItemQualityClass = (item: { 品质?: ItemQuality | { quality: string } 
     天: 'tian',
     地: 'di',
     玄: 'xuan',
-    灵: 'xuan',
+    珍: 'xuan',
     黄: 'huang',
     凡: 'common',
   };

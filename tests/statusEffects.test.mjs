@@ -415,6 +415,8 @@ const TAGGED = {
   'lcq.item.qiannian_renshen': { tags: ['stabilize'], onUse: [] },
   'lcq.item.tianshan_xuelian': { tags: ['stabilize'], onUse: [] },
   'lcq.item.jiuzhuan_huanhun_dan': { tags: ['revive'], onUse: [] },
+  // 2026-10-20 用户定：戒瘾药清心散（珍品，detox）。
+  'lcq.item.qingxin_san': { tags: ['detox'], onUse: [] },
 };
 
 test('物品表：只有毒/药相关的条目（原 5 件 + 麻古 + 新增五件药）补了 effectTags/onUse，其余两个字段都没有', () => {

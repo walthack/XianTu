@@ -311,6 +311,16 @@
             1,
             1
           ]
+        },
+        {
+          "id": "huamiao.qingxin_san",
+          "itemId": "lcq.item.qingxin_san",
+          "category": "rare",
+          "weight": 2,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 80
@@ -660,6 +670,16 @@
             1,
             1
           ]
+        },
+        {
+          "id": "yeao.qingxin_san",
+          "itemId": "lcq.item.qingxin_san",
+          "category": "rare",
+          "weight": 2,
+          "quantity": [
+            1,
+            1
+          ]
         }
       ],
       "maxCopper": 60
@@ -835,6 +855,16 @@
           ],
           "afterEventIds": [
             "lcq.event.s04b_lingfei_baiyi_crisis_10"
+          ]
+        },
+        {
+          "id": "baiyi.qingxin_san",
+          "itemId": "lcq.item.qingxin_san",
+          "category": "rare",
+          "weight": 2,
+          "quantity": [
+            1,
+            1
           ]
         }
       ]
@@ -1890,6 +1920,16 @@
           "itemId": "lcq.item.liaoshang_yao",
           "category": "common",
           "weight": 3,
+          "quantity": [
+            1,
+            1
+          ]
+        },
+        {
+          "id": "xep.qingxin_san",
+          "itemId": "lcq.item.qingxin_san",
+          "category": "rare",
+          "weight": 2,
           "quantity": [
             1,
             1

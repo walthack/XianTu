@@ -5,8 +5,8 @@ import { loadTs } from './loadTs.mjs';
 const { settleLocationLoot } = await loadTs('../src/modules/scenarioMods/locationLoot.ts');
 const { canonicalLocationId } = await loadTs('../src/modules/scenarioMods/travel/locationIds.ts');
 const inputs = loadLootInputs();
-test('approved 15 locations / 140 entries / 60 item identities validate in all covered stage catalogs', () => {
- const result = auditLocationLoot(inputs);assert.deepEqual(result.errors,[]);assert.equal(result.ready,15);assert.equal(result.entries,140);
+test('approved 15 locations / 144 entries (2026-10-20 +4 清心散稀有) / 60 item identities validate in all covered stage catalogs', () => {
+ const result = auditLocationLoot(inputs);assert.deepEqual(result.errors,[]);assert.equal(result.ready,15);assert.equal(result.entries,144);
  const items = new Map(inputs.stages.flatMap(s=>s.content.items.filter(i=>i.id.startsWith('lcq.item.nh_')).map(i=>[i.id,i])));
  assert.equal(items.size,60);
  for(const item of items.values()) assert.deepEqual(Object.keys(item).sort(),['description','grade','id','name','type']);

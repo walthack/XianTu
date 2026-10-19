@@ -103,7 +103,7 @@ test('预设成瘾：用户 2026-10-20 00:26 定先不预设（presetActors 为�
 });
 
 test('四品品级：凡/灵/仙/神，旧 grade 按映射归档，空值取默认凡品', () => {
-  assert.deepEqual(grades.ITEM_TIERS.map(t => t.name), ['凡品', '灵品', '仙品', '神品']);
+  assert.deepEqual(grades.ITEM_TIERS.map(t => t.name), ['凡品', '珍品', '仙品', '神品']);
   assert.equal(grades.itemTierOf(undefined).name, '凡品');
   for (const t of grades.ITEM_TIERS) assert.equal(grades.itemTierOf(t.name).id, t.id);
   const table = JSON.parse(readFileSync(new URL('../mod-kit/item-grades.json', import.meta.url), 'utf8'));
@@ -114,7 +114,7 @@ test('药品分级：降级规则在配置；dying 只能由 stabilize（降为�
   assert.deepEqual(NUM.status.itemTagDowngrade.stabilize, { dying: 'wound.severe' });
   const items = JSON.parse(readFileSync(new URL('../mod-kit/entity-catalog/items.json', import.meta.url), 'utf8'));
   const def = id => items.entries.find(e => e.id === id).definition;
-  assert.deepEqual([def('lcq.item.jinchuang_yao').grade, def('lcq.item.liaoshang_yao').grade, def('lcq.item.qiannian_renshen').grade, def('lcq.item.tianshan_xuelian').grade, def('lcq.item.jiuzhuan_huanhun_dan').grade], ['凡品', '凡品', '灵品', '灵品', '仙品']);
+  assert.deepEqual([def('lcq.item.jinchuang_yao').grade, def('lcq.item.liaoshang_yao').grade, def('lcq.item.qiannian_renshen').grade, def('lcq.item.tianshan_xuelian').grade, def('lcq.item.jiuzhuan_huanhun_dan').grade], ['凡品', '凡品', '珍品', '珍品', '仙品']);
   for (const id of ['lcq.item.np007', 'liuchao.item.long_jing_yu', 'lyl.item.np004', 'lcq.item.s05b_dragon_eye_jade', 'lcq.item.f10_broken_axe']) {
     const e = items.entries.find(x => x.id === id); if (e) assert.notEqual(e.definition.grade, undefined, id);
   }

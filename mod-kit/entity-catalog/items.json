@@ -593,7 +593,7 @@
         "name": "鬼角残片",
         "description": "一截从根部断裂的黑色弯角。",
         "type": "material",
-        "grade": "灵品"
+        "grade": "珍品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -609,7 +609,7 @@
         "name": "鬼面蜂尾针",
         "description": "一根血红色的弯钩尾针，用叶子包着。",
         "type": "material",
-        "grade": "灵品"
+        "grade": "珍品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -844,7 +844,7 @@
         "name": "雄黄避蛊香囊",
         "description": "一只褪色的布香囊，雄黄味冲鼻。",
         "type": "other",
-        "grade": "灵品"
+        "grade": "珍品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -861,7 +861,7 @@
         "name": "赤铜熔珠",
         "description": "岩浆熔渣里结出的一粒赤红铜珠。",
         "type": "material",
-        "grade": "灵品"
+        "grade": "珍品"
       },
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
@@ -4170,7 +4170,7 @@
         "name": "白龙鱼竿",
         "description": "可伸缩的鱼竿，丝线坚韧，可作武器。",
         "type": "weapon",
-        "grade": "灵品",
+        "grade": "珍品",
         "attributeBonus": {
           "气血上限": 45,
           "后天六司": {
@@ -6034,7 +6034,7 @@
         "name": "千年人参",
         "description": "年份极老的山参，含一片可吊住一口气，把濒死之人从鬼门关前拉回来，但伤仍未愈。",
         "type": "consumable",
-        "grade": "灵品",
+        "grade": "珍品",
         "effectTags": [
           "stabilize"
         ]
@@ -6050,7 +6050,7 @@
         "name": "天山雪莲",
         "description": "远方商队辗转带来的雪莲，药性清冽，能吊住垂死者的性命，但伤仍未愈。",
         "type": "consumable",
-        "grade": "灵品",
+        "grade": "珍品",
         "effectTags": [
           "stabilize"
         ]
@@ -6069,6 +6069,22 @@
         "grade": "仙品",
         "effectTags": [
           "revive"
+        ]
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json"
+    },
+    {
+      "id": "lcq.item.qingxin_san",
+      "aliases": [],
+      "definition": {
+        "id": "lcq.item.qingxin_san",
+        "name": "清心散",
+        "description": "南荒药铺配的清心药散，服下宁神压瘾，助人戒掉药瘾。",
+        "type": "consumable",
+        "grade": "珍品",
+        "effectTags": [
+          "detox"
         ]
       },
       "stageVariants": {},

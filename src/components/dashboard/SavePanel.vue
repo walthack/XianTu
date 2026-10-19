@@ -63,7 +63,7 @@
             >
               <Plus :size="16" />
             </button>
-            <div class="saves-count" v-if="!isOnlineMode">{{ savesList.length }}/10</div>
+            <div class="saves-count" v-if="!isOnlineMode">{{ manualSavesCount }} 张存档</div>
             <div class="saves-count online-badge" v-else>☁️ 云端存档</div>
           </div>
         </div>
@@ -380,6 +380,10 @@ const savesList = computed(() => {
     return slot.存档名 || slot.id;
   });
 });
+
+// 存档计数：只数手动存档（不含「上次对话」「时间点存档」两个自动槽）；单机存档没有张数上限，不再显示「/10」。
+const AUTO_SLOT_NAMES = new Set(['上次对话', '时间点存档']);
+const manualSavesCount = computed(() => savesList.value.filter(save => !AUTO_SLOT_NAMES.has(save.存档名)).length);
 
 // 获取当前存档
 const currentSave = computed(() => {

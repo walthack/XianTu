@@ -23,5 +23,5 @@ export const COMBAT_DAMAGE_RULES = `
 
 export const NAMING_CONVENTIONS = `
 [命名]
-物品ID:类型_时间戳_随机数;位置:大陆·地点·建筑;品质:道具{quality:凡|灵|仙|神,grade:数字}/功法{quality:凡|黄|玄|地|天|仙|神,grade:0-10}
+物品ID:类型_时间戳_随机数;位置:大陆·地点·建筑;品质:道具{quality:凡|珍|仙|神,grade:数字}/功法{quality:凡|黄|玄|地|天|仙|神,grade:0-10}
 `.trim()
