@@ -1,5 +1,5 @@
 {
-  "version": "2dd43a032cae3008",
+  "version": "a72470ef1d00d04b",
   "contracts": [
     {
       "meta": {
@@ -1459,7 +1459,6 @@
           "attack": {
             "dc": 8
           },
-          "allowProtected": true,
           "when": {
             "kind": "not",
             "cond": {
@@ -1470,15 +1469,19 @@
             }
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.internal"
-              }
-            ],
+            "statuses": [],
             "text": "护队的一侧受创"
           },
           "onBlocked": {
             "text": "这一侧挡住了袭击"
+          },
+          "woundRule": {
+            "profile": "default",
+            "tiers": {
+              "great_success": {
+                "status": "wound.internal"
+              }
+            }
           }
         },
         {
@@ -1491,7 +1494,6 @@
           "attack": {
             "dc": 8
           },
-          "allowProtected": true,
           "when": {
             "kind": "not",
             "cond": {
@@ -1502,16 +1504,13 @@
             }
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.external"
-              }
-            ],
+            "statuses": [],
             "text": "护队的一侧受创"
           },
           "onBlocked": {
             "text": "这一侧挡住了袭击"
-          }
+          },
+          "woundRule": "default"
         },
         {
           "id": "attack_a_xi",
@@ -1523,7 +1522,6 @@
           "attack": {
             "dc": 8
           },
-          "allowProtected": true,
           "when": {
             "kind": "not",
             "cond": {
@@ -1534,16 +1532,13 @@
             }
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.external"
-              }
-            ],
+            "statuses": [],
             "text": "护队的一侧受创"
           },
           "onBlocked": {
             "text": "这一侧挡住了袭击"
-          }
+          },
+          "woundRule": "default"
         }
       ],
       "fumble": [
@@ -3720,11 +3715,7 @@
             "dc": 14
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.external"
-              }
-            ],
+            "statuses": [],
             "text": "通道冲击中有人受伤，仍需守住井口",
             "trackShifts": [
               {
@@ -3736,7 +3727,8 @@
           },
           "onBlocked": {
             "text": "你挡住这一轮冲击"
-          }
+          },
+          "woundRule": "default"
         }
       ],
       "defeat": {

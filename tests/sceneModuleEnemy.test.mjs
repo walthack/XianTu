@@ -15,15 +15,15 @@ test('没挡住的差距够大，改挂更重的状态（onCrush）；差距小�
   assert.deepEqual(statusIds(light.state, 'pc'), ['wound.external']);
 });
 
-test('目标选择：each 对阵营每位成员各掷一次防御；受保护方除非明写 allowProtected 否则不被点名', () => {
+test('目标选择：each 对阵营每位成员各掷一次防御；受保护方一律不被点名、不出防御行（不再有 allowProtected 例外）', () => {
   const sweep = makeContract({ enemyActions: [hit('sweep', { target: { each: 'player_side' } })] });
   const out = mod.confirmAction(sweep, begin(sweep, { action: [10], defense: [1, 1] }).state, attack(['boss']), CTX);
   assert.deepEqual(out.result.enemy.map(r => r.target), ['pc', 'ally']);
   assert.equal(out.state.counters.defenseRolls, 2);
   const guarded = makeContract({ enemyActions: [hit('raid', { target: { each: 'neutral' } })] });
   assert.equal(mod.confirmAction(guarded, begin(guarded, { action: [10], defense: [1] }).state, attack(['boss']), CTX).result.enemy.length, 0);
-  const allowed = makeContract({ enemyActions: [hit('raid', { target: { each: 'neutral' }, allowProtected: true })] });
-  assert.equal(mod.confirmAction(allowed, begin(allowed, { action: [10], defense: [1] }).state, attack(['boss']), CTX).result.enemy.length, 1);
+  const named = makeContract({ enemyActions: [hit('raid', { target: { party: 'ward' } })] });
+  assert.equal(mod.confirmAction(named, begin(named, { action: [10], defense: [1] }).state, attack(['boss']), CTX).result.enemy.length, 0, '点名受保护方也不出行');
 });
 
 test('出手时机：fromBeat / onBeats / every / when 都读合同；不在时机内不出手也不耗防御骰', () => {

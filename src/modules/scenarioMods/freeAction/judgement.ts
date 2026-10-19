@@ -11,10 +11,8 @@ import { createJudgementProposal, environmentFactorFor, type JudgementDifficulty
 import { stateFactors } from '@/utils/judgementPreflight';
 import { levelOf } from '@/utils/realmUtils';
 import { packText } from '@/modules/contentPacks';
-import { effectiveLevel, levelFact } from '../characterLevels';
-import { relationshipOf } from '../ledger/affinityIdentity';
+import { currentActorLevel } from '../actorLevels';
 import { namingChapter } from '../ledger/naming';
-import { combatLevelOf, resolveActorStats } from '../characterStats';
 import { freeActionConfig, type VariantSpec } from './config';
 import { adjustedDifficulty } from './dangerTier';
 import { whyNowText, whySelfText } from './facts';
@@ -28,12 +26,10 @@ function bandFor(value: number): JudgementDifficultyBand {
   return value < bands.normal ? 'easy' : value < bands.hard ? 'normal' : value < bands.severe ? 'hard' : value < bands.extreme ? 'severe' : 'extreme';
 }
 
-/** NPC 级数：时点表 → 总表合并结果/关系记录境界（与 snapshotLevels 同一回落链）→ 查不到就是 undefined（按同级，差 0）。 */
+/** NPC 级数：与 snapshotLevels 同一入口（actorLevels.ts：存档为准，等级表当初始值/剧情节点，无名敌人按种类预设）→ 查不到就是 undefined（按同级，差 0）。 */
 export function targetLevelOf(save: SaveData, targetId: string): number | undefined {
-  const runtime = runtimeOf(save), fact = levelFact(targetId, namingChapter(runtime || {}));
-  if (fact) return effectiveLevel(fact);
-  const fallback = Math.max(levelOf((relationshipOf(save as any, targetId)?.profile as any)?.境界) ?? -1, combatLevelOf(resolveActorStats(runtime, targetId)?.stats) ?? -1);
-  return fallback < 0 ? undefined : fallback;
+  const runtime = runtimeOf(save);
+  return currentActorLevel(targetId, { chapter: namingChapter(runtime || {}), save, runtime }).level;
 }
 
 /**

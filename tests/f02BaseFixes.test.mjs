@@ -39,14 +39,17 @@ test('通用挂伤：普通打中只扣气血不挂伤；重击挂外伤；连�
   const crit = roll(contract, [1]);
   assert.deepEqual(crit.tiers, ['great_success']);
   assert.deepEqual(ids(crit.state), ['wound.external']);
-  const streak = roll(contract, [1, 2]);
+  // 难度 14、防御加值 0：只有自然 1（失败再降一档＝大失败）才是重击；防御 2 差 12，未过大失败线（sceneDefaults.tiers.critFailMargin），只是打中。
+  assert.deepEqual(roll(contract, [2]).tiers, ['success']);
+  const streak = roll(contract, [1, 1]);
   assert.deepEqual(ids(streak.state), ['wound.external.heavy']);
-  const broken = roll(contract, [1, 8, 2]);
+  const broken = roll(contract, [1, 8, 1]);
   assert.deepEqual(broken.tiers, ['great_success', 'success', 'great_success']);
   assert.deepEqual(ids(broken.state), ['wound.external'], '不连续的重击不自动升级');
-  const blocked = roll(contract, [20]);
+  const blocked = roll(contract, [15]);
   assert.deepEqual([blocked.tiers[0], ids(blocked.state).length], ['failure', 0]);
-  const downed = roll(contract, [1, 2, 3]);
+  assert.deepEqual(roll(contract, [20]).tiers, ['critical_failure'], '防御掷出自然 20＝防御大成功＝被大挡');
+  const downed = roll(contract, [1, 1, 1]);
   assert.deepEqual(ids(downed.state), ['incapacitated'], '外伤（重）再被重击仍按升级链倒下');
 });
 
@@ -72,8 +75,11 @@ test('原“打中即挂外伤”的合同改走 woundRule（只改机制字段�
     assert.equal(a.woundRule, 'default', `${id}.${action}`);
     assert.deepEqual(a.onHit.statuses, [], `${id}.${action}`);
   }
-  assert.deepEqual(byId('combat.f03.mountain_stream_fog').enemyActions.find(a => a.id === 'attack_bride').onHit.statuses, [{ status: 'wound.external' }]);
-  assert.equal(byId('combat.f03.mountain_stream_fog').enemyActions.find(a => a.id === 'attack_bride').woundRule, undefined);
+  // F03 打同伴的三条也改走 woundRule（与玩家同一套）；受保护方现在不被点名，这三条不出行（见 sceneModuleEnemy 目标选择）。
+  for (const id of ['attack_bride', 'attack_a_xi']) {
+    const a = byId('combat.f03.mountain_stream_fog').enemyActions.find(x => x.id === id);
+    assert.deepEqual([a.onHit.statuses, a.woundRule, a.allowProtected], [[], 'default', undefined], id);
+  }
   for (const c of SCENE_CONTRACTS) assert.deepEqual(mod.lintContract(c).errors, [], c.meta.id);
 });
 
@@ -196,5 +202,5 @@ test('本场没有交涉目标时，交涉说法给明确提示，不改判成�
   assert.equal(negotiationUnsupported(f02, '我挥刀砍向蛇人'), false);
   assert.equal(negotiationUnsupported(f06, '我与鲛人交涉'), false);
   const src = readFileSync(new URL('../src/modules/sceneModule/host/controller.ts', import.meta.url), 'utf8');
-  assert.match(src, /NO_NEGOTIATION_NOTICE='这一场不能交涉/);
+  assert.match(src, /NO_NEGOTIATION_NOTICE=negotiationConfig\(\)\.notice/);
 });

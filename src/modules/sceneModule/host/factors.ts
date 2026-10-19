@@ -1,11 +1,10 @@
 import {levelFact,effectiveLevel,contractChapter,contractVariant} from '../../scenarioMods/characterLevels';
 import {initializeLevel} from '../../scenarioMods/levelProgression';
+import {currentActorLevel,enemyPresetConfig,enemyKindOf,isEnemyKind,protagonistLevel} from '../../scenarioMods/actorLevels';
 import {namingChapter} from '../../scenarioMods/ledger/naming';
 import {GAME_NUMBERS,boundedLuck} from '../numbers';
 import {levelOf,stageBonus,levelModifier} from '../../../utils/realmUtils';
-import {relationshipOf} from '../../scenarioMods/ledger/affinityIdentity';
 import {namedEntityEntries} from '../../scenarioMods/namedEntities';
-import {resolveActorStats,combatLevelOf} from '../../scenarioMods/characterStats';
 // 玩家的基础判定因子取自游戏判定引擎；幸运改按气运取固定值（可复现）。
 import { pruneSceneInjuries } from './injuries';
 import { runtimeOf } from './refs';
@@ -67,27 +66,32 @@ export function sceneContext(save: SaveData, contract: Contract, actionText=''):
   return { factors: sum(action), factorProfiles, playerDefense: sum(defense), breakdown: { action, defense } };
 }
 
-/** Snapshot stage facts at engagement; unknown enemies use same-level fallback, never infer from old realm names. */
+/**
+ * 开打时给参战者定级（scenarioMods/actorLevels.ts 同一入口）：存档里的角色状态为准，等级表只当初始值/剧情节点，
+ * 无名敌人按敌人种类预设（combat.enemyPresets）。查不到级数的按与玩家同级。
+ * 缓存键带上解析器版本与本场敌人预设：旧存档里进行中的场面（按旧总表定的级数）会重定一次级，热调预设后新开场面也会重定。
+ */
+export const LEVEL_RESOLVER_VERSION = 2;
 export function snapshotLevels(save:SaveData,c:Contract,state:import('../types').SceneState):void {
  const r=runtimeOf(save),chapter=contractChapter(c,state.beat)||namingChapter(r||{});
  const variants=Object.fromEntries(c.parties.map(p=>{const id=p.enemyId||p.ref;return [id,contractVariant(c,id,state)];}));
- const key=JSON.stringify([chapter,variants]);
+ const presets=enemyPresetConfig(),presetKey=c.parties.map(p=>p.enemyId||p.ref).filter(id=>isEnemyKind(id)).map(id=>[id,presets.types[enemyKindOf(id)]??presets.default]);
+ const key=JSON.stringify([LEVEL_RESOLVER_VERSION,chapter,variants,presetKey,protagonistLevel(chapter)]);
  if(state.levelProjectionKey===key&&state.levelFacts)return;
  state.levelProjectionKey=key;
  state.levelChapter=chapter;
  if(c.parties.some(p=>p.player&&levelFact(p.ref,chapter)))initializeLevel(save,chapter);
  const playerLevel=levelOf(save.角色.属性.境界)??0;state.levels={};state.stages={};state.levelFacts={};
  for(const p of c.parties){
-  const id=p.enemyId||p.ref, fact=levelFact(id,chapter,variants[id]);
-  // 总表基础属性 ⊕ 本关阶段档覆盖项（characterStats.ts）；敌人种类与人物同表，不再另读敌人目录或阶段档的 level。
-  const relationship=relationshipOf(save,p.ref),stats=combatLevelOf(resolveActorStats(r,id)?.stats)??combatLevelOf(resolveActorStats(r,p.ref)?.stats);
-  const fallback=Math.max(levelOf((relationship?.profile as any)?.境界)??-1,stats??-1);
-  let value=fact?effectiveLevel(fact):(p.player?playerLevel:fallback<0?playerLevel:fallback);
-  if(p.player&&fact&&value!==undefined)value=playerLevel+(value-(fact.level??value));
+  const id=p.enemyId||p.ref, got=currentActorLevel(id,{chapter,variant:variants[id],save,runtime:r,player:!!p.player,ref:p.ref});
+  let value=got.level;
+  if(value===undefined&&got.source==='none')value=playerLevel; // 无数据：按同级
   if(c.levelContext?.nonLevelPartyIds?.includes(p.id))value=undefined;
   if(value!==undefined)state.levels[p.id]=value;
-  if(fact)state.levelFacts[p.id]={entityId:fact.entityId,sourceRow:fact.sourceRow,level:fact.level,effectiveLevel:effectiveLevel(fact),confidence:fact.confidence,available:fact.available};
+  const fact=got.fact;
+  if(fact)state.levelFacts[p.id]={entityId:fact.entityId,sourceRow:fact.sourceRow,level:fact.level,effectiveLevel:effectiveLevel(fact),confidence:fact.confidence,available:fact.available,source:got.source};
+  else if(got.preset)state.levelFacts[p.id]={entityId:got.preset.kindId,sourceRow:0,level:got.level??null,effectiveLevel:got.level,confidence:'preset',available:true,source:'preset'};
   state.stages[p.id]=p.player?stageBonus(save.角色.属性.境界):0;
-  if(fact&&!fact.available){state.present[p.id]=false;if(!state.departed.includes(p.id))state.departed.push(p.id);}
+  if(!got.present){state.present[p.id]=false;if(!state.departed.includes(p.id))state.departed.push(p.id);}
  }
 }

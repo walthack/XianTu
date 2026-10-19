@@ -5,18 +5,19 @@ import {writeFileSync,readFileSync} from 'node:fs';
 const root=new URL('../',import.meta.url),jiti=createJiti(import.meta.url,{alias:{'@':fileURLToPath(new URL('src',root))}});
 const core=await jiti.import(fileURLToPath(new URL('src/modules/sceneModule/index.ts',root)));
 const {SCENE_CONTRACTS}=await jiti.import(fileURLToPath(new URL('src/modules/sceneModule/contracts/registry.ts',root)));
-const {namedEntity}=await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/namedEntities.ts',root)));
 const {GAME_NUMBERS}=await jiti.import(fileURLToPath(new URL('src/modules/sceneModule/numbers.ts',root)));
-const {levelFact,effectiveLevel,contractChapter,contractVariant}=await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/characterLevels.ts',root)));
+const {contractChapter,contractVariant}=await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/characterLevels.ts',root)));
+const {currentActorLevel}=await jiti.import(fileURLToPath(new URL('src/modules/scenarioMods/actorLevels.ts',root)));
 const SIM=GAME_NUMBERS.combat.simulation;
 const N=Number(process.env.COMBAT_SIM_N)||SIM.samples;
 /** Deterministic reference player. Chooses legal expected track progress without inspecting future dice; always uses available authored levers. */
 export function simulateContract(c,n=N){let wins=0,losses=0,unresolved=0;const missing=new Set();
- const project=(s)=>{s.levels={};s.stages={};for(const p of c.parties){const id=p.enemyId||p.ref,fact=levelFact(id,contractChapter(c,s.beat),contractVariant(c,id,s));
-  const enemy=namedEntity('enemy',id),level=fact?effectiveLevel(fact):enemy?.level;
-  if(s.present[p.id]&&!fact&&!c.levelContext?.nonLevelPartyIds?.includes(p.id))missing.add(id);
+ // 级数与真机同一入口（actorLevels.ts）：无存档时玩家/有名人物读等级表，无名敌人按 combat.enemyPresets 预设。
+ const project=(s)=>{s.levels={};s.stages={};for(const p of c.parties){const id=p.enemyId||p.ref,got=currentActorLevel(id,{chapter:contractChapter(c,s.beat),variant:contractVariant(c,id,s),player:!!p.player,ref:p.ref});
+  const level=got.level;
+  if(s.present[p.id]&&got.source==='none'&&!c.levelContext?.nonLevelPartyIds?.includes(p.id))missing.add(id);
   if(!c.levelContext?.nonLevelPartyIds?.includes(p.id)&&level!==undefined&&level!==null)s.levels[p.id]=level;
-  s.stages[p.id]=0;if(fact&&!fact.available){s.present[p.id]=false;if(!s.departed.includes(p.id))s.departed.push(p.id);}
+  s.stages[p.id]=0;if(!got.present){s.present[p.id]=false;if(!s.departed.includes(p.id))s.departed.push(p.id);}
  }};
  for(let i=0;i<n;i++){let s=core.beginScene(c,{seed:SIM.seed+i*SIM.seedStride}).state;project(s);
   const ctx={factors:0,playerDefense:0,factorProfiles:Object.fromEntries(Object.keys(GAME_NUMBERS.weights).map(id=>[id,0]))};

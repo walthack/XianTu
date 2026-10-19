@@ -8,6 +8,8 @@ export function levelFact(id:string,chapter:number,variant?:string):LevelFact|un
  id=canonicalLevelEntityId(id);
  return table.entries.filter(e=>e.entityId===id && e.chapterRanges.some(([lo,hi])=>chapter>=lo && chapter<=hi) && (!e.variant || e.variant===variant)).sort((a,b)=>Number(Boolean(a.variant))-Number(Boolean(b.variant))||a.sourceRow-b.sourceRow).at(-1);
 }
+/** 等级表里有没有这个人物的任何时点行（无名敌人种类不进表）。 */
+export function hasLevelRows(id:string):boolean {id=canonicalLevelEntityId(id);return table.entries.some(e=>e.entityId===id);}
 export function effectiveLevel(f:LevelFact|undefined):number|undefined {return f?.available ? f.effectiveLevel ?? f.level ?? undefined : undefined;}
 export function contractChapter(c:{levelContext?:{chapter:number;chaptersByBeat?:{fromBeat:number;chapter:number}[]}},beat=1):number {return c.levelContext?.chaptersByBeat?.filter(s=>s.fromBeat<=beat).at(-1)?.chapter ?? c.levelContext?.chapter ?? 0;}
 

@@ -21,14 +21,10 @@
       "defenseBonus": 3
     },
     "woundRules": {
-      "note": "敌方出手的通用挂伤结算（sceneModule/woundRules.ts）。tiers 的键按敌方这一下的结果分档：great_success=重击、success=打中、failure=被挡住、critical_failure=被大挡。chance=挂伤几率（0–1），status=挂的伤（空串=不挂），hpLossRatio=按气血上限扣的比例。合同在 enemyActions[].woundRule 里写配置项名，或写 {profile, 覆盖字段}。",
+      "note": "敌方出手的通用挂伤结算（sceneModule/woundRules.ts）。tiers 的键按敌方这一下的结果分档：great_success=重击、success=打中、failure=被挡住、critical_failure=被大挡。tierFrom=defenseCheck：把防御当成一次普通四档检定定档（与玩家行动同一套：sceneDefaults.tiers 的 critFailMargin/critSuccessMargin、自然 1 降档、自然 20），防御大失败＝敌方重击。chance=挂伤几率（0–1），status=挂的伤（空串=不挂），hpLossRatio=按气血上限扣的比例。streak：连续 count 次重击挂 status；perBeat=true 时一拍里同一人至多算一次重击（不会一拍连挂两级），相邻两拍都被重击才算连续。labels=回执里给这一档加的字样。合同在 enemyActions[].woundRule 里写配置项名，或写 {profile, 覆盖字段}。",
       "profiles": {
         "default": {
-          "critMargin": 10,
-          "critFaces": [
-            1
-          ],
-          "greatBlockMargin": 10,
+          "tierFrom": "defenseCheck",
           "tiers": {
             "great_success": {
               "chance": 1,
@@ -53,9 +49,16 @@
           },
           "streak": {
             "count": 2,
-            "status": "wound.external.heavy"
+            "status": "wound.external.heavy",
+            "perBeat": true
           }
         }
+      },
+      "labels": {
+        "great_success": "重击",
+        "success": "",
+        "failure": "",
+        "critical_failure": "大挡"
       },
       "hp": {
         "keepHp": 1
@@ -69,6 +72,68 @@
           "player_side"
         ]
       }
+    },
+    "enemyPresets": {
+      "note": "无名/泛称敌人按敌人类型取级数（scenarioMods/actorLevels.ts）：级数 = 当章主角（baseActorId）在角色等级表里的当章级数 + protagonistOffset；levelGap:false 表示不走九级体系、不算级差；combatStrength 是不走九级但已裁定的固定战斗当量（尸鬼 3，用户 2026-10-16 裁定），不随主角浮动。types 里没有列的敌人类型用 default。本关阶段档对该类型显式写了 stats.level（剧情定向）时以阶段档为准。variants 按合同 levelContext 的变体名覆盖。可热调：tuning.json 的 numbers.combat.enemyPresets（键须已存在）。",
+      "baseActorId": "liuchao.character.cheng_zongyang",
+      "default": { "protagonistOffset": 0 },
+      "types": {
+        "lcq.enemy.f01_swordsman": { "protagonistOffset": 1 },
+        "lcq.enemy.f01_axeman": { "protagonistOffset": 1 },
+        "lcq.enemy.f01_archer": { "protagonistOffset": 0 },
+        "lcq.enemy.f01_veiled_woman": { "protagonistOffset": 1 },
+        "lcq.enemy.sheyi_raider": { "protagonistOffset": 1 },
+        "lcq.enemy.guiwang_warrior": { "protagonistOffset": 1, "variants": { "elite": { "protagonistOffset": 1 } } },
+        "lcq.enemy.dungeon_shaman": { "protagonistOffset": 1 },
+        "lcq.enemy.crow_man": { "protagonistOffset": 1 },
+        "lcq.enemy.merfolk": { "protagonistOffset": 1 },
+        "lcq.enemy.altar_corpse": { "combatStrength": 3 },
+        "lcq.enemy.yanmei": { "levelGap": false },
+        "lcq.enemy.husha_bone_tiger": { "levelGap": false },
+        "lcq.enemy.yinsha": { "levelGap": false },
+        "lcq.enemy.yansha": { "levelGap": false }
+      }
+    },
+    "beatLimit": {
+      "note": "场面战斗拍数门禁（sceneModule/beatLimit.ts）：一场还没分出胜负、已打完的拍数超过 max，就记 LCQ-SAV-020（error，持久日志），每多打一拍记一次。只记录、不改判：到上限之后怎么判（判负、按超时收场或其它）尚待拍板。",
+      "max": 20
+    },
+    "negotiation": {
+      "note": "场面里的交涉说法（sceneModule/host/recognize.ts）：玩家原话命中 patterns（正则片段，任一即可），且去掉交涉说法与 ignoreNouns（指人的称呼，如“袭击者”里的“击”不算动手）、合同参与方别称后不剩动手字眼，就算交涉；合同没有交涉目标时在模型识别之前给 notice，不归到攻击或防守。",
+      "patterns": [
+        "交涉",
+        "谈判",
+        "谈一谈",
+        "谈谈",
+        "讲和",
+        "求和",
+        "和谈",
+        "议和",
+        "停战",
+        "休战",
+        "罢斗",
+        "讲道理",
+        "有话好说",
+        "好好说",
+        "说清(?:缘由|来意|原委|来由)",
+        "问清(?:缘由|来意|原委|来由)",
+        "劝(?:他|她|它|他们|她们|对方|诸位|众人)?(?:住手|罢手|停手|收手)"
+      ],
+      "ignoreNouns": [
+        "袭击者",
+        "来袭者",
+        "攻击者",
+        "进攻者",
+        "偷袭者",
+        "伏击者",
+        "刺客",
+        "杀手",
+        "打手",
+        "射手",
+        "弓手",
+        "追兵"
+      ],
+      "notice": "这一场不能交涉，请改用攻击、防守等打法。"
     }
   },
   "difficulty": {

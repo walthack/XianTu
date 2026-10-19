@@ -1139,7 +1139,6 @@
       "attack": {
         "dc": 8
       },
-      "allowProtected": true,
       "when": {
         "kind": "not",
         "cond": {
@@ -1150,15 +1149,19 @@
         }
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.internal"
-          }
-        ],
+        "statuses": [],
         "text": "护队的一侧受创"
       },
       "onBlocked": {
         "text": "这一侧挡住了袭击"
+      },
+      "woundRule": {
+        "profile": "default",
+        "tiers": {
+          "great_success": {
+            "status": "wound.internal"
+          }
+        }
       }
     },
     {
@@ -1171,7 +1174,6 @@
       "attack": {
         "dc": 8
       },
-      "allowProtected": true,
       "when": {
         "kind": "not",
         "cond": {
@@ -1182,16 +1184,13 @@
         }
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ],
+        "statuses": [],
         "text": "护队的一侧受创"
       },
       "onBlocked": {
         "text": "这一侧挡住了袭击"
-      }
+      },
+      "woundRule": "default"
     },
     {
       "id": "attack_a_xi",
@@ -1203,7 +1202,6 @@
       "attack": {
         "dc": 8
       },
-      "allowProtected": true,
       "when": {
         "kind": "not",
         "cond": {
@@ -1214,16 +1212,13 @@
         }
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ],
+        "statuses": [],
         "text": "护队的一侧受创"
       },
       "onBlocked": {
         "text": "这一侧挡住了袭击"
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "fumble": [

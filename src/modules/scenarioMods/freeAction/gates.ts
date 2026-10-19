@@ -9,7 +9,7 @@ import { GAME_NUMBERS } from '../../sceneModule/numbers';
 import { activeScene } from '../../sceneModule/host/ext';
 import { sceneTime } from '../../sceneModule/host/injuries';
 import { contentDefinition, contentName } from '../entityCatalog';
-import { levelFact, effectiveLevel } from '../characterLevels';
+import { currentActorLevel } from '../actorLevels';
 import { namingChapter } from '../ledger/naming';
 import { relationshipOf, runtimeEntityName } from '../ledger/affinityIdentity';
 import { stanceOf } from '../affinityLadder';
@@ -135,10 +135,11 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
   // 查不到级数（占位行、非九级体系、无行）：requires.onLevelUnknown = assume_equal 时按与施术者同级放行（施术者须有修为，只看上面的好感），
   // 否则（deny）拒绝；deny 下目标没有可涨的进度条也拒绝。assume_equal 下没处落地的目标由后面的预算检查兜底（budget_full）。
   if (spec.requires?.actorLevel === 'ge_target') {
-    const fact = levelFact(targetId, namingChapter(runtime || {}));
+    // 目标级数与战斗同一入口（actorLevels.ts）：存档为准；只来自等级表占位行、非九级、或查不到的算“级数不明”。
+    const got = currentActorLevel(targetId, { chapter: namingChapter(runtime || {}), save, runtime });
     const realm = (relationshipOf(save as any, targetId)?.profile as any)?.境界;
-    const targetLevel = effectiveLevel(fact);
-    const levelKnown = Boolean(fact && fact.available && fact.applicability === 'nine_levels' && fact.settingStatus !== 'placeholder' && targetLevel !== undefined);
+    const fact = got.fact, targetLevel = got.level;
+    const levelKnown = Boolean(got.present && targetLevel !== undefined && got.source !== 'none' && (got.source === 'save' || (fact ? fact.applicability === 'nine_levels' && fact.settingStatus !== 'placeholder' : true)));
     if (spec.requires.onLevelUnknown !== 'assume_equal' && (!levelKnown || !(Number(realm?.下一级所需) > 0))) return fail('level_unknown');
     const mine = levelOf((save as any)?.角色?.属性?.境界);
     if (mine === null || (levelKnown ? mine < targetLevel! : !(mine > 0))) {

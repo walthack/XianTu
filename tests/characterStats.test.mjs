@@ -206,27 +206,28 @@ function snapshotWith(contractMutator, stageCharacters = []) {
   host.snapshotLevels(v, c, s);
   return s;
 }
-test('战斗：时点级数表没有该 id 该章的行时，读总表基础属性（鲛人第 45 章无表行）', () => {
+test('战斗：无名敌人种类不在角色等级表，按 combat.enemyPresets 预设定级（当章主角 + protagonistOffset；鲛人第 45 章 = 2 + 1）', () => {
   assert.equal(levels.levelFact(KINDS.merfolk, 45), undefined);
+  assert.equal(levels.levelFact(KINDS.merfolk, 74), undefined, '鲛人已移出角色等级表');
   const s = snapshotWith(c => { c.parties.find(p => p.id === 'foe_pack_1').ref = KINDS.merfolk; });
-  assert.equal(s.levels.foe_pack_1, 4);
-  assert.equal(s.levelFacts.foe_pack_1, undefined, '这一读不是时点表事实');
+  assert.equal(s.levels.foe_pack_1, 3);
+  assert.equal(s.levelFacts.foe_pack_1.confidence, 'preset', '这一读来自敌人种类预设');
 });
-test('战斗：阶段档覆盖项替换基础，战斗强度优先于等级；覆盖项不影响同种类以外的参战方', () => {
+test('战斗：阶段档覆盖项（剧情定向）优先于预设，战斗强度优先于等级；覆盖项不影响同种类以外的参战方', () => {
   const swap = c => { c.parties.find(p => p.id === 'foe_pack_1').ref = KINDS.merfolk; };
   assert.equal(snapshotWith(swap, [{ id: KINDS.merfolk, stats: { level: 6 } }]).levels.foe_pack_1, 6);
   const s = snapshotWith(swap, [{ id: KINDS.merfolk, stats: { combatStrength: 7 } }]);
   assert.equal(s.levels.foe_pack_1, 7);
-  assert.equal(s.levels.foe_engaged, 3, '同合同里的鬼王峒武士仍按时点表');
+  assert.equal(s.levels.foe_engaged, 3, '同合同里的鬼王峒武士仍按预设（2 + 1）');
 });
-test('战斗：时点级数表仍是按章的权威（第 45 章武士 3，精英变体 4）；总表基础只在没有表行时兜底', () => {
+test('战斗：鬼王峒武士按预设（第 45 章 2 + 1 = 3）；本关阶段档显式写了级数时按阶段档', () => {
+  assert.equal(snapshotWith(() => {}).levels.foe_engaged, 3);
   const s = snapshotWith(() => {}, [{ id: KINDS.guiwang_warrior, stats: { level: 8 } }]);
-  assert.equal(s.levels.foe_engaged, 3, '有表行时表行优先，阶段覆盖不改它');
-  assert.equal(s.levelFacts.foe_engaged.entityId, KINDS.guiwang_warrior);
+  assert.equal(s.levels.foe_engaged, 8);
 });
-test('战斗：尸鬼 level 为 null（不适用九级）但有战斗强度 3 → 战斗读 combatStrength ?? level（用户 2026-10-16 裁定尸鬼与男尸鬼合并）', () => {
+test('战斗：尸鬼不走九级，按预设里裁定的战斗强度 3（用户 2026-10-16 裁定尸鬼与男尸鬼合并）', () => {
   const s = snapshotWith(c => { c.parties.find(p => p.id === 'foe_pack_2').ref = KINDS.altar_corpse; });
-  assert.equal(s.levels.foe_pack_2, 3, '第 45 章没有尸鬼的表行：读总表基础的战斗强度，不是按同级');
+  assert.equal(s.levels.foe_pack_2, 3);
 });
 test('战斗：level 与 combatStrength 都为 null = 不适用，不是 0 级，调用方按同级回落', () => {
   assert.equal(merge.combatLevelOf({ level: null, combatStrength: null }), undefined);

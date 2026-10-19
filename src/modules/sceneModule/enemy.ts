@@ -70,7 +70,8 @@ function targetsOf(contract: Contract, state: SceneState, ctx: Pick<SceneContext
   const eligible = (id: string): boolean => {
     const party = partyOf(contract, id);
     if (!party || !isPresent(state, id) || isDowned(state, contract, ctx, id)) return false;
-    return !party.protected || !!action.allowProtected;
+    // 受保护 / 不参战的同行者一律不被点名、不出防御行（规则对所有合同一致，不再有 allowProtected 例外）。
+    return !party.protected;
   };
   const t = action.target;
   if (t === 'player') return player && eligible(player) ? [player] : [];
@@ -133,7 +134,7 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
       }
       // 通用挂伤：被挡住也要结算（档内几率可以配成非 0），并重置连续重击计数。
       // 合同写了 onCrush 且这一下够得上，就按合同指定的后果结算，通用挂伤不再叠加。
-      const woundTier = action.woundRule && !crushed ? woundTierOf(resolveWoundProfile(action.woundRule), { hit, face, total, dc }) : undefined;
+      const woundTier = action.woundRule && !crushed ? woundTierOf(resolveWoundProfile(action.woundRule), { hit, face, total, dc }, settings) : undefined;
       if (woundTier) events.push(...applyWoundRule(state, contract, ctx, targetId, action, woundTier));
       result.statusEvents.push(...events);
       result.rolls.push({
