@@ -128,7 +128,7 @@ test('既有状态只追加新维度：去掉新维度后与提交里的版本�
   const NEW_KINDS = ['psyche', 'sense', 'consciousness', 'restrict', 'appearance'];
   // 2026-10-19 整改按用户方案重写的条目（合并、补实效、去 provisional）与迁移表里删掉 / 并走的旧 id 不比。
   const REWORKED = new Set(['wound.external', 'wound.burn', 'wound.soul_aftershock', 'wound.soul', ...Object.keys(injuries.STATUS_MIGRATIONS)]);
-  const strip = d => { const { lifeFloor, permanent, ...rest } = d; return { ...rest, effects: d.effects.filter(e => !NEW_KINDS.includes(e.kind)), ...(d.id === 'dying' ? { remove: undefined } : {}) }; }; // dying.remove 按 2026-10-19 药品分级改，见下
+  const strip = d => { const { lifeFloor, permanent, ...rest } = d; return { ...rest, effects: d.effects.filter(e => !NEW_KINDS.includes(e.kind)), ...(d.id === 'dying' ? { remove: undefined } : {}), ...(d.id === 'poison.ice_gu' ? { storyApply: undefined } : {}) }; }; // poison.ice_gu.storyApply.stages 按 2026-10-20 6ccb 真机补 03b/04/04b，其余字段不动 // dying.remove 按 2026-10-19 药品分级改，见下
   let committed;
   try { committed = JSON.parse(execFileSync('git', ['show', 'HEAD:src/modules/sceneModule/contracts/statuses.json'], { cwd: fileURLToPath(rootUrl), encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] })); } catch { committed = undefined; }
   if (!committed) return; // 不在 git 仓库里（例如打包后）

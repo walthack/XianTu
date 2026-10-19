@@ -19,6 +19,7 @@ import { injuryStore, pruneSceneInjuries, renderInjuryViews, sceneTime } from '.
 import { actorStatusRecords } from '../actorStatusRead';
 import { relationshipOf } from '../ledger/affinityIdentity';
 import { applyActorStatus } from './actorStatus';
+import { scenarioPlayerId } from '../playerIdentity';
 
 export interface MaiguConfig {
   itemId: string; heightenedStatus: string; addictionStatus: string; withdrawalStatus: string;
@@ -31,7 +32,7 @@ export const maiguConfig = (): MaiguConfig => (GAME_NUMBERS.status as unknown as
 const WITHDRAWAL_SOURCE = 'maigu.withdrawal';
 type Clock = { lastDoseAt: number; withdrawal?: boolean; withdrawalAt?: number };
 const runtimeOf = (save: SaveData): any => (save as any)?.世界?.状态?.剧本模组;
-const playerIdOf = (save: SaveData): string | undefined => runtimeOf(save)?.opening?.playerCharacterId;
+const playerIdOf = (save: SaveData): string | undefined => scenarioPlayerId(save);
 const clocks = (save: SaveData): Record<string, Clock> => (runtimeOf(save).maiguClock ||= {});
 const has = (save: SaveData, actorId: string, statusId: string): boolean => actorStatusRecords(save, actorId).some(row => row.statusId === statusId);
 const isWithdrawalRow = (row: { statusId: string; sourceScene?: string }, cfg: MaiguConfig): boolean => row.statusId === cfg.withdrawalStatus && row.sourceScene === `free:${WITHDRAWAL_SOURCE}`;

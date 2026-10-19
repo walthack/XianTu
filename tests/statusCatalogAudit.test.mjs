@@ -110,7 +110,7 @@ test('赢了战后休整清轻伤（求生类按时撑过去也收成赢）：af
 test('冰蛊：剧情挂上（种蛊旗标），压低真气上限（比例在配置），只由剧情解除；超上限运功做寒气反噬检定', async () => {
   const def = CATALOG.find(d => d.id === 'poison.ice_gu');
   assert.ok(def);
-  assert.deepEqual(def.storyApply, { flags: ['event.ice_gu_coercion.done'], stages: ['lcq.stage_05', 'lcq.stage_05b'] });
+  assert.deepEqual(def.storyApply, { flags: ['event.ice_gu_coercion.done'], stages: ['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05', 'lcq.stage_05b'] }); // 2026-10-20 6ccb：补挂 03b/04/04b
   assert.ok(def.remove.every(rule => rule.kind === 'story'), '只走剧情解除');
   const cfg = progress.status.bingGu;
   assert.ok(cfg.qiCapRatio > 0 && cfg.qiCapRatio < 1);
@@ -129,6 +129,9 @@ test('冰蛊：剧情挂上（种蛊旗标），压低真气上限（比例在�
   assert.ok(s.角色.效果.some(e => e.状态名称 === '冰蛊'), '主角效果栏可见');
   assert.equal(bingGu.qiCapOf(s), Math.floor(100 * cfg.qiCapRatio));
   assert.equal(bingGu.availableQi(s), Math.floor(100 * cfg.qiCapRatio));
+  // 2026-10-20 6ccb 真机：挂上冰蛊后灵气仍显示满格——剧情同步时就把当前值夹到上限×比例
+  assert.equal(s.角色.属性.灵气.当前, Math.floor(100 * cfg.qiCapRatio));
+  s.角色.属性.灵气.当前 = 100; // 之后又涨过上限（运功）
   // 检定过：只压回上限，不伤气血
   let facts = bingGu.enforceQiCap(s, { roll: cfg.backlash.dc }, { player: '程宗扬', target: '' });
   assert.equal(facts.length, 1);

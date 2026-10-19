@@ -13,6 +13,7 @@ import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS, applyStepScene
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { advanceClock } from '@/modules/scenarioMods/travel/travelLedger';
 import { applyPlayerChoice, beginScene, buildSceneBrief, closeScene, confirmAction, matchPlayerChoice, previewAction, renderResultLines, classifyByRules, resolveInputPolicy, route, appendInput, type Contract } from '../index';
+import { settleDownedAfterHostSync } from '../scene';
 import { sceneContractById, sceneContractForEvent, sceneContractSupportsAction } from '../contracts/registry';
 import { activeScene, cloneSave, newActive, readExt, sceneModuleEnabled, writeExt, type ActiveScene } from './ext';
 import { sceneContext, snapshotLevels } from './factors';
@@ -181,6 +182,8 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
     if(!receipts.some((r:any)=>r.id===receiptId))receipts.push({id:receiptId,contractId:c.meta.id,chapter:interrogationChapter(c,runtime),success:['success','great_success'].includes(confirmed.result.tier),facts:interrogationMaterial(c,a.state,confirmed.result.goal,runtime,['success','great_success'].includes(confirmed.result.tier))});
   }
   syncSceneStatuses(save,c,a.state);
+  // 6ccb 真机 P0：气血本拍落账打到保底即当拍判负（结果行补一句，叙事与收场同拍）。
+  if(settleDownedAfterHostSync(c,a.state,sceneContext(save,c))){confirmed.result.outcome=a.state.outcome;a.last.lines.push('你伤重倒下，这一战败了。');}
   runtimeOf(save).worldTurn+=1;advanceClock(save,{minutes:1},'scene.'+c.meta.id);writeExt(save,ext);
   await deps.persist(save);checkAbort(deps); // Dice checkpoint BEFORE any model request.
   const narration=await narrateBeat(c,a.state,confirmed.result,p.text,runtimeOf(save),deps.askNarrative);checkAbort(deps);

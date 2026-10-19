@@ -58,3 +58,11 @@ test('按品统计脚本覆盖全部目录功法', () => {
   assert.ok(!Object.keys(out.catalog.byTier).some(k => k.startsWith('未识别')), JSON.stringify(out.catalog.byTier));
   assert.ok(!Object.keys(out.stageRefs.byTier).some(k => k.startsWith('未识别')));
 });
+
+// 6ccb 真机：功法页（默认修炼页）看不到四品——只有功法库卡片带品级标签。修炼页与功法库都加四品计数条。
+test('功法页修炼/功法库两页都有四品计数条，按配置四品渲染', () => {
+  const s = fs.readFileSync('src/components/dashboard/SkillsPanel.vue', 'utf8');
+  assert.equal((s.match(/data-test="technique-tier-summary"/g) || []).length, 2);
+  assert.match(s, /countTechniquesByTier\(inventoryTechniques\.value\.map/);
+  assert.deepEqual(tq.countTechniquesByTier(['神', '凡', '黄', '玄', '天']), { 凡品: 1, 珍品: 2, 仙品: 1, 神品: 1 });
+});

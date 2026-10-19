@@ -124,6 +124,30 @@
       ]
     },
     {
+      "id": "drive_off",
+      "label": "逼她退开",
+      "aliases": [
+        "逼退",
+        "逼退她",
+        "逼她退开",
+        "把她逼退",
+        "吓退",
+        "吓退她",
+        "击退",
+        "击退她",
+        "逼开",
+        "赶走她",
+        "让她退开"
+      ],
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 12,
+      "finishAs": "松口退开",
+      "targetIds": [
+        "snake_man"
+      ]
+    },
+    {
       "id": "defend",
       "label": "防守撑住",
       "type": "support",

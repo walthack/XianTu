@@ -590,6 +590,9 @@
         "event.ice_gu_coercion.done"
       ],
       "stages": [
+        "lcq.stage_03b_snake_flower_bridge",
+        "lcq.stage_04",
+        "lcq.stage_04b_lingfei_baiyi_crisis",
         "lcq.stage_05",
         "lcq.stage_05b"
       ]

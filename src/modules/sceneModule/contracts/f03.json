@@ -1234,7 +1234,8 @@
       },
       "onBlocked": {
         "text": "你横身拦住了扑向后方的武士"
-      }
+      },
+      "threatOnly": true
     },
     {
       "id": "threat_a_xi",
@@ -1266,7 +1267,8 @@
       },
       "onBlocked": {
         "text": "你截住了这一扑"
-      }
+      },
+      "threatOnly": true
     },
     {
       "id": "press_last",

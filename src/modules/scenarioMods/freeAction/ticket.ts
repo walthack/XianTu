@@ -11,6 +11,7 @@ import { itemEffectOf } from './itemUse';
 import { freeActionConfig, variantSpecOf, enabledVariants, type ActionClass, type Degree } from './config';
 import { gateText } from './facts';
 import { logGateRefusal } from './refusalLog';
+import { scenarioPlayerId } from '../playerIdentity';
 
 export interface FreeActionTicket {
   actionClass: ActionClass;
@@ -37,7 +38,7 @@ const TICKET_KEYS = ['actionClass', 'variant', 'targetId', 'degree', 'performed'
 const OPTIONAL_KEYS = ['targetId', 'itemId', 'affinityDelta'];
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
-export const playerIdOf = (save: unknown): string | undefined => runtimeOf(save)?.opening?.playerCharacterId;
+export const playerIdOf = (save: unknown): string | undefined => scenarioPlayerId(save);
 /** 本存档剧本正典里的人物条目（只读）。 */
 export const canonCharacterOf = (save: unknown, id: string): { id: string } | undefined =>
   (runtimeOf(save)?.canon?.characters as Array<{ id: string }> | undefined)?.find(item => item?.id === id);

@@ -32,6 +32,10 @@
 
     <!-- 修炼页面 -->
     <div v-if="activeTab === 'cultivation'" class="tab-content">
+      <!-- 功法四品计数（2026-10-20 6ccb 真机：修炼页看不到四品） -->
+      <div class="technique-tier-summary" data-test="technique-tier-summary">
+        <span v-for="row in techniqueTierCounts" :key="row.name" class="quality-tag" :class="`text-quality-${row.short}`">{{ row.name }} {{ row.count }}</span>
+      </div>
       <!-- 当前修炼功法 -->
       <div class="cultivation-card" :class="cultivationSkills ? getQualityBorderClass(cultivationSkills) : ''">
         <div class="cultivation-header">
@@ -184,6 +188,10 @@
         <input v-model="techniqueQuery" type="text" :placeholder="t('搜索功法...')" />
       </div>
 
+      <!-- 功法四品计数（2026-10-20 6ccb 真机：修炼页看不到四品） -->
+      <div class="technique-tier-summary" data-test="technique-tier-summary">
+        <span v-for="row in techniqueTierCounts" :key="row.name" class="quality-tag" :class="`text-quality-${row.short}`">{{ row.name }} {{ row.count }}</span>
+      </div>
       <div v-if="filteredInventoryTechniques.length === 0" class="empty-state">
         <BookOpen :size="32" class="empty-icon" />
         <p>{{ t('功法库为空或无匹配结果') }}</p>
@@ -236,7 +244,8 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { techniqueNumbersOf, techniqueTierLabel, techniqueTierShort, TECHNIQUE_BREAKTHROUGH_CAP } from '@/data/techniqueQuality';
+import { techniqueNumbersOf, techniqueTierLabel, techniqueTierShort, countTechniquesByTier, TECHNIQUE_BREAKTHROUGH_CAP } from '@/data/techniqueQuality';
+import { ITEM_TIER_TABLE } from '@/data/itemQuality';
 import { BookOpen, Clock, Moon, ScrollText, Search, Sparkles, TrendingUp, X, Zap } from 'lucide-vue-next';
 import DeepCultivationModal from '@/components/common/DeepCultivationModal.vue';
 import { useI18n } from '@/i18n';
@@ -289,6 +298,11 @@ const inventoryTechniques = computed((): TechniqueItem[] => {
   return allTechniques.value.filter(t => !(t as any).已装备 && !(t as any).修炼中);
 });
 
+/** 功法按四品计数（与道具共用 item-grades.json；旧七档按配置换算）。 */
+const techniqueTierCounts = computed(() => {
+  const counts = countTechniquesByTier(inventoryTechniques.value.map(t => t.品质?.quality));
+  return ITEM_TIER_TABLE.map(t => ({ name: t.name, short: t.short, count: counts[t.name] || 0 }));
+});
 const techniqueTotalCount = computed(() => {
   return allTechniques.value.length;
 });
@@ -1143,6 +1157,7 @@ const filteredInventoryTechniques = computed(() => {
   margin-bottom: 12px;
 }
 
+.technique-tier-summary { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
 .quality-tag {
   font-size: 12px;
   font-weight: 600;

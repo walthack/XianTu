@@ -113,6 +113,7 @@ export function renderResultLines(contract: Contract, result: BeatResult): strin
   for (const roll of result.enemy) {
     const names = roll.statuses.filter(e => e.op !== 'skipped').map(e => `${e.label}${e.op === 'upgrade' ? '（加重）' : ''}`).join('、');
     const tierMark = woundTierLabel(roll.woundTier);
+    if (roll.threatOnly) { lines.push(`${roll.label}：拦截 ${roll.face}＋${roll.defenseBonus}＝${roll.total} 对 ${roll.dc}，${roll.outcome === 'hit' ? `没拦住${roll.text ? `（${roll.text}）` : ''}` : '拦住了'}`); continue; }
     lines.push(`${roll.label}→${partyDisplay(contract, roll.target)}：防御 ${roll.face}＋${roll.defenseBonus}＝${roll.total} 对 ${roll.dc}，${roll.outcome === 'hit' ? `没挡住${tierMark ? `（${tierMark}）` : ''}${names ? `，挂「${names}」` : ''}` : `挡住了${tierMark ? `（${tierMark}）` : ''}`}`);
   }
   if (result.outcome) lines.push(`场面结果：${result.outcome.kind === 'win' ? '胜' : result.outcome.kind === 'lose' ? '败' : '超时收束'}`);

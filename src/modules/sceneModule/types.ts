@@ -310,6 +310,8 @@ export interface EnemyActionDef {
   woundRule?: WoundRuleRef;
   /** 通用挂伤挂上状态时带入的参数（如外伤部位 bodyPart）。 */
   woundParams?: StatusParams;
+  /** 只推威胁轨（如绕向后方的同伴）：主角做拦截判定，没拦住只推 onHit.trackShifts，不算打在主角身上、不挂伤、不扣气血，结果行不写「→主角」。 */
+  threatOnly?: boolean;
 }
 
 export type ConsequenceTarget = 'actor' | 'committed' | { party: string };

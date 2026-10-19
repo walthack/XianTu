@@ -14,10 +14,11 @@ import { pruneSceneInjuries } from '../../sceneModule/host/injuries';
 import { actorStatusRecords } from '../actorStatusRead';
 import { applyActorStatus } from './actorStatus';
 import { factText, type FactSlots } from './facts';
+import { scenarioPlayerId } from '../playerIdentity';
 
 type BingGuConfig = { qiCapRatio: number; qiActions: string[]; backlash: { dc: number; hpLossRatio: number; failStatus?: string } };
 const config = (): BingGuConfig => (GAME_NUMBERS.status as any).bingGu;
-const playerIdOf = (save: SaveData): string | undefined => (save as any)?.世界?.状态?.剧本模组?.opening?.playerCharacterId;
+const playerIdOf = (save: SaveData): string | undefined => scenarioPlayerId(save);
 const flagsOf = (save: SaveData): Record<string, unknown> => (save as any)?.世界?.状态?.剧本模组?.flags || {};
 
 /** 剧情来源状态补挂；返回这次新挂上的状态 id。 */
@@ -35,7 +36,14 @@ export function syncStoryStatuses(save: SaveData): string[] {
     if (actorStatusRecords(save, playerId).some(row => row.statusId === def.id)) continue;
     if (applyActorStatus(save, playerId, def.id, { sourceId: `story.${def.id}`, minutes: null }).ok) added.push(def.id);
   }
+  clampQiToCap(save);
   return added;
+}
+
+/** 状态栏同步：有冰蛊时当前灵气压到上限 × qiCapRatio（上限本身不改；6ccb 真机见到灵气仍 50/50）。 */
+export function clampQiToCap(save: SaveData): void {
+  const cap = qiCapOf(save), qi = (save as any)?.角色?.属性?.灵气;
+  if (cap !== undefined && qi && Number(qi.当前) > cap) qi.当前 = cap;
 }
 
 /** 主角此刻的可用真气上限；没有压上限的状态时为 undefined。 */

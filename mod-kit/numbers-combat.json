@@ -3,7 +3,9 @@
     "baselineDc": 11,
     "preBattleSave": {
     "enabled": true,
-    "slotName": "战前存档"
+    "slotName": "战前存档",
+    "workingSlotName": "战斗进行中",
+    "note": "战前存档必须留在战外（2026-10-20 6ccb 真机：读过「战前存档」后它就是当前激活槽，开战后每拍都写回当前激活槽，把战前档覆盖成战斗第 1 拍）。开战时若当前激活槽就是战前存档槽，先把进度挪到 workingSlotName 再写战前档。"
   },
   "heal": {
       "note": "战中「用药/运功疗伤」行动目标（2026-10-20 用户定）：所有战斗场面都有，用掉一拍（敌方照常出手）。按本拍判定档位解除伤势、回气血；点名背包里带疗伤标签的药时消耗 1 份，按品级再加回血。",
@@ -115,6 +117,8 @@
         "keepHp": 1,
         "downedAtKeep": true,
         "downedAtKeepContracts": ["combat.f14.dragon_god"],
+        "playerDownedLoses": true,
+        "playerDownedLosesNote": "2026-10-20 6ccb 真机：F03/F04/F09 主角倒下（气血到 keepHp 或挂 downed 类状态）后不判负——F09 等合同的 defeat 没写 partyDowned(pc)。打开后任何合同里主角倒下即判负，不依赖各合同自己写。",
         "downedAtKeepNote": "气血打到 keepHp 即算倒下（fee4 B4）。2026-10-20 全局打开：模拟（combat-simulation.mjs 已按同一规则扣气血）参考玩家胜率均不低于 minWinRate，F03 74.5%、F13 65%。"
       },
       "afterWin": {

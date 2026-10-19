@@ -1,5 +1,5 @@
 {
-  "version": "13aceba9d8ad4677",
+  "version": "09553307a15bc48d",
   "contracts": [
     {
       "meta": {
@@ -299,6 +299,30 @@
           "type": "push",
           "track": "vit",
           "baseDifficulty": 14,
+          "finishAs": "松口退开",
+          "targetIds": [
+            "snake_man"
+          ]
+        },
+        {
+          "id": "drive_off",
+          "label": "逼她退开",
+          "aliases": [
+            "逼退",
+            "逼退她",
+            "逼她退开",
+            "把她逼退",
+            "吓退",
+            "吓退她",
+            "击退",
+            "击退她",
+            "逼开",
+            "赶走她",
+            "让她退开"
+          ],
+          "type": "push",
+          "track": "vit",
+          "baseDifficulty": 12,
           "finishAs": "松口退开",
           "targetIds": [
             "snake_man"
@@ -1612,7 +1636,8 @@
           },
           "onBlocked": {
             "text": "你横身拦住了扑向后方的武士"
-          }
+          },
+          "threatOnly": true
         },
         {
           "id": "threat_a_xi",
@@ -1644,7 +1669,8 @@
           },
           "onBlocked": {
             "text": "你截住了这一扑"
-          }
+          },
+          "threatOnly": true
         },
         {
           "id": "press_last",

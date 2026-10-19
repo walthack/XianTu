@@ -516,6 +516,7 @@ import {canBreakthrough} from '@/modules/scenarioMods/levelProgression';
 import { canUseNicheCrystal, useNicheCrystal } from '@/modules/sceneModule/host/loot';
 import SceneEncounterCard from './SceneEncounterCard.vue';
 import { activeScene } from '@/modules/sceneModule/host/ext';
+import { writePreBattleSave } from '@/modules/sceneModule/host/preBattleSlot';
 import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSceneChoice, editSceneAction, finishScene, setSceneTestDice, type HostDeps } from '@/modules/sceneModule/host/controller';
 import { fixedEndingNarrative } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingKey, endingPresentation } from '@/modules/scenarioMods/endingPresentation';
@@ -1864,7 +1865,11 @@ async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promi
     await operation(save, {
       persist: async next => { if (aborted()) throw new Error('scene_host_aborted'); await persistJudgementSave(next); },
       askIntent: ask('intent'), askNarrative: ask('narrative'), aborted,
-      beforeCombat: async () => { await characterStore.saveToSlot(String((GAME_NUMBERS.combat as any).preBattleSave?.slotName || '战前存档')); },
+      beforeCombat: async () => { await writePreBattleSave({
+        activeSlot: () => characterStore.rootState.当前激活存档?.存档槽位,
+        saveToSlot: name => characterStore.saveToSlot(name),
+        setActiveSlot: name => { const cur = characterStore.rootState.当前激活存档; if (cur) characterStore.rootState.当前激活存档 = { ...cur, 存档槽位: name }; },
+      }); },
     });
   } catch (error) {
     if (!aborted()) toast.error(`场面处理未完成：${String((error as Error).message)}。已结算的骰点保留。`);

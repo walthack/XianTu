@@ -18,6 +18,7 @@ import { namedEntity } from '../namedEntities';
 import { isEnemyKindId, kindIdOf, parseInstanceId } from '../actorInstances';
 import { statusBankOf } from '../actorStatusRead';
 import { lifeFloorFor } from './protect';
+import { scenarioPlayerId } from '../playerIdentity';
 
 export type ApplyStatusRefusal = 'unknown_status' | 'enemy_kind' | 'bad_actor' | 'permanent_cap';
 
@@ -72,7 +73,7 @@ export function applyActorStatus(save: SaveData, actorId: string, statusId: stri
   else minutes = def.afterScene?.minutes ?? GAME_NUMBERS.status.freeActionMaxMinutes;
 
   const prior = rows.find(row => row.statusId === def.id);
-  const playerId = (save as any)?.世界?.状态?.剧本模组?.opening?.playerCharacterId, isPlayer = !!playerId && actorId === playerId;
+  const playerId = scenarioPlayerId(save), isPlayer = !!playerId && actorId === playerId;
   const record: InjuryRecord = {
     ...(instance ? { enemyId: instance.kindId, instanceId: actorId } : {}),
     player: isPlayer, statusId: def.id, label: def.label, sourceScene, cause: def.cause, source: def.source,

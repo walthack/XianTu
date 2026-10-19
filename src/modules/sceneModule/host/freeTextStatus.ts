@@ -7,6 +7,7 @@ import type { StatusDef } from '../types';
 import type { FreeTextStatusResolution } from './freeTextStatusSemantic';
 import { injuryStore, renderInjuryViews, sceneTime } from './injuries';
 import { runtimeOf } from './refs';
+import { scenarioPlayerId } from '@/modules/scenarioMods/playerIdentity';
 
 const SOURCE_PREFIX = 'narrative:';
 const NEGATION_RE = /未|没|不曾|并无|并非|不是|无法|别|勿|免得/;
@@ -71,7 +72,7 @@ export function mountFreeTextStatuses(save: SaveData, before: SaveData, narrativ
       || (semantic.statusIds.includes(d.id) && (semantic.evidenceScope !== 'input' || (d.freeText === 'input'
         && !mentions(narrative, d).some(m => m.subject === '你' && !real(m.clause))))))).map(d => d.id)
     : adjudicateFreeTextStatuses(narrative, userAction)) : [];
-  const runtime = runtimeOf(save), playerId = runtime?.opening?.playerCharacterId;
+  const runtime = runtimeOf(save), playerId = scenarioPlayerId(save);
   for (const id of ids) {
     const def = STATUS_CATALOG.find(d => d.id === id)!;
     const source = `${SOURCE_PREFIX}${def.id}`, minutes = def.afterScene?.minutes ?? null;

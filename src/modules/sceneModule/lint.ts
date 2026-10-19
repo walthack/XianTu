@@ -290,6 +290,7 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
       else if ('rotate' in t) t.rotate.forEach(id => knownParty(id, `${where}.target`));
       else if (!['player_side', 'opposed', 'neutral', 'third'].includes(t.each)) err(`${where}.target.each 不是合法阵营`);
     }
+    if (action.threatOnly && (action.woundRule || action.onHit?.statuses?.length || !action.onHit?.trackShifts?.length)) err(`${where}：threatOnly 只推威胁轨，不能写 woundRule／onHit.statuses，且必须有 trackShifts`);
     if (!action.onHit?.statuses?.length && !action.onHit?.trackShifts?.length && !action.woundRule) err(`${where}：onHit.statuses 为空（没挡住要给具体的人挂具体状态，或写 woundRule 走通用挂伤）`);
     if (action.woundRule) { try { woundRuleStatuses(action.woundRule).forEach(id => needStatus(id, `${where}.woundRule`)); } catch (error) { /* lcq-allow: 体检把问题记进 lint 错误列表，由合同编译/加载报出 */ err(`${where}.woundRule：${(error as Error).message}`); } }
     for (const ref of [...(action.onHit?.statuses || []), ...(action.onCrush?.statuses || [])]) needStatus(ref.status, where);

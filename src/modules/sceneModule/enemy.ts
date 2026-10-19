@@ -18,6 +18,8 @@ export interface EnemyRoll {
   partyRef: string;
   target: string;
   targetRef: string;
+  /** 只推威胁轨的拦截判定（不算打在主角身上）。 */
+  threatOnly?: boolean;
   dc: number;
   edgeBonus: number;
   defenseBonus: number;
@@ -133,16 +135,17 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
           const info = trackInfo(contract, shift.party, shift.track);
           if (info) (state.tracks[shift.party] ||= {})[info.id] = Math.max(0, Math.min(info.scale.length - 1, trackStep(state, shift.party, info.id) + shift.steps));
         }
-        for (const ref of plan.statuses) events.push(...applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id }));
+        if (!action.threatOnly) for (const ref of plan.statuses) events.push(...applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id }));
       }
       // 通用挂伤：被挡住也要结算（档内几率可以配成非 0），并重置连续重击计数。
       // 合同写了 onCrush 且这一下够得上，就按合同指定的后果结算，通用挂伤不再叠加。
-      const woundTier = action.woundRule && !crushed ? woundTierOf(resolveWoundProfile(action.woundRule), { hit, face, total, dc }, settings) : undefined;
+      const woundTier = action.woundRule && !action.threatOnly && !crushed ? woundTierOf(resolveWoundProfile(action.woundRule), { hit, face, total, dc }, settings) : undefined;
       if (woundTier) events.push(...applyWoundRule(state, contract, ctx, targetId, action, woundTier));
       result.statusEvents.push(...events);
       result.rolls.push({
         actionId: action.id, label: action.label, party: attacker.id, partyRef: attacker.ref, target: targetId, targetRef: target.ref,
         dc, edgeBonus, defenseBonus, face, total, outcome: hit ? 'hit' : 'blocked', margin: hit ? margin : total - dc, crushed,
+        ...(action.threatOnly ? { threatOnly: true } : {}),
         ...(woundTier ? { woundTier } : {}),
         statuses: events,
         text: hit ? (crushed ? action.onCrush!.text : action.onHit.text) : action.onBlocked?.text,
@@ -166,8 +169,8 @@ export function applyWorstCaseEnemyPhase(contract: Contract, state: SceneState, 
         const info = trackInfo(contract,shift.party,shift.track);
         if(info) (state.tracks[shift.party] ||= {})[info.id] = Math.max(0,Math.min(info.scale.length-1,trackStep(state,shift.party,info.id)+shift.steps));
       }
-      for (const ref of plan.statuses) applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id });
-      if (action.woundRule && !action.onCrush) applyWoundRule(state, contract, ctx, targetId, action, 'great_success', true);
+      if (!action.threatOnly) for (const ref of plan.statuses) applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id });
+      if (action.woundRule && !action.threatOnly && !action.onCrush) applyWoundRule(state, contract, ctx, targetId, action, 'great_success', true);
     }
   }
 }

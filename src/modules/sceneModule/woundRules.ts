@@ -23,7 +23,7 @@ export interface WoundRulesConfig {
   profiles: Record<string, WoundProfile>;
   /** 回执里给敌方这一下的档加的字样（空串＝不标）。 */
   labels: Record<WoundTier, string>;
-  hp: { keepHp: number; downedAtKeep?: boolean; downedAtKeepContracts?: string[] };
+  hp: { keepHp: number; downedAtKeep?: boolean; downedAtKeepContracts?: string[]; /** 主角倒下即判负（全局，不靠合同 defeat 自己写 partyDowned）。 */ playerDownedLoses?: boolean };
   afterWin: { clearLight: boolean; statuses: string[]; sides: string[] };
 }
 

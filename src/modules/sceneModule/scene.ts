@@ -9,8 +9,8 @@ import { applyWorstCaseEnemyPhase, resolveEnemyPhase, type EnemyRoll } from './e
 import { lintContract } from './lint';
 import { applyLocks, evaluatePlan, type PlanEvaluation } from './plan';
 import { allTrackInfos, isPresent, partyDisplay, partyOf, playerParty, resolveTagTargets, trackInfo, trackLabel, trackStep } from './queries';
-import { applyStatus, expireStatuses, persistentStatuses, type StatusEvent } from './statuses';
-import { afterWinClears } from './woundRules';
+import { applyStatus, expireStatuses, isDowned, persistentStatuses, type StatusEvent } from './statuses';
+import { afterWinClears, woundRulesConfig } from './woundRules';
 import { pickFace, resolveCheck, resolveSettings, type ResolvedSettings } from './tiers';
 import {
   TIER_LABELS,
@@ -165,8 +165,24 @@ function defeatConditions(contract: Contract): Array<Cond | Expr> {
   return (contract.defeat?.conditions || []).filter(c => (c as PlayerChoiceCond).kind !== 'playerChoice') as Array<Cond | Expr>;
 }
 
+/** 主角倒下（气血到保底 hpDowned，或挂了 downed 类状态如「倒下（加重）」）：配置 combat.woundRules.hp.playerDownedLoses 打开时一律判负。 */
+export function playerDownedLoses(contract: Contract, state: SceneState, ctx?: Pick<SceneContext, 'catalog'>): boolean {
+  if (!woundRulesConfig()?.hp?.playerDownedLoses) return false;
+  // 合同显式写了「整边倒下才输」（sideDowned）就按合同：同伴还站着，主角倒下不算输。
+  if (defeatConditions(contract).some(cond => (cond as { kind?: string }).kind === 'sideDowned')) return false;
+  const pc = contract.parties.find(p => p.player);
+  return !!pc && isDowned(state, contract, ctx, pc.id);
+}
+
 export function isLost(contract: Contract, state: SceneState, ctx?: Pick<SceneContext, 'catalog'>): boolean {
-  return defeatConditions(contract).some(cond => evalExpr(cond, contract, state, ctx));
+  return playerDownedLoses(contract, state, ctx) || defeatConditions(contract).some(cond => evalExpr(cond, contract, state, ctx));
+}
+
+/** host 每拍落账气血后再判一次：本拍敌方把主角打到保底，当拍就判负，不等下一拍。返回是否新判负。 */
+export function settleDownedAfterHostSync(contract: Contract, state: SceneState, ctx?: Pick<SceneContext, 'catalog'>): boolean {
+  if (state.status !== 'engaged' || !playerDownedLoses(contract, state, ctx)) return false;
+  decide(contract, state, 'lose', '主角倒下');
+  return true;
 }
 
 export function isWon(contract: Contract, state: SceneState, ctx?: Pick<SceneContext, 'catalog'>): boolean {
