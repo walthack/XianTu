@@ -1,6 +1,7 @@
 // 合同体检：只查结构（引用是否存在、有没有互相矛盾、有没有走不通的路径），不评价剧情。
 // 通用模块不自带人头数、拍数、胜负门槛，所以凡是需要这些数的地方，合同没写就报出来，而不是悄悄补一个默认值。
 
+import { assistSkillIds, partyRole } from './assist';
 import { isExpr, normalizeCond } from './conditions';
 import { GAME_NUMBERS } from './numbers';
 import { goalsOf } from './plan';
@@ -86,7 +87,12 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
     if (partyIds.has(party.id)) err(`参与方 id 重复：${party.id}`);
     partyIds.add(party.id);
     if (!party.ref) err(`参与方 ${party.id} 缺 ref（角色库 id 或字面标签）`);
+    if (party.role !== undefined && !['combatant', 'assist'].includes(party.role)) err(`参与方 ${party.id}：role 只能是 combatant / assist`);
+    if (party.role === 'assist' && party.side !== 'player_side') err(`参与方 ${party.id}：只有 player_side 的同伴可以是助战者（role assist）`);
   }
+  for (const id of contract.assist?.disabled || []) if (!partyIds.has(id)) err(`assist.disabled：参与方“${id}”不存在`);
+  const skillIds = new Set(assistSkillIds());
+  for (const id of contract.assist?.finishers || []) if (!skillIds.has(id)) err(`assist.finishers：numbers-assist.json 里没有自动技能“${id}”`);
   const players = (contract.parties || []).filter(p => p.player);
   if (players.length !== 1) err(`必须恰有一个 player:true 的参与方（现在 ${players.length} 个）`);
   const knownParty = (id: string | undefined, where: string): boolean => {
@@ -274,7 +280,12 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
     if (typeof action.attack?.dc !== 'number') err(`${where}：attack.dc 缺失`);
     const t = action.target;
     if (t !== 'player') {
-      if ('party' in t) knownParty(t.party, `${where}.target`);
+      if ('party' in t) {
+        if (knownParty(t.party, `${where}.target`)) {
+          const target = partyOf(contract, t.party)!;
+          if (!target.protected && partyRole(target) === 'assist') err(`${where}.target：“${t.party}”是助战者，敌人不会点名它（这条出手永远不会发生）；要让同伴挨打写 role:"combatant"，护人戏改用威胁轨（onHit.trackShifts）`);
+        }
+      }
       else if ('rotate' in t) t.rotate.forEach(id => knownParty(id, `${where}.target`));
       else if (!['player_side', 'opposed', 'neutral', 'third'].includes(t.each)) err(`${where}.target.each 不是合法阵营`);
     }

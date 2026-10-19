@@ -6,7 +6,7 @@
  */
 export type FieldKind = 'number' | 'int' | 'bool' | 'string' | 'object' | 'array' | 'tuple2';
 
-export type NumbersSection = 'combat' | 'progress' | 'runtime';
+export type NumbersSection = 'combat' | 'progress' | 'runtime' | 'assist';
 
 export interface FieldSpec {
   path: string;
@@ -22,9 +22,10 @@ export const SECTION_KEYS: Record<NumbersSection, readonly string[]> = {
   combat: ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'],
   progress: ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard'],
   runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'],
+  assist: ['assist'],
 };
 
-/** 26 个顶层键：version 为 int，其余为必填 object。 */
+/** 27 个顶层键：version 为 int，其余为必填 object。 */
 export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; section: NumbersSection }> = [
   { key: 'version', kind: 'int', section: 'runtime' },
   { key: 'levels', kind: 'object', section: 'progress' },
@@ -52,6 +53,7 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'feedback', kind: 'object', section: 'runtime' },
   { key: 'e2eSmoke', kind: 'object', section: 'runtime' },
   { key: 'perf', kind: 'object', section: 'runtime' },
+  { key: 'assist', kind: 'object', section: 'assist' },
 ];
 
 /** 高频叶子：挡住缺字段 / 类型 / 粗范围；其余叶子仍靠补丁 typeof 对齐默认。 */
@@ -75,6 +77,12 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'combat.woundRules.hp.keepHp', kind: 'number', required: true, min: 0, section: 'combat' },
   { path: 'combat.woundRules.afterWin.clearLight', kind: 'bool', required: true, section: 'combat' },
   { path: 'combat.woundRules.afterWin.statuses', kind: 'array', required: true, section: 'combat' },
+  { path: 'assist.defaultRole', kind: 'string', required: true, section: 'assist' },
+  { path: 'assist.maxActive', kind: 'int', required: true, min: 0, section: 'assist' },
+  { path: 'assist.levelCount', kind: 'int', required: true, min: 1, section: 'assist' },
+  { path: 'assist.simulationAffinity', kind: 'number', required: true, section: 'assist' },
+  { path: 'assist.affinityLevels', kind: 'object', required: true, section: 'assist' },
+  { path: 'assist.byActor', kind: 'object', required: true, section: 'assist' },
 ];
 
 function atPath(tree: unknown, path: string): unknown {

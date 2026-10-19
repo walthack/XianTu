@@ -1,0 +1,99 @@
+{
+  "assist": {
+    "defaultRole": "assist",
+    "maxActive": 2,
+    "levelCount": 3,
+    "simulationAffinity": 40,
+    "affinityLevels": {
+      "nemesis": -1,
+      "grudge": -1,
+      "hostile": -1,
+      "wary": -1,
+      "stranger": 0,
+      "acquainted": 0,
+      "trusted": 1,
+      "close": 1,
+      "sworn": 2
+    },
+    "byActor": {
+      "liuchao.character.wu_er_lang": {
+        "priority": 1,
+        "passive": [
+          { "id": "wu_er_lang.side_by_side", "label": "并肩压上", "scope": "action", "values": [1, 1, 2] }
+        ],
+        "skills": [
+          { "id": "wu_er_lang.pin_down", "label": "牵制", "fromBeat": 1, "every": 2, "on": "opposed", "effect": "enemyDcBonus", "values": [-1, -1, -2], "durationBeats": 0, "text": "{{ref:liuchao.character.wu_er_lang}}缠住敌人，敌方这一拍出手更好挡" }
+        ]
+      },
+      "liuchao.character.ning_yu": {
+        "priority": 2,
+        "passive": [
+          { "id": "ning_yu.watch_back", "label": "照应身后", "scope": "defense", "values": [1, 1, 2] }
+        ],
+        "skills": [
+          { "id": "ning_yu.sword_cover", "label": "剑势护身", "fromBeat": 2, "every": 3, "on": "player", "effect": "defenseBonus", "values": [1, 2, 3], "durationBeats": 0, "text": "{{ref:liuchao.character.ning_yu}}的剑光护住你身侧" }
+        ]
+      },
+      "liuchao.character.su_li": {
+        "priority": 3,
+        "passive": [
+          { "id": "su_li.spotter", "label": "指点破绽", "scope": "action", "values": [0, 1, 1] }
+        ],
+        "skills": [
+          { "id": "su_li.arrow_pressure", "label": "箭压", "fromBeat": 2, "every": 2, "on": "opposed", "effect": "enemyDcBonus", "values": [-1, -1, -2], "durationBeats": 0, "text": "{{ref:liuchao.character.su_li}}的箭逼得敌人出手变形" }
+        ]
+      },
+      "liuchao.character.le_mingzhu": {
+        "priority": 4,
+        "passive": [
+          { "id": "le_mingzhu.warning", "label": "出声示警", "scope": "defense", "values": [0, 1, 1] }
+        ],
+        "skills": [
+          { "id": "le_mingzhu.steady", "label": "定神", "fromBeat": 3, "every": 3, "on": "player", "effect": "defenseBonus", "values": [1, 2, 2], "durationBeats": 0, "text": "{{ref:liuchao.character.le_mingzhu}}在旁提醒，你稳住了架势" }
+        ]
+      },
+      "liuchao.character.xie_yi": {
+        "priority": 5,
+        "passive": [
+          { "id": "xie_yi.counsel", "label": "点拨", "scope": "action", "values": [1, 2, 2] }
+        ],
+        "skills": []
+      },
+      "lcq.character.np004": {
+        "priority": 6,
+        "passive": [],
+        "skills": [
+          { "id": "np004.covering_fire", "label": "掩护射击", "fromBeat": 1, "every": 3, "on": "opposed", "effect": "enemyDcBonus", "values": [-1, -1, -1], "durationBeats": 0, "text": "{{ref:lcq.character.np004}}放箭掩护" }
+        ]
+      },
+      "liuchao.character.qi_yuan": {
+        "priority": 7,
+        "passive": [
+          { "id": "qi_yuan.guard_flank", "label": "护住侧翼", "scope": "defense", "values": [0, 1, 1] }
+        ],
+        "skills": []
+      },
+      "liuchao.character.yi_hu": {
+        "priority": 8,
+        "passive": [
+          { "id": "yi_hu.backup", "label": "从旁策应", "scope": "action", "values": [0, 0, 1] }
+        ],
+        "skills": []
+      },
+      "liuchao.character.xiao_zi": {
+        "priority": 9,
+        "passive": [
+          { "id": "xiao_zi.distraction", "label": "扰敌", "scope": "action", "values": [0, 1, 1] }
+        ],
+        "skills": []
+      },
+      "liuchao.character.a_xi": {
+        "priority": 10,
+        "passive": [
+          { "id": "a_xi.lookout", "label": "望风", "scope": "defense", "values": [0, 0, 1] }
+        ],
+        "skills": []
+      }
+    }
+  }
+}

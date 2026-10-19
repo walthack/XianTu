@@ -190,7 +190,8 @@
     {
       "id": "xiaojin",
       "side": "player_side",
-      "ref": "小津"
+      "ref": "小津",
+      "role": "combatant"
     },
     {
       "id": "biling",

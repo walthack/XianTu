@@ -49,7 +49,8 @@ test('F10 snapshots the effective level and freezes it for the same chapter',()=
 });
 test('F13 chapter110 withdraws Ningyu and Wuerlang without counting retreat as death',()=>{
  const c=registry.sceneContractById('combat.f13.ghost_king_final'),s=core.beginScene(c).state,v=save();host.snapshotLevels(v,c,s);
- assert.equal(s.levels.wu_er_lang,5);assert.equal(s.levels.ning_yu,4);s.beat=2;host.snapshotLevels(v,c,s);
+ // 同伴缺省是助战者，不算级差（不进 levels）；第 2 拍照旧退场。
+ assert.equal(s.levels.wu_er_lang,undefined);assert.equal(s.levels.ning_yu,undefined);assert.equal(typeof s.levels.pc,'number');s.beat=2;host.snapshotLevels(v,c,s);
  for(const id of ['wu_er_lang','ning_yu']){assert.equal(s.present[id],false);assert.ok(s.departed.includes(id));assert.equal(s.levels[id],undefined);}
  assert.equal(core.isLost(c,s),false);
 });

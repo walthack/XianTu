@@ -6,6 +6,7 @@
  *   mod-kit/numbers-combat.json
  *   mod-kit/numbers-progress.json
  *   mod-kit/numbers-runtime.json
+ *   mod-kit/numbers-assist.json（同伴助战）
  * 生成物：mod-kit/game-numbers.qingyu.json（勿手改；改三分包后跑本脚本）。
  */
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -18,12 +19,14 @@ const read = (name) => JSON.parse(readFileSync(resolve(root, 'mod-kit', name), '
 const COMBAT = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'];
 const PROGRESS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard'];
 const RUNTIME = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'];
-const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'];
+const ASSIST = ['assist'];
+const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'assist'];
 
 const parts = [
   ['numbers-combat.json', COMBAT],
   ['numbers-progress.json', PROGRESS],
   ['numbers-runtime.json', RUNTIME],
+  ['numbers-assist.json', ASSIST],
 ];
 
 const merged = {};

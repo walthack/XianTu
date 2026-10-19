@@ -1,7 +1,7 @@
 {
   "meta": {
     "id": "combat.f13.ghost_king_final",
-    "version": 6,
+    "version": 7,
     "scene": {
       "kind": "combat"
     },
@@ -16,7 +16,8 @@
       2,
       3,
       4,
-      5
+      5,
+      6
     ]
   },
   "objective": {
@@ -158,6 +159,31 @@
       "id": "xiao_zi",
       "side": "player_side",
       "ref": "liuchao.character.xiao_zi"
+    },
+    {
+      "id": "ally_threat",
+      "side": "neutral",
+      "ref": "身后的同伴",
+      "tracks": [
+        {
+          "id": "threat",
+          "kind": "progress",
+          "scale": [
+            "同伴尚安",
+            "阴煞逼近同伴",
+            "同伴岌岌可危",
+            "同伴倒下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "同伴倒下",
+            "ceiling": 0,
+            "causedBy": "event",
+            "preserveOnWin": true,
+            "previewText": "威胁进度：阴煞冲破你的拦截就逼近身后的同伴一格；到顶同伴倒下，守口失败"
+          }
+        }
+      ]
     }
   ],
   "goals": [
@@ -249,14 +275,7 @@
       "id": "assault",
       "party": "well_front",
       "label": "鬼武士与阴煞冲击通道",
-      "target": {
-        "rotate": [
-          "pc",
-          "ning_yu",
-          "le_mingzhu",
-          "wu_er_lang"
-        ]
-      },
+      "target": "player",
       "attack": {
         "dc": 14
       },
@@ -275,6 +294,29 @@
         "text": "你挡住这一轮冲击"
       },
       "woundRule": "default"
+    },
+    {
+      "id": "threaten_companions",
+      "party": "well_front",
+      "label": "阴煞绕过你扑向身后的同伴",
+      "target": "player",
+      "attack": {
+        "dc": 14
+      },
+      "onHit": {
+        "statuses": [],
+        "text": "你没拦住，阴煞逼近了身后的同伴",
+        "trackShifts": [
+          {
+            "party": "ally_threat",
+            "track": "threat",
+            "steps": 1
+          }
+        ]
+      },
+      "onBlocked": {
+        "text": "你回身挡住，同伴无恙"
+      }
     }
   ],
   "defeat": {
@@ -287,35 +329,16 @@
             "reach": "final"
           },
           {
-            "any": [
-              {
-                "kind": "partyDowned",
-                "party": "ning_yu"
-              },
-              {
-                "kind": "partyDowned",
-                "party": "xie_yi"
-              },
-              {
-                "kind": "partyDowned",
-                "party": "le_mingzhu"
-              },
-              {
-                "kind": "partyDowned",
-                "party": "wu_er_lang"
-              },
-              {
-                "kind": "partyDowned",
-                "party": "su_li"
-              },
-              {
-                "kind": "statusPresent",
-                "party": "pc",
-                "status": "wound.external.heavy"
-              }
-            ]
+            "kind": "statusPresent",
+            "party": "pc",
+            "status": "wound.external.heavy"
           }
         ]
+      },
+      {
+        "party": "ally_threat",
+        "track": "threat",
+        "reach": "同伴倒下"
       },
       {
         "kind": "playerChoice",
@@ -436,7 +459,8 @@
       }
     ],
     "nonLevelPartyIds": [
-      "well_front"
+      "well_front",
+      "ally_threat"
     ]
   },
   "clock": {
@@ -453,6 +477,16 @@
             "depart": "ning_yu"
           }
         ]
+      },
+      {
+        "id": "companion_fallen",
+        "when": {
+          "party": "ally_threat",
+          "track": "threat",
+          "reach": "同伴倒下"
+        },
+        "text": "阴煞扑倒了你身后的同伴，守线随之崩溃",
+        "effects": []
       }
     ]
   }

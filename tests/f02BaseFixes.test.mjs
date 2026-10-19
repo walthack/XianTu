@@ -75,10 +75,12 @@ test('原“打中即挂外伤”的合同改走 woundRule（只改机制字段�
     assert.equal(a.woundRule, 'default', `${id}.${action}`);
     assert.deepEqual(a.onHit.statuses, [], `${id}.${action}`);
   }
-  // F03 打同伴的三条也改走 woundRule（与玩家同一套）；受保护方现在不被点名，这三条不出行（见 sceneModuleEnemy 目标选择）。
-  for (const id of ['attack_bride', 'attack_a_xi']) {
-    const a = byId('combat.f03.mountain_stream_fog').enemyActions.find(x => x.id === id);
-    assert.deepEqual([a.onHit.statuses, a.woundRule, a.allowProtected], [[], 'default', undefined], id);
+  // F03 护人戏改成威胁进度：火力全压主角（woundRule pressing），扑向后方的两条只推威胁轨、不挂伤（到顶由合同剧本 rear_breached 结算）。
+  const f03 = byId('combat.f03.mountain_stream_fog');
+  for (const id of ['press_pc', 'press_last']) assert.equal(f03.enemyActions.find(x => x.id === id).woundRule, 'pressing', id);
+  for (const id of ['threat_bride', 'threat_a_xi']) {
+    const a = f03.enemyActions.find(x => x.id === id);
+    assert.deepEqual([a.target, a.onHit.statuses, a.woundRule, a.onHit.trackShifts.map(t => t.party)], ['player', [], undefined, ['ally_threat']], id);
   }
   for (const c of SCENE_CONTRACTS) assert.deepEqual(mod.lintContract(c).errors, [], c.meta.id);
 });

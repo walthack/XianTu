@@ -1,4 +1,4 @@
-// Numbers registry：三分包合并、冷启动 LCQ-NUM-007、热改 LCQ-NUM-008、与 applyGameNumbers 衔接。
+// Numbers registry：四分包（战斗/成长/运行/助战）合并、冷启动 LCQ-NUM-007、热改 LCQ-NUM-008、与 applyGameNumbers 衔接。
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -12,19 +12,22 @@ const readJson = (rel) => JSON.parse(readFileSync(path.join(root, rel), 'utf8'))
 const COMBAT_KEYS = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'];
 const PROGRESS_KEYS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard'];
 const RUNTIME_KEYS = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'];
+const ASSIST_KEYS = ['assist'];
 
-test('权威三分包顶层键无重叠且并集盖住合并视图', () => {
+test('权威四分包顶层键无重叠且并集盖住合并视图', () => {
   const combat = readJson('mod-kit/numbers-combat.json');
   const progress = readJson('mod-kit/numbers-progress.json');
   const runtime = readJson('mod-kit/numbers-runtime.json');
+  const assist = readJson('mod-kit/numbers-assist.json');
   const merged = readJson('mod-kit/game-numbers.qingyu.json');
+  assert.deepEqual(Object.keys(assist).sort(), [...ASSIST_KEYS].sort());
   assert.deepEqual(Object.keys(combat).sort(), [...COMBAT_KEYS].sort());
   assert.deepEqual(Object.keys(progress).sort(), [...PROGRESS_KEYS].sort());
   assert.deepEqual(Object.keys(runtime).sort(), [...RUNTIME_KEYS].sort());
-  const union = new Set([...Object.keys(combat), ...Object.keys(progress), ...Object.keys(runtime)]);
+  const union = new Set([...Object.keys(combat), ...Object.keys(progress), ...Object.keys(runtime), ...Object.keys(assist)]);
   assert.deepEqual([...union].sort(), Object.keys(merged).sort());
   for (const key of Object.keys(merged)) {
-    const src = key in combat ? combat[key] : key in progress ? progress[key] : runtime[key];
+    const src = key in combat ? combat[key] : key in progress ? progress[key] : key in assist ? assist[key] : runtime[key];
     assert.deepEqual(merged[key], src, key);
   }
 });

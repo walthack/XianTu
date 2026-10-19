@@ -19,12 +19,20 @@ test('玩家：修炼/夺元落账后存档里的境界就是战斗级数（不�
  assert.equal(state.levels.pc,3);assert.equal(state.levels.merfolk,3,'鲛人按当章主角（等级表第 74 章 2 级）+1，不随玩家浮动');
 });
 
+// 同伴缺省是助战者，不算级差（不进 levels）；显式参战（role:'combatant'）的有名同伴才按存档/等级表定级。
+const asCombatant=c=>{const copy=structuredClone(c);copy.parties.find(p=>p.id==='le').role='combatant';return copy;};
 test('有名同伴：存档关系档里的境界（传功等写这里）高于等级表时以存档为准；低于时等级表当剧情节点抬到表级', async()=>{
  const {save,c,state}=await fresh();
- save.社交.关系[LE].境界=progression.realmAt(6);snapshotLevels(save,c,state);
+ save.社交.关系[LE].境界=progression.realmAt(6);snapshotLevels(save,asCombatant(c),state);
  assert.equal(state.levels.le,6);assert.equal(state.levelFacts.le.source,'save');
- const b=await fresh();b.save.社交.关系[LE].境界=progression.realmAt(1);snapshotLevels(b.save,b.c,b.state);
+ const b=await fresh();b.save.社交.关系[LE].境界=progression.realmAt(1);snapshotLevels(b.save,asCombatant(b.c),b.state);
  assert.equal(b.state.levels.le,4);assert.equal(b.state.levelFacts.le.source,'table');
+});
+
+test('助战同伴不算级差：缺省形态的同伴不进 levels', async()=>{
+ const {save,c,state}=await fresh();
+ snapshotLevels(save,c,state);
+ assert.equal(state.levels.le,undefined);assert.equal(typeof state.levels.pc,'number');
 });
 
 test('无名敌人：不在角色等级表；预设可热调（applyGameNumbers），新快照即生效；缓存键随预设变', async()=>{

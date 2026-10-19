@@ -2,6 +2,7 @@ import {levelModifier} from './levels';
 // 敌方出手：敌人按合同出手，被打的人用防御 / 豁免对抗；没挡住，就给那个人挂合同写的具体状态。
 // 防御检定用独立的骰流，增减敌方出手不会挪动玩家检定的骰面。
 
+import { assistModifier, partyRole } from './assist';
 import { evalExpr } from './conditions';
 import { isPresent, partyOf, playerParty, trackInfo, trackStep } from './queries';
 import { applyStatus, isDowned, statusMode, statusRollModifier, type StatusEvent } from './statuses';
@@ -70,8 +71,9 @@ function targetsOf(contract: Contract, state: SceneState, ctx: Pick<SceneContext
   const eligible = (id: string): boolean => {
     const party = partyOf(contract, id);
     if (!party || !isPresent(state, id) || isDowned(state, contract, ctx, id)) return false;
-    // 受保护 / 不参战的同行者一律不被点名、不出防御行（规则对所有合同一致，不再有 allowProtected 例外）。
-    return !party.protected;
+    // 受保护 / 不参战的同行者、助战者（role assist，同伴缺省）一律不被点名、不出防御行（规则对所有合同一致）。
+    // 敌人的火力因此全部压在主角身上；同伴的安危改由合同的威胁轨与剧情脚本表达。
+    return !party.protected && partyRole(party) !== 'assist';
   };
   const t = action.target;
   if (t === 'player') return player && eligible(player) ? [player] : [];
@@ -102,10 +104,11 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
         .reduce((sum, tag) => sum + (tag.effect.enemyDcBonus || 0), 0);
       const dc = action.attack.dc + edgeBonus;
       const crystalBonus=targetId===player ? state.itemEffects?.defenseBonus || 0 : 0;
+      const assistBonus=targetId===player ? assistModifier(contract, state, ctx, 'defense') : 0;
       const defenseBonus =
         (targetId === player ? ctx.playerDefense ?? 0 : target.defense?.bonus ?? 0)
         + (state.levels ? levelModifier(state.levels[targetId],state.levels[attacker.id]) : 0)
-        + crystalBonus + statusRollModifier(state, contract, ctx, targetId, 'defense')
+        + crystalBonus + assistBonus + statusRollModifier(state, contract, ctx, targetId, 'defense')
         + tagsFor(targetId, target.side).reduce((sum, tag) => sum + (tag.effect.defenseBonus || 0), 0);
       const mode = statusMode(state, contract, ctx, targetId, 'defense');
       const rollKind = rollMode(mode.advantage, mode.disadvantage);

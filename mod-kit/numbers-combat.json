@@ -52,6 +52,37 @@
             "status": "wound.external.heavy",
             "perBeat": true
           }
+        },
+        "pressing": {
+          "note": "火力全压主角的护人戏（F03 等）：打中即挂外伤；相邻两拍连续重击加重为重伤，重伤后再被打中按升级链倒下。",
+          "tierFrom": "defenseCheck",
+          "tiers": {
+            "great_success": {
+              "chance": 1,
+              "status": "wound.external",
+              "hpLossRatio": 0.2
+            },
+            "success": {
+              "chance": 1,
+              "status": "wound.external",
+              "hpLossRatio": 0.1
+            },
+            "failure": {
+              "chance": 0,
+              "status": "",
+              "hpLossRatio": 0
+            },
+            "critical_failure": {
+              "chance": 0,
+              "status": "",
+              "hpLossRatio": 0
+            }
+          },
+          "streak": {
+            "count": 2,
+            "status": "wound.external.heavy",
+            "perBeat": true
+          }
         }
       },
       "labels": {
@@ -394,7 +425,8 @@
       "leverCap": 6,
       "leverMax": 3,
       "novelty": 1,
-      "tagCash": 2
+      "tagCash": 2,
+      "completeOnSuccessMagnitude": 1
     },
     "attentionCap": {
       "combat": {

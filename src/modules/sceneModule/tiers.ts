@@ -13,7 +13,7 @@ export interface ResolvedSettings {
     critBonus: Array<'noExposure' | 'tagPlus1' | 'credit' | 'flourish'>;
     failure: { edge: number; spendOneShot: boolean };
   };
-  pricing: { premium: Record<string, number>; leverCap: number; leverMax: number; novelty: number; tagCash: number };
+  pricing: { premium: Record<string, number>; leverCap: number; leverMax: number; novelty: number; tagCash: number; completeOnSuccessMagnitude: number };
   attentionCap: Record<string, { primaryTargets: number; rangeClaim?: boolean }>;
   allowPlayerHarmAllies: boolean;
   enemyPhase: { maxRollsPerBeat: number };

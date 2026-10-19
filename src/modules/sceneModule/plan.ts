@@ -1,4 +1,5 @@
 import {evalExpr} from './conditions';
+import {assistModifier} from './assist';
 import {GAME_NUMBERS} from './numbers';
 import {goalModifierRule,levelModifier} from './levels';
 // 玩家行动：识别层提议的校验（只许白名单），以及落地、定价、预览（只读，不改状态）。
@@ -158,7 +159,7 @@ export interface PlanEvaluation {
   difficulty: number;
   difficultyParts: { base: number; premium: number; pressure: number; resistance: number };
   modifier: number;
-  modifierParts: { factors: number; levers: number; novelty: number; cash: number; status: number };
+  modifierParts: { factors: number; levers: number; novelty: number; cash: number; status: number; assist: number };
   mode: RollMode;
   grounded: boolean;
   odds: Record<TierId, number>;
@@ -273,7 +274,8 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
   const pressure = contract.beats?.[state.beat - 1]?.pressure ?? 0;
   const difficultyParts = {
     base: goal.baseDifficulty,
-    premium: pushGoal ? settings.pricing.premium[String(premiumMagnitude(plan.magnitude, targets))] ?? 0 : 0,
+    // 一举到底的目标（completeOnSuccess：成功就把目标推到头，与主张幅度无关）按配置的固定幅度收价，不因玩家说了“制服 / 拿下”多收。
+    premium: pushGoal ? settings.pricing.premium[String(premiumMagnitude(goal.completeOnSuccess ? Math.min(plan.magnitude, settings.pricing.completeOnSuccessMagnitude) : plan.magnitude, targets))] ?? 0 : 0,
     pressure,
     resistance: pushGoal ? primaryParty?.resistance ?? 0 : 0,
   };
@@ -289,8 +291,9 @@ export function evaluatePlan(contract: Contract, state: SceneState, planIn: Acti
     novelty: noveltyKey && !state.noveltySeen.includes(noveltyKey) ? settings.pricing.novelty : 0,
     cash: cash.reduce((sum, c) => sum + (c.ok ? c.bonus : 0), 0),
     status: playerId ? statusRollModifier(state, contract, ctx, playerId, 'action') : 0,
+    assist: assistModifier(contract, state, ctx, 'action'),
   };
-  const modifier = modifierParts.factors + modifierParts.levers + modifierParts.novelty + modifierParts.cash + modifierParts.status;
+  const modifier = modifierParts.factors + modifierParts.levers + modifierParts.novelty + modifierParts.cash + modifierParts.status + modifierParts.assist;
 
   // ---- 优势 / 劣势 ----
   const own = playerId ? statusMode(state, contract, ctx, playerId, 'action') : { advantage: false, disadvantage: false };

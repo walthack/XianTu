@@ -1,5 +1,6 @@
 import {levelTier} from './levels';
 import { evalExpr } from './conditions';
+import { activeAssists } from './assist';
 // 给主持模型的材料：一份短而固定结构的“场面简报”，每拍由代码从状态重新生成。
 // 模型不用记规则，也不用记场面：规则只有一小段常驻短句，场面事实全部以代码里的状态为准；
 // 硬规则（拍数、胜负、红线、结算）由代码执行，简报只负责让模型“看得懂”。
@@ -22,7 +23,7 @@ const RULES = '规则：你只负责描写，不裁决。档位、骰点、轨�
 
 interface Section { key: string; text: string; keep: boolean }
 
-export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pick<SceneContext, 'catalog'>, warn: 'none' | 'pre' | 'danger' = 'none'): Brief {
+export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pick<SceneContext, 'catalog' | 'assistAffinity'>, warn: 'none' | 'pre' | 'danger' = 'none'): Brief {
   const settings = resolveSettings(contract.settings);
   const beats = contract.clock?.beats;
   const sections: Section[] = [];
@@ -71,6 +72,8 @@ export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pic
   add('redlines', fixed.length ? `【红线】${fixed.join('；')}` : '', true);
   if (warn !== 'none') add('warn', `【预警】${contract.defeat?.guards?.warnText || (warn === 'danger' ? '此拍若出差错将触发败局' : '败局临近')}`, true);
 
+  const assists = activeAssists(contract, state, ctx);
+  if (assists.length) add('assist', `【助战】${assists.map(a => partyDisplay(contract, a.party)).join('、')}在旁助战：不会被敌人攻击、不会受伤；同伴受伤只按“已结算”里的剧情事件写`);
   if (state.digest.length) add('digest', `【已发生】${state.digestOlder ? `（更早 ${state.digestOlder} 拍已略）` : ''}${state.digest.join(' ／ ')}`);
   const player=contract.parties.find(p=>p.player),opponent=contract.parties.find(p=>p.side==='opposed');
   if(state.levels&&player&&opponent)add('level',`本场档位：${levelTier(state.levels[player.id],state.levels[opponent.id])}（代码按当前级数定）。碾压几招解决；占优主动；同级有来有回；吃力多守少攻；被碾压只能周旋或借外力。不得改变结算结果，不自报突破。`,true);
@@ -79,7 +82,7 @@ export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pic
   // 超出预算：先丢可有可无的段，再截断“已发生”；保留段永不丢。
   const dropped: string[] = [];
   const total = (): number => sections.reduce((sum, section) => sum + section.text.length + 1, 0) - 1;
-  for (const key of ['elements', 'beat', 'digest']) {
+  for (const key of ['assist', 'elements', 'beat', 'digest']) {
     if (total() <= settings.brief.maxChars) break;
     const index = sections.findIndex(section => section.key === key && !section.keep);
     if (index >= 0) { dropped.push(sections[index].key); sections.splice(index, 1); }
@@ -103,6 +106,9 @@ export function renderResultLines(contract: Contract, result: BeatResult): strin
   if (result.fumble) {
     const label = result.fumble.statuses.map(e => e.label).join('、');
     lines.push(`大失败的后果：${partyDisplay(contract, result.fumble.target)}${label ? `「${label}」` : ''}${result.fumble.text ? `（${result.fumble.text}）` : ''}`);
+  }
+  for (const a of result.assist || []) {
+    if (a.applied) lines.push(`${partyDisplay(contract, a.party)}助战「${a.label}」${a.effect === 'trackShift' ? `：${partyDisplay(contract, a.target || '')}推进 ${(a.to ?? 0) - (a.from ?? 0)} 格` : ''}`);
   }
   for (const roll of result.enemy) {
     const names = roll.statuses.filter(e => e.op !== 'skipped').map(e => `${e.label}${e.op === 'upgrade' ? '（加重）' : ''}`).join('、');

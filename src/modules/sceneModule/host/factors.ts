@@ -11,7 +11,8 @@ import { runtimeOf } from './refs';
 import type { SaveData } from '@/types/game';
 import type { JudgementKind } from '@/utils/judgementEngine';
 import { buildEventActionJudgementProposal } from '@/utils/judgementPreflight';
-import { resolveStatusDef, type Contract } from '../index';
+import { resolveStatusDef, partyRole, type Contract } from '../index';
+import { affinityOf } from '../../scenarioMods/ledger/affinityIdentity';
 
 export interface Factor { label: string; value: number }
 
@@ -54,7 +55,12 @@ export function baseFactors(save: SaveData, contract: Contract, kind: JudgementK
 const sum = (factors: Factor[]): number => factors.reduce((total, factor) => total + factor.value, 0);
 
 /** 玩家一方的判定加值（进攻 / 支援类行动）与防御加值（身法类）。 */
-export function sceneContext(save: SaveData, contract: Contract, actionText=''): { factors: number; factorProfiles: Record<string, number>; playerDefense: number; breakdown: { action: Factor[]; defense: Factor[] } } {
+/** 助战者好感：按角色库 id 从存档关系档读（affinityIdentity.affinityOf，查不到按 0）。 */
+export function assistAffinities(save: SaveData, contract: Contract): Record<string, number> {
+  return Object.fromEntries(contract.parties.filter(p => partyRole(p) === 'assist').map(p => [p.ref, affinityOf(save as any, p.ref)]));
+}
+
+export function sceneContext(save: SaveData, contract: Contract, actionText=''): { factors: number; factorProfiles: Record<string, number>; playerDefense: number; assistAffinity: Record<string, number>; breakdown: { action: Factor[]; defense: Factor[] } } {
   const phase={label:'小阶段',value:stageBonus(save.角色.属性.境界)};
   const action = baseFactors(save, contract, contract.settings?.judgement?.action || 'combat',actionText);
   action.push(phase);
@@ -63,7 +69,7 @@ export function sceneContext(save: SaveData, contract: Contract, actionText=''):
   for (const rule of Object.values(GAME_NUMBERS.goalModifiers)) {
     if (rule.factorProfile !== 'scene') factorProfiles[rule.factorProfile] = sum(baseFactors(save, contract, rule.factorProfile as JudgementKind, actionText));
   }
-  return { factors: sum(action), factorProfiles, playerDefense: sum(defense), breakdown: { action, defense } };
+  return { factors: sum(action), factorProfiles, playerDefense: sum(defense), assistAffinity: assistAffinities(save, contract), breakdown: { action, defense } };
 }
 
 /**
@@ -86,7 +92,7 @@ export function snapshotLevels(save:SaveData,c:Contract,state:import('../types')
   const id=p.enemyId||p.ref, got=currentActorLevel(id,{chapter,variant:variants[id],save,runtime:r,player:!!p.player,ref:p.ref});
   let value=got.level;
   if(value===undefined&&got.source==='none')value=playerLevel; // 无数据：按同级
-  if(c.levelContext?.nonLevelPartyIds?.includes(p.id))value=undefined;
+  if(c.levelContext?.nonLevelPartyIds?.includes(p.id)||partyRole(p)==='assist')value=undefined; // 助战者不算级差
   if(value!==undefined)state.levels[p.id]=value;
   const fact=got.fact;
   if(fact)state.levelFacts[p.id]={entityId:fact.entityId,sourceRow:fact.sourceRow,level:fact.level,effectiveLevel:effectiveLevel(fact),confidence:fact.confidence,available:fact.available,source:got.source};

@@ -9,7 +9,9 @@ export function referencePlan(c,s,ctx){
   const targets=c.parties.filter(p=>p.side==='opposed'&&s.present[p.id]&&!s.departed.includes(p.id)&&p.tracks?.some(t=>(s.tracks[p.id]?.[t.id??t.track]??0)<core.trackInfo(c,p.id,t.id??t.track).limit)).map(p=>p.id);
   const levers=(c.elements||[]).flatMap(e=>(e.verbs||[]).filter(v=>!v.goalTags?.length||v.goalTags.includes(g.id)).map(v=>({element:e.id,verb:v.id})));
   const choices=[[],...levers.map(l=>[l]),...levers.flatMap((l,i)=>levers.slice(i+1).filter(r=>r.element!==l.element).map(r=>[l,r]))];
-  for(const target of [targets,...targets.map(p=>[p])])for(const magnitude of [1,2,3])for(const chosen of choices){
+  // 合同把几名敌人编成同一行动组（actionGroup）时，玩家可以把这一组当一个目标（“其余武士们”）：参考玩家也试这些组。
+  const groups=[...new Map(targets.map(id=>[c.parties.find(p=>p.id===id)?.actionGroup||id,null])).keys()].map(g=>targets.filter(id=>(c.parties.find(p=>p.id===id)?.actionGroup||id)===g)).filter(list=>list.length>1);
+  for(const target of [targets,...groups,...targets.map(p=>[p])])for(const magnitude of [1,2,3])for(const chosen of choices){
    const plan={goal:g.id,magnitude,scope:target.length>1?'group':'single',targets:target,levers:chosen};
    try{const ev=core.evaluatePlan(c,s,plan,ctx);const moves=ev.targets.reduce((n,t)=>n+t.realizable,0);const prob=ev.odds.success+ev.odds.great_success;const score=moves*prob+(g.id==='reach_altar'?2:0)+(g.id==='defend'?0.01:0)+prob*.001;
     if(score>bestScore){bestScore=score;best=plan;}

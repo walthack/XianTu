@@ -54,7 +54,7 @@ test('F05 defensive level modifier is independent of empty/self targets across b
  const c=contract('05');let s=core.beginScene(c).state;s.levels={pc:2,ghost_warriors:3,shaman:3,blood_tiger:4};
  const p={goal:'defend',magnitude:1,scope:'single',levers:[],cash:[],text:'我举刀格挡'};
  const empty=core.previewAction(c,s,{...p,targets:[]},{factors:0,playerDefense:0});
- const self=core.previewAction(c,s,{...p,targets:['pc']},{factors:0,playerDefense:0});assert.equal(empty.modifier,self.modifier);assert.equal(empty.modifier,-numbers.GAME_NUMBERS.levels.gapOne);
+ const self=core.previewAction(c,s,{...p,targets:['pc']},{factors:0,playerDefense:0});assert.equal(empty.modifier,self.modifier);assert.equal(empty.modifier-(empty.modifierParts?.assist||0),-numbers.GAME_NUMBERS.levels.gapOne,'级差部分与助战加值分开');
 });
 test('training confirmation writes a once-only code receipt and real saved progress',async()=>{
  const pre=await loadTs('../src/utils/judgementPreflight.ts'),judge=await loadTs('../src/utils/judgementEngine.ts');const s=save('lcq.stage_04');

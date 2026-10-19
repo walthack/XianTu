@@ -39,7 +39,7 @@ test('7) F06 真机第 18 拍：原来的 -12 全是级差（程宗扬 2 级 vs 
   const r=await beat(h,'我挥刀制服鲛人');
   assert.equal(r.state.levels.merfolk,3);assert.equal(r.state.levels.pc,2);assert.equal(r.state.levelFacts.merfolk.confidence,'preset');
   assert.equal(r.preview.modifier,-GAME_NUMBERS.levels.gapOne);
-  assert.deepEqual(r.preview.modifierParts,{factors:-GAME_NUMBERS.levels.gapOne,levers:0,novelty:0,cash:0,status:0});
+  assert.deepEqual(r.preview.modifierParts,{factors:-GAME_NUMBERS.levels.gapOne,levers:0,novelty:0,cash:0,status:0,assist:0},'受保护的乐明珠不出助战效果');
   assert.ok(r.preview.odds.success+r.preview.odds.great_success>0,'不再是 0%');
   assert.equal(r.state.statuses.pc.filter(s=>s.id==='wound.drowning').length,1,'呛水伤仍只有一层，没有升级链（败局路径待拍板）');
   assert.equal(r.state.hpLoss?.pc,undefined,'onCrush 取代通用挂伤：连扣血也跳过（待拍板）');
@@ -71,15 +71,18 @@ test('7) 模拟和真机为什么对不上：同一拍局面，参考打法用�
 
 test('8) F03 真机开局：受保护 / 不参战的同行者（凝羽、花苗新娘、阿夕）不出防御行，不吃级差、不挂伤', async()=>{
  const h=harness(await readSaveFixture(F03),{goal:'survive',claim:{magnitude:1,scope:'single',targets:[]},levers:[]});
- const a=active(h);a.state.forced={action:Array(12).fill(12),defense:Array(30).fill(1)};a.state.cursors={action:0,defense:0};a.pending=null;
+ // 每拍防御骰顺序：铁斧、绕后、扑阿夕、最后一名武士——压主角的两下挡住（主角撑得过三拍），扑向后方的两下没拦住（威胁进度会到顶）。
+ const a=active(h);a.state.forced={action:Array(12).fill(12),defense:Array.from({length:10},()=>[20,1,1,20]).flat()};a.state.cursors={action:0,defense:0};a.pending=null;
  for(let i=0;i<3;i++){
   const r=await beat(h,'我在武士手下撑住');
   const enemy=active(h)?.last?.result?.enemy;assert.ok(Array.isArray(enemy));const rows=enemy.map(e=>e.target);
   for(const id of ['ning_yu','bride','a_xi']){
    assert.ok(!rows.includes(id),id);
-   assert.deepEqual((r.state.statuses[id]||[]).map(s=>s.id),[],id);
+   // 不被敌人直接挂伤；威胁进度到顶时合同剧本（rear_breached）才让新娘/阿夕受创，那是剧情事件不是战斗挂伤。
+   assert.deepEqual((r.state.statuses[id]||[]).filter(s=>s.cause==='combat').map(s=>s.id),[],id);
   }
-  assert.ok(!r.lines.some(l=>/阿夕|花苗新娘/.test(l)&&/防御|挂「/.test(l)),r.lines.join('\n'));
+  // 护人戏改成威胁进度后，出手标签里会出现阿夕的名字（“武士扑向阿夕一侧”），但防御行的被打者始终是主角。
+  assert.ok(!r.lines.some(l=>/→(阿夕|花苗新娘|凝羽)：防御/.test(l)||/(阿夕|花苗新娘|凝羽)[^→]*挂「/.test(l.replace(/^.*→[^：]+：/,''))),r.lines.join('\n'));
  }
 });
 
@@ -115,14 +118,14 @@ test('9) F03 真机预览「攻击武士」难度 17 加值 -4：17＝基础 10�
  assert.equal(active(h).pending.preview.difficulty,13);
 });
 
-test('10) F03 真机是按拍数时钟“超时”收场（scene.f03.escaped），不是赢：战后清轻伤只对赢生效（配置 afterWin），外伤留着——是否把超时/脱身也算战后休整待拍板', async()=>{
+test('10) F03 真机拖满拍数／倒下都按“输”收场（战斗只有赢和输；scene.f03.escaped 照旧），不是赢：战后清轻伤只对赢生效（配置 afterWin），外伤留着', async()=>{
  const h=harness(await readSaveFixture(F03),{goal:'survive',claim:{magnitude:1,scope:'single',targets:[]},levers:[]});
  const a=active(h);a.pending=null;
  a.state.statuses.pc=[{id:'wound.external',appliedBeat:1,expiresBeat:null,cause:'combat',sourceId:'fumble:pc_wound'}]; // 真机第 12 拍大失败挂上的外伤
  a.state.forced={action:Array(20).fill(12),defense:Array(60).fill(19)};a.state.cursors={action:0,defense:0};
  for(let i=0;i<20&&active(h);i++)await beat(h,'我在武士手下撑住');
  const last=ext.readExt(h.save).history.at(-1);
- assert.equal(last.outcome,'timeout');
+ assert.equal(last.outcome,'lose');
  assert.deepEqual(GAME_NUMBERS.combat.woundRules.afterWin.clearLight,true);
- assert.ok((h.save.角色.效果||[]).some(e=>e.状态名称==='外伤'),'超时收场不清轻伤');
+ assert.ok((h.save.角色.效果||[]).some(e=>/^外伤/.test(e.状态名称||'')),'输了不清伤');
 });

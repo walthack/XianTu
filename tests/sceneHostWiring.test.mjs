@@ -266,8 +266,10 @@ test('F03 natural twenty completes exactly one tactical group, never an instant 
  assert.ok(!closed.writeBack.persistent.some(x=>x.status==='incapacitated'));
  assert.ok(closed.writeBack.persistent.some(x=>x.party==='bride' && x.minutes>0));
  assert.match(closed.writeBack.costs.map(x=>x.effect).join(' '),/护卫/);
- assert.equal(c.enemyActions.some(a=>a.target?.party==='bride'),true);
- assert.equal(c.enemyActions.some(a=>a.target?.party==='a_xi'),true);
+ // 护人戏改成威胁进度：敌人不再点名新娘/阿夕，扑向后方的出手只推 ally_threat；到顶由合同剧本让她们受创。
+ assert.equal(c.enemyActions.filter(a=>a.onHit?.trackShifts?.some(t=>t.party==='ally_threat')).length,2);
+ const breach=c.clock.fixedEvents.find(e=>e.when?.party==='ally_threat');
+ assert.deepEqual(breach.effects.map(e=>e.status?.party).sort(),['a_xi','bride']);
 });
 
 test('F10 refuses negated/hypothetical surrender and uses only the capture E06 branch on explicit consent',async()=>{

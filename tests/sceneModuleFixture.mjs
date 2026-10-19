@@ -17,7 +17,8 @@ export function makeContract(patch = {}) {
     },
     parties: [
       { id: 'pc', side: 'player_side', ref: 'test.character.hero', player: true },
-      { id: 'ally', side: 'player_side', ref: 'test.character.ally', defense: { bonus: 2 } },
+      // 同伴缺省是助战者（不挨打）；这个抽象同伴要测挨打/挂伤/防御行，显式写成 combatant。
+      { id: 'ally', side: 'player_side', ref: 'test.character.ally', role: 'combatant', defense: { bonus: 2 } },
       { id: 'ward', side: 'neutral', ref: 'test.character.ward', protected: true },
       { id: 'foe_a', side: 'opposed', ref: 'test.foe.alpha',
         tracks: [{ track: 'vit', initial: 0, ending: { preset: 'eliminated', finalState: '出局', ceiling: 3, previewText: '他会倒下', clampText: '他撑住了' } }] },

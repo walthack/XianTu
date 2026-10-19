@@ -1,12 +1,13 @@
 /**
  * 共享数值权威。
- * 权威源：mod-kit/numbers-{combat,progress,runtime}.json（三分包，加载时合并为同一 GAME_NUMBERS 形状）。
+ * 权威源：mod-kit/numbers-{combat,progress,runtime,assist}.json（分包，加载时合并为同一 GAME_NUMBERS 形状；assist＝同伴助战）。
  * 兼容生成物：mod-kit/game-numbers.qingyu.json（scripts/merge-game-numbers.mjs；调用方勿散落读多路径，一律经本模块）。
  * 热改：applyTuning → applyGameNumbers；失败整份退回。
  */
 import combatPack from '../../../mod-kit/numbers-combat.json';
 import progressPack from '../../../mod-kit/numbers-progress.json';
 import runtimePack from '../../../mod-kit/numbers-runtime.json';
+import assistPack from '../../../mod-kit/numbers-assist.json';
 import { mergeNumberPacks, validateAgainstRegistry } from './numbersRegistry';
 
 const numError = (code: string, message: string): Error => Object.assign(Error(`[${code}] ${message}`), { code });
@@ -16,6 +17,7 @@ function loadDefaults(): Record<string, unknown> {
     runtimePack as Record<string, unknown>,
     combatPack as Record<string, unknown>,
     progressPack as Record<string, unknown>,
+    assistPack as Record<string, unknown>,
   );
   const cold = validateAgainstRegistry(merged, 'cold');
   if (cold.length) throw numError('LCQ-NUM-007', `默认数值包未通过 registry：${cold.join('；')}`);

@@ -91,7 +91,7 @@ test('叙事型参与方与玩家一方的“伤亡”：同伴 / 旁观者可�
     objective: { text: '护住同伴', win: { all: [{ party: 'foe', track: 'vit', reach: 'final' }] } },
     parties: [
       pc,
-      { id: 'friend', side: 'player_side', ref: 'test.character.friend', defense: { bonus: 1 } },
+      { id: 'friend', side: 'player_side', ref: 'test.character.friend', role: 'combatant', defense: { bonus: 1 } },
       { id: 'bystander', side: 'neutral', ref: '路人', protected: true },
       foe('foe', 'test.foe.one', { finalState: '出局', ceiling: 3 }),
     ],

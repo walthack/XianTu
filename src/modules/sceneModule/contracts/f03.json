@@ -1,7 +1,7 @@
 {
   "meta": {
     "id": "combat.f03.mountain_stream_fog",
-    "version": 5,
+    "version": 6,
     "scene": {
       "kind": "combat"
     },
@@ -14,12 +14,13 @@
       "escapeState": "逃走"
     },
     "compatibleStateVersions": [
-      4
+      4,
+      5
     ]
   },
   "objective": {
     "text": "浓雾里护住队伍，扛过鬼王峒武士的突袭",
-    "previewHint": "护住队伍；每次行动最多解决一组，雾散或拖满拍数不等于获胜。",
+    "previewHint": "护住队伍：拦住扑向后方的武士（威胁进度到顶，后方同伴会受创）；每次行动最多解决一组，拖满拍数算输。",
     "win": {
       "all": [
         {
@@ -523,6 +524,31 @@
       "protected": true
     },
     {
+      "id": "ally_threat",
+      "side": "neutral",
+      "ref": "护队后方",
+      "tracks": [
+        {
+          "id": "threat",
+          "kind": "progress",
+          "scale": [
+            "后方尚稳",
+            "武士逼近后方",
+            "后方告急",
+            "同伴受创"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "同伴受创",
+            "ceiling": 0,
+            "causedBy": "event",
+            "preserveOnWin": true,
+            "previewText": "威胁进度：武士冲破你的拦截就逼近后方一格；到顶按剧情让后方的同伴受创（不直接判负）"
+          }
+        }
+      ]
+    },
+    {
       "id": "xie_yi",
       "side": "neutral",
       "ref": "liuchao.character.xie_yi"
@@ -560,7 +586,7 @@
     "beats": 13,
     "onTimeout": {
       "type": "close",
-      "as": "timeout"
+      "as": "lose"
     },
     "fixedEvents": [
       {
@@ -656,6 +682,29 @@
               "on": "foe_last",
               "durationBeats": null,
               "effect": "刀伤不能让他倒下"
+            }
+          }
+        ]
+      },
+      {
+        "id": "rear_breached",
+        "when": {
+          "party": "ally_threat",
+          "track": "threat",
+          "reach": "同伴受创"
+        },
+        "text": "武士冲破拦截扑到后方：{{ref:liuchao.character.a_xi}}和新娘身边的人受了伤，花苗女子们拼死把她们护住",
+        "effects": [
+          {
+            "status": {
+              "party": "a_xi",
+              "status": "wound.external"
+            }
+          },
+          {
+            "status": {
+              "party": "bride",
+              "status": "wound.external"
             }
           }
         ]
@@ -1130,14 +1179,12 @@
   ],
   "enemyActions": [
     {
-      "id": "attack_ning_yu",
+      "id": "press_pc",
       "party": "foe_engaged",
-      "label": "铁斧逼近队伍",
-      "target": {
-        "party": "ning_yu"
-      },
+      "label": "铁斧劈向你",
+      "target": "player",
       "attack": {
-        "dc": 8
+        "dc": 18
       },
       "when": {
         "kind": "not",
@@ -1150,29 +1197,20 @@
       },
       "onHit": {
         "statuses": [],
-        "text": "护队的一侧受创"
+        "text": "铁斧劈中了你"
       },
       "onBlocked": {
-        "text": "这一侧挡住了袭击"
+        "text": "你架住了这一斧"
       },
-      "woundRule": {
-        "profile": "default",
-        "tiers": {
-          "great_success": {
-            "status": "wound.internal"
-          }
-        }
-      }
+      "woundRule": "pressing"
     },
     {
-      "id": "attack_bride",
+      "id": "threat_bride",
       "party": "foe_pack_1",
-      "label": "铁斧逼近队伍",
-      "target": {
-        "party": "bride"
-      },
+      "label": "武士绕向后方的花苗女子",
+      "target": "player",
       "attack": {
-        "dc": 8
+        "dc": 6
       },
       "when": {
         "kind": "not",
@@ -1185,22 +1223,26 @@
       },
       "onHit": {
         "statuses": [],
-        "text": "护队的一侧受创"
+        "text": "你没拦住，武士逼近了后方",
+        "trackShifts": [
+          {
+            "party": "ally_threat",
+            "track": "threat",
+            "steps": 1
+          }
+        ]
       },
       "onBlocked": {
-        "text": "这一侧挡住了袭击"
-      },
-      "woundRule": "default"
+        "text": "你横身拦住了扑向后方的武士"
+      }
     },
     {
-      "id": "attack_a_xi",
+      "id": "threat_a_xi",
       "party": "foe_last",
-      "label": "铁斧逼近队伍",
-      "target": {
-        "party": "a_xi"
-      },
+      "label": "武士扑向{{ref:liuchao.character.a_xi}}一侧",
+      "target": "player",
       "attack": {
-        "dc": 8
+        "dc": 6
       },
       "when": {
         "kind": "not",
@@ -1213,12 +1255,44 @@
       },
       "onHit": {
         "statuses": [],
-        "text": "护队的一侧受创"
+        "text": "你没拦住，武士逼近了后方",
+        "trackShifts": [
+          {
+            "party": "ally_threat",
+            "track": "threat",
+            "steps": 1
+          }
+        ]
       },
       "onBlocked": {
-        "text": "这一侧挡住了袭击"
+        "text": "你截住了这一扑"
+      }
+    },
+    {
+      "id": "press_last",
+      "party": "foe_last",
+      "label": "最后那名武士挥刀扑你",
+      "target": "player",
+      "attack": {
+        "dc": 17
       },
-      "woundRule": "default"
+      "when": {
+        "kind": "not",
+        "cond": {
+          "kind": "trackReaches",
+          "party": "foe_last",
+          "track": "vit",
+          "reach": "final"
+        }
+      },
+      "onHit": {
+        "statuses": [],
+        "text": "刀锋砍中了你"
+      },
+      "onBlocked": {
+        "text": "你格开了这一刀"
+      },
+      "woundRule": "pressing"
     }
   ],
   "fumble": [
@@ -1450,7 +1524,8 @@
     "nonLevelPartyIds": [
       "huamiao_men",
       "caravan_guards",
-      "bride"
+      "bride",
+      "ally_threat"
     ]
   }
 }

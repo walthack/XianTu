@@ -1,6 +1,7 @@
 // 场面模块的状态机：begin → preview / confirm（每拍一次）→ closing。全部是“状态进、状态出”的纯函数。
 // 合同决定一切内容与门槛（胜负、拍数、敌方出手、大失败后果）；模块只执行规则。
 
+import { resolveAssistSkills, type AssistEvent } from './assist';
 import { evalExpr } from './conditions';
 import { GAME_NUMBERS } from './numbers';
 import { peekActionDice, newSeed } from './dice';
@@ -274,6 +275,8 @@ export interface BeatResult {
   fumble?: { entry: string; target: string; consequence: Consequence; text?: string; statuses: StatusEvent[] };
   enemy: EnemyRoll[];
   enemyTruncated: boolean;
+  /** 本拍助战者的自动技能（只挂态势；合同点名的剧情终结技能才推进敌方轨道）。 */
+  assist: AssistEvent[];
   statusEvents: StatusEvent[];
   events: Array<{ id: string; text?: string }>;
   timeout?: boolean;
@@ -310,7 +313,7 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
     tier, tierLabel: TIER_LABELS[tier], baseTier: check.baseTier, natTriggered: check.natTriggered,
     face, faces, total: check.total, modifier: ev.modifier, difficulty: ev.difficulty, margin: check.margin,
     mode: ev.mode, grounded: ev.grounded, lock: locked.lock, claims: [], marks: [], tagsCreated: [], tagsCashed: [],
-    leversSpent: [], leversKept: [], credit: false, edge: false, enemy: [], enemyTruncated: false,
+    leversSpent: [], leversKept: [], credit: false, edge: false, enemy: [], enemyTruncated: false, assist: [],
     statusEvents, events: [], warn: 'none',
   };
 
@@ -414,6 +417,10 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
   };
   result.events.push(...fireConditionalEvents(contract,state,ctx,'afterAction'));
   if (!ended()) {
+    // 8.5) 助战者的每拍自动技能（敌方出手之前结算，态势本拍即生效）
+    result.assist = resolveAssistSkills(contract, state, ctx);
+  }
+  if (state.status === 'engaged' && !ended()) {
     // 9) 敌方出手
     const phase = resolveEnemyPhase(contract, state, { ...ctx, playerDefense: (ctx.playerDefense || 0) + (ev.goal.defensePenalty || 0) }, (phase,actionId) => {
       const fired=fireConditionalEvents(contract,state,ctx,phase,actionId);
@@ -452,6 +459,7 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
     `${ev.goal.label || ev.goal.text || ev.goal.id}→${TIER_LABELS[tier]}`,
     ...result.claims.filter(c => c.realized > 0).map(c => `${partyDisplay(contract, c.party)}${c.label}`),
     ...result.enemy.map(r => `${r.label}${r.outcome === 'hit' ? '命中' : '被挡'}${partyDisplay(contract, r.target)}`),
+    ...result.assist.filter(a => a.applied).map(a => `${partyDisplay(contract, a.party)}助战:${a.label}`),
     ...(result.fumble ? [`后果:${result.fumble.text || result.fumble.entry}`] : []),
   ];
   pushDigest(state, settings, `第${result.beat}拍 ${parts.join('；')}`);

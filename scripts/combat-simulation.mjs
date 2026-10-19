@@ -15,8 +15,9 @@ export function simulateContract(c,n=N){let wins=0,losses=0,unresolved=0;const m
  // 级数与真机同一入口（actorLevels.ts）：无存档时玩家/有名人物读等级表，无名敌人按 combat.enemyPresets 预设。
  const project=(s)=>{s.levels={};s.stages={};for(const p of c.parties){const id=p.enemyId||p.ref,got=currentActorLevel(id,{chapter:contractChapter(c,s.beat),variant:contractVariant(c,id,s),player:!!p.player,ref:p.ref});
   const level=got.level;
-  if(s.present[p.id]&&got.source==='none'&&!c.levelContext?.nonLevelPartyIds?.includes(p.id))missing.add(id);
-  if(!c.levelContext?.nonLevelPartyIds?.includes(p.id)&&level!==undefined&&level!==null)s.levels[p.id]=level;
+  const skip=c.levelContext?.nonLevelPartyIds?.includes(p.id)||core.partyRole(p)==='assist'; // 助战者不算级差（与 host/factors.ts 同一规则）
+  if(s.present[p.id]&&got.source==='none'&&!skip)missing.add(id);
+  if(!skip&&level!==undefined&&level!==null)s.levels[p.id]=level;
   s.stages[p.id]=0;if(!got.present){s.present[p.id]=false;if(!s.departed.includes(p.id))s.departed.push(p.id);}
  }};
  for(let i=0;i<n;i++){let s=core.beginScene(c,{seed:SIM.seed+i*SIM.seedStride}).state;project(s);

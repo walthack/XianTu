@@ -146,6 +146,11 @@ export interface PartyDef {
   /** 恰有一个参与方是玩家本人。 */
   player?: boolean;
   protected?: boolean;
+  /**
+   * 同伴形态：assist＝助战者（不当敌人攻击目标、不算级差、不挂伤、不出防御行；效果按角色 id 读 numbers-assist.json）；
+   * combatant＝可被攻击的参战者。player_side 的同伴缺省取 assist.defaultRole；敌方与中立方一律按 combatant。
+   */
+  role?: 'combatant' | 'assist';
   /** 防御 / 豁免加值与显示名（由合同给，玩家本人的加值另由宿主提供）。 */
   defense?: { bonus?: number; label?: string };
   /** 目标抗性：直接加在玩家对它出手的难度上。 */
@@ -382,6 +387,7 @@ export interface SceneSettings {
     leverMax?: number;
     novelty?: number;
     tagCash?: number;
+    completeOnSuccessMagnitude?: number;
   };
   attentionCap?: Record<string, { primaryTargets: number; rangeClaim?: boolean }>;
   allowPlayerHarmAllies?: boolean;
@@ -420,6 +426,8 @@ export interface Contract {
   redLines?: RedLine[];
   narration?: { outputChecks?: Array<{ afterScene?: boolean; when: Cond | Expr; pattern: string; message: string }>; fixedTexts?: Record<string, string> | string[]; requiredFacts?: string[]; forbidden?: string[] };
   settings?: SceneSettings;
+  /** 本场的助战覆盖：disabled＝这些参与方本场不出助战效果；finishers＝本场剧情允许直接推进敌方轨道（可终结战斗）的自动技能 id。 */
+  assist?: { disabled?: string[]; finishers?: string[] };
 }
 
 // ---------- 状态 ----------
@@ -530,4 +538,6 @@ export interface SceneContext {
   playerDefense?: number;
   /** 宿主的统一状态目录；有则优先于合同里的临时定义。 */
   catalog?: (id: string) => StatusDef | undefined;
+  /** 助战者好感（按角色库 id；宿主从存档读）。缺省时按 assist.simulationAffinity。 */
+  assistAffinity?: Record<string, number>;
 }
