@@ -1,4 +1,5 @@
 import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
+import { syncStoryStatuses } from './freeAction/bingGu';
 import {levelOf} from '../../utils/realmUtils';
 import {initializeLevel} from './levelProgression';
 import { logEvent } from '../diagnostics/log';
@@ -473,5 +474,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
       text: String(mod.scenario.opening.text || '').trim(),
     };
   }
+  // fee4：冰蛊等剧情来源状态原来只在「模型叙事可写状态」时由兜底入口补挂，清羽记本地叙事走不到，05/05b 从没挂上。进段时补挂一次。
+  syncStoryStatuses(advanced.saveData);
   return { saveData: advanced.saveData, ok: true, from: rt.modId, to: targetId, toName: mod.manifest.name };
 }

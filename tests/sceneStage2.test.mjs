@@ -84,7 +84,7 @@ for(const n of ['01','02','04','05'])test(`F${n} real host loss writes minimal g
   await host.submitSceneInput(save,'我挡住攻击',deps);
   const a=ext.activeScene(save);a.state.statuses.pc=[{id:'incapacitated',appliedBeat:1,expiresBeat:null,cause:'combat'}];a.state.forced={action:[10],defense:Array(20).fill(1)};
   await host.confirmSceneAction(save,deps);
-  const r=save.世界.状态.剧本模组;assert.equal(r.gameOver.title,'游戏结束');assert.equal(r.gameOver.endingId,'lcq.ending.fail.combat');
+  const r=save.世界.状态.剧本模组;assert.equal(r.gameOver.title,`战败 · 未能${c.objective.text}`); /* fee4 F04：通用战败结局按本场目标给标题 */ assert.equal(r.gameOver.endingId,'lcq.ending.fail.combat');
   assert.equal(r.completedEventIds.includes(c.meta.hook.eventId),false);assert.equal(ext.activeScene(save),null);
   assert.equal(save.系统.历史.叙事.at(-1).content.trim(),'游戏结束');
   assert.ok(ext.readExt(save).history.at(-1).state.statuses.pc.some(s=>s.id==='incapacitated'),'terminal loss must not revive player');

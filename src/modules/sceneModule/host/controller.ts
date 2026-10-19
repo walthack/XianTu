@@ -18,6 +18,9 @@ import { checkBeatLimit } from '../beatLimit';
 import { negotiationConfig, negotiationUnsupported, parseRecognition, recognizeAction, type ModelRequest } from './recognize';
 
 /** 本场合同没有交涉目标时给玩家的提示（不改判成攻击或防守）；文字在 numbers 配置 combat.negotiation.notice。 */
+/** fee4 F04：通用战败结局原来标题只有「游戏结束」。按本场目标给出可辨认的标题。 */
+export function combatLossTitle(c:{objective?:{text?:string}}):string{const goal=String(c.objective?.text||'').trim();return goal?`战败 · 未能${goal}`:'游戏结束';}
+
 export const NO_NEGOTIATION_NOTICE=negotiationConfig().notice;
 import { narrateBeat } from './narrate';
 import { applyWriteBack, syncSceneStatuses } from './writeback';
@@ -183,7 +186,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
   const written=applyWriteBack(save,c,a.state,closed.writeBack);writeExt(save,ext);
   if(closed.writeBack.outcome.endingId) {
     const id=closed.writeBack.outcome.endingId;
-    runtimeOf(save).gameOver={endingId:id,title:id==='lcq.ending.fail.combat' ? '游戏结束' : BATTLE_LOSS_ENDINGS.find(ending=>ending.endingId===id)?.title || '本局结束',facts:[a.closing.text],sourceEventId:a.eventId,atTurn:runtimeOf(save).worldTurn,presentation:endingPresentation({endingId:id,sourceEventId:a.eventId})};
+    runtimeOf(save).gameOver={endingId:id,title:id==='lcq.ending.fail.combat' ? combatLossTitle(c) : BATTLE_LOSS_ENDINGS.find(ending=>ending.endingId===id)?.title || '本局结束',facts:[a.closing.text],sourceEventId:a.eventId,atTurn:runtimeOf(save).worldTurn,presentation:endingPresentation({endingId:id,sourceEventId:a.eventId})};
     const fixed=fixedEndingNarrative(runtimeOf(save).gameOver);appendHistory(save,(fixed || [endingBridge('',id),a.closing.text].join('\n\n')),'',endingPresentation(runtimeOf(save).gameOver).image);
   } else {
     // The engine checks the persisted CLOSED state, event/action and contract version before honoring this completion.
