@@ -261,11 +261,7 @@
         "dc": 14
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ],
+        "statuses": [],
         "text": "通道冲击中有人受伤，仍需守住井口",
         "trackShifts": [
           {
@@ -277,7 +273,8 @@
       },
       "onBlocked": {
         "text": "你挡住这一轮冲击"
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

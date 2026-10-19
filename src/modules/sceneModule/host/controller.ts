@@ -14,10 +14,11 @@ import { sceneContractById, sceneContractForEvent, sceneContractSupportsAction }
 import { activeScene, cloneSave, newActive, readExt, sceneModuleEnabled, writeExt, type ActiveScene } from './ext';
 import { sceneContext, snapshotLevels } from './factors';
 import { partyName, renderRefs, runtimeOf } from './refs';
-import { negotiationUnsupported, parseRecognition, recognizeAction, type ModelRequest } from './recognize';
+import { checkBeatLimit } from '../beatLimit';
+import { negotiationConfig, negotiationUnsupported, parseRecognition, recognizeAction, type ModelRequest } from './recognize';
 
-/** 本场合同没有交涉目标时给玩家的提示（不改判成防守）。 */
-export const NO_NEGOTIATION_NOTICE='这一场不能交涉，请改用攻击、防守等打法。';
+/** 本场合同没有交涉目标时给玩家的提示（不改判成攻击或防守）；文字在 numbers 配置 combat.negotiation.notice。 */
+export const NO_NEGOTIATION_NOTICE=negotiationConfig().notice;
 import { narrateBeat } from './narrate';
 import { applyWriteBack, syncSceneStatuses } from './writeback';
 
@@ -154,6 +155,8 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   const context=sceneContext(save,c,p.text);
   if(p.plan.goal==='yield_guard'||p.plan.goal==='expose_self')context.playerDefense=-100;
   const confirmed=confirmAction(c,a.state,p.plan,context);a.state=confirmed.state;a.pending=null;
+  // 拍数门禁：超过 combat.beatLimit.max 仍未分胜负就记 LCQ-SAV-020（只记录，不改判）。
+  checkBeatLimit(c,a.state);
   if(c.levelContext)snapshotLevels(save,c,a.state);
   const lines=renderResultLines(c,confirmed.result).map(line=>renderRefs(line,runtimeOf(save)));
   a.last={playerText:p.text,result:confirmed.result,lines,text:''};a.narrativeIndex=appendHistory(save,lines.join('\n'),p.text);
