@@ -20,9 +20,16 @@ export const DEFAULT_COMBAT_GOALS: GoalDef[] = [
   },
 ];
 
+/** 战中疗伤目标：所有战斗场面都有，参数读 combat.heal。 */
+export function healGoal(): GoalDef | undefined {
+  const h = (GAME_NUMBERS.combat as any).heal;
+  return h ? { id: h.goalId, label: h.label, aliases: h.aliases, type: 'support', baseDifficulty: h.baseDifficulty, heal: true } : undefined;
+}
+
 export function goalsOf(contract: Contract): GoalDef[] {
-  if (contract.goals?.length) return contract.goals;
-  return contract.meta.scene.kind === 'combat' ? DEFAULT_COMBAT_GOALS : [];
+  const base = contract.goals?.length ? contract.goals : contract.meta.scene.kind === 'combat' ? DEFAULT_COMBAT_GOALS : [];
+  const heal = contract.meta.scene.kind === 'combat' ? healGoal() : undefined;
+  return heal && !base.some(g => g.id === heal.id) ? [...base, heal] : base;
 }
 
 export const goalOf = (contract: Contract, id: string): GoalDef | undefined => goalsOf(contract).find(g => g.id === id);

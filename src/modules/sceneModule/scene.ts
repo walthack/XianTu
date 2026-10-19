@@ -342,6 +342,20 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
     }
   }
 
+  // 2b) 战中疗伤：按档位从重到轻解除伤势、记回血（数值读 combat.heal）。
+  if (ev.goal.heal && player) {
+    const h = (GAME_NUMBERS.combat as any).heal, rule = h.byTier[tier] || { removeWounds: 0, hpGainRatio: 0 };
+    const removed: string[] = [];
+    for (const id of h.removable as string[]) {
+      if (removed.length >= rule.removeWounds) break;
+      const list = state.statuses[player] || [];
+      const at = list.findIndex(s => s.id === id);
+      if (at >= 0) { list.splice(at, 1); removed.push(id); }
+    }
+    if (rule.hpGainRatio > 0) (state.hpGain ||= {})[player] = (state.hpGain[player] || 0) + rule.hpGainRatio;
+    (result as any).healed = { removed, hpGainRatio: rule.hpGainRatio };
+  }
+
   // 3) 态势：成功生成标签（大成功多留一拍）；失败不生成
   if (success) {
     const extra = crit && bonus.has('tagPlus1') ? 1 : 0;

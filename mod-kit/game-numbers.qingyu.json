@@ -23,6 +23,67 @@
   },
   "combat": {
     "baselineDc": 11,
+    "preBattleSave": {
+      "enabled": true,
+      "slotName": "战前存档"
+    },
+    "heal": {
+      "note": "战中「用药/运功疗伤」行动目标（2026-10-20 用户定）：所有战斗场面都有，用掉一拍（敌方照常出手）。按本拍判定档位解除伤势、回气血；点名背包里带疗伤标签的药时消耗 1 份，按品级再加回血。",
+      "goalId": "heal_self",
+      "label": "用药/运功疗伤",
+      "baseDifficulty": 10,
+      "aliases": [
+        "疗伤",
+        "运功疗伤",
+        "调息疗伤",
+        "调息",
+        "服药",
+        "吃药",
+        "敷药",
+        "上药",
+        "包扎",
+        "止血",
+        "服下",
+        "用药"
+      ],
+      "removable": [
+        "wound.external.heavy",
+        "wound.external",
+        "bleeding",
+        "wound.blood_loss",
+        "wound.burn"
+      ],
+      "byTier": {
+        "great_success": {
+          "removeWounds": 2,
+          "hpGainRatio": 0.2
+        },
+        "success": {
+          "removeWounds": 1,
+          "hpGainRatio": 0.1
+        },
+        "failure": {
+          "removeWounds": 0,
+          "hpGainRatio": 0
+        },
+        "critical_failure": {
+          "removeWounds": 0,
+          "hpGainRatio": 0
+        }
+      },
+      "itemTags": [
+        "heal",
+        "salve",
+        "stabilize",
+        "revive"
+      ],
+      "itemHpGainByGrade": {
+        "凡品": 0.05,
+        "珍品": 0.15,
+        "仙品": 0.3,
+        "神品": 0.5
+      }
+    },
     "simulation": {
       "samples": 2000,
       "seed": 6291462,

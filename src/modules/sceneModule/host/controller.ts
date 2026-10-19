@@ -1,3 +1,5 @@
+import { GAME_NUMBERS } from '../numbers';
+import { applyCombatHeal } from './combatHeal';
 import {statusNamePattern} from '../statuses';
 import {acknowledgeStageEntryPresentation} from '@/modules/scenarioMods/runtime';
 import { evalExpr } from '../conditions';
@@ -30,6 +32,8 @@ export interface HostDeps {
   askIntent?: (request: ModelRequest) => Promise<string>;
   askNarrative?: (request: ModelRequest) => Promise<string>;
   aborted?: () => boolean;
+  /** 开战前存一份战外档（combat.preBattleSave）；失败只记日志，不挡开战。 */
+  beforeCombat?: (save: SaveData) => Promise<void>;
 }
 function alignContract(a: ActiveScene, c: Contract): boolean {
   if (a.state.contractVersion === c.meta.version) return false;
@@ -101,6 +105,7 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
     if(rule.class==='chat' && !wantsInterrogation(c,text) && ext.stall[c.meta.id] < (c.meta.hook.ambushAfterStall||Infinity)) {
       writeExt(save,ext);appendHistory(save,'眼前的交锋尚未解决，请说出你准备采取的行动。',text);await deps.persist(save);return true;
     }
+    if(deps.beforeCombat&&(GAME_NUMBERS.combat as any).preBattleSave?.enabled){try{await deps.beforeCombat(source);}catch(e){/* lcq-allow: 战前存档失败不挡开战，只留控制台记录 */console.warn('[场面] 战前存档失败',e);}}
     const opened=beginScene(c);
     snapshotLevels(save,c,opened.state);
     restoreSceneInjuries(save,c,opened.state);
@@ -158,6 +163,8 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   const context=sceneContext(save,c,p.text);
   if(p.plan.goal==='yield_guard'||p.plan.goal==='expose_self')context.playerDefense=-100;
   const confirmed=confirmAction(c,a.state,p.plan,context);a.state=confirmed.state;a.pending=null;
+  // 战中疗伤：用掉这一拍（敌方照常出手），回血与药品消耗由 host 落账。
+  if(confirmed.result.goal===(GAME_NUMBERS.combat as any).heal?.goalId){const pc=c.parties.find(x=>x.player)?.id;if(pc)(confirmed.result as any).healReceipt=applyCombatHeal(save,a.state,pc,p.text);}
   // 拍数门禁：combat.beatLimit.max 默认 0＝不限；设了正整数时超过仍未分胜负就记 LCQ-SAV-020（只记录，不改判）。
   checkBeatLimit(c,a.state);
   if(c.levelContext)snapshotLevels(save,c,a.state);

@@ -230,6 +230,8 @@ export interface GoalDef {
   finishAs?: string;
   completeOnSuccess?: boolean;
   onSuccess?: { tag?: TagDef; tagOn?: 'targets' | 'allies' | 'self' };
+  /** 战中疗伤（combat.heal）：按档位解除伤势、记回血。 */
+  heal?: boolean;
 }
 
 export interface LockDef {
@@ -522,6 +524,8 @@ export interface SceneState {
   woundCritBeats?: Record<string, number>;
   /** 通用挂伤：尚未写回存档的气血损失（按气血上限的比例累计；宿主写回后清零）。 */
   hpLoss?: Record<string, number>;
+  /** 战中疗伤记下的回血比例（按上限），由 host 写回气血后清零。 */
+  hpGain?: Record<string, number>;
   /** 气血已到保底值（keepHp）的一方；配置 combat.woundRules.hp.downedAtKeep 打开时算倒下。 */
   hpDowned?: Record<string, boolean>;
   outcome?: SceneOutcome;

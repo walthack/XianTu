@@ -510,6 +510,7 @@
 </template>
 
 <script setup lang="ts">
+import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
 import {canBreakthrough} from '@/modules/scenarioMods/levelProgression';
 import { canUseNicheCrystal, useNicheCrystal } from '@/modules/sceneModule/host/loot';
@@ -1863,6 +1864,7 @@ async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promi
     await operation(save, {
       persist: async next => { if (aborted()) throw new Error('scene_host_aborted'); await persistJudgementSave(next); },
       askIntent: ask('intent'), askNarrative: ask('narrative'), aborted,
+      beforeCombat: async () => { await characterStore.saveToSlot(String((GAME_NUMBERS.combat as any).preBattleSave?.slotName || '战前存档')); },
     });
   } catch (error) {
     if (!aborted()) toast.error(`场面处理未完成：${String((error as Error).message)}。已结算的骰点保留。`);
