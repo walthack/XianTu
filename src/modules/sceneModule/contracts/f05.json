@@ -177,12 +177,9 @@
         "dc": 1
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
-      }
+        "statuses": []
+      },
+      "woundRule": "default"
     },
     {
       "id": "warrior_2_attack",
@@ -193,12 +190,9 @@
         "dc": 1
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
-      }
+        "statuses": []
+      },
+      "woundRule": "default"
     },
     {
       "id": "shaman_attack",
@@ -209,12 +203,9 @@
         "dc": 1
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
-      }
+        "statuses": []
+      },
+      "woundRule": "default"
     },
     {
       "id": "blood_tiger_attack",
@@ -225,15 +216,12 @@
         "dc": 1
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
+        "statuses": []
       },
       "schedule": {
         "untilBeat": 1
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

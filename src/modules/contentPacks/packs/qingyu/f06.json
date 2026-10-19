@@ -204,11 +204,7 @@
         "dc": 11
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
+        "statuses": []
       },
       "onCrush": {
         "margin": 5,
@@ -217,7 +213,8 @@
             "status": "wound.drowning"
           }
         ]
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

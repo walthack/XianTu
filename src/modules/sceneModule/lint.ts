@@ -6,6 +6,7 @@ import { GAME_NUMBERS } from './numbers';
 import { goalsOf } from './plan';
 import { allTrackInfos, partyOf, partyTrackId, trackInfo } from './queries';
 import { resolveStatusDef } from './statuses';
+import { validateWoundRules, woundRuleStatuses } from './woundRules';
 import type { Cond, Contract, EnemyActionDef, Expr, FixedEventEffect, PlayerChoiceCond, SceneContext, StatusDef } from './types';
 
 export interface LintReport {
@@ -256,13 +257,14 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
   for (const cond of plainDefeat.flatMap(c => collectConds(c, []))) {
     if ((cond.kind === 'partyDowned' || cond.kind === 'sideDowned')) {
       const sources: string[] = [];
-      for (const action of contract.enemyActions || []) sources.push(...[...action.onHit.statuses, ...(action.onCrush?.statuses || [])].map(s => s.status));
+      for (const action of contract.enemyActions || []) sources.push(...[...action.onHit.statuses, ...(action.onCrush?.statuses || [])].map(s => s.status), ...(action.woundRule ? safeWoundStatuses(action.woundRule) : []));
       for (const entry of contract.fumble || []) if (entry.consequence.kind === 'status') sources.push(entry.consequence.status);
       if (!sources.some(id => leadsToDowned(id, contract, ctx))) warn('败局条件依赖“倒下”，但敌方出手和大失败后果里没有任何状态能走到“倒下”（可能永远输不了）');
     }
   }
 
   // ---- 敌方出手、大失败后果 ----
+  if ((contract.enemyActions || []).some(action => action.woundRule)) for (const problem of validateWoundRules(contract)) err(problem);
   const player = players[0]?.id;
   for (const action of contract.enemyActions || ([] as EnemyActionDef[])) {
     const where = `enemyActions.${action.id}`;
@@ -276,7 +278,8 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
       else if ('rotate' in t) t.rotate.forEach(id => knownParty(id, `${where}.target`));
       else if (!['player_side', 'opposed', 'neutral', 'third'].includes(t.each)) err(`${where}.target.each 不是合法阵营`);
     }
-    if (!action.onHit?.statuses?.length && !action.onHit?.trackShifts?.length) err(`${where}：onHit.statuses 为空（没挡住要给具体的人挂具体状态）`);
+    if (!action.onHit?.statuses?.length && !action.onHit?.trackShifts?.length && !action.woundRule) err(`${where}：onHit.statuses 为空（没挡住要给具体的人挂具体状态，或写 woundRule 走通用挂伤）`);
+    if (action.woundRule) { try { woundRuleStatuses(action.woundRule).forEach(id => needStatus(id, `${where}.woundRule`)); } catch (error) { /* lcq-allow: 体检把问题记进 lint 错误列表，由合同编译/加载报出 */ err(`${where}.woundRule：${(error as Error).message}`); } }
     for (const ref of [...(action.onHit?.statuses || []), ...(action.onCrush?.statuses || [])]) needStatus(ref.status, where);
     if (action.when) checkConds(action.when, `${where}.when`);
   }
@@ -382,3 +385,6 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
   }
   return { errors, warnings, infos };
 }
+
+/** 败局可达性检查用：规则引用坏了由逐条检查报错，这里只当没有来源。 */
+function safeWoundStatuses(ref: NonNullable<EnemyActionDef['woundRule']>): string[] { try { return woundRuleStatuses(ref); } catch { /* lcq-allow: 坏引用在 enemyActions 逐条体检里报错 */ return []; } }

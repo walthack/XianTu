@@ -630,8 +630,15 @@
           },
           "recover": {
             "label": "调息疗伤",
-            "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息运功平复气血，满血也算；双修、为他人疗伤不是本项。",
-            "applyRecovery": true
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息休整或休息一整夜，满血也算；双修、为他人疗伤不是本项。",
+            "applyRecovery": true,
+            "restRemoval": {
+              "outcomes": [
+                "perfect",
+                "great_success",
+                "success"
+              ]
+            }
           }
         }
       },

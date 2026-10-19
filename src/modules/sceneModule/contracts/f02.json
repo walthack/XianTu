@@ -100,12 +100,9 @@
         "dc": 12
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
-      }
+        "statuses": []
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

@@ -263,11 +263,7 @@
         "dc": 11
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ],
+        "statuses": [],
         "trackShifts": [
           {
             "party": "formation",
@@ -275,7 +271,8 @@
             "steps": 1
           }
         ]
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

@@ -260,6 +260,16 @@ export interface StatusApplyRef {
   durationBeats?: number | null;
 }
 
+/** 挂伤规则引用：GAME_NUMBERS.combat.woundRules.profiles 的配置项名，或 {profile, 覆盖字段}（见 woundRules.ts）。 */
+export type WoundRuleRef = string | {
+  profile: string;
+  critMargin?: number;
+  critFaces?: number[];
+  greatBlockMargin?: number;
+  tiers?: Partial<Record<'great_success' | 'success' | 'failure' | 'critical_failure', Partial<{ chance: number; status: string; hpLossRatio: number }>>>;
+  streak?: Partial<{ count: number; status: string }>;
+};
+
 export interface EnemyActionDef {
   id: string;
   party: string;
@@ -280,6 +290,8 @@ export interface EnemyActionDef {
   when?: Cond | Expr;
   /** 允许攻击 protected 的参与方（默认不允许）。 */
   allowProtected?: boolean;
+  /** 走通用挂伤结算（按档几率、连续重击升级）；写了它，onHit.statuses 只放剧情指定的额外状态。 */
+  woundRule?: WoundRuleRef;
 }
 
 export type ConsequenceTarget = 'actor' | 'committed' | { party: string };
@@ -484,6 +496,10 @@ export interface SceneState {
   digestOlder: number;
   audit: AuditEntry[];
   counters: { actions: number; checks: number; defenseRolls: number };
+  /** 通用挂伤：每个参与方当前连续被重击的次数（旧存档没有，按 0）。 */
+  woundStreaks?: Record<string, number>;
+  /** 通用挂伤：尚未写回存档的气血损失（按气血上限的比例累计；宿主写回后清零）。 */
+  hpLoss?: Record<string, number>;
   outcome?: SceneOutcome;
   closed?: boolean;
 }

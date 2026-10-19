@@ -90,15 +90,12 @@
         "dc": 12
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
+        "statuses": []
       },
       "onBlocked": {
         "text": "你挡开了拦截"
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

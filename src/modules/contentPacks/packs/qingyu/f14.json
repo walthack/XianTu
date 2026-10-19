@@ -156,15 +156,12 @@
         "dc": 11
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
+        "statuses": []
       },
       "onBlocked": {
         "text": "你避开了这一爪"
-      }
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

@@ -41,6 +41,56 @@
     "guard": {
       "durationBeats": 1,
       "defenseBonus": 3
+    },
+    "woundRules": {
+      "note": "敌方出手的通用挂伤结算（sceneModule/woundRules.ts）。tiers 的键按敌方这一下的结果分档：great_success=重击、success=打中、failure=被挡住、critical_failure=被大挡。chance=挂伤几率（0–1），status=挂的伤（空串=不挂），hpLossRatio=按气血上限扣的比例。合同在 enemyActions[].woundRule 里写配置项名，或写 {profile, 覆盖字段}。",
+      "profiles": {
+        "default": {
+          "critMargin": 10,
+          "critFaces": [
+            1
+          ],
+          "greatBlockMargin": 10,
+          "tiers": {
+            "great_success": {
+              "chance": 1,
+              "status": "wound.external",
+              "hpLossRatio": 0.2
+            },
+            "success": {
+              "chance": 0,
+              "status": "",
+              "hpLossRatio": 0.1
+            },
+            "failure": {
+              "chance": 0,
+              "status": "",
+              "hpLossRatio": 0
+            },
+            "critical_failure": {
+              "chance": 0,
+              "status": "",
+              "hpLossRatio": 0
+            }
+          },
+          "streak": {
+            "count": 2,
+            "status": "wound.external.heavy"
+          }
+        }
+      },
+      "hp": {
+        "keepHp": 1
+      },
+      "afterWin": {
+        "clearLight": true,
+        "statuses": [
+          "wound.external"
+        ],
+        "sides": [
+          "player_side"
+        ]
+      }
     }
   },
   "training": {
@@ -1020,8 +1070,15 @@
           },
           "recover": {
             "label": "调息疗伤",
-            "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息运功平复气血，满血也算；双修、为他人疗伤不是本项。",
-            "applyRecovery": true
+            "hint": "【自身行动，不针对在场某人也出票，targetId填null】调息休整或休息一整夜，满血也算；双修、为他人疗伤不是本项。",
+            "applyRecovery": true,
+            "restRemoval": {
+              "outcomes": [
+                "perfect",
+                "great_success",
+                "success"
+              ]
+            }
           }
         }
       },

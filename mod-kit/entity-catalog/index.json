@@ -20759,6 +20759,12 @@
     },
     {
       "kind": "status",
+      "id": "wound.external.heavy",
+      "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "wound.external.right_arm",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []

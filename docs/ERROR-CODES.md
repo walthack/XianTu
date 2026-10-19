@@ -73,6 +73,7 @@
 | LCQ-NUM-006 | error | numbers | 数值体检未通过，合并已退回 | 各模块登记的数值体检（freeAction、judgement、diagnostics 等）未通过，合并已整份退回 | 消息里列出每条体检错误，逐条修；体检在 numbers.ts 的 registerNumbersValidator 登记 | 否 |
 | LCQ-NUM-007 | error | numbers | 默认数值包缺段或字段表失败（冷启动） | 三分包合并后的默认树缺顶层段／必填字段，或 registry 字段表类型／范围失败 | 核对 mod-kit/numbers-{combat,progress,runtime}.json 与 numbersRegistry.ts；合并视图见 game-numbers.qingyu.json（生成物） | 否 |
 | LCQ-NUM-008 | error | numbers | 数值 registry 范围或类型无效 | tuning 合并后的树未通过 registry 已登记叶子的类型／范围／交叉约束（好感两端等） | 按消息路径修正；与 LCQ-NUM-004 内建范围检查并列，业务跨字段仍走 LCQ-NUM-006 | 否 |
+| LCQ-NUM-009 | error | numbers | 挂伤规则配置项不存在 | 合同 enemyActions[].woundRule 引用了 combat.woundRules.profiles 里没有的配置项名 | 改成已有配置项名，或在 numbers-combat.json 的 combat.woundRules.profiles 里补上该项；合同体检（lint）会先报出 | 否 |
 | LCQ-PCK-001 | error | scenarioMods | 剧情模组库内容无效（mods 不是数组），按空库处理 | 已存的剧情模组库 mods 字段被写成了非数组（数据损坏或旧版本遗留） | 按空库处理，内置模板会在下次播种时重建；必要时清理 scenario_mod_library_v1 | 否 |
 | LCQ-PCK-002 | warn | scenarioMods | 剧情模组文件不是有效 JSON | 导入的剧情模组文件不是有效 JSON | 用 JSON 校验器检查文件；日志只记字符数，不含文件内容 | 否 |
 | LCQ-PCK-003 | warn | scenarioMods | 剧情模组校验未通过 | 剧情模组结构或分析校验有 error 级问题，无法导入 | 看 detail.issues 的 path 与 code，按 mod:validate 脚本输出修正 | 否 |

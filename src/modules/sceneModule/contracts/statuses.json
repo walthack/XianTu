@@ -882,6 +882,40 @@
     "freeText": "narrative"
   },
   {
+    "id": "wound.external.heavy",
+    "label": "外伤（重）",
+    "tier": "general",
+    "cause": "combat",
+    "kind": "debuff",
+    "source": "外伤再度加重：连续重击，或剧情/合同明确指定。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": -3
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": -3
+      }
+    ],
+    "remove": [
+      {
+        "kind": "rest"
+      },
+      {
+        "kind": "item",
+        "ref": "heal"
+      }
+    ],
+    "afterScene": {
+      "minutes": 43200
+    },
+    "upgradesTo": "incapacitated",
+    "freeText": "narrative"
+  },
+  {
     "id": "bleeding",
     "label": "流血",
     "aliases": [

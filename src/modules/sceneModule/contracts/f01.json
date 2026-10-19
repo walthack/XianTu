@@ -117,12 +117,9 @@
         "dc": 3
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
-      }
+        "statuses": []
+      },
+      "woundRule": "default"
     },
     {
       "id": "archers_attack",
@@ -133,12 +130,9 @@
         "dc": 5
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
-      }
+        "statuses": []
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

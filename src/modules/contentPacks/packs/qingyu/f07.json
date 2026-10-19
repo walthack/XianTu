@@ -387,12 +387,9 @@
         "dc": 11
       },
       "onHit": {
-        "statuses": [
-          {
-            "status": "wound.external"
-          }
-        ]
-      }
+        "statuses": []
+      },
+      "woundRule": "default"
     }
   ],
   "defeat": {

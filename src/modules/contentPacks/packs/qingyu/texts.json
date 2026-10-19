@@ -196,6 +196,7 @@
   "free.fact.recover.partial": "{player}调息疗伤，只缓过来一点。",
   "free.fact.recover.failure": "{player}调息疗伤，却不得其法，伤势没有起色。",
   "free.fact.recover.critical_failure": "{player}调息时真气紊乱，没能缓过气来。",
+  "free.fact.recover.rest_removed": "{player}休整之后，{status}已经解除。",
   "free.fact.scene_act.perfect": "{player}这番行动干净利落，一气呵成，毫无破绽。",
   "free.fact.scene_act.great_success": "{player}这番行动很顺，不但达成所图，还有额外收获。",
   "free.fact.scene_act.success": "{player}这番行动得手，达成了所图。",

@@ -5,6 +5,7 @@ import type { SaveData } from '@/types/game';
 import { runtimeEntityId } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import { persistentStatuses, resolveStatusDef, type Contract, type SceneState, type StatusDef, type WriteBack } from '../index';
 import { toInjuryNote } from '../statusAdapters';
+import { EFFECT_VOCAB } from '@/modules/scenarioMods/effectTags';
 import { runtimeOf } from './refs';
 
 export const actorKey=(runtime:any,ref:string)=>/^[a-z0-9_]+(\.[a-z0-9_]+)+$/i.test(ref) ? ref : runtimeEntityId(runtime,ref);
@@ -64,6 +65,16 @@ export function removeSceneInjury(save: SaveData, target: {actorId:string} | {gr
   if(!remove.length)return false;
   bank[id]=rows.filter(row=>!remove.includes(row));clearPlayerEffects(save,remove);renderInjuryViews(save);return true;
 }
+/** 休整解除：玩家身上每条 remove 里写了 rest 的伤病都解除（按存档里该行自带的规则副本判断），返回被解除的行。 */
+export function removePlayerInjuriesByRest(save: SaveData): InjuryRecord[] {
+  const store=pruneSceneInjuries(save),removed:InjuryRecord[]=[];
+  for(const [id,rows] of Object.entries(store.actors)){
+    const hit=rows.filter(row=>row.player && row.remove?.some(rule=>rule.kind==='rest'));
+    if(hit.length){store.actors[id]=rows.filter(row=>!hit.includes(row));removed.push(...hit);}
+  }
+  if(removed.length){clearPlayerEffects(save,removed);renderInjuryViews(save);}
+  return removed;
+}
 export function recordSceneInjuries(save: SaveData, contract: Contract, rows: WriteBack['persistent'], state?:SceneState): void {
   const store=pruneSceneInjuries(save),now=sceneTime(save),runtime=runtimeOf(save),ledger=runtime.sceneLedger;
   ledger.legacyInjuries ||= {...ledger.injuries};
@@ -93,7 +104,7 @@ export function recordSceneInjuries(save: SaveData, contract: Contract, rows: Wr
 export function renderInjuryViews(save: SaveData): void {
   const runtime=runtimeOf(save),ledger=runtime.sceneLedger,store=pruneSceneInjuries(save);
   ledger.injuries={...ledger.legacyInjuries};ledger.groupInjuries={};
-  const note=(r:InjuryRecord)=>toInjuryNote({party:'',ref:'',status:r.statusId,label:r.label,minutes:r.expiresAt===null?null:Math.max(0,r.expiresAt-sceneTime(save)),cause:r.cause,source:r.source},{effects:r.effects} as StatusDef);
+  const note=(r:InjuryRecord)=>toInjuryNote({party:'',ref:'',status:r.statusId,label:r.label,minutes:r.expiresAt===null?null:Math.max(0,r.expiresAt-sceneTime(save)),cause:r.cause,source:r.source},{effects:r.effects,remove:r.remove} as StatusDef,tag=>(EFFECT_VOCAB.tags as Record<string,{label?:string}>)[tag]?.label);
   const dis=store.disabilities||{},asGroup=(id:string)=>!!parseInstanceId(id);
   for(const id of new Set([...Object.keys(store.actors),...Object.keys(dis).filter(k=>!asGroup(k))])){const rows=[...(store.actors[id]||[]),...(asGroup(id)?[]:dis[id]||[])];if(rows.length)ledger.injuries[id]=[ledger.injuries[id],...rows.map(note)].filter(Boolean).join('；');}
   for(const id of new Set([...Object.keys(store.groups),...Object.keys(dis).filter(asGroup)])){const rows=[...(store.groups[id]||[]),...(asGroup(id)?dis[id]||[]:[])];if(rows.length)ledger.groupInjuries[id]={label:store.groupLabels[id]||id,text:rows.map(note).join('；')};}

@@ -65,6 +65,8 @@ export interface VariantSpec {
   target?: 'none';
   /** 自修的调息疗伤、双修：判定卡放开旧引擎的“回气血/神识”结算（其余变体一律关）。 */
   applyRecovery?: boolean;
+  /** 休整解除：判定落在这些档时，按每个状态自己的 remove 规则解除玩家身上标了“休整可解除（rest）”的伤病。 */
+  restRemoval?: { outcomes: Outcome[] };
   /** selfBuff 用：增益定义所在的配置路径（freeAction 段下，如 dualCultivation.buff）。 */
   buffRef?: string;
   route: Route;
@@ -270,6 +272,8 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
       }
       if (spec.requires?.onLevelUnknown !== undefined && !['deny', 'assume_equal'].includes(spec.requires.onLevelUnknown)) errors.push(`${where}: requires.onLevelUnknown 无效`);
       if (spec.requires?.minGoodwill !== undefined && !(Number.isFinite(spec.requires.minGoodwill) && spec.requires.minGoodwill >= GAME_NUMBERS.affinity.range.min && spec.requires.minGoodwill <= GAME_NUMBERS.affinity.range.max)) errors.push(`${where}: requires.minGoodwill 须为 ${GAME_NUMBERS.affinity.range.min}~${GAME_NUMBERS.affinity.range.max} 的数`);
+      if (spec.restRemoval !== undefined && (!Array.isArray(spec.restRemoval?.outcomes) || !spec.restRemoval.outcomes.length || spec.restRemoval.outcomes.some(o => !(OUTCOMES as readonly string[]).includes(o)))) errors.push(`${where}: restRemoval.outcomes 须为非空判定档数组`);
+      if (spec.restRemoval !== undefined && spec.target !== 'none') errors.push(`${where}: restRemoval 只用于无对象的自身行动`);
       if (spec.legacyGuardWords !== undefined && (!Array.isArray(spec.legacyGuardWords) || spec.legacyGuardWords.some(word => typeof word !== 'string' || !word.trim()))) errors.push(`${where}: legacyGuardWords 须为非空字符串数组`);
       if (spec.needsItem && spec.actionClass === 'cast' && !spec.itemTag && !spec.itemTags?.length) errors.push(`${where}: needsItem 的施术变体缺 itemTag(s)`);
       if (spec.effect === 'drainProgress') errors.push(...validateDrain(spec, where));

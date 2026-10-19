@@ -7,6 +7,7 @@ import { isPresent, partyOf, playerParty, trackInfo, trackStep } from './queries
 import { applyStatus, isDowned, statusMode, statusRollModifier, type StatusEvent } from './statuses';
 import { peekDefenseDie } from './dice';
 import { pickFace, resolveSettings, rollMode } from './tiers';
+import { applyWoundRule, resolveWoundProfile, woundTierOf, type WoundTier } from './woundRules';
 import type { Contract, EnemyActionDef, SceneContext, SceneState } from './types';
 
 export interface EnemyRoll {
@@ -24,6 +25,8 @@ export interface EnemyRoll {
   outcome: 'blocked' | 'hit';
   margin: number;
   crushed: boolean;
+  /** 走通用挂伤规则时，敌方这一下的结果档。 */
+  woundTier?: WoundTier;
   statuses: StatusEvent[];
   text?: string;
 }
@@ -128,10 +131,15 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
         }
         for (const ref of plan.statuses) events.push(...applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id }));
       }
+      // 通用挂伤：被挡住也要结算（档内几率可以配成非 0），并重置连续重击计数。
+      // 合同写了 onCrush 且这一下够得上，就按合同指定的后果结算，通用挂伤不再叠加。
+      const woundTier = action.woundRule && !crushed ? woundTierOf(resolveWoundProfile(action.woundRule), { hit, face, total, dc }) : undefined;
+      if (woundTier) events.push(...applyWoundRule(state, contract, ctx, targetId, action, woundTier));
       result.statusEvents.push(...events);
       result.rolls.push({
         actionId: action.id, label: action.label, party: attacker.id, partyRef: attacker.ref, target: targetId, targetRef: target.ref,
         dc, edgeBonus, defenseBonus, face, total, outcome: hit ? 'hit' : 'blocked', margin: hit ? margin : total - dc, crushed,
+        ...(woundTier ? { woundTier } : {}),
         statuses: events,
         text: hit ? (crushed ? action.onCrush!.text : action.onHit.text) : action.onBlocked?.text,
       });
@@ -155,6 +163,7 @@ export function applyWorstCaseEnemyPhase(contract: Contract, state: SceneState, 
         if(info) (state.tracks[shift.party] ||= {})[info.id] = Math.max(0,Math.min(info.scale.length-1,trackStep(state,shift.party,info.id)+shift.steps));
       }
       for (const ref of plan.statuses) applyStatus(state, contract, ctx, targetId, ref, { cause: 'combat', sourceId: action.id });
+      if (action.woundRule && !action.onCrush) applyWoundRule(state, contract, ctx, targetId, action, 'great_success', true);
     }
   }
 }

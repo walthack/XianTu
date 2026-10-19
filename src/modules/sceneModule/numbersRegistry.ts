@@ -71,6 +71,10 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'sceneDefaults.auditKeep', kind: 'int', required: true, min: 1, section: 'combat' },
   { path: 'weights.combat', kind: 'array', required: true, section: 'combat' },
   { path: 'weights.social', kind: 'array', required: true, section: 'combat' },
+  { path: 'combat.woundRules.profiles', kind: 'object', required: true, section: 'combat' },
+  { path: 'combat.woundRules.hp.keepHp', kind: 'number', required: true, min: 0, section: 'combat' },
+  { path: 'combat.woundRules.afterWin.clearLight', kind: 'bool', required: true, section: 'combat' },
+  { path: 'combat.woundRules.afterWin.statuses', kind: 'array', required: true, section: 'combat' },
 ];
 
 function atPath(tree: unknown, path: string): unknown {

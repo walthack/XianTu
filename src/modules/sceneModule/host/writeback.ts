@@ -5,7 +5,7 @@ import {statusNamePattern} from '../statuses';
 import { settleScenarioInventoryTransfers } from '@/modules/scenarioMods/inventoryTransactions';
 import type { SaveData } from '@/types/game';
 import { runtimeEntityId, runtimeEntityName } from '@/modules/scenarioMods/ledger/affinityIdentity';
-import { persistentStatuses, resolveStatusDef, toPlayerStatusEffect, type Contract, type SceneState, type WriteBack } from '../index';
+import { afterWinClears, persistentStatuses, resolveStatusDef, toPlayerStatusEffect, woundRulesConfig, type Contract, type SceneState, type WriteBack } from '../index';
 import { sceneTime, recordSceneInjuries } from './injuries';
 import { partyName, renderRefs, runtimeOf } from './refs';
 
@@ -26,12 +26,38 @@ export function recoverDownedAfterScene(contract: Contract, state: SceneState, w
   }
 }
 
+/** 赢下之后的战后休整：按 numbers 配置 combat.woundRules.afterWin 清掉我方的轻伤，返回被清掉的行。 */
+export function clearLightWoundsAfterWin(contract: Contract, state: SceneState, writeBack: WriteBack): WriteBack['persistent'] {
+  if(writeBack.outcome.kind!=='win')return [];
+  const cleared=writeBack.persistent.filter(row=>afterWinClears(contract,row.party,row.status));
+  if(!cleared.length)return [];
+  writeBack.persistent=writeBack.persistent.filter(row=>!cleared.includes(row));
+  for(const row of cleared)state.statuses[row.party]=(state.statuses[row.party] || []).filter(s=>s.id!==row.status);
+  return cleared;
+}
+
+/** 通用挂伤记下的气血损失（按上限比例）写进主角 角色.属性.气血，写完清零；不低于配置的 keepHp。NPC 不记气血。 */
+export function applySceneHpLoss(save: SaveData, contract: Contract, state: SceneState): number {
+  const player=contract.parties.find(p=>p.player),ratio=player ? state.hpLoss?.[player.id] || 0 : 0;
+  if(state.hpLoss)for(const party of contract.parties)if(!party.player)delete state.hpLoss[party.id];
+  if(!player || !(ratio>0))return 0;
+  delete state.hpLoss![player.id];
+  const hp=(save as any).角色?.属性?.气血,current=Number(hp?.当前),max=Number(hp?.上限),keep=woundRulesConfig().hp.keepHp;
+  if(!Number.isFinite(current) || !Number.isFinite(max) || max<=0 || current<=keep)return 0;
+  const next=Math.max(keep,current-Math.round(max*ratio));
+  hp.当前=next;
+  return current-next;
+}
+
 export function applyWriteBack(save: SaveData, contract: Contract, state: SceneState, writeBack: WriteBack): { notes: string[] } {
   if(contract.rewardPolicy && writeBack.rewards.some(reward=>typeof reward.itemId==='string' && !contract.rewardPolicy!.itemIds.includes(reward.itemId)))throw new Error('场面奖励未获合同授权，未写回');
   recoverDownedAfterScene(contract,state,writeBack);
+  const cleared=clearLightWoundsAfterWin(contract,state,writeBack);
   const runtime = runtimeOf(save);
   const notes: string[] = [];
   if (!runtime) return { notes: ['存档里没有剧本运行时，状态与旗标没有写回'] };
+  applySceneHpLoss(save,contract,state);
+  for(const row of cleared)notes.push(`战后休整：${partyName(contract,runtime,row.party)}的${row.label}已处理好。`);
   const ledger = ledgerOf(runtime);
   const sceneSource = contract.meta.id;
   const effects=(save as any).角色?.效果;
@@ -97,5 +123,6 @@ function persistSceneInjuries(save: SaveData, contract: Contract, rows: WriteBac
 /** Publish only already-settled injuries during a beat, never rewards, flags or event completion. */
 export function syncSceneStatuses(save: SaveData, contract: Contract, state: SceneState): void {
   const rows=persistentStatuses(state,contract,undefined).map(({party,ref,def,active})=>({party,ref,originScene:active.originScene,status:def.id,label:def.label,minutes:def.afterScene?.minutes ?? null,cause:active.cause,source:def.source}));
+  applySceneHpLoss(save,contract,state);
   persistSceneInjuries(save,contract,rows,state);
 }

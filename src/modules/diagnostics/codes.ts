@@ -38,6 +38,7 @@ export const ERROR_CODES = {
   'LCQ-NUM-006': spec('error', 'numbers', '数值体检未通过，合并已退回'),
   'LCQ-NUM-007': spec('error', 'numbers', '默认数值包缺段或字段表失败（冷启动）'),
   'LCQ-NUM-008': spec('error', 'numbers', '数值 registry 范围或类型无效'),
+  'LCQ-NUM-009': spec('error', 'numbers', '挂伤规则配置项不存在'),
 
   'LCQ-FA-001': spec('info', 'freeAction', '闸门拒绝（not_present）：目标不在场'),
   'LCQ-FA-002': spec('info', 'freeAction', '闸门拒绝（scene_active）：身处场面交锋，顾不上这件事'),

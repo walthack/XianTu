@@ -10,7 +10,7 @@
 import type { SaveData } from '@/types/game';
 import { applyDeterministicEffects, getJudgementState, verifyResolvedJudgementReceipt, type JudgementResolution } from '@/utils/judgementEngine';
 import { getNarrativeTurn } from '@/utils/actionGate';
-import { removeSceneInjury, sceneTime } from '../../sceneModule/host/injuries';
+import { removePlayerInjuriesByRest, removeSceneInjury, sceneTime } from '../../sceneModule/host/injuries';
 import { AFFINITY_TIERS, clampAffinity, stanceOf, tierOf } from '../affinityLadder';
 import { affinityCapFor } from '../affinityCaps';
 import { relationshipOf, runtimeEntityName } from '../ledger/affinityIdentity';
@@ -319,6 +319,10 @@ function writeAftermath(save: SaveData, resolution: JudgementResolution | undefi
 function settleTargetless(save: SaveData, spec: VariantSpec, resolution: JudgementResolution, key: string, turn: number): SettleResult {
   const outcome = resolution.outcome!, slots = { player: playerNameOf(save), target: '' };
   const facts = [factText(spec.variant, outcome, slots), ...writeAftermath(save, resolution, slots)];
+  if (spec.restRemoval?.outcomes.includes(outcome)) {
+    const removed = removePlayerInjuriesByRest(save);
+    if (removed.length) facts.push(factText(spec.variant, 'rest_removed', { ...slots, status: [...new Set(removed.map(row => row.label))].join('、') }));
+  }
   const state = writableFreeActionState(save);
   state.log.push({ key, turn, actionClass: spec.actionClass, variant: spec.variant, targetId: null, resultKey: outcome, delta: 0, major: false });
   state.log = state.log.slice(-freeActionConfig().state.logKeep);

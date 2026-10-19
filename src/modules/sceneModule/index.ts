@@ -6,6 +6,7 @@ export * from './conditions';
 export * from './statuses';
 export * from './plan';
 export * from './enemy';
+export * from './woundRules';
 export * from './lint';
 export * from './scene';
 export * from './brief';
