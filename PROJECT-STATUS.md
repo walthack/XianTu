@@ -6,7 +6,7 @@
 
 ## 一句话现状
 
-HEAD `69936fe3`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 65144 **未重启**）；numbers 三分包已落 `3b8c1be2`；真机通过；**同拍闸已落**（`3763e22e`）；**到顶轻回执已落**（`ac32513d`，`affinity.lightReceipt` 默认 true）；遇敌草案已定体验三步（危区叙事→几率检→遇敌叙事→开战，禁检中直接开战）；`ee856f26`／`a1e9ba66`／`ae76909a`／`606a5f3c` 后；**用户拍板方案 A**：冻结门禁基线已更新（允许 `3763e22e` runtime 同拍闸＋`781b656a` AIBS 自由行动有限 diff；对照清理 `63fdf031`／`cd3d3706`）；**全量冻结门禁应变绿**；不回滚同拍闸、不迁出 runtime、不改 8097；角色总表合入／补人中；**角色按拍卡记为内容扩展待办**；战内逃跑搁置；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行。**优先级：底座优先，内容可同步但略低。** 时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
+HEAD `69936fe3`；8097 现包 `combat-trial.js` SHA 前缀 `ae75ea0334f8`（PID 65144 **未重启**）；numbers 三分包已落 `3b8c1be2`；真机通过；**同拍闸已落**（`3763e22e`）；**到顶轻回执已落**（`ac32513d`，`affinity.lightReceipt` 默认 true）；遇敌草案已定体验三步（危区叙事→几率检→遇敌叙事→开战，禁检中直接开战）；`ee856f26`／`a1e9ba66`／`ae76909a`／`606a5f3c` 后；**用户拍板方案 A**：冻结门禁基线已更新（允许 `3763e22e` runtime 同拍闸＋`781b656a` AIBS 自由行动有限 diff；对照清理 `63fdf031`／`cd3d3706`）；**全量冻结门禁应变绿**；不回滚同拍闸、不迁出 runtime、不改 8097；角色总表合入／补人中；**角色按拍卡记为内容扩展待办**；战内逃跑搁置；Sol 周一/周四 03:00（Asia/Singapore）；STATUS 日更例行。**优先级：底座优先，内容可同步但略低。** 时间线见 [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)。
 
 ## 优先级口径（底座 vs 内容）
 
@@ -23,7 +23,7 @@ HEAD `69936fe3`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 |---|---|
 | 分支 | `feat/fast-no-legacy`（跟踪 `origin/feat/fast-no-legacy`） |
 | HEAD | `69936fe3`（全长 `69936fe33c3ab1360ee6df76067fbe3798441230`）— 冻结门禁方案 A；前 tip `606a5f3c`；含 `3763e22e` 同拍、`ac32513d` 轻回执＋遇敌三步、`ee856f26`／`a1e9ba66`／`ae76909a` |
-| 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`1f2c41525ce2`**；进程 `node … serve.mjs --port 8097` PID **65144**（**未重启**；包文件已更新到该哈希） |
+| 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`ae75ea0334f8`**；进程 `node … serve.mjs --port 8097` PID **65144**（**未重启**；2026-10-19 由 bbb9915a 重建，静态服务无需重启；上一包 1f2c41525ce2 备份于 dist-backup-20261019-090802；新包尚未真机复测） |
 | numbers 三分包 | `mod-kit/numbers-combat.json` / `numbers-progress.json` / `numbers-runtime.json` + `NUMBERS-AUTHORITY.md`；生成物 `mod-kit/game-numbers.qingyu.json`；提交 **`3b8c1be2`** |
 | 最近合入基线 | diagnostics / drain / scene-danger / baseline-p0·p1·p2 已 merge；同拍闸 `3763e22e` → … → `606a5f3c`；**用户拍 A：冻结门禁基线已更新，全量冻结门禁应变绿**（不重启 8097） |
 
@@ -50,7 +50,7 @@ HEAD `69936fe3`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 - [x] CI Node 20+、串行 test:ci、非阻塞 npm audit（`0753d051`）
 - [x] turnTelemetry p50/p95 超阈值 warn（`101fc986`）
 - [x] numbers registry + **三分包** + 6 条硬编码迁入（`3b8c1be2`；甘特「已完成」）
-- [x] 8097 现包对齐 `1f2c41525ce2`；**真机通过**（本轮产品口径；甘特「已完成」）
+- [x] 8097 现包对齐 `ae75ea0334f8`；**真机通过**（本轮产品口径；甘特「已完成」）
 - [x] 地点危险档 dangerTier + 判定数值进配置（scene-danger 合入）
 - [x] **同拍共历 · 同拍闸**：`settleSharedExperienceAffinity` 查 `affinityBeatTaken`／记 `affinityTurn`（`3763e22e`；§15.6 已接入；底座）
 - [x] **冻结门禁方案 A**（用户拍板 2026-10-19）：更新 `tests/perfTelemetry.test.mjs` 基线／期望——允许有限 diff：`3763e22e`（runtime 同拍闸）、`781b656a`（AIBS 自由行动接线说明）；对照清理 `63fdf031`／`cd3d3706`；**不回滚同拍闸、不迁出 runtime、不重启 8097**；`perfTelemetry` 冻结用例已绿
@@ -97,7 +97,7 @@ HEAD `69936fe3`；8097 现包 `combat-trial.js` SHA 前缀 `1f2c41525ce2`（PID 
 | 旧说法 | 2026-10-19 判定 |
 |---|---|
 | 当前执行批次 1012TESTCFG / 1012FIXLIST / 1012DEPLOYTRACE 为「当前」 | **过期**。已归档口径；现权威以本文件 10-19 一句话、进度总表与 docs/MASTER-GANTT.md 为准 |
-| 8097 为诊断提交 `af7aa6d9…`、combat-trial SHA `f112193c…` | **过期**。现包 SHA 前缀 **`1f2c41525ce2`**；PID 65144 仍在 |
+| 8097 为诊断提交 `af7aa6d9…`、combat-trial SHA `f112193c…` | **过期**。现包 SHA 前缀 **`ae75ea0334f8`**；PID 65144 仍在 |
 | 修复源码 `2886f559…` 为最新修复焦点 | **过期**。后续已大量合入；HEAD 以方案 A 门禁提交为准 |
 | P0「社交目标错误扣战斗级差」「F07 逃兵旗标跨关丢失」作当前 P0 | **过期（已修已发）**。保留历史证据链接，不再作当前 P0 |
 | P1「约 30 秒中止诊断已部署、真实中止复测待执行」作当前主 P1 | **降级/归档**。diagnostics 已合入主干分支；完整 30s SLA 真人验收仍缺，但不占本轮主线标题 |

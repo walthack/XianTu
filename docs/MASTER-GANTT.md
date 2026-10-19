@@ -5,7 +5,7 @@
 **权威进度入口（双件）**：本文件（时间线）+ 仓库根目录 [`PROJECT-STATUS.md`](../PROJECT-STATUS.md)（叙述与勾选总表）。  
 勿另造第二份 status；`_newbot_tmp/PROJECT-TRACKER.md` 仅为草稿勾选，**非权威**。
 
-基线快照：tip `69936fe3`（方案 A 冻结门禁；前 `606a5f3c`／`ae76909a`）· 含 `3763e22e` 同拍 · `ac32513d` 轻回执＋遇敌三步 · `ee856f26`／`a1e9ba66`／`ae76909a` · 8097 包 SHA 前缀 `1f2c41525ce2`（PID 65144 **未重启**）· numbers `3b8c1be2`；**用户拍 A：门禁基线已更新，全量冻结门禁应变绿**；遇敌已定体验三步（危区→检→遇敌叙事→开战）。
+基线快照：tip `69936fe3`（方案 A 冻结门禁；前 `606a5f3c`／`ae76909a`）· 含 `3763e22e` 同拍 · `ac32513d` 轻回执＋遇敌三步 · `ee856f26`／`a1e9ba66`／`ae76909a` · 8097 包 SHA 前缀 `ae75ea0334f8`（PID 65144 **未重启**）· numbers `3b8c1be2`；**用户拍 A：门禁基线已更新，全量冻结门禁应变绿**；遇敌已定体验三步（危区→检→遇敌叙事→开战）。
 
 **优先级**：底座优先；内容（总表补人／角色按拍卡）可同步、优先级略低。
 
@@ -60,7 +60,7 @@ gantt
 |---|---|---|---|---|
 | 已完成 | diagnostics / P0 / P1 / P2 | Done | 底座 | 10-18 合入 `feat/fast-no-legacy`（见 git：`af020e5d`、`b59cee0f`、`7ea583a7` 等） |
 | 已完成 | numbers 三分包 | Done | 底座 | `3b8c1be2`；生成物与 `NUMBERS-AUTHORITY.md` |
-| 已完成 | 真机 | Done | 底座 | 8097 包 `1f2c41525ce2`；本轮产品口径通过 |
+| 已完成 | 真机 | Done | 底座 | 8097 包 `ae75ea0334f8`；本轮产品口径通过 |
 | 已完成 | 同拍闸 | Done | 底座 | `3763e22e`；`settleSharedExperienceAffinity` ↔ `affinityBeatTaken` |
 | 进行中·底座 | 同拍共历收口 | In progress | 底座 | 闸已落；边角／历法分叉跟扫描收口 |
 | 进行中·底座 | 已批未落扫描 | In progress / Approved-not-done | 底座 | 扫 GAP／裁定；样板见 APPROVED-BACKLOG |
