@@ -86,6 +86,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'weights.social', kind: 'array', required: true, section: 'combat' },
   { path: 'combat.woundRules.profiles', kind: 'object', required: true, section: 'combat' },
   { path: 'combat.woundRules.hp.keepHp', kind: 'number', required: true, min: 0, section: 'combat' },
+  { path: 'combat.woundRules.hp.downedAtKeep', kind: 'bool', required: false, section: 'combat' },
+  { path: 'combat.woundRules.hp.downedAtKeepContracts', kind: 'array', required: false, section: 'combat' },
   { path: 'combat.woundRules.afterWin.clearLight', kind: 'bool', required: true, section: 'combat' },
   { path: 'combat.woundRules.afterWin.statuses', kind: 'array', required: true, section: 'combat' },
   { path: 'assist.defaultRole', kind: 'string', required: true, section: 'assist' },

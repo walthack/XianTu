@@ -55,7 +55,7 @@ export function effectsOf(state: SceneState, contract: Contract, ctx: Pick<Scene
 }
 
 export function isDowned(state: SceneState, contract: Contract, ctx: Pick<SceneContext, 'catalog'> | undefined, party: string): boolean {
-  return effectsOf(state, contract, ctx, party).some(effect => effect.kind === 'downed');
+  return !!state.hpDowned?.[party] || effectsOf(state, contract, ctx, party).some(effect => effect.kind === 'downed');
 }
 
 export function statusRollModifier(state: SceneState, contract: Contract, ctx: Pick<SceneContext, 'catalog'> | undefined, party: string, scope: 'action' | 'defense'): number {

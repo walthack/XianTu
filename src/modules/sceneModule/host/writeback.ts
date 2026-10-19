@@ -43,8 +43,12 @@ export function applySceneHpLoss(save: SaveData, contract: Contract, state: Scen
   if(!player || !(ratio>0))return 0;
   delete state.hpLoss![player.id];
   const hp=(save as any).角色?.属性?.气血,current=Number(hp?.当前),max=Number(hp?.上限),keep=woundRulesConfig().hp.keepHp;
-  if(!Number.isFinite(current) || !Number.isFinite(max) || max<=0 || current<=keep)return 0;
+  if(!Number.isFinite(current) || !Number.isFinite(max) || max<=0)return 0;
   const next=Math.max(keep,current-Math.round(max*ratio));
+  // fee4 B4：气血被打到保底值（keepHp）即算倒下，交给合同的 partyDowned 判负；不再靠拍数兜底。
+  const hpCfg=woundRulesConfig().hp;
+  if(next<=keep && (hpCfg.downedAtKeep || (hpCfg.downedAtKeepContracts||[]).includes(contract.meta?.id)))(state.hpDowned ||= {})[player.id]=true;
+  if(current<=keep)return 0;
   hp.当前=next;
   return current-next;
 }

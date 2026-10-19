@@ -194,6 +194,12 @@ const entries = [...byId.values()].sort((a, b) => a.id.localeCompare(b.id));
 const idSet = new Set(entries.map(e => e.id));
 if (idSet.size !== entries.length) throw new Error('注册表存在重复 id（不应发生）');
 
+// 手工补卡（游戏原创角色等）：只 append，id 撞车报错。2026-10-20 诗薇莫（F02）。
+{
+  const sup = JSON.parse(readFileSync(join(root, 'mod-kit/character-registry-supplements.json'), 'utf8'));
+  const have = new Set(entries.map(e => e.id));
+  for (const c of sup.characters || []) { if (have.has(c.id)) throw new Error(`补卡 id 与总表撞车：${c.id}`); entries.push(c); have.add(c.id); }
+}
 // RAG 以 sourceHash 判断是否重建本地向量。注册表 ID/stagePresence 不只取决于角色卡，
 // 也取决于当前 stage 演员集合；只哈希 raw cards 会在演员移出关卡后留下旧向量 ID。
 // 哈希最终稳定排序的 entries，覆盖角色卡内容、stage ID 映射和 embedText 的全部变化。

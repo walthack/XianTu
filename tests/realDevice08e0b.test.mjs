@@ -112,7 +112,8 @@ test('8) 同伴与玩家同一套挂伤规则：普通打中只扣气血、不�
 test('8) 全部合同：普通打中直接挂通用伤（外伤/内伤/外伤（重））只剩剧情指定的 F10（按拍出手的定点伤；部位伤已并入外伤，部位写在 params.bodyPart）', async()=>{
  const general=new Set(['wound.external','wound.external.heavy','wound.internal']),left=[];
  for(const c of registry.SCENE_CONTRACTS)for(const act of c.enemyActions||[])for(const s of act.onHit?.statuses||[])if(general.has(s.status))left.push(`${c.meta.id}/${act.id}`);
- assert.deepEqual(left,['combat.f10.ghost_king_clash/dan_chen_bite','combat.f10.ghost_king_clash/ghost_feather_sword','combat.f10.ghost_king_clash/axe_from_behind','combat.f10.ghost_king_clash/bone_claw']);
+ // 2026-10-20 fee4：F12 普通命中改走伤势规则（部位进 woundParams），只剩剧情指定的骨爪加重。
+ assert.deepEqual(left,['combat.f10.ghost_king_clash/bone_claw']);
 });
 
 test('9) F03 真机预览「攻击武士」难度 17 加值 -4：17＝基础 10＋幅度 2 的加价 4（模型报“击退”＝幅度 2，头目轨道还剩 3 步，可兑现 2 步，不触发封顶）＋头目抗性 3；-4＝级差（2 级 vs 3 级）', async()=>{

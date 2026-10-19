@@ -522,6 +522,8 @@ export interface SceneState {
   woundCritBeats?: Record<string, number>;
   /** 通用挂伤：尚未写回存档的气血损失（按气血上限的比例累计；宿主写回后清零）。 */
   hpLoss?: Record<string, number>;
+  /** 气血已到保底值（keepHp）的一方；配置 combat.woundRules.hp.downedAtKeep 打开时算倒下。 */
+  hpDowned?: Record<string, boolean>;
   outcome?: SceneOutcome;
   closed?: boolean;
 }

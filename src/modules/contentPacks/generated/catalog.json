@@ -1,5 +1,5 @@
 {
-  "version": "ab9e17eeda95e831",
+  "version": "1c9058033ea1bab9",
   "contracts": [
     {
       "meta": {
@@ -3068,18 +3068,15 @@
             ]
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.external",
-                "params": {
-                  "bodyPart": "大腿"
-                }
-              }
-            ],
+            "statuses": [],
             "text": "大腿被她咬伤"
           },
           "onBlocked": {
             "text": "你踢开了她"
+          },
+          "woundRule": "default",
+          "woundParams": {
+            "bodyPart": "大腿"
           }
         },
         {
@@ -3096,18 +3093,15 @@
             ]
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.external",
-                "params": {
-                  "bodyPart": "右臂"
-                }
-              }
-            ],
+            "statuses": [],
             "text": "剑尖刺穿了你右臂的衣袖，血流了下来"
           },
           "onBlocked": {
             "text": "你侧身让过剑尖"
+          },
+          "woundRule": "default",
+          "woundParams": {
+            "bodyPart": "右臂"
           }
         },
         {
@@ -3124,18 +3118,15 @@
             ]
           },
           "onHit": {
-            "statuses": [
-              {
-                "status": "wound.external",
-                "params": {
-                  "bodyPart": "背"
-                }
-              }
-            ],
+            "statuses": [],
             "text": "背后被斧刃撕开，伤口没来得及包扎"
           },
           "onBlocked": {
             "text": "你闪开了这一斧"
+          },
+          "woundRule": "default",
+          "woundParams": {
+            "bodyPart": "背"
           }
         },
         {

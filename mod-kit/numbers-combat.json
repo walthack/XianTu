@@ -54,7 +54,7 @@
           }
         },
         "pressing": {
-          "note": "火力全压主角的护人戏（F03 等）：打中即挂外伤；相邻两拍连续重击加重为重伤，重伤后再被打中按升级链倒下。",
+          "note": "火力全压主角的护人戏（F03 等）：普通命中只扣气血、不挂伤（fee4，2026-10-20 用户定），重击挂外伤；相邻两拍连续重击加重为重伤，重伤后再被打中按升级链倒下。",
           "tierFrom": "defenseCheck",
           "tiers": {
             "great_success": {
@@ -63,8 +63,8 @@
               "hpLossRatio": 0.2
             },
             "success": {
-              "chance": 1,
-              "status": "wound.external",
+              "chance": 0,
+              "status": "",
               "hpLossRatio": 0.1
             },
             "failure": {
@@ -92,7 +92,10 @@
         "critical_failure": "大挡"
       },
       "hp": {
-        "keepHp": 1
+        "keepHp": 1,
+        "downedAtKeep": false,
+        "downedAtKeepContracts": ["combat.f14.dragon_god"],
+        "downedAtKeepNote": "气血打到 keepHp 即算倒下（fee4 B4）。先只对 F14 打开：F03 现版每拍固定扣 10%，打满拍数必到保底，要等 F03 助战重做（B2）调好再放开。"
       },
       "afterWin": {
         "clearLight": true,

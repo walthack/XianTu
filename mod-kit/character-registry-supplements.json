@@ -1,0 +1,82 @@
+{
+  "note": "角色总表的手工补卡（只 append）：生成脚本 build-character-registry.mjs 在源卡之后按此追加，id 撞车即报错。源卡 character-cards-v3.json 不入库，补卡放这里才不会在重新生成时丢失。",
+  "characters": [
+    {
+      "id": "lcq.character.nanhuang_shiweimo",
+      "canonicalName": "诗薇莫",
+      "aliases": [
+        "蛇彝女子"
+      ],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": true,
+      "staticProfile": {
+        "identitySummary": "黑石滩蛇彝村寨的女子，在屋檐上伏击商队（游戏原创，替换原著第37章的蛇彝男子）",
+        "personality": [
+          "话少",
+          "记恩记仇",
+          "孤僻但和气",
+          "爱蛇如亲"
+        ],
+        "appearance": "五官秀美近于六朝女子，两颊一道细银鳞自肩后延至眼梢；皮肤白嫩，身材修长姣好，胸部丰满；身后一条淡淡的蛇尾；发戴断了半边的银发箍；动怒时瞳孔竖长",
+        "speechStyle": "多嘶声，六朝话生硬",
+        "principles": [
+          "蛇彝人不到死路不吐毒液"
+        ],
+        "goals": [
+          "为村寨复仇"
+        ],
+        "weaknesses": [
+          "重伤",
+          "吐毒后命不久长，需珍品以上药物或治疗技能救治"
+        ],
+        "signatureAbilities": [
+          "檐上扑击",
+          "蛇尾撞击",
+          "毒气",
+          "附咒毒牙"
+        ],
+        "relationToProtagonist": [
+          "误以为主角一行是仇人"
+        ],
+        "formsOfAddress": [],
+        "joining": [
+          "第37章若被救活，可成为主角侍从（游戏原创）"
+        ],
+        "keyEvents": [
+          "第37章伏击程宗扬与凝羽"
+        ],
+        "ending": [
+          "未获救治则于第37章死去（同原著对手结局）"
+        ],
+        "affiliations": [
+          {
+            "faction": "蛇彝",
+            "role": "村寨女子"
+          }
+        ],
+        "debutLocation": {
+          "location": "黑石滩蛇彝村寨",
+          "locator": "六朝清羽记·第37章",
+          "scene": "夜里从屋檐扑下袭击"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": false,
+        "flags": [
+          "game-original-2026-10-20",
+          "replaces-canon-sheyi-male-F02"
+        ],
+        "conflicts": [],
+        "note": "F02 对手性别改为女（用户 2026-10-20 00:46 定）；外貌「淡淡的蛇尾、身材修长姣好、胸部丰满」为用户 01:02 定；名字是游戏原创（原著蛇彝人无名；按彝族女名「本名＋莫（女性缀词）」取名，影射彝族属推断）。简介只写首见可知的事实，不剧透。"
+      },
+      "embedText": "诗薇莫 ｜ 黑石滩蛇彝村寨的女子，在屋檐上伏击商队；银鳞银饰，身后一条淡淡的蛇尾 ｜ 【南荒人物】 ｜ 蛇彝(村寨女子) ｜ 登场约第37章"
+    }
+  ]
+}
