@@ -1,5 +1,5 @@
 {
-  "version": "1c9058033ea1bab9",
+  "version": "b9d374f662578906",
   "contracts": [
     {
       "meta": {
@@ -4919,7 +4919,10 @@
         {
           "id": "xiaojin",
           "side": "player_side",
-          "ref": "小津",
+          "ref": "lcq.character.nanhuang_xiaojin",
+          "aliases": [
+            "小津"
+          ],
           "role": "combatant"
         },
         {

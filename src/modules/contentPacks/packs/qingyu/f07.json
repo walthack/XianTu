@@ -190,7 +190,8 @@
     {
       "id": "xiaojin",
       "side": "player_side",
-      "ref": "小津",
+      "ref": "lcq.character.nanhuang_xiaojin",
+      "aliases": ["小津"],
       "role": "combatant"
     },
     {
