@@ -1,6 +1,8 @@
 import type { SaveData } from '@/types/game';
 
+import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import { recordOffscreenDivergence } from './divergenceLedger';
+import { namedEntityEntries } from './namedEntities';
 
 export type DivergenceLevel = 'low' | 'medium' | 'high';
 
@@ -61,6 +63,32 @@ function nearestAnchor(runtime: DivergenceRuntime) {
 
 const PROPER_NOUN = /[\u3400-\u9fff]{1,7}(?:宫|殿|阁|宗|派|门|盟|会|堂|教|阵|祭|典|谷|岛|山|河|湖|城|军|营|国|王|侯)/g;
 
+interface ProperNounConfig { stripChars: string; minChars: number; commonPhrases: string[] }
+const properNounConfig = (): ProperNounConfig => (GAME_NUMBERS.diagnostics as unknown as { divergence: { properNoun: ProperNounConfig } }).divergence.properNoun;
+
+/** 正则抓到的候选 → 去掉虚词/代词/动作字前缀后的专名；太短或是常用说法就不算（返回空串）。词表与长度都在 diagnostics.divergence 配置里。 */
+export function properNounCore(candidate: string, cfg: ProperNounConfig = properNounConfig()): string {
+  let cut = -1;
+  for (let i = 0; i < candidate.length - 1; i++) if (cfg.stripChars.includes(candidate[i])) cut = i;
+  const core = candidate.slice(cut + 1);
+  return core.length < cfg.minChars || cfg.commonPhrases.some(phrase => core === phrase || core.endsWith(phrase) && core.length - phrase.length < cfg.minChars) ? '' : core;
+}
+
+/** 先在虚词/代词/动作字处断开，再在每一段里找专名（免得“九幽噬魂阵在圣王宫”被当成一整个候选、再被截坏）。 */
+export function properNounCandidates(text: string, cfg: ProperNounConfig = properNounConfig()): string[] {
+  const pieces = [...cfg.stripChars].reduce((parts, ch) => parts.flatMap(part => part.split(ch)), [text]);
+  return [...new Set(pieces.flatMap(piece => piece.match(PROPER_NOUN) || []).map(match => properNounCore(match, cfg)).filter(Boolean))];
+}
+
+let catalogNames: string[] | null = null;
+/** 实体总表里登记过的人物、地点、势力、敌人名字与别名（存档 canon 之外也算已知）。 */
+function registeredNames(): string[] {
+  catalogNames ||= (['character', 'location', 'faction', 'enemy'] as const)
+    .flatMap(kind => namedEntityEntries(kind).flatMap(entry => [entry.definition?.name, ...(entry.aliases || [])]))
+    .filter((name): name is string => typeof name === 'string' && name.trim().length >= 2);
+  return catalogNames;
+}
+
 function runtimeOf(saveData: SaveData): DivergenceRuntime | null {
   const value = (saveData as any)?.世界?.状态?.剧本模组;
   return value && typeof value === 'object' && !Array.isArray(value) ? value as DivergenceRuntime : null;
@@ -92,9 +120,10 @@ export function computeDivergenceSignal(saveData: SaveData): DivergenceSignal | 
   const text = narratives.join('\n');
   const names = knownNames(runtime);
   const hitNames = names.filter(name => text.includes(name));
-  const candidates = [...new Set(text.match(PROPER_NOUN) || [])];
+  const candidates = properNounCandidates(text);
+  const known = [...names, ...registeredNames()];
   const unfamiliar = candidates.filter(candidate =>
-    !names.some(name => candidate.includes(name) || name.includes(candidate)));
+    !known.some(name => candidate.includes(name) || name.includes(candidate)));
   const knownEntityHitRate = names.length && narratives.length
     ? Math.min(1, hitNames.length / Math.max(1, Math.min(6, narratives.length * 2)))
     : 1;
