@@ -14,7 +14,10 @@ import { sceneContractById, sceneContractForEvent, sceneContractSupportsAction }
 import { activeScene, cloneSave, newActive, readExt, sceneModuleEnabled, writeExt, type ActiveScene } from './ext';
 import { sceneContext, snapshotLevels } from './factors';
 import { partyName, renderRefs, runtimeOf } from './refs';
-import { parseRecognition, recognizeAction, type ModelRequest } from './recognize';
+import { negotiationUnsupported, parseRecognition, recognizeAction, type ModelRequest } from './recognize';
+
+/** 本场合同没有交涉目标时给玩家的提示（不改判成防守）。 */
+export const NO_NEGOTIATION_NOTICE='这一场不能交涉，请改用攻击、防守等打法。';
 import { narrateBeat } from './narrate';
 import { applyWriteBack, syncSceneStatuses } from './writeback';
 
@@ -88,6 +91,9 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
     const rule=classifyByRules(c,text);
     ext.stall[c.meta.id]=(ext.stall[c.meta.id]||0)+1;
     // Observe/chat cannot complete the old objective. The counter is persisted, and the contract owns the ambush threshold.
+    if(negotiationUnsupported(c,text) && ext.stall[c.meta.id] < (c.meta.hook.ambushAfterStall||Infinity)) {
+      writeExt(save,ext);appendHistory(save,NO_NEGOTIATION_NOTICE,text);await deps.persist(save);return true;
+    }
     if(rule.class==='chat' && !wantsInterrogation(c,text) && ext.stall[c.meta.id] < (c.meta.hook.ambushAfterStall||Infinity)) {
       writeExt(save,ext);appendHistory(save,'眼前的交锋尚未解决，请说出你准备采取的行动。',text);await deps.persist(save);return true;
     }
@@ -103,6 +109,7 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
   if(a.state.status==='decided'){await closeHost(save,ext,c,deps);return true;}
   const choice=matchPlayerChoice(c,text);
   if(choice){logInput(a,c,text,{used:false},'intercept');a.choice={choiceId:choice.id,label:choice.label,confirmText:choice.confirmText,endingId:choice.endingId};a.pending=null;writeExt(save,ext);await deps.persist(save);return true;}
+  if(negotiationUnsupported(c,text)&&!wantsInterrogation(c,text)){a.pending=null;a.notice=NO_NEGOTIATION_NOTICE;logInput(a,c,text,{used:false},'clarify');writeExt(save,ext);await deps.persist(save);return true;}
   let modelClass: 'chat'|'action'|'unclear'|undefined;
   const ask=deps.askIntent ? async(req:ModelRequest)=>{const raw=await deps.askIntent!({...req,system:req.system+'\n另加 inputClass 字段：chat/action/unclear。闲聊必须没有任何行动。'});const obj=parseRecognition(raw);modelClass=['chat','action','unclear'].includes(String(obj?.inputClass))?obj!.inputClass as any:undefined;return raw;} : undefined;
   const recognitionKey = JSON.stringify([c.meta.version,text,a.state.beat,a.state.cursors,a.state.tracks,a.state.statuses,a.state.tags,a.state.departed,a.state.leverUses]);

@@ -15,6 +15,8 @@ const MEDIUM = /重创|砍倒|击倒|逼退|制服|按住|制住|压制|摧毁|�
 const ALL = /所有|全部|每一个|每个|他们|它们|一网打尽/;
 
 const PASSIVE = /张开双手不躲|不躲.{0,5}不挡|不招架|不还手|放下刀|硬吃.{0,8}刀/;
+/** 交涉类说法：放下兵刃讲道理、劝对方住手、谈判讲和。 */
+const NEGOTIATE = /交涉|谈判|谈一谈|谈谈|讲和|求和|和谈|议和|停战|休战|罢斗|讲道理|有话好说|好好说|说清(?:缘由|来意|原委)|劝(?:他|她|它|他们|她们|对方|诸位)?(?:住手|罢手|停手|收手)/;
 const NON_COMBAT = /看.*天色|雾什么时候.*散|聊天气|哼.*曲|泡面/;
 const compact = (value: string): string => String(value || '').normalize('NFKC').replace(/\s+/g, '');
 
@@ -168,6 +170,17 @@ function scoreGoal(goal: GoalDef, contract: Contract, text: string, hasAttack: b
 }
 
 /** 规则兜底识别：词表 + 要素别称。输出与模型相同的提议格式，仍要过 validateProposal。 */
+/** 合同里有没有能承接交涉的目标（modifierProfile / judgementKind 为 social）。 */
+export function contractSupportsNegotiation(contract: Contract): boolean {
+  return goalsOf(contract).some(goal => goal.modifierProfile === 'social' || goal.judgementKind === 'social');
+}
+
+/** 玩家这句是交涉（没有动手的字眼），而本场合同没有交涉目标：宿主给一句明确提示，不改判成防守。 */
+export function negotiationUnsupported(contract: Contract, text: string): boolean {
+  if (!NEGOTIATE.test(text) || contractSupportsNegotiation(contract)) return false;
+  return !ATTACK.test(text.replace(NEGOTIATE, ''));
+}
+
 export function recognizeByRules(contract: Contract, state: SceneState, text: string, runtime?: unknown): Record<string, unknown> | null {
   const t = compact(text);
   if (!t || NON_COMBAT.test(text)) return null;
