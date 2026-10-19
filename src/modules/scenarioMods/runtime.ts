@@ -1,5 +1,3 @@
-import {levelFact} from './characterLevels';
-import {realmAt} from './levelProgression';
 import {namingChapter} from './ledger/naming';
 import { settleStoryTrade } from './storyTrades';
 
@@ -3838,9 +3836,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
     }
     if (character.id === 'liuchao.character.xie_yi') {
       npc.记忆 = (npc.记忆 || []).filter((note: string) => !new RegExp("护佑其遗孀|护佑.*遗孤|奉"+"(?:"+entityNamePattern("character","canon.character.a33134d511")+")"+"之命|当前关卡 lcq\\.","").test(String(note)) && (xiaoziDisclosure(runtime).father || !new RegExp("(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.bi_ji")+")"+"|"+"(?:"+entityNamePattern("character","liuchao.character.xiao_zi")+")"+"|遗孤|遗腹","").test(String(note))));
-      const hidden = isXieyiSkillHidden(runtime);
-      const fact=levelFact(character.id,namingChapter(runtime));
-      npc.境界 = fact?.level!==null && fact?.level!==undefined && !hidden ? realmAt(fact.level) : {名称:hidden?'未知':'不详',阶段:'',当前进度:0,下一级所需:0,突破描述:''};
+      reconcileNpcRealm(npc,character.id,namingChapter(runtime),{hidden:isXieyiSkillHidden(runtime)});
     }
     if (['lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis'].includes(runtime.modId || '')
       && [...entityAliases("character","liuchao.character.ning_yu"), ...entityAliases("character","liuchao.character.su_li"), ...entityAliases("character","liuchao.character.a_xi"), ...entityAliases("character","liuchao.character.xie_yi"), ...entityAliases("character","liuchao.character.wu_er_lang"), ...entityAliases("character","liuchao.character.qi_yuan"), ...entityAliases("character","liuchao.character.yun_cang_feng")].includes(character.name)) {

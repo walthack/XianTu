@@ -117,7 +117,16 @@ export function currentActorLevel(id: string, opts: { chapter: number; variant?:
  * - 存档已有境界：只在表上当章级数更高时抬到表级（剧情节点的定向提升，与 currentActorLevel 的 max(存档, 表) 一致）；
  *   从不往下改，也不把当章“暂时压制”烘进存档。
  */
-export function reconcileNpcRealm(npc: any, characterId: string, chapter: number): void {
+const HIDDEN_REALM_NAME = '未知';
+export function reconcileNpcRealm(npc: any, characterId: string, chapter: number, options: { hidden?: boolean } = {}): void {
+  // 隐藏期（如谢艺武功未显露）：展示「未知」，存档里的真实境界暂存在占位里，显露后原样恢复，不按等级表重写。
+  if (options.hidden) {
+    if (npc.境界?.名称 === HIDDEN_REALM_NAME) return;
+    const stash = npc.境界 && typeof npc.境界 === 'object' && levelOf(npc.境界) !== null ? structuredClone(npc.境界) : undefined;
+    npc.境界 = { 名称: HIDDEN_REALM_NAME, 阶段: '', 当前进度: 0, 下一级所需: 0, 突破描述: '', ...(stash ? { 存档境界: stash } : {}) };
+    return;
+  }
+  if (npc.境界?.名称 === HIDDEN_REALM_NAME) npc.境界 = npc.境界.存档境界 ? structuredClone(npc.境界.存档境界) : undefined;
   const fact = levelFact(characterId, chapter);
   const table = typeof fact?.level === 'number' ? fact.level : null;
   const saved = levelOf(npc.境界);

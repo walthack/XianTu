@@ -9,6 +9,8 @@
 //   3. 2026-10-19 22:31 用户批准的小批解冻（runtime.ts / AIBidirectionalSystem.ts）：任务线效果结算迁至 questLineEffects.ts
 //      （角色结局只记归宿、不写 gameOver）、NPC 境界走 actorLevels.reconcileNpcRealm、剧情交易金额读 story.trades、
 //      逐拍演出关卡读行旅数据 + story.stepScene.minutesPerBeat。改完重新上锁：内容哈希基线 tests/frozen-baseline.json。
+//   4. 2026-10-19 23:52 用户批准：runtime.ts 谢艺境界改走 actorLevels.reconcileNpcRealm（存档为准、只补缺失，隐藏期仍显示「未知」）；
+//      AIBS 2742 回合计时 120 分钟读 story.stepScene.minutesPerBeat 用户已知悉。基线哈希同步更新。
 // 已批、可对照但不需再「新批」的清理：63fdf031（runtime world_sim 移除）、cd3d3706（AIBS 快速演示删除）。
 // 禁止：回滚同拍闸、把同拍闸迁出 runtime、为过门禁改游戏运行时逻辑。
 import assert from 'node:assert/strict';
