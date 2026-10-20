@@ -2861,6 +2861,15 @@ ${step1Text}
     const settledFixedBeat = eventProgress?.attempted && eventProgress.outcome === 'success'
       ? (() => { const card = stepScene((saveData as any).世界?.状态?.剧本模组, eventProgress.eventId, eventProgress.actionId); return !card?.fixedFacts?.length || card.forceFixed ? fixedBeatNarrative(eventProgress.eventId, eventProgress.actionId) || (card?.forceFixed ? card.fallbackText : undefined) : undefined; })() : undefined;
     if (settledFixedBeat) { textContent = settledFixedBeat; midTermContent = settledFixedBeat; response.action_options = []; }
+    // 2026-10-20 用户批准改 AIBS（只此一处）：谢艺救治判定为部分成功/失败时，命运已由本地落账为辞世（会出谢艺骨灰），
+    // 写手不得改写成救活——正文与记忆一律换成合同里该档的 outcomeText。
+    if (eventProgress?.attempted && eventProgress.eventId === 'lcq.event.xieyi_entrustment' && eventProgress.actionId === 'rescue_xieyi'
+      && (eventProgress.outcome === 'partial' || eventProgress.outcome === 'failure')) {
+      const rescue = ((saveData as any)?.世界?.状态?.剧本模组?.events || []).find((e: any) => e?.id === 'lcq.event.xieyi_entrustment')
+        ?.playerCompletionContract?.actions?.find((a: any) => a?.id === 'rescue_xieyi');
+      const lockedText = rescue?.outcomeText?.[eventProgress.outcome];
+      if (typeof lockedText === 'string' && lockedText) { textContent = lockedText; midTermContent = lockedText; response.action_options = []; }
+    }
     // 每关首次已结算动作保留一个固定身体信号，避免冰蛊压力整关被写手省掉；不新增致命期限。
     if (response.moduleReceipt && eventProgress?.attempted && eventProgress.outcome === 'success'
       && ['lcq.event.s03b_snake_flower_bridge_01', 'lcq.event.s04_02', 'lcq.event.s04b_lingfei_baiyi_crisis_01'].includes(eventProgress.eventId || '')

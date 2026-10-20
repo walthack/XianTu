@@ -204,7 +204,7 @@ function applyCreationPreset(save: SaveData, mod: ScenarioMod): void {
   }
 }
 
-export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = new Date().toISOString(), nanhuangPhase?: 1 | 2, playtestId?: string): SaveData {
+export function createQingyuOpeningPlaytestSave(mod: ScenarioMod, generatedAt = new Date().toISOString(), nanhuangPhase?: 1 | 2 | 3, playtestId?: string): SaveData {
   const selectedDefinition=packPlaytest(playtestId || (nanhuangPhase ? `nanhuang-${nanhuangPhase}` : 'qingyu'));
   if (mod.manifest.id !== selectedDefinition.startModId) {
     throw new Error(`清羽记开局试玩需要内置模组 ${QINGYU_OPENING_PLAYTEST_MOD_ID}`);
@@ -285,6 +285,18 @@ export function nextNanhuangPhase(save: SaveData | null | undefined): PackPlayte
  * 引擎是否拦住转场、界面是否判为本期结束，都只看这个标记（见 isNanhuangDemoFinished / transitionToNextScenarioStage）。
  * 返回新存档，不改入参；没有下一期时返回 null。
  */
+/** 当前隔离档的终点标记停在南荒第几期（nanhuang-N）；不是南荒分期档时返回 0。 */
+export function nanhuangPhaseNumber(save: SaveData | null | undefined): number {
+  for (const p of CONTENT_PACKS.playtests) {
+    const marker = (save as any)?.系统?.扩展?.[p.extensionKey] as QingyuOpeningPlaytestMarker | undefined;
+    if (marker?.kind !== p.kind || !marker.endEventId) continue;
+    const current = CONTENT_PACKS.playtests.find(c => c.kind === marker.kind && c.endModId === marker.endModId && c.endEventId === marker.endEventId);
+    const n = Number(/^nanhuang-(\d+)$/.exec(current?.id || '')?.[1]);
+    if (n) return n;
+  }
+  return 0;
+}
+
 export function withNextNanhuangPhase(save: SaveData): SaveData | null {
   const next = nextNanhuangPhase(save);
   if (!next) return null;

@@ -528,7 +528,7 @@ export interface SceneState {
   hpLoss?: Record<string, number>;
   /** 战中疗伤记下的回血比例（按上限），由 host 写回气血后清零。 */
   hpGain?: Record<string, number>;
-  /** 气血已到保底值（keepHp）的一方；配置 combat.woundRules.hp.downedAtKeep 打开时算倒下。 */
+  /** 战斗伤害把气血打到 combat.woundRules.hp.combatDownedAt 的一方（倒下）。 */
   hpDowned?: Record<string, boolean>;
   outcome?: SceneOutcome;
   closed?: boolean;

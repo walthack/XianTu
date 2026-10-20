@@ -11,6 +11,7 @@ const stage01 = async () => {
 };
 const PHASE1_END = ['lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.event.enter_dong_with_migu'];
 const PHASE2_END = ['lcq.stage_05b', 'lcq.event.shanghou_cures_ice_gu'];
+const PHASE3_END = ['lcq.stage_07_qingyuan_jiankang', 'lcq.event.s07_00c_arrive_jiankang'];
 async function endedSave(phase, [modId, eventId]) {
   const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const save = createQingyuOpeningPlaytestSave(await stage01(), '2026-10-14T00:00:00.000Z', phase);
@@ -42,12 +43,12 @@ test('phase 1 finished: continuing moves only the end marker to phase 2 and unbl
   assert.notEqual(transitionToNextScenarioStage(next, []).reason, '本期南荒试玩已结束');
   assert.equal(next.世界.状态.剧本模组, save.世界.状态.剧本模组, '玩家进度原样保留');
   assert.equal(q.isNanhuangDemoFinished(save), true, '不改入参');
-  assert.equal(q.nextNanhuangPhase(next), undefined);
+  assert.equal(q.nextNanhuangPhase(next)?.id, 'nanhuang-3', '2026-10-20 加第三期：二期之后接返程入建康');
 });
 
 test('the last phase and non-phase saves have nothing to continue to', async () => {
   const q = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
-  const last = await endedSave(2, PHASE2_END);
+  const last = await endedSave(3, PHASE3_END);
   assert.equal(q.isNanhuangDemoFinished(last), true);
   assert.equal(q.nextNanhuangPhase(last), undefined);
   assert.equal(q.withNextNanhuangPhase(last), null);
@@ -60,7 +61,8 @@ test('the finished card offers the continue button only when a next phase exists
   assert.match(panel, /v-if="nextPlaytestPhase"[^>]*@click="continueToNextPhase"/);
   assert.doesNotMatch(panel, /进度已保留，可返回入口选择下一期重新试玩/);
   const view = await read('src/views/QingyuOpeningPlaytestStartView.vue');
-  assert.match(view, /nanhuangPhase\.value === 2\) await gameStateStore\.continueToNextPlaytestPhase\(\)/);
+  assert.match(view, /nanhuangPhaseNumber\(gameStateStore\.toSaveData\(\)\) < nanhuangPhase\.value\)[\s\S]*continueToNextPlaytestPhase\(\)/);
+  assert.match(view, /<option :value="3">三期/);
   assert.match(await read('src/stores/gameStateStore.ts'), /async continueToNextPlaytestPhase\(\)/);
 });
 

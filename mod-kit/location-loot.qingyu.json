@@ -9,7 +9,8 @@
     "rareChance": 0.03,
     "largeCurrencyChance": 0.02,
     "maxCopperPerSearch": 80,
-    "bossChance": 0.6
+    "bossChance": 0.6,
+    "companionRemarkChance": 0.5
   },
   "locations": {
     "lcq.location.beast_camp": {

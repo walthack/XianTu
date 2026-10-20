@@ -23,7 +23,7 @@ export interface WoundRulesConfig {
   profiles: Record<string, WoundProfile>;
   /** 回执里给敌方这一下的档加的字样（空串＝不标）。 */
   labels: Record<WoundTier, string>;
-  hp: { keepHp: number; downedAtKeep?: boolean; downedAtKeepContracts?: string[]; /** 主角倒下即判负（全局，不靠合同 defeat 自己写 partyDowned）。 */ playerDownedLoses?: boolean };
+  hp: { /** 只给状态持续掉血保底（中毒等），战斗伤害不用。 */ keepHp: number; /** 战斗伤害打到 ≤ 此值即倒下。 */ combatDownedAt: number; /** 输了剧情继续时收场拉回的气血。 */ afterLossContinueHp: number; /** 主角倒下即判负（全局，不靠合同 defeat 自己写 partyDowned）。 */ playerDownedLoses?: boolean };
   afterWin: { clearLight: boolean; statuses: string[]; sides: string[] };
 }
 

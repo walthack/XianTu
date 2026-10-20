@@ -36,19 +36,17 @@ export function clearLightWoundsAfterWin(contract: Contract, state: SceneState, 
   return cleared;
 }
 
-/** 通用挂伤记下的气血损失（按上限比例）写进主角 角色.属性.气血，写完清零；不低于配置的 keepHp。NPC 不记气血。 */
+/** 通用挂伤记下的气血损失（按上限比例）写进主角 角色.属性.气血，写完清零。战斗伤害不保底（keepHp 只给状态掉血）：打到 combatDownedAt 即倒下。NPC 不记气血。 */
 export function applySceneHpLoss(save: SaveData, contract: Contract, state: SceneState): number {
   const player=contract.parties.find(p=>p.player),ratio=player ? state.hpLoss?.[player.id] || 0 : 0;
   if(state.hpLoss)for(const party of contract.parties)if(!party.player)delete state.hpLoss[party.id];
   if(!player || !(ratio>0))return 0;
   delete state.hpLoss![player.id];
-  const hp=(save as any).角色?.属性?.气血,current=Number(hp?.当前),max=Number(hp?.上限),keep=woundRulesConfig().hp.keepHp;
+  const hp=(save as any).角色?.属性?.气血,current=Number(hp?.当前),max=Number(hp?.上限),downAt=woundRulesConfig().hp.combatDownedAt;
   if(!Number.isFinite(current) || !Number.isFinite(max) || max<=0)return 0;
-  const next=Math.max(keep,current-Math.round(max*ratio));
-  // fee4 B4：气血被打到保底值（keepHp）即算倒下，交给合同的 partyDowned 判负；不再靠拍数兜底。
-  const hpCfg=woundRulesConfig().hp;
-  if(next<=keep && (hpCfg.downedAtKeep || (hpCfg.downedAtKeepContracts||[]).includes(contract.meta?.id)))(state.hpDowned ||= {})[player.id]=true;
-  if(current<=keep)return 0;
+  const next=Math.max(0,current-Math.round(max*ratio));
+  if(next<=downAt)(state.hpDowned ||= {})[player.id]=true;
+  if(current<=0)return 0;
   hp.当前=next;
   return current-next;
 }
@@ -61,6 +59,9 @@ export function applyWriteBack(save: SaveData, contract: Contract, state: SceneS
   const notes: string[] = [];
   if (!runtime) return { notes: ['存档里没有剧本运行时，状态与旗标没有写回'] };
   applySceneHpLoss(save,contract,state);
+  // 输了但剧情继续（不进结局）：气血从 0 拉回 afterLossContinueHp，免得界面按“气血耗尽”判死。
+  {const hp=(save as any).角色?.属性?.气血,back=woundRulesConfig().hp.afterLossContinueHp;
+   if(writeBack.outcome?.kind==='lose'&&!writeBack.outcome?.endingId&&hp&&Number(hp.当前)<back)hp.当前=back;}
   for(const row of cleared)notes.push(`战后休整：${partyName(contract,runtime,row.party)}的${row.label}已处理好。`);
   const ledger = ledgerOf(runtime);
   const sceneSource = contract.meta.id;

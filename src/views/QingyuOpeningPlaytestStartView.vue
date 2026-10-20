@@ -10,7 +10,7 @@
         任务栏会给出当前合同，右栏有完成合同按钮。
       </p>
 
-      <label v-if="!packId">试玩范围 <select v-model="nanhuangPhase"><option :value="1">一期：至第86章进入鬼王峒</option><option :value="2">二期：至第124章南荒尾声</option></select></label>
+      <label v-if="!packId">试玩范围 <select v-model="nanhuangPhase"><option :value="1">一期：至第86章进入鬼王峒</option><option :value="2">二期：至第124章南荒尾声</option><option :value="3">三期：至第126章返程入建康</option></select></label>
       <div class="facts">
         <article><strong>南荒两期</strong><span>从草原落地、五原出发，继续南荒商路与鬼王峒主线</span></article>
         <article><strong>需要叙事 API</strong><span>使用你在“API 管理”中已有的配置</span></article>
@@ -21,7 +21,7 @@
         <li>自由输入观察、交涉或行动，不必照抄推荐选项；顺序仍按原著拍点推进。</li>
         <li>任务栏显示当前 objective；右栏点「完成合同」才会把这一拍标完成。</li>
         <li>战场上不走，会被王哲九阳自爆的焰浪吞没；在苏妲己面前拒绝三个月期限，会当场受炮烙。两处都直接结束本局。</li>
-        <li>一期止于入峒，二期止于殇侯授艺；死亡结局会提前结束本局。</li>
+        <li>一期止于入峒，二期止于殇侯授艺，三期止于返程入建康；死亡结局会提前结束本局。</li>
       </ol>
 
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -52,6 +52,7 @@ import {
   QINGYU_OPENING_PLAYTEST_KIND,
   QINGYU_OPENING_PLAYTEST_MOD_ID,
   QINGYU_OPENING_PLAYTEST_SLOT,
+  nanhuangPhaseNumber,
 } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
 
 const router = useRouter();
@@ -64,7 +65,7 @@ const entryTitle=computed(()=>packId.value ? CONTENT_PACKS.entries.find(e=>e.pla
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const busy = ref(false);
-const nanhuangPhase = ref<1 | 2>(1);
+const nanhuangPhase = ref<1 | 2 | 3>(1);
 const errorMessage = ref(invalidPack.value ? '这个试玩入口不存在或未配置隔离存档，请返回主页选择有效入口。' : '');
 watch(invalidPack,bad=>{errorMessage.value=bad ? '这个试玩入口不存在或未配置隔离存档，请返回主页选择有效入口。' : '';});
 const playtestMod=computed(()=>BUILTIN_SCENARIO_MODS.find(mod=>mod.manifest.id===definition.value.startModId));
@@ -104,8 +105,13 @@ async function continuePlaytest() {
       definition.value.slot!,
     );
     if (!loaded || !gameStateStore.isGameLoaded) throw new Error('未能读取上次试玩档');
-    // 选了二期、上次档停在一期终点：同一份进度直接接着走，不用重玩。
-    if (!packId.value && nanhuangPhase.value === 2) await gameStateStore.continueToNextPlaytestPhase();
+    // 选了后面的期、上次档的终点标记停在前一期：同一份进度直接把标记挪到所选那期，不用重玩；已在所选期或更后不动。
+    if (!packId.value) {
+      while (nanhuangPhaseNumber(gameStateStore.toSaveData()) && nanhuangPhaseNumber(gameStateStore.toSaveData()) < nanhuangPhase.value) {
+        const step = await gameStateStore.continueToNextPlaytestPhase();
+        if (!step.ok) break;
+      }
+    }
     await router.replace('/game');
   } catch (error) {
     errorMessage.value = String((error as Error)?.message || error);

@@ -85,7 +85,7 @@ test('原“打中即挂外伤”的合同改走 woundRule（只改机制字段�
   for (const c of SCENE_CONTRACTS) assert.deepEqual(mod.lintContract(c).errors, [], c.meta.id);
 });
 
-test('赢了之后战后休整清掉我方轻伤（按配置）；重伤保留；输了不清；气血损失写回且不低于 keepHp', async () => {
+test('赢了之后战后休整清掉我方轻伤（按配置）；重伤保留；输了不清；气血损失写回；战斗伤害不保底，可到 0', async () => {
   const wb = await loadTs('../src/modules/sceneModule/host/writeback.ts');
   const contract = makeContract();
   const rows = () => [{ party: 'pc', ref: 'test.character.hero', status: 'wound.external', label: '外伤', minutes: 10080, cause: 'combat' },
@@ -105,7 +105,7 @@ test('赢了之后战后休整清掉我方轻伤（按配置）；重伤保留�
   assert.deepEqual(s.hpLoss, {}, '写回后清零，不重复扣');
   const low = { 角色: { 属性: { 气血: { 当前: 5, 上限: 100 } } } };
   wb.applySceneHpLoss(low, contract, { hpLoss: { pc: 0.5 } });
-  assert.equal(low.角色.属性.气血.当前, WR.hp.keepHp);
+  assert.equal(low.角色.属性.气血.当前, 0, '战斗伤害不吃 keepHp 保底');
 });
 
 test('外伤（重）进状态目录：来源→效果→解除写全；解除含休整与疗伤道具；-3/-3、30 天、升级到倒下；不自愈', async () => {

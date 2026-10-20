@@ -49,7 +49,7 @@ test('F03 吊桥战：前锋按存档角色名显示，不漏原始 id', async (
 });
 
 // P1-3：CP-1aae-07 读回后谢艺三选项没了。存档里这一事件已完成、选择旗标没写：事件完成/选项逻辑在冻结文件 runtime.ts，本轮只复现不改。
-test('CP-07：谢艺选择前的事件在存档里已完成且没有选择回执（冻结文件，待处理）', () => {
+test('CP-07：s05b_09 在存档里已完成（2026-10-20 复查：那拍已选 support_xieyi_counterstrike，见 round1020bFixes C）', () => {
   const f = fx('cp07-xieyi-choice-lost.json');
   assert.ok(f.completedEventIds.includes('lcq.event.s05b_09_temporary_pact_with_xiaozi'));
   assert.equal(f.flags['event.xieyi_entrustment.done'], false);

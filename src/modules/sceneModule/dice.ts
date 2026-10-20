@@ -9,7 +9,7 @@ export type DiceStream = 'action' | 'action2' | 'defense';
 
 const STREAM_SALT: Record<DiceStream, number> = { action: 0x9e3779b1, action2: 0x85ebca6b, defense: 0xc2b2ae35 };
 
-function mix32(value: number): number {
+export function mix32(value: number): number {
   let z = (value + 0x6d2b79f5) >>> 0;
   z = Math.imul(z ^ (z >>> 15), z | 1);
   z ^= z + Math.imul(z ^ (z >>> 7), z | 61);

@@ -11,9 +11,8 @@ export interface JudgementNumbers {
   dice: { sides: number; rerollOnOneChance: number };
   /** 总值 ≥ 难度 + 该值 即达到该档；success 线相对难度为 0。 */
   outcomeLines: { perfect: number; greatSuccess: number; success: number; partial: number; failure: number };
-  /** 气血占上限比例低于 hpRatioBelow 时加一条 penalty 的“重伤”因子。 */
+  /** 2026-10-20：「气血低于阈值加重伤」已去掉，这里只剩正文补账两项。 */
   injury: {
-    hpRatioBelow: number; penalty: number;
     /** 正文写了受伤但没写扣血时的自动补账（narratedDamage.ts）：判定差 ≤ majorMargin 算重伤扣 majorRatio，否则按正文轻重扣 severe / moderate / light 的比例（占气血上限）。 */
     narrated: { majorMargin: number; majorRatio: number; severeRatio: number; moderateRatio: number; lightRatio: number };
     /** 气血被扣到 0 而正文没写死亡时，保底恢复到上限的这个比例（至少 1 点）。 */
@@ -41,7 +40,7 @@ export function validateJudgementNumbers(cfg: JudgementNumbers = judgementNumber
   if (!(finite(dice?.rerollOnOneChance) && dice.rerollOnOneChance >= 0 && dice.rerollOnOneChance <= 1)) errors.push('judgement.dice.rerollOnOneChance 须在 [0,1]');
   const order = [lines?.perfect, lines?.greatSuccess, lines?.success, lines?.partial, lines?.failure];
   if (!order.every(finite) || order.some((v, i) => i > 0 && !(order[i - 1]! > v!))) errors.push('judgement.outcomeLines 须为数，且 perfect > greatSuccess > success > partial > failure');
-  if (!(finite(injury?.hpRatioBelow) && injury.hpRatioBelow >= 0 && injury.hpRatioBelow <= 1) || !finite(injury?.penalty)) errors.push('judgement.injury 须有 [0,1] 的 hpRatioBelow 和数值 penalty');
+  if (injury && ('hpRatioBelow' in injury || 'penalty' in injury)) errors.push('judgement.injury 不再接受 hpRatioBelow / penalty（气血低于阈值加重伤已去掉，重伤只跟伤势状态走）');
   const narrated = injury?.narrated;
   if (!finite(narrated?.majorMargin) || !(['majorRatio', 'severeRatio', 'moderateRatio', 'lightRatio'] as const).every(key => finite(narrated[key]) && narrated[key] > 0 && narrated[key] < 1)) errors.push('judgement.injury.narrated 须有数值 majorMargin 和 (0,1) 的各档比例');
   if (!(finite(injury?.zeroHealthRecoveryRatio) && injury.zeroHealthRecoveryRatio > 0 && injury.zeroHealthRecoveryRatio <= 1)) errors.push('judgement.injury.zeroHealthRecoveryRatio 须在 (0,1]');

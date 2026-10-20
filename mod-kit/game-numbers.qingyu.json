@@ -187,13 +187,14 @@
       },
       "hp": {
         "keepHp": 1,
-        "downedAtKeep": true,
-        "downedAtKeepContracts": [
-          "combat.f14.dragon_god"
-        ],
+        "keepHpNote": "2026-10-20 用户定：keepHp 只给中毒这类状态持续掉血保底；战斗伤害不保底。",
+        "combatDownedAt": 0,
+        "combatDownedAtNote": "战斗伤害把主角气血打到 ≤ combatDownedAt 即倒下，当拍判负（合同写 sideDowned「全队倒下才输」的除外），按合同进结局或 continue 的输局剧情。",
+        "afterLossContinueHp": 1,
+        "afterLossContinueHpNote": "输了但剧情继续（outcome continue）时，收场把气血从 0 拉回到这个值，免得被界面当成气血耗尽死亡；进结局的输局不拉回。",
         "playerDownedLoses": true,
         "playerDownedLosesNote": "2026-10-20 6ccb 真机：F03/F04/F09 主角倒下（气血到 keepHp 或挂 downed 类状态）后不判负——F09 等合同的 defeat 没写 partyDowned(pc)。打开后任何合同里主角倒下即判负，不依赖各合同自己写。",
-        "downedAtKeepNote": "气血打到 keepHp 即算倒下（fee4 B4）。2026-10-20 全局打开：模拟（combat-simulation.mjs 已按同一规则扣气血）参考玩家胜率均不低于 minWinRate，F03 74.5%、F13 65%。"
+        "downedHistoryNote": "fee4 B4 曾按「打到 keepHp 即倒下」（downedAtKeep），2026-10-20 改为战斗伤害不保底、打到 combatDownedAt 倒下。"
       },
       "afterWin": {
         "clearLight": true,
@@ -1590,8 +1591,7 @@
       "failure": -15
     },
     "injury": {
-      "hpRatioBelow": 0.25,
-      "penalty": -15,
+      "note": "2026-10-20 用户定：去掉「气血低于 25% 加重伤 -15」——重伤只跟真正的伤势状态走（外伤（重）等，按状态目录的判定减值）。",
       "narrated": {
         "majorMargin": -15,
         "majorRatio": 0.4,

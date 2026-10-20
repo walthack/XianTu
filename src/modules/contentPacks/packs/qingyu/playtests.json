@@ -52,7 +52,15 @@
     "extends": "qingyu",
     "endModId": "lcq.stage_05b",
     "endEventId": "lcq.event.shanghou_cures_ice_gu",
-    "scope": "lcq.stage_01-shanghou_cures_ice_gu"
+    "scope": "lcq.stage_01-shanghou_cures_ice_gu",
+    "nextId": "nanhuang-3"
+  },
+  {
+    "id": "nanhuang-3",
+    "extends": "qingyu",
+    "endModId": "lcq.stage_07_qingyuan_jiankang",
+    "endEventId": "lcq.event.s07_00c_arrive_jiankang",
+    "scope": "lcq.stage_01-s07_00c_arrive_jiankang"
   },
   {
     "id": "landing",

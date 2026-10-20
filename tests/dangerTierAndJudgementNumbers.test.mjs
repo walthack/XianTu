@@ -150,7 +150,7 @@ test('judgement 配置体检：各项坏值逐个报错', () => {
   const broken = patch => { const c = structuredClone(judgementCfg.judgementNumbers()); patch(c); return judgementCfg.validateJudgementNumbers(c).join('\n'); };
   assert.match(broken(c => { c.dice.rerollOnOneChance = 1.5; }), /rerollOnOneChance/);
   assert.match(broken(c => { c.dice.sides = 1; }), /dice\.sides/);
-  assert.match(broken(c => { c.injury.hpRatioBelow = -1; }), /judgement\.injury/);
+  assert.match(broken(c => { c.injury.hpRatioBelow = 0.25; }), /judgement\.injury/);
   assert.match(broken(c => { c.environment.divisor.craft = 0; }), /divisor\.craft/);
   assert.match(broken(c => { c.preflight.difficulty.byKind.combat.band = 'brutal'; }), /difficulty\.combat/);
   assert.match(broken(c => { c.preflight.difficulty.byKind.cultivate.value = 'no.such.key'; }), /difficulty\.cultivate/);
@@ -179,15 +179,12 @@ test('rollD20：骰到 1 默认 50% 重投；概率走配置', async () => {
   });
 });
 
-test('重伤：默认气血 <25% 扣 15，阈值与扣值走配置', async () => {
+test('2026-10-20：气血低不再挂「重伤」减值（战斗与普通判定都没有）；配置里也不再有 hpRatioBelow/penalty', () => {
   const save = (current, max = 100) => ({ 角色: { 身份: {}, 属性: { 气血: { 当前: current, 上限: max } } } });
-  const injury = s => preflight.stateFactors('combat', s).filter(f => f.label === '重伤');
-  assert.deepEqual(injury(save(24)).map(f => f.value), [-15]);
-  assert.deepEqual(injury(save(25)), []);
-  await restoring(() => {
-    mods.numbers.applyGameNumbers({ judgement: { injury: { hpRatioBelow: 0.5, penalty: -9 } } });
-    assert.deepEqual(injury(save(40)).map(f => f.value), [-9]);
-  });
+  for (const kind of ['combat', 'cultivate', 'social', 'craft']) for (const hp of [1, 10, 24, 80])
+    assert.deepEqual(preflight.stateFactors(kind, save(hp)).filter(f => f.label === '重伤'), [], `${kind} 气血 ${hp}`);
+  const inj = judgementCfg.judgementNumbers().injury;
+  assert.equal(inj.hpRatioBelow, undefined); assert.equal(inj.penalty, undefined);
 });
 
 test('环境修正与幸运点：默认值不变，除数 / 基准 / 默认灵气浓度走配置', async () => {

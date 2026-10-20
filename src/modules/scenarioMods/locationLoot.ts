@@ -4,6 +4,7 @@ import { canonicalLocationId } from './travel/locationIds';
 import { currentLocation } from './travel/travelLedger';
 import { settleScenarioInventoryTransfers } from './inventoryTransactions';
 import { DEFAULT_CURRENCIES, type DefaultCurrencyId } from '../../utils/currencySystem';
+import { scenarioPlayerId } from './playerIdentity';
 
 export interface LocationLootEntry {
   id: string; itemId?: string; category: 'key' | 'common' | 'rare' | 'currency' | 'boss';
@@ -12,12 +13,15 @@ export interface LocationLootEntry {
 }
 export interface LocationLootTable {
   version: number;
-  rules: { maxSearches: number; commonSlots: number[]; rareChance: number; largeCurrencyChance: number; maxCopperPerSearch: number; /** boss 场景专属：每次搜刮各自独立判定的缺省几率（条目 chance 可覆盖）。 */ bossChance?: number };
+  rules: { maxSearches: number; commonSlots: number[]; rareChance: number; largeCurrencyChance: number; maxCopperPerSearch: number; /** boss 场景专属：每次搜刮各自独立判定的缺省几率（条目 chance 可覆盖）。 */ bossChance?: number; /** 搜到仙品/神品时队友评价的触发概率。 */ companionRemarkChance?: number };
   locations: Record<string, { name: string; status: 'pending' | 'ready'; entries: LocationLootEntry[]; maxCopper?: number; kind?: 'ordinary' | 'special'; /** 可选：本地点的稀有几率，覆盖 rules.rareChance。 */ rareChance?: number }>;
 }
 export interface LocationLootReceipt {
   id: string; locationId: string; attempt: number; seed: number; turn: number;
-  drops: Array<{ entryId: string; itemId?: string; name: string; quantity: number; currency?: string }>;
+  drops: Array<{ entryId: string; itemId?: string; name: string; quantity: number; currency?: string; grade?: string;
+    /** 队友评价信号（2026-10-20）：只给品级与在场队友 id，评价怎么说交主持模型按各自性格写。 */
+    队友评价?: { 品级: string; 在场队友: string[] } }>;
+  companionRemark?: { itemId: string; grade: string; companionIds: string[] };
 }
 export interface LocationLootState {
   version: 1; seed: number; searches: Record<string, number>; claimed: string[];
@@ -116,10 +120,37 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
     }
     if (entry.once || entry.category === 'key') state.claimed.push(`${locationId}:${entry.id}`);
   }
+  // 搜到仙品/神品：按配置概率给一个队友评价信号（无队友、凡品、珍品不触发）。
+  const best = receipt.drops.filter(d => d.itemId && REMARK_GRADES.includes(gradeOf(runtime, d.itemId)))
+    .sort((a, b) => REMARK_GRADES.indexOf(gradeOf(runtime, b.itemId!)) - REMARK_GRADES.indexOf(gradeOf(runtime, a.itemId!)))[0];
+  const mates = best ? presentCompanionIds(save, runtime) : [];
+  if (best && mates.length && roll() < Number(table.rules.companionRemarkChance ?? 0)) {
+    const grade = gradeOf(runtime, best.itemId!);
+    best.grade = grade; best.队友评价 = { 品级: grade, 在场队友: mates };
+    receipt.companionRemark = { itemId: best.itemId!, grade, companionIds: mates };
+  }
   state.searches[locationId] = attempt;
   state.receipts.push(receipt);
   runtime.locationLoot = state;
   return { status: 'settled' as const, receipt, text: lootReceiptText(receipt) };
+}
+/** 触发队友评价的品级（四品里只有仙品、神品）。 */
+const REMARK_GRADES = ['仙品', '神品'];
+function gradeOf(runtime: any, itemId: string): string {
+  return String((runtime?.canon?.items || []).find((i: any) => i?.id === itemId)?.grade || '');
+}
+/** 在场队友：当前进行中事件的相关角色，去掉主角与已离队/已故的人。 */
+export function presentCompanionIds(save: SaveData, runtime: any): string[] {
+  const player = scenarioPlayerId(save);
+  const gone = new Set<string>([...(runtime?.departedCast || []).map((d: any) => typeof d === 'string' ? d : d?.id)].filter(Boolean));
+  const ids = new Set<string>();
+  for (const id of runtime?.activeEventIds || []) {
+    const ev = (runtime?.events || []).find((e: any) => e?.id === id);
+    for (const c of ev?.relatedCharacterIds || []) if (c && c !== player && !gone.has(c)) ids.add(c);
+  }
+  const protagonist = (runtime?.canon?.characters || []).find((c: any) => c?.isProtagonist)?.id;
+  if (protagonist) ids.delete(protagonist);
+  return [...ids];
 }
 export function lootReceiptText(receipt: LocationLootReceipt): string {
   return receipt.drops.length ? `你搜刮后收好${receipt.drops.map(d => `${d.name}×${d.quantity}`).join('、')}。` : '你仔细搜刮了一番，没有找到可带走的东西。';

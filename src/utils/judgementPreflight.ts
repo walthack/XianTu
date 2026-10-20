@@ -58,17 +58,15 @@ const STAT_WEIGHTS = GAME_NUMBERS.weights as Record<JudgementKind, Array<[string
 function numeric(value: unknown): number { const n = Number(value); return Number.isFinite(n) ? n : 0; }
 
 /**
- * recovery＝这次判定本身是疗伤 / 调息（回气血的自修）：不吃气血过低的“重伤”减值，否则越伤越难治。
- * 只免这一条；六司、技能、环境照常。
+ * 2026-10-20 用户定：去掉「气血低于阈值就加重伤 -15」（自行加的规则）。重伤只跟真正的伤势状态走（如外伤（重）），
+ * 由状态目录的判定减值计入。recovery 参数保留以兼容调用方。
  */
 export function stateFactors(kind: JudgementKind, saveData: any, options: { recovery?: boolean } = {}) {
   const innate = saveData?.角色?.身份?.先天六司 || {};
   const acquired = saveData?.角色?.身份?.后天六司 || {};
   const weighted = STAT_WEIGHTS[kind].reduce((sum, [key, weight]) => sum + (numeric(innate[key]) + numeric(acquired[key])) * weight, 0);
   const factors: any[] = [{ label: '六司', value: boundedStat(weighted), source: 'attribute' }];
-  const hp = saveData?.角色?.属性?.气血;
-  const injury = judgementNumbers().injury;
-  if (!options.recovery && numeric(hp?.上限) > 0 && numeric(hp?.当前) / numeric(hp?.上限) < injury.hpRatioBelow) factors.push({ label: '重伤', value: injury.penalty, source: 'condition' });
+  void options;
   return factors;
 }
 

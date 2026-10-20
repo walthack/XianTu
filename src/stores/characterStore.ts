@@ -36,6 +36,7 @@ import {
 import SaveMigrationModal from '@/components/dashboard/components/SaveMigrationModal.vue';
 import type { World} from '@/types';
 import type { TavernCommand as ValidatedTavernCommand } from '@/types/AIGameMaster';
+import { reseedActiveSceneAfterLoad } from '@/modules/sceneModule/host/rngSalt';
 import type { LocalStorageRoot, CharacterProfile, CharacterBaseInfo, SaveSlot, SaveData, StateChangeLog, Realm, NpcProfile, Item } from '@/types/game';
 import {
   applyLoadedSaveToWorkingSlotMeta,
@@ -1119,6 +1120,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
       if (targetSlot.存档数据) {
         const patched = isTavernEnv() ? (ensureSaveDataHasTavernNsfw(targetSlot.存档数据) as SaveData) : targetSlot.存档数据;
         targetSlot.存档数据 = patched;
+        reseedActiveSceneAfterLoad(patched);
         gameStateStore.loadFromSaveData(patched);
         debug.log('角色商店', '✅ 存档数据已加载到 gameStateStore');
 
@@ -2293,6 +2295,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
     // 🔥 修复：同步到gameStateStore，确保UI立即更新
     const gameStateStore = useGameStateStore();
+    reseedActiveSceneAfterLoad(rolledBackData);
     await gameStateStore.loadFromSaveData(rolledBackData);
 
     // 🔥 强制触发UI更新

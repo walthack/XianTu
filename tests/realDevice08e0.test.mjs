@@ -87,13 +87,12 @@ test('2) 赢后清轻伤：真机 seed 的 F01 只留轻伤 → 收尾战后休�
  assert.doesNotMatch(done.memoryNote,/留下的状态/);
 });
 
-test('3) F02 加值 -20/-22 的来历：等级差 -4 ＋ 判定引擎的“重伤”（气血 ≤25% 恒 -15）＋ 外伤 -1 / 外伤（重）-3；每项只算一次，没有重复叠加',async()=>{
+test('3) F02 加值来历（2026-10-20 改）：气血 ≤25% 不再挂「重伤 -15」——那是自行加的规则；只剩等级差 -4 与真实伤势状态（外伤 -1 / 外伤（重）-3），每项只算一次',async()=>{
  let save=await advanceToScene(await readSaveFixture('./fixtures/playtest-08e0/f01-after.json'));
  inj.removePlayerInjuriesByRest(save);save.角色.属性.气血.当前=50; // 真机这一局进场时外伤已解、气血 50
  const h=harness(save,['attack','defend','attack','attack','defend','defend']);
  // 真机 combat.log 的骰面：行动 15、2、5、2；防御 10、11、3、9
  const lines=await playBeats(h,'我挥刀攻击最近的敌人',{forced:{action:[15,2,5,2,1,1,1,1],defense:[10,11,3,9,1,1,1,1]}});
- const injury=GAME_NUMBERS.judgement.injury;
  for(const row of lines){
   const labels=row.ctx.breakdown.action.map(f=>f.label);
   assert.equal(new Set(labels).size,labels.length,`第 ${row.beat} 拍：同一来源不重复`);
@@ -101,9 +100,8 @@ test('3) F02 加值 -20/-22 的来历：等级差 -4 ＋ 判定引擎的“重�
   assert.equal(parts.levers+parts.novelty+parts.cash,0,`第 ${row.beat} 拍：没有杠杆/新意/标签加值混进来`);
  }
  const b4=lines.find(r=>r.beat===4),b5=lines.find(r=>r.beat===5);
- assert.ok(b4.ctx.breakdown.action.some(f=>f.label==='重伤'&&f.value===injury.penalty),'第 4 拍气血跌到 ≤25%，判定引擎的重伤罚进来了');
- assert.equal(b4.preview.modifierParts.factors-b4.ctx.factors,-4,'其余 -4 是等级差（levelGap），不是重复项');
- assert.ok(lines.slice(0,3).every(r=>!r.ctx.breakdown.action.some(f=>f.label==='重伤')),'气血高于 25% 时没有这项');
+ assert.ok(lines.every(r=>!r.ctx.breakdown.action.some(f=>f.label==='重伤')),'任何一拍（含第 4 拍气血跌到 ≤25%）都没有气血换算的「重伤」项');
+ if(b4?.preview)assert.equal(b4.preview.modifierParts.factors-b4.ctx.factors,-4,'因子之外只剩 -4 等级差（levelGap），不是重复项');
  const b3=lines.find(r=>r.beat===3);assert.doesNotMatch(b3.lines.join('\n'),/挂「/,'第 3 拍防御差 15（未过大失败线）只扣气血，不再挂伤');
 });
 

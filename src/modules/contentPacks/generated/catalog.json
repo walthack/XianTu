@@ -1,5 +1,5 @@
 {
-  "version": "e6ceba6fbf702f57",
+  "version": "4d4865d1ac10579c",
   "contracts": [
     {
       "meta": {
@@ -13959,6 +13959,47 @@
         "lcq.event.baihu_shangguan_escape"
       ],
       "scope": "lcq.stage_01-shanghou_cures_ice_gu",
+      "characterId": "char_qingyu_opening_playtest_v1",
+      "slot": "清羽记开局",
+      "openingTextId": "qingyu.opening",
+      "stageOpeningTextIds": {
+        "lcq.stage_02": "qingyu.stage02.opening"
+      },
+      "autoStallTurns": 3,
+      "timerWeaveEventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02"
+      ],
+      "nextId": "nanhuang-3"
+    },
+    {
+      "id": "nanhuang-3",
+      "extensionKey": "清羽记开局",
+      "kind": "qingyu-demo-v1",
+      "startModId": "lcq.stage_01",
+      "endModId": "lcq.stage_07_qingyuan_jiankang",
+      "endEventId": "lcq.event.s07_00c_arrive_jiankang",
+      "eventIds": [
+        "lcq.event.s01_01",
+        "lcq.event.s01_02",
+        "lcq.event.s01_03",
+        "lcq.event.s01_04",
+        "lcq.event.s01_06",
+        "lcq.event.s01_05",
+        "lcq.event.s02_01",
+        "lcq.event.s02_03",
+        "lcq.event.s02_02",
+        "lcq.event.s02_04",
+        "lcq.event.s02_05",
+        "lcq.event.s02_06",
+        "lcq.event.ningyu_enters_gamble",
+        "lcq.event.sudaji_south_pact",
+        "lcq.event.gamble_bond_signed",
+        "lcq.event.charge_sudaji_fee",
+        "lcq.event.free_ajiman",
+        "lcq.event.baihu_shangguan_escape"
+      ],
+      "scope": "lcq.stage_01-s07_00c_arrive_jiankang",
       "characterId": "char_qingyu_opening_playtest_v1",
       "slot": "清羽记开局",
       "openingTextId": "qingyu.opening",

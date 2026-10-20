@@ -77,7 +77,8 @@ export function auditLocationLoot({ table, stages, coverage = LOOT_STAGE_COVERAG
   allowed(table, ['version','rules','locations'], 'table');
   if (table?.version !== 1) fail('version', '不支持版本');
   const rules = table?.rules || {};
-  allowed(rules, ['maxSearches','commonSlots','rareChance','largeCurrencyChance','maxCopperPerSearch','bossChance'], 'rules');
+  allowed(rules, ['maxSearches','commonSlots','rareChance','largeCurrencyChance','maxCopperPerSearch','bossChance','companionRemarkChance'], 'rules');
+  if (rules.companionRemarkChance !== undefined && !probability(rules.companionRemarkChance)) fail('rules', '队友评价几率无效');
   if (rules.bossChance !== undefined && !probability(rules.bossChance)) fail('rules', 'boss 几率无效');
   if (!Number.isInteger(rules.maxSearches) || rules.maxSearches < 1) fail('maxSearches', '次数无效');
   if (!Array.isArray(rules.commonSlots) || rules.commonSlots.length !== 2 || !rules.commonSlots.every(probability) || !probability(rules.rareChance) || !probability(rules.largeCurrencyChance)) fail('rules', '槽位／概率无效');

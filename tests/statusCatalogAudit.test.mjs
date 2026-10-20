@@ -87,15 +87,15 @@ test('合同与物品不再引用已删除的 id', () => {
   assert.deepEqual(hits, []);
 });
 
-test('调息疗伤这类恢复判定不吃“重伤”减值；普通判定照吃', async () => {
+test('2026-10-20 起气血见底不再挂「重伤」减值：恢复判定、普通判定、战斗判定都没有', async () => {
   const pre = await loadTs('../src/utils/judgementPreflight.ts');
   const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
   const s = createMinimalSaveDataV3();
   s.角色.属性.气血 = { 当前: 1, 上限: 100 };
   const injured = list => list.filter(f => f.label === '重伤');
-  assert.equal(injured(pre.stateFactors('cultivate', s)).length, 1, '气血见底时普通判定吃重伤减值');
+  assert.equal(injured(pre.stateFactors('cultivate', s)).length, 0, '气血见底的普通判定也不再吃（重伤只跟伤势状态走）');
   assert.equal(injured(pre.stateFactors('cultivate', s, { recovery: true })).length, 0, '恢复判定（调息疗伤）不吃');
-  assert.equal(injured(pre.stateFactors('combat', s)).length, 1);
+  assert.equal(injured(pre.stateFactors('combat', s)).length, 0);
   // 自由行动入口：调息疗伤变体在配置里标 applyRecovery，judgement.ts 据此传 recovery
   assert.equal(progress.freeAction.classes.solo.variants.recover.applyRecovery, true);
   assert.match(readFileSync(join(root, 'src/modules/scenarioMods/freeAction/judgement.ts'), 'utf8'), /stateFactors\(kind, root, \{ recovery: spec\.applyRecovery === true \}\)/);
