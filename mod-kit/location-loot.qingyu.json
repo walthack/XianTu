@@ -1253,7 +1253,8 @@
           ],
           "once": true,
           "afterEventIds": [
-            "lcq.event.ghost_king_swallowed"
+            "lcq.event.ghost_king_swallowed",
+            "lcq.event.slay_dragon"
           ]
         },
         {
@@ -1266,7 +1267,8 @@
           ],
           "once": true,
           "afterEventIds": [
-            "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+            "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+            "lcq.event.slay_dragon"
           ]
         }
       ]

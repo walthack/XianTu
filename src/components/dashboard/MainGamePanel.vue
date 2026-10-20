@@ -368,7 +368,7 @@
 
           <div v-else-if="nanhuangDemoFinished" class="game-over-card">
             <div class="game-over-head"><span class="game-over-tag">本期结束</span><h3>南荒这一段已经走完</h3></div>
-            <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，可直接继续到下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
+            <p class="game-over-hint">{{ nextPlaytestPhase ? '进度已保留，点下面的按钮直接进入下一期，不用重玩。' : '这是试玩的最后一期，进度已保留。' }}</p>
             <div class="game-over-acts">
               <button v-if="nextPlaytestPhase" class="go-primary" :disabled="phaseContinueBlocked({ pending: phaseContinuePending, processing: isAIProcessing, finished: nanhuangDemoFinished })" @click="continueToNextPhase">继续到下一期</button>
               <button :class="nextPlaytestPhase ? 'go-ghost' : 'go-primary'" @click="router.push('/qingyu-opening-playtest')">返回试玩入口</button>
