@@ -303,7 +303,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       // 文案不写「之死」：上游已按裁定改成重伤未定，这里跟着中性化。
       // ⚠ 挂的 event 本身字面即死讯，属 backlog P1-7 四处承重之一，真分岔归 R2-0。
       // 10-20 方案 A(2)：返程入建康（第122–126章）。
-      { reviewSummary: '听殇侯交代去建康开商号', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_00a_shanghou_trading_house' },
+      { reviewSummary: entityText('听{{entity:character:liuchao.character.shang_zhen_yu}}交代去建康开商号'), status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_00a_shanghou_trading_house' },
       { reviewSummary: '连夜出南荒，沿江北上', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_00b_return_north' },
       { reviewSummary: '到晋都建康，在玉鸡巷安家', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_00c_arrive_jiankang' },
       { reviewSummary: '萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.xiaoyaoyi_arrives' },

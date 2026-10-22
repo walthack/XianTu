@@ -34,7 +34,7 @@ export function isLocationLootInput(input: string): boolean {
   // 2026-10-20 用户定：boss 不做死亡掉落；打倒后「搜尸身／搜周围」都走本地点搜刮池。
   const clause = /^(?:我)?(?:又|再)?(?:要|想|试着|打算|去|上前)?(?:搜刮|搜查|搜一搜|搜搜|翻找|搜)(?:一下|一番)?(?:[^，。！!？?\s]{0,8}?的?)?(?:尸身|尸体|尸首|遗骸|残骸|身上|周围|四周|附近|周遭|现场|战场|这里|此处)(?:一下|一番)?[。！!\s]*$/;
   if (clause.test(text)) return true;
-  // 2026-10-20 5e8f 真机：「我回到龙神的尸身旁，搜查尸身，翻找四周」整句不匹配，落到叙事模型。
+  // 2026-10-20 5e8f 真机：「我回到{{entity:character:liuchao.character.dragon_god}}的尸身旁，搜查尸身，翻找四周」整句不匹配，落到叙事模型。
   // 按逗号/顿号拆句：至少一句是搜刮句，其余只能是走近、蹲下这类靠近动作（不夹带逃跑、潜行、攻击等别的意图）。
   const parts = text.split(/[，,、；;。！!…]+/).map(p => p.trim()).filter(Boolean);
   if (parts.length < 2 || !parts.some(p => clause.test(p))) return false;

@@ -38,7 +38,7 @@ export function validateEnemyPresets(cfg: EnemyPresetConfig | undefined = enemyP
 }
 registerNumbersValidator(() => validateEnemyPresets());
 
-/** 是否按敌人种类预设取级数：配置里列了；或敌人目录里有这个种类、且角色等级表里没有它（有名的敌方人物如鬼巫王仍走等级表）。 */
+/** 是否按敌人种类预设取级数：配置里列了；或敌人目录里有这个种类、且角色等级表里没有它（有名的敌方人物如 liuchao.character.gui_wu_wang 仍走等级表）。 */
 /** 实例 id → 种类 id → 规范 id（旧 id 别名，如男尸鬼 → 尸鬼）。 */
 export const enemyKindOf = (id: string): string => { const kind = kindIdOf(id); return getRegistryCanonicalId(kind) ?? canonicalEntityId('enemy', kind); };
 export function isEnemyKind(id: string): boolean {
@@ -119,7 +119,7 @@ export function currentActorLevel(id: string, opts: { chapter: number; variant?:
  */
 const HIDDEN_REALM_NAME = '未知';
 export function reconcileNpcRealm(npc: any, characterId: string, chapter: number, options: { hidden?: boolean } = {}): void {
-  // 隐藏期（如谢艺武功未显露）：展示「未知」，存档里的真实境界暂存在占位里，显露后原样恢复，不按等级表重写。
+  // 隐藏期（如 liuchao.character.xie_yi 武功未显露）：展示「未知」，存档里的真实境界暂存在占位里，显露后原样恢复，不按等级表重写。
   if (options.hidden) {
     if (npc.境界?.名称 === HIDDEN_REALM_NAME) return;
     const stash = npc.境界 && typeof npc.境界 === 'object' && levelOf(npc.境界) !== null ? structuredClone(npc.境界) : undefined;

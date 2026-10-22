@@ -61,7 +61,7 @@ export function settleFreeActionTurn(
     }
     else if (result.facts.length) refused.push(...result.facts);
   };
-  // F02 诗薇莫救治（story.shiweimo）：目标是她且带药的票先按救治规则结算，不再走常规用药。
+  // F02 对手救治（SHIWEIMO_ID，story.shiweimo）：目标是她且带药的票先按救治规则结算，不再走常规用药。
   // 离开概率在配置（story.shiweimo.leaveChanceOnShedanTruth）；骰走项目 RNG，同种子可复现。
   const rescueRoll = shiweimoLeaveRoll(save, Number(getNarrativeTurn(save as any)) || 0);
   tickets = tickets.filter(ticket => {
