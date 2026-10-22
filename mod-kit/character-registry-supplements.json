@@ -1,6 +1,104 @@
 {
-  "note": "角色总表的手工补卡（只 append）：生成脚本 build-character-registry.mjs 在源卡之后按此追加，id 撞车即报错。源卡 character-cards-v3.json 不入库，补卡放这里才不会在重新生成时丢失。",
+  "note": "角色总表的手工补卡：生成脚本 build-character-registry.mjs 在源卡之后按 characters 顺序追加，id 撞车即报错；overrides 按 id 覆盖源卡已生成条目的 staticProfile 指定字段（不重算 embedText），id 不存在即报错。源卡 character-cards-v3.json 不入库，补卡/覆盖放这里才不会在重新生成时丢失。",
   "characters": [
+    {
+      "id": "lcq.character.nanhuang_aling",
+      "canonicalName": "阿伶",
+      "aliases": [],
+      "gender": "女",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "花苗女子，与石刚相好",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "花苗",
+            "role": "族人"
+          }
+        ],
+        "debutLocation": {
+          "location": "南荒",
+          "locator": "六朝清羽记·第58章",
+          "scene": "花苗女子，与石刚相好"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "nanhuang-debut-gap-filled-2026-10-19"
+        ],
+        "conflicts": [],
+        "note": "南荒登场漏档补建（2026-10-19）：不论敌友凡登场须进总表；简介仅首见可知事实，不剧透。阶段 stub 已有 id 则复用。"
+      },
+      "embedText": "阿伶 ｜ 花苗女子，与石刚相好 ｜ 【南荒人物】 ｜ 花苗(族人) ｜ 登场约第58章"
+    },
+    {
+      "id": "lcq.character.nanhuang_hongmiao_chief",
+      "canonicalName": "红苗族长",
+      "aliases": [],
+      "gender": "男",
+      "books": [
+        "qingyu"
+      ],
+      "tier": "次要",
+      "stagePresence": false,
+      "staticProfile": {
+        "identitySummary": "红苗族的族长，娄蒙之父",
+        "personality": [],
+        "appearance": "",
+        "speechStyle": "",
+        "principles": [],
+        "goals": [],
+        "weaknesses": [],
+        "signatureAbilities": [],
+        "relationToProtagonist": [],
+        "formsOfAddress": [],
+        "joining": [],
+        "keyEvents": [],
+        "ending": [],
+        "affiliations": [
+          {
+            "faction": "红苗",
+            "role": "族长"
+          }
+        ],
+        "debutLocation": {
+          "location": "红苗（被点名）",
+          "locator": "六朝清羽记·第91章",
+          "scene": "红苗族的族长，娄蒙之父"
+        }
+      },
+      "region": "南荒",
+      "phaseIdentities": [],
+      "review": {
+        "approved": false,
+        "reviewed": true,
+        "flags": [
+          "nanhuang-debut-gap-filled-2026-10-19"
+        ],
+        "conflicts": [],
+        "note": "南荒登场漏档补建（2026-10-19）：不论敌友凡登场须进总表；简介仅首见可知事实，不剧透。阶段 stub 已有 id 则复用。"
+      },
+      "embedText": "红苗族长 ｜ 红苗族的族长，娄蒙之父 ｜ 【南荒人物】 ｜ 红苗(族长) ｜ 登场约第91章"
+    },
     {
       "id": "lcq.character.nanhuang_shiweimo",
       "canonicalName": "诗薇莫",
@@ -77,6 +175,21 @@
         "note": "F02 对手性别改为女（用户 2026-10-20 00:46 定）；外貌「淡淡的蛇尾、身材修长姣好、胸部丰满」为用户 01:02 定；名字是游戏原创（原著蛇彝人无名；按彝族女名「本名＋莫（女性缀词）」取名，影射彝族属推断）。简介只写首见可知的事实，不剧透。"
       },
       "embedText": "诗薇莫 ｜ 黑石滩蛇彝村寨的女子，在屋檐上伏击商队；银鳞银饰，身后一条淡淡的蛇尾 ｜ 【南荒人物】 ｜ 蛇彝(村寨女子) ｜ 登场约第37章"
+    }
+  ],
+  "overrides": [
+    {
+      "id": "liuchao.character.wu_er_lang",
+      "source": "a1e9ba66 剧情策划补武二郎摘要（源卡 identitySummary 与归属 role 为空）",
+      "staticProfile": {
+        "identitySummary": "白武族刀客，与白湖商馆／程宗扬商队同行",
+        "affiliations": [
+          {
+            "faction": "白湖商馆",
+            "role": "同行刀客"
+          }
+        ]
+      }
     }
   ]
 }
