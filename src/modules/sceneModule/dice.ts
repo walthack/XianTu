@@ -27,6 +27,11 @@ export function dieAt(seed: number, stream: DiceStream, index: number): number {
   return (mix32(seed ^ index) % sides) + 1;
 }
 
+/** 项目 RNG 的 [0,1) 浮点：由 (种子, 盐, index) 派生，同种子同 index 可复现。场面外的概率判定（如随从去留）用它。 */
+export function unitAt(seed: number, salt: number, index: number): number {
+  return mix32((seed >>> 0) ^ mix32((salt >>> 0) + Math.imul(index + 1, 0x27d4eb2d))) / 0x100000000;
+}
+
 export function newSeed(): number {
   const c = globalThis.crypto;
   if (c?.getRandomValues) {

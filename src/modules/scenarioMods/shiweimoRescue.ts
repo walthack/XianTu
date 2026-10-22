@@ -44,10 +44,11 @@ import type { SaveData } from '@/types/game';
 import { ensureEncounteredScenarioCharacter } from './relationships';
 import { relationshipOf } from './ledger/affinityIdentity';
 import { sceneTime } from '../sceneModule/host/injuries';
+import { newSeed, unitAt } from '../sceneModule/dice';
 
 export const SHIWEIMO_ID = 'lcq.character.nanhuang_shiweimo';
 export const F02_CONTRACT_ID = 'combat.f02.snake_assault';
-export interface ShiweimoRecord { ending: ShiweimoEnding; endedAt: number; status: 'pending' | 'saved' | 'dead' | 'left'; skillTries: number; shedanSeen?: boolean }
+export interface ShiweimoRecord { ending: ShiweimoEnding; endedAt: number; status: 'pending' | 'saved' | 'dead' | 'left'; skillTries: number; shedanSeen?: boolean; /** 项目 RNG 种子：离开判定用，首次需要时生成并随存档保存。 */ seed?: number }
 
 const ext = (save: SaveData): any => (((save as any).系统 ||= {}).扩展 ||= {});
 export function shiweimoRecord(save: SaveData): ShiweimoRecord | undefined { return ext(save).lcq_shiweimo; }
@@ -59,6 +60,16 @@ export function recordShiweimoEnding(save: SaveData, ending: string): void {
   if (ending === '倒下') return;
   const source = (save as any).世界?.状态?.剧本模组?.canon || {};
   ensureEncounteredScenarioCharacter(save, source, SHIWEIMO_ID, { name: '诗薇莫', gender: '女' });
+}
+
+/** 离开判定的骰流盐（与场面骰流区分）。 */
+const LEAVE_SALT = 0x5f356495;
+/** 她认出朱箓蛇丹后的离开骰：走项目 RNG（种子存在记录里），按回合取第 turn 颗。 */
+export function shiweimoLeaveRoll(save: SaveData, turn: number): number {
+  const rec = shiweimoRecord(save);
+  if (!rec) return 1;
+  if (typeof rec.seed !== 'number') rec.seed = newSeed();
+  return unitAt(rec.seed, LEAVE_SALT, Math.max(0, Math.floor(Number(turn) || 0)));
 }
 
 export interface ShiweimoSettle { handled: boolean; facts: string[] }

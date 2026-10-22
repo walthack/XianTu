@@ -1079,6 +1079,23 @@
       "minutesPerBeat": 120
     }
   },
+  "crafting": {
+    "note": "炼制提示词数值（Sol 周审 2026-10-22 迁入，提示词只读这里不写死）。levelTierCaps：按原著九级（entity-catalog/levels.json 的 level，含两端）给可炼最高品，tier 用 item-grades.json 的 id；档位切分是草案，待用户拍。uncraftableTiers：任何级数都炼不出的品（item-grades 注：神品非剧情明示不得出现）。daoProficiency：炼制大道各熟练档的成功率区间（百分数）与最高品，maxTier 为 null 表示只受级数上限。successRateRange：提示词要求 AI 输出的成功率整数区间。",
+    "levelTierCaps": [
+      { "minLevel": 0, "maxLevel": 3, "tier": "zhen", "usualTier": "fan", "note": "通常只能炼出凡品，珍品已是极限" },
+      { "minLevel": 4, "maxLevel": 6, "tier": "zhen", "usualTier": "zhen", "note": "珍品稳定，珍品即天花板" },
+      { "minLevel": 7, "maxLevel": 9, "tier": "xian", "usualTier": "zhen", "note": "方可触及仙品，且只限有名有姓的正典奇物" }
+    ],
+    "uncraftableTiers": ["shen"],
+    "daoProficiency": [
+      { "name": "无大道/入门", "successRate": { "min": 5, "max": 15 }, "maxTier": "fan", "style": "手法生疏、险象环生，大概率失败" },
+      { "name": "略有所得", "successRate": { "min": 15, "max": 30 }, "maxTier": "fan", "style": "尚在摸索、偶有失误" },
+      { "name": "小有成就", "successRate": { "min": 30, "max": 50 }, "maxTier": "zhen", "style": "可尝试珍品" },
+      { "name": "登堂入室", "successRate": { "min": 40, "max": 60 }, "maxTier": "zhen", "style": "珍品稳定，从容不迫" },
+      { "name": "融会贯通及以上", "successRate": null, "maxTier": null, "style": "可尝试更高品质，但仍受级数上限" }
+    ],
+    "successRateRange": { "min": 5, "max": 95 }
+  },
   "shop": {
     "note": "药铺／商人进货（scenarioMods/shopStock.ts）：sites 键为规范地点 id，stock 为在售物品与单价（金铢）。用户 2026-10-20 定：清心散可在南荒药铺或商人处买。",
     "sites": {

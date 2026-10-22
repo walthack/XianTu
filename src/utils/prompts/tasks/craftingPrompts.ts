@@ -1,6 +1,48 @@
-import { generateQualitySystemPrompt } from '@/data/itemQuality';
+import { generateQualitySystemPrompt, ITEM_TIER_TABLE } from '@/data/itemQuality';
 import type { CraftingType } from '@/utils/craftingSystem';
 import type { ItemQuality } from '@/types/game';
+import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
+import { LEVELS } from '@/utils/realmUtils';
+
+// 级数—品质上限与大道熟练度区间全部读配置 crafting 段（mod-kit/numbers-progress.json），级数称谓读原著九级表；提示词不写死数字。
+type CraftingNumbers = {
+  levelTierCaps: { minLevel: number; maxLevel: number; tier: string; usualTier: string; note: string }[];
+  uncraftableTiers: string[];
+  daoProficiency: { name: string; successRate: { min: number; max: number } | null; maxTier: string | null; style: string }[];
+  successRateRange: { min: number; max: number };
+};
+const craftingNumbers = (): CraftingNumbers => (GAME_NUMBERS as any).crafting;
+const tierName = (id: string | null): string => (id && ITEM_TIER_TABLE.find(t => t.id === id)?.name) || '';
+const tierShorts = (): string => ITEM_TIER_TABLE.map(t => t.short).join('|');
+const levelLabel = (level: number): string => `${level}级${LEVELS.find(l => l.level === level)?.name ?? ''}`;
+const levelSpan = (row: CraftingNumbers['levelTierCaps'][number]): string => row.minLevel === row.maxLevel ? levelLabel(row.minLevel) : `${levelLabel(row.minLevel)}～${levelLabel(row.maxLevel)}`;
+const fourTiersNote = (): string => `（道具只分${ITEM_TIER_TABLE.map(t => t.name).join('／')}四品，没有上中下品）`;
+
+/** 级数→品质上限：列表写法（文案／推演提示词用）。 */
+function levelCapLines(): string {
+  const c = craftingNumbers();
+  const rows = c.levelTierCaps.map(row => `- ${levelSpan(row)}：最高只能炼制【${tierName(row.tier)}】（${row.note}）`);
+  const never = c.uncraftableTiers.map(tierName).filter(Boolean);
+  if (never.length) rows.push(`- ${never.map(n => `【${n}】`).join('')}：任何级数都炼不出，只能由剧情明示给出`);
+  return rows.join('\n');
+}
+/** 级数→品质上限：表格写法（裁定提示词用）。 */
+function levelCapTable(): string {
+  const c = craftingNumbers();
+  const rows = c.levelTierCaps.map(row => `| ${levelSpan(row)} | ${tierName(row.tier)} | ${row.note} |`);
+  const never = c.uncraftableTiers.map(tierName).filter(Boolean);
+  if (never.length) rows.push(`| 任何级数 | 炼不出${never.join('、')} | 只能由剧情明示给出 |`);
+  return ['| 角色级数 | 炼制品质上限 | 说明 |', '|---------|-------------|------|', ...rows].join('\n');
+}
+const rate = (r: { min: number; max: number } | null): string => r ? `成功率${r.min}-${r.max}%` : '';
+/** 大道熟练度各档：成功率区间与最高品都来自配置。 */
+function daoLines(withRates: boolean): string {
+  return craftingNumbers().daoProficiency.map(row => {
+    const parts = withRates ? [rate(row.successRate), row.maxTier ? `最高${tierName(row.maxTier)}` : ''] : [];
+    return `- ${row.name}：${[...parts, row.style].filter(Boolean).join('，')}`;
+  }).join('\n');
+}
+const rateRange = (): string => { const r = craftingNumbers().successRateRange; return `${r.min}-${r.max}`; };
 
 export type CraftingFireInput = { percent: number; label: string };
 
@@ -87,19 +129,14 @@ export function buildCraftingNarrativePrompts(input: CraftingNarrativeInput): { 
 4) 必须严格遵守物品品质体系：仅使用给定 resultQuality（quality 与 grade），不要自行更改。
 5) 若提供 resources（灵气/神识消耗计划），文案与事件描述必须与其一致，不要写出超过当前值的消耗。
 
-## 【境界】-品质上限（文案必须体现）
-炼制成品品质受角色境界严格限制，文案描写必须与此一致：
-- 凡人/练气期：通常只能炼制【凡品】，【珍品】已是极限
-- 筑基期／金丹期：最高只能炼制【珍品】
-- 元婴期及以上：最高可炼制【仙品】
-- 神品：需要渡劫期以上或特殊机缘，普通修士不可能炼制
-（道具只分凡品／珍品／仙品／神品四品，没有上中下品）
+## 【级数】-品质上限（文案必须体现）
+炼制成品品质受角色级数（原著九级）严格限制，文案描写必须与此一致：
+${levelCapLines()}
+${fourTiersNote()}
 
 ## 【大道熟练度】限制
-无对应炼制大道（炼丹之道/炼器之道等）或大道等级过低时：
-- 无大道/入门：文案应体现手法生疏、险象环生
-- 略有所得/小有成就：文案应体现尚在摸索、偶有失误
-- 登堂入室及以上：文案可体现从容不迫、技艺娴熟
+无对应炼制大道（炼丹之道/炼器之道等）或大道等级过低时，文案按下列档位体现：
+${daoLines(false)}
 
 输出 JSON 结构：
 {
@@ -138,26 +175,19 @@ export function buildCraftingSimulationPrompts(input: CraftingSimulationInput): 
 
 硬性规则：
 1) 只输出一个 JSON 对象，禁止输出 Markdown、代码块、解释文字、前后缀。
-2) successRate 必须是 5-95 的整数。
-3) predictedQuality 必须符合物品品质体系：quality 只能是 神/仙/天/地/玄/黄/凡，grade 只能是 0-10 的整数。
+2) successRate 必须是 ${rateRange()} 的整数。
+3) predictedQuality 必须符合物品品质体系：quality 只能是 ${tierShorts()}，grade 只能是 0-10 的整数。
 4) 这是"推演"，不是最终结果：不要输出成品物品，不要输出战斗/剧情延伸。
 5) 若提供 resources：视作"投入强度约束"，推演应考虑投入与阵法额外消耗，但不得写出超过当前值的消耗。
 
-## 【境界】-品质上限（绝对不可突破）
-炼制成品品质受角色境界严格限制，这是硬性天花板：
-- 凡人/练气期：通常只能炼制【凡品】，【珍品】已是极限
-- 筑基期／金丹期：最高只能炼制【珍品】
-- 元婴期及以上：最高可炼制【仙品】
-- 神品：需要渡劫期以上或特殊机缘，普通修士不可能炼制
-（道具只分凡品／珍品／仙品／神品四品，没有上中下品）
+## 【级数】-品质上限（绝对不可突破）
+炼制成品品质受角色级数（原著九级）严格限制，这是硬性天花板：
+${levelCapLines()}
+${fourTiersNote()}
 
 ## 【大道熟练度】限制
 无对应炼制大道（炼丹之道/炼器之道等）或大道等级过低时：
-- 无大道/入门：成功率极低(5-15%)，最高凡品
-- 略有所得：成功率低(15-30%)，最高凡品
-- 小有成就：成功率一般(30-50%)，可尝试珍品
-- 登堂入室：成功率中等(40-60%)，珍品稳定
-- 融会贯通及以上：可尝试更高品质，但仍受境界限制
+${daoLines(true)}
 
 ## 【材料品质】限制
 成品品质不可能超过主材料品质，且通常会略低于主材料。
@@ -165,7 +195,7 @@ export function buildCraftingSimulationPrompts(input: CraftingSimulationInput): 
 输出 JSON 结构：
 {
   "successRate": number,
-  "predictedQuality": { "quality": "凡|珍|仙|神", "grade": 数字（沿用字段，不表示品级） },
+  "predictedQuality": { "quality": "${tierShorts()}", "grade": 数字（沿用字段，不表示品级） },
   "analysis": "string（简短推演依据，1-3句）",
   "warnings": ["string"...]
 }
@@ -203,32 +233,23 @@ export function buildCraftingFinalizePrompts(input: CraftingFinalizeInput): { sy
 3) item 必须符合游戏 Item 结构（字段名用中文）：物品ID(可留空字符串)、名称、类型(装备/丹药/材料/其他/功法)、品质{quality,grade}、数量、描述、可叠加(可选)。
 4) 若炼制类型为"炼丹"，成功产物类型必须是"丹药"；若为"炼器"，成功产物类型必须是"装备"。
 5) 失败时允许产物为"废丹/炉渣"等：类型可为"丹药"或"材料/其他"，但必须与描述一致。
-6) successRate 必须与推演一致（如果给了推演），否则按你推导给出 5-95 的整数。
-7) predictedQuality（如果给了）仅作参考，但【必须受境界限制约束】，不可突破境界上限。
+6) successRate 必须与推演一致（如果给了推演），否则按你推导给出 ${rateRange()} 的整数。
+7) predictedQuality（如果给了）仅作参考，但【必须受级数上限约束】，不可突破级数上限。
 8) 若提供 resources（灵气/神识消耗计划）：你在 processText / eventDesc 里必须体现该投入与消耗，且不得写出超过当前值的消耗。
 
-## 【最高优先级】境界-品质硬性上限
-这是绝对不可突破的天花板，无论材料多好、推演结果如何，都必须遵守：
-| 角色境界 | 炼制品质上限 | 说明 |
-|---------|-------------|------|
-| 凡人/练气期 | 珍品 | 通常只能炼出凡品，珍品已是极限 |
-| 筑基期／金丹期 | 珍品 | 珍品已是天花板 |
-| 元婴期／化神期 | 仙品 | 仙品需要元婴以上修为 |
-| 渡劫期+ | 神品 | 神品唯有渡劫大能可触及 |
-（道具只分凡品／珍品／仙品／神品四品，没有上中下品）
+## 【最高优先级】级数-品质硬性上限
+这是绝对不可突破的天花板，无论材料多好、推演结果如何，都必须遵守（级数按原著九级）：
+${levelCapTable()}
+${fourTiersNote()}
 
 违反此规则的输出将被系统拒绝！
 
 ## 【大道熟练度】限制
 无对应炼制大道或等级过低时，成功率和品质都会大幅下降：
-- 无大道/入门：成功率5-15%，最高凡品，大概率失败
-- 略有所得：成功率15-30%，最高凡品
-- 小有成就：成功率30-50%，可尝试珍品
-- 登堂入室：成功率40-60%，珍品稳定
-- 融会贯通+：可尝试更高，但仍受境界限制
+${daoLines(true)}
 
 ## 【材料品质】限制
-成品品质绝不可能超过主材料品质。用凡品材料不可能炼出珍品以上。
+成品品质绝不可能超过主材料品质。用${tierName(ITEM_TIER_TABLE[0].id)}材料不可能炼出${tierName(ITEM_TIER_TABLE[1].id)}以上。
 
 输出 JSON 结构：
 {

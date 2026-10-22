@@ -97,6 +97,8 @@
 | LCQ-SAV-018 | warn | feedbackPack | 反馈包读取当前存档失败，已不带存档导出 | 玩家勾选了“附带存档”，但读本机 IndexedDB 的当前激活存档时抛错（存储库不可用、存档记录损坏） | 看 stack 与 cause；反馈包里的 manifest.json 会写明“读取存档失败，反馈包未带存档”，其余日志/版本/模型配置照常；按 LCQ-SAV-001 / LCQ-SAV-002 排查存储库，必要时让玩家走存档页的存档导出 | 否 |
 | LCQ-SAV-019 | warn | strictInitializer | 开局无法对齐出生年：缺年龄或当前年 | 严格剧本开局要按“当前年 − 年龄”写出生年，但存档缺 角色.身份，或 元数据.时间.年 不是数，或 角色.属性.寿命.当前 与开局预设 age 都没有 | 看 detail 里的 year / life / presetAge；补全开局预设的 age 或角色寿命；出生日期保持原样，年龄显示可能不对 | 否 |
 | LCQ-SAV-020 | error | sceneModule | 场面战斗拍数超过上限仍未分出胜负 | 一场场面战斗已打完的拍数超过 numbers-combat.json combat.beatLimit.max 仍是交战中：合同没有拍数时钟，玩家方赢不了（加值过低、没用要素）又走不到败局（专门后果不升级、不扣血） | 看 detail 里的 contractId / beat / tracks / statuses；对照合同的 objective.win、defeat、clock 与 enemyActions 的后果能否走到倒下；到上限后怎么判尚待拍板，代码只记录不改判 | 否 |
+| LCQ-SAV-021 | warn | sceneModule | 开战前存档失败，已照常开战（判负回档点可能缺失） | 进场面战斗前写「开战前」存档槽（host/preBattleSlot.ts）时抛错：存储库不可用、配额满、槽名冲突 | 看 cause 与 detail.contractId；按 LCQ-SAV-001 / LCQ-SAV-005 排查存储库；本场判负后可能回不到开战前，只能回「上次对话」 | 否 |
+| LCQ-SAV-022 | warn | sceneModule | 场面骰存档外游标读写 localStorage 失败，已退回真随机种子 | host/rngSalt.ts 读或写 localStorage 键 lcq.sceneRngSalt 抛错（隐私模式、存储被禁用、配额满）；detail.op 标明 read / write / access，detail.fallback 标明退回的随机源（crypto.getRandomValues 或 Math.random） | 读档换种子照常生效，只是计数没有延续；检查浏览器站点存储设置 | 否 |
 | LCQ-SYS-000 | warn | diagnostics | 未登记 | console.error / console.warn 被日志捕获；或调用方传了没登记的码（原码在 detail.originalCode） | 看 msg 与 stack 定位调用点；若是业务上要长期保留的错误，给它登记专属码并改成 logError | 否 |
 | LCQ-SYS-001 | warn | diagnostics | 日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存 | 浏览器禁用或不支持 IndexedDB（隐私模式、存储被清理策略禁用），或 lcq-log 库打开失败 | 日志仍在内存环形缓冲里，可照常导出；换普通窗口或检查浏览器站点存储设置 | 否 |
 | LCQ-UI-001 | error | window | 页面未捕获异常（window error） | 页面脚本抛出未捕获异常（组件渲染、事件回调） | 看 stack 与 detail.file/line；复现步骤 + 导出日志提交 | 否 |

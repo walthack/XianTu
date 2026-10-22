@@ -1,5 +1,6 @@
 import { recordShiweimoEnding, F02_CONTRACT_ID } from '@/modules/scenarioMods/shiweimoRescue';
 import { GAME_NUMBERS } from '../numbers';
+import { logError } from '@/modules/diagnostics/log';
 import { applyCombatHeal } from './combatHeal';
 import {statusNamePattern} from '../statuses';
 import {acknowledgeStageEntryPresentation} from '@/modules/scenarioMods/runtime';
@@ -107,7 +108,7 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
     if(rule.class==='chat' && !wantsInterrogation(c,text) && ext.stall[c.meta.id] < (c.meta.hook.ambushAfterStall||Infinity)) {
       writeExt(save,ext);appendHistory(save,'眼前的交锋尚未解决，请说出你准备采取的行动。',text);await deps.persist(save);return true;
     }
-    if(deps.beforeCombat&&(GAME_NUMBERS.combat as any).preBattleSave?.enabled){try{await deps.beforeCombat(source);}catch(e){/* lcq-allow: 战前存档失败不挡开战，只留控制台记录 */console.warn('[场面] 战前存档失败',e);}}
+    if(deps.beforeCombat&&(GAME_NUMBERS.combat as any).preBattleSave?.enabled){try{await deps.beforeCombat(source);}catch(e){/* 战前存档失败不挡开战；带码写持久日志 */logError('LCQ-SAV-021',e,{detail:{contractId:c.meta.id}});}}
     const opened=beginScene(c);
     snapshotLevels(save,c,opened.state);
     restoreSceneInjuries(save,c,opened.state);

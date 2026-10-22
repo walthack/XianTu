@@ -86,6 +86,8 @@ export const ERROR_CODES = {
   'LCQ-SAV-018': spec('warn', 'feedbackPack', '反馈包读取当前存档失败，已不带存档导出'),
   'LCQ-SAV-019': spec('warn', 'strictInitializer', '开局无法对齐出生年：缺年龄或当前年'),
   'LCQ-SAV-020': spec('error', 'sceneModule', '场面战斗拍数超过上限仍未分出胜负'),
+  'LCQ-SAV-021': spec('warn', 'sceneModule', '开战前存档失败，已照常开战（判负回档点可能缺失）'),
+  'LCQ-SAV-022': spec('warn', 'sceneModule', '场面骰存档外游标读写 localStorage 失败，已退回真随机种子'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

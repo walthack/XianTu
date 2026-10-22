@@ -1,5 +1,6 @@
 import { mix32 } from '../dice';
 import { readExt, writeExt } from './ext';
+import { logError } from '@/modules/diagnostics/log';
 
 /**
  * RNG 游标放在存档外（2026-10-20 用户定）：场面骰由 state.seed + 拍游标决定，种子跟着存档走，
@@ -11,18 +12,25 @@ export const RNG_SALT_STORAGE_KEY = 'lcq.sceneRngSalt';
 
 interface SaltStore { getItem(key: string): string | null; setItem(key: string, value: string): void }
 
+/** 退回的随机源：有 crypto 用 crypto.getRandomValues，否则 Math.random。 */
+function fallbackSource(): string { return typeof globalThis.crypto?.getRandomValues === 'function' ? 'crypto.getRandomValues' : 'Math.random'; }
+/** LCQ-SAV-022 的 detail：哪一步失败、退回了哪种随机源。 */
+function saltFailure(op: 'access' | 'read' | 'write'): { detail: { op: string; key: string; fallback: string } } {
+  return { detail: { op, key: RNG_SALT_STORAGE_KEY, fallback: op === 'write' ? `本次游标照用，未写回；下次仍从 ${fallbackSource()} 起` : fallbackSource() } };
+}
 function store(): SaltStore | undefined {
-  try { return (globalThis as any).localStorage as SaltStore | undefined; } catch { /* lcq-allow: 拿不到 localStorage 时退回真随机 */ return undefined; }
+  try { return (globalThis as any).localStorage as SaltStore | undefined; } catch (e) { logError('LCQ-SAV-022', e, saltFailure('access')); return undefined; }
 }
 
 /** 取下一个存档外游标并写回；拿不到 localStorage 时退回真随机。 */
 export function nextOutOfSaveSalt(s: SaltStore | undefined = store()): number {
   const fresh = () => { const c = globalThis.crypto; if (c?.getRandomValues) { const b = new Uint32Array(1); c.getRandomValues(b); return b[0]; } return Math.floor(Math.random() * 0x100000000); };
   if (!s) return fresh();
-  let cur = Number(s.getItem(RNG_SALT_STORAGE_KEY));
+  let cur: number;
+  try { cur = Number(s.getItem(RNG_SALT_STORAGE_KEY)); } catch (e) { logError('LCQ-SAV-022', e, saltFailure('read')); return fresh(); }
   if (!Number.isFinite(cur) || cur <= 0) cur = fresh();
   const next = (mix32((cur >>> 0) + 0x9e3779b9) >>> 0) || 1;
-  try { s.setItem(RNG_SALT_STORAGE_KEY, String(next)); } catch { /* lcq-allow: 写不进就只用这一次 */ }
+  try { s.setItem(RNG_SALT_STORAGE_KEY, String(next)); } catch (e) { logError('LCQ-SAV-022', e, saltFailure('write')); }
   return next;
 }
 
