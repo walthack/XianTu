@@ -1,6 +1,6 @@
 # 六朝仙途 · 完整功能清单
 
-更新时间：2026-10-23 02:10（Asia/Singapore）；分支 `feat/fast-no-legacy`，HEAD `efd8470f`（10-22 22:59；上轮日更 `b3c95706` 后 6 提交：`df23350d`、`8cded818`、`70f0e020`、`4462bf8a`、`cb6cbe71`、`efd8470f`）。
+更新时间：2026-10-24 02:00（Asia/Singapore；10-23 日更后无新提交，清单内容不变）；分支 `feat/fast-no-legacy`，HEAD `efd8470f`（10-22 22:59；上轮日更 `b3c95706` 后 6 提交：`df23350d`、`8cded818`、`70f0e020`、`4462bf8a`、`cb6cbe71`、`efd8470f`）。
 本清单由 [MASTER-GANTT.md](MASTER-GANTT.md) 引用，是总甘特的附属章节；权威仍是双件（[`PROJECT-STATUS.md`](../PROJECT-STATUS.md) + 总甘特）。
 来源只取双件、git 提交、仓库内落档／交接文档和真机报告 `../playtest-2026-09-28/REPORT-*.md`；聊天和 `_newbot_tmp` 不算基准。剧情策划 box 草稿只作「待拍」线索列出，不当已定。文档没写的不填，冲突或陈旧处标「文档待更新」。
 标记：✅ 已完成　🔄 进行中　⬜ 待办　🟡 待用户拍板　⏸ 搁置

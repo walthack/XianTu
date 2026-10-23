@@ -1,11 +1,13 @@
 # 六朝仙途 · 当前项目状态
 
-更新时间：2026-10-23 02:10（Asia/Singapore，日更）；分支 `feat/fast-no-legacy`。
+更新时间：2026-10-24 02:00（Asia/Singapore，日更）；分支 `feat/fast-no-legacy`。
 **权威进度入口（双件）**：本文件（叙述与勾选总表）+ [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)（总甘特时间线）。勿另造第二份 status。  
 `_newbot_tmp/PROJECT-TRACKER.md` **非权威**（草稿勾选；权威=本文件+总甘特）。历史全文见 [PROJECT-STATUS-ARCHIVE-2026-10-12.md](PROJECT-STATUS-ARCHIVE-2026-10-12.md)。  
 **完整功能清单**：[docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)（总甘特的附属章节：功能分块、每块进行中／已完成／待办、各线程任务、全部已完成与全部待办汇总）。
 
 ## 一句话现状
+
+**2026-10-24 02:00 日更核对**：自上轮日更 `13dbb25d`（10-23 02:06）起仓库无新提交（任何分支均无），HEAD 仍为 `efd8470f`＋日更文档提交，与 `origin/feat/fast-no-legacy` 一致；仓库内无新真机报告。下列 10-23 快照内容仍有效；其中「8097 重建时机未记」「现包真机复验是否已跑未记」两项依旧文档待更新；国家线下一条 03 宋原稿仍未入库。
 
 **当前快照（2026-10-23 02:10 日更）**：HEAD `efd8470f`（10-22 22:59，已推送，与 `origin/feat/fast-no-legacy` 一致）。自上轮日更 `b3c95706` 起 6 个提交：`df23350d` Sol 10-22 周审修复（开战前存档失败记 LCQ-SAV-021、rngSalt 读写失败记 LCQ-SAV-022 并写明退回哪种随机；诗薇莫认出蛇丹后的离开判定改走项目 RNG `shiweimoLeaveRoll`；炼制提示词「境界-品质上限」改按原著九级读 `crafting.levelTierCaps`，档位切分是草案待用户拍；成功率区间迁入 `crafting.daoProficiency`／`crafting.successRateRange`；既有红 `chapterIdentitySwitch` 按裁定 #218 ⑥ 恢复「阁罗的随从，鬼王峒的人」已修；全量 2426 测试 0 fail（3 skipped）、37 关 schema PASS、冻结门禁 PASS）→ `8cded818` 国家线落档第一条五原序幕＋南荒（并收录 10-22 交接稿与原稿 00／01／07）→ `70f0e020` 棘轮：`6216c52c` 起新增文件的人名改按角色 id 引用，账本人名棘轮转绿（未重置基线）→ `4462bf8a` 阿伶／红苗族长两张卡与武二郎摘要补进受控补卡源 `mod-kit/character-registry-supplements.json`，`canon:build` 重建总表不再丢失 → `cb6cbe71` 收录晋线原稿 → `efd8470f` 国家线落档第二条晋。国家线按文件编号逐条落：已落 01 五原序幕＋南荒、02 晋；宋／汉／唐／秦／太泉未落（原稿 03–06、12、13 未入库），角色线不落（见 `docs/narrative/2026-10-22-国家线/README.md`）。落档稿只是文档，不授权实装：四读变体、`xieyi.state` 三态、四年跳时都「待实装」。**8097**：双件仍记现包 `fa0d6e1ac595`（由 `88e32415` 构建）；`df23350d`（代码）之后双件未见重建记录，按文档即未重建（Sol 修复单原写「先不重建 8097、不推送，等用户定」，提交后已推送，重建时机文档未记，文档待更新）；本轮日更所在机器无法核对 8097 served 状态。**真机**：仓库内无新报告；`../playtest-2026-09-28/` 不在本轮可读范围，现包真机复验是否已跑文档未记（文档待更新）。
 
