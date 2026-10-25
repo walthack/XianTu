@@ -14,7 +14,7 @@ export function buildEntityIndex(){
  masters.character=read('src/modules/scenarioMods/builtins/character-registry.json').characters.map(e=>({id:e.id,aliases:e.idAliases||[]}));
  const canon=(kind,id)=>masters[kind]?.find(e=>e.id===id||e.aliases.includes(id))?.id||id;
  const rows=new Map(),add=(kind,id,authoritySource,aliases=[])=>{if(!id)return;id=canon(kind,id);const key=`${kind}:${id}`,prior=rows.get(key);if(prior){prior.aliases=[...new Set([...prior.aliases,...aliases])];return;}rows.set(key,{kind,id,authoritySource,aliases});};
- for(const [kind,plural]of [['item','items'],['skill','skills'],['technique','techniques'],['enemy','enemies'],['location','locations'],['faction','factions'],['ending','endings'],['level','levels'],['currency','currencies']])for(const e of read(`mod-kit/entity-catalog/${plural}.json`).entries)add(kind,e.id,e.authoritySource,e.aliases);
+ for(const [kind,plural]of [['item','items'],['skill','skills'],['technique','techniques'],['enemy','enemies'],['location','locations'],['faction','factions'],['ending','endings'],['level','levels'],['currency','currencies'],['identity','identities'],['line','lines']])for(const e of read(`mod-kit/entity-catalog/${plural}.json`).entries)add(kind,e.id,e.authoritySource,e.aliases);
  for(const e of read('src/modules/scenarioMods/builtins/character-registry.json').characters)add('character',e.id,'src/modules/scenarioMods/builtins/character-registry.json',[...e.aliases,...(e.idAliases||[])]);
  for(const e of read('mod-kit/entity-ledger/overrides.json').entities)add('address',e.id,'mod-kit/entity-ledger/overrides.json',e.aliases);
  for(const e of read('src/modules/sceneModule/contracts/statuses.json'))add('status',e.id,'src/modules/sceneModule/contracts/statuses.json');

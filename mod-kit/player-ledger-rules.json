@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "note": "玩家账本规则表（身份账设计稿 2026-10-25 §3.1）：「事件 → 身份 / 收束档」的唯一映射，由代码按完成顺序幂等同步。identityId 须在 entity-catalog/identities.json，eventId/lineId 须在 entity-catalog/index.json，outcome 须在 numbers-progress story.lineOutcome.tiers。首版留空，清单由总策划给出后再填。",
+  "identityGrants": [],
+  "identityRevokes": [],
+  "lineOutcomes": []
+}

@@ -18328,8 +18328,20 @@
     },
     {
       "kind": "line",
+      "id": "nanhuang",
+      "authoritySource": "mod-kit/entity-catalog/lines.json",
+      "aliases": []
+    },
+    {
+      "kind": "line",
       "id": "ningyu",
       "authoritySource": "src/modules/scenarioMods/characterQuests.ts",
+      "aliases": []
+    },
+    {
+      "kind": "line",
+      "id": "qin",
+      "authoritySource": "mod-kit/entity-catalog/lines.json",
       "aliases": []
     },
     {

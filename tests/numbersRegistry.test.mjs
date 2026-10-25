@@ -89,3 +89,21 @@ test('场景骰 / 好感钳制读配置', async () => {
   assert.equal(hit.tier, 'great_success');
   assert.equal(hit.natTriggered, 'nat20');
 });
+
+test('story.lineOutcome.tiers 必填非空', async () => {
+  const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const tree = structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  assert.deepEqual(tree.story.lineOutcome.tiers, ['resolved', 'imperfect', 'unresolved']);
+  assert.equal(tree.story.lineOutcome.writeOnce, true);
+  assert.ok(tree.story.identity.kinds.length > 0);
+  delete tree.story.lineOutcome.tiers;
+  assert.ok(registry.validateAgainstRegistry(tree, 'cold').some(e => e === '缺字段：story.lineOutcome.tiers'));
+  tree.story.lineOutcome.tiers = [];
+  assert.ok(registry.validateAgainstRegistry(tree, 'cold').some(e => /story\.lineOutcome\.tiers 不能为空数组/.test(e)));
+  delete tree.story.identity.kinds;
+  assert.ok(registry.validateAgainstRegistry(tree, 'cold').some(e => e === '缺字段：story.identity.kinds'));
+  const before = [...numbers.GAME_NUMBERS.story.lineOutcome.tiers];
+  assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { tiers: [] } } }), err => err.code === 'LCQ-NUM-008');
+  assert.deepEqual(numbers.GAME_NUMBERS.story.lineOutcome.tiers, before);
+});

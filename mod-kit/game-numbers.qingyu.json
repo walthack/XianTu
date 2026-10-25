@@ -2102,6 +2102,24 @@
     ],
     "stepScene": {
       "minutesPerBeat": 120
+    },
+    "lineOutcome": {
+      "note": "国家线收束档（身份账设计稿 2026-10-25 §6；总策划定三档、只写一次）：tiers 为 flags 键 line.<lineId>.outcome 的取值集合，代码与规则表校验都读这里；writeOnce=true 时已收束的线不被后写覆盖",
+      "tiers": [
+        "resolved",
+        "imperfect",
+        "unresolved"
+      ],
+      "writeOnce": true
+    },
+    "identity": {
+      "note": "玩家身份账（身份账设计稿 2026-10-25 §2.2）：kinds 为 entity-catalog/identities.json 里 kind 的取值集合（草案）",
+      "kinds": [
+        "office",
+        "title",
+        "merchant",
+        "sect"
+      ]
     }
   },
   "shop": {

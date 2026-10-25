@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "kind": "line",
+  "note": "国家线 id 补登（身份账设计稿 2026-10-25 §10 Q2，总策划定 7 条并行：nanhuang/jin/song/han/tang/qin/taiquan）。jin/song/han/tang/taiquan 的权威仍是 secondaryLines.ts；这里只登记那里没有的两条，供实体索引 kind=line 收录，不含剧情内容。",
+  "entries": [
+    {
+      "id": "nanhuang",
+      "aliases": [],
+      "definition": { "id": "nanhuang", "name": "南荒" },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/lines.json"
+    },
+    {
+      "id": "qin",
+      "aliases": [],
+      "definition": { "id": "qin", "name": "秦" },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/lines.json"
+    }
+  ]
+}
