@@ -314,3 +314,81 @@ test('default stage transition skips quarantined freeform/conflict stages', asyn
   assert.equal(result.to, 'liuchao.after_quarantine');
   assert.equal(result.saveData.世界.状态.剧本模组.modId, 'liuchao.after_quarantine');
 });
+
+// 身份账 T3（身份账设计稿 2026-10-25 §5）：切关前补同步、playerIdentities 快照继承、line.* flags 继承。
+const ZHUSHI = 'liuchao.identity.song.baochao_zhushi';
+async function buildIdentityTransitionSave() {
+  const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { applyStrictScenarioInitializationToSave, buildStrictScenarioInitialization } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const raw = JSON.parse(await readFile(fixtureUrl, 'utf8'));
+  raw.manifest.nextStageId = 'liuchao.next_stage';
+  raw.manifest.nextStageName = '六朝·下一关';
+  const rawNext = structuredClone(raw);
+  rawNext.manifest.id = 'liuchao.next_stage';
+  rawNext.manifest.nextStageId = null;
+  const save = applyStrictScenarioInitializationToSave(
+    { 角色: { 位置: { 描述: '旧' } }, 世界: { 信息: {}, 状态: {} }, 系统: { 扩展: {} } },
+    buildStrictScenarioInitialization(parseScenarioMod(raw), '2026-06-22T00:00:00.000Z'),
+  );
+  const rt = save.世界.状态.剧本模组;
+  rt.nextStageReadyId = rt.nextStageId;
+  return { save, rt, nextMod: parseScenarioMod(rawNext) };
+}
+
+test('切关继承 playerIdentities', async () => {
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { save, rt, nextMod } = await buildIdentityTransitionSave();
+  const record = {
+    identityId: ZHUSHI, status: 'revoked', acquiredAtEventId: 'event.firstmeeting', backfilled: true,
+    history: [{ eventId: 'event.firstmeeting', op: 'grant', backfilled: true }, { eventId: 'event.seized', op: 'revoke' }],
+  };
+  rt.playerIdentities = { [ZHUSHI]: record };
+  const result = transitionToNextScenarioStage(save, [nextMod]);
+  assert.equal(result.ok, true, result.reason);
+  const newRt = result.saveData.世界.状态.剧本模组;
+  assert.equal(newRt.modId, 'liuchao.next_stage');
+  assert.deepEqual(newRt.playerIdentities, { [ZHUSHI]: record }, '身份账整份跨关，撤销记录也保留');
+  assert.notEqual(newRt.playerIdentities[ZHUSHI], record, '快照是深拷贝');
+});
+
+test('切关继承 line.* flags', async () => {
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { save, rt, nextMod } = await buildIdentityTransitionSave();
+  rt.flags['line.jin.outcome'] = 'resolved';
+  rt.flags['line.taiquan.outcome'] = 'imperfect';
+  rt.flags['lineage.note'] = '非 line 命名空间不继承';
+  const result = transitionToNextScenarioStage(save, [nextMod]);
+  assert.equal(result.ok, true, result.reason);
+  const flags = result.saveData.世界.状态.剧本模组.flags;
+  assert.equal(flags['line.jin.outcome'], 'resolved');
+  assert.equal(flags['line.taiquan.outcome'], 'imperfect');
+  assert.equal(flags['lineage.note'], undefined);
+});
+
+test('切关前补记最后一拍授予', async () => {
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const { save, rt, nextMod } = await buildIdentityTransitionSave();
+  // 最后一拍：事件已进 completedEventIds，但每回合同步还没跑、编年史也没落账；切关会把 completedEventIds 按新关重置。
+  rt.completedEventIds = ['event.firstmeeting'];
+  rt.chronicle = [];
+  assert.equal(rt.playerIdentities, undefined);
+  setPlayerLedgerRulesForTest({
+    version: 1,
+    identityGrants: [{ eventId: 'event.firstmeeting', identityId: ZHUSHI }],
+    identityRevokes: [],
+    lineOutcomes: [{ eventId: 'event.firstmeeting', lineId: 'song', outcome: 'resolved' }],
+  });
+  try {
+    const result = transitionToNextScenarioStage(save, [nextMod]);
+    assert.equal(result.ok, true, result.reason);
+    const newRt = result.saveData.世界.状态.剧本模组;
+    assert.deepEqual(newRt.completedEventIds, [], '新关完成进度重置');
+    assert.equal(newRt.playerIdentities[ZHUSHI].status, 'active');
+    assert.equal(newRt.playerIdentities[ZHUSHI].acquiredAtEventId, 'event.firstmeeting');
+    assert.equal(newRt.playerIdentities[ZHUSHI].history[0].atStageId, 'liuchao.jiankang', '入账记在旧关');
+    assert.equal(newRt.flags['line.song.outcome'], 'resolved', '收束档同拍补记并跨关');
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+  }
+});

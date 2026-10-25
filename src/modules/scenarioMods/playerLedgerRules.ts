@@ -54,7 +54,8 @@ export interface PlayerLedgerRefs {
 
 /** 身份 id 末段保留给读取子路径（identity.<id>.from / .status）。 */
 const RESERVED_IDENTITY_TAILS = ['from', 'status'];
-const WHEN_HELD = ['reinforce', 'redirect'];
+/** 授予规则 whenHeld 的取值；任务线 identityGrant 同用。 */
+export const WHEN_HELD: readonly string[] = ['reinforce', 'redirect'];
 
 /** 实体索引里某 kind 的 id 集合。 */
 export const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
@@ -137,6 +138,11 @@ export function playerLedgerRules(): PlayerLedgerRules {
   const errors = validatePlayerLedgerRules(rules);
   if (errors.length) throw new Error(`player-ledger-rules.json 校验失败：${errors.join('；')}`);
   return (validatedRules = rules);
+}
+
+/** 测试夹具：整体替换仓库规则表（不再交叉校验），传 undefined 复原为仓库权威。生产代码不调用。 */
+export function setPlayerLedgerRulesForTest(rules?: PlayerLedgerRules): void {
+  validatedRules = rules;
 }
 
 let knownEventIdSet: Set<string> | undefined;

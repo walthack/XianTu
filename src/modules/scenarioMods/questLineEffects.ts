@@ -25,6 +25,8 @@ import statusCatalog from '../sceneModule/contracts/statuses.json';
 import { toPlayerStatusEffect } from '../sceneModule/statusAdapters';
 import { injuryStore, renderInjuryViews, sceneTime } from '../sceneModule/host/injuries';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
+import { applyGrantRule, revokePlayerIdentity, type LedgerOpContext, type PlayerIdentityLedger } from './identityLedger';
+import { playerIdentityDef } from './playerLedgerRules';
 
 export type { ActorResolution };
 
@@ -44,6 +46,13 @@ export function clampLineAffinityDelta(value: number): number {
   const cap = Number(numbers().freeAction.affinity.perBeatCap);
   return Number.isFinite(value) ? Math.max(-cap, Math.min(cap, value)) : 0;
 }
+
+/** runtime.playerIdentities（类型不进冻结的 RuntimeState，局部收窄）；缺失时新建。 */
+function identityLedgerOf(r: RuntimeState): PlayerIdentityLedger {
+  const rt = r as { playerIdentities?: PlayerIdentityLedger };
+  return (rt.playerIdentities && typeof rt.playerIdentities === 'object') ? rt.playerIdentities : (rt.playerIdentities = {});
+}
+const identityOpContext = (c: EffectContext): LedgerOpContext => ({ stageId: (c.r as { modId?: string }).modId, worldTurn: Number(c.r.worldTurn) || 0 });
 
 export const LINE_EFFECT_HANDLERS: Record<string, Handler> = {
   itemGrant: { apply: (e, c) => { (c.effects.inventoryTransfers ||= []).push({ transferId: `${c.receiptId}.${e.itemId}`, itemId: e.itemId, quantity: e.quantity }); } },
@@ -65,6 +74,15 @@ export const LINE_EFFECT_HANDLERS: Record<string, Handler> = {
   },
   setReceipt: { apply: (e, c) => { (c.effects.pathReceipts ||= []).push({ receiptId: e.receiptId, sourceEventId: c.event.id, choiceId: c.actionId, mutexGroupId: e.mutexGroupId || e.receiptId, dimension: 'method', label: c.beatObjective, consumeAtEventIds: e.consumeAtEventIds }); } },
   setState: { apply: (e, c) => { c.r.flags[e.stateId] = e.value; } },
+  // 身份账（身份账设计稿 §3.4）：eventId 取本拍 event.id，与规则表同一组函数，同一 (eventId, op) 幂等。
+  identityGrant: {
+    validate: e => { for (const id of [e.identityId, e.redirectIdentityId]) if (id !== undefined && !playerIdentityDef(id)) throw Error(`unknown identity ${id}`); },
+    apply: (e, c) => { applyGrantRule(identityLedgerOf(c.r), { ...e, eventId: c.event.id }, c.event.id, identityOpContext(c)); },
+  },
+  identityRevoke: {
+    validate: e => { if (!playerIdentityDef(e.identityId)) throw Error(`unknown identity ${e.identityId}`); },
+    apply: (e, c) => { revokePlayerIdentity(identityLedgerOf(c.r), { ...identityOpContext(c), identityId: e.identityId, eventId: c.event.id }); },
+  },
   affinityGrant: {
     validate: (e, c) => {
       if (!Number.isFinite((LINE_RESOURCES.affinityWeights as any)[e.weightId])) throw Error(`pending affinity weight ${e.weightId}`);

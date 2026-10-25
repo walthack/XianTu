@@ -798,6 +798,50 @@
           "type": "object",
           "properties": {
             "kind": {
+              "const": "identityGrant"
+            },
+            "identityId": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_.:-]+$"
+            },
+            "whenHeld": {
+              "enum": [
+                "reinforce",
+                "redirect"
+              ]
+            },
+            "redirectIdentityId": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_.:-]+$"
+            }
+          },
+          "required": [
+            "kind",
+            "identityId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "identityRevoke"
+            },
+            "identityId": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_.:-]+$"
+            }
+          },
+          "required": [
+            "kind",
+            "identityId"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
               "const": "ending"
             },
             "endingId": {

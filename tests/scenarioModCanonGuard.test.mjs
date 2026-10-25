@@ -193,3 +193,36 @@ test('#18 生死护栏:rail 前方事件相关角色不可被模型命令写死/
   assert.equal(result.accepted.length, 1);
   assert.equal(result.accepted[0].value, '受了轻伤，正在调息');
 });
+
+// 身份账 T3（身份账设计稿 2026-10-25 §3.5）：line.* 收束档与 playerIdentities 引擎独占，模型不能写。
+test('模型 set flags.line.* 被拒', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildScenarioSave();
+  const commands = [
+    { action: 'set', key: '世界.状态.剧本模组.flags.line.jin.outcome', value: 'resolved' },
+    { action: 'set', key: '世界.状态.剧本模组.flags.line', value: { song: { outcome: 'resolved' } } },
+    { action: 'add', key: '世界.状态.剧本模组.flags.line.tang.outcome', value: 'imperfect' },
+    { action: 'set', key: '世界.状态.剧本模组.flags.lineage.note', value: '不是 line 命名空间' },
+  ];
+  const result = guardScenarioModCommands(save, commands);
+  assert.deepEqual(result.accepted, commands.slice(3));
+  assert.equal(result.rejected.length, 3);
+  assert.match(result.rejected[0].reason, /国家线收束档 line\.\* 只能由本地引擎/);
+  assert.match(result.rejected[1].reason, /国家线收束档 line\.\* 只能由本地引擎/);
+});
+
+test('模型写 playerIdentities 被拒', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildScenarioSave();
+  const identityId = 'liuchao.identity.song.baochao_zhushi';
+  const commands = [
+    { action: 'set', key: `世界.状态.剧本模组.playerIdentities.${identityId}`, value: { identityId, status: 'active', acquiredAtEventId: 'event.firstmeeting', history: [] } },
+    { action: 'set', key: `世界.状态.剧本模组.playerIdentities.${identityId}.status`, value: 'revoked' },
+    { action: 'set', key: '世界.状态.剧本模组.playerIdentities', value: {} },
+    { action: 'delete', key: '世界.状态.剧本模组.playerIdentities' },
+  ];
+  const result = guardScenarioModCommands(save, commands);
+  assert.deepEqual(result.accepted, []);
+  assert.equal(result.rejected.length, commands.length);
+  assert.ok(result.rejected.every(item => item.reason.includes('剧本模组正典字段受保护')), JSON.stringify(result.rejected.map(r => r.reason)));
+});

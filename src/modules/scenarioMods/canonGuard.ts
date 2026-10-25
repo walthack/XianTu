@@ -4,6 +4,7 @@ import type { SaveData } from '@/types/game';
 import { fixedInventoryCommandViolation } from './fixedInventoryContracts';
 import { getNarrativeAnchorEvent } from './runtime';
 import { expandPrivateKnowledgeAssociations } from './privateKnowledgeGuard';
+import { LINE_FLAG_PREFIX } from './lineOutcomes';
 
 import type {
   ScenarioContentAccessRule,
@@ -353,6 +354,8 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
     || flagPath === 'event.gamble_bond_signed.outcome') {
     return '白湖拒赌账本只能由本地引擎写入';
   }
+  // 国家线收束档 line.<lineId>.outcome：只由规则表同步写入；整段 flags.line 嵌套写法同样拦（读取有嵌套兜底）。
+  if (`${flagPath}.`.startsWith(LINE_FLAG_PREFIX)) return '国家线收束档 line.* 只能由本地引擎按规则表写入';
   const parts = flagPath.split('.');
   const namespace = parts[0];
   if (namespace !== 'event' && namespace !== 'chapter') return null;

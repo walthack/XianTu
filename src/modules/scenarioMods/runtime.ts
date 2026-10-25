@@ -8,6 +8,7 @@ import {entityAliases,canonicalEntityId} from './namedEntities';
 import {isNamedEntityLabel} from './namedEntities';
 import {refreshSaveEntityReferences} from './entitySaveRefs';
 import { settleQuestLineEffects } from './questLineEffects';
+import { syncPlayerLedgers } from './identityLedger';
 import { reconcileNpcRealm } from './actorLevels';
 import {questLineOffer,questLineContext,expireQuestLineWindows,deferOptionalDeparture} from './questLineContext';
 import {QUEST_LINES,LINE_RESOURCES} from './questLines';
@@ -4025,6 +4026,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   settleScenePressure(runtime, transitions);
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
+  syncPlayerLedgers(runtime);
   releaseBaihuGambleRefusalIfEscaped(next);
 
   refreshSaveEntityReferences(next);

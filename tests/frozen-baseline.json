@@ -1,8 +1,8 @@
 {
-  "note": "冻结文件内容哈希基线（tests/perfTelemetry.test.mjs 冻结门禁）。2026-10-19 22:31 用户批准小批解冻后重新上锁；23:52 再批谢艺境界改存档为准并更新；再改须重新获批并更新本文件。 2026-10-20 08:27 用户批准改 AIBS 一处：谢艺救治部分成功/失败正文锁成合同 outcomeText（不再写成救活）。",
-  "approvedAt": "2026-10-20T08:27:00+08:00",
+  "note": "冻结文件内容哈希基线（tests/perfTelemetry.test.mjs 冻结门禁）。2026-10-19 22:31 用户批准小批解冻后重新上锁；23:52 再批谢艺境界改存档为准并更新；再改须重新获批并更新本文件。 2026-10-20 08:27 用户批准改 AIBS 一处：谢艺救治部分成功/失败正文锁成合同 outcomeText（不再写成救活）。 2026-10-26 用户批准（身份账 T3 方案 A）：runtime.ts 只加 2 行——import syncPlayerLedgers，并在 recordChronicleTransitions 之后调用 syncPlayerLedgers(runtime)（内部 try/catch，失败不阻断回合）。",
+  "approvedAt": "2026-10-26T00:00:00+08:00",
   "files": {
     "src/utils/AIBidirectionalSystem.ts": "77c2f3fc7d91e8b67b130a4090e6da9dc9060b2e39c0e3a2e78f3c9238b32171",
-    "src/modules/scenarioMods/runtime.ts": "b1caa2dbf1ed85ddd5c781fdbef7246e45aaf1eef3e993d04955545e0cfb4a65"
+    "src/modules/scenarioMods/runtime.ts": "33eb984b1cd3eae962042b43446937e79d9e53e13dd2506cef6e00f21dc94385"
   }
 }

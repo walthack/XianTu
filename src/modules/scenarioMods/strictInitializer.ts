@@ -25,6 +25,8 @@ import {
   XINGYUEHU_LANDING_PLAYTEST_KIND,
 } from './xingyuehuLandingPlaytest';
 import { departedPresentNames } from './presence';
+import { syncPlayerLedgers } from './identityLedger';
+import { LINE_FLAG_PREFIX } from './lineOutcomes';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   entitySaveFormat: number;
@@ -350,6 +352,8 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   }
 
   mod=overlayPackPlaytestOpening(mod,(saveData as any)?.系统?.扩展);
+  // 身份账与收束档：取快照前先补同步一次，防止本关最后一拍完成的事件没入账就被切关丢掉（completedEventIds 按新关重置）。
+  syncPlayerLedgers(rt);
   backfillRelationshipIds(saveData, rt.canon?.characters);
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
   // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；
@@ -361,6 +365,10 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   // 直接给她"内宅侍婢"的身份——正是 R3-12 要解决的那个矛盾。
   const acquaintanceSnapshot = structuredClone(
     rt.acquaintances && typeof rt.acquaintances === 'object' ? rt.acquaintances : {},
+  );
+  // 身份账同理：持有/撤销过哪些身份是玩家历史，跨关携带。
+  const playerIdentitiesSnapshot = structuredClone(
+    rt.playerIdentities && typeof rt.playerIdentities === 'object' ? rt.playerIdentities : {},
   );
   const departedCastSnapshot = [...new Set(departedPresentNames(rt))];
   // 关系姿态同理：滞回状态跨关保留，否则每次切关姿态都从瞬时值重来，
@@ -397,6 +405,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     || key.startsWith('character.')
     || key.endsWith('.void')
     || key.startsWith('world.baihu.')
+    || key.startsWith(LINE_FLAG_PREFIX)
     || key === 'event.gamble_bond_signed.refused_capture'
     || key === 'event.gamble_bond_signed.outcome',
   ));
@@ -434,6 +443,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   if (chronicleSnapshot.length) newRuntime.chronicle = chronicleSnapshot;
   if (Object.keys(acquaintanceSnapshot).length) {
     newRuntime.acquaintances = { ...(newRuntime.acquaintances || {}), ...acquaintanceSnapshot };
+  }
+  if (Object.keys(playerIdentitiesSnapshot).length) {
+    newRuntime.playerIdentities = { ...(newRuntime.playerIdentities || {}), ...playerIdentitiesSnapshot };
   }
   if (departedCastSnapshot.length) newRuntime.departedCast = departedCastSnapshot;
   migrateRuntimePersonRecords(newRuntime);

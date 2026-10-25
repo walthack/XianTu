@@ -91,7 +91,8 @@ export function revokePlayerIdentity(ledger: PlayerIdentityLedger, input: { iden
   return true;
 }
 
-function applyGrantRule(ledger: PlayerIdentityLedger, rule: IdentityGrantRule, eventId: string, ctx: LedgerOpContext): GrantResult {
+/** 按一条授予规则（含 whenHeld=redirect 改授）落账；规则表同步与任务线 identityGrant 共用。 */
+export function applyGrantRule(ledger: PlayerIdentityLedger, rule: IdentityGrantRule, eventId: string, ctx: LedgerOpContext): GrantResult {
   if (rule.whenHeld === 'redirect' && rule.redirectIdentityId) {
     // 幂等：原身份或改授身份任一已由本事件授予过，就跳过
     if (grantedBy(ledger[rule.identityId], eventId) || grantedBy(ledger[rule.redirectIdentityId], eventId)) return 'noop';

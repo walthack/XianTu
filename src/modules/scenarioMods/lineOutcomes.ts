@@ -7,7 +7,10 @@ import { orderedDoneEventIds, playerLedgerRules, type PlayerLedgerRules } from '
 
 export const lineOutcomeTiers = (): readonly string[] => GAME_NUMBERS.story.lineOutcome.tiers;
 
-export const lineOutcomeKey = (lineId: string): string => `line.${lineId}.outcome`;
+/** 国家线 flags 命名空间：收束档只有规则表这一个写入口（模型 set、任务线 setState 都不得写），切关时整段继承。 */
+export const LINE_FLAG_PREFIX = 'line.';
+
+export const lineOutcomeKey = (lineId: string): string => `${LINE_FLAG_PREFIX}${lineId}.outcome`;
 
 /** 扁平键优先，嵌套兜底。 */
 export function readLineOutcome(flags: Record<string, unknown> | undefined, lineId: string): string | undefined {
