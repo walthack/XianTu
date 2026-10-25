@@ -1,11 +1,13 @@
 # 六朝仙途 · 当前项目状态
 
-更新时间：2026-10-25 02:00（Asia/Singapore，日更）；分支 `feat/fast-no-legacy`。
+更新时间：2026-10-26 02:00（Asia/Singapore，日更）；分支 `feat/fast-no-legacy`。
 **权威进度入口（双件）**：本文件（叙述与勾选总表）+ [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)（总甘特时间线）。勿另造第二份 status。  
 `_newbot_tmp/PROJECT-TRACKER.md` **非权威**（草稿勾选；权威=本文件+总甘特）。历史全文见 [PROJECT-STATUS-ARCHIVE-2026-10-12.md](PROJECT-STATUS-ARCHIVE-2026-10-12.md)。  
 **完整功能清单**：[docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)（总甘特的附属章节：功能分块、每块进行中／已完成／待办、各线程任务、全部已完成与全部待办汇总）。
 
 ## 一句话现状
+
+**2026-10-26 02:00 日更核对**：自上轮日更 `b6de9e51`（10-25 01:55）起 3 个提交，HEAD `0aecc32b`（10-26 00:12，已推送，与 `origin/feat/fast-no-legacy` 一致）：`f5dd378b`（10-25 23:06）身份账 `playerIdentities` 设计稿（模块策划，[`docs/design/2026-10-25-身份账设计稿.md`](docs/design/2026-10-25-身份账设计稿.md)，纯文档）→ `c48479c0`（10-25 23:31）T1 配置与账本核心（`identityLedger.ts`／`lineOutcomes.ts`／`playerLedgerRules.ts`，`identities.json`／`player-ledger-rules.json` 首版空表，numbers 加 `story.lineOutcome.{tiers,writeOnce}`、`story.identity.kinds`，实体索引新增国家线 id `nanhuang`、`qin`；不碰冻结文件）→ `0aecc32b`（10-26 00:12）T2 读取接口 `ledgerConditions.ts`（`identity.`／`done.`／`line.*.outcome`／`acq.`／`knows.player.`，`party.*` 留位），`done.*` 以编年史 `chronicle.<stageId>.<eventId>` 为准、本关 `completedEventIds` 只补同回合空档、`travelLedger` 退出；validator 限账本路径只用于 `narrativeVariants.when`；不碰冻结文件。**未落**：T3 接线（写入挂点、跨关继承、防模型写、旧档回填；`runtime.ts` 方案 A 2 行）与可选 T4（`resolveConditionValue` 读账本以锁节点）——设计稿 §11 Q1 仍写「待总策划确认」，仓库内未见冻结改动获批记录（文档待更新）。设计稿 §11 Q3–Q6（收束三档或两档及是否可改写、`party.*` 在队口径、编年史上线前关卡的 `done.*` 回填、身份清单与规则表由谁何时给）仓库内未见答复，列入待拍。本次两个代码提交的测试结果提交说明未记；8097 未见重建记录；仓库内无新真机报告。03 宋原稿仍未入库。
 
 **2026-10-25 02:00 日更核对**：自上轮日更 `1469673f`（10-24 01:53）起仓库无新提交（任何分支均无），HEAD 仍为 `efd8470f`＋日更文档提交，与 `origin/feat/fast-no-legacy` 一致；仓库内无新真机报告。下列快照内容仍有效；「8097 重建时机未记」「现包真机复验是否已跑未记」仍文档待更新；03 宋原稿仍未入库。
 
@@ -43,7 +45,7 @@
 | 项 | 值 |
 |---|---|
 | 分支 | `feat/fast-no-legacy`（跟踪 `origin/feat/fast-no-legacy`） |
-| HEAD | `efd8470f`（2026-10-22 22:59 Asia/Singapore；已推送）— 国家线落档第二条晋；此前 `cb6cbe71` 收录晋线原稿、`4462bf8a` 补卡源（阿伶／红苗族长／武二郎摘要）、`70f0e020` 棘轮人名改 id、`8cded818` 国家线落档第一条五原序幕＋南荒、`df23350d` Sol 10-22 周审修复（LCQ-SAV-021／022、诗薇莫离开骰走 RNG、炼制按九级读配置、修既有红 `chapterIdentitySwitch`）；此前 `88e32415`（2026-10-20 08:48）— 试玩第三期 nanhuang-3、战斗伤害不保底（打到 0 倒下）、去掉低血重伤 -15、仙／神品队友评价信号、谢艺救治叙事锁（AIBS 获批一处）、RNG 游标放存档外；现包 `fa0d6e1ac595` 已含；此前 `80f0b25b` — 冰蛊进段／读档补挂＋通用战败标题；此前 `5837d7cb` — 同伴助战＋护人戏威胁进度；此前 `14c26037` — 08e0 真机复测修复（`51347d23` 挂伤按档/逐拍/标签/记忆说明＋交涉配置＋自由行动本地补票＋真机夹具；`213a0305` 拍数门禁 LCQ-SAV-020＋F13 同伴 woundRule；`14c26037` 级数以存档为准＋无名敌人种类预设＋受保护同行者不出防御行）；此前 `a0455dd4` — F02 卡点底座修复（`d2fa5334` 挂伤数据驱动＋外伤（重）＋休整解伤；`8c003b12` 幅度加价封顶；`9870e464` 偏离专名过滤；`b991f58a` 出生年；`a0455dd4` 无交涉提示＋单测）；此前 `69936fe3`（全长 `69936fe33c3ab1360ee6df76067fbe3798441230`）— 冻结门禁方案 A；前 tip `606a5f3c`；含 `3763e22e` 同拍、`ac32513d` 轻回执＋遇敌三步、`ee856f26`／`a1e9ba66`／`ae76909a` |
+| HEAD | `0aecc32b`（2026-10-26 00:12 Asia/Singapore；已推送）— 身份账 T2 读取接口；此前 `c48479c0` 身份账 T1、`f5dd378b` 身份账设计稿；此前 `efd8470f`（2026-10-22 22:59）— 国家线落档第二条晋；此前 `cb6cbe71` 收录晋线原稿、`4462bf8a` 补卡源（阿伶／红苗族长／武二郎摘要）、`70f0e020` 棘轮人名改 id、`8cded818` 国家线落档第一条五原序幕＋南荒、`df23350d` Sol 10-22 周审修复（LCQ-SAV-021／022、诗薇莫离开骰走 RNG、炼制按九级读配置、修既有红 `chapterIdentitySwitch`）；此前 `88e32415`（2026-10-20 08:48）— 试玩第三期 nanhuang-3、战斗伤害不保底（打到 0 倒下）、去掉低血重伤 -15、仙／神品队友评价信号、谢艺救治叙事锁（AIBS 获批一处）、RNG 游标放存档外；现包 `fa0d6e1ac595` 已含；此前 `80f0b25b` — 冰蛊进段／读档补挂＋通用战败标题；此前 `5837d7cb` — 同伴助战＋护人戏威胁进度；此前 `14c26037` — 08e0 真机复测修复（`51347d23` 挂伤按档/逐拍/标签/记忆说明＋交涉配置＋自由行动本地补票＋真机夹具；`213a0305` 拍数门禁 LCQ-SAV-020＋F13 同伴 woundRule；`14c26037` 级数以存档为准＋无名敌人种类预设＋受保护同行者不出防御行）；此前 `a0455dd4` — F02 卡点底座修复（`d2fa5334` 挂伤数据驱动＋外伤（重）＋休整解伤；`8c003b12` 幅度加价封顶；`9870e464` 偏离专名过滤；`b991f58a` 出生年；`a0455dd4` 无交涉提示＋单测）；此前 `69936fe3`（全长 `69936fe33c3ab1360ee6df76067fbe3798441230`）— 冻结门禁方案 A；前 tip `606a5f3c`；含 `3763e22e` 同拍、`ac32513d` 轻回执＋遇敌三步、`ee856f26`／`a1e9ba66`／`ae76909a` |
 | 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`fa0d6e1ac595`**（全长 `fa0d6e1ac59585b9119fba0fe8616e0eacdd084faf431bf16568f8701e6394f1`，md5 `3935543dff54f494ea0f6815d9c75c89`，23228958 字节；2026-10-20 08:48:58 Asia/Singapore 写盘，按包内标记判定由 `88e32415` 构建（构建记录双件原未写，2026-10-21 日更补记）；127.0.0.1:8097 实际所发 SHA-256 与磁盘一致；PID 65144 未重启；旧包 `a21dea14434b` 备份于 `dev/combat-trial/dist-backup-20261020-084852/`；**尚无真机报告**（文档所记）。`88e32415` 之后的提交（含代码提交 `df23350d`／`70f0e020`／`4462bf8a`）双件未见重建记录，按文档未部署（文档待更新）。10-20 历次：`fee49d5f0124`→`6ccb30140eed`（03:22）→`1aae9ec5c97a`（05:19）→`5e8fb688b745`（07:16）→`a21dea14434b`（08:17）→`fa0d6e1ac595`（08:48）） |
 | numbers 三分包 | `mod-kit/numbers-combat.json` / `numbers-progress.json` / `numbers-runtime.json` + `NUMBERS-AUTHORITY.md`；生成物 `mod-kit/game-numbers.qingyu.json`；提交 **`3b8c1be2`** |
 | 最近合入基线 | diagnostics / drain / scene-danger / baseline-p0·p1·p2 已 merge；同拍闸 `3763e22e` → … → `606a5f3c`；**用户拍 A：冻结门禁基线已更新，全量冻结门禁应变绿**（不重启 8097） |
@@ -58,6 +60,7 @@
 - [x] **账本人名棘轮转绿**（`70f0e020`）：`shiweimoRescue.ts`／`secondaryLines.ts` 显示文案改由总表按 id 取名，`actorLevels.ts`／`freeAction/turn.ts`／`locationLoot.ts` 注释改写为 id；`validate-ledger-ratchet` PASS（1873 处存量），未重置基线
 - [x] **总表补卡进受控源**（`4462bf8a`）：阿伶、红苗族长两张卡与武二郎摘要（overrides 段）进 `mod-kit/character-registry-supplements.json`，`build-character-registry.mjs` 套用 overrides；`canon:build` 重建不再丢失 `a1e9ba66` 手工追加内容；总表文件本身未改
 - [x] **国家线落档第一条：五原序幕＋南荒**（`8cded818`）：[`docs/narrative/2026-10-22-国家线/01-五原序幕与南荒.md`](docs/narrative/2026-10-22-国家线/01-五原序幕与南荒.md)——D1 序幕（含四年跳时，仓库未实装）、南荒节点表（对照现有 `lcq.event.*`）、已定变体表、交叉依赖、`xieyi.state` 三态、收束三态与代价、状态／道具「来源→效果→解除」、配置草案只列键、合规只标章:行、本线待拍；同提交收录交接稿与原稿 00／01／07（只读依据）
+- [x] **身份账设计稿＋T1＋T2**（`f5dd378b`／`c48479c0`／`0aecc32b`，已推送；8097 未见重建记录）：设计稿 [`docs/design/2026-10-25-身份账设计稿.md`](docs/design/2026-10-25-身份账设计稿.md)（模块策划）；T1 账本核心与配置（新增 `identityLedger.ts`／`lineOutcomes.ts`／`playerLedgerRules.ts`、空规则表、`story.lineOutcome.*`／`story.identity.kinds`、国家线 id `nanhuang`／`qin` 入实体索引，新测 `identityLedger`／`lineOutcomes`／`playerLedgerRules`）；T2 读取接口 `ledgerConditions.ts`，`done.*` 以编年史为准，`eventNarrativeView` 与 `storyContext.ts:845` 透传 runtime 使 Canon Rail 判定与选变体一致；两提交均不碰冻结文件
 - [x] **国家线落档第二条：晋**（`cb6cbe71` 收录原稿、`efd8470f` 落档）：[`docs/narrative/2026-10-22-国家线/02-晋.md`](docs/narrative/2026-10-22-国家线/02-晋.md)——入晋两由头、节点表、只收已定的变体表、交叉依赖与拆并短注、`xieyi.state` 晋侧读取、收束三态（只收用户定）、身份账建议名；纯文档，不改代码与数据
 - [x] **2026-10-20 白天南荒内容与修复（`c254b098`…`88e32415`，均已推送；现包 `fa0d6e1ac595` 已含）**：战中疗伤目标＋开战前战外存档（`c254b098`）；F07 小津挂卡 id（`86241350`）；F02 对手改诗薇莫＋救治规则（`7e858eed`）与战后自由行动接线（`38edf07b`）；F11 鬼王宫突围、F12 祭台尸鬼真战斗＋第 98–103 章过渡（`5bd66b10`）；建康方案 A(2)(3) 返程入建康章＋萧遥逸移至第 126 章（`09265d9f`）；功法四品＋按品计数（`5a43e7aa`）；南荒 boss 场景专属搜刮（`9915e5f4`）；6ccb 修复轮（`f3ca6cdc`）、1aae 修复轮（`2b2bacd1`）、5e8f 修复轮（`7ff38726`）；nanhuang-3、战斗伤害不保底、去掉低血重伤 -15、队友评价信号、谢艺救治叙事锁（AIBS 获批一处）、RNG 游标放存档外（`88e32415`）。详情见文末 10-20 条目
 - [x] **8097 10-20 五次重建＋三轮真机**：`6ccb30140eed`／`1aae9ec5c97a`／`5e8fb688b745` 各跑一轮（报告 `../playtest-2026-09-28/REPORT-6ccb30140eed-fullrun.md`、`REPORT-1aae9ec5c97a-fullrun.md`、`REPORT-5e8fb688b745-fullrun.md`）；5e8f 轮已打到二期终点（殇侯授艺），当时试玩范围不含建康
@@ -134,6 +137,8 @@
 
 ### In progress（进行中）
 
+- [ ] **身份账 T3 接线**（设计稿 §8：`runtime.ts` 方案 A 2 行或方案 B、`strictInitializer`／`canonGuard`／`loadRepairs`／`questLineEffects`／`questLines`）与**可选 T4**（激活／完成条件读账本，冻结 `runtime.ts:2443` 3 行）：T1／T2 已落，T3／T4 未见提交；冻结改动是否获批仓库内未记（文档待更新）
+
 - [ ] **同拍共历 · 收口观察**：同拍闸已落；是否还有拍间历法分叉边角，跟已批未落扫描一并收口（甘特「进行中」；底座）
 - [ ] **角色总表合入／补人**：总表补齐与合入进行中（对照约 333 条规模；甘特「进行中」；**内容**，可同步、略低）
 - [ ] **已批未落扫描**：对照 GAP / 裁定 / `_newbot_tmp/APPROVED-BACKLOG-2026-10-19.md`，扫清「批了但未落盘」项（底座）
@@ -171,6 +176,8 @@
 - [ ] **战内逃跑**：用户已定先不做（尚无随机遇敌）；草案仅预留 `flee` outcome 名，不实装 UI/规则（甘特泳道「搁置」；见 `_newbot_tmp/DESIGN-ENCOUNTER-AND-CHAINED-COMBAT-2026-10-19.md`）
 
 ### Waiting-user（待拍 / 待用户）
+
+- [ ] **身份账设计稿 §11**：Q1 冻结 `runtime.ts` 方案 A 与 T4 是否批（仓库未记，文档待更新）；Q2 国家线 id 已按新增 `nanhuang`／`qin` 落入 T1（`nh_`／`tq_` 前缀是否对齐未记）；Q3 收束三档／两档、`writeOnce`；Q4 `party.*` 在队口径；Q5 编年史上线前关卡 `done.*` 是否推断回填；Q6 身份清单与「事件→身份／收束档」规则由谁何时给（首版规则表为空）
 
 - [ ] **10-20 待拍（10-21 日更核对）**：仍待拍——跨国人物依赖清单（box 草稿已从全国版 10-20 09:00 出到理顺版 10-21 00:18，仓库未改）；药品余项（心性判定口径、九转六处）；CP-07 谢艺选项涉及冻结 `runtime.ts`（`88e32415` 查明是存档时那拍已选，是否还要改未记，文档待更新）。已解决：8097 重建时机（10-20 已重建五次）；谢艺救治叙事（AIBS 获批一处，`88e32415`）；低血量重伤 -15（去掉，`88e32415`）；RNG 游标（放存档外，`88e32415`）
 - [ ] **炼制品质上限档位**（`df23350d`）：`crafting.levelTierCaps` 按原著九级的档位切分是草案，待用户拍
@@ -284,3 +291,4 @@
 - 2026-10-21 02:10 日更核对（Asia/Singapore）：HEAD `88e32415` 与远端一致，10-20 08:48 后无新提交；8097 现包 `fa0d6e1ac595`（由 `88e32415` 构建，served 一致，PID 65144 未动），本次补记该次重建；现包尚无真机报告。剧情策划在 box `/workspace/narrative-drafts/` 新出国家线草稿（仓库未改、非基准，见「待拍」）。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
 - 2026-10-22 02:10 日更核对（Asia/Singapore）：HEAD `88e32415` 与远端一致，其后仅文档提交 `70b39fb4`，无代码提交；8097 现包仍是 `fa0d6e1ac595`（served SHA-256 与磁盘一致，PID 65144 未动），`../playtest-2026-09-28/` 无新报告，现包真机复验仍待做。剧情策划 10-21 在 box `/workspace/narrative-drafts/` 新出角色线草稿：`角色剧情线大纲.md`（10-22 00:51 最新，另有 `大纲分册/`）、`原著对比/` 与 `原著对比-10角色合订.md`、凝羽／卓云君／苏妲己角色线稿与 `2026-10-21-五角色线待拍板汇总.md`、`潘金莲-原著合规段对比摘要.md`、`称谓分档候选.md`、`大祭决战框架-草稿.md`；仓库未改、非基准，草稿里记的用户决定（角色事件分主要／次要、结局条件与后日谈、五原城跳四年、唐线恢复推进等）尚未写进双件（文档待更新）。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
 - 2026-10-23 02:10 日更核对（Asia/Singapore）：HEAD `efd8470f` 与远端一致；自 `b3c95706` 起 6 提交（`df23350d` Sol 周审修复、`8cded818` 国家线 01 五原序幕＋南荒、`70f0e020` 棘轮转绿、`4462bf8a` 补卡源、`cb6cbe71` 晋原稿、`efd8470f` 国家线 02 晋），已写入 Done；既有红 `chapterIdentitySwitch` 已修，从待拍移出；新增待拍：炼制 `crafting.levelTierCaps` 档位、国家线 01／02 §10。8097 双件仍记 `fa0d6e1ac595`，代码提交后未见重建记录；真机报告无新增记录（文档待更新）。下一条国家线按编号为 03 宋。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
+- 2026-10-26 02:00 日更核对（Asia/Singapore）：HEAD `0aecc32b` 与远端一致；自 `b6de9e51` 起 3 提交（`f5dd378b` 身份账设计稿、`c48479c0` T1、`0aecc32b` T2），已写入 Done；新增进行中 T3／T4、新增待拍设计稿 §11。8097 未见重建记录、无新真机报告（文档待更新）。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
