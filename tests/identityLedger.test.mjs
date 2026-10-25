@@ -7,6 +7,8 @@ const modPromise = loadTs('../src/modules/scenarioMods/identityLedger.ts');
 
 const ZHUSHI = 'liuchao.identity.song.baochao_zhushi';
 const FENHAO = 'liuchao.identity.jin.baochao_fenhao';
+const JIN_INVEST = 'lcq.event.s02_04';
+const JIN_OTHER = 'lcq.event.s02_05';
 const rules = (patch = {}) => ({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [], ...patch });
 
 test('首次授予写 acquiredAtEventId 与 active', async () => {
@@ -102,23 +104,24 @@ test('重复同步幂等 history 不重复', async () => {
 test('按完成顺序先到先得', async () => {
   const { syncPlayerIdentities, syncPlayerLedgers } = await modPromise;
   const table = rules({ identityGrants: [
-    { eventId: 'e.jin.invest', identityId: ZHUSHI },
+    { eventId: JIN_INVEST, identityId: ZHUSHI },
     { eventId: 'e.song.found', identityId: ZHUSHI },
   ] });
-  // 编年史（跨关，按 sequence）先于本关 completedEventIds；规则表里的顺序不影响来源
+  // 编年史（跨关，按 sequence）先于本关 completedEventIds；规则表里的顺序不影响来源。
+  // 编年史条目只认已知事件 id（实体索引 kind=event），故跨关事件取真实 id
   const runtime = {
     modId: 'stage.song', flags: {},
     chronicle: [
-      { id: 'chronicle.stage.jin.e.jin.invest', type: 'event', stageId: 'stage.jin', title: '注资', sequence: 2 },
-      { id: 'chronicle.stage.jin.e.jin.other', type: 'world', stageId: 'stage.jin', title: '世界自行推进', sequence: 1 },
+      { id: `chronicle.stage.jin.${JIN_INVEST}`, type: 'event', stageId: 'stage.jin', title: '注资', sequence: 2 },
+      { id: `chronicle.stage.jin.${JIN_OTHER}`, type: 'world', stageId: 'stage.jin', title: '世界自行推进', sequence: 1 },
     ],
     completedEventIds: ['e.song.found'],
   };
   syncPlayerIdentities(runtime, { rules: table });
-  assert.equal(runtime.playerIdentities[ZHUSHI].acquiredAtEventId, 'e.jin.invest');
+  assert.equal(runtime.playerIdentities[ZHUSHI].acquiredAtEventId, JIN_INVEST);
   assert.deepEqual(runtime.playerIdentities[ZHUSHI].history.map(h => h.op), ['grant', 'reinforce']);
   // 反过来完成：来源跟着完成顺序走
-  const other = { flags: {}, completedEventIds: ['e.song.found', 'e.jin.invest'] };
+  const other = { flags: {}, completedEventIds: ['e.song.found', JIN_INVEST] };
   assert.equal(syncPlayerLedgers(other, { rules: table }), 2);
   assert.equal(other.playerIdentities[ZHUSHI].acquiredAtEventId, 'e.song.found');
 });

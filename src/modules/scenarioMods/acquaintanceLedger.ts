@@ -72,6 +72,11 @@ export function rankOf(kind: AcquaintanceKind): number {
   return KIND_RANK[kind] || 0;
 }
 
+/** 是否合法相识程度（等级表只此一份，供 acq.* 条件校验复用）。 */
+export function isAcquaintanceKind(value: unknown): value is AcquaintanceKind {
+  return typeof value === 'string' && Object.prototype.hasOwnProperty.call(KIND_RANK, value);
+}
+
 /**
  * 只升不降地写入一条记录。
  *

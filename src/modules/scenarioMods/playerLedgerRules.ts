@@ -56,7 +56,8 @@ export interface PlayerLedgerRefs {
 const RESERVED_IDENTITY_TAILS = ['from', 'status'];
 const WHEN_HELD = ['reinforce', 'redirect'];
 
-const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
+/** 实体索引里某 kind 的 id 集合。 */
+export const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
 
 export function playerIdentityDefs(): PlayerIdentityDef[] {
   return (identitiesJson.entries as unknown as Array<{ definition: PlayerIdentityDef }>).map(e => e.definition);
@@ -138,17 +139,29 @@ export function playerLedgerRules(): PlayerLedgerRules {
   return (validatedRules = rules);
 }
 
+let knownEventIdSet: Set<string> | undefined;
+/** 实体索引 kind=event 的 id 集合（缓存）。 */
+export const knownEventIds = (): Set<string> => (knownEventIdSet ||= indexIds('event'));
+
 /**
- * 规则处理用的完成顺序：编年史 type='event' 条目按 sequence 排（跨关继承），
- * 本关 completedEventIds、travelLedger.doneEventIds 里尚未出现的按原顺序补在后面。
- * 场外结算（offscreenResolvedEventIds）不算完成。
+ * 已完成事件（done.* 与规则处理共用这一个口径，身份账设计稿 §4.2）：
+ * ① 编年史 type='event' 且 id 恰好为 chronicle.<stageId>.<eventId> 的条目，按 sequence 排（跨关继承）；
+ *    eventId 须是已知事件（实体索引 kind=event ∪ 本关 runtime.events），
+ *    所以 <eventId>.refused_capture 这类附加条目、type='world' 场外结算都不算；
+ * ② 本关 completedEventIds 里尚未出现的按原顺序补在后面，只为补「已完成、编年史尚未落账」的同回合空档；
+ *    场外结算（offscreenResolvedEventIds / eventTimeline.outcome='offscreen'）与玩家尚未获知的事件不补，同编年史入账口径。
+ * travelLedger 不参与。
  */
 export function orderedDoneEventIds(runtime: unknown): string[] {
   const rt = (runtime || {}) as {
     chronicle?: Array<{ id: string; type: string; stageId: string; sequence: number }>;
     completedEventIds?: string[];
-    travelLedger?: { doneEventIds?: string[] };
+    offscreenResolvedEventIds?: string[];
+    eventTimeline?: Record<string, { outcome?: string; playerLearnedAtTurn?: number } | undefined>;
+    events?: Array<{ id: string; timeline?: unknown }>;
   };
+  const stageEvents = new Map((rt.events || []).map(e => [e?.id, e]));
+  const isEventId = (id: string): boolean => stageEvents.has(id) || knownEventIds().has(id);
   const out: string[] = [];
   const seen = new Set<string>();
   const push = (id: string | undefined): void => { if (id && !seen.has(id)) { seen.add(id); out.push(id); } };
@@ -156,9 +169,16 @@ export function orderedDoneEventIds(runtime: unknown): string[] {
   for (const entry of chronicle) {
     // 条目 id＝chronicle.<modId||'unknown'>.<eventId>，stageId＝modId||''
     const prefix = `chronicle.${entry.stageId || 'unknown'}.`;
-    if (typeof entry.id === 'string' && entry.id.startsWith(prefix)) push(entry.id.slice(prefix.length));
+    if (typeof entry.id !== 'string' || !entry.id.startsWith(prefix)) continue;
+    const eventId = entry.id.slice(prefix.length);
+    if (isEventId(eventId)) push(eventId);
   }
-  for (const id of rt.completedEventIds || []) push(id);
-  for (const id of rt.travelLedger?.doneEventIds || []) push(id);
+  const offscreen = new Set(rt.offscreenResolvedEventIds || []);
+  for (const id of rt.completedEventIds || []) {
+    const timeline = rt.eventTimeline?.[id];
+    if (offscreen.has(id) || timeline?.outcome === 'offscreen') continue;
+    if (stageEvents.get(id)?.timeline && timeline?.playerLearnedAtTurn === undefined) continue;
+    push(id);
+  }
   return out;
 }

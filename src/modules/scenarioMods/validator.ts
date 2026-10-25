@@ -11,6 +11,11 @@ import { validateCharacterStats } from './characterStatsMerge';
 import { resolveReconcileBranchId } from './divergenceLedger';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 import { effectProblems } from './effectTags';
+import { LEDGER_OPERATORS, parseLedgerPath, type ParsedLedgerPath } from './ledgerConditions';
+import { PLAYER_IDENTITY_STATUSES } from './identityLedger';
+import { lineOutcomeTiers } from './lineOutcomes';
+import { isAcquaintanceKind } from './acquaintanceLedger';
+import { indexIds, knownEventIds, playerIdentityDefs } from './playerLedgerRules';
 
 export interface ScenarioModValidationIssue {
   path: string;
@@ -124,6 +129,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     opportunityAlias: boolean;
   }>();
   const omenIds = new Set<string>();
+  /** narrativeVariants.when 里的账本路径引用，事件/人物收齐后再查 */
+  const ledgerRefs: LedgerConditionRef[] = [];
 
   const validateInventoryTransfers = (
     value: unknown,
@@ -821,7 +828,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         }
       }
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
-        validateConditions(variant.when, `${variantPath}.when`, add);
+        validateConditions(variant.when, `${variantPath}.when`, add, ledgerRefs);
         optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);
         optionalString(variant.name, `${variantPath}.name`, add);
         optionalString(variant.description, `${variantPath}.description`, add);
@@ -1252,6 +1259,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRefs(entity.eventIds, eventIds, `${path}.eventIds`, 'event', add);
     });
   }
+  checkLedgerRefs(ledgerRefs, eventIds, characterIds, add);
+
   if (isRecord(rules) && Array.isArray(rules.contentAccess)) {
     const contentIds = new Set([...skillIds, ...techniqueIds, ...itemIds]);
     rules.contentAccess.forEach((entry, index) => {
@@ -2303,7 +2312,58 @@ function validateFlags(value: unknown, path: string, add: AddIssue): void {
   }
 }
 
-function validateConditions(value: unknown, path: string, add: AddIssue): void {
+interface LedgerConditionRef { parsed: ParsedLedgerPath; path: string }
+
+/**
+ * 账本路径（身份账设计稿 §4.3）只允许出现在 narrativeVariants.when（传了 ledgerRefs 的位置）：
+ * 别处走 runtime.ts 的 resolveConditionValue，求值恒为 undefined，节点会静默永不激活。
+ */
+function validateLedgerCondition(condition: ScenarioCondition, itemPath: string, add: AddIssue, ledgerRefs?: LedgerConditionRef[]): void {
+  const parsed = parseLedgerPath(condition.path);
+  if (!parsed) return;
+  if (!ledgerRefs) {
+    add(`${itemPath}.path`, 'ledger_path_not_allowed', 'Ledger condition paths (identity./done./line./acq./knows./party.) are only allowed in narrativeVariants.when.');
+    return;
+  }
+  if (parsed.invalid || !parsed.id) {
+    add(`${itemPath}.path`, 'invalid_path', 'Ledger condition path is malformed.');
+    return;
+  }
+  if (parsed.kind === 'party') {
+    add(`${itemPath}.path`, 'reserved_path', 'party.* is reserved; its data source is not defined yet.');
+    return;
+  }
+  if (!LEDGER_OPERATORS[parsed.kind].includes(condition.operator)) {
+    add(`${itemPath}.operator`, 'invalid_enum', `Operator "${String(condition.operator)}" is not supported for ${parsed.kind}.* paths.`);
+    return;
+  }
+  if (condition.operator !== 'exists') {
+    const value = condition.value;
+    const ok = parsed.kind === 'acq' ? isAcquaintanceKind(value)
+      : parsed.kind === 'line' ? lineOutcomeTiers().includes(value as string)
+        : parsed.kind === 'identity' && parsed.field === 'status' ? (PLAYER_IDENTITY_STATUSES as readonly unknown[]).includes(value)
+          : parsed.kind === 'identity' && parsed.field === 'from' ? typeof value === 'string' && value.length > 0
+            : typeof value === 'boolean';
+    if (!ok) add(`${itemPath}.value`, 'invalid_value', `Invalid comparison value for ${parsed.kind}.* path.`);
+  }
+  ledgerRefs.push({ parsed, path: `${itemPath}.path` });
+}
+
+/** 账本路径引用的 id 须存在：事件＝本 mod ∪ 实体索引；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引。 */
+function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, characterIds: Set<string>, add: AddIssue): void {
+  if (!refs.length) return;
+  const identityIds = new Set(playerIdentityDefs().map(def => def.id));
+  const lineIds = indexIds('line');
+  for (const { parsed, path } of refs) {
+    const { kind, id } = parsed;
+    if (kind === 'done' && !eventIds.has(id) && !knownEventIds().has(id)) add(path, 'missing_reference', `Unknown event id "${id}".`);
+    if (kind === 'identity' && !identityIds.has(id)) add(path, 'missing_reference', `Unknown identity id "${id}".`);
+    if (kind === 'line' && !lineIds.has(id)) add(path, 'missing_reference', `Unknown line id "${id}".`);
+    if (kind === 'acq' && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
+  }
+}
+
+function validateConditions(value: unknown, path: string, add: AddIssue, ledgerRefs?: LedgerConditionRef[]): void {
   if (value === undefined) return;
   if (!Array.isArray(value)) {
     add(path, 'invalid_type', `${path} must be an array.`);
@@ -2317,6 +2377,7 @@ function validateConditions(value: unknown, path: string, add: AddIssue): void {
     }
     if (!validateScenarioPath(condition.path)) add(`${itemPath}.path`, 'invalid_path', 'Condition path is invalid or unsafe.');
     if (!CONDITION_OPERATORS.has(String(condition.operator))) add(`${itemPath}.operator`, 'invalid_enum', 'Condition operator is invalid.');
+    else if (validateScenarioPath(condition.path)) validateLedgerCondition(condition as unknown as ScenarioCondition, itemPath, add, ledgerRefs);
     if (condition.operator !== 'exists' && !Object.prototype.hasOwnProperty.call(condition, 'value')) {
       add(`${itemPath}.value`, 'required_value', 'Condition value is required for this operator.');
     }

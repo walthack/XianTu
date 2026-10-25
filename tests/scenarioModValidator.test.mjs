@@ -182,6 +182,56 @@ test('validates event completion conditions', async () => {
   assert.ok(result.issues.some(issue => issue.path === 'scenario.events[0].completion[0].operator'));
 });
 
+test('账本路径用于 completion 时报错', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.scenario.events[0].completion = [{ path: 'done.event.firstmeeting', operator: 'eq', value: true }];
+  fixture.scenario.events[0].conditions = [{ path: 'acq.character.wangzhe', operator: 'gte', value: 'encountered' }];
+
+  const result = validateScenarioMod(fixture);
+
+  assert.equal(result.valid, false);
+  assert.deepEqual(
+    result.issues.filter(issue => issue.code === 'ledger_path_not_allowed').map(issue => issue.path).sort(),
+    ['scenario.events[0].completion[0].path', 'scenario.events[0].conditions[0].path'],
+  );
+  // 同样的路径放进 narrativeVariants.when 合法（事件与人物 id 取本 mod）
+  const ok = await loadFixture();
+  ok.scenario.events[0].narrativeVariants = [{
+    when: [
+      { path: 'done.event.firstmeeting', operator: 'eq', value: true },
+      { path: 'acq.character.wangzhe', operator: 'gte', value: 'encountered' },
+      { path: 'line.song.outcome', operator: 'exists' },
+    ],
+    name: '重逢',
+  }];
+  const okResult = validateScenarioMod(ok);
+  assert.deepEqual(okResult.issues, []);
+});
+
+test('acq 比较值不是合法 kind 时报错', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const fixture = await loadFixture();
+  fixture.scenario.events[0].narrativeVariants = [{
+    when: [
+      { path: 'acq.character.wangzhe', operator: 'gte', value: 'met' },
+      { path: 'done.event.firstmeeting', operator: 'gte', value: true },
+      { path: 'done.event.nowhere', operator: 'eq', value: true },
+      { path: 'party.character.wangzhe', operator: 'eq', value: true },
+    ],
+    name: '重逢',
+  }];
+
+  const result = validateScenarioMod(fixture);
+  const codeAt = index => result.issues.filter(issue => issue.path.startsWith(`scenario.events[0].narrativeVariants[0].when[${index}]`)).map(issue => issue.code);
+
+  assert.equal(result.valid, false);
+  assert.deepEqual(codeAt(0), ['invalid_value']);
+  assert.deepEqual(codeAt(1), ['invalid_enum']);
+  assert.deepEqual(codeAt(2), ['missing_reference']);
+  assert.deepEqual(codeAt(3), ['reserved_path']);
+});
+
 test('offscreenResolution requires safe flags and existing event references', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const raw = await loadFixture();

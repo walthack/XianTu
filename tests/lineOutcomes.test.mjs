@@ -27,8 +27,10 @@ test('收束事件写 line.<id>.outcome', async () => {
   assert.equal('line.qin.outcome' in runtime.flags, false);
   assert.equal(readLineOutcome({ line: { han: { outcome: 'imperfect' } } }, 'han'), 'imperfect');
   // 跨关：编年史里的收束事件同样入账；重复同步幂等
-  const later = { flags: {}, chronicle: [{ id: 'chronicle.stage.qin.e.qin.end', type: 'event', stageId: 'stage.qin', title: '', sequence: 1 }] };
-  const table = rules([{ eventId: 'e.qin.end', lineId: 'qin', outcome: 'unresolved' }]);
+  // 编年史条目只认已知事件 id（实体索引 kind=event），故取真实 id
+  const QIN_END = 'lcq.event.s02_06';
+  const later = { flags: {}, chronicle: [{ id: `chronicle.stage.qin.${QIN_END}`, type: 'event', stageId: 'stage.qin', title: '', sequence: 1 }] };
+  const table = rules([{ eventId: QIN_END, lineId: 'qin', outcome: 'unresolved' }]);
   assert.equal(syncLineOutcomes(later, { rules: table }), 1);
   assert.equal(syncLineOutcomes(later, { rules: table }), 0);
   assert.equal(later.flags['line.qin.outcome'], 'unresolved');

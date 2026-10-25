@@ -8,7 +8,8 @@
 import { orderedDoneEventIds, playerLedgerRules, type IdentityGrantRule, type PlayerLedgerRules } from './playerLedgerRules';
 import { syncLineOutcomes } from './lineOutcomes';
 
-export type PlayerIdentityStatus = 'active' | 'revoked';
+export const PLAYER_IDENTITY_STATUSES = ['active', 'revoked'] as const;
+export type PlayerIdentityStatus = typeof PLAYER_IDENTITY_STATUSES[number];
 
 /** 一次账目操作。history 是幂等依据：同一 (eventId, op) 只记一次。 */
 export interface PlayerIdentityOp {
