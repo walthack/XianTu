@@ -77,6 +77,7 @@
 | LCQ-PCK-001 | error | scenarioMods | 剧情模组库内容无效（mods 不是数组），按空库处理 | 已存的剧情模组库 mods 字段被写成了非数组（数据损坏或旧版本遗留） | 按空库处理，内置模板会在下次播种时重建；必要时清理 scenario_mod_library_v1 | 否 |
 | LCQ-PCK-002 | warn | scenarioMods | 剧情模组文件不是有效 JSON | 导入的剧情模组文件不是有效 JSON | 用 JSON 校验器检查文件；日志只记字符数，不含文件内容 | 否 |
 | LCQ-PCK-003 | warn | scenarioMods | 剧情模组校验未通过 | 剧情模组结构或分析校验有 error 级问题，无法导入 | 看 detail.issues 的 path 与 code，按 mod:validate 脚本输出修正 | 否 |
+| LCQ-PCK-004 | warn | scenarioMods | 固定结局的来路分支句缺失，本次只显示通用正文 | fixedEndingNarratives.ts 的 fixedEndingNarrative 按 gameOver.sourceEventId 认出分支来路（如 E02 阿姬曼路＝武二郎入队拍），但 texts.json 里对应键（detail.textKey）缺失或为空，常见于内容包改名、漏合并 | 按 detail.textKey 在 src/modules/contentPacks/packs/qingyu/texts.json 补回该键并重生成 catalog；结局照常发布，不阻断 | 否 |
 | LCQ-SAV-001 | error | indexedDB | 存档库打开失败 | 浏览器禁用 IndexedDB、存储配额满或库损坏、被其它标签页阻塞 | 控制台看 cause；清理站点存储或换浏览器；注意先导出存档 | 否 |
 | LCQ-SAV-002 | error | indexedDB | 存档读取失败，已回落空数据或空值 | IndexedDB 读事务失败或数据损坏，函数已回落空数据/空值 | 看 detail.op 与 key；若存档“消失”先别写入，检查浏览器存储并导出备份 | 否 |
 | LCQ-SAV-003 | error | indexedDB | 存档写入失败 | 配额满、库被关闭或事务中断，写入未落盘 | 看 detail.op；腾出站点存储空间后重试；写入失败期间不要关页面 | 是 |

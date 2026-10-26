@@ -1224,6 +1224,11 @@ test('hard-coded option locks (user ruling 2026-10-02): only the deciding step l
   assert.equal(over?.endingId, 'lcq.ending.death.ajiman_bond');
   assert.equal(over.title, '冰蛊');
   assert.equal(over.sourceEventId, 'lcq.event.wuerlang_joins');
+  // 裁定簿 #240：阿姬曼两句接进 E02 正文。落结局时武二郎入队拍尚未完成、不在编年史里，来路只能认 sourceEventId。
+  const { orderedDoneEventIds } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  assert.equal(orderedDoneEventIds(runtimeOf(pocketed)).includes('lcq.event.wuerlang_joins'), false);
+  const { fixedEndingNarrative } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  assert.match(fixedEndingNarrative(over), /^苏妲己捏着那张完好无损的身契[\s\S]*连皮带骨[\s\S]*送往黑魔海。她没有看你。$/);
   // 2026-10-27 00:54 用户定（裁定簿 #240）：阿姬曼路 facts = 通用三条 + A1–A6，取代 #169 的措辞
   assert.match(over.facts.join('；'), /冰蛊是苏妲己在冰镇酸梅汤里给程宗扬种下的/);
   assert.equal(over.facts.some(fact => /早在/.test(fact)), false, '不得暗示第23章已种下冰蛊');

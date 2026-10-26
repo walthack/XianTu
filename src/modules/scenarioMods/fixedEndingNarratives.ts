@@ -8,6 +8,7 @@ import type { ScenarioStepScene } from './schema';
 import { advanceClock } from './travel/travelLedger';
 import { isStepSceneStage } from './travel/stepScene';
 import { visibleModuleText } from './modularTurn';
+import { logEventOnce } from '../diagnostics/log';
 /** 剧情交接 2026-10-02：固定死亡正文；配图由 endingPresentation 提供。 */
 const ENDING_TEXTS: Readonly<Record<string,string>> = CONTENT_PACKS.texts;
 
@@ -57,9 +58,28 @@ export const BATTLE_LOSS_ENDINGS = ([
   }
 ] as const).map(ending => ({ ...ending, presentation: endingPresentation(ending) }));
 
+/**
+ * 同一结局按来路追加的分支句（裁定簿 #240，用户 2026-10-27 00:35）：texts 键首行插正文开头、其余插结尾。
+ * 来路认 gameOver.sourceEventId——阿姬曼路是武二郎入队拍的绝路，落结局时该拍尚未完成、不进编年史；期限到期等其它来路只给通用正文。
+ */
+const ENDING_PATH_TEXTS: Readonly<Record<string, { sourceEventId: string; textKey: string }>> = {
+  'lcq.ending.death.ajiman_bond': { sourceEventId: 'lcq.event.wuerlang_joins', textKey: 'lcq.ending.death.ajiman_bond.ajiman_path' },
+};
+
 export function fixedEndingNarrative(ending: { endingId: string; sourceEventId: string } | undefined): string | undefined {
   if (!ending) return undefined;
-  return ENDING_TEXTS[canonicalEndingId(ending)];
+  const endingId = canonicalEndingId(ending);
+  const text = ENDING_TEXTS[endingId];
+  const path = ENDING_PATH_TEXTS[endingId];
+  if (!text || !path || ending.sourceEventId !== path.sourceEventId) return text;
+  const extra = ENDING_TEXTS[path.textKey];
+  if (typeof extra !== 'string' || !extra.trim()) {
+    // 分支句缺失不挡结局：照发通用正文，带码写持久日志（同一键本会话只记一次）
+    logEventOnce(`LCQ-PCK-004:${path.textKey}`, { code: 'LCQ-PCK-004', detail: { endingId, sourceEventId: ending.sourceEventId, textKey: path.textKey } });
+    return text;
+  }
+  const [opening, ...closing] = extra.split('\n');
+  return [opening, text, ...closing].filter(line => line.trim()).join('\n');
 }
 
 /** 关键动作已由引擎预结算；不让写手追加条件、选择或道具。 */
