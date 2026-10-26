@@ -14,6 +14,8 @@ export interface FieldSpec {
   required?: boolean;
   min?: number;
   max?: number;
+  /** 字符串枚举：取值只能是其中之一 */
+  oneOf?: readonly string[];
   section: NumbersSection;
 }
 
@@ -72,6 +74,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.lineOutcome.judgedLines', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineOutcome.failEndsGame', kind: 'object', required: true, section: 'progress' },
   { path: 'story.identity.kinds', kind: 'array', required: true, section: 'progress' },
+  { path: 'story.itemProvenance.dedupeBy', kind: 'string', required: true, oneOf: ['everObtained', 'currentlyHeld'], section: 'progress' },
   { path: 'lineBonds.majorResponse.delta', kind: 'number', required: true, min: 0, section: 'progress' },
   { path: 'lineBonds.majorResponse.salienceFloor', kind: 'number', required: true, min: 0, section: 'progress' },
   { path: 'lineBonds.majorResponse.memoryKeep', kind: 'int', required: true, min: 1, section: 'progress' },
@@ -177,6 +180,7 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
       if (spec.min !== undefined && value < spec.min) errors.push(`字段范围无效：${spec.path} < ${spec.min}`);
       if (spec.max !== undefined && value > spec.max) errors.push(`字段范围无效：${spec.path} > ${spec.max}`);
     }
+    if (spec.oneOf && typeof value === 'string' && !spec.oneOf.includes(value)) errors.push(`字段范围无效：${spec.path} 须为 ${spec.oneOf.join('/')} 之一：${value}`);
     if (spec.kind === 'array' && Array.isArray(value) && value.length === 0) errors.push(`字段范围无效：${spec.path} 不能为空数组`);
   }
 

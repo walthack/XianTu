@@ -2155,6 +2155,10 @@
         "merchant",
         "sect"
       ]
+    },
+    "itemProvenance": {
+      "note": "道具来路去重（身份账补充设计稿 2026-10-26 §2.5；总策划 2026-10-26 审定取推荐值）：dedupeBy 为唯一道具组（mod-kit/player-ledger-rules.json itemGroups）判「已得过」的口径。everObtained＝组内任一 itemId 有发放回执或背包现存即算得过，用掉了也不再发；currentlyHeld＝只看背包现存。取值只能是这两个之一",
+      "dedupeBy": "everObtained"
     }
   },
   "shop": {

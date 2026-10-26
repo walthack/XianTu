@@ -183,3 +183,30 @@ test('diagnostics.debug.categories 必填 object', async () => {
   assert.throws(() => numbers.applyGameNumbers({ diagnostics: { debug: { categories: true } } }), err => err.code === 'LCQ-NUM-003');
   assert.equal(typeof numbers.GAME_NUMBERS.diagnostics.debug.categories, 'object');
 });
+
+test('story.itemProvenance.dedupeBy 必填且只能取 everObtained / currentlyHeld（补充设计稿 2026-10-26 §2.5）', async () => {
+  const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const spec = registry.FIELD_SPECS.find(s => s.path === 'story.itemProvenance.dedupeBy');
+  assert.deepEqual(spec, { path: 'story.itemProvenance.dedupeBy', kind: 'string', required: true, oneOf: ['everObtained', 'currentlyHeld'], section: 'progress' });
+  const fresh = () => structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  assert.equal(fresh().story.itemProvenance.dedupeBy, 'everObtained', '总策划 2026-10-26 审定取推荐值');
+  for (const mode of ['everObtained', 'currentlyHeld']) {
+    const tree = fresh();
+    tree.story.itemProvenance.dedupeBy = mode;
+    assert.deepEqual(registry.validateAgainstRegistry(tree, 'cold'), [], mode);
+  }
+  const absent = fresh();
+  delete absent.story.itemProvenance.dedupeBy;
+  assert.ok(registry.validateAgainstRegistry(absent, 'cold').some(e => e === '缺字段：story.itemProvenance.dedupeBy'));
+  assert.ok(registry.validateAgainstRegistry(absent, 'patch').some(e => e === '缺字段：story.itemProvenance.dedupeBy'), '必填：热改合并后也查');
+  const wrongKind = fresh();
+  wrongKind.story.itemProvenance.dedupeBy = 1;
+  assert.ok(registry.validateAgainstRegistry(wrongKind, 'cold').some(e => e === '字段类型无效：story.itemProvenance.dedupeBy 须为 string'));
+  const wrongValue = fresh();
+  wrongValue.story.itemProvenance.dedupeBy = 'byName';
+  assert.ok(registry.validateAgainstRegistry(wrongValue, 'cold').some(e => /字段范围无效：story\.itemProvenance\.dedupeBy 须为 everObtained\/currentlyHeld 之一：byName/.test(e)));
+  // 热改取第三值被拒，原值不变
+  assert.throws(() => numbers.applyGameNumbers({ story: { itemProvenance: { dedupeBy: 'byName' } } }), err => err.code === 'LCQ-NUM-008');
+  assert.equal(numbers.GAME_NUMBERS.story.itemProvenance.dedupeBy, 'everObtained');
+});

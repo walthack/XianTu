@@ -2,6 +2,7 @@ import type { SaveData } from '@/types/game';
 
 import type { ScenarioModItem, ScenarioPlayerCompletionEffects, ScenarioPlayerCompletionOutcome } from './schema';
 import { itemSaveQuality } from './itemGrades';
+import { itemGrantVerdict, redirectTransferId } from './itemProvenance';
 
 export interface ScenarioInventoryTransferReceipt {
   transferId: string;
@@ -83,6 +84,7 @@ function ensureInventory(saveData: SaveData): Record<string, Record<string, unkn
  * - 物品数据只取模组 catalog，不从正文猜名字/品级。
  * - transferId 已有回执时 no-op，重试、刷新和重复处理不会多发。
  * - 背包与回执在同一个本地调用中写入；LLM 不能参与或改写结果。
+ * - 唯一道具组已得过的跳过（不产生 settlement）或改发，回执 transferId 带 :redirect（itemProvenance.ts）。
  */
 export function settleScenarioInventoryTransfers(
   saveData: SaveData,
@@ -105,9 +107,12 @@ export function settleScenarioInventoryTransfers(
   const turn = Math.max(0, Number(runtime.worldTurn) || 0);
 
   for (const transfer of transfers) {
-    if (settledIds.has(transfer.transferId)) continue;
+    if (settledIds.has(transfer.transferId) || settledIds.has(redirectTransferId(transfer.transferId))) continue;
     if (!source.eventId.startsWith('loot:') && runtime.locationLoot?.claimedItemIds?.includes(transfer.itemId)) continue;
-    const item = catalog.get(transfer.itemId);
+    const verdict = itemGrantVerdict(saveData, runtime, transfer.itemId, transfer.transferId);
+    if (verdict.action === 'skip') continue;
+    const transferId = verdict.action === 'redirect' ? redirectTransferId(transfer.transferId) : transfer.transferId;
+    const item = catalog.get(verdict.action === 'redirect' ? verdict.itemId : transfer.itemId);
     const quantity = Number(transfer.quantity);
     if (!item || !Number.isInteger(quantity) || quantity < 1) continue;
 
@@ -118,7 +123,7 @@ export function settleScenarioInventoryTransfers(
     inventory[item.id] = newValue;
 
     const receipt: ScenarioInventoryTransferReceipt = {
-      transferId: transfer.transferId,
+      transferId,
       itemId: item.id,
       itemName: item.name,
       quantity,
@@ -128,7 +133,7 @@ export function settleScenarioInventoryTransfers(
       settledAtTurn: turn,
     };
     receipts.push(receipt);
-    settledIds.add(transfer.transferId);
+    settledIds.add(transferId);
     settlements.push({
       receipt,
       key: `角色.背包.物品.${item.id}`,

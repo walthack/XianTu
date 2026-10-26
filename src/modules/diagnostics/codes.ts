@@ -90,6 +90,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-022': spec('warn', 'sceneModule', '场面骰存档外游标读写 localStorage 失败，已退回真随机种子'),
   'LCQ-SAV-023': spec('warn', 'identityLedger', '身份账/收束档同步失败，本拍未入账（不阻断回合，下回合或读档重试）'),
   'LCQ-SAV-024': spec('warn', 'lineOutcomes', '国家线收束档拒写：线不在 story.lineOutcome.judgedLines（非判档线），或档位不在 story.lineOutcome.tiers，或已收束且 writeOnce 不覆盖'),
+  'LCQ-SAV-025': spec('warn', 'itemProvenance', '道具来路去重没能按规则执行（判断出错时按原逻辑发放；改发的物品不在本关物品表时只跳过；读档回填失败）'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

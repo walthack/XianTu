@@ -1,6 +1,6 @@
 /**
  * 玩家账本规则表（身份账设计稿 2026-10-25 §3.1 / §6）：「事件 → 身份 / 收束档」的唯一映射。
- * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；
+ * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；唯一道具组 itemGroups 见补充设计稿 2026-10-26 §2.2；
  * 档位集合、判档线集合与身份 kind 集合只读数值配置 story.lineOutcome.tiers / story.lineOutcome.judgedLines / story.identity.kinds，这里不写死。
  */
 import rulesJson from '../../../mod-kit/player-ledger-rules.json';
@@ -20,11 +20,24 @@ export interface IdentityRevokeRule { eventId: string; identityId: string }
 /** outcome ∈ story.lineOutcome.tiers；lineId ∈ story.lineOutcome.judgedLines（太泉不判档） */
 export interface LineOutcomeRule { eventId: string; lineId: string; outcome: string }
 
+/** 唯一道具组（补充设计稿 2026-10-26 §2.2）：同一件东西在各书里的 id，组内任一件得过就不再发（口径读 story.itemProvenance.dedupeBy）。 */
+export interface ItemGroupRule {
+  /** liuchao.itemgroup.<名>，末段不能是 from */
+  id: string;
+  /** 实体索引 kind=item；≥1 个；一物只属一组 */
+  itemIds: string[];
+  /** 本组已得过时怎么办。缺省 'skip'（不发）；'redirect'＝改发 redirectItemId */
+  whenHeld?: 'skip' | 'redirect';
+  redirectItemId?: string;
+}
+
 export interface PlayerLedgerRules {
   version: 1;
   identityGrants: IdentityGrantRule[];
   identityRevokes: IdentityRevokeRule[];
   lineOutcomes: LineOutcomeRule[];
+  /** 可选键，缺键按 [] 处理 */
+  itemGroups?: ItemGroupRule[];
 }
 
 export interface PlayerIdentityDef {
@@ -51,12 +64,20 @@ export interface PlayerLedgerRefs {
   tiers?: readonly string[];
   judgedLines?: readonly string[];
   kinds?: readonly string[];
+  itemIds?: Iterable<string>;
+  /** story.trades 里的 grantItemId（直写背包、不留回执，唯一道具不得走这条路） */
+  tradeGrantItemIds?: Iterable<string>;
 }
 
 /** 身份 id 末段保留给读取子路径（identity.<id>.from / .status）。 */
 const RESERVED_IDENTITY_TAILS = ['from', 'status'];
 /** 授予规则 whenHeld 的取值；任务线 identityGrant 同用。 */
 export const WHEN_HELD: readonly string[] = ['reinforce', 'redirect'];
+/** 道具组 id 前缀与保留末段（item.<groupId>.from 读取子路径）。 */
+export const ITEM_GROUP_PREFIX = 'liuchao.itemgroup.';
+const RESERVED_ITEM_GROUP_TAILS = ['from'];
+/** 道具组 whenHeld 的取值。 */
+export const ITEM_WHEN_HELD: readonly string[] = ['skip', 'redirect'];
 
 /** 实体索引里某 kind 的 id 集合。 */
 export const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
@@ -99,6 +120,7 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
   for (const key of ['identityGrants', 'identityRevokes', 'lineOutcomes'] as const) {
     if (!Array.isArray(rules?.[key])) errors.push(`规则表 ${key} 须为数组`);
   }
+  if (rules?.itemGroups !== undefined && !Array.isArray(rules.itemGroups)) errors.push('规则表 itemGroups 须为数组');
   if (errors.some(e => e.startsWith('规则表'))) return errors;
 
   const checkEvent = (where: string, eventId: string): void => { if (!eventIds.has(eventId)) errors.push(`${where}eventId 未知：${eventId}`); };
@@ -130,7 +152,43 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
     else if (!judgedLines.includes(rule.lineId)) errors.push(`${where}lineId 不在 story.lineOutcome.judgedLines（非判档线不写收束档）：${rule.lineId}`);
     if (!tiers.includes(rule.outcome)) errors.push(`${where}outcome 不在 story.lineOutcome.tiers：${String(rule.outcome)}`);
   }
+  validateItemGroups(rules.itemGroups ?? [], refs, errors);
   return errors;
+}
+
+function validateItemGroups(groups: ItemGroupRule[], refs: PlayerLedgerRefs, errors: string[]): void {
+  if (!groups.length) return;
+  const itemIds = new Set(refs.itemIds ?? indexIds('item'));
+  const tradeGrants = new Set(refs.tradeGrantItemIds ?? (GAME_NUMBERS.story.trades as Array<{ grantItemId?: string }>).map(t => t.grantItemId).filter(Boolean) as string[]);
+  const groupIds = new Set<string>();
+  const ownerOf = new Map<string, string>();
+  for (const group of groups) {
+    const where = `道具组 ${String(group?.id)}：`;
+    if (!group?.id || typeof group.id !== 'string' || !group.id.startsWith(ITEM_GROUP_PREFIX) || group.id.length === ITEM_GROUP_PREFIX.length) errors.push(`${where}id 须为 ${ITEM_GROUP_PREFIX}<名>`);
+    else if (RESERVED_ITEM_GROUP_TAILS.includes(group.id.split('.').pop() || '')) errors.push(`${where}id 末段不能是 ${RESERVED_ITEM_GROUP_TAILS.join('/')}`);
+    if (groupIds.has(group?.id)) errors.push(`道具组 id 重复：${group.id}`);
+    groupIds.add(group?.id);
+    if (!Array.isArray(group?.itemIds) || group.itemIds.length === 0) { errors.push(`${where}itemIds 须为非空数组`); continue; }
+    for (const itemId of group.itemIds) {
+      if (!itemIds.has(itemId)) errors.push(`${where}itemId 未知（实体索引 kind=item）：${String(itemId)}`);
+      const owner = ownerOf.get(itemId);
+      if (owner !== undefined) errors.push(`${where}itemId ${itemId} 已属道具组 ${owner}（一物只属一组）`);
+      else ownerOf.set(itemId, group.id);
+      if (tradeGrants.has(itemId)) errors.push(`${where}itemId ${itemId} 出现在 story.trades 的 grantItemId（直写背包不留回执，唯一道具不得走这条路）`);
+    }
+  }
+  for (const group of groups) {
+    const where = `道具组 ${String(group?.id)}：`;
+    if (group?.whenHeld !== undefined && !ITEM_WHEN_HELD.includes(group.whenHeld)) errors.push(`${where}whenHeld 须为 ${ITEM_WHEN_HELD.join('/')}`);
+    if (group?.whenHeld === 'redirect') {
+      if (!group.redirectItemId) errors.push(`${where}whenHeld=redirect 须带 redirectItemId`);
+      else {
+        if (!itemIds.has(group.redirectItemId)) errors.push(`${where}redirectItemId 未知（实体索引 kind=item）：${group.redirectItemId}`);
+        const owner = ownerOf.get(group.redirectItemId);
+        if (owner !== undefined) errors.push(`${where}redirectItemId ${group.redirectItemId} 属于道具组 ${owner}（改发物品不得入组，防链式改发）`);
+      }
+    } else if (group?.redirectItemId !== undefined) errors.push(`${where}redirectItemId 只用于 whenHeld=redirect`);
+  }
 }
 
 let validatedRules: PlayerLedgerRules | undefined;
