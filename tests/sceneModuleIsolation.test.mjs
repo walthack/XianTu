@@ -23,8 +23,8 @@ test('场面模块只依赖自己和类型：不引用 dev 试玩代码，不引
     '../../../mod-kit/numbers-assist.json',
   ]);
   const outside = imports.filter(([, spec]) => !spec.startsWith('./') && !numbersJson.has(spec));
-  // runtimeTuning 的失败、拍数门禁（beatLimit，LCQ-SAV-020）要记错误码日志（src/modules/diagnostics 只依赖 sceneModule/numbers 与自己，不碰应用代码）。
-  assert.deepEqual(outside.map(([name, spec, typeOnly]) => `${name} ${spec} ${typeOnly}`), ['beatLimit.ts ../diagnostics/log false', 'runtimeTuning.ts ../diagnostics/config false', 'runtimeTuning.ts ../diagnostics/log false', 'statusAdapters.ts @/types/game true', 'statuses.ts ../contentPacks false'], '仅允许游戏状态类型、纯内容包数据与诊断日志模块；禁止引用应用或试玩执行代码');
+  // runtimeTuning 的失败、拍数门禁（beatLimit，LCQ-SAV-020）要记错误码日志，runtimeTuning 的提示走 content 调试大类（src/modules/diagnostics 只依赖 sceneModule/numbers 与自己，不碰应用代码）。
+  assert.deepEqual(outside.map(([name, spec, typeOnly]) => `${name} ${spec} ${typeOnly}`), ['beatLimit.ts ../diagnostics/log false', 'runtimeTuning.ts ../diagnostics/config false', 'runtimeTuning.ts ../diagnostics/log false', 'runtimeTuning.ts ../diagnostics/debugLog false', 'statusAdapters.ts @/types/game true', 'statuses.ts ../contentPacks false'], '仅允许游戏状态类型、纯内容包数据与诊断日志模块；禁止引用应用或试玩执行代码');
 });
 
 test('场面模块的 .ts 不写死角色库里的任何姓名或别名（账本人名棘轮同一算法）', async () => {

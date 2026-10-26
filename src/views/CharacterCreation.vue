@@ -72,7 +72,7 @@
 
         <button
           type="button"
-          @click.prevent="(event: Event) => { console.log('[DEBUG] 开启仙途按钮被点击!'); handleNext(event); }"
+          @click.prevent="(event: Event) => { debugLog('init', '开启仙途按钮被点击'); handleNext(event); }"
           :disabled="
             store.isCreating ||
             isNextDisabled ||
@@ -110,6 +110,7 @@ import Step7_Preview from '../components/character-creation/Step7_Preview.vue'
 import { toast } from '../utils/toast'
 import { onMounted, onUnmounted, computed, nextTick } from 'vue';
 import { getCurrentCharacterName } from '../utils/tavern';
+import { debugLog } from '@/modules/diagnostics/debugLog';
 import { useI18n } from '../i18n';
 import type { CharacterPreset } from '@/utils/presetManager';
 
@@ -218,48 +219,46 @@ const isNextDisabled = computed(() => {
   const remainingPoints = store.remainingTalentPoints;
   const generating = store.isCreating;
 
-  console.log('[DEBUG] 按钮状态检查 - 当前步骤:', currentStep, '/', totalSteps);
-  console.log('[DEBUG] 按钮状态检查 - isCreating:', generating);
-  console.log('[DEBUG] 按钮状态检查 - 选中的世界:', selectedWorld?.name);
-  console.log('[DEBUG] 按钮状态检查 - 选中的天资:', selectedTalentTier?.name);
-  console.log('[DEBUG] 按钮状态检查 - 剩余天赋点:', remainingPoints);
+  debugLog('init', '按钮状态检查', () => ({
+    当前步骤: `${currentStep}/${totalSteps}`, isCreating: generating,
+    选中的世界: selectedWorld?.name, 选中的天资: selectedTalentTier?.name, 剩余天赋点: remainingPoints,
+  }));
 
   // You can add validation logic here for each step
   if (currentStep === 1 && !selectedWorld) {
-    console.log('[DEBUG] 按钮被禁用：第1步未选择世界');
+    debugLog('init', '按钮被禁用：第1步未选择世界');
     return true;
   }
   if (currentStep === 2 && !selectedTalentTier) {
-    console.log('[DEBUG] 按钮被禁用：第2步未选择天资');
+    debugLog('init', '按钮被禁用：第2步未选择天资');
     return true;
   }
 
-  console.log('[DEBUG] 按钮状态：启用');
+  debugLog('init', '按钮状态：启用');
   return false;
 })
 
 async function handleNext(event?: Event) {
-  console.log('[DEBUG] handleNext 被调用，当前步骤:', store.currentStep, '总步骤:', store.totalSteps);
+  debugLog('init', 'handleNext 被调用', () => ({ 当前步骤: store.currentStep, 总步骤: store.totalSteps }));
 
   if (event) {
     event.preventDefault();
     event.stopPropagation();
-    console.log('[DEBUG] 事件已阻止默认行为');
+    debugLog('init', '事件已阻止默认行为');
   }
 
   if (store.currentStep < store.totalSteps) {
-    console.log('[DEBUG] 执行下一步');
+    debugLog('init', '执行下一步');
     store.nextStep()
   } else {
     // Final step: Create Character
-    console.log('[DEBUG] 最后一步，准备创建角色');
+    debugLog('init', '最后一步，准备创建角色');
     await createCharacter()
   }
 }
 
 async function createCharacter() {
-  console.log('[DEBUG] createCharacter 开始执行');
-  console.log('[DEBUG] store.isCreating:', store.isCreating);
+  debugLog('init', 'createCharacter 开始执行', () => ({ isCreating: store.isCreating }));
 
   if (store.isCreating) {
     console.warn('[CharacterCreation.vue] 角色创建已在进行中，忽略重复请求');
@@ -268,34 +267,29 @@ async function createCharacter() {
   console.log('[CharacterCreation.vue] createCharacter() called.');
 
   // 1. 统一数据校验
-  console.log('[DEBUG] 开始数据校验');
-  console.log('[DEBUG] 角色名:', store.characterPayload.character_name);
-  console.log('[DEBUG] 选中的世界:', store.selectedWorld);
-  console.log('[DEBUG] 选中的天资:', store.selectedTalentTier);
-  console.log('[DEBUG] 选中的出身:', store.selectedOrigin);
-  console.log('[DEBUG] 选中的灵根:', store.selectedSpiritRoot);
+  debugLog('init', '开始数据校验', () => ({
+    角色名: store.characterPayload.character_name, 选中的世界: store.selectedWorld, 选中的天资: store.selectedTalentTier,
+    选中的出身: store.selectedOrigin, 选中的灵根: store.selectedSpiritRoot,
+  }));
 
   // 角色名自动获取，如果为空则使用默认值
   if (!store.characterPayload.character_name) {
-    console.log('[DEBUG] 角色名为空，使用默认值');
+    debugLog('init', '角色名为空，使用默认值');
     store.characterPayload.character_name = '修士';
   }
   if (!store.selectedWorld || !store.selectedTalentTier) {
-    console.log('[DEBUG] 验证失败：缺少必需选择项');
-    console.log('[DEBUG] selectedWorld:', store.selectedWorld);
-    console.log('[DEBUG] selectedTalentTier:', store.selectedTalentTier);
+    debugLog('init', '验证失败：缺少必需选择项', () => ({ selectedWorld: store.selectedWorld, selectedTalentTier: store.selectedTalentTier }));
     toast.error('创建数据不完整，请检查世界和天资选择！');
     return;
   }
 
   // 出身和灵根可以为空（表示随机选择）
-  console.log('[DEBUG] selectedOrigin:', store.selectedOrigin, '(可为空，表示随机出生)');
-  console.log('[DEBUG] selectedSpiritRoot:', store.selectedSpiritRoot, '(可为空，表示随机灵根)');
+  debugLog('init', '出身与灵根（可为空，表示随机）', () => ({ selectedOrigin: store.selectedOrigin, selectedSpiritRoot: store.selectedSpiritRoot }));
 
   // 进入创建流程后锁定按钮，防止重复点击/重复请求
   store.startCreation();
 
-  console.log('[DEBUG] 数据校验通过，开始创建角色');
+  debugLog('init', '数据校验通过，开始创建角色');
 
   try {
     // 2. 角色名由酒馆助手的角色管理功能编辑，此处不同步

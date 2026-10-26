@@ -8,6 +8,7 @@
  * - 触发时机 = stage_ready（该关关键剧情全部收束、可切下一关的时刻）。
  */
 import type { ScenarioRuntimeTransition } from './runtime';
+import { debugLog } from '../diagnostics/debugLog';
 
 export interface MilestoneReward {
   /** 完成哪一关授予 */
@@ -79,7 +80,7 @@ export function applyMilestoneRewards(saveData: AnySave, transitions: ScenarioRu
   }
   if (granted.length) notes.push(`获得称号「${granted.join('、')}」`);
   if (notes.length) {
-    console.info(`[里程碑奖励] ${currentStageId} 完成 → ${notes.join('；')}（${reward.note}）`);
+    debugLog('story', `[里程碑奖励] ${currentStageId} 完成 → ${notes.join('；')}（${reward.note}）`);
     return [`${notes.join('；')}：${reward.note}`];
   }
   return [];

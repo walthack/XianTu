@@ -85,6 +85,7 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useCharacterStore } from '@/stores/characterStore'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { useUIStore } from '@/stores/uiStore'
+import { debugLog } from '@/modules/diagnostics/debugLog'
 import type { SaveData } from '@/types/game'
 import type { BattleMode, Resolution, Tier } from './engine'
 import { F03_EVENT_ID } from './f03Scenario'
@@ -94,9 +95,8 @@ import { COMBAT_TRIAL_FIGHTING_CLASS, isCombatEngaged, readTrialState, trialRunt
 const gameState = useGameStateStore()
 const characterStore = useCharacterStore()
 const ui = useUIStore()
-// ?debug=1 时把卡片的关键动作打到控制台（consolePatch 会吞 console.log，所以用 error）。
-const DEBUG = new URLSearchParams(window.location.search).has('debug')
-const dlog = (...parts: unknown[]) => { if (DEBUG) console.error('[战斗卡片]', ...parts) }
+// 卡片的关键动作挂 combat 调试大类（numbers 的 diagnostics.debug.categories.combat，默认关；tuning.json 热改打开）。
+const dlog = (msg: string, data?: unknown) => debugLog('combat', `[战斗卡片] ${msg}`, data)
 const busy = ref(false)
 const error = ref('')
 

@@ -22,6 +22,7 @@ import { sceneModuleEnabled } from '@/modules/sceneModule/host/ext'
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers'
 import { diagnosticsConfig } from '@/modules/diagnostics/config'
 import { logError, logEvent } from '@/modules/diagnostics/log'
+import { debugLog } from '@/modules/diagnostics/debugLog'
 import { SCENE_CONTRACTS } from '@/modules/sceneModule/contracts/registry'
 import { applyTuning } from '@/modules/sceneModule/contracts/registry'
 import { installCombatTrialPortal } from './portal'
@@ -32,7 +33,7 @@ import * as trialState from './trialState'
 async function loadTuning() {
   const builtin=JSON.stringify({numbers:GAME_NUMBERS,contracts:SCENE_CONTRACTS});
   let builtinHash=0x811c9dc5;for(let i=0;i<builtin.length;i++)builtinHash=Math.imul(builtinHash^builtin.charCodeAt(i),0x01000193)>>>0;
-  const noTuning=()=>console.info(`【战斗试玩】未加载 tuning，使用内置数值（hash ${builtinHash.toString(16)}）`);
+  const noTuning=()=>debugLog('combat', `【战斗试玩】未加载 tuning，使用内置数值（hash ${builtinHash.toString(16)}）`);
   if (new URLSearchParams(window.location.search).get('tuning') !== '1') return noTuning()
   let fetchError: unknown
   const response = await fetch('./tuning.json', { cache: 'no-store' }).catch(error => { fetchError = error; return null })
@@ -49,7 +50,7 @@ async function loadTuning() {
   let parsed: unknown
   try { parsed = JSON.parse(text) } catch (e) { logError('LCQ-CFG-004', e); return }
   const result = applyTuning(parsed)
-  if (result.ok) console.log(`【战斗试玩】已应用 tuning.json（hash ${hash.toString(16)}）：${result.contracts.join('、')}`)
+  if (result.ok) debugLog('combat', `【战斗试玩】已应用 tuning.json（hash ${hash.toString(16)}）：${result.contracts.join('、')}`)
   else logEvent({ code: 'LCQ-CFG-005', detail: { errors: result.errors } })
 }
 
@@ -69,7 +70,7 @@ async function initializeTrial() {
     },
   })
 
-  // ?debug=1：暴露 router / pinia / flow 给无头浏览器自测（dev/combat-trial/e2e.mjs），并让战斗卡片打关键日志。
+  // ?debug=1：暴露 router / pinia / flow 给无头浏览器自测（dev/combat-trial/e2e.mjs）；只是测试钩子，不是日志开关（卡片日志走 combat 调试大类）。
   if (new URLSearchParams(window.location.search).has('debug')) {
     (window as any).__combatTrial = { router, pinia, flow, trialState }
   }
@@ -83,7 +84,7 @@ async function initializeTrial() {
   void useAPIManagementStore().loadFromStorage()
   // ?noportal=1：不挂战斗卡片，用来区分「卡片」与「游戏界面本身」的问题。
   if (!sceneModuleEnabled() && !new URLSearchParams(window.location.search).has('noportal')) installCombatTrialPortal(pinia)
-  console.log('【战斗试玩】已启动')
+  debugLog('combat', '【战斗试玩】已启动')
 }
 
 void initializeTrial()
