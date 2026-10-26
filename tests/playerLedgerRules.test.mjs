@@ -1,4 +1,4 @@
-// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）。规则均为测试夹具。
+// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）；T7 在队规则（同稿 §3.6）。规则均为测试夹具。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -13,7 +13,7 @@ const rules = (patch = {}) => ({ version: 1, identityGrants: [], identityRevokes
 
 test('仓库规则表与身份表首版为空且通过校验', async () => {
   const { playerLedgerRules, playerIdentityDefs, validatePlayerLedgerRules } = await modPromise;
-  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [], identityRevokes: [], lineOutcomes: [], itemGroups: [] });
+  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [], identityRevokes: [], lineOutcomes: [], itemGroups: [], partyJoins: [], partyLeaves: [], partyOpenings: [] });
   assert.deepEqual(playerIdentityDefs(), []);
   // 六条判档线都能被实体索引认出且可写收束档
   const table = rules({ lineOutcomes: ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin'].map(lineId => ({ eventId: EVENT, lineId, outcome: 'resolved' })) });
@@ -143,4 +143,51 @@ test('道具组：id 格式、末段 from、重复 id、whenHeld 取值与 redir
   has(/liuchao\.itemgroup\.bad_redirect：redirectItemId 未知（实体索引 kind=item）：lyg\.item\.no_such_item/);
   // 末段含 from 但不等于 from 的照常通过
   assert.deepEqual(validatePlayerLedgerRules(rules({ itemGroups: [{ id: 'liuchao.itemgroup.from_south', itemIds: [YY_LYG] }] }), { identities: [] }), []);
+});
+
+test('在队规则：合法规则通过；缺键按 [] 处理；非数组报错', async () => {
+  const { validatePlayerLedgerRules } = await modPromise;
+  const RCPT = 'rcpt.baihu.o1.deferential';
+  assert.deepEqual(validatePlayerLedgerRules(rules(), { identities: [] }), []);
+  assert.deepEqual(validatePlayerLedgerRules(rules({
+    partyOpenings: [{ stageId: 'lcq.stage_01', characterIds: ['liuchao.character.ning_yu'] }],
+    partyLeaves: [{ eventId: EVENT, characterId: 'liuchao.character.ning_yu', whenReceiptId: RCPT }],
+    partyJoins: [{ eventId: EVENT_2, characterId: 'liuchao.character.ning_yu' }, { eventId: EVENT, characterId: 'liuchao.character.ning_yu' }],
+  }), { identities: [] }), [], '同事件同人物入离各一条、whenReceiptId 不同时允许');
+  for (const key of ['partyJoins', 'partyLeaves', 'partyOpenings']) {
+    assert.deepEqual(validatePlayerLedgerRules(rules({ [key]: {} }), { identities: [] }), [`规则表 ${key} 须为数组`]);
+  }
+});
+
+test('在队规则：未知 eventId/characterId/whenReceiptId/stageId、主角入规则、开局关重复、同事件同人物既入又离都报错', async () => {
+  const { validatePlayerLedgerRules, PROTAGONIST_CHARACTER_IDS } = await modPromise;
+  const NING_YU = 'liuchao.character.ning_yu';
+  const HERO = PROTAGONIST_CHARACTER_IDS[0];
+  const errors = validatePlayerLedgerRules(rules({
+    partyJoins: [
+      { eventId: 'lcq.event.no_such_event', characterId: NING_YU },
+      { eventId: EVENT, characterId: 'liuchao.character.no_such_person' },
+      { eventId: EVENT, characterId: HERO },
+      { eventId: EVENT_2, characterId: NING_YU },
+    ],
+    partyLeaves: [
+      { eventId: EVENT_2, characterId: NING_YU },
+      { eventId: EVENT, characterId: NING_YU, whenReceiptId: 'rcpt.no_such_receipt' },
+    ],
+    partyOpenings: [
+      { stageId: 'lcq.stage_99', characterIds: [NING_YU] },
+      { stageId: 'lcq.stage_01', characterIds: [HERO] },
+      { stageId: 'lcq.stage_01', characterIds: [NING_YU] },
+    ],
+  }), { identities: [] });
+  const has = (re) => assert.ok(errors.some(e => re.test(e)), `缺少报错 ${re}：${errors.join(' | ')}`);
+  has(/入队规则 lcq\.event\.no_such_event → liuchao\.character\.ning_yu：eventId 未知/);
+  has(/入队规则 .* → liuchao\.character\.no_such_person：characterId 未知（实体索引 kind=character）/);
+  has(/入队规则 .* → liuchao\.character\.cheng_zongyang：主角不能写进在队规则/);
+  has(/离队规则 lcq\.event\.free_ajiman → liuchao\.character\.ning_yu：同一事件同一人物不能既入队又离队/);
+  has(/离队规则 .*：whenReceiptId 未知（实体索引 kind=receipt）：rcpt\.no_such_receipt/);
+  has(/开局在队 lcq\.stage_99：stageId 未知/);
+  has(/开局在队 lcq\.stage_01：主角不能写进在队规则/);
+  has(/开局在队 lcq\.stage_01：同一关只能有一份开局名单/);
+  assert.equal(errors.length, 8, errors.join(' | '));
 });

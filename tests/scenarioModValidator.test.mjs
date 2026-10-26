@@ -236,7 +236,31 @@ test('acq 比较值不是合法 kind 时报错', async () => {
   assert.deepEqual(codeAt(0), ['invalid_value']);
   assert.deepEqual(codeAt(1), ['invalid_enum']);
   assert.deepEqual(codeAt(2), ['missing_reference']);
-  assert.deepEqual(codeAt(3), ['reserved_path']);
+  assert.deepEqual(codeAt(3), ['missing_reference'], 'party.* 不再报留位；人物须在实体索引 kind=character');
+});
+
+test('party.* 账本路径：不再报 reserved_path；operator、取值与人物引用（补充设计稿 2026-10-26 §3.4，T7）', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const ok = await loadFixture();
+  ok.scenario.events[0].conditions = [
+    { path: 'party.liuchao.character.ning_yu', operator: 'eq', value: true },
+    { path: 'party.liuchao.character.ning_yu', operator: 'neq', value: false },
+  ];
+  assert.deepEqual(validateScenarioMod(ok).issues, []);
+  const fixture = await loadFixture();
+  fixture.scenario.events[0].completion = [
+    { path: 'party.liuchao.character.ning_yu', operator: 'exists' },
+    { path: 'party.liuchao.character.ning_yu', operator: 'eq', value: 'yes' },
+    { path: 'party.liuchao.character.no_such_person', operator: 'eq', value: true },
+    { path: 'party.', operator: 'eq', value: true },
+  ];
+  const result = validateScenarioMod(fixture);
+  const codeAt = index => result.issues.filter(issue => issue.path.startsWith(`scenario.events[0].completion[${index}]`)).map(issue => issue.code);
+  assert.equal(result.issues.some(issue => issue.code === 'reserved_path'), false);
+  assert.deepEqual(codeAt(0), ['invalid_enum'], 'party.* 恒为 boolean，只有 eq / neq');
+  assert.deepEqual(codeAt(1), ['invalid_value']);
+  assert.deepEqual(codeAt(2), ['missing_reference'], '未知 characterId 报错');
+  assert.ok(codeAt(3).length > 0);
 });
 
 test('item.* 账本路径：格式、operator、取值与引用（补充设计稿 2026-10-26 §2.4，T6）', async () => {

@@ -1,6 +1,6 @@
 /**
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
- * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），以及只留位的 party.*。
+ * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts）。
  * 只读不写；读不到的账本一律当空。不是本模块的前缀交还原 flags 逻辑。
  * narrativeVariants.when 走 evaluateLedgerCondition；activation/completion 等由 runtime.ts 的 resolveConditionValue 委托 resolveLedgerPath（T4，
  * 用户 2026-10-25 23:24 批），那里 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用（validator 拦）。
@@ -11,6 +11,7 @@ import type { PlayerIdentityLedger } from './identityLedger';
 import { readLineOutcome } from './lineOutcomes';
 import { isAcquaintanceKind, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
 import { firstItemReceipt } from './itemProvenance';
+import { isInParty } from './partyLedger';
 
 export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party';
 
@@ -24,7 +25,7 @@ export interface ParsedLedgerPath {
   invalid?: boolean;
 }
 
-/** 各类路径支持的 operator（§4.1）。party 留位，任何 operator 都不命中。 */
+/** 各类路径支持的 operator（§4.1）。party.<characterId> 恒为 boolean，只有 eq / neq。 */
 export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioConditionOperator[]> = {
   identity: ['eq', 'neq', 'exists'],
   done: ['eq', 'neq'],
@@ -32,7 +33,7 @@ export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioCondition
   acq: ['eq', 'neq', 'exists', 'gt', 'gte', 'lt', 'lte'],
   knows: ['eq', 'neq'],
   item: ['eq', 'neq', 'exists'],
-  party: [],
+  party: ['eq', 'neq'],
 };
 
 /** item.<id>（是否得过）恒为 boolean，只有 eq / neq；exists 只给 item.<id>.from。 */
@@ -124,7 +125,8 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown): unknown {
       return parsed.field === 'from' ? receipt?.sourceEventId : receipt !== undefined;
     }
     case 'party':
-      return undefined;
+      // 显式在队账（开局名单 → 编年史顺序入/离队 → 去掉 departedCast）；不在队为 false
+      return isInParty(runtime, parsed.id);
   }
 }
 
@@ -138,7 +140,7 @@ export function resolveLedgerPath(path: string, runtime: unknown): { handled: bo
 
 /**
  * undefined＝不是本模块的路径，交给原逻辑。
- * 账本路径在没有 runtime、路径形状不对、operator 不支持或 party 留位时一律不命中（false），不回落 flags。
+ * 账本路径在没有 runtime、路径形状不对或 operator 不支持时一律不命中（false），不回落 flags。
  */
 export function evaluateLedgerCondition(condition: ScenarioCondition, runtime?: unknown): boolean | undefined {
   const parsed = parseLedgerPath(condition?.path);

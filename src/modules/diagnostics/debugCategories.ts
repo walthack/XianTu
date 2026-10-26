@@ -15,7 +15,7 @@ const at = (dir: string, ...names: string[]): string[] => names.map(name => dir 
 export const DEBUG_CATEGORIES = [
   {
     id: 'identity', label: '身份账与玩家账本',
-    paths: [...sm('identityLedger.ts', 'ledgerConditions.ts', 'lineOutcomes.ts', 'playerIdentity.ts', 'playerLedgerRules.ts', 'acquaintanceLedger.ts', 'reputationLedger.ts', 'itemProvenance.ts', 'ledger/')],
+    paths: [...sm('identityLedger.ts', 'ledgerConditions.ts', 'lineOutcomes.ts', 'playerIdentity.ts', 'playerLedgerRules.ts', 'acquaintanceLedger.ts', 'reputationLedger.ts', 'itemProvenance.ts', 'partyLedger.ts', 'ledger/')],
   },
   {
     id: 'story', label: '剧情推进',

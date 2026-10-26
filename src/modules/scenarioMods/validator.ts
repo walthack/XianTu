@@ -2332,10 +2332,6 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     add(`${itemPath}.path`, 'invalid_path', 'Ledger condition path is malformed.');
     return;
   }
-  if (parsed.kind === 'party') {
-    add(`${itemPath}.path`, 'reserved_path', 'party.* is reserved; its data source is not defined yet.');
-    return;
-  }
   if (!ledgerOperatorsOf(parsed).includes(condition.operator)) {
     add(`${itemPath}.operator`, 'invalid_enum', `Operator "${String(condition.operator)}" is not supported for ${parsed.kind}.* paths.`);
     return;
@@ -2358,7 +2354,7 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
 
 /**
  * 账本路径引用的 id 须存在：事件＝本 mod ∪ 实体索引；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引；
- * 道具＝规则表 itemGroups 的组 id ∪ 本 mod 物品 ∪ 实体索引 kind=item。
+ * 道具＝规则表 itemGroups 的组 id ∪ 本 mod 物品 ∪ 实体索引 kind=item；在队人物＝实体索引 kind=character（在队账规则只收索引人物）。
  */
 function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, characterIds: Set<string>, itemIds: Set<string>, add: AddIssue): void {
   if (!refs.length) return;
@@ -2367,6 +2363,7 @@ function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, char
   const hasItemRefs = refs.some(ref => ref.parsed.kind === 'item');
   const itemGroupIds = new Set(hasItemRefs ? (playerLedgerRules().itemGroups ?? []).map(group => group.id) : []);
   const indexItemIds = hasItemRefs ? indexIds('item') : new Set<string>();
+  const indexCharacterIds = refs.some(ref => ref.parsed.kind === 'party') ? indexIds('character') : new Set<string>();
   for (const { parsed, path } of refs) {
     const { kind, id } = parsed;
     if (kind === 'done' && !eventIds.has(id) && !knownEventIds().has(id)) add(path, 'missing_reference', `Unknown event id "${id}".`);
@@ -2374,6 +2371,7 @@ function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, char
     if (kind === 'line' && !lineIds.has(id)) add(path, 'missing_reference', `Unknown line id "${id}".`);
     if (kind === 'acq' && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
     if (kind === 'item' && !itemGroupIds.has(id) && !itemIds.has(id) && !indexItemIds.has(id)) add(path, 'missing_reference', `Unknown item or item group id "${id}".`);
+    if (kind === 'party' && !indexCharacterIds.has(id)) add(path, 'missing_reference', `Unknown character id "${id}" (party.* needs entity index kind=character).`);
   }
 }
 

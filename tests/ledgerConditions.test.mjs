@@ -1,5 +1,6 @@
 // 身份账 T2（身份账设计稿 2026-10-25 §4）：账本条件读取。done.* 以编年史为准，补本关 completedEventIds。
 // item.*（补充设计稿 2026-10-26 §2.4，T6）：只看回执，itemId 原样读；道具组展开见 itemProvenance.test.mjs。
+// party.*（同稿 §3.4，T7）：显式在队账，推导细节见 partyLedger.test.mjs。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -153,8 +154,7 @@ test('未知前缀返回 undefined', async () => {
   assert.equal(evaluateLedgerCondition({ path: 'flags.a', operator: 'eq', value: true }, runtime), undefined);
   assert.equal(evaluateLedgerCondition({ path: 'pathReceipts.x', operator: 'exists' }, runtime), undefined);
   assert.deepEqual(resolveLedgerPath('flags.a', runtime), { handled: false });
-  // party 留位：任何 operator 都不命中；不传 runtime 时账本路径不命中
-  assert.equal(evaluateLedgerCondition({ path: 'party.liuchao.character.a', operator: 'neq', value: true }, runtime), false);
+  // 不传 runtime 时账本路径不命中
   assert.equal(evaluateLedgerCondition({ path: `done.${E1}`, operator: 'neq', value: true }), false);
 });
 
@@ -179,4 +179,35 @@ test('item 读取只看回执：是否得过与最早来路', async () => {
   assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}`, operator: 'exists' }, runtime), false);
   assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}`, operator: 'eq', value: true }), false);
   assert.deepEqual(resolveLedgerPath('item.', runtime), { handled: true, value: undefined });
+});
+
+test('party 读取 eq/neq：显式在队账，不在队为 false', async () => {
+  const { evaluateLedgerCondition, resolveLedgerPath, parseLedgerPath, ledgerOperatorsOf } = await modPromise;
+  const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const NING_YU = 'liuchao.character.ning_yu';
+  const eq = { path: `party.${NING_YU}`, operator: 'eq', value: true };
+  const neq = { path: `party.${NING_YU}`, operator: 'neq', value: true };
+  assert.deepEqual(parseLedgerPath(`party.${NING_YU}`), { kind: 'party', id: NING_YU });
+  assert.deepEqual(ledgerOperatorsOf(parseLedgerPath(`party.${NING_YU}`)), ['eq', 'neq']);
+  const runtime = { modId: 'lcq.stage_02', flags: {}, chronicle: [entry('lcq.stage_01', E1, 1), entry('lcq.stage_02', E2, 2)], completedEventIds: [] };
+  // 仓库规则表首版为空：恒不在队
+  assert.deepEqual(resolveLedgerPath(`party.${NING_YU}`, runtime), { handled: true, value: false });
+  assert.equal(evaluateLedgerCondition(eq, runtime), false);
+  assert.equal(evaluateLedgerCondition(neq, runtime), true);
+  setPlayerLedgerRulesForTest({
+    version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [],
+    partyOpenings: [{ stageId: 'lcq.stage_01', characterIds: [NING_YU] }],
+    partyLeaves: [{ eventId: E3, characterId: NING_YU }],
+  });
+  try {
+    assert.equal(evaluateLedgerCondition(eq, runtime), true, '开局关取编年史首条 stageId');
+    assert.equal(evaluateLedgerCondition(neq, runtime), false);
+    assert.equal(evaluateLedgerCondition(eq, { ...runtime, completedEventIds: [E3] }), false, '离队事件完成后不在队');
+    assert.equal(evaluateLedgerCondition(eq, { ...runtime, departedCast: [NING_YU] }), false, 'departedCast 不在队');
+    // 只有 eq / neq；不传 runtime 不命中
+    assert.equal(evaluateLedgerCondition({ path: `party.${NING_YU}`, operator: 'exists' }, runtime), false);
+    assert.equal(evaluateLedgerCondition(eq), false);
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+  }
 });

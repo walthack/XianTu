@@ -1,8 +1,11 @@
 {
   "version": 1,
-  "note": "玩家账本规则表（身份账设计稿 2026-10-25 §3.1）：「事件 → 身份 / 收束档」的唯一映射，由代码按完成顺序幂等同步。identityId 须在 entity-catalog/identities.json，eventId/lineId 须在 entity-catalog/index.json，outcome 须在 numbers-progress story.lineOutcome.tiers。首版留空，清单由总策划给出后再填。itemGroups：唯一道具组（身份账补充设计稿 2026-10-26 §2.2），同组 itemId 是同一件东西在各书里的 id，组内任一件得过就不再发（口径见 numbers-progress story.itemProvenance.dedupeBy）；itemId 须在 entity-catalog/index.json 且 kind=item，一物只属一组，组内物品不得出现在 story.trades 的 grantItemId；首版留空，由内容组填（候选见 scripts/report-item-group-candidates.mjs）。",
+  "note": "玩家账本规则表（身份账设计稿 2026-10-25 §3.1）：「事件 → 身份 / 收束档」的唯一映射，由代码按完成顺序幂等同步。identityId 须在 entity-catalog/identities.json，eventId/lineId 须在 entity-catalog/index.json，outcome 须在 numbers-progress story.lineOutcome.tiers。首版留空，清单由总策划给出后再填。itemGroups：唯一道具组（身份账补充设计稿 2026-10-26 §2.2），同组 itemId 是同一件东西在各书里的 id，组内任一件得过就不再发（口径见 numbers-progress story.itemProvenance.dedupeBy）；itemId 须在 entity-catalog/index.json 且 kind=item，一物只属一组，组内物品不得出现在 story.trades 的 grantItemId；首版留空，由内容组填（候选见 scripts/report-item-group-candidates.mjs）。partyJoins / partyLeaves / partyOpenings：显式在队账（身份账补充设计稿 2026-10-26 §3.2，总策划审定 Q4），party.<characterId> 由开局关在队名单 → 按编年史完成顺序应用离队/入队（同一事件先离后入，whenReceiptId 用路径回执区分玩家选择）→ 去掉 departedCast 推导，不落存档；eventId / characterId / whenReceiptId 须在 entity-catalog/index.json 且 kind 分别为 event / character / receipt，stageId 须为 entity-catalog/stage-access.json 的 stages 键且同一关只一份，主角不得入规则；首版留空。",
   "identityGrants": [],
   "identityRevokes": [],
   "lineOutcomes": [],
-  "itemGroups": []
+  "itemGroups": [],
+  "partyJoins": [],
+  "partyLeaves": [],
+  "partyOpenings": []
 }

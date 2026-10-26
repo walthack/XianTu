@@ -1,11 +1,12 @@
 /**
  * 玩家账本规则表（身份账设计稿 2026-10-25 §3.1 / §6）：「事件 → 身份 / 收束档」的唯一映射。
- * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；唯一道具组 itemGroups 见补充设计稿 2026-10-26 §2.2；
+ * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；唯一道具组 itemGroups 见补充设计稿 2026-10-26 §2.2，在队账 partyJoins / partyLeaves / partyOpenings 见同稿 §3.2；
  * 档位集合、判档线集合与身份 kind 集合只读数值配置 story.lineOutcome.tiers / story.lineOutcome.judgedLines / story.identity.kinds，这里不写死。
  */
 import rulesJson from '../../../mod-kit/player-ledger-rules.json';
 import identitiesJson from '../../../mod-kit/entity-catalog/identities.json';
 import index from '../../../mod-kit/entity-catalog/index.json';
+import stageAccess from '../../../mod-kit/entity-catalog/stage-access.json';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 
 export interface IdentityGrantRule {
@@ -31,6 +32,18 @@ export interface ItemGroupRule {
   redirectItemId?: string;
 }
 
+/** 在队账入队/离队规则（补充设计稿 2026-10-26 §3.2）：事件完成时该人物入队或离队。 */
+export interface PartyRule {
+  /** 实体索引 kind=event */
+  eventId: string;
+  /** 实体索引 kind=character；主角不得入规则 */
+  characterId: string;
+  /** 只在玩家走了某条路径时生效（pathReceipts 键，实体索引 kind=receipt），用来表达同一事件里选离队/留队 */
+  whenReceiptId?: string;
+}
+/** 从该关开局的存档，开局时在队的名单（stageId 为 entity-catalog/stage-access.json 的 stages 键，同一关只能出现一次）。 */
+export interface PartyOpening { stageId: string; characterIds: string[] }
+
 export interface PlayerLedgerRules {
   version: 1;
   identityGrants: IdentityGrantRule[];
@@ -38,6 +51,9 @@ export interface PlayerLedgerRules {
   lineOutcomes: LineOutcomeRule[];
   /** 可选键，缺键按 [] 处理 */
   itemGroups?: ItemGroupRule[];
+  partyJoins?: PartyRule[];
+  partyLeaves?: PartyRule[];
+  partyOpenings?: PartyOpening[];
 }
 
 export interface PlayerIdentityDef {
@@ -67,6 +83,11 @@ export interface PlayerLedgerRefs {
   itemIds?: Iterable<string>;
   /** story.trades 里的 grantItemId（直写背包、不留回执，唯一道具不得走这条路） */
   tradeGrantItemIds?: Iterable<string>;
+  characterIds?: Iterable<string>;
+  receiptIds?: Iterable<string>;
+  stageIds?: Iterable<string>;
+  /** 不得写进在队规则的主角 id；缺省 PROTAGONIST_CHARACTER_IDS */
+  protagonistIds?: Iterable<string>;
 }
 
 /** 身份 id 末段保留给读取子路径（identity.<id>.from / .status）。 */
@@ -78,6 +99,11 @@ export const ITEM_GROUP_PREFIX = 'liuchao.itemgroup.';
 const RESERVED_ITEM_GROUP_TAILS = ['from'];
 /** 道具组 whenHeld 的取值。 */
 export const ITEM_WHEN_HELD: readonly string[] = ['skip', 'redirect'];
+
+/** 主角人物 id（同 travelLedger / AIBS 的 isProtagonist 兜底口径）；在队账不收主角。 */
+export const PROTAGONIST_CHARACTER_IDS: readonly string[] = ['liuchao.character.cheng_zongyang'];
+/** 规则表里的可选数组键，缺键按 [] 处理。 */
+const OPTIONAL_RULE_ARRAYS = ['itemGroups', 'partyJoins', 'partyLeaves', 'partyOpenings'] as const;
 
 /** 实体索引里某 kind 的 id 集合。 */
 export const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
@@ -120,7 +146,9 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
   for (const key of ['identityGrants', 'identityRevokes', 'lineOutcomes'] as const) {
     if (!Array.isArray(rules?.[key])) errors.push(`规则表 ${key} 须为数组`);
   }
-  if (rules?.itemGroups !== undefined && !Array.isArray(rules.itemGroups)) errors.push('规则表 itemGroups 须为数组');
+  for (const key of OPTIONAL_RULE_ARRAYS) {
+    if (rules?.[key] !== undefined && !Array.isArray(rules[key])) errors.push(`规则表 ${key} 须为数组`);
+  }
   if (errors.some(e => e.startsWith('规则表'))) return errors;
 
   const checkEvent = (where: string, eventId: string): void => { if (!eventIds.has(eventId)) errors.push(`${where}eventId 未知：${eventId}`); };
@@ -153,7 +181,49 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
     if (!tiers.includes(rule.outcome)) errors.push(`${where}outcome 不在 story.lineOutcome.tiers：${String(rule.outcome)}`);
   }
   validateItemGroups(rules.itemGroups ?? [], refs, errors);
+  validateParty(rules, refs, eventIds, errors);
   return errors;
+}
+
+/** 在队规则（§3.6）：事件/人物/回执/关卡 id 须登记，同一关开局名单只一份，主角不入规则，同事件同人物不能既入又离（whenReceiptId 不同除外）。 */
+function validateParty(rules: PlayerLedgerRules, refs: PlayerLedgerRefs, eventIds: Set<string>, errors: string[]): void {
+  const joins = rules.partyJoins ?? [];
+  const leaves = rules.partyLeaves ?? [];
+  const openings = rules.partyOpenings ?? [];
+  if (!joins.length && !leaves.length && !openings.length) return;
+  const characterIds = new Set(refs.characterIds ?? indexIds('character'));
+  const receiptIds = new Set(refs.receiptIds ?? indexIds('receipt'));
+  const stageIds = new Set(refs.stageIds ?? Object.keys(stageAccess.stages));
+  const protagonists = new Set(refs.protagonistIds ?? PROTAGONIST_CHARACTER_IDS);
+  const checkCharacter = (where: string, characterId: string): void => {
+    if (!characterIds.has(characterId)) errors.push(`${where}characterId 未知（实体索引 kind=character）：${String(characterId)}`);
+    else if (protagonists.has(characterId)) errors.push(`${where}主角不能写进在队规则：${characterId}`);
+  };
+  const ruleKey = (rule: PartyRule): string => `${rule?.eventId}\u0000${rule?.characterId}`;
+  const joinReceipts = new Map<string, Set<string | undefined>>();
+  for (const [list, label] of [[joins, '入队'], [leaves, '离队']] as const) {
+    for (const rule of list) {
+      const where = `${label}规则 ${String(rule?.eventId)} → ${String(rule?.characterId)}：`;
+      if (!eventIds.has(rule?.eventId)) errors.push(`${where}eventId 未知：${String(rule?.eventId)}`);
+      checkCharacter(where, rule?.characterId);
+      if (rule?.whenReceiptId !== undefined && !receiptIds.has(rule.whenReceiptId)) errors.push(`${where}whenReceiptId 未知（实体索引 kind=receipt）：${String(rule.whenReceiptId)}`);
+      if (list === joins) {
+        if (!joinReceipts.has(ruleKey(rule))) joinReceipts.set(ruleKey(rule), new Set());
+        joinReceipts.get(ruleKey(rule))!.add(rule?.whenReceiptId);
+      } else if (joinReceipts.get(ruleKey(rule))?.has(rule?.whenReceiptId)) {
+        errors.push(`${where}同一事件同一人物不能既入队又离队（whenReceiptId 不同除外）`);
+      }
+    }
+  }
+  const seenStages = new Set<string>();
+  for (const opening of openings) {
+    const where = `开局在队 ${String(opening?.stageId)}：`;
+    if (!stageIds.has(opening?.stageId)) errors.push(`${where}stageId 未知（entity-catalog/stage-access.json stages）：${String(opening?.stageId)}`);
+    if (seenStages.has(opening?.stageId)) errors.push(`${where}同一关只能有一份开局名单`);
+    seenStages.add(opening?.stageId);
+    if (!Array.isArray(opening?.characterIds)) { errors.push(`${where}characterIds 须为数组`); continue; }
+    for (const characterId of opening.characterIds) checkCharacter(where, characterId);
+  }
 }
 
 function validateItemGroups(groups: ItemGroupRule[], refs: PlayerLedgerRefs, errors: string[]): void {

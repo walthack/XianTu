@@ -41,18 +41,18 @@ test('在队/知情不满足时节点不激活（锁节点）', async () => {
   save = advance(save);
   assert.equal(rt(save).activeEventIds.includes(EVENT), true, '知情后解锁');
 
-  // 在队：party.* 留位（数据源待定，§11 Q4），首版恒不命中，节点一直锁住；校验器也拦住不让内容先用
+  // 在队：party.* 显式在队账（补充设计稿 2026-10-26 §3，T7 撤掉留位）；仓库规则表首版为空，恒不在队，节点锁住
   const party = { path: 'party.character.wangzhe', operator: 'eq', value: true };
   const raw = await rawMod();
   raw.scenario.events[0].conditions = [party];
-  assert.ok(validateScenarioMod(raw).issues.some(issue => issue.code === 'reserved_path'));
+  assert.equal(validateScenarioMod(raw).issues.some(issue => issue.code === 'reserved_path'), false, '不再报留位');
   let locked = advance(await buildSave([{ path: 'flags.chapter.started', operator: 'eq', value: true }]));
   const event = rt(locked).events.find(item => item.id === EVENT);
   event.conditions = [party];
   rt(locked).flags['chapter.started'] = true;
   rt(locked).playerKnowledge = { k1: { factId: SECRET, status: 'confirmed' } };
   locked = advance(locked);
-  assert.equal(rt(locked).activeEventIds.includes(EVENT), false, 'party.* 留位不命中');
+  assert.equal(rt(locked).activeEventIds.includes(EVENT), false, '规则表为空时 party.* 不命中');
 
   // 其余账本路径同样经 resolveConditionValue 求值（completion / activation 用的同一入口）
   const runtime = rt(locked);
@@ -118,4 +118,27 @@ test('item 不满足时节点不激活，得过后激活', async () => {
   rt(save).inventoryTransferReceipts = [{ transferId: 't.blade', itemId: 'item.thunderblade', itemName: '雷刀', quantity: 1, sourceEventId: 'loot:x', actionId: 'loot', outcome: 'success', settledAtTurn: 1 }];
   save = advance(save);
   assert.equal(rt(save).activeEventIds.includes(EVENT), true, '有回执后激活');
+});
+
+test('party 不满足时节点不激活，在队后激活', async () => {
+  const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const NING_YU = 'liuchao.character.ning_yu';
+  const party = { path: `party.${NING_YU}`, operator: 'eq', value: true };
+  let save = advance(await buildSave([party]));
+  const runtime = rt(save);
+  assert.equal(runtime.activeEventIds.includes(EVENT), false, '规则表为空：不在队，锁节点');
+  // 夹具：本关开局在队名单含凝羽（规则只在测试里）
+  setPlayerLedgerRulesForTest({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [], partyOpenings: [{ stageId: runtime.modId, characterIds: [NING_YU] }] });
+  try {
+    const check = condition => evaluateScenarioCondition(condition, save, rt(save));
+    assert.equal(check(party), true);
+    assert.equal(check({ ...party, operator: 'neq' }), false);
+    rt(save).departedCast = [NING_YU];
+    assert.equal(check(party), false, 'departedCast 内不在队');
+    rt(save).departedCast = [];
+    save = advance(save);
+    assert.equal(rt(save).activeEventIds.includes(EVENT), true, '在队后解锁');
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+  }
 });
