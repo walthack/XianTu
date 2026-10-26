@@ -1,0 +1,49 @@
+# 调试日志大类（debugLog）
+
+调试日志按模块大类开关的权威说明（设计稿 `docs/design/2026-10-26-日志大类开关设计稿.md`）。代码侧大类总表在 `src/modules/diagnostics/debugCategories.ts`，两边由 `tests/debugLog.test.mjs` 互相校验：id、名称、路径必须一致。
+
+## 规则
+
+- 接口：`debugLog(大类, msg, data?)`、`debugEnabled(大类)`（`src/modules/diagnostics/debugLog.ts`）。只打控制台一行 `[dbg:<id>] msg` + 脱敏后的 data；data 可以传函数，大类关着时不求值；永不抛错。
+- 开关只有一处：`mod-kit/numbers-runtime.json` 的 `diagnostics.debug.categories`，默认全为 false。热改写 tuning.json：`{"numbers":{"diagnostics":{"debug":{"categories":{"identity":true}}}}}`，下一次调用即生效。没有总开关、没有级别、不设 localStorage / URL / 设置面板开关；要全开就把 15 个都写上。
+- 体检：`categories` 的键集合必须等于本表的 15 个 id，值必须是布尔；不过则热改整份退回（LCQ-NUM-006）。
+- **错误码与持久日志始终开启**：`logEvent / logError` 不读大类开关；`diagnostics.enabled` 锁死为 true（体检拒绝 false）。调试日志不进 logStore、不落盘、不进诊断导出和反馈包、不弹 toast、不带码，也永远不会生成 LCQ-SYS-000。
+- 脱敏照 `diagnostics.redactKeys / redactPatterns / textKeys / textChars`：密钥替换，玩家原文类字段只留长度。要看原文用 `freeAction.debug.playerTextLog` 专用通道（与 `freeAction.debug.drainLog` 同属数据采集通道，保留，不算调试开关）。
+- 新功能挂到所在目录对应的大类；跨多个目录时以入口文件所在大类为准。**不再每个功能单独加调试开关；增删大类须用户拍板。**
+- 归类按路径最长前缀：路径相对 `src/`，以 `/` 结尾的是目录前缀，其余是文件模式（`*` 只匹配同一层）；多条命中时非通配字符最多的那条胜出。新文件没被覆盖时，按调用方的大类补进路径表，不新开类。
+- 冻结文件（`utils/AIBidirectionalSystem.ts`、`modules/scenarioMods/runtime.ts`）照常归类，但不迁移其中的裸 console。
+
+## 大类表
+
+| id | 名称 | 覆盖（`src/` 下） | 对照码表 module |
+|---|---|---|---|
+| `identity` | 身份账与玩家账本 | `modules/scenarioMods/identityLedger.ts`、`modules/scenarioMods/ledgerConditions.ts`、`modules/scenarioMods/lineOutcomes.ts`、`modules/scenarioMods/playerIdentity.ts`、`modules/scenarioMods/playerLedgerRules.ts`、`modules/scenarioMods/acquaintanceLedger.ts`、`modules/scenarioMods/reputationLedger.ts`、`modules/scenarioMods/ledger/` | identityLedger、lineOutcomes |
+| `story` | 剧情推进 | `modules/scenarioMods/runtime.ts`、`modules/scenarioMods/questLine*.ts`、`modules/scenarioMods/mainQuestAxis.ts`、`modules/scenarioMods/secondaryLines.ts`、`modules/scenarioMods/characterQuests.ts`、`modules/scenarioMods/fixedQuestObjectives.ts`、`modules/scenarioMods/branchDecision.ts`、`modules/scenarioMods/milestoneRewards.ts`、`modules/scenarioMods/phaseContinue.ts`、`modules/scenarioMods/settledStepScene.ts`、`modules/scenarioMods/keyBeatCards.ts`、`modules/scenarioMods/endingPresentation.ts`、`modules/scenarioMods/fixedEndingNarratives.ts`、`modules/scenarioMods/eventNarrativeView.ts`、`modules/scenarioMods/canonRail*.ts`、`modules/scenarioMods/divergence*.ts`、`modules/scenarioMods/storyTrades.ts`、`modules/scenarioMods/shiweimoRescue.ts`、`modules/scenarioMods/*Playtest*.ts`、`modules/scenarioMods/baihuGambleRefusal.ts`、`modules/scenarioMods/effectTags.ts`、`modules/scenarioMods/r2AcceptanceFixtures.ts`、`modules/scenarioMods/playtestNarrativeScope.ts`、`assets/endings/` | scenarioMods |
+| `narrative` | 叙事与提示词 | `modules/scenarioMods/storyContext.ts`、`modules/scenarioMods/legacy*.ts`、`modules/scenarioMods/narrative*.ts`、`modules/scenarioMods/*Guard.ts`、`modules/scenarioMods/voiceCards.ts`、`modules/scenarioMods/qingyuOpening*.ts`、`modules/scenarioMods/qingyuOpportunityNarrative.ts`、`modules/scenarioMods/playerActionPresentation.ts`、`utils/prompts/`、`services/prompts/`、`services/defaultPrompts.ts`、`utils/narrative*.ts`、`utils/textSanitizer.ts`、`types/textRules.ts` | — |
+| `freeAction` | 自由行动 | `modules/scenarioMods/freeAction/`、`modules/scenarioMods/naturalIntentRouter.ts`、`utils/actionGate.ts`、`utils/enhancedActionQueue.ts`、`stores/actionQueueStore.ts` | freeAction |
+| `combat` | 战斗与场面 | `modules/sceneModule/`、`utils/judgement*.ts`、`utils/diceRoller.ts`、`utils/narratedDamage.ts`、`utils/playerVitalGuard.ts`、`dev/combatTrial/` | sceneModule |
+| `npc` | 人物与关系 | `modules/scenarioMods/actor*.ts`、`modules/scenarioMods/affinity*.ts`、`modules/scenarioMods/characterLevels.ts`、`modules/scenarioMods/characterResolver.ts`、`modules/scenarioMods/characterStats*.ts`、`modules/scenarioMods/relation*.ts`、`modules/scenarioMods/stanceProfiles.ts`、`modules/scenarioMods/npc*.ts`、`modules/scenarioMods/presence.ts`、`modules/scenarioMods/intimacyProfiles.ts`、`modules/scenarioMods/deferredReconcileMerge.ts`、`systems/`、`data/specialNpcs.ts` | — |
+| `growth` | 养成与物品 | `modules/scenarioMods/levelProgression.ts`、`modules/scenarioMods/inventoryTransactions.ts`、`modules/scenarioMods/fixedInventoryContracts.ts`、`modules/scenarioMods/itemGrades.ts`、`modules/scenarioMods/shopStock.ts`、`modules/scenarioMods/locationLoot.ts`、`utils/attributeCalculation.ts`、`utils/cultivationSpeedCalculator.ts`、`utils/realmUtils.ts`、`utils/lifespanCalculator.ts`、`utils/statusEffectManager.ts`、`utils/masteredSkillsCalculator.ts`、`utils/equipmentBonusApplier.ts`、`utils/craftingSystem.ts`、`utils/currencySystem.ts`、`utils/narratedInventory.ts`、`utils/sixSiManager.ts`、`data/` | — |
+| `world` | 世界与地图 | `modules/scenarioMods/travel/`、`modules/scenarioMods/locationTypes.ts`、`modules/scenarioMods/*openWorldSlice.ts`、`modules/scenarioMods/*OpenWorldSlice.ts`、`utils/gameMapManager.ts`、`utils/coordinateConverter.ts`、`utils/sect*.ts`、`utils/worldGeneration/`、`utils/generators/`、`utils/time.ts`、`types/gameMap.ts`、`types/location.ts`、`types/worldMap.ts` | — |
+| `init` | 开局与角色创建 | `services/initialization/`、`services/characterInitialization.ts`、`services/offlineInitialization.ts`、`modules/scenarioMods/strictInitializer.ts`、`modules/scenarioMods/expandInitializer.ts`、`utils/initialGenerationPolicy.ts`、`components/character-creation/`、`views/CharacterCreation.vue`、`stores/characterCreationStore.ts` | strictInitializer、startup |
+| `ai` | 模型请求与响应解析 | `services/ai*`、`services/request*`、`services/httpClient.ts`、`services/openAIEndpoint.ts`、`services/apiErrorMessage.ts`、`services/optionalReasoningParams.ts`、`services/moduleModelRuntime.ts`、`services/gameModelModules.ts`、`services/modularTurnBackground.ts`、`services/qingyuTurnLongRequests.ts`、`services/requestLifecycleDiagnostics.ts`、`services/backgroundAudit*`、`services/progressAuditService.ts`、`services/eventReconcileService.ts`、`services/narrativeResponseSalvage.ts`、`services/turnstile*`、`modules/scenarioMods/modularTurn.ts`、`modules/scenarioMods/backgroundAuditCore.ts`、`utils/AIBidirectionalSystem.ts`、`utils/modelCommandPipeline.ts`、`utils/repairCommandPipeline.ts`、`utils/command*Validator.ts`、`utils/processedAIResponseValidation.ts`、`utils/jsonExtract.ts`、`utils/boundedAuxiliaryTask.ts`、`utils/tavern*.ts`、`utils/actionOptionsPovGuard.ts`、`services/security/`、`services/diagnosticTransport.ts`、`stores/apiManagementStore.ts`、`types/AIGameMaster.d.ts` | aiService |
+| `memory` | 记忆与检索 | `services/characterRagService.ts`、`services/narrativeRagService.ts`、`services/vectorMemoryService.ts`、`services/embeddingService.ts`、`utils/memory*.ts`、`utils/backgroundMemory*.ts`、`utils/legacyForegroundRecall.ts`、`utils/regex.ts`、`types/memory.ts` | characterRag |
+| `save` | 存档 | `utils/indexedDBManager.ts`、`utils/save*.ts`、`utils/snapshotManager.ts`、`utils/dataRepair.ts`、`utils/dataValidation.ts`、`utils/legacyOnlineSaveMigration.ts`、`utils/isolatedPlaytestPersist.ts`、`utils/latestWriteQueue.ts`、`utils/cloudDataSync.ts`、`utils/dadBundle.ts`、`utils/machineCode.ts`、`services/userCloudStorage.ts`、`services/api/`、`types/`、`modules/scenarioMods/entitySave*.ts`、`modules/scenarioMods/loadRepairs.ts`、`stores/characterStore.ts`、`stores/gameStateStore.ts`、`components/dashboard/SavePanel.vue`、`components/character-creation/LegacySaveMigrationModal.vue` | indexedDB、saveMigration、saveValidation、userCloudStorage |
+| `content` | 内容包、模组与数值配置 | `modules/contentPacks/`、`modules/scenarioMods/manager.ts`、`modules/scenarioMods/validator.ts`、`modules/scenarioMods/analyzer.ts`、`modules/scenarioMods/builtins/`、`modules/scenarioMods/schema/`、`modules/scenarioMods/entityCatalog.ts`、`modules/scenarioMods/namedEntities.ts`、`modules/scenarioMods/canonGuard.ts`、`modules/sceneModule/numbers*.ts`、`modules/sceneModule/runtimeTuning.ts`、`utils/presetManager.ts`、`services/promptConfig.ts`、`services/promptStorage.ts`、`services/backendConfig.ts` | scenarioMods、numbers、runtimeTuning |
+| `ui` | 界面 | `components/`、`views/`、`App.vue`、`main.ts`、`env.d.ts`、`router/`、`i18n/`、`composables/`、`stores/uiStore.ts`、`utils/panelBus.ts`、`utils/toast.ts`、`utils/fullscreen.ts`、`utils/music*.ts`、`utils/videoCache.ts`、`utils/chatBus.ts`、`utils/fatalFallback.ts`、`utils/nsfw.ts`、`utils/stateChangeFormatter.ts`、`modules/diagnostics/feedback.ts`、`modules/diagnostics/export.ts`、`modules/diagnostics/zip.ts`、`modules/diagnostics/buildInfo.ts` | vue、window、feedbackPack |
+| `perf` | 性能与遥测 | `utils/turnTelemetry.ts`、`modules/diagnostics/`、`utils/consolePatch.ts`、`utils/debug.ts` | turnTelemetry、diagnostics |
+
+最后一列只是对照 `docs/ERROR-CODES.md` 的模块字段，错误码不受大类开关影响。
+
+## 改写规则（旧代码迁移）
+
+| 原写法 | 改成 |
+|---|---|
+| 不在 catch 里的 `console.log / info / debug / table / group` | `debugLog(大类, msg, () => data)` |
+| 不在 catch 里的 `console.warn / error` | 确实是异常 → 登记新码，然后 `logEvent`；只是观察 → `debugLog` |
+| catch 里的 `console.*` | 只能改成 `logError(码, err)` 或补 `// lcq-allow: 原因`。**不能改成 debugLog**：catch 指纹会变，errorCodeGuard 会把它当成新增未处理的 catch 报错 |
+| `DebugLogger.log(component, …)` / `debug.log` | `debugLog(大类, …)`，component 并进 msg 前缀 |
+| 单功能开关（`dad_debug_tavern`、`?debug`） | 改读 `debugEnabled(大类)`，删掉原开关 |
+
+- `debugLog` 不算 catch 已处理（errorCodeGuard 的 `LOGGING_CALL` 不认它，也不要加进去）；参数里不写 LCQ- 码。
+- 存量按大类分批迁、每批一个提交；顺手改到某个文件时可以迁，但不强制。设置面板的 `debugMode / consoleDebug` 继续管还没迁的裸 console。

@@ -138,3 +138,23 @@ test('story.lineOutcome.failEndsGame 键正好是 7 条国家线、值为 bool',
   assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { failEndsGame: { chu: false } } } }), err => err.code === 'LCQ-NUM-002');
   assert.equal('chu' in numbers.GAME_NUMBERS.story.lineOutcome.failEndsGame, false);
 });
+
+test('diagnostics.debug.categories 必填 object', async () => {
+  const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const spec = registry.FIELD_SPECS.find(s => s.path === 'diagnostics.debug.categories');
+  assert.deepEqual(spec, { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' });
+  const fresh = () => structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  assert.deepEqual(registry.validateAgainstRegistry(fresh(), 'cold'), []);
+  const absent = fresh();
+  delete absent.diagnostics.debug.categories;
+  assert.ok(registry.validateAgainstRegistry(absent, 'cold').some(e => e === '缺字段：diagnostics.debug.categories'));
+  assert.ok(registry.validateAgainstRegistry(absent, 'patch').some(e => e === '缺字段：diagnostics.debug.categories'), '必填：热改合并后也查');
+  for (const bad of [[], true, null]) {
+    const tree = fresh();
+    tree.diagnostics.debug.categories = bad;
+    assert.ok(registry.validateAgainstRegistry(tree, 'cold').some(e => e === '字段类型无效：diagnostics.debug.categories 须为 object'), JSON.stringify(bad));
+  }
+  assert.throws(() => numbers.applyGameNumbers({ diagnostics: { debug: { categories: true } } }), err => err.code === 'LCQ-NUM-003');
+  assert.equal(typeof numbers.GAME_NUMBERS.diagnostics.debug.categories, 'object');
+});

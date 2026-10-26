@@ -16,6 +16,7 @@
 import { debugLogger } from '@/utils/debug';
 import { toast } from '@/utils/toast';
 import { logConsole, logError, setToastSink } from '@/modules/diagnostics/log';
+import { setDebugConsole } from '@/modules/diagnostics/debugLog';
 
 type ConsoleMethod = (...args: any[]) => void;
 
@@ -30,6 +31,9 @@ const original = {
   groupEnd: console.groupEnd ? console.groupEnd.bind(console) as ConsoleMethod : undefined,
   error: console.error.bind(console) as ConsoleMethod,
 };
+
+// debugLog 走原始 console.debug（没有就用 log）：只受大类开关控制，不受下面 consoleDebug 隐藏，也不会记成 SYS-000。
+setDebugConsole(original.debug ?? original.log);
 
 // Helper guards
 const canConsoleDebug = () => debugLogger.isConsoleDebugEnabled();

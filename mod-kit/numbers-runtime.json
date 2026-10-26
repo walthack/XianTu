@@ -58,6 +58,26 @@
       "recent": 30
     },
     "tuning404Level": "info",
+    "debug": {
+      "note": "调试日志大类开关（debugLog）。只控制控制台调试输出；错误码 / 持久日志（logEvent、logError）不读这里，始终开启。增删大类须用户拍板，id 总表见 src/modules/diagnostics/debugCategories.ts 与 docs/DEBUG-LOG.md。",
+      "categories": {
+        "identity": false,
+        "story": false,
+        "narrative": false,
+        "freeAction": false,
+        "combat": false,
+        "npc": false,
+        "growth": false,
+        "world": false,
+        "init": false,
+        "ai": false,
+        "memory": false,
+        "save": false,
+        "content": false,
+        "ui": false,
+        "perf": false
+      }
+    },
     "divergence": {
       "note": "世界线偏离信号的专名计数（scenarioMods/divergenceControl.ts）：候选专名先在最后一个 stripChars 字处截掉前缀（虚词、代词、动作字），剩下不足 minChars 字、或落在 commonPhrases 里的不算专名；登记在实体总表（人物、地点、势力、敌人）里的名字一律算已知。",
       "properNoun": {

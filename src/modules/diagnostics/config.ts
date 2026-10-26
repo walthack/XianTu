@@ -5,11 +5,13 @@
  * 一律调用时再读，不要在模块顶层缓存数值，否则热改不生效。
  */
 import { GAME_NUMBERS, registerNumbersValidator } from '../sceneModule/numbers';
+import { DEBUG_CATEGORY_IDS, type DebugCategory } from './debugCategories';
 
 export const LOG_LEVELS = ['debug', 'info', 'warn', 'error'] as const;
 export type LogLevel = typeof LOG_LEVELS[number];
 
 export interface DiagnosticsConfig {
+  /** 锁死 true：错误码与持久日志始终开启（总策划 2026-10-26），体检拒绝 false；不删键以免旧配置报错。 */
   enabled: boolean;
   /** 低于此级别的事件整条丢弃；consoleLevel / persistLevel 分别决定是否打控制台、是否落盘。 */
   minLevel: LogLevel; consoleLevel: LogLevel; persistLevel: LogLevel;
@@ -26,6 +28,8 @@ export interface DiagnosticsConfig {
   panel: { recent: number };
   /** tuning.json 不存在（404）是常态，按这个级别记。 */
   tuning404Level: LogLevel;
+  /** 调试日志大类开关（debugLog / debugEnabled）：只管控制台调试输出，logEvent / logError 不读这里。 */
+  debug: { note?: string; categories: Record<DebugCategory, boolean> };
 }
 
 export const BUILTIN_DIAGNOSTICS: DiagnosticsConfig = structuredClone(GAME_NUMBERS.diagnostics) as DiagnosticsConfig;
@@ -38,7 +42,7 @@ export const levelAtLeast = (level: string, floor: string): boolean => levelRank
 export function validateDiagnosticsConfig(cfg: DiagnosticsConfig = diagnosticsConfig()): string[] {
   const errors: string[] = [], count = (v: unknown): v is number => Number.isInteger(v) && (v as number) > 0;
   if (!cfg || typeof cfg !== 'object') return ['diagnostics 段缺失'];
-  if (typeof cfg.enabled !== 'boolean') errors.push('diagnostics.enabled 须为布尔');
+  if (cfg.enabled !== true) errors.push('diagnostics.enabled 须为 true（错误码与持久日志始终开启，不得关闭）');
   for (const key of ['minLevel', 'consoleLevel', 'persistLevel', 'tuning404Level'] as const) if (levelRank(cfg[key]) < 0) errors.push(`diagnostics.${key} 须为 ${LOG_LEVELS.join(' / ')} 之一`);
   for (const key of ['ringMax', 'maxBytes', 'detailChars', 'stackChars', 'maxDepth', 'maxKeys', 'flushMs', 'repeatMs', 'repeatKeys', 'localFallbackMax'] as const) if (!count(cfg[key])) errors.push(`diagnostics.${key} 须为正整数`);
   if (!(Number.isInteger(cfg.textChars) && cfg.textChars >= 0)) errors.push('diagnostics.textChars 须为非负整数');
@@ -48,6 +52,19 @@ export function validateDiagnosticsConfig(cfg: DiagnosticsConfig = diagnosticsCo
   }
   if (typeof cfg.toast?.enabled !== 'boolean' || levelRank(cfg.toast?.minLevel) < 0 || !count(cfg.toast?.dedupeMs)) errors.push('diagnostics.toast 须有布尔 enabled、合法 minLevel、正整数 dedupeMs');
   if (!count(cfg.panel?.recent)) errors.push('diagnostics.panel.recent 须为正整数');
+  errors.push(...validateDebugCategories(cfg.debug?.categories));
+  return errors;
+}
+
+/** 大类开关体检：键集合必须等于 DEBUG_CATEGORY_IDS，值必须是布尔。 */
+export function validateDebugCategories(categories: unknown): string[] {
+  if (!categories || typeof categories !== 'object' || Array.isArray(categories)) return ['diagnostics.debug.categories 须为对象'];
+  const errors: string[] = [], keys = Object.keys(categories), known = new Set<string>(DEBUG_CATEGORY_IDS);
+  const unknown = keys.filter(key => !known.has(key)), missing = DEBUG_CATEGORY_IDS.filter(id => !keys.includes(id));
+  if (unknown.length) errors.push(`diagnostics.debug.categories 含未知大类：${unknown.join('、')}（新功能挂到已有大类，增类须用户拍板）`);
+  if (missing.length) errors.push(`diagnostics.debug.categories 缺大类：${missing.join('、')}（新功能挂到已有大类，增类须用户拍板）`);
+  const nonBool = keys.filter(key => typeof (categories as Record<string, unknown>)[key] !== 'boolean');
+  if (nonBool.length) errors.push(`diagnostics.debug.categories 的值须为布尔：${nonBool.join('、')}`);
   return errors;
 }
 

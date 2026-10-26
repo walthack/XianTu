@@ -94,9 +94,16 @@ test('写日志永不抛错：getter 抛错、循环引用、怪异 cause、配�
     const entry = recent().find(e => e.detail && e.detail.self);
     assert.equal(entry.detail.self, '[循环引用]');
   });
-  await fresh({ enabled: false }, async () => {
-    assert.equal(log.logEvent({ code: 'LCQ-SYS-000' }), null);
-    assert.equal(recent().length, 0);
+  // diagnostics.enabled 锁死 true（总策划 2026-10-26）：热改关不掉，错误码与持久日志始终开启
+  assert.throws(() => mods.numbers.applyGameNumbers({ diagnostics: { enabled: false } }), err => err.code === 'LCQ-NUM-006' && /enabled 须为 true/.test(err.message));
+  assert.equal(cfgMod.diagnosticsConfig().enabled, true);
+  // log.ts 的总闸行为不变：数值被绕过体检改坏时照旧直接返回、不抛错
+  await fresh(null, async () => {
+    N().diagnostics.enabled = false;
+    try {
+      assert.equal(log.logEvent({ code: 'LCQ-SYS-000' }), null);
+      assert.equal(recent().length, 0);
+    } finally { N().diagnostics.enabled = true; }
   });
 });
 
@@ -528,6 +535,10 @@ test('剧情模组 manager：坏 JSON→PCK-002（只记字符数，不含文件
 
 // ───────────── consolePatch ─────────────
 
+// consolePatch 只在第一次 import 时捕获“原始”console：两条用例都先把 console.debug 换成这个探针再 import，谁先跑都一样。
+const rawDebug = [];
+const rawDebugProbe = (...a) => { rawDebug.push(a); };
+
 test('consolePatch：console.error / console.warn 原样输出并另记 LCQ-SYS-000；日志自己输出不递归；window error / unhandledrejection 记 UI-001/002', async () => {
   const saved = {};
   for (const k of ['log', 'info', 'warn', 'debug', 'error', 'table', 'group', 'groupCollapsed', 'groupEnd']) saved[k] = console[k];
@@ -536,7 +547,8 @@ test('consolePatch：console.error / console.warn 原样输出并另记 LCQ-SYS-
   const fakeWindow = { addEventListener: (type, fn) => { listeners[type] = fn; } };
   // consolePatch 在 import 时捕获“原始”console：先换成探针，补丁版才不会把测试输出刷到终端。
   console.error = (...a) => { out.push(['error', a[0]]); };
-  console.warn = console.info = console.log = console.debug = () => {};
+  console.warn = console.info = console.log = () => {};
+  console.debug = rawDebugProbe;
   try {
     const patch = await load('../src/utils/consolePatch.ts');
     await fresh(null, async () => {
@@ -586,6 +598,27 @@ test('toast：带「进玩家提示」标记的码（SAV-003）按 toast 配置�
     log.setToastSink((level, message) => shown.push(message));
     try { quiet(() => log.logEvent({ code: 'LCQ-SAV-003' })); assert.deepEqual(shown, []); } finally { log.setToastSink(null); }
   });
+});
+
+test('consolePatch 登记原始 console.debug 为调试出口，consoleDebug 关时 debugLog 照常输出', async () => {
+  const saved = {};
+  for (const k of ['log', 'info', 'warn', 'debug', 'error', 'table', 'group', 'groupCollapsed', 'groupEnd']) saved[k] = console[k];
+  console.warn = console.info = console.log = console.error = () => {};
+  console.debug = rawDebugProbe;
+  const debugLog = await load('../src/modules/diagnostics/debugLog.ts');
+  const { debugLogger } = await load('../src/utils/debug.ts');
+  try {
+    await load('../src/utils/consolePatch.ts');
+    assert.equal(debugLogger.isConsoleDebugEnabled(), false, '玩家设置里 consoleDebug 关着');
+    await fresh({ debug: { categories: { ui: true } } }, async () => {
+      rawDebug.length = 0;
+      console.debug = () => {}; // 当前 console.debug 不输出（同 consoleDebug 关时的补丁版）；debugLog 不经它
+      debugLog.debugLog('ui', '面板打开', { panel: 'save', apiKey: 'sk-abcdef0123456789' });
+      debugLog.debugLog('save', '大类关着');
+      assert.deepEqual(rawDebug, [['[dbg:ui] 面板打开', { panel: 'save', apiKey: '[已脱敏]' }]], '经原始 console.debug 输出，不受 consoleDebug 隐藏');
+      assert.ok(!recent(500).some(e => e.code === 'LCQ-SYS-000'), '调试日志不记成 SYS-000');
+    });
+  } finally { Object.assign(console, saved); }
 });
 
 // ───────────── 模块边界 ─────────────

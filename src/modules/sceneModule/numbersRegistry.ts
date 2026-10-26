@@ -77,6 +77,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'judgement.dice.sides', kind: 'int', required: true, min: 2, section: 'combat' },
   { path: 'combat.baselineDc', kind: 'number', required: true, section: 'combat' },
   { path: 'tuning.timeoutMs', kind: 'int', required: true, min: 1, section: 'runtime' },
+  { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' },
   { path: 'affinity.range.min', kind: 'number', required: true, section: 'progress' },
   { path: 'affinity.range.max', kind: 'number', required: true, section: 'progress' },
   { path: 'affinity.tiers.nemesis', kind: 'tuple2', required: true, section: 'progress' },
