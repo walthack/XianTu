@@ -355,13 +355,13 @@ test('切关继承 line.* flags', async () => {
   const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
   const { save, rt, nextMod } = await buildIdentityTransitionSave();
   rt.flags['line.jin.outcome'] = 'resolved';
-  rt.flags['line.taiquan.outcome'] = 'imperfect';
+  rt.flags['line.taiquan.outcome'] = 'unresolved';
   rt.flags['lineage.note'] = '非 line 命名空间不继承';
   const result = transitionToNextScenarioStage(save, [nextMod]);
   assert.equal(result.ok, true, result.reason);
   const flags = result.saveData.世界.状态.剧本模组.flags;
   assert.equal(flags['line.jin.outcome'], 'resolved');
-  assert.equal(flags['line.taiquan.outcome'], 'imperfect');
+  assert.equal(flags['line.taiquan.outcome'], 'unresolved');
   assert.equal(flags['lineage.note'], undefined);
 });
 

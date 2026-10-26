@@ -201,7 +201,7 @@ test('模型 set flags.line.* 被拒', async () => {
   const commands = [
     { action: 'set', key: '世界.状态.剧本模组.flags.line.jin.outcome', value: 'resolved' },
     { action: 'set', key: '世界.状态.剧本模组.flags.line', value: { song: { outcome: 'resolved' } } },
-    { action: 'add', key: '世界.状态.剧本模组.flags.line.tang.outcome', value: 'imperfect' },
+    { action: 'add', key: '世界.状态.剧本模组.flags.line.tang.outcome', value: 'unresolved' },
     { action: 'set', key: '世界.状态.剧本模组.flags.lineage.note', value: '不是 line 命名空间' },
   ];
   const result = guardScenarioModCommands(save, commands);

@@ -1,12 +1,16 @@
 /**
  * 国家线收束档（身份账设计稿 2026-10-25 §3.2 / §3.3）：写进 flags 扁平键 line.<lineId>.outcome，不另加存档字段。
- * 档位集合与是否只写一次只读数值配置 story.lineOutcome.{tiers,writeOnce}；写入只由规则表驱动，按完成顺序幂等同步。
+ * 档位集合（resolved/unresolved；「没去」＝无收束记录，不是档位）、是否只写一次、失败是否结束游戏只读数值配置 story.lineOutcome.{tiers,writeOnce,failEndsGame}；写入只由规则表驱动，按完成顺序幂等同步。
  */
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { orderedDoneEventIds, playerLedgerRules, type PlayerLedgerRules } from './playerLedgerRules';
 import { logError } from '../diagnostics/log';
 
 export const lineOutcomeTiers = (): readonly string[] => GAME_NUMBERS.story.lineOutcome.tiers;
+
+/** 该国家线失败是否当场结束游戏（story.lineOutcome.failEndsGame，registry 保证 7 条线齐全）；非国家线 id 按默认 true。本函数只读配置，不接游戏结束流程。 */
+export const lineFailEndsGame = (lineId: string): boolean =>
+  (GAME_NUMBERS.story.lineOutcome.failEndsGame as Record<string, boolean | undefined>)[lineId] !== false;
 
 /** 国家线 flags 命名空间：收束档只有规则表这一个写入口（模型 set、任务线 setState 都不得写），切关时整段继承。 */
 export const LINE_FLAG_PREFIX = 'line.';

@@ -138,9 +138,9 @@ test('knows.player 只认 confirmed', async () => {
 test('line outcome 读扁平与嵌套 flags', async () => {
   const { evaluateLedgerCondition } = await modPromise;
   const flat = { flags: { 'line.song.outcome': 'resolved', line: { song: { outcome: 'unresolved' } } } };
-  const nested = { flags: { line: { jin: { outcome: 'imperfect' } } } };
+  const nested = { flags: { line: { jin: { outcome: 'unresolved' } } } };
   assert.equal(evaluateLedgerCondition({ path: 'line.song.outcome', operator: 'eq', value: 'resolved' }, flat), true);
-  assert.equal(evaluateLedgerCondition({ path: 'line.jin.outcome', operator: 'eq', value: 'imperfect' }, nested), true);
+  assert.equal(evaluateLedgerCondition({ path: 'line.jin.outcome', operator: 'eq', value: 'unresolved' }, nested), true);
   assert.equal(evaluateLedgerCondition({ path: 'line.jin.outcome', operator: 'exists' }, nested), true);
   assert.equal(evaluateLedgerCondition({ path: 'line.han.outcome', operator: 'exists' }, nested), false);
   assert.equal(evaluateLedgerCondition({ path: 'line.jin', operator: 'exists' }, nested), false);

@@ -94,7 +94,7 @@ test('story.lineOutcome.tiers 必填非空', async () => {
   const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
   const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
   const tree = structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
-  assert.deepEqual(tree.story.lineOutcome.tiers, ['resolved', 'imperfect', 'unresolved']);
+  assert.deepEqual(tree.story.lineOutcome.tiers, ['resolved', 'unresolved']);
   assert.equal(tree.story.lineOutcome.writeOnce, true);
   assert.ok(tree.story.identity.kinds.length > 0);
   delete tree.story.lineOutcome.tiers;
@@ -106,4 +106,35 @@ test('story.lineOutcome.tiers 必填非空', async () => {
   const before = [...numbers.GAME_NUMBERS.story.lineOutcome.tiers];
   assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { tiers: [] } } }), err => err.code === 'LCQ-NUM-008');
   assert.deepEqual(numbers.GAME_NUMBERS.story.lineOutcome.tiers, before);
+});
+
+test('story.lineOutcome.failEndsGame 键正好是 7 条国家线、值为 bool', async () => {
+  const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const lineIds = new Set(readJson('mod-kit/entity-catalog/index.json').entries.filter(e => e.kind === 'line').map(e => e.id));
+  for (const id of registry.NATION_LINE_IDS) assert.ok(lineIds.has(id), `实体索引缺国家线 ${id}`);
+  const fresh = () => structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  const base = fresh();
+  assert.deepEqual(Object.keys(base.story.lineOutcome.failEndsGame).sort(), [...registry.NATION_LINE_IDS].sort());
+  assert.ok(Object.values(base.story.lineOutcome.failEndsGame).every(v => v === true));
+  assert.deepEqual(registry.validateAgainstRegistry(base, 'cold'), []);
+  // 缺线
+  const missing = fresh();
+  delete missing.story.lineOutcome.failEndsGame.qin;
+  assert.ok(registry.validateAgainstRegistry(missing, 'cold').some(e => e === '缺字段：story.lineOutcome.failEndsGame.qin'));
+  // 多线
+  const extra = fresh();
+  extra.story.lineOutcome.failEndsGame.chu = true;
+  assert.ok(registry.validateAgainstRegistry(extra, 'cold').some(e => e === '未知国家线：story.lineOutcome.failEndsGame.chu'));
+  // 值不是 bool
+  const wrong = fresh();
+  wrong.story.lineOutcome.failEndsGame.song = 'yes';
+  assert.ok(registry.validateAgainstRegistry(wrong, 'cold').some(e => /failEndsGame\.song 须为 bool/.test(e)));
+  // 整段缺失
+  const absent = fresh();
+  delete absent.story.lineOutcome.failEndsGame;
+  assert.ok(registry.validateAgainstRegistry(absent, 'cold').some(e => e === '缺字段：story.lineOutcome.failEndsGame'));
+  // 热改加未知线被拒，原值不变
+  assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { failEndsGame: { chu: false } } } }), err => err.code === 'LCQ-NUM-002');
+  assert.equal('chu' in numbers.GAME_NUMBERS.story.lineOutcome.failEndsGame, false);
 });

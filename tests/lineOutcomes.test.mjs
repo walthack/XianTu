@@ -1,4 +1,4 @@
-// 国家线收束档 T1（身份账设计稿 2026-10-25 §3.3 / §6）：flags 键 line.<lineId>.outcome，档位与只写一次读数值配置。规则均为测试夹具。
+// 国家线收束档 T1（身份账设计稿 2026-10-25 §3.3 / §6）：flags 键 line.<lineId>.outcome，档位（两档）、只写一次、失败是否结束游戏读数值配置。规则均为测试夹具。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -26,11 +26,14 @@ test('收束事件写 line.<id>.outcome', async () => {
   const { syncLineOutcomes, lineOutcomeTiers, readLineOutcome } = await modPromise;
   const { GAME_NUMBERS } = await numbersPromise;
   assert.deepEqual([...lineOutcomeTiers()], GAME_NUMBERS.story.lineOutcome.tiers);
+  assert.deepEqual([...lineOutcomeTiers()], ['resolved', 'unresolved']);
   const runtime = { flags: {}, completedEventIds: ['e.song.end'] };
   assert.equal(syncLineOutcomes(runtime, { rules: rules([{ eventId: 'e.song.end', lineId: 'song', outcome: 'resolved' }, { eventId: 'e.qin.end', lineId: 'qin', outcome: 'unresolved' }]) }), 1);
   assert.equal(runtime.flags['line.song.outcome'], 'resolved');
   assert.equal('line.qin.outcome' in runtime.flags, false);
-  assert.equal(readLineOutcome({ line: { han: { outcome: 'imperfect' } } }, 'han'), 'imperfect');
+  assert.equal(readLineOutcome({ line: { han: { outcome: 'unresolved' } } }, 'han'), 'unresolved');
+  // 「没去」不是档位：无收束记录即 undefined
+  assert.equal(readLineOutcome({}, 'tang'), undefined);
   // 跨关：编年史里的收束事件同样入账；重复同步幂等
   // 编年史条目只认已知事件 id（实体索引 kind=event），故取真实 id
   const QIN_END = 'lcq.event.s02_06';
@@ -46,15 +49,15 @@ test('writeOnce 时后写不覆盖', async () => {
   const { GAME_NUMBERS } = await numbersPromise;
   assert.equal(GAME_NUMBERS.story.lineOutcome.writeOnce, true);
   const runtime = { flags: {}, completedEventIds: ['e.jin.fail', 'e.jin.rescue'] };
-  const table = rules([{ eventId: 'e.jin.fail', lineId: 'jin', outcome: 'imperfect' }, { eventId: 'e.jin.rescue', lineId: 'jin', outcome: 'resolved' }]);
+  const table = rules([{ eventId: 'e.jin.fail', lineId: 'jin', outcome: 'unresolved' }, { eventId: 'e.jin.rescue', lineId: 'jin', outcome: 'resolved' }]);
   await resetLog();
   const [changed, warnings] = await quiet(() => syncLineOutcomes(runtime, { rules: table }));
   assert.equal(changed, 1);
-  assert.equal(runtime.flags['line.jin.outcome'], 'imperfect');
+  assert.equal(runtime.flags['line.jin.outcome'], 'unresolved');
   assert.ok(warnings.some(w => /writeOnce/.test(w)));
   const [hit] = await logged('writeOnce');
   assert.deepEqual({ lineId: hit.detail.lineId, outcome: hit.detail.outcome, prior: hit.detail.prior, eventId: hit.detail.eventId, module: hit.module },
-    { lineId: 'jin', outcome: 'resolved', prior: 'imperfect', eventId: 'e.jin.rescue', module: 'lineOutcomes' });
+    { lineId: 'jin', outcome: 'resolved', prior: 'unresolved', eventId: 'e.jin.rescue', module: 'lineOutcomes' });
   // 已有嵌套写法的值也算已收束
   const nested = { line: { tang: { outcome: 'unresolved' } } };
   const [wrote] = await quiet(() => writeLineOutcome(nested, 'tang', 'resolved'));
@@ -76,23 +79,35 @@ test('outcome 不在 tiers 时拒写', async () => {
   assert.equal(hits[0].detail.outcome, 'triumph');
 });
 
-test('tiers 改为两档后旧三档值被校验拒绝', async () => {
+test('imperfect 不在 tiers 时拒写', async () => {
   const { syncLineOutcomes } = await modPromise;
   const { validatePlayerLedgerRules } = await rulesPromise;
-  const { GAME_NUMBERS, applyGameNumbers } = await numbersPromise;
-  const before = [...GAME_NUMBERS.story.lineOutcome.tiers];
+  const { GAME_NUMBERS } = await numbersPromise;
+  assert.equal(GAME_NUMBERS.story.lineOutcome.tiers.includes('imperfect'), false);
   const table = rules([{ eventId: 'lcq.event.charge_sudaji_fee', lineId: 'song', outcome: 'imperfect' }]);
-  const refs = { identities: [] };
-  assert.deepEqual(validatePlayerLedgerRules(table, refs), []);
-  applyGameNumbers({ story: { lineOutcome: { tiers: ['resolved', 'unresolved'] } } });
+  assert.ok(validatePlayerLedgerRules(table, { identities: [] }).some(e => /outcome 不在 story\.lineOutcome\.tiers：imperfect/.test(e)));
+  const runtime = { flags: {}, completedEventIds: ['lcq.event.charge_sudaji_fee'] };
+  await resetLog();
+  const [changed] = await quiet(() => syncLineOutcomes(runtime, { rules: table }));
+  assert.equal(changed, 0);
+  assert.equal('line.song.outcome' in runtime.flags, false);
+  const hits = await logged('tier');
+  assert.equal(hits.length, 1);
+  assert.equal(hits[0].detail.outcome, 'imperfect');
+});
+
+test('lineFailEndsGame 逐线读 failEndsGame，默认全 true', async () => {
+  const { lineFailEndsGame } = await modPromise;
+  const { GAME_NUMBERS, applyGameNumbers } = await numbersPromise;
+  const LINES = ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin', 'taiquan'];
+  assert.deepEqual(Object.keys(GAME_NUMBERS.story.lineOutcome.failEndsGame).sort(), [...LINES].sort());
+  for (const lineId of LINES) assert.equal(lineFailEndsGame(lineId), true, lineId);
+  applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: false } } } });
   try {
-    assert.ok(validatePlayerLedgerRules(table, refs).some(e => /outcome 不在 story\.lineOutcome\.tiers：imperfect/.test(e)));
-    const runtime = { flags: {}, completedEventIds: ['lcq.event.charge_sudaji_fee'] };
-    const [changed] = await quiet(() => syncLineOutcomes(runtime, { rules: table }));
-    assert.equal(changed, 0);
-    assert.equal('line.song.outcome' in runtime.flags, false);
+    assert.equal(lineFailEndsGame('han'), false);
+    assert.equal(lineFailEndsGame('jin'), true);
   } finally {
-    applyGameNumbers({ story: { lineOutcome: { tiers: before } } });
+    applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: true } } } });
   }
-  assert.deepEqual([...GAME_NUMBERS.story.lineOutcome.tiers], before);
+  assert.equal(lineFailEndsGame('han'), true);
 });

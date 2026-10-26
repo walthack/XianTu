@@ -14,7 +14,7 @@ const RULES = {
   version: 1,
   identityGrants: [{ eventId: JIN_INVEST, identityId: ZHUSHI }],
   identityRevokes: [],
-  lineOutcomes: [{ eventId: JIN_OTHER, lineId: 'jin', outcome: 'imperfect' }],
+  lineOutcomes: [{ eventId: JIN_OTHER, lineId: 'jin', outcome: 'unresolved' }],
 };
 
 /** 旧档：上一关的事件只留在编年史里（completedEventIds 已按本关重置）。 */
@@ -44,7 +44,7 @@ test('旧档缺 playerIdentities 读档回填并标 backfilled', () => withRules
   assert.equal(record.acquiredAtEventId, JIN_INVEST);
   assert.equal(record.backfilled, true);
   assert.equal(record.history[0].backfilled, true);
-  assert.equal(rt.flags['line.jin.outcome'], 'imperfect');
+  assert.equal(rt.flags['line.jin.outcome'], 'unresolved');
   // 幂等：再读一次不追加
   assert.equal(applyLoadRepairs(save).identitiesBackfilled, 0);
   assert.equal(rt.playerIdentities[ZHUSHI].history.length, 1);

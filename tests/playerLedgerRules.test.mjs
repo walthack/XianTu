@@ -26,7 +26,7 @@ test('未知 identityId/eventId/lineId 报错', async () => {
   assert.deepEqual(validatePlayerLedgerRules(rules({
     identityGrants: [{ eventId: EVENT, identityId: ZHUSHI.id }, { eventId: EVENT_2, identityId: ZHUSHI.id, whenHeld: 'redirect', redirectIdentityId: FENHAO.id }],
     identityRevokes: [{ eventId: EVENT_2, identityId: FENHAO.id }],
-    lineOutcomes: [{ eventId: EVENT, lineId: 'nanhuang', outcome: 'imperfect' }],
+    lineOutcomes: [{ eventId: EVENT, lineId: 'nanhuang', outcome: 'unresolved' }],
   }), refs), []);
   const errors = validatePlayerLedgerRules(rules({
     identityGrants: [

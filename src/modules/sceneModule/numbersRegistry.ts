@@ -59,6 +59,9 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'crafting', kind: 'object', section: 'progress' },
 ];
 
+/** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。 */
+export const NATION_LINE_IDS: readonly string[] = ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin', 'taiquan'];
+
 /** 高频叶子：挡住缺字段 / 类型 / 粗范围；其余叶子仍靠补丁 typeof 对齐默认。 */
 export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.trades', kind: 'array', required: true, section: 'progress' },
@@ -66,6 +69,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.stepScene.minutesPerBeat', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.lineOutcome.tiers', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineOutcome.writeOnce', kind: 'bool', required: true, section: 'progress' },
+  { path: 'story.lineOutcome.failEndsGame', kind: 'object', required: true, section: 'progress' },
   { path: 'story.identity.kinds', kind: 'array', required: true, section: 'progress' },
   { path: 'lineBonds.majorResponse.delta', kind: 'number', required: true, min: 0, section: 'progress' },
   { path: 'lineBonds.majorResponse.salienceFloor', kind: 'number', required: true, min: 0, section: 'progress' },
@@ -183,6 +187,17 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
     if (!(rangeMin < rangeMax)) errors.push('affinity.range.min 须小于 max');
     if (Array.isArray(nemesis) && nemesis[0] !== rangeMin) errors.push('affinity.range.min 须等于 tiers.nemesis[0]');
     if (Array.isArray(sworn) && sworn[1] !== rangeMax) errors.push('affinity.range.max 须等于 tiers.sworn[1]');
+  }
+
+  // 交叉：失败是否结束游戏须逐线配置，键正好是 7 条国家线，值为 bool
+  const failEndsGame = atPath(tree, 'story.lineOutcome.failEndsGame');
+  if (kindOk(failEndsGame, 'object')) {
+    const table = failEndsGame as Record<string, unknown>;
+    for (const lineId of NATION_LINE_IDS) if (!(lineId in table)) errors.push(`缺字段：story.lineOutcome.failEndsGame.${lineId}`);
+    for (const [lineId, value] of Object.entries(table)) {
+      if (!NATION_LINE_IDS.includes(lineId)) errors.push(`未知国家线：story.lineOutcome.failEndsGame.${lineId}`);
+      else if (typeof value !== 'boolean') errors.push(`字段类型无效：story.lineOutcome.failEndsGame.${lineId} 须为 bool`);
+    }
   }
 
   return errors;
