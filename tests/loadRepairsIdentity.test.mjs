@@ -1,4 +1,5 @@
 // 身份账 T3（身份账设计稿 2026-10-25 §5）：读档回填身份账与收束档，只追加不覆盖，新写的标 backfilled。规则均为测试夹具。
+// 道具来路 T6（补充设计稿 2026-10-26 §2.3）：返回值新增 itemReceiptsBackfilled。
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
@@ -48,6 +49,9 @@ test('旧档缺 playerIdentities 读档回填并标 backfilled', () => withRules
   // 幂等：再读一次不追加
   assert.equal(applyLoadRepairs(save).identitiesBackfilled, 0);
   assert.equal(rt.playerIdentities[ZHUSHI].history.length, 1);
+  // 规则表没有道具组：不回填道具回执
+  assert.equal(repairs.itemReceiptsBackfilled, 0);
+  assert.equal(rt.inventoryTransferReceipts, undefined);
   // 没有进度的新档不建字段
   const fresh = oldSave({ chronicle: [] });
   assert.equal(applyLoadRepairs(fresh).identitiesBackfilled, 0);
@@ -77,8 +81,26 @@ test('读档调用链包含身份同步', () => {
   assert.match(store, /applyLoadRepairs\(targetSlot\.存档数据\)/);
   const repairs = readFileSync(new URL('../src/modules/scenarioMods/loadRepairs.ts', import.meta.url), 'utf8');
   assert.match(repairs, /syncPlayerLedgers\(rt, \{ backfilled: true \}\)/);
+  assert.match(repairs, /backfillItemReceipts\(save, rt\)/);
   // 规则表为空（仓库首版）时读档不建字段、不报错
   const save = oldSave();
   assert.equal(applyLoadRepairs(save).identitiesBackfilled, 0);
   assert.equal(save.世界.状态.剧本模组.playerIdentities, undefined);
+});
+
+test('itemReceiptsBackfilled：背包现存的唯一道具补回填回执，与身份回填并列返回', () => {
+  const ITEM = 'lyg.item.np044';
+  setPlayerLedgerRulesForTest({ ...RULES, itemGroups: [{ id: 'liuchao.itemgroup.yinyang_fish', itemIds: [ITEM, 'lyl.item.np036'] }] });
+  try {
+    const save = oldSave();
+    save.角色 = { 背包: { 物品: { [ITEM]: { 物品ID: ITEM, 名称: '阴阳鱼', 数量: 1 } } } };
+    const repairs = applyLoadRepairs(save);
+    assert.deepEqual([repairs.identitiesBackfilled, repairs.itemReceiptsBackfilled], [2, 1]);
+    assert.deepEqual(save.世界.状态.剧本模组.inventoryTransferReceipts.map(r => [r.transferId, r.sourceEventId]), [[`backfill:${ITEM}`, 'backfill']]);
+    assert.deepEqual(applyLoadRepairs(save).itemReceiptsBackfilled, 0, '幂等');
+    // 没有剧本模组时字段照样在
+    assert.deepEqual(applyLoadRepairs({}), { injuriesMigrated: false, storyStatuses: [], identitiesBackfilled: 0, itemReceiptsBackfilled: 0 });
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+  }
 });

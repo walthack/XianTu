@@ -1,6 +1,6 @@
 /**
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
- * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，以及只留位的 party.*。
+ * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），以及只留位的 party.*。
  * 只读不写；读不到的账本一律当空。不是本模块的前缀交还原 flags 逻辑。
  * narrativeVariants.when 走 evaluateLedgerCondition；activation/completion 等由 runtime.ts 的 resolveConditionValue 委托 resolveLedgerPath（T4，
  * 用户 2026-10-25 23:24 批），那里 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用（validator 拦）。
@@ -10,14 +10,15 @@ import { orderedDoneEventIds } from './playerLedgerRules';
 import type { PlayerIdentityLedger } from './identityLedger';
 import { readLineOutcome } from './lineOutcomes';
 import { isAcquaintanceKind, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
+import { firstItemReceipt } from './itemProvenance';
 
-export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'party';
+export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party';
 
 export interface ParsedLedgerPath {
   kind: LedgerPathKind;
-  /** identityId / eventId / lineId / characterId / propositionId；格式不对时为空串 */
+  /** identityId / eventId / lineId / characterId / propositionId / 道具组 id 或 itemId；格式不对时为空串 */
   id: string;
-  /** 仅 identity：active＝是否持有，status / from＝子读取 */
+  /** identity：active＝是否持有，status / from＝子读取；item：active＝是否得过，from＝最早回执的 sourceEventId */
   field?: 'active' | 'status' | 'from';
   /** 前缀属于本模块但形状不对（如 line.<id> 缺 .outcome、knows.<非 player>） */
   invalid?: boolean;
@@ -30,8 +31,17 @@ export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioCondition
   line: ['eq', 'neq', 'exists'],
   acq: ['eq', 'neq', 'exists', 'gt', 'gte', 'lt', 'lte'],
   knows: ['eq', 'neq'],
+  item: ['eq', 'neq', 'exists'],
   party: [],
 };
+
+/** item.<id>（是否得过）恒为 boolean，只有 eq / neq；exists 只给 item.<id>.from。 */
+const ITEM_OBTAINED_OPERATORS: readonly ScenarioConditionOperator[] = ['eq', 'neq'];
+
+/** 该路径实际可用的 operator（validator 与求值共用）。 */
+export function ledgerOperatorsOf(parsed: ParsedLedgerPath): readonly ScenarioConditionOperator[] {
+  return parsed.kind === 'item' && parsed.field !== 'from' ? ITEM_OBTAINED_OPERATORS : LEDGER_OPERATORS[parsed.kind];
+}
 
 const RANK_OPERATORS = new Set<ScenarioConditionOperator>(['gt', 'gte', 'lt', 'lte']);
 
@@ -56,6 +66,10 @@ export function parseLedgerPath(path: string): ParsedLedgerPath | undefined {
   if (path.startsWith('acq.')) return { kind: 'acq', id: rest('acq.') };
   if (path.startsWith('knows.')) {
     return path.startsWith('knows.player.') ? { kind: 'knows', id: rest('knows.player.') } : { kind: 'knows', id: '', invalid: true };
+  }
+  if (path.startsWith('item.')) {
+    const tail = rest('item.');
+    return tail.endsWith('.from') ? { kind: 'item', id: tail.slice(0, -'.from'.length), field: 'from' } : { kind: 'item', id: tail, field: 'active' };
   }
   if (path.startsWith('party.')) return { kind: 'party', id: rest('party.') };
   return undefined;
@@ -104,6 +118,11 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown): unknown {
     case 'knows':
       return Object.values(asRecord<NonNullable<LedgerRuntime['playerKnowledge']>>(rt.playerKnowledge) || {})
         .some(fact => fact?.status === 'confirmed' && (fact.propositionId === parsed.id || fact.factId === parsed.id));
+    case 'item': {
+      // 只看回执（含读档回填）；没得过：item.<id> 为 false，.from 为 undefined
+      const receipt = firstItemReceipt(runtime, parsed.id);
+      return parsed.field === 'from' ? receipt?.sourceEventId : receipt !== undefined;
+    }
     case 'party':
       return undefined;
   }
@@ -124,7 +143,7 @@ export function resolveLedgerPath(path: string, runtime: unknown): { handled: bo
 export function evaluateLedgerCondition(condition: ScenarioCondition, runtime?: unknown): boolean | undefined {
   const parsed = parseLedgerPath(condition?.path);
   if (!parsed) return undefined;
-  if (!runtime || parsed.invalid || !parsed.id || !LEDGER_OPERATORS[parsed.kind].includes(condition.operator)) return false;
+  if (!runtime || parsed.invalid || !parsed.id || !ledgerOperatorsOf(parsed).includes(condition.operator)) return false;
   const { value: actual, rankCompare } = resolveLedgerPath(condition.path, runtime);
   if (condition.operator === 'exists') return actual !== undefined;
   if (condition.operator === 'eq') return actual === condition.value;

@@ -1,4 +1,5 @@
 // 身份账 T2（身份账设计稿 2026-10-25 §4）：账本条件读取。done.* 以编年史为准，补本关 completedEventIds。
+// item.*（补充设计稿 2026-10-26 §2.4，T6）：只看回执，itemId 原样读；道具组展开见 itemProvenance.test.mjs。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -155,4 +156,27 @@ test('未知前缀返回 undefined', async () => {
   // party 留位：任何 operator 都不命中；不传 runtime 时账本路径不命中
   assert.equal(evaluateLedgerCondition({ path: 'party.liuchao.character.a', operator: 'neq', value: true }, runtime), false);
   assert.equal(evaluateLedgerCondition({ path: `done.${E1}`, operator: 'neq', value: true }), false);
+});
+
+test('item 读取只看回执：是否得过与最早来路', async () => {
+  const { evaluateLedgerCondition, resolveLedgerPath, parseLedgerPath, ledgerOperatorsOf } = await modPromise;
+  const ITEM = 'lcq.item.jin_nang';
+  const receipt = (transferId, sourceEventId) => ({ transferId, itemId: ITEM, itemName: '锦囊', quantity: 1, sourceEventId, actionId: 'take', outcome: 'success', settledAtTurn: 1 });
+  const runtime = { flags: {}, inventoryTransferReceipts: [receipt('a', E1), receipt('b', E2)] };
+  assert.deepEqual(parseLedgerPath(`item.${ITEM}`), { kind: 'item', id: ITEM, field: 'active' });
+  assert.deepEqual(parseLedgerPath(`item.${ITEM}.from`), { kind: 'item', id: ITEM, field: 'from' });
+  assert.deepEqual(ledgerOperatorsOf(parseLedgerPath(`item.${ITEM}`)), ['eq', 'neq']);
+  assert.deepEqual(ledgerOperatorsOf(parseLedgerPath(`item.${ITEM}.from`)), ['eq', 'neq', 'exists']);
+  assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}`, operator: 'eq', value: true }, runtime), true);
+  assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}.from`, operator: 'eq', value: E1 }, runtime), true, '取最早一条');
+  assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}.from`, operator: 'neq', value: E2 }, runtime), true);
+  // 没回执：false 而不是 undefined；背包现存不算（读取不看背包）
+  const none = { flags: {}, inventoryTransferReceipts: [] };
+  assert.deepEqual(resolveLedgerPath(`item.${ITEM}`, none), { handled: true, value: false });
+  assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}`, operator: 'neq', value: true }, { flags: {} }), true);
+  assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}.from`, operator: 'exists' }, none), false);
+  // item.<id> 恒为 boolean，exists 不支持；不传 runtime 不命中
+  assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}`, operator: 'exists' }, runtime), false);
+  assert.equal(evaluateLedgerCondition({ path: `item.${ITEM}`, operator: 'eq', value: true }), false);
+  assert.deepEqual(resolveLedgerPath('item.', runtime), { handled: true, value: undefined });
 });

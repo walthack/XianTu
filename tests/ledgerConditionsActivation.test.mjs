@@ -67,6 +67,11 @@ test('在队/知情不满足时节点不激活（锁节点）', async () => {
   assert.equal(check({ path: 'line.jin.outcome', operator: 'exists' }), false);
   assert.equal(check({ path: 'acq.character.wangzhe', operator: 'eq', value: 'encountered' }), true);
   assert.equal(check({ path: `done.${EVENT}`, operator: 'eq', value: false }), true);
+  // 道具来路（补充设计稿 2026-10-26 §2.4，T6）：只看回执
+  assert.equal(check({ path: 'item.item.thunderblade', operator: 'eq', value: true }), false);
+  runtime.inventoryTransferReceipts = [{ transferId: 't.blade', itemId: 'item.thunderblade', itemName: '雷刀', quantity: 1, sourceEventId: EVENT, actionId: 'take', outcome: 'success', settledAtTurn: 1 }];
+  assert.equal(check({ path: 'item.item.thunderblade', operator: 'eq', value: true }), true);
+  assert.equal(check({ path: 'item.item.thunderblade.from', operator: 'eq', value: EVENT }), true);
   // 非账本路径行为不变
   assert.equal(check({ path: 'flags.chapter.started', operator: 'eq', value: true }), true);
 });
@@ -81,6 +86,7 @@ test('analyzer 不把账本条件章节报为不可达', () => {
         // 纯账本激活：开局值静态不可知，当动态条件，算可达
         { id: 'ch.identity', activation: [{ path: 'identity.liuchao.identity.song.baochao_zhushi', operator: 'eq', value: true }], completion: [{ path: 'flags.ch1.done', operator: 'eq', value: true }] },
         { id: 'ch.knows', activation: [{ path: `knows.player.${SECRET}`, operator: 'eq', value: true }], completion: [{ path: 'flags.ch1.done', operator: 'eq', value: true }] },
+        { id: 'ch.item', activation: [{ path: 'item.item.thunderblade.from', operator: 'exists' }], completion: [{ path: 'flags.ch1.done', operator: 'eq', value: true }] },
         // 账本条件夹 flags 条件：flags 部分照旧由前一章的 completion 连上
         { id: 'ch.after', activation: [{ path: 'flags.ch1.done', operator: 'eq', value: true }, { path: `done.${EVENT}`, operator: 'eq', value: true }] },
       ],
@@ -96,4 +102,20 @@ test('analyzer 不把账本条件章节报为不可达', () => {
   // 只有账本激活的唯一章节也算有开局章
   const only = { scenario: { initialFlags: {}, events: [], chapters: [{ id: 'ch.only', activation: [{ path: 'line.song.outcome', operator: 'exists' }] }] } };
   assert.equal(analyzeScenarioMod(only).issues.some(issue => issue.code === 'no_initial_chapter'), false);
+});
+
+test('item 不满足时节点不激活，得过后激活', async () => {
+  const blade = { path: 'item.item.thunderblade', operator: 'eq', value: true };
+  const raw = await rawMod();
+  raw.scenario.events[0].conditions = [blade];
+  assert.deepEqual(validateScenarioMod(raw).issues, []);
+  let save = advance(await buildSave([blade]));
+  assert.equal(rt(save).activeEventIds.includes(EVENT), false, '没得过不激活');
+  // 背包现存但没回执：读取不看背包，仍不激活（旧档靠读档回填补回执）
+  save.角色.背包 = { 物品: { 'item.thunderblade': { 物品ID: 'item.thunderblade', 数量: 1 } } };
+  save = advance(save);
+  assert.equal(rt(save).activeEventIds.includes(EVENT), false);
+  rt(save).inventoryTransferReceipts = [{ transferId: 't.blade', itemId: 'item.thunderblade', itemName: '雷刀', quantity: 1, sourceEventId: 'loot:x', actionId: 'loot', outcome: 'success', settledAtTurn: 1 }];
+  save = advance(save);
+  assert.equal(rt(save).activeEventIds.includes(EVENT), true, '有回执后激活');
 });

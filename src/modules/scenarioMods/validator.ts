@@ -11,11 +11,11 @@ import { validateCharacterStats } from './characterStatsMerge';
 import { resolveReconcileBranchId } from './divergenceLedger';
 import { NPC_ACTION_LIBRARY } from './npcDecisionCore';
 import { effectProblems } from './effectTags';
-import { LEDGER_OPERATORS, parseLedgerPath, type ParsedLedgerPath } from './ledgerConditions';
+import { ledgerOperatorsOf, parseLedgerPath, type ParsedLedgerPath } from './ledgerConditions';
 import { PLAYER_IDENTITY_STATUSES } from './identityLedger';
 import { lineOutcomeTiers } from './lineOutcomes';
 import { isAcquaintanceKind } from './acquaintanceLedger';
-import { indexIds, knownEventIds, playerIdentityDefs } from './playerLedgerRules';
+import { indexIds, knownEventIds, playerIdentityDefs, playerLedgerRules } from './playerLedgerRules';
 
 export interface ScenarioModValidationIssue {
   path: string;
@@ -1260,7 +1260,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRefs(entity.eventIds, eventIds, `${path}.eventIds`, 'event', add);
     });
   }
-  checkLedgerRefs(ledgerRefs, eventIds, characterIds, add);
+  checkLedgerRefs(ledgerRefs, eventIds, characterIds, itemIds, add);
 
   if (isRecord(rules) && Array.isArray(rules.contentAccess)) {
     const contentIds = new Set([...skillIds, ...techniqueIds, ...itemIds]);
@@ -2336,7 +2336,7 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     add(`${itemPath}.path`, 'reserved_path', 'party.* is reserved; its data source is not defined yet.');
     return;
   }
-  if (!LEDGER_OPERATORS[parsed.kind].includes(condition.operator)) {
+  if (!ledgerOperatorsOf(parsed).includes(condition.operator)) {
     add(`${itemPath}.operator`, 'invalid_enum', `Operator "${String(condition.operator)}" is not supported for ${parsed.kind}.* paths.`);
     return;
   }
@@ -2349,24 +2349,31 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     const ok = parsed.kind === 'acq' ? isAcquaintanceKind(value)
       : parsed.kind === 'line' ? lineOutcomeTiers().includes(value as string)
         : parsed.kind === 'identity' && parsed.field === 'status' ? (PLAYER_IDENTITY_STATUSES as readonly unknown[]).includes(value)
-          : parsed.kind === 'identity' && parsed.field === 'from' ? typeof value === 'string' && value.length > 0
+          : (parsed.kind === 'identity' || parsed.kind === 'item') && parsed.field === 'from' ? typeof value === 'string' && value.length > 0
             : typeof value === 'boolean';
     if (!ok) add(`${itemPath}.value`, 'invalid_value', `Invalid comparison value for ${parsed.kind}.* path.`);
   }
   ledger.refs.push({ parsed, path: `${itemPath}.path` });
 }
 
-/** 账本路径引用的 id 须存在：事件＝本 mod ∪ 实体索引；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引。 */
-function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, characterIds: Set<string>, add: AddIssue): void {
+/**
+ * 账本路径引用的 id 须存在：事件＝本 mod ∪ 实体索引；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引；
+ * 道具＝规则表 itemGroups 的组 id ∪ 本 mod 物品 ∪ 实体索引 kind=item。
+ */
+function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, characterIds: Set<string>, itemIds: Set<string>, add: AddIssue): void {
   if (!refs.length) return;
   const identityIds = new Set(playerIdentityDefs().map(def => def.id));
   const lineIds = indexIds('line');
+  const hasItemRefs = refs.some(ref => ref.parsed.kind === 'item');
+  const itemGroupIds = new Set(hasItemRefs ? (playerLedgerRules().itemGroups ?? []).map(group => group.id) : []);
+  const indexItemIds = hasItemRefs ? indexIds('item') : new Set<string>();
   for (const { parsed, path } of refs) {
     const { kind, id } = parsed;
     if (kind === 'done' && !eventIds.has(id) && !knownEventIds().has(id)) add(path, 'missing_reference', `Unknown event id "${id}".`);
     if (kind === 'identity' && !identityIds.has(id)) add(path, 'missing_reference', `Unknown identity id "${id}".`);
     if (kind === 'line' && !lineIds.has(id)) add(path, 'missing_reference', `Unknown line id "${id}".`);
     if (kind === 'acq' && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
+    if (kind === 'item' && !itemGroupIds.has(id) && !itemIds.has(id) && !indexItemIds.has(id)) add(path, 'missing_reference', `Unknown item or item group id "${id}".`);
   }
 }
 

@@ -1,5 +1,6 @@
 // 道具来路去重 T5 写入侧（身份账补充设计稿 2026-10-26 §2.3 / §2.8）：唯一道具组得过就不再发（口径 story.itemProvenance.dedupeBy），
 // 改发带 :redirect，判断出错照发并记 LCQ-SAV-025。道具组均为测试夹具（setPlayerLedgerRulesForTest），仓库规则表首版为空。
+// T6 读取侧与旧档窄回填（§2.3 / §2.4 / §6 Q5）：item.<g>[.from] 只看回执；读档把背包现存、没回执的唯一道具补成回填回执；done.* 不推断回填。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -13,7 +14,10 @@ const loaded = (async () => {
   const contracts = await loadTs('../src/modules/scenarioMods/fixedInventoryContracts.ts');
   const log = await loadTs('../src/modules/diagnostics/log.ts');
   const store = await loadTs('../src/modules/diagnostics/store.ts');
-  return { numbers, rules, provenance, inventory, contracts, log, store };
+  const ledger = await loadTs('../src/modules/scenarioMods/ledgerConditions.ts');
+  const repairs = await loadTs('../src/modules/scenarioMods/loadRepairs.ts');
+  const runtime = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  return { numbers, rules, provenance, inventory, contracts, log, store, ledger, repairs, runtime };
 })();
 
 /** SAV-025 须带 detail.reason 写持久日志（recent 新的在前） */
@@ -226,5 +230,153 @@ test('跳过的物品不进 AIBS 授权清单（buildItemReferenceContext 入参
     assert.deepEqual(context.authorizedGrantIds, ['test.item.plain']);
     assert.deepEqual(context.authorizedGrantNames, ['寻常干粮']);
     assert.equal(context.authorizedGrantIds.includes(YY_LYL), false);
+  });
+});
+
+test('item.<g> 与 item.<g>.from 读取', async () => {
+  const { inventory, ledger, provenance } = await loaded;
+  await withRules([yyGroup()], () => {
+    const s = save();
+    const rt = rtOf(s);
+    const read = (path, operator = 'eq', value) => ledger.evaluateLedgerCondition({ path, operator, ...(operator === 'exists' ? {} : { value }) }, rt);
+    // 没得过：item.<g> 为 false（不是 undefined），.from 不存在
+    assert.deepEqual(ledger.parseLedgerPath(`item.${GROUP}.from`), { kind: 'item', id: GROUP, field: 'from' });
+    assert.deepEqual(ledger.resolveLedgerPath(`item.${GROUP}`, rt), { handled: true, value: false });
+    assert.equal(read(`item.${GROUP}`, 'eq', false), true);
+    assert.equal(read(`item.${GROUP}.from`, 'exists'), false);
+    // 读取不看背包：只有背包现存、没有回执时仍为 false（旧档靠读档回填补齐）
+    s.角色.背包.物品[YY_LYG] = { 物品ID: YY_LYG, 名称: '阴阳鱼', 数量: 1 };
+    assert.equal(read(`item.${GROUP}`, 'eq', true), false);
+    delete s.角色.背包.物品[YY_LYG];
+
+    inventory.settleScenarioInventoryTransfers(s, rt, grant('loot.yy', YY_LYL), src('loot:lyl.cave'));
+    inventory.settleScenarioInventoryTransfers(s, rt, grant('e.food', 'test.item.plain'), src('e.food'));
+    // groupId 展开成组内全部 itemId；itemId 只读自己，不并入所属组
+    assert.equal(read(`item.${GROUP}`, 'eq', true), true);
+    assert.equal(read(`item.${GROUP}`, 'neq', true), false);
+    assert.equal(read(`item.${YY_LYL}`, 'eq', true), true);
+    assert.equal(read(`item.${YY_LYG}`, 'eq', true), false);
+    assert.equal(read('item.test.item.plain', 'eq', true), true);
+    // .from＝最早一条回执的 sourceEventId（搜刮为 loot:*）
+    assert.equal(read(`item.${GROUP}.from`, 'eq', 'loot:lyl.cave'), true);
+    assert.equal(read(`item.${GROUP}.from`, 'neq', 'e.lyg'), true);
+    assert.equal(read(`item.${GROUP}.from`, 'exists'), true);
+    assert.equal(provenance.firstItemReceipt(rt, GROUP).transferId, 'loot.yy');
+    // item.<g> 恒为 boolean，exists 不支持（不命中）
+    assert.equal(read(`item.${GROUP}`, 'exists'), false);
+    // 回填回执的来路读作 backfill
+    const old = save();
+    old.角色.背包.物品[YY_LYG] = { 物品ID: YY_LYG, 名称: '阴阳鱼', 数量: 1 };
+    provenance.backfillItemReceipts(old, rtOf(old));
+    assert.equal(ledger.evaluateLedgerCondition({ path: `item.${GROUP}.from`, operator: 'eq', value: provenance.BACKFILL_SOURCE }, rtOf(old)), true);
+  });
+});
+
+test('读取时规则表抛错按 itemId 原样读并只记一次 SAV-025 check_failed', async () => {
+  const { rules, ledger, log } = await loaded;
+  rules.setPlayerLedgerRulesForTest({ ...table([]), get itemGroups() { throw new Error('规则表坏了'); } });
+  try {
+    await log.resetLogState();
+    const rt = { inventoryTransferReceipts: [{ transferId: 't', itemId: YY_LYG, sourceEventId: 'e.lyg' }] };
+    const [values] = await quiet(() => [
+      ledger.resolveLedgerPath(`item.${GROUP}`, rt).value,
+      ledger.resolveLedgerPath(`item.${YY_LYG}.from`, rt).value,
+      ledger.resolveLedgerPath(`item.${GROUP}`, rt).value,
+    ]);
+    assert.deepEqual(values, [false, 'e.lyg', false]);
+    const hits = await logged('check_failed');
+    assert.equal(hits.length, 1);
+    assert.equal(hits[0].detail.phase, 'read');
+    assert.equal(hits[0].module, 'itemProvenance');
+  } finally {
+    rules.setPlayerLedgerRulesForTest(undefined);
+  }
+});
+
+test('读档：背包持有但无回执的组成员补回填回执且幂等', async () => {
+  const { repairs, inventory, provenance } = await loaded;
+  await withRules([yyGroup()], () => {
+    const s = save();
+    const rt = rtOf(s);
+    rt.worldTurn = 7;
+    s.角色.背包.物品[YY_LYG] = { 物品ID: YY_LYG, 名称: '阴阳鱼', 数量: 1 };
+    s.角色.背包.物品['test.item.plain'] = { 物品ID: 'test.item.plain', 名称: '寻常干粮', 数量: 3 };
+    const first = repairs.applyLoadRepairs(s);
+    assert.equal(first.itemReceiptsBackfilled, 1, '只回填唯一道具组成员，不入组的不动');
+    assert.deepEqual(rt.inventoryTransferReceipts, [{
+      transferId: `backfill:${YY_LYG}`, itemId: YY_LYG, itemName: '阴阳鱼', quantity: 1,
+      sourceEventId: 'backfill', actionId: 'backfill', outcome: 'success', settledAtTurn: 7,
+    }]);
+    // 幂等：再读档不追加；背包与 done.* 均不动
+    assert.equal(repairs.applyLoadRepairs(s).itemReceiptsBackfilled, 0);
+    assert.equal(rt.inventoryTransferReceipts.length, 1);
+    assert.equal(s.角色.背包.物品[YY_LYG].数量, 1);
+    assert.equal(rt.completedEventIds, undefined);
+    assert.equal(rt.chronicle, undefined);
+    // 回填后写入侧按回执跳过同组异书 id，来路为 backfill
+    assert.deepEqual(provenance.itemGrantVerdict(s, rt, YY_LYL), { action: 'skip', groupId: GROUP, firstFrom: 'backfill' });
+    assert.deepEqual(inventory.settleScenarioInventoryTransfers(s, rt, grant('e.lyl.yy', YY_LYL), src('e.lyl')), []);
+
+    // 已有回执的成员不回填；数量为 0 的不回填
+    const held = save();
+    inventory.settleScenarioInventoryTransfers(held, rtOf(held), grant('e.lyg.yy', YY_LYG), src('e.lyg'));
+    held.角色.背包.物品[YY_LYL] = { 物品ID: YY_LYL, 数量: 0 };
+    assert.equal(repairs.applyLoadRepairs(held).itemReceiptsBackfilled, 0);
+    assert.deepEqual(rtOf(held).inventoryTransferReceipts.map(r => r.transferId), ['e.lyg.yy']);
+  });
+  // 规则表为空（仓库首版）时不建字段
+  const fresh = save();
+  delete rtOf(fresh).inventoryTransferReceipts;
+  fresh.角色.背包.物品[YY_LYG] = { 物品ID: YY_LYG, 数量: 1 };
+  assert.equal(repairs.applyLoadRepairs(fresh).itemReceiptsBackfilled, 0);
+  assert.equal(rtOf(fresh).inventoryTransferReceipts, undefined);
+});
+
+test('读档回填失败记 SAV-025 backfill_failed，不抛、不写半截', async () => {
+  const { repairs, log } = await loaded;
+  await withRules([yyGroup()], async () => {
+    await log.resetLogState();
+    const s = save();
+    s.角色.背包.物品[YY_LYG] = { 物品ID: YY_LYG, 数量: 1 };
+    rtOf(s).inventoryTransferReceipts = { broken: true };
+    const [result] = await quiet(() => repairs.applyLoadRepairs(s));
+    assert.equal(result.itemReceiptsBackfilled, 0);
+    assert.deepEqual(rtOf(s).inventoryTransferReceipts, { broken: true });
+    const [hit] = await logged('backfill_failed');
+    assert.equal(hit.module, 'itemProvenance');
+    assert.equal(hit.level, 'warn');
+  });
+});
+
+test('Q5：done.* 不推断回填，非首关且编年史无事件条目时只打调试日志', async () => {
+  const { provenance, ledger, repairs } = await loaded;
+  const rt = { modId: 'lcq.stage_05', flags: {}, completedEventIds: [], chronicle: [{ id: 'chronicle.stage.lcq.stage_04.lcq.stage_05', type: 'stage', stageId: 'lcq.stage_04', sequence: 1 }] };
+  assert.equal(provenance.noteChronicleGap(rt), true);
+  assert.equal(provenance.noteChronicleGap({ ...rt, modId: 'lcq.stage_01' }), false, '首关不算缺口');
+  assert.equal(provenance.noteChronicleGap({ ...rt, chronicle: [{ id: 'chronicle.lcq.stage_04.lcq.event.s02_01', type: 'event', stageId: 'lcq.stage_04', sequence: 1 }] }), false);
+  const s = { 角色: { 背包: { 物品: {} } }, 世界: { 状态: { 剧本模组: structuredClone(rt) } } };
+  repairs.applyLoadRepairs(s);
+  assert.deepEqual(rtOf(s).completedEventIds, [], '不按关卡顺序推断 done.*');
+  assert.equal(ledger.evaluateLedgerCondition({ path: 'done.lcq.event.s02_01', operator: 'eq', value: true }, rtOf(s)), false);
+});
+
+test('回填回执不影响锦囊 transferId 判断', async () => {
+  const { provenance, runtime } = await loaded;
+  const JIN_NANG = 'lcq.item.jin_nang';
+  await withRules([{ id: 'liuchao.itemgroup.jin_nang', itemIds: [JIN_NANG] }], () => {
+    const s = save([{ id: JIN_NANG, name: '锦囊', description: '', type: 'other', grade: '凡品' }]);
+    s.角色.背包.物品[JIN_NANG] = { 物品ID: JIN_NANG, 名称: '锦囊', 数量: 1 };
+    rtOf(s).flags = {};
+    assert.equal(provenance.backfillItemReceipts(s, rtOf(s)), 1);
+    assert.equal(rtOf(s).inventoryTransferReceipts[0].transferId, `backfill:${JIN_NANG}`);
+    // 回填回执不是锦囊发放回执：重复领取判断照旧（无锦囊回执＝不拦）
+    assert.equal(runtime.previewRepeatSilkPouchClaimNarrative(s, { playerActionText: '我当面收下锦囊' }), '');
+    // 已有真锦囊回执的不回填，判断照旧命中
+    const real = save([{ id: JIN_NANG, name: '锦囊', description: '', type: 'other', grade: '凡品' }]);
+    real.角色.背包.物品[JIN_NANG] = { 物品ID: JIN_NANG, 名称: '锦囊', 数量: 1 };
+    rtOf(real).flags = {};
+    rtOf(real).inventoryTransferReceipts = [{ transferId: 'lcq.event.s02_01.inventory.jin_nang', itemId: JIN_NANG, itemName: '锦囊', quantity: 1, sourceEventId: 'lcq.event.s02_01', actionId: 'take', outcome: 'success', settledAtTurn: 1 }];
+    assert.equal(provenance.backfillItemReceipts(real, rtOf(real)), 0);
+    assert.notEqual(runtime.previewRepeatSilkPouchClaimNarrative(real, { playerActionText: '我当面收下锦囊' }), '');
   });
 });

@@ -239,6 +239,50 @@ test('acq 比较值不是合法 kind 时报错', async () => {
   assert.deepEqual(codeAt(3), ['reserved_path']);
 });
 
+test('item.* 账本路径：格式、operator、取值与引用（补充设计稿 2026-10-26 §2.4，T6）', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const ok = await loadFixture();
+  ok.scenario.events[0].conditions = [
+    { path: 'item.item.thunderblade', operator: 'eq', value: true },
+    { path: 'item.item.thunderblade.from', operator: 'neq', value: 'event.firstmeeting' },
+    { path: 'item.lcq.item.jin_nang.from', operator: 'exists' },
+  ];
+  assert.deepEqual(validateScenarioMod(ok).issues, []);
+
+  const fixture = await loadFixture();
+  fixture.scenario.events[0].narrativeVariants = [{
+    when: [
+      { path: 'item.item.thunderblade', operator: 'exists' },
+      { path: 'item.item.thunderblade', operator: 'eq', value: 'yes' },
+      { path: 'item.item.thunderblade.from', operator: 'eq', value: '' },
+      { path: 'item.item.nowhere', operator: 'eq', value: true },
+      { path: 'item.liuchao.itemgroup.nope.from', operator: 'exists' },
+      { path: 'item.item.thunderblade.from', operator: 'gte', value: 'x' },
+    ],
+    name: '得物',
+  }];
+  const result = validateScenarioMod(fixture);
+  const codeAt = index => result.issues.filter(issue => issue.path.startsWith(`scenario.events[0].narrativeVariants[0].when[${index}]`)).map(issue => issue.code);
+  assert.equal(result.valid, false);
+  assert.deepEqual(codeAt(0), ['invalid_enum'], 'item.<id> 恒为 boolean，exists 只给 .from');
+  assert.deepEqual(codeAt(1), ['invalid_value']);
+  assert.deepEqual(codeAt(2), ['invalid_value']);
+  assert.deepEqual(codeAt(3), ['missing_reference']);
+  assert.deepEqual(codeAt(4), ['missing_reference']);
+  assert.deepEqual(codeAt(5), ['invalid_enum']);
+
+  // 道具组 id 取规则表 itemGroups
+  const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  setPlayerLedgerRulesForTest({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [], itemGroups: [{ id: 'liuchao.itemgroup.blade', itemIds: ['item.thunderblade'] }] });
+  try {
+    const grouped = await loadFixture();
+    grouped.scenario.events[0].conditions = [{ path: 'item.liuchao.itemgroup.blade', operator: 'eq', value: true }];
+    assert.deepEqual(validateScenarioMod(grouped).issues, []);
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+  }
+});
+
 test('offscreenResolution requires safe flags and existing event references', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const raw = await loadFixture();
