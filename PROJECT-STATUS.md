@@ -1,11 +1,19 @@
 # 六朝仙途 · 当前项目状态
 
-更新时间：2026-10-26 02:00（Asia/Singapore，日更）；分支 `feat/fast-no-legacy`。
+更新时间：2026-10-27 02:00（Asia/Singapore，日更）；分支 `feat/fast-no-legacy`。
 **权威进度入口（双件）**：本文件（叙述与勾选总表）+ [docs/MASTER-GANTT.md](docs/MASTER-GANTT.md)（总甘特时间线）。勿另造第二份 status。  
 `_newbot_tmp/PROJECT-TRACKER.md` **非权威**（草稿勾选；权威=本文件+总甘特）。历史全文见 [PROJECT-STATUS-ARCHIVE-2026-10-12.md](PROJECT-STATUS-ARCHIVE-2026-10-12.md)。  
 **完整功能清单**：[docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)（总甘特的附属章节：功能分块、每块进行中／已完成／待办、各线程任务、全部已完成与全部待办汇总）。
 
 ## 一句话现状
+
+**2026-10-27 02:00 日更核对**：HEAD `5eb1bd1e`（10-27 01:57，已推送，与 `origin/feat/fast-no-legacy` 一致）。上轮日更（`2467618b`，10-26 01:58）漏记了它之前的 `b8179a83`（10-26 00:53）身份账 T3，本次补记；其后 21 个提交，分五组：
+① **身份账收尾**：`b8179a83` T3 接线（`runtime.ts` 方案 A 加 2 行，用户批）、`438c3af0` T4 账本条件锁节点（`runtime.ts` 加 3 行，用户 10-25 23:24 批；新码 LCQ-SAV-023／024）；设计稿 §11 Q1 已批、Q2 已定（7 条线并行）。`9046a1b2` 收束档改两档（resolved／unresolved，「没去」＝无记录）→ `98347a72` 国家线失败默认可继续（`story.lineOutcome.judgedLines` 6 条，`failEndsGame` 全 false），太泉不判档 → `5ae573c1` 太泉拒写收束档（SAV-024 notJudged）。
+② **日志大类开关**：`bfa95dbf` 设计稿＋总策划审核结论（§10 三项已定）→ `d2d5e2c6` T1 15 个大类与 `debugLog` 接口（默认全关，`diagnostics.enabled` 锁死 true）→ `0da1f28c` T2 裸 console 守卫与基线（1336 处）→ `f4dbbc74` T3 首批迁移样板（基线收紧到 1290）。
+③ **身份账补充**：`068d7e6b` 补充设计稿 → `68e3a71e` T5 道具去重写入侧（SAV-025，`dedupeBy`＝everObtained）→ `ed7e1536` T6 道具来路读取＋旧档窄回填 → `cc2bf488` T7 在队账（`party.*` 解除留位，SAV-026）→ `47c802a3` T8 进度期限 `deadline.*`（SAV-027）→ `8ffd4b9e` T9 身份注入提示词（裁定簿 #238）→ `aac29523` T10 期限到期接结局（`onDue.endingId`→gameOver，裁定簿 #239）。规则表 `player-ledger-rules.json` 各段与 `story.progressDeadline.limits` 仍为空，冰蛊期限的起点／刻度／解除事件与 due 待剧情策划给数（提交说明所记）。
+④ **冰蛊内容**：`9db6aa2c` 冰蛊期限与解蛊出路同步（裁定簿 #240：作废「只有殇侯能解」、取代「冰蛊不加致命期限」；E02 正文改通用「冰蛊发作而死」）→ `1c64ba90` E02 插图换成通用冰蛊发作画面（绘图重做）→ `6ae5306a` E02 阿姬曼路两句 `ajiman_path` 接入（新码 LCQ-PCK-004）。
+⑤ **太泉整线解锁**：`38b3a0b0` 设计稿（六阳 `minRealmLevel`=5＋至少收束 1 条线＋冰蛊已解；§14 待拍 7 项，其中 §14-3 不设 enforce、§14-4 已走进即解锁已由总策划定）→ `ec7b8949` T1 配置与登记 → `5eb1bd1e` T2 读数与合成判定（`lineUnlock.ts`，SAV-029；未接任何调用方）。T3–T7 未做；设计稿 §6 指出主角原著级数只到第 124 章，标准／严苛难度下六阳门会永久锁死，补录（T4）要用户批。
+冻结文件：只有 T3（2 行）、T4（3 行）动了 `runtime.ts` 并更新 `frozen-baseline.json`，均获批；AIBS 未动。**验收口径变化**：这批提交都写「`npm test` 失败 26 个，均为本机缺 `mod-kit/generated` 生成物的既有 ENOENT；`canon:build` 本机跑不起来未跑」，与 10-22 记的「全量 0 fail」不是同一台机器口径，生成物齐全的机器上是否全绿未记（文档待更新）。T9／T10 提交说明写「NAS 镜像路径本机不存在，裁定簿未 rsync」。8097 未见重建记录；仓库内无新真机报告；03 宋原稿仍未入库。
 
 **2026-10-26 02:00 日更核对**：自上轮日更 `b6de9e51`（10-25 01:55）起 3 个提交，HEAD `0aecc32b`（10-26 00:12，已推送，与 `origin/feat/fast-no-legacy` 一致）：`f5dd378b`（10-25 23:06）身份账 `playerIdentities` 设计稿（模块策划，[`docs/design/2026-10-25-身份账设计稿.md`](docs/design/2026-10-25-身份账设计稿.md)，纯文档）→ `c48479c0`（10-25 23:31）T1 配置与账本核心（`identityLedger.ts`／`lineOutcomes.ts`／`playerLedgerRules.ts`，`identities.json`／`player-ledger-rules.json` 首版空表，numbers 加 `story.lineOutcome.{tiers,writeOnce}`、`story.identity.kinds`，实体索引新增国家线 id `nanhuang`、`qin`；不碰冻结文件）→ `0aecc32b`（10-26 00:12）T2 读取接口 `ledgerConditions.ts`（`identity.`／`done.`／`line.*.outcome`／`acq.`／`knows.player.`，`party.*` 留位），`done.*` 以编年史 `chronicle.<stageId>.<eventId>` 为准、本关 `completedEventIds` 只补同回合空档、`travelLedger` 退出；validator 限账本路径只用于 `narrativeVariants.when`；不碰冻结文件。**未落**：T3 接线（写入挂点、跨关继承、防模型写、旧档回填；`runtime.ts` 方案 A 2 行）与可选 T4（`resolveConditionValue` 读账本以锁节点）——设计稿 §11 Q1 仍写「待总策划确认」，仓库内未见冻结改动获批记录（文档待更新）。设计稿 §11 Q3–Q6（收束三档或两档及是否可改写、`party.*` 在队口径、编年史上线前关卡的 `done.*` 回填、身份清单与规则表由谁何时给）仓库内未见答复，列入待拍。本次两个代码提交的测试结果提交说明未记；8097 未见重建记录；仓库内无新真机报告。03 宋原稿仍未入库。
 
@@ -45,7 +53,7 @@
 | 项 | 值 |
 |---|---|
 | 分支 | `feat/fast-no-legacy`（跟踪 `origin/feat/fast-no-legacy`） |
-| HEAD | `0aecc32b`（2026-10-26 00:12 Asia/Singapore；已推送）— 身份账 T2 读取接口；此前 `c48479c0` 身份账 T1、`f5dd378b` 身份账设计稿；此前 `efd8470f`（2026-10-22 22:59）— 国家线落档第二条晋；此前 `cb6cbe71` 收录晋线原稿、`4462bf8a` 补卡源（阿伶／红苗族长／武二郎摘要）、`70f0e020` 棘轮人名改 id、`8cded818` 国家线落档第一条五原序幕＋南荒、`df23350d` Sol 10-22 周审修复（LCQ-SAV-021／022、诗薇莫离开骰走 RNG、炼制按九级读配置、修既有红 `chapterIdentitySwitch`）；此前 `88e32415`（2026-10-20 08:48）— 试玩第三期 nanhuang-3、战斗伤害不保底（打到 0 倒下）、去掉低血重伤 -15、仙／神品队友评价信号、谢艺救治叙事锁（AIBS 获批一处）、RNG 游标放存档外；现包 `fa0d6e1ac595` 已含；此前 `80f0b25b` — 冰蛊进段／读档补挂＋通用战败标题；此前 `5837d7cb` — 同伴助战＋护人戏威胁进度；此前 `14c26037` — 08e0 真机复测修复（`51347d23` 挂伤按档/逐拍/标签/记忆说明＋交涉配置＋自由行动本地补票＋真机夹具；`213a0305` 拍数门禁 LCQ-SAV-020＋F13 同伴 woundRule；`14c26037` 级数以存档为准＋无名敌人种类预设＋受保护同行者不出防御行）；此前 `a0455dd4` — F02 卡点底座修复（`d2fa5334` 挂伤数据驱动＋外伤（重）＋休整解伤；`8c003b12` 幅度加价封顶；`9870e464` 偏离专名过滤；`b991f58a` 出生年；`a0455dd4` 无交涉提示＋单测）；此前 `69936fe3`（全长 `69936fe33c3ab1360ee6df76067fbe3798441230`）— 冻结门禁方案 A；前 tip `606a5f3c`；含 `3763e22e` 同拍、`ac32513d` 轻回执＋遇敌三步、`ee856f26`／`a1e9ba66`／`ae76909a` |
+| HEAD | `5eb1bd1e`（2026-10-27 01:57 Asia/Singapore；已推送）— 太泉解锁 T2；此前 `ec7b8949` 太泉解锁 T1、`38b3a0b0` 太泉解锁设计稿、`6ae5306a`／`1c64ba90`／`9db6aa2c` 冰蛊 E02 与解蛊出路、`aac29523`…`68e3a71e` 身份账 T10–T5、`068d7e6b` 补充设计稿、`f4dbbc74`／`0da1f28c`／`d2d5e2c6`／`bfa95dbf` 日志大类开关、`5ae573c1`／`98347a72`／`9046a1b2` 收束两档与失败可继续、`438c3af0` T4、`b8179a83` T3；此前 `0aecc32b`（2026-10-26 00:12）— 身份账 T2 读取接口；此前 `c48479c0` 身份账 T1、`f5dd378b` 身份账设计稿；此前 `efd8470f`（2026-10-22 22:59）— 国家线落档第二条晋；此前 `cb6cbe71` 收录晋线原稿、`4462bf8a` 补卡源（阿伶／红苗族长／武二郎摘要）、`70f0e020` 棘轮人名改 id、`8cded818` 国家线落档第一条五原序幕＋南荒、`df23350d` Sol 10-22 周审修复（LCQ-SAV-021／022、诗薇莫离开骰走 RNG、炼制按九级读配置、修既有红 `chapterIdentitySwitch`）；此前 `88e32415`（2026-10-20 08:48）— 试玩第三期 nanhuang-3、战斗伤害不保底（打到 0 倒下）、去掉低血重伤 -15、仙／神品队友评价信号、谢艺救治叙事锁（AIBS 获批一处）、RNG 游标放存档外；现包 `fa0d6e1ac595` 已含；此前 `80f0b25b` — 冰蛊进段／读档补挂＋通用战败标题；此前 `5837d7cb` — 同伴助战＋护人戏威胁进度；此前 `14c26037` — 08e0 真机复测修复（`51347d23` 挂伤按档/逐拍/标签/记忆说明＋交涉配置＋自由行动本地补票＋真机夹具；`213a0305` 拍数门禁 LCQ-SAV-020＋F13 同伴 woundRule；`14c26037` 级数以存档为准＋无名敌人种类预设＋受保护同行者不出防御行）；此前 `a0455dd4` — F02 卡点底座修复（`d2fa5334` 挂伤数据驱动＋外伤（重）＋休整解伤；`8c003b12` 幅度加价封顶；`9870e464` 偏离专名过滤；`b991f58a` 出生年；`a0455dd4` 无交涉提示＋单测）；此前 `69936fe3`（全长 `69936fe33c3ab1360ee6df76067fbe3798441230`）— 冻结门禁方案 A；前 tip `606a5f3c`；含 `3763e22e` 同拍、`ac32513d` 轻回执＋遇敌三步、`ee856f26`／`a1e9ba66`／`ae76909a` |
 | 8097 包 | `dev/combat-trial/dist/combat-trial.js` SHA-256 前缀 **`fa0d6e1ac595`**（全长 `fa0d6e1ac59585b9119fba0fe8616e0eacdd084faf431bf16568f8701e6394f1`，md5 `3935543dff54f494ea0f6815d9c75c89`，23228958 字节；2026-10-20 08:48:58 Asia/Singapore 写盘，按包内标记判定由 `88e32415` 构建（构建记录双件原未写，2026-10-21 日更补记）；127.0.0.1:8097 实际所发 SHA-256 与磁盘一致；PID 65144 未重启；旧包 `a21dea14434b` 备份于 `dev/combat-trial/dist-backup-20261020-084852/`；**尚无真机报告**（文档所记）。`88e32415` 之后的提交（含代码提交 `df23350d`／`70f0e020`／`4462bf8a`）双件未见重建记录，按文档未部署（文档待更新）。10-20 历次：`fee49d5f0124`→`6ccb30140eed`（03:22）→`1aae9ec5c97a`（05:19）→`5e8fb688b745`（07:16）→`a21dea14434b`（08:17）→`fa0d6e1ac595`（08:48）） |
 | numbers 三分包 | `mod-kit/numbers-combat.json` / `numbers-progress.json` / `numbers-runtime.json` + `NUMBERS-AUTHORITY.md`；生成物 `mod-kit/game-numbers.qingyu.json`；提交 **`3b8c1be2`** |
 | 最近合入基线 | diagnostics / drain / scene-danger / baseline-p0·p1·p2 已 merge；同拍闸 `3763e22e` → … → `606a5f3c`；**用户拍 A：冻结门禁基线已更新，全量冻结门禁应变绿**（不重启 8097） |
@@ -56,6 +64,12 @@
 
 > 甘特泳道「已完成」主线：diagnostics → P0 → P1 → P2 → numbers 三分包 → 真机 → **同拍闸** → **轻回执** → 回滚／补档／测修（日期见总甘特）。
 
+- [x] **身份账 T3／T4**（`b8179a83`／`438c3af0`，已推送）：T3 写入挂点、跨关继承、模型防写、读档回填、`identityGrant`／`identityRevoke` 处理器（`runtime.ts` 方案 A 加 2 行，用户批）；T4 激活／完成等条件读账本以锁节点（`runtime.ts` 加 3 行，用户 10-25 23:24 批），新码 LCQ-SAV-023／024；设计稿 §11 Q1 已批、Q2 已定
+- [x] **国家线收束两档＋失败可继续**（`9046a1b2`／`98347a72`／`5ae573c1`）：`story.lineOutcome.tiers`＝resolved／unresolved，「没去」由无记录判出；`judgedLines` 为南荒／晋／宋／汉／唐／秦 6 条，`failEndsGame` 全 false（失败默认可继续，逐线可改）；太泉不判档，写入即拒（SAV-024 notJudged）
+- [x] **日志大类开关 T1–T3**（设计稿 `bfa95dbf`＋总策划审核；`d2d5e2c6`／`0da1f28c`／`f4dbbc74`）：15 个大类、`debugLog`／`debugEnabled` 接口，配置 `diagnostics.debug.categories` 默认全关、`diagnostics.enabled` 锁死 true；裸 console 守卫只减不增（基线 1336→1290）；首批迁移样板；文档 `docs/DEBUG-LOG.md`
+- [x] **身份账补充 T5–T10**（设计稿 `068d7e6b`；`68e3a71e`／`ed7e1536`／`cc2bf488`／`47c802a3`／`8ffd4b9e`／`aac29523`）：道具去重写入（SAV-025）与来路读取＋旧档窄回填；在队账 `party.*`（SAV-026）；进度期限 `deadline.*` 现算＋终态锁存（SAV-027）；身份注入提示词（SAV-028，裁定簿 #238）；期限到期接结局 `onDue.endingId`（裁定簿 #239，冰蛊接 `lcq.ending.death.ajiman_bond`）。均不碰冻结文件；规则表各段首版仍为空
+- [x] **冰蛊期限与解蛊出路、E02 改写**（`9db6aa2c`／`1c64ba90`／`6ae5306a`）：裁定簿 #240；E02 正文改通用「冰蛊发作而死」，阿姬曼路两句按来路插入（LCQ-PCK-004）；E02 插图换成通用冰蛊发作画面
+- [x] **太泉整线解锁设计稿＋T1＋T2**（`38b3a0b0`／`ec7b8949`／`5eb1bd1e`）：配置 `story.lineUnlock.taiquan`（`minRealmLevel`=5、`minClosedLines`=1、`countTiers`、`requireDeadlinesCleared`=冰蛊）与登记；`lineUnlock.ts` 合成判定、缺项顺序、两版说法选择（SAV-029）；未接调用方
 - [x] **2026-10-22 Sol 周审修复**（`df23350d`，已推送；8097 未见重建记录）：依 `docs/handoffs/2026-10-22/2026-10-22-Sol周审修复单.md`——开战前存档失败记 LCQ-SAV-021（detail.contractId），rngSalt 读／写／取 localStorage 失败记 LCQ-SAV-022（写明退回 `crypto.getRandomValues` 还是 `Math.random`），见 `docs/ERROR-CODES.md`；诗薇莫离开判定改 `shiweimoLeaveRoll`（`dice.unitAt` 种子随存档，概率仍读 `story.shiweimo.leaveChanceOnShedanTruth`）；已核实六朝模式会用到 `craftingPrompts.ts`（炼制工坊），三段提示词品质上限按原著九级读 `crafting.levelTierCaps`（档位切分草案，待用户拍），成功率区间迁入配置并登记 numbersRegistry；既有红 `chapterIdentitySwitch` 已修（04b overlay 与 builtins 恢复「阁罗的随从，鬼王峒的人」，依裁定 #218 ⑥）；新测 `tests/solReview1022.test.mjs`。全量 2426 测试 0 fail（3 skipped）、37 关 schema PASS、冻结门禁 PASS
 - [x] **账本人名棘轮转绿**（`70f0e020`）：`shiweimoRescue.ts`／`secondaryLines.ts` 显示文案改由总表按 id 取名，`actorLevels.ts`／`freeAction/turn.ts`／`locationLoot.ts` 注释改写为 id；`validate-ledger-ratchet` PASS（1873 处存量），未重置基线
 - [x] **总表补卡进受控源**（`4462bf8a`）：阿伶、红苗族长两张卡与武二郎摘要（overrides 段）进 `mod-kit/character-registry-supplements.json`，`build-character-registry.mjs` 套用 overrides；`canon:build` 重建不再丢失 `a1e9ba66` 手工追加内容；总表文件本身未改
@@ -137,7 +151,9 @@
 
 ### In progress（进行中）
 
-- [ ] **身份账 T3 接线**（设计稿 §8：`runtime.ts` 方案 A 2 行或方案 B、`strictInitializer`／`canonGuard`／`loadRepairs`／`questLineEffects`／`questLines`）与**可选 T4**（激活／完成条件读账本，冻结 `runtime.ts:2443` 3 行）：T1／T2 已落，T3／T4 未见提交；冻结改动是否获批仓库内未记（文档待更新）
+- [ ] **太泉整线解锁 T3–T7**（设计稿 [`docs/design/2026-10-27-太泉解锁设计稿.md`](docs/design/2026-10-27-太泉解锁设计稿.md) §12）：T3 入口显示与两版说法（措辞待拍 §14-6）；T4 主角级数补录（正典数据，待用户批 §14-2）；T5 账本路径 `unlock.*`（方案 A／B 待拍 §14-1）；T6 硬门数据（依赖 T4、T5 与至少一条判档线的收束规则落地）；T7 文档同步。T1／T2 已落
+- [ ] **身份账规则表内容**：`player-ledger-rules.json`（身份、收束、道具组、在队、刻度、期限）与 `story.progressDeadline.limits` 首版均为空；冰蛊期限条目（起点、刻度、解除事件、due、`onDue`）待剧情策划给数后填（`aac29523`／`9db6aa2c` 提交说明）
+- [ ] **日志大类开关后续迁移**：T3 只迁了首批样板，存量裸 console 1290 处按设计稿 §6 逐步迁（不必一次迁完）
 
 - [ ] **同拍共历 · 收口观察**：同拍闸已落；是否还有拍间历法分叉边角，跟已批未落扫描一并收口（甘特「进行中」；底座）
 - [ ] **角色总表合入／补人**：总表补齐与合入进行中（对照约 333 条规模；甘特「进行中」；**内容**，可同步、略低）
@@ -177,7 +193,8 @@
 
 ### Waiting-user（待拍 / 待用户）
 
-- [ ] **身份账设计稿 §11**：Q1 冻结 `runtime.ts` 方案 A 与 T4 是否批（仓库未记，文档待更新）；Q2 国家线 id 已按新增 `nanhuang`／`qin` 落入 T1（`nh_`／`tq_` 前缀是否对齐未记）；Q3 收束三档／两档、`writeOnce`；Q4 `party.*` 在队口径；Q5 编年史上线前关卡 `done.*` 是否推断回填；Q6 身份清单与「事件→身份／收束档」规则由谁何时给（首版规则表为空）
+- [ ] **身份账设计稿 §11 ／补充设计稿 §12**（10-27 日更核对）：已定——Q1 冻结改动已批（T3 2 行、T4 3 行）、Q2 7 条线并行、Q3 两档＋失败默认可继续＋太泉不判档、补充稿 §12-3(b) 冰蛊到期＝游戏结束、§12-4 身份注入措辞（#238）。总策划已审、用户拍板仓库未记——§12-1 `dedupeBy` 取 everObtained、§12-2 Q4 显式在队账／Q5 `done.*` 不推断只做道具窄回填、§12-5 凝羽用路径回执（文档待更新）。仍待——Q6 账本清单由剧情策划逐线给、§12-3(a) 刻度表与冰蛊 due、(c) 到期前征兆 `promptCue` 文字
+- [ ] **太泉解锁设计稿 §14**：①硬门通道方案 A（`runtime.ts:2448` 改 1 行）还是 B；②主角级数补录（清羽 125–163=3、164–267=4、268–288=5；云龙吟／燕歌行下限 5；本次不取消练功章节上限）；⑤「盘江股东大会」挪到 linan_close 章；⑥两版进太泉说法措辞；⑦九阳层次本次不扩。③不设 enforce、④已走进即解锁已由总策划定（`ec7b8949`／`5eb1bd1e`）
 
 - [ ] **10-20 待拍（10-21 日更核对）**：仍待拍——跨国人物依赖清单（box 草稿已从全国版 10-20 09:00 出到理顺版 10-21 00:18，仓库未改）；药品余项（心性判定口径、九转六处）；CP-07 谢艺选项涉及冻结 `runtime.ts`（`88e32415` 查明是存档时那拍已选，是否还要改未记，文档待更新）。已解决：8097 重建时机（10-20 已重建五次）；谢艺救治叙事（AIBS 获批一处，`88e32415`）；低血量重伤 -15（去掉，`88e32415`）；RNG 游标（放存档外，`88e32415`）
 - [ ] **炼制品质上限档位**（`df23350d`）：`crafting.levelTierCaps` 按原著九级的档位切分是草案，待用户拍
@@ -223,6 +240,9 @@
 | HEAD `88e32415` 为当前、「其后无代码提交」 | **过期（10-23 日更）** — 当前 HEAD `efd8470f`；其后 6 提交见当前快照 |
 | 既有红 `chapterIdentitySwitch` 以哪边为准待定 | **过期（已修）** — `df23350d` 按裁定 #218 ⑥ 恢复 overlay；全量 0 fail |
 | 账本人名棘轮超额待用户定（`df23350d` 说明） | **过期（已修）** — `70f0e020` 转绿，未重置基线 |
+| 身份账 T3／T4 进行中、§11 Q1 冻结改动获批未记 | **过期（10-27 日更）** — `b8179a83`／`438c3af0` 已落，Q1 已批 |
+| 收束三档（含「不完美」）、失败当场结束 | **过期（10-27 日更）** — `9046a1b2`／`98347a72` 改两档、失败默认可继续 |
+| 冰蛊只有殇侯能解、冰蛊不加致命期限 | **过期（10-27 日更）** — 裁定簿 #240（`9db6aa2c`）、#239（`aac29523`） |
 | 国家线草稿全在 box、仓库未改 | **部分过期** — 01 南荒（含五原序幕）、02 晋已落档入库；其余仍在 box |
 
 ## 记录入口
@@ -292,3 +312,4 @@
 - 2026-10-22 02:10 日更核对（Asia/Singapore）：HEAD `88e32415` 与远端一致，其后仅文档提交 `70b39fb4`，无代码提交；8097 现包仍是 `fa0d6e1ac595`（served SHA-256 与磁盘一致，PID 65144 未动），`../playtest-2026-09-28/` 无新报告，现包真机复验仍待做。剧情策划 10-21 在 box `/workspace/narrative-drafts/` 新出角色线草稿：`角色剧情线大纲.md`（10-22 00:51 最新，另有 `大纲分册/`）、`原著对比/` 与 `原著对比-10角色合订.md`、凝羽／卓云君／苏妲己角色线稿与 `2026-10-21-五角色线待拍板汇总.md`、`潘金莲-原著合规段对比摘要.md`、`称谓分档候选.md`、`大祭决战框架-草稿.md`；仓库未改、非基准，草稿里记的用户决定（角色事件分主要／次要、结局条件与后日谈、五原城跳四年、唐线恢复推进等）尚未写进双件（文档待更新）。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
 - 2026-10-23 02:10 日更核对（Asia/Singapore）：HEAD `efd8470f` 与远端一致；自 `b3c95706` 起 6 提交（`df23350d` Sol 周审修复、`8cded818` 国家线 01 五原序幕＋南荒、`70f0e020` 棘轮转绿、`4462bf8a` 补卡源、`cb6cbe71` 晋原稿、`efd8470f` 国家线 02 晋），已写入 Done；既有红 `chapterIdentitySwitch` 已修，从待拍移出；新增待拍：炼制 `crafting.levelTierCaps` 档位、国家线 01／02 §10。8097 双件仍记 `fa0d6e1ac595`，代码提交后未见重建记录；真机报告无新增记录（文档待更新）。下一条国家线按编号为 03 宋。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
 - 2026-10-26 02:00 日更核对（Asia/Singapore）：HEAD `0aecc32b` 与远端一致；自 `b6de9e51` 起 3 提交（`f5dd378b` 身份账设计稿、`c48479c0` T1、`0aecc32b` T2），已写入 Done；新增进行中 T3／T4、新增待拍设计稿 §11。8097 未见重建记录、无新真机报告（文档待更新）。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
+- 2026-10-27 02:00 日更核对（Asia/Singapore）：HEAD `5eb1bd1e` 与远端一致；补记 `b8179a83` T3，另 21 提交（身份账 T4、收束两档与失败可继续、日志大类开关 T1–T3、身份账补充 T5–T10、冰蛊 E02 与解蛊出路、太泉解锁设计稿＋T1／T2）写入 Done；进行中改为太泉解锁 T3–T7、规则表内容、日志迁移；待拍更新身份账 §11／§12 与太泉 §14。验收口径为本机 26 个既有 ENOENT（文档待更新）；8097 未见重建记录、无新真机报告。完整清单见 [docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)。
