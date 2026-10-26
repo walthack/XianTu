@@ -96,18 +96,20 @@ test('imperfect 不在 tiers 时拒写', async () => {
   assert.equal(hits[0].detail.outcome, 'imperfect');
 });
 
-test('lineFailEndsGame 逐线读 failEndsGame，默认全 true', async () => {
-  const { lineFailEndsGame } = await modPromise;
+test('lineFailEndsGame 逐线读 failEndsGame，国家线默认失败可继续，太泉不判档', async () => {
+  const { lineFailEndsGame, judgedLineIds } = await modPromise;
   const { GAME_NUMBERS, applyGameNumbers } = await numbersPromise;
-  const LINES = ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin', 'taiquan'];
+  const LINES = ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin'];
+  assert.deepEqual([...judgedLineIds()].sort(), [...LINES].sort());
   assert.deepEqual(Object.keys(GAME_NUMBERS.story.lineOutcome.failEndsGame).sort(), [...LINES].sort());
-  for (const lineId of LINES) assert.equal(lineFailEndsGame(lineId), true, lineId);
-  applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: false } } } });
+  for (const lineId of LINES) assert.equal(lineFailEndsGame(lineId), false, lineId);
+  assert.equal(lineFailEndsGame('taiquan'), false);
+  applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: true } } } });
   try {
-    assert.equal(lineFailEndsGame('han'), false);
-    assert.equal(lineFailEndsGame('jin'), true);
+    assert.equal(lineFailEndsGame('han'), true);
+    assert.equal(lineFailEndsGame('jin'), false);
   } finally {
-    applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: true } } } });
+    applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: false } } } });
   }
-  assert.equal(lineFailEndsGame('han'), true);
+  assert.equal(lineFailEndsGame('han'), false);
 });

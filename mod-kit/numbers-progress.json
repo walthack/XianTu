@@ -1079,10 +1079,11 @@
       "minutesPerBeat": 120
     },
     "lineOutcome": {
-      "note": "国家线收束档（身份账设计稿 2026-10-25 §6；用户 2026-10-26 定两档、只写一次）：tiers 为 flags 键 line.<lineId>.outcome 的取值集合，代码与规则表校验都读这里；「没去」不是档位，由该线无收束记录判出；writeOnce=true 时已收束的线不被后写覆盖。failEndsGame：按 7 条国家线 id 逐线配置该线失败（unresolved）是否当场结束游戏，默认全 true，键须正好是这 7 条",
+      "note": "国家线收束档（身份账设计稿 2026-10-25 §6；用户 2026-10-26 定两档、只写一次）：tiers 为 flags 键 line.<lineId>.outcome 的取值集合，代码与规则表校验都读这里；「没去」不是档位，由该线无收束记录判出；writeOnce=true 时已收束的线不被后写覆盖。judgedLines：判档线集合（用户 2026-10-26 定太泉不判档，即 7 条国家线除 taiquan 外的 6 条），元素须为国家线 id。failEndsGame：按判档线逐线配置该线失败（unresolved）是否当场结束游戏，键须正好是 judgedLines；用户 2026-10-26 定国家线失败默认可继续，全 false",
       "tiers": ["resolved", "unresolved"],
       "writeOnce": true,
-      "failEndsGame": { "nanhuang": true, "jin": true, "song": true, "han": true, "tang": true, "qin": true, "taiquan": true }
+      "judgedLines": ["nanhuang", "jin", "song", "han", "tang", "qin"],
+      "failEndsGame": { "nanhuang": false, "jin": false, "song": false, "han": false, "tang": false, "qin": false }
     },
     "identity": {
       "note": "玩家身份账（身份账设计稿 2026-10-25 §2.2）：kinds 为 entity-catalog/identities.json 里 kind 的取值集合（草案）",
