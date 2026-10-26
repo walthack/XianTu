@@ -1,4 +1,4 @@
-// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）；T7 在队规则（同稿 §3.6）；T8 进度期限与刻度（同稿 §4.7）。规则均为测试夹具。
+// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）；T7 在队规则（同稿 §3.6）；T8 进度期限与刻度（同稿 §4.7）；T9 身份 secret（同稿 §5.1）。规则均为测试夹具。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -72,6 +72,14 @@ test('身份 id 末段为 from/status 报错', async () => {
     assert.ok(errors.some(e => e.includes(`末段不能是`) && e.includes(`liuchao.identity.song.${tail}`)), errors.join(' | '));
   }
   assert.deepEqual(validatePlayerLedgerRules(rules(), { identities: [{ ...ZHUSHI, id: 'liuchao.identity.song.from_south' }] }), []);
+});
+
+test('身份定义 secret 只能填 true（补充设计稿 2026-10-26 §5.1）', async () => {
+  const { validatePlayerLedgerRules } = await modPromise;
+  assert.deepEqual(validatePlayerLedgerRules(rules(), { identities: [{ ...ZHUSHI, secret: true }] }), []);
+  for (const secret of [false, 'yes', 1]) {
+    assert.deepEqual(validatePlayerLedgerRules(rules(), { identities: [{ ...ZHUSHI, secret }] }), [`身份 ${ZHUSHI.id} 的 secret 只能填 true（不填＝公开）`], String(secret));
+  }
 });
 
 test('同事件同身份既授又撤报错', async () => {

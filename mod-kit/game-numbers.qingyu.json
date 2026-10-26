@@ -2148,13 +2148,16 @@
       }
     },
     "identity": {
-      "note": "玩家身份账（身份账设计稿 2026-10-25 §2.2）：kinds 为 entity-catalog/identities.json 里 kind 的取值集合（草案）",
+      "note": "玩家身份账（身份账设计稿 2026-10-25 §2.2）：kinds 为 entity-catalog/identities.json 里 kind 的取值集合（草案）。prompt.maxItems：提示词【主角身份·引擎账本】结论行最多列几个身份（补充设计稿 2026-10-26 §5.4，int≥1；按 rank 降序、再按入账先后截取，secret 身份不计）",
       "kinds": [
         "office",
         "title",
         "merchant",
         "sect"
-      ]
+      ],
+      "prompt": {
+        "maxItems": 3
+      }
     },
     "itemProvenance": {
       "note": "道具来路去重（身份账补充设计稿 2026-10-26 §2.5；总策划 2026-10-26 审定取推荐值）：dedupeBy 为唯一道具组（mod-kit/player-ledger-rules.json itemGroups）判「已得过」的口径。everObtained＝组内任一 itemId 有发放回执或背包现存即算得过，用掉了也不再发；currentlyHeld＝只看背包现存。取值只能是这两个之一",

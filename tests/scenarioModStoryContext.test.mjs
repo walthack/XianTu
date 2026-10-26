@@ -119,6 +119,23 @@ test('a grounded completed improvised goal is injected as a one-shot narrative r
   assert.match(prompt, /不得凭空发放超额奖励/);
 });
 
+test('持有身份时 prompt 含【主角身份·引擎账本】且位于【声望与认知】之前（身份账补充设计稿 2026-10-26 §5.6）', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const { setPlayerIdentityDefsForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const save = await buildStorySave();
+  const id = 'liuchao.identity.test.zhushi';
+  save.世界.状态.剧本模组.playerIdentities = { [id]: { identityId: id, status: 'active', acquiredAtEventId: 'event.firstmeeting', history: [{ eventId: 'event.firstmeeting', op: 'grant' }] } };
+  setPlayerIdentityDefsForTest([{ id, name: '测试主事', kind: 'merchant' }]);
+  try {
+    const prompt = buildScenarioStoryPrompt(save);
+    const at = prompt.indexOf('【主角身份·引擎账本】主角眼下持有的公开身份：测试主事。');
+    assert.ok(at >= 0, '注入身份结论行');
+    assert.ok(at < prompt.indexOf('【声望与认知】'), '位于【声望与认知】之前');
+    assert.match(prompt, /本账以外的身份、官职、商号不得自行授予或改换/);
+  } finally { setPlayerIdentityDefsForTest(undefined); }
+  assert.ok(!buildScenarioStoryPrompt(save).includes('【主角身份·引擎账本】'), '身份表查不到时不注入');
+});
+
 test('free roaming injects current region and only recalls introduced canon residents', async () => {
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const save = await buildStorySave();

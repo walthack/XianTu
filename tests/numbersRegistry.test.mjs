@@ -237,3 +237,22 @@ test('story.progressDeadline.limits 必填、首版 {}、每项 due≥1 且 0≤
   ];
   for (const [limit, ...messages] of cases) assert.deepEqual(withLimits({ 'liuchao.deadline.a': limit }), messages, JSON.stringify(limit));
 });
+
+test('story.identity.prompt.maxItems 必填 int≥1、首版 3（补充设计稿 2026-10-26 §5.4）', async () => {
+  const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const spec = registry.FIELD_SPECS.find(s => s.path === 'story.identity.prompt.maxItems');
+  assert.deepEqual(spec, { path: 'story.identity.prompt.maxItems', kind: 'int', required: true, min: 1, section: 'progress' });
+  const fresh = () => structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  assert.equal(fresh().story.identity.prompt.maxItems, 3);
+  assert.deepEqual(readJson('mod-kit/numbers-progress.json').story.identity.prompt, { maxItems: 3 }, '生成物与权威分包一致');
+  const withMax = (value) => { const tree = fresh(); tree.story.identity.prompt.maxItems = value; return registry.validateAgainstRegistry(tree, 'cold'); };
+  assert.deepEqual(withMax(1), []);
+  assert.ok(withMax(0).includes('字段范围无效：story.identity.prompt.maxItems < 1'));
+  assert.ok(withMax(2.5).includes('字段类型无效：story.identity.prompt.maxItems 须为 int'));
+  const absent = fresh();
+  delete absent.story.identity.prompt.maxItems;
+  assert.ok(registry.validateAgainstRegistry(absent, 'patch').includes('缺字段：story.identity.prompt.maxItems'), '必填：热改合并后也查');
+  assert.throws(() => numbers.applyGameNumbers({ story: { identity: { prompt: { maxItems: 0 } } } }), err => err.code === 'LCQ-NUM-008');
+  assert.equal(numbers.GAME_NUMBERS.story.identity.prompt.maxItems, 3);
+});

@@ -93,6 +93,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-025': spec('warn', 'itemProvenance', '道具来路去重没能按规则执行（判断出错时按原逻辑发放；改发的物品不在本关物品表时只跳过；读档回填失败）'),
   'LCQ-SAV-026': spec('warn', 'partyLedger', '在队账推导失败，本次按“不在队”处理（偏保守，倾向锁节点）'),
   'LCQ-SAV-027': spec('warn', 'progressDeadlines', '进度期限同步或锁存失败、锁存值非法、或现算与锁存冲突（以锁存为准）'),
+  'LCQ-SAV-028': spec('warn', 'ledgerPrompt', '账本结论块生成失败，本轮不注入；或持有未登记身份，已跳过'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

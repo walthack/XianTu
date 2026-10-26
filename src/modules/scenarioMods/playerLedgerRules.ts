@@ -95,6 +95,8 @@ export interface PlayerIdentityDef {
   factionId?: string;
   /** 同时持有多个身份时结论行里的排序；数值只在配置里 */
   rank?: number;
+  /** 机密身份：不进身份结论行（补充设计稿 2026-10-26 §5.1），交提示词第 5 条机密护栏（#109）；只能填 true */
+  secret?: true;
 }
 
 /** 校验用的引用集合；缺省取仓库权威（index.json / identities.json / 数值配置）。测试夹具可整体替换。 */
@@ -139,8 +141,15 @@ const RESERVED_DEADLINE_TAILS = ['state'];
 /** 实体索引里某 kind 的 id 集合。 */
 export const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
 
+let identityDefsOverride: PlayerIdentityDef[] | undefined;
 export function playerIdentityDefs(): PlayerIdentityDef[] {
+  if (identityDefsOverride) return identityDefsOverride;
   return (identitiesJson.entries as unknown as Array<{ definition: PlayerIdentityDef }>).map(e => e.definition);
+}
+
+/** 测试夹具：整体替换身份表（entity-catalog/identities.json，首版为空），传 undefined 复原为仓库权威。生产代码不调用。 */
+export function setPlayerIdentityDefsForTest(defs?: PlayerIdentityDef[]): void {
+  identityDefsOverride = defs;
 }
 
 export function playerIdentityDef(identityId: string, defs: PlayerIdentityDef[] = playerIdentityDefs()): PlayerIdentityDef | undefined {
@@ -171,6 +180,7 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
     if (def.lineId !== undefined && !lineIds.has(def.lineId)) errors.push(`身份 ${def.id} 的 lineId 未知：${def.lineId}`);
     if (def.factionId !== undefined && !factionIds.has(def.factionId)) errors.push(`身份 ${def.id} 的 factionId 未知：${def.factionId}`);
     if (def.rank !== undefined && !Number.isFinite(def.rank)) errors.push(`身份 ${def.id} 的 rank 须为数字`);
+    if (def.secret !== undefined && def.secret !== true) errors.push(`身份 ${def.id} 的 secret 只能填 true（不填＝公开）`);
   }
 
   if (rules?.version !== 1) errors.push(`规则表 version 须为 1：${String(rules?.version)}`);

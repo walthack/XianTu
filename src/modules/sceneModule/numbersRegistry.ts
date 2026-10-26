@@ -74,6 +74,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.lineOutcome.judgedLines', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineOutcome.failEndsGame', kind: 'object', required: true, section: 'progress' },
   { path: 'story.identity.kinds', kind: 'array', required: true, section: 'progress' },
+  { path: 'story.identity.prompt.maxItems', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.itemProvenance.dedupeBy', kind: 'string', required: true, oneOf: ['everObtained', 'currentlyHeld'], section: 'progress' },
   { path: 'story.progressDeadline.limits', kind: 'object', required: true, section: 'progress' },
   { path: 'lineBonds.majorResponse.delta', kind: 'number', required: true, min: 0, section: 'progress' },
