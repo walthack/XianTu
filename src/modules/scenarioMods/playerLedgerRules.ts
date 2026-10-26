@@ -5,6 +5,7 @@
  */
 import rulesJson from '../../../mod-kit/player-ledger-rules.json';
 import identitiesJson from '../../../mod-kit/entity-catalog/identities.json';
+import endingsJson from '../../../mod-kit/entity-catalog/endings.json';
 import index from '../../../mod-kit/entity-catalog/index.json';
 import stageAccess from '../../../mod-kit/entity-catalog/stage-access.json';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
@@ -66,6 +67,8 @@ export interface ProgressDeadlineDef {
   excludeLineIds?: string[];
   /** 逼近演出的可观察事实（裁定 #155：不写剩余数，不预告结局）；内容组写，首版不填 */
   promptCue?: { urgent?: string; due?: string };
+  /** 到期即本局结束（同稿 §10-T10，用户 2026-10-27 拍板冰蛊到期未解＝游戏结束）：锁存 due 时写 runtime.gameOver；endingId 须在 entity-catalog/endings.json */
+  onDue?: { endingId: string };
 }
 
 export interface PlayerLedgerRules {
@@ -118,6 +121,8 @@ export interface PlayerLedgerRefs {
   protagonistIds?: Iterable<string>;
   /** 期限数值表（键须正好是 progressDeadlines 的 id 集合）；缺省 story.progressDeadline.limits */
   deadlineLimits?: Record<string, unknown>;
+  /** 期限 onDue.endingId 的取值集合；缺省 entity-catalog/endings.json */
+  endingIds?: Iterable<string>;
 }
 
 /** 身份 id 末段保留给读取子路径（identity.<id>.from / .status）。 */
@@ -137,6 +142,13 @@ const OPTIONAL_RULE_ARRAYS = ['itemGroups', 'partyJoins', 'partyLeaves', 'partyO
 /** 进度期限 id 前缀与保留末段（flags 锁存键 deadline.<id>.state）。 */
 export const DEADLINE_ID_PREFIX = 'liuchao.deadline.';
 const RESERVED_DEADLINE_TAILS = ['state'];
+
+/** 结局定义（entity-catalog/endings.json）；部分结局只有 name、没有 title / facts。 */
+export interface EndingDef { id: string; name: string; title?: string; facts?: string[] }
+const endingDefs = (): EndingDef[] => (endingsJson.entries as unknown as Array<{ definition: EndingDef }>).map(e => e.definition);
+export function endingDefinition(endingId: string): EndingDef | undefined {
+  return endingDefs().find(d => d.id === endingId);
+}
 
 /** 实体索引里某 kind 的 id 集合。 */
 export const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
@@ -227,7 +239,7 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
   return errors;
 }
 
-/** 进度期限（§4.7）：事件须登记，刻度与排除线须为国家线，同一事件最多一个刻度，起点非空且与解除不相交，期限数值表的键须正好是期限 id 集合。 */
+/** 进度期限（§4.7）：事件须登记，刻度与排除线须为国家线，同一事件最多一个刻度，起点非空且与解除不相交，onDue.endingId 须在 endings.json，期限数值表的键须正好是期限 id 集合。 */
 function validateProgressDeadlines(rules: PlayerLedgerRules, refs: PlayerLedgerRefs, eventIds: Set<string>, errors: string[]): void {
   const ticks = rules.progressTicks ?? [];
   const deadlines = rules.progressDeadlines ?? [];
@@ -236,6 +248,7 @@ function validateProgressDeadlines(rules: PlayerLedgerRules, refs: PlayerLedgerR
     if (!Array.isArray(ids)) { errors.push(`${where}${field} 须为数组`); return; }
     for (const eventId of ids) if (!eventIds.has(eventId)) errors.push(`${where}${field} eventId 未知：${String(eventId)}`);
   };
+  const endingIds = new Set(refs.endingIds ?? endingDefs().map(d => d.id));
   const tickEvents = new Set<string>();
   for (const tick of ticks) {
     const where = `刻度 ${String(tick?.eventId)}：`;
@@ -268,6 +281,14 @@ function validateProgressDeadlines(rules: PlayerLedgerRules, refs: PlayerLedgerR
       else for (const [key, text] of Object.entries(cue)) {
         if (key !== 'urgent' && key !== 'due') errors.push(`${where}promptCue 只能有 urgent / due：${key}`);
         else if (typeof text !== 'string') errors.push(`${where}promptCue.${key} 须为字串`);
+      }
+    }
+    if (def?.onDue !== undefined) {
+      const onDue = def.onDue as Record<string, unknown>;
+      if (!onDue || typeof onDue !== 'object' || Array.isArray(onDue)) errors.push(`${where}onDue 须为对象`);
+      else {
+        for (const key of Object.keys(onDue)) if (key !== 'endingId') errors.push(`${where}onDue 只能有 endingId：${key}`);
+        if (!endingIds.has(onDue.endingId as string)) errors.push(`${where}onDue.endingId 不在 entity-catalog/endings.json：${String(onDue.endingId)}`);
       }
     }
   }

@@ -1,4 +1,4 @@
-// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）；T7 在队规则（同稿 §3.6）；T8 进度期限与刻度（同稿 §4.7）；T9 身份 secret（同稿 §5.1）。规则均为测试夹具。
+// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）；T7 在队规则（同稿 §3.6）；T8 进度期限与刻度（同稿 §4.7）；T9 身份 secret（同稿 §5.1）；T10 期限 onDue.endingId（同稿 §10-T10）。规则均为测试夹具。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -250,4 +250,23 @@ test('进度期限：未知 eventId、非国家线、同一事件两个刻度、
   has(/期限 liuchao\.deadline\.a：promptCue\.due 须为字串/);
   has(/期限 liuchao\.deadline\.empty：startEventIds 不能为空/);
   assert.equal(errors.length, 15, errors.join(' | '));
+});
+
+test('进度期限 onDue：endingId 须在 endings.json（冰蛊坏结局可用），形状不对报错', async () => {
+  const { validatePlayerLedgerRules, endingDefinition } = await modPromise;
+  const BINGU = 'liuchao.deadline.bingu';
+  const ICE_GU = 'lcq.ending.death.ajiman_bond';
+  const deadline = (onDue) => ({ id: BINGU, name: '冰蛊', startEventIds: [EVENT], clearEventIds: [EVENT_2], onDue });
+  const check = (onDue, refs = {}) => validatePlayerLedgerRules(rules({ progressDeadlines: [deadline(onDue)] }), { identities: [], deadlineLimits: { [BINGU]: { due: 3, urgentAt: 2 } }, ...refs });
+  assert.equal(endingDefinition(ICE_GU)?.title, '冰蛊', '仓库 endings.json 里有冰蛊坏结局');
+  assert.equal(endingDefinition('lcq.ending.no_such'), undefined);
+  assert.deepEqual(check({ endingId: ICE_GU }), []);
+  assert.deepEqual(check(undefined), [], 'onDue 可选');
+  assert.deepEqual(check({ endingId: 'lcq.ending.no_such' }), [`期限 ${BINGU}：onDue.endingId 不在 entity-catalog/endings.json：lcq.ending.no_such`]);
+  assert.deepEqual(check({ endingId: ICE_GU }, { endingIds: ['test.ending'] }), [`期限 ${BINGU}：onDue.endingId 不在 entity-catalog/endings.json：${ICE_GU}`], '夹具可替换结局集合');
+  assert.deepEqual(check({ endingId: 'test.ending' }, { endingIds: ['test.ending'] }), []);
+  assert.deepEqual(check({ endingId: ICE_GU, title: '冰蛊' }), [`期限 ${BINGU}：onDue 只能有 endingId：title`]);
+  assert.deepEqual(check({}), [`期限 ${BINGU}：onDue.endingId 不在 entity-catalog/endings.json：undefined`]);
+  assert.deepEqual(check(ICE_GU), [`期限 ${BINGU}：onDue 须为对象`]);
+  assert.deepEqual(check([ICE_GU]), [`期限 ${BINGU}：onDue 须为对象`]);
 });

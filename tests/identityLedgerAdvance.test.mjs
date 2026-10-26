@@ -86,3 +86,39 @@ test('账本同步失败不阻断回合', () => withRules({ version: 1, identity
   assert.ok(warned.some(w => w.startsWith('[LCQ-SAV-023]')), warned.join('\n'));
   await log.resetLogState();
 }));
+
+// T10（身份账补充设计稿 2026-10-26 §9 / §10-T10）：期限填 onDue.endingId 时，advanceScenarioRuntime 回合末 syncPlayerLedgers 锁存 due 即写 gameOver，
+// runtime.ts 不改；下一回合 advance 见 gameOver 早退，不再推进。规则与数值均为测试夹具。
+test('T10 当回合完成的刻度事件让期限到期：写 gameOver，下一回合不再推进', async () => {
+  const { GAME_NUMBERS } = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const BINGU = 'liuchao.deadline.test_bingu';
+  const ICE_GU = 'lcq.ending.death.ajiman_bond';
+  const START = 'lcq.event.free_ajiman';
+  const limits = GAME_NUMBERS.story.progressDeadline.limits;
+  limits[BINGU] = { due: 1, urgentAt: 0 };
+  try {
+    await withRules({
+      version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [],
+      progressTicks: [{ eventId: EVENT, lineId: 'song' }],
+      progressDeadlines: [{ id: BINGU, name: '测试冰蛊', startEventIds: [START], clearEventIds: ['lcq.event.charge_sudaji_fee'], onDue: { endingId: ICE_GU } }],
+    }, async () => {
+      const save = await buildSave();
+      const before = save.世界.状态.剧本模组;
+      before.chronicle = [...(before.chronicle || []), { id: `chronicle.${before.modId}.${START}`, type: 'event', stageId: before.modId, title: '', sequence: 0 }];
+      assert.equal(advanceScenarioRuntime(save).saveData.世界.状态.剧本模组.gameOver, undefined, '刻度事件未完成不结束');
+      before.flags.resolved = true;
+      const advanced = advanceScenarioRuntime(save);
+      const rt = advanced.saveData.世界.状态.剧本模组;
+      assert.ok(advanced.transitions.some(t => t.type === 'event_completed' && t.id === EVENT));
+      assert.equal(rt.flags[`deadline.${BINGU}.state`], 'due');
+      assert.equal(rt.gameOver?.endingId, ICE_GU);
+      assert.equal(rt.gameOver.sourceEventId, EVENT);
+      assert.equal(rt.gameOver.title, '冰蛊');
+      const after = advanceScenarioRuntime(advanced.saveData);
+      assert.deepEqual(after.transitions, [], '本局已结束不再推进');
+      assert.deepEqual(after.saveData.世界.状态.剧本模组.gameOver, rt.gameOver);
+    });
+  } finally {
+    delete limits[BINGU];
+  }
+});

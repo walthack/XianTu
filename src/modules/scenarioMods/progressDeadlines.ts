@@ -5,10 +5,13 @@
  * - 不加存档字段：running / urgent 每次读取从编年史（orderedDoneEventIds）现算，任何先后顺序都得到确定结果；
  *   到终态 due / cleared 才锁存进 flags 扁平键 deadline.<id>.state，写一次不再改（数值可热改，不锁存会让已到期的倒退）。
  *   锁存只由本模块写：切关整段继承（strictInitializer）、模型不能写（canonGuard）、任务线 setState 不能写（questLines），同 line.*。
- * - 到期后果（坏结局、开放接回、换文案）不在机制里，内容用 deadline.<id> eq due 自己接；本模块不写 gameOver。
- * - 出错记 LCQ-SAV-027，不抛、不阻断回合；SAV-023（身份账/收束档）含义不变。
+ * - 到期后果（开放接回、换文案）不在机制里，内容用 deadline.<id> eq due 自己接；唯一例外是期限定义填了 onDue.endingId（同稿 §10-T10，
+ *   用户 2026-10-27 拍板冰蛊到期未解＝游戏结束）：锁存 due 的同一拍照 sceneModule/host/controller.ts 先例写 runtime.gameOver，runtime.ts 不改。
+ *   结局正文与配图由展示流程按 endingId 自取（fixedEndingNarrative / endingPresentation）；本局已结束的不覆盖。
+ * - 出错记 LCQ-SAV-027，不抛、不阻断回合；SAV-023（身份账/收束档）含义不变。onDue 结局在 endings.json 查不到时不锁存（ending_missing），下回合或读档重试。
  */
-import { orderedDoneEventIds, playerLedgerRules, type PlayerLedgerRules, type ProgressDeadlineDef, type ProgressTick } from './playerLedgerRules';
+import { endingDefinition, orderedDoneEventIds, playerLedgerRules, type PlayerLedgerRules, type ProgressDeadlineDef, type ProgressTick } from './playerLedgerRules';
+import { endingPresentation, type EndingPresentation } from './endingPresentation';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { logError, logEventOnce } from '../diagnostics/log';
 import { debugLog } from '../diagnostics/debugLog';
@@ -70,7 +73,8 @@ export interface ProgressDeadlineOptions {
   limits?: DeadlineLimits;
 }
 
-interface DeadlineRuntime { modId?: string; flags?: Record<string, unknown> }
+interface DeadlineGameOver { endingId: string; title: string; facts: string[]; sourceEventId: string; atTurn: number; presentation?: EndingPresentation }
+interface DeadlineRuntime { modId?: string; flags?: Record<string, unknown>; worldTurn?: unknown; gameOver?: DeadlineGameOver }
 
 const limitsOf = (opts: ProgressDeadlineOptions): DeadlineLimits => opts.limits ?? (GAME_NUMBERS.story.progressDeadline.limits as DeadlineLimits);
 
@@ -120,7 +124,22 @@ export function deadlineState(runtime: unknown, id: string, opts: ProgressDeadli
   }
 }
 
-/** 把已到终态的期限锁存进 flags；已锁存的不再改。自带 try/catch，失败记 LCQ-SAV-027 不抛、不写半截（下一回合或读档重试）。返回锁存条数。 */
+/** 到期接结局：照 controller.ts 先例写 runtime.gameOver；本局已结束（别的结局先落）的不覆盖。 */
+function endRunOnDue(rt: DeadlineRuntime, def: ProgressDeadlineDef, endingId: string, computation: DeadlineComputation): void {
+  if (rt.gameOver) {
+    debugLog('identity', `[期限] ${def.id} 到期结局 ${endingId} 跳过：本局已以 ${rt.gameOver.endingId} 结束`);
+    return;
+  }
+  const ending = endingDefinition(endingId)!;
+  const sourceEventId = computation.settledAt ?? '';
+  rt.gameOver = {
+    endingId, title: ending.title || ending.name, facts: [...(ending.facts ?? [])], sourceEventId,
+    atTurn: Math.max(0, Number(rt.worldTurn) || 0), presentation: endingPresentation({ endingId, sourceEventId }),
+  };
+  debugLog('identity', `[期限] ${def.id} 到期结局 ${endingId} @${sourceEventId}`);
+}
+
+/** 把已到终态的期限锁存进 flags；已锁存的不再改；到期且填了 onDue 的同一拍写 gameOver。自带 try/catch，失败记 LCQ-SAV-027 不抛、不写半截（下一回合或读档重试）。返回锁存条数。 */
 export function syncProgressDeadlines(runtime: unknown, opts: ProgressDeadlineOptions = {}): number {
   try {
     const rules = opts.rules ?? playerLedgerRules();
@@ -130,18 +149,28 @@ export function syncProgressDeadlines(runtime: unknown, opts: ProgressDeadlineOp
     const orderedDone = orderedDoneEventIds(runtime);
     const rt = runtime as DeadlineRuntime;
     if (rt.flags !== undefined && (!rt.flags || typeof rt.flags !== 'object' || Array.isArray(rt.flags))) throw new Error('runtime.flags 不是对象');
-    const writes: Array<[string, DeadlineState, Resolved]> = [];
+    const writes: Array<[ProgressDeadlineDef, DeadlineState, Resolved]> = [];
     for (const def of defs) {
       const resolved = resolveDeadline(runtime, def, orderedDone, rules, limits);
       const { computation } = resolved;
       debugLog('identity', `[期限] ${def.id} 起算@${computation.startedAt ?? '未起算'} 刻度 ${computation.ticks}/${limitOf(limits, def.id).due} 状态=${resolved.state ?? '未开始'}${resolved.latched ? '（锁存）' : ''}`);
-      if (!resolved.latched && isTerminal(resolved.state)) writes.push([def.id, resolved.state, resolved]);
+      if (resolved.latched || !isTerminal(resolved.state)) continue;
+      if (resolved.state === 'due' && def.onDue && !endingDefinition(def.onDue.endingId)) {
+        // 结局查不到就不锁存：deadline.<id> 照常现算为 due，修好结局表后下回合或读档补锁存并结束本局
+        logEventOnce(`LCQ-SAV-027:ending_missing:${def.id}`, {
+          code: 'LCQ-SAV-027', msg: `期限 ${def.id} 到期结局 ${def.onDue.endingId} 不在 endings.json，本拍不锁存`,
+          detail: { reason: 'ending_missing', deadlineId: def.id, endingId: def.onDue.endingId, modId: rt.modId },
+        });
+        continue;
+      }
+      writes.push([def, resolved.state, resolved]);
     }
     if (!writes.length) return 0;
     rt.flags ||= {};
-    for (const [id, state, resolved] of writes) {
-      rt.flags[deadlineStateKey(id)] = state;
-      debugLog('identity', `[期限] 锁存 ${id}=${state} @${resolved.computation.settledAt}`);
+    for (const [def, state, resolved] of writes) {
+      rt.flags[deadlineStateKey(def.id)] = state;
+      debugLog('identity', `[期限] 锁存 ${def.id}=${state} @${resolved.computation.settledAt}`);
+      if (state === 'due' && def.onDue) endRunOnDue(rt, def, def.onDue.endingId, resolved.computation);
     }
     return writes.length;
   } catch (error) {

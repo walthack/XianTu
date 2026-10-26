@@ -1,6 +1,7 @@
 // 进度期限 T8（身份账补充设计稿 2026-10-26 §4 / §4.9 / §7）：deadline.<id> 起点事件起算、刻度计数、解除事件；
 // running/urgent 每次现算，到 due/cleared 才锁存进 flags 键 deadline.<id>.state。不加存档字段，到期后果不在机制里。
 // 规则与期限数值均为测试夹具（显式入参 / setPlayerLedgerRulesForTest / 临时挂进 GAME_NUMBERS），仓库规则表与 limits 首版为空。
+// T10（同稿 §9 / §10-T10，用户 2026-10-27 拍板冰蛊到期未解＝游戏结束）：期限定义填 onDue.endingId 时，锁存 due 的同一拍写 runtime.gameOver。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -18,6 +19,7 @@ const loaded = (async () => {
 
 const STAGE = 'lcq.stage_01';
 const BINGU = 'liuchao.deadline.test_bingu';
+const ICE_GU = 'lcq.ending.death.ajiman_bond';
 const START = 'test.event.start';
 const CLEAR = 'test.event.clear';
 const ev = (name) => `test.event.${name}`;
@@ -195,7 +197,7 @@ test('七线全排列下冰蛊夹具：解除事件在第 due 个刻度之前完
   const tickLines = ['song', 'han', 'tang', 'qin', 'taiquan'];
   const rulesTable = table({
     progressTicks: ticksOf(tickLines.map(line => [eventOf(line), line])),
-    progressDeadlines: [def({ startEventIds: [eventOf('nanhuang')], clearEventIds: [eventOf('jin')], excludeLineIds: ['taiquan'] })],
+    progressDeadlines: [def({ startEventIds: [eventOf('nanhuang')], clearEventIds: [eventOf('jin')], excludeLineIds: ['taiquan'], onDue: { endingId: ICE_GU } })],
   });
   const limits = { [BINGU]: { due: 2, urgentAt: 1 } };
   const permute = (rest, prefix = []) => rest.length ? rest.flatMap((x, i) => permute([...rest.slice(0, i), ...rest.slice(i + 1)], [...prefix, x])) : [prefix];
@@ -222,6 +224,7 @@ test('七线全排列下冰蛊夹具：解除事件在第 due 个刻度之前完
       if (latchedAt !== undefined) assert.equal(latch, latchedAt, `${order.join('>')} 锁存后不再改`);
     }
     assert.equal(latchedAt, expected === 'cleared' || expected === 'due' ? expected : undefined, order.join('>'));
+    assert.equal(stepped.gameOver?.endingId, expected === 'due' ? ICE_GU : undefined, `${order.join('>')} 只有到期才结束本局`);
     seen.add(expected);
   }
   assert.deepEqual([...seen].sort(), ['cleared', 'due', 'running', 'urgent'], '夹具覆盖四种状态（南荒起点排在最后时停在 running）');
@@ -281,4 +284,73 @@ test('同步抛错不阻断，SAV-023 不被占用', async () => {
     assert.equal(deadlines.deadlineState(latched, BINGU, { rules: table({ progressDeadlines: [def()] }), limits: {} }), 'cleared');
     assert.equal(deadlines.deadlineState(runtimeOf({ doneIds: [START] }), BINGU, { rules: table({ progressDeadlines: [def()] }), limits: {} }), undefined);
   });
+});
+
+test('T10 到期且填 onDue：锁存 due 同一拍写 gameOver（冰蛊坏结局），只写一次；解除与未填 onDue 不结束', async () => {
+  const { deadlines } = await loaded;
+  const ticks = ticksOf([[ev('a'), 'jin'], [ev('b'), 'song']]);
+  const limits = { [BINGU]: { due: 2, urgentAt: 1 } };
+  const opts = (onDue) => ({ rules: table({ progressTicks: ticks, progressDeadlines: [def({ onDue })] }), limits });
+  const runtime = { ...runtimeOf({ doneIds: [START, ev('a')], eventIds: [START, ev('a'), ev('b'), CLEAR] }), worldTurn: 17 };
+  assert.equal(deadlines.syncProgressDeadlines(runtime, opts({ endingId: ICE_GU })), 0);
+  assert.equal(runtime.gameOver, undefined, 'urgent 不结束');
+  runtime.chronicle.push(entry(ev('b'), 3));
+  assert.equal(deadlines.syncProgressDeadlines(runtime, opts({ endingId: ICE_GU })), 1);
+  assert.equal(runtime.flags[`deadline.${BINGU}.state`], 'due');
+  assert.deepEqual(runtime.gameOver, {
+    endingId: ICE_GU, title: '冰蛊', facts: runtime.gameOver.facts, sourceEventId: ev('b'), atTurn: 17, presentation: { image: 'E02.jpg' },
+  });
+  assert.ok(runtime.gameOver.facts.some(f => f.includes('冰蛊')), '事实取自 endings.json');
+  const first = structuredClone(runtime.gameOver);
+  runtime.worldTurn = 18;
+  assert.equal(deadlines.syncProgressDeadlines(runtime, opts({ endingId: ICE_GU })), 0);
+  assert.deepEqual(runtime.gameOver, first, '已锁存不再写');
+
+  const cleared = runtimeOf({ doneIds: [START, ev('a'), CLEAR, ev('b')] });
+  assert.equal(deadlines.syncProgressDeadlines(cleared, opts({ endingId: ICE_GU })), 1);
+  assert.equal(cleared.flags[`deadline.${BINGU}.state`], 'cleared');
+  assert.equal(cleared.gameOver, undefined, '解除不结束');
+  const plain = runtimeOf({ doneIds: [START, ev('a'), ev('b')] });
+  assert.equal(deadlines.syncProgressDeadlines(plain, opts(undefined)), 1);
+  assert.equal(plain.flags[`deadline.${BINGU}.state`], 'due');
+  assert.equal(plain.gameOver, undefined, '未填 onDue 到期后果仍由内容自接');
+});
+
+test('T10 本局已由别的结局结束：照常锁存 due，不覆盖 gameOver', async () => {
+  const { deadlines } = await loaded;
+  const other = { endingId: 'lcq.ending.death.paolao', title: '炮烙', facts: [], sourceEventId: 'test.event.other', atTurn: 3 };
+  const runtime = { ...runtimeOf({ doneIds: [START, ev('a')] }), gameOver: structuredClone(other) };
+  const opts = { rules: table({ progressTicks: ticksOf([[ev('a'), 'jin']]), progressDeadlines: [def({ onDue: { endingId: ICE_GU } })] }), limits: { [BINGU]: { due: 1, urgentAt: 0 } } };
+  assert.equal(deadlines.syncProgressDeadlines(runtime, opts), 1);
+  assert.equal(runtime.flags[`deadline.${BINGU}.state`], 'due');
+  assert.deepEqual(runtime.gameOver, other);
+});
+
+test('T10 onDue 结局不在 endings.json：不锁存、不结束、读取仍为 due，记 SAV-027 ending_missing 只一次', async () => {
+  const { deadlines, store } = await loaded;
+  const opts = { rules: table({ progressTicks: ticksOf([[ev('a'), 'jin']]), progressDeadlines: [def({ onDue: { endingId: 'lcq.ending.no_such' } })] }), limits: { [BINGU]: { due: 1, urgentAt: 0 } } };
+  await quiet(async () => {
+    const before = logged(store, 'ending_missing').length;
+    const runtime = runtimeOf({ doneIds: [START, ev('a')] });
+    assert.equal(deadlines.syncProgressDeadlines(runtime, opts), 0);
+    assert.equal(deadlines.syncProgressDeadlines(runtime, opts), 0);
+    assert.deepEqual(runtime.flags, {});
+    assert.equal(runtime.gameOver, undefined);
+    assert.equal(deadlines.deadlineState(runtime, BINGU, opts), 'due');
+    const missing = logged(store, 'ending_missing');
+    assert.equal(missing.length - before, 1);
+    assert.equal(missing.at(-1).detail.endingId, 'lcq.ending.no_such');
+    assert.equal(missing.at(-1).module, 'progressDeadlines');
+  });
+});
+
+test('T10 结局展示流程接得住：期限写的 gameOver 有固定结局正文与配图', async () => {
+  const { deadlines } = await loaded;
+  const { fixedEndingNarrative } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  const { endingPresentation, endingKey } = await loadTs('../src/modules/scenarioMods/endingPresentation.ts');
+  const runtime = runtimeOf({ doneIds: [START, ev('a')] });
+  deadlines.syncProgressDeadlines(runtime, { rules: table({ progressTicks: ticksOf([[ev('a'), 'jin']]), progressDeadlines: [def({ onDue: { endingId: ICE_GU } })] }), limits: { [BINGU]: { due: 1, urgentAt: 0 } } });
+  assert.ok(fixedEndingNarrative(runtime.gameOver)?.length > 0, 'MainGamePanel / AIBS 按 endingId 取固定正文');
+  assert.equal(endingKey(runtime.gameOver), 'E02');
+  assert.equal(endingPresentation(runtime.gameOver).image, 'E02.jpg');
 });

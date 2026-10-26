@@ -355,6 +355,8 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
   mod=overlayPackPlaytestOpening(mod,(saveData as any)?.系统?.扩展);
   // 身份账与收束档：取快照前先补同步一次，防止本关最后一拍完成的事件没入账就被切关丢掉（completedEventIds 按新关重置）。
   syncPlayerLedgers(rt);
+  // 补同步可能让进度期限到期并按 onDue 结束本局（补充设计稿 2026-10-26 §10-T10）：不切关，否则 gameOver 留在旧关、due 锁存却被新关继承
+  if (rt.gameOver) return { saveData, ok: false, reason: '本局已结束' };
   backfillRelationshipIds(saveData, rt.canon?.characters);
   const relationSnapshot = structuredClone((saveData as any)?.社交?.关系 || {});
   // 世界线分歧是玩家历史，不是当前关卡模板数据。切关时必须跨关携带；

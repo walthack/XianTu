@@ -407,3 +407,31 @@ test('切关前补记最后一拍授予', async () => {
     setPlayerLedgerRulesForTest(undefined);
   }
 });
+
+// T10（身份账补充设计稿 2026-10-26 §10-T10）：切关前补同步让期限到期并按 onDue 结束本局时不切关，
+// 否则 gameOver 留在旧关运行时、due 锁存却被新关继承，本局再也结束不了。
+test('切关前补同步期限到期结束本局：拒绝切关', async () => {
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const { GAME_NUMBERS } = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const BINGU = 'liuchao.deadline.test_bingu';
+  const { save, rt, nextMod } = await buildIdentityTransitionSave();
+  rt.completedEventIds = ['lcq.event.free_ajiman', 'event.firstmeeting'];
+  rt.chronicle = [];
+  setPlayerLedgerRulesForTest({
+    version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [],
+    progressTicks: [{ eventId: 'event.firstmeeting', lineId: 'song' }],
+    progressDeadlines: [{ id: BINGU, name: '测试冰蛊', startEventIds: ['lcq.event.free_ajiman'], clearEventIds: [], onDue: { endingId: 'lcq.ending.death.ajiman_bond' } }],
+  });
+  GAME_NUMBERS.story.progressDeadline.limits[BINGU] = { due: 1, urgentAt: 0 };
+  try {
+    const result = transitionToNextScenarioStage(save, [nextMod]);
+    assert.equal(result.ok, false);
+    assert.equal(result.reason, '本局已结束');
+    assert.equal(result.saveData.世界.状态.剧本模组.modId, rt.modId, '仍在旧关');
+    assert.equal(result.saveData.世界.状态.剧本模组.gameOver?.endingId, 'lcq.ending.death.ajiman_bond');
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+    delete GAME_NUMBERS.story.progressDeadline.limits[BINGU];
+  }
+});
