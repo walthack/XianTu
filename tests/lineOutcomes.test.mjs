@@ -136,3 +136,22 @@ test('lineFailEndsGame 逐线读 failEndsGame，国家线默认失败可继续�
   }
   assert.equal(lineFailEndsGame('han'), false);
 });
+
+test('closedLineIds：按 judgedLines 顺序、非判档线手写也不算、tiers 过滤（太泉解锁设计稿 2026-10-27 §3 / §10-2）', async () => {
+  const { closedLineIds, judgedLineIds } = await modPromise;
+  const flags = { 'line.qin.outcome': 'resolved', 'line.jin.outcome': 'unresolved', 'line.taiquan.outcome': 'resolved', 'line.chu.outcome': 'resolved', 'line.song.outcome': 'bogus' };
+  // judgedLines 顺序（nanhuang, jin, song, han, tang, qin），不是 flags 写入顺序
+  assert.deepEqual(closedLineIds(flags), judgedLineIds().filter(id => id === 'jin' || id === 'qin'));
+  assert.deepEqual(closedLineIds(flags), ['jin', 'qin']);
+  assert.deepEqual(closedLineIds(flags, ['resolved']), ['qin']);
+  assert.deepEqual(closedLineIds(flags, ['unresolved']), ['jin']);
+  assert.deepEqual(closedLineIds(flags, []), []);
+  // 嵌套兜底与扁平键同口径；没有收束记录（没去 / 半路走掉）不算
+  assert.deepEqual(closedLineIds({ line: { han: { outcome: 'unresolved' } } }), ['han']);
+  assert.deepEqual(closedLineIds({}), []);
+  assert.deepEqual(closedLineIds(undefined), []);
+  // 纯读：不写 flags
+  const before = structuredClone(flags);
+  closedLineIds(flags);
+  assert.deepEqual(flags, before);
+});

@@ -33,6 +33,14 @@ export function readLineOutcome(flags: Record<string, unknown> | undefined, line
   return typeof node === 'string' ? node : undefined;
 }
 
+/** 已收束的判档线（太泉解锁设计稿 2026-10-27 §3）：按 judgedLineIds() 的顺序，收束档在 tiers 里的线 id；tiers 缺省取全部档位。非判档线即使被手写了收束档也不算。纯读，不写 flags、不记日志。 */
+export function closedLineIds(flags: Record<string, unknown> | undefined, tiers: readonly string[] = lineOutcomeTiers()): string[] {
+  return judgedLineIds().filter(lineId => {
+    const outcome = readLineOutcome(flags, lineId);
+    return outcome !== undefined && tiers.includes(outcome);
+  });
+}
+
 /** 写一条收束档；返回是否有改动。非判档线（不在 judgedLines，如太泉）与不在 tiers 里的档位拒写；writeOnce 时已收束的线不覆盖（同值静默跳过）；拒写记 LCQ-SAV-024。 */
 export function writeLineOutcome(flags: Record<string, unknown>, lineId: string, outcome: string, eventId?: string): boolean {
   const from = eventId ? `（事件 ${eventId}）` : '';
