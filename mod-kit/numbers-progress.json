@@ -1085,6 +1085,15 @@
       "judgedLines": ["nanhuang", "jin", "song", "han", "tang", "qin"],
       "failEndsGame": { "nanhuang": false, "jin": false, "song": false, "han": false, "tang": false, "qin": false }
     },
+    "lineUnlock": {
+      "note": "整线解锁（太泉解锁设计稿 2026-10-27 §2；用户 2026-10-27 01:12／01:28 定）。键＝国家线 id，目前只有 taiquan。三条同时满足才解锁：①玩家九级境界 levelOf(角色.属性.境界) ≥ minRealmLevel（六阳按原著换算读坐照＝5，lyl 11967；小阶段不看）；②已收束的判档线条数 ≥ minClosedLines（只数 story.lineOutcome.judgedLines 里的线，太泉不在其中；档位须在 countTiers 里；没去、半路走掉＝没有收束记录，不算）；③requireDeadlinesCleared 里每个期限的 deadlineState 都是 cleared；读不到（未上线、未起算）按通过（总策划 01:28），空数组＝不读期限。已走进本线的存档（任一本线节点事件已完成）一律视为已解锁（总策划 2026-10-27 定，设计稿 §14-4）。不设 enforce 开关（总策划 2026-10-27 定，设计稿 §14-3），改由默认路线可达性测试卡住硬门数据。改值即时生效；解锁结果不锁存。",
+      "taiquan": {
+        "minRealmLevel": 5,
+        "minClosedLines": 1,
+        "countTiers": ["resolved", "unresolved"],
+        "requireDeadlinesCleared": ["liuchao.deadline.ice_gu"]
+      }
+    },
     "identity": {
       "note": "玩家身份账（身份账设计稿 2026-10-25 §2.2）：kinds 为 entity-catalog/identities.json 里 kind 的取值集合（草案）。prompt.maxItems：提示词【主角身份·引擎账本】结论行最多列几个身份（补充设计稿 2026-10-26 §5.4，int≥1；按 rank 降序、再按入账先后截取，secret 身份不计）",
       "kinds": ["office", "title", "merchant", "sect"],

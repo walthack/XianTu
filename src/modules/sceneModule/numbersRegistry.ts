@@ -64,6 +64,9 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
 /** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读配置 story.lineOutcome.judgedLines，这里不写。 */
 export const NATION_LINE_IDS: readonly string[] = ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin', 'taiquan'];
 
+/** story.lineUnlock.<lineId> 每线允许的键（太泉解锁设计稿 2026-10-27 §2；不设 enforce 开关，总策划 2026-10-27 定）。 */
+export const LINE_UNLOCK_KEYS: readonly string[] = ['note', 'minRealmLevel', 'minClosedLines', 'countTiers', 'requireDeadlinesCleared'];
+
 /** 高频叶子：挡住缺字段 / 类型 / 粗范围；其余叶子仍靠补丁 typeof 对齐默认。 */
 export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.trades', kind: 'array', required: true, section: 'progress' },
@@ -73,6 +76,9 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.lineOutcome.writeOnce', kind: 'bool', required: true, section: 'progress' },
   { path: 'story.lineOutcome.judgedLines', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineOutcome.failEndsGame', kind: 'object', required: true, section: 'progress' },
+  { path: 'story.lineUnlock.taiquan.minRealmLevel', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.lineUnlock.taiquan.minClosedLines', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.lineUnlock.taiquan.countTiers', kind: 'array', required: true, section: 'progress' },
   { path: 'story.identity.kinds', kind: 'array', required: true, section: 'progress' },
   { path: 'story.identity.prompt.maxItems', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.itemProvenance.dedupeBy', kind: 'string', required: true, oneOf: ['everObtained', 'currentlyHeld'], section: 'progress' },
@@ -211,6 +217,48 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
     for (const [lineId, value] of Object.entries(table)) {
       if (!judged.includes(lineId)) errors.push(`非判档线：story.lineOutcome.failEndsGame.${lineId}（不在 story.lineOutcome.judgedLines）`);
       else if (typeof value !== 'boolean') errors.push(`字段类型无效：story.lineOutcome.failEndsGame.${lineId} 须为 bool`);
+    }
+  }
+
+  // 交叉：整线解锁（太泉解锁设计稿 2026-10-27 §2）。键须为国家线（另可有 note）；每线只许 LINE_UNLOCK_KEYS；
+  // minRealmLevel ≤ levels.max、minClosedLines ≤ 判档线条数（否则门永远打不开）、countTiers ⊆ lineOutcome.tiers 不重复；
+  // requireDeadlinesCleared 空数组合法（＝不读期限），故不进 FIELD_SPECS（array 一律禁空），在这里校验；期限 id 与规则表的交叉核对不在这里
+  const lineUnlock = atPath(tree, 'story.lineUnlock');
+  if (lineUnlock !== undefined && !kindOk(lineUnlock, 'object')) errors.push('字段类型无效：story.lineUnlock 须为 object');
+  else if (lineUnlock !== undefined) {
+    const levelMax = atPath(tree, 'levels.max');
+    const tiers = atPath(tree, 'story.lineOutcome.tiers');
+    const specified = new Set(FIELD_SPECS.map(s => s.path));
+    for (const [lineId, conf] of Object.entries(lineUnlock as Record<string, unknown>)) {
+      const at = `story.lineUnlock.${lineId}`;
+      if (lineId === 'note') { if (typeof conf !== 'string') errors.push(`字段类型无效：${at} 须为 string`); continue; }
+      if (!NATION_LINE_IDS.includes(lineId)) { errors.push(`未知国家线：${at}`); continue; }
+      if (!kindOk(conf, 'object')) { errors.push(`字段类型无效：${at} 须为 object`); continue; }
+      const table = conf as Record<string, unknown>;
+      for (const key of Object.keys(table)) if (!LINE_UNLOCK_KEYS.includes(key)) errors.push(`未知字段：${at}.${key}（只有 ${LINE_UNLOCK_KEYS.join(' / ')}）`);
+      if ('note' in table && typeof table.note !== 'string') errors.push(`字段类型无效：${at}.note 须为 string`);
+      // 已在 FIELD_SPECS 的（taiquan）不重复报形状；其余线在这里补形状
+      for (const [key, kind] of [['minRealmLevel', 'int'], ['minClosedLines', 'int'], ['countTiers', 'array']] as const) {
+        if (specified.has(`${at}.${key}`)) continue;
+        const value = table[key];
+        if (value === undefined) errors.push(`缺字段：${at}.${key}`);
+        else if (!kindOk(value, kind)) errors.push(`字段类型无效：${at}.${key} 须为 ${kind}`);
+        else if (kind === 'int' && (value as number) < 0) errors.push(`字段范围无效：${at}.${key} < 0`);
+        else if (kind === 'array' && (value as unknown[]).length === 0) errors.push(`字段范围无效：${at}.${key} 不能为空数组`);
+      }
+      const { minRealmLevel, minClosedLines, countTiers, requireDeadlinesCleared } = table;
+      if (kindOk(minRealmLevel, 'int') && typeof levelMax === 'number' && (minRealmLevel as number) > levelMax) errors.push(`字段范围无效：${at}.minRealmLevel > levels.max（${levelMax}）`);
+      if (kindOk(minClosedLines, 'int') && (minClosedLines as number) > judged.length) errors.push(`字段范围无效：${at}.minClosedLines > story.lineOutcome.judgedLines 条数（${judged.length}），门永远打不开`);
+      if (Array.isArray(countTiers)) countTiers.forEach((tier, i) => {
+        if (!Array.isArray(tiers) || !tiers.includes(tier)) errors.push(`字段范围无效：${at}.countTiers[${i}]=${String(tier)} 不在 story.lineOutcome.tiers`);
+        else if (countTiers.indexOf(tier) !== i) errors.push(`档位重复：${at}.countTiers[${i}]=${String(tier)}`);
+      });
+      if (requireDeadlinesCleared === undefined) errors.push(`缺字段：${at}.requireDeadlinesCleared`);
+      else if (!Array.isArray(requireDeadlinesCleared)) errors.push(`字段类型无效：${at}.requireDeadlinesCleared 须为 array`);
+      else requireDeadlinesCleared.forEach((id, i) => {
+        if (typeof id !== 'string' || !id) errors.push(`字段类型无效：${at}.requireDeadlinesCleared[${i}] 须为非空字符串`);
+        else if (requireDeadlinesCleared.indexOf(id) !== i) errors.push(`期限重复：${at}.requireDeadlinesCleared[${i}]=${id}`);
+      });
     }
   }
 

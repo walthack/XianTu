@@ -256,3 +256,74 @@ test('story.identity.prompt.maxItems 必填 int≥1、首版 3（补充设计稿
   assert.throws(() => numbers.applyGameNumbers({ story: { identity: { prompt: { maxItems: 0 } } } }), err => err.code === 'LCQ-NUM-008');
   assert.equal(numbers.GAME_NUMBERS.story.identity.prompt.maxItems, 3);
 });
+
+test('story.lineUnlock.taiquan 四键取值、FIELD_SPECS 三条、交叉校验（太泉解锁设计稿 2026-10-27 §2 / §10-3）', async () => {
+  const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const fresh = () => structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  const expected = { minRealmLevel: 5, minClosedLines: 1, countTiers: ['resolved', 'unresolved'], requireDeadlinesCleared: ['liuchao.deadline.ice_gu'] };
+  const { note, ...taiquan } = numbers.GAME_NUMBERS.story.lineUnlock.taiquan;
+  assert.equal(note, undefined, '线内不放 note，说明写在 story.lineUnlock.note');
+  assert.deepEqual(structuredClone(taiquan), expected, 'GAME_NUMBERS 四值等于设计稿 §2');
+  assert.deepEqual(readJson('mod-kit/numbers-progress.json').story.lineUnlock.taiquan, expected, '权威分包与生成物一致');
+  assert.equal('enforce' in taiquan, false, '不设 enforce 开关（总策划 2026-10-27 定 §14-3）');
+  assert.deepEqual(registry.FIELD_SPECS.filter(s => s.path.startsWith('story.lineUnlock.')), [
+    { path: 'story.lineUnlock.taiquan.minRealmLevel', kind: 'int', required: true, min: 0, section: 'progress' },
+    { path: 'story.lineUnlock.taiquan.minClosedLines', kind: 'int', required: true, min: 0, section: 'progress' },
+    { path: 'story.lineUnlock.taiquan.countTiers', kind: 'array', required: true, section: 'progress' },
+  ], 'requireDeadlinesCleared 不进 FIELD_SPECS（空数组合法）');
+  assert.deepEqual(registry.validateAgainstRegistry(fresh(), 'cold'), []);
+  const errorsOf = (mutate, mode = 'cold') => { const tree = fresh(); mutate(tree.story.lineUnlock, tree); return registry.validateAgainstRegistry(tree, mode); };
+  const at = 'story.lineUnlock.taiquan';
+  // 缺三个 FIELD_SPEC 键：冷启动与热改合并后都报
+  for (const key of ['minRealmLevel', 'minClosedLines', 'countTiers']) {
+    for (const mode of ['cold', 'patch']) assert.deepEqual(errorsOf(u => { delete u.taiquan[key]; }, mode), [`缺字段：${at}.${key}`], `${key} ${mode}`);
+  }
+  assert.ok(errorsOf(u => { delete u.taiquan; }).includes(`缺字段：${at}.minRealmLevel`), '整线缺失同样拦下');
+  // 形状
+  assert.deepEqual(errorsOf(u => { u.taiquan.minRealmLevel = -1; }), [`字段范围无效：${at}.minRealmLevel < 0`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.minClosedLines = 1.5; }), [`字段类型无效：${at}.minClosedLines 须为 int`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.countTiers = []; }), [`字段范围无效：${at}.countTiers 不能为空数组`]);
+  // 上限读配置，不写死 9 / 6
+  assert.deepEqual(errorsOf(u => { u.taiquan.minRealmLevel = 9; }), []);
+  assert.deepEqual(errorsOf(u => { u.taiquan.minRealmLevel = 10; }), [`字段范围无效：${at}.minRealmLevel > levels.max（9）`]);
+  assert.deepEqual(errorsOf((u, t) => { t.levels.max = 4; }), [`字段范围无效：${at}.minRealmLevel > levels.max（4）`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.minClosedLines = 6; }), []);
+  assert.deepEqual(errorsOf(u => { u.taiquan.minClosedLines = 7; }), [`字段范围无效：${at}.minClosedLines > story.lineOutcome.judgedLines 条数（6），门永远打不开`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.minClosedLines = 0; }), [], '0 合法（恒过）');
+  // countTiers ⊆ tiers、不重复
+  assert.deepEqual(errorsOf(u => { u.taiquan.countTiers = ['resolved']; }), []);
+  assert.deepEqual(errorsOf(u => { u.taiquan.countTiers = ['resolved', 'absent']; }), [`字段范围无效：${at}.countTiers[1]=absent 不在 story.lineOutcome.tiers`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.countTiers = ['resolved', 'resolved']; }), [`档位重复：${at}.countTiers[1]=resolved`]);
+  // requireDeadlinesCleared：必有、数组、非空字符串、不重复；空数组合法
+  assert.deepEqual(errorsOf(u => { u.taiquan.requireDeadlinesCleared = []; }), []);
+  assert.deepEqual(errorsOf(u => { delete u.taiquan.requireDeadlinesCleared; }), [`缺字段：${at}.requireDeadlinesCleared`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.requireDeadlinesCleared = 'liuchao.deadline.ice_gu'; }), [`字段类型无效：${at}.requireDeadlinesCleared 须为 array`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.requireDeadlinesCleared = ['liuchao.deadline.ice_gu', 3, '']; }),
+    [`字段类型无效：${at}.requireDeadlinesCleared[1] 须为非空字符串`, `字段类型无效：${at}.requireDeadlinesCleared[2] 须为非空字符串`]);
+  assert.deepEqual(errorsOf(u => { u.taiquan.requireDeadlinesCleared.push('liuchao.deadline.ice_gu'); }), [`期限重复：${at}.requireDeadlinesCleared[1]=liuchao.deadline.ice_gu`]);
+  // 未知线、未知字段、整段类型
+  assert.deepEqual(errorsOf(u => { u.chu = structuredClone(u.taiquan); }), ['未知国家线：story.lineUnlock.chu']);
+  assert.deepEqual(errorsOf(u => { u.taiquan.enforce = false; }), [`未知字段：${at}.enforce（只有 note / minRealmLevel / minClosedLines / countTiers / requireDeadlinesCleared）`]);
+  assert.deepEqual(errorsOf(u => { u.note = 1; }), ['字段类型无效：story.lineUnlock.note 须为 string']);
+  assert.deepEqual(errorsOf((u, t) => { t.story.lineUnlock = []; }).filter(e => e.startsWith('字段类型无效：story.lineUnlock ')), ['字段类型无效：story.lineUnlock 须为 object']);
+  // 其它国家线也可配（不在 FIELD_SPECS 的线由交叉校验补形状）
+  assert.deepEqual(errorsOf(u => { u.jin = { minRealmLevel: 3, minClosedLines: 0, countTiers: ['resolved'], requireDeadlinesCleared: [] }; }), []);
+  assert.deepEqual(errorsOf(u => { u.jin = { minRealmLevel: 'x', countTiers: [] }; }), [
+    '字段类型无效：story.lineUnlock.jin.minRealmLevel 须为 int', '缺字段：story.lineUnlock.jin.minClosedLines',
+    '字段范围无效：story.lineUnlock.jin.countTiers 不能为空数组', '缺字段：story.lineUnlock.jin.requireDeadlinesCleared',
+  ]);
+  // 热改：越界 → NUM-008 原值不变；合法值即时生效后复原；未知线 → NUM-002
+  assert.throws(() => numbers.applyGameNumbers({ story: { lineUnlock: { taiquan: { minClosedLines: 99 } } } }), err => err.code === 'LCQ-NUM-008' && /minClosedLines/.test(err.message));
+  assert.equal(numbers.GAME_NUMBERS.story.lineUnlock.taiquan.minClosedLines, 1);
+  assert.throws(() => numbers.applyGameNumbers({ story: { lineUnlock: { taiquan: { countTiers: ['resolved', 'x'] } } } }), err => err.code === 'LCQ-NUM-008');
+  assert.throws(() => numbers.applyGameNumbers({ story: { lineUnlock: { jin: { minRealmLevel: 1 } } } }), err => err.code === 'LCQ-NUM-002');
+  numbers.applyGameNumbers({ story: { lineUnlock: { taiquan: { minRealmLevel: 4, requireDeadlinesCleared: [] } } } });
+  try {
+    assert.equal(numbers.GAME_NUMBERS.story.lineUnlock.taiquan.minRealmLevel, 4);
+    assert.deepEqual(numbers.GAME_NUMBERS.story.lineUnlock.taiquan.requireDeadlinesCleared, []);
+  } finally {
+    numbers.applyGameNumbers({ story: { lineUnlock: { taiquan: { minRealmLevel: 5, requireDeadlinesCleared: ['liuchao.deadline.ice_gu'] } } } });
+  }
+  assert.deepEqual(structuredClone(numbers.GAME_NUMBERS.story.lineUnlock.taiquan), expected);
+});
