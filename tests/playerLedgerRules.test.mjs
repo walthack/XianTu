@@ -15,9 +15,25 @@ test('仓库规则表与身份表首版为空且通过校验', async () => {
   const { playerLedgerRules, playerIdentityDefs, validatePlayerLedgerRules } = await modPromise;
   assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [], identityRevokes: [], lineOutcomes: [] });
   assert.deepEqual(playerIdentityDefs(), []);
-  // 七条国家线都能被实体索引认出
-  const table = rules({ lineOutcomes: ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin', 'taiquan'].map(lineId => ({ eventId: EVENT, lineId, outcome: 'resolved' })) });
+  // 六条判档线都能被实体索引认出且可写收束档
+  const table = rules({ lineOutcomes: ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin'].map(lineId => ({ eventId: EVENT, lineId, outcome: 'resolved' })) });
   assert.deepEqual(validatePlayerLedgerRules(table), []);
+});
+
+test('太泉不判档：收束规则的 lineId 须在 story.lineOutcome.judgedLines', async () => {
+  const { validatePlayerLedgerRules } = await modPromise;
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  assert.equal(numbers.GAME_NUMBERS.story.lineOutcome.judgedLines.includes('taiquan'), false);
+  const table = rules({ lineOutcomes: [{ eventId: EVENT, lineId: 'taiquan', outcome: 'resolved' }] });
+  // 太泉是已知国家线（实体索引 kind=line），报的是非判档而不是未知
+  assert.deepEqual(validatePlayerLedgerRules(table, { identities: [] }), [`收束规则 ${EVENT} → taiquan：lineId 不在 story.lineOutcome.judgedLines（非判档线不写收束档）：taiquan`]);
+  // 判档线集合走配置：引用集合换成含太泉即通过，去掉宋即报错
+  assert.deepEqual(validatePlayerLedgerRules(table, { identities: [], judgedLines: ['taiquan'] }), []);
+  const song = rules({ lineOutcomes: [{ eventId: EVENT, lineId: 'song', outcome: 'resolved' }] });
+  assert.ok(validatePlayerLedgerRules(song, { identities: [], judgedLines: ['jin'] }).some(e => /非判档线不写收束档）：song/.test(e)));
+  // 未知线只报未知，不重复报非判档
+  const chu = validatePlayerLedgerRules(rules({ lineOutcomes: [{ eventId: EVENT, lineId: 'chu', outcome: 'resolved' }] }), { identities: [] });
+  assert.deepEqual(chu, [`收束规则 ${EVENT} → chu：lineId 未知：chu`]);
 });
 
 test('未知 identityId/eventId/lineId 报错', async () => {

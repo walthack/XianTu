@@ -33,9 +33,13 @@ export function readLineOutcome(flags: Record<string, unknown> | undefined, line
   return typeof node === 'string' ? node : undefined;
 }
 
-/** 写一条收束档；返回是否有改动。不在 tiers 里拒写；writeOnce 时已收束的线不覆盖（同值静默跳过）；拒写记 LCQ-SAV-024。 */
+/** 写一条收束档；返回是否有改动。非判档线（不在 judgedLines，如太泉）与不在 tiers 里的档位拒写；writeOnce 时已收束的线不覆盖（同值静默跳过）；拒写记 LCQ-SAV-024。 */
 export function writeLineOutcome(flags: Record<string, unknown>, lineId: string, outcome: string, eventId?: string): boolean {
   const from = eventId ? `（事件 ${eventId}）` : '';
+  if (!judgedLineIds().includes(lineId)) {
+    logError('LCQ-SAV-024', `${lineId} 不在 story.lineOutcome.judgedLines（非判档线），拒写收束档 ${String(outcome)}${from}`, { detail: { reason: 'notJudged', lineId, outcome, eventId } });
+    return false;
+  }
   if (!lineOutcomeTiers().includes(outcome)) {
     logError('LCQ-SAV-024', `${lineId} 收束档 ${String(outcome)} 不在 story.lineOutcome.tiers，拒写${from}`, { detail: { reason: 'tier', lineId, outcome, eventId } });
     return false;

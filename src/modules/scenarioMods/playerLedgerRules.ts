@@ -1,7 +1,7 @@
 /**
  * 玩家账本规则表（身份账设计稿 2026-10-25 §3.1 / §6）：「事件 → 身份 / 收束档」的唯一映射。
  * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；
- * 档位集合与身份 kind 集合只读数值配置 story.lineOutcome.tiers / story.identity.kinds，这里不写死。
+ * 档位集合、判档线集合与身份 kind 集合只读数值配置 story.lineOutcome.tiers / story.lineOutcome.judgedLines / story.identity.kinds，这里不写死。
  */
 import rulesJson from '../../../mod-kit/player-ledger-rules.json';
 import identitiesJson from '../../../mod-kit/entity-catalog/identities.json';
@@ -17,7 +17,7 @@ export interface IdentityGrantRule {
   redirectIdentityId?: string;
 }
 export interface IdentityRevokeRule { eventId: string; identityId: string }
-/** outcome ∈ story.lineOutcome.tiers */
+/** outcome ∈ story.lineOutcome.tiers；lineId ∈ story.lineOutcome.judgedLines（太泉不判档） */
 export interface LineOutcomeRule { eventId: string; lineId: string; outcome: string }
 
 export interface PlayerLedgerRules {
@@ -49,6 +49,7 @@ export interface PlayerLedgerRefs {
   lineIds?: Iterable<string>;
   factionIds?: Iterable<string>;
   tiers?: readonly string[];
+  judgedLines?: readonly string[];
   kinds?: readonly string[];
 }
 
@@ -78,6 +79,7 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
   const lineIds = new Set(refs.lineIds ?? indexIds('line'));
   const factionIds = new Set(refs.factionIds ?? indexIds('faction'));
   const tiers = refs.tiers ?? GAME_NUMBERS.story.lineOutcome.tiers;
+  const judgedLines = refs.judgedLines ?? GAME_NUMBERS.story.lineOutcome.judgedLines;
   const kinds = refs.kinds ?? identityKinds();
   const identityIds = new Set<string>();
 
@@ -125,6 +127,7 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
     const where = `收束规则 ${rule.eventId} → ${rule.lineId}：`;
     checkEvent(where, rule.eventId);
     if (!lineIds.has(rule.lineId)) errors.push(`${where}lineId 未知：${rule.lineId}`);
+    else if (!judgedLines.includes(rule.lineId)) errors.push(`${where}lineId 不在 story.lineOutcome.judgedLines（非判档线不写收束档）：${rule.lineId}`);
     if (!tiers.includes(rule.outcome)) errors.push(`${where}outcome 不在 story.lineOutcome.tiers：${String(rule.outcome)}`);
   }
   return errors;

@@ -1,4 +1,4 @@
-// 国家线收束档 T1（身份账设计稿 2026-10-25 §3.3 / §6）：flags 键 line.<lineId>.outcome，档位（两档）、只写一次、失败是否结束游戏读数值配置。规则均为测试夹具。
+// 国家线收束档 T1（身份账设计稿 2026-10-25 §3.3 / §6）：flags 键 line.<lineId>.outcome，档位（两档）、判档线（太泉不判档）、只写一次、失败是否结束游戏读数值配置。规则均为测试夹具。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -94,6 +94,29 @@ test('imperfect 不在 tiers 时拒写', async () => {
   const hits = await logged('tier');
   assert.equal(hits.length, 1);
   assert.equal(hits[0].detail.outcome, 'imperfect');
+});
+
+test('太泉不判档：非判档线拒写 line.<id>.outcome，记 LCQ-SAV-024（notJudged）', async () => {
+  const { syncLineOutcomes, writeLineOutcome, judgedLineIds } = await modPromise;
+  assert.equal(judgedLineIds().includes('taiquan'), false);
+  const runtime = { flags: {}, completedEventIds: ['e.taiquan.end', 'e.song.end'] };
+  const table = rules([{ eventId: 'e.taiquan.end', lineId: 'taiquan', outcome: 'resolved' }, { eventId: 'e.song.end', lineId: 'song', outcome: 'unresolved' }]);
+  await resetLog();
+  const [changed, warnings] = await quiet(() => syncLineOutcomes(runtime, { rules: table }));
+  assert.equal(changed, 1, '判档线照写，太泉不写');
+  assert.equal('line.taiquan.outcome' in runtime.flags, false);
+  assert.equal(runtime.flags['line.song.outcome'], 'unresolved');
+  assert.ok(warnings.some(w => /judgedLines/.test(w)));
+  const hits = await logged('notJudged');
+  assert.equal(hits.length, 1);
+  assert.deepEqual({ lineId: hits[0].detail.lineId, outcome: hits[0].detail.outcome, eventId: hits[0].detail.eventId, module: hits[0].module },
+    { lineId: 'taiquan', outcome: 'resolved', eventId: 'e.taiquan.end', module: 'lineOutcomes' });
+  // 直接写入口同样拒写；未知线也不在判档集合里
+  const flags = {};
+  const [wrote] = await quiet(() => writeLineOutcome(flags, 'taiquan', 'unresolved'));
+  const [wroteUnknown] = await quiet(() => writeLineOutcome(flags, 'chu', 'resolved'));
+  assert.deepEqual([wrote, wroteUnknown, flags], [false, false, {}]);
+  assert.equal((await logged('notJudged')).length, 3);
 });
 
 test('lineFailEndsGame 逐线读 failEndsGame，国家线默认失败可继续，太泉不判档', async () => {
