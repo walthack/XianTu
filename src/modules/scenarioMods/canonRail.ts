@@ -552,7 +552,7 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
     "contracts": [
       {
         "eventId": "lcq.event.s05b_ice_gu_detour",
-        "mustReach": entityText("祁远算出三个月之约只剩十几天，赶不及回五原或建康，朱老头指路山村一天多。云苍峰与{{entity:character:lcq.character.nanhuang_xiaowei}}带货物和伤员去白龙江口，程宗扬、祁远、凝羽、乐明珠随朱老头去叶媪山村。期限仅叙事压力，无致命倒计时。"),
+        "mustReach": entityText("祁远算出三个月之约只剩十几天，赶不及回五原或建康，朱老头指路山村一天多。云苍峰与{{entity:character:lcq.character.nanhuang_xiaowei}}带货物和伤员去白龙江口，程宗扬、祁远、凝羽、乐明珠随朱老头去叶媪山村。冰蛊发作在即，须赶在发作前解蛊。"),
         "completionEvidence": [],
         "forbiddenInCanon": [
           "提前演出后续剧情",

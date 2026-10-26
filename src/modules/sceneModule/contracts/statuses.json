@@ -584,7 +584,7 @@
     "tier": "book",
     "cause": "item",
     "kind": "debuff",
-    "source": "苏妲己在冰镇酸梅汤里给程宗扬种下冰蛊，以此逼他南行（lcq.event.ice_gu_coercion）；只由剧情解除：殇侯解蛊（lcq.event.shanghou_cures_ice_gu，或殇侯读白纸信那一步 event.s05b_shanghou_reads_letter.ice_gu_cured）。第 05、05b 两段剧本整段都在中蛊期（换段时旗标会重置，按剧本段补挂）。",
+    "source": "苏妲己在冰镇酸梅汤里给程宗扬种下冰蛊，以此逼他南行（lcq.event.ice_gu_coercion）；只由剧情解除，解除事件不止一种：南荒殇侯原法解蛊（lcq.event.shanghou_cures_ice_gu，或殇侯读白纸信那一步 event.s05b_shanghou_reads_letter.ice_gu_cured），晋、宋、汉云家解蛊，朱老头带路找殇侯解蛊等（各线解除事件接入后补进 remove）。第 05、05b 两段剧本整段都在中蛊期（换段时旗标会重置，按剧本段补挂）。",
     "storyApply": {
       "flags": [
         "event.ice_gu_coercion.done"

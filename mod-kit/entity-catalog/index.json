@@ -23175,6 +23175,12 @@
     },
     {
       "kind": "text",
+      "id": "lcq.ending.death.ajiman_bond.ajiman_path",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "lcq.ending.death.baihu_beheading",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []

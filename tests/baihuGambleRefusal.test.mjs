@@ -1224,10 +1224,11 @@ test('hard-coded option locks (user ruling 2026-10-02): only the deciding step l
   assert.equal(over?.endingId, 'lcq.ending.death.ajiman_bond');
   assert.equal(over.title, '冰蛊');
   assert.equal(over.sourceEventId, 'lcq.event.wuerlang_joins');
-  assert.match(over.facts.join('；'), /冰蛊是之后苏妲己/);
+  // 2026-10-27 00:54 用户定（裁定簿 #240）：阿姬曼路 facts = 通用三条 + A1–A6，取代 #169 的措辞
+  assert.match(over.facts.join('；'), /冰蛊是苏妲己在冰镇酸梅汤里给程宗扬种下的/);
   assert.equal(over.facts.some(fact => /早在/.test(fact)), false, '不得暗示第23章已种下冰蛊');
   assert.match(over.facts.join('；'), /没有撕掉的身契让她查到了程宗扬/);
-  assert.match(over.facts.join('；'), /哥哥将永远等不到她回来/);
+  assert.match(over.facts.join('；'), /耽摩城里的哥哥，再也等不到她回去/);
   assert.match(over.facts.join('；'), /黑魔海/);
   const endingPrompt = buildScenarioStoryPrompt(pocketed);
   assert.match(endingPrompt, /【本局结束·结局正文】[^\n]*标题是“冰蛊”/);
