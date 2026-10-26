@@ -129,6 +129,18 @@ test('扫描器自测：字符串 / 注释 / 正则 / 模板里的 catch 字样�
   assert.equal(maskSource('a = "x"; // y\nb').length, 'a = "x"; // y\nb'.length);
 });
 
+test('扫描器自测：catch 里只有 debugLog 不算已处理；lcq-allow-console 不等于 lcq-allow', () => {
+  const src = [
+    "try { f(); } catch (e) { debugLog('ai', '失败', () => e); }",
+    'try { f(); } catch { /* lcq-allow-console: 不是 catch 豁免 */ }',
+    '// lcq-allow-console: 上一行也不算',
+    'try { g(); } catch {}',
+    "p.catch(e => debugLog('ai', 'x', e));",
+    "try { f(); } catch (e) { debugLog('ai', 'x'); logError('LCQ-SYS-000', e); }",
+  ].join('\n');
+  assert.deepEqual(scanCatches(src).map(f => f.handled), [false, false, false, false, true]);
+});
+
 test('catch 守卫：非测试源码新增的 catch 必须含 logError/logEvent 或 // lcq-allow: 原因（存量见基线文件）', () => {
   const current = {};
   const unhandledAt = new Map();
