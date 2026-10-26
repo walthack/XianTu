@@ -1092,6 +1092,10 @@
     "itemProvenance": {
       "note": "道具来路去重（身份账补充设计稿 2026-10-26 §2.5；总策划 2026-10-26 审定取推荐值）：dedupeBy 为唯一道具组（mod-kit/player-ledger-rules.json itemGroups）判「已得过」的口径。everObtained＝组内任一 itemId 有发放回执或背包现存即算得过，用掉了也不再发；currentlyHeld＝只看背包现存。取值只能是这两个之一",
       "dedupeBy": "everObtained"
+    },
+    "progressDeadline": {
+      "note": "进度期限（身份账补充设计稿 2026-10-26 §4.6）：limits 为 { \"<deadlineId>\": { \"due\": int≥1, \"urgentAt\": int, 0≤urgentAt<due } }，键须正好是 mod-kit/player-ledger-rules.json progressDeadlines 的 id 集合（规则表校验交叉核对）。due＝起算后计满多少个刻度即到期，urgentAt＝计到多少个刻度进入 urgent。running/urgent 每次读取现算，到 due/cleared 才锁存进 flags 键 deadline.<id>.state，热改数值不让已锁存的倒退。首版留空，冰蛊的 due、凝羽归队的 N 待总策划给数",
+      "limits": {}
     }
   },
   "crafting": {

@@ -92,6 +92,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-024': spec('warn', 'lineOutcomes', '国家线收束档拒写：线不在 story.lineOutcome.judgedLines（非判档线），或档位不在 story.lineOutcome.tiers，或已收束且 writeOnce 不覆盖'),
   'LCQ-SAV-025': spec('warn', 'itemProvenance', '道具来路去重没能按规则执行（判断出错时按原逻辑发放；改发的物品不在本关物品表时只跳过；读档回填失败）'),
   'LCQ-SAV-026': spec('warn', 'partyLedger', '在队账推导失败，本次按“不在队”处理（偏保守，倾向锁节点）'),
+  'LCQ-SAV-027': spec('warn', 'progressDeadlines', '进度期限同步或锁存失败、锁存值非法、或现算与锁存冲突（以锁存为准）'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

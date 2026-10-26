@@ -75,6 +75,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.lineOutcome.failEndsGame', kind: 'object', required: true, section: 'progress' },
   { path: 'story.identity.kinds', kind: 'array', required: true, section: 'progress' },
   { path: 'story.itemProvenance.dedupeBy', kind: 'string', required: true, oneOf: ['everObtained', 'currentlyHeld'], section: 'progress' },
+  { path: 'story.progressDeadline.limits', kind: 'object', required: true, section: 'progress' },
   { path: 'lineBonds.majorResponse.delta', kind: 'number', required: true, min: 0, section: 'progress' },
   { path: 'lineBonds.majorResponse.salienceFloor', kind: 'number', required: true, min: 0, section: 'progress' },
   { path: 'lineBonds.majorResponse.memoryKeep', kind: 'int', required: true, min: 1, section: 'progress' },
@@ -209,6 +210,22 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
     for (const [lineId, value] of Object.entries(table)) {
       if (!judged.includes(lineId)) errors.push(`非判档线：story.lineOutcome.failEndsGame.${lineId}（不在 story.lineOutcome.judgedLines）`);
       else if (typeof value !== 'boolean') errors.push(`字段类型无效：story.lineOutcome.failEndsGame.${lineId} 须为 bool`);
+    }
+  }
+
+  // 形状：进度期限每项 { due:int≥1, urgentAt:int, 0≤urgentAt<due }（键集合与规则表的交叉核对在 validatePlayerLedgerRules）
+  const deadlineLimits = atPath(tree, 'story.progressDeadline.limits');
+  if (kindOk(deadlineLimits, 'object')) {
+    for (const [id, limit] of Object.entries(deadlineLimits as Record<string, unknown>)) {
+      const at = `story.progressDeadline.limits.${id}`;
+      if (!kindOk(limit, 'object')) { errors.push(`字段类型无效：${at} 须为 object`); continue; }
+      const { due, urgentAt, ...extra } = limit as Record<string, unknown>;
+      for (const key of Object.keys(extra)) errors.push(`未知字段：${at}.${key}（只有 due / urgentAt）`);
+      if (!kindOk(due, 'int')) errors.push(`字段类型无效：${at}.due 须为 int`);
+      else if ((due as number) < 1) errors.push(`字段范围无效：${at}.due < 1`);
+      if (!kindOk(urgentAt, 'int')) errors.push(`字段类型无效：${at}.urgentAt 须为 int`);
+      else if ((urgentAt as number) < 0) errors.push(`字段范围无效：${at}.urgentAt < 0`);
+      else if (kindOk(due, 'int') && (urgentAt as number) >= (due as number)) errors.push(`字段范围无效：${at}.urgentAt 须小于 due`);
     }
   }
 

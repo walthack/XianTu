@@ -210,3 +210,30 @@ test('story.itemProvenance.dedupeBy 必填且只能取 everObtained / currentlyH
   assert.throws(() => numbers.applyGameNumbers({ story: { itemProvenance: { dedupeBy: 'byName' } } }), err => err.code === 'LCQ-NUM-008');
   assert.equal(numbers.GAME_NUMBERS.story.itemProvenance.dedupeBy, 'everObtained');
 });
+
+test('story.progressDeadline.limits 必填、首版 {}、每项 due≥1 且 0≤urgentAt<due（补充设计稿 2026-10-26 §4.6）', async () => {
+  const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
+  const spec = registry.FIELD_SPECS.find(s => s.path === 'story.progressDeadline.limits');
+  assert.deepEqual(spec, { path: 'story.progressDeadline.limits', kind: 'object', required: true, section: 'progress' });
+  const fresh = () => structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  assert.deepEqual(fresh().story.progressDeadline.limits, {}, '首版留空，数值待总策划给');
+  assert.deepEqual(readJson('mod-kit/numbers-progress.json').story.progressDeadline.limits, {}, '生成物与权威分包一致');
+  const withLimits = (limits) => { const tree = fresh(); tree.story.progressDeadline.limits = limits; return registry.validateAgainstRegistry(tree, 'cold'); };
+  assert.deepEqual(withLimits({ 'liuchao.deadline.a': { due: 3, urgentAt: 2 }, 'liuchao.deadline.b': { due: 1, urgentAt: 0 } }), []);
+  const absent = fresh();
+  delete absent.story.progressDeadline.limits;
+  assert.ok(registry.validateAgainstRegistry(absent, 'patch').some(e => e === '缺字段：story.progressDeadline.limits'));
+  assert.ok(withLimits([]).some(e => e === '字段类型无效：story.progressDeadline.limits 须为 object'));
+  const at = 'story.progressDeadline.limits.liuchao.deadline.a';
+  const cases = [
+    [{ due: 0, urgentAt: 0 }, `字段范围无效：${at}.due < 1`, `字段范围无效：${at}.urgentAt 须小于 due`],
+    [{ due: 2.5, urgentAt: 0 }, `字段类型无效：${at}.due 须为 int`],
+    [{ urgentAt: 0 }, `字段类型无效：${at}.due 须为 int`],
+    [{ due: 2 }, `字段类型无效：${at}.urgentAt 须为 int`],
+    [{ due: 2, urgentAt: -1 }, `字段范围无效：${at}.urgentAt < 0`],
+    [{ due: 2, urgentAt: 2 }, `字段范围无效：${at}.urgentAt 须小于 due`],
+    [{ due: 2, urgentAt: 1, onDue: 'x' }, `未知字段：${at}.onDue（只有 due / urgentAt）`],
+    [3, `字段类型无效：${at} 须为 object`],
+  ];
+  for (const [limit, ...messages] of cases) assert.deepEqual(withLimits({ 'liuchao.deadline.a': limit }), messages, JSON.stringify(limit));
+});

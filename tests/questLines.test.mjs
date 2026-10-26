@@ -28,3 +28,10 @@ test('reference validation checks every owner, condition, receipt and whiteliste
  const seen=[];const errors=q.validateQuestLineReferences(table,(kind,id,ev)=>{seen.push([kind,id,ev]);return false;});
  assert.ok(errors.includes('character: test.actor'));assert.ok(errors.includes('event: test.insert'));assert.ok(errors.includes('chapter: test.chapter'));assert.ok(seen.some(([kind,id,event])=>kind==='action'&&id==='test.choose'&&event==='test.insert'));
 });
+// 进度期限 T8（身份账补充设计稿 2026-10-26 §4.2）：deadline.* 锁存只由 progressDeadlines.ts 写，setState 不得写这个前缀（同 line.*）
+test('setState 写 deadline. 前缀被拒',()=>{
+ const withState=stateId=>{const copy=structuredClone(line);copy.beats[0].onComplete=[{kind:'setState',stateId,value:'due'}];return {version:1,lines:[copy]};};
+ assert.throws(()=>q.parseQuestLines(withState('deadline.liuchao.deadline.bingu.state')),/deadline\./);
+ assert.throws(()=>q.parseQuestLines(withState('deadline')),/deadline\./);
+ assert.equal(q.parseQuestLines(withState('deadlines.note')).lines.length,1,'只拦 deadline 命名空间');
+});

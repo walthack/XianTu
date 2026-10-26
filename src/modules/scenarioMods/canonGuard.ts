@@ -5,6 +5,7 @@ import { fixedInventoryCommandViolation } from './fixedInventoryContracts';
 import { getNarrativeAnchorEvent } from './runtime';
 import { expandPrivateKnowledgeAssociations } from './privateKnowledgeGuard';
 import { LINE_FLAG_PREFIX } from './lineOutcomes';
+import { DEADLINE_FLAG_PREFIX } from './progressDeadlines';
 
 import type {
   ScenarioContentAccessRule,
@@ -356,6 +357,8 @@ function findScenarioFlagViolation(runtime: ScenarioRuntimeState, command: Comma
   }
   // 国家线收束档 line.<lineId>.outcome：只由规则表同步写入；整段 flags.line 嵌套写法同样拦（读取有嵌套兜底）。
   if (`${flagPath}.`.startsWith(LINE_FLAG_PREFIX)) return '国家线收束档 line.* 只能由本地引擎按规则表写入';
+  // 进度期限锁存 deadline.<id>.state：只由 progressDeadlines.ts 写（补充设计稿 2026-10-26 §4.2），嵌套写法同样拦。
+  if (`${flagPath}.`.startsWith(DEADLINE_FLAG_PREFIX)) return '进度期限 deadline.* 只能由本地引擎锁存';
   const parts = flagPath.split('.');
   const namespace = parts[0];
   if (namespace !== 'event' && namespace !== 'chapter') return null;

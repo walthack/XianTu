@@ -1,13 +1,14 @@
 /**
  * 玩家账本规则表（身份账设计稿 2026-10-25 §3.1 / §6）：「事件 → 身份 / 收束档」的唯一映射。
- * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；唯一道具组 itemGroups 见补充设计稿 2026-10-26 §2.2，在队账 partyJoins / partyLeaves / partyOpenings 见同稿 §3.2；
- * 档位集合、判档线集合与身份 kind 集合只读数值配置 story.lineOutcome.tiers / story.lineOutcome.judgedLines / story.identity.kinds，这里不写死。
+ * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；唯一道具组 itemGroups 见补充设计稿 2026-10-26 §2.2，在队账 partyJoins / partyLeaves / partyOpenings 见同稿 §3.2，进度期限 progressTicks / progressDeadlines 见同稿 §4.3；
+ * 档位集合、判档线集合、身份 kind 集合与期限数值只读数值配置 story.lineOutcome.tiers / story.lineOutcome.judgedLines / story.identity.kinds / story.progressDeadline.limits，这里不写死。
  */
 import rulesJson from '../../../mod-kit/player-ledger-rules.json';
 import identitiesJson from '../../../mod-kit/entity-catalog/identities.json';
 import index from '../../../mod-kit/entity-catalog/index.json';
 import stageAccess from '../../../mod-kit/entity-catalog/stage-access.json';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
+import { NATION_LINE_IDS } from '../sceneModule/numbersRegistry';
 
 export interface IdentityGrantRule {
   eventId: string;
@@ -44,6 +45,29 @@ export interface PartyRule {
 /** 从该关开局的存档，开局时在队的名单（stageId 为 entity-catalog/stage-access.json 的 stages 键，同一关只能出现一次）。 */
 export interface PartyOpening { stageId: string; characterIds: string[] }
 
+/** 进度刻度（补充设计稿 2026-10-26 §4.3）：一个「主要段落」＝一个刻度；同一事件最多算一个刻度。 */
+export interface ProgressTick {
+  /** 实体索引 kind=event */
+  eventId: string;
+  /** 7 条国家线之一（NATION_LINE_IDS） */
+  lineId: string;
+}
+/** 进度期限定义（同稿 §4.3）：起点事件完成起算，每完成一个刻度计数加一，到 due 到期；到期前完成解除事件即解除。到期后果不在机制里。 */
+export interface ProgressDeadlineDef {
+  /** liuchao.deadline.<名>，末段不能是 state */
+  id: string;
+  /** 展示名（调试日志、提示词用） */
+  name: string;
+  /** 任一完成即起算，取最早完成的那个；不能为空 */
+  startEventIds: string[];
+  /** 起算后任一完成即解除；起算前完成的不算；与 startEventIds 不得有交集 */
+  clearEventIds: string[];
+  /** 这些线的刻度不计 */
+  excludeLineIds?: string[];
+  /** 逼近演出的可观察事实（裁定 #155：不写剩余数，不预告结局）；内容组写，首版不填 */
+  promptCue?: { urgent?: string; due?: string };
+}
+
 export interface PlayerLedgerRules {
   version: 1;
   identityGrants: IdentityGrantRule[];
@@ -54,6 +78,8 @@ export interface PlayerLedgerRules {
   partyJoins?: PartyRule[];
   partyLeaves?: PartyRule[];
   partyOpenings?: PartyOpening[];
+  progressTicks?: ProgressTick[];
+  progressDeadlines?: ProgressDeadlineDef[];
 }
 
 export interface PlayerIdentityDef {
@@ -88,6 +114,8 @@ export interface PlayerLedgerRefs {
   stageIds?: Iterable<string>;
   /** 不得写进在队规则的主角 id；缺省 PROTAGONIST_CHARACTER_IDS */
   protagonistIds?: Iterable<string>;
+  /** 期限数值表（键须正好是 progressDeadlines 的 id 集合）；缺省 story.progressDeadline.limits */
+  deadlineLimits?: Record<string, unknown>;
 }
 
 /** 身份 id 末段保留给读取子路径（identity.<id>.from / .status）。 */
@@ -103,7 +131,10 @@ export const ITEM_WHEN_HELD: readonly string[] = ['skip', 'redirect'];
 /** 主角人物 id（同 travelLedger / AIBS 的 isProtagonist 兜底口径）；在队账不收主角。 */
 export const PROTAGONIST_CHARACTER_IDS: readonly string[] = ['liuchao.character.cheng_zongyang'];
 /** 规则表里的可选数组键，缺键按 [] 处理。 */
-const OPTIONAL_RULE_ARRAYS = ['itemGroups', 'partyJoins', 'partyLeaves', 'partyOpenings'] as const;
+const OPTIONAL_RULE_ARRAYS = ['itemGroups', 'partyJoins', 'partyLeaves', 'partyOpenings', 'progressTicks', 'progressDeadlines'] as const;
+/** 进度期限 id 前缀与保留末段（flags 锁存键 deadline.<id>.state）。 */
+export const DEADLINE_ID_PREFIX = 'liuchao.deadline.';
+const RESERVED_DEADLINE_TAILS = ['state'];
 
 /** 实体索引里某 kind 的 id 集合。 */
 export const indexIds = (kind: string): Set<string> => new Set(index.entries.filter(e => e.kind === kind).map(e => e.id));
@@ -182,7 +213,58 @@ export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: Player
   }
   validateItemGroups(rules.itemGroups ?? [], refs, errors);
   validateParty(rules, refs, eventIds, errors);
+  validateProgressDeadlines(rules, refs, eventIds, errors);
   return errors;
+}
+
+/** 进度期限（§4.7）：事件须登记，刻度与排除线须为国家线，同一事件最多一个刻度，起点非空且与解除不相交，期限数值表的键须正好是期限 id 集合。 */
+function validateProgressDeadlines(rules: PlayerLedgerRules, refs: PlayerLedgerRefs, eventIds: Set<string>, errors: string[]): void {
+  const ticks = rules.progressTicks ?? [];
+  const deadlines = rules.progressDeadlines ?? [];
+  const checkLine = (where: string, lineId: unknown): void => { if (!NATION_LINE_IDS.includes(lineId as string)) errors.push(`${where}lineId 不在 7 条国家线：${String(lineId)}`); };
+  const checkEvents = (where: string, field: string, ids: unknown): void => {
+    if (!Array.isArray(ids)) { errors.push(`${where}${field} 须为数组`); return; }
+    for (const eventId of ids) if (!eventIds.has(eventId)) errors.push(`${where}${field} eventId 未知：${String(eventId)}`);
+  };
+  const tickEvents = new Set<string>();
+  for (const tick of ticks) {
+    const where = `刻度 ${String(tick?.eventId)}：`;
+    if (!eventIds.has(tick?.eventId)) errors.push(`${where}eventId 未知：${String(tick?.eventId)}`);
+    checkLine(where, tick?.lineId);
+    if (tickEvents.has(tick?.eventId)) errors.push(`${where}同一事件最多算一个刻度`);
+    tickEvents.add(tick?.eventId);
+  }
+  const deadlineIds = new Set<string>();
+  for (const def of deadlines) {
+    const where = `期限 ${String(def?.id)}：`;
+    if (!def?.id || typeof def.id !== 'string' || !def.id.startsWith(DEADLINE_ID_PREFIX) || def.id.length === DEADLINE_ID_PREFIX.length) errors.push(`${where}id 须为 ${DEADLINE_ID_PREFIX}<名>`);
+    else if (RESERVED_DEADLINE_TAILS.includes(def.id.split('.').pop() || '')) errors.push(`${where}id 末段不能是 ${RESERVED_DEADLINE_TAILS.join('/')}`);
+    if (deadlineIds.has(def?.id)) errors.push(`期限 id 重复：${def.id}`);
+    deadlineIds.add(def?.id);
+    if (typeof def?.name !== 'string' || !def.name.trim()) errors.push(`${where}缺展示名`);
+    checkEvents(where, 'startEventIds', def?.startEventIds);
+    if (Array.isArray(def?.startEventIds) && def.startEventIds.length === 0) errors.push(`${where}startEventIds 不能为空`);
+    checkEvents(where, 'clearEventIds', def?.clearEventIds);
+    if (Array.isArray(def?.startEventIds) && Array.isArray(def?.clearEventIds)) {
+      for (const eventId of def.clearEventIds) if (def.startEventIds.includes(eventId)) errors.push(`${where}起点与解除不能是同一事件：${eventId}`);
+    }
+    if (def?.excludeLineIds !== undefined) {
+      if (!Array.isArray(def.excludeLineIds)) errors.push(`${where}excludeLineIds 须为数组`);
+      else for (const lineId of def.excludeLineIds) checkLine(`${where}excludeLineIds `, lineId);
+    }
+    if (def?.promptCue !== undefined) {
+      const cue = def.promptCue as Record<string, unknown>;
+      if (!cue || typeof cue !== 'object' || Array.isArray(cue)) errors.push(`${where}promptCue 须为对象`);
+      else for (const [key, text] of Object.entries(cue)) {
+        if (key !== 'urgent' && key !== 'due') errors.push(`${where}promptCue 只能有 urgent / due：${key}`);
+        else if (typeof text !== 'string') errors.push(`${where}promptCue.${key} 须为字串`);
+      }
+    }
+  }
+  const limits = refs.deadlineLimits ?? (GAME_NUMBERS.story.progressDeadline.limits as Record<string, unknown>);
+  const limitIds = new Set(Object.keys(limits && typeof limits === 'object' ? limits : {}));
+  for (const id of deadlineIds) if (typeof id === 'string' && !limitIds.has(id)) errors.push(`期限 ${id}：story.progressDeadline.limits 缺此键`);
+  for (const id of limitIds) if (!deadlineIds.has(id)) errors.push(`story.progressDeadline.limits.${id} 不是规则表里的期限 id`);
 }
 
 /** 在队规则（§3.6）：事件/人物/回执/关卡 id 须登记，同一关开局名单只一份，主角不入规则，同事件同人物不能既入又离（whenReceiptId 不同除外）。 */

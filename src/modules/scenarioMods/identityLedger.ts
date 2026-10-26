@@ -7,6 +7,7 @@
  */
 import { orderedDoneEventIds, playerLedgerRules, type IdentityGrantRule, type PlayerLedgerRules } from './playerLedgerRules';
 import { syncLineOutcomes } from './lineOutcomes';
+import { syncProgressDeadlines } from './progressDeadlines';
 import { logError } from '../diagnostics/log';
 
 export const PLAYER_IDENTITY_STATUSES = ['active', 'revoked'] as const;
@@ -137,13 +138,17 @@ export function syncPlayerIdentities(runtime: unknown, opts: SyncPlayerLedgerOpt
   return changed;
 }
 
-/** 身份＋收束档一起同步；失败记 LCQ-SAV-023 不抛，不阻断回合。 */
+/**
+ * 身份＋收束档一起同步，失败记 LCQ-SAV-023 不抛，不阻断回合；
+ * 进度期限锁存在这个 try/catch 之外另调一次（补充设计稿 2026-10-26 §4.4），自带 try/catch 记 LCQ-SAV-027，两边互不连坐。返回改动条数之和。
+ */
 export function syncPlayerLedgers(runtime: unknown, opts: SyncPlayerLedgerOptions = {}): number {
+  let changed = 0;
   try {
-    return syncPlayerIdentities(runtime, opts) + syncLineOutcomes(runtime, opts);
+    changed = syncPlayerIdentities(runtime, opts) + syncLineOutcomes(runtime, opts);
   } catch (error) {
     // 账本同步失败不阻断回合，带码写持久日志；同步幂等，下回合或读档补记
     logError('LCQ-SAV-023', error, { detail: { stageId: (runtime as { modId?: unknown } | null)?.modId, backfilled: Boolean(opts.backfilled) } });
-    return 0;
   }
+  return changed + syncProgressDeadlines(runtime, { rules: opts.rules });
 }

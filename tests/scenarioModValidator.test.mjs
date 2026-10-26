@@ -410,3 +410,34 @@ test('rejects scenario map and character profile values outside native boundarie
   assert.ok(result.issues.some(issue => issue.path === 'canon.locations[0].coordinates.x' && issue.code === 'invalid_number'));
   assert.ok(result.issues.some(issue => issue.path === 'canon.characters[0].profile.attributes.charm' && issue.code === 'invalid_number'));
 });
+
+test('deadline.* 账本路径：operator、取值、锁存键不作路径与期限引用（补充设计稿 2026-10-26 §4.5，T8）', async () => {
+  const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const ID = 'liuchao.deadline.test_validator';
+  setPlayerLedgerRulesForTest({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [], progressDeadlines: [{ id: ID, name: '测试', startEventIds: ['lcq.event.free_ajiman'], clearEventIds: [] }] });
+  try {
+    const ok = await loadFixture();
+    ok.scenario.events[0].conditions = [
+      { path: `deadline.${ID}`, operator: 'eq', value: 'due' },
+      { path: `deadline.${ID}`, operator: 'neq', value: 'cleared' },
+      { path: `deadline.${ID}`, operator: 'exists' },
+    ];
+    assert.deepEqual(validateScenarioMod(ok).issues, []);
+    const fixture = await loadFixture();
+    fixture.scenario.events[0].completion = [
+      { path: `deadline.${ID}`, operator: 'gt', value: 'running' },
+      { path: `deadline.${ID}`, operator: 'eq', value: true },
+      { path: 'deadline.liuchao.deadline.no_such', operator: 'eq', value: 'due' },
+      { path: `deadline.${ID}.state`, operator: 'eq', value: 'due' },
+    ];
+    const result = validateScenarioMod(fixture);
+    const codeAt = index => result.issues.filter(issue => issue.path.startsWith(`scenario.events[0].completion[${index}]`)).map(issue => issue.code);
+    assert.deepEqual(codeAt(0), ['invalid_enum']);
+    assert.deepEqual(codeAt(1), ['invalid_value'], '取值只能是 running/urgent/due/cleared');
+    assert.deepEqual(codeAt(2), ['missing_reference'], '期限 id 须在规则表');
+    assert.deepEqual(codeAt(3), ['invalid_path'], 'deadline.<id>.state 是 flags 锁存键，条件读 deadline.<id>');
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+  }
+});

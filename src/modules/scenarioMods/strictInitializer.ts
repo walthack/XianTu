@@ -27,6 +27,7 @@ import {
 import { departedPresentNames } from './presence';
 import { syncPlayerLedgers } from './identityLedger';
 import { LINE_FLAG_PREFIX } from './lineOutcomes';
+import { DEADLINE_FLAG_PREFIX } from './progressDeadlines';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   entitySaveFormat: number;
@@ -406,6 +407,7 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     || key.endsWith('.void')
     || key.startsWith('world.baihu.')
     || key.startsWith(LINE_FLAG_PREFIX)
+    || key.startsWith(DEADLINE_FLAG_PREFIX)
     || key === 'event.gamble_bond_signed.refused_capture'
     || key === 'event.gamble_bond_signed.outcome',
   ));

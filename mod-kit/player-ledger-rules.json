@@ -1,11 +1,13 @@
 {
   "version": 1,
-  "note": "玩家账本规则表（身份账设计稿 2026-10-25 §3.1）：「事件 → 身份 / 收束档」的唯一映射，由代码按完成顺序幂等同步。identityId 须在 entity-catalog/identities.json，eventId/lineId 须在 entity-catalog/index.json，outcome 须在 numbers-progress story.lineOutcome.tiers。首版留空，清单由总策划给出后再填。itemGroups：唯一道具组（身份账补充设计稿 2026-10-26 §2.2），同组 itemId 是同一件东西在各书里的 id，组内任一件得过就不再发（口径见 numbers-progress story.itemProvenance.dedupeBy）；itemId 须在 entity-catalog/index.json 且 kind=item，一物只属一组，组内物品不得出现在 story.trades 的 grantItemId；首版留空，由内容组填（候选见 scripts/report-item-group-candidates.mjs）。partyJoins / partyLeaves / partyOpenings：显式在队账（身份账补充设计稿 2026-10-26 §3.2，总策划审定 Q4），party.<characterId> 由开局关在队名单 → 按编年史完成顺序应用离队/入队（同一事件先离后入，whenReceiptId 用路径回执区分玩家选择）→ 去掉 departedCast 推导，不落存档；eventId / characterId / whenReceiptId 须在 entity-catalog/index.json 且 kind 分别为 event / character / receipt，stageId 须为 entity-catalog/stage-access.json 的 stages 键且同一关只一份，主角不得入规则；首版留空。",
+  "note": "玩家账本规则表（身份账设计稿 2026-10-25 §3.1）：「事件 → 身份 / 收束档」的唯一映射，由代码按完成顺序幂等同步。identityId 须在 entity-catalog/identities.json，eventId/lineId 须在 entity-catalog/index.json，outcome 须在 numbers-progress story.lineOutcome.tiers。首版留空，清单由总策划给出后再填。itemGroups：唯一道具组（身份账补充设计稿 2026-10-26 §2.2），同组 itemId 是同一件东西在各书里的 id，组内任一件得过就不再发（口径见 numbers-progress story.itemProvenance.dedupeBy）；itemId 须在 entity-catalog/index.json 且 kind=item，一物只属一组，组内物品不得出现在 story.trades 的 grantItemId；首版留空，由内容组填（候选见 scripts/report-item-group-candidates.mjs）。partyJoins / partyLeaves / partyOpenings：显式在队账（身份账补充设计稿 2026-10-26 §3.2，总策划审定 Q4），party.<characterId> 由开局关在队名单 → 按编年史完成顺序应用离队/入队（同一事件先离后入，whenReceiptId 用路径回执区分玩家选择）→ 去掉 departedCast 推导，不落存档；eventId / characterId / whenReceiptId 须在 entity-catalog/index.json 且 kind 分别为 event / character / receipt，stageId 须为 entity-catalog/stage-access.json 的 stages 键且同一关只一份，主角不得入规则；首版留空。progressTicks / progressDeadlines：按剧情进度计的期限（身份账补充设计稿 2026-10-26 §4.3），起点事件（startEventIds 任一，取最早）完成起算，之后每完成一个刻度事件（progressTicks，lineId 须为 7 条国家线，所属线在 excludeLineIds 的不计）计数加一，计到 due 即到期，到期前完成 clearEventIds 任一即解除；同一事件既是刻度又是解除先判解除；running/urgent 每次现算，到 due/cleared 才锁存进 flags 键 deadline.<id>.state；期限 id 为 liuchao.deadline.<名>（末段不能是 state），eventId 须在 entity-catalog/index.json 且 kind=event，同一事件最多一个刻度，起点非空且与解除不相交，due/urgentAt 在 numbers-progress story.progressDeadline.limits（键须正好是期限 id 集合）；到期后果不在机制里，内容用 deadline.<id> eq due 自己接；首版留空。",
   "identityGrants": [],
   "identityRevokes": [],
   "lineOutcomes": [],
   "itemGroups": [],
   "partyJoins": [],
   "partyLeaves": [],
-  "partyOpenings": []
+  "partyOpenings": [],
+  "progressTicks": [],
+  "progressDeadlines": []
 }

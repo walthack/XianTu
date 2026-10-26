@@ -365,6 +365,21 @@ test('切关继承 line.* flags', async () => {
   assert.equal(flags['lineage.note'], undefined);
 });
 
+// 进度期限 T8（身份账补充设计稿 2026-10-26 §4.2）：deadline.<id>.state 锁存照搬 line.*，切关整段继承。
+test('切关继承 deadline.* flags', async () => {
+  const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+  const { save, rt, nextMod } = await buildIdentityTransitionSave();
+  rt.flags['deadline.liuchao.deadline.bingu.state'] = 'due';
+  rt.flags['deadline.liuchao.deadline.ningyu_return.state'] = 'cleared';
+  rt.flags['deadlines.note'] = '非 deadline 命名空间不继承';
+  const result = transitionToNextScenarioStage(save, [nextMod]);
+  assert.equal(result.ok, true, result.reason);
+  const flags = result.saveData.世界.状态.剧本模组.flags;
+  assert.equal(flags['deadline.liuchao.deadline.bingu.state'], 'due');
+  assert.equal(flags['deadline.liuchao.deadline.ningyu_return.state'], 'cleared');
+  assert.equal(flags['deadlines.note'], undefined);
+});
+
 test('切关前补记最后一拍授予', async () => {
   const { transitionToNextScenarioStage } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
   const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');

@@ -211,6 +211,23 @@ test('模型 set flags.line.* 被拒', async () => {
   assert.match(result.rejected[1].reason, /国家线收束档 line\.\* 只能由本地引擎/);
 });
 
+// 进度期限 T8（身份账补充设计稿 2026-10-26 §4.2）：deadline.* 锁存只能由引擎写，同 line.*。
+test('模型 set flags.deadline.* 被拒', async () => {
+  const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
+  const save = await buildScenarioSave();
+  const commands = [
+    { action: 'set', key: '世界.状态.剧本模组.flags.deadline.liuchao.deadline.bingu.state', value: 'cleared' },
+    { action: 'set', key: '世界.状态.剧本模组.flags.deadline', value: { 'liuchao.deadline.bingu.state': 'due' } },
+    { action: 'delete', key: '世界.状态.剧本模组.flags.deadline.liuchao.deadline.bingu.state' },
+    { action: 'set', key: '世界.状态.剧本模组.flags.deadlines.note', value: '不是 deadline 命名空间' },
+  ];
+  const result = guardScenarioModCommands(save, commands);
+  assert.deepEqual(result.accepted, commands.slice(3));
+  assert.equal(result.rejected.length, 3);
+  assert.match(result.rejected[0].reason, /进度期限 deadline\.\* 只能由本地引擎锁存/);
+  assert.match(result.rejected[1].reason, /进度期限 deadline\.\* 只能由本地引擎锁存/);
+});
+
 test('模型写 playerIdentities 被拒', async () => {
   const { guardScenarioModCommands } = await loadTs('../src/modules/scenarioMods/canonGuard.ts');
   const save = await buildScenarioSave();

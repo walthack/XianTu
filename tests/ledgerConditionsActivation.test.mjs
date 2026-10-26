@@ -142,3 +142,36 @@ test('party 不满足时节点不激活，在队后激活', async () => {
     setPlayerLedgerRulesForTest(undefined);
   }
 });
+
+// 进度期限 T8（身份账补充设计稿 2026-10-26 §4.5）：deadline.<id> eq due 才激活；每回合 syncPlayerLedgers 顺带锁存终态。
+test('deadline eq due 才激活，到期后锁存进 flags', async () => {
+  const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const { GAME_NUMBERS } = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const ID = 'liuchao.deadline.test_activation';
+  const [START, TICK_A, TICK_B] = ['lcq.event.baihu_shangguan_escape', 'lcq.event.biling_bay_stance', 'lcq.event.blacksea_vault_split'];
+  const due = { path: `deadline.${ID}`, operator: 'eq', value: 'due' };
+  // 夹具：起点＋两个刻度，due=2（规则与数值只在测试里；validator 也要求期限 id 在规则表里）
+  setPlayerLedgerRulesForTest({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [],
+    progressTicks: [{ eventId: TICK_A, lineId: 'jin' }, { eventId: TICK_B, lineId: 'song' }],
+    progressDeadlines: [{ id: ID, name: '测试期限', startEventIds: [START], clearEventIds: [] }] });
+  GAME_NUMBERS.story.progressDeadline.limits[ID] = { due: 2, urgentAt: 1 };
+  try {
+    let save = advance(await buildSave([due]));
+    assert.equal(rt(save).activeEventIds.includes(EVENT), false, '未起算：锁节点');
+    const stage = rt(save).modId;
+    const done = eventId => (rt(save).chronicle ||= []).push({ id: `chronicle.${stage}.${eventId}`, type: 'event', stageId: stage, title: '', sequence: rt(save).chronicle.length + 100 });
+    const check = condition => evaluateScenarioCondition(condition, save, rt(save));
+    done(START); done(TICK_A);
+    save = advance(save);
+    assert.equal(check({ path: `deadline.${ID}`, operator: 'eq', value: 'urgent' }), true);
+    assert.equal(rt(save).activeEventIds.includes(EVENT), false, 'urgent 不激活');
+    assert.equal(rt(save).flags[`deadline.${ID}.state`], undefined, 'urgent 不落存档');
+    done(TICK_B);
+    save = advance(save);
+    assert.equal(rt(save).flags[`deadline.${ID}.state`], 'due', '每回合同步锁存终态');
+    assert.equal(rt(save).activeEventIds.includes(EVENT), true, '到期后激活');
+  } finally {
+    setPlayerLedgerRulesForTest(undefined);
+    delete GAME_NUMBERS.story.progressDeadline.limits[ID];
+  }
+});

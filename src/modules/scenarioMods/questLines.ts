@@ -1,5 +1,6 @@
 import {CONTENT_PACKS} from '../contentPacks';
 import {LINE_FLAG_PREFIX} from './lineOutcomes';
+import {DEADLINE_FLAG_PREFIX} from './progressDeadlines';
 import {WHEN_HELD} from './playerLedgerRules';
 /** Data-driven optional / character insertions. No third mandatory rail; progress only uses its own code receipt. */
 import source from '../../../mod-kit/quest-lines/lines.json';
@@ -61,6 +62,8 @@ function effect(x:unknown,where:string):asserts x is LineEffect {
  if(x.kind==='setState'&&!['number','string','boolean'].includes(typeof x.value))throw Error('invalid state');
  // 国家线收束档只有规则表这一个写入口（身份账设计稿 §3.4）
  if(x.kind==='setState'&&`${x.stateId}.`.startsWith(LINE_FLAG_PREFIX))throw Error(`${where}: setState may not write ${LINE_FLAG_PREFIX}* (line outcomes come from player-ledger-rules only)`);
+ // 进度期限锁存只由 progressDeadlines.ts 写（补充设计稿 2026-10-26 §4.2）
+ if(x.kind==='setState'&&`${x.stateId}.`.startsWith(DEADLINE_FLAG_PREFIX))throw Error(`${where}: setState may not write ${DEADLINE_FLAG_PREFIX}* (deadline latches come from progressDeadlines only)`);
  if((x.kind==='identityGrant'||x.kind==='identityRevoke')&&!id(x.identityId))throw Error(`${where}: invalid identityId`);
  if(x.kind==='identityGrant'){if(x.whenHeld!==undefined&&!WHEN_HELD.includes(x.whenHeld))throw Error(`${where}: invalid whenHeld`);if((x.whenHeld==='redirect')!==(x.redirectIdentityId!==undefined)||x.redirectIdentityId===x.identityId)throw Error(`${where}: redirectIdentityId goes with whenHeld=redirect only`);}
  if(x.kind==='itemGrant'&&(!Number.isSafeInteger(x.quantity)||x.quantity<1))throw Error(`${where}: invalid quantity`);

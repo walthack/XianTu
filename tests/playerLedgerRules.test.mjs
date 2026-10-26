@@ -1,4 +1,4 @@
-// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）；T7 在队规则（同稿 §3.6）。规则均为测试夹具。
+// 玩家账本规则表交叉校验 T1（身份账设计稿 2026-10-25 §6）：身份/事件/国家线 id、保留末段、授撤冲突；T5 唯一道具组（补充设计稿 2026-10-26 §2.6）；T7 在队规则（同稿 §3.6）；T8 进度期限与刻度（同稿 §4.7）。规则均为测试夹具。
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
@@ -190,4 +190,56 @@ test('在队规则：未知 eventId/characterId/whenReceiptId/stageId、主角�
   has(/开局在队 lcq\.stage_01：主角不能写进在队规则/);
   has(/开局在队 lcq\.stage_01：同一关只能有一份开局名单/);
   assert.equal(errors.length, 8, errors.join(' | '));
+});
+
+test('进度期限：合法规则通过；缺键按 [] 处理；非数组报错；limits 键须正好是期限 id 集合', async () => {
+  const { validatePlayerLedgerRules, playerLedgerRules } = await modPromise;
+  const BINGU = 'liuchao.deadline.bingu';
+  const deadline = { id: BINGU, name: '冰蛊', startEventIds: [EVENT], clearEventIds: [EVENT_2], excludeLineIds: ['taiquan'], promptCue: { urgent: '寒意', due: '冰封' } };
+  const limits = { [BINGU]: { due: 3, urgentAt: 2 } };
+  assert.deepEqual(validatePlayerLedgerRules(rules({ progressTicks: [{ eventId: EVENT_2, lineId: 'jin' }], progressDeadlines: [deadline] }), { identities: [], deadlineLimits: limits }), []);
+  assert.deepEqual(validatePlayerLedgerRules(rules(), { identities: [] }), [], '缺键按 []，仓库 limits 首版 {}');
+  assert.deepEqual(playerLedgerRules().progressDeadlines, []);
+  for (const key of ['progressTicks', 'progressDeadlines']) {
+    assert.deepEqual(validatePlayerLedgerRules(rules({ [key]: {} }), { identities: [] }), [`规则表 ${key} 须为数组`]);
+  }
+  assert.deepEqual(validatePlayerLedgerRules(rules({ progressDeadlines: [deadline] }), { identities: [], deadlineLimits: {} }), [`期限 ${BINGU}：story.progressDeadline.limits 缺此键`]);
+  assert.deepEqual(validatePlayerLedgerRules(rules(), { identities: [], deadlineLimits: limits }), [`story.progressDeadline.limits.${BINGU} 不是规则表里的期限 id`]);
+});
+
+test('进度期限：未知 eventId、非国家线、同一事件两个刻度、id 格式与末段 state、起点为空或与解除相交、promptCue 形状都报错', async () => {
+  const { validatePlayerLedgerRules } = await modPromise;
+  const ids = ['liuchao.deadline.a', 'liuchao.deadline.state', 'bad.deadline', 'liuchao.deadline.a', 'liuchao.deadline.empty'];
+  const errors = validatePlayerLedgerRules(rules({
+    progressTicks: [
+      { eventId: 'lcq.event.no_such_event', lineId: 'jin' },
+      { eventId: EVENT, lineId: 'liang' },
+      { eventId: EVENT_2, lineId: 'song' },
+      { eventId: EVENT_2, lineId: 'han' },
+    ],
+    progressDeadlines: [
+      { id: ids[0], name: '甲', startEventIds: [EVENT], clearEventIds: [EVENT, 'lcq.event.no_such_clear'], excludeLineIds: ['liang'], promptCue: { soon: 'x' } },
+      { id: ids[1], name: '乙', startEventIds: ['lcq.event.no_such_start'], clearEventIds: [] },
+      { id: ids[2], name: '', startEventIds: [EVENT], clearEventIds: 'x' },
+      { id: ids[3], name: '丁', startEventIds: [EVENT], clearEventIds: [], promptCue: { due: 1 } },
+      { id: ids[4], name: '戊', startEventIds: [], clearEventIds: [] },
+    ],
+  }), { identities: [], deadlineLimits: Object.fromEntries(ids.map(id => [id, { due: 1, urgentAt: 0 }])) });
+  const has = (re) => assert.ok(errors.some(e => re.test(e)), `缺少报错 ${re}：${errors.join(' | ')}`);
+  has(/刻度 lcq\.event\.no_such_event：eventId 未知/);
+  has(/刻度 lcq\.event\.charge_sudaji_fee：lineId 不在 7 条国家线：liang/);
+  has(/刻度 lcq\.event\.free_ajiman：同一事件最多算一个刻度/);
+  has(/期限 liuchao\.deadline\.a：clearEventIds eventId 未知：lcq\.event\.no_such_clear/);
+  has(/期限 liuchao\.deadline\.a：起点与解除不能是同一事件：lcq\.event\.charge_sudaji_fee/);
+  has(/期限 liuchao\.deadline\.a：excludeLineIds lineId 不在 7 条国家线：liang/);
+  has(/期限 liuchao\.deadline\.a：promptCue 只能有 urgent \/ due：soon/);
+  has(/期限 liuchao\.deadline\.state：id 末段不能是 state/);
+  has(/期限 liuchao\.deadline\.state：startEventIds eventId 未知：lcq\.event\.no_such_start/);
+  has(/期限 bad\.deadline：id 须为 liuchao\.deadline\.<名>/);
+  has(/期限 bad\.deadline：缺展示名/);
+  has(/期限 bad\.deadline：clearEventIds 须为数组/);
+  has(/期限 id 重复：liuchao\.deadline\.a/);
+  has(/期限 liuchao\.deadline\.a：promptCue\.due 须为字串/);
+  has(/期限 liuchao\.deadline\.empty：startEventIds 不能为空/);
+  assert.equal(errors.length, 15, errors.join(' | '));
 });
