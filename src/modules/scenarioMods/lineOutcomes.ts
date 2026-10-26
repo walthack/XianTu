@@ -4,6 +4,7 @@
  */
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { orderedDoneEventIds, playerLedgerRules, type PlayerLedgerRules } from './playerLedgerRules';
+import { logError } from '../diagnostics/log';
 
 export const lineOutcomeTiers = (): readonly string[] => GAME_NUMBERS.story.lineOutcome.tiers;
 
@@ -25,17 +26,17 @@ export function readLineOutcome(flags: Record<string, unknown> | undefined, line
   return typeof node === 'string' ? node : undefined;
 }
 
-/** 写一条收束档；返回是否有改动。不在 tiers 里拒写；writeOnce 时已收束的线不覆盖（同值静默跳过）。 */
+/** 写一条收束档；返回是否有改动。不在 tiers 里拒写；writeOnce 时已收束的线不覆盖（同值静默跳过）；拒写记 LCQ-SAV-024。 */
 export function writeLineOutcome(flags: Record<string, unknown>, lineId: string, outcome: string, eventId?: string): boolean {
   const from = eventId ? `（事件 ${eventId}）` : '';
   if (!lineOutcomeTiers().includes(outcome)) {
-    console.warn(`[lineOutcomes] ${lineId} 收束档 ${String(outcome)} 不在 story.lineOutcome.tiers，拒写${from}`);
+    logError('LCQ-SAV-024', `${lineId} 收束档 ${String(outcome)} 不在 story.lineOutcome.tiers，拒写${from}`, { detail: { reason: 'tier', lineId, outcome, eventId } });
     return false;
   }
   const prior = readLineOutcome(flags, lineId);
   if (prior === outcome) return false;
   if (prior !== undefined && GAME_NUMBERS.story.lineOutcome.writeOnce) {
-    console.warn(`[lineOutcomes] ${lineId} 已收束为 ${prior}，writeOnce 不覆盖为 ${outcome}${from}`);
+    logError('LCQ-SAV-024', `${lineId} 已收束为 ${prior}，writeOnce 不覆盖为 ${outcome}${from}`, { detail: { reason: 'writeOnce', lineId, outcome, prior, eventId } });
     return false;
   }
   flags[lineOutcomeKey(lineId)] = outcome;

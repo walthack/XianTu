@@ -2,7 +2,8 @@
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
  * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，以及只留位的 party.*。
  * 只读不写；读不到的账本一律当空。不是本模块的前缀交还原 flags 逻辑。
- * 首版只接 narrativeVariants.when；activation/completion 走 runtime.ts 的 resolveConditionValue，不读本模块（T4 另批）。
+ * narrativeVariants.when 走 evaluateLedgerCondition；activation/completion 等由 runtime.ts 的 resolveConditionValue 委托 resolveLedgerPath（T4，
+ * 用户 2026-10-25 23:24 批），那里 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用（validator 拦）。
  */
 import type { ScenarioCondition, ScenarioConditionOperator } from './schema';
 import { orderedDoneEventIds } from './playerLedgerRules';

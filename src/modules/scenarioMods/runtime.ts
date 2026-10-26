@@ -9,6 +9,7 @@ import {isNamedEntityLabel} from './namedEntities';
 import {refreshSaveEntityReferences} from './entitySaveRefs';
 import { settleQuestLineEffects } from './questLineEffects';
 import { syncPlayerLedgers } from './identityLedger';
+import { resolveLedgerPath } from './ledgerConditions';
 import { reconcileNpcRealm } from './actorLevels';
 import {questLineOffer,questLineContext,expireQuestLineWindows,deferOptionalDeparture} from './questLineContext';
 import {QUEST_LINES,LINE_RESOURCES} from './questLines';
@@ -2444,6 +2445,8 @@ function getRuntime(saveData: SaveData): RuntimeState | null {
 }
 
 function resolveConditionValue(condition: ScenarioCondition, saveData: SaveData, runtime: RuntimeState): unknown {
+  const ledger = resolveLedgerPath(condition.path, runtime);
+  if (ledger.handled) return ledger.value;
   if (condition.path === 'flags') return runtime.flags;
   if (condition.path.startsWith('flags.')) {
     const flagPath = condition.path.slice('flags.'.length);

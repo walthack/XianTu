@@ -182,7 +182,9 @@ test('validates event completion conditions', async () => {
   assert.ok(result.issues.some(issue => issue.path === 'scenario.events[0].completion[0].operator'));
 });
 
-test('账本路径用于 completion 时报错', async () => {
+// T4（用户 2026-10-25 23:24 批 runtime.ts 委托 3 行）放开：completion / conditions 等可用账本路径；
+// 但 runtime 的 gt/gte/lt/lte 只比数字，acq 等级比较仍只限 narrativeVariants.when。
+test('账本路径用于 completion 时可用，acq 等级比较只限变体', async () => {
   const { validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
   const fixture = await loadFixture();
   fixture.scenario.events[0].completion = [{ path: 'done.event.firstmeeting', operator: 'eq', value: true }];
@@ -191,10 +193,15 @@ test('账本路径用于 completion 时报错', async () => {
   const result = validateScenarioMod(fixture);
 
   assert.equal(result.valid, false);
-  assert.deepEqual(
-    result.issues.filter(issue => issue.code === 'ledger_path_not_allowed').map(issue => issue.path).sort(),
-    ['scenario.events[0].completion[0].path', 'scenario.events[0].conditions[0].path'],
-  );
+  assert.deepEqual(result.issues.map(issue => [issue.code, issue.path]), [['ledger_rank_variant_only', 'scenario.events[0].conditions[0].operator']]);
+  const fixed = await loadFixture();
+  fixed.scenario.events[0].completion = [{ path: 'done.event.firstmeeting', operator: 'eq', value: true }];
+  fixed.scenario.events[0].conditions = [{ path: 'acq.character.wangzhe', operator: 'exists' }];
+  assert.deepEqual(validateScenarioMod(fixed).issues, []);
+  // 引用检查同样适用于非变体位置
+  const unknown = await loadFixture();
+  unknown.scenario.events[0].completion = [{ path: 'done.event.nope', operator: 'eq', value: true }];
+  assert.deepEqual(validateScenarioMod(unknown).issues.map(issue => issue.code), ['missing_reference']);
   // 同样的路径放进 narrativeVariants.when 合法（事件与人物 id 取本 mod）
   const ok = await loadFixture();
   ok.scenario.events[0].narrativeVariants = [{

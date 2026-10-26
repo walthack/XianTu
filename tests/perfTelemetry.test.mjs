@@ -12,6 +12,7 @@
 //   4. 2026-10-19 23:52 用户批准：runtime.ts 谢艺境界改走 actorLevels.reconcileNpcRealm（存档为准、只补缺失，隐藏期仍显示「未知」）；
 //      AIBS 2742 回合计时 120 分钟读 story.stepScene.minutesPerBeat 用户已知悉。基线哈希同步更新。
 //   5. 2026-10-26 用户批准（身份账 T3 方案 A）：runtime.ts 只加 2 行（import syncPlayerLedgers；recordChronicleTransitions 之后调用），基线哈希同步更新。
+//   6. 2026-10-25 23:24 用户批准（身份账 T4）：runtime.ts 只加 3 行（import resolveLedgerPath；resolveConditionValue 开头委托账本路径），基线哈希同步更新。
 // 已批、可对照但不需再「新批」的清理：63fdf031（runtime world_sim 移除）、cd3d3706（AIBS 快速演示删除）。
 // 禁止：回滚同拍闸、把同拍闸迁出 runtime、为过门禁改游戏运行时逻辑。
 import assert from 'node:assert/strict';

@@ -1,4 +1,5 @@
 import type { ScenarioCondition, ScenarioFlagValue, ScenarioMod, ScenarioModChapter } from './schema';
+import { parseLedgerPath } from './ledgerConditions';
 
 export type ScenarioAnalysisSeverity = 'error' | 'warning';
 
@@ -20,7 +21,11 @@ function conditionValue(condition: ScenarioCondition, flags: Record<string, Scen
   return flags[condition.path.slice('flags.'.length)];
 }
 
+/** 账本路径（identity./done./line./acq./knows./party.）读跨关账本，开局值静态不可知：当动态条件，不判初始不可达，也不拿来连章。 */
+const isLedgerCondition = (condition: ScenarioCondition): boolean => parseLedgerPath(condition.path) !== undefined;
+
 function conditionMatchesInitial(condition: ScenarioCondition, flags: Record<string, ScenarioFlagValue>): boolean {
+  if (isLedgerCondition(condition)) return true;
   const actual = conditionValue(condition, flags);
   switch (condition.operator) {
     case 'eq': return actual === condition.value;
@@ -46,9 +51,10 @@ function conditionSignature(condition: ScenarioCondition): string {
 }
 
 function chapterCanLeadTo(source: ScenarioModChapter, target: ScenarioModChapter, initial: Record<string, ScenarioFlagValue>): boolean {
-  if (!target.activation?.length) return false;
+  const linking = (target.activation || []).filter(condition => !isLedgerCondition(condition));
+  if (!linking.length) return false;
   const completions = new Set((source.completion || []).map(conditionSignature));
-  return target.activation.every(condition =>
+  return linking.every(condition =>
     conditionMatchesInitial(condition, initial) || completions.has(conditionSignature(condition)),
   );
 }

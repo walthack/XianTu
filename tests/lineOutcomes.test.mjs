@@ -8,11 +8,16 @@ const loaded = (async () => {
   const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
   const rules = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
   const mod = await loadTs('../src/modules/scenarioMods/lineOutcomes.ts');
-  return { numbers, rules, mod };
+  const log = await loadTs('../src/modules/diagnostics/log.ts');
+  const store = await loadTs('../src/modules/diagnostics/store.ts');
+  return { numbers, rules, mod, log, store };
 })();
 const modPromise = loaded.then(x => x.mod);
 const rulesPromise = loaded.then(x => x.rules);
 const numbersPromise = loaded.then(x => x.numbers);
+/** 拒写须带码 LCQ-SAV-024 写持久日志 */
+const logged = async (reason) => (await loaded).store.logStore.recent(100).filter(e => e.code === 'LCQ-SAV-024' && e.detail?.reason === reason);
+const resetLog = async () => (await loaded).log.resetLogState();
 
 const rules = (lineOutcomes) => ({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes });
 const quiet = async (fn) => { const warn = console.warn; const seen = []; console.warn = (...a) => seen.push(a.join(' ')); try { return [await fn(), seen]; } finally { console.warn = warn; } };
@@ -42,10 +47,14 @@ test('writeOnce 时后写不覆盖', async () => {
   assert.equal(GAME_NUMBERS.story.lineOutcome.writeOnce, true);
   const runtime = { flags: {}, completedEventIds: ['e.jin.fail', 'e.jin.rescue'] };
   const table = rules([{ eventId: 'e.jin.fail', lineId: 'jin', outcome: 'imperfect' }, { eventId: 'e.jin.rescue', lineId: 'jin', outcome: 'resolved' }]);
+  await resetLog();
   const [changed, warnings] = await quiet(() => syncLineOutcomes(runtime, { rules: table }));
   assert.equal(changed, 1);
   assert.equal(runtime.flags['line.jin.outcome'], 'imperfect');
   assert.ok(warnings.some(w => /writeOnce/.test(w)));
+  const [hit] = await logged('writeOnce');
+  assert.deepEqual({ lineId: hit.detail.lineId, outcome: hit.detail.outcome, prior: hit.detail.prior, eventId: hit.detail.eventId, module: hit.module },
+    { lineId: 'jin', outcome: 'resolved', prior: 'imperfect', eventId: 'e.jin.rescue', module: 'lineOutcomes' });
   // 已有嵌套写法的值也算已收束
   const nested = { line: { tang: { outcome: 'unresolved' } } };
   const [wrote] = await quiet(() => writeLineOutcome(nested, 'tang', 'resolved'));
@@ -56,10 +65,15 @@ test('writeOnce 时后写不覆盖', async () => {
 test('outcome 不在 tiers 时拒写', async () => {
   const { syncLineOutcomes } = await modPromise;
   const runtime = { flags: {}, completedEventIds: ['e.han.end'] };
+  await resetLog();
   const [changed, warnings] = await quiet(() => syncLineOutcomes(runtime, { rules: rules([{ eventId: 'e.han.end', lineId: 'han', outcome: 'triumph' }]) }));
   assert.equal(changed, 0);
   assert.equal('line.han.outcome' in runtime.flags, false);
   assert.ok(warnings.some(w => /tiers/.test(w)));
+  const hits = await logged('tier');
+  assert.equal(hits.length, 1);
+  assert.equal(hits[0].detail.lineId, 'han');
+  assert.equal(hits[0].detail.outcome, 'triumph');
 });
 
 test('tiers 改为两档后旧三档值被校验拒绝', async () => {

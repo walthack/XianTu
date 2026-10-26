@@ -7,6 +7,7 @@
  */
 import { orderedDoneEventIds, playerLedgerRules, type IdentityGrantRule, type PlayerLedgerRules } from './playerLedgerRules';
 import { syncLineOutcomes } from './lineOutcomes';
+import { logError } from '../diagnostics/log';
 
 export const PLAYER_IDENTITY_STATUSES = ['active', 'revoked'] as const;
 export type PlayerIdentityStatus = typeof PLAYER_IDENTITY_STATUSES[number];
@@ -136,13 +137,13 @@ export function syncPlayerIdentities(runtime: unknown, opts: SyncPlayerLedgerOpt
   return changed;
 }
 
-/** 身份＋收束档一起同步；失败只告警不抛，不阻断回合。 */
+/** 身份＋收束档一起同步；失败记 LCQ-SAV-023 不抛，不阻断回合。 */
 export function syncPlayerLedgers(runtime: unknown, opts: SyncPlayerLedgerOptions = {}): number {
   try {
     return syncPlayerIdentities(runtime, opts) + syncLineOutcomes(runtime, opts);
   } catch (error) {
-    // lcq-allow: 同 updateAcquaintanceLedger，账本同步失败只告警，不阻断回合；规则表坏了由 playerLedgerRules 校验与测试拦
-    console.warn('[identityLedger] 账本同步失败（不阻断回合）', error);
+    // 账本同步失败不阻断回合，带码写持久日志；同步幂等，下回合或读档补记
+    logError('LCQ-SAV-023', error, { detail: { stageId: (runtime as { modId?: unknown } | null)?.modId, backfilled: Boolean(opts.backfilled) } });
     return 0;
   }
 }

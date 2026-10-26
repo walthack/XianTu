@@ -129,8 +129,9 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     opportunityAlias: boolean;
   }>();
   const omenIds = new Set<string>();
-  /** narrativeVariants.when 里的账本路径引用，事件/人物收齐后再查 */
+  /** 条件里的账本路径引用，事件/人物收齐后再查 */
   const ledgerRefs: LedgerConditionRef[] = [];
+  const runtimeLedger: LedgerScope = { refs: ledgerRefs };
 
   const validateInventoryTransfers = (
     value: unknown,
@@ -380,8 +381,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.axisAnchor, `${entity.__path}.axisAnchor`, add);
       optionalNumber(entity.axisSeq, `${entity.__path}.axisSeq`, add);
       optionalBoolean(entity.critical, `${entity.__path}.critical`, add);
-      validateConditions(entity.conditions, `${entity.__path}.conditions`, add);
-      validateConditions(entity.completion, `${entity.__path}.completion`, add);
+      validateConditions(entity.conditions, `${entity.__path}.conditions`, add, runtimeLedger);
+      validateConditions(entity.completion, `${entity.__path}.completion`, add, runtimeLedger);
       validateStringArray(entity.completionEvidence, `${entity.__path}.completionEvidence`, add);
       validateIdArray(entity.relatedCharacterIds, `${entity.__path}.relatedCharacterIds`, add);
       validateIdArray(entity.relatedFactionIds, `${entity.__path}.relatedFactionIds`, add);
@@ -514,7 +515,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 if (!Array.isArray(action.successWhen) || action.successWhen.length < 1) {
                   add(`${actionPath}.successWhen`, 'required_array', 'A local condition action needs at least one success condition.');
                 } else {
-                  validateConditions(action.successWhen, `${actionPath}.successWhen`, add);
+                  validateConditions(action.successWhen, `${actionPath}.successWhen`, add, runtimeLedger);
                 }
                 if (!['partial', 'failure'].includes(String(action.unmetOutcome))) {
                   add(`${actionPath}.unmetOutcome`, 'invalid_enum', 'unmetOutcome must be partial or failure.');
@@ -539,7 +540,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
                 }
               }
               if (action.visibleWhen !== undefined) {
-                validateConditions(action.visibleWhen, `${actionPath}.visibleWhen`, add);
+                validateConditions(action.visibleWhen, `${actionPath}.visibleWhen`, add, runtimeLedger);
               }
               if (action.judgement !== undefined) {
                 validateEventActionJudgement(action.judgement, `${actionPath}.judgement`, characterIds, add);
@@ -828,7 +829,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         }
       }
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
-        validateConditions(variant.when, `${variantPath}.when`, add, ledgerRefs);
+        validateConditions(variant.when, `${variantPath}.when`, add, { refs: ledgerRefs, variant: true });
         optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);
         optionalString(variant.name, `${variantPath}.name`, add);
         optionalString(variant.description, `${variantPath}.description`, add);
@@ -1054,8 +1055,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     validateEntityArray(scenario.chapters, 'scenario.chapters', chapterIds, add, entity => {
       requireString(entity.title, `${entity.__path}.title`, add);
       requireString(entity.summary, `${entity.__path}.summary`, add);
-      validateConditions(entity.activation, `${entity.__path}.activation`, add);
-      validateConditions(entity.completion, `${entity.__path}.completion`, add);
+      validateConditions(entity.activation, `${entity.__path}.activation`, add, runtimeLedger);
+      validateConditions(entity.completion, `${entity.__path}.completion`, add, runtimeLedger);
       validateIdArray(entity.eventIds, `${entity.__path}.eventIds`, add);
     }, false);
   }
@@ -2314,17 +2315,19 @@ function validateFlags(value: unknown, path: string, add: AddIssue): void {
 
 interface LedgerConditionRef { parsed: ParsedLedgerPath; path: string }
 
+/** 账本路径引用收集处；variant＝narrativeVariants.when（eventNarrativeView 求值），否则走 runtime.ts 的 evaluateScenarioCondition。 */
+interface LedgerScope { refs: LedgerConditionRef[]; variant?: boolean }
+
+/** evaluateScenarioCondition 的 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用。 */
+const RANK_OPERATORS_VARIANT_ONLY = new Set(['gt', 'gte', 'lt', 'lte']);
+
 /**
- * 账本路径（身份账设计稿 §4.3）只允许出现在 narrativeVariants.when（传了 ledgerRefs 的位置）：
- * 别处走 runtime.ts 的 resolveConditionValue，求值恒为 undefined，节点会静默永不激活。
+ * 账本路径（身份账设计稿 §4.3，T4 放开）：narrativeVariants.when 与 conditions / completion / activation / successWhen / visibleWhen
+ * 都可用（后者经 runtime.ts 的 resolveConditionValue 委托 resolveLedgerPath）；acq.* 的等级比较只在变体里可用。
  */
-function validateLedgerCondition(condition: ScenarioCondition, itemPath: string, add: AddIssue, ledgerRefs?: LedgerConditionRef[]): void {
+function validateLedgerCondition(condition: ScenarioCondition, itemPath: string, add: AddIssue, ledger: LedgerScope): void {
   const parsed = parseLedgerPath(condition.path);
   if (!parsed) return;
-  if (!ledgerRefs) {
-    add(`${itemPath}.path`, 'ledger_path_not_allowed', 'Ledger condition paths (identity./done./line./acq./knows./party.) are only allowed in narrativeVariants.when.');
-    return;
-  }
   if (parsed.invalid || !parsed.id) {
     add(`${itemPath}.path`, 'invalid_path', 'Ledger condition path is malformed.');
     return;
@@ -2337,6 +2340,10 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     add(`${itemPath}.operator`, 'invalid_enum', `Operator "${String(condition.operator)}" is not supported for ${parsed.kind}.* paths.`);
     return;
   }
+  if (!ledger.variant && RANK_OPERATORS_VARIANT_ONLY.has(condition.operator)) {
+    add(`${itemPath}.operator`, 'ledger_rank_variant_only', `Rank comparison "${condition.operator}" on ${parsed.kind}.* is only allowed in narrativeVariants.when; use eq/neq/exists here.`);
+    return;
+  }
   if (condition.operator !== 'exists') {
     const value = condition.value;
     const ok = parsed.kind === 'acq' ? isAcquaintanceKind(value)
@@ -2346,7 +2353,7 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
             : typeof value === 'boolean';
     if (!ok) add(`${itemPath}.value`, 'invalid_value', `Invalid comparison value for ${parsed.kind}.* path.`);
   }
-  ledgerRefs.push({ parsed, path: `${itemPath}.path` });
+  ledger.refs.push({ parsed, path: `${itemPath}.path` });
 }
 
 /** 账本路径引用的 id 须存在：事件＝本 mod ∪ 实体索引；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引。 */
@@ -2363,7 +2370,7 @@ function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, char
   }
 }
 
-function validateConditions(value: unknown, path: string, add: AddIssue, ledgerRefs?: LedgerConditionRef[]): void {
+function validateConditions(value: unknown, path: string, add: AddIssue, ledger: LedgerScope): void {
   if (value === undefined) return;
   if (!Array.isArray(value)) {
     add(path, 'invalid_type', `${path} must be an array.`);
@@ -2377,7 +2384,7 @@ function validateConditions(value: unknown, path: string, add: AddIssue, ledgerR
     }
     if (!validateScenarioPath(condition.path)) add(`${itemPath}.path`, 'invalid_path', 'Condition path is invalid or unsafe.');
     if (!CONDITION_OPERATORS.has(String(condition.operator))) add(`${itemPath}.operator`, 'invalid_enum', 'Condition operator is invalid.');
-    else if (validateScenarioPath(condition.path)) validateLedgerCondition(condition as unknown as ScenarioCondition, itemPath, add, ledgerRefs);
+    else if (validateScenarioPath(condition.path)) validateLedgerCondition(condition as unknown as ScenarioCondition, itemPath, add, ledger);
     if (condition.operator !== 'exists' && !Object.prototype.hasOwnProperty.call(condition, 'value')) {
       add(`${itemPath}.value`, 'required_value', 'Condition value is required for this operator.');
     }

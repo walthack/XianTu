@@ -8,6 +8,8 @@ import { loadTs } from './loadTs.mjs';
 const { advanceScenarioRuntime } = await loadTs('../src/modules/scenarioMods/runtime.ts');
 const { setPlayerLedgerRulesForTest } = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
 const { evaluateLedgerCondition } = await loadTs('../src/modules/scenarioMods/ledgerConditions.ts');
+const log = await loadTs('../src/modules/diagnostics/log.ts');
+const { logStore } = await loadTs('../src/modules/diagnostics/store.ts');
 
 const ZHUSHI = 'liuchao.identity.song.baochao_zhushi';
 const EVENT = 'event.firstmeeting';
@@ -65,6 +67,7 @@ test('advanceScenarioRuntime 当回合完成事件即入账', () => withRules({
 test('账本同步失败不阻断回合', () => withRules({ version: 1, identityGrants: { length: 1 }, identityRevokes: [], lineOutcomes: [] }, async () => {
   const save = await buildSave();
   save.世界.状态.剧本模组.flags.resolved = true;
+  await log.resetLogState();
   const warn = console.warn;
   const warned = [];
   console.warn = (...args) => warned.push(String(args[0]));
@@ -75,5 +78,11 @@ test('账本同步失败不阻断回合', () => withRules({ version: 1, identity
   } finally {
     console.warn = warn;
   }
-  assert.ok(warned.some(w => w.includes('[identityLedger] 账本同步失败')), warned.join('\n'));
+  // 带错误码写持久日志（LCQ-SAV-023），不再是裸 console.warn
+  const logged = logStore.recent(100).filter(e => e.code === 'LCQ-SAV-023');
+  assert.equal(logged.length, 1, warned.join('\n'));
+  assert.equal(logged[0].module, 'identityLedger');
+  assert.ok(logged[0].stack || logged[0].msg.includes('：'), '带上抛错原因');
+  assert.ok(warned.some(w => w.startsWith('[LCQ-SAV-023]')), warned.join('\n'));
+  await log.resetLogState();
 }));
