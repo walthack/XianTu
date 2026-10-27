@@ -60,3 +60,17 @@ test('failed judgement gives the world an immediate weighted turn', async () => 
   assert.equal(runtime.lastWorldPushJudgementId, 'j1');
   assert.equal(runtime.worldPush, undefined, 'a consumed world push must not repeat forever');
 });
+
+test('停滞但正文没有陌生专名（照建议行动、修炼）不算世界线偏离', async () => {
+  const { computeDivergenceSignal } = await loadTs('../src/modules/scenarioMods/divergenceControl.ts');
+  const data = save({ stallTurns: 9 });
+  data.系统.历史.叙事 = [
+    { content: '你盘膝坐下，照建议运转真气，丹田里的暖意一点点沉下去。' },
+    { content: '你又练了一轮功，气息比昨日顺畅了些，小紫在旁边打了个哈欠。' },
+  ];
+  const signal = computeDivergenceSignal(data);
+  assert.equal(signal.stallTurns, 9);
+  assert.equal(signal.unfamiliarProperNounDensity, 0);
+  assert.equal(signal.level, 'low');
+  assert.equal(signal.score, 0);
+});

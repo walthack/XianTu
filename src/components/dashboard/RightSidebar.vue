@@ -79,7 +79,7 @@
         <div class="realm-display">
           <div class="realm-info">
             <span class="realm-name">{{ formatRealmDisplay(playerStatus?.境界) }}</span>
-            <span v-if="playerStatus?.境界?.突破描述" class="realm-breakthrough">{{ playerStatus?.境界?.突破描述 }}</span>
+            <span v-if="breakthroughText" class="realm-breakthrough">{{ breakthroughText }}</span>
           </div>
           <!-- 有进度数据：显示进度条（包含凡人 -> 引气入体） -->
           <div v-if="isRealmProgressAvailable" class="realm-progress">
@@ -224,7 +224,7 @@
             <template v-if="questMain">
               <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
               <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
-              <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
+              <div v-if="questMain.stallDebug" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
               <div v-if="questMain.signal?.level === 'medium' || questMain.signal?.level === 'high'" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
                 世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续当前支流，也可以主动回到最近承重节点。
               </div>
@@ -422,7 +422,7 @@ import {
 } from '@/modules/scenarioMods/runtime';
 import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
 import { lineCompassView, showLineCompass } from '@/modules/scenarioMods/lineCompass';
-import { atTrainingCap, canBreakthrough } from '@/modules/scenarioMods/levelProgression';
+import { atTrainingCap, breakthroughHint, canBreakthrough } from '@/modules/scenarioMods/levelProgression';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
@@ -430,6 +430,7 @@ import { formatQuestCompass, questCompassPhrases, resolveScenarioEventNarrative,
 import { detectBranchDecision } from '@/modules/scenarioMods/branchDecision';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
+import { debugLogger } from '@/utils/debug';
 
 const { t } = useI18n();
 
@@ -554,6 +555,8 @@ const questMain = computed(() => {
     next,
     nextStageId: next ? String(rt.nextStageReadyId) : '',
     stalled,
+    // 停滞预警写的是事件对账与 API 管理里的开关，属内部诊断：只在设置里开了调试模式时显示（真机 da893388 #1）
+    stallDebug: stalled && debugLogger.isDebugMode(),
     stallCount: stallTurns,
     signal,
     canReturn,
@@ -801,8 +804,11 @@ const isRealmProgressAvailable = computed(() => {
   return typeof maxProgress === 'number' && maxProgress > 0;
 });
 
+// 突破说明与「可冲刺」「可突破!」同源：已到练功上限时不再显示「后期进度满后可冲关」（真机 da893388 复测①）。
+const breakthroughText = computed(() => (gameStateStore.attributes?.境界 ? breakthroughHint(gameStateStore.toSaveData()) : ''));
+
 const realmWaitingText = computed(() => {
-  const desc = playerStatus.value?.境界?.突破描述;
+  const desc = breakthroughText.value;
   if (desc) return `${t('等待仙缘')} · ${desc}`;
   return t('等待仙缘');
 });

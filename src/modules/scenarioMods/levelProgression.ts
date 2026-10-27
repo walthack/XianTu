@@ -2,6 +2,7 @@ import {levelFact} from './characterLevels';
 import {namingChapter} from './ledger/naming';
 import {GAME_NUMBERS} from '../sceneModule/numbers';
 import {levelOf,levelName} from '../../utils/realmUtils';
+import {packText} from '../contentPacks';
 export type DifficultySettings={autoRaiseLevel:boolean;trainingCap:'canon'|'canon+1'|'none'};
 export const DIFFICULTY_PRESETS:Record<string,DifficultySettings>=GAME_NUMBERS.difficulty.presets as Record<string,DifficultySettings>;
 export function difficultySettings(save:any):DifficultySettings {const d=save?.系统?.难度设置;return d&&typeof d.autoRaiseLevel==='boolean'&&['canon','canon+1','none'].includes(d.trainingCap)?d:{...DIFFICULTY_PRESETS[GAME_NUMBERS.difficulty.defaultPreset]};}
@@ -44,3 +45,5 @@ export function drainedRealm(save:any,gain:number):any|null {
 export function canBreakthrough(save:any):boolean {return trainingRealm(save,'冲关','success')!==null;}
 /** 已到练功／冲关上限（trainingCapLevel，默认即境界最高级）：没有关可冲。冲关结算、右栏「可冲刺」「可突破!」、自修闸门的「瓶颈」原因都读这一个判据。没有境界记录返回 false。 */
 export function atTrainingCap(save:any):boolean {const r=save?.角色?.属性?.境界;return Boolean(r)&&(levelOf(r)??0)>=trainingCapLevel(save);}
+/** 面板上的突破说明：已到练功上限（atTrainingCap，与「可冲刺」「可突破!」同一判据）时不再沿用存档里「后期进度满后可冲关」，改读 realm.breakthrough.capped（真机 da893388 复测①）。 */
+export function breakthroughHint(save:any):string {const r=save?.角色?.属性?.境界;if(!r)return '';return atTrainingCap(save)?packText('realm.breakthrough.capped'):String(r.突破描述||'');}

@@ -109,7 +109,7 @@ NAR 是新增的码族，从 001 起取号，规则同其他族：序号只增�
 
 1. **反馈包（推荐，不用开调试模式）**：在设置页「高级设置 → 导出反馈包」导出，得到 `lcq-feedback-<时间>.zip`，其中 `logs.json` 是全部日志。启动失败的兜底界面里也能导出。
 2. **日志 JSON**：调试模式下，页面左下角有错误角标，点开后可以「导出」，得到 `lcq-log-<时间>.json`。
-3. 两种导出的 `stats.narrativeSource` 都有本会话统计：`records`（记了几段）、`flagged`（几段夹英文）、`withheld`（几段写了尚不自知的词，NAR-003）、`words`（各命中词出现在几段里）。
+3. 两种导出的 `stats.narrativeSource` 都有本会话统计：`records`（记了几段）、`flagged`（几段夹英文）、`withheld`（几段写了尚不自知的词，NAR-003）、`words`（各命中词出现在几段里），`scope` 写明口径。**只计本会话**：页面加载起累计，刷新或中断后清零；中断前的命中只在 `entries` 明细里。要按日志保留期统计，用下面的 jq 数 `entries` 里的 LCQ-NAR-001／002／003。
 
 用 jq 过滤（文件名按实际替换；反馈包先解压出 `logs.json`）：
 
@@ -122,6 +122,9 @@ jq -r '.entries[] | select(.code=="LCQ-NAR-001") | "\(.detail.generatedAt)  \(.d
 
 # 只看冲关 / 修炼叙事
 jq '.entries[] | select(.code=="LCQ-NAR-001" and ((.detail.triggers // []) | any(test("solo\\.(breakthrough|train)|judgement:cultivate"))))' logs.json
+
+# 按日志保留期统计（含中断前的会话）：各码条数
+jq '[.entries[] | select(.code|test("^LCQ-NAR-00[123]$"))] | group_by(.code) | map({code: .[0].code, n: length})' logs.json
 ```
 
 注意：反馈包的 `feedback.redactSaveNarrative`（默认脱敏）只管 `save.json` 里的叙事。`logs.json` 里 NAR-001 的正文全文**不受它影响**，因为留全文本来就是给测试看的。分享反馈包前请知悉。

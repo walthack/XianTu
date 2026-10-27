@@ -131,7 +131,7 @@ test('夹英文时另记 NAR-002：命中词、前后各 20 字与同样的来�
     assert.equal(recent('LCQ-NAR-001').length, 2, '空正文不记');
 
     const exported = await exportMod.buildLogExport();
-    assert.deepEqual(exported.stats.narrativeSource, { records: 2, flagged: 1, withheld: 0, words: { leaps: 1, steady: 1, changes: 1, decide: 1, feel: 1, manipulated: 1 } });
+    assert.deepEqual(exported.stats.narrativeSource, { scope: nar.NARRATIVE_SOURCE_STATS_SCOPE, records: 2, flagged: 1, withheld: 0, words: { leaps: 1, steady: 1, changes: 1, decide: 1, feel: 1, manipulated: 1 } });
     assert.ok(exported.entries.some(e => e.code === 'LCQ-NAR-001' && e.detail.text === LEAKY), '导出里有正文全文');
   });
 });

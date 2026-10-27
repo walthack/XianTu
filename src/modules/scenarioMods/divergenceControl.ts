@@ -131,8 +131,9 @@ export function computeDivergenceSignal(saveData: SaveData): DivergenceSignal | 
     ? unfamiliar.length / candidates.length
     : 0;
   const stallTurns = Math.max(0, Number(runtime.stallTurns) || 0);
+  // 停滞只是“本轮没完成事件”，照建议行动、修炼也会累加（真机 da893388 #1）；正文里没有陌生专名就不算偏离，停滞不单独计分。
   const score = Math.round(Math.min(100,
-    Math.min(45, stallTurns * 6)
+    (unfamiliar.length ? Math.min(45, stallTurns * 6) : 0)
       + unfamiliarProperNounDensity * 35
       + (candidates.length ? (1 - knownEntityHitRate) * 20 : 0)));
   const level: DivergenceLevel = score >= 65 ? 'high' : score >= 35 ? 'medium' : 'low';

@@ -3,7 +3,7 @@ import {isNamedEntityLabel} from './namedEntities';
 import {entityNamePattern} from './namedEntities';
 import { namingAliases, namingFor, namingChapter, sceneBoundEntity, ledgerChapterGates } from './ledger/naming';
 import { syncNanhuangIdentityDisplay, xiaoziDisclosure, isDisclosureFactAllowed } from './characterResolver';
-import { stepScene, sceneLedgerSummary } from './fixedEndingNarratives';
+import { stepScene, sceneLedgerSummary, sceneDayPart } from './fixedEndingNarratives';
 import { cloneDeep } from 'lodash';
 import { getPrompt, getSystemPrompts } from '@/services/defaultPrompts';
 import { rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
@@ -88,6 +88,8 @@ export interface LegacyNarratorPacket {
   action: string;
   settledOutcome: string;
   location: string;
+  /** 存档时钟的时段（sceneDayPart：清晨／上午／白天／黄昏／夜／深夜）；缺时钟时省略。 */
+  时段?: string;
   currentObjective: string;
   publicFacts: string[];
   localReceipt: LegacyLocalReceipt;
@@ -432,6 +434,8 @@ export function compileLegacyNarratorPacket(
     action,
     settledOutcome,
     location: capsule.location,
+    // 真机 da893388 #16：逐拍关以外的场景材料没有时间，模型按氛围猜成「暮色」；时段与地点一样读存档。
+    ...((saveData as any)?.元数据?.时间 ? { 时段: sceneDayPart((saveData as any).元数据.时间) } : {}),
     currentObjective: capsule.currentObjective,
     publicFacts: publicFacts.filter(fact => isDisclosureFactAllowed(fact, runtimeOf(saveData))),
     localReceipt: {

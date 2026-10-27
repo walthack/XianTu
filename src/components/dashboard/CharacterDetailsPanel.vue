@@ -511,6 +511,7 @@ import { computed, onActivated, onMounted, ref } from 'vue';
 import { useI18n } from '@/i18n';
 import { useCharacterStore } from '@/stores/characterStore';
 import { useGameStateStore } from '@/stores/gameStateStore';
+import { breakthroughHint } from '@/modules/scenarioMods/levelProgression';
 import BodyStatsPanel from '@/components/dashboard/components/BodyStatsPanel.vue';
 import { calculateFinalAttributes } from '@/utils/attributeCalculation';
 import { calculateAgeFromBirthdate, type GameTime as LifespanGameTime } from '@/utils/lifespanCalculator';
@@ -986,8 +987,11 @@ const hasValidCultivation = (): boolean => {
   return max > 0;
 };
 
+// 与右栏同源：已到练功上限时突破说明改读 realm.breakthrough.capped（真机 da893388 复测①）。
+const breakthroughText = computed(() => (playerStatus.value?.境界 ? breakthroughHint(saveData.value) : ''));
+
 const waitingStageText = computed(() => {
-  const desc = playerStatus.value?.境界?.突破描述;
+  const desc = breakthroughText.value;
   if (desc) return `${t('等待仙缘')} · ${desc}`;
   return t('等待仙缘');
 });
@@ -1006,7 +1010,7 @@ const formatCultivationText = (): string => {
   if (!realm) return '';
   const current = Number(realm.当前进度 ?? 0);
   const max = Number(realm.下一级所需 ?? 0);
-  const target = String(realm.突破描述 ?? t('下一步'));
+  const target = breakthroughText.value || t('下一步');
   if (!max) return target;
   return `${current} / ${max} · ${target}`;
 };

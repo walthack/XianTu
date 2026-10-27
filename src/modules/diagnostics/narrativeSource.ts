@@ -225,9 +225,12 @@ export function recordTurnNarrative(input: TurnNarrativeInput): boolean {
   }
 }
 
-/** 统计（诊断导出 / 反馈包的 stats.narrativeSource）：本会话记了几段、几段夹英文、各词出现的段数、几段写了尚不自知的词。 */
-export function getNarrativeSourceStats(): { records: number; flagged: number; withheld: number; words: Record<string, number> } {
-  return { records: stats.records, flagged: stats.flagged, withheld: stats.withheld, words: Object.fromEntries([...stats.words].sort((a, b) => b[1] - a[1])) };
+/** 统计口径说明（真机 da893388 ⑥：测试拿 stats 当全部命中数，漏看了中断前只在明细里的命中）。 */
+export const NARRATIVE_SOURCE_STATS_SCOPE = '只计本会话（页面加载起，刷新或中断后清零）；中断前的命中只在 entries 明细里，按保留期统计请数 entries 中的 LCQ-NAR-001/002/003';
+
+/** 统计（诊断导出 / 反馈包的 stats.narrativeSource）：本会话记了几段、几段夹英文、各词出现的段数、几段写了尚不自知的词；scope 写明口径。 */
+export function getNarrativeSourceStats(): { scope: string; records: number; flagged: number; withheld: number; words: Record<string, number> } {
+  return { scope: NARRATIVE_SOURCE_STATS_SCOPE, records: stats.records, flagged: stats.flagged, withheld: stats.withheld, words: Object.fromEntries([...stats.words].sort((a, b) => b[1] - a[1])) };
 }
 registerStatsProvider('narrativeSource', getNarrativeSourceStats);
 

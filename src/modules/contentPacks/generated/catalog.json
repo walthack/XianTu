@@ -1,5 +1,5 @@
 {
-  "version": "c24c5b622920b51a",
+  "version": "c44e1cf73f2bc4e6",
   "contracts": [
     {
       "meta": {
@@ -13620,6 +13620,7 @@
     "free.stakes.solo.train.criticalFailure": "彻底落空，白费工夫；修为进度不变，也没有任何折损，只是这条路一时难再走通。",
     "free.stakes.solo.breakthrough.failure": "冲关失败，已积累的修为折损一部分。",
     "free.stakes.solo.breakthrough.criticalFailure": "冲关功亏一篑，已积累的修为折损一部分，还要承接更重的余波。",
+    "realm.breakthrough.capped": "修为已到瓶颈，眼下无关可冲。",
     "settings.difficulty.trainingCap.label": "练功上限",
     "free.stakes.field.perfect": "干净利落，不留破绽。",
     "free.stakes.field.greatSuccess": "办得漂亮，还有额外收获。",
