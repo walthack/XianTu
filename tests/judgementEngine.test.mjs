@@ -186,7 +186,7 @@ test('verifyResolvedJudgementReceipt returns the save copy and fail-closes on ta
   assert.equal(judgementHasLocalCombatHpWrite(trusted), true);
   const prompt = formatVerifiedJudgementReceiptForPrompt(trusted);
   assert.match(prompt, new RegExp(`判定ID=${trusted.id}`));
-  assert.match(prompt, /类型=combat/);
+  assert.match(prompt, /类型=战斗/);
   assert.match(prompt, /骰点=4/);
   assert.match(prompt, /结果=/);
   assert.match(prompt, /正典策略=/);

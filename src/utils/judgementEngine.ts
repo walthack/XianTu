@@ -363,19 +363,43 @@ export function describeJudgementOutcomeText(resolution: JudgementResolution): s
   return '';
 }
 
+/**
+ * 给叙事模型看的回执里，类型／结果／正典策略／已写入效果只写中文（真机 db4278a0247b：冲关叙事夹了英文词，
+ * 回执里原样给的 cultivate／success／route_process_only／「角色.属性.境界 set」是漏给模型的英文）。判定ID 原样保留。
+ */
+export const JUDGEMENT_KIND_LABELS: Record<JudgementKind, string> = {
+  combat: '战斗', cultivate: '修炼', craft: '炼制', explore: '探查', social: '交涉', escape: '身法', stealth: '潜行', scheme: '谋略',
+};
+export const JUDGEMENT_OUTCOME_LABELS: Record<JudgementOutcome, string> = {
+  critical_failure: '大失败', failure: '失败', partial: '部分成功', success: '成功', great_success: '大成功', perfect: '完美',
+};
+export const JUDGEMENT_CANON_POLICY_LABELS: Record<JudgementCanonPolicy, string> = {
+  free: '自由演绎', route_process_only: '只演过程',
+};
+const JUDGEMENT_EFFECT_ACTION_LABELS: Record<string, string> = { set: '已改写', add: '已增减', upsert: '已写入', remove: '已移除', push: '已追加' };
+/** 回执里的类型、结果、正典策略（中文；未知值原样）。 */
+export function judgementPromptLabels(resolution: Pick<JudgementResolution, 'kind' | 'outcome' | 'canonPolicy'>): { kind: string; outcome: string; canonPolicy: string } {
+  return {
+    kind: JUDGEMENT_KIND_LABELS[resolution.kind] ?? String(resolution.kind),
+    outcome: resolution.outcome ? JUDGEMENT_OUTCOME_LABELS[resolution.outcome] ?? resolution.outcome : String(resolution.outcome),
+    canonPolicy: JUDGEMENT_CANON_POLICY_LABELS[resolution.canonPolicy] ?? String(resolution.canonPolicy),
+  };
+}
+
 export function formatVerifiedJudgementReceiptForPrompt(resolution: JudgementResolution): string {
   const effectSummary = (resolution.appliedEffects || []).map(describeJudgementEffect).join('；') || '无';
   const outcomeText = describeJudgementOutcomeText(resolution) || '无';
+  const labels = judgementPromptLabels(resolution);
   return [
     '只可演出同一判定ID给出的既定骰点、总值、结果与已写入效果；不得重新计算、掷骰或输出判定卡。',
     `动作=${resolution.actionText}`,
     `判定ID=${resolution.id}`,
-    `类型=${resolution.kind}`,
+    `类型=${labels.kind}`,
     `骰点=${resolution.roll}`,
     `总值=${resolution.total}`,
     `难度=${resolution.difficulty.value}`,
-    `结果=${resolution.outcome}`,
-    `正典策略=${resolution.canonPolicy}`,
+    `结果=${labels.outcome}`,
+    `正典策略=${labels.canonPolicy}`,
     `结果文案=${outcomeText}`,
     `已写入=${effectSummary}`,
   ].join('；');
@@ -574,7 +598,11 @@ export function describeJudgementEffect(effect: JudgementResolution['appliedEffe
   if (effect.key === '角色.效果' && effect.action === 'upsert') return `获得临时状态「${(effect.value as any)?.状态名称 || '未知'}」`;
   if (effect.key === '角色.效果' && effect.action === 'remove') return `解除「${(effect.value as any)?.状态名称 || '未知'}」`;
   if (effect.key === '系统.扩展.行动门控.recent') return '写入行动余波';
-  return `${effect.key} ${effect.action}`;
+  if (effect.key === '角色.属性.境界' && effect.action === 'set') {
+    const realm = effect.value as { 名称?: unknown; 阶段?: unknown; 当前进度?: unknown } | null;
+    return realm?.名称 ? `境界记为${String(realm.名称)}${String(realm.阶段 ?? '')}（进度 ${Number(realm.当前进度) || 0}）` : '境界已改写';
+  }
+  return `${effect.key} ${JUDGEMENT_EFFECT_ACTION_LABELS[effect.action] ?? '已改动'}`;
 }
 
 /**

@@ -566,6 +566,8 @@ import {
   persistPendingJudgement,
   resolvePendingJudgement,
   describeJudgementEffect,
+  judgementPromptLabels,
+  JUDGEMENT_CANON_POLICY_LABELS,
   type JudgementProposal,
   type JudgementResolution,
   type JudgementOutcome,
@@ -2297,7 +2299,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     const result = contractedJudgementResolution;
     const localDamageApplied = result.kind === 'combat' && result.appliedEffects.some(effect => effect.key === '角色.属性.气血.当前');
     const effectSummary = result.appliedEffects.map(describeJudgementEffect).join('；') || '无';
-    finalUserMessage += `\n【本地判定已结算】判定ID=${result.id}；类型=${result.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${result.outcome}；正典策略=${result.canonPolicy}；已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算=true' : ''}。只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为 route_process_only，不得直接完成、void 或改写活动正典事件。\n`;
+    // 类型／结果／正典策略给模型只写中文（真机 db4278a0247b：叙事夹英文）；判定ID 原样。
+    const labels = judgementPromptLabels(result);
+    finalUserMessage += `\n【本地判定已结算】判定ID=${result.id}；类型=${labels.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果=${labels.outcome}；正典策略=${labels.canonPolicy}；已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算' : ''}。只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为${JUDGEMENT_CANON_POLICY_LABELS.route_process_only}，不得直接完成、作废或改写活动正典事件。\n`;
   }
   if (freeActionBlock) finalUserMessage += freeActionBlock;
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
