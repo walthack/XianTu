@@ -3422,6 +3422,23 @@
                 "id": "record_battlefield_aftermath",
                 "label": "确认焦土余波与殉军结果",
                 "actionText": "我确认毁灭性光球坠地后的焦土余波，把王哲殉军与左武军覆灭完整落账。",
+                "intentMatch": {
+                  "matchAny": [
+                    "离开",
+                    "逃",
+                    "撤",
+                    "东南"
+                  ],
+                  "rejectIf": [
+                    "不离开",
+                    "不走",
+                    "不逃",
+                    "不撤",
+                    "别走",
+                    "不想走",
+                    "不肯走"
+                  ]
+                },
                 "timeCost": 1,
                 "requiresPreparation": [
                   "sequence_step_2"

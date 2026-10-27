@@ -322,3 +322,31 @@ test('焰浪只在见证九阳之后拖满 3 回合死亡；炮烙只由显式�
   assert.equal(runtimeOf(fatalSave).gameOver?.endingId, 'lcq.ending.death.paolao');
   assert.equal(runtimeOf(fatalSave).completedEventIds.includes('lcq.event.sudaji_south_pact'), false);
 });
+
+test('s02_02 王哲自爆后：自由输入「带月霜逃走」落到收尾动作、本拍结清不判死；否定句不算离开', async () => {
+  // 真机 da893388（2026-10-28）：自爆后玩家输入逃跑，判定成功仍被焰浪吞没——逃跑只走了自由判定，没有结清 s02_02，三轮期限照走。
+  const tools = await loadTools();
+  const mods = await loadMods();
+  const { rtm } = tools;
+  const beat = 'lcq.event.s02_02';
+  let { save } = await walkHappyPath(tools, mods, ({ save, phase }) => phase === 'active' && runtimeOf(save).activeEventIds.includes(beat));
+  for (const step of ['hold_left_army_line', WITNESS]) {
+    const selection = contractSelection(rtm, save);
+    assert.equal(selection.actionId, step);
+    save = recordAndReload(rtm, save, selection).save;
+  }
+  assert.equal(rtm.resolveStoryEventActionFromPlayerText(save, '我不走，就在这里看着王哲。'), undefined, '否定离开不得落成离场');
+  assert.ok(rtm.previewWangZheStayEnding(save, '我不走，就在这里看着王哲。'), '执意留下仍是绝路');
+  const leave = rtm.resolveStoryEventActionFromPlayerText(save, '我拉着月霜往东南逃走。');
+  assert.equal(leave?.actionId, 'record_battlefield_aftermath', '离场意图必须落到本拍收尾动作');
+  assert.equal(rtm.previewWangZheStayEnding(save, '我拉着月霜往东南逃走。'), undefined);
+  save = recordAndReload(rtm, save, leave).save;
+  save = idle(rtm, save, 3).save;
+  assert.ok(runtimeOf(save).completedEventIds.includes(beat));
+  assert.equal(runtimeOf(save).gameOver, undefined, '带月霜离开后不得再被焰浪吞没');
+});
+
+test('s02_02 自爆那一拍的固定正文给出离开提示', async () => {
+  const { fixedBeatNarrative } = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
+  assert.match(fixedBeatNarrative('lcq.event.s02_02', WITNESS) || '', /带着月霜往东南去，两刻之内离开/);
+});
