@@ -60,7 +60,8 @@ export function buildFreeActionJudgementProposal(
     factors.splice(1, 0, { label: theirs === undefined ? '境界差（无级数数据，按同级）' : '境界差', value: levelModifier(mine, theirs), source: 'realm' });
   }
   // 结果档说明：变体有专属句（free.stakes.<类>.<变体>.<档>）用专属句，否则用类的通用句。
-  // 冲关部分成功按失败保留 training.failureRetention 扣进度，不能沿用自修通用句「勉强见效」（真机 1f9f24127b4e：模型据此写成境界有增长）。
+  // 冲关部分成功按失败保留 training.failureRetention 扣进度、修炼部分成功进度不涨，都不能沿用自修通用句「勉强见效」（真机 1f9f24127b4e：模型据此写成境界有增长）。
+  // 旧关键词预检（judgementPreflight.ts）的修炼／冲关部分成功也取这两句。
   const stake = (name: string) => {
     const own = `free.stakes.${spec.actionClass}.${spec.variant}.${name}`;
     return packText(CONTENT_PACKS.texts[own] !== undefined ? own : `free.stakes.${spec.actionClass}.${name}`);

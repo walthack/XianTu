@@ -1,5 +1,5 @@
 {
-  "version": "4b8005677946f8d7",
+  "version": "a8abc00c472db9c8",
   "contracts": [
     {
       "meta": {
@@ -13613,6 +13613,7 @@
     "free.stakes.solo.failure": "不得要领，白费工夫。",
     "free.stakes.solo.criticalFailure": "彻底落空，要承接更重的余波。",
     "free.stakes.solo.breakthrough.partial": "冲关未成，已积累的修为折损一部分。",
+    "free.stakes.solo.train.partial": "修炼了一阵，修为没有实在的进益。",
     "settings.difficulty.trainingCap.label": "练功上限",
     "free.stakes.field.perfect": "干净利落，不留破绽。",
     "free.stakes.field.greatSuccess": "办得漂亮，还有额外收获。",

@@ -166,6 +166,29 @@ test('旧引擎基线：冲关只在后期满进度且未到上限时生效，�
   assert.deepEqual(resolveOnce('我冲关突破', 'success', { trainingCap: 'none' }).effects, []);
 });
 
+test('旧预检：修炼／冲关部分成功的说明与结算数值一致（同自由行动自修，真机 1f9f24127b4e）；其余 cultivate 与别的类仍用通用句', () => {
+  const GENERIC = '达成部分目标，但会留下代价或余波。';
+  const partialOf = (sentence, realmState = realm('中期', 30)) => {
+    const save = baseSave();
+    save.角色.属性.境界 = realmState;
+    save.系统 = { 难度设置: { autoRaiseLevel: true, trainingCap: 'none' } };
+    return buildLocalJudgementPreflight(sentence, save, 7).stakes.partial;
+  };
+  // 练功：部分成功进度不涨
+  for (const sentence of ['我闭关修炼', '我开始练功']) {
+    assert.equal(partialOf(sentence), '修炼了一阵，修为没有实在的进益。', sentence);
+    assert.deepEqual(resolveOnce(sentence, 'partial').realm, realm('中期', 30), `${sentence}：部分成功进度不涨`);
+  }
+  // 冲关：后期满进度时部分成功按失败折损
+  const late = realm('后期', 100);
+  assert.equal(partialOf('我冲关突破', late), '冲关未成，已积累的修为折损一部分。');
+  assert.equal(resolveOnce('我冲关突破', 'partial', { realmState: late, trainingCap: 'none' }).realm.当前进度, Math.floor(100 * GAME_NUMBERS.training.failureRetention));
+  // 冲关时机未到：结算不动境界，不说折损，也不说成修炼
+  assert.equal(partialOf('我冲关突破'), GENERIC);
+  // 调息疗伤、双修：部分成功有回血等收益，仍用通用句；别的类不受影响
+  for (const sentence of ['我盘膝调息疗伤', '我和她双修', '我出手攻击他']) assert.equal(partialOf(sentence), GENERIC, sentence);
+});
+
 test('旧引擎基线：调息疗伤按结果档回气血/神识，双修另得“阴阳调和”', () => {
   const heal = outcome => resolveOnce('我盘膝调息疗伤', outcome);
   assert.deepEqual(heal('partial').effects, [['角色.属性.气血.当前', 'set', 100], ['角色.属性.神识.当前', 'set', 45], GATE('scene', 'partial')]);

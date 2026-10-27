@@ -265,10 +265,29 @@ test('冲关部分成功（真机 1f9f24127b4e）：数值按设计折损（同�
     assert.match(mods.judgement.formatVerifiedJudgementReceiptForPrompt(resolution), /结果文案=冲关未成，已积累的修为折损一部分。/);
     assert.ok(!/见效|增长|进益|精进/.test(outcomeText), outcomeText);
     assert.match(result.facts[0], /冲关未成.*折损/, '事实句与结果文案同口径');
-    // 冲关其余档、修炼各档仍用自修通用句（没有专属句就回落类的通用句）
+    // 冲关其余档仍用自修通用句（没有专属句就回落类的通用句）；修炼部分成功另有专属句（见下一条）
     assert.equal(prepared.proposal.stakes.success, '有所进益。');
     assert.equal(prepared.proposal.stakes.failure, '不得要领，白费工夫。');
-    assert.equal(mods.plan.prepareFreeAction(readySave(), solo('train')).proposal.stakes.partial, '勉强见效，不尽如人意。');
+    assert.equal(mods.plan.prepareFreeAction(readySave(), solo('train')).proposal.stakes.partial, '修炼了一阵，修为没有实在的进益。');
+  });
+});
+
+test('修炼部分成功（真机 1f9f24127b4e，同冲关的改法）：数值上进度不涨；给模型的结果文案用修炼专属句、与数值一致，不写成见效／增长；修炼其余档与调息疗伤仍用自修通用句', () => {
+  switchedOn(() => {
+    const save = readySave();
+    const before = structuredClone(save.角色.属性.境界);
+    const { prepared, resolution, result } = runJudged(save, solo('train'), 'partial');
+    assert.deepEqual(save.角色.属性.境界, before, '部分成功不写境界进度（trainingRealm 只认成功档）');
+    assert.ok(!resolution.appliedEffects.some(e => e.key === '角色.属性.境界'));
+    assert.equal(prepared.proposal.stakes.partial, '修炼了一阵，修为没有实在的进益。');
+    const outcomeText = mods.judgement.describeJudgementOutcomeText(resolution);
+    assert.equal(outcomeText, prepared.proposal.stakes.partial);
+    assert.match(mods.judgement.formatVerifiedJudgementReceiptForPrompt(resolution), /结果文案=修炼了一阵，修为没有实在的进益。/);
+    assert.ok(!/见效|增长|精进|有所/.test(outcomeText), outcomeText);
+    assert.match(result.facts[0], /修炼了一阵.*没有实在的进益/, '事实句与结果文案同口径');
+    assert.equal(prepared.proposal.stakes.success, '有所进益。');
+    assert.equal(prepared.proposal.stakes.failure, '不得要领，白费工夫。');
+    assert.equal(mods.plan.prepareFreeAction(readySave(), solo('recover')).proposal.stakes.partial, '勉强见效，不尽如人意。', '调息疗伤部分成功确有小幅回血，仍用通用句');
   });
 });
 
