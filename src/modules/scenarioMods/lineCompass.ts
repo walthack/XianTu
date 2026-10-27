@@ -4,7 +4,7 @@
  *
  * - 只有 7 条国家线（NATION_LINE_IDS，太泉算国家线）。势力线（黑魔海、星月湖、太乙）不单独上卡，只在国家线的下一步里自然出现；商道不是线，走身份账。
  * - 已知＝锚已满足（anchorLine＝旧二级线 id，锚读编年史 knownSecondaryLines）或 knownWhen 全满足；未知的线不出现，也不进折叠行。
- * - 收束＝line.<id>.outcome 有档（lineOutcomes），或 closedWhen 全满足；收束的线卡片和折叠行都撤（Q6）。
+ * - 收束＝唯一读取点 lineClosed（lineOutcomes.ts）：line.<id>.outcome 有档按档，规则表还没有本线规则时退回读 closedWhen（按编年史）；收束的线卡片和折叠行都撤（Q6）。
  * - 整线解锁（story.lineUnlock，太泉）：没解锁不当当前线，只在折叠行灰显，标题与缺项句复用 secondaryLineEntryView 的锁定分支。
  * - 当前线（Q7）：焦点事件所在国家线（下一步表里写了这个 eventId 的线，否则按焦点事件所在关的地区 story.lineCompass.regionLines）；
  *   不在任何线上、或那条线未知／已收束／没解锁，取编年史里最近推进过、未收束的线；都没有返回 null，右栏退回原主线指南针那一句（Q1）。
@@ -25,7 +25,7 @@ import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { logEventOnce } from '../diagnostics/log';
 import { debugEnabled, debugLog } from '../diagnostics/debugLog';
 import { evaluateLedgerCondition } from './ledgerConditions';
-import { readLineOutcome } from './lineOutcomes';
+import { lineClosed } from './lineOutcomes';
 import { lineUnlockConfig, lineUnlockStatus } from './lineUnlock';
 import { orderedDoneEventIds } from './playerLedgerRules';
 import { STAGE_REGION } from './reputationLedger';
@@ -88,7 +88,7 @@ export interface LineCompassLine {
   anchorLine?: string;
   /** 另一条已知判定：全满足即已知（与 anchorLine 任一成立即可） */
   knownWhen?: LineCompassCondition[];
-  /** 收束判定补充：全满足即撤（line.<id>.outcome 有档总是撤） */
+  /** 收束事件：规则表 lineOutcomes 还没有本线规则时，全满足即算收束（lineClosed 读；只许 done.*，可含 anyOf 组，按编年史判）；line.<id>.outcome 有档时按档 */
   closedWhen?: LineCompassCondition[];
   steps: LineCompassStep[];
   note?: string;
@@ -211,8 +211,7 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
     text(line, line.nameKey) ?? SECONDARY_LINES.find(old => old.id === line.anchorLine)?.name ?? line.lineId;
   const known = (line: LineCompassLine): boolean =>
     (line.anchorLine !== undefined && knownOld.has(line.anchorLine)) || (!!line.knownWhen?.length && holds(line.knownWhen));
-  const closed = (line: LineCompassLine): boolean =>
-    readLineOutcome(rt.flags, line.lineId) !== undefined || (!!line.closedWhen?.length && holds(line.closedWhen));
+  const closed = (line: LineCompassLine): boolean => lineClosed(line.lineId, rt, { lines: table.lines });
   const unlockLine = (line: LineCompassLine) => SECONDARY_LINES.find(old => old.unlock === line.lineId);
   const locked = (line: LineCompassLine): boolean => {
     if (!lineUnlockConfig(line.lineId)) return false;

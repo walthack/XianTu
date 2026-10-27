@@ -1,7 +1,7 @@
 /**
  * 整线解锁（太泉解锁设计稿 2026-10-27 §3；用户 2026-10-27 01:12／01:28 定）：三条同时满足才解锁，阈值只读配置 story.lineUnlock.<lineId>。
  * - 境界：levelOf(角色.属性.境界) ≥ minRealmLevel（只看九级，小阶段不看）；境界名不认识＝未达，记 LCQ-SAV-029 realm_unreadable。
- * - 线数：closedLineIds(flags, countTiers) 条数 ≥ minClosedLines（只数判档线，太泉不在其中；没去、半路走掉＝没有收束记录）。
+ * - 线数：closedLineIds(runtime, countTiers) 条数 ≥ minClosedLines（逐条读唯一读取点 lineClosed；只数判档线，太泉不在其中；没去、半路走掉不算）。
  * - 期限：requireDeadlinesCleared 每项 deadlineState 为 cleared；读不到（未上线、未起算）按通过（总策划 01:28）。
  * - 已走进本线（调用方传入的本线节点事件任一已完成）一律视为已解锁（总策划 2026-10-27 定 §14-4）：兼容旧档、冗余门与入口门判法一致。
  * 三项都单调（境界只升、收束档 writeOnce、期限 cleared 锁存），故解锁结果不锁存、不加存档字段；配置每次调用现读，热改即时生效。
@@ -109,7 +109,7 @@ export function lineUnlockStatus(save: unknown, lineId: string, opts: LineUnlock
     }
     const realmName = save && typeof save === 'object' ? (save as any).角色?.属性?.境界 : undefined;
     const level = levelOf(realmName);
-    const closedIds = closedLineIds(runtime?.flags, conf.countTiers);
+    const closedIds = closedLineIds(runtime, conf.countTiers);
     const lines = { closedIds, need: conf.minClosedLines, short: Math.max(0, conf.minClosedLines - closedIds.length) };
     const realm = { level, need: conf.minRealmLevel };
     if (entered) {

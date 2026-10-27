@@ -2460,7 +2460,7 @@ const LINE_COMPASS_PLACE_SLOT = '{地点}';
  * - lineId 须为 7 条国家线、不重复；nameKey 须在 texts；anchorLine 须为 secondaryLines 的线 id；
  * - when / until / knownWhen / closedWhen 只许账本路径（不是账本前缀报 ledger_only），id 须存在；表求值时传存档，unlock.* 可用，相识等级比较可用；
  *   条件数组里可写 { anyOf: [...] } 组（分路线：组内任一条满足即成立），组内至少 2 条、只能是账本条件、不得嵌套、不得带其他字段；
- * - closedWhen 不得读 compass.*（compass.anyLineClosed 由 closedWhen 派生，读了成环）；
+ * - closedWhen 是收束事件，只许 done.*（lineClosed 规则表无本线规则时按编年史判；读 compass.* 报 compass_in_closed_when，其余非 done.* 报 closed_when_done_only）；
  * - 每步 id 线内唯一，eventId 与 hintKey 至少一个，eventId 须是已知事件；
  * - pending 步（总策划定：仓库还没有对应剧情事件，本次不新建）：eventId 与条件里的 done.* 可以是仓库尚无的事件 id（形如 <ns>.event.<id>），
  *   eventId 与 hintKey 都可缺（只占步序），须写 note 说明缺什么；
@@ -2491,6 +2491,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     const parsed = parseLedgerPath(c.path);
     if (!parsed) add(`${itemPath}.path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.*), got "${c.path}".`);
     else if (opts.noCompass && parsed.kind === 'compass') add(`${itemPath}.path`, 'compass_in_closed_when', 'closedWhen cannot read compass.* (compass.anyLineClosed is derived from closedWhen).');
+    else if (opts.noCompass && parsed.kind !== 'done') add(`${itemPath}.path`, 'closed_when_done_only', `closedWhen lists closing events and only accepts done.* (judged by the chronicle in lineClosed), got "${c.path}".`);
   };
   const isGroup = (c: unknown): c is Record<string, unknown> => isRecord(c) && Object.prototype.hasOwnProperty.call(c, 'anyOf');
   const conditions = (value: unknown, path: string, scope: LedgerScope = ledger, opts: { noCompass?: boolean } = {}): void => {

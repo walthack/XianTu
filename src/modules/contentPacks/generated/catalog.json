@@ -1,5 +1,5 @@
 {
-  "version": "d2d973aaa7106241",
+  "version": "4bfa882b149e93a1",
   "contracts": [
     {
       "meta": {
@@ -14552,7 +14552,7 @@
             "note": "不提晋（线可任意顺序走）；分路线 anyOf：解蛊 06 那套 s06_06 也算"
           }
         ],
-        "note": "knownWhen＝南荒之约（P-01）；closedWhen 暂用 05b 那套（P-09），lineOutcomes 有数据后改 line.nanhuang.outcome"
+        "note": "knownWhen＝南荒之约（P-01）；closedWhen 用 05b 那套（P-09）。收束统一读 lineClosed：line.nanhuang.outcome 有档按档，规则表 lineOutcomes 还没有本线规则时退回读这里的 closedWhen（按编年史）"
       },
       {
         "lineId": "jin",
