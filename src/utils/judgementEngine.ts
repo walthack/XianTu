@@ -1,4 +1,4 @@
-import {trainingRealm} from '../modules/scenarioMods/levelProgression';
+import {TRAINING_ACTION_PATTERN,trainingRealm} from '../modules/scenarioMods/levelProgression';
 import { rollD20 } from './diceRoller';
 import { judgementNumbers } from './judgementConfig';
 import { GAME_NUMBERS } from '../modules/sceneModule/numbers';
@@ -386,21 +386,42 @@ export function judgementPromptLabels(resolution: Pick<JudgementResolution, 'kin
   };
 }
 
+/**
+ * 结果档名与结果说明只给模型理解成败，不是正文（真机 658435d5eb8b：模型把档名、结果说明原样念进叙事）。
+ * 回执头一句与模块叙事指令都写明不得照抄；不另加正文改写器。
+ */
+export const JUDGEMENT_RECEIPT_NO_COPY = '结果档与结果说明只给你看：正文不写档名，不照抄结果说明，用情节、动作与对白演出这个结果';
+
+/**
+ * 修炼／冲关判定的修为说明（真机 658435d5eb8b：修炼部分成功进度没动，叙事却写「反倒被消磨去少许」）：
+ * 没写入境界＝修为进度不变、没有任何折损，明令不得写折损；只有冲关非成功档按 training.failureRetention 写入了境界，才是真折损。
+ * 动作文本没命中练功／冲关结算词（调息疗伤、双修等）返回空串，不加这一行。
+ */
+export function cultivationProgressNote(resolution: Pick<JudgementResolution, 'kind' | 'actionText' | 'outcome' | 'appliedEffects'>): string {
+  if (resolution.kind !== 'cultivate' || !TRAINING_ACTION_PATTERN.test(resolution.actionText || '')) return '';
+  const realmWritten = (resolution.appliedEffects || []).some(effect => effect.key === '角色.属性.境界' && effect.action === 'set');
+  if (!realmWritten) return '修为进度不变，没有任何折损；不得写成修为被消磨、折损、倒退或有所增长';
+  if (resolution.outcome && !['success', 'great_success', 'perfect'].includes(resolution.outcome)) return '冲关未成，修为已折损到已写入的进度，只按这个数写折损，不夸大';
+  return '';
+}
+
 export function formatVerifiedJudgementReceiptForPrompt(resolution: JudgementResolution): string {
   const effectSummary = (resolution.appliedEffects || []).map(describeJudgementEffect).join('；') || '无';
   const outcomeText = describeJudgementOutcomeText(resolution) || '无';
   const labels = judgementPromptLabels(resolution);
+  const progressNote = cultivationProgressNote(resolution);
   return [
-    '只可演出同一判定ID给出的既定骰点、总值、结果与已写入效果；不得重新计算、掷骰或输出判定卡。',
+    `只可演出同一判定ID给出的既定骰点、总值、结果与已写入效果；不得重新计算、掷骰或输出判定卡。${JUDGEMENT_RECEIPT_NO_COPY}。`,
     `动作=${resolution.actionText}`,
     `判定ID=${resolution.id}`,
     `类型=${labels.kind}`,
     `骰点=${resolution.roll}`,
     `总值=${resolution.total}`,
     `难度=${resolution.difficulty.value}`,
-    `结果=${labels.outcome}`,
+    `结果档（只给你看）=${labels.outcome}`,
     `正典策略=${labels.canonPolicy}`,
-    `结果文案=${outcomeText}`,
+    `结果说明（只给你看，不照抄）=${outcomeText}`,
+    ...(progressNote ? [`修为=${progressNote}`] : []),
     `已写入=${effectSummary}`,
   ].join('；');
 }

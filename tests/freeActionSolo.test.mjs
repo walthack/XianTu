@@ -229,20 +229,23 @@ test('冲关：时机未到 / 冲不了关时满进度修炼 → 出判定卡之
       return [solo(variant), save];
     };
     // 满进度修炼可冲关时改按冲关出卡（真机 db4278a0247b，见下一条）；到境界最高级冲不了关才拦，事实句写瓶颈、不写「还不到这一步」
-    for (const [tk, save, fact] of [
-      [solo('breakthrough'), readySave({ stage: '中期', progress: 30, cap: 'none' }), /境界进度还不到这一步/],
-      [...top('train'), /修为已到瓶颈.*再练也没有进益/],
+    // 最高境界满进度发「冲关」与发「修炼」同一原因 realm_capped（atTrainingCap，与 canBreakthrough 同源），都写瓶颈（真机 658435d5eb8b）
+    for (const [tk, save, reason, fact] of [
+      [solo('breakthrough'), readySave({ stage: '中期', progress: 30, cap: 'none' }), 'not_ready', /境界进度还不到这一步/],
+      [...top('train'), 'realm_capped', /修为已到瓶颈.*再练也没有进益/],
+      [...top('breakthrough'), 'realm_capped', /修为已到瓶颈.*已无关可冲/],
     ]) {
       const snapshot = structuredClone(save);
       const prepared = mods.plan.prepareFreeAction(save, tk);
-      assert.deepEqual([prepared.kind, prepared.reason], ['refused', 'not_ready'], tk.variant);
+      assert.deepEqual([prepared.kind, prepared.reason], ['refused', reason], tk.variant);
+      assert.ok(!/还不到这一步/.test(prepared.facts[0]) || reason === 'not_ready', prepared.facts[0]);
       assert.match(prepared.facts[0], fact);
       assert.deepEqual(save, snapshot, '零写入');
       assert.match(mods.turn.issueFreeActionJudgement(save, [tk]).refusalBlock, /本地自由行动未发生/);
     }
     // 用户 2026-10-27 13:40 定取消练功章节上限：默认难度（trainingCap=none）满进度可冲关；到境界最高级才被拦
     assert.equal(mods.plan.prepareFreeAction(readySave({ stage: '后期', progress: 100 }), solo('breakthrough')).kind, 'issued');
-    assert.equal(mods.plan.prepareFreeAction(top('breakthrough')[1], solo('breakthrough')).reason, 'not_ready');
+    assert.equal(mods.plan.prepareFreeAction(top('breakthrough')[1], solo('breakthrough')).reason, 'realm_capped');
 
     const win = readySave({ stage: '后期', progress: 100, cap: 'none' });
     const oldName = win.角色.属性.境界.名称;
@@ -282,7 +285,7 @@ test('冲关偶发误拦（真机 db4278a0247b）：右栏「可突破!」、快
       assert.equal(levelProgression.canBreakthrough(make()), ready, `${name}：可突破`);
       const breakthrough = mods.plan.prepareFreeAction(make(), solo('breakthrough'));
       assert.equal(breakthrough.kind === 'issued', ready, `${name}：冲关票出卡 ⇔ 面板可突破`);
-      if (!ready) assert.equal(breakthrough.reason, 'not_ready', name);
+      if (!ready) assert.equal(breakthrough.reason, top ? 'realm_capped' : 'not_ready', name);
       const train = mods.plan.prepareFreeAction(make(), solo('train'));
       if (ready) {
         assert.equal(train.kind, 'issued', `${name}：修炼票不再被「时机未到」拦下`);
@@ -310,7 +313,7 @@ test('冲关偶发误拦（真机 db4278a0247b）：右栏「可突破!」、快
   });
 });
 
-test('冲关部分成功（真机 1f9f24127b4e）：数值按设计折损（同失败，保留 failureRetention）；给模型的结果文案用冲关专属句、与数值一致，不写成见效／增长；其余档与修炼仍用自修通用句', () => {
+test('冲关部分成功（真机 1f9f24127b4e）：数值按设计折损（同失败，保留 failureRetention）；给模型的结果文案用冲关专属句、与数值一致，不写成见效／增长；冲关失败档也用冲关专属句（写折损），成功档仍用自修通用句', () => {
   switchedOn(() => {
     const save = readySave({ stage: '后期', progress: 100, cap: 'none' });
     const { prepared, resolution, result } = runJudged(save, solo('breakthrough'), 'partial');
@@ -318,31 +321,33 @@ test('冲关部分成功（真机 1f9f24127b4e）：数值按设计折损（同�
     assert.equal(prepared.proposal.stakes.partial, '冲关未成，已积累的修为折损一部分。');
     const outcomeText = mods.judgement.describeJudgementOutcomeText(resolution);
     assert.equal(outcomeText, prepared.proposal.stakes.partial);
-    assert.match(mods.judgement.formatVerifiedJudgementReceiptForPrompt(resolution), /结果文案=冲关未成，已积累的修为折损一部分。/);
+    assert.match(mods.judgement.formatVerifiedJudgementReceiptForPrompt(resolution), /结果说明（只给你看，不照抄）=冲关未成，已积累的修为折损一部分。/);
     assert.ok(!/见效|增长|进益|精进/.test(outcomeText), outcomeText);
     assert.match(result.facts[0], /冲关未成.*折损/, '事实句与结果文案同口径');
     // 冲关其余档仍用自修通用句（没有专属句就回落类的通用句）；修炼部分成功另有专属句（见下一条）
+    // 冲关失败／大失败同样折损，用冲关专属句（真机 658435d5eb8b：折损只在数值确实折损时写，反过来折损了也要写）
     assert.equal(prepared.proposal.stakes.success, '有所进益。');
-    assert.equal(prepared.proposal.stakes.failure, '不得要领，白费工夫。');
-    assert.equal(mods.plan.prepareFreeAction(readySave(), solo('train')).proposal.stakes.partial, '修炼了一阵，修为没有实在的进益。');
+    assert.match(prepared.proposal.stakes.failure, /冲关失败.*折损/);
+    assert.match(prepared.proposal.stakes.criticalFailure, /冲关.*折损/);
+    assert.match(mods.plan.prepareFreeAction(readySave(), solo('train')).proposal.stakes.partial, /^修炼了一阵，修为没有实在的进益；进度不变，也没有任何折损。$/);
   });
 });
 
-test('修炼部分成功（真机 1f9f24127b4e，同冲关的改法）：数值上进度不涨；给模型的结果文案用修炼专属句、与数值一致，不写成见效／增长；修炼其余档与调息疗伤仍用自修通用句', () => {
+test('修炼部分成功（真机 1f9f24127b4e，同冲关的改法）：数值上进度不涨；给模型的结果文案用修炼专属句、与数值一致，不写成见效／增长；修炼失败档也写明进度不变、无折损，成功档与调息疗伤仍用自修通用句', () => {
   switchedOn(() => {
     const save = readySave();
     const before = structuredClone(save.角色.属性.境界);
     const { prepared, resolution, result } = runJudged(save, solo('train'), 'partial');
     assert.deepEqual(save.角色.属性.境界, before, '部分成功不写境界进度（trainingRealm 只认成功档）');
     assert.ok(!resolution.appliedEffects.some(e => e.key === '角色.属性.境界'));
-    assert.equal(prepared.proposal.stakes.partial, '修炼了一阵，修为没有实在的进益。');
+    assert.equal(prepared.proposal.stakes.partial, '修炼了一阵，修为没有实在的进益；进度不变，也没有任何折损。');
     const outcomeText = mods.judgement.describeJudgementOutcomeText(resolution);
     assert.equal(outcomeText, prepared.proposal.stakes.partial);
-    assert.match(mods.judgement.formatVerifiedJudgementReceiptForPrompt(resolution), /结果文案=修炼了一阵，修为没有实在的进益。/);
+    assert.match(mods.judgement.formatVerifiedJudgementReceiptForPrompt(resolution), /结果说明（只给你看，不照抄）=修炼了一阵，修为没有实在的进益；进度不变，也没有任何折损。/);
     assert.ok(!/见效|增长|精进|有所/.test(outcomeText), outcomeText);
     assert.match(result.facts[0], /修炼了一阵.*没有实在的进益/, '事实句与结果文案同口径');
     assert.equal(prepared.proposal.stakes.success, '有所进益。');
-    assert.equal(prepared.proposal.stakes.failure, '不得要领，白费工夫。');
+    assert.match(prepared.proposal.stakes.failure, /^不得要领，白费工夫；修为进度不变，也没有任何折损。$/);
     assert.equal(mods.plan.prepareFreeAction(readySave(), solo('recover')).proposal.stakes.partial, '勉强见效，不尽如人意。', '调息疗伤部分成功确有小幅回血，仍用通用句');
   });
 });

@@ -176,7 +176,8 @@ test('旧预检：修炼／冲关部分成功的说明与结算数值一致（�
   };
   // 练功：部分成功进度不涨
   for (const sentence of ['我闭关修炼', '我开始练功']) {
-    assert.equal(partialOf(sentence), '修炼了一阵，修为没有实在的进益。', sentence);
+    // 写明进度不变、无折损（真机 658435d5eb8b：叙事写成「被消磨」）
+    assert.equal(partialOf(sentence), '修炼了一阵，修为没有实在的进益；进度不变，也没有任何折损。', sentence);
     assert.deepEqual(resolveOnce(sentence, 'partial').realm, realm('中期', 30), `${sentence}：部分成功进度不涨`);
   }
   // 冲关：后期满进度时部分成功按失败折损

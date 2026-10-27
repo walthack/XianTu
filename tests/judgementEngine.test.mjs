@@ -188,9 +188,9 @@ test('verifyResolvedJudgementReceipt returns the save copy and fail-closes on ta
   assert.match(prompt, new RegExp(`判定ID=${trusted.id}`));
   assert.match(prompt, /类型=战斗/);
   assert.match(prompt, /骰点=4/);
-  assert.match(prompt, /结果=/);
+  assert.match(prompt, /结果档（只给你看）=/);
   assert.match(prompt, /正典策略=/);
-  assert.match(prompt, /结果文案=/);
+  assert.match(prompt, /结果说明（只给你看，不照抄）=/);
   assert.match(prompt, /已写入=/);
   assert.match(prompt, /动作=翻越有守卫的城墙/);
 

@@ -66,6 +66,7 @@ export const ERROR_CODES = {
   'LCQ-FA-023': spec('info', 'freeAction', '闸门拒绝（not_ready）：境界进度未到，自修无从推进'),
   'LCQ-FA-024': spec('info', 'freeAction', '闸门拒绝（dropped）：同目标被挤掉的第二张票未能落实'),
   'LCQ-FA-025': spec('info', 'freeAction', '闸门拒绝（unrecognized）：本地没有识别出可结算的动作'),
+  'LCQ-FA-026': spec('info', 'freeAction', '闸门拒绝（realm_capped）：已到练功上限，无关可冲、修炼无进益'),
 
   'LCQ-SAV-001': spec('error', 'indexedDB', '存档库打开失败'),
   'LCQ-SAV-002': spec('error', 'indexedDB', '存档读取失败，已回落空数据或空值'),
@@ -143,6 +144,7 @@ export const FA_GATE_CODES: Record<GateReason, string> = {
   budget_full: 'LCQ-FA-013', protected: 'LCQ-FA-014', guard_up: 'LCQ-FA-015', drain_empty: 'LCQ-FA-016',
   drain_resisted: 'LCQ-FA-017', hp_too_low: 'LCQ-FA-018', drain_survivor: 'LCQ-FA-019', target_unavailable: 'LCQ-FA-020',
   item_unavailable: 'LCQ-FA-021', state_refused: 'LCQ-FA-022', not_ready: 'LCQ-FA-023', dropped: 'LCQ-FA-024', unrecognized: 'LCQ-FA-025',
+  realm_capped: 'LCQ-FA-026',
 };
 
 /** AiRequestTimeoutError 的 phase → 错误码。 */

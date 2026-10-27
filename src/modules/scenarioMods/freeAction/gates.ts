@@ -15,7 +15,7 @@ import { relationshipOf, runtimeEntityName } from '../ledger/affinityIdentity';
 import { stanceOf } from '../affinityLadder';
 import { actorStatusRecords } from '../actorStatusRead';
 import { levelOf } from '@/utils/realmUtils';
-import { canBreakthrough, trainingRealm } from '../levelProgression';
+import { atTrainingCap, canBreakthrough, trainingRealm } from '../levelProgression';
 import type { InjuryRecord } from '../../sceneModule/host/injuries';
 import { itemEffectOf, type ItemEffect } from './itemUse';
 import { resolveNumberRef, variantSpecOf, type VariantSpec } from './config';
@@ -88,7 +88,8 @@ export function atBreakthroughTicket(save: SaveData, ticket: FreeActionTicket): 
 function checkTargetlessGates(save: SaveData, spec: VariantSpec): GateOk | GateFail {
   const slots: GateSlots = { player: playerNameOf(save), target: '' };
   if (activeScene(save)) return { ok: false, reason: 'scene_active', slots };
-  if (spec.requires?.realmMoves && !realmWouldMove(save, spec)) return { ok: false, reason: 'not_ready', slots };
+  // 境界试算不动：已到练功上限（默认即境界最高级，与 canBreakthrough 同一判据 atTrainingCap）＝瓶颈，冲关、修炼都一样；否则是进度还不到（真机 658435d5eb8b：最高境界满进度冲关提示「还不到这一步」）。
+  if (spec.requires?.realmMoves && !realmWouldMove(save, spec)) return { ok: false, reason: atTrainingCap(save) ? 'realm_capped' : 'not_ready', slots };
   return { ok: true, spec, slots, toxic: false };
 }
 

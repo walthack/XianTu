@@ -93,7 +93,7 @@
             <span class="progress-text" :class="getRealmProgressClass()">
               {{ realmProgressPercent }}%
               <span v-if="breakthroughReady" class="breakthrough-hint">可突破!</span>
-              <span v-else-if="realmProgressPercent >= 90 && realmProgressPercent < 100" class="sprint-hint">可冲刺</span>
+              <span v-else-if="sprintReady" class="sprint-hint">可冲刺</span>
             </span>
           </div>
           <!-- 无进度数据：显示等待提示 -->
@@ -422,7 +422,7 @@ import {
 } from '@/modules/scenarioMods/runtime';
 import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
 import { lineCompassView, showLineCompass } from '@/modules/scenarioMods/lineCompass';
-import { canBreakthrough } from '@/modules/scenarioMods/levelProgression';
+import { atTrainingCap, canBreakthrough } from '@/modules/scenarioMods/levelProgression';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
@@ -792,6 +792,9 @@ const realmProgressPercent = computed(() => {
 
 // 「可突破!」与冲关闸门同一判据、同一份存档快照（canBreakthrough：后期、进度满、未到上限），不再只看百分比（真机 db4278a0247b）。
 const breakthroughReady = computed(() => Boolean(gameStateStore.attributes?.境界) && canBreakthrough(gameStateStore.toSaveData()));
+// 「可冲刺」：进度 90–99%，且未到练功上限（atTrainingCap，与 canBreakthrough 同源；默认即境界最高级）——最高境界已无关可冲，不再显示（真机 658435d5eb8b）。
+const sprintReady = computed(() => realmProgressPercent.value >= 90 && realmProgressPercent.value < 100
+  && Boolean(gameStateStore.attributes?.境界) && !atTrainingCap(gameStateStore.toSaveData()));
 
 const isRealmProgressAvailable = computed(() => {
   const maxProgress = gameStateStore.attributes?.境界?.下一级所需;
@@ -806,9 +809,8 @@ const realmWaitingText = computed(() => {
 
 // 根据进度百分比返回CSS类名
 const getRealmProgressClass = (): string => {
-  const percent = realmProgressPercent.value;
   if (breakthroughReady.value) return 'realm-breakthrough';  // 红色 - 可突破（同冲关闸门判据）
-  if (percent >= 90 && percent < 100) return 'realm-sprint';  // 黄色 - 可冲刺
+  if (sprintReady.value) return 'realm-sprint';  // 黄色 - 可冲刺（同上，最高境界不显示）
   return '';                                         // 紫色 - 默认
 };
 

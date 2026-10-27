@@ -29,7 +29,7 @@ test('冲关回执（成功／部分成功）：给模型的回执没有英文�
     assert.deepEqual(latinWords(prompt, resolution.id), [], `${outcome}：${prompt}`);
     assert.match(prompt, new RegExp(`判定ID=${resolution.id}`));
     assert.match(prompt, /类型=修炼/);
-    assert.match(prompt, new RegExp(`结果=${label}；`));
+    assert.match(prompt, new RegExp(`结果档（只给你看）=${label}；`));
     assert.match(prompt, /正典策略=(自由演绎|只演过程)/);
     assert.match(prompt, /已写入=境界记为/);
   }
@@ -48,7 +48,7 @@ test('MainGamePanel 拼的【本地判定已结算】：类型／结果／正典
   const panel = readFileSync(fileURLToPath(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url)), 'utf8');
   const line = panel.split('\n').find(row => row.includes('【本地判定已结算】判定ID='));
   assert.ok(line);
-  assert.match(line, /类型=\$\{labels\.kind\}.*结果=\$\{labels\.outcome\}.*正典策略=\$\{labels\.canonPolicy\}/);
+  assert.match(line, /类型=\$\{labels\.kind\}.*结果档（只给你看）=\$\{labels\.outcome\}.*正典策略=\$\{labels\.canonPolicy\}/);
   assert.ok(!/\$\{result\.(kind|outcome|canonPolicy)\}/.test(line), line);
   // 模板里的字面文字（去掉 ${…} 插值）没有英文
   const literal = line.slice(line.indexOf('`') + 1, line.lastIndexOf('`')).replace(/\$\{[^}]*\}/g, '');

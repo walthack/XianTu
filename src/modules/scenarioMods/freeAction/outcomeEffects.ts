@@ -7,7 +7,7 @@
  */
 import { GAME_NUMBERS } from '../../sceneModule/numbers';
 import { packText } from '@/modules/contentPacks';
-import type { JudgementKind, JudgementOutcome, JudgementResolution } from '@/utils/judgementEngine';
+import { JUDGEMENT_OUTCOME_LABELS, type JudgementKind, type JudgementOutcome, type JudgementResolution } from '@/utils/judgementEngine';
 
 type Effect = JudgementResolution['appliedEffects'][number];
 
@@ -47,7 +47,8 @@ export function failureAftermathEffects(
       outcome: gateOutcome,
       scope: gate.scopeByKind[kind] ?? gate.defaultScope,
       ...(input.target ? { target: input.target } : {}),
-      reason: fill(packText('judge.aftermath.reason'), { severity: packText(`judge.aftermath.severity.${outcome}`), outcome }),
+      // 原因会进行动门控提示给模型看，结果档写中文（真机 658435d5eb8b：叙事夹英文）。
+      reason: fill(packText('judge.aftermath.reason'), { severity: packText(`judge.aftermath.severity.${outcome}`), outcome: JUDGEMENT_OUTCOME_LABELS[outcome] ?? outcome }),
       effect: packText('judge.aftermath.effect'),
       createdAtTurn: input.turn,
       ttlTurns: gate.ttlTurns,

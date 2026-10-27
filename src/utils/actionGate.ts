@@ -22,6 +22,9 @@ export interface ActionGateState {
 
 const ACTION_GATE_PATH = '系统.扩展.行动门控';
 const MAX_ACTIVE_GATES = 6;
+/** 活跃门控给模型看的结果／范围写中文（未知值原样）；存档里仍存英文枚举，写入格式那一行是指令协议，不改（真机 658435d5eb8b：叙事夹英文）。 */
+export const ACTION_GATE_OUTCOME_LABELS: Record<string, string> = { failure: '失败', partial: '部分成功', blocked: '受阻' };
+export const ACTION_GATE_SCOPE_LABELS: Record<string, string> = { scene: '场面', npc: '人物', location: '地点', item: '物品', quest: '事务', combat: '交手', social: '交涉' };
 
 function toFiniteNumber(value: unknown): number | null {
   const num = Number(value);
@@ -143,7 +146,7 @@ export function buildActionGatePrompt(saveData: unknown, currentTurn = getNarrat
       const expiry = typeof entry.expiresAtTurn === 'number'
         ? `,到期回合=${entry.expiresAtTurn}`
         : (typeof entry.ttlTurns === 'number' ? `,持续=${entry.ttlTurns}回合` : '');
-      lines.push(`${index + 1}. 动作=${entry.actionLabel},结果=${entry.outcome},范围=${entry.scope}${target},原因=${entry.reason},影响=${entry.effect}${expiry}`);
+      lines.push(`${index + 1}. 动作=${entry.actionLabel},结果=${ACTION_GATE_OUTCOME_LABELS[entry.outcome] ?? entry.outcome},范围=${ACTION_GATE_SCOPE_LABELS[entry.scope] ?? entry.scope}${target},原因=${entry.reason},影响=${entry.effect}${expiry}`);
     });
   } else {
     lines.push('当前活跃门控:无');

@@ -53,8 +53,8 @@ export const GATE_REASONS = [
   'drain_survivor',
   // 票校验阶段（目标/物品无效）与结算写入被状态拒绝时的“未发生”事实。
   'target_unavailable', 'item_unavailable', 'state_refused',
-  // 自修：按修炼结算试算境界进度不会变（时机未到 / 已满）。
-  'not_ready',
+  // 自修：按修炼结算试算境界进度不会变——时机未到 / 已到练功上限（瓶颈，无关可冲）。
+  'not_ready', 'realm_capped',
   // 没落实的动作（同目标被挤掉的第二张票）/ 本地没有识别出可结算动作（识别降级、传功语义无票）。
   'dropped', 'unrecognized',
 ] as const;

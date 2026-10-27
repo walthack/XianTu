@@ -12,14 +12,16 @@ export function applyStoryLevel(save:any,to:number):void {if(!Number.isInteger(t
 /** 练功／冲关上限。用户 2026-10-27 13:40 定：不再按章节原著级卡上限，三档难度默认 'none'，只受境界最高级限制；
  *  存档里仍选 'canon'/'canon+1' 时，只在查得到原著级的关卡按原著级卡，查不到（null）一律按最高级，不再退成当前级。 */
 export function trainingCapLevel(save:any):number {const d=difficultySettings(save),canon=stageCanonLevel(save);if(d.trainingCap==='none'||canon===null)return GAME_NUMBERS.levels.max;return Math.min(GAME_NUMBERS.levels.max,canon+(d.trainingCap==='canon+1'?GAME_NUMBERS.training.canonExtra:0));}
+/** 动作文本命中练功／冲关结算（trainingRealm）的词；判定回执的修为说明也按它认。 */
+export const TRAINING_ACTION_PATTERN=/练功|修炼|闭关|冲关|冲击境界/;
 /** Pure receipt payload; callers apply it once through the existing judgement receipt. */
 export function trainingRealm(save:any,text:string,outcome:string):any|null {
- if(!/练功|修炼|闭关|冲关|冲击境界/.test(text))return null;
+ if(!TRAINING_ACTION_PATTERN.test(text))return null;
  const current=save?.角色?.属性?.境界;if(!current)return null;
- const r=structuredClone(current),level=levelOf(r)??0,cap=trainingCapLevel(save);
+ const r=structuredClone(current),level=levelOf(r)??0;
  r.下一级所需=GAME_NUMBERS.training.progressPerLevel;
  const success=['success','great_success','perfect'].includes(outcome),need=Math.max(1,Number(r.下一级所需)||GAME_NUMBERS.training.progressPerLevel);
- if(/冲关|冲击境界/.test(text)) {if(r.阶段!=='后期'||r.当前进度<need||level>=cap)return null;return success?{...realmAt(level+1),九阳层次:r.九阳层次}:{...r,当前进度:Math.floor(need*GAME_NUMBERS.training.failureRetention)};}
+ if(/冲关|冲击境界/.test(text)) {if(r.阶段!=='后期'||r.当前进度<need||atTrainingCap(save))return null;return success?{...realmAt(level+1),九阳层次:r.九阳层次}:{...r,当前进度:Math.floor(need*GAME_NUMBERS.training.failureRetention)};}
  if(!success)return null;
  advanceProgress(r,outcome==='success'?GAME_NUMBERS.training.successProgress:GAME_NUMBERS.training.greatProgress,need);
  return r;
@@ -40,3 +42,5 @@ export function drainedRealm(save:any,gain:number):any|null {
 /** 可冲关＝冲关结算（trainingRealm 的冲关分支）有结果：后期、进度满（按 training.progressPerLevel）、未到上限。
  *  右栏「可突破!」、快捷动作「冲关」、自由行动冲关闸门与修炼票改按冲关出卡（requires.atBreakthrough）都读这一个判据（真机 db4278a0247b）。 */
 export function canBreakthrough(save:any):boolean {return trainingRealm(save,'冲关','success')!==null;}
+/** 已到练功／冲关上限（trainingCapLevel，默认即境界最高级）：没有关可冲。冲关结算、右栏「可冲刺」「可突破!」、自修闸门的「瓶颈」原因都读这一个判据。没有境界记录返回 false。 */
+export function atTrainingCap(save:any):boolean {const r=save?.角色?.属性?.境界;return Boolean(r)&&(levelOf(r)??0)>=trainingCapLevel(save);}
