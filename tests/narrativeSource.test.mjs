@@ -1,4 +1,4 @@
-// 叙事来源日志（LCQ-NAR-001 / 002）与持久日志轮转（LCQ-SYS-002）：夹英文检测与白名单、来源字段与正文全文、
+// 叙事来源日志（LCQ-NAR-001 / 002 / 003）与持久日志轮转（LCQ-SYS-002）：夹英文检测与白名单、来源字段与正文全文、
 // 回合正文是否由模型生成的判定、触发来源 id、场面描写接入、配置体检与热改、按天数 / 条数轮转并记日志，以及各接入点的源码约束。
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -131,7 +131,7 @@ test('夹英文时另记 NAR-002：命中词、前后各 20 字与同样的来�
     assert.equal(recent('LCQ-NAR-001').length, 2, '空正文不记');
 
     const exported = await exportMod.buildLogExport();
-    assert.deepEqual(exported.stats.narrativeSource, { records: 2, flagged: 1, words: { leaps: 1, steady: 1, changes: 1, decide: 1, feel: 1, manipulated: 1 } });
+    assert.deepEqual(exported.stats.narrativeSource, { records: 2, flagged: 1, withheld: 0, words: { leaps: 1, steady: 1, changes: 1, decide: 1, feel: 1, manipulated: 1 } });
     assert.ok(exported.entries.some(e => e.code === 'LCQ-NAR-001' && e.detail.text === LEAKY), '导出里有正文全文');
   });
 });
@@ -211,6 +211,75 @@ test('场面拍描写：模型写成并通过守卫才记（site=scene_beat，�
     assert.equal(template.by, 'template');
     assert.equal(recent('LCQ-NAR-001').length, 1, '模板描写不是模型正文，不记');
   });
+});
+
+// ───────────── 主角尚不自知的设定与功法词（LCQ-NAR-003） ─────────────
+
+const undisclosed = await loadTs('../src/modules/scenarioMods/undisclosedSelfFacts.ts');
+// stage_01 开局：生死根、九阳神功都挂在 s01_05（王哲筑基）上。
+const stage01Runtime = (completed = []) => ({
+  completedEventIds: completed,
+  undisclosedSelfFacts: [
+    { fact: '生死根', untilEventId: 'lcq.event.s01_05', disclosedBy: '王哲在帅帐中察觉并说破' },
+    { fact: '九阳神功', untilEventId: 'lcq.event.s01_05', disclosedBy: '王哲筑基后传下口诀' },
+  ],
+});
+const CULTIVATE_LEAK = '你盘膝静坐，照着记忆里的九阳口诀引气，丹田里那团真阳缓缓转动。';
+
+test('NAR-003：给了禁词且正文命中才记（warn），带命中词、禁词表、前后各 20 字与来源字段；正文原样返回不改写；统计进导出', async () => {
+  await fresh(null, async () => {
+    const terms = undisclosed.undisclosedSelfFactTerms(stage01Runtime());
+    const source = { site: 'turn', path: 'modular', triggers: ['judgement:cultivate'], moduleId: 'narrative', model: 'm', turn: 2, withheldTerms: terms };
+    assert.deepEqual(nar.recordNarrativeSource(source, CULTIVATE_LEAK), [], '返回值仍只是夹英文命中');
+    const [entry] = recent('LCQ-NAR-003');
+    assert.ok(entry, '记了 NAR-003');
+    assert.equal(entry.level, 'warn'); assert.equal(entry.module, 'narrativeSource');
+    assert.deepEqual(entry.detail.words, ['九阳', '口诀', '真阳']);
+    assert.deepEqual(entry.detail.terms, terms);
+    assert.deepEqual(entry.detail.hits[0], { word: '九阳', before: '你盘膝静坐，照着记忆里的', after: '口诀引气，丹田里那团真阳缓缓转动。' });
+    for (const key of ['site', 'path', 'triggers', 'moduleId', 'model', 'turn', 'generatedAt', 'textChars']) assert.ok(key in entry.detail, key);
+    assert.ok(!('withheldTerms' in recent('LCQ-NAR-001')[0].detail), '禁词表不进 NAR-001 的来源字段');
+    assert.equal(recent('LCQ-NAR-001')[0].detail.text, CULTIVATE_LEAK, '正文原样');
+    assert.match(entry.msg, /九阳、口诀、真阳.*turn\/modular/);
+
+    nar.recordNarrativeSource(source, '你盘膝静坐，调息吐纳，体内有股说不清的暖意慢慢沉下去。');
+    nar.recordNarrativeSource({ ...source, withheldTerms: undefined }, CULTIVATE_LEAK);
+    nar.recordNarrativeSource({ ...source, withheldTerms: [] }, CULTIVATE_LEAK);
+    assert.equal(recent('LCQ-NAR-003').length, 1, '干净正文、没给禁词表、禁词表为空都不记');
+    const exported = await exportMod.buildLogExport();
+    assert.equal(exported.stats.narrativeSource.withheld, 1);
+  });
+});
+
+test('NAR-003 接入：回合正文把 withheldTerms 带过去；场面拍描写按 runtime 算禁词；点破之后不记', async () => {
+  await fresh(null, async () => {
+    const base = { text: CULTIVATE_LEAK, startedAt: Date.now(), receipt: { path: 'modular' } };
+    nar.recordTurnNarrative({ ...base, withheldTerms: undisclosed.undisclosedSelfFactTerms(stage01Runtime()) });
+    assert.equal(recent('LCQ-NAR-003').length, 1);
+    nar.recordTurnNarrative({ ...base, withheldTerms: undisclosed.undisclosedSelfFactTerms(stage01Runtime(['lcq.event.s01_05'])) });
+    assert.equal(recent('LCQ-NAR-003').length, 1, 's01_05 完成后不再记');
+
+    const c = makeContract(), state = mod.beginScene(c).state;
+    const plan = mod.validateProposal(c, state, { goal: 'guard', claim: { magnitude: 1, scope: 'single', targets: [] } }, '我掩护同伴').plan;
+    const confirmed = mod.confirmAction(c, state, plan, { factors: 100, playerDefense: 100 });
+    const reply = '你横身挡在同伴身前，体内生死根一阵翻涌，稳稳接下了这一击。';
+    const done = await narrate.narrateBeat(c, confirmed.state, confirmed.result, '我掩护同伴', stage01Runtime(), async () => reply);
+    assert.deepEqual([done.by, done.text], ['model', reply], '正文不改写');
+    const scene = recent('LCQ-NAR-003').find(entry => entry.detail.site === 'scene_beat');
+    assert.ok(scene, '场面拍描写也记');
+    assert.deepEqual(scene.detail.words, ['生死根']);
+  });
+});
+
+test('NAR-003 接入点（源码约束）：回合收尾按回合结束后的存档算禁词；开局、场内闲聊同样带上', () => {
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  const hook = panel.indexOf('recordTurnNarrative({');
+  assert.match(panel.slice(hook - 300, hook), /const narratedSave = gameStateStore\.toSaveData\(\);/);
+  assert.match(panel.slice(hook, hook + 900), /withheldTerms: undisclosedSelfFactTerms\(\(narratedSave as any\)\?\.世界\?\.状态\?\.剧本模组\)/);
+  assert.match(read('src/services/initialization/characterInitialization.ts'), /withheldTerms: undisclosedSelfFactTerms\(\(saveDataAfterCommands as any\)\?\.世界\?\.状态\?\.剧本模组\)/);
+  assert.match(read('src/modules/sceneModule/host/controller.ts'), /noteSceneNarrative\('scene_chat',reply,c,a\.state\.beat,a\.eventId,runtimeOf\(save\)\)/);
+  const doc = read('docs/NARRATIVE-SOURCE-LOG.md');
+  for (const needle of ['LCQ-NAR-003', 'undisclosedSelfFactTerms', 'withheld']) assert.ok(doc.includes(needle), needle);
 });
 
 // ───────────── 轮转 ─────────────
@@ -306,7 +375,7 @@ test('接入点：回合收尾、场面闲聊、开局、提示词取用、模�
 
   const controller = read('src/modules/sceneModule/host/controller.ts');
   assert.match(controller, /reply=await deps\.askNarrative\(\{[^\n]*\}\);byModel=true;\}/, '只有模型真的回了话才标 byModel');
-  assert.match(controller, /else \{logInput\([^\n]*'passThrough'\);if\(byModel\)noteSceneNarrative\('scene_chat',reply,c,a\.state\.beat,a\.eventId\);\}/, '被换成固定句的回话不记');
+  assert.match(controller, /else \{logInput\([^\n]*'passThrough'\);if\(byModel\)noteSceneNarrative\('scene_chat',reply,c,a\.state\.beat,a\.eventId,runtimeOf\(save\)\);\}/, '被换成固定句的回话不记');
 
   const init = read('src/services/initialization/characterInitialization.ts');
   assert.ok(init.indexOf('const openingStartedAt = Date.now();') < init.indexOf('const initialMessageResponse = await robustAICall('));

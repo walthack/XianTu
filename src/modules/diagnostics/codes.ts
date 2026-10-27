@@ -119,6 +119,7 @@ export const ERROR_CODES = {
 
   'LCQ-NAR-001': spec('info', 'narrativeSource', '叙事来源：模型生成了一段玩家可见正文（记来源与全文）'),
   'LCQ-NAR-002': spec('warn', 'narrativeSource', '叙事正文中文里夹拉丁单词（只记录，不改写正文）'),
+  'LCQ-NAR-003': spec('warn', 'narrativeSource', '叙事正文提前写出主角尚不自知的设定或相关功法词（只记录，不改写正文）'),
 
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),

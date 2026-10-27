@@ -29,7 +29,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'narrative', label: '叙事与提示词',
     paths: [
-      ...sm('storyContext.ts', 'legacy*.ts', 'narrative*.ts', '*Guard.ts', 'voiceCards.ts', 'qingyuOpening*.ts', 'qingyuOpportunityNarrative.ts', 'playerActionPresentation.ts'),
+      ...sm('storyContext.ts', 'undisclosedSelfFacts.ts', 'legacy*.ts', 'narrative*.ts', '*Guard.ts', 'voiceCards.ts', 'qingyuOpening*.ts', 'qingyuOpportunityNarrative.ts', 'playerActionPresentation.ts'),
       'utils/prompts/', 'services/prompts/', 'services/defaultPrompts.ts', 'utils/narrative*.ts', 'utils/textSanitizer.ts', 'types/textRules.ts',
     ],
   },

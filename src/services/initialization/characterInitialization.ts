@@ -31,6 +31,7 @@ import { applyStrictScenarioInitializationToSave, resolveInitialWorldInfo } from
 import { applyExpandScenarioInitializationToSave } from '@/modules/scenarioMods/expandInitializer';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
 import { buildScenarioStoryPrompt } from '@/modules/scenarioMods/storyContext';
+import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
 // 导入本地数据库用于随机生成
 import { LOCAL_SPIRIT_ROOTS, LOCAL_ORIGINS } from '@/data/creationData';
 
@@ -733,12 +734,13 @@ async () => {
   if (!openingStory.trim()) {
     throw new Error('AI生成的开场剧情为空');
   }
-  // 叙事来源日志：开局正文（LCQ-NAR-001；中文夹英文另记 LCQ-NAR-002）。只记录，不改正文。
+  // 叙事来源日志：开局正文（LCQ-NAR-001；中文夹英文另记 LCQ-NAR-002；写出主角尚不自知的设定／功法词另记 LCQ-NAR-003）。只记录，不改正文。
   const openingRoute = isTavernEnv() ? null : useAPIManagementStore().getAPIForType('main');
   recordNarrativeSource({
     site: 'opening', path: 'opening', prompts: promptUsesSince(openingStartedAt),
     model: isTavernEnv() ? '宿主主流程' : openingRoute?.model ?? null, provider: isTavernEnv() ? 'tavern' : openingRoute?.provider ?? null,
     turn: getNarrativeTurn(saveDataAfterCommands),
+    withheldTerms: undisclosedSelfFactTerms((saveDataAfterCommands as any)?.世界?.状态?.剧本模组),
   }, openingStory);
 
 

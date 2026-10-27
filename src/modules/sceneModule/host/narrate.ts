@@ -11,6 +11,7 @@ import { buildNarrationInput, checkNarration, type BeatResult, type Contract, ty
 import { partyName, renderRefs } from './refs';
 import type { ModelRequest } from './recognize';
 import { lastModelRoute, recordNarrativeSource } from '@/modules/diagnostics/narrativeSource';
+import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
 
 
 export function buildNarrationPrompt(contract: Contract, state: SceneState, result: BeatResult, playerText: string, runtime: unknown): ModelRequest {
@@ -90,7 +91,7 @@ export async function narrateBeat(
         const raw = String(await ask(buildNarrationPrompt(contract, state, result, playerText, runtime)))
           .replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
         const issues = raw ? acceptable(contract, state, result, raw, runtime) : ['描写为空'];
-        if (!issues.length) { noteSceneNarrative('scene_beat', raw, contract, state.beat); return { text: raw, by: 'model', problems }; }
+        if (!issues.length) { noteSceneNarrative('scene_beat', raw, contract, state.beat, undefined, runtime); return { text: raw, by: 'model', problems }; }
         problems.push(...issues);
       } catch (error) {
         problems.push(`模型描写不可用：${String((error as Error)?.message || error).slice(0, 80)}`);
@@ -104,13 +105,15 @@ export async function narrateBeat(
 /**
  * 叙事来源日志：场面里模型写成、守卫放行的描写与闲聊回话（LCQ-NAR-001；夹英文另记 LCQ-NAR-002）。
  * 这两段提示词写在代码里（buildNarrationPrompt / controller 的闲聊指令），不经提示词面板，custom 恒为 false；模型名取 narrative 模块最近一次路由。
+ * runtime（剧本模组进度）给了时，写出主角尚不自知的设定／功法词另记 LCQ-NAR-003。
  */
-export function noteSceneNarrative(site: 'scene_beat' | 'scene_chat', text: string, contract: Contract, beat?: number, eventId?: string): void {
+export function noteSceneNarrative(site: 'scene_beat' | 'scene_chat', text: string, contract: Contract, beat?: number, eventId?: string, runtime?: unknown): void {
   const route = lastModelRoute('narrative');
   recordNarrativeSource({
     site, path: 'sceneModule', triggers: [`scene:${contract.meta.id}`], moduleId: 'narrative',
     prompts: [{ id: site === 'scene_beat' ? 'sceneModule.narrateBeat' : 'sceneModule.chat', custom: false }],
     model: route?.model ?? null, provider: route?.provider ?? null, beat: beat ?? null, eventId,
+    withheldTerms: undisclosedSelfFactTerms(runtime as Parameters<typeof undisclosedSelfFactTerms>[0]),
   }, text);
 }
 

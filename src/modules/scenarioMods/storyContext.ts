@@ -25,6 +25,7 @@ import {
   privateFactNeedsNarrativeAssociationGuard,
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
+import { undisclosedSelfFactsPromptLine } from './undisclosedSelfFacts';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
 import { getBaihuGambleRefusalPrompt } from './baihuGambleRefusal';
 
@@ -1024,16 +1025,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 主角自己还不知道的自身设定：引擎知道 ≠ 角色知道。
   // 这些字段建档时就写进 `角色.身份`，随人物面板每轮发给模型，storyContext 拦不住它进上下文，
   // 只能显式禁止使用。制作人 2026-08-20 在第二拍就看到选项「尝试用生死根救治」。
-  const undisclosed = ((runtime as { undisclosedSelfFacts?: Array<{ fact: string; untilEventId: string; disclosedBy?: string }> })
-    .undisclosedSelfFacts || [])
-    .filter(item => item?.fact && !(runtime.completedEventIds || []).includes(item.untilEventId));
-  const undisclosedLine = undisclosed.length
-    ? `【主角尚不自知】玩家角色**还不知道**自己身上有这些：${undisclosed.map(item => `「${item.fact}」`).join('、')}。`
-      + '这些字段确实写在人物面板上，但那是引擎的账，不是角色的认知——'
-      + '**正文、玩家台词与行动选项里一律不得出现这些词**，也不得让主角据此行事或自述。'
-      + '它们只能在剧情把它点破的那一拍由当场的人物说出来，那之后才可使用。'
-      + (undisclosed.some(item => item.disclosedBy) ? `（点破方式：${undisclosed.filter(item => item.disclosedBy).map(item => `${item.fact}＝${item.disclosedBy}`).join('；')}）` : '')
-    : '';
+  // 禁令文字与模块链路共用一份（undisclosedSelfFacts.ts）。
+  const undisclosedLine = undisclosedSelfFactsPromptLine(runtime);
   const narratorNamingRule = metLine + '**叙述同样受此约束**：玩家没见过的人物在正文里不得被直呼其名——'
     + '玩家此刻并不知道他叫什么，请用外观、衣着、位置或所作所为指代（如「那个黑甲武将」）。'
     + '名字只有在本轮有人当场说出口、或玩家自己问出来时才能开始使用，并且要把「怎么知道的」写进正文。'

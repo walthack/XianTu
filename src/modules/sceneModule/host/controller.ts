@@ -151,7 +151,7 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
     try { if(deps.askNarrative){reply=await deps.askNarrative({system:'只回答场内闲聊，第二人称。不得改变局势、人物状态、位置或物品，不替玩家采取行动，只输出正文。'+(c.interrogation ? '不生成供词、来历或幕后情报；这些请求只能进入代码审问合同。' : ''),user:sceneBrief(save)+'\n玩家：'+text});byModel=true;} } catch { /* conversational fallback */ }
     checkAbort(deps);
     if(new RegExp(`战斗结束|战斗胜利|敌人(?:${statusNamePattern('incapacitated')})|获得|收入背包|已经逃离|<[^>]+>`).test(reply)){reply='对方没有回应，眼前的交锋仍未解决。';logInput(a,c,text,{used:!!modelClass,class:modelClass},'clarify');}
-    else {logInput(a,c,text,{used:!!modelClass,class:modelClass},'passThrough');if(byModel)noteSceneNarrative('scene_chat',reply,c,a.state.beat,a.eventId);}
+    else {logInput(a,c,text,{used:!!modelClass,class:modelClass},'passThrough');if(byModel)noteSceneNarrative('scene_chat',reply,c,a.state.beat,a.eventId,runtimeOf(save));}
     appendHistory(save,reply,text);a.notice='';writeExt(save,ext);await deps.persist(save);return true;
   }
   if(!recognized.plan||routed.decision==='clarify') {a.pending=null;a.notice='请用陈述句说明本拍目标和打法；可用要素见场面简报。';logInput(a,c,text,{used:!!modelClass,class:modelClass},'clarify');}

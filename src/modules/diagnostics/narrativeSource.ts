@@ -4,6 +4,8 @@
  *   模型名、回合 / 拍序号、正文字数、正文全文（verbatim，只抹密钥形状），以及本机时区的生成时刻 generatedAt。
  * - 正文里夹在中文之间的拉丁单词（字母数 ≥ minLetters，前后 contextChars 字内有汉字，不在白名单里）再记一条 LCQ-NAR-002，
  *   带命中词、前后各 contextChars 字与同样的来源字段。只记录，不改写正文；永不抛错。
+ * - 调用方给了 withheldTerms（主角尚不自知的设定与相关功法词，scenarioMods/undisclosedSelfFacts.ts）时，正文里出现其中的词
+ *   再记一条 LCQ-NAR-003，同样只记录、不改写正文。
  * 来源由调用方给：回合正文（MainGamePanel 发送收尾）、场面拍描写与场内闲聊（sceneModule/host）、开局正文（characterInitialization）。
  * 提示词模块的“是否用户自定义”由 promptStorage.get 经 notePromptUse 报到这里；模块模型路由由 gameModelModules 经 noteModelRoute 报到这里。
  * 配置：game-numbers diagnostics.narrativeSource；说明见 docs/NARRATIVE-SOURCE-LOG.md。
@@ -33,6 +35,8 @@ export interface NarrativeSource {
   beat?: number | null;
   generationId?: string;
   eventId?: string;
+  /** 此刻正文不该出现的词（主角尚不自知的设定及相关功法词）；不进来源字段，只用于 LCQ-NAR-003。 */
+  withheldTerms?: string[];
 }
 export interface MixedLatinHit { word: string; before: string; after: string }
 
@@ -55,6 +59,19 @@ export function findMixedLatin(text: string, cfg: NarrativeSourceConfig = narrat
     const before = Array.from(body.slice(Math.max(0, at - span * 2), at)).slice(-span).join('');
     const after = Array.from(body.slice(at + word.length, at + word.length + span * 2)).slice(0, span).join('');
     if (HAN.test(before) || HAN.test(after)) hits.push({ word, before, after });
+  }
+  return hits;
+}
+
+/** 正文里出现的禁词（逐次出现记一条，带前后 contextChars 字）。 */
+export function findWithheldTerms(text: string, terms: readonly string[], cfg: NarrativeSourceConfig = narrativeSourceConfig()): MixedLatinHit[] {
+  const hits: MixedLatinHit[] = [], body = String(text ?? ''), span = cfg.contextChars;
+  for (const word of new Set(terms.filter(Boolean))) {
+    for (let at = body.indexOf(word); at >= 0; at = body.indexOf(word, at + word.length)) {
+      const before = Array.from(body.slice(Math.max(0, at - span * 2), at)).slice(-span).join('');
+      const after = Array.from(body.slice(at + word.length, at + word.length + span * 2)).slice(0, span).join('');
+      hits.push({ word, before, after });
+    }
   }
   return hits;
 }
@@ -117,7 +134,7 @@ export function narrativeTriggers(input: NarrativeTriggerInput): string[] {
 
 // ───────────── 记录 ─────────────
 
-const stats = { records: 0, flagged: 0, words: new Map<string, number>() };
+const stats = { records: 0, flagged: 0, withheld: 0, words: new Map<string, number>() };
 
 const sourceFields = (source: NarrativeSource) => ({
   site: source.site, path: source.path, triggers: source.triggers ?? [], moduleId: source.moduleId ?? null,
@@ -152,6 +169,15 @@ export function recordNarrativeSource(source: NarrativeSource, text: string, gen
       stats.flagged++;
       for (const word of words) stats.words.set(word.toLowerCase(), (stats.words.get(word.toLowerCase()) ?? 0) + 1);
     }
+    const withheld = findWithheldTerms(body, source.withheldTerms ?? []);
+    if (withheld.length) {
+      const words = [...new Set(withheld.map(hit => hit.word))];
+      logEvent({
+        code: 'LCQ-NAR-003', msg: `叙事正文提前写出主角尚不自知的设定／功法词：${words.join('、')}（${fields.site}/${fields.path}）`,
+        detail: { ...fields, generatedAt, textChars, words, terms: source.withheldTerms, hits: withheld },
+      });
+      stats.withheld++;
+    }
     return hits;
   } catch {
     return []; // lcq-allow: 观察用的来源日志不得影响正文发布（配置异常、日志故障都吞掉）
@@ -170,6 +196,8 @@ export interface TurnNarrativeInput {
   startedAt: number;
   /** 模块演出的提示词键（GAME_MODEL_MODULES 里 narrative 的 promptKey）。 */
   narrativePromptKey?: string;
+  /** 见 NarrativeSource.withheldTerms；按回合结束后的进度算（点破那一拍已完成，不算违禁）。 */
+  withheldTerms?: string[];
 }
 
 /**
@@ -189,7 +217,7 @@ export function recordTurnNarrative(input: TurnNarrativeInput): boolean {
       prompts: modular ? (key ? [promptUse(key) ?? { id: key, custom: false }] : []) : promptUsesSince(input.startedAt),
       model: (modular ? receipt?.route?.model : undefined) ?? telemetry?.model ?? null,
       provider: (modular ? receipt?.route?.provider : undefined) ?? telemetry?.provider ?? null,
-      turn: input.turn ?? null, generationId: input.generationId, eventId: receipt?.eventId,
+      turn: input.turn ?? null, generationId: input.generationId, eventId: receipt?.eventId, withheldTerms: input.withheldTerms,
     }, input.text);
     return true;
   } catch {
@@ -197,14 +225,14 @@ export function recordTurnNarrative(input: TurnNarrativeInput): boolean {
   }
 }
 
-/** 统计（诊断导出 / 反馈包的 stats.narrativeSource）：本会话记了几段、几段夹英文、各词出现的段数。 */
-export function getNarrativeSourceStats(): { records: number; flagged: number; words: Record<string, number> } {
-  return { records: stats.records, flagged: stats.flagged, words: Object.fromEntries([...stats.words].sort((a, b) => b[1] - a[1])) };
+/** 统计（诊断导出 / 反馈包的 stats.narrativeSource）：本会话记了几段、几段夹英文、各词出现的段数、几段写了尚不自知的词。 */
+export function getNarrativeSourceStats(): { records: number; flagged: number; withheld: number; words: Record<string, number> } {
+  return { records: stats.records, flagged: stats.flagged, withheld: stats.withheld, words: Object.fromEntries([...stats.words].sort((a, b) => b[1] - a[1])) };
 }
 registerStatsProvider('narrativeSource', getNarrativeSourceStats);
 
 /** 仅供测试：清登记与统计。 */
 export function resetNarrativeSourceState(): void {
   promptUses.clear(); modelRoutes.clear();
-  stats.records = 0; stats.flagged = 0; stats.words.clear();
+  stats.records = 0; stats.flagged = 0; stats.withheld = 0; stats.words.clear();
 }

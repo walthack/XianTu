@@ -62,3 +62,31 @@ test('声明的解禁事件必须真实存在，否则永远解不了禁', () =>
     }
   }
 });
+
+// 用户 2026-10-28 01:18 定（策划稿《九阳得功时点与凝羽自称》①）：得功前允许修炼、不设级数门槛；
+// 到 s01_05（王哲筑基）为止只写调息、吐纳、静坐、体内说不清的暖意，不写九阳、口诀、太一经、生死根；
+// 真阳按原著首次出口（qyj:1215，王哲点破生死根）一并禁到 s01_05。
+test('得功前：禁令同时列出九阳相关词并给出可写的修炼措辞；禁词表与提示词同一份', async () => {
+  const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const { undisclosedSelfFactsPromptLine, undisclosedSelfFactTerms } = await loadTs('../src/modules/scenarioMods/undisclosedSelfFacts.ts');
+  const mod = JSON.parse(fs.readFileSync(DATA, 'utf8'));
+  const save = boot(rtm, mod);
+  const runtime = save.世界.状态.剧本模组;
+  const line = undisclosedSelfFactsPromptLine(runtime);
+  assert.ok((buildScenarioStoryPrompt(save) || '').includes(line), '旧链路的禁令就是共用函数的输出');
+  assert.match(line, /点破之前写修炼只写调息、吐纳、静坐、体内说不清的暖意，同样不写「九阳」、「口诀」、「太一经」、「真阳」。/);
+  assert.deepEqual(undisclosedSelfFactTerms(runtime), ['生死根', '九阳神功', '九阳', '口诀', '太一经', '真阳']);
+
+  runtime.completedEventIds = [...(runtime.completedEventIds || []), 'lcq.event.s01_05'];
+  assert.equal(undisclosedSelfFactsPromptLine(runtime), '');
+  assert.deepEqual(undisclosedSelfFactTerms(runtime), [], '王哲筑基之后全部解禁');
+  assert.deepEqual(undisclosedSelfFactTerms(null), []);
+  assert.deepEqual(undisclosedSelfFactTerms({ undisclosedSelfFacts: [{ fact: '生死根', untilEventId: 'x' }] }), ['生死根'], '没有相关词的设定只禁本词');
+});
+
+test('世界观常量的内功举例不点名九阳神功、太一经（每轮无条件并入 WORLD_STANDARDS）', async () => {
+  const { MARTIAL_SYSTEM } = await loadTs('../src/utils/prompts/definitions/worldStandards.ts');
+  assert.match(MARTIAL_SYSTEM, /内功\(真气心法,如吐纳调息、聚气行功\)/);
+  assert.doesNotMatch(MARTIAL_SYSTEM, /九阳|太一经/);
+});

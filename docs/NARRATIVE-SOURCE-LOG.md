@@ -10,6 +10,7 @@
 |---|---|---|
 | `LCQ-NAR-001` | info | 模型每生成一段玩家可见正文记一条：来源字段加正文全文 |
 | `LCQ-NAR-002` | warn | 同一段正文里有夹在中文之间的拉丁单词：命中词、前后各 20 字，加上同样的来源字段 |
+| `LCQ-NAR-003` | warn | 同一段正文提前写出了主角尚不自知的设定或相关功法词（见下文「LCQ-NAR-003」）：命中词、前后各 20 字，加上同样的来源字段 |
 | `LCQ-SYS-002` | info | 持久日志轮转删掉了旧记录（见下文「轮转」） |
 
 NAR 是新增的码族，从 001 起取号，规则同其他族：序号只增不复用，作废的码挪到 ERROR-CODES.md 的「已作废」一节。
@@ -55,6 +56,15 @@ NAR 是新增的码族，从 001 起取号，规则同其他族：序号只增�
 - 每段正文最多记一条：`detail.words` 是去重后的命中词，`detail.hits` 是每次出现的 `{ word, before, after }`（命中词前后各 `contextChars` 字），再加上与 NAR-001 相同的来源字段、`generatedAt` 和 `textChars`。`hits` 超过 `diagnostics.maxKeys`（默认 20）项时截断，尾部注明总数。
 - 只记录，正文原样发布。
 
+## LCQ-NAR-003：尚不自知的设定与功法词
+
+用户 2026-10-28 01:18 定（策划稿《九阳得功时点与凝羽自称》①）：得功前允许修炼、不设级数门槛，但到王哲筑基（`lcq.event.s01_05`）为止，修炼叙事只写调息、吐纳、静坐、体内说不清的暖意。
+
+- 禁词表（`scenarioMods/undisclosedSelfFacts.ts` 的 `undisclosedSelfFactTerms`）：本关 `scenario.undisclosedSelfFacts` 里还没到 `untilEventId` 的设定（stage_01：生死根、九阳神功），加上这些设定的相关词（九阳神功 → 九阳、口诀、太一经、真阳）。和提示词里【主角尚不自知】的禁令是同一份。
+- 记录点：`turn`（按回合结束后的进度算，点破那一拍本身已完成，不算违禁）、`opening`、`scene_beat`、`scene_chat`。
+- 按字面匹配，不判断否定句（「你还不知道什么九阳」也会记）。`detail.words` 是去重后的命中词，`detail.terms` 是当时的禁词表，`detail.hits` 同 NAR-002 的格式。
+- 只记录，正文原样发布；不进守卫，不退稿。
+
 ## 配置（`mod-kit/numbers-runtime.json` 的 `diagnostics` 段）
 
 改完三分包要跑 `node scripts/merge-game-numbers.mjs`，重新生成 `game-numbers.qingyu.json`。也可以写 tuning.json 的 `numbers.diagnostics` 热改，下一次记录即生效。配置体检不通过时，整份热改退回（LCQ-NUM-006）。
@@ -83,7 +93,7 @@ NAR 是新增的码族，从 001 起取号，规则同其他族：序号只增�
 - **持久化**：浏览器 IndexedDB 独立库 `lcq-log`，对象仓 `logs`，主键 `seq`（写入时刻 ms × 1000 + 计数）。这个库与存档库 `DAD_SAVES_DB` 无关。
 - **降级**：IndexedDB 不可用时，改用 localStorage 键 `lcq-log-fallback`，只留最近 `localFallbackMax`（默认 50）条，并记 `LCQ-SYS-001`。再不可用就只留内存。
 - **内存**：环形缓冲同样受 `ringMax` / `maxBytes` 与保留天数限制，面板与导出都读它（含磁盘里旧会话的记录）。
-- `persistLevel` 默认 `info`，所以 NAR-001（info）也会落盘；`consoleLevel` 默认 `warn`，所以控制台只打 NAR-002。
+- `persistLevel` 默认 `info`，所以 NAR-001（info）也会落盘；`consoleLevel` 默认 `warn`，所以控制台只打 NAR-002 与 NAR-003。
 
 ## 轮转（`LCQ-SYS-002`）
 
@@ -99,7 +109,7 @@ NAR 是新增的码族，从 001 起取号，规则同其他族：序号只增�
 
 1. **反馈包（推荐，不用开调试模式）**：在设置页「高级设置 → 导出反馈包」导出，得到 `lcq-feedback-<时间>.zip`，其中 `logs.json` 是全部日志。启动失败的兜底界面里也能导出。
 2. **日志 JSON**：调试模式下，页面左下角有错误角标，点开后可以「导出」，得到 `lcq-log-<时间>.json`。
-3. 两种导出的 `stats.narrativeSource` 都有本会话统计：`records`（记了几段）、`flagged`（几段夹英文）、`words`（各命中词出现在几段里）。
+3. 两种导出的 `stats.narrativeSource` 都有本会话统计：`records`（记了几段）、`flagged`（几段夹英文）、`withheld`（几段写了尚不自知的词，NAR-003）、`words`（各命中词出现在几段里）。
 
 用 jq 过滤（文件名按实际替换；反馈包先解压出 `logs.json`）：
 
