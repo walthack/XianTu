@@ -1,5 +1,5 @@
 {
-  "version": "5652825649fa6edc",
+  "version": "78fa1f18cbef85cb",
   "contracts": [
     {
       "meta": {
@@ -13684,7 +13684,6 @@
     "lineCompass.nanhuang.step.nh_guiwang_approach": "去鬼王峒附近看看",
     "lineCompass.nanhuang.step.nh_f10_ghost_king_probe": "走萨安说的那条路看看",
     "lineCompass.nanhuang.step.nh_shanghou_ice_gu": "回来时住过的山村看看",
-    "lineCompass.nanhuang.step.nh_leave_for_jin": "收拾行装，往北出南荒",
     "lineCompass.jin.step.jin_arrive_from_nanhuang": "去建康，把商号开起来",
     "lineCompass.jin.step.jin_arrive_icegu": "去建康，托人想想办法",
     "lineCompass.jin.step.jin_arrive_skip_nh": "去建康，找门路做生意",
@@ -14527,28 +14526,6 @@
             ],
             "hintKey": "lineCompass.nanhuang.step.nh_shanghou_ice_gu",
             "note": "lcq:7401–7404；结尾用 05b 那套（P-09）；分路线 anyOf：06 那套 s06_05 也算"
-          },
-          {
-            "id": "nh_leave_for_jin",
-            "eventId": "lcq.event.s05b_wuer_suli_depart",
-            "when": [
-              {
-                "anyOf": [
-                  {
-                    "path": "done.lcq.event.shanghou_cures_ice_gu",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lcq.event.s06_06",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
-              }
-            ],
-            "hintKey": "lineCompass.nanhuang.step.nh_leave_for_jin",
-            "note": "不提晋（线可任意顺序走）；分路线 anyOf：解蛊 06 那套 s06_06 也算"
           }
         ],
         "note": "knownWhen＝南荒之约（P-01）；closedWhen 用 05b 那套（P-09）。收束统一读 lineClosed：line.nanhuang.outcome 有档按档，规则表 lineOutcomes 还没有本线规则时退回读这里的 closedWhen（按编年史）"
@@ -15632,7 +15609,6 @@
     "lcq.event.slay_dragon": "鬼王峒",
     "lcq.event.tribes_pledge": "鬼王峒",
     "lcq.event.shanghou_revealed": "南荒山村",
-    "lcq.event.s05b_wuer_suli_depart": "南荒散峒营地",
     "lcq.event.s07_00a_shanghou_trading_house": "",
     "lcq.event.s07_00c_arrive_jiankang": "",
     "lcq.event.xiaoyaoyi_arrives": "",

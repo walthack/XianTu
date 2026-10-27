@@ -30,10 +30,6 @@ const ALLOWED = {
     at: '73 < 75（nh_f03_huamiao_mist）',
     why: 's04_03 乐明珠（73）在 s04_01 送亲疑点（75）之后才能触发：stage_04 条件链 s04_01 → s04_02 → s04_03，所以 s04_01 一定先完成，nh_f03_huamiao_mist 的提示照常显示到 s04_01 完成。',
   },
-  'nanhuang.nh_leave_for_jin': {
-    at: '219 < 222（nh_shanghou_ice_gu）',
-    why: '05b rail 上二爷离队（219）在殇侯现身（222）之前；但离队就是南荒 closedWhen，一完成线就收束、卡片撤掉，兜底没机会吞 nh_shanghou_ice_gu——那一句在 tribes_pledge 之后到离队之前照常显示。',
-  },
   'jin.jin_palm_oath': {
     at: '300 < 308（jin_gumingyin）',
     why: '掌誓（palm_oath_shanghou）不在 stage_08 rail、也没挂章（eventReachability 欠账），默认路线完成不了，吞不了前面的步；即便挂上，会被兜底算过的 jin_feiniao_ninjia、jin_gumingyin 都只有 eventId、没有文案。',
@@ -46,6 +42,7 @@ const ALLOWED = {
 
 // 原有三处（晋 jin_shanghou_cure_and_trade、汉 han_camera_palace_alt、太泉 tq_yinyang_fish）已按总策划定改顺序，回归测试见文末。
 const KNOWN = {};
+// 南荒 nh_leave_for_jin（219<222）已按 R-15（剧情策划稿 §15.2，总策划定）整步删掉，放行条目随之去掉；回归测试见文末。
 
 /** 每条线里倒序的步：本步 axisSeq 小于它前面各正式 eventId 步的最大值。 */
 function inversions(table) {
@@ -175,4 +172,39 @@ test('太泉（总策划定）：tq_yinyang_fish 按关链排在 afterfall 各�
   });
   assert.equal(card(AF, [...before, ...cc, ...af.slice(0, 1)], af[1]).step, returnTo(BEAST), 'afterfall 开头：仍是 tq_beast_traps「回到太泉古阵看看」');
   assert.equal(card(AF, [...before, ...cc, ...until05], A06).step, EXIT, 'tq_city_in_film 过了：显示「找条路出古阵」');
+});
+
+test('南荒 R-15（总策划定）：删掉 nh_leave_for_jin；山村那句显示到离队，离队即收束撤卡；晋入口 jin_arrive_from_nanhuang 照常接上', () => {
+  const S05B = 'lcq.stage_05b', S07 = 'lcq.stage_07_qingyuan_jiankang';
+  const [PLEDGE, DEPART, CURE] = ['lcq.event.tribes_pledge', 'lcq.event.s05b_wuer_suli_depart', 'lcq.event.shanghou_cures_ice_gu'];
+  const [A, B] = ['lcq.event.s07_00a_shanghou_trading_house', 'lcq.event.s07_00b_return_north'];
+  const nanhuang = compass.lineCompassTable().lines.find(l => l.lineId === 'nanhuang');
+  assert.ok(!nanhuang.steps.some(s => s.id === 'nh_leave_for_jin'), '表里已删');
+  assert.equal(texts['lineCompass.nanhuang.step.nh_leave_for_jin'], undefined, '文案键已删');
+  assert.equal(nanhuang.steps.at(-1).id, 'nh_shanghou_ice_gu', '山村那句成了南荒最后一步');
+  assert.deepEqual(nanhuang.closedWhen, [{ path: `done.${DEPART}`, operator: 'eq', value: true }], 'closedWhen 不动');
+  const LEAVE = '收拾行装，往北出南荒', VILLAGE = texts['lineCompass.nanhuang.step.nh_shanghou_ice_gu'];
+  const before = routeTo(S05B), s05b = stageOrder(S05B);
+  assert.ok(s05b.indexOf(PLEDGE) < s05b.indexOf(DEPART) && s05b.indexOf(DEPART) < s05b.indexOf(CURE));
+  s05b.forEach((id, i) => {
+    const done = [...before, ...s05b.slice(0, i)];
+    for (const focus of [id, undefined]) {
+      const v = compass.lineCompassView(saveOf(S05B, done), { focusEventId: focus, compassPointer: () => pointer(S05B, focus) });
+      assert.ok(![v.current?.step, ...v.others.map(o => o.step)].includes(LEAVE), `${id}：不再出现「${LEAVE}」`);
+      if (i > s05b.indexOf(PLEDGE) && i <= s05b.indexOf(DEPART) && !focus) assert.equal(v.current?.step, VILLAGE, `${id} 之前：显示山村那句`);
+      if (i > s05b.indexOf(DEPART)) {
+        assert.notEqual(v.current?.lineId, 'nanhuang', `${id} 之前：离队后南荒已收束`);
+        assert.ok(!v.others.some(o => o.lineId === 'nanhuang'), `${id} 之前：折叠行也撤掉南荒`);
+      }
+    }
+  });
+  const ARRIVE = texts['lineCompass.jin.step.jin_arrive_from_nanhuang'];
+  const route = routeTo(S07);
+  assert.ok(route.includes(DEPART) && route.includes(CURE), '默认路线到建康前走过 05b：离队、解蛊都完成');
+  const acq = { 'liuchao.character.shang_zhen_yu': { kind: 'encountered' }, 'liuchao.character.yun_cang_feng': { kind: 'encountered' } };
+  for (const [done, focus] of [[[A], B], [[A], undefined], [[A, B], undefined]]) {
+    const c = card(S07, [...route, ...done], focus, acq);
+    assert.equal(c?.lineId, 'jin', `完成 ${done.length} 拍、焦点 ${focus ?? '无'}`);
+    assert.equal(c.step, ARRIVE, `完成 ${done.length} 拍、焦点 ${focus ?? '无'}：南荒收束后晋入口「${ARRIVE}」照常显示`);
+  }
 });
