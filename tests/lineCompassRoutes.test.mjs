@@ -131,12 +131,13 @@ test('仓库表：引用默认路线隔离关事件的正式步，都带上默�
   assert.deepEqual(problems, []);
 });
 
-test('唐 R-11／R-12（总策划定）：tang_d7_publish 暂不挂锚（pending），tang_shifang_public_enemy 挪到它后面；鸿胪寺补救（默认路线）或 s11（隔离路线）后显示「去大明宫赴元正朝会」', () => {
+test('唐 R-11／R-12（总策划定）→ 五线补全·唐 T20（2026-10-28）：tang_d7_publish 挂新建的「和约公布」、去 pending，tang_shifang_public_enemy 在它后面；鸿胪寺补救（默认路线）或 s11（隔离路线）后显示「去大明宫赴元正朝会」', () => {
   const tang = compass.lineCompassTable().lines.find(line => line.lineId === 'tang');
   const ids = tang.steps.map(step => step.id);
   const publish = tang.steps.find(step => step.id === 'tang_d7_publish');
-  assert.equal(publish.pending, true);
-  assert.equal(publish.eventId, undefined, '鸿胪寺公布和约事件待补（建议 lyg.event.honglusi_treaty_announced），补上前不挂锚');
+  assert.equal(publish.pending, undefined);
+  assert.equal(publish.eventId, 'lyg.event.honglusi_treaty_announced', '鸿胪寺公布和约（ygx 19735，seq 1160）');
+  assert.equal(eventStage.get(publish.eventId), 'lyg.changgan_interlude', '在默认路线关');
   assert.ok(ids.indexOf('tang_d7_publish') < ids.indexOf('tang_shifang_public_enemy') && ids.indexOf('tang_shifang_public_enemy') < ids.indexOf('tang_ganlu_zhuhuan'));
   assert.ok(!tang.steps.some(step => step.eventId === 'lyg.event.honglusi_amends'), '第673章鸿胪寺补救不再当后面的锚');
   const ENVOYS = texts['lineCompass.tang.step.tang_envoys_reunion'];

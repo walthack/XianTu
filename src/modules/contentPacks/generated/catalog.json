@@ -1,5 +1,5 @@
 {
-  "version": "6e523b7be4371836",
+  "version": "f8ec5dc1a64f64e2",
   "contracts": [
     {
       "meta": {
@@ -13722,6 +13722,7 @@
     "lineCompass.tang.step.tang_changan_yangyuhuan": "进长安，先找个宅子住下",
     "lineCompass.tang.step.tang_envoys_reunion": "去大明宫赴元正朝会",
     "lineCompass.tang.step.tang_d7_secret_treaty": "在长安城里打听打听",
+    "lineCompass.tang.step.tang_d7_publish": "在长安城里留意朝廷动静",
     "lineCompass.tang.step.tang_ganlu_zhuhuan": "回长安城里看看",
     "lineCompass.qin.step.qin_entry_envoy": "去咸阳，向秦廷递国书",
     "lineCompass.qin.step.qin_entry_xu_unmet": "去咸阳，找那个方士问问",
@@ -15105,6 +15106,7 @@
         "steps": [
           {
             "id": "tang_entry_from_han",
+            "eventId": "lyg.event.tang_liuxianping_arrive",
             "when": [
               {
                 "path": "done.lyg.event.s02_09",
@@ -15112,34 +15114,24 @@
                 "value": true
               }
             ],
-            "until": [
-              {
-                "path": "acq.liuchao.character.yuan_tiangang",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
             "hintKey": "lineCompass.tang.step.tang_entry_from_han",
-            "pending": true,
-            "note": "pending：仓库无留仙坪入唐事件（han_succession_10_beat 只是近似），本次不新建；走过汉那一版（P-05；lyg:8298、8478、8289）"
+            "note": "T1 抵留仙坪（五线补全·唐 2026-10-28，changgan_begins 新首章「留仙坪」rail 1059，排在 s03_01 之前）；until 缺省＝T1 完成；走过汉那一版（P-05；lyg:8298、8478、8289）"
           },
           {
             "id": "tang_entry",
-            "until": [
-              {
-                "path": "acq.liuchao.character.yuan_tiangang",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
+            "eventId": "lyg.event.tang_liuxianping_arrive",
             "hintKey": "lineCompass.tang.step.tang_entry",
-            "pending": true,
-            "note": "pending：仓库无留仙坪入唐事件，本次不新建；跳过汉那一版，不点地名（lcq:2133）"
+            "note": "T1；跳过汉那一版，不点地名（lcq:2133）。跳过汉线的入点要并行调度给（关链 han_succession → changgan_begins 线性，2026-10-28 待核·程序）"
           },
           {
             "id": "tang_meet_liao_zhou_yuan",
-            "pending": true,
-            "note": "pending：仓库无留仙坪遇廖、周、袁事件，本次不新建；lyg:8526"
+            "eventId": "lyg.event.tang_liuxianping_xiangshi",
+            "note": "T2 镇上相士（五线补全·唐 2026-10-28，留仙坪 rail 1060）；完成后相识账记袁天罡 encountered；lyg:8526、8742、8853"
+          },
+          {
+            "id": "tang_fanseng",
+            "eventId": "lyg.event.changgan_fanseng_hunt",
+            "note": "T3（五线补全·唐 2026-10-28）：挂留仙坪章上 rail（1061），按原著序挪到 tang_changan_yangyuhuan（1066）之前"
           },
           {
             "id": "tang_changan_yangyuhuan",
@@ -15155,13 +15147,8 @@
             "note": "lyg:10009"
           },
           {
-            "id": "tang_fanseng",
-            "eventId": "lyg.event.changgan_fanseng_hunt",
-            "note": "旧锚"
-          },
-          {
             "id": "tang_envoys_reunion",
-            "eventId": "lyg.event.shixiang_s13",
+            "eventId": "lyg.event.yuanzheng_globe",
             "when": [
               {
                 "anyOf": [
@@ -15178,24 +15165,8 @@
                 ]
               }
             ],
-            "until": [
-              {
-                "anyOf": [
-                  {
-                    "path": "done.lyg.event.shixiang_s13",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lyg.event.yuanzheng_globe",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
-              }
-            ],
             "hintKey": "lineCompass.tang.step.tang_envoys_reunion",
-            "note": "lyg:13678–13686；分路线 anyOf：shixiang_ambush 隔离，默认路线 changgan_interlude 同序号承接"
+            "note": "T8（五线补全·唐 2026-10-28）：改挂默认路线 changgan_interlude「佛门暗潮与元正朝会」章的元正朝会（1102），不再挂隔离关 s13，until 缺省＝它完成；lyg:13678–13686。Q1（跳过汉线、无汉使身份时怎么进鸿胪寺致歉与朝会）待用户拍板，现按原著汉使版，分档未实现"
           },
           {
             "id": "tang_zhao_nan_war_jinnang",
@@ -15205,11 +15176,11 @@
           {
             "id": "tang_d7_appoint",
             "eventId": "lyg.event.song_tongwen",
-            "pending": true,
-            "note": "pending：缺读取点：when 应为 identity.<宋员外郎身份> exists，identities.json 为空，写不进条件；条件必经"
+            "note": "T18（五线补全·唐 2026-10-28）：通问计议使挂年节与朝局章上 rail（1134）。when 读 identity.liuchao.identity.song.* 与两档身份写入待身份清单（identities.json 首版留空），现条件必经"
           },
           {
             "id": "tang_d7_secret_treaty",
+            "eventId": "lyg.event.tang_secret_treaty_signed",
             "when": [
               {
                 "anyOf": [
@@ -15227,18 +15198,18 @@
               }
             ],
             "hintKey": "lineCompass.tang.step.tang_d7_secret_treaty",
-            "pending": true,
-            "note": "pending：仓库无 D7 密约事件（changgan_interlude_04 是反向事件），until 缺读取点，本次不新建；申服君在元正朝会在场（lyg:13678）"
+            "note": "T19 密约谈定（五线补全·唐 2026-10-28，年节与朝局章 rail 1139，接密约谈崩之后）；until 缺省＝T19 完成；申服君在元正朝会在场（lyg:13678），谈妥条款 ygx 17662–17702"
           },
           {
             "id": "tang_d7_publish",
-            "pending": true,
-            "note": "pending：仓库无「鸿胪寺公布和约」事件（ygx:19735–19738，第709章·濯足），本次不新建，做到唐线时再补，建议 id lyg.event.honglusi_treaty_announced、axisSeq 1160，补上后挂回 eventId 并去掉 pending；原挂的 honglusi_amends（seq 1097）是第673章鸿胪寺补救，早于元正朝会，会让前面各步被兜底跳过（R-11，总策划定）"
+            "eventId": "lyg.event.honglusi_treaty_announced",
+            "hintKey": "lineCompass.tang.step.tang_d7_publish",
+            "note": "T20 和约公布（五线补全·唐 2026-10-28，失踪与伏击章 rail 1160；ygx:19735–19738，第709章·濯足）；R-11（总策划定）：不挂第673章鸿胪寺补救"
           },
           {
             "id": "tang_shifang_public_enemy",
             "eventId": "lyg.event.zhoufei_conspiracy",
-            "note": "≈ seq 1198，排在返程伏击（1177）之后、甘露（1280）之前；原先排在元正朝会前面，会挡住「去大明宫赴元正朝会」（R-12，总策划定）"
+            "note": "T22（五线补全·唐 2026-10-28）：挂新尾章「甘露前夜」上 rail（1198），排在返程伏击（1177）、和约公布（1160）之后、甘露（1280）之前（R-12，总策划定）"
           },
           {
             "id": "tang_ganlu_zhuhuan",
@@ -15605,10 +15576,15 @@
     "lyl.event.han_palace_endgame_08_beat": "",
     "lyg.event.s01_05": "昭阳宫",
     "lyg.event.s02_09": "",
-    "lyg.event.s03_01": "长安",
+    "lyg.event.tang_liuxianping_arrive": "",
+    "lyg.event.tang_liuxianping_xiangshi": "",
     "lyg.event.changgan_fanseng_hunt": "",
-    "lyg.event.shixiang_s13": "大明宫",
+    "lyg.event.s03_01": "长安",
+    "lyg.event.yuanzheng_globe": "长安城",
     "lyg.event.changgan_interlude_03_beat": "",
+    "lyg.event.song_tongwen": "",
+    "lyg.event.tang_secret_treaty_signed": "长安城",
+    "lyg.event.honglusi_treaty_announced": "长安城",
     "lyg.event.zhoufei_conspiracy": "长安城",
     "lyg.event.buddhist_conspiracy_11_beat": "",
     "lyl.event.taiquan_sacred_fruit_07": "",

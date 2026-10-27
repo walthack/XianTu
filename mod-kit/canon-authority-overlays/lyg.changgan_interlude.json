@@ -1,0 +1,268 @@
+{
+  "version": 1,
+  "stageId": "lyg.changgan_interlude",
+  "ops": [
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "event.changgan_interlude_10.done",
+      "beforeKey": "chapter.lyg.changgan_interlude.court.started",
+      "entries": {
+        "chapter.lyg.changgan_interlude.buddhist.started": true,
+        "chapter.lyg.changgan_interlude.buddhist.done": false
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "chapter.lyg.changgan_interlude.ambush.done",
+      "beforeKey": "event.debut_daiqisi.done",
+      "entries": {
+        "chapter.lyg.changgan_interlude.tail.started": false,
+        "chapter.lyg.changgan_interlude.tail.done": false
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "event.song_tongwen.done",
+      "beforeKey": "event.interrogate_feiniao_yingzi.done",
+      "entries": {
+        "event.tang_secret_treaty_signed.done": false,
+        "event.honglusi_treaty_announced.done": false
+      }
+    },
+    {
+      "op": "insertBefore",
+      "path": "scenario.chapters",
+      "beforeId": "lyg.chapter.changgan_interlude_court",
+      "value": {
+        "id": "lyg.chapter.changgan_interlude_buddhist",
+        "title": "佛门暗潮与元正朝会",
+        "summary": "北司借佛门查探程宗扬底细，鸿胪寺登门致歉、恢复朝会资格；元正朝会上秦使展示地球仪，宣平坊命案、兴庆宫地下入口、太子误伤接连而来；水香楼擒下飞鸟萤子，炸开摩尼寺，听信永讲蕃密邪径。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.changgan_interlude.buddhist.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyg.event.north_bureau_buddhist_moves",
+          "lyg.event.honglusi_amends",
+          "lyg.event.cien_red_lotus",
+          "lyg.event.yuanzheng_globe",
+          "lyg.event.xuanping_eunuch_murder",
+          "lyg.event.survey_xingqing_palace",
+          "lyg.event.prince_injury_control",
+          "lyg.event.shuixiang_lure_setup",
+          "lyg.event.spot_poison_assassin",
+          "lyg.event.poolside_capture",
+          "lyg.event.blast_moni_temple",
+          "lyg.event.xinyong_reveals_fanmi",
+          "lyg.event.interrogate_feiniao_yingzi",
+          "lyg.event.debut_daiqisi"
+        ]
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.chapters[id=lyg.chapter.changgan_interlude_court]",
+      "afterKey": "summary",
+      "beforeKey": "completion",
+      "entries": {
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.changgan_interlude.buddhist.done",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyg.chapter.changgan_interlude_court].eventIds",
+      "from": [
+        "lyg.event.changgan_interlude_01_beat",
+        "lyg.event.changgan_interlude_02_beat",
+        "lyg.event.changgan_interlude_03_beat",
+        "lyg.event.changgan_interlude_04_beat",
+        "lyg.event.changgan_interlude_05_beat",
+        "lyg.event.debut_daiqisi"
+      ],
+      "to": [
+        "lyg.event.changgan_interlude_01_beat",
+        "lyg.event.changgan_interlude_02_beat",
+        "lyg.event.changgan_interlude_03_beat",
+        "lyg.event.song_tongwen",
+        "lyg.event.changgan_interlude_04_beat",
+        "lyg.event.tang_secret_treaty_signed",
+        "lyg.event.changgan_interlude_05_beat"
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyg.chapter.changgan_interlude_ambush].eventIds",
+      "from": [
+        "lyg.event.changgan_interlude_06_beat",
+        "lyg.event.changgan_interlude_07_beat",
+        "lyg.event.changgan_interlude_08_beat",
+        "lyg.event.changgan_interlude_09_beat",
+        "lyg.event.changgan_interlude_10_beat"
+      ],
+      "to": [
+        "lyg.event.changgan_interlude_06_beat",
+        "lyg.event.changgan_interlude_07_beat",
+        "lyg.event.changgan_interlude_08_beat",
+        "lyg.event.honglusi_treaty_announced",
+        "lyg.event.changgan_interlude_09_beat",
+        "lyg.event.changgan_interlude_10_beat"
+      ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.chapters",
+      "afterId": "lyg.chapter.changgan_interlude_ambush",
+      "value": {
+        "id": "lyg.chapter.changgan_interlude_tail",
+        "title": "甘露前夜",
+        "summary": "杨玉环转交李昂的闭门密令；黎锦香说破周飞与十方丛林合谋针对程宅，又问出飞鸟家族与剑柄的线索。",
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.changgan_interlude.ambush.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.changgan_interlude.tail.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyg.event.liang_secret_order",
+          "lyg.event.zhoufei_conspiracy",
+          "lyg.event.feiniao_hilt_clue"
+        ]
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events",
+      "afterId": "lyg.event.song_tongwen",
+      "value": {
+        "id": "lyg.event.tang_secret_treaty_signed",
+        "name": "密约谈定",
+        "description": "昭南人急于了结，坚持把谈判放在升平客栈。申服君自矜身份不出席，程宗扬按对等原则也不亲自上阵：昭南由卿士囊瓦出面，宋国这边以祁远为主、贾文和为辅，童贯与高智商随同，每遇僵持便传回内宅由程宗扬定夺。谈判从白天熬到天亮，密约条款大致谈妥，只卡在昭南咬定要张亢的人头上。程宗扬定下两条底线——条款不再让步，张亢不交——改从私下给申服君好处入手打开局面。",
+        "axisId": null,
+        "axisMethod": "tang-line-fill-axis-pending",
+        "axisAnchor": "六朝燕歌行·#98·押注",
+        "axisSeq": 1139,
+        "axisBeat": "宋国与昭南在升平客栈连夜谈判，密约条款大致谈妥，只卡在张亢一事；程宗扬定下条款不让、张亢不交两条底线，改从私下给申服君好处入手。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.song_tongwen.done",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "flags.event.changgan_interlude_04.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.tang_secret_treaty_signed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.jia_wenhe",
+          "liuchao.character.gao_zhishang"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "主持与昭南的密约谈判，守住底线把条款谈妥",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hold_treaty_bottom_lines",
+              "label": "守住两条底线，把密约谈妥",
+              "actionText": "我在内宅盯着升平客栈那边的谈判：条款不再让步、张亢不交，另想办法私下打点申服君。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你守住了底线，密约条款大致谈妥；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events",
+      "afterId": "lyg.event.tang_secret_treaty_signed",
+      "value": {
+        "id": "lyg.event.honglusi_treaty_announced",
+        "name": "和约公布",
+        "description": "正月初九，昭南与宋国的使者同赴鸿胪寺，正式宣布双方谈妥和约，箭在弦上的战事一夜平息。密约内容没有公开，但有心人早已摸到条款：是程氏商会拿出巨额资金，替宋国解了燃眉之急；不知情的人则传说新授的宋国正使只用一天就说服了固执的昭南人。这个刚入长安就让鸿胪寺、京兆府、刑部焦头烂额的汉国诸侯、身份神秘的宋国正使，一时成了长安各方关注的焦点。",
+        "axisId": null,
+        "axisMethod": "tang-line-fill-axis-pending",
+        "axisAnchor": "六朝燕歌行·#109·濯足",
+        "axisSeq": 1160,
+        "axisBeat": "正月初九昭南与宋国使者同赴鸿胪寺宣布和约，战事平息；程宗扬成了长安各方关注的焦点。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.tang_secret_treaty_signed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.honglusi_treaty_announced.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "lyg.location.changan",
+        "objective": "留意鸿胪寺公布和约后长安各方的动静",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "watch_treaty_announcement",
+              "label": "留意鸿胪寺公布和约",
+              "actionText": "我留意鸿胪寺公布和约的消息，看长安各方怎么议论这桩和约和我这个宋国正使。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "鸿胪寺已公布和约，昭南与宋国的战事平息；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

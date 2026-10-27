@@ -36,26 +36,8 @@ const DEBT = new Set([
   // 已于 2026-10-28 挂章上 rail（五线补全·宋 S2–S22、S24–S30），从本清单删去。
   // 汉线 15 条（太泉余波广源行旧账／朝会粮草账、洛都星月湖被诬／纸钞买田、汉宫宫变之夜 8 拍与真空传闻／拥立选择、秘境冰冰验名单）
   // 已于 2026-10-28 挂章（五线补全·汉 H3、H4、H7–H19），除真空传闻／拥立选择两条条件拍只挂章外都上了 rail，从本清单删去。
-  'lyg.event.changgan_fanseng_hunt',
-  'lyg.event.qinglongsi_te_master',
-  'lyg.event.song_tongwen',
-  'lyg.event.interrogate_feiniao_yingzi',
-  'lyg.event.liang_secret_order',
-  'lyg.event.zhoufei_conspiracy',
-  'lyg.event.feiniao_hilt_clue',
-  'lyg.event.north_bureau_buddhist_moves',
-  'lyg.event.honglusi_amends',
-  'lyg.event.cien_red_lotus',
-  'lyg.event.yuanzheng_globe',
-  'lyg.event.xuanping_eunuch_murder',
-  'lyg.event.survey_xingqing_palace',
-  'lyg.event.prince_injury_control',
-  'lyg.event.shuixiang_lure_setup',
-  'lyg.event.spot_poison_assassin',
-  'lyg.event.poolside_capture',
-  'lyg.event.blast_moni_temple',
-  'lyg.event.xinyong_reveals_fanmi',
-  'lyg.event.shituolin_endgame_title_daduhu',
+  // 唐线 20 条（留仙坪番僧猎杀、灞桥章尾青龙寺、长安插曲佛门暗潮 13 拍与通问计议使、甘露前夜 3 拍、尸陀林受封大都护）
+  // 已于 2026-10-28 挂章上 rail（五线补全·唐 T3–T18、T21–T24），从本清单删去。
 ]);
 
 function isCritical(event) {

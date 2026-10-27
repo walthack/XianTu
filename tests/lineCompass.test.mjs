@@ -54,15 +54,15 @@ test('配置：ui.rightSidebar.showLineCompass 默认 true 已登记（用户 20
   assert.equal(compass.lineOfStage('lyl.taiquan_sacred_fruit'), 'taiquan');
 });
 
-test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合并 5 对同文后 58 条，R-15 删南荒 nh_leave_for_jin 后 57 条）；没有占位；pending 步与线级 knownWhen 按拍板；validator 对仓库表无问题', () => {
+test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合并 5 对同文后 58 条，R-15 删南荒 nh_leave_for_jin 后 57 条，五线补全·唐 T20 给 tang_d7_publish 补文案后 58 条）；没有占位；pending 步与线级 knownWhen 按拍板；validator 对仓库表无问题', () => {
   const table = compass.lineCompassTable();
   assert.deepEqual(table.lines.map(l => l.lineId).sort(), [...registry.NATION_LINE_IDS].sort());
   const steps = table.lines.flatMap(l => l.steps.map(step => ({ lineId: l.lineId, ...step })));
   assert.ok(!steps.some(step => step.draft), '定稿后不留【待剧情策划】占位');
   const hinted = steps.filter(step => step.hintKey);
-  assert.equal(hinted.length, 57, '定稿 63 条，R-8 删掉 5 行同文的「见过」版，R-15 删掉南荒 nh_leave_for_jin');
+  assert.equal(hinted.length, 58, '定稿 63 条，R-8 删掉 5 行同文的「见过」版，R-15 删掉南荒 nh_leave_for_jin，唐 T20 补 tang_d7_publish「在长安城里留意朝廷动静」');
   const perLine = Object.fromEntries(table.lines.map(l => [l.lineId, l.steps.filter(step => step.hintKey).length]));
-  assert.deepEqual(perLine, { nanhuang: 10, jin: 8, song: 10, han: 9, tang: 6, qin: 8, taiquan: 6 });
+  assert.deepEqual(perLine, { nanhuang: 10, jin: 8, song: 10, han: 9, tang: 7, qin: 8, taiquan: 6 });
   for (const step of hinted) {
     assert.equal(step.hintKey, `lineCompass.${step.lineId}.step.${step.id}`);
     assert.ok([...texts[step.hintKey]].length <= numbers.GAME_NUMBERS.story.lineCompass.hint.maxChars, step.hintKey);
@@ -72,9 +72,9 @@ test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合�
   assert.equal(texts[compass.LINE_COMPASS_RETURN_KEY], '回到{地点}看看');
   // pending：仓库没有的事件，本次不新建；运行时跳过，note 写缺什么
   // 汉 6 步（四个入口、云如瑶卖饼、霍府别院）已于 2026-10-28 改挂新建事件、去 pending（五线补全·汉 H1／H2／H6）
+  // 唐 6 步（两个入口、遇廖周袁、D7 委任／密约／公布）已于 2026-10-28 改挂事件、去 pending（五线补全·唐 T1／T2／T18／T19／T20）
   const pending = steps.filter(step => step.pending).map(step => `${step.lineId}.${step.id}`);
   assert.deepEqual(pending, [
-    'tang.tang_entry_from_han', 'tang.tang_entry', 'tang.tang_meet_liao_zhou_yuan', 'tang.tang_d7_appoint', 'tang.tang_d7_secret_treaty', 'tang.tang_d7_publish',
     ...table.lines.find(l => l.lineId === 'qin').steps.map(step => `qin.${step.id}`),
     'taiquan.tq_enter_array', 'taiquan.tq_xionggu_key', 'taiquan.tq_xuanyuan_mijing',
   ]);

@@ -102,6 +102,7 @@ const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
   'lyl.chapter.lin_an_bridge_arrival': 'court',
   'lyl.chapter.lin_an_bridge_intel': 'court',
 
+  'lyg.chapter.changgan_begins_liuxianping': 'daily',
   'lyg.chapter.changgan_begins': 'daily',
   'lyg.chapter.dingtao_beijing': 'court',
   'lyg.chapter.liangzhou_league': 'battle',

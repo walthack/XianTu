@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "stageId": "lyg.shituolin_endgame",
+  "ops": [
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyg.chapter.shituolin_endgame_old_grudge].eventIds",
+      "from": [
+        "lyg.event.shituolin_endgame_13_beat",
+        "lyg.event.claim_slew_demon",
+        "lyg.event.shituolin_endgame_14_beat",
+        "lyg.event.shituolin_endgame_15_beat"
+      ],
+      "to": [
+        "lyg.event.shituolin_endgame_13_beat",
+        "lyg.event.claim_slew_demon",
+        "lyg.event.shituolin_endgame_title_daduhu",
+        "lyg.event.shituolin_endgame_14_beat",
+        "lyg.event.shituolin_endgame_15_beat"
+      ]
+    }
+  ]
+}

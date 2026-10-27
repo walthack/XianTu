@@ -1569,7 +1569,7 @@
   {
     "id": "yange.changgan_begins",
     "modId": "lyg.changgan_begins",
-    "chapterId": "lyg.chapter.changgan_begins",
+    "chapterId": "lyg.chapter.changgan_begins_liuxianping",
     "orderedEventIds": [
       "lyg.event.s03_01",
       "lyg.event.s03_02",
@@ -1677,7 +1677,7 @@
   {
     "id": "yange.changgan_interlude",
     "modId": "lyg.changgan_interlude",
-    "chapterId": "lyg.chapter.changgan_interlude_court",
+    "chapterId": "lyg.chapter.changgan_interlude_buddhist",
     "orderedEventIds": [
       "lyg.event.changgan_interlude_01_beat",
       "lyg.event.changgan_interlude_02_beat",

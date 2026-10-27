@@ -790,7 +790,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'tang',
     name: '唐国',
     kind: 'nation',
-    // 锚事件待补：番僧猎杀穿越者在 beat 层（seq 1061）有，event 层 1059–1065 整段空白。
+    // 锚事件：番僧猎杀穿越者（seq 1061）。2026-10-28 五线补全·唐把它挂上留仙坪章 rail，1059／1060 新建抵留仙坪、镇上相士补上。
     anchorEventIds: ['lyg.event.changgan_fanseng_hunt'],
     anchorLocationIds: ['liuchao.location.changan'],
     entryHint: '番僧在猎杀穿越者，而且近来在长安大肆扩张——唐国本来崇道，如今佛门要压过道门。',
@@ -811,8 +811,10 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '（另记一处结构：seq 1055 他是**以舞阳侯身份**出使唐国的——**汉国线的顶点就是本线的入场券**，'
       + '八条线里第一处明确的"顶点喂入口"。这层不写进指引，只作日后分层的依据。）',
     nodes: [
-      // 锚事件：seq 1061 袁天罡透露番僧猎杀穿越者。seq 1059–1065 事件层整段空白，需新增。
+      // 锚事件：seq 1061 袁天罡透露番僧猎杀穿越者。1059 抵留仙坪、1060 镇上相士由五线补全·唐（2026-10-28）新建。
       { reviewSummary: '审汪臻，问明白员外传说多是编造', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_10_beat' },
+      { reviewSummary: '赴唐途中歇在留仙坪，盯住同住客栈的周飞一伙与廖群玉', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.tang_liuxianping_arrive' },
+      { reviewSummary: '堵下镇上的落魄老相士，他承认也是穿越者，借名袁天罡', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.tang_liuxianping_xiangshi' },
       // T1 汉使身份并进同关 s03_09
       { reviewSummary: '听袁天罡说破：番僧在猎杀穿越者', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.changgan_fanseng_hunt' },
       { reviewSummary: '入长安宣平坊落脚，石超接风——吕奉先已在城中惹事', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
@@ -852,8 +854,10 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '在长安面见唐皇，接下昭南索赔：交张亢、赔款，否则兴兵', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_03_beat' },
       { reviewSummary: '受礼部侍郎、通问计议使，用这颗印解宋困', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.song_tongwen' },
       { reviewSummary: '与昭南卿士囊瓦谈崩，他拒了程氏方案并加码兑付', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_04_beat' },
+      { reviewSummary: '升平客栈连夜谈判，密约条款大致谈妥，只卡在张亢——条款不让、人不交', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.tang_secret_treaty_signed' },
       { reviewSummary: '摸清窥基改唆娑梵寺主刺你——瑶池宗已退出', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_06_beat' },
       { reviewSummary: '疑吕雉泄了赵飞燕的消息，计划以她为饵钓十方丛林', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_08_beat' },
+      { reviewSummary: '正月初九鸿胪寺公布昭南与宋国和约，你成了长安各方关注的焦点', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.honglusi_treaty_announced' },
       { reviewSummary: '返程迎战四十余名黑衣人伏击', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_09_beat' },
       { reviewSummary: '救出白霓裳，击杀王守澄——墨枫林登场', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.changgan_interlude_10_beat' },
       { reviewSummary: '从杨玉环接下李昂密令：天策府闭门不涉，去牵制鱼朝恩', status: 'ready', stageId: 'lyg.changgan_interlude', eventId: 'lyg.event.liang_secret_order' },

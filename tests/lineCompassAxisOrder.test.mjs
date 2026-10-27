@@ -30,16 +30,13 @@ const ALLOWED = {
     at: '73 < 75（nh_f03_huamiao_mist）',
     why: 's04_03 乐明珠（73）在 s04_01 送亲疑点（75）之后才能触发：stage_04 条件链 s04_01 → s04_02 → s04_03，所以 s04_01 一定先完成，nh_f03_huamiao_mist 的提示照常显示到 s04_01 完成。',
   },
-  'tang.tang_fanseng': {
-    at: '1061 < 1066（tang_changan_yangyuhuan）',
-    why: '番僧猎杀（changgan_fanseng_hunt）不在 changgan_begins rail、也没挂章（eventReachability 欠账），默认路线完成不了；前一步 tang_changan_yangyuhuan 的 s03_01 是本关 rail 第一拍，按焦点排序（rail 拍优先）挂章后也是它先完成，提示不会被吞。',
-  },
 };
 
 // 原有三处（晋 jin_shanghou_cure_and_trade、汉 han_camera_palace_alt、太泉 tq_yinyang_fish）已按总策划定改顺序，回归测试见文末。
 const KNOWN = {};
 // 南荒 nh_leave_for_jin（219<222）已按 R-15（剧情策划稿 §15.2，总策划定）整步删掉，放行条目随之去掉；回归测试见文末。
 // 晋 jin_palm_oath（300<308）已按五线补全·晋 J3（2026-10-28）挪到 jin_back_after_eagle 之后、掌誓挂章上 rail，放行条目随之去掉；回归测试见文末。
+// 唐 tang_fanseng（1061<1066）已按五线补全·唐 T3（2026-10-28）挪到 tang_changan_yangyuhuan 之前、番僧猎杀挂留仙坪章上 rail，放行条目随之去掉；回归测试见文末。
 
 /** 每条线里倒序的步：本步 axisSeq 小于它前面各正式 eventId 步的最大值。 */
 function inversions(table) {
@@ -474,4 +471,77 @@ test('汉 五线补全 H1–H20（2026-10-28）：默认路线从临安收束起
   assert.notEqual(closed.current?.lineId, 'han', 's02_09 完成：汉已收束');
   assert.ok(!closed.others.some(o => o.lineId === 'han'), 's02_09 完成：折叠行撤掉汉');
   assert.ok(han.findIndex(x => x.id === H20) < CLOSE, '受封舞阳侯在收束前');
+});
+
+test('唐 五线补全 T1–T24（2026-10-28）：默认路线从汉线收束起，留仙坪→长安初定→长安插曲每拍挂章上 rail；6 个 pending 全去掉、番僧倒序放行删除，元正朝会改挂默认路线，线卡随步推进，buddhist_conspiracy_11 完成即收束撤卡', () => {
+  const CB = 'lyg.changgan_begins', CI = 'lyg.changgan_interlude', LZ = 'lyg.liangzhou_league', BC = 'lyg.buddhist_conspiracy';
+  const lyg = id => `lyg.event.${id}`;
+  const [T1, T2, T19, T20] = ['tang_liuxianping_arrive', 'tang_liuxianping_xiangshi', 'tang_secret_treaty_signed', 'honglusi_treaty_announced'].map(lyg);
+  // ① 默认路线：关链 汉嗣→长安初定→（隔离 shixiang_ambush）→长安插曲→（隔离 ganlu_bian）→凉州盟→佛门围杀
+  const TANG = [CB, CI, LZ, BC];
+  for (const id of ['lyg.shixiang_ambush', 'lyg.ganlu_bian']) assert.ok(DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(id));
+  assert.deepEqual([...new Set(routeTo('lyg.ganlu_aftershock').map(id => eventOf.get(id).stageId))].filter(s => TANG.includes(s)), TANG);
+  const before = routeTo(CB);
+  assert.ok(before.includes(lyg('han_succession_10_beat')), '进唐前已审过汪臻（汉线末拍）');
+  const tang = TANG.flatMap(stageId => stageOrder(stageId).map(id => ({ stageId, id })));
+  // ② 表：pending 全去掉；带 eventId 的步都在默认路线上、不再挂隔离关
+  const table = compass.lineCompassTable().lines.find(l => l.lineId === 'tang');
+  assert.ok(!table.steps.some(s => s.pending), '唐线不再有待建步');
+  for (const s of table.steps.filter(s => s.eventId)) {
+    assert.ok(!DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(eventOf.get(s.eventId).stageId), `${s.id} 不挂隔离关`);
+    assert.ok(tang.some(x => x.id === s.eventId), `${s.id}：${s.eventId} 在默认路线上`);
+  }
+  assert.deepEqual(table.steps.map(s => s.eventId?.split('.').pop()), ['tang_liuxianping_arrive', 'tang_liuxianping_arrive', 'tang_liuxianping_xiangshi',
+    'changgan_fanseng_hunt', 's03_01', 'yuanzheng_globe', 'changgan_interlude_03_beat', 'song_tongwen', 'tang_secret_treaty_signed',
+    'honglusi_treaty_announced', 'zhoufei_conspiracy', 'buddhist_conspiracy_11_beat'], '番僧挪到进长安之前；各步按原著序');
+  assert.equal(texts['lineCompass.tang.step.tang_d7_publish'], '在长安城里留意朝廷动静');
+  // ③ 逐拍走：焦点＝本线表里的拍时当前线是唐；无焦点时带文案的步按表序出现、不回跳
+  // 镇上相士带上袁天罡：它完成后相识账记 encountered（引擎按已完成事件的 relatedCharacterIds 记账），这里照此给账
+  const acq = { 'liuchao.character.yuan_tiangang': { kind: 'encountered' } };
+  const acqOf = done => (done.includes(T2) ? acq : {});
+  const HINTS = Object.fromEntries(table.steps.filter(s => s.hintKey).map(s => [s.id, texts[s.hintKey]]));
+  const at = id => tang.findIndex(x => x.id === id);
+  const CLOSE = at(lyg('buddhist_conspiracy_11_beat'));
+  const upTo = id => [...before, ...tang.slice(0, at(id)).map(x => x.id)];
+  const seen = [];
+  tang.forEach(({ stageId, id }, i) => {
+    if (i > CLOSE) return;
+    const done = [...before, ...tang.slice(0, i).map(x => x.id)];
+    if (table.steps.some(s => s.eventId === id)) assert.equal(card(stageId, done, id, acqOf(done))?.lineId, 'tang', `${id} 当焦点：当前线是唐`);
+    const idle = card(stageId, done, undefined, acqOf(done));
+    if (idle?.lineId !== 'tang') return;
+    const hint = Object.entries(HINTS).find(([, text]) => text === idle.step)?.[0];
+    if (hint && seen.at(-1) !== hint) seen.push(hint);
+  });
+  assert.deepEqual(seen, ['tang_changan_yangyuhuan', 'tang_envoys_reunion', 'tang_d7_secret_treaty', 'tang_d7_publish', 'tang_ganlu_zhuhuan'],
+    '带文案的步按表顺序依次出现、不回跳；密约、公布两步不再是死步');
+  // 入唐：抵留仙坪当焦点——没有地点、只有主角，指南针为空，用入口步文案（走过汉那一版）
+  assert.equal(pointer(CB, T1), '');
+  assert.equal(card(CB, upTo(T1), T1).step, HINTS.tang_entry_from_han);
+  assert.equal(pointer(CB, T2), '见袁天罡', '镇上相士当焦点：主线指南针');
+  assert.equal(card(CB, upTo(T2), T2).step, pointer(CB, T2));
+  for (const id of [T2, lyg('changgan_fanseng_hunt'), lyg('s03_01')]) {
+    assert.ok(![HINTS.tang_entry_from_han, HINTS.tang_entry].includes(card(CB, upTo(id), undefined)?.step), `${id} 之前入口提示已过`);
+  }
+  // 进长安：番僧猎杀（袁天罡已相识）之后显示「进长安，先找个宅子住下」，s03_01 完成后不再显示；没见过袁天罡时不显示
+  assert.notEqual(card(CB, upTo(lyg('s03_01')), undefined).step, HINTS.tang_changan_yangyuhuan);
+  assert.equal(card(CB, upTo(lyg('s03_01')), undefined, acq).step, HINTS.tang_changan_yangyuhuan);
+  assert.notEqual(card(CB, upTo(lyg('s03_02')), undefined, acq).step, HINTS.tang_changan_yangyuhuan);
+  // 元正朝会：鸿胪寺致歉后显示「去大明宫赴元正朝会」，朝会当焦点出指南针，朝会后不再显示
+  assert.equal(card(CI, upTo(lyg('yuanzheng_globe')), undefined).step, HINTS.tang_envoys_reunion);
+  assert.notEqual(card(CI, upTo(lyg('xuanping_eunuch_murder')), undefined).step, HINTS.tang_envoys_reunion);
+  // 密约：受通问计议使后显示「在长安城里打听打听」到密约谈定；和约：谈定后显示「在长安城里留意朝廷动静」到鸿胪寺公布
+  assert.equal(card(CI, upTo(T19), undefined).step, HINTS.tang_d7_secret_treaty);
+  assert.notEqual(card(CI, upTo(lyg('changgan_interlude_05_beat')), undefined).step, HINTS.tang_d7_secret_treaty);
+  assert.equal(card(CI, upTo(T20), undefined).step, HINTS.tang_d7_publish);
+  assert.equal(card(CI, upTo(T20), T20).step, pointer(CI, T20));
+  assert.notEqual(card(CI, upTo(lyg('changgan_interlude_09_beat')), undefined).step, HINTS.tang_d7_publish);
+  // 十方丛林公敌：返程伏击、救出白霓裳之后才轮到（甘露前夜章），显示「回到长安城看看」
+  assert.equal(card(CI, upTo(lyg('zhoufei_conspiracy')), undefined).step, returnTo(lyg('zhoufei_conspiracy')));
+  // ④ 收束：buddhist_conspiracy_11 完成即撤卡，折叠行也不再有唐；受封大都护在收束之后（尸陀林关），不影响判档
+  const all = [...before, ...tang.slice(0, CLOSE + 1).map(x => x.id)];
+  const closed = compass.lineCompassView(saveOf(BC, all), { focusEventId: undefined, compassPointer: () => '' });
+  assert.notEqual(closed.current?.lineId, 'tang', '_11 完成：唐已收束');
+  assert.ok(!closed.others.some(o => o.lineId === 'tang'), '_11 完成：折叠行撤掉唐');
+  assert.ok(routeTo('lyg.shituolin_endgame').includes(lyg('buddhist_conspiracy_11_beat')));
 });

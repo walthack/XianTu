@@ -168,6 +168,20 @@ export const LUOYANG_COURT_EVENT_IDS: ReadonlySet<string> = new Set([
   'han_yuedan_ping', 'han_huo_villa', 'han_xingyue_framed', 'han_limit_field',
 ].map(id => `lyl.event.${id}`));
 
+/** lyg.changgan_begins「留仙坪」章的承重拍（与关卡数据同步，测试钉住）；同章另挂的两条非 rail 拍开放在灞桥段，不在此列。 */
+export const LIUXIANPING_EVENT_IDS: ReadonlySet<string> = new Set([
+  'tang_liuxianping_arrive', 'tang_liuxianping_xiangshi', 'changgan_fanseng_hunt',
+].map(id => `lyg.event.${id}`));
+
+/** lyg.changgan_interlude 首章（rail 章）以外三章的拍，按章名分（与关卡数据同步，测试钉住）。 */
+export const CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS: ReadonlyArray<readonly [string, ReadonlySet<string>]> = [
+  ['年节与朝局', ['changgan_interlude_01_beat', 'changgan_interlude_02_beat', 'changgan_interlude_03_beat', 'song_tongwen',
+    'changgan_interlude_04_beat', 'tang_secret_treaty_signed', 'changgan_interlude_05_beat']],
+  ['失踪与伏击', ['changgan_interlude_06_beat', 'changgan_interlude_07_beat', 'changgan_interlude_08_beat', 'honglusi_treaty_announced',
+    'changgan_interlude_09_beat', 'changgan_interlude_10_beat']],
+  ['甘露前夜', ['liang_secret_order', 'zhoufei_conspiracy', 'feiniao_hilt_clue']],
+].map(([title, ids]) => [title as string, new Set((ids as string[]).map(id => `lyg.event.${id}`))] as const);
+
 /** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
   if (modId === 'lcq.stage_04' && eventId) return ({
@@ -191,6 +205,9 @@ export function storyChapterTitle(modId: string | undefined, eventId: string | u
   // 汉宫：rail 章是新首章「宫变之夜」，整关停在它上面；其余拍照旧标「汉宫突入」。洛都：rail 章仍是首章，第二章「洛都风云」的拍单标（五线补全·汉 2026-10-28）
   if (modId === 'lyl.han_palace_endgame' && eventId) return HAN_PALACE_NIGHT_EVENT_IDS.has(eventId) ? '宫变之夜' : '汉宫突入';
   if (modId === 'lyl.luoyang_cloud_secret' && eventId && LUOYANG_COURT_EVENT_IDS.has(eventId)) return '洛都风云';
+  // 唐：长安初定、长安插曲的 rail 章都改成了新首章（留仙坪／佛门暗潮与元正朝会），整关停在它上面；其余拍照旧标原章（五线补全·唐 2026-10-28）
+  if (modId === 'lyg.changgan_begins' && eventId) return LIUXIANPING_EVENT_IDS.has(eventId) ? '留仙坪' : '抵达长安灞桥';
+  if (modId === 'lyg.changgan_interlude' && eventId) return CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS.find(([, ids]) => ids.has(eventId))?.[0] ?? fallback;
   if (modId !== 'lcq.stage_02' || !eventId) return fallback;
   if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
   return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';

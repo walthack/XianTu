@@ -2985,6 +2985,12 @@
     },
     {
       "kind": "action",
+      "id": "lyg.event.honglusi_treaty_announced:watch_treaty_announcement",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lyg.event.interrogate_feiniao_yingzi:open_feiniao_interrogation",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
@@ -3580,6 +3586,24 @@
     {
       "kind": "action",
       "id": "lyg.event.survey_xingqing_palace:survey_xingqing_ruins",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lyg.event.tang_liuxianping_arrive:settle_liuxianping_watch_guests",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lyg.event.tang_liuxianping_xiangshi:confront_liuxianping_xiangshi",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lyg.event.tang_secret_treaty_signed:hold_treaty_bottom_lines",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
     },
@@ -5564,13 +5588,31 @@
     },
     {
       "kind": "chapter",
+      "id": "lyg.chapter.changgan_begins_liuxianping",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
       "id": "lyg.chapter.changgan_interlude_ambush",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
     },
     {
       "kind": "chapter",
+      "id": "lyg.chapter.changgan_interlude_buddhist",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
       "id": "lyg.chapter.changgan_interlude_court",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lyg.chapter.changgan_interlude_tail",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
     },
@@ -10727,6 +10769,12 @@
     },
     {
       "kind": "event",
+      "id": "lyg.event.honglusi_treaty_announced",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lyg.event.interrogate_feiniao_yingzi",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
@@ -11190,6 +11238,24 @@
     {
       "kind": "event",
       "id": "lyg.event.survey_xingqing_palace",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lyg.event.tang_liuxianping_arrive",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lyg.event.tang_liuxianping_xiangshi",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lyg.event.tang_secret_treaty_signed",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
     },
@@ -13379,6 +13445,12 @@
     },
     {
       "kind": "flag",
+      "id": "chapter.lyg.changgan_begins.liuxianping.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "chapter.lyg.changgan_begins.started",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
       "aliases": []
@@ -13391,7 +13463,19 @@
     },
     {
       "kind": "flag",
+      "id": "chapter.lyg.changgan_interlude.buddhist.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "chapter.lyg.changgan_interlude.court.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "chapter.lyg.changgan_interlude.tail.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
     },
@@ -14364,6 +14448,12 @@
     {
       "kind": "flag",
       "id": "event.honglusi_amends.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.honglusi_treaty_announced.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
     },
@@ -16231,6 +16321,24 @@
       "kind": "flag",
       "id": "event.taiquan_sacred_fruit_10.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_sacred_fruit.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.tang_liuxianping_arrive.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.tang_liuxianping_xiangshi.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.tang_secret_treaty_signed.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.changgan_interlude.json",
       "aliases": []
     },
     {
@@ -23860,6 +23968,12 @@
     {
       "kind": "text",
       "id": "lineCompass.tang.step.tang_changan_yangyuhuan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.step.tang_d7_publish",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

@@ -106,7 +106,7 @@ test('R-8：5 对同文变体已合并——「见过」那一行连同文案键
       seen.add(sig);
     }
   }
-  assert.equal(table.lines.flatMap(l => l.steps).filter(s => s.hintKey).length, 57, 'R-8 后 58，R-15 再删南荒 nh_leave_for_jin 一条');
+  assert.equal(table.lines.flatMap(l => l.steps).filter(s => s.hintKey).length, 58, 'R-8 后 58，R-15 再删南荒 nh_leave_for_jin 一条，五线补全·唐 T20 给 tang_d7_publish 补一条（剧情策划唐稿定文案）');
 });
 
 const eventStage = new Map(fs.readdirSync('src/modules/scenarioMods/builtins/data').filter(f => f.endsWith('.json'))

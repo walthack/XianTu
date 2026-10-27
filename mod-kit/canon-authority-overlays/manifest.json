@@ -105,6 +105,21 @@
       "stageId": "lyg.dingtao_beijing",
       "file": "lyg.dingtao_beijing.json",
       "book": "yange"
+    },
+    {
+      "stageId": "lyg.changgan_begins",
+      "file": "lyg.changgan_begins.json",
+      "book": "yange"
+    },
+    {
+      "stageId": "lyg.changgan_interlude",
+      "file": "lyg.changgan_interlude.json",
+      "book": "yange"
+    },
+    {
+      "stageId": "lyg.shituolin_endgame",
+      "file": "lyg.shituolin_endgame.json",
+      "book": "yange"
     }
   ]
 }
