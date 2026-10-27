@@ -287,6 +287,14 @@
       ],
       "steps": [
         {
+          "id": "jin_shanghou_cure_and_trade",
+          "eventId": "lcq.event.s07_00a_shanghou_trading_house",
+          "when": [
+            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "gte", "value": "encountered" }
+          ],
+          "note": "条件必经；排在三版入口之前（原著顺序 227＜229；剧情策划稿 §14.3-4，总策划定）：00a 一完成兜底只算过本步，返程（00b）期间照常显示「去建康…」"
+        },
+        {
           "id": "jin_arrive_from_nanhuang",
           "eventId": "lcq.event.s07_00c_arrive_jiankang",
           "when": [
@@ -320,14 +328,6 @@
           "eventId": "lcq.event.s07_00c_arrive_jiankang",
           "hintKey": "lineCompass.jin.step.jin_arrive_skip_nh",
           "note": "兜底：没走南荒"
-        },
-        {
-          "id": "jin_shanghou_cure_and_trade",
-          "eventId": "lcq.event.s07_00a_shanghou_trading_house",
-          "when": [
-            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "gte", "value": "encountered" }
-          ],
-          "note": "条件必经"
         },
         {
           "id": "jin_xiaoyaoyi_meet",

@@ -1,5 +1,5 @@
 {
-  "version": "9db0c06295569f0d",
+  "version": "e5f949c8c1461f17",
   "contracts": [
     {
       "meta": {
@@ -14572,6 +14572,18 @@
         ],
         "steps": [
           {
+            "id": "jin_shanghou_cure_and_trade",
+            "eventId": "lcq.event.s07_00a_shanghou_trading_house",
+            "when": [
+              {
+                "path": "acq.liuchao.character.shang_zhen_yu",
+                "operator": "gte",
+                "value": "encountered"
+              }
+            ],
+            "note": "条件必经；排在三版入口之前（原著顺序 227＜229；剧情策划稿 §14.3-4，总策划定）：00a 一完成兜底只算过本步，返程（00b）期间照常显示「去建康…」"
+          },
+          {
             "id": "jin_arrive_from_nanhuang",
             "eventId": "lcq.event.s07_00c_arrive_jiankang",
             "when": [
@@ -14625,18 +14637,6 @@
             "eventId": "lcq.event.s07_00c_arrive_jiankang",
             "hintKey": "lineCompass.jin.step.jin_arrive_skip_nh",
             "note": "兜底：没走南荒"
-          },
-          {
-            "id": "jin_shanghou_cure_and_trade",
-            "eventId": "lcq.event.s07_00a_shanghou_trading_house",
-            "when": [
-              {
-                "path": "acq.liuchao.character.shang_zhen_yu",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
-            "note": "条件必经"
           },
           {
             "id": "jin_xiaoyaoyi_meet",
@@ -15631,8 +15631,8 @@
     "lcq.event.tribes_pledge": "鬼王峒",
     "lcq.event.shanghou_revealed": "南荒山村",
     "lcq.event.s05b_wuer_suli_depart": "南荒散峒营地",
-    "lcq.event.s07_00c_arrive_jiankang": "",
     "lcq.event.s07_00a_shanghou_trading_house": "",
+    "lcq.event.s07_00c_arrive_jiankang": "",
     "lcq.event.xiaoyaoyi_arrives": "",
     "lcq.event.s07_01_old_case": "",
     "lcq.event.wangzhe_letter": "清远",

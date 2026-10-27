@@ -12,10 +12,18 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const compass = await loadTs('../src/modules/scenarioMods/lineCompass.ts');
+const { CANON_RAIL_PROFILES, DEFAULT_LINE_QUARANTINED_STAGE_IDS } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
+const { questCompassPhrases } = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
+const packs = await loadTs('../src/modules/contentPacks/index.ts');
+const texts = packs.CONTENT_PACKS.texts;
+const places = packs.CONTENT_PACKS.lineCompassPlaces;
 
 const DATA = 'src/modules/scenarioMods/builtins/data';
-const axisSeq = new Map(fs.readdirSync(DATA).filter(f => f.endsWith('.json'))
-  .flatMap(f => (JSON.parse(fs.readFileSync(`${DATA}/${f}`, 'utf8')).scenario?.events || []).map(e => [e.id, e.axisSeq])));
+const stages = new Map(fs.readdirSync(DATA).filter(f => f.endsWith('.json'))
+  .map(f => JSON.parse(fs.readFileSync(`${DATA}/${f}`, 'utf8'))).map(d => [d.manifest.id, d]));
+const allEvents = [...stages.values()].flatMap(d => (d.scenario?.events || []).map(e => ({ ...e, stageId: d.manifest.id })));
+const axisSeq = new Map(allEvents.map(e => [e.id, e.axisSeq]));
+const eventOf = new Map(allEvents.map(e => [e.id, e]));
 
 const ALLOWED = {
   'nanhuang.nh_le_mingzhu_join': {
@@ -37,10 +45,6 @@ const ALLOWED = {
 };
 
 const KNOWN = {
-  'jin.jin_shanghou_cure_and_trade': {
-    at: '227 < 229（jin_arrive_skip_nh）',
-    why: 'stage_07 rail 是 00a 殇侯交代商号 → 00b 返程 → 00c 抵建康。00a 一完成，三版「去建康…」入口提示（jin_arrive_*，挂 00c）就被兜底算过，返程期间卡片只剩线名（下一步 xiaoyaoyi_arrives 没有 locationId）；入口提示只在 00a 当焦点时出现。可改法：本步挪到三版入口之前。待总策划定。',
-  },
   'han.han_camera_palace_alt': {
     at: '776 < 777（han_yuncangfeng_luodu）',
     why: '关链 taiquan_afterfall 在 luoyang_cloud_secret 之前。afterfall_09 之后被选中的是前一步 han_yuncangfeng_luodu（s05_01，显示「回到洛都看看」），「进宫看看」一次也不显示，afterfall_10 一完成就被算过。可改法：本步挪到 han_yuncangfeng_luodu 之前。待总策划定。',
@@ -83,4 +87,59 @@ test('守门本身：倒序能查出来，pending／draft 步不参与', () => {
     { id: 'c', eventId: ev('s04_06') },
   ] }] };
   assert.deepEqual(inversions(table), { 'nanhuang.b': '73 < 75（a）' });
+});
+
+// ── 回归：真实的 lineCompassView，按默认路线推进 ──
+// 推进顺序：关链 nextStageId（跳过默认路线隔离关）；关内按章，章内 rail 拍优先、其余按 axisSeq（同 runtime getNarrativeAnchorEvent 的焦点排序）。
+// 指南针句取右栏同一口径（RightSidebar.vue：questCompassPhrases 连成一句，canon 取当前关）。
+const order = (x, y) => (x === y ? 0 : x - y);
+function stageOrder(stageId) {
+  const rail = CANON_RAIL_PROFILES.find(p => p.modId === stageId)?.orderedEventIds || [];
+  const railAt = id => (rail.includes(id) ? rail.indexOf(id) : Infinity);
+  return (stages.get(stageId).scenario.chapters || []).flatMap(c => [...(c.eventIds || [])]
+    .sort((a, b) => order(railAt(a), railAt(b)) || order(axisSeq.get(a) ?? Infinity, axisSeq.get(b) ?? Infinity)));
+}
+/** 默认路线上 stageId 之前（不含）各关事件，按推进顺序。 */
+function routeTo(stageId) {
+  const done = [];
+  for (let id = 'lcq.stage_01'; id !== stageId; id = stages.get(id).manifest.nextStageId) {
+    assert.ok(id, `默认路线走不到 ${stageId}`);
+    if (!DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(id)) done.push(...stageOrder(id));
+  }
+  return done;
+}
+const saveOf = (modId, done, acq = {}) => ({
+  角色: { 属性: { 境界: { 名称: '生象', 阶段: '初期' } } },
+  世界: { 状态: { 剧本模组: {
+    modId, events: [], completedEventIds: [], flags: {}, acquaintances: acq,
+    chronicle: done.map((id, i) => ({ id: `chronicle.${eventOf.get(id).stageId}.${id}`, type: 'event', stageId: eventOf.get(id).stageId, title: '', sequence: i + 1 })),
+  } } },
+});
+const pointer = (modId, eventId) => (eventId
+  ? questCompassPhrases(eventOf.get(eventId), { canon: stages.get(modId).canon, opening: stages.get(modId).scenario.opening }).join(' · ')
+  : '');
+const card = (modId, done, focusEventId, acq) =>
+  compass.lineCompassView(saveOf(modId, done, acq), { focusEventId, compassPointer: () => pointer(modId, focusEventId) }).current;
+const returnTo = eventId => texts[compass.LINE_COMPASS_RETURN_KEY].split(compass.LINE_COMPASS_PLACE_SLOT).join(places[eventId]);
+
+test('晋（总策划定）：jin_shanghou_cure_and_trade 排在三版入口之前；00a 完成后返程期间显示对应那版「去建康…」，抵建康后不再显示', () => {
+  const S07 = 'lcq.stage_07_qingyuan_jiankang';
+  const [A, B, C] = ['lcq.event.s07_00a_shanghou_trading_house', 'lcq.event.s07_00b_return_north', 'lcq.event.s07_00c_arrive_jiankang'];
+  const acq = { 'liuchao.character.shang_zhen_yu': { kind: 'encountered' }, 'liuchao.character.yun_cang_feng': { kind: 'encountered' } };
+  const ARRIVE = ['jin_arrive_from_nanhuang', 'jin_arrive_icegu', 'jin_arrive_skip_nh'].map(id => texts[`lineCompass.jin.step.${id}`]);
+  const cases = [
+    { name: '走南荒、解了冰蛊（默认路线）', before: routeTo(S07), hint: ARRIVE[0] },
+    { name: '走南荒、冰蛊没解（没走 05b）', before: routeTo('lcq.stage_05b'), hint: ARRIVE[1] },
+    { name: '没走南荒（只到铁索桥）', before: routeTo('lcq.stage_03b_snake_flower_bridge'), hint: ARRIVE[2] },
+  ];
+  for (const { name, before, hint } of cases) {
+    const at = (done, focus) => card(S07, [...before, ...done], focus, acq);
+    assert.equal(at([], A)?.lineId, 'jin', name);
+    assert.equal(at([], A).step, pointer(S07, A), `${name}：00a 当焦点，本步就是焦点 → 主线指南针`);
+    for (const [done, focus] of [[[A], B], [[A], undefined], [[A, B], undefined]]) {
+      assert.equal(at(done, focus).step, hint, `${name}：返程期间（完成 ${done.length} 拍、焦点 ${focus ?? '无'}）显示入口提示`);
+    }
+    assert.equal(at([A, B], C).step, pointer(S07, C), `${name}：00c 当焦点 → 主线指南针`);
+    assert.ok(!ARRIVE.includes(at([A, B, C], undefined).step), `${name}：抵建康后入口提示不再显示`);
+  }
 });
