@@ -501,18 +501,16 @@
         },
         {
           "id": "song_linan_arrive",
-          "eventId": "lyl.event.debut_ruan_sisters",
+          "eventId": "lyl.event.linan_arrive_fengbo",
           "until": [
             {
               "anyOf": [
-                { "path": "done.lyl.event.debut_ruan_sisters", "operator": "eq", "value": true },
-                { "path": "done.lyl.event.tail_li_shishi", "operator": "eq", "value": true },
-                { "path": "done.lyl.event.survey_wumu_mansion", "operator": "eq", "value": true },
-                { "path": "done.lyl.event.evade_huangchengsi", "operator": "eq", "value": true }
+                { "path": "done.lyl.event.linan_arrive_fengbo", "operator": "eq", "value": true },
+                { "path": "done.lyl.event.debut_ruan_sisters", "operator": "eq", "value": true }
               ]
             }
           ],
-          "note": "分路线 anyOf：lin_an_black_sea 隔离，默认路线 lin_an_bridge 由抵达临安同章（yly 第6章·临安）的尾随李师师（555）、查勘武穆王府（556）、明庆寺识破皇城司（556）任一承接；不用 lin_an_bridge_xieyi_tomb（626，#71·叵密，是萧遥逸等人抵临安后的第二次拜祭）（R-13，总策划定）；这三拍眼下在 eventReachability 欠账里（没挂章、不在 rail），挂章前默认路线靠后面的步兜底过这一步"
+          "note": "五线补全·宋 S1（2026-10-28）：改挂默认路线 lin_an_bridge 新首章「初抵临安」的入钱塘门·风波亭（556，critical、rail 首拍）；分路线 anyOf 只留两路的抵达拍（隔离关 lin_an_black_sea 的 debut_ruan_sisters 同 seq 556 承接），尾随李师师／武穆王府／皇城司三拍已挂章上 rail、排在抵达之后，不再作承接。不用 lin_an_bridge_xieyi_tomb（626，#71·叵密，是萧遥逸等人抵临安后的第二次拜祭）（R-13，总策划定）"
         },
         {
           "id": "song_xuezhun_takeover",

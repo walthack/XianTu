@@ -145,15 +145,17 @@ test('唐 R-11／R-12（总策划定）：tang_d7_publish 暂不挂锚（pending
   assert.notEqual(at([...base, 'lyg.event.honglusi_amends', 'lyg.event.yuanzheng_globe']).step, ENVOYS, '朝会过了就不再显示');
 });
 
-test('宋 R-13（总策划定）：song_linan_arrive 由抵达临安同章（yly 第6章）的拍承接——尾随李师师／查勘武穆王府／明庆寺识破皇城司任一完成即过；第二次拜祭谢艺（#71）不再算', () => {
+test('宋 R-13 → 五线补全·宋 S1（2026-10-28）：song_linan_arrive 改挂默认路线新首拍「入钱塘门，风波亭」，与隔离关 debut_ruan_sisters 分路线 anyOf；尾随／武穆王府／皇城司已上 rail 排在抵达之后，第二次拜祭谢艺（#71）不算', () => {
   const step = compass.lineCompassTable().lines.find(line => line.lineId === 'song').steps.find(s => s.id === 'song_linan_arrive');
-  const ARRIVE = ['lyl.event.debut_ruan_sisters', 'lyl.event.tail_li_shishi', 'lyl.event.survey_wumu_mansion', 'lyl.event.evade_huangchengsi'];
-  assert.deepEqual(step.until, [{ anyOf: ARRIVE.map(id => ({ path: `done.${id}`, operator: 'eq', value: true })) }]);
-  for (const id of ARRIVE.slice(1)) assert.equal(eventStage.get(id), 'lyl.lin_an_bridge', `${id} 在默认路线关`);
+  const [S1, ALT] = ['lyl.event.linan_arrive_fengbo', 'lyl.event.debut_ruan_sisters'];
+  assert.equal(step.eventId, S1);
+  assert.deepEqual(step.until, [{ anyOf: [S1, ALT].map(id => ({ path: `done.${id}`, operator: 'eq', value: true })) }]);
+  assert.equal(eventStage.get(S1), 'lyl.lin_an_bridge', 'S1 在默认路线关');
+  assert.ok(DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(eventStage.get(ALT)), 'debut_ruan_sisters 在隔离关，只作分路线承接');
   const pointer = '去某处 · 见某人';
   const base = ['lcq.event.sudaji_south_pact', 'lyl.event.s01_01', 'lyl.event.s01_02'];
   const at = extra => view(saveOf({ modId: 'lyl.lin_an_bridge', done: [...base, ...extra].map(id => [eventStage.get(id), id]) }), step.eventId).current;
   assert.equal(at([]).step, pointer, '刚到临安：停在这一步');
-  for (const id of ARRIVE) assert.notEqual(at([id]).step, pointer, `${id} 完成即过`);
+  for (const id of [S1, ALT]) assert.notEqual(at([id]).step, pointer, `${id} 完成即过`);
   assert.equal(at(['lyl.event.lin_an_bridge_xieyi_tomb']).step, pointer, '第二次拜祭谢艺不再承接抵达临安');
 });

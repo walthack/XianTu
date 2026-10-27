@@ -65,6 +65,26 @@
       "stageId": "lcq.stage_03",
       "file": "lcq.stage_03.json",
       "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+      "file": "lcq.stage_10_jiangzhou_shadow_war.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lcq.stage_12_jiangzhou_counterwar",
+      "file": "lcq.stage_12_jiangzhou_counterwar.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "file": "lyl.xiaoyingzhou_blacksea_trap.json",
+      "book": "yunlong"
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "file": "lyl.taiquan_sacred_fruit.json",
+      "book": "yunlong"
     }
   ]
 }

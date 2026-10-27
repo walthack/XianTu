@@ -2704,7 +2704,7 @@
   {
     "id": "yunlong.lin_an_bridge",
     "modId": "lyl.lin_an_bridge",
-    "chapterId": "lyl.chapter.lin_an_bridge_intel",
+    "chapterId": "lyl.chapter.lin_an_bridge_arrival",
     "orderedEventIds": [
       "lyl.event.lin_an_bridge_01_beat",
       "lyl.event.lin_an_bridge_02_beat",

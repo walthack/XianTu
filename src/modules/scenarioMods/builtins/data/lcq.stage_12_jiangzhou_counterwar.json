@@ -3918,7 +3918,9 @@
           "lcq.event.s12_02_recognize_zhuo",
           "lcq.event.s12_03_xiaozi_controls_zhuo",
           "lcq.event.s12_04_river_granary",
-          "lcq.event.s12_05_granary_fire_plan"
+          "lcq.event.s12_05_granary_fire_plan",
+          "lcq.event.jin_vacate_jiangzhou",
+          "lcq.event.tuntian_post"
         ]
       },
       {
@@ -3961,7 +3963,8 @@
           "lcq.event.s12_10_rescue_xiao",
           "lcq.event.s12_11_siege_begins",
           "lcq.event.s12_12_gate_fire",
-          "lcq.event.s12_13_long_siege"
+          "lcq.event.s12_13_long_siege",
+          "lcq.event.pengyi_takeover"
         ],
         "activation": [
           {

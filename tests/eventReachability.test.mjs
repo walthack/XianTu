@@ -32,10 +32,8 @@ const DEBT = new Set([
   'lcq.event.ice_gu_coercion',
   // 晋线 wangzhe_letter／palace_haunting_rumor／palm_oath_shanghou／spoils_split／xiangfu_stance
   // 已于 2026-10-28 挂章上 rail（五线补全·晋 J1–J5），从本清单删去。
-  'lcq.event.yeying_seat_struggle',
-  'lcq.event.pengyi_takeover',
-  'lcq.event.jin_vacate_jiangzhou',
-  'lcq.event.tuntian_post',
+  // 宋线 28 条（stage_10 夜影争位、stage_12 腾出江州／屯田司／接管鹏翼社、lin_an_bridge 16 拍、小瀛洲 6 拍、临安收束 2 拍）
+  // 已于 2026-10-28 挂章上 rail（五线补全·宋 S2–S22、S24–S30），从本清单删去。
   'lyg.event.changgan_fanseng_hunt',
   'lyg.event.qinglongsi_te_master',
   'lyg.event.song_tongwen',
@@ -67,34 +65,10 @@ const DEBT = new Set([
   'lyl.event.changqiu_palace_defense',
   'lyl.event.bounty_and_hu_cavalry',
   'lyl.event.lvfengxian_breaks_line',
-  'lyl.event.mingqingsi_lin_lu_meeting',
-  'lyl.event.blacksea_iron_puppet',
-  'lyl.event.siying_lane_saber_ambush',
-  'lyl.event.tail_li_shishi',
-  'lyl.event.evade_huangchengsi',
-  'lyl.event.libu_registration',
-  'lyl.event.leifeng_pagoda_invite',
-  'lyl.event.leifeng_repel_gao',
-  'lyl.event.weiyuan_extortion',
-  'lyl.event.ivory_visit_weiyuan',
-  'lyl.event.survey_wumu_mansion',
-  'lyl.event.decode_bianmenwa_note',
-  'lyl.event.meet_xue_yanshan',
-  'lyl.event.identify_xue_cold_poison',
-  'lyl.event.decide_chase_weiyuan',
-  'lyl.event.pass_kotian_stone',
   'lyl.event.han_xingyue_framed',
   'lyl.event.han_limit_field',
   'lyl.event.jin_guangyuan_ledger',
   'lyl.event.han_court_grain_blame',
-  'lyl.event.sacred_against_lin',
-  'lyl.event.sacred_jin_drought',
-  'lyl.event.xiaoyingzhou_lin_takes_seat',
-  'lyl.event.xiaoyingzhou_cement_truce',
-  'lyl.event.xiaoyingzhou_paper_plan',
-  'lyl.event.xiaoyingzhou_paper_mint',
-  'lyl.event.linjia_sees_ningyi',
-  'lyl.event.xihu_villa_eavesdrop',
 ]);
 
 function isCritical(event) {

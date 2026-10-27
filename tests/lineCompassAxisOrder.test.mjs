@@ -276,3 +276,109 @@ test('晋 五线补全 J1–J6（2026-10-28）：默认路线从南荒收束起�
   assert.notEqual(closed.current?.lineId, 'jin', 's09_10 完成：晋已收束');
   assert.ok(!closed.others.some(o => o.lineId === 'jin'), 's09_10 完成：折叠行撤掉晋');
 });
+
+test('宋 五线补全 S1–S30（2026-10-28）：默认路线从晋收束起，10→12→江州退军→临安→小瀛洲→临安收束每拍挂章上 rail；抵达步改挂默认路线、死步复活，线卡随步推进，_06 完成即收束撤卡', () => {
+  const S10 = 'lcq.stage_10_jiangzhou_shadow_war', S12 = 'lcq.stage_12_jiangzhou_counterwar', RET = 'lyl.jiangzhou_retreat';
+  const LIN = 'lyl.lin_an_bridge', XYZ = 'lyl.xiaoyingzhou_blacksea_trap', SF = 'lyl.taiquan_sacred_fruit';
+  const lcq = id => `lcq.event.${id}`, lyl = id => `lyl.event.${id}`;
+  const FILLED = {
+    [S10]: ['yeying_seat_struggle'].map(lcq),
+    [S12]: ['jin_vacate_jiangzhou', 'tuntian_post', 'pengyi_takeover'].map(lcq),
+    [LIN]: ['linan_arrive_fengbo', 'tail_li_shishi', 'survey_wumu_mansion', 'evade_huangchengsi', 'mingqingsi_lin_lu_meeting', 'decode_bianmenwa_note',
+      'weiyuan_extortion', 'libu_registration', 'meet_xue_yanshan', 'blacksea_iron_puppet', 'identify_xue_cold_poison', 'leifeng_pagoda_invite',
+      'leifeng_repel_gao', 'decide_chase_weiyuan', 'pass_kotian_stone', 'ivory_visit_weiyuan', 'siying_lane_saber_ambush'].map(lyl),
+    [XYZ]: ['linjia_sees_ningyi', 'xihu_villa_eavesdrop', 'xiaoyingzhou_paper_plan', 'xiaoyingzhou_paper_mint', 'xiaoyingzhou_lin_takes_seat',
+      'song_baochao_appointed', 'xiaoyingzhou_cement_truce'].map(lyl),
+    [SF]: ['sacred_against_lin', 'sacred_jin_drought'].map(lyl),
+  };
+  // ① 可达：28 条原欠账与 2 个新拍都挂在本关章里、且在本关 rail 上；插入处与 rail 前后两拍按 axisSeq 不倒序，
+  //    唯一例外是 S1 风波亭（556）→ 尾随李师师（555）：原著 yly 766→795，尾随的主轴改绑 yunlong.6.1 按 R-14 暂缓
+  const R14 = [lyl('linan_arrive_fengbo'), lyl('tail_li_shishi')].join('→');
+  for (const [stageId, ids] of Object.entries(FILLED)) {
+    const rail = CANON_RAIL_PROFILES.find(p => p.modId === stageId).orderedEventIds;
+    const bound = new Set(stages.get(stageId).scenario.chapters.flatMap(c => c.eventIds || []));
+    for (const id of ids) {
+      assert.ok(bound.has(id), `${id} 挂在 ${stageId} 的章里`);
+      const i = rail.indexOf(id);
+      assert.ok(i >= 0, `${id} 在 ${stageId} rail 上`);
+      for (const [a, b] of [[rail[i - 1], id], [id, rail[i + 1]]]) {
+        if (a && b && `${a}→${b}` !== R14) assert.ok(axisSeq.get(a) <= axisSeq.get(b), `${a}（${axisSeq.get(a)}）→ ${b}（${axisSeq.get(b)}）不倒序`);
+      }
+    }
+  }
+  assert.equal(eventOf.get(lyl('tail_li_shishi')).axisSeq, 555, 'R-14 暂缓：尾随李师师仍是 yunlong.3.2／555，只加过渡前置');
+  assert.deepEqual(eventOf.get(lyl('tail_li_shishi')).conditions, [{ path: 'flags.event.linan_arrive_fengbo.done', operator: 'eq', value: true }]);
+  // 新首章：rail 章＝首章（runtime 只在 rail 章里激活 rail 拍）；原 intel 章接在它之后
+  const linChapters = stages.get(LIN).scenario.chapters;
+  assert.deepEqual(linChapters.map(c => c.id), ['lyl.chapter.lin_an_bridge_arrival', 'lyl.chapter.lin_an_bridge_intel']);
+  assert.equal(CANON_RAIL_PROFILES.find(p => p.modId === LIN).chapterId, linChapters[0].id);
+  // 同 seq 次序键按原著行序：556 风波亭 766 → 武穆王府 825 → 皇城司 831；557 鲁林初会 903 → 祈福暗号 961 → 威远勒索 1078；
+  // 558 吏部 989 → 薛延山 1007 → 铁傀儡 1178；559 寒毒 1010 → 雷峰之邀 1045 → 便门瓦棚 1266；560 雷峰退高 1099 → 小瀛洲 1334；
+  // 561 复盘失镖 1161 → 林娘子 1496；562 叩天石 1214 → 明庆寺饮酒 1510
+  const linRail = CANON_RAIL_PROFILES.find(p => p.modId === LIN).orderedEventIds;
+  assert.deepEqual(linRail.map(id => id.replace('lyl.event.', '')), [
+    'linan_arrive_fengbo', 'tail_li_shishi', 'survey_wumu_mansion', 'evade_huangchengsi',
+    'mingqingsi_lin_lu_meeting', 'decode_bianmenwa_note', 'weiyuan_extortion',
+    'libu_registration', 'meet_xue_yanshan', 'blacksea_iron_puppet',
+    'identify_xue_cold_poison', 'leifeng_pagoda_invite', 'lin_an_bridge_01_beat',
+    'leifeng_repel_gao', 'lin_an_bridge_02_beat', 'decide_chase_weiyuan', 'lin_an_bridge_03_beat',
+    'pass_kotian_stone', 'lin_an_bridge_04_beat', 'ivory_visit_weiyuan', 'siying_lane_saber_ambush', 'lin_an_bridge_xieyi_tomb',
+  ]);
+  // ② 默认路线：关链 09→10→11→12→江州退军→（隔离 lin_an_black_sea）→临安→（隔离 taiquan_expedition）→小瀛洲→临安收束
+  const SONG = [S10, 'lcq.stage_11_lieshan_battle', S12, RET, LIN, XYZ, SF];
+  const before = routeTo(S10);
+  assert.ok(before.includes(lcq('s09_10_separation')), '默认路线到江州前晋已收束');
+  for (const id of ['lyl.lin_an_black_sea', 'lyl.taiquan_expedition']) assert.ok(DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(id));
+  const song = SONG.flatMap(stageId => stageOrder(stageId).map(id => ({ stageId, id })));
+  assert.deepEqual([...new Set(routeTo('lyl.taiquan_core_conflict').map(id => eventOf.get(id).stageId))].filter(s => SONG.includes(s)), SONG);
+  for (const id of Object.values(FILLED).flat()) assert.ok(song.some(x => x.id === id), `${id} 在默认路线上`);
+  // ③ 逐拍走：焦点＝本线的拍时当前线是宋；上一拍归宋时（无焦点）当前线仍是宋；带文案的步按表序出现、不回跳
+  const acq = Object.fromEntries(['meng_fei_qing', 'xie_yi'].map(n => [`liuchao.character.${n}`, { kind: 'encountered' }]));
+  const table = compass.lineCompassTable().lines.find(l => l.lineId === 'song');
+  const HINTS = Object.fromEntries(table.steps.filter(s => s.hintKey).map(s => [s.id, texts[s.hintKey]]));
+  const at = id => song.findIndex(x => x.id === id);
+  const CLOSE = at(lyl('taiquan_sacred_fruit_06'));
+  const ownLine = x => compass.lineOfEvent(x.id, x.stageId) === 'song';
+  const upTo = id => [...before, ...song.slice(0, at(id)).map(x => x.id)];
+  const seen = [];
+  song.forEach(({ stageId, id }, i) => {
+    if (i >= CLOSE) return;
+    const done = [...before, ...song.slice(0, i).map(x => x.id)];
+    if (table.steps.some(s => s.eventId === id)) assert.equal(card(stageId, done, id, acq)?.lineId, 'song', `${id} 当焦点：当前线是宋`);
+    if (i === 0 || !ownLine(song[i - 1])) return;
+    const idle = card(stageId, done, undefined, acq);
+    assert.equal(idle?.lineId, 'song', `${id} 之前（无焦点）：当前线是宋`);
+    const hint = Object.entries(HINTS).find(([, text]) => text === idle.step)?.[0];
+    if (hint && seen.at(-1) !== hint) seen.push(hint);
+  });
+  assert.deepEqual(seen, ['song_escort_yue_girls', 'song_jiangzhou_war_open_alt', 'song_lieshan_snow', 'song_sanchuankou', 'song_yuanwailang',
+    'song_xuezhun_takeover', 'song_ximen_xiaoyingzhou'],
+  '带文案的步按表顺序依次出现，不回跳；song_xuezhun_takeover「去约好的地方看看」不再是死步');
+  // 临安收束关按地区归太泉线（lineOfStage），无焦点时不归宋；云涛观迷楼当焦点照常是宋的本步（挂章前后同）
+  assert.equal(compass.lineOfStage(SF), 'taiquan');
+  const yt = card(SF, upTo(lyl('taiquan_sacred_fruit_04')), lyl('taiquan_sacred_fruit_04'), acq);
+  assert.equal(yt?.lineId, 'song');
+  assert.equal(pointer(SF, lyl('taiquan_sacred_fruit_04')), '', '迷楼没有地点：指南针为空，用本步文案');
+  assert.equal(yt.step, HINTS.song_yuntao_niaoren, '对付蔺采泉、晋旱收粮两拍插在 _03 与 _04 之间，不吞云涛观这一步');
+  // 抵达步：江州上船（s01_02）后显示「回到临安看看」直到风波亭；风波亭当焦点出主线指南针；之后不再显示
+  const ARRIVE = returnTo(lyl('linan_arrive_fengbo'));
+  assert.equal(places[lyl('linan_arrive_fengbo')], '临安');
+  assert.equal(card(RET, upTo(lyl('s01_03')), undefined, acq).step, ARRIVE, '江州上船之后：抵达步提示');
+  assert.equal(card(LIN, upTo(lyl('linan_arrive_fengbo')), undefined, acq).step, ARRIVE);
+  assert.equal(card(LIN, upTo(lyl('linan_arrive_fengbo')), lyl('linan_arrive_fengbo'), acq).step, pointer(LIN, lyl('linan_arrive_fengbo')));
+  for (const id of ['tail_li_shishi', 'decode_bianmenwa_note', 'lin_an_bridge_01_beat'].map(lyl)) {
+    assert.notEqual(card(LIN, upTo(id), undefined, acq).step, ARRIVE, `${id} 之前：抵达步已过`);
+  }
+  // 薛延山：祈福暗号解开后显示「去约好的地方看看」，见到薛延山后不再显示；之前也不提前显示
+  const XUE = HINTS.song_xuezhun_takeover;
+  assert.notEqual(card(LIN, upTo(lyl('decode_bianmenwa_note')), undefined, acq).step, XUE, '暗号没解开前不显示');
+  assert.equal(card(LIN, upTo(lyl('libu_registration')), undefined, acq).step, XUE, '暗号解开后：显示到见薛延山');
+  assert.equal(pointer(LIN, lyl('meet_xue_yanshan')), '', '西湖农居没有地点：指南针为空');
+  assert.equal(card(LIN, upTo(lyl('meet_xue_yanshan')), lyl('meet_xue_yanshan'), acq).step, XUE, '薛延山当焦点：用本步文案');
+  assert.notEqual(card(LIN, upTo(lyl('blacksea_iron_puppet')), undefined, acq).step, XUE, '见过薛延山后不再显示');
+  // ④ 收束：taiquan_sacred_fruit_06 完成即撤卡，折叠行也不再有宋
+  const all = [...before, ...song.slice(0, CLOSE + 1).map(x => x.id)];
+  const closed = compass.lineCompassView(saveOf(SF, all, acq), { focusEventId: undefined, compassPointer: () => '' });
+  assert.notEqual(closed.current?.lineId, 'song', '_06 完成：宋已收束');
+  assert.ok(!closed.others.some(o => o.lineId === 'song'), '_06 完成：折叠行撤掉宋');
+});

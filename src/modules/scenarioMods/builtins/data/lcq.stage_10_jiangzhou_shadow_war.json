@@ -3906,7 +3906,8 @@
         ],
         "eventIds": [
           "lcq.event.s10_01_jiangzhou_order",
-          "lcq.event.s10_02_yeying_pass"
+          "lcq.event.s10_02_yeying_pass",
+          "lcq.event.yeying_seat_struggle"
         ]
       },
       {

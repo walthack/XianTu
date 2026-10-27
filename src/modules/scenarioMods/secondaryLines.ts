@@ -671,6 +671,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '识破皇城司盯梢，不动手，以富商身份掩护进明庆寺', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.evade_huangchengsi' },
       // 序按 axisSeq：太皇太后 604 在高俅 624 之前，先前两条排反了。
       { reviewSummary: '绕武穆王府查清建筑方位，没惊动周边暗梢', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.survey_wumu_mansion' },
+      // S1 默认路线的抵达拍（五线补全·宋 2026-10-28）；隔离关同 seq 那拍保留在下一行
+      { reviewSummary: '由钱塘门进临安，在风波亭停车——见过谢艺的，到亭后谢艺墓前上香', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.linan_arrive_fengbo' },
       { reviewSummary: '在风波亭后拜祭谢艺并安顿临安落脚处——敖润、冯源、林清浦登场', status: 'ready', stageId: 'lyl.lin_an_black_sea', eventId: 'lyl.event.debut_ruan_sisters' },
       { reviewSummary: '听俞子元回报，确认高衙内勒索威远镖局的条件', status: 'ready', stageId: 'lyl.lin_an_bridge', eventId: 'lyl.event.weiyuan_extortion' },
       // S10 并进 changgan_interlude_04_beat
@@ -691,6 +693,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '偕李师师赴梵天寺遭禁军伏击，马车被毁，俞子元掩护', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_01_beat' },
       { reviewSummary: '多宝阁问清贾师宪要你推纸币——你要纸币能纳税、发行量须经认可', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_plan' },
       { reviewSummary: '童贯引见宋主，纸币获准纳税并共同监制', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_paper_mint' },
+      { reviewSummary: '户部新设宝钞局，宋主亲笔点你以员外郎兼任宝钞局主事', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.song_baochao_appointed' },
       { reviewSummary: '林冲持刀闯白虎堂被刺配江州，你与鲁智深计划营救', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_03_beat' },
       { reviewSummary: '坐实林冲没被救下——刺配照旧，他仍要去江州', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.linchong_still_exiled' },
       { reviewSummary: '潜入明庆寺观音殿，被郭槐、封德明制住，太皇太后认出劳力士后放人', status: 'ready', stageId: 'lyl.xiaoyingzhou_blacksea_trap', eventId: 'lyl.event.xiaoyingzhou_blacksea_trap_06_beat' },

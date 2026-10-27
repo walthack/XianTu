@@ -5247,7 +5247,8 @@
       "chapter.lyl.xiaoyingzhou_blacksea_trap.linchong.done": false,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.trap.started": false,
       "chapter.lyl.xiaoyingzhou_blacksea_trap.trap.done": false,
-      "event.linchong_still_exiled.done": false
+      "event.linchong_still_exiled.done": false,
+      "event.song_baochao_appointed.done": false
     },
     "chapters": [
       {
@@ -5262,12 +5263,18 @@
           }
         ],
         "eventIds": [
+          "lyl.event.linjia_sees_ningyi",
+          "lyl.event.xihu_villa_eavesdrop",
           "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
           "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
           "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
           "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
           "lyl.event.linchong_still_exiled",
-          "lyl.event.xiaoyingzhou_blacksea_trap_05_beat"
+          "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+          "lyl.event.xiaoyingzhou_paper_plan",
+          "lyl.event.xiaoyingzhou_paper_mint",
+          "lyl.event.xiaoyingzhou_lin_takes_seat",
+          "lyl.event.song_baochao_appointed"
         ]
       },
       {
@@ -5286,7 +5293,8 @@
           "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
           "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
           "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
-          "lyl.event.xiaoyingzhou_blacksea_trap_10_beat"
+          "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+          "lyl.event.xiaoyingzhou_cement_truce"
         ],
         "activation": [
           {
@@ -6557,6 +6565,57 @@
                 "success": "你已让纸钞能纳税，并以此逼宋军退兵；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lyl.event.song_baochao_appointed",
+        "name": "宝钞局主事",
+        "description": "纸钞获准纳税后，宫里发下诏旨：户部新设宝钞局，宋主亲笔点了程宗扬的名字，以屯田司员外郎兼任宝钞局主事。消息先一步传到程宗扬耳边，诏书随后送到。",
+        "axisId": null,
+        "axisMethod": "song-line-fill-axis-pending",
+        "axisAnchor": "六朝云龙吟·#31·欢畅",
+        "axisSeq": 582,
+        "axisBeat": "户部新设宝钞局，宋主亲笔点程宗扬担任宝钞局主事，诏旨下达。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.xiaoyingzhou_paper_mint.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.song_baochao_appointed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "relatedFactionIds": [
+          "lyg.faction.song_state"
+        ],
+        "objective": "接下宝钞局主事的诏旨",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "accept_baochao_post",
+              "label": "接下宝钞局主事的诏旨",
+              "actionText": "我听说户部新设宝钞局、宋主点了我的名字，等诏书到了便接下宝钞局主事这个差使。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已接下宝钞局主事的诏旨；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }
             }
           ]

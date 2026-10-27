@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+  "ops": [
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.stage_10_jiangzhou_shadow_war_orders].eventIds",
+      "from": [
+        "lcq.event.s10_01_jiangzhou_order",
+        "lcq.event.s10_02_yeying_pass"
+      ],
+      "to": [
+        "lcq.event.s10_01_jiangzhou_order",
+        "lcq.event.s10_02_yeying_pass",
+        "lcq.event.yeying_seat_struggle"
+      ]
+    }
+  ]
+}

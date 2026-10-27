@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "stageId": "lyl.taiquan_sacred_fruit",
+  "ops": [
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyl.chapter.taiquan_sacred_fruit_linan_close].eventIds",
+      "from": [
+        "lyl.event.taiquan_sacred_fruit_01",
+        "lyl.event.taiquan_sacred_fruit_02",
+        "lyl.event.taiquan_sacred_fruit_03",
+        "lyl.event.taiquan_sacred_fruit_04",
+        "lyl.event.taiquan_sacred_fruit_05"
+      ],
+      "to": [
+        "lyl.event.taiquan_sacred_fruit_01",
+        "lyl.event.taiquan_sacred_fruit_02",
+        "lyl.event.taiquan_sacred_fruit_03",
+        "lyl.event.taiquan_sacred_fruit_04",
+        "lyl.event.taiquan_sacred_fruit_05",
+        "lyl.event.sacred_against_lin",
+        "lyl.event.sacred_jin_drought"
+      ]
+    }
+  ]
+}

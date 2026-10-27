@@ -151,6 +151,12 @@ type QuestCompassRuntime = {
   };
 } | null | undefined;
 
+/** lyl.lin_an_bridge「初抵临安」章的拍（与关卡数据同步，测试钉住）。 */
+export const LIN_AN_ARRIVAL_EVENT_IDS: ReadonlySet<string> = new Set([
+  'linan_arrive_fengbo', 'tail_li_shishi', 'survey_wumu_mansion', 'evade_huangchengsi', 'mingqingsi_lin_lu_meeting',
+  'decode_bianmenwa_note', 'weiyuan_extortion', 'libu_registration', 'meet_xue_yanshan', 'blacksea_iron_puppet',
+].map(id => `lyl.event.${id}`));
+
 /** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
   if (modId === 'lcq.stage_04' && eventId) return ({
@@ -169,6 +175,8 @@ export function storyChapterTitle(modId: string | undefined, eventId: string | u
     if (['lcq.event.haishen_hall_merfolk', 'lcq.event.pull_harpoon_lemingzhu'].includes(eventId)) return '海神殿';
     if (['lcq.event.regroup_caravan_envoy','lcq.event.weapon_deal_with_geluo','lcq.event.spot_dong_informant'].includes(eventId)) return '商队与峒使';
   }
+  // 临安：rail 章是首章「初抵临安」，整关停在它上面；原「临安疑线」章的拍照旧标疑线（五线补全·宋 2026-10-28）
+  if (modId === 'lyl.lin_an_bridge' && eventId) return LIN_AN_ARRIVAL_EVENT_IDS.has(eventId) ? '初抵临安' : '临安疑线';
   if (modId !== 'lcq.stage_02' || !eventId) return fallback;
   if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
   return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';

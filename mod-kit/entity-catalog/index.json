@@ -291,6 +291,12 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.jin_panjiang_shaozhu:rise_at_yun_banquet",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.jin_vacate_jiangzhou:confirm_song_free_to_raid",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json",
       "aliases": []
@@ -4113,6 +4119,18 @@
     },
     {
       "kind": "action",
+      "id": "lyl.event.linan_arrive_fengbo:enter_linan_qiantang_gate",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lyl.event.linan_arrive_fengbo:stop_at_fengbo_pavilion",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lyl.event.linchong_still_exiled:confirm_linchong_exiled",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json",
       "aliases": []
@@ -4529,6 +4547,12 @@
       "kind": "action",
       "id": "lyl.event.siying_lane_saber_ambush:watch_linchong_buy_saber",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lyl.event.song_baochao_appointed:accept_baochao_post",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json",
       "aliases": []
     },
     {
@@ -5650,6 +5674,12 @@
       "kind": "chapter",
       "id": "lyl.chapter.jiangzhou_retreat",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.jiangzhou_retreat.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lyl.chapter.lin_an_bridge_arrival",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
       "aliases": []
     },
     {
@@ -8789,6 +8819,12 @@
     },
     {
       "kind": "event",
+      "id": "lcq.event.jin_panjiang_shaozhu",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lcq.event.jin_vacate_jiangzhou",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json",
       "aliases": []
@@ -11441,6 +11477,12 @@
     },
     {
       "kind": "event",
+      "id": "lyl.event.linan_arrive_fengbo",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lyl.event.linchong_still_exiled",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json",
       "aliases": []
@@ -11689,6 +11731,12 @@
       "kind": "event",
       "id": "lyl.event.siying_lane_saber_ambush",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lyl.event.song_baochao_appointed",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json",
       "aliases": []
     },
     {
@@ -13355,6 +13403,12 @@
     },
     {
       "kind": "flag",
+      "id": "chapter.lyl.lin_an_bridge.arrival.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "chapter.lyl.lin_an_bridge.intel.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
       "aliases": []
@@ -14255,6 +14309,12 @@
     },
     {
       "kind": "flag",
+      "id": "event.jin_panjiang_shaozhu.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_07_qingyuan_jiankang.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "event.jin_vacate_jiangzhou.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json",
       "aliases": []
@@ -14329,6 +14389,12 @@
       "kind": "flag",
       "id": "event.lin_chong_confront.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.linan_arrive_fengbo.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
       "aliases": []
     },
     {
@@ -15853,6 +15919,12 @@
       "kind": "flag",
       "id": "event.slay_dragon.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.song_baochao_appointed.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.xiaoyingzhou_blacksea_trap.json",
       "aliases": []
     },
     {
@@ -22053,6 +22125,18 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.gate.realm_capped",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.gate.realm_capped.breakthrough",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.gate.scene_active",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22815,6 +22899,24 @@
     },
     {
       "kind": "text",
+      "id": "free.stakes.solo.breakthrough.criticalFailure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.solo.breakthrough.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.solo.breakthrough.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.stakes.solo.criticalFailure",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22846,6 +22948,24 @@
     {
       "kind": "text",
       "id": "free.stakes.solo.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.solo.train.criticalFailure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.solo.train.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.stakes.solo.train.partial",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -23223,6 +23343,438 @@
     },
     {
       "kind": "text",
+      "id": "line.taiquan.entry.song",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "line.taiquan.entry.song.key",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "line.taiquan.entry.wangzhe",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "line.taiquan.locked.deadline.liuchao.deadline.ice_gu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "line.taiquan.locked.lines",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "line.taiquan.locked.realm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "line.taiquan.locked.title",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.name",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_camera_palace_alt",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_enter_border_alt",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_enter_border_wudu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_enter_from_taiquan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_enter_from_taiquan_wudu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_huo_bieyuan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_liujian_yuxi_alt",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_yunruyao_bing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.han.step.han_zhu_urge_luo_alt",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.name",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.jin_arrive_from_nanhuang",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.jin_arrive_icegu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.jin_arrive_skip_nh",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.jin_back_after_eagle",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.jin_back_jiankang",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.jin_eagle_beifu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.jin_qingyuan_case",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.jin.step.palace_ask",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.name",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_baiyi_enter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_biling_bay",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_enter_caravan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_f03_huamiao_mist",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_f08_dagu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_f10_ghost_king_probe",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_guiwang_approach",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_shanghou_ice_gu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_sheyi_village",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_yun_guide",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.name",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_baiqi",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_banquet",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_branch_raid",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_camp_route",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_entry_envoy",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_entry_xu_unmet",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_purge_suxiao",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.qin.step.qin_villa",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.name",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_escort_yue_girls",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_guangyang_from_jin",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_guangyang_skip_jin",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_jiangzhou_war_open_alt",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_lieshan_snow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_sanchuankou",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_ximen_xiaoyingzhou",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_xuezhun_takeover",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_yuanwailang",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.song.step.song_yuntao_niaoren",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.step.returnTo",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.taiquan.name",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.taiquan.step.tq_chiyang_fruit",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.taiquan.step.tq_entry_fruit",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.taiquan.step.tq_entry_wangzhe",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.taiquan.step.tq_exit_to_han",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.taiquan.step.tq_xionggu_key",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.taiquan.step.tq_xuanyuan_mijing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.name",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.step.tang_changan_yangyuhuan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.step.tang_d7_secret_treaty",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.step.tang_entry",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.step.tang_entry_from_han",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.step.tang_envoys_reunion",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.tang.step.tang_ganlu_zhuhuan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "outcome.act.ask_biling_for_nylon",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -23488,6 +24040,12 @@
     {
       "kind": "text",
       "id": "qingyu.stage02.opening",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "settings.difficulty.trainingCap.label",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

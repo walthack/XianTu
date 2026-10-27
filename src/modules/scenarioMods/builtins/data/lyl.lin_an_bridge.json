@@ -5164,6 +5164,9 @@
       "event.lin_an_bridge_02.done": false,
       "event.lin_an_bridge_03.done": false,
       "event.lin_an_bridge_04.done": false,
+      "event.linan_arrive_fengbo.done": false,
+      "chapter.lyl.lin_an_bridge.arrival.started": true,
+      "chapter.lyl.lin_an_bridge.arrival.done": false,
       "chapter.lyl.lin_an_bridge.intel.started": true,
       "chapter.lyl.lin_an_bridge.intel.done": false,
       "event.debut_yundanliu.done": false,
@@ -5193,9 +5196,40 @@
     },
     "chapters": [
       {
+        "id": "lyl.chapter.lin_an_bridge_arrival",
+        "title": "初抵临安",
+        "summary": "由钱塘门入城、风波亭拜祭，安顿落脚后查看武穆王府、识破皇城司盯梢，接上祈福榜暗号与吏部报到。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyl.lin_an_bridge.arrival.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.linan_arrive_fengbo",
+          "lyl.event.tail_li_shishi",
+          "lyl.event.survey_wumu_mansion",
+          "lyl.event.evade_huangchengsi",
+          "lyl.event.mingqingsi_lin_lu_meeting",
+          "lyl.event.decode_bianmenwa_note",
+          "lyl.event.weiyuan_extortion",
+          "lyl.event.libu_registration",
+          "lyl.event.meet_xue_yanshan",
+          "lyl.event.blacksea_iron_puppet"
+        ]
+      },
+      {
         "id": "lyl.chapter.lin_an_bridge_intel",
         "title": "临安疑线",
         "summary": "瓦棚情报、小瀛洲冲突与明庆寺拜访共同打开禁军疑云。",
+        "activation": [
+          {
+            "path": "flags.chapter.lyl.lin_an_bridge.arrival.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.chapter.lyl.lin_an_bridge.intel.done",
@@ -5204,6 +5238,13 @@
           }
         ],
         "eventIds": [
+          "lyl.event.identify_xue_cold_poison",
+          "lyl.event.leifeng_pagoda_invite",
+          "lyl.event.leifeng_repel_gao",
+          "lyl.event.decide_chase_weiyuan",
+          "lyl.event.pass_kotian_stone",
+          "lyl.event.ivory_visit_weiyuan",
+          "lyl.event.siying_lane_saber_ambush",
           "lyl.event.lin_an_bridge_01_beat",
           "lyl.event.lin_an_bridge_02_beat",
           "lyl.event.lin_an_bridge_03_beat",
@@ -5220,6 +5261,98 @@
       }
     ],
     "events": [
+      {
+        "id": "lyl.event.linan_arrive_fengbo",
+        "name": "入钱塘门，风波亭",
+        "description": "程宗扬一行由钱塘门进入临安，车过城内的风波亭。亭后两座无碑的坟：正对亭子的大坟据说是岳鹏举的空坟，他不拜；旁边一座是谢艺的墓，他上香叩首，把江州近况与星月湖重聚的消息说给谢艺听。离开风波亭后，众人赶往保和坊落脚。",
+        "axisId": null,
+        "axisMethod": "song-line-fill-axis-pending",
+        "axisAnchor": "六朝云龙吟·#6·临安",
+        "axisSeq": 556,
+        "axisBeat": "程宗扬一行由钱塘门进入临安，到风波亭后拜祭谢艺，随后赶往落脚处。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.linan_arrive_fengbo.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.lin_qing_pu"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.xing_yue_hu"
+        ],
+        "locationId": "liuchao.location.linan",
+        "objective": "由钱塘门进临安，在风波亭停一停，再去落脚处安顿",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lcq.if_xieyi_longrest.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "replacesCanonRail": true,
+            "name": "入钱塘门，风波亭",
+            "description": "程宗扬一行由钱塘门进入临安，车过城内的风波亭，亭后只有岳鹏举的空坟。谢艺仍在长养，不得出现谢艺墓，不得空墓冒充已葬。离开风波亭后，众人赶往保和坊落脚。",
+            "axisBeat": "程宗扬一行由钱塘门进入临安，途经风波亭（谢艺仍在长养，没有谢艺墓），随后赶往落脚处。",
+            "objective": "由钱塘门进临安，经过风波亭，再去落脚处安顿"
+          },
+          {
+            "when": [
+              {
+                "path": "acq.liuchao.character.xie_yi",
+                "operator": "lt",
+                "value": "encountered"
+              }
+            ],
+            "name": "入钱塘门，风波亭",
+            "description": "程宗扬一行由钱塘门进入临安，车过城内的风波亭，亭后有两座无碑的坟。程宗扬不曾结识谢艺：只写风波亭与亭后的坟，不出谢艺的名字，不写拜祭。离开风波亭后，众人赶往保和坊落脚。",
+            "axisBeat": "程宗扬一行由钱塘门进入临安，途经风波亭，随后赶往落脚处。",
+            "objective": "由钱塘门进临安，经过风波亭，再去落脚处安顿"
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "enter_linan_qiantang_gate",
+              "label": "由钱塘门进临安",
+              "actionText": "我随车队由钱塘门进临安城，沿街往城里走。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已由钱塘门进了临安；最终完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "kind": "prepare",
+              "grantsPreparation": "qiantang_gate_entered"
+            },
+            {
+              "id": "stop_at_fengbo_pavilion",
+              "label": "在风波亭停车，到亭后看看",
+              "actionText": "车到风波亭，我下车往亭后走，在那两座无碑的坟前停下，然后再去落脚处。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已在风波亭后停过，随后赶往落脚处；事件完成真值将由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              },
+              "requiresPreparation": [
+                "qiantang_gate_entered"
+              ]
+            }
+          ]
+        }
+      },
       {
         "id": "lyl.event.lin_an_bridge_01_beat",
         "name": "瓦棚情报",
@@ -6277,6 +6410,13 @@
         "axisSeq": 555,
         "axisBeat": "程宗扬尾随李师师的马车至威远镖局，确认她为何突然返回临安。",
         "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.linan_arrive_fengbo.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.event.tail_li_shishi.done",

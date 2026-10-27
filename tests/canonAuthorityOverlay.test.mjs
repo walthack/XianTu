@@ -32,6 +32,11 @@ const STAGES = [
   { stageId: 'lcq.stage_01', book: 'qingyu' },
   { stageId: 'lcq.stage_09_trade_and_escape', book: 'qingyu' },
   { stageId: 'lcq.stage_03', book: 'qingyu' },
+  // 宋线补全（五线补全·宋，2026-10-28）：挂章／新事件的权威增量
+  { stageId: 'lcq.stage_10_jiangzhou_shadow_war', book: 'qingyu' },
+  { stageId: 'lcq.stage_12_jiangzhou_counterwar', book: 'qingyu' },
+  { stageId: 'lyl.xiaoyingzhou_blacksea_trap', book: 'yunlong' },
+  { stageId: 'lyl.taiquan_sacred_fruit', book: 'yunlong' },
 ];
 
 function miniMod(name = 'old') {
@@ -268,10 +273,11 @@ test('id-addressed source keeps a valid id-array; malformed target or source fai
   );
 });
 
-test('tracked overlays are exactly the thirteen generated→builtin closures', async () => {
+test('tracked overlays are exactly the seventeen generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
-  assert.equal(catalog.manifest.overlays.length, 13);
+  // 13 → 17：宋线补全（2026-10-28）新增 stage_10／stage_12／小瀛洲／临安收束四关的挂章增量
+  assert.equal(catalog.manifest.overlays.length, 17);
 });
 
 test('generated plus tracked overlay reconstructs the Git-tracked builtins', async () => {

@@ -112,9 +112,10 @@ test('承重拍挂在默认路线 rail 的指定位置', async () => {
   );
 
   const linAn = byId[STAGE_IDS.linAn];
-  assert.equal(
-    linAn.orderedEventIds[linAn.orderedEventIds.indexOf('lyl.event.lin_an_bridge_04_beat') + 1],
-    TOMB,
+  // 五线补全·宋（2026-10-28）：象牙试探（563）、司营巷（564）挂章上 rail 后排在 04 拍与谢艺墓（626）之间；墓仍收在本关 rail 末拍
+  assert.deepEqual(
+    linAn.orderedEventIds.slice(linAn.orderedEventIds.indexOf('lyl.event.lin_an_bridge_04_beat') + 1),
+    ['lyl.event.ivory_visit_weiyuan', 'lyl.event.siying_lane_saber_ambush', TOMB],
   );
   assert.equal(stage04b.contracts.length, stage04b.orderedEventIds.length);
   assert.equal(stage07.contracts.length, stage07.orderedEventIds.length);
