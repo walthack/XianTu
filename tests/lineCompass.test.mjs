@@ -324,5 +324,5 @@ test('用户拍板：晋开局王哲锦囊起已知；宋汉唐南荒序幕结�
   assert.equal(skip.current.lineId, 'song');
   assert.equal(skip.current.step, '打听月霜的下落', '跳过晋：不点广阳');
   const fromJin = view(saveOf({ modId: S09, done: [[S02, WANGZHE], [S02, PACT], [S09, 'lcq.event.s09_05_drain_escape']] }), SONG_FOCUS);
-  assert.equal(fromJin.current.step, '进广阳城看看');
+  assert.equal(fromJin.current.step, '上岸，进附近的城看看', '走过晋：不点广阳（防剧透通审 §13.1 #5）');
 });
