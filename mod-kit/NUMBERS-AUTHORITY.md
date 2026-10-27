@@ -6,7 +6,7 @@
 |---|---|
 | `mod-kit/numbers-combat.json` | combat, difficulty, judgement, factors, weights, goalModifiers, sceneDefaults, historicalPrototype |
 | `mod-kit/numbers-progress.json` | levels, training, techniques, status, currency, freeAction, affinity, reputation, lineBonds, npcCard |
-| `mod-kit/numbers-runtime.json` | version, tuning, diagnostics, saves, aiRetry, feedback, e2eSmoke, perf |
+| `mod-kit/numbers-runtime.json` | version, tuning, diagnostics, saves, aiRetry, feedback, e2eSmoke, perf, ui（界面显示开关，如 `ui.rightSidebar.showSecondaryLines`） |
 | `mod-kit/numbers-assist.json` | assist（同伴助战：缺省形态、同时生效上限、好感档→助战档、按角色库 id 的被动 buff／每拍自动技能；`sceneModule/assist.ts` 读，热改走 `applyGameNumbers`，体检 LCQ-NUM-006/008） |
 
 运行时由 `src/modules/sceneModule/numbers.ts` **加载合并**为同一 `GAME_NUMBERS` 形状；`applyTuning` / `applyGameNumbers` 仍对合并视图打补丁（tuning 不感知物理文件数）。冷启动跑 `numbersRegistry`（缺段 → `LCQ-NUM-007`）。

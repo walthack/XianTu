@@ -23,11 +23,11 @@ export interface FieldSpec {
 export const SECTION_KEYS: Record<NumbersSection, readonly string[]> = {
   combat: ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'],
   progress: ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting'],
-  runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'],
+  runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui'],
   assist: ['assist'],
 };
 
-/** 30 个顶层键：version 为 int，其余为必填 object。 */
+/** 31 个顶层键：version 为 int，其余为必填 object。 */
 export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; section: NumbersSection }> = [
   { key: 'version', kind: 'int', section: 'runtime' },
   { key: 'levels', kind: 'object', section: 'progress' },
@@ -59,6 +59,7 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'story', kind: 'object', section: 'progress' },
   { key: 'shop', kind: 'object', section: 'progress' },
   { key: 'crafting', kind: 'object', section: 'progress' },
+  { key: 'ui', kind: 'object', section: 'runtime' },
 ];
 
 /** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读配置 story.lineOutcome.judgedLines，这里不写。 */
@@ -89,6 +90,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'judgement.dice.sides', kind: 'int', required: true, min: 2, section: 'combat' },
   { path: 'combat.baselineDc', kind: 'number', required: true, section: 'combat' },
   { path: 'tuning.timeoutMs', kind: 'int', required: true, min: 1, section: 'runtime' },
+  { path: 'ui.rightSidebar.showSecondaryLines', kind: 'bool', required: true, section: 'runtime' },
   { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' },
   { path: 'affinity.range.min', kind: 'number', required: true, section: 'progress' },
   { path: 'affinity.range.max', kind: 'number', required: true, section: 'progress' },

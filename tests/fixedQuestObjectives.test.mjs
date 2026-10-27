@@ -139,7 +139,8 @@ test('事件叙事视图使用固定目标覆盖，分歧与显式 variant 仍�
 });
 
 test('二级线玩家栏不暴露制作进度', () => {
-  const sidebar = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8');
+  const sidebar = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8')
+    + fs.readFileSync('src/modules/scenarioMods/sidebarLineEntries.ts', 'utf8');
   assert.doesNotMatch(sidebar, /line\.ready|line\.total|line\.pending/);
   assert.doesNotMatch(sidebar, /余待扩/);
 });

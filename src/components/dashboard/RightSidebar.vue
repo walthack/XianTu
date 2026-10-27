@@ -255,7 +255,7 @@
         :path-receipts="epistemicRuntime?.pathReceipts"
       />
 
-      <!-- 二级线待办：走到地方／认识对的人就出现，不需要接受任务 -->
+      <!-- 二级线待办：走到地方／认识对的人就出现，不需要接受任务；整块受 ui.rightSidebar.showSecondaryLines 控制（默认隐藏） -->
       <div v-if="availableLines.length" class="collapsible-section quest-section">
         <div class="section-header" @click="linesCollapsed = !linesCollapsed">
           <h3 class="section-title">
@@ -400,8 +400,7 @@ import {
   trackStoryOpportunity,
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
-import { secondaryLineDisplayName, resolveAvailableLines, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
-import { secondaryLineEntryView } from '@/modules/scenarioMods/secondaryLineEntry';
+import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
@@ -454,36 +453,14 @@ const visibleQuestObjective = (rt: any, event: any): string => {
   const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt);
   return formatQuestCompass(view, rt, questAtLocationId(rt)) || String(view.objective || '').trim();
 };
-// 二级线：锚一满足就作为待办显示，不需要玩家确认（用户裁定 2026-08-16）。
-// 整线解锁的线（太泉）没解锁也照样显示：标题「时机未到」＋缺项句，灰显不隐藏（太泉解锁设计稿 2026-10-27 §5）。
+// 「可投的门路」：二级线入口＋支线，列表组装在 sidebarLineEntries.ts。
+// 显示开关 ui.rightSidebar.showSecondaryLines（默认 false，用户 2026-10-27 08:53 定先隐藏不删）；关时先返回，不取存档快照。
 const availableLines = computed(() => {
+  if (!showSecondaryLines()) return [];
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
-  const locId = locationFromPosition(
-    playerLocationDescription(),
-    rt.canon?.locations,
-  ).locationId;
   const event = currentQuestEvent(rt);
-  const activeLineIds = new Set(secondaryLinesAtEvent(event?.id).map(line => line.id));
-  const save = gameStateStore.toSaveData();
-  return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => {
-    const view = secondaryLineEntryView(line, save);
-    return {
-      id: line.id,
-      name: view.locked ? view.title : secondaryLineDisplayName(line, event),
-      kind: line.kind === 'sect'
-        ? '宗派'
-        : line.kind === 'commerce'
-          ? '商道'
-          : line.kind === 'expedition'
-            ? '远征'
-            : '国家',
-      hint: view.hintLines.join('\n'),
-      hintLines: view.hintLines,
-      locked: view.locked,
-      objective: activeLineIds.has(line.id) ? visibleQuestObjective(rt, event) : '',
-    };
-  }).concat(questLineView(save).secondary.map(line => ({ ...line, hintLines: [line.hint], locked: false })));
+  return sidebarAvailableLines(rt, gameStateStore.toSaveData(), questAtLocationId(rt), event, () => visibleQuestObjective(rt, event));
 });
 // 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
 // 与主线 UI / 主叙事同一锚，避免从 activeEventIds 抽出资料事件。

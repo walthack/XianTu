@@ -11,7 +11,7 @@ const readJson = (rel) => JSON.parse(readFileSync(path.join(root, rel), 'utf8'))
 
 const COMBAT_KEYS = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'];
 const PROGRESS_KEYS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting'];
-const RUNTIME_KEYS = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf'];
+const RUNTIME_KEYS = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui'];
 const ASSIST_KEYS = ['assist'];
 
 test('权威四分包顶层键无重叠且并集盖住合并视图', () => {

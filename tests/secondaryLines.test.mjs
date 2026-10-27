@@ -52,7 +52,7 @@ test('两类线各用各的锚，破例只有白名单里那条', async () => {
 });
 
 test('任务栏把太泉 expedition 显示成远征，不伪装成国家线', () => {
-  const sidebar = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8');
+  const sidebar = fs.readFileSync('src/modules/scenarioMods/sidebarLineEntries.ts', 'utf8');
   assert.match(sidebar, /line\.kind === 'expedition'[\s\S]*\? '远征'/);
 });
 
@@ -396,9 +396,10 @@ test('文案键缺失记 LCQ-PCK-005（同一键只记一次）并用兜底：�
 
 test('右栏入口改走 secondaryLineEntryView：锁住时用「时机未到」标题、逐句显示、灰显不隐藏', () => {
   const sidebar = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8');
-  assert.match(sidebar, /secondaryLineEntryView\(line, save\)/);
-  assert.match(sidebar, /name: view\.locked \? view\.title : secondaryLineDisplayName\(line, event\)/);
+  const entries = fs.readFileSync('src/modules/scenarioMods/sidebarLineEntries.ts', 'utf8');
+  assert.match(entries, /secondaryLineEntryView\(line, save\)/);
+  assert.match(entries, /name: view\.locked \? view\.title : secondaryLineDisplayName\(line, event\)/);
   assert.match(sidebar, /v-for="\(hint, i\) in line\.hintLines"/);
   assert.match(sidebar, /'quest-locked': line\.locked/);
-  assert.doesNotMatch(sidebar, /hint: line\.entryHint/);
+  assert.doesNotMatch(sidebar + entries, /hint: line\.entryHint/);
 });
