@@ -55,13 +55,18 @@ test('旧档情境（03b 路线、编年史无 s03_12）：碧鲮族／鬼王峒
   }
 });
 
-test('第一步：铁索桥后、到蛇彝村前照常显示；到蛇彝村后两条路线都能过（03 的 s03_12 或 03b 首拍）', () => {
-  const base = played(S02);
-  assert.equal(view(saveOf({ modId: S02, done: base }), undefined).current.step, STUCK, '还没到蛇彝村');
-  for (const [stageId, eventId] of [[S03, 'lcq.event.s03_12'], [S03B, 'lcq.event.s03b_snake_flower_bridge_01']]) {
-    const step = view(saveOf({ modId: stageId, done: [...base, [stageId, eventId]] }), undefined).current.step;
+test('第一步：铁索桥前显示「随商队出五原」，铁索桥过了换「去蛇彝村」；到蛇彝村后三条路线都能过（默认路线 02 尾拍、03 的 s03_12、03b 首拍）', () => {
+  // 真机 da89 #3：原先第一步等到蛇彝村才过，02 关后半段（铁索桥→雨林→黑石滩→蛇彝村）一路停在「随商队出五原」
+  const SHEYI = texts['lineCompass.nanhuang.step.nh_sheyi_village'];
+  const s02 = played(S02);
+  const before = s02.filter(([, e]) => !['lcq.event.iron_bridge_ambush', 'lcq.event.ningyu_regicide_offer', 'lcq.event.zixi_taiyi_intercept', 'lcq.event.rainforest_black_shoal', 'lcq.event.silent_sheyi_village'].includes(e));
+  assert.equal(view(saveOf({ modId: S02, done: before }), 'lcq.event.iron_bridge_ambush').current.step, '去某处 · 见某人', '铁索桥前：焦点就是这一步，用主线指南针');
+  assert.equal(view(saveOf({ modId: S02, done: [...before, [S02, 'lcq.event.iron_bridge_ambush']] }), undefined).current.step, SHEYI, '铁索桥过了：出了五原，往蛇彝村去');
+  assert.equal(view(saveOf({ modId: S02, done: [...before, ...['iron_bridge_ambush', 'ningyu_regicide_offer', 'zixi_taiyi_intercept', 'rainforest_black_shoal'].map(id => [S02, `lcq.event.${id}`])] }), undefined).current.step, SHEYI, '黑石滩过了：仍在去蛇彝村的路上');
+  for (const [stageId, eventId] of [[S02, 'lcq.event.silent_sheyi_village'], [S03, 'lcq.event.s03_12'], [S03B, 'lcq.event.s03b_snake_flower_bridge_01']]) {
+    const step = view(saveOf({ modId: stageId, done: [...before, [S02, 'lcq.event.iron_bridge_ambush'], [stageId, eventId]] }), undefined).current.step;
     assert.notEqual(step, STUCK, `${eventId} 完成即过第一步`);
-    assert.notEqual(step, texts['lineCompass.nanhuang.step.nh_sheyi_village'], '蛇彝村那一步同样按任一路线算过');
+    assert.notEqual(step, SHEYI, `${eventId}：蛇彝村那一步同样按任一路线算过`);
   }
 });
 

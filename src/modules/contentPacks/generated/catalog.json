@@ -1,5 +1,5 @@
 {
-  "version": "2394a96d749068f2",
+  "version": "c24c5b622920b51a",
   "contracts": [
     {
       "meta": {
@@ -14183,24 +14183,8 @@
                 "value": true
               }
             ],
-            "until": [
-              {
-                "anyOf": [
-                  {
-                    "path": "done.lcq.event.s03_12",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lcq.event.s03b_snake_flower_bridge_01",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
-              }
-            ],
             "hintKey": "lineCompass.nanhuang.step.nh_enter_caravan",
-            "note": "≈ 原拍是随商队入南荒，仓库最早一拍是铁索桥；分路线 anyOf：到蛇彝村即过：03 走 s03_12，默认路线（03 隔离）走 03b 首拍 s03b_snake_flower_bridge_01"
+            "note": "≈ 原拍是随商队入南荒，仓库最早一拍是铁索桥；铁索桥过了就算出了五原（真机 da89 #3：原先等到蛇彝村才过，02 关后半段雨林、黑石滩、蛇彝村一路停在这句）"
           },
           {
             "id": "nh_sheyi_village",
@@ -14208,6 +14192,11 @@
             "until": [
               {
                 "anyOf": [
+                  {
+                    "path": "done.lcq.event.silent_sheyi_village",
+                    "operator": "eq",
+                    "value": true
+                  },
                   {
                     "path": "done.lcq.event.s03_12",
                     "operator": "eq",
@@ -14222,7 +14211,7 @@
               }
             ],
             "hintKey": "lineCompass.nanhuang.step.nh_sheyi_village",
-            "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）；分路线 anyOf 同上"
+            "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）；到蛇彝村即过，分路线 anyOf：默认路线在 02 关尾拍 silent_sheyi_village 就到了，03 走 s03_12，03b 首拍 s03b_snake_flower_bridge_01 兜旧档"
           },
           {
             "id": "nh_yun_guide_road",
