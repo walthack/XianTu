@@ -144,3 +144,16 @@ test('唐 R-11／R-12（总策划定）：tang_d7_publish 暂不挂锚（pending
   }
   assert.notEqual(at([...base, 'lyg.event.honglusi_amends', 'lyg.event.yuanzheng_globe']).step, ENVOYS, '朝会过了就不再显示');
 });
+
+test('宋 R-13（总策划定）：song_linan_arrive 由抵达临安同章（yly 第6章）的拍承接——尾随李师师／查勘武穆王府／明庆寺识破皇城司任一完成即过；第二次拜祭谢艺（#71）不再算', () => {
+  const step = compass.lineCompassTable().lines.find(line => line.lineId === 'song').steps.find(s => s.id === 'song_linan_arrive');
+  const ARRIVE = ['lyl.event.debut_ruan_sisters', 'lyl.event.tail_li_shishi', 'lyl.event.survey_wumu_mansion', 'lyl.event.evade_huangchengsi'];
+  assert.deepEqual(step.until, [{ anyOf: ARRIVE.map(id => ({ path: `done.${id}`, operator: 'eq', value: true })) }]);
+  for (const id of ARRIVE.slice(1)) assert.equal(eventStage.get(id), 'lyl.lin_an_bridge', `${id} 在默认路线关`);
+  const pointer = '去某处 · 见某人';
+  const base = ['lcq.event.sudaji_south_pact', 'lyl.event.s01_01', 'lyl.event.s01_02'];
+  const at = extra => view(saveOf({ modId: 'lyl.lin_an_bridge', done: [...base, ...extra].map(id => [eventStage.get(id), id]) }), step.eventId).current;
+  assert.equal(at([]).step, pointer, '刚到临安：停在这一步');
+  for (const id of ARRIVE) assert.notEqual(at([id]).step, pointer, `${id} 完成即过`);
+  assert.equal(at(['lyl.event.lin_an_bridge_xieyi_tomb']).step, pointer, '第二次拜祭谢艺不再承接抵达临安');
+});

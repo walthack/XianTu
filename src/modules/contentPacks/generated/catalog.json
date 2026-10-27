@@ -1,5 +1,5 @@
 {
-  "version": "94d28ea56847b58e",
+  "version": "9db0c06295569f0d",
   "contracts": [
     {
       "meta": {
@@ -14902,14 +14902,24 @@
                     "value": true
                   },
                   {
-                    "path": "done.lyl.event.lin_an_bridge_xieyi_tomb",
+                    "path": "done.lyl.event.tail_li_shishi",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.survey_wumu_mansion",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.evade_huangchengsi",
                     "operator": "eq",
                     "value": true
                   }
                 ]
               }
             ],
-            "note": "分路线 anyOf：lin_an_black_sea 隔离，默认路线 lin_an_bridge 拜祭谢艺那拍承接"
+            "note": "分路线 anyOf：lin_an_black_sea 隔离，默认路线 lin_an_bridge 由抵达临安同章（yly 第6章·临安）的尾随李师师（555）、查勘武穆王府（556）、明庆寺识破皇城司（556）任一承接；不用 lin_an_bridge_xieyi_tomb（626，#71·叵密，是萧遥逸等人抵临安后的第二次拜祭）（R-13，总策划定）；这三拍眼下在 eventReachability 欠账里（没挂章、不在 rail），挂章前默认路线靠后面的步兜底过这一步"
           },
           {
             "id": "song_xuezhun_takeover",
