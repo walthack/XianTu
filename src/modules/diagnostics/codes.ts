@@ -95,6 +95,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-027': spec('warn', 'progressDeadlines', '进度期限同步或锁存失败、锁存值非法、或现算与锁存冲突（以锁存为准）'),
   'LCQ-SAV-028': spec('warn', 'ledgerPrompt', '账本结论块生成失败，本轮不注入；或持有未登记身份，已跳过'),
   'LCQ-SAV-029': spec('warn', 'lineUnlock', '整线解锁判定读数异常（境界读不出、缺配置或判定出错时按锁住处理；期限 id 不在规则表时按通过；说法判定出错退回王哲版）'),
+  'LCQ-SAV-030': spec('warn', 'loadRepairs', '读档迁移旧档练功上限（canon / canon+1 → none）失败，本次照常加载，下次读档重试'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),
