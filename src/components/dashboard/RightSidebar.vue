@@ -188,7 +188,7 @@
       </div>
 
       <!-- 任务目标（剧情主线 + 即兴目标；含逐拍/回轨/启程） -->
-      <div v-if="(questMain || questGoals.length)" class="collapsible-section quest-section">
+      <div v-if="(questMain || questGoals.length || lineCompass)" class="collapsible-section quest-section">
         <div class="section-header" @click="questCollapsed = !questCollapsed">
           <h3 class="section-title">
             <Clock :size="14" class="section-icon" />
@@ -201,6 +201,23 @@
           </button>
         </div>
         <div v-show="!questCollapsed" class="quest-body">
+          <!-- 当前线卡：ui.rightSidebar.showLineCompass 开时取代下面主线指南针那一行；没有当前线时退回原指南针句（用户 2026-10-27 09:26 Q1） -->
+          <div v-if="lineCompass" class="quest-main quest-line-card">
+            <template v-if="lineCompass.current">
+              <div class="quest-chapter"><span class="quest-tag quest-tag-main">{{ t('当前线') }}</span>{{ lineCompass.current.name }}</div>
+              <div v-if="lineCompass.current.step" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.current.step }}</div>
+            </template>
+            <div v-else-if="lineCompass.fallback" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.fallback }}</div>
+            <template v-if="lineCompass.others.length">
+              <div class="quest-more quest-line-others" @click="lineOthersOpen = !lineOthersOpen">{{ lineOthersOpen ? '▾' : '▸' }} {{ t('别处还有事') }}（{{ lineCompass.others.length }}）</div>
+              <template v-if="lineOthersOpen">
+                <div v-for="line in lineCompass.others" :key="line.lineId" class="quest-event" :class="{ 'quest-locked': line.locked }">
+                  <span class="quest-mark-side">·</span>{{ line.name }}
+                  <div v-for="(hint, i) in line.hintLines" :key="i" class="quest-more">{{ hint }}</div>
+                </div>
+              </template>
+            </template>
+          </div>
           <div v-if="questMain" class="quest-main">
             <div v-if="questMain.chapter" class="quest-chapter"><span class="quest-tag quest-tag-main">主线</span>{{ questMain.chapter }}</div>
             <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
@@ -401,10 +418,11 @@ import {
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
 import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
+import { lineCompassView, showLineCompass } from '@/modules/scenarioMods/lineCompass';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
-import { formatQuestCompass, resolveScenarioEventNarrative, storyChapterTitle } from '@/modules/scenarioMods/eventNarrativeView';
+import { formatQuestCompass, questCompassPhrases, resolveScenarioEventNarrative, storyChapterTitle } from '@/modules/scenarioMods/eventNarrativeView';
 import { detectBranchDecision } from '@/modules/scenarioMods/branchDecision';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
@@ -431,6 +449,8 @@ const statusEffects = computed(() => {
 
 const questCollapsed = ref(false);
 const linesCollapsed = ref(false);
+// 当前线卡的「别处还有事」默认收起（用户 2026-10-27 09:26 Q2）
+const lineOthersOpen = ref(false);
 const beatsCollapsed = ref(false);
 const worldlineCollapsed = ref(false);
 const chronicleCollapsed = ref(true);
@@ -462,6 +482,24 @@ const availableLines = computed(() => {
   const event = currentQuestEvent(rt);
   return sidebarAvailableLines(rt, gameStateStore.toSaveData(), questAtLocationId(rt), event, () => visibleQuestObjective(rt, event));
 });
+// 当前线卡（lineCompass.ts）：显示开关 ui.rightSidebar.showLineCompass（默认 false，上线前不开）；关时先返回，不取存档快照。
+// fallback＝原主线指南针那一句（与 questMain 同一算法），没有当前线时卡片显示它（总策划定，避免玩家什么提示都没有）。
+const lineCompass = computed(() => {
+  if (!showLineCompass()) return null;
+  const rt: any = epistemicRuntime.value;
+  if (!rt || typeof rt !== 'object') return null;
+  const event = currentQuestEvent(rt);
+  const view = event ? resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt) : null;
+  const at = questAtLocationId(rt);
+  const result = lineCompassView(gameStateStore.toSaveData(), {
+    focusEventId: event?.id,
+    atLocationId: at,
+    compassPointer: () => questCompassPhrases(view, rt, at).join(' · '),
+  });
+  const fallback = view ? String(formatQuestCompass(view, rt, at) || view.objective || view.name || '') : '';
+  if (!result.current && !fallback && !result.others.length) return null;
+  return { ...result, fallback };
+});
 // 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
 // 与主线 UI / 主叙事同一锚，避免从 activeEventIds 抽出资料事件。
 const characterBeats = computed(() => {
@@ -488,6 +526,8 @@ const questMain = computed(() => {
     const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences, rt);
     return formatQuestCompass(view, rt, questAtLocationId(rt)) || view.objective || view.name;
   }).filter(Boolean);
+  // 当前线卡开着时取代这一行主线指南针（用户 2026-10-27 09:26 Q1）；启程提示、清关与脱节判断照旧按原 events 算
+  const compassReplaced = showLineCompass() && events.length > 0;
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
   const departure = ready ? getStageDepartureOffer(gameStateStore.toSaveData()) : null;
@@ -503,7 +543,7 @@ const questMain = computed(() => {
   const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
   return {
     chapter: chapter ? `章节：${storyChapterTitle(rt.modId, anchor?.id, chapter.title || chapter.id)}` : '',
-    events,
+    events: compassReplaced ? [] : events,
     moreCount,
     cleared,
     next,
@@ -2149,6 +2189,7 @@ const getReputationClass = (): string => {
 .quest-chapter { font-size: 12px; font-weight: 600; opacity: 0.9; display: flex; align-items: center; }
 .quest-event { font-size: 12px; line-height: 1.6; opacity: 0.95; font-weight: 500; padding-left: 2px; }
 .quest-locked { opacity: 0.6; }
+.quest-line-others { cursor: pointer; padding-left: 2px; opacity: 0.55; }
 .quest-mark-main { color: var(--color-accent, #d4af37); font-weight: 700; margin-right: 6px; }
 .quest-more { font-size: 11px; opacity: 0.4; padding-left: 18px; margin-top: 1px; }
 .quest-tag { font-size: 10px; line-height: 1; padding: 2px 5px; border-radius: 3px; margin-right: 6px; letter-spacing: 1px; font-weight: 600; }
