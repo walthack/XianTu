@@ -47,6 +47,8 @@ export interface LineUnlockOptions {
   enteredEventIds?: readonly string[];
   /** 调用方声明本线必有配置（如 secondaryLines 的 unlock 字段）：配置不在时记 config_missing 并锁住，而不是当作不设锁 */
   required?: boolean;
+  /** 判定读的剧本运行时（账本条件求值时＝runtime.ts 传入的 runtime）；缺省取 save.世界.状态.剧本模组 */
+  runtime?: unknown;
 }
 
 /** 进太泉的说法：原著版（萧遥逸受伤那一拍已完成）／王哲托付＋徐君房带路版。 */
@@ -97,7 +99,7 @@ const shortDeadlineId = (id: string): string => id.split('.').pop() || id;
 export function lineUnlockStatus(save: unknown, lineId: string, opts: LineUnlockOptions = {}): LineUnlockStatus | undefined {
   let entered = false;
   try {
-    const runtime = runtimeOf(save);
+    const runtime = opts.runtime !== undefined ? opts.runtime : runtimeOf(save);
     entered = enteredLine(runtime, opts.enteredEventIds);
     const conf = lineUnlockConfig(lineId);
     if (!conf) {
@@ -147,6 +149,18 @@ export function lineUnlockStatus(save: unknown, lineId: string, opts: LineUnlock
 /** 是否解锁；没配置（且未声明 required）的线为 true。 */
 export function isLineUnlocked(save: unknown, lineId: string, opts: LineUnlockOptions = {}): boolean {
   return lineUnlockStatus(save, lineId, opts)?.unlocked ?? true;
+}
+
+/**
+ * 账本路径 unlock.<lineId> 的读数（T5 方案 A：runtime.ts 的 resolveConditionValue 把 saveData 传进来，用户 2026-10-27 08:17 批）。
+ * 没拿到存档（调用方没传 save，或占位空存档里没有 角色）→ undefined＝条件不通过；这是设计上的读不到，不记码，只打调试日志。
+ */
+export function lineUnlockLedgerValue(save: unknown, lineId: string, opts: LineUnlockOptions = {}): boolean | undefined {
+  if (!save || typeof save !== 'object' || !(save as any).角色) {
+    debugOnChange(`${lineId}:ledger`, `[整线解锁] ${lineId} 账本条件没拿到存档 → 读成 undefined（不通过）`, () => ({ lineId }));
+    return undefined;
+  }
+  return isLineUnlocked(save, lineId, opts);
 }
 
 /** 进太泉的说法：萧遥逸受伤那一拍已完成 → 'song'，否则 → 'wangzhe'。读编年史（orderedDoneEventIds），跨关有效；抛错退回王哲版并记 variant_failed。 */

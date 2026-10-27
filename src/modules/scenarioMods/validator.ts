@@ -15,6 +15,7 @@ import { ledgerOperatorsOf, parseLedgerPath, type ParsedLedgerPath } from './led
 import { PLAYER_IDENTITY_STATUSES } from './identityLedger';
 import { DEADLINE_STATES } from './progressDeadlines';
 import { lineOutcomeTiers } from './lineOutcomes';
+import { lineUnlockConfig } from './lineUnlock';
 import { isAcquaintanceKind } from './acquaintanceLedger';
 import { indexIds, knownEventIds, playerIdentityDefs, playerLedgerRules } from './playerLedgerRules';
 
@@ -133,6 +134,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
   /** 条件里的账本路径引用，事件/人物收齐后再查 */
   const ledgerRefs: LedgerConditionRef[] = [];
   const runtimeLedger: LedgerScope = { refs: ledgerRefs };
+  /** 事件 conditions、章节 activation：另许 unlock.*（整线解锁门，太泉解锁设计稿 2026-10-27 §4.1） */
+  const runtimeGate: LedgerScope = { refs: ledgerRefs, unlockSite: true };
 
   const validateInventoryTransfers = (
     value: unknown,
@@ -382,7 +385,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       optionalString(entity.axisAnchor, `${entity.__path}.axisAnchor`, add);
       optionalNumber(entity.axisSeq, `${entity.__path}.axisSeq`, add);
       optionalBoolean(entity.critical, `${entity.__path}.critical`, add);
-      validateConditions(entity.conditions, `${entity.__path}.conditions`, add, runtimeLedger);
+      validateConditions(entity.conditions, `${entity.__path}.conditions`, add, runtimeGate);
       validateConditions(entity.completion, `${entity.__path}.completion`, add, runtimeLedger);
       validateStringArray(entity.completionEvidence, `${entity.__path}.completionEvidence`, add);
       validateIdArray(entity.relatedCharacterIds, `${entity.__path}.relatedCharacterIds`, add);
@@ -830,7 +833,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         }
       }
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
-        validateConditions(variant.when, `${variantPath}.when`, add, { refs: ledgerRefs, variant: true });
+        validateConditions(variant.when, `${variantPath}.when`, add, { refs: ledgerRefs, variant: true, unlockSite: true });
         optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);
         optionalString(variant.name, `${variantPath}.name`, add);
         optionalString(variant.description, `${variantPath}.description`, add);
@@ -1056,7 +1059,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
     validateEntityArray(scenario.chapters, 'scenario.chapters', chapterIds, add, entity => {
       requireString(entity.title, `${entity.__path}.title`, add);
       requireString(entity.summary, `${entity.__path}.summary`, add);
-      validateConditions(entity.activation, `${entity.__path}.activation`, add, runtimeLedger);
+      validateConditions(entity.activation, `${entity.__path}.activation`, add, runtimeGate);
       validateConditions(entity.completion, `${entity.__path}.completion`, add, runtimeLedger);
       validateIdArray(entity.eventIds, `${entity.__path}.eventIds`, add);
     }, false);
@@ -2316,8 +2319,11 @@ function validateFlags(value: unknown, path: string, add: AddIssue): void {
 
 interface LedgerConditionRef { parsed: ParsedLedgerPath; path: string }
 
-/** 账本路径引用收集处；variant＝narrativeVariants.when（eventNarrativeView 求值），否则走 runtime.ts 的 evaluateScenarioCondition。 */
-interface LedgerScope { refs: LedgerConditionRef[]; variant?: boolean }
+/**
+ * 账本路径引用收集处；variant＝narrativeVariants.when（eventNarrativeView 求值），否则走 runtime.ts 的 evaluateScenarioCondition。
+ * unlockSite＝允许 unlock.*：只有事件 conditions、章节 activation、narrativeVariants.when 三处（太泉解锁设计稿 2026-10-27 §4.1），completion 等其余处不许。
+ */
+interface LedgerScope { refs: LedgerConditionRef[]; variant?: boolean; unlockSite?: boolean }
 
 /** evaluateScenarioCondition 的 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用。 */
 const RANK_OPERATORS_VARIANT_ONLY = new Set(['gt', 'gte', 'lt', 'lte']);
@@ -2335,6 +2341,10 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
   }
   if (!ledgerOperatorsOf(parsed).includes(condition.operator)) {
     add(`${itemPath}.operator`, 'invalid_enum', `Operator "${String(condition.operator)}" is not supported for ${parsed.kind}.* paths.`);
+    return;
+  }
+  if (parsed.kind === 'unlock' && !ledger.unlockSite) {
+    add(`${itemPath}.path`, 'ledger_unlock_site', 'unlock.* is only allowed in event conditions, chapter activation and narrativeVariants.when.');
     return;
   }
   if (!ledger.variant && RANK_OPERATORS_VARIANT_ONLY.has(condition.operator)) {
@@ -2356,7 +2366,8 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
 
 /**
  * 账本路径引用的 id 须存在：事件＝本 mod ∪ 实体索引；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引；
- * 道具＝规则表 itemGroups 的组 id ∪ 本 mod 物品 ∪ 实体索引 kind=item；在队人物＝实体索引 kind=character（在队账规则只收索引人物）；期限＝规则表 progressDeadlines 的 id。
+ * 道具＝规则表 itemGroups 的组 id ∪ 本 mod 物品 ∪ 实体索引 kind=item；在队人物＝实体索引 kind=character（在队账规则只收索引人物）；期限＝规则表 progressDeadlines 的 id；
+ * 整线解锁＝story.lineUnlock 的线键。
  */
 function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, characterIds: Set<string>, itemIds: Set<string>, add: AddIssue): void {
   if (!refs.length) return;
@@ -2376,6 +2387,7 @@ function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, char
     if (kind === 'item' && !itemGroupIds.has(id) && !itemIds.has(id) && !indexItemIds.has(id)) add(path, 'missing_reference', `Unknown item or item group id "${id}".`);
     if (kind === 'party' && !indexCharacterIds.has(id)) add(path, 'missing_reference', `Unknown character id "${id}" (party.* needs entity index kind=character).`);
     if (kind === 'deadline' && !deadlineIds.has(id)) add(path, 'missing_reference', `Unknown progress deadline id "${id}" (deadline.* needs player-ledger-rules progressDeadlines).`);
+    if (kind === 'unlock' && !lineUnlockConfig(id)) add(path, 'missing_reference', `Unknown line unlock id "${id}" (unlock.* needs story.lineUnlock.<lineId>).`);
   }
 }
 

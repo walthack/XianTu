@@ -175,3 +175,79 @@ test('deadline eq due 才激活，到期后锁存进 flags', async () => {
     delete GAME_NUMBERS.story.progressDeadline.limits[ID];
   }
 });
+
+// 整线解锁 T5（太泉解锁设计稿 2026-10-27 §4 / §10-5；方案 A：用户 2026-10-27 08:17 批 runtime.ts 1 行传 saveData）：
+// unlock.taiquan 读存档境界＋收束档＋期限；门在「选下一章／选事件」时求值，条件满足的同一次 advance 里激活。
+const UNLOCK = { path: 'unlock.taiquan', operator: 'eq', value: true };
+const realmOf = (save, name) => { save.角色.属性 = { ...(save.角色.属性 || {}), 境界: { 名称: name, 阶段: '初期' } }; };
+
+test('unlock.taiquan 门：事件 conditions 不满足不激活，境界够了同一次 advance 激活；没境界按未达', async () => {
+  const quiet = console.warn; console.warn = () => {};
+  try {
+    let save = await buildSave([UNLOCK]);
+    rt(save).flags['line.song.outcome'] = 'resolved';
+    save = advance(save);
+    assert.equal(rt(save).activeEventIds.includes(EVENT), false, '存档没有境界：按未达锁住');
+    realmOf(save, '入微');
+    save = advance(save);
+    assert.equal(rt(save).activeEventIds.includes(EVENT), false, '入微不够');
+    assert.equal(evaluateScenarioCondition(UNLOCK, save, rt(save)), false);
+    assert.equal(evaluateScenarioCondition({ ...UNLOCK, value: false }, save, rt(save)), true);
+    realmOf(save, '坐照');
+    save = advance(save);
+    assert.equal(rt(save).activeEventIds.includes(EVENT), true, '坐照＋已收束一条：同一次 advance 激活');
+  } finally { console.warn = quiet; }
+});
+
+test('unlock.taiquan 门挂在章节 activation：门关着上一章完成后停住，门开的同一次 advance 里开章', async () => {
+  const raw = await rawMod();
+  const started = { path: 'flags.chapter.started', operator: 'eq', value: true };
+  raw.scenario.chapters = [
+    { ...raw.scenario.chapters[0], completion: [started] },
+    { id: 'chapter.gated', title: '苍澜', summary: '进太泉。', activation: [started, UNLOCK], eventIds: [] },
+  ];
+  assert.deepEqual(validateScenarioMod(raw).issues, []);
+  const build = () => applyStrictScenarioInitializationToSave(
+    { 角色: { 位置: { 描述: '旧地点' }, 属性: { 境界: { 名称: '入微', 阶段: '后期' } } }, 世界: { 信息: {}, 状态: {} }, 系统: { 扩展: {} } },
+    buildStrictScenarioInitialization(parseScenarioMod(raw), '2026-06-22T00:00:00.000Z'),
+  );
+  let save = build();
+  rt(save).flags['line.song.outcome'] = 'resolved';
+  rt(save).flags['chapter.started'] = true;
+  save = advance(save);
+  assert.ok(rt(save).completedChapterIds.includes('chapter.arrival'));
+  assert.equal(rt(save).currentChapterId, null, '门关着：上一章完成后不开下一章');
+  realmOf(save, '坐照');
+  save = advance(save);
+  assert.equal(rt(save).currentChapterId, 'chapter.gated', '练到坐照后下一次 advance 开章');
+  // 门本来就开：上一章完成的同一次 advance 里直接开章
+  let open = build();
+  realmOf(open, '坐照');
+  rt(open).flags['line.song.outcome'] = 'resolved';
+  rt(open).flags['chapter.started'] = true;
+  open = advance(open);
+  assert.equal(rt(open).currentChapterId, 'chapter.gated');
+});
+
+test('validator：unlock.* 只许 eq/neq、只许已配置的线、只许 conditions/activation/变体，completion 等处拒收', async () => {
+  const codes = (raw) => validateScenarioMod(raw).issues.map(issue => [issue.code, issue.path]);
+  const ok = await rawMod();
+  ok.scenario.events[0].conditions = [UNLOCK];
+  ok.scenario.events[0].narrativeVariants = [{ when: [{ ...UNLOCK, operator: 'neq' }], name: '未解锁' }];
+  ok.scenario.chapters[0].activation = [UNLOCK];
+  assert.deepEqual(codes(ok), []);
+
+  const bad = await rawMod();
+  bad.scenario.events[0].conditions = [{ path: 'unlock.jin', operator: 'eq', value: true }, { ...UNLOCK, operator: 'gte' }, { ...UNLOCK, operator: 'exists' }, { ...UNLOCK, value: 'yes' }];
+  bad.scenario.events[0].completion = [UNLOCK];
+  bad.scenario.chapters[0].completion = [UNLOCK];
+  const at = 'scenario.events[0]';
+  assert.deepEqual(codes(bad), [
+    ['invalid_enum', `${at}.conditions[1].operator`],
+    ['invalid_enum', `${at}.conditions[2].operator`],
+    ['invalid_value', `${at}.conditions[3].value`],
+    ['ledger_unlock_site', `${at}.completion[0].path`],
+    ['ledger_unlock_site', 'scenario.chapters[0].completion[0].path'],
+    ['missing_reference', `${at}.conditions[0].path`],
+  ]);
+});

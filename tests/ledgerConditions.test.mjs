@@ -211,3 +211,33 @@ test('party 读取 eq/neq：显式在队账，不在队为 false', async () => {
     setPlayerLedgerRulesForTest(undefined);
   }
 });
+
+// 整线解锁 T5（太泉解锁设计稿 2026-10-27 §4，方案 A：用户 2026-10-27 08:17 批 runtime.ts 传 saveData）：
+// unlock.<lineId> 只有 eq / neq；境界在存档里，没传 save 读成 undefined；门后节点已完成＝已走进，追认解锁。
+test('unlock.taiquan：三条满足为 true、缺项为 false；没传存档读成 undefined；门后节点追认、门前迷楼两拍不算', async () => {
+  const { parseLedgerPath, resolveLedgerPath, evaluateLedgerCondition, LEDGER_OPERATORS } = await modPromise;
+  assert.deepEqual(parseLedgerPath('unlock.taiquan'), { kind: 'unlock', id: 'taiquan' });
+  assert.deepEqual(LEDGER_OPERATORS.unlock, ['eq', 'neq']);
+  assert.deepEqual(resolveLedgerPath('unlock.', {}, {}), { handled: true, value: undefined });
+  const runtimeOf = ({ flags = { 'line.song.outcome': 'resolved' }, done = [] } = {}) => ({
+    modId: 'lyl.taiquan_sacred_fruit', events: [], completedEventIds: [], flags,
+    chronicle: done.map((id, i) => entry('lyl.taiquan_sacred_fruit', id, i + 1)),
+  });
+  const saveOf = (realm, rt) => ({ 角色: { 属性: { 境界: { 名称: realm } } }, 世界: { 状态: { 剧本模组: rt } } });
+  const read = (realm, rt = runtimeOf()) => resolveLedgerPath('unlock.taiquan', rt, saveOf(realm, rt)).value;
+  assert.equal(read('坐照'), true);
+  assert.equal(read('入微'), false);
+  assert.equal(read('坐照', runtimeOf({ flags: {} })), false, '没收束线');
+  // 没传存档、占位空存档（没有 角色）：读成 undefined，eq true 不通过
+  assert.equal(resolveLedgerPath('unlock.taiquan', runtimeOf()).value, undefined);
+  assert.equal(resolveLedgerPath('unlock.taiquan', runtimeOf(), {}).value, undefined);
+  assert.equal(evaluateLedgerCondition({ path: 'unlock.taiquan', operator: 'eq', value: true }, runtimeOf()), false, '变体求值不传存档');
+  assert.equal(evaluateLedgerCondition({ path: 'unlock.taiquan', operator: 'gte', value: true }, runtimeOf()), false, '不支持的 operator 不命中');
+  // 追认：境界 3 走到取果 _10 → 解锁；只走完迷楼 _04/_05（临安收束章、门前）→ 仍锁
+  assert.equal(read('生象', runtimeOf({ flags: {}, done: ['lyl.event.taiquan_sacred_fruit_10'] })), true);
+  assert.equal(read('生象', runtimeOf({ flags: {}, done: ['lyl.event.taiquan_sacred_fruit_04', 'lyl.event.taiquan_sacred_fruit_05'] })), false);
+  // 以传入的 runtime 为准（切关、选章时 runtime 可能不是存档里那份）
+  const stale = runtimeOf({ flags: {} });
+  assert.equal(resolveLedgerPath('unlock.taiquan', runtimeOf(), saveOf('坐照', stale)).value, true);
+  assert.equal(resolveLedgerPath('unlock.taiquan', stale, saveOf('坐照', runtimeOf())).value, false);
+});

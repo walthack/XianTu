@@ -329,3 +329,25 @@ test('minRealmLevel 只出现在 lineUnlock.ts、配置、registry 与测试；u
   assert.deepEqual(hits.filter(h => !GATED.has(h.split(':')[1]) || !h.endsWith(':unlock.taiquan')), [], '账本门只在 §4.1 三个章节');
   assert.equal(files.filter(f => f.startsWith('src/') && /tq_xuanyuan_mijing/.test(readFileSync(path.join(root, f), 'utf8')) && readFileSync(path.join(root, f), 'utf8').includes('unlock.')).length, 0, '秘境不设修为门');
 });
+
+test('T5 账本读数 lineUnlockLedgerValue：没拿到存档读成 undefined、不记码，只打 story 调试日志；有存档同 isLineUnlocked；opts.runtime 优先', async () => {
+  const { unlock, numbers, dbg } = await loaded;
+  await resetLog();
+  const out = [];
+  const before = structuredClone(numbers.GAME_NUMBERS.diagnostics);
+  dbg.setDebugConsole((...args) => out.push(args));
+  try {
+    numbers.applyGameNumbers({ diagnostics: { debug: { categories: { story: true } } } });
+    assert.equal(unlock.lineUnlockLedgerValue(undefined, 'taiquan'), undefined);
+    assert.equal(unlock.lineUnlockLedgerValue({}, 'taiquan'), undefined, '占位空存档（没有 角色）同样读不到');
+    assert.ok(out.some(([line]) => /^\[dbg:story\] \[整线解锁\] taiquan 账本条件没拿到存档/.test(line)));
+  } finally {
+    numbers.applyGameNumbers({ diagnostics: before });
+    dbg.setDebugConsole(null);
+  }
+  assert.deepEqual(await logged(), [], '读不到存档不记码');
+  assert.equal(unlock.lineUnlockLedgerValue(saveOf(), 'taiquan'), true);
+  assert.equal(unlock.lineUnlockLedgerValue(saveOf({ realm: { 名称: '入微' } }), 'taiquan'), false);
+  const rt = saveOf().世界.状态.剧本模组;
+  assert.equal(unlock.lineUnlockLedgerValue(saveOf({ flags: {} }), 'taiquan', { runtime: rt }), true, '以传入的 runtime 为准');
+});

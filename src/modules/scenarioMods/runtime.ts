@@ -2445,7 +2445,7 @@ function getRuntime(saveData: SaveData): RuntimeState | null {
 }
 
 function resolveConditionValue(condition: ScenarioCondition, saveData: SaveData, runtime: RuntimeState): unknown {
-  const ledger = resolveLedgerPath(condition.path, runtime);
+  const ledger = resolveLedgerPath(condition.path, runtime, saveData);
   if (ledger.handled) return ledger.value;
   if (condition.path === 'flags') return runtime.flags;
   if (condition.path.startsWith('flags.')) {

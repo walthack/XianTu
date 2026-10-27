@@ -1,6 +1,7 @@
 /**
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
- * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts），进度期限 deadline.*（同稿 §4.5，数据源 progressDeadlines.ts）。
+ * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts），进度期限 deadline.*（同稿 §4.5，数据源 progressDeadlines.ts），
+ * 整线解锁 unlock.<lineId>（太泉解锁设计稿 2026-10-27 §4，数据源 lineUnlock.ts；要读存档里的境界，只有传了 save 的调用方读得到，否则为 undefined）。
  * 只读不写；读不到的账本一律当空。不是本模块的前缀交还原 flags 逻辑。
  * narrativeVariants.when 走 evaluateLedgerCondition；activation/completion 等由 runtime.ts 的 resolveConditionValue 委托 resolveLedgerPath（T4，
  * 用户 2026-10-25 23:24 批），那里 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用（validator 拦）。
@@ -13,12 +14,14 @@ import { isAcquaintanceKind, rankOf, type AcquaintanceLedger } from './acquainta
 import { firstItemReceipt } from './itemProvenance';
 import { isInParty } from './partyLedger';
 import { deadlineState } from './progressDeadlines';
+import { lineUnlockLedgerValue } from './lineUnlock';
+import { SECONDARY_LINES, secondaryLineUnlockOptions } from './secondaryLines';
 
-export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline';
+export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline' | 'unlock';
 
 export interface ParsedLedgerPath {
   kind: LedgerPathKind;
-  /** identityId / eventId / lineId / characterId / propositionId / 道具组 id 或 itemId / 期限 id；格式不对时为空串 */
+  /** identityId / eventId / lineId / characterId / propositionId / 道具组 id 或 itemId / 期限 id / 整线解锁配置键；格式不对时为空串 */
   id: string;
   /** identity：active＝是否持有，status / from＝子读取；item：active＝是否得过，from＝最早回执的 sourceEventId */
   field?: 'active' | 'status' | 'from';
@@ -26,7 +29,7 @@ export interface ParsedLedgerPath {
   invalid?: boolean;
 }
 
-/** 各类路径支持的 operator（§4.1）。party.<characterId> 恒为 boolean，只有 eq / neq；deadline.<id> 的 exists＝已起算。 */
+/** 各类路径支持的 operator（§4.1）。party.<characterId> 恒为 boolean，只有 eq / neq；deadline.<id> 的 exists＝已起算；unlock.<lineId> 恒为 boolean（没存档为 undefined），只有 eq / neq。 */
 export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioConditionOperator[]> = {
   identity: ['eq', 'neq', 'exists'],
   done: ['eq', 'neq'],
@@ -36,6 +39,7 @@ export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioCondition
   item: ['eq', 'neq', 'exists'],
   party: ['eq', 'neq'],
   deadline: ['eq', 'neq', 'exists'],
+  unlock: ['eq', 'neq'],
 };
 
 /** item.<id>（是否得过）恒为 boolean，只有 eq / neq；exists 只给 item.<id>.from。 */
@@ -80,6 +84,7 @@ export function parseLedgerPath(path: string): ParsedLedgerPath | undefined {
     const tail = rest('deadline.');
     return tail === 'state' || tail.endsWith('.state') ? { kind: 'deadline', id: '', invalid: true } : { kind: 'deadline', id: tail };
   }
+  if (path.startsWith('unlock.')) return { kind: 'unlock', id: rest('unlock.') };
   return undefined;
 }
 
@@ -102,7 +107,7 @@ type LedgerRuntime = {
 const asRecord = <T>(value: unknown): T | undefined =>
   value && typeof value === 'object' && !Array.isArray(value) ? value as T : undefined;
 
-function readPath(parsed: ParsedLedgerPath, runtime: unknown): unknown {
+function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): unknown {
   const rt = (asRecord<LedgerRuntime>(runtime) || {}) as LedgerRuntime;
   switch (parsed.kind) {
     case 'identity': {
@@ -137,15 +142,20 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown): unknown {
     case 'deadline':
       // 锁存（due / cleared）优先，否则按编年史现算；未起算为 undefined
       return deadlineState(runtime, parsed.id);
+    case 'unlock': {
+      // 境界在存档里：没传 save 读成 undefined（不通过）。本线必有配置；门后节点已完成＝已走进，追认解锁
+      const line = SECONDARY_LINES.find(l => l.unlock === parsed.id);
+      return lineUnlockLedgerValue(save, parsed.id, { ...(line ? secondaryLineUnlockOptions(line) : { required: true }), runtime });
+    }
   }
 }
 
-/** 解析五类路径；不是本模块的前缀返回 { handled:false }。rankCompare＝gt/gte/lt/lte 按相识等级比较。 */
-export function resolveLedgerPath(path: string, runtime: unknown): { handled: boolean; value?: unknown; rankCompare?: boolean } {
+/** 解析五类路径；不是本模块的前缀返回 { handled:false }。rankCompare＝gt/gte/lt/lte 按相识等级比较。save 只有 unlock.* 用（读境界）。 */
+export function resolveLedgerPath(path: string, runtime: unknown, save?: unknown): { handled: boolean; value?: unknown; rankCompare?: boolean } {
   const parsed = parseLedgerPath(path);
   if (!parsed) return { handled: false };
   if (parsed.invalid || !parsed.id) return { handled: true, value: undefined };
-  return { handled: true, value: readPath(parsed, runtime), ...(parsed.kind === 'acq' ? { rankCompare: true } : {}) };
+  return { handled: true, value: readPath(parsed, runtime, save), ...(parsed.kind === 'acq' ? { rankCompare: true } : {}) };
 }
 
 /**
