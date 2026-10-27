@@ -622,17 +622,17 @@
           "note": "≈ lyl:23731；洛都江州时就听过（lyl:9940）；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
         },
         {
-          "id": "han_yuncangfeng_luodu",
-          "eventId": "lyl.event.s05_01"
-        },
-        {
           "id": "han_camera_palace_alt",
           "eventId": "lyl.event.taiquan_afterfall_10_beat",
           "when": [
             { "path": "done.lyl.event.taiquan_afterfall_09_beat", "operator": "eq", "value": true }
           ],
           "hintKey": "lineCompass.han.step.han_camera_palace_alt",
-          "note": "≈ R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，不论走没走过太泉、见没见过斯明信都出这一句"
+          "note": "≈ R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，不论走没走过太泉、见没见过斯明信都出这一句；排在 han_yuncangfeng_luodu 之前（原著顺序 776＜777；剧情策划稿 §14.3-4，总策划定）：afterfall_09 之后显示这一句，afterfall_10 完成后才轮到进洛都那一拍"
+        },
+        {
+          "id": "han_yuncangfeng_luodu",
+          "eventId": "lyl.event.s05_01"
         },
         {
           "id": "han_huo_bieyuan",

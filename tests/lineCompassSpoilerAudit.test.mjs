@@ -129,7 +129,8 @@ test('R-8：表现不变——合并的 4 对非待建步，见过和没见过�
   const cases = [
     ['song_jiangzhou_war_open', 'xiao_yao_yi', [PACT, 'lcq.event.s10_09_yin_yang_fish', 'lcq.event.s10_10_xiaozi_crisis'], 'lcq.event.s10_09_yin_yang_fish', '去江州看看那边的情形'],
     ['han_zhu_urge_luo', 'shang_zhen_yu', [PACT], 'lyl.event.s05_01', '去洛都看看'],
-    ['han_camera_palace', 'si_ming_xin', [PACT, 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.s05_01', 'lyl.event.taiquan_afterfall_09_beat'], 'lyl.event.s06_01', '进宫看看'],
+    // 进宫看看已挪到进洛都那一拍（s05_01）之前（原著顺序，总策划定）：编年史按真实顺序，afterfall_09 之后、s05_01 之前
+    ['han_camera_palace', 'si_ming_xin', [PACT, 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.taiquan_afterfall_09_beat'], 'lyl.event.s06_01', '进宫看看'],
     ['han_liujian_yuxi', 'zhao_feiyan', [PACT, 'lyl.event.s06_01'], 'lyl.event.han_palace_endgame_08_beat', '去长秋宫看看'],
   ];
   for (const [label, who, done, focus, sentence] of cases) {
@@ -139,7 +140,7 @@ test('R-8：表现不变——合并的 4 对非待建步，见过和没见过�
     }
   }
   // 斯明信那对：原「见过」版另要求走过太泉；走过太泉、见过斯明信也照样出这一句
-  const viaTaiquan = stepOf(saveOf([PACT, 'lyl.event.taiquan_portal_exit', 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.s05_01', 'lyl.event.taiquan_afterfall_09_beat'], ['si_ming_xin']), 'lyl.event.s06_01');
+  const viaTaiquan = stepOf(saveOf([PACT, 'lyl.event.taiquan_portal_exit', 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.taiquan_afterfall_09_beat'], ['si_ming_xin']), 'lyl.event.s06_01');
   assert.equal(viaTaiquan?.step, '进宫看看');
   const qin = compass.lineCompassTable().lines.find(l => l.lineId === 'qin').steps.find(s => s.id === 'qin_entry_xu_unmet');
   assert.equal(qin.pending, true);

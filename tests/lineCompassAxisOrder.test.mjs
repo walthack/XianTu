@@ -45,10 +45,6 @@ const ALLOWED = {
 };
 
 const KNOWN = {
-  'han.han_camera_palace_alt': {
-    at: '776 < 777（han_yuncangfeng_luodu）',
-    why: '关链 taiquan_afterfall 在 luoyang_cloud_secret 之前。afterfall_09 之后被选中的是前一步 han_yuncangfeng_luodu（s05_01，显示「回到洛都看看」），「进宫看看」一次也不显示，afterfall_10 一完成就被算过。可改法：本步挪到 han_yuncangfeng_luodu 之前。待总策划定。',
-  },
   'taiquan.tq_yinyang_fish': {
     at: '666 < 708（tq_city_in_film）',
     why: '关链 taiquan_core_conflict 在 taiquan_afterfall 之前。阴阳鱼反击（yin_yang_counter）一完成，tq_beast_traps、tq_mowu、tq_city_in_film 三步（只有 eventId，没有文案）被兜底算过，整个 afterfall 期间卡片提前显示「找条路出古阵」；core_conflict 期间显示的是 tq_beast_traps 的「回到太泉古阵看看」。用户定：只汇报，不擅自改顺序。',
@@ -142,4 +138,21 @@ test('晋（总策划定）：jin_shanghou_cure_and_trade 排在三版入口之�
     assert.equal(at([A, B], C).step, pointer(S07, C), `${name}：00c 当焦点 → 主线指南针`);
     assert.ok(!ARRIVE.includes(at([A, B, C], undefined).step), `${name}：抵建康后入口提示不再显示`);
   }
+});
+
+test('汉（总策划定）：han_camera_palace_alt 排在 han_yuncangfeng_luodu 之前；afterfall_09 之后显示「进宫看看」，进洛都那一拍不再被兜底跳过', () => {
+  const AF = 'lyl.taiquan_afterfall', LUO = 'lyl.luoyang_cloud_secret';
+  const [A09, A10, S0501] = ['lyl.event.taiquan_afterfall_09_beat', 'lyl.event.taiquan_afterfall_10_beat', 'lyl.event.s05_01'];
+  const PALACE = texts['lineCompass.han.step.han_camera_palace_alt'];
+  const before = routeTo(AF), af = stageOrder(AF);
+  const upTo = id => [...before, ...af.slice(0, af.indexOf(id))];
+  assert.equal(pointer(AF, A10), '', 'afterfall_10 没有地点、只有主角：右栏指南针为空，用本步文案');
+  const palace = card(AF, upTo(A10), A10);
+  assert.equal(palace?.lineId, 'han');
+  assert.equal(palace.step, PALACE, 'afterfall_09 之后、afterfall_10 当焦点：显示「进宫看看」');
+  assert.notEqual(card(AF, upTo(A09), A09)?.step, PALACE, 'afterfall_09 之前不显示（when）');
+  const luodu = card(LUO, [...before, ...af], S0501);
+  assert.equal(luodu?.lineId, 'han');
+  assert.equal(luodu.step, pointer(LUO, S0501), '进洛都：s05_01 当焦点 → 主线指南针，不再被兜底跳到下一拍的「回到洛都看看」');
+  assert.notEqual(card(LUO, [...before, ...af, S0501], undefined)?.step, PALACE, 'afterfall_10 完成后不再显示');
 });
