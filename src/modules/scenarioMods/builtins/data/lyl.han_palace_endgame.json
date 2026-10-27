@@ -5424,6 +5424,8 @@
       "event.changqiu_palace_defense.done": false,
       "event.bounty_and_hu_cavalry.done": false,
       "event.lvfengxian_breaks_line.done": false,
+      "chapter.lyl.han_palace_endgame.night.started": true,
+      "chapter.lyl.han_palace_endgame.night.done": false,
       "chapter.lyl.han_palace_endgame.palace.started": true,
       "chapter.lyl.han_palace_endgame.palace.done": false,
       "chapter.lyl.han_palace_endgame.endgame.started": false,
@@ -5432,9 +5434,38 @@
     },
     "chapters": [
       {
+        "id": "lyl.chapter.han_palace_endgame_night",
+        "title": "宫变之夜",
+        "summary": "含光殿藻井目睹凌辱、天子暴毙矫诏，出宫定下拥立定陶王；刘建攻占南宫，长秋宫死守，赏格争得胡骑、回绝剑玉姬，吕奉先单骑破阵。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyl.han_palace_endgame.night.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.lvji_defiles_consort",
+          "lyl.event.emperor_death_spreads",
+          "lyl.event.arrange_escape_route",
+          "lyl.event.liujian_takes_nangong",
+          "lyl.event.changqiu_palace_defense",
+          "lyl.event.bounty_and_hu_cavalry",
+          "lyl.event.han_jianyu_refused",
+          "lyl.event.lvfengxian_breaks_line"
+        ]
+      },
+      {
         "id": "lyl.chapter.han_palace_endgame_palace",
         "title": "汉宫突入",
         "summary": "吕氏与刘建的宫廷斗争全面爆发，程宗扬在含光殿救人。",
+        "activation": [
+          {
+            "path": "flags.chapter.lyl.han_palace_endgame.night.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.chapter.lyl.han_palace_endgame.palace.done",
@@ -5444,6 +5475,8 @@
         ],
         "eventIds": [
           "lyl.event.han_palace_endgame_01_beat",
+          "lyl.event.han_power_vacuum",
+          "lyl.event.han_sponsor_dingtao",
           "lyl.event.han_palace_endgame_02_beat",
           "lyl.event.han_palace_endgame_03_beat",
           "lyl.event.han_palace_endgame_04_beat",

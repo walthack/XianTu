@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "stageId": "lyl.han_palace_endgame",
+  "ops": [
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "event.lvfengxian_breaks_line.done",
+      "beforeKey": "chapter.lyl.han_palace_endgame.palace.started",
+      "entries": {
+        "chapter.lyl.han_palace_endgame.night.started": true,
+        "chapter.lyl.han_palace_endgame.night.done": false
+      }
+    },
+    {
+      "op": "insertBefore",
+      "path": "scenario.chapters",
+      "beforeId": "lyl.chapter.han_palace_endgame_palace",
+      "value": {
+        "id": "lyl.chapter.han_palace_endgame_night",
+        "title": "宫变之夜",
+        "summary": "含光殿藻井目睹凌辱、天子暴毙矫诏，出宫定下拥立定陶王；刘建攻占南宫，长秋宫死守，赏格争得胡骑、回绝剑玉姬，吕奉先单骑破阵。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyl.han_palace_endgame.night.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "lyl.event.lvji_defiles_consort",
+          "lyl.event.emperor_death_spreads",
+          "lyl.event.arrange_escape_route",
+          "lyl.event.liujian_takes_nangong",
+          "lyl.event.changqiu_palace_defense",
+          "lyl.event.bounty_and_hu_cavalry",
+          "lyl.event.han_jianyu_refused",
+          "lyl.event.lvfengxian_breaks_line"
+        ]
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.chapters[id=lyl.chapter.han_palace_endgame_palace]",
+      "afterKey": "summary",
+      "beforeKey": "completion",
+      "entries": {
+        "activation": [
+          {
+            "path": "flags.chapter.lyl.han_palace_endgame.night.done",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyl.chapter.han_palace_endgame_palace].eventIds",
+      "from": [
+        "lyl.event.han_palace_endgame_01_beat",
+        "lyl.event.han_palace_endgame_02_beat",
+        "lyl.event.han_palace_endgame_03_beat",
+        "lyl.event.han_palace_endgame_04_beat",
+        "lyl.event.han_palace_endgame_05_beat"
+      ],
+      "to": [
+        "lyl.event.han_palace_endgame_01_beat",
+        "lyl.event.han_power_vacuum",
+        "lyl.event.han_sponsor_dingtao",
+        "lyl.event.han_palace_endgame_02_beat",
+        "lyl.event.han_palace_endgame_03_beat",
+        "lyl.event.han_palace_endgame_04_beat",
+        "lyl.event.han_palace_endgame_05_beat"
+      ]
+    }
+  ]
+}

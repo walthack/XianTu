@@ -9,10 +9,13 @@ const stageUrl = new URL(
   import.meta.url,
 );
 const EVENT_ID = 'lyg.event.s01_09';
+const PRE_S01_09 = 'lyg.event.han_marquis_wuyang_enfeoff';
 
 function fixture(stage, charm = 6) {
   const flags = { ...stage.scenario.initialFlags };
   for (let index = 1; index <= 8; index++) flags[`event.s01_0${index}.done`] = true;
+  // 汉线补全 H20（2026-10-28）：受封舞阳侯在 rail 上排在 s01_08 与 s01_09 之间，s01_09 前须一并完成
+  flags[`event.${PRE_S01_09.split('.').pop()}.done`] = true;
   return {
     角色: {
       身份: { 名字: 'R2-11E验收角色', 先天六司: { 魅力: charm } },
@@ -33,7 +36,7 @@ function fixture(stage, charm = 6) {
           events: structuredClone(stage.scenario.events),
           flags,
           activeEventIds: [EVENT_ID],
-          completedEventIds: Array.from({ length: 8 }, (_, index) => `lyg.event.s01_0${index + 1}`),
+          completedEventIds: [...Array.from({ length: 8 }, (_, index) => `lyg.event.s01_0${index + 1}`), PRE_S01_09],
           completedChapterIds: [],
           offscreenResolvedEventIds: [],
           chronicle: [],

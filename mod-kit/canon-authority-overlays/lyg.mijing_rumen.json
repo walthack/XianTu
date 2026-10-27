@@ -13,6 +13,35 @@
         "x": 6838,
         "y": 3577
       }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyg.chapter.mijing_rumen].eventIds",
+      "from": [
+        "lyg.event.s02_01",
+        "lyg.event.s02_02",
+        "lyg.event.s02_03",
+        "lyg.event.s02_04",
+        "lyg.event.s02_05",
+        "lyg.event.s02_06",
+        "lyg.event.s02_07",
+        "lyg.event.s02_08",
+        "lyg.event.yangwuhou_rumor",
+        "lyg.event.s02_09"
+      ],
+      "to": [
+        "lyg.event.s02_01",
+        "lyg.event.s02_02",
+        "lyg.event.s02_03",
+        "lyg.event.s02_04",
+        "lyg.event.s02_05",
+        "lyg.event.s02_06",
+        "lyg.event.s02_07",
+        "lyg.event.s02_08",
+        "lyg.event.yangwuhou_rumor",
+        "lyg.event.s02_09",
+        "lyg.event.mijing_superuser_roster"
+      ]
     }
   ]
 }

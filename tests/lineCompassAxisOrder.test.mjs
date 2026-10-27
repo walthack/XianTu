@@ -382,3 +382,96 @@ test('宋 五线补全 S1–S30（2026-10-28）：默认路线从晋收束起，
   assert.notEqual(closed.current?.lineId, 'song', '_06 完成：宋已收束');
   assert.ok(!closed.others.some(o => o.lineId === 'song'), '_06 完成：折叠行撤掉宋');
 });
+
+test('汉 五线补全 H1–H20（2026-10-28）：默认路线从临安收束起，太泉余波→洛都→汉宫→定陶→秘境每拍挂章上 rail；入汉／饼肆／霍府三处死步复活，宫变两步改挂默认路线，线卡随步推进，s02_09 完成即收束撤卡', () => {
+  const AF = 'lyl.taiquan_afterfall', LUO = 'lyl.luoyang_cloud_secret', HPE = 'lyl.han_palace_endgame', DT = 'lyg.dingtao_beijing', MJ = 'lyg.mijing_rumen';
+  const lyl = id => `lyl.event.${id}`;
+  const [H1, H2, H5, H6, H20] = [lyl('han_shouyang_gaoyanei'), lyl('han_wudu_bingsi'), lyl('han_yuedan_ping'), lyl('han_huo_villa'), 'lyg.event.han_marquis_wuyang_enfeoff'];
+  const FILLED = {
+    [AF]: [H1, H2, lyl('jin_guangyuan_ledger'), lyl('han_court_grain_blame')],
+    [LUO]: [H5, H6, lyl('han_xingyue_framed'), lyl('han_limit_field')],
+    [HPE]: ['lvji_defiles_consort', 'emperor_death_spreads', 'arrange_escape_route', 'liujian_takes_nangong', 'changqiu_palace_defense',
+      'bounty_and_hu_cavalry', 'han_jianyu_refused', 'lvfengxian_breaks_line'].map(lyl),
+    [DT]: [H20],
+    [MJ]: ['lyg.event.mijing_superuser_roster'],
+  };
+  // ① 可达：13 条原欠账与 5 个新拍都挂在本关章里、且在本关 rail 上；插入处与 rail 前后两拍按 axisSeq 不倒序
+  for (const [stageId, ids] of Object.entries(FILLED)) {
+    const rail = CANON_RAIL_PROFILES.find(p => p.modId === stageId).orderedEventIds;
+    const bound = new Set(stages.get(stageId).scenario.chapters.flatMap(c => c.eventIds || []));
+    for (const id of ids) {
+      assert.ok(bound.has(id), `${id} 挂在 ${stageId} 的章里`);
+      const i = rail.indexOf(id);
+      assert.ok(i >= 0, `${id} 在 ${stageId} rail 上`);
+      for (const [a, b] of [[rail[i - 1], id], [id, rail[i + 1]]]) {
+        if (a && b) assert.ok(axisSeq.get(a) <= axisSeq.get(b), `${a}（${axisSeq.get(a)}）→ ${b}（${axisSeq.get(b)}）不倒序`);
+      }
+    }
+  }
+  // 同 seq 次序键按原著行序：718 抵舞都（yly 22618）→ 云如瑶私奔（22934）；898 赏格争胡骑（47300）→ 回绝剑玉姬（47483）
+  const afRail = CANON_RAIL_PROFILES.find(p => p.modId === AF).orderedEventIds;
+  assert.equal(afRail.indexOf(H1) + 1, afRail.indexOf(lyl('taiquan_afterfall_06_beat')));
+  const hpeRail = CANON_RAIL_PROFILES.find(p => p.modId === HPE).orderedEventIds;
+  assert.equal(hpeRail.indexOf(lyl('bounty_and_hu_cavalry')) + 1, hpeRail.indexOf(lyl('han_jianyu_refused')));
+  // ② 默认路线：关链 …临安收束→（太泉核心）→太泉余波→洛都→（隔离 luoyang_coup）→汉宫→定陶→秘境
+  const HAN = [AF, LUO, HPE, DT, MJ];
+  assert.ok(DEFAULT_LINE_QUARANTINED_STAGE_IDS.has('lyl.luoyang_coup'));
+  assert.deepEqual([...new Set(routeTo('lyg.han_succession').map(id => eventOf.get(id).stageId))].filter(s => HAN.includes(s)), HAN);
+  const before = routeTo(AF);
+  const han = HAN.flatMap(stageId => stageOrder(stageId).map(id => ({ stageId, id })));
+  for (const id of Object.values(FILLED).flat()) assert.ok(han.some(x => x.id === id), `${id} 在默认路线上`);
+  // ③ 表：6 个 pending 全去掉，抵达两步不再挂隔离关 s06_01／s06_02
+  const table = compass.lineCompassTable().lines.find(l => l.lineId === 'han');
+  assert.ok(!table.steps.some(s => s.pending), '汉线不再有待建步');
+  assert.ok(!JSON.stringify(table.steps).includes('lyl.event.s06_0'), '不再引用隔离关 luoyang_coup 的拍');
+  for (const id of ['han_enter_from_taiquan_wudu', 'han_enter_from_taiquan', 'han_enter_border_wudu', 'han_enter_border_alt']) {
+    assert.equal(table.steps.find(s => s.id === id).eventId, H1, `${id} 改挂 H1`);
+  }
+  assert.deepEqual(table.steps.map(s => s.id).slice(4, 7), ['han_zhu_urge_luo_alt', 'han_yunruyao_bing', 'han_camera_palace_alt'], '饼肆挪到 han_zhu_urge_luo_alt 之后');
+  assert.equal(texts['lineCompass.han.step.han_yunruyao_bing'], '在舞都城里走走看看');
+  // H1 带上高智商：完成后相识账记 encountered，饼肆那步的 when 才成立
+  assert.ok(eventOf.get(H1).relatedCharacterIds.includes('liuchao.character.gao_zhishang'));
+  // ④ 逐拍走：焦点＝本线表里的拍时当前线是汉；带文案的步按表序出现、不回跳
+  const acq = { 'liuchao.character.gao_zhishang': { kind: 'encountered' } };
+  const HINTS = Object.fromEntries(table.steps.filter(s => s.hintKey).map(s => [s.id, texts[s.hintKey]]));
+  const at = id => han.findIndex(x => x.id === id);
+  const CLOSE = at('lyg.event.s02_09');
+  const upTo = id => [...before, ...han.slice(0, at(id)).map(x => x.id)];
+  const seen = [];
+  han.forEach(({ stageId, id }, i) => {
+    if (i > CLOSE) return;
+    const done = [...before, ...han.slice(0, i).map(x => x.id)];
+    if (table.steps.some(s => s.eventId === id)) assert.equal(card(stageId, done, id, acq)?.lineId, 'han', `${id} 当焦点：当前线是汉`);
+    const idle = card(stageId, done, undefined, acq);
+    if (idle?.lineId !== 'han') return;
+    const hint = Object.entries(HINTS).find(([, text]) => text === idle.step)?.[0];
+    if (hint && seen.at(-1) !== hint) seen.push(hint);
+  });
+  assert.deepEqual(seen, ['han_zhu_urge_luo_alt', 'han_yunruyao_bing', 'han_huo_bieyuan', 'han_liujian_yuxi_alt'],
+    '带文案的步按表顺序依次出现、不回跳；饼肆、霍府两步不再是死步');
+  // 入汉：H1 当焦点出主线指南针（去舞都）；过了 H1 显示「去洛都看看」，入口提示不再出
+  assert.equal(card(AF, upTo(H1), H1, acq).step, pointer(AF, H1));
+  assert.match(pointer(AF, H1), /^去舞都/);
+  const ENTRY = ['han_enter_from_taiquan_wudu', 'han_enter_from_taiquan', 'han_enter_border_wudu', 'han_enter_border_alt'].map(id => HINTS[id]);
+  const afterH1 = card(AF, upTo(lyl('taiquan_afterfall_06_beat')), undefined, acq);
+  assert.equal(afterH1.step, HINTS.han_zhu_urge_luo_alt);
+  for (const id of [H2, lyl('taiquan_afterfall_10_beat'), lyl('s05_01'), H6]) assert.ok(!ENTRY.includes(card(eventOf.get(id).stageId, upTo(id), undefined, acq)?.step), `${id} 之前不再出入口提示`);
+  // 饼肆：afterfall_07 之后显示到饼肆完成；饼肆当焦点出指南针
+  assert.equal(card(AF, upTo(H2), undefined, acq).step, HINTS.han_yunruyao_bing);
+  assert.equal(card(AF, upTo(H2), H2, acq).step, pointer(AF, H2));
+  assert.notEqual(card(AF, upTo(lyl('jin_guangyuan_ledger')), undefined, acq).step, HINTS.han_yunruyao_bing, '饼肆之后不再显示');
+  // 霍府：进洛都之后显示到霍府别院完成，之后不再显示
+  assert.equal(card(LUO, upTo(H6), undefined, acq).step, HINTS.han_huo_bieyuan);
+  assert.notEqual(card(LUO, upTo(lyl('han_xingyue_framed')), undefined, acq).step, HINTS.han_huo_bieyuan);
+  // 宫变：天子暴毙（默认路线）完成后显示「去长秋宫看看」，出宫定拥立后不再显示
+  const PALACE_NIGHT = lyl('arrange_escape_route');
+  assert.notEqual(card(HPE, upTo(lyl('emperor_death_spreads')), undefined, acq).step, HINTS.han_liujian_yuxi_alt, '天子暴毙之前不显示');
+  assert.equal(card(HPE, upTo(PALACE_NIGHT), undefined, acq).step, HINTS.han_liujian_yuxi_alt);
+  assert.notEqual(card(HPE, upTo(lyl('liujian_takes_nangong')), undefined, acq).step, HINTS.han_liujian_yuxi_alt);
+  // ⑤ 收束：s02_09 完成即撤卡，折叠行也不再有汉
+  const all = [...before, ...han.slice(0, CLOSE + 1).map(x => x.id)];
+  const closed = compass.lineCompassView(saveOf(MJ, all, acq), { focusEventId: undefined, compassPointer: () => '' });
+  assert.notEqual(closed.current?.lineId, 'han', 's02_09 完成：汉已收束');
+  assert.ok(!closed.others.some(o => o.lineId === 'han'), 's02_09 完成：折叠行撤掉汉');
+  assert.ok(han.findIndex(x => x.id === H20) < CLOSE, '受封舞阳侯在收束前');
+});

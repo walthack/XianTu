@@ -85,6 +85,26 @@
       "stageId": "lyl.taiquan_sacred_fruit",
       "file": "lyl.taiquan_sacred_fruit.json",
       "book": "yunlong"
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "file": "lyl.taiquan_afterfall.json",
+      "book": "yunlong"
+    },
+    {
+      "stageId": "lyl.luoyang_cloud_secret",
+      "file": "lyl.luoyang_cloud_secret.json",
+      "book": "yunlong"
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "file": "lyl.han_palace_endgame.json",
+      "book": "yunlong"
+    },
+    {
+      "stageId": "lyg.dingtao_beijing",
+      "file": "lyg.dingtao_beijing.json",
+      "book": "yange"
     }
   ]
 }

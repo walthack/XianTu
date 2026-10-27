@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "stageId": "lyg.dingtao_beijing",
+  "ops": [
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "event.s01_08.done",
+      "beforeKey": "event.s01_09.done",
+      "entries": {
+        "event.han_marquis_wuyang_enfeoff.done": false
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events",
+      "afterId": "lyg.event.s01_08",
+      "value": {
+        "id": "lyg.event.han_marquis_wuyang_enfeoff",
+        "name": "受封舞阳侯",
+        "description": "秦桧、班超与霍子孟一方谈定酬功与借贷的协议：程宗扬以拥立首功受封舞阳侯，实封五千户，封地在首阳山铜矿到舞都七里坊之间，连舞都城内的七里坊也一并划入。程氏商会获准在汉国境内经商，发行的纸钞可在民间流通，但不能充抵赋税；协议里给的少府一职，程宗扬推掉了——他来汉国是做生意的，不是来当官的。",
+        "axisId": null,
+        "axisMethod": "han-line-fill-axis-pending",
+        "axisAnchor": "六朝燕歌行·#12·长约",
+        "axisSeq": 979,
+        "axisBeat": "程宗扬以拥立首功受封舞阳侯，实封五千户，封地在舞都与首阳山之间；推掉少府，只要经营权。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.s01_05.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.han_marquis_wuyang_enfeoff.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.qin_hui",
+          "liuchao.character.np069",
+          "liuchao.character.huo_zi_meng"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.han_guo_chao_ting",
+          "lyg.faction.wuyang_houfu",
+          "liuchao.faction.cheng_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.luoyang",
+        "objective": "看过酬功协议，受封舞阳侯",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "accept_wuyang_marquis",
+              "label": "看过酬功协议，受封舞阳侯",
+              "actionText": "我看过秦桧和班超谈下来的酬功协议，接下舞阳侯的封号，少府就推掉，只要经营权。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已受封舞阳侯、实封五千户；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyg.chapter.dingtao_beijing].eventIds",
+      "from": [
+        "lyg.event.s01_01",
+        "lyg.event.s01_02",
+        "lyg.event.s01_03",
+        "lyg.event.s01_04",
+        "lyg.event.s01_05",
+        "lyg.event.s01_06",
+        "lyg.event.s01_07",
+        "lyg.event.highlight_banchao_lamb_leg",
+        "lyg.event.s01_08",
+        "lyg.event.s01_09",
+        "lyg.event.debut_lvzhi",
+        "lyg.event.lvzhi_zhenjiu",
+        "lyg.event.debut_chengguang",
+        "lyg.event.debut_qiyuxian",
+        "lyg.event.debut_jiawenhe"
+      ],
+      "to": [
+        "lyg.event.s01_01",
+        "lyg.event.s01_02",
+        "lyg.event.s01_03",
+        "lyg.event.s01_04",
+        "lyg.event.s01_05",
+        "lyg.event.s01_06",
+        "lyg.event.s01_07",
+        "lyg.event.highlight_banchao_lamb_leg",
+        "lyg.event.s01_08",
+        "lyg.event.han_marquis_wuyang_enfeoff",
+        "lyg.event.s01_09",
+        "lyg.event.debut_lvzhi",
+        "lyg.event.lvzhi_zhenjiu",
+        "lyg.event.debut_chengguang",
+        "lyg.event.debut_qiyuxian",
+        "lyg.event.debut_jiawenhe"
+      ]
+    }
+  ]
+}

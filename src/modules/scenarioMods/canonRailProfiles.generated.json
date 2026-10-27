@@ -2521,7 +2521,7 @@
   {
     "id": "yunlong.han_palace_endgame",
     "modId": "lyl.han_palace_endgame",
-    "chapterId": "lyl.chapter.han_palace_endgame_palace",
+    "chapterId": "lyl.chapter.han_palace_endgame_night",
     "orderedEventIds": [
       "lyl.event.han_palace_endgame_01_beat",
       "lyl.event.han_palace_endgame_02_beat",

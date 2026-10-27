@@ -2889,6 +2889,12 @@
     },
     {
       "kind": "action",
+      "id": "lyg.event.han_marquis_wuyang_enfeoff:accept_wuyang_marquis",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lyg.event.han_succession_01_beat:advance_declared_objective",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.han_succession.json",
       "aliases": []
@@ -3867,6 +3873,12 @@
     },
     {
       "kind": "action",
+      "id": "lyl.event.han_huo_villa:sneak_into_huo_villa",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lyl.event.han_jianyu_refused:hear_cai_expose_liujian",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
@@ -3975,6 +3987,12 @@
     },
     {
       "kind": "action",
+      "id": "lyl.event.han_shouyang_gaoyanei:descend_shouyang_to_wudu",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lyl.event.han_sponsor_dingtao:hear_dingtao_sponsorship_motion",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
@@ -3993,6 +4011,12 @@
     },
     {
       "kind": "action",
+      "id": "lyl.event.han_wudu_bingsi:help_yunruyao_bingsi",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lyl.event.han_xingyue_framed:hear_xingyue_framed_for_zuowu",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
       "aliases": []
@@ -4000,6 +4024,12 @@
     {
       "kind": "action",
       "id": "lyl.event.han_xingyue_framed:show_watch_gain_yan_trust",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lyl.event.han_yuedan_ping:attend_yuedan_ping",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
       "aliases": []
     },
@@ -5666,6 +5696,12 @@
     },
     {
       "kind": "chapter",
+      "id": "lyl.chapter.han_palace_endgame_night",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
       "id": "lyl.chapter.han_palace_endgame_palace",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
@@ -5691,6 +5727,12 @@
     {
       "kind": "chapter",
       "id": "lyl.chapter.luoyang_cloud_secret",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lyl.chapter.luoyang_cloud_secret_court",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
       "aliases": []
     },
@@ -10607,6 +10649,12 @@
     },
     {
       "kind": "event",
+      "id": "lyg.event.han_marquis_wuyang_enfeoff",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lyg.event.han_succession_01_beat",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.han_succession.json",
       "aliases": []
@@ -11321,6 +11369,12 @@
     },
     {
       "kind": "event",
+      "id": "lyl.event.han_huo_villa",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lyl.event.han_jianyu_refused",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
@@ -11399,13 +11453,31 @@
     },
     {
       "kind": "event",
+      "id": "lyl.event.han_shouyang_gaoyanei",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lyl.event.han_sponsor_dingtao",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
     },
     {
       "kind": "event",
+      "id": "lyl.event.han_wudu_bingsi",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
       "id": "lyl.event.han_xingyue_framed",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lyl.event.han_yuedan_ping",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
       "aliases": []
     },
@@ -13001,6 +13073,12 @@
     },
     {
       "kind": "flag",
+      "id": "branch.lyl.han_border_entry.active",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "chapter.aftermath.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_core_conflict.json",
       "aliases": []
@@ -13391,6 +13469,12 @@
     },
     {
       "kind": "flag",
+      "id": "chapter.lyl.han_palace_endgame.night.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "chapter.lyl.han_palace_endgame.palace.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
@@ -13411,6 +13495,12 @@
       "kind": "flag",
       "id": "chapter.lyl.lin_an_bridge.intel.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "chapter.lyl.luoyang_cloud_secret.court.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
       "aliases": []
     },
     {
@@ -14087,6 +14177,12 @@
     },
     {
       "kind": "flag",
+      "id": "event.han_huo_villa.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "event.han_jianyu_refused.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
@@ -14095,6 +14191,12 @@
       "kind": "flag",
       "id": "event.han_limit_field.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.han_marquis_wuyang_enfeoff.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.dingtao_beijing.json",
       "aliases": []
     },
     {
@@ -14165,6 +14267,12 @@
     },
     {
       "kind": "flag",
+      "id": "event.han_shouyang_gaoyanei.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "event.han_sponsor_dingtao.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.han_palace_endgame.json",
       "aliases": []
@@ -14231,7 +14339,19 @@
     },
     {
       "kind": "flag",
+      "id": "event.han_wudu_bingsi.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
       "id": "event.han_xingyue_framed.done",
+      "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
+      "aliases": []
+    },
+    {
+      "kind": "flag",
+      "id": "event.han_yuedan_ping.done",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.luoyang_cloud_secret.json",
       "aliases": []
     },
@@ -24040,6 +24160,72 @@
     {
       "kind": "text",
       "id": "qingyu.stage02.opening",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "realm.breakthrough.capped",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.defense.part.assist",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.defense.part.contract",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.defense.part.crystal",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.defense.part.goal",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.defense.part.level",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.defense.part.self",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.defense.part.yield",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.receipt.defense.edge",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.receipt.defense.sources",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.receipt.edge",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

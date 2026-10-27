@@ -97,6 +97,7 @@ const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
 
   'lyl.chapter.jiangzhou_retreat': 'daily',
   'lyl.chapter.luoyang_cloud_secret': 'court',
+  'lyl.chapter.luoyang_cloud_secret_court': 'court',
   'lyl.chapter.luoyang_coup': 'climax',
   'lyl.chapter.lin_an_bridge_arrival': 'court',
   'lyl.chapter.lin_an_bridge_intel': 'court',

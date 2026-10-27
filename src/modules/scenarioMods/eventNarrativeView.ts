@@ -157,6 +157,17 @@ export const LIN_AN_ARRIVAL_EVENT_IDS: ReadonlySet<string> = new Set([
   'decode_bianmenwa_note', 'weiyuan_extortion', 'libu_registration', 'meet_xue_yanshan', 'blacksea_iron_puppet',
 ].map(id => `lyl.event.${id}`));
 
+/** lyl.han_palace_endgame「宫变之夜」章的拍（与关卡数据同步，测试钉住）。 */
+export const HAN_PALACE_NIGHT_EVENT_IDS: ReadonlySet<string> = new Set([
+  'lvji_defiles_consort', 'emperor_death_spreads', 'arrange_escape_route', 'liujian_takes_nangong',
+  'changqiu_palace_defense', 'bounty_and_hu_cavalry', 'han_jianyu_refused', 'lvfengxian_breaks_line',
+].map(id => `lyl.event.${id}`));
+
+/** lyl.luoyang_cloud_secret「洛都风云」章的拍（与关卡数据同步，测试钉住）。 */
+export const LUOYANG_COURT_EVENT_IDS: ReadonlySet<string> = new Set([
+  'han_yuedan_ping', 'han_huo_villa', 'han_xingyue_framed', 'han_limit_field',
+].map(id => `lyl.event.${id}`));
+
 /** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
   if (modId === 'lcq.stage_04' && eventId) return ({
@@ -177,6 +188,9 @@ export function storyChapterTitle(modId: string | undefined, eventId: string | u
   }
   // 临安：rail 章是首章「初抵临安」，整关停在它上面；原「临安疑线」章的拍照旧标疑线（五线补全·宋 2026-10-28）
   if (modId === 'lyl.lin_an_bridge' && eventId) return LIN_AN_ARRIVAL_EVENT_IDS.has(eventId) ? '初抵临安' : '临安疑线';
+  // 汉宫：rail 章是新首章「宫变之夜」，整关停在它上面；其余拍照旧标「汉宫突入」。洛都：rail 章仍是首章，第二章「洛都风云」的拍单标（五线补全·汉 2026-10-28）
+  if (modId === 'lyl.han_palace_endgame' && eventId) return HAN_PALACE_NIGHT_EVENT_IDS.has(eventId) ? '宫变之夜' : '汉宫突入';
+  if (modId === 'lyl.luoyang_cloud_secret' && eventId && LUOYANG_COURT_EVENT_IDS.has(eventId)) return '洛都风云';
   if (modId !== 'lcq.stage_02' || !eventId) return fallback;
   if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
   return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';

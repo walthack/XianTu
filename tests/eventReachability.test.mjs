@@ -34,6 +34,8 @@ const DEBT = new Set([
   // 已于 2026-10-28 挂章上 rail（五线补全·晋 J1–J5），从本清单删去。
   // 宋线 28 条（stage_10 夜影争位、stage_12 腾出江州／屯田司／接管鹏翼社、lin_an_bridge 16 拍、小瀛洲 6 拍、临安收束 2 拍）
   // 已于 2026-10-28 挂章上 rail（五线补全·宋 S2–S22、S24–S30），从本清单删去。
+  // 汉线 15 条（太泉余波广源行旧账／朝会粮草账、洛都星月湖被诬／纸钞买田、汉宫宫变之夜 8 拍与真空传闻／拥立选择、秘境冰冰验名单）
+  // 已于 2026-10-28 挂章（五线补全·汉 H3、H4、H7–H19），除真空传闻／拥立选择两条条件拍只挂章外都上了 rail，从本清单删去。
   'lyg.event.changgan_fanseng_hunt',
   'lyg.event.qinglongsi_te_master',
   'lyg.event.song_tongwen',
@@ -53,22 +55,7 @@ const DEBT = new Set([
   'lyg.event.poolside_capture',
   'lyg.event.blast_moni_temple',
   'lyg.event.xinyong_reveals_fanmi',
-  'lyg.event.mijing_superuser_roster',
   'lyg.event.shituolin_endgame_title_daduhu',
-  'lyl.event.han_jianyu_refused',
-  'lyl.event.han_power_vacuum',
-  'lyl.event.han_sponsor_dingtao',
-  'lyl.event.liujian_takes_nangong',
-  'lyl.event.lvji_defiles_consort',
-  'lyl.event.emperor_death_spreads',
-  'lyl.event.arrange_escape_route',
-  'lyl.event.changqiu_palace_defense',
-  'lyl.event.bounty_and_hu_cavalry',
-  'lyl.event.lvfengxian_breaks_line',
-  'lyl.event.han_xingyue_framed',
-  'lyl.event.han_limit_field',
-  'lyl.event.jin_guangyuan_ledger',
-  'lyl.event.han_court_grain_blame',
 ]);
 
 function isCritical(event) {

@@ -71,9 +71,9 @@ test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合�
   assert.equal(texts['lineCompass.song.step.song_guangyang_skip_jin'], '打听月霜的下落', '宋跳过晋入口（用户定）');
   assert.equal(texts[compass.LINE_COMPASS_RETURN_KEY], '回到{地点}看看');
   // pending：仓库没有的事件，本次不新建；运行时跳过，note 写缺什么
+  // 汉 6 步（四个入口、云如瑶卖饼、霍府别院）已于 2026-10-28 改挂新建事件、去 pending（五线补全·汉 H1／H2／H6）
   const pending = steps.filter(step => step.pending).map(step => `${step.lineId}.${step.id}`);
   assert.deepEqual(pending, [
-    'han.han_enter_from_taiquan_wudu', 'han.han_enter_from_taiquan', 'han.han_enter_border_wudu', 'han.han_enter_border_alt', 'han.han_yunruyao_bing', 'han.han_huo_bieyuan',
     'tang.tang_entry_from_han', 'tang.tang_entry', 'tang.tang_meet_liao_zhou_yuan', 'tang.tang_d7_appoint', 'tang.tang_d7_secret_treaty', 'tang.tang_d7_publish',
     ...table.lines.find(l => l.lineId === 'qin').steps.map(step => `qin.${step.id}`),
     'taiquan.tq_enter_array', 'taiquan.tq_xionggu_key', 'taiquan.tq_xuanyuan_mijing',

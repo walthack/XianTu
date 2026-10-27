@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "stageId": "lyl.taiquan_afterfall",
+  "ops": [
+    {
+      "op": "insertKeys",
+      "path": "scenario.initialFlags",
+      "afterKey": "event.taiquan_afterfall_10.done",
+      "beforeKey": "event.jin_guangyuan_ledger.done",
+      "entries": {
+        "event.han_shouyang_gaoyanei.done": false,
+        "event.han_wudu_bingsi.done": false
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lyl.chapter.taiquan_afterfall_luodu].eventIds",
+      "from": [
+        "lyl.event.taiquan_afterfall_05_beat",
+        "lyl.event.taiquan_afterfall_06_beat",
+        "lyl.event.taiquan_afterfall_07_beat",
+        "lyl.event.taiquan_afterfall_08_beat",
+        "lyl.event.taiquan_afterfall_09_beat",
+        "lyl.event.taiquan_afterfall_10_beat",
+        "lyl.event.pan_settlement_clash",
+        "lyl.event.pan_hetu_exit",
+        "lyl.event.fen_wuchen_destroys_gate",
+        "lyl.event.taiquan_portal_exit"
+      ],
+      "to": [
+        "lyl.event.taiquan_afterfall_05_beat",
+        "lyl.event.han_shouyang_gaoyanei",
+        "lyl.event.taiquan_afterfall_06_beat",
+        "lyl.event.taiquan_afterfall_07_beat",
+        "lyl.event.han_wudu_bingsi",
+        "lyl.event.jin_guangyuan_ledger",
+        "lyl.event.taiquan_afterfall_08_beat",
+        "lyl.event.taiquan_afterfall_09_beat",
+        "lyl.event.han_court_grain_blame",
+        "lyl.event.taiquan_afterfall_10_beat",
+        "lyl.event.pan_settlement_clash",
+        "lyl.event.pan_hetu_exit",
+        "lyl.event.fen_wuchen_destroys_gate",
+        "lyl.event.taiquan_portal_exit"
+      ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events",
+      "afterId": "lyl.event.taiquan_afterfall_05_beat",
+      "value": {
+        "id": "lyl.event.han_shouyang_gaoyanei",
+        "name": "下首阳，赴舞都",
+        "description": "程宗扬与小紫、朱老头出了太泉古阵，翻山到首阳山脚，在邳家家奴的山棚撞见冯源、哈迷蚩、青面兽一行，被哈迷蚩管得服服帖帖的高智商瘦了一大圈。冯源说起此地正是汉国首阳山，铜矿的事正与平亭侯邳家扯皮；程宗扬想起云如瑶就被送到首阳山下的舞都，便讨了冯源的马匹，带着朱老头和小紫赶往舞都。",
+        "axisId": null,
+        "axisMethod": "han-line-fill-axis-pending",
+        "axisAnchor": "六朝云龙吟·#144·豪强",
+        "axisSeq": 718,
+        "axisBeat": "程宗扬出太泉后下首阳山，在山脚与冯源、高智商一行会合，随即赶往舞都。",
+        "critical": true,
+        "completion": [
+          {
+            "path": "flags.event.han_shouyang_gaoyanei.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_zi",
+          "liuchao.character.shang_zhen_yu",
+          "liuchao.character.gao_zhishang",
+          "liuchao.character.qing_mian_shou"
+        ],
+        "locationId": "liuchao.location.wudu",
+        "objective": "下首阳山，与冯源他们会合，再赶往舞都",
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "flags.branch.lyl.han_border_entry.active",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "name": "下首阳，赴舞都",
+            "description": "程宗扬没走太泉古阵，由边境入汉，在首阳山脚邳家家奴的山棚与冯源、哈迷蚩、青面兽一行会合，见到瘦了一大圈的高智商。冯源说起铜矿的事正与平亭侯邳家扯皮；程宗扬听说云如瑶在首阳山下的舞都，便讨了冯源的马匹赶往舞都。不得写出太泉古阵、传送阵或同出古阵的经过。",
+            "axisBeat": "程宗扬由边境入汉，在首阳山脚与冯源、高智商一行会合，随即赶往舞都。",
+            "objective": "进汉国，在首阳山脚与冯源他们会合，再赶往舞都"
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "descend_shouyang_to_wudu",
+              "label": "下首阳山，赶往舞都",
+              "actionText": "我下首阳山，与冯源他们会合后讨了马匹，赶往舞都。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你已下首阳山、赶到舞都；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "scenario.events",
+      "afterId": "lyl.event.taiquan_afterfall_07_beat",
+      "value": {
+        "id": "lyl.event.han_wudu_bingsi",
+        "name": "舞都饼肆",
+        "description": "游冶台开张后生意火爆，云如瑶却说七里坊人气最旺的是游冶台对面巷中的一家饼肆，并已吩咐下去：从明日起她亲自去饼肆做工。程宗扬拗不过她，只好挽起袖子下灶和面、剁面蒸饼，拉上高智商烧火打下手；云如瑶在台前收钱卖饼，小小的饼肆被围得水泄不通。",
+        "axisId": null,
+        "axisMethod": "han-line-fill-axis-pending",
+        "axisAnchor": "六朝云龙吟·#154·饼肆",
+        "axisSeq": 730,
+        "axisBeat": "云如瑶决定亲自去七里坊的饼肆做工，程宗扬只好下灶和面蒸饼，帮她把饼肆撑起来。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.taiquan_afterfall_07.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.han_wudu_bingsi.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yun_ru_yao",
+          "liuchao.character.gao_zhishang"
+        ],
+        "locationId": "liuchao.location.wudu",
+        "objective": "去七里坊的饼肆，帮云如瑶把生意撑起来",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "help_yunruyao_bingsi",
+              "label": "去饼肆帮云如瑶和面蒸饼",
+              "actionText": "我到七里坊那家饼肆，挽起袖子下灶和面蒸饼，帮云如瑶把生意撑起来。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "你在饼肆忙完一晚，云如瑶的饼肆撑起来了；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

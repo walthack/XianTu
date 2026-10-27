@@ -80,8 +80,9 @@ const MERGED = [
   ['han', 'han_zhu_urge_luo', 'han_zhu_urge_luo_alt', 'shang_zhen_yu', undefined, '去洛都看看'],
   ['han', 'han_camera_palace', 'han_camera_palace_alt', 'si_ming_xin',
     [{ path: 'done.lyl.event.taiquan_afterfall_09_beat', operator: 'eq', value: true }], '进宫看看'],
+  // 五线补全·汉 H11（2026-10-28）：改挂默认路线 arrange_escape_route，when 简化为只读同序号的 emperor_death_spreads（隔离关 s06_01 不再引用）
   ['han', 'han_liujian_yuxi', 'han_liujian_yuxi_alt', 'zhao_feiyan',
-    [{ anyOf: [{ path: 'done.lyl.event.s06_01', operator: 'eq', value: true }, { path: 'done.lyl.event.emperor_death_spreads', operator: 'eq', value: true }] }], '去长秋宫看看'],
+    [{ path: 'done.lyl.event.emperor_death_spreads', operator: 'eq', value: true }], '去长秋宫看看'],
   ['qin', 'qin_entry_xu_met', 'qin_entry_xu_unmet', 'xu_junfang', undefined, '去咸阳，找那个方士问问'],
 ];
 
@@ -128,10 +129,11 @@ test('R-8：表现不变——合并的 4 对非待建步，见过和没见过�
   const PACT = 'lcq.event.sudaji_south_pact';
   const cases = [
     ['song_jiangzhou_war_open', 'xiao_yao_yi', [PACT, 'lcq.event.s10_09_yin_yang_fish', 'lcq.event.s10_10_xiaozi_crisis'], 'lcq.event.s10_09_yin_yang_fish', '去江州看看那边的情形'],
-    ['han_zhu_urge_luo', 'shang_zhen_yu', [PACT], 'lyl.event.s05_01', '去洛都看看'],
+    // 入汉四步已改挂 H1（五线补全·汉 2026-10-28，不再 pending）：编年史按真实顺序先过 H1
+    ['han_zhu_urge_luo', 'shang_zhen_yu', [PACT, 'lyl.event.han_shouyang_gaoyanei'], 'lyl.event.s05_01', '去洛都看看'],
     // 进宫看看已挪到进洛都那一拍（s05_01）之前（原著顺序，总策划定）：编年史按真实顺序，afterfall_09 之后、s05_01 之前
     ['han_camera_palace', 'si_ming_xin', [PACT, 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.taiquan_afterfall_09_beat'], 'lyl.event.s06_01', '进宫看看'],
-    ['han_liujian_yuxi', 'zhao_feiyan', [PACT, 'lyl.event.s06_01'], 'lyl.event.han_palace_endgame_08_beat', '去长秋宫看看'],
+    ['han_liujian_yuxi', 'zhao_feiyan', [PACT, 'lyl.event.emperor_death_spreads'], 'lyl.event.han_palace_endgame_08_beat', '去长秋宫看看'],
   ];
   for (const [label, who, done, focus, sentence] of cases) {
     for (const acq of [[who], []]) {

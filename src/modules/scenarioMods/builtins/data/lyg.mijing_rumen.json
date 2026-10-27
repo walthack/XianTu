@@ -5518,7 +5518,8 @@
           "lyg.event.s02_07",
           "lyg.event.s02_08",
           "lyg.event.yangwuhou_rumor",
-          "lyg.event.s02_09"
+          "lyg.event.s02_09",
+          "lyg.event.mijing_superuser_roster"
         ]
       }
     ],

@@ -1,5 +1,5 @@
 {
-  "version": "c44e1cf73f2bc4e6",
+  "version": "6e523b7be4371836",
   "contracts": [
     {
       "meta": {
@@ -13712,7 +13712,7 @@
     "lineCompass.han.step.han_enter_from_taiquan": "下首阳山，找个镇子落脚",
     "lineCompass.han.step.han_enter_border_wudu": "去汉国舞都看看",
     "lineCompass.han.step.han_enter_border_alt": "去汉国看看",
-    "lineCompass.han.step.han_yunruyao_bing": "去舞都城里看看",
+    "lineCompass.han.step.han_yunruyao_bing": "在舞都城里走走看看",
     "lineCompass.han.step.han_zhu_urge_luo_alt": "去洛都看看",
     "lineCompass.han.step.han_camera_palace_alt": "进宫看看",
     "lineCompass.han.step.han_huo_bieyuan": "照打听来的消息去看看",
@@ -14960,6 +14960,7 @@
         "steps": [
           {
             "id": "han_enter_from_taiquan_wudu",
+            "eventId": "lyl.event.han_shouyang_gaoyanei",
             "when": [
               {
                 "path": "done.lyl.event.taiquan_portal_exit",
@@ -14973,11 +14974,11 @@
               }
             ],
             "hintKey": "lineCompass.han.step.han_enter_from_taiquan_wudu",
-            "pending": true,
-            "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；走过太泉、知道舞都（lyl:22524、22610、22620；R-7 已核 cement_truce＝丰乐楼交易，lyl:9799）"
+            "note": "H1 下首阳赴舞都（五线补全·汉 2026-10-28，afterfall rail 718，排在云如瑶私奔之前）；走过太泉、知道舞都（lyl:22524、22610、22620；R-7 已核 cement_truce＝丰乐楼交易，lyl:9799）"
           },
           {
             "id": "han_enter_from_taiquan",
+            "eventId": "lyl.event.han_shouyang_gaoyanei",
             "when": [
               {
                 "path": "done.lyl.event.taiquan_portal_exit",
@@ -14986,11 +14987,11 @@
               }
             ],
             "hintKey": "lineCompass.han.step.han_enter_from_taiquan",
-            "pending": true,
-            "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；走过太泉、不知道舞都"
+            "note": "H1；走过太泉、不知道舞都"
           },
           {
             "id": "han_enter_border_wudu",
+            "eventId": "lyl.event.han_shouyang_gaoyanei",
             "when": [
               {
                 "path": "done.lyl.event.xiaoyingzhou_cement_truce",
@@ -14999,17 +15000,23 @@
               }
             ],
             "hintKey": "lineCompass.han.step.han_enter_border_wudu",
-            "pending": true,
-            "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；跳过太泉、知道舞都（P-04）"
+            "note": "H1；跳过太泉、知道舞都（P-04）。跳过太泉的入点要并行调度给（关链线性，2026-10-28 待核·程序）"
           },
           {
             "id": "han_enter_border_alt",
+            "eventId": "lyl.event.han_shouyang_gaoyanei",
             "hintKey": "lineCompass.han.step.han_enter_border_alt",
-            "pending": true,
-            "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；跳过太泉兜底，不点地名（lcq:1042）"
+            "note": "H1；跳过太泉兜底，不点地名（lcq:1042）"
+          },
+          {
+            "id": "han_zhu_urge_luo_alt",
+            "eventId": "lyl.event.taiquan_afterfall_07_beat",
+            "hintKey": "lineCompass.han.step.han_zhu_urge_luo_alt",
+            "note": "≈ lyl:23731；洛都江州时就听过（lyl:9940）；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
           },
           {
             "id": "han_yunruyao_bing",
+            "eventId": "lyl.event.han_wudu_bingsi",
             "when": [
               {
                 "path": "acq.liuchao.character.gao_zhishang",
@@ -15018,14 +15025,7 @@
               }
             ],
             "hintKey": "lineCompass.han.step.han_yunruyao_bing",
-            "pending": true,
-            "note": "pending：仓库无云如瑶卖饼事件，本次不新建；until 待该事件；lyl:22620"
-          },
-          {
-            "id": "han_zhu_urge_luo_alt",
-            "eventId": "lyl.event.taiquan_afterfall_07_beat",
-            "hintKey": "lineCompass.han.step.han_zhu_urge_luo_alt",
-            "note": "≈ lyl:23731；洛都江州时就听过（lyl:9940）；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
+            "note": "H2 舞都饼肆（五线补全·汉 2026-10-28，afterfall rail 730）；按原著序挪到 han_zhu_urge_luo_alt（728）之后；lyl:24180、24262–24267"
           },
           {
             "id": "han_camera_palace_alt",
@@ -15046,68 +15046,27 @@
           },
           {
             "id": "han_huo_bieyuan",
+            "eventId": "lyl.event.han_huo_villa",
             "hintKey": "lineCompass.han.step.han_huo_bieyuan",
-            "pending": true,
-            "note": "pending：仓库无月旦评／霍家别院事件，when 与 until 都缺读取点，本次不新建；条件必经"
+            "note": "H6 霍府别院（五线补全·汉 2026-10-28，luoyang_cloud_secret「洛都风云」章 rail，接 H5 月旦评之后）；条件必经"
           },
           {
             "id": "han_emperor_dead_coup",
-            "eventId": "lyl.event.s06_01",
-            "until": [
-              {
-                "anyOf": [
-                  {
-                    "path": "done.lyl.event.s06_01",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lyl.event.emperor_death_spreads",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
-              }
-            ],
-            "note": "分路线 anyOf：luoyang_coup 隔离，默认路线 han_palace_endgame 同序号承接"
+            "eventId": "lyl.event.emperor_death_spreads",
+            "note": "五线补全·汉 H10（2026-10-28）：改挂默认路线 han_palace_endgame「宫变之夜」章的同序号拍（894），不再挂隔离关 s06_01"
           },
           {
             "id": "han_liujian_yuxi_alt",
-            "eventId": "lyl.event.s06_02",
+            "eventId": "lyl.event.arrange_escape_route",
             "when": [
               {
-                "anyOf": [
-                  {
-                    "path": "done.lyl.event.s06_01",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lyl.event.emperor_death_spreads",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
-              }
-            ],
-            "until": [
-              {
-                "anyOf": [
-                  {
-                    "path": "done.lyl.event.s06_02",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lyl.event.arrange_escape_route",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
+                "path": "done.lyl.event.emperor_death_spreads",
+                "operator": "eq",
+                "value": true
               }
             ],
             "hintKey": "lineCompass.han.step.han_liujian_yuxi_alt",
-            "note": "分路线 anyOf：luoyang_coup／han_palace_endgame 同序号；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
+            "note": "五线补全·汉 H11（2026-10-28）：改挂默认路线同序号拍（895），不再挂隔离关 s06_02；R-8（总策划定）：防剧透通审后与「见过」一版同文，见过没见过都出这一句"
           },
           {
             "id": "han_dongzhuo_enter",
@@ -15635,11 +15594,14 @@
     "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": "",
     "lyl.event.taiquan_sacred_fruit_04": "",
     "lyl.event.taiquan_sacred_fruit_06": "",
+    "lyl.event.han_shouyang_gaoyanei": "舞都",
     "lyl.event.taiquan_afterfall_07_beat": "",
+    "lyl.event.han_wudu_bingsi": "舞都",
     "lyl.event.taiquan_afterfall_10_beat": "",
     "lyl.event.s05_01": "洛都",
-    "lyl.event.s06_01": "洛都",
-    "lyl.event.s06_02": "长秋宫",
+    "lyl.event.han_huo_villa": "洛都",
+    "lyl.event.emperor_death_spreads": "",
+    "lyl.event.arrange_escape_route": "",
     "lyl.event.han_palace_endgame_08_beat": "",
     "lyg.event.s01_05": "昭阳宫",
     "lyg.event.s02_09": "",

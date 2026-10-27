@@ -37,6 +37,11 @@ const STAGES = [
   { stageId: 'lcq.stage_12_jiangzhou_counterwar', book: 'qingyu' },
   { stageId: 'lyl.xiaoyingzhou_blacksea_trap', book: 'yunlong' },
   { stageId: 'lyl.taiquan_sacred_fruit', book: 'yunlong' },
+  // 汉线补全（五线补全·汉，2026-10-28）：挂章／新事件／新章的权威增量（mijing_rumen 并入原 overlay）
+  { stageId: 'lyl.taiquan_afterfall', book: 'yunlong' },
+  { stageId: 'lyl.luoyang_cloud_secret', book: 'yunlong' },
+  { stageId: 'lyl.han_palace_endgame', book: 'yunlong' },
+  { stageId: 'lyg.dingtao_beijing', book: 'yange' },
 ];
 
 function miniMod(name = 'old') {
@@ -273,11 +278,12 @@ test('id-addressed source keeps a valid id-array; malformed target or source fai
   );
 });
 
-test('tracked overlays are exactly the seventeen generated→builtin closures', async () => {
+test('tracked overlays are exactly the twenty-one generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
   // 13 → 17：宋线补全（2026-10-28）新增 stage_10／stage_12／小瀛洲／临安收束四关的挂章增量
-  assert.equal(catalog.manifest.overlays.length, 17);
+  // 17 → 21：汉线补全（2026-10-28）新增太泉余波／洛都／汉宫／定陶四关的挂章增量
+  assert.equal(catalog.manifest.overlays.length, 21);
 });
 
 test('generated plus tracked overlay reconstructs the Git-tracked builtins', async () => {

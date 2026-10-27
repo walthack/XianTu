@@ -725,13 +725,18 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '与孟非卿复盘王哲左武军覆灭：有人切断补给、泄军机，排除金蜜镝', status: 'ready', stageId: 'lcq.stage_10_jiangzhou_shadow_war', eventId: 'lcq.event.s10_04_left_army_review' },
       { reviewSummary: '抵达苍澜镇，看清昂贵物价与太泉异常', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_07' },
       { reviewSummary: '与虞白樱从蚁穴脱险，太泉余波进了身体', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_01_beat' },
+      // H1 下首阳赴舞都（五线补全·汉 2026-10-28）
+      { reviewSummary: '下首阳山，在山脚与冯源、高智商一行会合，赶往舞都', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.han_shouyang_gaoyanei' },
       { reviewSummary: '前往洛都查明风波——宁成登场', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_07_beat' },
+      { reviewSummary: '云如瑶要亲自去七里坊的饼肆做工，你下灶和面蒸饼帮她撑起来', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.han_wudu_bingsi' },
       { reviewSummary: '与冯子都结交探听渠道——高智商、徐璜登场', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_08_beat' },
       { reviewSummary: '汉廷朝会上追问：王温舒攻韦玄成，左武军粮草不继究竟谁的责', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.han_court_grain_blame' },
       { reviewSummary: '襄城君府密室发现小紫已控制孙寿，并透露刺杀韩定国', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_10_beat' },
       { reviewSummary: '与云苍峰商定开首阳山铜矿，并经西邸买二千石官与郡县小吏', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_01' },
       { reviewSummary: '在山口镇应对吕氏兄弟调来的卫尉、屯骑等四军围杀', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_03' },
       { reviewSummary: '在宅院抵御吕氏死士进攻——哈迷蚩登场', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.s05_04' },
+      { reviewSummary: '随朱老头赴石室书院月旦评，见识谶纬怎么左右洛都风向', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_yuedan_ping' },
+      { reviewSummary: '与斯明信夜潜霍家别院，找严君平的下落', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_huo_villa' },
       { reviewSummary: '严君平告知星月湖被诬致左武军覆没，末块玉牌藏胶西', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_xingyue_framed' },
       { reviewSummary: '与云秀峰、郭解用纸钞买下一千五百顷田，看清限田令要卷进云家', status: 'ready', stageId: 'lyl.luoyang_cloud_secret', eventId: 'lyl.event.han_limit_field' },
       { reviewSummary: '与赵合德藏在含光殿藻井，看完吕冀淫辱友通期全过程', status: 'ready', stageId: 'lyl.han_palace_endgame', eventId: 'lyl.event.lvji_defiles_consort' },
@@ -762,6 +767,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '到昭阳宫：董卓拥立定陶王为帝，贾文和献大赦、选材、迁都', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_05' },
       { reviewSummary: '剑玉姬刺穿郭解心脉，他临终把定陶王托付给你', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_06' },
       { reviewSummary: '董卓死在贾文和怀里，留下胡骑异动、边地将有剧变的军情', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_07' },
+      // 顶点（R3-10 §0.2，seq 979 长约）：用名分换经营权
+      { reviewSummary: '以拥立首功受封舞阳侯，实封五千户；推掉少府，只要经营权', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.han_marquis_wuyang_enfeoff' },
       { reviewSummary: '奉懿旨至永巷当众凌辱并赐死吕冀，其妻孙寿发配为奴', status: 'ready', stageId: 'lyg.dingtao_beijing', eventId: 'lyg.event.s01_09' },
       { reviewSummary: '率众为郭解送葬，立郭靖为义子并让他继承舞阳侯', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_01' },
       { reviewSummary: '探视金蜜镝——他装伤避嫌；你以成亲相胁，他默许不干涉帝统', status: 'ready', stageId: 'lyg.mijing_rumen', eventId: 'lyg.event.s02_07' },
@@ -775,8 +782,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '登基大典上真气失控，吕雉点破须双修，赵飞燕以双修之姿助你行功', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_08_beat' },
     ],
     pendingExpansion: '入口改挂（2026-08-16）：`s07_01_old_case` 跟着八骏查左武军覆灭，第 10 关即可入线；该节点同时喂星月湖。'
-      + '顶点＝封舞阳侯（实封五千户），辞少府只经商（seq 979）；尚无独立 event。'
-      + '仍缺 H4 限田／H5 真空传闻／H6 拥立选择。772 朝会粮草账、871 星月湖被诬尚未落地。'
+      + '顶点＝封舞阳侯（实封五千户），辞少府只经商（seq 979）；2026-10-28 五线补全·汉 H20 新建 han_marquis_wuyang_enfeoff 落地。'
+      + '限田、星月湖被诬、朝会粮草账、宫变之夜八拍已挂章上 rail；真空传闻／拥立选择是没亲历宫变之夜的条件拍，只挂章。'
       + '`s10_04_left_army_review` 可加深调查、双喂星月湖。`taiquan_afterfall_07` 降为「人到洛都」地理拍，不再当入口。',
   },
   {
