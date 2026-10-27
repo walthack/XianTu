@@ -983,6 +983,11 @@
           "note": "≈ lcq:42253"
         },
         {
+          "id": "tq_yinyang_fish",
+          "eventId": "lyl.event.yin_yang_counter",
+          "note": "按关链排在 sacred_fruit 关各步之后、afterfall 关各步之前（core_conflict 关，原著顺序 666；剧情策划稿 §14.3-4，总策划定）：阴阳鱼反击完成后只算过本步，afterfall 三步照常轮到，「找条路出古阵」要等 tq_city_in_film 过了才出"
+        },
+        {
           "id": "tq_beast_traps",
           "eventId": "lyl.event.xingyin_beast_traps",
           "note": "≈"
@@ -1004,10 +1009,6 @@
           "id": "tq_city_in_film",
           "eventId": "lyl.event.taiquan_afterfall_05_beat",
           "note": "≈"
-        },
-        {
-          "id": "tq_yinyang_fish",
-          "eventId": "lyl.event.yin_yang_counter"
         },
         {
           "id": "tq_exit_to_han",

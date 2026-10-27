@@ -44,12 +44,8 @@ const ALLOWED = {
   },
 };
 
-const KNOWN = {
-  'taiquan.tq_yinyang_fish': {
-    at: '666 < 708（tq_city_in_film）',
-    why: '关链 taiquan_core_conflict 在 taiquan_afterfall 之前。阴阳鱼反击（yin_yang_counter）一完成，tq_beast_traps、tq_mowu、tq_city_in_film 三步（只有 eventId，没有文案）被兜底算过，整个 afterfall 期间卡片提前显示「找条路出古阵」；core_conflict 期间显示的是 tq_beast_traps 的「回到太泉古阵看看」。用户定：只汇报，不擅自改顺序。',
-  },
-};
+// 原有三处（晋 jin_shanghou_cure_and_trade、汉 han_camera_palace_alt、太泉 tq_yinyang_fish）已按总策划定改顺序，回归测试见文末。
+const KNOWN = {};
 
 /** 每条线里倒序的步：本步 axisSeq 小于它前面各正式 eventId 步的最大值。 */
 function inversions(table) {
@@ -155,4 +151,28 @@ test('汉（总策划定）：han_camera_palace_alt 排在 han_yuncangfeng_luodu
   assert.equal(luodu?.lineId, 'han');
   assert.equal(luodu.step, pointer(LUO, S0501), '进洛都：s05_01 当焦点 → 主线指南针，不再被兜底跳到下一拍的「回到洛都看看」');
   assert.notEqual(card(LUO, [...before, ...af, S0501], undefined)?.step, PALACE, 'afterfall_10 完成后不再显示');
+});
+
+test('太泉（总策划定）：tq_yinyang_fish 按关链排在 afterfall 各步之前；阴阳鱼反击后 afterfall 三步不被兜底跳过，tq_city_in_film 过了才出「找条路出古阵」', () => {
+  const CC = 'lyl.taiquan_core_conflict', AF = 'lyl.taiquan_afterfall';
+  const [YY, BEAST, A05, A06] = ['lyl.event.yin_yang_counter', 'lyl.event.xingyin_beast_traps', 'lyl.event.taiquan_afterfall_05_beat', 'lyl.event.taiquan_afterfall_06_beat'];
+  const EXIT = texts['lineCompass.taiquan.step.tq_exit_to_han'];
+  const cc = stageOrder(CC), af = stageOrder(AF), before = routeTo(CC);
+  const yy = card(CC, [...before, ...cc.slice(0, cc.indexOf(YY))], YY);
+  assert.equal(yy?.lineId, 'taiquan');
+  assert.equal(yy.step, pointer(CC, YY), '阴阳鱼反击当焦点：本步就是焦点 → 主线指南针');
+  const afterYY = [...before, ...cc.slice(0, cc.indexOf(YY) + 1)];
+  assert.equal(card(CC, afterYY, cc[cc.indexOf(YY) + 1]).step, returnTo(BEAST), '阴阳鱼反击完成：下一步是 tq_beast_traps，不再跳到出古阵');
+  // afterfall 关：tq_city_in_film（afterfall_05）完成之前，任何一拍都不提前显示「找条路出古阵」
+  const until05 = af.slice(0, af.indexOf(A05) + 1);
+  assert.ok(until05.includes(BEAST) && until05.includes('lyl.event.taiquan_afterfall_03_beat'));
+  until05.forEach((id, i) => {
+    for (const focus of [id, undefined]) {
+      const c = card(AF, [...before, ...cc, ...af.slice(0, i)], focus);
+      assert.equal(c?.lineId, 'taiquan', `${id} 之前（焦点 ${focus ?? '无'}）`);
+      assert.notEqual(c.step, EXIT, `${id} 之前（焦点 ${focus ?? '无'}）：不提前显示「找条路出古阵」`);
+    }
+  });
+  assert.equal(card(AF, [...before, ...cc, ...af.slice(0, 1)], af[1]).step, returnTo(BEAST), 'afterfall 开头：仍是 tq_beast_traps「回到太泉古阵看看」');
+  assert.equal(card(AF, [...before, ...cc, ...until05], A06).step, EXIT, 'tq_city_in_film 过了：显示「找条路出古阵」');
 });
