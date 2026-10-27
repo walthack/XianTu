@@ -9,6 +9,9 @@
  * - 当前线（Q7）：焦点事件所在国家线（下一步表里写了这个 eventId 的线，否则按焦点事件所在关的地区 story.lineCompass.regionLines）；
  *   不在任何线上、或那条线未知／已收束／没解锁，取编年史里最近推进过、未收束的线；都没有返回 null，右栏退回原主线指南针那一句（Q1）。
  * - 下一步：按顺序取第一条非占位（draft）、非待建（pending）、when 全满足、未过（until 全满足即过；没写 until 时 eventId 已完成即过）的一步。
+ *   分路线（03／03b、05／04b 同序号拍、06／05b、lin_an_black_sea／lin_an_bridge、luoyang_coup／han_palace_endgame、shixiang_ambush／changgan_interlude，
+ *   前者为默认路线隔离关）：条件里写 { anyOf: [...] } 组，组内任一条满足即成立＝任一路线的对应事件完成即算（总策划定，真机 1f9f 南荒卡第一步）。
+ *   兜底（总策划定）：后面某一步（非 draft／pending）已过，它前面的步一律算过——进度只往前走，不回头等走不到的那一路。
  *   这一步正好是焦点事件 → 直接用主线指南针的「去X · 见Y」；否则用 hintKey 的文案。缺键记 LCQ-PCK-005 并不出这一步，绝不回退旧 entryHint（Q8）。
  *   只有 eventId、焦点又不在这一拍（R-4／P-12，总策划定）→ 通用句 texts[lineCompass.step.returnTo]「回到{地点}看看」，
  *   地点＝该事件 locationId 的显示名（content-packs 编译时求得，catalog.lineCompassPlaces）；locationId 为空就不出下一步（只显示线名），记 story 调试日志，不报错码。
@@ -30,6 +33,22 @@ import { SECONDARY_LINES, secondaryLineUnlockOptions } from './secondaryLines';
 import { knownSecondaryLines, secondaryLineEntryView } from './secondaryLineEntry';
 import type { ScenarioCondition } from './schema';
 
+/** 条件组：组内任一条满足即成立（分路线：任一路线的对应事件完成即算）；不嵌套。 */
+export interface LineCompassAnyOf {
+  anyOf: ScenarioCondition[];
+}
+
+/** 下一步表里的一条条件：账本条件，或 anyOf 组；数组之间仍是全满足。 */
+export type LineCompassCondition = ScenarioCondition | LineCompassAnyOf;
+
+export const isLineCompassAnyOf = (condition: unknown): condition is LineCompassAnyOf =>
+  !!condition && typeof condition === 'object' && Array.isArray((condition as LineCompassAnyOf).anyOf);
+
+/** 全满足（anyOf 组内任一）；one 只求单条账本条件。 */
+export function lineCompassConditionsHold(conds: readonly LineCompassCondition[] | undefined, one: (condition: ScenarioCondition) => boolean): boolean {
+  return (conds ?? []).every(c => (isLineCompassAnyOf(c) ? c.anyOf.some(one) : one(c)));
+}
+
 /**
  * 线的一步。
  * 文案口径（分析稿 §4，写文案和审稿都按这个）：**提示，不是说明**——只给方向：去哪、找谁、打听什么，玩家看了不能知道接下来会发生什么。
@@ -46,10 +65,10 @@ export interface LineCompassStep {
   id: string;
   /** 这一步对应的承重拍事件；焦点事件正好是它时直接用主线指南针的「去X · 见Y」，可不写 hintKey */
   eventId?: string;
-  /** 全满足才轮到这一步（只许账本路径）；缺省＝总满足 */
-  when?: ScenarioCondition[];
-  /** 全满足＝这一步已过；缺省时 eventId 已完成即过 */
-  until?: ScenarioCondition[];
+  /** 全满足才轮到这一步（只许账本路径，可含 anyOf 组）；缺省＝总满足 */
+  when?: LineCompassCondition[];
+  /** 全满足＝这一步已过（可含 anyOf 组：分路线任一对应事件完成即过）；缺省时 eventId 已完成即过 */
+  until?: LineCompassCondition[];
   /** texts 键（lineCompass.<lineId>.step.<id>）；eventId 与 hintKey 至少写一个 */
   hintKey?: string;
   /** 【待剧情策划】占位：运行时跳过，不进玩家可见 */
@@ -68,9 +87,9 @@ export interface LineCompassLine {
   /** 已知判定沿用的旧二级线（secondaryLines.ts 的 id，锚读编年史） */
   anchorLine?: string;
   /** 另一条已知判定：全满足即已知（与 anchorLine 任一成立即可） */
-  knownWhen?: ScenarioCondition[];
+  knownWhen?: LineCompassCondition[];
   /** 收束判定补充：全满足即撤（line.<id>.outcome 有档总是撤） */
-  closedWhen?: ScenarioCondition[];
+  closedWhen?: LineCompassCondition[];
   steps: LineCompassStep[];
   note?: string;
 }
@@ -176,8 +195,8 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
   const texts = input.texts ?? CONTENT_PACKS.texts;
   const places = input.places ?? lineCompassPlaces();
   const rt = runtimeOf(save) || {};
-  const holds = (conds: readonly ScenarioCondition[] | undefined): boolean =>
-    (conds ?? []).every(c => evaluateLedgerCondition(c, rt, save) === true);
+  const holds = (conds: readonly LineCompassCondition[] | undefined): boolean =>
+    lineCompassConditionsHold(conds, c => evaluateLedgerCondition(c, rt, save) === true);
   const done = new Set(orderedDoneEventIds(rt));
   const knownOld = new Set(knownSecondaryLines(rt, input.atLocationId).map(line => line.id));
 
@@ -219,7 +238,12 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
   let card: LineCompassCard | null = null;
   if (current) {
     const line = current;
-    const step = line.steps.find(s => !s.draft && !s.pending && holds(s.when) && !(s.until?.length ? holds(s.until) : s.eventId !== undefined && done.has(s.eventId)));
+    const live = (s: LineCompassStep): boolean => !s.draft && !s.pending;
+    const passed = (s: LineCompassStep): boolean => (s.until?.length ? holds(s.until) : s.eventId !== undefined && done.has(s.eventId));
+    // 兜底：最后一个已过的步之前一律算过（进度只往前走）
+    let lastPassed = -1;
+    line.steps.forEach((s, i) => { if (live(s) && passed(s)) lastPassed = i; });
+    const step = line.steps.find((s, i) => i > lastPassed && live(s) && holds(s.when) && !passed(s));
     let stepText = '';
     if (step) {
       const atFocus = !!step.eventId && step.eventId === input.focusEventId;

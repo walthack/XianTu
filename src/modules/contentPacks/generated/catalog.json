@@ -1,5 +1,5 @@
 {
-  "version": "c4598207994b0e7d",
+  "version": "d2d973aaa7106241",
   "contracts": [
     {
       "meta": {
@@ -14172,19 +14172,44 @@
             ],
             "until": [
               {
-                "path": "done.lcq.event.s03_12",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s03_12",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s03b_snake_flower_bridge_01",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.nanhuang.step.nh_enter_caravan",
-            "note": "≈ 原拍是随商队入南荒，仓库最早一拍是铁索桥"
+            "note": "≈ 原拍是随商队入南荒，仓库最早一拍是铁索桥；分路线 anyOf：到蛇彝村即过：03 走 s03_12，默认路线（03 隔离）走 03b 首拍 s03b_snake_flower_bridge_01"
           },
           {
             "id": "nh_sheyi_village",
             "eventId": "lcq.event.s03_12",
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s03_12",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s03b_snake_flower_bridge_01",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
             "hintKey": "lineCompass.nanhuang.step.nh_sheyi_village",
-            "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）"
+            "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）；分路线 anyOf 同上"
           },
           {
             "id": "nh_yun_guide_road",
@@ -14289,7 +14314,23 @@
           {
             "id": "nh_xiaozi_debut",
             "eventId": "lcq.event.xiaozi_first_appears",
-            "note": "同地"
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.xiaozi_first_appears",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.debut_xiaozi",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "note": "同地；分路线 anyOf：05 那套的 debut_xiaozi 也算"
           },
           {
             "id": "nh_tide_disaster",
@@ -14298,37 +14339,120 @@
           {
             "id": "nh_f07_burn_village",
             "eventId": "lcq.event.s05_16",
-            "note": "≈ 焚村与解救碧鲮族"
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s05_16",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.biling_bay_stance",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "note": "≈ 焚村与解救碧鲮族；分路线 anyOf：05 隔离，默认路线 04b 同序号 biling_bay_stance 承接"
           },
           {
             "id": "nh_f08_dagu",
             "eventId": "lcq.event.s05_08",
             "when": [
               {
-                "path": "done.lcq.event.s05_16",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s05_16",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.biling_bay_stance",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s05_08",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.ruins_ghost_warriors",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.nanhuang.step.nh_f08_dagu",
-            "note": "古道之名主角事先不知道"
+            "note": "古道之名主角事先不知道；分路线 anyOf：05／04b 同序号"
           },
           {
             "id": "nh_f09_yinsha",
-            "eventId": "lcq.event.s05_09"
+            "eventId": "lcq.event.s05_09",
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s05_09",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.yiyang_repels_yinsha",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "note": "分路线 anyOf：05／04b 同序号"
           },
           {
             "id": "nh_guiwang_approach",
             "eventId": "lcq.event.s05_11",
             "when": [
               {
-                "path": "done.lcq.event.s05_10",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s05_10",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.guiwangdong_coop_pact",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s05_11",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.enter_dong_with_migu",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.nanhuang.step.nh_guiwang_approach",
-            "note": "鬼王峒祁远早说过（lcq:5771）"
+            "note": "鬼王峒祁远早说过（lcq:5771）；分路线 anyOf：05／04b 同序号"
           },
           {
             "id": "nh_binu_arc",
@@ -14353,7 +14477,24 @@
           },
           {
             "id": "nh_f13_f14",
-            "eventId": "lcq.event.slay_dragon"
+            "eventId": "lcq.event.slay_dragon",
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.slay_dragon",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s06_02",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "note": "分路线 anyOf：06 那套 s06_02 也算"
           },
           {
             "id": "nh_tribes_ending",
@@ -14369,21 +14510,46 @@
                 "value": true
               }
             ],
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.shanghou_revealed",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s06_05",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
             "hintKey": "lineCompass.nanhuang.step.nh_shanghou_ice_gu",
-            "note": "lcq:7401–7404；结尾用 05b 那套（P-09）"
+            "note": "lcq:7401–7404；结尾用 05b 那套（P-09）；分路线 anyOf：06 那套 s06_05 也算"
           },
           {
             "id": "nh_leave_for_jin",
             "eventId": "lcq.event.s05b_wuer_suli_depart",
             "when": [
               {
-                "path": "done.lcq.event.shanghou_cures_ice_gu",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.shanghou_cures_ice_gu",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s06_06",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.nanhuang.step.nh_leave_for_jin",
-            "note": "不提晋（线可任意顺序走）"
+            "note": "不提晋（线可任意顺序走）；分路线 anyOf：解蛊 06 那套 s06_06 也算"
           }
         ],
         "note": "knownWhen＝南荒之约（P-01）；closedWhen 暂用 05b 那套（P-09），lineOutcomes 有数据后改 line.nanhuang.outcome"
@@ -14412,22 +14578,40 @@
             "eventId": "lcq.event.s07_00c_arrive_jiankang",
             "when": [
               {
-                "path": "done.lcq.event.shanghou_cures_ice_gu",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.shanghou_cures_ice_gu",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s06_06",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.jin.step.jin_arrive_from_nanhuang",
-            "note": "殇侯托付赴建康（lcq:18075）"
+            "note": "殇侯托付赴建康（lcq:18075）；分路线 anyOf：解蛊 06 那套 s06_06 也算"
           },
           {
             "id": "jin_arrive_icegu",
             "eventId": "lcq.event.s07_00c_arrive_jiankang",
             "when": [
               {
-                "path": "done.lcq.event.s03_12",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s03_12",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s03b_snake_flower_bridge_01",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               },
               {
                 "path": "acq.liuchao.character.yun_cang_feng",
@@ -14436,7 +14620,7 @@
               }
             ],
             "hintKey": "lineCompass.jin.step.jin_arrive_icegu",
-            "note": "走了南荒、冰蛊没解（lcq:17700）"
+            "note": "走了南荒、冰蛊没解（lcq:17700）；分路线 anyOf：到过蛇彝村：s03_12 或 03b 首拍"
           },
           {
             "id": "jin_arrive_skip_nh",
@@ -14733,7 +14917,24 @@
           },
           {
             "id": "song_linan_arrive",
-            "eventId": "lyl.event.debut_ruan_sisters"
+            "eventId": "lyl.event.debut_ruan_sisters",
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lyl.event.debut_ruan_sisters",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.lin_an_bridge_xieyi_tomb",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "note": "分路线 anyOf：lin_an_black_sea 隔离，默认路线 lin_an_bridge 拜祭谢艺那拍承接"
           },
           {
             "id": "song_xuezhun_takeover",
@@ -14936,16 +15137,42 @@
           },
           {
             "id": "han_emperor_dead_coup",
-            "eventId": "lyl.event.s06_01"
+            "eventId": "lyl.event.s06_01",
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lyl.event.s06_01",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.emperor_death_spreads",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "note": "分路线 anyOf：luoyang_coup 隔离，默认路线 han_palace_endgame 同序号承接"
           },
           {
             "id": "han_liujian_yuxi",
             "eventId": "lyl.event.s06_02",
             "when": [
               {
-                "path": "done.lyl.event.s06_01",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lyl.event.s06_01",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.emperor_death_spreads",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               },
               {
                 "path": "acq.liuchao.character.zhao_feiyan",
@@ -14953,21 +15180,63 @@
                 "value": "encountered"
               }
             ],
-            "hintKey": "lineCompass.han.step.han_liujian_yuxi"
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lyl.event.s06_02",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.arrange_escape_route",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "hintKey": "lineCompass.han.step.han_liujian_yuxi",
+            "note": "分路线 anyOf：luoyang_coup／han_palace_endgame 同序号"
           },
           {
             "id": "han_liujian_yuxi_alt",
             "eventId": "lyl.event.s06_02",
             "when": [
               {
-                "path": "done.lyl.event.s06_01",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lyl.event.s06_01",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.emperor_death_spreads",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               },
               {
                 "path": "acq.liuchao.character.zhao_feiyan",
                 "operator": "lt",
                 "value": "encountered"
+              }
+            ],
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lyl.event.s06_02",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyl.event.arrange_escape_route",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.han.step.han_liujian_yuxi_alt",
@@ -15074,13 +15343,38 @@
             "eventId": "lyg.event.shixiang_s13",
             "when": [
               {
-                "path": "done.lyg.event.shixiang_s11",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lyg.event.shixiang_s11",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyg.event.honglusi_amends",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "until": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lyg.event.shixiang_s13",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyg.event.yuanzheng_globe",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.tang.step.tang_envoys_reunion",
-            "note": "lyg:13678–13686"
+            "note": "lyg:13678–13686；分路线 anyOf：shixiang_ambush 隔离，默认路线 changgan_interlude 同序号承接"
           },
           {
             "id": "tang_zhao_nan_war_jinnang",
@@ -15097,9 +15391,18 @@
             "id": "tang_d7_secret_treaty",
             "when": [
               {
-                "path": "done.lyg.event.shixiang_s13",
-                "operator": "eq",
-                "value": true
+                "anyOf": [
+                  {
+                    "path": "done.lyg.event.shixiang_s13",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lyg.event.yuanzheng_globe",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
               }
             ],
             "hintKey": "lineCompass.tang.step.tang_d7_secret_treaty",

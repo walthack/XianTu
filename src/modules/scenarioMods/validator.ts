@@ -2459,6 +2459,7 @@ const LINE_COMPASS_PLACE_SLOT = '{地点}';
  * 线的下一步表（内容包 line-compass.json，右栏线入口复用分析 2026-10-27 §5.2；结构与文案口径见 lineCompass.ts 的 LineCompassTable）。
  * - lineId 须为 7 条国家线、不重复；nameKey 须在 texts；anchorLine 须为 secondaryLines 的线 id；
  * - when / until / knownWhen / closedWhen 只许账本路径（不是账本前缀报 ledger_only），id 须存在；表求值时传存档，unlock.* 可用，相识等级比较可用；
+ *   条件数组里可写 { anyOf: [...] } 组（分路线：组内任一条满足即成立），组内至少 2 条、只能是账本条件、不得嵌套、不得带其他字段；
  * - closedWhen 不得读 compass.*（compass.anyLineClosed 由 closedWhen 派生，读了成环）；
  * - 每步 id 线内唯一，eventId 与 hintKey 至少一个，eventId 须是已知事件；
  * - pending 步（总策划定：仓库还没有对应剧情事件，本次不新建）：eventId 与条件里的 done.* 可以是仓库尚无的事件 id（形如 <ns>.event.<id>），
@@ -2479,14 +2480,32 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
   const ledger: LedgerScope = { refs: [], variant: true, unlockSite: true };
   // pending 步的引用另收：done.* 允许仓库尚无的事件（形如 <ns>.event.<id>），其余类照常核对
   const pendingLedger: LedgerScope = { refs: [], variant: true, unlockSite: true };
+  // 单条账本条件：借 validateConditions 校验，问题与引用的路径改写回真实位置
+  const oneCondition = (c: unknown, itemPath: string, scope: LedgerScope, opts: { noCompass?: boolean }): void => {
+    const base = '@cond[0]';
+    const fix = (p: string): string => (p.startsWith(base) ? itemPath + p.slice(base.length) : p);
+    const before = scope.refs.length;
+    validateConditions([c], '@cond', (p, code, message) => add(fix(p), code, message), scope);
+    for (const ref of scope.refs.slice(before)) ref.path = fix(ref.path);
+    if (!isRecord(c) || typeof c.path !== 'string') return;
+    const parsed = parseLedgerPath(c.path);
+    if (!parsed) add(`${itemPath}.path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.*), got "${c.path}".`);
+    else if (opts.noCompass && parsed.kind === 'compass') add(`${itemPath}.path`, 'compass_in_closed_when', 'closedWhen cannot read compass.* (compass.anyLineClosed is derived from closedWhen).');
+  };
+  const isGroup = (c: unknown): c is Record<string, unknown> => isRecord(c) && Object.prototype.hasOwnProperty.call(c, 'anyOf');
   const conditions = (value: unknown, path: string, scope: LedgerScope = ledger, opts: { noCompass?: boolean } = {}): void => {
     if (value === undefined) return;
-    validateConditions(value, path, add, scope);
-    if (Array.isArray(value)) value.forEach((c, i) => {
-      if (!isRecord(c) || typeof c.path !== 'string') return;
-      const parsed = parseLedgerPath(c.path);
-      if (!parsed) add(`${path}[${i}].path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.*), got "${c.path}".`);
-      else if (opts.noCompass && parsed.kind === 'compass') add(`${path}[${i}].path`, 'compass_in_closed_when', 'closedWhen cannot read compass.* (compass.anyLineClosed is derived from closedWhen).');
+    if (!Array.isArray(value)) { validateConditions(value, path, add, scope); return; }
+    value.forEach((c, i) => {
+      const at = `${path}[${i}]`;
+      if (!isGroup(c)) { oneCondition(c, at, scope, opts); return; }
+      // anyOf 组（分路线）：组内任一条满足即成立
+      for (const key of Object.keys(c)) if (key !== 'anyOf') add(`${at}.${key}`, 'unknown_field', `An anyOf group only has "anyOf", got "${key}".`);
+      if (!Array.isArray(c.anyOf) || c.anyOf.length < 2) { add(`${at}.anyOf`, 'invalid_type', 'anyOf must be an array of at least 2 conditions.'); return; }
+      c.anyOf.forEach((inner, k) => {
+        if (isGroup(inner)) add(`${at}.anyOf[${k}]`, 'invalid_type', 'anyOf groups cannot be nested.');
+        else oneCondition(inner, `${at}.anyOf[${k}]`, scope, opts);
+      });
     });
   };
   const hint = GAME_NUMBERS.story.lineCompass.hint;
