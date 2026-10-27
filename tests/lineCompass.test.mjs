@@ -54,15 +54,15 @@ test('配置：ui.rightSidebar.showLineCompass 默认 true 已登记（用户 20
   assert.equal(compass.lineOfStage('lyl.taiquan_sacred_fruit'), 'taiquan');
 });
 
-test('下一步表：7 条国家线、写入剧情策划定稿 63 条；没有占位；pending 步与线级 knownWhen 按拍板；validator 对仓库表无问题', () => {
+test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合并 5 对同文后 58 条）；没有占位；pending 步与线级 knownWhen 按拍板；validator 对仓库表无问题', () => {
   const table = compass.lineCompassTable();
   assert.deepEqual(table.lines.map(l => l.lineId).sort(), [...registry.NATION_LINE_IDS].sort());
   const steps = table.lines.flatMap(l => l.steps.map(step => ({ lineId: l.lineId, ...step })));
   assert.ok(!steps.some(step => step.draft), '定稿后不留【待剧情策划】占位');
   const hinted = steps.filter(step => step.hintKey);
-  assert.equal(hinted.length, 63, '定稿 63 条');
+  assert.equal(hinted.length, 58, '定稿 63 条，R-8 删掉 5 行同文的「见过」版');
   const perLine = Object.fromEntries(table.lines.map(l => [l.lineId, l.steps.filter(step => step.hintKey).length]));
-  assert.deepEqual(perLine, { nanhuang: 11, jin: 8, song: 11, han: 12, tang: 6, qin: 9, taiquan: 6 });
+  assert.deepEqual(perLine, { nanhuang: 11, jin: 8, song: 10, han: 9, tang: 6, qin: 8, taiquan: 6 });
   for (const step of hinted) {
     assert.equal(step.hintKey, `lineCompass.${step.lineId}.step.${step.id}`);
     assert.ok([...texts[step.hintKey]].length <= numbers.GAME_NUMBERS.story.lineCompass.hint.maxChars, step.hintKey);
@@ -293,22 +293,22 @@ test('pending 步运行时跳过、不进玩家可见；R-4 只有 eventId 的�
   assert.equal(places['lcq.event.s04b_lingfei_baiyi_crisis_02'], '白夷族');
 });
 
-test('R-6：acq … lt encountered 在没有记录时为 true（等级按 0 比），初见／重逢写成显式互补条件', () => {
+test('R-6：acq … lt encountered 在没有记录时为 true（等级按 0 比）；R-8 合并后兜底那行不再带 acq 条件', () => {
   const cond = { path: 'acq.liuchao.character.xu_junfang', operator: 'lt', value: 'encountered' };
   assert.equal(ledger.evaluateLedgerCondition(cond, { acquaintances: {} }), true, '无记录');
   assert.equal(ledger.evaluateLedgerCondition(cond, { acquaintances: { 'liuchao.character.xu_junfang': { kind: 'rumored' } } }), true, '只听说过');
   assert.equal(ledger.evaluateLedgerCondition(cond, { acquaintances: { 'liuchao.character.xu_junfang': { kind: 'encountered' } } }), false);
+  // 防剧透通审后「见过／没见过」两版同文，按 R-8（总策划定）只留兜底那行（详见 lineCompassSpoilerAudit.test.mjs）
   const table = compass.lineCompassTable();
-  const pair = (lineId, met, unmet, who) => {
+  const merged = (lineId, met, kept, who) => {
     const steps = table.lines.find(l => l.lineId === lineId).steps;
-    const a = steps.find(s => s.id === met), b = steps.find(s => s.id === unmet);
-    assert.ok(a.when.some(c => c.path === `acq.liuchao.character.${who}` && c.operator === 'gte'), met);
-    assert.ok(b.when.some(c => c.path === `acq.liuchao.character.${who}` && c.operator === 'lt' && c.value === 'encountered'), unmet);
+    assert.ok(!steps.some(s => s.id === met), met);
+    assert.ok(!(steps.find(s => s.id === kept).when ?? []).some(c => c.path === `acq.liuchao.character.${who}`), kept);
   };
-  pair('song', 'song_jiangzhou_war_open', 'song_jiangzhou_war_open_alt', 'xiao_yao_yi');
-  pair('han', 'han_zhu_urge_luo', 'han_zhu_urge_luo_alt', 'shang_zhen_yu');
-  pair('han', 'han_liujian_yuxi', 'han_liujian_yuxi_alt', 'zhao_feiyan');
-  pair('qin', 'qin_entry_xu_met', 'qin_entry_xu_unmet', 'xu_junfang');
+  merged('song', 'song_jiangzhou_war_open', 'song_jiangzhou_war_open_alt', 'xiao_yao_yi');
+  merged('han', 'han_zhu_urge_luo', 'han_zhu_urge_luo_alt', 'shang_zhen_yu');
+  merged('han', 'han_liujian_yuxi', 'han_liujian_yuxi_alt', 'zhao_feiyan');
+  merged('qin', 'qin_entry_xu_met', 'qin_entry_xu_unmet', 'xu_junfang');
 });
 
 test('用户拍板：晋开局王哲锦囊起已知；宋汉唐南荒序幕结束起已知；宋入口按走没走过晋分两版', () => {

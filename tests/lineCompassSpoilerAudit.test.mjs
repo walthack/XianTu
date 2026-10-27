@@ -1,7 +1,9 @@
 // 右栏「当前线」卡·21:00 防剧透通审（剧情策划稿 2026-10-27-线的下一步提示文案.md §13.1，起因真机 1f9f24127b4e 报告第 179–186 行）。
 // 口径（用户 21:00）：只写中性的地点和动作；不定性、不剧透；不点玩家没见过的人或物；`when` 保证不了的一律改，拿不准就不点名。
 // 改 25 条，其余 38 条不动。
+// R-8（总策划定）：改完后 5 对「见过／没见过」两版同文，删掉「见过」那一行，只留兜底那行（去掉 acq 条件），表现不变。
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
@@ -69,4 +71,76 @@ test('防剧透通审：当前线卡各句不再点名通审清零的人、物�
   for (const [key, value] of stepTexts()) {
     for (const word of CLEARED) assert.ok(!value.includes(word), `${key}「${value}」含「${word}」`);
   }
+});
+
+/** R-8 合并的 5 对：[线, 删掉的「见过」步, 留下的兜底步, 相识账人物, 留下那行的 when（去掉 acq 后）, 同文] */
+const MERGED = [
+  ['song', 'song_jiangzhou_war_open', 'song_jiangzhou_war_open_alt', 'xiao_yao_yi',
+    [{ path: 'done.lcq.event.s10_10_xiaozi_crisis', operator: 'eq', value: true }], '去江州看看那边的情形'],
+  ['han', 'han_zhu_urge_luo', 'han_zhu_urge_luo_alt', 'shang_zhen_yu', undefined, '去洛都看看'],
+  ['han', 'han_camera_palace', 'han_camera_palace_alt', 'si_ming_xin',
+    [{ path: 'done.lyl.event.taiquan_afterfall_09_beat', operator: 'eq', value: true }], '进宫看看'],
+  ['han', 'han_liujian_yuxi', 'han_liujian_yuxi_alt', 'zhao_feiyan',
+    [{ anyOf: [{ path: 'done.lyl.event.s06_01', operator: 'eq', value: true }, { path: 'done.lyl.event.emperor_death_spreads', operator: 'eq', value: true }] }], '去长秋宫看看'],
+  ['qin', 'qin_entry_xu_met', 'qin_entry_xu_unmet', 'xu_junfang', undefined, '去咸阳，找那个方士问问'],
+];
+
+test('R-8：5 对同文变体已合并——「见过」那一行连同文案键删掉，兜底那行去掉 acq 条件、文案不变；带提示的步 63 → 58', () => {
+  const table = compass.lineCompassTable();
+  for (const [lineId, met, kept, who, when, sentence] of MERGED) {
+    const steps = table.lines.find(l => l.lineId === lineId).steps;
+    assert.ok(!steps.some(s => s.id === met), `${met} 已删`);
+    assert.equal(texts[`lineCompass.${lineId}.step.${met}`], undefined, `${met} 文案键已删`);
+    const step = steps.find(s => s.id === kept);
+    assert.deepEqual(step.when, when, kept);
+    assert.ok(!JSON.stringify(step.when ?? []).includes(`acq.liuchao.character.${who}`), `${kept} 不再读相识账`);
+    assert.equal(texts[step.hintKey], sentence, kept);
+  }
+  // 没有别的同一事件、同一句的重复行
+  for (const line of table.lines) {
+    const seen = new Set();
+    for (const step of line.steps.filter(s => s.hintKey && s.eventId)) {
+      const sig = `${step.eventId}|${texts[step.hintKey]}`;
+      assert.ok(!seen.has(sig), `${line.lineId}.${step.id} 与前一行同事件同文`);
+      seen.add(sig);
+    }
+  }
+  assert.equal(table.lines.flatMap(l => l.steps).filter(s => s.hintKey).length, 58);
+});
+
+const eventStage = new Map(fs.readdirSync('src/modules/scenarioMods/builtins/data').filter(f => f.endsWith('.json'))
+  .flatMap(f => { const d = JSON.parse(fs.readFileSync(`src/modules/scenarioMods/builtins/data/${f}`, 'utf8')); return (d.scenario?.events || []).map(e => [e.id, d.manifest.id]); }));
+/** 只有跨关账的存档：done＝编年史里已完成的事件（按给定顺序），acq＝见过的人。 */
+const saveOf = (done, acq = []) => ({
+  角色: { 属性: { 境界: { 名称: '生象', 阶段: '初期' } } },
+  世界: { 状态: { 剧本模组: {
+    modId: eventStage.get(done[done.length - 1]), events: [], completedEventIds: [], flags: {},
+    acquaintances: Object.fromEntries(acq.map(id => [`liuchao.character.${id}`, { kind: 'encountered' }])),
+    chronicle: done.map((eventId, i) => {
+      assert.ok(eventStage.has(eventId), eventId);
+      return { id: `chronicle.${eventStage.get(eventId)}.${eventId}`, type: 'event', stageId: eventStage.get(eventId), title: '', sequence: i + 1 };
+    }),
+  } } },
+});
+const stepOf = (save, focusEventId) => compass.lineCompassView(save, { focusEventId, compassPointer: () => '去某处 · 见某人' }).current;
+
+test('R-8：表现不变——合并的 4 对非待建步，见过和没见过那个人时卡片出同一句（秦线那对是待建步，运行时本就跳过）', () => {
+  const PACT = 'lcq.event.sudaji_south_pact';
+  const cases = [
+    ['song_jiangzhou_war_open', 'xiao_yao_yi', [PACT, 'lcq.event.s10_09_yin_yang_fish', 'lcq.event.s10_10_xiaozi_crisis'], 'lcq.event.s10_09_yin_yang_fish', '去江州看看那边的情形'],
+    ['han_zhu_urge_luo', 'shang_zhen_yu', [PACT], 'lyl.event.s05_01', '去洛都看看'],
+    ['han_camera_palace', 'si_ming_xin', [PACT, 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.s05_01', 'lyl.event.taiquan_afterfall_09_beat'], 'lyl.event.s06_01', '进宫看看'],
+    ['han_liujian_yuxi', 'zhao_feiyan', [PACT, 'lyl.event.s06_01'], 'lyl.event.han_palace_endgame_08_beat', '去长秋宫看看'],
+  ];
+  for (const [label, who, done, focus, sentence] of cases) {
+    for (const acq of [[who], []]) {
+      const card = stepOf(saveOf(done, acq), focus);
+      assert.equal(card?.step, sentence, `${label}：${acq.length ? '见过' : '没见过'}`);
+    }
+  }
+  // 斯明信那对：原「见过」版另要求走过太泉；走过太泉、见过斯明信也照样出这一句
+  const viaTaiquan = stepOf(saveOf([PACT, 'lyl.event.taiquan_portal_exit', 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.s05_01', 'lyl.event.taiquan_afterfall_09_beat'], ['si_ming_xin']), 'lyl.event.s06_01');
+  assert.equal(viaTaiquan?.step, '进宫看看');
+  const qin = compass.lineCompassTable().lines.find(l => l.lineId === 'qin').steps.find(s => s.id === 'qin_entry_xu_unmet');
+  assert.equal(qin.pending, true);
 });

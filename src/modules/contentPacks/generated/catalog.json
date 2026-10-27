@@ -1,5 +1,5 @@
 {
-  "version": "d8a0e6ed101f5ed3",
+  "version": "4b8005677946f8d7",
   "contracts": [
     {
       "meta": {
@@ -13694,7 +13694,6 @@
     "lineCompass.song.step.song_guangyang_from_jin": "上岸，进附近的城看看",
     "lineCompass.song.step.song_guangyang_skip_jin": "打听月霜的下落",
     "lineCompass.song.step.song_escort_yue_girls": "离开广阳，接着上路",
-    "lineCompass.song.step.song_jiangzhou_war_open": "去江州看看那边的情形",
     "lineCompass.song.step.song_jiangzhou_war_open_alt": "去江州看看那边的情形",
     "lineCompass.song.step.song_lieshan_snow": "跟着月霜去烈山",
     "lineCompass.song.step.song_sanchuankou": "去三川口，照孟非卿的安排",
@@ -13707,12 +13706,9 @@
     "lineCompass.han.step.han_enter_border_wudu": "去汉国舞都看看",
     "lineCompass.han.step.han_enter_border_alt": "去汉国看看",
     "lineCompass.han.step.han_yunruyao_bing": "去舞都城里看看",
-    "lineCompass.han.step.han_zhu_urge_luo": "去洛都看看",
     "lineCompass.han.step.han_zhu_urge_luo_alt": "去洛都看看",
-    "lineCompass.han.step.han_camera_palace": "进宫看看",
     "lineCompass.han.step.han_camera_palace_alt": "进宫看看",
     "lineCompass.han.step.han_huo_bieyuan": "照打听来的消息去看看",
-    "lineCompass.han.step.han_liujian_yuxi": "去长秋宫看看",
     "lineCompass.han.step.han_liujian_yuxi_alt": "去长秋宫看看",
     "lineCompass.tang.step.tang_entry_from_han": "从舞都动身，往长安去",
     "lineCompass.tang.step.tang_entry": "去唐国看看",
@@ -13721,7 +13717,6 @@
     "lineCompass.tang.step.tang_d7_secret_treaty": "在长安城里打听打听",
     "lineCompass.tang.step.tang_ganlu_zhuhuan": "回长安城里看看",
     "lineCompass.qin.step.qin_entry_envoy": "去咸阳，向秦廷递国书",
-    "lineCompass.qin.step.qin_entry_xu_met": "去咸阳，找那个方士问问",
     "lineCompass.qin.step.qin_entry_xu_unmet": "去咸阳，找那个方士问问",
     "lineCompass.qin.step.qin_camp_route": "去城外军营看看",
     "lineCompass.qin.step.qin_banquet": "进宫看看",
@@ -14839,24 +14834,6 @@
             "note": "≈"
           },
           {
-            "id": "song_jiangzhou_war_open",
-            "eventId": "lcq.event.s11_02_cement_fortress",
-            "when": [
-              {
-                "path": "done.lcq.event.s10_10_xiaozi_crisis",
-                "operator": "eq",
-                "value": true
-              },
-              {
-                "path": "acq.liuchao.character.xiao_yao_yi",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
-            "hintKey": "lineCompass.song.step.song_jiangzhou_war_open",
-            "note": "≈ lcq:35522"
-          },
-          {
             "id": "song_jiangzhou_war_open_alt",
             "eventId": "lcq.event.s11_02_cement_fortress",
             "when": [
@@ -14864,15 +14841,10 @@
                 "path": "done.lcq.event.s10_10_xiaozi_crisis",
                 "operator": "eq",
                 "value": true
-              },
-              {
-                "path": "acq.liuchao.character.xiao_yao_yi",
-                "operator": "lt",
-                "value": "encountered"
               }
             ],
             "hintKey": "lineCompass.song.step.song_jiangzhou_war_open_alt",
-            "note": "萧遥逸还没见过；R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+            "note": "≈ lcq:35522；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
           },
           {
             "id": "song_lieshan_snow",
@@ -15066,57 +15038,14 @@
             "note": "pending：仓库无云如瑶卖饼事件，本次不新建；until 待该事件；lyl:22620"
           },
           {
-            "id": "han_zhu_urge_luo",
-            "eventId": "lyl.event.taiquan_afterfall_07_beat",
-            "when": [
-              {
-                "path": "acq.liuchao.character.shang_zhen_yu",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
-            "hintKey": "lineCompass.han.step.han_zhu_urge_luo",
-            "note": "≈ lyl:23731"
-          },
-          {
             "id": "han_zhu_urge_luo_alt",
             "eventId": "lyl.event.taiquan_afterfall_07_beat",
-            "when": [
-              {
-                "path": "acq.liuchao.character.shang_zhen_yu",
-                "operator": "lt",
-                "value": "encountered"
-              }
-            ],
             "hintKey": "lineCompass.han.step.han_zhu_urge_luo_alt",
-            "note": "洛都江州时就听过（lyl:9940）；R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+            "note": "≈ lyl:23731；洛都江州时就听过（lyl:9940）；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
           },
           {
             "id": "han_yuncangfeng_luodu",
             "eventId": "lyl.event.s05_01"
-          },
-          {
-            "id": "han_camera_palace",
-            "eventId": "lyl.event.taiquan_afterfall_10_beat",
-            "when": [
-              {
-                "path": "done.lyl.event.taiquan_afterfall_09_beat",
-                "operator": "eq",
-                "value": true
-              },
-              {
-                "path": "done.lyl.event.taiquan_portal_exit",
-                "operator": "eq",
-                "value": true
-              },
-              {
-                "path": "acq.liuchao.character.si_ming_xin",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
-            "hintKey": "lineCompass.han.step.han_camera_palace",
-            "note": "≈ P-18：不写太后寝宫"
           },
           {
             "id": "han_camera_palace_alt",
@@ -15129,7 +15058,7 @@
               }
             ],
             "hintKey": "lineCompass.han.step.han_camera_palace_alt",
-            "note": "≈ 兜底：跳过太泉或没见过斯明信，按顺序兜底"
+            "note": "≈ R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，不论走没走过太泉、见没见过斯明信都出这一句"
           },
           {
             "id": "han_huo_bieyuan",
@@ -15159,49 +15088,6 @@
             "note": "分路线 anyOf：luoyang_coup 隔离，默认路线 han_palace_endgame 同序号承接"
           },
           {
-            "id": "han_liujian_yuxi",
-            "eventId": "lyl.event.s06_02",
-            "when": [
-              {
-                "anyOf": [
-                  {
-                    "path": "done.lyl.event.s06_01",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lyl.event.emperor_death_spreads",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
-              },
-              {
-                "path": "acq.liuchao.character.zhao_feiyan",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
-            "until": [
-              {
-                "anyOf": [
-                  {
-                    "path": "done.lyl.event.s06_02",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
-                    "path": "done.lyl.event.arrange_escape_route",
-                    "operator": "eq",
-                    "value": true
-                  }
-                ]
-              }
-            ],
-            "hintKey": "lineCompass.han.step.han_liujian_yuxi",
-            "note": "分路线 anyOf：luoyang_coup／han_palace_endgame 同序号"
-          },
-          {
             "id": "han_liujian_yuxi_alt",
             "eventId": "lyl.event.s06_02",
             "when": [
@@ -15218,11 +15104,6 @@
                     "value": true
                   }
                 ]
-              },
-              {
-                "path": "acq.liuchao.character.zhao_feiyan",
-                "operator": "lt",
-                "value": "encountered"
               }
             ],
             "until": [
@@ -15242,7 +15123,7 @@
               }
             ],
             "hintKey": "lineCompass.han.step.han_liujian_yuxi_alt",
-            "note": "R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+            "note": "分路线 anyOf：luoyang_coup／han_palace_endgame 同序号；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
           },
           {
             "id": "han_dongzhuo_enter",
@@ -15451,32 +15332,11 @@
             "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；when 应为 identity.<汉使/宋使/唐使> exists（identities.json 为空，缺读取点）；使节入口"
           },
           {
-            "id": "qin_entry_xu_met",
-            "eventId": "liuchao.event.qin_find_xu",
-            "when": [
-              {
-                "path": "acq.liuchao.character.xu_junfang",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
-            "hintKey": "lineCompass.qin.step.qin_entry_xu_met",
-            "pending": true,
-            "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；重逢；lyg:13686"
-          },
-          {
             "id": "qin_entry_xu_unmet",
             "eventId": "liuchao.event.qin_find_xu",
-            "when": [
-              {
-                "path": "acq.liuchao.character.xu_junfang",
-                "operator": "lt",
-                "value": "encountered"
-              }
-            ],
             "hintKey": "lineCompass.qin.step.qin_entry_xu_unmet",
             "pending": true,
-            "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；初见；R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+            "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；lyg:13686；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
           },
           {
             "id": "qin_camp_route",
