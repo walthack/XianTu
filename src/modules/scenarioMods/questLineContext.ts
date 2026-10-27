@@ -5,7 +5,9 @@ import {stepScene} from './fixedEndingNarratives';
 import {canonicalLocationId,locationAncestors} from './travel/locationIds';
 import {namedEntity} from './namedEntities';
 import {currentLocation} from './travel/travelLedger';
-/** Scene cards are code-owned declarations. A prose mention never adds presence. */
+import {orderedDoneEventIds} from './playerLedgerRules';
+/** Scene cards are code-owned declarations. A prose mention never adds presence.
+ * 已完成事件读编年史（跨关，orderedDoneEventIds＝done.* 同一口径），不读切关即重置的 rt.completedEventIds（右栏线入口复用分析 2026-10-27 §3-1／§7-1）。 */
 export function questLineContext(save:any,focusId?:string):LineContext {
  const r=save.世界.状态.剧本模组,locationId=currentLocation(save).canonicalLocationId||canonicalLocationId(save.角色?.位置?.地点ID||'');
  const containing=(id:string)=>id?[id,...locationAncestors(id)]:[],zoneWorld=locationId?String(namedEntity('location',locationId)?.worldLocationId||''):'',locationIds=[...new Set([...containing(locationId),...containing(canonicalLocationId(zoneWorld))])];
@@ -13,7 +15,7 @@ export function questLineContext(save:any,focusId?:string):LineContext {
  const candidates=new Set<string>();
  for(const id of [focusId,r.sceneLedger?.lastBeat?.eventId].filter(Boolean))for(const ref of stepScene(r,id)?.cast?.present||[])candidates.add(runtimeEntityId(r,ref));
  for(const [id,a]of Object.entries(r.sceneLedger?.actors||{}))if((a as any).status==='present')candidates.add(id);
- const ctx:LineContext={completedEventIds:[...(r.completedEventIds||[]),...(r.travelLedger?.doneEventIds||[])],activeEventIds:(r.activeEventIds||[]).filter((id:string)=>{const e=r.events.find((e:any)=>e.id===id);return !e?.locationId||locationIds.includes(canonicalLocationId(e.locationId));}),presentActorIds:[],knownFactIds:Object.values(r.playerKnowledge||{}).filter((f:any)=>f.status==='confirmed').map((f:any)=>f.factId),locationId,locationIds,chapterOrder:{},currentChapterOrder:namingChapter(r),affinity:Object.fromEntries(QUEST_LINES.flatMap(l=>l.ownerCharacterIds).map(id=>[id,affinityOf(save,id)])),flags:r.flags||{}};
+ const ctx:LineContext={completedEventIds:[...new Set([...orderedDoneEventIds(r),...(r.travelLedger?.doneEventIds||[])])],activeEventIds:(r.activeEventIds||[]).filter((id:string)=>{const e=r.events.find((e:any)=>e.id===id);return !e?.locationId||locationIds.includes(canonicalLocationId(e.locationId));}),presentActorIds:[],knownFactIds:Object.values(r.playerKnowledge||{}).filter((f:any)=>f.status==='confirmed').map((f:any)=>f.factId),locationId,locationIds,chapterOrder:{},currentChapterOrder:namingChapter(r),affinity:Object.fromEntries(QUEST_LINES.flatMap(l=>l.ownerCharacterIds).map(id=>[id,affinityOf(save,id)])),flags:r.flags||{}};
  for(const ch of r.chapters||[]){const n=(ch.eventIds||[]).map((id:string)=>r.events.find((e:any)=>e.id===id)?.axisAnchor?.match(/第(\d+)章/)?.[1]).map(Number).filter((n:number)=>n>0);if(n.length)ctx.chapterOrder[ch.id]=Math.min(...n);}
  // Author-declared optional scene cast is valid only within its true location/window.
  for(const l of QUEST_LINES)if(lineConditionMet(l.entry,ctx)&&(!l.closeWhen||!lineConditionMet(l.closeWhen,ctx)))for(const b of l.beats)if(locationIds.includes(canonicalLocationId(b.sceneLocationId||b.locationId||''))&&(!b.closeWhen||!lineConditionMet(b.closeWhen,ctx)))for(const id of b.presentActorIds||[])if(r.canon.characters.some((c:any)=>c.id===id))candidates.add(id);
