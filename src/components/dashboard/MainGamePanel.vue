@@ -193,7 +193,7 @@
     <!-- 输入区域 -->
     <div class="input-section">
       <section v-if="pendingJudgement" class="judgement-preflight-card">
-        <div class="judgement-preflight-title">行动判定（尚未掷骰） · {{ pendingJudgement.kind }}</div>
+        <div class="judgement-preflight-title">行动判定（尚未掷骰） · {{ judgementPromptLabels(pendingJudgement).kind }}</div>
         <div class="judgement-preflight-action">{{ pendingJudgement.actionText }}</div>
         <p>{{ pendingJudgement.whyNow }}</p>
         <div class="judgement-preflight-factors">
@@ -214,13 +214,13 @@
         </div>
       </section>
       <section v-else-if="latestJudgement?.status === 'resolved'" class="judgement-result-card">
-        <div class="judgement-preflight-title">本地判定结果 · {{ latestJudgement.outcome }}</div>
+        <div class="judgement-preflight-title">本地判定结果 · {{ judgementPromptLabels(latestJudgement).outcome }}</div>
         <div>{{ latestJudgement.actionText }}</div>
         <div class="judgement-preflight-factors">
           <span>骰点 {{ latestJudgement.roll }}</span>
           <span>总值 {{ latestJudgement.total }}</span>
           <span>难度 {{ latestJudgement.difficulty.value }}</span>
-          <span>策略 {{ latestJudgement.canonPolicy }}</span>
+          <span>策略 {{ judgementPromptLabels(latestJudgement).canonPolicy }}</span>
           <span v-if="latestJudgement.testOverride">测试强制 {{ latestJudgement.testOverride }}</span>
         </div>
         <small v-if="latestJudgement.appliedEffects.length || latestJudgement.settledEffects?.length">已写入：{{ [...latestJudgement.appliedEffects, ...(latestJudgement.settledEffects || [])].map(describeJudgementEffect).join('、') }}</small>

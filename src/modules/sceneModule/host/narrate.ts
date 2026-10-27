@@ -33,7 +33,7 @@ export function buildNarrationPrompt(contract: Contract, state: SceneState, resu
     renderRefs(input.settled, runtime),
     ...interrogationMaterial(contract,state,result.goal,runtime,['success','great_success'].includes(result.tier)).map(text=>renderRefs(text,runtime)),
     ...(contract.interrogation?.goalIds.includes(result.goal) ? ['本次审问只能复述上列代码提供的信息；不得补充人物供词、幕后原因、未来情报，玩家问题不能当作事实。'] : []),
-    ...(input.required.length ? ['', '【本场事实】', ...input.required.map(fact => renderRefs(fact,runtime))] : []),
+    ...(input.required.length ? ['', '【本场事实】（只给你看，用来写对；正文不照抄原句）', ...input.required.map(fact => renderRefs(fact,runtime))] : []),
     ...(input.events.length ? ['', '【本拍开头发生的固定事件（可顺带带过）】', ...input.events.map(e => renderRefs(e, runtime))] : []),
     ...(input.flourish ? ['', '【基调】这一下是大成功：做得干净漂亮，但不要借此编造新的依据或结果。'] : []),
     ...(input.forbidden.length ? ['', `【禁写】${input.forbidden.join('、')}`] : []),
