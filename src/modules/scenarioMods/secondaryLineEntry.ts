@@ -10,7 +10,9 @@ import { CONTENT_PACKS } from '../contentPacks';
 import { logEventOnce } from '../diagnostics/log';
 import { evaluateLedgerCondition } from './ledgerConditions';
 import { lineUnlockStatus, taiquanEntryVariant } from './lineUnlock';
-import { secondaryLineUnlockOptions, type SecondaryLine } from './secondaryLines';
+import { orderedDoneEventIds } from './playerLedgerRules';
+import { resolveAvailableLines, secondaryLineUnlockOptions, type SecondaryLine } from './secondaryLines';
+import type { AcquaintanceLedger } from './acquaintanceLedger';
 
 export interface SecondaryLineEntryView {
   /** 有 unlock 且没解锁：右栏灰显（不隐藏） */
@@ -19,6 +21,17 @@ export interface SecondaryLineEntryView {
   title: string;
   /** 入口指引，一句一行 */
   hintLines: string[];
+}
+
+/**
+ * 锚读跨关账（右栏线入口复用分析 2026-10-27 §3-1／§5.3，Q10 总策划定）：已完成事件取 `orderedDoneEventIds`
+ * （与 `done.*` 账本路径同一口径：编年史为准，补本关 `completedEventIds` 的同回合空档），不读 `rt.completedEventIds`——
+ * 后者切关时按新关重置，锚事件在上一关完成的线到下一关就会消失。相识账本身跨关继承。
+ * 放在本文件而不是 secondaryLines.ts：后者保持不依赖账本模块（ledgerConditions 反向读它的本线节点）。
+ */
+export function knownSecondaryLines(rt: unknown, currentLocationId?: string): SecondaryLine[] {
+  const runtime = (rt && typeof rt === 'object' ? rt : {}) as { acquaintances?: AcquaintanceLedger };
+  return resolveAvailableLines(currentLocationId, runtime.acquaintances, orderedDoneEventIds(rt));
 }
 
 /** 各线的说法判定（键＝unlock 配置键）。没登记的线用 variants.default。 */

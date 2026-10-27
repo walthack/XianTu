@@ -6,8 +6,8 @@
  */
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { questLineView } from './questLineView';
-import { secondaryLineEntryView } from './secondaryLineEntry';
-import { resolveAvailableLines, secondaryLineDisplayName, secondaryLinesAtEvent } from './secondaryLines';
+import { knownSecondaryLines, secondaryLineEntryView } from './secondaryLineEntry';
+import { secondaryLineDisplayName, secondaryLinesAtEvent } from './secondaryLines';
 
 export interface SidebarLineEntry {
   id: string;
@@ -23,6 +23,7 @@ export const showSecondaryLines = (): boolean => GAME_NUMBERS.ui.rightSidebar.sh
 
 // 二级线：锚一满足就作为待办显示，不需要玩家确认（用户裁定 2026-08-16）。
 // 整线解锁的线（太泉）没解锁也照样显示：标题「时机未到」＋缺项句，灰显不隐藏（太泉解锁设计稿 2026-10-27 §5）。
+// 锚读编年史（knownSecondaryLines），切关后照样已知（分析稿 2026-10-27 §3-1）。
 // objectiveOf：当前拍属于这条线时的「当前目标」（右栏的指南针句），只在用到时才算。
 export function sidebarAvailableLines(
   rt: any,
@@ -34,7 +35,7 @@ export function sidebarAvailableLines(
   if (!showSecondaryLines()) return [];
   if (!rt || typeof rt !== 'object') return [];
   const activeLineIds = new Set(secondaryLinesAtEvent(event?.id).map(line => line.id));
-  return resolveAvailableLines(locationId, rt.acquaintances, rt.completedEventIds).map((line): SidebarLineEntry => {
+  return knownSecondaryLines(rt, locationId).map((line): SidebarLineEntry => {
     const view = secondaryLineEntryView(line, save);
     return {
       id: line.id,

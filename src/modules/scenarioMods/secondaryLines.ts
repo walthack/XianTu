@@ -925,6 +925,7 @@ export function secondaryLineUnlockOptions(line: SecondaryLine): LineUnlockOptio
 
 /**
  * 当前接得到哪些二级线。纯函数：只看地点与相识账本，不读别的存档字段、不产生副作用。
+ * `completedEventIds` 须是跨关口径（编年史）；读存档的调用方用 `secondaryLineEntry.knownSecondaryLines`，不要传本关的 `rt.completedEventIds`。
  *
  * 只回答"接得到"，不回答"加入了"——见模块头纪律。返回的每条都带 `entryHint`，
  * 上层直接当待办显示即可，无需玩家确认。
