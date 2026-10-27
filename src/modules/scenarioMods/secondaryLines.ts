@@ -591,6 +591,7 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.xiaoyaoyi_arrives' },
       { reviewSummary: '萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_01_old_case' },
       { reviewSummary: '用灵飞镜窥见假山大汉钻出，被他察觉——宫禁闹鬼传开', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.palace_haunting_rumor' },
+      { reviewSummary: '云家宴上起身解围，被云家主人当众称作「盘江程氏的少主」', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.jin_panjiang_shaozhu' },
       // J2 并进 s08_03_beifu_rescue
       { reviewSummary: '与萧遥逸夜探神龙殿：晋帝昏迷如死，似遭操控', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_07_dragon_hall' },
       { reviewSummary: '在皇宫与云丹琉交手后逃生', status: 'ready', stageId: 'lcq.stage_07_qingyuan_jiankang', eventId: 'lcq.event.s07_08_palace_escape' },

@@ -1,5 +1,5 @@
 {
-  "version": "f15bf5dc87c7e2b7",
+  "version": "e636616ff91507a8",
   "contracts": [
     {
       "meta": {
@@ -14724,15 +14724,6 @@
             "hintKey": "lineCompass.jin.step.jin_back_after_eagle"
           },
           {
-            "id": "jin_feiniao_ninjia",
-            "eventId": "lcq.event.s08_07_palace_ninja",
-            "note": "≈"
-          },
-          {
-            "id": "jin_gumingyin",
-            "eventId": "lcq.event.s08_08_gumingyin_plot"
-          },
-          {
             "id": "jin_palm_oath",
             "eventId": "lcq.event.palm_oath_shanghou",
             "when": [
@@ -14742,7 +14733,16 @@
                 "value": "encountered"
               }
             ],
-            "note": "条件必经"
+            "note": "条件必经；按原著序（300）挪到 jin_back_after_eagle（289）之后、jin_feiniao_ninjia（304）之前（五线补全·晋 J3，2026-10-28：掌誓已挂 sudaji 章、上 stage_08 rail 紧接 s08_06）"
+          },
+          {
+            "id": "jin_feiniao_ninjia",
+            "eventId": "lcq.event.s08_07_palace_ninja",
+            "note": "≈"
+          },
+          {
+            "id": "jin_gumingyin",
+            "eventId": "lcq.event.s08_08_gumingyin_plot"
           },
           {
             "id": "jin_weaving_trade",
@@ -15627,9 +15627,9 @@
     "lcq.event.s07_10_dragon_fang": "",
     "lcq.event.s08_01_eagle_valley": "",
     "lcq.event.s08_04_sudaji_enters": "",
+    "lcq.event.palm_oath_shanghou": "建康",
     "lcq.event.s08_07_palace_ninja": "",
     "lcq.event.s08_08_gumingyin_plot": "",
-    "lcq.event.palm_oath_shanghou": "建康",
     "lcq.event.s09_04_weaving_trade": "",
     "lcq.event.s09_05_drain_escape": "",
     "lcq.event.s09_07_feiniao_infiltration": "",

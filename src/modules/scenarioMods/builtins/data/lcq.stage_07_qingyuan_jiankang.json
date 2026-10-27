@@ -3936,7 +3936,10 @@
         "eventIds": [
           "lcq.event.s07_01_old_case",
           "lcq.event.s07_02_kill_wu",
+          "lcq.event.wangzhe_letter",
           "lcq.event.s07_03_xiaozi_appears",
+          "lcq.event.palace_haunting_rumor",
+          "lcq.event.jin_panjiang_shaozhu",
           "lcq.event.s07_04_zhuo_subdued",
           "lcq.event.s07_debut_qinhui",
           "lcq.event.s07_qinhui_join"
@@ -5781,6 +5784,62 @@
               "timeCost": 1,
               "outcomeText": {
                 "success": "你已用灵飞镜撞见假山大汉，并记下宫禁闹鬼传闻；事件完成真值由本地引擎落账。",
+                "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "lcq.event.jin_panjiang_shaozhu",
+        "name": "盘江程氏少主",
+        "description": "云家宴上石超劝酒逼命、满席僵住，程宗扬起身向主人致意解围；云家主人顺势挽住他，当众称他是「盘江程氏的少主」，一向在南方。这个名头从此在建康世家间传开。",
+        "axisId": null,
+        "axisMethod": "jin-line-fill-axis-pending",
+        "axisAnchor": "六朝清羽记·#137·第135章·清谈",
+        "axisSeq": 243,
+        "axisBeat": "云家宴席僵局中程宗扬起身解围，云家主人当众称他是「盘江程氏的少主」，一向在南方。",
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.palace_haunting_rumor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.jin_panjiang_shaozhu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xiao_yao_yi",
+          "liuchao.character.qin_hui",
+          "liuchao.character.wu_san_gui"
+        ],
+        "relatedFactionIds": [
+          "liuchao.faction.pan_jiang_cheng",
+          "liuchao.faction.yun_shi_shang_hui"
+        ],
+        "locationId": "liuchao.location.jiankang",
+        "objective": "在云家宴席上起身解围，坐实「盘江程氏少主」的名头",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "rise_at_yun_banquet",
+              "label": "在云家宴上起身解围，认下「盘江程氏少主」",
+              "actionText": "我在云家宴席僵住时起身向主人致意解围，由云家主人当众引荐为「盘江程氏的少主」，顺势认下这个名头。",
+              "timeCost": 1,
+              "outcomeText": {
+                "success": "云家主人当众称你是盘江程氏的少主、一向在南方；这个名头从此在建康世家间传开。事件完成真值由本地引擎落账。",
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               }

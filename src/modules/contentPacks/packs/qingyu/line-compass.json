@@ -390,6 +390,14 @@
           "hintKey": "lineCompass.jin.step.jin_back_after_eagle"
         },
         {
+          "id": "jin_palm_oath",
+          "eventId": "lcq.event.palm_oath_shanghou",
+          "when": [
+            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "gte", "value": "encountered" }
+          ],
+          "note": "条件必经；按原著序（300）挪到 jin_back_after_eagle（289）之后、jin_feiniao_ninjia（304）之前（五线补全·晋 J3，2026-10-28：掌誓已挂 sudaji 章、上 stage_08 rail 紧接 s08_06）"
+        },
+        {
           "id": "jin_feiniao_ninjia",
           "eventId": "lcq.event.s08_07_palace_ninja",
           "note": "≈"
@@ -397,14 +405,6 @@
         {
           "id": "jin_gumingyin",
           "eventId": "lcq.event.s08_08_gumingyin_plot"
-        },
-        {
-          "id": "jin_palm_oath",
-          "eventId": "lcq.event.palm_oath_shanghou",
-          "when": [
-            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "gte", "value": "encountered" }
-          ],
-          "note": "条件必经"
         },
         {
           "id": "jin_weaving_trade",

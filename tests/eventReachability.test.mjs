@@ -30,12 +30,8 @@ const DIR = 'src/modules/scenarioMods/builtins/data/';
 const DEBT = new Set([
   // 裁定170：第24章历史内容留原位，不上rail；不是本期南荒待补拍。
   'lcq.event.ice_gu_coercion',
-  // 第131/133章，超出本期第124章终点。
-  'lcq.event.wangzhe_letter',
-  'lcq.event.palace_haunting_rumor',
-  'lcq.event.palm_oath_shanghou',
-  'lcq.event.xiangfu_stance',
-  'lcq.event.spoils_split',
+  // 晋线 wangzhe_letter／palace_haunting_rumor／palm_oath_shanghou／spoils_split／xiangfu_stance
+  // 已于 2026-10-28 挂章上 rail（五线补全·晋 J1–J5），从本清单删去。
   'lcq.event.yeying_seat_struggle',
   'lcq.event.pengyi_takeover',
   'lcq.event.jin_vacate_jiangzhou',

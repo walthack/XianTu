@@ -9,6 +9,20 @@
       "path": "canon.characters[id=liuchao.character.qi_yuan].description",
       "from": "程氏商会在江州的锦衣掌柜缩在榻边，腊黄的脸埋进账册，弓成虾米的脊背里藏着南荒九死一生的旧伤——他替程宗扬管着的，岂止是账面上的银钱。",
       "to": "白湖商馆的老行商，走过几次南荒；这一程替商队带路，管奴隶。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.chapters[id=lcq.chapter.stage_09_trade_and_escape_aftermath].eventIds",
+      "from": [
+        "lcq.event.s09_01_eight_steeds_leave",
+        "lcq.event.s09_02_yun_ruyao_faints"
+      ],
+      "to": [
+        "lcq.event.spoils_split",
+        "lcq.event.s09_01_eight_steeds_leave",
+        "lcq.event.xiangfu_stance",
+        "lcq.event.s09_02_yun_ruyao_faints"
+      ]
     }
   ]
 }

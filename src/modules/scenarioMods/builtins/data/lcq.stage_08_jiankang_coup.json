@@ -3926,7 +3926,8 @@
         "eventIds": [
           "lcq.event.s08_04_sudaji_enters",
           "lcq.event.s08_05_breakthrough",
-          "lcq.event.s08_06_pursuit_repelled"
+          "lcq.event.s08_06_pursuit_repelled",
+          "lcq.event.palm_oath_shanghou"
         ],
         "activation": [
           {

@@ -636,6 +636,76 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
       allowedElaboration: '可补足资源清点与当下可用范围，不得改写死／生真值。',
     }],
   },
+  // 晋线补全（剧情策划 2026-10-28 五线补全·晋 J1–J6；用户 2026-10-28 01:26 授权）：原欠账拍按原著序挂章上 rail。
+  {
+    modId: 'lcq.stage_07_qingyuan_jiankang',
+    afterEventId: 'lcq.event.s07_02_kill_wu',
+    eventIds: ['lcq.event.wangzhe_letter'],
+    contracts: [{
+      eventId: 'lcq.event.wangzhe_letter',
+      mustReach: '斩吴行德后，程宗扬在清远玄真观以水浸开王哲锦囊里的空白信笺，读到王哲委托他清理太乙真宗门户。',
+      completionEvidence: [],
+      forbiddenInCanon: ['信中写明掌教之位传给谁', '信中给程宗扬师徒名分或信物', '提前演出后续剧情'],
+      allowedElaboration: '可补足显字过程与程宗扬读信时的反应，不得替王哲补写信中没有的名分。',
+    }],
+  },
+  {
+    modId: 'lcq.stage_07_qingyuan_jiankang',
+    afterEventId: 'lcq.event.s07_03_xiaozi_appears',
+    eventIds: ['lcq.event.palace_haunting_rumor', 'lcq.event.jin_panjiang_shaozhu'],
+    contracts: [
+      {
+        eventId: 'lcq.event.palace_haunting_rumor',
+        mustReach: '程宗扬用灵飞镜窥探宫城，撞见可疑大汉从假山钻出并被察觉，宫禁闹鬼的传闻传开。',
+        completionEvidence: [],
+        forbiddenInCanon: ['点破假山大汉的身份与来历', '提前演出后续剧情'],
+        allowedElaboration: '可补足窥镜所见与传闻在建康的传播，不得提前揭开闹鬼底下的真相。',
+      },
+      {
+        eventId: 'lcq.event.jin_panjiang_shaozhu',
+        mustReach: '云家宴席僵局中程宗扬起身解围，云家主人当众称他是「盘江程氏的少主」，一向在南方。',
+        completionEvidence: [],
+        forbiddenInCanon: ['改由程宗扬自封名头', '提前演出后续剧情'],
+        allowedElaboration: '可补足宴席众人的反应与名头在世家间传开的过程。',
+      },
+    ],
+  },
+  {
+    modId: 'lcq.stage_08_jiankang_coup',
+    afterEventId: 'lcq.event.s08_06_pursuit_repelled',
+    eventIds: ['lcq.event.palm_oath_shanghou'],
+    contracts: [{
+      eventId: 'lcq.event.palm_oath_shanghou',
+      mustReach: '程宗扬向萧遥逸透露秦桧等人与黑魔海毒宗的关系，萧遥逸承诺不与殇侯为敌，双方击掌立约。',
+      completionEvidence: [],
+      forbiddenInCanon: ['萧遥逸拒绝立约', '提前演出后续剧情'],
+      allowedElaboration: '可补足两人谈殇侯、议合作的对话与击掌前后的过渡。',
+    }],
+  },
+  {
+    modId: 'lcq.stage_09_trade_and_escape',
+    beforeEventId: 'lcq.event.s09_01_eight_steeds_leave',
+    eventIds: ['lcq.event.spoils_split'],
+    contracts: [{
+      eventId: 'lcq.event.spoils_split',
+      mustReach: '宫变后分赃落定：王茂弘、谢安等各方妥协，萧家获江、宁二州，云家得盐业，程宗扬一无所得。',
+      completionEvidence: [],
+      forbiddenInCanon: ['程宗扬分得州郡或盐利', '提前演出后续剧情'],
+      allowedElaboration: '可补足分赃名单的来由与程宗扬的反应，不得改写分赃结果。',
+    }],
+  },
+  {
+    modId: 'lcq.stage_09_trade_and_escape',
+    afterEventId: 'lcq.event.s09_01_eight_steeds_leave',
+    eventIds: ['lcq.event.xiangfu_stance'],
+    contracts: [{
+      eventId: 'lcq.event.xiangfu_stance',
+      mustReach: '程宗扬当面问清王茂弘：相府此刻站在哪一边。王茂弘阐述无为而治，愿让权于萧侯等年轻人，并承诺保晋国二十年太平。',
+      completionEvidence: [],
+      forbiddenInCanon: ['王茂弘倒向某一家争权', '提前演出后续剧情'],
+      allowedElaboration: '可补足相府会面的场景与问答，不得改写王茂弘的立场。',
+    }],
+  },
   {
     modId: 'lyl.lin_an_bridge',
     afterEventId: 'lyl.event.lin_an_bridge_04_beat',

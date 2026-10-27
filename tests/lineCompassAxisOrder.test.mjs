@@ -30,10 +30,6 @@ const ALLOWED = {
     at: '73 < 75（nh_f03_huamiao_mist）',
     why: 's04_03 乐明珠（73）在 s04_01 送亲疑点（75）之后才能触发：stage_04 条件链 s04_01 → s04_02 → s04_03，所以 s04_01 一定先完成，nh_f03_huamiao_mist 的提示照常显示到 s04_01 完成。',
   },
-  'jin.jin_palm_oath': {
-    at: '300 < 308（jin_gumingyin）',
-    why: '掌誓（palm_oath_shanghou）不在 stage_08 rail、也没挂章（eventReachability 欠账），默认路线完成不了，吞不了前面的步；即便挂上，会被兜底算过的 jin_feiniao_ninjia、jin_gumingyin 都只有 eventId、没有文案。',
-  },
   'tang.tang_fanseng': {
     at: '1061 < 1066（tang_changan_yangyuhuan）',
     why: '番僧猎杀（changgan_fanseng_hunt）不在 changgan_begins rail、也没挂章（eventReachability 欠账），默认路线完成不了；前一步 tang_changan_yangyuhuan 的 s03_01 是本关 rail 第一拍，按焦点排序（rail 拍优先）挂章后也是它先完成，提示不会被吞。',
@@ -43,6 +39,7 @@ const ALLOWED = {
 // 原有三处（晋 jin_shanghou_cure_and_trade、汉 han_camera_palace_alt、太泉 tq_yinyang_fish）已按总策划定改顺序，回归测试见文末。
 const KNOWN = {};
 // 南荒 nh_leave_for_jin（219<222）已按 R-15（剧情策划稿 §15.2，总策划定）整步删掉，放行条目随之去掉；回归测试见文末。
+// 晋 jin_palm_oath（300<308）已按五线补全·晋 J3（2026-10-28）挪到 jin_back_after_eagle 之后、掌誓挂章上 rail，放行条目随之去掉；回归测试见文末。
 
 /** 每条线里倒序的步：本步 axisSeq 小于它前面各正式 eventId 步的最大值。 */
 function inversions(table) {
@@ -207,4 +204,75 @@ test('南荒 R-15（总策划定）：删掉 nh_leave_for_jin；山村那句显�
     assert.equal(c?.lineId, 'jin', `完成 ${done.length} 拍、焦点 ${focus ?? '无'}`);
     assert.equal(c.step, ARRIVE, `完成 ${done.length} 拍、焦点 ${focus ?? '无'}：南荒收束后晋入口「${ARRIVE}」照常显示`);
   }
+});
+
+test('晋 五线补全 J1–J6（2026-10-28）：默认路线从南荒收束起，07→08→09 每拍挂章上 rail；线卡随步推进，掌誓不再倒序，s09_10 完成即收束撤卡', () => {
+  const S05B = 'lcq.stage_05b', S07 = 'lcq.stage_07_qingyuan_jiankang', S08 = 'lcq.stage_08_jiankang_coup', S09 = 'lcq.stage_09_trade_and_escape';
+  const ev = id => `lcq.event.${id}`;
+  const FILLED = { [S07]: ['wangzhe_letter', 'palace_haunting_rumor', 'jin_panjiang_shaozhu'], [S08]: ['palm_oath_shanghou'], [S09]: ['spoils_split', 'xiangfu_stance'] };
+  // ① 可达：原欠账 5 拍与新拍都挂在本关章里、且在本关 rail 上；插入处与 rail 前后两拍按原著 axisSeq 不倒序
+  for (const [stageId, ids] of Object.entries(FILLED)) {
+    const rail = CANON_RAIL_PROFILES.find(p => p.modId === stageId).orderedEventIds;
+    const bound = new Set(stages.get(stageId).scenario.chapters.flatMap(c => c.eventIds || []));
+    for (const id of ids.map(ev)) {
+      assert.ok(bound.has(id), `${id} 挂在 ${stageId} 的章里`);
+      const i = rail.indexOf(id);
+      assert.ok(i >= 0, `${id} 在 ${stageId} rail 上`);
+      const [prev, next] = [axisSeq.get(rail[i - 1]), axisSeq.get(rail[i + 1])];
+      assert.ok((prev ?? -Infinity) <= axisSeq.get(id) && axisSeq.get(id) <= (next ?? Infinity), `${id} 与 rail 前后拍 axisSeq 不倒序`);
+    }
+  }
+  assert.equal(axisSeq.get(ev('jin_panjiang_shaozhu')), 243);
+  // ② 默认路线：关链从 stage_01 走到晋三关，途经 05b（南荒已收束）
+  const before = routeTo(S07);
+  assert.ok(before.includes(ev('s05b_wuer_suli_depart')), '默认路线到建康前南荒已收束');
+  assert.equal(stages.get(S07).manifest.nextStageId, S08);
+  assert.equal(stages.get(S08).manifest.nextStageId, S09);
+  const jin = [S07, S08, S09].flatMap(stageId => stageOrder(stageId).map(id => ({ stageId, id })));
+  for (const id of Object.values(FILLED).flat().map(ev)) assert.ok(jin.some(x => x.id === id), `${id} 在默认路线上`);
+  const at = id => jin.findIndex(x => x.id === ev(id));
+  assert.ok(at('s07_02_kill_wu') < at('wangzhe_letter') && at('wangzhe_letter') < at('s07_03_xiaozi_appears'), '原著序：斩吴 → 拆锦囊 → 小紫现身');
+  assert.ok(at('palace_haunting_rumor') < at('jin_panjiang_shaozhu') && at('jin_panjiang_shaozhu') < at('s07_04_zhuo_subdued'));
+  assert.ok(at('s08_06_pursuit_repelled') < at('palm_oath_shanghou') && at('palm_oath_shanghou') < at('s08_07_palace_ninja'));
+  assert.ok(at('spoils_split') < at('s09_01_eight_steeds_leave') && at('s09_01_eight_steeds_leave') < at('xiangfu_stance'));
+  // ③ 逐拍走：每拍之前（焦点＝这一拍／无焦点）当前线都是晋；焦点正是本步的拍时出主线指南针；提示只往前走
+  const acq = Object.fromEntries(['shang_zhen_yu', 'yun_cang_feng', 'xiao_yao_yi'].map(n => [`liuchao.character.${n}`, { kind: 'encountered' }]));
+  const table = compass.lineCompassTable().lines.find(l => l.lineId === 'jin');
+  const stepOf = new Map(table.steps.filter(s => s.eventId).map(s => [s.eventId, s.id]));
+  const HINTS = Object.fromEntries(table.steps.filter(s => s.hintKey).map(s => [s.id, texts[s.hintKey]]));
+  const seen = [];
+  // 广阳两拍（s09_07／s09_08）写在宋线下一步表里（song_guangyang_from_jin），焦点在那里时当前线归宋，不算晋的步
+  const ownLine = x => compass.lineOfEvent(x.id, x.stageId) === 'jin';
+  jin.forEach(({ stageId, id }, i) => {
+    if (i > at('s09_10_separation')) return; // 收束拍之后（章尾的非承重拍）见 ④
+    const done = [...before, ...jin.slice(0, i).map(x => x.id)];
+    if (ownLine(jin[i])) assert.equal(card(stageId, done, id, acq)?.lineId, 'jin', `${id} 当焦点：当前线是晋`);
+    // 晋第一拍之前没有焦点时编年史里还没有晋的拍；上一拍归宋时最近推进的线是宋
+    if (i === 0 || !ownLine(jin[i - 1])) return;
+    const idle = card(stageId, done, undefined, acq);
+    assert.equal(idle?.lineId, 'jin', `${id} 之前（无焦点）：当前线是晋`);
+    const hint = Object.entries(HINTS).find(([, text]) => text === idle.step)?.[0];
+    if (hint && seen.at(-1) !== hint) seen.push(hint);
+  });
+  assert.deepEqual(seen, ['jin_arrive_from_nanhuang', 'jin_qingyuan_case', 'jin_back_jiankang', 'palace_ask', 'jin_eagle_beifu', 'jin_back_after_eagle'],
+    '带文案的步按表顺序依次出现，不回跳；palace_ask（宫禁闹鬼可达后）不再永不显示');
+  // 拆锦囊：s07_01 后显示到锦囊拆开；锦囊当焦点出主线指南针；拆开后不再显示
+  const upTo = id => [...before, ...jin.slice(0, at(id)).map(x => x.id)];
+  assert.equal(card(S07, upTo('s07_02_kill_wu'), undefined, acq).step, HINTS.jin_qingyuan_case);
+  assert.equal(card(S07, upTo('wangzhe_letter'), ev('wangzhe_letter'), acq).step, pointer(S07, ev('wangzhe_letter')));
+  assert.notEqual(card(S07, upTo('s07_03_xiaozi_appears'), undefined, acq).step, HINTS.jin_qingyuan_case);
+  // 宫禁闹鬼已完成、回建康之后：「在建康打听宫里最近有什么事」显示到神龙殿夜探
+  assert.equal(card(S07, upTo('s07_06_water_assassins'), undefined, acq).step, HINTS.palace_ask);
+  assert.notEqual(card(S07, upTo('s07_08_palace_escape'), undefined, acq).step, HINTS.palace_ask, '神龙殿夜探之后不再显示');
+  // 掌誓：苏妲己退走后轮到 jin_palm_oath；当焦点出主线指南针；完成后轮到 jin_feiniao_ninjia，不再被兜底吞掉
+  assert.equal(card(S08, upTo('palm_oath_shanghou'), undefined, acq).step, returnTo(ev('palm_oath_shanghou')));
+  assert.equal(card(S08, upTo('palm_oath_shanghou'), ev('palm_oath_shanghou'), acq).step, pointer(S08, ev('palm_oath_shanghou')));
+  assert.equal(card(S08, upTo('s08_07_palace_ninja'), ev('s08_07_palace_ninja'), acq).step, pointer(S08, ev('s08_07_palace_ninja')), '掌誓之后 jin_feiniao_ninjia 照常是本步');
+  assert.equal(stepOf.get(ev('palm_oath_shanghou')), 'jin_palm_oath');
+  // ④ 收束：s09_10_separation 完成即撤卡，折叠行也不再有晋
+  const all = [...before, ...jin.map(x => x.id)];
+  assert.ok(all.includes(ev('s09_10_separation')));
+  const closed = compass.lineCompassView(saveOf(S09, all, acq), { focusEventId: undefined, compassPointer: () => '' });
+  assert.notEqual(closed.current?.lineId, 'jin', 's09_10 完成：晋已收束');
+  assert.ok(!closed.others.some(o => o.lineId === 'jin'), 's09_10 完成：折叠行撤掉晋');
 });

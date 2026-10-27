@@ -3904,7 +3904,9 @@
           }
         ],
         "eventIds": [
+          "lcq.event.spoils_split",
           "lcq.event.s09_01_eight_steeds_leave",
+          "lcq.event.xiangfu_stance",
           "lcq.event.s09_02_yun_ruyao_faints"
         ]
       },
