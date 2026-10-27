@@ -10,7 +10,7 @@ import { calculateTurnJudgementData } from '@/utils/judgementRules';
 import { createJudgementProposal, environmentFactorFor, type JudgementDifficultyBand, type JudgementFactor, type JudgementProposal } from '@/utils/judgementEngine';
 import { stateFactors } from '@/utils/judgementPreflight';
 import { levelOf } from '@/utils/realmUtils';
-import { packText } from '@/modules/contentPacks';
+import { CONTENT_PACKS, packText } from '@/modules/contentPacks';
 import { currentActorLevel } from '../actorLevels';
 import { namingChapter } from '../ledger/naming';
 import { freeActionConfig, type VariantSpec } from './config';
@@ -59,7 +59,12 @@ export function buildFreeActionJudgementProposal(
     const mine = levelOf(root?.角色?.属性?.境界) ?? 0, theirs = targetLevelOf(save, ticket.targetId);
     factors.splice(1, 0, { label: theirs === undefined ? '境界差（无级数数据，按同级）' : '境界差', value: levelModifier(mine, theirs), source: 'realm' });
   }
-  const stakeKey = `free.stakes.${spec.actionClass}.`, stake = (name: string) => packText(`${stakeKey}${name}`);
+  // 结果档说明：变体有专属句（free.stakes.<类>.<变体>.<档>）用专属句，否则用类的通用句。
+  // 冲关部分成功按失败保留 training.failureRetention 扣进度，不能沿用自修通用句「勉强见效」（真机 1f9f24127b4e：模型据此写成境界有增长）。
+  const stake = (name: string) => {
+    const own = `free.stakes.${spec.actionClass}.${spec.variant}.${name}`;
+    return packText(CONTENT_PACKS.texts[own] !== undefined ? own : `free.stakes.${spec.actionClass}.${name}`);
+  };
   return createJudgementProposal({
     actionText: freeActionText(spec, names.target),
     kind,

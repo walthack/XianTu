@@ -254,6 +254,24 @@ test('冲关：时机未到 / 已满进度修炼 → 出判定卡之前就被拦
   });
 });
 
+test('冲关部分成功（真机 1f9f24127b4e）：数值按设计折损（同失败，保留 failureRetention）；给模型的结果文案用冲关专属句、与数值一致，不写成见效／增长；其余档与修炼仍用自修通用句', () => {
+  switchedOn(() => {
+    const save = readySave({ stage: '后期', progress: 100, cap: 'none' });
+    const { prepared, resolution, result } = runJudged(save, solo('breakthrough'), 'partial');
+    assert.equal(save.角色.属性.境界.当前进度, Math.floor(100 * N().training.failureRetention), '部分成功按失败折损（设计口径，数值不改）');
+    assert.equal(prepared.proposal.stakes.partial, '冲关未成，已积累的修为折损一部分。');
+    const outcomeText = mods.judgement.describeJudgementOutcomeText(resolution);
+    assert.equal(outcomeText, prepared.proposal.stakes.partial);
+    assert.match(mods.judgement.formatVerifiedJudgementReceiptForPrompt(resolution), /结果文案=冲关未成，已积累的修为折损一部分。/);
+    assert.ok(!/见效|增长|进益|精进/.test(outcomeText), outcomeText);
+    assert.match(result.facts[0], /冲关未成.*折损/, '事实句与结果文案同口径');
+    // 冲关其余档、修炼各档仍用自修通用句（没有专属句就回落类的通用句）
+    assert.equal(prepared.proposal.stakes.success, '有所进益。');
+    assert.equal(prepared.proposal.stakes.failure, '不得要领，白费工夫。');
+    assert.equal(mods.plan.prepareFreeAction(readySave(), solo('train')).proposal.stakes.partial, '勉强见效，不尽如人意。');
+  });
+});
+
 test('调息疗伤：只有它放开旧引擎的回血结算（partial 5% / success 15%），不碰境界；双修不会从这里溜进去', () => {
   switchedOn(() => {
     for (const [outcome, hp] of [['partial', 55], ['success', 65], ['failure', 50], ['perfect', 90]]) {
