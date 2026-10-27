@@ -27,7 +27,7 @@
         <h4>当前存档难度</h4>
         <button v-for="(preset, name) in DIFFICULTY_PRESETS" :key="name" @click="gameStateStore.difficultySettings = {...preset}">{{ name }}</button>
         <label><input type="checkbox" v-model="gameStateStore.difficultySettings.autoRaiseLevel">进关自动抬至原著级</label>
-        <select v-model="gameStateStore.difficultySettings.trainingCap"><option value="canon">原著级</option><option value="canon+1">原著级+1</option><option value="none">不设限</option></select>
+        <label>{{ packText('settings.difficulty.trainingCap.label') }}<select v-model="gameStateStore.difficultySettings.trainingCap"><option value="canon">原著级</option><option value="canon+1">原著级+1</option><option value="none">不设限</option></select></label>
       </section>
       <!-- 显示设置 -->
       <div class="settings-section">
@@ -431,6 +431,7 @@ import PromptManagementPanel from '@/components/dashboard/PromptManagementPanel.
 import type { TextReplaceRule } from '@/types/textRules';
 import { useCharacterStore } from '@/stores/characterStore';
 import {DIFFICULTY_PRESETS} from '@/modules/scenarioMods/levelProgression';
+import { packText } from '@/modules/contentPacks';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { useUIStore } from '@/stores/uiStore';
 import { unwrapDadBundle } from '@/utils/dadBundle';
