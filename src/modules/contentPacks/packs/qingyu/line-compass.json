@@ -741,11 +741,6 @@
           "note": "旧锚"
         },
         {
-          "id": "tang_shifang_public_enemy",
-          "eventId": "lyg.event.zhoufei_conspiracy",
-          "note": "≈"
-        },
-        {
           "id": "tang_envoys_reunion",
           "eventId": "lyg.event.shixiang_s13",
           "when": [
@@ -794,8 +789,13 @@
         },
         {
           "id": "tang_d7_publish",
-          "eventId": "lyg.event.honglusi_amends",
-          "note": "≈"
+          "pending": true,
+          "note": "pending：仓库无「鸿胪寺公布和约」事件（ygx:19735–19738，第709章·濯足），本次不新建，做到唐线时再补，建议 id lyg.event.honglusi_treaty_announced、axisSeq 1160，补上后挂回 eventId 并去掉 pending；原挂的 honglusi_amends（seq 1097）是第673章鸿胪寺补救，早于元正朝会，会让前面各步被兜底跳过（R-11，总策划定）"
+        },
+        {
+          "id": "tang_shifang_public_enemy",
+          "eventId": "lyg.event.zhoufei_conspiracy",
+          "note": "≈ seq 1198，排在返程伏击（1177）之后、甘露（1280）之前；原先排在元正朝会前面，会挡住「去大明宫赴元正朝会」（R-12，总策划定）"
         },
         {
           "id": "tang_ganlu_zhuhuan",
