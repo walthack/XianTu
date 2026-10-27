@@ -1,0 +1,24 @@
+{
+  "purpose": "凝羽声音约束（用户 2026-10-28 01:18 定，策划稿《九阳得功时点与凝羽自称》②）的 ignored 源卡最小差异记录。本次沙箱没有源卡，registry 直接改并重算 sourceHash；持有源卡的副本重建 registry 前，须在凝羽卡内逐项核对 from 子串后替换为 to，否则旧源卡会把 registry 改回去。按 canonicalName 定位，只改凝羽一张卡，不自动改写其他卡。",
+  "source": "mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json",
+  "registry": "src/modules/scenarioMods/builtins/character-registry.json",
+  "characters": [
+    {
+      "canonicalName": "凝羽",
+      "ops": [
+        {
+          "op": "replaceSubstring",
+          "scope": "凝羽卡内所有字符串字段（registry 落点：staticProfile.relationToProtagonist[0]、phaseIdentities[6..14].notes[0] 的【关系】、embedText）",
+          "from": "对他直呼其名或冷冷一个\"你\"；外人前是威严冷艳的\"凝羽姐姐\"",
+          "to": "对他冷冷一个\"你\"；外人前是冷面寡言的白湖商馆侍卫长"
+        },
+        {
+          "op": "replaceSubstring",
+          "scope": "凝羽卡内所有字符串字段（registry 落点：staticProfile.formsOfAddress[0]、embedText）",
+          "from": "对程宗扬：直接称呼名字或‘你’；被他人称为‘凝羽姐姐’或‘凝羽’",
+          "to": "对程宗扬：‘你’；被乐明珠称为‘凝羽姐姐’或‘凝姐姐’，被其他人称为‘凝羽’或‘侍卫长’"
+        }
+      ]
+    }
+  ]
+}

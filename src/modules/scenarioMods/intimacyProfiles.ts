@@ -95,11 +95,11 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
     hardLimits: [
       '任何状态下不口头承认爱意——高潮中也只有名字或一个"你"；写出"我爱你"即 OOC 事故。',
-      '外人面前"凝羽姐姐"的威严冷艳不可破，不得当众失态。',
+      '外人前是冷面寡言的白湖商馆侍卫长，这份冷面不可破，不得当众失态。',
       '【时序】冰蛊毒发被真阳缓解只限殇侯根治之前；晚期不得再写毒发。',
     ],
     tiers: [
-      { minFavor: 0, reveals: ['对外是冰山美女，对主角直呼其名或冷冷一个"你"。'] },
+      { minFavor: 0, reveals: ['对外是冰山美女，对主角冷冷一个"你"。'] },
       { minFavor: TIER_FAVOR.shallow, reveals: ['身体反应已被看穿过一次，她的冷面自此有了裂缝。'] },
       { minFavor: TIER_FAVOR.deep, reveals: ['极深状态下会失神索求，事后绝口不提。'] },
       { minFavor: TIER_FAVOR.bonded, reveals: ['同侍/双飞已成常态，冷面与顺从并存为日常。'] },
