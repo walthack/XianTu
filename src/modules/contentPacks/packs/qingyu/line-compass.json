@@ -1,27 +1,935 @@
 {
   "version": 1,
-  "note": "线的下一步表（右栏线入口复用分析 2026-10-27 §5.2；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q5/Q7/Q8）。只放 7 条国家线（势力线不单独上卡，只在国家线的下一步里自然出现）。字段与求值口径见 src/modules/scenarioMods/lineCompass.ts 的 LineCompassTable 注释；when/until/knownWhen/closedWhen 只许账本路径（done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.*），求值时传存档。文案只写 hintKey，正文在 texts（lineCompass.<lineId>.step.<stepId>）；缺键记 LCQ-PCK-005 并不出这一步，绝不回退旧 entryHint。防剧透口径（分析稿 §4）：提示不是说明，只给去哪、找谁、打听什么；不定性（✗「去建康打听宫里的怪事」✓「去建康打听宫里最近有什么事」）、不预告、不点名结果和动机、只用主角当时已知的名字，一句、最好不超过 20 字（story.lineCompass.hint）。draft:true＝【待剧情策划】占位，运行时一律跳过、不进玩家可见；正式文案由剧情策划填写后去掉 draft。",
+  "note": "线的下一步表（右栏线入口复用分析 2026-10-27 §5.2；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q5/Q7/Q8）。只放 7 条国家线（势力线不单独上卡，只在国家线的下一步里自然出现）。字段与求值口径见 src/modules/scenarioMods/lineCompass.ts 的 LineCompassTable 注释；when/until/knownWhen/closedWhen 只许账本路径（done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.*；closedWhen 不得读 compass.*），求值时传存档。文案只写 hintKey，正文在 texts（lineCompass.<lineId>.step.<stepId>）；缺键记 LCQ-PCK-005 并不出这一步，绝不回退旧 entryHint。防剧透口径（分析稿 §4）：提示不是说明，只给去哪、找谁、打听什么；不定性（✗「去建康打听宫里的怪事」✓「去建康打听宫里最近有什么事」）、不预告、不点名结果和动机、只用主角当时已知的名字，一句、最好不超过 20 字（story.lineCompass.hint）。draft:true＝【待剧情策划】占位，运行时一律跳过、不进玩家可见；pending:true＝仓库还没有对应剧情事件（本次不新建），文案已定稿但运行时跳过、不进玩家可见，note 写缺什么。只有 eventId 的步，焦点不在这一拍时显示通用句 lineCompass.step.returnTo「回到{地点}看看」，事件没有 locationId 时只显示线名。正式文案来自剧情策划定稿 2026-10-27（63 条，已按用户 10:22／10:45 拍板改过）。",
   "lines": [
     {
       "lineId": "nanhuang",
       "nameKey": "lineCompass.nanhuang.name",
       "anchorLine": "zhaonan",
+      "knownWhen": [
+        { "path": "done.lcq.event.sudaji_south_pact", "operator": "eq", "value": true }
+      ],
+      "closedWhen": [
+        { "path": "done.lcq.event.s05b_wuer_suli_depart", "operator": "eq", "value": true }
+      ],
       "steps": [
-        { "id": "sheyi_look", "draft": true, "hintKey": "lineCompass.nanhuang.step.sheyi_look", "note": "占位样例：旧 entryHint「到了蛇彝村，才会知道这一带出了什么事」按 §4.3 改写方向；when/until/eventId 由剧情策划补" }
-      ]
+        {
+          "id": "nh_enter_caravan",
+          "eventId": "lcq.event.iron_bridge_ambush",
+          "when": [
+            { "path": "done.lcq.event.sudaji_south_pact", "operator": "eq", "value": true }
+          ],
+          "until": [
+            { "path": "done.lcq.event.s03_12", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_enter_caravan",
+          "note": "≈ 原拍是随商队入南荒，仓库最早一拍是铁索桥"
+        },
+        {
+          "id": "nh_sheyi_village",
+          "eventId": "lcq.event.s03_12",
+          "hintKey": "lineCompass.nanhuang.step.nh_sheyi_village",
+          "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）"
+        },
+        {
+          "id": "nh_yun_guide_road",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_05",
+          "when": [
+            { "path": "done.lcq.event.s03b_snake_flower_bridge_04", "operator": "eq", "value": true }
+          ],
+          "note": "巨藤断桥；云氏同行，仍在路上"
+        },
+        {
+          "id": "nh_huamiao",
+          "eventId": "lcq.event.s03b_snake_flower_bridge_06",
+          "note": "花苗救援"
+        },
+        {
+          "id": "nh_yun_guide",
+          "eventId": "lcq.event.s03b_yinzhu_xiongerpu",
+          "when": [
+            { "path": "done.lcq.event.s03b_snake_flower_bridge_07", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_yun_guide",
+          "note": "≈ 仓库地点挂在 huamiao_village；熊耳铺云苍峰说的（lcq:5972）"
+        },
+        {
+          "id": "nh_f03_huamiao_mist",
+          "eventId": "lcq.event.s04_01",
+          "when": [
+            { "path": "done.lcq.event.s03b_yinzhu_xiongerpu", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_f03_huamiao_mist"
+        },
+        {
+          "id": "nh_le_mingzhu_join",
+          "eventId": "lcq.event.s04_03",
+          "note": "乐明珠线起"
+        },
+        {
+          "id": "nh_ningyu_wound",
+          "eventId": "lcq.event.s04_06",
+          "when": [
+            { "path": "party.liuchao.character.ning_yu", "operator": "eq", "value": true }
+          ],
+          "note": "条件必经，凝羽在队时走"
+        },
+        {
+          "id": "nh_baiyi_enter",
+          "eventId": "lcq.event.s04_07",
+          "when": [
+            { "path": "done.lcq.event.s04_03", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_baiyi_enter",
+          "note": "lcq:5898、6590"
+        },
+        {
+          "id": "nh_f04_yaren",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+          "note": "鸦人"
+        },
+        {
+          "id": "nh_lingfei_mirror",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+          "note": "灵飞镜"
+        },
+        {
+          "id": "nh_f05_trap",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+          "note": "地宫陷阱"
+        },
+        {
+          "id": "nh_biling_bay",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_15",
+          "when": [
+            { "path": "done.lcq.event.s04b_lingfei_baiyi_crisis_13", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_biling_bay",
+          "note": "lcq:5892、5896；霓龙丝 lcq:2904、2942"
+        },
+        {
+          "id": "nh_xiaozi_debut",
+          "eventId": "lcq.event.xiaozi_first_appears",
+          "note": "同地"
+        },
+        {
+          "id": "nh_tide_disaster",
+          "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+        },
+        {
+          "id": "nh_f07_burn_village",
+          "eventId": "lcq.event.s05_16",
+          "note": "≈ 焚村与解救碧鲮族"
+        },
+        {
+          "id": "nh_f08_dagu",
+          "eventId": "lcq.event.s05_08",
+          "when": [
+            { "path": "done.lcq.event.s05_16", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_f08_dagu",
+          "note": "古道之名主角事先不知道"
+        },
+        {
+          "id": "nh_f09_yinsha",
+          "eventId": "lcq.event.s05_09"
+        },
+        {
+          "id": "nh_guiwang_approach",
+          "eventId": "lcq.event.s05_11",
+          "when": [
+            { "path": "done.lcq.event.s05_10", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_guiwang_approach",
+          "note": "鬼王峒祁远早说过（lcq:5771）"
+        },
+        {
+          "id": "nh_binu_arc",
+          "eventId": "lcq.event.s05b_02_xiaozi_exposed"
+        },
+        {
+          "id": "nh_f10_ghost_king_probe",
+          "eventId": "lcq.event.s05b_04_enter_ghost_palace",
+          "when": [
+            { "path": "done.lcq.event.s05b_03_saan_secret_path", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_f10_ghost_king_probe"
+        },
+        {
+          "id": "nh_f11_f12",
+          "eventId": "lcq.event.s05b_08a_rescue_suli",
+          "note": "突围、尸鬼、凤凰同地"
+        },
+        {
+          "id": "nh_f13_f14",
+          "eventId": "lcq.event.slay_dragon"
+        },
+        {
+          "id": "nh_tribes_ending",
+          "eventId": "lcq.event.tribes_pledge"
+        },
+        {
+          "id": "nh_shanghou_ice_gu",
+          "eventId": "lcq.event.shanghou_revealed",
+          "when": [
+            { "path": "done.lcq.event.tribes_pledge", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_shanghou_ice_gu",
+          "note": "lcq:7401–7404；结尾用 05b 那套（P-09）"
+        },
+        {
+          "id": "nh_leave_for_jin",
+          "eventId": "lcq.event.s05b_wuer_suli_depart",
+          "when": [
+            { "path": "done.lcq.event.shanghou_cures_ice_gu", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.nanhuang.step.nh_leave_for_jin",
+          "note": "不提晋（线可任意顺序走）"
+        }
+      ],
+      "note": "knownWhen＝南荒之约（P-01）；closedWhen 暂用 05b 那套（P-09），lineOutcomes 有数据后改 line.nanhuang.outcome"
     },
     {
       "lineId": "jin",
       "nameKey": "lineCompass.jin.name",
       "anchorLine": "jin",
+      "knownWhen": [
+        { "path": "done.lcq.event.s02_01", "operator": "eq", "value": true }
+      ],
+      "closedWhen": [
+        { "path": "done.lcq.event.s09_10_separation", "operator": "eq", "value": true }
+      ],
       "steps": [
-        { "id": "palace_ask", "draft": true, "hintKey": "lineCompass.jin.step.palace_ask", "note": "占位样例：用户 2026-10-27 08:56 原例；when/until/eventId 由剧情策划补" }
-      ]
+        {
+          "id": "jin_arrive_from_nanhuang",
+          "eventId": "lcq.event.s07_00c_arrive_jiankang",
+          "when": [
+            { "path": "done.lcq.event.shanghou_cures_ice_gu", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.jin.step.jin_arrive_from_nanhuang",
+          "note": "殇侯托付赴建康（lcq:18075）"
+        },
+        {
+          "id": "jin_arrive_icegu",
+          "eventId": "lcq.event.s07_00c_arrive_jiankang",
+          "when": [
+            { "path": "done.lcq.event.s03_12", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.yun_cang_feng", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.jin.step.jin_arrive_icegu",
+          "note": "走了南荒、冰蛊没解（lcq:17700）"
+        },
+        {
+          "id": "jin_arrive_skip_nh",
+          "eventId": "lcq.event.s07_00c_arrive_jiankang",
+          "hintKey": "lineCompass.jin.step.jin_arrive_skip_nh",
+          "note": "兜底：没走南荒"
+        },
+        {
+          "id": "jin_shanghou_cure_and_trade",
+          "eventId": "lcq.event.s07_00a_shanghou_trading_house",
+          "when": [
+            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "gte", "value": "encountered" }
+          ],
+          "note": "条件必经"
+        },
+        {
+          "id": "jin_xiaoyaoyi_meet",
+          "eventId": "lcq.event.xiaoyaoyi_arrives"
+        },
+        {
+          "id": "jin_master_address",
+          "eventId": "lcq.event.s07_01_old_case",
+          "note": "同门旧案"
+        },
+        {
+          "id": "jin_qingyuan_case",
+          "eventId": "lcq.event.wangzhe_letter",
+          "when": [
+            { "path": "done.lcq.event.s07_01_old_case", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.jin.step.jin_qingyuan_case",
+          "note": "王哲原话（lcq:2150）"
+        },
+        {
+          "id": "jin_zhuo_subdued",
+          "eventId": "lcq.event.s07_04_zhuo_subdued"
+        },
+        {
+          "id": "jin_back_jiankang",
+          "eventId": "lcq.event.s07_05_eight_steeds_informed",
+          "when": [
+            { "path": "done.lcq.event.s07_04_zhuo_subdued", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.jin.step.jin_back_jiankang",
+          "note": "≈"
+        },
+        {
+          "id": "palace_ask",
+          "eventId": "lcq.event.s07_07_dragon_hall",
+          "when": [
+            { "path": "done.lcq.event.palace_haunting_rumor", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.jin.step.palace_ask",
+          "note": "P-14：人已在建康，「去」改「在」；用户 08:56 原例"
+        },
+        {
+          "id": "jin_palace_escape",
+          "eventId": "lcq.event.s07_08_palace_escape"
+        },
+        {
+          "id": "jin_hengtang",
+          "eventId": "lcq.event.s07_09_hengtang_ambush",
+          "when": [
+            { "path": "done.lcq.event.s07_08_palace_escape", "operator": "eq", "value": true }
+          ],
+          "note": "P-16：s07_09 不是三十亩地那一拍，只留 eventId（R-5 未做）"
+        },
+        {
+          "id": "jin_dragon_fang",
+          "eventId": "lcq.event.s07_10_dragon_fang"
+        },
+        {
+          "id": "jin_eagle_beifu",
+          "eventId": "lcq.event.s08_01_eagle_valley",
+          "when": [
+            { "path": "done.lcq.event.s07_10_dragon_fang", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.xiao_yao_yi", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.jin.step.jin_eagle_beifu",
+          "note": "lcq:22954、23069"
+        },
+        {
+          "id": "jin_back_after_eagle",
+          "eventId": "lcq.event.s08_04_sudaji_enters",
+          "when": [
+            { "path": "done.lcq.event.s08_03_beifu_rescue", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.jin.step.jin_back_after_eagle"
+        },
+        {
+          "id": "jin_feiniao_ninjia",
+          "eventId": "lcq.event.s08_07_palace_ninja",
+          "note": "≈"
+        },
+        {
+          "id": "jin_gumingyin",
+          "eventId": "lcq.event.s08_08_gumingyin_plot"
+        },
+        {
+          "id": "jin_palm_oath",
+          "eventId": "lcq.event.palm_oath_shanghou",
+          "when": [
+            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "gte", "value": "encountered" }
+          ],
+          "note": "条件必经"
+        },
+        {
+          "id": "jin_weaving_trade",
+          "eventId": "lcq.event.s09_04_weaving_trade"
+        },
+        {
+          "id": "jin_river_ambush",
+          "eventId": "lcq.event.s09_05_drain_escape",
+          "note": "≈ 原拍江上截杀，仓库是排水沟沉江；离开晋交给 closedWhen"
+        }
+      ],
+      "note": "knownWhen＝王哲锦囊 s02_01（用户定 P-02）；closedWhen 暂用 s09_10_separation"
     },
-    { "lineId": "song", "nameKey": "lineCompass.song.name", "anchorLine": "song", "steps": [] },
-    { "lineId": "han", "nameKey": "lineCompass.han.name", "anchorLine": "han", "steps": [] },
-    { "lineId": "tang", "nameKey": "lineCompass.tang.name", "anchorLine": "tang", "steps": [] },
-    { "lineId": "qin", "nameKey": "lineCompass.qin.name", "steps": [], "note": "旧体系没有秦线、没有锚；knownWhen（知道秦线的那一拍）由剧情策划补，补之前本线不出现" },
-    { "lineId": "taiquan", "nameKey": "lineCompass.taiquan.name", "anchorLine": "taiquan", "steps": [] }
+    {
+      "lineId": "song",
+      "nameKey": "lineCompass.song.name",
+      "anchorLine": "song",
+      "knownWhen": [
+        { "path": "done.lcq.event.sudaji_south_pact", "operator": "eq", "value": true }
+      ],
+      "closedWhen": [
+        { "path": "done.lyl.event.taiquan_sacred_fruit_06", "operator": "eq", "value": true }
+      ],
+      "steps": [
+        {
+          "id": "song_guangyang_from_jin",
+          "eventId": "lcq.event.s09_07_feiniao_infiltration",
+          "when": [
+            { "path": "done.lcq.event.s09_05_drain_escape", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.song.step.song_guangyang_from_jin",
+          "note": "走过晋那一版（P-03）"
+        },
+        {
+          "id": "song_guangyang_skip_jin",
+          "eventId": "lcq.event.s09_07_feiniao_infiltration",
+          "hintKey": "lineCompass.song.step.song_guangyang_skip_jin",
+          "note": "跳过晋那一版（用户定）：不点广阳（广阳属晋，lcq:31011）"
+        },
+        {
+          "id": "song_guangyang_yueshuang",
+          "eventId": "lcq.event.s09_08_six_doors_confession",
+          "note": "≈"
+        },
+        {
+          "id": "song_escort_yue_girls",
+          "eventId": "lcq.event.s10_02_yeying_pass",
+          "when": [
+            { "path": "done.lcq.event.s09_08_six_doors_confession", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.song.step.song_escort_yue_girls",
+          "note": "≈ lcq:31144"
+        },
+        {
+          "id": "song_pengyi_yinyang",
+          "eventId": "lcq.event.s10_09_yin_yang_fish",
+          "note": "≈"
+        },
+        {
+          "id": "song_jiangzhou_war_open",
+          "eventId": "lcq.event.s11_02_cement_fortress",
+          "when": [
+            { "path": "done.lcq.event.s10_10_xiaozi_crisis", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.xiao_yao_yi", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.song.step.song_jiangzhou_war_open",
+          "note": "≈ lcq:35522"
+        },
+        {
+          "id": "song_jiangzhou_war_open_alt",
+          "eventId": "lcq.event.s11_02_cement_fortress",
+          "when": [
+            { "path": "done.lcq.event.s10_10_xiaozi_crisis", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.xiao_yao_yi", "operator": "lt", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.song.step.song_jiangzhou_war_open_alt",
+          "note": "萧遥逸还没见过；R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+        },
+        {
+          "id": "song_lieshan_snow",
+          "eventId": "lcq.event.s11_06_snow_battle",
+          "when": [
+            { "path": "done.lcq.event.s11_03_protect_yueshuang", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.song.step.song_lieshan_snow"
+        },
+        {
+          "id": "song_sanchuankou",
+          "eventId": "lcq.event.s11_10_sanchuankou_defeat",
+          "when": [
+            { "path": "done.lcq.event.s11_07_camp_falls", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.meng_fei_qing", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.song.step.song_sanchuankou",
+          "note": "lcq:35522"
+        },
+        {
+          "id": "song_yuanwailang",
+          "eventId": "lyl.event.s01_02",
+          "when": [
+            { "path": "done.lyl.event.s01_01", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.song.step.song_yuanwailang",
+          "note": "lyl:12"
+        },
+        {
+          "id": "song_linan_arrive",
+          "eventId": "lyl.event.debut_ruan_sisters"
+        },
+        {
+          "id": "song_xuezhun_takeover",
+          "eventId": "lyl.event.meet_xue_yanshan",
+          "when": [
+            { "path": "done.lyl.event.decode_bianmenwa_note", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.song.step.song_xuezhun_takeover",
+          "note": "≈"
+        },
+        {
+          "id": "song_ximen_xiaoyingzhou",
+          "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+          "when": [
+            { "path": "done.lyl.event.xiaoyingzhou_blacksea_trap_07_beat", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.song.step.song_ximen_xiaoyingzhou"
+        },
+        {
+          "id": "song_yuntao_niaoren",
+          "eventId": "lyl.event.taiquan_sacred_fruit_04",
+          "when": [
+            { "path": "done.lyl.event.taiquan_sacred_fruit_03", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.song.step.song_yuntao_niaoren"
+        },
+        {
+          "id": "song_shareholder_meet",
+          "eventId": "lyl.event.taiquan_sacred_fruit_06",
+          "note": "同城；收束拍（P-17）"
+        }
+      ],
+      "note": "knownWhen＝序幕收束 sudaji_south_pact（用户定）；走没走过晋分到入口步 when；closedWhen 暂用 _06（P-17）"
+    },
+    {
+      "lineId": "han",
+      "nameKey": "lineCompass.han.name",
+      "anchorLine": "han",
+      "knownWhen": [
+        { "path": "done.lcq.event.sudaji_south_pact", "operator": "eq", "value": true }
+      ],
+      "closedWhen": [
+        { "path": "done.lyg.event.s02_09", "operator": "eq", "value": true }
+      ],
+      "steps": [
+        {
+          "id": "han_enter_from_taiquan_wudu",
+          "when": [
+            { "path": "done.lyl.event.taiquan_portal_exit", "operator": "eq", "value": true },
+            { "path": "done.lyl.event.xiaoyingzhou_cement_truce", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.han.step.han_enter_from_taiquan_wudu",
+          "pending": true,
+          "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；走过太泉、知道舞都（lyl:22524、22610、22620；R-7 已核 cement_truce＝丰乐楼交易，lyl:9799）"
+        },
+        {
+          "id": "han_enter_from_taiquan",
+          "when": [
+            { "path": "done.lyl.event.taiquan_portal_exit", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.han.step.han_enter_from_taiquan",
+          "pending": true,
+          "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；走过太泉、不知道舞都"
+        },
+        {
+          "id": "han_enter_border_wudu",
+          "when": [
+            { "path": "done.lyl.event.xiaoyingzhou_cement_truce", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.han.step.han_enter_border_wudu",
+          "pending": true,
+          "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；跳过太泉、知道舞都（P-04）"
+        },
+        {
+          "id": "han_enter_border_alt",
+          "hintKey": "lineCompass.han.step.han_enter_border_alt",
+          "pending": true,
+          "note": "pending：仓库无首阳山入汉事件（han_shouyang_gaoyanei），本次不新建；until 待该事件；跳过太泉兜底，不点地名（lcq:1042）"
+        },
+        {
+          "id": "han_yunruyao_bing",
+          "when": [
+            { "path": "acq.liuchao.character.gao_zhishang", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.han.step.han_yunruyao_bing",
+          "pending": true,
+          "note": "pending：仓库无云如瑶卖饼事件，本次不新建；until 待该事件；lyl:22620"
+        },
+        {
+          "id": "han_zhu_urge_luo",
+          "eventId": "lyl.event.taiquan_afterfall_07_beat",
+          "when": [
+            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.han.step.han_zhu_urge_luo",
+          "note": "≈ lyl:23731"
+        },
+        {
+          "id": "han_zhu_urge_luo_alt",
+          "eventId": "lyl.event.taiquan_afterfall_07_beat",
+          "when": [
+            { "path": "acq.liuchao.character.shang_zhen_yu", "operator": "lt", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.han.step.han_zhu_urge_luo_alt",
+          "note": "洛都江州时就听过（lyl:9940）；R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+        },
+        {
+          "id": "han_yuncangfeng_luodu",
+          "eventId": "lyl.event.s05_01"
+        },
+        {
+          "id": "han_camera_palace",
+          "eventId": "lyl.event.taiquan_afterfall_10_beat",
+          "when": [
+            { "path": "done.lyl.event.taiquan_afterfall_09_beat", "operator": "eq", "value": true },
+            { "path": "done.lyl.event.taiquan_portal_exit", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.si_ming_xin", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.han.step.han_camera_palace",
+          "note": "≈ P-18：不写太后寝宫"
+        },
+        {
+          "id": "han_camera_palace_alt",
+          "eventId": "lyl.event.taiquan_afterfall_10_beat",
+          "when": [
+            { "path": "done.lyl.event.taiquan_afterfall_09_beat", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.han.step.han_camera_palace_alt",
+          "note": "≈ 兜底：跳过太泉或没见过斯明信，按顺序兜底"
+        },
+        {
+          "id": "han_huo_bieyuan",
+          "hintKey": "lineCompass.han.step.han_huo_bieyuan",
+          "pending": true,
+          "note": "pending：仓库无月旦评／霍家别院事件，when 与 until 都缺读取点，本次不新建；条件必经"
+        },
+        {
+          "id": "han_emperor_dead_coup",
+          "eventId": "lyl.event.s06_01"
+        },
+        {
+          "id": "han_liujian_yuxi",
+          "eventId": "lyl.event.s06_02",
+          "when": [
+            { "path": "done.lyl.event.s06_01", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.zhao_feiyan", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.han.step.han_liujian_yuxi"
+        },
+        {
+          "id": "han_liujian_yuxi_alt",
+          "eventId": "lyl.event.s06_02",
+          "when": [
+            { "path": "done.lyl.event.s06_01", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.zhao_feiyan", "operator": "lt", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.han.step.han_liujian_yuxi_alt",
+          "note": "R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+        },
+        {
+          "id": "han_dongzhuo_enter",
+          "eventId": "lyl.event.han_palace_endgame_08_beat"
+        },
+        {
+          "id": "han_dingtao_enthroned",
+          "eventId": "lyg.event.s01_05"
+        },
+        {
+          "id": "han_wudi_digong",
+          "eventId": "lyg.event.s02_09",
+          "note": "条件必经；收束拍（P-11）"
+        }
+      ],
+      "note": "knownWhen＝序幕收束（用户定）；走没走过太泉分到入口步 when，入境城舞都；closedWhen 暂用 lyg s02_09"
+    },
+    {
+      "lineId": "tang",
+      "nameKey": "lineCompass.tang.name",
+      "anchorLine": "tang",
+      "knownWhen": [
+        { "path": "done.lcq.event.sudaji_south_pact", "operator": "eq", "value": true }
+      ],
+      "closedWhen": [
+        { "path": "done.lyg.event.buddhist_conspiracy_11_beat", "operator": "eq", "value": true }
+      ],
+      "steps": [
+        {
+          "id": "tang_entry_from_han",
+          "when": [
+            { "path": "done.lyg.event.s02_09", "operator": "eq", "value": true }
+          ],
+          "until": [
+            { "path": "acq.liuchao.character.yuan_tiangang", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.tang.step.tang_entry_from_han",
+          "pending": true,
+          "note": "pending：仓库无留仙坪入唐事件（han_succession_10_beat 只是近似），本次不新建；走过汉那一版（P-05；lyg:8298、8478、8289）"
+        },
+        {
+          "id": "tang_entry",
+          "until": [
+            { "path": "acq.liuchao.character.yuan_tiangang", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.tang.step.tang_entry",
+          "pending": true,
+          "note": "pending：仓库无留仙坪入唐事件，本次不新建；跳过汉那一版，不点地名（lcq:2133）"
+        },
+        {
+          "id": "tang_meet_liao_zhou_yuan",
+          "pending": true,
+          "note": "pending：仓库无留仙坪遇廖、周、袁事件，本次不新建；lyg:8526"
+        },
+        {
+          "id": "tang_changan_yangyuhuan",
+          "eventId": "lyg.event.s03_01",
+          "when": [
+            { "path": "acq.liuchao.character.yuan_tiangang", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.tang.step.tang_changan_yangyuhuan",
+          "note": "lyg:10009"
+        },
+        {
+          "id": "tang_fanseng",
+          "eventId": "lyg.event.changgan_fanseng_hunt",
+          "note": "旧锚"
+        },
+        {
+          "id": "tang_shifang_public_enemy",
+          "eventId": "lyg.event.zhoufei_conspiracy",
+          "note": "≈"
+        },
+        {
+          "id": "tang_envoys_reunion",
+          "eventId": "lyg.event.shixiang_s13",
+          "when": [
+            { "path": "done.lyg.event.shixiang_s11", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.tang.step.tang_envoys_reunion",
+          "note": "lyg:13678–13686"
+        },
+        {
+          "id": "tang_zhao_nan_war_jinnang",
+          "eventId": "lyg.event.changgan_interlude_03_beat",
+          "note": "≈"
+        },
+        {
+          "id": "tang_d7_appoint",
+          "eventId": "lyg.event.song_tongwen",
+          "pending": true,
+          "note": "pending：缺读取点：when 应为 identity.<宋员外郎身份> exists，identities.json 为空，写不进条件；条件必经"
+        },
+        {
+          "id": "tang_d7_secret_treaty",
+          "when": [
+            { "path": "done.lyg.event.shixiang_s13", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.tang.step.tang_d7_secret_treaty",
+          "pending": true,
+          "note": "pending：仓库无 D7 密约事件（changgan_interlude_04 是反向事件），until 缺读取点，本次不新建；申服君在元正朝会在场（lyg:13678）"
+        },
+        {
+          "id": "tang_d7_publish",
+          "eventId": "lyg.event.honglusi_amends",
+          "note": "≈"
+        },
+        {
+          "id": "tang_ganlu_zhuhuan",
+          "eventId": "lyg.event.buddhist_conspiracy_11_beat",
+          "when": [
+            { "path": "done.lyg.event.changgan_interlude_09_beat", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.tang.step.tang_ganlu_zhuhuan",
+          "note": "收束拍"
+        }
+      ],
+      "note": "knownWhen＝序幕收束（用户定）；走没走过汉分到入口步 when；closedWhen 暂用 buddhist_conspiracy_11_beat"
+    },
+    {
+      "lineId": "qin",
+      "nameKey": "lineCompass.qin.name",
+      "knownWhen": [
+        { "path": "compass.anyLineClosed", "operator": "eq", "value": true }
+      ],
+      "steps": [
+        {
+          "id": "qin_entry_envoy",
+          "eventId": "liuchao.event.qin_entry_envoy",
+          "hintKey": "lineCompass.qin.step.qin_entry_envoy",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；when 应为 identity.<汉使/宋使/唐使> exists（identities.json 为空，缺读取点）；使节入口"
+        },
+        {
+          "id": "qin_entry_xu_met",
+          "eventId": "liuchao.event.qin_find_xu",
+          "when": [
+            { "path": "acq.liuchao.character.xu_junfang", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_entry_xu_met",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；重逢；lyg:13686"
+        },
+        {
+          "id": "qin_entry_xu_unmet",
+          "eventId": "liuchao.event.qin_find_xu",
+          "when": [
+            { "path": "acq.liuchao.character.xu_junfang", "operator": "lt", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_entry_xu_unmet",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；初见；R-6：显式「没见过」条件（acq … lt encountered 无记录时为 true，与上一步互补）"
+        },
+        {
+          "id": "qin_camp_route",
+          "eventId": "liuchao.event.qin_entry_camp",
+          "when": [
+            { "path": "done.liuchao.event.qin_find_xu", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_camp_route",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；平民身份那一半缺读取点；军营路"
+        },
+        {
+          "id": "qin_king",
+          "eventId": "liuchao.event.qin_king_refuses",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；宫中，同城"
+        },
+        {
+          "id": "qin_auspice",
+          "eventId": "liuchao.event.qin_xu_auspice",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建"
+        },
+        {
+          "id": "qin_banquet",
+          "eventId": "liuchao.event.qin_new_year_banquet",
+          "when": [
+            { "path": "done.liuchao.event.qin_xu_auspice", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_banquet",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建"
+        },
+        {
+          "id": "qin_sealed_fight",
+          "eventId": "liuchao.event.qin_succession_fight",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；封宫、争位同城连着走"
+        },
+        {
+          "id": "qin_purge_suxiao",
+          "eventId": "liuchao.event.qin_purge_hunted",
+          "when": [
+            { "path": "done.liuchao.event.qin_succession_fight", "operator": "eq", "value": true },
+            { "path": "acq.liuchao.character.su_xiao", "operator": "gte", "value": "encountered" }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_purge_suxiao",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；lcq:32823"
+        },
+        {
+          "id": "qin_heimohai",
+          "eventId": "liuchao.event.qin_heimohai_message",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建"
+        },
+        {
+          "id": "qin_villa",
+          "eventId": "liuchao.event.qin_xiaoling_villa",
+          "when": [
+            { "path": "done.liuchao.event.qin_heimohai_message", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_villa",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；地点来自供词，不点人"
+        },
+        {
+          "id": "qin_baiqi",
+          "eventId": "liuchao.event.qin_act3_baiqi",
+          "when": [
+            { "path": "done.liuchao.event.qin_act3_choose", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_baiqi",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；lyg:16975"
+        },
+        {
+          "id": "qin_branch_raid",
+          "eventId": "liuchao.event.qin_raid_branch",
+          "when": [
+            { "path": "done.liuchao.event.qin_act3_trade_route", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.qin.step.qin_branch_raid",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；推翻结局那一路"
+        },
+        {
+          "id": "qin_close",
+          "eventId": "liuchao.event.qin_close",
+          "pending": true,
+          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；收束拍；closedWhen 待 liuchao.event.qin_close"
+        }
+      ],
+      "note": "knownWhen＝compass.anyLineClosed（R-3 总策划定；用户 P-06：任一国家线收束后由商会伙计传话）；知情拍 liuchao.event.qin_hook_fangshi_rumor 与全部秦线事件仓库尚无、本次不新建，步一律 pending；closedWhen 待 liuchao.event.qin_close"
+    },
+    {
+      "lineId": "taiquan",
+      "nameKey": "lineCompass.taiquan.name",
+      "anchorLine": "taiquan",
+      "closedWhen": [
+        { "path": "done.lyl.event.taiquan_portal_exit", "operator": "eq", "value": true }
+      ],
+      "steps": [
+        {
+          "id": "tq_entry_fruit",
+          "eventId": "lyl.event.taiquan_sacred_fruit_07",
+          "when": [
+            { "path": "unlock.taiquan", "operator": "eq", "value": true },
+            { "path": "done.lcq.event.s12_10_rescue_xiao", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_entry_fruit",
+          "note": "宋版入口（P-15；lcq:42253–42258）"
+        },
+        {
+          "id": "tq_entry_wangzhe",
+          "eventId": "lyl.event.taiquan_sacred_fruit_07",
+          "when": [
+            { "path": "unlock.taiquan", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_entry_wangzhe",
+          "note": "兜底：王哲托付（lcq:1687–1691）"
+        },
+        {
+          "id": "tq_canglan_mist",
+          "eventId": "lyl.event.taiquan_sacred_fruit_08",
+          "note": "≈"
+        },
+        {
+          "id": "tq_enter_array",
+          "pending": true,
+          "note": "pending：仓库无进阵事件（liuchao.event.enter_taiquan 内容是临安军情，不能用，P-10），本次不新建"
+        },
+        {
+          "id": "tq_xionggu_key",
+          "when": [
+            { "path": "done.lyl.event.taiquan_sacred_fruit_05", "operator": "eq", "value": true },
+            { "path": "done.lyl.event.taiquan_sacred_fruit_07", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_xionggu_key",
+          "pending": true,
+          "note": "pending：仓库无熊谷事件，until 缺读取点，本次不新建；lyl:11959、11577"
+        },
+        {
+          "id": "tq_chiyang_fruit",
+          "eventId": "lyl.event.taiquan_sacred_fruit_10",
+          "when": [
+            { "path": "done.lcq.event.s12_10_rescue_xiao", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_chiyang_fruit",
+          "note": "≈ lcq:42253"
+        },
+        {
+          "id": "tq_beast_traps",
+          "eventId": "lyl.event.xingyin_beast_traps",
+          "note": "≈"
+        },
+        {
+          "id": "tq_mowu",
+          "eventId": "lyl.event.taiquan_afterfall_03_beat"
+        },
+        {
+          "id": "tq_xuanyuan_mijing",
+          "when": [
+            { "path": "done.lyl.event.taiquan_sacred_fruit_07", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_xuanyuan_mijing",
+          "pending": true,
+          "note": "pending：仓库无轩辕秘境事件，until 缺读取点，本次不新建；lcq:1687"
+        },
+        {
+          "id": "tq_city_in_film",
+          "eventId": "lyl.event.taiquan_afterfall_05_beat",
+          "note": "≈"
+        },
+        {
+          "id": "tq_yinyang_fish",
+          "eventId": "lyl.event.yin_yang_counter"
+        },
+        {
+          "id": "tq_exit_to_han",
+          "eventId": "lyl.event.taiquan_portal_exit",
+          "when": [
+            { "path": "done.lyl.event.decide_yin_fulan_fate", "operator": "eq", "value": true }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_exit_to_han",
+          "note": "≈ 文案不写去向"
+        }
+      ],
+      "note": "已知读锚（s02_01／_05）；解锁读 unlock.taiquan；closedWhen 暂用 taiquan_portal_exit"
+    }
   ]
 }

@@ -2451,16 +2451,25 @@ function checkRefs(value: unknown, ids: Set<string>, path: string, target: strin
 
 /** 占位文案标记（与 lineCompass.ts 的 LINE_COMPASS_DRAFT_MARK 同值；validator 不反向依赖 lineCompass，以免成环）。 */
 const LINE_COMPASS_DRAFT_MARK = '【待剧情策划】';
+/** 只有 eventId 的步的通用句键与地点占位（与 lineCompass.ts 的 LINE_COMPASS_RETURN_KEY / LINE_COMPASS_PLACE_SLOT 同值）。 */
+const LINE_COMPASS_RETURN_KEY = 'lineCompass.step.returnTo';
+const LINE_COMPASS_PLACE_SLOT = '{地点}';
 
 /**
  * 线的下一步表（内容包 line-compass.json，右栏线入口复用分析 2026-10-27 §5.2；结构与文案口径见 lineCompass.ts 的 LineCompassTable）。
  * - lineId 须为 7 条国家线、不重复；nameKey 须在 texts；anchorLine 须为 secondaryLines 的线 id；
  * - when / until / knownWhen / closedWhen 只许账本路径（不是账本前缀报 ledger_only），id 须存在；表求值时传存档，unlock.* 可用，相识等级比较可用；
+ * - closedWhen 不得读 compass.*（compass.anyLineClosed 由 closedWhen 派生，读了成环）；
  * - 每步 id 线内唯一，eventId 与 hintKey 至少一个，eventId 须是已知事件；
+ * - pending 步（总策划定：仓库还没有对应剧情事件，本次不新建）：eventId 与条件里的 done.* 可以是仓库尚无的事件 id（形如 <ns>.event.<id>），
+ *   eventId 与 hintKey 都可缺（只占步序），须写 note 说明缺什么；
+ *   运行时一律跳过、不进玩家可见；文案照正式步校验；不得同时是 draft；
  * - 正式步（非 draft）hintKey 须在 texts，文案不得带【待剧情策划】、不得超过 story.lineCompass.hint.maxChars 字、不得含 hint.bannedWords（§4.2）；
+ * - 只有 eventId 的正式步（R-4／P-12）：焦点不在这一拍时显示通用句 texts[lineCompass.step.returnTo]「回到{地点}看看」，
+ *   有这种步时模板须在 texts、含 {地点}；传了 places（eventId → 地点显示名，content-packs 编译时从各关事件 locationId 求得）时，代入后的句子同样守字数与定性词；
  * - draft 步的文案（若有）须以【待剧情策划】开头，运行时一律跳过。
  */
-export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>): ScenarioModValidationIssue[] {
+export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>, places?: Readonly<Record<string, string>>): ScenarioModValidationIssue[] {
   const issues: ScenarioModValidationIssue[] = [];
   const add: AddIssue = (path, code, message) => issues.push({ path, code, message });
   if (!isRecord(table) || table.version !== 1 || !Array.isArray(table.lines)) {
@@ -2468,14 +2477,25 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     return issues;
   }
   const ledger: LedgerScope = { refs: [], variant: true, unlockSite: true };
-  const conditions = (value: unknown, path: string): void => {
+  // pending 步的引用另收：done.* 允许仓库尚无的事件（形如 <ns>.event.<id>），其余类照常核对
+  const pendingLedger: LedgerScope = { refs: [], variant: true, unlockSite: true };
+  const conditions = (value: unknown, path: string, scope: LedgerScope = ledger, opts: { noCompass?: boolean } = {}): void => {
     if (value === undefined) return;
-    validateConditions(value, path, add, ledger);
+    validateConditions(value, path, add, scope);
     if (Array.isArray(value)) value.forEach((c, i) => {
-      if (isRecord(c) && typeof c.path === 'string' && !parseLedgerPath(c.path)) add(`${path}[${i}].path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.*), got "${c.path}".`);
+      if (!isRecord(c) || typeof c.path !== 'string') return;
+      const parsed = parseLedgerPath(c.path);
+      if (!parsed) add(`${path}[${i}].path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.* / compass.*), got "${c.path}".`);
+      else if (opts.noCompass && parsed.kind === 'compass') add(`${path}[${i}].path`, 'compass_in_closed_when', 'closedWhen cannot read compass.* (compass.anyLineClosed is derived from closedWhen).');
     });
   };
   const hint = GAME_NUMBERS.story.lineCompass.hint;
+  const checkHintText = (value: string, path: string): void => {
+    if ([...value].length > hint.maxChars) add(path, 'hint_too_long', `Step text is ${[...value].length} chars, over story.lineCompass.hint.maxChars (${hint.maxChars}): "${value}".`);
+    for (const word of hint.bannedWords) if (value.includes(word)) add(path, 'hint_spoiler_word', `Step text uses characterising word "${word}" (分析稿 §4.2-2).`);
+  };
+  const returnTemplate = texts[LINE_COMPASS_RETURN_KEY];
+  let returnTemplateChecked = false;
   const oldLineIds = new Set(SECONDARY_LINES.map(line => line.id));
   const seenLines = new Set<string>();
   table.lines.forEach((line, li) => {
@@ -2489,23 +2509,38 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     if (line.anchorLine !== undefined && (typeof line.anchorLine !== 'string' || !oldLineIds.has(line.anchorLine))) add(`${at}.anchorLine`, 'missing_reference', `Unknown secondary line "${String(line.anchorLine)}".`);
     optionalString(line.note, `${at}.note`, add);
     conditions(line.knownWhen, `${at}.knownWhen`);
-    conditions(line.closedWhen, `${at}.closedWhen`);
+    conditions(line.closedWhen, `${at}.closedWhen`, ledger, { noCompass: true });
     if (!Array.isArray(line.steps)) { add(`${at}.steps`, 'invalid_type', `${at}.steps must be an array.`); return; }
     const seenSteps = new Set<string>();
     line.steps.forEach((step, si) => {
       const sp = `${at}.steps[${si}]`;
       if (!isRecord(step)) { add(sp, 'invalid_type', `${sp} must be an object.`); return; }
-      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'draft', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
+      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'draft', 'pending', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
       if (validateId(step.id, `${sp}.id`, add)) {
         if (seenSteps.has(step.id)) add(`${sp}.id`, 'duplicate_id', `Duplicate step id "${step.id}".`);
         seenSteps.add(step.id);
       }
       if (step.draft !== undefined && step.draft !== true) add(`${sp}.draft`, 'invalid_value', 'draft must be true or omitted.');
+      if (step.pending !== undefined && step.pending !== true) add(`${sp}.pending`, 'invalid_value', 'pending must be true or omitted.');
+      const pending = step.pending === true;
+      if (pending && step.draft === true) add(`${sp}.pending`, 'invalid_value', 'A step cannot be both draft and pending.');
+      if (pending && !isNonEmptyString(step.note)) add(`${sp}.note`, 'pending_note_required', 'A pending step must say in note what is missing from the repo.');
       optionalString(step.note, `${sp}.note`, add);
-      if (step.eventId === undefined && step.hintKey === undefined) add(sp, 'required_value', 'A step needs eventId or hintKey.');
-      if (step.eventId !== undefined && (typeof step.eventId !== 'string' || !knownEventIds().has(step.eventId))) add(`${sp}.eventId`, 'missing_reference', `Unknown event id "${String(step.eventId)}".`);
-      conditions(step.when, `${sp}.when`);
-      conditions(step.until, `${sp}.until`);
+      if (!pending && step.eventId === undefined && step.hintKey === undefined) add(sp, 'required_value', 'A step needs eventId or hintKey.');
+      if (step.eventId !== undefined) {
+        if (typeof step.eventId !== 'string' || !(pending ? /^[a-z]+\.event\.[a-z0-9_]+$/.test(step.eventId) : knownEventIds().has(step.eventId))) add(`${sp}.eventId`, 'missing_reference', `Unknown event id "${String(step.eventId)}".`);
+      }
+      conditions(step.when, `${sp}.when`, pending ? pendingLedger : ledger);
+      conditions(step.until, `${sp}.until`, pending ? pendingLedger : ledger);
+      // 只有 eventId 的正式步：通用句「回到{地点}看看」
+      if (step.hintKey === undefined && !pending && step.draft !== true && typeof step.eventId === 'string') {
+        if (!returnTemplateChecked) {
+          returnTemplateChecked = true;
+          if (!isNonEmptyString(returnTemplate) || !returnTemplate.includes(LINE_COMPASS_PLACE_SLOT)) add(`texts.${LINE_COMPASS_RETURN_KEY}`, 'missing_text', `eventId-only steps need texts["${LINE_COMPASS_RETURN_KEY}"] containing ${LINE_COMPASS_PLACE_SLOT}.`);
+        }
+        const place = places?.[step.eventId];
+        if (place && isNonEmptyString(returnTemplate)) checkHintText(returnTemplate.split(LINE_COMPASS_PLACE_SLOT).join(place), `${sp}.eventId`);
+      }
       if (step.hintKey === undefined) return;
       if (typeof step.hintKey !== 'string' || !step.hintKey) { add(`${sp}.hintKey`, 'invalid_type', 'hintKey must be a non-empty string.'); return; }
       const value = texts[step.hintKey];
@@ -2515,10 +2550,15 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
       }
       if (!isNonEmptyString(value)) { add(`${sp}.hintKey`, 'missing_text', `Step text "${step.hintKey}" is missing.`); return; }
       if (value.includes(LINE_COMPASS_DRAFT_MARK)) add(`${sp}.hintKey`, 'draft_text', `Non-draft step text still carries ${LINE_COMPASS_DRAFT_MARK}; mark the step draft or rewrite it.`);
-      if ([...value].length > hint.maxChars) add(`${sp}.hintKey`, 'hint_too_long', `Step text is ${[...value].length} chars, over story.lineCompass.hint.maxChars (${hint.maxChars}).`);
-      for (const word of hint.bannedWords) if (value.includes(word)) add(`${sp}.hintKey`, 'hint_spoiler_word', `Step text uses characterising word "${word}" (分析稿 §4.2-2).`);
+      checkHintText(value, `${sp}.hintKey`);
     });
   });
   checkLedgerRefs(ledger.refs, new Set(), new Set(), new Set(), add);
+  const pendingRefs = pendingLedger.refs.filter(ref => {
+    if (ref.parsed.kind !== 'done' || knownEventIds().has(ref.parsed.id)) return true;
+    if (!/^[a-z]+\.event\.[a-z0-9_]+$/.test(ref.parsed.id)) add(ref.path, 'missing_reference', `Pending done.* must still look like an event id, got "${ref.parsed.id}".`);
+    return false;
+  });
+  checkLedgerRefs(pendingRefs, new Set(), new Set(), new Set(), add);
   return issues;
 }

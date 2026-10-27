@@ -1100,6 +1100,10 @@
       "hint": {
         "maxChars": 20,
         "bannedWords": ["怪事", "闹鬼", "阴谋", "勾结", "猎杀", "危机", "要打起来了", "覆灭", "背叛"]
+      },
+      "anyLineClosed": {
+        "note": "派生读取点 compass.anyLineClosed（分析稿 2026-10-27 §6 R-3，总策划定；用户 P-06 定秦线消息在任一国家线收束后由商会伙计传话）：lineIds 里任一条线 line.<id>.outcome 有档、或线的下一步表里该线 closedWhen 全满足即为 true。太泉、秦不计入。秦线知情拍与秦线 knownWhen 读它。值须为国家线 id、不得含 qin / taiquan。",
+        "lineIds": ["nanhuang", "jin", "song", "han", "tang"]
       }
     },
     "identity": {

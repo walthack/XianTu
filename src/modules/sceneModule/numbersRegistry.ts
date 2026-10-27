@@ -95,6 +95,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.lineCompass.regionLines', kind: 'object', required: true, section: 'progress' },
   { path: 'story.lineCompass.hint.maxChars', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.lineCompass.hint.bannedWords', kind: 'array', required: true, section: 'progress' },
+  { path: 'story.lineCompass.anyLineClosed.lineIds', kind: 'array', required: true, section: 'progress' },
   { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' },
   { path: 'affinity.range.min', kind: 'number', required: true, section: 'progress' },
   { path: 'affinity.range.max', kind: 'number', required: true, section: 'progress' },
@@ -275,6 +276,11 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
       if (typeof lineId !== 'string' || !NATION_LINE_IDS.includes(lineId)) errors.push(`未知国家线：story.lineCompass.regionLines.${region}=${String(lineId)}`);
     }
   }
+  // compass.anyLineClosed 计入的线（R-3）：须为国家线、不得重复；太泉、秦不计入
+  const anyClosedLines = atPath(tree, 'story.lineCompass.anyLineClosed.lineIds');
+  if (Array.isArray(anyClosedLines)) anyClosedLines.forEach((lineId, i) => {
+    if (typeof lineId !== 'string' || !NATION_LINE_IDS.includes(lineId) || lineId === 'qin' || lineId === 'taiquan' || anyClosedLines.indexOf(lineId) !== i) errors.push(`字段值无效：story.lineCompass.anyLineClosed.lineIds[${i}]=${String(lineId)}（须为国家线 id、不重复，太泉／秦不计入）`);
+  });
   const bannedWords = atPath(tree, 'story.lineCompass.hint.bannedWords');
   if (Array.isArray(bannedWords)) bannedWords.forEach((word, i) => {
     if (typeof word !== 'string' || !word.trim()) errors.push(`字段类型无效：story.lineCompass.hint.bannedWords[${i}] 须为非空字符串`);

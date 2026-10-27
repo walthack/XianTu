@@ -327,7 +327,12 @@ test('minRealmLevel 只出现在 lineUnlock.ts、配置、registry 与测试；u
     for (const name of readdirSync(path.join(root, dir)).filter(n => n.endsWith('.json'))) walk(JSON.parse(readFileSync(path.join(root, dir, name), 'utf8')), undefined, `${dir}/${name}`);
   }
   assert.deepEqual(hits.filter(h => !GATED.has(h.split(':')[1]) || !h.endsWith(':unlock.taiquan')), [], '账本门只在 §4.1 三个章节');
-  assert.equal(files.filter(f => f.startsWith('src/') && /tq_xuanyuan_mijing/.test(readFileSync(path.join(root, f), 'utf8')) && readFileSync(path.join(root, f), 'utf8').includes('unlock.')).length, 0, '秘境不设修为门');
+  // 线的下一步表（及其生成物）里太泉入口步合法读 unlock.taiquan，同文件也有秘境那一步：改为逐步核对秘境步自身条件
+  const lineCompassFiles = new Set(['src/modules/contentPacks/packs/qingyu/line-compass.json', 'src/modules/contentPacks/generated/catalog.json']);
+  assert.equal(files.filter(f => f.startsWith('src/') && !lineCompassFiles.has(f) && /tq_xuanyuan_mijing/.test(readFileSync(path.join(root, f), 'utf8')) && readFileSync(path.join(root, f), 'utf8').includes('unlock.')).length, 0, '秘境不设修为门');
+  const compassTable = JSON.parse(readFileSync(path.join(root, 'src/modules/contentPacks/packs/qingyu/line-compass.json'), 'utf8'));
+  const mijing = compassTable.lines.flatMap(l => l.steps).filter(s => s.id === 'tq_xuanyuan_mijing');
+  assert.ok(mijing.every(s => ![...(s.when || []), ...(s.until || [])].some(c => c.path.startsWith('unlock.'))), '下一步表的秘境步不设修为门');
 });
 
 test('T5 账本读数 lineUnlockLedgerValue：没拿到存档读成 undefined、不记码，只打 story 调试日志；有存档同 isLineUnlocked；opts.runtime 优先', async () => {

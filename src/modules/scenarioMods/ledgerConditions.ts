@@ -1,7 +1,8 @@
 /**
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
  * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts），进度期限 deadline.*（同稿 §4.5，数据源 progressDeadlines.ts），
- * 整线解锁 unlock.<lineId>（太泉解锁设计稿 2026-10-27 §4，数据源 lineUnlock.ts；要读存档里的境界，只有传了 save 的调用方读得到，否则为 undefined）。
+ * 整线解锁 unlock.<lineId>（太泉解锁设计稿 2026-10-27 §4，数据源 lineUnlock.ts；要读存档里的境界，只有传了 save 的调用方读得到，否则为 undefined），
+ * 派生读取点 compass.<id>（右栏线入口复用分析 2026-10-27 §6 R-3，总策划定；数据源＝内容包线的下一步表 line-compass.json 的 closedWhen ＋ line.*.outcome）。
  * 只读不写；读不到的账本一律当空。不是本模块的前缀交还原 flags 逻辑。
  * narrativeVariants.when 走 evaluateLedgerCondition；activation/completion 等由 runtime.ts 的 resolveConditionValue 委托 resolveLedgerPath（T4，
  * 用户 2026-10-25 23:24 批），那里 gt/gte/lt/lte 只比数字，相识等级比较只在变体里可用（validator 拦）。
@@ -16,8 +17,18 @@ import { isInParty } from './partyLedger';
 import { deadlineState } from './progressDeadlines';
 import { lineUnlockLedgerValue } from './lineUnlock';
 import { SECONDARY_LINES, secondaryLineUnlockOptions } from './secondaryLines';
+import { CONTENT_PACKS } from '../contentPacks';
+import { GAME_NUMBERS } from '../sceneModule/numbers';
 
-export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline' | 'unlock';
+export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline' | 'unlock' | 'compass';
+
+/**
+ * 派生读取点 compass.<id>（R-3，总策划定）：由线的下一步表现算，不落存档。
+ * anyLineClosed＝story.lineCompass.anyLineClosed.lineIds（南荒／晋／宋／汉／唐；太泉、秦不算）里任一条
+ * line.<id>.outcome 有档，或表里该线 closedWhen 全满足。秦线知情拍与秦线 knownWhen 读它（lineOutcomes 有数据前 closedWhen 是临时 done.*）。
+ * closedWhen 里不得再读 compass.*（validator 拦；求值时也有防重入，重入读成 undefined）。
+ */
+export const COMPASS_DERIVED_IDS = ['anyLineClosed'] as const;
 
 export interface ParsedLedgerPath {
   kind: LedgerPathKind;
@@ -29,7 +40,7 @@ export interface ParsedLedgerPath {
   invalid?: boolean;
 }
 
-/** 各类路径支持的 operator（§4.1）。party.<characterId> 恒为 boolean，只有 eq / neq；deadline.<id> 的 exists＝已起算；unlock.<lineId> 恒为 boolean（没存档为 undefined），只有 eq / neq。 */
+/** 各类路径支持的 operator（§4.1）。party.<characterId> 恒为 boolean，只有 eq / neq；deadline.<id> 的 exists＝已起算；unlock.<lineId> 恒为 boolean（没存档为 undefined），只有 eq / neq；compass.<id> 恒为 boolean，只有 eq / neq。 */
 export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioConditionOperator[]> = {
   identity: ['eq', 'neq', 'exists'],
   done: ['eq', 'neq'],
@@ -40,6 +51,7 @@ export const LEDGER_OPERATORS: Record<LedgerPathKind, readonly ScenarioCondition
   party: ['eq', 'neq'],
   deadline: ['eq', 'neq', 'exists'],
   unlock: ['eq', 'neq'],
+  compass: ['eq', 'neq'],
 };
 
 /** item.<id>（是否得过）恒为 boolean，只有 eq / neq；exists 只给 item.<id>.from。 */
@@ -85,6 +97,10 @@ export function parseLedgerPath(path: string): ParsedLedgerPath | undefined {
     return tail === 'state' || tail.endsWith('.state') ? { kind: 'deadline', id: '', invalid: true } : { kind: 'deadline', id: tail };
   }
   if (path.startsWith('unlock.')) return { kind: 'unlock', id: rest('unlock.') };
+  if (path.startsWith('compass.')) {
+    const id = rest('compass.');
+    return (COMPASS_DERIVED_IDS as readonly string[]).includes(id) ? { kind: 'compass', id } : { kind: 'compass', id: '', invalid: true };
+  }
   return undefined;
 }
 
@@ -106,6 +122,26 @@ type LedgerRuntime = {
 
 const asRecord = <T>(value: unknown): T | undefined =>
   value && typeof value === 'object' && !Array.isArray(value) ? value as T : undefined;
+
+type CompassLine = { lineId?: string; closedWhen?: ScenarioCondition[] };
+let compassEvaluating = false;
+
+/** compass.anyLineClosed：任一计入的国家线已收束（line.<id>.outcome 有档或 closedWhen 全满足）。 */
+function anyNationLineClosed(runtime: unknown, save?: unknown): boolean | undefined {
+  if (compassEvaluating) return undefined;
+  compassEvaluating = true;
+  try {
+    const flags = asRecord<Record<string, unknown>>((runtime as LedgerRuntime | undefined)?.flags);
+    const lines = ((CONTENT_PACKS as { lineCompass?: { lines?: CompassLine[] } }).lineCompass?.lines) ?? [];
+    return GAME_NUMBERS.story.lineCompass.anyLineClosed.lineIds.some((lineId: string) => {
+      if (readLineOutcome(flags, lineId) !== undefined) return true;
+      const closedWhen = lines.find(line => line.lineId === lineId)?.closedWhen;
+      return !!closedWhen?.length && closedWhen.every(c => evaluateLedgerCondition(c, runtime, save) === true);
+    });
+  } finally {
+    compassEvaluating = false;
+  }
+}
 
 function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): unknown {
   const rt = (asRecord<LedgerRuntime>(runtime) || {}) as LedgerRuntime;
@@ -147,6 +183,9 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): u
       const line = SECONDARY_LINES.find(l => l.unlock === parsed.id);
       return lineUnlockLedgerValue(save, parsed.id, { ...(line ? secondaryLineUnlockOptions(line) : { required: true }), runtime });
     }
+    case 'compass':
+      // 只读编年史等跨关账（closedWhen 只许账本路径），不新增存档字段
+      return anyNationLineClosed(runtime, save);
   }
 }
 

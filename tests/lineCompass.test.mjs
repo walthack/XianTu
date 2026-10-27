@@ -53,15 +53,38 @@ test('配置：ui.rightSidebar.showLineCompass 默认 false 已登记；story.li
   assert.equal(compass.lineOfStage('lyl.taiquan_sacred_fruit'), 'taiquan');
 });
 
-test('下一步表：7 条国家线、只放结构；占位样例标【待剧情策划】且是 draft；validator 对仓库表无问题', () => {
+test('下一步表：7 条国家线、写入剧情策划定稿 63 条；没有占位；pending 步与线级 knownWhen 按拍板；validator 对仓库表无问题', () => {
   const table = compass.lineCompassTable();
   assert.deepEqual(table.lines.map(l => l.lineId).sort(), [...registry.NATION_LINE_IDS].sort());
-  for (const line of table.lines) for (const step of line.steps) {
-    assert.equal(step.draft, true, `${line.lineId}.${step.id} 正式文案未定，只许占位`);
-    assert.ok(texts[step.hintKey].startsWith(compass.LINE_COMPASS_DRAFT_MARK), step.hintKey);
+  const steps = table.lines.flatMap(l => l.steps.map(step => ({ lineId: l.lineId, ...step })));
+  assert.ok(!steps.some(step => step.draft), '定稿后不留【待剧情策划】占位');
+  const hinted = steps.filter(step => step.hintKey);
+  assert.equal(hinted.length, 63, '定稿 63 条');
+  const perLine = Object.fromEntries(table.lines.map(l => [l.lineId, l.steps.filter(step => step.hintKey).length]));
+  assert.deepEqual(perLine, { nanhuang: 11, jin: 8, song: 11, han: 12, tang: 6, qin: 9, taiquan: 6 });
+  for (const step of hinted) {
+    assert.equal(step.hintKey, `lineCompass.${step.lineId}.step.${step.id}`);
+    assert.ok([...texts[step.hintKey]].length <= numbers.GAME_NUMBERS.story.lineCompass.hint.maxChars, step.hintKey);
   }
-  assert.ok(table.lines.reduce((n, l) => n + l.steps.length, 0) <= 3, '极少量占位样例');
-  assert.deepEqual(validateLineCompassTable(table, texts), []);
+  assert.equal(texts['lineCompass.jin.step.palace_ask'], '在建康打听宫里最近有什么事', 'P-14');
+  assert.equal(texts['lineCompass.song.step.song_guangyang_skip_jin'], '打听月霜的下落', '宋跳过晋入口（用户定）');
+  assert.equal(texts[compass.LINE_COMPASS_RETURN_KEY], '回到{地点}看看');
+  // pending：仓库没有的事件，本次不新建；运行时跳过，note 写缺什么
+  const pending = steps.filter(step => step.pending).map(step => `${step.lineId}.${step.id}`);
+  assert.deepEqual(pending, [
+    'han.han_enter_from_taiquan_wudu', 'han.han_enter_from_taiquan', 'han.han_enter_border_wudu', 'han.han_enter_border_alt', 'han.han_yunruyao_bing', 'han.han_huo_bieyuan',
+    'tang.tang_entry_from_han', 'tang.tang_entry', 'tang.tang_meet_liao_zhou_yuan', 'tang.tang_d7_appoint', 'tang.tang_d7_secret_treaty',
+    ...table.lines.find(l => l.lineId === 'qin').steps.map(step => `qin.${step.id}`),
+    'taiquan.tq_enter_array', 'taiquan.tq_xionggu_key', 'taiquan.tq_xuanyuan_mijing',
+  ]);
+  for (const step of steps.filter(step => step.pending)) assert.ok(step.note?.includes('pending：'), `${step.lineId}.${step.id}`);
+  for (const step of steps.filter(step => step.lineId === 'qin')) assert.match(step.eventId, /^liuchao\.event\.qin_/, '秦线事件命名空间（P-08）');
+  // 线级：晋读 s02_01；宋汉唐与南荒读序幕收束；秦读派生读取点
+  const known = id => table.lines.find(l => l.lineId === id).knownWhen;
+  assert.deepEqual(known('jin'), [{ path: 'done.lcq.event.s02_01', operator: 'eq', value: true }]);
+  for (const id of ['nanhuang', 'song', 'han', 'tang']) assert.deepEqual(known(id), [{ path: 'done.lcq.event.sudaji_south_pact', operator: 'eq', value: true }], id);
+  assert.deepEqual(known('qin'), [{ path: 'compass.anyLineClosed', operator: 'eq', value: true }]);
+  assert.deepEqual(validateLineCompassTable(table, texts, compass.lineCompassPlaces()), []);
   // 势力线、商道不进表（Q3/Q4）
   for (const id of ['heimohai', 'xingyuehu', 'taiyi', 'commerce']) assert.ok(!table.lines.some(l => l.lineId === id || l.anchorLine === id), id);
 });
@@ -96,12 +119,14 @@ test('validator：只许账本路径、国家线、文案在 texts、正式文�
   assert.ok(codes(anchor).includes('missing_reference'));
 });
 
-test('当前线＝焦点事件所在国家线；表里只有占位时用主线指南针「去X · 见Y」，占位文案永不出现', () => {
+test('当前线＝焦点事件所在国家线；下一步按表取（没走南荒的存档：入口兜底句），占位文案永不出现', () => {
   const v = view(saveOf(), KILL_WU);
   assert.equal(v.current.lineId, 'jin');
   assert.equal(v.current.source, 'focus');
   assert.equal(v.current.name, texts['lineCompass.jin.name']);
-  assert.equal(v.current.step, POINTER);
+  assert.equal(v.current.step, '去建康，找门路做生意');
+  // 焦点正好是入口那一拍 → 主线指南针
+  assert.equal(view(saveOf(), 'lcq.event.s07_00c_arrive_jiankang').current.step, POINTER);
   assert.ok(!JSON.stringify(v).includes(compass.LINE_COMPASS_DRAFT_MARK));
   assert.ok(!JSON.stringify(v).includes(secondary.SECONDARY_LINES.find(l => l.id === 'jin').entryHint), '不回退旧 entryHint');
 });
@@ -110,9 +135,9 @@ test('焦点不在国家线上（塞外）：取编年史最近推进过、未�
   const recent = view(saveOf({ modId: S02 }), 'lcq.event.s02_05');
   assert.equal(recent.current.lineId, 'jin');
   assert.equal(recent.current.source, 'recent');
-  assert.equal(recent.current.step, '', '不是焦点所在的线，不借焦点事件的指南针');
-  // 晋的锚还没知道：焦点在晋地也不认晋（线是被知道打开的），最近推进过的也只有塞外 → 没有当前线
-  const none = view(saveOf({ done: [[S02, WANGZHE]] }), KILL_WU);
+  assert.equal(recent.current.step, '去建康，找门路做生意', '不是焦点所在的线，不借焦点事件的指南针，按表出入口句');
+  // 晋还没知道（王哲锦囊 s02_01 之前，用户定 P-02）：焦点在晋地也不认晋（线是被知道打开的）→ 没有当前线
+  const none = view(saveOf({ done: [] }), KILL_WU);
   assert.equal(none.current, null);
 });
 
@@ -179,4 +204,124 @@ test('缺键记 LCQ-PCK-005 并不出这一步（同一键只记一次），绝�
   assert.equal(hits[0].detail.lineId, 'jin');
   assert.equal(hits[0].level, 'warn');
   log.resetLogState();
+});
+
+// ── 2026-10-27 定稿写入：派生读取点、pending、通用句、R-6 ──
+const ledger = await loadTs('../src/modules/scenarioMods/ledgerConditions.ts');
+const dbg = await loadTs('../src/modules/diagnostics/debugLog.ts');
+const PACT = 'lcq.event.sudaji_south_pact';
+const CLOSERS = { nanhuang: ['lcq.stage_05b', 'lcq.event.s05b_wuer_suli_depart'], jin: ['lcq.stage_09_trade_and_escape', 'lcq.event.s09_10_separation'], song: [TQ, 'lyl.event.taiquan_sacred_fruit_06'], han: ['lyg.mijing_rumen', 'lyg.event.s02_09'], tang: ['lyg.buddhist_conspiracy', 'lyg.event.buddhist_conspiracy_11_beat'] };
+const ANY_CLOSED = { path: 'compass.anyLineClosed', operator: 'eq', value: true };
+const rtOf = save => save.世界.状态.剧本模组;
+
+test('R-3 compass.anyLineClosed：南荒／晋／宋／汉／唐任一 closedWhen 成立或 line.*.outcome 有档为 true；太泉、秦不算；计入的线进配置', () => {
+  assert.deepEqual(ledger.parseLedgerPath('compass.anyLineClosed'), { kind: 'compass', id: 'anyLineClosed' });
+  assert.equal(ledger.parseLedgerPath('compass.nope').invalid, true);
+  assert.deepEqual(ledger.LEDGER_OPERATORS.compass, ['eq', 'neq']);
+  assert.deepEqual(numbers.GAME_NUMBERS.story.lineCompass.anyLineClosed.lineIds, ['nanhuang', 'jin', 'song', 'han', 'tang']);
+  assert.ok(registry.FIELD_SPECS.some(s => s.path === 'story.lineCompass.anyLineClosed.lineIds'));
+  const tree = JSON.parse(fs.readFileSync('mod-kit/game-numbers.qingyu.json', 'utf8'));
+  tree.story.lineCompass.anyLineClosed.lineIds.push('taiquan');
+  assert.ok(registry.validateAgainstRegistry(tree).some(e => e.includes('anyLineClosed.lineIds')), '太泉不计入');
+  const holds = save => ledger.evaluateLedgerCondition(ANY_CLOSED, rtOf(save), save);
+  assert.equal(holds(saveOf()), false);
+  for (const [lineId, [stage, eventId]] of Object.entries(CLOSERS)) assert.equal(holds(saveOf({ done: [[S02, WANGZHE], [stage, eventId]] })), true, lineId);
+  assert.equal(holds(saveOf({ flags: { 'line.han.outcome': 'resolved' } })), true, 'line.*.outcome 有档');
+  assert.equal(holds(saveOf({ done: [[S02, WANGZHE], ['lyl.taiquan_afterfall', 'lyl.event.taiquan_portal_exit']] })), false, '太泉收束不算');
+  assert.equal(ledger.evaluateLedgerCondition({ ...ANY_CLOSED, operator: 'neq' }, rtOf(saveOf()), saveOf()), true);
+  assert.equal(ledger.evaluateLedgerCondition({ ...ANY_CLOSED, operator: 'exists' }, rtOf(saveOf())), false, '只有 eq / neq');
+});
+
+test('R-3 秦线 knownWhen 读 compass.anyLineClosed：任一国家线收束前不出现，收束后进折叠行；秦步全是 pending，不出提示', () => {
+  const before = view(saveOf(), KILL_WU);
+  assert.ok(!before.others.some(o => o.lineId === 'qin'));
+  const after = view(saveOf({ done: [[S02, WANGZHE], [S07, JIN_ANCHOR], CLOSERS.nanhuang] }), KILL_WU);
+  assert.deepEqual(after.others.find(o => o.lineId === 'qin'), { lineId: 'qin', name: texts['lineCompass.qin.name'], locked: false, hintLines: [] });
+  assert.ok(!after.others.some(o => o.lineId === 'nanhuang'), '南荒已收束撤掉');
+});
+
+test('validator：compass.* 不得进 closedWhen；pending 步允许仓库没有的事件、须写 note、不得同时 draft；非 pending 仍拒未知事件', () => {
+  const base = () => ({ version: 1, lines: [{ lineId: 'qin', nameKey: 'n', knownWhen: [ANY_CLOSED], steps: [{ id: 'a', hintKey: 'k' }] }] });
+  const t = { n: '秦国', k: '去咸阳看看' };
+  const codes = (table, tx = t, places) => validateLineCompassTable(table, tx, places).map(i => i.code);
+  assert.deepEqual(codes(base()), []);
+  const closed = base(); closed.lines[0].closedWhen = [ANY_CLOSED];
+  assert.ok(codes(closed).includes('compass_in_closed_when'));
+  const badId = base(); badId.lines[0].knownWhen = [{ path: 'compass.whatever', operator: 'eq', value: true }];
+  assert.ok(codes(badId).includes('invalid_path'));
+  const pending = base(); Object.assign(pending.lines[0].steps[0], { pending: true, eventId: 'liuchao.event.qin_find_xu', when: [{ path: 'done.liuchao.event.qin_hook_fangshi_rumor', operator: 'eq', value: true }], note: 'pending：仓库无秦线事件' });
+  assert.deepEqual(codes(pending), []);
+  assert.ok(codes({ ...pending, lines: [{ ...pending.lines[0], steps: [{ ...pending.lines[0].steps[0], note: undefined }] }] }).includes('pending_note_required'));
+  assert.ok(codes({ ...pending, lines: [{ ...pending.lines[0], steps: [{ ...pending.lines[0].steps[0], draft: true }] }] }).includes('invalid_value'));
+  const shapeless = structuredClone(pending); shapeless.lines[0].steps[0].when[0].path = 'done.not an id';
+  assert.ok(codes(shapeless).includes('missing_reference'));
+  const notPending = structuredClone(pending); delete notPending.lines[0].steps[0].pending;
+  assert.ok(codes(notPending).includes('missing_reference'), '非 pending 仍拒仓库没有的事件');
+  const tooLongPending = structuredClone(pending); assert.ok(codes(tooLongPending, { ...t, k: '去咸阳城里四处走走看看，打听一下宫里最近到底有什么事情' }).includes('hint_too_long'), 'pending 文案照正式步校验');
+  // 只有 eventId 的步：通用句须在 texts、代入地点后守字数
+  const bare = { version: 1, lines: [{ lineId: 'jin', nameKey: 'n', anchorLine: 'jin', steps: [{ id: 'b', eventId: KILL_WU }] }] };
+  assert.ok(codes(bare, { n: '晋国' }).includes('missing_text'));
+  assert.deepEqual(codes(bare, { n: '晋国', [compass.LINE_COMPASS_RETURN_KEY]: '回到{地点}看看' }, { [KILL_WU]: '清远' }), []);
+  assert.ok(codes(bare, { n: '晋国', [compass.LINE_COMPASS_RETURN_KEY]: '回到{地点}看看' }, { [KILL_WU]: '一二三四五六七八九十一二三四五六七' }).includes('hint_too_long'));
+});
+
+test('pending 步运行时跳过、不进玩家可见；R-4 只有 eventId 的步焦点不在此拍时「回到{地点}看看」，没有地点只显示线名并记 story 调试日志、不报错码', () => {
+  const table = { version: 1, lines: [{ lineId: 'jin', nameKey: 'n.jin', anchorLine: 'jin', steps: [
+    { id: 'p', pending: true, hintKey: 'k.p', note: 'pending：x' },
+    { id: 'e', eventId: KILL_WU },
+  ] }] };
+  const tx = { 'n.jin': '晋', 'k.p': '不该出', [compass.LINE_COMPASS_RETURN_KEY]: '回到{地点}看看' };
+  const at = (focus, places) => view(saveOf(), focus, { table, texts: tx, places }).current.step;
+  assert.equal(at(XIAOZI, { [KILL_WU]: '清远' }), '回到清远看看');
+  assert.equal(at(KILL_WU, { [KILL_WU]: '清远' }), POINTER, '焦点正好在这一拍 → 指南针');
+  log.resetLogState();
+  const out = [];
+  numbers.applyGameNumbers({ diagnostics: { debug: { categories: { story: true } } } });
+  dbg.setDebugConsole((...args) => out.push(args));
+  try {
+    assert.equal(at(XIAOZI, { [KILL_WU]: '' }), '', '没有地点 → 只显示线名');
+  } finally {
+    dbg.setDebugConsole(null);
+    numbers.applyGameNumbers({ diagnostics: { debug: { categories: { story: false } } } });
+  }
+  assert.ok(out.some(([msg]) => msg.startsWith('[dbg:story]') && msg.includes('没有地点')), 'story 调试日志');
+  assert.equal(store.logStore.recent(500).filter(e => e.detail?.source === 'lineCompass').length, 0, '不报错码');
+  // 仓库表：晋 s07_08 等事件 locationId 为空 → 编译期记空串；南荒同地拍有地点名
+  const places = compass.lineCompassPlaces();
+  assert.equal(places['lcq.event.s07_08_palace_escape'], '');
+  assert.equal(places['lcq.event.s04b_lingfei_baiyi_crisis_02'], '白夷族');
+});
+
+test('R-6：acq … lt encountered 在没有记录时为 true（等级按 0 比），初见／重逢写成显式互补条件', () => {
+  const cond = { path: 'acq.liuchao.character.xu_junfang', operator: 'lt', value: 'encountered' };
+  assert.equal(ledger.evaluateLedgerCondition(cond, { acquaintances: {} }), true, '无记录');
+  assert.equal(ledger.evaluateLedgerCondition(cond, { acquaintances: { 'liuchao.character.xu_junfang': { kind: 'rumored' } } }), true, '只听说过');
+  assert.equal(ledger.evaluateLedgerCondition(cond, { acquaintances: { 'liuchao.character.xu_junfang': { kind: 'encountered' } } }), false);
+  const table = compass.lineCompassTable();
+  const pair = (lineId, met, unmet, who) => {
+    const steps = table.lines.find(l => l.lineId === lineId).steps;
+    const a = steps.find(s => s.id === met), b = steps.find(s => s.id === unmet);
+    assert.ok(a.when.some(c => c.path === `acq.liuchao.character.${who}` && c.operator === 'gte'), met);
+    assert.ok(b.when.some(c => c.path === `acq.liuchao.character.${who}` && c.operator === 'lt' && c.value === 'encountered'), unmet);
+  };
+  pair('song', 'song_jiangzhou_war_open', 'song_jiangzhou_war_open_alt', 'xiao_yao_yi');
+  pair('han', 'han_zhu_urge_luo', 'han_zhu_urge_luo_alt', 'shang_zhen_yu');
+  pair('han', 'han_liujian_yuxi', 'han_liujian_yuxi_alt', 'zhao_feiyan');
+  pair('qin', 'qin_entry_xu_met', 'qin_entry_xu_unmet', 'xu_junfang');
+});
+
+test('用户拍板：晋开局王哲锦囊起已知；宋汉唐南荒序幕结束起已知；宋入口按走没走过晋分两版', () => {
+  const opening = view(saveOf({ modId: S02, done: [[S02, WANGZHE]] }), 'lcq.event.s02_05');
+  assert.equal(opening.current, null, '还没推进过任何国家线、焦点在塞外 → 没有当前线');
+  assert.ok(opening.others.some(o => o.lineId === 'jin'), '王哲锦囊之后晋即已知（折叠行）');
+  assert.ok(!opening.others.some(o => ['song', 'han', 'tang', 'nanhuang'].includes(o.lineId)), '序幕结束前宋汉唐南荒未知');
+  const afterPact = view(saveOf({ modId: S02, done: [[S02, WANGZHE], [S02, PACT]] }), 'lcq.event.s02_05');
+  for (const id of ['song', 'han', 'tang', 'nanhuang']) assert.ok(afterPact.others.some(o => o.lineId === id), id);
+  const SONG_FOCUS = 'lcq.event.s09_08_six_doors_confession';
+  const S09 = 'lcq.stage_09_trade_and_escape';
+  const skip = view(saveOf({ modId: S09, done: [[S02, WANGZHE], [S02, PACT]] }), SONG_FOCUS);
+  assert.equal(skip.current.lineId, 'song');
+  assert.equal(skip.current.step, '打听月霜的下落', '跳过晋：不点广阳');
+  const fromJin = view(saveOf({ modId: S09, done: [[S02, WANGZHE], [S02, PACT], [S09, 'lcq.event.s09_05_drain_escape']] }), SONG_FOCUS);
+  assert.equal(fromJin.current.step, '进广阳城看看');
 });

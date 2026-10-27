@@ -8,8 +8,10 @@
  * - 整线解锁（story.lineUnlock，太泉）：没解锁不当当前线，只在折叠行灰显，标题与缺项句复用 secondaryLineEntryView 的锁定分支。
  * - 当前线（Q7）：焦点事件所在国家线（下一步表里写了这个 eventId 的线，否则按焦点事件所在关的地区 story.lineCompass.regionLines）；
  *   不在任何线上、或那条线未知／已收束／没解锁，取编年史里最近推进过、未收束的线；都没有返回 null，右栏退回原主线指南针那一句（Q1）。
- * - 下一步：按顺序取第一条非占位、when 全满足、未过（until 全满足即过；没写 until 时 eventId 已完成即过）的一步。
+ * - 下一步：按顺序取第一条非占位（draft）、非待建（pending）、when 全满足、未过（until 全满足即过；没写 until 时 eventId 已完成即过）的一步。
  *   这一步正好是焦点事件 → 直接用主线指南针的「去X · 见Y」；否则用 hintKey 的文案。缺键记 LCQ-PCK-005 并不出这一步，绝不回退旧 entryHint（Q8）。
+ *   只有 eventId、焦点又不在这一拍（R-4／P-12，总策划定）→ 通用句 texts[lineCompass.step.returnTo]「回到{地点}看看」，
+ *   地点＝该事件 locationId 的显示名（content-packs 编译时求得，catalog.lineCompassPlaces）；locationId 为空就不出下一步（只显示线名），记 story 调试日志，不报错码。
  *   表里没有可用的一步、而当前线是焦点事件所在的线 → 也用「去X · 见Y」（焦点事件就是这条线眼下这一拍）。
  * - 判定只读跨关账（编年史、相识账、身份账、line.*／期限 flags），不读 rt.completedEventIds，不新增存档字段（§5.3）。
  * - 条件求值传存档（evaluateLedgerCondition 第三参），unlock.* 读得到；不是账本路径的条件一律不成立（validator 已拦）。
@@ -52,6 +54,8 @@ export interface LineCompassStep {
   hintKey?: string;
   /** 【待剧情策划】占位：运行时跳过，不进玩家可见 */
   draft?: true;
+  /** 待建：仓库还没有对应剧情事件（eventId／条件里的 done.* 可为尚无的 id），本次不新建；运行时跳过，不进玩家可见，note 写缺什么 */
+  pending?: true;
   /** 制作备注，不进玩家可见 */
   note?: string;
 }
@@ -111,15 +115,24 @@ export interface LineCompassInput {
   compassPointer: () => string;
   table?: LineCompassTable;
   texts?: Readonly<Record<string, string>>;
+  /** eventId → 地点显示名（空串＝事件没有 locationId）；缺省读 catalog.lineCompassPlaces */
+  places?: Readonly<Record<string, string>>;
 }
 
 /** 占位文案标记：带它的句子永不显示。 */
 export const LINE_COMPASS_DRAFT_MARK = '【待剧情策划】';
+/** 只有 eventId 的步、焦点不在这一拍时的通用句键（R-4／P-12）与地点占位 */
+export const LINE_COMPASS_RETURN_KEY = 'lineCompass.step.returnTo';
+export const LINE_COMPASS_PLACE_SLOT = '{地点}';
 
 export const showLineCompass = (): boolean => GAME_NUMBERS.ui.rightSidebar.showLineCompass === true;
 
 export const lineCompassTable = (): LineCompassTable =>
   ((CONTENT_PACKS as { lineCompass?: LineCompassTable }).lineCompass) ?? { version: 1, lines: [] };
+
+/** 下一步表里各 eventId 的地点显示名（content-packs 编译时从各关事件 locationId 求得；空串＝没有 locationId）。 */
+export const lineCompassPlaces = (): Readonly<Record<string, string>> =>
+  ((CONTENT_PACKS as { lineCompassPlaces?: Record<string, string> }).lineCompassPlaces) ?? {};
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
 
@@ -129,6 +142,7 @@ function debugOnChange(msg: string, data: () => unknown): void {
   lastDebug.key = msg;
   debugLog('story', msg, data);
 }
+const loggedNoPlace = new Set<string>();
 
 /** 关卡 → 国家线（story.lineCompass.regionLines，按 stageRegions 的地区名）；塞外等不登记的地区为 undefined。 */
 export function lineOfStage(stageId: string | undefined): string | undefined {
@@ -160,6 +174,7 @@ function doneEventsWithStage(rt: any): Array<{ eventId: string; stageId: string 
 export function lineCompassView(save: unknown, input: LineCompassInput): LineCompassView {
   const table = input.table ?? lineCompassTable();
   const texts = input.texts ?? CONTENT_PACKS.texts;
+  const places = input.places ?? lineCompassPlaces();
   const rt = runtimeOf(save) || {};
   const holds = (conds: readonly ScenarioCondition[] | undefined): boolean =>
     (conds ?? []).every(c => evaluateLedgerCondition(c, rt, save) === true);
@@ -204,11 +219,21 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
   let card: LineCompassCard | null = null;
   if (current) {
     const line = current;
-    const step = line.steps.find(s => !s.draft && holds(s.when) && !(s.until?.length ? holds(s.until) : s.eventId !== undefined && done.has(s.eventId)));
+    const step = line.steps.find(s => !s.draft && !s.pending && holds(s.when) && !(s.until?.length ? holds(s.until) : s.eventId !== undefined && done.has(s.eventId)));
     let stepText = '';
     if (step) {
-      if (step.eventId && step.eventId === input.focusEventId) stepText = input.compassPointer();
+      const atFocus = !!step.eventId && step.eventId === input.focusEventId;
+      if (atFocus) stepText = input.compassPointer();
       if (!stepText && step.hintKey) stepText = text(line, step.hintKey) ?? '';
+      else if (!stepText && !atFocus && step.eventId) {
+        // 只有 eventId、焦点不在这一拍：「回到{地点}看看」；没有地点只显示线名（记 story 调试日志，不报错码）
+        const place = places[step.eventId];
+        if (place) stepText = (text(line, LINE_COMPASS_RETURN_KEY) ?? '').split(LINE_COMPASS_PLACE_SLOT).join(place);
+        else if (debugEnabled('story') && !loggedNoPlace.has(`${line.lineId}.${step.id}`)) {
+          loggedNoPlace.add(`${line.lineId}.${step.id}`);
+          debugLog('story', `[当前线] ${line.lineId} 步 ${step.id} 的事件 ${step.eventId} 没有地点，这一次不出下一步（只显示线名）`, () => ({ lineId: line.lineId, stepId: step.id, eventId: step.eventId }));
+        }
+      }
     } else if (source === 'focus') {
       stepText = input.compassPointer();
     }
