@@ -18,6 +18,9 @@ import { lineOutcomeTiers } from './lineOutcomes';
 import { lineUnlockConfig } from './lineUnlock';
 import { isAcquaintanceKind } from './acquaintanceLedger';
 import { indexIds, knownEventIds, playerIdentityDefs, playerLedgerRules } from './playerLedgerRules';
+import { SECONDARY_LINES } from './secondaryLines';
+import { GAME_NUMBERS } from '../sceneModule/numbers';
+import { NATION_LINE_IDS } from '../sceneModule/numbersRegistry';
 
 export interface ScenarioModValidationIssue {
   path: string;
@@ -2444,4 +2447,78 @@ function checkRef(value: unknown, ids: Set<string>, path: string, target: string
 function checkRefs(value: unknown, ids: Set<string>, path: string, target: string, add: AddIssue): void {
   if (!Array.isArray(value)) return;
   value.forEach((entry, index) => checkRef(entry, ids, `${path}[${index}]`, target, add));
+}
+
+/** 占位文案标记（与 lineCompass.ts 的 LINE_COMPASS_DRAFT_MARK 同值；validator 不反向依赖 lineCompass，以免成环）。 */
+const LINE_COMPASS_DRAFT_MARK = '【待剧情策划】';
+
+/**
+ * 线的下一步表（内容包 line-compass.json，右栏线入口复用分析 2026-10-27 §5.2；结构与文案口径见 lineCompass.ts 的 LineCompassTable）。
+ * - lineId 须为 7 条国家线、不重复；nameKey 须在 texts；anchorLine 须为 secondaryLines 的线 id；
+ * - when / until / knownWhen / closedWhen 只许账本路径（不是账本前缀报 ledger_only），id 须存在；表求值时传存档，unlock.* 可用，相识等级比较可用；
+ * - 每步 id 线内唯一，eventId 与 hintKey 至少一个，eventId 须是已知事件；
+ * - 正式步（非 draft）hintKey 须在 texts，文案不得带【待剧情策划】、不得超过 story.lineCompass.hint.maxChars 字、不得含 hint.bannedWords（§4.2）；
+ * - draft 步的文案（若有）须以【待剧情策划】开头，运行时一律跳过。
+ */
+export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>): ScenarioModValidationIssue[] {
+  const issues: ScenarioModValidationIssue[] = [];
+  const add: AddIssue = (path, code, message) => issues.push({ path, code, message });
+  if (!isRecord(table) || table.version !== 1 || !Array.isArray(table.lines)) {
+    add('lineCompass', 'invalid_type', 'lineCompass must be { version: 1, lines: [] }.');
+    return issues;
+  }
+  const ledger: LedgerScope = { refs: [], variant: true, unlockSite: true };
+  const conditions = (value: unknown, path: string): void => {
+    if (value === undefined) return;
+    validateConditions(value, path, add, ledger);
+    if (Array.isArray(value)) value.forEach((c, i) => {
+      if (isRecord(c) && typeof c.path === 'string' && !parseLedgerPath(c.path)) add(`${path}[${i}].path`, 'ledger_only', `lineCompass conditions only accept ledger paths (done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.*), got "${c.path}".`);
+    });
+  };
+  const hint = GAME_NUMBERS.story.lineCompass.hint;
+  const oldLineIds = new Set(SECONDARY_LINES.map(line => line.id));
+  const seenLines = new Set<string>();
+  table.lines.forEach((line, li) => {
+    const at = `lineCompass.lines[${li}]`;
+    if (!isRecord(line)) { add(at, 'invalid_type', `${at} must be an object.`); return; }
+    for (const key of Object.keys(line)) if (!['lineId', 'nameKey', 'anchorLine', 'knownWhen', 'closedWhen', 'steps', 'note'].includes(key)) add(`${at}.${key}`, 'unknown_field', `Unknown field "${key}".`);
+    if (typeof line.lineId !== 'string' || !NATION_LINE_IDS.includes(line.lineId)) add(`${at}.lineId`, 'invalid_enum', `lineId must be one of ${NATION_LINE_IDS.join('/')}.`);
+    else if (seenLines.has(line.lineId)) add(`${at}.lineId`, 'duplicate_id', `Duplicate line "${line.lineId}".`);
+    else seenLines.add(line.lineId);
+    if (typeof line.nameKey !== 'string' || !isNonEmptyString(texts[line.nameKey])) add(`${at}.nameKey`, 'missing_text', `Line name text "${String(line.nameKey)}" is missing.`);
+    if (line.anchorLine !== undefined && (typeof line.anchorLine !== 'string' || !oldLineIds.has(line.anchorLine))) add(`${at}.anchorLine`, 'missing_reference', `Unknown secondary line "${String(line.anchorLine)}".`);
+    optionalString(line.note, `${at}.note`, add);
+    conditions(line.knownWhen, `${at}.knownWhen`);
+    conditions(line.closedWhen, `${at}.closedWhen`);
+    if (!Array.isArray(line.steps)) { add(`${at}.steps`, 'invalid_type', `${at}.steps must be an array.`); return; }
+    const seenSteps = new Set<string>();
+    line.steps.forEach((step, si) => {
+      const sp = `${at}.steps[${si}]`;
+      if (!isRecord(step)) { add(sp, 'invalid_type', `${sp} must be an object.`); return; }
+      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'draft', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
+      if (validateId(step.id, `${sp}.id`, add)) {
+        if (seenSteps.has(step.id)) add(`${sp}.id`, 'duplicate_id', `Duplicate step id "${step.id}".`);
+        seenSteps.add(step.id);
+      }
+      if (step.draft !== undefined && step.draft !== true) add(`${sp}.draft`, 'invalid_value', 'draft must be true or omitted.');
+      optionalString(step.note, `${sp}.note`, add);
+      if (step.eventId === undefined && step.hintKey === undefined) add(sp, 'required_value', 'A step needs eventId or hintKey.');
+      if (step.eventId !== undefined && (typeof step.eventId !== 'string' || !knownEventIds().has(step.eventId))) add(`${sp}.eventId`, 'missing_reference', `Unknown event id "${String(step.eventId)}".`);
+      conditions(step.when, `${sp}.when`);
+      conditions(step.until, `${sp}.until`);
+      if (step.hintKey === undefined) return;
+      if (typeof step.hintKey !== 'string' || !step.hintKey) { add(`${sp}.hintKey`, 'invalid_type', 'hintKey must be a non-empty string.'); return; }
+      const value = texts[step.hintKey];
+      if (step.draft) {
+        if (value !== undefined && !value.startsWith(LINE_COMPASS_DRAFT_MARK)) add(`${sp}.hintKey`, 'draft_unmarked', `Draft step text must start with ${LINE_COMPASS_DRAFT_MARK}.`);
+        return;
+      }
+      if (!isNonEmptyString(value)) { add(`${sp}.hintKey`, 'missing_text', `Step text "${step.hintKey}" is missing.`); return; }
+      if (value.includes(LINE_COMPASS_DRAFT_MARK)) add(`${sp}.hintKey`, 'draft_text', `Non-draft step text still carries ${LINE_COMPASS_DRAFT_MARK}; mark the step draft or rewrite it.`);
+      if ([...value].length > hint.maxChars) add(`${sp}.hintKey`, 'hint_too_long', `Step text is ${[...value].length} chars, over story.lineCompass.hint.maxChars (${hint.maxChars}).`);
+      for (const word of hint.bannedWords) if (value.includes(word)) add(`${sp}.hintKey`, 'hint_spoiler_word', `Step text uses characterising word "${word}" (分析稿 §4.2-2).`);
+    });
+  });
+  checkLedgerRefs(ledger.refs, new Set(), new Set(), new Set(), add);
+  return issues;
 }

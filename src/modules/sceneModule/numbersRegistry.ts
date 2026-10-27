@@ -91,6 +91,10 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'combat.baselineDc', kind: 'number', required: true, section: 'combat' },
   { path: 'tuning.timeoutMs', kind: 'int', required: true, min: 1, section: 'runtime' },
   { path: 'ui.rightSidebar.showSecondaryLines', kind: 'bool', required: true, section: 'runtime' },
+  { path: 'ui.rightSidebar.showLineCompass', kind: 'bool', required: true, section: 'runtime' },
+  { path: 'story.lineCompass.regionLines', kind: 'object', required: true, section: 'progress' },
+  { path: 'story.lineCompass.hint.maxChars', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.lineCompass.hint.bannedWords', kind: 'array', required: true, section: 'progress' },
   { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' },
   { path: 'affinity.range.min', kind: 'number', required: true, section: 'progress' },
   { path: 'affinity.range.max', kind: 'number', required: true, section: 'progress' },
@@ -263,6 +267,18 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
       });
     }
   }
+
+  // 交叉：当前线卡地区映射（右栏线入口复用分析 2026-10-27 §5.1）。值须为国家线 id；定性词须为非空字符串
+  const regionLines = atPath(tree, 'story.lineCompass.regionLines');
+  if (kindOk(regionLines, 'object')) {
+    for (const [region, lineId] of Object.entries(regionLines as Record<string, unknown>)) {
+      if (typeof lineId !== 'string' || !NATION_LINE_IDS.includes(lineId)) errors.push(`未知国家线：story.lineCompass.regionLines.${region}=${String(lineId)}`);
+    }
+  }
+  const bannedWords = atPath(tree, 'story.lineCompass.hint.bannedWords');
+  if (Array.isArray(bannedWords)) bannedWords.forEach((word, i) => {
+    if (typeof word !== 'string' || !word.trim()) errors.push(`字段类型无效：story.lineCompass.hint.bannedWords[${i}] 须为非空字符串`);
+  });
 
   // 形状：进度期限每项 { due:int≥1, urgentAt:int, 0≤urgentAt<due }（键集合与规则表的交叉核对在 validatePlayerLedgerRules）
   const deadlineLimits = atPath(tree, 'story.progressDeadline.limits');

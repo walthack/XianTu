@@ -1,5 +1,5 @@
 {
-  "version": "1049751fa87eb574",
+  "version": "2048df211360da6f",
   "contracts": [
     {
       "meta": {
@@ -13662,6 +13662,15 @@
     "line.taiquan.entry.song": "「我正好要去一趟太泉古阵，大伙儿说说那东西长什么样子，我顺路把它采了。」小狐狸的伤指望着那颗赤阳圣果，往苍澜去碰碰运气。",
     "line.taiquan.entry.song.key": "岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。",
     "line.taiquan.entry.wangzhe": "「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」师帅交代的事，总得走这一趟。到了苍澜镇，再找个认路的向导。",
+    "lineCompass.nanhuang.name": "南荒",
+    "lineCompass.jin.name": "晋国",
+    "lineCompass.song.name": "宋国",
+    "lineCompass.han.name": "汉国",
+    "lineCompass.tang.name": "唐国",
+    "lineCompass.qin.name": "秦国",
+    "lineCompass.taiquan.name": "太泉古阵",
+    "lineCompass.nanhuang.step.sheyi_look": "【待剧情策划】去蛇彝村看看",
+    "lineCompass.jin.step.palace_ask": "【待剧情策划】去建康，打听宫里最近有什么事",
     "text.act.baihu.o1.priced": "挺直腰板，把话说成一笔买卖",
     "intent.baihu.o1.priced": "我挺直腰板对苏妲己说：这是一笔买卖，价钱先谈清楚。",
     "outcome.act.baihu.o1.priced": "你没有低头，把话说成了一笔买卖。苏妲己抬眼看了你一下，没有打断。",
@@ -14066,5 +14075,66 @@
       "icon": "Feather",
       "testId": "open-qingyu-opening-playtest"
     }
-  ]
+  ],
+  "lineCompass": {
+    "version": 1,
+    "lines": [
+      {
+        "lineId": "nanhuang",
+        "nameKey": "lineCompass.nanhuang.name",
+        "anchorLine": "zhaonan",
+        "steps": [
+          {
+            "id": "sheyi_look",
+            "draft": true,
+            "hintKey": "lineCompass.nanhuang.step.sheyi_look",
+            "note": "占位样例：旧 entryHint「到了蛇彝村，才会知道这一带出了什么事」按 §4.3 改写方向；when/until/eventId 由剧情策划补"
+          }
+        ]
+      },
+      {
+        "lineId": "jin",
+        "nameKey": "lineCompass.jin.name",
+        "anchorLine": "jin",
+        "steps": [
+          {
+            "id": "palace_ask",
+            "draft": true,
+            "hintKey": "lineCompass.jin.step.palace_ask",
+            "note": "占位样例：用户 2026-10-27 08:56 原例；when/until/eventId 由剧情策划补"
+          }
+        ]
+      },
+      {
+        "lineId": "song",
+        "nameKey": "lineCompass.song.name",
+        "anchorLine": "song",
+        "steps": []
+      },
+      {
+        "lineId": "han",
+        "nameKey": "lineCompass.han.name",
+        "anchorLine": "han",
+        "steps": []
+      },
+      {
+        "lineId": "tang",
+        "nameKey": "lineCompass.tang.name",
+        "anchorLine": "tang",
+        "steps": []
+      },
+      {
+        "lineId": "qin",
+        "nameKey": "lineCompass.qin.name",
+        "steps": [],
+        "note": "旧体系没有秦线、没有锚；knownWhen（知道秦线的那一拍）由剧情策划补，补之前本线不出现"
+      },
+      {
+        "lineId": "taiquan",
+        "nameKey": "lineCompass.taiquan.name",
+        "anchorLine": "taiquan",
+        "steps": []
+      }
+    ]
+  }
 }

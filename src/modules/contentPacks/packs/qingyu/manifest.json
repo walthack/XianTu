@@ -38,6 +38,7 @@
     "lines-texts.json"
   ],
   "questLineResources": "lines-resources.json",
+  "lineCompass": "line-compass.json",
   "playtests": "playtests.json",
   "entries": "entries.json"
 }

@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "note": "线的下一步表（右栏线入口复用分析 2026-10-27 §5.2；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q5/Q7/Q8）。只放 7 条国家线（势力线不单独上卡，只在国家线的下一步里自然出现）。字段与求值口径见 src/modules/scenarioMods/lineCompass.ts 的 LineCompassTable 注释；when/until/knownWhen/closedWhen 只许账本路径（done.* / line.* / acq.* / identity.* / knows.player.* / item.* / party.* / deadline.* / unlock.*），求值时传存档。文案只写 hintKey，正文在 texts（lineCompass.<lineId>.step.<stepId>）；缺键记 LCQ-PCK-005 并不出这一步，绝不回退旧 entryHint。防剧透口径（分析稿 §4）：提示不是说明，只给去哪、找谁、打听什么；不定性（✗「去建康打听宫里的怪事」✓「去建康打听宫里最近有什么事」）、不预告、不点名结果和动机、只用主角当时已知的名字，一句、最好不超过 20 字（story.lineCompass.hint）。draft:true＝【待剧情策划】占位，运行时一律跳过、不进玩家可见；正式文案由剧情策划填写后去掉 draft。",
+  "lines": [
+    {
+      "lineId": "nanhuang",
+      "nameKey": "lineCompass.nanhuang.name",
+      "anchorLine": "zhaonan",
+      "steps": [
+        { "id": "sheyi_look", "draft": true, "hintKey": "lineCompass.nanhuang.step.sheyi_look", "note": "占位样例：旧 entryHint「到了蛇彝村，才会知道这一带出了什么事」按 §4.3 改写方向；when/until/eventId 由剧情策划补" }
+      ]
+    },
+    {
+      "lineId": "jin",
+      "nameKey": "lineCompass.jin.name",
+      "anchorLine": "jin",
+      "steps": [
+        { "id": "palace_ask", "draft": true, "hintKey": "lineCompass.jin.step.palace_ask", "note": "占位样例：用户 2026-10-27 08:56 原例；when/until/eventId 由剧情策划补" }
+      ]
+    },
+    { "lineId": "song", "nameKey": "lineCompass.song.name", "anchorLine": "song", "steps": [] },
+    { "lineId": "han", "nameKey": "lineCompass.han.name", "anchorLine": "han", "steps": [] },
+    { "lineId": "tang", "nameKey": "lineCompass.tang.name", "anchorLine": "tang", "steps": [] },
+    { "lineId": "qin", "nameKey": "lineCompass.qin.name", "steps": [], "note": "旧体系没有秦线、没有锚；knownWhen（知道秦线的那一拍）由剧情策划补，补之前本线不出现" },
+    { "lineId": "taiquan", "nameKey": "lineCompass.taiquan.name", "anchorLine": "taiquan", "steps": [] }
+  ]
+}

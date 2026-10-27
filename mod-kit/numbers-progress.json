@@ -1094,6 +1094,14 @@
         "requireDeadlinesCleared": ["liuchao.deadline.ice_gu"]
       }
     },
+    "lineCompass": {
+      "note": "右栏「当前线」卡（右栏线入口复用分析 2026-10-27 §5；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q5/Q7/Q8）。regionLines：关卡所属地区（mod-kit/entity-ledger/overrides.json stageRegions 的值）→ 国家线 id，用来判「焦点事件所在国家线」和「编年史里最近推进过的线」；值须为 7 条国家线 id，塞外不是国家线、不登记。hint.maxChars：下一步一句的字数上限（分析稿 §4.2-5「最好不超过 20 字」），hint.bannedWords：定性词（§4.2-2），两项都只在内容包编译时由 validator 拦正式文案，【待剧情策划】占位不拦。下一步表本身在内容包 line-compass.json，文案在 texts。",
+      "regionLines": { "昭南": "nanhuang", "晋国": "jin", "宋国": "song", "汉国": "han", "唐国": "tang", "太泉": "taiquan" },
+      "hint": {
+        "maxChars": 20,
+        "bannedWords": ["怪事", "闹鬼", "阴谋", "勾结", "猎杀", "危机", "要打起来了", "覆灭", "背叛"]
+      }
+    },
     "identity": {
       "note": "玩家身份账（身份账设计稿 2026-10-25 §2.2）：kinds 为 entity-catalog/identities.json 里 kind 的取值集合（草案）。prompt.maxItems：提示词【主角身份·引擎账本】结论行最多列几个身份（补充设计稿 2026-10-26 §5.4，int≥1；按 rank 降序、再按入账先后截取，secret 身份不计）",
       "kinds": ["office", "title", "merchant", "sect"],

@@ -263,5 +263,14 @@
   "line.taiquan.locked.deadline.liuchao.deadline.ice_gu": "「现在我最想要的，就是把肚子里的冰蛊去掉。」太泉古阵，等这件事了了再说。",
   "line.taiquan.entry.song": "「我正好要去一趟太泉古阵，大伙儿说说那东西长什么样子，我顺路把它采了。」小狐狸的伤指望着那颗赤阳圣果，往苍澜去碰碰运气。",
   "line.taiquan.entry.song.key": "岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。",
-  "line.taiquan.entry.wangzhe": "「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」师帅交代的事，总得走这一趟。到了苍澜镇，再找个认路的向导。"
+  "line.taiquan.entry.wangzhe": "「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」师帅交代的事，总得走这一趟。到了苍澜镇，再找个认路的向导。",
+  "lineCompass.nanhuang.name": "南荒",
+  "lineCompass.jin.name": "晋国",
+  "lineCompass.song.name": "宋国",
+  "lineCompass.han.name": "汉国",
+  "lineCompass.tang.name": "唐国",
+  "lineCompass.qin.name": "秦国",
+  "lineCompass.taiquan.name": "太泉古阵",
+  "lineCompass.nanhuang.step.sheyi_look": "【待剧情策划】去蛇彝村看看",
+  "lineCompass.jin.step.palace_ask": "【待剧情策划】去建康，打听宫里最近有什么事"
 }

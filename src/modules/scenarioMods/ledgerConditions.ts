@@ -161,12 +161,13 @@ export function resolveLedgerPath(path: string, runtime: unknown, save?: unknown
 /**
  * undefined＝不是本模块的路径，交给原逻辑。
  * 账本路径在没有 runtime、路径形状不对或 operator 不支持时一律不命中（false），不回落 flags。
+ * save 只有 unlock.* 用（读境界）：变体求值不传，unlock.* 恒不成立；右栏当前线卡的下一步表（lineCompass.ts）传存档求值。
  */
-export function evaluateLedgerCondition(condition: ScenarioCondition, runtime?: unknown): boolean | undefined {
+export function evaluateLedgerCondition(condition: ScenarioCondition, runtime?: unknown, save?: unknown): boolean | undefined {
   const parsed = parseLedgerPath(condition?.path);
   if (!parsed) return undefined;
   if (!runtime || parsed.invalid || !parsed.id || !ledgerOperatorsOf(parsed).includes(condition.operator)) return false;
-  const { value: actual, rankCompare } = resolveLedgerPath(condition.path, runtime);
+  const { value: actual, rankCompare } = resolveLedgerPath(condition.path, runtime, save);
   if (condition.operator === 'exists') return actual !== undefined;
   if (condition.operator === 'eq') return actual === condition.value;
   if (condition.operator === 'neq') return actual !== condition.value;
