@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { WANG_ZHE, load, makeSave, mods, profileOf, runJudged, runtimeOf, ticket } from './freeActionFixture.mjs';
 
 const preflight = await load('../src/utils/judgementPreflight.ts');
+const levelProgression = await load('../src/modules/scenarioMods/levelProgression.ts');
 
 const cfg = () => mods.config.freeActionConfig();
 const N = () => mods.numbers.GAME_NUMBERS;
@@ -220,21 +221,28 @@ test('修炼各结果档：与旧引擎同一套（成功 +10、大成功与完�
   });
 });
 
-test('冲关：时机未到 / 已满进度修炼 → 出判定卡之前就被拦（未发生事实，零写入）；时机到了成功升级，失败折损', () => {
+test('冲关：时机未到 / 冲不了关时满进度修炼 → 出判定卡之前就被拦（未发生事实，零写入）；时机到了成功升级，失败折损', () => {
   switchedOn(() => {
-    for (const [tk, save] of [[solo('breakthrough'), readySave({ stage: '中期', progress: 30, cap: 'none' })], [solo('train'), readySave({ stage: '后期', progress: 100, cap: 'none' })]]) {
+    const top = (variant) => {
+      const save = readySave({ stage: '后期', progress: 100 });
+      save.角色.属性.境界.名称 = mods.realm.levelName(N().levels.max);
+      return [solo(variant), save];
+    };
+    // 满进度修炼可冲关时改按冲关出卡（真机 db4278a0247b，见下一条）；到境界最高级冲不了关才拦，事实句写瓶颈、不写「还不到这一步」
+    for (const [tk, save, fact] of [
+      [solo('breakthrough'), readySave({ stage: '中期', progress: 30, cap: 'none' }), /境界进度还不到这一步/],
+      [...top('train'), /修为已到瓶颈.*再练也没有进益/],
+    ]) {
       const snapshot = structuredClone(save);
       const prepared = mods.plan.prepareFreeAction(save, tk);
       assert.deepEqual([prepared.kind, prepared.reason], ['refused', 'not_ready'], tk.variant);
-      assert.match(prepared.facts[0], /境界进度还不到这一步/);
+      assert.match(prepared.facts[0], fact);
       assert.deepEqual(save, snapshot, '零写入');
       assert.match(mods.turn.issueFreeActionJudgement(save, [tk]).refusalBlock, /本地自由行动未发生/);
     }
     // 用户 2026-10-27 13:40 定取消练功章节上限：默认难度（trainingCap=none）满进度可冲关；到境界最高级才被拦
     assert.equal(mods.plan.prepareFreeAction(readySave({ stage: '后期', progress: 100 }), solo('breakthrough')).kind, 'issued');
-    const top = readySave({ stage: '后期', progress: 100 });
-    top.角色.属性.境界.名称 = mods.realm.levelName(N().levels.max);
-    assert.equal(mods.plan.prepareFreeAction(top, solo('breakthrough')).reason, 'not_ready');
+    assert.equal(mods.plan.prepareFreeAction(top('breakthrough')[1], solo('breakthrough')).reason, 'not_ready');
 
     const win = readySave({ stage: '后期', progress: 100, cap: 'none' });
     const oldName = win.角色.属性.境界.名称;
@@ -251,6 +259,54 @@ test('冲关：时机未到 / 已满进度修炼 → 出判定卡之前就被拦
       assert.equal(lose.角色.属性.境界.当前进度, Math.floor(100 * N().training.failureRetention), outcome);
       assert.match(lost.result.facts[0], /折损/);
     }
+  });
+});
+
+test('冲关偶发误拦（真机 db4278a0247b）：右栏「可突破!」、快捷动作「冲关」与冲关闸门同一判据 canBreakthrough；可冲关时修炼票改按冲关出卡，同一状态下冲关／修炼两种票结果一致', () => {
+  switchedOn(() => {
+    const states = [
+      ['中期 30', { stage: '中期', progress: 30 }, false],
+      ['中期 100（异常数据：百分比满、阶段不对）', { stage: '中期', progress: 100 }, false],
+      ['后期 99', { stage: '后期', progress: 99 }, false],
+      ['后期 100', { stage: '后期', progress: 100 }, true],
+      ['后期 50／下一级所需 50（面板百分比 100，冲关结算按 progressPerLevel）', { stage: '后期', progress: 50, need: 50 }, false],
+      ['后期 100、已到境界最高级', { stage: '后期', progress: 100, top: true }, false],
+    ];
+    for (const [name, { stage, progress, need, top }, ready] of states) {
+      const make = () => {
+        const save = readySave({ stage, progress });
+        if (need) save.角色.属性.境界.下一级所需 = need;
+        if (top) save.角色.属性.境界.名称 = mods.realm.levelName(N().levels.max);
+        return save;
+      };
+      assert.equal(levelProgression.canBreakthrough(make()), ready, `${name}：可突破`);
+      const breakthrough = mods.plan.prepareFreeAction(make(), solo('breakthrough'));
+      assert.equal(breakthrough.kind === 'issued', ready, `${name}：冲关票出卡 ⇔ 面板可突破`);
+      if (!ready) assert.equal(breakthrough.reason, 'not_ready', name);
+      const train = mods.plan.prepareFreeAction(make(), solo('train'));
+      if (ready) {
+        assert.equal(train.kind, 'issued', `${name}：修炼票不再被「时机未到」拦下`);
+        assert.equal(train.proposal.actionText, '自行「冲关」（自由行动）', `${name}：改按冲关出卡`);
+        assert.equal(train.proposal.authorityReceipt.variant, 'breakthrough', `${name}：回执里的票也是冲关，结算按冲关走`);
+        assert.equal(train.proposal.actionText, breakthrough.proposal.actionText);
+      } else {
+        assert.notEqual(train.kind === 'issued' && train.proposal.actionText, '自行「冲关」（自由行动）', `${name}：不可冲关时修炼票不改`);
+      }
+    }
+    // 修炼票改按冲关后完整走一遍：确认成功即升级（与冲关票同）
+    const save = readySave({ stage: '后期', progress: 100 });
+    const oldName = save.角色.属性.境界.名称;
+    const { result } = runJudged(save, solo('train'), 'success');
+    assert.notEqual(save.角色.属性.境界.名称, oldName);
+    assert.equal(save.角色.属性.境界.阶段, '初期');
+    assert.match(result.facts[0], /冲破关隘/);
+    // 界面：「可突破!」与红色进度条读同一判据（同一份 toSaveData 快照），不再只看百分比；快捷动作「冲关」本就读它
+    const sidebar = readFileSync(fileURLToPath(new URL('../src/components/dashboard/RightSidebar.vue', import.meta.url)), 'utf8');
+    assert.match(sidebar, /const breakthroughReady = computed\(\(\) => Boolean\(gameStateStore\.attributes\?\.境界\) && canBreakthrough\(gameStateStore\.toSaveData\(\)\)\);/);
+    assert.match(sidebar, /<span v-if="breakthroughReady" class="breakthrough-hint">可突破!<\/span>/);
+    assert.ok(!/realmProgressPercent >= 100/.test(sidebar), '不再按百分比判可突破');
+    const mainPanel = readFileSync(fileURLToPath(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url)), 'utf8');
+    assert.match(mainPanel, /action\.name!=='冲关'\|\|canBreakthrough\(gameStateStore\.toSaveData\(\)\)/);
   });
 });
 

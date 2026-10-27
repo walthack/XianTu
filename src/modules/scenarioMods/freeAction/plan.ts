@@ -9,7 +9,7 @@ import type { SaveData } from '@/types/game';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { getJudgementState, persistPendingJudgement, type JudgementProposal } from '@/utils/judgementEngine';
 import { variantSpecOf, type VariantSpec } from './config';
-import { checkGates, type FreeActionDeps } from './gates';
+import { atBreakthroughTicket, checkGates, type FreeActionDeps } from './gates';
 import { withEncounteredTarget } from './encounter';
 import { gateText } from './facts';
 import { logGateRefusal } from './refusalLog';
@@ -23,7 +23,9 @@ export type PrepareResult =
   | { kind: 'settled'; result: SettleResult }
   | { kind: 'blocked' };
 
-export function prepareFreeAction(save: SaveData, ticket: FreeActionTicket, deps: SettleDeps & FreeActionDeps = {}): PrepareResult {
+export function prepareFreeAction(save: SaveData, raw: FreeActionTicket, deps: SettleDeps & FreeActionDeps = {}): PrepareResult {
+  // 可冲关时修炼票改按冲关（requires.atBreakthrough，判据同右栏「可突破!」）；之后闸门、判定卡、回执都用改后的票。
+  const ticket = atBreakthroughTicket(save, raw);
   const spec = variantSpecOf(ticket.actionClass, ticket.variant);
   if (!spec || !spec.enabled || spec.route === 'none' || (!ticket.targetId && spec.target !== 'none')) return { kind: 'blocked' };
   return withEncounteredTarget(save, ticket.targetId, () => prepareRegistered(save, ticket, spec, deps), result => result.kind === 'settled' && result.result.ok);

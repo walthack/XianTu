@@ -37,4 +37,6 @@ export function drainedRealm(save:any,gain:number):any|null {
  return r;
 }
 
-export function canBreakthrough(save:any):boolean {const r=save?.角色?.属性?.境界;if(!r)return false;const level=levelOf(r)??0,cap=trainingCapLevel(save);return r.阶段==='后期'&&Number(r.当前进度)>=Number(r.下一级所需)&&level<cap;}
+/** 可冲关＝冲关结算（trainingRealm 的冲关分支）有结果：后期、进度满（按 training.progressPerLevel）、未到上限。
+ *  右栏「可突破!」、快捷动作「冲关」、自由行动冲关闸门与修炼票改按冲关出卡（requires.atBreakthrough）都读这一个判据（真机 db4278a0247b）。 */
+export function canBreakthrough(save:any):boolean {return trainingRealm(save,'冲关','success')!==null;}

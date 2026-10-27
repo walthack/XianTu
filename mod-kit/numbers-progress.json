@@ -674,7 +674,8 @@
             "label": "修炼",
             "hint": "【自身行动，不针对在场某人也出票，targetId填null】打坐练功修炼；与人双修、传功不是本项。",
             "requires": {
-              "realmMoves": true
+              "realmMoves": true,
+              "atBreakthrough": "breakthrough"
             }
           },
           "breakthrough": {

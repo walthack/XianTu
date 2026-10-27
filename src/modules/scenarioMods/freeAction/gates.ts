@@ -15,7 +15,7 @@ import { relationshipOf, runtimeEntityName } from '../ledger/affinityIdentity';
 import { stanceOf } from '../affinityLadder';
 import { actorStatusRecords } from '../actorStatusRead';
 import { levelOf } from '@/utils/realmUtils';
-import { trainingRealm } from '../levelProgression';
+import { canBreakthrough, trainingRealm } from '../levelProgression';
 import type { InjuryRecord } from '../../sceneModule/host/injuries';
 import { itemEffectOf, type ItemEffect } from './itemUse';
 import { resolveNumberRef, variantSpecOf, type VariantSpec } from './config';
@@ -69,6 +69,16 @@ export function isToxic(item: ItemEffect): boolean {
 function realmWouldMove(save: SaveData, spec: VariantSpec): boolean {
   const now = (save as any)?.角色?.属性?.境界, next = trainingRealm(save, freeActionText(spec, ''), 'success');
   return Boolean(now && next && (next.名称 !== now.名称 || next.阶段 !== now.阶段 || Number(next.当前进度) !== Number(now.当前进度)));
+}
+
+/**
+ * 修炼票在可冲关时改按冲关（requires.atBreakthrough）：进度已满时修炼试算不会动，只有冲关能动；
+ * 判据与右栏「可突破!」同一个 canBreakthrough，面板说可突破、闸门就不再以「时机未到」拦下（真机 db4278a0247b：意图模型偶把冲关报成修炼）。
+ * 改后的票原样进判定卡与回执，结算按冲关走。其余票原样返回。
+ */
+export function atBreakthroughTicket(save: SaveData, ticket: FreeActionTicket): FreeActionTicket {
+  const to = variantSpecOf(ticket.actionClass, ticket.variant)?.requires?.atBreakthrough;
+  return to && canBreakthrough(save) ? { ...ticket, variant: to } : ticket;
 }
 
 /**

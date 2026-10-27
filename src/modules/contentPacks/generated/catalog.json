@@ -1,5 +1,5 @@
 {
-  "version": "1ff2d2fc4b62b6f4",
+  "version": "5652825649fa6edc",
   "contracts": [
     {
       "meta": {
@@ -13578,6 +13578,7 @@
     "free.fact.gate.unrecognized": "{player}这句话本地没有识别出可结算的动作，没有任何物品、状态或好感变化，只当作叙述。",
     "free.fact.gate.dropped": "{player}同时做的另一个动作没能落实，没有成事。",
     "free.fact.gate.not_ready": "{player}眼下境界进度还不到这一步，这件事没能做成。",
+    "free.fact.gate.not_ready.train": "{player}的修为已到瓶颈，眼下再练也没有进益，这件事没能做成。",
     "free.why.self": "我理解为：{player}自行{label}。若理解有误，请撤回后换个说法。",
     "free.fact.bingGu.backlash_pass": "{player}强行催动超出冰蛊压制的真气，一股寒气直冲经脉，硬生生扛了下来，真气被压回原处。",
     "free.fact.bingGu.backlash_fail": "{player}强行催动超出冰蛊压制的真气，寒气反噬，经脉一阵冰冷刺痛，气血受损、真气走岔。",

@@ -96,8 +96,10 @@ export interface VariantSpec {
    * onLevelUnknown：目标级数查不到时 deny（拒绝）/ assume_equal（按与施术者同级放行，只看好感；没处落地由后面的预算检查兜底）。
    * minGoodwill：目标好感（-100~100）低于它就不肯接受，与 needsGoodwill 的“低姿态”检查并存；配置里可写数，也可写 "freeAction.xxx" 这样的数值引用（variantSpecOf 解析成数）。
    * realmMoves：自修用——按旧引擎同一套修炼结算（trainingRealm）试算，境界进度没有变化（时机未到、已满）就不出判定卡。
+   * atBreakthrough：自修用——可冲关时（canBreakthrough，与右栏「可突破!」同一判据）本票改按同类的这个变体出卡、结算
+   *   （修炼票在进度已满时只能冲关；意图模型偶把冲关报成修炼，不能因此被「时机未到」误拦，真机 db4278a0247b）。
    */
-  requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal'; minGoodwill?: number; targetDefenseDown?: DefenseDownRule; realmMoves?: boolean };
+  requires?: { actorLevel?: 'ge_target'; onLevelUnknown?: 'deny' | 'assume_equal'; minGoodwill?: number; targetDefenseDown?: DefenseDownRule; realmMoves?: boolean; atBreakthrough?: string };
   /** 玩家原话含其中任一词（且在自由行动范围内）= 这句归本变体的票据与结算，不再回落旧关键词判定。 */
   legacyGuardWords?: string[];
   /** 无对象自身行动的本地兜底词（见 ticket.local）：模型没出这一类的票、原话又明说了，就本地出票。 */
@@ -276,6 +278,11 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
       if (spec.effect === 'applyStatus' && spec.enabled) {
         if (!spec.statusId || !catalogStatus(spec.statusId)) errors.push(`${where}: applyStatus 的 statusId 不在状态目录里`);
         if (!(Number(spec.maxStatusMinutes) > 0)) errors.push(`${where}: applyStatus 缺 maxStatusMinutes`);
+      }
+      if (spec.requires?.atBreakthrough !== undefined) {
+        const to = variantSpecOf(cls, spec.requires.atBreakthrough, cfg);
+        if (spec.target !== 'none' || !spec.requires.realmMoves) errors.push(`${where}: requires.atBreakthrough 只用于带 realmMoves 的无对象自修变体`);
+        if (!to || to.variant === variant || to.target !== 'none' || !to.requires?.realmMoves || to.requires.atBreakthrough !== undefined) errors.push(`${where}: requires.atBreakthrough 须指向同类另一个带 realmMoves、自身不再转的变体`);
       }
       if (spec.requires?.onLevelUnknown !== undefined && !['deny', 'assume_equal'].includes(spec.requires.onLevelUnknown)) errors.push(`${where}: requires.onLevelUnknown 无效`);
       if (spec.requires?.minGoodwill !== undefined && !(Number.isFinite(spec.requires.minGoodwill) && spec.requires.minGoodwill >= GAME_NUMBERS.affinity.range.min && spec.requires.minGoodwill <= GAME_NUMBERS.affinity.range.max)) errors.push(`${where}: requires.minGoodwill 须为 ${GAME_NUMBERS.affinity.range.min}~${GAME_NUMBERS.affinity.range.max} 的数`);
