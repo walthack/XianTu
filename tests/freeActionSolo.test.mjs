@@ -230,8 +230,11 @@ test('冲关：时机未到 / 已满进度修炼 → 出判定卡之前就被拦
       assert.deepEqual(save, snapshot, '零写入');
       assert.match(mods.turn.issueFreeActionJudgement(save, [tk]).refusalBlock, /本地自由行动未发生/);
     }
-    // 默认难度（trainingCap=canon）下上限就是当前级：满进度也冲不动 → 同样被拦
-    assert.equal(mods.plan.prepareFreeAction(readySave({ stage: '后期', progress: 100 }), solo('breakthrough')).reason, 'not_ready');
+    // 用户 2026-10-27 13:40 定取消练功章节上限：默认难度（trainingCap=none）满进度可冲关；到境界最高级才被拦
+    assert.equal(mods.plan.prepareFreeAction(readySave({ stage: '后期', progress: 100 }), solo('breakthrough')).kind, 'issued');
+    const top = readySave({ stage: '后期', progress: 100 });
+    top.角色.属性.境界.名称 = mods.realm.levelName(N().levels.max);
+    assert.equal(mods.plan.prepareFreeAction(top, solo('breakthrough')).reason, 'not_ready');
 
     const win = readySave({ stage: '后期', progress: 100, cap: 'none' });
     const oldName = win.角色.属性.境界.名称;

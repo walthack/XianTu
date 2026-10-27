@@ -145,8 +145,12 @@ test('旧引擎基线：cultivate 修炼 / 练功只在成功档写境界进度�
 
 test('旧引擎基线：冲关只在后期满进度且未到上限时生效，失败按 failureRetention 折损', () => {
   const late = realm('后期', 100);
-  // 默认难度（trainingCap=canon）下，存档没有剧情级数时上限=当前级，冲关不动
-  assert.deepEqual(resolveOnce('我冲关突破', 'success', { realmState: late }).effects, []);
+  // 用户 2026-10-27 13:40 定取消练功章节上限：默认难度（trainingCap=none）满进度即可冲关；
+  // 旧档存的 canon 在查不到剧情级数时也不再把上限退成当前级
+  assert.equal(resolveOnce('我冲关突破', 'success', { realmState: late }).realm.阶段, '初期');
+  assert.equal(resolveOnce('我冲关突破', 'success', { realmState: late, trainingCap: 'canon' }).realm.阶段, '初期');
+  // 到境界最高级就停
+  assert.deepEqual(resolveOnce('我冲关突破', 'success', { realmState: { ...late, 名称: levelName(GAME_NUMBERS.levels.max) } }).effects, []);
   // 上限放开：成功升一级、阶段回初期
   const up = resolveOnce('我冲关突破', 'success', { realmState: late, trainingCap: 'none' });
   assert.equal(up.realm.阶段, '初期');

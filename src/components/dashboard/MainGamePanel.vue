@@ -1439,7 +1439,7 @@ const actionCategories = ref<ActionCategory[]>([
     icon: '',
     actions: [
       {
-        name: '冲关',icon:'⚡',type:'cultivation',description:'后期进度满后冲击下一级；未满或达到本关练功上限时不升级。',timeRequired:true
+        name: '冲关',icon:'⚡',type:'cultivation',description:'后期进度满后冲击下一级；未满、已到最高级，或难度设置选了按原著级封顶时不升级。',timeRequired:true
       },
       {
         name: '基础修炼',

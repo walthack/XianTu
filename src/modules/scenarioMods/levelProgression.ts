@@ -9,12 +9,14 @@ export function stageCanonLevel(save:any,chapterOverride?:number):number|null {c
 export function realmAt(level:number):any{return {名称:levelName(level),阶段:'初期',当前进度:0,下一级所需:GAME_NUMBERS.training.progressPerLevel,突破描述:'练功积累，后期进度满后可冲关。'};}
 export function initializeLevel(save:any,chapterOverride?:number):void {save.系统 ||= {};save.系统.难度设置 ||= {...DIFFICULTY_PRESETS[GAME_NUMBERS.difficulty.defaultPreset]};save.角色 ||= {};save.角色.属性 ||= {};const r=save.角色.属性.境界;const old=levelOf(r);const canon=stageCanonLevel(save,chapterOverride);if(old===null)save.角色.属性.境界={...realmAt(canon??0),九阳层次:r?.九阳层次};else if(difficultySettings(save).autoRaiseLevel&&canon!==null&&old<canon)save.角色.属性.境界={...realmAt(canon),九阳层次:r?.九阳层次};}
 export function applyStoryLevel(save:any,to:number):void {if(!Number.isInteger(to)||to<0||to>GAME_NUMBERS.levels.max)throw Error('剧情级数必须0–9');const old=levelOf(save.角色.属性.境界)??0;const d=difficultySettings(save);const cap=stageCanonLevel(save)??old;const next=d.autoRaiseLevel?Math.max(old,to):Math.max(old,Math.min(old+GAME_NUMBERS.training.storyRaiseStep,to,cap));if(next>old)save.角色.属性.境界={...realmAt(next),九阳层次:save.角色.属性.境界?.九阳层次};}
+/** 练功／冲关上限。用户 2026-10-27 13:40 定：不再按章节原著级卡上限，三档难度默认 'none'，只受境界最高级限制；
+ *  存档里仍选 'canon'/'canon+1' 时，只在查得到原著级的关卡按原著级卡，查不到（null）一律按最高级，不再退成当前级。 */
+export function trainingCapLevel(save:any):number {const d=difficultySettings(save),canon=stageCanonLevel(save);if(d.trainingCap==='none'||canon===null)return GAME_NUMBERS.levels.max;return Math.min(GAME_NUMBERS.levels.max,canon+(d.trainingCap==='canon+1'?GAME_NUMBERS.training.canonExtra:0));}
 /** Pure receipt payload; callers apply it once through the existing judgement receipt. */
 export function trainingRealm(save:any,text:string,outcome:string):any|null {
  if(!/练功|修炼|闭关|冲关|冲击境界/.test(text))return null;
  const current=save?.角色?.属性?.境界;if(!current)return null;
- const r=structuredClone(current),level=levelOf(r)??0,d=difficultySettings(save),canon=stageCanonLevel(save)??level;
- const cap=d.trainingCap==='none'?GAME_NUMBERS.levels.max:Math.min(GAME_NUMBERS.levels.max,canon+(d.trainingCap==='canon+1'?GAME_NUMBERS.training.canonExtra:0));
+ const r=structuredClone(current),level=levelOf(r)??0,cap=trainingCapLevel(save);
  r.下一级所需=GAME_NUMBERS.training.progressPerLevel;
  const success=['success','great_success','perfect'].includes(outcome),need=Math.max(1,Number(r.下一级所需)||GAME_NUMBERS.training.progressPerLevel);
  if(/冲关|冲击境界/.test(text)) {if(r.阶段!=='后期'||r.当前进度<need||level>=cap)return null;return success?{...realmAt(level+1),九阳层次:r.九阳层次}:{...r,当前进度:Math.floor(need*GAME_NUMBERS.training.failureRetention)};}
@@ -35,4 +37,4 @@ export function drainedRealm(save:any,gain:number):any|null {
  return r;
 }
 
-export function canBreakthrough(save:any):boolean {const r=save?.角色?.属性?.境界;if(!r)return false;const d=difficultySettings(save),level=levelOf(r)??0,canon=stageCanonLevel(save)??level;const cap=d.trainingCap==='none'?GAME_NUMBERS.levels.max:Math.min(GAME_NUMBERS.levels.max,canon+(d.trainingCap==='canon+1'?GAME_NUMBERS.training.canonExtra:0));return r.阶段==='后期'&&Number(r.当前进度)>=Number(r.下一级所需)&&level<cap;}
+export function canBreakthrough(save:any):boolean {const r=save?.角色?.属性?.境界;if(!r)return false;const level=levelOf(r)??0,cap=trainingCapLevel(save);return r.阶段==='后期'&&Number(r.当前进度)>=Number(r.下一级所需)&&level<cap;}

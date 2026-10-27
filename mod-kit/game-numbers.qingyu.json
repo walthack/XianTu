@@ -322,11 +322,11 @@
       },
       "标准": {
         "autoRaiseLevel": true,
-        "trainingCap": "canon"
+        "trainingCap": "none"
       },
       "严苛": {
         "autoRaiseLevel": false,
-        "trainingCap": "canon"
+        "trainingCap": "none"
       }
     }
   },
