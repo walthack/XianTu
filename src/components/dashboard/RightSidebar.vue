@@ -267,11 +267,11 @@
           </button>
         </div>
         <div v-show="!linesCollapsed" class="quest-body">
-          <div v-for="line in availableLines" :key="line.id" class="quest-main">
+          <div v-for="line in availableLines" :key="line.id" class="quest-main" :class="{ 'quest-locked': line.locked }">
             <div class="quest-chapter">
               <span class="quest-tag quest-tag-side">{{ line.kind }}</span>{{ line.name }}
             </div>
-            <div class="quest-event"><span class="quest-mark-side">·</span>{{ line.hint }}</div>
+            <div v-for="(hint, i) in line.hintLines" :key="i" class="quest-event"><span class="quest-mark-side">·</span>{{ hint }}</div>
             <div v-if="line.objective" class="quest-event"><span class="quest-mark-main">◆</span>{{ t('当前目标') }}：{{ line.objective }}</div>
           </div>
           <div class="quest-more">{{ t('照着做就是加入，不做也不损失什么。') }}</div>
@@ -401,6 +401,7 @@ import {
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
 import { secondaryLineDisplayName, resolveAvailableLines, secondaryLinesAtEvent } from '@/modules/scenarioMods/secondaryLines';
+import { secondaryLineEntryView } from '@/modules/scenarioMods/secondaryLineEntry';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
@@ -454,6 +455,7 @@ const visibleQuestObjective = (rt: any, event: any): string => {
   return formatQuestCompass(view, rt, questAtLocationId(rt)) || String(view.objective || '').trim();
 };
 // 二级线：锚一满足就作为待办显示，不需要玩家确认（用户裁定 2026-08-16）。
+// 整线解锁的线（太泉）没解锁也照样显示：标题「时机未到」＋缺项句，灰显不隐藏（太泉解锁设计稿 2026-10-27 §5）。
 const availableLines = computed(() => {
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
@@ -463,19 +465,25 @@ const availableLines = computed(() => {
   ).locationId;
   const event = currentQuestEvent(rt);
   const activeLineIds = new Set(secondaryLinesAtEvent(event?.id).map(line => line.id));
-  return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => ({
-    id: line.id,
-    name: secondaryLineDisplayName(line, event),
-    kind: line.kind === 'sect'
-      ? '宗派'
-      : line.kind === 'commerce'
-        ? '商道'
-        : line.kind === 'expedition'
-          ? '远征'
-          : '国家',
-    hint: line.entryHint,
-    objective: activeLineIds.has(line.id) ? visibleQuestObjective(rt, event) : '',
-  })).concat(questLineView(gameStateStore.toSaveData()).secondary);
+  const save = gameStateStore.toSaveData();
+  return resolveAvailableLines(locId, rt.acquaintances, rt.completedEventIds).map((line: any) => {
+    const view = secondaryLineEntryView(line, save);
+    return {
+      id: line.id,
+      name: view.locked ? view.title : secondaryLineDisplayName(line, event),
+      kind: line.kind === 'sect'
+        ? '宗派'
+        : line.kind === 'commerce'
+          ? '商道'
+          : line.kind === 'expedition'
+            ? '远征'
+            : '国家',
+      hint: view.hintLines.join('\n'),
+      hintLines: view.hintLines,
+      locked: view.locked,
+      objective: activeLineIds.has(line.id) ? visibleQuestObjective(rt, event) : '',
+    };
+  }).concat(questLineView(save).secondary.map(line => ({ ...line, hintLines: [line.hint], locked: false })));
 });
 // 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
 // 与主线 UI / 主叙事同一锚，避免从 activeEventIds 抽出资料事件。
@@ -2163,6 +2171,7 @@ const getReputationClass = (): string => {
 .quest-section .quest-body { padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
 .quest-chapter { font-size: 12px; font-weight: 600; opacity: 0.9; display: flex; align-items: center; }
 .quest-event { font-size: 12px; line-height: 1.6; opacity: 0.95; font-weight: 500; padding-left: 2px; }
+.quest-locked { opacity: 0.6; }
 .quest-mark-main { color: var(--color-accent, #d4af37); font-weight: 700; margin-right: 6px; }
 .quest-more { font-size: 11px; opacity: 0.4; padding-left: 18px; margin-top: 1px; }
 .quest-tag { font-size: 10px; line-height: 1; padding: 2px 5px; border-radius: 3px; margin-right: 6px; letter-spacing: 1px; font-weight: 600; }

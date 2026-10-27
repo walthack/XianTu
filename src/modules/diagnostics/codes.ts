@@ -112,6 +112,7 @@ export const ERROR_CODES = {
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),
   'LCQ-PCK-003': spec('warn', 'scenarioMods', '剧情模组校验未通过'),
   'LCQ-PCK-004': spec('warn', 'scenarioMods', '固定结局的来路分支句缺失，本次只显示通用正文'),
+  'LCQ-PCK-005': spec('warn', 'scenarioMods', '整线解锁入口文案键缺失，本次用兜底句'),
 
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),

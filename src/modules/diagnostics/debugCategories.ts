@@ -22,7 +22,7 @@ export const DEBUG_CATEGORIES = [
     paths: [
       ...sm('runtime.ts', 'questLine*.ts', 'mainQuestAxis.ts', 'secondaryLines.ts', 'characterQuests.ts', 'fixedQuestObjectives.ts', 'branchDecision.ts', 'milestoneRewards.ts',
         'phaseContinue.ts', 'settledStepScene.ts', 'keyBeatCards.ts', 'endingPresentation.ts', 'fixedEndingNarratives.ts', 'eventNarrativeView.ts', 'canonRail*.ts', 'divergence*.ts',
-        'storyTrades.ts', 'shiweimoRescue.ts', '*Playtest*.ts', 'baihuGambleRefusal.ts', 'effectTags.ts', 'r2AcceptanceFixtures.ts', 'playtestNarrativeScope.ts', 'lineUnlock.ts'),
+        'storyTrades.ts', 'shiweimoRescue.ts', '*Playtest*.ts', 'baihuGambleRefusal.ts', 'effectTags.ts', 'r2AcceptanceFixtures.ts', 'playtestNarrativeScope.ts', 'lineUnlock.ts', 'secondaryLineEntry.ts'),
       'assets/endings/',
     ],
   },

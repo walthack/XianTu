@@ -35,6 +35,8 @@ import {entityText} from './namedEntities';
  */
 
 import { acquaintanceOf, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
+import type { LineUnlockOptions } from './lineUnlock';
+import type { ScenarioCondition } from './schema';
 import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
 
 export type SecondaryLineKind = 'sect' | 'nation' | 'commerce' | 'expedition';
@@ -90,12 +92,33 @@ export interface SecondaryLine {
    * 照着做就是加入，不做也不损失什么。
    */
   entryHint: string;
+  /**
+   * 整线解锁（太泉解锁设计稿 2026-10-27 §5）：值＝配置键 `story.lineUnlock.<id>`。
+   * 填了它，锚满足后入口**照样显示**，没解锁时标题写「时机未到」并按缺项出句（`secondaryLineEntry.ts`）；
+   * 不填的线行为不变。是否接得到仍只由锚回答（`resolveAvailableLines`），锁不锁由解锁判定回答。
+   */
+  unlock?: string;
+  /** 带 `unlock` 的线的入口文案键（contentPacks texts）；`entryHint` 退为说法缺失时的兜底原文。 */
+  entryHintKeys?: SecondaryLineEntryHintKeys;
   /** 锚为什么是这个——正典依据，便于日后复核。 */
   basis: string;
   /** 线内节点。骨架先搭齐，缺内容的标 `pending` 待扩。 */
   nodes: LineNode[];
   /** 这条线还缺什么（beat 级盘点结论）。空＝原著段已够打穿。 */
   pendingExpansion?: string;
+}
+
+/** 入口说法里的一句：文本键，或带账本条件的附句（条件只用账本路径，全满足才出）。 */
+export type SecondaryLineHintPart = string | { key: string; when: ScenarioCondition[] };
+
+export interface SecondaryLineEntryHintKeys {
+  /**
+   * 没解锁时：标题总出；缺项句按 realm → lines → deadline 顺序出。
+   * `lines` 句里的 `{X}` 换成还差几条；`deadlinePrefix` ＋ `.` ＋ 期限 id＝该期限没了结时的句子（期限 id 只读配置 requireDeadlinesCleared）。
+   */
+  locked: { title: string; realm: string; lines: string; deadlinePrefix: string };
+  /** 解锁后按说法变体取句（太泉：taiquanEntryVariant）。 */
+  variants: Record<string, SecondaryLineHintPart[]>;
 }
 
 /**
@@ -117,6 +140,11 @@ export interface LineNode {
   stageId?: string;
   /** `ready` 填现有 event id；`new` 填建议 id。 */
   eventId?: string;
+  /**
+   * 解锁门之前的本线节点：完成它**不算已走进本线**（整线解锁的追认只认门后的节点）。
+   * 太泉：迷楼两拍在临安收束章（门在苍澜章），线性默认路线上一定先于门完成——算进去门就形同虚设。
+   */
+  beforeUnlock?: true;
 }
 
 /** 当前 event 属于哪些已落地二级线节点。 */
@@ -204,9 +232,25 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'taiquan',
     name: '太泉古阵',
     kind: 'expedition',
-    // 锚＝你第一次知道「钥匙在迷楼」那一拍（用户 2026-08-19 裁定太泉单独拿出来）。
-    anchorEventIds: ['lyl.event.taiquan_sacred_fruit_02'],
+    // 锚＝你知道太泉古阵这件事的那一拍（太泉解锁设计稿 2026-10-27 §5，命中任一即可）：
+    // 王哲传功与托付 s02_01（所有正常开局必经，没解锁也显示入口）；迷楼「太泉钥匙」_05 兜底从云龙吟开局的试玩包。
+    // 原锚 _02「黑魔海撤出谈判」与「钥匙在迷楼」对不上，去掉。
+    anchorEventIds: ['lcq.event.s02_01', 'lyl.event.taiquan_sacred_fruit_05'],
     entryHint: '岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。',
+    unlock: 'taiquan',
+    // 文案定案：「时机未到」按方案 二-4；两版说法按方案 §10（用户 2026-10-27 08:17 批），入口不点徐君房名字。
+    entryHintKeys: {
+      locked: {
+        title: 'line.taiquan.locked.title',
+        realm: 'line.taiquan.locked.realm',
+        lines: 'line.taiquan.locked.lines',
+        deadlinePrefix: 'line.taiquan.locked.deadline',
+      },
+      variants: {
+        song: ['line.taiquan.entry.song', { key: 'line.taiquan.entry.song.key', when: [{ path: 'done.lyl.event.taiquan_sacred_fruit_05', operator: 'eq', value: true }] }],
+        wangzhe: ['line.taiquan.entry.wangzhe'],
+      },
+    },
     basis: '**用户裁定 2026-08-19**：「太泉这一段，我觉得照理说应该单独拿出来，不应该放在原先的主轴里。」\n'
       + '此前这 8 拍挂在主轴上，而主轴按同日裁定只保留「开局→王哲三托付」＋两个通关条件，'
       + '不再作为任务清单展示。太泉恰是**条件一（修为达六阳，前往太泉古阵祭祀故人）的落点**，'
@@ -215,10 +259,14 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '⚠ `kind: expedition` 是新档位：它既不是宗派（无法统）也不是国家（不是政权地盘），'
       + '是一处**远征目的地**。故不受「国家线跟玩家在这个国家的行动」那条地理规则约束。\n'
       + '⚠ 「太泉古阵＝系统入口」是我们的设计推断，**正典只写「祭祀故人」，全书无「祭祀大阵」字样**'
-      + '（见主轴文档与裁定 #159／#160）。本线文案不得把它叙述成开启装置。',
+      + '（见主轴文档与裁定 #159／#160）。本线文案不得把它叙述成开启装置。\n'
+      + '**整线解锁（用户 2026-10-27 01:12／01:28 定）**：境界≥坐照、至少收束一条国家线、冰蛊已了结，三条同时满足'
+      + '（阈值读 story.lineUnlock.taiquan）；没解锁照样显示入口，标题「时机未到」按缺项出句。'
+      + '进太泉说法分两版：萧遥逸受伤拍 s12_10 已完成＝原著版，否则王哲托付版（用户 2026-10-27 08:17 批方案 §10 措辞）。'
+      + '已走进太泉（门后任一节点完成）一律视为已解锁（总策划 2026-10-27 定）。',
     nodes: [
-      { reviewSummary: '随陈琳进云涛观迷楼，摸清机关，撞见小紫等人', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_04' },
-      { reviewSummary: '经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_05' },
+      { reviewSummary: '随陈琳进云涛观迷楼，摸清机关，撞见小紫等人', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_04', beforeUnlock: true },
+      { reviewSummary: '经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_05', beforeUnlock: true },
       { reviewSummary: '到火山口争赤阳圣果，最终被萧遥逸吞下一颗', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_10' },
       { reviewSummary: '与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.plan_counterattack' },
       { reviewSummary: '与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.yin_yang_counter' },
@@ -235,8 +283,8 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       { reviewSummary: '与小紫、朱老头经传送阵离开太泉，落在首阳山一带；阵要十年才能再充能', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_portal_exit' },
     ],
     pendingExpansion: '正典写到进入人类居住区、推测古阵是避难所为止。'
-      + '「修为达六阳后祭祀故人」这一拍**正典无对应 event**（原著中程宗扬从未履行此托付，'
-      + '全书修为最高见入微境），属待扩，不在本阶段设计。',
+      + '「修为达六阳后祭祀故人」这一拍**正典无对应 event**（原著中程宗扬从未履行此托付；'
+      + '修为上原著第268章入第五级坐照（qyj 41202），燕歌行入第六级通幽（lyg 8080）），属待扩，不在本阶段设计。',
   },
   // —— 宗派线：锚人 ——
   {
@@ -862,6 +910,18 @@ export function secondaryLineDisplayName(line: SecondaryLine, event?: { axisAnch
 }
 
 export const LINE_ANCHOR_MIN_ACQUAINTANCE = 'encountered' as const;
+
+/**
+ * 带 `unlock` 的线交给整线解锁判定的参数：本线必有配置（缺了记码并锁住），
+ * 门后任一 ready 节点完成＝已走进（`beforeUnlock` 的节点不算）。没有 `unlock` 的线返回 undefined。
+ */
+export function secondaryLineUnlockOptions(line: SecondaryLine): LineUnlockOptions | undefined {
+  if (!line.unlock) return undefined;
+  const enteredEventIds = line.nodes
+    .filter(node => node.status === 'ready' && !node.beforeUnlock && node.eventId)
+    .map(node => node.eventId!);
+  return { required: true, enteredEventIds };
+}
 
 /**
  * 当前接得到哪些二级线。纯函数：只看地点与相识账本，不读别的存档字段、不产生副作用。

@@ -231,3 +231,174 @@ test('地点锚收齐孪生 id，覆盖该线全部关卡', async () => {
     }
   }
 });
+
+// —— 整线解锁 T3：太泉入口显示与说法变体（太泉解锁设计稿 2026-10-27 §5 / §10-4）——
+// 文案逐字取 texts（不在测试里手抄）；阈值与期限 id 取配置；规则表与期限数值是测试夹具（仓库首版为空）。
+// 顺序加载：并发 loadTs 会各自实例化 numbers.ts / playerLedgerRules.ts，夹具就挂不到同一份上。
+const unlockLoaded = (async () => {
+  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const rules = await loadTs('../src/modules/scenarioMods/playerLedgerRules.ts');
+  const secondary = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+  const entry = await loadTs('../src/modules/scenarioMods/secondaryLineEntry.ts');
+  const packs = await loadTs('../src/modules/contentPacks/index.ts');
+  const log = await loadTs('../src/modules/diagnostics/log.ts');
+  const store = await loadTs('../src/modules/diagnostics/store.ts');
+  return { numbers, rules, secondary, entry, texts: packs.CONTENT_PACKS.texts, log, store };
+})();
+
+const SONG_HURT = 'lcq.event.s12_10_rescue_xiao';
+const KEY_EVENT = 'lyl.event.taiquan_sacred_fruit_05';
+const ICE_START = 'test.event.ice_start';
+const ICE_CLEAR = 'test.event.ice_clear';
+const chronicleEntry = (stageId, eventId, sequence) => ({ id: `chronicle.${stageId}.${eventId}`, type: 'event', stageId, title: '', sequence });
+/** 存档夹具：境界、flags、跨关编年史里已完成的事件（[stageId, eventId]）。 */
+const taiquanSave = ({ realm = { 名称: '坐照', 阶段: '初期' }, flags = { 'line.song.outcome': 'resolved' }, done = [] } = {}) => ({
+  角色: { 属性: { 境界: realm } },
+  世界: { 状态: { 剧本模组: {
+    // 夹具期限事件不在正典里，挂进本关 events 才认得（orderedDoneEventIds 只认已知事件 id）
+    modId: 'lcq.stage_02', events: [{ id: ICE_START }, { id: ICE_CLEAR }], completedEventIds: [], flags: structuredClone(flags),
+    chronicle: [['lcq.stage_02', 'lcq.event.s02_01'], ...done].map(([stageId, eventId], i) => chronicleEntry(stageId, eventId, i + 1)),
+  } } },
+});
+const ledgerTable = (patch = {}) => ({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [], itemGroups: [], partyJoins: [], partyLeaves: [], partyOpenings: [], progressTicks: [], progressDeadlines: [], ...patch });
+
+/** 挂上冰蛊期限（id 取配置），用完复原。 */
+async function withIceGu(fn) {
+  const { rules, numbers } = await unlockLoaded;
+  const iceId = numbers.GAME_NUMBERS.story.lineUnlock.taiquan.requireDeadlinesCleared[0];
+  const limits = numbers.GAME_NUMBERS.story.progressDeadline.limits;
+  rules.setPlayerLedgerRulesForTest(ledgerTable({ progressDeadlines: [{ id: iceId, name: '冰蛊', startEventIds: [ICE_START], clearEventIds: [ICE_CLEAR] }] }));
+  limits[iceId] = { due: 3, urgentAt: 2 };
+  try { return await fn(iceId); } finally {
+    rules.setPlayerLedgerRulesForTest(undefined);
+    delete limits[iceId];
+  }
+}
+const quietConsole = async (fn) => {
+  const saved = { warn: console.warn, error: console.error, info: console.info };
+  console.warn = () => {}; console.error = () => {}; console.info = () => {};
+  try { return await fn(); } finally { Object.assign(console, saved); }
+};
+
+test('太泉锚：王哲托付 s02_01 后可见、迷楼钥匙 _05 后也可见，原锚 _02 不再开线', async () => {
+  const { secondary } = await unlockLoaded;
+  const visible = (done) => secondary.resolveAvailableLines(undefined, {}, done).some(l => l.id === 'taiquan');
+  assert.equal(visible(['lcq.event.s02_01']), true);
+  assert.equal(visible([KEY_EVENT]), true);
+  assert.equal(visible(['lyl.event.taiquan_sacred_fruit_02']), false);
+  assert.equal(visible([]), false);
+  const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
+  assert.equal(line.unlock, 'taiquan');
+  assert.ok(secondary.SECONDARY_LINES.filter(l => l.id !== 'taiquan').every(l => !l.unlock && !l.entryHintKeys), '其余线不设锁');
+});
+
+test('其余九条线的锚与改动前一致（快照），resolveAvailableLines 签名不变、锁住的线照样返回', async () => {
+  const { secondary } = await unlockLoaded;
+  // 改动前（cd95d716）的锚：[anchorEventIds, anchorEventPending, anchorLocationIds, anchorCharacterIds]
+  const before = {"commerce":[["lcq.event.weapon_deal_with_geluo"],null,null,null],"taiyi":[["lcq.event.s01_04"],null,null,["lcq.character.wang_zhe"]],"xingyuehu":[["lcq.event.s04b_lingfei_baiyi_crisis_16"],null,null,["liuchao.character.xie_yi","liuchao.character.xiao_yao_yi"]],"heimohai":[["lcq.event.s04b_lingfei_baiyi_crisis_04"],null,null,null],"zhaonan":[["lcq.event.s03b_snake_flower_bridge_02"],null,["liuchao.location.wuyuan","liuchao.location.wu_yuan_cheng"],["liuchao.character.yun_cang_feng","liuchao.character.wu_er_lang"]],"jin":[["lcq.event.palace_haunting_rumor"],null,["liuchao.location.jiankang"],null],"song":[["lcq.event.s10_01_jiangzhou_order"],null,["liuchao.location.jiangzhou","liuchao.location.linan","liuchao.location.lin_an"],null],"han":[["lcq.event.s07_01_old_case"],null,["liuchao.location.luoyang","lyl.location.luoyang"],["liuchao.character.xiao_yao_yi"]],"tang":[["lyg.event.changgan_fanseng_hunt"],null,["liuchao.location.changan"],null]};
+  const now = Object.fromEntries(secondary.SECONDARY_LINES.filter(l => l.id !== 'taiquan')
+    .map(l => [l.id, [l.anchorEventIds ?? null, l.anchorEventPending ?? null, l.anchorLocationIds ?? null, l.anchorCharacterIds ?? null]]));
+  assert.deepEqual(now, before);
+  assert.equal(secondary.resolveAvailableLines.length, 3);
+  // s02_01 只开太泉，不顺带开别的线
+  assert.deepEqual(secondary.resolveAvailableLines(undefined, {}, ['lcq.event.s02_01']).map(l => l.id), ['taiquan']);
+});
+
+test('已走进太泉只认门后节点：迷楼两拍（临安收束章、门前）不算，取果 _10 及以后算', async () => {
+  const { secondary } = await unlockLoaded;
+  const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
+  const opts = secondary.secondaryLineUnlockOptions(line);
+  assert.equal(opts.required, true);
+  assert.ok(!opts.enteredEventIds.includes('lyl.event.taiquan_sacred_fruit_04'));
+  assert.ok(!opts.enteredEventIds.includes(KEY_EVENT));
+  assert.ok(opts.enteredEventIds.includes('lyl.event.taiquan_sacred_fruit_10'));
+  assert.deepEqual(opts.enteredEventIds, line.nodes.filter(n => !n.beforeUnlock).map(n => n.eventId));
+  assert.equal(secondary.secondaryLineUnlockOptions(secondary.SECONDARY_LINES.find(l => l.id === 'song')), undefined);
+  // 境界 3 走完迷楼两拍：仍锁；走到取果：追认解锁
+  const { entry } = await unlockLoaded;
+  const weak = { realm: { 名称: '生象' }, flags: {} };
+  assert.equal(entry.secondaryLineEntryView(line, taiquanSave({ ...weak, done: [['lyl.taiquan_sacred_fruit', 'lyl.event.taiquan_sacred_fruit_04'], ['lyl.taiquan_sacred_fruit', KEY_EVENT]] })).locked, true);
+  assert.equal(entry.secondaryLineEntryView(line, taiquanSave({ ...weak, done: [['lyl.taiquan_sacred_fruit', 'lyl.event.taiquan_sacred_fruit_10']] })).locked, false);
+});
+
+test('锁住时：标题＋缺项句逐字等于 texts，顺序修为 → 线数 → 冰蛊，{X} 换成还差几条', async () => {
+  const { secondary, entry, texts, numbers } = await unlockLoaded;
+  const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
+  const short = numbers.GAME_NUMBERS.story.lineUnlock.taiquan.minClosedLines;
+  const linesText = texts['line.taiquan.locked.lines'].split('{X}').join(String(short));
+  assert.ok(texts['line.taiquan.locked.lines'].includes('{X}'));
+  assert.equal(texts['line.taiquan.locked.title'], '太泉古阵 · 时机未到');
+  await withIceGu(async (iceId) => {
+    const iceText = texts[`line.taiquan.locked.deadline.${iceId}`];
+    assert.ok(iceText);
+    const running = [['lcq.stage_02', ICE_START]];
+    const cases = [
+      [{ realm: { 名称: '入微' }, flags: {}, done: running }, [texts['line.taiquan.locked.realm'], linesText, iceText]],
+      [{ realm: { 名称: '入微' } }, [texts['line.taiquan.locked.realm']]],
+      [{ flags: {} }, [linesText]],
+      [{ done: running }, [iceText]],
+      [{ realm: { 名称: '入微' }, done: running }, [texts['line.taiquan.locked.realm'], iceText]],
+    ];
+    for (const [fixture, hintLines] of cases) {
+      const view = entry.secondaryLineEntryView(line, taiquanSave(fixture));
+      assert.deepEqual(view, { locked: true, title: texts['line.taiquan.locked.title'], hintLines }, JSON.stringify(fixture));
+    }
+    // 冰蛊已了结、或期限未起算：不出冰蛊句
+    const cleared = entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '入微' }, done: [...running, ['lcq.stage_02', ICE_CLEAR]] }));
+    assert.deepEqual(cleared.hintLines, [texts['line.taiquan.locked.realm']]);
+  });
+});
+
+test('解锁后两版说法：s12_10 已完成＝宋版，否则王哲版；钥匙附句只在 _05 已完成时跟在宋版后面', async () => {
+  const { secondary, entry, texts } = await unlockLoaded;
+  const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
+  // 定稿原文（剧情方案 §10，用户 2026-10-27 08:17 批）：逐字核对，入口不点徐君房名字
+  assert.equal(texts['line.taiquan.entry.song'], '「我正好要去一趟太泉古阵，大伙儿说说那东西长什么样子，我顺路把它采了。」小狐狸的伤指望着那颗赤阳圣果，往苍澜去碰碰运气。');
+  assert.equal(texts['line.taiquan.entry.wangzhe'], '「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」师帅交代的事，总得走这一趟。到了苍澜镇，再找个认路的向导。');
+  assert.equal(texts['line.taiquan.entry.song.key'], line.entryHint, '钥匙附句沿用原 entryHint');
+  for (const key of Object.keys(texts).filter(k => k.startsWith('line.taiquan.'))) assert.ok(!texts[key].includes('徐君房'), key);
+
+  const song = [['lcq.stage_12_jiangzhou_counterwar', SONG_HURT]];
+  const key = [['lyl.taiquan_sacred_fruit', KEY_EVENT]];
+  const view = (done) => entry.secondaryLineEntryView(line, taiquanSave({ done }));
+  assert.deepEqual(view([]), { locked: false, title: line.name, hintLines: [texts['line.taiquan.entry.wangzhe']] });
+  assert.deepEqual(view(key).hintLines, [texts['line.taiquan.entry.wangzhe']], '王哲版不挂钥匙附句');
+  assert.deepEqual(view(song).hintLines, [texts['line.taiquan.entry.song']]);
+  assert.deepEqual(view([...song, ...key]).hintLines, [texts['line.taiquan.entry.song'], texts['line.taiquan.entry.song.key']]);
+});
+
+test('没设锁的线照旧：标题＝线名，指引＝entryHint 原文', async () => {
+  const { secondary, entry } = await unlockLoaded;
+  for (const line of secondary.SECONDARY_LINES.filter(l => !l.unlock)) {
+    assert.deepEqual(entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '无修为' }, flags: {} })), { locked: false, title: line.name, hintLines: [line.entryHint] });
+  }
+});
+
+test('文案键缺失记 LCQ-PCK-005（同一键只记一次）并用兜底：标题退回「线名 · 时机未到」、缺项句跳过、说法主句缺失退回 entryHint', async () => {
+  const { secondary, entry, texts, log, store } = await unlockLoaded;
+  const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
+  const without = (...keys) => Object.fromEntries(Object.entries(texts).filter(([k]) => !keys.includes(k)));
+  const hits = () => store.logStore.recent(500).filter(e => e.code === 'LCQ-PCK-005');
+  log.resetLogState();
+  await quietConsole(async () => {
+    const locked = entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '入微' }, flags: {} }), without('line.taiquan.locked.title', 'line.taiquan.locked.realm'));
+    assert.deepEqual(locked, { locked: true, title: '太泉古阵 · 时机未到', hintLines: [texts['line.taiquan.locked.lines'].split('{X}').join('1')] });
+    entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '入微' }, flags: {} }), without('line.taiquan.locked.title', 'line.taiquan.locked.realm'));
+    const song = [['lcq.stage_12_jiangzhou_counterwar', SONG_HURT], ['lyl.taiquan_sacred_fruit', KEY_EVENT]];
+    assert.deepEqual(entry.secondaryLineEntryView(line, taiquanSave({ done: song }), without('line.taiquan.entry.song')).hintLines, [line.entryHint]);
+    assert.deepEqual(entry.secondaryLineEntryView(line, taiquanSave({ done: song }), without('line.taiquan.entry.song.key')).hintLines, [texts['line.taiquan.entry.song']], '附句缺失只跳过那一句');
+  });
+  const keys = hits().map(e => e.detail.textKey).sort();
+  assert.deepEqual(keys, ['line.taiquan.entry.song', 'line.taiquan.entry.song.key', 'line.taiquan.locked.realm', 'line.taiquan.locked.title']);
+  assert.ok(hits().every(e => e.detail.lineId === 'taiquan' && e.level === 'warn'));
+  log.resetLogState();
+});
+
+test('右栏入口改走 secondaryLineEntryView：锁住时用「时机未到」标题、逐句显示、灰显不隐藏', () => {
+  const sidebar = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8');
+  assert.match(sidebar, /secondaryLineEntryView\(line, save\)/);
+  assert.match(sidebar, /name: view\.locked \? view\.title : secondaryLineDisplayName\(line, event\)/);
+  assert.match(sidebar, /v-for="\(hint, i\) in line\.hintLines"/);
+  assert.match(sidebar, /'quest-locked': line\.locked/);
+  assert.doesNotMatch(sidebar, /hint: line\.entryHint/);
+});
