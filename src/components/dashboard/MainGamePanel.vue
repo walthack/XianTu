@@ -574,6 +574,9 @@ import {
 } from '@/utils/judgementEngine';
 import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
+import { getLastTurnTelemetry } from '@/utils/turnTelemetry';
+import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
+import { narrativeTriggers, recordTurnNarrative } from '@/modules/diagnostics/narrativeSource';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
 import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
@@ -2387,6 +2390,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       }
 
       (options as { qingyuTurnId?: string }).qingyuTurnId = qingyuTurnId;
+      const narrativeStartedAt = Date.now();
       aiResponse = await bidirectionalSystem.processPlayerAction(
         finalUserMessage,
         character,
@@ -2491,6 +2495,16 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (finalText) {
         console.log('[AI响应处理] 文本处理完成，记忆已由 AIBidirectionalSystem 处理');
         latestMessageText.value = gmResp?.text || null;
+        // 叙事来源日志：这段正文由哪条路径、哪个提示词模块、哪个模型生成（LCQ-NAR-001；中文夹英文另记 LCQ-NAR-002）。只记录，不改正文。
+        recordTurnNarrative({
+          text: finalText, receipt: gmResp?.moduleReceipt, telemetry: getLastTurnTelemetry(),
+          triggers: narrativeTriggers({
+            tickets: routedFreeActionTickets, judgement: contractedJudgementResolution, eventAction: resolvedEventAction,
+            opportunity: resolvedOpportunityAction, openWorld: resolvedOpenWorldAction, gambleRefusal: resolvedGambleRefusalAction,
+          }),
+          turn: getNarrativeTurn(gameStateStore.toSaveData()), generationId, startedAt: narrativeStartedAt,
+          narrativePromptKey: GAME_MODEL_MODULES.find(module => module.id === 'narrative')?.promptKey,
+        });
 
         // 更新UI显示
         if (currentNarrative.value) {

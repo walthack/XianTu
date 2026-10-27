@@ -14,6 +14,9 @@ import type { World, Origin, SpiritRoot } from '@/types';
 import type { GM_Response, TavernCommand } from '@/types/AIGameMaster';
 import { AIBidirectionalSystem } from '@/utils/AIBidirectionalSystem';
 import { isTavernEnv } from '@/utils/tavern';
+import { useAPIManagementStore } from '@/stores/apiManagementStore';
+import { getNarrativeTurn } from '@/utils/actionGate';
+import { promptUsesSince, recordNarrativeSource } from '@/modules/diagnostics/narrativeSource';
 import { 纪元基点, 计算起始年 } from '@/utils/lifespanCalculator';
 import { getNsfwSettingsFromStorage, ensureSystemConfigHasNsfw } from '@/utils/nsfw';
 import { createEmptyThousandDaoSystem } from '@/data/thousandDaoData';
@@ -528,6 +531,7 @@ ${selectionsSummary}${scenarioOpening}${scenarioCanonPrompt ? `\n\n${scenarioCan
     );
   };
 
+  const openingStartedAt = Date.now();
   const initialMessageResponse = await robustAICall(
 async () => {
   console.log('[初始化] ===== 开始生成开场剧情 =====');
@@ -729,6 +733,13 @@ async () => {
   if (!openingStory.trim()) {
     throw new Error('AI生成的开场剧情为空');
   }
+  // 叙事来源日志：开局正文（LCQ-NAR-001；中文夹英文另记 LCQ-NAR-002）。只记录，不改正文。
+  const openingRoute = isTavernEnv() ? null : useAPIManagementStore().getAPIForType('main');
+  recordNarrativeSource({
+    site: 'opening', path: 'opening', prompts: promptUsesSince(openingStartedAt),
+    model: isTavernEnv() ? '宿主主流程' : openingRoute?.model ?? null, provider: isTavernEnv() ? 'tavern' : openingRoute?.provider ?? null,
+    turn: getNarrativeTurn(saveDataAfterCommands),
+  }, openingStory);
 
 
   // 将 stateChanges 添加到最后一条叙事记录中

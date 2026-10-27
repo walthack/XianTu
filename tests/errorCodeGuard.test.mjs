@@ -58,6 +58,15 @@ test('docs/ERROR-CODES.md 与 codes.ts 互相一致：码、级别、模块、�
   for (const code of RETIRED_CODES) assert.ok(retired.includes(code), `${code} 须在文档“已作废”一节登记`);
 });
 
+test('docs/DEBUG-LOG.md 大类表的“对照码表 module”列覆盖码表里的每个 module（错误码表与 DEBUG-LOG.md 同步）', () => {
+  const text = readFileSync(path.join(root, 'docs/DEBUG-LOG.md'), 'utf8');
+  const section = text.split('## 大类表')[1]?.split('\n## ')[0] ?? '';
+  const listed = new Set(section.split('\n').filter(line => /^\| `[^`]+` \|/.test(line))
+    .flatMap(line => (line.split('|').slice(1, -1)[3] ?? '').split('、').map(cell => cell.trim())).filter(cell => cell && cell !== '—'));
+  const missing = [...new Set(Object.values(ERROR_CODES).map(spec => spec.module))].filter(module => !listed.has(module));
+  assert.deepEqual(missing, [], '这些 module 在码表里出现，却没登记进 DEBUG-LOG.md 任何大类的对照列');
+});
+
 test('同一族内序号不重复、不跳号后复用：每族序号从 001 起且连续（作废的码仍占位）', () => {
   const families = new Map();
   for (const code of [...Object.keys(ERROR_CODES), ...RETIRED_CODES]) {

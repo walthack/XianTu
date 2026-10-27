@@ -4,18 +4,18 @@
 
 ## 规则
 
-- 格式：`LCQ-<CFG|NUM|FA|SAV|NET|PCK|UI|SYS>-三位序号`。CFG 配置 / NUM 数值配置 / FA 自由行动 / SAV 存档与 IndexedDB / NET 网络与 AI 请求 / PCK 内容包与剧情模组 / UI 页面 / SYS 日志系统自身。
+- 格式：`LCQ-<CFG|NUM|FA|SAV|NET|PCK|NAR|UI|SYS>-三位序号`。CFG 配置 / NUM 数值配置 / FA 自由行动 / SAV 存档与 IndexedDB / NET 网络与 AI 请求 / PCK 内容包与剧情模组 / NAR 叙事正文来源（2026-10-28 新增族，从 001 起）/ UI 页面 / SYS 日志系统自身。
 - 序号只增不复用：新增码取该族下一个未用序号；作废的码移到文末“已作废”，不再发出也不得被新码占用。
 - **LCQ-FA 与 freeAction 的 `GATE_REASONS` 一一对应**：每个闸门原因一个码，含义栏里括号内是原因 id。新增闸门原因必须同时在 `codes.ts` 的 `FA_GATE_CODES` 与本表登记（漏了编译和守卫测试都会失败）。
 - 兜底码 `LCQ-SYS-000`「未登记」：console.error / console.warn 捕获，以及调用方传了没登记的码，都落到这里。
 - 级别列是码的默认级别；个别接入点会按场景调整（如后台 AI 请求超时降为 warn、tuning.json 404 级别取配置 `diagnostics.tuning404Level`）。
-- 日志不记玩家原文、不记请求头/URL/正文/密钥：detail 经脱敏（`diagnostics.redactKeys / redactPatterns / textKeys / textChars`），textChars 默认 0。这是有意的，不要为了排查把原文加进 detail。
+- 日志不记玩家原文、不记请求头/URL/正文/密钥：detail 经脱敏（`diagnostics.redactKeys / redactPatterns / textKeys / textChars`），textChars 默认 0。这是有意的，不要为了排查把原文加进 detail。**唯一例外**：叙事来源日志 `LCQ-NAR-001` 按总策划要求保留模型生成的玩家可见正文全文（`detail.text`，经 logEvent 的 `verbatim` 通道，只抹密钥形状、不截断），见 [叙事来源日志](NARRATIVE-SOURCE-LOG.md)；玩家原文仍不得走这个通道。
 - 数值全部在 game-numbers（权威三分包 `mod-kit/numbers-*.json`，合并视图 `game-numbers.qingyu.json`）的 `diagnostics` 段（可经 tuning.json 热改，体检登记在 numbers.ts）；反馈包的存档脱敏配置在同文件 `feedback` 段（体检登记在 feedback.ts）。
 - 新代码的 catch 必须含 logError/logEvent，或写 `// lcq-allow: 原因`；存量 catch 记在 `tests/errorCodeGuard.baseline.json`，只拦新增。
 
 ## 日志字段
 
-`ts`、`level`、`code`、`module`、`sessionId`、`turnId`、`requestId?`、`msg`、`detail`（已脱敏）、`stack?`。落在独立 IndexedDB 库 `lcq-log`（环形，不碰存档库）；IndexedDB 不可用时降级 localStorage 小缓存。调试模式下页面左下角出现错误角标，点开可看最近条目并导出 JSON。
+`ts`、`level`、`code`、`module`、`sessionId`、`turnId`、`requestId?`、`msg`、`detail`（已脱敏）、`stack?`。落在独立 IndexedDB 库 `lcq-log`（环形，不碰存档库）；IndexedDB 不可用时降级 localStorage 小缓存。**轮转**（`diagnostics.rotation`）：每次落盘删掉早于 `retentionDays`（默认 3）天的记录；条数超 `ringMax`（默认 2000）或总大小超 `maxBytes`（默认 2097152 个 JSON 字符）时从最老的删到 `trimToRatio`（默认 0.8）倍以下；每次轮转记一条 `LCQ-SYS-002`。调试模式下页面左下角出现错误角标，点开可看最近条目并导出 JSON。
 
 **反馈包**：设置页「高级设置 → 导出反馈包」与启动失败兜底界面（均非仅调试模式可见）可导出单个 zip（`lcq-feedback-<时间>.zip`，store 模式）：`manifest.json`、`version.json`（游戏版本/构建号/GIT_SHA/内容包版本）、`logs.json`、`model-config.json`（模型连接摘要，只记“是否填了密钥”，URL 去掉账号与查询串）；勾选“附带存档”才多一个 `save.json`（当前激活存档）。存档里的叙事原文是否脱敏由 `game-numbers` 的 `feedback.redactSaveNarrative` 决定（默认脱敏，范围 `feedback.narrativePaths`）；密钥无论如何都脱敏。
 
@@ -54,6 +54,8 @@
 | LCQ-FA-023 | info | freeAction | 闸门拒绝（not_ready）：境界进度未到，自修无从推进 | 自修的境界进度试算无变化（时机未到或已满） | 正常；核对修炼进度配置 | 否 |
 | LCQ-FA-024 | info | freeAction | 闸门拒绝（dropped）：同目标被挤掉的第二张票未能落实 | 同一目标/同一类被报了多张票，较轻的一张被挤掉 | 正常；每个目标每回合最多一张票，配置 ticket.maxPerTurn | 否 |
 | LCQ-FA-025 | info | freeAction | 闸门拒绝（unrecognized）：本地没有识别出可结算的动作 | 玩家这句话本地没识别出可结算动作（识别降级或传功语义无票） | 正常；若频繁出现检查意图识别模型是否超时，见 LCQ-NET 码 | 否 |
+| LCQ-NAR-001 | info | narrativeSource | 叙事来源：模型生成了一段玩家可见正文（记来源与全文） | 不是故障：模型每生成一段玩家可见正文记一条——回合正文（site=turn，MainGamePanel 发送收尾）、场面拍描写（scene_beat）与场内闲聊（scene_chat，sceneModule/host）、开局正文（opening，characterInitialization）；本地合同正文、卡片句、守卫三稿全拒后的固定承接不请求模型，不记。detail：site / path / triggers / moduleId / prompts（id + custom）/ model / provider / turn / beat / generationId / eventId / generatedAt（本机时区 ISO）/ textChars / text（全文） | 按 generatedAt 或 turn 找到出问题的那段正文，看 path（modular / legacy / legacy_pilot / sceneModule / opening）与 triggers（freeAction:solo.breakthrough、judgement:cultivate 等）定位生成路径，prompts 里 custom=true 说明玩家在提示词面板改过该模块；字段、存放与导出见 docs/NARRATIVE-SOURCE-LOG.md | 否 |
+| LCQ-NAR-002 | warn | narrativeSource | 叙事正文中文里夹拉丁单词（只记录，不改写正文） | 正文里出现夹在中文之间的拉丁单词：字母数 ≥ diagnostics.narrativeSource.minLetters（默认 3），前后 contextChars（默认 20）字内有汉字，且不在 nameWhitelist（人名专名）/ colloquialWhitelist（程宗扬现代口语）里，不分大小写。多见于修炼 / 闭关 / 冲关叙事：模型顺着提示词、回执或场景材料里的英文字段名、程序标识写出英文（真机见过 leaps、steady、changes、Decide、feel、manipulated） | 看 detail.words 与 hits（命中词 + 前后各 contextChars 字），同条 detail 带同样的来源字段（path / triggers / prompts / model / turn / beat / generatedAt），必要时按 generatedAt 找同一段的 LCQ-NAR-001 看全文；确属人名专名或程宗扬现代口语的补进对应白名单（mod-kit/numbers-runtime.json，或 tuning.json 的 numbers.diagnostics.narrativeSource 热改）；正文不会被改写 | 否 |
 | LCQ-NET-001 | error | aiService | AI 请求等待首个响应超时（first_byte） | 请求发出后迟迟没有首个响应字节（网络慢、服务端排队、API 地址错） | 看 requestId/turnId 对应的请求；检查 API 地址与网络；可手动重试 | 否 |
 | LCQ-NET-002 | error | aiService | AI 请求总耗时超时（total） | 整次请求超过总耗时上限（含回合预算耗尽） | 看 detail.stage；检查模型响应速度或调大超时；后台任务超时降为 warn | 否 |
 | LCQ-NET-003 | error | aiService | AI 正文流空闲超时（idle） | 流式正文开始后长时间没有新内容 | 多为服务端卡住或网络中断；手动重试，必要时换模型/代理 | 否 |
@@ -111,6 +113,7 @@
 | LCQ-SAV-030 | warn | loadRepairs | 读档迁移旧档练功上限（canon / canon+1 → none）失败，本次照常加载，下次读档重试 | loadRepairs.ts 的 migrateTrainingCapNone（applyLoadRepairs 读档时调用；总策划裁定接用户 2026-10-27 13:40 取消练功章节上限：旧档也一律不设限）把存档 系统.难度设置.trainingCap 的 'canon' / 'canon+1' 改成 'none'、并在 系统.扩展.读档迁移.练功不设限 打迁移版本号时抛错（detail.reason=migrate_failed），常见于外部改档把 系统.扩展 或 系统.难度设置 写成只读 / 非预期结构；本次不打标记，难度设置可能仍是旧值（练功上限按 trainingCapLevel 旧口径：查得到原著级时按原著级卡），不阻断读档 | 看 cause 与 detail.migration；查存档 系统.难度设置 与 系统.扩展.读档迁移 的结构，修好后重新读档即迁；跑 tests/loadRepairsTrainingCap.test.mjs | 否 |
 | LCQ-SYS-000 | warn | diagnostics | 未登记 | console.error / console.warn 被日志捕获；或调用方传了没登记的码（原码在 detail.originalCode） | 看 msg 与 stack 定位调用点；若是业务上要长期保留的错误，给它登记专属码并改成 logError | 否 |
 | LCQ-SYS-001 | warn | diagnostics | 日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存 | 浏览器禁用或不支持 IndexedDB（隐私模式、存储被清理策略禁用），或 lcq-log 库打开失败 | 日志仍在内存环形缓冲里，可照常导出；换普通窗口或检查浏览器站点存储设置 | 否 |
+| LCQ-SYS-002 | info | diagnostics | 持久日志轮转：按保留天数、条数或总大小删除了旧记录 | 不是故障：落盘时 lcq-log 里有早于 diagnostics.rotation.retentionDays（默认 3）天的记录（detail.byAge），或条数超过 ringMax、总大小超过 maxBytes（detail.byLimit，一次删到 trimToRatio 倍以下）；detail 还有 rotatedAt（本机时区 ISO）/ dropped / kept / keptBytes / oldestDroppedAt / newestDroppedAt 与当时的 retentionDays / maxEntries / maxBytes / trimToRatio | 要多留就在 tuning.json 的 numbers.diagnostics 调大 rotation.retentionDays、ringMax、maxBytes；byLimit 频繁出现说明上限偏小；删掉的记录找不回，要留证据先导出日志 | 否 |
 | LCQ-UI-001 | error | window | 页面未捕获异常（window error） | 页面脚本抛出未捕获异常（组件渲染、事件回调） | 看 stack 与 detail.file/line；复现步骤 + 导出日志提交 | 否 |
 | LCQ-UI-002 | error | window | 未处理的 Promise 拒绝（unhandledrejection） | 某个 Promise 失败且无人处理 | 看 stack 找到未 await/未 catch 的调用；业务上应补 catch 并改用专属码 | 否 |
 | LCQ-UI-003 | warn | diagnostics | 导出日志失败 | 导出日志时浏览器拒绝创建下载（沙箱、权限） | 换浏览器或重试；不影响游戏 | 否 |

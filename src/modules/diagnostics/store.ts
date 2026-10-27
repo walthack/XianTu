@@ -2,6 +2,8 @@
  * 日志存储：内存环形缓冲（面板与导出读它）+ 异步落盘（独立 IndexedDB 库 lcq-log，不碰存档库 DAD_SAVES_DB 及其 DB_VERSION）。
  * IndexedDB 不可用 / 打开失败 → 降级到 localStorage 小缓存（只留最近 localFallbackMax 条）；再不行就只留内存。
  * 条数与体积上限（ringMax / maxBytes）内存与磁盘各自生效，超了删最老的。所有落盘错误吞掉，不影响游戏。
+ * 轮转（diagnostics.rotation）：磁盘上早于 retentionDays 天的记录每次落盘时删掉（内存里也不再留）；磁盘超上限时一次删到
+ * trimToRatio 倍以下（不是每写一条删一条），每次轮转经 onRotate 回报一次（log.ts 记 LCQ-SYS-002）。记录时间取 seq（= 写入时刻 ms × 1000）。
  */
 import { diagnosticsConfig } from './config';
 import type { LogLevel } from './config';
@@ -32,6 +34,36 @@ export const LOG_DB_NAME = 'lcq-log';
 export const LOG_STORE_NAME = 'logs';
 export const LOG_DB_VERSION = 1;
 export const LOG_FALLBACK_KEY = 'lcq-log-fallback';
+
+/** 轮转回报（LCQ-SYS-002 的 detail）。时间是本机时区的 ISO 串。 */
+export interface RotationInfo {
+  rotatedAt: string;
+  dropped: number;
+  /** 因超过保留天数删掉的条数。 */
+  byAge: number;
+  /** 因超过条数 / 总大小上限删掉的条数。 */
+  byLimit: number;
+  retentionDays: number; maxEntries: number; maxBytes: number; trimToRatio: number;
+  kept: number; keptBytes: number;
+  oldestDroppedAt: string; newestDroppedAt: string;
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+/** 记录写入时刻（ms）：seq = Date.now() × 1000 + 计数。 */
+export const seqTime = (seq: number): number => Math.floor(seq / 1000);
+
+/** 带本机时区偏移的 ISO 时间串，如 2026-10-27T23:07:44.123+08:00（日志条目自身的 ts 仍是 UTC 的 toISOString）。 */
+export function localIsoTimestamp(ms: number = Date.now()): string {
+  const d = new Date(ms), offset = -d.getTimezoneOffset(), abs = Math.abs(offset);
+  const pad = (n: number, width = 2): string => String(n).padStart(width, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${pad(d.getMilliseconds(), 3)}${offset >= 0 ? '+' : '-'}${pad(Math.floor(abs / 60))}:${pad(abs % 60)}`;
+}
+
+/** 保留期截止时刻：早于它的记录该删；配置不合法（体检会拦）时返回 null＝不按天数删。 */
+function retentionCutoff(now: number): number | null {
+  const days = diagnosticsConfig().rotation?.retentionDays;
+  return typeof days === 'number' && Number.isFinite(days) && days > 0 ? now - days * DAY_MS : null;
+}
 
 const sizeOf = (entry: StoredEntry): number => { try { return JSON.stringify(entry).length; } catch { return 0; } }; // lcq-allow: 估算体积，序列化失败按 0 计
 
@@ -82,6 +114,8 @@ export interface LogStoreOptions {
   openBackend?: () => Promise<LogBackend>;
   /** 落盘从 IndexedDB 降级时回调一次（log.ts 用它记 LCQ-SYS-001）。 */
   onDegrade?: (reason: unknown, to: LogBackend['kind']) => void;
+  /** 磁盘上轮转删掉了记录时回调（log.ts 用它记 LCQ-SYS-002）。 */
+  onRotate?: (info: RotationInfo) => void;
 }
 
 export function createLogStore(options: LogStoreOptions = {}) {
@@ -111,8 +145,10 @@ export function createLogStore(options: LogStoreOptions = {}) {
     trimRing();
   };
   const trimRing = (): void => {
-    const cfg = diagnosticsConfig();
-    while (ring.length > 1 && (ring.length > cfg.ringMax || ringBytes > cfg.maxBytes)) { const old = ring.shift()!; ringBytes -= sizes.get(old.seq) ?? 0; sizes.delete(old.seq); }
+    const cfg = diagnosticsConfig(), cutoff = retentionCutoff(Date.now());
+    const drop = (): void => { const old = ring.shift()!; ringBytes -= sizes.get(old.seq) ?? 0; sizes.delete(old.seq); };
+    while (cutoff !== null && ring.length && seqTime(ring[0].seq) < cutoff) drop();
+    while (ring.length > 1 && (ring.length > cfg.ringMax || ringBytes > cfg.maxBytes)) drop();
   };
   const notify = (): void => { for (const fn of [...listeners]) { try { fn(); } catch { /* lcq-allow: 订阅者出错不得影响日志写入 */ } } };
 
@@ -124,18 +160,37 @@ export function createLogStore(options: LogStoreOptions = {}) {
     notify();
   })().catch(() => { /* lcq-allow: 读盘失败只影响历史记录，当前会话的内存记录照常 */ }));
 
+  /** 磁盘轮转：先删过了保留期的，再看条数 / 总大小，超了就从最老的删到 trimToRatio 倍以下（至少留最新一条）。 */
   const trimPersisted = async (b: LogBackend): Promise<void> => {
-    const cfg = diagnosticsConfig();
+    const cfg = diagnosticsConfig(), now = Date.now(), cutoff = retentionCutoff(now);
+    const ratio = cfg.rotation?.trimToRatio;
+    const scale = (limit: number): number => typeof ratio === 'number' && ratio > 0 && ratio < 1 ? Math.floor(limit * ratio) : limit;
+    const seqs = [...persisted.keys()].sort((a, c) => a - c);
     let bytes = 0;
     for (const size of persisted.values()) bytes += size;
     const drop: number[] = [];
-    for (const seq of [...persisted.keys()].sort((a, c) => a - c)) {
-      if (persisted.size - drop.length <= cfg.ringMax && bytes <= cfg.maxBytes) break;
+    for (const seq of seqs) {
+      if (cutoff === null || seqTime(seq) >= cutoff) break;
       bytes -= persisted.get(seq) ?? 0; drop.push(seq);
+    }
+    const byAge = drop.length;
+    if (seqs.length - drop.length > cfg.ringMax || bytes > cfg.maxBytes) {
+      const countGoal = scale(cfg.ringMax), bytesGoal = scale(cfg.maxBytes);
+      for (const seq of seqs.slice(byAge)) {
+        const left = seqs.length - drop.length;
+        if (left <= 1 || (left <= countGoal && bytes <= bytesGoal)) break;
+        bytes -= persisted.get(seq) ?? 0; drop.push(seq);
+      }
     }
     if (!drop.length) return;
     await b.remove(drop);
     for (const seq of drop) persisted.delete(seq);
+    options.onRotate?.({
+      rotatedAt: localIsoTimestamp(now), dropped: drop.length, byAge, byLimit: drop.length - byAge,
+      retentionDays: cfg.rotation?.retentionDays, maxEntries: cfg.ringMax, maxBytes: cfg.maxBytes, trimToRatio: cfg.rotation?.trimToRatio,
+      kept: persisted.size, keptBytes: bytes,
+      oldestDroppedAt: localIsoTimestamp(seqTime(drop[0])), newestDroppedAt: localIsoTimestamp(seqTime(drop[drop.length - 1])),
+    });
   };
 
   const flushNow = (): Promise<void> => (flushing = flushing.then(async () => {
@@ -184,6 +239,9 @@ export function createLogStore(options: LogStoreOptions = {}) {
 }
 
 let degradeHandler: LogStoreOptions['onDegrade'];
+let rotateHandler: LogStoreOptions['onRotate'];
 /** log.ts 登记：默认存储从 IndexedDB 降级时记一条 LCQ-SYS-001。 */
 export const onStoreDegrade = (fn: LogStoreOptions['onDegrade']): void => { degradeHandler = fn; };
-export const logStore = createLogStore({ onDegrade: (reason, to) => degradeHandler?.(reason, to) });
+/** log.ts 登记：默认存储轮转删掉旧记录时记一条 LCQ-SYS-002。 */
+export const onStoreRotate = (fn: LogStoreOptions['onRotate']): void => { rotateHandler = fn; };
+export const logStore = createLogStore({ onDegrade: (reason, to) => degradeHandler?.(reason, to), onRotate: info => rotateHandler?.(info) });

@@ -1,6 +1,6 @@
 /**
  * 错误码总表（代码侧）。权威说明在 docs/ERROR-CODES.md（含常见原因、排查办法），两边由 tests/errorCodeGuard.test.mjs 互相校验。
- * 格式 LCQ-<CFG|NUM|FA|SAV|NET|PCK|UI|SYS>-三位序号；码一经发出不复用、不改义，作废的码挪进 RETIRED_CODES 并在文档“已作废”一节登记。
+ * 格式 LCQ-<CFG|NUM|FA|SAV|NET|PCK|NAR|UI|SYS>-三位序号；码一经发出不复用、不改义，作废的码挪进 RETIRED_CODES 并在文档“已作废”一节登记。
  * FA 族与 freeAction 的 GATE_REASONS 一一对应（FA_GATE_CODES 的键类型是 GateReason，漏一个编译不过）。
  */
 import type { GateReason } from '../scenarioMods/freeAction/facts';
@@ -22,6 +22,7 @@ export const UNREGISTERED_CODE = 'LCQ-SYS-000';
 export const ERROR_CODES = {
   [UNREGISTERED_CODE]: spec('warn', 'diagnostics', '未登记'),
   'LCQ-SYS-001': spec('warn', 'diagnostics', '日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存'),
+  'LCQ-SYS-002': spec('info', 'diagnostics', '持久日志轮转：按保留天数、条数或总大小删除了旧记录'),
 
   'LCQ-CFG-001': spec('info', 'runtimeTuning', 'tuning.json 不存在（HTTP 404），使用打包内默认值'),
   'LCQ-CFG-002': spec('warn', 'runtimeTuning', 'tuning.json 请求失败（网络错误），使用打包内默认值'),
@@ -115,6 +116,9 @@ export const ERROR_CODES = {
   'LCQ-PCK-004': spec('warn', 'scenarioMods', '固定结局的来路分支句缺失，本次只显示通用正文'),
   'LCQ-PCK-005': spec('warn', 'scenarioMods', '线入口／当前线卡文案键缺失，本次用兜底或不出该句'),
 
+  'LCQ-NAR-001': spec('info', 'narrativeSource', '叙事来源：模型生成了一段玩家可见正文（记来源与全文）'),
+  'LCQ-NAR-002': spec('warn', 'narrativeSource', '叙事正文中文里夹拉丁单词（只记录，不改写正文）'),
+
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),
   'LCQ-UI-003': spec('warn', 'diagnostics', '导出日志失败'),
@@ -127,7 +131,7 @@ export type ErrorCode = keyof typeof ERROR_CODES;
 /** 作废的码：不再发出，也不得被新码复用。 */
 export const RETIRED_CODES: readonly string[] = [];
 
-export const CODE_PATTERN = /^LCQ-(CFG|NUM|FA|SAV|NET|PCK|UI|SYS)-\d{3}$/;
+export const CODE_PATTERN = /^LCQ-(CFG|NUM|FA|SAV|NET|PCK|NAR|UI|SYS)-\d{3}$/;
 export const isRegisteredCode = (code: string): code is ErrorCode => Object.prototype.hasOwnProperty.call(ERROR_CODES, code);
 export const specOf = (code: string): CodeSpec => ERROR_CODES[isRegisteredCode(code) ? code : UNREGISTERED_CODE];
 

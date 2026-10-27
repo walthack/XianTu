@@ -4,6 +4,7 @@
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { getSystemPrompts, PROMPT_CATEGORIES, type PromptDefinition } from './defaultPrompts';
 import { loadUserCloudData, saveUserCloudData } from '@/services/userCloudStorage';
+import { notePromptUse } from '@/modules/diagnostics/narrativeSource';
 
 const PROMPTS_CLOUD_KEY = 'user_config_prompts_v1';
 
@@ -263,19 +264,23 @@ class PromptStorage {
   async get(key: string): Promise<string> {
     await this.init();
     const defaults = getSystemPrompts();
-    if (this.memoryOnly || !this.db) return defaults[key]?.content || '';
+    // 叙事来源日志（LCQ-NAR-001）据此记“提示词模块 id 及是否用户自定义”。
+    if (this.memoryOnly || !this.db) { notePromptUse(key, false); return defaults[key]?.content || ''; }
     const saved = await this.db.get('prompts', key);
 
     if (saved?.enabled === false) {
+      notePromptUse(key, false);
       return '';
     }
 
     // 如果有保存且标记为已修改，使用用户自定义内容
     // 否则始终使用最新的默认值（确保代码更新后提示词也更新）
     if (saved?.modified) {
+      notePromptUse(key, true);
       return saved.content;
     }
 
+    notePromptUse(key, false);
     return defaults[key]?.content || '';
   }
 

@@ -12,6 +12,7 @@ const { useAPIManagementStore } = await jiti.import('../src/stores/apiManagement
 const { resolveGameModuleRoute, runGameModelModule } = await jiti.import('../src/services/gameModelModules.ts');
 const { GAME_MODEL_MODULES } = await jiti.import('../src/services/moduleModelRuntime.ts');
 const { aiService } = await jiti.import('../src/services/aiService.ts');
+const narrativeSource = await jiti.import('../src/modules/diagnostics/narrativeSource.ts');
 const config = (id, model) => ({ id, name:id, model, provider:'custom', url:'https://api.minimaxi.com/v1', apiKey:'fixture', enabled:true, maxTokens:4096 });
 
 test('four modules follow main configuration, not M3 or previous module assignments', async () => {
@@ -31,6 +32,8 @@ test('four modules follow main configuration, not M3 or previous module assignme
     for (const d of GAME_MODEL_MODULES) {
       assert.equal(resolveGameModuleRoute(d).config.id,'main-selected');
       assert.equal((await runGameModelModule(d.id,{system:'test',input:'action',generationId:d.id})).route.model,'MiniMax-M2.7-highspeed');
+      // 叙事来源日志（LCQ-NAR-001）取场面描写模型名用：每次跑模块都报一次路由。
+      assert.deepEqual(narrativeSource.lastModelRoute(d.id),{model:'MiniMax-M2.7-highspeed',provider:'custom'});
     }
     api.apiConfigs[0].model = 'another-backend-model';
     for (const d of GAME_MODEL_MODULES) assert.equal(resolveGameModuleRoute(d).config.model,'another-backend-model');

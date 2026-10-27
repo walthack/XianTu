@@ -240,7 +240,7 @@ function fakeIndexedDb() {
 }
 const entryOf = (i, extra = {}) => ({ ts: new Date(1700000000000 + i).toISOString(), level: 'error', code: 'LCQ-SYS-000', module: 'm', sessionId: 's', turnId: null, msg: `m${i}`, ...extra });
 
-test('IndexedDB 后端：独立库 lcq-log，put / load / remove / clear；存储层 flush 落盘并按 ringMax 裁剪磁盘', async () => {
+test('IndexedDB 后端：独立库 lcq-log，put / load / remove / clear；存储层 flush 落盘并按 ringMax 轮转磁盘（删到 trimToRatio 倍以下）', async () => {
   const fake = fakeIndexedDb();
   const backend = await storeMod.indexedDbBackend(fake.factory);
   assert.equal(backend.kind, 'indexedDB');
@@ -251,12 +251,16 @@ test('IndexedDB 后端：独立库 lcq-log，put / load / remove / clear；存�
   const before = structuredClone(N().diagnostics);
   mods.numbers.applyGameNumbers({ diagnostics: { ringMax: 4, flushMs: 1 } });
   try {
-    const store = storeMod.createLogStore({ openBackend: async () => backend });
+    const rotations = [];
+    const store = storeMod.createLogStore({ openBackend: async () => backend, onRotate: info => rotations.push(info) });
     for (let i = 0; i < 7; i++) store.add(entryOf(i), true);
     await store.flush();
     const onDisk = await backend.load();
-    assert.equal(onDisk.length, 4, '磁盘上也受 ringMax 限制');
-    assert.deepEqual(onDisk.map(e => e.msg), ['m3', 'm4', 'm5', 'm6']);
+    // 超了 ringMax=4 就一次删到 floor(4 × trimToRatio 0.8)=3 条，留出余量，不是每写一条轮转一次。
+    assert.equal(onDisk.length, Math.floor(4 * N().diagnostics.rotation.trimToRatio), '磁盘上受 ringMax 限制，轮转删到低水位');
+    assert.deepEqual(onDisk.map(e => e.msg), ['m4', 'm5', 'm6']);
+    assert.equal(rotations.length, 1, '一次轮转回报一次');
+    assert.deepEqual([rotations[0].dropped, rotations[0].byAge, rotations[0].byLimit, rotations[0].kept], [4, 0, 4, 3]);
 
     // 新开一个存储实例（模拟刷新页面）：all() 能读回旧会话的记录
     const reopened = storeMod.createLogStore({ openBackend: async () => backend });

@@ -27,7 +27,7 @@ import { negotiationConfig, negotiationUnsupported, parseRecognition, recognizeA
 export function combatLossTitle(c:{objective?:{text?:string}}):string{const goal=String(c.objective?.text||'').trim();return goal?`战败 · 未能${goal}`:'游戏结束';}
 
 export const NO_NEGOTIATION_NOTICE=negotiationConfig().notice;
-import { narrateBeat } from './narrate';
+import { narrateBeat, noteSceneNarrative } from './narrate';
 import { applyWriteBack, syncSceneStatuses } from './writeback';
 
 export interface HostDeps {
@@ -147,11 +147,11 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
   const routed=route(policy,'engaged',interrogating ? {class:'action',evidence:['审问合同动作']} : classifyByRules(c,text),interrogating ? {used:false} : {used:!!modelClass,class:modelClass});
   if(routed.decision==='passThrough') {
     // Chat has a dedicated no-commands path. Neither story progression nor object registration can run here.
-    let reply='你们简短交换了几句话，交锋的局面没有改变。';
-    try { if(deps.askNarrative) reply=await deps.askNarrative({system:'只回答场内闲聊，第二人称。不得改变局势、人物状态、位置或物品，不替玩家采取行动，只输出正文。'+(c.interrogation ? '不生成供词、来历或幕后情报；这些请求只能进入代码审问合同。' : ''),user:sceneBrief(save)+'\n玩家：'+text}); } catch { /* conversational fallback */ }
+    let reply='你们简短交换了几句话，交锋的局面没有改变。',byModel=false;
+    try { if(deps.askNarrative){reply=await deps.askNarrative({system:'只回答场内闲聊，第二人称。不得改变局势、人物状态、位置或物品，不替玩家采取行动，只输出正文。'+(c.interrogation ? '不生成供词、来历或幕后情报；这些请求只能进入代码审问合同。' : ''),user:sceneBrief(save)+'\n玩家：'+text});byModel=true;} } catch { /* conversational fallback */ }
     checkAbort(deps);
     if(new RegExp(`战斗结束|战斗胜利|敌人(?:${statusNamePattern('incapacitated')})|获得|收入背包|已经逃离|<[^>]+>`).test(reply)){reply='对方没有回应，眼前的交锋仍未解决。';logInput(a,c,text,{used:!!modelClass,class:modelClass},'clarify');}
-    else logInput(a,c,text,{used:!!modelClass,class:modelClass},'passThrough');
+    else {logInput(a,c,text,{used:!!modelClass,class:modelClass},'passThrough');if(byModel)noteSceneNarrative('scene_chat',reply,c,a.state.beat,a.eventId);}
     appendHistory(save,reply,text);a.notice='';writeExt(save,ext);await deps.persist(save);return true;
   }
   if(!recognized.plan||routed.decision==='clarify') {a.pending=null;a.notice='请用陈述句说明本拍目标和打法；可用要素见场面简报。';logInput(a,c,text,{used:!!modelClass,class:modelClass},'clarify');}

@@ -30,6 +30,10 @@ export interface DiagnosticsConfig {
   tuning404Level: LogLevel;
   /** 调试日志大类开关（debugLog / debugEnabled）：只管控制台调试输出，logEvent / logError 不读这里。 */
   debug: { note?: string; categories: Record<DebugCategory, boolean> };
+  /** 持久日志轮转：落盘时删掉早于 retentionDays 天的记录；超 ringMax / maxBytes 时一次删到 trimToRatio 倍以下；每次轮转记 LCQ-SYS-002。 */
+  rotation: { note?: string; retentionDays: number; trimToRatio: number };
+  /** 叙事来源日志（narrativeSource.ts）：夹英文检测的字母数下限、上下文字数与两张白名单（不分大小写）。 */
+  narrativeSource: { note?: string; minLetters: number; contextChars: number; nameWhitelist: string[]; colloquialWhitelist: string[] };
 }
 
 export const BUILTIN_DIAGNOSTICS: DiagnosticsConfig = structuredClone(GAME_NUMBERS.diagnostics) as DiagnosticsConfig;
@@ -53,6 +57,12 @@ export function validateDiagnosticsConfig(cfg: DiagnosticsConfig = diagnosticsCo
   if (typeof cfg.toast?.enabled !== 'boolean' || levelRank(cfg.toast?.minLevel) < 0 || !count(cfg.toast?.dedupeMs)) errors.push('diagnostics.toast 须有布尔 enabled、合法 minLevel、正整数 dedupeMs');
   if (!count(cfg.panel?.recent)) errors.push('diagnostics.panel.recent 须为正整数');
   errors.push(...validateDebugCategories(cfg.debug?.categories));
+  const rotation = cfg.rotation;
+  if (!(typeof rotation?.retentionDays === 'number' && rotation.retentionDays > 0 && Number.isFinite(rotation.retentionDays))) errors.push('diagnostics.rotation.retentionDays 须为正数（天）');
+  if (!(typeof rotation?.trimToRatio === 'number' && rotation.trimToRatio > 0 && rotation.trimToRatio < 1)) errors.push('diagnostics.rotation.trimToRatio 须在 0 与 1 之间（不含两端）');
+  const nar = cfg.narrativeSource;
+  if (!count(nar?.minLetters) || !count(nar?.contextChars)) errors.push('diagnostics.narrativeSource.minLetters / contextChars 须为正整数');
+  for (const key of ['nameWhitelist', 'colloquialWhitelist'] as const) if (!Array.isArray(nar?.[key]) || nar[key].some(item => typeof item !== 'string' || !item.trim())) errors.push(`diagnostics.narrativeSource.${key} 须为字符串数组（可为空，项不能是空串）`);
   return errors;
 }
 

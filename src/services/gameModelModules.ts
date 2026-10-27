@@ -1,6 +1,7 @@
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
 import { isTavernEnv } from '@/utils/tavern';
 import { aiService } from './aiService';
+import { noteModelRoute } from '@/modules/diagnostics/narrativeSource';
 import {
   createModuleModelRuntime, GAME_MODEL_MODULES,
   type ModelModuleDefinition, type ModelModuleInput, type ModuleRouteResolution,
@@ -27,11 +28,14 @@ export function isGameModuleEnabled(definition: ModelModuleDefinition): boolean 
 }
 
 /** 四个游戏模块共用后台主模型；请求策略与连接配置分别冻结。 */
-export function runGameModelModule(moduleId: string, input: ModelModuleInput) {
-  return createModuleModelRuntime({
+export async function runGameModelModule(moduleId: string, input: ModelModuleInput) {
+  const result = await createModuleModelRuntime({
     definitions: GAME_MODEL_MODULES,
     resolveRoute: resolveGameModuleRoute,
     isEnabled: isGameModuleEnabled,
     generate: options => aiService.generate(options),
   }).run(moduleId, input);
+  // 叙事来源日志（LCQ-NAR-001）取场面描写的模型名用。
+  noteModelRoute(moduleId, result.route);
+  return result;
 }

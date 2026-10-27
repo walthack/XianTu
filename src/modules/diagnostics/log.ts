@@ -3,11 +3,12 @@
  * 字段：ts、level、code、module、sessionId、turnId、requestId?、msg、detail（脱敏）、stack?。
  * 码不在 codes.ts 里 → 落到 LCQ-SYS-000「未登记」，原码记进 detail.originalCode。
  * 有意不记玩家原文：detail 里 textKeys 下的字符串只留长度（textChars=0），见 redact.ts；也不要与 playerTextDebug 混用。
+ * 唯一例外是 verbatim：叙事来源日志（LCQ-NAR-001）按总策划要求保留模型正文全文，只抹密钥形状、不截断。
  */
 import { ERROR_CODES, UNREGISTERED_CODE, isRegisteredCode, specOf } from './codes';
 import { diagnosticsConfig, levelAtLeast, type LogLevel } from './config';
 import { redact, redactStack, scrubString } from './redact';
-import { logStore, onStoreDegrade, type LogEntry } from './store';
+import { logStore, onStoreDegrade, onStoreRotate, type LogEntry } from './store';
 
 export interface LogContext { sessionId?: string; turnId?: string | null; requestId?: string }
 export interface LogEventInput {
@@ -24,6 +25,11 @@ export interface LogEventInput {
   ctx?: LogContext;
   /** false = 不再往控制台打（来源本身就是 console，已经打过了）。 */
   echo?: boolean;
+  /**
+   * 原样并进 detail 的长文本：只抹 redactPatterns 的密钥形状，不按 detailChars 截断、不按 textKeys 省略。
+   * 只给叙事来源日志存模型正文全文用（narrativeSource.ts）；玩家原文不得走这里。
+   */
+  verbatim?: Record<string, string>;
 }
 
 export const SESSION_ID = `s_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
@@ -94,6 +100,10 @@ export function logEvent(input: LogEventInput): LogEntry | null {
     const causeText = cause === undefined ? '' : scrubString(toText(cause), cfg);
     const msg = scrubString(input.msg ?? (causeText ? `${base.meaning}：${causeText}` : base.meaning), cfg, cfg.detailChars);
     let detail = input.detail === undefined ? undefined : redact(input.detail, cfg);
+    if (input.verbatim) {
+      const kept = Object.fromEntries(Object.entries(input.verbatim).map(([key, text]) => [key, scrubString(String(text), cfg, Number.MAX_SAFE_INTEGER)]));
+      detail = detail && typeof detail === 'object' && !Array.isArray(detail) ? { ...(detail as object), ...kept } : detail === undefined ? kept : { detail, ...kept };
+    }
     if (!registered) {
       const extra = { originalCode: scrubString(String(input.code), cfg, cfg.detailChars) };
       detail = detail && typeof detail === 'object' && !Array.isArray(detail) ? { ...extra, ...(detail as object) } : detail === undefined ? extra : { ...extra, detail };
@@ -150,3 +160,4 @@ export function logConsole(level: 'warn' | 'error', args: unknown[]): void {
 }
 
 onStoreDegrade((reason, to) => { logEvent({ code: 'LCQ-SYS-001', detail: { to }, cause: reason }); });
+onStoreRotate(info => { logEvent({ code: 'LCQ-SYS-002', detail: info }); });
