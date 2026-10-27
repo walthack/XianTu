@@ -833,7 +833,8 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
         }
       }
       forEachRecord(entity.narrativeVariants, `${entity.__path}.narrativeVariants`, (variant, variantPath) => {
-        validateConditions(variant.when, `${variantPath}.when`, add, { refs: ledgerRefs, variant: true, unlockSite: true });
+        // 变体求值（eventNarrativeView → evaluateLedgerCondition）拿不到存档，unlock.* 永远读成 undefined、永远不成立，故不许（2026-10-27）
+        validateConditions(variant.when, `${variantPath}.when`, add, { refs: ledgerRefs, variant: true });
         optionalBoolean(variant.replacesCanonRail, `${variantPath}.replacesCanonRail`, add);
         optionalString(variant.name, `${variantPath}.name`, add);
         optionalString(variant.description, `${variantPath}.description`, add);
@@ -2321,7 +2322,8 @@ interface LedgerConditionRef { parsed: ParsedLedgerPath; path: string }
 
 /**
  * 账本路径引用收集处；variant＝narrativeVariants.when（eventNarrativeView 求值），否则走 runtime.ts 的 evaluateScenarioCondition。
- * unlockSite＝允许 unlock.*：只有事件 conditions、章节 activation、narrativeVariants.when 三处（太泉解锁设计稿 2026-10-27 §4.1），completion 等其余处不许。
+ * unlockSite＝允许 unlock.*：只有事件 conditions、章节 activation 两处（太泉解锁设计稿 2026-10-27 §4.1），completion 等其余处不许；
+ * narrativeVariants.when 也不许——变体求值不传存档，unlock.* 恒为 undefined，写了永远不成立（2026-10-27 收紧）。
  */
 interface LedgerScope { refs: LedgerConditionRef[]; variant?: boolean; unlockSite?: boolean }
 
@@ -2344,7 +2346,7 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
     return;
   }
   if (parsed.kind === 'unlock' && !ledger.unlockSite) {
-    add(`${itemPath}.path`, 'ledger_unlock_site', 'unlock.* is only allowed in event conditions, chapter activation and narrativeVariants.when.');
+    add(`${itemPath}.path`, 'ledger_unlock_site', 'unlock.* is only allowed in event conditions and chapter activation (narrativeVariants.when cannot read the save, so it would never hold).');
     return;
   }
   if (!ledger.variant && RANK_OPERATORS_VARIANT_ONLY.has(condition.operator)) {

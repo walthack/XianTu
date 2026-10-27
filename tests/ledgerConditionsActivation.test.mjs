@@ -229,11 +229,10 @@ test('unlock.taiquan 门挂在章节 activation：门关着上一章完成后停
   assert.equal(rt(open).currentChapterId, 'chapter.gated');
 });
 
-test('validator：unlock.* 只许 eq/neq、只许已配置的线、只许 conditions/activation/变体，completion 等处拒收', async () => {
+test('validator：unlock.* 只许 eq/neq、只许已配置的线、只许 conditions/activation，completion 与变体 when 拒收', async () => {
   const codes = (raw) => validateScenarioMod(raw).issues.map(issue => [issue.code, issue.path]);
   const ok = await rawMod();
   ok.scenario.events[0].conditions = [UNLOCK];
-  ok.scenario.events[0].narrativeVariants = [{ when: [{ ...UNLOCK, operator: 'neq' }], name: '未解锁' }];
   ok.scenario.chapters[0].activation = [UNLOCK];
   assert.deepEqual(codes(ok), []);
 
@@ -241,12 +240,16 @@ test('validator：unlock.* 只许 eq/neq、只许已配置的线、只许 condit
   bad.scenario.events[0].conditions = [{ path: 'unlock.jin', operator: 'eq', value: true }, { ...UNLOCK, operator: 'gte' }, { ...UNLOCK, operator: 'exists' }, { ...UNLOCK, value: 'yes' }];
   bad.scenario.events[0].completion = [UNLOCK];
   bad.scenario.chapters[0].completion = [UNLOCK];
+  // 变体求值拿不到存档，unlock.* 永远读成 undefined，eq 与 neq 都写不成
+  bad.scenario.events[0].narrativeVariants = [{ when: [{ ...UNLOCK, operator: 'neq' }], name: '未解锁' }, { when: [UNLOCK], name: '已解锁' }];
   const at = 'scenario.events[0]';
   assert.deepEqual(codes(bad), [
     ['invalid_enum', `${at}.conditions[1].operator`],
     ['invalid_enum', `${at}.conditions[2].operator`],
     ['invalid_value', `${at}.conditions[3].value`],
     ['ledger_unlock_site', `${at}.completion[0].path`],
+    ['ledger_unlock_site', `${at}.narrativeVariants[0].when[0].path`],
+    ['ledger_unlock_site', `${at}.narrativeVariants[1].when[0].path`],
     ['ledger_unlock_site', 'scenario.chapters[0].completion[0].path'],
     ['missing_reference', `${at}.conditions[0].path`],
   ]);
