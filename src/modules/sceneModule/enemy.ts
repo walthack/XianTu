@@ -5,11 +5,11 @@ import {levelModifier} from './levels';
 import { assistModifier, partyRole } from './assist';
 import { evalExpr } from './conditions';
 import { isPresent, partyOf, playerParty, trackInfo, trackStep } from './queries';
-import { applyStatus, isDowned, statusMode, statusRollModifier, type StatusEvent } from './statuses';
+import { applyStatus, isDowned, statusMode, statusRollModifier, statusRollModifierParts, type StatusEvent } from './statuses';
 import { peekDefenseDie } from './dice';
 import { pickFace, resolveSettings, rollMode } from './tiers';
 import { applyWoundRule, resolveWoundProfile, woundTierOf, type WoundTier } from './woundRules';
-import type { Contract, EnemyActionDef, SceneContext, SceneState } from './types';
+import type { Contract, DefensePart, EnemyActionDef, SceneContext, SceneState } from './types';
 
 export interface EnemyRoll {
   actionId: string;
@@ -23,6 +23,8 @@ export interface EnemyRoll {
   dc: number;
   edgeBonus: number;
   defenseBonus: number;
+  /** defenseBonus 的来源明细（只列非 0 项，合计等于 defenseBonus），回执据此写明来源。 */
+  defenseParts?: DefensePart[];
   face: number;
   total: number;
   outcome: 'blocked' | 'hit';
@@ -112,6 +114,15 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
         + (state.levels ? levelModifier(state.levels[targetId],state.levels[attacker.id]) : 0)
         + crystalBonus + assistBonus + statusRollModifier(state, contract, ctx, targetId, 'defense')
         + tagsFor(targetId, target.side).reduce((sum, tag) => sum + (tag.effect.defenseBonus || 0), 0);
+      const levelGap = state.levels ? levelModifier(state.levels[targetId],state.levels[attacker.id]) : 0;
+      const ownBase = targetId === player ? ctx.playerDefense ?? 0 : target.defense?.bonus ?? 0;
+      const ownParts = targetId === player && ctx.playerDefenseParts && ctx.playerDefenseParts.reduce((sum, part) => sum + part.value, 0) === ownBase
+        ? ctx.playerDefenseParts : [{ key: targetId === player ? 'self' : 'contract', value: ownBase }];
+      const defenseParts: DefensePart[] = [
+        ...ownParts, { key: 'level', value: levelGap }, { key: 'crystal', value: crystalBonus }, { key: 'assist', value: assistBonus },
+        ...statusRollModifierParts(state, contract, ctx, targetId, 'defense'),
+        ...tagsFor(targetId, target.side).map(tag => ({ label: tag.label, value: tag.effect.defenseBonus || 0 })),
+      ].filter(part => part.value !== 0);
       const mode = statusMode(state, contract, ctx, targetId, 'defense');
       const rollKind = rollMode(mode.advantage, mode.disadvantage);
       const first = peekDefenseDie(state);
@@ -144,7 +155,7 @@ export function resolveEnemyPhase(contract: Contract, state: SceneState, ctx: Sc
       result.statusEvents.push(...events);
       result.rolls.push({
         actionId: action.id, label: action.label, party: attacker.id, partyRef: attacker.ref, target: targetId, targetRef: target.ref,
-        dc, edgeBonus, defenseBonus, face, total, outcome: hit ? 'hit' : 'blocked', margin: hit ? margin : total - dc, crushed,
+        dc, edgeBonus, defenseBonus, defenseParts, face, total, outcome: hit ? 'hit' : 'blocked', margin: hit ? margin : total - dc, crushed,
         ...(action.threatOnly ? { threatOnly: true } : {}),
         ...(woundTier ? { woundTier } : {}),
         statuses: events,

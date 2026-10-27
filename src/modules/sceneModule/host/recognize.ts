@@ -22,8 +22,18 @@ const compact = (value: string): string => String(value || '').normalize('NFKC')
 function available(item: { availability?: { fromBeat?: number; untilBeat?: number } }, state: SceneState): boolean {
   return (!item.availability?.fromBeat || state.beat >= item.availability.fromBeat) && (!item.availability?.untilBeat || state.beat <= item.availability.untilBeat);
 }
+/**
+ * 喊给对方听的话不是玩家自己的动作：引号里的、「喊/叫/说…：」后面的、「叫/让/劝/命令他们…」的，都去掉再认停手。
+ * 真机 da893388 #22：「我大喊：住手！都放下刀」被当成自己放下刀，判成停止抵抗，防御按 -100 结算。
+ */
+const SPOKEN_TO_OTHERS = /[“"「『][^”"」』]*[”"」』]?|(?:喊|叫|吼|喝|说|道|骂)[^，。；！？：:]{0,6}[：:].*|(?:叫|让|劝|命令|喝令|要求|喊)(?:他|她|它|他们|她们|它们|对方|众人|大家|诸位|你们|你)[^，。；！？]*/g;
+/** 喊的是「我投降」这类自述的仍保留，算玩家自己的话。 */
+function withoutSpeechToOthers(text: string): string {
+  return String(text||'').replace(SPOKEN_TO_OTHERS,said=>/^(?:[“"「『]|[^：:]*[：:][“"「『]?)我/.test(said)?said:'，');
+}
 function explicitYield(contract: Contract, goal: GoalDef, text: string): boolean {
  if(!['yield_guard','expose_self'].includes(goal.id))return true;
+ text=withoutSpeechToOthers(text);
  const activeText=text.replace(/不还手|不招架|不躲|不挡/g,'');
  if(/(?:举刀|拔剑|反击|招架|格挡|挡开|还手|防守)/.test(activeText))return false;
  const affirmative=text.split(/[，。；！？]/).filter(clause=>!/(?:绝不|不会|不再|拒绝|不要|不愿|不肯|不打算).{0,8}(?:投降|放下|停止|任|不挡|不还手)/.test(clause));
@@ -206,9 +216,11 @@ export function recognizeByRules(contract: Contract, state: SceneState, text: st
   const t = compact(text);
   if (!t || NON_COMBAT.test(text)) return null;
   if(PASSIVE.test(text)&&goalsOf(contract).some(g=>['yield_guard','expose_self'].includes(g.id)&&explicitYield(contract,g,text))){const goal=goalsOf(contract).find(g=>g.id==='yield_guard'||g.id==='expose_self');return goal?{goal:goal.id,claim:{magnitude:1,scope:'single',targets:[]},levers:[],cash:[]}:null;}
-  const hasAttack = ATTACK.test(text) && !(/防守|格挡|招架|挡开/.test(text)&&!/砍|劈|斩|捅|刺|射/.test(text));
-  const hasProtect = PROTECT.test(text);
-  const hasObserve = OBSERVE.test(text);
+  // 动手 / 防守 / 观察只认玩家自己的动作，喊给对方的「别打了」不算动手。
+  const own = withoutSpeechToOthers(text);
+  const hasAttack = ATTACK.test(own) && !(/防守|格挡|招架|挡开/.test(own)&&!/砍|劈|斩|捅|刺|射/.test(own));
+  const hasProtect = PROTECT.test(own);
+  const hasObserve = OBSERVE.test(own);
   const named = namedParties(contract, state, text, runtime);
   const goals = goalsOf(contract).filter(g => available(g,state) && explicitYield(contract,g,text));
   if (!goals.length) return null;

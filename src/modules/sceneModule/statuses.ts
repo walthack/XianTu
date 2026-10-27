@@ -64,6 +64,17 @@ export function statusRollModifier(state: SceneState, contract: Contract, ctx: P
   return sum;
 }
 
+/** 同上，按状态分项（回执写来源用），值为 0 的不列。 */
+export function statusRollModifierParts(state: SceneState, contract: Contract, ctx: Pick<SceneContext, 'catalog'> | undefined, party: string, scope: 'action' | 'defense'): Array<{ label: string; value: number }> {
+  const parts: Array<{ label: string; value: number }> = [];
+  for (const active of activeStatuses(state, party)) {
+    const def = resolveStatusDef(active.id, contract, ctx);
+    const value = def ? resolveEffects(def.effects, active.params).filter(effect => effect.kind === 'rollModifier' && effect.scope === scope).reduce((sum, effect) => sum + (effect as { value: number }).value, 0) : 0;
+    if (value) parts.push({ label: def?.label || active.id, value });
+  }
+  return parts;
+}
+
 export function statusMode(state: SceneState, contract: Contract, ctx: Pick<SceneContext, 'catalog'> | undefined, party: string, scope: 'action' | 'defense'): { advantage: boolean; disadvantage: boolean } {
   const effects = effectsOf(state, contract, ctx, party);
   return {

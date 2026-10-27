@@ -155,7 +155,7 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
     appendHistory(save,reply,text);a.notice='';writeExt(save,ext);await deps.persist(save);return true;
   }
   if(!recognized.plan||routed.decision==='clarify') {a.pending=null;a.notice='请用陈述句说明本拍目标和打法；可用要素见场面简报。';logInput(a,c,text,{used:!!modelClass,class:modelClass},'clarify');}
-  else {const previewContext=sceneContext(save,c,text);if(recognized.plan.goal==='yield_guard'||recognized.plan.goal==='expose_self')previewContext.playerDefense=-100;a.choice=null;a.pending={plan:recognized.plan,text,preview:previewAction(c,a.state,recognized.plan,previewContext),by:recognized.by,dropped:recognized.dropped,cursor:a.state.cursors.action};a.notice='请确认预览后掷骰。';logInput(a,c,text,{used:!!modelClass,class:modelClass},'redirectAction');}
+  else {const previewContext=sceneContext(save,c,text);if(recognized.plan.goal==='yield_guard'||recognized.plan.goal==='expose_self'){previewContext.playerDefense=-100;previewContext.playerDefenseParts=[{key:'yield',value:-100}];}a.choice=null;a.pending={plan:recognized.plan,text,preview:previewAction(c,a.state,recognized.plan,previewContext),by:recognized.by,dropped:recognized.dropped,cursor:a.state.cursors.action};a.notice='请确认预览后掷骰。';logInput(a,c,text,{used:!!modelClass,class:modelClass},'redirectAction');}
   writeExt(save,ext);await deps.persist(save);return true;
 }
 export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promise<void> {
@@ -164,7 +164,7 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   if(alignContract(a,c)){writeExt(save,ext);await deps.persist(save);return;}
   const p=a.pending!;if(p.cursor!==a.state.cursors.action)throw new Error('stale_scene_preview');
   const context=sceneContext(save,c,p.text);
-  if(p.plan.goal==='yield_guard'||p.plan.goal==='expose_self')context.playerDefense=-100;
+  if(p.plan.goal==='yield_guard'||p.plan.goal==='expose_self'){context.playerDefense=-100;context.playerDefenseParts=[{key:'yield',value:-100}];}
   const confirmed=confirmAction(c,a.state,p.plan,context);a.state=confirmed.state;a.pending=null;
   // 战中疗伤：用掉这一拍（敌方照常出手），回血与药品消耗由 host 落账。
   if(confirmed.result.goal===(GAME_NUMBERS.combat as any).heal?.goalId){const pc=c.parties.find(x=>x.player)?.id;if(pc)(confirmed.result as any).healReceipt=applyCombatHeal(save,a.state,pc,p.text);}

@@ -10,7 +10,8 @@ import { resolveStatusDef } from './statuses';
 import { resolveSettings } from './tiers';
 import { woundTierLabel } from './woundRules';
 import type { BeatResult } from './scene';
-import type { Contract, SceneContext, SceneState } from './types';
+import type { Contract, DefensePart, SceneContext, SceneState } from './types';
+import { CONTENT_PACKS } from '../contentPacks';
 
 export interface Brief {
   text: string;
@@ -93,6 +94,17 @@ export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pic
 
 // ---------- 代码渲染的结果卡与给描写模型的“已结算” ----------
 
+/** 回执文案取内容包 texts（scene.*），{槽位} 由代码填。 */
+const receiptText = (id: string, slots: Record<string, string> = {}): string =>
+  String(CONTENT_PACKS.texts[id] ?? '').replace(/\{(\w+)\}/g, (_, key: string) => slots[key] ?? '');
+const signed = (value: number): string => (value > 0 ? `+${value}` : String(value));
+/** 防御加值写明来源（真机 da893388 #24：加值一直 -4/-5 却看不出从哪来）。 */
+function defenseSources(parts: DefensePart[] | undefined): string {
+  if (!parts?.length) return '';
+  const list = parts.map(part => `${part.label ?? receiptText(`scene.defense.part.${part.key}`)}${signed(part.value)}`).join('、');
+  return receiptText('scene.receipt.defense.sources', { parts: list });
+}
+
 export function renderResultLines(contract: Contract, result: BeatResult): string[] {
   const lines: string[] = [];
   const nat = result.natTriggered === 'nat20' ? '（自然 20）' : result.natTriggered === 'nat1' ? '（自然 1，降一档）' : '';
@@ -102,7 +114,8 @@ export function renderResultLines(contract: Contract, result: BeatResult): strin
     else if (claim.realized > 0) lines.push(`${partyDisplay(contract, claim.party)}：推进 ${claim.realized} 格${claim.clamped ? `（主张 ${claim.claimed} 格，被合同夹紧）` : ''} → ${claim.label}`);
     else if (claim.claimed > 0 && (result.tier === 'success' || result.tier === 'great_success')) lines.push(`${partyDisplay(contract, claim.party)}：未能推进（已到你能推到的上限）`);
   }
-  if (result.edge) lines.push('局面往敌人那边偏：本拍敌方出手更难防');
+  // 真机 da893388 #23：「防守撑住：失败」后两次出手都挡住——没做成只让敌方出手更难防，挡没挡住各看防御骰。
+  if (result.edge) lines.push(receiptText('scene.receipt.edge', { goal: result.goalLabel, edge: signed(resolveSettings(contract.settings).tiers.failure.edge) }));
   if (result.fumble) {
     const label = result.fumble.statuses.map(e => e.label).join('、');
     lines.push(`大失败的后果：${partyDisplay(contract, result.fumble.target)}${label ? `「${label}」` : ''}${result.fumble.text ? `（${result.fumble.text}）` : ''}`);
@@ -113,8 +126,9 @@ export function renderResultLines(contract: Contract, result: BeatResult): strin
   for (const roll of result.enemy) {
     const names = roll.statuses.filter(e => e.op !== 'skipped').map(e => `${e.label}${e.op === 'upgrade' ? '（加重）' : ''}`).join('、');
     const tierMark = woundTierLabel(roll.woundTier);
-    if (roll.threatOnly) { lines.push(`${roll.label}：拦截 ${roll.face}＋${roll.defenseBonus}＝${roll.total} 对 ${roll.dc}，${roll.outcome === 'hit' ? `没拦住${roll.text ? `（${roll.text}）` : ''}` : '拦住了'}`); continue; }
-    lines.push(`${roll.label}→${partyDisplay(contract, roll.target)}：防御 ${roll.face}＋${roll.defenseBonus}＝${roll.total} 对 ${roll.dc}，${roll.outcome === 'hit' ? `没挡住${tierMark ? `（${tierMark}）` : ''}${names ? `，挂「${names}」` : ''}` : `挡住了${tierMark ? `（${tierMark}）` : ''}`}`);
+    const sources = defenseSources(roll.defenseParts), edgeMark = roll.edgeBonus ? receiptText('scene.receipt.defense.edge', { edge: signed(roll.edgeBonus) }) : '';
+    if (roll.threatOnly) { lines.push(`${roll.label}：拦截 ${roll.face}＋${roll.defenseBonus}${sources}＝${roll.total} 对 ${roll.dc}${edgeMark}，${roll.outcome === 'hit' ? `没拦住${roll.text ? `（${roll.text}）` : ''}` : '拦住了'}`); continue; }
+    lines.push(`${roll.label}→${partyDisplay(contract, roll.target)}：防御 ${roll.face}＋${roll.defenseBonus}${sources}＝${roll.total} 对 ${roll.dc}${edgeMark}，${roll.outcome === 'hit' ? `没挡住${tierMark ? `（${tierMark}）` : ''}${names ? `，挂「${names}」` : ''}` : `挡住了${tierMark ? `（${tierMark}）` : ''}`}`);
   }
   if (result.outcome) lines.push(`场面结果：${result.outcome.kind === 'win' ? '胜' : result.outcome.kind === 'lose' ? '败' : '超时收束'}`);
   return lines;

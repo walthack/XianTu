@@ -1,5 +1,5 @@
 {
-  "version": "429982977468a05b",
+  "version": "6b3442256b7e5557",
   "contracts": [
     {
       "meta": {
@@ -13736,6 +13736,16 @@
     "lineCompass.taiquan.step.tq_chiyang_fruit": "往古阵深处走走",
     "lineCompass.taiquan.step.tq_xuanyuan_mijing": "去古阵西部找那块红石",
     "lineCompass.taiquan.step.tq_exit_to_han": "找条路出古阵",
+    "scene.defense.part.self": "本人",
+    "scene.defense.part.contract": "自身防御",
+    "scene.defense.part.level": "境界差",
+    "scene.defense.part.crystal": "碎水晶",
+    "scene.defense.part.assist": "同伴助战",
+    "scene.defense.part.goal": "本拍行动的防御代价",
+    "scene.defense.part.yield": "不躲不挡（放弃防御）",
+    "scene.receipt.defense.sources": "（加值来源：{parts}）",
+    "scene.receipt.defense.edge": "（难度含敌方占先{edge}）",
+    "scene.receipt.edge": "局面往敌人那边偏：「{goal}」没做成，本拍敌方出手难度{edge}；挡没挡住，看下面每次出手各自的防御骰",
     "text.act.baihu.o1.priced": "挺直腰板，把话说成一笔买卖",
     "intent.baihu.o1.priced": "我挺直腰板对苏妲己说：这是一笔买卖，价钱先谈清楚。",
     "outcome.act.baihu.o1.priced": "你没有低头，把话说成了一笔买卖。苏妲己抬眼看了你一下，没有打断。",

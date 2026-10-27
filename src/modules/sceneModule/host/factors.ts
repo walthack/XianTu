@@ -11,7 +11,7 @@ import { runtimeOf } from './refs';
 import type { SaveData } from '@/types/game';
 import type { JudgementKind } from '@/utils/judgementEngine';
 import { buildEventActionJudgementProposal } from '@/utils/judgementPreflight';
-import { resolveStatusDef, partyRole, type Contract } from '../index';
+import { resolveStatusDef, partyRole, type Contract, type DefensePart } from '../index';
 import { affinityOf } from '../../scenarioMods/ledger/affinityIdentity';
 
 export interface Factor { label: string; value: number }
@@ -60,7 +60,7 @@ export function assistAffinities(save: SaveData, contract: Contract): Record<str
   return Object.fromEntries(contract.parties.filter(p => partyRole(p) === 'assist').map(p => [p.ref, affinityOf(save as any, p.ref)]));
 }
 
-export function sceneContext(save: SaveData, contract: Contract, actionText=''): { factors: number; factorProfiles: Record<string, number>; playerDefense: number; assistAffinity: Record<string, number>; breakdown: { action: Factor[]; defense: Factor[] } } {
+export function sceneContext(save: SaveData, contract: Contract, actionText=''): { factors: number; factorProfiles: Record<string, number>; playerDefense: number; playerDefenseParts: DefensePart[]; assistAffinity: Record<string, number>; breakdown: { action: Factor[]; defense: Factor[] } } {
   const phase={label:'小阶段',value:stageBonus(save.角色.属性.境界)};
   const action = baseFactors(save, contract, contract.settings?.judgement?.action || 'combat',actionText);
   action.push(phase);
@@ -69,7 +69,7 @@ export function sceneContext(save: SaveData, contract: Contract, actionText=''):
   for (const rule of Object.values(GAME_NUMBERS.goalModifiers)) {
     if (rule.factorProfile !== 'scene') factorProfiles[rule.factorProfile] = sum(baseFactors(save, contract, rule.factorProfile as JudgementKind, actionText));
   }
-  return { factors: sum(action), factorProfiles, playerDefense: sum(defense), assistAffinity: assistAffinities(save, contract), breakdown: { action, defense } };
+  return { factors: sum(action), factorProfiles, playerDefense: sum(defense), playerDefenseParts: defense, assistAffinity: assistAffinities(save, contract), breakdown: { action, defense } };
 }
 
 /**

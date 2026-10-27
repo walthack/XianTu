@@ -553,6 +553,9 @@ export interface ActionPlan {
   text?: string;
 }
 
+/** 防御加值的一项来源：key 是通用来源（回执文案在内容包 texts 的 scene.defense.part.<key>），label 是数据里的名字（状态、态势、判定因子）。 */
+export interface DefensePart { key?: string; label?: string; value: number }
+
 export interface SceneContext {
   /** 玩家本人的判定加值（宿主用游戏判定引擎的真实因子求和）。 */
   factors: number;
@@ -560,6 +563,8 @@ export interface SceneContext {
   factorProfiles?: Record<string, number>;
   /** 玩家本人的防御 / 豁免加值，缺省 0。 */
   playerDefense?: number;
+  /** playerDefense 的来源明细（宿主给；合计须等于 playerDefense，否则回执只写一行「本人」）。 */
+  playerDefenseParts?: DefensePart[];
   /** 宿主的统一状态目录；有则优先于合同里的临时定义。 */
   catalog?: (id: string) => StatusDef | undefined;
   /** 助战者好感（按角色库 id；宿主从存档读）。缺省时按 assist.simulationAffinity。 */

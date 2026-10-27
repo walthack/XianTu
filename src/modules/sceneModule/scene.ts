@@ -452,7 +452,7 @@ export function confirmAction(contract: Contract, stateIn: SceneState, planIn: A
   }
   if (state.status === 'engaged' && !ended()) {
     // 9) 敌方出手
-    const phase = resolveEnemyPhase(contract, state, { ...ctx, playerDefense: (ctx.playerDefense || 0) + (ev.goal.defensePenalty || 0) }, (phase,actionId) => {
+    const phase = resolveEnemyPhase(contract, state, { ...ctx, playerDefense: (ctx.playerDefense || 0) + (ev.goal.defensePenalty || 0), ...(ctx.playerDefenseParts ? { playerDefenseParts: [...ctx.playerDefenseParts, { key: 'goal', value: ev.goal.defensePenalty || 0 }] } : {}) }, (phase,actionId) => {
       const fired=fireConditionalEvents(contract,state,ctx,phase,actionId);
       result.events.push(...fired);
       return fired.length>0 && ended();
