@@ -15,8 +15,9 @@ const rail = await loadTs('../src/modules/scenarioMods/canonRail.ts');
 const { QUEST_LINES } = await loadTs('../src/modules/scenarioMods/questLines.ts');
 
 const withSwitch = (on, fn) => {
-  numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: on } } });
-  try { return fn(); } finally { numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: false } } }); }
+  // 当前线卡默认开（用户 2026-10-27 08:57 定），两块不并存：测「可投的门路」时先关当前线卡
+  numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: on, showLineCompass: false } } });
+  try { return fn(); } finally { numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: false, showLineCompass: true } } }); }
 };
 
 // 碧鲮藻丝支线（questLineView.secondary）＋商道二级线（锚事完成）同时可见的存档

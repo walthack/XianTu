@@ -1,4 +1,5 @@
-// 右栏「当前线」卡接线（用户 2026-10-27 09:26 定 Q1/Q2）：开关关时不算；开时取代主线指南针那一行，没有当前线退回原指南针句；
+// 右栏「当前线」卡接线（用户 2026-10-27 09:26 定 Q1/Q2）：开关关时不算；开时放在原主线指南针那一行的位置取代它（不在章节行上方），
+// 没有当前线只退回「去X · 见Y」、不带冒号后的固定目标；开关默认 true（用户 2026-10-27 08:57 定）；
 // 「别处还有事」默认收起；与「可投的门路」（ui.rightSidebar.showSecondaryLines）两块不并存；人物任务 characterBeats 不受影响。
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -18,12 +19,17 @@ test('右栏接线：开关关时不算；开时取代主线指南针那一行�
   const block = vue.slice(vue.indexOf('const lineCompass = computed('), vue.indexOf('const characterBeats = computed('));
   assert.match(block, /^const lineCompass = computed\(\(\) => \{\n  if \(!showLineCompass\(\)\) return null;/);
   assert.match(block, /compassPointer: \(\) => questCompassPhrases\(view, rt, at\)\.join\(' · '\)/);
-  assert.match(block, /const fallback = view \? String\(formatQuestCompass\(view, rt, at\) \|\| view\.objective \|\| view\.name/);
+  assert.match(block, /const fallback = questCompassPhrases\(view, rt, at\)\.join\(' · '\);/, '退回句只有「去X · 见Y」');
+  assert.doesNotMatch(block, /formatQuestCompass|objective/, '不带冒号后的固定目标');
   const main = vue.slice(vue.indexOf('const questMain = computed('));
   assert.match(main, /const compassReplaced = showLineCompass\(\) && events\.length > 0;/);
   assert.match(main, /events: compassReplaced \? \[\] : events,/);
-  assert.match(vue, /<div v-if="lineCompass" class="quest-main quest-line-card">/);
-  assert.match(vue, /<div v-else-if="lineCompass\.fallback" class="quest-event">/);
+  // 位置：主线块里章节行之后、原指南针那一行（questMain.events）之前；没有主线块时卡片照样显示
+  const tpl = vue.slice(vue.indexOf('<div v-if="questMain || lineCompass" class="quest-main">'), vue.indexOf('<div v-if="questGoals.length" class="quest-improv">'));
+  assert.ok(tpl.length > 0, '卡片与主线同一块');
+  const iChapter = tpl.indexOf('questMain?.chapter'), iCard = tpl.indexOf('<div v-if="lineCompass" class="quest-line-card">'), iEvents = tpl.indexOf('v-for="ev in questMain.events"');
+  assert.ok(iChapter >= 0 && iCard > iChapter && iEvents > iCard, '章节行 → 当前线卡 → 原指南针行');
+  assert.match(tpl, /<div v-else-if="lineCompass\.fallback" class="quest-event">/);
   assert.match(vue, /const lineOthersOpen = ref\(false\);/, '「别处还有事」默认收起');
   const beats = vue.slice(vue.indexOf('const characterBeats = computed('), vue.indexOf('const questMain = computed('));
   assert.doesNotMatch(beats, /showLineCompass|lineCompass/);
@@ -34,7 +40,7 @@ test('右栏接线：开关关时不算；开时取代主线指南针那一行�
     assert.equal(compass.showLineCompass(), true);
     assert.deepEqual(sidebar.sidebarAvailableLines(saveOf().世界.状态.剧本模组, saveOf(), undefined, undefined, () => ''), []);
   } finally {
-    numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: false, showLineCompass: false } } });
+    numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: false, showLineCompass: true } } });
   }
   assert.throws(() => numbers.applyGameNumbers({ ui: { rightSidebar: { showLineCompass: 1 } } }), err => err.code === 'LCQ-NUM-003');
 });

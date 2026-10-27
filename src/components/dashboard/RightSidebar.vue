@@ -201,41 +201,44 @@
           </button>
         </div>
         <div v-show="!questCollapsed" class="quest-body">
-          <!-- 当前线卡：ui.rightSidebar.showLineCompass 开时取代下面主线指南针那一行；没有当前线时退回原指南针句（用户 2026-10-27 09:26 Q1） -->
-          <div v-if="lineCompass" class="quest-main quest-line-card">
-            <template v-if="lineCompass.current">
-              <div class="quest-chapter"><span class="quest-tag quest-tag-main">{{ t('当前线') }}</span>{{ lineCompass.current.name }}</div>
-              <div v-if="lineCompass.current.step" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.current.step }}</div>
-            </template>
-            <div v-else-if="lineCompass.fallback" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.fallback }}</div>
-            <template v-if="lineCompass.others.length">
-              <div class="quest-more quest-line-others" @click="lineOthersOpen = !lineOthersOpen">{{ lineOthersOpen ? '▾' : '▸' }} {{ t('别处还有事') }}（{{ lineCompass.others.length }}）</div>
-              <template v-if="lineOthersOpen">
-                <div v-for="line in lineCompass.others" :key="line.lineId" class="quest-event" :class="{ 'quest-locked': line.locked }">
-                  <span class="quest-mark-side">·</span>{{ line.name }}
-                  <div v-for="(hint, i) in line.hintLines" :key="i" class="quest-more">{{ hint }}</div>
-                </div>
+          <div v-if="questMain || lineCompass" class="quest-main">
+            <div v-if="questMain?.chapter" class="quest-chapter"><span class="quest-tag quest-tag-main">主线</span>{{ questMain.chapter }}</div>
+            <!-- 当前线卡：ui.rightSidebar.showLineCompass 开时放在原主线指南针那一行的位置、取代它（用户 2026-10-27 09:26 Q1；位置按用户 2026-10-27 定，不放在章节行上方）；
+                 没有当前线时只退回原指南针的「去X · 见Y」，不带冒号后的固定目标 -->
+            <div v-if="lineCompass" class="quest-line-card">
+              <template v-if="lineCompass.current">
+                <div class="quest-chapter"><span class="quest-tag quest-tag-main">{{ t('当前线') }}</span>{{ lineCompass.current.name }}</div>
+                <div v-if="lineCompass.current.step" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.current.step }}</div>
               </template>
-            </template>
-          </div>
-          <div v-if="questMain" class="quest-main">
-            <div v-if="questMain.chapter" class="quest-chapter"><span class="quest-tag quest-tag-main">主线</span>{{ questMain.chapter }}</div>
-            <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
-            <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
-            <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
-            <div v-if="questMain.signal?.level === 'medium' || questMain.signal?.level === 'high'" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
-              世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续当前支流，也可以主动回到最近承重节点。
+              <div v-else-if="lineCompass.fallback" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.fallback }}</div>
+              <template v-if="lineCompass.others.length">
+                <div class="quest-more quest-line-others" @click="lineOthersOpen = !lineOthersOpen">{{ lineOthersOpen ? '▾' : '▸' }} {{ t('别处还有事') }}（{{ lineCompass.others.length }}）</div>
+                <template v-if="lineOthersOpen">
+                  <div v-for="line in lineCompass.others" :key="line.lineId" class="quest-event" :class="{ 'quest-locked': line.locked }">
+                    <span class="quest-mark-side">·</span>{{ line.name }}
+                    <div v-for="(hint, i) in line.hintLines" :key="i" class="quest-more">{{ hint }}</div>
+                  </div>
+                </template>
+              </template>
             </div>
-            <button v-if="questMain.canReturn && !epistemicRuntime?.gameOver && !detectBranchDecision(getCurrentStoryEventActions(gameStateStore.toSaveData()))" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
-              {{ returningToCanon ? t('回轨中…') : t('↩ 斩线回轨') }}
-            </button>
-            <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
-            <template v-if="questMain.next">
-              <div class="quest-next">{{ t('此地诸事已暂告一段落。若已准备好，可顺势启程。') }}</div>
-              <button class="quest-next-btn" :disabled="stageSwitching || uiStore.isAIProcessing" @click="goNextStage">
-                {{ stageSwitching ? t('启程中…') : t('▶ 启程') }}
+            <template v-if="questMain">
+              <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
+              <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
+              <div v-if="questMain.stalled" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
+              <div v-if="questMain.signal?.level === 'medium' || questMain.signal?.level === 'high'" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
+                世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续当前支流，也可以主动回到最近承重节点。
+              </div>
+              <button v-if="questMain.canReturn && !epistemicRuntime?.gameOver && !detectBranchDecision(getCurrentStoryEventActions(gameStateStore.toSaveData()))" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
+                {{ returningToCanon ? t('回轨中…') : t('↩ 斩线回轨') }}
               </button>
-              <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
+              <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
+              <template v-if="questMain.next">
+                <div class="quest-next">{{ t('此地诸事已暂告一段落。若已准备好，可顺势启程。') }}</div>
+                <button class="quest-next-btn" :disabled="stageSwitching || uiStore.isAIProcessing" @click="goNextStage">
+                  {{ stageSwitching ? t('启程中…') : t('▶ 启程') }}
+                </button>
+                <div v-if="stageSwitchError" class="quest-error">{{ stageSwitchError }}</div>
+              </template>
             </template>
           </div>
           <div v-if="questGoals.length" class="quest-improv">
@@ -482,8 +485,9 @@ const availableLines = computed(() => {
   const event = currentQuestEvent(rt);
   return sidebarAvailableLines(rt, gameStateStore.toSaveData(), questAtLocationId(rt), event, () => visibleQuestObjective(rt, event));
 });
-// 当前线卡（lineCompass.ts）：显示开关 ui.rightSidebar.showLineCompass（默认 false，上线前不开）；关时先返回，不取存档快照。
-// fallback＝原主线指南针那一句（与 questMain 同一算法），没有当前线时卡片显示它（总策划定，避免玩家什么提示都没有）。
+// 当前线卡（lineCompass.ts）：显示开关 ui.rightSidebar.showLineCompass（默认 true，用户 2026-10-27 08:57 定改完后不再隐藏）；关时先返回，不取存档快照。
+// fallback＝原主线指南针的「去X · 见Y」（questCompassPhrases），没有当前线时卡片显示它（总策划定，避免玩家什么提示都没有）；
+// 不带冒号后的固定目标（用户 2026-10-27 定）。
 const lineCompass = computed(() => {
   if (!showLineCompass()) return null;
   const rt: any = epistemicRuntime.value;
@@ -496,7 +500,7 @@ const lineCompass = computed(() => {
     atLocationId: at,
     compassPointer: () => questCompassPhrases(view, rt, at).join(' · '),
   });
-  const fallback = view ? String(formatQuestCompass(view, rt, at) || view.objective || view.name || '') : '';
+  const fallback = questCompassPhrases(view, rt, at).join(' · ');
   if (!result.current && !fallback && !result.others.length) return null;
   return { ...result, fallback };
 });

@@ -47,11 +47,11 @@ test('再切一关（05b → 07）仍为已知；右栏「可投的门路」开�
   assert.equal(r.modId, s07.manifest.id);
   assert.ok(!r.completedEventIds.includes(ANCHOR));
   assert.ok(ids(secondary.knownSecondaryLines(r)).includes('heimohai'));
-  numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: true } } });
+  numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: true, showLineCompass: false } } });
   try {
     assert.ok(ids(entries.sidebarAvailableLines(r, out.saveData, undefined, undefined, () => '')).includes('heimohai'));
   } finally {
-    numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: false } } });
+    numbers.applyGameNumbers({ ui: { rightSidebar: { showSecondaryLines: false, showLineCompass: true } } });
   }
 });
 

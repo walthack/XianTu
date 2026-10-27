@@ -36,10 +36,11 @@ const view = (save, focusEventId, extra = {}) => compass.lineCompassView(save, {
 const quiet = fn => { const saved = { warn: console.warn, error: console.error, info: console.info }; console.warn = console.error = console.info = () => {}; try { return fn(); } finally { Object.assign(console, saved); } };
 const pck005 = () => store.logStore.recent(500).filter(e => e.code === 'LCQ-PCK-005' && e.detail?.source === 'lineCompass');
 
-test('配置：ui.rightSidebar.showLineCompass 默认 false 已登记；story.lineCompass 地区映射与文案上限进配置', () => {
+test('配置：ui.rightSidebar.showLineCompass 默认 true 已登记（用户 2026-10-27 08:57 定改完后不再隐藏）；story.lineCompass 地区映射与文案上限进配置', () => {
   const merged = JSON.parse(fs.readFileSync('mod-kit/game-numbers.qingyu.json', 'utf8'));
-  assert.equal(merged.ui.rightSidebar.showLineCompass, false);
-  assert.equal(compass.showLineCompass(), false);
+  assert.equal(merged.ui.rightSidebar.showLineCompass, true);
+  assert.equal(merged.ui.rightSidebar.showSecondaryLines, false, '「可投的门路」仍隐藏');
+  assert.equal(compass.showLineCompass(), true);
   assert.ok(registry.FIELD_SPECS.some(s => s.path === 'ui.rightSidebar.showLineCompass' && s.kind === 'bool' && s.required && s.section === 'runtime'));
   for (const path of ['story.lineCompass.regionLines', 'story.lineCompass.hint.maxChars', 'story.lineCompass.hint.bannedWords']) assert.ok(registry.FIELD_SPECS.some(s => s.path === path), path);
   const regionLines = numbers.GAME_NUMBERS.story.lineCompass.regionLines;
