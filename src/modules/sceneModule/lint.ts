@@ -77,6 +77,9 @@ export function lintContract(contract: Contract, ctx?: Pick<SceneContext, 'catal
   // ---- meta ----
   if (!contract.meta?.id) err('meta.id 缺失');
   if (!contract.meta?.scene?.kind) err('meta.scene.kind 缺失');
+  if (contract.meta?.scene?.kind !== 'random') for (const party of contract.parties || []) {
+    if (party.fixedLevel !== undefined || party.levelOffset !== undefined) err(`parties.${party.id}：fixedLevel / levelOffset 只给随机遇敌合同（meta.scene.kind="random"），剧情合同按等级表与敌人预设定级`);
+  }
   if (contract.meta?.hook?.required && !(Number(contract.meta.hook.ambushAfterStall) >= 1)) {
     err('meta.hook.required = true 的合同必须写 meta.hook.ambushAfterStall（停留几回合后对方先动手）；通用模块不自带这个数');
   }

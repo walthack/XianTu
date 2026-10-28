@@ -16,6 +16,9 @@ import { advanceClock } from '@/modules/scenarioMods/travel/travelLedger';
 import { applyPlayerChoice, beginScene, buildSceneBrief, closeScene, confirmAction, matchPlayerChoice, previewAction, renderResultLines, classifyByRules, resolveInputPolicy, route, appendInput, trackInfo, type Contract } from '../index';
 import { settleDownedAfterHostSync } from '../scene';
 import { sceneContractById, sceneContractForEvent, sceneContractSupportsAction } from '../contracts/registry';
+import { instantiateRandomContract, isRandomContract, randomContractId } from '../contracts/randomContract';
+import { pendingRandomBattle, settleRandomEncounterClose } from '@/modules/scenarioMods/randomEncounter';
+import { grantLootSpoils } from '@/modules/scenarioMods/locationLoot';
 import { activeScene, cloneSave, newActive, readExt, sceneModuleEnabled, writeExt, type ActiveScene } from './ext';
 import { sceneContext, snapshotLevels } from './factors';
 import { partyName, renderRefs, runtimeOf } from './refs';
@@ -60,7 +63,19 @@ export function sceneCandidate(save: SaveData, selected?: { eventId?: string; ac
     return c && sceneContractSupportsAction(c,action.actionId) && (!selected?.eventId || selected.eventId === action.eventId);
   });
   const contract = selection && sceneContractForEvent(selection.eventId,runtimeOf(save)?.flags);
-  return contract && selection ? { contract, selection } : undefined;
+  if (contract && selection) return { contract, selection };
+  return randomSceneCandidate(save, selected);
+}
+/** 剧情必经战优先；没有剧情候选时，接第1张单的待开战随机遇敌（不挂剧情事件，eventId 用 encounter:<遇敌 id>）。 */
+const RANDOM_EVENT_PREFIX = 'encounter:';
+function randomSceneCandidate(save: SaveData, selected?: { eventId?: string; actionId?: string }): { contract: Contract; selection: ScenarioEventActionSelection } | undefined {
+  const p = pendingRandomBattle(save);
+  const eventId = p && RANDOM_EVENT_PREFIX + p.id;
+  if (!p || !eventId || (selected?.eventId && selected.eventId !== eventId)) return undefined;
+  const contract = instantiateRandomContract(randomContractId(p));
+  // 实例化失败（LCQ-SAV-034 已记）：作废这次遇敌，免得卡在 battle 阶段。
+  if (!contract) { settleRandomEncounterClose(save, { id: p.id, outcome: 'void' }); return undefined; }
+  return { contract, selection: { source: 'event_engine', eventId, actionId: 'random_encounter', label: '迎敌', actionText: '迎敌', playerLine: '', timeCost: 1, contractHash: contract.meta.id, expectedOutcome: 'success', outcomeText: '', interaction: { verb: 'attack' } } };
 }
 export function hostNeeded(save: SaveData, selected?: { eventId?: string; actionId?: string }): boolean {
   return Boolean(activeScene(save) || sceneCandidate(save, selected));
@@ -191,6 +206,10 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   a.last.text=narration.text;history(save)[a.narrativeIndex].content=[narration.text,...lines].join('\n\n');
   if(a.state.status==='decided') await closeHost(save,ext,c,deps); else {a.notice='';writeExt(save,ext);await deps.persist(save);}
 }
+/** 收场正文末尾的敌方终局行（赢了且轨道 preserveOnWin 的不列）。 */
+function terminalLines(save:SaveData,c:Contract,writeBack:ReturnType<typeof closeScene>['writeBack']):string[] {
+  return writeBack.finalStates.filter(row=>c.parties.find(p=>p.id===row.party)?.side==='opposed'&&!(writeBack.outcome.kind==='win'&&trackInfo(c,row.party,row.track)?.ending?.preserveOnWin===true)).map(row=>`${partyName(c,runtimeOf(save),row.party)}：${row.label}`);
+}
 async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract,deps:HostDeps):Promise<void> {
   const a=ext.active!;const closed=closeScene(c,a.state,sceneContext(save,c));
   if(closed.writeBack.violations.redLines.length || closed.writeBack.violations.afterState.length)throw new Error('场面红线校验未过，未推进剧情');
@@ -201,6 +220,12 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     const id=closed.writeBack.outcome.endingId;
     runtimeOf(save).gameOver={endingId:id,title:id==='lcq.ending.fail.combat' ? combatLossTitle(c) : BATTLE_LOSS_ENDINGS.find(ending=>ending.endingId===id)?.title || '本局结束',facts:[a.closing.text],sourceEventId:a.eventId,atTurn:runtimeOf(save).worldTurn,presentation:endingPresentation({endingId:id,sourceEventId:a.eventId})};
     const fixed=fixedEndingNarrative(runtimeOf(save).gameOver);appendHistory(save,(fixed || [endingBridge('',id),a.closing.text].join('\n\n')),'',endingPresentation(runtimeOf(save).gameOver).image);
+  } else if (isRandomContract(c)) {
+    // 随机战（总策划定）：不推进剧情事件、不写 flags／身份账；输了就地重伤继续（气血与伤势由 applyWriteBack 处理）；赢了给当地留一次战后搜尸。
+    const settled=settleRandomEncounterClose(save,{id:a.eventId.slice(RANDOM_EVENT_PREFIX.length),outcome:closed.writeBack.outcome.kind==='win'?'win':'lose'});
+    if(closed.writeBack.outcome.kind==='win'&&settled)grantLootSpoils(save,{locationId:settled.locKey,sourceId:a.eventId});
+    delete ext.stall[c.meta.id];
+    appendHistory(save,[a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)].join('\n'));
   } else {
     // The engine checks the persisted CLOSED state, event/action and contract version before honoring this completion.
     const receiptScene=c.meta.hook.completionSceneByOutcome?.[closed.writeBack.outcome.kind as 'win'|'lose'];
@@ -208,8 +233,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     if(!selection)throw new Error('场面收束对应的剧情动作已过期');
     const settled=recordStoryEventStructuredAction(save,selection);if(!settled.attempted || (receiptScene && !settled.completed))throw new Error('场面剧情收束未成立：'+settled.reason);
     if(receiptScene)applyStepSceneLedger(save,runtimeOf(save),a.eventId,a.actionId,receiptScene as Parameters<typeof applyStepSceneLedger>[4]);
-    const terminal=closed.writeBack.finalStates.filter(row=>c.parties.find(p=>p.id===row.party)?.side==='opposed'&&!(closed.writeBack.outcome.kind==='win'&&trackInfo(c,row.party,row.track)?.ending?.preserveOnWin===true)).map(row=>`${partyName(c,runtimeOf(save),row.party)}：${row.label}`);
-    appendHistory(save,[a.closing.text,...written.notes,...terminal].join('\n'));
+    appendHistory(save,[a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)].join('\n'));
   }
   ext.history.push({contractId:a.contractId,eventId:a.eventId,outcome:a.closing.outcome,endingId:closed.writeBack.outcome.endingId,beats:closed.writeBack.beats,memoryNote:renderRefs(closed.writeBack.memoryNote,runtimeOf(save)),state:cloneSave(a.state),inputLog:cloneSave(a.inputLog)});
   ext.active=null;writeExt(save,ext);const advanced=advanceScenarioRuntime(save).saveData;await deps.persist(advanced);

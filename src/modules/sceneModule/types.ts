@@ -171,6 +171,10 @@ export interface PartyDef {
   /** 开场是否在场，缺省在场。 */
   absent?: boolean;
   tracks?: PartyTrack[];
+  /** 只给随机遇敌合同（meta.scene.kind='random'）：池条目给定的等级，snapshotLevels 直接用，不再查等级表/预设。 */
+  fixedLevel?: number;
+  /** 只给随机遇敌合同：按敌人预设定级时改用的 protagonistOffset（池条目 levelOffset）。 */
+  levelOffset?: number;
 }
 
 export interface VerbDef {

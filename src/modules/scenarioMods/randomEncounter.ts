@@ -2,7 +2,8 @@
  * 随机遇敌引擎（用户 2026-10-28 13:48 第1、2、4、6条；10-19 三步 §3.0、§3.4；总策划技术决定）。
  *
  * 三步：① 危区叙事 → ② 代码按存档种子掷骰（检不检/中不中/遇谁/几个/几级）→ ③ 遇敌叙事 → 待开战。
- * 本模块只做到「遇敌叙事已演出 → 待开战」（pending.stage='battle'）；开战、输赢、收场、战后搜尸由下一张单接手。
+ * 本模块只做到「遇敌叙事已演出 → 待开战」（pending.stage='battle'）；开战、输赢、战后搜尸在 sceneModule 宿主（encounter-2），
+ * 收场时调 settleRandomEncounterClose 清掉待开战、回执补 outcome。
  * 模型只描写：本模块给出事实包（encounterPromptFacts），不透出几率、骰面、等级或档位。
  *
  * 硬约束：状态只写 世界.状态.剧本模组.encounter；不写 flags / completedEventIds / activeEventIds / sceneLedger /
@@ -52,10 +53,13 @@ export type EncounterPending =
   | { stage: 'foreshadow'; locKey: string; tier: string; setTurn: number }
   | { stage: 'reveal' | 'battle'; id: string; locKey: string; tier: string; enemyId: string; variant: EncounterVariant;
     count: number; level: number | null; levelOffset?: number; setTurn: number };
+/** 待开战（③ 已演出）。注：stage 是 'reveal'|'battle' 联合，不能用 Extract<…, {stage:'battle'}>（会得 never）。 */
+export type BattlePending = Extract<EncounterPending, { id: string }> & { stage: 'battle' };
 export interface EncounterReceipt {
   id: string; turn: number; locKey: string; tier: string; preset: string; chance: number; roll: number; hit: boolean;
   reason?: 'empty_pool'; enemyId?: string; variant?: EncounterVariant; count?: number; level?: number | null;
-  outcome?: 'preempted' | 'left' | 'win' | 'lose';
+  /** void＝随机遇敌合同实例化失败，本次不开战（LCQ-SAV-034）。 */
+  outcome?: 'preempted' | 'left' | 'win' | 'lose' | 'void';
 }
 export interface EncounterState {
   version: 1; seed: number; lastTickTurn: number;
@@ -332,9 +336,9 @@ export function encounterPromptFacts(save: SaveData | null | undefined, config?:
 }
 
 /** 待开战的随机遇敌（③ 已演出）；供下一张单开战。 */
-export function pendingRandomBattle(save: SaveData | null | undefined): Extract<EncounterPending, { stage: 'battle' }> | null {
+export function pendingRandomBattle(save: SaveData | null | undefined): BattlePending | null {
   const pending: EncounterPending | null | undefined = runtimeOf(save)?.encounter?.pending;
-  return pending?.stage === 'battle' ? pending as Extract<EncounterPending, { stage: 'battle' }> : null;
+  return pending?.stage === 'battle' ? pending as BattlePending : null;
 }
 
 /**
@@ -345,4 +349,19 @@ export function encounterNarratedBy(save: SaveData | null | undefined, path: str
   if (path === 'local' || path === 'card') return false;
   if (path === 'modular') return isStepSceneStage(String(runtimeOf(save)?.modId || ''));
   return true;
+}
+
+/**
+ * 随机战收场（或实例化失败作废）：清掉对应的待开战、回执补 outcome、该地点冷却从当前回合重算。只写 runtime.encounter。
+ * 返回被清掉的待开战（取 locKey 给战后搜尸）；对不上 id 时返回 null。
+ */
+export function settleRandomEncounterClose(save: SaveData, { id, outcome }: { id: string; outcome: 'win' | 'lose' | 'void' }): BattlePending | null {
+  const runtime = runtimeOf(save), state: EncounterState | undefined = runtime?.encounter;
+  if (!state) return null;
+  const pending = state.pending?.stage === 'battle' && state.pending.id === id ? state.pending as BattlePending : null;
+  if (pending) state.pending = null;
+  markReceipt(state, id, outcome);
+  const locKey = pending?.locKey ?? state.receipts.find(r => r.id === id)?.locKey;
+  if (locKey) state.lastCheckTurn[locKey] = Number(runtime.worldTurn) || 0;
+  return pending;
 }

@@ -8,6 +8,7 @@ import { runtimeEntityId, runtimeEntityName } from '@/modules/scenarioMods/ledge
 import { afterWinClears, persistentStatuses, resolveStatusDef, toPlayerStatusEffect, woundRulesConfig, type Contract, type SceneState, type WriteBack } from '../index';
 import { sceneTime, recordSceneInjuries } from './injuries';
 import { partyName, renderRefs, runtimeOf } from './refs';
+import { isRandomContract } from '../contracts/randomContract';
 
 function ledgerOf(runtime: any) {
   return (runtime.sceneLedger ||= { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [] });
@@ -23,6 +24,18 @@ export function recoverDownedAfterScene(contract: Contract, state: SceneState, w
     item.status=def.id;item.label=def.label;item.minutes=def.afterScene?.minutes || GAME_NUMBERS.status.afterSceneDefaultMinutes;item.source=def.source;
     state.statuses[item.party]=(state.statuses[item.party] || []).filter(s=>s.id!=='incapacitated' && s.id!==def.id);
     state.statuses[item.party].push({id:def.id,appliedBeat:state.beat,expiresBeat:null,cause:'combat',sourceId:'scene:recovery'});
+  }
+  // 随机战输了就地重伤（用户 2026-10-28 13:48 第3条）：气血打到倒下（hpDowned，没有倒地状态行）也照上面换成 recoveryStatus；
+  // 已有同 id 的（含前一场带进来的）先移除再加，不叠加。剧情合同不走这段，保持现状。
+  if(!isRandomContract(contract) || writeBack.outcome.kind!=='lose')return;
+  for(const party of contract.parties){
+    if(!state.hpDowned?.[party.id])continue;
+    const def=resolveStatusDef(party.recoveryStatus || 'wound.external.heavy',contract)!;
+    if(writeBack.persistent.some(row=>row.party===party.id && row.status===def.id && !row.originScene))continue;
+    writeBack.persistent=writeBack.persistent.filter(row=>!(row.party===party.id && row.status===def.id));
+    writeBack.persistent.push({party:party.id,ref:party.ref,status:def.id,label:def.label,minutes:def.afterScene?.minutes || GAME_NUMBERS.status.afterSceneDefaultMinutes,cause:'combat',source:def.source});
+    state.statuses[party.id]=(state.statuses[party.id] || []).filter(s=>s.id!==def.id);
+    state.statuses[party.id].push({id:def.id,appliedBeat:state.beat,expiresBeat:null,cause:'combat',sourceId:'scene:recovery'});
   }
 }
 
@@ -52,6 +65,8 @@ export function applySceneHpLoss(save: SaveData, contract: Contract, state: Scen
 }
 
 export function applyWriteBack(save: SaveData, contract: Contract, state: SceneState, writeBack: WriteBack): { notes: string[] } {
+  // 随机战（总策划定）：不写剧情状态——不进 worldFacts、不转奖励、不写 flags；气血、伤势、倒下恢复照常。
+  const random = isRandomContract(contract);
   if(contract.rewardPolicy && writeBack.rewards.some(reward=>typeof reward.itemId==='string' && !contract.rewardPolicy!.itemIds.includes(reward.itemId)))throw new Error('场面奖励未获合同授权，未写回');
   recoverDownedAfterScene(contract,state,writeBack);
   const cleared=clearLightWoundsAfterWin(contract,state,writeBack);
@@ -67,9 +82,10 @@ export function applyWriteBack(save: SaveData, contract: Contract, state: SceneS
   const sceneSource = contract.meta.id;
   const effects=(save as any).角色?.效果;
   if (Array.isArray(effects)) (save as any).角色.效果=effects.filter((e:any)=>!(e.来源===sceneSource && new RegExp(`^(?:${statusNamePattern('incapacitated')})$`).test(e.状态名称 || '')));
-  if (writeBack.closingText) ledger.worldFacts = [...new Set([...ledger.worldFacts, renderRefs(writeBack.closingText,runtime)])];
+  if (!random && writeBack.closingText) ledger.worldFacts = [...new Set([...ledger.worldFacts, renderRefs(writeBack.closingText,runtime)])];
 
   persistSceneInjuries(save,contract,writeBack.persistent,state);
+  if (random) return { notes };
 
   // 承重代价（文字）
   for (const cost of writeBack.costs) {

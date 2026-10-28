@@ -1,0 +1,117 @@
+{
+  "meta": {
+    "id": "combat.random.skirmish",
+    "version": 1,
+    "scene": {
+      "kind": "random"
+    },
+    "hook": {
+      "eventId": "",
+      "actionId": "random_encounter",
+      "required": true,
+      "ambushAfterStall": 1
+    }
+  },
+  "objective": {
+    "text": "击退来袭者",
+    "win": {
+      "party": "foe",
+      "track": "vit",
+      "reach": "final"
+    }
+  },
+  "parties": [
+    {
+      "id": "pc",
+      "side": "player_side",
+      "ref": "liuchao.character.cheng_zongyang",
+      "player": true
+    },
+    {
+      "id": "foe",
+      "side": "opposed",
+      "ref": "",
+      "tracks": [
+        {
+          "id": "vit",
+          "kind": "harm",
+          "scale": [
+            "仍在抵抗",
+            "抵抗减弱",
+            "倒下"
+          ],
+          "initial": 0,
+          "ending": {
+            "finalState": "倒下",
+            "ceiling": 2,
+            "preserveOnWin": false
+          }
+        }
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "id": "attack",
+      "label": "攻击对手",
+      "aliases": [
+        "攻击对手",
+        "出手攻击",
+        "挥刀攻击",
+        "一刀砍",
+        "砍倒",
+        "劈砍",
+        "进攻"
+      ],
+      "type": "push",
+      "track": "vit",
+      "baseDifficulty": 7
+    },
+    {
+      "id": "defend",
+      "label": "防守撑住",
+      "type": "support",
+      "baseDifficulty": 12
+    }
+  ],
+  "enemyActions": [
+    {
+      "id": "foe_attack",
+      "party": "foe",
+      "label": "攻击",
+      "target": "player",
+      "attack": {
+        "dc": 8
+      },
+      "onHit": {
+        "statuses": []
+      },
+      "woundRule": "default"
+    }
+  ],
+  "defeat": {
+    "conditions": [
+      {
+        "kind": "partyDowned",
+        "party": "pc"
+      }
+    ],
+    "outcome": {
+      "type": "continue"
+    }
+  },
+  "closing": {
+    "win": {
+      "text": "来袭者尽数倒下，四下重归寂静。",
+      "rewards": []
+    },
+    "lose": {
+      "text": "你倒在地上，来袭者没有再纠缠，散入四野。",
+      "rewards": []
+    }
+  },
+  "settings": {},
+  "rewardPolicy": {
+    "itemIds": []
+  }
+}

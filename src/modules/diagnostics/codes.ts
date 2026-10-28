@@ -101,6 +101,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-031': spec('warn', 'characterStore', '「上次对话」回合备份不属于当前存档：拒绝回滚，或读档/新开局时清理旧备份失败'),
   'LCQ-SAV-032': spec('warn', 'randomEncounter', '随机遇敌回合检查失败，本回合不检，不影响剧情'),
   'LCQ-SAV-033': spec('warn', 'randomEncounter', '随机遇敌敌池或地点条目无效，已跳过该条'),
+  'LCQ-SAV-034': spec('warn', 'randomContract', '随机遇敌合同实例化失败，本次不开战，遇敌已作废'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

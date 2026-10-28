@@ -13,6 +13,8 @@ import type { JudgementKind } from '@/utils/judgementEngine';
 import { buildEventActionJudgementProposal } from '@/utils/judgementPreflight';
 import { resolveStatusDef, partyRole, type Contract, type DefensePart } from '../index';
 import { affinityOf } from '../../scenarioMods/ledger/affinityIdentity';
+import { encounterConfig, encounterPresetOf } from '../../scenarioMods/randomEncounter';
+import { isRandomContract } from '../contracts/randomContract';
 
 export interface Factor { label: string; value: number }
 
@@ -78,18 +80,30 @@ export function sceneContext(save: SaveData, contract: Contract, actionText=''):
  * 缓存键带上解析器版本与本场敌人预设：旧存档里进行中的场面（按旧总表定的级数）会重定一次级，热调预设后新开场面也会重定。
  */
 export const LEVEL_RESOLVER_VERSION = 2;
+/** 随机遇敌按预设定级时叠加的难度 levelShift（encounter.difficulty[档位]）；配置坏时按 0（回合 tick 另记 LCQ-SAV-032）。 */
+function randomLevelShift(save:SaveData):number{try{return Number(encounterConfig().difficulty[encounterPresetOf(save)]?.levelShift)||0;}catch{return 0;/* lcq-allow: 配置坏时回合 tick 记 LCQ-SAV-032，这里只按不加级 */}}
 export function snapshotLevels(save:SaveData,c:Contract,state:import('../types').SceneState):void {
  const r=runtimeOf(save),chapter=contractChapter(c,state.beat)||namingChapter(r||{});
  const variants=Object.fromEntries(c.parties.map(p=>{const id=p.enemyId||p.ref;return [id,contractVariant(c,id,state)];}));
  const presets=enemyPresetConfig(),presetKey=c.parties.map(p=>p.enemyId||p.ref).filter(id=>isEnemyKind(id)).map(id=>[id,presets.types[enemyKindOf(id)]??presets.default]);
- const key=JSON.stringify([LEVEL_RESOLVER_VERSION,chapter,variants,presetKey,protagonistLevel(chapter)]);
+ // 随机遇敌：池条目给定的等级（fixedLevel，已含难度 levelShift）直接用；按预设定级的另叠 levelShift，levelOffset 覆盖预设的 protagonistOffset。
+ const random=isRandomContract(c),shift=random?randomLevelShift(save):0;
+ const randomKey=random?[shift,c.parties.map(p=>[p.id,p.fixedLevel??null,p.levelOffset??null])]:null;
+ const key=JSON.stringify([LEVEL_RESOLVER_VERSION,chapter,variants,presetKey,protagonistLevel(chapter),...(randomKey?[randomKey]:[])]);
  if(state.levelProjectionKey===key&&state.levelFacts)return;
  state.levelProjectionKey=key;
  state.levelChapter=chapter;
  if(c.parties.some(p=>p.player&&levelFact(p.ref,chapter)))initializeLevel(save,chapter);
  const playerLevel=levelOf(save.角色.属性.境界)??0;state.levels={};state.stages={};state.levelFacts={};
  for(const p of c.parties){
-  const id=p.enemyId||p.ref, got=currentActorLevel(id,{chapter,variant:variants[id],save,runtime:r,player:!!p.player,ref:p.ref});
+  const id=p.enemyId||p.ref;
+  if(random&&p.fixedLevel!==undefined){state.levels[p.id]=p.fixedLevel;state.levelFacts[p.id]={entityId:id,sourceRow:0,level:p.fixedLevel,effectiveLevel:p.fixedLevel,confidence:'encounter',available:true,source:'encounter'};state.stages[p.id]=0;continue;}
+  const got=currentActorLevel(id,{chapter,variant:variants[id],save,runtime:r,player:!!p.player,ref:p.ref});
+  if(random&&!p.player&&got.preset&&got.level!==undefined){
+   // levelGap:false 的敌人 got.level 为空，沿用现状不加级。
+   const base=p.levelOffset!==undefined&&got.preset.baseLevel!==undefined?Math.max(GAME_NUMBERS.levels.min,Math.min(GAME_NUMBERS.levels.max,got.preset.baseLevel+p.levelOffset)):got.level;
+   got.level=Math.max(0,base+shift);
+  }
   let value=got.level;
   if(value===undefined&&got.source==='none')value=playerLevel; // 无数据：按同级
   if(c.levelContext?.nonLevelPartyIds?.includes(p.id)||partyRole(p)==='assist')value=undefined; // 助战者不算级差

@@ -7,6 +7,7 @@ import { BUILTIN_STATUSES, STATUS_CATALOG } from '../statuses';
 import { GAME_NUMBERS, applyGameNumbers } from '../numbers';
 import { lintContract } from '../lint';
 import type { Contract, StatusDef } from '../types';
+import { RANDOM_CONTRACT_PREFIX, instantiateRandomContract } from './randomContract';
 
 function withSharedStatuses(raw: unknown): Contract {
   const contract = structuredClone(raw) as Contract;
@@ -35,7 +36,9 @@ export function sceneContractForEvent(eventId: string | undefined, flags: Record
 }
 
 export function sceneContractById(id: string | undefined): Contract | undefined {
-  return id ? SCENE_CONTRACTS.find(contract => contract.meta.id === id) : undefined;
+  if (!id) return undefined;
+  // 随机遇敌合同不在注册表里，按 id 实例化（randomContract.ts）。
+  return SCENE_CONTRACTS.find(contract => contract.meta.id === id) || (id.startsWith(RANDOM_CONTRACT_PREFIX) ? instantiateRandomContract(id) : undefined);
 }
 
 /**
