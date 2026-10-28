@@ -5,7 +5,7 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const fixtureUrl = new URL('./fixtures/scenario-mod/minimal.json', import.meta.url);
-const stage02Url = new URL('../mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_02.json', import.meta.url);
+const stage02Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_02.json', import.meta.url);
 
 function inventorySave() {
   return {

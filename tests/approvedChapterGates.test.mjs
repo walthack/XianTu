@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { loadTs } from './loadTs.mjs';
+import { HAS_CHARACTER_CARDS_V3, skipUnless } from './sourceTree.mjs';
 const { disclosedNovelChapter, approvedChapterGates, isDisclosureFactAllowed, sanitizeXieyiDisclosure, stripNarrativeUnintroducedCharacters } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
 const { validateNanhuangCanonNarrative } = await loadTs('../src/modules/scenarioMods/narrativeBoundaries.ts');
 const at = chapter => ({ modId: 'lcq.stage_04b_lingfei_baiyi_crisis', events: [{id:'current',axisAnchor:`第${chapter}章`}], activeEventIds:['current'], completedEventIds:[] });
@@ -38,7 +39,12 @@ test('poison sect name opens121 but cannot be confused with Xiaozi father gate10
  assert.equal(isDisclosureFactAllowed('信里提到毒宗。',at(121)),true);
 });
 test('source card, generated projection and builtin all use chapter49 regicide gate',async()=>{
- for(const path of ['mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json','src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json']){
+ for(const path of ['src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json']){
+  const s=await readFile(new URL('../'+path,import.meta.url),'utf8');assert.doesNotMatch(s,/刺杀鬼巫王的意图要到第59章/);assert.match(s,/刺杀鬼巫王的意图在第49章/);
+ }
+});
+test('source card, generated projection and builtin all use chapter49 regicide gate（源卡 cards-v3）',{skip:skipUnless(HAS_CHARACTER_CARDS_V3,'character-canon/character-cards-v3.json')},async()=>{
+ for(const path of ['mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json']){
   const s=await readFile(new URL('../'+path,import.meta.url),'utf8');assert.doesNotMatch(s,/刺杀鬼巫王的意图要到第59章/);assert.match(s,/刺杀鬼巫王的意图在第49章/);
  }
 });

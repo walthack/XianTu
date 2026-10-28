@@ -13,8 +13,9 @@ import {
   loadTrackedCanonAuthorityOverlays,
 } from '../scripts/canon-authority-overlay.mjs';
 import { loadTs } from './loadTs.mjs';
+import { GENERATED_ROOT, HAS_GENERATED_STAGES, skipUnless } from './sourceTree.mjs';
 
-const generatedRoot = new URL('../mod-kit/generated/deepseek-v4-flash/', import.meta.url);
+const generatedRoot = GENERATED_ROOT;
 const builtinDir = new URL('../src/modules/scenarioMods/builtins/data/', import.meta.url);
 const gitignoreUrl = new URL('../.gitignore', import.meta.url);
 
@@ -291,7 +292,7 @@ test('tracked overlays are exactly the twenty-four generated→builtin closures'
   assert.equal(catalog.manifest.overlays.length, 24);
 });
 
-test('generated plus tracked overlay reconstructs the Git-tracked builtins', async () => {
+test('generated plus tracked overlay reconstructs the Git-tracked builtins', { skip: skipUnless(HAS_GENERATED_STAGES, 'qingyu/stages/') }, async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   for (const stage of STAGES) {
     const generated = await loadGenerated(stage);
@@ -311,7 +312,7 @@ test('generated plus tracked overlay reconstructs the Git-tracked builtins', asy
   }
 });
 
-test('source drift in a load-bearing generated field fails closed', async () => {
+test('source drift in a load-bearing generated field fails closed', { skip: skipUnless(HAS_GENERATED_STAGES, 'qingyu/stages/') }, async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   const generated = await loadGenerated(STAGES.find(stage => stage.stageId === 'lcq.stage_05b'));
   const slay = generated.scenario.events.find(event => event.id === 'lcq.event.slay_dragon');

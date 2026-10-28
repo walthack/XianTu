@@ -4,9 +4,9 @@ import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
 
-const stage05Url = new URL('../mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_05.json', import.meta.url);
-const stage06Url = new URL('../mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_06.json', import.meta.url);
-const linAnUrl = new URL('../mod-kit/generated/deepseek-v4-flash/yunlong/stages/lyl.lin_an_black_sea.json', import.meta.url);
+const stage05Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_05.json', import.meta.url);
+const stage06Url = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_06.json', import.meta.url);
+const linAnUrl = new URL('../src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json', import.meta.url);
 const registryUrl = new URL('../src/modules/scenarioMods/builtins/character-registry.json', import.meta.url);
 const FACT_ID = 'knowledge.npc.qingyu.biji_xingyuehu_identity';
 const CLAIM = '碧姬就是星月湖旧部称作“碧宛”的岳帅姬妾。';

@@ -5,11 +5,11 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const cardsUrl = new URL(
-  '../mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json',
+  '../src/modules/scenarioMods/builtins/character-registry.json',
   import.meta.url,
 );
 const bridgeUrl = new URL(
-  '../mod-kit/generated/deepseek-v4-flash/yunlong/stages/lyl.lin_an_bridge.json',
+  '../src/modules/scenarioMods/builtins/data/lyl.lin_an_bridge.json',
   import.meta.url,
 );
 const builtinEarlyUrl = new URL(
@@ -68,7 +68,7 @@ test('R2-12 phase audit resolves the eleven-item queue without stale stage proje
     'lyl.taiquan_afterfall', 'lyl.luoyang_cloud_secret', 'lyl.luoyang_coup',
   ]) {
     const stage = JSON.parse(await readFile(new URL(
-      `../mod-kit/generated/deepseek-v4-flash/yunlong/stages/${stageId}.json`,
+      `../src/modules/scenarioMods/builtins/data/${stageId}.json`,
       import.meta.url,
     ), 'utf8'));
     const zhao = stage.canon.characters.find(item => item.id === 'liuchao.character.zhao_he_de');

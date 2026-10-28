@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {loadTs} from './loadTs.mjs';
+import {HAS_CHARACTER_CARDS_V3,skipUnless} from './sourceTree.mjs';
 const {estimateNpcAge,enforceScenarioNpcAdulthood,applyScenarioRelationshipsToSave}=await loadTs('../src/modules/scenarioMods/relationships.ts');
 const {createJudgementProposal,persistPendingJudgement,resolvePendingJudgement}=await loadTs('../src/utils/judgementEngine.ts');
 const {CHARACTER_QUESTS}=await loadTs('../src/modules/scenarioMods/characterQuests.ts');
@@ -55,8 +56,8 @@ test('C02 YueShuang tiers retain hostility without replaying involuntary encount
  const output=formatIntimacyProfile('月霜',{sceneText:'双修',favor:100});
  assert.match(output,/仅记录既成事实|仅.*事实/);assert.match(output,/不重复/);assert.match(output,/敌意|双标/);
 });
-test('C01 source cards and generated registry preserve adulthood and approved exceptions',async()=>{
- const cards=await read('mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json');
+test('C01a source cards and generated registry preserve adulthood and approved exceptions',async()=>{
+ const cards=await read('src/modules/scenarioMods/builtins/character-registry.json');
  const c=n=>cards.characters.find(c=>c.canonicalName===n);
  assert.doesNotMatch(c('阿夕').staticProfile.weaknesses.join(''),/年龄小/);assert.match(c('阿夕').staticProfile.identitySummary,/成年/);
  assert.doesNotMatch(JSON.stringify(c('小玲儿')),/童颜|外表远稚|稚嫩/);
@@ -65,10 +66,14 @@ test('C01 source cards and generated registry preserve adulthood and approved ex
  assert.ok(stage.canon.characters.find(c=>c.name==='阿夕').profile.personality.includes('天真跳脱'));
  const n=(await read('src/modules/scenarioMods/builtins/data/lcq.stage_02.json')).canon.characters.find(c=>c.name==='凝羽');
  assert.ok(!n.profile.memories.some(m=>/药物侵害|迷奸/.test(m)));
- // 补充22b：未来事实不得作为初始记忆；原批准措辞留在源卡历史备注，未改写。
- assert.ok(c('凝羽').sourceCards[0].deferredStageMemories.memories.some(m=>/药物侵害.*原著事实记忆/.test(m)));
  const x=(await read('src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json')).canon.characters.find(c=>c.name==='小紫');
  assert.match(x.profile.appearance,/成年少女/);
+});
+test('C01b source card keeps NingYu approved wording in deferred history',{skip:skipUnless(HAS_CHARACTER_CARDS_V3,'character-canon/character-cards-v3.json')},async()=>{
+ const cards=await read('mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json');
+ const c=n=>cards.characters.find(c=>c.canonicalName===n);
+ // 补充22b：未来事实不得作为初始记忆；原批准措辞留在源卡历史备注，未改写。
+ assert.ok(c('凝羽').sourceCards[0].deferredStageMemories.memories.some(m=>/药物侵害.*原著事实记忆/.test(m)));
 });
 
 test('C01 existing underage birthdays repair once; adult birthdays stay unchanged',()=>{

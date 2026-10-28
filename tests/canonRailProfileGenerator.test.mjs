@@ -5,7 +5,9 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 
-test('Canon Rail generator rejects an explicit critical event without a source-axis anchor', () => {
+import { HAS_AXIS_BINDING, skipUnless } from './sourceTree.mjs';
+
+test('Canon Rail generator rejects an explicit critical event without a source-axis anchor', { skip: skipUnless(HAS_AXIS_BINDING, 'character-canon/axis-binding.json') }, () => {
   const dir = mkdtempSync(join(tmpdir(), 'xiantu-canon-rail-null-axis-'));
   const mod = JSON.parse(readFileSync('src/modules/scenarioMods/builtins/data/lcq.stage_04.json', 'utf8'));
   const event = mod.scenario.events.find(item => item.critical === true || item.axisId);
@@ -35,7 +37,7 @@ test('Canon Rail generator rejects an explicit critical event without a source-a
   assert.match(result, /lcq\.stage_04 has null \(lcq\.event\.s04_01\)/);
 });
 
-test('stage_06 future dequarantine cannot silently restore axis-seq order over the frozen IF chain', () => {
+test('stage_06 future dequarantine cannot silently restore axis-seq order over the frozen IF chain', { skip: skipUnless(HAS_AXIS_BINDING, 'character-canon/axis-binding.json') }, () => {
   const dir = mkdtempSync(join(tmpdir(), 'xiantu-canon-rail-stage06-order-'));
   const mod = JSON.parse(readFileSync('src/modules/scenarioMods/builtins/data/lcq.stage_06.json', 'utf8'));
   [mod.scenario.events[1], mod.scenario.events[2]] = [mod.scenario.events[2], mod.scenario.events[1]];

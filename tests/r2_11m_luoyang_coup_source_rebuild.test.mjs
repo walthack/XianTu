@@ -3,9 +3,9 @@ import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
+import { HAS_AXIS_BINDING, skipUnless } from './sourceTree.mjs';
 
 const dataUrl = new URL('../src/modules/scenarioMods/builtins/data/', import.meta.url);
-const canonUrl = new URL('../mod-kit/generated/deepseek-v4-flash/character-canon/', import.meta.url);
 
 const STAGE_ID = 'lyl.luoyang_coup';
 
@@ -105,6 +105,10 @@ test('rebuilt source order puts the Hanguang hall beat before the forged edict',
   // 裁定 A：四拍原本错挂在源 278《游宫》，实际出自 279《弑君》/280《凌辱》。
   assert.equal(byId.get('lyl.event.s06_01b').axisId, 'yunlong.280.1');
   assert.equal(byId.get('lyl.event.s06_01b').axisAnchor, '六朝云龙吟·#280·凌辱');
+});
+
+test('rebuilt source order puts the Hanguang hall beat before the forged edict（源树 axis-binding）', { skip: skipUnless(HAS_AXIS_BINDING, 'character-canon/axis-binding.json') }, async () => {
+  const canonUrl = new URL('../mod-kit/generated/deepseek-v4-flash/character-canon/', import.meta.url);
   const binding = JSON.parse(await readFile(new URL('axis-binding.json', canonUrl), 'utf8'));
   const bySeq = new Map(binding.nodes.filter(node => node.book === 'yunlong').map(node => [node.seq, node]));
   assert.deepEqual(

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {loadTs} from './loadTs.mjs';
+import {HAS_GENERATED_STAGES, skipUnless} from './sourceTree.mjs';
 const root = new URL('../',import.meta.url);
 const read = async path => JSON.parse(await readFile(new URL(path,root),'utf8'));
 const stage = id => read(`src/modules/scenarioMods/builtins/data/lcq.stage_${id}.json`);
@@ -48,12 +49,17 @@ test('23 supplement: Xieyi male pronouns agree in executable sources and decisio
   const xie = e.worldActor.decisionCore.actors.find(x => x.characterId === 'liuchao.character.xie_yi' || x.id === 'liuchao.character.xie_yi');
   assert.doesNotMatch(JSON.stringify(xie), /她/);
   assert.match(JSON.stringify(xie), /他提供碧鲮线索/);
-  for (const path of ['scripts/add-secondary-line-opportunity-cards-south.mjs', 'mod-kit/canon-authority-overlays/lcq.stage_04b_lingfei_baiyi_crisis.json', 'mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_04b_lingfei_baiyi_crisis.json']) {
+  for (const path of ['scripts/add-secondary-line-opportunity-cards-south.mjs', 'mod-kit/canon-authority-overlays/lcq.stage_04b_lingfei_baiyi_crisis.json']) {
     const text = await readFile(new URL(path, root), 'utf8');
     assert.doesNotMatch(text, /由她通报碧鲮|先交给她，不走云家中立匣|请她决定如何通报碧鲮|本拍护的是她给过线索|axisBeat：她提供碧鲮线索/);
   }
   const r = (await registry()).characters.find(x => x.canonicalName === '谢艺');
   assert.equal(r.gender, '男');
+});
+
+test('23 supplement: Xieyi male pronouns agree in executable sources and decision evidence（源树 04b）', { skip: skipUnless(HAS_GENERATED_STAGES, 'qingyu/stages/') }, async () => {
+  const text = await readFile(new URL('mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_04b_lingfei_baiyi_crisis.json', root), 'utf8');
+  assert.doesNotMatch(text, /由她通报碧鲮|先交给她，不走云家中立匣|请她决定如何通报碧鲮|本拍护的是她给过线索|axisBeat：她提供碧鲮线索/);
 });
 
 test('23 supplement: pronoun-only contract revision preserves progress without accepting other hashes', async () => {

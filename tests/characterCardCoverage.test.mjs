@@ -4,14 +4,16 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import { GENERATED_ROOT, HAS_GENERATED_STAGES, skipUnless } from './sourceTree.mjs';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const generatedRoot = path.join(root, 'mod-kit/generated/deepseek-v4-flash');
+const generatedRoot = fileURLToPath(GENERATED_ROOT);
 
 function readJson(file) {
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 }
 
-test('every structured stage character is shipped in the canonical character registry', () => {
+test('every structured stage character is shipped in the canonical character registry', { skip: skipUnless(HAS_GENERATED_STAGES, 'qingyu/stages/') }, () => {
   const registry = readJson(path.join(root, 'src/modules/scenarioMods/builtins/character-registry.json')).characters;
   const coveredNames = new Set(registry.flatMap(character => [
     character.canonicalName,

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { loadTs } from './loadTs.mjs';
+import { HAS_AXIS_BINDING, skipUnless } from './sourceTree.mjs';
 const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
 const { buildStrictScenarioInitialization, applyStrictScenarioInitializationToSave } = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
 const runtime = await loadTs('../src/modules/scenarioMods/runtime.ts');
@@ -77,10 +78,14 @@ test('scene guards reject omitted facts, early identities, wrong pronouns, unrec
 
 test('ghost-king event encompasses actual chapters 109–112 with existing composite-axis format, without changing rail identity',async()=>{
  const mod=await stage('05b');const e=mod.scenario.events.find(e=>e.id==='lcq.event.ghost_king_swallowed');
+ assert.ok(e.axisAnchor.split('+').includes(e.axisId));
+ assert.equal(e.axisId,'qingyu.114.2');assert.equal(e.playerCompletionContract.actions.length,1);assert.match(e.description,/鬼巫王/);
+});
+test('ghost-king event encompasses actual chapters 109–112 with existing composite-axis format（源树 axis-binding 锚点解析）',{skip:skipUnless(HAS_AXIS_BINDING,'character-canon/axis-binding.json')},async()=>{
+ const mod=await stage('05b');const e=mod.scenario.events.find(e=>e.id==='lcq.event.ghost_king_swallowed');
  const binding=JSON.parse(await readFile(new URL('../mod-kit/generated/deepseek-v4-flash/character-canon/axis-binding.json',import.meta.url),'utf8'));
  const anchors=e.axisAnchor.split('+').map(id=>binding.nodes.find(n=>n.axisId===id));assert.ok(anchors.every(Boolean));
- assert.ok(e.axisAnchor.split('+').includes(e.axisId));for(const ch of [109,110,111,112])assert.ok(anchors.some(n=>n.anchor.includes(`第${ch}章`)));
- assert.equal(e.axisId,'qingyu.114.2');assert.equal(e.playerCompletionContract.actions.length,1);assert.match(e.description,/鬼巫王/);
+ for(const ch of [109,110,111,112])assert.ok(anchors.some(n=>n.anchor.includes(`第${ch}章`)));
 });
 
 test('masked bride becomes Lemingzhu at the reveal step; Xiaozi is absent in the preceding crocodile beat',async()=>{

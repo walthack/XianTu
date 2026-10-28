@@ -5,7 +5,7 @@ import test from 'node:test';
 import { loadTs } from './loadTs.mjs';
 
 const cardsUrl = new URL(
-  '../mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json',
+  '../src/modules/scenarioMods/builtins/character-registry.json',
   import.meta.url,
 );
 const cards = JSON.parse(await readFile(cardsUrl, 'utf8')).characters;

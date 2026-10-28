@@ -4,7 +4,7 @@ import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
 
-const stageUrl = new URL('../mod-kit/generated/deepseek-v4-flash/qingyu/stages/lcq.stage_04.json', import.meta.url);
+const stageUrl = new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_04.json', import.meta.url);
 const ATTACK_EVENT_ID = 'lcq.event.s04_02';
 const REVEAL_EVENT_ID = 'lcq.event.s04_03';
 const GROUNDED_CLAIM = '武二郎与苏荔联手击杀九名鬼王峒武士';
