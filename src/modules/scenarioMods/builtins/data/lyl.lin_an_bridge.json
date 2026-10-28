@@ -5216,7 +5216,14 @@
           "lyl.event.weiyuan_extortion",
           "lyl.event.libu_registration",
           "lyl.event.meet_xue_yanshan",
-          "lyl.event.blacksea_iron_puppet"
+          "lyl.event.blacksea_iron_puppet",
+          "lyl.event.debut_yundanliu",
+          "lyl.event.debut_yunruyao",
+          "lyl.event.debut_zhaohede",
+          "lyl.event.debut_yinfulan",
+          "lyl.event.debut_jingli",
+          "lyl.event.debut_jianyuji",
+          "lyl.event.xue_yanshan_slain"
         ]
       },
       {
@@ -5249,14 +5256,7 @@
           "lyl.event.lin_an_bridge_02_beat",
           "lyl.event.lin_an_bridge_03_beat",
           "lyl.event.lin_an_bridge_04_beat",
-          "lyl.event.lin_an_bridge_xieyi_tomb",
-          "lyl.event.debut_yundanliu",
-          "lyl.event.debut_yunruyao",
-          "lyl.event.debut_zhaohede",
-          "lyl.event.debut_yinfulan",
-          "lyl.event.debut_jingli",
-          "lyl.event.debut_jianyuji",
-          "lyl.event.xue_yanshan_slain"
+          "lyl.event.lin_an_bridge_xieyi_tomb"
         ]
       }
     ],
@@ -7202,6 +7202,13 @@
         "axisSeq": 568,
         "axisBeat": "薛延山在西湖边藏身处被杀，首级被取走，冯源逃回报信。",
         "critical": false,
+        "conditions": [
+          {
+            "path": "flags.event.blacksea_iron_puppet.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
         "completion": [
           {
             "path": "flags.event.xue_yanshan_slain.done",

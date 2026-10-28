@@ -151,7 +151,7 @@ type QuestCompassRuntime = {
   };
 } | null | undefined;
 
-/** lyl.lin_an_bridge「初抵临安」章的拍（与关卡数据同步，测试钉住）。 */
+/** lyl.lin_an_bridge「初抵临安」章的承重拍（与关卡数据同步，测试钉住）；同章随迁的 6 张登场卡与薛延山遇害仍标「临安疑线」，不在此列。 */
 export const LIN_AN_ARRIVAL_EVENT_IDS: ReadonlySet<string> = new Set([
   'linan_arrive_fengbo', 'tail_li_shishi', 'survey_wumu_mansion', 'evade_huangchengsi', 'mingqingsi_lin_lu_meeting',
   'decode_bianmenwa_note', 'weiyuan_extortion', 'libu_registration', 'meet_xue_yanshan', 'blacksea_iron_puppet',

@@ -30,14 +30,7 @@
         "lyl.event.lin_an_bridge_02_beat",
         "lyl.event.lin_an_bridge_03_beat",
         "lyl.event.lin_an_bridge_04_beat",
-        "lyl.event.lin_an_bridge_xieyi_tomb",
-        "lyl.event.debut_yundanliu",
-        "lyl.event.debut_yunruyao",
-        "lyl.event.debut_zhaohede",
-        "lyl.event.debut_yinfulan",
-        "lyl.event.debut_jingli",
-        "lyl.event.debut_jianyuji",
-        "lyl.event.xue_yanshan_slain"
+        "lyl.event.lin_an_bridge_xieyi_tomb"
       ]
     },
     {
@@ -206,7 +199,14 @@
           "lyl.event.weiyuan_extortion",
           "lyl.event.libu_registration",
           "lyl.event.meet_xue_yanshan",
-          "lyl.event.blacksea_iron_puppet"
+          "lyl.event.blacksea_iron_puppet",
+          "lyl.event.debut_yundanliu",
+          "lyl.event.debut_yunruyao",
+          "lyl.event.debut_zhaohede",
+          "lyl.event.debut_yinfulan",
+          "lyl.event.debut_jingli",
+          "lyl.event.debut_jianyuji",
+          "lyl.event.xue_yanshan_slain"
         ]
       }
     },
@@ -331,6 +331,21 @@
         "conditions": [
           {
             "path": "flags.event.linan_arrive_fengbo.done",
+            "operator": "eq",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyl.event.xue_yanshan_slain]",
+      "afterKey": "critical",
+      "beforeKey": "completion",
+      "entries": {
+        "conditions": [
+          {
+            "path": "flags.event.blacksea_iron_puppet.done",
             "operator": "eq",
             "value": true
           }
