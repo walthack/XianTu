@@ -92,6 +92,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'tuning.timeoutMs', kind: 'int', required: true, min: 1, section: 'runtime' },
   { path: 'ui.rightSidebar.showSecondaryLines', kind: 'bool', required: true, section: 'runtime' },
   { path: 'ui.rightSidebar.showLineCompass', kind: 'bool', required: true, section: 'runtime' },
+  { path: 'ui.worldSelection.showGenericWorlds', kind: 'bool', required: true, section: 'runtime' },
   { path: 'story.qin.actionTimeCost', kind: 'int', required: true, min: 1, max: 1, section: 'progress' },
   { path: 'story.lineCompass.regionLines', kind: 'object', required: true, section: 'progress' },
   { path: 'story.lineCompass.hint.maxChars', kind: 'int', required: true, min: 1, section: 'progress' },

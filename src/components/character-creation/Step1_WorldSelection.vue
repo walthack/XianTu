@@ -7,7 +7,7 @@
       <!-- 左侧面板：世界列表 -->
       <div class="left-panel">
         <!-- 顶部功能按钮 -->
-        <div class="top-actions-container">
+        <div v-if="showGenericWorlds" class="top-actions-container">
           <button @click="isCustomModalVisible = true" class="action-item shimmer-on-hover">
             <span class="action-name">{{ $t('自定义世界') }}</span>
           </button>
@@ -35,7 +35,7 @@
           </button>
         </div>
 
-        <div class="list-container">
+        <div v-if="showGenericWorlds" class="list-container">
           <div v-if="worldsList.length === 0" class="no-worlds-message">
             <div class="no-worlds-icon">🌌</div>
             <div class="no-worlds-text">
@@ -79,7 +79,7 @@
 
           <!-- 地图生成选项（移入右侧详情内，避免整体高度溢出） -->
           <div class="map-options" v-show="showMapOptions">
-            <div class="map-options-header">{{ $t('世界规模配置') }}</div>
+            <div v-if="showGenericWorlds" class="map-options-header">{{ $t('世界规模配置') }}</div>
 
             <!-- 修仙难度选择 -->
             <div class="difficulty-section">
@@ -103,89 +103,91 @@
               </div>
             </div>
 
-            <!-- 仅生成大陆开关 -->
-            <div class="continents-only-section">
-              <label class="continents-only-toggle">
-                <input
-                  type="checkbox"
-                  v-model="worldConfig.generateOnlyContinents"
-                  class="toggle-checkbox"
-                />
-                <span class="toggle-label">{{ $t('仅生成大陆（开局优化）') }}</span>
-              </label>
-              <div class="toggle-hint">
-                {{ worldConfig.generateOnlyContinents ? $t('开局只生成大陆，势力和地点可在游戏中动态生成，减少token消耗') : $t('开局生成完整世界（包括势力、地点和秘境）') }}
+            <template v-if="showGenericWorlds">
+              <!-- 仅生成大陆开关 -->
+              <div class="continents-only-section">
+                <label class="continents-only-toggle">
+                  <input
+                    type="checkbox"
+                    v-model="worldConfig.generateOnlyContinents"
+                    class="toggle-checkbox"
+                  />
+                  <span class="toggle-label">{{ $t('仅生成大陆（开局优化）') }}</span>
+                </label>
+                <div class="toggle-hint">
+                  {{ worldConfig.generateOnlyContinents ? $t('开局只生成大陆，势力和地点可在游戏中动态生成，减少token消耗') : $t('开局生成完整世界（包括势力、地点和秘境）') }}
+                </div>
               </div>
-            </div>
 
-            <!-- 配置警告提示 -->
-            <div class="config-warning" v-if="isConfigRisky">
-              <div class="warning-icon">⚠️</div>
-              <div class="warning-text">
-                <div class="warning-title">{{ $t('配置过高警告') }}</div>
-                <div class="warning-desc">{{ $t('当前配置可能导致生成失败，建议调整至合理范围') }}</div>
+              <!-- 配置警告提示 -->
+              <div class="config-warning" v-if="isConfigRisky">
+                <div class="warning-icon">⚠️</div>
+                <div class="warning-text">
+                  <div class="warning-title">{{ $t('配置过高警告') }}</div>
+                  <div class="warning-desc">{{ $t('当前配置可能导致生成失败，建议调整至合理范围') }}</div>
+                </div>
               </div>
-            </div>
 
-            <!-- 核心游戏配置 -->
-            <div class="map-options-grid">
-              <label class="option-item">
-                <span class="option-label">{{ $t('主要势力') }}</span>
-                <input
-                  type="number"
-                  min="1"
-                  max="20"
-                  step="1"
-                  v-model.number="worldConfig.majorFactionsCount"
-                  :class="{ 'config-risky': worldConfig.majorFactionsCount > 8 }"
-                  :disabled="worldConfig.generateOnlyContinents"
-                />
-                <span class="config-hint">{{ $t('推荐: 3-8') }}</span>
-              </label>
-              <label class="option-item">
-                <span class="option-label">{{ $t('地点总数') }}</span>
-                <input
-                  type="number"
-                  min="5"
-                  max="100"
-                  step="1"
-                  v-model.number="worldConfig.totalLocations"
-                  :class="{ 'config-risky': worldConfig.totalLocations > 15 }"
-                  :disabled="worldConfig.generateOnlyContinents"
-                />
-                <span class="config-hint">{{ $t('推荐: 8-15') }}</span>
-              </label>
-              <label class="option-item">
-                <span class="option-label">{{ $t('秘境数量') }}</span>
-                <input
-                  type="number"
-                  min="0"
-                  max="30"
-                  step="1"
-                  v-model.number="worldConfig.secretRealmsCount"
-                  :class="{ 'config-risky': worldConfig.secretRealmsCount > 10 }"
-                  :disabled="worldConfig.generateOnlyContinents"
-                />
-                <span class="config-hint">{{ $t('推荐: 3-10') }}</span>
-              </label>
-              <label class="option-item">
-                <span class="option-label">{{ $t('大陆数量') }}</span>
-                <input
-                  type="number"
-                  min="3"
-                  max="7"
-                  step="1"
-                  v-model.number="worldConfig.continentCount"
-                  :title="$t('大陆数量决定世界的宏观格局，3-7片大陆形成不同的地缘政治结构')"
-                />
-                <span class="config-hint">{{ $t('范围: 3-7') }}</span>
-              </label>
-            </div>
+              <!-- 核心游戏配置 -->
+              <div class="map-options-grid">
+                <label class="option-item">
+                  <span class="option-label">{{ $t('主要势力') }}</span>
+                  <input
+                    type="number"
+                    min="1"
+                    max="20"
+                    step="1"
+                    v-model.number="worldConfig.majorFactionsCount"
+                    :class="{ 'config-risky': worldConfig.majorFactionsCount > 8 }"
+                    :disabled="worldConfig.generateOnlyContinents"
+                  />
+                  <span class="config-hint">{{ $t('推荐: 3-8') }}</span>
+                </label>
+                <label class="option-item">
+                  <span class="option-label">{{ $t('地点总数') }}</span>
+                  <input
+                    type="number"
+                    min="5"
+                    max="100"
+                    step="1"
+                    v-model.number="worldConfig.totalLocations"
+                    :class="{ 'config-risky': worldConfig.totalLocations > 15 }"
+                    :disabled="worldConfig.generateOnlyContinents"
+                  />
+                  <span class="config-hint">{{ $t('推荐: 8-15') }}</span>
+                </label>
+                <label class="option-item">
+                  <span class="option-label">{{ $t('秘境数量') }}</span>
+                  <input
+                    type="number"
+                    min="0"
+                    max="30"
+                    step="1"
+                    v-model.number="worldConfig.secretRealmsCount"
+                    :class="{ 'config-risky': worldConfig.secretRealmsCount > 10 }"
+                    :disabled="worldConfig.generateOnlyContinents"
+                  />
+                  <span class="config-hint">{{ $t('推荐: 3-10') }}</span>
+                </label>
+                <label class="option-item">
+                  <span class="option-label">{{ $t('大陆数量') }}</span>
+                  <input
+                    type="number"
+                    min="3"
+                    max="7"
+                    step="1"
+                    v-model.number="worldConfig.continentCount"
+                    :title="$t('大陆数量决定世界的宏观格局，3-7片大陆形成不同的地缘政治结构')"
+                  />
+                  <span class="config-hint">{{ $t('范围: 3-7') }}</span>
+                </label>
+              </div>
 
-            <div class="map-options-actions">
-              <button class="opt-btn" @click="randomizeConfig">{{ $t('随机') }}</button>
-              <button class="opt-btn" @click="resetConfig">{{ $t('重置') }}</button>
-            </div>
+              <div class="map-options-actions">
+                <button class="opt-btn" @click="randomizeConfig">{{ $t('随机') }}</button>
+                <button class="opt-btn" @click="resetConfig">{{ $t('重置') }}</button>
+              </div>
+            </template>
           </div>
 
           <div class="description-scroll" v-show="!showMapOptions">
@@ -239,8 +241,10 @@ import { generateWithRawPrompt } from '../../utils/tavernCore';
 import { WORLD_ITEM_GENERATION_PROMPT } from '../../utils/prompts/tasks/gameElementPrompts';
 import { parseJsonFromText } from '@/utils/jsonExtract';
 import { scenarioModManager, type StoredScenarioMod } from '@/modules/scenarioMods/manager';
+import { showGenericWorldEntries } from '@/modules/scenarioMods/genericWorldEntry';
 
 const store = useCharacterCreationStore();
+const showGenericWorlds = showGenericWorldEntries();
 const activeWorld = ref<World | null>(null); // For hover details view - 仿照天赋选择
 const isCustomModalVisible = ref(false);
 const showMapOptions = ref(false);
@@ -255,6 +259,8 @@ onMounted(async () => {
   try {
     scenarioMods.value = await scenarioModManager.list();
     if (store.selectedScenarioMod) activeWorld.value = store.selectedWorld;
+    // 入口隐藏前残留的普通世界选择清掉；剧本模组 world_id=-1 不受影响
+    if (!showGenericWorlds && !store.selectedScenarioMod && typeof store.characterPayload.world_id === 'number' && store.characterPayload.world_id >= 0) store.selectWorld('');
   } catch (error) {
     console.error('[世界选择] 加载剧本模组失败:', error);
   }

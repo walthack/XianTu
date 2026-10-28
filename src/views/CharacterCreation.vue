@@ -14,6 +14,7 @@
           <div class="cloud-sync-container">
             <CloudDataSync @sync-completed="onSyncCompleted" variant="compact" size="small" />
             <StorePreSeting
+              v-if="showGenericWorlds"
               variant="compact"
               size="small"
               :current-step="store.currentStep"
@@ -21,7 +22,7 @@
               :character-data="characterDataForPreset"
               @store-completed="onStoreCompleted"
             />
-            <LoadingPreSeting variant="compact" size="small" @load-completed="onLoadCompleted" />
+            <LoadingPreSeting v-if="showGenericWorlds" variant="compact" size="small" @load-completed="onLoadCompleted" />
             <DataClearButtons variant="horizontal" size="small" @data-cleared="onDataCleared" />
           </div>
         </div>
@@ -113,6 +114,7 @@ import { getCurrentCharacterName } from '../utils/tavern';
 import { debugLog } from '@/modules/diagnostics/debugLog';
 import { useI18n } from '../i18n';
 import type { CharacterPreset } from '@/utils/presetManager';
+import { showGenericWorldEntries } from '@/modules/scenarioMods/genericWorldEntry';
 
 
 const props = defineProps<{
@@ -124,6 +126,8 @@ const emit = defineEmits<{
 }>()
 const store = useCharacterCreationStore();
 const { t } = useI18n();
+// 普通世界入口开关（ui.worldSelection.showGenericWorlds）：关时隐藏保存/加载预设（预设只服务普通世界开局）
+const showGenericWorlds = showGenericWorldEntries();
 // 使用 store 中的 isCreating 状态，不再使用本地 ref
 
 type PresetGender = NonNullable<CharacterPreset['data']['gender']>;
@@ -432,6 +436,7 @@ async function onStoreCompleted(result: { success: boolean; message: string; pre
 
 // 处理加载预设完成事件
 async function onLoadCompleted(result: { success: boolean; message: string; presetData?: CharacterPreset }) {
+  if (!showGenericWorlds) { toast.warning('普通世界开局入口已隐藏'); return; }
   console.log('[角色创建] 加载预设完成:', result);
   
   if (!result.success) {

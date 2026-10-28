@@ -102,7 +102,7 @@
       <canvas ref="canvasRef"></canvas>
 
       <!-- 初始化地图按钮 (仅在地图为空时显示) -->
-      <div v-if="!hasMapContent && !isInitializing" class="initialize-map-overlay">
+      <div v-if="!hasMapContent && !isInitializing && !scenarioMapLocked" class="initialize-map-overlay">
         <div class="initialize-prompt">
           <div class="prompt-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="map-icon">
@@ -307,7 +307,7 @@
     </div>
 
     <!-- 地图操作按钮 -->
-    <div class="map-actions" :class="{ expanded: actionsExpanded }">
+    <div v-if="!scenarioMapLocked" class="map-actions" :class="{ expanded: actionsExpanded }">
       <div class="actions-header" @click="actionsExpanded = !actionsExpanded">
         <Menu :size="16" />
         <span>地图功能</span>
@@ -316,7 +316,7 @@
       </div>
       <div v-if="actionsExpanded" class="actions-content">
         <button
-          v-if="hasMapContent"
+          v-if="hasMapContent && !scenarioMapLocked"
           @click="showGenerateModal = true"
           class="action-btn"
           :disabled="isGenerating"
@@ -1823,6 +1823,7 @@ function isScenarioModMapLocked(worldInfo: any): boolean {
   const mapLock = worldInfo?.剧本地图?.locked;
   return runtimeMode === 'strict' || extensionMode === 'strict' || mapLock === true;
 }
+const scenarioMapLocked = computed(() => isScenarioModMapLocked(gameStateStore.worldInfo));
 
 /**
  * 加载地图数据
