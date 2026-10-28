@@ -1,5 +1,32 @@
 {
   "version": 1,
   "kind": "identity",
-  "entries": []
+  "entries": [
+    {
+      "id": "liuchao.identity.han.marquis_wuyang",
+      "aliases": [
+        "舞阳侯"
+      ],
+      "definition": {
+        "id": "liuchao.identity.han.marquis_wuyang",
+        "name": "舞阳侯",
+        "kind": "title",
+        "lineId": "han"
+      },
+      "stageVariants": {}
+    },
+    {
+      "id": "liuchao.identity.jin.panjiang_shaozhu",
+      "aliases": [
+        "盘江程氏少主"
+      ],
+      "definition": {
+        "id": "liuchao.identity.jin.panjiang_shaozhu",
+        "name": "盘江程氏少主",
+        "kind": "merchant",
+        "lineId": "jin"
+      },
+      "stageVariants": {}
+    }
+  ]
 }

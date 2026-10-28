@@ -44,7 +44,7 @@ test('配置：ui.rightSidebar.showLineCompass 默认 true 已登记（用户 20
   assert.ok(registry.FIELD_SPECS.some(s => s.path === 'ui.rightSidebar.showLineCompass' && s.kind === 'bool' && s.required && s.section === 'runtime'));
   for (const path of ['story.lineCompass.regionLines', 'story.lineCompass.hint.maxChars', 'story.lineCompass.hint.bannedWords']) assert.ok(registry.FIELD_SPECS.some(s => s.path === path), path);
   const regionLines = numbers.GAME_NUMBERS.story.lineCompass.regionLines;
-  assert.deepEqual(Object.values(regionLines).sort(), ['han', 'jin', 'nanhuang', 'song', 'taiquan', 'tang']);
+  assert.deepEqual(Object.values(regionLines).sort(), ['han', 'jin', 'nanhuang', 'qin', 'song', 'taiquan', 'tang']);
   assert.equal(regionLines['塞外'], undefined, '塞外不是国家线');
   const tree = structuredClone(merged);
   tree.story.lineCompass.regionLines['塞外'] = 'saiwai';
@@ -75,7 +75,7 @@ test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合�
   // 唐 6 步（两个入口、遇廖周袁、D7 委任／密约／公布）已于 2026-10-28 改挂事件、去 pending（五线补全·唐 T1／T2／T18／T19／T20）
   const pending = steps.filter(step => step.pending).map(step => `${step.lineId}.${step.id}`);
   assert.deepEqual(pending, [
-    ...table.lines.find(l => l.lineId === 'qin').steps.map(step => `qin.${step.id}`),
+    'qin.qin_baiqi', 'qin.qin_branch_raid',
     'taiquan.tq_enter_array', 'taiquan.tq_xionggu_key', 'taiquan.tq_xuanyuan_mijing',
   ]);
   for (const step of steps.filter(step => step.pending)) assert.ok(step.note?.includes('pending：'), `${step.lineId}.${step.id}`);
@@ -84,7 +84,7 @@ test('下一步表：7 条国家线、写入剧情策划定稿 63 条（R-8 合�
   const known = id => table.lines.find(l => l.lineId === id).knownWhen;
   assert.deepEqual(known('jin'), [{ path: 'done.lcq.event.s02_01', operator: 'eq', value: true }]);
   for (const id of ['nanhuang', 'song', 'han', 'tang']) assert.deepEqual(known(id), [{ path: 'done.lcq.event.sudaji_south_pact', operator: 'eq', value: true }], id);
-  assert.deepEqual(known('qin'), [{ path: 'compass.anyLineClosed', operator: 'eq', value: true }]);
+  assert.deepEqual(known('qin'), [{ path: 'done.liuchao.event.qin_hook_fangshi_rumor', operator: 'eq', value: true }]);
   assert.deepEqual(validateLineCompassTable(table, texts, compass.lineCompassPlaces()), []);
   // 势力线、商道不进表（Q3/Q4）
   for (const id of ['heimohai', 'xingyuehu', 'taiyi', 'commerce']) assert.ok(!table.lines.some(l => l.lineId === id || l.anchorLine === id), id);
@@ -233,10 +233,10 @@ test('R-3 compass.anyLineClosed：南荒／晋／宋／汉／唐任一 closedWhe
   assert.equal(ledger.evaluateLedgerCondition({ ...ANY_CLOSED, operator: 'exists' }, rtOf(saveOf())), false, '只有 eq / neq');
 });
 
-test('R-3 秦线 knownWhen 读 compass.anyLineClosed：任一国家线收束前不出现，收束后进折叠行；秦步全是 pending，不出提示', () => {
+test('秦线知情拍完成后才进折叠行；收束其他国家线不等于已听到传闻', () => {
   const before = view(saveOf(), KILL_WU);
   assert.ok(!before.others.some(o => o.lineId === 'qin'));
-  const after = view(saveOf({ done: [[S02, WANGZHE], [S07, JIN_ANCHOR], CLOSERS.nanhuang] }), KILL_WU);
+  const after = view(saveOf({ done: [['lyg.qin_xianyang', 'liuchao.event.qin_hook_fangshi_rumor'], [S02, WANGZHE], [S07, JIN_ANCHOR], CLOSERS.nanhuang] }), KILL_WU);
   assert.deepEqual(after.others.find(o => o.lineId === 'qin'), { lineId: 'qin', name: texts['lineCompass.qin.name'], locked: false, hintLines: [] });
   assert.ok(!after.others.some(o => o.lineId === 'nanhuang'), '南荒已收束撤掉');
 });
@@ -250,7 +250,7 @@ test('validator：compass.* 不得进 closedWhen；pending 步允许仓库没有
   assert.ok(codes(closed).includes('compass_in_closed_when'));
   const badId = base(); badId.lines[0].knownWhen = [{ path: 'compass.whatever', operator: 'eq', value: true }];
   assert.ok(codes(badId).includes('invalid_path'));
-  const pending = base(); Object.assign(pending.lines[0].steps[0], { pending: true, eventId: 'liuchao.event.qin_find_xu', when: [{ path: 'done.liuchao.event.qin_hook_fangshi_rumor', operator: 'eq', value: true }], note: 'pending：仓库无秦线事件' });
+  const pending = base(); Object.assign(pending.lines[0].steps[0], { pending: true, eventId: 'liuchao.event.qin_act3_choose', when: [{ path: 'done.liuchao.event.qin_hook_fangshi_rumor', operator: 'eq', value: true }], note: 'pending：仓库无秦线事件' });
   assert.deepEqual(codes(pending), []);
   assert.ok(codes({ ...pending, lines: [{ ...pending.lines[0], steps: [{ ...pending.lines[0].steps[0], note: undefined }] }] }).includes('pending_note_required'));
   assert.ok(codes({ ...pending, lines: [{ ...pending.lines[0], steps: [{ ...pending.lines[0].steps[0], draft: true }] }] }).includes('invalid_value'));

@@ -45,3 +45,7 @@ F06–F09引用桌面31号作者原件的已定W18–32及裁定#209：F06/F08/F
 ## 作者来源追溯
 
 F06–F09采用[31号合同原样归档](../../../mod-kit/source-documents/31-南荒全部固定战斗合同草案.md)，[来源记录](../../../mod-kit/source-documents/README.md)包含原路径、保存时间、SHA-256与章节定位。此归档不修改已接入合同或试玩包。
+
+## 2026-10-28 stage 资源引用
+
+`stages` JSON 的值可用单键对象 `{"$text":"正文键"}` 引用该次编译合并的 pack texts，也可用 `{"$num":"story.qin.actionTimeCost"}` 引用数值权威。编译时递归替换后再做完整 stage schema 校验；缺键、混合字段对象立即失败，不生成半份 catalog。runtime 接收的仍是普通 ScenarioMod，不增加 TS 关卡注册或条件分支。

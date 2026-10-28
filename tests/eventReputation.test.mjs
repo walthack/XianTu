@@ -43,7 +43,7 @@ test('地区立足度是派生量：走完该地区即到顶，未涉足为 0', 
   for (const stageId of STAGE_ORDER) {
     assert.ok(STAGE_REGION[stageId], `关卡 ${stageId} 缺地区映射`);
   }
-  assert.equal(Object.keys(STAGE_REGION).length, STAGE_ORDER.length, '地区映射与链序关卡数必须一致');
+  assert.deepEqual(Object.keys(STAGE_REGION).filter(id => !STAGE_ORDER.includes(id)), ['lyg.qin_xianyang'], '秦内容包关尚未接入线性关链');
 
   // 开局：塞外刚起步，其余全 0
   const atStart = regionStanding('lcq.stage_01', STAGE_ORDER);
@@ -60,7 +60,7 @@ test('地区立足度是派生量：走完该地区即到顶，未涉足为 0', 
   // 终点：全部到顶
   const atEnd = regionStanding(STAGE_ORDER[STAGE_ORDER.length - 1], STAGE_ORDER);
   for (const [region, value] of Object.entries(atEnd)) {
-    assert.equal(value, 100, `走到最后一关时 ${region} 应到顶，实得 ${value}`);
+    assert.equal(value, region === '秦国' ? 0 : 100, `线性链终点不冒认走过独立秦关：${region}=${value}`);
   }
 
   // 幂等：同一输入两次结果一致（派生量不是累加账）

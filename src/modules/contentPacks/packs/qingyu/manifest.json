@@ -23,7 +23,9 @@
   "statuses": [
     "statuses.json"
   ],
-  "stages": [],
+  "stages": [
+    "stage-qin-xianyang.json"
+  ],
   "overlays": [
     "stage3-overlays.json"
   ],
@@ -35,7 +37,8 @@
   "entities": [],
   "texts": [
     "texts.json",
-    "lines-texts.json"
+    "lines-texts.json",
+    "qin-texts.json"
   ],
   "questLineResources": "lines-resources.json",
   "lineCompass": "line-compass.json",

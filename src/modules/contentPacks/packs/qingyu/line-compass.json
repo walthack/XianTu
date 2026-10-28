@@ -757,22 +757,26 @@
       "lineId": "qin",
       "nameKey": "lineCompass.qin.name",
       "knownWhen": [
-        { "path": "compass.anyLineClosed", "operator": "eq", "value": true }
+        { "path": "done.liuchao.event.qin_hook_fangshi_rumor", "operator": "eq", "value": true }
+      ],
+      "closedWhen": [
+        { "path": "done.liuchao.event.qin_close_default", "operator": "eq", "value": true }
       ],
       "steps": [
         {
           "id": "qin_entry_envoy",
           "eventId": "liuchao.event.qin_entry_envoy",
+          "when": [
+            { "path": "identity.liuchao.identity.han.marquis_wuyang", "operator": "exists" }
+          ],
           "hintKey": "lineCompass.qin.step.qin_entry_envoy",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；when 应为 identity.<汉使/宋使/唐使> exists（identities.json 为空，缺读取点）；使节入口"
+          "note": "Q-3：只读已登记的汉舞阳侯身份，不以完成事件代替身份。宋职 OR/通配及 rail 互斥分流待程序合同；本拍可选，不阻塞无身份默认路。"
         },
         {
           "id": "qin_entry_xu_unmet",
           "eventId": "liuchao.event.qin_find_xu",
           "hintKey": "lineCompass.qin.step.qin_entry_xu_unmet",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；lyg:13686；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-4 找到方士（2004，rail）。lyg:13686；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句（事件按 acq.xu_junfang 分重逢／初见两版）"
         },
         {
           "id": "qin_camp_route",
@@ -781,20 +785,17 @@
             { "path": "done.liuchao.event.qin_find_xu", "operator": "eq", "value": true }
           ],
           "hintKey": "lineCompass.qin.step.qin_camp_route",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；平民身份那一半缺读取点；军营路"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-5 城外军营（2005，rail，默认路线必经）。「无使节身份」那一半（exists 取反）现有条件写不出：rail 拍不读 conditions；当前仅无身份默认路线经过军营。有身份时跳过军营的互斥路由未实现，不编造国书之后仍须军营的说法；军营路"
         },
         {
           "id": "qin_king",
           "eventId": "liuchao.event.qin_king_refuses",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；宫中，同城"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-6 见秦王（2006，rail）；宫中，同城"
         },
         {
           "id": "qin_auspice",
           "eventId": "liuchao.event.qin_xu_auspice",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-7 祥瑞之托（2007，rail）"
         },
         {
           "id": "qin_banquet",
@@ -803,14 +804,12 @@
             { "path": "done.liuchao.event.qin_xu_auspice", "operator": "eq", "value": true }
           ],
           "hintKey": "lineCompass.qin.step.qin_banquet",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-9 年节宴（2009，rail）"
         },
         {
           "id": "qin_sealed_fight",
           "eventId": "liuchao.event.qin_succession_fight",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；封宫、争位同城连着走"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-11 争位（2011，rail）；封宫（Q-10，2010）、争位同城连着走"
         },
         {
           "id": "qin_purge_suxiao",
@@ -820,14 +819,12 @@
             { "path": "acq.liuchao.character.su_xiao", "operator": "gte", "value": "encountered" }
           ],
           "hintKey": "lineCompass.qin.step.qin_purge_suxiao",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；lcq:32823"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-12 清洗（2012，rail）。lcq:32823；没见过苏骁的存档不写提示，靠焦点"
         },
         {
           "id": "qin_heimohai",
           "eventId": "liuchao.event.qin_heimohai_message",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-14 黑魔海递话（2014，rail）；qin_yu_sisters_act2、qin_ningyu_coldtrace 是条件拍，同城"
         },
         {
           "id": "qin_villa",
@@ -836,8 +833,7 @@
             { "path": "done.liuchao.event.qin_heimohai_message", "operator": "eq", "value": true }
           ],
           "hintKey": "lineCompass.qin.step.qin_villa",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；地点来自供词，不点人"
+          "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-16 别院女囚（2016，rail）；地点来自打听，不点人"
         },
         {
           "id": "qin_baiqi",
@@ -847,7 +843,7 @@
           ],
           "hintKey": "lineCompass.qin.step.qin_baiqi",
           "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；lyg:16975"
+          "note": "pending：第三幕推翻结局（Q-18–Q-22）待用户拍板 Q2（扶持谁掌秦），本次不建；lyg:16975"
         },
         {
           "id": "qin_branch_raid",
@@ -857,16 +853,10 @@
           ],
           "hintKey": "lineCompass.qin.step.qin_branch_raid",
           "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；推翻结局那一路"
-        },
-        {
-          "id": "qin_close",
-          "eventId": "liuchao.event.qin_close",
-          "pending": true,
-          "note": "pending：仓库无秦线事件（liuchao.event.qin_*，P-08），本次不新建；收束拍；closedWhen 待 liuchao.event.qin_close"
+          "note": "pending：第三幕推翻结局（Q-18–Q-22）待用户拍板 Q2（扶持谁掌秦），本次不建；推翻结局那一路"
         }
       ],
-      "note": "knownWhen＝compass.anyLineClosed（R-3 总策划定；用户 P-06：任一国家线收束后由商会伙计传话）；知情拍 liuchao.event.qin_hook_fangshi_rumor 与全部秦线事件仓库尚无、本次不新建，步一律 pending；closedWhen 待 liuchao.event.qin_close"
+      "note": "秦关内容包：Q-1–Q-17、Q-23；Q2 五拍未实现。knownWhen 读知情拍，默认收束写 line.qin.outcome=unresolved。并行入点、身份互斥 rail、2–3年日历推进待程序；详见 docs/handoffs/2026-10-28/QIN-FILL.md。"
     },
     {
       "lineId": "taiquan",

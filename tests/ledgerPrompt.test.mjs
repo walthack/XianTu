@@ -63,10 +63,10 @@ test('措辞按用户 2026-10-27 拍板口径；单个身份不写位次括注�
   assert.equal(numbers.GAME_NUMBERS.story.identity.prompt.maxItems, 3);
 });
 
-test('身份表为空时返回空串，buildScenarioStoryPrompt 输出与改前逐字相同', async () => {
+test('未持有身份时返回空串，buildScenarioStoryPrompt 输出与改前逐字相同', async () => {
   const { rules, prompt } = await loaded;
   const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
-  assert.deepEqual(rules.playerIdentityDefs(), [], '仓库身份表首版为空');
+  assert.equal(prompt.formatLedgerPrompt(runtimeOf(), { defs: [] }), '', '空定义表仍返回空串');
   assert.equal(prompt.formatLedgerPrompt(runtimeOf()), '');
   assert.equal(prompt.formatLedgerPrompt(runtimeOf({ doneIds: [ev('a')], identities: ledgerOf([record('A', ev('a'), 'revoked')]) }), { defs: [identity('A')] }), '');
   const save = await buildStorySave();

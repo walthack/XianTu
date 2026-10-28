@@ -11,10 +11,11 @@ const ZHUSHI = { id: 'liuchao.identity.song.baochao_zhushi', name: '宝钞铺主
 const FENHAO = { id: 'liuchao.identity.jin.baochao_fenhao', name: '宝钞分号', kind: 'merchant', lineId: 'jin' };
 const rules = (patch = {}) => ({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [], ...patch });
 
-test('仓库规则表与身份表首版为空且通过校验', async () => {
+test('仓库秦线收束规则与只读身份定义通过校验', async () => {
   const { playerLedgerRules, playerIdentityDefs, validatePlayerLedgerRules } = await modPromise;
-  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [], identityRevokes: [], lineOutcomes: [], itemGroups: [], partyJoins: [], partyLeaves: [], partyOpenings: [] });
-  assert.deepEqual(playerIdentityDefs(), []);
+  assert.deepEqual(playerLedgerRules(), { ...playerLedgerRules(), identityGrants: [], identityRevokes: [], lineOutcomes: [{ eventId: 'liuchao.event.qin_close_default', lineId: 'qin', outcome: 'unresolved' }], itemGroups: [], partyJoins: [], partyLeaves: [], partyOpenings: [] });
+  assert.deepEqual(playerIdentityDefs().map(d => d.id), ['liuchao.identity.han.marquis_wuyang', 'liuchao.identity.jin.panjiang_shaozhu']);
+  assert.deepEqual(validatePlayerLedgerRules(playerLedgerRules()), []);
   // 六条判档线都能被实体索引认出且可写收束档
   const table = rules({ lineOutcomes: ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin'].map(lineId => ({ eventId: EVENT, lineId, outcome: 'resolved' })) });
   assert.deepEqual(validatePlayerLedgerRules(table), []);

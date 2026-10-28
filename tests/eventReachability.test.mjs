@@ -23,6 +23,7 @@ import { loadTs } from './loadTs.mjs';
 //
 // 隔离关（`DEFAULT_LINE_QUARANTINED_STAGE_IDS`）默认路线走不到，不计入。
 
+const packStages = JSON.parse(fs.readFileSync('src/modules/contentPacks/generated/catalog.json', 'utf8')).stages;
 const DIR = 'src/modules/scenarioMods/builtins/data/';
 
 // 欠账清单：**只能减，不能增**。绑好一条就从这里删一条。
@@ -52,8 +53,7 @@ test('critical event 必须绑在章里或 rail 上，否则玩家永远够不�
   const onRail = new Set(CANON_RAIL_PROFILES.flatMap(profile => profile.orderedEventIds));
 
   const unreachable = [];
-  for (const file of fs.readdirSync(DIR).filter(name => name.endsWith('.json'))) {
-    const mod = JSON.parse(fs.readFileSync(DIR + file, 'utf8'));
+  for (const mod of [...fs.readdirSync(DIR).filter(name => name.endsWith('.json')).map(file => JSON.parse(fs.readFileSync(DIR + file, 'utf8'))), ...packStages]) {
     if (DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(mod.manifest.id)) continue;
     const bound = new Set((mod.scenario.chapters || []).flatMap(chapter => chapter.eventIds || []));
     for (const event of mod.scenario.events || []) {
@@ -91,8 +91,8 @@ test('rail 关里「不在 rail 上的 critical」数量不得增长', async () 
   const offRail = [];
   for (const profile of CANON_RAIL_PROFILES) {
     const file = `${DIR}${profile.modId}.json`;
-    if (!fs.existsSync(file)) continue;
-    const mod = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const mod = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : packStages.find(s => s.manifest.id === profile.modId);
+    if (!mod) continue;
     const ordered = new Set(profile.orderedEventIds);
     for (const event of mod.scenario?.events || []) {
       if (isCritical(event) && !ordered.has(event.id)) offRail.push(`${profile.modId}　${event.id}`);

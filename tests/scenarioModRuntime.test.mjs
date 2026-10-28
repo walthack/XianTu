@@ -165,10 +165,11 @@ test('Canon Rail stage_02 uses the reviewed source order and repaired battle nod
   assert.match(profile.contracts.find(c => c.eventId === 'lcq.event.s02_03').mustReach, /秦军/);
 });
 
-test('Canon Rail covers every source-anchored built-in stage except explicitly quarantined drafts/conflicts', async () => {
+test('Canon Rail covers 29 built-in stages plus the Qin content-pack stage; quarantined stages stay excluded', async () => {
   const { CANON_RAIL_PROFILES, getCanonRailProfile } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
-  assert.equal(CANON_RAIL_PROFILES.length, 29);
-  assert.equal(new Set(CANON_RAIL_PROFILES.map(profile => profile.modId)).size, 29);
+  assert.equal(CANON_RAIL_PROFILES.filter(p => p.modId !== 'lyg.qin_xianyang').length, 29);
+  assert.ok(getCanonRailProfile({ modId: 'lyg.qin_xianyang' }));
+  assert.equal(new Set(CANON_RAIL_PROFILES.map(profile => profile.modId)).size, 30);
   for (const id of ['lyl.taiquan_expedition', 'lcq.stage_03', 'lcq.stage_05', 'lcq.stage_06', 'lyg.ganlu_bian', 'lyg.shixiang_ambush', 'lyl.lin_an_black_sea', 'lyl.luoyang_coup']) {
     assert.equal(getCanonRailProfile({ modId: id }), null, id);
   }

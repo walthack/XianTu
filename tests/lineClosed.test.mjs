@@ -35,8 +35,8 @@ const SOUTH_DONE = [...played(S02), ...played(S03B), ...played(S04), ...played(S
 // 半路走掉：进了鬼王宫就没往下走（05b 只到 s05b_04）
 const SOUTH_HALF = [...played(S02), ...played(S03B), ...played(S04), ...played(S04B), ...played(S05B, e => typeof e.axisSeq === 'number' && e.axisSeq <= 169)];
 
-test('仓库现状：规则表 lineOutcomes 为空，南荒收束靠退回读 closedWhen（二爷离队）', () => {
-  assert.deepEqual(rules.playerLedgerRules().lineOutcomes, []);
+test('仓库现状：南荒尚无收束规则，南荒收束靠退回读 closedWhen（二爷离队）', () => {
+  assert.deepEqual(rules.playerLedgerRules().lineOutcomes.filter(r => r.lineId === 'nanhuang'), []);
   assert.deepEqual(compass.lineCompassTable().lines.find(l => l.lineId === 'nanhuang').closedWhen, [{ path: `done.${DEPART}`, operator: 'eq', value: true }]);
   assert.ok(SOUTH_DONE.some(([, id]) => id === DEPART));
 });
@@ -106,7 +106,7 @@ test('5e8f-04 情境（二期终点·朱老头授艺后，南荒已收束、境�
   assert.notEqual(view.current?.lineId, 'nanhuang');
   assert.ok(!view.others.some(o => o.lineId === 'nanhuang'), '南荒撤卡');
   assert.equal(ledger.evaluateLedgerCondition({ path: 'compass.anyLineClosed', operator: 'eq', value: true }, rt, save), true);
-  assert.ok(view.others.some(o => o.lineId === 'qin'), '秦线在任一国家线收束后出现');
+  assert.ok(!view.others.some(o => o.lineId === 'qin'), '尚未听到秦线传闻，不提前知情');
   const tqLine = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
   const status = unlock.lineUnlockStatus(save, 'taiquan', secondary.secondaryLineUnlockOptions(tqLine));
   assert.deepEqual(status.lines, { closedIds: ['nanhuang'], need: 1, short: 0 });

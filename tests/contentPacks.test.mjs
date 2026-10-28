@@ -10,3 +10,18 @@ test('JSON migration retains existing save kinds, scopes, entries and opening te
 test('mistyped old-save action alias and unsafe completion rewrite fail closed',async()=>fixture(async({m,file,save,compile})=>{const c=JSON.parse(await readFile(join(root,'src/modules/contentPacks/packs/qingyu/f14.json')));m.contracts=['battle.json'];c.meta.hook.compatibleActionIds=['unknown_action'];await file('battle.json',c);await save();await assert.rejects(compile,/invalid compatible action/);delete c.meta.hook.compatibleActionIds;c.meta.hook.completionSceneByOutcome={win:{id:'rewritten_action'}};await file('battle.json',c);await assert.rejects(compile,/unsafe completion override/);}));
 test('playtest stage prose applies only to an explicit matching isolated marker',async()=>{const {overlayPackPlaytestOpening}=await loadTs('../src/modules/contentPacks/index.ts');const stage=JSON.parse(await readFile(join(root,'src/modules/scenarioMods/builtins/data/lcq.stage_02.json')));assert.equal(overlayPackPlaytestOpening(stage,{}),stage);assert.equal(overlayPackPlaytestOpening(stage,{清羽记开局:{kind:'qingyu-demo-v1'}}).scenario.opening.text,(await compileContentPacks()).texts['qingyu.stage02.opening']);});
 test('a prepare action cannot be registered as a legacy battle completion alias',async()=>fixture(async({m,file,save,compile})=>{const c=JSON.parse(await readFile(join(root,'src/modules/contentPacks/packs/qingyu/f06.json')));m.contracts=['battle.json'];c.meta.hook.actionId='repel_merfolk_in_haishen_hall';const stage=JSON.parse(await readFile(join(root,'src/modules/scenarioMods/builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json')));c.meta.hook.compatibleActionIds=[stage.scenario.events.find(e=>e.id===c.meta.hook.eventId).playerCompletionContract.actions.find(a=>a.kind==='prepare').id];await file('battle.json',c);await save();await assert.rejects(compile,/invalid compatible action/);}));
+test('stage text/number references resolve before schema validation and missing/mixed references fail closed', async () => fixture(async ({m,file,save,compile}) => {
+  const stage = JSON.parse(await readFile(join(root,'src/modules/contentPacks/packs/qingyu/stage-qin-xianyang.json')));
+  const texts = JSON.parse(await readFile(join(root,'src/modules/contentPacks/packs/qingyu/qin-texts.json')));
+  m.stages=['stage.json']; m.texts=['texts.json'];
+  await file('texts.json',texts); await save();
+  const original=stage.scenario.opening.text;
+  stage.scenario.opening.text={$text:'missing'}; await file('stage.json',stage);
+  await assert.rejects(compile,/invalid \$text reference/);
+  stage.scenario.opening.text={...original, extra:'not allowed'}; await file('stage.json',stage);
+  await assert.rejects(compile,/invalid \$text reference/);
+  stage.scenario.opening.text=original; await file('stage.json',stage);
+  const out=await compile();
+  assert.equal(out.stages[0].scenario.opening.text,texts[original.$text]);
+  assert.equal(out.stages[0].scenario.events[0].playerCompletionContract.actions[0].timeCost,1);
+}));

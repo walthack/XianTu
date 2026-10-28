@@ -1,0 +1,3699 @@
+{
+  "schema": "xiantu.scenario-mod",
+  "version": 1,
+  "manifest": {
+    "id": "lyg.qin_xianyang",
+    "name": "六朝·咸阳（秦国线）",
+    "version": "1.0.0",
+    "author": "XianTu 剧情策划（五线补全·秦 2026-10-28）",
+    "description": "秦国线（全部为扩写，有意偏离原著 lyg 13680「唯一没打过交道的就是秦国」）：任一国家线收束后，程宗扬听说咸阳有方士冒用他的名头，入咸阳，旁观举鼎、封宫、争位与清洗，在清洗中被追捕，拉拢盟友；第三幕「谁来掌秦」本版只有默认收束（芈氏掌秦），推翻结局待定（Q2）。",
+    "axisSeqLo": null,
+    "axisSeqHi": null,
+    "eventIdContract": "append-only-frozen",
+    "prevStageId": null,
+    "prevStageName": null,
+    "nextStageId": null,
+    "nextStageName": null
+  },
+  "world": {
+    "name": "六朝",
+    "era": "秦国·嬴荡在位末年",
+    "background": "秦国以法家立国、以军功赐爵，商人进不了朝堂。秦王嬴荡二十来岁，修为极高，没有子嗣；宫中有太后，也有先王宠妃芈夫人一系，庶出的公子们手里有兵。咸阳宫里近来出了个排场不小的方士，逢人便说自己是「程少主」请来的。",
+    "specialRules": [
+      "核心专名不得改写",
+      "现代人穿越至六朝，拥有知识优势",
+      "生死根为死气感应异能，非传统灵根",
+      "内宅电铃系统为程宗扬自制",
+      "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
+    ],
+    "continents": [
+      {
+        "id": "liuchao.continent.zhongzhou",
+        "name": "中州",
+        "description": "六朝世界的主要大陆，包含六国都城及主要战场。",
+        "bounds": [
+          {
+            "x": 100,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 50
+          },
+          {
+            "x": 9600,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 6500
+          },
+          {
+            "x": 100,
+            "y": 50
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.nanhuang",
+        "name": "南荒",
+        "description": "中州以南的蛮荒地带，多部族势力。",
+        "bounds": [
+          {
+            "x": 1200,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 5200
+          },
+          {
+            "x": 7000,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 10000
+          },
+          {
+            "x": 1200,
+            "y": 5200
+          }
+        ]
+      },
+      {
+        "id": "liuchao.continent.taiquan",
+        "name": "太泉古阵",
+        "description": "宋国以南的神秘古遗迹，传说中的太泉古阵所在。",
+        "bounds": [
+          {
+            "x": 6400,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 6600
+          },
+          {
+            "x": 9800,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 9600
+          },
+          {
+            "x": 6400,
+            "y": 6600
+          }
+        ]
+      }
+    ],
+    "map": {
+      "atlasId": "liuchao.shared.atlas",
+      "locked": true,
+      "mapConfig": {
+        "width": 10000,
+        "height": 10000,
+        "minLng": 0,
+        "maxLng": 10000,
+        "minLat": 0,
+        "maxLat": 10000
+      },
+      "backgroundImage": "shared-atlas/source-maps/liuchao-world.jpg"
+    }
+  },
+  "canon": {
+    "factions": [
+      {
+        "id": "lyg.faction.wuyang_houfu",
+        "name": "舞阳侯府",
+        "description": "汉国舞阳侯程宗扬在长安的府邸，实为程氏核心势力据点。",
+        "type": "贵族府邸",
+        "headquartersLocationId": "lyg.location.wuyang_mansion"
+      },
+      {
+        "id": "lyg.faction.iron_horse_hall",
+        "name": "铁马堂",
+        "description": "门派/帮会；总部/据点：凉州；核心：铁雄山（原堂主）、铁中宝（副堂主后任堂主）；人物：铁雄山、铁中宝；与程宗扬：程宗扬通过王忠嗣与铁马堂交好，并在凉州盟擂台赛中协助铁马堂",
+        "type": "江湖帮会",
+        "headquartersLocationId": "lyg.location.liangzhou_arena",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.danxia_sect",
+        "name": "丹霞宗",
+        "description": "门派/教派；总部/据点：凉州；目标：未明确；核心：柴永剑（继任宗主）、左彤芝（左护法/护法长老）、白老宗主（已故，曾任丹霞宗宗主及凉州盟盟主）、白仙儿（宗主之女）；人物：左彤芝（左护法）、柴永剑（宗主）、白仙儿（宗主女儿）、丁志雄（凉州盟副盟主，原丹霞宗出身，黑魔海暗子）；与程宗扬：程宗扬与丹霞宗左护法左彤芝有交情，曾受其邀请；丹霞宗为凉州盟总盟主，与程宗扬阵营存在博弈",
+        "type": "宗门",
+        "headquartersLocationId": "lyg.location.liangzhou_arena",
+        "features": [
+          "修炼受伤需赤阳圣果疗伤",
+          "同生共死（兄弟结义）",
+          "悬赏取人性命"
+        ]
+      },
+      {
+        "id": "lyg.faction.zhou_clan",
+        "name": "周族",
+        "description": "周飞的家族势力，携剑霄门、青叶教加入凉州盟，意图夺取盟主之位。",
+        "type": "家族",
+        "headquartersLocationId": "lyg.location.liangzhou_arena"
+      },
+      {
+        "id": "lyg.faction.guangyuan_hang",
+        "name": "广源行",
+        "description": "商会；总部/据点：晴州，具体地点未明；核心：严森垒（账房）、庞白鸿/庞执事（执事，同一人）；人物：严森垒、庞白鸿、庞执事、黎锦香、义姁、何漪莲、周飞；与程宗扬：敌对，程宗扬与广源行屡次为敌",
+        "type": "商会",
+        "headquartersLocationId": "lyg.location.liangzhou",
+        "features": [
+          "安插亲信",
+          "扶植傀儡帮会",
+          "借刀杀人",
+          "重金买凶"
+        ]
+      },
+      {
+        "id": "lyg.faction.sword_gate_sect",
+        "name": "剑霄门",
+        "description": "门派；核心：黎锦香，门主；人物：黎锦香、前任门主（已故）；与程宗扬：曾合作，后因周族势力整合，剑霄门加入周族，与程宗扬存在博弈",
+        "type": "宗门",
+        "headquartersLocationId": "lyg.location.liangzhou_arena",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.yao_chi_zong",
+        "name": "瑶池宗",
+        "description": "女修为主的宗门，白霓裳所属，与舞阳侯府有往来。",
+        "type": "宗门",
+        "headquartersLocationId": "lyg.location.liangzhou"
+      },
+      {
+        "id": "liuchao.faction.liang_zhou_meng",
+        "name": "凉州盟",
+        "description": "唐国凉州一带的江湖联盟，由一宗四堂八会共十六家帮会组成，目前因盟主空缺而动荡。",
+        "type": "江湖联盟",
+        "headquartersLocationId": "lyg.location.liangzhou_arena"
+      },
+      {
+        "id": "liuchao.faction.pan_jiang_cheng",
+        "name": "盘江程氏",
+        "description": "盘江程氏（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.tiance_fu",
+        "name": "皇图天策府",
+        "description": "皇图天策府（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x9fc5fde11c",
+        "name": "右千牛卫府",
+        "description": "右千牛卫府（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x2d33e1eaf9",
+        "name": "程宗扬势力",
+        "description": "程宗扬势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.liangzhou_army",
+        "name": "凉州军",
+        "description": "董卓私属边军，初期假借太后懿旨入京，后附逆刘建；凉州边军，兵力约三千，分华雄、牛辅等部，步骑兼备，擅长攻城野战；主将：董卓（破虏）、牛辅、华雄、贾文和（参军）；凉州健儿善战，斩首以万计无封赏；装备劲弩，攻城破门势如破竹，以寡破众击败两千隶徒。",
+        "type": "军队",
+        "features": [],
+        "polity": "汉国",
+        "region": "汉国"
+      },
+      {
+        "id": "lyl.faction.lyu_clan",
+        "name": "吕氏外戚集团",
+        "description": "吕氏外戚集团（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.tang_guo_chao_ting",
+        "name": "唐国朝廷",
+        "description": "唐国朝廷（势力）——简介待补，源自角色归属富化自动补录。",
+        "type": "势力",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.tai_yi_zhen_zong",
+        "name": "太乙真宗",
+        "description": "太乙真宗（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x0d71c824e7",
+        "name": "阳钧宗",
+        "description": "阳钧宗（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xcd42487992",
+        "name": "乾贞道",
+        "description": "乾贞道（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x6c70e576ef",
+        "name": "长青宗",
+        "description": "长青宗（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.guang_ming_guan_tang",
+        "name": "光明观堂",
+        "description": "光明观堂（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.wei_yuan_escort",
+        "name": "威远镖局",
+        "description": "威远镖局（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb829c70fb9",
+        "name": "林州小碧潭",
+        "description": "林州小碧潭（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.han_guo_chao_ting",
+        "name": "汉国朝廷",
+        "description": "汉国朝廷（势力）——简介待补，源自角色归属富化自动补录。",
+        "type": "势力",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.eunuch_group",
+        "name": "宦官集团",
+        "description": "宦官集团（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x3a190100e6",
+        "name": "摩尼教",
+        "description": "摩尼教（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.shi_fang_cong_lin",
+        "name": "十方丛林",
+        "description": "十方丛林（宗门） 曾起草「核武不扩散条约」——即核心武学不扩散条约，旨在管控顶级武学外流（程宗扬初闻误以为地球核武器，惊到半死，被六朝众人嘲笑没常识）。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x78a6c9fdd3",
+        "name": "大孚灵鹫寺",
+        "description": "大孚灵鹫寺（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x400542aa34",
+        "name": "留仙客栈",
+        "description": "留仙客栈（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.cheng_shi_shang_hui",
+        "name": "程氏商会",
+        "description": "程氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.hei_mo_hai",
+        "name": "黑魔海",
+        "description": "黑魔海（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.dragon_chen",
+        "name": "龙宸",
+        "description": "杀手集团/刺客组织；总部/据点：晴州；目标：绝对中立，只为金铢服务，不涉及任何立场；核心：座主（真身未明）,长老焚无尘；架构：外围：三十六妖星（其他门派弃徒）；核心：二十八宿正星等；手段：色诱术,隐匿形迹,刺杀,暗杀法门,标记召唤；人物：虞白樱,虞紫薇,焚无尘,牛金牛,虚日鼠,女土蝠,室火猪,壁水貐,斗木獬,危月燕,惊理,罂奴；与程宗扬：敌对，程宗扬多次与龙宸杀手冲突，但亦有短暂合作（如请焚无尘开启魔墟禁制）；关键事件：龙宸刺杀岳鸟人及程宗扬同伴,与黑魔海联手袭击云家,在伊水之战中派遣六名杀手刺杀程宗扬,焚无尘被程宗扬设计击杀于太泉古阵。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb332eefadd",
+        "name": "银枪效节",
+        "description": "银枪效节（军队）——简介待补，源自角色归属富化自动补录。",
+        "type": "军队",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.daciensi",
+        "name": "大慈恩寺",
+        "description": "大慈恩寺（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.pengyi",
+        "name": "鹏翼社",
+        "description": "鹏翼社（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xe6bd0066c9",
+        "name": "小紫势力",
+        "description": "小紫势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xing_yue_hu",
+        "name": "星月湖",
+        "description": "星月湖（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.qin_state",
+        "name": "秦国",
+        "description": "秦国（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.yun_shi_shang_hui",
+        "name": "云氏商会",
+        "description": "云氏商会（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.song_state",
+        "name": "宋国",
+        "description": "宋国（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.wu_zong",
+        "name": "巫宗",
+        "description": "巫宗（宗门）——简介待补，源自角色归属富化自动补录。",
+        "type": "宗门",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.liu_jian",
+        "name": "刘建集团",
+        "description": "刘建集团（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.bai_hu_shang_guan",
+        "name": "白湖商馆",
+        "description": "白湖商馆（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyl.faction.changqiu",
+        "name": "长秋宫",
+        "description": "长秋宫（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lcq.faction.left_guard",
+        "name": "左武军",
+        "description": "隶属左武卫大将军王哲，受朝廷/天子调遣，但朝廷奸臣作梗、拖欠粮饷；六朝联军野战军；第一军团辖天武（秦军方阵）、天策（唐军陌刀）、天霁（宋军神臂弓）三营，总兵力万余；主将：王哲（最高统帅/师帅）、韩庚（天武营主将）、文泽（帅帐参谋）；六朝精锐联合，在王哲麾下从无败绩，以寡敌众全歼罗马六军团，断粮月余仍死战不退。",
+        "type": "军队",
+        "features": [],
+        "polity": "大汉/六朝",
+        "region": "跨国（草原域外作战）"
+      },
+      {
+        "id": "liuchao.faction.x8b538653d9",
+        "name": "殇侯势力",
+        "description": "黑魔海毒宗旗下的一个分支——殇侯（鸩羽殇侯·殇振羽）的私人班底，成员忠心于殇侯个人而非毒宗建制，**不等同于毒宗**。背景：黑魔海分巫、毒二宗且向来不睦（巫宗之主=秘御天王，外堂总执事=剑玉姬），两宗曾有内斗。核心成员：秦桧（门客二十余年，习毒宗绝学惊魔指）、石敬瑭（近卫/代理人）、仇雍；小紫幼时托庇殇侯门下，被殇侯指定为毒宗嫡传。",
+        "type": "宗门分支",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x898ded5bf1",
+        "name": "少陵侯府",
+        "description": "少陵侯府（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x4664abc321",
+        "name": "窥基势力",
+        "description": "窥基势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xad9e87112f",
+        "name": "高俅势力",
+        "description": "高俅势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xb51b4a3f61",
+        "name": "十三太保",
+        "description": "十三太保（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "lyg.faction.jin_state",
+        "name": "晋国",
+        "description": "晋国（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xfa787e54e6",
+        "name": "苏妲己势力",
+        "description": "苏妲己势力（组织）——简介待补，源自角色归属富化自动补录。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x2fc3ef553f",
+        "name": "江都王国",
+        "description": "江都王国（势力）——简介待补，源自角色归属富化自动补录。",
+        "type": "势力",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.xue_sun",
+        "name": "雪隼佣兵团",
+        "description": "佣兵团（晴州铜狮巷雇佣兵组织）；总部/据点：晴州铜狮巷；目标：公平、正义、责任和勇气；核心：团长薛延山,副团长石之隼,副队长月霜,副队长敖润；架构：团长-副团长-副队长-佣兵（如老张、冯源等）；手段：；人物：敖润,冯源,老张,赵队长（上尉）,徐队长（上尉）；与程宗扬：程宗扬因月霜关系与雪隼佣兵团结交，曾利用供奉身份设计黑魔海阴谋，后委托雪隼佣兵团运送物品至晴州波斯商会，与副团长石之隼、副队长敖润等有直接互动。；关键事件：月霜加入雪隼佣兵团任副队长,雪隼佣兵团受广阳城官府委托对抗劫匪,雪隼佣兵团遭黑魔海卷入，月霜身份被泉玉姬利用，导致六扇门和雪隼佣兵团被一网打尽,黑魔海阴谋中雪隼佣兵团被重创,程宗扬在晴州与雪隼佣兵团合作，石之隼亲自带队执行任务。",
+        "type": "组织",
+        "features": []
+      },
+      {
+        "id": "liuchao.faction.x56f82fa2b5",
+        "name": "羽林军",
+        "description": "天子亲领；与期门武士并为最可靠兵力；太后、吕氏亦曾插手其人事安排；天子亲军/禁军；驻扎上林苑；设右营骑射等编制；兵力分散驻守各宫观；主将：义纵（右营骑射）、冯子都（羽林郎）、王子方（羽林郎）、霍少将军（后接管）；天子亲领精锐；盔带长羽；骑射为主；被视为最可靠兵力；可争取为皇位支撑。",
+        "type": "军队",
+        "features": [],
+        "polity": "汉国",
+        "region": "汉国"
+      },
+      {
+        "id": "liuchao.faction.x89db5b6118",
+        "name": "兰陵萧氏",
+        "description": "兰陵萧氏（家族）——简介待补，源自角色归属富化自动补录。",
+        "type": "家族",
+        "features": []
+      }
+    ],
+    "locations": [
+      {
+        "id": "lyg.location.wuyang_mansion",
+        "name": "舞阳侯府（长安）",
+        "description": "程宗扬在长安宣平坊的宅邸，设内宅报警电铃和前院议事厅。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "factionId": "lyg.faction.wuyang_houfu",
+        "coordinates": {
+          "x": 2830,
+          "y": 3049
+        },
+        "features": []
+      },
+      {
+        "id": "lyg.location.liangzhou_arena",
+        "name": "凉州武馆",
+        "description": "凉州盟比武场地，因空间有限每日只比两三场。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 750,
+          "y": 3600
+        },
+        "features": []
+      },
+      {
+        "id": "lyg.location.liangzhou",
+        "name": "凉州",
+        "description": "唐国西部重镇，凉州盟根据地。 边塞荒凉，帐篷散落，门派营地零星分布，沙尘漫天，武人往来频繁（民俗：边塞各派结盟自保，凉州盟统领四堂八会，丹霞宗为本地盟主，门派势力根深蒂固） 铁马堂等帮会势力组成凉州盟，驰骋而来（民俗：凉州人士豪侠，结盟闯阵）",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 1430,
+          "y": 2767
+        },
+        "features": [],
+        "region": "唐国"
+      },
+      {
+        "id": "lyg.location.changan",
+        "name": "长安城",
+        "description": "唐国都城，人口二百万，六朝首屈一指的超级都市。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 2830,
+          "y": 3049
+        },
+        "features": []
+      },
+      {
+        "id": "lyg.location.weishui",
+        "name": "渭水",
+        "description": "长安城外主要水系，小紫在此水下闭关晋级。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 2830,
+          "y": 3049
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.changan",
+        "name": "长安",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+        "coordinates": {
+          "x": 3159,
+          "y": 2767
+        },
+        "features": [],
+        "region": "唐国"
+      },
+      {
+        "id": "liuchao.location.wuyuan",
+        "name": "五原城",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "中州北部边境城池，程宗扬初次逃亡地。 边境贸易重镇，商贾云集，市集有马匹、皮毛、香料等货物，城墙高耸，客栈酒肆热闹。（民俗：马市兴盛，五原马匹为六朝各地商队所青睐，亦是南来北往商旅的歇脚之地。） 以出产良驹著称，马匹身量不大但耳尖腿直、鼻正眼明。",
+        "coordinates": {
+          "x": 881,
+          "y": 4366
+        },
+        "features": [],
+        "region": "塞外"
+      },
+      {
+        "id": "liuchao.location.jiankang",
+        "name": "建康",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "晋国都城，六朝世界的政治中心之一。 六朝金粉地，金陵帝王州。繁华街市豪门宅邸，云氏等商贾世家汇聚，商业鼎盛，富甲一方。 长江南岸重镇，台城宫阙壮丽，秦淮河畔烟火万家（民俗：六朝故都，风流文雅，士人尚清谈，寺院道观遍布）",
+        "coordinates": {
+          "x": 3380,
+          "y": 5992
+        },
+        "features": [],
+        "region": "晋国"
+      },
+      {
+        "id": "liuchao.location.luoyang",
+        "name": "洛都",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国都城，位于中州腹地。 汉国京师，宫殿巍峨，琼玉阙楼耸立，国宾驿馆宏伟大气，宫廷戒备森严，天子仪仗威严（民俗：皇家仪仗森严，权贵云集，各方势力暗流涌动） 宫阙巍峨，殿宇连绵，铜驼大街宽绰，两侧里坊规整，晨昏鼓声号令全城（民俗：士族好清谈，宫宴豪奢成风，婚丧仪礼繁复，禁婚二十七月）",
+        "coordinates": {
+          "x": 6838,
+          "y": 3577
+        },
+        "features": [],
+        "region": "汉国"
+      },
+      {
+        "id": "liuchao.location.linan",
+        "name": "临安",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国都城，江南繁华之地。 江南水乡名城，西湖烟柳繁华，蹴鞠相扑盛行，权贵聚集，市井热闹非凡。（民俗：山岳正赛为六朝顶级蹴鞠盛会，女子相扑大赛热闹开擂，鞠社文化蔚然成风。） 江南水乡，市桥繁华，街巷窄长多河渠，酒楼茶肆林立（民俗：商贾云集，物产丰饶，丝织业盛，宋女婉约好文墨）",
+        "coordinates": {
+          "x": 7466,
+          "y": 6532
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.jiangzhou",
+        "name": "江州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "星月湖大营所在地，宋国边境重要城市。 长江南岸的战略要冲，城墙坚固，营寨密布，城郊有金明寨等驻军设施，城内已开设书院，商贾初兴，战火余烬未散。（民俗：晋、宋势力交汇之地，兵家必争，世家子弟图谋变革，欲建平等新秩序；商业萌芽，商会经营渐起。） 南陲边城，山势险峻，星月湖大营隐于其间，数千义士驻守（民俗：民风彪悍，尚武敢战，程侯领地，商旅往来频繁）",
+        "coordinates": {
+          "x": 4956,
+          "y": 6735
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.junzhou",
+        "name": "筠州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国州城，王团练驻地，程宗扬运粮之处。 宋国西部商业重镇，浮凌江畔船来船往，粮铺商号林立，官府设常平仓储粮，军需供应繁忙。（民俗：商业气息浓厚，粮商与军政勾连，走私商路通达昭南。） 程宗扬施粥济民之地，仓廪开棚，平价粜粮，民生有所恢复（民俗：曾有程宗扬开棚施粥、平价粜粮之善政，数万民众受惠）",
+        "coordinates": {
+          "x": 5656,
+          "y": 6822
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.mingzhou",
+        "name": "明州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海州城，光明观堂据点所在。 东南沿海港城，光明观堂医宗所在，城中曾发瘟疫，街巷萧条，港口帆船往来，有大湖水域。（民俗：光明观堂以医术闻名，弟子多习医道，救死扶伤，受民众敬重。）",
+        "coordinates": {
+          "x": 8925,
+          "y": 6374
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.guangyang",
+        "name": "广阳",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "晋国-汉国边境重镇。 广阳渠连接大江云水，商船往来频繁，沿岸街市繁华，赌场酒楼错落其间。（民俗：商贾汇聚，江湖势力活跃，云氏等大商族在此经营水道贸易，黑魔海亦设赌坊为据点。）",
+        "coordinates": {
+          "x": 4456,
+          "y": 5668
+        },
+        "features": [],
+        "region": "晋国"
+      },
+      {
+        "id": "liuchao.location.qingzhou",
+        "name": "晴州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "商贾云集的运河港埠，粮铺船行林立，鞠社热闹，商会势力盘根错节，南北货物汇聚之地。（民俗：蹴鞠之风盛行，商人重利轻义，慈幼院济贫，光明观堂弟子曾在此施医布善。） 沿海城市，泊陵鱼氏与黑魔海曾在此联手",
+        "coordinates": {
+          "x": 5400,
+          "y": 6000
+        },
+        "features": [],
+        "region": "海上"
+      },
+      {
+        "id": "liuchao.location.ningzhou",
+        "name": "宁州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "北府兵驻地。 江畔山城，水师驻防，州城临江而建，西连大江山岭，与江州唇齿相依。（民俗：萧氏经营军镇，水师强盛，民风尚武，州城自治不问朝廷。）",
+        "coordinates": {
+          "x": 4656,
+          "y": 6437
+        },
+        "features": [],
+        "region": "晋国"
+      },
+      {
+        "id": "liuchao.location.jinmingzhai",
+        "name": "金明寨",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋军大营，位于烈山附近。 江州城东南十五里的村寨旧址，宋军掘土垒墙、设壕为营，成为进攻江州的军事基地，辎重营曾遭焚烧。 宋军大营所在，捧日军右厢石元孙麾下诸将驻扎，营帐连绵（民俗：右厢都指挥使石元孙驻军于此，备有巢车、轒輼等攻城器械）",
+        "coordinates": {
+          "x": 5050,
+          "y": 6550
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.haoshuichuan",
+        "name": "好水川",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "烈山附近峡谷，大型战场。 山谷丘陵地带，荒凉旷野，宋夏两军交战之地，有山岗可俯瞰战场。 宋军败绩之地，战场荒凉，遗骸未收，士气低落之地（民俗：军事地名，龙卫左厢军曾在此惨败，主将任福战死）",
+        "coordinates": {
+          "x": 5104,
+          "y": 6476
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.jingxi",
+        "name": "荆溪村寨",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "荆溪人聚居地，位于筠州附近山区。 山间村寨，存粮充裕戒备森严，兼具仓储与防御功能，临江而近筠州，水路可通粮运。（民俗：作为临时粮仓重地，外人出入盘查严格，与官府关系密切。）",
+        "coordinates": {
+          "x": 5600,
+          "y": 6900
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.wudu",
+        "name": "舞都",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "程宗扬封地，舞阳侯府所在。 首阳山下的晋国封邑，侯府深院，画舫往来，世家公子云集，纨绔声色犬马之地。（民俗：权贵奢靡成风，侯门子弟以豢养风虎、海东青等珍禽异兽为风尚，社交宴饮无度。） 南方边陲重镇，程侯规划取此地经营，图谋霸业（民俗：偏远之地，民风淳朴，亟待开发）",
+        "coordinates": {
+          "x": 6114,
+          "y": 3929
+        },
+        "features": [],
+        "region": "汉国"
+      },
+      {
+        "id": "liuchao.location.yong",
+        "name": "上庸",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "唐国与汉国之间的城池。",
+        "coordinates": {
+          "x": 5176,
+          "y": 3978
+        },
+        "features": [],
+        "region": "秦国"
+      },
+      {
+        "id": "liuchao.location.yongzhou",
+        "name": "永州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国-唐国交界附近的城市。",
+        "coordinates": {
+          "x": 4220,
+          "y": 4242
+        },
+        "features": [],
+        "region": "唐国"
+      },
+      {
+        "id": "liuchao.location.baijun",
+        "name": "巴郡",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国、唐国交界处的郡城。",
+        "coordinates": {
+          "x": 4763,
+          "y": 3063
+        },
+        "features": [],
+        "region": "秦国"
+      },
+      {
+        "id": "liuchao.location.dantu",
+        "name": "丹徒",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "晋国-宋国水路交通要地。",
+        "coordinates": {
+          "x": 8875,
+          "y": 4854
+        },
+        "features": [],
+        "region": "汉国"
+      },
+      {
+        "id": "liuchao.location.longchuan",
+        "name": "龙川",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国城市。 江湖术士聚集的边陲小镇，酒旗招展，街巷间多有占卜测字摊位，市井嘈杂而鱼龙混杂。（民俗：民间信奉铁口神算，术士在此地颇受欢迎，算命测字成为当地常见的营生。）",
+        "coordinates": {
+          "x": 7908,
+          "y": 6819
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.nanjun",
+        "name": "南郡",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国南部郡城。",
+        "coordinates": {
+          "x": 6876,
+          "y": 5276
+        },
+        "features": [],
+        "region": "汉国"
+      },
+      {
+        "id": "liuchao.location.chenzhou",
+        "name": "辰州",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "汉国-唐国边境城市。",
+        "coordinates": {
+          "x": 4704,
+          "y": 5011
+        },
+        "features": [],
+        "region": "唐国"
+      },
+      {
+        "id": "liuchao.location.boling",
+        "name": "泊陵",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海城市，鱼氏势力据点。 海岸岛礁中的楼船停泊处，山崖上有鱼氏伏击要塞，湖泊与海路交汇的险峻水域（民俗：海上岛民世家，以毒术和阴险报复闻名江湖，族中高手擅长用毒伏击） 泊陵鱼氏所在，濒海地区，与黑魔海有往来（民俗：鱼氏家族，掌握阴阳鱼等秘宝）",
+        "coordinates": {
+          "x": 9592,
+          "y": 6706
+        },
+        "features": [],
+        "region": "海上"
+      },
+      {
+        "id": "liuchao.location.yiyang",
+        "name": "夷陵",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国城市，长江沿岸。 江南丘陵商业城镇，长江沿岸水陆要冲，白湖商馆据点所在，商旅繁忙，钱庄林立，客栈酒肆遍布街巷。（民俗：白湖商馆醉月楼分号遍布，商贾云集消息灵通，以商贸和情报网络闻名，黑白两道均有往来。） 入山前最后一个城镇，马匹在此换成走骡",
+        "coordinates": {
+          "x": 7068,
+          "y": 7423
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.cuizhi",
+        "name": "翠枝港",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国沿海港口。",
+        "coordinates": {
+          "x": 9515,
+          "y": 5001
+        },
+        "features": [],
+        "region": "唐国"
+      },
+      {
+        "id": "liuchao.location.lie",
+        "name": "烈",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "城池",
+        "description": "宋国-晋国交界的山脉区域。 险峻山地间一条狭窄山道蜿蜒而过，两侧山势陡峭难行，冬季积雪封路，宋军步阵在此难以展开。 金明寨附近区域，宋军右厢主力驻扎，前军应已接近此地（民俗：宋军行军至此，主力部队集结区域）",
+        "coordinates": {
+          "x": 5390,
+          "y": 6472
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.longchi",
+        "name": "龙池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "type": "宗门",
+        "description": "太乙真宗总部所在地，位于中州区域。 太乙真宗道观所在，山门巍峨，云雾缭绕，为六朝道教第一大宗的主坛所在。（民俗：道教圣地，讲究清修炼丹，弟子遍布六朝各地，掌教就职典礼庄严肃穆。） 太乙真宗圣地，龙阙山所在地，掌教就职大典举行地，山势险峻（民俗：道教圣地，太乙真宗总坛所在，九阳神功传承之地）",
+        "coordinates": {
+          "x": 5000,
+          "y": 5000
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.nanzhao",
+        "name": "昭南",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城市，六朝清羽记结尾与云龙吟中多次出现。 南方国度，都城麟趾城，地产巨木用于建筑，水系连通大江云水，婚俗保留古风。（民俗：妻媵制盛行，诸侯可一聘九女；沐羽城等地有昭南人受雇充当佣兵；建筑用巨木由昭南输出。） 六朝之一，都城为麟趾城，境内有帝丘、昆吾等地名。",
+        "coordinates": {
+          "x": 4916,
+          "y": 7778
+        },
+        "features": [],
+        "region": "昭南"
+      },
+      {
+        "id": "liuchao.location.diqiu",
+        "name": "帝丘",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒-中州交界处的重要城镇。 昭南境内地名，位于麟趾城附近。",
+        "coordinates": {
+          "x": 6096,
+          "y": 7831
+        },
+        "features": [],
+        "region": "昭南"
+      },
+      {
+        "id": "liuchao.location.kunwu",
+        "name": "昆吾",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域的重要城镇。 昭南南方重镇，城中有制刀工匠，相传以昆吾刀裁取霓龙丝，气候湿热，多云霞幻象。（民俗：昆吾刀锋利著称，相传可裁取霞光化为霓丝，为当地神秘特产。） 昭南境内地名，与帝丘之间夹杂着夭鸿、火渎等地名。",
+        "coordinates": {
+          "x": 4840,
+          "y": 7546
+        },
+        "features": [],
+        "region": "昭南"
+      },
+      {
+        "id": "liuchao.location.xiongerpu",
+        "name": "熊耳铺",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒入口处的村寨，程宗扬在此选向导。 南荒湿热，商旅歇脚的驿站小镇，夜间赶路凭眼力辨途，店铺灯火昏暗。（民俗：南荒人夜行不点火把，全凭眼力走夜路，速度反比白天更快。）",
+        "coordinates": {
+          "x": 1623,
+          "y": 7612
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.guiwangdong",
+        "name": "鬼王峒",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "洞府",
+        "description": "南荒鬼王峒势力的核心洞窟。 深幽不见底的地堑，古老遗迹与荒圮乱石交织，闷热潮湿的密林中仅见奴隶，鲜有人马。（民俗：鬼巫王主导的隐秘势力，与碧鲮人有生意往来，设驿馆接待外来者。） 鬼地方，日夜难分。",
+        "coordinates": {
+          "x": 1641,
+          "y": 8690
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.baiyi",
+        "name": "白夷族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒白夷族聚居地。 南荒丛林深处的部族聚居地，设有隐秘地宫，当地出产湖珠手串等南荒特产，有自己的武装力量与鬼王峒抗衡。 盘江以南的富庶山谷，纯白岩石门楼，香花遍路，女子娇美。（民俗：出产珍稀之物，女性地位较高，盛装迎接贵客。）",
+        "coordinates": {
+          "x": 1818,
+          "y": 8118
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.biyu",
+        "name": "碧鲮族",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒沿海碧鲮族聚居地。 濒海而居的部族村寨，以渔获腌制和珊瑚采集为生，夜间篝火烤肉，空气中弥漫海产腥鲜与草药气息。（民俗：擅长潜水捕捞，族中女子常以海产交换陆上物资，有将俘虏献予鬼巫王的传统。） 碧蓝海湾，白沙滩平缓，椰林婆娑，海产丰饶。（民俗：渔业为生，曾出美女供鬼巫王玩乐。）",
+        "coordinates": {
+          "x": 1824,
+          "y": 8592
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.liuligu",
+        "name": "琉璃谷",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域山谷。 琉璃化的山谷，阳光下七彩纷呈，景色瑰丽绝美，为南荒胜境。",
+        "coordinates": {
+          "x": 1165,
+          "y": 8791
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.shenmu",
+        "name": "神木",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒区域重要地标。 巍峨神木如万仞之峰，枝干广袤需五日方至半腰，根节如群山层叠，云霞缭绕触手可及，树巅隐于天际不可望",
+        "coordinates": {
+          "x": 1341,
+          "y": 9521
+        },
+        "features": [],
+        "region": "南荒"
+      },
+      {
+        "id": "liuchao.location.haishanghuahuan",
+        "name": "海棠花環",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "险地",
+        "description": "南荒极南端的环状区域。",
+        "coordinates": {
+          "x": 3241,
+          "y": 9915
+        },
+        "features": [],
+        "region": "海上"
+      },
+      {
+        "id": "liuchao.location.canglan",
+        "name": "苍澜镇",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "城池",
+        "description": "太泉古阵入口附近的镇子。 浮玉山脚下的荒芜集镇，四野红土不毛，唯镇周有零星草木，镇外常年雾气弥漫（雾瘴），进出太泉古阵的旅客在此落脚。（民俗：无本地出产，粮价百倍于外；兵器极廉，窝头换刀非神话；镇上弱肉强食，外来者须管住嘴少打听。）",
+        "coordinates": {
+          "x": 7500,
+          "y": 9000
+        },
+        "features": [],
+        "region": "太泉"
+      },
+      {
+        "id": "liuchao.location.taiquan",
+        "name": "太泉古阵",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "秘境",
+        "description": "远古遗迹，太泉古阵入口。 古阵空间结构违背常识，头顶可见星空，西部有赤红巨石，残存焦黑树木与灰烬，黑暗无光处有魇狼出没（民俗：阵法设有灵性机关，需特定修为（六阳境）方可进入，藏有赤阳圣果等珍贵之物） 上古遗迹实为另一个时代的造物：金铁构筑的廊道厅堂、长明不灭的\"夜明珠\"、显影人像的\"光影幻璧\"、轻韧透亮的\"琉璃纸\"、不用牛马自行奔走的\"铁车\"残骸，六朝人以自身语汇敬畏称之。（民俗：入阵者以\"仙家遗泽\"解读诸般造物并各自命名；唯穿越者能认出真身，认知差微妙有趣。）",
+        "coordinates": {
+          "x": 7573,
+          "y": 9083
+        },
+        "features": [],
+        "region": "太泉"
+      },
+      {
+        "id": "liuchao.location.bailuojiang",
+        "name": "白龍江",
+        "continentId": "liuchao.continent.nanhuang",
+        "type": "城池",
+        "description": "南荒-中州交界的重要河流。 大江支流，河水蜿蜒向西汇入滔滔江水。",
+        "coordinates": {
+          "x": 1905,
+          "y": 7162
+        },
+        "features": [],
+        "region": "宋国"
+      },
+      {
+        "id": "liuchao.location.xianyang",
+        "name": "咸阳",
+        "type": "城池",
+        "description": "秦国国都，渭水之滨的雄城。",
+        "coordinates": {
+          "x": 5189,
+          "y": 1911
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.yongcheng",
+        "name": "雍",
+        "type": "城池",
+        "description": "秦国故都，岐山东麓的古邑。",
+        "coordinates": {
+          "x": 4805,
+          "y": 1728
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.lintao",
+        "name": "临洮",
+        "type": "城池",
+        "description": "秦国西北边城。",
+        "coordinates": {
+          "x": 4421,
+          "y": 941
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.shangjun",
+        "name": "上郡",
+        "type": "城池",
+        "description": "秦国北疆重镇。",
+        "coordinates": {
+          "x": 5422,
+          "y": 932
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.hanguguan",
+        "name": "函谷关",
+        "type": "城池",
+        "description": "秦国东出之咽喉雄关，扼守通往汉境的孔道。",
+        "coordinates": {
+          "x": 5750,
+          "y": 2432
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.hongmen",
+        "name": "鸿门",
+        "type": "城池",
+        "description": "咸阳东郊之地。",
+        "coordinates": {
+          "x": 5483,
+          "y": 2132
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.qishan",
+        "name": "歧山",
+        "type": "城池",
+        "description": "秦国西界山脉。",
+        "coordinates": {
+          "x": 4589,
+          "y": 2148
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.zhuoguang",
+        "name": "涿光",
+        "type": "城池",
+        "description": "秦国极北关隘，出关即皋落氏、勾龙氏诸部草原。",
+        "coordinates": {
+          "x": 4803,
+          "y": 584
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.qingyuan_jin",
+        "name": "清远",
+        "type": "城池",
+        "description": "晋国北境城邑。",
+        "coordinates": {
+          "x": 3167,
+          "y": 5628
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.rongzhou",
+        "name": "容州",
+        "type": "城池",
+        "description": "晋国北部州城。",
+        "coordinates": {
+          "x": 3685,
+          "y": 5654
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.hezhou",
+        "name": "和州",
+        "type": "城池",
+        "description": "晋国腹地州城。",
+        "coordinates": {
+          "x": 3031,
+          "y": 6216
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.linchuan",
+        "name": "临川",
+        "type": "城池",
+        "description": "晋国东部州城，临川王封地。",
+        "coordinates": {
+          "x": 4090,
+          "y": 6122
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.jingzhou_jin",
+        "name": "竞州",
+        "type": "城池",
+        "description": "晋国西陲州城。",
+        "coordinates": {
+          "x": 2188,
+          "y": 6465
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.zhuyajun",
+        "name": "珠崖郡",
+        "type": "城池",
+        "description": "晋国西南滨海之郡。",
+        "coordinates": {
+          "x": 2713,
+          "y": 7296
+        },
+        "features": []
+      },
+      {
+        "id": "liuchao.location.yongzhou_jin",
+        "name": "邕州",
+        "type": "城池",
+        "description": "晋国南部州城。",
+        "coordinates": {
+          "x": 4178,
+          "y": 6999
+        },
+        "features": []
+      }
+    ],
+    "characters": [
+      {
+        "id": "liuchao.character.cheng_zongyang",
+        "name": "程宗扬",
+        "description": "主角",
+        "role": "主角",
+        "gender": "男",
+        "realm": "未知",
+        "affiliations": [],
+        "locationId": "liuchao.location.xianyang",
+        "skillIds": [
+          "lyg.skill.death_root",
+          "lyg.skill.np001",
+          "lyg.skill.np004",
+          "lyg.skill.np005",
+          "lyg.skill.np006",
+          "lyg.skill.np012",
+          "lyg.skill.np024",
+          "lyg.skill.np028",
+          "lyg.skill.np029",
+          "lyg.skill.np030",
+          "lyg.skill.np033",
+          "lyg.skill.np035",
+          "lyg.skill.np040",
+          "lyg.skill.np055",
+          "lyg.skill.np057",
+          "lyg.skill.np058",
+          "lyg.skill.np059",
+          "lyg.skill.np060",
+          "lyg.skill.np061",
+          "lyg.skill.np064",
+          "lyg.skill.np067",
+          "lyg.skill.np069",
+          "lyg.skill.np070"
+        ],
+        "techniqueIds": [
+          "lyg.technique.np016",
+          "lyg.technique.np050",
+          "lyg.technique.np056",
+          "lyg.technique.np062"
+        ],
+        "itemIds": [
+          "lyg.item.fubutsu_honmaru_hilt",
+          "lyg.item.np002",
+          "lyg.item.np003",
+          "lyg.item.np007",
+          "lyg.item.np008",
+          "lyg.item.np009",
+          "lyg.item.np010",
+          "lyg.item.np011",
+          "lyg.item.np013",
+          "lyg.item.np014",
+          "lyg.item.np015",
+          "lyg.item.np017",
+          "lyg.item.np018",
+          "lyg.item.np019",
+          "lyg.item.np020",
+          "lyg.item.np021",
+          "lyg.item.np022",
+          "lyg.item.np023",
+          "lyg.item.np025",
+          "lyg.item.np026",
+          "lyg.item.np027",
+          "lyg.item.np031",
+          "lyg.item.np032",
+          "lyg.item.np034",
+          "lyg.item.np036",
+          "lyg.item.np037",
+          "lyg.item.np038",
+          "lyg.item.np039",
+          "lyg.item.np041",
+          "lyg.item.np042",
+          "lyg.item.np043",
+          "lyg.item.np044",
+          "lyg.item.np045",
+          "lyg.item.np046",
+          "lyg.item.np047",
+          "lyg.item.np048",
+          "lyg.item.np049",
+          "lyg.item.np051",
+          "lyg.item.np052",
+          "lyg.item.np053",
+          "lyg.item.np054",
+          "lyg.item.np063",
+          "lyg.item.np065",
+          "liuchao.item.coral_dagger",
+          "lyg.item.np068"
+        ],
+        "profile": {
+          "attributes": {
+            "rootBone": 10,
+            "spirituality": 10,
+            "comprehension": 10,
+            "fortune": 9,
+            "charm": 9,
+            "temperament": 10
+          },
+          "spiritRoot": {
+            "name": "变异灵根",
+            "tier": "天品",
+            "description": "灵根异变破常理，潜力无穷，修炼者似逆命而行，主颠覆与意外之变。"
+          },
+          "talents": [
+            {
+              "name": "天命主角",
+              "description": "灾难收束为踏脚石，机缘如雨点砸来，他站在风暴眼笑看命运齿轮碾碎所有敌人。"
+            },
+            {
+              "name": "太一经",
+              "description": "程宗扬的专属异能。"
+            }
+          ],
+          "appearance": "下巴有胡茬",
+          "personality": [
+            "拥有现代知识体系；水泥、拉链、纸钞、现代器物等概念来自其穿越者认知",
+            "现代人，拥有六朝人物没有的知识（纸钞体系，现代性玩具），好色",
+            "冲动",
+            "偶尔愧疚",
+            "有支配欲"
+          ],
+          "notes": [
+            "【功法约束】双修鼎炉之术中，须以处子为鼎炉才能高效炼化杂气，否则炼化效率极低。（破坏后果：炼化缓慢，可能造成真元失控、丹田胀裂风险。）",
+            "【功法约束】生死根功法吸收死气后造成死气过重，需通过交合吸收元红消纳死气。（破坏后果：死气过重可能导致经脉受损或修为失控。）",
+            "【功法约束】程宗扬因魔修功法或药物触发，需要频繁与女性发生性关系以调控真元或缓解阳亢之症。（破坏后果：若长期不泄或失去鼎炉，阳亢之症或真元暴烈可能加剧，危及自身。）",
+            "【性癖】喜爱后庭性交；喜爱使用性玩具；有轻微支配施虐倾向；喜爱处女；喜爱成熟美妇"
+          ],
+          "origin": "主角",
+          "memories": [
+            "程宗扬与凝羽遭蛇彝人袭击，程宗扬中毒受伤，凝羽斩杀蛇彝人。",
+            "程宗扬等人在蛇彝族长屋内发现五十余具女尸，被以仪式性方式残虐致死，疑似鬼王峒所为，商队决定焚屋离去。",
+            "云苍峰提议两支商队同行去白夷族，程宗扬同意并透露寻找霓龙丝的目标，谢艺提供碧鲮族线索，双方达成合作。",
+            "程宗扬说服武二郎参与明晚夺取灵飞镜的行动，武二郎同意协助。",
+            "程宗扬趁机偷袭，一刀斩下鸦人首级，救下乐明珠和阿夕。",
+            "程宗扬和武二郎处理鸦人尸体，发现其携带的空白羊皮纸，经云苍峰鉴定为秘法传讯信，推测黑魔海与鬼王峒勾结，目标指向白夷族。",
+            "吕巨君率左武军与兽蛮入宫，程宗扬认出古格尔。",
+            "程宗扬在含光殿击杀古格尔，救出昭仪。",
+            "程宗扬等人走复道遇伏，秦桧用烟雾掩护，程宗扬脱身。",
+            "程宗扬在便门瓦牡丹棚获情报，涉及宋军部署、贾师宪决策、林冲背景等，疑线人在皇城司。",
+            "程宗扬与李师师游小瀛洲，遇梁公子等恶少，程宗扬出手教训，李师师因母亲被辱痛哭。",
+            "程宗扬与众人分析黑魔海可能通过林娘子渗透禁军，决定拜访鲁智深。",
+            "殇侯与程宗扬夜谈六朝兴亡之际，文士巾打扮的秦桧快步走来，躬身深揖：\"君侯，北地有讯。\"随后受命引程宗扬在山崖温泉间随意走走。其人举止温文尔雅，脸上总带一丝谦虚笑意；殇侯私评：\"灵敏有余，志浅易变。\"",
+            "程宗扬在临安某处（疑似沐羽城程氏住所或城外隐蔽处）（程宗扬骑在申婉盈臀上交合时，文中提及「卓云君亲传的房中术」，以背景人物方式首次被提及；随后在0090.html正式以奴婢身份向程宗扬回话） 初始身份：太乙真宗教御（蔺贼势力败落后被小紫收服的逃亡者，三魂七魄留"
+          ]
+        },
+        "level": null,
+        "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+      },
+      {
+        "id": "liuchao.character.xu_junfang",
+        "name": "徐君房",
+        "description": "羽衣大袖、水晶球不离手的方士，被一对双胞胎女子带来咸阳，在秦宫里出入，逢人就算卦，自称是「程少主」请来的。",
+        "role": "方士",
+        "gender": "男",
+        "realm": "未知",
+        "affiliations": [],
+        "locationId": "liuchao.location.xianyang",
+        "profile": {
+          "origin": "方士，在秦宫出入，尚无官职"
+        }
+      },
+      {
+        "id": "liuchao.character.yu_bai_ying",
+        "name": "虞白樱",
+        "description": "虞氏双胞胎中的姐姐，身手出自龙宸，在咸阳暗中护着徐君房。",
+        "role": "虞氏双胞胎姐姐",
+        "gender": "女",
+        "realm": "未知",
+        "affiliations": [],
+        "locationId": "liuchao.location.xianyang",
+        "profile": {
+          "origin": "龙宸出身的杀手"
+        }
+      },
+      {
+        "id": "liuchao.character.yu_zi_wei",
+        "name": "虞紫薇",
+        "description": "虞氏双胞胎中的妹妹，身手出自龙宸，在咸阳暗中护着徐君房。",
+        "role": "虞氏双胞胎妹妹",
+        "gender": "女",
+        "realm": "未知",
+        "affiliations": [],
+        "locationId": "liuchao.location.xianyang",
+        "profile": {
+          "origin": "龙宸出身的杀手"
+        }
+      },
+      {
+        "id": "liuchao.character.ning_yu",
+        "name": "凝羽",
+        "description": "程宗扬身边冷淡寡言的女护卫。",
+        "role": "程宗扬身边的护卫",
+        "gender": "女",
+        "realm": "未知",
+        "affiliations": [],
+        "locationId": "liuchao.location.xianyang",
+        "profile": {
+          "origin": "程宗扬身边的护卫"
+        }
+      }
+    ],
+    "playerRelationships": [],
+    "relationships": [],
+    "factionRelationships": [
+      {
+        "fromFactionId": "lyg.faction.sword_gate_sect",
+        "toFactionId": "lyg.faction.zhou_clan",
+        "relation": "盟友",
+        "score": 72,
+        "direction": "bidirectional",
+        "tags": [
+          "妻子",
+          "夫君",
+          "名义夫妻"
+        ]
+      },
+      {
+        "fromFactionId": "lyg.faction.wuyang_houfu",
+        "toFactionId": "liuchao.faction.yao_chi_zong",
+        "relation": "友好",
+        "score": 28,
+        "direction": "bidirectional",
+        "tags": [
+          "初次会面，互相试探",
+          "初次会面",
+          "暧昧接触"
+        ]
+      },
+      {
+        "fromFactionId": "lyg.faction.iron_horse_hall",
+        "toFactionId": "lyg.faction.wuyang_houfu",
+        "relation": "友好",
+        "score": 39,
+        "direction": "bidirectional",
+        "tags": [
+          "盟友",
+          "属下"
+        ]
+      },
+      {
+        "fromFactionId": "lyg.faction.iron_horse_hall",
+        "toFactionId": "lyg.faction.zhou_clan",
+        "relation": "冷淡",
+        "score": -20,
+        "direction": "bidirectional",
+        "tags": [
+          "竞争关系",
+          "竞争/恩怨"
+        ]
+      },
+      {
+        "fromFactionId": "lyg.faction.wuyang_houfu",
+        "toFactionId": "lyg.faction.zhou_clan",
+        "relation": "友好",
+        "score": 32,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对",
+          "情人/合作者",
+          "仇敌"
+        ]
+      },
+      {
+        "fromFactionId": "lyg.faction.sword_gate_sect",
+        "toFactionId": "lyg.faction.wuyang_houfu",
+        "relation": "友好",
+        "score": 45,
+        "direction": "bidirectional",
+        "tags": [
+          "情人/合作者",
+          "情人/性伴侣",
+          "有肌肤之亲，未公开"
+        ]
+      },
+      {
+        "fromFactionId": "lyg.faction.danxia_sect",
+        "toFactionId": "lyg.faction.wuyang_houfu",
+        "relation": "友好",
+        "score": 42,
+        "direction": "bidirectional",
+        "tags": [
+          "盟友"
+        ]
+      },
+      {
+        "fromFactionId": "lyg.faction.danxia_sect",
+        "toFactionId": "lyg.faction.zhou_clan",
+        "relation": "中立",
+        "score": 5,
+        "direction": "bidirectional",
+        "tags": [
+          "敌对"
+        ]
+      }
+    ]
+  },
+  "content": {
+    "items": [
+      {
+        "id": "lyg.item.fubutsu_honmaru_hilt"
+      },
+      {
+        "id": "lyg.item.np002"
+      },
+      {
+        "id": "lyg.item.np003"
+      },
+      {
+        "id": "lyg.item.np007"
+      },
+      {
+        "id": "lyg.item.np008"
+      },
+      {
+        "id": "lyg.item.np009"
+      },
+      {
+        "id": "lyg.item.np010"
+      },
+      {
+        "id": "lyg.item.np011"
+      },
+      {
+        "id": "lyg.item.np013"
+      },
+      {
+        "id": "lyg.item.np014"
+      },
+      {
+        "id": "lyg.item.np015"
+      },
+      {
+        "id": "lyg.item.np017"
+      },
+      {
+        "id": "lyg.item.np018"
+      },
+      {
+        "id": "lyg.item.np019"
+      },
+      {
+        "id": "lyg.item.np020"
+      },
+      {
+        "id": "lyg.item.np021"
+      },
+      {
+        "id": "lyg.item.np022"
+      },
+      {
+        "id": "lyg.item.np023"
+      },
+      {
+        "id": "lyg.item.np025"
+      },
+      {
+        "id": "lyg.item.np026"
+      },
+      {
+        "id": "lyg.item.np027"
+      },
+      {
+        "id": "lyg.item.np031"
+      },
+      {
+        "id": "lyg.item.np032"
+      },
+      {
+        "id": "lyg.item.np034"
+      },
+      {
+        "id": "lyg.item.np036"
+      },
+      {
+        "id": "lyg.item.np037"
+      },
+      {
+        "id": "lyg.item.np038"
+      },
+      {
+        "id": "lyg.item.np039"
+      },
+      {
+        "id": "lyg.item.np041"
+      },
+      {
+        "id": "lyg.item.np042"
+      },
+      {
+        "id": "lyg.item.np043"
+      },
+      {
+        "id": "lyg.item.np044"
+      },
+      {
+        "id": "lyg.item.np045"
+      },
+      {
+        "id": "lyg.item.np046"
+      },
+      {
+        "id": "lyg.item.np047"
+      },
+      {
+        "id": "lyg.item.np048"
+      },
+      {
+        "id": "lyg.item.np049"
+      },
+      {
+        "id": "lyg.item.np051"
+      },
+      {
+        "id": "lyg.item.np052"
+      },
+      {
+        "id": "lyg.item.np053"
+      },
+      {
+        "id": "lyg.item.np054"
+      },
+      {
+        "id": "lyg.item.np063"
+      },
+      {
+        "id": "lyg.item.np065"
+      },
+      {
+        "id": "liuchao.item.coral_dagger"
+      },
+      {
+        "id": "lyg.item.np068"
+      },
+      {
+        "id": "lyg.item.np071"
+      },
+      {
+        "id": "lyg.item.np073"
+      },
+      {
+        "id": "lyg.item.np076"
+      },
+      {
+        "id": "lyg.item.np077"
+      },
+      {
+        "id": "lyg.item.np079"
+      },
+      {
+        "id": "lyg.item.np082"
+      },
+      {
+        "id": "lyg.item.np085"
+      },
+      {
+        "id": "lyg.item.np086"
+      },
+      {
+        "id": "lyg.item.np091"
+      },
+      {
+        "id": "lyg.item.np092"
+      },
+      {
+        "id": "lyg.item.np096"
+      },
+      {
+        "id": "lyg.item.np101"
+      },
+      {
+        "id": "lyg.item.np108"
+      },
+      {
+        "id": "lyg.item.np109"
+      },
+      {
+        "id": "lyg.item.np111"
+      },
+      {
+        "id": "lyg.item.np116"
+      },
+      {
+        "id": "lyg.item.np117"
+      },
+      {
+        "id": "lyg.item.np118"
+      },
+      {
+        "id": "lyg.item.np121"
+      },
+      {
+        "id": "lyg.item.np123"
+      },
+      {
+        "id": "lyg.item.np124"
+      },
+      {
+        "id": "lyg.item.np125"
+      },
+      {
+        "id": "lyg.item.np127"
+      }
+    ],
+    "skills": [
+      {
+        "id": "lyg.skill.death_root"
+      },
+      {
+        "id": "lyg.skill.np001"
+      },
+      {
+        "id": "lyg.skill.np004"
+      },
+      {
+        "id": "lyg.skill.np005"
+      },
+      {
+        "id": "lyg.skill.np006"
+      },
+      {
+        "id": "lyg.skill.np012"
+      },
+      {
+        "id": "lyg.skill.np024"
+      },
+      {
+        "id": "lyg.skill.np028"
+      },
+      {
+        "id": "lyg.skill.np029"
+      },
+      {
+        "id": "lyg.skill.np030"
+      },
+      {
+        "id": "lyg.skill.np033"
+      },
+      {
+        "id": "lyg.skill.np035"
+      },
+      {
+        "id": "lyg.skill.np040"
+      },
+      {
+        "id": "lyg.skill.np055"
+      },
+      {
+        "id": "lyg.skill.np057"
+      },
+      {
+        "id": "lyg.skill.np058"
+      },
+      {
+        "id": "lyg.skill.np059"
+      },
+      {
+        "id": "lyg.skill.np060"
+      },
+      {
+        "id": "lyg.skill.np061"
+      },
+      {
+        "id": "lyg.skill.np064"
+      },
+      {
+        "id": "lyg.skill.np067"
+      },
+      {
+        "id": "lyg.skill.np069"
+      },
+      {
+        "id": "lyg.skill.np070"
+      },
+      {
+        "id": "lyg.skill.np080"
+      },
+      {
+        "id": "lyg.skill.np081"
+      },
+      {
+        "id": "lyg.skill.np094"
+      },
+      {
+        "id": "lyg.skill.np097"
+      },
+      {
+        "id": "lyg.skill.np100"
+      },
+      {
+        "id": "lyg.skill.np102"
+      },
+      {
+        "id": "lyg.skill.np114"
+      }
+    ],
+    "techniques": [
+      {
+        "id": "lyg.technique.np016"
+      },
+      {
+        "id": "lyg.technique.np050"
+      },
+      {
+        "id": "lyg.technique.np056"
+      },
+      {
+        "id": "lyg.technique.np062"
+      },
+      {
+        "id": "lyg.technique.np074"
+      },
+      {
+        "id": "lyg.technique.np075"
+      },
+      {
+        "id": "lyg.technique.np078"
+      },
+      {
+        "id": "lyg.technique.np122"
+      }
+    ]
+  },
+  "rules": {
+    "mode": "strict",
+    "lockedFields": [
+      "canon.factions.*.name",
+      "canon.locations.*.name",
+      "canon.characters.*.name",
+      "content.skills.*.name",
+      "content.techniques.*.name",
+      "content.items.*.name"
+    ],
+    "contentAccess": [
+      {
+        "contentId": "lyg.skill.death_root",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np004",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np005",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np029",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np030",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np040",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np055",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np059",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np064",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.skill.np070",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np002",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np003",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np007",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np008",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np011",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np014",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np023",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np032",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np034",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np036",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np037",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np038",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np042",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np043",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np044",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np046",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np048",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np063",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np068",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np121",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.xu_junfang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np123",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.xu_junfang"
+        ],
+        "playerAllowed": false
+      },
+      {
+        "contentId": "lyg.item.np124",
+        "policy": "exclusive",
+        "allowedCharacterIds": [
+          "liuchao.character.xu_junfang"
+        ],
+        "playerAllowed": false
+      }
+    ]
+  },
+  "scenario": {
+    "opening": {
+      "text": {
+        "$text": "qin.opening.text"
+      },
+      "playerCharacterId": "liuchao.character.cheng_zongyang",
+      "creationPreset": {
+        "characterName": "程宗扬",
+        "gender": "男",
+        "race": "人族",
+        "age": 20,
+        "talentTier": {
+          "name": "异世来客",
+          "description": {
+            "$text": "qin.opening.creationPreset.talentTier.description"
+          }
+        },
+        "origin": {
+          "name": "程氏商会东家",
+          "description": {
+            "$text": "qin.opening.creationPreset.origin.description"
+          }
+        },
+        "spiritRoot": {
+          "name": "生死根",
+          "tier": "唯一异能",
+          "description": {
+            "$text": "qin.opening.creationPreset.spiritRoot.description"
+          },
+          "specialEffects": [
+            "感应死亡气息",
+            "可吸收周围死气",
+            "阴阳失衡有爆体风险"
+          ]
+        },
+        "talents": [
+          {
+            "name": "务实机敏",
+            "description": {
+              "$text": "qin.opening.creationPreset.talents.0.description"
+            }
+          },
+          {
+            "name": "现代知识",
+            "description": {
+              "$text": "qin.opening.creationPreset.talents.1.description"
+            }
+          }
+        ],
+        "attributes": {
+          "rootBone": 6,
+          "spirituality": 5,
+          "comprehension": 7,
+          "fortune": 7,
+          "charm": 6,
+          "temperament": 6
+        },
+        "locked": true
+      },
+      "locationId": "liuchao.location.xianyang",
+      "featuredCharacterIds": [
+        "liuchao.character.cheng_zongyang"
+      ]
+    },
+    "initialFlags": {
+      "chapter.lyg.qin_xianyang.prologue.started": true,
+      "chapter.lyg.qin_xianyang.prologue.done": false,
+      "chapter.lyg.qin_xianyang.act1.started": true,
+      "chapter.lyg.qin_xianyang.act1.done": false,
+      "chapter.lyg.qin_xianyang.act2.started": true,
+      "chapter.lyg.qin_xianyang.act2.done": false,
+      "chapter.lyg.qin_xianyang.act3.started": true,
+      "chapter.lyg.qin_xianyang.act3.done": false,
+      "event.qin_hook_fangshi_rumor.done": false,
+      "event.qin_enter_xianyang.done": false,
+      "event.qin_entry_envoy.done": false,
+      "event.qin_find_xu.done": false,
+      "event.qin_entry_camp.done": false,
+      "event.qin_king_refuses.done": false,
+      "event.qin_xu_auspice.done": false,
+      "event.qin_yu_sisters_refuge.done": false,
+      "event.qin_new_year_banquet.done": false,
+      "event.qin_palace_sealed.done": false,
+      "event.qin_succession_fight.done": false,
+      "event.qin_purge_hunted.done": false,
+      "event.qin_yu_sisters_act2.done": false,
+      "event.qin_heimohai_message.done": false,
+      "event.qin_ningyu_coldtrace.done": false,
+      "event.qin_xiaoling_villa.done": false,
+      "event.qin_bo_family.done": false,
+      "event.qin_close_default.done": false
+    },
+    "events": [
+      {
+        "id": "liuchao.event.qin_hook_fangshi_rumor",
+        "name": "咸阳传闻",
+        "description": {
+          "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16988、17057（徐君房：半路接到「你传来的话」去咸阳办事；混了个客卿的身份）",
+        "axisSeq": 2001,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "compass.anyLineClosed",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_hook_fangshi_rumor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "objective": {
+          "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.objective"
+        },
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "acq.liuchao.character.xu_junfang",
+                "operator": "gte",
+                "value": "encountered"
+              },
+              {
+                "path": "identity.liuchao.identity.jin.panjiang_shaozhu",
+                "operator": "exists"
+              }
+            ],
+            "description": {
+              "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.0.description"
+            }
+          },
+          {
+            "when": [
+              {
+                "path": "acq.liuchao.character.xu_junfang",
+                "operator": "gte",
+                "value": "encountered"
+              }
+            ],
+            "description": {
+              "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.1.description"
+            }
+          },
+          {
+            "when": [
+              {
+                "path": "identity.liuchao.identity.jin.panjiang_shaozhu",
+                "operator": "exists"
+              }
+            ],
+            "description": {
+              "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.2.description"
+            }
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_xianyang_rumor",
+              "label": {
+                "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_enter_xianyang",
+        "name": "入咸阳",
+        "description": {
+          "$text": "qin.liuchao.event.qin_enter_xianyang.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lcq 27299（秦都咸阳）、lyl 37227（秦国以军功赐爵）",
+        "axisSeq": 2002,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_enter_xianyang.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_hook_fangshi_rumor.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_enter_xianyang.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_enter_xianyang.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "settle_in_xianyang",
+              "label": {
+                "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_entry_envoy",
+        "name": "递交国书",
+        "description": {
+          "$text": "qin.liuchao.event.qin_entry_envoy.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 2063（舞阳侯、汉使）",
+        "axisSeq": 2003,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_entry_envoy.axisBeat"
+        },
+        "critical": false,
+        "conditions": [
+          {
+            "path": "flags.event.qin_enter_xianyang.done",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "identity.liuchao.identity.han.marquis_wuyang",
+            "operator": "exists"
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_entry_envoy.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_entry_envoy.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "present_han_credentials",
+              "label": {
+                "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "position"
+        }
+      },
+      {
+        "id": "liuchao.event.qin_find_xu",
+        "name": "找到方士",
+        "description": {
+          "$text": "qin.liuchao.event.qin_find_xu.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16988（半路接到「你传来的话」去咸阳办事）、13686（苍澜那个落魄家伙）",
+        "axisSeq": 2004,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_find_xu.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_enter_xianyang.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_find_xu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xu_junfang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_find_xu.objective"
+        },
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "acq.liuchao.character.xu_junfang",
+                "operator": "gte",
+                "value": "encountered"
+              }
+            ],
+            "name": "重逢徐君房",
+            "description": {
+              "$text": "qin.liuchao.event.qin_find_xu.narrativeVariants.0.description"
+            },
+            "axisBeat": {
+              "$text": "qin.liuchao.event.qin_find_xu.narrativeVariants.0.axisBeat"
+            },
+            "objective": {
+              "$text": "qin.liuchao.event.qin_find_xu.narrativeVariants.0.objective"
+            }
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "confront_xianyang_fangshi",
+              "label": {
+                "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_entry_camp",
+        "name": "城外军营",
+        "description": {
+          "$text": "qin.liuchao.event.qin_entry_camp.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16966（公子稷一个手下带几十人）",
+        "axisSeq": 2005,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_entry_camp.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_find_xu.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_entry_camp.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_entry_camp.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "supply_frontier_camp",
+              "label": {
+                "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_king_refuses",
+        "name": "见秦王",
+        "description": {
+          "$text": "qin.liuchao.event.qin_king_refuses.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16953（秦王修为高、身边有秦国最强的几个高手）、lyl 37227",
+        "axisSeq": 2006,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_king_refuses.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_entry_camp.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_king_refuses.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_king_refuses.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "propose_to_qin_king",
+              "label": {
+                "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_xu_auspice",
+        "name": "祥瑞之托",
+        "description": {
+          "$text": "qin.liuchao.event.qin_xu_auspice.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16988–16993（双胞胎逼徐君房准备登基大典与黑龙祥瑞）",
+        "axisSeq": 2007,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_xu_auspice.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_king_refuses.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_xu_auspice.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xu_junfang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_xu_auspice.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_xu_auspice_plea",
+              "label": {
+                "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_yu_sisters_refuge",
+        "name": "虞氏姐妹求庇护",
+        "description": {
+          "$text": "qin.liuchao.event.qin_yu_sisters_refuge.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyl 36144（已被收服）、lcq 43616（龙宸）、lyg 16947–16950",
+        "axisSeq": 2008,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_yu_sisters_refuge.axisBeat"
+        },
+        "critical": false,
+        "conditions": [
+          {
+            "path": "done.lyl.event.rescue_yu_sisters",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "flags.event.qin_xu_auspice.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_yu_sisters_refuge.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yu_bai_ying",
+          "liuchao.character.yu_zi_wei"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_yu_sisters_refuge.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "meet_yu_sisters_xianyang",
+              "label": {
+                "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "seed"
+        }
+      },
+      {
+        "id": "liuchao.event.qin_new_year_banquet",
+        "name": "年节宴",
+        "description": {
+          "$text": "qin.liuchao.event.qin_new_year_banquet.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16953（秦王举鼎，腿被砸断）",
+        "axisSeq": 2009,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_new_year_banquet.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_xu_auspice.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_new_year_banquet.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xu_junfang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_new_year_banquet.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "attend_new_year_banquet",
+              "label": {
+                "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_palace_sealed",
+        "name": "封宫一夜",
+        "description": {
+          "$text": "qin.liuchao.event.qin_palace_sealed.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16958–16960（秦王当夜死、无子嗣；护卫被赐死）",
+        "axisSeq": 2010,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_palace_sealed.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_new_year_banquet.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_palace_sealed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_palace_sealed.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "survive_sealed_palace",
+              "label": {
+                "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_succession_fight",
+        "name": "争位",
+        "description": {
+          "$text": "qin.liuchao.event.qin_succession_fight.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16962–16966、16975（诸公子争位；公子稷手下小将击溃上千人）",
+        "axisSeq": 2011,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_succession_fight.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_palace_sealed.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_succession_fight.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_succession_fight.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "watch_succession_fight",
+              "label": {
+                "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_purge_hunted",
+        "name": "清洗",
+        "description": {
+          "$text": "qin.liuchao.event.qin_purge_hunted.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 16985（芈夫人清洗、封锁消息）、16942（几万人被斩）、39134（帛十六接管秦国）",
+        "axisSeq": 2012,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_purge_hunted.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_succession_fight.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_purge_hunted.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_purge_hunted.objective"
+        },
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "acq.liuchao.character.su_xiao",
+                "operator": "gte",
+                "value": "encountered"
+              }
+            ],
+            "description": {
+              "$text": "qin.liuchao.event.qin_purge_hunted.narrativeVariants.0.description"
+            }
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "evade_purge_xianyang",
+              "label": {
+                "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_yu_sisters_act2",
+        "name": "保下虞氏姐妹",
+        "description": {
+          "$text": "qin.liuchao.event.qin_yu_sisters_act2.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyl 36144、lyg 16947–16950",
+        "axisSeq": 2013,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_yu_sisters_act2.axisBeat"
+        },
+        "critical": false,
+        "conditions": [
+          {
+            "path": "flags.event.qin_yu_sisters_refuge.done",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "flags.event.qin_purge_hunted.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_yu_sisters_act2.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.yu_bai_ying",
+          "liuchao.character.yu_zi_wei"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_yu_sisters_act2.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "shelter_yu_sisters",
+              "label": {
+                "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "payoff"
+        }
+      },
+      {
+        "id": "liuchao.event.qin_heimohai_message",
+        "name": "黑魔海递话",
+        "description": {
+          "$text": "qin.liuchao.event.qin_heimohai_message.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyl 9390（黑魔海各国主事者，秦国主事者原著未写）",
+        "axisSeq": 2014,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_heimohai_message.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_purge_hunted.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_heimohai_message.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_heimohai_message.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "hear_heimohai_envoy",
+              "label": {
+                "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_ningyu_coldtrace",
+        "name": "尸身上的寒气",
+        "description": {
+          "$text": "qin.liuchao.event.qin_ningyu_coldtrace.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lcq 5101（「那股气息不是你的」）",
+        "axisSeq": 2015,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_ningyu_coldtrace.axisBeat"
+        },
+        "critical": false,
+        "conditions": [
+          {
+            "path": "party.liuchao.character.ning_yu",
+            "operator": "eq",
+            "value": true
+          },
+          {
+            "path": "flags.event.qin_heimohai_message.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_ningyu_coldtrace.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.ning_yu"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_ningyu_coldtrace.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "ningyu_examines_body",
+              "label": {
+                "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        },
+        "exploration": {
+          "role": "investigate"
+        }
+      },
+      {
+        "id": "liuchao.event.qin_xiaoling_villa",
+        "name": "别院女囚",
+        "description": {
+          "$text": "qin.liuchao.event.qin_xiaoling_villa.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyl 10503、lyg 4804、28145–28148（只作暗示）",
+        "axisSeq": 2016,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_xiaoling_villa.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_heimohai_message.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_xiaoling_villa.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_xiaoling_villa.objective"
+        },
+        "narrativeVariants": [
+          {
+            "when": [
+              {
+                "path": "acq.liuchao.character.xiao_ling_er",
+                "operator": "gte",
+                "value": "encountered"
+              }
+            ],
+            "description": {
+              "$text": "qin.liuchao.event.qin_xiaoling_villa.narrativeVariants.0.description"
+            }
+          }
+        ],
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "scout_guangyuan_villa",
+              "label": {
+                "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_bo_family",
+        "name": "帛家旧部",
+        "description": {
+          "$text": "qin.liuchao.event.qin_bo_family.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 39134（帛十六摘桃、帛十三调占城）、39120、20817",
+        "axisSeq": 2017,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_bo_family.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_xiaoling_villa.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_bo_family.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_bo_family.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "meet_bo_shisan_remnants",
+              "label": {
+                "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "liuchao.event.qin_close_default",
+        "name": "芈氏掌秦",
+        "description": {
+          "$text": "qin.liuchao.event.qin_close_default.description"
+        },
+        "axisId": null,
+        "axisMethod": "qin-line-expansion-no-axis",
+        "axisAnchor": "扩写·依据 lyg 17094（芈姓昭南一系把持秦国的走向）",
+        "axisSeq": 2022,
+        "axisBeat": {
+          "$text": "qin.liuchao.event.qin_close_default.axisBeat"
+        },
+        "critical": true,
+        "conditions": [
+          {
+            "path": "flags.event.qin_bo_family.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.event.qin_close_default.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.xu_junfang"
+        ],
+        "locationId": "liuchao.location.xianyang",
+        "objective": {
+          "$text": "qin.liuchao.event.qin_close_default.objective"
+        },
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "leave_xianyang_default",
+              "label": {
+                "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "chapters": [
+      {
+        "id": "lyg.chapter.qin_xianyang_prologue",
+        "title": "咸阳传闻",
+        "summary": "商会伙计传来咸阳方士冒用名头的消息；程宗扬入咸阳，找到徐君房，绕道军营换来觐见，被秦王当面回绝，又接下徐君房的祥瑞之托。",
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.qin_xianyang.prologue.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.qin_hook_fangshi_rumor",
+          "liuchao.event.qin_enter_xianyang",
+          "liuchao.event.qin_entry_envoy",
+          "liuchao.event.qin_find_xu",
+          "liuchao.event.qin_entry_camp",
+          "liuchao.event.qin_king_refuses",
+          "liuchao.event.qin_xu_auspice",
+          "liuchao.event.qin_yu_sisters_refuge",
+          "liuchao.event.qin_yu_sisters_act2",
+          "liuchao.event.qin_ningyu_coldtrace"
+        ]
+      },
+      {
+        "id": "lyg.chapter.qin_xianyang_act1",
+        "title": "年节封宫",
+        "summary": "年节宴上秦王举鼎断腿，当夜封宫身亡；诸公子争位，公子稷回城收局。",
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.qin_xianyang.prologue.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.qin_xianyang.act1.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.qin_new_year_banquet",
+          "liuchao.event.qin_palace_sealed",
+          "liuchao.event.qin_succession_fight"
+        ]
+      },
+      {
+        "id": "lyg.chapter.qin_xianyang_act2",
+        "title": "清洗",
+        "summary": "新太后大肆清洗，程宗扬被告密追捕；黑魔海来人递话，广源行别院扣着一名女囚，帛十三旧部私下来投。",
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.qin_xianyang.act1.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.qin_xianyang.act2.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.qin_purge_hunted",
+          "liuchao.event.qin_heimohai_message",
+          "liuchao.event.qin_xiaoling_villa",
+          "liuchao.event.qin_bo_family"
+        ]
+      },
+      {
+        "id": "lyg.chapter.qin_xianyang_act3",
+        "title": "掌秦",
+        "summary": "谁来掌秦。",
+        "activation": [
+          {
+            "path": "flags.chapter.lyg.qin_xianyang.act2.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "completion": [
+          {
+            "path": "flags.chapter.lyg.qin_xianyang.act3.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "eventIds": [
+          "liuchao.event.qin_close_default"
+        ]
+      }
+    ]
+  }
+}

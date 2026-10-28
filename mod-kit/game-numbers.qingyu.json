@@ -2214,15 +2214,17 @@
         ]
       }
     },
+    "qin": { "actionTimeCost": 1 },
     "lineCompass": {
-      "note": "右栏「当前线」卡（右栏线入口复用分析 2026-10-27 §5；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q5/Q7/Q8）。regionLines：关卡所属地区（mod-kit/entity-ledger/overrides.json stageRegions 的值）→ 国家线 id，用来判「焦点事件所在国家线」和「编年史里最近推进过的线」；值须为 7 条国家线 id，塞外不是国家线、不登记。hint.maxChars：下一步一句的字数上限（分析稿 §4.2-5「最好不超过 20 字」），hint.bannedWords：定性词（§4.2-2），两项都只在内容包编译时由 validator 拦正式文案，【待剧情策划】占位不拦。下一步表本身在内容包 line-compass.json，文案在 texts。",
+      "note": "右栏「当前线」卡（右栏线入口复用分析 2026-10-27 §5；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q5/Q7/Q8）。regionLines：关卡所属地区（mod-kit/entity-ledger/overrides.json stageRegions 的值）→ 国家线 id，用来判「焦点事件所在国家线」和「编年史里最近推进过的线」；值须为 7 条国家线 id，塞外不是国家线、不登记；秦国（lyg.qin_xianyang，内容包关，不在 STAGE_ORDER 链上）→ qin（五线补全·秦 2026-10-28）。hint.maxChars：下一步一句的字数上限（分析稿 §4.2-5「最好不超过 20 字」），hint.bannedWords：定性词（§4.2-2），两项都只在内容包编译时由 validator 拦正式文案，【待剧情策划】占位不拦。下一步表本身在内容包 line-compass.json，文案在 texts。",
       "regionLines": {
         "昭南": "nanhuang",
         "晋国": "jin",
         "宋国": "song",
         "汉国": "han",
         "唐国": "tang",
-        "太泉": "taiquan"
+        "太泉": "taiquan",
+        "秦国": "qin"
       },
       "hint": {
         "maxChars": 20,

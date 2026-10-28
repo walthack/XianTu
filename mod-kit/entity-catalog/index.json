@@ -2469,6 +2469,114 @@
     },
     {
       "kind": "action",
+      "id": "liuchao.event.qin_bo_family:meet_bo_shisan_remnants",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_close_default:leave_xianyang_default",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_enter_xianyang:settle_in_xianyang",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_entry_camp:supply_frontier_camp",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_entry_envoy:present_han_credentials",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_find_xu:confront_xianyang_fangshi",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_heimohai_message:hear_heimohai_envoy",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_hook_fangshi_rumor:hear_xianyang_rumor",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_king_refuses:propose_to_qin_king",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_new_year_banquet:attend_new_year_banquet",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_ningyu_coldtrace:ningyu_examines_body",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_palace_sealed:survive_sealed_palace",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_purge_hunted:evade_purge_xianyang",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_succession_fight:watch_succession_fight",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_xiaoling_villa:scout_guangyuan_villa",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_xu_auspice:hear_xu_auspice_plea",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_yu_sisters_act2:shelter_yu_sisters",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_yu_sisters_refuge:meet_yu_sisters_xianyang",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "liuchao.event.reconnoiter:hear_weiyuan_decision",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.taiquan_expedition.json",
       "aliases": []
@@ -5686,6 +5794,30 @@
       "kind": "chapter",
       "id": "lyg.chapter.power_gathering",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyg.ganlu_bian.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lyg.chapter.qin_xianyang_act1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lyg.chapter.qin_xianyang_act2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lyg.chapter.qin_xianyang_act3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "chapter",
+      "id": "lyg.chapter.qin_xianyang_prologue",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -10339,6 +10471,114 @@
       "kind": "event",
       "id": "liuchao.event.lin_chong_confront",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lyl.lin_an_black_sea.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_bo_family",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_close_default",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_enter_xianyang",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_entry_camp",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_entry_envoy",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_find_xu",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_heimohai_message",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_hook_fangshi_rumor",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_king_refuses",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_new_year_banquet",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_ningyu_coldtrace",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_palace_sealed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_purge_hunted",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_succession_fight",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_xiaoling_villa",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_xu_auspice",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_yu_sisters_act2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "liuchao.event.qin_yu_sisters_refuge",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -16682,6 +16922,20 @@
       "id": "world.xingyuehu_war.offscreen_resolved",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_12_jiangzhou_counterwar.json",
       "aliases": []
+    },
+    {
+      "kind": "identity",
+      "id": "liuchao.identity.han.marquis_wuyang",
+      "aliases": [
+        "舞阳侯"
+      ]
+    },
+    {
+      "kind": "identity",
+      "id": "liuchao.identity.jin.panjiang_shaozhu",
+      "aliases": [
+        "盘江程氏少主"
+      ]
     },
     {
       "kind": "item",
@@ -24262,6 +24516,1356 @@
     {
       "kind": "text",
       "id": "outcome.echo.ningyu.y6.word.warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.narrativeVariants.0.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.narrativeVariants.0.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.narrativeVariants.0.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.0.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.1.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.2.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.narrativeVariants.0.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.narrativeVariants.0.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.axisBeat",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.outcomeText.failure",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.outcomeText.partial",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.opening.creationPreset.origin.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.opening.creationPreset.spiritRoot.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.opening.creationPreset.talents.0.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.opening.creationPreset.talents.1.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.opening.creationPreset.talentTier.description",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.opening.text",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.1",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.10",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.11",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.12",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.13",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.14",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.15",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.16",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.17",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.18",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.19",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.2",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.20",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.21",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.22",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.23",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.24",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.25",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.26",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.27",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.28",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.29",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.3",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.30",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.31",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.32",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.33",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.34",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.35",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.36",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.37",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.38",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.39",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.4",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.40",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.41",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.42",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.43",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.44",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.45",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.46",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.47",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.48",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.49",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.5",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.50",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.51",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.52",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.53",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.54",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.55",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.56",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.57",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.58",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.59",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.6",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.60",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.61",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.62",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.63",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.64",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.65",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.66",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.67",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.7",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.8",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.rail.text.9",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

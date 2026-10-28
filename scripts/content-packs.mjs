@@ -27,6 +27,14 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
   if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);catalog.lineCompass.lines.push(...t.lines);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);catalog[k].push(...v);}
  }
+ // Stage assets use the same numeric authority as quest lines; prose is held in pack texts.
+ const resolveText=(value,where)=>{
+  if(Array.isArray(value))return value.map((v,i)=>resolveText(v,`${where}.${i}`));
+  if(!object(value))return value;
+  if('$text' in value){if(Object.keys(value).length!==1||typeof value.$text!=='string'||!(value.$text in catalog.texts))fail(`${where}: invalid $text reference`);return catalog.texts[value.$text];}
+  return Object.fromEntries(Object.entries(value).map(([k,v])=>[k,resolveText(v,`${where}.${k}`)]));
+ };
+ catalog.stages=catalog.stages.map((s,i)=>resolveText(resolveNumbers(s,numbers,`stages.${i}`),`stages.${i}`));
  catalog.questLines=catalog.questLines.map((l,i)=>expandEchoes(resolveNumbers(l,numbers,`questLines.${i}`)));
  unique([...catalog.contracts,...catalog.drafts],x=>x.meta?.id,'contract');unique(catalog.statuses,x=>x.id,'status');unique(catalog.stages,x=>x.manifest?.id,'stage');unique(catalog.playtests,x=>x.id,'playtest');unique(catalog.entries,x=>x.id,'entry');unique(catalog.questLines,x=>x.id,'quest line');unique(catalog.entities,x=>`${x.kind}:${x.entry?.id}`,'entity');
  const builtinDir=join(sourceRoot,'src/modules/scenarioMods/builtins/data');const builtins=await Promise.all((await readdir(builtinDir)).filter(x=>x.endsWith('.json')).map(async x=>JSON.parse(await readFile(join(builtinDir,x),'utf8'))));

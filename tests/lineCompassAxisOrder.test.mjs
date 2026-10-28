@@ -21,6 +21,7 @@ const places = packs.CONTENT_PACKS.lineCompassPlaces;
 const DATA = 'src/modules/scenarioMods/builtins/data';
 const stages = new Map(fs.readdirSync(DATA).filter(f => f.endsWith('.json'))
   .map(f => JSON.parse(fs.readFileSync(`${DATA}/${f}`, 'utf8'))).map(d => [d.manifest.id, d]));
+for (const stage of packs.CONTENT_PACKS.stages) stages.set(stage.manifest.id, stage);
 const allEvents = [...stages.values()].flatMap(d => (d.scenario?.events || []).map(e => ({ ...e, stageId: d.manifest.id })));
 const axisSeq = new Map(allEvents.map(e => [e.id, e.axisSeq]));
 const eventOf = new Map(allEvents.map(e => [e.id, e]));

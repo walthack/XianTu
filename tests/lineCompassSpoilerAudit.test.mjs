@@ -125,7 +125,7 @@ const saveOf = (done, acq = []) => ({
 });
 const stepOf = (save, focusEventId) => compass.lineCompassView(save, { focusEventId, compassPointer: () => '去某处 · 见某人' }).current;
 
-test('R-8：表现不变——合并的 4 对非待建步，见过和没见过那个人时卡片出同一句（秦线那对是待建步，运行时本就跳过）', () => {
+test('R-8：表现不变——合并的 4 对非待建步，见过和没见过那个人时卡片出同一句（秦线已挂事件，仍沿用同文提示）', () => {
   const PACT = 'lcq.event.sudaji_south_pact';
   const cases = [
     ['song_jiangzhou_war_open', 'xiao_yao_yi', [PACT, 'lcq.event.s10_09_yin_yang_fish', 'lcq.event.s10_10_xiaozi_crisis'], 'lcq.event.s10_09_yin_yang_fish', '去江州看看那边的情形'],
@@ -145,5 +145,5 @@ test('R-8：表现不变——合并的 4 对非待建步，见过和没见过�
   const viaTaiquan = stepOf(saveOf([PACT, 'lyl.event.taiquan_portal_exit', 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.taiquan_afterfall_09_beat'], ['si_ming_xin']), 'lyl.event.s06_01');
   assert.equal(viaTaiquan?.step, '进宫看看');
   const qin = compass.lineCompassTable().lines.find(l => l.lineId === 'qin').steps.find(s => s.id === 'qin_entry_xu_unmet');
-  assert.equal(qin.pending, true);
+  assert.equal(qin.pending, undefined);
 });
