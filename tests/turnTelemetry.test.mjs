@@ -44,3 +44,10 @@ test('embedding calls before generate are counted separately from later ones', a
   assert.equal(snapshot.embeddingCountBeforeGenerate, 2);
   assert.equal(snapshot.embeddingCountTotal, 3);
 });
+
+test('回合埋点走 perf 调试大类，不再用 console.error 制造 LCQ-SYS-000（fix5939-5）', async () => {
+  const fs = await import('node:fs');
+  const src = fs.readFileSync('src/utils/turnTelemetry.ts', 'utf8');
+  assert.equal(src.includes('console.error('), false);
+  assert.ok(src.includes("debugLog('perf', '[回合埋点]'"));
+});

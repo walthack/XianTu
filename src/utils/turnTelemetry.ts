@@ -1,3 +1,4 @@
+import { debugLog } from '../modules/diagnostics/debugLog';
 import { logEvent } from '../modules/diagnostics/log';
 import { perfConfig } from '../modules/diagnostics/perfConfig';
 import { registerStatsProvider } from '../modules/diagnostics/statsProviders';
@@ -212,10 +213,8 @@ export function endTurnTelemetry(): TurnTelemetry | null {
   last = active;
   active = null;
   recordPerf(last);
-  const line = `[回合埋点] ${JSON.stringify(last)}`;
-  // 单幕试验必须总能在控制台拆时间；完整 Legacy 仍走 info，受调试开关约束。
-  if (last.path === 'legacy_pilot' || last.path === 'modular') console.error(line);
-  else console.info(line);
+  // 回合埋点归 perf 调试大类（debugCategories.ts 117-118 已把 utils/turnTelemetry.ts 归 perf）；耗时统计仍由 recordPerf 进诊断导出（fix5939-5）
+  debugLog('perf', '[回合埋点]', () => last);
   return last;
 }
 
