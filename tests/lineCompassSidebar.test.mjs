@@ -22,7 +22,8 @@ test('右栏接线：开关关时不算；开时取代主线指南针那一行�
   assert.match(block, /const fallback = questCompassPhrases\(view, rt, at\)\.join\(' · '\);/, '退回句只有「去X · 见Y」');
   assert.doesNotMatch(block, /formatQuestCompass|objective/, '不带冒号后的固定目标');
   const main = vue.slice(vue.indexOf('const questMain = computed('));
-  assert.match(main, /const compassReplaced = showLineCompass\(\) && events\.length > 0;/);
+  assert.match(main, /const compassReplaced = Boolean\(lineCompass\.value\);/);
+  assert.doesNotMatch(main, /const compassReplaced =[^\n]*events\.length/, '线卡是否取代主线行不看 events.length');
   assert.match(main, /events: compassReplaced \? \[\] : events,/);
   // 位置：主线块里章节行之后、原指南针那一行（questMain.events）之前；没有主线块时卡片照样显示
   const tpl = vue.slice(vue.indexOf('<div v-if="questMain || lineCompass" class="quest-main">'), vue.indexOf('<div v-if="questGoals.length" class="quest-improv">'));

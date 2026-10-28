@@ -13,7 +13,7 @@ import { restoreSceneInjuries } from './injuries';
 import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS, applyStepSceneLedger } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { advanceClock } from '@/modules/scenarioMods/travel/travelLedger';
-import { applyPlayerChoice, beginScene, buildSceneBrief, closeScene, confirmAction, matchPlayerChoice, previewAction, renderResultLines, classifyByRules, resolveInputPolicy, route, appendInput, type Contract } from '../index';
+import { applyPlayerChoice, beginScene, buildSceneBrief, closeScene, confirmAction, matchPlayerChoice, previewAction, renderResultLines, classifyByRules, resolveInputPolicy, route, appendInput, trackInfo, type Contract } from '../index';
 import { settleDownedAfterHostSync } from '../scene';
 import { sceneContractById, sceneContractForEvent, sceneContractSupportsAction } from '../contracts/registry';
 import { activeScene, cloneSave, newActive, readExt, sceneModuleEnabled, writeExt, type ActiveScene } from './ext';
@@ -208,7 +208,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     if(!selection)throw new Error('场面收束对应的剧情动作已过期');
     const settled=recordStoryEventStructuredAction(save,selection);if(!settled.attempted || (receiptScene && !settled.completed))throw new Error('场面剧情收束未成立：'+settled.reason);
     if(receiptScene)applyStepSceneLedger(save,runtimeOf(save),a.eventId,a.actionId,receiptScene as Parameters<typeof applyStepSceneLedger>[4]);
-    const terminal=closed.writeBack.finalStates.filter(row=>c.parties.find(p=>p.id===row.party)?.side==='opposed').map(row=>`${partyName(c,runtimeOf(save),row.party)}：${row.label}`);
+    const terminal=closed.writeBack.finalStates.filter(row=>c.parties.find(p=>p.id===row.party)?.side==='opposed'&&!(closed.writeBack.outcome.kind==='win'&&trackInfo(c,row.party,row.track)?.ending?.preserveOnWin===true)).map(row=>`${partyName(c,runtimeOf(save),row.party)}：${row.label}`);
     appendHistory(save,[a.closing.text,...written.notes,...terminal].join('\n'));
   }
   ext.history.push({contractId:a.contractId,eventId:a.eventId,outcome:a.closing.outcome,endingId:closed.writeBack.outcome.endingId,beats:closed.writeBack.beats,memoryNote:renderRefs(closed.writeBack.memoryNote,runtimeOf(save)),state:cloneSave(a.state),inputLog:cloneSave(a.inputLog)});

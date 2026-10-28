@@ -532,12 +532,13 @@ const questMain = computed(() => {
     const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences, rt);
     return formatQuestCompass(view, rt, questAtLocationId(rt)) || view.objective || view.name;
   }).filter(Boolean);
-  // 当前线卡开着时取代这一行主线指南针（用户 2026-10-27 09:26 Q1）；启程提示、清关与脱节判断照旧按原 events 算
-  const compassReplaced = showLineCompass() && events.length > 0;
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
   const departure = ready ? getStageDepartureOffer(gameStateStore.toSaveData()) : null;
   if (departure?.label && !events.length) events.push(departure.label);
+  // 线卡是否取代这一行主线指南针，看线卡本身（用户 2026-10-27 09:26 Q1）。
+  // showLineCompass 关时 lineCompass 已返回 null。不能看 events.length：锚点为空时启程句是上面才推进去的。
+  const compassReplaced = Boolean(lineCompass.value);
   const cleared = ready && !chapter && !events.length;
   const next = Boolean(departure);
   // 脱节哨兵（零成本确定性）：停滞轮数超阈值 → UI 预警"主线疑似脱节"，只提示、不改任何数据。
