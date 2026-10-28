@@ -1,5 +1,5 @@
 {
-  "version": "28568908187500f4",
+  "version": "712dcfe06d017a71",
   "contracts": [
     {
       "meta": {
@@ -17030,6 +17030,7 @@
     "lineCompass.step.returnTo": "回到{地点}看看",
     "lineCompass.nanhuang.step.nh_enter_caravan": "随商队出五原，往南荒去",
     "lineCompass.nanhuang.step.nh_sheyi_village": "去蛇彝村看看",
+    "lineCompass.nanhuang.step.nh_yun_guide_road": "跟着商队往前走",
     "lineCompass.nanhuang.step.nh_yun_guide": "去熊耳铺，找个向导",
     "lineCompass.nanhuang.step.nh_f03_huamiao_mist": "从熊耳铺跟大伙上路",
     "lineCompass.nanhuang.step.nh_baiyi_enter": "往白夷族去",
@@ -17768,17 +17769,12 @@
               {
                 "anyOf": [
                   {
-                    "path": "done.lcq.event.silent_sheyi_village",
-                    "operator": "eq",
-                    "value": true
-                  },
-                  {
                     "path": "done.lcq.event.s03_12",
                     "operator": "eq",
                     "value": true
                   },
                   {
-                    "path": "done.lcq.event.s03b_snake_flower_bridge_01",
+                    "path": "done.lcq.event.s03b_snake_flower_bridge_04",
                     "operator": "eq",
                     "value": true
                   }
@@ -17786,7 +17782,7 @@
               }
             ],
             "hintKey": "lineCompass.nanhuang.step.nh_sheyi_village",
-            "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）；到蛇彝村即过，分路线 anyOf：默认路线在 02 关尾拍 silent_sheyi_village 就到了，03 走 s03_12，03b 首拍 s03b_snake_flower_bridge_01 兜旧档"
+            "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）；人在村里仍停在这一步（02 尾拍 silent_sheyi_village、03b 的 01–03），s03_12 或 s03b_snake_flower_bridge_04 才过。hintKey 仍是「去蛇彝村看看」（P3-2 未定）"
           },
           {
             "id": "nh_yun_guide_road",
@@ -17798,12 +17794,20 @@
                 "value": true
               }
             ],
-            "note": "巨藤断桥；云氏同行，仍在路上"
+            "hintKey": "lineCompass.nanhuang.step.nh_yun_guide_road",
+            "note": "巨藤断桥；云氏同行，仍在路上。hint 不点巨藤"
           },
           {
             "id": "nh_huamiao",
             "eventId": "lcq.event.s03b_snake_flower_bridge_06",
-            "note": "花苗救援"
+            "when": [
+              {
+                "path": "done.lcq.event.s03b_snake_flower_bridge_05",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "花苗救援；巨藤那一拍过了才轮到，焦点正好是 s03b_06"
           },
           {
             "id": "nh_yun_guide",
@@ -17833,7 +17837,14 @@
           {
             "id": "nh_le_mingzhu_join",
             "eventId": "lcq.event.s04_03",
-            "note": "乐明珠线起"
+            "when": [
+              {
+                "path": "done.lcq.event.s04_02",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "乐明珠线起；前一拍 s04_02（axisSeq 71）过了才轮到"
           },
           {
             "id": "nh_ningyu_wound",
@@ -17863,17 +17874,38 @@
           {
             "id": "nh_f04_yaren",
             "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02",
-            "note": "鸦人"
+            "when": [
+              {
+                "path": "done.lcq.event.s04b_lingfei_baiyi_crisis_01",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "鸦人；前一拍 s04b_01（axisSeq 88）过了才轮到"
           },
           {
             "id": "nh_lingfei_mirror",
             "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_05",
-            "note": "灵飞镜"
+            "when": [
+              {
+                "path": "done.lcq.event.s04b_lingfei_baiyi_crisis_04",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "灵飞镜；前一拍 s04b_04（axisSeq 93）过了才轮到"
           },
           {
             "id": "nh_f05_trap",
             "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
-            "note": "地宫陷阱"
+            "when": [
+              {
+                "path": "done.lcq.event.s04b_lingfei_baiyi_crisis_09",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "地宫陷阱；前一拍 s04b_09（axisSeq 103）过了才轮到"
           },
           {
             "id": "nh_biling_bay",
@@ -17891,6 +17923,22 @@
           {
             "id": "nh_xiaozi_debut",
             "eventId": "lcq.event.xiaozi_first_appears",
+            "when": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.s04b_lingfei_baiyi_crisis_17",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.debut_xiaozi",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
             "until": [
               {
                 "anyOf": [
@@ -17907,15 +17955,39 @@
                 ]
               }
             ],
-            "note": "同地；分路线 anyOf：05 那套的 debut_xiaozi 也算"
+            "note": "同地；分路线 anyOf：前一拍默认路线 s04b_17（axisSeq 119），05 隔离 debut_xiaozi 无 axisSeq，带上只为隔离路线不卡"
           },
           {
             "id": "nh_tide_disaster",
-            "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+            "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+            "when": [
+              {
+                "path": "done.lcq.event.s04b_lingfei_baiyi_crisis_18",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "前一拍 s04b_18（axisSeq 121）过了才轮到"
           },
           {
             "id": "nh_f07_burn_village",
             "eventId": "lcq.event.s05_16",
+            "when": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.spot_dong_informant",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s05_06",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
             "until": [
               {
                 "anyOf": [
@@ -17975,6 +18047,22 @@
           {
             "id": "nh_f09_yinsha",
             "eventId": "lcq.event.s05_09",
+            "when": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.wuerlang_slays_dagu",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s05_05",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
             "until": [
               {
                 "anyOf": [
@@ -18033,7 +18121,15 @@
           },
           {
             "id": "nh_binu_arc",
-            "eventId": "lcq.event.s05b_02_xiaozi_exposed"
+            "eventId": "lcq.event.s05b_02_xiaozi_exposed",
+            "when": [
+              {
+                "path": "done.lcq.event.s05b_01_binu_reveals_xiaozi",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "前一拍 s05b_01（axisSeq 164）过了才轮到"
           },
           {
             "id": "nh_f10_ghost_king_probe",
@@ -18050,11 +18146,34 @@
           {
             "id": "nh_f11_f12",
             "eventId": "lcq.event.s05b_08a_rescue_suli",
-            "note": "突围、尸鬼、凤凰同地"
+            "when": [
+              {
+                "path": "done.lcq.event.s05b_07_xiaozi_trap",
+                "operator": "eq",
+                "value": true
+              }
+            ],
+            "note": "突围、尸鬼、凤凰同地；前一拍 s05b_07（axisSeq 178）过了才轮到"
           },
           {
             "id": "nh_f13_f14",
             "eventId": "lcq.event.slay_dragon",
+            "when": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.ghost_king_swallowed",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s06_01",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
             "until": [
               {
                 "anyOf": [
@@ -18075,7 +18194,24 @@
           },
           {
             "id": "nh_tribes_ending",
-            "eventId": "lcq.event.tribes_pledge"
+            "eventId": "lcq.event.tribes_pledge",
+            "when": [
+              {
+                "anyOf": [
+                  {
+                    "path": "done.lcq.event.xiaozi_kills_mother",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "done.lcq.event.s06_04",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ]
+              }
+            ],
+            "note": "分路线 anyOf：前一拍默认路线 xiaozi_kills_mother、隔离关 06 的 s06_04（都是 axisSeq 217）"
           },
           {
             "id": "nh_shanghou_ice_gu",

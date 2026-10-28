@@ -1,6 +1,7 @@
 // 右栏「当前线」卡·分路线与进度兜底（真机 1f9f24127b4e 报告卡-05；总策划定）。
 // ① 线的下一步表里凡有分路线的步（03／03b、05／04b 同序号拍、06／05b、lin_an_black_sea／lin_an_bridge、luoyang_coup／han_palace_endgame、
-//    shixiang_ambush／changgan_interlude；前者是默认路线隔离关），完成条件改成 { anyOf: [...] }：任一路线的对应事件完成即算；
+//    shixiang_ambush／changgan_interlude；前者是默认路线隔离关），完成条件改成 { anyOf: [...] }：任一路线的对应事件完成即算。
+//    蛇彝村这一步人在村里仍停着：02 尾拍与 03b 首拍不算过，s03_12 或 s03b_04 才过；
 // ② 兜底：后面某一步已过，前面的步一律算过，进度只往前走；
 // ③ 旧档情境回归：走 03b 的存档在碧鲮族、鬼王峒外围、鬼王宫时，卡片不能再停在「随商队出五原，往南荒去」。
 import assert from 'node:assert/strict';
@@ -43,8 +44,9 @@ test('旧档情境（03b 路线、编年史无 s03_12）：碧鲮族／鬼王峒
     { slot: '6ccb-08-F07前', modId: S04B, done: [...DEFAULT_ROUTE_SOUTH, ...played(S04B, 139)], step: returnTo('lcq.event.s05_16') },
     // 1aae-02-F10前：鬼王峒外围哨位（第86章·随弥骨入峒），同行之约已结、尚未随弥骨入峒（enter_dong_with_migu，seq 154）
     { slot: '1aae-02-F10前', modId: S04B, done: [...DEFAULT_ROUTE_SOUTH, ...played(S04B, 154)], step: texts['lineCompass.nanhuang.step.nh_guiwang_approach'] },
-    // 1aae-05-F13前：南荒·鬼王宫，05b 走到祭台吞王（ghost_king_swallowed，seq 205）之前
-    { slot: '1aae-05-F13前', modId: S05B, done: [...DEFAULT_ROUTE_SOUTH, ...played(S04B), ...played(S05B, 205)], step: returnTo('lcq.event.slay_dragon') },
+    // 1aae-05-F13前：南荒·鬼王宫，05b 走到祭台吞王（ghost_king_swallowed，seq 205）之前。
+    // nh_f13_f14 的 when 要 ghost_king_swallowed（或隔离关 s06_01），这里还没完成，没有别的步可选，只显示线名。
+    { slot: '1aae-05-F13前', modId: S05B, done: [...DEFAULT_ROUTE_SOUTH, ...played(S04B), ...played(S05B, 205)], step: '' },
   ];
   for (const c of cases) {
     assert.ok(!c.done.some(([, id]) => id === 'lcq.event.s03_12'), `${c.slot}：情境里没有 s03_12`);
@@ -55,18 +57,24 @@ test('旧档情境（03b 路线、编年史无 s03_12）：碧鲮族／鬼王峒
   }
 });
 
-test('第一步：铁索桥前显示「随商队出五原」，铁索桥过了换「去蛇彝村」；到蛇彝村后三条路线都能过（默认路线 02 尾拍、03 的 s03_12、03b 首拍）', () => {
+test('第一步：铁索桥前显示「随商队出五原」，铁索桥过了换「去蛇彝村」；人在蛇彝村仍停在这一步，s03_12 或 03b 的 04 拍才过', () => {
   // 真机 da89 #3：原先第一步等到蛇彝村才过，02 关后半段（铁索桥→雨林→黑石滩→蛇彝村）一路停在「随商队出五原」
+  // 人在蛇彝村（02 尾拍、03b 首拍）仍停在「去蛇彝村看看」；s03_12 或 s03b_snake_flower_bridge_04 完成才离开这一步
   const SHEYI = texts['lineCompass.nanhuang.step.nh_sheyi_village'];
   const s02 = played(S02);
   const before = s02.filter(([, e]) => !['lcq.event.iron_bridge_ambush', 'lcq.event.ningyu_regicide_offer', 'lcq.event.zixi_taiyi_intercept', 'lcq.event.rainforest_black_shoal', 'lcq.event.silent_sheyi_village'].includes(e));
   assert.equal(view(saveOf({ modId: S02, done: before }), 'lcq.event.iron_bridge_ambush').current.step, '去某处 · 见某人', '铁索桥前：焦点就是这一步，用主线指南针');
   assert.equal(view(saveOf({ modId: S02, done: [...before, [S02, 'lcq.event.iron_bridge_ambush']] }), undefined).current.step, SHEYI, '铁索桥过了：出了五原，往蛇彝村去');
   assert.equal(view(saveOf({ modId: S02, done: [...before, ...['iron_bridge_ambush', 'ningyu_regicide_offer', 'zixi_taiyi_intercept', 'rainforest_black_shoal'].map(id => [S02, `lcq.event.${id}`])] }), undefined).current.step, SHEYI, '黑石滩过了：仍在去蛇彝村的路上');
-  for (const [stageId, eventId] of [[S02, 'lcq.event.silent_sheyi_village'], [S03, 'lcq.event.s03_12'], [S03B, 'lcq.event.s03b_snake_flower_bridge_01']]) {
+  for (const [stageId, eventId] of [[S02, 'lcq.event.silent_sheyi_village'], [S03B, 'lcq.event.s03b_snake_flower_bridge_01']]) {
     const step = view(saveOf({ modId: stageId, done: [...before, [S02, 'lcq.event.iron_bridge_ambush'], [stageId, eventId]] }), undefined).current.step;
     assert.notEqual(step, STUCK, `${eventId} 完成即过第一步`);
-    assert.notEqual(step, SHEYI, `${eventId}：蛇彝村那一步同样按任一路线算过`);
+    assert.equal(step, SHEYI, `${eventId}：人还在蛇彝村，02–04 期间停在蛇彝村这步`);
+  }
+  for (const [stageId, eventId] of [[S03, 'lcq.event.s03_12'], [S03B, 'lcq.event.s03b_snake_flower_bridge_04']]) {
+    const step = view(saveOf({ modId: stageId, done: [...before, [S02, 'lcq.event.iron_bridge_ambush'], [stageId, eventId]] }), undefined).current.step;
+    assert.notEqual(step, STUCK, `${eventId} 完成即过第一步`);
+    assert.notEqual(step, SHEYI, `${eventId}：蛇彝村那一步已过`);
   }
 });
 

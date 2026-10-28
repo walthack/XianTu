@@ -106,7 +106,11 @@ test('R-8：5 对同文变体已合并——「见过」那一行连同文案键
       seen.add(sig);
     }
   }
-  assert.equal(table.lines.flatMap(l => l.steps).filter(s => s.hintKey).length, 58, 'R-8 后 58，R-15 再删南荒 nh_leave_for_jin 一条，五线补全·唐 T20 给 tang_d7_publish 补一条（剧情策划唐稿定文案）');
+  assert.equal(table.lines.flatMap(l => l.steps).filter(s => s.hintKey).length, 59, 'R-8 后 58，R-15 再删南荒 nh_leave_for_jin 一条，五线补全·唐 T20 给 tang_d7_publish 补一条（剧情策划唐稿定文案），fix86-1 给 nh_yun_guide_road 补「跟着商队往前走」');
+  const road = texts['lineCompass.nanhuang.step.nh_yun_guide_road'];
+  assert.equal(road, '跟着商队往前走');
+  assert.equal([...road].length, 7);
+  for (const word of CLEARED) assert.ok(!road.includes(word), `nh_yun_guide_road「${road}」含「${word}」`);
 });
 
 const eventStage = new Map(fs.readdirSync('src/modules/scenarioMods/builtins/data').filter(f => f.endsWith('.json'))

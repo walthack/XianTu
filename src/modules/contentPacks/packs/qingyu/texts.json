@@ -284,6 +284,7 @@
   "lineCompass.step.returnTo": "回到{地点}看看",
   "lineCompass.nanhuang.step.nh_enter_caravan": "随商队出五原，往南荒去",
   "lineCompass.nanhuang.step.nh_sheyi_village": "去蛇彝村看看",
+  "lineCompass.nanhuang.step.nh_yun_guide_road": "跟着商队往前走",
   "lineCompass.nanhuang.step.nh_yun_guide": "去熊耳铺，找个向导",
   "lineCompass.nanhuang.step.nh_f03_huamiao_mist": "从熊耳铺跟大伙上路",
   "lineCompass.nanhuang.step.nh_baiyi_enter": "往白夷族去",
