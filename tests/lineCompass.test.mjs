@@ -326,3 +326,32 @@ test('用户拍板：晋开局王哲锦囊起已知；宋汉唐南荒序幕结�
   const fromJin = view(saveOf({ modId: S09, done: [[S02, WANGZHE], [S02, PACT], [S09, 'lcq.event.s09_05_drain_escape']] }), SONG_FOCUS);
   assert.equal(fromJin.current.step, '上岸，进附近的城看看', '走过晋：不点广阳（防剧透通审 §13.1 #5）');
 });
+
+test('fix5939-2 travelHint：人在该步事件地点不出「去该地」，改出焦点指南针（编年史来源则留空）；不在地照旧指路', () => {
+  const HERE = 'liuchao.location.qingyuan', AWAY = 'liuchao.location.wuyuan';
+  const table = { version: 1, lines: [{ lineId: 'jin', nameKey: 'n.jin', anchorLine: 'jin', steps: [
+    { id: 'b', eventId: KILL_WU, hintKey: 'k.b', travelHint: true },
+  ] }] };
+  const tx = { 'n.jin': '晋', 'k.b': '去清远看看' };
+  const at = (focus, atLocationId) => view(saveOf(), focus, { table, texts: tx, placeIds: { [KILL_WU]: HERE }, atLocationId }).current;
+  assert.equal(at(XIAOZI, AWAY).step, '去清远看看', '不在地 → 出 hint');
+  assert.equal(at(XIAOZI, undefined).step, '去清远看看', '地点未知 → 出 hint');
+  assert.equal(at(XIAOZI, HERE).step, POINTER, '在地 → 焦点指南针');
+  const recent = at(undefined, HERE);
+  assert.equal(recent.source, 'recent');
+  assert.equal(recent.step, '', '在地、编年史来源 → 只显示线名');
+  const plain = structuredClone(table); delete plain.lines[0].steps[0].travelHint;
+  assert.equal(view(saveOf(), XIAOZI, { table: plain, texts: tx, placeIds: { [KILL_WU]: HERE }, atLocationId: HERE }).current.step, '去清远看看', '没标 travelHint 不改旧行为');
+});
+
+test('fix5939-2 validator：travelHint 只能是 true、须有 eventId 与 hintKey、文案须含事件地点名', () => {
+  const tx = { n: '晋国', k: '去清远看看', other: '去熊耳铺，找个向导' };
+  const places = { [KILL_WU]: '清远' };
+  const table = step => ({ version: 1, lines: [{ lineId: 'jin', nameKey: 'n', anchorLine: 'jin', steps: [{ id: 'a', ...step }] }] });
+  const codes = step => validateLineCompassTable(table(step), tx, places).map(i => i.code);
+  assert.deepEqual(codes({ eventId: KILL_WU, hintKey: 'k', travelHint: true }), []);
+  assert.ok(codes({ eventId: KILL_WU, hintKey: 'other', travelHint: true }).includes('invalid_travel_hint'), '文案不含地点名');
+  assert.ok(codes({ eventId: KILL_WU, hintKey: 'k', travelHint: 'yes' }).includes('invalid_travel_hint'), '非 true');
+  assert.ok(codes({ hintKey: 'k', travelHint: true }).includes('invalid_travel_hint'), '缺 eventId');
+  assert.ok(codes({ eventId: KILL_WU, hintKey: 'k', travelHnt: true }).includes('unknown_field'), '未知字段仍报');
+});

@@ -87,3 +87,35 @@ test('12 步：前一拍未完成时，不显示该步的「回到{地点}看看
     assert.notEqual(card.step, returnTo(eventId), `${stepId}：前一拍未完成，不应是 ${returnTo(eventId)}`);
   }
 });
+
+// fix5939-2 A：travelHint 步，人已在该步事件地点时不说「去该地」
+const viewAt = (save, focusEventId, atLocationId, pointer = POINTER) =>
+  compass.lineCompassView(save, { focusEventId, atLocationId, compassPointer: () => pointer });
+const SHEYI_ID = 'lcq.location.sheyi_village';
+
+test('人在蛇彝村（焦点 s03b_01）：不出「去蛇彝村看看」，改出焦点指南针', () => {
+  const save = saveOf({ modId: S03B, done: through03b(60) });
+  assert.equal(packs.CONTENT_PACKS.lineCompassPlaceIds['lcq.event.s03_12'], SHEYI_ID);
+  const card = viewAt(save, 'lcq.event.s03b_snake_flower_bridge_01', SHEYI_ID).current;
+  assert.equal(card?.lineId, 'nanhuang');
+  assert.notEqual(card.step, SHEYI);
+  assert.equal(card.step, POINTER);
+});
+
+test('人不在蛇彝村：仍出「去蛇彝村看看」（旧行为）', () => {
+  const save = saveOf({ modId: S03B, done: through03b(60) });
+  const card = viewAt(save, 'lcq.event.s03b_snake_flower_bridge_01', 'liuchao.location.wuyuan').current;
+  assert.equal(card?.lineId, 'nanhuang');
+  assert.equal(card.step, SHEYI);
+});
+
+test('人在白夷族（焦点 s04_07、指南针为空）：不出「往白夷族去」', () => {
+  const save = saveOf({ modId: eventStage.get('lcq.event.s04_03'), done: [at('lcq.event.sudaji_south_pact'), at('lcq.event.s04_03')] });
+  const BAIYI = texts['lineCompass.nanhuang.step.nh_baiyi_enter'];
+  const away = viewAt(save, 'lcq.event.s04_07', 'liuchao.location.wuyuan', '').current;
+  assert.equal(away?.step, BAIYI, '不在白夷族时仍指路');
+  const card = viewAt(save, 'lcq.event.s04_07', 'liuchao.location.baiyi', '').current;
+  assert.equal(card?.lineId, 'nanhuang');
+  assert.notEqual(card.step, BAIYI);
+  assert.equal(card.step, '');
+});

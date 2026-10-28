@@ -34,6 +34,7 @@
             }
           ],
           "hintKey": "lineCompass.nanhuang.step.nh_sheyi_village",
+          "travelHint": true,
           "note": "蛇彝之名祁远路上已提过（lcq:5267、5271）；人在村里仍停在这一步（02 尾拍 silent_sheyi_village、03b 的 01–03），s03_12 或 s03b_snake_flower_bridge_04 才过。hintKey 仍是「去蛇彝村看看」（P3-2 未定）"
         },
         {
@@ -93,6 +94,7 @@
             { "path": "done.lcq.event.s04_03", "operator": "eq", "value": true }
           ],
           "hintKey": "lineCompass.nanhuang.step.nh_baiyi_enter",
+          "travelHint": true,
           "note": "lcq:5898、6590"
         },
         {

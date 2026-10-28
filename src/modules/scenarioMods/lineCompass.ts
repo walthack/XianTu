@@ -28,6 +28,7 @@ import { evaluateLedgerCondition } from './ledgerConditions';
 import { lineClosed } from './lineOutcomes';
 import { lineUnlockConfig, lineUnlockStatus } from './lineUnlock';
 import { orderedDoneEventIds } from './playerLedgerRules';
+import { locationWithin } from './travel/locationIds';
 import { STAGE_REGION } from './reputationLedger';
 import { SECONDARY_LINES, secondaryLineUnlockOptions } from './secondaryLines';
 import { knownSecondaryLines, secondaryLineEntryView } from './secondaryLineEntry';
@@ -71,6 +72,8 @@ export interface LineCompassStep {
   until?: LineCompassCondition[];
   /** texts 键（lineCompass.<lineId>.step.<id>）；eventId 与 hintKey 至少写一个 */
   hintKey?: string;
+  /** hint 是「去{该步事件地点}」类指路句：玩家已在该地点（locationWithin）时不出这句，改出焦点指南针「见Y」，仍为空则留空（fix5939-2） */
+  travelHint?: true;
   /** 【待剧情策划】占位：运行时跳过，不进玩家可见 */
   draft?: true;
   /** 待建：仓库还没有对应剧情事件（eventId／条件里的 done.* 可为尚无的 id），本次不新建；运行时跳过，不进玩家可见，note 写缺什么 */
@@ -136,6 +139,8 @@ export interface LineCompassInput {
   texts?: Readonly<Record<string, string>>;
   /** eventId → 地点显示名（空串＝事件没有 locationId）；缺省读 catalog.lineCompassPlaces */
   places?: Readonly<Record<string, string>>;
+  /** eventId → 地点 id（空串＝事件没有 locationId）；travelHint 判「已在该地」用，缺省读 catalog.lineCompassPlaceIds */
+  placeIds?: Readonly<Record<string, string>>;
 }
 
 /** 占位文案标记：带它的句子永不显示。 */
@@ -152,6 +157,10 @@ export const lineCompassTable = (): LineCompassTable =>
 /** 下一步表里各 eventId 的地点显示名（content-packs 编译时从各关事件 locationId 求得；空串＝没有 locationId）。 */
 export const lineCompassPlaces = (): Readonly<Record<string, string>> =>
   ((CONTENT_PACKS as { lineCompassPlaces?: Record<string, string> }).lineCompassPlaces) ?? {};
+
+/** 下一步表里各 eventId 的地点 id（同上，编译期求得；空串＝没有 locationId）。 */
+export const lineCompassPlaceIds = (): Readonly<Record<string, string>> =>
+  ((CONTENT_PACKS as { lineCompassPlaceIds?: Record<string, string> }).lineCompassPlaceIds) ?? {};
 
 const runtimeOf = (save: unknown): any => (save as any)?.世界?.状态?.剧本模组;
 
@@ -194,6 +203,7 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
   const table = input.table ?? lineCompassTable();
   const texts = input.texts ?? CONTENT_PACKS.texts;
   const places = input.places ?? lineCompassPlaces();
+  const placeIds = input.placeIds ?? lineCompassPlaceIds();
   const rt = runtimeOf(save) || {};
   const holds = (conds: readonly LineCompassCondition[] | undefined): boolean =>
     lineCompassConditionsHold(conds, c => evaluateLedgerCondition(c, rt, save) === true);
@@ -247,7 +257,10 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
     if (step) {
       const atFocus = !!step.eventId && step.eventId === input.focusEventId;
       if (atFocus) stepText = input.compassPointer();
-      if (!stepText && step.hintKey) stepText = text(line, step.hintKey) ?? '';
+      // travelHint：人已在这一步的事件地点，不说「去该地」，改出焦点指南针（多半只剩「见Y」），仍为空就只显示线名（fix5939-2）
+      const here = !!step.travelHint && !!step.eventId && locationWithin(input.atLocationId, placeIds[step.eventId]);
+      if (here) { if (!stepText && source === 'focus') stepText = input.compassPointer(); }
+      else if (!stepText && step.hintKey) stepText = text(line, step.hintKey) ?? '';
       else if (!stepText && !atFocus && step.eventId) {
         // 只有 eventId、焦点不在这一拍：「回到{地点}看看」；没有地点只显示线名（记 story 调试日志，不报错码）
         const place = places[step.eventId];

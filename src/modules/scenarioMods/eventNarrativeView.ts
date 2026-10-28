@@ -149,6 +149,7 @@ type QuestCompassRuntime = {
     characters?: Array<{ id?: string; name?: string }>;
     locations?: Array<{ id?: string; name?: string }>;
   };
+  eventActionStates?: Record<string, { preparations?: string[] }>;
 } | null | undefined;
 
 /** lyl.lin_an_bridge「初抵临安」章的承重拍（与关卡数据同步，测试钉住）；同章随迁的 6 张登场卡与薛延山遇害仍标「临安疑线」，不在此列。 */
@@ -234,8 +235,25 @@ export function storyRouteLocation(eventId: string): string | undefined {
   } as Record<string, string>)[eventId];
 }
 
+/** 合同已有准备拍落账（事件进行中）时，去X 指向下一个可做动作 sceneLocation 里能认出的正典地点（取名字最长的命中）；认不出、或还没开打，仍用事件 locationId（fix5939-2） */
+function questCompassLocationId(event: ScenarioModEvent, runtime: QuestCompassRuntime): string | undefined {
+  const preps = runtime?.eventActionStates?.[event.id]?.preparations || [];
+  const actions = event.playerCompletionContract?.actions || [];
+  if (!preps.length || !actions.length) return event.locationId;
+  const next = actions.find(a => (a.requiresPreparation || []).every(p => preps.includes(p))
+    && !(a.kind === 'prepare' && a.grantsPreparation && preps.includes(a.grantsPreparation)));
+  const scene = next?.sceneLocation;
+  if (!scene) return event.locationId;
+  // 本地按名字包含匹配，不引 travelLedger（避免 travelLedger→secondaryLines 循环依赖）
+  const hit = (runtime?.canon?.locations || [])
+    .filter(item => item.id && item.name && scene.includes(item.name))
+    .sort((a, b) => String(b.name).length - String(a.name).length)[0];
+  return hit?.id || event.locationId;
+}
+
 function questCompassTargets(event: ScenarioModEvent, runtime: QuestCompassRuntime): { locName: string; who: string[] } {
-  const locName = String((runtime?.canon?.locations || []).find(item => item.id === event.locationId)?.name || '').trim();
+  const locationId = questCompassLocationId(event, runtime);
+  const locName = String((runtime?.canon?.locations || []).find(item => item.id === locationId)?.name || '').trim();
   const playerId = String(runtime?.opening?.playerCharacterId
     || ((runtime?.canon?.characters || []).some(item => item.id === 'liuchao.character.cheng_zongyang')
       ? 'liuchao.character.cheng_zongyang' : ''));
@@ -257,7 +275,8 @@ export function questCompassPhrases(
   if (!event) return [];
   const { locName, who } = questCompassTargets(event, runtime);
   const phrases: string[] = [];
-  if (!storyRouteLocation(event.id) && locName && event.locationId && !locationWithin(atLocationId, event.locationId)) phrases.push(`去${locName}`);
+  const locationId = questCompassLocationId(event, runtime);
+  if (!storyRouteLocation(event.id) && locName && locationId && !locationWithin(atLocationId, locationId)) phrases.push(`去${locName}`);
   for (const name of who) phrases.push(`见${name}`);
   return phrases;
 }

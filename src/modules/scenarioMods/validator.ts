@@ -2468,6 +2468,7 @@ const LINE_COMPASS_PLACE_SLOT = '{地点}';
  * - 正式步（非 draft）hintKey 须在 texts，文案不得带【待剧情策划】、不得超过 story.lineCompass.hint.maxChars 字、不得含 hint.bannedWords（§4.2）；
  * - 只有 eventId 的正式步（R-4／P-12）：焦点不在这一拍时显示通用句 texts[lineCompass.step.returnTo]「回到{地点}看看」，
  *   有这种步时模板须在 texts、含 {地点}；传了 places（eventId → 地点显示名，content-packs 编译时从各关事件 locationId 求得）时，代入后的句子同样守字数与定性词；
+ * - travelHint 步（fix5939-2）：只能是 true，须同时有 eventId 与 hintKey，传了 places 时文案须含该事件地点名，否则 invalid_travel_hint；
  * - draft 步的文案（若有）须以【待剧情策划】开头，运行时一律跳过。
  */
 export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>, places?: Readonly<Record<string, string>>): ScenarioModValidationIssue[] {
@@ -2535,7 +2536,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     line.steps.forEach((step, si) => {
       const sp = `${at}.steps[${si}]`;
       if (!isRecord(step)) { add(sp, 'invalid_type', `${sp} must be an object.`); return; }
-      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'draft', 'pending', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
+      for (const key of Object.keys(step)) if (!['id', 'eventId', 'when', 'until', 'hintKey', 'travelHint', 'draft', 'pending', 'note'].includes(key)) add(`${sp}.${key}`, 'unknown_field', `Unknown field "${key}".`);
       if (validateId(step.id, `${sp}.id`, add)) {
         if (seenSteps.has(step.id)) add(`${sp}.id`, 'duplicate_id', `Duplicate step id "${step.id}".`);
         seenSteps.add(step.id);
@@ -2560,6 +2561,16 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
         }
         const place = places?.[step.eventId];
         if (place && isNonEmptyString(returnTemplate)) checkHintText(returnTemplate.split(LINE_COMPASS_PLACE_SLOT).join(place), `${sp}.eventId`);
+      }
+      // travelHint（fix5939-2）：hint 须是「去{该步事件地点}」类句子——要有 eventId 与 hintKey，文案含该事件地点名
+      if (step.travelHint !== undefined) {
+        if (step.travelHint !== true) add(`${sp}.travelHint`, 'invalid_travel_hint', 'travelHint must be true or omitted.');
+        else if (typeof step.eventId !== 'string' || typeof step.hintKey !== 'string') add(`${sp}.travelHint`, 'invalid_travel_hint', 'travelHint needs both eventId and hintKey.');
+        else {
+          const place = places?.[step.eventId];
+          const value = texts[step.hintKey];
+          if (places && (!place || typeof value !== 'string' || !value.includes(place))) add(`${sp}.travelHint`, 'invalid_travel_hint', `travelHint step text must name its event's place "${place || ''}".`);
+        }
       }
       if (step.hintKey === undefined) return;
       if (typeof step.hintKey !== 'string' || !step.hintKey) { add(`${sp}.hintKey`, 'invalid_type', 'hintKey must be a non-empty string.'); return; }
