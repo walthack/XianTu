@@ -41,6 +41,37 @@ const VARIANT_OF: Record<string, (runtime: unknown) => string> = {
 
 const runtimeOf = (save: unknown): unknown => (save as any)?.世界?.状态?.剧本模组;
 
+const GAP_DIGIT = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'] as const;
+
+/** 读数。开头的「十」省「一」；嵌在更高位里的 10–19 写成「一十」。这里的 2 一律作「二」，单独的 2 由 lineGapCountText 改成「两」。 */
+function readGapCount(n: number): string {
+  if (n < 10) return GAP_DIGIT[n];
+  if (n < 20) return n === 10 ? '十' : `十${GAP_DIGIT[n - 10]}`;
+  if (n < 100) {
+    const tens = Math.floor(n / 10);
+    const ones = n % 10;
+    return `${GAP_DIGIT[tens]}十${ones ? GAP_DIGIT[ones] : ''}`;
+  }
+  const unit = n < 1000 ? 100 : n < 10000 ? 1000 : n < 100000000 ? 10000 : 100000000;
+  const label = unit === 100 ? '百' : unit === 1000 ? '千' : unit === 10000 ? '万' : '亿';
+  const high = Math.floor(n / unit);
+  const rest = n % unit;
+  const head = `${unit >= 10000 ? readGapCount(high) : GAP_DIGIT[high]}${label}`;
+  if (!rest) return head;
+  const tail = rest >= 10 && rest < 20 ? `一十${rest === 10 ? '' : GAP_DIGIT[rest - 10]}` : readGapCount(rest);
+  return head + (rest < unit / 10 ? '零' : '') + tail;
+}
+
+/**
+ * 「{X} 处」里的数字（总策划 fix86-3）：口语计数，单独的 2 写作「两」，十二、二十仍用「二」，两百、两千同理。
+ * 不写阿拉伯数字。线数缺口最大是判档线条数；更大的整数也按位拼，避免以后改配置又露出数字。
+ */
+export function lineGapCountText(n: number): string {
+  if (!Number.isInteger(n) || n < 0) return '零';
+  if (n === 2) return '两';
+  return readGapCount(n).replace(/^二(?=[百千万亿])/, '两');
+}
+
 export function secondaryLineEntryView(
   line: SecondaryLine,
   save: unknown,
@@ -64,7 +95,7 @@ export function secondaryLineEntryView(
     for (const gap of status.missing) {
       if (!keys) break;
       if (gap === 'realm') hintLines.push(text(keys.locked.realm) ?? '');
-      if (gap === 'lines') hintLines.push(text(keys.locked.lines)?.split('{X}').join(String(status.lines.short)) ?? '');
+      if (gap === 'lines') hintLines.push(text(keys.locked.lines)?.split('{X}').join(lineGapCountText(status.lines.short)) ?? '');
       if (gap === 'deadline') {
         for (const d of status.deadlines.filter(d => !d.pass)) hintLines.push(text(`${keys.locked.deadlinePrefix}.${d.id}`) ?? '');
       }

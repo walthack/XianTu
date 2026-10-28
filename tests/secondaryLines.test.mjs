@@ -321,11 +321,11 @@ test('已走进太泉只认门后节点：迷楼两拍（临安收束章、门�
   assert.equal(entry.secondaryLineEntryView(line, taiquanSave({ ...weak, done: [['lyl.taiquan_sacred_fruit', 'lyl.event.taiquan_sacred_fruit_10']] })).locked, false);
 });
 
-test('锁住时：标题＋缺项句逐字等于 texts，顺序修为 → 线数 → 冰蛊，{X} 换成还差几条', async () => {
+test('锁住时：标题＋缺项句逐字等于 texts，顺序修为 → 线数 → 冰蛊，{X} 换成中文数字', async () => {
   const { secondary, entry, texts, numbers } = await unlockLoaded;
   const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
   const short = numbers.GAME_NUMBERS.story.lineUnlock.taiquan.minClosedLines;
-  const linesText = texts['line.taiquan.locked.lines'].split('{X}').join(String(short));
+  const linesText = texts['line.taiquan.locked.lines'].split('{X}').join(entry.lineGapCountText(short));
   assert.ok(texts['line.taiquan.locked.lines'].includes('{X}'));
   assert.equal(texts['line.taiquan.locked.title'], '太泉古阵 · 时机未到');
   await withIceGu(async (iceId) => {
@@ -347,6 +347,41 @@ test('锁住时：标题＋缺项句逐字等于 texts，顺序修为 → 线数
     const cleared = entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '入微' }, done: [...running, ['lcq.stage_02', ICE_CLEAR]] }));
     assert.deepEqual(cleared.hintLines, [texts['line.taiquan.locked.realm']]);
   });
+});
+
+test('太泉时机未到：六阳换算成配置里的境界名，只出实际缺的条件，{X} 写成中文且不出现阿拉伯数字', async () => {
+  const { secondary, entry, texts, numbers } = await unlockLoaded;
+  const { levelName } = await loadTs('../src/utils/realmUtils.ts');
+  const realmText = texts['line.taiquan.locked.realm'];
+  const linesTemplate = texts['line.taiquan.locked.lines'];
+  const needLevel = numbers.GAME_NUMBERS.story.lineUnlock.taiquan.minRealmLevel;
+  const realmName = levelName(needLevel);
+  assert.ok(realmText.includes('六阳'));
+  assert.ok(realmText.includes(realmName), realmName);
+  assert.equal(realmName, '坐照');
+  for (const sentence of [realmText, linesTemplate]) {
+    assert.equal(sentence.includes('国家线'), false, sentence);
+    assert.equal(sentence.includes('收束'), false, sentence);
+  }
+  assert.equal(linesTemplate.split('{X}').length - 1, 1);
+  assert.equal(entry.lineGapCountText(1), '一');
+  assert.equal(entry.lineGapCountText(2), '两');
+  assert.equal(entry.lineGapCountText(3), '三');
+  assert.equal(entry.lineGapCountText(12), '十二');
+  assert.equal(entry.lineGapCountText(20), '二十');
+  assert.equal(/[0-9]/.test([0, 1, 2, 3, 10, 12, 20, 22].map(n => entry.lineGapCountText(n)).join('')), false);
+
+  const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
+  const onlyLines = entry.secondaryLineEntryView(line, taiquanSave({ flags: {} }));
+  assert.equal(onlyLines.hintLines.length, 1);
+  assert.equal(onlyLines.hintLines[0], '手头的事还没了结。至少还得先了结 一 处的大事，才腾得出手。');
+  assert.equal(onlyLines.hintLines[0].includes('六阳'), false);
+  assert.equal(/[0-9]/.test(onlyLines.hintLines[0]), false);
+
+  const onlyRealm = entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '入微' } }));
+  assert.equal(onlyRealm.hintLines.length, 1);
+  assert.equal(onlyRealm.hintLines[0], '王哲的托付还记着：「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」「如果未达六阳之境，根本无法进入太泉古阵。」六阳，差不多就是第五级坐照的修为——眼下还没到。');
+  assert.equal(onlyRealm.hintLines[0], realmText);
 });
 
 test('解锁后两版说法：s12_10 已完成＝宋版，否则王哲版；钥匙附句只在 _05 已完成时跟在宋版后面', async () => {
@@ -382,7 +417,7 @@ test('文案键缺失记 LCQ-PCK-005（同一键只记一次）并用兜底：�
   log.resetLogState();
   await quietConsole(async () => {
     const locked = entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '入微' }, flags: {} }), without('line.taiquan.locked.title', 'line.taiquan.locked.realm'));
-    assert.deepEqual(locked, { locked: true, title: '太泉古阵 · 时机未到', hintLines: [texts['line.taiquan.locked.lines'].split('{X}').join('1')] });
+    assert.deepEqual(locked, { locked: true, title: '太泉古阵 · 时机未到', hintLines: [texts['line.taiquan.locked.lines'].split('{X}').join(entry.lineGapCountText(1))] });
     entry.secondaryLineEntryView(line, taiquanSave({ realm: { 名称: '入微' }, flags: {} }), without('line.taiquan.locked.title', 'line.taiquan.locked.realm'));
     const song = [['lcq.stage_12_jiangzhou_counterwar', SONG_HURT], ['lyl.taiquan_sacred_fruit', KEY_EVENT]];
     assert.deepEqual(entry.secondaryLineEntryView(line, taiquanSave({ done: song }), without('line.taiquan.entry.song')).hintLines, [line.entryHint]);
