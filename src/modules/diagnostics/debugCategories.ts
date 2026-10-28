@@ -39,7 +39,7 @@ export const DEBUG_CATEGORIES = [
   },
   {
     id: 'combat', label: '战斗与场面',
-    paths: ['modules/sceneModule/', 'utils/judgement*.ts', 'utils/diceRoller.ts', 'utils/narratedDamage.ts', 'utils/playerVitalGuard.ts', 'dev/combatTrial/'],
+    paths: ['modules/sceneModule/', 'utils/judgement*.ts', 'utils/diceRoller.ts', 'utils/narratedDamage.ts', 'utils/playerVitalGuard.ts', 'dev/combatTrial/', ...sm('randomEncounter.ts')],
   },
   {
     id: 'npc', label: '人物与关系',
@@ -51,7 +51,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'growth', label: '养成与物品',
     paths: [
-      ...sm('levelProgression.ts', 'inventoryTransactions.ts', 'fixedInventoryContracts.ts', 'itemGrades.ts', 'shopStock.ts', 'locationLoot.ts'),
+      ...sm('levelProgression.ts', 'inventoryTransactions.ts', 'fixedInventoryContracts.ts', 'itemGrades.ts', 'shopStock.ts', 'locationLoot.ts', 'seededRng.ts'),
       ...at('utils/', 'attributeCalculation.ts', 'cultivationSpeedCalculator.ts', 'realmUtils.ts', 'lifespanCalculator.ts', 'statusEffectManager.ts', 'masteredSkillsCalculator.ts',
         'equipmentBonusApplier.ts', 'craftingSystem.ts', 'currencySystem.ts', 'narratedInventory.ts', 'sixSiManager.ts'),
       'data/',

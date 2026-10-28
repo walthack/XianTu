@@ -9,7 +9,7 @@ import { loadTs } from './loadTs.mjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const readJson = (rel) => JSON.parse(readFileSync(path.join(root, rel), 'utf8'));
 
-const COMBAT_KEYS = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'];
+const COMBAT_KEYS = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'encounter'];
 const PROGRESS_KEYS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting', 'loot'];
 const RUNTIME_KEYS = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui'];
 const ASSIST_KEYS = ['assist'];

@@ -9,6 +9,7 @@ import { advanceClock } from './travel/travelLedger';
 import { isStepSceneStage } from './travel/stepScene';
 import { visibleModuleText } from './modularTurn';
 import { logEventOnce } from '../diagnostics/log';
+import { encounterPromptFacts } from './randomEncounter';
 /** 剧情交接 2026-10-02：固定死亡正文；配图由 endingPresentation 提供。 */
 const ENDING_TEXTS: Readonly<Record<string,string>> = CONTENT_PACKS.texts;
 
@@ -186,5 +187,7 @@ export function sceneLedgerSummary(save: SaveData): Record<string, unknown> {
     已故: [...new Set([runtimeEntityName(runtime,"lcq.character.duan_qiang"), runtimeEntityName(runtime,"lcq.character.wang_zhe"), ...Object.entries(ledger?.actors || {}).filter(([, v]) => v.status === 'dead').map(([id]) => runtimeEntityName(runtime,id))])],
     世界事实: [...(runtime?.completedEventIds?.includes('lcq.event.ghost_king_swallowed') ? [] : ['鬼王峒未平定，鬼巫王在世']), ...(ledger?.worldFacts || [])],
     上一拍要点: ledger?.lastBeat?.facts || runtime?.chronicle?.at(-1)?.summary || '',
+    // 随机遇敌事实包（危区／遇敌）；没有待演出的遇敌时为空，返回对象与原来一致。
+    ...encounterPromptFacts(save),
   };
 }

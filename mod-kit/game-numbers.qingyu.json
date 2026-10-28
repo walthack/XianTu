@@ -2414,5 +2414,217 @@
       "exhausted": "你已经仔细搜刮过这里{n}次，没有新的搜刮机会。",
       "respawnHint": "过些日子再来，或许又能翻出些东西。"
     }
+  },
+  "encounter": {
+    "note": "随机遇敌（用户 2026-10-28 13:48；10-19 三步）。代码按存档种子掷骰决定检不检/中不中/遇谁/几个/几级，模型只描写。仅 regions 里配了 zones+pool 的地区生效；第一版只有南荒，zones/pool 照剧情策划清单（/workspace/planner_ask_nanhuang_encounter.md）配置草案填入，其中 shan_jian、sea_temple 与鲛人三条按「推荐」写入、待用户拍板（否决就删对应条目）。几率与倍率初值待用户拍板。",
+    "enabled": true,
+    "tiers": {
+      "safe": {
+        "chance": 0,
+        "cooldownTurns": 0
+      },
+      "guarded": {
+        "chance": 0.08,
+        "cooldownTurns": 3
+      },
+      "hostile": {
+        "chance": 0.22,
+        "cooldownTurns": 2
+      },
+      "fortress": {
+        "chance": 0.35,
+        "cooldownTurns": 2
+      }
+    },
+    "difficulty": {
+      "宽松": {
+        "chanceMul": 1,
+        "levelShift": 0
+      },
+      "标准": {
+        "chanceMul": 1,
+        "levelShift": 0
+      },
+      "严苛": {
+        "chanceMul": 1,
+        "levelShift": 0
+      }
+    },
+    "maxCount": 6,
+    "receiptsKeep": 50,
+    "prompt": {
+      "foreshadow": "本轮正文须写出此地的危险迹象（声响、痕迹、气味、同伴警觉等），只写迹象，不写敌人现身，不写开战；让玩家看得出可以继续留下或离开。",
+      "reveal": "本轮正文须写出这些对手现身、逼近或拦路，停在交手之前；不写胜负、伤亡、逃脱，不给对手起名，不把他们写成剧情人物。下一步由玩家决定如何应对。本条遇敌由程序掷定，不受「不得新增敌袭」限制。"
+    },
+    "regions": {
+      "nanhuang": {
+        "modIdPattern": "^lcq\\.stage_0(?:3b|4|4b|5b)",
+        "skipDuringEventIds": [
+          "lcq.event.s05b_06_breakout_and_reunion",
+          "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+        ],
+        "zones": [
+          {
+            "key": "liuchao.location.shan_jian",
+            "tier": "guarded",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.s04_02"
+              ],
+              "untilEventIds": [
+                "lcq.event.s04_06"
+              ]
+            },
+            "source": "扩写：qyj 6827、6848–6852、12301（待用户拍板）"
+          },
+          {
+            "key": "liuchao.location.sea_temple",
+            "tier": "guarded",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.haishen_hall_merfolk"
+              ],
+              "untilEventIds": [
+                "lcq.event.pull_harpoon_lemingzhu"
+              ]
+            },
+            "source": "扩写：qyj 11021–11022、11140（待用户拍板）"
+          },
+          {
+            "key": "liuchao.location.gui_wang_dong",
+            "tier": "hostile",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.s05b_02_xiaozi_exposed"
+              ],
+              "untilEventIds": [
+                "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+              ]
+            },
+            "source": "qyj 14258、16253"
+          },
+          {
+            "key": "lcq.location.guiwang_inn",
+            "tier": "hostile",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.s05b_02_xiaozi_exposed"
+              ],
+              "untilEventIds": [
+                "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+              ]
+            },
+            "source": "qyj 14198、14258、16253"
+          },
+          {
+            "key": "liuchao.location.gui_wang_gong",
+            "tier": "hostile",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.s05b_04_enter_ghost_palace"
+              ],
+              "untilEventIds": [
+                "lcq.event.ghost_king_swallowed"
+              ]
+            },
+            "source": "qyj 14598–14802、16253、16748"
+          },
+          {
+            "key": "liuchao.location.gui_wang_gong.jingshen_tai",
+            "tier": "hostile",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.s05b_06_breakout_and_reunion"
+              ],
+              "untilEventIds": [
+                "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+              ]
+            },
+            "source": "qyj 15087–15152（落点待核）"
+          }
+        ],
+        "pool": [
+          {
+            "enemyId": "lcq.enemy.guiwang_warrior",
+            "variant": "normal",
+            "level": 3,
+            "zones": [
+              "liuchao.location.shan_jian",
+              "liuchao.location.gui_wang_dong",
+              "lcq.location.guiwang_inn",
+              "liuchao.location.gui_wang_gong",
+              "liuchao.location.gui_wang_gong.jingshen_tai"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "activeWhen": {
+              "afterEventIds": [],
+              "untilEventIds": [
+                "lcq.event.ghost_king_swallowed"
+              ]
+            },
+            "weight": 3,
+            "count": [
+              1,
+              3
+            ],
+            "source": "扩写级数：qyj 6760–6773、6800、12287、14773；个数 qyj 9370–9371、14603、14743"
+          },
+          {
+            "enemyId": "lcq.enemy.guiwang_warrior",
+            "variant": "elite",
+            "level": 4,
+            "zones": [
+              "liuchao.location.gui_wang_dong",
+              "lcq.location.guiwang_inn",
+              "liuchao.location.gui_wang_gong",
+              "liuchao.location.gui_wang_gong.jingshen_tai"
+            ],
+            "tiers": [
+              "hostile"
+            ],
+            "activeWhen": {
+              "afterEventIds": [],
+              "untilEventIds": [
+                "lcq.event.ghost_king_swallowed"
+              ]
+            },
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "扩写：qyj 6809–6817、9371、12743、14746"
+          },
+          {
+            "enemyId": "lcq.enemy.merfolk",
+            "variant": "normal",
+            "level": 4,
+            "zones": [
+              "liuchao.location.sea_temple"
+            ],
+            "tiers": [
+              "guarded"
+            ],
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.haishen_hall_merfolk"
+              ],
+              "untilEventIds": [
+                "lcq.event.pull_harpoon_lemingzhu"
+              ]
+            },
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "扩写：qyj 11012–11017、11040–11041、11064–11065、11259（待用户拍板）"
+          }
+        ]
+      }
+    }
   }
 }

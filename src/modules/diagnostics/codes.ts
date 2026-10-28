@@ -99,6 +99,8 @@ export const ERROR_CODES = {
   'LCQ-SAV-029': spec('warn', 'lineUnlock', '整线解锁判定读数异常（境界读不出、缺配置或判定出错时按锁住处理；期限 id 不在规则表时按通过；说法判定出错退回王哲版）'),
   'LCQ-SAV-030': spec('warn', 'loadRepairs', '读档迁移旧档练功上限（canon / canon+1 → none）失败，本次照常加载，下次读档重试'),
   'LCQ-SAV-031': spec('warn', 'characterStore', '「上次对话」回合备份不属于当前存档：拒绝回滚，或读档/新开局时清理旧备份失败'),
+  'LCQ-SAV-032': spec('warn', 'randomEncounter', '随机遇敌回合检查失败，本回合不检，不影响剧情'),
+  'LCQ-SAV-033': spec('warn', 'randomEncounter', '随机遇敌敌池或地点条目无效，已跳过该条'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

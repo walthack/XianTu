@@ -16,11 +16,11 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (name) => JSON.parse(readFileSync(resolve(root, 'mod-kit', name), 'utf8'));
 
-const COMBAT = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'];
+const COMBAT = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'encounter'];
 const PROGRESS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting', 'loot'];
 const RUNTIME = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui'];
 const ASSIST = ['assist'];
-const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'assist', 'story', 'shop', 'crafting', 'ui', 'loot'];
+const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'assist', 'story', 'shop', 'crafting', 'ui', 'loot', 'encounter'];
 
 const parts = [
   ['numbers-combat.json', COMBAT],

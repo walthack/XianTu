@@ -26,6 +26,7 @@ import {
 } from './privateKnowledgeGuard';
 import { formatVoiceCard } from './voiceCards';
 import { undisclosedSelfFactsPromptLine } from './undisclosedSelfFacts';
+import { encounterPromptFacts } from './randomEncounter';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
 import { getBaihuGambleRefusalPrompt } from './baihuGambleRefusal';
 
@@ -1107,9 +1108,9 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const steeringLine = steeringCooldown > 0
     ? ''
     : stallTurns >= 7
-    ? `【回主线路标（玩家可忽略）】剧情已停滞多轮：本轮必须给玩家一条明确、此刻就能采取的回主线下一步。从下述“最近主线节点”里提取尚未揭晓的悬念/待解之谜/人物去向，以过渡钩子牵引，切勿复现该场景原貌、也不得提前演出该桥段：${dirHint}。用旁人指路、一封急报、路上传闻、同伴提议往某地或环境指向等自然方式带出，让玩家清楚“下一步可以往哪走”。严禁以新增敌袭、追兵或战斗充当压力（除非玩家主动招惹）。仅为可选引导：不得替玩家做决定，不得直接完成事件或强行触发主线高潮。`
+    ? `【回主线路标（玩家可忽略）】剧情已停滞多轮：本轮必须给玩家一条明确、此刻就能采取的回主线下一步。从下述“最近主线节点”里提取尚未揭晓的悬念/待解之谜/人物去向，以过渡钩子牵引，切勿复现该场景原貌、也不得提前演出该桥段：${dirHint}。用旁人指路、一封急报、路上传闻、同伴提议往某地或环境指向等自然方式带出，让玩家清楚“下一步可以往哪走”。严禁以新增敌袭、追兵或战斗充当压力（除非玩家主动招惹，或本轮【遇敌事实】已给出）。仅为可选引导：不得替玩家做决定，不得直接完成事件或强行触发主线高潮。`
     : stallTurns >= 4
-      ? `【回主线轻引子（玩家可忽略）】剧情已数轮未推进：本轮给一个轻量可选线索，指向下述“最近主线节点”的悬念（提取待解之谜/人物去向牵引，不复现场景、不提前演出）：${dirHint}。可用旁人一句话、一则传闻、环境异样或同伴提议带出，让玩家知道“想推进主线可以往这走”。不得强行触发主线高潮，不得直接完成事件，不得用新增战斗/追兵充当引子。`
+      ? `【回主线轻引子（玩家可忽略）】剧情已数轮未推进：本轮给一个轻量可选线索，指向下述“最近主线节点”的悬念（提取待解之谜/人物去向牵引，不复现场景、不提前演出）：${dirHint}。可用旁人一句话、一则传闻、环境异样或同伴提议带出，让玩家知道“想推进主线可以往这走”。不得强行触发主线高潮，不得直接完成事件，不得用新增战斗/追兵充当引子（本轮【遇敌事实】已给出时除外）。`
       : '';
   const divergenceSignal = (runtime as any).divergenceSignal;
   const divergenceControlLine = divergenceSignal?.level === 'high'
@@ -1128,6 +1129,11 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   // 危险逐轮逼近：引擎只给可观察事实，压力由正文演出——不用 UI 倒计时（裁定 #155）。
   // 制作人 2026-08-19：「倒计时让 LLM 自己用语言喂给玩家即可。」
   const fatalApproachLine = formatScenePressurePrompt(saveData);
+  // 随机遇敌：代码已掷定的危区迹象／对手现身（randomEncounter.ts），模型只描写；与推进引导里「严禁新增敌袭」的例外对应。
+  const encounterFacts = encounterPromptFacts(saveData) as { 危区?: { 地点: string; 要求: string }; 遇敌?: { 对手: string; 数量: number; 要求: string } };
+  const encounterLine = encounterFacts.遇敌
+    ? `【遇敌事实（程序已定）】对手：${encounterFacts.遇敌.对手}，共${encounterFacts.遇敌.数量}名。${encounterFacts.遇敌.要求}`
+    : encounterFacts.危区 ? `【遇敌事实（程序已定）】${encounterFacts.危区.地点}是危险地带。${encounterFacts.危区.要求}` : '';
   // 本局已结束：正文写结局，然后停在那里。
   const over = (runtime as { gameOver?: { title: string; facts: string[] } }).gameOver;
   const gameOverLine = over
@@ -1221,7 +1227,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${undisclosedLine ? `${undisclosedLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${ledgerLine ? `${ledgerLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${relationshipEvolutionLine}\n\n${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${undisclosedLine ? `${undisclosedLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${encounterLine ? `${encounterLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${ledgerLine ? `${ledgerLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${relationshipEvolutionLine}\n\n${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

@@ -7,6 +7,7 @@ import { DEFAULT_CURRENCIES, type DefaultCurrencyId } from '../../utils/currency
 import { scenarioPlayerId } from './playerIdentity';
 import { gameDayOf } from './affinityLadder';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
+import { seedHash as hash, seededRoller, saveSeed } from './seededRng';
 
 export interface LocationLootEntry {
   id: string; itemId?: string; category: 'key' | 'common' | 'rare' | 'currency' | 'boss';
@@ -75,11 +76,6 @@ function lootToday(save: SaveData): number | null {
   const time = (save as any).元数据?.时间;
   return time && time.年 !== undefined && time.月 !== undefined && time.日 !== undefined ? gameDayOf(time) : null;
 }
-function hash(text: string): number {
-  let n = 2166136261;
-  for (const c of text) n = Math.imul(n ^ c.charCodeAt(0), 16777619);
-  return n >>> 0;
-}
 /** 存档身份与创建时刻派生初始种子；首个成功搜刮时持久化，重载/重试不改骰。 */
 export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
   const runtime = (save as any).世界?.状态?.剧本模组;
@@ -134,7 +130,7 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
   return { status: 'settled' as const, receipt, text: lootReceiptText(receipt) };
 }
 function lootState(save: SaveData, runtime: any): LocationLootState {
-  const initialSeed = hash(JSON.stringify([(save as any).角色?.身份, (save as any).元数据?.创建时间, (save as any).元数据?.版本]));
+  const initialSeed = saveSeed(save);
   return runtime.locationLoot || { version: 1, seed: initialSeed, searches: {}, claimed: [], claimedItemIds: [], receipts: [] };
 }
 /** 随机战胜利后给当地留一次「战后搜尸」：下一次搜刮走战后一次、不占搜刮次数。每地点只留最近一场。 */
@@ -155,7 +151,7 @@ function rollAndGrant({ save, runtime, table, location, locationId, state, id, a
   state: LocationLootState; id: string; attempt: number; turn: number; rng: number; categories?: Set<LootCategory>; commonOnly: boolean;
 }): LocationLootReceipt {
   const seed = rng;
-  const roll = () => { rng = (rng + 0x6D2B79F5) >>> 0; let t = Math.imul(rng ^ (rng >>> 15), 1 | rng); t ^= t + Math.imul(t ^ (t >>> 7), 61 | t); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const roll = seededRoller(rng);
   const knownItems = new Set((runtime.canon?.items || []).filter((i: any) => !i.storyItem).map((i: any) => i.id));
   // 当前关进度切关会清空；行旅账保留已结算事件，不反向污染当前关 rail。
   const completed = new Set([...(runtime.completedEventIds || []), ...(runtime.travelLedger?.doneEventIds || [])]);

@@ -21,13 +21,13 @@ export interface FieldSpec {
 
 /** 三分包顶层段归属（与 mod-kit/numbers-*.json 一致）。 */
 export const SECTION_KEYS: Record<NumbersSection, readonly string[]> = {
-  combat: ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype'],
+  combat: ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'encounter'],
   progress: ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting', 'loot'],
   runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui'],
   assist: ['assist'],
 };
 
-/** 32 个顶层键：version 为 int，其余为必填 object。 */
+/** 33 个顶层键：version 为 int，其余为必填 object。 */
 export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; section: NumbersSection }> = [
   { key: 'version', kind: 'int', section: 'runtime' },
   { key: 'levels', kind: 'object', section: 'progress' },
@@ -61,6 +61,7 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'crafting', kind: 'object', section: 'progress' },
   { key: 'ui', kind: 'object', section: 'runtime' },
   { key: 'loot', kind: 'object', section: 'progress' },
+  { key: 'encounter', kind: 'object', section: 'combat' },
 ];
 
 /** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读配置 story.lineOutcome.judgedLines，这里不写。 */
@@ -81,6 +82,15 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'loot.spoils.categories', kind: 'array', required: true, section: 'progress' },
   { path: 'loot.texts.exhausted', kind: 'string', required: true, section: 'progress' },
   { path: 'loot.texts.respawnHint', kind: 'string', required: true, section: 'progress' },
+  // 随机遇敌（用户 2026-10-28 13:48；10-19 三步）；tiers/difficulty 键与取值、regions 正则在 randomEncounter.ts 深层校验。
+  { path: 'encounter.enabled', kind: 'bool', required: true, section: 'combat' },
+  { path: 'encounter.tiers', kind: 'object', required: true, section: 'combat' },
+  { path: 'encounter.difficulty', kind: 'object', required: true, section: 'combat' },
+  { path: 'encounter.regions', kind: 'object', required: true, section: 'combat' },
+  { path: 'encounter.maxCount', kind: 'int', required: true, min: 1, section: 'combat' },
+  { path: 'encounter.receiptsKeep', kind: 'int', required: true, min: 1, section: 'combat' },
+  { path: 'encounter.prompt.foreshadow', kind: 'string', required: true, section: 'combat' },
+  { path: 'encounter.prompt.reveal', kind: 'string', required: true, section: 'combat' },
   { path: 'story.stepScene.minutesPerBeat', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.lineOutcome.tiers', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineOutcome.writeOnce', kind: 'bool', required: true, section: 'progress' },

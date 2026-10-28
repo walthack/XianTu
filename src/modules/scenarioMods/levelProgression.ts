@@ -3,7 +3,8 @@ import {namingChapter} from './ledger/naming';
 import {GAME_NUMBERS} from '../sceneModule/numbers';
 import {levelOf,levelName} from '../../utils/realmUtils';
 import {packText} from '../contentPacks';
-export type DifficultySettings={autoRaiseLevel:boolean;trainingCap:'canon'|'canon+1'|'none'};
+/** preset：玩家点选的难度档位名（随机遇敌按档取倍率；宽松与标准两项相同，只能靠它分）；旧档没有，手动改勾选/下拉后保留原值。 */
+export type DifficultySettings={autoRaiseLevel:boolean;trainingCap:'canon'|'canon+1'|'none';preset?:string};
 export const DIFFICULTY_PRESETS:Record<string,DifficultySettings>=GAME_NUMBERS.difficulty.presets as Record<string,DifficultySettings>;
 export function difficultySettings(save:any):DifficultySettings {const d=save?.系统?.难度设置;return d&&typeof d.autoRaiseLevel==='boolean'&&['canon','canon+1','none'].includes(d.trainingCap)?d:{...DIFFICULTY_PRESETS[GAME_NUMBERS.difficulty.defaultPreset]};}
 export function stageCanonLevel(save:any,chapterOverride?:number):number|null {const runtime=save?.世界?.状态?.剧本模组;const id=runtime?.opening?.playerCharacterId;const fact=id?levelFact(id,chapterOverride??namingChapter(runtime)):undefined;if(fact?.level!==null && fact?.level!==undefined)return fact.level;const c=save?.世界?.状态?.剧本模组?.canon?.characters?.find((c:any)=>c.id==='liuchao.character.cheng_zongyang');return Number.isInteger(c?.level)&&c.level>=0&&c.level<=GAME_NUMBERS.levels.max?c.level:null;}

@@ -582,6 +582,8 @@ import { getLastTurnTelemetry } from '@/utils/turnTelemetry';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import { narrativeTriggers, recordTurnNarrative } from '@/modules/diagnostics/narrativeSource';
 import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
+import { tickRandomEncounter, encounterNarratedBy } from '@/modules/scenarioMods/randomEncounter';
+import { logError } from '@/modules/diagnostics/log';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
 import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
@@ -669,6 +671,15 @@ const persistJudgementSave = async (save: any) => {
   gameStateStore.loadFromSaveData(save);
   await characterStore.saveCurrentGame();
   refreshPendingJudgement();
+};
+// 随机遇敌：故事回合成功收尾后推进一次（只写 剧本模组.encounter；场面宿主回合不走这里）。
+// 事实包没送到叙事模型的回合（固定文本、05b 模块路径）不算演出过，见 encounterNarratedBy。
+const tickEncounterAfterTurn = async (resp: any) => {
+  const s = gameStateStore.toSaveData(); if (!s) return;
+  try {
+    const r = tickRandomEncounter(s, { narrated: encounterNarratedBy(s, resp?.moduleReceipt?.path) });
+    if (r.changed) await persistJudgementSave(s);
+  } catch (e) { logError('LCQ-SAV-032', e, { detail: { phase: 'tick' } }); }
 };
 // 🔥 使用全局状态替代组件状态
 const isAIProcessing = computed(() => uiStore.isAIProcessing);
@@ -2613,6 +2624,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     // 🔥 [关键修复] 无论成功失败，都在这里清除AI处理状态
     // 成功的提示
     if (!hasError && aiResponse) {
+      await tickEncounterAfterTurn(aiResponse);
       toast.success('天机重现');
       // 清空已发送的图片
       clearImages();
