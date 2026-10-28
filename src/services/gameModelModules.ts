@@ -1,3 +1,5 @@
+import { isContentModerationError, toUserFacingAIError } from './apiErrorMessage';
+import { ModuleNarrativeGuardError } from '@/modules/scenarioMods/modularTurn';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
 import { isTavernEnv } from '@/utils/tavern';
 import { aiService } from './aiService';
@@ -33,7 +35,14 @@ export async function runGameModelModule(moduleId: string, input: ModelModuleInp
     definitions: GAME_MODEL_MODULES,
     resolveRoute: resolveGameModuleRoute,
     isEnabled: isGameModuleEnabled,
-    generate: options => aiService.generate(options),
+    generate: async options => {
+      try { return await aiService.generate(options); }
+      catch (error) {
+        // lcq-allow: 传输层已记录 LCQ-NET-012；这里只保留 cause 并转换本地正文守卫。
+        if (!isContentModerationError(error)) throw error;
+        throw Object.assign(new ModuleNarrativeGuardError(toUserFacingAIError(error).message), { cause: error });
+      }
+    },
   }).run(moduleId, input);
   // 叙事来源日志（LCQ-NAR-001）取场面描写的模型名用。
   noteModelRoute(moduleId, result.route);

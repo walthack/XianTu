@@ -293,6 +293,19 @@
             </div>
           </div>
 
+          <div v-if="!isTavernEnvFlag" class="setting-item">
+            <div class="setting-info">
+              <label class="setting-name">备用连接</label>
+              <span class="setting-desc">启用自动切换后，主叙事遇内容审核拦截时用此连接重发一次；可选择 xAI / Grok。</span>
+            </div>
+            <div class="setting-control">
+              <select :value="apiStore.fallbackApiId" @change="apiStore.setFallbackAPI(($event.target as HTMLSelectElement).value)" class="setting-select">
+                <option value="">不使用备用连接</option>
+                <option v-for="api in apiStore.enabledAPIs" :key="api.id" :value="api.id">{{ getDisplayName(api) }}</option>
+              </select>
+            </div>
+          </div>
+
           <!-- 2. 指令生成 -->
           <div class="setting-item">
             <div class="setting-info">

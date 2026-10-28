@@ -1,3 +1,4 @@
+import { isContentModerationError } from '@/services/apiErrorMessage';
 import {LEVELS} from '../../utils/realmUtils';
 import { filterLedgerMemory, type GuardFinding } from './ledger/guardFramework';
 import type { SaveData } from '@/types/game';
@@ -208,10 +209,11 @@ export async function attemptModuleNarrative<T>(
       if (options.isFatal(error)) throw error;
       options.onRejected?.(error, attempts);
       lastError = error;
+      if (isContentModerationError(error)) break;
       if (attempts >= (options.maxAttemptsForError?.(error) || options.maxAttempts || 2)) break;
     }
   }
-  if (!canAfford(1)) throw lastError;
+  if (!isContentModerationError(lastError) && !canAfford(1)) throw lastError;
   return { ok: false, reason: String((lastError as Error)?.message || lastError || '未知原因').slice(0, 200), attempts };
 }
 

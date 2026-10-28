@@ -1,3 +1,5 @@
+import moderationConfig from '../../mod-kit/ai-content-moderation.json';
+import { useAPIManagementStore } from '@/stores/apiManagementStore';
 /**
  * 统一AI服务 - 支持酒馆和自定义API
  *
@@ -67,6 +69,7 @@ export interface AIConfig {
 
 type DirectAPIConfig = NonNullable<AIConfig['customAPI']>;
 type QingyuTransportBudget = {
+  moderationFallback?: boolean;
   usageType?: string;
   maxTokens?: number;
   qingyuTurnId?: string;
@@ -116,6 +119,8 @@ export interface AIMessage {
 }
 
 export interface GenerateOptions {
+  /** 本次成功传输实际使用的连接，只含公开路由信息。 */
+  onModelRoute?: (route: { configId: string; provider: string; model: string }) => void;
   /** 模块运行时固定的本次连接配置，不写回API管理，也不随重试重新路由。 */
   apiConfigOverride?: Readonly<DirectAPIConfig>;
   /** Observational attribution only; never sent to the provider. */
@@ -746,6 +751,7 @@ class AIService {
 
     if (provider === 'xai' || baseUrl.includes('api.x.ai')) {
       return [
+        'grok-4.20-0309-non-reasoning',
         'grok-4',
         'grok-3',
         'grok-3-fast',
@@ -930,7 +936,8 @@ class AIService {
       usageType: 'main' as const,
       qingyuTurnId: peekActiveQingyuTurnId() ?? undefined,
     };
-    if (!consumeQingyuTurnLongRequest(options, options.qingyuTurnId)) {
+    // 内容审核后的备用重发不占 qingyuTurnLongRequests 单回合 2 次预算。
+    if (!bound?.moderationFallback && !consumeQingyuTurnLongRequest(options, options.qingyuTurnId)) {
       throw new QingyuTurnLongRequestBudgetError();
     }
     bound?.onTransportStart?.();
@@ -1401,7 +1408,7 @@ class AIService {
     const usageType = options.usageType;
     const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = resolveGenerateResponseFormat(options, assignedConfig);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal, options.onModelRoute);
   }
 
   private async generateRawWithCustomAPI(
@@ -1424,7 +1431,7 @@ class AIService {
     const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = resolveGenerateResponseFormat(options, assignedConfig);
     console.log(`[AI服务-自定义Raw] shouldStream=${shouldStream}, hasOnStreamChunk=${!!options.onStreamChunk}, options.should_stream=${options.should_stream}, config.streaming=${this.config.streaming}`);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal, options.onModelRoute);
   }
 
   private async callAPI(
@@ -1436,6 +1443,8 @@ class AIService {
     maxTokensOverride?: number,
     apiConfig: DirectAPIConfig = this.config.customAPI!,
     signal?: AbortSignal,
+    onModelRoute?: GenerateOptions['onModelRoute'],
+    fallbackAttempt = 0,
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
 
@@ -1468,21 +1477,48 @@ class AIService {
 
     console.log(`[AI服务-API调用] Provider: ${provider}, URL: ${url}, Model: ${model}, 消息数: ${finalMessages.length}, 流式: ${streaming}, usageType=${usageType || 'main'}`);
 
-    // 根据provider选择不同的调用方式
-    switch (provider) {
-      case 'claude':
-        return this.callClaudeAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride, apiConfig, signal);
-      case 'gemini':
-        return this.callGeminiAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride, apiConfig, signal);
-      case 'openai':
-      case 'deepseek':
-      case 'zhipu':
-      case 'xai':
-      case 'openrouter':
-      case 'ollama':
-      case 'custom':
-      default:
-        return this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, usageType, maxTokensOverride, apiConfig, signal);
+    try {
+      let result: string;
+      switch (provider) {
+        case 'claude':
+          result = await this.callClaudeAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride, apiConfig, signal);
+          break;
+        case 'gemini':
+          result = await this.callGeminiAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, maxTokensOverride, apiConfig, signal);
+          break;
+        default:
+          result = await this.callOpenAICompatibleAPI(finalMessages, streaming, onStreamChunk, effectiveResponseFormat, usageType, maxTokensOverride, apiConfig, signal);
+      }
+      onModelRoute?.({ configId: (apiConfig as StoreAPIConfig).id || '', provider, model });
+      return result;
+    } catch (error) {
+      const detail = contentModerationDetail(error);
+      if (detail) logEvent({ code: 'LCQ-NET-012', cause: error, detail: { ...detail, provider, model, fallbackAttempt }, echo: false });
+      if (!moderationConfig.fallbackEnabled || !(error instanceof AiHttpError) || error.status !== moderationConfig.status
+        || !moderationConfig.fallbackMarkers.some(marker => error.message.toLowerCase().includes(marker))
+        || fallbackAttempt >= moderationConfig.fallbackAttempts
+        || !['main', 'module_narrative'].includes(usageType || 'main') || signal?.aborted) throw error;
+      const store = useAPIManagementStore();
+      const fallback = store.apiConfigs.find(item => item.id === store.fallbackApiId && item.enabled);
+      if (!fallback || !fallback.model.trim() || !fallback.url.trim()
+        || (fallback.url === url && fallback.model === model)) throw error;
+      const snapshot = { ...fallback };
+      const previous = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
+      if (signal) qingyuTransportBudgetBySignal.set(signal, { ...previous, usageType: usageType || 'main', moderationFallback: true });
+      noteGenerateStart({ provider: snapshot.provider, model: snapshot.model, maxTokens: maxTokensOverride ?? snapshot.maxTokens, jsonObject: !!responseFormat });
+      try {
+        return await this.callAPI(messages, streaming, onStreamChunk, responseFormat, usageType, maxTokensOverride, snapshot, signal, onModelRoute, fallbackAttempt + 1);
+      } catch (fallbackError) {
+        // lcq-allow: 备用传输已由 diagnosticTransport 记录；保留原审核 cause 避免重复请求。
+        if (signal?.aborted || (fallbackError as Error)?.name === 'AbortError') throw fallbackError;
+        // 保留最初的审核分类，阻止外层对同一提示词重试；备用失败仅作诊断原因。
+        throw Object.assign(toUserFacingAIError(error), { status: error.status, retriesSpent: true, fallbackCause: fallbackError });
+      } finally {
+        if (signal) {
+          if (previous) qingyuTransportBudgetBySignal.set(signal, previous);
+          else qingyuTransportBudgetBySignal.delete(signal);
+        }
+      }
     }
   }
 

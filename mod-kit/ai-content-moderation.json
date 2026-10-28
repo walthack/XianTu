@@ -7,5 +7,11 @@
     "moderation",
     "content filter",
     "敏感"
-  ]
+  ],
+  "fallbackMarkers": [
+    "1026",
+    "new_sensitive"
+  ],
+  "fallbackAttempts": 1,
+  "fallbackEnabled": false
 }

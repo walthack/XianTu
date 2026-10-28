@@ -155,6 +155,7 @@ export function createModuleModelRuntime(dependencies: {
           ? Math.min(policy.maxTokens, snapshot.maxTokens) : policy.maxTokens;
         request = { ...shared, maxTokens: budget, apiConfigOverride: snapshot };
       }
+      request.onModelRoute = actual => { route = { ...route, ...actual, configId: actual.configId || route.configId }; };
       let raw: string;
       try { raw = await dependencies.generate(request); } catch (error) {
         // Preserve typed transport errors and cancellation behavior; attach only public route metadata.

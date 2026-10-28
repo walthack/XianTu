@@ -217,6 +217,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
 
   // 模块级模型分配（独立于功能分配；未设置即继承）
   const moduleAssignments = ref<ModuleAssignment[]>([]);
+  const fallbackApiId = ref('');
+
   // 模块自有开关（只登记有独立开关的模块，如后台审计）
   const moduleEnabled = ref<Record<string, boolean>>({ ...DEFAULT_MODULE_ENABLED });
 
@@ -248,6 +250,7 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
   });
 
   const applyStoredConfig = (data: any) => {
+    fallbackApiId.value = typeof data.fallbackApiId === 'string' ? data.fallbackApiId : '';
     // 加载AI生成设置
     if (data.aiGenerationSettings) {
       aiGenerationSettings.value = {
@@ -277,6 +280,7 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       return { type: a.type, apiId };
     });
     apiAssignments.value = normalizedAssignments;
+    if (!existingApiIds.has(fallbackApiId.value)) fallbackApiId.value = '';
 
     const knownModeTypes = new Set(DEFAULT_FUNCTION_MODES.map(m => m.type));
     const mergedModes = new Map<APIUsageType, FunctionModeConfig>();
@@ -335,6 +339,7 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
   const buildStoragePayload = () => ({
     apiConfigs: apiConfigs.value,
     apiAssignments: apiAssignments.value,
+    fallbackApiId: fallbackApiId.value,
     functionModes: functionModes.value,
     functionEnabled: functionEnabled.value,
     moduleAssignments: moduleAssignments.value,
@@ -483,6 +488,7 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     moduleAssignments.value = moduleAssignments.value.filter(assignment => assignment.apiId !== id);
 
     apiConfigs.value = apiConfigs.value.filter(api => api.id !== id);
+    if (fallbackApiId.value === id) fallbackApiId.value = '';
     saveToStorage();
   };
 
@@ -594,6 +600,7 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     return {
       apiConfigs: apiConfigs.value,
       apiAssignments: apiAssignments.value,
+      fallbackApiId: fallbackApiId.value,
       functionModes: functionModes.value,
       functionEnabled: functionEnabled.value,
       moduleAssignments: moduleAssignments.value,
@@ -683,7 +690,14 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     }
   };
 
+  const setFallbackAPI = (id: string) => {
+    fallbackApiId.value = apiConfigs.value.some(api => api.id === id && api.enabled) ? id : '';
+    saveToStorage();
+  };
+
   return {
+    fallbackApiId,
+    setFallbackAPI,
     apiConfigs,
     apiAssignments,
     functionModes,
