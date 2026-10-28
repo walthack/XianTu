@@ -374,7 +374,8 @@ test('太泉时机未到：六阳换算成配置里的境界名，只出实际�
   const line = secondary.SECONDARY_LINES.find(l => l.id === 'taiquan');
   const onlyLines = entry.secondaryLineEntryView(line, taiquanSave({ flags: {} }));
   assert.equal(onlyLines.hintLines.length, 1);
-  assert.equal(onlyLines.hintLines[0], '手头的事还没了结。至少还得先了结 一 处的大事，才腾得出手。');
+  assert.equal(onlyLines.hintLines[0], '手头的事还没了结。至少还得先了结一处的大事，才腾得出手。');
+  assert.equal(/\s/.test(onlyLines.hintLines[0]), false, '锁定句数字两侧不留空格（fix5939-3）');
   assert.equal(onlyLines.hintLines[0].includes('六阳'), false);
   assert.equal(/[0-9]/.test(onlyLines.hintLines[0]), false);
 
