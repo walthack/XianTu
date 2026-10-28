@@ -1,0 +1,18 @@
+{
+  "purpose": "FIX422 用户限定只改丹宸 speechStyle；源卡缺失，按裁定 #242 先例记录最小补丁。持源卡副本重建前按角色和字段核对旧值后应用，其他字段不动。",
+  "source": "mod-kit/generated/deepseek-v4-flash/character-canon/character-cards-v3.json",
+  "registry": "src/modules/scenarioMods/builtins/character-registry.json",
+  "characters": [
+    {
+      "canonicalName": "丹宸",
+      "ops": [
+        {
+          "op": "replace",
+          "scope": "staticProfile.speechStyle",
+          "from": "口齿不清呻吟‘好……好舒服呢’；泣声唱‘妹是林间一朵花……敞开花心让……让哥插……’；妖淫唱词；谦卑称‘仁慈而神圣的鬼巫王’。",
+          "to": "神情恍惚，言语含混，谦卑称‘仁慈而神圣的鬼巫王’"
+        }
+      ]
+    }
+  ]
+}
