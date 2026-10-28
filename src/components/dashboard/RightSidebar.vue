@@ -225,7 +225,7 @@
               <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
               <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
               <div v-if="questMain.stallDebug" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
-              <div v-if="questMain.signal?.level === 'medium' || questMain.signal?.level === 'high'" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
+              <div v-if="questMain.divergenceDebug" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
                 世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续当前支流，也可以主动回到最近承重节点。
               </div>
               <button v-if="questMain.canReturn && !epistemicRuntime?.gameOver && !detectBranchDecision(getCurrentStoryEventActions(gameStateStore.toSaveData()))" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
@@ -560,6 +560,8 @@ const questMain = computed(() => {
     stallDebug: stalled && debugLogger.isDebugMode(),
     stallCount: stallTurns,
     signal,
+    // 偏离评分属内部诊断：与停滞预警一样只在调试模式显示（fix5939-4）
+    divergenceDebug: (signal?.level === 'medium' || signal?.level === 'high') && debugLogger.isDebugMode(),
     canReturn,
   };
 });
