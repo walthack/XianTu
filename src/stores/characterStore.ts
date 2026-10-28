@@ -14,6 +14,9 @@ import { debug } from '@/utils/debug';
 import { useUIStore } from './uiStore'; // 导入UI Store
 import { useCharacterCreationStore } from './characterCreationStore'; // 导入创角Store
 import * as storage from '@/utils/indexedDBManager';
+import { clearSnapshots } from '@/utils/snapshotManager';
+import { logError } from '@/modules/diagnostics/log';
+import { LAST_CONVERSATION_SLOT, clearedLastConversationSlot, lastConversationMatchesActive, shouldKeepLastConversationOnLoad } from '@/utils/lastConversationGuard';
 import { applyLoadRepairs } from '@/modules/scenarioMods/loadRepairs';
 import { loadSaveWithFallback, rejectFutureSaveVersion, validateLoadedSave } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
@@ -805,6 +808,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
       },
       存档列表: {
         ...(existing?.存档列表 || {}),
+        // 新开一局：上一局的「上次对话」不能留给本局回滚（fix5939-1）
+        [LAST_CONVERSATION_SLOT]: clearedLastConversationSlot(existing?.存档列表?.[LAST_CONVERSATION_SLOT]),
         [payload.slotName]: {
           存档名: payload.slotName,
           保存时间: now,
@@ -820,6 +825,12 @@ export const useCharacterStore = defineStore('characterV3', () => {
       角色ID: payload.characterId,
       存档槽位: payload.slotName,
     };
+    try {
+      await storage.deleteSaveData(payload.characterId, LAST_CONVERSATION_SLOT, { localOnly: true });
+    } catch (error) {
+      logError('LCQ-SAV-031', error, { detail: { reason: 'clear_failed', charId: payload.characterId, slotKey: payload.slotName, activeSlotKey: payload.slotName } });
+    }
+    clearSnapshots(payload.characterId, payload.slotName);
     await commitMetadataToStorage();
     useGameStateStore().loadFromSaveData(payload.saveData);
   };
@@ -889,6 +900,25 @@ export const useCharacterStore = defineStore('characterV3', () => {
    * @param charId 角色ID
    * @param slotKey 存档槽位关键字 (e.g., "存档1")
    */
+  /**
+   * 读档后「上次对话」若不属于本次激活的存档（来源章缺失/不同，或读入的槽位被挂到工作槽/复测槽），
+   * 清掉元数据、IndexedDB 备份和内存快照，防止「回到上一轮」跨档回滚（fix5939-1）。
+   * 只改内存元数据，落盘交给调用方随后的 commitMetadataToStorage。
+   */
+  const resetLastConversationIfForeign = async (profile: CharacterProfile, charId: string, slotKey: string, activeSlotKey: string) => {
+    if (!profile.存档列表) return;
+    const lastSlot = profile.存档列表[LAST_CONVERSATION_SLOT];
+    if (shouldKeepLastConversationOnLoad(lastSlot, slotKey, activeSlotKey)) return;
+    profile.存档列表[LAST_CONVERSATION_SLOT] = clearedLastConversationSlot(lastSlot);
+    try {
+      await storage.deleteSaveData(charId, LAST_CONVERSATION_SLOT, { localOnly: Boolean(profile.隔离试玩信息?.localOnly) });
+    } catch (error) {
+      logError('LCQ-SAV-031', error, { detail: { reason: 'clear_failed', charId, slotKey, activeSlotKey } });
+    }
+    clearSnapshots(charId, activeSlotKey);
+    if (slotKey !== activeSlotKey) clearSnapshots(charId, slotKey);
+  };
+
   const loadGame = async (charId: string, slotKey: string) => {
       debug.log('角色商店', `开始加载游戏，角色ID: ${charId}, 存档槽: ${slotKey}`);
       const uiStore = useUIStore();
@@ -1112,6 +1142,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
         // 2. 设置激活存档
         debug.log('角色商店', '设置当前激活存档');
       rootState.value.当前激活存档 = { 角色ID: charId, 存档槽位: activeSlotKey };
+      await resetLastConversationIfForeign(profile, charId, slotKey, activeSlotKey);
       await commitMetadataToStorage(); // 立即保存激活状态
 
       // 3. 将加载的存档数据同步到 gameStateStore
@@ -1892,7 +1923,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
         境界: playerAttributes?.境界?.名称 || '凡人',
         位置: playerLocation?.描述 || '未知',
         修为进度: 0,
-        游戏内时间: undefined
+        游戏内时间: undefined,
+        // 「上次对话」盖上来源槽位，读档/回滚时据此拒绝跨档（fix5939-1）
+        ...(slotName === LAST_CONVERSATION_SLOT ? { 回滚来源槽位: active.存档槽位 } : {}),
       };
 
       // 计算修为进度
@@ -2251,6 +2284,14 @@ export const useCharacterStore = defineStore('characterV3', () => {
       } else {
         lastConversationSlot.存档数据 = loadedData;
       }
+    }
+
+    // 备份必须来自当前激活槽位；IndexedDB 补读的数据不带槽位元数据，来源章只认内存元数据，缺失即不匹配（fix5939-1）
+    if (!lastConversationMatchesActive(lastConversationSlot, active.存档槽位)) {
+      logError('LCQ-SAV-031', '「上次对话」备份不属于当前存档，拒绝回滚', {
+        detail: { reason: 'origin_mismatch', activeSlot: active.存档槽位, origin: lastConversationSlot?.回滚来源槽位 ?? null },
+      });
+      throw new Error('这份「上次对话」备份不属于当前存档，不能回滚');
     }
 
     const lastConversationData = lastConversationSlot.存档数据;

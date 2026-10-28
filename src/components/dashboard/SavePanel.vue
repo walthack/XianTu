@@ -125,7 +125,7 @@
                   class="card-btn warning"
                   @click.stop="rollbackFromLastConversation(save)"
                   :disabled="loading || !currentSave"
-                  v-if="save.存档名 === '上次对话' && !isOnlineMode"
+                  v-if="save.存档名 === '上次对话' && !isOnlineMode && lastConversationMatchesActive(save, activeSlotKey)"
                   title="用上次对话的数据覆盖当前存档（回滚）"
                 >
                   <RefreshCw :size="14" />
@@ -316,6 +316,7 @@ import { useI18n } from '@/i18n';
 import { toast } from '@/utils/toast';
 import { debug } from '@/utils/debug';
 import type { SaveSlot } from '@/types/game';
+import { lastConversationMatchesActive } from '@/utils/lastConversationGuard';
 import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
 import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
@@ -384,6 +385,9 @@ const savesList = computed(() => {
 // 存档计数：只数手动存档（不含「上次对话」「时间点存档」两个自动槽）；单机存档没有张数上限，不再显示「/10」。
 const AUTO_SLOT_NAMES = new Set(['上次对话', '时间点存档']);
 const manualSavesCount = computed(() => savesList.value.filter(save => !AUTO_SLOT_NAMES.has(save.存档名)).length);
+
+// 当前激活槽位 key：「上次对话」回滚按钮只对属于它的备份显示（fix5939-1）
+const activeSlotKey = computed(() => characterStore.rootState.当前激活存档?.存档槽位);
 
 // 获取当前存档
 const currentSave = computed(() => {

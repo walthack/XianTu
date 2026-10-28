@@ -1123,6 +1123,8 @@ export interface SaveSlot {
   修为进度?: number; // 修为进度
   世界地图?: WorldMap;
   存档数据?: SaveData | null;
+  /** 仅「上次对话」用：这份回合前备份来自哪个存档槽位（fix5939-1） */
+  回滚来源槽位?: string;
   // 联机模式专属字段
   云端同步信息?: {
     最后同步: string;

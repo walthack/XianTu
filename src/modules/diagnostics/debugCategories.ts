@@ -91,7 +91,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'save', label: '存档',
     paths: [
-      ...at('utils/', 'indexedDBManager.ts', 'save*.ts', 'snapshotManager.ts', 'dataRepair.ts', 'dataValidation.ts', 'legacyOnlineSaveMigration.ts', 'isolatedPlaytestPersist.ts',
+      ...at('utils/', 'indexedDBManager.ts', 'save*.ts', 'snapshotManager.ts', 'dataRepair.ts', 'dataValidation.ts', 'legacyOnlineSaveMigration.ts', 'isolatedPlaytestPersist.ts', 'lastConversationGuard.ts',
         'latestWriteQueue.ts', 'cloudDataSync.ts', 'dadBundle.ts', 'machineCode.ts'),
       'services/userCloudStorage.ts', 'services/api/', 'types/', ...sm('entitySave*.ts', 'loadRepairs.ts'), 'stores/characterStore.ts', 'stores/gameStateStore.ts',
       'components/dashboard/SavePanel.vue', 'components/character-creation/LegacySaveMigrationModal.vue',

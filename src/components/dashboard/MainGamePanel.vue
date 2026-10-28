@@ -560,6 +560,7 @@ import XingyuehuQuestPlaytestHud from '@/components/dashboard/XingyuehuQuestPlay
 import { getTravelCard } from '@/modules/scenarioMods/travel/travelLedger';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { getSnapshots } from '@/utils/snapshotManager';
+import { lastConversationMatchesActive } from '@/utils/lastConversationGuard';
 import {
   cancelPendingJudgement as cancelStoredJudgement,
   getJudgementState,
@@ -1309,7 +1310,9 @@ const canRollback = computed(() => {
   if (!profile || profile.模式 !== '单机') return false;
   const lastConversation = profile.存档列表?.['上次对话'];
   // 🔥 修复：检查保存时间而不是存档数据，因为存档数据可能在IndexedDB中而不在内存中
-  return lastConversation?.保存时间 !== null && lastConversation?.保存时间 !== undefined;
+  return lastConversation?.保存时间 !== null && lastConversation?.保存时间 !== undefined
+    // 备份必须属于当前激活存档，读旧档/重开试玩后不给跨档回滚（fix5939-1）
+    && lastConversationMatchesActive(lastConversation, characterStore.rootState?.当前激活存档?.存档槽位);
 });
 
 // 回滚到上次对话
