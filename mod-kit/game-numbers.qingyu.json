@@ -2392,5 +2392,27 @@
     "worldSelection": {
       "showGenericWorlds": false
     }
+  },
+  "loot": {
+    "note": "搜刮回刷与战后搜尸（用户 2026-10-28 13:48 第5条）：按游戏天数只回刷普通物和小钱；rare/key/boss/large 货币永远只在首轮给（总策划 2026-10-28 定：稀有物一律只给一次，含首轮三次内不重复）。随机战战后搜尸另计、不占 maxSearches。categories 取值：common / smallCurrency / rare / largeCurrency / key / boss。intervalDays 初值 30（一个游戏月）待用户拍板。texts.exhausted 的 {n} 填中文次数；respawnHint 只在回刷开启且存档有游戏时间时接在搜满提示后。",
+    "respawn": {
+      "enabled": true,
+      "intervalDays": 30,
+      "categories": [
+        "common",
+        "smallCurrency"
+      ]
+    },
+    "spoils": {
+      "enabled": true,
+      "categories": [
+        "common",
+        "smallCurrency"
+      ]
+    },
+    "texts": {
+      "exhausted": "你已经仔细搜刮过这里{n}次，没有新的搜刮机会。",
+      "respawnHint": "过些日子再来，或许又能翻出些东西。"
+    }
   }
 }

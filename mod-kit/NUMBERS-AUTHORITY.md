@@ -5,7 +5,7 @@
 | 文件 | 顶层段 |
 |---|---|
 | `mod-kit/numbers-combat.json` | combat, difficulty, judgement, factors, weights, goalModifiers, sceneDefaults, historicalPrototype |
-| `mod-kit/numbers-progress.json` | levels, training, techniques, status, currency, freeAction, affinity, reputation, lineBonds, npcCard |
+| `mod-kit/numbers-progress.json` | levels, training, techniques, status, currency, freeAction, affinity, reputation, lineBonds, npcCard, story, shop, crafting, loot（搜刮回刷与战后搜尸：回刷间隔天数、回刷／搜尸可出分类、搜满文案；`scenarioMods/locationLoot.ts` 读） |
 | `mod-kit/numbers-runtime.json` | version, tuning, diagnostics, saves, aiRetry, feedback, e2eSmoke, perf, ui（界面显示开关，如 `ui.rightSidebar.showSecondaryLines`、`ui.rightSidebar.showLineCompass`） |
 | `mod-kit/numbers-assist.json` | assist（同伴助战：缺省形态、同时生效上限、好感档→助战档、按角色库 id 的被动 buff／每拍自动技能；`sceneModule/assist.ts` 读，热改走 `applyGameNumbers`，体检 LCQ-NUM-006/008） |
 
