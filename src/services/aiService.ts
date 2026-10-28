@@ -16,7 +16,7 @@ import { bindRequestDiagnosticContext, diagnosticContext, inheritDiagnosticCance
 import { AiRequestTimeoutError, isAiRequestTimeout, withAiRequestDeadline } from './aiRequestDeadline';
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
-import { toUserFacingAIError } from './apiErrorMessage';
+import { contentModerationDetail, toUserFacingAIError } from './apiErrorMessage';
 import { logError, logEvent } from '@/modules/diagnostics/log';
 import { AiHttpError, abortableDelay, aiRetryConfig, planAiRetry, readRetryAfterHeader, type AiRetryPlan } from './aiRetryPolicy';
 import {
@@ -344,6 +344,8 @@ class AIService {
    */
   private finalizeRetryFailure(error: unknown, plan: Extract<AiRetryPlan, { retry: false }>, attempt: number, operationName: string): unknown {
     const { verdict } = plan;
+    const moderationDetail = contentModerationDetail(error);
+    if (moderationDetail) logEvent({ code: 'LCQ-NET-012', cause: error, detail: { operationName, ...moderationDetail }, echo: false });
     if (verdict.reason !== 'status' && verdict.reason !== 'status_not_retryable' && verdict.reason !== 'network') return error;
     if (plan.reason === 'retries_exhausted' || plan.reason === 'turn_time_short') {
       logEvent({ code: 'LCQ-NET-009', cause: error, detail: { operationName, retries: attempt, why: plan.reason, status: verdict.status } });

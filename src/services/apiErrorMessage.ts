@@ -1,4 +1,5 @@
 import { readHttpStatus } from './aiRetryPolicy';
+import moderation from '../../mod-kit/ai-content-moderation.json';
 
 function readMessage(error: unknown): string {
   if (!error) return '未知错误';
@@ -6,9 +7,27 @@ function readMessage(error: unknown): string {
   const value = error as any;
   const detail = value?.response?.data?.error?.message ?? value?.response?.data?.detail ?? value?.response?.data?.message;
   if (typeof detail === 'string' && detail.trim()) return detail;
-  if (error instanceof Error) return error.message || '未知错误';
+  if (typeof value?.message === 'string') return value.message || '未知错误';
   return String(error);
 }
+
+/** 包装后的玩家错误通过 cause 保留审核分类；防御循环 cause。 */
+export function contentModerationDetail(error: unknown): { status: number; providerCode?: string; requestId?: string } | undefined {
+  const seen = new Set<unknown>();
+  for (let current: any = error; current && !seen.has(current); current = current.cause) {
+    seen.add(current);
+    const message = readMessage(current);
+    if (readHttpStatus(current) !== moderation.status || !moderation.markers.some(marker => message.toLowerCase().includes(marker))) continue;
+    return {
+      status: moderation.status,
+      providerCode: moderation.markers.filter(marker => /^\d+$/.test(marker)).find(marker => new RegExp(`\\b${marker}\\b`).test(message)),
+      requestId: message.match(/request_id["'\s]*[:=]["'\s]*([\w-]+)/i)?.[1],
+    };
+  }
+  return undefined;
+}
+
+export const isContentModerationError = (error: unknown): boolean => !!contentModerationDetail(error);
 
 /** retries = 已自动重试的次数；大于 0 时文案如实写“已自动重试 N 次仍失败”，为 0/缺省则不声称重试过。 */
 export function toUserFacingAIError(error: unknown, info: { retries?: number } = {}): Error {
@@ -18,7 +37,9 @@ export function toUserFacingAIError(error: unknown, info: { retries?: number } =
   const quota = /insufficient[_ -]?quota|quota.{0,20}(?:exceed|耗尽|不足)|credit|余额|billing|payment required/i.test(message);
 
   let userMessage: string;
-  if (status === 401 || /invalid.{0,12}(?:api[_ -]?key|密钥)|unauthori[sz]ed|authentication/i.test(message)) {
+  if (isContentModerationError(error)) {
+    userMessage = '内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。';
+  } else if (status === 401 || /invalid.{0,12}(?:api[_ -]?key|密钥)|unauthori[sz]ed|authentication/i.test(message)) {
     userMessage = 'API 密钥无效或已过期。请打开“API管理”重新填写密钥，并使用“测试连接”验证。';
   } else if (status === 402 || quota) {
     userMessage = 'API 额度或账户余额不足。请充值/更换提供商，或在“API管理”切换到仍有额度的配置。';

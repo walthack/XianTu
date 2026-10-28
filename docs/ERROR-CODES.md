@@ -69,6 +69,7 @@
 | LCQ-NET-009 | warn | aiService | AI 请求自动重试未能成功，已转为玩家可读提示 | 可重试的失败（限流、5xx、网络）重试次数用完，或本回合剩余时间不够再等一轮（detail.why = retries_exhausted / turn_time_short）；玩家看到的是“已自动重试 N 次仍失败”类提示 | 看 detail.status 与同一请求的 LCQ-NET-004/005；限流就降频或换提供商；持续 5xx 查服务商状态 | 否 |
 | LCQ-NET-010 | warn | turnTelemetry | 回合总耗时超过阈值（perf.turnWarnMs） | 一个回合从开始到结束的耗时（detail.turnMs）超过 game-numbers `perf.turnWarnMs`；常见于模型慢、重试、召回/辅助等待久；只记日志，不弹玩家提示、不改回合行为 | 看 detail.path / modelMs / retryCount / provider / model 判断慢在哪；对照同一回合的 LCQ-NET-004/005/008；诊断导出与反馈包里的 perf 统计可看 p50/p95 趋势；阈值可在 tuning.json 的 numbers.perf 热改 | 否 |
 | LCQ-NET-011 | warn | turnTelemetry | 模型调用耗时超过阈值（perf.modelWarnMs） | 一次回合里模型从发请求到收完响应的耗时（detail.modelMs）超过 game-numbers `perf.modelWarnMs`；只记日志，不弹玩家提示、不改回合行为 | 看 detail.provider / model / retryCount / promptBytes；提示词过大或服务商限流/慢时出现，换更快的模型或服务商、缩小提示词；阈值可在 tuning.json 的 numbers.perf 热改 | 否 |
+| LCQ-NET-012 | warn | aiService | AI 请求被内容审核拦截 | HTTP 422 且包含 sensitive／1026／1027／moderation／content filter／敏感 | 查看持久日志 status、providerCode、requestId；玩家仅见审核提示，原文保留 cause；判定词表在 mod-kit/ai-content-moderation.json | 否 |
 | LCQ-NUM-001 | error | numbers | 数值配置对象无效 | tuning.json numbers 段里某处应为对象却写成了别的类型 | 按消息里的路径修正为对象 | 否 |
 | LCQ-NUM-002 | error | numbers | 数值配置含未知键 | numbers 段含 game-numbers.qingyu.json 里不存在的键（拼写错误或已删除的键） | 按消息里的路径核对键名；只能改已有键，不能新增 | 否 |
 | LCQ-NUM-003 | error | numbers | 数值配置类型无效 | numbers 段某个值的类型与默认值不同（数字写成字符串等）或为非有限数 | 按消息里的路径改成与默认值相同类型 | 否 |
