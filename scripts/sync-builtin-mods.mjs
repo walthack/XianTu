@@ -6,11 +6,11 @@
 //
 // Usage: node scripts/sync-builtin-mods.mjs
 
-import {writeContentPacks} from './content-packs.mjs';
+import { writeContentPacks, checkContentPacks } from './content-packs.mjs';
 import { createHash } from 'node:crypto';
 import { mkdir, readFile, readdir, writeFile, rm, copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   applyTrackedCanonAuthorityOverlay,
@@ -23,6 +23,8 @@ const root = resolve(import.meta.dirname, '..');
 const gen = join(root, 'mod-kit', 'generated', 'deepseek-v4-flash');
 const outDir = join(root, 'src', 'modules', 'scenarioMods', 'builtins', 'data');
 const books = ['qingyu', 'yunlong', 'yange'];
+const WORLD_MAP_ASSET = join(root, 'src', 'assets', 'world-map', 'liuchao-world-map.jpg');
+const SOURCE_STAGE_DIRS = ['qingyu', 'yunlong', 'yange'].map(b => join(gen, b, 'stages'));
 
 export async function syncBuiltinModData({ generatedRoot = gen, outputDir = outDir, selectedBooks = books, authorityCatalog } = {}) {
   authorityCatalog ||= await loadTrackedCanonAuthorityOverlays();
@@ -57,7 +59,36 @@ export async function syncBuiltinModData({ generatedRoot = gen, outputDir = outD
   return { ids, version };
 }
 
+// 持久化世界地图背景到 dist(devServer 静态目录;webpack output.clean 会清,故每次同步重建)
+async function copyWorldMap() {
+  if (!existsSync(WORLD_MAP_ASSET)) {
+    console.warn('世界地图底图缺失：待总策划从 Mac 拷入 src/assets/world-map/liuchao-world-map.jpg；本次构建无底图');
+    return;
+  }
+  try {
+    const distDir = join(root, 'dist');
+    await mkdir(distDir, { recursive: true });
+    await copyFile(WORLD_MAP_ASSET, join(distDir, 'liuchao-world-map.jpg'));
+    console.log('世界地图背景 → dist/liuchao-world-map.jpg');
+  } catch (e) {
+    console.warn('世界地图背景拷贝失败:', e.message);
+  }
+}
+
 async function run() {
+  const present = SOURCE_STAGE_DIRS.filter(d => existsSync(d));
+  if (present.length === 0) {
+    // 无源树：不删不写 builtins，确认已提交投影在
+    if (!existsSync(join(root, 'src/modules/scenarioMods/builtins/manifest.json'))) throw new Error('无源树且缺已提交 builtins/manifest.json');
+    console.log('无源树，沿用已提交 builtins');
+    await copyWorldMap();
+    return { fallback: true };
+  }
+  // 半套源树仍 fail closed，不静默
+  if (present.length !== SOURCE_STAGE_DIRS.length) {
+    const missing = SOURCE_STAGE_DIRS.filter(d => !present.includes(d)).map(d => relative(root, d));
+    throw new Error(`源树不完整：缺 ${missing.join('、')}`);
+  }
   // fail closed before deleting the tracked builtins: this source tree is gitignored,
   // so a regressed local/NAS copy must never silently overwrite a known-good bundle.
   await validateQingyuStage01AuthorityFile();
@@ -65,16 +96,12 @@ async function run() {
   const { ids, version } = await syncBuiltinModData({ authorityCatalog });
   console.log(`内置 ${ids.length} 个 mod → src/modules/scenarioMods/builtins/data/，version=${version}`);
 
-  // 持久化世界地图背景到 dist(devServer 静态目录;webpack output.clean 会清,故每次同步重建)
-  try {
-    const distDir = join(root, 'dist');
-    await mkdir(distDir, { recursive: true });
-    await copyFile(join(gen, 'shared-atlas', '六朝世界地图.jpg'), join(distDir, 'liuchao-world-map.jpg'));
-    console.log('世界地图背景 → dist/liuchao-world-map.jpg');
-  } catch (e) {
-    console.warn('世界地图背景拷贝失败:', e.message);
-  }
+  await copyWorldMap();
+  return { fallback: false };
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
-  try { await run(); await writeContentPacks(); } catch(e) { console.error(e); process.exitCode=1; }
+  try {
+    const { fallback } = await run();
+    if (fallback) await checkContentPacks(); else await writeContentPacks();
+  } catch (e) { console.error(e); process.exitCode = 1; }
 }

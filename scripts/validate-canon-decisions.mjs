@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
@@ -20,6 +21,7 @@ const rules = [
 ];
 
 async function jsonFiles(dir) {
+  if (!existsSync(dir)) { skipped.push(path.relative(root, dir)); return []; }
   const entries = await readdir(dir, { withFileTypes: true });
   const files = [];
   for (const entry of entries) {
@@ -30,6 +32,7 @@ async function jsonFiles(dir) {
   return files;
 }
 
+const skipped = [];
 const files = [
   ...await jsonFiles(path.join(stageRoot, 'qingyu/stages')),
   ...await jsonFiles(path.join(stageRoot, 'yunlong/stages')),
@@ -43,7 +46,9 @@ const files = [
   path.join(root, 'scripts/apply-char-support.mjs'),
   path.join(root, 'scripts/apply-review-decisions-to-canon.mjs'),
   path.join(root, 'scripts/extract-faction-details-from-epub.mjs'),
-];
+  // 无源树（gitignored）时只跳过 stageRoot 下的源文件；builtins 与 scripts 缺失仍 fail closed
+].filter(f => !f.startsWith(stageRoot) || existsSync(f) || (skipped.push(path.relative(root, f)), false));
+if (skipped.length) console.log(`无源树，跳过 ${skipped.length} 个源文件/目录：${skipped.join('、')}`);
 const errors = [];
 for (const file of files) {
   const text = await readFile(file, 'utf8');
