@@ -112,6 +112,11 @@ test('唐线补全：长安初定首章「留仙坪」是 rail 章，开关第�
   assert.match(mod.scenario.opening.text, /留仙坪/);
   assert.doesNotMatch(mod.scenario.opening.text, /灞桥|杨玉环|潘金莲|袁天罡/);
   assert.deepEqual(mod.scenario.opening.featuredCharacterIds, ['liuchao.character.cheng_zongyang', 'liuchao.character.gao_zhishang']);
+  assert.equal(mod.scenario.opening.locationId, 'lyg.location.liuxianping');
+  const town = mod.canon.locations.find(l => l.id === 'lyg.location.liuxianping');
+  assert.equal(town?.name, '留仙坪');
+  assert.deepEqual(town?.coordinates, { x: 3600, y: 3400 });
+  for (const id of LIUXIANPING) assert.equal(mod.scenario.events.find(e => e.id === id).locationId, 'lyg.location.liuxianping', id);
 });
 
 test('唐线补全：长安插曲首章「佛门暗潮与元正朝会」是 rail 章；年节与朝局接在它之后、甘露前夜接失踪与伏击；佛堂善母登场卡随迁、照旧关一开即开放；侧栏章名按拍分', () => {
@@ -161,8 +166,26 @@ test('唐线补全：新建四拍 axisId 待补轴、critical、人物地点在�
   assert.ok(stageOf(CB).scenario.events.find(e => e.id === lyg('tang_liuxianping_xiangshi')).relatedCharacterIds.includes('liuchao.character.yuan_tiangang'));
   const t1 = stageOf(CB).scenario.events.find(e => e.id === lyg('tang_liuxianping_arrive'));
   const rt = done => ({ chronicle: done.map((id, i) => ({ id: `chronicle.lyg.han_succession.${id}`, type: 'event', stageId: 'lyg.han_succession', sequence: i + 1 })) });
-  assert.match(view.resolveScenarioEventNarrative(t1, {}, undefined, rt([lyg('han_succession_10_beat')])).description, /汉国正使/);
+  const han = view.resolveScenarioEventNarrative(t1, {}, undefined, rt([lyg('han_succession_10_beat')]));
+  assert.match(han.description, /多留一日/);
+  assert.match(han.description, /周飞/);
   const merchant = view.resolveScenarioEventNarrative(t1, {}, undefined, rt([]));
   assert.match(merchant.description, /行商身份/);
-  assert.match(merchant.description, /不得写出舞阳侯/);
+  assert.match(merchant.objective, /江湖人/);
+  assert.doesNotMatch(`${merchant.description}\n${merchant.objective}\n${merchant.axisBeat}`, /不得写出|周飞|廖群玉|汪臻|贾师宪/);
+  const t2 = stageOf(CB).scenario.events.find(e => e.id === lyg('tang_liuxianping_xiangshi'));
+  assert.match(t2.description, /试探着问此间是否有危险/);
+  assert.match(t2.description, /神色有异/);
+  assert.doesNotMatch(t2.description, /此间有危险，也可能有回去的办法/);
+  const fanseng = stageOf(CB).scenario.events.find(e => e.id === lyg('changgan_fanseng_hunt'));
+  assert.equal(fanseng.name, '主家小姐的旧事');
+  assert.match(fanseng.description, /不知道番僧是否专冲穿越者/);
+  assert.doesNotMatch(`${fanseng.description}\n${fanseng.axisBeat}\n${fanseng.objective}`, /猎杀穿越者/);
+  const rail = railOf(CB);
+  const contract = id => rail.contracts.find(c => c.eventId === lyg(id));
+  assert.match(contract('tang_liuxianping_arrive').mustReach, /多留一日/);
+  assert.ok(contract('tang_liuxianping_arrive').forbiddenInCanon.includes('行商入唐写成舞阳侯、汉使身份、舞都或汉国随行'));
+  assert.match(contract('changgan_fanseng_hunt').mustReach, /不知道番僧是否专冲穿越者/);
+  assert.ok(contract('changgan_fanseng_hunt').forbiddenInCanon.includes('坐实番僧专门猎杀穿越者'));
+  assert.doesNotMatch(contract('changgan_fanseng_hunt').allowedElaboration, /不得改写番僧猎杀/);
 });

@@ -99,11 +99,11 @@ const saveOf = (modId, done, acq = {}) => ({
     chronicle: done.map((id, i) => ({ id: `chronicle.${eventOf.get(id).stageId}.${id}`, type: 'event', stageId: eventOf.get(id).stageId, title: '', sequence: i + 1 })),
   } } },
 });
-const pointer = (modId, eventId) => (eventId
-  ? questCompassPhrases(eventOf.get(eventId), { canon: stages.get(modId).canon, opening: stages.get(modId).scenario.opening }).join(' · ')
+const pointer = (modId, eventId, atLocationId) => (eventId
+  ? questCompassPhrases(eventOf.get(eventId), { canon: stages.get(modId).canon, opening: stages.get(modId).scenario.opening }, atLocationId).join(' · ')
   : '');
-const card = (modId, done, focusEventId, acq) =>
-  compass.lineCompassView(saveOf(modId, done, acq), { focusEventId, compassPointer: () => pointer(modId, focusEventId) }).current;
+const card = (modId, done, focusEventId, acq, atLocationId) =>
+  compass.lineCompassView(saveOf(modId, done, acq), { focusEventId, compassPointer: () => pointer(modId, focusEventId, atLocationId) }).current;
 const returnTo = eventId => texts[compass.LINE_COMPASS_RETURN_KEY].split(compass.LINE_COMPASS_PLACE_SLOT).join(places[eventId]);
 
 test('晋（总策划定）：jin_shanghou_cure_and_trade 排在三版入口之前；00a 完成后返程期间显示对应那版「去建康…」，抵建康后不再显示', () => {
@@ -516,11 +516,13 @@ test('唐 五线补全 T1–T24（2026-10-28）：默认路线从汉线收束起
   });
   assert.deepEqual(seen, ['tang_changan_yangyuhuan', 'tang_envoys_reunion', 'tang_d7_secret_treaty', 'tang_d7_publish', 'tang_ganlu_zhuhuan'],
     '带文案的步按表顺序依次出现、不回跳；密约、公布两步不再是死步');
-  // 入唐：抵留仙坪当焦点——没有地点、只有主角，指南针为空，用入口步文案（走过汉那一版）
-  assert.equal(pointer(CB, T1), '');
-  assert.equal(card(CB, upTo(T1), T1).step, HINTS.tang_entry_from_han);
-  assert.equal(pointer(CB, T2), '见袁天罡', '镇上相士当焦点：主线指南针');
-  assert.equal(card(CB, upTo(T2), T2).step, pointer(CB, T2));
+  // 入唐：三拍都在留仙坪。人不在镇上时指南针写「去留仙坪」；开场人已在留仙坪，指针为空，仍用入口步文案（走过汉那一版）
+  const atTown = stages.get(CB).scenario.opening.locationId;
+  assert.equal(pointer(CB, T1), '去留仙坪');
+  assert.equal(pointer(CB, T1, atTown), '');
+  assert.equal(card(CB, upTo(T1), T1, undefined, atTown).step, HINTS.tang_entry_from_han);
+  assert.equal(pointer(CB, T2, atTown), '见袁天罡', '镇上相士当焦点、人已在留仙坪：只见人');
+  assert.equal(card(CB, upTo(T2), T2, undefined, atTown).step, pointer(CB, T2, atTown));
   for (const id of [T2, lyg('changgan_fanseng_hunt'), lyg('s03_01')]) {
     assert.ok(![HINTS.tang_entry_from_han, HINTS.tang_entry].includes(card(CB, upTo(id), undefined)?.step), `${id} 之前入口提示已过`);
   }

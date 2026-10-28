@@ -1,5 +1,5 @@
 {
-  "version": "bc422c76ffa72387",
+  "version": "28568908187500f4",
   "contracts": [
     {
       "meta": {
@@ -19146,9 +19146,9 @@
     "lyl.event.han_palace_endgame_08_beat": "",
     "lyg.event.s01_05": "昭阳宫",
     "lyg.event.s02_09": "",
-    "lyg.event.tang_liuxianping_arrive": "",
-    "lyg.event.tang_liuxianping_xiangshi": "",
-    "lyg.event.changgan_fanseng_hunt": "",
+    "lyg.event.tang_liuxianping_arrive": "留仙坪",
+    "lyg.event.tang_liuxianping_xiangshi": "留仙坪",
+    "lyg.event.changgan_fanseng_hunt": "留仙坪",
     "lyg.event.s03_01": "长安",
     "lyg.event.yuanzheng_globe": "长安城",
     "lyg.event.changgan_interlude_03_beat": "",

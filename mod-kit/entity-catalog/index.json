@@ -19723,6 +19723,12 @@
     },
     {
       "kind": "location",
+      "id": "lyg.location.liuxianping",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": []
+    },
+    {
+      "kind": "location",
       "id": "lyg.location.qinglongsi",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []

@@ -1337,10 +1337,10 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
     contracts: [
       {
         eventId: 'lyg.event.tang_liuxianping_arrive',
-        mustReach: '程宗扬一行赴唐途中在山中小镇留仙坪的留仙客栈歇脚，撞见周族少主周飞一伙与同行的廖群玉，程宗扬留在镇上盯着他们。',
+        mustReach: '程宗扬在山中小镇留仙坪多留一日，在留仙客栈盯着周族少主周飞一伙与同行的廖群玉。',
         completionEvidence: [],
-        forbiddenInCanon: ['与周飞当场结仇动手', '本拍就点破老相士的来历', '提前演出后续剧情'],
-        allowedElaboration: '可补足翻山赶路、客栈里的人与白员外遇狐的传说，不得改写同住客栈的这几伙人。',
+        forbiddenInCanon: ['与周飞当场结仇动手', '本拍就点破老相士的来历', '提前演出后续剧情', '行商入唐写成舞阳侯、汉使身份、舞都或汉国随行'],
+        allowedElaboration: '可补足客栈里的人与白员外遇狐的传说，不得改写同住客栈的这几伙人。',
       },
       {
         eventId: 'lyg.event.tang_liuxianping_xiangshi',
@@ -1351,10 +1351,10 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
       },
       {
         eventId: 'lyg.event.changgan_fanseng_hunt',
-        mustReach: '袁天罡向程宗扬透露番僧在猎杀穿越者。',
+        mustReach: '袁天罡讲出当年主家小姐被番僧以魔症带走的旧事，坦言不知道番僧是否专冲穿越者而来；程宗扬由此起疑。',
         completionEvidence: [],
-        forbiddenInCanon: ['本拍就与番僧交手', '提前演出后续剧情'],
-        allowedElaboration: '可补足袁天罡讲述时的忌惮与程宗扬的追问，不得改写番僧猎杀穿越者这件事。',
+        forbiddenInCanon: ['本拍就与番僧交手', '提前演出后续剧情', '坐实番僧专门猎杀穿越者'],
+        allowedElaboration: '可补足袁天罡讲述时的忌惮与程宗扬的追问。',
       },
     ],
   },

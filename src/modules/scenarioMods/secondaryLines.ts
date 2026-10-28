@@ -17,7 +17,7 @@ import {entityText} from './namedEntities';
  * 【锚只能落 event，"知道"却是 beat 层的事实】beat 1399 条、event 396 条，约 3.5 : 1；
  *   引擎能观测的只有 `completedEventIds`，所以锚必须落 event。两层对得上的线就精确锚，
  *   对不上的要**为那一拍补 event**——八条里有两条如此（晋国闹鬼 seq 241–242、
- *   唐国番僧猎杀穿越者 seq 1061），见 `anchorEventPending`。
+ *   唐国主家小姐旧事 seq 1061），见 `anchorEventPending`。
  *
  * 【为什么不锚关卡】`canonRail.DEFAULT_LINE_QUARANTINED_STAGE_IDS` 让默认路线静默跳过
  * 8 个关卡。主轴已经因此死过 3 条节点。关卡编排会变，地点与人不会。
@@ -77,7 +77,7 @@ export interface SecondaryLine {
    *
    * 八条线里有两条的「知道那一刻」在 beat 层有、event 层没有（实测 2026-08-16）：
    * 晋国的宫城闹鬼（seq 241–242，事件层最近的 seq 264 已经是"去夜探"了）、
-   * 唐国的番僧猎杀穿越者（seq 1061，seq 1059–1065 整段事件层空白）。
+   * 唐国的主家小姐旧事（seq 1061，seq 1059–1065 整段事件层空白）。
    * 锚到不存在的 id 上＝这条线永远打不开——主轴已经这么死过 3 条节点，不重蹈。
    *
    * 所以这两条先挂 `new` 节点把 event 补上，锚 id 照写，用本标志声明"暂用粗锚"。
@@ -790,15 +790,16 @@ export const SECONDARY_LINES: SecondaryLine[] = [
     id: 'tang',
     name: '唐国',
     kind: 'nation',
-    // 锚事件：番僧猎杀穿越者（seq 1061）。2026-10-28 五线补全·唐把它挂上留仙坪章 rail，1059／1060 新建抵留仙坪、镇上相士补上。
+    // 锚事件：主家小姐的旧事（seq 1061，id 仍是 changgan_fanseng_hunt）。袁天罡说不清番僧是否专冲穿越者，不得写成定论。
+    // 2026-10-28 五线补全·唐把它挂上留仙坪章 rail，1059／1060 新建抵留仙坪、镇上相士补上。
     anchorEventIds: ['lyg.event.changgan_fanseng_hunt'],
     anchorLocationIds: ['liuchao.location.changan'],
-    entryHint: '番僧在猎杀穿越者，而且近来在长安大肆扩张——唐国本来崇道，如今佛门要压过道门。',
+    entryHint: '袁天罡说起主家小姐被番僧带走的旧事，说不清是否专冲穿越者；佛门近来在长安大肆扩张，唐国本来崇道，如今佛门要压过道门。',
     basis: '长安＝唐国都城，第 30 关可达。**这次不是孪生 id 坑**（实测，2026-08-16）：'
       + '`lyg.location.changan` 确实存在于 6 个关，但那 6 关同时都有 `liuchao.location.changan`——'
       + '是真子集，收一个就够，加了等于没加。（旧 basis 写它「live 关查无」，与实测不符，已改。'
       + '结论没变，理由是错的。汉国洛都那次是真孪生：24 关 vs 6 关互不覆盖，必须全收。）'
-      + '**引子＝世界此刻的状态**（用户 2026-08-16）：番僧猎杀穿越者（seq 1061 袁天罡透露），'
+      + '**引子＝世界此刻的状态**（2026-10-28 返修，不得坐实猎杀）：袁天罡讲主家小姐被番僧带走的旧事，说不清是否专冲穿越者（seq 1061）；'
       + '且正在长安大肆扩张（`investigate_te_master` 的 objective 即「确认释特昧普的**扩张方式**与外援」，'
       + '手法是强制灌顶收服摩尼寺）。'
       + '**「唐国本来崇道」是正典明写的设定**（用户指出，已核）：卓云君卷「在**崇信道家的唐宋两国**，'
@@ -811,12 +812,12 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + '（另记一处结构：seq 1055 他是**以舞阳侯身份**出使唐国的——**汉国线的顶点就是本线的入场券**，'
       + '八条线里第一处明确的"顶点喂入口"。这层不写进指引，只作日后分层的依据。）',
     nodes: [
-      // 锚事件：seq 1061 袁天罡透露番僧猎杀穿越者。1059 抵留仙坪、1060 镇上相士由五线补全·唐（2026-10-28）新建。
+      // 锚事件：seq 1061 袁天罡讲主家小姐的旧事，说不清是否专冲穿越者。1059 抵留仙坪、1060 镇上相士由五线补全·唐（2026-10-28）新建。
       { reviewSummary: '审汪臻，问明白员外传说多是编造', status: 'ready', stageId: 'lyg.han_succession', eventId: 'lyg.event.han_succession_10_beat' },
-      { reviewSummary: '赴唐途中歇在留仙坪，盯住同住客栈的周飞一伙与廖群玉', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.tang_liuxianping_arrive' },
+      { reviewSummary: '在留仙坪多留一日，盯住同住客栈的周飞一伙与廖群玉', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.tang_liuxianping_arrive' },
       { reviewSummary: '堵下镇上的落魄老相士，他承认也是穿越者，借名袁天罡', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.tang_liuxianping_xiangshi' },
       // T1 汉使身份并进同关 s03_09
-      { reviewSummary: '听袁天罡说破：番僧在猎杀穿越者', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.changgan_fanseng_hunt' },
+      { reviewSummary: '听袁天罡讲主家小姐被番僧带走的旧事，他并说不清是否专冲穿越者', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.changgan_fanseng_hunt' },
       { reviewSummary: '入长安宣平坊落脚，石超接风——吕奉先已在城中惹事', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_01' },
       { reviewSummary: '街头撞见杨玉环驾轻车伤人训话，潘金莲提剑为她警戒', status: 'ready', stageId: 'lyg.changgan_begins', eventId: 'lyg.event.s03_03' },
       // T4 并进 buddhist_conspiracy_04／_06（火遁／佛咒，过程）

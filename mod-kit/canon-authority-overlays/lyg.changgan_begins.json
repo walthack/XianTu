@@ -42,12 +42,12 @@
       "value": {
         "id": "lyg.event.tang_liuxianping_arrive",
         "name": "抵留仙坪",
-        "description": "程宗扬以舞阳侯、汉国正使的身份出使唐国：一行人离开舞都，从舞阳河口乘船北上，云水起了北风，只好在房州上岸改走陆路，翻越山南东道的重重山岭；小紫与吕雉等人打着汉国使节的旗号循水路先行。车队在山中小镇留仙坪歇脚，金谷石家在唐国的主事石越受石超之托在留仙客栈迎候，高智商出面应酬，程宗扬贴上胡须混在护卫里。客栈里另住着一伙江湖人：周族少主周飞带着族人，廖群玉自称替贾师宪搜罗诗文，也与他们同行。讲白员外遇狐传说的汪臻已被敖润拎去问过——那些传说多是他编的，只有几句诗是白员外留下的。程宗扬留在镇上，盯着周飞一伙与廖群玉，看他们来留仙坪做什么。",
+        "description": "程宗扬在山中小镇留仙坪多留一日。金谷石家在唐国的主事石越受石超之托在留仙客栈迎候，高智商出面应酬，程宗扬贴上胡须混在护卫里。客栈里另住着一伙江湖人：周族少主周飞带着族人，廖群玉自称替贾师宪搜罗诗文，也与他们同行。讲白员外遇狐传说的汪臻已被敖润拎去问过——那些传说多是他编的，只有几句诗是白员外留下的。程宗扬留在镇上，盯着周飞一伙与廖群玉，看他们来留仙坪做什么。",
         "axisId": null,
         "axisMethod": "tang-line-fill-axis-pending",
         "axisAnchor": "六朝燕歌行·#49·白娃",
         "axisSeq": 1059,
-        "axisBeat": "程宗扬一行赴唐途中在留仙坪留仙客栈歇脚，撞见周飞一伙与同行的廖群玉，留在镇上盯着他们。",
+        "axisBeat": "程宗扬在留仙坪多留一日，在留仙客栈盯着周飞一伙与同行的廖群玉。",
         "critical": true,
         "completion": [
           {
@@ -59,7 +59,8 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
-        "objective": "在留仙坪落脚，留意客栈里周飞一伙与廖群玉的动静",
+        "locationId": "lyg.location.liuxianping",
+        "objective": "在留仙坪多留一日，留意客栈里周飞一伙与廖群玉的动静",
         "narrativeVariants": [
           {
             "when": [
@@ -70,9 +71,9 @@
               }
             ],
             "name": "抵留仙坪",
-            "description": "程宗扬以行商身份赴唐，翻越山南东道的重重山岭，入夜抵达山中小镇留仙坪，在镇上唯一的留仙客栈落脚。客栈里住着一伙江湖人：周族少主周飞带着族人，廖群玉自称替贾师宪搜罗诗文，也与他们同行；镇上的破落户汪臻正拿百年前白员外遇狐的传说下酒，传说里那几句诗，程宗扬听着耳熟。不得写出舞阳侯、汉使身份、舞都或汉国随行的人。",
-            "axisBeat": "程宗扬以行商身份初到留仙坪，在留仙客栈落脚，撞见周飞一伙与同行的廖群玉。",
-            "objective": "初到留仙坪，在客栈落脚，留意周飞一伙与廖群玉的动静"
+            "description": "程宗扬以行商身份赴唐，翻越山南东道的重重山岭，入夜抵达山中小镇留仙坪，在镇上唯一的留仙客栈落脚。客栈里住着一伙江湖人：一个年轻族少带着族人，一名随行书生自称替人搜罗诗文，也与他们同行；镇上的破落户正拿百年前白员外遇狐的传说下酒，传说里那几句诗，程宗扬听着耳熟。",
+            "axisBeat": "程宗扬以行商身份初到留仙坪，在留仙客栈落脚，留意一伙江湖人与随行书生。",
+            "objective": "初到留仙坪，在客栈落脚，留意那伙江湖人与随行书生的动静"
           }
         ],
         "playerCompletionContract": {
@@ -103,7 +104,7 @@
       "value": {
         "id": "lyg.event.tang_liuxianping_xiangshi",
         "name": "镇上相士",
-        "description": "客栈里那个打着补丁、扛着阴阳八卦幡的落魄老相士，在汪臻念出「人生若只如初见」时，神情像被雷劈了一样。程宗扬当夜让人把他拿下，拿手电筒照着逼问；老相士几番装傻，终于承认自己也是穿越者——魂魄降世，投生成婴儿，在这里活了将近五十年，借用的名字叫袁天罡。程宗扬撕下胡须报上真名，两人摊开来谈：此间有危险，也可能有回去的办法；袁天罡咬牙答应合作。",
+        "description": "客栈里那个打着补丁、扛着阴阳八卦幡的落魄老相士，在汪臻念出「人生若只如初见」时，神情像被雷劈了一样。程宗扬当夜让人把他拿下，拿手电筒照着逼问；老相士几番装傻，终于承认自己也是穿越者——魂魄降世，投生成婴儿，在这里活了将近五十年，借用的名字叫袁天罡。程宗扬撕下胡须报上真名，试探着问此间是否有危险、有没有回去的办法。袁天罡神色有异，终于咬牙答应合作。",
         "axisId": null,
         "axisMethod": "tang-line-fill-axis-pending",
         "axisAnchor": "六朝燕歌行·#50·相士",
@@ -128,6 +129,7 @@
           "liuchao.character.cheng_zongyang",
           "liuchao.character.yuan_tiangang"
         ],
+        "locationId": "lyg.location.liuxianping",
         "objective": "找镇上那个落魄老相士问个明白",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -187,7 +189,7 @@
       "value": {
         "id": "lyg.chapter.changgan_begins_liuxianping",
         "title": "留仙坪",
-        "summary": "赴唐途中歇在山中小镇留仙坪：撞见周飞一伙与廖群玉，识破落魄老相士——同为穿越者的袁天罡，听他说破番僧在猎杀穿越者。",
+        "summary": "在留仙坪多留一日：盯着周飞一伙与廖群玉，识破落魄老相士——同为穿越者的袁天罡，听他讲主家小姐被番僧带走的旧事，说不清是否专冲穿越者。",
         "completion": [
           {
             "path": "flags.chapter.lyg.changgan_begins.liuxianping.done",
@@ -250,6 +252,80 @@
         "lyg.event.s03_09",
         "lyg.event.qinglongsi_te_master"
       ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.opening.locationId",
+      "from": "lyg.location.chanqiao",
+      "to": "lyg.location.liuxianping"
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.locations",
+      "afterId": "lyg.location.chanqiao",
+      "value": {
+        "id": "lyg.location.liuxianping",
+        "name": "留仙坪",
+        "description": "山南东道的山中小镇，镇上有留仙客栈。程宗扬赴长安途中在此歇脚。长安还在山那边。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 3600,
+          "y": 3400
+        },
+        "features": []
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt].name",
+      "from": "番僧猎杀穿越者",
+      "to": "主家小姐的旧事"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt].description",
+      "from": "袁天罡向程宗扬透露番僧在猎杀穿越者。",
+      "to": "袁天罡讲出当年主家小姐被番僧以魔症带走的旧事，坦言不知道番僧是否专冲穿越者而来。程宗扬由此起疑。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt].axisBeat",
+      "from": "袁天罡向程宗扬透露番僧在猎杀穿越者。",
+      "to": "袁天罡讲出当年主家小姐被番僧以魔症带走的旧事，坦言不知道番僧是否专冲穿越者而来；程宗扬由此起疑。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt].objective",
+      "from": "听袁天罡当面透露番僧在猎杀穿越者",
+      "to": "听袁天罡讲主家小姐被番僧带走的旧事"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt].playerCompletionContract.actions[id=hear_yuan_fanseng_hunt].label",
+      "from": "听袁天罡说破番僧猎杀穿越者",
+      "to": "听袁天罡讲主家小姐的旧事"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt].playerCompletionContract.actions[id=hear_yuan_fanseng_hunt].actionText",
+      "from": "我听袁天罡当面说完：番僧正在猎杀穿越者。",
+      "to": "我听袁天罡讲当年主家小姐被番僧带走的旧事，问他番僧是不是专冲穿越者。"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt].playerCompletionContract.actions[id=hear_yuan_fanseng_hunt].outcomeText.success",
+      "from": "你已听清袁天罡的话：番僧在猎杀穿越者；事件完成真值由本地引擎落账。",
+      "to": "你已听清：袁天罡说不清番僧是否专冲穿越者；事件完成真值由本地引擎落账。"
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyg.event.changgan_fanseng_hunt]",
+      "afterKey": "relatedCharacterIds",
+      "beforeKey": "objective",
+      "entries": {
+        "locationId": "lyg.location.liuxianping"
+      }
     }
   ]
 }

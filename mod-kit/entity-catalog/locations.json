@@ -16508,6 +16508,40 @@
       ]
     },
     {
+      "id": "lyg.location.liuxianping",
+      "aliases": [],
+      "definition": {
+        "id": "lyg.location.liuxianping",
+        "name": "留仙坪",
+        "description": "山南东道的山中小镇，镇上有留仙客栈。程宗扬赴长安途中在此歇脚。长安还在山那边。",
+        "type": "城池",
+        "continentId": "liuchao.continent.zhongzhou",
+        "coordinates": {
+          "x": 3600,
+          "y": 3400
+        },
+        "features": []
+      },
+      "stageVariants": {
+        "lyg.changgan_begins": {
+          "id": "lyg.location.liuxianping",
+          "name": "留仙坪",
+          "description": "山南东道的山中小镇，镇上有留仙客栈。程宗扬赴长安途中在此歇脚。长安还在山那边。",
+          "type": "城池",
+          "continentId": "liuchao.continent.zhongzhou",
+          "coordinates": {
+            "x": 3600,
+            "y": 3400
+          },
+          "features": []
+        }
+      },
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "migratedFrom": [
+        "src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json#canon.locations[id=lyg.location.liuxianping]"
+      ]
+    },
+    {
       "id": "liuchao.location.lie",
       "aliases": [],
       "definition": {
