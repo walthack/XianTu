@@ -1,5 +1,5 @@
 import {stripQuestLineProjection,projectQuestLines} from './quest-line-projection.mjs';
-import {projectContentReferences} from './entity-catalog-projection.mjs';
+import {projectContentReferences,projectLocationCountries} from './entity-catalog-projection.mjs';
 import { readdir, readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -370,9 +370,10 @@ export async function applyTrackedCanonAuthorityOverlay(mod, catalog) {
   const loaded = catalog || await loadTrackedCanonAuthorityOverlays();
   stripQuestLineProjection(mod);
   const overlay = loaded.byStageId.get(mod?.manifest?.id);
-  if (!overlay) { projectContentReferences(mod); projectQuestLines(mod); return { matched: false, applied: 0 }; }
+  if (!overlay) { projectContentReferences(mod); projectLocationCountries(mod); projectQuestLines(mod); return { matched: false, applied: 0 }; }
   const applied = applyCanonAuthorityOverlay(mod, overlay);
   projectContentReferences(mod);
+  projectLocationCountries(mod);
   projectQuestLines(mod);
   return { matched: true, applied };
 }
