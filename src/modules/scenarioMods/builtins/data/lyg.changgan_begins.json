@@ -507,7 +507,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.liuxianping",
@@ -519,7 +520,8 @@
           "x": 3600,
           "y": 3400
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.xuanping_fang",
@@ -531,7 +533,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.yongning_fang",
@@ -543,7 +546,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.daciensi",
@@ -555,7 +559,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.qujiang",
@@ -567,7 +572,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "liuchao.location.changan",
@@ -580,7 +586,8 @@
           "y": 2767
         },
         "features": [],
-        "region": "唐国"
+        "region": "唐国",
+        "country": "唐"
       },
       {
         "id": "liuchao.location.mingzhou",
@@ -593,7 +600,8 @@
           "y": 6374
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.wuyuan",
@@ -619,7 +627,8 @@
           "y": 5992
         },
         "features": [],
-        "region": "晋国"
+        "region": "晋国",
+        "country": "晋"
       },
       {
         "id": "liuchao.location.luoyang",
@@ -632,7 +641,8 @@
           "y": 3577
         },
         "features": [],
-        "region": "汉国"
+        "region": "汉国",
+        "country": "汉"
       },
       {
         "id": "liuchao.location.linan",
@@ -645,7 +655,8 @@
           "y": 6532
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.jiangzhou",
@@ -658,7 +669,8 @@
           "y": 6735
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.junzhou",
@@ -671,7 +683,8 @@
           "y": 6822
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.guangyang",
@@ -684,7 +697,8 @@
           "y": 5668
         },
         "features": [],
-        "region": "晋国"
+        "region": "晋国",
+        "country": "晋"
       },
       {
         "id": "liuchao.location.qingzhou",
@@ -697,7 +711,8 @@
           "y": 6000
         },
         "features": [],
-        "region": "海上"
+        "region": "海上",
+        "country": "晴州"
       },
       {
         "id": "liuchao.location.ningzhou",
@@ -710,7 +725,8 @@
           "y": 6437
         },
         "features": [],
-        "region": "晋国"
+        "region": "晋国",
+        "country": "晋"
       },
       {
         "id": "liuchao.location.jinmingzhai",
@@ -723,7 +739,8 @@
           "y": 6550
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.haoshuichuan",
@@ -736,7 +753,8 @@
           "y": 6476
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.jingxi",
@@ -749,7 +767,8 @@
           "y": 6900
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.wudu",
@@ -762,7 +781,8 @@
           "y": 3929
         },
         "features": [],
-        "region": "汉国"
+        "region": "汉国",
+        "country": "汉"
       },
       {
         "id": "liuchao.location.yong",
@@ -775,7 +795,8 @@
           "y": 3978
         },
         "features": [],
-        "region": "秦国"
+        "region": "秦国",
+        "country": "秦"
       },
       {
         "id": "liuchao.location.yongzhou",
@@ -788,7 +809,8 @@
           "y": 4242
         },
         "features": [],
-        "region": "唐国"
+        "region": "唐国",
+        "country": "唐"
       },
       {
         "id": "liuchao.location.baijun",
@@ -801,7 +823,8 @@
           "y": 3063
         },
         "features": [],
-        "region": "秦国"
+        "region": "秦国",
+        "country": "秦"
       },
       {
         "id": "liuchao.location.dantu",
@@ -814,7 +837,8 @@
           "y": 4854
         },
         "features": [],
-        "region": "汉国"
+        "region": "汉国",
+        "country": "汉"
       },
       {
         "id": "liuchao.location.longchuan",
@@ -827,7 +851,8 @@
           "y": 6819
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.nanjun",
@@ -840,7 +865,8 @@
           "y": 5276
         },
         "features": [],
-        "region": "汉国"
+        "region": "汉国",
+        "country": "汉"
       },
       {
         "id": "liuchao.location.chenzhou",
@@ -853,7 +879,8 @@
           "y": 5011
         },
         "features": [],
-        "region": "唐国"
+        "region": "唐国",
+        "country": "唐"
       },
       {
         "id": "liuchao.location.liangzhou",
@@ -866,7 +893,8 @@
           "y": 2767
         },
         "features": [],
-        "region": "唐国"
+        "region": "唐国",
+        "country": "唐"
       },
       {
         "id": "liuchao.location.boling",
@@ -892,7 +920,8 @@
           "y": 7423
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.cuizhi",
@@ -905,7 +934,8 @@
           "y": 5001
         },
         "features": [],
-        "region": "唐国"
+        "region": "唐国",
+        "country": "唐"
       },
       {
         "id": "liuchao.location.lie",
@@ -918,7 +948,8 @@
           "y": 6472
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.longchi",
@@ -931,7 +962,8 @@
           "y": 5000
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.nanzhao",
@@ -983,7 +1015,8 @@
           "y": 7612
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.guiwangdong",
@@ -996,7 +1029,8 @@
           "y": 8690
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.baiyi",
@@ -1009,7 +1043,8 @@
           "y": 8118
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.biyu",
@@ -1022,7 +1057,8 @@
           "y": 8592
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.liuligu",
@@ -1035,7 +1071,8 @@
           "y": 8791
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.shenmu",
@@ -1048,7 +1085,8 @@
           "y": 9521
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.haishanghuahuan",
@@ -1061,7 +1099,8 @@
           "y": 9915
         },
         "features": [],
-        "region": "海上"
+        "region": "海上",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.canglan",
@@ -1074,7 +1113,8 @@
           "y": 9000
         },
         "features": [],
-        "region": "太泉"
+        "region": "太泉",
+        "country": "太泉"
       },
       {
         "id": "liuchao.location.taiquan",
@@ -1087,7 +1127,8 @@
           "y": 9083
         },
         "features": [],
-        "region": "太泉"
+        "region": "太泉",
+        "country": "太泉"
       },
       {
         "id": "liuchao.location.bailuojiang",
@@ -1111,7 +1152,8 @@
           "x": 5189,
           "y": 1911
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       {
         "id": "liuchao.location.yongcheng",
@@ -1122,7 +1164,8 @@
           "x": 4805,
           "y": 1728
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       {
         "id": "liuchao.location.lintao",
@@ -1133,7 +1176,8 @@
           "x": 4421,
           "y": 941
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       {
         "id": "liuchao.location.shangjun",
@@ -1144,7 +1188,8 @@
           "x": 5422,
           "y": 932
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       {
         "id": "liuchao.location.hanguguan",
@@ -1166,7 +1211,8 @@
           "x": 5483,
           "y": 2132
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       {
         "id": "liuchao.location.qishan",
@@ -1210,7 +1256,8 @@
           "x": 3685,
           "y": 5654
         },
-        "features": []
+        "features": [],
+        "country": "晋"
       },
       {
         "id": "liuchao.location.hezhou",
@@ -1221,7 +1268,8 @@
           "x": 3031,
           "y": 6216
         },
-        "features": []
+        "features": [],
+        "country": "晋"
       },
       {
         "id": "liuchao.location.linchuan",
@@ -1232,7 +1280,8 @@
           "x": 4090,
           "y": 6122
         },
-        "features": []
+        "features": [],
+        "country": "晋"
       },
       {
         "id": "liuchao.location.jingzhou_jin",
@@ -1243,7 +1292,8 @@
           "x": 2188,
           "y": 6465
         },
-        "features": []
+        "features": [],
+        "country": "晋"
       },
       {
         "id": "liuchao.location.zhuyajun",
@@ -1265,7 +1315,8 @@
           "x": 4178,
           "y": 6999
         },
-        "features": []
+        "features": [],
+        "country": "晋"
       }
     ],
     "characters": [

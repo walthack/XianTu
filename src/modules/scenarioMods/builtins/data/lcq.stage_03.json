@@ -165,7 +165,8 @@
           "x": 4200,
           "y": 6900
         },
-        "features": []
+        "features": [],
+        "country": "南荒"
       },
       {
         "id": "lcq.location.sheyi_village",
@@ -177,7 +178,8 @@
           "x": 4650,
           "y": 7350
         },
-        "features": []
+        "features": [],
+        "country": "南荒"
       }
     ],
     "characters": [

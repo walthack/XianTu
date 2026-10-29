@@ -27,7 +27,8 @@
     "stage-qin-xianyang.json"
   ],
   "overlays": [
-    "stage3-overlays.json"
+    "stage3-overlays.json",
+    "time-overlays.json"
   ],
   "questLines": [
     "lines-baihu.json",
@@ -43,5 +44,8 @@
   "questLineResources": "lines-resources.json",
   "lineCompass": "line-compass.json",
   "playtests": "playtests.json",
-  "entries": "entries.json"
+  "entries": "entries.json",
+  "mapRoutes": [
+    "map-routes.json"
+  ]
 }

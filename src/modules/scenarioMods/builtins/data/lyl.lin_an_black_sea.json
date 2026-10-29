@@ -211,7 +211,8 @@
           "y": 6532
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.mingqing_temple",
@@ -223,7 +224,8 @@
           "x": 7466,
           "y": 6532
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.west_lake_cottage",
@@ -248,7 +250,8 @@
           "y": 6735
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "宋"
       }
     ],
     "characters": [

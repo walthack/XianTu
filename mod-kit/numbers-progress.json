@@ -84,7 +84,13 @@
     "bingGu": {
       "note": "冰蛊（状态 poison.ice_gu，效果 qiCap）：生效时玩家可用真气（灵气）上限 = 灵气.上限 × qiCapRatio；qiActions 里的自由行动（运功、传功、双修、夺元）按此上限算可用真气。施行时当前真气已超过上限＝强行超上限运功，用这次判定的骰面做一次寒气反噬检定：骰面 < backlash.dc 为失败，扣 气血上限 × hpLossRatio（不低于 1）并挂 failStatus；之后真气压回上限。解除只走剧情（见状态目录 remove）。",
       "qiCapRatio": 0.7,
-      "qiActions": ["solo.train", "solo.breakthrough", "cast.transfer_qi", "intimate.dual_cultivate", "physical.drain_qi"],
+      "qiActions": [
+        "solo.train",
+        "solo.breakthrough",
+        "cast.transfer_qi",
+        "intimate.dual_cultivate",
+        "physical.drain_qi"
+      ],
       "backlash": {
         "dc": 11,
         "hpLossRatio": 0.1,
@@ -101,7 +107,9 @@
         "minutes": 240,
         "socialBonus": 1,
         "mindPenalty": -1,
-        "mindKinds": ["cultivate"]
+        "mindKinds": [
+          "cultivate"
+        ]
       },
       "addiction": {
         "cravingMinutes": 4320,
@@ -627,7 +635,13 @@
             "effect": "removeStatus",
             "base": 4,
             "needsItem": true,
-            "itemTags": ["heal", "salve", "stabilize", "revive", "detox"]
+            "itemTags": [
+              "heal",
+              "salve",
+              "stabilize",
+              "revive",
+              "detox"
+            ]
           },
           "bandage": {
             "label": "包扎",
@@ -1061,57 +1075,136 @@
       "note": "F02 诗薇莫（10-20 用户定）：制服/化解后到天亮为救治窗口；珍品及以上疗伤/解毒药或治疗技能达门槛可救；凡品无效；朱箓蛇丹不可用；救活收为侍从，好感按收场方式；得知蛇丹真相降到 -10 并可能离队",
       "rescueWindowHours": 6,
       "minItemTier": "珍品",
-      "itemTags": ["heal", "antidote", "detox", "revive", "stabilize"],
-      "forbiddenItemIds": ["lcq.item.np013"],
+      "itemTags": [
+        "heal",
+        "antidote",
+        "detox",
+        "revive",
+        "stabilize"
+      ],
+      "forbiddenItemIds": [
+        "lcq.item.np013"
+      ],
       "skillThreshold": 3,
       "skillDifficulty": 15,
       "skillTries": 2,
-      "affinityOnRescue": { "松口退开": 5, "被制住": 2 },
+      "affinityOnRescue": {
+        "松口退开": 5,
+        "被制住": 2
+      },
       "affinityOnShedanTruth": -10,
       "leaveChanceOnShedanTruth": 0.5
     },
     "note": "剧情固定数值：已验证剧情动作的固定交易（按事件+动作回执只结算一次）；逐拍演出关卡每拍默认推进的分钟数（卡片自带 dayPart 时不另推进）",
     "trades": [
-      { "eventId": "lcq.event.charge_sudaji_fee", "actionId": "lock_fee_then_remove_device", "goldDelta": 60 },
-      { "eventId": "lcq.event.free_ajiman", "actionId": "take_ajiman_bond_in_hand", "goldDelta": -50, "grantItemId": "lcq.item.ajiman_bond" },
-      { "eventId": "lcq.event.free_ajiman", "actionId": "tear_bond_and_face_blockade", "removeItemId": "lcq.item.ajiman_bond" }
+      {
+        "eventId": "lcq.event.charge_sudaji_fee",
+        "actionId": "lock_fee_then_remove_device",
+        "goldDelta": 60
+      },
+      {
+        "eventId": "lcq.event.free_ajiman",
+        "actionId": "take_ajiman_bond_in_hand",
+        "goldDelta": -50,
+        "grantItemId": "lcq.item.ajiman_bond"
+      },
+      {
+        "eventId": "lcq.event.free_ajiman",
+        "actionId": "tear_bond_and_face_blockade",
+        "removeItemId": "lcq.item.ajiman_bond"
+      }
     ],
     "stepScene": {
       "minutesPerBeat": 120
     },
     "lineOutcome": {
       "note": "国家线收束档（身份账设计稿 2026-10-25 §6；用户 2026-10-26 定两档、只写一次）：tiers 为 flags 键 line.<lineId>.outcome 的取值集合，代码与规则表校验都读这里；「没去」不是档位，由该线无收束记录判出；writeOnce=true 时已收束的线不被后写覆盖。judgedLines：判档线集合（用户 2026-10-26 定太泉不判档，即 7 条国家线除 taiquan 外的 6 条），元素须为国家线 id。failEndsGame：按判档线逐线配置该线失败（unresolved）是否当场结束游戏，键须正好是 judgedLines；用户 2026-10-26 定国家线失败默认可继续，全 false",
-      "tiers": ["resolved", "unresolved"],
+      "tiers": [
+        "resolved",
+        "unresolved"
+      ],
       "writeOnce": true,
-      "judgedLines": ["nanhuang", "jin", "song", "han", "tang", "qin"],
-      "failEndsGame": { "nanhuang": false, "jin": false, "song": false, "han": false, "tang": false, "qin": false }
+      "judgedLines": [
+        "nanhuang",
+        "jin",
+        "song",
+        "han",
+        "tang",
+        "qin"
+      ],
+      "failEndsGame": {
+        "nanhuang": false,
+        "jin": false,
+        "song": false,
+        "han": false,
+        "tang": false,
+        "qin": false
+      }
     },
     "lineUnlock": {
       "note": "整线解锁（太泉解锁设计稿 2026-10-27 §2；用户 2026-10-27 01:12／01:28 定）。键＝国家线 id，目前只有 taiquan。三条同时满足才解锁：①玩家九级境界 levelOf(角色.属性.境界) ≥ minRealmLevel（六阳按原著换算读坐照＝5，lyl 11967；小阶段不看）；②已收束的判档线条数 ≥ minClosedLines（只数 story.lineOutcome.judgedLines 里的线，太泉不在其中；档位须在 countTiers 里；没去、半路走掉＝没有收束记录，不算）；③requireDeadlinesCleared 里每个期限的 deadlineState 都是 cleared；读不到（未上线、未起算）按通过（总策划 01:28），空数组＝不读期限。已走进本线的存档（任一本线节点事件已完成）一律视为已解锁（总策划 2026-10-27 定，设计稿 §14-4）。不设 enforce 开关（总策划 2026-10-27 定，设计稿 §14-3），改由默认路线可达性测试卡住硬门数据。改值即时生效；解锁结果不锁存。",
       "taiquan": {
         "minRealmLevel": 5,
         "minClosedLines": 1,
-        "countTiers": ["resolved", "unresolved"],
-        "requireDeadlinesCleared": ["liuchao.deadline.ice_gu"]
+        "countTiers": [
+          "resolved",
+          "unresolved"
+        ],
+        "requireDeadlinesCleared": [
+          "liuchao.deadline.ice_gu"
+        ]
       }
     },
-    "qin": { "actionTimeCost": 1 },
+    "qin": {
+      "actionTimeCost": 1
+    },
     "lineCompass": {
       "note": "右栏「当前线」卡（右栏线入口复用分析 2026-10-27 §5；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q5/Q7/Q8）。regionLines：关卡所属地区（mod-kit/entity-ledger/overrides.json stageRegions 的值）→ 国家线 id，用来判「焦点事件所在国家线」和「编年史里最近推进过的线」；值须为 7 条国家线 id，塞外不是国家线、不登记；秦国（lyg.qin_xianyang，内容包关，不在 STAGE_ORDER 链上）→ qin（五线补全·秦 2026-10-28）。hint.maxChars：下一步一句的字数上限（分析稿 §4.2-5「最好不超过 20 字」），hint.bannedWords：定性词（§4.2-2），两项都只在内容包编译时由 validator 拦正式文案，【待剧情策划】占位不拦。下一步表本身在内容包 line-compass.json，文案在 texts。",
-      "regionLines": { "昭南": "nanhuang", "晋国": "jin", "宋国": "song", "汉国": "han", "唐国": "tang", "太泉": "taiquan", "秦国": "qin" },
+      "regionLines": {
+        "昭南": "nanhuang",
+        "晋国": "jin",
+        "宋国": "song",
+        "汉国": "han",
+        "唐国": "tang",
+        "太泉": "taiquan",
+        "秦国": "qin"
+      },
       "hint": {
         "maxChars": 20,
-        "bannedWords": ["怪事", "闹鬼", "阴谋", "勾结", "猎杀", "危机", "要打起来了", "覆灭", "背叛"]
+        "bannedWords": [
+          "怪事",
+          "闹鬼",
+          "阴谋",
+          "勾结",
+          "猎杀",
+          "危机",
+          "要打起来了",
+          "覆灭",
+          "背叛"
+        ]
       },
       "anyLineClosed": {
         "note": "派生读取点 compass.anyLineClosed（分析稿 2026-10-27 §6 R-3，总策划定；用户 P-06 定秦线消息在任一国家线收束后由商会伙计传话）：lineIds 里任一条线 line.<id>.outcome 有档、或线的下一步表里该线 closedWhen 全满足即为 true。太泉、秦不计入。秦线知情拍与秦线 knownWhen 读它。值须为国家线 id、不得含 qin / taiquan。",
-        "lineIds": ["nanhuang", "jin", "song", "han", "tang"]
+        "lineIds": [
+          "nanhuang",
+          "jin",
+          "song",
+          "han",
+          "tang"
+        ]
       }
     },
     "identity": {
       "note": "玩家身份账（身份账设计稿 2026-10-25 §2.2）：kinds 为 entity-catalog/identities.json 里 kind 的取值集合（草案）。prompt.maxItems：提示词【主角身份·引擎账本】结论行最多列几个身份（补充设计稿 2026-10-26 §5.4，int≥1；按 rank 降序、再按入账先后截取，secret 身份不计）",
-      "kinds": ["office", "title", "merchant", "sect"],
-      "prompt": { "maxItems": 3 }
+      "kinds": [
+        "office",
+        "title",
+        "merchant",
+        "sect"
+      ],
+      "prompt": {
+        "maxItems": 3
+      }
     },
     "itemProvenance": {
       "note": "道具来路去重（身份账补充设计稿 2026-10-26 §2.5；总策划 2026-10-26 审定取推荐值）：dedupeBy 为唯一道具组（mod-kit/player-ledger-rules.json itemGroups）判「已得过」的口径。everObtained＝组内任一 itemId 有发放回执或背包现存即算得过，用掉了也不再发；currentlyHeld＝只看背包现存。取值只能是这两个之一",
@@ -1120,37 +1213,162 @@
     "progressDeadline": {
       "note": "进度期限（身份账补充设计稿 2026-10-26 §4.6）：limits 为 { \"<deadlineId>\": { \"due\": int≥1, \"urgentAt\": int, 0≤urgentAt<due } }，键须正好是 mod-kit/player-ledger-rules.json progressDeadlines 的 id 集合（规则表校验交叉核对）。due＝起算后计满多少个刻度即到期，urgentAt＝计到多少个刻度进入 urgent。running/urgent 每次读取现算，到 due/cleared 才锁存进 flags 键 deadline.<id>.state，热改数值不让已锁存的倒退。首版留空，冰蛊的 due、凝羽归队的 N 待总策划给数",
       "limits": {}
+    },
+    "actionTime": {
+      "minutes": {
+        "instant": 0,
+        "moment": 15,
+        "shichen": 120,
+        "halfDay": 360
+      },
+      "days": {
+        "oneDay": 1
+      },
+      "severalDays": {
+        "maxDays": 30
+      },
+      "fallbackTier": "片刻",
+      "cultivation": {
+        "minDays": 1,
+        "maxDays": 3650
+      },
+      "calendar": {
+        "daysPerMonth": 30,
+        "monthsPerYear": 12,
+        "version": 1
+      },
+      "prologueYears": 4
     }
   },
   "crafting": {
     "note": "炼制提示词数值（Sol 周审 2026-10-22 迁入，提示词只读这里不写死）。levelTierCaps：按原著九级（entity-catalog/levels.json 的 level，含两端）给可炼最高品，tier 用 item-grades.json 的 id；档位切分是草案，待用户拍。uncraftableTiers：任何级数都炼不出的品（item-grades 注：神品非剧情明示不得出现）。daoProficiency：炼制大道各熟练档的成功率区间（百分数）与最高品，maxTier 为 null 表示只受级数上限。successRateRange：提示词要求 AI 输出的成功率整数区间。",
     "levelTierCaps": [
-      { "minLevel": 0, "maxLevel": 3, "tier": "zhen", "usualTier": "fan", "note": "通常只能炼出凡品，珍品已是极限" },
-      { "minLevel": 4, "maxLevel": 6, "tier": "zhen", "usualTier": "zhen", "note": "珍品稳定，珍品即天花板" },
-      { "minLevel": 7, "maxLevel": 9, "tier": "xian", "usualTier": "zhen", "note": "方可触及仙品，且只限有名有姓的正典奇物" }
+      {
+        "minLevel": 0,
+        "maxLevel": 3,
+        "tier": "zhen",
+        "usualTier": "fan",
+        "note": "通常只能炼出凡品，珍品已是极限"
+      },
+      {
+        "minLevel": 4,
+        "maxLevel": 6,
+        "tier": "zhen",
+        "usualTier": "zhen",
+        "note": "珍品稳定，珍品即天花板"
+      },
+      {
+        "minLevel": 7,
+        "maxLevel": 9,
+        "tier": "xian",
+        "usualTier": "zhen",
+        "note": "方可触及仙品，且只限有名有姓的正典奇物"
+      }
     ],
-    "uncraftableTiers": ["shen"],
+    "uncraftableTiers": [
+      "shen"
+    ],
     "daoProficiency": [
-      { "name": "无大道/入门", "successRate": { "min": 5, "max": 15 }, "maxTier": "fan", "style": "手法生疏、险象环生，大概率失败" },
-      { "name": "略有所得", "successRate": { "min": 15, "max": 30 }, "maxTier": "fan", "style": "尚在摸索、偶有失误" },
-      { "name": "小有成就", "successRate": { "min": 30, "max": 50 }, "maxTier": "zhen", "style": "可尝试珍品" },
-      { "name": "登堂入室", "successRate": { "min": 40, "max": 60 }, "maxTier": "zhen", "style": "珍品稳定，从容不迫" },
-      { "name": "融会贯通及以上", "successRate": null, "maxTier": null, "style": "可尝试更高品质，但仍受级数上限" }
+      {
+        "name": "无大道/入门",
+        "successRate": {
+          "min": 5,
+          "max": 15
+        },
+        "maxTier": "fan",
+        "style": "手法生疏、险象环生，大概率失败"
+      },
+      {
+        "name": "略有所得",
+        "successRate": {
+          "min": 15,
+          "max": 30
+        },
+        "maxTier": "fan",
+        "style": "尚在摸索、偶有失误"
+      },
+      {
+        "name": "小有成就",
+        "successRate": {
+          "min": 30,
+          "max": 50
+        },
+        "maxTier": "zhen",
+        "style": "可尝试珍品"
+      },
+      {
+        "name": "登堂入室",
+        "successRate": {
+          "min": 40,
+          "max": 60
+        },
+        "maxTier": "zhen",
+        "style": "珍品稳定，从容不迫"
+      },
+      {
+        "name": "融会贯通及以上",
+        "successRate": null,
+        "maxTier": null,
+        "style": "可尝试更高品质，但仍受级数上限"
+      }
     ],
-    "successRateRange": { "min": 5, "max": 95 }
+    "successRateRange": {
+      "min": 5,
+      "max": 95
+    }
   },
   "shop": {
     "note": "药铺／商人进货（scenarioMods/shopStock.ts）：sites 键为规范地点 id，stock 为在售物品与单价（金铢）。用户 2026-10-20 定：清心散可在南荒药铺或商人处买。",
     "sites": {
-      "liuchao.location.xiongerpu": { "name": "熊耳铺药铺", "stock": [{ "itemId": "lcq.item.qingxin_san", "price": 3 }] },
-      "lcq.location.guiwang_inn": { "name": "鬼王峒驿馆行商", "stock": [{ "itemId": "lcq.item.qingxin_san", "price": 4 }] },
-      "lcq.location.nanhuang_departure_camp": { "name": "南荒散峒营地商人", "stock": [{ "itemId": "lcq.item.qingxin_san", "price": 3 }] }
+      "liuchao.location.xiongerpu": {
+        "name": "熊耳铺药铺",
+        "stock": [
+          {
+            "itemId": "lcq.item.qingxin_san",
+            "price": 3
+          }
+        ]
+      },
+      "lcq.location.guiwang_inn": {
+        "name": "鬼王峒驿馆行商",
+        "stock": [
+          {
+            "itemId": "lcq.item.qingxin_san",
+            "price": 4
+          }
+        ]
+      },
+      "lcq.location.nanhuang_departure_camp": {
+        "name": "南荒散峒营地商人",
+        "stock": [
+          {
+            "itemId": "lcq.item.qingxin_san",
+            "price": 3
+          }
+        ]
+      }
     }
   },
   "loot": {
     "note": "搜刮回刷与战后搜尸（用户 2026-10-28 13:48 第5条）：按游戏天数只回刷普通物和小钱；rare/key/boss/large 货币永远只在首轮给（总策划 2026-10-28 定：稀有物一律只给一次，含首轮三次内不重复）。随机战战后搜尸另计、不占 maxSearches。categories 取值：common / smallCurrency / rare / largeCurrency / key / boss。intervalDays 初值 30（一个游戏月）待用户拍板。texts.exhausted 的 {n} 填中文次数；respawnHint 只在回刷开启且存档有游戏时间时接在搜满提示后。",
-    "respawn": { "enabled": true, "intervalDays": 30, "categories": ["common", "smallCurrency"] },
-    "spoils": { "enabled": true, "categories": ["common", "smallCurrency"] },
-    "texts": { "exhausted": "你已经仔细搜刮过这里{n}次，没有新的搜刮机会。", "respawnHint": "过些日子再来，或许又能翻出些东西。" }
+    "respawn": {
+      "enabled": true,
+      "intervalDays": 30,
+      "categories": [
+        "common",
+        "smallCurrency"
+      ]
+    },
+    "spoils": {
+      "enabled": true,
+      "categories": [
+        "common",
+        "smallCurrency"
+      ]
+    },
+    "texts": {
+      "exhausted": "你已经仔细搜刮过这里{n}次，没有新的搜刮机会。",
+      "respawnHint": "过些日子再来，或许又能翻出些东西。"
+    }
   }
 }

@@ -148,7 +148,8 @@
           "y": 8690
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.south_wild_valley",
@@ -160,7 +161,8 @@
           "x": 4916,
           "y": 7778
         },
-        "features": []
+        "features": [],
+        "country": "南荒"
       }
     ],
     "characters": [

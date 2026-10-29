@@ -139,7 +139,8 @@
           "x": 1824,
           "y": 8592
         },
-        "features": []
+        "features": [],
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.biyu_village",
@@ -153,7 +154,8 @@
           "y": 8592
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       },
       {
         "id": "lcq.location.turtle_road_ruins",
@@ -165,7 +167,8 @@
           "x": 4700,
           "y": 7700
         },
-        "features": []
+        "features": [],
+        "country": "南荒"
       },
       {
         "id": "lcq.location.nanhuang_camp",
@@ -177,7 +180,8 @@
           "x": 4900,
           "y": 7900
         },
-        "features": []
+        "features": [],
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.guiwang_dong",
@@ -191,7 +195,8 @@
           "y": 8690
         },
         "features": [],
-        "region": "南荒"
+        "region": "南荒",
+        "country": "南荒"
       }
     ],
     "characters": [

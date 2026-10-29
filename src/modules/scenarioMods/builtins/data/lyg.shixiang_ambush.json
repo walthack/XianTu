@@ -148,7 +148,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.ziyun_lou",
@@ -184,7 +185,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.daming_palace",
@@ -196,7 +198,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.xingqing_palace",

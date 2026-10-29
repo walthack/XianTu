@@ -283,7 +283,8 @@
           "x": 881,
           "y": 4366
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.wuyuan",
@@ -307,7 +308,8 @@
           "x": 4956,
           "y": 6735
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.nanzhao",

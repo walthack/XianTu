@@ -2281,6 +2281,31 @@
     "progressDeadline": {
       "note": "进度期限（身份账补充设计稿 2026-10-26 §4.6）：limits 为 { \"<deadlineId>\": { \"due\": int≥1, \"urgentAt\": int, 0≤urgentAt<due } }，键须正好是 mod-kit/player-ledger-rules.json progressDeadlines 的 id 集合（规则表校验交叉核对）。due＝起算后计满多少个刻度即到期，urgentAt＝计到多少个刻度进入 urgent。running/urgent 每次读取现算，到 due/cleared 才锁存进 flags 键 deadline.<id>.state，热改数值不让已锁存的倒退。首版留空，冰蛊的 due、凝羽归队的 N 待总策划给数",
       "limits": {}
+    },
+    "actionTime": {
+      "minutes": {
+        "instant": 0,
+        "moment": 15,
+        "shichen": 120,
+        "halfDay": 360
+      },
+      "days": {
+        "oneDay": 1
+      },
+      "severalDays": {
+        "maxDays": 30
+      },
+      "fallbackTier": "片刻",
+      "cultivation": {
+        "minDays": 1,
+        "maxDays": 3650
+      },
+      "calendar": {
+        "daysPerMonth": 30,
+        "monthsPerYear": 12,
+        "version": 1
+      },
+      "prologueYears": 4
     }
   },
   "shop": {

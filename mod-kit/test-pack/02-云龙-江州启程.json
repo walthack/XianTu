@@ -307,7 +307,8 @@
           "x": 5050,
           "y": 6550
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.jiangzhou",
@@ -320,7 +321,8 @@
           "x": 4956,
           "y": 6735
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.junzhou",
@@ -333,7 +335,8 @@
           "x": 5656,
           "y": 6822
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.jingxi_village",
@@ -346,7 +349,8 @@
           "x": 5600,
           "y": 6900
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.linan",
@@ -359,7 +363,8 @@
           "x": 7466,
           "y": 6532
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       {
         "id": "liuchao.location.guiwangdong",
@@ -371,7 +376,8 @@
           "x": 1641,
           "y": 8690
         },
-        "features": []
+        "features": [],
+        "country": "南荒"
       }
     ],
     "characters": [

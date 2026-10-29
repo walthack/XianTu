@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {createJiti} from 'jiti';
 import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './content-pack-quest-lines.mjs';
 const root=resolve(import.meta.dirname,'..');
-const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities'];
+const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes'];
 const fields=['schemaVersion','id',...kinds,'texts','questLineResources','playtests','entries','lineCompass'];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -12,7 +12,7 @@ const fail=s=>{throw new Error(`Content Pack: ${s}`);};
 const unique=(items,key,label)=>{const seen=new Set();for(const x of items){const id=key(x);if(typeof id!=='string'||!id.trim()||seen.has(id))fail(`${label} missing/duplicate id ${id}`);seen.add(id);}};
 /** Pure compiler: no writes until every pack validates. Paths confined to the source tree, including symlinks. */
 export async function compileContentPacks({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root,validateContracts=true}={}) {
- const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{}};
+ const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{}};
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set();
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
@@ -40,6 +40,8 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
  const builtinDir=join(sourceRoot,'src/modules/scenarioMods/builtins/data');const builtins=await Promise.all((await readdir(builtinDir)).filter(x=>x.endsWith('.json')).map(async x=>JSON.parse(await readFile(join(builtinDir,x),'utf8'))));
  const baseEvents=new Map(builtins.flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,structuredClone(e)])));
  const stages=new Map(builtins.map(x=>[x.manifest.id,x]));for(const s of catalog.stages){if(stages.has(s.manifest.id))fail(`stage shadows builtin ${s.manifest.id}`);stages.set(s.manifest.id,s);}
+ catalog.overlays=resolveNumbers(catalog.overlays,numbers,'overlays');
+ catalog.mapRoutes=resolveNumbers(catalog.mapRoutes,numbers,'mapRoutes');
  const applyOverlay=await import('./content-pack-overlays.mjs');applyOverlay.applyPackOverlays(stages,catalog.overlays);
  if(catalog.questLines.length){
   const jiti0=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {isNanhuangSceneStage}=await jiti0.import(join(root,'src/modules/scenarioMods/fixedEndingNarratives.ts'));
@@ -47,7 +49,15 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
   const routeLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));
   for(const [stageId,projected] of projectQuestLineEvents({lines:catalog.questLines,stages,texts:{...base.texts,...catalog.texts},intentMatches:{...base.intentMatches,...catalog.questLineResources.intentMatches},guardCovers:isNanhuangSceneStage,routeLocationNames})){const overlay={stageId,events:projected};catalog.overlays.push(overlay);applyOverlay.applyPackOverlays(stages,[overlay]);}
  }
+ for (const stage of stages.values()) for (const event of stage.scenario?.events || []) for (const action of event.playerCompletionContract?.actions || []) {
+  if(action.timeAdvance!==undefined){const t=action.timeAdvance;if(!object(t)||Object.keys(t).some(k=>!['kind','years'].includes(k))||t.kind!=='calendarYears'||!Number.isSafeInteger(t.years)||t.years<=0)fail(`invalid timeAdvance ${event.id}`);}
+  if(action.action_time!==undefined){const t=action.action_time;if(!object(t)||Object.keys(t).some(k=>!['tier','days'].includes(k))||!['一瞬','片刻','一时辰','半日','一日','数日'].includes(t.tier)||(t.tier==='数日'? !Number.isSafeInteger(t.days)||t.days<=0:t.days!==undefined))fail(`invalid action_time ${event.id}`);}
+ }
+ const locationIds=new Set(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.flatMap(e=>[e.id,...(e.aliases||[])]));
+ unique(catalog.mapRoutes,r=>r.id,'map route');
+ for(const r of catalog.mapRoutes)if(!object(r)||Object.keys(r).some(k=>!['id','fromId','toId','dayCost','unlockWhen'].includes(k))||!locationIds.has(r.fromId)||!locationIds.has(r.toId)||r.fromId===r.toId||!(r.dayCost==='several'||typeof r.dayCost==='number'&&Number.isFinite(r.dayCost)&&r.dayCost>=0)||(r.unlockWhen!==undefined&&(!Array.isArray(r.unlockWhen)||r.unlockWhen.some(id=>typeof id!=='string'))))fail(`invalid map route ${r?.id}`);
  const events=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,e])));
+ for(const r of catalog.mapRoutes)for(const id of r.unlockWhen||[])if(!events.has(id))fail(`map route ${r.id}: unknown unlock event ${id}`);
  const playtests=new Map(catalog.playtests.map(x=>[x.id,x]));
  const expand=(p,chain=[])=>{if(chain.includes(p.id))fail(`playtest inheritance cycle ${p.id}`);if(!p.extends)return p;const parent=playtests.get(p.extends);if(!parent)fail(`missing parent ${p.extends}`);const v={...expand(parent,[...chain,p.id]),...p};delete v.extends;return v;};catalog.playtests=catalog.playtests.map(p=>expand(p));
  for(const p of catalog.playtests){if(p.nextId!==undefined&&!playtests.has(p.nextId))fail(`playtest ${p.id}: missing next ${p.nextId}`);if(!stages.has(p.startModId)||!stages.has(p.endModId)||!events.has(p.endEventId))fail(`playtest ${p.id}: dangling stage/end event`);const end=stages.get(p.endModId);if(!end.scenario.events.some(e=>e.id===p.endEventId))fail(`playtest ${p.id}: end event in wrong stage`);if(typeof p.kind!=='string'||typeof p.extensionKey!=='string'||!Array.isArray(p.eventIds)||p.eventIds.some(id=>!events.has(id))||new Set(p.eventIds).size!==p.eventIds.length)fail(`playtest ${p.id}: invalid scope`);for(const stageId of Object.keys(p.stageOpeningTextIds||{}))if(!stages.has(stageId))fail(`playtest ${p.id}: unknown opening stage`);for(const id of [p.openingTextId,...Object.values(p.stageOpeningTextIds||{})].filter(Boolean))if(!(id in catalog.texts))fail(`playtest ${p.id}: missing text ${id}`);}
