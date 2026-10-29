@@ -296,13 +296,29 @@
           <div v-if="!isTavernEnvFlag" class="setting-item">
             <div class="setting-info">
               <label class="setting-name">备用连接</label>
-              <span class="setting-desc">启用自动切换后，主叙事遇内容审核拦截时用此连接重发一次；可选择 xAI / Grok。</span>
+              <span class="setting-desc">打开下方「遇到内容审核（422）自动切备用连接」后，主叙事遇内容审核拦截时用此连接重发一次；可选择 xAI / Grok。</span>
             </div>
             <div class="setting-control">
               <select :value="apiStore.fallbackApiId" @change="apiStore.setFallbackAPI(($event.target as HTMLSelectElement).value)" class="setting-select">
                 <option value="">不使用备用连接</option>
                 <option v-for="api in apiStore.enabledAPIs" :key="api.id" :value="api.id">{{ getDisplayName(api) }}</option>
               </select>
+            </div>
+          </div>
+
+          <div v-if="!isTavernEnvFlag" class="setting-item">
+            <div class="setting-info">
+              <label class="setting-name" for="moderation-fallback-enabled">遇到内容审核（422）自动切备用连接</label>
+              <span class="setting-desc">开启后，主叙事被内容审核拦截时用上方备用连接重发一次；关闭则不切换。</span>
+              <span v-if="apiStore.effectiveModerationFallbackEnabled && !apiStore.fallbackApiId" class="setting-desc setting-warning">已开启自动切换，但未选择备用连接，遇到审核拦截时不会切换</span>
+            </div>
+            <div class="setting-control">
+              <label class="setting-switch compact">
+                <input id="moderation-fallback-enabled" type="checkbox"
+                  :checked="apiStore.effectiveModerationFallbackEnabled"
+                  @change="apiStore.setModerationFallbackEnabled(($event.target as HTMLInputElement).checked)" />
+                <span class="switch-slider"></span>
+              </label>
             </div>
           </div>
 
@@ -2090,6 +2106,10 @@ const handleImport = () => {
 .setting-desc {
   font-size: 0.875rem;
   color: var(--color-text-secondary);
+}
+
+.setting-desc.setting-warning {
+  color: var(--color-warning);
 }
 
 /* 酒馆模式锁定状态 */

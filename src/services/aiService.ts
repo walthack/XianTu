@@ -1494,11 +1494,13 @@ class AIService {
     } catch (error) {
       const detail = contentModerationDetail(error);
       if (detail) logEvent({ code: 'LCQ-NET-012', cause: error, detail: { ...detail, provider, model, fallbackAttempt }, echo: false });
-      if (!moderationConfig.fallbackEnabled || !(error instanceof AiHttpError) || error.status !== moderationConfig.status
+      if (!(error instanceof AiHttpError) || error.status !== moderationConfig.status
         || !moderationConfig.fallbackMarkers.some(marker => error.message.toLowerCase().includes(marker))
         || fallbackAttempt >= moderationConfig.fallbackAttempts
         || !['main', 'module_narrative'].includes(usageType || 'main') || signal?.aborted) throw error;
+      // 开关 = API管理界面开关，未设置时沿用 ai-content-moderation.json 的 fallbackEnabled。
       const store = useAPIManagementStore();
+      if (!store.effectiveModerationFallbackEnabled) throw error;
       const fallback = store.apiConfigs.find(item => item.id === store.fallbackApiId && item.enabled);
       if (!fallback || !fallback.model.trim() || !fallback.url.trim()
         || (fallback.url === url && fallback.model === model)) throw error;

@@ -115,3 +115,73 @@ test('自动切换默认关闭，配置备用但未开开关时仍只请求主�
     assert.equal(calls,1);
   });
 });
+
+const {resolveModerationFallbackEnabled}=await jiti.import('../src/stores/apiManagementStore.ts');
+const {readFileSync:readFile}=await import('node:fs');
+const jsonFallbackDefault=JSON.parse(readFile(new URL('../mod-kit/ai-content-moderation.json',import.meta.url),'utf8')).fallbackEnabled;
+
+test('合并规则：界面开关优先，未设置（缺字段/非布尔）沿用 json 默认',()=>{
+  for(const json of [true,false]){
+    for(const missing of [undefined,null,'true',1]) assert.equal(resolveModerationFallbackEnabled(missing,json),json);
+    assert.equal(resolveModerationFallbackEnabled(true,json),true);
+    assert.equal(resolveModerationFallbackEnabled(false,json),false);
+  }
+});
+
+test('自动切换开关默认关：新配置/空配置下生效值为 false',async()=>{
+  moderationConfig.fallbackEnabled=jsonFallbackDefault;
+  setActivePinia(createPinia());
+  const api=useAPIManagementStore();
+  assert.equal(api.moderationFallbackEnabled,null);assert.equal(api.effectiveModerationFallbackEnabled,false);
+  storage.set('api_management_config',JSON.stringify({}));
+  await api.loadFromStorage();assert.equal(api.effectiveModerationFallbackEnabled,false);
+});
+
+test('界面开关开：json 默认关也会在 422/1026 时切备用重发',async()=>{
+  const api=setup(true,false);api.moderationFallbackEnabled=true;const calls=[];
+  await withFetch(async(url)=>{calls.push(String(url));return calls.length===1?rejected():ok();},async()=>{
+    const text=await aiService.generate({user_input:'观察',should_stream:true,usageType:'main',requestMaxRetries:0,apiConfigOverride:main});
+    assert.match(text,/静静等候/);assert.equal(calls.length,2);
+    assert.match(calls[0],/main\.invalid/);assert.match(calls[1],/backup\.invalid/);
+  });
+});
+
+test('界面开关关：json 默认开也不切，只请求一次并抛原 422',async()=>{
+  const api=setup(true,true);api.moderationFallbackEnabled=false;let calls=0;
+  await withFetch(async()=>{calls++;return rejected();},async()=>{
+    await assert.rejects(()=>aiService.generate({user_input:'test',should_stream:true,usageType:'main',requestMaxRetries:0,apiConfigOverride:main}),e=>e.status===422);
+    assert.equal(calls,1);
+  });
+});
+
+test('开关开但未选备用连接：不切换',async()=>{
+  const api=setup(false,false);api.moderationFallbackEnabled=true;let calls=0;
+  assert.equal(api.effectiveModerationFallbackEnabled,true);assert.equal(api.fallbackApiId,'');
+  await withFetch(async()=>{calls++;return rejected();},async()=>{
+    await assert.rejects(()=>aiService.generate({user_input:'test',should_stream:true,usageType:'main',requestMaxRetries:0,apiConfigOverride:main}),e=>e.status===422);
+    assert.equal(calls,1);
+  });
+});
+
+test('开关持久化：payload 含新字段，旧配置缺字段加载为未设置且不写死 json 默认',async()=>{
+  const api=setup(true,false);
+  storage.set('api_management_config',JSON.stringify({apiConfigs:[main,fallback],apiAssignments:[{type:'main',apiId:'main'}]}));
+  await api.loadFromStorage();assert.equal(api.moderationFallbackEnabled,null);
+  api.saveToStorage();assert.equal(JSON.parse(storage.get('api_management_config')).moderationFallbackEnabled,null);
+  assert.equal(api.effectiveModerationFallbackEnabled,moderationConfig.fallbackEnabled);
+  api.setModerationFallbackEnabled(true);
+  assert.equal(JSON.parse(storage.get('api_management_config')).moderationFallbackEnabled,true);
+  api.moderationFallbackEnabled=null;await api.loadFromStorage();assert.equal(api.moderationFallbackEnabled,true);
+  // 云端未配置时上传排队到 pending，即远端 user_config_api_management_v1 的同一 payload。
+  assert.equal(JSON.parse(storage.get('api_management_cloud_pending_v1')).payload.moderationFallbackEnabled,true);
+  storage.delete('api_management_cloud_pending_v1');
+  storage.set('api_management_config',JSON.stringify({apiConfigs:[main],moderationFallbackEnabled:'yes'}));
+  await api.loadFromStorage();assert.equal(api.moderationFallbackEnabled,null);
+});
+
+test('API管理面板含 422 自动切换开关与未选备用提示',()=>{
+  const vue=readFile(new URL('../src/components/dashboard/APIManagementPanel.vue',import.meta.url),'utf8');
+  assert.match(vue,/遇到内容审核（422）自动切备用连接/);
+  assert.match(vue,/已开启自动切换，但未选择备用连接，遇到审核拦截时不会切换/);
+  assert.match(vue,/setModerationFallbackEnabled\(/);assert.match(vue,/:checked="apiStore\.effectiveModerationFallbackEnabled"/);
+});
