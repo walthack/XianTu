@@ -614,7 +614,8 @@
           "y": 4366
         },
         "features": [],
-        "region": "塞外"
+        "region": "塞外",
+        "country": "中立边陲"
       },
       {
         "id": "liuchao.location.jiankang",
@@ -976,7 +977,8 @@
           "y": 7778
         },
         "features": [],
-        "region": "昭南"
+        "region": "昭南",
+        "country": "昭南"
       },
       {
         "id": "liuchao.location.diqiu",
@@ -989,7 +991,8 @@
           "y": 7831
         },
         "features": [],
-        "region": "昭南"
+        "region": "昭南",
+        "country": "昭南"
       },
       {
         "id": "liuchao.location.kunwu",
@@ -1002,7 +1005,8 @@
           "y": 7546
         },
         "features": [],
-        "region": "昭南"
+        "region": "昭南",
+        "country": "昭南"
       },
       {
         "id": "liuchao.location.xiongerpu",
@@ -1200,7 +1204,8 @@
           "x": 5750,
           "y": 2432
         },
-        "features": []
+        "features": [],
+        "country": "汉"
       },
       {
         "id": "liuchao.location.hongmen",
@@ -1245,7 +1250,8 @@
           "x": 3167,
           "y": 5628
         },
-        "features": []
+        "features": [],
+        "country": "晋"
       },
       {
         "id": "liuchao.location.rongzhou",
@@ -1304,7 +1310,8 @@
           "x": 2713,
           "y": 7296
         },
-        "features": []
+        "features": [],
+        "country": "汉"
       },
       {
         "id": "liuchao.location.yongzhou_jin",

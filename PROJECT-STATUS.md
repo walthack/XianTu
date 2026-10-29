@@ -396,3 +396,13 @@
 - 证据：最终全量2932测，2919通过/0失败/13跳过；新增52测全过；tsc仅controller.ts:202既有TS2559；内容包check/4组件SFC编译/差分检查通过。runtime哈希原样，AIBS仅用户2026-10-29指定位置，基线同步。
 - 成熟度：PARTIAL。旧叙事standardize丢action_time，超出已批冻结范围，待额外授权；主动跨国无获批路程资产，生产路线表未启用；canon:build缺权威qingyu/stages源目录ENOENT，不能commit。未push、未读密钥/付费API；未做浏览器/真实模型/真人验收、NAS镜像同步。
 - 跨组依赖/下轮：补权威生产源并跑canon门禁；裁定旧解析器一行透传；策划提供主动跨国路程与解锁事件，随后由既有控制面继续门禁/审核。方案外问题与未判定清单在/workspace/narrative-drafts/对应2026-10-29文件。
+
+### COUNTRY-20261029 · 地点国别补齐（已完成验证，未提交）
+- 用户授权：按10-29地点核对稿与本轮裁定补国别；同名异地独立 id，未定留空。冻结三文件不动，不 commit/push。
+- 交付：[国别裁定与留空清单](docs/handoffs/2026-10-29/LOCATION-COUNTRIES.md)。原53未定补43；另建江州水香楼、长安上清观、麟趾，现共142地点/132有国别/10留空；原同名条目未合并，既有阶段引用保留。词表新增昭南/域外/中立边陲，保留原有晴州。索引与builtins通过脚本生成，未手改overlay。
+- 证据：npm test 共2936测，2923通过/0失败/13跳过（244.3秒，新增4测；原基线2932为总数、2919通过）。type-check仅既有controller.ts:202 TS2559；目录校验与git diff --check通过；canon裁定校验2规则/41产物通过（7个缺源树路径跳过）。差分核对builtins仅country变化，runtime/AIBS/frozen-baseline未动。
+- 成熟度：数据与离线回归完成；未测浏览器/真实模型；新增地点无已知坐标，不猜坐标或阶段挂载。不涉及新策划轮次。未提交、推送、部署或NAS同步。后续未定地点等剧情策划明确裁定。
+
+## 2026-10-29 地点国别 overlay 幂等修复（Codex，未提交）
+
+按用户指令，将 canon-authority-overlays 中 canon.locations 的 set.to 经 projectLocationCountries 投影；set.from 不动。仅四份地点替换 overlay，manifest 无哈希字段；冻结文件不动。验证：专项测试 15 项（13 通过、2 源树跳过）；四份地点 set 操作独立二次应用幂等通过，diff 校验仅改变投影后的 set.to、from 全部保留。npm test：2936 项，2922 通过、13 跳过、1 失败（diagnostics.test.mjs:141，1ms 去重窗口 suppressedBefore 断言）；该文件单独复跑 28/28 通过，疑似时序敏感，未改无关测试。git diff --check 通过。源树重建一致性本机未验证，不改变项目验收阶段；未提交。

@@ -140,7 +140,8 @@
           "x": 881,
           "y": 4366
         },
-        "features": []
+        "features": [],
+        "country": "中立边陲"
       },
       {
         "id": "liuchao.location.wuyuan",
@@ -153,7 +154,8 @@
           "y": 4366
         },
         "features": [],
-        "region": "塞外"
+        "region": "塞外",
+        "country": "中立边陲"
       },
       {
         "id": "lcq.location.nanhuang_route",

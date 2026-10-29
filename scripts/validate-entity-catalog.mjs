@@ -55,6 +55,7 @@ export function variantIdentityErrors(entry,stageId,variant,identity){
 export function auditEntityCatalog(){
  const errors=[],byKind={};
  const identity=read('mod-kit/entity-catalog/validation.config.json').variantIdentity;
+ const locationCountries=read('mod-kit/entity-catalog/validation.config.json').locationCountries;
  const dangerTiers=read('mod-kit/game-numbers.qingyu.json').freeAction.dangerTiers;
  for(const [kind,plural] of [['item','items'],['skill','skills'],['technique','techniques'],['enemy','enemies'],['location','locations'],['faction','factions'],['ending','endings']]){
   const table=read(`mod-kit/entity-catalog/${plural}.json`),map=new Map();byKind[kind]=map;
@@ -62,6 +63,9 @@ export function auditEntityCatalog(){
    if(entry.definition.id!==entry.id||!entry.definition.name)errors.push(`invalid definition ${entry.id}`);
    if(entry.authoritySource!==`mod-kit/entity-catalog/${plural}.json`)errors.push(`wrong authority ${entry.id}`);
    if(kind==='location'&&entry.definition.dangerTier!==undefined&&!dangerTiers.includes(entry.definition.dangerTier))errors.push(`unknown dangerTier ${entry.id}: ${String(entry.definition.dangerTier)}（须在 game-numbers freeAction.dangerTiers 里）`);
+   if(kind==='location')for(const [stageId,def] of [['definition',entry.definition],...Object.entries(entry.stageVariants)]){
+    if(def.country!==undefined&&!locationCountries.includes(def.country))errors.push(`unknown country ${entry.id}@${stageId}: ${String(def.country)}`);
+   }
    for(const [stageId,v] of Object.entries(entry.stageVariants)){
     if(v.id!==entry.id)errors.push(`variant id drift ${entry.id}`);
     if(kind==='item')errors.push(...variantIdentityErrors(entry,stageId,v,identity));

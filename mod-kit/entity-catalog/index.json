@@ -19067,6 +19067,12 @@
     },
     {
       "kind": "location",
+      "id": "lcq.location.shuixiang_lou",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": []
+    },
+    {
+      "kind": "location",
       "id": "lcq.location.taiyi_temple",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []
@@ -19423,6 +19429,12 @@
     },
     {
       "kind": "location",
+      "id": "liuchao.location.linzhi",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": []
+    },
+    {
+      "kind": "location",
       "id": "liuchao.location.liuligu",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []
@@ -19736,6 +19748,12 @@
     {
       "kind": "location",
       "id": "lyg.location.qujiang",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": []
+    },
+    {
+      "kind": "location",
+      "id": "lyg.location.shangshenguan",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []
     },
@@ -24048,6 +24066,12 @@
     {
       "kind": "text",
       "id": "lineCompass.nanhuang.step.nh_yun_guide",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "lineCompass.nanhuang.step.nh_yun_guide_road",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

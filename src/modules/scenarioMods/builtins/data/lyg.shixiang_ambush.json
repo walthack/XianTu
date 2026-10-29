@@ -161,7 +161,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.qinglongsi",
@@ -173,7 +174,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.daciensi",
@@ -211,7 +213,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       {
         "id": "lyg.location.shuixiang_lou",
@@ -223,7 +226,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       }
     ],
     "characters": [

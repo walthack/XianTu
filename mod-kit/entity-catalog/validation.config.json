@@ -27,5 +27,18 @@
     "unlinkedGrantSeverity": "warn",
     "optionalEventIsEvidence": false,
     "appearanceScope": "tracked"
-  }
+  },
+  "locationCountries": [
+    "晋",
+    "宋",
+    "汉",
+    "唐",
+    "秦",
+    "南荒",
+    "太泉",
+    "昭南",
+    "域外",
+    "中立边陲",
+    "晴州"
+  ]
 }
