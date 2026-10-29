@@ -52,7 +52,11 @@
       <!-- 操作按钮 -->
       <div class="actions-section">
         <div class="action-group">
-          <button class="btn-primary" @click="startNewGame">
+          <button class="btn-primary" data-testid="liuchao-entry" @click="enterLiuchao">
+            <Sparkles :size="18" />
+            <span>入六朝</span>
+          </button>
+          <button v-if="showGenericStart" class="btn-primary" @click="startNewGame">
             <Sparkles :size="18" />
             <span>{{ $t('初入仙途') }}</span>
           </button>
@@ -87,6 +91,7 @@ import { getBuildInfo, formatVersionLabel, formatVersionDetail } from '@/modules
 import VideoBackground from '@/components/common/VideoBackground.vue';
 import { Sparkles, History, User, Check, Library, Orbit, Feather, Moon } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import { LIUCHAO_ENTRY_MOD_ID, showGenericStartEntry } from '@/modules/scenarioMods/liuchaoEntry';
 
 const buildInfo = getBuildInfo();
 const versionLabel = formatVersionLabel(buildInfo);
@@ -101,9 +106,16 @@ const emit = defineEmits<{
 }>();
 
 const router = useRouter();
+// 「初入仙途」显示开关（ui.modeSelection.showGenericStart，默认 false）：关时首页主按钮只有「入六朝」
+const showGenericStart = showGenericStartEntry();
 
 const startNewGame = () => {
   emit('start-creation', 'single');
+};
+
+// 入六朝：直接以内置剧本模组进创角，CharacterCreation 读 query mod 跳到第 7 步预览
+const enterLiuchao = () => {
+  router.push({ path: '/creation', query: { mod: LIUCHAO_ENTRY_MOD_ID } });
 };
 
 const enterCharacterSelection = async () => {

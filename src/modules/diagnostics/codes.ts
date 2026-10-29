@@ -121,6 +121,7 @@ export const ERROR_CODES = {
   'LCQ-PCK-003': spec('warn', 'scenarioMods', '剧情模组校验未通过'),
   'LCQ-PCK-004': spec('warn', 'scenarioMods', '固定结局的来路分支句缺失，本次只显示通用正文'),
   'LCQ-PCK-005': spec('warn', 'scenarioMods', '线入口／当前线卡文案键缺失，本次用兜底或不出该句'),
+  'LCQ-PCK-006': spec('warn', 'scenarioMods', '创角链接指定的剧本模组不存在（?mod=），留在第 1 步正常创角'),
 
   'LCQ-NAR-001': spec('info', 'narrativeSource', '叙事来源：模型生成了一段玩家可见正文（记来源与全文）'),
   'LCQ-NAR-002': spec('warn', 'narrativeSource', '叙事正文中文里夹拉丁单词（只记录，不改写正文）'),

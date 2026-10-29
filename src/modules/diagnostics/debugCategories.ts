@@ -65,7 +65,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'init', label: '开局与角色创建',
     paths: [
-      'services/initialization/', 'services/characterInitialization.ts', 'services/offlineInitialization.ts', ...sm('strictInitializer.ts', 'expandInitializer.ts', 'genericWorldEntry.ts'),
+      'services/initialization/', 'services/characterInitialization.ts', 'services/offlineInitialization.ts', ...sm('strictInitializer.ts', 'expandInitializer.ts', 'genericWorldEntry.ts', 'liuchaoEntry.ts'),
       'utils/initialGenerationPolicy.ts', 'components/character-creation/', 'views/CharacterCreation.vue', 'stores/characterCreationStore.ts',
     ],
   },

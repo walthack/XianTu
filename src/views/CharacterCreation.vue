@@ -109,12 +109,15 @@ import Step5_TalentSelection from '../components/character-creation/Step5_Talent
 import Step6_AttributeAllocation from '../components/character-creation/Step6_AttributeAllocation.vue'
 import Step7_Preview from '../components/character-creation/Step7_Preview.vue'
 import { toast } from '../utils/toast'
-import { onMounted, onUnmounted, computed, nextTick } from 'vue';
+import { onMounted, onUnmounted, computed, nextTick, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { getCurrentCharacterName } from '../utils/tavern';
 import { debugLog } from '@/modules/diagnostics/debugLog';
 import { useI18n } from '../i18n';
 import type { CharacterPreset } from '@/utils/presetManager';
 import { showGenericWorldEntries } from '@/modules/scenarioMods/genericWorldEntry';
+import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
+import { logEvent } from '@/modules/diagnostics/log';
 
 
 const props = defineProps<{
@@ -128,6 +131,9 @@ const store = useCharacterCreationStore();
 const { t } = useI18n();
 // 普通世界入口开关（ui.worldSelection.showGenericWorlds）：关时隐藏保存/加载预设（预设只服务普通世界开局）
 const showGenericWorlds = showGenericWorldEntries();
+const route = useRoute();
+// 经 ?mod=（首页「入六朝」）直入第 7 步时为 true：返回直接回首页，不退回第 6 步
+const enteredViaModQuery = ref(false);
 // 使用 store 中的 isCreating 状态，不再使用本地 ref
 
 type PresetGender = NonNullable<CharacterPreset['data']['gender']>;
@@ -165,6 +171,20 @@ onMounted(async () => {
   } catch (error) {
     console.error('【角色创建】获取角色名字时出错:', error);
     store.characterPayload.character_name = '无名者';
+  }
+
+  // 3. 带 ?mod= 进来（首页「入六朝」）：按 id 取内置剧本模组（不看模组库 enabled），直接到第 7 步预览
+  const modId = typeof route.query.mod === 'string' ? route.query.mod : '';
+  if (modId) {
+    const mod = BUILTIN_SCENARIO_MODS.find(item => item.manifest.id === modId);
+    if (mod) {
+      store.selectScenarioMod(mod);
+      store.goToStep(store.totalSteps);
+      enteredViaModQuery.value = true;
+    } else {
+      logEvent({ code: 'LCQ-PCK-006', msg: `创角链接指定的剧本模组 ${modId} 不存在`, detail: { modId } });
+      toast.error(`找不到剧本模组「${modId}」，请在第一步重新选择`);
+    }
   }
 });
 
@@ -208,7 +228,9 @@ const characterDataForPreset = computed(() => ({
 }))
 
 const handleBack = () => {
-  if (store.currentStep > 1) {
+  if (enteredViaModQuery.value && store.currentStep === store.totalSteps) {
+    props.onBack();
+  } else if (store.currentStep > 1) {
     store.prevStep()
   } else {
     props.onBack();
