@@ -29,3 +29,7 @@
 生成：`node scripts/build-entity-index.mjs`；`node scripts/project-builtin-location-countries.mjs` 复用 `projectLocationCountries`，在缺源树的副本只刷新已发布地点国别与 manifest 内容哈希。完整源树仍由 `sync-builtin-mods.mjs` 经 `canon-authority-overlay.mjs` 调用同一投影。overlay 无须手改。
 
 验证结果见 PROJECT-STATUS.md 的 COUNTRY-20261029 记录。未进行浏览器/真人验收；新增地点无阶段挂载。未提交、推送或同步 NAS。
+
+## 2026-10-30 补齐
+
+用户裁定剩余10处：蚁丘迷窟=太泉；阳禄门院废弃客栈=唐；歧山、涿光=秦；光明观、泊陵=宋；秘境荒野=汉；草原、兽蛮人营地=中立边陲；白龍江=南荒。光明观堂不变，白龙江口不拆分，描述未改。上表清单已全部落地，现无空白国别。overlay op.to 已同步重投影。

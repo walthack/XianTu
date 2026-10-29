@@ -1135,7 +1135,8 @@
           "y": 6706
         },
         "features": [],
-        "region": "海上"
+        "region": "海上",
+        "country": "宋"
       },
       {
         "id": "liuchao.location.yiyang",
@@ -1190,7 +1191,8 @@
           "y": 7162
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "南荒"
       },
       {
         "id": "liuchao.location.longchi",
@@ -1383,7 +1385,8 @@
           "x": 4589,
           "y": 2148
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       {
         "id": "liuchao.location.zhuoguang",
@@ -1394,7 +1397,8 @@
           "x": 4803,
           "y": 584
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       {
         "id": "liuchao.location.qingyuan_jin",

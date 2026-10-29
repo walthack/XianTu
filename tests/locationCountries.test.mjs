@@ -16,8 +16,9 @@ test('明确裁定和五原子地点同步各阶段，南荒商路仍南荒',()=
  assert.equal(country('lcq.location.nanhuang_route'),'南荒');
  for(const id of ['roman_camp','macedon_camp'])assert.equal(country('lcq.location.'+id),'域外');
 });
-test('未定地点精确保留空白',()=>{
- assert.deepEqual(entries.filter(e=>!e.definition.country).map(e=>e.id).sort(),['liuchao.location.guang_ming_guan','lcq.location.beast_camp','liuchao.location.qishan','liuchao.location.boling','liuchao.location.zhuoguang','liuchao.location.bailuojiang','liuchao.location.mijing_wilderness','lcq.location.grassland','lyl.location.ant_hill','lyg.location.yanglu_menyuan'].sort());
+test('全部地点已裁定国别（2026-10-30 补齐最后10处）',()=>{
+ assert.deepEqual(entries.filter(e=>!e.definition.country).map(e=>e.id),[]);
+ for(const [id,c] of Object.entries({'lyl.location.ant_hill':'太泉','lyg.location.yanglu_menyuan':'唐','liuchao.location.qishan':'秦','liuchao.location.zhuoguang':'秦','liuchao.location.guang_ming_guan':'宋','liuchao.location.boling':'宋','liuchao.location.mijing_wilderness':'汉','lcq.location.grassland':'中立边陲','lcq.location.beast_camp':'中立边陲','liuchao.location.bailuojiang':'南荒'})){const e=entries.find(x=>x.id===id);for(const d of [e.definition,...Object.values(e.stageVariants||{})])assert.equal(d.country,c,id);}
 });
 test('国别投影涵盖所有已发布地点并幂等；未定不推断',()=>{
  const {ids}=read('src/modules/scenarioMods/builtins/manifest.json');

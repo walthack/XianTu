@@ -3602,7 +3602,8 @@
           "x": 8925,
           "y": 6374
         },
-        "features": []
+        "features": [],
+        "country": "宋"
       },
       "stageVariants": {
         "lcq.stage_04": {
@@ -3616,7 +3617,8 @@
             "x": 8925,
             "y": 6374
           },
-          "features": []
+          "features": [],
+          "country": "宋"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -3822,7 +3824,8 @@
           "x": 881,
           "y": 4366
         },
-        "features": []
+        "features": [],
+        "country": "中立边陲"
       },
       "stageVariants": {
         "lcq.stage_02": {
@@ -3836,7 +3839,8 @@
             "x": 881,
             "y": 4366
           },
-          "features": []
+          "features": [],
+          "country": "中立边陲"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -13632,7 +13636,8 @@
           "x": 4589,
           "y": 2148
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       "stageVariants": {
         "lcq.stage_01": {
@@ -13644,7 +13649,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_02": {
           "id": "liuchao.location.qishan",
@@ -13655,7 +13661,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_03b_snake_flower_bridge": {
           "id": "liuchao.location.qishan",
@@ -13666,7 +13673,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_04": {
           "id": "liuchao.location.qishan",
@@ -13677,7 +13685,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_04b_lingfei_baiyi_crisis": {
           "id": "liuchao.location.qishan",
@@ -13688,7 +13697,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_05b": {
           "id": "liuchao.location.qishan",
@@ -13699,7 +13709,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_07_qingyuan_jiankang": {
           "id": "liuchao.location.qishan",
@@ -13710,7 +13721,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_08_jiankang_coup": {
           "id": "liuchao.location.qishan",
@@ -13721,7 +13733,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_09_trade_and_escape": {
           "id": "liuchao.location.qishan",
@@ -13732,7 +13745,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_10_jiangzhou_shadow_war": {
           "id": "liuchao.location.qishan",
@@ -13743,7 +13757,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_11_lieshan_battle": {
           "id": "liuchao.location.qishan",
@@ -13754,7 +13769,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_12_jiangzhou_counterwar": {
           "id": "liuchao.location.qishan",
@@ -13765,7 +13781,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.buddhist_conspiracy": {
           "id": "liuchao.location.qishan",
@@ -13776,7 +13793,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.changgan_begins": {
           "id": "liuchao.location.qishan",
@@ -13787,7 +13805,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.changgan_interlude": {
           "id": "liuchao.location.qishan",
@@ -13798,7 +13817,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.dingtao_beijing": {
           "id": "liuchao.location.qishan",
@@ -13809,7 +13829,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.ganlu_aftershock": {
           "id": "liuchao.location.qishan",
@@ -13820,7 +13841,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.han_succession": {
           "id": "liuchao.location.qishan",
@@ -13831,7 +13853,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.liangzhou_league": {
           "id": "liuchao.location.qishan",
@@ -13842,7 +13865,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.mijing_rumen": {
           "id": "liuchao.location.qishan",
@@ -13853,7 +13877,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.shituolin_endgame": {
           "id": "liuchao.location.qishan",
@@ -13864,7 +13889,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.han_palace_endgame": {
           "id": "liuchao.location.qishan",
@@ -13875,7 +13901,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.jiangzhou_retreat": {
           "id": "liuchao.location.qishan",
@@ -13886,7 +13913,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.lin_an_bridge": {
           "id": "liuchao.location.qishan",
@@ -13897,7 +13925,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.luoyang_cloud_secret": {
           "id": "liuchao.location.qishan",
@@ -13908,7 +13937,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.luoyang_coup": {
           "id": "liuchao.location.qishan",
@@ -13919,7 +13949,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.taiquan_afterfall": {
           "id": "liuchao.location.qishan",
@@ -13930,7 +13961,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.taiquan_core_conflict": {
           "id": "liuchao.location.qishan",
@@ -13941,7 +13973,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.taiquan_sacred_fruit": {
           "id": "liuchao.location.qishan",
@@ -13952,7 +13985,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.xiaoyingzhou_blacksea_trap": {
           "id": "liuchao.location.qishan",
@@ -13963,7 +13997,8 @@
             "x": 4589,
             "y": 2148
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -15106,7 +15141,8 @@
           "y": 6706
         },
         "features": [],
-        "region": "海上"
+        "region": "海上",
+        "country": "宋"
       },
       "stageVariants": {
         "lcq.stage_01": {
@@ -15120,7 +15156,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_02": {
           "id": "liuchao.location.boling",
@@ -15133,7 +15170,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_03b_snake_flower_bridge": {
           "id": "liuchao.location.boling",
@@ -15146,7 +15184,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_04": {
           "id": "liuchao.location.boling",
@@ -15159,7 +15198,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_04b_lingfei_baiyi_crisis": {
           "id": "liuchao.location.boling",
@@ -15172,7 +15212,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_05b": {
           "id": "liuchao.location.boling",
@@ -15185,7 +15226,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_07_qingyuan_jiankang": {
           "id": "liuchao.location.boling",
@@ -15198,7 +15240,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_08_jiankang_coup": {
           "id": "liuchao.location.boling",
@@ -15211,7 +15254,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_09_trade_and_escape": {
           "id": "liuchao.location.boling",
@@ -15224,7 +15268,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_10_jiangzhou_shadow_war": {
           "id": "liuchao.location.boling",
@@ -15237,7 +15282,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_11_lieshan_battle": {
           "id": "liuchao.location.boling",
@@ -15250,7 +15296,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lcq.stage_12_jiangzhou_counterwar": {
           "id": "liuchao.location.boling",
@@ -15263,7 +15310,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.buddhist_conspiracy": {
           "id": "liuchao.location.boling",
@@ -15276,7 +15324,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.changgan_begins": {
           "id": "liuchao.location.boling",
@@ -15289,7 +15338,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.changgan_interlude": {
           "id": "liuchao.location.boling",
@@ -15302,7 +15352,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.dingtao_beijing": {
           "id": "liuchao.location.boling",
@@ -15315,7 +15366,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.ganlu_aftershock": {
           "id": "liuchao.location.boling",
@@ -15328,7 +15380,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.han_succession": {
           "id": "liuchao.location.boling",
@@ -15341,7 +15394,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.liangzhou_league": {
           "id": "liuchao.location.boling",
@@ -15354,7 +15408,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.mijing_rumen": {
           "id": "liuchao.location.boling",
@@ -15367,7 +15422,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyg.shituolin_endgame": {
           "id": "liuchao.location.boling",
@@ -15380,7 +15436,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.han_palace_endgame": {
           "id": "liuchao.location.boling",
@@ -15393,7 +15450,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.jiangzhou_retreat": {
           "id": "liuchao.location.boling",
@@ -15406,7 +15464,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.lin_an_bridge": {
           "id": "liuchao.location.boling",
@@ -15419,7 +15478,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.luoyang_cloud_secret": {
           "id": "liuchao.location.boling",
@@ -15432,7 +15492,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.luoyang_coup": {
           "id": "liuchao.location.boling",
@@ -15445,7 +15506,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.taiquan_afterfall": {
           "id": "liuchao.location.boling",
@@ -15458,7 +15520,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.taiquan_core_conflict": {
           "id": "liuchao.location.boling",
@@ -15471,7 +15534,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.taiquan_sacred_fruit": {
           "id": "liuchao.location.boling",
@@ -15484,7 +15548,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         },
         "lyl.xiaoyingzhou_blacksea_trap": {
           "id": "liuchao.location.boling",
@@ -15497,7 +15562,8 @@
             "y": 6706
           },
           "features": [],
-          "region": "海上"
+          "region": "海上",
+          "country": "宋"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -16673,7 +16739,8 @@
           "x": 4803,
           "y": 584
         },
-        "features": []
+        "features": [],
+        "country": "秦"
       },
       "stageVariants": {
         "lcq.stage_01": {
@@ -16685,7 +16752,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_02": {
           "id": "liuchao.location.zhuoguang",
@@ -16696,7 +16764,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_03b_snake_flower_bridge": {
           "id": "liuchao.location.zhuoguang",
@@ -16707,7 +16776,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_04": {
           "id": "liuchao.location.zhuoguang",
@@ -16718,7 +16788,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_04b_lingfei_baiyi_crisis": {
           "id": "liuchao.location.zhuoguang",
@@ -16729,7 +16800,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_05b": {
           "id": "liuchao.location.zhuoguang",
@@ -16740,7 +16812,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_07_qingyuan_jiankang": {
           "id": "liuchao.location.zhuoguang",
@@ -16751,7 +16824,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_08_jiankang_coup": {
           "id": "liuchao.location.zhuoguang",
@@ -16762,7 +16836,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_09_trade_and_escape": {
           "id": "liuchao.location.zhuoguang",
@@ -16773,7 +16848,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_10_jiangzhou_shadow_war": {
           "id": "liuchao.location.zhuoguang",
@@ -16784,7 +16860,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_11_lieshan_battle": {
           "id": "liuchao.location.zhuoguang",
@@ -16795,7 +16872,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lcq.stage_12_jiangzhou_counterwar": {
           "id": "liuchao.location.zhuoguang",
@@ -16806,7 +16884,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.buddhist_conspiracy": {
           "id": "liuchao.location.zhuoguang",
@@ -16817,7 +16896,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.changgan_begins": {
           "id": "liuchao.location.zhuoguang",
@@ -16828,7 +16908,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.changgan_interlude": {
           "id": "liuchao.location.zhuoguang",
@@ -16839,7 +16920,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.dingtao_beijing": {
           "id": "liuchao.location.zhuoguang",
@@ -16850,7 +16932,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.ganlu_aftershock": {
           "id": "liuchao.location.zhuoguang",
@@ -16861,7 +16944,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.han_succession": {
           "id": "liuchao.location.zhuoguang",
@@ -16872,7 +16956,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.liangzhou_league": {
           "id": "liuchao.location.zhuoguang",
@@ -16883,7 +16968,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.mijing_rumen": {
           "id": "liuchao.location.zhuoguang",
@@ -16894,7 +16980,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyg.shituolin_endgame": {
           "id": "liuchao.location.zhuoguang",
@@ -16905,7 +16992,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.han_palace_endgame": {
           "id": "liuchao.location.zhuoguang",
@@ -16916,7 +17004,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.jiangzhou_retreat": {
           "id": "liuchao.location.zhuoguang",
@@ -16927,7 +17016,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.lin_an_bridge": {
           "id": "liuchao.location.zhuoguang",
@@ -16938,7 +17028,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.luoyang_cloud_secret": {
           "id": "liuchao.location.zhuoguang",
@@ -16949,7 +17040,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.luoyang_coup": {
           "id": "liuchao.location.zhuoguang",
@@ -16960,7 +17052,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.taiquan_afterfall": {
           "id": "liuchao.location.zhuoguang",
@@ -16971,7 +17064,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.taiquan_core_conflict": {
           "id": "liuchao.location.zhuoguang",
@@ -16982,7 +17076,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.taiquan_sacred_fruit": {
           "id": "liuchao.location.zhuoguang",
@@ -16993,7 +17088,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         },
         "lyl.xiaoyingzhou_blacksea_trap": {
           "id": "liuchao.location.zhuoguang",
@@ -17004,7 +17100,8 @@
             "x": 4803,
             "y": 584
           },
-          "features": []
+          "features": [],
+          "country": "秦"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -20036,7 +20133,8 @@
           "y": 7162
         },
         "features": [],
-        "region": "宋国"
+        "region": "宋国",
+        "country": "南荒"
       },
       "stageVariants": {
         "lcq.stage_01": {
@@ -20050,7 +20148,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_02": {
           "id": "liuchao.location.bailuojiang",
@@ -20063,7 +20162,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_03b_snake_flower_bridge": {
           "id": "liuchao.location.bailuojiang",
@@ -20076,7 +20176,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_04": {
           "id": "liuchao.location.bailuojiang",
@@ -20089,7 +20190,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_04b_lingfei_baiyi_crisis": {
           "id": "liuchao.location.bailuojiang",
@@ -20102,7 +20204,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_05b": {
           "id": "liuchao.location.bailuojiang",
@@ -20115,7 +20218,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_07_qingyuan_jiankang": {
           "id": "liuchao.location.bailuojiang",
@@ -20128,7 +20232,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_08_jiankang_coup": {
           "id": "liuchao.location.bailuojiang",
@@ -20141,7 +20246,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_09_trade_and_escape": {
           "id": "liuchao.location.bailuojiang",
@@ -20154,7 +20260,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_10_jiangzhou_shadow_war": {
           "id": "liuchao.location.bailuojiang",
@@ -20167,7 +20274,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_11_lieshan_battle": {
           "id": "liuchao.location.bailuojiang",
@@ -20180,7 +20288,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lcq.stage_12_jiangzhou_counterwar": {
           "id": "liuchao.location.bailuojiang",
@@ -20193,7 +20302,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.buddhist_conspiracy": {
           "id": "liuchao.location.bailuojiang",
@@ -20206,7 +20316,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.changgan_begins": {
           "id": "liuchao.location.bailuojiang",
@@ -20219,7 +20330,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.changgan_interlude": {
           "id": "liuchao.location.bailuojiang",
@@ -20232,7 +20344,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.dingtao_beijing": {
           "id": "liuchao.location.bailuojiang",
@@ -20245,7 +20358,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.ganlu_aftershock": {
           "id": "liuchao.location.bailuojiang",
@@ -20258,7 +20372,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.han_succession": {
           "id": "liuchao.location.bailuojiang",
@@ -20271,7 +20386,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.liangzhou_league": {
           "id": "liuchao.location.bailuojiang",
@@ -20284,7 +20400,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.mijing_rumen": {
           "id": "liuchao.location.bailuojiang",
@@ -20297,7 +20414,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyg.shituolin_endgame": {
           "id": "liuchao.location.bailuojiang",
@@ -20310,7 +20428,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.han_palace_endgame": {
           "id": "liuchao.location.bailuojiang",
@@ -20323,7 +20442,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.jiangzhou_retreat": {
           "id": "liuchao.location.bailuojiang",
@@ -20336,7 +20456,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.lin_an_bridge": {
           "id": "liuchao.location.bailuojiang",
@@ -20349,7 +20470,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.luoyang_cloud_secret": {
           "id": "liuchao.location.bailuojiang",
@@ -20362,7 +20484,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.luoyang_coup": {
           "id": "liuchao.location.bailuojiang",
@@ -20375,7 +20498,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.taiquan_afterfall": {
           "id": "liuchao.location.bailuojiang",
@@ -20388,7 +20512,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.taiquan_core_conflict": {
           "id": "liuchao.location.bailuojiang",
@@ -20401,7 +20526,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.taiquan_sacred_fruit": {
           "id": "liuchao.location.bailuojiang",
@@ -20414,7 +20540,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         },
         "lyl.xiaoyingzhou_blacksea_trap": {
           "id": "liuchao.location.bailuojiang",
@@ -20427,7 +20554,8 @@
             "y": 7162
           },
           "features": [],
-          "region": "宋国"
+          "region": "宋国",
+          "country": "南荒"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -21456,7 +21584,8 @@
           "x": 6838,
           "y": 3577
         },
-        "features": []
+        "features": [],
+        "country": "汉"
       },
       "stageVariants": {
         "lyg.mijing_rumen": {
@@ -21469,7 +21598,8 @@
             "x": 6838,
             "y": 3577
           },
-          "features": []
+          "features": [],
+          "country": "汉"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -24713,7 +24843,8 @@
           "x": 881,
           "y": 4366
         },
-        "features": []
+        "features": [],
+        "country": "中立边陲"
       },
       "stageVariants": {
         "lcq.stage_01": {
@@ -24726,7 +24857,8 @@
             "x": 881,
             "y": 4366
           },
-          "features": []
+          "features": [],
+          "country": "中立边陲"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -24747,7 +24879,8 @@
           "x": 7573,
           "y": 9083
         },
-        "features": []
+        "features": [],
+        "country": "太泉"
       },
       "stageVariants": {
         "lyl.taiquan_core_conflict": {
@@ -24760,7 +24893,8 @@
             "x": 7573,
             "y": 9083
           },
-          "features": []
+          "features": [],
+          "country": "太泉"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
@@ -26948,7 +27082,8 @@
           "x": 3159,
           "y": 2767
         },
-        "features": []
+        "features": [],
+        "country": "唐"
       },
       "stageVariants": {
         "lyg.ganlu_bian": {
@@ -26961,7 +27096,8 @@
             "x": 3159,
             "y": 2767
           },
-          "features": []
+          "features": [],
+          "country": "唐"
         }
       },
       "authoritySource": "mod-kit/entity-catalog/locations.json",
