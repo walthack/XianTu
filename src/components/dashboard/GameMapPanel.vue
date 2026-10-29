@@ -155,6 +155,7 @@
       </div>
       <div class="popup-content">
         <p class="location-type">{{ getLocationTypeName(selectedLocation.type) }}</p>
+        <p v-if="mapTravelNotice">{{ mapTravelNotice }}</p>
         <p class="location-desc">{{ selectedLocation.description || selectedLocation.描述 }}</p>
         <div v-if="selectedLocation.danger_level" class="location-detail">
           <strong>安全等级：</strong>{{ selectedLocation.danger_level }}
@@ -165,6 +166,7 @@
         <div v-if="selectedLocation.controlled_by" class="location-detail">
           <strong>控制势力：</strong>{{ selectedLocation.controlled_by }}
         </div>
+        <button class="enter-region-btn" :disabled="mapTravelBusy || mapTravelUi.isAIProcessing" @click="travelToSelectedLocation">前往此地</button>
         <!-- 进入区域地图 -->
         <button
           class="enter-region-btn"
@@ -388,6 +390,8 @@ import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Users, ChevronUp, ChevronDown, Plus, Menu } from 'lucide-vue-next';
 import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
+import { useUIStore } from '@/stores/uiStore';
+import { selectMapTravel, settleMapTravel } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
 import { EnhancedWorldGenerator, generateRealmMap } from '@/utils/worldGeneration/enhancedWorldGenerator';
@@ -402,6 +406,21 @@ import UnmappedLocationsPanel from './UnmappedLocationsPanel.vue';
 import type { UnmappedNpc } from './UnmappedLocationsPanel.vue';
 
 const gameStateStore = useGameStateStore();
+const mapTravelNotice = ref('');
+const mapTravelUi = useUIStore();
+const mapTravelBusy = ref(false);
+const travelToSelectedLocation = async () => {
+  if (mapTravelBusy.value || mapTravelUi.isAIProcessing) return;
+  const source = gameStateStore.toSaveData();
+  if (!source || !selectedLocation.value) return;
+  const save = structuredClone(source);
+  const selection = selectMapTravel(save, String(selectedLocation.value.id || ''));
+  if (!selection || !settleMapTravel(save, selection)) { mapTravelNotice.value = '此处暂无已开放且登记路程的路线，不能前往。'; return; }
+  mapTravelBusy.value = true;
+  try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); mapTravelNotice.value = '已按地图路线抵达。'; }
+  finally { mapTravelBusy.value = false; }
+};
+
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const mapContainerRef = ref<HTMLDivElement | null>(null);
 const mapManager = ref<GameMapManager | null>(null);

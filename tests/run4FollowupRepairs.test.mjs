@@ -725,10 +725,10 @@ test('locally accepted module turn advances the displayed clock once; replayed r
   const response = { text: receipt.text, moduleReceipt: receipt, mid_term_memory: '', tavern_commands: [], action_options: [] };
   const options = { userAction: '我观察现场。', playerIntentText: '我观察现场。', narrativeAuthority: 'local_contract' };
   const result = await AIBidirectionalSystem.processGmResponse(structuredClone(response), structuredClone(save), false, () => false, options);
-  assert.equal(result.saveData.元数据.时间.分钟, 1);
+  assert.equal(result.saveData.元数据.时间.分钟, 15);
   appendModuleReceipt(result.saveData, receipt);
   const replay = await AIBidirectionalSystem.processGmResponse(structuredClone(response), result.saveData, false, () => false, options);
-  assert.equal(replay.saveData.元数据.时间.分钟, 1);
+  assert.equal(replay.saveData.元数据.时间.分钟, 15);
   const failed = await AIBidirectionalSystem.processGmResponse({ ...structuredClone(response), generationError: { code: 'DEMO_MODULE_FAILED', message: 'failed' } }, structuredClone(save), false, () => false, options);
   assert.equal(failed.saveData.元数据.时间.分钟, 0);
 });

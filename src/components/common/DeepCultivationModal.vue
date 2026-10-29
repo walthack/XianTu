@@ -60,8 +60,8 @@
             <input
               v-model.number="selectedDays"
               type="number"
-              :min="1"
-              :max="3650"
+              ::min="actionTimeConfig().cultivation.minDays"
+              ::max="actionTimeConfig().cultivation.maxDays"
               :step="1"
               class="days-input"
               :placeholder="$t('输入天数')"
@@ -99,6 +99,7 @@
 </template>
 
 <script setup lang="ts">
+import { actionTimeConfig } from '@/modules/scenarioMods/actionTime';
 import { ref, computed, watch } from 'vue';
 import { X } from 'lucide-vue-next';
 import type { TechniqueItem } from '@/types/game';
@@ -135,7 +136,7 @@ const presetDays = [
 ];
 
 const isValidDays = computed(() => {
-  return selectedDays.value >= 1 && selectedDays.value <= 3650;
+  return Number.isInteger(selectedDays.value) && selectedDays.value >= actionTimeConfig().cultivation.minDays && selectedDays.value <= actionTimeConfig().cultivation.maxDays;
 });
 
 const getTechniqueQualityClass = computed(() => {

@@ -1,3 +1,5 @@
+import { settleActionTime } from '@/modules/scenarioMods/actionTime';
+import { readModuleActionTime } from '@/modules/scenarioMods/modularTurn';
 import { pilotOptionsPrompt, pilotOptionContext, selectPilotOptions, tagPilotOptions } from '@/modules/scenarioMods/legacyPilotActionOptions';
 import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
 import { settledStepScene } from '@/modules/scenarioMods/settledStepScene';
@@ -304,6 +306,8 @@ function applyPlainObjectPatchReplacingArrays(target: PlainObject, patch: PlainO
 }
 
 export interface ProcessOptions {
+  cultivationSelections?: import('@/modules/scenarioMods/actionTime').CultivationSelection[];
+  timeActionId?: string;
   playerIntentText?: string;
   freeTextStatusResolution?: FreeTextStatusResolution;
   onStreamChunk?: (chunk: string) => void;
@@ -870,7 +874,7 @@ class AIBidirectionalSystemClass {
       });
       if (shouldAbort()) throw new Error('请求已被取消');
       try {
-        const text = endingText ? endingBridge(raw) : readModuleNarrative(raw);
+        const text = endingText ? endingBridge(raw) : readModuleNarrative(raw, preview?.settled || saveData);
         if (!endingText) {
           validateModuleCastNarrative(text, absentCast, remembered, requiredCast);
           const sceneConflicts = closedSceneNarrativeProblems(saveData,text);
@@ -897,7 +901,7 @@ class AIBidirectionalSystemClass {
         const check = compiled && !endingText ? validateLegacyVisibleNarrative(text, compiled.packet, { partial: true, userInput: playerLine, storyPrompt: compiled.storyPrompt, allowItemObservation: true }) : { valid: true, issues: [] };
         if (!endingText && moduleOnly) assertPlayerAgency(text, userMessage, compiled?.packet.present || []);
         if (!endingText && (!check.valid || !text.includes('你'))) throw new Error('模块正文检查失败：' + check.issues.join('；'));
-        return { text, route };
+        return { text, route, action_time: readModuleActionTime(raw) };
       } catch (error) {
         // 已成功取得正文之后的所有校验失败都是拒稿；传输失败不进入这里。
         throw error instanceof ModuleNarrativeGuardError ? error : new ModuleNarrativeGuardError(String((error as Error)?.message || error));
@@ -913,8 +917,8 @@ class AIBidirectionalSystemClass {
       isFatal: error => shouldAbort() || (error as any)?.name === 'AbortError' || error instanceof QingyuTurnLongRequestBudgetError,
     });
     if (outcome.ok) {
-      const { text, route } = outcome.value;
-      return { text, mid_term_memory: '', tavern_commands: [], action_options: [],
+      const { text, route, action_time } = outcome.value;
+      return { text, action_time, mid_term_memory: '', tavern_commands: [], action_options: [],
         moduleReceipt: { id: generationId, path: 'modular', route, eventId,
           promptChars: system.length + playerLine.length, foregroundMs: Date.now() - started,
           text, guard: ledgerFindings, memory: { status: 'pending' } } };
@@ -1908,6 +1912,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           userAction: (userMessage && String(userMessage).trim()) || '继续当前活动',
           freeTextStatusResolution: options?.freeTextStatusResolution,
           playerIntentText: options?.playerIntentText,
+          ...{ cultivationSelections: options?.cultivationSelections, timeActionId: options?.timeActionId || generationId },
           opportunityAction: options?.opportunityAction,
           eventAction: options?.eventAction,
           openWorldAction: options?.openWorldAction,
@@ -2733,13 +2738,11 @@ ${step1Text}
       if (!Array.isArray((saveData as any).系统.历史.叙事)) (saveData as any).系统.历史.叙事 = [];
     }
 
-    if (response.moduleReceipt && !response.generationError && (saveData as any).元数据?.时间
-      && !getModuleReceipts(saveData).some(receipt => receipt.id === response.moduleReceipt!.id)
+    if (!response.moduleReceipt || (!getModuleReceipts(saveData).some(receipt => receipt.id === response.moduleReceipt!.id)
       && (eventProgress?.attempted || (openWorldProgress?.settled && !openWorldProgress.idempotent)
-        || (!options?.eventAction && !options?.openWorldAction))) {
+        || (!options?.eventAction && !options?.openWorldAction)))) {
       const currentCard = stepScene((saveData as any).世界?.状态?.剧本模组, eventProgress?.eventId, eventProgress?.actionId);
-      const cost = isStepSceneStage((saveData as any).世界?.状态?.剧本模组?.modId) ? (currentCard?.dayPart ? 0 : stepSceneMinutesPerBeat()) : Math.max(1, Number(options?.eventAction?.timeCost || options?.openWorldAction?.timeCost) || 1);
-      const advanced = advanceClock(saveData, { minutes: cost }, 'module_turn');
+      const advanced = settleActionTime(saveData, response, options, currentCard, isStepSceneStage((saveData as any).世界?.状态?.剧本模组?.modId), isInitialization);
       if (advanced) changes.push({ key: '元数据.时间', action: 'set', oldValue: advanced.oldValue, newValue: advanced.newValue });
     }
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);

@@ -1,3 +1,4 @@
+import { migrateCalendar } from './calendarMigration';
 import type { SaveData, GameTime, EventSystem } from '@/types/game';
 import type { SaveDataV3 } from '@/types/saveSchemaV3';
 import { normalizeBackpackCurrencies } from '@/utils/currencySystem';
@@ -559,6 +560,7 @@ export function migrateSaveData(
     current = step.fn(current, report);
     version = step.to;
   }
+  migrateCalendar(current);
   return { migrated: current, report, fromVersion, toVersion: version };
 }
 

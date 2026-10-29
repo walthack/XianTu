@@ -91,9 +91,12 @@ export function syncMaigu(save: SaveData): string[] {
       if (now - clock.withdrawalAt >= cfg.addiction.quitMinutes) { quitAddiction(save, actorId, cfg); added.push(`-${actorId}:${cfg.addictionStatus}`); }
       continue;
     }
+    if (now - clock.lastDoseAt >= cfg.addiction.cravingMinutes + cfg.addiction.quitMinutes) {
+      quitAddiction(save, actorId, cfg); added.push(`-${actorId}:${cfg.addictionStatus}`); continue;
+    }
     if (now - clock.lastDoseAt >= cfg.addiction.cravingMinutes) {
       if (applyActorStatus(save, actorId, cfg.withdrawalStatus, { sourceId: WITHDRAWAL_SOURCE, minutes: cfg.addiction.withdrawalMinutes }).ok) {
-        clock.withdrawal = true; clock.withdrawalAt = now; added.push(`${actorId}:${cfg.withdrawalStatus}`);
+        clock.withdrawal = true; clock.withdrawalAt = clock.lastDoseAt + cfg.addiction.cravingMinutes; added.push(`${actorId}:${cfg.withdrawalStatus}`);
       }
     }
   }

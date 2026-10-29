@@ -1,3 +1,5 @@
+import { settleTime } from './actionTime';
+import { calendarConfig } from '@/utils/time';
 import {CONTENT_PACKS} from '../contentPacks';
 import {applyStoryLevel} from './levelProgression';
 
@@ -130,7 +132,14 @@ export function isNanhuangSceneStage(id?: string): boolean { return isStepSceneS
 export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: string, actionId: string, sceneOverride?: Partial<ScenarioStepScene>): void {
   const base=stepScene(runtime,eventId,actionId);
   const scene=base && sceneOverride ? {...base,...sceneOverride} : base;
-  if (!scene || !isNanhuangSceneStage(runtime.modId)) return;
+  if (!scene) return;
+  if (scene.timeAdvance && !(runtime.completedEventIds || []).includes(eventId)) {
+    const jump = scene.timeAdvance, c = calendarConfig();
+    if (jump.kind !== 'calendarYears' || !Number.isSafeInteger(jump.years) || jump.years <= 0) throw new Error('LCQ-SAV-039');
+    settleTime(save, `author:${eventId}::${actionId}`, jump.years * c.daysPerMonth * c.monthsPerYear * 1440, 'author');
+    (runtime as any).authorTimeConsumedAtTurn = runtime.worldTurn;
+  }
+  if (!isNanhuangSceneStage(runtime.modId)) return;
   const ledger: SceneLedger = runtime.sceneLedger ||= { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [] };
   const receipt = `${eventId}::${actionId}`;
   if (ledger.receipts.includes(receipt)) return;
@@ -159,14 +168,7 @@ export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: stri
     (ledger.cultivation ||= {})['lcq.technique.jiuyang'] = { stage: scene.ledgerEffects.jiuyang, eventId, actionId };
   }
   ledger.lastBeat = { eventId, actionId, facts: scene.fixedFacts?.length ? [...scene.fixedFacts] : [scene.fallbackText || scene.previousBeat || '本步已经落账。'] };
-  if (scene.dayPart && (save as any).元数据?.时间) {
-    const hours: Record<string, number> = { 清晨: 6, 上午: 9, 白天: 12, 黄昏: 18, 傍晚: 18, 夜: 21, 深夜: 0, 正午: 12 };
-    const time = (save as any).元数据.时间;
-    const target = hours[scene.dayPart] * 60;
-    const current = (Number(time.小时) || 0) * 60 + (Number(time.分钟) || 0);
-    const samePart = sceneDayPart(time) === scene.dayPart || (scene.dayPart === '正午' && Number(time.小时) === 12);
-    if (!samePart) advanceClock(save, { minutes: (target - current + 1440) % 1440 }, receipt);
-  }
+
 }
 
 /** 运行时事实摘要，缺字段的旧档按已有回执推导，不从模型文字反填。 */

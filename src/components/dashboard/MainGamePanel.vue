@@ -459,7 +459,7 @@
                 <button
                   v-for="timeOption in timeOptions"
                   :key="timeOption.value"
-                  @click="selectedTime = timeOption.value"
+                  @click="selectedTime = timeOption.value; customTime = 0"
                   class="time-btn"
                   :class="{ active: selectedTime === timeOption.value }"
                 >
@@ -471,8 +471,8 @@
                 <input
                   v-model.number="customTime"
                   type="number"
-                  min="1"
-                  max="365"
+                  :min="actionTimeConfig().cultivation.minDays"
+                  :max="actionTimeConfig().cultivation.maxDays"
                   class="time-input"
                 /> {{ t('天') }}
               </div>
@@ -510,6 +510,8 @@
 </template>
 
 <script setup lang="ts">
+import { mapPreparation } from '@/modules/scenarioMods/travel/mapTravel';
+import { actionTimeConfig } from '@/modules/scenarioMods/actionTime';
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
 import {canBreakthrough} from '@/modules/scenarioMods/levelProgression';
@@ -648,9 +650,10 @@ const currentNarrativeStateChanges = computed(() => {
 
 
 // 🔥 使用 uiStore 持久化输入框内容
+const selectedCultivationTime = ref<{ text: string; selection: import('@/modules/scenarioMods/actionTime').CultivationSelection } | null>(null);
 const inputText = computed({
   get: () => uiStore.userInputText,
-  set: (value: string) => { uiStore.userInputText = value; }
+  set: (value: string) => { if (value !== selectedCultivationTime.value?.text) selectedCultivationTime.value = null; uiStore.userInputText = value; }
 });
 const isInputFocused = ref(false);
 const pendingJudgement = ref<JudgementProposal | null>(null);
@@ -1626,6 +1629,9 @@ const confirmAction = () => {
 
   // 填充到输入框
   inputText.value = actionText;
+  if (selectedAction.value.timeRequired && selectedAction.value.type === 'cultivation') {
+    selectedCultivationTime.value = { text: actionText, selection: { kind: 'cultivation', days: customTime.value > 0 ? customTime.value : selectedTime.value, actionId: crypto.randomUUID() } };
+  }
 
   // 清理状态
   cancelAction();
@@ -1939,6 +1945,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // 剧情分支点：只接受已选中的选项原句；判定确认等后续执行沿用已选动作，不再拦。
   if (!isFollowUpExecution && branchDecision.value && !branchDecisionReady.value) {
     toast.info(`${BRANCH_DECISION_TITLE}：请从选项中选择一项后再发送`);
+    return;
+  }
+  const cultivationSelections = actionQueue.pendingActions.flatMap(a => a.cultivation ? [{ ...a.cultivation }] : []);
+  if (selectedCultivationTime.value?.text === inputText.value) cultivationSelections.push({ ...selectedCultivationTime.value.selection });
+  if (!cultivationSelections.length && (/(?:修炼|闭关|练功|打坐)/.test(inputText.value) || actionQueue.pendingActions.some(a => a.type === 'cultivate' && !a.cultivation)) && !/(?:不|别|停止|取消)(?:修炼|闭关|练功|打坐)/.test(inputText.value)) {
+    selectAction({ name: inputText.value, type: 'cultivation', description: '请选择本次修炼天数', timeRequired: true });
     return;
   }
   const actionQueueText = actionQueue.getActionPrompt();
@@ -2329,13 +2341,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     const labels = judgementPromptLabels(result), progressNote = cultivationProgressNote(result);
     finalUserMessage += `\n【本地判定已结算】判定ID=${result.id}；类型=${labels.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果档（只给你看）=${labels.outcome}；正典策略=${labels.canonPolicy}；${progressNote ? `修为=${progressNote}；` : ''}已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算' : ''}。${JUDGEMENT_RECEIPT_NO_COPY}；只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为${JUDGEMENT_CANON_POLICY_LABELS.route_process_only}，不得直接完成、作废或改写活动正典事件。\n`;
   }
+  const mapPrepSave = gameStateStore.toSaveData();
+  const mapPrep = mapPrepSave ? mapPreparation(mapPrepSave, userMessage) : undefined;
+  if (mapPrep) { finalUserMessage += '\n' + mapPrep; toast.info('跨国旅行请打开地图选择路线。'); }
   if (freeActionBlock) finalUserMessage += freeActionBlock;
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 
-  // 清空动作队列（动作已经添加到消息中）
-  if (actionQueueText) {
-    actionQueue.clearActions();
-  }
+  // 动作和所选天数在成功提交后才从队列移除。
 
   // 重置输入框高度
   nextTick(() => {
@@ -2375,6 +2387,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           console.log('[AI进度]', progress);
         },
         playerIntentText: userMessage,
+        cultivationSelections,
         freeTextStatusResolution,
         useStreaming: useStreaming.value,
         shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
@@ -2426,6 +2439,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         return;
       }
 
+      if (aiResponse?.transactionCommitted) { actionQueue.clearActions(); selectedCultivationTime.value = null; }
       if (aiResponse?.transactionCommitted && aiResponse.narrativeNotice) toast.warning(aiResponse.narrativeNotice);
 
       // 验证AI响应结构

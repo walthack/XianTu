@@ -10,6 +10,7 @@ export interface ScenarioModFaction {
 }
 
 export interface ScenarioModLocation {
+  country?: string;
   id: string;
   name: string;
   description?: string;

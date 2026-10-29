@@ -12,7 +12,7 @@ import { validateProposal } from '../plan';
 import { restoreSceneInjuries } from './injuries';
 import { fixedEndingNarrative, endingBridge, BATTLE_LOSS_ENDINGS, applyStepSceneLedger } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingPresentation } from '@/modules/scenarioMods/endingPresentation';
-import { advanceClock } from '@/modules/scenarioMods/travel/travelLedger';
+import { settleTime, actionTimeConfig } from '@/modules/scenarioMods/actionTime';
 import { applyPlayerChoice, beginScene, buildSceneBrief, closeScene, confirmAction, matchPlayerChoice, previewAction, renderResultLines, classifyByRules, resolveInputPolicy, route, appendInput, trackInfo, type Contract } from '../index';
 import { settleDownedAfterHostSync } from '../scene';
 import { sceneContractById, sceneContractForEvent, sceneContractSupportsAction } from '../contracts/registry';
@@ -200,7 +200,7 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   syncSceneStatuses(save,c,a.state);
   // 6ccb 真机 P0：气血本拍落账打到保底即当拍判负（结果行补一句，叙事与收场同拍）。
   if(settleDownedAfterHostSync(c,a.state,sceneContext(save,c))){confirmed.result.outcome=a.state.outcome;a.last.lines.push('你伤重倒下，这一战败了。');}
-  runtimeOf(save).worldTurn+=1;advanceClock(save,{minutes:1},'scene.'+c.meta.id);writeExt(save,ext);
+  runtimeOf(save).worldTurn+=1;writeExt(save,ext);
   await deps.persist(save);checkAbort(deps); // Dice checkpoint BEFORE any model request.
   const narration=await narrateBeat(c,a.state,confirmed.result,p.text,runtimeOf(save),deps.askNarrative);checkAbort(deps);
   a.last.text=narration.text;history(save)[a.narrativeIndex].content=[narration.text,...lines].join('\n\n');
@@ -215,7 +215,6 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
   if(closed.writeBack.violations.redLines.length || closed.writeBack.violations.afterState.length)throw new Error('场面红线校验未过，未推进剧情');
   a.state=closed.state;a.phase='closing';a.closing={text:renderRefs(closed.writeBack.closingText||closed.writeBack.memoryNote,runtimeOf(save)),outcome:closed.writeBack.outcome.kind,reason:closed.writeBack.outcome.reason};
   const written=applyWriteBack(save,c,a.state,closed.writeBack);writeExt(save,ext);
-  if(c.meta.id===F02_CONTRACT_ID&&closed.writeBack.outcome.kind==='win'){const row=closed.writeBack.finalStates.find(r=>r.party==='snake_man');if(row)recordShiweimoEnding(save,row.label);}
   if(closed.writeBack.outcome.endingId) {
     const id=closed.writeBack.outcome.endingId;
     runtimeOf(save).gameOver={endingId:id,title:id==='lcq.ending.fail.combat' ? combatLossTitle(c) : BATTLE_LOSS_ENDINGS.find(ending=>ending.endingId===id)?.title || '本局结束',facts:[a.closing.text],sourceEventId:a.eventId,atTurn:runtimeOf(save).worldTurn,presentation:endingPresentation({endingId:id,sourceEventId:a.eventId})};
@@ -235,6 +234,8 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     if(receiptScene)applyStepSceneLedger(save,runtimeOf(save),a.eventId,a.actionId,receiptScene as Parameters<typeof applyStepSceneLedger>[4]);
     appendHistory(save,[a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)].join('\n'));
   }
+  if (runtimeOf(save).travelLedger?.timeConsumedAtTurn !== runtimeOf(save).worldTurn) settleTime(save, `combat:${c.meta.id}:${a.state.seed}:${a.eventId}`, actionTimeConfig().minutes.moment, 'combat');
+  if(c.meta.id===F02_CONTRACT_ID&&closed.writeBack.outcome.kind==='win'){const row=closed.writeBack.finalStates.find(r=>r.party==='snake_man');if(row)recordShiweimoEnding(save,row.label);}
   ext.history.push({contractId:a.contractId,eventId:a.eventId,outcome:a.closing.outcome,endingId:closed.writeBack.outcome.endingId,beats:closed.writeBack.beats,memoryNote:renderRefs(closed.writeBack.memoryNote,runtimeOf(save)),state:cloneSave(a.state),inputLog:cloneSave(a.inputLog)});
   ext.active=null;writeExt(save,ext);const advanced=advanceScenarioRuntime(save).saveData;await deps.persist(advanced);
 }

@@ -23,7 +23,7 @@ test('chapter65 window survives normal rail chapter, can skip chat, travels once
  const free=await intents.resolveNaturalIntent({saveData:s,playerText:choices[0].actionText,generate:async()=>JSON.stringify({actionId:choices[0].actionId,source:choices[0].source,eventId:chat,evidence:choices[0].actionText,certainty:'high'})});assert.equal(free.kind,'matched');
  const chatted=structuredClone(s);assert.equal(rtm.recordStoryEventStructuredAction(chatted,choices[0]).completed,true);assert.equal(rtm.recordStoryEventStructuredAction(chatted,choices[0]).attempted,false);
  const next=rtm.getCurrentStoryEventActions(s).find(a=>a.actionId.startsWith('travel:'));assert.ok(next);assert.equal(rtm.recordStoryEventStructuredAction(s,next).attempted,true);
- assert.match(s.角色.位置.描述,/山谷/);assert.equal(r.travelLedger.lastCard.duration,'半日');
+ assert.match(s.角色.位置.描述,/山谷/);assert.equal(r.travelLedger.lastCard.duration,'0.5天路程');
  const count=r.travelLedger.state.travelReceipts.length;rtm.advanceScenarioRuntime(s);assert.equal(r.travelLedger.state.travelReceipts.length,count);
  r.flags['event.s04b_lingfei_baiyi_crisis_14.done']=true; r.completedEventIds.push(after);
  s=rtm.advanceScenarioRuntime(s).saveData; assert.equal(rt(s).activeEventIds.includes(chat),false);

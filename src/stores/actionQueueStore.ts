@@ -10,6 +10,7 @@ export interface GameAction {
   itemType?: string;
   description?: string;
   timestamp: number;
+  cultivation?: import('@/modules/scenarioMods/actionTime').CultivationSelection;
   [key: string]: unknown; // 使用 unknown 替代 any，更安全
 }
 
@@ -46,12 +47,6 @@ export const useActionQueueStore = defineStore('actionQueue', () => {
       );
     }
 
-    // 确保任何时候只有一个修炼操作
-    // 如果添加新的修炼操作，则移除所有旧的
-    if (newAction.type === 'cultivate') {
-      pendingActions.value = pendingActions.value.filter(a => a.type !== 'cultivate');
-    }
-
     // 确保任何时候只有一个感悟大道操作
     // 如果添加新的感悟操作，则移除所有旧的
     if (newAction.type === 'comprehend') {
@@ -61,7 +56,7 @@ export const useActionQueueStore = defineStore('actionQueue', () => {
 
     // 检查是否已经有相同类型的操作，如果有则替换
     const existingIndex = pendingActions.value.findIndex(
-      a => a.type === action.type && a.itemName === action.itemName && a.npcId === action.npcId
+      a => !newAction.cultivation && a.type === action.type && a.itemName === action.itemName && a.npcId === action.npcId
     );
     
     if (existingIndex !== -1) {
@@ -126,7 +121,7 @@ export const useActionQueueStore = defineStore('actionQueue', () => {
           if (action.itemType === '大道') {
             return `感悟了《${action.itemName}》大道`;
           } else {
-            return `修炼了《${action.itemName}》功法`;
+            return action.description || `修炼了《${action.itemName}》功法`;
           }
         case 'equip':
           return `装备了《${action.itemName}》${action.itemType || '法宝'}`;

@@ -1,3 +1,4 @@
+import { gameTimeMinutes } from '@/utils/time';
 import { splitRecordPath } from './ledger/affinityIdentity';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 /**
@@ -148,7 +149,7 @@ export function gameDayOf(time: { 年?: unknown; 月?: unknown; 日?: unknown } 
   const year = Number(time?.年) || 0;
   const month = Number(time?.月) || 1;
   const day = Number(time?.日) || 1;
-  return year * 360 + (month - 1) * 30 + day;
+  return Math.floor(gameTimeMinutes({ 年: year, 月: month, 日: day, 小时: 0, 分钟: 0 }) / 1440) + 1;
 }
 
 /**

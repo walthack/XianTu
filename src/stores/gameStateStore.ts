@@ -1,3 +1,5 @@
+import { calendarConfig, normalizeGameTime } from '@/utils/time';
+import { migrateCalendar } from '@/utils/calendarMigration';
 import {difficultySettings as readDifficultySettings} from '../modules/scenarioMods/levelProgression';
 import {migrateLegacyE01Ending} from '@/modules/scenarioMods/endingPresentation';
 import {assertEntitySaveFormat} from '@/modules/scenarioMods/entitySaveFormat';
@@ -341,6 +343,7 @@ export const useGameStateStore = defineStore('gameState', {
       assertEntitySaveFormat(saveData);
       migrateLegacyE01Ending((saveData as any).世界?.状态?.剧本模组?.gameOver);
       backfillRelationshipIds(saveData, (saveData as any).世界?.状态?.剧本模组?.canon?.characters);
+      migrateCalendar(saveData);
       const v3 = (isSaveDataV3(saveData) ? saveData : migrateSaveDataToLatest(saveData).migrated) as any;
 
       // 兼容修复：旧存档可能被 LLM 指令误扣至 0，但历史正文只写昏迷/受伤。
@@ -605,6 +608,7 @@ export const useGameStateStore = defineStore('gameState', {
         更新时间: nowIso,
         游戏时长秒: Number((this.saveMeta as any)?.游戏时长秒 ?? 0),
         时间: this.gameTime,
+        calendarVersion: calendarConfig().version,
       };
 
       const daoNormalized =
@@ -736,38 +740,8 @@ export const useGameStateStore = defineStore('gameState', {
      * @param minutes 要推进的分钟数
      */
     advanceGameTime(minutes: number) {
-      if (this.gameTime) {
-        // 实现时间推进逻辑，处理进位
-        this.gameTime.分钟 += minutes;
-
-        // 处理小时进位
-        if (this.gameTime.分钟 >= 60) {
-          const hours = Math.floor(this.gameTime.分钟 / 60);
-          this.gameTime.分钟 = this.gameTime.分钟 % 60;
-          this.gameTime.小时 += hours;
-        }
-
-        // 处理天进位（注意：GameTime 使用"日"而非"天"）
-        if (this.gameTime.小时 >= 24) {
-          const days = Math.floor(this.gameTime.小时 / 24);
-          this.gameTime.小时 = this.gameTime.小时 % 24;
-          this.gameTime.日 += days;
-        }
-
-        // 处理月进位（假设每月30天）
-        if (this.gameTime.日 > 30) {
-          const months = Math.floor((this.gameTime.日 - 1) / 30);
-          this.gameTime.日 = ((this.gameTime.日 - 1) % 30) + 1;
-          this.gameTime.月 += months;
-        }
-
-        // 处理年进位
-        if (this.gameTime.月 > 12) {
-          const years = Math.floor((this.gameTime.月 - 1) / 12);
-          this.gameTime.月 = ((this.gameTime.月 - 1) % 12) + 1;
-          this.gameTime.年 += years;
-        }
-      }
+      if (!Number.isFinite(minutes) || minutes < 0) throw new Error('invalid_game_time');
+      if (this.gameTime) this.gameTime = normalizeGameTime({ ...this.gameTime, 分钟: this.gameTime.分钟 + minutes });
     },
 
     /**

@@ -72,6 +72,19 @@ export const LINE_UNLOCK_KEYS: readonly string[] = ['note', 'minRealmLevel', 'mi
 
 /** 高频叶子：挡住缺字段 / 类型 / 粗范围；其余叶子仍靠补丁 typeof 对齐默认。 */
 export const FIELD_SPECS: readonly FieldSpec[] = [
+  { path: 'story.actionTime.prologueYears', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.actionTime.minutes.instant', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.actionTime.minutes.moment', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.actionTime.minutes.shichen', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.actionTime.minutes.halfDay', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.actionTime.days.oneDay', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.actionTime.severalDays.maxDays', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.actionTime.cultivation.minDays', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.actionTime.cultivation.maxDays', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.actionTime.calendar.daysPerMonth', kind: 'int', required: true, min: 30, max: 30, section: 'progress' },
+  { path: 'story.actionTime.calendar.monthsPerYear', kind: 'int', required: true, min: 12, max: 12, section: 'progress' },
+  { path: 'story.actionTime.calendar.version', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.actionTime.fallbackTier', kind: 'string', required: true, oneOf: ['片刻'], section: 'progress' },
   { path: 'aiRetry.reasoning.modelPattern', kind: 'string', required: true, section: 'runtime' },
   { path: 'aiRetry.reasoning.minMaxTokens', kind: 'int', required: true, min: 1, max: 384000, section: 'runtime' },
   { path: 'aiRetry.reasoning.tokenMultiplier', kind: 'int', required: true, min: 1, max: 16, section: 'runtime' },
@@ -229,6 +242,10 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
     if (spec.oneOf && typeof value === 'string' && !spec.oneOf.includes(value)) errors.push(`字段范围无效：${spec.path} 须为 ${spec.oneOf.join('/')} 之一：${value}`);
     if (spec.kind === 'array' && Array.isArray(value) && value.length === 0) errors.push(`字段范围无效：${spec.path} 不能为空数组`);
   }
+
+  const cultivationMin = atPath(tree, 'story.actionTime.cultivation.minDays');
+  const cultivationMax = atPath(tree, 'story.actionTime.cultivation.maxDays');
+  if (typeof cultivationMin === 'number' && typeof cultivationMax === 'number' && cultivationMin > cultivationMax) errors.push('story.actionTime.cultivation.minDays 须不大于 maxDays');
 
   // 交叉：好感两端须覆盖档端
   const rangeMin = atPath(tree, 'affinity.range.min');

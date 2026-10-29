@@ -228,6 +228,8 @@ export interface ScenarioEventActionJudgement {
 
 /** 南荒试点：步骤材料与本地账本；缺省沿用事件值。 */
 export interface ScenarioStepScene {
+  action_time?: import('../actionTime').ActionTime;
+  timeAdvance?: { kind: 'calendarYears'; years: number };
   locationId?: string;
   cast?: { present?: string[]; enter?: string[]; exit?: Array<{ name: string; status: 'dead' | 'missing' | 'departed' }> };
   sceneLocation?: string; sceneObjective?: string;

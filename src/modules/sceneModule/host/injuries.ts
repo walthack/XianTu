@@ -1,3 +1,5 @@
+import { migrateCalendar } from '@/utils/calendarMigration';
+import { gameTimeMinutes } from '@/utils/time';
 import {namedEntity} from '@/modules/scenarioMods/namedEntities';
 import {instanceId,isEnemyKindId,parseInstanceId} from '@/modules/scenarioMods/actorInstances';
 // Structured, id-keyed injury storage; old prose remains readable but is never parsed into mechanics.
@@ -33,9 +35,8 @@ export function partyInstanceId(contract:Contract,party:Contract['parties'][numb
 }
 const isEnemyParty=(party:Contract['parties'][number])=>!!namedEntity('enemy',party.ref)||isEnemyKindId(party.ref);
 export function sceneTime(save: SaveData): number {
-  const t=(save as any).元数据?.时间 || {}, date=new Date(0);
-  date.setUTCFullYear(t.年 || 1,(t.月 || 1)-1,t.日 || 1);date.setUTCHours(t.小时 || 0,t.分钟 || 0,0,0);
-  return date.getTime()/60000;
+  migrateCalendar(save);
+  return gameTimeMinutes((save as any).元数据?.时间 || {});
 }
 function clearPlayerEffects(save:SaveData,rows:InjuryRecord[]):void {
   if(!Array.isArray(save.角色?.效果))return;

@@ -16,6 +16,7 @@ export type OpenWorldVisibility = 'hidden' | 'heard' | 'visited';
 export const SEVERAL_DAYS_PLACEHOLDER = 3;
 
 export interface OpenWorldZone {
+  country?: string;
   id: string;
   name: string;
   aliases?: string[];

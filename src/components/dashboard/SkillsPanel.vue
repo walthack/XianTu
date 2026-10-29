@@ -380,26 +380,7 @@ const breakthroughChance = computed(() => {
 const startCultivation = async (type: 'normal' | 'secluded') => {
   if (!cultivationSkills.value) return;
 
-  const { useActionQueueStore } = await import('@/stores/actionQueueStore');
-  const actionQueue = useActionQueueStore();
-
-  if (type === 'normal') {
-    actionQueue.addAction({
-      type: 'cultivate',
-      itemName: cultivationSkills.value.名称,
-      itemType: t('功法'),
-      description: `开始修炼《${cultivationSkills.value.名称}》，提升功法熟练度`,
-    });
-    uiStore.showToast(`开始修炼《${cultivationSkills.value.名称}》`, { type: 'success' });
-  } else {
-    actionQueue.addAction({
-      type: 'secluded_cultivation',
-      itemName: cultivationSkills.value.名称,
-      itemType: t('闭关'),
-      description: `进入闭关状态，专心修炼《${cultivationSkills.value.名称}》，效率大幅提升`,
-    });
-    uiStore.showToast(`进入闭关修炼《${cultivationSkills.value.名称}》`, { type: 'info' });
-  }
+  showDialog.value = true;
 };
 
 const attemptBreakthrough = async () => {
@@ -500,6 +481,7 @@ const handleCultivationConfirm = async (totalDays: number) => {
     const { useActionQueueStore } = await import('@/stores/actionQueueStore');
     useActionQueueStore().addAction({
       type: 'cultivate',
+      cultivation: { kind: 'cultivation', days: totalDays, actionId: crypto.randomUUID() },
       itemName: cultivationSkills.value.名称,
       itemType: t('功法'),
       description: `对《${cultivationSkills.value.名称}》进行${totalDays}天的深度修炼`,

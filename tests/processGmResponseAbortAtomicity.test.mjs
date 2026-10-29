@@ -135,7 +135,7 @@ function abortAfter(allowCalls) {
 function twoSetCommands() {
   return [
     { action: 'set', key: '角色.属性.声望', value: 7 },
-    { action: 'set', key: '角色.位置.描述', value: '白湖商馆内院' },
+    { action: 'set', key: '角色.属性.气血.当前', value: 88 },
   ];
 }
 

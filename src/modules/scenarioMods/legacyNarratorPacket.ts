@@ -1,3 +1,4 @@
+import { actionTimePrompt } from './actionTime';
 
 import {isNamedEntityLabel} from './namedEntities';
 import {entityNamePattern} from './namedEntities';
@@ -603,6 +604,7 @@ export function buildCompactModuleNarrativePrompt(
   memories: string[],
   budget = 10000,
 ): { system: string; originalChars: number; compacted: boolean } {
+  instruction += '\n本轮耗时协议（覆盖旧时间指令）：' + actionTimePrompt();
   const original = instruction + '\n场景材料：' + JSON.stringify(scene)
     + '\n历史摘录（只是已展示内容，不代表所有人物知情）：' + JSON.stringify(memories);
   if (original.length <= budget) return { system: original, originalChars: original.length, compacted: false };

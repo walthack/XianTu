@@ -48,7 +48,7 @@ export const COMMAND_PATH_CONSTRUCTION_RULES = `
 NPC路径:必须以社交.关系.["角色ID"].开头,禁止写成NPC名.字段
 常用操作:add增减数值|set设置对象|push添加数组|delete删除(禁用remove)
 V3短路径:物品必须角色.背包.物品.{物品ID};属性必须角色.属性.*;位置必须角色.位置
-时间路径:只允许元数据.时间.分钟/元数据.时间.小时,禁止时间.分钟/游戏时间.分钟
+日历禁止模型写入，只提交顶层action_time档位
 占位符规则:人物角色ID替换为已登记ID并保留JSON引号方括号,道名和功法ID替换为对应名称或ID
 `.trim();
 

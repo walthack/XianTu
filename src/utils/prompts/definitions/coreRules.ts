@@ -1,8 +1,9 @@
+import { actionTimePrompt } from '@/modules/scenarioMods/actionTime';
 /**
  * @fileoverview 核心输出规则（AI友好格式）
  */
 
-export const JSON_OUTPUT_RULES = `
+export const JSON_OUTPUT_RULES = actionTimePrompt() + `
 [输出格式]
 只输出JSON:{"text":"叙事","mid_term_memory":"摘要","tavern_commands":[...],"action_options":["选项1","选项2"]}
 禁止:代码围栏/前后缀文本/确认消息/<thinking>标签/尾逗号/注释;字符串内换行用\\n
@@ -19,7 +20,7 @@ export const RESPONSE_FORMAT_RULES = `
 text写什么就更新什么;无法确认的数据宁可不写;禁止猜测编造
 
 [必须生成指令的场景]
-时间:add 元数据.时间.分钟 | 位置:set 角色.位置{描述,x,y,灵气浓度}
+时间仅由代码按action_time推进，禁止日期指令 | 位置:set 角色.位置{描述,x,y,灵气浓度}
 物品:获得set/消耗add数量(负)/用完delete | 货币:add 角色.背包.货币.{币种}.数量
 战斗:add 气血/灵气/神识.当前(负) | 修炼:add 境界.当前进度 | 功法:add 熟练度/push 已解锁技能
 大道:解锁set完整对象/感悟add当前经验/升阶add当前阶段(+1)
@@ -48,7 +49,7 @@ NPC:必须一次性创建完整对象,禁止残缺
 
 [禁止整体操作路径]
 顶级根/角色.属性/角色.背包/角色.功法/角色.大道/社交.关系/社交.事件/世界.地图/世界.势力
-允许整体set:角色.位置/元数据.时间/角色.属性.境界
+允许整体set:角色.位置/角色.属性.境界
 
 [字段操作]
 字符串用set | 数组用push | 数值用add(必须是数字不是字符串)

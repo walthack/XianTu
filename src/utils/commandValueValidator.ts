@@ -1,3 +1,4 @@
+import { localTimeCommandViolation } from './timeCommandGuard';
 import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 指令值格式验证系统
@@ -71,11 +72,8 @@ export function validateAndRepairCommandValue(command: TavernCommand): Validatio
       errors.push(...result.errors);
     }
 
-    // 2.1 游戏时间对象（允许整体 set，用于时间跳跃/修复）
-    if (key === '元数据.时间' && action === 'set') {
-      const result = validateGameTimeObject(value);
-      errors.push(...result.errors);
-    }
+    // 全局日历只由可信本地函数推进；状态的生成时间仍可写入。
+    if (localTimeCommandViolation(command)) return { valid: false, errors: ['LCQ-SAV-037：禁止模型写日历'] };
 
     // 3. 状态效果对象（push操作）
     if (key === '角色.效果' && action === 'push') {

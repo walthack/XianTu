@@ -12,7 +12,7 @@ test('时间只进不退:set 年份倒退被拒', async () => {
     { action: 'set', key: '元数据.时间.年', value: 200 },
   ], SAVE);
   assert.equal(res.validCommands.length, 0);
-  assert.ok(res.rejectedCommands[0].errors[0].includes('只进不退'));
+  assert.ok(res.rejectedCommands[0].errors[0].includes('LCQ-SAV-037'));
 });
 
 test('时间只进不退:整对象 set 携带倒退年份同拦', async () => {
@@ -23,14 +23,14 @@ test('时间只进不退:整对象 set 携带倒退年份同拦', async () => {
   assert.equal(res.validCommands.length, 0);
 });
 
-test('正常推进与闭关跳年放行', async () => {
+test('模型普通推进与闭关跳年均禁写，改走本地耗时协议', async () => {
   const { validateModelCommandPipeline } = await modPromise;
   const res = await validateModelCommandPipeline([
     { action: 'add', key: '元数据.时间.分钟', value: 30 },
     { action: 'set', key: '元数据.时间.年', value: 221 },
     { action: 'add', key: '元数据.时间.年', value: 10 },
   ], SAVE);
-  assert.equal(res.validCommands.length, 3, JSON.stringify(res.rejectedCommands));
+  assert.equal(res.validCommands.length, 0, JSON.stringify(res.rejectedCommands));
 });
 
 test('主角出生日期禁改', async () => {

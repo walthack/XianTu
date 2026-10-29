@@ -187,6 +187,7 @@ export interface GM_Request {
  * AI Game Master 返回的结构化响应对象 (天道响应)。
  */
 export interface GM_Response {
+  action_time?: import('@/modules/scenarioMods/actionTime').ActionTime;
   moduleReceipt?: import('@/modules/scenarioMods/modularTurn').ModuleReceipt;
   /** AI生成的主要叙事内容，用于展示给用户。也作为短期记忆存储 */
   text: string;

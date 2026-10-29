@@ -20,6 +20,12 @@ const spec = (level: LogLevel, module: string, meaning: string, toast = false): 
 export const UNREGISTERED_CODE = 'LCQ-SYS-000';
 
 export const ERROR_CODES = {
+  'LCQ-SAV-040': spec('warn', 'calendarMigration', '旧历法时间戳迁移失败'),
+  'LCQ-SAV-039': spec('error', 'actionTime', '时间来源或回执冲突'),
+  'LCQ-SAV-038': spec('warn', 'mapTravel', '跨国移动需要有效地图选择'),
+  'LCQ-SAV-037': spec('warn', 'actionTime', '模型时间写入已拒绝'),
+  'LCQ-SAV-036': spec('warn', 'actionTime', '模型数日超过配置上限，已截断'),
+  'LCQ-SAV-035': spec('warn', 'actionTime', '动作耗时档位缺失或非法'),
   [UNREGISTERED_CODE]: spec('warn', 'diagnostics', '未登记'),
   'LCQ-SYS-001': spec('warn', 'diagnostics', '日志持久化降级：IndexedDB 不可用，改用 localStorage 小缓存'),
   'LCQ-SYS-002': spec('info', 'diagnostics', '持久日志轮转：按保留天数、条数或总大小删除了旧记录'),

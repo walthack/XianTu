@@ -1,3 +1,5 @@
+import { migrateCalendar } from './calendarMigration';
+import { calendarConfig, gameTimeMinutes } from './time';
 /**
  * @fileoverview 状态效果管理系统 - 数值化时间管理
  * 使用精确的数值计算进行状态效果的时间管理和自动过期检测
@@ -27,12 +29,7 @@ type LegacyStatusEffect = Partial<StatusEffect> & {
  * @returns 总分钟数
  */
 export function gameTimeToTotalMinutes(gameTime: GameTime): number {
-  const minutes = gameTime.分钟 ?? 0;
-  return gameTime.年 * 365 * 24 * 60 +
-         gameTime.月 * 30 * 24 * 60 +
-         gameTime.日 * 24 * 60 +
-         gameTime.小时 * 60 +
-         minutes;
+  return gameTimeMinutes(gameTime);
 }
 
 /**
@@ -44,9 +41,9 @@ export function formatMinutesToDuration(minutes: number): string {
   if (minutes <= 0) return '已过期';
   if (minutes >= GAME_NUMBERS.status.permanentMinutesThreshold) return '永久';
 
-  const years = Math.floor(minutes / (365 * 24 * 60));
-  const months = Math.floor((minutes % (365 * 24 * 60)) / (30 * 24 * 60));
-  const days = Math.floor((minutes % (30 * 24 * 60)) / (24 * 60));
+  const years = Math.floor(minutes / (calendarConfig().daysPerMonth * calendarConfig().monthsPerYear * 24 * 60));
+  const months = Math.floor((minutes % (calendarConfig().daysPerMonth * calendarConfig().monthsPerYear * 24 * 60)) / (calendarConfig().daysPerMonth * 24 * 60));
+  const days = Math.floor((minutes % (calendarConfig().daysPerMonth * 24 * 60)) / (24 * 60));
   const hours = Math.floor((minutes % (24 * 60)) / 60);
   const mins = minutes % 60;
 
@@ -72,12 +69,12 @@ export function parseDurationToMinutes(duration: string): number {
 
   const yearMatch = duration.match(/(\d+)年/);
   if (yearMatch) {
-    totalMinutes += parseInt(yearMatch[1]) * 365 * 24 * 60;
+    totalMinutes += parseInt(yearMatch[1]) * calendarConfig().daysPerMonth * calendarConfig().monthsPerYear * 24 * 60;
   }
 
   const monthMatch = duration.match(/(\d+)月/);
   if (monthMatch) {
-    totalMinutes += parseInt(monthMatch[1]) * 30 * 24 * 60;
+    totalMinutes += parseInt(monthMatch[1]) * calendarConfig().daysPerMonth * 24 * 60;
   }
 
   const dayMatch = duration.match(/(\d+)天/);
@@ -203,6 +200,7 @@ export function normalizeStatusEffect(effect: LegacyStatusEffect, gameTime: Game
  * @returns 返回一个对象，其中包含被移除的状态效果名称列表
  */
 export function updateStatusEffects(saveData: SaveData): { removedEffects: string[] } {
+  migrateCalendar(saveData);
   const removedEffects: string[] = [];
   try {
     const statusEffects = get(saveData, '角色.效果', get(saveData, '效果', [])) as StatusEffect[];

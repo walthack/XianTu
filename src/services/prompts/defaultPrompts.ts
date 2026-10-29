@@ -1,3 +1,4 @@
+import { actionTimePrompt } from '@/modules/scenarioMods/actionTime';
 /**
  * 默认提示词集合 - 完整版
  *
@@ -91,13 +92,13 @@ export const PROMPT_CATEGORIES = {
   },
   module: {
     name: '回合模块提示词',
-    description: '模块链路（剧情演出／回合记忆／后台审计）的模块指令；结算、权限与验证不在此处',
+    description: '模块演出已升级JSON信封及action_time六档；旧自定义纯文本提示请更新，缺档按片刻结算。记忆／审计指令不受影响',
     icon: '🧩'
   }
 };
 
 /** 回合模块指令。提示词面板可改；被停用或清空时模块回落到这里的默认值，避免空指令。 */
-export const MODULE_NARRATIVE_SYSTEM_PROMPT = '你只负责演出本轮行动，输出第二人称中文正文约300至600字，不输出JSON、思考或系统规则。'
+export const MODULE_NARRATIVE_SYSTEM_PROMPT = actionTimePrompt() + '你只负责演出本轮行动，输出第二人称中文正文约300至600字，以JSON信封输出，text字段为正文，不输出思考或系统规则。'
   + '行动结果已由本地合同确定，不重新判定，不修改状态，不替玩家增加决定。人物只知道本轮公开信息；'
   + '不新增人物、道具、地点、关系身份。承接最近正文，禁止重演已经完成的前一幕。'
   + '正文只用中文，不夹英文单词、字段名或程序标识；场景材料里的英文键名只是格式，不写进正文。'

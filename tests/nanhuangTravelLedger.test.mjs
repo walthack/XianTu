@@ -214,7 +214,7 @@ test('叶媪村后五日与散峒半日推进日历、显示卡面，重放不�
   const { settleNanhuangForcedTravel } = await loadTs('../src/modules/scenarioMods/travel/travelLedger.ts');
   for (const [stageId, from, eventId, duration, day, hour] of [
     [S04, 'nh.yeao', 'lcq.event.s04_04', '五日', 6, 8],
-    ['lcq.stage_05b', 'nh.guiwang_dong', 'lcq.event.tribes_pledge', '半日', 1, 20],
+    ['lcq.stage_05b', 'nh.guiwang_dong', 'lcq.event.tribes_pledge', '0.5天路程', 1, 20],
   ]) {
     const save = await opened(stageId);
     rt(save).travelLedger.state.currentZoneId = from;

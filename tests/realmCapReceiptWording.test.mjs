@@ -114,8 +114,8 @@ test('判定回执：档名与结果说明标成只给模型看、不得照抄�
   }
   assert.match(prompts.MODULE_NARRATIVE_SYSTEM_PROMPT, /结果档名和结果说明只供你理解成败，不照抄进正文/);
   assert.match(prompts.MODULE_NARRATIVE_SYSTEM_PROMPT, /不把写给自己的提示、备忘或自检（中英文都算）写进正文/);
-  // 「不输出JSON」是格式名，保留；此外指令里没有英文
-  assert.deepEqual(latinWords(prompts.MODULE_NARRATIVE_SYSTEM_PROMPT).filter(word => word !== 'JSON'), []);
+  // JSON信封与action_time/tier/days/text是协议字段，其余指令没有英文
+  assert.deepEqual(latinWords(prompts.MODULE_NARRATIVE_SYSTEM_PROMPT).filter(word => !['JSON','action_time','tier','days','text'].includes(word)), []);
 });
 
 test('MainGamePanel 拼给模型的回执：本地判定写结果档与修为说明并带不照抄要求；事件判定的结果档、开放世界类型写中文', () => {

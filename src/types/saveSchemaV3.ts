@@ -26,6 +26,7 @@ import type {
  */
 
 export interface SaveMetaV3 {
+  calendarVersion?: number;
   版本号: 3;
   存档ID: string;
   存档名: string;

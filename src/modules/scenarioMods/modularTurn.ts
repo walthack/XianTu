@@ -1,3 +1,4 @@
+import { mapArrivalViolation } from './travel/mapTravel';
 import { isContentModerationError } from '@/services/apiErrorMessage';
 import {LEVELS} from '../../utils/realmUtils';
 import { filterLedgerMemory, type GuardFinding } from './ledger/guardFramework';
@@ -88,11 +89,12 @@ export function localModuleGuardNarrative(label: string | undefined, attempted: 
   return '你按刚才的选择采取了行动，眼前的事情有了新的进展。';
 }
 
-export function readModuleNarrative(raw: string): string {
+export function readModuleNarrative(raw: string, save?: import('@/types/game').SaveData): string {
   const visible = visibleModuleText(raw);
   const text = stripNarrativeTimePrefix(visible.startsWith('{') || visible.startsWith('```')
     ? String(parseModuleObject(visible).text || '') : visible);
   validateModuleInstructionLeak(text);
+  if (save && mapArrivalViolation(save, text)) throw new ModuleNarrativeGuardError('跨国抵达未经地图确认，只能写准备前往并提示打开地图');
   if (!text.trim() || text.length > 6000) throw new Error('正文为空或异常过长');
   if (text.split(/[，,、。；;：:！？!?…\n]/).some(part => part.trim().length > 120)) throw new Error('正文出现无标点长句，本稿不展示、不落档');
   return text.trim();
@@ -283,4 +285,9 @@ export function validateStepSceneNarrative(text: string, card: import('./schema'
     throw new ModuleNarrativeGuardError('一阳境界尚未落账');
   if (/你[^。！？]{0,12}(?:付出|支付|花了|收下|得到|获得)[^。！？]{0,12}(?:铜铢|银铢|金铢)/.test(text)
     && !card?.ledgerEffects?.inventoryTransfers?.length && !scene.搜刮回执?.some(drop => drop.currency)) throw new ModuleNarrativeGuardError('钱物交易没有本地结算回执');
+}
+
+export function readModuleActionTime(raw: string): import('./actionTime').ActionTime | undefined {
+  const visible = visibleModuleText(raw);
+  try { return (parseModuleObject(visible) as any).action_time; } catch { /* lcq-allow: 旧纯文本演出没有JSON耗时字段，由统一入口记缺档诊断 */ return undefined; }
 }

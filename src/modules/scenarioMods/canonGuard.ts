@@ -1,3 +1,6 @@
+import { logEvent } from '../diagnostics/log';
+import { countryOf } from './travel/mapTravel';
+import { currentLocation, locationFromPosition } from './travel/travelLedger';
 import {canonicalEntityId} from './namedEntities';
 import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
@@ -538,11 +541,40 @@ function findNpcPrivateKnowledgeRelationViolation(
 export function guardScenarioModCommands(saveData: SaveData, commands: unknown[]): ScenarioCommandGuardResult {
   const runtime = getRuntimeState(saveData);
   const protectedPaths = compileScenarioProtectedPaths(saveData);
-  if (!runtime) return { accepted: [...commands], rejected: [] };
+  const locationRejected: RejectedScenarioCommand[] = [];
+  commands = commands.filter((command: any) => {
+    const key = normalizePath(String(command?.key || ''));
+    const here = currentLocation(saveData);
+    let target: any;
+    if ((key === '角色.位置' || key === '角色' || key === '角色.位置.locationId' || key === '角色.位置.描述') && command.action === 'delete') {
+      logEvent({ code: 'LCQ-SAV-038', detail: { reason: 'delete_position' } });
+      locationRejected.push({ command, reason: 'LCQ-SAV-038：位置由地图或本地剧情投影，不能删除' }); return false;
+    }
+    if (key === '角色.位置') target = command.value;
+    else if (key === '角色.位置.locationId') target = { locationId: command.value };
+    else if (key === '角色.位置.描述') target = { 描述: command.value };
+    else if (key === '角色') target = command.value?.位置;
+    else if (key === '角色.位置.x' || key === '角色.位置.y') {
+      logEvent({ code: 'LCQ-SAV-038', detail: { reason: 'coordinate_only' } });
+      locationRejected.push({ command, reason: 'LCQ-SAV-038：坐标移动需要地图选择' }); return false;
+    }
+    if (target !== undefined) {
+      const id = target?.locationId || locationFromPosition(target?.描述, runtime?.canon?.locations).canonicalLocationId;
+      const from = countryOf(here.canonicalLocationId), to = countryOf(id);
+      const describedId = target?.描述 ? locationFromPosition(target.描述, runtime?.canon?.locations).canonicalLocationId : undefined;
+      const describedCountry = countryOf(describedId);
+      if (!from || !to || from !== to || (describedCountry && describedCountry !== to)) {
+        logEvent({ code: 'LCQ-SAV-038', detail: { reason: 'country_or_unknown_destination', fromId: here.canonicalLocationId, toId: id } });
+        locationRejected.push({ command, reason: 'LCQ-SAV-038：跨国或未知目的地需打开地图选择，仅可准备前往' }); return false;
+      }
+    }
+    return true;
+  });
+  if (!runtime) return { accepted: [...commands], rejected: locationRejected };
 
   const railAheadNames = collectRailAheadCharacterNames(runtime);
   const accepted: unknown[] = [];
-  const rejected: RejectedScenarioCommand[] = [];
+  const rejected: RejectedScenarioCommand[] = [...locationRejected];
   for (const command of commands) {
     const action = typeof (command as CommandLike)?.action === 'string'
       ? (command as CommandLike).action

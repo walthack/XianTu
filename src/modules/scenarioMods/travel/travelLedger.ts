@@ -1,3 +1,7 @@
+import { migrateCalendar } from '@/utils/calendarMigration';
+import { syncMaigu } from '../freeAction/maigu';
+import { pruneSceneInjuries } from '../../sceneModule/host/injuries';
+import { updateStatusEffects } from '@/utils/statusEffectManager';
 import {entityNamePattern} from '../namedEntities';
 import {entityName} from '../namedEntities';
 
@@ -154,6 +158,9 @@ export function advanceClock(
 ): { oldValue: GameTime; newValue: GameTime; cause: string } | null {
   const meta = (saveData as { 元数据?: { 时间?: GameTime } } | null | undefined)?.元数据;
   if (!meta?.时间) return null;
+  const amount = 'minutes' in advance ? advance.minutes : advance.days;
+  if (amount !== 'several' && (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0)) throw new Error('LCQ-SAV-039');
+  migrateCalendar(saveData);
   const oldValue = structuredClone(meta.时间);
   let newValue: GameTime;
   if ('minutes' in advance) {
@@ -166,6 +173,8 @@ export function advanceClock(
     if (several) newValue.相对日 = RELATIVE_DAY_LABEL;
   }
   meta.时间 = newValue;
+  if ((saveData as any).世界?.状态?.剧本模组) { syncMaigu(saveData); pruneSceneInjuries(saveData); }
+  updateStatusEffects(saveData);
   return { oldValue, newValue, cause };
 }
 
@@ -304,7 +313,7 @@ function travelCard(receiptId: string, routeId: string, companions: string[]): T
   const route = DEF.routes.find(item => item.id === routeId);
   if (!route) return undefined;
   const { days, several } = routeDayCost(route);
-  const duration = route.durationLabel || (route.kind !== 'journey' ? '片刻' : several ? '数日' : days === 0.5 ? '半日' : days === 1 ? '一日' : `${days}日`);
+  const duration = (route.kind === 'journey' && days === 0.5 ? '0.5天路程' : route.durationLabel) || (route.kind !== 'journey' ? '片刻' : several ? '数日' : days === 0.5 ? '0.5天路程' : days === 1 ? '一日' : `${days}日`);
   const from = zoneName(route.fromZoneId);
   const to = zoneName(route.toZoneId);
   const text = [`【路途】${from} → ${to}`, route.summary || route.label, `耗时：${duration}`, ...(companions.length ? [`同行：${companions.join('、')}`] : [])].join('｜');
@@ -359,7 +368,7 @@ export function settleNanhuangForcedTravel(
     const card = travelCard(item.receiptId, item.routeId, departureCompanions);
     if (card) cards.push(card);
   }
-  if (cards.length) ledger.lastCard = cards[cards.length - 1];
+  if (cards.length) { ledger.lastCard = cards[cards.length - 1]; (ledger as any).timeConsumedAtTurn = runtime.worldTurn; }
   if (settled.length || reprojections.length) projectPosition(saveData, runtime, ledger.state.currentZoneId);
   return cards;
 }
