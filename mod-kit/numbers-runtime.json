@@ -240,6 +240,10 @@
     },
     "modeSelection": {
       "showGenericStart": false
+    },
+    "legacyPilotActionOptions": {
+      "min": 2,
+      "max": 4
     }
   }
 }

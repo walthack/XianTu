@@ -19,6 +19,8 @@ import { localIsoTimestamp } from './store';
 export type NarrativeSite = 'turn' | 'scene_beat' | 'scene_chat' | 'opening';
 export interface PromptModuleUse { id: string; custom: boolean }
 export interface NarrativeSource {
+  actionOptionsCount?: number;
+  optionsSource?: string;
   site: NarrativeSite;
   /** 生成路径：回合埋点的 path（modular / legacy / legacy_pilot）、场面 sceneModule、开局 opening。 */
   path: string;
@@ -137,6 +139,7 @@ export function narrativeTriggers(input: NarrativeTriggerInput): string[] {
 const stats = { records: 0, flagged: 0, withheld: 0, words: new Map<string, number>() };
 
 const sourceFields = (source: NarrativeSource) => ({
+  actionOptionsCount: source.actionOptionsCount ?? 0, optionsSource: source.optionsSource ?? 'unknown',
   site: source.site, path: source.path, triggers: source.triggers ?? [], moduleId: source.moduleId ?? null,
   prompts: (source.prompts ?? []).map(use => ({ id: use.id, custom: use.custom })),
   model: source.model ?? null, provider: source.provider ?? null,
@@ -186,6 +189,9 @@ export function recordNarrativeSource(source: NarrativeSource, text: string, gen
 
 /** 回合正文收尾用：ModuleReceipt 与回合埋点只取用到的字段（结构类型，不依赖服务层）。 */
 export interface TurnNarrativeInput {
+  actionOptionsCount?: number;
+  optionsSource?: string;
+  legacyPilot?: boolean;
   text: string;
   receipt?: { path?: string; route?: { model?: string; provider?: string } | null; eventId?: string } | null;
   telemetry?: { path?: string; model?: string | null; provider?: string | null; requestStartedAt?: number | null } | null;
@@ -209,10 +215,11 @@ export function recordTurnNarrative(input: TurnNarrativeInput): boolean {
     const { receipt, telemetry } = input;
     const modular = receipt?.path === 'modular';
     const legacy = !receipt && telemetry?.requestStartedAt != null && (telemetry.path === 'legacy' || telemetry.path === 'legacy_pilot');
-    if (!modular && !legacy) return false;
+    if (!modular && !legacy && !input.legacyPilot) return false;
     const key = input.narrativePromptKey;
     recordNarrativeSource({
-      site: 'turn', path: modular ? 'modular' : String(telemetry!.path), triggers: input.triggers ?? [],
+      actionOptionsCount: input.actionOptionsCount, optionsSource: input.optionsSource,
+      site: 'turn', path: input.legacyPilot ? 'legacy_pilot' : modular ? 'modular' : String(telemetry!.path), triggers: input.triggers ?? [],
       moduleId: modular ? 'narrative' : null,
       prompts: modular ? (key ? [promptUse(key) ?? { id: key, custom: false }] : []) : promptUsesSince(input.startedAt),
       model: (modular ? receipt?.route?.model : undefined) ?? telemetry?.model ?? null,

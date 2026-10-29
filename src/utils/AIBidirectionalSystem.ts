@@ -1,3 +1,4 @@
+import { pilotOptionsPrompt, pilotOptionContext, selectPilotOptions, tagPilotOptions } from '@/modules/scenarioMods/legacyPilotActionOptions';
 import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
 import { settledStepScene } from '@/modules/scenarioMods/settledStepScene';
 import {entityName} from '@/modules/scenarioMods/namedEntities';
@@ -967,6 +968,20 @@ class AIBidirectionalSystemClass {
       console.warn('[Legacy单幕试验] 预结算未成立，回落普通 Legacy', plan.selection.eventId);
       return null;
     }
+    const ui = useUIStore();
+    const enabled = this.isActionOptionsEnabled(ui);
+    const context = pilotOptionContext(saveData, plan, compiled.packet);
+    const finish = (text: string, modelOptions: string[] = []): GM_Response => {
+      const selected = selectPilotOptions(modelOptions, context.local, context.engine,
+        values => this.sanitizeActionOptionsForDisplay(values));
+      return tagPilotOptions({ text, mid_term_memory: '', tavern_commands: [],
+        action_options: enabled ? selected.options : [] }, enabled ? selected.source : 'disabled');
+    };
+    if (enabled) {
+      const extra = await pilotOptionsPrompt(ui.actionOptionsPrompt || '');
+      compiled.systemPrompt += `\n${extra}`;
+      compiled.promptBytes += new TextEncoder().encode(`\n${extra}`).length;
+    }
     if (!acceptLegacyPilotScene(compiled.packet)) {
       console.warn('[Legacy单幕试验] 场景合同不完整，改用本地句库，不回落普通 Legacy', {
         eventId: compiled.packet.eventId,
@@ -976,12 +991,7 @@ class AIBidirectionalSystemClass {
       });
       const text = composeLegacyNarrativeFromPlan(compiled.packet);
       if (!text) return null;
-      return {
-        text,
-        mid_term_memory: '',
-        tavern_commands: [],
-        action_options: [],
-      };
+      return finish(text);
     }
     if (!isLegacyPilotPromptWithinBudget(compiled)) {
       if (compiled.managedPromptCompatible === false) {
@@ -997,12 +1007,7 @@ class AIBidirectionalSystemClass {
       });
       const oversizedText = composeLegacyNarrativeFromPlan(compiled.packet);
       if (!oversizedText) return null;
-      return {
-        text: oversizedText,
-        mid_term_memory: '',
-        tavern_commands: [],
-        action_options: [],
-      };
+      return finish(oversizedText);
     }
     noteRecallWait(Date.now() - recallStarted);
     notePromptBytes(compiled.promptBytes);
@@ -1018,6 +1023,9 @@ class AIBidirectionalSystemClass {
       useStreaming: false,
       generationId: `${generationId}_legacy_narrative_pilot`,
       shouldAbort,
+      parseOptions: values => values.some(value => typeof value === 'string' && value.trim())
+        ? this.parseAIResponse(JSON.stringify({ text: '', action_options: values }), false, enabled).action_options || []
+        : [],
       generate: ({ generationId: attemptId }) => aiService.generate({
         ...LEGACY_NARRATIVE_PILOT_GENERATE_OPTIONS,
         requestMaxRetries: 0,
@@ -1049,12 +1057,7 @@ class AIBidirectionalSystemClass {
       embeddingCalls: 0,
       modelCommands: 0,
     })}`);
-    return {
-      text,
-      mid_term_memory: '',
-      tavern_commands: [],
-      action_options: [],
-    };
+    return finish(text, finished.actionOptions);
   }
 
   /**

@@ -1,3 +1,4 @@
+import { splitPilotOptions } from './legacyPilotActionOptions';
 import { createLegacySentenceStream } from './legacySentenceStream';
 import { validateLegacyVisibleNarrative } from './legacyNarrativeContract';
 import type { LegacyNarratorPacket } from './legacyNarratorPacket';
@@ -21,6 +22,7 @@ export interface LegacyPilotGenerateInput {
   useStreaming: boolean;
   generationId: string;
   generate: (call: LegacyPilotGenerateCall) => Promise<string>;
+  parseOptions?: (options: unknown[]) => string[];
   onStreamChunk?: (delta: string) => void;
   shouldAbort?: () => boolean;
   /** Cap the RenderPlan call; the visible body is always composed locally. */
@@ -30,6 +32,7 @@ export interface LegacyPilotGenerateInput {
 export interface LegacyPilotGenerateResult {
   text: string;
   displayed: string;
+  actionOptions: string[];
   usedFallback: boolean;
   attempts: number;
   retried: boolean;
@@ -107,13 +110,18 @@ export async function generateLegacyPilotNarrative(
     try {
       const raw = await callPilotGenerate(input, `${input.generationId}_a${attempt}`);
       if (input.shouldAbort?.()) throw new Error('请求已被取消');
-      const parsed = parseLegacyRenderPlan(String(raw));
+      const split = splitPilotOptions(String(raw));
+      const parsed = parseLegacyRenderPlan(split.renderPlan);
+      let actionOptions: string[] = [];
+      try { actionOptions = input.parseOptions?.(split.options) ?? []; }
+      catch { /* lcq-allow: option parse failure must not discard the reviewed local body */ }
       const body = composeLegacyNarrativeFromPlan(input.packet, parsed.plan);
       const published = publishLocalBody(input, body);
       if (input.useStreaming && !published.text) input.onStreamChunk?.(body);
       return {
         text: published.text,
         displayed: published.text,
+        actionOptions: published.usedFallback || !parsed.parsed ? [] : actionOptions,
         usedFallback: published.usedFallback || !parsed.parsed,
         attempts,
         retried: attempt > 0,
@@ -128,6 +136,7 @@ export async function generateLegacyPilotNarrative(
       return {
         text: published.text,
         displayed: published.text,
+        actionOptions: [],
         usedFallback: true,
         attempts,
         retried: attempt > 0,

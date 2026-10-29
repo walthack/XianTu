@@ -26,6 +26,12 @@ NAR 是新增的码族，从 001 起取号，规则同其他族：序号只增�
 
 冻结文件 `src/utils/AIBidirectionalSystem.ts` 与 `src/modules/scenarioMods/runtime.ts` **没有改动**。来源取自它们已有的输出：`processPlayerAction` 返回的 `moduleReceipt`（路径、模型路由、eventId），以及回合埋点 `getLastTurnTelemetry()`（path、模型、本回合有没有发过模型请求）。
 
+### 2026-10-29 Legacy 单幕选项补充
+
+用户 14:37 授权 AIBS 单幕路径选项修复；上述“冻结文件没有改动”是原日志接入时的记录。此次仅改 AIBS 单幕选项出口，并更新冻结基线中 AIBS 的哈希；runtime 未改。
+
+`legacy_pilot` 的三个出口（含无模型请求的合同不全／超预算本地句库）都在发送收尾记录 LCQ-NAR-001。`actionOptionsCount` 取最终叙事历史的选项数量，`optionsSource` 为 `model`、`local_fallback`、`disabled` 或原有后处理清空的原因 `cleared_keybeat`／`cleared_fixedbeat`／`cleared_ending`／`cleared_contract`。选项不足时补入本地候选，归为 `local_fallback`。非回合记录未提供选项信息时为 `0`／`unknown`。不新增错误码，也不改变固定正文与清空逻辑。
+
 ## LCQ-NAR-001 字段
 
 日志条目本身的通用字段照旧：`ts`（UTC 的 ISO 串）、`level`、`code`、`module`、`sessionId`、`turnId`（请求生命周期的回合 id）、`msg`（形如「叙事来源：turn/modular，模型 deepseek-chat，356字」）。`detail` 字段如下：

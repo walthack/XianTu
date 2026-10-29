@@ -580,6 +580,7 @@ import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActio
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { getLastTurnTelemetry } from '@/utils/turnTelemetry';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
+import { pilotOptionsDiagnostic } from '@/modules/scenarioMods/legacyPilotActionOptions';
 import { narrativeTriggers, recordTurnNarrative } from '@/modules/diagnostics/narrativeSource';
 import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
 import { tickRandomEncounter, encounterNarratedBy } from '@/modules/scenarioMods/randomEncounter';
@@ -2522,6 +2523,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         const narratedSave = gameStateStore.toSaveData();
         recordTurnNarrative({
           text: finalText, receipt: gmResp?.moduleReceipt, telemetry: getLastTurnTelemetry(),
+          ...pilotOptionsDiagnostic(narratedSave, gmResp, resolvedEventAction),
           triggers: narrativeTriggers({
             tickets: routedFreeActionTickets, judgement: contractedJudgementResolution, eventAction: resolvedEventAction,
             opportunity: resolvedOpportunityAction, openWorld: resolvedOpenWorldAction, gambleRefusal: resolvedGambleRefusalAction,

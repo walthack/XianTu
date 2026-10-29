@@ -111,6 +111,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'tuning.timeoutMs', kind: 'int', required: true, min: 1, section: 'runtime' },
   { path: 'ui.rightSidebar.showSecondaryLines', kind: 'bool', required: true, section: 'runtime' },
   { path: 'ui.rightSidebar.showLineCompass', kind: 'bool', required: true, section: 'runtime' },
+  { path: 'ui.legacyPilotActionOptions.min', kind: 'int', required: true, min: 2, max: 4, section: 'runtime' },
+  { path: 'ui.legacyPilotActionOptions.max', kind: 'int', required: true, min: 2, max: 4, section: 'runtime' },
   { path: 'ui.worldSelection.showGenericWorlds', kind: 'bool', required: true, section: 'runtime' },
   { path: 'ui.modeSelection.showGenericStart', kind: 'bool', required: true, section: 'runtime' },
   { path: 'story.qin.actionTimeCost', kind: 'int', required: true, min: 1, max: 1, section: 'progress' },

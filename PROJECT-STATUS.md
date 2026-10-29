@@ -5,6 +5,12 @@
 `_newbot_tmp/PROJECT-TRACKER.md` **非权威**（草稿勾选；权威=本文件+总甘特）。历史全文见 [PROJECT-STATUS-ARCHIVE-2026-10-12.md](PROJECT-STATUS-ARCHIVE-2026-10-12.md)。  
 **完整功能清单**：[docs/FEATURE-LIST.md](docs/FEATURE-LIST.md)（总甘特的附属章节：功能分块、每块进行中／已完成／待办、各线程任务、全部已完成与全部待办汇总）。
 
+## 2026-10-29 Legacy 单幕行动选项修复（未提交）
+
+用户 14:37 授权，基于 `feat/fast-no-legacy` / `1829ff2e`。Codex 实现仅限 AIBS 单幕选项出口：同次 RenderPlan 响应带行动选项；本地兜底、引擎去重与 2–4 项配置在独立模块；LCQ-NAR-001 记录最终数量／来源。保留原正文合同、keyBeat/fixedBeat 清空、结局与合同改写逻辑。冻结基线只更新 AIBS 项，runtime 不改。不读凭据、不调用付费模型、不提交推送。
+
+验证：新增 11 项离线测试通过；最终 `npm test` 共 2863 项、2860 通过、0 失败、3 跳过（本机实际跳过数不同于用户提供的 13）。首轮遇到 Node 子进程反序列化错误，单文件与完整重跑通过；最终 `type-check` 仅既有 `controller.ts:202` TS2559；冻结门禁与 `git diff --check` 通过。无真机／真实模型验证，不据此改变项目验收阶段。
+
 ## 一句话现状
 
 **2026-10-29 02:00 日更核对**：HEAD `6b91263f`（10-28 23:10，已推送，与 `origin/feat/fast-no-legacy` 一致；工作树干净——上轮记的 12 个未提交文件已随五线补全提交）。自上轮日更 `50f93619` 起 29 个提交，分六组：
