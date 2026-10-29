@@ -2041,11 +2041,6 @@ ${stepRules}
 
 # 世界观设定
 ${worldStandardsPrompt}
-
----
-
-# 角色设定
-${userPrompt}
             `.trim();
           }
 
