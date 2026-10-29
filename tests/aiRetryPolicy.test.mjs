@@ -15,7 +15,7 @@ const cfg = (patch = {}) => ({ ...policy.aiRetryConfig(), jitter: 0, ...patch })
 
 test('aiRetry 段在 game-numbers 里，字段齐全，默认值过体检；超时默认不重试', () => {
   const json = JSON.parse(readFileSync(new URL('../mod-kit/game-numbers.qingyu.json', import.meta.url), 'utf8'));
-  assert.deepEqual(Object.keys(json.aiRetry).sort(), ['baseDelayMs', 'factor', 'jitter', 'maxDelayMs', 'maxRetries', 'retryAfterMaxMs', 'retryOnTimeout', 'retryStatuses']);
+  assert.deepEqual(Object.keys(json.aiRetry).sort(), ['baseDelayMs', 'factor', 'jitter', 'maxDelayMs', 'maxRetries', 'reasoning', 'retryAfterMaxMs', 'retryOnTimeout', 'retryStatuses']);
   assert.equal(json.aiRetry.retryOnTimeout, false);
   assert.deepEqual(policy.validateAiRetryConfig(), []);
   assert.deepEqual(policy.aiRetryConfig(), json.aiRetry);

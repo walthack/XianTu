@@ -1852,7 +1852,16 @@
     "factor": 2,
     "jitter": 0.25,
     "retryOnTimeout": false,
-    "retryAfterMaxMs": 20000
+    "retryAfterMaxMs": 20000,
+    "reasoning": {
+      "modelPattern": "minimax-m3|deepseek-r|thinking|reasoner",
+      "minMaxTokens": 16384,
+      "tokenMultiplier": 2,
+      "minTimeoutMs": 300000,
+      "timeoutMultiplier": 3,
+      "retryMultiplier": 2,
+      "budgetTokens": 0
+    }
   },
   "feedback": {
     "redactSaveNarrative": true,

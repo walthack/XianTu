@@ -8,6 +8,7 @@ export const QINGYU_TURN_DEADLINE_MS = 60000;
 interface QingyuTurnBudget {
   remaining: number | null;
   expiresAt: number | null;
+  deadlineMs: number;
   depth: number;
   invalidated: boolean;
 }
@@ -48,6 +49,7 @@ export function beginQingyuTurnLongRequests(save: SaveData | null | undefined, t
   turns.set(id, {
     remaining: save && usesFixedScenarioInventory(save) ? QINGYU_TURN_LONG_REQUEST_LIMIT : null,
     expiresAt: save && usesFixedScenarioInventory(save) ? Date.now() + QINGYU_TURN_DEADLINE_MS : null,
+    deadlineMs: QINGYU_TURN_DEADLINE_MS,
     depth: 1,
     invalidated: false,
   });
@@ -131,4 +133,12 @@ export function remainingQingyuTurnTimeMs(turnId?: string): number | null {
   if (!turn || turn.expiresAt === null) return null;
   if (turn.invalidated) return 0;
   return Math.max(0, turn.expiresAt - Date.now());
+}
+
+/** Extend once to the largest model budget, preserving the original turn start and cancellation. */
+export function extendQingyuTurnDeadline(turnId: string | undefined, totalMs: number): void {
+  const turn = getTurn(turnId);
+  if (!turn || turn.invalidated || turn.expiresAt === null || totalMs <= turn.deadlineMs) return;
+  turn.expiresAt += totalMs - turn.deadlineMs;
+  turn.deadlineMs = totalMs;
 }

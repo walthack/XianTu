@@ -380,3 +380,8 @@
 ### FIX422 · 2026-10-28（按用户最新范围）
 - 三提交：只改丹宸总表 speechStyle；LCQ-NET-012 审核提示/持久日志；Grok 备用连接（配置开关默认关闭）。苏荔、其他成人档案、冻结文件均不动；取消通用露骨词过滤。
 - 仅离线替身验证，不联网、不读密钥、不推送。canon:build 缺 ignored stages 源目录，按用户随后明确要求执行三次 commit；源卡缺失沿用 #242 最小补丁先例，NAS 不联网同步。定向/全量测试与 capture 进行中。
+
+
+### 2026-10-29 · 思考模型开局预算修复（用户授权，未提交）
+
+基线 feat/fast-no-legacy / 3bb56f70。服务层新增思考模型识别、16384 token 下限、300 秒超时下限及空正文 length 一次恢复；清羽共享时限在非冻结模块内适配。新增 LCQ-NET-013。详见 [实现/定位/冻结边界报告](docs/REASONING-OUTPUT-RECOVERY-2026-10-29.md)。专项新增15项；最终全量2878项、2875通过/0失败/3跳过（166.3秒）；tsc 仅 controller.ts:202 既有错。AIBS/runtime/冻结基线未改，未读凭据或 .xiantu-server 配置，未调用付费模型，未部署/commit/push。真实模型与玩家体验未验收；duplicated prompt 已定位到冻结 AIBS，未修。

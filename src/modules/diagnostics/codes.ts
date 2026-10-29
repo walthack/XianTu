@@ -115,6 +115,7 @@ export const ERROR_CODES = {
   'LCQ-NET-010': spec('warn', 'turnTelemetry', '回合总耗时超过阈值（perf.turnWarnMs）'),
   'LCQ-NET-011': spec('warn', 'turnTelemetry', '模型调用耗时超过阈值（perf.modelWarnMs）'),
   'LCQ-NET-012': spec('warn', 'aiService', 'AI 请求被内容审核拦截'),
+  'LCQ-NET-013': spec('warn', 'aiService', '思考耗尽输出长度'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),

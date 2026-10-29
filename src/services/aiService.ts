@@ -1,3 +1,4 @@
+import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, retryReasoningOnce } from './aiReasoningModelPolicy';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
 /**
@@ -36,6 +37,7 @@ import {
 import { optionalReasoningParam } from './optionalReasoningParams';
 import {
   consumeQingyuTurnLongRequest,
+  extendQingyuTurnDeadline,
   peekActiveQingyuTurnId,
   remainingQingyuTurnTimeMs,
   QingyuTurnLongRequestBudgetError,
@@ -839,8 +841,11 @@ class AIService {
    * - 如果没有配置独立API，使用默认API
    */
   async generate(options: GenerateOptions): Promise<string> {
+    const route = options.apiConfigOverride || this.getAPIConfigForUsageType(options.usageType || 'main') || this.config.customAPI;
+    if (route && reasoningPolicy(route.model)) options = { ...options, timeoutMs: reasoningTimeout(route.model, options.timeoutMs ?? 120000) * 2 };
     const turnId = options.background ? `background_${options.generation_id || Date.now()}`
       : options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined;
+    if (route && reasoningPolicy(route.model)) extendQingyuTurnDeadline(turnId, options.timeoutMs!);
     if (options.background) options = { ...options, qingyuTurnId: turnId };
     if (options.timeoutMode === 'content_idle') {
       const controller = this.createRequestController(turnId);
@@ -885,7 +890,9 @@ class AIService {
     try {
       return await this.generateOnce(withTurn);
     } catch (error) {
+      // lcq-allow: 思考耗尽由专项重试层记 LCQ-NET-013，传输错误由 diagnosticTransport 记录。
       if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
+      if (error instanceof ReasoningExhaustedError) throw error;
       const salvaged = salvageTruncationError(error);
       if (salvaged) return salvaged;
       if (!shouldRecoverTruncation(withTurn, error)) throw error;
@@ -1670,6 +1677,24 @@ class AIService {
     apiConfig: DirectAPIConfig = this.config.customAPI!,
     signal?: AbortSignal,
   ): Promise<string> {
+    const cap = reasoningLimits(apiConfig.model, this.getEffectiveRequestedMaxTokens(apiConfig.provider, apiConfig.model, apiConfig.maxTokens ?? 16000, usageType, maxTokensOverride));
+    return retryReasoningOnce(
+      cap,
+      cap => this.callOpenAICompatibleAPIOnce(messages, streaming, onStreamChunk, responseFormat, usageType, cap, apiConfig, signal),
+      signal,
+    );
+  }
+
+  private async callOpenAICompatibleAPIOnce(
+    messages: AIMessage[],
+    streaming: boolean,
+    onStreamChunk?: (chunk: string) => void,
+    responseFormat?: 'json_object',
+    usageType?: APIUsageType,
+    maxTokensOverride?: number,
+    apiConfig: DirectAPIConfig = this.config.customAPI!,
+    signal?: AbortSignal,
+  ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
     const requestedMaxTokens = this.getEffectiveRequestedMaxTokens(provider, model, maxTokens ?? 16000, usageType, maxTokensOverride);
     const safeMaxTokens = this.clampMaxTokensForContext(provider, model, messages, requestedMaxTokens);
@@ -1729,8 +1754,8 @@ class AIService {
           };
           this.applyMaxTokensParam(requestBody, provider, model, safeMaxTokens);
           Object.assign(requestBody, optionalReasoningParam(provider, model, {
-          url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
-        }) || {});
+            url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
+          }) || {}, reasoningBudgetParam(url));
 
           // 如果指定了 JSON 格式，添加 response_format
           // 🔥 注意：某些模型/API不支持 response_format
@@ -1751,14 +1776,18 @@ class AIService {
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
               },
-              timeout: 60000, // 减少到60秒
+              timeout: reasoningTimeout(model, 60000),
               signal
             }
           );
 
           const message = response.data.choices?.[0]?.message;
-          const content = message?.content || message?.reasoning_content || message?.reasoning || '';
+          const content = observeReasoning(model, message?.content, message?.reasoning_content || message?.reasoning);
           const finishReason = response.data.choices?.[0]?.finish_reason;
+          if (finishReason === 'length' && !content.trim() && reasoningPolicy(model)) {
+            emitDiagnostic(0, finishReason, true, response.data.usage);
+            throw new ReasoningExhaustedError(safeMaxTokens);
+          }
           if (isTruncatedFinishReason(finishReason)) {
             throwTruncated(finishReason, 0, response.data.usage, content);
           }
@@ -1776,7 +1805,7 @@ class AIService {
         this.applyMaxTokensParam(requestBody, provider, model, safeMaxTokens);
         Object.assign(requestBody, optionalReasoningParam(provider, model, {
           url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
-        }) || {});
+        }) || {}, reasoningBudgetParam(url));
 
         // 如果指定了 JSON 格式，添加 response_format
         // 🔥 注意：某些模型/API不支持 response_format
@@ -1797,14 +1826,18 @@ class AIService {
               'Authorization': `Bearer ${apiKey}`,
               'Content-Type': 'application/json'
             },
-            timeout: 120000,
+            timeout: reasoningTimeout(model, 120000),
             signal
           }
         );
 
         const message = response.data.choices?.[0]?.message;
-        const content = message?.content || message?.reasoning_content || message?.reasoning || '';
+        const content = observeReasoning(model, message?.content, message?.reasoning_content || message?.reasoning);
         const finishReason = response.data.choices?.[0]?.finish_reason;
+        if (finishReason === 'length' && !content.trim() && reasoningPolicy(model)) {
+          emitDiagnostic(0, finishReason, true, response.data.usage);
+          throw new ReasoningExhaustedError(safeMaxTokens);
+        }
         if (isTruncatedFinishReason(finishReason)) {
           throwTruncated(finishReason, 0, response.data.usage, content);
         }
@@ -2156,7 +2189,8 @@ class AIService {
       responseFormat, provider, requestSignal, firstByte, onFinish,
       );
     }, signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle'
-      ? { signal, totalMs: null, firstByteMs: 30000, idleMs: 30000 } : { signal });
+      ? { signal, totalMs: null, firstByteMs: reasoningTimeout(model, 30000), idleMs: reasoningTimeout(model, 30000) }
+      : { signal, totalMs: reasoningTimeout(model, 120000), firstByteMs: reasoningTimeout(model, 30000) });
   }
 
   private async streamingRequestOpenAIOnce(
@@ -2186,8 +2220,8 @@ class AIService {
       requestBody.stream_options = { include_usage: true };
     }
     Object.assign(requestBody, optionalReasoningParam(provider, model, {
-          url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
-        }) || {});
+      url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
+    }) || {}, reasoningBudgetParam(url));
 
     if (/^MiniMax-(?:M3|M2\.7(?:-highspeed)?)$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
       && signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none') {
@@ -2235,9 +2269,7 @@ class AIService {
       throw new Error(`Stream unsupported (content-type=${contentType || 'unknown'})`);
     }
 
-    // 思维链兜底：部分推理模型（DeepSeek 用 reasoning_content，Ollama 等用 reasoning）
-    // 把思考放在独立字段、content 为空。正式内容优先；若整段流没有任何 content，
-    // 则回退使用思维链文本，避免返回空结果导致“AI生成失败”。
+    // 思考独立累计用于识别，绝不把 reasoning 当作可见正文。
     let reasoningBuffer = '';
     let truncated = false;
     let finishReason: string | undefined;
@@ -2253,8 +2285,8 @@ class AIService {
         truncated = true;
       }
 
-      const reasoningPiece = delta?.reasoning_content ?? delta?.reasoning;
-      if (typeof reasoningPiece === 'string') reasoningBuffer += reasoningPiece;
+      const reasoningPiece = delta?.reasoning_content || delta?.reasoning;
+      if (typeof reasoningPiece === 'string') { reasoningBuffer += reasoningPiece; observeReasoning(model, '', reasoningPiece); }
 
       // 普通 content（优先）
       const hasActualContent = delta?.content !== undefined && delta?.content !== null && delta?.content !== '';
@@ -2267,7 +2299,8 @@ class AIService {
     }, onStreamChunk, signal, signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle' ? undefined : onFirstByte);
     onFinish?.(finishReason, usage);
 
-    const visible = result.trim() ? result : signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none' ? '' : reasoningBuffer;
+    const visible = observeReasoning(model, result, reasoningBuffer);
+    if (finishReason === 'length' && !visible.trim() && reasoningPolicy(model)) throw new ReasoningExhaustedError(maxTokens);
     if (truncated) {
       throw new OutputTruncationError({ budget: maxTokens, partialContent: visible });
     }
