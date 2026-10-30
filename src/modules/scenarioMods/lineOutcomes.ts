@@ -74,14 +74,24 @@ export function lineClosed(lineId: string, runtime: unknown, opts: LineClosedOpt
   const flags = (runtime as { flags?: Record<string, unknown> } | undefined)?.flags;
   const outcome = readLineOutcome(flags && typeof flags === 'object' ? flags : undefined, lineId);
   if (outcome !== undefined && lineOutcomeTiers().includes(outcome)) return (opts.tiers ?? lineOutcomeTiers()).includes(outcome);
+  // 正式失败终点由数据登记；空表不猜失败。与正常 closedWhen 并行，不关闭旧档回退。
+  const failures = GAME_NUMBERS.story.lineOutcome.failureClosureEvents as Record<string, readonly string[]>;
+  const done = new Set(orderedDoneEventIds(runtime));
+  if (failures[lineId]?.some(eventId => done.has(eventId))) return (opts.tiers ?? lineOutcomeTiers()).includes('unresolved');
   if (playerLedgerRules().lineOutcomes.some(rule => rule.lineId === lineId)) return false;
   const closedWhen = (opts.lines ?? packLines()).find(line => line.lineId === lineId)?.closedWhen;
-  const closed = !!closedWhen?.length && closedWhenHolds(closedWhen, new Set(orderedDoneEventIds(runtime)));
+  const closed = !!closedWhen?.length && closedWhenHolds(closedWhen, done);
   if (debugEnabled('identity') && lastFallback.get(lineId) !== closed) {
     lastFallback.set(lineId, closed);
     debugLog('identity', `[收束] ${lineId}：规则表 lineOutcomes 还没有本线规则，退回读线的下一步表收束事件（closedWhen，按编年史）→ ${closed ? '已收束' : '未收束'}`, () => ({ lineId, closedWhen }));
   }
   return closed;
+}
+
+/** 秦入口只数配置中的五条国家线；同线多终点、重复完成记录均只计一次。 */
+export function nationClosedLineCount(runtime: unknown): number {
+  return [...new Set(GAME_NUMBERS.story.lineCompass.anyLineClosed.lineIds)]
+    .filter(lineId => lineClosed(lineId, runtime)).length;
 }
 
 /** 已收束的判档线（太泉解锁设计稿 2026-10-27 §3）：按 judgedLineIds() 的顺序逐条读 lineClosed；tiers 缺省取全部档位。非判档线（太泉）不在其中。纯读，不写 flags。 */

@@ -10,7 +10,7 @@
 import type { ScenarioCondition, ScenarioConditionOperator } from './schema';
 import { orderedDoneEventIds } from './playerLedgerRules';
 import type { PlayerIdentityLedger } from './identityLedger';
-import { lineClosed, readLineOutcome } from './lineOutcomes';
+import { lineClosed, nationClosedLineCount, readLineOutcome } from './lineOutcomes';
 import { isAcquaintanceKind, rankOf, type AcquaintanceLedger } from './acquaintanceLedger';
 import { firstItemReceipt } from './itemProvenance';
 import { isInParty } from './partyLedger';
@@ -24,9 +24,9 @@ export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'i
 /**
  * 派生读取点 compass.<id>（R-3，总策划定）：现算，不落存档。
  * anyLineClosed＝story.lineCompass.anyLineClosed.lineIds（南荒／晋／宋／汉／唐；太泉、秦不算）里任一条 lineClosed（收束唯一读取点）。
- * 秦线知情拍与秦线 knownWhen 读它。closedWhen 只许 done.*（validator 拦），lineClosed 按编年史判，不回读账本条件，不会成环。
+ * 秦线知情拍读 qinEntryReady＝计数达到配置阈值；knownWhen 读 Q-1 done。closedWhen 只许 done.*（validator 拦），lineClosed 按编年史判，不回读账本条件，不会成环。
  */
-export const COMPASS_DERIVED_IDS = ['anyLineClosed'] as const;
+export const COMPASS_DERIVED_IDS = ['anyLineClosed', 'qinEntryReady'] as const;
 
 export interface ParsedLedgerPath {
   kind: LedgerPathKind;
@@ -168,7 +168,11 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): u
     }
     case 'compass':
       // 只读收束档与编年史（closedWhen 只许 done.*），不新增存档字段
-      return anyNationLineClosed(runtime);
+      switch (parsed.id) {
+        case 'anyLineClosed': return anyNationLineClosed(runtime);
+        case 'qinEntryReady': return nationClosedLineCount(runtime) >= GAME_NUMBERS.story.lineCompass.qinEntry.minClosedLines;
+        default: return undefined;
+      }
   }
 }
 

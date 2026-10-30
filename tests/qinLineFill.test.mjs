@@ -92,7 +92,7 @@ test('秦：18 个事件独立轴段，critical 全上 rail，Q2 五拍未实现
   for (const suffix of ['act3_choose','act3_trade_route','act3_baiqi','raid_branch','close_overthrow']) assert.ok(!mod.scenario.events.some(e => e.id === id(suffix)));
 });
 
-test('秦：汉使入口只读身份，不以受封事件冒认持有；知情拍称呼也只读晋身份', async () => {
+test('秦：汉使入口只读身份，不以受封事件冒认持有；知情拍统一口信、不从晋身份推断商号', async () => {
   const view = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
   for (const held of [false, true]) {
     let save = start({ playerIdentities: held ? { 'liuchao.identity.han.marquis_wuyang': { status: 'active' } } : {},
@@ -103,8 +103,11 @@ test('秦：汉使入口只读身份，不以受封事件冒认持有；知情�
     if (held) save = complete(save, id('entry_envoy'));
   }
   const hook = mod.scenario.events.find(e => e.id === id('hook_fangshi_rumor'));
-  assert.match(view.resolveScenarioEventNarrative(hook, {}, undefined, { playerIdentities: { 'liuchao.identity.jin.panjiang_shaozhu': { status: 'active' } } }).description, /盘江程少主/);
-  assert.match(view.resolveScenarioEventNarrative(hook, {}, undefined, {}).description, /东家/);
+  for (const runtime of [{}, { playerIdentities: { 'liuchao.identity.jin.panjiang_shaozhu': { status: 'active' } } }]) {
+    const description = view.resolveScenarioEventNarrative(hook, {}, undefined, runtime).description;
+    assert.match(description, /商会伙计.*程少主/);
+    assert.doesNotMatch(description, /盘江|云氏|徐君房|水晶球|芈太后|公子稷/);
+  }
 });
 test('秦：正文与单步成本由内容包编译器解析', async () => {
   const raw = JSON.parse(fs.readFileSync('src/modules/contentPacks/packs/qingyu/stage-qin-xianyang.json', 'utf8'));

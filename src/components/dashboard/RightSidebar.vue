@@ -211,6 +211,7 @@
                 <div v-if="lineCompass.current.step" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.current.step }}</div>
               </template>
               <div v-else-if="lineCompass.fallback" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.fallback }}</div>
+              <div v-for="hint in lineCompass.entryHints.filter(h => h.lineId !== lineCompass.current?.lineId)" :key="hint.lineId" class="quest-event"><span class="quest-mark-side">◆</span>{{ hint.text }}</div>
               <template v-if="lineCompass.others.length">
                 <div class="quest-more quest-line-others" @click="lineOthersOpen = !lineOthersOpen">{{ lineOthersOpen ? '▾' : '▸' }} {{ t('别处还有事') }}（{{ lineCompass.others.length }}）</div>
                 <template v-if="lineOthersOpen">

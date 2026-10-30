@@ -439,3 +439,16 @@
 ## 2026-10-29 地点国别 overlay 幂等修复（Codex，未提交；10-30 日更注：对应提交 `e51e0ff5`／`ffd40977` 已推送；本节所记 `diagnostics.test.mjs:141` 偶发失败后续结果未记）
 
 按用户指令，将 canon-authority-overlays 中 canon.locations 的 set.to 经 projectLocationCountries 投影；set.from 不动。仅四份地点替换 overlay，manifest 无哈希字段；冻结文件不动。验证：专项测试 15 项（13 通过、2 源树跳过）；四份地点 set 操作独立二次应用幂等通过，diff 校验仅改变投影后的 set.to、from 全部保留。npm test：2936 项，2922 通过、13 跳过、1 失败（diagnostics.test.mjs:141，1ms 去重窗口 suppressedBefore 断言）；该文件单独复跑 28/28 通过，疑似时序敏感，未改无关测试。git diff --check 通过。源树重建一致性本机未验证，不改变项目验收阶段；未提交。
+
+
+### QIN-ENTRY-20261030 · 开工
+- 用户授权：旧解析器单行 action_time；秦三线门槛、两终结动作与地图入口。禁止 commit/push；runtime 冻结，AIBS 仅该补丁。
+- 系统/剧情目标：保留五线 closedWhen，配置失败终点扩展；受冻结阻塞的跨关能力写 /workspace/qin_blockers.md。
+- 成熟度/证据：实施中，未验证；未测：真机/模型。依赖：跨关调度冻结边界；下轮以离线回归和阻塞清单复核。
+
+### QIN-ENTRY-20261030 · 系统/剧情交付（PARTIAL）
+- 系统交付：AIBS 旧解析器仅 +1 行透传 action_time；秦入口五线去重计数、阈值 3、JSON 失败终点扩展表、compass.qinEntryReady 按 id 分派与校验。merged numbers / catalog 均由脚本生成。
+- 剧情/UI交付：Q-1 两并列终结动作与统一口信，Q-2 读跨关 done；未入秦右栏固定提示「去咸阳，找那个方士问问」，独立于焦点和折叠。两动作均不直接转场；失败终点表空，不猜内容裁定。
+- 交付链接：[完整摘要](/workspace/codex_summary.md)、[精确冻结阻塞](/workspace/qin_blockers.md)、[入口回归](tests/qinEntry.test.mjs)。正式跨关投递和地图点击咸阳切关未接通，不宣称入口上线；大祭/lapsed 未做。
+- 证据层级：离线全量 npm test 2950 项，2937 pass / 0 fail / 13 skip；秦专项19项全过；type-check 仅既有 controller.ts:202 TS2559。内容包 check、右栏 Vue SFC 编译、diff check、冻结哈希通过。AIBS +1/-0，runtime 未动，无新增诊断码。
+- 未测/依赖：浏览器真人体验、真实模型、正式跨关一体流程未测；跨关投递/rail 条件门受 runtime 冻结阻塞，地图现有实现仅移动地点。下轮先按 blocker 精确范围处理共享调度和地图入秦事务，再验正式入口；不改变 Grok 控制面。未 commit/push，未读凭据，既有未跟踪临时目录未动。

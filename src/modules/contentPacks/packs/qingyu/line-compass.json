@@ -825,6 +825,7 @@
     {
       "lineId": "qin",
       "nameKey": "lineCompass.qin.name",
+      "entryHint": { "stageId": "lyg.qin_xianyang", "hintKey": "lineCompass.qin.entry" },
       "knownWhen": [
         { "path": "done.liuchao.event.qin_hook_fangshi_rumor", "operator": "eq", "value": true }
       ],

@@ -2207,6 +2207,13 @@
         "han": false,
         "tang": false,
         "qin": false
+      },
+      "failureClosureEvents": {
+        "nanhuang": [],
+        "jin": [],
+        "song": [],
+        "han": [],
+        "tang": []
       }
     },
     "lineUnlock": {
@@ -2252,7 +2259,7 @@
         ]
       },
       "anyLineClosed": {
-        "note": "派生读取点 compass.anyLineClosed（分析稿 2026-10-27 §6 R-3，总策划定；用户 P-06 定秦线消息在任一国家线收束后由商会伙计传话）：lineIds 里任一条线 line.<id>.outcome 有档、或线的下一步表里该线 closedWhen 全满足即为 true。太泉、秦不计入。秦线知情拍与秦线 knownWhen 读它。值须为国家线 id、不得含 qin / taiquan。",
+        "note": "国家线计数共用清单：南荒、晋、宋、汉、唐；太泉、秦不计。anyLineClosed 表示至少一线收束；秦入口改读 compass.qinEntryReady，阈值见 qinEntry.minClosedLines。",
         "lineIds": [
           "nanhuang",
           "jin",
@@ -2260,6 +2267,9 @@
           "han",
           "tang"
         ]
+      },
+      "qinEntry": {
+        "minClosedLines": 3
       }
     },
     "identity": {

@@ -6,7 +6,7 @@
     "name": "六朝·咸阳（秦国线）",
     "version": "1.0.0",
     "author": "XianTu 剧情策划（五线补全·秦 2026-10-28）",
-    "description": "秦国线（全部为扩写，有意偏离原著 lyg 13680「唯一没打过交道的就是秦国」）：任一国家线收束后，程宗扬听说咸阳有方士冒用他的名头，入咸阳，旁观举鼎、封宫、争位与清洗，在清洗中被追捕，拉拢盟友；第三幕「谁来掌秦」本版只有默认收束（芈氏掌秦），推翻结局待定（Q2）。",
+    "description": "秦国线（全部为扩写，有意偏离原著 lyg 13680「唯一没打过交道的就是秦国」）：南荒、晋、宋、汉、唐中三条线收束后，程宗扬听说咸阳有方士冒用他的名头，入咸阳，旁观举鼎、封宫、争位与清洗，在清洗中被追捕，拉拢盟友；第三幕「谁来掌秦」本版只有默认收束（芈氏掌秦），推翻结局待定（Q2）。",
     "axisSeqLo": null,
     "axisSeqHi": null,
     "eventIdContract": "append-only-frozen",
@@ -2326,7 +2326,7 @@
         "critical": true,
         "conditions": [
           {
-            "path": "compass.anyLineClosed",
+            "path": "compass.qinEntryReady",
             "operator": "eq",
             "value": true
           }
@@ -2344,47 +2344,7 @@
         "objective": {
           "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.objective"
         },
-        "narrativeVariants": [
-          {
-            "when": [
-              {
-                "path": "acq.liuchao.character.xu_junfang",
-                "operator": "gte",
-                "value": "encountered"
-              },
-              {
-                "path": "identity.liuchao.identity.jin.panjiang_shaozhu",
-                "operator": "exists"
-              }
-            ],
-            "description": {
-              "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.0.description"
-            }
-          },
-          {
-            "when": [
-              {
-                "path": "acq.liuchao.character.xu_junfang",
-                "operator": "gte",
-                "value": "encountered"
-              }
-            ],
-            "description": {
-              "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.1.description"
-            }
-          },
-          {
-            "when": [
-              {
-                "path": "identity.liuchao.identity.jin.panjiang_shaozhu",
-                "operator": "exists"
-              }
-            ],
-            "description": {
-              "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.2.description"
-            }
-          }
-        ],
+        "narrativeVariants": [],
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2392,7 +2352,7 @@
           ],
           "actions": [
             {
-              "id": "hear_xianyang_rumor",
+              "id": "go_now",
               "label": {
                 "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.label"
               },
@@ -2405,6 +2365,29 @@
               "outcomeText": {
                 "success": {
                   "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.success"
+                },
+                "partial": {
+                  "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.partial"
+                },
+                "failure": {
+                  "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.failure"
+                }
+              }
+            },
+            {
+              "id": "later",
+              "label": {
+                "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.label"
+              },
+              "actionText": {
+                "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.actionText"
+              },
+              "timeCost": {
+                "$num": "story.qin.actionTimeCost"
+              },
+              "outcomeText": {
+                "success": {
+                  "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.outcomeText.success"
                 },
                 "partial": {
                   "$text": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.partial"
@@ -2433,7 +2416,7 @@
         "critical": true,
         "conditions": [
           {
-            "path": "flags.event.qin_hook_fangshi_rumor.done",
+            "path": "done.liuchao.event.qin_hook_fangshi_rumor",
             "operator": "eq",
             "value": true
           }

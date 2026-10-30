@@ -93,6 +93,8 @@ export interface LineCompassLine {
   knownWhen?: LineCompassCondition[];
   /** 收束事件：规则表 lineOutcomes 还没有本线规则时，全满足即算收束（lineClosed 读；只许 done.*，可含 anyOf 组，按编年史判）；line.<id>.outcome 有档时按档 */
   closedWhen?: LineCompassCondition[];
+  /** 已知但尚未进入目标关时持续显示；只指向地图，不触发转场。 */
+  entryHint?: { stageId: string; hintKey: string };
   steps: LineCompassStep[];
   note?: string;
 }
@@ -126,6 +128,7 @@ export interface LineCompassView {
   /** null＝没有当前线，右栏退回原主线指南针那一句 */
   current: LineCompassCard | null;
   others: LineCompassOther[];
+  entryHints: Array<{ lineId: string; text: string }>;
 }
 
 export interface LineCompassInput {
@@ -288,7 +291,14 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
     return { lineId: line.lineId, name: nameOf(line), locked: false, hintLines: [] };
   });
 
-  const view: LineCompassView = { current: card, others };
+  const entryHints = open.filter(line => line.entryHint && rt.modId !== line.entryHint.stageId
+    && !(rt.chronicle || []).some((e: { stageId?: string }) => e.stageId === line.entryHint!.stageId))
+    .map(line => ({ lineId: line.lineId, text: text(line, line.entryHint!.hintKey) ?? '' }))
+    .filter(hint => !!hint.text);
+  // 未入关不提前显示关内身份分流；提示独立于当前焦点和折叠项。
+  const currentEntry = entryHints.find(hint => hint.lineId === card?.lineId);
+  if (card && currentEntry) card.step = currentEntry.text;
+  const view: LineCompassView = { current: card, others, entryHints };
   debugOnChange(`[当前线] ${card ? `${card.lineId}（${card.source}）下一步「${card.step || '—'}」` : '无 → 退回主线指南针'} 别处 ${others.map(o => `${o.lineId}${o.locked ? '(锁)' : ''}`).join(',') || '—'}`, () => ({ focusEventId: input.focusEventId, view }));
   return view;
 }

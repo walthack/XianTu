@@ -5302,6 +5302,7 @@ ${saveDataJson}`;
       }
 
       return {
+        action_time: obj.action_time as GM_Response['action_time'],
         text: String(obj.text || obj.叙事文本 || obj.narrative || ''),
         mid_term_memory: String(obj.mid_term_memory || obj.中期记忆 || obj.memory || ''),
         tavern_commands: tavernCommands,

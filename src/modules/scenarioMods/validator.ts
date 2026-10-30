@@ -2522,13 +2522,19 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
   table.lines.forEach((line, li) => {
     const at = `lineCompass.lines[${li}]`;
     if (!isRecord(line)) { add(at, 'invalid_type', `${at} must be an object.`); return; }
-    for (const key of Object.keys(line)) if (!['lineId', 'nameKey', 'anchorLine', 'knownWhen', 'closedWhen', 'steps', 'note'].includes(key)) add(`${at}.${key}`, 'unknown_field', `Unknown field "${key}".`);
+    for (const key of Object.keys(line)) if (!['lineId', 'nameKey', 'anchorLine', 'knownWhen', 'closedWhen', 'entryHint', 'steps', 'note'].includes(key)) add(`${at}.${key}`, 'unknown_field', `Unknown field "${key}".`);
     if (typeof line.lineId !== 'string' || !NATION_LINE_IDS.includes(line.lineId)) add(`${at}.lineId`, 'invalid_enum', `lineId must be one of ${NATION_LINE_IDS.join('/')}.`);
     else if (seenLines.has(line.lineId)) add(`${at}.lineId`, 'duplicate_id', `Duplicate line "${line.lineId}".`);
     else seenLines.add(line.lineId);
     if (typeof line.nameKey !== 'string' || !isNonEmptyString(texts[line.nameKey])) add(`${at}.nameKey`, 'missing_text', `Line name text "${String(line.nameKey)}" is missing.`);
     if (line.anchorLine !== undefined && (typeof line.anchorLine !== 'string' || !oldLineIds.has(line.anchorLine))) add(`${at}.anchorLine`, 'missing_reference', `Unknown secondary line "${String(line.anchorLine)}".`);
     optionalString(line.note, `${at}.note`, add);
+    if (line.entryHint !== undefined) {
+      const hint = line.entryHint;
+      if (!isRecord(hint) || !isNonEmptyString(hint.stageId) || !isNonEmptyString(hint.hintKey)) add(`${at}.entryHint`, 'invalid_type', 'entryHint requires stageId and hintKey.');
+      else if (!isNonEmptyString(texts[hint.hintKey])) add(`${at}.entryHint.hintKey`, 'missing_text', 'Entry hint text is missing.');
+      else checkHintText(texts[hint.hintKey], `${at}.entryHint.hintKey`);
+    }
     conditions(line.knownWhen, `${at}.knownWhen`);
     conditions(line.closedWhen, `${at}.closedWhen`, ledger, { noCompass: true });
     if (!Array.isArray(line.steps)) { add(`${at}.steps`, 'invalid_type', `${at}.steps must be an array.`); return; }

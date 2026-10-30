@@ -1,5 +1,5 @@
 {
-  "version": "1571ec96c99f5120",
+  "version": "9418e1c3ac8280a2",
   "contracts": [
     {
       "meta": {
@@ -7304,7 +7304,7 @@
         "name": "六朝·咸阳（秦国线）",
         "version": "1.0.0",
         "author": "XianTu 剧情策划（五线补全·秦 2026-10-28）",
-        "description": "秦国线（全部为扩写，有意偏离原著 lyg 13680「唯一没打过交道的就是秦国」）：任一国家线收束后，程宗扬听说咸阳有方士冒用他的名头，入咸阳，旁观举鼎、封宫、争位与清洗，在清洗中被追捕，拉拢盟友；第三幕「谁来掌秦」本版只有默认收束（芈氏掌秦），推翻结局待定（Q2）。",
+        "description": "秦国线（全部为扩写，有意偏离原著 lyg 13680「唯一没打过交道的就是秦国」）：南荒、晋、宋、汉、唐中三条线收束后，程宗扬听说咸阳有方士冒用他的名头，入咸阳，旁观举鼎、封宫、争位与清洗，在清洗中被追捕，拉拢盟友；第三幕「谁来掌秦」本版只有默认收束（芈氏掌秦），推翻结局待定（Q2）。",
         "axisSeqLo": null,
         "axisSeqHi": null,
         "eventIdContract": "append-only-frozen",
@@ -9517,7 +9517,7 @@
       },
       "scenario": {
         "opening": {
-          "text": "一条国家线的风波刚刚落定，程宗扬手头的事告一段落。商会的伙计带着一条从秦国传来的消息赶来：咸阳宫里有人借着他的名头出入。秦国以军功立国，商人进不了朝堂；程宗扬还从没和秦国打过交道。",
+          "text": "程宗扬在咸阳落脚，准备找那位方士问清口信的来由。",
           "playerCharacterId": "liuchao.character.cheng_zongyang",
           "creationPreset": {
             "characterName": "程宗扬",
@@ -9599,16 +9599,16 @@
           {
             "id": "liuchao.event.qin_hook_fangshi_rumor",
             "name": "咸阳传闻",
-            "description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「东家」请来的，借着这个名头在秦宫里出入，排场不小。伙计说不清那方士姓甚名谁，只知道他一身方士打扮。程宗扬从没托谁去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。",
+            "description": "商会伙计一路打听，在你落脚处传来口信：「咸阳有个方士，逢人就说是程少主请来的。小的听到这话，不敢耽搁，赶来问您一声。」",
             "axisId": null,
             "axisMethod": "qin-line-expansion-no-axis",
             "axisAnchor": "扩写·依据 lyg 16988、17057（徐君房：半路接到「你传来的话」去咸阳办事；混了个客卿的身份）",
             "axisSeq": 2001,
-            "axisBeat": "任一国家线收束后，商会伙计传来消息：咸阳宫里有个方士，冒用程宗扬的名头出入秦宫。",
+            "axisBeat": "南荒、晋、宋、汉、唐中三条线收束后，商会伙计传来咸阳方士的口信。",
             "critical": true,
             "conditions": [
               {
-                "path": "compass.anyLineClosed",
+                "path": "compass.qinEntryReady",
                 "operator": "eq",
                 "value": true
               }
@@ -9623,42 +9623,8 @@
             "relatedCharacterIds": [
               "liuchao.character.cheng_zongyang"
             ],
-            "objective": "听商会伙计把咸阳那个方士的事说清楚",
-            "narrativeVariants": [
-              {
-                "when": [
-                  {
-                    "path": "acq.liuchao.character.xu_junfang",
-                    "operator": "gte",
-                    "value": "encountered"
-                  },
-                  {
-                    "path": "identity.liuchao.identity.jin.panjiang_shaozhu",
-                    "operator": "exists"
-                  }
-                ],
-                "description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「盘江程少主」请来的，手里总捧着一颗水晶球，自称姓徐。程宗扬一听就知道是徐君房——他从没托徐君房去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。"
-              },
-              {
-                "when": [
-                  {
-                    "path": "acq.liuchao.character.xu_junfang",
-                    "operator": "gte",
-                    "value": "encountered"
-                  }
-                ],
-                "description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「东家」请来的，手里总捧着一颗水晶球，自称姓徐。程宗扬一听就知道是徐君房——他从没托徐君房去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。"
-              },
-              {
-                "when": [
-                  {
-                    "path": "identity.liuchao.identity.jin.panjiang_shaozhu",
-                    "operator": "exists"
-                  }
-                ],
-                "description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「盘江程少主」请来的，借着这个名头在秦宫里出入，排场不小。伙计说不清那方士姓甚名谁，只知道他一身方士打扮。程宗扬从没托谁去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。"
-              }
-            ],
+            "objective": "听取口信，决定何时前往咸阳",
+            "narrativeVariants": [],
             "playerCompletionContract": {
               "kind": "objective_action",
               "settleOn": [
@@ -9666,12 +9632,23 @@
               ],
               "actions": [
                 {
-                  "id": "hear_xianyang_rumor",
-                  "label": "听伙计说完咸阳那个方士的事",
-                  "actionText": "我让伙计把咸阳那个方士的事从头说一遍，打定主意亲自去咸阳问个明白。",
+                  "id": "go_now",
+                  "label": "这就动身去咸阳",
+                  "actionText": "这就动身去咸阳",
                   "timeCost": 1,
                   "outcomeText": {
-                    "success": "你已听清咸阳的传闻，决定去咸阳问个明白；事件完成真值由本地引擎落账。",
+                    "success": "你记下了口信，准备从地图选择咸阳出发。",
+                    "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
+                    "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
+                  }
+                },
+                {
+                  "id": "later",
+                  "label": "先记下，手头的事办完再说",
+                  "actionText": "先记下，手头的事办完再说",
+                  "timeCost": 1,
+                  "outcomeText": {
+                    "success": "你记下了口信，继续处理手头的事。伙计应声退下，不再提起此事。",
                     "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                     "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
                   }
@@ -9691,7 +9668,7 @@
             "critical": true,
             "conditions": [
               {
-                "path": "flags.event.qin_hook_fangshi_rumor.done",
+                "path": "done.liuchao.event.qin_hook_fangshi_rumor",
                 "operator": "eq",
                 "value": true
               }
@@ -16866,6 +16843,7 @@
   },
   "entities": [],
   "texts": {
+    "lineCompass.qin.entry": "去咸阳，找那个方士问问",
     "qingyu.opening": "雷光是紫色的。\n\n机舱在那一瞬间失去了所有声音——引擎、广播、邻座的呼吸，一齐没了。等你重新听见东西，耳朵里只剩风，草叶擦过脸颊的窸窣，以及远处某种连成一片的低鸣，像是很多人在同时喊叫。\n\n你趴在草里。掌心下面是湿的泥土和草根，不是座椅，不是金属。段强在几步开外，还没爬起来。\n\n天是亮的。风里有血腥味。",
     "qingyu.stage02.opening": "帅帐里灯火压得很低。\n\n帐外还能听见远处的喊杀，但这里已经静下来了。案上有一只未拆的锦囊，对面的人还坐着，像是有话要当面说完。\n\n帐帘刚落下。你站在门槛里。",
     "lcq.ending.death.shanghou_relic": "指尖碰到那层凝固的灰尘时，你先听见了一声极轻的嗡鸣。\n那声音你太熟了。小区楼下的配电箱，地铁隧道里的变压器，夏夜空调外机旁的铁皮柜，都是这样低低的、不肯停歇的嗡嗡声。你在那个世界里从它们旁边走过一千次，从没多看一眼。它们的门上贴着同一个标记：黄底，黑边，一道红色的拐弯箭头。\n手臂上的汗毛先竖了起来，接着是头皮。空气里浮起一股焦甜的腥气，像雷雨落下之前的味道。你想把手缩回来，手指却不听使唤，像被一只看不见的铁钳攥住，五指反而越扣越紧。\n然后它进来了。\n起初不是疼，是一股蛮横的力量从指尖灌进来，顺着胳膊直撞胸口。全身的筋肉在同一瞬间抽紧，牙关咬得咯咯作响，你连一声都叫不出来。心口猛地一顿，又胡乱跳了几下，像一面被人乱擂的破鼓。丹田里那团真阳被惊醒了，生死根疯了一样翻涌，却不知该往哪里去。\n眼前白了一下。你闻到头发烧焦的味道，然后是皮肉。殇侯说过，以往的测试者一触之下便化作火球。那时你还在心里嘀咕：有这么厉害吗？现在你知道了，衣襟上已经蹿起了火苗。\n你忽然想起路边那些骨头。藤蔓底下一层压着一层，一直铺到土径尽头。一百六十七个。他们大概也是这样，被一句“天命之人”说动了心，伸出手去，以为前面就是荣华富贵。\n可你本来认得这个标记。你比他们中的任何一个都认得。\n隔着那片白光，你好像看见殇侯站了起来，又慢慢坐了回去。他捋了捋胡须，叹了口气，那声音很轻，像在惋惜一颗又被失手摔碎的夜明珠。\n最后一个念头竟有点好笑：苏妲己的冰蛊等了你三个月，到底没能等到。\n雨还在下。\n等雨停了，那条红土路边会多出一具焦黑的骨头。用不了几年，藤蔓就会把它盖住，空洞的眼窝里，也会长出青草。",
@@ -17412,15 +17390,15 @@
     "text.card.lmz.l3_harpoon.option1": "替她把叉拔下来",
     "text.card.lmz.l3_harpoon.option2": "拔下来，再给她包扎",
     "text.echo.lmz.l3_harpoon.shielded.previous": "鲛人那一场刚过去，乐明珠还被鱼叉卡着；山顶碧潭那回你先护在她身前，这一回她没有躲，由着你靠近。",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「东家」请来的，借着这个名头在秦宫里出入，排场不小。伙计说不清那方士姓甚名谁，只知道他一身方士打扮。程宗扬从没托谁去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.axisBeat": "任一国家线收束后，商会伙计传来消息：咸阳宫里有个方士，冒用程宗扬的名头出入秦宫。",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.objective": "听商会伙计把咸阳那个方士的事说清楚",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.0.description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「盘江程少主」请来的，手里总捧着一颗水晶球，自称姓徐。程宗扬一听就知道是徐君房——他从没托徐君房去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.1.description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「东家」请来的，手里总捧着一颗水晶球，自称姓徐。程宗扬一听就知道是徐君房——他从没托徐君房去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.2.description": "一条国家线的风波刚落定，商会的一个伙计赶来传话：咸阳宫里有个方士，逢人就说自己是「盘江程少主」请来的，借着这个名头在秦宫里出入，排场不小。伙计说不清那方士姓甚名谁，只知道他一身方士打扮。程宗扬从没托谁去过咸阳，自己的名头被人用进了秦宫，非得亲自去问个清楚。",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.label": "听伙计说完咸阳那个方士的事",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.actionText": "我让伙计把咸阳那个方士的事从头说一遍，打定主意亲自去咸阳问个明白。",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.success": "你已听清咸阳的传闻，决定去咸阳问个明白；事件完成真值由本地引擎落账。",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.description": "商会伙计一路打听，在你落脚处传来口信：「咸阳有个方士，逢人就说是程少主请来的。小的听到这话，不敢耽搁，赶来问您一声。」",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.axisBeat": "南荒、晋、宋、汉、唐中三条线收束后，商会伙计传来咸阳方士的口信。",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.objective": "听取口信，决定何时前往咸阳",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.0.description": "商会伙计一路打听，在你落脚处传来口信：「咸阳有个方士，逢人就说是程少主请来的。小的听到这话，不敢耽搁，赶来问您一声。」",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.1.description": "商会伙计一路打听，在你落脚处传来口信：「咸阳有个方士，逢人就说是程少主请来的。小的听到这话，不敢耽搁，赶来问您一声。」",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.narrativeVariants.2.description": "商会伙计一路打听，在你落脚处传来口信：「咸阳有个方士，逢人就说是程少主请来的。小的听到这话，不敢耽搁，赶来问您一声。」",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.label": "这就动身去咸阳",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.actionText": "这就动身去咸阳",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.success": "你记下了口信，准备从地图选择咸阳出发。",
     "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
     "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。",
     "qin.liuchao.event.qin_enter_xianyang.description": "程宗扬带着随从北上入秦，到了秦都咸阳落脚。秦国以军功赐爵，商人地位低，进不了朝堂；程宗扬打算借这一趟和秦王谈谈商会与财政的事——在秦国开商路，或者替秦廷理财。怎样才能见到秦王，是摆在眼前的第一道关。",
@@ -17564,7 +17542,7 @@
     "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.success": "你已离开咸阳；秦国落在芈太后一系手里；事件完成真值由本地引擎落账。",
     "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
     "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。",
-    "qin.opening.text": "一条国家线的风波刚刚落定，程宗扬手头的事告一段落。商会的伙计带着一条从秦国传来的消息赶来：咸阳宫里有人借着他的名头出入。秦国以军功立国，商人进不了朝堂；程宗扬还从没和秦国打过交道。",
+    "qin.opening.text": "程宗扬在咸阳落脚，准备找那位方士问清口信的来由。",
     "qin.opening.creationPreset.talentTier.description": "来自现代世界的穿越者，拥有不同于本土的思维方式与知识体系。",
     "qin.opening.creationPreset.origin.description": "来自现代世界的穿越者，在六朝各国经营程氏商会。",
     "qin.opening.creationPreset.spiritRoot.description": "并非传统灵根，而是吸收死气转化真元的特殊异能。",
@@ -17636,7 +17614,10 @@
     "qin.rail.text.64": "程宗扬推翻芈太后",
     "qin.rail.text.65": "徐君房死在秦国",
     "qin.rail.text.66": "提前演出秦国以外的后续",
-    "qin.rail.text.67": "可补足离开咸阳前的安顿与回望；国家层面的结果按原著走向，不扩写决战结算。"
+    "qin.rail.text.67": "可补足离开咸阳前的安顿与回望；国家层面的结果按原著走向，不扩写决战结算。",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.label": "先记下，手头的事办完再说",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.actionText": "先记下，手头的事办完再说",
+    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.outcomeText.success": "你记下了口信，继续处理手头的事。伙计应声退下，不再提起此事。"
   },
   "playtests": [
     {
@@ -19062,6 +19043,10 @@
       {
         "lineId": "qin",
         "nameKey": "lineCompass.qin.name",
+        "entryHint": {
+          "stageId": "lyg.qin_xianyang",
+          "hintKey": "lineCompass.qin.entry"
+        },
         "knownWhen": [
           {
             "path": "done.liuchao.event.qin_hook_fangshi_rumor",

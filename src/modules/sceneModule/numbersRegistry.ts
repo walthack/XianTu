@@ -140,6 +140,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.lineCompass.hint.maxChars', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.lineCompass.hint.bannedWords', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineCompass.anyLineClosed.lineIds', kind: 'array', required: true, section: 'progress' },
+  { path: 'story.lineCompass.qinEntry.minClosedLines', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.lineOutcome.failureClosureEvents', kind: 'object', required: true, section: 'progress' },
   { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' },
   { path: 'affinity.range.min', kind: 'number', required: true, section: 'progress' },
   { path: 'affinity.range.max', kind: 'number', required: true, section: 'progress' },
@@ -329,6 +331,17 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
   if (Array.isArray(anyClosedLines)) anyClosedLines.forEach((lineId, i) => {
     if (typeof lineId !== 'string' || !NATION_LINE_IDS.includes(lineId) || lineId === 'qin' || lineId === 'taiquan' || anyClosedLines.indexOf(lineId) !== i) errors.push(`字段值无效：story.lineCompass.anyLineClosed.lineIds[${i}]=${String(lineId)}（须为国家线 id、不重复，太泉／秦不计入）`);
   });
+  const expectedQinLines = NATION_LINE_IDS.filter(id => id !== 'qin' && id !== 'taiquan');
+  if (Array.isArray(anyClosedLines) && (anyClosedLines.length !== expectedQinLines.length || expectedQinLines.some(id => !anyClosedLines.includes(id)))) errors.push('story.lineCompass.anyLineClosed.lineIds 须恰为南荒、晋、宋、汉、唐');
+  const threshold = atPath(tree, 'story.lineCompass.qinEntry.minClosedLines');
+  if (typeof threshold === 'number' && Array.isArray(anyClosedLines) && threshold > new Set(anyClosedLines).size) errors.push('story.lineCompass.qinEntry.minClosedLines 不得超过计入线数');
+  const failures = atPath(tree, 'story.lineOutcome.failureClosureEvents');
+  if (kindOk(failures, 'object')) {
+    for (const [lineId, events] of Object.entries(failures as Record<string, unknown>)) {
+      if (!expectedQinLines.includes(lineId) || !Array.isArray(events) || events.some(id => typeof id !== 'string' || !id.trim()) || new Set(events).size !== events.length) errors.push(`story.lineOutcome.failureClosureEvents.${lineId} 须为计入国家线的无重复非空事件 id 列表`);
+    }
+    if (expectedQinLines.some(id => !Object.prototype.hasOwnProperty.call(failures, id))) errors.push('story.lineOutcome.failureClosureEvents 须包含五条计入国家线');
+  }
   const bannedWords = atPath(tree, 'story.lineCompass.hint.bannedWords');
   if (Array.isArray(bannedWords)) bannedWords.forEach((word, i) => {
     if (typeof word !== 'string' || !word.trim()) errors.push(`字段类型无效：story.lineCompass.hint.bannedWords[${i}] 须为非空字符串`);

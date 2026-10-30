@@ -214,3 +214,16 @@ test('pilot options: over-budget local exit never invokes transport', async () =
     localStorage.removeItem('xiantu.legacyNarrativePilot.s01_01.v1');
   }
 });
+
+test('legacy parseAIResponse preserves action_time through standardize', async () => {
+  setActivePinia(createPinia());
+  const { AIBidirectionalSystem: ai } = await load('utils/AIBidirectionalSystem.ts');
+  for (const action_time of [{ tier: '一瞬' }, { tier: '数日', days: 7 }]) {
+    for (const forceJson of [false, true]) {
+      const parsed = ai.parseAIResponse(JSON.stringify({ text: '离线解析夹具', action_time, tavern_commands: [] }), forceJson, false);
+      assert.deepEqual(parsed.action_time, action_time);
+      assert.equal(parsed.text, '离线解析夹具');
+    }
+  }
+  assert.equal(ai.parseAIResponse('{"text":"旧响应"}', false, false).action_time, undefined);
+});
