@@ -4867,7 +4867,7 @@
             "y": 6374
           },
           "features": [],
-          "country": "南荒"
+          "country": "宋"
         },
         {
           "id": "liuchao.location.guiwang_dong",
@@ -4910,7 +4910,7 @@
           },
           "features": [],
           "region": "宋国",
-          "country": "宋"
+          "country": "晋"
         },
         {
           "id": "liuchao.location.jiankang",
@@ -5120,7 +5120,7 @@
           },
           "features": [],
           "region": "海上",
-          "country": "晴州"
+          "country": "宋"
         },
         {
           "id": "liuchao.location.ningzhou",
@@ -5148,7 +5148,7 @@
           },
           "features": [],
           "region": "宋国",
-          "country": "宋"
+          "country": "晋"
         },
         {
           "id": "liuchao.location.haoshuichuan",

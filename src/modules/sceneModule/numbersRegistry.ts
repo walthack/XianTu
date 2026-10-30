@@ -23,12 +23,13 @@ export interface FieldSpec {
 export const SECTION_KEYS: Record<NumbersSection, readonly string[]> = {
   combat: ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'encounter'],
   progress: ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting', 'loot'],
-  runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui'],
+  runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui', 'crossCountryTravel'],
   assist: ['assist'],
 };
 
 /** 33 个顶层键：version 为 int，其余为必填 object。 */
 export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; section: NumbersSection }> = [
+  { key: 'crossCountryTravel', kind: 'object', section: 'runtime' },
   { key: 'version', kind: 'int', section: 'runtime' },
   { key: 'levels', kind: 'object', section: 'progress' },
   { key: 'factors', kind: 'object', section: 'combat' },
@@ -128,6 +129,12 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'lineBonds.majorResponse.memoryKeep', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'judgement.dice.sides', kind: 'int', required: true, min: 2, section: 'combat' },
   { path: 'combat.baselineDc', kind: 'number', required: true, section: 'combat' },
+  { path: 'crossCountryTravel.dayCap', kind: 'int', required: true, min: 1, section: 'runtime' },
+  { path: 'crossCountryTravel.liPerDay', kind: 'int', required: true, min: 1, section: 'runtime' },
+  { path: 'crossCountryTravel.capitals', kind: 'object', required: true, section: 'runtime' },
+  { path: 'crossCountryTravel.rawDays', kind: 'object', required: true, section: 'runtime' },
+  { path: 'crossCountryTravel.destinations', kind: 'object', required: true, section: 'runtime' },
+  { path: 'crossCountryTravel.destinationRawDays', kind: 'object', required: true, section: 'runtime' },
   { path: 'tuning.timeoutMs', kind: 'int', required: true, min: 1, section: 'runtime' },
   { path: 'ui.rightSidebar.showSecondaryLines', kind: 'bool', required: true, section: 'runtime' },
   { path: 'ui.rightSidebar.showLineCompass', kind: 'bool', required: true, section: 'runtime' },

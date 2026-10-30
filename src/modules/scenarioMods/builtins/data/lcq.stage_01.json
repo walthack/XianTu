@@ -358,7 +358,7 @@
           "y": 4366
         },
         "features": [],
-        "country": "汉"
+        "country": "中立边陲"
       },
       {
         "id": "lcq.location.longchi",
@@ -401,7 +401,7 @@
         },
         "features": [],
         "region": "宋国",
-        "country": "宋"
+        "country": "晋"
       },
       {
         "id": "liuchao.location.nanzhao",
@@ -653,7 +653,7 @@
         },
         "features": [],
         "region": "海上",
-        "country": "晴州"
+        "country": "宋"
       },
       {
         "id": "liuchao.location.ningzhou",
@@ -681,7 +681,7 @@
         },
         "features": [],
         "region": "宋国",
-        "country": "宋"
+        "country": "晋"
       },
       {
         "id": "liuchao.location.haoshuichuan",

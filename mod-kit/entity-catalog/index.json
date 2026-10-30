@@ -18972,6 +18972,14 @@
     },
     {
       "kind": "location",
+      "id": "lcq.location.bailongjiang_kou",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": [
+        "白龙江口"
+      ]
+    },
+    {
+      "kind": "location",
       "id": "lcq.location.beast_camp",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []
@@ -19256,13 +19264,10 @@
       "kind": "location",
       "id": "liuchao.location.guang_ming_guan",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
-      "aliases": []
-    },
-    {
-      "kind": "location",
-      "id": "liuchao.location.guangming",
-      "authoritySource": "mod-kit/entity-catalog/locations.json",
-      "aliases": []
+      "aliases": [
+        "liuchao.location.guangming",
+        "光明观堂"
+      ]
     },
     {
       "kind": "location",

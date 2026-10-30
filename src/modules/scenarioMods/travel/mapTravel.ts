@@ -1,3 +1,4 @@
+import runtimeNumbers from '../../../../mod-kit/numbers-runtime.json';
 import { mapEntryReady } from '../mapEntries';
 import { transitionToMapEntryStage } from '../strictInitializer';
 import locations from '../../../../mod-kit/entity-catalog/locations.json';
@@ -20,14 +21,54 @@ export function isCrossCountry(fromId: string, toId: string): boolean {
   const from = countryOf(fromId), to = countryOf(toId);
   return !!from && !!to && from !== to;
 }
-/** 主动旅行只消费作者已登记路程与解锁条件，不把强制剧情路线自动开放给地图。 */
+const crossCountryTravel = runtimeNumbers.crossCountryTravel;
+const capitals: Readonly<Record<string, string>> = crossCountryTravel.capitals;
+/** 跨国可点落点（按国）；不在表内的国别只可出发、不可作跨国目的地（域外、晴州无代表点）。 */
+const destinations: Readonly<Record<string, readonly string[]>> = crossCountryTravel.destinations;
+/** 单独落点的「出发国→该点」天数表；未列落点用国别矩阵。 */
+const destinationRawDays: Readonly<Record<string, Readonly<Record<string, number>>>> = crossCountryTravel.destinationRawDays;
+/** 各关共用的地图跨国落点标记；始终取总表坐标，不受当前关地点列表限制。 */
+export function mapCapitalMarkers() {
+  return Object.entries(destinations).flatMap(([country, ids]) => ids.map(id => [country, id] as const)).flatMap(([country, id]) => {
+    const entry = locations.entries.find(e => e.id === canonicalLocationId(id));
+    const definition = entry?.definition;
+    return definition?.coordinates ? [{ ...definition, id: entry!.id, country,
+      coordinates: { ...definition.coordinates }, iconColor: '#b45309' }] : [];
+  });
+}
+
+/** 代表点优先插入：同坐标地点的最近点命中平手时仍能点到代表点。 */
+export function withMapCapitalMarkers<T extends { id?: string; name?: string }>(points: T[]) {
+  const markers = mapCapitalMarkers();
+  return [...markers, ...points.filter(point => !markers.some(marker =>
+    canonicalLocationId(point.id) === marker.id || point.name === marker.name))];
+}
+const rawDays: Readonly<Record<string, Readonly<Record<string, number>>>> = crossCountryTravel.rawDays;
+/** UI 与结算共用跨国目的地限制；国内仍由原入口/路线合同处理。 */
+export function mapTravelRestriction(save: SaveData, toId: string): string | undefined {
+  const from = countryOf(currentLocation(save).canonicalLocationId), to = countryOf(toId);
+  if (!from || !to) return '此处国别未定，暂无主动路线。';
+  if (!capitals[from] || !capitals[to]) return '此国别暂不开放主动路线。';
+  if (from !== to && !destinations[to]?.length) return '此国别暂不开放跨国落点。';
+  if (from !== to && !destinations[to].some(id => canonicalLocationId(id) === canonicalLocationId(toId))) return '跨国须前往该国都城/代表地点';
+  return undefined;
+}
+/** 作者登记路线优先（包括未解锁路线）；没有地点路线才按国别回退。 */
 export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
   const fromId = currentLocation(save).canonicalLocationId;
   const done = (save as any).世界?.状态?.剧本模组?.completedEventIds || [];
-  if (!fromId || !countryOf(fromId) || !countryOf(toId)) return [];
-  return (CONTENT_PACKS.mapRoutes || []).filter(r => canonicalLocationId(r.fromId) === fromId && canonicalLocationId(r.toId) === canonicalLocationId(toId) && (r.unlockWhen || []).every(id => done.includes(id)));
+  if (!fromId || mapTravelRestriction(save, toId)) return [];
+  const targetId = canonicalLocationId(toId);
+  const authored = (CONTENT_PACKS.mapRoutes || []).filter(r => canonicalLocationId(r.fromId) === fromId && canonicalLocationId(r.toId) === targetId);
+  if (authored.length) return authored.filter(r => (r.unlockWhen || []).every(id => done.includes(id)));
+  const from = countryOf(fromId)!, to = countryOf(targetId)!;
+  if (from === to) return [];
+  const pointDays = destinationRawDays[targetId];
+  const raw = pointDays ? pointDays[from] : rawDays[from]?.[to] ?? rawDays[to]?.[from];
+  return raw === undefined ? [] : [{ id: `xc:${from}:${to}`, fromId, toId: targetId, dayCost: Math.min(raw, crossCountryTravel.dayCap) }];
 }
 export function selectMapTravel(save: SaveData, toId: string): MapTravelSelection | undefined {
+  if (mapTravelRestriction(save, toId)) return undefined;
   const entry = CONTENT_PACKS.mapEntries?.find(e => e.locationId === canonicalLocationId(toId));
   if (entry) return mapEntryReady(save, entry) ? { source: 'map', actionId: crypto.randomUUID(), fromId: currentLocation(save).canonicalLocationId || '', toId: entry.locationId, routeId: entry.id } : undefined;
   const route = mapRoutes(save, toId)[0], fromId = currentLocation(save).canonicalLocationId;
@@ -36,6 +77,11 @@ export function selectMapTravel(save: SaveData, toId: string): MapTravelSelectio
 /** 调用入口仅地图按钮；模型与自然语言不进入此函数。提交者先克隆存档，落账后原子持久化。 */
 export function settleMapTravel(save: SaveData, selection: MapTravelSelection): boolean {
   if (selection?.source !== 'map' || !selection.actionId) return false;
+  // 重放按原收据核验，不以抵达后的当前国别重新生成路线。
+  const source = `map:${selection.routeId}:${selection.fromId}:${selection.toId}`;
+  const prior = (save as any).系统?.扩展?.actionTime?.receipts?.['map:' + selection.actionId];
+  if (prior) return prior.source === source;
+  if (mapTravelRestriction(save, selection.toId)) return false;
   const entry = CONTENT_PACKS.mapEntries?.find(e => e.locationId === canonicalLocationId(selection.toId));
   if (entry) {
     if (selection.routeId !== entry.id || selection.fromId !== (currentLocation(save).canonicalLocationId || '') || !mapEntryReady(save, entry)) return false;
@@ -45,9 +91,6 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
     Object.assign(save, result.saveData);
     return true;
   }
-  const source = `map:${selection.routeId}:${selection.fromId}:${selection.toId}`;
-  const prior = (save as any).系统?.扩展?.actionTime?.receipts?.['map:' + selection.actionId];
-  if (prior) return prior.source === source;
   const route = currentLocation(save).canonicalLocationId === selection.fromId ? mapRoutes(save, selection.toId).find(r => r.id === selection.routeId) : undefined;
   if (!route) { logEvent({ code: 'LCQ-SAV-038', detail: { reason: 'invalid_map_selection' } }); return false; }
   const days = route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost;

@@ -678,7 +678,7 @@
         },
         "features": [],
         "region": "宋国",
-        "country": "宋"
+        "country": "晋"
       },
       {
         "id": "liuchao.location.junzhou",
@@ -734,7 +734,7 @@
         },
         "features": [],
         "region": "海上",
-        "country": "晴州"
+        "country": "宋"
       },
       {
         "id": "liuchao.location.ningzhou",
@@ -762,7 +762,7 @@
         },
         "features": [],
         "region": "宋国",
-        "country": "宋"
+        "country": "晋"
       },
       {
         "id": "liuchao.location.haoshuichuan",

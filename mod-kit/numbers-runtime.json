@@ -254,5 +254,117 @@
       "min": 2,
       "max": 4
     }
+  },
+  "crossCountryTravel": {
+    "note": "直线坐标距离按每日80里向上取整；rawDays保存未截断天数，双向共用，结算取dayCap上限。capitals为各国代表点（出发国别开放判定与矩阵基准）；destinations为跨国可点落点（中立边陲无落点，五原只能出发不能作跨国目的地）；destinationRawDays为单独落点的「出发国→该点」未截断天数（按该点坐标到各国代表点直线距离计，同国不走跨国规则），未列落点用国别矩阵。",
+    "liPerDay": 80,
+    "dayCap": 60,
+    "capitals": {
+      "晋": "liuchao.location.jiankang",
+      "宋": "liuchao.location.lin_an",
+      "汉": "lyl.location.luoyang",
+      "唐": "liuchao.location.changan",
+      "秦": "liuchao.location.xianyang",
+      "南荒": "lcq.location.huamiao_village",
+      "太泉": "liuchao.location.canglan",
+      "昭南": "liuchao.location.nanzhao",
+      "中立边陲": "liuchao.location.wuyuan"
+    },
+    "destinations": {
+      "晋": [
+        "liuchao.location.jiankang",
+        "liuchao.location.jiangzhou"
+      ],
+      "宋": [
+        "liuchao.location.lin_an"
+      ],
+      "汉": [
+        "lyl.location.luoyang"
+      ],
+      "唐": [
+        "liuchao.location.changan"
+      ],
+      "秦": [
+        "liuchao.location.xianyang"
+      ],
+      "南荒": [
+        "lcq.location.huamiao_village"
+      ],
+      "太泉": [
+        "liuchao.location.canglan"
+      ],
+      "昭南": [
+        "liuchao.location.nanzhao"
+      ],
+      "中立边陲": [
+        "liuchao.location.wuyuan"
+      ]
+    },
+    "destinationRawDays": {
+      "liuchao.location.jiangzhou": {
+        "宋": 32,
+        "汉": 46,
+        "唐": 55,
+        "秦": 61,
+        "南荒": 43,
+        "太泉": 43,
+        "昭南": 14,
+        "中立边陲": 59
+      }
+    },
+    "rawDays": {
+      "晋": {
+        "宋": 52,
+        "汉": 53,
+        "唐": 41,
+        "秦": 56,
+        "南荒": 29,
+        "太泉": 64,
+        "昭南": 30,
+        "中立边陲": 38
+      },
+      "宋": {
+        "汉": 38,
+        "唐": 72,
+        "秦": 65,
+        "南荒": 74,
+        "太泉": 31,
+        "昭南": 36,
+        "中立边陲": 87
+      },
+      "汉": {
+        "唐": 48,
+        "秦": 30,
+        "南荒": 82,
+        "太泉": 69,
+        "昭南": 58,
+        "中立边陲": 76
+      },
+      "唐": {
+        "秦": 28,
+        "南荒": 62,
+        "太泉": 95,
+        "昭南": 67,
+        "中立边陲": 35
+      },
+      "秦": {
+        "南荒": 83,
+        "太泉": 94,
+        "昭南": 74,
+        "中立边陲": 62
+      },
+      "南荒": {
+        "太泉": 76,
+        "昭南": 42,
+        "中立边陲": 40
+      },
+      "太泉": {
+        "昭南": 36,
+        "中立边陲": 101
+      },
+      "昭南": {
+        "中立边陲": 67
+      }
+    }
   }
 }

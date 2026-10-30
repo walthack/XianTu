@@ -473,3 +473,25 @@
 - 证据层级：离线自动化。`tests/qinEntryWiring.test.mjs` 14/14（新增7项）；秦入口、六份 lineCompass 与 numbersRegistry 共9文件全部通过。仓库 `npm run type-check` 仅允许的 controller.ts:202 TS2559；`git diff --check` 通过。额外 vue-tsc 检查报出其他页面类型错误（日志 `/tmp/festival-vue-types.log`），不记为通过。沿用现有 node:test，仓库未配置 vitest。
 - 成熟度：实现与定向回归完成；未测浏览器/真人/模型，全量测试未跑。无新增诊断码；runtime/AIBS/核心 prompt/canon 数据未动，无冻结接线阻塞。未 commit/push。
 - 跨组依赖/下轮：剧情策划替换占位文案，浏览器核验点击与存档恢复；保持 Grok 控制面不变。
+
+### XC-20261031 · 主动跨国按国对国路程（工作区）
+- 用户授权实现：配置矩阵、首都限制、路线回退与地图提示；保留作者入口/路线优先级，不动冻结三文件，不 commit/push。
+- 交付：[`numbers-runtime.json`](mod-kit/numbers-runtime.json) 保存9国代表点、36对原始天数、60天上限与80里/日；[`mapTravel.ts`](src/modules/scenarioMods/travel/mapTravel.ts) 按当前国别回退，作者入口/路线（含解锁门槛）优先；地图非首都跨国提示并禁用。合并数值产物由脚本生成，注册表同步。
+- 证据：[`crossCountryTravel.test.mjs`](tests/crossCountryTravel.test.mjs) 新增48项；地图/时间/秦入口专项114/114；最终 npm test 3012项，2999通过、0失败、13跳过（263.4秒）；npm run type-check 通过；Vue SFC编译与 git diff --check 通过。
+- 门禁修复：controller.ts:202 移除无catalog的无效上下文参数（沿用默认catalog）；诊断去重测试改用可控Date.now，消除1ms真实时间窗口抖动。数值包测试顶层键清单同步。无新增require/错误码/生产模块，不需新增debugCategories登记。
+- 成熟度：实现及离线验证完成；浏览器/真人/真实模型未测。冻结runtime.ts、AIBidirectionalSystem.ts、tests/frozen-baseline.json差分为空；既有临时目录未动，无commit/push。不涉及新策划轮次，控制面不变；下轮可验证地图点击体验。
+
+### XC-20261031 · 地点裁定与地图代表点续轮开工
+- 用户授权：江州三地点归晋、白龙江口独立补给点、光明观堂合并别名、帅帐/函谷关国别同步，以及各国代表点常驻地图。保留既有跨国/晴州改动，不提交推送，冻结三文件不动。
+- 实施中；验证待专项、内容包check、type-check及全量测试。非策划轮次，既有控制面不变；浏览器/真人体验待测。
+
+### XC-20261031 · 地点裁定与地图代表点续轮交付（未提交）
+- 交付：[完整文件/地点/地图位置清单](docs/handoffs/2026-10-31/LOCATION-MAP-UPDATE.md)。江州三点归晋、白龙江口独立南荒补给点、光明观堂合并别名、帅帐归中立边陲、函谷关汉核验；各数据层显式国别同步（含旧id），目录索引及光明观空搜刮占位配套同步。
+- 地图：九国代表点跨关常驻、总表坐标、优先命中并去重；花苗寨保持(1650,7470)，不修改底图/原坐标。水香楼仍宋/无坐标，宁州仍晋。
+- 证据：最终 npm test 3020项，3007 pass / 0 fail / 13 skip（253.5秒）；本批新增8项。type-check退出0；content-packs --check、entity-catalog零错误、Vue SFC编译、diff check通过。
+- 成熟度：实现及离线验证完成，浏览器/真人体验未测。冻结三文件差分为空，无新增源文件/require/诊断码，保留既有未提交跨国/晴州改动及临时目录；未commit/push。下一步可由既有控制面安排浏览器地图点击验收。
+
+### XC-20261031 · 江州第二落点（五原仍为落点，见 01:18 更正）
+- 用户已定：江州为晋第二跨国落点（天数按江州坐标单独配置，临安→江州32日）；五原保留为可点跨国落点（用户 01:18 更正）；核验剧情罗盘跨国转场。
+- 交付：`crossCountryTravel.destinations`／`destinationRawDays` 入配置（[续轮二说明](docs/handoffs/2026-10-31/LOCATION-MAP-UPDATE.md)），mapTravel 限制/天数/地图标记改读配置。剧情 travel: 转场未被卡（本地落位，不经 canonGuard），模型跨国位置指令仍拒。
+- 证据：新测 jiangzhouScriptedTravel 3项、crossCountryTravel 增至65项；npm test 3028项 3015 pass / 0 fail / 13 skip；type-check 退出0。冻结三文件差分为空，无新增源文件/require/诊断码；未commit/push。浏览器/真人未测。

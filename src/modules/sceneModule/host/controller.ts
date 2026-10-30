@@ -199,7 +199,7 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   }
   syncSceneStatuses(save,c,a.state);
   // 6ccb 真机 P0：气血本拍落账打到保底即当拍判负（结果行补一句，叙事与收场同拍）。
-  if(settleDownedAfterHostSync(c,a.state,sceneContext(save,c))){confirmed.result.outcome=a.state.outcome;a.last.lines.push('你伤重倒下，这一战败了。');}
+  if(settleDownedAfterHostSync(c,a.state)){confirmed.result.outcome=a.state.outcome;a.last.lines.push('你伤重倒下，这一战败了。');}
   runtimeOf(save).worldTurn+=1;writeExt(save,ext);
   await deps.persist(save);checkAbort(deps); // Dice checkpoint BEFORE any model request.
   const narration=await narrateBeat(c,a.state,confirmed.result,p.text,runtimeOf(save),deps.askNarrative);checkAbort(deps);

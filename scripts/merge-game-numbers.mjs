@@ -18,9 +18,9 @@ const read = (name) => JSON.parse(readFileSync(resolve(root, 'mod-kit', name), '
 
 const COMBAT = ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'encounter'];
 const PROGRESS = ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting', 'loot'];
-const RUNTIME = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui'];
+const RUNTIME = ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui', 'crossCountryTravel'];
 const ASSIST = ['assist'];
-const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'assist', 'story', 'shop', 'crafting', 'ui', 'loot', 'encounter'];
+const ORDER = ['version', 'levels', 'factors', 'combat', 'training', 'difficulty', 'currency', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'lineBonds', 'npcCard', 'affinity', 'reputation', 'status', 'techniques', 'freeAction', 'tuning', 'judgement', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'assist', 'story', 'shop', 'crafting', 'ui', 'loot', 'encounter', 'crossCountryTravel'];
 
 const parts = [
   ['numbers-combat.json', COMBAT],

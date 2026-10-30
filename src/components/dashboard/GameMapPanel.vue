@@ -155,7 +155,8 @@
       </div>
       <div class="popup-content">
         <p class="location-type">{{ getLocationTypeName(selectedLocation.type) }}</p>
-        <p v-if="mapTravelNotice">{{ mapTravelNotice }}</p>
+        <p v-if="selectedTravelRestriction">{{ selectedTravelRestriction }}</p>
+        <p v-else-if="mapTravelNotice">{{ mapTravelNotice }}</p>
         <p class="location-desc">{{ selectedLocation.description || selectedLocation.描述 }}</p>
         <div v-if="selectedLocation.danger_level" class="location-detail">
           <strong>安全等级：</strong>{{ selectedLocation.danger_level }}
@@ -166,7 +167,7 @@
         <div v-if="selectedLocation.controlled_by" class="location-detail">
           <strong>控制势力：</strong>{{ selectedLocation.controlled_by }}
         </div>
-        <button class="enter-region-btn" :disabled="mapTravelBusy || mapTravelUi.isAIProcessing" @click="travelToSelectedLocation">前往此地</button>
+        <button class="enter-region-btn" :disabled="!!selectedTravelRestriction || mapTravelBusy || mapTravelUi.isAIProcessing" @click="travelToSelectedLocation">前往此地</button>
         <!-- 进入区域地图 -->
         <button
           class="enter-region-btn"
@@ -391,7 +392,7 @@ import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Us
 import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
 import { useUIStore } from '@/stores/uiStore';
-import { selectMapTravel, settleMapTravel } from '@/modules/scenarioMods/travel/mapTravel';
+import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
 import { EnhancedWorldGenerator, generateRealmMap } from '@/utils/worldGeneration/enhancedWorldGenerator';
@@ -425,6 +426,10 @@ const canvasRef = ref<HTMLCanvasElement | null>(null);
 const mapContainerRef = ref<HTMLDivElement | null>(null);
 const mapManager = ref<GameMapManager | null>(null);
 const selectedLocation = ref<WorldLocation | null>(null);
+const selectedTravelRestriction = computed(() => {
+  const save = gameStateStore.toSaveData();
+  return save && selectedLocation.value ? mapTravelRestriction(save, String(selectedLocation.value.id || '')) : undefined;
+});
 const selectedContinent = ref<any | null>(null);
 const mapStatus = ref('初始化中...');
 const popupPosition = ref({ x: 0, y: 0 });
@@ -1905,12 +1910,16 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
 
     // 加载地点（包括所有类型）；正典子地点（寺/观/宫/楼/坊…与主城同坐标）不画世界锚——
     // 它们住在城内区域图里，世界图上一点摞十几个标签正是"标注重叠阅读困难"的主源。
-    if (worldInfo.地点信息 && Array.isArray(worldInfo.地点信息)) {
-      const locations = normalizeLocationsData(worldInfo.地点信息, mapConfig);
+    if (scenarioMapLocked.value || Array.isArray(worldInfo.地点信息)) {
+      const stageLocations = normalizeLocationsData(worldInfo.地点信息 || [], mapConfig);
+      const capitalIds = new Set(scenarioMapLocked.value ? withMapCapitalMarkers([]).map(marker => marker.id) : []);
+      const locations = scenarioMapLocked.value
+        ? normalizeLocationsData(withMapCapitalMarkers(stageLocations), mapConfig)
+        : stageLocations;
       let skippedSub = 0;
       locations.forEach((location: WorldLocation) => {
         try {
-          if (isCanonSubPlace(location, locations)) { skippedSub++; return; }
+          if (!capitalIds.has(location.id) && isCanonSubPlace(location, locations)) { skippedSub++; return; }
           mapManager.value?.addLocation(location);
           locationCount++;
         } catch (error) {

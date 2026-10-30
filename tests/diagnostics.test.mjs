@@ -123,7 +123,7 @@ test('级别线：minLevel 丢弃、persistLevel 控制落盘、consoleLevel 控
   });
 });
 
-test('同一事件在 repeatMs 内只记一次，下一次带出 suppressedBefore；detail 不同则各记', async () => {
+test('同一事件在 repeatMs 内只记一次，下一次带出 suppressedBefore；detail 不同则各记', async (t) => {
   await fresh(null, async () => {
     quiet(() => {
       log.logEvent({ code: 'LCQ-FA-001', detail: { t: 'a' } });
@@ -134,11 +134,15 @@ test('同一事件在 repeatMs 内只记一次，下一次带出 suppressedBefor
     assert.equal(recent().length, 2);
   });
   await fresh({ repeatMs: 1 }, async () => {
-    log.logEvent({ code: 'LCQ-FA-001', detail: { t: 'a' } });
-    log.logEvent({ code: 'LCQ-FA-001', detail: { t: 'a' } });
-    await new Promise(resolve => setTimeout(resolve, 5));
-    const third = log.logEvent({ code: 'LCQ-FA-001', detail: { t: 'a' } });
-    assert.equal(third.detail.suppressedBefore, 1, '窗口内被吞的那一条在下一条里带出计数');
+    let now = Date.now();
+    const clock = t.mock.method(Date, 'now', () => now);
+    try {
+      log.logEvent({ code: 'LCQ-FA-001', detail: { t: 'a' } });
+      assert.equal(log.logEvent({ code: 'LCQ-FA-001', detail: { t: 'a' } }), null);
+      now += 5;
+      const third = log.logEvent({ code: 'LCQ-FA-001', detail: { t: 'a' } });
+      assert.equal(third.detail.suppressedBefore, 1, '窗口内被吞的那一条在下一条里带出计数');
+    } finally { clock.mock.restore(); }
   });
 });
 
