@@ -141,6 +141,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.lineCompass.hint.bannedWords', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineCompass.anyLineClosed.lineIds', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineCompass.qinEntry.minClosedLines', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.lineCompass.festival', kind: 'object', required: true, section: 'progress' },
   { path: 'story.lineOutcome.failureClosureEvents', kind: 'object', required: true, section: 'progress' },
   { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' },
   { path: 'affinity.range.min', kind: 'number', required: true, section: 'progress' },

@@ -129,6 +129,7 @@
 | LCQ-UI-004 | error | vue | Vue 组件未捕获异常（app.config.errorHandler） | 组件渲染、生命周期钩子、事件处理器或 watcher 抛出未捕获异常（Vue 已接管，不会再触发 window error） | 看 stack 与 detail.info（Vue 给出的出错位置，如 render function / mounted hook）、detail.component；玩家提示按码 30 秒去重，不会刷屏；复现步骤 + 导出日志提交 | 是 |
 | LCQ-UI-005 | error | startup | 启动阶段失败，已显示兜底界面 | 挂载前的启动步骤抛错（目前是 migrateData 存档迁移检查），或挂载 Vue 应用时抛错；此时页面显示原生兜底界面（导出日志 / 重新载入） | 看 detail.stage（migrateData / mount）与 cause；先导出日志，再重新载入；migrateData 失败多为浏览器存储不可用，按 LCQ-SAV-001 / LCQ-SAV-005 排查 | 否 |
 | LCQ-UI-006 | warn | diagnostics | 导出反馈包失败 | 组包或触发下载时抛错：浏览器拒绝创建下载（沙箱、权限），或内存不足以容纳带存档的大包 | 看 cause；换浏览器或重试；先不勾选“附带存档”再导出（只含日志/版本/模型配置摘要，体积很小）；不影响游戏 | 否 |
+| LCQ-UI-007 | warn | vue | 开启黑魔海大祭失败 | 右栏点击「开启大祭」时读写存档或保存抛错 | 看 cause；重试点击；存档未改动则可继续游戏 | 否 |
 
 | LCQ-SAV-035 | warn | actionTime | 动作耗时档位缺失或非法 | 协议缺失、非法或旧档不兼容 | 检查该动作结构化来源及配置，保留原档重试 | 否 |
 | LCQ-SAV-036 | warn | actionTime | 模型数日超过配置上限，已截断 | 协议缺失、非法或旧档不兼容 | 检查该动作结构化来源及配置，保留原档重试 | 否 |

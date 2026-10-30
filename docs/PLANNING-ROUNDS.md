@@ -1003,3 +1003,14 @@ PROJECT-STATUS改为当前真相→P0/P1负责人状态→简要交付→文档�
 - 交付与证据：[入口实现及验证记录](handoffs/2026-10-30/QIN-ENTRY-WIRING.md)；`tests/qinEntryWiring.test.mjs` 新增 7 项全部通过，内容包 check / diff check / 冻结哈希通过。
 - 全量（box 非沙箱复跑）：npm test 2957 项、2944 pass / 0 fail / 13 skip（基线 2950 + 新增 7）；type-check 仅允许的 controller.ts:202 TS2559；vite build 通过。mapTravel 改为静态导入 strictInitializer（去掉浏览器不可用的 require）；新文件 mapEntries.ts 归入日志 world 大类。
 - 成熟度：入口已实现、专项离线已验证；未测浏览器/真人/真实模型。依赖/下轮：环境恢复后复跑全量；秦返回流程与 rail 首拍修复另行授权，不扩大本批范围。控制面不变。
+
+### FESTIVAL-20261030 · 开工
+- 系统/剧情目标：方案 A，终关完成后玩家主动开启黑魔海大祭；关闭未入秦入口，秦内阻止启动，仅占位文案。
+- 成熟度：实施中；证据待定向回归与类型检查；未测真机/模型。冻结 runtime/AIBS，不提交；沿用现有控制面。
+
+### FESTIVAL-20261030 · 交付（未提交）
+- 系统交付：`src/modules/scenarioMods/heimohaiFestival.ts` 读取终关完整 canon rail 结算（含场外/void），右栏明确点击才记录 `lyg.event.heimohai_festival_start` 与扩展 `festivalStarted`；秦内拒绝，未入秦关闭指南针提示、口信与地图资格，不写秦收束账。配置位于 `mod-kit/numbers-progress.json` 的 `story.lineCompass.festival`，合并产物由脚本生成，新模块已登记 debugCategories。
+- 剧情交付：终关「大祭将近」、秦内阻止使用【扩写】，开祭过场使用【扩写·待剧情策划】占位；不扩写正式剧情。
+- 证据层级：离线自动化。`tests/qinEntryWiring.test.mjs` 14/14（新增7项）；秦入口、六份 lineCompass 与 numbersRegistry 共9文件全部通过。仓库 `npm run type-check` 仅允许的 controller.ts:202 TS2559；`git diff --check` 通过。额外 vue-tsc 检查报出其他页面类型错误（日志 `/tmp/festival-vue-types.log`），不记为通过。沿用现有 node:test，仓库未配置 vitest。
+- 成熟度：实现与定向回归完成；未测浏览器/真人/模型，全量测试未跑。无新增诊断码；runtime/AIBS/核心 prompt/canon 数据未动，无冻结接线阻塞。未 commit/push。
+- 跨组依赖/下轮：剧情策划替换占位文案，浏览器核验点击与存档恢复；保持 Grok 控制面不变。

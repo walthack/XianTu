@@ -9,6 +9,13 @@
     </div>
 
     <div v-if="isDataLoaded && characterInfo" class="sidebar-content">
+      <div v-if="festival.warning || festival.available || festival.transition" class="quest-section">
+        <p v-if="festival.warning">{{ festival.warning }}</p>
+        <button v-if="festival.available" class="quest-next-btn" :disabled="festivalSaving || uiStore.isAIProcessing || !!festival.blocked" @click="beginFestival">{{ FESTIVAL.label }}</button>
+        <p v-if="festival.available && festival.blocked">{{ festival.blocked }}</p>
+        <p v-if="festival.transition">{{ festival.transition }}</p>
+        <p v-if="festivalError">{{ festivalError }}</p>
+      </div>
       <!-- 核心数值 -->
       <div class="vitals-section">
         <h3 class="section-title">
@@ -404,6 +411,7 @@
 <script setup lang="ts">
 import {questLineView} from '@/modules/scenarioMods/questLineView';
 import { computed, ref } from 'vue';
+import { logError } from '@/modules/diagnostics/log';
 import { User, Sparkles, Heart, Droplet, Brain, Clock, Star, Zap } from 'lucide-vue-next';
 import { LOCAL_TALENTS } from '@/data/creationData';
 import DetailModal from '@/components/common/DetailModal.vue';
@@ -422,6 +430,7 @@ import {
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
 import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
+import { FESTIVAL, festivalView, startHeimohaiFestival } from '@/modules/scenarioMods/heimohaiFestival';
 import { lineCompassView, showLineCompass } from '@/modules/scenarioMods/lineCompass';
 import { atTrainingCap, breakthroughHint, canBreakthrough } from '@/modules/scenarioMods/levelProgression';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
@@ -491,6 +500,23 @@ const availableLines = computed(() => {
 // 当前线卡（lineCompass.ts）：显示开关 ui.rightSidebar.showLineCompass（默认 true，用户 2026-10-27 08:57 定改完后不再隐藏）；关时先返回，不取存档快照。
 // fallback＝原主线指南针的「去X · 见Y」（questCompassPhrases），没有当前线时卡片显示它（总策划定，避免玩家什么提示都没有）；
 // 不带冒号后的固定目标（用户 2026-10-27 定）。
+const festival = computed(() => festivalView(gameStateStore.toSaveData()));
+const festivalSaving = ref(false);
+const festivalError = ref('');
+const beginFestival = async () => {
+  if (festivalSaving.value || uiStore.isAIProcessing) return;
+  festivalSaving.value = true;
+  festivalError.value = '';
+  try {
+    const save = gameStateStore.toSaveData();
+    if (!save) return;
+    const result = startHeimohaiFestival(save, { source: 'player', actionId: FESTIVAL.actionId });
+    if (!result.ok) { festivalError.value = result.note; return; }
+    gameStateStore.loadFromSaveData(save);
+    await gameStateStore.saveGame();
+  } catch (error) { festivalError.value = String(error); logError('LCQ-UI-007', error); }
+  finally { festivalSaving.value = false; }
+};
 const lineCompass = computed(() => {
   if (!showLineCompass()) return null;
   const rt: any = epistemicRuntime.value;

@@ -1,3 +1,4 @@
+import { qinClosedByFestival, FESTIVAL } from './heimohaiFestival';
 import type { SaveData } from '@/types/game';
 import { CONTENT_PACKS } from '../contentPacks';
 import { resolveLedgerPath } from './ledgerConditions';
@@ -16,6 +17,7 @@ export function mapEntryReady(save: SaveData, entry: MapEntry): boolean {
 /** At the post-ledger seam: persisted delivery survives stage changes; previews only change their clone. */
 export function syncMapEntryMessages(save: SaveData, rt: any, transitions: Array<{ type: string; id: string }>): void {
   for (const entry of CONTENT_PACKS.mapEntries || []) {
+    if (entry.stageId === FESTIVAL.qinStageId && qinClosedByFestival(save, rt)) continue;
     const previous = (save as any).系统?.扩展?.mapEntryMessages?.[entry.id];
     if (resolveLedgerPath(`done.${entry.eventId}`, rt, save)?.value === true) {
       if (previous) previous.done = true;

@@ -1,3 +1,4 @@
+import { qinClosedByFestival } from './heimohaiFestival';
 /**
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
  * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts），进度期限 deadline.*（同稿 §4.5，数据源 progressDeadlines.ts），
@@ -170,7 +171,7 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): u
       // 只读收束档与编年史（closedWhen 只许 done.*），不新增存档字段
       switch (parsed.id) {
         case 'anyLineClosed': return anyNationLineClosed(runtime);
-        case 'qinEntryReady': return nationClosedLineCount(runtime) >= GAME_NUMBERS.story.lineCompass.qinEntry.minClosedLines;
+        case 'qinEntryReady': return !qinClosedByFestival(save, runtime) && nationClosedLineCount(runtime) >= GAME_NUMBERS.story.lineCompass.qinEntry.minClosedLines;
         default: return undefined;
       }
   }

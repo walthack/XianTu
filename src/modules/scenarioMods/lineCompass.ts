@@ -1,3 +1,4 @@
+import { qinClosedByFestival, FESTIVAL } from './heimohaiFestival';
 /**
  * 右栏「当前线」卡（右栏线入口复用分析 2026-10-27 §5；用户 2026-10-27 09:26 定 Q1/Q2/Q4/Q6，总策划定 Q3/Q5/Q7/Q8/Q10）。
  * 回答两件事：当前在走哪条国家线、它的下一步一句；别处还有哪些已知的线（只给线名）。
@@ -232,7 +233,7 @@ export function lineCompassView(save: unknown, input: LineCompassInput): LineCom
     const status = lineUnlockStatus(save, line.lineId, { ...(old ? secondaryLineUnlockOptions(old) : { required: true }), runtime: rt });
     return !status?.unlocked;
   };
-  const open = table.lines.filter(line => known(line) && !closed(line));
+  const open = table.lines.filter(line => known(line) && !closed(line) && !(line.lineId === FESTIVAL.qinLineId && qinClosedByFestival(save, rt)));
   const eligible = (lineId: string | undefined): LineCompassLine | undefined => {
     const line = open.find(l => l.lineId === lineId);
     return line && !locked(line) ? line : undefined;

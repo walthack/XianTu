@@ -140,6 +140,7 @@ export const ERROR_CODES = {
   'LCQ-UI-004': spec('error', 'vue', 'Vue 组件未捕获异常（app.config.errorHandler）', true),
   'LCQ-UI-005': spec('error', 'startup', '启动阶段失败，已显示兜底界面'),
   'LCQ-UI-006': spec('warn', 'diagnostics', '导出反馈包失败'),
+  'LCQ-UI-007': spec('warn', 'vue', '开启黑魔海大祭失败'),
 } as const satisfies Record<string, CodeSpec>;
 
 export type ErrorCode = keyof typeof ERROR_CODES;

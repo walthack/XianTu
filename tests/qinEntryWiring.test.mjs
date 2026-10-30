@@ -88,3 +88,93 @@ test('预览推进不污染源存档投递标记，未选择也可在达标后�
  assert.equal(settleMapTravel(s,selection),true);
  assert.equal(rt(s).modId,entry.stageId);
 });
+
+let festivalApi, railApi, compassApi;
+before(async () => {
+ festivalApi = await loadTs('../src/modules/scenarioMods/heimohaiFestival.ts');
+ railApi = await loadTs('../src/modules/scenarioMods/canonRail.ts');
+ compassApi = await loadTs('../src/modules/scenarioMods/lineCompass.ts');
+});
+const finalSource = JSON.parse(readFileSync(new URL('../src/modules/scenarioMods/builtins/data/lyg.shituolin_endgame.json', import.meta.url)));
+function finalSave(complete = true) {
+ const s = saveWith(3);
+ s.世界.状态.剧本模组 = buildStrictScenarioInitialization(finalSource).runtimeState;
+ rt(s).completedEventIds = [...closers, ...(complete ? railApi.getCanonRailProfile(rt(s)).orderedEventIds : [])];
+ return s;
+}
+const start = s => festivalApi.startHeimohaiFestival(s, {source:'player', actionId:festivalApi.FESTIVAL.actionId});
+test('大祭：终关显示警示，末拍/诛魔不能代替整条rail完成', () => {
+ const s = finalSave(false);
+ assert.match(festivalApi.festivalView(s).warning, /^【扩写】大祭将近/);
+ rt(s).completedEventIds.push('lyg.event.shituolin_endgame_15_beat','lyg.event.claim_slew_demon');
+ assert.equal(start(s).ok, false);
+ assert.equal(festivalApi.festivalView(saveWith(3)).warning, '');
+});
+test('大祭：时间/回合推进不启动，必须明确玩家选择；重复点击幂等', () => {
+ let s = finalSave();
+ s.元数据.时间.日 += 10;
+ s = advanceScenarioRuntime(s).saveData;
+ assert.equal(s.系统.扩展.festivalStarted, undefined);
+ assert.equal(festivalApi.festivalView(s).available, true);
+ assert.equal(festivalApi.startHeimohaiFestival(s,{source:'tick',actionId:festivalApi.FESTIVAL.actionId}).ok,false);
+ assert.equal(start(s).ok,true);
+ assert.match(festivalApi.festivalView(s).transition,/^【扩写·待剧情策划】/);
+ const before = structuredClone(s);
+ assert.equal(start(s).ok,false);
+ assert.deepEqual(s,before);
+});
+test('大祭：未入秦隐藏提示、停止口信、禁用咸阳且无秦收束记录', () => {
+ let s = advanceScenarioRuntime(finalSave()).saveData;
+ assert.ok(rt(s).activeEventIds.includes(entry.eventId));
+ const beforeChronicle = structuredClone(rt(s).chronicle);
+ assert.equal(start(s).ok,true);
+ assert.equal(selectMapTravel(s,entry.locationId),undefined);
+ assert.ok(!getCurrentStoryExplorationActions(s).some(a=>a.eventId===entry.eventId));
+ s = advanceScenarioRuntime(s).saveData;
+ assert.ok(!rt(s).activeEventIds.includes(entry.eventId));
+ assert.ok(!rt(s).completedEventIds.includes(entry.eventId));
+ assert.equal(rt(s).chronicle.filter(e=>!beforeChronicle.some(b=>b.id===e.id)).length,1);
+ assert.ok(!compassApi.lineCompassView(s,{}).entryHints.some(h=>h.lineId==='qin'));
+});
+test('大祭：秦内阻止，叙事提示先完成秦，存档不变', () => {
+ const s = finalSave();
+ const selection = selectMapTravel(s,entry.locationId);
+ assert.equal(settleMapTravel(s,selection),true);
+ const before = structuredClone(s);
+ assert.match(start(s).note,/【扩写】.*先完成秦线/);
+ assert.equal(start(s).ok,false);
+ assert.deepEqual(s,before);
+});
+test('大祭：已入秦并返回者不按未入秦关闭；场外结算与void遵循rail机制', () => {
+ const s = finalSave();
+ (rt(s).chronicle ||= []).push({id:'visited-qin',stageId:entry.stageId});
+ const rail = railApi.getCanonRailProfile(rt(s));
+ const id = rail.orderedEventIds[0];
+ rt(s).completedEventIds = rt(s).completedEventIds.filter(e=>e!==id);
+ rt(s).offscreenResolvedEventIds = [id];
+ assert.equal(festivalApi.festivalView(s).available,true);
+ rt(s).offscreenResolvedEventIds = [];
+ const condition = rt(s).events.find(e=>e.id===id).completion[0];
+ rt(s).flags[condition.path.slice(6).replace(/\.done$/, '.void')] = true;
+ assert.equal(festivalApi.festivalView(s).available,true);
+ assert.equal(start(s).ok,true);
+ assert.equal(festivalApi.qinClosedByFestival(s),false);
+});
+test('大祭：未投递口信直接开祭不再投递；已知秦提示在开祭后隐藏', () => {
+ let fresh = finalSave();
+ assert.equal(start(fresh).ok,true);
+ const result = advanceScenarioRuntime(fresh);
+ assert.ok(!result.transitions.some(t=>t.id===entry.eventId));
+ assert.equal(result.saveData.系统.扩展.mapEntryMessages?.qin,undefined);
+ const s = finalSave();
+ rt(s).completedEventIds.push(entry.eventId);
+ rt(s).chronicle = [{id:`chronicle.${rt(s).modId}.${entry.eventId}`,stageId:rt(s).modId,type:'event'}];
+ assert.ok(compassApi.lineCompassView(s,{}).entryHints.some(h=>h.lineId==='qin'));
+ assert.equal(start(s).ok,true);
+ assert.ok(!compassApi.lineCompassView(s,{}).entryHints.some(h=>h.lineId==='qin'));
+});
+test('大祭：插入的大都护拍未结算时不可启动', () => {
+ const s = finalSave();
+ rt(s).completedEventIds = rt(s).completedEventIds.filter(id=>id!=='lyg.event.shituolin_endgame_title_daduhu');
+ assert.equal(start(s).ok,false);
+});
