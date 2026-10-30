@@ -4,7 +4,7 @@ import {createHash} from 'node:crypto';
 import {createJiti} from 'jiti';
 import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './content-pack-quest-lines.mjs';
 const root=resolve(import.meta.dirname,'..');
-const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes'];
+const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries'];
 const fields=['schemaVersion','id',...kinds,'texts','questLineResources','playtests','entries','lineCompass'];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -12,7 +12,7 @@ const fail=s=>{throw new Error(`Content Pack: ${s}`);};
 const unique=(items,key,label)=>{const seen=new Set();for(const x of items){const id=key(x);if(typeof id!=='string'||!id.trim()||seen.has(id))fail(`${label} missing/duplicate id ${id}`);seen.add(id);}};
 /** Pure compiler: no writes until every pack validates. Paths confined to the source tree, including symlinks. */
 export async function compileContentPacks({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root,validateContracts=true}={}) {
- const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{}};
+ const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{}};
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set();
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
@@ -76,6 +76,11 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
  // 只有 eventId 的步的通用句「回到{地点}看看」（R-4／P-12）：地点取该事件 locationId 在所在关 canon.locations 的名字，退回实体目录名；没有 locationId 记空串（运行时只显示线名）；地点 id 另记 lineCompassPlaceIds（travelHint 判已在该地，fix5939-2）
  {const catalogLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));const stageOfEvent=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,s])));for(const line of catalog.lineCompass.lines)for(const step of line.steps||[]){if(typeof step.eventId!=='string'||step.pending||!events.has(step.eventId)||step.eventId in catalog.lineCompassPlaces)continue;const locationId=events.get(step.eventId).locationId;const name=locationId?String((stageOfEvent.get(step.eventId)?.canon?.locations||[]).find(l=>l?.id===locationId)?.name||catalogLocationNames[locationId]||''):'';catalog.lineCompassPlaces[step.eventId]=name;catalog.lineCompassPlaceIds[step.eventId]=locationId||'';}}
  {const jiti=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
+ unique(catalog.mapEntries,e=>e.id,'mapEntries');
+ for(const e of catalog.mapEntries){
+  const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);
+  if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||e.readyPath!=='compass.qinEntryReady')fail(`invalid map entry ${e.id}`);
+ }
  const serialized=JSON.stringify({...catalog,version:''});catalog.version=createHash('sha256').update(serialized).digest('hex').slice(0,16);return catalog;
 }
 export async function writeContentPacks(options){const c=await compileContentPacks(options);const dir=join(root,'src/modules/contentPacks/generated');await mkdir(dir,{recursive:true});const temp=join(dir,`.catalog.${process.pid}.tmp`);await writeFile(temp,JSON.stringify(c,null,2)+'\n');await rename(temp,join(dir,'catalog.json'));return c;}

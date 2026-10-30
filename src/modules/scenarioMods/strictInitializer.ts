@@ -1,3 +1,5 @@
+import { resolveLedgerPath } from './ledgerConditions';
+import { mapEntryReady, type MapEntry } from './mapEntries';
 import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
 import { syncStoryStatuses } from './freeAction/bingGu';
 import {levelOf} from '../../utils/realmUtils';
@@ -314,6 +316,22 @@ function findLedgerIdCollision(
  * 仅当 nextStageReadyId 就绪（本关关键剧情已完成）才允许。
  */
 export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[]): StageTransitionResult {
+  return transitionScenarioStage(saveData, modsOverride);
+}
+
+/** Only map selections call this entry; retain the paused source independently of the target runtime. */
+export function transitionToMapEntryStage(saveData: SaveData, entry: MapEntry, mods: ScenarioMod[]): StageTransitionResult {
+  if (!mapEntryReady(saveData, entry)) return { saveData, ok: false, reason: '入口尚未开放' };
+  const source = structuredClone(saveData);
+  const result = transitionScenarioStage(source, mods, entry);
+  if (result.ok) {
+    const ext = (result.saveData as any).系统.扩展;
+    ext.mapEntryResume = { entryId: entry.id, runtime: structuredClone((saveData as any).世界.状态.剧本模组), position: structuredClone(saveData.角色.位置) };
+  }
+  return result;
+}
+
+function transitionScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[], entry?: MapEntry): StageTransitionResult {
   const rt = (saveData as any)?.世界?.状态?.剧本模组;
   if (!rt?.modId) return { saveData, ok: false, reason: '当前存档无剧本运行时' };
   const demoEnd = (saveData as any)?.系统?.扩展?.清羽记开局;
@@ -321,9 +339,9 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     && rt.completedEventIds?.includes(demoEnd.endEventId)) {
     return { saveData, ok: false, reason: '本期南荒试玩已结束' };
   }
-  const configuredTargetId = rt.nextStageId;
+  const configuredTargetId = entry?.stageId || rt.nextStageId;
   if (!configuredTargetId) return { saveData, ok: false, reason: '已是最终关，无下一关' };
-  if (rt.nextStageReadyId !== configuredTargetId) return { saveData, ok: false, reason: '本关关键剧情尚未完成' };
+  if (!entry && rt.nextStageReadyId !== configuredTargetId) return { saveData, ok: false, reason: '本关关键剧情尚未完成' };
   let mods = modsOverride;
   if (!mods) {
     try {
@@ -476,7 +494,16 @@ export function transitionToNextScenarioStage(saveData: SaveData, modsOverride?:
     (newRuntime as { baihuGambleRefusal?: unknown }).baihuGambleRefusal = inheritedBaihuGambleRefusal;
   }
   // 行旅账跨关携带；转关强制路线先落回执再定位置（开场地点只在账为空时生效）。
-  settleNanhuangStageTransition(next, newRuntime, String(rt.modId), targetId, rt.travelLedger, currentTravelCompanions(saveData, rt));
+  if (!entry) settleNanhuangStageTransition(next, newRuntime, String(rt.modId), targetId, rt.travelLedger, currentTravelCompanions(saveData, rt));
+  if (entry) {
+    const message = (next as any).系统.扩展.mapEntryMessages?.[entry.id];
+    if (message?.done || resolveLedgerPath(`done.${entry.eventId}`, rt, saveData)?.value === true) {
+      newRuntime.completedEventIds = [...new Set([...newRuntime.completedEventIds, entry.eventId])];
+      newRuntime.activeEventIds = newRuntime.activeEventIds.filter((id: string) => id !== entry.eventId);
+    } else if (message?.delivered && !newRuntime.activeEventIds.includes(entry.eventId)) {
+      newRuntime.activeEventIds.push(entry.eventId);
+    }
+  }
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);
   const advancedRuntime = (advanced.saveData as any)?.世界?.状态?.剧本模组;

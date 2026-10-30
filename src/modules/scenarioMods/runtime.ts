@@ -1,3 +1,4 @@
+import { syncMapEntryMessages } from './mapEntries';
 import {namingChapter} from './ledger/naming';
 import { settleStoryTrade } from './storyTrades';
 
@@ -4030,6 +4031,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   recordSettledBeatHandoff(runtime, transitions);
   recordChronicleTransitions(runtime, transitions);
   syncPlayerLedgers(runtime);
+  syncMapEntryMessages(next, runtime, transitions);
   releaseBaihuGambleRefusalIfEscaped(next);
 
   refreshSaveEntityReferences(next);

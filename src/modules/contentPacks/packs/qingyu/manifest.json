@@ -47,5 +47,8 @@
   "entries": "entries.json",
   "mapRoutes": [
     "map-routes.json"
+  ],
+  "mapEntries": [
+    "map-entries.json"
   ]
 }

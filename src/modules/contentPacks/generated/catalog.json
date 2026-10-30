@@ -1,5 +1,5 @@
 {
-  "version": "9418e1c3ac8280a2",
+  "version": "d05ead6bbcc10dad",
   "contracts": [
     {
       "meta": {
@@ -10670,6 +10670,15 @@
     }
   ],
   "mapRoutes": [],
+  "mapEntries": [
+    {
+      "id": "qin",
+      "stageId": "lyg.qin_xianyang",
+      "eventId": "liuchao.event.qin_hook_fangshi_rumor",
+      "locationId": "liuchao.location.xianyang",
+      "readyPath": "compass.qinEntryReady"
+    }
+  ],
   "overlays": [
     {
       "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",

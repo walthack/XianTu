@@ -984,12 +984,22 @@ PROJECT-STATUS改为当前真相→P0/P1负责人状态→简要交付→文档�
 
 ### QIN-ENTRY-20261030 · 开工
 - 用户授权：旧解析器单行 action_time；秦三线门槛、两终结动作与地图入口。禁止 commit/push；runtime 冻结，AIBS 仅该补丁。
-- 系统/剧情目标：保留五线 closedWhen，配置失败终点扩展；受冻结阻塞的跨关能力写 /workspace/qin_blockers.md。
+- 系统/剧情目标：保留五线 closedWhen，配置失败终点扩展；原跨关阻塞已由本批入口接线续轮处理，见下方交付。
 - 成熟度/证据：实施中，未验证；未测：真机/模型。依赖：跨关调度冻结边界；下轮以离线回归和阻塞清单复核。
 
-### QIN-ENTRY-20261030 · 系统/剧情交付（PARTIAL）
+### QIN-ENTRY-20261030 · 前轮交付（入口接线已由续轮完成）
 - 系统交付：AIBS 旧解析器仅 +1 行透传 action_time；秦入口五线去重计数、阈值 3、JSON 失败终点扩展表、compass.qinEntryReady 按 id 分派与校验。merged numbers / catalog 均由脚本生成。
 - 剧情/UI交付：Q-1 两并列终结动作与统一口信，Q-2 读跨关 done；未入秦右栏固定提示「去咸阳，找那个方士问问」，独立于焦点和折叠。两动作均不直接转场；失败终点表空，不猜内容裁定。
-- 交付链接：[完整摘要](/workspace/codex_summary.md)、[精确冻结阻塞](/workspace/qin_blockers.md)、[入口回归](../tests/qinEntry.test.mjs)。正式跨关投递和地图点击咸阳切关未接通，不宣称入口上线；大祭/lapsed 未做。
+- 交付链接：[仓库内入口接线交付](handoffs/2026-10-30/QIN-ENTRY-WIRING.md)、[入口回归](../tests/qinEntry.test.mjs)。正式跨关一次投递和地图点击咸阳切关已接通（本批续轮）；大祭/lapsed 未做。
 - 证据层级：离线全量 npm test 2950 项，2937 pass / 0 fail / 13 skip；秦专项19项全过；type-check 仅既有 controller.ts:202 TS2559。内容包 check、右栏 Vue SFC 编译、diff check、冻结哈希通过。AIBS +1/-0，runtime 未动，无新增诊断码。
-- 未测/依赖：浏览器真人体验、真实模型、正式跨关一体流程未测；跨关投递/rail 条件门受 runtime 冻结阻塞，地图现有实现仅移动地点。下轮先按 blocker 精确范围处理共享调度和地图入秦事务，再验正式入口；不改变 Grok 控制面。未 commit/push，未读凭据，既有未跟踪临时目录未动。
+- 未测/依赖：浏览器真人体验、真实模型、正式跨关一体流程未测；入口投递与地图入秦事务已在本批续轮接通；rail 首拍条件缺陷按用户要求保留。后续验证浏览器入口体验；不改变 Grok 控制面。未 commit/push，未读凭据，既有未跟踪临时目录未动。
+
+### QIN-ENTRY-20261030 · 入口接线续轮开工
+- 用户仅解冻 runtime 的秦入口接缝；AIBS、rail 首拍、大祭均不改。目标：跨关一次传话、地图达标入秦、保存源关续点。
+- 系统/剧情沿用既有 Q-1 文案与动作合同；实施中，待离线全量与类型检查，浏览器/真实模型未测。
+
+### QIN-ENTRY-20261030 · 入口接线续轮交付
+- 系统/剧情：跨关一次伙计口信、“先记下”去重及达标地图入秦接线已完成；复用原 Q-1 文案与动作，源关续点保存。runtime 仅 +2 行，AIBS / rail 首拍 / 大祭未改，未提交。
+- 交付与证据：[入口实现及验证记录](handoffs/2026-10-30/QIN-ENTRY-WIRING.md)；`tests/qinEntryWiring.test.mjs` 新增 7 项全部通过，内容包 check / diff check / 冻结哈希通过。
+- 全量（box 非沙箱复跑）：npm test 2957 项、2944 pass / 0 fail / 13 skip（基线 2950 + 新增 7）；type-check 仅允许的 controller.ts:202 TS2559；vite build 通过。mapTravel 改为静态导入 strictInitializer（去掉浏览器不可用的 require）；新文件 mapEntries.ts 归入日志 world 大类。
+- 成熟度：入口已实现、专项离线已验证；未测浏览器/真人/真实模型。依赖/下轮：环境恢复后复跑全量；秦返回流程与 rail 首拍修复另行授权，不扩大本批范围。控制面不变。

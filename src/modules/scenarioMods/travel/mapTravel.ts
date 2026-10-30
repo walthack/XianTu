@@ -1,3 +1,5 @@
+import { mapEntryReady } from '../mapEntries';
+import { transitionToMapEntryStage } from '../strictInitializer';
 import locations from '../../../../mod-kit/entity-catalog/locations.json';
 import { CONTENT_PACKS } from '../../contentPacks';
 import type { SaveData } from '@/types/game';
@@ -26,12 +28,23 @@ export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
   return (CONTENT_PACKS.mapRoutes || []).filter(r => canonicalLocationId(r.fromId) === fromId && canonicalLocationId(r.toId) === canonicalLocationId(toId) && (r.unlockWhen || []).every(id => done.includes(id)));
 }
 export function selectMapTravel(save: SaveData, toId: string): MapTravelSelection | undefined {
+  const entry = CONTENT_PACKS.mapEntries?.find(e => e.locationId === canonicalLocationId(toId));
+  if (entry) return mapEntryReady(save, entry) ? { source: 'map', actionId: crypto.randomUUID(), fromId: currentLocation(save).canonicalLocationId || '', toId: entry.locationId, routeId: entry.id } : undefined;
   const route = mapRoutes(save, toId)[0], fromId = currentLocation(save).canonicalLocationId;
   return route && fromId ? { source: 'map', actionId: crypto.randomUUID(), fromId, toId: canonicalLocationId(toId), routeId: route.id } : undefined;
 }
 /** 调用入口仅地图按钮；模型与自然语言不进入此函数。提交者先克隆存档，落账后原子持久化。 */
 export function settleMapTravel(save: SaveData, selection: MapTravelSelection): boolean {
   if (selection?.source !== 'map' || !selection.actionId) return false;
+  const entry = CONTENT_PACKS.mapEntries?.find(e => e.locationId === canonicalLocationId(selection.toId));
+  if (entry) {
+    if (selection.routeId !== entry.id || selection.fromId !== (currentLocation(save).canonicalLocationId || '') || !mapEntryReady(save, entry)) return false;
+    const result = transitionToMapEntryStage(save, entry, CONTENT_PACKS.stages);
+    if (!result.ok) return false;
+    result.saveData.角色.位置.locationId = entry.locationId;
+    Object.assign(save, result.saveData);
+    return true;
+  }
   const source = `map:${selection.routeId}:${selection.fromId}:${selection.toId}`;
   const prior = (save as any).系统?.扩展?.actionTime?.receipts?.['map:' + selection.actionId];
   if (prior) return prior.source === source;
