@@ -4,7 +4,7 @@
 
 ## 地点结果
 
-- 江州、星月湖大营、金明寨（含旧 id jinmingzhai）country=晋，全部 stageVariants 与显式 country 投影同步；江州/星月湖/金明寨到临安按晋→宋52日。
+- 江州、星月湖大营、金明寨（含旧 id jinmingzhai）country=晋，全部 stageVariants 与显式 country 投影同步；星月湖/金明寨到临安按晋→宋52日；江州→临安按江州表对称为32日（见续轮二）。
 - 白龙江口 lcq.location.bailongjiang_kou：南荒，liuchao.continent.nanhuang，城池，(1960,7080)，独立补给点，不是跨国代表点。描述依据用户提供 lcq.txt:5230，白龙江口南下入南荒前最后补给。
 - 光明观堂 liuchao.location.guangming 合并入 liuchao.location.guang_ming_guan，旧 id 与名字作为 aliases；九个旧变体转入目标条目，连同原有一变体共十个，全部归宋。内置剧情旧 id 保留，由现有别名层解析；目录索引同步，搜刮表移除旧 id 的重复空 pending 条目（无掉落内容变化）。没有新建易州。
 - 帅帐 lcq.location.shuai_zhang 及 command_tent 别名归中立边陲。
@@ -73,7 +73,7 @@
 ## 续轮二：江州第二落点、五原移出落点、剧情跨国转场核验（未提交）
 
 - 配置（`mod-kit/numbers-runtime.json` → `crossCountryTravel`，合并产物由脚本重生成）：新增 `destinations`（按国列跨国可点落点；晋＝[建康, 江州]，中立边陲不列＝五原不可作跨国目的地）与 `destinationRawDays`（单独落点的「出发国→该点」未截断天数）。`capitals` 与 `rawDays` 矩阵保留，五原出发仍按矩阵。注册表补两条必填 object 字段。
-- 江州天数按江州坐标 (4956,6735) 到各国代表点直线距离/80 向上取整：宋32、汉46、唐55、秦61（结算截60）、南荒43、太泉43、昭南14、中立边陲59；晋国内到江州不走跨国规则（表内无晋）。江州出发按晋计（如江州→临安仍52日，与临安→江州32日不对称，按用户裁定）。
+- 江州天数按江州坐标 (4956,6735) 到各国代表点直线距离/80 向上取整：宋32、汉46、唐55、秦61（结算截60）、南荒43、太泉43、昭南14、中立边陲59；晋国内到江州不走跨国规则（表内无晋）。~~江州出发按晋计~~ → 2026-10-31 用户改定来回对称：从江州出发去 X 国落点按江州表 X 国天数（同截60，如江州→临安＝临安→江州＝32日）；仅江州出发生效，建康等其他晋地出发仍按矩阵。
 - `mapTravel.ts`：限制改读 `destinations`（无落点国别提示「此国别暂不开放跨国落点」），天数优先读该落点自身表，地图标记取全部落点（含江州、不含五原）。TS 内无硬编码地点。
 - 剧情转场：**未被卡**。罗盘 `travel:` 移动由 runtime 本地 `movePlayerToEventLocation` 落位，不经 canonGuard/地图选择；`lyl.jiangzhou_retreat` 江州(晋)→荆溪村寨(宋)→筠州、`lyl.lin_an_black_sea` 临安(宋)→江州(晋)→临安 均到场，零 LCQ-SAV-038。模型位置指令跨国仍被 canonGuard 拒（LCQ-SAV-038）。无需修复，冻结三文件未动。
 - 证据：`tests/jiangzhouScriptedTravel.test.mjs` 新增3项；`tests/crossCountryTravel.test.mjs` 增改为65项（临安→江州32日、江州各国天数、江州出发按晋计、建康↔江州无跨国回退、五原不可点且伪造拒绝、五原→建康38日、五原→太泉截60、标记含江州不含五原、落点配置国别一致）。npm test 3028项：3015通过、0失败、13跳过（243.0秒）；npm run type-check 退出0。浏览器/真人体验未测。

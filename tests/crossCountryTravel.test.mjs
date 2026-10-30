@@ -70,16 +70,29 @@ test('江州为晋第二跨国落点：天数按江州坐标单独配置，临�
   }
   assert.equal(table.宋,32);assert.equal(table.秦,61);
 });
-test('江州出发按晋计：到唐41日、到临安52日；建康↔江州国内不走跨国规则', () => {
-  const jz='liuchao.location.jiangzhou';
-  for (const [to,days] of [['唐',41],['宋',52]]) {
-    const s=saveAt(jz),choice=P.selectMapTravel(s,config.capitals[to]),before=gameTimeMinutes(s.元数据.时间);
-    assert.equal(choice.routeId,`xc:晋:${to}`);
-    assert.equal(P.settleMapTravel(s,choice),true);
-    assert.equal(gameTimeMinutes(s.元数据.时间)-before,days*1440);
-  }
+test('江州出发来回对称：江州→临安32日且等于临安→江州；建康→临安仍按矩阵52日；建康↔江州国内不走跨国规则', () => {
+  const jz='liuchao.location.jiangzhou', lin=config.capitals.宋;
+  const go=P.mapRoutes(saveAt(jz),lin)[0], back=P.mapRoutes(saveAt(lin),jz)[0];
+  assert.equal(go.id,'xc:晋:宋');assert.equal(go.dayCost,32);assert.equal(go.dayCost,back.dayCost);
+  const s=saveAt(jz),choice=P.selectMapTravel(s,lin),before=gameTimeMinutes(s.元数据.时间);
+  assert.equal(P.settleMapTravel(s,choice),true);
+  assert.equal(gameTimeMinutes(s.元数据.时间)-before,32*1440);
+  assert.equal(P.mapRoutes(saveAt(config.capitals.晋),lin)[0].dayCost,52);
   assert.deepEqual(P.mapRoutes(saveAt(config.capitals.晋),jz),[]);
   assert.deepEqual(P.mapRoutes(saveAt(jz),config.capitals.晋),[]);
+});
+test('江州↔每个国别落点天数相等（含五原中立边陲、秦截断60），且等于江州表值', () => {
+  const jz='liuchao.location.jiangzhou', table=config.destinationRawDays[jz];
+  const targets=Object.entries(config.destinations).filter(([c])=>c!=='晋').flatMap(([c,ids])=>ids.map(id=>[c,id]));
+  assert.ok(targets.some(([,id])=>id===config.capitals.中立边陲));
+  for (const [country,id] of targets) {
+    const go=P.mapRoutes(saveAt(jz),id)[0], back=P.mapRoutes(saveAt(id),jz)[0];
+    assert.equal(go.dayCost,back.dayCost,id);
+    assert.equal(go.dayCost,Math.min(table[country],config.dayCap),id);
+    assert.equal(go.id,`xc:晋:${country}`,id);
+  }
+  assert.equal(P.mapRoutes(saveAt(jz),config.capitals.秦)[0].dayCost,60);
+  assert.equal(P.mapRoutes(saveAt(jz),config.capitals.中立边陲)[0].dayCost,59);
 });
 test('落点配置与总表国别一致', () => {
   for (const [country,ids] of Object.entries(config.destinations)) for (const id of ids) assert.equal(P.countryOf(id),country,id);
@@ -136,12 +149,12 @@ test('晴州归宋：从晴州按宋→晋计52日，晴州本身不是跨国落
 const { canonicalLocationId } = await loadTs('../src/modules/scenarioMods/travel/locationIds.ts');
 const { namedEntity, resolveNamedEntityId } = await loadTs('../src/modules/scenarioMods/namedEntities.ts');
 const catalog = JSON.parse(readFileSync(new URL('../mod-kit/entity-catalog/locations.json', import.meta.url)));
-for (const id of ['liuchao.location.jiangzhou','liuchao.location.xingyue_lake','liuchao.location.jinming_zhai']) test(`${id}归晋，到临安52日`, () => {
+for (const [id,days] of [['liuchao.location.jiangzhou',32],['liuchao.location.xingyue_lake',52],['liuchao.location.jinming_zhai',52]]) test(`${id}归晋，到临安${days}日`, () => {
   assert.equal(P.countryOf(id),'晋');
   const save=saveAt(id), before=gameTimeMinutes(save.元数据.时间), choice=P.selectMapTravel(save,config.capitals.宋);
   assert.equal(choice.routeId,'xc:晋:宋');
   assert.equal(P.settleMapTravel(save,choice),true);
-  assert.equal(gameTimeMinutes(save.元数据.时间)-before,52*1440);
+  assert.equal(gameTimeMinutes(save.元数据.时间)-before,days*1440);
   const entry=catalog.entries.find(e=>e.id===id);
   for(const d of [entry.definition,...Object.values(entry.stageVariants)])assert.equal(d.country,'晋');
 });

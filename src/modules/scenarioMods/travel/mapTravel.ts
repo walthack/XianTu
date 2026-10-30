@@ -25,7 +25,7 @@ const crossCountryTravel = runtimeNumbers.crossCountryTravel;
 const capitals: Readonly<Record<string, string>> = crossCountryTravel.capitals;
 /** 跨国可点落点（按国）；不在表内的国别只可出发、不可作跨国目的地（域外、晴州无代表点）。 */
 const destinations: Readonly<Record<string, readonly string[]>> = crossCountryTravel.destinations;
-/** 单独落点的「出发国→该点」天数表；未列落点用国别矩阵。 */
+/** 单独落点的「出发国→该点」天数表，自该点出发去该国同天数（来回对称）；未列落点用国别矩阵。 */
 const destinationRawDays: Readonly<Record<string, Readonly<Record<string, number>>>> = crossCountryTravel.destinationRawDays;
 /** 各关共用的地图跨国落点标记；始终取总表坐标，不受当前关地点列表限制。 */
 export function mapCapitalMarkers() {
@@ -63,8 +63,9 @@ export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
   if (authored.length) return authored.filter(r => (r.unlockWhen || []).every(id => done.includes(id)));
   const from = countryOf(fromId)!, to = countryOf(targetId)!;
   if (from === to) return [];
-  const pointDays = destinationRawDays[targetId];
-  const raw = pointDays ? pointDays[from] : rawDays[from]?.[to] ?? rawDays[to]?.[from];
+  // 带表落点来回对称：出发点表取目标国、目标点表取出发国；两端都带表时取较大值以保持对称；都没有才用国别矩阵。
+  const pointRaw = [destinationRawDays[fromId]?.[to], destinationRawDays[targetId]?.[from]].filter((d): d is number => d !== undefined);
+  const raw = pointRaw.length ? Math.max(...pointRaw) : rawDays[from]?.[to] ?? rawDays[to]?.[from];
   return raw === undefined ? [] : [{ id: `xc:${from}:${to}`, fromId, toId: targetId, dayCost: Math.min(raw, crossCountryTravel.dayCap) }];
 }
 export function selectMapTravel(save: SaveData, toId: string): MapTravelSelection | undefined {
