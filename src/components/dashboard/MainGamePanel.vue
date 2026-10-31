@@ -529,7 +529,7 @@ import { activeScene } from '@/modules/sceneModule/host/ext';
 import { writePreBattleSave } from '@/modules/sceneModule/host/preBattleSlot';
 import { phaseContinueBlocked } from '@/modules/scenarioMods/phaseContinue';
 import { hostNeeded, sceneBrief, submitSceneInput, confirmSceneAction, confirmSceneChoice, editSceneAction, finishScene, setSceneTestDice, type HostDeps } from '@/modules/sceneModule/host/controller';
-import { fixedEndingNarrative } from '@/modules/scenarioMods/fixedEndingNarratives';
+import { fixedEndingNarrative, flushTimeSkipInterlude } from '@/modules/scenarioMods/fixedEndingNarratives';
 import { endingKey, endingPresentation } from '@/modules/scenarioMods/endingPresentation';
 import { resolveEndingImage } from '@/assets/endings';
 import { currentDiagnosticTurnId, noteTicketDiscard, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
@@ -594,6 +594,7 @@ import { pilotOptionsDiagnostic } from '@/modules/scenarioMods/legacyPilotAction
 import { narrativeTriggers, recordTurnNarrative } from '@/modules/diagnostics/narrativeSource';
 import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
 import { tickRandomEncounter, encounterNarratedBy } from '@/modules/scenarioMods/randomEncounter';
+import { tickWhiteTailLeopard } from '@/modules/scenarioMods/whiteTailLeopard';
 import { logError } from '@/modules/diagnostics/log';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
@@ -690,11 +691,15 @@ const persistJudgementSave = async (save: any) => {
 };
 // 随机遇敌：故事回合成功收尾后推进一次（只写 剧本模组.encounter；场面宿主回合不走这里）。
 // 事实包没送到叙事模型的回合（固定文本、05b 模块路径）不算演出过，见 encounterNarratedBy。
+// 作者跳年（如序幕四年）的过渡叙述也在这里接到本回合正文之后，只接一次；白尾豹彩蛋同样在这里结算。
 const tickEncounterAfterTurn = async (resp: any) => {
   const s = gameStateStore.toSaveData(); if (!s) return;
   try {
+    const interlude = flushTimeSkipInterlude(s);
     const r = tickRandomEncounter(s, { narrated: encounterNarratedBy(s, resp?.moduleReceipt?.path) });
-    if (r.changed) await persistJudgementSave(s);
+    // 南荒密林白尾豹彩蛋：遇见描写接在本回合正文之后。
+    const leopard = tickWhiteTailLeopard(s);
+    if (r.changed || interlude || leopard.changed) await persistJudgementSave(s);
   } catch (e) { logError('LCQ-SAV-032', e, { detail: { phase: 'tick' } }); }
 };
 // 🔥 使用全局状态替代组件状态

@@ -27,18 +27,18 @@ test('N05 旧路程卡无回合标记不能吞掉当前耗时；有效同拍标�
  T.settleActionTime(s,{}, {timeActionId:'b'},null,false,false);
  assert.equal(C.gameTimeMinutes(s.元数据.时间)-start,T.actionTimeConfig().minutes.moment);
 });
-test('N04 配置证据：跨国到花苗寨不会更换stage_02，缺地区；南荒关也无花苗寨猛兽池',()=>{
- const s=base();assert.equal(E.encounterGate(s),'no_region');
- s.世界.状态.剧本模组.modId='lcq.stage_04';assert.equal(E.encounterGate(s),'no_zone');
- const cfg=E.encounterConfig();assert.ok(!cfg.regions.nanhuang.zones.some(z=>/hua.?miao/.test(z.key)));
- assert.ok(!cfg.regions.nanhuang.pool.some(e=>/beast|tiger|wolf/.test(e.enemyId)));
- assert.equal(E.tickRandomEncounter(s,{narrated:true}).changed,false);
+test('N04 跨国到花苗寨：2026-11-01 起按国别算进南荒；寨内不检，寨外密林检；南荒关同样适用',()=>{
+ const s=base();assert.equal(E.encounterGate(s),null,'「南荒·花苗寨·密林」是寨外一带');
+ s.角色.位置.描述='南荒·花苗寨';assert.equal(E.encounterGate(s),'village');
+ s.世界.状态.剧本模组.modId='lcq.stage_04';assert.equal(E.encounterGate(s),'village');
+ const cfg=E.encounterConfig();assert.ok(cfg.regions.nanhuang.zones.some(z=>z.key==='lcq.location.huamiao_village'&&z.subPlace));
+ assert.ok(cfg.regions.nanhuang.pool.some(e=>e.enemyId==='lcq.enemy.wild_boar'));
  assert.equal(E.pendingRandomBattle(s),null);
 });
-test('N04/N05 冻结接缝证据：搜刮仅模块回执触发，叙事文字不直接成为掉落或随机战',()=>{
+test('N04/N05 冻结接缝（2026-11-01 解冻后）：搜刮在普通叙事回合也走本地回执入包，叙事文字不直接成为掉落或随机战',()=>{
  const ai=read('src/utils/AIBidirectionalSystem.ts');
- assert.match(ai,/if \(response\.moduleReceipt && !response\.generationError && !options\?\.eventAction && isLocationLootInput/);
- assert.match(ai,/const lootPreviewSave = moduleOnly && !options\?\.eventAction && isLocationLootInput/);
+ assert.match(ai,/if \(\(response\.moduleReceipt \|\| response\.localLoot\) && !response\.generationError && !options\?\.eventAction && isLocationLootInput/);
+ assert.match(ai,/const lootPreviewSave = !options\?\.eventAction && isLocationLootInput/);
  const host=read('src/modules/sceneModule/host/controller.ts');assert.match(host,/const p = pendingRandomBattle\(save\)/);
 });
 test('G01/G02 草原与五原独立坐标；总表、变体、内置关一致，投影可保持',async()=>{
@@ -73,10 +73,11 @@ test('国别未知不猜，已知地点保留子地点',()=>{
  assert.equal(L.locationDescriptionWithCountry({描述:'中州·未知地'}),'中州·未知地');
  assert.equal(L.locationDescriptionWithCountry({locationId:'liuchao.location.jiangzhou',描述:'中州·江州·渡口'}),'晋·江州·渡口');
 });
-test('DQ10 220→224为s01_06成功合同的既有四年跳跃，重复结算不再跳',async()=>{
+test('DQ10 四年跳跃 2026-11-01 改挂 s02_04（五原为奴期间）：s01_06 不再跳，s02_04 首次成功 220→224，重复不再跳',async()=>{
  const {applyStepSceneLedger}=await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
- const event=packs.overlays.find(o=>o.stageId==='lcq.stage_01').events.find(e=>e.id==='lcq.event.s01_06');
- const s=base(),rt=s.世界.状态.剧本模组;Object.assign(rt,{modId:'lcq.stage_01',events:[event],completedEventIds:[]});
+ assert.equal(packs.overlays.some(o=>o.stageId==='lcq.stage_01'&&o.events.some(e=>e.id==='lcq.event.s01_06')),false);
+ const event=packs.overlays.find(o=>o.stageId==='lcq.stage_02').events.find(e=>e.id==='lcq.event.s02_04');
+ const s=base(),rt=s.世界.状态.剧本模组;Object.assign(rt,{modId:'lcq.stage_02',events:[event],completedEventIds:[]});
  const action=event.playerCompletionContract.actions[0];assert.equal(action.timeAdvance.years,4);
  applyStepSceneLedger(s,rt,event.id,action.id);assert.equal(s.元数据.时间.年,224);
  applyStepSceneLedger(s,rt,event.id,action.id);assert.equal(s.元数据.时间.年,224);

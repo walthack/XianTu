@@ -23,17 +23,21 @@ test('损坏时间戳迁移原子失败',()=>{const s=base();s.世界.状态.剧
 test('国别来自country，晋宋跨国；未知不猜',()=>{assert.equal(P.countryOf('liuchao.location.jiankang'),'晋');assert.equal(P.countryOf('liuchao.location.changan'),'唐');assert.equal(P.countryOf('unknown'),undefined);assert.equal(P.isCrossCountry('liuchao.location.jiankang','liuchao.location.lin_an'),true);});
 test('地图非法/过期/文字伪造选择不得改变位置或日历',()=>{const s=base(),before=structuredClone(s);assert.equal(P.settleMapTravel(s,{source:'model',actionId:'fake',routeId:'fake',fromId:'liuchao.location.jiankang',toId:'liuchao.location.changan'}),false);assert.deepEqual(s,before);assert.equal(P.selectMapTravel(s,'liuchao.location.changan')?.routeId,'xc:晋:唐');});
 
-test('作者四年跳跃只在stage_01收尾成功步骤首次结算，已完成旧档不追补', async()=>{
+test('作者四年跳跃只在s02_04（五原为奴）成功步骤首次结算，已完成旧档不追补；旧档已在s01_06跳过的不再跳', async()=>{
   const { CONTENT_PACKS }=await loadTs('../src/modules/contentPacks/index.ts');
   const { applyStepSceneLedger }=await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
-  const event=CONTENT_PACKS.overlays.find(o=>o.stageId==='lcq.stage_01').events.find(e=>e.id==='lcq.event.s01_06');
+  const event=CONTENT_PACKS.overlays.find(o=>o.stageId==='lcq.stage_02').events.find(e=>e.id==='lcq.event.s02_04');
   assert.equal(event.playerCompletionContract.actions[0].timeAdvance.years,4);
-  const s=base(),rt=s.世界.状态.剧本模组;Object.assign(rt,{modId:'lcq.stage_01',events:[event],completedEventIds:[]});
+  const s=base(),rt=s.世界.状态.剧本模组;Object.assign(rt,{modId:'lcq.stage_02',events:[event],completedEventIds:[]});
   const start=C.gameTimeMinutes(s.元数据.时间),action=event.playerCompletionContract.actions[0];
   applyStepSceneLedger(s,rt,event.id,action.id);assert.equal(C.gameTimeMinutes(s.元数据.时间)-start,1440*1440);
   applyStepSceneLedger(s,rt,event.id,action.id);assert.equal(C.gameTimeMinutes(s.元数据.时间)-start,1440*1440);
-  const old=base(),oldRt=old.世界.状态.剧本模组;Object.assign(oldRt,{modId:'lcq.stage_01',events:[event],completedEventIds:[event.id]});
+  const old=base(),oldRt=old.世界.状态.剧本模组;Object.assign(oldRt,{modId:'lcq.stage_02',events:[event],completedEventIds:[event.id]});
   const before=structuredClone(old.元数据.时间);applyStepSceneLedger(old,oldRt,event.id,action.id);assert.deepEqual(old.元数据.时间,before);
+  const jumped=base(),jRt=jumped.世界.状态.剧本模组;Object.assign(jRt,{modId:'lcq.stage_02',events:[event],completedEventIds:[]});
+  T.settleTime(jumped,'author:lcq.event.s01_06::advance_declared_objective',1440*1440,'author');
+  const mid=structuredClone(jumped.元数据.时间);applyStepSceneLedger(jumped,jRt,event.id,action.id);assert.deepEqual(jumped.元数据.时间,mid);
+  assert.equal(jRt.timeSkipInterlude,undefined,'没跳就不接过渡叙述');
 });
 test('同拍路程覆盖作者演出档位，不相加',()=>{const s=base(),rt=s.世界.状态.剧本模组;rt.travelLedger={timeConsumedAtTurn:1,lastCard:{receiptId:'route:a'}};const before=structuredClone(s.元数据.时间);T.settleActionTime(s,{moduleReceipt:{id:'b'},action_time:{tier:'数日',days:30}},{},{action_time:{tier:'半日'}},true,false);assert.deepEqual(s.元数据.时间,before);});
 test('丢弃动作克隆同时丢弃时间回执；同原档可重试且不串档',()=>{const s=base(),before=structuredClone(s),clone=structuredClone(s);T.settleTime(clone,'same',15,'model');assert.deepEqual(s,before);T.settleTime(s,'same',15,'model');assert.deepEqual(s.元数据.时间,clone.元数据.时间);const other=base();T.settleTime(other,'same',15,'model');assert.deepEqual(other.元数据.时间,s.元数据.时间);});

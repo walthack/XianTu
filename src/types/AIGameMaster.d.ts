@@ -189,6 +189,8 @@ export interface GM_Request {
 export interface GM_Response {
   action_time?: import('@/modules/scenarioMods/actionTime').ActionTime;
   moduleReceipt?: import('@/modules/scenarioMods/modularTurn').ModuleReceipt;
+  /** 普通叙事回合的本地搜刮回执正文（未请求模型）；落账时按回执入包。 */
+  localLoot?: boolean;
   /** AI生成的主要叙事内容，用于展示给用户。也作为短期记忆存储 */
   text: string;
   /** 输出因长度限制被截断；不得当网络错误自动重试。 */

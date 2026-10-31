@@ -50,15 +50,15 @@ for(const [label,data,extra] of [
  ['末端loadFromSaveData拒绝',{},{}],
 ])test(`P0 ${label}不删除、不写存档、不更改激活槽`,async()=>{const h=loadHarness(data,extra);assert.equal(await h.run('c','a'),false);assert.deepEqual(h.calls,[]);assert.equal(h.deps.rootState.value.当前激活存档.角色ID,'previous');});
 test('P0 滚动候选旧实体格式拒绝且不读取备用覆盖它',async()=>{let reads=0;assert.equal((await F.validateLoadedSave('c','a',{世界:{状态:{剧本模组:{modId:'lcq.stage_01'}}}},{readBackup:async()=>{reads++;return {};}})).status,'rejected');assert.equal(reads,0);});
-test('2 冻结解析器复现：完整正文+仅指令JSON得到空text；独立天数结算7日正确',async()=>{
+test('2 解析器（2026-11-01 解冻修复）：完整正文+仅指令JSON保住JSON外叙事；独立天数结算7日正确',async()=>{
  const source=read('src/utils/AIBidirectionalSystem.ts'),start=source.indexOf('  private parseAIResponse('),end=source.indexOf('\n}\n\nexport const AIBidirectionalSystem',start);
  const extractStart=source.indexOf('  private extractNarrativeText('),extractEnd=source.indexOf('\n  }',extractStart)+4;
  const js=ts.transpileModule('class Parser {'+source.slice(extractStart,extractEnd)+source.slice(start,end)+'}',{compilerOptions:{target:ts.ScriptTarget.ES2022}}).outputText;
  const json=await loadTs('../src/utils/jsonExtract.ts');
  // Inject only parsing helpers; this test never calls a model.
- const Parser=new Function('stripModelThinking','parseJsonSmart','itemReferencesFromObject',js+';return Parser;')(s=>s,json.parseJsonSmart,()=>[]), parser=new Parser();parser.sanitizeActionOptionsForDisplay=x=>x;
+ const Parser=new Function('stripModelThinking','parseJsonSmart','itemReferencesFromObject','narrativeOutsideJson',js+';return Parser;')(s=>s,json.parseJsonSmart,()=>[],json.narrativeOutsideJson), parser=new Parser();parser.sanitizeActionOptionsForDisplay=x=>x;
  const sample='第七日，你缓缓收功，呼吸已深浅有别。\n```json\n{"action_time":{"tier":"数日","days":7},"tavern_commands":[],"action_options":[]}\n```';
- assert.equal(parser.parseAIResponse(sample).text,'');assert.equal(parser.extractNarrativeText(sample),'','分步正文提取同样丢弃JSON外叙事');
+ assert.equal(parser.parseAIResponse(sample).text,'第七日，你缓缓收功，呼吸已深浅有别。');assert.equal(parser.extractNarrativeText(sample),'第七日，你缓缓收功，呼吸已深浅有别。','分步正文提取同样保住JSON外叙事');
  const proper=parser.parseAIResponse(JSON.stringify({text:'第七日，你缓缓收功。',action_time:{tier:'数日',days:7}}));assert.ok(proper.text);
  const s=saveAt(config.capitals.晋),before=clock.gameTimeMinutes(s.元数据.时间);T.settleActionTime(s,proper,{timeActionId:'turn',cultivationSelections:[{kind:'cultivation',days:7,actionId:'seven'}]},null,false,false);assert.equal(clock.gameTimeMinutes(s.元数据.时间)-before,7*1440);
 });

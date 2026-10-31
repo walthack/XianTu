@@ -222,7 +222,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
   } else if (isRandomContract(c)) {
     // 随机战（总策划定）：不推进剧情事件、不写 flags／身份账；输了就地重伤继续（气血与伤势由 applyWriteBack 处理）；赢了给当地留一次战后搜尸。
     const settled=settleRandomEncounterClose(save,{id:a.eventId.slice(RANDOM_EVENT_PREFIX.length),outcome:closed.writeBack.outcome.kind==='win'?'win':'lose'});
-    if(closed.writeBack.outcome.kind==='win'&&settled)grantLootSpoils(save,{locationId:settled.locKey,sourceId:a.eventId});
+    if(closed.writeBack.outcome.kind==='win'&&settled)grantLootSpoils(save,{locationId:settled.locKey,sourceId:a.eventId,enemyId:settled.enemyId});
     delete ext.stall[c.meta.id];
     appendHistory(save,[a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)].join('\n'));
   } else {

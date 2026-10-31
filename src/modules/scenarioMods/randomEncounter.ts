@@ -22,9 +22,13 @@ import { isStepSceneStage } from './travel/stepScene';
 import { namedEntity, entityName } from './namedEntities';
 import { enemyPresetConfig } from './actorLevels';
 import { seedHash, seededRoller, saveSeed } from './seededRng';
+import { countryOf } from './travel/mapTravel';
+import { presentCompanionIds } from './locationLoot';
+import { assistConfig } from '../sceneModule/assist';
 
 export interface EncounterWindow { afterEventIds?: string[]; untilEventIds?: string[] }
-export interface EncounterZone { key: string; tier: string; activeWhen?: EncounterWindow; source?: string }
+/** subPlace：只在位置描述里该地点之后的子地点命中这个正则时才算本区（村寨一带，如「南荒·花苗寨·密林」）。 */
+export interface EncounterZone { key: string; tier: string; activeWhen?: EncounterWindow; subPlace?: string; source?: string }
 export type EncounterVariant = 'normal' | 'elite';
 export interface EncounterPoolEntry {
   enemyId: string;
@@ -36,6 +40,10 @@ export interface EncounterPoolEntry {
 }
 export interface EncounterRegion {
   modIdPattern: string;
+  /** 当前地点国别在表里也算本地区（跨国落点不切关，用户 2026-11-01 定南荒含花苗寨一带）。 */
+  countries?: string[];
+  /** 村寨：寨内不检遇敌；只有带 subPlace 且命中的区（寨外一带）才检。 */
+  noCheckLocationIds?: string[];
   /** 无合同但落在危险窗口里的剧情拍：这些事件进行中按「当前事件进行中」跳过检定（总策划定，不为此补合同）。 */
   skipDuringEventIds?: string[];
   zones: EncounterZone[]; pool: EncounterPoolEntry[];
@@ -47,12 +55,17 @@ export interface EncounterConfig {
   maxCount: number; receiptsKeep: number;
   prompt: { foreshadow: string; reveal: string };
   regions: Record<string, EncounterRegion>;
+  /** 敌人掉落（搜尸身）：按敌人 id；键 note 是说明。 */
+  drops?: Record<string, EnemyDrops>;
 }
+export interface EnemyDrops { common: string[]; commonQty: [number, number]; rareOnce: string[]; rareChance: number }
 
 export type EncounterPending =
   | { stage: 'foreshadow'; locKey: string; tier: string; setTurn: number }
   | { stage: 'reveal' | 'battle'; id: string; locKey: string; tier: string; enemyId: string; variant: EncounterVariant;
-    count: number; level: number | null; levelOffset?: number; setTurn: number };
+    count: number; level: number | null; levelOffset?: number; setTurn: number;
+    /** 遇敌那一刻在场的助战同伴（assist.byActor 里有的）；随机战一打一，同伴不下场只给 buff。 */
+    companions?: string[] };
 /** 待开战（③ 已演出）。注：stage 是 'reveal'|'battle' 联合，不能用 Extract<…, {stage:'battle'}>（会得 never）。 */
 export type BattlePending = Extract<EncounterPending, { id: string }> & { stage: 'battle' };
 export interface EncounterReceipt {
@@ -69,7 +82,7 @@ export interface EncounterState {
   receipts: EncounterReceipt[];
 }
 
-export type EncounterGateReason = 'disabled' | 'no_runtime' | 'game_over' | 'active_scene' | 'no_region' | 'no_zone' | 'safe_tier' | 'story_contract' | 'story_event';
+export type EncounterGateReason = 'disabled' | 'no_runtime' | 'game_over' | 'active_scene' | 'no_region' | 'village' | 'no_zone' | 'safe_tier' | 'story_contract' | 'story_event';
 
 const numError = (message: string): Error => Object.assign(Error(`[LCQ-NUM-007] ${message}`), { code: 'LCQ-NUM-007' });
 const sameKeys = (a: object, b: object) => JSON.stringify(Object.keys(a).sort()) === JSON.stringify(Object.keys(b).sort());
@@ -94,6 +107,17 @@ export function validateEncounterConfig(cfg: EncounterConfig | undefined): strin
     catch { errors.push(`encounter.regions.${key}.modIdPattern 不是合法正则`); /* lcq-allow: 校验结果随 LCQ-NUM-007 抛出 */ }
     if (!Array.isArray(region?.zones) || !Array.isArray(region?.pool)) errors.push(`encounter.regions.${key} 须有 zones、pool 数组`);
     if (region?.skipDuringEventIds !== undefined && !(Array.isArray(region.skipDuringEventIds) && region.skipDuringEventIds.every(id => typeof id === 'string'))) errors.push(`encounter.regions.${key}.skipDuringEventIds 须为事件 id 数组`);
+    for (const field of ['countries', 'noCheckLocationIds'] as const) {
+      const list = region?.[field];
+      if (list !== undefined && !(Array.isArray(list) && list.every(id => typeof id === 'string'))) errors.push(`encounter.regions.${key}.${field} 须为字符串数组`);
+    }
+  }
+  for (const [enemyId, d] of Object.entries(cfg.drops || {})) {
+    if (enemyId === 'note') continue;
+    const ok = d && Array.isArray(d.common) && Array.isArray(d.rareOnce) && [...d.common, ...d.rareOnce].every(id => typeof id === 'string')
+      && Array.isArray(d.commonQty) && Number.isInteger(d.commonQty[0]) && Number.isInteger(d.commonQty[1]) && d.commonQty[0] >= 1 && d.commonQty[1] >= d.commonQty[0]
+      && typeof d.rareChance === 'number' && d.rareChance >= 0 && d.rareChance <= 1;
+    if (!ok) errors.push(`encounter.drops.${enemyId} 须有 common/rareOnce 物品数组、commonQty 区间与 0..1 的 rareChance`);
   }
   return errors;
 }
@@ -167,13 +191,27 @@ const validZones = (regionKey: string, region: EncounterRegion, cfg: EncounterCo
 const validPool = (regionKey: string, region: EncounterRegion) => validEntries(regionKey, 'pool', region.pool,
   poolEntryProblem, (e, i) => `${i}:${(e as any)?.enemyId}:${(e as any)?.variant || 'normal'}`);
 
-function regionOf(runtime: any, cfg: EncounterConfig): [string, EncounterRegion] | undefined {
+function regionOf(save: SaveData, runtime: any, cfg: EncounterConfig): [string, EncounterRegion] | undefined {
   const modId = String(runtime?.modId || '');
-  return Object.entries(cfg.regions || {}).find(([, r]) => new RegExp(r.modIdPattern).test(modId));
+  const country = countryOf(encounterLocKey(save));
+  return Object.entries(cfg.regions || {}).find(([, r]) => new RegExp(r.modIdPattern).test(modId) || (!!country && (r.countries || []).includes(country)));
 }
-function zoneAt(regionKey: string, region: EncounterRegion, cfg: EncounterConfig, locKey: string | undefined, done: Set<string>): EncounterZone | undefined {
+/** 位置描述里该地点之后的子地点（「南荒·花苗寨·密林」→「密林」）；没有子地点为空串。 */
+export function subPlaceOf(save: SaveData | null | undefined, locKey: string | undefined): string {
+  const segments = String((save as any)?.角色?.位置?.描述 || '').split('·').map(part => part.trim()).filter(Boolean);
+  const name = locKey ? namedEntity('location', locKey)?.name : undefined;
+  const at = typeof name === 'string' ? segments.lastIndexOf(name) : -1;
+  return at >= 0 ? segments.slice(at + 1).join('·') : '';
+}
+/** 带 subPlace 的区只认命中的子地点；村寨里不带 subPlace 的区不算（寨内不检）。 */
+export function placeMatches(save: SaveData | null | undefined, place: { key: string; subPlace?: string }, locKey: string | undefined, noCheck: readonly string[] = []): boolean {
+  if (!locKey || canonicalLocationId(place.key) !== locKey) return false;
+  if (place.subPlace) return new RegExp(place.subPlace).test(subPlaceOf(save, locKey));
+  return !noCheck.some(id => canonicalLocationId(id) === locKey);
+}
+function zoneAt(save: SaveData, regionKey: string, region: EncounterRegion, cfg: EncounterConfig, locKey: string | undefined, done: Set<string>): EncounterZone | undefined {
   if (!locKey) return undefined;
-  return validZones(regionKey, region, cfg).find(z => canonicalLocationId(z.key) === locKey && windowOpen(z.activeWhen, done));
+  return validZones(regionKey, region, cfg).find(z => placeMatches(save, z, locKey, region.noCheckLocationIds) && windowOpen(z.activeWhen, done));
 }
 /** 当前事件动作。读取会顺手初始化 eventActionStates，这里在运行时副本上读，保证本模块只写 runtime.encounter。 */
 function currentEventIds(save: SaveData): string[] {
@@ -203,9 +241,11 @@ export function encounterGate(save: SaveData, cfg: EncounterConfig = encounterCo
   if (!runtime) return 'no_runtime';
   if (runtime.gameOver) return 'game_over';
   if (activeScene(save)) return 'active_scene';
-  const region = regionOf(runtime, cfg);
+  const region = regionOf(save, runtime, cfg);
   if (!region) return 'no_region';
-  const zone = zoneAt(region[0], region[1], cfg, encounterLocKey(save), doneEvents(runtime));
+  const locKey = encounterLocKey(save);
+  const zone = zoneAt(save, region[0], region[1], cfg, locKey, doneEvents(runtime));
+  if (!zone && (region[1].noCheckLocationIds || []).some(id => canonicalLocationId(id) === locKey)) return 'village';
   if (!zone) return 'no_zone';
   if (!(cfg.tiers[zone.tier]?.chance > 0)) return 'safe_tier';
   const eventIds = currentEventIds(save);
@@ -251,15 +291,15 @@ export function tickRandomEncounter(save: SaveData, { narrated, config }: { narr
   if (gate) {
     // 必经战优先：当前事件有必经／限时合同（或在窗口排除表里）时撤掉随机遇敌。
     // 人还在原地但此处已不再危险（剧情完成关掉了窗口、配置关掉）：未开战的待定也撤掉，免得下一轮事实包还写敌人现身。
-    const closed = gate === 'disabled' || gate === 'no_region' || gate === 'no_zone' || gate === 'safe_tier';
+    const closed = gate === 'disabled' || gate === 'no_region' || gate === 'village' || gate === 'no_zone' || gate === 'safe_tier';
     if (state.pending && (gate === 'story_contract' || gate === 'story_event' || (closed && state.pending.stage !== 'battle'))) {
       if (state.pending.stage !== 'foreshadow') markReceipt(state, state.pending.id, 'preempted');
       state.pending = null;
     }
     return { changed: true, reason: gate };
   }
-  const region = regionOf(runtime, cfg)!;
-  const zone = zoneAt(region[0], region[1], cfg, locKey, doneEvents(runtime))!;
+  const region = regionOf(save, runtime, cfg)!;
+  const zone = zoneAt(save, region[0], region[1], cfg, locKey, doneEvents(runtime))!;
   const loc = locKey!;
   const pending = state.pending;
   if (pending?.stage === 'foreshadow') {
@@ -306,8 +346,11 @@ export function tickRandomEncounter(save: SaveData, { narrated, config }: { narr
       const level = Number.isInteger(entry.level) ? Math.max(0, (entry.level as number) + diff.levelShift) : null;
       const variant = entry.variant || 'normal';
       Object.assign(receipt, { enemyId: entry.enemyId, variant, count, level });
+      const assistActors = assistConfig().byActor || {};
+      const companions = presentCompanionIds(save, runtime).filter(id => id in assistActors).sort();
       state.pending = { stage: 'reveal', id, locKey: loc, tier: zone.tier, enemyId: entry.enemyId, variant, count, level,
-        ...(level === null && Number.isInteger(entry.levelOffset) ? { levelOffset: entry.levelOffset as number } : {}), setTurn: turn };
+        ...(level === null && Number.isInteger(entry.levelOffset) ? { levelOffset: entry.levelOffset as number } : {}), setTurn: turn,
+        ...(companions.length ? { companions } : {}) };
     }
   }
   state.receipts.push(receipt);

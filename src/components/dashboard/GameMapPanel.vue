@@ -395,7 +395,7 @@ import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Us
 import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
 import { useUIStore } from '@/stores/uiStore';
-import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, mapTravelPreview, mapTravelConfirmed } from '@/modules/scenarioMods/travel/mapTravel';
+import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
 import { EnhancedWorldGenerator, generateRealmMap } from '@/utils/worldGeneration/enhancedWorldGenerator';
@@ -1926,9 +1926,9 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
     if (scenarioMapLocked.value || Array.isArray(worldInfo.地点信息)) {
       const stageLocations = normalizeLocationsData(worldInfo.地点信息 || [], mapConfig);
       const capitalIds = new Set(scenarioMapLocked.value ? withMapCapitalMarkers([]).map(marker => marker.id) : []);
-      const locations = scenarioMapLocked.value
+      const locations = withoutMapHiddenLocations(scenarioMapLocked.value
         ? normalizeLocationsData(withMapCapitalMarkers(stageLocations), mapConfig)
-        : stageLocations;
+        : stageLocations);
       let skippedSub = 0;
       locations.forEach((location: WorldLocation) => {
         try {
@@ -1998,6 +1998,7 @@ const handleLocationClick = (data: unknown) => {
   }
 
   const locationData = data as any;
+  if (isMapHiddenLocation((locationData.location || locationData)?.id)) return;
 
   // 清除大陆选择
   selectedContinent.value = null;

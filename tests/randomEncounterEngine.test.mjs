@@ -56,8 +56,12 @@ test('① 真实配置：encounter 段已登记；南荒 zones/pool 照剧情策
   assert.deepEqual(E.validateEncounterConfig(cfg), []);
   assert.deepEqual(Object.keys(cfg.tiers), N.GAME_NUMBERS.freeAction.dangerTiers);
   const nh = cfg.regions.nanhuang;
-  assert.deepEqual(nh.zones.map(z => z.key), ['liuchao.location.shan_jian', 'liuchao.location.sea_temple', 'liuchao.location.gui_wang_dong', INN, 'liuchao.location.gui_wang_gong', 'liuchao.location.gui_wang_gong.jingshen_tai']);
-  assert.deepEqual(nh.pool.map(p => `${p.enemyId}:${p.variant}:${p.level}`), [`${WARRIOR}:normal:3`, `${WARRIOR}:elite:4`, 'lcq.enemy.merfolk:normal:4']);
+  assert.deepEqual(nh.zones.map(z => z.key), ['liuchao.location.shan_jian', 'liuchao.location.sea_temple', 'liuchao.location.gui_wang_dong', INN, 'liuchao.location.gui_wang_gong', 'liuchao.location.gui_wang_gong.jingshen_tai',
+    // 2026-11-01 南荒敌池稿 §4 补的区（含花苗寨一带密林）。
+    'lcq.location.huamiao_village', 'lcq.location.giant_vine', 'lcq.location.nanhuang_route', 'nh.black_shoal', 'liuchao.location.baiyi', 'liuchao.location.south_wild_valley', 'lcq.location.turtle_road_ruins', 'lcq.location.guiwang_outer_post']);
+  // 精英不进池（用户 2026-11-01）；稿 R1–R10 去掉白尾豹共 10 种。
+  assert.deepEqual(nh.pool.map(p => `${p.enemyId}:${p.variant}:${p.level}`), [`${WARRIOR}:normal:3`, 'lcq.enemy.yin_spider:normal:2', 'lcq.enemy.ghostface_wasp:normal:1', 'lcq.enemy.venom_bat:normal:2',
+    'lcq.enemy.swamp_crocodile:normal:3', 'lcq.enemy.crow_man:normal:3', 'lcq.enemy.merfolk:normal:4', 'lcq.enemy.altar_corpse:normal:null', 'lcq.enemy.wild_boar:normal:2', 'lcq.enemy.nh_venom_snake:normal:1']);
   assert.deepEqual(nh.skipDuringEventIds, ['lcq.event.s05b_06_breakout_and_reunion', 'lcq.event.s05b_08b_altar_corpse_fight_and_danchen']);
   // 南荒判定：行旅账管理的南荒关（02 是五原，不算）全部命中。
   const re = new RegExp(nh.modIdPattern);
@@ -74,9 +78,12 @@ test('① 真实配置：encounter 段已登记；南荒 zones/pool 照剧情策
 test('① 地点 key 与读取代码一致：配置 key 都是规范 id，且各对应一个行旅 zone（鬼王峒行旅写 guiwang_dong → 规范 gui_wang_dong）', async () => {
   const zones = N.GAME_NUMBERS.encounter.regions.nanhuang.zones;
   const travelKeys = new Set(NANHUANG_ZONES.filter(z => z.worldLocationId).map(z => canonicalLocationId(canonicalEntityId('location', canonicalLocationId(z.worldLocationId)))));
+  const zoneIds = new Set(NANHUANG_ZONES.map(z => z.id));
+  // 2026-11-01 起区也可以是总表里国别为南荒的地点（按国别算进南荒，跨国落点不切关）或没有总表地点的行旅 zone（雨林黑石滩）。
+  const southLocations = new Set(JSON.parse(await readFile(new URL('../mod-kit/entity-catalog/locations.json', import.meta.url), 'utf8')).entries.filter(e => e.definition.country === '南荒').map(e => e.id));
   for (const z of zones) {
     assert.equal(canonicalLocationId(z.key), z.key, z.key);
-    assert.ok(travelKeys.has(z.key), `${z.key} 不是行旅 zone`);
+    assert.ok(travelKeys.has(z.key) || zoneIds.has(z.key) || southLocations.has(z.key), `${z.key} 既不是行旅 zone 也不是南荒地点`);
   }
   for (const p of N.GAME_NUMBERS.encounter.regions.nanhuang.pool) for (const k of p.zones) assert.ok(zones.some(z => z.key === k), k);
   const s = await open05b();
@@ -114,15 +121,16 @@ test('② 三步顺序：到达只设 ①；演出后记 foreshadowed；再留�
   next(s, c);
   const p = rt(s).encounter.pending;
   assert.equal(p.stage, 'reveal');
-  assert.deepEqual({ enemyId: p.enemyId, variant: p.variant, count: p.count, level: p.level }, { enemyId: WARRIOR, variant: 'normal', count: 2, level: 3 });
+  // 一打一（用户 2026-11-01）：maxCount=1，池条目写 [2,2] 也只来一个。
+  assert.deepEqual({ enemyId: p.enemyId, variant: p.variant, count: p.count, level: p.level }, { enemyId: WARRIOR, variant: 'normal', count: 1, level: 3 });
   assert.equal(p.id, `enc:${INN}:${rt(s).worldTurn}`);
   assert.equal(rt(s).encounter.receipts.length, 1);
   assert.equal(rt(s).encounter.receipts[0].hit, true);
   facts = E.encounterPromptFacts(s, c);
-  assert.deepEqual(facts, { 遇敌: { 对手: '鬼王峒武士', 数量: 2, 要求: c.prompt.reveal } });
+  assert.deepEqual(facts, { 遇敌: { 对手: '鬼王峒武士', 数量: 1, 要求: c.prompt.reveal } });
   assert.doesNotMatch(JSON.stringify(facts), /chance|roll|几率|骰|level|等级|hostile|档/);
   const prompt = buildScenarioStoryPrompt(s, '');
-  assert.match(prompt, /【遇敌事实（程序已定）】对手：鬼王峒武士，共2名。/);
+  assert.match(prompt, /【遇敌事实（程序已定）】对手：鬼王峒武士，共1名。/);
   assert.equal(E.pendingRandomBattle(s), null);
   assert.equal(activeScene(s), null);
 

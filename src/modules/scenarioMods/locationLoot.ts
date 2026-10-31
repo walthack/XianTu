@@ -8,6 +8,7 @@ import { scenarioPlayerId } from './playerIdentity';
 import { gameDayOf } from './affinityLadder';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { seedHash as hash, seededRoller, saveSeed } from './seededRng';
+import { catalogItem } from './entityCatalog';
 
 export interface LocationLootEntry {
   id: string; itemId?: string; category: 'key' | 'common' | 'rare' | 'currency' | 'boss';
@@ -33,8 +34,8 @@ export interface LocationLootState {
   claimedItemIds: string[]; receipts: LocationLootReceipt[];
   /** 每地点当前回刷窗口：本轮起算的游戏日（2026-10-28 13:48 第5条）。 */
   windows?: Record<string, { cycle: number; startDay: number }>;
-  /** 每地点待用的战后搜尸凭据（只留最近一场）。 */
-  spoils?: Record<string, { sourceId: string; atTurn: number }>;
+  /** 每地点待用的战后搜尸凭据（只留最近一场）；enemyId 有掉落表时搜尸走敌人掉落。 */
+  spoils?: Record<string, { sourceId: string; atTurn: number; enemyId?: string }>;
   spoilsClaimed?: string[];
 }
 export const QINGYU_LOOT_TABLE = defaults as unknown as LocationLootTable;
@@ -81,6 +82,9 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
   const runtime = (save as any).世界?.状态?.剧本模组;
   const locationId = canonicalLocationId(currentLocation(save, runtime?.canon?.locations).locationId);
   const location = locationId ? table.locations[locationId] : undefined;
+  // 随机战搜尸身走敌人掉落（用户 2026-11-01 定）：不看地点清单，不占搜刮次数。
+  const enemyToken = runtime && locationId ? runtime.locationLoot?.spoils?.[locationId] : undefined;
+  if (enemyToken?.enemyId && enemyDropsOf(enemyToken.enemyId) && GAME_NUMBERS.loot.spoils.enabled) return settleEnemySpoils(save, runtime, locationId!, enemyToken);
   if (!runtime || !locationId || !location || location.status !== 'ready') return { status: 'pending' as const, text: '此处的搜刮清单尚未配置，本次不消耗搜刮次数。' };
   const state = lootState(save, runtime);
   const config = lootRespawnConfig();
@@ -133,17 +137,72 @@ function lootState(save: SaveData, runtime: any): LocationLootState {
   const initialSeed = saveSeed(save);
   return runtime.locationLoot || { version: 1, seed: initialSeed, searches: {}, claimed: [], claimedItemIds: [], receipts: [] };
 }
-/** 随机战胜利后给当地留一次「战后搜尸」：下一次搜刮走战后一次、不占搜刮次数。每地点只留最近一场。 */
-export function grantLootSpoils(save: SaveData, { locationId, sourceId }: { locationId: string; sourceId: string }, table = QINGYU_LOOT_TABLE): boolean {
+/** 随机战胜利后给当地留一次「战后搜尸」：下一次搜刮走战后一次、不占搜刮次数。每地点只留最近一场。
+ *  敌人有掉落表（encounter.drops）时搜尸走敌人掉落，不要求地点有搜刮清单；没有时沿用地点池的普通槽。 */
+export function grantLootSpoils(save: SaveData, { locationId, sourceId, enemyId }: { locationId: string; sourceId: string; enemyId?: string }, table = QINGYU_LOOT_TABLE): boolean {
   const runtime = (save as any).世界?.状态?.剧本模组;
   const id = canonicalLocationId(locationId);
   const location = id ? table.locations[id] : undefined;
-  if (!runtime || !id || !location || location.status !== 'ready' || !sourceId || !GAME_NUMBERS.loot.spoils.enabled) return false;
+  const byEnemy = !!enemyId && !!enemyDropsOf(enemyId);
+  if (!runtime || !id || (!byEnemy && (!location || location.status !== 'ready')) || !sourceId || !GAME_NUMBERS.loot.spoils.enabled) return false;
   const state = lootState(save, runtime);
   if ((state.spoilsClaimed || []).includes(sourceId)) return false;
-  (state.spoils ||= {})[id] = { sourceId, atTurn: Number(runtime.worldTurn) || 0 };
+  (state.spoils ||= {})[id] = { sourceId, atTurn: Number(runtime.worldTurn) || 0, ...(byEnemy ? { enemyId } : {}) };
   runtime.locationLoot = state;
   return true;
+}
+interface EnemyDropTable { common: string[]; commonQty: [number, number]; rareOnce: string[]; rareChance: number }
+/** 敌人掉落表（numbers-combat encounter.drops）；键 note 是说明。 */
+export function enemyDropsOf(enemyId: string): EnemyDropTable | undefined {
+  const table = (GAME_NUMBERS as any).encounter?.drops?.[enemyId];
+  return enemyId !== 'note' && table && Array.isArray(table.common) ? table as EnemyDropTable : undefined;
+}
+/** 稀有物全局只给一次：已领过（claimed）、背包里有、或已有入包回执（含地点搜刮与敌人掉落）都不再给。 */
+function itemAlreadyGiven(save: SaveData, runtime: any, state: LocationLootState, itemId: string): boolean {
+  return state.claimedItemIds.includes(itemId) || Number((save as any).角色?.背包?.物品?.[itemId]?.数量) > 0
+    || (runtime.inventoryTransferReceipts || []).some((r: any) => r.itemId === itemId);
+}
+/** 当前关正典里有就用它，没有按总表（随机战可能发生在任何关的南荒地点）；剧情物不发。 */
+function droppableItem(runtime: any, itemId: string): any {
+  const own = (runtime.canon?.items || []).find((i: any) => i?.id === itemId);
+  const item = own || catalogItem(itemId, runtime.modId);
+  return item && !(item as any).storyItem ? item : undefined;
+}
+function settleEnemySpoils(save: SaveData, runtime: any, locationId: string, token: { sourceId: string; enemyId?: string }) {
+  const state = lootState(save, runtime);
+  const id = `loot:spoils:${token.sourceId}`;
+  const prior = state.receipts.find(r => r.id === id);
+  if (prior) return { status: 'replay' as const, receipt: prior, text: lootReceiptText(prior) };
+  const drops = enemyDropsOf(token.enemyId!)!;
+  const turn = Number(runtime.worldTurn) || 0;
+  const rng = hash(`${state.seed}:${locationId}:spoils:${token.sourceId}`);
+  const roll = seededRoller(rng);
+  const receipt: LocationLootReceipt = { id, locationId, attempt: 0, seed: rng, turn, drops: [], kind: 'spoils', sourceId: token.sourceId };
+  const picks: Array<{ itemId: string; quantity: number }> = [];
+  const commons = drops.common.filter(itemId => droppableItem(runtime, itemId));
+  if (commons.length) {
+    const [lo, hi] = drops.commonQty;
+    const itemId = commons[Math.min(commons.length - 1, Math.floor(roll() * commons.length))];
+    picks.push({ itemId, quantity: lo + Math.floor(roll() * (hi - lo + 1)) });
+  }
+  if (drops.rareOnce.length && roll() < drops.rareChance) {
+    const rares = drops.rareOnce.filter(itemId => droppableItem(runtime, itemId) && !itemAlreadyGiven(save, runtime, state, itemId));
+    if (rares.length) picks.push({ itemId: rares[Math.min(rares.length - 1, Math.floor(roll() * rares.length))], quantity: 1 });
+  }
+  runtime.inventoryTransferReceipts ||= [];
+  for (const pick of picks) {
+    const item = droppableItem(runtime, pick.itemId);
+    // 当前关正典里没有这件：只给本次入包事务看一份补了这件的目录，不改存档里的正典。
+    const view = (runtime.canon?.items || []).some((i: any) => i?.id === pick.itemId) ? runtime
+      : { ...runtime, canon: { ...(runtime.canon || {}), items: [...(runtime.canon?.items || []), item] } };
+    const settled = settleScenarioInventoryTransfers(save, view, { inventoryTransfers: [{ transferId: `${id}:${pick.itemId}`, itemId: pick.itemId, quantity: pick.quantity }] }, { eventId: id, actionId: 'spoils', outcome: 'success' });
+    if (settled.length) receipt.drops.push({ entryId: `drop:${pick.itemId}`, itemId: pick.itemId, name: settled[0].receipt.itemName, quantity: pick.quantity });
+  }
+  (state.spoilsClaimed ||= []).push(token.sourceId);
+  delete state.spoils![locationId];
+  state.receipts.push(receipt);
+  runtime.locationLoot = state;
+  return { status: 'settled' as const, receipt, text: lootReceiptText(receipt) };
 }
 /** 按分类过滤可掷条目 → 掷 → 入账；普通搜刮与战后搜尸共用。普通搜刮（categories 缺省、commonOnly=false）的掷骰顺序与旧版一致。 */
 function rollAndGrant({ save, runtime, table, location, locationId, state, id, attempt, turn, rng, categories, commonOnly }: {

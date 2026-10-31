@@ -38,6 +38,16 @@ export function mapCapitalMarkers() {
   });
 }
 
+/** 地图隐藏地点（numbers-runtime ui.worldMap.hiddenLocationIds）：不画、不能点；地点数据照留。 */
+export function isMapHiddenLocation(id: string | undefined): boolean {
+  const hidden: readonly string[] = runtimeNumbers.ui.worldMap.hiddenLocationIds;
+  const canonical = canonicalLocationId(id);
+  return !!canonical && hidden.some(h => canonicalLocationId(h) === canonical);
+}
+export function withoutMapHiddenLocations<T extends { id?: string }>(points: T[]): T[] {
+  return points.filter(point => !isMapHiddenLocation(point.id));
+}
+
 /** 代表点优先插入：同坐标地点的最近点命中平手时仍能点到代表点。 */
 export function withMapCapitalMarkers<T extends { id?: string; name?: string }>(points: T[]) {
   const markers = mapCapitalMarkers();
@@ -47,6 +57,7 @@ export function withMapCapitalMarkers<T extends { id?: string; name?: string }>(
 const rawDays: Readonly<Record<string, Readonly<Record<string, number>>>> = crossCountryTravel.rawDays;
 /** UI 与结算共用跨国目的地限制；国内仍由原入口/路线合同处理。 */
 export function mapTravelRestriction(save: SaveData, toId: string): string | undefined {
+  if (isMapHiddenLocation(toId)) return '此地不在地图上。';
   const from = countryOf(currentLocation(save).canonicalLocationId), to = countryOf(toId);
   if (!from || !to) return '此处国别未定，暂无主动路线。';
   if (!capitals[from] || !capitals[to]) return '此国别暂不开放主动路线。';

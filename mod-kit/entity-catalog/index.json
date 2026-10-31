@@ -2511,7 +2511,13 @@
     },
     {
       "kind": "action",
-      "id": "liuchao.event.qin_hook_fangshi_rumor:hear_xianyang_rumor",
+      "id": "liuchao.event.qin_hook_fangshi_rumor:go_now",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "liuchao.event.qin_hook_fangshi_rumor:later",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -8777,6 +8783,16 @@
     },
     {
       "kind": "enemy",
+      "id": "lcq.enemy.ghostface_wasp",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "aliases": [
+        "鬼面蜂",
+        "鬼面蜂群",
+        "毒蜂"
+      ]
+    },
+    {
+      "kind": "enemy",
       "id": "lcq.enemy.gui_wu_wang",
       "authoritySource": "mod-kit/entity-catalog/enemies.json",
       "aliases": [
@@ -8837,6 +8853,15 @@
     },
     {
       "kind": "enemy",
+      "id": "lcq.enemy.nh_venom_snake",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "aliases": [
+        "毒蛇",
+        "怪蛇"
+      ]
+    },
+    {
+      "kind": "enemy",
       "id": "lcq.enemy.sheyi_shiweimo",
       "authoritySource": "mod-kit/entity-catalog/enemies.json",
       "aliases": [
@@ -8847,6 +8872,35 @@
         "带重伤的蛇彝男子",
         "lcq.enemy.sheyi_male",
         "lcq.enemy.sheyi_raider"
+      ]
+    },
+    {
+      "kind": "enemy",
+      "id": "lcq.enemy.swamp_crocodile",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "aliases": [
+        "巨鳄",
+        "朽木",
+        "泥潭鳄鱼"
+      ]
+    },
+    {
+      "kind": "enemy",
+      "id": "lcq.enemy.venom_bat",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "aliases": [
+        "毒蝙蝠",
+        "无毛蝙蝠",
+        "不长毛的蝙蝠"
+      ]
+    },
+    {
+      "kind": "enemy",
+      "id": "lcq.enemy.wild_boar",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "aliases": [
+        "野猪",
+        "大野猪"
       ]
     },
     {
@@ -8863,6 +8917,15 @@
       "authoritySource": "mod-kit/entity-catalog/enemies.json",
       "aliases": [
         "炎煞"
+      ]
+    },
+    {
+      "kind": "enemy",
+      "id": "lcq.enemy.yin_spider",
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "aliases": [
+        "阴蛛",
+        "吸血妖物"
       ]
     },
     {
@@ -17417,6 +17480,14 @@
     },
     {
       "kind": "item",
+      "id": "lcq.item.nh_venom_bat_wing",
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "aliases": [
+        "毒蝠翼膜"
+      ]
+    },
+    {
+      "kind": "item",
       "id": "lcq.item.nh_verdigris_shard",
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "aliases": []
@@ -24082,6 +24153,12 @@
     },
     {
       "kind": "text",
+      "id": "lineCompass.qin.entry",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "lineCompass.qin.name",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -24971,6 +25048,24 @@
     {
       "kind": "text",
       "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.0.outcomeText.success",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.actionText",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.outcomeText.success",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -25907,6 +26002,12 @@
     {
       "kind": "text",
       "id": "qingyu.opening",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "qingyu.prologue.fourYears",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },

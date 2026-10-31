@@ -229,7 +229,11 @@ export interface ScenarioEventActionJudgement {
 /** 南荒试点：步骤材料与本地账本；缺省沿用事件值。 */
 export interface ScenarioStepScene {
   action_time?: import('../actionTime').ActionTime;
-  timeAdvance?: { kind: 'calendarYears'; years: number };
+  /**
+   * 作者固定跳年。supersedes：旧挂点的「事件::动作」，旧档已在那里跳过就不再跳；
+   * interludeTextKey：内容包 texts 里的过渡叙述，跳年当回合正文之后接上。
+   */
+  timeAdvance?: { kind: 'calendarYears'; years: number; supersedes?: string[]; interludeTextKey?: string };
   locationId?: string;
   cast?: { present?: string[]; enter?: string[]; exit?: Array<{ name: string; status: 'dead' | 'missing' | 'departed' }> };
   sceneLocation?: string; sceneObjective?: string;

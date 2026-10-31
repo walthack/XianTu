@@ -5,6 +5,7 @@
  * 所有参数都编码在 id 里（遇敌 id、敌人、数量、等级），sceneContractById 只凭 id 就能重建，读档、预演克隆都不依赖外部状态。
  * 等级段：整数＝池条目给定的等级（已含难度 levelShift，由 snapshotLevels 直接用）；'p'＝按 combat.enemyPresets 定级；
  * 'p<整数>'＝按预设定级但 protagonistOffset 改用池条目的 levelOffset。
+ * 可选第 5 段 'c=<角色 id,…>'：遇敌时在场的助战同伴，作为 player_side 助战者入场（一打一，同伴不下场挨打，只给 assist 段的 buff）。
  */
 import template from './random/skirmish.template.json';
 import { registerSceneContracts } from './registry';
@@ -15,11 +16,12 @@ import type { Contract, PartyDef } from '../types';
 
 export const RANDOM_CONTRACT_PREFIX = 'combat.random.skirmish~';
 
-export interface RandomContractParams { id: string; enemyId: string; count: number; level: number | null; levelOffset?: number | null }
+export interface RandomContractParams { id: string; enemyId: string; count: number; level: number | null; levelOffset?: number | null; companions?: string[] }
 
-export function randomContractId({ id, enemyId, count, level, levelOffset }: RandomContractParams): string {
+export function randomContractId({ id, enemyId, count, level, levelOffset, companions }: RandomContractParams): string {
   const levelPart = Number.isInteger(level) ? String(level) : Number.isInteger(levelOffset) ? `p${levelOffset}` : 'p';
-  return `${RANDOM_CONTRACT_PREFIX}${id}~${enemyId}~${count}~${levelPart}`;
+  const allies = companions?.length ? `~c=${companions.join(',')}` : '';
+  return `${RANDOM_CONTRACT_PREFIX}${id}~${enemyId}~${count}~${levelPart}${allies}`;
 }
 
 export function isRandomContract(c: Pick<Contract, 'meta'> | undefined | null): boolean {
@@ -29,15 +31,21 @@ export function isRandomContract(c: Pick<Contract, 'meta'> | undefined | null): 
 function parse(contractId: string): RandomContractParams | string {
   if (!contractId.startsWith(RANDOM_CONTRACT_PREFIX)) return 'bad_prefix';
   const parts = contractId.slice(RANDOM_CONTRACT_PREFIX.length).split('~');
-  if (parts.length !== 4) return 'bad_shape';
-  const [id, enemyId, countText, levelText] = parts;
+  if (parts.length !== 4 && parts.length !== 5) return 'bad_shape';
+  const [id, enemyId, countText, levelText, alliesText] = parts;
   if (!id || !enemyId) return 'bad_shape';
   const count = Number(countText);
   if (!/^\d+$/.test(countText) || !(count >= 1)) return 'bad_count';
+  let companions: string[] | undefined;
+  if (alliesText !== undefined) {
+    companions = alliesText.startsWith('c=') ? alliesText.slice(2).split(',').filter(Boolean) : [];
+    if (!companions.length) return 'bad_companions';
+  }
+  const allies = companions ? { companions } : {};
   const offset = levelText.match(/^p(-?\d+)?$/);
-  if (offset) return { id, enemyId, count, level: null, ...(offset[1] !== undefined ? { levelOffset: Number(offset[1]) } : {}) };
+  if (offset) return { id, enemyId, count, level: null, ...(offset[1] !== undefined ? { levelOffset: Number(offset[1]) } : {}), ...allies };
   if (!/^\d+$/.test(levelText)) return 'bad_level';
-  return { id, enemyId, count, level: Number(levelText) };
+  return { id, enemyId, count, level: Number(levelText), ...allies };
 }
 
 function build(contractId: string, p: RandomContractParams): Contract | string {
@@ -58,7 +66,8 @@ function build(contractId: string, p: RandomContractParams): Contract | string {
     foes.push(party);
     attacks.push({ ...structuredClone(attack), id: `foe_${i}_attack`, party: party.id });
   }
-  raw.parties = [...raw.parties.filter(party => party !== foe), ...foes];
+  const allies: PartyDef[] = (p.companions || []).map((ref, i) => ({ id: `ally_${i + 1}`, side: 'player_side', ref, role: 'assist' }) as PartyDef);
+  raw.parties = [...raw.parties.filter(party => party !== foe), ...allies, ...foes];
   raw.enemyActions = [...raw.enemyActions!.filter(action => action !== attack), ...attacks];
   // 赢＝每个来袭者的轨道都推到「倒下」（多敌照 f03 的写法；sideDowned 只认倒地状态，不认轨道到头）。
   raw.objective.win = { all: foes.map(party => ({ party: party.id, track: 'vit', reach: 'final' })) } as Contract['objective']['win'];

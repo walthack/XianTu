@@ -6289,6 +6289,22 @@
       "stageVariants": {},
       "authoritySource": "mod-kit/entity-catalog/items.json",
       "migratedFrom": []
+    },
+    {
+      "id": "lcq.item.nh_venom_bat_wing",
+      "aliases": [
+        "毒蝠翼膜"
+      ],
+      "definition": {
+        "id": "lcq.item.nh_venom_bat_wing",
+        "name": "毒蝠翼膜",
+        "description": "无毛毒蝙蝠身上割下的一片翼膜，薄而韧，带着腥气。",
+        "type": "material",
+        "grade": "凡品"
+      },
+      "stageVariants": {},
+      "authoritySource": "mod-kit/entity-catalog/items.json",
+      "migratedFrom": []
     }
   ]
 }

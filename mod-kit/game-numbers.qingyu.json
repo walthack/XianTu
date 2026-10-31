@@ -2440,7 +2440,7 @@
     }
   },
   "ui": {
-    "note": "界面显示开关（只管玩家看不看得到，不删代码、数据、文案）。rightSidebar.showSecondaryLines：右栏「可投的门路」整块（secondaryLines 二级线入口＋questLineView 支线）是否显示；用户 2026-10-27 08:53 定先隐藏不删，默认 false。rightSidebar.showLineCompass：右栏「当前线」卡（线名＋下一步一句，别处已知的线默认收起只列线名；右栏线入口复用分析 2026-10-27 §5，用户 2026-10-27 09:26 定）是否显示；开时放在原主线指南针那一行的位置、取代它，与「可投的门路」两块不并存（两个都开时只显示当前线卡）；用户 2026-10-27 08:57 定改完后不再隐藏，默认 true（showSecondaryLines 仍为 false）。worldSelection.showGenericWorlds：创建角色第 1 步「普通世界」入口（自定义世界、AI推演、本地世界列表、世界规模配置、保存预设与加载预设）是否显示；用户 2026-10-28 定先隐藏不删，默认 false；关时剧本模组与修仙难度照常，旧普通世界存档照常可读。modeSelection.showGenericStart：首页「初入仙途」（普通创角入口）是否显示；用户 2026-10-29 定先隐藏不删，默认 false；关时首页主按钮为「入六朝」（直入 lcq.stage_01 第 7 步预览），续前世因缘与剧本模组照常。",
+    "note": "界面显示开关（只管玩家看不看得到，不删代码、数据、文案）。rightSidebar.showSecondaryLines：右栏「可投的门路」整块（secondaryLines 二级线入口＋questLineView 支线）是否显示；用户 2026-10-27 08:53 定先隐藏不删，默认 false。rightSidebar.showLineCompass：右栏「当前线」卡（线名＋下一步一句，别处已知的线默认收起只列线名；右栏线入口复用分析 2026-10-27 §5，用户 2026-10-27 09:26 定）是否显示；开时放在原主线指南针那一行的位置、取代它，与「可投的门路」两块不并存（两个都开时只显示当前线卡）；用户 2026-10-27 08:57 定改完后不再隐藏，默认 true（showSecondaryLines 仍为 false）。worldSelection.showGenericWorlds：创建角色第 1 步「普通世界」入口（自定义世界、AI推演、本地世界列表、世界规模配置、保存预设与加载预设）是否显示；用户 2026-10-28 定先隐藏不删，默认 false；关时剧本模组与修仙难度照常，旧普通世界存档照常可读。modeSelection.showGenericStart：首页「初入仙途」（普通创角入口）是否显示；用户 2026-10-29 定先隐藏不删，默认 false；关时首页主按钮为「入六朝」（直入 lcq.stage_01 第 7 步预览），续前世因缘与剧本模组照常。 worldMap.hiddenLocationIds：世界地图不显示、不能点的地点 id（地点数据保留）；用户 2026-11-01 定草原 lcq.location.grassland 从地图去掉。",
     "rightSidebar": {
       "showSecondaryLines": false,
       "showLineCompass": true
@@ -2454,6 +2454,11 @@
     "legacyPilotActionOptions": {
       "min": 2,
       "max": 4
+    },
+    "worldMap": {
+      "hiddenLocationIds": [
+        "lcq.location.grassland"
+      ]
     }
   },
   "loot": {
@@ -2479,7 +2484,7 @@
     }
   },
   "encounter": {
-    "note": "随机遇敌（用户 2026-10-28 13:48；10-19 三步）。代码按存档种子掷骰决定检不检/中不中/遇谁/几个/几级，模型只描写。仅 regions 里配了 zones+pool 的地区生效；第一版只有南荒，zones/pool 照剧情策划清单（/workspace/planner_ask_nanhuang_encounter.md）配置草案填入，其中 shan_jian、sea_temple 与鲛人三条按「推荐」写入、待用户拍板（否决就删对应条目）。几率与倍率初值待用户拍板。",
+    "note": "随机遇敌（用户 2026-10-28 13:48；10-19 三步）。代码按存档种子掷骰决定检不检/中不中/遇谁/几个/几级，模型只描写。仅 regions 里配了 zones+pool 的地区生效；第一版只有南荒，zones/pool 照剧情策划清单（/workspace/planner_ask_nanhuang_encounter.md）配置草案填入，其中 shan_jian、sea_temple 与鲛人三条按「推荐」写入、待用户拍板（否决就删对应条目）。几率与倍率初值待用户拍板。 2026-11-01 用户定南荒敌池（稿 /workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md）：只收无名杂兵、精英不进池；一次一个敌人（count 一律 [1,1]、maxCount=1），同伴不下场只给助战 buff（assist 段）；鸦人／鲛人／尸鬼分别等 F04／F06／F12 的剧情事件完成后才进池（pool.activeWhen.afterEventIds）；鬼面蜂一群算一个敌人；regions.nanhuang.countries＝按当前地点国别也算进南荒（跨国落到花苗寨等，不必在南荒关）；noCheckLocationIds＝村寨，寨内不检遇敌，zone 带 subPlace 的只在位置描述的子地点命中该正则时算寨外一带（如「南荒·花苗寨·密林」）。drops＝搜尸身走敌人掉落（不占搜刮次数），稀有物与地点搜刮共用全局只给一次。凡稿里为 null 的数值（新区 tier、新敌权重、掉落数量与稀有几率）按现有同级敌人填的保守初值，见各条 initialValues 说明，待用户拍板。",
     "enabled": true,
     "tiers": {
       "safe": {
@@ -2513,7 +2518,7 @@
         "levelShift": 0
       }
     },
-    "maxCount": 6,
+    "maxCount": 1,
     "receiptsKeep": 50,
     "prompt": {
       "foreshadow": "本轮正文须写出此地的危险迹象（声响、痕迹、气味、同伴警觉等），只写迹象，不写敌人现身，不写开战；让玩家看得出可以继续留下或离开。",
@@ -2604,6 +2609,47 @@
               ]
             },
             "source": "qyj 15087–15152（落点待核）"
+          },
+          {
+            "key": "lcq.location.huamiao_village",
+            "subPlace": "林|野|山|溪|藤|寨外",
+            "tier": "guarded",
+            "source": "稿 R1/R2/R3/R9/R10：花苗寨一带密林（寨内不检，只认子地点为林野山溪藤寨外）；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
+          },
+          {
+            "key": "lcq.location.giant_vine",
+            "tier": "guarded",
+            "source": "稿 §4：熊耳铺—花苗寨之间、藤桥（万古巨藤＝通往花苗地界的巨藤）；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
+          },
+          {
+            "key": "lcq.location.nanhuang_route",
+            "tier": "guarded",
+            "source": "稿 §4：白龙江口→熊耳铺一线·南荒商路；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
+          },
+          {
+            "key": "nh.black_shoal",
+            "tier": "guarded",
+            "source": "稿 §4：雨林黑石滩；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
+          },
+          {
+            "key": "liuchao.location.baiyi",
+            "tier": "guarded",
+            "source": "稿 §4：白夷、白夷谷（白夷谷 bai_yi_valley 是 baiyi 的别名，同一区）；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
+          },
+          {
+            "key": "liuchao.location.south_wild_valley",
+            "tier": "guarded",
+            "source": "稿 §4：南荒泥潭、山洞群、南荒山谷；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
+          },
+          {
+            "key": "lcq.location.turtle_road_ruins",
+            "tier": "guarded",
+            "source": "稿 §4：龟纹古道废墟；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
+          },
+          {
+            "key": "lcq.location.guiwang_outer_post",
+            "tier": "guarded",
+            "source": "稿 §4：鬼王峒外围哨位；tier 初值（数值稿为 null，按现有 shan_jian/sea_temple 同为 guarded 档填，待用户拍板）"
           }
         ],
         "pool": [
@@ -2613,6 +2659,10 @@
             "level": 3,
             "zones": [
               "liuchao.location.shan_jian",
+              "lcq.location.huamiao_village",
+              "lcq.location.giant_vine",
+              "lcq.location.turtle_road_ruins",
+              "lcq.location.guiwang_outer_post",
               "liuchao.location.gui_wang_dong",
               "lcq.location.guiwang_inn",
               "liuchao.location.gui_wang_gong",
@@ -2631,35 +2681,108 @@
             "weight": 3,
             "count": [
               1,
-              3
+              1
             ],
-            "source": "扩写级数：qyj 6760–6773、6800、12287、14773；个数 qyj 9370–9371、14603、14743"
+            "source": "扩写级数：qyj 6760–6773、6800、12287、14773；个数 qyj 9370–9371、14603、14743；2026-11-01 一打一 count 改 [1,1]，区域按稿 R1 补花苗寨一带/巨藤/古道废墟/外围哨位"
           },
           {
-            "enemyId": "lcq.enemy.guiwang_warrior",
-            "variant": "elite",
-            "level": 4,
+            "enemyId": "lcq.enemy.yin_spider",
+            "variant": "normal",
+            "level": 2,
             "zones": [
-              "liuchao.location.gui_wang_dong",
-              "lcq.location.guiwang_inn",
-              "liuchao.location.gui_wang_gong",
-              "liuchao.location.gui_wang_gong.jingshen_tai"
+              "lcq.location.huamiao_village",
+              "lcq.location.giant_vine",
+              "liuchao.location.south_wild_valley"
             ],
             "tiers": [
+              "guarded",
               "hostile"
             ],
-            "activeWhen": {
-              "afterEventIds": [],
-              "untilEventIds": [
-                "lcq.event.ghost_king_swallowed"
-              ]
-            },
             "weight": 1,
             "count": [
               1,
               1
             ],
-            "source": "扩写：qyj 6809–6817、9371、12743、14746"
+            "source": "稿 R2 阴蛛 lcq:6520–6548；等级 2 为稿推断【待核】；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）"
+          },
+          {
+            "enemyId": "lcq.enemy.ghostface_wasp",
+            "variant": "normal",
+            "level": 1,
+            "zones": [
+              "lcq.location.huamiao_village",
+              "lcq.location.giant_vine"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "稿 R3 鬼面蜂 lcq:6214–6233；一群算一个敌人（总策划定 11-01 00:10）；等级 1 为稿推断【待核】；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）"
+          },
+          {
+            "enemyId": "lcq.enemy.venom_bat",
+            "variant": "normal",
+            "level": 2,
+            "zones": [
+              "liuchao.location.baiyi"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "稿 R4 无毛毒蝙蝠 lcq:8766–8809；等级 2 为稿推断【待核】；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）"
+          },
+          {
+            "enemyId": "lcq.enemy.swamp_crocodile",
+            "variant": "normal",
+            "level": 3,
+            "zones": [
+              "liuchao.location.south_wild_valley"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "稿 R5 泥潭巨鳄 lcq:10373–10385；等级 3 为稿推断【待核】；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）"
+          },
+          {
+            "enemyId": "lcq.enemy.crow_man",
+            "variant": "normal",
+            "level": 3,
+            "zones": [
+              "liuchao.location.baiyi"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "稿 R6 鸦人 lcq:8400–8476，级数表 :77；F04 触发（s04b_lingfei_baiyi_crisis_03 完成）后才进池；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.s04b_lingfei_baiyi_crisis_03"
+              ],
+              "untilEventIds": []
+            }
           },
           {
             "enemyId": "lcq.enemy.merfolk",
@@ -2684,7 +2807,247 @@
               1,
               1
             ],
-            "source": "扩写：qyj 11012–11017、11040–11041、11064–11065、11259（待用户拍板）"
+            "source": "扩写：qyj 11012–11017、11040–11041、11064–11065、11259（待用户拍板）；2026-11-01 F06（haishen_hall_merfolk）完成后才进池；碧鲮族村落属村寨不检，只留海神殿"
+          },
+          {
+            "enemyId": "lcq.enemy.altar_corpse",
+            "variant": "normal",
+            "level": null,
+            "zones": [
+              "liuchao.location.gui_wang_dong",
+              "liuchao.location.gui_wang_gong"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "稿 R8 尸鬼 lcq:15258–15261；不适用九级，level=null 走 combat.enemyPresets 的战斗当量 3（级数表 :79）；F12 触发（s05b_08b 完成）后才进池；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）",
+            "activeWhen": {
+              "afterEventIds": [
+                "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+              ],
+              "untilEventIds": []
+            }
+          },
+          {
+            "enemyId": "lcq.enemy.wild_boar",
+            "variant": "normal",
+            "level": 2,
+            "zones": [
+              "lcq.location.huamiao_village",
+              "lcq.location.giant_vine"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "稿 R9 野猪【扩写】lcq:7729；等级 2 无原著依据；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）"
+          },
+          {
+            "enemyId": "lcq.enemy.nh_venom_snake",
+            "variant": "normal",
+            "level": 1,
+            "zones": [
+              "lcq.location.nanhuang_route",
+              "nh.black_shoal",
+              "lcq.location.huamiao_village",
+              "lcq.location.giant_vine"
+            ],
+            "tiers": [
+              "guarded",
+              "hostile"
+            ],
+            "weight": 1,
+            "count": [
+              1,
+              1
+            ],
+            "source": "稿 R10 南荒毒蛇【扩写】lcq:4629、5269、6117；等级 1 无原著依据；weight=1 为初值（数值稿 null，按现有鲛人/精英同为 1 填，待用户拍板）"
+          }
+        ],
+        "countries": [
+          "南荒"
+        ],
+        "noCheckLocationIds": [
+          "liuchao.location.xiongerpu",
+          "lcq.location.huamiao_village",
+          "liuchao.location.biyu_village",
+          "lcq.location.sheyi_village",
+          "lcq.location.yeao_village"
+        ]
+      }
+    },
+    "drops": {
+      "note": "搜尸身走敌人掉落（用户定 2026-11-01）：随机战赢后的下一次搜刮按本表出敌人掉落，不占地点搜刮次数；common 等权取一件、数量 commonQty；rareOnce 按 rareChance 判一次，同一稀有物与地点搜刮合起来全局只给一次（背包里有或已有入包回执就不再给）。commonQty=[1,1]、rareChance=0.03 为初值（数值稿 null；rareChance 取 location-loot rules.rareChance 现值，待用户拍板）。竹筒 lcq.item.crow_bamboo_tube 是 F04 关键物，不进随机掉落。",
+      "lcq.enemy.guiwang_warrior": {
+        "common": [
+          "lcq.item.nh_torch",
+          "lcq.item.nh_small_hide"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [
+          "lcq.item.nh_ghost_horn_shard"
+        ],
+        "rareChance": 0.03
+      },
+      "lcq.enemy.yin_spider": {
+        "common": [
+          "lcq.item.nh_yinzhu_silk"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [],
+        "rareChance": 0
+      },
+      "lcq.enemy.ghostface_wasp": {
+        "common": [
+          "lcq.item.nh_bee_wax"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [
+          "lcq.item.nh_ghostface_stinger"
+        ],
+        "rareChance": 0.03
+      },
+      "lcq.enemy.venom_bat": {
+        "common": [
+          "lcq.item.nh_venom_bat_wing"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [],
+        "rareChance": 0
+      },
+      "lcq.enemy.swamp_crocodile": {
+        "common": [
+          "lcq.item.nh_small_hide"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [],
+        "rareChance": 0
+      },
+      "lcq.enemy.crow_man": {
+        "common": [
+          "lcq.item.nh_crowman_feather"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [],
+        "rareChance": 0
+      },
+      "lcq.enemy.merfolk": {
+        "common": [
+          "lcq.item.nh_clam_shell",
+          "lcq.item.nh_coral_twig"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [
+          "lcq.item.nh_merfolk_scale_pouch"
+        ],
+        "rareChance": 0.03
+      },
+      "lcq.enemy.altar_corpse": {
+        "common": [
+          "lcq.item.nh_bone_bead_string"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [],
+        "rareChance": 0
+      },
+      "lcq.enemy.wild_boar": {
+        "common": [
+          "lcq.item.nh_small_hide"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [],
+        "rareChance": 0
+      },
+      "lcq.enemy.nh_venom_snake": {
+        "common": [
+          "lcq.item.nh_snake_slough"
+        ],
+        "commonQty": [
+          1,
+          1
+        ],
+        "rareOnce": [],
+        "rareChance": 0
+      }
+    },
+    "easterEggs": {
+      "whiteTailLeopard": {
+        "note": "白尾豹彩蛋（用户定 11-01 00:28，稿 /workspace/narrative-drafts/2026-11-01-白尾豹彩蛋.md）：南荒密林小概率遇见，白尾豹不攻击；体力＝角色.属性.气血（仓库无独立体力字段），按上限比例回复、不超上限；挂增益「山神庇佑」（内容包状态 buff.shanshen_blessing，场面战斗里按其 rollModifier 生效），持续 durationTurns 个回合后摘除；增益在身时不再触发。队里有南荒本地同伴时按 companionLines 顺序由第一位在场者说一句（台词在内容包 texts）。chance、staminaRestoreRatio、durationTurns 与状态的 rollModifier 都是初值（稿为 null，按现有 guarded 档几率量级与最小档加值保守填，待用户拍板）。",
+        "enabled": true,
+        "hostile": false,
+        "locations": [
+          {
+            "key": "lcq.location.huamiao_village",
+            "subPlace": "林"
+          },
+          {
+            "key": "lcq.location.giant_vine"
+          },
+          {
+            "key": "liuchao.location.shan_jian"
+          },
+          {
+            "key": "lcq.location.turtle_road_ruins"
+          }
+        ],
+        "chance": 0.03,
+        "staminaRestoreRatio": 0.3,
+        "buff": {
+          "statusId": "buff.shanshen_blessing",
+          "name": "山神庇佑",
+          "durationTurns": 5
+        },
+        "textKey": "nanhuang.leopard.encounter",
+        "companionLines": [
+          {
+            "characterId": "liuchao.character.su_li",
+            "textKey": "nanhuang.leopard.line.su_li"
+          },
+          {
+            "characterId": "liuchao.character.a_xi",
+            "textKey": "nanhuang.leopard.line.a_xi"
+          },
+          {
+            "characterId": "lcq.character.nanhuang_shiweimo",
+            "textKey": "nanhuang.leopard.line.shiweimo"
           }
         ]
       }

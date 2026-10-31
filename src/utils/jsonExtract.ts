@@ -78,6 +78,32 @@ function extractBalancedJson(
   return null;
 }
 
+/**
+ * JSON 片段之外的正文：去掉被解析的那段 JSON（含代码围栏）后剩下的文字。
+ * 模型把叙事写在 JSON 外、JSON 里只给指令时，用它保住叙事。
+ */
+export function narrativeOutsideJson(text: string): string {
+  const cleaned = stripModelThinking(text);
+  if (!cleaned) return '';
+  let rest: string | null = null;
+  const fenceRe = /```(?:json)?\s*([\s\S]*?)\s*```/gi;
+  for (const match of cleaned.matchAll(fenceRe)) {
+    const candidate = (match[1] || '').trim();
+    if (!candidate || !(candidate.includes('{') || candidate.includes('['))) continue;
+    rest = cleaned.slice(0, match.index) + '\n' + cleaned.slice((match.index || 0) + match[0].length);
+    break;
+  }
+  if (rest === null) {
+    for (let i = 0; i < cleaned.length && rest === null; i++) {
+      if (cleaned[i] !== '{' && cleaned[i] !== '[') continue;
+      const snippet = extractBalancedJson(cleaned, i);
+      if (snippet) rest = cleaned.slice(0, i) + '\n' + cleaned.slice(i + snippet.length);
+    }
+  }
+  if (rest === null) return '';
+  return rest.replace(/```(?:json)?/gi, '').replace(/\n{3,}/g, '\n\n').trim();
+}
+
 export function parseJsonFromText<T = unknown>(text: string): T {
   const snippet = extractFirstJsonSnippet(text);
   if (!snippet) {

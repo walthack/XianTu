@@ -136,8 +136,13 @@ export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: stri
   if (scene.timeAdvance && !(runtime.completedEventIds || []).includes(eventId)) {
     const jump = scene.timeAdvance, c = calendarConfig();
     if (jump.kind !== 'calendarYears' || !Number.isSafeInteger(jump.years) || jump.years <= 0) throw new Error('LCQ-SAV-039');
-    settleTime(save, `author:${eventId}::${actionId}`, jump.years * c.daysPerMonth * c.monthsPerYear * 1440, 'author');
-    (runtime as any).authorTimeConsumedAtTurn = runtime.worldTurn;
+    const receipts = (save as any).系统?.扩展?.actionTime?.receipts || {};
+    // 挂点挪过的跳年：旧档已在旧挂点跳过的，不再跳第二次。
+    if (!(jump.supersedes || []).some(old => receipts[`author:${old}`])) {
+      const advanced = settleTime(save, `author:${eventId}::${actionId}`, jump.years * c.daysPerMonth * c.monthsPerYear * 1440, 'author');
+      (runtime as any).authorTimeConsumedAtTurn = runtime.worldTurn;
+      if (advanced && jump.interludeTextKey) runtime.timeSkipInterlude = { eventId, actionId, textKey: jump.interludeTextKey };
+    }
   }
   if (!isNanhuangSceneStage(runtime.modId)) return;
   const ledger: SceneLedger = runtime.sceneLedger ||= { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [] };
@@ -169,6 +174,29 @@ export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: stri
   }
   ledger.lastBeat = { eventId, actionId, facts: scene.fixedFacts?.length ? [...scene.fixedFacts] : [scene.fallbackText || scene.previousBeat || '本步已经落账。'] };
 
+}
+
+/**
+ * 跳年过渡叙述：跳年那一回合正文落账后，把内容包里的过渡稿接在本回合正文之后（叙事历史末条与短期记忆末条），只接一次。
+ * 返回接上的文字；没有待接的过渡时返回空串。
+ */
+export function flushTimeSkipInterlude(save: SaveData): string {
+  const runtime = (save as any).世界?.状态?.剧本模组;
+  const pending = runtime?.timeSkipInterlude;
+  if (!pending) return '';
+  delete runtime.timeSkipInterlude;
+  const text = CONTENT_PACKS.texts[pending.textKey];
+  if (typeof text !== 'string' || !text.trim()) return '';
+  appendToLatestNarrative(save, text);
+  return text;
+}
+/** 把本地定稿的文字接在本回合正文之后：叙事历史末条与短期记忆末条各接一段。 */
+export function appendToLatestNarrative(save: SaveData, text: string): void {
+  const history = (save as any).系统?.历史?.叙事;
+  const last = Array.isArray(history) ? history[history.length - 1] : undefined;
+  if (last && typeof last.content === 'string') last.content = [last.content, text].filter(Boolean).join('\n\n');
+  const memory = (save as any).社交?.记忆?.短期记忆;
+  if (Array.isArray(memory) && typeof memory[memory.length - 1] === 'string') memory[memory.length - 1] = `${memory[memory.length - 1]}\n\n${text}`;
 }
 
 /** 运行时事实摘要，缺字段的旧档按已有回执推导，不从模型文字反填。 */

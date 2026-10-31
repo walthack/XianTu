@@ -78,7 +78,7 @@ import { INITIAL_GENERATION_POLICY, initialGenerationRequestLimits, shouldRetryI
 import { validateAndRepairNpcProfile } from '@/utils/dataValidation';
 import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
-import { parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
+import { narrativeOutsideJson, parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
 import { composeShortTermMemoryEntry, sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
 import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
@@ -715,7 +715,7 @@ class AIBidirectionalSystemClass {
       || options?.gambleRefusalAction || (options?.openWorldAction && !options.eventAction)
       || isKeyBeatCardAction(options?.eventAction))) return null;
     const started = Date.now();
-    const lootPreviewSave = moduleOnly && !options?.eventAction && isLocationLootInput(options?.playerIntentText || userMessage) ? cloneDeep(saveData) : undefined;
+    const lootPreviewSave = !options?.eventAction && isLocationLootInput(options?.playerIntentText || userMessage) ? cloneDeep(saveData) : undefined;
     const lootPreview = lootPreviewSave ? settleLocationLoot(lootPreviewSave) : undefined;
     if (lootPreview && lootPreview.status !== 'settled') return { text: lootPreview.text, mid_term_memory: '', tavern_commands: [], action_options: [], moduleReceipt: { id: generationId, path: 'local', text: lootPreview.text, promptChars: 0, foregroundMs: Date.now() - started } };
     if (moduleOnly) {
@@ -1145,7 +1145,11 @@ class AIBidirectionalSystemClass {
       // @deprecated LEGACY：模块化稳定后删除（2026-10-02 用户决定）
       if (!modularResponse) {
       if (moduleOnly) assertDemoModulePath(saveData, 'legacy');
-      const legacyNarrativePilotResponse = await this.tryLegacyNarrativePilot(
+      // 普通叙事回合的搜刮与模块回合同一本地事务：先预结算出回执正文、不请求模型，入包在 processGmResponse 落账；清单未配置的地点照旧交模型。
+      const lootLocal = !options?.eventAction && !options?.opportunityAction && !options?.openWorldAction && !options?.gambleRefusalAction
+        && !options?.judgementResolution && isLocationLootInput(options?.playerIntentText || userMessage) ? settleLocationLoot(cloneDeep(saveData)) : undefined;
+      const lootLocalText = lootLocal && lootLocal.status !== 'pending' ? lootLocal.text : '';
+      const legacyNarrativePilotResponse = lootLocalText ? null : await this.tryLegacyNarrativePilot(
         saveData,
         options,
         generationId,
@@ -1177,7 +1181,7 @@ class AIBidirectionalSystemClass {
       // 重要桥段推进卡片：不请求模型；结算成功后由 processGmResponse 换成该步 resultLine，未结算则保留这句悬置。
       const keyBeatLocalText = !repeatSilkPouchText && !opportunityLocalText && !openWorldLocalText && !gambleRefusalLocalText
         && isKeyBeatCardAction(options?.eventAction) ? KEY_BEAT_PENDING_FALLBACK : '';
-      const localContractText = repeatSilkPouchText || opportunityLocalText || openWorldLocalText || gambleRefusalLocalText || keyBeatLocalText;
+      const localContractText = lootLocalText || repeatSilkPouchText || opportunityLocalText || openWorldLocalText || gambleRefusalLocalText || keyBeatLocalText;
       if (localContractText) {
         if (openWorldLocalText) noteTurnPath('open_world');
         else noteTurnPath('local_contract');
@@ -1188,6 +1192,7 @@ class AIBidirectionalSystemClass {
           mid_term_memory: '',
           tavern_commands: [],
           action_options: [],
+          ...(lootLocalText ? { localLoot: true } : {}),
         };
         usedLegacyNarrativePilot = true;
       }
@@ -2625,7 +2630,7 @@ ${step1Text}
       ? String((saveData as any).世界.状态.剧本模组.lastSettledBeat.eventId)
       : '';
     // 显式空间/问题合同与事件、机会卡相同：先由本地系统结算，模型命令只能演出回执。
-    if (response.moduleReceipt && !response.generationError && !options?.eventAction && isLocationLootInput(options?.playerIntentText || options?.userAction || '')) {
+    if ((response.moduleReceipt || response.localLoot) && !response.generationError && !options?.eventAction && isLocationLootInput(options?.playerIntentText || options?.userAction || '')) {
       const loot = settleLocationLoot(saveData);
       changes.push({ key: '世界.状态.剧本模组.locationLoot', action: 'local_loot', oldValue: undefined, newValue: loot });
     }
@@ -5315,7 +5320,10 @@ ${saveDataJson}`;
     try {
       const parsedObj = parseJsonSmart<Record<string, unknown>>(rawText, forceJsonMode);
       console.log('[parseAIResponse] ✅ 成功解析JSON对象');
-      return standardize(parsedObj);
+      const parsed = standardize(parsedObj);
+      // 模型把叙事写在 JSON 外、JSON 里只给指令时，保住 JSON 外的正文，不当成空响应。
+      if (!parsed.text.trim()) parsed.text = narrativeOutsideJson(rawText);
+      return parsed;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       throw new Error(`无法解析AI响应：${message}`);

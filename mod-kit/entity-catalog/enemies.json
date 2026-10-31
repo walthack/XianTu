@@ -1416,6 +1416,231 @@
       "stageVariants": {},
       "encounters": [],
       "migratedFrom": []
+    },
+    {
+      "id": "lcq.enemy.yin_spider",
+      "aliases": [
+        "阴蛛",
+        "吸血妖物"
+      ],
+      "definition": {
+        "id": "lcq.enemy.yin_spider",
+        "name": "阴蛛",
+        "type": "beast",
+        "unnamed": true,
+        "description": "八肢、甲壳刀砍有金属声的吸血妖物，白天躲在洞穴里，夜里出来（lcq:6520–6535）。",
+        "instances": {},
+        "level": null,
+        "levelSource": "随机遇敌池等级见 numbers-combat encounter.regions.nanhuang.pool（稿推断/扩写，待核）"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "野兽/妖物，无势力归属"
+      },
+      "encounters": [
+        {
+          "combat": "随机遇敌",
+          "combatId": null,
+          "contract": "src/modules/sceneModule/contracts/random/skirmish.template.json",
+          "readiness": "registered",
+          "notes": "南荒随机遇敌池（/workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md R2）",
+          "level": null,
+          "levelSource": "见随机遇敌池"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.ghostface_wasp",
+      "aliases": [
+        "鬼面蜂",
+        "鬼面蜂群",
+        "毒蜂"
+      ],
+      "definition": {
+        "id": "lcq.enemy.ghostface_wasp",
+        "name": "鬼面蜂",
+        "type": "beast",
+        "unnamed": true,
+        "description": "硕大血红、翼上有鬼面骷髅花纹的毒蜂，成群袭人（lcq:6214–6233）；随机遇敌里一群算一个敌人。",
+        "instances": {},
+        "level": null,
+        "levelSource": "随机遇敌池等级见 numbers-combat encounter.regions.nanhuang.pool（稿推断/扩写，待核）"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "野兽/妖物，无势力归属"
+      },
+      "encounters": [
+        {
+          "combat": "随机遇敌",
+          "combatId": null,
+          "contract": "src/modules/sceneModule/contracts/random/skirmish.template.json",
+          "readiness": "registered",
+          "notes": "南荒随机遇敌池（/workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md R3）",
+          "level": null,
+          "levelSource": "见随机遇敌池"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.venom_bat",
+      "aliases": [
+        "毒蝙蝠",
+        "无毛蝙蝠",
+        "不长毛的蝙蝠"
+      ],
+      "definition": {
+        "id": "lcq.enemy.venom_bat",
+        "name": "无毛毒蝙蝠",
+        "type": "beast",
+        "unnamed": true,
+        "description": "白夷地穴里不长毛的毒蝙蝠（lcq:8766–8809）。",
+        "instances": {},
+        "level": null,
+        "levelSource": "随机遇敌池等级见 numbers-combat encounter.regions.nanhuang.pool（稿推断/扩写，待核）"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "野兽/妖物，无势力归属"
+      },
+      "encounters": [
+        {
+          "combat": "随机遇敌",
+          "combatId": null,
+          "contract": "src/modules/sceneModule/contracts/random/skirmish.template.json",
+          "readiness": "registered",
+          "notes": "南荒随机遇敌池（/workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md R4）",
+          "level": null,
+          "levelSource": "见随机遇敌池"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.swamp_crocodile",
+      "aliases": [
+        "巨鳄",
+        "朽木",
+        "泥潭鳄鱼"
+      ],
+      "definition": {
+        "id": "lcq.enemy.swamp_crocodile",
+        "name": "泥潭巨鳄",
+        "type": "beast",
+        "unnamed": true,
+        "description": "泥潭里像朽木一样浮着的巨鳄，坚甲能弹开刀锋（lcq:10373–10385）。",
+        "instances": {},
+        "level": null,
+        "levelSource": "随机遇敌池等级见 numbers-combat encounter.regions.nanhuang.pool（稿推断/扩写，待核）"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "野兽/妖物，无势力归属"
+      },
+      "encounters": [
+        {
+          "combat": "随机遇敌",
+          "combatId": null,
+          "contract": "src/modules/sceneModule/contracts/random/skirmish.template.json",
+          "readiness": "registered",
+          "notes": "南荒随机遇敌池（/workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md R5）",
+          "level": null,
+          "levelSource": "见随机遇敌池"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.wild_boar",
+      "aliases": [
+        "野猪",
+        "大野猪"
+      ],
+      "definition": {
+        "id": "lcq.enemy.wild_boar",
+        "name": "野猪",
+        "type": "beast",
+        "unnamed": true,
+        "description": "南荒林中比牛犊还大的野猪（lcq:7729–7730；交战为扩写）。",
+        "instances": {},
+        "level": null,
+        "levelSource": "随机遇敌池等级见 numbers-combat encounter.regions.nanhuang.pool（稿推断/扩写，待核）"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "野兽/妖物，无势力归属"
+      },
+      "encounters": [
+        {
+          "combat": "随机遇敌",
+          "combatId": null,
+          "contract": "src/modules/sceneModule/contracts/random/skirmish.template.json",
+          "readiness": "registered",
+          "notes": "南荒随机遇敌池（/workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md R9）",
+          "level": null,
+          "levelSource": "见随机遇敌池"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
+    },
+    {
+      "id": "lcq.enemy.nh_venom_snake",
+      "aliases": [
+        "毒蛇",
+        "怪蛇"
+      ],
+      "definition": {
+        "id": "lcq.enemy.nh_venom_snake",
+        "name": "南荒毒蛇",
+        "type": "beast",
+        "unnamed": true,
+        "description": "南荒林地里的毒蛇（lcq:4629、5269、6117 提及；交战为扩写）。",
+        "instances": {},
+        "level": null,
+        "levelSource": "随机遇敌池等级见 numbers-combat encounter.regions.nanhuang.pool（稿推断/扩写，待核）"
+      },
+      "factionRef": {
+        "id": null,
+        "status": "unconfirmed",
+        "note": "野兽/妖物，无势力归属"
+      },
+      "encounters": [
+        {
+          "combat": "随机遇敌",
+          "combatId": null,
+          "contract": "src/modules/sceneModule/contracts/random/skirmish.template.json",
+          "readiness": "registered",
+          "notes": "南荒随机遇敌池（/workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md R10）",
+          "level": null,
+          "levelSource": "见随机遇敌池"
+        }
+      ],
+      "realmSource": null,
+      "authoritySource": "mod-kit/entity-catalog/enemies.json",
+      "migratedFrom": [],
+      "stageVariants": {}
     }
   ]
 }

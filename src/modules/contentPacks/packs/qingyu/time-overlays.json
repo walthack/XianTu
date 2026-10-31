@@ -1,37 +1,35 @@
 [
   {
-    "stageId": "lcq.stage_01",
+    "stageId": "lcq.stage_02",
     "events": [
       {
-        "id": "lcq.event.s01_06",
-        "name": "月霜强取真阳",
-        "description": "月霜为治伤强行给程宗扬服下丹药，程宗扬在真阳激发下强行与月霜发生关系，意外治愈其寒毒。",
+        "id": "lcq.event.s02_04",
+        "name": "程宗扬在五原城被误抓为奴隶",
+        "description": "程宗扬在五原城被白湖商馆的人误认为逃奴，遭毒打并烙上奴隶印记。",
         "conditions": [
           {
-            "path": "flags.event.s01_05.done",
+            "path": "flags.event.s02_03.done",
             "operator": "eq",
             "value": true
           }
         ],
         "completion": [
           {
-            "path": "flags.event.s01_06.done",
+            "path": "flags.event.s02_04.done",
             "operator": "eq",
             "value": true
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang",
-          "lcq.character.yue_shuang"
+          "liuchao.character.cheng_zongyang"
         ],
-        "relatedFactionIds": [
-          "lcq.faction.left_guard"
-        ],
-        "axisId": "qingyu.9.2",
-        "axisSeq": 18,
-        "axisAnchor": "六朝清羽记·#9·第8章·治伤",
-        "axisBeat": "程宗扬在真阳驱使下强行与月霜发生关系，意外通过性交将真阳传入月霜体内，压制并化解了她的寒毒。",
-        "objective": "月霜身上的寒毒正在失控，先应对眼前危局",
+        "locationId": "liuchao.location.wuyuan",
+        "axisId": "qingyu.17.1",
+        "axisMethod": "deepseek",
+        "axisSeq": 31,
+        "axisAnchor": "六朝清羽记·#17·第15章·冤屈",
+        "axisBeat": "程宗扬被戈龙和孙疤脸误认为是逃跑的奴隶，遭到暴打和烙刑，被强制烙印奴隶印记。",
+        "objective": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -40,24 +38,11 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "月霜身上的寒毒正在失控，先应对眼前危局",
-              "actionText": "我按当前主线目标行动：应对眼前危局",
+              "label": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
+              "actionText": "我按当前主线目标行动：应付眼前的盘问与拉扯",
               "timeCost": 1,
-              "intentMatch": {
-                "matchAny": [
-                  "帮月霜压住寒毒",
-                  "救治月霜的寒毒",
-                  "设法缓解月霜寒毒"
-                ],
-                "rejectIf": [
-                  "不管月霜",
-                  "丢下月霜",
-                  "任由寒毒发作",
-                  "转身离开"
-                ]
-              },
               "outcomeText": {
-                "success": "你已亲自执行“与月霜解除寒毒危机”；事件完成真值将由本地引擎落账。",
+                "success": "你已亲自执行“在五原城中避免被误抓为奴隶”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
               },
@@ -65,7 +50,11 @@
                 "kind": "calendarYears",
                 "years": {
                   "$num": "story.actionTime.prologueYears"
-                }
+                },
+                "supersedes": [
+                  "lcq.event.s01_06::advance_declared_objective"
+                ],
+                "interludeTextKey": "qingyu.prologue.fourYears"
               }
             }
           ]

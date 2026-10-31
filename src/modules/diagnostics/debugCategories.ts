@@ -39,7 +39,7 @@ export const DEBUG_CATEGORIES = [
   },
   {
     id: 'combat', label: '战斗与场面',
-    paths: ['modules/sceneModule/', 'utils/judgement*.ts', 'utils/diceRoller.ts', 'utils/narratedDamage.ts', 'utils/playerVitalGuard.ts', 'dev/combatTrial/', ...sm('randomEncounter.ts')],
+    paths: ['modules/sceneModule/', 'utils/judgement*.ts', 'utils/diceRoller.ts', 'utils/narratedDamage.ts', 'utils/playerVitalGuard.ts', 'dev/combatTrial/', ...sm('randomEncounter.ts', 'whiteTailLeopard.ts')],
   },
   {
     id: 'npc', label: '人物与关系',

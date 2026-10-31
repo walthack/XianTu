@@ -151,5 +151,39 @@
     "afterScene": {
       "minutes": null
     }
+  },
+  {
+    "id": "buff.shanshen_blessing",
+    "label": "山神庇佑",
+    "tier": "book",
+    "cause": "story",
+    "kind": "buff",
+    "source": "白尾豹彩蛋（用户 2026-11-01 00:28 定；名称出自 lcq:7729 花苗人「山神庇佑」）。南荒密林遇见白尾豹后挂上，持续回合数在 numbers-combat encounter.easterEggs.whiteTailLeopard.buff.durationTurns，到期由彩蛋模块（scenarioMods/whiteTailLeopard.ts）写上解除旗标摘除，下次挂上时清掉该旗标。两项 rollModifier +1 是初值（稿为 null，按现有状态最小档 1 填，待用户拍板）。",
+    "effects": [
+      {
+        "kind": "rollModifier",
+        "scope": "action",
+        "value": 1
+      },
+      {
+        "kind": "rollModifier",
+        "scope": "defense",
+        "value": 1
+      },
+      {
+        "kind": "note",
+        "field": "text",
+        "text": "胸口沉闷散开，呼吸顺畅，浑身又有了力气"
+      }
+    ],
+    "remove": [
+      {
+        "kind": "story",
+        "flag": "scene.status.buff.shanshen_blessing.expired"
+      }
+    ],
+    "afterScene": {
+      "minutes": null
+    }
   }
 ]

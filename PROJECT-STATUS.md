@@ -536,3 +536,11 @@
 ### REPORT89-20261031 · 修复开工
 - 用户授权七项报告缺陷定位、非冻结范围修复、逐项回归、全量测试/type-check与相关提交；不push/部署，不读取凭据，忽略临时目录。基线89addbf9。
 - 进行中；DQ10仅报告，runtime/AIBS/frozen-baseline绝不修改；离线证据待补，真实模型/浏览器未测。
+
+### 2026-11-01 · AIBS 两处解冻、草原下图、序幕四年改挂 s02_04、南荒敌池、白尾豹彩蛋
+- AIBS（用户批准小范围解冻两处，runtime 不动）：普通叙事回合搜刮按现有规则本地预结算出回执、落账入包（清单未配置的地点照旧交模型）；parseAIResponse 在 JSON 无正文时保住 JSON 外叙事。frozen-baseline 仅更新 AIBS 哈希。
+- 草原：numbers-runtime ui.worldMap.hiddenLocationIds，地图不画、点不了、跨国限制拒绝；地点数据保留。
+- 序幕四年：time-overlays 从 s01_06 挪到 s02_04（supersedes 防旧档二次跳），过渡叙述 texts qingyu.prologue.fourYears 在跳年当回合正文后接上。
+- 南荒敌池：numbers-combat encounter 南荒区（按国别也算、村寨不检、花苗寨一带按子地点、精英出池、一打一同伴助战、F04/F06/F12 门闩、敌人掉落表与稀有物全局一次）；新建 6 种敌人与毒蝠翼膜；null 数值按同级填初值并注明。
+- 白尾豹：scenarioMods/whiteTailLeopard.ts＋内容包状态「山神庇佑」与台词；体力＝角色.属性.气血。
+- 证据：npm test 3114 项 3101 pass / 0 fail / 13 skip（新增 tests/report20261101.test.mjs 15 项）；type-check 0；内容包 check、实体目录校验、两个 SFC 编译通过；canon:build 照旧因缺 generated/qingyu/stages ENOENT 跑不了。未测浏览器/真机/真实模型。

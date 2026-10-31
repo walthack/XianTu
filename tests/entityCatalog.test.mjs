@@ -6,8 +6,8 @@ const cat=await loadTs('../src/modules/scenarioMods/entityCatalog.ts');
 const {buildStrictScenarioInitialization}=await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
 const {validateScenarioMod}=await loadTs('../src/modules/scenarioMods/validator.ts');
 test('three master tables have unique ids and all published stages carry only access references',async()=>{
- // item 285→299（2026-10-20 boss 场景专属搜刮 +14）
- for(const [kind,total] of [['item',299],['skill',143],['technique',67]]){
+ // item 285→299（2026-10-20 boss 场景专属搜刮 +14）→300（2026-11-01 南荒敌池毒蝠翼膜）
+ for(const [kind,total] of [['item',300],['skill',143],['technique',67]]){
   const entries=cat.contentEntries(kind);assert.equal(entries.length,total);assert.equal(new Set(entries.map(e=>e.id)).size,total);
  }
  const access=JSON.parse(await readFile(new URL('../mod-kit/entity-catalog/stage-access.json',import.meta.url),'utf8'));
