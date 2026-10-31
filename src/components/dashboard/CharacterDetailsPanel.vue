@@ -276,7 +276,7 @@
                             <div class="effect-row" v-if="fullCultivationTechnique.功法效果?.修炼速度加成">
                               <Rocket :size="16" class="effect-icon" />
                               <span class="effect-label">{{ t('修炼速度') }}</span>
-                              <span class="effect-value">+{{ (fullCultivationTechnique.功法效果.修炼速度加成 * 100).toFixed(0) }}%</span>
+                              <span class="effect-value">{{ formatCultivationSpeedBonus(fullCultivationTechnique.功法效果.修炼速度加成) }}</span>
                             </div>
                           </div>
                         </div>
@@ -514,6 +514,7 @@ import { useGameStateStore } from '@/stores/gameStateStore';
 import { breakthroughHint } from '@/modules/scenarioMods/levelProgression';
 import BodyStatsPanel from '@/components/dashboard/components/BodyStatsPanel.vue';
 import { calculateFinalAttributes } from '@/utils/attributeCalculation';
+import { formatCultivationSpeedBonus } from '@/utils/cultivationSpeedCalculator';
 import { calculateAgeFromBirthdate, type GameTime as LifespanGameTime } from '@/utils/lifespanCalculator';
 import { formatRealmWithStage } from '@/utils/realmUtils';
 import { isTavernEnv } from '@/utils/tavern';

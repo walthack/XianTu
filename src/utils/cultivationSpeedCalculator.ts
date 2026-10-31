@@ -1,17 +1,19 @@
 /** @deprecated Progression is settled by scenarioMods/levelProgression; no old resource multiplier model. */
 export {};
 
-/** 功法速度为倍率：0.56 → -44%，1.44 → +44%。 */
-export function formatCultivationSpeedBonus(multiplier: number): string {
-  const percent = Math.round((multiplier - 1) * 100);
-  return `${percent >= 0 ? '+' : ''}${percent}%`;
-}
-
-/** 按舍入后的数值定符号（同 formatCultivationSpeedBonus）：不出现「+-」与「-0」。 */
+/** 按舍入后的数值定符号：不出现「+-」与「-0」。 */
 function signedNumber(value: number, digits = 0): string {
   const factor = 10 ** digits;
   const rounded = Math.round(value * factor) / factor || 0;
   return `${rounded >= 0 ? '+' : ''}${rounded}`;
+}
+
+/**
+ * 功法修炼速度加成的唯一显示口径（闭关弹窗、背包、角色详情共用）：
+ * 按 techniques.cultivationSpeedBonus.semantics＝fraction_increment 读，0.56 → +56%，-0.44 → -44%，0 → +0%。
+ */
+export function formatCultivationSpeedBonus(fraction: number): string {
+  return `${signedNumber(fraction * 100)}%`;
 }
 
 /**
@@ -28,7 +30,7 @@ export function formatTechniqueEffects(effects: unknown): string {
   const parts: string[] = [];
   for (const [key, value] of Object.entries(effects as Record<string, unknown>)) {
     if (value === null || value === undefined || value === '') continue;
-    if (key === '修炼速度加成' && typeof value === 'number') parts.push(`修炼速度 ${signedNumber(value * 100)}%`);
+    if (key === '修炼速度加成' && typeof value === 'number') parts.push(`修炼速度 ${formatCultivationSpeedBonus(value)}`);
     else if (key === '属性加成' && value && typeof value === 'object' && !Array.isArray(value)) {
       const attrs = Object.entries(value as Record<string, unknown>)
         .filter(([, v]) => typeof v === 'number' && Number.isFinite(v))

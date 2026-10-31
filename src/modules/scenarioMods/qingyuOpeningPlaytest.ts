@@ -79,9 +79,8 @@ function applyQingyuDemoNaturalIntents(mod: ScenarioMod): void {
 
   // Demo 的自然行动只是把玩家意图映射到当前 fresh 合同；成功、移动、物品和死亡
   // 仍全部由本地 settlement 决定。短语只覆盖眼前可执行动作，否定与离场优先拒绝。
-  event('lcq.event.s01_01', [
-    '稳住自己', '弄清身在何处', '确认段强', '查看段强', '弄清这片草原', '观察四周', '找掩体', '处理落地',
-  ], ['不管段强', '丢下段强']);
+  // s01_01 不在这里追加：内置关已满 8 条（含开场三个建议的命中词，见 scripts/dev/apply-s01-01-intent-match.mjs），
+  // 再并入 Demo 短语会超校验上限 8。
   event('lcq.event.s01_02', [
     '带段强躲开', '拉段强避箭', '掩护段强', '寻找掩护', '躲开半兽人', '避开箭袭',
   ]);

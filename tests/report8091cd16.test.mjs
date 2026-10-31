@@ -10,7 +10,7 @@ const read = p => readFileSync(new URL('../' + p, import.meta.url), 'utf8');
 const stageJson = id => JSON.parse(read(`src/modules/scenarioMods/builtins/data/${id}.json`));
 const init = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
 const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
-const { advanceScenarioRuntime, resolveStoryEventActionFromPlayerText, getCurrentStoryEventActions } = await loadTs('../src/modules/scenarioMods/runtime.ts');
+const { advanceScenarioRuntime, resolveStoryEventActionFromPlayerText, getCurrentStoryEventActions, recordStoryEventStructuredAction } = await loadTs('../src/modules/scenarioMods/runtime.ts');
 const rt = s => s.世界.状态.剧本模组;
 
 let stage01Save;
@@ -159,6 +159,76 @@ test('④ 旧档读档补 intentMatch：只补缺失、不覆盖已有短语或�
   assert.equal(L.backfillMissingIntentMatch(rt(other)), 0);
 });
 
+test('④ s01_01 清羽 Demo 合并后仍 ≤8 条：Demo 不再追加，合并结果＝内置关＝overlay；开场三个建议、主线按钮文案与真机原话都落到主线动作', async () => {
+  const { createQingyuOpeningPlaytestSave } = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+  const { parseScenarioMod, validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const builtin = stageJson('lcq.stage_01').scenario.events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch;
+  const demo = createQingyuOpeningPlaytestSave(parseScenarioMod(stageJson('lcq.stage_01')), '2026-10-31T09:08:20.813Z');
+  const merged = rt(demo).events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch;
+  assert.ok(merged.matchAny.length >= 1 && merged.matchAny.length <= 8, `Demo 合并后 ${merged.matchAny.length} 条`);
+  assert.ok(merged.rejectIf.length >= 1 && merged.rejectIf.length <= 8);
+  assert.deepEqual(merged, builtin, 'Demo 合并结果与内置关同一份');
+  const overlay = JSON.parse(read('mod-kit/canon-authority-overlays/lcq.stage_01.json'));
+  assert.deepEqual(overlay.ops.find(o => o.path === 'scenario.events[id=lcq.event.s01_01].playerCompletionContract.actions[id=advance_declared_objective]').entries.intentMatch, merged);
+  // 把 Demo 合并后的事件交给校验器：s01_01 这一拍没有 intentMatch 问题。
+  const mod = parseScenarioMod(stageJson('lcq.stage_01'));
+  mod.scenario.events = structuredClone(rt(demo).events);
+  const index = mod.scenario.events.findIndex(e => e.id === 'lcq.event.s01_01');
+  assert.deepEqual(validateScenarioMod(mod).issues.filter(i => i.path.startsWith(`scenario.events[${index}].`) && i.path.includes('intentMatch')), []);
+  // 真机 69ab A1–B15 实际命中的三条必须留着。
+  for (const phrase of ['护住段强', '秦军阵线', '盾阵']) assert.ok(merged.matchAny.includes(phrase), phrase);
+  const label = getCurrentStoryEventActions(demo).find(a => a.eventId === 'lcq.event.s01_01')?.label;
+  assert.ok(label);
+  for (const text of [...demo.系统.历史.叙事[0].actionOptions, label, ...STUCK_INPUTS]) {
+    assert.equal(resolveStoryEventActionFromPlayerText(structuredClone(demo), text)?.eventId, 'lcq.event.s01_01', text);
+  }
+});
+
+test('④ 真机 stuck.json 旧档离线回放：读档补短语后 A1 等原话推进 s01_01 并激活 s01_02', async () => {
+  const L = await loadTs('../src/modules/scenarioMods/loadRepairs.ts');
+  const stuck = () => structuredClone(JSON.parse(read('tests/fixtures/playtest-cd16/stuck-s01-01.json')).save);
+  const raw = stuck();
+  assert.equal(rt(raw).modId, 'lcq.stage_01');
+  assert.deepEqual(rt(raw).completedEventIds, []);
+  assert.equal(rt(raw).events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch, undefined, '真机旧档动作无短语');
+  assert.equal(resolveStoryEventActionFromPlayerText(raw, STUCK_INPUTS[0]), undefined, '不读档修复：原样卡住');
+  const inputs = [...STUCK_INPUTS, '我压低盾牌诱敌靠近，再带段强冲入秦军阵线', '我侧身避开直落长矛，随即回盾护住段强', '我护住段强，沿骑兵空档贴地侧移'];
+  for (const text of inputs) {
+    const s = stuck();
+    L.applyLoadRepairs(s);
+    const selection = resolveStoryEventActionFromPlayerText(s, text);
+    assert.equal(selection?.eventId, 'lcq.event.s01_01', text);
+    assert.equal(recordStoryEventStructuredAction(s, selection).completed, true, text);
+    const next = rt(advanceScenarioRuntime(s).saveData);
+    assert.ok(next.completedEventIds.includes('lcq.event.s01_01'), text);
+    assert.equal(next.flags['event.s01_01.done'], true);
+    assert.deepEqual(next.activeEventIds, ['lcq.event.s01_02'], text);
+  }
+});
+
+test('④ 读档把已烘焙的 s01_01 旧短语快照（首版 8 条／Demo 合并 11 条／更早 Demo 8 条）换成现行 ≤8 条；其它短语不动', async () => {
+  const L = await loadTs('../src/modules/scenarioMods/loadRepairs.ts');
+  const current = stageJson('lcq.stage_01').scenario.events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch;
+  const v1 = ['稳住自己', '弄清身在何处', '观察四周', '找掩体', '确认段强', '护住段强', '秦军阵线', '盾阵'];
+  const rejectIf = ['不管段强', '丢下段强'];
+  for (const matchAny of [v1, [...v1, '查看段强', '弄清这片草原', '处理落地'], ['稳住自己', '弄清身在何处', '确认段强', '查看段强', '弄清这片草原', '观察四周', '找掩体', '处理落地']]) {
+    const s = oldStage01Save();
+    rt(s).events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch = { matchAny, rejectIf };
+    assert.equal(L.backfillMissingIntentMatch(rt(s)), 1, `${matchAny.length} 条旧快照`);
+    assert.deepEqual(rt(s).events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch, current);
+    assert.equal(L.backfillMissingIntentMatch(rt(s)), 0, '幂等');
+    assert.equal(resolveStoryEventActionFromPlayerText(structuredClone(s), STUCK_INPUTS[0])?.eventId, 'lcq.event.s01_01');
+  }
+  const custom = oldStage01Save();
+  rt(custom).events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch = { matchAny: v1.slice(0, 7), rejectIf };
+  assert.equal(L.backfillMissingIntentMatch(rt(custom)), 0, '非快照的短语不动');
+  const tried = oldStage01Save();
+  rt(tried).events.find(e => e.id === 'lcq.event.s01_01').playerCompletionContract.actions[0].intentMatch = { matchAny: v1, rejectIf };
+  rt(tried).eventActionStates ||= {};
+  rt(tried).eventActionStates['lcq.event.s01_01'] = { contractHash: 'x', attemptCount: 1, preparations: [], attempts: [{}] };
+  assert.equal(L.backfillMissingIntentMatch(rt(tried)), 0, '已有尝试的拍不碰');
+});
+
 test('④ 任务卡：段强已同行时不再写「见段强」；人在五原只剩「去草原」；停滞后给出可点主线按钮的引导', async () => {
   const V = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
   const s = freshStage01();
@@ -222,6 +292,25 @@ test('⑥ 背包功法效果格式化为可读文本（fraction_increment：0.56
   const panel = read('src/components/dashboard/InventoryPanel.vue');
   assert.match(panel, /\{\{ formatTechniqueEffects\(selectedItem\.功法效果\) \}\}/);
   assert.doesNotMatch(panel, /JSON\.stringify\(selectedItem\.功法效果\)/);
+});
+
+test('⑥ 闭关弹窗与背包同一格式化函数：同一功法修炼速度显示一致（0.56→+56%、-0.44→-44%），角色详情同口径', async () => {
+  const { formatCultivationSpeedBonus: speed, formatTechniqueEffects: effects } = await loadTs('../src/utils/cultivationSpeedCalculator.ts');
+  const modal = read('src/components/common/DeepCultivationModal.vue');
+  const call = modal.match(/\$t\('(修炼速度: \{0\})'\)\.replace\('\{0\}', formatCultivationSpeedBonus\(technique\.功法效果\.修炼速度加成\)\)/);
+  assert.ok(call, '闭关弹窗用 formatCultivationSpeedBonus 填完整百分比');
+  assert.match(modal, /import \{ formatCultivationSpeedBonus \} from '@\/utils\/cultivationSpeedCalculator'/);
+  for (const [bonus, percent] of [[0.56, '+56%'], [-0.44, '-44%'], [0, '+0%'], [1.44, '+144%'], [-0.001, '+0%']]) {
+    const technique = { 功法效果: { 修炼速度加成: bonus, 属性加成: { 悟性: 3 } } };
+    const modalText = call[1].replace('{0}', speed(technique.功法效果.修炼速度加成));
+    const inventoryText = effects(technique.功法效果);
+    assert.equal(modalText, `修炼速度: ${percent}`);
+    assert.equal(inventoryText, `修炼速度 ${percent}；悟性 +3`);
+    assert.equal(modalText.split(' ').pop(), inventoryText.split(/[ ；]/)[1], `${bonus}：两处百分比一致`);
+  }
+  const details = read('src/components/dashboard/CharacterDetailsPanel.vue');
+  assert.match(details, /\{\{ formatCultivationSpeedBonus\(fullCultivationTechnique\.功法效果\.修炼速度加成\) \}\}/);
+  assert.doesNotMatch(details, /修炼速度加成 \* 100/, '不再自拼「+」号，负值不会显示成 +-44%');
 });
 
 // ⑦ 读档失败提示 ───────────────────────────────────────────

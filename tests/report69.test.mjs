@@ -31,7 +31,7 @@ test('5 地图预览纯函数显示32日；取消/首次/过期确认不可提�
 test('6 打字跨国展示系统提示，否定/国内不提示',()=>{
  const s=saveAt(config.capitals.晋);assert.equal(P.mapPreparationNotice(s,'我想收拾行装，动身前往宋国临安。'),'跨国出行请打开世界地图选择目的地');assert.equal(P.mapPreparationNotice(s,'不去宋国'),undefined);assert.equal(P.mapPreparationNotice(s,'去建康'),undefined);assert.match(read('src/components/dashboard/MainGamePanel.vue'),/v-if="crossCountryNotice" role="status"/);
 });
-test('7 功法倍率正负号与零值',async()=>{const {formatCultivationSpeedBonus:f}=await loadTs('../src/utils/cultivationSpeedCalculator.ts');assert.equal(f(.56),'-44%');assert.equal(f(1.44),'+44%');assert.equal(f(1),'+0%');assert.equal(f(.999999),'+0%');});
+test('7 功法修炼速度按 fraction_increment 显示正负号与零值（与背包同口径）',async()=>{const {formatCultivationSpeedBonus:f}=await loadTs('../src/utils/cultivationSpeedCalculator.ts');assert.equal(f(.56),'+56%');assert.equal(f(-.44),'-44%');assert.equal(f(1.44),'+144%');assert.equal(f(0),'+0%');assert.equal(f(-.000001),'+0%');});
 test('3 江州/晴州总表及全部阶段变体字段一致',()=>{
  for(const [id,country]of [['liuchao.location.jiangzhou','晋'],['liuchao.location.qingzhou','宋']]){const e=locations.entries.find(e=>e.id===id);for(const v of [e.definition,...Object.values(e.stageVariants||{})]){assert.equal(v.country,country);if(v.region)assert.equal(v.region,country+'国');assert.doesNotMatch(v.description||'',/宋国边境重要城市/);}}
 });
