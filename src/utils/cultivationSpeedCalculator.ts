@@ -17,6 +17,21 @@ export function formatCultivationSpeedBonus(fraction: number): string {
 }
 
 /**
+ * 技能面板「速度」：功法品质倍率（item-grades.json technique.tiers.*.speedBonus，凡 1.0／真 1.3／仙 2.0／神 3.0）
+ * 乘上功法效果的修炼速度加成（fraction_increment，0.56 即 ×1.56），折回同一口径的增量。
+ * 旧版把 0.56 直接当倍率乘、缺省按 1 算，+56% 的功法显示成「0.6%/日」（真机 REPORT-8091-fbef6792 ⑦）。
+ */
+export function techniqueCultivationSpeedBonus(qualityMultiplier: unknown, effectFraction: unknown): number {
+  const quality = typeof qualityMultiplier === 'number' && Number.isFinite(qualityMultiplier) && qualityMultiplier > 0 ? qualityMultiplier : 1;
+  const effect = typeof effectFraction === 'number' && Number.isFinite(effectFraction) ? effectFraction : 0;
+  return quality * (1 + effect) - 1;
+}
+/** 技能面板「速度」显示文本，与闭关弹窗／背包／角色详情同一格式（formatCultivationSpeedBonus）。 */
+export function formatTechniqueCultivationSpeed(qualityMultiplier: unknown, effectFraction: unknown): string {
+  return formatCultivationSpeedBonus(techniqueCultivationSpeedBonus(qualityMultiplier, effectFraction));
+}
+
+/**
  * 背包功法详情的「功法效果」可读文本（真机 REPORT-8091-cd167d7a：原样显示 JSON）。
  * 修炼速度加成按 techniques.cultivationSpeedBonus.semantics＝fraction_increment 读：0.56 → 修炼速度 +56%。
  * 属性加成逐项「悟性 +7」；其余键原样「键：值」。字符串原样返回。

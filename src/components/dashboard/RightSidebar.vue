@@ -432,6 +432,8 @@ import {
 } from '@/modules/scenarioMods/runtime';
 import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
 import { FESTIVAL, festivalView, startHeimohaiFestival } from '@/modules/scenarioMods/heimohaiFestival';
+import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
+import { eventNameIndex, playerFacingText } from '@/utils/narrativeMetaWords';
 import { lineCompassView, showLineCompass } from '@/modules/scenarioMods/lineCompass';
 import { atTrainingCap, breakthroughHint, canBreakthrough } from '@/modules/scenarioMods/levelProgression';
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
@@ -511,7 +513,11 @@ const availableLines = computed(() => {
 // 当前线卡（lineCompass.ts）：显示开关 ui.rightSidebar.showLineCompass（默认 true，用户 2026-10-27 08:57 定改完后不再隐藏）；关时先返回，不取存档快照。
 // fallback＝原主线指南针的「去X · 见Y」（questCompassPhrases），没有当前线时卡片显示它（总策划定，避免玩家什么提示都没有）；
 // 不带冒号后的固定目标（用户 2026-10-27 定）。
-const festival = computed(() => festivalView(gameStateStore.toSaveData()));
+// 显示层去掉【扩写】类占位标记（文字保留，配置原文不动），见 narrativeMetaWords.ts。
+const festival = computed(() => {
+  const view = festivalView(gameStateStore.toSaveData());
+  return { ...view, warning: playerFacingText(view.warning), blocked: playerFacingText(view.blocked), transition: playerFacingText(view.transition) };
+});
 const festivalSaving = ref(false);
 const festivalError = ref('');
 const beginFestival = async () => {
@@ -522,7 +528,7 @@ const beginFestival = async () => {
     const save = gameStateStore.toSaveData();
     if (!save) return;
     const result = startHeimohaiFestival(save, { source: 'player', actionId: FESTIVAL.actionId });
-    if (!result.ok) { festivalError.value = result.note; return; }
+    if (!result.ok) { festivalError.value = playerFacingText(result.note); return; }
     gameStateStore.loadFromSaveData(save);
     await gameStateStore.saveGame();
   } catch (error) { festivalError.value = String(error); logError('LCQ-UI-007', error); }
@@ -742,6 +748,14 @@ const questGoals = computed(() => {
   if (!Array.isArray(goals)) return [] as string[];
   return goals.slice(0, 3).map((g: any) => typeof g === 'string' ? g : g?.标题 || '').filter(Boolean);
 });
+// 编年史里跨关继承的拍可能只记了事件 id（runtime 当前关查不到 name 时落 id）：显示时按 当前关事件→全部内置关/内容包关 查名，查不到给可读兜底。
+let builtinEventNames: Map<string, string> | null = null;
+const chronicleEventName = (rt: any, id: string): string | undefined => {
+  const own = Array.isArray(rt?.events) ? rt.events.find((event: any) => event?.id === id)?.name : undefined;
+  if (typeof own === 'string' && own.trim()) return own;
+  builtinEventNames ||= eventNameIndex(BUILTIN_SCENARIO_MODS as any);
+  return builtinEventNames.get(id);
+};
 const worldlineEntries = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!Array.isArray(rt?.divergences)) return [] as Array<{ id: string; worldDelta: string; receipt: string }>;
@@ -753,7 +767,7 @@ const worldlineEntries = computed(() => {
     .filter((item: any) => item && item.revealed !== false && typeof item.worldDelta === 'string')
     .map((item: any, index: number) => ({
       id: String(item.id || `divergence-${index}`),
-      worldDelta: item.worldDelta,
+      worldDelta: playerFacingText(item.worldDelta, id => chronicleEventName(rt, id)),
       receipt: Array.isArray(item.characterStates)
         ? item.characterStates.map((state: any) => {
           const name = names.get(state.characterId) || String(state.characterId || '').split('.').at(-1);
@@ -785,8 +799,8 @@ const chronicleEntries = computed(() => {
     .map((item: any, index: number) => ({
       id: String(item.id || `chronicle-${index}`),
       mark: item.type === 'stage' ? '◆' : item.type === 'world' ? '◇' : '·',
-      title: String(item.title),
-      detail: typeof item.detail === 'string' ? item.detail : '',
+      title: playerFacingText(String(item.title), id => chronicleEventName(rt, id)),
+      detail: typeof item.detail === 'string' ? playerFacingText(item.detail, id => chronicleEventName(rt, id)) : '',
     }));
 });
 

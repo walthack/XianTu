@@ -89,7 +89,7 @@
           </div>
           <div class="stat-item">
             <span class="stat-label">{{ t('速度') }}</span>
-            <span class="stat-value">{{ cultivationSpeed }}%/日</span>
+            <span class="stat-value">{{ cultivationSpeed }}</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">{{ t('已解锁') }}</span>
@@ -246,6 +246,7 @@
 import { randomUUID } from '@/utils/uuid';
 import { computed, ref, watch } from 'vue';
 import { techniqueNumbersOf, techniqueTierLabel, techniqueTierShort, countTechniquesByTier, TECHNIQUE_BREAKTHROUGH_CAP } from '@/data/techniqueQuality';
+import { formatCultivationSpeedBonus, formatTechniqueCultivationSpeed } from '@/utils/cultivationSpeedCalculator';
 import { ITEM_TIER_TABLE } from '@/data/itemQuality';
 import { BookOpen, Clock, Moon, ScrollText, Search, Sparkles, TrendingUp, X, Zap } from 'lucide-vue-next';
 import DeepCultivationModal from '@/components/common/DeepCultivationModal.vue';
@@ -362,13 +363,11 @@ const canBreakthrough = computed(() => {
 
 const getQualitySpeedBonus = (quality?: string): number => techniqueNumbersOf(quality).speedBonus;
 
+// 品质倍率 × (1 + 修炼速度加成)，按 fraction_increment 口径显示为增量（见 techniqueCultivationSpeedBonus）。
 const cultivationSpeed = computed(() => {
   const technique = cultivationSkills.value;
-  if (!technique) return '0';
-  const baseSpeed = 1;
-  const qualityBonus = getQualitySpeedBonus(technique.品质?.quality);
-  const effectBonus = technique.功法效果?.修炼速度加成 || 1;
-  return (baseSpeed * qualityBonus * effectBonus).toFixed(1);
+  if (!technique) return formatCultivationSpeedBonus(0);
+  return formatTechniqueCultivationSpeed(getQualitySpeedBonus(technique.品质?.quality), technique.功法效果?.修炼速度加成);
 });
 
 const breakthroughChance = computed(() => {

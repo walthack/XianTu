@@ -1186,6 +1186,65 @@
           ]
         }
       }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.s01_02].playerCompletionContract.actions[id=advance_declared_objective].intentMatch.matchAny",
+      "from": [
+        "拉着段强躲",
+        "带段强找掩护",
+        "护住段强撤"
+      ],
+      "to": [
+        "带段强找掩护",
+        "护住段强撤",
+        "带段强躲开",
+        "拉段强避箭",
+        "掩护段强",
+        "寻找掩护",
+        "躲开半兽人",
+        "避开箭袭"
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.s01_03].playerCompletionContract.actions[id=advance_declared_objective].intentMatch.matchAny",
+      "from": [
+        "查看伤兵伤势",
+        "扶起受伤军士",
+        "救下受伤军士",
+        "带伤兵离开"
+      ],
+      "to": [
+        "查看伤兵伤势",
+        "扶起受伤军士",
+        "救下受伤军士",
+        "带伤兵离开",
+        "见月霜",
+        "查看伤者",
+        "扶住伤者",
+        "救那个伤兵"
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.s01_05].playerCompletionContract.actions[id=advance_declared_objective].intentMatch.matchAny",
+      "from": [
+        "请王哲诊治",
+        "让王哲诊治",
+        "让王哲查看伤势",
+        "向王哲说明来历请他诊治"
+      ],
+      "to": [
+        "请王哲诊治",
+        "让王哲诊治",
+        "让王哲查看伤势",
+        "去帅帐",
+        "前往帅帐",
+        "见王哲",
+        "请他看伤",
+        "说明自己的来历"
+      ]
     }
   ]
 }

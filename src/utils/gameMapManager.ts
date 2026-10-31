@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 import type { GameMapConfig, GameCoordinates, ViewportState } from '@/types/gameMap';
 import type { WorldLocation } from '@/types/location';
 import type { CultivationContinent } from '@/types/worldMap';
-import { coLocatedMarkerKey, coLocatedMarkerOffset } from './coordinateConverter';
+import { coLocatedMarkerKey, coLocatedMarkerOffset, pickMapMarker, type MapMarkerBox, type MapMarkerHitTarget } from './coordinateConverter';
 
 /**
  * 游戏地图管理器
@@ -229,32 +229,21 @@ export class GameMapManager {
     const worldX = (mouseX - this.worldContainer.x) / scale;
     const worldY = (mouseY - this.worldContainer.y) / scale;
 
-    // 优先检测地点（更精确的点击范围）
+    // 优先检测地点：先看是否点在某标记的图标／文字标签框内，再按最近图标中心（半径 50）兜底（见 pickMapMarker）。
     const locationLayer = this.layers.get(4);
     if (locationLayer) {
-      let nearestLocation: any = null;
-      let nearestDistance = Infinity;
-
+      const targets: MapMarkerHitTarget<any>[] = [];
       locationLayer.children.forEach((child) => {
         if (!(child instanceof PIXI.Container)) return;
         const userData = (child as any).userData;
         if (!userData) return;
-
-        const distance = Math.sqrt(
-          Math.pow(worldX - child.x, 2) + Math.pow(worldY - child.y, 2)
-        );
-
-        if (distance < nearestDistance) {
-          nearestDistance = distance;
-          nearestLocation = userData;
-        }
+        targets.push({ center: { x: child.x, y: child.y }, boxes: this.locationHitBoxes(child as PIXI.Container), data: userData });
       });
-
-      // 缩小点击半径到 50 像素（世界坐标）
-      if (nearestLocation && nearestDistance < 50) {
-        console.log(`[地图] 点击地点: ${nearestLocation.data.name}，距离: ${nearestDistance.toFixed(0)}`);
+      const hit = pickMapMarker({ x: worldX, y: worldY }, targets);
+      if (hit) {
+        console.log(`[地图] 点击地点: ${hit.data.name}`);
         this.emit('locationClick', {
-          ...nearestLocation.data,
+          ...hit.data,
           clickPosition: { x: mouseX, y: mouseY }
         });
         return;
@@ -326,6 +315,22 @@ export class GameMapManager {
     }
 
     console.log('[地图] 点击空白区域');
+  }
+
+  /** 地点标记的可点框（世界坐标）：图标外框＋文字标签外框，取自 addLocation 记下的 hitParts。 */
+  private locationHitBoxes(container: PIXI.Container): MapMarkerBox[] {
+    const parts = (container as any).hitParts as { icon?: PIXI.DisplayObject; label?: PIXI.Text } | undefined;
+    const boxes: MapMarkerBox[] = [];
+    if (parts?.icon) {
+      const b = parts.icon.getLocalBounds();
+      const sx = parts.icon.scale.x, sy = parts.icon.scale.y;
+      boxes.push({ x: container.x + parts.icon.x + b.x * sx, y: container.y + parts.icon.y + b.y * sy, width: b.width * sx, height: b.height * sy });
+    }
+    if (parts?.label) {
+      const w = parts.label.width, h = parts.label.height;
+      boxes.push({ x: container.x + parts.label.x - w * parts.label.anchor.x, y: container.y + parts.label.y - h * parts.label.anchor.y, width: w, height: h });
+    }
+    return boxes;
   }
 
   /**
@@ -757,6 +762,9 @@ export class GameMapManager {
         location: location,
       },
     };
+
+    // 图标与标签各自的框参与点选（handleClick → locationHitBoxes），点标签就开这个地点
+    (locationContainer as any).hitParts = { icon, label };
 
     locationLayer.addChild(locationContainer);
     this.locationSprites.set(location.id, locationContainer);

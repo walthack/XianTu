@@ -64,9 +64,11 @@ function overlayDemoActionIntent(
     ?.find(item => item.id === eventId)
     ?.playerCompletionContract?.actions?.find(item => item.id === actionId);
   if (!action) return;
+  const rejectIf = [...new Set([...(action.intentMatch?.rejectIf || []), ...extraReject])];
+  // 两边都没有拒绝词时不写空数组：校验器要求 rejectIf 1–8 条，空 [] 判 invalid_range（stage_02 曾合并出 7 个）。
   action.intentMatch = {
     matchAny: [...new Set([...(action.intentMatch?.matchAny || []), ...extraAny])],
-    rejectIf: [...new Set([...(action.intentMatch?.rejectIf || []), ...extraReject])],
+    ...(rejectIf.length ? { rejectIf } : {}),
   };
 }
 
@@ -80,19 +82,11 @@ function applyQingyuDemoNaturalIntents(mod: ScenarioMod): void {
   // Demo 的自然行动只是把玩家意图映射到当前 fresh 合同；成功、移动、物品和死亡
   // 仍全部由本地 settlement 决定。短语只覆盖眼前可执行动作，否定与离场优先拒绝。
   // s01_01 不在这里追加：内置关已满 8 条（含开场三个建议的命中词，见 scripts/dev/apply-s01-01-intent-match.mjs），
-  // 再并入 Demo 短语会超校验上限 8。
-  event('lcq.event.s01_02', [
-    '带段强躲开', '拉段强避箭', '掩护段强', '寻找掩护', '躲开半兽人', '避开箭袭',
-  ]);
-  event('lcq.event.s01_03', [
-    '见月霜', '上前查看伤者', '看看那个伤兵', '查看伤者', '扶住伤者', '救那个伤兵',
-  ]);
+  // 再并入 Demo 短语会超校验上限 8。s01_02／s01_03／s01_05 同理：Demo 短语已与内置值并成一份 ≤8 条写进内置关
+  // （见 scripts/dev/apply-s01-demo-intent-match.mjs），这里不再追加。
   event('lcq.event.s01_04', [
     '带伤者脱险', '带伤兵脱险', '护着伤者撤退', '跟修士撤离', '离开战场',
   ], ['独自离开', '丢下伤者']);
-  event('lcq.event.s01_05', [
-    '去帅帐', '前往帅帐', '走进帅帐', '见王哲', '请他看伤', '说明自己的来历',
-  ]);
   event('lcq.event.s01_06', [
     '见月霜', '应对眼前危局', '压住寒毒', '替月霜疗伤', '救月霜',
   ]);

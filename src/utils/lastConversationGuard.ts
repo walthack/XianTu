@@ -16,14 +16,22 @@ export function shouldKeepLastConversationOnLoad(lastSlot: LastConversationLike,
   return !!lastSlot && lastSlot.保存时间 != null && loadedSlotKey === activeSlotKey && lastSlot.回滚来源槽位 === activeSlotKey;
 }
 
+/** 已被清空的「上次对话」（读别的档／新开一局后）：两个保存时间都为空。磁盘备份保留，但不再读回内存充当一份有内容的槽。 */
+export function isClearedLastConversationSlot(slotKey: string, slot: { 保存时间?: unknown; 最后保存时间?: unknown } | null | undefined): boolean {
+  return slotKey === LAST_CONVERSATION_SLOT && !!slot && slot.保存时间 == null && slot.最后保存时间 == null;
+}
+
 /** 「上次对话」是否属于当前激活槽位（按钮可见性与回滚前校验共用） */
 export function lastConversationMatchesActive(lastSlot: LastConversationLike, activeSlotKey: string | undefined | null): boolean {
   return !!lastSlot && lastSlot.保存时间 != null && !!activeSlotKey && lastSlot.回滚来源槽位 === activeSlotKey;
 }
 
-/** 清空后的槽位元数据（保留存档名等展示字段，保存时间/存档数据置 null，删除 回滚来源槽位） */
+/**
+ * 清空后的槽位元数据（保留存档名、角色名，保存时间/存档数据置 null，删除 回滚来源槽位）。
+ * 境界/位置/游戏内时间/修为进度属于被清掉的那份备份，一并去掉，否则存档面板显示一份「有地点没时间」的上次对话（真机 REPORT-8091-fbef6792）。
+ */
 export function clearedLastConversationSlot(slot: Partial<SaveSlot> | null | undefined): SaveSlot {
-  const { 回滚来源槽位: _origin, ...rest } = slot || {};
+  const { 回滚来源槽位: _origin, 境界: _realm, 位置: _place, 游戏内时间: _gameTime, 修为进度: _progress, ...rest } = slot || {};
   return {
     ...rest,
     存档名: rest.存档名 || LAST_CONVERSATION_SLOT,

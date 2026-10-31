@@ -37,12 +37,12 @@
           <div class="save-stats">
             <div class="stat-item">
               <span class="stat-label">{{ t('创建时间') }}</span>
-              <span class="stat-value">{{ formatTime(currentSave.保存时间 || '') }}</span>
+              <span class="stat-value">{{ formatTime(saveSlotCreatedAt(currentSave)) }}</span>
             </div>
             <div class="stat-item">
               <span class="stat-label">{{ t('最后保存') }}</span>
               <span class="stat-value">{{
-                formatTime(currentSave.最后保存时间 ?? currentSave.保存时间 ?? '')
+                formatTime(saveSlotModifiedAt(currentSave))
               }}</span>
             </div>
           </div>
@@ -109,7 +109,7 @@
                   <div class="character-name-small">{{ save.角色名字 || '无名道友' }}</div>
                   <!-- 显示最后保存时间 -->
                   <div class="save-time">
-                    {{ isEmptySaveSlot(save) ? EMPTY_SLOT_LABEL : formatTime(save.最后保存时间 ?? save.保存时间 ?? null) }}
+                    {{ isEmptySaveSlot(save) ? EMPTY_SLOT_LABEL : formatTime(saveSlotModifiedAt(save)) }}
                   </div>
                 </div>
               </div>
@@ -177,7 +177,7 @@
                 <div class="detail-row">
                   <span class="detail-label">修改:</span>
                   <span class="detail-value">{{
-                    isEmptySaveSlot(save) ? EMPTY_SLOT_LABEL : formatTime(save.最后保存时间 ?? save.保存时间 ?? '')
+                    isEmptySaveSlot(save) ? EMPTY_SLOT_LABEL : formatTime(saveSlotModifiedAt(save))
                   }}</span>
                 </div>
                 <div v-if="emptySaveSlotHint(save, timeBasedSaveEnabled)" class="detail-row empty-slot-hint">
@@ -330,7 +330,7 @@ import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
 import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { repairSaveData } from '@/utils/dataRepair';
-import { EMPTY_SLOT_LABEL, emptySaveSlotHint, isEmptySaveSlot, saveSlotDetail } from '@/utils/saveSlotDisplay';
+import { EMPTY_SLOT_LABEL, emptySaveSlotHint, isEmptySaveSlot, saveSlotCreatedAt, saveSlotDetail, saveSlotModifiedAt } from '@/utils/saveSlotDisplay';
 
 const { t } = useI18n();
 

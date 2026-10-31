@@ -10,8 +10,12 @@
  *   jiangzhou-retreat  lyl.jiangzhou_retreat（坠美）开局：人在江州，「江州宋军大溃与退军」(lyl.event.s01_01) 激活未完成
  *   heimohai-approach  lyl.lin_an_black_sea（血誓）：前序拍全部完成，「江州铁傀儡场外拍」(liuchao.event.black_sea_approach) 激活，人仍在临安
  *
- * 用法：node scripts/dev/make-test-saves.mjs [模板导出存档.json] [输出目录]
- *   默认模板 /tmp/pt/r/stuck.json，默认输出 /workspace/testsaves-out/
+ *   broken-load        读档必失败的损坏存档（REPORT-8091-fbef6792 ⑨）：导出包里这一槽只有元数据、没有存档数据（存档数据 null），
+ *                      「导入存档」照常收下（只登记槽位、不写存档数据），点「读取」时本机与远端都读不到这一槽的数据，
+ *                      loadGame 报「读档失败：存档【测试-broken-load】的数据读取不到（存储或网络出错），存档未改动」，不写、不删任何存档。
+ *
+ * 用法：node scripts/dev/make-test-saves.mjs [模板导出存档.json] [输出目录] [--only 名字,名字]
+ *   默认模板 /tmp/pt/r/stuck.json，默认输出 /workspace/testsaves-out/；--only 只生成列出的几份（例：--only broken-load），别的文件不动。
  * 每份写出前都用游戏读档同款校验跑一遍（assertEntitySaveFormat、版本守卫、旧结构检测、V3 校验、读档前校验、读档修复），
  * 并断言目标状态成立；任何一项不过就不写文件、以非零码退出。
  */
@@ -100,7 +104,7 @@ export const TEST_SAVE_BUILDERS = {
     save = advance(m, save);
     const rail = m.rail.getCanonRailProfile(rt(save));
     for (let i = 0; i < 4; i++) { markDone(save, rail.orderedEventIds); save = advance(m, save); }
-    note(save, '尸陀林终局的主线拍已全部走完。右栏「开启大祭」按钮可点；点下即黑魔海大祭开始（未入秦则秦线关闭）。');
+    note(save, '尸陀林终局的主线拍已全部走完。右栏「开启大祭」按钮可点；点下即进入大祭开始态（未入秦则秦线关闭）。');
     return save;
   },
   'jiangzhou-retreat'(m, template) {
@@ -187,6 +191,30 @@ function slotOf(save) {
   };
 }
 
+/** 损坏测试档的槽位名与说明（README、测试共用）。 */
+export const BROKEN_LOAD_SLOT = '测试-broken-load';
+export const BROKEN_LOAD_NAME = 'broken-load';
+/**
+ * 读档必失败的测试档：槽位元数据齐全（导入面板照常收下、列表里看得到），存档数据为 null。
+ * importSave 只在有存档数据时写存档数据，所以导入后这一槽在本机/远端都没有数据；读取时 loadGame 走「数据读取不到」那一支失败返回，
+ * 失败路径不写、不删任何存档（tests/report8091fbef.test.mjs ⑨ 用真实 importSave／loadGame 函数体验证）。不改任何读档规则。
+ */
+export async function buildBrokenLoadSave(templateBundle) {
+  const m = await modules();
+  const unwrapped = m.bundle.unwrapDadBundle(templateBundle);
+  must(unwrapped.type === 'saves' && Array.isArray(unwrapped.payload?.saves) && unwrapped.payload.saves[0]?.存档数据, '模板不是游戏导出的存档文件');
+  const template = unwrapped.payload.saves[0].存档数据;
+  const now = '2026-10-31T00:00:00.000Z';
+  return m.bundle.createDadBundle('saves', {
+    characterId: unwrapped.payload.characterId, characterName: unwrapped.payload.characterName,
+    saves: [{
+      存档名: BROKEN_LOAD_SLOT, 保存时间: now, 最后保存时间: now, 游戏内时间: '损坏测试档',
+      角色名字: template.角色?.身份?.名字, 境界: template.角色?.属性?.境界?.名称 || '凡人', 位置: '损坏测试档（读取必失败）', 修为进度: 0,
+      存档数据: null,
+    }],
+  }, { exportedAt: now });
+}
+
 /** 生成全部测试存档（内存）：返回 { name: { bundle, save, summary } }。 */
 export async function buildTestSaves(templateBundle, names = Object.keys(TEST_SAVE_BUILDERS)) {
   const m = await modules();
@@ -207,13 +235,30 @@ export async function buildTestSaves(templateBundle, names = Object.keys(TEST_SA
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  const templatePath = process.argv[2] || '/tmp/pt/r/stuck.json';
-  const outDir = process.argv[3] || '/workspace/testsaves-out';
-  const built = await buildTestSaves(JSON.parse(readFileSync(templatePath, 'utf8')));
+  let only = null;
+  const positional = [];
+  const args = process.argv.slice(2);
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--only') only = String(args[++i] || '').split(',').filter(Boolean);
+    else positional.push(args[i]);
+  }
+  const templatePath = positional[0] || '/tmp/pt/r/stuck.json';
+  const outDir = positional[1] || '/workspace/testsaves-out';
+  const known = [...Object.keys(TEST_SAVE_BUILDERS), BROKEN_LOAD_NAME];
+  const names = only || known;
+  const unknown = names.filter(name => !known.includes(name));
+  if (unknown.length) throw new Error(`未知的测试存档：${unknown.join('、')}（可选：${known.join('、')}）`);
+  const template = JSON.parse(readFileSync(templatePath, 'utf8'));
+  const built = await buildTestSaves(template, names.filter(name => name !== BROKEN_LOAD_NAME));
   mkdirSync(outDir, { recursive: true });
   for (const [name, { bundle, summary }] of Object.entries(built)) {
     const file = `${outDir}/${name}.json`;
     writeFileSync(file, JSON.stringify(bundle, null, 2) + '\n');
     console.log(`✔ ${file}`, JSON.stringify(summary));
+  }
+  if (names.includes(BROKEN_LOAD_NAME)) {
+    const file = `${outDir}/${BROKEN_LOAD_NAME}.json`;
+    writeFileSync(file, JSON.stringify(await buildBrokenLoadSave(template), null, 2) + '\n');
+    console.log(`✔ ${file}`, JSON.stringify({ slot: BROKEN_LOAD_SLOT, 存档数据: null, 读取: '必失败' }));
   }
 }

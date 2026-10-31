@@ -352,7 +352,7 @@
                           <span class="location">{{
                             normalizeSaveDataV3(slot.存档数据)?.角色?.位置?.描述 || '初始地'
                           }}</span>
-                          <span class="save-time">{{ formatTime(slot.保存时间) }}</span>
+                          <span class="save-time">{{ formatTime(saveSlotModifiedAt(slot)) }}</span>
                         </div>
                       </div>
 
@@ -489,6 +489,7 @@ import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
 import type { SaveDataV3 } from '@/types/saveSchemaV3';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
+import { saveSlotModifiedAt } from '@/utils/saveSlotDisplay';
 import {
   buildR20VAcceptancePack,
   isR20VAcceptanceProfile,

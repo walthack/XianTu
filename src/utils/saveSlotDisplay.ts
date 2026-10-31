@@ -9,10 +9,32 @@ export const TIME_BASED_SLOT_NAME = '时间点存档';
 export const LAST_CONVERSATION_SLOT_NAME = '上次对话';
 export const EMPTY_SLOT_LABEL = '尚未写入';
 
-/** 槽位里还没有任何存档内容（自动槽的占位）。 */
+/**
+ * 槽位里还没有任何存档内容（自动槽的占位）。
+ * 只看存档数据与保存时间：characterStore.saveSlots 给每个槽补了「凡人／未知」展示兜底，
+ * 旧版连 境界/位置 一起判，面板拿到的槽永远「有境界有位置」，空槽照样显示 未知/凡人/未知（真机 REPORT-8091-fbef6792）。
+ */
 export function isEmptySaveSlot(slot: Partial<SaveSlot> | null | undefined): boolean {
   if (!slot) return true;
-  return !slot.存档数据 && !slot.保存时间 && !slot.最后保存时间 && !slot.境界 && !slot.位置;
+  return !slot.存档数据 && !slot.保存时间 && !slot.最后保存时间;
+}
+
+type SaveDataMeta = { 元数据?: { 创建时间?: unknown; 更新时间?: unknown } } | null | undefined;
+const metaTime = (slot: Partial<SaveSlot> | null | undefined, key: '创建时间' | '更新时间') => {
+  const value = (slot?.存档数据 as SaveDataMeta)?.元数据?.[key];
+  return typeof value === 'string' && value ? value : null;
+};
+/**
+ * 槽位「修改／最后保存」时间：槽位元数据优先，缺了退到存档数据自带的 元数据.更新时间（每次写档 toSaveData 盖章）。
+ * 真机「上次对话」修改时间显示「未知」：读别的档时 resetLastConversationIfForeign 清了槽位时间，磁盘备份又被 loadCharacterSaves 读回来，
+ * 槽位有数据没时间。
+ */
+export function saveSlotModifiedAt(slot: Partial<SaveSlot> | null | undefined): string | null {
+  return slot?.最后保存时间 || slot?.保存时间 || metaTime(slot, '更新时间') || null;
+}
+/** 槽位「创建时间」：槽位 保存时间 优先，缺了退到 元数据.创建时间。 */
+export function saveSlotCreatedAt(slot: Partial<SaveSlot> | null | undefined): string | null {
+  return slot?.保存时间 || metaTime(slot, '创建时间') || null;
 }
 
 /** 卡片上的「境界」「位置」两栏；空槽不再冒充凡人／未知。 */

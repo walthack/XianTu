@@ -16,7 +16,7 @@ import { useCharacterCreationStore } from './characterCreationStore'; // 导入�
 import * as storage from '@/utils/indexedDBManager';
 import { clearSnapshots } from '@/utils/snapshotManager';
 import { logError } from '@/modules/diagnostics/log';
-import { LAST_CONVERSATION_SLOT, clearedLastConversationSlot, lastConversationMatchesActive, shouldKeepLastConversationOnLoad } from '@/utils/lastConversationGuard';
+import { LAST_CONVERSATION_SLOT, clearedLastConversationSlot, isClearedLastConversationSlot, lastConversationMatchesActive, shouldKeepLastConversationOnLoad } from '@/utils/lastConversationGuard';
 import { applyLoadRepairs } from '@/modules/scenarioMods/loadRepairs';
 import { loadSaveWithFallback, rejectFutureSaveVersion, validateLoadedSave } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
@@ -477,6 +477,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
       // 3. 更新存档槽位的保存时间和元数据
       // 注意：保存时间（创建时间）只在创建时设置，不再修改
       slot.保存时间 = new Date().toISOString();
+      // 「修改」栏读 最后保存时间（saveSlots 里 最后保存时间 ?? 保存时间），这里不同步会一直显示旧值
+      slot.最后保存时间 = slot.保存时间;
 
       // 提取元数据用于存档列表显示
       slot.角色名字 = (slot.存档数据 as any).角色?.身份?.名字;
@@ -2875,8 +2877,8 @@ const migrateLegacyOnlineCharacterToSingle = async (sourceCharacterId: string): 
 
         for (const slotKey of slotKeys) {
           const slot = profile.存档列表[slotKey];
-          // 只加载没有存档数据的槽位（包括"上次对话"）
-          if (slot && !slot.存档数据) {
+          // 只加载没有存档数据的槽位（包括"上次对话"）；已清空的「上次对话」磁盘备份留着，不读回来冒充有内容的槽
+          if (slot && !slot.存档数据 && !isClearedLastConversationSlot(slotKey, slot)) {
             const saveData = profile.隔离试玩信息?.localOnly
               ? await storage.loadLocalSaveData(charId, slotKey)
               : await storage.loadSaveData(charId, slotKey);

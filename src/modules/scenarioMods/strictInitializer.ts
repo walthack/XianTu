@@ -1,4 +1,3 @@
-import { resolveLedgerPath } from './ledgerConditions';
 import { mapEntryReady, type MapEntry } from './mapEntries';
 import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
 import { syncStoryStatuses } from './freeAction/bingGu';
@@ -497,13 +496,13 @@ function transitionScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[
   // 行旅账跨关携带；转关强制路线先落回执再定位置（开场地点只在账为空时生效）。
   if (!entry) settleNanhuangStageTransition(next, newRuntime, String(rt.modId), targetId, rt.travelLedger, currentTravelCompanions(saveData, rt));
   if (entry) {
-    const message = (next as any).系统.扩展.mapEntryMessages?.[entry.id];
-    if (message?.done || resolveLedgerPath(`done.${entry.eventId}`, rt, saveData)?.value === true) {
-      newRuntime.completedEventIds = [...new Set([...newRuntime.completedEventIds, entry.eventId])];
-      newRuntime.activeEventIds = newRuntime.activeEventIds.filter((id: string) => id !== entry.eventId);
-    } else if (message?.delivered && !newRuntime.activeEventIds.includes(entry.eventId)) {
-      newRuntime.activeEventIds.push(entry.eventId);
-    }
+    // 从地图点入口地点入关，本身就是口信要玩家做的「决定前往」：不论之前点没点「先记下」，口信拍一律记为已完成。
+    // 旧版只在「先记下」后才记完成，直接点地图入秦时口信拍原样带进秦关、仍是当前拍，
+    // 主线目标停在「听取口信，决定何时前往咸阳」（真机 REPORT-8091-fbef6792）。
+    const ext = (next as any).系统.扩展;
+    ((ext.mapEntryMessages ||= {})[entry.id] ||= {}).done = true;
+    newRuntime.completedEventIds = [...new Set([...newRuntime.completedEventIds, entry.eventId])];
+    newRuntime.activeEventIds = newRuntime.activeEventIds.filter((id: string) => id !== entry.eventId);
   }
   // 立即推进一轮：激活新关首章/首批事件
   const advanced = advanceScenarioRuntime(next);

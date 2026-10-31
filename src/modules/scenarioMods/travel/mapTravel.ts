@@ -97,7 +97,10 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
     if (selection.routeId !== entry.id || selection.fromId !== (currentLocation(save).canonicalLocationId || '') || !mapEntryReady(save, entry)) return false;
     const result = transitionToMapEntryStage(save, entry, CONTENT_PACKS.stages);
     if (!result.ok) return false;
-    result.saveData.角色.位置.locationId = entry.locationId;
+    // 位置描述与普通地图抵达同口径「国别·地名」：新关开场位置是「大陆·地名」（中州·咸阳），顶栏会显示成中州（真机 REPORT-8091-fbef6792）。
+    const arrived = result.saveData.角色.位置, entryLoc = locations.entries.find(e => canonicalLocationId(e.id) === entry.locationId)?.definition;
+    arrived.locationId = entry.locationId;
+    if (countryOf(entry.locationId) && entryLoc?.name) arrived.描述 = `${countryOf(entry.locationId)}·${entryLoc.name}`;
     Object.assign(save, result.saveData);
     return true;
   }
