@@ -59,9 +59,9 @@ export function settleActionTime(save: SaveData, response: any, options: any, ca
     }
   }
   // 本拍路程已由行旅服务推进：不再叠加演出/模型耗时。
-  if (rt?.authorTimeConsumedAtTurn === rt?.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
+  if (Number.isFinite(rt?.authorTimeConsumedAtTurn) && rt.authorTimeConsumedAtTurn === rt.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
   const travel = rt?.travelLedger?.lastCard;
-  if (travel && rt?.travelLedger?.timeConsumedAtTurn === rt?.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
+  if (travel && Number.isFinite(rt?.travelLedger?.timeConsumedAtTurn) && rt.travelLedger.timeConsumedAtTurn === rt.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
   const selections: CultivationSelection[] = options?.cultivationSelections || [];
   if (selections.length) {
     if (!selections.every(validCultivation)) throw new Error('LCQ-SAV-039');

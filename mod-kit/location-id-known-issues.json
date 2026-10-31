@@ -42,12 +42,11 @@
       "detail": "南荒散峒营地 无坐标"
     },
     {
-      "key": "shared_anchor:lcq.location.beast_camp+lcq.location.command_tent+lcq.location.grassland+lcq.location.macedon_camp+lcq.location.roman_camp+lcq.location.taiyi_temple+liuchao.location.baihu_shang_guan+liuchao.location.longchi+liuchao.location.wuyuan+liuchao.location.yun_shi_shop",
+      "key": "shared_anchor:lcq.location.beast_camp+lcq.location.command_tent+lcq.location.macedon_camp+lcq.location.roman_camp+lcq.location.taiyi_temple+liuchao.location.baihu_shang_guan+liuchao.location.longchi+liuchao.location.wuyuan+liuchao.location.yun_shi_shop",
       "kind": "shared_anchor",
       "locationIds": [
         "lcq.location.beast_camp",
         "lcq.location.command_tent",
-        "lcq.location.grassland",
         "lcq.location.macedon_camp",
         "lcq.location.roman_camp",
         "lcq.location.taiyi_temple",

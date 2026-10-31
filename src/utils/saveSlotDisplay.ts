@@ -56,3 +56,9 @@ export function emptySaveSlotHint(slot: Partial<SaveSlot> | null | undefined, ti
   if (slot?.存档名 === LAST_CONVERSATION_SLOT_NAME) return '下一次发送对话前会自动写入。';
   return '此槽位尚无存档内容。';
 }
+
+/** 空自动槽不展示历史占位名「未知」。 */
+export function saveSlotCharacterName(slot: Partial<SaveSlot> | null | undefined): string {
+  if (isEmptySaveSlot(slot)) return EMPTY_SLOT_LABEL;
+  return slot?.角色名字 && slot.角色名字 !== '未知' ? slot.角色名字 : '无名道友';
+}

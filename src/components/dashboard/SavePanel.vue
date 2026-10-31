@@ -106,7 +106,7 @@
                     />
                     {{ save.存档名 || save.id || `存档${index + 1}` }}
                   </div>
-                  <div class="character-name-small">{{ save.角色名字 || '无名道友' }}</div>
+                  <div class="character-name-small">{{ saveSlotCharacterName(save) }}</div>
                   <!-- 显示最后保存时间 -->
                   <div class="save-time">
                     {{ isEmptySaveSlot(save) ? EMPTY_SLOT_LABEL : formatTime(saveSlotModifiedAt(save)) }}
@@ -330,7 +330,7 @@ import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
 import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { repairSaveData } from '@/utils/dataRepair';
-import { EMPTY_SLOT_LABEL, emptySaveSlotHint, isEmptySaveSlot, saveSlotCreatedAt, saveSlotDetail, saveSlotModifiedAt } from '@/utils/saveSlotDisplay';
+import { EMPTY_SLOT_LABEL, emptySaveSlotHint, isEmptySaveSlot, saveSlotCreatedAt, saveSlotCharacterName, saveSlotDetail, saveSlotModifiedAt } from '@/utils/saveSlotDisplay';
 
 const { t } = useI18n();
 

@@ -336,7 +336,6 @@
             <div v-if="card.windowText" class="actor-card-line" :class="{ 'actor-window-tight': card.windowTight }">
               <span>时间</span>{{ card.windowText }}
             </div>
-            <div class="actor-card-line"><span>可能获得</span>{{ card.rewardPreview }}</div>
             <div class="actor-card-risk">风险：{{ card.stakes }}</div>
             <button
               class="quest-next-btn"

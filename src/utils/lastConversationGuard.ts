@@ -40,3 +40,9 @@ export function clearedLastConversationSlot(slot: Partial<SaveSlot> | null | und
     存档数据: null,
   };
 }
+
+/** 失去当前局回滚资格不代表磁盘备份不存在；保留展示元数据，仅撤销来源章。 */
+export function detachedLastConversationSlot(slot: Partial<SaveSlot> | null | undefined): SaveSlot {
+  const { 回滚来源槽位: _origin, ...rest } = slot || {};
+  return { ...rest, 存档名: rest.存档名 || LAST_CONVERSATION_SLOT, 保存时间: rest.保存时间 ?? null } as SaveSlot;
+}

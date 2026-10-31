@@ -52,6 +52,7 @@ if(retired){
  old.entries=old.entries.filter(e=>e!==retired);
 }
 for(const entry of old.entries) {
+ if(entry.id==='lcq.location.grassland'){entry.authoritativeFields=['coordinates'];for(const d of [entry.definition,...Object.values(entry.stageVariants||{})])d.coordinates={x:1200,y:4650};}
  if(!['liuchao.location.jiangzhou','liuchao.location.qingzhou'].includes(entry.id))continue;
  for(const d of [entry.definition,...Object.values(entry.stageVariants||{})]) {
   if(entry.id==='liuchao.location.jiangzhou'){if(d.region)d.region='晋国';if(d.description)d.description=d.description.replaceAll('宋国边境重要城市','晋国边境重要城市');}

@@ -259,10 +259,10 @@ test('④ 任务卡：段强已同行时不再写「见段强」；人在五原�
 });
 
 // ⑤ 地图重叠 ───────────────────────────────────────────────
-test('⑤ 草原与五原城同坐标：真实底图按落点序号错开显示（各自可点），地点坐标与路程不变', async () => {
+test('⑤ 草原独立锚点；其余同点标记继续错开显示，回传真实坐标', async () => {
   const locations = JSON.parse(read('mod-kit/entity-catalog/locations.json')).entries;
   const at = id => locations.find(e => e.id === id).definition.coordinates;
-  assert.deepEqual(at('lcq.location.grassland'), at('liuchao.location.wuyuan'), '根因：两点坐标完全相同');
+  assert.notDeepEqual(at('lcq.location.grassland'), at('liuchao.location.wuyuan'), 'REPORT89 已授权草原独立坐标');
   const C = await loadTs('../src/utils/coordinateConverter.ts');
   assert.deepEqual(C.coLocatedMarkerOffset(0), { x: 0, y: 0 });
   const CLICK_RADIUS = 50;
@@ -270,7 +270,7 @@ test('⑤ 草原与五原城同坐标：真实底图按落点序号错开显示�
   for (let i = 0; i < points.length; i++) for (let j = i + 1; j < points.length; j++) {
     assert.ok(Math.hypot(points[i].x - points[j].x, points[i].y - points[j].y) > CLICK_RADIUS, `标记 ${i}/${j} 间距须大于点击半径`);
   }
-  assert.equal(C.coLocatedMarkerKey({ x: 881.2, y: 4366.4 }), C.coLocatedMarkerKey(at('lcq.location.grassland')));
+  assert.equal(C.coLocatedMarkerKey({ x: 881.2, y: 4366.4 }), C.coLocatedMarkerKey(at('liuchao.location.wuyuan')));
   const manager = read('src/utils/gameMapManager.ts');
   assert.match(manager, /const offset = coLocatedMarkerOffset\(index\);/);
   assert.match(manager, /locationContainer\.x = display\.x/);

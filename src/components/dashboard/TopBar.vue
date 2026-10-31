@@ -46,6 +46,7 @@ import { useGameStateStore } from '@/stores/gameStateStore'
 import { formatRealmWithStage } from '@/utils/realmUtils'
 import { useI18n } from '@/i18n'
 import { getFullscreenElement, requestFullscreen, exitFullscreen, explainFullscreenError } from '@/utils/fullscreen'
+import { locationDescriptionWithCountry } from '@/modules/scenarioMods/travel/locationIds'
 import type { GameTime } from '@/types/game'
 
 const { t } = useI18n()
@@ -81,7 +82,7 @@ const characterRealm = computed(() => {
 
 const currentLocation = computed(() => {
   try {
-    return gameStateStore.location?.描述 || t('初始地')
+    return locationDescriptionWithCountry(gameStateStore.location) || t('初始地')
   } catch (e) {
     console.error('[TopBar] Error getting currentLocation:', e)
     return t('初始地')

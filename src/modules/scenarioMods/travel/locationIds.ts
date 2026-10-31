@@ -212,3 +212,18 @@ export function auditLocationIds(
   }
   return issues;
 }
+
+/** 旧档大陆前缀仅用于历史存储；展示国别以地点总表为准，不修改地点身份。 */
+export function locationDescriptionWithCountry(position: { locationId?: string; 描述?: string } | null | undefined): string {
+  const description = position?.描述 || '';
+  const entries = namedEntityEntries('location');
+  let entry = entries.find(e => e.id === canonicalLocationId(position?.locationId));
+  if (!entry) {
+    const hits = entries.filter(e => typeof e.definition.name === 'string' && description.split('·').slice(1).some(part => part === e.definition.name));
+    if (hits.length === 1) entry = hits[0];
+  }
+  const country = entry?.definition.country;
+  if (typeof country !== 'string' || !country || !description) return description;
+  const parts = description.split('·');
+  return parts.length > 1 ? [country, ...parts.slice(1)].join('·') : `${country}·${description}`;
+}

@@ -153,6 +153,7 @@ export function findInternalNarrativeControlLeaks(text: string): string[] {
 export function stripInternalNarrativeControlLeaks(text: string): string {
   if (!text) return '';
   let result = text
+    .replace(/可能获得\s*取得一次[^。！？\n]*权限[。]?/g, '')
     .replace(WORLD_HOOK_DIRECTIVE_RE, '')
     .replace(HIGH_INTELLIGENCE_CONTRACT_LABEL_RE, '')
     .replace(/【世界留钩】/g, '')

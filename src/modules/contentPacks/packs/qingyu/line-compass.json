@@ -844,6 +844,7 @@
         },
         {
           "id": "qin_entry_xu_unmet",
+          "travelHint": true,
           "eventId": "liuchao.event.qin_find_xu",
           "hintKey": "lineCompass.qin.step.qin_entry_xu_unmet",
           "note": "五线补全·秦（2026-10-28）：事件在内容包关 lyg.qin_xianyang，Q-4 找到方士（2004，rail）。lyg:13686；R-8（总策划定）：防剧透通审后与「见过」一版同文，已并入这一行，去掉 acq 条件，见过没见过都出这一句（事件按 acq.xu_junfang 分重逢／初见两版）"

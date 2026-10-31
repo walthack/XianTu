@@ -15,17 +15,19 @@ function cityMarkerBoxes(center, name) {
 }
 const overlap = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
 
-test('① 草原／五原城同坐标：真机点击路径（pickMapMarker）点图标或标签都开各自地点，标记整块互不压盖', async () => {
+test('① 草原独立坐标／五原同点组：真机点击路径（pickMapMarker）点图标或标签都开各自地点，标记整块互不压盖', async () => {
   const C = await loadTs('../src/utils/coordinateConverter.ts');
   const M = await loadTs('../src/modules/scenarioMods/travel/mapTravel.ts');
   // 地图面板 loadMapData 的顺序：跨国代表点标记在前，再接关内地点（五原城是代表点，排第 0 留原点）。
   const drawn = M.withMapCapitalMarkers(stageJson('lcq.stage_01').canon.locations);
   const group = drawn.filter(l => C.coLocatedMarkerKey(l.coordinates) === '881:4366');
-  assert.deepEqual(group.map(l => l.name), ['五原城', '草原', '帅帐', '龙池']);
+  assert.deepEqual(group.map(l => l.name), ['五原城', '帅帐', '龙池']);
   const targets = group.map((l, i) => {
     const o = C.coLocatedMarkerOffset(i), center = { x: 881 + o.x, y: 4366 + o.y };
     return { center, boxes: cityMarkerBoxes(center, l.name), data: l.name };
   });
+  const grass = drawn.find(l => l.name === '草原');
+  targets.push({ center: grass.coordinates, boxes: cityMarkerBoxes(grass.coordinates, grass.name), data: grass.name });
   for (let i = 0; i < targets.length; i++) for (let j = i + 1; j < targets.length; j++) {
     for (const a of targets[i].boxes) for (const b of targets[j].boxes) assert.ok(!overlap(a, b), `${targets[i].data}/${targets[j].data} 的图标或标签不得压盖`);
   }
@@ -38,13 +40,14 @@ test('① 草原／五原城同坐标：真机点击路径（pickMapMarker）点
   }
   // 根因复现：旧版（半径 80 小圆周＋只按最近中心、半径 50）点草原标签左端会命中五原城。
   const oldAngles = [null, -45, -135, 0];
-  const oldTargets = group.map((l, i) => {
+  const oldTargets = ['五原城', '草原', '帅帐', '龙池'].map((name, i) => {
+    const l = {name};
     const a = oldAngles[i], center = a === null ? { x: 881, y: 4366 } : { x: 881 + Math.round(Math.cos(a * Math.PI / 180) * 80), y: 4366 + Math.round(Math.sin(a * Math.PI / 180) * 80) };
     return { center, boxes: [], data: l.name };
   });
   const oldGrassLabel = cityMarkerBoxes(oldTargets[1].center, '草原')[1];
   assert.equal(C.pickMapMarker({ x: oldGrassLabel.x + 8, y: oldGrassLabel.y + 8 }, oldTargets), '五原城', '旧画法的根因');
-  // 坐标本身不改，空白处不误中
+  // 空白处不误中
   assert.equal(C.pickMapMarker({ x: 881 + 600, y: 4366 + 600 }, targets), null);
   const manager = read('src/utils/gameMapManager.ts');
   assert.match(manager, /const hit = pickMapMarker\(\{ x: worldX, y: worldY \}, targets\);/, '真机点击路径走 pickMapMarker');
@@ -81,8 +84,8 @@ test('② 时间点存档／上次对话：面板拿到的是 store 补过兜底
   assert.equal(D.isEmptySaveSlot(shown), true);
   assert.equal(D.saveSlotDetail(shown, '位置'), '尚未写入');
   assert.match(D.emptySaveSlotHint(shown, false), /下一次发送对话前会自动写入/);
-  // 被清空的上次对话不再从磁盘读回内存（磁盘备份保留）
-  assert.match(store, /if \(slot && !slot\.存档数据 && !isClearedLastConversationSlot\(slotKey, slot\)\) \{/);
+  // REPORT89：磁盘内容允许回填展示；回滚资格仍须来源章
+  assert.match(store, /if \(slot && !slot\.存档数据\) \{/);
   // 旧槽有数据没有槽位时间：退到存档自带 元数据.更新时间／创建时间，不再显示「未知」
   const legacy = enhanceLikeStore({ 存档名: '上次对话', 保存时间: null, 存档数据: { 元数据: { 创建时间: '2026-10-30T01:00:00.000Z', 更新时间: '2026-10-31T11:41:00.000Z' } } });
   assert.equal(D.isEmptySaveSlot(legacy), false);

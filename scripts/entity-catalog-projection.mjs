@@ -29,7 +29,10 @@ export function projectLocationCountries(mod){
   if(!loc||typeof loc!=='object')continue;
   // Catalog-authoritative prose fields (e.g. 江州归晋后的 region/description) override stale generated copies.
   const auth=fieldAuth.get(loc.id);
-  if(auth)for(const f of auth.fields)if(typeof auth.src[f]==='string'&&auth.src[f])loc[f]=auth.src[f];
+  if(auth)for(const f of auth.fields){
+   if(typeof auth.src[f]==='string'&&auth.src[f])loc[f]=auth.src[f];
+   else if(f==='coordinates'&&Number.isFinite(auth.src[f]?.x)&&Number.isFinite(auth.src[f]?.y))loc[f]=structuredClone(auth.src[f]);
+  }
   if(Object.prototype.hasOwnProperty.call(loc,'country'))continue;
   const country=byId.get(loc.id);
   if(country)loc.country=country;

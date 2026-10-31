@@ -16,7 +16,7 @@ import { useCharacterCreationStore } from './characterCreationStore'; // 导入�
 import * as storage from '@/utils/indexedDBManager';
 import { clearSnapshots } from '@/utils/snapshotManager';
 import { logError } from '@/modules/diagnostics/log';
-import { LAST_CONVERSATION_SLOT, clearedLastConversationSlot, isClearedLastConversationSlot, lastConversationMatchesActive, shouldKeepLastConversationOnLoad } from '@/utils/lastConversationGuard';
+import { LAST_CONVERSATION_SLOT, clearedLastConversationSlot, detachedLastConversationSlot, lastConversationMatchesActive, shouldKeepLastConversationOnLoad } from '@/utils/lastConversationGuard';
 import { applyLoadRepairs } from '@/modules/scenarioMods/loadRepairs';
 import { loadSaveWithFallback, rejectFutureSaveVersion, validateLoadedSave } from '@/utils/saveLoadFallback';
 import { getTavernHelper, clearAllCharacterData, isTavernEnv } from '@/utils/tavern';
@@ -905,14 +905,25 @@ export const useCharacterStore = defineStore('characterV3', () => {
    */
   /**
    * 读档后「上次对话」若不属于本次激活的存档（来源章缺失/不同，或读入的槽位被挂到工作槽/复测槽），
-   * 仅清掉元数据和内存快照，保留磁盘备份，防止「回到上一轮」跨档回滚（fix5939-1）。
+   * 仅撤销回滚来源与内存快照，保留展示元数据和磁盘备份，防止「回到上一轮」跨档回滚（fix5939-1）。
    * 只改内存元数据，落盘交给调用方随后的 commitMetadataToStorage。
    */
   const resetLastConversationIfForeign = async (profile: CharacterProfile, charId: string, slotKey: string, activeSlotKey: string) => {
     if (!profile.存档列表) return;
-    const lastSlot = profile.存档列表[LAST_CONVERSATION_SLOT];
+    let lastSlot = profile.存档列表[LAST_CONVERSATION_SLOT];
+    // 旧版本曾清空展示元数据却保留磁盘文件；只读恢复内容，不恢复来源章。
+    if (lastSlot && !lastSlot.存档数据 && !lastSlot.保存时间 && !lastSlot.最后保存时间) {
+      try {
+        const backup = profile.隔离试玩信息?.localOnly
+          ? await storage.loadLocalSaveData(charId, LAST_CONVERSATION_SLOT)
+          : await storage.loadSaveData(charId, LAST_CONVERSATION_SLOT);
+        if (backup) lastSlot = { ...lastSlot, 存档数据: backup };
+      } catch { // lcq-allow: 可选展示备份读取失败保留槽位，不阻断已成功载入的主档
+        debug.warn('角色商店', '上次对话备份暂不可读，保留原槽位');
+      }
+    }
     if (shouldKeepLastConversationOnLoad(lastSlot, slotKey, activeSlotKey)) return;
-    profile.存档列表[LAST_CONVERSATION_SLOT] = clearedLastConversationSlot(lastSlot);
+    profile.存档列表[LAST_CONVERSATION_SLOT] = detachedLastConversationSlot(lastSlot);
     clearSnapshots(charId, activeSlotKey);
     if (slotKey !== activeSlotKey) clearSnapshots(charId, slotKey);
   };
@@ -2877,8 +2888,8 @@ const migrateLegacyOnlineCharacterToSingle = async (sourceCharacterId: string): 
 
         for (const slotKey of slotKeys) {
           const slot = profile.存档列表[slotKey];
-          // 只加载没有存档数据的槽位（包括"上次对话"）；已清空的「上次对话」磁盘备份留着，不读回来冒充有内容的槽
-          if (slot && !slot.存档数据 && !isClearedLastConversationSlot(slotKey, slot)) {
+          // 展示磁盘上实际存在的备份；回滚资格仍只由来源章决定。
+          if (slot && !slot.存档数据) {
             const saveData = profile.隔离试玩信息?.localOnly
               ? await storage.loadLocalSaveData(charId, slotKey)
               : await storage.loadSaveData(charId, slotKey);
