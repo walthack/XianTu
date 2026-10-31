@@ -144,6 +144,7 @@ export function buildStrictScenarioInitialization(
       return withNativeScenarioLocationType({
         id: canonicalEntityId('location',location.id),
         名称: location.name,
+        country: location.country,
         位置: continent?.name || firstContinentName,
         ...(location.region ? { 地域: location.region } : {}),
         coordinates: location.coordinates ? structuredClone(location.coordinates) : undefined,

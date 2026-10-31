@@ -565,7 +565,7 @@ const autoTranslateMap: Record<string, string> = {
   // DeepCultivationModal
   '深度修炼': 'Deep Cultivation',
   '当前修炼进度': 'Current Progress',
-  '修炼速度: +{0}%': 'Cultivation Speed: +{0}%',
+  '修炼速度: {0}': 'Cultivation Speed: {0}',
   '选择修炼天数': 'Select Cultivation Days',
   'AI将根据修炼天数生成详细的修炼过程和结果': 'AI will generate detailed cultivation process and results based on days',
   '输入天数': 'Enter days',

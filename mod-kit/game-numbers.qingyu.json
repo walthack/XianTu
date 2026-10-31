@@ -2800,6 +2800,11 @@
       "昭南": {
         "中立边陲": 67
       }
+    },
+    "domesticRepresentative": {
+      "enabled": true,
+      "minDays": 1,
+      "coordinateLi": 1
     }
   }
 }

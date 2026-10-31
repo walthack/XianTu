@@ -50,14 +50,14 @@ test('characterStore 接线：saveToSlot 盖来源章，loadGame/重开试玩清
 
   const reset = fnBody(src, 'resetLastConversationIfForeign');
   assert.match(reset, /shouldKeepLastConversationOnLoad\(/);
-  assert.match(reset, /deleteSaveData\(charId, LAST_CONVERSATION_SLOT/);
+  assert.doesNotMatch(reset, /deleteSaveData|saveSaveData/);
   assert.match(reset, /clearSnapshots\(charId, activeSlotKey\)/);
-  assert.match(reset, /'LCQ-SAV-031'[\s\S]*reason: 'clear_failed'/);
+
   const load = fnBody(src, 'loadGame');
   const setActive = load.indexOf('rootState.value.当前激活存档 = { 角色ID: charId, 存档槽位: activeSlotKey }');
   const call = load.indexOf('await resetLastConversationIfForeign(profile, charId, slotKey, activeSlotKey)');
   const apply = load.indexOf('gameStateStore.loadFromSaveData(patched)');
-  assert.ok(setActive > 0 && call > setActive && apply > call, 'loadGame 须在设激活存档后、loadFromSaveData 前清理');
+  assert.ok(apply > 0 && setActive > apply && call > setActive, 'loadGame 须在成功载入后才设激活存档、清内存备份');
   assert.equal(src.match(/LAST_CONVERSATION_SLOT = '上次对话'/), null); // 常量只在 guard 模块定义
 
   const install = fnBody(src, 'installIsolatedPlaytestCharacter');
@@ -67,7 +67,7 @@ test('characterStore 接线：saveToSlot 盖来源章，loadGame/重开试玩清
   const rollback = fnBody(src, 'rollbackToLastConversation');
   assert.match(rollback, /lastConversationMatchesActive\(lastConversationSlot, active\.存档槽位\)/);
   assert.match(rollback, /'LCQ-SAV-031'/);
-  assert.ok(rollback.indexOf('lastConversationMatchesActive') < rollback.indexOf('JSON.parse(JSON.stringify(lastConversationData))'));
+  assert.ok(rollback.indexOf('lastConversationMatchesActive') < rollback.indexOf('JSON.parse(JSON.stringify(outcome.data))'));
 });
 
 test('按钮可见性：MainGamePanel canRollback 与 SavePanel 回滚按钮都校验来源', async () => {

@@ -42,7 +42,7 @@ test('时间配置所有叶子必填、错误热改整份回退',async()=>{const
 test('麻古跨过渴求与戒断两个阈值按实际经过时间戒除',async()=>{const maigu=await loadTs('../src/modules/scenarioMods/freeAction/maigu.ts');const cfg=maigu.maiguConfig(),s=base(),rt=s.世界.状态.剧本模组;rt.modId='test';rt.flags={};const now=C.gameTimeMinutes(s.元数据.时间);s.元数据.calendarVersion=1;rt.sceneLedger={receipts:[],actors:{},injuries:{},names:{},worldFacts:[],statusRecords:{version:1,actors:{npc:[{statusId:cfg.addictionStatus,label:'麻古成瘾',sourceScene:'free:maigu.dose',appliedAt:now-10000,expiresAt:null,effects:{},remove:[]}]},groups:{},groupLabels:{}}};rt.maiguClock={npc:{lastDoseAt:now-cfg.addiction.cravingMinutes-cfg.addiction.quitMinutes}};assert.ok(maigu.syncMaigu(s).includes('-npc:'+cfg.addictionStatus));assert.equal(rt.maiguClock.npc,undefined);});
 
 test('地图已登记跨国路线核验解锁、起点；点选一次按路线天数抵达，重放不重扣',async()=>{const {CONTENT_PACKS}=await loadTs('../src/modules/contentPacks/index.ts');const routes=CONTENT_PACKS.mapRoutes;routes.push({id:'test.map.jin_song',fromId:'liuchao.location.jiankang',toId:'liuchao.location.lin_an',dayCost:1.5,unlockWhen:['test.open']});try{const s=base(),rt=s.世界.状态.剧本模组;assert.equal(P.selectMapTravel(s,'liuchao.location.lin_an'),undefined);rt.completedEventIds=['test.open'];const choice=P.selectMapTravel(s,'liuchao.location.lin_an');assert.ok(choice);const before=C.gameTimeMinutes(s.元数据.时间);const stale={...choice,fromId:'liuchao.location.changan'};assert.equal(P.settleMapTravel(s,stale),false);assert.equal(C.gameTimeMinutes(s.元数据.时间),before);assert.equal(P.settleMapTravel(s,choice),true);assert.equal(C.gameTimeMinutes(s.元数据.时间)-before,1.5*1440);assert.equal(s.角色.位置.locationId,'liuchao.location.lin_an');assert.equal(P.settleMapTravel(s,choice),true);assert.equal(C.gameTimeMinutes(s.元数据.时间)-before,1.5*1440);assert.equal(P.settleMapTravel(s,{...choice,toId:'liuchao.location.changan'}),false);}finally{routes.pop();}});
-test('国别调整仅改country及获批光明观合并：保护字段与其他原字段保持',async()=>{const {readFileSync}=await import('node:fs');const {execFileSync}=await import('node:child_process');const rel='mod-kit/entity-catalog/locations.json';const old=JSON.parse(execFileSync('git',['show','HEAD:'+rel],{encoding:'utf8',maxBuffer:1<<26}));const now=JSON.parse(readFileSync(new URL('../'+rel,import.meta.url),'utf8'));// 本批用户批准将光明观堂合并光明观，除此之外仍逐值保护原字段。
+test('国别调整与获批江州晴州地图修正：其余原字段保持',async()=>{const {readFileSync}=await import('node:fs');const {execFileSync}=await import('node:child_process');const rel='mod-kit/entity-catalog/locations.json';const old=JSON.parse(execFileSync('git',['show','HEAD:'+rel],{encoding:'utf8',maxBuffer:1<<26}));const now=JSON.parse(readFileSync(new URL('../'+rel,import.meta.url),'utf8'));// 本批用户批准将光明观堂合并光明观，除此之外仍逐值保护原字段。
 const merged=old.entries.find(e=>e.id==='liuchao.location.guang_ming_guan');
 const retired=old.entries.find(e=>e.id==='liuchao.location.guangming');
 if(retired){
@@ -50,6 +50,13 @@ if(retired){
  for(const [stage,d] of Object.entries(retired.stageVariants))if(!merged.stageVariants[stage])merged.stageVariants[stage]={...d,id:merged.id};
  merged.migratedFrom.push(...retired.migratedFrom);
  old.entries=old.entries.filter(e=>e!==retired);
+}
+for(const entry of old.entries) {
+ if(!['liuchao.location.jiangzhou','liuchao.location.qingzhou'].includes(entry.id))continue;
+ for(const d of [entry.definition,...Object.values(entry.stageVariants||{})]) {
+  if(entry.id==='liuchao.location.jiangzhou'){if(d.region)d.region='晋国';if(d.description)d.description=d.description.replaceAll('宋国边境重要城市','晋国边境重要城市');}
+  else if(d.region)d.region='宋国';
+ }
 }
 const strip=x=>{if(Array.isArray(x))return x.map(strip);if(x&&typeof x==='object')return Object.fromEntries(Object.entries(x).filter(([k])=>k!=='country').map(([k,v])=>[k,strip(v)]));return x;};assert.deepEqual(strip({...now,entries:now.entries.filter(e=>old.entries.some(o=>o.id===e.id))}),strip(old));for(const e of now.entries)if(e.definition.country)assert.equal(typeof e.definition.country,'string');});
 test('跨年旧效果保留elapsed与剩余分钟，过期效果不变永久',async()=>{const status=await loadTs('../src/utils/statusEffectManager.ts');const s=base();s.元数据.时间={年:221,月:1,日:1,小时:0,分钟:0};const started={年:220,月:12,日:30,小时:0,分钟:0};s.角色.效果=[{生成时间:started,持续时间分钟:10080},{生成时间:{...started},持续时间分钟:60}];M.migrateCalendar(s);assert.equal(status.calculateRemainingMinutes(s.角色.效果[0],s.元数据.时间),1440);assert.equal(status.calculateRemainingMinutes(s.角色.效果[1],s.元数据.时间),0);});

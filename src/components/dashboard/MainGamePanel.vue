@@ -137,6 +137,7 @@
           <div class="narrative-text">
             <img v-if="currentNarrative.image" :src="resolveEndingImage(currentNarrative.image)" alt="剧情插图" style="display:block;max-width:100%;height:auto;margin:0 auto 1rem;" />
             <FormattedText :text="currentNarrative.content" />
+            <p v-if="crossCountryNotice" role="status">{{ crossCountryNotice }}</p>
           </div>
 
           <div v-if="engineButtonOptions.length" class="action-options engine-action-options">
@@ -510,6 +511,8 @@
 </template>
 
 <script setup lang="ts">
+import { mapPreparationNotice } from '@/modules/scenarioMods/travel/mapTravel';
+import { randomUUID } from '@/utils/uuid';
 import { mapPreparation } from '@/modules/scenarioMods/travel/mapTravel';
 import { actionTimeConfig } from '@/modules/scenarioMods/actionTime';
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
@@ -650,6 +653,10 @@ const currentNarrativeStateChanges = computed(() => {
 
 
 // 🔥 使用 uiStore 持久化输入框内容
+const crossCountryNotice = computed(() => {
+  const save = gameStateStore.toSaveData();
+  return save ? mapPreparationNotice(save, uiStore.lastSentUserIntentText || '') : undefined;
+});
 const selectedCultivationTime = ref<{ text: string; selection: import('@/modules/scenarioMods/actionTime').CultivationSelection } | null>(null);
 const inputText = computed({
   get: () => uiStore.userInputText,
@@ -1630,7 +1637,7 @@ const confirmAction = () => {
   // 填充到输入框
   inputText.value = actionText;
   if (selectedAction.value.timeRequired && selectedAction.value.type === 'cultivation') {
-    selectedCultivationTime.value = { text: actionText, selection: { kind: 'cultivation', days: customTime.value > 0 ? customTime.value : selectedTime.value, actionId: crypto.randomUUID() } };
+    selectedCultivationTime.value = { text: actionText, selection: { kind: 'cultivation', days: customTime.value > 0 ? customTime.value : selectedTime.value, actionId: randomUUID() } };
   }
 
   // 清理状态

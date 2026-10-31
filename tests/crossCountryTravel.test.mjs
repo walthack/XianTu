@@ -78,8 +78,8 @@ test('江州出发来回对称：江州→临安32日且等于临安→江州；
   assert.equal(P.settleMapTravel(s,choice),true);
   assert.equal(gameTimeMinutes(s.元数据.时间)-before,32*1440);
   assert.equal(P.mapRoutes(saveAt(config.capitals.晋),lin)[0].dayCost,52);
-  assert.deepEqual(P.mapRoutes(saveAt(config.capitals.晋),jz),[]);
-  assert.deepEqual(P.mapRoutes(saveAt(jz),config.capitals.晋),[]);
+  assert.match(P.mapRoutes(saveAt(config.capitals.晋),jz)[0].id,/^domestic:/);
+  assert.match(P.mapRoutes(saveAt(jz),config.capitals.晋)[0].id,/^domestic:/);
 });
 test('江州↔每个国别落点天数相等（含五原中立边陲、秦截断60），且等于江州表值', () => {
   const jz='liuchao.location.jiangzhou', table=config.destinationRawDays[jz];

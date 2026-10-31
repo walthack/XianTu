@@ -522,3 +522,13 @@
 - 用户已定：江州为晋第二跨国落点（天数按江州坐标单独配置，临安→江州32日）；五原保留为可点跨国落点（用户 01:18 更正）；核验剧情罗盘跨国转场。
 - 交付：`crossCountryTravel.destinations`／`destinationRawDays` 入配置（[续轮二说明](docs/handoffs/2026-10-31/LOCATION-MAP-UPDATE.md)），mapTravel 限制/天数/地图标记改读配置。剧情 travel: 转场未被卡（本地落位，不经 canonGuard），模型跨国位置指令仍拒。
 - 证据：新测 jiangzhouScriptedTravel 3项、crossCountryTravel 增至65项；npm test 3028项 3015 pass / 0 fail / 13 skip；type-check 退出0。冻结三文件差分为空，无新增源文件/require/诊断码；未commit/push。浏览器/真人未测。
+
+### REPORT69-20261031 · 试玩缺陷修复开工（Codex）
+- 用户授权仅工作区修改，不 commit/push；实际 HEAD 6e9d4c54，源码基线 69ab6bdd。保留既有未跟踪临时目录。
+- 范围：报告 P0 与 1–8；冻结 runtime/AIBS/frozen-baseline，提示词不改。进行中，离线测试待跑；真实模型与浏览器未测。控制面不变，本轮为缺陷修复而非新策划。
+
+### REPORT69-20261031 · 工作区交付（未提交）
+- 交付：[逐项根因/改法/测试名/61个文件清单](docs/handoffs/2026-10-31/REPORT69-FIXES.md)。P0读档失败无删除/覆盖；UUID三档兜底；江州/晴州地图字段及国别投影；本国代表点路程；地图预览确认；跨国系统提示；修炼百分比格式已修。
+- 范围保留：第2项混合正文/JSON判空根因复现位于冻结AIBS，FROZEN-NEEDED；第4项秦门槛按用户条件与既有测试保留；第8项仅报告罗盘/合同条件及同国回写复现，无原存档不猜状态、不扩大移动权限规则。
+- 证据层级：离线自动化；最终 npm test 3052项，3039 pass / 0 fail / 13 skip，新增专项23项；type-check退出0；内容包编译及check、4个Vue SFC编译、diff check、冻结字节比对通过。
+- 成熟度：可修项离线交付，受限项明确保留；未测浏览器/局域网真机、真实模型和Mac存档重放。下一步建议由既有控制面验证修复并单独裁定第2项解析器解冻；第8项取得状态证据后再定修法。未读凭据/API配置，未commit/push/部署/NAS同步；冻结三文件未动，控制面不变。

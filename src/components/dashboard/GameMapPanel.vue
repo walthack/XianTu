@@ -167,7 +167,10 @@
         <div v-if="selectedLocation.controlled_by" class="location-detail">
           <strong>控制势力：</strong>{{ selectedLocation.controlled_by }}
         </div>
-        <button class="enter-region-btn" :disabled="!!selectedTravelRestriction || mapTravelBusy || mapTravelUi.isAIProcessing" @click="travelToSelectedLocation">前往此地</button>
+        <p v-if="selectedTravelPreview">{{ selectedTravelPreview.label }}</p>
+        <p v-if="travelConfirmation">确认前往此地？</p>
+        <button v-if="travelConfirmation" class="enter-region-btn" @click="travelConfirmation = null">取消</button>
+        <button class="enter-region-btn" :disabled="!!selectedTravelRestriction || mapTravelBusy || mapTravelUi.isAIProcessing" @click="travelToSelectedLocation">{{ travelConfirmation ? '确认前往' : '前往此地' }}</button>
         <!-- 进入区域地图 -->
         <button
           class="enter-region-btn"
@@ -392,7 +395,7 @@ import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Us
 import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
 import { useUIStore } from '@/stores/uiStore';
-import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers } from '@/modules/scenarioMods/travel/mapTravel';
+import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, mapTravelPreview, mapTravelConfirmed } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
 import { EnhancedWorldGenerator, generateRealmMap } from '@/utils/worldGeneration/enhancedWorldGenerator';
@@ -410,11 +413,16 @@ const gameStateStore = useGameStateStore();
 const mapTravelNotice = ref('');
 const mapTravelUi = useUIStore();
 const mapTravelBusy = ref(false);
+const travelConfirmation = ref<string | null>(null);
 const travelToSelectedLocation = async () => {
   if (mapTravelBusy.value || mapTravelUi.isAIProcessing) return;
   const source = gameStateStore.toSaveData();
   if (!source || !selectedLocation.value) return;
   const save = structuredClone(source);
+  const preview = mapTravelPreview(save, String(selectedLocation.value.id || ''));
+  if (!preview) { mapTravelNotice.value = '此处暂无已开放且登记路程的路线，不能前往。'; return; }
+  if (!mapTravelConfirmed(preview, travelConfirmation.value)) { travelConfirmation.value = preview.key; return; }
+  travelConfirmation.value = null;
   const selection = selectMapTravel(save, String(selectedLocation.value.id || ''));
   if (!selection || !settleMapTravel(save, selection)) { mapTravelNotice.value = '此处暂无已开放且登记路程的路线，不能前往。'; return; }
   mapTravelBusy.value = true;
@@ -430,6 +438,11 @@ const selectedTravelRestriction = computed(() => {
   const save = gameStateStore.toSaveData();
   return save && selectedLocation.value ? mapTravelRestriction(save, String(selectedLocation.value.id || '')) : undefined;
 });
+const selectedTravelPreview = computed(() => {
+  const save = gameStateStore.toSaveData();
+  return save && selectedLocation.value ? mapTravelPreview(save, String(selectedLocation.value.id || '')) : undefined;
+});
+watch(selectedLocation, () => { travelConfirmation.value = null; mapTravelNotice.value = ''; });
 const selectedContinent = ref<any | null>(null);
 const mapStatus = ref('初始化中...');
 const popupPosition = ref({ x: 0, y: 0 });

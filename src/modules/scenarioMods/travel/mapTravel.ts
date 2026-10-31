@@ -1,3 +1,4 @@
+import { randomUUID } from '@/utils/uuid';
 import runtimeNumbers from '../../../../mod-kit/numbers-runtime.json';
 import { mapEntryReady } from '../mapEntries';
 import { transitionToMapEntryStage } from '../strictInitializer';
@@ -62,7 +63,15 @@ export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
   const authored = (CONTENT_PACKS.mapRoutes || []).filter(r => canonicalLocationId(r.fromId) === fromId && canonicalLocationId(r.toId) === targetId);
   if (authored.length) return authored.filter(r => (r.unlockWhen || []).every(id => done.includes(id)));
   const from = countryOf(fromId)!, to = countryOf(targetId)!;
-  if (from === to) return [];
+  if (from === to) {
+    const rule = crossCountryTravel.domesticRepresentative;
+    if (!rule.enabled || fromId === targetId || !destinations[to]?.includes(targetId)) return [];
+    const start = locations.entries.find(e => canonicalLocationId(e.id) === fromId)?.definition.coordinates;
+    const end = locations.entries.find(e => canonicalLocationId(e.id) === targetId)?.definition.coordinates;
+    if (!start || !end) return [];
+    const days = Math.max(rule.minDays, Math.ceil(Math.hypot(end.x - start.x, end.y - start.y) * rule.coordinateLi / crossCountryTravel.liPerDay));
+    return [{ id: `domestic:${fromId}:${targetId}`, fromId, toId: targetId, dayCost: days }];
+  }
   // 带表落点来回对称：出发点表取目标国、目标点表取出发国；两端都带表时取较大值以保持对称；都没有才用国别矩阵。
   const pointRaw = [destinationRawDays[fromId]?.[to], destinationRawDays[targetId]?.[from]].filter((d): d is number => d !== undefined);
   const raw = pointRaw.length ? Math.max(...pointRaw) : rawDays[from]?.[to] ?? rawDays[to]?.[from];
@@ -71,9 +80,9 @@ export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
 export function selectMapTravel(save: SaveData, toId: string): MapTravelSelection | undefined {
   if (mapTravelRestriction(save, toId)) return undefined;
   const entry = CONTENT_PACKS.mapEntries?.find(e => e.locationId === canonicalLocationId(toId));
-  if (entry) return mapEntryReady(save, entry) ? { source: 'map', actionId: crypto.randomUUID(), fromId: currentLocation(save).canonicalLocationId || '', toId: entry.locationId, routeId: entry.id } : undefined;
+  if (entry) return mapEntryReady(save, entry) ? { source: 'map', actionId: randomUUID(), fromId: currentLocation(save).canonicalLocationId || '', toId: entry.locationId, routeId: entry.id } : undefined;
   const route = mapRoutes(save, toId)[0], fromId = currentLocation(save).canonicalLocationId;
-  return route && fromId ? { source: 'map', actionId: crypto.randomUUID(), fromId, toId: canonicalLocationId(toId), routeId: route.id } : undefined;
+  return route && fromId ? { source: 'map', actionId: randomUUID(), fromId, toId: canonicalLocationId(toId), routeId: route.id } : undefined;
 }
 /** 调用入口仅地图按钮；模型与自然语言不进入此函数。提交者先克隆存档，落账后原子持久化。 */
 export function settleMapTravel(save: SaveData, selection: MapTravelSelection): boolean {
@@ -119,4 +128,23 @@ export function mapArrivalViolation(save: SaveData, text: string): boolean {
   if (!from) return false; // 无法判定国别时不猜正文国家，位置写入仍fail-closed。
   const countries = [...new Set(locations.entries.map(e => (e.definition as any).country).filter(Boolean))] as string[];
   return countries.some(country => country !== from && new RegExp(`你(?:已经|终于|顺利)?(?:抵达|到达|进入|来到)${country}国`).test(text));
+}
+
+/** 无副作用的出发预览；确认时必须重新核对，避免弹窗打开后路线或存档改变。 */
+export function mapTravelPreview(save: SaveData, toId: string): { key: string; label: string; days: number | null } | undefined {
+  if (mapTravelRestriction(save, toId)) return undefined;
+  const fromId = currentLocation(save).canonicalLocationId;
+  if (!fromId) return undefined;
+  const entry = CONTENT_PACKS.mapEntries?.find(e => e.locationId === canonicalLocationId(toId));
+  if (entry) return mapEntryReady(save, entry) ? { key: `${fromId}:${entry.id}`, label: '剧情入口转场（不另计路程天数）', days: null } : undefined;
+  const route = mapRoutes(save, toId)[0];
+  if (!route) return undefined;
+  const days = route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost;
+  return { key: `${fromId}:${route.toId}:${route.id}:${days}`, label: `约${days}日路程`, days };
+}
+export function mapTravelConfirmed(preview: ReturnType<typeof mapTravelPreview>, confirmationKey: string | null): boolean {
+  return !!preview && preview.key === confirmationKey;
+}
+export function mapPreparationNotice(save: SaveData, text: string): string | undefined {
+  return mapPreparation(save, text) ? '跨国出行请打开世界地图选择目的地' : undefined;
 }

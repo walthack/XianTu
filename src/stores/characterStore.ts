@@ -902,7 +902,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
    */
   /**
    * 读档后「上次对话」若不属于本次激活的存档（来源章缺失/不同，或读入的槽位被挂到工作槽/复测槽），
-   * 清掉元数据、IndexedDB 备份和内存快照，防止「回到上一轮」跨档回滚（fix5939-1）。
+   * 仅清掉元数据和内存快照，保留磁盘备份，防止「回到上一轮」跨档回滚（fix5939-1）。
    * 只改内存元数据，落盘交给调用方随后的 commitMetadataToStorage。
    */
   const resetLastConversationIfForeign = async (profile: CharacterProfile, charId: string, slotKey: string, activeSlotKey: string) => {
@@ -910,11 +910,6 @@ export const useCharacterStore = defineStore('characterV3', () => {
     const lastSlot = profile.存档列表[LAST_CONVERSATION_SLOT];
     if (shouldKeepLastConversationOnLoad(lastSlot, slotKey, activeSlotKey)) return;
     profile.存档列表[LAST_CONVERSATION_SLOT] = clearedLastConversationSlot(lastSlot);
-    try {
-      await storage.deleteSaveData(charId, LAST_CONVERSATION_SLOT, { localOnly: Boolean(profile.隔离试玩信息?.localOnly) });
-    } catch (error) {
-      logError('LCQ-SAV-031', error, { detail: { reason: 'clear_failed', charId, slotKey, activeSlotKey } });
-    }
     clearSnapshots(charId, activeSlotKey);
     if (slotKey !== activeSlotKey) clearSnapshots(charId, slotKey);
   };
@@ -923,7 +918,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
       debug.log('角色商店', `开始加载游戏，角色ID: ${charId}, 存档槽: ${slotKey}`);
       const uiStore = useUIStore();
 
-      const profile = rootState.value.角色列表[charId];
+      const storedProfile = rootState.value.角色列表[charId];
+      const profile = storedProfile ? cloneDeep(storedProfile) : undefined;
       if (!profile) {
         debug.error('角色商店', '找不到要加载的角色', charId);
         toast.error('找不到要加载的角色！');
@@ -973,8 +969,6 @@ export const useCharacterStore = defineStore('characterV3', () => {
                 (targetSlot as any).世界地图 = cloudSave.world_map;
               }
 
-              await storage.saveSaveData(charId, slotKey, targetSlot.存档数据);
-
               const currentOnlineSlot = getOnlineSaveSlot(profile);
               if (currentOnlineSlot) {
                 currentOnlineSlot.云端同步信息 = {
@@ -983,10 +977,10 @@ export const useCharacterStore = defineStore('characterV3', () => {
                   需要同步: false,
                   后端创建失败: false,
                 };
-                await commitMetadataToStorage();
+
               }
 
-              debug.log('角色商店', '联机存档已从云端拉取并缓存到本地');
+              debug.log('角色商店', '联机存档已从云端拉取，等待读档校验');
             }
           } catch (error) {
             debug.warn('角色商店', '联机存档云端拉取失败，回退本地缓存', error);
@@ -1019,10 +1013,14 @@ export const useCharacterStore = defineStore('characterV3', () => {
         }
       }
 
+      try { assertEntitySaveFormat(targetSlot.存档数据); }
+      catch (error) { // lcq-allow: 格式拒绝只向玩家提示，不改写或删除任何存档。
+        toast.error(error instanceof Error ? error.message : '存档格式不符'); return false; }
+
       // 版本守卫：存档版本高于当前游戏则拒绝加载（不迁移、不写回），须先于旧结构检测
       if (rejectFutureSaveVersion(charId, slotKey, targetSlot.存档数据)) return false;
 
-      // V3 迁移：检测到旧结构必须先迁移（写回同槽位），否则不允许加载
+      // V3 兼容：仅在内存迁移，通过全部读档检查后由后续主动保存落盘
       if (targetSlot.存档数据) {
         const detection = detectLegacySaveData(targetSlot.存档数据);
         if (detection.needsMigration) {
@@ -1037,11 +1035,6 @@ export const useCharacterStore = defineStore('characterV3', () => {
                 onConfirm: async () => {
                   try {
                     const original = targetSlot!.存档数据 as SaveData;
-                    const backupSlot = `__backup__${slotKey}__${new Date().toISOString().replace(/[:.]/g, '-')}`;
-                    await storage.saveSaveData(charId, backupSlot, original, {
-                      localOnly: profile.隔离试玩信息?.localOnly === true,
-                    });
-
                     const { migrated, report } = migrateSaveDataToLatest(original);
                     const validation = validateSaveDataV3(migrated as any);
                     if (!validation.isValid) {
@@ -1054,12 +1047,9 @@ export const useCharacterStore = defineStore('characterV3', () => {
                     if (validation.warnings.length > 0) {
                       console.warn('[存档迁移] 迁移告警:', validation.warnings);
                     }
-
-                    await storage.saveSaveData(charId, slotKey, migrated as any, {
-                      localOnly: profile.隔离试玩信息?.localOnly === true,
-                    });
+                    assertEntitySaveFormat(migrated);
                     targetSlot!.存档数据 = migrated as any;
-                    debug.log('角色商店', `[存档迁移] ✅ 已写回 V3：${charId}/${slotKey}`);
+                    debug.log('角色商店', `[存档迁移] ✅ 已在内存准备 V3：${charId}/${slotKey}`);
                     resolve(true);
                   } catch (e) {
                     console.error('[存档迁移] ❌ 迁移过程异常:', e);
@@ -1118,7 +1108,6 @@ export const useCharacterStore = defineStore('characterV3', () => {
           };
           applyLoadedSaveToWorkingSlotMeta(workingSlot, workingData, new Date().toISOString());
           profile.存档列表[workingKey] = workingSlot;
-          await storage.saveSaveData(charId, workingKey, workingData, { localOnly: true });
           delete targetSlot.存档数据;
           workingSlot.存档数据 = workingData;
           targetSlot = workingSlot;
@@ -1133,18 +1122,12 @@ export const useCharacterStore = defineStore('characterV3', () => {
           const data = checkpointCopy;
           const slot = { ...targetSlot, 存档名: key, 存档数据: data };
           profile.存档列表 ||= {};
-          await storage.saveSaveData(charId, key, data, { localOnly: Boolean(profile.隔离试玩信息?.localOnly) });
           profile.存档列表[key] = slot;
           targetSlot = slot;
           activeSlotKey = key;
         }
 
-        // 2. 设置激活存档
-        debug.log('角色商店', '设置当前激活存档');
-      rootState.value.当前激活存档 = { 角色ID: charId, 存档槽位: activeSlotKey };
-      await resetLastConversationIfForeign(profile, charId, slotKey, activeSlotKey);
-      await commitMetadataToStorage(); // 立即保存激活状态
-
+      // 完成内存载入后才激活与持久化元数据。
       // 3. 将加载的存档数据同步到 gameStateStore
       debug.log('角色商店', '将存档数据加载到 gameStateStore');
       const gameStateStore = useGameStateStore();
@@ -1153,6 +1136,12 @@ export const useCharacterStore = defineStore('characterV3', () => {
         targetSlot.存档数据 = patched;
         reseedActiveSceneAfterLoad(patched);
         gameStateStore.loadFromSaveData(patched);
+        // 新建的隔离工作槽在成功载入后持久化；失败读档不会碰任何存档文件。
+        if (activeSlotKey !== slotKey) await storage.saveSaveData(charId, activeSlotKey, patched, { localOnly: Boolean(reattachKey || profile.隔离试玩信息?.localOnly) });
+        rootState.value.角色列表[charId] = profile;
+        rootState.value.当前激活存档 = { 角色ID: charId, 存档槽位: activeSlotKey };
+        await resetLastConversationIfForeign(profile, charId, slotKey, activeSlotKey);
+        await commitMetadataToStorage();
         debug.log('角色商店', '✅ 存档数据已加载到 gameStateStore');
 
         try {
@@ -2305,7 +2294,14 @@ export const useCharacterStore = defineStore('characterV3', () => {
       throw new Error(`找不到当前激活的存档槽位: ${active.存档槽位}`);
     }
 
-    const rolledBackData = JSON.parse(JSON.stringify(lastConversationData));
+    assertEntitySaveFormat(lastConversationData);
+    if (rejectFutureSaveVersion(active.角色ID, '上次对话', lastConversationData)) throw new Error('回滚存档版本不符');
+    const outcome = await validateLoadedSave(active.角色ID, '上次对话', lastConversationData, { keep: 0 });
+    if (outcome.status === 'rejected') throw new Error('回滚存档结构损坏');
+    const rolledBackData = JSON.parse(JSON.stringify(outcome.data));
+    const gameStateStore = useGameStateStore();
+    reseedActiveSceneAfterLoad(rolledBackData);
+    await gameStateStore.loadFromSaveData(rolledBackData);
     activeSlot.存档数据 = rolledBackData;
     activeSlot.保存时间 = new Date().toISOString();
 
@@ -2333,11 +2329,6 @@ export const useCharacterStore = defineStore('characterV3', () => {
       localOnly: profile.隔离试玩信息?.localOnly === true,
     });
     await commitMetadataToStorage();
-
-    // 🔥 修复：同步到gameStateStore，确保UI立即更新
-    const gameStateStore = useGameStateStore();
-    reseedActiveSceneAfterLoad(rolledBackData);
-    await gameStateStore.loadFromSaveData(rolledBackData);
 
     // 🔥 强制触发UI更新
     const uiStore = useUIStore();

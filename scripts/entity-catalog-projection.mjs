@@ -18,8 +18,19 @@ export function projectLocationCountries(mod){
   if(typeof country!=='string'||!country)continue;
   for(const id of [e.id,...(e.aliases||[])])if(!byId.has(id))byId.set(id,country);
  }
+ const fieldAuth=new Map();
+ for(const e of locationCatalog.entries||[]){
+  const fields=e.authoritativeFields;
+  if(!Array.isArray(fields)||!fields.length)continue;
+  const src={...(e.definition||{}),...(e.stageVariants?.[stageId]||{})};
+  for(const id of [e.id,...(e.aliases||[])])if(!fieldAuth.has(id))fieldAuth.set(id,{fields,src});
+ }
  for(const loc of list){
-  if(!loc||typeof loc!=='object'||Object.prototype.hasOwnProperty.call(loc,'country'))continue;
+  if(!loc||typeof loc!=='object')continue;
+  // Catalog-authoritative prose fields (e.g. 江州归晋后的 region/description) override stale generated copies.
+  const auth=fieldAuth.get(loc.id);
+  if(auth)for(const f of auth.fields)if(typeof auth.src[f]==='string'&&auth.src[f])loc[f]=auth.src[f];
+  if(Object.prototype.hasOwnProperty.call(loc,'country'))continue;
   const country=byId.get(loc.id);
   if(country)loc.country=country;
  }

@@ -1,3 +1,4 @@
+import { assertEntitySaveFormat } from '@/modules/scenarioMods/entitySaveFormat';
 /**
  * 读档入口（带滚动备份回退）：主槽读出损坏/抛错就依次试 `__rot__<槽>_1..N`，用第一个可用的。
  * 回退成功记 LCQ-SAV-012 并提示玩家（同一会话同一槽只提示一次）；全部不可用记 LCQ-SAV-013（日志管线按码表弹提示）。
@@ -77,6 +78,7 @@ export function checkLoadedSave(saveData: SaveData): { fatal: string[]; minor: s
 function prepareBackupCandidate(raw: unknown): SaveData | null {
   if (!isUsableSave(raw) || !checkSaveSchemaVersion(raw as SaveData).supported) return null;
   try {
+    assertEntitySaveFormat(raw);
     const candidate = detectLegacySaveData(raw as SaveData).needsMigration ? (migrateSaveDataToLatest(raw as SaveData).migrated as SaveData) : (raw as SaveData);
     return checkLoadedSave(candidate).fatal.length === 0 ? candidate : null;
   } catch {
@@ -101,6 +103,10 @@ export async function validateLoadedSave(
   saveData: SaveData,
   options: { keep?: number; readBackup?: (index: number) => Promise<unknown> } = {},
 ): Promise<LoadValidationOutcome> {
+  try { assertEntitySaveFormat(saveData); }
+  catch (error) { // lcq-allow: 格式拒绝只向玩家提示，不改写或删除任何存档。
+        toast.error(error instanceof Error ? error.message : '存档格式不符'); return { status: 'rejected' }; }
+  if (rejectFutureSaveVersion(characterId, slotId, saveData)) return { status: 'rejected' };
   const first = checkLoadedSave(saveData);
   let data = saveData, minor = first.minor, backupIndex = 0;
   if (first.fatal.length > 0) {

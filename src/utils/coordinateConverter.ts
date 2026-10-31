@@ -1,3 +1,4 @@
+import { namedEntity } from '@/modules/scenarioMods/namedEntities';
 import type { GameCoordinates } from '@/types/gameMap';
 import type { WorldLocation } from '@/types/location';
 
@@ -95,6 +96,7 @@ export function normalizeLocationsData(locations: any[], mapSize?: Partial<MapSi
     // 标准化字段名称，确保使用英文字段名
     return {
       ...loc,
+      country: namedEntity('location', loc.id)?.country || loc.country,
       id: loc.id || `loc_${index}_${Date.now()}`,
       name: loc.name || loc.名称 || `未命名地点${index}`,
       type: rawType,

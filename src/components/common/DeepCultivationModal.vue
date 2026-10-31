@@ -38,7 +38,7 @@
             <ul class="effects-list">
               <li v-if="technique.功法效果.修炼速度加成">
                 <span class="effect-icon">🚀</span>
-                {{ $t('修炼速度: +{0}%').replace('{0}', ((technique.功法效果.修炼速度加成 - 1) * 100).toFixed(0)) }}
+                {{ $t('修炼速度: {0}').replace('{0}', formatCultivationSpeedBonus(technique.功法效果.修炼速度加成)) }}
               </li>
               <li v-if="technique.功法效果.属性加成">
                 <span class="effect-icon">💪</span>
@@ -99,6 +99,7 @@
 </template>
 
 <script setup lang="ts">
+import { formatCultivationSpeedBonus } from '@/utils/cultivationSpeedCalculator';
 import { actionTimeConfig } from '@/modules/scenarioMods/actionTime';
 import { ref, computed, watch } from 'vue';
 import { X } from 'lucide-vue-next';

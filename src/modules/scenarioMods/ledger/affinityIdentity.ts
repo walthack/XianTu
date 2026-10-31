@@ -1,3 +1,4 @@
+import { randomUUID } from '@/utils/uuid';
 import registry from '../builtins/character-registry.json';
 import overrides from '../../../../mod-kit/entity-ledger/overrides.json';
 
@@ -44,7 +45,7 @@ export function resolveRelationshipId(save: Save, reference: string, characters:
   return uniqueId(reference, characters);
 }
 export function newLocalCharacterId(): string {
-  return 'npc.local.' + (globalThis.crypto.randomUUID?.() || Array.from(globalThis.crypto.getRandomValues(new Uint32Array(4)), n=>n.toString(16).padStart(8,'0')).join(''));
+  return 'npc.local.' + randomUUID();
 }
 /** Stored and enumerated records use ids only. Unique old-name accessors are transient compatibility, never serialized. */
 export function backfillRelationshipIds(save: Save, characters: Character[] = [], log = console.warn): void {

@@ -243,6 +243,7 @@
 </template>
 
 <script setup lang="ts">
+import { randomUUID } from '@/utils/uuid';
 import { computed, ref, watch } from 'vue';
 import { techniqueNumbersOf, techniqueTierLabel, techniqueTierShort, countTechniquesByTier, TECHNIQUE_BREAKTHROUGH_CAP } from '@/data/techniqueQuality';
 import { ITEM_TIER_TABLE } from '@/data/itemQuality';
@@ -481,7 +482,7 @@ const handleCultivationConfirm = async (totalDays: number) => {
     const { useActionQueueStore } = await import('@/stores/actionQueueStore');
     useActionQueueStore().addAction({
       type: 'cultivate',
-      cultivation: { kind: 'cultivation', days: totalDays, actionId: crypto.randomUUID() },
+      cultivation: { kind: 'cultivation', days: totalDays, actionId: randomUUID() },
       itemName: cultivationSkills.value.名称,
       itemType: t('功法'),
       description: `对《${cultivationSkills.value.名称}》进行${totalDays}天的深度修炼`,
