@@ -4,6 +4,7 @@ import type { ScenarioDivergence } from './divergenceLedger';
 import { locationWithin } from './travel/locationIds';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { evaluateLedgerCondition } from './ledgerConditions';
+import { computePresentNames } from './presence';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
@@ -251,7 +252,7 @@ function questCompassLocationId(event: ScenarioModEvent, runtime: QuestCompassRu
   return hit?.id || event.locationId;
 }
 
-function questCompassTargets(event: ScenarioModEvent, runtime: QuestCompassRuntime): { locName: string; who: string[] } {
+function questCompassTargets(event: ScenarioModEvent, runtime: QuestCompassRuntime, present?: ReadonlySet<string>): { locName: string; who: string[] } {
   const locationId = questCompassLocationId(event, runtime);
   const locName = String((runtime?.canon?.locations || []).find(item => item.id === locationId)?.name || '').trim();
   const playerId = String(runtime?.opening?.playerCharacterId
@@ -259,21 +260,48 @@ function questCompassTargets(event: ScenarioModEvent, runtime: QuestCompassRunti
       ? 'liuchao.character.cheng_zongyang' : ''));
   const playerName = String((runtime?.canon?.characters || []).find(item => item.id === playerId)?.name || '').trim();
   const who = [...new Set((event.relatedCharacterIds || [])
-    .filter(id => id && id !== playerId)
+    .filter(id => id && id !== playerId && !present?.has(id))
     .map(id => String((runtime?.canon?.characters || []).find(item => item.id === id)?.name || '').trim())
     .filter(name => name.length >= 2 && name !== playerName))]
     .slice(0, 2);
   return { locName, who };
 }
 
-/** 当前拍要去哪、见谁。已在目标地点时不再写「去某地」。 */
+/**
+ * 罗盘「见X」要剔除的人：已经相识（acquaintances encountered）且此刻就在玩家身边的人。
+ * 「身边」沿用在场判定 computePresentNames 的位置同建筑段与近期正文兜底（不含活跃事件／开场名单——那会把所有相关人都判成在场）。
+ * 真机 REPORT-8091-cd167d7a：段强一路同行，任务卡仍写「◆见段强」「◆去草原 · 见段强」。
+ */
+export function questCompassPresentIds(save: unknown, recentNarrative?: string): Set<string> {
+  const data = save as { 角色?: { 位置?: { 描述?: unknown } }; 社交?: { 关系?: Record<string, any> }; 世界?: { 状态?: { 剧本模组?: any } } } | null | undefined;
+  const relations = data?.社交?.关系 || {};
+  const acquaintances = data?.世界?.状态?.剧本模组?.acquaintances || {};
+  const met = new Set(Object.values(acquaintances as Record<string, any>)
+    .filter(item => item?.kind === 'encountered' && typeof item.characterId === 'string')
+    .map(item => item.characterId as string));
+  const present = computePresentNames({
+    playerLocation: String(data?.角色?.位置?.描述 || ''),
+    relations,
+    recentNarrative,
+  });
+  const ids = new Set<string>();
+  for (const [key, npc] of Object.entries(relations)) {
+    const id = String(npc?.角色ID || key);
+    const name = String(npc?.名字 || key);
+    if (met.has(id) && present.has(name)) ids.add(id);
+  }
+  return ids;
+}
+
+/** 当前拍要去哪、见谁。已在目标地点时不再写「去某地」；present 里的人（已同行）不再写「见某人」。 */
 export function questCompassPhrases(
   event: ScenarioModEvent | null | undefined,
   runtime: QuestCompassRuntime,
   atLocationId?: string,
+  present?: ReadonlySet<string>,
 ): string[] {
   if (!event) return [];
-  const { locName, who } = questCompassTargets(event, runtime);
+  const { locName, who } = questCompassTargets(event, runtime, present);
   const phrases: string[] = [];
   const locationId = questCompassLocationId(event, runtime);
   if (!storyRouteLocation(event.id) && locName && locationId && !locationWithin(atLocationId, locationId)) phrases.push(`去${locName}`);
@@ -286,10 +314,11 @@ export function formatQuestCompass(
   event: ScenarioModEvent | null | undefined,
   runtime: QuestCompassRuntime,
   atLocationId?: string,
+  present?: ReadonlySet<string>,
 ): string {
   const objective = resolveFixedQuestObjective(event);
   if (event?.id === 'lcq.event.s02_04') return objective;
-  const pointer = questCompassPhrases(event, runtime, atLocationId).join(' · ');
+  const pointer = questCompassPhrases(event, runtime, atLocationId, present).join(' · ');
   if (!pointer) return objective;
   if (!objective) return pointer;
   return `${pointer}：${objective}`;
@@ -322,4 +351,18 @@ export function ledgerRecordTurnLabel(runtime: any, record: { sourceEventId?: st
   const label = String(stage || '').match(/stage_(\d+b?)/)?.[1];
   const local = Number(turn) > 0 ? `第 ${Number(turn)} 回合` : !record.sourceEventId ? '开场已知' : '回合未记录';
   return `${label ? `第${label}关 · ` : ''}${local}`;
+}
+
+/** 停滞几轮后给玩家看推进提示（与叙事端「回主线轻引子」同阈值）。 */
+export const QUEST_STALL_HINT_TURNS = 4;
+/**
+ * 主线停滞时的玩家可见引导（真机 69ab：stage01 自由输入 19 回合不推进，玩家不知道要点「主线」按钮）。
+ * 只在当前拍确有可点的主线动作时出现；不改任何数据。
+ */
+export function questStallHint(stallTurns: unknown, mainActionLabel: string | undefined, objective?: string): string {
+  const turns = Number(stallTurns) || 0;
+  if (turns < QUEST_STALL_HINT_TURNS || !mainActionLabel) return '';
+  const goal = String(objective || '').trim();
+  const goalNote = goal && !mainActionLabel.includes(goal) ? `（${goal}）` : '';
+  return `主线已有 ${turns} 轮没有推进：可直接点行动区的「主线 · ${mainActionLabel}」，或照目标行动${goalNote}。`;
 }

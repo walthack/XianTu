@@ -245,6 +245,7 @@ import { useGameStateStore } from '@/stores/gameStateStore';
 import { useCharacterStore } from '@/stores/characterStore';
 import type { EventSystem, GameEvent, GameTime, CustomEventTemplate } from '@/types/game';
 import { toast } from '@/utils/toast';
+import { worldEventRecords } from '@/utils/worldEventRecords';
 
 const gameStateStore = useGameStateStore();
 const characterStore = useCharacterStore();
@@ -255,10 +256,8 @@ const editingEventIndex = ref<number | null>(null);
 
 const eventSystem = computed<EventSystem>(() => gameStateStore.eventSystem);
 
-const events = computed<GameEvent[]>(() => {
-  const list = (eventSystem.value?.事件记录 || []) as GameEvent[];
-  return [...list].slice().reverse();
-});
+// 与主界面铃铛角标同一读取口（worldEventRecords），角标数＝列表条数。
+const events = computed<GameEvent[]>(() => worldEventRecords(eventSystem.value));
 
 const nextEventText = computed(() => {
   const t = eventSystem.value?.下次事件时间 as GameTime | null | undefined;

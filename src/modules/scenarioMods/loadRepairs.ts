@@ -9,6 +9,7 @@ import { syncPlayerLedgers } from './identityLedger';
 import { backfillItemReceipts, noteChronicleGap } from './itemProvenance';
 import { logError } from '../diagnostics/log';
 import { debugLog } from '../diagnostics/debugLog';
+import stage01 from './builtins/data/lcq.stage_01.json';
 
 /** 读档一次性迁移的标记：系统.扩展.读档迁移.<迁移名> = 迁移版本号；标了就不再迁，玩家之后在设置里改回的值不会被冲掉。 */
 export const LOAD_MIGRATIONS_KEY = '读档迁移';
@@ -40,10 +41,45 @@ export function migrateTrainingCapNone(save: any): 'canon' | 'canon+1' | null {
   }
 }
 
+/** 读档补 intentMatch 的关卡（只放确有作者后补短语、旧档会卡住的关）：stage01 s01_01（真机 69ab B16「见段强」卡住，见 scripts/dev/apply-s01-01-intent-match.mjs）。 */
+const INTENT_MATCH_BACKFILL_STAGES: Record<string, { scenario: { events: any[] } }> = {
+  'lcq.stage_01': stage01 as unknown as { scenario: { events: any[] } },
+};
+const withoutIntentMatch = (contract: unknown): string => JSON.stringify(contract, (key, value) => key === 'intentMatch' ? undefined : value);
+
+/**
+ * 旧档把事件合同烘焙进 runtime，作者后来给动作补的自由输入短语不会进档（runtime 只为 V03 一拍同步，冻结文件不改）。
+ * 只补「存档动作完全没有 intentMatch、合同其余部分与内置逐字一致、该拍还没有任何尝试或准备」的情形：
+ * 不覆盖 Demo 覆写或已有短语；合同哈希随之变化时 runtime 会把这一拍的空动作状态重建，没有可丢的进度。返回补了几个动作。
+ */
+export function backfillMissingIntentMatch(rt: any): number {
+  const canonical = INTENT_MATCH_BACKFILL_STAGES[String(rt?.modId || '')];
+  if (!canonical || !Array.isArray(rt?.events)) return 0;
+  let filled = 0;
+  for (const source of canonical.scenario.events || []) {
+    const contract = source?.playerCompletionContract;
+    const saved = rt.events.find((event: any) => event?.id === source.id);
+    const savedContract = saved?.playerCompletionContract;
+    if (!contract || !savedContract || withoutIntentMatch(savedContract) !== withoutIntentMatch(contract)) continue;
+    const state = rt.eventActionStates?.[source.id];
+    if (state && ((state.attemptCount || 0) > 0 || state.preparations?.length || state.attempts?.length)) continue;
+    for (const action of savedContract.actions || []) {
+      const intent = (contract.actions || []).find((item: any) => item?.id === action?.id)?.intentMatch;
+      if (!intent || action.intentMatch !== undefined) continue;
+      action.intentMatch = structuredClone(intent);
+      filled++;
+    }
+  }
+  if (filled) debugLog('save', `读档补 intentMatch：${rt.modId} ${filled} 个动作`, { modId: rt.modId, filled });
+  return filled;
+}
+
 export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyStatuses: string[]; identitiesBackfilled: number; itemReceiptsBackfilled: number } {
   migrateTrainingCapNone(save);
   const rt = save?.世界?.状态?.剧本模组;
   if (!rt || typeof rt !== 'object') return { injuriesMigrated: false, storyStatuses: [], identitiesBackfilled: 0, itemReceiptsBackfilled: 0 };
+  // 旧档缺作者后补的自由输入短语（s01_01）：只补缺失，见 backfillMissingIntentMatch。
+  backfillMissingIntentMatch(rt);
   if (rt.sceneLedger) injuryStore(save);
   // 冰蛊等剧情来源状态：旧档停在 05/05b 时读档补挂（幂等）。
   const storyStatuses = syncStoryStatuses(save);

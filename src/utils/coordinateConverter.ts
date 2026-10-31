@@ -159,3 +159,22 @@ export function calculateDistance(p1: GameCoordinates, p2: GameCoordinates): num
 export function isCoordinateValid(coord: GameCoordinates, mapWidth: number = 10000, mapHeight: number = 10000): boolean {
   return coord.x >= 0 && coord.x <= mapWidth && coord.y >= 0 && coord.y <= mapHeight;
 }
+
+/**
+ * 真实底图上同坐标标记的显示错位（真机 REPORT-8091-cd167d7a：草原与五原城坐标相同，标记完全重叠，地图上点不到草原）。
+ * 真实底图不做螺旋防重叠（会把城市群推离印刷地名数百单位），只把「同一落点的第 2、3…个标记」摆到半径 radius 的小圆周上；
+ * 第 1 个留在原点。只改画的位置，地点坐标、路程天数都不动。radius 须大于点击半径（50）才能各自点中。
+ */
+export const CO_LOCATED_MARKER_RADIUS = 80;
+/** 屏幕坐标 y 向下：先右上、左上、右、左、正上，正下方（标签所在）放最后。 */
+const CO_LOCATED_ANGLES = [-45, -135, 0, 180, -90, 45, 135, 90];
+export function coLocatedMarkerOffset(index: number, radius: number = CO_LOCATED_MARKER_RADIUS): GameCoordinates {
+  if (!Number.isInteger(index) || index <= 0) return { x: 0, y: 0 };
+  const slot = (index - 1) % CO_LOCATED_ANGLES.length, ring = Math.floor((index - 1) / CO_LOCATED_ANGLES.length) + 1;
+  const angle = CO_LOCATED_ANGLES[slot] * Math.PI / 180;
+  return { x: Math.round(Math.cos(angle) * radius * ring), y: Math.round(Math.sin(angle) * radius * ring) };
+}
+/** 同落点分组键（取整坐标）。 */
+export function coLocatedMarkerKey(coordinates: GameCoordinates): string {
+  return `${Math.round(Number(coordinates.x) || 0)}:${Math.round(Number(coordinates.y) || 0)}`;
+}

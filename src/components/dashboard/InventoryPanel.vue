@@ -249,7 +249,7 @@
                 <div v-if="selectedItem.功法效果" class="details-attributes">
                   <h4>{{ t('功法效果:') }}</h4>
                   <div class="attribute-text">
-                    {{ typeof selectedItem.功法效果 === 'string' ? selectedItem.功法效果 : JSON.stringify(selectedItem.功法效果) }}
+                    {{ formatTechniqueEffects(selectedItem.功法效果) }}
                   </div>
                 </div>
 
@@ -546,6 +546,7 @@ import { EnhancedActionQueueManager } from '@/utils/enhancedActionQueue'
 import { isTavernEnv } from '@/utils/tavern'
 import type { Item, ConsumableItem } from '@/types/game'
 import { itemTierOf } from '@/data/itemQuality'
+import { formatTechniqueEffects } from '@/utils/cultivationSpeedCalculator'
 import { toast } from '@/utils/toast'
 import { debug } from '@/utils/debug'
 import QuantitySelectModal from '@/components/common/QuantitySelectModal.vue'

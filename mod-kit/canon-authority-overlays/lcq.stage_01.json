@@ -1162,6 +1162,30 @@
           "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
         }
       ]
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lcq.event.s01_01].playerCompletionContract.actions[id=advance_declared_objective]",
+      "afterKey": "timeCost",
+      "beforeKey": "outcomeText",
+      "entries": {
+        "intentMatch": {
+          "matchAny": [
+            "稳住自己",
+            "弄清身在何处",
+            "观察四周",
+            "找掩体",
+            "确认段强",
+            "护住段强",
+            "秦军阵线",
+            "盾阵"
+          ],
+          "rejectIf": [
+            "不管段强",
+            "丢下段强"
+          ]
+        }
+      }
     }
   ]
 }

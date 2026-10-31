@@ -32,6 +32,7 @@ import { detectLegacySaveData, isSaveDataV3, migrateSaveDataToLatest, extractSav
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { executeValidatedRepairCommands } from '@/utils/repairCommandPipeline';
 import { useGameStateStore } from '@/stores/gameStateStore';
+import { useActionQueueStore } from '@/stores/actionQueueStore';
 import {
   migrateLegacyOnlineCacheToSingle,
   normalizeLegacyOnlineSaveForSingle,
@@ -917,13 +918,14 @@ export const useCharacterStore = defineStore('characterV3', () => {
   const loadGame = async (charId: string, slotKey: string) => {
       debug.log('角色商店', `开始加载游戏，角色ID: ${charId}, 存档槽: ${slotKey}`);
       const uiStore = useUIStore();
+      // 读档失败统一提示「读档失败：原因」并多停留几秒；失败路径不写、不删任何存档（真机 REPORT-8091-cd167d7a P3）。
+      const failLoad = (reason: string) => { toast.error(`读档失败：${reason}`, { duration: 8000 }); return false; };
 
       const storedProfile = rootState.value.角色列表[charId];
       const profile = storedProfile ? cloneDeep(storedProfile) : undefined;
       if (!profile) {
         debug.error('角色商店', '找不到要加载的角色', charId);
-        toast.error('找不到要加载的角色！');
-        return false;
+        return failLoad('找不到要加载的角色');
       }
 
       let targetSlot: SaveSlot | undefined | null;
@@ -935,8 +937,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
 
       if (!targetSlot) {
         debug.error('角色商店', '找不到指定的存档槽位', slotKey);
-        toast.error('找不到指定的存档槽位！');
-        return false;
+        return failLoad(`找不到存档槽位【${slotKey}】`);
       }
 
       // 联机模式：必须登录才能加载
@@ -1003,19 +1004,17 @@ export const useCharacterStore = defineStore('characterV3', () => {
             debug.log('角色商店', `✅ 已从 IndexedDB 加载存档数据`);
           } else {
             debug.error('角色商店', `IndexedDB 中不存在存档数据: ${charId}/${slotKey}`);
-            toast.error('存档数据不存在！');
-            return false;
+            return failLoad(`存档【${slotKey}】的数据读取不到（存储或网络出错），存档未改动`);
           }
-        } catch (error) {
+        } catch (error) { // lcq-allow: 读取失败已经以「读档失败：原因」提示玩家，存档不写不删
           debug.error('角色商店', '从 IndexedDB 加载存档数据失败', error);
-          toast.error('加载存档数据失败！');
-          return false;
+          return failLoad(`读取存档【${slotKey}】出错：${error instanceof Error ? error.message : String(error)}，存档未改动`);
         }
       }
 
       try { assertEntitySaveFormat(targetSlot.存档数据); }
       catch (error) { // lcq-allow: 格式拒绝只向玩家提示，不改写或删除任何存档。
-        toast.error(error instanceof Error ? error.message : '存档格式不符'); return false; }
+        return failLoad(error instanceof Error ? error.message : '存档格式不符'); }
 
       // 版本守卫：存档版本高于当前游戏则拒绝加载（不迁移、不写回），须先于旧结构检测
       if (rejectFutureSaveVersion(charId, slotKey, targetSlot.存档数据)) return false;
@@ -1136,6 +1135,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
         targetSlot.存档数据 = patched;
         reseedActiveSceneAfterLoad(patched);
         gameStateStore.loadFromSaveData(patched);
+        // 待执行动作队列放在 localStorage、不随存档走：读档成功后清空，免得别的档遗留的「开始修炼」在下次发送时弹出修炼时间框（真机 REPORT-8091-cd167d7a P2）。
+        useActionQueueStore().clearActions();
         // 新建的隔离工作槽在成功载入后持久化；失败读档不会碰任何存档文件。
         if (activeSlotKey !== slotKey) await storage.saveSaveData(charId, activeSlotKey, patched, { localOnly: Boolean(reattachKey || profile.隔离试玩信息?.localOnly) });
         rootState.value.角色列表[charId] = profile;
@@ -1156,11 +1157,10 @@ export const useCharacterStore = defineStore('characterV3', () => {
       toast.success(`已成功加载【${profile.角色?.名字 || '未知角色'}】的存档: ${targetSlot.存档名 || slotKey}`);
       return true;
 
-    } catch (error) {
+    } catch (error) { // lcq-allow: 读档末端异常已经以「读档失败：原因」提示玩家，存档不写不删
       debug.error('角色商店', '加载过程出错', error);
       const errorMessage = error instanceof Error ? error.message : '未知错误';
-      toast.error(`存档加载失败：${errorMessage}`);
-      return false;
+      return failLoad(`${errorMessage}，存档未改动`);
     } finally {
       uiStore.stopLoading();
     }

@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import type { GameMapConfig, GameCoordinates, ViewportState } from '@/types/gameMap';
 import type { WorldLocation } from '@/types/location';
 import type { CultivationContinent } from '@/types/worldMap';
+import { coLocatedMarkerKey, coLocatedMarkerOffset } from './coordinateConverter';
 
 /**
  * 游戏地图管理器
@@ -14,6 +15,8 @@ export class GameMapManager {
   private layers: Map<number, PIXI.Container>;
   private config: GameMapConfig;
   private locationSprites: Map<string, PIXI.Container> = new Map();
+  /** 真实底图上每个落点已画的标记数（同坐标错位用，见 coLocatedMarkerOffset）。 */
+  private coLocatedMarkerCounts: Map<string, number> = new Map();
   private eventCallbacks: Map<string, ((data?: unknown) => void)[]> = new Map();
   private continentBounds: Map<string, {
     bounds: { x: number; y: number }[];
@@ -702,11 +705,23 @@ export class GameMapManager {
           `${location.id}|${location.name}`
         );
     location.coordinates = resolvedCoordinates;
+    // 真实底图：同一落点的后续标记在小圆周上错开（如草原与五原城同坐标），地点坐标本身不改。
+    let display = resolvedCoordinates;
+    if (hasRealMap) {
+      const key = coLocatedMarkerKey(resolvedCoordinates);
+      const index = this.coLocatedMarkerCounts.get(key) || 0;
+      this.coLocatedMarkerCounts.set(key, index + 1);
+      const offset = coLocatedMarkerOffset(index);
+      display = {
+        x: clampToMap(resolvedCoordinates.x + offset.x, 0, this.config.width),
+        y: clampToMap(resolvedCoordinates.y + offset.y, 0, this.config.height),
+      };
+    }
 
     // 创建地点容器
     const locationContainer = new PIXI.Container();
-    locationContainer.x = location.coordinates?.x || 0;
-    locationContainer.y = location.coordinates?.y || 0;
+    locationContainer.x = display.x || 0;
+    locationContainer.y = display.y || 0;
     // 禁用交互，使用手动点击检测
     locationContainer.eventMode = 'none';
 
@@ -1422,6 +1437,7 @@ export class GameMapManager {
     });
 
     this.locationSprites.clear();
+    this.coLocatedMarkerCounts.clear();
     this.continentBounds.clear();
     this.drawBackground();
 
@@ -1470,6 +1486,7 @@ export class GameMapManager {
     // 4. 清理引用
     this.layers.clear();
     this.locationSprites.clear();
+    this.coLocatedMarkerCounts.clear();
     this.eventCallbacks.clear();
     this.continentBounds.clear();
 

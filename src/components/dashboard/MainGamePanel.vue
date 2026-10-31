@@ -113,6 +113,7 @@
                 :title="t('世界事件')"
               >
                 <Bell :size="20" />
+                <span v-if="worldEventCount > 0" class="snapshot-count world-event-count">{{ worldEventCount }}</span>
               </button>
 
               <!-- 命令日志按钮 -->
@@ -124,7 +125,7 @@
                 :title="currentNarrativeStateChanges.length > 0 ? t('查看本次对话的变更日志') : t('本次对话无变更记录')"
               >
                 <ScrollText :size="16" />
-                <span class="update-count">{{ currentNarrativeStateChanges.length }}</span>
+                <span class="update-count">{{ t('变更') }} {{ currentNarrativeStateChanges.length }}</span>
               </button>
             </div>
           </div>
@@ -512,6 +513,10 @@
 
 <script setup lang="ts">
 import { mapPreparationNotice } from '@/modules/scenarioMods/travel/mapTravel';
+import { shouldRestorePreTurnSave } from '@/utils/saveTurnRollback';
+import { worldEventBadgeCount } from '@/utils/worldEventRecords';
+import { stripActionOptionMetaWords, stripNarrativeMetaWords } from '@/utils/narrativeMetaWords';
+import type { SaveData } from '@/types/game';
 import { randomUUID } from '@/utils/uuid';
 import { mapPreparation } from '@/modules/scenarioMods/travel/mapTravel';
 import { actionTimeConfig } from '@/modules/scenarioMods/actionTime';
@@ -1045,6 +1050,8 @@ const continueToNextPhase = async () => {
   }
 };
 
+// 铃铛角标＝世界事件记录条数（与事件面板列表同源）；旁边的计数是本回合变更日志，已标「变更」以免混淆。
+const worldEventCount = computed(() => worldEventBadgeCount(gameStateStore.eventSystem));
 const openEventsPanel = () => {
   router.push('/game/events');
 };
@@ -1173,14 +1180,15 @@ const currentNarrative = computed(() => {
   // 从叙事历史获取actionOptions和stateChanges
   if (narrativeHistory && narrativeHistory.length > 0) {
     const latestNarrative = narrativeHistory[narrativeHistory.length - 1];
+    // 显示层去掉「本世界线支流」等内部元词（存档原文不动），见 narrativeMetaWords.ts。
     return {
       type: latestNarrative.type || 'narrative',
       userIntent: (latestNarrative as { userIntent?: string }).userIntent || '',
-      content: [latestNarrative.content.replace(/^【.*?】\s*/, '') || content || '...'].filter(Boolean).join('\n\n'),
+      content: stripNarrativeMetaWords([latestNarrative.content.replace(/^【.*?】\s*/, '') || content || '...'].filter(Boolean).join('\n\n')),
       time: currentTimeString,
       stateChanges: latestNarrative.stateChanges || { changes: [] },
       image: latestNarrative.image,
-      actionOptions: latestNarrative.actionOptions || []
+      actionOptions: stripActionOptionMetaWords(latestNarrative.actionOptions || [])
     };
   }
 
@@ -1920,7 +1928,7 @@ async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promi
     sealDiagnosticTurn(diagnosticTurnId);
   }
 }
-const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution }) => {
+const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution; restoreOnFailure?: SaveData | null }) => {
   let diagnosticTurnId: string | null = null;
   try {
   const sceneSave = gameStateStore.toSaveData();
@@ -2224,6 +2232,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     }
   }
 
+  // 回合失败不得部分提交（真机 69ab 127 补测：闭关回合解析失败，判定已写的境界 +10% 却留下）：
+  // 记下本回合任何本地预结算（判定、自由行动）之前的状态；回合既没成功也没有已提交的事务时整份恢复。
+  // 判定在 executePendingJudgement 里先于本函数结算，由它把结算前的快照传进来。
+  const preTurnSave = execution?.restoreOnFailure ?? gameStateStore.toSaveData();
+  let turnCommitted = false;
+
   // 🔥 在发送消息前备份到"上次对话"（用于回滚）
   if (gameStateStore.conversationAutoSaveEnabled) {
     try {
@@ -2446,7 +2460,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         return;
       }
 
-      if (aiResponse?.transactionCommitted) { actionQueue.clearActions(); selectedCultivationTime.value = null; }
+      if (aiResponse?.transactionCommitted) { turnCommitted = true; actionQueue.clearActions(); selectedCultivationTime.value = null; }
       if (aiResponse?.transactionCommitted && aiResponse.narrativeNotice) toast.warning(aiResponse.narrativeNotice);
 
       // 验证AI响应结构
@@ -2486,6 +2500,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           }
 
           if (retryResponse) {
+            if (retryResponse.transactionCommitted) turnCommitted = true;
             if (retryResponse.outputTruncated) {
               toast.warning('回应被截断，已保留你的输入，可手动重试。');
               aiResponse = null;
@@ -2708,6 +2723,20 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       persistAIProcessingState();
     }
 
+    // 回合失败：撤回本回合的本地预结算（判定写入、自由行动结算），判定卡回到待确认，可原样重发。
+    if (aiResetToken === resetSnapshot && !aiResponse && !turnCommitted && preTurnSave) {
+      try {
+        if (shouldRestorePreTurnSave(preTurnSave, gameStateStore.toSaveData())) {
+          gameStateStore.loadFromSaveData(preTurnSave);
+          await characterStore.saveCurrentGame();
+          refreshPendingJudgement();
+          toast.info('本回合未完成，已撤回本回合的判定与结算，可重新发送。');
+        }
+      } catch (restoreError) { // lcq-allow: 撤回失败直接告诉玩家改用「上次对话」回滚（发送前已备份），不再另记码
+        toast.error(`本回合未完成，撤回本回合结算失败：${restoreError instanceof Error ? restoreError.message : String(restoreError)}；可在存档面板用「上次对话」回滚。`);
+      }
+    }
+
     // 最终统一存档（仅成功时）
     if (aiResetToken === resetSnapshot && aiResponse) {
       try {
@@ -2739,12 +2768,14 @@ const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
   if (!pendingJudgement.value || isAIProcessing.value) return;
   const save = gameStateStore.toSaveData();
   if (!save) return;
+  // 结算前快照：判定结果（如修炼进度）先于叙事回合写入，回合失败时由 sendMessage 用它整份撤回。
+  const beforeResolution = gameStateStore.toSaveData();
   const resolution = resolvePendingJudgement(save, pendingJudgement.value.id, {
     currentTurn: getNarrativeTurn(save),
     ...(testOutcome ? { testOutcome } : {}),
   });
   await persistJudgementSave(save);
-  await sendMessage({ skipPreflight: true, resolution });
+  await sendMessage({ skipPreflight: true, resolution, restoreOnFailure: beforeResolution });
 };
 
 const changePendingJudgement = async () => {
@@ -4349,6 +4380,7 @@ const syncGameState = async () => {
 }
 
 .header-action-btn.event-btn {
+  position: relative;
   background: rgba(111, 127, 168, 0.10);
   border: 1px solid rgba(111, 127, 168, 0.20);
   color: rgba(111, 127, 168, 0.95);

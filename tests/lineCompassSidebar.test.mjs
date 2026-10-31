@@ -18,8 +18,9 @@ test('右栏接线：开关关时不算；开时取代主线指南针那一行�
   const vue = fs.readFileSync('src/components/dashboard/RightSidebar.vue', 'utf8');
   const block = vue.slice(vue.indexOf('const lineCompass = computed('), vue.indexOf('const characterBeats = computed('));
   assert.match(block, /^const lineCompass = computed\(\(\) => \{\n  if \(!showLineCompass\(\)\) return null;/);
-  assert.match(block, /compassPointer: \(\) => questCompassPhrases\(view, rt, at\)\.join\(' · '\)/);
-  assert.match(block, /const fallback = questCompassPhrases\(view, rt, at\)\.join\(' · '\);/, '退回句只有「去X · 见Y」');
+  // 第 4 参是已同行者（REPORT-8091-cd167d7a ④：段强同行不再写「见段强」），不改「去X · 见Y」的句式
+  assert.match(block, /compassPointer: \(\) => questCompassPhrases\(view, rt, at, compassPresentIds\.value\)\.join\(' · '\)/);
+  assert.match(block, /const fallback = questCompassPhrases\(view, rt, at, compassPresentIds\.value\)\.join\(' · '\);/, '退回句只有「去X · 见Y」');
   assert.doesNotMatch(block, /formatQuestCompass|objective/, '不带冒号后的固定目标');
   const main = vue.slice(vue.indexOf('const questMain = computed('));
   assert.match(main, /const compassReplaced = Boolean\(lineCompass\.value\);/);

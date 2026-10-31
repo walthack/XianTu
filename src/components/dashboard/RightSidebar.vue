@@ -232,9 +232,10 @@
             <template v-if="questMain">
               <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
               <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
+              <div v-if="questMain.stallHint" class="quest-stall-hint" role="status" style="font-size:12px;margin-top:4px;line-height:1.4;opacity:0.85;">{{ questMain.stallHint }}</div>
               <div v-if="questMain.stallDebug" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
               <div v-if="questMain.divergenceDebug" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
-                世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续当前支流，也可以主动回到最近承重节点。
+                世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续眼下这条路，也可以主动回到最近的主线节点。
               </div>
               <button v-if="questMain.canReturn && !epistemicRuntime?.gameOver && !detectBranchDecision(getCurrentStoryEventActions(gameStateStore.toSaveData()))" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
                 {{ returningToCanon ? t('回轨中…') : t('↩ 斩线回轨') }}
@@ -436,7 +437,7 @@ import { atTrainingCap, breakthroughHint, canBreakthrough } from '@/modules/scen
 import { locationFromPosition } from '@/modules/scenarioMods/travel/travelLedger';
 import { characterBeatsAt } from '@/modules/scenarioMods/characterQuests';
 import { prefillChat } from '@/utils/chatBus';
-import { formatQuestCompass, questCompassPhrases, resolveScenarioEventNarrative, storyChapterTitle } from '@/modules/scenarioMods/eventNarrativeView';
+import { formatQuestCompass, questCompassPhrases, questCompassPresentIds, questStallHint, resolveScenarioEventNarrative, storyChapterTitle } from '@/modules/scenarioMods/eventNarrativeView';
 import { detectBranchDecision } from '@/modules/scenarioMods/branchDecision';
 import { returnToCanonAnchor } from '@/modules/scenarioMods/divergenceControl';
 import { useI18n } from '@/i18n';
@@ -483,10 +484,20 @@ const questAtLocationId = (rt: any): string | undefined => locationFromPosition(
   playerLocationDescription(),
   rt?.canon?.locations,
 ).locationId;
+// 罗盘「见X」剔除已同行的人（已相识且同处／刚在正文出场），见 questCompassPresentIds。只取 store 的轻字段，不做整档快照。
+const compassPresentIds = computed(() => {
+  const history = gameStateStore.narrativeHistory || [];
+  const recent = history.slice(-2).map((entry: any) => String(entry?.content || '')).join('\n');
+  return questCompassPresentIds({
+    角色: { 位置: gameStateStore.location },
+    社交: { 关系: gameStateStore.relationships },
+    世界: { 状态: gameStateStore.worldState },
+  }, recent);
+});
 const visibleQuestObjective = (rt: any, event: any): string => {
   if (!event) return '';
   const view = resolveScenarioEventNarrative(event, rt.flags || {}, rt.divergences, rt);
-  return formatQuestCompass(view, rt, questAtLocationId(rt)) || String(view.objective || '').trim();
+  return formatQuestCompass(view, rt, questAtLocationId(rt), compassPresentIds.value) || String(view.objective || '').trim();
 };
 // 「可投的门路」：二级线入口＋支线，列表组装在 sidebarLineEntries.ts。
 // 显示开关 ui.rightSidebar.showSecondaryLines（默认 false，用户 2026-10-27 08:53 定先隐藏不删）；关时先返回，不取存档快照。
@@ -527,9 +538,9 @@ const lineCompass = computed(() => {
   const result = lineCompassView(gameStateStore.toSaveData(), {
     focusEventId: event?.id,
     atLocationId: at,
-    compassPointer: () => questCompassPhrases(view, rt, at).join(' · '),
+    compassPointer: () => questCompassPhrases(view, rt, at, compassPresentIds.value).join(' · '),
   });
-  const fallback = questCompassPhrases(view, rt, at).join(' · ');
+  const fallback = questCompassPhrases(view, rt, at, compassPresentIds.value).join(' · ');
   if (!result.current && !fallback && !result.others.length) return null;
   return { ...result, fallback };
 });
@@ -557,7 +568,7 @@ const questMain = computed(() => {
   const activeEvents = anchor ? [anchor] : [];
   const events = activeEvents.slice(0, 1).map((e: any) => {
     const view = resolveScenarioEventNarrative(e, rt.flags || {}, rt.divergences, rt);
-    return formatQuestCompass(view, rt, questAtLocationId(rt)) || view.objective || view.name;
+    return formatQuestCompass(view, rt, questAtLocationId(rt), compassPresentIds.value) || view.objective || view.name;
   }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
@@ -575,6 +586,10 @@ const questMain = computed(() => {
   if (!chapter && !events.length && !next && !stalled) return null;
   const signal = rt.divergenceSignal;
   const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
+  // 玩家可见的推进引导：停滞数轮且这一拍有可点的主线动作时出现（非调试信息）。
+  const mainAction = anchor ? getCurrentStoryEventActions(gameStateStore.toSaveData()).find((a: any) => a.eventId === anchor.id) : undefined;
+  const anchorView = anchor ? resolveScenarioEventNarrative(anchor, rt.flags || {}, rt.divergences, rt) : null;
+  const stallHint = questStallHint(stallTurns, mainAction?.label, anchorView?.objective);
   return {
     chapter: chapter ? `章节：${storyChapterTitle(rt.modId, anchor?.id, chapter.title || chapter.id)}` : '',
     events: compassReplaced ? [] : events,
@@ -586,6 +601,7 @@ const questMain = computed(() => {
     // 停滞预警写的是事件对账与 API 管理里的开关，属内部诊断：只在设置里开了调试模式时显示（真机 da893388 #1）
     stallDebug: stalled && debugLogger.isDebugMode(),
     stallCount: stallTurns,
+    stallHint,
     signal,
     // 偏离评分属内部诊断：与停滞预警一样只在调试模式显示（fix5939-4）
     divergenceDebug: (signal?.level === 'medium' || signal?.level === 'high') && debugLogger.isDebugMode(),

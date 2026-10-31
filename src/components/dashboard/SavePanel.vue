@@ -21,9 +21,9 @@
             <div class="preview-info">
               <div class="character-name">{{ currentSave.角色名字 || '无名道友' }}</div>
               <div class="character-details">
-                <span class="detail-item">{{ currentSave.境界 || '凡人' }}</span>
+                <span class="detail-item">{{ saveSlotDetail(currentSave, '境界') }}</span>
                 <span class="detail-separator">·</span>
-                <span class="detail-item">{{ currentSave.位置 || '未知' }}</span>
+                <span class="detail-item">{{ saveSlotDetail(currentSave, '位置') }}</span>
               </div>
               <!-- 特殊存档说明 -->
               <div v-if="currentSave.存档名 === '上次对话'" class="current-save-hint last">
@@ -47,6 +47,12 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- 读档失败：除右上提示外在面板内常驻一条，直到下次成功读档或手动关闭 -->
+      <div v-if="loadError" class="load-error-banner" role="alert">
+        <span>{{ loadError }}</span>
+        <button class="load-error-close" @click="loadError = ''" title="关闭">×</button>
       </div>
 
       <!-- 存档列表 -->
@@ -103,7 +109,7 @@
                   <div class="character-name-small">{{ save.角色名字 || '无名道友' }}</div>
                   <!-- 显示最后保存时间 -->
                   <div class="save-time">
-                    {{ formatTime(save.最后保存时间 ?? save.保存时间 ?? null) }}
+                    {{ isEmptySaveSlot(save) ? EMPTY_SLOT_LABEL : formatTime(save.最后保存时间 ?? save.保存时间 ?? null) }}
                   </div>
                 </div>
               </div>
@@ -162,17 +168,20 @@
               <div class="save-details">
                 <div class="detail-row">
                   <span class="detail-label">境界:</span>
-                  <span class="detail-value">{{ save.境界 || '凡人' }}</span>
+                  <span class="detail-value">{{ saveSlotDetail(save, '境界') }}</span>
                 </div>
                 <div class="detail-row">
                   <span class="detail-label">位置:</span>
-                  <span class="detail-value">{{ save.位置 || '未知' }}</span>
+                  <span class="detail-value">{{ saveSlotDetail(save, '位置') }}</span>
                 </div>
                 <div class="detail-row">
                   <span class="detail-label">修改:</span>
                   <span class="detail-value">{{
-                    formatTime(save.最后保存时间 ?? save.保存时间 ?? '')
+                    isEmptySaveSlot(save) ? EMPTY_SLOT_LABEL : formatTime(save.最后保存时间 ?? save.保存时间 ?? '')
                   }}</span>
+                </div>
+                <div v-if="emptySaveSlotHint(save, timeBasedSaveEnabled)" class="detail-row empty-slot-hint">
+                  {{ emptySaveSlotHint(save, timeBasedSaveEnabled) }}
                 </div>
               </div>
             </div>
@@ -321,12 +330,14 @@ import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
 import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { repairSaveData } from '@/utils/dataRepair';
+import { EMPTY_SLOT_LABEL, emptySaveSlotHint, isEmptySaveSlot, saveSlotDetail } from '@/utils/saveSlotDisplay';
 
 const { t } = useI18n();
 
 const characterStore = useCharacterStore();
 const gameStateStore = useGameStateStore();
 const loading = ref(false);
+const loadError = ref('');
 const fileInput = ref<HTMLInputElement>();
 
 // 🔥 获取本地日期字符串（用于文件名，避免 toISOString 的 UTC 时区问题）
@@ -617,11 +628,19 @@ const loadSave = async (save: SaveSlot) => {
   loading.value = true;
   try {
     // 使用存档名作为槽位key
-    await characterStore.loadGameById(save.存档名);
-    toast.success(`已加载存档: ${save.存档名}`);
-  } catch (error) {
+    // loadGameById 失败返回 false（原因已由 loadGame 以「读档失败：…」提示），不能再报成功。
+    const loaded = await characterStore.loadGameById(save.存档名);
+    if (loaded) {
+      loadError.value = '';
+      toast.success(`已加载存档: ${save.存档名}`);
+    } else {
+      loadError.value = `读档失败：存档【${save.存档名}】未能读取，存档本身未改动；原因见右上角提示。`;
+    }
+  } catch (error) { // lcq-allow: 读档失败只向玩家提示（右上提示＋面板横幅），存档未改动
     debug.error('存档面板', '加载失败', error);
-    toast.error('加载存档失败');
+    const reason = error instanceof Error ? error.message : String(error);
+    loadError.value = `读档失败：${reason}`;
+    toast.error(`读档失败：${reason}`, { duration: 8000 });
   } finally {
     loading.value = false;
   }
@@ -1189,6 +1208,32 @@ onMounted(() => {
 }
 
 /* 存档容器 */
+.load-error-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border-left: 4px solid var(--color-error, #dc2626);
+  background: rgba(220, 38, 38, 0.08);
+  color: var(--color-text);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.load-error-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 1rem;
+}
+.empty-slot-hint {
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
 .saves-container {
   flex: 1;
   overflow-y: auto;

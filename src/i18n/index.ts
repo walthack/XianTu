@@ -413,6 +413,7 @@ const autoTranslateMap: Record<string, string> = {
   '流式': 'Stream',
   '快捷行动': 'Quick Actions',
   '修炼时间': 'Cultivation Time',
+  '变更': 'Changes',
   '自定义：': 'Custom:',
   '天': 'days',
   '选项': 'Options',
