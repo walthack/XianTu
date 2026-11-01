@@ -623,3 +623,9 @@
 - P2-2 地图去咸阳：咸阳口信拍注入唐关，章名沿用唐关「抵达长安灞桥」；改按 mapEntries 目标关取章名，抵达提示写实际落点；测试确认到咸阳有 qin_enter_xianyang 行动。
 - P2-3 审核拦截：AIBS 235–240 本地兜底判定不含审核拦截（且 1872–1875 还要求可信本地合同），主叙事回合不兜底；冻结区外只把 toUserFacingAIError 文案改成如实「本回合没有推进」，模块叙事才说本地叙事。行为修复待批准改 AIBS。
 - 测试：tests/report8091da90.test.mjs 9 项；npm test 3217 项 3204 pass / 0 fail / 13 skip；type-check 0。
+
+### REPORT8091-6a22 · 复测修复开工（Codex，2026-11-01）
+- 基线 6a2218ca；范围 P1-1～P2-4，逐项真机同路径离线复现。冻结文件本轮未改；不读取密钥、不改模型配置、不触碰 _newbot_tmp。
+- P1-1 点名缺物：rollPool=false，只回执拒绝，不耗搜刮次数、不发池物（回执文案进 config）。P1-2 TAKE_CLAUSE 认「取」+namedQuantity，点名龙牙真实入包。P1-3 地图抵咸阳 stage_entry 也出行动建议。P2-1 咸阳确认框改用 travelPreview 配置文本。P2-2 captureAIResponseError 让审核拦截 toast 如实；「[AI双向系统] AI生成失败」由 log.ts logConsole 按 codes.ts CONSOLE_PREFIX_CODES 认领为新码 NET-016（不再落 SYS-000，AIBS 未改）；NET-014 按 settledLocally 分文案（true 用 NET-017）。P2-3 南荒：05b 模块叙事不带遇敌事实包致状态机停预兆，补 tickEncounterAfterNarration；CP03 落 no_zone 属剧情门禁。P2-4 dataRepair 保留「九阳层次」，汉线首拍不再「赶往舞都」。
+- 追加（Codex/Claude 限流，Grok Bot 直写）：南荒遇敌/白尾豹几率覆盖。tickRandomEncounter/tickEncounterAfterNarration/tickWhiteTailLeopard 可选 {chance?,chanceMul?,leopardChance?}，定值替换、倍率相乘、夹 0..1，不传不变；URL(?/#) 参数名在 e2eSmoke.nanhuangEncounters.overrideParams（xiantu.test.encounterChance / encounterChanceMul / leopardChance），numbersRegistry 已登记。
+- 证据：新增 tests/report8091_6a22（7）、encounterChanceOverride（5）；npm test 3229 项 3216 pass / 0 fail / 13 skip；type-check 与基线同为 27（无新增）。AIBS、runtime、frozen-baseline 本轮均未改。

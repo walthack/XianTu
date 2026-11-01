@@ -1,3 +1,5 @@
+import { packText } from '../contentPacks';
+import { appendToLatestNarrative } from './fixedEndingNarratives';
 /**
  * 随机遇敌引擎（用户 2026-10-28 13:48 第1、2、4、6条；10-19 三步 §3.0、§3.4；总策划技术决定）。
  *
@@ -266,7 +268,7 @@ function markReceipt(state: EncounterState, id: string, outcome: EncounterReceip
  * 每个故事回合结束后调用一次；按 worldTurn 幂等。narrated＝本回合正文确实由模型按事实包演出（固定文本回合为 false）。
  * 只写 runtime.encounter。
  */
-export function tickRandomEncounter(save: SaveData, { narrated, config }: { narrated: boolean; config?: EncounterConfig }): { changed: boolean; reason?: string } {
+export function tickRandomEncounter(save: SaveData, { narrated, config, override }: { narrated: boolean; config?: EncounterConfig; override?: EncounterChanceOverride }): { changed: boolean; reason?: string } {
   const cfg = resolveConfig(config);
   const runtime = runtimeOf(save);
   if (!runtime) return { changed: false, reason: 'no_runtime' };
@@ -325,7 +327,10 @@ export function tickRandomEncounter(save: SaveData, { narrated, config }: { narr
   const roll = seededRoller(seedHash(`${state.seed}:encounter:${loc}:${turn}`));
   const preset = encounterPresetOf(save);
   const diff = cfg.difficulty[preset] || { chanceMul: 1, levelShift: 0 };
-  const chance = region[0] === 'nanhuang' ? (nanhuangTestRates()?.encounterChance ?? Math.min(1, tier.chance * diff.chanceMul)) : Math.min(1, tier.chance * diff.chanceMul);
+  const baseChance = region[0] === 'nanhuang' ? (nanhuangTestRates()?.encounterChance ?? Math.min(1, tier.chance * diff.chanceMul)) : Math.min(1, tier.chance * diff.chanceMul);
+  // 几率覆盖（e2eSmoke.nanhuangEncounters.overrideParams 的 note）：参数优先，其次南荒测试 URL/会话；都没有时与原值完全一致。
+  const ov = override ?? (region[0] === 'nanhuang' ? nanhuangChanceOverride() : undefined);
+  const chance = applyChanceOverride(baseChance, ov?.chance, ov?.chanceMul);
   const face = roll();
   const id = `enc:${loc}:${turn}`;
   const receipt: EncounterReceipt = { id, turn, locKey: loc, tier: zone.tier, preset, chance, roll: face, hit: face < chance };
@@ -443,4 +448,53 @@ export function nanhuangTestRates(): { encounterChance: number; leopardChance: n
   if (enabled && announcedTestSource !== source) console.info(`[南荒测试开关] 已开启（来源：${source}）：南荒遇敌与白尾豹检定按测试概率`);
   announcedTestSource = enabled ? source : '';
   return enabled ? cfg : undefined;
+}
+
+/** 几率覆盖：chance／leopardChance 为定值（替换配置值），chanceMul 为倍率（乘在配置值或定值上）；结果夹在 0..1。都不传时原样返回。 */
+export interface EncounterChanceOverride { chance?: number; chanceMul?: number; leopardChance?: number }
+const finite = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+export function applyChanceOverride(base: number, fixed?: number, mul?: number): number {
+  if (!finite(fixed) && !finite(mul)) return base;
+  const value = (finite(fixed) ? fixed : base) * (finite(mul) ? mul : 1);
+  return Math.min(1, Math.max(0, value));
+}
+/**
+ * 南荒测试几率覆盖：参数名读 e2eSmoke.nanhuangEncounters.overrideParams（? 或 # 后的查询串，与南荒测试开关同一读法）；
+ * URL 给了就写进 sessionStorage，刷新后仍生效；值为空或 off 清除该项。不受开关 on/off 影响，只作用于南荒。
+ */
+export function nanhuangChanceOverride(): EncounterChanceOverride | undefined {
+  const names = (GAME_NUMBERS as any).e2eSmoke?.nanhuangEncounters?.overrideParams as Record<keyof EncounterChanceOverride, string> | undefined;
+  if (!names) return undefined;
+  const out: EncounterChanceOverride = {};
+  for (const key of ['chance', 'chanceMul', 'leopardChance'] as const) {
+    const flag = names[key];
+    if (!flag) continue;
+    let query: string | null = null;
+    try { query = urlTestFlag(flag); } catch { /* lcq-allow: 地址解析失败按未设置处理。 */ }
+    if (query !== null) {
+      const clear = query.trim() === '' || query.trim().toLowerCase() === 'off';
+      try { if (clear) tabStore()?.removeItem(flag); else tabStore()?.setItem(flag, query.trim()); } catch { /* lcq-allow: 会话存储不可用时只认本次 URL。 */ }
+      if (clear) continue;
+    }
+    const raw = query ?? storageGet(tabStore, flag);
+    const value = raw === null ? NaN : Number(raw);
+    if (Number.isFinite(value)) out[key] = value;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
+/** 未携带遇敌事实包的正文路径补本地演出，再按同一三阶段状态机结算；不跳过门禁、冷却或概率。 */
+export function tickEncounterAfterNarration(save: SaveData, path?: string, override?: EncounterChanceOverride): ReturnType<typeof tickRandomEncounter> {
+  let narrated = encounterNarratedBy(save, path);
+  const runtime = runtimeOf(save), pending: EncounterPending | undefined = runtime?.encounter?.pending;
+  const turn = Number(runtime?.worldTurn) || 0;
+  if (!narrated && pending && pending.stage !== 'battle' && turn > pending.setTurn
+    && runtime.encounter.lastTickTurn !== turn && !encounterGate(save) && encounterLocKey(save) === pending.locKey) {
+    const text = pending.stage === 'foreshadow'
+      ? packText('report8091.encounter.foreshadow').replace('{place}', placeName(save, pending.locKey))
+      : packText('report8091.encounter.reveal').replace('{enemy}', entityName('enemy', pending.enemyId)).replace('{count}', String(pending.count));
+    appendToLatestNarrative(save, text);
+    narrated = true;
+  }
+  return tickRandomEncounter(save, { narrated, override });
 }

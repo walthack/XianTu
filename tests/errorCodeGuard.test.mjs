@@ -114,7 +114,8 @@ test('码表里的码（除兜底码）至少在源码里被用到一次：登�
   const faViaMap = new Set(Object.values(FA_GATE_CODES));
   const unused = Object.keys(ERROR_CODES).filter(code => code !== UNREGISTERED_CODE && !faViaMap.has(code) && !all.includes(code));
   // NET-001..003 经 NET_TIMEOUT_CODES 映射发出，源码里只有映射表本身。
-  const viaTimeout = new Set(Object.values(codes.NET_TIMEOUT_CODES));
+  // CONSOLE_PREFIX_CODES 认领冻结文件 console 前缀（如 NET-016），经 logConsole 发出。
+  const viaTimeout = new Set([...Object.values(codes.NET_TIMEOUT_CODES), ...Object.values(codes.CONSOLE_PREFIX_CODES)]);
   assert.deepEqual(unused.filter(code => !viaTimeout.has(code)), []);
 });
 

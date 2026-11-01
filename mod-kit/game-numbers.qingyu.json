@@ -1887,7 +1887,13 @@
       "enabled": false,
       "flag": "xiantu.test.nanhuangEncounters",
       "encounterChance": 1,
-      "leopardChance": 1
+      "leopardChance": 1,
+      "overrideParams": {
+        "note": "南荒随机遇敌／白尾豹几率覆盖（用户 2026-11-01 确认）。几率仍由本文件驱动：遇敌基础值＝encounter.tiers[档].chance × encounter.difficulty[预设].chanceMul（测试开关 on 时南荒改用上面的 encounterChance），白尾豹基础值＝whiteTailLeopard.chance（开关 on 时用 leopardChance）。覆盖三项：chance＝遇敌定值，替换基础值；chanceMul＝遇敌倍率，乘在基础值（或 chance 定值）上；leopardChance＝白尾豹定值，替换豹基础值（chanceMul 不作用于豹）。结果一律夹在 0..1；三项都不给时行为与原来完全一致。来源优先级：tickRandomEncounter/tickEncounterAfterNarration/tickWhiteTailLeopard 的 override 参数 > URL 参数（? 或 # 后，读法同 flag）> 本标签页 sessionStorage（URL 给过即写入，值为空或 off 清除）。只作用于南荒，不受 flag 开关 on/off 影响。下面三项是 URL 参数名。",
+        "chance": "xiantu.test.encounterChance",
+        "chanceMul": "xiantu.test.encounterChanceMul",
+        "leopardChance": "xiantu.test.leopardChance"
+      }
     }
   },
   "perf": {
@@ -2468,7 +2474,7 @@
     }
   },
   "loot": {
-    "note": "搜刮回刷与战后搜尸（用户 2026-10-28 13:48 第5条）：按游戏天数只回刷普通物和小钱；rare/key/boss/large 货币永远只在首轮给（总策划 2026-10-28 定：稀有物一律只给一次，含首轮三次内不重复）。随机战战后搜尸另计、不占 maxSearches。categories 取值：common / smallCurrency / rare / largeCurrency / key / boss。intervalDays 初值 30（一个游戏月）待用户拍板。texts.exhausted 的 {n} 填中文次数；respawnHint 只在回刷开启且存档有游戏时间时接在搜满提示后。 namedMissing：玩家点名取物（「取出X收进背包」）而 X 不在本地点可得条目里时，接在搜刮回执前，{name} 填玩家原话里的 X；搜刮照常进行（REPORT-8091-da90cb13 P1-1）。",
+    "note": "搜刮回刷与战后搜尸（用户 2026-10-28 13:48 第5条）：按游戏天数只回刷普通物和小钱；rare/key/boss/large 货币永远只在首轮给（总策划 2026-10-28 定：稀有物一律只给一次，含首轮三次内不重复）。随机战战后搜尸另计、不占 maxSearches。categories 取值：common / smallCurrency / rare / largeCurrency / key / boss。intervalDays 初值 30（一个游戏月）待用户拍板。texts.exhausted 的 {n} 填中文次数；respawnHint 只在回刷开启且存档有游戏时间时接在搜满提示后。 namedMissing：点名不在可得池时只拒绝，不发物、不消耗次数；namedQuantity 为点名取一件的数量。",
     "respawn": {
       "enabled": true,
       "intervalDays": 30,
@@ -2487,8 +2493,11 @@
     "texts": {
       "exhausted": "你已经仔细搜刮过这里{n}次，没有新的搜刮机会。",
       "respawnHint": "过些日子再来，或许又能翻出些东西。",
-      "namedMissing": "这里没有能取走的「{name}」。"
-    }
+      "namedMissing": "这里没有能取走的「{name}」。",
+      "success": "你搜刮后收好{items}。",
+      "empty": "你仔细搜刮了一番，没有找到可带走的东西。"
+    },
+    "namedQuantity": 1
   },
   "encounter": {
     "note": "随机遇敌（用户 2026-10-28 13:48；10-19 三步）。代码按存档种子掷骰决定检不检/中不中/遇谁/几个/几级，模型只描写。仅 regions 里配了 zones+pool 的地区生效；第一版只有南荒，zones/pool 照剧情策划清单（/workspace/planner_ask_nanhuang_encounter.md）配置草案填入，其中 shan_jian、sea_temple 与鲛人三条按「推荐」写入、待用户拍板（否决就删对应条目）。几率与倍率初值待用户拍板。 2026-11-01 用户定南荒敌池（稿 /workspace/narrative-drafts/2026-11-01-南荒随机遇敌敌池.md）：只收无名杂兵、精英不进池；一次一个敌人（count 一律 [1,1]、maxCount=1），同伴不下场只给助战 buff（assist 段）；鸦人／鲛人／尸鬼分别等 F04／F06／F12 的剧情事件完成后才进池（pool.activeWhen.afterEventIds）；鬼面蜂一群算一个敌人；regions.nanhuang.countries＝按当前地点国别也算进南荒（跨国落到花苗寨等，不必在南荒关）；noCheckLocationIds＝村寨，寨内不检遇敌，zone 带 subPlace 的只在位置描述的子地点命中该正则时算寨外一带（如「南荒·花苗寨·密林」）。drops＝搜尸身走敌人掉落（不占搜刮次数），稀有物与地点搜刮共用全局只给一次。凡稿里为 null 的数值（新区 tier、新敌权重、掉落数量与稀有几率）按现有同级敌人填的保守初值，见各条 initialValues 说明，待用户拍板。",

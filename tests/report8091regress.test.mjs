@@ -93,7 +93,7 @@ function block(from, to, args, tail = '') {
 const preLoot = block('      const lootLocal = ', '      const legacyNarrativePilotResponse', ['saveData', 'options', 'userMessage', 'cloneDeep', 'isLocationLootInput', 'settleLocationLoot'], '\nreturn lootLocalText;');
 const commitLoot = block('    if ((response.moduleReceipt || response.localLoot)', '    const openWorldProgress', ['saveData', 'options', 'response', 'changes', 'isLocationLootInput', 'settleLocationLoot']);
 
-test('I-4 CP03首判失败后取出发青光硬物仍本地入包；全局一次、同拍重放不双发', () => {
+test('I-4 CP03首判失败后取出发青光硬物仍走本地搜刮：点名缺物只回执拒绝、不发物（REPORT-8091-6a2218ca P1-1）、同拍重放不双发', () => {
   const s = json('tests/fixtures/playtest-5e8f/cp03-dragon-corpse.json').saves[0].存档数据;
   assert.equal(Object.keys(s.角色.背包.物品).length, 23);
   for (const input of ['我回到龙神尸身旁，搜查尸身，取出发青光的硬物收进背包', '取出发青光的硬物收进背包']) {
@@ -105,7 +105,8 @@ test('I-4 CP03首判失败后取出发青光硬物仍本地入包；全局一次
     const before = structuredClone(s.角色.背包.物品);
     commitLoot(s, options, { text, localLoot: true }, [], L.isLocationLootInput, L.settleLocationLoot);
     const receipt = rt(s).locationLoot.receipts.at(-1);
-    assert.ok(receipt.drops.length);
+    assert.equal(receipt.missingName, '发青光的硬物');
+    assert.equal(receipt.drops.length, 0, '点名缺物本回合不发任何东西');
     for (const d of receipt.drops.filter(d => d.itemId)) {
       assert.equal(s.角色.背包.物品[d.itemId].数量, (before[d.itemId]?.数量 || 0) + d.quantity);
       assert.ok(text.includes(d.name));
@@ -115,7 +116,7 @@ test('I-4 CP03首判失败后取出发青光硬物仍本地入包；全局一次
     assert.deepEqual(s, once);
     rt(s).worldTurn++;
   }
-  assert.ok(Object.keys(s.角色.背包.物品).length > 23);
+  assert.equal(Object.keys(s.角色.背包.物品).length, 23);
   const rare = rt(s).locationLoot.claimedItemIds;
   assert.equal(new Set(rare).size, rare.length);
 });

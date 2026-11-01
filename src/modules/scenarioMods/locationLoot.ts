@@ -24,7 +24,7 @@ export interface LocationLootReceipt {
   id: string; locationId: string; attempt: number; seed: number; turn: number;
   /** 回刷轮次（0＝首轮）；'spoils'＝随机战战后搜尸，不占搜刮次数。旧回执无这三项。 */
   cycle?: number; kind?: 'search' | 'spoils'; sourceId?: string;
-  /** 玩家点名要取、但本地点没有可得条目的东西（原话里的名字）；回执正文先写明没取到，再列本次搜刮所得。 */
+  /** 玩家点名要取、但本地点没有可得条目的东西（原话里的名字）；只回执拒绝，不发物、不消耗次数。 */
   missingName?: string;
   drops: Array<{ entryId: string; itemId?: string; name: string; quantity: number; currency?: string; grade?: string;
     /** 队友评价信号（2026-10-20）：只给品级与在场队友 id，评价怎么说交主持模型按各自性格写。 */
@@ -56,25 +56,27 @@ function takeLootIntent(): string {
   lastLootIntent = '';
   return intent;
 }
-const TAKE_CLAUSE = /(?:取出|掏出|挖出|撬出|撬下|剥下|割下|剜下|砍下|拔下|敲下|剔下|锯下)([^，。！？!?]+?)(?:收进|放进|装进|塞进|收入)(?:背包|行囊|包袱)/;
+const TAKE_CLAUSE = /(?:取出|取|掏出|挖出|撬出|撬下|剥下|割下|剜下|砍下|拔下|敲下|剔下|锯下)([^，。！？!?]+?)(?:收进|放进|装进|塞进|收入)(?:背包|行囊|包袱)/;
 /**
  * 点名取物（REPORT-8091-da90cb13 P1-1）：「取出X收进背包」里的 X。泛称（硬物、东西，或只带方位的「龙颅里那块硬物」）不算点名。
  * withSearch：同一句里还有别的搜刮分句（「搜查尸身，取出…」），点名之外照常搜刮。
  */
-export function namedLootTarget(input: string): { name: string; withSearch: boolean } | undefined {
+export function namedLootTarget(input: string): { name: string; withSearch: boolean; quantity?: number } | undefined {
   const parts = String(input || '').trim().split(/[，,、；;。！!…]+/).map(p => p.trim()).filter(Boolean);
   const index = parts.findIndex(p => TAKE_CLAUSE.test(p));
   if (index < 0) return undefined;
-  const name = parts[index].match(TAKE_CLAUSE)![1].trim()
+  const rawName = parts[index].match(TAKE_CLAUSE)![1].trim();
+  const quantity = /^一(?:块|颗|枚|片|截|根|个|件|团|粒)/.test(rawName) ? GAME_NUMBERS.loot.namedQuantity : undefined;
+  const name = rawName
     .replace(/^[^那这一的]{0,8}(?:里|中|上|内|下|旁|处)的?(?=那|这|一)/, '')
     .replace(/^(?:那|这|一)(?:块|颗|枚|片|截|根|个|件|团|粒|点|些)?/, '');
   if (!name || /^(?:[^的]{0,8}(?:里|中|上|内|下|旁|处)的)?(?:硬物|东西|物件|物事|宝贝|宝物)$/.test(name)) return undefined;
   const rest = parts.filter((_, i) => i !== index);
-  return { name, withSearch: rest.length > 0 && matchesLootInput(rest.join('，')) };
+  return { name, withSearch: rest.length > 0 && matchesLootInput(rest.join('，')), ...(quantity !== undefined ? { quantity } : {}) };
 }
 function matchesLootInput(input: string): boolean {
   const text = String(input || '').trim();
-  if (/(?:不|别|不要|没有)(?:再|去|想|要|从[^，。！？!?]*)?(?:搜|翻找|取出|掏出|挖出|撬|剥|割|剜)/.test(text)) return false;
+  if (/(?:不|别|不要|没有)(?:再|去|想|要|从[^，。！？!?]*)?(?:搜|翻找|取出|取|掏出|挖出|撬|剥|割|剜)/.test(text)) return false;
   if (/^(?:我)?(?:要|想|试着|打算)?搜刮(?:这里|此处|当前地点|一番|一下)?[。！!\s]*$/.test(text)) return true;
   // 2026-10-20 用户定：boss 不做死亡掉落；打倒后「搜尸身／搜周围」都走本地点搜刮池。
   const clause = /^(?:我)?(?:又|再)?(?:要|想|试着|打算|去|上前)?(?:搜刮|搜查|搜一搜|搜搜|翻找|搜)(?:一下|一番)?(?:[^，。！!？?\s]{0,8}?的?)?(?:尸身|尸体|尸首|遗骸|残骸|身上|周围|四周|附近|周遭|现场|战场|这里|此处)(?:一下|一番)?[。！!\s]*$/;
@@ -85,7 +87,7 @@ function matchesLootInput(input: string): boolean {
   // 2026-10-20 5e8f 真机：「我回到{{entity:character:liuchao.character.dragon_god}}的尸身旁，搜查尸身，翻找四周」整句不匹配，落到叙事模型。
   // 按逗号/顿号拆句：至少一句是搜刮句，其余只能是走近、蹲下这类靠近动作（不夹带逃跑、潜行、攻击等别的意图）。
   // REPORT8091：搜查后取出硬物/包好入囊是同一次搜刮。普通「取出自己的东西」仍不算。
-  const take = (p: string) => /(?:取出|掏出|挖出|撬出|撬下|剥下|割下|剜下)[^，。！？!?]+?(?:收进|放进|装进|塞进|收入)(?:背包|行囊|包袱)/.test(p);
+  const take = (p: string) => TAKE_CLAUSE.test(p);
   const corpse = /尸身|尸体|尸首|遗骸|残骸|龙颅|龙脑/;
   const discoveredObject = /(?:取出|掏出|挖出|撬出)(?:那块|一块)?(?:发[^，。！？!?]*光的)?硬物/;
   if (take(text) && !/攻击|逃跑|杀死|离开/.test(text) && !/[，,、；;。！!…]/.test(text.replace(/[。！!\s]+$/, ''))
@@ -170,8 +172,8 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE, in
     // 回刷轮只出配置分类；稀有、关键、boss、大额钱只在首轮给。
     categories: cycle ? config.respawn.categories : undefined, commonOnly: false, named: namedLootTarget(intent) });
   receipt.cycle = cycle; receipt.kind = 'search';
-  state.searches[locationId] = attempt;
-  if (attempt === 1 && today !== null) (state.windows ||= {})[locationId] = { cycle, startDay: today };
+  if (!receipt.missingName) state.searches[locationId] = attempt;
+  if (!receipt.missingName && attempt === 1 && today !== null) (state.windows ||= {})[locationId] = { cycle, startDay: today };
   state.receipts.push(receipt);
   runtime.locationLoot = state;
   return { status: 'settled' as const, receipt, text: lootReceiptText(receipt) };
@@ -251,7 +253,7 @@ function settleEnemySpoils(save: SaveData, runtime: any, locationId: string, tok
 function rollAndGrant({ save, runtime, table, location, locationId, state, id, attempt, turn, rng, categories, commonOnly, named }: {
   save: SaveData; runtime: any; table: LocationLootTable; location: LocationLootTable['locations'][string]; locationId: string;
   state: LocationLootState; id: string; attempt: number; turn: number; rng: number; categories?: Set<LootCategory>; commonOnly: boolean;
-  named?: { name: string; withSearch: boolean };
+  named?: { name: string; withSearch: boolean; quantity?: number };
 }): LocationLootReceipt {
   const seed = rng;
   const roll = seededRoller(rng);
@@ -279,7 +281,7 @@ function rollAndGrant({ save, runtime, table, location, locationId, state, id, a
   const namedHits = named ? eligible.filter(e => e.itemId && itemName(e) && named.name.includes(itemName(e)))
     .sort((a, b) => itemName(b).length - itemName(a).length) : [];
   for (const e of namedHits) if (!picked.some(p => itemName(p).includes(itemName(e)))) picked.push(e);
-  const rollPool = !named || !picked.length || named.withSearch;
+  const rollPool = !named || (picked.length > 0 && named.withSearch);
   const pick = (entries: LocationLootEntry[]) => {
     const pool = entries.filter(e => !picked.includes(e));
     const total = pool.reduce((n, e) => n + Math.max(0, e.weight ?? 1), 0);
@@ -302,7 +304,7 @@ function rollAndGrant({ save, runtime, table, location, locationId, state, id, a
   for (const entry of picked) {
     const [lo, hi] = entry.quantity;
     if (!Number.isInteger(lo) || !Number.isInteger(hi) || lo < 1 || hi < lo) throw new Error('搜刮数量区间无效');
-    let quantity = ['key', 'rare'].includes(entry.category) ? 1 : lo + Math.floor(roll() * (hi - lo + 1));
+    let quantity = namedHits.includes(entry) && named?.quantity !== undefined ? named.quantity : ['key', 'rare'].includes(entry.category) ? 1 : lo + Math.floor(roll() * (hi - lo + 1));
     if (entry.category === 'currency') {
       const currency = entry.currency || '铜铢';
       const rate = DEFAULT_CURRENCIES[currency as DefaultCurrencyId]?.价值度 ?? 1;
@@ -353,7 +355,9 @@ export function presentCompanionIds(save: SaveData, runtime: any): string[] {
 }
 export function lootReceiptText(receipt: LocationLootReceipt): string {
   const missing = receipt.missingName ? lootRespawnConfig().texts.namedMissing.replace('{name}', receipt.missingName) : '';
-  return missing + (receipt.drops.length ? `你搜刮后收好${receipt.drops.map(d => `${d.name}×${d.quantity}`).join('、')}。` : '你仔细搜刮了一番，没有找到可带走的东西。');
+  if (missing) return missing;
+  const texts = lootRespawnConfig().texts;
+  return receipt.drops.length ? texts.success.replace('{items}', receipt.drops.map(d => `${d.name}×${d.quantity}`).join('、')) : texts.empty;
 }
 
 /** 演出只允许收好本次回执物，不约束玩家观察清单外的物件。 */

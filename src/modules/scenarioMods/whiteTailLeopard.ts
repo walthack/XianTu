@@ -14,7 +14,7 @@ import { toPlayerStatusEffect } from '../sceneModule/statusAdapters';
 import { injuryStore, renderInjuryViews, sceneTime } from '../sceneModule/host/injuries';
 import { activeScene } from '../sceneModule/host/ext';
 import { CONTENT_PACKS } from '../contentPacks';
-import { encounterLocKey, placeMatches, nanhuangTestRates } from './randomEncounter';
+import { encounterLocKey, placeMatches, nanhuangTestRates, nanhuangChanceOverride, applyChanceOverride, type EncounterChanceOverride } from './randomEncounter';
 import { presentCompanionIds } from './locationLoot';
 import { scenarioPlayerId } from './playerIdentity';
 import { appendToLatestNarrative } from './fixedEndingNarratives';
@@ -98,7 +98,7 @@ export function expireWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leop
 }
 
 /** 每个故事回合收尾调一次。返回 changed＝存档有改动；text＝本回合接在正文后的遇见描写（没遇见为空）。 */
-export function tickWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leopardConfig()): { changed: boolean; text: string } {
+export function tickWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leopardConfig(), override?: EncounterChanceOverride): { changed: boolean; text: string } {
   const runtime = runtimeOf(save);
   if (!runtime || !cfg?.enabled) return { changed: false, text: '' };
   const turn = Number(runtime.worldTurn) || 0;
@@ -115,7 +115,10 @@ export function tickWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leopar
   const state: LeopardState = runtime.whiteTailLeopard ||= { lastTickTurn: turn, sightings: [] };
   state.lastTickTurn = turn;
   const roll = seededRoller(seedHash(`${saveSeed(save, 'whiteTailLeopard')}:${locKey}:${turn}`))();
-  if (!(roll < (nanhuangTestRates()?.leopardChance ?? cfg.chance))) return { changed: true, text: '' };
+  // 白尾豹几率：配置 cfg.chance → 南荒测试开关 leopardChance → 覆盖（参数优先，其次测试 URL/会话；只认 leopardChance 定值，chanceMul 只作用于遇敌）。
+  const ov = override ?? nanhuangChanceOverride();
+  const chance = applyChanceOverride(nanhuangTestRates()?.leopardChance ?? cfg.chance, ov?.leopardChance);
+  if (!(roll < chance)) return { changed: true, text: '' };
   const restored = restoreStamina(save, cfg.staminaRestoreRatio);
   mountBuff(save, cfg);
   state.buffUntilTurn = turn + cfg.buff.durationTurns;

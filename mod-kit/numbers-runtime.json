@@ -235,7 +235,13 @@
       "enabled": false,
       "flag": "xiantu.test.nanhuangEncounters",
       "encounterChance": 1,
-      "leopardChance": 1
+      "leopardChance": 1,
+      "overrideParams": {
+        "note": "南荒随机遇敌／白尾豹几率覆盖（用户 2026-11-01 确认）。几率仍由本文件驱动：遇敌基础值＝encounter.tiers[档].chance × encounter.difficulty[预设].chanceMul（测试开关 on 时南荒改用上面的 encounterChance），白尾豹基础值＝whiteTailLeopard.chance（开关 on 时用 leopardChance）。覆盖三项：chance＝遇敌定值，替换基础值；chanceMul＝遇敌倍率，乘在基础值（或 chance 定值）上；leopardChance＝白尾豹定值，替换豹基础值（chanceMul 不作用于豹）。结果一律夹在 0..1；三项都不给时行为与原来完全一致。来源优先级：tickRandomEncounter/tickEncounterAfterNarration/tickWhiteTailLeopard 的 override 参数 > URL 参数（? 或 # 后，读法同 flag）> 本标签页 sessionStorage（URL 给过即写入，值为空或 off 清除）。只作用于南荒，不受 flag 开关 on/off 影响。下面三项是 URL 参数名。",
+        "chance": "xiantu.test.encounterChance",
+        "chanceMul": "xiantu.test.encounterChanceMul",
+        "leopardChance": "xiantu.test.leopardChance"
+      }
     }
   },
   "perf": {

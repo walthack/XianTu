@@ -5,7 +5,7 @@
  * 有意不记玩家原文：detail 里 textKeys 下的字符串只留长度（textChars=0），见 redact.ts；也不要与 playerTextDebug 混用。
  * 唯一例外是 verbatim：叙事来源日志（LCQ-NAR-001）按总策划要求保留模型正文全文，只抹密钥形状、不截断。
  */
-import { ERROR_CODES, UNREGISTERED_CODE, isRegisteredCode, specOf } from './codes';
+import { CONSOLE_PREFIX_CODES, ERROR_CODES, UNREGISTERED_CODE, isRegisteredCode, specOf } from './codes';
 import { diagnosticsConfig, levelAtLeast, type LogLevel } from './config';
 import { redact, redactStack, scrubString } from './redact';
 import { logStore, onStoreDegrade, onStoreRotate, type LogEntry } from './store';
@@ -93,12 +93,14 @@ export function logEvent(input: LogEventInput): LogEntry | null {
     const registered = isRegisteredCode(input.code);
     const code = registered ? input.code : UNREGISTERED_CODE;
     const base = ERROR_CODES[code as keyof typeof ERROR_CODES];
+    const meaning = code === 'LCQ-NET-014' && (input.detail as { settledLocally?: boolean } | undefined)?.settledLocally === true
+      ? ERROR_CODES['LCQ-NET-017'].meaning : base.meaning;
     const level = input.level ?? base.level;
     if (!levelAtLeast(level, cfg.minLevel)) return null;
 
     const cause = input.cause;
     const causeText = cause === undefined ? '' : scrubString(toText(cause), cfg);
-    const msg = scrubString(input.msg ?? (causeText ? `${base.meaning}：${causeText}` : base.meaning), cfg, cfg.detailChars);
+    const msg = scrubString(input.msg ?? (causeText ? `${meaning}：${causeText}` : meaning), cfg, cfg.detailChars);
     let detail = input.detail === undefined ? undefined : redact(input.detail, cfg);
     if (input.verbatim) {
       const kept = Object.fromEntries(Object.entries(input.verbatim).map(([key, text]) => [key, scrubString(String(text), cfg, Number.MAX_SAFE_INTEGER)]));
@@ -151,12 +153,16 @@ export function logEventOnce(key: string, input: LogEventInput): LogEntry | null
   return logEvent(input);
 }
 
-/** consolePatch 用：console.error / console.warn 捕获为 LCQ-SYS-000（未登记）。 */
-export function logConsole(level: 'warn' | 'error', args: unknown[]): void {
-  if (emitting) return;
+/** consolePatch 用：console.error / console.warn 捕获为 LCQ-SYS-000（未登记）；CONSOLE_PREFIX_CODES 认领的前缀改记登记码。 */
+export function logConsole(level: 'warn' | 'error', args: unknown[]): LogEntry | null {
+  if (emitting) return null;
   const first = args.find(arg => typeof arg === 'string') as string | undefined;
   const cause = args.find(arg => arg instanceof Error);
-  logEvent({ level, code: UNREGISTERED_CODE, module: 'console', echo: false, detail: { args }, cause: cause as Error | undefined, msg: first ? `${ERROR_CODES[UNREGISTERED_CODE].meaning}：${first}` : undefined });
+  const claimed = first ? Object.entries(CONSOLE_PREFIX_CODES).find(([prefix]) => first.startsWith(prefix))?.[1] : undefined;
+  if (claimed && isRegisteredCode(claimed)) {
+    return logEvent({ level, code: claimed, echo: false, detail: { args }, cause: cause as Error | undefined, msg: `${ERROR_CODES[claimed as keyof typeof ERROR_CODES].meaning}：${first}` });
+  }
+  return logEvent({ level, code: UNREGISTERED_CODE, module: 'console', echo: false, detail: { args }, cause: cause as Error | undefined, msg: first ? `${ERROR_CODES[UNREGISTERED_CODE].meaning}：${first}` : undefined });
 }
 
 onStoreDegrade((reason, to) => { logEvent({ code: 'LCQ-SYS-001', detail: { to }, cause: reason }); });

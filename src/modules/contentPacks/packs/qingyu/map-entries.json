@@ -4,6 +4,7 @@
     "stageId": "lyg.qin_xianyang",
     "eventId": "liuchao.event.qin_hook_fangshi_rumor",
     "locationId": "liuchao.location.xianyang",
-    "readyPath": "compass.qinEntryReady"
+    "readyPath": "compass.qinEntryReady",
+    "previewTextId": "report8091.qin.preview"
   }
 ]

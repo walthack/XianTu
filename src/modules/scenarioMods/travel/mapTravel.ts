@@ -4,7 +4,7 @@ import runtimeNumbers from '../../../../mod-kit/numbers-runtime.json';
 import { mapEntryReady } from '../mapEntries';
 import { transitionToMapEntryStage } from '../strictInitializer';
 import locations from '../../../../mod-kit/entity-catalog/locations.json';
-import { CONTENT_PACKS } from '../../contentPacks';
+import { CONTENT_PACKS, packText } from '../../contentPacks';
 import type { SaveData } from '@/types/game';
 import { currentLocation } from './travelLedger';
 import { canonicalLocationId } from './locationIds';
@@ -156,12 +156,12 @@ export function mapArrivalViolation(save: SaveData, text: string): boolean {
 }
 
 /** 无副作用的出发预览；确认时必须重新核对，避免弹窗打开后路线或存档改变。 */
-export function mapTravelPreview(save: SaveData, toId: string): { key: string; label: string; days: number | null } | undefined {
+export function mapTravelPreview(save: SaveData, toId: string): { key: string; label: string; days: number | null; description?: string } | undefined {
   if (mapTravelRestriction(save, toId)) return undefined;
   const fromId = currentLocation(save).canonicalLocationId;
   if (!fromId) return undefined;
   const entry = CONTENT_PACKS.mapEntries?.find(e => e.locationId === canonicalLocationId(toId));
-  if (entry) return mapEntryReady(save, entry) ? { key: `${fromId}:${entry.id}`, label: '剧情入口转场（不另计路程天数）', days: null } : undefined;
+  if (entry) return mapEntryReady(save, entry) ? { key: `${fromId}:${entry.id}`, label: '剧情入口转场（不另计路程天数）', days: null, description: entry.previewTextId ? packText(entry.previewTextId) : undefined } : undefined;
   const route = mapRoutes(save, toId)[0];
   if (!route) return undefined;
   const days = route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost;

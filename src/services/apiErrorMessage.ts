@@ -1,3 +1,4 @@
+import { packText } from '../modules/contentPacks';
 import { readHttpStatus } from './aiRetryPolicy';
 import moderation from '../../mod-kit/ai-content-moderation.json';
 
@@ -43,8 +44,8 @@ export function toUserFacingAIError(error: unknown, info: { retries?: number; lo
   let userMessage: string;
   if (isContentModerationError(error)) {
     userMessage = info.localFallback
-      ? '内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。'
-      : '内容审核未通过（LCQ-NET-012）。本回合没有推进，可调整行动后重试；启用自动切换后可使用“API管理”中的备用连接。';
+      ? packText('report8091.moderation.local')
+      : packText('report8091.moderation.blocked');
   } else if (status === 401 || /invalid.{0,12}(?:api[_ -]?key|密钥)|unauthori[sz]ed|authentication/i.test(message)) {
     userMessage = 'API 密钥无效或已过期。请打开“API管理”重新填写密钥，并使用“测试连接”验证。';
   } else if (status === 402 || quota) {
@@ -65,5 +66,17 @@ export function toUserFacingAIError(error: unknown, info: { retries?: number; lo
 
   const result = new Error(userMessage);
   (result as any).cause = error;
+  if (isContentModerationError(error) && !info.localFallback) for (const receive of responseErrorObservers) receive(result);
   return result;
+}
+
+// AIBS 的旧返回协议会吞掉非 terminal 异常。只在当前 UI 请求期间订阅服务端分类，
+// 验证失败时还原提示；不依赖诊断开关、不更改生成/重试/提交行为，也不沿用上一拍错误。
+const responseErrorObservers = new Set<(error: Error) => void>();
+export async function captureAIResponseError<T>(run: () => Promise<T>): Promise<{ response: T; error?: Error }> {
+  let error: Error | undefined;
+  const receive = (value: Error) => { error = value; };
+  responseErrorObservers.add(receive);
+  try { return { response: await run(), error }; }
+  finally { responseErrorObservers.delete(receive); }
 }

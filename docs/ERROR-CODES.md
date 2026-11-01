@@ -77,8 +77,10 @@
 | LCQ-NET-011 | warn | turnTelemetry | 模型调用耗时超过阈值（perf.modelWarnMs） | 一次回合里模型从发请求到收完响应的耗时（detail.modelMs）超过 game-numbers `perf.modelWarnMs`；只记日志，不弹玩家提示、不改回合行为 | 看 detail.provider / model / retryCount / promptBytes；提示词过大或服务商限流/慢时出现，换更快的模型或服务商、缩小提示词；阈值可在 tuning.json 的 numbers.perf 热改 | 否 |
 | LCQ-NET-012 | warn | aiService | AI 请求被内容审核拦截 | HTTP 422 且包含 sensitive／1026／1027／moderation／content filter／敏感 | 查看持久日志 status、providerCode、requestId；玩家仅见审核提示，原文保留 cause。备用自动切换由 mod-kit/ai-content-moderation.json 的 fallbackEnabled 控制（默认 false），关闭或失败走本地叙事 | 否 |
 | LCQ-NET-013 | warn | aiService | 思考耗尽输出长度 | 正文为空、finish_reason=length、识别到思考模型/响应 | 同模型放大输出预算重试一次；再次耗尽则失败；日志仅预算和重试标记 | 否 |
-| LCQ-NET-014 | error | aiBidirectional | 回合正文生成失败，已用占位或本地安全正文兜底 | 回合主生成抛错（超时、截断、格式不对、玩家主体违规等）；固定背包剧本且有可信本地合同时改用本地安全正文并照常提交合同，否则返回「（AI生成失败）」占位、不执行任何指令 | 看 detail.error、detail.truncated / terminal / settledLocally / moduleOnly；同一 turnId 找 LCQ-NET-00x 看底层请求错误 | 否 |
+| LCQ-NET-014 | error | aiBidirectional | 回合正文生成失败，未本地结算 | 回合主生成抛错（超时、截断、格式不对、玩家主体违规等）；固定背包剧本且有可信本地合同时改用本地安全正文并照常提交合同，否则返回「（AI生成失败）」占位、不执行任何指令 | 看 detail.error、detail.truncated / terminal / settledLocally / moduleOnly；同一 turnId 找 LCQ-NET-00x 看底层请求错误 | 否 |
 | LCQ-NET-015 | warn | aiService | AI 接口不支持流式传输，已自动降级为非流式请求 | 流式请求报「不支持流式」类错误（OpenAI 兼容或 Claude 接口），本次改发非流式请求 | 看 detail.provider、detail.model 与 detail.error；该接口确实不支持流式时到设置里关闭流式传输 | 否 |
+| LCQ-NET-016 | error | aiBidirectional | AI双向系统生成失败 | AIBS 回合主生成 catch 的 console.error「[AI双向系统] AI生成失败」经 consolePatch 按 CONSOLE_PREFIX_CODES 认领（冻结文件不改） | 查看 cause 与同回合 NET-014 的结算分支 | 否 |
+| LCQ-NET-017 | error | aiBidirectional | 回合正文生成失败，已用本地安全正文结算 | NET-014 的 detail.settledLocally=true 时采用此文案模板 | 核对本地合同回执；NET-014 为 false 时明确未本地结算 | 否 |
 | LCQ-NUM-001 | error | numbers | 数值配置对象无效 | tuning.json numbers 段里某处应为对象却写成了别的类型 | 按消息里的路径修正为对象 | 否 |
 | LCQ-NUM-002 | error | numbers | 数值配置含未知键 | numbers 段含 game-numbers.qingyu.json 里不存在的键（拼写错误或已删除的键） | 按消息里的路径核对键名；只能改已有键，不能新增 | 否 |
 | LCQ-NUM-003 | error | numbers | 数值配置类型无效 | numbers 段某个值的类型与默认值不同（数字写成字符串等）或为非有限数 | 按消息里的路径改成与默认值相同类型 | 否 |

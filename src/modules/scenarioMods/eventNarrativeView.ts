@@ -5,7 +5,7 @@ import { locationWithin } from './travel/locationIds';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { evaluateLedgerCondition } from './ledgerConditions';
 import { computePresentNames } from './presence';
-import { CONTENT_PACKS } from '../contentPacks';
+import { CONTENT_PACKS, packText } from '../contentPacks';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
@@ -378,4 +378,11 @@ export function questStallHint(stallTurns: unknown, mainActionLabel: string | un
   const goal = String(objective || '').trim();
   const goalNote = goal && !mainActionLabel.includes(goal) ? `（${goal}）` : '';
   return `主线已有 ${turns} 轮没有推进：可直接点行动区的「主线 · ${mainActionLabel}」，或照目标行动${goalNote}。`;
+}
+
+/** 旅行已经落位后，行动展示承接所在地；合同 id/hash 与结算条件不变。 */
+export function storyActionPresentation<T extends { eventId: string; actionId: string; label: string; playerLine: string }>(action: T, save: any): T {
+  if (action.eventId !== 'lyl.event.han_shouyang_gaoyanei' || action.actionId !== 'descend_shouyang_to_wudu'
+    || save?.角色?.位置?.locationId !== 'liuchao.location.wudu') return action;
+  return { ...action, label: packText('report8091.han.arrived.label'), playerLine: packText('report8091.han.arrived.playerLine') };
 }

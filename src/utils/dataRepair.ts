@@ -331,7 +331,8 @@ function repairRealm(realm: any): Realm {
     阶段: stage,
     当前进度: progress,
     下一级所需: required,
-    突破描述: realm.突破描述 || getDefaultBreakthroughDescription()
+    突破描述: realm.突破描述 || getDefaultBreakthroughDescription(),
+    ...(typeof realm.九阳层次 === 'string' ? { 九阳层次: realm.九阳层次 } : {})
   };
 }
 

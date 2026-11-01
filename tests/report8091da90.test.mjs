@@ -48,7 +48,7 @@ test('P1-1 发青光的硬物＝原著龙精：已裁定不归玩家、不进鬼
   }
 });
 
-test('P1-1 CP03「取出发青光的硬物收进背包」：回显点名没取到这件，龙精不入包；照常搜刮且回执与背包一致、重放不双发', () => {
+test('P1-1 CP03「取出发青光的硬物收进背包」：回显点名没取到这件，龙精不入包；只拒绝且不消耗搜刮次数、重放不双发', () => {
   const s = cp03();
   assert.equal(Object.keys(s.角色.背包.物品).length, 23);
   const input = '取出发青光的硬物收进背包';
@@ -57,6 +57,9 @@ test('P1-1 CP03「取出发青光的硬物收进背包」：回显点名没取�
   const text = legacyLootTurn(s, input);
   const receipt = rt(s).locationLoot.receipts.at(-1);
   assert.equal(receipt.missingName, '发青光的硬物');
+  assert.deepEqual(receipt.drops, []);
+  assert.deepEqual(s.角色.背包.物品, before);
+  assert.equal(rt(s).locationLoot.searches[receipt.locationId] || 0, 0);
   assert.ok(text.startsWith(GAME_NUMBERS.loot.texts.namedMissing.replace('{name}', '发青光的硬物')), text);
   assert.equal(s.角色.背包.物品['lyg.item.np091'], undefined, '龙精不入包');
   for (const d of receipt.drops.filter(d => d.itemId)) {

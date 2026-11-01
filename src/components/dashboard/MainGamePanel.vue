@@ -168,12 +168,12 @@
 
           <!-- 行动选项 -->
           <div
-            v-if="!scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length && scenarioEngineActionOptions.length"
+            v-if="currentNarrative.type !== 'stage_entry' && !scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length && scenarioEngineActionOptions.length"
             class="other-action-label"
           >
             {{ t('其他行动') }}
           </div>
-          <div v-if="!scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length" class="action-options secondary-action-options">
+          <div v-if="currentNarrative.type !== 'stage_entry' && !scenarioGameOver && uiStore.enableActionOptions && !keyBeatCard && !branchDecision && currentNarrative.actionOptions?.length" class="action-options secondary-action-options">
             <button
               v-for="(option, index) in currentNarrative.actionOptions"
               :key="index"
@@ -593,7 +593,9 @@ import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import { pilotOptionsDiagnostic } from '@/modules/scenarioMods/legacyPilotActionOptions';
 import { narrativeTriggers, recordTurnNarrative } from '@/modules/diagnostics/narrativeSource';
 import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
-import { tickRandomEncounter, encounterNarratedBy } from '@/modules/scenarioMods/randomEncounter';
+import { storyActionPresentation } from '@/modules/scenarioMods/eventNarrativeView';
+import { captureAIResponseError } from '@/services/apiErrorMessage';
+import { tickEncounterAfterNarration } from '@/modules/scenarioMods/randomEncounter';
 import { tickWhiteTailLeopard } from '@/modules/scenarioMods/whiteTailLeopard';
 import { logError, logEvent } from '@/modules/diagnostics/log';
 import { summarizeError, summarizeList } from '@/modules/diagnostics/errorSummary';
@@ -692,13 +694,13 @@ const persistJudgementSave = async (save: any) => {
   refreshPendingJudgement();
 };
 // 随机遇敌：故事回合成功收尾后推进一次（只写 剧本模组.encounter；场面宿主回合不走这里）。
-// 事实包没送到叙事模型的回合（固定文本、05b 模块路径）不算演出过，见 encounterNarratedBy。
+// 固定文本、05b 模块路径没有模型遇敌事实包，先补本地演出，再推进既有遇敌阶段。
 // 作者跳年（如序幕四年）的过渡叙述也在这里接到本回合正文之后，只接一次；白尾豹彩蛋同样在这里结算。
 const tickEncounterAfterTurn = async (resp: any) => {
   const s = gameStateStore.toSaveData(); if (!s) return;
   try {
     const interlude = flushTimeSkipInterlude(s);
-    const r = tickRandomEncounter(s, { narrated: encounterNarratedBy(s, resp?.moduleReceipt?.path) });
+    const r = tickEncounterAfterNarration(s, resp?.moduleReceipt?.path);
     // 南荒密林白尾豹彩蛋：遇见描写接在本回合正文之后。
     const leopard = tickWhiteTailLeopard(s);
     if (r.changed || interlude || leopard.changed) await persistJudgementSave(s);
@@ -997,6 +999,7 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
   const openWorldActions = getWuyuanOpenWorldSelections(save);
   const gambleRefusalActions = getBaihuGambleRefusalSelections(save);
   const eventActions = getCurrentStoryEventActions(save)
+    .map(action => storyActionPresentation(action, save))
     // 五原落奴这拍由“先走到点心铺 → 选择应对过程 → 收束既定被抓事实”的局部合同承接。
     // 隐藏旧的宽泛单按钮，避免绕过移动、代价和失败转新状态。
     .filter(action => !(openWorldActions.length && action.eventId === 'lcq.event.s02_04'));
@@ -1169,7 +1172,7 @@ const currentNarrative = computed(() => {
       content: stageEntry.text,
       time: currentTimeString,
       stateChanges: { changes: [] },
-      actionOptions: []
+      actionOptions: scenarioEngineActionOptions.value.map(engineOptionLine)
     };
   }
 
@@ -2473,11 +2476,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
       (options as { qingyuTurnId?: string }).qingyuTurnId = qingyuTurnId;
       const narrativeStartedAt = Date.now();
-      aiResponse = await bidirectionalSystem.processPlayerAction(
+      const captured = await captureAIResponseError(() => bidirectionalSystem.processPlayerAction(
         finalUserMessage,
         character,
         options
-      );
+      ));
+      aiResponse = captured.response;
 
       if (!uiStore.isAIProcessing || aiResetToken !== resetSnapshot) {
         console.log('[AI响应处理] 已重置，忽略本次响应');
@@ -2498,6 +2502,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         }
         const validation = validateProcessedAIResponse(aiResponse);
         if (!validation.isValid) {
+          if (captured.error) { toast.warning(captured.error.message); aiResponse = null; return; }
           console.warn('[AI响应验证] 结构验证失败:', validation.errors);
           const saveForRetry = gameStateStore.toSaveData();
           if (

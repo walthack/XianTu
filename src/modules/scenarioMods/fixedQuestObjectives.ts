@@ -1,3 +1,4 @@
+import { packText } from '../contentPacks';
 import {entityText} from './namedEntities';
 /**
  * 玩家侧固定任务目标覆盖。
@@ -78,6 +79,7 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
 
 export function resolveFixedQuestObjective(event: QuestObjectiveEventLike | null | undefined): string {
   const eventId = String(event?.id || '').trim();
+  if (eventId === 'lyl.event.han_shouyang_gaoyanei') return packText('report8091.han.arrived.objective');
   if (eventId === 'lcq.event.s02_04') return '先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人';
   if (eventId === 'lcq.event.huamiao_coop_boundary') return '跟云苍峰谈清进鬼王峒的合作边界';
   if (eventId && FIXED_QUEST_OBJECTIVE_OVERRIDES[eventId]) {

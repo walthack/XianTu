@@ -19,6 +19,14 @@ const spec = (level: LogLevel, module: string, meaning: string, toast = false): 
 /** 兜底码：没登记的码、console.error / console.warn 捕获、写日志时传错码，都落到这里。 */
 export const UNREGISTERED_CODE = 'LCQ-SYS-000';
 
+/**
+ * 冻结文件里沿用 console.error/warn 的已知日志：consolePatch 捕获时按首个字符串前缀改记登记码，不再落 SYS-000。
+ * 冻结文件不迁 console（tests/debugLogMigration 门禁），只在这里认领。
+ */
+export const CONSOLE_PREFIX_CODES: Readonly<Record<string, string>> = {
+  '[AI双向系统] AI生成失败': 'LCQ-NET-016',
+};
+
 export const ERROR_CODES = {
   'LCQ-SAV-040': spec('warn', 'calendarMigration', '旧历法时间戳迁移失败'),
   'LCQ-SAV-039': spec('error', 'actionTime', '时间来源或回执冲突'),
@@ -135,7 +143,9 @@ export const ERROR_CODES = {
   'LCQ-NET-011': spec('warn', 'turnTelemetry', '模型调用耗时超过阈值（perf.modelWarnMs）'),
   'LCQ-NET-012': spec('warn', 'aiService', 'AI 请求被内容审核拦截'),
   'LCQ-NET-013': spec('warn', 'aiService', '思考耗尽输出长度'),
-  'LCQ-NET-014': spec('error', 'aiBidirectional', '回合正文生成失败，已用占位或本地安全正文兜底'),
+  'LCQ-NET-014': spec('error', 'aiBidirectional', '回合正文生成失败，未本地结算'),
+  'LCQ-NET-016': spec('error', 'aiBidirectional', 'AI双向系统生成失败'),
+  'LCQ-NET-017': spec('error', 'aiBidirectional', '回合正文生成失败，已用本地安全正文结算'),
   'LCQ-NET-015': spec('warn', 'aiService', 'AI 接口不支持流式传输，已自动降级为非流式请求'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),

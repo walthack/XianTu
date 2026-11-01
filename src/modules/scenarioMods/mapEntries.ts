@@ -4,7 +4,7 @@ import { CONTENT_PACKS } from '../contentPacks';
 import { resolveLedgerPath } from './ledgerConditions';
 import { activeScene } from '../sceneModule/host/ext';
 
-export interface MapEntry { id: string; stageId: string; eventId: string; locationId: string; readyPath: string }
+export interface MapEntry { id: string; stageId: string; eventId: string; locationId: string; readyPath: string; previewTextId?: string }
 
 export function mapEntryReady(save: SaveData, entry: MapEntry): boolean {
   const rt = (save as any).世界?.状态?.剧本模组;

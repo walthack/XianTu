@@ -157,7 +157,7 @@
         <p class="location-type">{{ getLocationTypeName(selectedLocation.type) }}</p>
         <p v-if="selectedTravelRestriction">{{ selectedTravelRestriction }}</p>
         <p v-else-if="mapTravelNotice">{{ mapTravelNotice }}</p>
-        <p class="location-desc">{{ selectedLocation.description || selectedLocation.描述 }}</p>
+        <p class="location-desc">{{ selectedTravelPreview?.description || selectedLocation.description || selectedLocation.描述 }}</p>
         <div v-if="selectedLocation.danger_level" class="location-detail">
           <strong>安全等级：</strong>{{ selectedLocation.danger_level }}
         </div>

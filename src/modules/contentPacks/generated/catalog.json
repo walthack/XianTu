@@ -1,5 +1,5 @@
 {
-  "version": "42e24ac0b547fdcf",
+  "version": "800a103071e5cb5b",
   "contracts": [
     {
       "meta": {
@@ -10710,7 +10710,8 @@
       "stageId": "lyg.qin_xianyang",
       "eventId": "liuchao.event.qin_hook_fangshi_rumor",
       "locationId": "liuchao.location.xianyang",
-      "readyPath": "compass.qinEntryReady"
+      "readyPath": "compass.qinEntryReady",
+      "previewTextId": "report8091.qin.preview"
     }
   ],
   "overlays": [
@@ -17242,6 +17243,14 @@
     "nanhuang.leopard.line.su_li": "苏荔：「是山神的宠儿白尾豹。它不扑人，是山神在照看我们。」",
     "nanhuang.leopard.line.a_xi": "阿夕：「白尾豹！它看了我一眼……族长，我可没拿蝎子丢它！」",
     "nanhuang.leopard.line.shiweimo": "诗薇莫：「花苗的山神宠儿……蛇彝人见了，也只该低头让路。」",
+    "report8091.han.arrived.label": "在舞都安顿，与冯源一行会合",
+    "report8091.han.arrived.playerLine": "我在舞都安顿下来，与冯源他们会合，打听云如瑶的下落。",
+    "report8091.han.arrived.objective": "在舞都与冯源一行会合，打听云如瑶的下落",
+    "report8091.qin.preview": "前往秦都咸阳落脚，打听商人求见秦王的门路。",
+    "report8091.moderation.blocked": "内容审核未通过（LCQ-NET-012）。本回合没有推进，可调整行动后重试；启用自动切换后可使用“API管理”中的备用连接。",
+    "report8091.moderation.local": "内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。",
+    "report8091.encounter.foreshadow": "{place}周围传来异样的声响，地上留着新鲜的踪迹。这里并不安全，你可以继续探查，也可以离开。",
+    "report8091.encounter.reveal": "{enemy}循着动静现身，挡在前方。对方共{count}个，尚未交手，你可以决定如何应对。",
     "text.act.baihu.o1.priced": "挺直腰板，把话说成一笔买卖",
     "intent.baihu.o1.priced": "我挺直腰板对苏妲己说：这是一笔买卖，价钱先谈清楚。",
     "outcome.act.baihu.o1.priced": "你没有低头，把话说成了一笔买卖。苏妲己抬眼看了你一下，没有打断。",
