@@ -135,7 +135,7 @@ test('P2-3 sessionStorage 开关+真实 UI 回合末路径：05b 模块寻兽不
   try {
     assert.equal(E.encounterGate(s),null);assert.equal(E.nanhuangTestRates().encounterChance,1);
     const store=await gameStore(s);
-    const tick=cut(main,'const tickEncounterAfterTurn = async','// 🔥 使用全局状态', ['gameStateStore','flushTimeSkipInterlude','tickEncounterAfterNarration','tickWhiteTailLeopard','persistJudgementSave','logError'], '\nreturn tickEncounterAfterTurn;')(store,()=>'',E.tickEncounterAfterNarration,()=>({changed:false}),async next=>store.loadFromSaveData(next),(_code,e)=>{throw e;});
+    const tick=cut(main,'const tickEncounterAfterTurn = async','// 🔥 使用全局状态', ['gameStateStore','flushTimeSkipInterlude','tickEncounterAfterNarration','tickRareEncounters','persistJudgementSave','logError'], '\nreturn tickEncounterAfterTurn;')(store,()=>'',E.tickEncounterAfterNarration,()=>({changed:false}),async next=>store.loadFromSaveData(next),(_code,e)=>{throw e;});
     for(let i=0;i<4;i++) {
       s=store.toSaveData();rt(s).worldTurn++;
       s.系统.历史.叙事.push({type:'narrative',content:'我主动寻兽，循踪探查。',actionOptions:[]});
@@ -149,14 +149,14 @@ test('P2-3 sessionStorage 开关+真实 UI 回合末路径：05b 模块寻兽不
     s.角色.位置={locationId:'lcq.location.huamiao_village',描述:'南荒·花苗寨'};assert.equal(E.encounterGate(s),'village');
   } finally {globalThis.sessionStorage=previous;}
 });
-test('P2-4 汉线实际建议与罗盘承接已在舞都；三份检查点读档与原链路 repair 后保留一阳',async()=>{
+test('P2-4 汉线实际建议与罗盘承接已在舞都；三份检查点读档与原链路 repair 后保留九阳层次状态（标题不显示，见 report8091_f76e ③）',async()=>{
   const repair=await load('utils/dataRepair.ts'), realm=await load('utils/realmUtils.ts');
   for(const line of ['han','tang','taiquan']) {
     const s=fixture(`checkpoints/current-${line}-entry.json`), store=await gameStore(s);
-    const before=realm.formatRealmWithStage(store.attributes.境界);assert.match(before,/一阳/);
+    const before=realm.formatRealmWithStage(store.attributes.境界);assert.equal(store.attributes.境界.九阳层次,'一阳');
     // processGmResponse 2621-2623 的原调用：修复后克隆，再 load。从修复起点验证字段不丢。
     const restored=repair.repairSaveData(store.toSaveData());store.loadFromSaveData(structuredClone(restored));
-    assert.equal(realm.formatRealmWithStage(store.attributes.境界),before);
+    assert.equal(store.attributes.境界.九阳层次,'一阳');assert.equal(realm.formatRealmWithStage(store.attributes.境界),before);
     if(line==='han') {
       const options=engineOptions(store);assert.ok(options.length);assert.doesNotMatch(options.map(a=>a.label).join(''),/赶往舞都|下首阳/);
       assert.match(options[0].label,/在舞都/);

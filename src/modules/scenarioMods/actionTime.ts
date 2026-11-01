@@ -2,9 +2,10 @@ import type { SaveData, GameTime } from '@/types/game';
 import { registerNumbersValidator, GAME_NUMBERS } from '../sceneModule/numbers';
 import { advanceScenarioRuntime } from './runtime';
 import { deferOptionalDeparture } from './questLineContext';
-import { advanceClock, syncNanhuangRailTravel } from './travel/travelLedger';
+import { advanceClock, isNanhuangTravelStage, syncNanhuangRailTravel } from './travel/travelLedger';
 import { gameTimeMinutes } from '@/utils/time';
 import { logEvent } from '../diagnostics/log';
+import { domesticTravelDays } from './travel/routeDays';
 export interface ActionTime { tier: '一瞬' | '片刻' | '一时辰' | '半日' | '一日' | '数日'; days?: number }
 export interface CultivationSelection { kind: 'cultivation'; days: number; actionId: string }
 export const actionTimeConfig = () => GAME_NUMBERS.story.actionTime;
@@ -46,6 +47,8 @@ export function settleActionTime(save: SaveData, response: any, options: any, ca
   const id = response.moduleReceipt?.id || options?.timeActionId;
   if (!id) return null;
   const rt = (save as any).世界?.状态?.剧本模组;
+  // 点名要的东西本地点没有：只回执拒绝，不发物、不耗次数，也不耗时（REPORT-8091-f76e07a7 ⑦）。
+  if (response.localLoot && namedLootRefused(rt)) return null;
   // 正式runtime在正文时间前缀之后推进；先用它的只读克隆算出本拍确实会落账的路线。
   // 只提前落相同的行旅回执，事件/回合仍由原入口推进，保留可选离城窗口。
   if (Array.isArray(rt?.events) && Array.isArray(rt?.chapters) && (rt?.travelLedger || rt?.modId === 'lcq.stage_02')) {
@@ -72,8 +75,26 @@ export function settleActionTime(save: SaveData, response: any, options: any, ca
     for (const selection of selections) settleTime(save, 'cultivation:' + selection.actionId, selection.days * 1440, 'cultivation');
     return { oldValue, newValue: structuredClone((save as any).元数据.时间) };
   }
-  const minutes = card?.action_time ? parseActionTime(card.action_time, id) : step ? Number(GAME_NUMBERS.story.stepScene.minutesPerBeat) : parseActionTime(response.action_time, id);
-  return settleTime(save, id, minutes, step ? 'beat' : 'model');
+  const travelMinutes = card?.action_time ? undefined : questTravelMinutes(save, options);
+  const minutes = card?.action_time ? parseActionTime(card.action_time, id) : travelMinutes ?? (step ? Number(GAME_NUMBERS.story.stepScene.minutesPerBeat) : parseActionTime(response.action_time, id));
+  return settleTime(save, id, minutes, travelMinutes !== undefined ? 'travel' : step ? 'beat' : 'model');
+}
+/**
+ * 罗盘移动（runtime 的 travel:<地点> 动作，结算时人已被挪到目的地）的路程：从发送时所在地点（界面随动作带上的 travelFromLocationId）算起，
+ * 按 travel/routeDays 的国内路程天数结算，不再按一拍的演出时间（REPORT-8091-f76e07a7 P1-2：舞都→洛都只过 15 分钟）。
+ * 南荒行旅关自有路线与时钟，不走这里；没带出发地或算不出路程时返回 undefined，沿用原耗时。
+ */
+export function questTravelMinutes(save: SaveData, options: any): number | undefined {
+  const action = options?.eventAction, rt = (save as any).世界?.状态?.剧本模组;
+  const actionId = String(action?.actionId || '');
+  if (!rt || isNanhuangTravelStage(rt.modId) || action?.source !== 'event_engine' || !actionId.startsWith('travel:')) return undefined;
+  const days = domesticTravelDays(action.travelFromLocationId, actionId.slice('travel:'.length));
+  return days === undefined ? undefined : days * 1440;
+}
+/** 本回合的搜刮回执是「点名缺物」拒绝（有 missingName、没发任何东西）。 */
+function namedLootRefused(rt: any): boolean {
+  const receipt = rt?.locationLoot?.receipts?.at?.(-1);
+  return !!receipt?.missingName && !(receipt.drops || []).length && Number(receipt.turn) === (Number(rt?.worldTurn) || 0);
 }
 export function actionTimePrompt(): string {
   const c = actionTimeConfig();

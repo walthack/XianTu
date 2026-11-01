@@ -16,8 +16,8 @@
             "年": 224,
             "月": 3,
             "日": 28,
-            "小时": 13,
-            "分钟": 58
+            "小时": 14,
+            "分钟": 13
           },
           "calendarVersion": 1
         },
@@ -24335,7 +24335,7 @@
                   "predicate": "known",
                   "status": "confirmed",
                   "disclosureScope": "player",
-                  "learnedAtTurn": 13,
+                  "learnedAtTurn": 14,
                   "claim": "你已知晓徐璜",
                   "source": {
                     "kind": "observed",
@@ -24349,7 +24349,7 @@
                   "predicate": "known",
                   "status": "confirmed",
                   "disclosureScope": "player",
-                  "learnedAtTurn": 14,
+                  "learnedAtTurn": 15,
                   "claim": "你已知晓赵合德",
                   "source": {
                     "kind": "observed",
@@ -24363,7 +24363,7 @@
                   "predicate": "known",
                   "status": "confirmed",
                   "disclosureScope": "player",
-                  "learnedAtTurn": 14,
+                  "learnedAtTurn": 15,
                   "claim": "你已知晓赵飞燕",
                   "source": {
                     "kind": "observed",
@@ -27609,7 +27609,7 @@
                   "type": "event",
                   "stageId": "lyl.taiquan_afterfall",
                   "title": "洛都风波",
-                  "detail": "前往洛都查明风波",
+                  "detail": "在舞都打听平亭侯下狱的风波",
                   "sequence": 267
                 },
                 {
@@ -36712,8 +36712,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:346": {
-                  "id": "line-checkpoint:346",
+                "line-checkpoint:345": {
+                  "id": "line-checkpoint:345",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -37032,8 +37032,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:363": {
-                  "id": "line-checkpoint:363",
+                "line-checkpoint:362": {
+                  "id": "line-checkpoint:362",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -37572,8 +37572,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:391": {
-                  "id": "line-checkpoint:391",
+                "line-checkpoint:390": {
+                  "id": "line-checkpoint:390",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -38112,8 +38112,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:419": {
-                  "id": "line-checkpoint:419",
+                "line-checkpoint:418": {
+                  "id": "line-checkpoint:418",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -38412,8 +38412,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:435": {
-                  "id": "line-checkpoint:435",
+                "line-checkpoint:434": {
+                  "id": "line-checkpoint:434",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -38609,6 +38609,26 @@
                     "日": 28,
                     "小时": 13,
                     "分钟": 58
+                  },
+                  "version": 1
+                },
+                "line-checkpoint:445": {
+                  "id": "line-checkpoint:445",
+                  "source": "model",
+                  "minutes": 15,
+                  "oldTime": {
+                    "年": 224,
+                    "月": 3,
+                    "日": 28,
+                    "小时": 13,
+                    "分钟": 58
+                  },
+                  "newTime": {
+                    "年": 224,
+                    "月": 3,
+                    "日": 28,
+                    "小时": 14,
+                    "分钟": 13
                   },
                   "version": 1
                 }

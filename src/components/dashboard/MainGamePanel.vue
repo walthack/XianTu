@@ -596,7 +596,7 @@ import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelf
 import { storyActionPresentation } from '@/modules/scenarioMods/eventNarrativeView';
 import { captureAIResponseError } from '@/services/apiErrorMessage';
 import { tickEncounterAfterNarration } from '@/modules/scenarioMods/randomEncounter';
-import { tickWhiteTailLeopard } from '@/modules/scenarioMods/whiteTailLeopard';
+import { tickRareEncounters } from '@/modules/scenarioMods/rareEncounters';
 import { logError, logEvent } from '@/modules/diagnostics/log';
 import { summarizeError, summarizeList } from '@/modules/diagnostics/errorSummary';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
@@ -695,15 +695,15 @@ const persistJudgementSave = async (save: any) => {
 };
 // 随机遇敌：故事回合成功收尾后推进一次（只写 剧本模组.encounter；场面宿主回合不走这里）。
 // 固定文本、05b 模块路径没有模型遇敌事实包，先补本地演出，再推进既有遇敌阶段。
-// 作者跳年（如序幕四年）的过渡叙述也在这里接到本回合正文之后，只接一次；白尾豹彩蛋同样在这里结算。
+// 作者跳年（如序幕四年）的过渡叙述也在这里接到本回合正文之后，只接一次；稀有遇见（白尾豹等）同样在这里结算。
 const tickEncounterAfterTurn = async (resp: any) => {
   const s = gameStateStore.toSaveData(); if (!s) return;
   try {
     const interlude = flushTimeSkipInterlude(s);
     const r = tickEncounterAfterNarration(s, resp?.moduleReceipt?.path);
-    // 南荒密林白尾豹彩蛋：遇见描写接在本回合正文之后。
-    const leopard = tickWhiteTailLeopard(s);
-    if (r.changed || interlude || leopard.changed) await persistJudgementSave(s);
+    // 稀有遇见（白尾豹等，配置 encounter.rareEncounters）：遇见描写接在本回合正文之后。
+    const rare = tickRareEncounters(s);
+    if (r.changed || interlude || rare.changed) await persistJudgementSave(s);
   } catch (e) { logError('LCQ-SAV-032', e, { detail: { phase: 'tick' } }); }
 };
 // 🔥 使用全局状态替代组件状态
@@ -2444,6 +2444,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (resolvedOpportunityAction) options.opportunityAction = { ...resolvedOpportunityAction };
       else if (resolvedEventAction) {
         options.eventAction = { ...resolvedEventAction };
+        // 罗盘移动结算时人已到目的地：带上出发地，actionTime 按两地路程计时（REPORT-8091-f76e07a7 P1-2）。
+        if (String(resolvedEventAction.actionId || '').startsWith('travel:')) (options.eventAction as Record<string, unknown>).travelFromLocationId = gameStateStore.location?.locationId;
         options.eventActionProvenance = exactSelectedEventAction ? 'selected' : 'resolved_text';
       }
       if (resolvedOpenWorldAction) options.openWorldAction = { ...resolvedOpenWorldAction };

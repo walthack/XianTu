@@ -366,6 +366,35 @@ export function ledgerRecordTurnLabel(runtime: any, record: { sourceEventId?: st
   return `${label ? `第${label}关 · ` : ''}${local}`;
 }
 
+/** 「认知与路径」面板只给玩家看中文：任何带拉丁字母的字段（lyg./lyl./lcq. 原始键、method 等英文维度）都不直接显示（REPORT-8091-f76e07a7 ⑤）。 */
+const RAW_LEDGER_TEXT = /[A-Za-z]/;
+const PATH_DIMENSION_LABELS: Readonly<Record<string, string>> = {
+  position: '立场', allegiance: '归属', method: '做法', participation: '参与', route: '路线',
+  trust: '信任', hostility: '敌意', obligation: '人情', caution: '戒备',
+};
+const ledgerName = (runtime: any, id: unknown): string | undefined => {
+  const pool = [...(runtime?.canon?.characters || []), ...(runtime?.canon?.factions || []), ...(runtime?.canon?.locations || []), ...(runtime?.events || [])];
+  const name = pool.find((item: any) => item?.id === id)?.name;
+  return typeof name === 'string' && name.trim() && !RAW_LEDGER_TEXT.test(name) ? name : undefined;
+};
+export function ledgerKnowledgeClaim(runtime: any, fact: { claim?: unknown; subjectId?: unknown }): string {
+  if (typeof fact.claim === 'string' && fact.claim.trim() && !RAW_LEDGER_TEXT.test(fact.claim)) return fact.claim;
+  const name = ledgerName(runtime, fact.subjectId);
+  return name ? `你已知晓${name}` : '已记录一条线索（原记录缺少名称）';
+}
+export function ledgerKnowledgeSource(runtime: any, fact: { source?: { label?: unknown }; sourceEventId?: unknown }): string {
+  const label = fact.source?.label;
+  return typeof label === 'string' && label.trim() && !RAW_LEDGER_TEXT.test(label) ? label : ledgerName(runtime, fact.sourceEventId) || '已发生的剧情';
+}
+export function ledgerPathLabel(receipt: { label?: unknown }): string {
+  return typeof receipt.label === 'string' && receipt.label.trim() && !RAW_LEDGER_TEXT.test(receipt.label) ? receipt.label : '已作出的选择';
+}
+export function ledgerPathDimension(dimension: unknown): string {
+  const raw = String(dimension || '');
+  if (PATH_DIMENSION_LABELS[raw]) return PATH_DIMENSION_LABELS[raw];
+  return raw && !RAW_LEDGER_TEXT.test(raw) ? raw : '剧情分支';
+}
+
 /** 停滞几轮后给玩家看推进提示（与叙事端「回主线轻引子」同阈值）。 */
 export const QUEST_STALL_HINT_TURNS = 4;
 /**

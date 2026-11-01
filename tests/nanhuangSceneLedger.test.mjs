@@ -61,7 +61,7 @@ test('clock is monotonic/idempotent, K20 records one-yang without inventing a ge
  const s=await open('04b_lingfei_baiyi_crisis'),old=s.角色.属性.境界.名称;
  const e=rt(s).events.find(e=>e.id==='lcq.event.yiyang_repels_yinsha');const a=e.playerCompletionContract.actions.at(-1);
  facts.applyStepSceneLedger(s,rt(s),e.id,a.id);assert.equal(s.角色.属性.境界.名称,old);assert.equal(s.角色.属性.境界.九阳层次,'一阳');
- const {formatRealmWithStage}=await loadTs('../src/utils/realmUtils.ts');assert.match(formatRealmWithStage(s.角色.属性.境界),/一阳/);
+ const {formatRealmWithStage}=await loadTs('../src/utils/realmUtils.ts');assert.doesNotMatch(formatRealmWithStage(s.角色.属性.境界),/一阳/,'九阳层次只记状态，不进境界显示（REPORT-8091-f76e07a7 ③）');
  const time=JSON.stringify(s.元数据.时间);facts.applyStepSceneLedger(s,rt(s),e.id,a.id);assert.equal(JSON.stringify(s.元数据.时间),time);
  assert.ok(facts.sceneLedgerSummary(s).已故.includes('王哲'));assert.doesNotMatch(JSON.stringify(facts.sceneLedgerSummary(s)),/十里焦土/);
 });

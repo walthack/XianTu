@@ -395,7 +395,7 @@ import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Us
 import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
 import { useUIStore } from '@/stores/uiStore';
-import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed, mapTravelArrivalNotice } from '@/modules/scenarioMods/travel/mapTravel';
+import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed, mapTravelArrivalNotice, mapHeaderInfo } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
 import { logEvent } from '@/modules/diagnostics/log';
@@ -965,8 +965,10 @@ const densityMultipliers: Record<MapDensity, { faction: number; location: number
   dense: { faction: 1.5, location: 1.5 },
 };
 
-const worldName = computed(() => activeWorldInfo.value?.世界名称 || '修仙界');
-const worldBackground = computed(() => activeWorldInfo.value?.世界背景 || '');
+// 剧本档标头写玩家当前所在，背景不提当前地名就不显示（REPORT-8091-f76e07a7 ⑥）。
+const mapHeader = computed(() => mapHeaderInfo(activeWorldInfo.value, gameStateStore.location, scenarioMapLocked.value));
+const worldName = computed(() => mapHeader.value.name);
+const worldBackground = computed(() => mapHeader.value.background);
 const mapRenderConfig = computed(() => {
   const mapConfig = (activeWorldInfo.value as any)?.['地图配置'];
   const width = Number(mapConfig?.width) || 10000;

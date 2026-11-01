@@ -2462,6 +2462,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_enter_xianyang.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -2533,6 +2543,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_entry_envoy.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -2625,6 +2645,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_find_xu.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -2692,6 +2722,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_entry_camp.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -2759,6 +2799,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_king_refuses.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -2827,6 +2877,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_xu_auspice.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -2901,6 +2961,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_yu_sisters_refuge.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -2972,6 +3042,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_new_year_banquet.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3039,6 +3119,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_palace_sealed.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3106,6 +3196,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_succession_fight.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3187,6 +3287,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_purge_hunted.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3261,6 +3371,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_yu_sisters_act2.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3331,6 +3451,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_heimohai_message.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3404,6 +3534,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_ningyu_coldtrace.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3488,6 +3628,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_xiaoling_villa.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3555,6 +3705,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_bo_family.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]
@@ -3623,6 +3783,16 @@
                 "failure": {
                   "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.outcomeText.failure"
                 }
+              },
+              "intentMatch": {
+                "matchAny": [
+                  {
+                    "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.label"
+                  },
+                  {
+                    "$text": "qin.liuchao.event.qin_close_default.playerCompletionContract.actions.0.actionText"
+                  }
+                ]
               }
             }
           ]

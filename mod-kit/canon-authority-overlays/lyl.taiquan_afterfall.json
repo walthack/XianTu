@@ -165,6 +165,39 @@
           ]
         }
       }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.taiquan_afterfall_07_beat].objective",
+      "from": "前往洛都查明风波",
+      "to": "在舞都打听平亭侯下狱的风波"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.taiquan_afterfall_07_beat].playerCompletionContract.actions[id=advance_declared_objective].label",
+      "from": "前往洛都查明风波",
+      "to": "在舞都打听平亭侯下狱的风波"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.taiquan_afterfall_07_beat].playerCompletionContract.actions[id=advance_declared_objective].actionText",
+      "from": "我按当前主线目标行动：前往洛都查明风波",
+      "to": "我按当前主线目标行动：在舞都打听平亭侯下狱的风波"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.taiquan_afterfall_07_beat].playerCompletionContract.actions[id=advance_declared_objective].outcomeText.success",
+      "from": "你已亲自执行“前往洛都查明风波”；事件完成真值将由本地引擎落账。",
+      "to": "你已亲自执行“在舞都打听平亭侯下狱的风波”；事件完成真值将由本地引擎落账。"
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyl.event.taiquan_afterfall_08_beat]",
+      "afterKey": "relatedCharacterIds",
+      "beforeKey": "objective",
+      "entries": {
+        "locationId": "lyl.location.luoyang"
+      }
     }
   ]
 }

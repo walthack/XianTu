@@ -11,7 +11,8 @@ export function toGaoshoubangName(name:string):string{return name;}
 export function formatRealmWithStage(realm:any):string {
  const name=typeof realm==='string'?realm:realm?.名称 || levelName(0);
  const phase=typeof realm==='object'&&['初期','中期','后期'].includes(realm?.阶段)?realm.阶段:'';
- return name+(levelOf(name)!==0&&phase?'·'+phase:'')+(realm?.九阳层次?' · '+realm.九阳层次:'');
+ // 九阳层次只是存档状态，不进境界显示（顶栏、侧栏、角色详情、存档列表都走这里；REPORT-8091-f76e07a7 ③）。
+ return name+(levelOf(name)!==0&&phase?'·'+phase:'');
 }
 export function stageBonus(realm:any):number{return GAME_NUMBERS.levels.phases[realm?.阶段 as keyof typeof GAME_NUMBERS.levels.phases] ?? 0;}
 export {levelModifier,levelTier} from '../modules/sceneModule/levels';

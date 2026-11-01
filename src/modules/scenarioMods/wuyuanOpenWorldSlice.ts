@@ -372,7 +372,17 @@ export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorl
   const state = ensureWuyuanOpenWorldSlice(saveData);
   if (!state) return [];
   const view = getOpenWorldSliceView(state, WUYUAN_OPEN_WORLD_DEFINITION);
+  // 点心铺的应对（完成 s02_04 的唯一入口）排在最前：首条建议若是「前往」会把人带离问题所在地，来回走永远进不了 s02_04（REPORT-8091-f76e07a7 ⑧）。
+  const problemActions = view.problems.flatMap(problem => problem.actions.map(action => {
+    const definition = WUYUAN_OPEN_WORLD_DEFINITION.actions.find(item => item.id === action.id)!;
+    return {
+      source: 'open_world_engine' as const, kind: 'problem_action' as const, identityId: action.id,
+      receiptId: receiptId(state, 'problem_action', action.id), label: action.label, timeCost: 1, actionText: action.actionText,
+      settledFacts: [...definition.settledFacts, ...(definition.costs || []).map(cost => `代价：${cost}`)],
+    };
+  }));
   return [
+    ...problemActions,
     ...view.destinations.map(item => ({
       source: 'open_world_engine' as const, kind: 'travel' as const, identityId: item.routeId,
       receiptId: receiptId(state, 'travel', item.routeId), label: `前往 · ${item.destination}`, timeCost: item.turnCost,
@@ -384,14 +394,6 @@ export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorl
       receiptId: receiptId(state, 'notice', item.id), label: `查看 · ${item.id === 'lcq.notice.wuyuan.market_layout' ? '市集木牌' : item.id === 'lcq.notice.wuyuan.pastry_back_alley' ? '摊主提醒' : '地方消息'}`, timeCost: 1,
       actionText: `我停下来查看这条现场消息：${item.presentation}`,
       settledFacts: [item.presentation],
-    })),
-    ...view.problems.flatMap(problem => problem.actions.map(action => {
-      const definition = WUYUAN_OPEN_WORLD_DEFINITION.actions.find(item => item.id === action.id)!;
-      return {
-        source: 'open_world_engine' as const, kind: 'problem_action' as const, identityId: action.id,
-        receiptId: receiptId(state, 'problem_action', action.id), label: action.label, timeCost: 1, actionText: action.actionText,
-        settledFacts: [...definition.settledFacts, ...(definition.costs || []).map(cost => `代价：${cost}`)],
-      };
     })),
   ];
 }

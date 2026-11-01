@@ -7,7 +7,7 @@ import locations from '../../../../mod-kit/entity-catalog/locations.json';
 import { CONTENT_PACKS, packText } from '../../contentPacks';
 import type { SaveData } from '@/types/game';
 import { currentLocation } from './travelLedger';
-import { canonicalLocationId } from './locationIds';
+import { canonicalLocationId, locationDescriptionWithCountry } from './locationIds';
 import { SEVERAL_DAYS_PLACEHOLDER } from '../openWorldSlice';
 import { settleTime } from '../actionTime';
 import { logEvent } from '../../diagnostics/log';
@@ -172,4 +172,15 @@ export function mapTravelConfirmed(preview: ReturnType<typeof mapTravelPreview>,
 }
 export function mapPreparationNotice(save: SaveData, text: string): string | undefined {
   return mapPreparation(save, text) ? '跨国出行请打开世界地图选择目的地' : undefined;
+}
+/**
+ * 地图标头（REPORT-8091-f76e07a7 ⑥）：剧本档的世界名称／背景是开关时写死的（唐关＝「六朝·唐国长安」＋长安、太真简介），人走到别处仍照旧。
+ * 剧本档标头改写玩家当前所在（与顶栏同口径「国别·地名」）；背景只在提到当前地名时保留，否则不显示。非剧本档原样。
+ */
+export function mapHeaderInfo(worldInfo: { 世界名称?: unknown; 世界背景?: unknown } | null | undefined, position: { locationId?: string; 描述?: string } | null | undefined, scenario: boolean): { name: string; background: string } {
+  const name = String(worldInfo?.世界名称 || '') || '修仙界', background = String(worldInfo?.世界背景 || '');
+  if (!scenario) return { name, background };
+  const here = locationDescriptionWithCountry(position || undefined);
+  const place = here.split('·').filter(Boolean).at(-1) || '';
+  return { name: here || name, background: place && background.includes(place) ? background : '' };
 }

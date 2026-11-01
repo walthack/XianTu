@@ -23,9 +23,9 @@ async function loadPanel() {
     fileName: filename,
   }).outputText;
   const ledger = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
-  // data-URL组件测试不能使用webpack别名，载入实际TS模块；断言不变。
-  const helpers = `const ledgerRecordOrder = ${ledger.ledgerRecordOrder.toString()}; const ledgerRecordTurnLabel = ${ledger.ledgerRecordTurnLabel.toString()};`;
-  const resolvable = transpiled.replace(/import \{ ledgerRecordOrder, ledgerRecordTurnLabel \} from ['"]@\/modules\/scenarioMods\/eventNarrativeView['"];?/, helpers)
+  // data-URL组件测试不能使用webpack别名，载入实际TS模块（经全局句柄交给组件）；断言不变。
+  globalThis.__ledgerViewForPanelTest = ledger;
+  const resolvable = transpiled.replace(/import (\{[^}]*\}) from ['"]@\/modules\/scenarioMods\/eventNarrativeView['"];?/, (_, names) => `const ${names} = globalThis.__ledgerViewForPanelTest;`)
     .replaceAll("from 'vue'", `from '${import.meta.resolve('vue')}'`)
     .replaceAll('from "vue"', `from '${import.meta.resolve('vue')}'`)
     .replaceAll("from 'vue/server-renderer'", `from '${import.meta.resolve('@vue/server-renderer')}'`)
@@ -60,6 +60,8 @@ test('epistemic ledger mounts confirmed, rumor, legacy and path receipts from en
   assert.match(html, /认知与路径/);
   assert.match(html, /已确认[\s\S]*王蕙撰写小史[\s\S]*小紫的说明/);
   assert.match(html, /听说[\s\S]*街巷附会皇叔血统[\s\S]*洛都街巷传抄/);
-  assert.match(html, /old\.subject\.heard（旧记录）/);
-  assert.match(html, /私下追查[\s\S]*路径记录 · method/);
+  // 旧三元组记录与英文维度不再原样显示（REPORT-8091-f76e07a7 ⑤）。
+  assert.match(html, /已记录一条线索（原记录缺少名称）/);
+  assert.match(html, /私下追查[\s\S]*路径记录 · 做法/);
+  assert.doesNotMatch(html.replace(/<[^>]*>/g, ''), /old\.subject|method|旧记录/);
 });

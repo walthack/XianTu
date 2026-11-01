@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { ledgerRecordOrder, ledgerRecordTurnLabel } from '@/modules/scenarioMods/eventNarrativeView';
+import { ledgerKnowledgeClaim, ledgerKnowledgeSource, ledgerPathDimension, ledgerPathLabel, ledgerRecordOrder, ledgerRecordTurnLabel } from '@/modules/scenarioMods/eventNarrativeView';
 
 const props = defineProps<{
   playerKnowledge?: Record<string, any>;
@@ -31,8 +31,6 @@ const props = defineProps<{
 }>();
 
 const collapsed = ref(false);
-const factName = (id: string) => [...(props.runtime?.canon?.characters || []), ...(props.runtime?.canon?.factions || []), ...(props.runtime?.canon?.locations || [])].find(item => item.id === id)?.name;
-const eventName = (id: string) => props.runtime?.events?.find((item: any) => item.id === id)?.name;
 const order = (record: any) => ledgerRecordOrder(props.runtime, record);
 const datedTurn = (record: any, turn: unknown) => ledgerRecordTurnLabel(props.runtime, record, turn);
 const knowledgeEntries = computed(() => Object.values(props.playerKnowledge || {})
@@ -41,10 +39,8 @@ const knowledgeEntries = computed(() => Object.values(props.playerKnowledge || {
   .map(fact => ({
     id: String(fact.factId),
     confirmed: fact.status === 'confirmed',
-    claim: typeof fact.claim === 'string' && fact.claim.trim() && !/lcq\.|liuchao\./.test(fact.claim)
-      ? fact.claim
-      : /lcq\.|liuchao\./.test(`${fact.subjectId}.${fact.predicate}.${fact.objectId}`) ? factName(fact.subjectId) ? `你已知晓${factName(fact.subjectId)}` : '已记录一条线索（原记录缺少名称）' : `${fact.subjectId}.${fact.predicate}${fact.objectId ? `=${fact.objectId}` : ''}（旧记录）`,
-    source: typeof fact.source?.label === 'string' && !/lcq\.|liuchao\./.test(fact.source.label) ? fact.source.label : eventName(fact.sourceEventId) || '已发生的剧情',
+    claim: ledgerKnowledgeClaim(props.runtime, fact),
+    source: ledgerKnowledgeSource(props.runtime, fact),
     turnLabel: datedTurn(fact, fact.learnedAtTurn || props.runtime?.eventActionStates?.[fact.sourceEventId]?.readyAtTurn),
   })));
 const pathEntries = computed(() => Object.values(props.pathReceipts || {})
@@ -52,8 +48,8 @@ const pathEntries = computed(() => Object.values(props.pathReceipts || {})
   .slice(0, 8)
   .map(receipt => ({
     id: String(receipt.receiptId),
-    label: typeof receipt.label === 'string' && !/lcq\.|liuchao\./.test(receipt.label) ? receipt.label : '已作出的选择',
-    dimension: /lcq\.|liuchao\./.test(String(receipt.dimension || '')) ? '剧情分支' : String(receipt.dimension || '剧情分支'),
+    label: ledgerPathLabel(receipt),
+    dimension: ledgerPathDimension(receipt.dimension),
     turnLabel: datedTurn(receipt, receipt.selectedAtTurn),
   })));
 </script>

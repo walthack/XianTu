@@ -127,6 +127,8 @@
         "afterLossContinueHpNote": "输了但剧情继续（outcome continue）时，收场把气血从 0 拉回到这个值，免得被界面当成气血耗尽死亡；进结局的输局不拉回。",
         "playerDownedLoses": true,
         "playerDownedLosesNote": "2026-10-20 6ccb 真机：F03/F04/F09 主角倒下（气血到 keepHp 或挂 downed 类状态）后不判负——F09 等合同的 defeat 没写 partyDowned(pc)。打开后任何合同里主角倒下即判负，不依赖各合同自己写。",
+        "randomPlayerDownedByHpOnly": true,
+        "randomPlayerDownedByHpOnlyNote": "2026-11-02（REPORT-8091-f76e07a7 ④，用户要求统一为气血≤0倒下）：随机遇敌里主角倒下统一按气血——战斗伤害把气血打到 ≤ combatDownedAt（0）才倒下。敌方挂伤沿升级链（外伤→外伤（重）→倒下）升到倒地类状态时，对主角停在原级、只扣气血；旧行为是连续重击把主角升成「倒下」，南荒第一场气血还剩 21 就判负，第二场没连重击打到 1 还在打。只作用于随机遇敌：剧情固定战 F01–F14 的升级链倒下是 10-20 用户定的合同设计（见 woundRules.profiles.pressing note），未经确认不改；NPC／敌方不受影响。",
         "downedHistoryNote": "fee4 B4 曾按「打到 keepHp 即倒下」（downedAtKeep），2026-10-20 改为战斗伤害不保底、打到 combatDownedAt 倒下。"
       },
       "afterWin": {
@@ -1025,49 +1027,58 @@
         "rareChance": 0
       }
     },
-    "easterEggs": {
-      "whiteTailLeopard": {
-        "note": "白尾豹彩蛋（用户定 11-01 00:28，稿 /workspace/narrative-drafts/2026-11-01-白尾豹彩蛋.md）：南荒密林小概率遇见，白尾豹不攻击；体力＝角色.属性.气血（仓库无独立体力字段），按上限比例回复、不超上限；挂增益「山神庇佑」（内容包状态 buff.shanshen_blessing，场面战斗里按其 rollModifier 生效），持续 durationTurns 个回合后摘除；增益在身时不再触发。队里有南荒本地同伴时按 companionLines 顺序由第一位在场者说一句（台词在内容包 texts）。chance、staminaRestoreRatio、durationTurns 与状态的 rollModifier 都是初值（稿为 null，按现有 guarded 档几率量级与最小档加值保守填，待用户拍板）。",
-        "enabled": true,
-        "hostile": false,
-        "locations": [
-          {
-            "key": "lcq.location.huamiao_village",
-            "subPlace": "林"
+    "rareEncounters": {
+      "note": "稀有遇见（通用，2026-11-02 用户定，REPORT-8091-f76e07a7 重构）：每条 id 一行，带地区 region、地点 locations（key＝地点 id，subPlace＝位置描述子地点正则）、几率 chance（0–1）、效果 effect（staminaRestoreRatio＝按气血上限比例回复体力，不超上限；buff＝挂的增益状态）、回合数 durationTurns（增益持续回合，到期摘除，增益在身时本条不再触发）、遇见描写 textKey 与同伴台词 companionLines（按顺序由第一位在场者说一句，台词在内容包 texts）。遇见不攻击；一回合至多遇见一条。别国加一条即可用。stateKey／buffSource 只给白尾豹沿用旧存档字段（剧本模组.whiteTailLeopard、来源 easterEgg:whiteTailLeopard），新条目不写。legacyLeopardEntryId＝旧参数 leopardChance（函数参数、URL xiantu.test.leopardChance、南荒测试开关的 leopardChance）映射到的条目。测试覆盖参数名见 e2eSmoke.rareEncounters。白尾豹数值照旧（原 easterEggs.whiteTailLeopard，用户定 11-01 00:28，稿 /workspace/narrative-drafts/2026-11-01-白尾豹彩蛋.md；chance、staminaRestoreRatio、durationTurns 与状态 rollModifier 为初值待用户拍板）。",
+      "legacyLeopardEntryId": "nanhuang.white_tail_leopard",
+      "entries": [
+        {
+          "id": "nanhuang.white_tail_leopard",
+          "enabled": true,
+          "region": "nanhuang",
+          "hostile": false,
+          "locations": [
+            {
+              "key": "lcq.location.huamiao_village",
+              "subPlace": "林"
+            },
+            {
+              "key": "lcq.location.giant_vine"
+            },
+            {
+              "key": "liuchao.location.shan_jian"
+            },
+            {
+              "key": "lcq.location.turtle_road_ruins"
+            }
+          ],
+          "chance": 0.03,
+          "durationTurns": 5,
+          "effect": {
+            "staminaRestoreRatio": 0.3,
+            "buff": {
+              "statusId": "buff.shanshen_blessing",
+              "name": "山神庇佑"
+            }
           },
-          {
-            "key": "lcq.location.giant_vine"
-          },
-          {
-            "key": "liuchao.location.shan_jian"
-          },
-          {
-            "key": "lcq.location.turtle_road_ruins"
-          }
-        ],
-        "chance": 0.03,
-        "staminaRestoreRatio": 0.3,
-        "buff": {
-          "statusId": "buff.shanshen_blessing",
-          "name": "山神庇佑",
-          "durationTurns": 5
-        },
-        "textKey": "nanhuang.leopard.encounter",
-        "companionLines": [
-          {
-            "characterId": "liuchao.character.su_li",
-            "textKey": "nanhuang.leopard.line.su_li"
-          },
-          {
-            "characterId": "liuchao.character.a_xi",
-            "textKey": "nanhuang.leopard.line.a_xi"
-          },
-          {
-            "characterId": "lcq.character.nanhuang_shiweimo",
-            "textKey": "nanhuang.leopard.line.shiweimo"
-          }
-        ]
-      }
+          "textKey": "nanhuang.leopard.encounter",
+          "companionLines": [
+            {
+              "characterId": "liuchao.character.su_li",
+              "textKey": "nanhuang.leopard.line.su_li"
+            },
+            {
+              "characterId": "liuchao.character.a_xi",
+              "textKey": "nanhuang.leopard.line.a_xi"
+            },
+            {
+              "characterId": "lcq.character.nanhuang_shiweimo",
+              "textKey": "nanhuang.leopard.line.shiweimo"
+            }
+          ],
+          "stateKey": "whiteTailLeopard",
+          "buffSource": "easterEgg:whiteTailLeopard"
+        }
+      ]
     }
   }
 }

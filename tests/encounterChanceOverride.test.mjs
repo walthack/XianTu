@@ -90,9 +90,17 @@ test('URL（? 或 #）覆盖：读 overrideParams 参数名，写入会话；off
   withEnv({}, () => assert.equal(E.nanhuangChanceOverride(), undefined));
 });
 
-test('白尾豹：leopardChance 定值替换豹几率，chanceMul 不作用于豹；不传与原来一致', () => {
-  const src = read('src/modules/scenarioMods/whiteTailLeopard.ts');
-  assert.match(src, /applyChanceOverride\(nanhuangTestRates\(\)\?\.leopardChance \?\? cfg\.chance, ov\?\.leopardChance\)/);
+test('白尾豹：leopardChance 定值替换豹几率，chanceMul 不作用于豹；不传与原来一致', async () => {
+  // 2026-11-02 起白尾豹是稀有遇见表里的一条（rareEncounters.ts），旧参数映射到它：行为照旧。
+  const RE = await loadTs('../src/modules/scenarioMods/rareEncounters.ts');
+  const entry = RE.rareEncounterEntry(N.encounter.rareEncounters.legacyLeopardEntryId);
+  withEnv({}, () => {
+    assert.equal(RE.rareEncounterChance(entry), W.leopardConfig().chance);
+    assert.equal(RE.rareEncounterChance(entry, { leopardChance: 0.5 }), 0.5);
+    assert.equal(RE.rareEncounterChance(entry, { chanceMul: 9 }), W.leopardConfig().chance, '遇敌倍率不作用于豹');
+    assert.equal(RE.rareEncounterChance(entry, { leopardChance: 7 }), 1);
+  });
+  withEnv({ search: `?${names.leopardChance}=0.4` }, () => assert.equal(RE.rareEncounterChance(entry), 0.4, '旧 URL 参数照旧'));
   assert.equal(typeof W.tickWhiteTailLeopard, 'function');
   assert.equal(W.tickWhiteTailLeopard.length >= 1, true);
 });

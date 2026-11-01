@@ -18065,7 +18065,7 @@
                     "liuchao.character.cheng_zongyang",
                     "liuchao.character.yun_cang_feng"
                   ],
-                  "objective": "前往洛都查明风波",
+                  "objective": "在舞都打听平亭侯下狱的风波",
                   "playerCompletionContract": {
                     "kind": "objective_action",
                     "settleOn": [
@@ -18074,11 +18074,11 @@
                     "actions": [
                       {
                         "id": "advance_declared_objective",
-                        "label": "前往洛都查明风波",
-                        "actionText": "我按当前主线目标行动：前往洛都查明风波",
+                        "label": "在舞都打听平亭侯下狱的风波",
+                        "actionText": "我按当前主线目标行动：在舞都打听平亭侯下狱的风波",
                         "timeCost": 1,
                         "outcomeText": {
-                          "success": "你已亲自执行“前往洛都查明风波”；事件完成真值将由本地引擎落账。",
+                          "success": "你已亲自执行“在舞都打听平亭侯下狱的风波”；事件完成真值将由本地引擎落账。",
                           "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                           "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
                         }
@@ -18426,6 +18426,7 @@
                   "relatedCharacterIds": [
                     "liuchao.character.cheng_zongyang"
                   ],
+                  "locationId": "lyl.location.luoyang",
                   "objective": "与冯子都结交探听渠道",
                   "playerCompletionContract": {
                     "kind": "objective_action",

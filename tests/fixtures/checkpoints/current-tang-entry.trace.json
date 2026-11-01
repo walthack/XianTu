@@ -4438,6 +4438,19 @@
     "kind": "action",
     "stage": "lyl.taiquan_afterfall",
     "event": "lyl.event.taiquan_afterfall_08_beat",
+    "action": "travel:lyl.location.luoyang",
+    "receipt": {
+      "attempted": true,
+      "completed": false,
+      "eventId": "lyl.event.taiquan_afterfall_08_beat",
+      "actionId": "travel:lyl.location.luoyang",
+      "outcome": "success"
+    }
+  },
+  {
+    "kind": "action",
+    "stage": "lyl.taiquan_afterfall",
+    "event": "lyl.event.taiquan_afterfall_08_beat",
     "action": "advance_declared_objective",
     "receipt": {
       "attempted": true,

@@ -350,7 +350,7 @@ test('⑤ 白尾豹：配置齐全；密林里触发不攻击、回复体力（�
   rt(s).worldTurn++; W.tickWhiteTailLeopard(s, always);
   assert.ok(s.角色.效果.some(e => e.状态名称 === '山神庇佑'), '再次遇见重新挂上');
   assert.equal(rt(s).flags['scene.status.buff.shanshen_blessing.expired'], undefined);
-  assert.match(read('src/components/dashboard/MainGamePanel.vue'), /const leopard = tickWhiteTailLeopard\(s\);/);
+  assert.match(read('src/components/dashboard/MainGamePanel.vue'), /const rare = tickRareEncounters\(s\);/);
 });
 
 test('⑤ 南荒本地同伴开口：苏荔 → 阿夕 → 诗薇莫，一人一句；无本地同伴只用描写；台词在内容配置', async () => {

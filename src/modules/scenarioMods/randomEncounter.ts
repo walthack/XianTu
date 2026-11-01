@@ -451,7 +451,13 @@ export function nanhuangTestRates(): { encounterChance: number; leopardChance: n
 }
 
 /** 几率覆盖：chance／leopardChance 为定值（替换配置值），chanceMul 为倍率（乘在配置值或定值上）；结果夹在 0..1。都不传时原样返回。 */
-export interface EncounterChanceOverride { chance?: number; chanceMul?: number; leopardChance?: number }
+export interface EncounterChanceOverride {
+  chance?: number; chanceMul?: number;
+  /** 旧参数：白尾豹定值，内部映射到稀有遇见表里的白尾豹那条（rareEncounters.legacyLeopardEntryId）。 */
+  leopardChance?: number;
+  /** 稀有遇见：按条目 id 的定值（替换该条 chance）；rareChanceMul＝全部稀有遇见的倍率。 */
+  rare?: Record<string, number>; rareChanceMul?: number;
+}
 const finite = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 export function applyChanceOverride(base: number, fixed?: number, mul?: number): number {
   if (!finite(fixed) && !finite(mul)) return base;
@@ -467,20 +473,26 @@ export function nanhuangChanceOverride(): EncounterChanceOverride | undefined {
   if (!names) return undefined;
   const out: EncounterChanceOverride = {};
   for (const key of ['chance', 'chanceMul', 'leopardChance'] as const) {
-    const flag = names[key];
-    if (!flag) continue;
-    let query: string | null = null;
-    try { query = urlTestFlag(flag); } catch { /* lcq-allow: 地址解析失败按未设置处理。 */ }
-    if (query !== null) {
-      const clear = query.trim() === '' || query.trim().toLowerCase() === 'off';
-      try { if (clear) tabStore()?.removeItem(flag); else tabStore()?.setItem(flag, query.trim()); } catch { /* lcq-allow: 会话存储不可用时只认本次 URL。 */ }
-      if (clear) continue;
-    }
-    const raw = query ?? storageGet(tabStore, flag);
-    const value = raw === null ? NaN : Number(raw);
-    if (Number.isFinite(value)) out[key] = value;
+    const value = names[key] ? readTestNumberParam(names[key]) : undefined;
+    if (value !== undefined) out[key] = value;
   }
   return Object.keys(out).length ? out : undefined;
+}
+/**
+ * 测试数值参数（几率覆盖共用）：? 或 # 后的查询串优先，给了就写进本标签页 sessionStorage，刷新后仍生效；值为空或 off 清除该项。
+ * 没给或不是有限数返回 undefined。
+ */
+export function readTestNumberParam(flag: string): number | undefined {
+  let query: string | null = null;
+  try { query = urlTestFlag(flag); } catch { /* lcq-allow: 地址解析失败按未设置处理。 */ }
+  if (query !== null) {
+    const clear = query.trim() === '' || query.trim().toLowerCase() === 'off';
+    try { if (clear) tabStore()?.removeItem(flag); else tabStore()?.setItem(flag, query.trim()); } catch { /* lcq-allow: 会话存储不可用时只认本次 URL。 */ }
+    if (clear) return undefined;
+  }
+  const raw = query ?? storageGet(tabStore, flag);
+  const value = raw === null ? NaN : Number(raw);
+  return Number.isFinite(value) ? value : undefined;
 }
 
 /** 未携带遇敌事实包的正文路径补本地演出，再按同一三阶段状态机结算；不跳过门禁、冷却或概率。 */

@@ -1,6 +1,7 @@
 import { normalizeLocationCountry } from './locationCountry';
 import retreat from './builtins/data/lyl.jiangzhou_retreat.json';
 import blackSea from './builtins/data/lyl.lin_an_black_sea.json';
+import afterfall from './builtins/data/lyl.taiquan_afterfall.json';
 /**
  * 读档时一次性修复（幂等）：旧伤势按 statuses.migrations.json 迁移（原来只在第一次访问伤势时才迁）；剧情来源状态（冰蛊）补挂；
  * 身份账与国家线收束档按已完成事件回填（身份账设计稿 2026-10-25 §5）；唯一道具窄回填回执（补充设计稿 2026-10-26 §2.3 / Q5）；
@@ -48,11 +49,14 @@ export function migrateTrainingCapNone(save: any): 'canon' | 'canon+1' | null {
   }
 }
 
-/** 读档补 intentMatch 的关卡（只放确有作者后补短语、旧档会卡住的关）：stage01 s01_01（真机 69ab B16「见段强」卡住，见 scripts/dev/apply-s01-01-intent-match.mjs）、s01_02／03／05（Demo 合并压回 8 条）。 */
+/** 读档补 intentMatch 的关卡（只放确有作者后补短语、旧档会卡住的关）：秦线 lyg.qin_xianyang（非试玩档的自由输入只认作者短语，原先一条都没有）；stage01 s01_01（真机 69ab B16「见段强」卡住，见 scripts/dev/apply-s01-01-intent-match.mjs）、s01_02／03／05（Demo 合并压回 8 条）。 */
 const INTENT_MATCH_BACKFILL_STAGES: Record<string, { scenario: { events: any[] } }> = {
   'lyl.lin_an_black_sea': blackSea as unknown as { scenario: { events: any[] } },
   'lyl.jiangzhou_retreat': retreat as unknown as { scenario: { events: any[] } },
   'lcq.stage_01': stage01 as unknown as { scenario: { events: any[] } },
+  // 秦线（内容包关）：动作补了按钮原文短语，旧档照样补（REPORT-8091-f76e07a7 P1-1）。
+  ...Object.fromEntries((CONTENT_PACKS.stages || []).filter(stage => stage.manifest.id === 'lyg.qin_xianyang')
+    .map(stage => [stage.manifest.id, stage as unknown as { scenario: { events: any[] } }])),
 };
 const withoutIntentMatch = (contract: unknown): string => JSON.stringify(contract, (key, value) => key === 'intentMatch' ? undefined : value);
 
@@ -168,6 +172,7 @@ export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyS
   if (!rt || typeof rt !== 'object') return { injuriesMigrated: false, storyStatuses: [], identitiesBackfilled: 0, itemReceiptsBackfilled: 0 };
   // 旧档缺作者后补的自由输入短语（s01_01）：只补缺失或已被取代的旧快照，见 backfillMissingIntentMatch。
   repairReport8091Route(rt);
+  repairHanLuoduRoute(rt);
   backfillMissingIntentMatch(rt);
   // 旧版直接点地图入秦留下的口信当前拍（推进一轮会换掉 剧本模组 对象，之后改用新的）。
   if (repairLingeringMapEntryMessage(save)) rt = save.世界.状态.剧本模组;
@@ -182,4 +187,24 @@ export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyS
   const itemReceiptsBackfilled = backfillItemReceipts(save, rt);
   noteChronicleGap(rt);
   return { injuriesMigrated: !!rt.sceneLedger, storyStatuses, identitiesBackfilled, itemReceiptsBackfilled };
+}
+
+/**
+ * 汉线舞都→洛都（REPORT-8091-f76e07a7 P1-2）：afterfall_07 原著是平亭侯在舞都下诏狱（yunlong #150），旧目标「前往洛都查明风波」
+ * 让人以为选了就到洛都，实际只过一拍、人还在舞都；北上洛都在原著 #156，挂到 08（冯子都，洛都酒肆 #176）的地点上，由罗盘移动真实走路程。
+ * 读档只升级未完成、仍是旧快照的两拍：07 还没有任何尝试时换目标与合同；08 没有地点时补地点。不补记完成、不动其它字段。
+ */
+export function repairHanLuoduRoute(rt: any): void {
+  if (rt?.modId !== afterfall.manifest.id || !Array.isArray(rt.events)) return;
+  const source = (id: string): any => afterfall.scenario.events.find(e => e.id === id);
+  const e07 = rt.events.find((e: any) => e.id === 'lyl.event.taiquan_afterfall_07_beat');
+  const state = rt.eventActionStates?.['lyl.event.taiquan_afterfall_07_beat'];
+  const untouched = !state || !((state.attemptCount || 0) > 0 || state.preparations?.length || state.attempts?.length);
+  if (e07 && !rt.completedEventIds?.includes(e07.id) && e07.objective === '前往洛都查明风波' && untouched) {
+    const next = source(e07.id);
+    e07.objective = next.objective;
+    e07.playerCompletionContract = structuredClone(next.playerCompletionContract);
+  }
+  const e08 = rt.events.find((e: any) => e.id === 'lyl.event.taiquan_afterfall_08_beat');
+  if (e08 && !rt.completedEventIds?.includes(e08.id) && !e08.locationId) e08.locationId = source(e08.id).locationId;
 }
