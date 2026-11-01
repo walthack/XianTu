@@ -82,12 +82,14 @@ export function settleActionTime(save: SaveData, response: any, options: any, ca
 /**
  * 罗盘移动（runtime 的 travel:<地点> 动作，结算时人已被挪到目的地）的路程：从发送时所在地点（界面随动作带上的 travelFromLocationId）算起，
  * 按 travel/routeDays 的国内路程天数结算，不再按一拍的演出时间（REPORT-8091-f76e07a7 P1-2：舞都→洛都只过 15 分钟）。
+ * 只对 story.actionTime.questRouteDays.eventIds 里的剧情节点生效（2026-11-02 总策划定收窄：如汉 08 舞都→洛都）；其余罗盘移动返回 undefined。
  * 南荒行旅关自有路线与时钟，不走这里；没带出发地或算不出路程时返回 undefined，沿用原耗时。
  */
 export function questTravelMinutes(save: SaveData, options: any): number | undefined {
   const action = options?.eventAction, rt = (save as any).世界?.状态?.剧本模组;
   const actionId = String(action?.actionId || '');
   if (!rt || isNanhuangTravelStage(rt.modId) || action?.source !== 'event_engine' || !actionId.startsWith('travel:')) return undefined;
+  if (!actionTimeConfig().questRouteDays.eventIds.includes(action.eventId)) return undefined;
   const days = domesticTravelDays(action.travelFromLocationId, actionId.slice('travel:'.length));
   return days === undefined ? undefined : days * 1440;
 }

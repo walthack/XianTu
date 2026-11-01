@@ -25,7 +25,8 @@ const AUDIT = [
   ['song', 'song_yuanwailang', '带着举荐文书去临安', '离开江州，往临安去'],
   ['song', 'song_xuezhun_takeover', '去西湖边的农居看看', '去约好的地方看看'],
   ['song', 'song_yuntao_niaoren', '去云涛观看看', '在临安城里四处看看'],
-  ['han', 'han_zhu_urge_luo', '随朱老头去洛都', '去洛都看看'],
+  // 2026-11-02 总策划定：07 罗盘提示与新目标一致（在舞都打听），不再写「去洛都看看」
+  ['han', 'han_zhu_urge_luo', '随朱老头去洛都', '在舞都打听平亭侯下狱的风波'],
   ['han', 'han_camera_palace', '随斯明信进宫取回摄像机', '进宫看看'],
   ['han', 'han_huo_bieyuan', '去霍家别院找严君平', '照打听来的消息去看看'],
   ['han', 'han_liujian_yuxi', '去长秋宫见赵飞燕', '去长秋宫看看'],
@@ -77,7 +78,7 @@ test('防剧透通审：当前线卡各句不再点名通审清零的人、物�
 const MERGED = [
   ['song', 'song_jiangzhou_war_open', 'song_jiangzhou_war_open_alt', 'xiao_yao_yi',
     [{ path: 'done.lcq.event.s10_10_xiaozi_crisis', operator: 'eq', value: true }], '去江州看看那边的情形'],
-  ['han', 'han_zhu_urge_luo', 'han_zhu_urge_luo_alt', 'shang_zhen_yu', undefined, '去洛都看看'],
+  ['han', 'han_zhu_urge_luo', 'han_zhu_urge_luo_alt', 'shang_zhen_yu', undefined, '在舞都打听平亭侯下狱的风波'],
   ['han', 'han_camera_palace', 'han_camera_palace_alt', 'si_ming_xin',
     [{ path: 'done.lyl.event.taiquan_afterfall_09_beat', operator: 'eq', value: true }], '进宫看看'],
   // 五线补全·汉 H11（2026-10-28）：改挂默认路线 arrange_escape_route，when 简化为只读同序号的 emperor_death_spreads（隔离关 s06_01 不再引用）
@@ -134,7 +135,7 @@ test('R-8：表现不变——合并的 4 对非待建步，见过和没见过�
   const cases = [
     ['song_jiangzhou_war_open', 'xiao_yao_yi', [PACT, 'lcq.event.s10_09_yin_yang_fish', 'lcq.event.s10_10_xiaozi_crisis'], 'lcq.event.s10_09_yin_yang_fish', '去江州看看那边的情形'],
     // 入汉四步已改挂 H1（五线补全·汉 2026-10-28，不再 pending）：编年史按真实顺序先过 H1
-    ['han_zhu_urge_luo', 'shang_zhen_yu', [PACT, 'lyl.event.han_shouyang_gaoyanei'], 'lyl.event.s05_01', '去洛都看看'],
+    ['han_zhu_urge_luo', 'shang_zhen_yu', [PACT, 'lyl.event.han_shouyang_gaoyanei'], 'lyl.event.s05_01', '在舞都打听平亭侯下狱的风波'],
     // 进宫看看已挪到进洛都那一拍（s05_01）之前（原著顺序，总策划定）：编年史按真实顺序，afterfall_09 之后、s05_01 之前
     ['han_camera_palace', 'si_ming_xin', [PACT, 'lyl.event.taiquan_afterfall_07_beat', 'lyl.event.taiquan_afterfall_09_beat'], 'lyl.event.s06_01', '进宫看看'],
     ['han_liujian_yuxi', 'zhao_feiyan', [PACT, 'lyl.event.emperor_death_spreads'], 'lyl.event.han_palace_endgame_08_beat', '去长秋宫看看'],

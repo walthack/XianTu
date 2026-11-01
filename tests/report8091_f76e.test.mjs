@@ -122,12 +122,61 @@ test('P1-2 路程口径：同国坐标距离按 liPerDay 折天；同城、跨�
   assert.equal(RD.domesticTravelDays('liuchao.location.wudu', 'liuchao.location.wudu'), undefined);
   assert.equal(RD.domesticTravelDays('liuchao.location.wudu', 'liuchao.location.changan'), undefined, '跨国另有口径');
   const s = fixture('checkpoints/current-han-entry.json');
-  const travel = { source: 'event_engine', eventId: 'x', actionId: 'travel:lyl.location.luoyang' };
+  const travel = { source: 'event_engine', eventId: 'lyl.event.taiquan_afterfall_08_beat', actionId: 'travel:lyl.location.luoyang' };
   assert.equal(AT.questTravelMinutes(s, { eventAction: travel }), undefined, '没带出发地');
   assert.ok(AT.questTravelMinutes(s, { eventAction: { ...travel, travelFromLocationId: 'liuchao.location.wudu' } }) >= 1440);
   rt(s).modId = 'lcq.stage_04b_lingfei_baiyi_crisis';
   assert.equal(AT.questTravelMinutes(s, { eventAction: { ...travel, travelFromLocationId: 'liuchao.location.wudu' } }), undefined, '南荒行旅关自有时钟');
   assert.ok(N.crossCountryTravel.domesticRepresentative && read('src/modules/sceneModule/numbersRegistry.ts').includes('crossCountryTravel.domesticRepresentative.coordinateLi'));
+});
+
+// 2026-11-02 总策划定：罗盘折天收窄——只用于剧情节点指定地点的长途移动（配置 story.actionTime.questRouteDays.eventIds），普通罗盘移动恢复原耗时。
+test('罗盘折天收窄：唐线留仙坪→长安的普通罗盘移动恢复原耗时；汉 08 舞都→洛都仍按两地路程折天', () => {
+  assert.deepEqual(N.story.actionTime.questRouteDays.eventIds, ['lyl.event.taiquan_afterfall_08_beat']);
+  assert.ok(read('src/modules/sceneModule/numbersRegistry.ts').includes("path: 'story.actionTime.questRouteDays.eventIds'"));
+  // 唐线：留仙坪几拍做完，罗盘给出「去长安」（lyg.event.s03_01）；两地同在唐境、路程算得出天数，但不在名单里，按原耗时（模型给的「片刻」）。
+  let s = R.advanceScenarioRuntime(fixture('checkpoints/current-tang-entry.json')).saveData;
+  let a;
+  for (let i = 0; i < 12; i++) {
+    [a] = R.getCurrentStoryEventActions(s);
+    assert.ok(a, `第${i}拍有主线动作`);
+    if (a.actionId.startsWith('travel:')) break;
+    R.recordStoryEventStructuredAction(s, a, { judgementResolution: { status: 'resolved', outcome: 'success', kind: 'explore' } });
+    rt(s).worldTurn++; s = R.advanceScenarioRuntime(s).saveData;
+  }
+  const from = s.角色.位置.locationId;
+  assert.equal(from, 'lyg.location.liuxianping');
+  assert.equal(a.actionId, 'travel:liuchao.location.changan');
+  assert.ok(RD.domesticTravelDays(from, 'liuchao.location.changan') >= 1, '路程本可折天，确认是名单在挡');
+  const eventAction = { ...a, travelFromLocationId: from };
+  assert.equal(AT.questTravelMinutes(s, { eventAction }), undefined);
+  const before = structuredClone(s.元数据.时间);
+  assert.equal(R.recordStoryEventStructuredAction(s, a, { judgementResolution: { status: 'resolved', outcome: 'success', kind: 'explore' } }).attempted, true);
+  AT.settleActionTime(s, { action_time: { tier: '片刻' } }, { eventAction, timeActionId: 'tang-travel' }, undefined, false, false, undefined);
+  assert.equal(s.角色.位置.locationId, 'liuchao.location.changan');
+  assert.equal(minutesOf(s.元数据.时间) - minutesOf(before), N.story.actionTime.minutes.moment, '恢复原耗时（片刻），不按路程折天');
+  // 汉 08：舞都→洛都在名单里，仍按两地路程折天。
+  const han = fixture('checkpoints/current-han-entry.json');
+  const days = RD.domesticTravelDays('liuchao.location.wudu', 'lyl.location.luoyang');
+  assert.ok(days >= 1);
+  const han08 = { source: 'event_engine', eventId: 'lyl.event.taiquan_afterfall_08_beat', actionId: 'travel:lyl.location.luoyang', travelFromLocationId: 'liuchao.location.wudu' };
+  assert.equal(AT.questTravelMinutes(han, { eventAction: han08 }), days * 1440);
+  // 同一段路挂在别的节点上就不折天：名单按剧情节点，不按起讫地点。
+  assert.equal(AT.questTravelMinutes(han, { eventAction: { ...han08, eventId: 'lyl.event.taiquan_afterfall_07_beat' } }), undefined);
+});
+
+test('汉 07 罗盘提示与新目标一致：在舞都打听平亭侯下狱的风波，不再写「去洛都看看」；内置关与 overlay 的 07 目标同句', () => {
+  const hint = CONTENT_PACKS.texts['lineCompass.han.step.han_zhu_urge_luo_alt'];
+  const step = CONTENT_PACKS.lineCompass.lines.find(l => l.lineId === 'han').steps.find(x => x.id === 'han_zhu_urge_luo_alt');
+  assert.equal(step.eventId, 'lyl.event.taiquan_afterfall_07_beat');
+  const builtin07 = json('src/modules/scenarioMods/builtins/data/lyl.taiquan_afterfall.json').scenario.events.find(e => e.id === 'lyl.event.taiquan_afterfall_07_beat');
+  const overlay07 = json('mod-kit/canon-authority-overlays/lyl.taiquan_afterfall.json').ops
+    .find(o => o.path === 'scenario.events[id=lyl.event.taiquan_afterfall_07_beat].objective');
+  assert.equal(hint, builtin07.objective);
+  assert.equal(hint, overlay07.to);
+  assert.doesNotMatch(hint, /洛都/);
+  assert.ok(!Object.values(CONTENT_PACKS.texts).includes('去洛都看看'));
+  assert.ok([...hint].length <= N.story.lineCompass.hint.maxChars);
 });
 
 // ───────────── P2-3 标题「· 一阳」 ─────────────

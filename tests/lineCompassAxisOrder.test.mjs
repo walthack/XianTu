@@ -447,7 +447,7 @@ test('汉 五线补全 H1–H20（2026-10-28）：默认路线从临安收束起
   });
   assert.deepEqual(seen, ['han_zhu_urge_luo_alt', 'han_yunruyao_bing', 'han_huo_bieyuan', 'han_liujian_yuxi_alt'],
     '带文案的步按表顺序依次出现、不回跳；饼肆、霍府两步不再是死步');
-  // 入汉：H1 当焦点出主线指南针（去舞都）；过了 H1 显示「去洛都看看」，入口提示不再出
+  // 入汉：H1 当焦点出主线指南针（去舞都）；过了 H1 显示 07 的「在舞都打听平亭侯下狱的风波」，入口提示不再出
   assert.equal(card(AF, upTo(H1), H1, acq).step, pointer(AF, H1));
   assert.match(pointer(AF, H1), /^去舞都/);
   const ENTRY = ['han_enter_from_taiquan_wudu', 'han_enter_from_taiquan', 'han_enter_border_wudu', 'han_enter_border_alt'].map(id => HINTS[id]);

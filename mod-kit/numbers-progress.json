@@ -1259,7 +1259,13 @@
         "monthsPerYear": 12,
         "version": 1
       },
-      "prologueYears": 4
+      "prologueYears": 4,
+      "questRouteDays": {
+        "note": "罗盘移动按两地路程折天（travel/routeDays.ts，2026-11-02 总策划定收窄）：只对 eventIds 里的剧情节点生效——该拍指定地点的长途移动（runtime 的 travel:<地点> 动作）按两地路程天数结算；其余国内罗盘移动沿用原耗时（一拍演出或模型给的时间档）。首条为汉线 08（舞都→洛都，REPORT-8091-f76e07a7 P1-2）。",
+        "eventIds": [
+          "lyl.event.taiquan_afterfall_08_beat"
+        ]
+      }
     }
   },
   "crafting": {
