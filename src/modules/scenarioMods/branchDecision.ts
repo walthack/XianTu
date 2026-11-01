@@ -6,6 +6,8 @@
  * 判定是确定性的：表中第一个动作（决定动作）出现在当前可选动作里即为分支点；
  * 锁只作用于输入方式，选中后仍走原有结构化动作与本地合同，不改任何结算。
  */
+import phraseConfig from '../../../mod-kit/branch-decision-phrases.json';
+
 export interface BranchDecisionCandidate {
   source: string;
   eventId?: string;
@@ -66,10 +68,47 @@ export function branchDecisionAllowsSend<T extends BranchDecisionCandidate>(
   return Boolean(chosen) && lineOf(chosen!).trim() === inputText.trim();
 }
 
-/** 手打固定选项与点击走同一动作；只精确匹配当前选项，含糊/否定/混合输入不代选。 */
+interface BranchPhrases { matchAny: string[]; rejectIf: string[] }
+const PHRASES = phraseConfig as unknown as {
+  negationWindow: number; negationChars: string; ambiguityMarkers: string[];
+  decisions: Record<string, Record<string, BranchPhrases>>;
+};
+
+const normalizeBranchText = (text: string): string => text.replace(/[\s\p{P}\p{S}]+/gu, '');
+
+/** 子串在 input 里出现、且至少有一处出现位置的前 negationWindow 个字里没有否定词（「我不接这赌局」里的「接」不算接赌）。 */
+function plainHit(input: string, phrase: string): boolean {
+  for (let at = input.indexOf(phrase); at >= 0; at = input.indexOf(phrase, at + 1)) {
+    const before = input.slice(Math.max(0, at - PHRASES.negationWindow), at);
+    if (![...before].some(char => PHRASES.negationChars.includes(char))) return true;
+  }
+  return false;
+}
+
+function phraseHit(option: BranchDecisionCandidate, input: string): boolean {
+  const phrases = option.eventId ? PHRASES.decisions[option.eventId]?.[option.actionId] : undefined;
+  if (!phrases) return false;
+  if (phrases.rejectIf.map(normalizeBranchText).some(phrase => phrase && input.includes(phrase))) return false;
+  return phrases.matchAny.map(normalizeBranchText).some(phrase => phrase && plainHit(input, phrase));
+}
+
+/**
+ * 手打固定选项与点击走同一动作：先认选项原文；再认 mod-kit/branch-decision-phrases.json 里的近义说法（REPORT-8091-75eaaee0 P2-1）。
+ * 只有恰好一个选项命中才代选；问句、二选一的含糊句、否定句或同时命中多个选项时不代选，由界面提示可选项。
+ */
 export function resolveBranchDecisionInput<T extends BranchDecisionCandidate>(decision: BranchDecision<T> | null, text: string, lineOf: (option: T) => string): T | undefined {
   const input = text.trim().replace(/[。！!]+$/, '');
   if (!input || !decision) return undefined;
   const hits = decision.options.filter((option, i) => [decision.labels[i], option.label, lineOf(option)].some(line => line.trim().replace(/[。！!]+$/, '') === input));
-  return hits.length === 1 ? hits[0] : undefined;
+  if (hits.length) return hits.length === 1 ? hits[0] : undefined;
+  if (/[？?]\s*$/.test(input)) return undefined;
+  const normalized = normalizeBranchText(input);
+  if (!normalized || PHRASES.ambiguityMarkers.some(marker => normalized.includes(marker))) return undefined;
+  const fuzzy = decision.options.filter(option => phraseHit(option, normalized));
+  return fuzzy.length === 1 ? fuzzy[0] : undefined;
+}
+
+/** 手打内容对不上任何固定选项时的明示提示（不静默禁用发送）。 */
+export function branchDecisionChoiceHint(decision: BranchDecision | null): string {
+  return decision ? `请选择：${decision.labels.join(' / ')}` : '';
 }

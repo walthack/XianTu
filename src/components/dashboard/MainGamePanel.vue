@@ -286,6 +286,7 @@
           <span class="key-beat-label">{{ branchDecision.labels[index] }}</span>
         </button>
         <p class="key-beat-hint">{{ BRANCH_DECISION_HINT }}</p>
+        <p v-if="branchDecisionInputHint" class="key-beat-hint" data-testid="branch-decision-input-hint" role="status">{{ branchDecisionInputHint }}</p>
       </section>
       <div v-if="intentHoldMessage" class="intent-hold-message" data-testid="intent-hold-message" role="status">{{ intentHoldMessage }}</div>
       <div v-if="freeActionReceipts.length" class="free-action-receipt" data-testid="free-action-receipt" role="status">
@@ -409,7 +410,7 @@
 
         <button
           @click="sendMessage"
-          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver || (!!branchDecision && !branchDecisionReady)"
+          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver"
           class="send-button"
         >
           <Loader2 v-if="isAIProcessing" :size="16" class="animate-spin" />
@@ -534,7 +535,7 @@ import { resolveEndingImage } from '@/assets/endings';
 import { currentDiagnosticTurnId, noteTicketDiscard, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
-import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, resolveBranchDecisionInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
+import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, branchDecisionChoiceHint, resolveBranchDecisionInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
 import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch } from 'vue';
 import {
@@ -1036,6 +1037,9 @@ const branchDecisionReady = computed(() => !!resolveBranchDecisionInput(branchDe
   inputText.value,
   engineOptionLine,
 ));
+// 手打内容对不上固定选项时明示可选项，发送键不再静默禁用（REPORT-8091-75eaaee0 P2-1）。
+const branchDecisionInputHint = computed(() => branchDecision.value && inputText.value.trim() && !branchDecisionReady.value
+  ? branchDecisionChoiceHint(branchDecision.value) : '');
 const stageDepartureOffer = computed(() => {
   const save = gameStateStore.toSaveData();
   return save && !scenarioGameOver.value && !isNanhuangDemoFinished(save) ? getStageDepartureOffer(save) : null;
@@ -1979,7 +1983,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (typed) { selectedScenarioEngineAction.value = typed; inputText.value = engineOptionLine(typed); }
   }
   if (!isFollowUpExecution && branchDecision.value && !branchDecisionReady.value) {
-    toast.info(`${BRANCH_DECISION_TITLE}：请从选项中选择一项后再发送`);
+    intentHoldMessage.value = `${BRANCH_DECISION_TITLE}：${branchDecisionChoiceHint(branchDecision.value)}`;
+    toast.info(intentHoldMessage.value);
     return;
   }
   const cultivationSelections = actionQueue.pendingActions.flatMap(a => a.cultivation ? [{ ...a.cultivation }] : []);
