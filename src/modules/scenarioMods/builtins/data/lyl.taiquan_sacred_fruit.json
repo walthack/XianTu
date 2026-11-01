@@ -5822,6 +5822,7 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
+        "locationId": "lyl.location.taiquan_crater",
         "objective": "前往火山口争夺赤阳圣果",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -5841,8 +5842,7 @@
               }
             }
           ]
-        },
-        "locationId": "lyl.location.taiquan_crater"
+        }
       },
       {
         "id": "lyl.event.sacred_against_lin",

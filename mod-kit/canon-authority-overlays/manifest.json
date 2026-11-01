@@ -130,6 +130,41 @@
       "stageId": "lyl.lin_an_black_sea",
       "file": "lyl.lin_an_black_sea.json",
       "book": "yunlong"
+    },
+    {
+      "stageId": "lcq.stage_11_lieshan_battle",
+      "file": "lcq.stage_11_lieshan_battle.json",
+      "book": "qingyu"
+    },
+    {
+      "stageId": "lyg.buddhist_conspiracy",
+      "file": "lyg.buddhist_conspiracy.json",
+      "book": "yange"
+    },
+    {
+      "stageId": "lyg.ganlu_aftershock",
+      "file": "lyg.ganlu_aftershock.json",
+      "book": "yange"
+    },
+    {
+      "stageId": "lyg.han_succession",
+      "file": "lyg.han_succession.json",
+      "book": "yange"
+    },
+    {
+      "stageId": "lyg.liangzhou_league",
+      "file": "lyg.liangzhou_league.json",
+      "book": "yange"
+    },
+    {
+      "stageId": "lyl.luoyang_coup",
+      "file": "lyl.luoyang_coup.json",
+      "book": "yunlong"
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "file": "lyl.taiquan_core_conflict.json",
+      "book": "yunlong"
     }
   ]
 }

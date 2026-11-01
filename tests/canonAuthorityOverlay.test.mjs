@@ -49,6 +49,14 @@ const STAGES = [
   { stageId: 'lyg.shituolin_endgame', book: 'yange' },
   { stageId: 'lyl.jiangzhou_retreat', book: 'yunlong' },
   { stageId: 'lyl.lin_an_black_sea', book: 'yunlong' },
+  // 长安介绍错字「热闘」→「热闹」（REPORT-8091-c385f351 P2-7，2026-11-02）：此前无 overlay 的七关只带这一条 set
+  { stageId: 'lcq.stage_11_lieshan_battle', book: 'qingyu' },
+  { stageId: 'lyg.buddhist_conspiracy', book: 'yange' },
+  { stageId: 'lyg.ganlu_aftershock', book: 'yange' },
+  { stageId: 'lyg.han_succession', book: 'yange' },
+  { stageId: 'lyg.liangzhou_league', book: 'yange' },
+  { stageId: 'lyl.luoyang_coup', book: 'yunlong' },
+  { stageId: 'lyl.taiquan_core_conflict', book: 'yunlong' },
 ];
 
 function miniMod(name = 'old') {
@@ -285,13 +293,14 @@ test('id-addressed source keeps a valid id-array; malformed target or source fai
   );
 });
 
-test('tracked overlays are exactly the twenty-six generated→builtin closures', async () => {
+test('tracked overlays are exactly the thirty-three generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
   // 13 → 17：宋线补全（2026-10-28）新增 stage_10／stage_12／小瀛洲／临安收束四关的挂章增量
   // 17 → 21：汉线补全（2026-10-28）新增太泉余波／洛都／汉宫／定陶四关的挂章增量
   // 21 → 24：唐线补全（2026-10-28）新增长安初定／长安插曲／尸陀林三关的挂章增量
-  assert.equal(catalog.manifest.overlays.length, 26);
+  // 26 → 33：长安错字修正（2026-11-02）给七个原无 overlay 的关补单条 set
+  assert.equal(catalog.manifest.overlays.length, 33);
 });
 
 test('generated plus tracked overlay reconstructs the Git-tracked builtins', { skip: skipUnless(HAS_GENERATED_STAGES, 'qingyu/stages/') }, async () => {
