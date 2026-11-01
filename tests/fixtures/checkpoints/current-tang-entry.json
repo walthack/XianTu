@@ -17,7 +17,7 @@
             "月": 3,
             "日": 28,
             "小时": 14,
-            "分钟": 13
+            "分钟": 28
           },
           "calendarVersion": 1
         },
@@ -15365,7 +15365,7 @@
                   "x": 3159,
                   "y": 2767
                 },
-                "描述": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+                "描述": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）",
                 "特色": "",
                 "安全等级": "较安全",
                 "开放状态": "开放",
@@ -17343,7 +17343,7 @@
                     "name": "长安",
                     "continentId": "liuchao.continent.zhongzhou",
                     "type": "城池",
-                    "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+                    "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）",
                     "coordinates": {
                       "x": 3159,
                       "y": 2767
@@ -36332,8 +36332,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:325": {
-                  "id": "line-checkpoint:325",
+                "line-checkpoint:324": {
+                  "id": "line-checkpoint:324",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -36372,8 +36372,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:328": {
-                  "id": "line-checkpoint:328",
+                "line-checkpoint:327": {
+                  "id": "line-checkpoint:327",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -36732,8 +36732,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:347": {
-                  "id": "line-checkpoint:347",
+                "line-checkpoint:346": {
+                  "id": "line-checkpoint:346",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -37052,8 +37052,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:364": {
-                  "id": "line-checkpoint:364",
+                "line-checkpoint:363": {
+                  "id": "line-checkpoint:363",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -37592,8 +37592,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:392": {
-                  "id": "line-checkpoint:392",
+                "line-checkpoint:391": {
+                  "id": "line-checkpoint:391",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -38132,8 +38132,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:420": {
-                  "id": "line-checkpoint:420",
+                "line-checkpoint:419": {
+                  "id": "line-checkpoint:419",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -38432,8 +38432,8 @@
                   },
                   "version": 1
                 },
-                "line-checkpoint:436": {
-                  "id": "line-checkpoint:436",
+                "line-checkpoint:435": {
+                  "id": "line-checkpoint:435",
                   "source": "model",
                   "minutes": 15,
                   "oldTime": {
@@ -38629,6 +38629,26 @@
                     "日": 28,
                     "小时": 14,
                     "分钟": 13
+                  },
+                  "version": 1
+                },
+                "line-checkpoint:446": {
+                  "id": "line-checkpoint:446",
+                  "source": "model",
+                  "minutes": 15,
+                  "oldTime": {
+                    "年": 224,
+                    "月": 3,
+                    "日": 28,
+                    "小时": 14,
+                    "分钟": 13
+                  },
+                  "newTime": {
+                    "年": 224,
+                    "月": 3,
+                    "日": 28,
+                    "小时": 14,
+                    "分钟": 28
                   },
                   "version": 1
                 }

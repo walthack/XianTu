@@ -664,3 +664,7 @@
 - P1-1 点名缺物：rollPool=false，只回执拒绝，不耗搜刮次数、不发池物（回执文案进 config）。P1-2 TAKE_CLAUSE 认「取」+namedQuantity，点名龙牙真实入包。P1-3 地图抵咸阳 stage_entry 也出行动建议。P2-1 咸阳确认框改用 travelPreview 配置文本。P2-2 captureAIResponseError 让审核拦截 toast 如实；「[AI双向系统] AI生成失败」由 log.ts logConsole 按 codes.ts CONSOLE_PREFIX_CODES 认领为新码 NET-016（不再落 SYS-000，AIBS 未改）；NET-014 按 settledLocally 分文案（true 用 NET-017）。P2-3 南荒：05b 模块叙事不带遇敌事实包致状态机停预兆，补 tickEncounterAfterNarration；CP03 落 no_zone 属剧情门禁。P2-4 dataRepair 保留「九阳层次」，汉线首拍不再「赶往舞都」。
 - 追加（Codex/Claude 限流，Grok Bot 直写）：南荒遇敌/白尾豹几率覆盖。tickRandomEncounter/tickEncounterAfterNarration/tickWhiteTailLeopard 可选 {chance?,chanceMul?,leopardChance?}，定值替换、倍率相乘、夹 0..1，不传不变；URL(?/#) 参数名在 e2eSmoke.nanhuangEncounters.overrideParams（xiantu.test.encounterChance / encounterChanceMul / leopardChance），numbersRegistry 已登记。
 - 证据：新增 tests/report8091_6a22（7）、encounterChanceOverride（5）；npm test 3229 项 3216 pass / 0 fail / 13 skip；type-check 与基线同为 27（无新增）。AIBS、runtime、frozen-baseline 本轮均未改。
+
+### REPORT8091-c385 · 复测修复开工（2026-11-02，Codex）
+- 范围：用户报告 P1-1～P2-7 与观察8；基线 c385f351。逐项定位、回归，全量测试与 tsc 待跑。
+- 冻结 runtime.ts / AIBidirectionalSystem.ts / frozen-baseline.json；不提交推送、不读凭据、不改模型/API配置。非新策划轮次；控制面不变，真机未测。

@@ -58,6 +58,7 @@ export function withMapCapitalMarkers<T extends { id?: string; name?: string }>(
 const rawDays: Readonly<Record<string, Readonly<Record<string, number>>>> = crossCountryTravel.rawDays;
 /** UI 与结算共用跨国目的地限制；国内仍由原入口/路线合同处理。 */
 export function mapTravelRestriction(save: SaveData, toId: string): string | undefined {
+  if (canonicalLocationId(toId) === currentLocation(save).canonicalLocationId) return '你已在此地。';
   if (isMapHiddenLocation(toId)) return '此地不在地图上。';
   const from = countryOf(currentLocation(save).canonicalLocationId), to = countryOf(toId);
   if (!from || !to) return '此处国别未定，暂无主动路线。';

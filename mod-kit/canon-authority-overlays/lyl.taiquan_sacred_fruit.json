@@ -21,6 +21,30 @@
         "lyl.event.sacred_against_lin",
         "lyl.event.sacred_jin_drought"
       ]
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyl.event.taiquan_sacred_fruit_10]",
+      "afterKey": "relatedCharacterIds",
+      "beforeKey": "objective",
+      "entries": {
+        "locationId": "lyl.location.taiquan_crater"
+      }
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.locations",
+      "afterId": "liuchao.location.yongzhou_jin",
+      "value": {
+        "id": "lyl.location.taiquan_crater",
+        "name": "火山口",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "秘境",
+        "description": "太泉赤阳圣果争夺所在的火山口。",
+        "country": "太泉",
+        "region": "太泉",
+        "features": []
+      }
     }
   ]
 }

@@ -69,7 +69,7 @@ test('P1-1 正式档到咸阳后照建议原文输入（含「行动 · 」前�
   const stage = CONTENT_PACKS.stages.find(x => x.manifest.id === 'lyg.qin_xianyang');
   for (const e of stage.scenario.events) for (const a of e.playerCompletionContract?.actions || []) {
     if (e.id === 'liuchao.event.qin_hook_fangshi_rumor') continue;
-    assert.deepEqual(a.intentMatch?.matchAny, [a.label, a.actionText], `${e.id}:${a.id}`);
+    assert.deepEqual(a.intentMatch?.matchAny?.slice(0, 2), [a.label, a.actionText], `${e.id}:${a.id}`);
   }
 });
 

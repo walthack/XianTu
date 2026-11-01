@@ -4233,6 +4233,19 @@
     "kind": "action",
     "stage": "lyl.taiquan_sacred_fruit",
     "event": "lyl.event.taiquan_sacred_fruit_10",
+    "action": "travel:lyl.location.taiquan_crater",
+    "receipt": {
+      "attempted": true,
+      "completed": false,
+      "eventId": "lyl.event.taiquan_sacred_fruit_10",
+      "actionId": "travel:lyl.location.taiquan_crater",
+      "outcome": "success"
+    }
+  },
+  {
+    "kind": "action",
+    "stage": "lyl.taiquan_sacred_fruit",
+    "event": "lyl.event.taiquan_sacred_fruit_10",
     "action": "advance_declared_objective",
     "receipt": {
       "attempted": true,

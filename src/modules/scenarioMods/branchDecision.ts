@@ -20,7 +20,7 @@ export interface BranchDecision<T extends BranchDecisionCandidate = BranchDecisi
 }
 
 export const BRANCH_DECISION_TITLE = '剧情分支需要做出决定';
-export const BRANCH_DECISION_HINT = '这一步只能从下面的选项中选择一项。';
+export const BRANCH_DECISION_HINT = '请选择一项，也可以输入选项原文。';
 
 /** eventId → [动作 id, 显示文案]；第一项是决定动作，其余是同一时刻的其他固定选项（含致命选项）。 */
 const LOCKED_DECISIONS: Readonly<Record<string, ReadonlyArray<readonly [string, string]>>> = {
@@ -64,4 +64,12 @@ export function branchDecisionAllowsSend<T extends BranchDecisionCandidate>(
   const chosen = decision.options.find(option =>
     option.source === selected.source && option.actionId === selected.actionId && (option.eventId || '') === (selected.eventId || ''));
   return Boolean(chosen) && lineOf(chosen!).trim() === inputText.trim();
+}
+
+/** 手打固定选项与点击走同一动作；只精确匹配当前选项，含糊/否定/混合输入不代选。 */
+export function resolveBranchDecisionInput<T extends BranchDecisionCandidate>(decision: BranchDecision<T> | null, text: string, lineOf: (option: T) => string): T | undefined {
+  const input = text.trim().replace(/[。！!]+$/, '');
+  if (!input || !decision) return undefined;
+  const hits = decision.options.filter((option, i) => [decision.labels[i], option.label, lineOf(option)].some(line => line.trim().replace(/[。！!]+$/, '') === input));
+  return hits.length === 1 ? hits[0] : undefined;
 }

@@ -1,5 +1,5 @@
 {
-  "version": "375469444e081d01",
+  "version": "3e4ae3fc3da86084",
   "contracts": [
     {
       "meta": {
@@ -7934,7 +7934,7 @@
             "name": "长安",
             "continentId": "liuchao.continent.zhongzhou",
             "type": "城池",
-            "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+            "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）",
             "coordinates": {
               "x": 3159,
               "y": 2767
@@ -9738,7 +9738,14 @@
                   "intentMatch": {
                     "matchAny": [
                       "在咸阳落脚，打听见王的门路",
-                      "我在咸阳找个地方住下，打听商人要见秦王得走什么门路。"
+                      "我在咸阳找个地方住下，打听商人要见秦王得走什么门路。",
+                      "落脚打听"
+                    ],
+                    "rejectIf": [
+                      "不落脚",
+                      "不打听",
+                      "不想落脚",
+                      "不想打听"
                     ]
                   }
                 }
@@ -17353,6 +17360,8 @@
     "report8091.moderation.local": "内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。",
     "report8091.encounter.foreshadow": "{place}周围传来异样的声响，地上留着新鲜的踪迹。这里并不安全，你可以继续探查，也可以离开。",
     "report8091.encounter.reveal": "{enemy}循着动静现身，挡在前方。对方共{count}个，尚未交手，你可以决定如何应对。",
+    "actionDisplay.lyl.event.han_court_grain_blame.hear_court_grain_cutoff.label": "观察 · 听清朝会上粮草被掐断",
+    "actionDisplay.lyl.event.han_court_grain_blame.hear_court_grain_cutoff.line": "我在汉廷朝会上听完：御史王温舒攻击丞相韦玄成，左武军粮草因此接不上。",
     "text.act.baihu.o1.priced": "挺直腰板，把话说成一笔买卖",
     "intent.baihu.o1.priced": "我挺直腰板对苏妲己说：这是一笔买卖，价钱先谈清楚。",
     "outcome.act.baihu.o1.priced": "你没有低头，把话说成了一笔买卖。苏妲己抬眼看了你一下，没有打断。",
@@ -19571,7 +19580,7 @@
     "liuchao.event.qin_xiaoling_villa": "咸阳",
     "lyl.event.taiquan_sacred_fruit_07": "",
     "lyl.event.taiquan_sacred_fruit_08": "",
-    "lyl.event.taiquan_sacred_fruit_10": "",
+    "lyl.event.taiquan_sacred_fruit_10": "火山口",
     "lyl.event.yin_yang_counter": "太泉古阵核心区",
     "lyl.event.xingyin_beast_traps": "太泉古阵",
     "lyl.event.taiquan_afterfall_03_beat": "",
@@ -19669,7 +19678,7 @@
     "liuchao.event.qin_xiaoling_villa": "liuchao.location.xianyang",
     "lyl.event.taiquan_sacred_fruit_07": "",
     "lyl.event.taiquan_sacred_fruit_08": "",
-    "lyl.event.taiquan_sacred_fruit_10": "",
+    "lyl.event.taiquan_sacred_fruit_10": "lyl.location.taiquan_crater",
     "lyl.event.yin_yang_counter": "lyl.location.taiquan_core",
     "lyl.event.xingyin_beast_traps": "liuchao.location.taiquan",
     "lyl.event.taiquan_afterfall_03_beat": "",

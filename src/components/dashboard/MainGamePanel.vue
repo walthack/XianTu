@@ -292,7 +292,7 @@
         <p v-for="line in freeActionReceipts" :key="line">{{ line }}</p>
         <button type="button" class="free-action-receipt-dismiss" data-testid="free-action-receipt-dismiss" @click="freeActionReceipts = []">{{ packText('free.receipt.dismiss') }}</button>
       </div>
-      <div v-if="!branchDecision" class="input-wrapper">
+      <div class="input-wrapper">
         <!-- 隐藏的文件选择器 -->
         <input
           type="file"
@@ -398,8 +398,7 @@
             @blur="isInputFocused = false"
             @keydown="handleKeyDown"
             @input="handleInput"
-            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : branchDecision ? `${BRANCH_DECISION_TITLE}：请点选上方选项` : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
-            :readonly="!!branchDecision"
+            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : branchDecision ? `${BRANCH_DECISION_TITLE}：请输入或点选固定选项` : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
             class="game-input"
             ref="inputRef"
             rows="1"
@@ -535,7 +534,7 @@ import { resolveEndingImage } from '@/assets/endings';
 import { currentDiagnosticTurnId, noteTicketDiscard, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
-import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
+import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, resolveBranchDecisionInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
 import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch } from 'vue';
 import {
@@ -1015,8 +1014,8 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
 const keyBeatCard = computed(() => currentScene.value ? null : getActiveKeyBeatCard(gameStateStore.toSaveData()));
 const keyBeatHighlight = ref(false);
 let keyBeatConfirmedByCard = false;
-// 锁定时只显示固定选项（见下方分支区块）；未激活的锁选项（如决定步之前的致命选项）不提前显示。
-const engineButtonOptions = computed(() => currentScene.value || playtestFinished.value || branchDecision.value ? [] :
+// 锁定时建议区与分支区都显示固定选项；未激活的锁选项（如决定步之前的致命选项）不提前显示。
+const engineButtonOptions = computed(() => currentScene.value || playtestFinished.value ? [] : branchDecision.value ? branchDecision.value.options.map((option, i) => ({ ...option, label: branchDecision.value!.labels[i] })) :
   scenarioEngineActionOptions.value.filter(option => !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
     && !isDormantLockedOption(option as unknown as BranchDecisionCandidate)));
 /** 选项填入输入框时使用的原句（与 selectScenarioEngineAction 一致）。 */
@@ -1027,11 +1026,11 @@ const engineOptionLine = (option: ScenarioEngineActionSelection): string => (
     ? option.actionText
     : option.playerLine
 );
-// 剧情分支点：只能在给定选项中选，不接受自由输入（判定见 branchDecision.ts）。
+// 剧情分支点：只接受当前固定选项，支持手打原文（判定见 branchDecision.ts）。
 // 本局已结束（如选了致命选项）时不再锁：让结局卡片与返回入口显示出来。
 const branchDecision = computed(() => scenarioGameOver.value ? null :
   detectBranchDecision(scenarioEngineActionOptions.value as unknown as Array<BranchDecisionCandidate & ScenarioEngineActionSelection>));
-const branchDecisionReady = computed(() => branchDecisionAllowsSend(
+const branchDecisionReady = computed(() => !!resolveBranchDecisionInput(branchDecision.value, inputText.value, engineOptionLine) || branchDecisionAllowsSend(
   branchDecision.value,
   selectedScenarioEngineAction.value as unknown as (BranchDecisionCandidate & ScenarioEngineActionSelection) | null,
   inputText.value,
@@ -1894,7 +1893,7 @@ const confirmKeyBeatCard = async (option: KeyBeatCardOption) => {
   await sendMessage();
 };
 
-// 锁定时没有输入框：点固定选项即选中并发送（仍走原有结构化动作与本地合同）。
+// 点固定选项即选中并发送，手打原文也走相同动作（仍走原有结构化动作与本地合同）。
 const confirmBranchDecision = async (option: ScenarioEngineActionSelection) => {
   selectScenarioEngineAction(option);
   await sendMessage();
@@ -1975,6 +1974,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   intentHoldMessage.value = '';
   freeActionReceipts.value = [];
   // 剧情分支点：只接受已选中的选项原句；判定确认等后续执行沿用已选动作，不再拦。
+  if (!isFollowUpExecution && branchDecision.value) {
+    const typed = resolveBranchDecisionInput(branchDecision.value, inputText.value, engineOptionLine);
+    if (typed) { selectedScenarioEngineAction.value = typed; inputText.value = engineOptionLine(typed); }
+  }
   if (!isFollowUpExecution && branchDecision.value && !branchDecisionReady.value) {
     toast.info(`${BRANCH_DECISION_TITLE}：请从选项中选择一项后再发送`);
     return;

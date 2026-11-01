@@ -19,3 +19,11 @@ export function domesticTravelDays(fromId: string | undefined, toId: string | un
   if (li < cfg.liPerDay) return undefined;
   return Math.min(cfg.dayCap, Math.ceil(li / cfg.liPerDay));
 }
+
+/** 已知同国两点的移动；不把跨国剧情转场套入国内片刻规则。 */
+export function isDomesticTravel(fromId: string | undefined, toId: string | undefined): boolean {
+  const from = canonicalLocationId(fromId), to = canonicalLocationId(toId);
+  if (!from || !to || from === to) return false;
+  const a = definitionOf(from), b = definitionOf(to);
+  return !!a?.country && a.country === b?.country;
+}

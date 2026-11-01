@@ -1,3 +1,4 @@
+import { CONTENT_PACKS } from '../contentPacks';
 import type { ScenarioModEvent } from './schema';
 import { isScopedPlayerPresentationEvent } from './playtestNarrativeScope';
 
@@ -69,6 +70,9 @@ export function playerFacingActionLine(line: string): string {
 
 /** 旧合同在玩家面前不重复预设“离开后返回”，也不提前念阿葭死讯。 */
 export function playerActionDisplayOverride(eventId: string, actionId: string): { line: string; label?: string } | undefined {
+  const key = `actionDisplay.${eventId}.${actionId}`;
+  const line = CONTENT_PACKS.texts[`${key}.line`], label = CONTENT_PACKS.texts[`${key}.label`];
+  if (line && label) return { line, label };
   // 武二郎工钱已改入源合同，不再由显示投影缩写。
   if (eventId === 'lcq.event.huamiao_coop_boundary') return { line: '我跟云苍峰谈清进鬼王峒的合作边界。', label: '与云苍峰谈合作边界' };
   if (eventId === 'lcq.event.weapon_deal_with_geluo' && actionId === 'open_weapon_talk_with_geluo') return { line: '我向鬼王峒使者提出兵器生意。', label: '同使者谈兵器生意' };

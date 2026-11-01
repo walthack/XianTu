@@ -754,7 +754,7 @@
         "name": "长安",
         "continentId": "liuchao.continent.zhongzhou",
         "type": "城池",
-        "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+        "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）",
         "coordinates": {
           "x": 3159,
           "y": 2767
@@ -1432,6 +1432,16 @@
         },
         "features": [],
         "country": "晋"
+      },
+      {
+        "id": "lyl.location.taiquan_crater",
+        "name": "火山口",
+        "continentId": "liuchao.continent.taiquan",
+        "type": "秘境",
+        "description": "太泉赤阳圣果争夺所在的火山口。",
+        "country": "太泉",
+        "region": "太泉",
+        "features": []
       }
     ],
     "characters": [
@@ -5831,7 +5841,8 @@
               }
             }
           ]
-        }
+        },
+        "locationId": "lyl.location.taiquan_crater"
       },
       {
         "id": "lyl.event.sacred_against_lin",

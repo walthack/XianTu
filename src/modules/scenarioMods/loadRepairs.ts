@@ -1,3 +1,4 @@
+import sacredFruit from './builtins/data/lyl.taiquan_sacred_fruit.json';
 import { normalizeLocationCountry } from './locationCountry';
 import retreat from './builtins/data/lyl.jiangzhou_retreat.json';
 import blackSea from './builtins/data/lyl.lin_an_black_sea.json';
@@ -77,6 +78,7 @@ const S01_DEMO_SUPERSEDED: Record<string, { any: string[]; demo: string[]; rejec
   'lcq.event.s01_05': { any: ['请王哲诊治', '让王哲诊治', '让王哲查看伤势', '向王哲说明来历请他诊治'], demo: ['去帅帐', '前往帅帐', '走进帅帐', '见王哲', '请他看伤', '说明自己的来历'], reject: ['拒绝诊治', '隐瞒来历离开', '不让王哲查看'] },
 };
 const SUPERSEDED_INTENT_MATCH: Record<string, string[]> = {
+  'liuchao.event.qin_enter_xianyang:settle_in_xianyang': (CONTENT_PACKS.stages.find(s => s.manifest.id === 'lyg.qin_xianyang')?.scenario?.events?.find(e => e.id === 'liuchao.event.qin_enter_xianyang')?.playerCompletionContract?.actions || []).map(a => JSON.stringify({ matchAny: [a.label, a.actionText] })),
   'lcq.event.s01_01:advance_declared_objective': [
     { matchAny: S01_01_V1_ANY, rejectIf: S01_01_REJECT },
     { matchAny: [...S01_01_V1_ANY, '查看段强', '弄清这片草原', '处理落地'], rejectIf: S01_01_REJECT },
@@ -173,6 +175,7 @@ export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyS
   // 旧档缺作者后补的自由输入短语（s01_01）：只补缺失或已被取代的旧快照，见 backfillMissingIntentMatch。
   repairReport8091Route(rt);
   repairHanLuoduRoute(rt);
+  repairTaiquanCrater(rt);
   backfillMissingIntentMatch(rt);
   // 旧版直接点地图入秦留下的口信当前拍（推进一轮会换掉 剧本模组 对象，之后改用新的）。
   if (repairLingeringMapEntryMessage(save)) rt = save.世界.状态.剧本模组;
@@ -207,4 +210,18 @@ export function repairHanLuoduRoute(rt: any): void {
   }
   const e08 = rt.events.find((e: any) => e.id === 'lyl.event.taiquan_afterfall_08_beat');
   if (e08 && !rt.completedEventIds?.includes(e08.id) && !e08.locationId) e08.locationId = source(e08.id).locationId;
+}
+
+/** 旧档缺失火山口地点合同：只补未完成节点，不补写完成或移动玩家。 */
+export function repairTaiquanCrater(rt: any): void {
+  if (rt?.modId !== sacredFruit.manifest.id) return;
+  for (const source of sacredFruit.scenario.events) {
+    const saved = rt.events?.find((e: any) => e.id === source.id);
+    if (!('locationId' in source) || !source.locationId || !saved || saved.locationId || rt.completedEventIds?.includes(source.id)) continue;
+    const loc = sacredFruit.canon.locations.find(l => l.id === source.locationId);
+    if (!loc) continue;
+    saved.locationId = source.locationId;
+    rt.canon.locations ||= [];
+    if (!rt.canon.locations.some((l: any) => l.id === loc.id)) rt.canon.locations.push(structuredClone(loc));
+  }
 }

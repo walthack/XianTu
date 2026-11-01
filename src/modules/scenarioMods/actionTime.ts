@@ -5,7 +5,7 @@ import { deferOptionalDeparture } from './questLineContext';
 import { advanceClock, isNanhuangTravelStage, syncNanhuangRailTravel } from './travel/travelLedger';
 import { gameTimeMinutes } from '@/utils/time';
 import { logEvent } from '../diagnostics/log';
-import { domesticTravelDays } from './travel/routeDays';
+import { domesticTravelDays, isDomesticTravel } from './travel/routeDays';
 export interface ActionTime { tier: '一瞬' | '片刻' | '一时辰' | '半日' | '一日' | '数日'; days?: number }
 export interface CultivationSelection { kind: 'cultivation'; days: number; actionId: string }
 export const actionTimeConfig = () => GAME_NUMBERS.story.actionTime;
@@ -76,7 +76,8 @@ export function settleActionTime(save: SaveData, response: any, options: any, ca
     return { oldValue, newValue: structuredClone((save as any).元数据.时间) };
   }
   const travelMinutes = card?.action_time ? undefined : questTravelMinutes(save, options);
-  const minutes = card?.action_time ? parseActionTime(card.action_time, id) : travelMinutes ?? (step ? Number(GAME_NUMBERS.story.stepScene.minutesPerBeat) : parseActionTime(response.action_time, id));
+  const ordinaryTravel = options?.eventAction?.source === 'event_engine' && String(options.eventAction.actionId).startsWith('travel:') && !actionTimeConfig().questRouteDays.eventIds.includes(options.eventAction.eventId) && isDomesticTravel(options.eventAction.travelFromLocationId, options.eventAction.actionId.slice('travel:'.length));
+  const minutes = ordinaryTravel ? actionTimeConfig().minutes.moment : card?.action_time ? parseActionTime(card.action_time, id) : travelMinutes ?? (step ? Number(GAME_NUMBERS.story.stepScene.minutesPerBeat) : parseActionTime(response.action_time, id));
   return settleTime(save, id, minutes, travelMinutes !== undefined ? 'travel' : step ? 'beat' : 'model');
 }
 /**

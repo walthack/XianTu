@@ -26790,6 +26790,12 @@
       "id": "text.obj.ningyu.y6.recall",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
+    },
+    {
+      "kind": "location",
+      "id": "lyl.location.taiquan_crater",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": []
     }
   ],
   "reusedSources": {

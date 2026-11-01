@@ -56,6 +56,8 @@ if(retired){
  old.entries=old.entries.filter(e=>e!==retired);
 }
 for(const entry of old.entries) {
+ if(entry.id==='liuchao.location.changan')entry.authoritativeFields=['description'];
+ if(entry.id==='liuchao.location.changan')for(const d of [entry.definition,...Object.values(entry.stageVariants||{})])if(d.description)d.description=d.description.replaceAll('热闘','热闹');
  if(entry.id==='lcq.location.grassland'){entry.authoritativeFields=['coordinates'];for(const d of [entry.definition,...Object.values(entry.stageVariants||{})])d.coordinates={x:1200,y:4650};}
  if(!['liuchao.location.jiangzhou','liuchao.location.qingzhou'].includes(entry.id))continue;
  for(const d of [entry.definition,...Object.values(entry.stageVariants||{})]) {
