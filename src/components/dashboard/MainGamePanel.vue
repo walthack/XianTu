@@ -597,6 +597,7 @@ import { tickRandomEncounter, encounterNarratedBy } from '@/modules/scenarioMods
 import { tickWhiteTailLeopard } from '@/modules/scenarioMods/whiteTailLeopard';
 import { logError } from '@/modules/diagnostics/log';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
+import { settleSelfConsumable, renderSelfConsumableBlock, renderSelfConsumableReceipt } from '@/modules/scenarioMods/freeAction/selfConsumable';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
 import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
 import { notePlayerText } from '@/modules/scenarioMods/freeAction/playerTextDebug';
@@ -2275,6 +2276,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	    givenFacts = settlement.givenFacts;
 	    affinityNotes = settlement.affinityNotes;
 	  }
+	  // 自服背包里的消耗品（05e63d31 真机 MED1「我取出朱箓蛇丹服下，运气疗伤」）：发给叙事前本地扣份数、按物品配置结算，
+	  // 背包事实块随之写明扣了什么，叙事不会再写成未入口。与自由行动同在“上次对话”备份之后，失败回合整份回退。
+	  const selfUseSave = !buttonSelected && !routedIntentAction && typedText ? gameStateStore.toSaveData() : null;
+	  const selfUse = selfUseSave ? settleSelfConsumable(selfUseSave, typedText) : undefined;
+	  if (selfUse) {
+	    await persistJudgementSave(selfUseSave);
+	    freeActionBlock += renderSelfConsumableBlock(selfUse);
+	  }
 	  // 叙述包带上背包的实际账（增减 + 现有），叙事才不会把没发生的交付写成已成。
 	  if (freeActionBlock) freeActionBlock += renderInventoryBlock(inventoryBefore, gameStateStore.toSaveData());
 	  // 回执：被拒、给予成功、到顶轻回执（可关）、其他——持久显示（不是一闪而过的 toast），玩家下次发送或点“收起”才清除。
@@ -2284,6 +2293,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	    others: routedFreeActionOthers,
 	    ...(freeActionConfig().affinity.lightReceipt && affinityNotes.length ? { affinity: affinityNotes } : {}),
 	  });
+	  if (selfUse) freeActionReceipts.value.push(renderSelfConsumableReceipt(selfUse));
 
 	  const userMessage = inputText.value.trim();
 	  console.log('[前端] 用户输入 inputText.value:', inputText.value);

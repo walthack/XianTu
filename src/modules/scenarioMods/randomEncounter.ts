@@ -409,14 +409,38 @@ export function settleRandomEncounterClose(save: SaveData, { id, outcome }: { id
   return pending;
 }
 
-/** 测试专用；每拍读取，部署后可切换，不写存档或正式概率配置。 */
+/** URL 里的开关值：? 查询优先，其次 # 后的查询（外部链接可能把参数放在 # 之后）；没写为 null。 */
+function urlTestFlag(flag: string): string | null {
+  if (typeof location === 'undefined') return null;
+  const hashQuery = (location.hash || '').split('?').slice(1).join('?');
+  return new URLSearchParams(location.search || '').get(flag) ?? new URLSearchParams(hashQuery).get(flag);
+}
+const storageGet = (store: () => Storage | undefined, flag: string): string | null => {
+  try { return store()?.getItem(flag) ?? null; } catch { /* lcq-allow: 测试开关存储不可用按未设置处理，不影响正式遭遇。 */ return null; }
+};
+const tabStore = () => (typeof sessionStorage === 'undefined' ? undefined : sessionStorage);
+const siteStore = () => (typeof localStorage === 'undefined' ? undefined : localStorage);
+let announcedTestSource = '';
+
+/**
+ * 测试专用；每拍读取，部署后可切换，不写存档或正式概率配置。
+ * 优先级：URL（? 或 # 后）＞本标签页 sessionStorage（URL 开过的值，刷新／站内跳转后仍在，关标签即失效）＞localStorage＞配置默认。
+ * 8091 真机 05e63d31：开关只活在地址栏里，刷新或驱动重进首页即丢，又没有可见回执，只能拿 localStorage 判断成败。
+ */
 export function nanhuangTestRates(): { encounterChance: number; leopardChance: number } | undefined {
   const cfg = (GAME_NUMBERS as any).e2eSmoke.nanhuangEncounters;
   if (!cfg) return undefined;
-  let enabled = cfg.enabled === true;
-  try {
-    const query = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get(cfg.flag);
-    enabled = query !== null ? query === 'on' : enabled || (typeof localStorage !== 'undefined' && localStorage.getItem(cfg.flag) === 'on');
-  } catch { /* lcq-allow: 测试开关存储不可用时保持默认关闭，不影响正式遭遇。 */ }
+  let query: string | null = null;
+  try { query = urlTestFlag(cfg.flag); } catch { /* lcq-allow: 地址解析失败按未设置处理。 */ }
+  if (query !== null) {
+    query = query.trim().toLowerCase() === 'on' ? 'on' : 'off';
+    try { tabStore()?.setItem(cfg.flag, query); } catch { /* lcq-allow: 会话存储不可用时只认本次 URL。 */ }
+  }
+  const tab = query ?? storageGet(tabStore, cfg.flag);
+  const source = query !== null ? 'url' : tab !== null ? 'sessionStorage' : storageGet(siteStore, cfg.flag) === 'on' ? 'localStorage' : cfg.enabled === true ? 'config' : '';
+  const enabled = tab !== null ? tab === 'on' : source !== '';
+  // lcq-allow-console: 给真机测试者看的开关回执（来源变化时一行），不进诊断日志。
+  if (enabled && announcedTestSource !== source) console.info(`[南荒测试开关] 已开启（来源：${source}）：南荒遇敌与白尾豹检定按测试概率`);
+  announcedTestSource = enabled ? source : '';
   return enabled ? cfg : undefined;
 }

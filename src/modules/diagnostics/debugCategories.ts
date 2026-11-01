@@ -51,7 +51,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'growth', label: '养成与物品',
     paths: [
-      ...sm('levelProgression.ts', 'inventoryTransactions.ts', 'fixedInventoryContracts.ts', 'itemGrades.ts', 'shopStock.ts', 'locationLoot.ts', 'seededRng.ts'),
+      ...sm('levelProgression.ts', 'inventoryTransactions.ts', 'fixedInventoryContracts.ts', 'itemGrades.ts', 'shopStock.ts', 'locationLoot.ts', 'selfConsumableIntent.ts', 'seededRng.ts'),
       ...at('utils/', 'attributeCalculation.ts', 'cultivationSpeedCalculator.ts', 'realmUtils.ts', 'lifespanCalculator.ts', 'statusEffectManager.ts', 'masteredSkillsCalculator.ts',
         'equipmentBonusApplier.ts', 'craftingSystem.ts', 'currencySystem.ts', 'narratedInventory.ts', 'sixSiManager.ts'),
       'data/',

@@ -2,6 +2,7 @@
  * 自由行动票：模型只报“玩家这一句做了什么”（类、变体、对谁、轻重、是否真做了、原话证据、手段物品），
  * 全部是固定枚举或代码生成名单里的 id；本文件只做名单生成与票的校验，不读数值、不结算。
  * 不对玩家原话做任何关键词/正则匹配：是否真做了由模型填 performed，原话只用于“确有此话”的连续子串核对。
+ * 唯一例外：自服句（目录外 selfConsumableIntent 判定）里没对象的给予票直接丢，自服由 selfConsumable 本地结算。
  */
 import type { SaveData } from '@/types/game';
 import { contentDefinition, contentName } from '../entityCatalog';
@@ -12,6 +13,7 @@ import { freeActionConfig, variantSpecOf, enabledVariants, type ActionClass, typ
 import { gateText } from './facts';
 import { logGateRefusal } from './refusalLog';
 import { scenarioPlayerId } from '../playerIdentity';
+import { selfConsumableTarget } from '../selfConsumableIntent';
 
 export interface FreeActionTicket {
   actionClass: ActionClass;
@@ -159,6 +161,8 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     const targetless = spec.target === 'none';
     const reported = t.targetId === 'null' || t.targetId === '' ? null : t.targetId;
     if (!targetless) {
+      // 自服（「服下朱箓蛇丹」）不是给人：交 selfConsumable 本地结算，这张没对象的给予票直接丢，不出「未发生」（05e63d31 真机 MED1）。
+      if (spec.actionClass === 'give' && (typeof reported !== 'string' || !roster.has(reported)) && selfConsumableTarget(save, playerText)) { drop('self_use', label); continue; }
       if (typeof reported !== 'string' || !roster.has(reported)) { refuse('target_unavailable', 'target_not_present', label); continue; }
       if (!relationshipOf(save as any, reported) && !canonCharacterOf(save, reported)) { refuse('target_unavailable', 'target_no_record', label); continue; }
     }

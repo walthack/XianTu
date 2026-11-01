@@ -1,3 +1,4 @@
+import { expireWhiteTailLeopard } from '@/modules/scenarioMods/whiteTailLeopard';
 import { recordShiweimoEnding, F02_CONTRACT_ID } from '@/modules/scenarioMods/shiweimoRescue';
 import { GAME_NUMBERS } from '../numbers';
 import { logError } from '@/modules/diagnostics/log';
@@ -110,7 +111,7 @@ function logInput(a: ActiveScene, c: Contract, text: string, model: { used: bool
 }
 /** Single input gate. It returns true even for clarification; never leaks an unresolved scene to the story engine. */
 export async function submitSceneInput(source: SaveData, text: string, deps: HostDeps, selected?: {eventId?:string;actionId?:string}): Promise<boolean> {
-  const save=cloneSave(source); const ext=cloneSave(readExt(save)); let a=ext.active;
+  const save=cloneSave(source); expireWhiteTailLeopard(save); const ext=cloneSave(readExt(save)); let a=ext.active;
   if (!a) {
     const candidate=sceneCandidate(save,selected); if(!candidate)return false;
     const {contract:c,selection}=candidate;
@@ -174,7 +175,8 @@ export async function submitSceneInput(source: SaveData, text: string, deps: Hos
   writeExt(save,ext);await deps.persist(save);return true;
 }
 export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promise<void> {
-  const save=cloneSave(source),ext=cloneSave(readExt(save)),a=ext.active; if(!a||!a.pending||a.phase!=='fighting')throw new Error('没有待确认的场面行动');
+  const save=cloneSave(source); expireWhiteTailLeopard(save);
+  const ext=cloneSave(readExt(save)),a=ext.active; if(!a||!a.pending||a.phase!=='fighting')throw new Error('没有待确认的场面行动');
   const c=sceneContractById(a.contractId)!;
   if(alignContract(a,c)){writeExt(save,ext);await deps.persist(save);return;}
   const p=a.pending!;if(p.cursor!==a.state.cursors.action)throw new Error('stale_scene_preview');
@@ -200,7 +202,8 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   syncSceneStatuses(save,c,a.state);
   // 6ccb 真机 P0：气血本拍落账打到保底即当拍判负（结果行补一句，叙事与收场同拍）。
   if(settleDownedAfterHostSync(c,a.state)){confirmed.result.outcome=a.state.outcome;a.last.lines.push('你伤重倒下，这一战败了。');}
-  runtimeOf(save).worldTurn+=1;writeExt(save,ext);
+  // 场面每拍也推进 worldTurn：限时增益（白尾豹「山神庇佑」）按同一回合数到期，不等战后下一个故事回合（05e63d31 真机：战中 14–19 拍仍生效）。
+  runtimeOf(save).worldTurn+=1;writeExt(save,ext);expireWhiteTailLeopard(save);
   await deps.persist(save);checkAbort(deps); // Dice checkpoint BEFORE any model request.
   const narration=await narrateBeat(c,a.state,confirmed.result,p.text,runtimeOf(save),deps.askNarrative);checkAbort(deps);
   a.last.text=narration.text;history(save)[a.narrativeIndex].content=[narration.text,...lines].join('\n\n');
@@ -237,7 +240,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
   if (runtimeOf(save).travelLedger?.timeConsumedAtTurn !== runtimeOf(save).worldTurn) settleTime(save, `combat:${c.meta.id}:${a.state.seed}:${a.eventId}`, actionTimeConfig().minutes.moment, 'combat');
   if(c.meta.id===F02_CONTRACT_ID&&closed.writeBack.outcome.kind==='win'){const row=closed.writeBack.finalStates.find(r=>r.party==='snake_man');if(row)recordShiweimoEnding(save,row.label);}
   ext.history.push({contractId:a.contractId,eventId:a.eventId,outcome:a.closing.outcome,endingId:closed.writeBack.outcome.endingId,beats:closed.writeBack.beats,memoryNote:renderRefs(closed.writeBack.memoryNote,runtimeOf(save)),state:cloneSave(a.state),inputLog:cloneSave(a.inputLog)});
-  ext.active=null;writeExt(save,ext);const advanced=advanceScenarioRuntime(save).saveData;await deps.persist(advanced);
+  ext.active=null;writeExt(save,ext);const advanced=advanceScenarioRuntime(save).saveData;expireWhiteTailLeopard(advanced);await deps.persist(advanced);
 }
 export async function confirmSceneChoice(source:SaveData,deps:HostDeps):Promise<void>{
  const save=cloneSave(source),ext=cloneSave(readExt(save)),a=ext.active;if(!a?.choice)throw new Error('没有待确认的终局选择');

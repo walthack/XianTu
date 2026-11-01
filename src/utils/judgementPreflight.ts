@@ -19,6 +19,7 @@ import { getCanonRailContract, getCanonRailProfile } from '@/modules/scenarioMod
 import { getNarrativeAnchorEvent } from '@/modules/scenarioMods/runtime';
 import { packText } from '@/modules/contentPacks';
 import { trainingRealm } from '@/modules/scenarioMods/levelProgression';
+import { isLocationLootInput } from '@/modules/scenarioMods/locationLoot';
 
 const RISK_RULES: Array<[JudgementKind, RegExp]> = [
   ['combat', /攻击|出手|偷袭|斩杀|刺杀|搏杀|斗法|交手|战斗|迎战|应战|反击|格挡|挡住|阻击|拦住|制服|擒拿|对决|打晕|击晕|下毒|抢劫|抢夺(?!先机|时间|机会|话语权)|抢下.{0,8}(?:手里|手中|手上).{0,6}(?:短刀|长刀|刀剑|佩刀|佩剑|剑|匕首|斧|枪|矛|弓|兵器|武器)|(?:斩|砍|刺|杀|宰|击|射)(?:向|出|了|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打(?:向|死|伤|中|退|倒|那|这|他|她|它|敌|贼|妖|守卫|对手)|打了(?:他|她|它|敌人|守卫|对手)|打出(?:一|两|三|数)?(?:拳|掌|招|击)/],
@@ -41,6 +42,8 @@ export function shouldSkipJudgementPreflight(input: {
   if (input.skipPreflight) return true;
   if (input.selectedSource === 'open_world_engine') return true;
   if (input.selectedSource === 'baihu_gamble_refusal_engine') return true;
+  // 搜刮／搜尸身句由本地搜刮规则结算，掉落不看骰；「搜查尸身」不再弹探索判定卡（05e63d31 真机：战后搜尸）。
+  if (!input.selectedSource && input.userMessage && isLocationLootInput(input.userMessage)) return true;
   return input.selectedSource === 'event_engine'
     && Boolean(input.selectedPlayerLine)
     && input.selectedPlayerLine === input.userMessage;

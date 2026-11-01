@@ -1,5 +1,5 @@
 {
-  "version": "7bf4150c5e7ba3a9",
+  "version": "f556ebfd6ef180ae",
   "contracts": [
     {
       "meta": {
@@ -17118,6 +17118,12 @@
     "free.receipt.refused": "没成事：{facts}",
     "free.receipt.given": "已给出：{facts}",
     "free.receipt.other": "这一句没有对应的结算规则，只作叙述，不改变背包、状态或好感。",
+    "free.block.selfUse": "\n【本地物品已结算】{facts}。这一口已经服下、背包已扣除，只演出这些既定事实：不得写成没有入口、没有扣除，也不得杜撰上面没写的回血、修为或其他药效。\n",
+    "free.fact.selfUse.used": "你服下了{item}，背包扣除{count}份",
+    "free.fact.selfUse.cured": "药力解除了{status}",
+    "free.fact.selfUse.onUse": "药效生效：{status}",
+    "free.fact.selfUse.noEffect": "眼下身上没有它能解除的状态，此外没有别的效果",
+    "free.receipt.selfUse": "已服用：{facts}",
     "free.receipt.dismiss": "收起",
     "judge.aftermath.severity.partial": "目标虽有进展但留下破绽",
     "judge.aftermath.severity.failure": "行动受阻",

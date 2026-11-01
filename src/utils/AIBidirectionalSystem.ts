@@ -1146,8 +1146,9 @@ class AIBidirectionalSystemClass {
       if (!modularResponse) {
       if (moduleOnly) assertDemoModulePath(saveData, 'legacy');
       // 普通叙事回合的搜刮与模块回合同一本地事务：先预结算出回执正文、不请求模型，入包在 processGmResponse 落账；清单未配置的地点照旧交模型。
+      // 搜刮句带了行动判定（关键词预检「搜查」或自由行动探索票）也照样本地结算：掉落只由搜刮规则决定，判定不改掉落（05e63d31 真机 CP03）。
       const lootLocal = !options?.eventAction && !options?.opportunityAction && !options?.openWorldAction && !options?.gambleRefusalAction
-        && !options?.judgementResolution && isLocationLootInput(options?.playerIntentText || userMessage) ? settleLocationLoot(cloneDeep(saveData)) : undefined;
+        && isLocationLootInput(options?.playerIntentText || userMessage) ? settleLocationLoot(cloneDeep(saveData)) : undefined;
       const lootLocalText = lootLocal && lootLocal.status !== 'pending' ? lootLocal.text : '';
       const legacyNarrativePilotResponse = lootLocalText ? null : await this.tryLegacyNarrativePilot(
         saveData,

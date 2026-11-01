@@ -83,6 +83,20 @@ function restoreStamina(save: SaveData, ratio: number): number {
   return next - now;
 }
 
+/**
+ * 到期摘除「山神庇佑」：worldTurn 到 buffUntilTurn 即摘（角色.效果、状态账、正在打的场面里的同名状态）。
+ * 故事回合收尾（tickWhiteTailLeopard）与场面每拍／收场各调一次；与遇见概率无关，幂等。
+ */
+export function expireWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leopardConfig()): boolean {
+  const runtime = runtimeOf(save), prior: LeopardState | undefined = runtime?.whiteTailLeopard;
+  if (prior?.buffUntilTurn === undefined || (Number(runtime.worldTurn) || 0) < prior.buffUntilTurn) return false;
+  removeBuff(save, cfg);
+  const scene = activeScene(save);
+  if (scene) for (const party of Object.keys(scene.state.statuses)) scene.state.statuses[party] = scene.state.statuses[party].filter(s => s.id !== cfg.buff.statusId);
+  delete prior.buffUntilTurn;
+  return true;
+}
+
 /** 每个故事回合收尾调一次。返回 changed＝存档有改动；text＝本回合接在正文后的遇见描写（没遇见为空）。 */
 export function tickWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leopardConfig()): { changed: boolean; text: string } {
   const runtime = runtimeOf(save);
@@ -90,12 +104,7 @@ export function tickWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leopar
   const turn = Number(runtime.worldTurn) || 0;
   const prior: LeopardState | undefined = runtime.whiteTailLeopard;
   if (prior?.lastTickTurn === turn) return { changed: false, text: '' };
-  let changed = false;
-  if (prior?.buffUntilTurn !== undefined && turn >= prior.buffUntilTurn) {
-    removeBuff(save, cfg);
-    delete prior.buffUntilTurn;
-    changed = true;
-  }
+  const changed = expireWhiteTailLeopard(save, cfg);
   const locKey = encounterLocKey(save);
   const here = cfg.locations.some(place => placeMatches(save, place, locKey));
   const pendingFight = runtime.encounter?.pending && runtime.encounter.pending.stage !== 'foreshadow';

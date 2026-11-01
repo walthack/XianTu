@@ -45,6 +45,9 @@ async function initializeApp() {
 
   // 数值热改：读与 index.html 同级的 tuning.json，失败静默用打包内默认值（见 runtimeTuning.ts）。
   await loadRuntimeTuning();
+  // 南荒测试开关：启动时就把 URL 上的值记进本标签页，之后刷新或站内跳转丢了参数也照旧（默认关，不写存档）。
+  // lcq-allow: 测试开关读取失败按未开处理，不影响启动。
+  void import('@/modules/scenarioMods/randomEncounter').then(m => m.nanhuangTestRates()).catch(() => undefined);
 
   console.log('【应用启动】数据迁移检查完成，开始挂载Vue应用');
   try {
