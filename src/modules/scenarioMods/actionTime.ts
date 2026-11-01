@@ -1,8 +1,9 @@
-import type { SaveData } from '@/types/game';
+import type { SaveData, GameTime } from '@/types/game';
 import { registerNumbersValidator, GAME_NUMBERS } from '../sceneModule/numbers';
 import { advanceScenarioRuntime } from './runtime';
 import { deferOptionalDeparture } from './questLineContext';
 import { advanceClock, syncNanhuangRailTravel } from './travel/travelLedger';
+import { gameTimeMinutes } from '@/utils/time';
 import { logEvent } from '../diagnostics/log';
 export interface ActionTime { tier: '一瞬' | '片刻' | '一时辰' | '半日' | '一日' | '数日'; days?: number }
 export interface CultivationSelection { kind: 'cultivation'; days: number; actionId: string }
@@ -40,7 +41,7 @@ export function settleTime(save: SaveData, id: string, minutes: number, source: 
   s.系统.扩展.actionTime.receipts[id] = { id, source, minutes, oldTime: advanced.oldValue, newTime: advanced.newValue, version: 1 };
   return advanced;
 }
-export function settleActionTime(save: SaveData, response: any, options: any, card: any, step: boolean, initialization: boolean) {
+export function settleActionTime(save: SaveData, response: any, options: any, card: any, step: boolean, initialization: boolean, timeBeforeLocalSettlement?: GameTime) {
   if (initialization || response.generationError || response.transactionCommitted) return null;
   const id = response.moduleReceipt?.id || options?.timeActionId;
   if (!id) return null;
@@ -58,10 +59,12 @@ export function settleActionTime(save: SaveData, response: any, options: any, ca
       finally { rt.completedEventIds = done; }
     }
   }
+  // 旧档可能保留与 worldTurn 相同的有限耗时标记；必须核对本次本地结算真的改过时钟。
+  const localClockMoved = !timeBeforeLocalSettlement || gameTimeMinutes(timeBeforeLocalSettlement) !== gameTimeMinutes((save as any).元数据.时间);
   // 本拍路程已由行旅服务推进：不再叠加演出/模型耗时。
-  if (Number.isFinite(rt?.authorTimeConsumedAtTurn) && rt.authorTimeConsumedAtTurn === rt.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
+  if (localClockMoved && Number.isFinite(rt?.authorTimeConsumedAtTurn) && rt.authorTimeConsumedAtTurn === rt.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
   const travel = rt?.travelLedger?.lastCard;
-  if (travel && Number.isFinite(rt?.travelLedger?.timeConsumedAtTurn) && rt.travelLedger.timeConsumedAtTurn === rt.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
+  if (localClockMoved && travel && Number.isFinite(rt?.travelLedger?.timeConsumedAtTurn) && rt.travelLedger.timeConsumedAtTurn === rt.worldTurn) { if (options?.cultivationSelections?.length) throw new Error('LCQ-SAV-039'); return null; }
   const selections: CultivationSelection[] = options?.cultivationSelections || [];
   if (selections.length) {
     if (!selections.every(validCultivation)) throw new Error('LCQ-SAV-039');

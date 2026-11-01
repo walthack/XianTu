@@ -230,7 +230,13 @@
     ]
   },
   "e2eSmoke": {
-    "scriptTimeoutMs": 300000
+    "scriptTimeoutMs": 300000,
+    "nanhuangEncounters": {
+      "enabled": false,
+      "flag": "xiantu.test.nanhuangEncounters",
+      "encounterChance": 1,
+      "leopardChance": 1
+    }
   },
   "perf": {
     "sampleWindow": 50,

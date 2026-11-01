@@ -17,7 +17,9 @@ const ACTIONS = [
   { label: '亲密接触', re: /亲吻|吻上|吻了|接吻|抚摸[^，。！？\n]{0,8}(?:胸|乳|下体)|拥吻/ },
   { label: '签约', re: /签下|签署|签了|画押|按下手印/ },
 ] as const;
-const NEGATIVE_OR_QUESTION = /不(?:要|会|想|能|去|曾)?|没有|未曾|别|如果|假如|是否|要不要|能不能|[？?]/;
+const NEGATIVE_OR_QUESTION = /不(?:要|会|想|能|去|曾)?|没有?|未曾|[尚并]?未|别|如果|假如|是否|要不要|能不能|[？?]/;
+// 报名字的施事：紧贴动词前的第三方（“你听他报出名字”“你记住了那人报出的名号”）才是报名字的人。
+const THIRD_PARTY_RIGHT_BEFORE_VERB = /(?:[他她](?!们)|对方|那人|此人|来人|有人|旁人|那(?:汉子|男子|女子|少女|老者|掌柜|伙计|守卫)|掌柜|伙计|守卫)(?:也|又|才|便|就|已经?|刚刚?|方才|这才|随即|立刻|当即|主动|先|随后)?$/;
 
 export function unauthorizedPlayerActions(narrative: string, playerIntent: string, otherActors: string[] = []): string[] {
   const intentClauses = playerIntent.split(/[，,。！!？?；;\n]/);
@@ -28,14 +30,23 @@ export function unauthorizedPlayerActions(narrative: string, playerIntent: strin
       const match = clause.match(new RegExp("(?:你(?!们)|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")"+")([^。！？\\n]*)",""));
       if (!match || !action.re.test(match[1])) return false;
       const before = match[1].slice(0, match[1].search(action.re));
+      // “他向你报上姓名”“你面前的掌柜报出名字”：你是宾语/定语，并非施事。
+      const subjectPrefix = clause.slice(0, match.index);
+      if (/(?:向|对|让|请|问|替|给)$/.test(subjectPrefix) || /^(?:面前|身旁|身后|眼前|对面)的/.test(match[1])) return false;
+      if (action.label === '报名字' && /(?:让|请|要|要求|催促|示意|等|等着)(?:他|她|对方|掌柜|来人|那人)[^，,]*$/.test(before)) return false;
       // 同一句中逗号后换成有名NPC作主语，不把NPC的动作算成玩家动作。
       const lastClause = before.split(/[，,]/).at(-1)?.trim() || '';
+      if (/^(?:他|她|对方|掌柜|来人|那人|此人|那(?:汉子|男子|女子|少女|老者|掌柜|伙计|守卫))(?!们)/.test(lastClause)) return false;
+      if (action.label === '报名字' && (THIRD_PARTY_RIGHT_BEFORE_VERB.test(before) || otherActors.some(name => name && before.endsWith(name)))) return false;
       if (otherActors.some(name => name && lastClause.startsWith(name) && !new RegExp("你|"+"(?:"+entityNamePattern("character","liuchao.character.cheng_zongyang")+")","").test(lastClause))) return false;
       return !NEGATIVE_OR_QUESTION.test(before.slice(-6)) && !/听说|看到|看见|看着|听见|观察|判断|问/.test(before);
     });
     if (!acted) return false;
     return !intentClauses.some(clause => {
-      const index = clause.search(action.re);
+      const intentPattern = action.label === '报名字'
+        ? new RegExp(action.re.source + '|自我介绍|介绍自己|(?:我叫|我的名字(?:是|叫))' + entityNamePattern('character', 'liuchao.character.cheng_zongyang'))
+        : action.re;
+      const index = clause.search(intentPattern);
       return index >= 0 && !NEGATIVE_OR_QUESTION.test(clause.slice(0, index));
     });
   }).map(action => action.label);

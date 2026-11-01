@@ -325,7 +325,7 @@ export function tickRandomEncounter(save: SaveData, { narrated, config }: { narr
   const roll = seededRoller(seedHash(`${state.seed}:encounter:${loc}:${turn}`));
   const preset = encounterPresetOf(save);
   const diff = cfg.difficulty[preset] || { chanceMul: 1, levelShift: 0 };
-  const chance = Math.min(1, tier.chance * diff.chanceMul);
+  const chance = region[0] === 'nanhuang' ? (nanhuangTestRates()?.encounterChance ?? Math.min(1, tier.chance * diff.chanceMul)) : Math.min(1, tier.chance * diff.chanceMul);
   const face = roll();
   const id = `enc:${loc}:${turn}`;
   const receipt: EncounterReceipt = { id, turn, locKey: loc, tier: zone.tier, preset, chance, roll: face, hit: face < chance };
@@ -407,4 +407,16 @@ export function settleRandomEncounterClose(save: SaveData, { id, outcome }: { id
   const locKey = pending?.locKey ?? state.receipts.find(r => r.id === id)?.locKey;
   if (locKey) state.lastCheckTurn[locKey] = Number(runtime.worldTurn) || 0;
   return pending;
+}
+
+/** 测试专用；每拍读取，部署后可切换，不写存档或正式概率配置。 */
+export function nanhuangTestRates(): { encounterChance: number; leopardChance: number } | undefined {
+  const cfg = (GAME_NUMBERS as any).e2eSmoke.nanhuangEncounters;
+  if (!cfg) return undefined;
+  let enabled = cfg.enabled === true;
+  try {
+    const query = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get(cfg.flag);
+    enabled = query !== null ? query === 'on' : enabled || (typeof localStorage !== 'undefined' && localStorage.getItem(cfg.flag) === 'on');
+  } catch { /* lcq-allow: 测试开关存储不可用时保持默认关闭，不影响正式遭遇。 */ }
+  return enabled ? cfg : undefined;
 }

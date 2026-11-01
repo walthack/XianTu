@@ -1622,11 +1622,14 @@ const selectAction = (action: ActionItem) => {
 
 const cancelAction = () => {
   abortInFlightNaturalIntent();
+  resumeAfterCultivationSelection = false;
   selectedAction.value = null;
   selectedTime.value = 1;
   customTime.value = 1;
   selectedOption.value = '';
 };
+
+let resumeAfterCultivationSelection = false;
 
 const confirmAction = () => {
   if (!selectedAction.value) return;
@@ -1653,8 +1656,11 @@ const confirmAction = () => {
     selectedCultivationTime.value = { text: actionText, selection: { kind: 'cultivation', days: customTime.value > 0 ? customTime.value : selectedTime.value, actionId: randomUUID() } };
   }
 
+  const resume = resumeAfterCultivationSelection;
+  resumeAfterCultivationSelection = false;
   // 清理状态
   cancelAction();
+  if (resume) { void sendMessage(); return; }
 
   // 聚焦输入框
   nextTick(() => {
@@ -1970,6 +1976,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   const cultivationSelections = actionQueue.pendingActions.flatMap(a => a.cultivation ? [{ ...a.cultivation }] : []);
   if (selectedCultivationTime.value?.text === inputText.value) cultivationSelections.push({ ...selectedCultivationTime.value.selection });
   if (!cultivationSelections.length && (/(?:修炼|闭关|练功|打坐)/.test(inputText.value) || actionQueue.pendingActions.some(a => a.type === 'cultivate' && !a.cultivation)) && !/(?:不|别|停止|取消)(?:修炼|闭关|练功|打坐)/.test(inputText.value)) {
+    resumeAfterCultivationSelection = true;
     selectAction({ name: inputText.value, type: 'cultivation', description: '请选择本次修炼天数', timeRequired: true });
     return;
   }

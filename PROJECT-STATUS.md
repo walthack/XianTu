@@ -592,3 +592,8 @@
 - 南荒敌池：numbers-combat encounter 南荒区（按国别也算、村寨不检、花苗寨一带按子地点、精英出池、一打一同伴助战、F04/F06/F12 门闩、敌人掉落表与稀有物全局一次）；新建 6 种敌人与毒蝠翼膜；null 数值按同级填初值并注明。
 - 白尾豹：scenarioMods/whiteTailLeopard.ts＋内容包状态「山神庇佑」与台词；体力＝角色.属性.气血。
 - 证据：npm test 3114 项 3101 pass / 0 fail / 13 skip（新增 tests/report20261101.test.mjs 15 项）；type-check 0；内容包 check、实体目录校验、两个 SFC 编译通过；canon:build 照旧因缺 generated/qingyu/stages ENOENT 跑不了。未测浏览器/真机/真实模型。
+
+### REPORT8091-20261101 · 补测七项修复开工（Codex）
+- 授权：定位七项、逐项回归、新档回放检查点、默认关闭的遭遇测试开关；不提交、不读凭据、不改模型配置。冻结文件仅对应缺陷最小改动并记录行号/哈希。
+- 交付（未提交）：旧档耗时标记须有本拍时钟变化证据（activeScene 冻结 worldTurn 致每拍误中）；模型命令回血逐条回滚（不记执行失败，本地治疗不受影响）；旧档 s02_04 从内容包补 timeAdvance；打字闭关选天数确认后自动发送；报名字守卫按施事/否定/换主语收窄；cp03 夹具补成导出包；南荒遇敌/白尾豹测试开关 e2eSmoke.nanhuangEncounters（默认关，URL/localStorage 热开）。新检查点 tests/fixtures/checkpoints/current-prologue-before-s02_04.json（scripts/generate-prologue-checkpoint.mjs 生成）。
+- 证据：npm test 3133 项 3120 pass / 0 fail / 13 skip（新增 report8091*.test.mjs 25 项）；type-check 0；build 成功。AIBS 5 行解冻改动、哈希已更新；runtime 未改。未进行真实模型或浏览器验收；存档1_1 原档不在仓库，根因按代码路径推断复现。

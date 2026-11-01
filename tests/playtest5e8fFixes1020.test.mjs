@@ -15,7 +15,7 @@ test('龙神尸身搜刮：真机原句进搜刮池，夹带逃跑的句子不�
 });
 
 test('龙神尸身搜刮：CP-5e8f-03 存档在鬼王峒、杀龙已完成，能拿到龙神专属道具', () => {
-  const save = fx('cp03-dragon-corpse.json');
+  const save = fx('cp03-dragon-corpse.json').saves[0].存档数据;
   const r = loot.settleLocationLoot(save);
   assert.equal(r.status, 'settled');
   assert.ok(r.receipt.drops.some(d => /^lcq\.item\.nh_dragon_(scale|bone|horn|fang|sinew|blood)$/.test(d.itemId)), JSON.stringify(r.receipt.drops));

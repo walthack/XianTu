@@ -161,7 +161,7 @@ import {
 import { reconcileNarrativeState, reconcilePlayerFreeTextStatuses } from '@/utils/narrativeStateReconciler';
 import { runProgressAudit, shouldRunAudit } from '@/services/progressAuditService';
 import { runDeterministicBijiReconcile, runDeterministicHighlightReconcile, runDeterministicXieyiReconcile, runEventReconcile, shouldRunReconcile, evidenceLikely, buildChainCandidates } from '@/services/eventReconcileService';
-import { validateModelCommandPipeline } from '@/utils/modelCommandPipeline';
+import { validateModelCommandPipeline, rejectModelHealthIncrease } from '@/utils/modelCommandPipeline';
 import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import { runBoundedAuxiliaryTask } from '@/utils/boundedAuxiliaryTask';
 import {
@@ -2607,6 +2607,7 @@ ${step1Text}
     const repairedData = repairSaveData(currentSaveData);
     let saveData = cloneDeep(repairedData);
     const changes: StateChange[] = [];
+    const timeBeforeLocalSettlement = structuredClone((saveData as any).元数据.时间);
     const startingRuntime = (currentSaveData as any)?.世界?.状态?.剧本模组;
     const startingModId = typeof startingRuntime?.modId === 'string' ? startingRuntime.modId : '';
     const stayEnding = response.moduleReceipt && !options?.eventAction ? previewWangZheStayEnding(saveData, options?.playerIntentText || options?.userAction || '') : undefined;
@@ -2747,7 +2748,7 @@ ${step1Text}
       && (eventProgress?.attempted || (openWorldProgress?.settled && !openWorldProgress.idempotent)
         || (!options?.eventAction && !options?.openWorldAction)))) {
       const currentCard = stepScene((saveData as any).世界?.状态?.剧本模组, eventProgress?.eventId, eventProgress?.actionId);
-      const advanced = settleActionTime(saveData, response, options, currentCard, isStepSceneStage((saveData as any).世界?.状态?.剧本模组?.modId), isInitialization);
+      const advanced = settleActionTime(saveData, response, options, currentCard, isStepSceneStage((saveData as any).世界?.状态?.剧本模组?.modId), isInitialization, timeBeforeLocalSettlement);
       if (advanced) changes.push({ key: '元数据.时间', action: 'set', oldValue: advanced.oldValue, newValue: advanced.newValue });
     }
     const timePrefix = this._formatGameTime((saveData as any).元数据?.时间);
@@ -3109,7 +3110,9 @@ ${step1Text}
         }
 
         const oldValue = get(saveData, command.key);
+        const healthBeforeCommand = structuredClone((saveData as any).角色?.属性?.气血);
         this.executeCommand(command, saveData, protectionMode);
+        rejectModelHealthIncrease(saveData, healthBeforeCommand);
         const newValue = get(saveData, command.key);
         commandAppliedChanges.push({
           key: command.key,

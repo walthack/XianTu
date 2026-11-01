@@ -14,7 +14,7 @@ import { toPlayerStatusEffect } from '../sceneModule/statusAdapters';
 import { injuryStore, renderInjuryViews, sceneTime } from '../sceneModule/host/injuries';
 import { activeScene } from '../sceneModule/host/ext';
 import { CONTENT_PACKS } from '../contentPacks';
-import { encounterLocKey, placeMatches } from './randomEncounter';
+import { encounterLocKey, placeMatches, nanhuangTestRates } from './randomEncounter';
 import { presentCompanionIds } from './locationLoot';
 import { scenarioPlayerId } from './playerIdentity';
 import { appendToLatestNarrative } from './fixedEndingNarratives';
@@ -106,7 +106,7 @@ export function tickWhiteTailLeopard(save: SaveData, cfg: LeopardConfig = leopar
   const state: LeopardState = runtime.whiteTailLeopard ||= { lastTickTurn: turn, sightings: [] };
   state.lastTickTurn = turn;
   const roll = seededRoller(seedHash(`${saveSeed(save, 'whiteTailLeopard')}:${locKey}:${turn}`))();
-  if (!(roll < cfg.chance)) return { changed: true, text: '' };
+  if (!(roll < (nanhuangTestRates()?.leopardChance ?? cfg.chance))) return { changed: true, text: '' };
   const restored = restoreStamina(save, cfg.staminaRestoreRatio);
   mountBuff(save, cfg);
   state.buffUntilTurn = turn + cfg.buff.durationTurns;

@@ -1,0 +1,94 @@
+[
+  {
+    "event": "lcq.event.s01_01",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_02",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_03",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_04",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_06",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_05",
+    "action": "travel:lcq.location.command_tent",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_05",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "stage": "lcq.stage_02"
+  },
+  {
+    "opportunity": {
+      "source": "opportunity_engine",
+      "opportunityId": "opportunity.lcq.s02_01.take_full_mandate",
+      "stepId": "take_bag",
+      "actionId": "accept_silk_bag",
+      "label": "【推进·1/2】收下锦囊",
+      "actionText": "我当面从王哲案上收下锦囊，不让它再留在帐内无人认领。",
+      "timeCost": 1,
+      "contractHash": "b89c08c7"
+    },
+    "progressed": true
+  },
+  {
+    "opportunity": {
+      "source": "opportunity_engine",
+      "opportunityId": "opportunity.lcq.s02_01.take_full_mandate",
+      "stepId": "own_charge",
+      "actionId": "acknowledge_purge_charge",
+      "label": "【推进·2/2】认下托付",
+      "actionText": "我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。",
+      "timeCost": 1,
+      "contractHash": "b89c08c7"
+    },
+    "progressed": true
+  },
+  {
+    "event": "lcq.event.s02_03",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s02_02",
+    "action": "hold_left_army_line",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s02_02",
+    "action": "witness_wang_zhe_nine_suns",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s02_02",
+    "action": "record_battlefield_aftermath",
+    "outcome": "success"
+  },
+  {
+    "local": "lcq.route.wuyuan.arrive_market",
+    "settled": true
+  },
+  {
+    "local": "lcq.route.wuyuan.market_to_pastry_street",
+    "settled": true
+  }
+]

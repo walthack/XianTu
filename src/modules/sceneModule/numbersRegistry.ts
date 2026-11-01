@@ -73,6 +73,10 @@ export const LINE_UNLOCK_KEYS: readonly string[] = ['note', 'minRealmLevel', 'mi
 
 /** 高频叶子：挡住缺字段 / 类型 / 粗范围；其余叶子仍靠补丁 typeof 对齐默认。 */
 export const FIELD_SPECS: readonly FieldSpec[] = [
+  { path: 'e2eSmoke.nanhuangEncounters.enabled', kind: 'bool', required: true, section: 'runtime' },
+  { path: 'e2eSmoke.nanhuangEncounters.flag', kind: 'string', required: true, section: 'runtime' },
+  { path: 'e2eSmoke.nanhuangEncounters.encounterChance', kind: 'number', required: true, min: 0, max: 1, section: 'runtime' },
+  { path: 'e2eSmoke.nanhuangEncounters.leopardChance', kind: 'number', required: true, min: 0, max: 1, section: 'runtime' },
   { path: 'story.actionTime.prologueYears', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.actionTime.minutes.instant', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.actionTime.minutes.moment', kind: 'int', required: true, min: 0, section: 'progress' },

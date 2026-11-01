@@ -117,7 +117,12 @@ export interface SceneLedger {
 }
 export function stepScene(runtime: any, eventId?: string, actionId?: string): ScenarioStepScene | undefined {
   const event = runtime?.events?.find((e: any) => e.id === eventId);
-  const actions = event?.playerCompletionContract?.actions || [];
+  // 老存档内嵌旧合同；仅补当前内容包明确声明的耗时，不替换其它状态/合同。
+  const overlay = CONTENT_PACKS.overlays.find(o => o.stageId === runtime?.modId)?.events?.find(e => e.id === eventId);
+  const actions = (event?.playerCompletionContract?.actions || []).map((a: any) => {
+    const current = overlay?.playerCompletionContract?.actions?.find((c: any) => c.id === a.id);
+    return current?.timeAdvance ? { ...a, timeAdvance: current.timeAdvance } : a;
+  });
   const prepared = runtime?.eventActionStates?.[eventId || '']?.preparations || [];
   return actionId ? actions.find((a: any) => a.id === actionId) : actions.find((a: any) => (a.requiresPreparation || []).every((p: string) => prepared.includes(p)) && !(a.kind === 'prepare' && prepared.includes(a.grantsPreparation)));
 }
