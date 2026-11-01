@@ -163,6 +163,17 @@ test('P2-7 长安当前位置禁止重复前往，地图权威及内置文本没
   assert.doesNotMatch(await read('src/modules/scenarioMods/builtins/data/lyg.changgan_begins.json'),/热闘/);
 });
 
+test('P2-7 旧档读档修正长安错字：地图地点与剧本canon只改热闘一处，其它地点不动、重复读档幂等',async()=>{
+  const old=JSON.parse(await read('tests/fixtures/playtest-08e0/f03-before.json')).payload.saves[0].存档数据;
+  const changan=s=>[s.世界.信息.地点信息.find(l=>l.id==='liuchao.location.changan').描述,rt(s).canon.locations.find(l=>l.id==='liuchao.location.changan').description];
+  assert.ok(changan(old).every(d=>d.includes('热闘')),'旧档确有错字');
+  const expected=changan(old).map(d=>d.replaceAll('热闘','热闹')),others=structuredClone(old.世界.信息.地点信息.filter(l=>l.id!=='liuchao.location.changan'));
+  LR.applyLoadRepairs(old);
+  assert.deepEqual(changan(old),expected);
+  assert.deepEqual(old.世界.信息.地点信息.filter(l=>l.id!=='liuchao.location.changan'),others);
+  const once=structuredClone(old);LR.applyLoadRepairs(old);assert.deepEqual(changan(old),changan(once));
+});
+
 test('观察8 舞都到洛都为11游戏日：三月28日至四月9日按每月30日计算，没有多扣一天',async()=>{
   const s=await fixture('han-entry');s.元数据.时间={年:224,月:3,日:28,小时:14,分钟:43};
   const before=gameTimeMinutes(s.元数据.时间);

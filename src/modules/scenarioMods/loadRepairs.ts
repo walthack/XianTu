@@ -170,6 +170,7 @@ export function repairReport8091Route(rt: any): void {
 export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyStatuses: string[]; identitiesBackfilled: number; itemReceiptsBackfilled: number } {
   migrateTrainingCapNone(save);
   normalizeLocationCountry(save?.角色?.位置);
+  repairChanganDescriptionTypo(save);
   let rt = save?.世界?.状态?.剧本模组;
   if (!rt || typeof rt !== 'object') return { injuriesMigrated: false, storyStatuses: [], identitiesBackfilled: 0, itemReceiptsBackfilled: 0 };
   // 旧档缺作者后补的自由输入短语（s01_01）：只补缺失或已被取代的旧快照，见 backfillMissingIntentMatch。
@@ -210,6 +211,16 @@ export function repairHanLuoduRoute(rt: any): void {
   }
   const e08 = rt.events.find((e: any) => e.id === 'lyl.event.taiquan_afterfall_08_beat');
   if (e08 && !rt.completedEventIds?.includes(e08.id) && !e08.locationId) e08.locationId = source(e08.id).locationId;
+}
+
+/** 长安介绍错字（REPORT-8091-c385f351 P2-7）：旧档的地图地点与剧本 canon 快照照抄过「热闘」，读档只改长安这一条描述里的错字。 */
+export function repairChanganDescriptionTypo(save: any): void {
+  const fix = (loc: any, key: string) => {
+    if (loc?.id === 'liuchao.location.changan' && typeof loc[key] === 'string' && loc[key].includes('热闘')) loc[key] = loc[key].replaceAll('热闘', '热闹');
+  };
+  const list = (value: any): any[] => Array.isArray(value) ? value : [];
+  for (const loc of list(save?.世界?.信息?.地点信息)) fix(loc, '描述');
+  for (const loc of list(save?.世界?.状态?.剧本模组?.canon?.locations)) fix(loc, 'description');
 }
 
 /** 旧档缺失火山口地点合同：只补未完成节点，不补写完成或移动玩家。 */
