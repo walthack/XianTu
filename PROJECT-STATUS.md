@@ -600,3 +600,8 @@
 
 ### REPORT8091-05e63d31 · 二轮修复开工
 - 交付：①搜刮带判定也本地入包+剥取句识别+搜刮句免判定卡；②场面每拍/收场摘到期山神庇佑；③自服消耗品本地扣份结算；④URL(?/#)开关+sessionStorage 记忆。npm test 3145 项 3132 pass / 0 fail / 13 skip；type-check 0；build 成功。AIBS 改 1149、1151 行，哈希 6adf68d2…；runtime 未改。
+
+### REPORT8091-67275ed1 · 全线回归修复（2026-11-01，Codex 写／Grok 审）
+- 交付：I-1 晋线 s01_01 落点改江州、s01_02 落点改临安（目标「乘船抵达临安」，罗盘剧情转场，不再要求开地图）＋旧档快照修复；I-3 切关不再重发新关开局背包（39→58 根因）；I-4 搜刮识别「取出…硬物收进背包」与首判失败后重试；I-5 黑魔海「完成江州场外插叙」补 intentMatch＋旧档回填；P2 落败不列敌方「仍在抵抗」、清理中文后「attempted」、位置前缀统一取地点总表国别（新 locationCountry.ts）。overlay 新增 lyl.jiangzhou_retreat／lyl.lin_an_black_sea。
+- I-2 存档1_1 只诊断：AIBS 生成异常兜底（约 1859–1891 行）把非终止错误统一变成「（AI生成失败）」占位，MainGamePanel 校验 mid_term_memory 为空即报格式不正确；原始异常未上抛，需原档／控制台确认具体异常。
+- 三冻结文件未改；新增 tests/report8091regress.test.mjs 12 项。

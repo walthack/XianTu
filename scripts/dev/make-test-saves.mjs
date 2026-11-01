@@ -109,7 +109,7 @@ export const TEST_SAVE_BUILDERS = {
   },
   'jiangzhou-retreat'(m, template) {
     const save = advance(m, enterStage(m, template, 'lyl.jiangzhou_retreat', 'jiangzhou-retreat'));
-    note(save, '你在江州。宋军粮尽将溃，「前往江州协助撤退」一拍已经挂出、尚未开始；按主线罗盘前往金明寨即触发退军剧情。');
+    note(save, '你在江州。宋军粮尽将溃，「前往江州协助撤退」一拍已经挂出、尚未开始；在江州按主线行动协助撤退。');
     return save;
   },
   'heimohai-approach'(m, template) {
@@ -153,7 +153,7 @@ export const TEST_SAVE_CHECKS = {
     must(save.角色.位置.locationId === 'liuchao.location.jiangzhou', '不在江州');
     must(rt(save).activeEventIds.includes('lyl.event.s01_01') && !rt(save).completedEventIds.includes('lyl.event.s01_01'), '退军拍未处于触发前');
     const action = m.runtime.getCurrentStoryEventActions(structuredClone(save)).find(a => a.eventId === 'lyl.event.s01_01');
-    must(action?.actionId === 'travel:liuchao.location.jinming_zhai', `罗盘首步应为前往金明寨：${action?.actionId}`);
+    must(action?.actionId === 'advance_declared_objective', `江州退军拍应就地可做：${action?.actionId}`);
     return { modId: rt(save).modId, location: save.角色.位置.locationId, active: 'lyl.event.s01_01' };
   },
   'heimohai-approach'(m, save) {

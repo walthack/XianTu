@@ -1,3 +1,6 @@
+import { normalizeLocationCountry } from './locationCountry';
+import retreat from './builtins/data/lyl.jiangzhou_retreat.json';
+import blackSea from './builtins/data/lyl.lin_an_black_sea.json';
 /**
  * 读档时一次性修复（幂等）：旧伤势按 statuses.migrations.json 迁移（原来只在第一次访问伤势时才迁）；剧情来源状态（冰蛊）补挂；
  * 身份账与国家线收束档按已完成事件回填（身份账设计稿 2026-10-25 §5）；唯一道具窄回填回执（补充设计稿 2026-10-26 §2.3 / Q5）；
@@ -47,6 +50,8 @@ export function migrateTrainingCapNone(save: any): 'canon' | 'canon+1' | null {
 
 /** 读档补 intentMatch 的关卡（只放确有作者后补短语、旧档会卡住的关）：stage01 s01_01（真机 69ab B16「见段强」卡住，见 scripts/dev/apply-s01-01-intent-match.mjs）、s01_02／03／05（Demo 合并压回 8 条）。 */
 const INTENT_MATCH_BACKFILL_STAGES: Record<string, { scenario: { events: any[] } }> = {
+  'lyl.lin_an_black_sea': blackSea as unknown as { scenario: { events: any[] } },
+  'lyl.jiangzhou_retreat': retreat as unknown as { scenario: { events: any[] } },
   'lcq.stage_01': stage01 as unknown as { scenario: { events: any[] } },
 };
 const withoutIntentMatch = (contract: unknown): string => JSON.stringify(contract, (key, value) => key === 'intentMatch' ? undefined : value);
@@ -138,11 +143,31 @@ export function repairLingeringMapEntryMessage(save: any): number {
   return fixed;
 }
 
+/** 只升级本轮已确认的旧合同快照；保留尝试账，不重发奖励或补记完成。 */
+export function repairReport8091Route(rt: any): void {
+  if (rt?.modId !== retreat.manifest.id) return;
+  for (const id of ['lyl.event.s01_01', 'lyl.event.s01_02']) {
+    if (rt.completedEventIds?.includes(id)) continue;
+    const event = rt.events?.find((e: any) => e.id === id);
+    const source = retreat.scenario.events.find(e => e.id === id)!;
+    const oldLocation = id === 'lyl.event.s01_01' ? 'liuchao.location.jinming_zhai' : 'liuchao.location.jiangzhou';
+    if (!event || event.locationId !== oldLocation) continue;
+    const action = event.playerCompletionContract?.actions?.[0];
+    if (action?.id !== 'advance_declared_objective' || action.intentMatch) continue;
+    if (id === 'lyl.event.s01_02' && action.actionText !== '我按当前主线目标行动：乘船前往临安') continue;
+    event.locationId = source.locationId;
+    event.objective = source.objective;
+    event.playerCompletionContract = structuredClone(source.playerCompletionContract);
+  }
+}
+
 export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyStatuses: string[]; identitiesBackfilled: number; itemReceiptsBackfilled: number } {
   migrateTrainingCapNone(save);
+  normalizeLocationCountry(save?.角色?.位置);
   let rt = save?.世界?.状态?.剧本模组;
   if (!rt || typeof rt !== 'object') return { injuriesMigrated: false, storyStatuses: [], identitiesBackfilled: 0, itemReceiptsBackfilled: 0 };
   // 旧档缺作者后补的自由输入短语（s01_01）：只补缺失或已被取代的旧快照，见 backfillMissingIntentMatch。
+  repairReport8091Route(rt);
   backfillMissingIntentMatch(rt);
   // 旧版直接点地图入秦留下的口信当前拍（推进一轮会换掉 剧本模组 对象，之后改用新的）。
   if (repairLingeringMapEntryMessage(save)) rt = save.世界.状态.剧本模组;

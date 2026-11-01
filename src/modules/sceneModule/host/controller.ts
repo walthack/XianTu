@@ -211,6 +211,8 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
 }
 /** 收场正文末尾的敌方终局行（赢了且轨道 preserveOnWin 的不列）。 */
 function terminalLines(save:SaveData,c:Contract,writeBack:ReturnType<typeof closeScene>['writeBack']):string[] {
+  // 落败已结束战斗；敌方未耗尽的抵抗轨道不是仍在交战的终局事实。
+  if (writeBack.outcome.kind === 'lose') return [];
   return writeBack.finalStates.filter(row=>c.parties.find(p=>p.id===row.party)?.side==='opposed'&&!(writeBack.outcome.kind==='win'&&trackInfo(c,row.party,row.track)?.ending?.preserveOnWin===true)).map(row=>`${partyName(c,runtimeOf(save),row.party)}：${row.label}`);
 }
 async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract,deps:HostDeps):Promise<void> {

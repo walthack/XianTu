@@ -48,7 +48,7 @@ function compassTravel(tools, save, eventId, toId) {
   const result = tools.recordStoryEventStructuredAction(save, byText);
   assert.equal(result.attempted, true, result.reason);
   assert.equal(result.completed, false, '到达≠完成');
-  assert.equal(save.角色.位置.locationId, toId);
+  assert.equal(save.角色.位置.locationId, toId === 'liuchao.location.linan' ? 'liuchao.location.lin_an' : toId);
   return { fromCountry, toCountry: tools.countryOf(toId) };
 }
 
@@ -63,11 +63,12 @@ test('江州退军：江州(晋)→荆溪村寨(宋)→筠州(宋) 剧情罗盘�
   let save = await tools.stageSave('lyl.jiangzhou_retreat');
   assert.equal(save.角色.位置.locationId, 'liuchao.location.jiangzhou');
   const legs = [
-    ['lyl.event.s01_01', 'liuchao.location.jinming_zhai'],
-    ['lyl.event.s01_02', 'liuchao.location.jiangzhou'],
+    ['lyl.event.s01_02', 'liuchao.location.linan'],
     ['lyl.event.s01_03', 'liuchao.location.jingxi_village'],
     ['lyl.event.s01_04', 'liuchao.location.junzhou'],
   ];
+  save = advance(tools, save);
+  doContract(tools, save, 'lyl.event.s01_01');
   const crossings = [];
   const logs = await capture038(() => {
     for (const [eventId, toId] of legs) {

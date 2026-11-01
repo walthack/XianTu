@@ -50,6 +50,7 @@ export function templateNarration(contract: Contract, state: SceneState, result:
   // Player wording is an attempted intention, never a factual fallback result.
   lines.push(renderRefs(input.settled,runtime));
   for(const party of contract.parties)for(const track of party.tracks||[]){
+    if (state.outcome?.kind === 'lose' && party.side === 'opposed') continue;
     const key=String(track.track??track.id??''),step=state.tracks[party.id]?.[key];
     if(step!==undefined)lines.push(`${partyName(contract,runtime,party.id)}：${(track.scale||[])[step]}。`);
   }

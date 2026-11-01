@@ -2870,7 +2870,7 @@
         "relatedFactionIds": [
           "lyg.faction.song_state"
         ],
-        "locationId": "liuchao.location.jinming_zhai",
+        "locationId": "liuchao.location.jiangzhou",
         "axisId": "yunlong.1.1",
         "axisSeq": 551,
         "axisAnchor": "六朝云龙吟·#1·坠美",
@@ -2901,6 +2901,16 @@
                 "success": "你已亲自执行“前往江州协助撤退”；事件完成真值将由本地引擎落账。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "前往江州协助撤退",
+                  "协助撤退"
+                ],
+                "rejectIf": [
+                  "不协助",
+                  "拒绝撤退"
+                ]
               }
             }
           ]
@@ -2931,12 +2941,12 @@
         "relatedFactionIds": [
           "liuchao.faction.xing_yue_hu"
         ],
-        "locationId": "liuchao.location.jiangzhou",
+        "locationId": "liuchao.location.linan",
         "axisId": "yunlong.1.2",
         "axisSeq": 552,
         "axisAnchor": "六朝云龙吟·#1·坠美",
         "axisBeat": "程宗扬乘船离江州赴临安，途中遇谢幼度与鱼长老对峙，谢幼度退敌。",
-        "objective": "乘船前往临安",
+        "objective": "乘船抵达临安",
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2945,13 +2955,27 @@
           "actions": [
             {
               "id": "advance_declared_objective",
-              "label": "乘船前往临安",
-              "actionText": "我按当前主线目标行动：乘船前往临安",
+              "label": "乘船抵达临安",
+              "actionText": "我乘船抵达临安，结束江州赴临安的行程",
               "timeCost": 1,
               "outcomeText": {
-                "success": "你已亲自执行“乘船前往临安”；事件完成真值将由本地引擎落账。",
+                "success": "你已乘船抵达临安，江州赴临安的行程结束。",
                 "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                 "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "乘船前往临安",
+                  "乘船抵达临安",
+                  "抵达临安",
+                  "结束舟行"
+                ],
+                "rejectIf": [
+                  "不去临安",
+                  "不前往临安",
+                  "不乘船",
+                  "拒绝登船"
+                ]
               }
             }
           ]

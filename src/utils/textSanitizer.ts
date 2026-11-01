@@ -126,6 +126,8 @@ function sanitizeWithRules(
     .replace(/<\/?thought>/gi, '');
 
   result = stripInternalNarrativeControlLeaks(result);
+  // 模型偶尔在中文动作后泄漏英文状态词（如「催马 attempted」）；不据此推断成败。
+  result = result.replace(/([\u3400-\u9fff])[ \t]+attempted\b[ \t]*/gi, '$1');
 
   for (const rule of replaceRules) {
     result = result.replace(rule.re, rule.replacement);

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "stageId": "lyl.lin_an_black_sea",
+  "ops": [
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=liuchao.event.black_sea_approach].playerCompletionContract.actions[id=acknowledge_offscreen_interlude]",
+      "afterKey": "outcomeText",
+      "beforeKey": null,
+      "entries": {
+        "intentMatch": {
+          "matchAny": [
+            "完成江州场外插叙",
+            "看完江州场外插叙"
+          ],
+          "rejectIf": [
+            "不看",
+            "不完成",
+            "跳过"
+          ]
+        }
+      }
+    }
+  ]
+}

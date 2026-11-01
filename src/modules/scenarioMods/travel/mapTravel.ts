@@ -1,3 +1,4 @@
+import { resolveStoryEventActionFromPlayerText } from '../runtime';
 import { randomUUID } from '@/utils/uuid';
 import runtimeNumbers from '../../../../mod-kit/numbers-runtime.json';
 import { mapEntryReady } from '../mapEntries';
@@ -129,6 +130,10 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
 
 /** 已知跨国文字意图只提供准备材料，不能签发地图选择。 */
 export function mapPreparation(save: SaveData, text: string): string | undefined {
+  // 已命中当前剧情罗盘移动的意图走本地剧情转场，不再提示玩家另开地图。
+  // 解析会整理合同缓存，因此只在副本上预览。
+  const storyAction = resolveStoryEventActionFromPlayerText(structuredClone(save), text);
+  if (storyAction?.actionId.startsWith('travel:')) return undefined;
   if (!/(?:去|到|前往|赴|出发|动身)/.test(text) || /(?:不去|别去|不前往|取消前往)/.test(text)) return undefined;
   const from = countryOf(currentLocation(save).canonicalLocationId);
   const places = locations.entries.filter(e => text.includes(e.definition.name) && countryOf(e.id) && countryOf(e.id) !== from).sort((a,b)=>b.definition.name.length-a.definition.name.length);

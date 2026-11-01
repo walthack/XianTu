@@ -47,6 +47,8 @@ const STAGES = [
   { stageId: 'lyg.changgan_begins', book: 'yange' },
   { stageId: 'lyg.changgan_interlude', book: 'yange' },
   { stageId: 'lyg.shituolin_endgame', book: 'yange' },
+  { stageId: 'lyl.jiangzhou_retreat', book: 'yunlong' },
+  { stageId: 'lyl.lin_an_black_sea', book: 'yunlong' },
 ];
 
 function miniMod(name = 'old') {
@@ -283,13 +285,13 @@ test('id-addressed source keeps a valid id-array; malformed target or source fai
   );
 });
 
-test('tracked overlays are exactly the twenty-four generated→builtin closures', async () => {
+test('tracked overlays are exactly the twenty-six generated→builtin closures', async () => {
   const catalog = await loadTrackedCanonAuthorityOverlays();
   assert.deepEqual(catalog.stageIds, STAGES.map(stage => stage.stageId));
   // 13 → 17：宋线补全（2026-10-28）新增 stage_10／stage_12／小瀛洲／临安收束四关的挂章增量
   // 17 → 21：汉线补全（2026-10-28）新增太泉余波／洛都／汉宫／定陶四关的挂章增量
   // 21 → 24：唐线补全（2026-10-28）新增长安初定／长安插曲／尸陀林三关的挂章增量
-  assert.equal(catalog.manifest.overlays.length, 24);
+  assert.equal(catalog.manifest.overlays.length, 26);
 });
 
 test('generated plus tracked overlay reconstructs the Git-tracked builtins', { skip: skipUnless(HAS_GENERATED_STAGES, 'qingyu/stages/') }, async () => {

@@ -1,3 +1,4 @@
+import { canonicalLocationCountry } from './locationCountry';
 import { mapEntryReady, type MapEntry } from './mapEntries';
 import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
 import { syncStoryStatuses } from './freeAction/bingGu';
@@ -210,7 +211,7 @@ export function buildStrictScenarioInitialization(
     runtimeState,
     initialLocation: {
       locationId: openingLocation ? canonicalEntityId('location',openingLocation.id) : undefined,
-      描述: `${continentName}·${locationName}`,
+      描述: `${canonicalLocationCountry(openingLocation?.id) || continentName}·${locationName}`,
       x: openingCoordinates.x,
       y: openingCoordinates.y,
     },
@@ -239,6 +240,7 @@ export function alignBirthWithStartYear(save: SaveData, presetAge?: unknown): bo
 export function applyStrictScenarioInitializationToSave(
   saveData: SaveData,
   initialization: StrictScenarioInitialization,
+  grantStarterInventory = true,
 ): SaveData {
   const next = structuredClone(saveData);
   next.世界 = {
@@ -269,7 +271,7 @@ export function applyStrictScenarioInitializationToSave(
   return applyScenarioRelationshipsToSave(next, {
     ...initialization.runtimeState.canon,
     opening: initialization.runtimeState.opening,
-  }, initialization.worldInfo.生成时间);
+  }, initialization.worldInfo.生成时间, grantStarterInventory);
 }
 
 export async function resolveInitialWorldInfo(
@@ -435,7 +437,7 @@ function transitionScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[
     ? structuredClone(rt.baihuGambleRefusal)
     : undefined;
   const initialization = buildStrictScenarioInitialization(mod);
-  const next = applyStrictScenarioInitializationToSave(saveData, initialization);
+  const next = applyStrictScenarioInitializationToSave(saveData, initialization, false);
   // 回填累积关系：旧值(好感/关系/记忆等)优先，新关正典只补新增字段与新记忆
   const relations = (next as any).社交.关系 as Record<string, any>;
   for (const [name, old] of Object.entries<any>(relationSnapshot)) {

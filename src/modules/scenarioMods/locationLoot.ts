@@ -41,6 +41,7 @@ export interface LocationLootState {
 export const QINGYU_LOOT_TABLE = defaults as unknown as LocationLootTable;
 export function isLocationLootInput(input: string): boolean {
   const text = input.trim();
+  if (/(?:不|别|不要|没有)(?:再|去|想|要|从[^，。！？!?]*)?(?:搜|翻找|取出|掏出|挖出|撬|剥|割|剜)/.test(text)) return false;
   if (/^(?:我)?(?:要|想|试着|打算)?搜刮(?:这里|此处|当前地点|一番|一下)?[。！!\s]*$/.test(text)) return true;
   // 2026-10-20 用户定：boss 不做死亡掉落；打倒后「搜尸身／搜周围」都走本地点搜刮池。
   const clause = /^(?:我)?(?:又|再)?(?:要|想|试着|打算|去|上前)?(?:搜刮|搜查|搜一搜|搜搜|翻找|搜)(?:一下|一番)?(?:[^，。！!？?\s]{0,8}?的?)?(?:尸身|尸体|尸首|遗骸|残骸|身上|周围|四周|附近|周遭|现场|战场|这里|此处)(?:一下|一番)?[。！!\s]*$/;
@@ -50,12 +51,18 @@ export function isLocationLootInput(input: string): boolean {
   if (/^(?:我)?(?:撬下|剥下|割下|砍下|拔下|敲下|剜下|剔下|锯下)[^，。！？!?]+?(?:收进|放进|装进|塞进|收入)(?:背包|行囊|包袱)[。！!\s]*$/.test(text)) return true;
   // 2026-10-20 5e8f 真机：「我回到{{entity:character:liuchao.character.dragon_god}}的尸身旁，搜查尸身，翻找四周」整句不匹配，落到叙事模型。
   // 按逗号/顿号拆句：至少一句是搜刮句，其余只能是走近、蹲下这类靠近动作（不夹带逃跑、潜行、攻击等别的意图）。
+  // REPORT8091：搜查后取出硬物/包好入囊是同一次搜刮。普通「取出自己的东西」仍不算。
+  const take = (p: string) => /(?:取出|掏出|挖出|撬出|撬下|剥下|割下|剜下)[^，。！？!?]+?(?:收进|放进|装进|塞进|收入)(?:背包|行囊|包袱)/.test(p);
+  const corpse = /尸身|尸体|尸首|遗骸|残骸|龙颅|龙脑/;
+  const discoveredObject = /(?:取出|掏出|挖出|撬出)(?:那块|一块)?(?:发[^，。！？!?]*光的)?硬物/;
+  if (take(text) && !/攻击|逃跑|杀死|离开/.test(text) && !/[，,、；;。！!…]/.test(text.replace(/[。！!\s]+$/, ''))
+    && (corpse.test(text) || discoveredObject.test(text))) return true;
   const parts = text.split(/[，,、；;。！!…]+/).map(p => p.trim()).filter(Boolean);
-  if (parts.length < 2 || !parts.some(p => clause.test(p))) return false;
+  if (parts.length < 2 || !parts.some(p => clause.test(p) || (take(p) && (corpse.test(text) || discoveredObject.test(p))))) return false;
   const approach = /^(?:我)?(?:又|再)?(?:回到|走到|来到|走近|靠近|凑近|上前到?|蹲下|俯身|弯腰|蹲在)[^，。！!？?\s]{0,12}?(?:旁|边|前|身边|跟前|旁边)?(?:蹲下|俯身)?$/;
   // 补充搜找句（「在龙颅和龙脑处翻找有什么能带走的东西」）：含搜找动词、不夹带逃跑/潜行/攻击/偷藏。
   const extraSearch = (p: string) => /搜刮|搜查|搜寻|翻找|翻检|摸索|找找|带走/.test(p) && !/逃|潜|跑|离开|攻|杀|打|偷|藏|躲|撤/.test(p);
-  return parts.every(p => clause.test(p) || approach.test(p) || extraSearch(p));
+  return parts.every(p => clause.test(p) || approach.test(p) || extraSearch(p) || (take(p) && !/攻击|逃跑|杀死|离开/.test(p)));
 }
 type LootCategory = 'common' | 'smallCurrency' | 'rare' | 'largeCurrency' | 'key' | 'boss';
 const LOOT_CATEGORIES: readonly LootCategory[] = ['common', 'smallCurrency', 'rare', 'largeCurrency', 'key', 'boss'];

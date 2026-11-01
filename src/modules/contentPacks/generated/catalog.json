@@ -1,5 +1,5 @@
 {
-  "version": "f556ebfd6ef180ae",
+  "version": "0496e9548edc82e2",
   "contracts": [
     {
       "meta": {
@@ -19417,7 +19417,7 @@
     "lcq.event.s11_02_cement_fortress": "",
     "lcq.event.s11_06_snow_battle": "",
     "lcq.event.s11_10_sanchuankou_defeat": "",
-    "lyl.event.s01_02": "江州",
+    "lyl.event.s01_02": "临安",
     "lyl.event.linan_arrive_fengbo": "临安",
     "lyl.event.meet_xue_yanshan": "",
     "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": "",
@@ -19515,7 +19515,7 @@
     "lcq.event.s11_02_cement_fortress": "",
     "lcq.event.s11_06_snow_battle": "",
     "lcq.event.s11_10_sanchuankou_defeat": "",
-    "lyl.event.s01_02": "liuchao.location.jiangzhou",
+    "lyl.event.s01_02": "liuchao.location.linan",
     "lyl.event.linan_arrive_fengbo": "liuchao.location.linan",
     "lyl.event.meet_xue_yanshan": "",
     "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": "",

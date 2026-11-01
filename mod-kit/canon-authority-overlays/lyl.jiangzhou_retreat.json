@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "stageId": "lyl.jiangzhou_retreat",
+  "ops": [
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.s01_01].locationId",
+      "from": "liuchao.location.jinming_zhai",
+      "to": "liuchao.location.jiangzhou"
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyl.event.s01_01].playerCompletionContract.actions[id=advance_declared_objective]",
+      "afterKey": "outcomeText",
+      "beforeKey": null,
+      "entries": {
+        "intentMatch": {
+          "matchAny": [
+            "前往江州协助撤退",
+            "协助撤退"
+          ],
+          "rejectIf": [
+            "不协助",
+            "拒绝撤退"
+          ]
+        }
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.s01_02].locationId",
+      "from": "liuchao.location.jiangzhou",
+      "to": "liuchao.location.linan"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.s01_02].objective",
+      "from": "乘船前往临安",
+      "to": "乘船抵达临安"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.s01_02].playerCompletionContract.actions[id=advance_declared_objective].label",
+      "from": "乘船前往临安",
+      "to": "乘船抵达临安"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.s01_02].playerCompletionContract.actions[id=advance_declared_objective].actionText",
+      "from": "我按当前主线目标行动：乘船前往临安",
+      "to": "我乘船抵达临安，结束江州赴临安的行程"
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.s01_02].playerCompletionContract.actions[id=advance_declared_objective].outcomeText.success",
+      "from": "你已亲自执行“乘船前往临安”；事件完成真值将由本地引擎落账。",
+      "to": "你已乘船抵达临安，江州赴临安的行程结束。"
+    },
+    {
+      "op": "insertKeys",
+      "path": "scenario.events[id=lyl.event.s01_02].playerCompletionContract.actions[id=advance_declared_objective]",
+      "afterKey": "outcomeText",
+      "beforeKey": null,
+      "entries": {
+        "intentMatch": {
+          "matchAny": [
+            "乘船前往临安",
+            "乘船抵达临安",
+            "抵达临安",
+            "结束舟行"
+          ],
+          "rejectIf": [
+            "不去临安",
+            "不前往临安",
+            "不乘船",
+            "拒绝登船"
+          ]
+        }
+      }
+    }
+  ]
+}

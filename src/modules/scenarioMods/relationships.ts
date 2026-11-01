@@ -242,7 +242,7 @@ export function ensureEncounteredScenarioCharacter(saveData: SaveData, source: S
   backfillRelationshipIds(saveData, source.characters);
 }
 
-export function applyScenarioRelationshipsToSave(saveData: SaveData, source: ScenarioRelationshipSource, generatedAt: string): SaveData {
+export function applyScenarioRelationshipsToSave(saveData: SaveData, source: ScenarioRelationshipSource, generatedAt: string, grantStarterInventory = true): SaveData {
   const next = saveData as SaveData & { 社交?: Record<string, any>; 元数据?: { 时间?: { 年?: number } } };
   backfillRelationshipIds(saveData, source.characters);
   const currentYear = next.元数据?.时间?.年 ?? 1000;
@@ -299,7 +299,7 @@ export function applyScenarioRelationshipsToSave(saveData: SaveData, source: Sce
     next.角色.技能 = next.角色.技能 || { 掌握技能: [], 装备栏: [], 冷却: {} };
     next.角色.技能.掌握技能 = nativeContent.skills;
     next.角色.背包 = next.角色.背包 || { 物品: {} };
-    next.角色.背包.物品 = mergeFixedScenarioStarterInventory(next.角色.背包.物品 || {}, nativeContent.items);
+    if (grantStarterInventory) next.角色.背包.物品 = mergeFixedScenarioStarterInventory(next.角色.背包.物品 || {}, nativeContent.items);
     next.角色.修炼 = next.角色.修炼 || {};
     next.角色.修炼.修炼功法 = nativeContent.primaryTechnique;
 

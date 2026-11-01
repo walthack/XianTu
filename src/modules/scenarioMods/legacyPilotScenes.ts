@@ -1,3 +1,4 @@
+import { canonicalLocationCountry } from './locationCountry';
 import {entityName} from './namedEntities';
 
 import {entityAliases} from './namedEntities';
@@ -57,7 +58,9 @@ function isCommandTentLabel(value: unknown): boolean {
 }
 
 function isQingyuCommandTent(value: unknown): boolean {
-  return String(value || '').trim() === '中州·帅帐';
+  const parts = String(value || '').trim().split('·');
+  return parts.length === 2 && ['中州', canonicalLocationCountry('lcq.location.shuai_zhang')].includes(parts[0])
+    && isCommandTentLabel(parts[1]);
 }
 
 function isWuyuanCityLabel(value: unknown): boolean {
