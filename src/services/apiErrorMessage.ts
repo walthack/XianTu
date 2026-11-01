@@ -29,8 +29,12 @@ export function contentModerationDetail(error: unknown): { status: number; provi
 
 export const isContentModerationError = (error: unknown): boolean => !!contentModerationDetail(error);
 
-/** retries = 已自动重试的次数；大于 0 时文案如实写“已自动重试 N 次仍失败”，为 0/缺省则不声称重试过。 */
-export function toUserFacingAIError(error: unknown, info: { retries?: number } = {}): Error {
+/**
+ * retries = 已自动重试的次数；大于 0 时文案如实写“已自动重试 N 次仍失败”，为 0/缺省则不声称重试过。
+ * localFallback = 调用方在审核拦截后确实改用本地正文（模块叙事 / 场面描写走模板）；缺省为否：
+ * 主叙事回合（AIBS）被拦截时不会产出本地叙事、时间不推进，文案只能如实说没推进（REPORT-8091-da90cb13 P2-3）。
+ */
+export function toUserFacingAIError(error: unknown, info: { retries?: number; localFallback?: boolean } = {}): Error {
   const status = readHttpStatus(error);
   const message = readMessage(error);
   const retried = (info.retries ?? 0) > 0 ? `已自动重试 ${info.retries} 次仍失败。` : '';
@@ -38,7 +42,9 @@ export function toUserFacingAIError(error: unknown, info: { retries?: number } =
 
   let userMessage: string;
   if (isContentModerationError(error)) {
-    userMessage = '内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。';
+    userMessage = info.localFallback
+      ? '内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。'
+      : '内容审核未通过（LCQ-NET-012）。本回合没有推进，可调整行动后重试；启用自动切换后可使用“API管理”中的备用连接。';
   } else if (status === 401 || /invalid.{0,12}(?:api[_ -]?key|密钥)|unauthori[sz]ed|authentication/i.test(message)) {
     userMessage = 'API 密钥无效或已过期。请打开“API管理”重新填写密钥，并使用“测试连接”验证。';
   } else if (status === 402 || quota) {

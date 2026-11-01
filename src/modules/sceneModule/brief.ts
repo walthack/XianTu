@@ -54,13 +54,15 @@ export function buildSceneBrief(contract: Contract, state: SceneState, ctx?: Pic
       statusLines.push(`${partyDisplay(contract, party)}：${def?.label || item.id}${left}`);
     }
   }
-  const tagLines = [...new Map(state.tags.map(tag=>[`${tag.label}:${tag.on}`,tag])).values()].map(tag => `${tag.label}@${tag.on === 'scene' || tag.on === 'opposed' || tag.on === 'player_side' ? tag.on : partyDisplay(contract, tag.on)}${tag.expiresBeat === null ? '' : `（余${Math.max(0, tag.expiresBeat - state.beat + 1)}拍）`}`);
+  // 简报只给描写模型看：态势挂在一方（scene/opposed/player_side）时写中文，不把英文键送进去（REPORT-8091-da90cb13 P2-1）。
+  const tagLines = [...new Map(state.tags.map(tag=>[`${tag.label}:${tag.on}`,tag])).values()].map(tag => `${tag.label}@${tag.on === 'scene' || tag.on === 'opposed' || tag.on === 'player_side' ? receiptText(`scene.brief.tagOn.${tag.on}`) || tag.on : partyDisplay(contract, tag.on)}${tag.expiresBeat === null ? '' : `（余${Math.max(0, tag.expiresBeat - state.beat + 1)}拍）`}`);
   add('status', `【状态】${statusLines.join('；') || '无'}${tagLines.length ? `｜态势：${tagLines.join('；')}` : ''}`, true);
 
   const usable = (contract.elements || [])
     .filter(e => (e.availability?.fromBeat ?? 1) <= state.beat && (e.availability?.untilBeat ?? Infinity) >= state.beat
       && (e.uses === undefined || e.uses === null || (state.leverUses[e.id] || 0) < e.uses))
-    .map(e => `${e.label}[${(e.verbs || []).map(v => v.id).join('/')}]`);
+    // 动词写作者给的中文说法（aliases 首项），不写英文 id；没有中文说法的只写要素名。
+    .map(e => { const verbs = (e.verbs || []).map(v => v.aliases?.[0]).filter(Boolean); return verbs.length ? `${e.label}[${verbs.join('/')}]` : e.label; });
   add('elements', usable.length ? `【可用】${usable.slice(0, 8).join('；')}` : '');
 
   const beatDef = contract.beats?.[state.beat - 1];

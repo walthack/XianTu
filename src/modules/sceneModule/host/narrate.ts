@@ -12,6 +12,7 @@ import { partyName, renderRefs } from './refs';
 import type { ModelRequest } from './recognize';
 import { lastModelRoute, recordNarrativeSource } from '@/modules/diagnostics/narrativeSource';
 import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
+import { sanitizeAITextForDisplay } from '@/utils/textSanitizer';
 
 
 export function buildNarrationPrompt(contract: Contract, state: SceneState, result: BeatResult, playerText: string, runtime: unknown): ModelRequest {
@@ -89,8 +90,9 @@ export async function narrateBeat(
   if (ask) {
     for (let attempt = 0; attempt < 2; attempt++) {
       try {
-        const raw = String(await ask(buildNarrationPrompt(contract, state, result, playerText, runtime)))
-          .replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+        // 场面描写不经 AIBS，直接写进历史：在这里过一遍正文清洗（含夹在中文里的英文字段名，REPORT-8091-da90cb13 P2-1）。
+        const raw = sanitizeAITextForDisplay(String(await ask(buildNarrationPrompt(contract, state, result, playerText, runtime)))
+          .replace(/<think>[\s\S]*?<\/think>/gi, '')).trim();
         const issues = raw ? acceptable(contract, state, result, raw, runtime) : ['描写为空'];
         if (!issues.length) { noteSceneNarrative('scene_beat', raw, contract, state.beat, undefined, runtime); return { text: raw, by: 'model', problems }; }
         problems.push(...issues);

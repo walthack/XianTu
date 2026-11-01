@@ -24,6 +24,8 @@ export interface LocationLootReceipt {
   id: string; locationId: string; attempt: number; seed: number; turn: number;
   /** 回刷轮次（0＝首轮）；'spoils'＝随机战战后搜尸，不占搜刮次数。旧回执无这三项。 */
   cycle?: number; kind?: 'search' | 'spoils'; sourceId?: string;
+  /** 玩家点名要取、但本地点没有可得条目的东西（原话里的名字）；回执正文先写明没取到，再列本次搜刮所得。 */
+  missingName?: string;
   drops: Array<{ entryId: string; itemId?: string; name: string; quantity: number; currency?: string; grade?: string;
     /** 队友评价信号（2026-10-20）：只给品级与在场队友 id，评价怎么说交主持模型按各自性格写。 */
     队友评价?: { 品级: string; 在场队友: string[] } }>;
@@ -39,8 +41,39 @@ export interface LocationLootState {
   spoilsClaimed?: string[];
 }
 export const QINGYU_LOOT_TABLE = defaults as unknown as LocationLootTable;
+/**
+ * 最近一次判定为搜刮句的玩家原句。AIBS（冻结文件）调 settleLocationLoot(save) 时不带原句，
+ * 但三处调用都紧挨着先调 isLocationLootInput(原句)（同步、中间无 await），这里借它取点名对象；settleLocationLoot 读一次即清。
+ */
+let lastLootIntent = '';
 export function isLocationLootInput(input: string): boolean {
-  const text = input.trim();
+  const matched = matchesLootInput(input);
+  lastLootIntent = matched ? input : '';
+  return matched;
+}
+function takeLootIntent(): string {
+  const intent = lastLootIntent;
+  lastLootIntent = '';
+  return intent;
+}
+const TAKE_CLAUSE = /(?:取出|掏出|挖出|撬出|撬下|剥下|割下|剜下|砍下|拔下|敲下|剔下|锯下)([^，。！？!?]+?)(?:收进|放进|装进|塞进|收入)(?:背包|行囊|包袱)/;
+/**
+ * 点名取物（REPORT-8091-da90cb13 P1-1）：「取出X收进背包」里的 X。泛称（硬物、东西，或只带方位的「龙颅里那块硬物」）不算点名。
+ * withSearch：同一句里还有别的搜刮分句（「搜查尸身，取出…」），点名之外照常搜刮。
+ */
+export function namedLootTarget(input: string): { name: string; withSearch: boolean } | undefined {
+  const parts = String(input || '').trim().split(/[，,、；;。！!…]+/).map(p => p.trim()).filter(Boolean);
+  const index = parts.findIndex(p => TAKE_CLAUSE.test(p));
+  if (index < 0) return undefined;
+  const name = parts[index].match(TAKE_CLAUSE)![1].trim()
+    .replace(/^[^那这一的]{0,8}(?:里|中|上|内|下|旁|处)的?(?=那|这|一)/, '')
+    .replace(/^(?:那|这|一)(?:块|颗|枚|片|截|根|个|件|团|粒|点|些)?/, '');
+  if (!name || /^(?:[^的]{0,8}(?:里|中|上|内|下|旁|处)的)?(?:硬物|东西|物件|物事|宝贝|宝物)$/.test(name)) return undefined;
+  const rest = parts.filter((_, i) => i !== index);
+  return { name, withSearch: rest.length > 0 && matchesLootInput(rest.join('，')) };
+}
+function matchesLootInput(input: string): boolean {
+  const text = String(input || '').trim();
   if (/(?:不|别|不要|没有)(?:再|去|想|要|从[^，。！？!?]*)?(?:搜|翻找|取出|掏出|挖出|撬|剥|割|剜)/.test(text)) return false;
   if (/^(?:我)?(?:要|想|试着|打算)?搜刮(?:这里|此处|当前地点|一番|一下)?[。！!\s]*$/.test(text)) return true;
   // 2026-10-20 用户定：boss 不做死亡掉落；打倒后「搜尸身／搜周围」都走本地点搜刮池。
@@ -88,7 +121,7 @@ function lootToday(save: SaveData): number | null {
   return time && time.年 !== undefined && time.月 !== undefined && time.日 !== undefined ? gameDayOf(time) : null;
 }
 /** 存档身份与创建时刻派生初始种子；首个成功搜刮时持久化，重载/重试不改骰。 */
-export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
+export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE, intent = takeLootIntent()) {
   const runtime = (save as any).世界?.状态?.剧本模组;
   const locationId = canonicalLocationId(currentLocation(save, runtime?.canon?.locations).locationId);
   const location = locationId ? table.locations[locationId] : undefined;
@@ -135,7 +168,7 @@ export function settleLocationLoot(save: SaveData, table = QINGYU_LOOT_TABLE) {
   const receipt = rollAndGrant({ save, runtime, table, location, locationId, state, id, attempt, turn,
     rng: hash(cycle ? `${state.seed}:${locationId}:c${cycle}:${attempt}` : `${state.seed}:${locationId}:${attempt}`),
     // 回刷轮只出配置分类；稀有、关键、boss、大额钱只在首轮给。
-    categories: cycle ? config.respawn.categories : undefined, commonOnly: false });
+    categories: cycle ? config.respawn.categories : undefined, commonOnly: false, named: namedLootTarget(intent) });
   receipt.cycle = cycle; receipt.kind = 'search';
   state.searches[locationId] = attempt;
   if (attempt === 1 && today !== null) (state.windows ||= {})[locationId] = { cycle, startDay: today };
@@ -215,9 +248,10 @@ function settleEnemySpoils(save: SaveData, runtime: any, locationId: string, tok
   return { status: 'settled' as const, receipt, text: lootReceiptText(receipt) };
 }
 /** 按分类过滤可掷条目 → 掷 → 入账；普通搜刮与战后搜尸共用。普通搜刮（categories 缺省、commonOnly=false）的掷骰顺序与旧版一致。 */
-function rollAndGrant({ save, runtime, table, location, locationId, state, id, attempt, turn, rng, categories, commonOnly }: {
+function rollAndGrant({ save, runtime, table, location, locationId, state, id, attempt, turn, rng, categories, commonOnly, named }: {
   save: SaveData; runtime: any; table: LocationLootTable; location: LocationLootTable['locations'][string]; locationId: string;
   state: LocationLootState; id: string; attempt: number; turn: number; rng: number; categories?: Set<LootCategory>; commonOnly: boolean;
+  named?: { name: string; withSearch: boolean };
 }): LocationLootReceipt {
   const seed = rng;
   const roll = seededRoller(rng);
@@ -240,6 +274,12 @@ function rollAndGrant({ save, runtime, table, location, locationId, state, id, a
   if (!Number.isInteger(table.rules.maxSearches) || table.rules.maxSearches < 1 || ![...table.rules.commonSlots, table.rules.rareChance, table.rules.largeCurrencyChance].every(p => Number.isFinite(p) && p >= 0 && p <= 1)) throw new Error('搜刮规则配置无效');
   const eligible = categories ? available.filter(e => categories.has(lootCategoryOf(e))) : available;
   const picked: LocationLootEntry[] = [];
+  // 点名取物：本次可得条目里名字出现在点名里的（同一串里长名优先，「龙鳞碎屑」不再连带「龙鳞」），只给这些；同句另有搜刮分句才再照常掷。
+  const itemName = (e: LocationLootEntry) => String((runtime.canon?.items || []).find((i: any) => i?.id === e.itemId)?.name || '');
+  const namedHits = named ? eligible.filter(e => e.itemId && itemName(e) && named.name.includes(itemName(e)))
+    .sort((a, b) => itemName(b).length - itemName(a).length) : [];
+  for (const e of namedHits) if (!picked.some(p => itemName(p).includes(itemName(e)))) picked.push(e);
+  const rollPool = !named || !picked.length || named.withSearch;
   const pick = (entries: LocationLootEntry[]) => {
     const pool = entries.filter(e => !picked.includes(e));
     const total = pool.reduce((n, e) => n + Math.max(0, e.weight ?? 1), 0);
@@ -248,16 +288,16 @@ function rollAndGrant({ save, runtime, table, location, locationId, state, id, a
     for (const entry of pool) { cursor -= Math.max(0, entry.weight ?? 1); if (cursor < 0) { picked.push(entry); return; } }
   };
   // 战后搜尸只走普通槽。
-  if (!commonOnly) for (const e of eligible.filter(e => e.category === 'key')) if (roll() < (e.chance ?? 1)) picked.push(e);
+  if (rollPool && !commonOnly) for (const e of eligible.filter(e => e.category === 'key')) if (roll() < (e.chance ?? 1) && !picked.includes(e)) picked.push(e);
   // 2026-10-20 boss 场景专属：只在 boss 倒下后（afterEventIds）、各只一次（once），按份数入账，几率高于普通稀有槽。
-  if (!commonOnly) for (const e of eligible.filter(e => e.category === 'boss')) if (roll() < (e.chance ?? table.rules.bossChance ?? 0)) picked.push(e);
-  for (const chance of table.rules.commonSlots) if (roll() < chance) pick(eligible.filter(e => e.category === 'common' || (e.category === 'currency' && !e.large)));
-  if (!commonOnly) {
+  if (rollPool && !commonOnly) for (const e of eligible.filter(e => e.category === 'boss')) if (roll() < (e.chance ?? table.rules.bossChance ?? 0) && !picked.includes(e)) picked.push(e);
+  if (rollPool) for (const chance of table.rules.commonSlots) if (roll() < chance) pick(eligible.filter(e => e.category === 'common' || (e.category === 'currency' && !e.large)));
+  if (rollPool && !commonOnly) {
     // 稀有几率：地点可选覆盖 rareChance（boss 地 / 宫殿等高价值场景），缺省用全局 rules.rareChance。
     if (roll() < (location.rareChance ?? table.rules.rareChance)) pick(eligible.filter(e => e.category === 'rare'));
     if (roll() < table.rules.largeCurrencyChance) pick(eligible.filter(e => e.category === 'currency' && e.large));
   }
-  const receipt: LocationLootReceipt = { id, locationId, attempt, seed, turn, drops: [] };
+  const receipt: LocationLootReceipt = { id, locationId, attempt, seed, turn, drops: [], ...(named && !namedHits.length ? { missingName: named.name } : {}) };
   let moneyLeft = Math.max(0, location.kind === 'special' ? location.maxCopper ?? 80 : Math.min(80, location.maxCopper ?? table.rules.maxCopperPerSearch));
   for (const entry of picked) {
     const [lo, hi] = entry.quantity;
@@ -312,7 +352,8 @@ export function presentCompanionIds(save: SaveData, runtime: any): string[] {
   return [...ids];
 }
 export function lootReceiptText(receipt: LocationLootReceipt): string {
-  return receipt.drops.length ? `你搜刮后收好${receipt.drops.map(d => `${d.name}×${d.quantity}`).join('、')}。` : '你仔细搜刮了一番，没有找到可带走的东西。';
+  const missing = receipt.missingName ? lootRespawnConfig().texts.namedMissing.replace('{name}', receipt.missingName) : '';
+  return missing + (receipt.drops.length ? `你搜刮后收好${receipt.drops.map(d => `${d.name}×${d.quantity}`).join('、')}。` : '你仔细搜刮了一番，没有找到可带走的东西。');
 }
 
 /** 演出只允许收好本次回执物，不约束玩家观察清单外的物件。 */

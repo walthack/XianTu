@@ -395,7 +395,7 @@ import { Mountain, Building2, Store, Sparkles, Gem, AlertTriangle, Zap, User, Us
 import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
 import { useUIStore } from '@/stores/uiStore';
-import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed } from '@/modules/scenarioMods/travel/mapTravel';
+import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed, mapTravelArrivalNotice } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
 import { logEvent } from '@/modules/diagnostics/log';
@@ -428,7 +428,7 @@ const travelToSelectedLocation = async () => {
   const selection = selectMapTravel(save, String(selectedLocation.value.id || ''));
   if (!selection || !settleMapTravel(save, selection)) { mapTravelNotice.value = '此处暂无已开放且登记路程的路线，不能前往。'; return; }
   mapTravelBusy.value = true;
-  try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); mapTravelNotice.value = '已按地图路线抵达。'; }
+  try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); mapTravelNotice.value = mapTravelArrivalNotice(save); }
   finally { mapTravelBusy.value = false; }
 };
 

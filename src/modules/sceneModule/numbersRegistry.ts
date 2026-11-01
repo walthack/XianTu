@@ -107,6 +107,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'loot.spoils.categories', kind: 'array', required: true, section: 'progress' },
   { path: 'loot.texts.exhausted', kind: 'string', required: true, section: 'progress' },
   { path: 'loot.texts.respawnHint', kind: 'string', required: true, section: 'progress' },
+  { path: 'loot.texts.namedMissing', kind: 'string', required: true, section: 'progress' },
   // 随机遇敌（用户 2026-10-28 13:48；10-19 三步）；tiers/difficulty 键与取值、regions 正则在 randomEncounter.ts 深层校验。
   { path: 'encounter.enabled', kind: 'bool', required: true, section: 'combat' },
   { path: 'encounter.tiers', kind: 'object', required: true, section: 'combat' },

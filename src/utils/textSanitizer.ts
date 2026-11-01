@@ -103,6 +103,9 @@ function getCompiledReplaceRules(): Array<{ re: RegExp; replacement: string }> {
   return cachedCompiledReplaceRules;
 }
 
+/** 模型照抄进正文的战斗字段名 → 中文（只在紧跟汉字时替换，英文专名照留）。 */
+const LEAKED_COMBAT_WORDS: Readonly<Record<string, string>> = { defense: '防御', defence: '防御', attack: '攻击' };
+
 function sanitizeWithRules(
   text: string,
   replaceRules: Array<{ re: RegExp; replacement: string }>,
@@ -128,6 +131,8 @@ function sanitizeWithRules(
   result = stripInternalNarrativeControlLeaks(result);
   // 模型偶尔在中文动作后泄漏英文状态词（如「催马 attempted」）；不据此推断成败。
   result = result.replace(/([\u3400-\u9fff])[ \t]+attempted\b[ \t]*/gi, '$1');
+  // \u540c\u7c7b\uff1a\u6218\u6597\u5f15\u64ce\u7684\u82f1\u6587\u5b57\u6bb5\u540d\u5939\u5728\u4e2d\u6587\u91cc\uff08\u300c\u88ab\u4f60\u7684 defense \u6321\u4e0b\u300d\uff09\uff0c\u6362\u56de\u4e2d\u6587\uff08REPORT-8091-da90cb13 P2-1\uff09\u3002
+  result = result.replace(/([\u3400-\u9fff])[ \t]*\b(defen[cs]e|attack)\b[ \t]*/gi, (_, han: string, word: string) => han + (LEAKED_COMBAT_WORDS[word.toLowerCase()] ?? word));
 
   for (const rule of replaceRules) {
     result = result.replace(rule.re, rule.replacement);

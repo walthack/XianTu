@@ -128,6 +128,12 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
   return true;
 }
 
+/** 地图出行落账后的弹窗提示：写明实际落点（与顶栏「国别·地名」同口径），不留旧关文案（REPORT-8091-da90cb13 P2-2）。 */
+export function mapTravelArrivalNotice(save: SaveData): string {
+  const where = String((save as any).角色?.位置?.描述 || '').trim();
+  return where ? `已按地图路线抵达${where}。` : '已按地图路线抵达。';
+}
+
 /** 已知跨国文字意图只提供准备材料，不能签发地图选择。 */
 export function mapPreparation(save: SaveData, text: string): string | undefined {
   // 已命中当前剧情罗盘移动的意图走本地剧情转场，不再提示玩家另开地图。

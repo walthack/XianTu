@@ -610,3 +610,16 @@
 - 新码 23 个：CFG-007、NET-014/015、NAR-004~008、SAV-041~052、UI-008~010；复用 SAV-004（characterStore 两处）、SAV-005（一处）。码表 codes.ts 与 docs/ERROR-CODES.md 同步，新增 src/modules/diagnostics/errorSummary.ts（{name, message≤300字, stack 首行}，永不抛错）。全部 logEvent/logEventOnce、echo:false、不进玩家提示。
 - 冻结文件（用户 2026-11-01 19:38 批准，只加记录）：AIBS 插入 NET-014（生成失败占位兜底，查存档1_1 真实异常）/NAR-005~008/SAV-041/042/045/051/052；runtime.ts 插入 SAV-043/044。只新增行，三处 `catch {}` 改为 `catch (error)` 并补记录，返回值、控制流、文案、console 不变；frozen-baseline.json 哈希已更新（AIBS 89e0ece5…，runtime cba62f7c…）。
 - 证据：npm test 3204 项 3191 pass / 0 fail / 13 skip（新增 errorCodeWiringLcq / errorCodeWiringFrozen）；type-check 0。
+
+### LINE-ENTRY-20261101 · 离线交付（Codex，未提交）
+- 生成脚本：[generate-line-entry-checkpoints.mjs](scripts/generate-line-entry-checkpoints.mjs)，直接 node 运行；复用新档序幕生成器，正式事件/机会合同、切关、耗时结算推进。无 runtime 字段伪造，无前置 completedEventIds 注入；仅固定宿主时钟、随机种子与 UUID 以保证重放一致，存档名为导出元数据。
+- 三份存档及同名 `.trace.json`：[汉](tests/fixtures/checkpoints/current-han-entry.json)停在 `lyl.event.han_shouyang_gaoyanei`（汉·舞都），[唐](tests/fixtures/checkpoints/current-tang-entry.json)停在 `lyg.event.tang_liuxianping_arrive`（唐·留仙坪），[太泉](tests/fixtures/checkpoints/current-taiquan-entry.json)停在 `lyl.event.taiquan_sacred_fruit_07`（太泉·苍澜镇）。三首拍均未完成且可行动。太泉首拍没有 locationId，使用 selectMapTravel/settleMapTravel 正常旅行到苍澜；mapEntries 当前仅秦，未合成新入口。
+- 证据层级：离线自动化。[lineEntryCheckpoints.test.mjs](tests/lineEntryCheckpoints.test.mjs) 4/4：导入解包、V3 校验及实体格式校验、读档同步后首拍仍未完成且动作可执行、重生成完整存档与 trace 深度一致；`npx tsc --noEmit` 退出0。冻结源码哈希与基线一致，diff check 通过。
+- 成熟度：离线交付；浏览器/真人导入未测，无模型调用。游戏内「存档面板→导入」选择存档 json（不是 trace）。既有未提交改动、模型配置、临时目录不动，不 commit/push；非策划轮次，既有控制面不变。下轮可由控制面安排游戏内导入验收。
+
+### REPORT-8091-da90cb13 修复（2026-11-01，Claude/Codex 写，Grok 审）
+- P1-1 CP03「取出发青光的硬物」：原著与数据核实为龙精 `lyg.item.np091`（第116章；31-南荒固定战斗合同草案「龙精不归玩家（116·82）」，不进搜刮池）。按既有裁定不发龙精；新增点名取物：池里有的只给那一件，池里没有的回执先写「这里没有能取走的「X」。」（文案进 loot.texts.namedMissing）。如要让龙精入包需策划改裁定。
+- P2-1 defense 泄漏：场面简报把态势挂方英文键（scene/opposed/player_side）和要素动词英文 id 送给描写模型；改为中文（texts scene.brief.tagOn.*、动词取 aliases），narrate.ts 落历史前过 sanitizeAITextForDisplay，textSanitizer 补 defense/defence/attack 兜底。
+- P2-2 地图去咸阳：咸阳口信拍注入唐关，章名沿用唐关「抵达长安灞桥」；改按 mapEntries 目标关取章名，抵达提示写实际落点；测试确认到咸阳有 qin_enter_xianyang 行动。
+- P2-3 审核拦截：AIBS 235–240 本地兜底判定不含审核拦截（且 1872–1875 还要求可信本地合同），主叙事回合不兜底；冻结区外只把 toUserFacingAIError 文案改成如实「本回合没有推进」，模块叙事才说本地叙事。行为修复待批准改 AIBS。
+- 测试：tests/report8091da90.test.mjs 9 项；npm test 3217 项 3204 pass / 0 fail / 13 skip；type-check 0。

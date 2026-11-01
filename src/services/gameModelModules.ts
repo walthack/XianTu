@@ -40,7 +40,7 @@ export async function runGameModelModule(moduleId: string, input: ModelModuleInp
       catch (error) {
         // lcq-allow: 传输层已记录 LCQ-NET-012；这里只保留 cause 并转换本地正文守卫。
         if (!isContentModerationError(error)) throw error;
-        throw Object.assign(new ModuleNarrativeGuardError(toUserFacingAIError(error).message), { cause: error });
+        throw Object.assign(new ModuleNarrativeGuardError(toUserFacingAIError(error, { localFallback: true }).message), { cause: error });
       }
     },
   }).run(moduleId, input);
