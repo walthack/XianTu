@@ -549,6 +549,8 @@ import { itemTierOf } from '@/data/itemQuality'
 import { formatTechniqueEffects } from '@/utils/cultivationSpeedCalculator'
 import { toast } from '@/utils/toast'
 import { debug } from '@/utils/debug'
+import { logEvent } from '@/modules/diagnostics/log'
+import { pickId, summarizeError } from '@/modules/diagnostics/errorSummary'
 import QuantitySelectModal from '@/components/common/QuantitySelectModal.vue'
 import {
   DEFAULT_BASE_CURRENCY_ID,
@@ -1169,6 +1171,7 @@ const toggleEquip = async (item: Item) => {
     }
   } catch (error) {
     console.error('装备切换失败:', error)
+    logEvent({ code: 'LCQ-SAV-049', echo: false, detail: { op: 'toggleEquip', itemId: pickId(item, '物品ID'), error: summarizeError(error) } })
     toast.error(t('装备操作失败，请稍后重试'))
   } finally {
     equipBusy.value = false
@@ -1250,6 +1253,7 @@ watch(
       normalizeInventoryCurrencies(inv as any)
     } catch (e) {
       console.warn('[背包面板] 货币系统规范化失败（将继续使用原数据）', e)
+      logEvent({ code: 'LCQ-SAV-049', echo: false, detail: { op: 'normalizeCurrencies', error: summarizeError(e) } })
     }
     normalizedInventoryRef.value = inv
   },

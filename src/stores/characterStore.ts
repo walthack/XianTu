@@ -15,7 +15,8 @@ import { useUIStore } from './uiStore'; // 导入UI Store
 import { useCharacterCreationStore } from './characterCreationStore'; // 导入创角Store
 import * as storage from '@/utils/indexedDBManager';
 import { clearSnapshots } from '@/utils/snapshotManager';
-import { logError } from '@/modules/diagnostics/log';
+import { logError, logEvent } from '@/modules/diagnostics/log';
+import { summarizeError } from '@/modules/diagnostics/errorSummary';
 import { LAST_CONVERSATION_SLOT, clearedLastConversationSlot, detachedLastConversationSlot, lastConversationMatchesActive, shouldKeepLastConversationOnLoad } from '@/utils/lastConversationGuard';
 import { applyLoadRepairs } from '@/modules/scenarioMods/loadRepairs';
 import { loadSaveWithFallback, rejectFutureSaveVersion, validateLoadedSave } from '@/utils/saveLoadFallback';
@@ -870,6 +871,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
       console.log(`[角色商店-删除] ✅ 已清理 ${deletedCount} 个存档记录`);
     } catch (error) {
       console.error('[角色商店-删除] 清理 IndexedDB 存档数据失败:', error);
+      logEvent({ code: 'LCQ-SAV-004', echo: false, detail: { op: 'deleteCharacter.cascadeSaveData', characterId: charId, error: summarizeError(error) } });
       toast.warning('清理存档数据时出现错误，部分数据可能未删除');
     }
 
@@ -1065,6 +1067,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
                     resolve(true);
                   } catch (e) {
                     console.error('[存档迁移] ❌ 迁移过程异常:', e);
+                    logEvent({ code: 'LCQ-SAV-005', echo: false, detail: { stage: 'characterStore.confirmMigration', characterId: charId, slot: slotKey, error: summarizeError(e) } });
                     toast.error('迁移失败：发生异常，请查看控制台');
                     resolve(false);
                   } finally {
@@ -1697,6 +1700,7 @@ export const useCharacterStore = defineStore('characterV3', () => {
       console.log('[角色商店-删除存档] ✅ IndexedDB 存档数据已删除');
     } catch (error) {
       console.error('[角色商店-删除存档] 删除 IndexedDB 存档数据失败:', error);
+      logEvent({ code: 'LCQ-SAV-004', echo: false, detail: { op: 'deleteSave', characterId: charId, slot: slotKey, error: summarizeError(error) } });
       toast.warning('清理存档数据时出现错误');
     }
 

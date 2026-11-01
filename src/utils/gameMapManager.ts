@@ -3,6 +3,8 @@ import * as PIXI from 'pixi.js';
 import type { GameMapConfig, GameCoordinates, ViewportState } from '@/types/gameMap';
 import type { WorldLocation } from '@/types/location';
 import type { CultivationContinent } from '@/types/worldMap';
+import { logEvent } from '@/modules/diagnostics/log';
+import { summarizeError } from '@/modules/diagnostics/errorSummary';
 import { coLocatedMarkerKey, coLocatedMarkerOffset, pickMapMarker, type MapMarkerBox, type MapMarkerHitTarget } from './coordinateConverter';
 
 /**
@@ -84,6 +86,7 @@ export class GameMapManager {
       });
     } catch (error) {
       console.error('[地图管理器] Pixi初始化失败，尝试降级方案:', error);
+      logEvent({ code: 'LCQ-UI-010', echo: false, detail: { stage: 'pixiInit', error: summarizeError(error) } });
       // 降级方案：使用更保守的配置
       this.app = new PIXI.Application({
         view: canvas,
@@ -528,6 +531,7 @@ export class GameMapManager {
       bgLayer.addChild(mapSprite);
     } catch (e) {
       console.warn('[地图] 世界地图背景加载失败', e);
+      logEvent({ code: 'LCQ-UI-010', echo: false, detail: { stage: 'background', error: summarizeError(e) } });
     }
 
     // 绘制网格

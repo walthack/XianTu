@@ -324,6 +324,8 @@ import { useGameStateStore } from '@/stores/gameStateStore';
 import { useI18n } from '@/i18n';
 import { toast } from '@/utils/toast';
 import { debug } from '@/utils/debug';
+import { logEvent } from '@/modules/diagnostics/log';
+import { summarizeError } from '@/modules/diagnostics/errorSummary';
 import type { SaveSlot } from '@/types/game';
 import { lastConversationMatchesActive } from '@/utils/lastConversationGuard';
 import { createDadBundle, unwrapDadBundle } from '@/utils/dadBundle';
@@ -706,6 +708,7 @@ const exportSingleSave = async (save: SaveSlot) => {
       exportSaveData = v3SaveData;
     } catch (migrateError) {
       console.warn('[单个存档导出] 迁移失败，导出原始数据:', migrateError);
+      logEvent({ code: 'LCQ-SAV-047', echo: false, detail: { op: 'exportSave', slot: slotKey, error: summarizeError(migrateError) } });
       // 继续使用原始数据导出
     }
 
@@ -738,6 +741,7 @@ const exportSingleSave = async (save: SaveSlot) => {
     toast.success(`已导出存档: ${save.存档名}`);
   } catch (error) {
     console.error('[单个存档导出] 导出失败:', error);
+    logEvent({ code: 'LCQ-SAV-048', echo: false, detail: { op: 'exportSave', error: summarizeError(error) } });
     toast.error(`导出存档失败: ${error instanceof Error ? error.message : '未知错误'}`);
   }
 };
@@ -790,6 +794,7 @@ const exportCharacter = async () => {
         exportSaveData = v3SaveData;
       } catch (migrateError) {
         console.warn(`[角色导出] 存档「${s.存档名}」迁移失败，使用原始数据:`, migrateError);
+        logEvent({ code: 'LCQ-SAV-047', echo: false, detail: { op: 'exportCharacter', slot: s.id || s.存档名, error: summarizeError(migrateError) } });
         // 继续使用原始数据
       }
       return { ...s, 存档数据: exportSaveData };
@@ -824,6 +829,7 @@ const exportCharacter = async () => {
     toast.success(`已导出角色: ${characterName} (含 ${savesWithFullData.length} 个存档)`);
   } catch (error) {
     console.error('[角色导出] 导出失败:', error);
+    logEvent({ code: 'LCQ-SAV-048', echo: false, detail: { op: 'exportCharacter', error: summarizeError(error) } });
     toast.error(`导出角色失败: ${error instanceof Error ? error.message : '未知错误'}`);
   }
 };
@@ -872,6 +878,7 @@ const exportSaves = async () => {
         return { ...s, 存档数据: v3SaveData };
       } catch (e) {
         console.warn(`[存档导出] 存档「${s.存档名}」迁移失败，导出原始数据:`, e);
+        logEvent({ code: 'LCQ-SAV-047', echo: false, detail: { op: 'exportSaves', slot: s.存档名, error: summarizeError(e) } });
         return { ...s, 存档数据: rawSaveData };
       }
     });
@@ -908,6 +915,7 @@ const exportSaves = async () => {
     toast.success(`已导出 ${savesList.value.length} 个存档`);
   } catch (error) {
     console.error('[存档导出] 导出失败:', error);
+    logEvent({ code: 'LCQ-SAV-048', echo: false, detail: { op: 'exportSaves', error: summarizeError(error) } });
     debug.error('存档面板', '导出失败', error);
     toast.error(`导出存档失败: ${error instanceof Error ? error.message : '未知错误'}`);
   }

@@ -41,6 +41,8 @@ import { createAffinityCommandGate } from '@/modules/scenarioMods/affinityLadder
 import { affinityCapFor } from '@/modules/scenarioMods/affinityCaps';
 import { focusedNpcNamesFromState } from '@/modules/scenarioMods/presence';
 import { toast } from './toast';
+import { logEvent } from '@/modules/diagnostics/log';
+import { pickId, summarizeError } from '@/modules/diagnostics/errorSummary';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { readAuditLog } from '@/modules/scenarioMods/backgroundAuditCore';
 import { validateStepSceneNarrative } from '@/modules/scenarioMods/modularTurn';
@@ -565,6 +567,7 @@ class AIBidirectionalSystemClass {
       }
     } catch (e) {
       console.warn('[世界事件] 调度/生成失败:', e);
+      logEvent({ code: 'LCQ-SAV-052', echo: false, detail: { stage: 'worldEvents', error: summarizeError(e) } });
     }
   }
 
@@ -694,6 +697,7 @@ class AIBidirectionalSystemClass {
       return text;
     } catch (error) {
       console.error('[文本优化] 优化失败:', error);
+      logEvent({ code: 'LCQ-NAR-008', echo: false, detail: { error: summarizeError(error) } });
       return text;
     }
   }
@@ -823,7 +827,9 @@ class AIBidirectionalSystemClass {
     let auditCorrections: string[] = [];
     try { const active = useCharacterStore().rootState.当前激活存档;
       if (active?.角色ID && active?.存档槽位) auditCorrections = readAuditLog(localStorage).filter(entry => entry.status === 'accepted' && entry.slotKey === `${active.角色ID}:${active.存档槽位}` && entry.modId === runtime?.modId).slice(-1).flatMap(entry => entry.findings.filter(f => ['voice_drift', 'state_mismatch'].includes(f.category)).map(f => f.issue));
-    } catch { /* 没有活跃存档/本地存储时不跨槽取审计。 */ }
+    } catch (error) { /* 没有活跃存档/本地存储时不跨槽取审计。 */
+      logEvent({ code: 'LCQ-SAV-045', echo: false, detail: { stage: 'readAuditLog', error: summarizeError(error) } });
+    }
     if (compiled) (scene as any).mustAppear = projectNamingPacket({ ...compiled.packet.mustAppear, present: requiredCast }, settledRuntime || runtime || {});
     let guardFailure: ModuleNarrativeGuardError | undefined;
     const ledgerFindings: GuardFinding[] = [];
@@ -1612,6 +1618,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
             parsedStep2 = null;
           } catch (e) {
             console.warn(`[分步生成] 第2步第${attempt}次失败:`, e);
+            logEvent({ code: 'LCQ-NAR-006', echo: false, detail: { attempt, error: summarizeError(e) } });
           }
         }
         if (!parsedStep2) {
@@ -1660,6 +1667,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           gmResponse = this.parseAIResponse(response, mainForceJson, actionOptionsEnabled);
         } catch (parseError) {
         console.error('[AI双向系统] 响应解析失败，尝试容错处理:', parseError);
+        logEvent({ code: 'LCQ-NAR-005', echo: false, detail: { error: summarizeError(parseError) } });
 
         const salvaged = salvageCompleteNarrativeResponse(String(response));
         if (salvaged) {
@@ -1866,6 +1874,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
         && usesFixedScenarioInventory(saveData)
         && hasTrustedLocalContract(options)
         && shouldSettleLocalContractAfterGenerationFailure(error);
+      logEvent({ code: 'LCQ-NET-014', echo: false, detail: { error: summarizeError(error), truncated, terminal, settledLocally: canSettleLocally, moduleOnly } });
       if (canSettleLocally) {
         const storyPrompt = buildScenarioStoryPrompt(saveData, options?.playerIntentText || userMessage);
         gmResponse = {
@@ -1964,6 +1973,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       return gmResponse;
     } catch (error) {
       console.error('[AI双向系统] 指令执行失败:', error);
+      logEvent({ code: 'LCQ-SAV-042', echo: false, detail: { error: summarizeError(error), playerAgencyViolation: error instanceof PlayerAgencyViolationError } });
       if (error instanceof PlayerAgencyViolationError) {
         return {
           text: '',
@@ -2408,6 +2418,7 @@ ${step1Text}
           gmResponse = this.parseAIResponse(String(response), initMainForceJson, actionOptionsEnabled);
         } catch (parseError) {
           console.error('[AI双向系统] 初始消息解析失败，尝试容错处理:', parseError);
+          logEvent({ code: 'LCQ-NAR-007', echo: false, detail: { stage: 'parse', error: summarizeError(parseError) } });
 
           // 容错策略：尝试多种方式提取文本内容
           const responseText = String(response).trim();
@@ -2425,6 +2436,7 @@ ${step1Text}
               extractedCommands = jsonObj.tavern_commands || jsonObj.指令 || [];
             } catch (e) {
               console.warn('[AI双向系统] JSON代码块解析失败:', e);
+              logEvent({ code: 'LCQ-NAR-007', echo: false, detail: { stage: 'jsonBlock', error: summarizeError(e) } });
             }
           }
 
@@ -2467,7 +2479,9 @@ ${step1Text}
               const jsonObj = JSON.parse(jsonBlockMatch2[1].trim());
               extractedActionOptions = jsonObj.action_options || [];
             }
-          } catch { /* 忽略 */ }
+          } catch (error) { /* 忽略 */
+            logEvent({ code: 'LCQ-NAR-007', echo: false, detail: { stage: 'actionOptions', error: summarizeError(error) } });
+          }
 
           // 确保不为空
           if (!actionOptionsEnabled) {
@@ -2979,6 +2993,7 @@ ${step1Text}
       }
     } catch (error) {
       console.warn('[AI双向系统] 读取记忆配置失败，使用默认值:', error);
+      logEvent({ code: 'LCQ-SAV-051', echo: false, detail: { where: 'AIBidirectionalSystem.shortTermLimit', error: summarizeError(error) } });
     }
 
     while ((saveData as any).社交?.记忆?.短期记忆 && (saveData as any).社交.记忆.短期记忆.length > SHORT_TERM_LIMIT) {
@@ -3007,6 +3022,7 @@ ${step1Text}
       shouldAutoSummarize = !response.moduleReceipt && shouldQueueAutomaticMemorySummary(saveData, memorySettings);
     } catch (error) {
       console.warn('[AI双向系统] 检查自动总结阈值时出错:', error);
+      logEvent({ code: 'LCQ-SAV-051', echo: false, detail: { where: 'AIBidirectionalSystem.autoSummaryThreshold', error: summarizeError(error) } });
     }
 
 
@@ -3123,6 +3139,7 @@ ${step1Text}
         });
       } catch (error) {
         console.error(`[AI双向系统] 指令执行失败:`, command, error);
+        logEvent({ code: 'LCQ-SAV-041', echo: false, detail: { key: pickId(command, 'key'), action: pickId(command, 'action'), error: summarizeError(error) } });
         hadExecutionError = true;
         commandErrorChanges.unshift({
           key: '? 执行失败',
@@ -3262,6 +3279,7 @@ ${step1Text}
       }
     } catch (error) {
       console.warn('[进度审计] 跳过（异常）:', error);
+      logEvent({ code: 'LCQ-SAV-045', echo: false, detail: { stage: 'progressAudit', error: summarizeError(error) } });
     }
 
     const actionGatePrune = pruneExpiredActionGates(saveData, getNarrativeTurn(saveData));
@@ -3279,7 +3297,9 @@ ${step1Text}
       try {
         const raw = localStorage.getItem('command-apply-mode');
         if (raw === 'atomic' || raw === 'atomic_on_invalid_state' || raw === 'best_effort') return raw;
-      } catch { /* noop */ }
+      } catch (error) { /* noop */
+        logEvent({ code: 'LCQ-SAV-045', echo: false, detail: { stage: 'commandApplyMode', error: summarizeError(error) } });
+      }
       return 'best_effort' as const;
     })();
 
@@ -3393,6 +3413,7 @@ ${step1Text}
       }
     } catch (error) {
       console.warn('[事件对账] 跳过（异常）:', error);
+      logEvent({ code: 'LCQ-SAV-045', echo: false, detail: { stage: 'eventReconcile', error: summarizeError(error) } });
     }
 
     const scenarioResult = advanceScenarioRuntime(saveData);
@@ -3516,6 +3537,7 @@ ${step1Text}
       }
     } catch (e) {
       console.warn('[AI双向系统] 自动初始化宗门系统失败（非致命）:', e);
+      logEvent({ code: 'LCQ-SAV-052', echo: false, detail: { stage: 'sectAutoInit', error: summarizeError(e) } });
     }
 
     if (abortRequested()) {
@@ -3587,6 +3609,7 @@ ${step1Text}
               }
             } catch (error) {
               console.warn('[事件对账] 后台任务失败，主事务不受影响:', error);
+              logEvent({ code: 'LCQ-SAV-045', echo: false, detail: { stage: 'eventReconcileBackground', error: summarizeError(error) } });
             }
           })();
         }
@@ -3607,6 +3630,7 @@ ${step1Text}
       }
     } catch (error) {
       console.warn('[后台记忆] 调度失败（不影响回合）:', error);
+      logEvent({ code: 'LCQ-SAV-052', echo: false, detail: { stage: 'backgroundMemory', error: summarizeError(error) } });
     }
 
     return { saveData, stateChanges: stateChangesLog };
@@ -3865,6 +3889,7 @@ ${saveDataJson}`;
         });
       } catch (e) {
         console.warn('[长期检索] 添加到检索索引失败:', e);
+        logEvent({ code: 'LCQ-SAV-052', echo: false, detail: { stage: 'vectorIndex', error: summarizeError(e) } });
       }
 
       // 7. 保存到存档

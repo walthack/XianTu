@@ -15,6 +15,8 @@ import { resolveStatusDef, partyRole, type Contract, type DefensePart } from '..
 import { affinityOf } from '../../scenarioMods/ledger/affinityIdentity';
 import { encounterConfig, encounterPresetOf } from '../../scenarioMods/randomEncounter';
 import { isRandomContract } from '../contracts/randomContract';
+import { logEventOnce } from '../../diagnostics/log';
+import { summarizeError } from '../../diagnostics/errorSummary';
 
 export interface Factor { label: string; value: number }
 
@@ -81,7 +83,7 @@ export function sceneContext(save: SaveData, contract: Contract, actionText=''):
  */
 export const LEVEL_RESOLVER_VERSION = 2;
 /** 随机遇敌按预设定级时叠加的难度 levelShift（encounter.difficulty[档位]）；配置坏时按 0（回合 tick 另记 LCQ-SAV-032）。 */
-function randomLevelShift(save:SaveData):number{try{return Number(encounterConfig().difficulty[encounterPresetOf(save)]?.levelShift)||0;}catch{return 0;/* lcq-allow: 配置坏时回合 tick 记 LCQ-SAV-032，这里只按不加级 */}}
+function randomLevelShift(save:SaveData):number{try{return Number(encounterConfig().difficulty[encounterPresetOf(save)]?.levelShift)||0;}catch(error){logEventOnce('LCQ-SAV-050',{code:'LCQ-SAV-050',echo:false,detail:{stage:'randomLevelShift',error:summarizeError(error)}});return 0;/* lcq-allow: 配置坏时回合 tick 记 LCQ-SAV-032，这里只按不加级；本处另记一次 LCQ-SAV-050 */}}
 export function snapshotLevels(save:SaveData,c:Contract,state:import('../types').SceneState):void {
  const r=runtimeOf(save),chapter=contractChapter(c,state.beat)||namingChapter(r||{});
  const variants=Object.fromEntries(c.parties.map(p=>{const id=p.enemyId||p.ref;return [id,contractVariant(c,id,state)];}));

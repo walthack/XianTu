@@ -595,7 +595,8 @@ import { narrativeTriggers, recordTurnNarrative } from '@/modules/diagnostics/na
 import { undisclosedSelfFactTerms } from '@/modules/scenarioMods/undisclosedSelfFacts';
 import { tickRandomEncounter, encounterNarratedBy } from '@/modules/scenarioMods/randomEncounter';
 import { tickWhiteTailLeopard } from '@/modules/scenarioMods/whiteTailLeopard';
-import { logError } from '@/modules/diagnostics/log';
+import { logError, logEvent } from '@/modules/diagnostics/log';
+import { summarizeError, summarizeList } from '@/modules/diagnostics/errorSummary';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
 import { settleSelfConsumable, renderSelfConsumableBlock, renderSelfConsumableReceipt } from '@/modules/scenarioMods/freeAction/selfConsumable';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
@@ -1291,6 +1292,7 @@ const loadMemorySettings = async () => {
     }
   } catch (error) {
     console.warn('[记忆设置] 加载配置失败，使用默认值:', error);
+    logEvent({ code: 'LCQ-SAV-051', echo: false, detail: { where: 'MainGamePanel.loadMemorySettings', error: summarizeError(error) } });
   }
 };
 
@@ -2258,6 +2260,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       console.log('[上次对话] 已在发送消息前备份当前状态');
     } catch (backupError) {
       console.warn('[上次对话] 备份失败（非致命）:', backupError);
+      logEvent({ code: 'LCQ-SAV-046', echo: false, detail: { slot: '上次对话', error: summarizeError(backupError) } });
       // 备份失败不阻止发送消息
     }
   }
@@ -2502,10 +2505,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
             || remainingQingyuTurnLongRequests() === 0
             || (saveForRetry && usesFixedScenarioInventory(saveForRetry))
           ) {
+            logEvent({ code: 'LCQ-NAR-004', echo: false, detail: { errors: summarizeList(validation.errors), willRetry: false } });
             toast.warning('AI响应格式不正确，已保留你的输入，可手动重试。');
             aiResponse = null;
             return;
           }
+          logEvent({ code: 'LCQ-NAR-004', echo: false, detail: { errors: summarizeList(validation.errors), willRetry: true } });
           toast.warning('AI响应格式不正确，正在重试...');
 
           // 尝试重新生成
@@ -2714,6 +2719,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       return;
     }
     console.error('[AI交互] 处理失败:', error);
+    logEvent({ code: 'LCQ-UI-008', echo: false, detail: { error: summarizeError(error) } });
     hasError = true;
 
     // 显示错误提示

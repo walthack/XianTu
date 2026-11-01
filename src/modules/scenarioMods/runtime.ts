@@ -94,6 +94,8 @@ import { resolveScopedPlayerLine, playerFacingActionLine, playerActionDisplayOve
 import { enforceScenarioNpcAdulthood, ensureEncounteredScenarioCharacter } from './relationships';
 import { fixedStoryInventoryEffects } from './fixedInventoryContracts';
 import { isScopedPlayerPresentationEvent } from './playtestNarrativeScope';
+import { logEvent, logEventOnce } from '../diagnostics/log';
+import { summarizeError } from '../diagnostics/errorSummary';
 
 
 export interface ScenarioProgressState {
@@ -3237,7 +3239,10 @@ function getReconcileDeps(): { version: string; resolve: (c: unknown[] | undefin
     const builtins = require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] };
     /* eslint-enable @typescript-eslint/no-require-imports */
     return { version: resolver.REGISTRY_VERSION, resolve: resolver.resolveScenarioCharacters, mods: builtins.BUILTIN_SCENARIO_MODS || [] };
-  } catch { return null; }
+  } catch (error) {
+    logEventOnce('scenarioMods.getReconcileDeps', { code: 'LCQ-SAV-044', echo: false, detail: { item: 'reconcileDeps', error: summarizeError(error) } });
+    return null;
+  }
 }
 
 /**
@@ -3398,6 +3403,7 @@ function reconcileSaveWithRegistry(saveData: SaveData, runtime: RuntimeState & {
     console.info(`[剧本reconcile] 存档正典已对齐 registry ${deps.version}`);
   } catch (error) {
     console.warn('[剧本reconcile] 失败(不影响游戏):', error);
+    logEvent({ code: 'LCQ-SAV-044', echo: false, detail: { item: 'registryReconcile', error: summarizeError(error) } });
   }
   runtime.reconciledRegistryVersion = deps.version;
 }
@@ -3499,6 +3505,7 @@ function updateAcquaintanceLedger(saveData: SaveData, runtime: RuntimeState & { 
     });
   } catch (error) {
     console.warn('[剧本模组] 相识账本同步失败（不阻断回合）:', error);
+    logEvent({ code: 'LCQ-SAV-044', echo: false, detail: { item: 'metLedger', error: summarizeError(error) } });
   }
 }
 
@@ -3531,6 +3538,7 @@ function updateStanceStates(saveData: SaveData, runtime: RuntimeState & { modId?
     }
   } catch (error) {
     console.warn('[剧本模组] 关系姿态推进失败（不阻断回合）:', error);
+    logEvent({ code: 'LCQ-SAV-044', echo: false, detail: { item: 'stanceStates', error: summarizeError(error) } });
   }
 }
 
@@ -3616,6 +3624,7 @@ function settleEventReputation(
     rt.reputationGrantedEventIds = [...granted];
   } catch (error) {
     console.warn('[剧本模组] 事件声望结算失败（不阻断回合）:', error);
+    logEvent({ code: 'LCQ-SAV-043', echo: false, detail: { kind: 'reputation', error: summarizeError(error) } });
   }
   return grants;
 }
@@ -3685,6 +3694,7 @@ function settleSharedExperienceAffinity(
     rt.affinityGrantedEventIds = [...granted];
   } catch (error) {
     console.warn('[剧本模组] 共历事件好感结算失败（不阻断回合）:', error);
+    logEvent({ code: 'LCQ-SAV-043', echo: false, detail: { kind: 'affinity', error: summarizeError(error) } });
   }
   return grants;
 }

@@ -398,6 +398,8 @@ import { useUIStore } from '@/stores/uiStore';
 import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
+import { logEvent } from '@/modules/diagnostics/log';
+import { pickId, summarizeError } from '@/modules/diagnostics/errorSummary';
 import { EnhancedWorldGenerator, generateRealmMap } from '@/utils/worldGeneration/enhancedWorldGenerator';
 import { isTavernEnv } from '@/utils/tavern';
 import type { WorldLocation } from '@/types/location';
@@ -1899,6 +1901,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
           mapManager.value?.addContinent(continent);
         } catch (error) {
           console.error('[地图] 加载大陆失败:', continent, error);
+          logEvent({ code: 'LCQ-UI-009', echo: false, detail: { kind: 'continent', id: pickId(continent, 'id', '名称', 'name'), error: summarizeError(error) } });
         }
       });
       console.log(`[地图] 已加载 ${worldInfo.大陆信息.length} 个大陆`);
@@ -1916,6 +1919,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
           // 不再自动为势力创建地点标记，地点由"地点信息"数组统一管理
         } catch (error) {
           console.error('[地图] 加载势力失败:', faction, error);
+          logEvent({ code: 'LCQ-UI-009', echo: false, detail: { kind: 'faction', id: pickId(faction, 'id', 'name', '名称'), error: summarizeError(error) } });
         }
       });
       console.log(`[地图] 已加载 ${factions.length} 个势力范围`);
@@ -1937,6 +1941,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
           locationCount++;
         } catch (error) {
           console.error('[地图] 加载地点失败:', location, error);
+          logEvent({ code: 'LCQ-UI-009', echo: false, detail: { kind: 'location', id: pickId(location, 'id', 'name', '名称'), error: summarizeError(error) } });
         }
       });
       console.log(`[地图] 已加载 ${locations.length - skippedSub} 个地点（${skippedSub} 个城内子地点归入区域图）`);
@@ -1981,6 +1986,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
     }
   } catch (error) {
     console.error('[地图] 加载数据失败:', error);
+    logEvent({ code: 'LCQ-UI-009', echo: false, detail: { kind: 'load', error: summarizeError(error) } });
     mapStatus.value = '数据加载失败';
     toast.error('加载地图数据失败: ' + (error as Error).message);
   }

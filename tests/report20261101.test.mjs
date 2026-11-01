@@ -77,7 +77,8 @@ test('①a 冻结文件只改两处并已重新上锁：runtime.ts 不动，AIBS
   const base = json('tests/frozen-baseline.json');
   for (const f of ['src/utils/AIBidirectionalSystem.ts', 'src/modules/scenarioMods/runtime.ts'])
     assert.equal(createHash('sha256').update(readFileSync(new URL('../' + f, import.meta.url))).digest('hex'), base.files[f], f);
-  assert.equal(base.files['src/modules/scenarioMods/runtime.ts'], 'dc8f55186f7d4f73b89adb1efbebd6609988de51ac798bbaba3f221ff3aba67a');
+  // 2026-11-01 19:38 用户批准 runtime.ts 只加错误码日志（SAV-043/044），原钉的 dc8f5518… 随之更新。
+  assert.equal(base.files['src/modules/scenarioMods/runtime.ts'], 'cba62f7c46cc5e0d63554c9d563d704e3595cacd27811130df104e501c7cfd91');
 });
 
 test('①a 普通叙事回合搜刮：先本地预结算出回执正文（不请求模型），落账按回执入包；清单未配置照旧交模型', () => {

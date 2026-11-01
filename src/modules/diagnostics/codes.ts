@@ -36,6 +36,7 @@ export const ERROR_CODES = {
   'LCQ-CFG-004': spec('error', 'runtimeTuning', 'tuning.json 不是合法 JSON，整份未应用'),
   'LCQ-CFG-005': spec('error', 'runtimeTuning', 'tuning.json 校验未通过，整份拒绝'),
   'LCQ-CFG-006': spec('warn', 'runtimeTuning', 'tuning.json 返回了非 404 的错误状态，使用打包内默认值'),
+  'LCQ-CFG-007': spec('warn', 'aiService', 'AI 服务配置读取失败，沿用默认配置'),
 
   'LCQ-NUM-001': spec('error', 'numbers', '数值配置对象无效'),
   'LCQ-NUM-002': spec('error', 'numbers', '数值配置含未知键'),
@@ -108,6 +109,18 @@ export const ERROR_CODES = {
   'LCQ-SAV-032': spec('warn', 'randomEncounter', '随机遇敌回合检查失败，本回合不检，不影响剧情'),
   'LCQ-SAV-033': spec('warn', 'randomEncounter', '随机遇敌敌池或地点条目无效，已跳过该条'),
   'LCQ-SAV-034': spec('warn', 'randomContract', '随机遇敌合同实例化失败，本次不开战，遇敌已作废'),
+  'LCQ-SAV-041': spec('error', 'aiBidirectional', '单条模型指令执行失败，已记入变更明细（是否整回合回滚看指令应用模式）'),
+  'LCQ-SAV-042': spec('error', 'aiBidirectional', '回合处理模型响应（执行指令、提交事务）阶段抛错'),
+  'LCQ-SAV-043': spec('warn', 'scenarioMods', '剧本事件声望或共历好感结算失败，本拍不发放（不阻断回合）'),
+  'LCQ-SAV-044': spec('warn', 'scenarioMods', '剧本运行时账目同步失败（相识账本、关系姿态、正典 registry 对齐及其依赖加载），不阻断回合'),
+  'LCQ-SAV-045': spec('warn', 'aiBidirectional', '进度审计、事件对账等辅助环节失败或跳过（含读取审计记录、读取指令应用模式），主事务继续'),
+  'LCQ-SAV-046': spec('warn', 'mainGamePanel', '发送前「上次对话」备份失败，本回合照常发送'),
+  'LCQ-SAV-047': spec('warn', 'savePanel', '导出存档时迁移到新结构失败，已导出原始存档数据'),
+  'LCQ-SAV-048': spec('error', 'savePanel', '导出存档或角色失败'),
+  'LCQ-SAV-049': spec('warn', 'inventoryPanel', '背包面板操作失败：装备切换失败，或货币字段规范化失败（沿用原数据）'),
+  'LCQ-SAV-050': spec('warn', 'sceneModule', '随机遇敌难度加级读取失败，按不加级定级'),
+  'LCQ-SAV-051': spec('warn', 'memorySettings', '记忆配置（memory-settings）读取失败，使用默认值'),
+  'LCQ-SAV-052': spec('warn', 'aiBidirectional', '回合附属维护失败（世界事件调度、宗门自动初始化、后台记忆调度、长期检索索引），不影响回合'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),
@@ -122,6 +135,8 @@ export const ERROR_CODES = {
   'LCQ-NET-011': spec('warn', 'turnTelemetry', '模型调用耗时超过阈值（perf.modelWarnMs）'),
   'LCQ-NET-012': spec('warn', 'aiService', 'AI 请求被内容审核拦截'),
   'LCQ-NET-013': spec('warn', 'aiService', '思考耗尽输出长度'),
+  'LCQ-NET-014': spec('error', 'aiBidirectional', '回合正文生成失败，已用占位或本地安全正文兜底'),
+  'LCQ-NET-015': spec('warn', 'aiService', 'AI 接口不支持流式传输，已自动降级为非流式请求'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),
@@ -133,6 +148,11 @@ export const ERROR_CODES = {
   'LCQ-NAR-001': spec('info', 'narrativeSource', '叙事来源：模型生成了一段玩家可见正文（记来源与全文）'),
   'LCQ-NAR-002': spec('warn', 'narrativeSource', '叙事正文中文里夹拉丁单词（只记录，不改写正文）'),
   'LCQ-NAR-003': spec('warn', 'narrativeSource', '叙事正文提前写出主角尚不自知的设定或相关功法词（只记录，不改写正文）'),
+  'LCQ-NAR-004': spec('warn', 'mainGamePanel', '回合 AI 响应结构校验未通过（随后自动重试或保留输入）'),
+  'LCQ-NAR-005': spec('warn', 'aiBidirectional', '回合模型响应解析失败，转入容错提取'),
+  'LCQ-NAR-006': spec('warn', 'aiBidirectional', '分步生成第 2 步（指令）单次失败，重试或按空指令继续'),
+  'LCQ-NAR-007': spec('warn', 'aiBidirectional', '开局消息解析失败，转入容错提取'),
+  'LCQ-NAR-008': spec('warn', 'aiBidirectional', '文本优化失败，沿用原文'),
 
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),
@@ -141,6 +161,9 @@ export const ERROR_CODES = {
   'LCQ-UI-005': spec('error', 'startup', '启动阶段失败，已显示兜底界面'),
   'LCQ-UI-006': spec('warn', 'diagnostics', '导出反馈包失败'),
   'LCQ-UI-007': spec('warn', 'vue', '开启黑魔海大祭失败'),
+  'LCQ-UI-008': spec('error', 'mainGamePanel', '主游戏面板处理回合失败（总兜底，已提示请求失败）'),
+  'LCQ-UI-009': spec('warn', 'gameMapPanel', '地图数据加载失败（单个大陆、势力或地点已跳过，或整份加载失败）'),
+  'LCQ-UI-010': spec('warn', 'gameMapManager', '地图渲染初始化降级：Pixi 初始化失败改用保守配置，或世界地图背景加载失败'),
 } as const satisfies Record<string, CodeSpec>;
 
 export type ErrorCode = keyof typeof ERROR_CODES;

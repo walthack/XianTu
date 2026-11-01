@@ -29,6 +29,7 @@
 | LCQ-CFG-004 | error | runtimeTuning | tuning.json 不是合法 JSON，整份未应用 | tuning.json 语法错误（多余逗号、缺引号、被服务器返回成 HTML） | 用 JSON 校验器检查文件；看 detail/msg 里的解析位置；整份未应用 | 否 |
 | LCQ-CFG-005 | error | runtimeTuning | tuning.json 校验未通过，整份拒绝 | tuning.json 内容有未知键、类型不对或数值体检不过 | 看 detail.errors 逐条修；整份被拒，已合并的数值已退回 | 否 |
 | LCQ-CFG-006 | warn | runtimeTuning | tuning.json 返回了非 404 的错误状态，使用打包内默认值 | 服务器对 tuning.json 返回 403/500 等非 404 状态 | 看 detail.status；检查静态服务器配置与权限 | 否 |
+| LCQ-CFG-007 | warn | aiService | AI 服务配置读取失败，沿用默认配置 | ①启动读 localStorage `ai_service_config` 时 JSON 损坏或 localStorage 不可用（沿用内置默认配置）；②按功能取 API 分配（`getAPIForType`）时 API 管理 store 抛错（返回 null，按默认配置请求） | 看 detail.op（`loadConfig` / `getAPIForType`）、detail.usageType 与 detail.error；JSON 解析失败时 error.message 有意省略（报错可能引用配置原文）；到设置页重新保存一次 API 配置 | 否 |
 | LCQ-FA-001 | info | freeAction | 闸门拒绝（not_present）：目标不在场 | 目标人物不在当前在场名单（已离场、名字对不上、模型报错人） | 核对在场名单与票上的 targetId；见 detail.targetId | 否 |
 | LCQ-FA-002 | info | freeAction | 闸门拒绝（scene_active）：身处场面交锋，顾不上这件事 | 场面（战斗/对峙）进行中，自由行动被挡 | 正常；场面结束后再做 | 否 |
 | LCQ-FA-003 | info | freeAction | 闸门拒绝（low_goodwill）：好感太低，对方不接受 | 对方对玩家好感低于该动作允许的下限 | 正常的玩法拒绝；核对 freeAction 好感门槛配置 | 否 |
@@ -58,6 +59,11 @@
 | LCQ-NAR-001 | info | narrativeSource | 叙事来源：模型生成了一段玩家可见正文（记来源与全文） | 不是故障：模型每生成一段玩家可见正文记一条——回合正文（site=turn，MainGamePanel 发送收尾）、场面拍描写（scene_beat）与场内闲聊（scene_chat，sceneModule/host）、开局正文（opening，characterInitialization）；本地合同正文、卡片句、守卫三稿全拒后的固定承接不请求模型，不记。detail：site / path / triggers / moduleId / prompts（id + custom）/ model / provider / turn / beat / generationId / eventId / generatedAt（本机时区 ISO）/ textChars / text（全文） | 按 generatedAt 或 turn 找到出问题的那段正文，看 path（modular / legacy / legacy_pilot / sceneModule / opening）与 triggers（freeAction:solo.breakthrough、judgement:cultivate 等）定位生成路径，prompts 里 custom=true 说明玩家在提示词面板改过该模块；字段、存放与导出见 docs/NARRATIVE-SOURCE-LOG.md | 否 |
 | LCQ-NAR-002 | warn | narrativeSource | 叙事正文中文里夹拉丁单词（只记录，不改写正文） | 正文里出现夹在中文之间的拉丁单词：字母数 ≥ diagnostics.narrativeSource.minLetters（默认 3），前后 contextChars（默认 20）字内有汉字，且不在 nameWhitelist（人名专名）/ colloquialWhitelist（程宗扬现代口语）里，不分大小写。多见于修炼 / 闭关 / 冲关叙事：模型顺着提示词、回执或场景材料里的英文字段名、程序标识写出英文（真机见过 leaps、steady、changes、Decide、feel、manipulated） | 看 detail.words 与 hits（命中词 + 前后各 contextChars 字），同条 detail 带同样的来源字段（path / triggers / prompts / model / turn / beat / generatedAt），必要时按 generatedAt 找同一段的 LCQ-NAR-001 看全文；确属人名专名或程宗扬现代口语的补进对应白名单（mod-kit/numbers-runtime.json，或 tuning.json 的 numbers.diagnostics.narrativeSource 热改）；正文不会被改写 | 否 |
 | LCQ-NAR-003 | warn | narrativeSource | 叙事正文提前写出主角尚不自知的设定或相关功法词（只记录，不改写正文） | 本关 `scenario.undisclosedSelfFacts` 里还没点破的设定（stage_01：生死根、九阳神功，到 `lcq.event.s01_05` 王哲筑基为止）及其相关词（九阳神功 → 九阳、口诀、太一经、真阳；`scenarioMods/undisclosedSelfFacts.ts`，用户 2026-10-28 定）出现在模型正文里。多见于得功前的修炼／打坐叙事：模型凭原著先验把「程宗扬 + 修炼」写成九阳神功。记录点：回合正文（按回合结束后的进度算，点破那一拍不算）、开局正文、场面拍描写与场内闲聊 | 看 detail.words 与 hits（命中词 + 前后各 contextChars 字），detail.terms 是当时的禁词表，同条 detail 带同样的来源字段（path / triggers / prompts / model / turn / generatedAt），按 generatedAt 找同一段的 LCQ-NAR-001 看全文；按 path 查对应链路的提示词里有没有【主角尚不自知】禁令。按字面匹配、不判断否定句；正文不会被改写 | 否 |
+| LCQ-NAR-004 | warn | mainGamePanel | 回合 AI 响应结构校验未通过（随后自动重试或保留输入） | 模型返回的回合响应缺字段或类型不对（`validateProcessedAIResponse` 不通过）；已提交事务、本回合长请求额度用完或固定背包剧本时只保留输入，否则自动重试一次 | 看 detail.errors（最多 8 条、每条截断）、detail.willRetry；同一 turnId 找 LCQ-NAR-001 看模型原文 | 否 |
+| LCQ-NAR-005 | warn | aiBidirectional | 回合模型响应解析失败，转入容错提取 | 模型正文不是合法 JSON、被截断或夹了前置分析（`parseAIResponse` 抛错），随后走 salvage／代码块／正则提取 | 看 detail.error；同一 turnId 找 LCQ-NAR-001 看原文；多次出现时检查该模型的强 JSON 设置 | 否 |
+| LCQ-NAR-006 | warn | aiBidirectional | 分步生成第 2 步（指令）单次失败，重试或按空指令继续 | 分步生成开启时第 2 步（指令生成）请求失败或解析不出指令；共试 2 次，都失败则按空指令继续 | 看 detail.attempt 与 detail.error；检查 instruction_generation 的 API 分配与第 2 步流式开关 | 否 |
+| LCQ-NAR-007 | warn | aiBidirectional | 开局消息解析失败，转入容错提取 | 开局（初始消息）模型正文不是合法 JSON；容错依次试 JSON 代码块、整体 JSON、正则取 text，行动选项提取失败按空 | 看 detail.stage（parse / jsonBlock / actionOptions）与 detail.error；检查开局用的模型与强 JSON 设置 | 否 |
+| LCQ-NAR-008 | warn | aiBidirectional | 文本优化失败，沿用原文 | 开启了 text_optimization 功能，但优化请求失败或抛错，返回未优化的原文 | 看 detail.error；检查 text_optimization 的 API 分配；不影响回合 | 否 |
 | LCQ-NET-001 | error | aiService | AI 请求等待首个响应超时（first_byte） | 请求发出后迟迟没有首个响应字节（网络慢、服务端排队、API 地址错） | 看 requestId/turnId 对应的请求；检查 API 地址与网络；可手动重试 | 否 |
 | LCQ-NET-002 | error | aiService | AI 请求总耗时超时（total） | 整次请求超过总耗时上限（含回合预算耗尽） | 看 detail.stage；检查模型响应速度或调大超时；后台任务超时降为 warn | 否 |
 | LCQ-NET-003 | error | aiService | AI 正文流空闲超时（idle） | 流式正文开始后长时间没有新内容 | 多为服务端卡住或网络中断；手动重试，必要时换模型/代理 | 否 |
@@ -71,6 +77,8 @@
 | LCQ-NET-011 | warn | turnTelemetry | 模型调用耗时超过阈值（perf.modelWarnMs） | 一次回合里模型从发请求到收完响应的耗时（detail.modelMs）超过 game-numbers `perf.modelWarnMs`；只记日志，不弹玩家提示、不改回合行为 | 看 detail.provider / model / retryCount / promptBytes；提示词过大或服务商限流/慢时出现，换更快的模型或服务商、缩小提示词；阈值可在 tuning.json 的 numbers.perf 热改 | 否 |
 | LCQ-NET-012 | warn | aiService | AI 请求被内容审核拦截 | HTTP 422 且包含 sensitive／1026／1027／moderation／content filter／敏感 | 查看持久日志 status、providerCode、requestId；玩家仅见审核提示，原文保留 cause。备用自动切换由 mod-kit/ai-content-moderation.json 的 fallbackEnabled 控制（默认 false），关闭或失败走本地叙事 | 否 |
 | LCQ-NET-013 | warn | aiService | 思考耗尽输出长度 | 正文为空、finish_reason=length、识别到思考模型/响应 | 同模型放大输出预算重试一次；再次耗尽则失败；日志仅预算和重试标记 | 否 |
+| LCQ-NET-014 | error | aiBidirectional | 回合正文生成失败，已用占位或本地安全正文兜底 | 回合主生成抛错（超时、截断、格式不对、玩家主体违规等）；固定背包剧本且有可信本地合同时改用本地安全正文并照常提交合同，否则返回「（AI生成失败）」占位、不执行任何指令 | 看 detail.error、detail.truncated / terminal / settledLocally / moduleOnly；同一 turnId 找 LCQ-NET-00x 看底层请求错误 | 否 |
+| LCQ-NET-015 | warn | aiService | AI 接口不支持流式传输，已自动降级为非流式请求 | 流式请求报「不支持流式」类错误（OpenAI 兼容或 Claude 接口），本次改发非流式请求 | 看 detail.provider、detail.model 与 detail.error；该接口确实不支持流式时到设置里关闭流式传输 | 否 |
 | LCQ-NUM-001 | error | numbers | 数值配置对象无效 | tuning.json numbers 段里某处应为对象却写成了别的类型 | 按消息里的路径修正为对象 | 否 |
 | LCQ-NUM-002 | error | numbers | 数值配置含未知键 | numbers 段含 game-numbers.qingyu.json 里不存在的键（拼写错误或已删除的键） | 按消息里的路径核对键名；只能改已有键，不能新增 | 否 |
 | LCQ-NUM-003 | error | numbers | 数值配置类型无效 | numbers 段某个值的类型与默认值不同（数字写成字符串等）或为非有限数 | 按消息里的路径改成与默认值相同类型 | 否 |
@@ -130,6 +138,9 @@
 | LCQ-UI-005 | error | startup | 启动阶段失败，已显示兜底界面 | 挂载前的启动步骤抛错（目前是 migrateData 存档迁移检查），或挂载 Vue 应用时抛错；此时页面显示原生兜底界面（导出日志 / 重新载入） | 看 detail.stage（migrateData / mount）与 cause；先导出日志，再重新载入；migrateData 失败多为浏览器存储不可用，按 LCQ-SAV-001 / LCQ-SAV-005 排查 | 否 |
 | LCQ-UI-006 | warn | diagnostics | 导出反馈包失败 | 组包或触发下载时抛错：浏览器拒绝创建下载（沙箱、权限），或内存不足以容纳带存档的大包 | 看 cause；换浏览器或重试；先不勾选“附带存档”再导出（只含日志/版本/模型配置摘要，体积很小）；不影响游戏 | 否 |
 | LCQ-UI-007 | warn | vue | 开启黑魔海大祭失败 | 右栏点击「开启大祭」时读写存档或保存抛错 | 看 cause；重试点击；存档未改动则可继续游戏 | 否 |
+| LCQ-UI-008 | error | mainGamePanel | 主游戏面板处理回合失败（总兜底，已提示请求失败） | 发送回合时任一环节抛错且不是玩家取消（AI 请求失败、生成错误、响应处理抛错）；玩家看到「请求失败: …」，流式状态已清 | 看 detail.error 与 detail.code；同一 turnId 往前找 LCQ-NET-* / LCQ-NAR-* 定位源头 | 否 |
+| LCQ-UI-009 | warn | gameMapPanel | 地图数据加载失败（单个大陆、势力或地点已跳过，或整份加载失败） | 世界信息里某个大陆边界、势力范围或地点数据不合法，添加到地图时抛错（只跳过这一项）；或整份地图数据加载抛错（显示「数据加载失败」） | 看 detail.kind（continent / faction / location / load）与 detail.id，按 id 去存档 世界.信息 里查该条数据 | 否 |
+| LCQ-UI-010 | warn | gameMapManager | 地图渲染初始化降级：Pixi 初始化失败改用保守配置，或世界地图背景加载失败 | 浏览器 WebGL／shader 不兼容导致 Pixi 首选配置初始化失败（改用关抗锯齿、分辨率 1 重试）；或 `/liuchao-world-map.jpg` 背景精灵创建失败（只画底色与网格） | 看 detail.stage（pixiInit / background）与 detail.error；检查显卡与浏览器 WebGL 支持、背景图是否随包部署 | 否 |
 
 | LCQ-SAV-035 | warn | actionTime | 动作耗时档位缺失或非法 | 协议缺失、非法或旧档不兼容 | 检查该动作结构化来源及配置，保留原档重试 | 否 |
 | LCQ-SAV-036 | warn | actionTime | 模型数日超过配置上限，已截断 | 协议缺失、非法或旧档不兼容 | 检查该动作结构化来源及配置，保留原档重试 | 否 |
@@ -137,6 +148,18 @@
 | LCQ-SAV-038 | warn | mapTravel | 跨国移动需要有效地图选择 | 协议缺失、非法或旧档不兼容 | 检查该动作结构化来源及配置，保留原档重试 | 否 |
 | LCQ-SAV-039 | error | actionTime | 时间来源或回执冲突 | 协议缺失、非法或旧档不兼容 | 检查该动作结构化来源及配置，保留原档重试 | 否 |
 | LCQ-SAV-040 | warn | calendarMigration | 旧历法时间戳迁移失败 | 协议缺失、非法或旧档不兼容 | 检查该动作结构化来源及配置，保留原档重试 | 否 |
+| LCQ-SAV-041 | error | aiBidirectional | 单条模型指令执行失败，已记入变更明细（是否整回合回滚看指令应用模式） | 模型下发的某条 tavern_command 路径、动作或值不合法，执行时抛错；记一条「执行失败」变更，best_effort 下其余照常，atomic 下整回合回滚 | 看 detail.key、detail.action 与 detail.error（不记指令全文）；对照提示词里的指令规范 | 否 |
+| LCQ-SAV-042 | error | aiBidirectional | 回合处理模型响应（执行指令、提交事务）阶段抛错 | 生成成功后处理响应、执行指令、提交事务时抛错；玩家主体违规时返回生成错误，否则按原逻辑返回已生成的响应 | 看 detail.error 与 detail.playerAgencyViolation；同一 turnId 找 LCQ-SAV-041 / LCQ-SAV-045 看具体环节 | 否 |
+| LCQ-SAV-043 | warn | scenarioMods | 剧本事件声望或共历好感结算失败，本拍不发放（不阻断回合） | 剧本运行时结算事件声望（`reputationGrantedEventIds`）或共历事件好感（`affinityGrantedEventIds`）时读写存档抛错，本拍不发放 | 看 detail.kind（reputation / affinity）与 detail.error（catch 包住整轮结算，不带单个 eventId）；下一拍会重试未发放的事件 | 否 |
+| LCQ-SAV-044 | warn | scenarioMods | 剧本运行时账目同步失败（相识账本、关系姿态、正典 registry 对齐及其依赖加载），不阻断回合 | 相识账本同步、关系姿态推进、存档正典与 registry 对齐抛错，或对齐依赖（characterResolver / builtins）加载失败（node 测试环境加载不了属正常，按 no-op） | 看 detail.item（metLedger / stanceStates / registryReconcile / reconcileDeps，后者本会话只记一次）与 detail.error；读档或下一拍会再对齐 | 否 |
+| LCQ-SAV-045 | warn | aiBidirectional | 进度审计、事件对账等辅助环节失败或跳过（含读取审计记录、读取指令应用模式），主事务继续 | 进度审计、事件对账（含后台三方合并任务）抛错；或读取 localStorage 里的审计记录、`command-apply-mode` 失败（按不取审计纠正、best_effort 处理） | 看 detail.stage（readAuditLog / progressAudit / commandApplyMode / eventReconcile / eventReconcileBackground）与 detail.error；不影响本回合提交 | 否 |
+| LCQ-SAV-046 | warn | mainGamePanel | 发送前「上次对话」备份失败，本回合照常发送 | 开启对话自动存档时，发送前写「上次对话」槽位失败（IndexedDB 写失败、配额满、当前无激活存档） | 看 detail.slot 与 detail.error；同时段找 LCQ-SAV-003；本回合若需回滚，「上次对话」可能是更早的状态 | 否 |
+| LCQ-SAV-047 | warn | savePanel | 导出存档时迁移到新结构失败，已导出原始存档数据 | 单个存档、整角色或全部存档导出时，旧格式存档迁移到 V3 抛错；导出文件里该存档保留原始数据 | 看 detail.op（exportSave / exportCharacter / exportSaves）、detail.slot 与 detail.error；导出的原档可再导入后读档触发正常迁移 | 否 |
+| LCQ-SAV-048 | error | savePanel | 导出存档或角色失败 | 导出时取不到存档数据、某存档缺存档数据、序列化或下载触发抛错；玩家看到「导出存档失败 / 导出角色失败」 | 看 detail.op 与 detail.error；同时段找 LCQ-SAV-002 看读档是否失败 | 否 |
+| LCQ-SAV-049 | warn | inventoryPanel | 背包面板操作失败：装备切换失败，或货币字段规范化失败（沿用原数据） | 装备／卸下时动作队列抛错（玩家看到「装备操作失败」）；或背包货币字段规范化抛错（继续用原数据） | 看 detail.op（toggleEquip / normalizeCurrencies）、detail.itemId 与 detail.error | 否 |
+| LCQ-SAV-050 | warn | sceneModule | 随机遇敌难度加级读取失败，按不加级定级 | 随机遇敌开战定级时读 `encounter.difficulty[档位].levelShift` 抛错（配置坏、档位读不出），按 0 加级（本会话只记一次） | 看 detail.error；对照 LCQ-SAV-032 / LCQ-SAV-033 检查随机遇敌配置 | 否 |
+| LCQ-SAV-051 | warn | memorySettings | 记忆配置（memory-settings）读取失败，使用默认值 | localStorage `memory-settings` 不是合法 JSON 或 localStorage 不可用；主面板加载记忆设置、AIBS 读短期记忆上限或检查自动总结阈值时用默认值 | 看 detail.where（MainGamePanel.loadMemorySettings / AIBidirectionalSystem.shortTermLimit / AIBidirectionalSystem.autoSummaryThreshold）与 detail.error；到设置页重新保存记忆设置 | 否 |
+| LCQ-SAV-052 | warn | aiBidirectional | 回合附属维护失败（世界事件调度、宗门自动初始化、后台记忆调度、长期检索索引），不影响回合 | 回合后的非关键维护抛错：世界事件调度／生成、宗门系统自动初始化、后台记忆任务调度、新长期记忆加入检索索引 | 看 detail.stage（worldEvents / sectAutoInit / backgroundMemory / vectorIndex）与 detail.error；均可下一回合重试，不影响存档主体 | 否 |
 
 ## 已作废
 

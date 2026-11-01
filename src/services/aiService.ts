@@ -21,6 +21,7 @@ import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiMana
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
 import { contentModerationDetail, toUserFacingAIError } from './apiErrorMessage';
 import { logError, logEvent } from '@/modules/diagnostics/log';
+import { summarizeError } from '@/modules/diagnostics/errorSummary';
 import { AiHttpError, abortableDelay, aiRetryConfig, planAiRetry, readRetryAfterHeader, type AiRetryPlan } from './aiRetryPolicy';
 import {
   isTruncatedFinishReason,
@@ -379,6 +380,8 @@ class AIService {
       this.syncModeWithEnvironment();
     } catch (e) {
       console.error('[AI服务] 加载配置失败:', e);
+      // JSON.parse 的报错会引用配置原文（可能含密钥），只记异常名。
+      logEvent({ code: 'LCQ-CFG-007', echo: false, detail: { op: 'loadConfig', error: summarizeError(e, { omitMessage: e instanceof SyntaxError }) } });
     }
   }
 
@@ -825,6 +828,7 @@ class AIService {
       return apiConfig;
     } catch (e) {
       console.warn('[AI服务] 获取功能API配置失败，使用默认配置:', e);
+      logEvent({ code: 'LCQ-CFG-007', echo: false, detail: { op: 'getAPIForType', usageType, error: summarizeError(e) } });
       return null;
     }
   }
@@ -1745,6 +1749,7 @@ class AIService {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg) || (signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle')) throw e;
           console.warn('[AI服务-OpenAI兼容] 当前API可能不支持流式传输，已自动降级为非流式请求。');
+          logEvent({ code: 'LCQ-NET-015', echo: false, detail: { provider, model, usageType, error: summarizeError(e) } });
 
           const requestBody: any = {
             model,
@@ -1937,6 +1942,7 @@ class AIService {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg)) throw e;
           console.warn('[AI服务-Claude] 当前API可能不支持流式传输，已自动降级为非流式请求。');
+          logEvent({ code: 'LCQ-NET-015', echo: false, detail: { provider, model, error: summarizeError(e) } });
 
           this.chargeQingyuLongTransport(signal);
           const response = await diagnosticAxiosPost(

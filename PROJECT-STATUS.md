@@ -605,3 +605,8 @@
 - 交付：I-1 晋线 s01_01 落点改江州、s01_02 落点改临安（目标「乘船抵达临安」，罗盘剧情转场，不再要求开地图）＋旧档快照修复；I-3 切关不再重发新关开局背包（39→58 根因）；I-4 搜刮识别「取出…硬物收进背包」与首判失败后重试；I-5 黑魔海「完成江州场外插叙」补 intentMatch＋旧档回填；P2 落败不列敌方「仍在抵抗」、清理中文后「attempted」、位置前缀统一取地点总表国别（新 locationCountry.ts）。overlay 新增 lyl.jiangzhou_retreat／lyl.lin_an_black_sea。
 - I-2 存档1_1 只诊断：AIBS 生成异常兜底（约 1859–1891 行）把非终止错误统一变成「（AI生成失败）」占位，MainGamePanel 校验 mid_term_memory 为空即报格式不正确；原始异常未上抛，需原档／控制台确认具体异常。
 - 三冻结文件未改；新增 tests/report8091regress.test.mjs 12 项。
+
+### ERRCODE-20261101 · 错误码补全两批（2026-11-01，Claude 写／Grok 审；Codex 限流）
+- 新码 23 个：CFG-007、NET-014/015、NAR-004~008、SAV-041~052、UI-008~010；复用 SAV-004（characterStore 两处）、SAV-005（一处）。码表 codes.ts 与 docs/ERROR-CODES.md 同步，新增 src/modules/diagnostics/errorSummary.ts（{name, message≤300字, stack 首行}，永不抛错）。全部 logEvent/logEventOnce、echo:false、不进玩家提示。
+- 冻结文件（用户 2026-11-01 19:38 批准，只加记录）：AIBS 插入 NET-014（生成失败占位兜底，查存档1_1 真实异常）/NAR-005~008/SAV-041/042/045/051/052；runtime.ts 插入 SAV-043/044。只新增行，三处 `catch {}` 改为 `catch (error)` 并补记录，返回值、控制流、文案、console 不变；frozen-baseline.json 哈希已更新（AIBS 89e0ece5…，runtime cba62f7c…）。
+- 证据：npm test 3204 项 3191 pass / 0 fail / 13 skip（新增 errorCodeWiringLcq / errorCodeWiringFrozen）；type-check 0。
