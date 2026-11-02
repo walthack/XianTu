@@ -209,8 +209,10 @@ function runtimeOf(saveData: SaveData): RuntimeWithSlice | undefined {
   return (saveData as any)?.世界?.状态?.剧本模组;
 }
 
+// 场外到点收束的拍（offscreenResolvedEventIds）同样算已发生：s02_02／s02_03 战局停滞后由世界收束时，
+// 只认 completedEventIds 会让「王哲已殉」永远不成立，五原切片不开、s02_04 永远完成不了（REPORT-8091-ef573ece P1）。
 function completedIds(runtime: RuntimeWithSlice): string[] {
-  return runtime.completedEventIds || [];
+  return [...(runtime.completedEventIds || []), ...((runtime as { offscreenResolvedEventIds?: string[] }).offscreenResolvedEventIds || [])];
 }
 
 function wangZheFallen(runtime: RuntimeWithSlice): boolean {

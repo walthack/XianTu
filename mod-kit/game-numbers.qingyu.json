@@ -2357,6 +2357,13 @@
           "lyl.event.taiquan_afterfall_08_beat"
         ]
       }
+    },
+    "stallAutoAdvance": {
+      "note": "主线停滞自动收束（REPORT-8091-ef573ece P1）。mainlineTurns：当前主线拍连续停滞（runtime.stallTurns）达到这么多回合、且这一拍没有作者的场外到点合同（offscreenResolution 自己会收）也不是场面战时，本回合按这一拍的主线动作结算，叙事照常演出（等同玩家点了主线建议）。stageDepartureIdleTurns：本关已收束、启程按钮出现后，再过这么多回合仍没启程就自动启程进下一关；手打或粘贴启程按钮文字等同点按钮。0＝关闭该项。清羽 Demo 档沿用自己的到点设计，不套用。",
+      "mainlineTurns": 3,
+      "stageDepartureIdleTurns": 3,
+      "mainlineNotice": "停留已久，局势自行推进：{label}",
+      "departureNotice": "停留已久，已随众人启程：{toName}"
     }
   },
   "shop": {
