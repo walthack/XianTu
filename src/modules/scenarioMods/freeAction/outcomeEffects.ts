@@ -1,6 +1,7 @@
 /**
  * 判定确认后的确定性效果（数值在 game-numbers 的 freeAction.aftermath / dualCultivation.buff，文本在内容包 texts）：
- *   failureAftermathEffects：非成功档写“行动门控”余波；combat 类另扣玩家气血（最低留 keepHp 点）。
+ *   failureAftermathEffects：非成功档写“行动门控”余波；combat 类另扣玩家气血——战斗伤害不保底，与场面同一口径（combat.woundRules.hp）：
+ *     打到 ≤ combatDownedAt 即当拍判负，人倒下后剧情继续，气血拉回 afterLossContinueHp（keepHp 只给中毒等状态掉血）。
  *   selfBuffEffect：双修的“阴阳调和”临时状态。
  * 只算不写：旧判定引擎（旧预检 / 事件判定的回执）和 freeAction 结算（settle.ts）共用这一份。
  * 判定回执是 free_action_judgement 时，引擎不再自己算这些（见 judgementEngine.deterministicOutcomeEffects），由 settle.ts 落账，避免双扣、双写。
@@ -12,7 +13,7 @@ import { JUDGEMENT_OUTCOME_LABELS, type JudgementKind, type JudgementOutcome, ty
 type Effect = JudgementResolution['appliedEffects'][number];
 
 export interface AftermathConfig {
-  hpLoss: { kinds: string[]; ratio: Partial<Record<JudgementOutcome, number>>; minLoss: number; keepHp: number };
+  hpLoss: { kinds: string[]; ratio: Partial<Record<JudgementOutcome, number>>; minLoss: number };
   gate: { ttlTurns: number; labelChars: number; defaultScope: string; scopeByKind: Record<string, string>; outcomeByResult: Partial<Record<JudgementOutcome, string>> };
 }
 export interface SelfBuffConfig {
@@ -24,21 +25,32 @@ export const dualBuffConfig = (): SelfBuffConfig => GAME_NUMBERS.freeAction.dual
 
 const fill = (template: string, slots: Record<string, string>): string => Object.entries(slots).reduce((out, [key, value]) => out.split(`{${key}}`).join(value), template);
 
+/**
+ * combat 类失手扣的气血（REPORT-8091-1892cfb6 P1：南荒战斗气血打到 1 后停住、不判负——这里原先按 keepHp 保底，战斗伤害不该保底）。
+ * 扣到 ≤ combatDownedAt＝当拍判负（downed），收场拉回 afterLossContinueHp；已在 0 及以下的不再扣。非 combat 类或该档不扣时返回 null。
+ */
+export function combatAftermathHp(saveData: unknown, kind: JudgementKind, outcome: JudgementOutcome): { from: number; to: number; lost: number; downed: boolean } | null {
+  const { hpLoss } = aftermathConfig();
+  if (!aftermathConfig().gate.outcomeByResult[outcome] || !hpLoss.kinds.includes(kind)) return null;
+  const ratio = hpLoss.ratio[outcome];
+  const hp = (saveData as any)?.角色?.属性?.气血, from = Number(hp?.当前), max = Number(hp?.上限);
+  if (ratio === undefined || !Number.isFinite(from) || !Number.isFinite(max) || max <= 0 || from <= 0) return null;
+  const rules = GAME_NUMBERS.combat.woundRules.hp;
+  const lost = Math.min(from, Math.max(hpLoss.minLoss, Math.round(max * ratio)));
+  const downed = from - lost <= rules.combatDownedAt;
+  return { from, to: downed ? rules.afterLossContinueHp : from - lost, lost, downed };
+}
+
 export function failureAftermathEffects(
   saveData: unknown,
   input: { kind: JudgementKind; actionText: string; target?: string; outcome: JudgementOutcome; turn: number },
 ): Effect[] {
-  const { hpLoss, gate } = aftermathConfig(), { kind, outcome } = input;
+  const { gate } = aftermathConfig(), { kind, outcome } = input;
   const gateOutcome = gate.outcomeByResult[outcome];
   if (!gateOutcome) return [];
   const effects: Effect[] = [];
-  const ratio = hpLoss.kinds.includes(kind) ? hpLoss.ratio[outcome] : undefined;
-  if (ratio !== undefined) {
-    const hp = (saveData as any)?.角色?.属性?.气血, current = Number(hp?.当前), max = Number(hp?.上限);
-    if (Number.isFinite(current) && Number.isFinite(max) && current > hpLoss.keepHp && max > 0) {
-      effects.push({ key: '角色.属性.气血.当前', action: 'add', value: -Math.min(current - hpLoss.keepHp, Math.max(hpLoss.minLoss, Math.round(max * ratio))) });
-    }
-  }
+  const hit = combatAftermathHp(saveData, kind, outcome);
+  if (hit && hit.to !== hit.from) effects.push({ key: '角色.属性.气血.当前', action: 'add', value: hit.to - hit.from });
   effects.push({
     key: '系统.扩展.行动门控.recent',
     action: 'push',

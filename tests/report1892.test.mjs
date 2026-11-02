@@ -111,3 +111,59 @@ test('1 s01_06：旧档读档补短语与场外合同，只补缺失、幂等', 
   rt(done).completedEventIds.push(S0106);
   assert.equal(L.backfillMissingOffscreenResolution(rt(done)), 0, '已结算的拍不补');
 });
+
+// ───────────── 2) P1 南荒战斗气血 6→1 后交锋卡片消失、不判负，后续 7 回合停在 1 ─────────────
+// 根因：场面里那一下确实把气血打到 0、当拍判负（卡片消失＝随机战按输局收场），输局剧情继续时按 combat.woundRules.hp.afterLossContinueHp 拉回 1；
+// 之后「与来敌交手」打的是模型写出来的拦路人（没有待开战），走 freeAction combat 判定，失手扣血按 freeAction.aftermath.hpLoss.keepHp 保底——
+// 气血 1 时一点不扣、也不判负，于是一直停在 1。用户定的规则是 keepHp 只给中毒等状态掉血，战斗伤害不保底、打到 0 当拍判负。
+// 修：freeAction combat 失手与场面同一口径——不保底，打到 ≤ combatDownedAt 即当拍判负（事实行写明这一战败了），拉回 afterLossContinueHp。
+const host = await load('modules/sceneModule/host/controller.ts');
+const ext = await load('modules/sceneModule/host/ext.ts');
+const { GAME_NUMBERS: N } = await load('modules/sceneModule/numbers.ts');
+const E = await load('modules/scenarioMods/randomEncounter.ts');
+async function randomBattle(hp = 6) {
+  globalThis.location = { search: '?sceneModule=on', hostname: 'localhost', href: 'http://localhost/?sceneModule=on' };
+  let save = quiet(() => R.advanceScenarioRuntime(init.applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), init.buildStrictScenarioInitialization(json('src/modules/scenarioMods/builtins/data/lcq.stage_05b.json')))).saveData);
+  const config = structuredClone(N.encounter), loc = 'lcq.location.guiwang_inn';
+  config.tiers.hostile = { chance: 1, cooldownTurns: 0 };
+  config.regions.nanhuang.zones = [{ key: loc, tier: 'hostile' }];
+  config.regions.nanhuang.pool = [{ enemyId: 'lcq.enemy.guiwang_warrior', level: 3, zones: [loc], weight: 1, count: [1, 1] }];
+  config.regions.nanhuang.skipDuringEventIds = [];
+  for (let i = 0; i < 4; i++) { rt(save).worldTurn++; E.tickRandomEncounter(save, { narrated: true, config }); }
+  assert.ok(E.pendingRandomBattle(save));
+  save.角色.属性.气血 = { 当前: hp, 上限: 100 };
+  const snapshots = [];
+  const h = { get save() { return save; }, snapshots, deps: { persist: async next => { save = structuredClone(next); snapshots.push(structuredClone(next)); } } };
+  await quiet(() => host.submitSceneInput(h.save, '与来敌交手', h.deps));
+  ext.activeScene(h.save).state.forced = { action: Array(200).fill(1), defense: Array(400).fill(1) };
+  return h;
+}
+
+test('2 随机战：气血 6 挨一下当拍打到 0 判负、卡片收场，输局继续拉回 afterLossContinueHp（不是 keepHp 保底）', async () => {
+  const h = await randomBattle();
+  await quiet(() => host.confirmSceneAction(h.save, h.deps));
+  assert.equal(ext.readExt(h.save).history.at(-1)?.outcome, 'lose');
+  assert.equal(ext.activeScene(h.save), null, '输局收场，交锋卡片消失');
+  assert.ok(h.snapshots.some(s => s.角色.属性.气血.当前 === 0), '当拍先打到 0');
+  assert.equal(h.save.角色.属性.气血.当前, N.combat.woundRules.hp.afterLossContinueHp);
+  assert.ok(h.save.系统.历史.叙事.slice(-3).some(e => String(e.content).includes('这一战败了')), '正文写明判负');
+});
+
+test('2 自由行动交手失手：战斗伤害不保底，气血 6／1 都当拍判负、拉回 afterLossContinueHp（复现：原先停在 1 不判负）', async () => {
+  const F = await import('./freeActionFixture.mjs');
+  const back = F.mods.numbers.GAME_NUMBERS.combat.woundRules.hp.afterLossContinueHp;
+  assert.equal('keepHp' in F.mods.config.freeActionConfig().aftermath.hpLoss, false);
+  for (const hp of [6, 1]) {
+    const save = F.makeSave({ present: [F.WANG_ZHE], favor: { [F.WANG_ZHE]: 55 } });
+    save.角色.属性.气血 = { 当前: hp, 上限: 100 };
+    const { result } = quiet(() => F.runJudged(save, F.ticket('physical', 'attack', F.WANG_ZHE), 'critical_failure'));
+    assert.equal(result.ok, true, `气血 ${hp}`);
+    assert.equal(save.角色.属性.气血.当前, back, `气血 ${hp}`);
+    assert.ok(result.facts.some(f => f.includes('这一战败了')), `气血 ${hp}：当拍判负`);
+  }
+  const save = F.makeSave({ present: [F.WANG_ZHE], favor: { [F.WANG_ZHE]: 55 } });
+  save.角色.属性.气血 = { 当前: 50, 上限: 100 };
+  const { result } = quiet(() => F.runJudged(save, F.ticket('physical', 'attack', F.WANG_ZHE), 'failure'));
+  assert.equal(save.角色.属性.气血.当前, 35, '没打到 0 照常扣、不判负');
+  assert.ok(!result.facts.some(f => f.includes('这一战败了')));
+});

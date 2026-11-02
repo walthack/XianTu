@@ -1454,7 +1454,7 @@
           "critical_failure": 0.4
         },
         "minLoss": 1,
-        "keepHp": 1
+        "hpRuleNote": "REPORT-8091-1892cfb6 P1（用户定：keepHp 只给中毒等状态掉血，战斗伤害不保底）：combat 类失手扣血不留底，打到 ≤ combat.woundRules.hp.combatDownedAt 即当拍判负，人倒下后剧情继续、气血拉回 combat.woundRules.hp.afterLossContinueHp（与随机战输局同一口径）。原 keepHp 保底已删。"
       },
       "gate": {
         "ttlTurns": 3,

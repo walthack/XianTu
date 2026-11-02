@@ -292,9 +292,9 @@ test('自损气血：不论结果档都先扣（失败伤害由结算在自损�
       const hp = save.角色.属性.气血;
       const { hpMid, result } = stepped(save, outcome);
       assert.equal(result.ok, true, outcome);
-      // 旧引擎不再对 free_action 回执扣失败伤害（hpMid 就是满血）；结算先自损、再按配置扣失败伤害（最低留 keepHp 点）。
+      // 旧引擎不再对 free_action 回执扣失败伤害（hpMid 就是满血）；结算先自损、再按配置扣失败伤害（战斗伤害不保底，REPORT-8091-1892cfb6）。
       const afterSelf = hpMid - Math.round(hp.上限 * ratio);
-      const failLoss = hpLoss.ratio[outcome] === undefined ? 0 : Math.min(afterSelf - hpLoss.keepHp, Math.max(hpLoss.minLoss, Math.round(hp.上限 * hpLoss.ratio[outcome])));
+      const failLoss = hpLoss.ratio[outcome] === undefined ? 0 : Math.min(afterSelf, Math.max(hpLoss.minLoss, Math.round(hp.上限 * hpLoss.ratio[outcome])));
       assert.equal(hp.当前, afterSelf - failLoss, outcome);
       assert.equal(result.facts.includes(mods.facts.factText('drain_qi', 'self_cost', { player: save.角色.身份.名字 || '你', target: nameOf(save) })), true, `${outcome} 事实`);
     }

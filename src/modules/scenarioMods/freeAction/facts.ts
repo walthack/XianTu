@@ -28,6 +28,7 @@ export function gateText(reason: string, slots: FactSlots, variant?: string): st
 export const affinityNoteText = (kind: 'worn' | 'capped', slots: FactSlots): string => fillSlots(packText(`free.fact.affinity.${kind}`), slots);
 /** 判定失手扣了玩家气血：告诉叙事数额（本地已扣，叙事不得再写数值）。 */
 export const aftermathHpText = (slots: FactSlots): string => fillSlots(packText('free.fact.aftermath.hp'), slots);
+export const aftermathDownedText = (slots: FactSlots): string => fillSlots(packText('free.fact.aftermath.downed'), slots);
 export const protectedText = (slots: FactSlots): string => fillSlots(packText('free.fact.protected'), slots);
 export const whyNowText = (slots: FactSlots): string => fillSlots(packText('free.why'), slots);
 /** 无对象的票（自修、场面）的理解说明：没有 {target}。 */
@@ -125,7 +126,7 @@ export function validateFreeActionTexts(texts: Record<string, string> = CONTENT_
   }
   for (const reason of GATE_REASONS) need(`free.fact.gate.${reason}`, 'gate');
   need('free.fact.protected', 'protected');
-  for (const id of ['judge.aftermath.reason', 'judge.aftermath.effect', 'free.fact.aftermath.hp', 'free.skill.label', 'free.talent.label', 'free.skill.none']) need(id, 'judgement');
+  for (const id of ['judge.aftermath.reason', 'judge.aftermath.effect', 'free.fact.aftermath.hp', 'free.fact.aftermath.downed', 'free.skill.label', 'free.talent.label', 'free.skill.none']) need(id, 'judgement');
   for (const outcome of Object.keys(aftermathConfig().gate.outcomeByResult)) need(`judge.aftermath.severity.${outcome}`, 'aftermath');
   for (const kind of ['worn', 'capped']) need(`free.fact.affinity.${kind}`, 'affinity');
   need('free.why', 'why');

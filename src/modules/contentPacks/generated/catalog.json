@@ -1,5 +1,5 @@
 {
-  "version": "3e4ae3fc3da86084",
+  "version": "598673b521c775fe",
   "contracts": [
     {
       "meta": {
@@ -17241,6 +17241,7 @@
     "judge.aftermath.reason": "{severity}（本地判定：{outcome}）",
     "judge.aftermath.effect": "重复同一路线须承接既有余波，改做准备、绕行或换目标可降低风险。",
     "free.fact.aftermath.hp": "{player}在这次失手中受了伤，气血减少{amount}。",
+    "free.fact.aftermath.downed": "{player}这一下伤得太重，气血被打到见底，倒在地上——这一战败了；勉强撑起身时，气血只剩{amount}。",
     "free.buff.dual_cultivation.desc": "本地双修疗伤结算获得：修炼速度+10%，伤势恢复速度+20%，双修效果+30%。",
     "free.fact.dual_cultivate.unsynced": "{player}与{target}合练功法，真气始终不得相合，这一次没有收获。",
     "free.fact.dual_cultivate.shallow": "{player}与{target}合练功法，真气勉强相通，只得了浅浅的益处。",

@@ -326,7 +326,7 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
   if (!Array.isArray(repeat?.factors) || !repeat.factors.length || repeat.factors.some(factor => !(Number.isFinite(factor) && factor >= 0 && factor <= 1))) errors.push('affinity.repeat.factors 须为非空的 0~1 数组');
   if (cfg.affinity.perBeatCap !== GAME_NUMBERS.affinity.limits.perTurn) errors.push('affinity.perBeatCap 应与 affinity.limits.perTurn 同值');
   const hpLoss = cfg.aftermath?.hpLoss, gate = cfg.aftermath?.gate;
-  if (!hpLoss || !(hpLoss.minLoss >= 0) || !(hpLoss.keepHp >= 0) || !Object.values(hpLoss.ratio || {}).every(ratio => ratio >= 0 && ratio <= 1)) errors.push('aftermath.hpLoss 配置无效');
+  if (!hpLoss || !(hpLoss.minLoss >= 0) || !Object.values(hpLoss.ratio || {}).every(ratio => ratio >= 0 && ratio <= 1)) errors.push('aftermath.hpLoss 配置无效');
   if (!gate || !(gate.ttlTurns > 0) || !(gate.labelChars > 0) || !gate.defaultScope || !Object.keys(gate.outcomeByResult || {}).length) errors.push('aftermath.gate 配置无效');
   const match = cfg.skillMatch;
   if (!match || !Number.isFinite(resolveNumberRef(match.skillBonus)) || !Number.isFinite(match.talentBonus) || !(match.maxSkill >= 0) || !(match.maxTalent >= 0) || !Object.values(match.tags || {}).every(words => Array.isArray(words) && words.length && words.every(word => typeof word === 'string' && word)) || !Array.isArray(match.unavailableMarks)) errors.push('skillMatch 配置无效');

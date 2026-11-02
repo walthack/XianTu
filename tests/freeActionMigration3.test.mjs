@@ -92,7 +92,8 @@ test('2 路由：修炼句识别成功（含空票）skip=true；非试玩存档
 
 test('3 配置：余波数值、范围、条数全在 game-numbers.freeAction.aftermath；引擎与结算代码里没有写死', async () => {
   const { hpLoss, gate } = cfg().aftermath;
-  assert.deepEqual(hpLoss, { kinds: ['combat'], ratio: { partial: 0.05, failure: 0.15, critical_failure: 0.4 }, minLoss: 1, keepHp: 1 });
+  assert.deepEqual(hpLoss, { kinds: ['combat'], ratio: { partial: 0.05, failure: 0.15, critical_failure: 0.4 }, minLoss: 1, hpRuleNote: hpLoss.hpRuleNote });
+  assert.equal('keepHp' in hpLoss, false, '战斗伤害不保底（REPORT-8091-1892cfb6）：keepHp 只给状态掉血，不在这里');
   assert.deepEqual(gate, {
     ttlTurns: 3, labelChars: 48, defaultScope: 'scene',
     scopeByKind: { combat: 'combat', escape: 'combat', social: 'social', scheme: 'social' },
@@ -132,7 +133,7 @@ test('3 physical 失败：结算扣一次气血、写一次余波；旧引擎对
   }
 });
 
-test('3 成功档没有余波；最低留 keepHp 点（气血 2 → 1，气血 1 不再扣但仍写余波）；别的 kind 不扣血', () => {
+test('3 成功档没有余波；战斗伤害不保底：打到 0 当拍判负，拉回 afterLossContinueHp（气血 2 → 判负 → 1，气血 1 再失手照样判负）；别的 kind 不扣血', () => {
   const ok = hpSave();
   runJudged(ok, ticket('physical', 'attack', WANG_ZHE), 'success');
   assert.deepEqual([ok.角色.属性.气血.当前, gateRows(ok).length], [100, 0]);
@@ -141,12 +142,16 @@ test('3 成功档没有余波；最低留 keepHp 点（气血 2 → 1，气血 1
     runJudged(save, ticket('physical', 'attack', WANG_ZHE), outcome);
     assert.deepEqual([save.角色.属性.气血.当前, gateRows(save).length], [100, 0], outcome);
   }
+  const back = N().combat.woundRules.hp.afterLossContinueHp;
   const low = hpSave({ hp: 2 });
-  runJudged(low, ticket('physical', 'attack', WANG_ZHE), 'critical_failure');
-  assert.equal(low.角色.属性.气血.当前, cfg().aftermath.hpLoss.keepHp);
+  const lowSettled = runJudged(low, ticket('physical', 'attack', WANG_ZHE), 'critical_failure');
+  assert.equal(low.角色.属性.气血.当前, back);
+  assert.ok(lowSettled.result.facts.some(f => f.includes('这一战败了')), '打到 0 当拍判负');
   const one = hpSave({ hp: 1 });
-  runJudged(one, ticket('physical', 'attack', WANG_ZHE), 'failure');
-  assert.deepEqual([one.角色.属性.气血.当前, gateRows(one).length], [1, 1]);
+  const oneSettled = runJudged(one, ticket('physical', 'attack', WANG_ZHE), 'failure');
+  assert.deepEqual([one.角色.属性.气血.当前, gateRows(one).length], [back, 1]);
+  assert.ok(oneSettled.result.facts.some(f => f.includes('这一战败了')), '气血 1 不再被保底吃掉伤害：照样判负');
+  assert.ok(!oneSettled.result.facts.some(f => f.includes('气血减少0')));
   // verbal（social / scheme）：只写 social 余波，不扣血
   for (const variant of ['taunt', 'deceive']) {
     const save = hpSave();
@@ -161,9 +166,9 @@ test('3 余波的比例 / 范围 / 条数 / 留血都读配置：改配置，结
     runJudged(save, ticket(cls, variant, WANG_ZHE), outcome);
     return save;
   };
-  const restore = { freeAction: { aftermath: { hpLoss: { ratio: { failure: 0.15 }, keepHp: 1 }, gate: { ttlTurns: 3, scopeByKind: { combat: 'combat' }, defaultScope: 'scene' } } } };
+  const restore = { freeAction: { aftermath: { hpLoss: { ratio: { failure: 0.15 } }, gate: { ttlTurns: 3, scopeByKind: { combat: 'combat' }, defaultScope: 'scene' } } } };
   patch({ freeAction: { aftermath: { hpLoss: { ratio: { failure: 0.5 } } } } }, () => assert.equal(run('physical', 'attack', 'failure').角色.属性.气血.当前, 50), restore);
-  patch({ freeAction: { aftermath: { hpLoss: { keepHp: 90 } } } }, () => assert.equal(run('physical', 'attack', 'failure').角色.属性.气血.当前, 90), restore);
+  patch({ freeAction: { aftermath: { hpLoss: { ratio: { failure: 1 } } } } }, () => assert.equal(run('physical', 'attack', 'failure').角色.属性.气血.当前, N().combat.woundRules.hp.afterLossContinueHp), restore);
   patch({ freeAction: { aftermath: { gate: { ttlTurns: 7 } } } }, () => assert.equal(gateRows(run('physical', 'attack', 'failure'))[0].ttlTurns, 7), restore);
   patch({ freeAction: { aftermath: { gate: { scopeByKind: { combat: 'social' } } } } }, () => assert.equal(gateRows(run('physical', 'attack', 'failure'))[0].scope, 'social'), restore);
   patch({ freeAction: { aftermath: { hpLoss: { kinds: [] } } } }, () => assert.equal(run('physical', 'attack', 'failure').角色.属性.气血.当前, 100), { freeAction: { aftermath: { hpLoss: { kinds: ['combat'] } } } });

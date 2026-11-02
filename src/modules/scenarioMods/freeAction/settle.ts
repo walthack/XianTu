@@ -23,8 +23,8 @@ import { applyItemOnUse, tagDowngradeOf } from './itemUse';
 import { afterItemFed } from './maigu';
 import { checkGates, drainPlan, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
 import { freeActionConfig, intimacyConfig, selfBuffOf, variantSpecOf, type VariantSpec } from './config';
-import { affinityNoteText, aftermathHpText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
-import { failureAftermathEffects, selfBuffEffect } from './outcomeEffects';
+import { affinityNoteText, aftermathDownedText, aftermathHpText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
+import { combatAftermathHp, failureAftermathEffects, selfBuffEffect } from './outcomeEffects';
 import { pushLightMemory, pushMajorEpisode } from './memory';
 import { lethalForbidden, protectedCapFor } from './protect';
 import { noteDrain } from './playerTextDebug';
@@ -321,10 +321,12 @@ export function settleFreeAction(save: SaveData, ticket: FreeActionTicket, resol
  */
 function writeAftermath(save: SaveData, resolution: JudgementResolution | undefined, slots: FactSlots): string[] {
   if (!resolution?.outcome) return [];
+  const hit = combatAftermathHp(save, resolution.kind, resolution.outcome);
   const effects = failureAftermathEffects(save, { kind: resolution.kind, actionText: resolution.actionText, target: resolution.target, outcome: resolution.outcome, turn: resolution.resolvedAtTurn });
   applyDeterministicEffects(save, effects);
-  const hp = effects.find(effect => effect.key === '角色.属性.气血.当前');
-  return hp ? [aftermathHpText({ ...slots, amount: String(Math.abs(Number(hp.value))) })] : [];
+  if (!hit || (!hit.downed && !hit.lost)) return [];
+  // 打到倒下：当拍判负的事实行（气血先到 0 再拉回 afterLossContinueHp，所以写拉回后的值，不写“减少 0”）。
+  return [hit.downed ? aftermathDownedText({ ...slots, amount: String(hit.to) }) : aftermathHpText({ ...slots, amount: String(hit.lost) })];
 }
 
 /**
