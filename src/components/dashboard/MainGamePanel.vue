@@ -1046,6 +1046,8 @@ const branchDecisionReady = computed(() => branchDecisionAllowsSend(
 const turnLedger = reactive<TurnLedger>({ inFlight: 0, seq: 0 });
 const turnFlagsOf = (inFlight: boolean) => ({
   processing: isAIProcessing.value || inFlight, ended: !!scenarioGameOver.value || playtestFinished.value, choiceOnly: branchDecisionInputLocked.value,
+  // 场面行动已出预览/终局选择待确认、或行动判定待掷骰：同一拍还差「确认并掷骰」，这次发送不算一拍（REPORT-8091-f9737e0d ⑥）。
+  awaitingConfirm: !!(currentScene.value?.pending || currentScene.value?.choice || pendingJudgement.value),
 });
 const turnState = computed(() => turnStateOf(turnFlagsOf(turnLedger.inFlight > 0)));
 const turnCompleteSeq = computed(() => turnLedger.seq);

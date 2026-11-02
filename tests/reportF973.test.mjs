@@ -215,3 +215,58 @@ test('P2-4 留仙坪→临安：弹窗 60 日＝实扣 60×1440 分钟＝游戏�
   assert.equal(M.mapTravelPreview(tangAtLiuxianping(), CHANGAN).arrival, undefined);
   assert.match(read('src/components/dashboard/GameMapPanel.vue'), /selectedTravelPreview\.arrival/);
 });
+
+// ───────────── ⑥ 南荒战斗：气血 30 后不再掉？／turn-complete 每拍 2 次 ─────────────
+// 气血：查无引擎停伤。随机遇敌模板敌方每拍都出手（敌方 vit 轨三格、两次命中即倒），没挡住按 woundRules.default 扣 10%/重击 20%，
+// 打到 combatDownedAt（0）当拍判负、输局拉回 afterLossContinueHp；场外自由行动判定路径失手扣血到 1 为止。
+// 报告的 30→30→30 与防御骰连续挡住（DC 8–10、防御 -3/-4，需 14+）或判定成功档不扣血吻合；105 场种子随机战真跑没有一拍敌方不出手。数值不动。
+const host = await load('modules/sceneModule/host/controller.ts');
+const sceneExt = await load('modules/sceneModule/host/ext.ts');
+const RE = await load('modules/scenarioMods/randomEncounter.ts');
+const TS = await load('composables/turnSignal.ts');
+test('⑥ 随机遇敌：气血 30 以下照常掉（每次命中按配置比例），打到 0 当拍判负、按配置拉回', async () => {
+  globalThis.location = { search: '?sceneModule=on', hostname: 'localhost', href: 'http://localhost/?sceneModule=on' };
+  const s = quiet(() => R.advanceScenarioRuntime(init.applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(),
+    init.buildStrictScenarioInitialization(json('src/modules/scenarioMods/builtins/data/lcq.stage_05b.json')))).saveData);
+  s.元数据.创建时间 = '2026-10-28T06:00:00.000Z';
+  const INN = 'lcq.location.guiwang_inn', c = structuredClone(N.encounter);
+  c.tiers.hostile = { chance: 1, cooldownTurns: 0 }; c.regions.nanhuang.zones = [{ key: INN, tier: 'hostile' }];
+  c.regions.nanhuang.pool = [{ enemyId: 'lcq.enemy.wild_boar', level: 3, zones: [INN], weight: 1, count: [1, 1] }]; c.regions.nanhuang.skipDuringEventIds = [];
+  quiet(() => { RE.tickRandomEncounter(s, { narrated: true, config: c }); for (let i = 0; i < 3; i++) { rt(s).worldTurn++; RE.tickRandomEncounter(s, { narrated: true, config: c }); } });
+  assert.ok(RE.pendingRandomBattle(s));
+  s.角色.属性.气血 = { 当前: 30, 上限: 100 };
+  let cur = s; const deps = { persist: async x => { cur = structuredClone(x); } };
+  const hp = [];
+  await host.submitSceneInput(cur, '与来敌交手', deps);
+  for (let n = 0; n < 6 && sceneExt.activeScene(cur); n++) {
+    if (!sceneExt.activeScene(cur).pending) await host.submitSceneInput(cur, '与来敌交手', deps);
+    sceneExt.activeScene(cur).state.forced = { action: Array(50).fill(4), defense: Array(100).fill(2) }; // 主角出手落空、防御都没挡住
+    await host.confirmSceneAction(cur, deps);
+    hp.push(cur.角色.属性.气血.当前);
+  }
+  const ratio = N.combat.woundRules.profiles.default.tiers.success.hpLossRatio;
+  assert.deepEqual(hp.slice(0, 2), [30 - 100 * ratio, 30 - 200 * ratio], '30 以下每拍照常掉');
+  assert.equal(sceneExt.activeScene(cur), null, '打到 0 判负收场');
+  assert.equal(sceneExt.readExt(cur).history.at(-1).outcome, 'lose');
+  assert.equal(cur.角色.属性.气血.当前, N.combat.woundRules.hp.afterLossContinueHp);
+});
+
+// turn-complete：场面一拍＝「发送出预览」＋「确认并掷骰」，场外行动判定同样是「发送出判定」＋「确认并掷骰」；以前两段各发一次（每拍 2 次）。
+// 现在停在待确认时 data-turn-state＝confirm、不 +1 不派发，掷骰确认结算后才发这一拍唯一一次。
+test('⑥ turn-complete：待掷骰确认（场面预览/终局选择/行动判定）不算一拍，确认结算后只发一次', () => {
+  const target = new EventTarget(), got = [];
+  target.addEventListener(TS.TURN_COMPLETE_EVENT, e => got.push(e.detail));
+  const ledger = { inFlight: 0, seq: 0 };
+  let awaiting = true;
+  const flags = processing => ({ processing, ended: false, choiceOnly: false, awaitingConfirm: awaiting });
+  TS.beginTurn(ledger);
+  assert.equal(TS.completeTurn(ledger, flags, target), null, '发送只出了预览');
+  assert.equal(TS.turnStateOf(flags(false)), 'confirm');
+  assert.deepEqual([ledger.seq, got.length], [0, 0]);
+  awaiting = false; TS.beginTurn(ledger);
+  assert.deepEqual(TS.completeTurn(ledger, flags, target), { seq: 1, state: 'ready' });
+  assert.deepEqual(got, [{ seq: 1, state: 'ready' }]);
+  assert.equal(TS.emitTurnComplete(target, { seq: 9, state: 'confirm' }), false);
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  assert.match(panel, /awaitingConfirm: !!\(currentScene\.value\?\.pending \|\| currentScene\.value\?\.choice \|\| pendingJudgement\.value\)/);
+});
