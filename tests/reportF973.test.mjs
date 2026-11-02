@@ -194,3 +194,24 @@ test('P2-3 地图所有文字标签都过显示名；人物标记换不出名字
   assert.match(panel, /npcName: npcLabel,/);
   assert.doesNotMatch(panel, /name: npcName,/);
 });
+
+// ───────────── P2-4 临安「约60日」与实扣天数 ─────────────
+// 核对：实扣就是 60 日（86400 分钟）。本世界历每月 30 日（story.actionTime.calendar），224/3/28→5/28 正好 60 日；报告的 61 天是按公历（3 月 31 日）数的。
+// 天数取整：跨国按 rawDays 表直接取整数天、不经坐标换算，不存在多扣一天。为免再按公历误读，弹窗另写与结算同一换算的预计抵达日。
+const LINAN = 'liuchao.location.lin_an';
+test('P2-4 留仙坪→临安：弹窗 60 日＝实扣 60×1440 分钟＝游戏历 3/28→5/28，弹窗抵达日与落账后时间一致', () => {
+  const s = tangAtLiuxianping();
+  assert.deepEqual([s.元数据.时间.年, s.元数据.时间.月, s.元数据.时间.日], [224, 3, 28]);
+  const preview = M.mapTravelPreview(s, LINAN);
+  assert.equal(preview.days, 60);
+  assert.equal(preview.label, '约60日路程');
+  assert.equal(N.story.actionTime.calendar.daysPerMonth, 30);
+  assert.equal(preview.arrival, travelUi.arrivalDateLine.replace('{year}', '224').replace('{month}', '5').replace('{day}', '28').replace('{daysPerMonth}', '30'));
+  const before = minutesOf(s.元数据.时间);
+  assert.equal(M.settleMapTravel(s, M.selectMapTravel(s, LINAN)), true);
+  assert.equal(minutesOf(s.元数据.时间) - before, 60 * 1440);
+  assert.deepEqual([s.元数据.时间.年, s.元数据.时间.月, s.元数据.时间.日], [224, 5, 28]);
+  // 国内片刻不显示抵达日。
+  assert.equal(M.mapTravelPreview(tangAtLiuxianping(), CHANGAN).arrival, undefined);
+  assert.match(read('src/components/dashboard/GameMapPanel.vue'), /selectedTravelPreview\.arrival/);
+});

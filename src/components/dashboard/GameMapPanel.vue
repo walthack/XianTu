@@ -168,6 +168,7 @@
           <strong>控制势力：</strong>{{ selectedLocation.controlled_by }}
         </div>
         <p v-if="selectedTravelPreview">{{ selectedTravelPreview.label }}</p>
+        <p v-if="selectedTravelPreview?.arrival">{{ selectedTravelPreview.arrival }}</p>
         <p v-if="travelConfirmation">确认前往此地？</p>
         <button v-if="travelConfirmation" class="enter-region-btn" @click="travelConfirmation = null">取消</button>
         <button class="enter-region-btn" :disabled="!!selectedTravelRestriction || mapTravelBusy || mapTravelUi.isAIProcessing" @click="travelToSelectedLocation">{{ travelConfirmation ? '确认前往' : '前往此地' }}</button>

@@ -13,6 +13,7 @@ import { SEVERAL_DAYS_PLACEHOLDER } from '../openWorldSlice';
 import { settleTime, actionTimeConfig } from '../actionTime';
 import { logEvent } from '../../diagnostics/log';
 import { domesticTravelDays } from './routeDays';
+import { calendarConfig, gameTimeFromMinutes, gameTimeMinutes } from '@/utils/time';
 /** questRoute：剧情路程特例（questRouteDays 名单节点），国内也按两地路程天数结算。 */
 export interface MapTravelRoute { id: string; fromId: string; toId: string; dayCost: number | 'several'; unlockWhen?: string[]; questRoute?: boolean }
 /** 国内地图移动按原方式计时（片刻，story.actionTime.minutes.moment）；只有跨国才按路程天数（REPORT-8091-4c8245a5 P1）。 */
@@ -273,7 +274,7 @@ export function mapArrivalViolation(save: SaveData, text: string): boolean {
 }
 
 /** 无副作用的出发预览；确认时必须重新核对，避免弹窗打开后路线或存档改变。 */
-export function mapTravelPreview(save: SaveData, toId: string): { key: string; label: string; days: number | null; description?: string } | undefined {
+export function mapTravelPreview(save: SaveData, toId: string): { key: string; label: string; days: number | null; description?: string; arrival?: string } | undefined {
   if (mapTravelRestriction(save, toId)) return undefined;
   const fromId = currentLocation(save).canonicalLocationId;
   if (!fromId) return undefined;
@@ -284,7 +285,19 @@ export function mapTravelPreview(save: SaveData, toId: string): { key: string; l
   if (isDomesticMapRoute(route)) return { key: `${fromId}:${route.toId}:${route.id}:moment`, label: travelUi.domesticMapLabel, days: null };
   const days = route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost;
   const label = route.questRoute ? travelUi.questRouteMapLabel.replace(/\{days\}/g, String(days)) : `约${days}日路程`;
-  return { key: `${fromId}:${route.toId}:${route.id}:${days}`, label, days };
+  const arrival = route.dayCost === 'several' ? undefined : mapArrivalLine(save, mapRouteMinutes(route));
+  return { key: `${fromId}:${route.toId}:${route.id}:${days}`, label, days, ...(arrival ? { arrival } : {}) };
+}
+/**
+ * 按天路线的预计抵达日（REPORT-8091-f9737e0d P2-4：临安弹窗「约60日」，测试按公历数成 61 天）。本世界历每月 30 日（story.actionTime.calendar），
+ * 3/28 起 60 日正好是 5/28；这里用与结算同一换算（utils/time）写出抵达日，弹窗天数与实际扣的天数、日期三者一致。文案在 mod-kit/cross-country-travel-ui.json。
+ */
+function mapArrivalLine(save: SaveData, minutes: number): string | undefined {
+  const now = (save as any)?.元数据?.时间;
+  if (!now || !Number.isFinite(minutes)) return undefined;
+  const at = gameTimeFromMinutes(gameTimeMinutes(now) + minutes);
+  return travelUi.arrivalDateLine.replace(/\{daysPerMonth\}/g, String(calendarConfig().daysPerMonth))
+    .replace(/\{year\}/g, String(at.年)).replace(/\{month\}/g, String(at.月)).replace(/\{day\}/g, String(at.日));
 }
 /** 国内路线（作者登记的也算）一律片刻；跨国、剧情路程特例按天数。 */
 function isDomesticMapRoute(route: MapTravelRoute): boolean {
