@@ -6,6 +6,7 @@ import { affinityOf } from '../modules/scenarioMods/ledger/affinityIdentity';
 import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
 import type { ActionClass, Degree } from '@/modules/scenarioMods/freeAction/config';
 import { dualBuffConfig, failureAftermathEffects, selfBuffEffect } from '@/modules/scenarioMods/freeAction/outcomeEffects';
+import { writeCombatResult, type CombatResult } from '@/modules/sceneModule/host/combatWriteback';
 
 export interface EventActionJudgementReceipt {
   kind: 'event_action_judgement';
@@ -90,7 +91,8 @@ export interface JudgementResolution extends Omit<JudgementProposal, 'status'> {
   outcome?: JudgementOutcome;
   /** Present only when a development-only test control forced the result. */
   testOverride?: JudgementOutcome;
-  appliedEffects: Array<{ key: string; action: string; value: unknown }>;
+  /** combat：失手扣血那一条带统一战斗结果，落账走 writeCombatResult（设计稿 2.4）。 */
+  appliedEffects: Array<{ key: string; action: string; value: unknown; combat?: CombatResult }>;
   /** 判定之后、结算那一步才落账的效果（如休整解伤），只用于回执展示；不进权威快照，不再执行。 */
   settledEffects?: Array<{ key: string; action: string; value: unknown }>;
   resolvedAtTurn: number;
@@ -273,7 +275,7 @@ function normalizeResolution(raw: unknown): JudgementResolution | null {
   ) return null;
   const effectsOf = (list: unknown) => Array.isArray(list)
     ? list.filter(effect => effect && typeof effect === 'object' && normalizeText((effect as any).key) && normalizeText((effect as any).action))
-        .map(effect => ({ key: normalizeText((effect as any).key), action: normalizeText((effect as any).action), value: (effect as any).value }))
+        .map(effect => ({ key: normalizeText((effect as any).key), action: normalizeText((effect as any).action), value: (effect as any).value, ...((effect as any).combat ? { combat: clone((effect as any).combat) as CombatResult } : {}) }))
     : [];
   const appliedEffects = effectsOf(value.appliedEffects), settledEffects = effectsOf(value.settledEffects);
   return {
@@ -564,7 +566,7 @@ function deterministicOutcomeEffects(saveData: unknown, proposal: JudgementPropo
   if(proposal.kind==='cultivate'){const realm=trainingRealm(saveData,proposal.actionText,outcome);if(realm)effects.push({key:'角色.属性.境界',action:'set',value:realm});}
   effects.push(...spiritCostEffects(saveData, proposal, outcome));
   if (isFreeActionJudgement(proposal)) return effects;
-  effects.push(...failureAftermathEffects(saveData, { kind: proposal.kind, actionText: proposal.actionText, target: proposal.target, outcome, turn: currentTurn }));
+  effects.push(...failureAftermathEffects(saveData, { kind: proposal.kind, actionText: proposal.actionText, target: proposal.target, outcome, turn: currentTurn, sourceId: proposal.id }));
   return effects;
 }
 
@@ -576,6 +578,8 @@ export function applyDeterministicEffects(saveData: unknown, effects: JudgementR
   if (!root.系统.扩展.行动门控) root.系统.扩展.行动门控 = { version: 1, recent: [] };
   if (!Array.isArray(root.系统.扩展.行动门控.recent)) root.系统.扩展.行动门控.recent = [];
   for (const effect of effects) {
+    // 战斗伤害：与场面收场同一写回（扣血不保底、判负、短期记忆、日志），不走下面的通用加减。
+    if (effect.combat) { writeCombatResult(root, effect.combat); continue; }
     if(effect.key==='角色.属性.境界'&&effect.action==='set'&&effect.value&&typeof effect.value==='object'){root.角色 ||= {};root.角色.属性 ||= {};root.角色.属性.境界=clone(effect.value);}
     if (effect.key === '角色.属性.气血.当前' && effect.action === 'add' && typeof effect.value === 'number') {
       root.角色 ??= {}; root.角色.属性 ??= {}; root.角色.属性.气血 ??= {};

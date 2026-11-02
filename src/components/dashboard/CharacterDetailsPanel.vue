@@ -408,10 +408,7 @@
                      </div>
                   </div>
                   <div class="spirit-stones-grid">
-                    <div class="stone-kv"><span class="k">{{ t('下品') }}</span><span class="v">{{ getSpiritStoneCount('下品') }}</span></div>
-                    <div class="stone-kv"><span class="k">{{ t('中品') }}</span><span class="v">{{ getSpiritStoneCount('中品') }}</span></div>
-                    <div class="stone-kv"><span class="k">{{ t('上品') }}</span><span class="v">{{ getSpiritStoneCount('上品') }}</span></div>
-                    <div class="stone-kv"><span class="k">{{ t('极品') }}</span><span class="v">{{ getSpiritStoneCount('极品') }}</span></div>
+                    <div v-for="(asset, id) in inventory?.货币 || {}" :key="id" class="stone-kv"><span class="k">{{ asset.名称 }}</span><span class="v">{{ asset.数量 }}</span></div>
                   </div>
                 </section>
 

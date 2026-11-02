@@ -1178,7 +1178,7 @@ const fetchModelsForEditing = async () => {
     const models = await aiService.fetchModelsForConfig({
       provider: editingAPI.value.provider as APIProvider,
       url: editingAPI.value.url,
-      apiKey: editingAPI.value.apiKey,
+      apiKey: editingAPI.value.apiKey!,
       model: editingAPI.value.model || 'gpt-4o',
       temperature: editingAPI.value.temperature || 0.7,
       maxTokens: editingAPI.value.maxTokens || 16000

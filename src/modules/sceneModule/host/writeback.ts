@@ -1,3 +1,4 @@
+import { combatResult, writeCombatResult, type CombatResult } from './combatWriteback';
 import { GAME_NUMBERS } from '../numbers';
 import {statusNamePattern} from '../statuses';
 // 收束时把场面结果写回游戏现有载体：主角状态 → 角色.效果；同伴 / NPC / 群体状态 → sceneLedger.statusRecords（结构化，兼容 injury 文本）；
@@ -60,11 +61,11 @@ export function applySceneHpLoss(save: SaveData, contract: Contract, state: Scen
   const next=Math.max(0,current-Math.round(max*ratio));
   if(next<=downAt)(state.hpDowned ||= {})[player.id]=true;
   if(current<=0)return 0;
-  hp.当前=next;
+  writeCombatResult(save,combatResult({source:'scene',outcome:next<=downAt?'lose':'win',hpFrom:current,hpTo:next,downed:next<=downAt,memoryLine:'',sourceId:contract.meta.id}),{record:false});
   return current-next;
 }
 
-export function applyWriteBack(save: SaveData, contract: Contract, state: SceneState, writeBack: WriteBack): { notes: string[] } {
+export function applyWriteBack(save: SaveData, contract: Contract, state: SceneState, writeBack: WriteBack): { notes: string[]; injuries: CombatResult['injuries'] } {
   // 随机战（总策划定）：不写剧情状态——不进 worldFacts、不转奖励、不写 flags；气血、伤势、倒下恢复照常。
   const random = isRandomContract(contract);
   if(contract.rewardPolicy && writeBack.rewards.some(reward=>typeof reward.itemId==='string' && !contract.rewardPolicy!.itemIds.includes(reward.itemId)))throw new Error('场面奖励未获合同授权，未写回');
@@ -72,11 +73,11 @@ export function applyWriteBack(save: SaveData, contract: Contract, state: SceneS
   const cleared=clearLightWoundsAfterWin(contract,state,writeBack);
   const runtime = runtimeOf(save);
   const notes: string[] = [];
-  if (!runtime) return { notes: ['存档里没有剧本运行时，状态与旗标没有写回'] };
+  if (!runtime) return { notes: ['存档里没有剧本运行时，状态与旗标没有写回'], injuries: [] };
   applySceneHpLoss(save,contract,state);
   // 输了但剧情继续（不进结局）：气血从 0 拉回 afterLossContinueHp，免得界面按“气血耗尽”判死。
   {const hp=(save as any).角色?.属性?.气血,back=woundRulesConfig().hp.afterLossContinueHp;
-   if(writeBack.outcome?.kind==='lose'&&!writeBack.outcome?.endingId&&hp&&Number(hp.当前)<back)hp.当前=back;}
+   if(writeBack.outcome?.kind==='lose'&&!writeBack.outcome?.endingId&&hp&&Number(hp.当前)<back)writeCombatResult(save,combatResult({source:'scene',outcome:'lose',hpFrom:Number(hp.当前),hpTo:back,downed:true,memoryLine:'',sourceId:contract.meta.id}),{record:false});}
   for(const row of cleared)notes.push(`战后休整：${partyName(contract,runtime,row.party)}的${row.label}已处理好。`);
   const ledger = ledgerOf(runtime);
   const sceneSource = contract.meta.id;
@@ -84,8 +85,8 @@ export function applyWriteBack(save: SaveData, contract: Contract, state: SceneS
   if (Array.isArray(effects)) (save as any).角色.效果=effects.filter((e:any)=>!(e.来源===sceneSource && new RegExp(`^(?:${statusNamePattern('incapacitated')})$`).test(e.状态名称 || '')));
   if (!random && writeBack.closingText) ledger.worldFacts = [...new Set([...ledger.worldFacts, renderRefs(writeBack.closingText,runtime)])];
 
-  persistSceneInjuries(save,contract,writeBack.persistent,state);
-  if (random) return { notes };
+  const injuries=persistSceneInjuries(save,contract,writeBack.persistent,state);
+  if (random) return { notes, injuries };
 
   // 承重代价（文字）
   for (const cost of writeBack.costs) {
@@ -113,32 +114,34 @@ export function applyWriteBack(save: SaveData, contract: Contract, state: SceneS
   runtime.flags[`scene.${contract.meta.id}.outcome`] = writeBack.outcome.kind;
   void state;
   void runtimeEntityName;
-  return { notes };
+  return { notes, injuries };
 }
 
-function persistSceneInjuries(save: SaveData, contract: Contract, rows: WriteBack['persistent'], state?:SceneState): void {
+function persistSceneInjuries(save: SaveData, contract: Contract, rows: WriteBack['persistent'], state?:SceneState): CombatResult['injuries'] {
   const runtime=runtimeOf(save),ledger=ledgerOf(runtime),sceneSource=contract.meta.id,player=contract.parties.find(p=>p.player);
   const prior=ledger.statusRecords?.actors[player?.ref || ''] || [];
   if(Array.isArray(save.角色?.效果))save.角色.效果=save.角色.效果.filter((effect:any)=>!prior.some((row:any)=>resolveStatusDef(row.statusId,contract) && effect.来源===row.sourceScene && effect.状态名称===row.label));
   recordSceneInjuries(save,contract,rows,state);
   const now=structuredClone((save as any).元数据?.时间 || {年:1,月:1,日:1,小时:0,分钟:0});
   if(Array.isArray((save as any).角色?.效果)) (save as any).角色.效果=(save as any).角色.效果.filter((effect:any)=>effect.来源!==sceneSource);
+  const injuries: CombatResult['injuries'] = [];
   // 状态
   for (const item of rows) {
     const def = resolveStatusDef(item.status, contract);
     if (item.party === player?.id) {
-      const effects = ((save as any).角色 ||= {}).效果 ||= [];
       const source=item.originScene || sceneSource;
       const record=ledger.statusRecords?.actors[item.ref]?.find((row:any)=>row.sourceScene===source && row.statusId===item.status);
       const remaining=record?.expiresAt===null ? null : record ? Math.max(0,record.expiresAt-sceneTime(save)) : item.minutes;
       const effect = toPlayerStatusEffect({...item,minutes:remaining}, now, def);
       effect.来源 = source;
-      const at = effects.findIndex((e: any) => e?.状态名称 === effect.状态名称 && e?.来源 === effect.来源);
-      if (at >= 0) effects[at] = effect; else effects.push(effect);
+      injuries.push(effect as unknown as Record<string,unknown>);
     }
 
   }
 
+  const hp=Number((save as any).角色?.属性?.气血?.当前);
+  writeCombatResult(save,combatResult({source:'scene',outcome:'win',hpFrom:hp,hpTo:hp,downed:false,injuries,memoryLine:'',sourceId:contract.meta.id}),{record:false});
+  return injuries;
 }
 
 /** Publish only already-settled injuries during a beat, never rewards, flags or event completion. */

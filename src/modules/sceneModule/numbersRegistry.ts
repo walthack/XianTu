@@ -202,6 +202,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'combat.preBattleSave.slotName', kind: 'string', required: true, section: 'combat' },
   { path: 'combat.preBattleSave.workingSlotName', kind: 'string', required: true, section: 'combat' },
   { path: 'combat.narrationBudget.totalMs', kind: 'int', required: true, min: 0, section: 'combat' },
+  { path: 'combat.sceneClose.fatalEventIds', kind: 'array', required: true, section: 'combat' },
   { path: 'combat.sceneClose.loseHeadline', kind: 'string', required: true, section: 'combat' },
   { path: 'combat.heal.baseDifficulty', kind: 'number', required: true, section: 'combat' },
   { path: 'combat.heal.byTier', kind: 'object', required: true, section: 'combat' },
@@ -303,6 +304,8 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
   }
 
   // 交叉：判档线须为不重复的国家线 id；失败是否结束游戏须逐线配置，键正好是判档线，值为 bool
+  const fatalEvents = atPath(tree, 'combat.sceneClose.fatalEventIds');
+  if (Array.isArray(fatalEvents) && (fatalEvents.some(id => typeof id !== 'string' || !id.trim()) || new Set(fatalEvents).size !== fatalEvents.length)) errors.push('combat.sceneClose.fatalEventIds 须为不重复的非空事件 id');
   const judgedLines = atPath(tree, 'story.lineOutcome.judgedLines');
   const judged = Array.isArray(judgedLines) ? judgedLines : [];
   judged.forEach((lineId, i) => {

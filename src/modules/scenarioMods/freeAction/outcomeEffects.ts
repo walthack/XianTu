@@ -4,9 +4,12 @@
  *     打到 ≤ combatDownedAt 即当拍判负，人倒下后剧情继续，气血拉回 afterLossContinueHp（keepHp 只给中毒等状态掉血）。
  *   selfBuffEffect：双修的“阴阳调和”临时状态。
  * 只算不写：旧判定引擎（旧预检 / 事件判定的回执）和 freeAction 结算（settle.ts）共用这一份。
+ * 气血那一条带上统一的战斗结果（CombatResult，设计稿 2.4）：落账时 applyDeterministicEffects 交给 sceneModule/host/combatWriteback.ts
+ * 的 writeCombatResult，与场面收场同一写回（扣血、判负首行、短期记忆、combat.writeback 日志）。
  * 判定回执是 free_action_judgement 时，引擎不再自己算这些（见 judgementEngine.deterministicOutcomeEffects），由 settle.ts 落账，避免双扣、双写。
  */
 import { GAME_NUMBERS } from '../../sceneModule/numbers';
+import { combatHpAfterLoss, combatLoseHeadline, combatResult, type CombatResult } from '../../sceneModule/host/combatWriteback';
 import { packText } from '@/modules/contentPacks';
 import { JUDGEMENT_OUTCOME_LABELS, type JudgementKind, type JudgementOutcome, type JudgementResolution } from '@/utils/judgementEngine';
 
@@ -35,22 +38,27 @@ export function combatAftermathHp(saveData: unknown, kind: JudgementKind, outcom
   const ratio = hpLoss.ratio[outcome];
   const hp = (saveData as any)?.角色?.属性?.气血, from = Number(hp?.当前), max = Number(hp?.上限);
   if (ratio === undefined || !Number.isFinite(from) || !Number.isFinite(max) || max <= 0 || from <= 0) return null;
-  const rules = GAME_NUMBERS.combat.woundRules.hp;
   const lost = Math.min(from, Math.max(hpLoss.minLoss, Math.round(max * ratio)));
-  const downed = from - lost <= rules.combatDownedAt;
-  return { from, to: downed ? rules.afterLossContinueHp : from - lost, lost, downed };
+  return { from, lost, ...combatHpAfterLoss(from, lost) };
+}
+
+/** 交手失手的统一战斗结果：判负（打到倒下）时首行与短期记忆写判负文本；没倒下只扣血。 */
+export function freeActionCombatResult(saveData: unknown, kind: JudgementKind, outcome: JudgementOutcome, sourceId?: string): CombatResult | null {
+  const hit = combatAftermathHp(saveData, kind, outcome);
+  if (!hit) return null;
+  return combatResult({ source: 'freeAction', outcome: 'lose', hpFrom: hit.from, hpTo: hit.to, downed: hit.downed, memoryLine: hit.downed ? combatLoseHeadline() : '', ...(sourceId ? { sourceId } : {}) });
 }
 
 export function failureAftermathEffects(
   saveData: unknown,
-  input: { kind: JudgementKind; actionText: string; target?: string; outcome: JudgementOutcome; turn: number },
+  input: { kind: JudgementKind; actionText: string; target?: string; outcome: JudgementOutcome; turn: number; sourceId?: string },
 ): Effect[] {
   const { gate } = aftermathConfig(), { kind, outcome } = input;
   const gateOutcome = gate.outcomeByResult[outcome];
   if (!gateOutcome) return [];
   const effects: Effect[] = [];
-  const hit = combatAftermathHp(saveData, kind, outcome);
-  if (hit && hit.to !== hit.from) effects.push({ key: '角色.属性.气血.当前', action: 'add', value: hit.to - hit.from });
+  const combat = freeActionCombatResult(saveData, kind, outcome, input.sourceId);
+  if (combat) effects.push({ key: '角色.属性.气血.当前', action: 'add', value: combat.hpTo - combat.hpFrom, combat });
   effects.push({
     key: '系统.扩展.行动门控.recent',
     action: 'push',

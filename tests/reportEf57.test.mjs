@@ -39,6 +39,7 @@ const FIXTURE_REPLY = '风从草原尽头吹来，你在原地看了看四周。
 function turn(save, input, clicked) {
   const trace = {};
   BP.applyBeatDeadlines(rt(save).events);
+  BP.prepareBeatDeadlineTurn(save);
   const typed = clicked ? undefined : BP.resolveBeatText(save, input);
   if (typed?.action.kind === 'departure') {
     const t = quiet(() => init.transitionToNextScenarioStage(save, MODS));
@@ -190,15 +191,29 @@ test('1 s01_06 月霜寒毒到点回合数进配置（默认 5），每回合发
     return { s, turns };
   };
   const base = reach();
-  assert.ok(base.turns <= 6, `默认配置到点：${base.turns} 回合`);
+  assert.equal(base.turns, 5, `默认配置到点：${base.turns} 回合`);
   const N = GAME_NUMBERS.story.beatProgress.deadlineTurns;
   const saved = N['lcq.event.s01_06'];
   try {
     N['lcq.event.s01_06'] = 2;
     const fast = reach();
-    assert.ok(fast.turns < base.turns, `改成 2 回合后更早到点：${fast.turns} < ${base.turns}`);
+    assert.equal(fast.turns, 2, `改成 2 回合后到点：${fast.turns} 回合`);
     assert.equal(rt(fast.s).events.find(e => e.id === 'lcq.event.s01_06').offscreenResolution.afterStallTurns, 2);
   } finally { N['lcq.event.s01_06'] = saved; }
+});
+
+test('1 deadline 到点当回合仍优先玩家按钮；准备到点不直接落账，失败快照可回退', () => {
+  let save = newSave();
+  while (!rt(save).activeEventIds.includes('lcq.event.s01_06')) { const c = clickInput(save); save = turn(save, c.input, c.clicked).save; }
+  for (let i = 0; i < 4; i++) save = turn(save, '我看看四周。').save;
+  assert.ok(!rt(save).offscreenResolvedEventIds.includes('lcq.event.s01_06'));
+  const checkpoint = structuredClone(save);
+  assert.equal(BP.prepareBeatDeadlineTurn(save), true);
+  assert.ok(!rt(save).offscreenResolvedEventIds.includes('lcq.event.s01_06'), '准备阶段不结算');
+  assert.ok(!rt(checkpoint).forcedWorldEventIds?.includes('lcq.event.s01_06'), '发送前快照没有预结算标记');
+  const c = clickInput(save); save = turn(save, c.input, c.clicked).save;
+  assert.ok(rt(save).completedEventIds.includes('lcq.event.s01_06'));
+  assert.ok(!rt(save).offscreenResolvedEventIds.includes('lcq.event.s01_06'), '到点按钮仍按玩家动作完成');
 });
 
 test('1 Demo 档不提示启程空转', async () => {
@@ -314,7 +329,7 @@ test('2 输局后「与来敌交手」：无名来袭者已散、不在在场名
 test('2 controller：判负结果行与收场同一句配置文案，不再写死', () => {
   const src = read('src/modules/sceneModule/host/controller.ts');
   assert.doesNotMatch(src, /'你伤重倒下，这一战败了。'/);
-  assert.equal((src.match(/rememberSceneClose\(save,body\)/g) || []).length, 2, '随机战与剧情战两个收场分支都写记忆');
+  assert.match(src, /writeCombatResult\(save,\{\.\.\.result,memoryLine:body\}\)/, '场面收场与自由行动共用写回');
 });
 
 // ───────────── 3) P2 普通叙事没有总时长上限：B15 模型流卡死 300 秒才中止重试，粘贴标签回合 101.7 秒 ─────────────

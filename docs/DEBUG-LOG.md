@@ -47,3 +47,5 @@
 
 - `debugLog` 不算 catch 已处理（errorCodeGuard 的 `LOGGING_CALL` 不认它，也不要加进去）；参数里不写 LCQ- 码。
 - 存量按大类分批迁、每批一个提交；顺手改到某个文件时可以迁，但不强制。设置面板的 `debugMode / consoleDebug` 继续管还没迁的裸 console。
+
+战斗统一写回入口 `modules/sceneModule/host/combatWriteback.ts` 归现有 combat 大类；`combat.writeback`（LCQ-SAV-056）及缺败局分支（LCQ-SAV-055）为持久日志，echo:false，不受调试开关控制。

@@ -33,7 +33,8 @@ export function combatLossTitle(c:{objective?:{text?:string}}):string{const goal
 export const NO_NEGOTIATION_NOTICE=negotiationConfig().notice;
 import { narrateBeat, noteSceneNarrative } from './narrate';
 import { applyWriteBack, syncSceneStatuses } from './writeback';
-import { composeShortTermMemoryEntry } from '@/utils/memorySanitizer';
+import { combatLoseHeadline, combatResult, withCombatHeadline, writeCombatResult } from './combatWriteback';
+import { logEvent } from '@/modules/diagnostics/log';
 
 export interface HostDeps {
   persist: (save: SaveData) => Promise<void>;
@@ -54,21 +55,17 @@ function alignContract(a: ActiveScene, c: Contract): boolean {
 }
 function checkAbort(deps: HostDeps): void { if (deps.aborted?.()) throw new Error('scene_host_aborted'); }
 function history(save: SaveData): any[] { return ((save as any).系统.历史 ||= {}).叙事 ||= []; }
-const loseHeadline = (): string => String((GAME_NUMBERS.combat as any).sceneClose?.loseHeadline || '');
-/**
- * 收场正文写进短期记忆（REPORT-8091-ef573ece P1）：场面每拍与收场原先只进叙事历史，叙事模型只读短期记忆，
- * 下一回合不知道这一战已经分出胜负（随机战输了来袭者已散），接着写乱战。时间前缀与 gameStateStore.addToShortTermMemory 同口径。
- */
-function rememberSceneClose(save: SaveData, text: string): void {
-  const t=(save as any).元数据?.时间,memory=((save as any).社交 ||= {}).记忆 ||= {};
-  const prefix=t ? `【仙道${t.年}年${t.月}月${t.日}日 ${String(t.小时 ?? 0).padStart(2,'0')}:${String(t.分钟 ?? 0).padStart(2,'0')}】` : '【未知时间】';
-  const entry=composeShortTermMemoryEntry(prefix,text);if(!entry)return;
-  for(const key of ['短期记忆','隐式中期记忆'])(Array.isArray(memory[key]) ? memory[key] : (memory[key]=[])).push(entry);
+/** 通用战败结局（作者没写败局分支的战斗拍打输也落这里，用户 2026-11-02 拍板⑤）。 */
+const FAIL_COMBAT_ENDING='lcq.ending.fail.combat';
+/** 剧情战斗拍作者没写败局分支（合同 defeat.outcome 缺省：既不是 ending 也不是 continue）却打输了。随机战不算剧情拍。 */
+export function missingLoseBranch(c:Contract,outcome:{kind:string;endingId?:string}):boolean{
+  return !isRandomContract(c) && outcome.kind==='lose' && !outcome.endingId && !c.defeat?.outcome && !c.closing?.lose && !c.meta.hook.completionSceneByOutcome?.lose;
 }
-/** 收场正文：判负（不进结局）第一行写明这一战败了，免得玩家只看到交锋卡片消失。 */
-function closingBody(c:Contract,closingText:string,notes:string[],outcome:string,terminal:string[]):string {
-  const head=outcome==='lose' && loseHeadline() && !closingText.includes(loseHeadline()) ? [loseHeadline()] : [];
-  void c;return [...head,closingText,...notes,...terminal].filter(Boolean).join('\n');
+/** 秦 Q-20/Q-21 的已定死亡策略不启用待裁定剧情；国家线收束档规则保持原样。 */
+export function applyCombatDefeatPolicy(c:Contract,outcome:{kind:string;endingId?:string},eventId:string,actionId:string):void {
+  const missing=missingLoseBranch(c,outcome);
+  if(missing)logEvent({code:'LCQ-SAV-055',echo:false,detail:{contractId:c.meta.id,eventId,actionId}});
+  if(outcome.kind==='lose' && (missing || GAME_NUMBERS.combat.sceneClose.fatalEventIds.includes(eventId)))outcome.endingId=FAIL_COMBAT_ENDING;
 }
 function appendHistory(save: SaveData, text: string, playerText = '', image?: string | null): number {
   acknowledgeStageEntryPresentation(save,runtimeOf(save)?.modId);
@@ -219,7 +216,7 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   }
   syncSceneStatuses(save,c,a.state);
   // 6ccb 真机 P0：气血本拍落账打到保底即当拍判负（结果行补一句，叙事与收场同拍）。
-  if(settleDownedAfterHostSync(c,a.state)){confirmed.result.outcome=a.state.outcome;a.last.lines.push(loseHeadline());}
+  if(settleDownedAfterHostSync(c,a.state)){confirmed.result.outcome=a.state.outcome;a.last.lines.push(combatLoseHeadline());}
   // 场面每拍也推进 worldTurn：限时增益（白尾豹「山神庇佑」）按同一回合数到期，不等战后下一个故事回合（05e63d31 真机：战中 14–19 拍仍生效）。
   runtimeOf(save).worldTurn+=1;writeExt(save,ext);expireRareEncounters(save);
   await deps.persist(save);checkAbort(deps); // Dice checkpoint BEFORE any model request.
@@ -236,18 +233,28 @@ function terminalLines(save:SaveData,c:Contract,writeBack:ReturnType<typeof clos
 async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract,deps:HostDeps):Promise<void> {
   const a=ext.active!;const closed=closeScene(c,a.state,sceneContext(save,c));
   if(closed.writeBack.violations.redLines.length || closed.writeBack.violations.afterState.length)throw new Error('场面红线校验未过，未推进剧情');
+  // 作者没写败局分支的战斗拍打输＝游戏结束，日志标明这一拍缺败局分支（用户 2026-11-02 拍板⑤）。
+  applyCombatDefeatPolicy(c,closed.writeBack.outcome,a.eventId,a.actionId);
   a.state=closed.state;a.phase='closing';a.closing={text:renderRefs(closed.writeBack.closingText||closed.writeBack.memoryNote,runtimeOf(save)),outcome:closed.writeBack.outcome.kind,reason:closed.writeBack.outcome.reason};
+  const hpFrom=Number((save as any).角色?.属性?.气血?.当前);
   const written=applyWriteBack(save,c,a.state,closed.writeBack);writeExt(save,ext);
+  // 战斗结果统一结构与写回（设计稿 2.4）：判负首行、短期记忆、伤势、combat.writeback 日志都走 writeCombatResult，与自由行动交手同一函数。
+  const kind=closed.writeBack.outcome.kind;
+  const result=combatResult({source:'scene',outcome:kind==='win'?'win':kind==='lose'?'lose':'flee',hpFrom,hpTo:Number((save as any).角色?.属性?.气血?.当前),downed:kind==='lose',injuries:written.injuries,memoryLine:'',sourceId:c.meta.id});
+  const close=(lines:string[]):void=>{const body=withCombatHeadline(result,lines).join('\n');appendHistory(save,body);writeCombatResult(save,{...result,memoryLine:body});};
   if(closed.writeBack.outcome.endingId) {
     const id=closed.writeBack.outcome.endingId;
     runtimeOf(save).gameOver={endingId:id,title:id==='lcq.ending.fail.combat' ? combatLossTitle(c) : BATTLE_LOSS_ENDINGS.find(ending=>ending.endingId===id)?.title || '本局结束',facts:[a.closing.text],sourceEventId:a.eventId,atTurn:runtimeOf(save).worldTurn,presentation:endingPresentation({endingId:id,sourceEventId:a.eventId})};
-    const fixed=fixedEndingNarrative(runtimeOf(save).gameOver);appendHistory(save,(fixed || [endingBridge('',id),a.closing.text].join('\n\n')),'',endingPresentation(runtimeOf(save).gameOver).image);
+    const fixed=fixedEndingNarrative(runtimeOf(save).gameOver);
+    const body=withCombatHeadline(result,[fixed || [endingBridge('',id),a.closing.text].join('\n\n')]).join('\n');
+    appendHistory(save,body,'',endingPresentation(runtimeOf(save).gameOver).image);
+    writeCombatResult(save,{...result,memoryLine:body});
   } else if (isRandomContract(c)) {
     // 随机战（总策划定）：不推进剧情事件、不写 flags／身份账；输了就地重伤继续（气血与伤势由 applyWriteBack 处理）；赢了给当地留一次战后搜尸。
     const settled=settleRandomEncounterClose(save,{id:a.eventId.slice(RANDOM_EVENT_PREFIX.length),outcome:closed.writeBack.outcome.kind==='win'?'win':'lose'});
     if(closed.writeBack.outcome.kind==='win'&&settled)grantLootSpoils(save,{locationId:settled.locKey,sourceId:a.eventId,enemyId:settled.enemyId});
     delete ext.stall[c.meta.id];
-    {const body=closingBody(c,a.closing.text,written.notes,closed.writeBack.outcome.kind,terminalLines(save,c,closed.writeBack));appendHistory(save,body);rememberSceneClose(save,body);}
+    close([a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)]);
   } else {
     // The engine checks the persisted CLOSED state, event/action and contract version before honoring this completion.
     const receiptScene=c.meta.hook.completionSceneByOutcome?.[closed.writeBack.outcome.kind as 'win'|'lose'];
@@ -255,7 +262,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     if(!selection)throw new Error('场面收束对应的剧情动作已过期');
     const settled=recordStoryEventStructuredAction(save,selection);if(!settled.attempted || (receiptScene && !settled.completed))throw new Error('场面剧情收束未成立：'+settled.reason);
     if(receiptScene)applyStepSceneLedger(save,runtimeOf(save),a.eventId,a.actionId,receiptScene as Parameters<typeof applyStepSceneLedger>[4]);
-    {const body=closingBody(c,a.closing.text,written.notes,closed.writeBack.outcome.kind,terminalLines(save,c,closed.writeBack));appendHistory(save,body);rememberSceneClose(save,body);}
+    close([a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)]);
   }
   if (runtimeOf(save).travelLedger?.timeConsumedAtTurn !== runtimeOf(save).worldTurn) settleTime(save, `combat:${c.meta.id}:${a.state.seed}:${a.eventId}`, actionTimeConfig().minutes.moment, 'combat');
   if(c.meta.id===F02_CONTRACT_ID&&closed.writeBack.outcome.kind==='win'){const row=closed.writeBack.finalStates.find(r=>r.party==='snake_man');if(row)recordShiweimoEnding(save,row.label);}

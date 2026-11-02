@@ -131,6 +131,8 @@ export const ERROR_CODES = {
   'LCQ-SAV-052': spec('warn', 'aiBidirectional', '回合附属维护失败（世界事件调度、宗门自动初始化、后台记忆调度、长期检索索引），不影响回合'),
   'LCQ-SAV-053': spec('info', 'beatProgress', '节拍结算记录（beat.resolve）：本回合输入方式、命中动作、停滞回合、关是否已就绪'),
   'LCQ-SAV-054': spec('info', 'beatProgress', '节拍手打未命中（beat.resolve miss）：不推进，已弹提示列出本拍可做的动作'),
+  'LCQ-SAV-055': spec('warn', 'sceneModule', '战斗拍缺败局分支，判负结束游戏'),
+  'LCQ-SAV-056': spec('info', 'sceneModule', '战斗统一写回（combat.writeback）'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

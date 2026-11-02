@@ -128,6 +128,26 @@ export function applyBeatDeadlines(events: Array<{ id?: unknown; offscreenResolu
   return changed;
 }
 
+/**
+ * 发送事务内预备这一拍的到点结算。旧 runtime 在停滞 +1 之前检查期限，
+ * 因此配置 N 原本要第 N+1 次空转才收束。只对显式配置且已有作者场外合同的活跃拍
+ * 使用既有 forcedWorldEventIds 入口；引擎仍先检查该拍是否已被玩家动作结算。
+ * 不改全局停滞数；失败回合随发送前快照回滚。pressure/timeline 自有时钟不接管。
+ */
+export function prepareBeatDeadlineTurn(save: SaveData): boolean {
+  const runtime = runtimeOf(save);
+  if (!runtime || runtime.gameOver || (runtime.steeringCooldown || 0) > 0) return false;
+  let changed = false;
+  for (const event of runtime.events || []) {
+    const turns = beatDeadlineTurns(event.id);
+    if (turns === undefined || !event.offscreenResolution || event.pressure || event.timeline?.deadlineTurns !== undefined
+      || !runtime.activeEventIds?.includes(event.id) || (Number(runtime.stallTurns) || 0) + 1 < turns) continue;
+    const forced: string[] = runtime.forcedWorldEventIds ||= [];
+    if (!forced.includes(event.id)) { forced.push(event.id); changed = true; }
+  }
+  return changed;
+}
+
 /** 本回合有没有拍按作者写明的 deadline 收束（场外收束名单变长）。 */
 export function deadlineResolvedThisTurn(before: SaveData | null | undefined, after: SaveData | null | undefined): string[] {
   const prior = new Set<string>(runtimeOf(before)?.offscreenResolvedEventIds || []);

@@ -350,7 +350,7 @@ test('same input at unchanged scene state reuses recognition, including after sa
 test('E06 closure history contains the fixed body once and never repeats its opening bridge',async()=>{
  enable();const h=harness(await f10());await host.submitSceneInput(h.save,'我投降',h.deps);await host.confirmSceneChoice(h.save,h.deps);
  const ending=await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');const full=ending.fixedEndingNarrative(runtime(h.save).gameOver);
- assert.equal(h.save.系统.历史.叙事.at(-1).content,full);assert.equal((full.match(/你听见自己说「好」/g)||[]).length,1);
+ assert.equal(h.save.系统.历史.叙事.at(-1).content,(await loadTs('../src/modules/sceneModule/numbers.ts')).GAME_NUMBERS.combat.sceneClose.loseHeadline + '\n' + full);assert.equal((full.match(/你听见自己说「好」/g)||[]).length,1);
  const panel=await readFile(new URL('../src/components/dashboard/MainGamePanel.vue',import.meta.url),'utf8');assert.match(panel,/v-for="\(fact, index\) in scenarioEndingParagraphs"/);assert.match(panel,/fixedEndingNarrative\(over\)/);
 });
 test('already settled back injury is published during battle, before closure or rewards',async()=>{

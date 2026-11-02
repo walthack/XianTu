@@ -38,6 +38,7 @@ export const DEBUG_CATEGORIES = [
     paths: [...sm('freeAction/', 'naturalIntentRouter.ts'), 'utils/actionGate.ts', 'utils/enhancedActionQueue.ts', 'stores/actionQueueStore.ts'],
   },
   {
+    // host/combatWriteback.ts 的统一战斗写回归此类；持久日志 LCQ-SAV-055/056 沿用 sceneModule。
     id: 'combat', label: '战斗与场面',
     paths: ['modules/sceneModule/', 'utils/judgement*.ts', 'utils/diceRoller.ts', 'utils/narratedDamage.ts', 'utils/playerVitalGuard.ts', 'dev/combatTrial/', ...sm('randomEncounter.ts', 'whiteTailLeopard.ts', 'rareEncounters.ts')],
   },

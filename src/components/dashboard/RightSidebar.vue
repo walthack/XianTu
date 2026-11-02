@@ -218,7 +218,7 @@
                 <div v-if="lineCompass.current.step" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.current.step }}</div>
               </template>
               <div v-else-if="lineCompass.fallback" class="quest-event"><span class="quest-mark-main">◆</span>{{ lineCompass.fallback }}</div>
-              <div v-for="hint in lineCompass.entryHints.filter(h => h.lineId !== lineCompass.current?.lineId)" :key="hint.lineId" class="quest-event"><span class="quest-mark-side">◆</span>{{ hint.text }}</div>
+              <div v-for="hint in lineCompass.entryHints.filter(h => h.lineId !== lineCompass?.current?.lineId)" :key="hint.lineId" class="quest-event"><span class="quest-mark-side">◆</span>{{ hint.text }}</div>
               <template v-if="lineCompass.others.length">
                 <div class="quest-more quest-line-others" @click="lineOthersOpen = !lineOthersOpen">{{ lineOthersOpen ? '▾' : '▸' }} {{ t('别处还有事') }}（{{ lineCompass.others.length }}）</div>
                 <template v-if="lineOthersOpen">
@@ -237,7 +237,7 @@
               <div v-if="questMain.divergenceDebug" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">
                 世界线偏离：{{ questMain.signal.level === 'high' ? '大偏' : '中偏' }}（{{ questMain.signal.score }}/100）。你可以继续眼下这条路，也可以主动回到最近的主线节点。
               </div>
-              <button v-if="questMain.canReturn && !epistemicRuntime?.gameOver && !detectBranchDecision(getCurrentStoryEventActions(gameStateStore.toSaveData()))" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
+              <button v-if="questMain.canReturn && !epistemicRuntime?.gameOver && !detectBranchDecision(sidebarStoryActions())" class="quest-next-btn" :disabled="returningToCanon" @click="cutBackToCanon">
                 {{ returningToCanon ? t('回轨中…') : t('↩ 斩线回轨') }}
               </button>
               <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
@@ -565,6 +565,10 @@ const characterBeats = computed(() => {
   return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective })).concat(view.character, view.resolved);
 });
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
+const sidebarStoryActions = () => {
+  const save = gameStateStore.toSaveData();
+  return save ? getCurrentStoryEventActions(save) : [];
+};
 const questMain = computed(() => {
   const rt: any = (gameStateStore.worldState as any)?.剧本模组;
   if (!rt || typeof rt !== 'object') return null;
@@ -580,7 +584,8 @@ const questMain = computed(() => {
   }).filter(Boolean);
   const moreCount = Math.max(0, activeEvents.length - 1);
   const ready = rt.nextStageReadyId && rt.nextStageReadyId === rt.nextStageId;
-  const departure = ready ? getStageDepartureOffer(gameStateStore.toSaveData()) : null;
+  const save = gameStateStore.toSaveData();
+  const departure = ready && save ? getStageDepartureOffer(save) : null;
   if (departure?.label && !events.length) events.push(departure.label);
   // 线卡是否取代这一行主线指南针，看线卡本身（用户 2026-10-27 09:26 Q1）。
   // showLineCompass 关时 lineCompass 已返回 null。不能看 events.length：锚点为空时启程句是上面才推进去的。
@@ -595,7 +600,7 @@ const questMain = computed(() => {
   const signal = rt.divergenceSignal;
   const canReturn = signal?.level === 'medium' || signal?.level === 'high' || stalled;
   // 玩家可见的推进引导：停滞数轮且这一拍有可点的主线动作时出现（非调试信息）。
-  const mainAction = anchor ? getCurrentStoryEventActions(gameStateStore.toSaveData()).find((a: any) => a.eventId === anchor.id) : undefined;
+  const mainAction = anchor ? sidebarStoryActions().find((a: any) => a.eventId === anchor.id) : undefined;
   const anchorView = anchor ? resolveScenarioEventNarrative(anchor, rt.flags || {}, rt.divergences, rt) : null;
   const stallHint = questStallHint(stallTurns, mainAction?.label, anchorView?.objective);
   return {

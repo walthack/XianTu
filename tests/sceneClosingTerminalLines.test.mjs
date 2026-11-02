@@ -90,7 +90,7 @@ test('F01 显式骰加认输：走 endingId，终态行过滤不影响战败结�
   }
   assert.equal(save.世界.状态.剧本模组.gameOver.endingId, 'lcq.ending.fail.combat');
   assert.equal(ext.activeScene(save), null);
-  assert.equal(lastGm(save).content.trim(), '游戏结束');
+  assert.equal(lastGm(save).content.trim(), (await loadTs('../src/modules/sceneModule/numbers.ts')).GAME_NUMBERS.combat.sceneClose.loseHeadline + '\n游戏结束');
   assert.doesNotMatch(lastGm(save).content, /刺客斧手/);
 });
 

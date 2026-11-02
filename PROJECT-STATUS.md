@@ -668,3 +668,7 @@
 ### REPORT8091-c385 · 复测修复开工（2026-11-02，Codex）
 - 范围：用户报告 P1-1～P2-7 与观察8；基线 c385f351。逐项定位、回归，全量测试与 tsc 待跑。
 - 冻结 runtime.ts / AIBidirectionalSystem.ts / frozen-baseline.json；不提交推送、不读凭据、不改模型/API配置。非新策划轮次；控制面不变，真机未测。
+
+### BEAT-PROGRESS-20261102 · 接手续作（Codex）
+- 已读设计稿及既有 c4e5acee、516dacb1；接手战斗统一写回半成品，核对动作表、deadline、新档至 s03_07 与两项 ef57 回归。冻结文件、凭据、模型配置及临时目录不动；不 push/部署。
+- canon:build 被缺失 generated/deepseek-v4-flash/qingyu/stages 阻断；按提交纪律，未全绿不得新增 commit。秦 Q-20/Q-21 仍待剧情裁定，本轮只接失败策略，不启用待定剧情。离线验证进行中，真实模型/真机未测。

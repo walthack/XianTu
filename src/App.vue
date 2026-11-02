@@ -349,7 +349,7 @@ watch([activeScenarioChapterId, activeScenarioEvents, latestAiNarrative], ([chap
     当前mood: currentMusicMood.value,
     正文层命中: resolveMoodFromNarrative(narrative),
     章节: chapterId,
-    活跃事件: events.map(e => e?.id || '?'),
+    活跃事件: events.map((e: { id?: string }) => e?.id || '?'),
     正文长度: (narrative || '').length,
     正文尾部: (narrative || '').slice(-50),
   });

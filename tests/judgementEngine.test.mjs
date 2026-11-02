@@ -194,6 +194,11 @@ test('verifyResolvedJudgementReceipt returns the save copy and fail-closes on ta
   assert.match(prompt, /已写入=/);
   assert.match(prompt, /动作=翻越有守卫的城墙/);
 
+  const combatTamper = structuredClone(resolution);
+  combatTamper.appliedEffects.find(effect => effect.combat).combat.hpTo += 1;
+  assert.equal(verifyResolvedJudgementReceipt(save, combatTamper), null, 'tampered combat writeback');
+  const reloaded = JSON.parse(JSON.stringify(save));
+  assert.deepEqual(verifyResolvedJudgementReceipt(reloaded, resolution), resolution, 'combat result survives save reload');
   const callerMutated = structuredClone(resolution);
   callerMutated.outcome = 'perfect';
   assert.equal(verifyResolvedJudgementReceipt(save, callerMutated), null, 'tampered outcome');

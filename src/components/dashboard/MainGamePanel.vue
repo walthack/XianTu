@@ -144,7 +144,7 @@
           <div v-if="engineButtonOptions.length" class="action-options engine-action-options">
             <button
               v-for="option in engineButtonOptions"
-              :key="`${option.contractHash}:${option.source}:${'stepId' in option ? option.stepId : option.eventId}:${option.actionId}`"
+              :key="JSON.stringify(option)"
               @click="branchDecision ? confirmBranchDecision(option) : selectScenarioEngineAction(option)"
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
@@ -336,7 +336,7 @@
         </div>
         <SceneEncounterCard v-if="currentScene" :scene="currentScene" :brief="currentSceneBrief" :busy="isAIProcessing" :crystal="currentCrystalAvailable"
           @confirm="runSceneOperation(confirmSceneAction)" @choice="runSceneOperation(confirmSceneChoice)"
-          @crystal="mode => runSceneOperation((save,deps) => useNicheCrystal(save,mode,deps))" @edit="runSceneOperation(editSceneAction)" @finish="runSceneOperation(finishScene)" />
+          @crystal="(mode: 'wound' | 'defense') => runSceneOperation((save,deps) => useNicheCrystal(save,mode,deps))" @edit="runSceneOperation(editSceneAction)" @finish="runSceneOperation(finishScene)" />
         <div class="input-container">
           <!-- 图片预览区域 -->
           <div v-if="selectedImages.length > 0" class="image-preview-container">
@@ -604,6 +604,7 @@ import { summarizeError, summarizeList } from '@/modules/diagnostics/errorSummar
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
 import { settleSelfConsumable, renderSelfConsumableBlock, renderSelfConsumableReceipt } from '@/modules/scenarioMods/freeAction/selfConsumable';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
+import { finishCombatNarrative } from '@/modules/sceneModule/host/combatWriteback';
 import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
 import { notePlayerText } from '@/modules/scenarioMods/freeAction/playerTextDebug';
 import { logGateRefusal } from '@/modules/scenarioMods/freeAction/refusalLog';
@@ -632,7 +633,7 @@ import {
   type BaihuGambleRefusalSelection,
 } from '@/modules/scenarioMods/baihuGambleRefusal';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
-import { applyBeatDeadlines, beatActionTable, beatMissNotice, deadlineResolvedThisTurn, logBeatResolve, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
+import { prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, deadlineResolvedThisTurn, logBeatResolve, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
 import {
   abortInFlightNaturalIntent,
   freeActionOwnsText,
@@ -957,7 +958,7 @@ const gameStateStore = useGameStateStore();
 const currentTravelCard = computed(() => getTravelCard(gameStateStore.toSaveData()));
 // 本局已结束（玩家走进绝路）。引擎侧 `runtime.gameOver` 是唯一真值来源——
 // 结局正文由叙述在本轮已经写完，这里只负责收住界面：封输入，只留退路。
-const scenarioGameOver = computed<{ endingId: string; title: string; facts: string[] } | null>(() => {
+const scenarioGameOver = computed<{ endingId: string; sourceEventId: string; title: string; facts: string[] } | null>(() => {
   const runtime = (gameStateStore.worldState as any)?.剧本模组;
   const over = runtime?.gameOver;
   return over?.endingId ? over : null;
@@ -2017,7 +2018,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   if (selectedCultivationTime.value?.text === inputText.value) cultivationSelections.push({ ...selectedCultivationTime.value.selection });
   if (!cultivationSelections.length && (/(?:修炼|闭关|练功|打坐)/.test(inputText.value) || actionQueue.pendingActions.some(a => a.type === 'cultivate' && !a.cultivation)) && !/(?:不|别|停止|取消)(?:修炼|闭关|练功|打坐)/.test(inputText.value)) {
     resumeAfterCultivationSelection = true;
-    selectAction({ name: inputText.value, type: 'cultivation', description: '请选择本次修炼天数', timeRequired: true });
+    selectAction({ name: inputText.value, icon: '', type: 'cultivation', description: '请选择本次修炼天数', timeRequired: true });
     return;
   }
   const actionQueueText = actionQueue.getActionPrompt();
@@ -2092,7 +2093,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (travel && moved && settleDomesticTypedTravel(moved, travel, typed)) {
       gameStateStore.loadFromSaveData(moved);
       await gameStateStore.saveGame();
-      inputText.value = ''; lastSelectedActionOption.value = null; selectedScenarioEngineAction.value = null;
+      inputText.value = ''; lastSelectedActionOption.value = ''; selectedScenarioEngineAction.value = null;
       uiStore.setAIProcessing(false);
       persistAIProcessingState();
       toast.info(mapTravelArrivalNotice(moved));
@@ -2151,7 +2152,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       });
       if (!uiStore.isAIProcessing || aiResetToken !== intentReset) return;
       if (inputText.value.trim() !== inputSnapshot) {
-        noteTicketDiscard('intent', 'input_changed', intent.selection?.actionId);
+        noteTicketDiscard('intent', 'input_changed', (intent.selection && 'actionId' in intent.selection ? intent.selection.actionId : undefined));
         toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
         return;
       }
@@ -2159,13 +2160,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (!activeSnapshot || !activeNow
         || activeNow.角色ID !== activeSnapshot.角色ID
         || activeNow.存档槽位 !== activeSnapshot.存档槽位) {
-        noteTicketDiscard('intent', 'slot_changed', intent.selection?.actionId);
+        noteTicketDiscard('intent', 'slot_changed', (intent.selection && 'actionId' in intent.selection ? intent.selection.actionId : undefined));
         toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
         return;
       }
       const latestSave = gameStateStore.toSaveData();
       if (!latestSave || intentSaveFingerprint(latestSave) !== saveFingerprint) {
-        noteTicketDiscard('intent', 'save_changed', intent.selection?.actionId);
+        noteTicketDiscard('intent', 'save_changed', (intent.selection && 'actionId' in intent.selection ? intent.selection.actionId : undefined));
         toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
         return;
       }
@@ -2193,7 +2194,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (intent.selection) {
         const fresh = intent.kind === 'matched'
           ? verifyFreshSelection(latestSave, {
-            actionId: intent.selection.actionId || ('identityId' in intent.selection ? intent.selection.identityId : ''),
+            actionId: ('actionId' in intent.selection ? intent.selection.actionId : '') || ('identityId' in intent.selection ? intent.selection.identityId : ''),
             source: intent.selection.source,
             eventId: 'eventId' in intent.selection ? String(intent.selection.eventId || '') : undefined,
             contractHash: 'contractHash' in intent.selection
@@ -2202,7 +2203,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           })
           : intent.selection;
         if (intent.kind === 'matched' && !fresh) {
-          noteTicketDiscard('intent', 'fresh_selection_failed', intent.selection.actionId);
+          noteTicketDiscard('intent', 'fresh_selection_failed', 'actionId' in intent.selection ? intent.selection.actionId : undefined);
           toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
           return;
         }
@@ -2331,6 +2332,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
 
 	  // 自由行动结算放在“上次对话”备份之后：回滚到上次对话时，这次的好感/记忆/物品一并回滚。
+      const deadlineSave = gameStateStore.toSaveData();
+      if (deadlineSave && prepareBeatDeadlineTurn(deadlineSave)) await persistJudgementSave(deadlineSave);
 	  let freeActionBlock = freeActionRefusalBlock;
 	  const freeActionSave = routedFreeActionTickets.length || followUpFreeAction ? gameStateStore.toSaveData() : null;
 	  const inventoryBefore = inventoryCounts(freeActionSave ?? gameStateStore.toSaveData());
@@ -2650,7 +2653,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       let finalText = '';
       const gmResp = aiResponse; // aiResponse 本身就是 GM_Response
       if (gmResp?.transactionCommitted) {
-        inputText.value = ''; lastSelectedActionOption.value = null; selectedScenarioEngineAction.value = null;
+        inputText.value = ''; lastSelectedActionOption.value = ''; selectedScenarioEngineAction.value = null;
       }
 
       console.log('[AI响应处理] 开始处理AI响应文本');
@@ -2668,6 +2671,15 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         console.log('[AI响应处理] 使用 streamingContent 提取后作为最终文本，长度:', finalText.length);
       } else {
         console.warn('[AI响应处理] 未找到任何有效的文本内容');
+      }
+
+      if (finalText && gmResp) {
+        const combatSave = gameStateStore.toSaveData();
+        const body = combatSave ? finishCombatNarrative(combatSave, finalText) : finalText;
+        if (body !== finalText || (gameStateStore.toSaveData() as any)?.系统?.扩展?.combatHeadline) {
+          finalText = body; gmResp.text = body;
+          await persistJudgementSave(combatSave);
+        }
       }
 
       console.log('[AI响应处理] 最终文本内容预览:', finalText.substring(0, 100) + '...');
@@ -2791,7 +2803,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       // 清空已发送的图片
       clearImages();
       inputText.value = '';
-      lastSelectedActionOption.value = null;
+      lastSelectedActionOption.value = '';
       selectedScenarioEngineAction.value = null;
       nextTick(() => {
         adjustTextareaHeight();

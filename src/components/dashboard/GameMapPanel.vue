@@ -1622,7 +1622,7 @@ const initializeMap = async () => {
           好感度: 10,
           当前位置: { 描述: `${sectName}驻地` },
           factionId: resolveNamedEntityId('faction',sectName),
-          factionIds: [resolveNamedEntityId('faction',sectName)].filter(Boolean),
+          factionIds: [resolveNamedEntityId('faction',sectName)].filter((id): id is string => Boolean(id)),
           势力归属: resolveNamedEntityId('faction',sectName) || '',
           人格底线: [],
           记忆: [
@@ -1798,7 +1798,7 @@ const generateAdditionalContent = async () => {
           好感度: 10,
           当前位置: { 描述: `${sectName}驻地` },
           factionId: resolveNamedEntityId('faction',sectName),
-          factionIds: [resolveNamedEntityId('faction',sectName)].filter(Boolean),
+          factionIds: [resolveNamedEntityId('faction',sectName)].filter((id): id is string => Boolean(id)),
           势力归属: resolveNamedEntityId('faction',sectName) || '',
           人格底线: [],
           记忆: [
@@ -1869,8 +1869,8 @@ const generateAdditionalContent = async () => {
 };
 
 function isScenarioModMapLocked(worldInfo: any): boolean {
-  const runtimeMode = (gameStateStore.saveData as any)?.世界?.状态?.剧本模组?.mode;
-  const extensionMode = (gameStateStore.saveData as any)?.系统?.扩展?.剧本模组?.mode;
+  const runtimeMode = (gameStateStore.toSaveData() as any)?.世界?.状态?.剧本模组?.mode;
+  const extensionMode = (gameStateStore.toSaveData() as any)?.系统?.扩展?.剧本模组?.mode;
   const mapLock = worldInfo?.剧本地图?.locked;
   return runtimeMode === 'strict' || extensionMode === 'strict' || mapLock === true;
 }

@@ -164,6 +164,8 @@
 | LCQ-SAV-052 | warn | aiBidirectional | 回合附属维护失败（世界事件调度、宗门自动初始化、后台记忆调度、长期检索索引），不影响回合 | 回合后的非关键维护抛错：世界事件调度／生成、宗门系统自动初始化、后台记忆任务调度、新长期记忆加入检索索引 | 看 detail.stage（worldEvents / sectAutoInit / backgroundMemory / vectorIndex）与 detail.error；均可下一回合重试，不影响存档主体 | 否 |
 | LCQ-SAV-053 | info | beatProgress | 节拍结算记录（beat.resolve）：本回合输入方式、命中动作、停滞回合、关是否已就绪 | 不是故障：每个叙事回合记一条。detail.via＝button（点按钮）／exact（手打＝原句或按钮标签）／alias（命中作者短语）／deadline（作者写明的到点收束）／other（本回合走了自由行动、开放世界等别的引擎）／none（本拍没有可做的动作）；手打没对上记 LCQ-SAV-054 | 看 detail.beatId、detail.actionId、detail.stallTurns、detail.stageReady；不记玩家原文 | 否 |
 | LCQ-SAV-054 | info | beatProgress | 节拍手打未命中（beat.resolve miss）：不推进，已弹提示列出本拍可做的动作 | 玩家手打的话与本拍任何动作的原句、按钮标签、作者短语（intentMatch）都对不上；回合照常叙事、不结算（用户 2026-11-02 拍板②） | 按 detail.beatId 汇总条数，作为给该拍补 aliases 的依据；不记玩家原文，要看原文用 freeAction.debug.playerTextLog | 否 |
+| LCQ-SAV-055 | warn | sceneModule | 战斗拍缺败局分支，判负结束游戏 | 剧情战斗合同没有败局出口却判负 | 按 detail.eventId、actionId、contractId 核对作者合同 | 否 |
+| LCQ-SAV-056 | info | sceneModule | 战斗统一写回（combat.writeback） | 场面或自由交手落账 | detail.source、from、to、downed、injuries 记录实际结果，不记输入原文 | 否 |
 
 ## 已作废
 
