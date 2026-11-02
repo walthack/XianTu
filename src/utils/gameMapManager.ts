@@ -4,6 +4,7 @@ import type { GameMapConfig, GameCoordinates, ViewportState } from '@/types/game
 import type { WorldLocation } from '@/types/location';
 import type { CultivationContinent } from '@/types/worldMap';
 import { logEvent } from '@/modules/diagnostics/log';
+import { displayEntityLabel } from '@/modules/scenarioMods/namedEntities';
 import { summarizeError } from '@/modules/diagnostics/errorSummary';
 import { coLocatedMarkerKey, coLocatedMarkerOffset, pickMapMarker, type MapMarkerBox, type MapMarkerHitTarget } from './coordinateConverter';
 
@@ -613,7 +614,7 @@ export class GameMapManager {
 
     // 添加大陆名称标签（超大背景水印样式）
     const center = this.calculatePolygonCenter(bounds);
-    const label = new PIXI.Text(continent.name || continent.名称 || '未知大陆', {
+    const label = new PIXI.Text(displayEntityLabel(continent.name || continent.名称) || '未知大陆', {
       fontFamily: 'Microsoft YaHei, SimHei, sans-serif',
       fontSize: 280, // 超大字体，像背景水印
       fill: 0x1e40af,
@@ -741,7 +742,7 @@ export class GameMapManager {
 
     // 文字标签：真实底图上地名已印在图里，锚点大字标签会与其重叠致阅读困难——
     // 改为小号半透明辅助标签（便于识别无印刷名的新增点位）；生成式地图维持大标签。
-    const label = new PIXI.Text(location.name, {
+    const label = new PIXI.Text(displayEntityLabel(location.name), {
       fontFamily: 'Microsoft YaHei, SimHei, sans-serif',
       fontSize: (hasRealMap ? 16 : 38) * scale,
       fill: location.iconColor || '#6B7280',
@@ -984,7 +985,7 @@ export class GameMapManager {
 
     // 添加势力名称标签（超大透明背景水印，类似大洲）
     const center = this.calculatePolygonCenter(bounds);
-    const label = new PIXI.Text(location.name, {
+    const label = new PIXI.Text(displayEntityLabel(location.name), {
       fontFamily: 'Microsoft YaHei, SimHei, sans-serif',
       fontSize: 100, // 超大字体，像大洲一样
       fill: location.iconColor || '#6B7280',
@@ -1042,6 +1043,8 @@ export class GameMapManager {
       if (!Number.isFinite(npc.coordinates?.x) || !Number.isFinite(npc.coordinates?.y)) {
         return;
       }
+      // 名字换不出来（只剩引用 id）就不画这个标记，id 不外露（REPORT-8091-f9737e0d P2-3）。
+      if (!displayEntityLabel(npc.name)) return;
 
       const npcContainer = new PIXI.Container();
       npcContainer.x = npc.coordinates.x;
@@ -1083,7 +1086,7 @@ export class GameMapManager {
       npcContainer.addChild(marker);
 
       // 添加NPC名称
-      const label = new PIXI.Text(npc.name, {
+      const label = new PIXI.Text(displayEntityLabel(npc.name), {
         fontFamily: 'Microsoft YaHei, sans-serif',
         fontSize: 40,
         fill: 0x8b5cf6,
@@ -1159,7 +1162,7 @@ export class GameMapManager {
     playerContainer.addChild(marker);
 
     // 添加玩家名称（增大字体）
-    const label = new PIXI.Text(playerName, {
+    const label = new PIXI.Text(displayEntityLabel(playerName), {
       fontFamily: 'Microsoft YaHei, sans-serif',
       fontSize: 48, // 增大玩家名称字体
       fill: 0xdc2626,
@@ -1242,7 +1245,7 @@ export class GameMapManager {
     playerContainer.addChild(marker);
 
     // 添加玩家名称
-    const label = new PIXI.Text(`${playerName}玩家`, {
+    const label = new PIXI.Text(`${displayEntityLabel(playerName)}玩家`, {
       fontFamily: 'Microsoft YaHei, sans-serif',
       fontSize: 40,
       fill: 0x2563eb,

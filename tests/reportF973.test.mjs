@@ -165,3 +165,32 @@ test('③ 否定、问句、假设、跨国、原地都不当国内移动；发�
   assert.match(panel, /!resolveStoryEventActionFromText\(structuredClone\(saveData\), typed\) && !resolveWuyuanOpenWorldSelectionFromText\(saveData, typed\)/, '罗盘/开放世界优先');
   assert.ok(travelUi.domesticTypedArrival.includes('{where}'));
 });
+
+// ───────────── P2-3 地图人物标签外露原始 id ─────────────
+// 根因：地图人物标记直接拿 社交.关系 的键当标签，而剧本档的关系键是引用 id（liuchao.character.sun_shou 等，汉线进线档洛都一带全是），
+// 模型自造的 liuchao.character.chengzongyang 这类下划线写法不同的键也照原样画出来。
+const NE = await load('modules/scenarioMods/namedEntities.ts');
+test('P2-3 显示名：引用 id 换实体名（含下划线写法不同），换不出返回空串，普通文字原样', () => {
+  assert.equal(NE.displayEntityLabel('liuchao.character.chengzongyang'), '程宗扬');
+  assert.equal(NE.displayEntityLabel('liuchao.character.cheng_zongyang'), '程宗扬');
+  assert.equal(NE.displayEntityLabel('liuchao.character.sun_shou'), '孙寿');
+  assert.equal(NE.displayEntityLabel('lyl.location.luoyang'), '洛都');
+  assert.equal(NE.displayEntityLabel('liuchao.character.no_such_person_x'), '');
+  assert.equal(NE.displayEntityLabel('孙寿'), '孙寿');
+  assert.equal(NE.displayEntityLabel(' 道友 '), '道友');
+  // 汉线进线档：关系键全是 id，每个有坐标的人都换得出名字。
+  const rel = fixture('checkpoints/current-han-entry.json').社交.关系;
+  for (const [key, data] of Object.entries(rel)) {
+    const label = NE.displayEntityLabel(data?.名字) || NE.displayEntityLabel(key);
+    assert.ok(!NE.isEntityIdLike(label), `${key} → ${label}`);
+  }
+});
+test('P2-3 地图所有文字标签都过显示名；人物标记换不出名字就不画；关系面板同口径', () => {
+  const mgr = read('src/utils/gameMapManager.ts');
+  assert.doesNotMatch(mgr, /new PIXI\.Text\((?:npc\.name|location\.name|playerName|`\$\{playerName\})/);
+  assert.match(mgr, /if \(!displayEntityLabel\(npc\.name\)\) return;/);
+  const panel = read('src/components/dashboard/GameMapPanel.vue');
+  assert.equal((panel.match(/name: npcMapLabel\(npcName, npcData\)/g) || []).length, 2);
+  assert.match(panel, /npcName: npcLabel,/);
+  assert.doesNotMatch(panel, /name: npcName,/);
+});

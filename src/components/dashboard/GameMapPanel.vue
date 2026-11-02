@@ -407,6 +407,7 @@ import type { GameCoordinates } from '@/types/gameMap';
 import type { NpcProfile, GameTime, WorldInfo } from '@/types/game';
 import type { RegionMap } from '@/types/gameMap';
 import RegionMapPanel from './RegionMapPanel.vue';
+import { displayEntityLabel } from '@/modules/scenarioMods/namedEntities';
 import { generateRegionMap, mergeCanonBuildingsIntoRegion, type RegionNpcLocationHint } from '@/utils/worldGeneration/regionMapGenerator';
 import UnmappedLocationsPanel from './UnmappedLocationsPanel.vue';
 import type { UnmappedNpc } from './UnmappedLocationsPanel.vue';
@@ -793,8 +794,10 @@ const unmappedNpcs = computed((): UnmappedNpc[] => {
     const bounds: { x: number; y: number }[] =
       matchedContinent.大洲边界 ?? matchedContinent.continent_bounds ?? [];
 
+    const npcLabel = npcMapLabel(npcName, npcData);
+    if (!npcLabel) continue;
     result.push({
-      npcName,
+      npcName: npcLabel,
       locationDesc: desc,
       locationHint: field2,   // 世界地图要添加的是字段2
       buildingHint: field3,   // 字段3 仅用于面板展示（区域内建筑）
@@ -993,6 +996,8 @@ const resolveNumber = (value: unknown): number | null => {
   return null;
 };
 
+/** 地图上的人物标签：关系表键多是引用 id（liuchao.character.xxx），先取档里的名字，再按实体表换显示名；都换不出就留空、不画（REPORT-8091-f9737e0d P2-3）。 */
+const npcMapLabel = (npcKey: string, npcData: any): string => displayEntityLabel(npcData?.名字) || displayEntityLabel(npcKey);
 const resolveNpcCoordinates = (npcName: string, npcData: any): GameCoordinates | null => {
   const raw = npcData?.['当前位置'] || npcData?.['位置'] || npcData?.coordinates;
   if (!raw || typeof raw !== 'object') return null;
@@ -1357,7 +1362,7 @@ watch(
       const coords = resolveNpcCoordinates(npcName, npcData);
       if (coords) {
         npcs.push({
-          name: npcName,
+          name: npcMapLabel(npcName, npcData),
           coordinates: coords
         });
       }
@@ -1970,7 +1975,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
         const coords = resolveNpcCoordinates(npcName, npcData);
         if (coords) {
           npcs.push({
-            name: npcName,
+            name: npcMapLabel(npcName, npcData),
             coordinates: coords
           });
         }

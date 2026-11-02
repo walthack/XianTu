@@ -28,3 +28,19 @@ export function entityText(text:string):string{return text.replace(/\{\{entity:(
 
 /** A stable label selector for evidence that must retain its authored short form. */
 export function entityRecognitionLabel(kind:NamedEntityKind,id:string,labelId:string):string {const value=byId[kind].get(canonicalEntityId(kind,id))?.definition.recognitionLabels?.[labelId];if(typeof value!=='string')throw new Error(`Unknown recognition label: ${kind}/${id}/${labelId}`);return value;}
+
+/** 形如 liuchao.character.xxx 的引用 id（不是给玩家看的名字）。 */
+export const isEntityIdLike=(value:unknown):boolean=>typeof value==='string'&&/^[a-z][a-z0-9_]*(?:\.[a-z0-9_-]+)+$/i.test(value.trim());
+const looseIds=new Map<string,string|null>();
+for(const [kind,map] of Object.entries(byId))for(const id of map.keys()){const key=kind+':'+id.replace(/_/g,'').toLowerCase();looseIds.set(key,looseIds.has(key)?null:id);}
+/**
+ * 界面显示用的名字：普通文字原样；引用 id 换成实体显示名（下划线写法不同也认，如 chengzongyang→cheng_zongyang）；换不出名字返回空串，调用方不显示（REPORT-8091-f9737e0d P2-3：任何 id 都不外露）。
+ */
+export function displayEntityLabel(value:unknown):string{
+  const text=String(value??'').trim();
+  if(!isEntityIdLike(text))return text;
+  const kinds=Object.keys(byId) as NamedEntityKind[];
+  for(const kind of kinds){const id=canonicalEntityId(kind,text);if(byId[kind].has(id))return String(byId[kind].get(id)!.definition.name||'');}
+  for(const kind of kinds){const id=looseIds.get(kind+':'+text.replace(/_/g,'').toLowerCase());if(id)return String(byId[kind].get(id)!.definition.name||'');}
+  return '';
+}
