@@ -37,3 +37,41 @@ test('P2-A 文案来自 mod-kit 配置；发送时 toast 走 mapPreparationToast
   assert.match(panel, /crossCountryStoryTravelToast\(crossCountryTravel\) : mapPreparationToast\(mapPrepSave!, userMessage\)/);
   assert.doesNotMatch(panel, /跨国旅行请打开地图选择路线/);
 });
+
+// ---------- P2-B 地图抵达清旧建议 ----------
+const init = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+const opening = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+const { parseScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
+const readStage = async id => JSON.parse(await read(`src/modules/scenarioMods/builtins/data/${id}.json`));
+async function jiangzhouAtS01_02() {
+  const base = init.applyStrictScenarioInitializationToSave(
+    opening.createQingyuOpeningPlaytestSave(parseScenarioMod(await readStage('lcq.stage_01')), '2026-10-31T00:00:00.000Z'),
+    init.buildStrictScenarioInitialization(parseScenarioMod(await readStage('lyl.jiangzhou_retreat'))),
+  );
+  let save = R.advanceScenarioRuntime(base).saveData;
+  assert.equal(R.recordStoryEventStructuredAction(save, R.getCurrentStoryEventActions(save).find(a => a.eventId === 'lyl.event.s01_01')).completed, true);
+  save = R.advanceScenarioRuntime(save).saveData;
+  save.系统.历史 = { ...(save.系统.历史 || {}), 叙事: [...(save.系统.历史?.叙事 || []),
+    { type: 'gm', content: '江州渡口，快船已备。', actionOptions: ['确认航线后登上快船', '让小紫继续守住泊位'] }] };
+  return save;
+}
+const LINAN = 'liuchao.location.lin_an';
+
+test('P2-B 走地图从江州到临安：出发地正文附带的模型建议清空，正文保留；新地点主线建议照常', async () => {
+  const s = await jiangzhouAtS01_02();
+  assert.equal(M.settleMapTravel(s, M.selectMapTravel(s, LINAN)), true);
+  assert.equal(s.角色.位置.locationId, LINAN);
+  const latest = s.系统.历史.叙事.at(-1);
+  assert.deepEqual(latest.actionOptions, [], '江州渡口旧建议不残留');
+  assert.equal(latest.content, '江州渡口，快船已备。');
+  assert.ok(R.getCurrentStoryEventActions(s).some(a => a.eventId === 'lyl.event.s01_02'), '临安主线建议照常');
+});
+
+test('P2-B 地图出行没走成（无路线/重放核验）不动建议', async () => {
+  const s = await jiangzhouAtS01_02();
+  assert.equal(M.settleMapTravel(s, { source: 'map', actionId: 'x', fromId: 'liuchao.location.jiangzhou', toId: 'liuchao.location.changan', routeId: 'nope' }), false);
+  assert.deepEqual(s.系统.历史.叙事.at(-1).actionOptions, ['确认航线后登上快船', '让小紫继续守住泊位']);
+  // 地图面板落账后整档载入，显示层读的就是被清空的这条叙事。
+  const panel = await read('src/components/dashboard/GameMapPanel.vue');
+  assert.match(panel, /settleMapTravel\(save, selection\)\) \{[^\n]*\n\s*mapTravelBusy\.value = true;\n\s*try \{ gameStateStore\.loadFromSaveData\(save\);/);
+});

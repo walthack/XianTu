@@ -116,6 +116,7 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
     arrived.locationId = entry.locationId;
     if (countryOf(entry.locationId) && entryLoc?.name) arrived.描述 = `${countryOf(entry.locationId)}·${entryLoc.name}`;
     Object.assign(save, result.saveData);
+    clearDepartureActionOptions(save);
     return true;
   }
   const route = currentLocation(save).canonicalLocationId === selection.fromId ? mapRoutes(save, selection.toId).find(r => r.id === selection.routeId) : undefined;
@@ -127,7 +128,16 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
   const position = (save as any).角色.位置;
   position.locationId = selection.toId; position.描述 = `${countryOf(selection.toId)}·${loc?.name || ''}`;
   if (loc?.coordinates) { position.x = loc.coordinates.x; position.y = loc.coordinates.y; }
+  clearDepartureActionOptions(save);
   return true;
+}
+/**
+ * 地图抵达后清掉出发地那段正文附带的模型建议（「其他行动」）：那是按旧地点写的（江州渡口「确认航线后登上快船」到临安仍挂着，REPORT-8091-2ba71102 P2-B）。
+ * 正文本身保留；新地点的主线/探索建议由引擎按新位置现算，不受影响。
+ */
+function clearDepartureActionOptions(save: SaveData): void {
+  const latest = (save as any).系统?.历史?.叙事?.at?.(-1);
+  if (latest && Array.isArray(latest.actionOptions) && latest.actionOptions.length) latest.actionOptions = [];
 }
 
 /** 地图出行落账后的弹窗提示：写明实际落点（与顶栏「国别·地名」同口径），不留旧关文案（REPORT-8091-da90cb13 P2-2）。 */
