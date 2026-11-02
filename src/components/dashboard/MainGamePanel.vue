@@ -633,7 +633,7 @@ import {
   type BaihuGambleRefusalSelection,
 } from '@/modules/scenarioMods/baihuGambleRefusal';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
-import { prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, deadlineResolvedThisTurn, logBeatResolve, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
+import { prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
 import {
   abortInFlightNaturalIntent,
   freeActionOwnsText,
@@ -2874,12 +2874,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       }
     }
 
-    // 回合收尾：作者写明的到点本回合收束了哪拍（beat.resolve deadline）；启程按钮空转满 story.beatProgress.departureIdleTurns 回合只提示，不自动出发（用户 2026-11-02 拍板③④）。
+    // 回合收尾：作者写明的到点本回合收束了哪拍（beat.resolve deadline）；启程按钮空转满 story.beatProgress.departureIdleTurns 回合、本拍主线按钮空转满 actionIdleTurns 回合都只提示，不自动出发、不代结算（用户 2026-11-02 拍板③④）。
     let idleDepartureNotice: string | undefined;
     if (aiResetToken === resetSnapshot && aiResponse) {
       const idleSave = gameStateStore.toSaveData();
       for (const eventId of deadlineResolvedThisTurn(scenarioSaveAtSend, idleSave)) logBeatResolve(idleSave, 'deadline', { eventId });
       idleDepartureNotice = idleSave ? noteStageDepartureIdleTurn(idleSave) : undefined;
+      const idleActionNotice = idleSave ? noteBeatActionIdleTurn(idleSave) : undefined;
+      idleDepartureNotice ||= idleActionNotice;
       if (idleSave) gameStateStore.systemExtensions = (idleSave as any).系统.扩展;
     }
     // 最终统一存档（仅成功时）

@@ -87,6 +87,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.beatProgress.deadlineTurns', kind: 'object', required: true, section: 'progress' },
   { path: 'story.beatProgress.departureIdleTurns', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.beatProgress.departureIdleNotice', kind: 'string', required: true, section: 'progress' },
+  { path: 'story.beatProgress.actionIdleTurns', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.beatProgress.actionIdleNotice', kind: 'string', required: true, section: 'progress' },
   { path: 'story.beatProgress.missNotice', kind: 'string', required: true, section: 'progress' },
   { path: 'story.narrativeTurnBudget.totalMs', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.narrativeTurnBudget.notice', kind: 'string', required: true, section: 'progress' },

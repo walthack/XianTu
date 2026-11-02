@@ -67,3 +67,52 @@ test('2 自由交手失手扣血（统一写回、记 LCQ-SAV-056），一路打
   // 不写任何人的好感与记忆
   assert.equal(FX.runtimeOf(save).pendingLineAffinityGrants, undefined);
 });
+
+// ───────────── 3) P2 启程／主线按钮闲置不点没有任何提示（唐线进线前_13 连续 4 回合） ─────────────
+// 根因：那一拍的按钮「行动 · 前往宣平坊宅院赴宴」是本拍主线动作（playerCompletionContract），不是本关收束后的启程按钮；
+// 闲置提示只做了启程（noteStageDepartureIdleTurn 只认 getStageDepartureOffer），主线按钮空转没有任何提示。
+// 修：noteBeatActionIdleTurn——本拍主线按钮在场、本拍没推进，空转满 story.beatProgress.actionIdleTurns 回合弹 actionIdleNotice，只提示、不代结算；
+// 启程按钮在场时仍只由启程提示管。回合数与文字都在 mod-kit。
+const R = await loadTs('../src/modules/scenarioMods/runtime.ts');
+const init = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
+const cp = await loadTs('../src/modules/contentPacks/index.ts');
+const ec = await loadTs('../src/modules/scenarioMods/entityCatalog.ts');
+const cr = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+const BP = await loadTs('../src/modules/scenarioMods/beatProgress.ts');
+const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
+const quiet = fn => { const log = console.log, info = console.info, warn = console.warn; console.log = console.info = console.warn = () => {}; try { return fn(); } finally { Object.assign(console, { log, info, warn }); } };
+const stage01 = () => {
+  const mod = ec.resolveScenarioContent(cp.applyContentPackOverlays(JSON.parse(read('src/modules/scenarioMods/builtins/data/lcq.stage_01.json'))));
+  cr.resolveScenarioCharacters(mod.canon?.characters, mod.manifest.id);
+  return quiet(() => R.advanceScenarioRuntime(init.applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), init.buildStrictScenarioInitialization(mod))).saveData);
+};
+const idleTurn = save => {
+  save.世界.状态.剧本模组.worldTurn++;
+  save.系统.历史.叙事.push({ type: 'gm', content: '你在原地歇息片刻，整理思绪。' });
+  save = quiet(() => R.advanceScenarioRuntime(save).saveData);
+  return { save, notice: BP.noteBeatActionIdleTurn(save), departure: BP.noteStageDepartureIdleTurn(save) };
+};
+
+test('3 主线按钮空转 N 回合（N 读 mod-kit）只提示一次、提示后重新计数；拍不推进、不自动结算；推进后计数作废', () => {
+  const cfg = GAME_NUMBERS.story.beatProgress, N = cfg.actionIdleTurns;
+  assert.ok(N > 0);
+  assert.match(cfg.actionIdleNotice, /\{label\}/);
+  assert.deepEqual(JSON.parse(read('mod-kit/game-numbers.qingyu.json')).story.beatProgress.actionIdleNotice, cfg.actionIdleNotice);
+  let save = stage01();
+  const beat = R.getCurrentStoryEventActions(save)[0];
+  assert.ok(beat, 's01_01 有主线按钮');
+  const notices = [];
+  for (let i = 0; i < 2 * N + 2; i++) { const out = idleTurn(save); save = out.save; notices.push(out.notice); assert.equal(out.departure, undefined); }
+  const at = notices.map((n, i) => n ? i : -1).filter(i => i >= 0);
+  // 第一回合看到按钮记 0，再空转 N 回合提示一次；提示后重新计数。
+  assert.deepEqual(at, [N, 2 * N], JSON.stringify(notices));
+  assert.equal(notices[N], cfg.actionIdleNotice.replace('{label}', beat.label));
+  assert.equal(R.getCurrentStoryEventActions(save)[0]?.eventId, beat.eventId, '只提示，拍没被代结算');
+  // 点了按钮推进到下一拍：计数从 0 重来
+  quiet(() => R.recordStoryEventStructuredAction(save, R.getCurrentStoryEventActions(save)[0]));
+  save = idleTurn(save).save;
+  const next = R.getCurrentStoryEventActions(save)[0];
+  if (next && next.eventId !== beat.eventId) assert.equal(save.系统.扩展.beatActionIdle?.turns ?? 0, 0);
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  assert.match(panel, /const idleActionNotice = idleSave \? noteBeatActionIdleTurn\(idleSave\) : undefined;\s*idleDepartureNotice \|\|= idleActionNotice;/);
+});

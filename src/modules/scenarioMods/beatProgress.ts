@@ -10,6 +10,7 @@
  * 到点：只认作者在拍上写明的 deadline（offscreenResolution，回合数在 story.beatProgress.deadlineTurns 按事件 id 配，
  * 由 applyBeatDeadlines 在载入关卡时写进拍）；不再有通用的「主线停滞 N 回合代玩家结算」。
  * 启程：本关收束后启程按钮＝本关最后一个动作（手打按钮文字＝点击）；空转 departureIdleTurns 回合只提示、不自动出发；
+ * 本拍主线按钮空转 actionIdleTurns 回合同样只提示（noteBeatActionIdleTurn）；
  * 下一关在别国时启程改为打开地图点选（stageDepartureMapTarget／stageDepartureArrived）。
  * runtime.ts 冻结：它在「关已就绪未切关」时把 stallTurns 清零，所以启程空转计数外置在 系统.扩展.stageDepartureIdle。
  */
@@ -35,6 +36,8 @@ type BeatConfig = {
   deadlineTurns: Record<string, number>;
   departureIdleTurns: number;
   departureIdleNotice: string;
+  actionIdleTurns: number;
+  actionIdleNotice: string;
   missNotice: string;
 };
 const config = (): BeatConfig => (GAME_NUMBERS.story as unknown as { beatProgress: BeatConfig }).beatProgress;
@@ -173,6 +176,28 @@ export function noteStageDepartureIdleTurn(save: SaveData | null | undefined): s
   const turns = prev?.stageId === stageId && prev?.nextStageId === offer.nextStageId ? (Number(prev.turns) || 0) + 1 : 0;
   ext[IDLE_KEY] = { stageId, nextStageId: offer.nextStageId, turns: turns >= limit ? 0 : turns };
   return turns >= limit ? config().departureIdleNotice.replace('{label}', offer.label) : undefined;
+}
+
+const ACTION_IDLE_KEY = 'beatActionIdle';
+/**
+ * 每个叙事回合收尾时调用一次（与启程空转同一口径，REPORT-8091-98199e80 P2：唐线「行动 · 前往宣平坊宅院赴宴」连续 4 回合不点没有任何提示）：
+ * 本拍主线动作按钮在场、本拍又没推进，就记一回合空转（首次看到记 0），满 actionIdleTurns 回合返回一句提示（{label}＝第一个按钮的文字）并重新计数——
+ * 只提示，不代玩家结算、不自动出发。启程按钮在场时由 noteStageDepartureIdleTurn 管，这里不重复提示；拍换了（推进了）计数作废。
+ */
+export function noteBeatActionIdleTurn(save: SaveData | null | undefined): string | undefined {
+  const ext = (save as any)?.系统?.扩展;
+  if (!save || !ext) return undefined;
+  const actions = getCurrentStoryEventActions(save);
+  const limit = Number(config().actionIdleTurns) || 0;
+  if (!actions.length || !limit || getStageDepartureOffer(save) || isQingyuOpeningPlaytestSave(save) || runtimeOf(save)?.gameOver) {
+    delete ext[ACTION_IDLE_KEY];
+    return undefined;
+  }
+  const stageId = String(runtimeOf(save)?.modId || ''), eventId = actions[0].eventId;
+  const prev = ext[ACTION_IDLE_KEY];
+  const turns = prev?.stageId === stageId && prev?.eventId === eventId ? (Number(prev.turns) || 0) + 1 : 0;
+  ext[ACTION_IDLE_KEY] = { stageId, eventId, turns: turns >= limit ? 0 : turns };
+  return turns >= limit ? config().actionIdleNotice.replace('{label}', actions[0].label) : undefined;
 }
 
 /** 下一关模组（与切关同口径跳过默认路线的隔离关）。 */
