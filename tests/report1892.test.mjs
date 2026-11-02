@@ -223,3 +223,21 @@ test('5 地图人物标记跳过玩家本人的关系条目，没有位置的人
   assert.equal((panel.match(/if \(isPlayerRelationEntry\(npcName, npcData, gameStateStore\.character\?\.名字\)\) return;/g) || []).length, 2, '两处人物标记都跳过玩家本人');
   assert.doesNotMatch(panel, /hash 伪随机兜底|const hash = seed\.split/);
 });
+
+// ───────────── 6) P2 把按钮显示标签（「行动 · …」）粘贴发送不结算 ─────────────
+// 根因：resolveStoryEventActionFromText 只拿建议原句（playerLine／actionText）比对，按钮上显示的是 label，粘贴标签对不上原句、
+// 又不含作者短语，只能交给意图模型。值得等同原句：标签与动作一一对应，改动只多比一个字段；两条以上同标签时照旧不猜。
+// 修：按钮标签与原句同口径（去标点空白后相等即命中）。
+test('6 粘贴按钮标签等同原句结算（复现：s01_03 标签原先对不上）', () => {
+  const s = newGameAt('lcq.event.s01_03');
+  const [action] = R.getCurrentStoryEventActions(s);
+  assert.equal(action.label, '行动 · 战场上有名受伤军士，先判断该不该伸手相助');
+  assert.equal(R.resolveStoryEventActionFromPlayerText(structuredClone(s), action.label), undefined, '复现：作者短语认不出标签');
+  const hit = NI.resolveStoryEventActionFromText(structuredClone(s), action.label);
+  assert.deepEqual([hit?.eventId, hit?.actionId], [action.eventId, action.actionId]);
+  assert.equal(quiet(() => R.recordStoryEventStructuredAction(structuredClone(s), hit)).completed, true);
+  assert.equal(NI.resolveStoryEventActionFromText(structuredClone(s), '行动 战场上有名受伤军士先判断该不该伸手相助')?.eventId, action.eventId, '去标点空白后相等');
+  assert.equal(NI.resolveStoryEventActionFromText(structuredClone(s), '战场上有名受伤军士'), undefined, '只认整条标签，不做片段匹配');
+  const frost = newGameAt(S0106);
+  assert.equal(NI.resolveStoryEventActionFromText(structuredClone(frost), R.getCurrentStoryEventActions(frost)[0].label)?.eventId, S0106);
+});

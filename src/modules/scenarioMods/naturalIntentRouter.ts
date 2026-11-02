@@ -417,12 +417,13 @@ const presentedLineKey = (value: unknown): string => String(value || '').normali
  * 手打或填入的句子与引擎当前给出的建议原句一字不差（去标点空白后相等）＝点了那条建议；对不上再走作者短语（resolveStoryEventActionFromPlayerText）。
  * REPORT-8091-f9737e0d P1：s01_03 建议原句「我上前查看那位伤者。」不在该拍作者短语里，按钮选择一丢（手打、驱动填入同一句）就永远落不了账，
  * 而 s01_02 靠场外时钟、s01_01 原句恰好命中短语才没露馅。只认当前剧情/探索动作自己的原句，不做近义匹配；两条以上同句时不猜。
+ * 按钮上看得到的标签（「行动 · …」）同样算原句：玩家照着按钮抄写或粘贴标签就是点那条建议（REPORT-8091-1892cfb6 P2）。
  */
 export function resolveStoryEventActionFromText(saveData: SaveData, playerText: string): ScenarioEventActionSelection | undefined {
   const key = presentedLineKey(playerText);
   if (key) {
     const hits = [...getCurrentStoryEventActions(saveData), ...getCurrentStoryExplorationActions(saveData)]
-      .filter(action => presentedLineKey(action.playerLine) === key || presentedLineKey(action.actionText) === key);
+      .filter(action => [action.playerLine, action.actionText, action.label].some(line => presentedLineKey(line) === key));
     if (hits.length === 1) return hits[0];
   }
   return resolveStoryEventActionFromPlayerText(saveData, playerText);
