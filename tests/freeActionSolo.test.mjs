@@ -414,7 +414,8 @@ test('场面进行中：自修与场面都不出判定卡（scene_active），�
 
 test('有对象的变体缺 targetId（回执被剥）：不出卡、不结算——无对象只认配置声明了 target:none 的变体', () => {
   const save = makeSave({ present: [WANG_ZHE], favor: { [WANG_ZHE]: 55 } });
-  const bare = ticket('physical', 'attack', null);
+  // 用 grab：不在无名来敌名单里（physical.attack 对无名来敌另按 freeAction.ticket.unlistedFoe 收票，见 tests/report9819.test.mjs）
+  const bare = ticket('physical', 'grab', null);
   assert.equal(mods.plan.prepareFreeAction(save, bare).kind, 'blocked');
   const resolved = { id: 'j.fake', status: 'resolved', outcome: 'success' };
   assert.deepEqual(mods.settle.settleFreeAction(save, bare, resolved), { ok: false, reason: 'disabled', facts: [] });

@@ -42,7 +42,7 @@ test('模型说 none 并报票：校验通过的票挂在自由结果上；名�
   const save = fresh();
   mods.diag.clearTicketDiscards();
   const text = '我拔刀，一刀砍向王哲！';
-  const { generate } = stub(reply([ticketJson(), ticketJson({ targetId: 'lcq.character.nobody', evidence: '一刀砍向' })]));
+  const { generate } = stub(reply([ticketJson(), ticketJson({ targetId: 'liuchao.character.su_daji', evidence: '一刀砍向' })]));
   const result = await run(save, text, generate);
   assert.equal(result.kind, 'free');
   assert.equal(result.skipKeywordPreflight, true);

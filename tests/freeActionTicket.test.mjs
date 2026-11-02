@@ -10,7 +10,7 @@ test('空值写成字符串 "null" / "" 按空处理（真机见过 itemId:"null
   const text = '我拔刀，一刀砍向王哲！';
   assert.equal(validate([t('attack', WANG_ZHE, '一刀砍向王哲', { itemId: 'null' })], text).tickets.length, 1);
   assert.equal(validate([t('attack', WANG_ZHE, '一刀砍向王哲', { itemId: '' })], text).tickets[0].itemId, null);
-  assert.equal(validate([t('attack', 'null', '一刀砍向王哲')], text).discards[0].reason, 'target_not_present');
+  assert.equal(validate([t('grab', 'null', '一刀砍向王哲')], text).discards[0].reason, 'target_not_present'); // grab 不在无名来敌名单里（physical.attack 对无名来敌另按 freeAction.ticket.unlistedFoe 收票，见 tests/report9819.test.mjs）
   const stray = validate([t('attack', WANG_ZHE, '一刀砍向王哲', { itemId: 'lcq.item.not_mine' })], text);
   assert.equal(stray.tickets.length, 1, '不需要物品的变体带了名单外 itemId：置空，票照收');
   assert.equal(stray.tickets[0].itemId, null);

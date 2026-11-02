@@ -182,7 +182,9 @@ test('体量与格式：提示词主体一字不变（700 字）；变体清单�
   const section = mods.ticket.ticketPromptSection(base());
   assert.equal(section.system.length, 700, '不改提示词主体');
   const BEFORE_CLASSES_LENGTH = 1548; // 本次修复前（HEAD afaae50b）变体清单 JSON 的长度
-  const grown = JSON.stringify(section.payload.classes).length - BEFORE_CLASSES_LENGTH;
+  // REPORT-8091-98199e80 P1 另加的无名来敌 hint（physical.attack）不计入那次修复的增量。
+  const foeHint = JSON.stringify({ hint: hintOf('physical', 'attack') }).length - 1;
+  const grown = JSON.stringify(section.payload.classes).length - BEFORE_CLASSES_LENGTH - foeHint;
   assert.ok(grown > 0 && grown <= 200, `变体清单增加 ${grown} 字符`);
   for (const row of mods.config.enabledVariants()) {
     const hint = hintOf(row.actionClass, row.variant);

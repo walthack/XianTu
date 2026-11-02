@@ -838,6 +838,11 @@
       "unclear"
     ],
     "ticket": {
+      "unlistedFoe": {
+        "note": "无名来敌（REPORT-8091-98199e80 P1；设计稿 2026-11-02 2.4「自由交手打模型临场写出的敌人：仍走 freeAction 判定，用同一写回函数」）：这些变体（类.变体）的票，targetId 不是任何已知人物（没有关系记录也没有正典记录，常见为 null 或模型编的 id）时不再按 target_unavailable 拒掉，改按「对{label}出手」签发判定卡，确认后只结算玩家一方——非成功档按 freeAction.aftermath.hpLoss 扣气血、打到 ≤ combatDownedAt 判负，走 combatWriteback 统一写回；不写对方好感、伤势、记忆。点名的已知人物不在场仍按 target_unavailable 拒（#222④）。",
+        "variants": ["physical.attack"],
+        "label": "来敌"
+      },
       "maxPerTurn": 2,
       "evidenceChars": 30,
       "rosterMax": 6,
@@ -947,6 +952,7 @@
         "variants": {
           "attack": {
             "label": "攻击",
+            "hint": "打无名来敌（不在roster）也出票，targetId填null。",
             "base": -10,
             "npcOutcomes": {
               "critical_failure": "block",

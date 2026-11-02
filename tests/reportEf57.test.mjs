@@ -317,13 +317,14 @@ test('2 随机战判胜：收场也写进短期记忆，不加判负行', async 
   assert.ok(!memory.includes(HEAD()));
 });
 
-test('2 输局后「与来敌交手」：无名来袭者已散、不在在场名单，交手票按不在场拒掉（不掷骰的原因）', async () => {
+// REPORT-8091-98199e80 P1 起：这正是「自由交手不扣血」的根因——无名来袭者（敌人种类 id）不是任何已知人物，攻击票改按无名来敌收下、签发判定（freeAction.ticket.unlistedFoe）。
+test('2 输局后「与来敌交手」：无名来袭者不在在场名单，攻击票按无名来敌收下（targetId 置空），不再按不在场拒', async () => {
   const h = await randomBattle(10);
   const raw = [{ actionClass: 'physical', variant: 'attack', targetId: 'lcq.enemy.guiwang_warrior', degree: 'normal', performed: 'yes', evidence: '与来敌交手', itemId: null }];
   const checked = quiet(() => T.validateFreeActionTickets(raw, '与来敌交手', h.save));
-  assert.equal(checked.tickets.length, 0);
-  assert.deepEqual(checked.discards.map(d => d.reason), ['target_not_present']);
-  assert.equal(checked.refusals.length, 1, '只留一行「人不在身边、落了空」的未发生事实');
+  assert.deepEqual(checked.tickets.map(t => [t.variant, t.targetId]), [['attack', null]]);
+  assert.deepEqual(checked.discards, []);
+  assert.deepEqual(checked.refusals, []);
 });
 
 test('2 controller：判负结果行与收场同一句配置文案，不再写死', () => {

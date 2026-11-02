@@ -18,7 +18,7 @@ import { levelOf } from '@/utils/realmUtils';
 import { atTrainingCap, canBreakthrough, trainingRealm } from '../levelProgression';
 import type { InjuryRecord } from '../../sceneModule/host/injuries';
 import { itemEffectOf, type ItemEffect } from './itemUse';
-import { resolveNumberRef, variantSpecOf, type VariantSpec } from './config';
+import { freeActionConfig, isUnlistedFoeTicket, resolveNumberRef, variantSpecOf, type VariantSpec } from './config';
 import { freeActionText, targetLevelOf } from './judgement';
 import { canonCharacterOf, freeActionRosterOf, playerIdOf, type FreeActionTicket } from './ticket';
 import { readFreeActionState, runtimeOf } from './state';
@@ -85,8 +85,8 @@ export function atBreakthroughTicket(save: SaveData, ticket: FreeActionTicket): 
  * 无对象的票（自修、场面）只在“出判定卡前”过闸门：不查名单、好感、物品、代价，只看场面是否在进行，和自修的境界试算。
  * 确认判定时旧引擎已按 kind 落账（境界、气血、余波），所以结算侧不再回头过闸门（见 settle.ts）。
  */
-function checkTargetlessGates(save: SaveData, spec: VariantSpec): GateOk | GateFail {
-  const slots: GateSlots = { player: playerNameOf(save), target: '' };
+function checkTargetlessGates(save: SaveData, spec: VariantSpec, target = ''): GateOk | GateFail {
+  const slots: GateSlots = { player: playerNameOf(save), target };
   if (activeScene(save)) return { ok: false, reason: 'scene_active', slots };
   // 境界试算不动：已到练功上限（默认即境界最高级，与 canBreakthrough 同一判据 atTrainingCap）＝瓶颈，冲关、修炼都一样；否则是进度还不到（真机 658435d5eb8b：最高境界满进度冲关提示「还不到这一步」）。
   if (spec.requires?.realmMoves && !realmWouldMove(save, spec)) return { ok: false, reason: atTrainingCap(save) ? 'realm_capped' : 'not_ready', slots };
@@ -97,6 +97,8 @@ export function checkGates(save: SaveData, ticket: FreeActionTicket, deps: FreeA
   const spec = variantSpecOf(ticket.actionClass, ticket.variant);
   if (!spec || !spec.enabled) throw new Error(`自由行动变体不可用：${ticket.actionClass}.${ticket.variant}`);
   if (spec.target === 'none') return checkTargetlessGates(save, spec);
+  // 无名来敌：没有对象可查（名单、好感、保护），同无对象票只看场面是否在进行；对象名用配置的 label。
+  if (isUnlistedFoeTicket(ticket, spec)) return checkTargetlessGates(save, spec, freeActionConfig().ticket.unlistedFoe.label);
   const targetId = ticket.targetId!, runtime = runtimeOf(save);
   const slots: GateSlots = { player: playerNameOf(save), target: targetNameOf(save, targetId) };
   const fail = (reason: GateReason): GateFail => ({ ok: false, reason, slots });

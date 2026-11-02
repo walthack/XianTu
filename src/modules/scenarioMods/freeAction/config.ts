@@ -145,8 +145,9 @@ export interface FreeActionConfig {
   /**
    * local：意图模型没给无对象自身行动（调息、休整……）出票时的本地兜底。原话里有该变体 localTicketWords 的词、所在小句没有 negators 里的否定字和 helperMarks 里替他人做的字（替/帮/给…）、模型一张票都没给、
    * 也不含 excludeWords（为他人疗伤、双修、传功这类指向别人的说法），就本地出一张票（degree 取 local.degree），照常过闸门和判定。
+   * unlistedFoe：对模型临场写出的无名来敌（不是任何已知人物）出手的变体（类.变体），不拒票，按「对{label}出手」签发判定、只结算玩家一方（见 isUnlistedFoeTicket）。
    */
-  ticket: { maxPerTurn: number; evidenceChars: number; rosterMax: number; itemListMax: number; local: { negators: string; helperMarks: string; excludeWords: string[]; degree: Degree } };
+  ticket: { maxPerTurn: number; evidenceChars: number; rosterMax: number; itemListMax: number; local: { negators: string; helperMarks: string; excludeWords: string[]; degree: Degree }; unlistedFoe: { variants: string[]; label: string } };
   /**
    * floatBand：票上的好感浮动位只能在“代码基础值 ± floatBand”内生效。
    * repeat：同一目标同一行动类的正向好感按次数递减——factors[n] 是窗口内第 n+1 次的系数（超出表长取最后一项），windowMinutes 从窗口内第一次起算，窗口外重算；敌意不递减。
@@ -179,6 +180,12 @@ export interface FreeActionConfig {
 export const freeActionConfig = (): FreeActionConfig => GAME_NUMBERS.freeAction as unknown as FreeActionConfig;
 
 export { resolveNumberRef };
+
+/** 无名来敌票：变体在 ticket.unlistedFoe.variants 里、票上没有 targetId（ticket.ts 校验时已把非已知人物的目标置空）。 */
+export function isUnlistedFoeTicket(ticket: { actionClass: string; variant: string; targetId: string | null }, spec: VariantSpec | undefined, cfg: FreeActionConfig = freeActionConfig()): boolean {
+  return !!spec && !ticket.targetId && spec.target !== 'none' && spec.kind === 'combat'
+    && (cfg.ticket.unlistedFoe?.variants ?? []).includes(`${ticket.actionClass}.${ticket.variant}`);
+}
 
 export function intimacyConfig(cfg: FreeActionConfig = freeActionConfig()): IntimacyConfig | undefined {
   return cfg.classes.intimate?.intimacy;
@@ -298,6 +305,14 @@ export function validateFreeActionConfig(cfg: FreeActionConfig = freeActionConfi
   }
   const local = cfg.ticket?.local;
   if (!local || typeof local.negators !== 'string' || typeof local.helperMarks !== 'string' || !Array.isArray(local.excludeWords) || local.excludeWords.some(word => typeof word !== 'string' || !word.trim()) || !cfg.degrees.includes(local.degree)) errors.push('ticket.local 须有 negators、helperMarks（字符串）、excludeWords（非空字符串数组）、degree（degrees 之一）');
+  const foe = cfg.ticket?.unlistedFoe;
+  if (!foe || !Array.isArray(foe.variants) || typeof foe.label !== 'string' || !foe.label.trim()) errors.push('ticket.unlistedFoe 须有 variants（类.变体 数组）、label（非空字符串）');
+  else for (const key of foe.variants) {
+    const [cls, variant] = String(key).split('.');
+    const spec = cls && variant ? variantSpecOf(cls, variant, cfg) : undefined;
+    if (!spec) errors.push(`ticket.unlistedFoe.variants 的 ${String(key)} 不是已知变体`);
+    else if (spec.kind !== 'combat' || spec.target === 'none') errors.push(`ticket.unlistedFoe.variants 的 ${String(key)} 须是有对象的 combat 类变体`);
+  }
   if (!Array.isArray(cfg.dangerTiers) || !cfg.dangerTiers.length || cfg.dangerTiers.some(tier => typeof tier !== 'string' || !tier) || new Set(cfg.dangerTiers).size !== cfg.dangerTiers.length) errors.push('dangerTiers 须为不重复的非空字符串数组');
   else if (!cfg.dangerTiers.includes(cfg.defaultDangerTier)) errors.push(`defaultDangerTier ${String(cfg.defaultDangerTier)} 不在 dangerTiers 里`);
   for (const [cls, raw] of Object.entries(cfg.classes)) {

@@ -70,7 +70,7 @@ export function buildFreeActionJudgementProposal(
     actionText: freeActionText(spec, names.target),
     kind,
     target: ticket.targetId ?? undefined,
-    whyNow: (ticket.targetId ? whyNowText : whySelfText)({ ...names, label: spec.label }),
+    whyNow: (ticket.targetId || spec.target !== 'none' ? whyNowText : whySelfText)({ ...names, label: spec.label }),
     difficulty: { band: bandFor(difficulty), value: difficulty },
     factors,
     stakes: {

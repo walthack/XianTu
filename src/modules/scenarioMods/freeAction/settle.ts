@@ -22,7 +22,7 @@ import { withEncounteredTarget } from './encounter';
 import { applyItemOnUse, tagDowngradeOf } from './itemUse';
 import { afterItemFed } from './maigu';
 import { checkGates, drainPlan, drainSelfCost, playerNameOf, transferRoom, targetNameOf, type FreeActionDeps, type GateOk } from './gates';
-import { freeActionConfig, intimacyConfig, selfBuffOf, variantSpecOf, type VariantSpec } from './config';
+import { freeActionConfig, intimacyConfig, isUnlistedFoeTicket, selfBuffOf, variantSpecOf, type VariantSpec } from './config';
 import { affinityNoteText, aftermathDownedText, aftermathHpText, factText, gateText, memoryText, protectedText, type FactSlots } from './facts';
 import { failureAftermathEffects, selfBuffEffect } from './outcomeEffects';
 import { pushLightMemory, pushMajorEpisode } from './memory';
@@ -353,14 +353,30 @@ function settleTargetless(save: SaveData, spec: VariantSpec, resolution: Judgeme
   return { ok: true, key, resultKey: outcome, facts };
 }
 
+/**
+ * 无名来敌（ticket.unlistedFoe；REPORT-8091-98199e80 P1）：对方不是任何已知人物，只结算玩家一方——事实行按变体的结果档（npcOutcomes）写「对来敌出手」，
+ * 非成功档的余波（扣气血、打到倒下判负、行动门控）走 writeAftermath → combatWriteback 统一写回。不写好感、对方伤势与记忆；同无对象票不回头过闸门。
+ */
+function settleUnlistedFoe(save: SaveData, spec: VariantSpec, resolution: JudgementResolution, key: string, turn: number): SettleResult {
+  const outcome = resolution.outcome!, slots = { player: playerNameOf(save), target: freeActionConfig().ticket.unlistedFoe.label };
+  const resultKey = spec.npcOutcomes?.[outcome] ?? outcome;
+  const facts = [factText(spec.variant, resultKey, slots), ...writeAftermath(save, resolution, slots)];
+  const state = writableFreeActionState(save);
+  state.log.push({ key, turn, actionClass: spec.actionClass, variant: spec.variant, targetId: null, resultKey, delta: 0, major: false });
+  state.log = state.log.slice(-freeActionConfig().state.logKeep);
+  noteSettled(state, key, { facts, resultKey });
+  return { ok: true, key, resultKey, facts };
+}
+
 function settleRegistered(save: SaveData, ticket: FreeActionTicket, resolution: JudgementResolution | undefined, deps: SettleDeps): SettleResult {
   const spec = variantSpecOf(ticket.actionClass, ticket.variant);
-  if (!spec || !spec.enabled || spec.route === 'none' || (!ticket.targetId && spec.target !== 'none')) return { ok: false, reason: 'disabled', facts: [] };
+  if (!spec || !spec.enabled || spec.route === 'none' || (!ticket.targetId && spec.target !== 'none' && !isUnlistedFoeTicket(ticket, spec))) return { ok: false, reason: 'disabled', facts: [] };
   const turn = getNarrativeTurn(save), key = `fa.${resolution?.id ?? `t${turn}`}.${ticket.targetId ?? spec.actionClass}.${ticket.variant}`;
   const prior = readFreeActionState(save).settled[key];
   if (prior) return { ok: true, replay: true, key, resultKey: prior.resultKey, facts: prior.facts };
   if (spec.route === 'judge' && (!resolution || resolution.status !== 'resolved' || !resolution.outcome)) return { ok: false, reason: 'unresolved', facts: [] };
   if (spec.target === 'none') return settleTargetless(save, spec, resolution!, key, turn);
+  if (!ticket.targetId) return settleUnlistedFoe(save, spec, resolution!, key, turn);
   const targetId = ticket.targetId!; // 有对象的变体：缺 targetId 的票上面已按 disabled 退回
 
   const gate = checkGates(save, ticket, deps);

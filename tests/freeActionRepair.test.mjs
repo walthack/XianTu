@@ -90,8 +90,9 @@ test('证据通过但目标无效：返回 target_unavailable 文本（不含玩
   const save = makeSave({ present: [WANG_ZHE] });
   const text = '我一刀砍向苏妲己';
   const expected = mods.facts.gateText('target_unavailable', { player: save.角色.身份.名字 || '你', target: '' });
-  for (const targetId of ['liuchao.character.su_daji', 'lcq.character.not_a_real_one', 123, null, 'null']) {
-    const out = validate([raw('physical', 'attack', targetId, '一刀砍向')], text, save);
+  // grab 不在无名来敌名单里（physical.attack 对无名来敌另按 freeAction.ticket.unlistedFoe 收票，见 tests/report9819.test.mjs）；点名的已知人物（苏妲己）不在场，攻击票也照旧拒
+  for (const [variant, targetId] of [['attack', 'liuchao.character.su_daji'], ...['liuchao.character.su_daji', 'lcq.character.not_a_real_one', 123, null, 'null'].map(id => ['grab', id])]) {
+    const out = validate([raw('physical', variant, targetId, '一刀砍向')], text, save);
     assert.deepEqual(out.tickets, []);
     assert.deepEqual(out.discards.map(d => d.reason), ['target_not_present']);
     assert.deepEqual(out.refusals, [expected]);
@@ -130,7 +131,7 @@ test('路由把 refusals 透传（没有可结算的票时也带）；两条拒�
   const text = '我一刀砍向苏妲己，又一刀砍向李四';
   const result = await run(save, text, stub(reply([
     raw('physical', 'attack', 'liuchao.character.su_daji', '一刀砍向苏妲己'),
-    raw('physical', 'attack', 'lcq.character.li_si', '一刀砍向李四'),
+    raw('physical', 'grab', 'lcq.character.li_si', '一刀砍向李四'),
   ])).generate);
   assert.equal(result.freeActionTickets, undefined);
   assert.equal(result.freeActionRefusals.length, 1);

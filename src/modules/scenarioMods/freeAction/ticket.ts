@@ -14,6 +14,7 @@ import { gateText } from './facts';
 import { logGateRefusal } from './refusalLog';
 import { scenarioPlayerId } from '../playerIdentity';
 import { selfConsumableTarget } from '../selfConsumableIntent';
+import { isRegistryPerson } from '../characterResolver';
 
 export interface FreeActionTicket {
   actionClass: ActionClass;
@@ -159,14 +160,20 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     if (typeof t.evidence !== 'string' || !evidenceBelongs(playerText, t.evidence)) { drop('bad_evidence', label); continue; }
     // 模型常把“空”写成字符串 "null" / ""，按空处理。无对象的变体（自修、场面）不看模型报的 targetId，一律置空，也不查名单与关系。
     const targetless = spec.target === 'none';
-    const reported = t.targetId === 'null' || t.targetId === '' ? null : t.targetId;
-    if (!targetless) {
+    let reported = t.targetId === 'null' || t.targetId === '' ? null : t.targetId;
+    // 无名来敌（REPORT-8091-98199e80 P1）：对不是任何已知人物（关系档、本存档正典、角色总表里的个人）的目标出手，置空后按「对来敌出手」判定，只结算玩家一方；
+    // 点名的已知人物不在场照旧拒。敌人种类 id（lcq.enemy.*）与模型编的 id 都算无名来敌。
+    const foe = !targetless && cfg.ticket.unlistedFoe.variants.includes(`${spec.actionClass}.${spec.variant}`)
+      && !(typeof reported === 'string' && roster.has(reported))
+      && !(typeof reported === 'string' && (relationshipOf(save as any, reported) || canonCharacterOf(save, reported) || isRegistryPerson(reported)));
+    if (foe) reported = null;
+    if (!targetless && !foe) {
       // 自服（「服下朱箓蛇丹」）不是给人：交 selfConsumable 本地结算，这张没对象的给予票直接丢，不出「未发生」（05e63d31 真机 MED1）。
       if (spec.actionClass === 'give' && (typeof reported !== 'string' || !roster.has(reported)) && selfConsumableTarget(save, playerText)) { drop('self_use', label); continue; }
       if (typeof reported !== 'string' || !roster.has(reported)) { refuse('target_unavailable', 'target_not_present', label); continue; }
       if (!relationshipOf(save as any, reported) && !canonCharacterOf(save, reported)) { refuse('target_unavailable', 'target_no_record', label); continue; }
     }
-    const targetId = targetless ? null : reported as string;
+    const targetId = targetless || foe ? null : reported as string;
     // 不需要物品的变体：模型顺手带的 itemId 直接置空，不让整张票作废。
     let itemId = t.itemId === 'null' || t.itemId === '' ? null : t.itemId ?? null;
     if (!spec.needsItem) itemId = null;
@@ -177,7 +184,7 @@ export function validateFreeActionTickets(raw: unknown, playerText: string, save
     if (prior && prior.weight >= weight) { refuse('dropped', 'duplicate_target', label); continue; }
     if (prior) refuse('dropped', 'duplicate_target', `${prior.ticket.actionClass}.${prior.ticket.variant}`);
     // 好感浮动位：不是有限数字就当没报（不作废整张票）；先钳到单拍上限。
-    const floated = !targetless && typeof t.affinityDelta === 'number' && Number.isFinite(t.affinityDelta)
+    const floated = !targetless && !foe && typeof t.affinityDelta === 'number' && Number.isFinite(t.affinityDelta)
       ? Math.max(-cfg.affinity.perBeatCap, Math.min(cfg.affinity.perBeatCap, Math.round(t.affinityDelta))) : undefined;
     picked.set(pickKey, {
       weight,

@@ -111,8 +111,9 @@ test('T6 名单外的人 / 不在场的人：整张票作废，零写入', () =>
   const save = makeSave({ present: [WANG_ZHE] });
   const before = structuredClone(save);
   const text = '我一刀砍向苏妲己';
+  // grab 不在无名来敌名单里（physical.attack 对无名来敌另按 freeAction.ticket.unlistedFoe 收票，见 tests/report9819.test.mjs）
   for (const targetId of ['liuchao.character.su_daji', 'lcq.character.not_a_real_one', 123, null]) {
-    const out = mods.ticket.validateFreeActionTickets([{ actionClass: 'physical', variant: 'attack', targetId, degree: 'normal', performed: 'yes', evidence: '一刀砍向', itemId: null }], text, save);
+    const out = mods.ticket.validateFreeActionTickets([{ actionClass: 'physical', variant: 'grab', targetId, degree: 'normal', performed: 'yes', evidence: '一刀砍向', itemId: null }], text, save);
     assert.deepEqual(out.tickets, []);
     assert.equal(out.discards[0].reason, 'target_not_present');
   }

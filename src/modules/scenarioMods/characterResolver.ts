@@ -290,6 +290,11 @@ export function getRegistryBaseStats(characterId: string): Record<string, unknow
   const stats = byId.get(kindIdOf(characterId))?.baseStats;
   return stats === undefined ? undefined : structuredClone(stats);
 }
+/** 总表里有名有姓的个人（含旧 id 别名；敌人种类与其实例 id 不算）。 */
+export function isRegistryPerson(characterId: string): boolean {
+  const entry = byId.get(characterId);
+  return !!entry && entry.entityType !== ENEMY_KIND_TYPE;
+}
 /** 该 id（含旧 id 别名、实例 id）对应的总表主 id；总表里没有则 undefined。 */
 export function getRegistryCanonicalId(characterId: string): string | undefined {
   return byId.get(kindIdOf(characterId))?.id;
