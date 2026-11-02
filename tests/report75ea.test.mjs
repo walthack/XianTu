@@ -1,4 +1,4 @@
-// REPORT-8091-75eaaee0 复测新问题回归：P2-1 固定选项分支手打近义说法与提示；P2-2 跨国罗盘移动只写准备、引导地图。
+// REPORT-8091-75eaaee0 复测新问题回归：P2-1 固定选项分支期间关闭自由输入（输入框与发送键禁用、占位明示，只能点选项）；P2-2 跨国罗盘移动只写准备、引导地图。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -31,50 +31,65 @@ async function gambleDecision() {
   return (gamble = { s, decision });
 }
 
-test('P2-1 五原赌局：「我接下这场赌局」等自然说法认作接赌，与点击结算同一动作', async () => {
+test('P2-1 五原赌局：分支期间输入框与发送键一起禁用、占位明示；点选项结算后分支消失即恢复可输入', async () => {
   const { s, decision } = await gambleDecision();
   const [accept, decline] = decision.options;
-  for (const text of ['我接下这场赌局', '好，这场赌局我应下了。', '我答应凝羽，赌就赌！', '接受赌局']) {
-    assert.equal(B.resolveBranchDecisionInput(decision, text, lineOf)?.actionId, accept.actionId, text);
-  }
-  const typed = B.resolveBranchDecisionInput(decision, '我接下这场赌局', lineOf);
-  assert.deepEqual(advance(structuredClone(s), typed), advance(structuredClone(s), accept));
-  for (const text of ['我拒绝这场赌局', '这赌局我推掉', '我不赌了']) {
-    assert.equal(B.resolveBranchDecisionInput(decision, text, lineOf)?.actionId, decline.actionId, text);
-  }
+  assert.equal(B.branchDecisionLocksInput(decision), true, '分支期间锁输入');
+  // 手打一律不放行：只认点选的选项（选中且输入框就是该选项原句）。
+  for (const text of ['接赌', '我接下这场赌局', '不赌', '随便聊聊']) assert.equal(B.branchDecisionAllowsSend(decision, null, text, lineOf), false, text);
+  assert.equal(B.branchDecisionAllowsSend(decision, accept, lineOf(accept), lineOf), true);
+  assert.equal(B.branchDecisionAllowsSend(decision, decline, lineOf(decline), lineOf), true);
+  // 点「接赌」后：下一拍不再是分支点，输入恢复。
+  const after = advance(structuredClone(s), accept);
+  const next = B.detectBranchDecision(R.getCurrentStoryEventActions(after));
+  assert.equal(next, null);
+  assert.equal(B.branchDecisionLocksInput(next), false, '点选项后恢复可输入');
 });
 
-test('P2-1 否定句、问句、二选一含糊句不误配；对不上时给出可选项提示', async () => {
-  const { decision } = await gambleDecision();
-  for (const text of ['我不接这赌局', '不接赌', '我不想接下这场赌局', '接赌还是不赌', '要不要接下赌局', '我接下这场赌局？', '随便聊聊', '不怕，我先看看']) {
-    assert.notEqual(B.resolveBranchDecisionInput(decision, text, lineOf)?.actionId, 'answer_ningyu_on_debut', text);
-  }
-  for (const text of ['不接赌', '接赌还是不赌', '随便聊聊', '我接下这场赌局？']) assert.equal(B.resolveBranchDecisionInput(decision, text, lineOf), undefined, text);
-  assert.equal(B.branchDecisionChoiceHint(decision), '请选择：接赌 / 不赌');
+test('P2-1 界面：输入框与发送键都挂分支锁禁用，占位与提示文案来自 mod-kit 配置；手打代选已撤', async () => {
   const ui = await read('src/components/dashboard/MainGamePanel.vue');
-  assert.doesNotMatch(ui, /!!branchDecision && !branchDecisionReady/, '发送键不再因分支锁静默禁用');
-  assert.match(ui, /data-testid="branch-decision-input-hint"/);
-  assert.match(ui, /intentHoldMessage.value = `\$\{BRANCH_DECISION_TITLE\}：\$\{branchDecisionChoiceHint\(branchDecision.value\)\}`/);
+  const config = JSON.parse(await read('mod-kit/branch-decision-ui.json'));
+  const textarea = ui.match(/<textarea[\s\S]*?<\/textarea>/)[0];
+  const send = ui.match(/<button\s+@click="sendMessage"[\s\S]*?class="send-button"/)[0];
+  assert.match(textarea, /:disabled="[^"]*\|\| branchDecisionInputLocked"/, '输入框分支期间禁用');
+  assert.match(send, /:disabled="[^"]*\|\| branchDecisionInputLocked"/, '发送键分支期间禁用');
+  assert.match(textarea, /branchDecisionInputLocked \? BRANCH_DECISION_INPUT_PLACEHOLDER :/, '占位文字明示有意禁用');
+  assert.match(ui, /const branchDecisionInputLocked = computed\(\(\) => branchDecisionLocksInput\(branchDecision.value\)\)/);
+  // 建议区在分支期间点按即确认（发送键已禁用，不能只填入）。
+  assert.match(ui, /@click="branchDecision \? confirmBranchDecision\(option\) : selectScenarioEngineAction\(option\)"/);
+  assert.match(ui, /const confirmBranchDecision = async \(option: ScenarioEngineActionSelection\) => \{\n\s*selectScenarioEngineAction\(option\);\n\s*await sendMessage\(\);/, '点选项结算行为不变');
+  // 文案不写死在组件里。
+  assert.equal(B.BRANCH_DECISION_INPUT_PLACEHOLDER, config.inputPlaceholder);
+  assert.equal(B.BRANCH_DECISION_HINT, config.hint);
+  assert.equal(B.BRANCH_DECISION_TITLE, config.title);
+  assert.equal(B.BRANCH_DECISION_BLOCKED_NOTICE, config.blockedSendNotice);
+  assert.match(config.inputPlaceholder, /此处请从选项中选择/);
+  assert.match(config.inputPlaceholder, /有意禁用/);
+  for (const text of [config.inputPlaceholder, config.hint, config.blockedSendNotice]) assert.equal(ui.includes(text), false, text);
+  // 6ec8d94c 的手打匹配代选已撤。
+  assert.equal(B.resolveBranchDecisionInput, undefined);
+  assert.equal(B.branchDecisionChoiceHint, undefined);
+  assert.doesNotMatch(ui, /resolveBranchDecisionInput|branchDecisionChoiceHint|branch-decision-input-hint/);
+  assert.doesNotMatch(await read('src/modules/scenarioMods/branchDecision.ts'), /branch-decision-phrases/);
+  await assert.rejects(read('mod-kit/branch-decision-phrases.json'), { code: 'ENOENT' });
 });
 
-test('P2-1 通用于所有固定选项锁：近义说法配置覆盖每把锁的每个选项，正反说法各归其位', async () => {
-  const phrases = JSON.parse(await read('mod-kit/branch-decision-phrases.json'));
+test('P2-1 通用于四把固定选项锁：每把锁激活时都关闭自由输入，手打选项原文也不代选', async () => {
   const src = await read('src/modules/scenarioMods/branchDecision.ts');
   const table = [...src.matchAll(/'([^']+)': \[\['([^']+)', '([^']+)'\], \['([^']+)', '([^']+)'\]\]/g)];
-  assert.equal(table.length, 4);
-  // [手打, 应认作的动作（undefined＝不代选，界面提示可选项）]
-  const samples = {
-    'lcq.event.shanghou_revealed': [['我认出那警示，不去碰它', 'refuse_shanghou_relic_test'], ['我伸手去碰那件东西', 'touch_shanghou_relic'], ['我不伸手', 'refuse_shanghou_relic_test'], ['碰还是不碰', undefined]],
-    'lcq.event.ningyu_enters_gamble': [['我接下这场赌局', 'answer_ningyu_on_debut'], ['我拒绝这场赌局', 'refuse_gamble_take_paolao'], ['我不接这赌局', undefined]],
-    'lcq.event.free_ajiman': [['我当面把身契撕了', 'tear_bond_and_face_blockade'], ['先把身契收起来，出城再说', 'pocket_ajiman_bond'], ['我不撕了', 'pocket_ajiman_bond']],
-    'lcq.event.s05b_09_temporary_pact_with_xiaozi': [['我去帮谢艺准备反杀', 'support_xieyi_counterstrike'], ['我先休整一下，随队走', 'rest_then_follow_team'], ['我不支援', 'rest_then_follow_team']],
-  };
+  assert.deepEqual(table.map(m => m[1]).sort(), ['lcq.event.free_ajiman', 'lcq.event.ningyu_enters_gamble', 'lcq.event.s05b_09_temporary_pact_with_xiaozi', 'lcq.event.shanghou_revealed']);
   for (const [, eventId, a1, l1, a2, l2] of table) {
-    assert.deepEqual(Object.keys(phrases.decisions[eventId]).sort(), [a1, a2].sort(), eventId);
-    const options = [a1, a2].map(actionId => ({ source: 'event_engine', eventId, actionId, label: actionId, playerLine: actionId }));
-    const decision = { options, labels: [l1, l2] };
-    for (const [text, expected] of samples[eventId]) assert.equal(B.resolveBranchDecisionInput(decision, text, lineOf)?.actionId, expected, text);
+    const options = [a1, a2].map(actionId => ({ source: 'event_engine', eventId, actionId, label: actionId, playerLine: `line:${actionId}` }));
+    const decision = B.detectBranchDecision(options);
+    assert.deepEqual(decision?.labels, [l1, l2], eventId);
+    assert.equal(B.branchDecisionLocksInput(decision), true, eventId);
+    for (const [i, label] of [l1, l2].entries()) {
+      assert.equal(B.branchDecisionAllowsSend(decision, null, label, lineOf), false, label);
+      assert.equal(B.branchDecisionAllowsSend(decision, options[i], lineOf(options[i]), lineOf), true, label);
+    }
+    assert.equal(B.detectBranchDecision(options.slice(1)), null, `${eventId} 决定步不在时不锁`);
   }
+  assert.equal(B.branchDecisionLocksInput(null), false);
 });
 
 // ---------- P2-2 跨国罗盘移动 ----------

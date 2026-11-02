@@ -116,7 +116,7 @@ test('P1-3 秦入口短句落脚打听：新档、旧合同回填及补充语可
   assert.equal(R.resolveStoryEventActionFromPlayerText(s,'不想落脚打听'),undefined);
 });
 
-test('P2-4 五原固定选项：建议可见，手打接赌/不赌与点击结算同一动作，含糊输入不代选',async()=>{
+test('P2-4 五原固定选项：建议可见，点按接赌/不赌即结算（75ea P2-1 改向：分支期间关闭自由输入）',async()=>{
   let s=R.advanceScenarioRuntime(await fixture('prologue-before-s02_04')).saveData,decision;
   for(let i=0;i<25;i++){
     const actions=R.getCurrentStoryEventActions(s);decision=B.detectBranchDecision(actions);
@@ -126,16 +126,13 @@ test('P2-4 五原固定选项：建议可见，手打接赌/不赌与点击结�
     }else s=advance(s,actions[0]);
   }
   assert.deepEqual(decision?.labels,['接赌','不赌']);
-  for(const [i,label] of decision.labels.entries()){
-    const action=B.resolveBranchDecisionInput(decision,label,a=>a.playerLine);
-    assert.equal(action.actionId,decision.options[i].actionId);
-    assert.deepEqual(advance(structuredClone(s),action),advance(structuredClone(s),decision.options[i]));
-  }
-  for(const text of ['不接赌','接赌还是不赌','随便聊聊']) assert.equal(B.resolveBranchDecisionInput(decision,text,a=>a.playerLine),undefined);
+  for(const option of decision.options) assert.equal(B.branchDecisionAllowsSend(decision,option,option.playerLine,a=>a.playerLine),true);
+  for(const text of [...decision.labels,'不接赌','接赌还是不赌','随便聊聊']) assert.equal(B.branchDecisionAllowsSend(decision,null,text,a=>a.playerLine),false);
+  assert.equal(B.branchDecisionLocksInput(decision),true);
   const ui=await read('src/components/dashboard/MainGamePanel.vue');
   assert.match(ui,/branchDecision.value \? branchDecision.value.options.map/);
   assert.doesNotMatch(ui,/<div v-if="!branchDecision" class="input-wrapper"/);
-  assert.match(ui,/selectedScenarioEngineAction.value = typed; inputText.value = engineOptionLine\(typed\)/);
+  assert.match(ui,/@click="branchDecision \? confirmBranchDecision\(option\) : selectScenarioEngineAction\(option\)"/);
 });
 
 test('P2-5 太泉旧档补齐火山口地点：前往实际落位，到场不会提前完成圣果争夺',async()=>{

@@ -145,7 +145,7 @@
             <button
               v-for="option in engineButtonOptions"
               :key="`${option.contractHash}:${option.source}:${'stepId' in option ? option.stepId : option.eventId}:${option.actionId}`"
-              @click="selectScenarioEngineAction(option)"
+              @click="branchDecision ? confirmBranchDecision(option) : selectScenarioEngineAction(option)"
               class="action-option-btn engine-action-btn"
               :disabled="isAIProcessing"
             >
@@ -153,7 +153,7 @@
               {{ option.label }}<template v-if="showScenarioActionMechanics(option)"> · 耗时 {{ 'timeCost' in option ? (option.timeCost ?? 1) : 1 }} 回合<template v-if="'remainingTurns' in option && option.remainingTurns !== undefined"> · 剩余 {{ option.remainingTurns }} 次重要行动</template></template>
               <span v-if="'costHint' in option && option.costHint" class="engine-action-cost"> · {{ option.costHint }}</span>
             </button>
-            <div class="engine-action-hint">{{ qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
+            <div class="engine-action-hint">{{ branchDecision ? BRANCH_DECISION_HINT : qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
           </div>
 
           <div v-if="stageDepartureOffer" class="action-options opportunity-action-options">
@@ -286,7 +286,6 @@
           <span class="key-beat-label">{{ branchDecision.labels[index] }}</span>
         </button>
         <p class="key-beat-hint">{{ BRANCH_DECISION_HINT }}</p>
-        <p v-if="branchDecisionInputHint" class="key-beat-hint" data-testid="branch-decision-input-hint" role="status">{{ branchDecisionInputHint }}</p>
       </section>
       <div v-if="intentHoldMessage" class="intent-hold-message" data-testid="intent-hold-message" role="status">{{ intentHoldMessage }}</div>
       <div v-if="freeActionReceipts.length" class="free-action-receipt" data-testid="free-action-receipt" role="status">
@@ -399,19 +398,21 @@
             @blur="isInputFocused = false"
             @keydown="handleKeyDown"
             @input="handleInput"
-            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : branchDecision ? `${BRANCH_DECISION_TITLE}：请输入或点选固定选项` : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
+            :placeholder="scenarioGameOver ? '本局已结束' : playtestFinished ? '本次试玩已结束' : branchDecisionInputLocked ? BRANCH_DECISION_INPUT_PLACEHOLDER : hasActiveCharacter ? t('请输入您的选择或行动...') : t('请先选择角色...')"
             class="game-input"
             ref="inputRef"
             rows="1"
             wrap="soft"
-            :disabled="!hasActiveCharacter || isAIProcessing || playtestFinished || !!scenarioGameOver"
+            :disabled="!hasActiveCharacter || isAIProcessing || playtestFinished || !!scenarioGameOver || branchDecisionInputLocked"
+            data-testid="game-input"
           ></textarea>
         </div>
 
         <button
           @click="sendMessage"
-          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver"
+          :disabled="!inputText.trim() || isAIProcessing || !hasActiveCharacter || playtestFinished || !!scenarioGameOver || branchDecisionInputLocked"
           class="send-button"
+          data-testid="send-button"
         >
           <Loader2 v-if="isAIProcessing" :size="16" class="animate-spin" />
           <Send v-else :size="16" />
@@ -535,7 +536,7 @@ import { resolveEndingImage } from '@/assets/endings';
 import { currentDiagnosticTurnId, noteTicketDiscard, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
-import { BRANCH_DECISION_HINT, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, branchDecisionChoiceHint, resolveBranchDecisionInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
+import { BRANCH_DECISION_BLOCKED_NOTICE, BRANCH_DECISION_HINT, BRANCH_DECISION_INPUT_PLACEHOLDER, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, branchDecisionLocksInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
 import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch } from 'vue';
 import {
@@ -1027,19 +1028,17 @@ const engineOptionLine = (option: ScenarioEngineActionSelection): string => (
     ? option.actionText
     : option.playerLine
 );
-// 剧情分支点：只接受当前固定选项，支持手打原文（判定见 branchDecision.ts）。
+// 剧情分支点：只能点固定选项，期间输入框与发送键一起禁用（判定见 branchDecision.ts）。
 // 本局已结束（如选了致命选项）时不再锁：让结局卡片与返回入口显示出来。
 const branchDecision = computed(() => scenarioGameOver.value ? null :
   detectBranchDecision(scenarioEngineActionOptions.value as unknown as Array<BranchDecisionCandidate & ScenarioEngineActionSelection>));
-const branchDecisionReady = computed(() => !!resolveBranchDecisionInput(branchDecision.value, inputText.value, engineOptionLine) || branchDecisionAllowsSend(
+const branchDecisionInputLocked = computed(() => branchDecisionLocksInput(branchDecision.value));
+const branchDecisionReady = computed(() => branchDecisionAllowsSend(
   branchDecision.value,
   selectedScenarioEngineAction.value as unknown as (BranchDecisionCandidate & ScenarioEngineActionSelection) | null,
   inputText.value,
   engineOptionLine,
 ));
-// 手打内容对不上固定选项时明示可选项，发送键不再静默禁用（REPORT-8091-75eaaee0 P2-1）。
-const branchDecisionInputHint = computed(() => branchDecision.value && inputText.value.trim() && !branchDecisionReady.value
-  ? branchDecisionChoiceHint(branchDecision.value) : '');
 const stageDepartureOffer = computed(() => {
   const save = gameStateStore.toSaveData();
   return save && !scenarioGameOver.value && !isNanhuangDemoFinished(save) ? getStageDepartureOffer(save) : null;
@@ -1977,14 +1976,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   intentHoldMessage.value = '';
   freeActionReceipts.value = [];
-  // 剧情分支点：只接受已选中的选项原句；判定确认等后续执行沿用已选动作，不再拦。
-  if (!isFollowUpExecution && branchDecision.value) {
-    const typed = resolveBranchDecisionInput(branchDecision.value, inputText.value, engineOptionLine);
-    if (typed) { selectedScenarioEngineAction.value = typed; inputText.value = engineOptionLine(typed); }
-  }
+  // 剧情分支点：只接受点选的选项原句；判定确认等后续执行沿用已选动作，不再拦。
   if (!isFollowUpExecution && branchDecision.value && !branchDecisionReady.value) {
-    intentHoldMessage.value = `${BRANCH_DECISION_TITLE}：${branchDecisionChoiceHint(branchDecision.value)}`;
-    toast.info(intentHoldMessage.value);
+    toast.info(`${BRANCH_DECISION_TITLE}：${BRANCH_DECISION_BLOCKED_NOTICE}`);
     return;
   }
   const cultivationSelections = actionQueue.pendingActions.flatMap(a => a.cultivation ? [{ ...a.cultivation }] : []);

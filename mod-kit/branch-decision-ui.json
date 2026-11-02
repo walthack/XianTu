@@ -1,0 +1,7 @@
+{
+  "description": "剧情分支固定选项锁（src/modules/scenarioMods/branchDecision.ts 的 LOCKED_DECISIONS）期间的界面文案（REPORT-8091-75eaaee0 P2-1 改向）。分支期间输入框与发送键一起禁用（灰色），只能点上方选项；占位文字明示这是有意禁用，不是故障。",
+  "title": "剧情分支需要做出决定",
+  "hint": "这一步只能从上面的选项中点选一项，输入框暂时关闭。",
+  "inputPlaceholder": "此处请从选项中选择（剧情分支期间输入框有意禁用，选定后恢复）",
+  "blockedSendNotice": "此处请从选项中选择一项"
+}
