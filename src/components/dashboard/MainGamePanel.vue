@@ -513,7 +513,7 @@
 </template>
 
 <script setup lang="ts">
-import { mapPreparationNotice } from '@/modules/scenarioMods/travel/mapTravel';
+import { mapPreparationNotice, domesticTypedTravel, settleDomesticTypedTravel, mapTravelArrivalNotice } from '@/modules/scenarioMods/travel/mapTravel';
 import { turnStateOf, beginTurn, completeTurn, type TurnLedger } from '@/composables/turnSignal';
 import { shouldRestorePreTurnSave } from '@/utils/saveTurnRollback';
 import { worldEventBadgeCount } from '@/utils/worldEventRecords';
@@ -2056,6 +2056,25 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         toast.error('角色已死亡，寿元耗尽。无法继续游戏，请重新开始或复活角色。');
         return;
       }
+    }
+  }
+
+  // 手打国内移动（REPORT-8091-f9737e0d ③）：点名同国地图落点（「我去长安」）与地图「前往此地」同一结算——直接移动、国内片刻，
+  // 不交模型叙述「打开地图按脚程算」而人不动。剧情罗盘/开放世界接得住的句子、点选的建议、带修炼或动作队列的发送不走这里。
+  if (saveData && !isFollowUpExecution && !actionQueueText && !cultivationSelections.length) {
+    const typed = inputText.value.trim();
+    const picked = selectedScenarioEngineAction.value && ('playerLine' in selectedScenarioEngineAction.value && selectedScenarioEngineAction.value.playerLine === typed || selectedScenarioEngineAction.value.actionText === typed);
+    const travel = !picked && !resolveStoryEventActionFromText(structuredClone(saveData), typed) && !resolveWuyuanOpenWorldSelectionFromText(saveData, typed)
+      ? domesticTypedTravel(saveData, typed) : undefined;
+    const moved = travel ? structuredClone(saveData) : null;
+    if (travel && moved && settleDomesticTypedTravel(moved, travel, typed)) {
+      gameStateStore.loadFromSaveData(moved);
+      await gameStateStore.saveGame();
+      inputText.value = ''; lastSelectedActionOption.value = null; selectedScenarioEngineAction.value = null;
+      uiStore.setAIProcessing(false);
+      persistAIProcessingState();
+      toast.info(mapTravelArrivalNotice(moved));
+      return;
     }
   }
 

@@ -129,3 +129,39 @@ test('② 特例只认名单节点进行中且目的地正是该拍地点：08 �
   assert.match(src, /questRouteDays\.eventIds/);
   assert.doesNotMatch(src, /剧情路程，约/, '文案只在 mod-kit');
 });
+
+// ───────────── ③ 手打「我去长安」国内移动：直接移动、耗时片刻，与地图/罗盘一致 ─────────────
+// 根因：手打国内地点既不是当前罗盘目标（解析不出剧情移动），又没有地图选择，整句交给模型叙述——模型按提示词只写「打开地图按脚程算」，
+// 人不动、时间照常按片刻扣。地图「前往此地」与罗盘建议都会真的挪人。
+const CHANGAN = 'liuchao.location.changan', LIUXIANPING = 'lyg.location.liuxianping';
+const tangAtLiuxianping = () => quiet(() => R.advanceScenarioRuntime(fixture('checkpoints/current-tang-entry.json')).saveData);
+
+test('③ 手打「我去长安」：剧情罗盘接不住时按地图同一结算——到唐·长安、只耗片刻、正文补本地回执', () => {
+  const s = tangAtLiuxianping();
+  assert.equal(s.角色.位置.locationId, LIUXIANPING);
+  assert.equal(NI.resolveStoryEventActionFromText(structuredClone(s), '我去长安'), undefined, '复现：不是当前罗盘目标，旧路径交给模型');
+  const sel = M.domesticTypedTravel(s, '我去长安');
+  assert.equal(sel?.toId, CHANGAN);
+  const typed = structuredClone(s), map = structuredClone(s), before = minutesOf(s.元数据.时间);
+  assert.equal(M.settleDomesticTypedTravel(typed, sel, '我去长安'), true);
+  assert.equal(M.settleMapTravel(map, M.selectMapTravel(map, CHANGAN)), true);
+  assert.equal(typed.角色.位置.locationId, CHANGAN);
+  assert.equal(typed.角色.位置.描述, map.角色.位置.描述);
+  assert.equal(minutesOf(typed.元数据.时间) - before, MOMENT);
+  assert.equal(minutesOf(map.元数据.时间) - before, MOMENT, '与地图同耗时');
+  const row = typed.系统.历史.叙事.at(-1);
+  assert.equal(row.content, travelUi.domesticTypedArrival.replace('{name}', '长安').replace('{where}', typed.角色.位置.描述));
+  assert.equal(row.userIntent, '我去长安');
+});
+
+test('③ 否定、问句、假设、跨国、原地都不当国内移动；发送入口在模型之前接住', () => {
+  const s = tangAtLiuxianping();
+  for (const text of ['我不想去长安', '别去长安', '要去长安吗？', '如果去长安会怎样', '我去临安', '我去留仙坪', '我看看四周'])
+    assert.equal(M.domesticTypedTravel(s, text), undefined, text);
+  assert.equal(M.domesticTypedTravel(s, '我动身前往长安。')?.toId, CHANGAN);
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  const at = panel.indexOf('domesticTypedTravel(saveData, typed)'), intent = panel.indexOf('const intent = await resolveNaturalIntent(');
+  assert.ok(at > 0 && at < intent, '手打国内移动在意图模型与叙事之前结算');
+  assert.match(panel, /!resolveStoryEventActionFromText\(structuredClone\(saveData\), typed\) && !resolveWuyuanOpenWorldSelectionFromText\(saveData, typed\)/, '罗盘/开放世界优先');
+  assert.ok(travelUi.domesticTypedArrival.includes('{where}'));
+});

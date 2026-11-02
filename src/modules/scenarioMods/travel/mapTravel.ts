@@ -212,6 +212,38 @@ function crossCountryTextIntent(save: SaveData, text: string): { name: string; t
   return { name };
 }
 
+/**
+ * 手打国内移动（REPORT-8091-f9737e0d ③）：「我去长安」这类点名同国地图落点的句子，与地图「前往此地」同一结果——直接移动、按地图路线计时
+ * （国内片刻；剧情路程特例按天）。只认地图上走得通的普通路线（不走剧情入口转场、不在南荒行旅关）；否定、问句、假设句不算。
+ * 当前剧情罗盘/开放世界动作能接住的句子由调用方先交给它们，这里不抢。
+ */
+export function domesticTypedTravel(save: SaveData, text: string): MapTravelSelection | undefined {
+  const raw = String(text || '').trim();
+  if (!raw || /[？?]\s*$/.test(raw) || /^(?:如果|要是|假如|倘若|若是)/.test(raw)) return undefined;
+  if (!/(?:去|到|前往|赴|动身|回)/.test(raw) || /(?:不|别|没|勿|莫|未)(?:想|要|愿|必|用|敢|能|打算)?(?:去|到|前往|赴|动身|回)|取消前往/.test(raw)) return undefined;
+  if (isNanhuangTravelStage((save as any)?.世界?.状态?.剧本模组?.modId)) return undefined;
+  const from = currentLocation(save).canonicalLocationId, country = countryOf(from);
+  if (!from || !country) return undefined;
+  const named = locations.entries
+    .filter(e => countryOf(e.id) === country && canonicalLocationId(e.id) !== from && e.definition.name && raw.includes(e.definition.name))
+    .sort((a, b) => b.definition.name.length - a.definition.name.length);
+  for (const entry of named) {
+    const toId = canonicalLocationId(entry.id)!;
+    if (CONTENT_PACKS.mapEntries?.some(e => e.locationId === toId)) continue;
+    const selection = selectMapTravel(save, toId);
+    if (selection) return selection;
+  }
+  return undefined;
+}
+/** 手打国内移动落账：与地图同一结算（settleMapTravel），并补一段本地回执正文（文案在 mod-kit/cross-country-travel-ui.json）。 */
+export function settleDomesticTypedTravel(save: SaveData, selection: MapTravelSelection, playerText: string): boolean {
+  if (!settleMapTravel(save, selection)) return false;
+  const name = locationName(selection.toId), where = String((save as any).角色?.位置?.描述 || name);
+  const system = ((save as any).系统 ||= {}), rows = ((system.历史 ||= {}).叙事 ||= []);
+  rows.push({ type: 'gm', role: 'assistant', content: travelUi.domesticTypedArrival.replace(/\{name\}/g, name).replace(/\{where\}/g, where), time: '', userIntent: playerText, actionOptions: [] });
+  return true;
+}
+
 /** 已知跨国文字意图只提供准备材料，不能签发地图选择。 */
 export function mapPreparation(save: SaveData, text: string): string | undefined {
   const intent = mapPreparationIntent(save, text);
