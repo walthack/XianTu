@@ -1945,9 +1945,9 @@ async function runSceneOperationInner(operation: (save: any, deps: HostDeps) => 
   const aborted = () => aiResetToken !== reset || !uiStore.isAIProcessing || characterStore.rootState.当前激活存档?.角色ID !== character;
   try {
     const { runGameModelModule } = await import('@/services/gameModelModules');
-    const ask = (moduleId: string) => async (request: {system:string;user:string}) => {
+    const ask = (moduleId: string) => async (request: {system:string;user:string}, signal?: AbortSignal) => {
       if (aborted()) throw new Error('scene_host_aborted');
-      const result = await runGameModelModule(moduleId, { system: request.system, input: request.user, generationId: `scene_${moduleId}_${Date.now()}` });
+      const result = await runGameModelModule(moduleId, { system: request.system, input: request.user, generationId: `scene_${moduleId}_${Date.now()}`, signal });
       if (aborted()) throw new Error('scene_host_aborted');
       return result.raw;
     };

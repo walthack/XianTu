@@ -265,6 +265,10 @@
         }
       }
     },
+    "narrationBudget": {
+      "note": "场面每拍描写（sceneModule/host/narrate.ts）的模型总耗时上限（毫秒，含重试）：骰点与收场已在请求前落账，超时就掐断请求、改用模板描写，免得这一拍一直停在生成中（REPORT-8091-1892cfb6 P2：随机战判胜后 data-turn-state 卡在 processing 超过 120 秒——场面描写走流式空闲超时，没有总时长上限）。0＝不设上限。",
+      "totalMs": 45000
+    },
     "beatLimit": {
       "note": "场面战斗拍数门禁（sceneModule/beatLimit.ts）。max=0（默认）＝不设上限：战斗打到一方倒下或达成胜负条件才结束；只有合同显式声明为限时战（clock.beats + clock.onTimeout {type:close, as:win|lose}）才在时限到时按合同判赢或输。max 设为正整数时只作诊断：一场还没分出胜负、已打完的拍数超过 max 就记 LCQ-SAV-020（error），每多打一拍记一次，不改判。",
       "max": 0

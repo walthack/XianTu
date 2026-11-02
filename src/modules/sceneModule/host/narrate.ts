@@ -80,7 +80,7 @@ export async function narrateBeat(
   result: BeatResult,
   playerText: string,
   runtime: unknown,
-  ask?: (request: ModelRequest) => Promise<string>,
+  ask?: (request: ModelRequest, signal?: AbortSignal) => Promise<string>,
 ): Promise<{ text: string; by: 'model' | 'template'; problems: string[] }> {
   const problems: string[] = [];
   // The informational answer is an authored code receipt. Free prose cannot add a new confession.
@@ -88,19 +88,28 @@ export async function narrateBeat(
     return {text:interrogationMaterial(contract,state,result.goal,runtime,['success','great_success'].includes(result.tier)).map(text=>renderRefs(text,runtime)).join('\n'),by:'template',problems};
   }
   if (ask) {
-    for (let attempt = 0; attempt < 2; attempt++) {
-      try {
-        // 场面描写不经 AIBS，直接写进历史：在这里过一遍正文清洗（含夹在中文里的英文字段名，REPORT-8091-da90cb13 P2-1）。
-        const raw = sanitizeAITextForDisplay(String(await ask(buildNarrationPrompt(contract, state, result, playerText, runtime)))
-          .replace(/<think>[\s\S]*?<\/think>/gi, '')).trim();
-        const issues = raw ? acceptable(contract, state, result, raw, runtime) : ['描写为空'];
-        if (!issues.length) { noteSceneNarrative('scene_beat', raw, contract, state.beat, undefined, runtime); return { text: raw, by: 'model', problems }; }
-        problems.push(...issues);
-      } catch (error) {
-        problems.push(`模型描写不可用：${String((error as Error)?.message || error).slice(0, 80)}`);
-        break;
+    // 总耗时上限（combat.narrationBudget.totalMs，含重试）：骰点已落账，超时掐断请求改用模板，这一拍不停在生成中（REPORT-8091-1892cfb6 P2）。
+    const budgetMs = Number(GAME_NUMBERS.combat.narrationBudget?.totalMs) || 0;
+    const budget = budgetMs > 0 ? new AbortController() : undefined;
+    const timer = budget ? setTimeout(() => budget.abort(), budgetMs) : undefined;
+    const overBudget = budget ? new Promise<never>((_, reject) => budget.signal.addEventListener('abort', () => reject(new Error(`描写超过 ${budgetMs / 1000} 秒`)), { once: true })) : undefined;
+    overBudget?.catch(() => undefined);
+    const askWithin = (request: ModelRequest) => overBudget ? Promise.race([ask(request, budget!.signal), overBudget]) : ask(request);
+    try {
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          // 场面描写不经 AIBS，直接写进历史：在这里过一遍正文清洗（含夹在中文里的英文字段名，REPORT-8091-da90cb13 P2-1）。
+          const raw = sanitizeAITextForDisplay(String(await askWithin(buildNarrationPrompt(contract, state, result, playerText, runtime)))
+            .replace(/<think>[\s\S]*?<\/think>/gi, '')).trim();
+          const issues = raw ? acceptable(contract, state, result, raw, runtime) : ['描写为空'];
+          if (!issues.length) { noteSceneNarrative('scene_beat', raw, contract, state.beat, undefined, runtime); return { text: raw, by: 'model', problems }; }
+          problems.push(...issues);
+        } catch (error) {
+          problems.push(`模型描写不可用：${String((error as Error)?.message || error).slice(0, 80)}`);
+          break;
+        }
       }
-    }
+    } finally { clearTimeout(timer); }
   }
   return { text: templateNarration(contract, state, result, playerText, runtime), by: 'template', problems };
 }

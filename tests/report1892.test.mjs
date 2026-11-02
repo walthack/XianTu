@@ -167,3 +167,29 @@ test('2 自由行动交手失手：战斗伤害不保底，气血 6／1 都当�
   assert.equal(save.角色.属性.气血.当前, 35, '没打到 0 照常扣、不判负');
   assert.ok(!result.facts.some(f => f.includes('这一战败了')));
 });
+
+// ───────────── 3) P2 战斗判胜后 data-turn-state 卡在 processing 超过 120 秒 ─────────────
+// 根因：掷骰确认后结果行先落账显示（「场面结果：胜」），随后等场面描写模型；描写走流式空闲超时（content_idle，totalMs=null），
+// 没有总时长上限，模型慢吞吞地吐字（加上不合格重试一次）就一直停在 processing，回合账不结清。
+// 修：narrateBeat 加总耗时上限 combat.narrationBudget.totalMs（含重试），到点掐断请求（signal）改用模板描写。
+const NUM = await load('modules/sceneModule/numbers.ts');
+test('3 场面描写超出总耗时上限：掐断请求、改用模板，确认掷骰照常收场（复现：模型不返回就一直等）', async () => {
+  assert.ok(N.combat.narrationBudget.totalMs > 0 && N.combat.narrationBudget.totalMs < 120000, '上限在驱动 120 秒超时以内');
+  const h = await randomBattle(100);
+  ext.activeScene(h.save).state.forced = { action: Array(200).fill(20), defense: Array(400).fill(20) };
+  const signals = [];
+  const hang = (_request, signal) => { signals.push(signal); return new Promise(() => {}); };
+  const before = N.combat.narrationBudget.totalMs;
+  NUM.applyGameNumbers({ combat: { narrationBudget: { totalMs: 30 } } });
+  try {
+    const started = Date.now();
+    for (let i = 0; i < 12 && ext.activeScene(h.save); i++) {
+      if (!ext.activeScene(h.save).pending) await quiet(() => host.submitSceneInput(h.save, '与来敌交手', h.deps));
+      await quiet(() => host.confirmSceneAction(h.save, { ...h.deps, askNarrative: hang }));
+    }
+    assert.equal(ext.activeScene(h.save), null, '判胜收场');
+    assert.equal(ext.readExt(h.save).history.at(-1)?.outcome, 'win');
+    assert.ok(Date.now() - started < 5000, '没有卡在等模型');
+    assert.ok(signals.length >= 1 && signals.every(s => s?.aborted), '超时的请求被掐断');
+  } finally { NUM.applyGameNumbers({ combat: { narrationBudget: { totalMs: before } } }); }
+});

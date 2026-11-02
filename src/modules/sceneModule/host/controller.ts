@@ -37,7 +37,8 @@ import { applyWriteBack, syncSceneStatuses } from './writeback';
 export interface HostDeps {
   persist: (save: SaveData) => Promise<void>;
   askIntent?: (request: ModelRequest) => Promise<string>;
-  askNarrative?: (request: ModelRequest) => Promise<string>;
+  /** signal：场面描写超出 combat.narrationBudget 时掐断请求。 */
+  askNarrative?: (request: ModelRequest, signal?: AbortSignal) => Promise<string>;
   aborted?: () => boolean;
   /** 开战前存一份战外档（combat.preBattleSave）；失败只记日志，不挡开战。 */
   beforeCombat?: (save: SaveData) => Promise<void>;
