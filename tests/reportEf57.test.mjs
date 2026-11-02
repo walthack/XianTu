@@ -239,3 +239,48 @@ test('2 controller：判负结果行与收场同一句配置文案，不再写�
   assert.doesNotMatch(src, /'你伤重倒下，这一战败了。'/);
   assert.equal((src.match(/rememberSceneClose\(save,body\)/g) || []).length, 2, '随机战与剧情战两个收场分支都写记忆');
 });
+
+// ───────────── 3) P2 普通叙事没有总时长上限：B15 模型流卡死 300 秒才中止重试，粘贴标签回合 101.7 秒 ─────────────
+// 根因：场面描写有 combat.narrationBudget（631f0936），普通叙事回合（processPlayerAction）只有流式空闲超时与重试，没有总时长上限；
+// 流卡住时整拍停在 processing，回合账不结清。
+// 修：story.narrativeTurnBudget.totalMs（mod-kit，90 秒）——MainGamePanel 用 raceTurnBudget 包住 processPlayerAction，到点掐断本回合在途请求、
+// 不再等，按生成失败兜底（撤回本回合预结算、保留输入），弹配置里的提示；外层 finally 照常结清回合账、发完成信号。模型／API 配置不动。
+const TS = await loadTs('../src/composables/turnSignal.ts');
+test('3 raceTurnBudget：请求卡死到点即返回 expired、先调 onExpire；按时返回照常取值；失败照常抛；0＝不设上限', async () => {
+  let expiredCalls = 0;
+  const started = Date.now();
+  const hung = await TS.raceTurnBudget(new Promise(() => {}), 30, () => { expiredCalls++; });
+  assert.deepEqual(hung, { expired: true });
+  assert.equal(expiredCalls, 1);
+  assert.ok(Date.now() - started < 1000, '不再等卡死的请求');
+  assert.deepEqual(await TS.raceTurnBudget(Promise.resolve('ok'), 1000, () => { expiredCalls++; }), { expired: false, value: 'ok' });
+  await assert.rejects(TS.raceTurnBudget(Promise.reject(new Error('boom')), 1000, () => {}), /boom/);
+  assert.deepEqual(await TS.raceTurnBudget(new Promise(r => setTimeout(() => r(7), 20)), 0, () => { expiredCalls++; }), { expired: false, value: 7 });
+  assert.equal(expiredCalls, 1, '按时返回不触发超时');
+  // 超时后被放弃的请求迟到失败，不成为未处理拒绝
+  let late; const lateRun = new Promise((_, reject) => { late = reject; });
+  assert.deepEqual(await TS.raceTurnBudget(lateRun, 10, () => {}), { expired: true });
+  late(new Error('late')); await new Promise(r => setTimeout(r, 10));
+});
+
+test('3 超时后回合账照常结清：data-turn-state 回 ready、seq+1 发一次完成信号', async () => {
+  const ledger = { inFlight: 0, seq: 0 };
+  const events = [];
+  const target = new EventTarget(); target.addEventListener(TS.TURN_COMPLETE_EVENT, e => events.push(e.detail));
+  TS.beginTurn(ledger);
+  try { assert.equal((await TS.raceTurnBudget(new Promise(() => {}), 10, () => {})).expired, true); }
+  finally { TS.completeTurn(ledger, processing => ({ processing, ended: false, choiceOnly: false }), target); }
+  assert.deepEqual(events, [{ seq: 1, state: 'ready' }]);
+});
+
+test('3 上限与提示在 mod-kit，低于驱动 300 秒，模型配置不动；MainGamePanel 接线', () => {
+  const budget = GAME_NUMBERS.story.narrativeTurnBudget;
+  assert.ok(budget.totalMs > GAME_NUMBERS.combat.narrationBudget.totalMs && budget.totalMs < 300000, String(budget.totalMs));
+  assert.match(budget.notice, /\{seconds\}/);
+  assert.match(budget.notice, /输入已保留/);
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  assert.match(panel, /raceTurnBudget\(captureAIResponseError\(\(\) => bidirectionalSystem\.processPlayerAction\(/);
+  assert.match(panel, /narrativeBudgetExpired = true;\s*aiService\.abortQingyuTurnRequests\(qingyuTurnId\);/);
+  assert.match(panel, /shouldAbort: \(\) => narrativeBudgetExpired \|\|/);
+  assert.match(panel, /if \(raced\.expired\) \{\s*hasError = true;\s*aiResponse = null;\s*return;/, '到点直接按失败兜底返回，被掐断的请求迟到的错误不再另弹「AI处理失败」');
+});

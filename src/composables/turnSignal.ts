@@ -41,3 +41,20 @@ export function completeTurn(
   emitTurnComplete(target, detail);
   return detail;
 }
+
+/**
+ * 普通叙事回合总耗时上限（REPORT-8091-ef573ece P2：B15 回合模型流卡死 300 秒才中止重试，粘贴标签那回合用了 101.7 秒）。
+ * 到点先调 onExpire（掐断本回合在途请求、给可见提示），并立即结束等待——不再等一个可能永不返回的请求；
+ * 回合账由调用方照常在 finally 结清，data-turn-state 回到 ready、发一次完成信号。totalMs≤0＝不设上限。
+ */
+export async function raceTurnBudget<T>(run: Promise<T>, totalMs: number, onExpire: () => void): Promise<{ expired: true } | { expired: false; value: T }> {
+  if (!(totalMs > 0)) return { expired: false, value: await run };
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const expiry = new Promise<{ expired: true }>(resolve => { timer = setTimeout(() => { onExpire(); resolve({ expired: true }); }, totalMs); });
+  try {
+    return await Promise.race([run.then(value => ({ expired: false as const, value })), expiry]);
+  } finally {
+    clearTimeout(timer);
+    run.catch(() => { /* lcq-allow: 超时后被放弃的请求迟到的失败已无人等待，只防未处理拒绝 */ });
+  }
+}

@@ -88,6 +88,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.stallAutoAdvance.stageDepartureIdleTurns', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.stallAutoAdvance.mainlineNotice', kind: 'string', required: true, section: 'progress' },
   { path: 'story.stallAutoAdvance.departureNotice', kind: 'string', required: true, section: 'progress' },
+  { path: 'story.narrativeTurnBudget.totalMs', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.narrativeTurnBudget.notice', kind: 'string', required: true, section: 'progress' },
   // 罗盘移动按路程折天只用于这些剧情节点（actionTime.questTravelMinutes 读；2026-11-02 总策划定收窄）。
   { path: 'story.actionTime.questRouteDays.eventIds', kind: 'array', required: true, section: 'progress' },
   { path: 'story.actionTime.minutes.instant', kind: 'int', required: true, min: 0, section: 'progress' },

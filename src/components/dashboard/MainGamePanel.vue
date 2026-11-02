@@ -514,7 +514,7 @@
 
 <script setup lang="ts">
 import { mapPreparationNotice, domesticTypedTravel, settleDomesticTypedTravel, mapTravelArrivalNotice } from '@/modules/scenarioMods/travel/mapTravel';
-import { turnStateOf, beginTurn, completeTurn, type TurnLedger } from '@/composables/turnSignal';
+import { turnStateOf, beginTurn, completeTurn, raceTurnBudget, type TurnLedger } from '@/composables/turnSignal';
 import { shouldRestorePreTurnSave } from '@/utils/saveTurnRollback';
 import { worldEventBadgeCount } from '@/utils/worldEventRecords';
 import { stripActionOptionMetaWords, stripNarrativeMetaWords } from '@/utils/narrativeMetaWords';
@@ -2480,6 +2480,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // 使用优化的AI请求系统进行双向交互
   let aiResponse: GM_Response | null = null;
   let hasError = false;
+  // 普通叙事总耗时上限（story.narrativeTurnBudget）：到点掐断本回合请求，按生成失败兜底（撤回预结算、保留输入）。
+  let narrativeBudgetExpired = false;
 
   try {
     // 获取当前角色
@@ -2498,7 +2500,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         cultivationSelections,
         freeTextStatusResolution,
         useStreaming: useStreaming.value,
-        shouldAbort: () => !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
+        shouldAbort: () => narrativeBudgetExpired || !uiStore.isAIProcessing || aiResetToken !== resetSnapshot,
       };
       if (resolvedOpportunityAction) options.opportunityAction = { ...resolvedOpportunityAction };
       else if (resolvedEventAction) {
@@ -2537,11 +2539,22 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
       (options as { qingyuTurnId?: string }).qingyuTurnId = qingyuTurnId;
       const narrativeStartedAt = Date.now();
-      const captured = await captureAIResponseError(() => bidirectionalSystem.processPlayerAction(
+      const budget = (GAME_NUMBERS.story as any).narrativeTurnBudget as { totalMs: number; notice: string };
+      const raced = await raceTurnBudget(captureAIResponseError(() => bidirectionalSystem.processPlayerAction(
         finalUserMessage,
         character,
         options
-      ));
+      )), Number(budget?.totalMs) || 0, () => {
+        narrativeBudgetExpired = true;
+        aiService.abortQingyuTurnRequests(qingyuTurnId);
+        toast.warning(String(budget.notice).replace('{seconds}', String(Math.round(budget.totalMs / 1000))));
+      });
+      if (raced.expired) {
+        hasError = true;
+        aiResponse = null;
+        return;
+      }
+      const captured = raced.value;
       aiResponse = captured.response;
 
       if (!uiStore.isAIProcessing || aiResetToken !== resetSnapshot) {
