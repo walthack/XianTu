@@ -180,6 +180,16 @@ export function crossCountryStoryTravel(save: SaveData, action: { source?: strin
   return crossCountryTarget(save, toId);
 }
 export interface CrossCountryTravelTarget { toId: string; name: string; mapTargetId: string; mapTargetName: string }
+/**
+ * 跨国切关（用户 2026-11-02 拍板④）：下一关开场地点与玩家所在不同国时，启程改为在地图上点选（同剧情罗盘的地图落点口径）。
+ * 南荒行旅关自有路线与时钟，不算；地图上也去不了时 undefined（照常直接启程，免得卡关）。
+ */
+export function crossCountryStageDeparture(save: SaveData, nextStageId: string, nextOpeningLocationId: string | undefined): CrossCountryTravelTarget | undefined {
+  if (isNanhuangTravelStage((save as any)?.世界?.状态?.剧本模组?.modId) || isNanhuangTravelStage(nextStageId)) return undefined;
+  const toId = canonicalLocationId(nextOpeningLocationId || ''), fromId = currentLocation(save).canonicalLocationId;
+  if (!toId || !fromId || !isCrossCountry(fromId, toId)) return undefined;
+  return crossCountryTarget(save, toId);
+}
 const locationName = (id: string) => locations.entries.find(e => canonicalLocationId(e.id) === canonicalLocationId(id))?.definition.name || '';
 /** 地图落点取目标地点本身，不是地图落点时取该国代表地点；地图上也去不了时 undefined。 */
 function crossCountryTarget(save: SaveData, toId: string): CrossCountryTravelTarget | undefined {

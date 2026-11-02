@@ -21,7 +21,7 @@ export const DEBUG_CATEGORIES = [
     id: 'story', label: '剧情推进',
     paths: [
       ...sm('runtime.ts', 'questLine*.ts', 'mainQuestAxis.ts', 'secondaryLines.ts', 'characterQuests.ts', 'fixedQuestObjectives.ts', 'branchDecision.ts', 'milestoneRewards.ts',
-        'phaseContinue.ts', 'stallAutoAdvance.ts', 'settledStepScene.ts', 'keyBeatCards.ts', 'endingPresentation.ts', 'fixedEndingNarratives.ts', 'eventNarrativeView.ts', 'canonRail*.ts', 'divergence*.ts',
+        'phaseContinue.ts', 'beatProgress.ts', 'settledStepScene.ts', 'keyBeatCards.ts', 'endingPresentation.ts', 'fixedEndingNarratives.ts', 'eventNarrativeView.ts', 'canonRail*.ts', 'divergence*.ts',
         'storyTrades.ts', 'shiweimoRescue.ts', '*Playtest*.ts', 'baihuGambleRefusal.ts', 'effectTags.ts', 'r2AcceptanceFixtures.ts', 'playtestNarrativeScope.ts', 'lineUnlock.ts', 'secondaryLineEntry.ts', 'sidebarLineEntries.ts', 'lineCompass.ts'),
       'assets/endings/',
     ],

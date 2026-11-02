@@ -7,7 +7,6 @@ import { freeTextStatusSemanticRequest, validateFreeTextStatusProposals, type Fr
 import type { SaveData } from '@/types/game';
 import {
   getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding,
-  resolveStoryEventActionFromPlayerText,
   getTrackedStoryOpportunityActions,
   reconcileNaturalIntentMetadata,
   type ScenarioEventActionSelection,
@@ -23,6 +22,7 @@ import {
   type WuyuanOpenWorldSelection,
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
+import { resolveBeatText } from './beatProgress';
 import { freeActionConfig } from './freeAction/config';
 import { localTargetlessTickets, ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
 import { freeActionOwnerOf } from './freeAction/legacyGuard';
@@ -412,21 +412,14 @@ function narrateWithoutSettlement(reason: string, usedModel: boolean): NaturalIn
   return { kind: 'free', reason, skipKeywordPreflight: true, usedModel };
 }
 
-const presentedLineKey = (value: unknown): string => String(value || '').normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
 /**
- * 手打或填入的句子与引擎当前给出的建议原句一字不差（去标点空白后相等）＝点了那条建议；对不上再走作者短语（resolveStoryEventActionFromPlayerText）。
- * REPORT-8091-f9737e0d P1：s01_03 建议原句「我上前查看那位伤者。」不在该拍作者短语里，按钮选择一丢（手打、驱动填入同一句）就永远落不了账，
- * 而 s01_02 靠场外时钟、s01_01 原句恰好命中短语才没露馅。只认当前剧情/探索动作自己的原句，不做近义匹配；两条以上同句时不猜。
- * 按钮上看得到的标签（「行动 · …」）同样算原句：玩家照着按钮抄写或粘贴标签就是点那条建议（REPORT-8091-1892cfb6 P2）。
+ * 手打或填入的句子 → 本拍动作表里的动作（beatProgress.resolveBeatText：原句／按钮标签相等且唯一，否则作者短语，否定优先）。
+ * 这里只认剧情／探索动作；启程文字由调用方另走启程（MainGamePanel）。对不上返回 undefined＝不推进（用户 2026-11-02 拍板①②）。
+ * REPORT-8091-f9737e0d P1／1892cfb6 P2 的「原句、按钮标签＝点那条建议」由同一张动作表承接。
  */
 export function resolveStoryEventActionFromText(saveData: SaveData, playerText: string): ScenarioEventActionSelection | undefined {
-  const key = presentedLineKey(playerText);
-  if (key) {
-    const hits = [...getCurrentStoryEventActions(saveData), ...getCurrentStoryExplorationActions(saveData)]
-      .filter(action => [action.playerLine, action.actionText, action.label].some(line => presentedLineKey(line) === key));
-    if (hits.length === 1) return hits[0];
-  }
-  return resolveStoryEventActionFromPlayerText(saveData, playerText);
+  const hit = resolveBeatText(saveData, playerText);
+  return hit?.action.kind === 'event' ? hit.action.selection : undefined;
 }
 
 type NaturalIntentInput = {
@@ -578,6 +571,12 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
     }
     const selection = verifyFreshSelection(input.saveData, parsed);
     if (!selection) return free('stale_or_ambiguous_candidate');
+    // 主线拍只由本拍动作表结算（按钮／原句／作者短语）；意图模型认出、动作表却没对上的主线动作不结算（用户 2026-11-02 拍板②：手打对不上不推进）。
+    // 人物线拍的短语命中仍交模型评估好感（上面 alias 不直接返回），这时模型选的必须就是动作表命中的那一条。
+    if (selection.source === 'event_engine') {
+      const table = resolveBeatText(input.saveData, input.playerText)?.action;
+      if (!(table?.kind === 'event' && table.selection.eventId === selection.eventId && table.selection.actionId === selection.actionId)) return free('beat_requires_action_table', true);
+    }
     const affection=candidates.find(c=>c.actionId===parsed.actionId&&c.eventId===('eventId' in selection?selection.eventId:undefined))?.affinityAssessment;
     if(affection){if(parsed.affinityDelta===undefined)return free('missing_affinity_assessment');(selection as ScenarioEventActionSelection).lineAffinityDelta=parsed.affinityDelta;}
     return { kind: 'matched', selection, skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution };

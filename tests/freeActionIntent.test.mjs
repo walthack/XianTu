@@ -74,7 +74,8 @@ test('不确定（low）也收票；候选命中（matched）时不收票，避�
   const candidates = router.listNaturalIntentCandidates(save);
   const pick = candidates.find(c => c.eventId && c.source === 'event_engine');
   assert.ok(pick, '夹具里应有事件候选');
-  const text = `我${pick.playerLine}`;
+  // 主线动作只在动作表对上（原句相等）时由模型认领（用户 2026-11-02 拍板②）。
+  const text = pick.playerLine;
   const matched = await run(save, text, stub(JSON.stringify({ actionId: pick.actionId, source: pick.source, eventId: pick.eventId, contractHash: pick.contractHash, evidence: pick.playerLine.slice(0, 4), certainty: 'high', affinityDelta: 0, statusProposals: [], tickets: [ticketJson({ evidence: pick.playerLine.slice(0, 4) })] })).generate);
   assert.equal(matched.kind, 'matched', '夹具要真的命中作者动作，这条断言才有意义');
   assert.equal(matched.freeActionTickets, undefined);

@@ -63,7 +63,8 @@ test('actionId 容错只认“不是任何候选的 id”：真候选 id 命中�
   const candidates = router.listNaturalIntentCandidates(save);
   const pick = candidates.find(c => c.eventId && c.source === 'event_engine');
   assert.ok(pick, '夹具里应有事件候选');
-  const matched = await run(save, `我${pick.playerLine}`, JSON.stringify({ actionId: pick.actionId, source: pick.source, eventId: pick.eventId, contractHash: pick.contractHash, evidence: pick.playerLine.slice(0, 4), certainty: 'high', affinityDelta: 0, statusProposals: [], tickets: [rawTicket('solo', 'train', null, pick.playerLine.slice(0, 4))] }));
+  // 主线动作只在动作表对上（原句相等）时由模型认领（用户 2026-11-02 拍板②）。
+  const matched = await run(save, pick.playerLine, JSON.stringify({ actionId: pick.actionId, source: pick.source, eventId: pick.eventId, contractHash: pick.contractHash, evidence: pick.playerLine.slice(0, 4), certainty: 'high', affinityDelta: 0, statusProposals: [], tickets: [rawTicket('solo', 'train', null, pick.playerLine.slice(0, 4))] }));
   assert.equal(matched.kind, 'matched');
   assert.equal(matched.freeActionTickets, undefined, '命中作者动作时不收票，避免同拍双结算');
   const bad = await run(save, text, replyOf([rawTicket('solo', 'train', null, '运转九阳功修炼', { power: 9 })], 'train'));

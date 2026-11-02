@@ -14,16 +14,17 @@ const ec = await loadTs('../src/modules/scenarioMods/entityCatalog.ts');
 const cr = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
 const NI = await loadTs('../src/modules/scenarioMods/naturalIntentRouter.ts');
 const wuyuan = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
-const SA = await loadTs('../src/modules/scenarioMods/stallAutoAdvance.ts');
+const BP = await loadTs('../src/modules/scenarioMods/beatProgress.ts');
 const { GAME_NUMBERS } = await loadTs('../src/modules/sceneModule/numbers.ts');
 const { createMinimalSaveDataV3 } = await loadTs('../src/utils/dataRepair.ts');
 const rt = s => s.世界.状态.剧本模组;
 
 // ───────────── 1) P1 新档走完 s01_05 停在 stage_01，s02_01 不出 ─────────────
 // 根因：s01_05 完成后本关收束（nextStageReadyId=stage_02），切关只挂在「收拾行装，继续旅程」按钮的点击上；手打／粘贴按钮文字只是普通叙事，
-// 本关又已无待推进内容，runtime 每回合把 stallTurns 清零，停滞收束永远不触发。新档（入六朝）也没有 Demo 那套到点合同，主线拍空转从不收束。
-// 修：stallAutoAdvance.ts（数值与提示在 mod-kit story.stallAutoAdvance）——启程按钮文字＝点按钮；启程按钮出现后空转 N 回合自动启程；
-// 主线拍停滞 N 回合（无场外合同、非场面战）按主线动作结算。MainGamePanel 发送前／回合收尾各接一处。
+// 本关又已无待推进内容，runtime 每回合把 stallTurns 清零，停滞收束永远不触发。
+// e174ed57 曾补「空转 N 回合自动启程」「主线拍停滞 N 回合代结算」；用户 2026-11-02 拍板改为剧情推进机制（beatProgress.ts）：
+// 本拍动作表是唯一结算入口（按钮／原句／标签／作者短语，启程按钮＝本关最后一个动作，手打按钮文字＝点击）；手打对不上不推进、提示并记 miss；
+// 停滞到点只认作者写明 deadline 的拍（回合数在 story.beatProgress.deadlineTurns）；启程空转只提示、不自动出发。
 const STAGES = ['lcq.stage_01', 'lcq.stage_02', 'lcq.stage_03', 'lcq.stage_03b_snake_flower_bridge'];
 const MODS = STAGES.map(id => {
   const mod = ec.resolveScenarioContent(cp.applyContentPackOverlays(JSON.parse(read(`src/modules/scenarioMods/builtins/data/${id}.json`))));
@@ -33,37 +34,38 @@ const MODS = STAGES.map(id => {
 const S03_07 = 'lcq.event.iron_bridge_ambush'; // 默认路线上 s03_07 铁索桥（qingyu.32.2）由 stage_02 同轴拍承接（stage_03 隔离）
 const newSave = () => quiet(() => R.advanceScenarioRuntime(init.applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), init.buildStrictScenarioInitialization(MODS[0]))).saveData);
 // 夹具化的模型回复：本地推进不读正文，每回合只把固定一段写进叙事历史（不调模型）。
-const FIXTURE_REPLY = '风从草原尽头吹来，你在原地看了看四周。';
-// 一回合＝MainGamePanel.sendMessage 的本地部分：启程文字 → 主线动作（按钮／原句／停滞到点）→ 推进 → 回合收尾的空转启程。
+const FIXTURE_REPLY = '风从草原尽头吹来，你在原地看了看四周。月霜的寒毒被真阳化解，王哲传你九阳神功。';
+// 一回合＝MainGamePanel.sendMessage 的本地部分：发送前对齐到点配置 → 启程文字 → 本拍动作（按钮／原句／短语，对不上记 miss）→ 推进 → 回合收尾的空转提示。
 function turn(save, input, clicked) {
   const trace = {};
-  if (SA.stageDepartureFromText(save, input)) {
+  BP.applyBeatDeadlines(rt(save).events);
+  const typed = clicked ? undefined : BP.resolveBeatText(save, input);
+  if (typed?.action.kind === 'departure') {
     const t = quiet(() => init.transitionToNextScenarioStage(save, MODS));
     assert.ok(t.ok, t.reason);
-    return { save: t.saveData, trace: { departed: 'text' } };
+    return { save: t.saveData, trace: { departed: 'text', via: typed.via } };
   }
   rt(save).worldTurn++;
-  const auto = clicked ? undefined : SA.stallAutoAdvance(save);
-  const action = clicked || NI.resolveStoryEventActionFromText(structuredClone(save), input) || (auto?.kind === 'event' ? auto.action : undefined);
+  const action = clicked || (typed?.action.kind === 'event' ? typed.action.selection : undefined);
+  trace.via = clicked ? 'button' : typed ? typed.via : BP.beatActionTable(save).actions.length ? 'miss' : 'none';
+  if (trace.via === 'miss') trace.notice = BP.beatMissNotice(save);
   quiet(() => {
-    if (auto?.kind === 'open_world') { trace.openWorld = wuyuan.settleWuyuanOpenWorldSelection(save, auto.selection).settled; }
-    else if (action) {
+    if (action) {
       const receipt = R.recordStoryEventStructuredAction(save, action);
+      // s02_04 主线按钮要先完成五原开放世界前置：玩家点开放世界按钮（同属本拍可做的动作）。
       if (receipt.reason === 'open_world_prerequisites') {
         const local = wuyuan.getWuyuanOpenWorldSelections(save);
-        wuyuan.settleWuyuanOpenWorldSelection(save, local.find(a => a.kind === 'problem_action') || local.find(a => a.kind === 'travel'));
+        trace.openWorld = wuyuan.settleWuyuanOpenWorldSelection(save, local.find(a => a.kind === 'problem_action') || local.find(a => a.kind === 'travel')).settled;
       }
-      trace.event = action.eventId; trace.auto = Boolean(auto && !clicked);
+      trace.event = action.eventId;
     }
   });
+  const before = structuredClone(save);
   save.系统.历史.叙事.push({ type: 'gm', content: FIXTURE_REPLY });
   save = quiet(() => R.advanceScenarioRuntime(save).saveData);
   wuyuan.ensureWuyuanOpenWorldSlice(save);
-  if (SA.noteStageDepartureIdleTurn(save)) {
-    const t = quiet(() => init.transitionToNextScenarioStage(save, MODS));
-    assert.ok(t.ok, t.reason);
-    return { save: t.saveData, trace: { ...trace, departed: 'idle' } };
-  }
+  trace.deadline = BP.deadlineResolvedThisTurn(before, save);
+  trace.idleNotice = BP.noteStageDepartureIdleTurn(save);
   return { save, trace };
 }
 // 「点主线按钮」：当前主线拍的引擎按钮；启程按钮在场就点启程（真机驱动把按钮文字填进输入框发送，与点击同一结算）。
@@ -74,94 +76,169 @@ const clickInput = save => {
   const actions = R.getCurrentStoryEventActions(save).filter(a => a.eventId === focus?.id);
   const ids = new Set((focus?.playerCompletionContract?.actions || []).map(a => a.id));
   const a = actions.find(x => ids.has(x.actionId)) || actions.find(x => x.actionId.startsWith('travel:'));
-  return { input: a?.label || '我看看四周', clicked: a };
+  return { input: a?.playerLine || '我看看四周', clicked: a };
 };
-function walk(mode, limit = 300) {
+function walk(limit = 300) {
   let save = newSave();
   const log = [];
   for (let n = 0; n < limit; n++) {
     const r = rt(save);
     if (r.activeEventIds.includes(S03_07)) return { save, log, turns: n };
-    const step = mode === 'click' ? clickInput(save) : { input: '我在原地看看四周。' };
+    const step = clickInput(save);
     const out = turn(save, step.input, step.clicked);
     save = out.save; log.push({ mod: r.modId, focus: R.getScenarioFocusEvent(r)?.id, ...out.trace });
   }
-  assert.fail(`${mode} 走不到 s03_07：停在 ${rt(save).modId} ${rt(save).activeEventIds}`);
+  assert.fail(`走不到 s03_07：停在 ${rt(save).modId} ${rt(save).activeEventIds}`);
 }
+const toStageReady = () => {
+  let s = newSave();
+  for (let i = 0; i < 12 && !rt(s).nextStageReadyId; i++) { const c = clickInput(s); s = turn(s, c.input, c.clicked).save; }
+  return s;
+};
 
-test('1 复现：旧逻辑下 s01_05 完成后只剩启程按钮，空转回合 stallTurns 每拍清零、不切关', () => {
-  let s = walk('click').save; // 先确认整条路能走通，再单独造 s01_05 后的状态
-  s = newSave();
-  for (let i = 0; i < 12 && !rt(s).nextStageReadyId; i++) s = turn(s, clickInput(s).input, clickInput(s).clicked).save;
+test('1 复现：s01_05 完成后只剩启程按钮，空转回合 stallTurns 每拍清零、引擎本身从不切关', () => {
+  const s = toStageReady();
   assert.equal(rt(s).modId, 'lcq.stage_01');
   assert.equal(rt(s).nextStageReadyId, 'lcq.stage_02');
   assert.deepEqual(rt(s).activeEventIds, []);
   assert.equal(R.getStageDepartureOffer(s)?.label, '收拾行装，继续旅程');
-  for (let i = 0; i < 5; i++) { rt(s).worldTurn++; s = quiet(() => R.advanceScenarioRuntime(s).saveData); }
+  for (let i = 0; i < 5; i++) { rt(s).worldTurn++; Object.assign(s, quiet(() => R.advanceScenarioRuntime(s).saveData)); }
   assert.equal(rt(s).modId, 'lcq.stage_01', '引擎本身从不自动切关');
   assert.equal(rt(s).stallTurns, 0, '本关已无待推进内容，停滞计数每拍清零——停滞收束轮不到');
 });
 
-test('1 粘贴／手打启程按钮文字＝点启程按钮，s02_01 王哲传功接上', () => {
-  let s = newSave();
-  for (let i = 0; i < 12 && !rt(s).nextStageReadyId; i++) { const c = clickInput(s); s = turn(s, c.input, c.clicked).save; }
-  assert.ok(SA.stageDepartureFromText(s, '收拾行装，继续旅程'));
-  assert.ok(SA.stageDepartureFromText(s, ' 收拾行装 继续旅程。'));
-  assert.equal(SA.stageDepartureFromText(s, '我返回帅帐去见王哲。'), null, '别的句子不当启程');
+test('1 启程按钮＝本关最后一个动作：粘贴／手打按钮文字＝点启程，s01_05 之后 s02_01 王哲传功接上', () => {
+  const s = toStageReady();
+  const table = BP.beatActionTable(s).actions;
+  assert.deepEqual(table.map(a => a.kind), ['departure'], '收束后本拍动作表只剩启程');
+  assert.equal(BP.resolveBeatText(s, '收拾行装，继续旅程')?.action.kind, 'departure');
+  assert.equal(BP.resolveBeatText(s, ' 收拾行装 继续旅程。')?.action.kind, 'departure');
+  assert.equal(BP.resolveBeatText(s, '我返回帅帐去见王哲。'), undefined, '别的句子不当启程');
   const out = turn(s, '收拾行装，继续旅程');
   assert.equal(out.trace.departed, 'text');
   assert.equal(rt(out.save).modId, 'lcq.stage_02');
-  assert.deepEqual(rt(out.save).activeEventIds, ['lcq.event.s02_01']);
+  assert.deepEqual(rt(out.save).activeEventIds, ['lcq.event.s02_01'], 's02_01 王哲传功出现');
+  assert.equal(R.getScenarioFocusEvent(rt(out.save))?.id, 'lcq.event.s02_01');
 });
 
-test('1 启程按钮出现后空转 N 回合自动启程（N 读 mod-kit）', () => {
-  const N = GAME_NUMBERS.story.stallAutoAdvance.stageDepartureIdleTurns;
+test('1 启程按钮空转 N 回合（N 读 mod-kit）只提示、不自动出发；提示后重新计数', () => {
+  const N = GAME_NUMBERS.story.beatProgress.departureIdleTurns;
   assert.ok(N > 0);
-  let s = newSave();
-  for (let i = 0; i < 12 && !rt(s).nextStageReadyId; i++) { const c = clickInput(s); s = turn(s, c.input, c.clicked).save; }
-  const results = [];
-  for (let i = 0; i < N; i++) { const out = turn(s, '我返回帅帐去见王哲。'); results.push(out.trace.departed); s = out.save; }
-  assert.deepEqual(results, [...Array(N - 1).fill(undefined), 'idle']);
-  assert.equal(rt(s).modId, 'lcq.stage_02');
-  assert.ok(rt(s).activeEventIds.includes('lcq.event.s02_01'));
-  assert.equal(s.系统.扩展.stageDepartureIdle, undefined, '切关后空转计数作废');
+  assert.equal(GAME_NUMBERS.story.stallAutoAdvance, undefined, '通用「主线停滞代结算／空转自动启程」配置已撤');
+  let s = toStageReady();
+  const notices = [];
+  for (let i = 0; i < 2 * N + 2; i++) { const out = turn(s, '我在营地里四处走走。'); notices.push(out.trace.idleNotice); s = out.save; assert.equal(out.trace.departed, undefined); }
+  assert.equal(rt(s).modId, 'lcq.stage_01', '从不自动启程');
+  assert.equal(rt(s).nextStageReadyId, 'lcq.stage_02');
+  const at = notices.map((n, i) => n ? i : -1).filter(i => i >= 0);
+  // 启程按钮出现的那一回合记 0，再空转 N 回合提示一次；提示后重新计数。
+  assert.deepEqual(at, [N - 1, 2 * N - 1], `空转满 N 回合提示一次，之后再满 N 回合再提示：${JSON.stringify(notices)}`);
+  assert.ok(notices[N - 1].includes('收拾行装，继续旅程'));
 });
 
-test('1 自动化：新档「点主线按钮」一路推进到 s03_07（铁索桥）', () => {
-  const { save, log } = walk('click');
+test('1 自动化：新档逐拍点主线按钮一路推进到 s03_07（铁索桥），每拍都靠按钮结算', () => {
+  const { save, log } = walk();
   assert.equal(rt(save).modId, 'lcq.stage_02');
   assert.ok(log.some(x => x.departed === 'text'), '经启程按钮切到 stage_02');
-  assert.ok(!log.some(x => x.auto), '点按钮的路线不靠停滞到点');
+  assert.ok(!log.some(x => x.via === 'miss'), '点按钮从不落空');
+  assert.ok(!log.some(x => x.deadline?.length), '点按钮的路线不靠到点收束');
   for (const id of ['lcq.event.s02_01', 'lcq.event.s02_04', 'lcq.event.free_ajiman', 'lcq.event.wuerlang_joins']) assert.ok(rt(save).completedEventIds.includes(id), id);
+  const settled = log.map(x => x.event).filter(Boolean);
+  for (const id of ['lcq.event.s01_01', 'lcq.event.s01_02', 'lcq.event.s01_03', 'lcq.event.s01_04', 'lcq.event.s01_05', 'lcq.event.s01_06']) assert.ok(settled.includes(id), `${id} 靠按钮结算`);
+  const departed = log.findIndex(x => x.departed === 'text');
+  assert.equal(log[departed + 1]?.focus, 'lcq.event.s02_01', '启程后第一拍就是 s02_01 王哲传功');
+  assert.ok(settled.indexOf('lcq.event.s02_01') > settled.indexOf('lcq.event.s01_05'));
 });
 
-test('1 自动化：新档「空转」（停滞自动收束）一路推进到 s03_07（铁索桥）', () => {
-  const { save, log, turns } = walk('idle');
-  assert.equal(rt(save).modId, 'lcq.stage_02');
-  assert.ok(log.some(x => x.departed === 'idle'), '启程靠空转到点');
-  assert.ok(log.filter(x => x.auto).length >= 10, '主线拍靠停滞到点结算');
-  assert.ok(log.some(x => x.openWorld), 's02_04 开放世界前置也能到点代走');
-  assert.ok((rt(save).offscreenResolvedEventIds || []).includes('lcq.event.s02_02'), 's02_02 场外收束后五原切片照样打开（旧逻辑只认 completedEventIds，s02_04 永远完成不了）');
-  for (const id of ['lcq.event.s01_05', 'lcq.event.s02_01', 'lcq.event.s02_04', 'lcq.event.free_ajiman', 'lcq.event.wuerlang_joins']) assert.ok([...rt(save).completedEventIds, ...(rt(save).offscreenResolvedEventIds || [])].includes(id) || id.startsWith('lcq.event.s01'), id);
-  assert.ok(turns < 200, `空转回合数 ${turns}`);
-});
-
-test('1 有场外到点合同的拍不抢跑；Demo 档不套用', async () => {
+test('1 手打对不上不推进：只提示本拍可做的动作并记 beat.resolve miss；正文写了寒毒、真阳也不结算', () => {
   let s = newSave();
-  for (let i = 0; i < 12 && !rt(s).activeEventIds.includes('lcq.event.s01_02'); i++) { const c = clickInput(s); s = turn(s, c.input, c.clicked).save; }
-  rt(s).stallTurns = 9;
-  assert.equal(SA.stallAutoAdvance(s), undefined, 's01_02 段强之死有 offscreenResolution，由它自己收');
+  const beat = R.getScenarioFocusEvent(rt(s))?.id;
+  const done = [...rt(s).completedEventIds];
+  const out = turn(s, '我在原地看看四周。');
+  assert.equal(out.trace.via, 'miss');
+  assert.match(out.trace.notice, /剧情没有推进/);
+  const labels = BP.beatActionTable(s).actions.map(a => a.selection.label);
+  assert.ok(labels.length && labels.every(label => out.trace.notice.includes(label)), `提示列出本拍动作：${out.trace.notice}`);
+  assert.deepEqual(rt(out.save).completedEventIds, done, '没有结算');
+  assert.equal(R.getScenarioFocusEvent(rt(out.save))?.id, beat);
+  const entry = BP.logBeatResolve(out.save, 'miss');
+  assert.equal(entry?.code, 'LCQ-SAV-054');
+  assert.equal(entry?.detail?.beatId, beat);
+  assert.equal(entry?.detail?.via, 'miss');
+  assert.equal(BP.logBeatResolve(out.save, 'button', { eventId: beat, actionId: 'advance_declared_objective' })?.code, 'LCQ-SAV-053');
+});
+
+test('1 撤掉通用停滞代结算：没写 deadline 的主线拍空转 30 回合不推进；写了 deadline 的拍照常到点', () => {
+  let s = newSave();
+  const first = R.getScenarioFocusEvent(rt(s))?.id;
+  assert.equal(first, 'lcq.event.s01_01');
+  assert.equal(rt(s).events.find(e => e.id === first).offscreenResolution, undefined, 's01_01 作者没写到点');
+  for (let i = 0; i < 30; i++) s = turn(s, '我在原地看看四周。').save;
+  assert.equal(R.getScenarioFocusEvent(rt(s))?.id, first, '不再代玩家选主线动作');
+  assert.ok(!rt(s).completedEventIds.includes(first));
+});
+
+test('1 s01_06 月霜寒毒到点回合数进配置（默认 5），每回合发送前写进拍；改配置即生效', () => {
+  assert.equal(BP.beatDeadlineTurns('lcq.event.s01_06'), 5);
+  assert.equal(BP.beatDeadlineTurns('lcq.event.s01_01'), undefined, '只给配置里列出的拍');
+  const reach = () => {
+    let s = newSave();
+    for (let i = 0; i < 20 && !rt(s).activeEventIds.includes('lcq.event.s01_06'); i++) { const c = clickInput(s); s = turn(s, c.input, c.clicked).save; }
+    assert.ok(rt(s).activeEventIds.includes('lcq.event.s01_06'));
+    let turns = 0, out;
+    do { out = turn(s, '我在原地看看四周。'); s = out.save; turns++; } while (!out.trace.deadline.includes('lcq.event.s01_06') && turns < 20);
+    return { s, turns };
+  };
+  const base = reach();
+  assert.ok(base.turns <= 6, `默认配置到点：${base.turns} 回合`);
+  const N = GAME_NUMBERS.story.beatProgress.deadlineTurns;
+  const saved = N['lcq.event.s01_06'];
+  try {
+    N['lcq.event.s01_06'] = 2;
+    const fast = reach();
+    assert.ok(fast.turns < base.turns, `改成 2 回合后更早到点：${fast.turns} < ${base.turns}`);
+    assert.equal(rt(fast.s).events.find(e => e.id === 'lcq.event.s01_06').offscreenResolution.afterStallTurns, 2);
+  } finally { N['lcq.event.s01_06'] = saved; }
+});
+
+test('1 Demo 档不提示启程空转', async () => {
   const opening = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
   const demo = quiet(() => opening.createQingyuOpeningPlaytestSave(MODS[0], '2026-11-02T00:00:00.000Z'));
-  rt(demo).stallTurns = 9;
-  assert.equal(SA.stallAutoAdvance(demo), undefined, 'Demo 只认自己的到点合同');
+  rt(demo).nextStageReadyId = rt(demo).nextStageId;
+  assert.equal(BP.noteStageDepartureIdleTurn(demo), undefined);
 });
 
-test('1 MainGamePanel 接线：发送前认启程文字、停滞到点补主线动作、回合收尾数空转', () => {
+test('1 跨国切关：启程改为打开地图点选，到了目标国再切关', async () => {
+  const dir = 'src/modules/scenarioMods/builtins/data/';
+  const ids = ['lyl.taiquan_afterfall', 'lyl.luoyang_cloud_secret'];
+  const mods = ids.map(id => ec.resolveScenarioContent(cp.applyContentPackOverlays(JSON.parse(read(`${dir}${id}.json`)))));
+  for (const mod of mods) cr.resolveScenarioCharacters(mod.canon?.characters, mod.manifest.id);
+  const map = await loadTs('../src/modules/scenarioMods/travel/mapTravel.ts');
+  const s = quiet(() => R.advanceScenarioRuntime(init.applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), init.buildStrictScenarioInitialization(mods[0]))).saveData);
+  rt(s).nextStageReadyId = rt(s).nextStageId;
+  assert.equal(rt(s).nextStageId, 'lyl.luoyang_cloud_secret');
+  s.角色.位置 = { ...s.角色.位置, locationId: 'liuchao.location.taiquan' }; // 本关最后几拍在太泉，下一关洛都在汉
+  const target = BP.stageDepartureMapTarget(s, mods);
+  assert.ok(target, '太泉→汉跨国，启程改走地图');
+  assert.equal(map.countryOf(target.mapTargetId), '汉');
+  assert.equal(BP.stageDepartureArrived(s), undefined, '人还没到汉，不切关');
+  const selection = map.selectMapTravel(s, target.mapTargetId);
+  assert.ok(selection && map.settleMapTravel(s, selection), '地图上点选目标落点');
+  assert.equal(BP.stageDepartureArrived(s), 'lyl.luoyang_cloud_secret');
+  assert.equal(s.系统.扩展.stageDepartureMap, undefined, '待启程标记清掉');
+  const t = quiet(() => init.transitionToNextScenarioStage(s, mods));
+  assert.ok(t.ok, t.reason);
+  assert.equal(rt(t.saveData).modId, 'lyl.luoyang_cloud_secret');
+  // 同国（清羽 stage_01→02）照常直接启程
+  assert.equal(BP.stageDepartureMapTarget(toStageReady(), MODS), undefined);
+});
+
+test('1 MainGamePanel 接线：动作表结算、miss 提示与日志、到点对齐、空转只提示、跨国走地图；撤掉自动启程与停滞代结算', () => {
   const panel = read('src/components/dashboard/MainGamePanel.vue');
-  assert.match(panel, /stageDepartureFromText\(/);
-  assert.match(panel, /stallAutoAdvance\(/);
-  assert.match(panel, /noteStageDepartureIdleTurn\(/);
+  for (const call of ['resolveBeatText(', 'beatMissNotice(', 'logBeatResolve(', 'applyBeatDeadlines(', 'noteStageDepartureIdleTurn(', 'stageDepartureMapTarget(', 'deadlineResolvedThisTurn(']) assert.ok(panel.includes(call), call);
+  assert.doesNotMatch(panel, /stallAutoAdvance|idleDeparture\.nextStageId/);
+  assert.match(read('src/components/dashboard/GameMapPanel.vue'), /stageDepartureArrived\(arrived\)/);
+  assert.match(read('src/components/dashboard/RightSidebar.vue'), /stageDepartureMapTarget\(/);
 });
 
 // ───────────── 2) P1 南荒交锋气血 10→1 后卡片消失、看不到判负；之后自由交手 5 次气血一直 1、不掷骰 ─────────────

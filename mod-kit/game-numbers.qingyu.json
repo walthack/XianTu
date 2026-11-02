@@ -2362,12 +2362,14 @@
         ]
       }
     },
-    "stallAutoAdvance": {
-      "note": "主线停滞自动收束（REPORT-8091-ef573ece P1）。mainlineTurns：当前主线拍连续停滞（runtime.stallTurns）达到这么多回合、且这一拍没有作者的场外到点合同（offscreenResolution 自己会收）也不是场面战时，本回合按这一拍的主线动作结算，叙事照常演出（等同玩家点了主线建议）。stageDepartureIdleTurns：本关已收束、启程按钮出现后，再过这么多回合仍没启程就自动启程进下一关；手打或粘贴启程按钮文字等同点按钮。0＝关闭该项。清羽 Demo 档沿用自己的到点设计，不套用。",
-      "mainlineTurns": 3,
-      "stageDepartureIdleTurns": 3,
-      "mainlineNotice": "停留已久，局势自行推进：{label}",
-      "departureNotice": "停留已久，已随众人启程：{toName}"
+    "beatProgress": {
+      "note": "剧情推进（设计稿 2026-11-02「剧情推进机制设计」；用户 2026-11-02 拍板 1–4，代码 src/modules/scenarioMods/beatProgress.ts）。deadlineTurns：作者在拍上写明到点（offscreenResolution 场外收束）的拍，停滞到点回合数按事件 id 配，载入／每回合发送前写进拍；只用于这里列出的拍，没有通用的「主线停滞 N 回合代玩家结算」。s01_06 月霜寒毒保留 5 回合（bbe2653a）。departureIdleTurns：本关已收束、启程按钮出现后又空转这么多回合，弹一次 departureIdleNotice（{label}＝启程按钮文字），只提示、不自动出发；0＝不提示。missNotice：手打对不上本拍任何动作（原句、按钮标签、作者短语）时不推进，弹这句并列出本拍可做的动作（{actions}）。",
+      "deadlineTurns": {
+        "lcq.event.s01_06": 5
+      },
+      "departureIdleTurns": 3,
+      "departureIdleNotice": "本关已收束，点「{label}」即可启程。",
+      "missNotice": "这句话没对上这一拍可做的动作，剧情没有推进。可做：{actions}"
     },
     "narrativeTurnBudget": {
       "note": "普通叙事回合（MainGamePanel 发给 AIBidirectionalSystem.processPlayerAction 的那次生成，含其内部重试）的总耗时上限（毫秒）。到点掐断本回合在途请求、不再等，撤回本回合预结算（与生成失败同一兜底），保留玩家输入可直接重发，并弹 notice 提示；回合完成信号照常收尾。场面战描写另有 combat.narrationBudget。REPORT-8091-ef573ece P2：B15 回合模型流卡死 300 秒才中止重试。0＝不设上限。不改模型／API 超时配置。",

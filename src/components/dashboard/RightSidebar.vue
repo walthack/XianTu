@@ -432,6 +432,9 @@ import {
 import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
 import { FESTIVAL, festivalView, startHeimohaiFestival } from '@/modules/scenarioMods/heimohaiFestival';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
+import { stageDepartureMapTarget } from '@/modules/scenarioMods/beatProgress';
+import { crossCountryStoryTravelToast } from '@/modules/scenarioMods/travel/mapTravel';
+import { useRouter } from 'vue-router';
 import { eventNameIndex, playerFacingText } from '@/utils/narrativeMetaWords';
 import { lineCompassView, showLineCompass } from '@/modules/scenarioMods/lineCompass';
 import { atTrainingCap, breakthroughHint, canBreakthrough } from '@/modules/scenarioMods/levelProgression';
@@ -711,11 +714,22 @@ const trackOpportunity = async (opportunityId: string) => {
     trackingOpportunity.value = '';
   }
 };
+const router = useRouter();
 const goNextStage = async () => {
   if (stageSwitching.value) return;
   stageSwitching.value = true;
   stageSwitchError.value = '';
   try {
+    // 下一关在别国：启程改为打开地图点选（用户 2026-11-02 拍板④；与主面板启程按钮同一判定）。
+    const departureSave = gameStateStore.toSaveData();
+    const mapTarget = departureSave ? stageDepartureMapTarget(departureSave, BUILTIN_SCENARIO_MODS) : undefined;
+    if (departureSave && mapTarget) {
+      gameStateStore.systemExtensions = (departureSave as any).系统.扩展;
+      await gameStateStore.saveGame();
+      stageSwitchError.value = crossCountryStoryTravelToast(mapTarget);
+      await router.push('/game/world-map');
+      return;
+    }
     const result = await gameStateStore.transitionToNextStage(questMain.value?.nextStageId || undefined);
     if (!result.ok) stageSwitchError.value = result.reason || '切换失败';
   } catch (error) {

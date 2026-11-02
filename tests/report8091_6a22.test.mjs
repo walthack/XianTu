@@ -88,9 +88,10 @@ function qinReady() {
 test('P1-3 地图双击确认→真实 store load/save→MainGamePanel computed：秦首拍行动建议非空', async () => {
   const store = await gameStore(qinReady());
   const map = read('src/components/dashboard/GameMapPanel.vue');
-  const fn = cut(map, 'const travelToSelectedLocation = async', 'const canvasRef', ['gameStateStore','mapTravelBusy','mapTravelUi','selectedLocation','mapTravelPreview','mapTravelNotice','mapTravelConfirmed','travelConfirmation','selectMapTravel','settleMapTravel','mapTravelArrivalNotice'], '\nreturn travelToSelectedLocation;');
+  const fn = cut(map, 'const travelToSelectedLocation = async', 'const canvasRef', ['gameStateStore','mapTravelBusy','mapTravelUi','selectedLocation','mapTravelPreview','mapTravelNotice','mapTravelConfirmed','travelConfirmation','selectMapTravel','settleMapTravel','mapTravelArrivalNotice','stageDepartureArrived'], '\nreturn travelToSelectedLocation;');
   const confirm={value:null}, busy={value:false};
-  const go = fn(store,busy,{isAIProcessing:false},{value:{id:'liuchao.location.xianyang'}},M.mapTravelPreview,{value:''},M.mapTravelConfirmed,confirm,M.selectMapTravel,M.settleMapTravel,M.mapTravelArrivalNotice);
+  const BP = await load('modules/scenarioMods/beatProgress.ts');
+  const go = fn(store,busy,{isAIProcessing:false},{value:{id:'liuchao.location.xianyang'}},M.mapTravelPreview,{value:''},M.mapTravelConfirmed,confirm,M.selectMapTravel,M.settleMapTravel,M.mapTravelArrivalNotice,BP.stageDepartureArrived);
   await go(); assert.ok(confirm.value); await go();
   const saved=store.toSaveData(); assert.equal(saved.角色.位置.描述,'秦·咸阳');
   assert.deepEqual(R.getCurrentStoryEventActions(saved).map(a=>a.eventId),['liuchao.event.qin_enter_xianyang']);

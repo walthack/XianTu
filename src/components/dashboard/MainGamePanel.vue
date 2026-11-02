@@ -632,7 +632,7 @@ import {
   type BaihuGambleRefusalSelection,
 } from '@/modules/scenarioMods/baihuGambleRefusal';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
-import { noteStageDepartureIdleTurn, stageAutoDepartureNotice, stageDepartureFromText, stallAutoAdvance, stallAutoAdvanceNotice } from '@/modules/scenarioMods/stallAutoAdvance';
+import { applyBeatDeadlines, beatActionTable, beatMissNotice, deadlineResolvedThisTurn, logBeatResolve, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
 import {
   abortInFlightNaturalIntent,
   freeActionOwnsText,
@@ -1089,6 +1089,16 @@ const departToNextStage = async () => {
   if (!offer || stageDeparturePending.value || isAIProcessing.value || currentScene.value) return;
   stageDeparturePending.value = true;
   try {
+    // 下一关在别国：启程改为打开地图点选（用户 2026-11-02 拍板④），到了目标国再切关（GameMapPanel 落账后接 stageDepartureArrived）。
+    const departureSave = gameStateStore.toSaveData();
+    const mapTarget = departureSave ? stageDepartureMapTarget(departureSave) : undefined;
+    if (departureSave && mapTarget) {
+      gameStateStore.systemExtensions = (departureSave as any).系统.扩展;
+      await gameStateStore.saveGame();
+      toast.info(crossCountryStoryTravelToast(mapTarget));
+      await router.push('/game/world-map');
+      return;
+    }
     const result = await gameStateStore.transitionToNextStage(offer.nextStageId);
     if (!result.ok) {
       toast.warning(result.reason || '此刻还不能启程');
@@ -2017,9 +2027,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     toast.warning('AI正在处理中，请稍等...');
     return;
   }
-  // 手打／粘贴启程按钮文字＝点启程按钮（REPORT-8091-ef573ece P1：驱动把按钮文字填进输入框发送，只得到一段叙事、不切关）。
-  if (!isFollowUpExecution && !actionQueueText && stageDepartureOffer.value && stageDepartureFromText(gameStateStore.toSaveData(), inputText.value)) {
+  // 启程＝本关最后一个动作：手打／粘贴启程按钮文字＝点启程按钮（本拍动作表同一匹配，用户 2026-11-02 拍板①）。
+  if (!isFollowUpExecution && !actionQueueText && stageDepartureOffer.value && resolveBeatText(gameStateStore.toSaveData(), inputText.value)?.action.kind === 'departure') {
     inputText.value = ''; lastSelectedActionOption.value = ''; selectedScenarioEngineAction.value = null;
+    logBeatResolve(gameStateStore.toSaveData(), 'exact', { actionId: 'stage_departure' });
     await departToNextStage();
     return;
   }
@@ -2044,6 +2055,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // Migrate only the V03 question-classifier metadata on the live runtime before
   // taking a detached save snapshot; otherwise settlement still sees the old hash.
   reconcileNaturalIntentMetadata({ 世界: { 状态: gameStateStore.worldState } } as any);
+  // 作者写明到点的拍：回合数以配置为准（story.beatProgress.deadlineTurns），旧档／库里的关卡快照每回合发送前对齐。
+  applyBeatDeadlines((gameStateStore.worldState as any)?.剧本模组?.events);
   const saveData = gameStateStore.toSaveData();
   if (saveData) {
     // 检查气血
@@ -2367,11 +2380,6 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	  }
 
   const scenarioSaveAtSend = gameStateStore.toSaveData();
-  // 主线拍停滞到点（story.stallAutoAdvance.mainlineTurns）且玩家这回合没选别的动作：按这一拍的主线动作结算，叙事照常演出（REPORT-8091-ef573ece P1）。
-  const stallAuto = !selectedScenarioEngineAction.value && !routedIntentAction && !contractedJudgementResolution && !routedFreeActionTickets.length && scenarioSaveAtSend
-    && !resolveStoryEventActionFromText(structuredClone(scenarioSaveAtSend), userMessage) && !resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage)
-    ? stallAutoAdvance(scenarioSaveAtSend) : undefined;
-  if (stallAuto) toast.info(stallAutoAdvanceNotice(stallAuto.kind === 'event' ? stallAuto.action.label : stallAuto.selection.label));
   const exactSelectedEventAction = selectedScenarioEngineAction.value?.source !== 'opportunity_engine'
     && selectedScenarioEngineAction.value?.source !== 'open_world_engine'
     && selectedScenarioEngineAction.value?.source !== BAIHU_GAMBLE_REFUSAL_SOURCE
@@ -2393,8 +2401,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       || (routedIntentAction?.source === 'event_engine' || routedIntentAction?.source === 'exploration_engine'
         ? routedIntentAction
         : undefined)
-      || (scenarioSaveAtSend ? resolveStoryEventActionFromText(scenarioSaveAtSend, userMessage) : undefined)
-      || (stallAuto?.kind === 'event' ? stallAuto.action : undefined);
+      || (scenarioSaveAtSend ? resolveStoryEventActionFromText(scenarioSaveAtSend, userMessage) : undefined);
   // 跨国须在地图上点选目的地：跨国剧情罗盘（建议或手打）本轮不交事件引擎换国，只写准备并引导地图（REPORT-8091-75eaaee0 P2-2）。
   const crossCountryTravel = matchedEventAction && scenarioSaveAtSend ? crossCountryStoryTravel(scenarioSaveAtSend, matchedEventAction) : undefined;
   const resolvedEventAction = crossCountryTravel ? undefined : matchedEventAction;
@@ -2414,8 +2421,20 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     ? undefined
     : exactSelectedOpenWorldAction
       || (routedIntentAction?.source === 'open_world_engine' ? routedIntentAction : undefined)
-      || (scenarioSaveAtSend ? resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage) : undefined)
-      || (stallAuto?.kind === 'open_world' ? stallAuto.selection : undefined);
+      || (scenarioSaveAtSend ? resolveWuyuanOpenWorldSelectionFromText(scenarioSaveAtSend, userMessage) : undefined);
+  // beat.resolve（每回合一条）：点按钮、手打对上原句／按钮标签／作者短语才推进本拍；手打都没对上：不推进、回合照常叙事，
+  // 弹提示列出本拍可做的动作并记 miss（用户 2026-11-02 拍板②）。判定确认后的二次执行沿用当初那一回合的记录。
+  if (!isFollowUpExecution && scenarioSaveAtSend) {
+    const typedBeat = !exactSelectedEventAction && matchedEventAction ? resolveBeatText(scenarioSaveAtSend, userMessage) : undefined;
+    const otherEngine = Boolean(resolvedGambleRefusalAction || resolvedOpportunityAction || resolvedOpenWorldAction || routedFreeActionTickets.length || contractedJudgementResolution || followUpFreeAction || selfUse);
+    const via: BeatVia = exactSelectedEventAction ? 'button'
+      : matchedEventAction ? (typedBeat?.via ?? (routedIntentAction ? 'other' : 'alias'))
+      : otherEngine ? 'other'
+      : userMessage && beatActionTable(scenarioSaveAtSend).actions.length ? 'miss' : 'none';
+    logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId } : undefined);
+    const missNotice = via === 'miss' ? beatMissNotice(scenarioSaveAtSend) : undefined;
+    if (missNotice) toast.info(missNotice);
+  }
 
   // 获取动作队列中的文本
   console.log('[前端] 动作队列 actionQueueText:', actionQueueText);
@@ -2843,11 +2862,12 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       }
     }
 
-    // 启程按钮出现后又空转 story.stallAutoAdvance.stageDepartureIdleTurns 回合：存档后自动启程（REPORT-8091-ef573ece P1）。
-    let idleDeparture: ReturnType<typeof noteStageDepartureIdleTurn> = null;
+    // 回合收尾：作者写明的到点本回合收束了哪拍（beat.resolve deadline）；启程按钮空转满 story.beatProgress.departureIdleTurns 回合只提示，不自动出发（用户 2026-11-02 拍板③④）。
+    let idleDepartureNotice: string | undefined;
     if (aiResetToken === resetSnapshot && aiResponse) {
       const idleSave = gameStateStore.toSaveData();
-      idleDeparture = idleSave ? noteStageDepartureIdleTurn(idleSave) : null;
+      for (const eventId of deadlineResolvedThisTurn(scenarioSaveAtSend, idleSave)) logBeatResolve(idleSave, 'deadline', { eventId });
+      idleDepartureNotice = idleSave ? noteStageDepartureIdleTurn(idleSave) : undefined;
       if (idleSave) gameStateStore.systemExtensions = (idleSave as any).系统.扩展;
     }
     // 最终统一存档（仅成功时）
@@ -2860,10 +2880,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           toast.success(`存档【${slot.存档名}】已保存`);
         }
         console.log('[AI响应处理] 最终统一存档完成');
-        if (idleDeparture) {
-          const departed = await gameStateStore.transitionToNextStage(idleDeparture.nextStageId);
-          if (departed.ok) toast.info(stageAutoDepartureNotice(departed.toName || ''));
-        }
+        if (idleDepartureNotice) toast.info(idleDepartureNotice);
         if (aiResponse.transactionCommitted) {
           startModuleBackground(diagnosticTurnId);
           scheduleBackgroundAudit(diagnosticTurnId);

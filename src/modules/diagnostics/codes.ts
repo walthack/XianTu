@@ -129,6 +129,8 @@ export const ERROR_CODES = {
   'LCQ-SAV-050': spec('warn', 'sceneModule', '随机遇敌难度加级读取失败，按不加级定级'),
   'LCQ-SAV-051': spec('warn', 'memorySettings', '记忆配置（memory-settings）读取失败，使用默认值'),
   'LCQ-SAV-052': spec('warn', 'aiBidirectional', '回合附属维护失败（世界事件调度、宗门自动初始化、后台记忆调度、长期检索索引），不影响回合'),
+  'LCQ-SAV-053': spec('info', 'beatProgress', '节拍结算记录（beat.resolve）：本回合输入方式、命中动作、停滞回合、关是否已就绪'),
+  'LCQ-SAV-054': spec('info', 'beatProgress', '节拍手打未命中（beat.resolve miss）：不推进，已弹提示列出本拍可做的动作'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),
