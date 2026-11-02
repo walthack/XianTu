@@ -12,7 +12,9 @@ import { canonicalLocationId, locationDescriptionWithCountry } from './locationI
 import { SEVERAL_DAYS_PLACEHOLDER } from '../openWorldSlice';
 import { settleTime, actionTimeConfig } from '../actionTime';
 import { logEvent } from '../../diagnostics/log';
-export interface MapTravelRoute { id: string; fromId: string; toId: string; dayCost: number | 'several'; unlockWhen?: string[] }
+import { domesticTravelDays } from './routeDays';
+/** questRoute：剧情路程特例（questRouteDays 名单节点），国内也按两地路程天数结算。 */
+export interface MapTravelRoute { id: string; fromId: string; toId: string; dayCost: number | 'several'; unlockWhen?: string[]; questRoute?: boolean }
 /** 国内地图移动按原方式计时（片刻，story.actionTime.minutes.moment）；只有跨国才按路程天数（REPORT-8091-4c8245a5 P1）。 */
 export const MOMENT_DAY_COST = 0;
 export interface MapTravelSelection { source: 'map'; actionId: string; fromId: string; toId: string; routeId: string }
@@ -76,6 +78,8 @@ export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
   const done = (save as any).世界?.状态?.剧本模组?.completedEventIds || [];
   if (!fromId || mapTravelRestriction(save, toId)) return [];
   const targetId = canonicalLocationId(toId);
+  const quest = questRouteDaysRoute(save, fromId, targetId);
+  if (quest) return [quest];
   const authored = (CONTENT_PACKS.mapRoutes || []).filter(r => canonicalLocationId(r.fromId) === fromId && canonicalLocationId(r.toId) === targetId);
   if (authored.length) return authored.filter(r => (r.unlockWhen || []).every(id => done.includes(id)));
   const from = countryOf(fromId)!, to = countryOf(targetId)!;
@@ -89,6 +93,21 @@ export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
   const pointRaw = [destinationRawDays[fromId]?.[to], destinationRawDays[targetId]?.[from]].filter((d): d is number => d !== undefined);
   const raw = pointRaw.length ? Math.max(...pointRaw) : rawDays[from]?.[to] ?? rawDays[to]?.[from];
   return raw === undefined ? [] : [{ id: `xc:${from}:${to}`, fromId, toId: targetId, dayCost: Math.min(raw, crossCountryTravel.dayCap) }];
+}
+/**
+ * 剧情路程特例优先（REPORT-8091-f9737e0d ②）：story.actionTime.questRouteDays.eventIds 里的节点正在进行、地图目的地正是该拍地点时，
+ * 地图与罗盘同口径按两地路程天数（travel/routeDays）结算，不套国内片刻（汉 08 舞都→洛都约 11 日，曾被 3285eece 的国内规则改成片刻）。
+ * 名单外、或算不出路程（同城、跨国）时返回 undefined，照常走作者路线/国内片刻/跨国天数。
+ */
+function questRouteDaysRoute(save: SaveData, fromId: string, targetId: string | undefined): MapTravelRoute | undefined {
+  const runtime = (save as any)?.世界?.状态?.剧本模组;
+  if (!runtime || !targetId || isNanhuangTravelStage(runtime.modId)) return undefined;
+  const listed: readonly string[] = actionTimeConfig().questRouteDays.eventIds;
+  const active: string[] = runtime.activeEventIds || [], done: string[] = runtime.completedEventIds || [];
+  const event = (runtime.events || []).find((e: any) => listed.includes(e.id) && active.includes(e.id) && !done.includes(e.id)
+    && canonicalLocationId(e.locationId) === targetId);
+  const days = event ? domesticTravelDays(fromId, targetId) : undefined;
+  return days === undefined ? undefined : { id: `quest:${event.id}:${fromId}:${targetId}`, fromId, toId: targetId, dayCost: days, questRoute: true };
 }
 export function selectMapTravel(save: SaveData, toId: string): MapTravelSelection | undefined {
   if (mapTravelRestriction(save, toId)) return undefined;
@@ -232,10 +251,12 @@ export function mapTravelPreview(save: SaveData, toId: string): { key: string; l
   if (!route) return undefined;
   if (isDomesticMapRoute(route)) return { key: `${fromId}:${route.toId}:${route.id}:moment`, label: travelUi.domesticMapLabel, days: null };
   const days = route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost;
-  return { key: `${fromId}:${route.toId}:${route.id}:${days}`, label: `约${days}日路程`, days };
+  const label = route.questRoute ? travelUi.questRouteMapLabel.replace(/\{days\}/g, String(days)) : `约${days}日路程`;
+  return { key: `${fromId}:${route.toId}:${route.id}:${days}`, label, days };
 }
-/** 国内路线（作者登记的也算）一律片刻；跨国按天数。 */
+/** 国内路线（作者登记的也算）一律片刻；跨国、剧情路程特例按天数。 */
 function isDomesticMapRoute(route: MapTravelRoute): boolean {
+  if (route.questRoute) return false;
   const from = countryOf(route.fromId), to = countryOf(route.toId);
   return !!from && from === to;
 }
