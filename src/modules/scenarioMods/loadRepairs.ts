@@ -50,7 +50,7 @@ export function migrateTrainingCapNone(save: any): 'canon' | 'canon+1' | null {
   }
 }
 
-/** 读档补 intentMatch 的关卡（只放确有作者后补短语、旧档会卡住的关）：秦线 lyg.qin_xianyang（非试玩档的自由输入只认作者短语，原先一条都没有）；stage01 s01_01（真机 69ab B16「见段强」卡住，见 scripts/dev/apply-s01-01-intent-match.mjs）、s01_02／03／05（Demo 合并压回 8 条）。 */
+/** 读档补 intentMatch 的关卡（只放确有作者后补短语、旧档会卡住的关）：秦线 lyg.qin_xianyang（非试玩档的自由输入只认作者短语，原先一条都没有）；stage01 s01_01（真机 69ab B16「见段强」卡住，见 scripts/dev/apply-s01-01-intent-match.mjs）、s01_02／03／05／06（Demo 合并压回 8 条）。 */
 const INTENT_MATCH_BACKFILL_STAGES: Record<string, { scenario: { events: any[] } }> = {
   'lyl.lin_an_black_sea': blackSea as unknown as { scenario: { events: any[] } },
   'lyl.jiangzhou_retreat': retreat as unknown as { scenario: { events: any[] } },
@@ -76,6 +76,8 @@ const S01_DEMO_SUPERSEDED: Record<string, { any: string[]; demo: string[]; rejec
   'lcq.event.s01_02': { any: ['拉着段强躲', '带段强找掩护', '护住段强撤'], demo: ['带段强躲开', '拉段强避箭', '掩护段强', '寻找掩护', '躲开半兽人', '避开箭袭'], reject: ['不管段强', '丢下段强', '袖手旁观'] },
   'lcq.event.s01_03': { any: ['查看伤兵伤势', '扶起受伤军士', '救下受伤军士', '带伤兵离开'], demo: ['见月霜', '上前查看伤者', '看看那个伤兵', '查看伤者', '扶住伤者', '救那个伤兵'], reject: ['不管伤兵', '不救伤者', '丢下伤者', '转身离开'] },
   'lcq.event.s01_05': { any: ['请王哲诊治', '让王哲诊治', '让王哲查看伤势', '向王哲说明来历请他诊治'], demo: ['去帅帐', '前往帅帐', '走进帅帐', '见王哲', '请他看伤', '说明自己的来历'], reject: ['拒绝诊治', '隐瞒来历离开', '不让王哲查看'] },
+  // REPORT-8091-1892cfb6 P1：s01_06 补真机说法（引出寒毒／化解寒毒…）后与 Demo 并成 8 条进内置关。
+  'lcq.event.s01_06': { any: ['帮月霜压住寒毒', '救治月霜的寒毒', '设法缓解月霜寒毒'], demo: ['见月霜', '应对眼前危局', '压住寒毒', '替月霜疗伤', '救月霜'], reject: ['不管月霜', '丢下月霜', '任由寒毒发作', '转身离开'] },
 };
 const SUPERSEDED_INTENT_MATCH: Record<string, string[]> = {
   'liuchao.event.qin_enter_xianyang:settle_in_xianyang': (CONTENT_PACKS.stages.find(s => s.manifest.id === 'lyg.qin_xianyang')?.scenario?.events?.find(e => e.id === 'liuchao.event.qin_enter_xianyang')?.playerCompletionContract?.actions || []).map(a => JSON.stringify({ matchAny: [a.label, a.actionText] })),
@@ -167,6 +169,28 @@ export function repairReport8091Route(rt: any): void {
   }
 }
 
+/** 读档补场外到点合同的拍（只放作者后补、旧档会永远卡住的拍）：s01_06 月霜寒毒（REPORT-8091-1892cfb6 P1，新档 35 回合不结算）。 */
+const OFFSCREEN_BACKFILL_EVENTS: Record<string, string[]> = { 'lcq.stage_01': ['lcq.event.s01_06'] };
+/**
+ * 旧档把事件烘焙进 runtime，内置关后补的 offscreenResolution（停滞到点自行收束）不会进档。只给存档里还没有场外合同、
+ * 也还没结算的拍补上内置值；已有合同（含 IF/Demo 覆写）一律不动。返回补了几拍。
+ */
+export function backfillMissingOffscreenResolution(rt: any): number {
+  const ids = OFFSCREEN_BACKFILL_EVENTS[String(rt?.modId || '')];
+  const canonical = INTENT_MATCH_BACKFILL_STAGES[String(rt?.modId || '')];
+  if (!ids || !canonical || !Array.isArray(rt?.events)) return 0;
+  let filled = 0;
+  for (const id of ids) {
+    const source = canonical.scenario.events.find((event: any) => event?.id === id)?.offscreenResolution;
+    const saved = rt.events.find((event: any) => event?.id === id);
+    if (!source || !saved || saved.offscreenResolution || (rt.completedEventIds || []).includes(id)) continue;
+    saved.offscreenResolution = structuredClone(source);
+    filled++;
+  }
+  if (filled) debugLog('save', `读档补场外到点合同：${rt.modId} ${filled} 拍`, { modId: rt.modId, filled });
+  return filled;
+}
+
 export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyStatuses: string[]; identitiesBackfilled: number; itemReceiptsBackfilled: number } {
   migrateTrainingCapNone(save);
   normalizeLocationCountry(save?.角色?.位置);
@@ -178,6 +202,7 @@ export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyS
   repairHanLuoduRoute(rt);
   repairTaiquanCrater(rt);
   backfillMissingIntentMatch(rt);
+  backfillMissingOffscreenResolution(rt);
   // 旧版直接点地图入秦留下的口信当前拍（推进一轮会换掉 剧本模组 对象，之后改用新的）。
   if (repairLingeringMapEntryMessage(save)) rt = save.世界.状态.剧本模组;
   if (rt.sceneLedger) injuryStore(save);

@@ -83,13 +83,11 @@ function applyQingyuDemoNaturalIntents(mod: ScenarioMod): void {
   // 仍全部由本地 settlement 决定。短语只覆盖眼前可执行动作，否定与离场优先拒绝。
   // s01_01 不在这里追加：内置关已满 8 条（含开场三个建议的命中词，见 scripts/dev/apply-s01-01-intent-match.mjs），
   // 再并入 Demo 短语会超校验上限 8。s01_02／s01_03／s01_05 同理：Demo 短语已与内置值并成一份 ≤8 条写进内置关
-  // （见 scripts/dev/apply-s01-demo-intent-match.mjs），这里不再追加。
+  // （见 scripts/dev/apply-s01-demo-intent-match.mjs），这里不再追加。s01_06 同样已并进内置关（REPORT-8091-1892cfb6 P1：
+  // 补「引出寒毒／化解寒毒」等真机说法后满 8 条，保留 A 线「见月霜」；「应对眼前危局」是建议原句、已按原句认），这里不再追加。
   event('lcq.event.s01_04', [
     '带伤者脱险', '带伤兵脱险', '护着伤者撤退', '跟修士撤离', '离开战场',
   ], ['独自离开', '丢下伤者']);
-  event('lcq.event.s01_06', [
-    '见月霜', '应对眼前危局', '压住寒毒', '替月霜疗伤', '救月霜',
-  ]);
 
   event('lcq.event.s02_01', [
     '听王哲交代', '听他说完', '问王哲还有什么事', '询问王哲后事', '听清三件事',

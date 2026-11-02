@@ -2807,6 +2807,16 @@
         "axisAnchor": "六朝清羽记·#9·第8章·治伤",
         "axisBeat": "程宗扬在真阳驱使下强行与月霜发生关系，意外通过性交将真阳传入月霜体内，压制并化解了她的寒毒。",
         "objective": "月霜身上的寒毒正在失控，先应对眼前危局",
+        "offscreenResolution": {
+          "id": "offscreen.r1892.lcq_event_s01_06",
+          "afterStallTurns": 5,
+          "flagKey": "world.r1892.lcq_event_s01_06.offscreen_resolved",
+          "resolvedEventIds": [
+            "lcq.event.s01_06"
+          ],
+          "worldDelta": "月霜体内失控的寒毒没有等你想出办法，可到天明时终究退了下去，她已脱离险境；醒来后她对你冷着脸，当时的事一句也不提。",
+          "evidence": "REPORT-8091-1892cfb6 P1：月霜寒毒危局是不依赖玩家选择也会收束的正典节点（同 s01_02/s01_04 的世界引力合同）；仅在该节点已激活且长期停滞时结算，免得主线卡死。"
+        },
         "playerCompletionContract": {
           "kind": "objective_action",
           "settleOn": [
@@ -2820,15 +2830,24 @@
               "timeCost": 1,
               "intentMatch": {
                 "matchAny": [
-                  "帮月霜压住寒毒",
-                  "救治月霜的寒毒",
-                  "设法缓解月霜寒毒"
+                  "压住寒毒",
+                  "化解寒毒",
+                  "引出寒毒",
+                  "缓解月霜寒毒",
+                  "救治月霜",
+                  "救月霜",
+                  "替月霜疗伤",
+                  "见月霜"
                 ],
                 "rejectIf": [
                   "不管月霜",
                   "丢下月霜",
                   "任由寒毒发作",
-                  "转身离开"
+                  "转身离开",
+                  "不救月霜",
+                  "不救治",
+                  "不想救",
+                  "不替月霜"
                 ]
               },
               "outcomeText": {

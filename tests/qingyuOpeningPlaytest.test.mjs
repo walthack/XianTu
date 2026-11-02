@@ -194,7 +194,8 @@ test('Demo 五拍自然行动词保持保守，世界压力与场外结算时钟
   assert.equal(events.get('lcq.event.s01_04')?.offscreenResolution?.afterStallTurns, 5);
   assert.equal(events.get('lcq.event.s01_03')?.offscreenResolution, undefined);
   assert.equal(events.get('lcq.event.s01_05')?.offscreenResolution, undefined);
-  assert.equal(events.get('lcq.event.s01_06')?.offscreenResolution, undefined);
+  // REPORT-8091-1892cfb6 P1：s01_06 月霜寒毒新档 35 回合不结算，补停滞 5 轮的场外到点（与 s01_04 同口径）。
+  assert.equal(events.get('lcq.event.s01_06')?.offscreenResolution?.afterStallTurns, 5);
 });
 
 test('Demo A 线覆写：去帅帐/见人能推进，且不加自动推进 timer', async () => {
@@ -216,7 +217,7 @@ test('Demo A 线覆写：去帅帐/见人能推进，且不加自动推进 timer
   assert.ok(phrases('lcq.event.s01_06').includes('见月霜'));
   assert.equal(byId('lcq.event.s01_03')?.offscreenResolution, undefined);
   assert.equal(byId('lcq.event.s01_05')?.offscreenResolution, undefined);
-  assert.equal(byId('lcq.event.s01_06')?.offscreenResolution, undefined);
+  assert.equal(byId('lcq.event.s01_06')?.offscreenResolution?.id, 'offscreen.r1892.lcq_event_s01_06', '内置关的场外到点（REPORT-8091-1892cfb6 P1），不是 Demo timer');
   const demoTimers = events.filter(event => String(event.offscreenResolution?.id || '').includes('qingyu_demo'));
   assert.deepEqual(demoTimers.map(event => event.id), ['lcq.event.s01_01']);
 
