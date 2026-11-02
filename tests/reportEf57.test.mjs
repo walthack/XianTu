@@ -279,8 +279,8 @@ test('3 上限与提示在 mod-kit，低于驱动 300 秒，模型配置不动�
   assert.match(budget.notice, /\{seconds\}/);
   assert.match(budget.notice, /输入已保留/);
   const panel = read('src/components/dashboard/MainGamePanel.vue');
-  assert.match(panel, /raceTurnBudget\(captureAIResponseError\(\(\) => bidirectionalSystem\.processPlayerAction\(/);
+  assert.match(panel, /const captured = await captureAIResponseError\(\(\) => raceTurnBudget\(bidirectionalSystem\.processPlayerAction\(/);
   assert.match(panel, /narrativeBudgetExpired = true;\s*aiService\.abortQingyuTurnRequests\(qingyuTurnId\);/);
   assert.match(panel, /shouldAbort: \(\) => narrativeBudgetExpired \|\|/);
-  assert.match(panel, /if \(raced\.expired\) \{\s*hasError = true;\s*aiResponse = null;\s*return;/, '到点直接按失败兜底返回，被掐断的请求迟到的错误不再另弹「AI处理失败」');
+  assert.match(panel, /if \(captured\.response\.expired\) \{\s*hasError = true;\s*aiResponse = null;\s*return;/, '到点直接按失败兜底返回，被掐断的请求迟到的错误不再另弹「AI处理失败」');
 });

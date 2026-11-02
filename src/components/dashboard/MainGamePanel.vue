@@ -2019,7 +2019,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   // 手打／粘贴启程按钮文字＝点启程按钮（REPORT-8091-ef573ece P1：驱动把按钮文字填进输入框发送，只得到一段叙事、不切关）。
   if (!isFollowUpExecution && !actionQueueText && stageDepartureOffer.value && stageDepartureFromText(gameStateStore.toSaveData(), inputText.value)) {
-    inputText.value = ''; lastSelectedActionOption.value = null; selectedScenarioEngineAction.value = null;
+    inputText.value = ''; lastSelectedActionOption.value = ''; selectedScenarioEngineAction.value = null;
     await departToNextStage();
     return;
   }
@@ -2540,22 +2540,21 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       (options as { qingyuTurnId?: string }).qingyuTurnId = qingyuTurnId;
       const narrativeStartedAt = Date.now();
       const budget = (GAME_NUMBERS.story as any).narrativeTurnBudget as { totalMs: number; notice: string };
-      const raced = await raceTurnBudget(captureAIResponseError(() => bidirectionalSystem.processPlayerAction(
+      const captured = await captureAIResponseError(() => raceTurnBudget(bidirectionalSystem.processPlayerAction(
         finalUserMessage,
         character,
         options
-      )), Number(budget?.totalMs) || 0, () => {
+      ), Number(budget?.totalMs) || 0, () => {
         narrativeBudgetExpired = true;
         aiService.abortQingyuTurnRequests(qingyuTurnId);
         toast.warning(String(budget.notice).replace('{seconds}', String(Math.round(budget.totalMs / 1000))));
-      });
-      if (raced.expired) {
+      }));
+      if (captured.response.expired) {
         hasError = true;
         aiResponse = null;
         return;
       }
-      const captured = raced.value;
-      aiResponse = captured.response;
+      aiResponse = captured.response.value;
 
       if (!uiStore.isAIProcessing || aiResetToken !== resetSnapshot) {
         console.log('[AI响应处理] 已重置，忽略本次响应');
