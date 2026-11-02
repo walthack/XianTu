@@ -6,6 +6,7 @@ const P = await loadTs('../src/modules/scenarioMods/travel/mapTravel.ts');
 const { CONTENT_PACKS } = await loadTs('../src/modules/contentPacks/index.ts');
 const { gameTimeMinutes } = await loadTs('../src/utils/time.ts');
 const config = JSON.parse(readFileSync(new URL('../mod-kit/numbers-runtime.json', import.meta.url))).crossCountryTravel;
+const MOMENT = JSON.parse(readFileSync(new URL('../mod-kit/numbers-progress.json', import.meta.url))).story.actionTime.minutes.moment;
 const saveAt = id => ({元数据:{时间:{年:220,月:1,日:1,小时:0,分钟:0}},角色:{位置:{locationId:id}},系统:{扩展:{}},世界:{状态:{剧本模组:{worldTurn:1,completedEventIds:[]}}}});
 for (const [from, row] of Object.entries(config.rawDays)) {
   for (const [to, raw] of Object.entries(row)) test(`矩阵双向 ${from}↔${to} ${raw}天`, () => {
@@ -114,7 +115,7 @@ for (const [from,to] of [
   assert.equal(P.settleMapTravel(s,{source:'map',actionId:'forged',fromId:from,toId:to,routeId:`xc:${P.countryOf(from)}:${P.countryOf(to)}`}),false);
   assert.deepEqual(s,before);
 });
-test('国内无国别回退，作者国内路线与解锁条件不变', () => {
+test('国内无国别回退，作者国内路线与解锁条件不变；国内一律只耗片刻（REPORT-8091-4c8245a5 P1）', () => {
   const s=saveAt(config.capitals.晋),target='liuchao.location.linchuan';
   assert.equal(P.selectMapTravel(s,target),undefined);
   CONTENT_PACKS.mapRoutes.push({id:'test.domestic',fromId:config.capitals.晋,toId:target,dayCost:2,unlockWhen:['open']});
@@ -124,7 +125,7 @@ test('国内无国别回退，作者国内路线与解锁条件不变', () => {
     const choice=P.selectMapTravel(s,target),before=gameTimeMinutes(s.元数据.时间);
     assert.equal(choice.routeId,'test.domestic');
     assert.equal(P.settleMapTravel(s,choice),true);
-    assert.equal(gameTimeMinutes(s.元数据.时间)-before,2*1440);
+    assert.equal(gameTimeMinutes(s.元数据.时间)-before,MOMENT);
   } finally { CONTENT_PACKS.mapRoutes.pop(); }
 });
 test('咸阳入口门槛不会被国别回退绕过', () => {

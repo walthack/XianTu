@@ -11,6 +11,7 @@ const clock = await loadTs('../src/utils/time.ts');
 const F = await loadTs('../src/utils/saveLoadFallback.ts');
 const E = await loadTs('../src/modules/scenarioMods/entitySaveFormat.ts');
 const config = JSON.parse(read('mod-kit/numbers-runtime.json')).crossCountryTravel;
+const progress = JSON.parse(read('mod-kit/numbers-progress.json'));
 const locations = JSON.parse(read('mod-kit/entity-catalog/locations.json'));
 const saveAt=id=>({元数据:{版本号:3,时间:{年:220,月:1,日:1,小时:0,分钟:0}},角色:{位置:{locationId:id}},系统:{扩展:{}},世界:{状态:{剧本模组:{worldTurn:1,completedEventIds:[]}}}});
 for(const mode of ['native','getRandomValues','Math.random'])test(`1 UUID ${mode}生成唯一v4，地图select不抛`,()=>{
@@ -19,10 +20,10 @@ for(const mode of ['native','getRandomValues','Math.random'])test(`1 UUID ${mode
  try {Object.defineProperty(globalThis,'crypto',{configurable:true,value:crypto}); const ids=Array.from({length:1000},()=>U.randomUUID());assert.equal(new Set(ids).size,1000);for(const id of ids)assert.match(id,/^[\da-f]{8}-[\da-f]{4}-4[\da-f]{3}-[89ab][\da-f]{3}-[\da-f]{12}$/);assert.ok(P.selectMapTravel(saveAt(config.capitals.晋),config.capitals.宋));}
  finally {Object.defineProperty(globalThis,'crypto',descriptor);}
 });
-test('4 草原→五原国内代表点按坐标80里每日且至少1日结算',()=>{
- const s=saveAt('lcq.location.grassland'),from=locations.entries.find(e=>e.id==='lcq.location.grassland').definition.coordinates,to=locations.entries.find(e=>e.id===config.capitals.中立边陲).definition.coordinates;
- const route=P.mapRoutes(s,config.capitals.中立边陲)[0],expected=Math.max(config.domesticRepresentative.minDays,Math.ceil(Math.hypot(to.x-from.x,to.y-from.y)*config.domesticRepresentative.coordinateLi/config.liPerDay));
- assert.equal(route.dayCost,expected);const before=clock.gameTimeMinutes(s.元数据.时间);assert.equal(P.settleMapTravel(s,P.selectMapTravel(s,route.toId)),true);assert.equal(clock.gameTimeMinutes(s.元数据.时间)-before,expected*1440);assert.deepEqual(P.mapRoutes(s,route.toId),[]);
+test('4 草原→五原国内代表点可点，只耗片刻（REPORT-8091-4c8245a5 P1：国内移动不按地图折天）',()=>{
+ const s=saveAt('lcq.location.grassland'),moment=progress.story.actionTime.minutes.moment;
+ const route=P.mapRoutes(s,config.capitals.中立边陲)[0];
+ assert.ok(route);const before=clock.gameTimeMinutes(s.元数据.时间);assert.equal(P.settleMapTravel(s,P.selectMapTravel(s,route.toId)),true);assert.equal(clock.gameTimeMinutes(s.元数据.时间)-before,moment);assert.deepEqual(P.mapRoutes(s,route.toId),[]);
 });
 test('5 地图预览纯函数显示32日；取消/首次/过期确认不可提交',()=>{
  const s=saveAt(config.capitals.宋),before=structuredClone(s),p=P.mapTravelPreview(s,'liuchao.location.jiangzhou');assert.equal(p.label,'约32日路程');assert.deepEqual(s,before);assert.equal(P.mapTravelConfirmed(p,null),false);assert.equal(P.mapTravelConfirmed(p,p.key),true);assert.equal(P.mapTravelConfirmed(P.mapTravelPreview(s,config.capitals.唐),p.key),false);assert.equal(P.mapTravelConfirmed(undefined,p.key),false);

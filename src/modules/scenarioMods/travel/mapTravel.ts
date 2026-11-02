@@ -10,9 +10,11 @@ import type { SaveData } from '@/types/game';
 import { currentLocation, isNanhuangTravelStage } from './travelLedger';
 import { canonicalLocationId, locationDescriptionWithCountry } from './locationIds';
 import { SEVERAL_DAYS_PLACEHOLDER } from '../openWorldSlice';
-import { settleTime } from '../actionTime';
+import { settleTime, actionTimeConfig } from '../actionTime';
 import { logEvent } from '../../diagnostics/log';
 export interface MapTravelRoute { id: string; fromId: string; toId: string; dayCost: number | 'several'; unlockWhen?: string[] }
+/** 国内地图移动按原方式计时（片刻，story.actionTime.minutes.moment）；只有跨国才按路程天数（REPORT-8091-4c8245a5 P1）。 */
+export const MOMENT_DAY_COST = 0;
 export interface MapTravelSelection { source: 'map'; actionId: string; fromId: string; toId: string; routeId: string }
 export function countryOf(id: string | undefined): string | undefined {
   if (!id) return undefined;
@@ -80,11 +82,8 @@ export function mapRoutes(save: SaveData, toId: string): MapTravelRoute[] {
   if (from === to) {
     const rule = crossCountryTravel.domesticRepresentative;
     if (!rule.enabled || fromId === targetId || !destinations[to]?.includes(targetId)) return [];
-    const start = locations.entries.find(e => canonicalLocationId(e.id) === fromId)?.definition.coordinates;
-    const end = locations.entries.find(e => canonicalLocationId(e.id) === targetId)?.definition.coordinates;
-    if (!start || !end) return [];
-    const days = Math.max(rule.minDays, Math.ceil(Math.hypot(end.x - start.x, end.y - start.y) * rule.coordinateLi / crossCountryTravel.liPerDay));
-    return [{ id: `domestic:${fromId}:${targetId}`, fromId, toId: targetId, dayCost: days }];
+    // 国内只耗片刻，不按坐标折天（留仙坪→长安曾按地图算成约10日，REPORT-8091-4c8245a5 P1）。
+    return [{ id: `domestic:${fromId}:${targetId}`, fromId, toId: targetId, dayCost: MOMENT_DAY_COST }];
   }
   // 带表落点来回对称：出发点表取目标国、目标点表取出发国；两端都带表时取较大值以保持对称；都没有才用国别矩阵。
   const pointRaw = [destinationRawDays[fromId]?.[to], destinationRawDays[targetId]?.[from]].filter((d): d is number => d !== undefined);
@@ -121,8 +120,7 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
   }
   const route = currentLocation(save).canonicalLocationId === selection.fromId ? mapRoutes(save, selection.toId).find(r => r.id === selection.routeId) : undefined;
   if (!route) { logEvent({ code: 'LCQ-SAV-038', detail: { reason: 'invalid_map_selection' } }); return false; }
-  const days = route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost;
-  settleTime(save, 'map:' + selection.actionId, days * 1440, source);
+  settleTime(save, 'map:' + selection.actionId, mapRouteMinutes(route), source);
   if (route.dayCost === 'several') (save as any).元数据.时间.相对日 = '数日后';
   const loc = locations.entries.find(e => canonicalLocationId(e.id) === selection.toId)?.definition;
   const position = (save as any).角色.位置;
@@ -232,8 +230,18 @@ export function mapTravelPreview(save: SaveData, toId: string): { key: string; l
   if (entry) return mapEntryReady(save, entry) ? { key: `${fromId}:${entry.id}`, label: '剧情入口转场（不另计路程天数）', days: null, description: entry.previewTextId ? packText(entry.previewTextId) : undefined } : undefined;
   const route = mapRoutes(save, toId)[0];
   if (!route) return undefined;
+  if (isDomesticMapRoute(route)) return { key: `${fromId}:${route.toId}:${route.id}:moment`, label: travelUi.domesticMapLabel, days: null };
   const days = route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost;
   return { key: `${fromId}:${route.toId}:${route.id}:${days}`, label: `约${days}日路程`, days };
+}
+/** 国内路线（作者登记的也算）一律片刻；跨国按天数。 */
+function isDomesticMapRoute(route: MapTravelRoute): boolean {
+  const from = countryOf(route.fromId), to = countryOf(route.toId);
+  return !!from && from === to;
+}
+export function mapRouteMinutes(route: MapTravelRoute): number {
+  if (isDomesticMapRoute(route)) return actionTimeConfig().minutes.moment;
+  return (route.dayCost === 'several' ? SEVERAL_DAYS_PLACEHOLDER : route.dayCost) * 1440;
 }
 export function mapTravelConfirmed(preview: ReturnType<typeof mapTravelPreview>, confirmationKey: string | null): boolean {
   return !!preview && preview.key === confirmationKey;
