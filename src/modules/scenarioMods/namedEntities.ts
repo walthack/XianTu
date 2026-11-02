@@ -44,3 +44,12 @@ export function displayEntityLabel(value:unknown):string{
   for(const kind of kinds){const id=looseIds.get(kind+':'+text.replace(/_/g,'').toLowerCase());if(id)return String(byId[kind].get(id)!.definition.name||'');}
   return '';
 }
+/**
+ * 关系表里记的是不是玩家本人（模型常给主角自造一条关系，如 liuchao.character.chengzongyang）：档里名字或键换出的显示名等于玩家名。
+ * 地图人物标记跳过这条——玩家标记按 角色.位置 另画，关系条目里的位置是旧的（REPORT-8091-1892cfb6 P2：人在舞都、洛都还画着程宗扬）。
+ */
+export function isPlayerRelationEntry(key:string,data:unknown,playerName:unknown):boolean{
+  const name=String(playerName??'').trim();
+  if(!name)return false;
+  return [displayEntityLabel((data as {名字?:unknown}|null)?.名字),displayEntityLabel(key)].some(label=>label===name);
+}

@@ -208,3 +208,18 @@ test('4 剧本新档游戏中写出缺版本的 社交.宗门：不弹旧版宗�
   assert.equal(detectSectMigration(legacy).needed, true, '复现：同样的缺版本宗门数据在非剧本档里判为旧版');
   assert.equal(detectSectMigration(s).needed, false, '剧本档不弹');
 });
+
+// ───────────── 5) P2 玩家在舞都时洛都也显示程宗扬人物标记 ─────────────
+// 根因：地图人物标记取自 社交.关系 每一条的 当前位置/位置；模型给主角自造了一条关系（liuchao.character.chengzongyang），位置是旧的
+// （或干脆没有位置、按名字 hash 伪造坐标），于是玩家本人在洛都旁又画了一个「程宗扬」。玩家标记本来就按 角色.位置 另画。
+// 修：关系条目是玩家本人（名字或键换出的显示名＝玩家名）时不画人物标记；没有位置信息的 NPC 不再伪造坐标。
+test('5 地图人物标记跳过玩家本人的关系条目，没有位置的人物不伪造坐标', async () => {
+  const NE = await load('modules/scenarioMods/namedEntities.ts');
+  assert.equal(NE.isPlayerRelationEntry('liuchao.character.chengzongyang', { 当前位置: { 描述: '汉·洛都' } }, '程宗扬'), true, '模型自造的下划线变体键');
+  assert.equal(NE.isPlayerRelationEntry('npc_x', { 名字: '程宗扬' }, '程宗扬'), true, '档里名字');
+  assert.equal(NE.isPlayerRelationEntry('lcq.character.yue_shuang', { 名字: '月霜' }, '程宗扬'), false);
+  assert.equal(NE.isPlayerRelationEntry('liuchao.character.chengzongyang', {}, ''), false, '没有玩家名不误判');
+  const panel = read('src/components/dashboard/GameMapPanel.vue');
+  assert.equal((panel.match(/if \(isPlayerRelationEntry\(npcName, npcData, gameStateStore\.character\?\.名字\)\) return;/g) || []).length, 2, '两处人物标记都跳过玩家本人');
+  assert.doesNotMatch(panel, /hash 伪随机兜底|const hash = seed\.split/);
+});

@@ -408,7 +408,7 @@ import type { GameCoordinates } from '@/types/gameMap';
 import type { NpcProfile, GameTime, WorldInfo } from '@/types/game';
 import type { RegionMap } from '@/types/gameMap';
 import RegionMapPanel from './RegionMapPanel.vue';
-import { displayEntityLabel } from '@/modules/scenarioMods/namedEntities';
+import { displayEntityLabel, isPlayerRelationEntry } from '@/modules/scenarioMods/namedEntities';
 import { generateRegionMap, mergeCanonBuildingsIntoRegion, type RegionNpcLocationHint } from '@/utils/worldGeneration/regionMapGenerator';
 import UnmappedLocationsPanel from './UnmappedLocationsPanel.vue';
 import type { UnmappedNpc } from './UnmappedLocationsPanel.vue';
@@ -999,7 +999,7 @@ const resolveNumber = (value: unknown): number | null => {
 
 /** 地图上的人物标签：关系表键多是引用 id（liuchao.character.xxx），先取档里的名字，再按实体表换显示名；都换不出就留空、不画（REPORT-8091-f9737e0d P2-3）。 */
 const npcMapLabel = (npcKey: string, npcData: any): string => displayEntityLabel(npcData?.名字) || displayEntityLabel(npcKey);
-const resolveNpcCoordinates = (npcName: string, npcData: any): GameCoordinates | null => {
+const resolveNpcCoordinates = (_npcName: string, npcData: any): GameCoordinates | null => {
   const raw = npcData?.['当前位置'] || npcData?.['位置'] || npcData?.coordinates;
   if (!raw || typeof raw !== 'object') return null;
 
@@ -1060,15 +1060,8 @@ const resolveNpcCoordinates = (npcName: string, npcData: any): GameCoordinates |
     return { x, y };
   }
 
-  // ── 优先级 3：hash 伪随机兜底（完全无位置信息） ───────────────────────
-  const mapConfig = mapRenderConfig.value;
-  const seed = `${npcName}`;
-  const hash = seed.split('').reduce((a: number, c: string) => a + c.charCodeAt(0), 0);
-  const hx = mapConfig.width * 0.3 + (hash % 100) * (mapConfig.width * 0.004);
-  const hy = mapConfig.height * 0.3 + ((hash * 7) % 100) * (mapConfig.height * 0.004);
-
-  if (!Number.isFinite(hx) || !Number.isFinite(hy)) return null;
-  return { x: hx, y: hy };
+  // 完全没有位置信息：不画。原先按名字 hash 伪造一个坐标，人物标记就落在与实际所在无关的地方（REPORT-8091-1892cfb6 P2）。
+  return null;
 };
 
 /**
@@ -1360,6 +1353,7 @@ watch(
     const npcs: Array<{ name: string; coordinates: GameCoordinates }> = [];
 
     Object.entries(relationships).forEach(([npcName, npcData]: [string, any]) => {
+      if (isPlayerRelationEntry(npcName, npcData, gameStateStore.character?.名字)) return;
       const coords = resolveNpcCoordinates(npcName, npcData);
       if (coords) {
         npcs.push({
@@ -1973,6 +1967,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
       const npcs: Array<{ name: string; coordinates: GameCoordinates }> = [];
 
       Object.entries(relationships).forEach(([npcName, npcData]: [string, any]) => {
+        if (isPlayerRelationEntry(npcName, npcData, gameStateStore.character?.名字)) return;
         const coords = resolveNpcCoordinates(npcName, npcData);
         if (coords) {
           npcs.push({
