@@ -5,185 +5,8 @@ import { loadTs } from './loadTs.mjs';
 
 const modPromise = loadTs('../src/services/eventReconcileService.ts');
 
-// —— 复现存档11111/stage_06 死锁场景：严格顺序链 01~06，玩家杀了鬼巫王(01/02已发生)、
-//    谢艺没死/殇侯没出现(03分岔/05未到) ——
-function chain() {
-  return [
-    { id: 'e1', name: '鬼巫王被吞', beat: '鬼巫王与龙神合体失败被吞', flagKey: 'event.s06_01.done' },
-    { id: 'e2', name: '龙神激战', beat: '商队与龙神激战', flagKey: 'event.s06_02.done' },
-    { id: 'e3', name: '谢艺死亡', beat: '谢艺重创龙神后死亡', flagKey: 'event.s06_03.done' },
-    { id: 'e4', name: '小紫弑母', beat: '小紫刺死碧姬', flagKey: 'event.s06_04.done' },
-    { id: 'e5', name: '殇侯揭身份', beat: '殇侯揭示身份', flagKey: 'event.s06_05.done' },
-  ];
-}
-const CTX = '鬼巫王已死，龙神也已陨落。血池决战落幕。谢艺拄着刀单臂撑在石壁上说话。';
-
-test('连续前缀：done+void 按序接受，pending 处链停止', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const raw = { events: [
-    { id: 'e1', verdict: 'done', evidence: '鬼巫王已死', confidence: 0.95 },
-    { id: 'e2', verdict: 'done', evidence: '血池决战落幕', confidence: 0.9 },
-    { id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.9 },
-    { id: 'e4', verdict: 'pending', evidence: '', confidence: 0 },
-    { id: 'e5', verdict: 'done', evidence: '鬼巫王已死', confidence: 0.99 }, // 跳序：必须被拒
-  ] };
-  const { accepted } = validateEventReconcile(raw, chain(), CTX);
-  assert.deepEqual(accepted.map(a => `${a.id}:${a.verdict}`), ['e1:done', 'e2:done', 'e3:void']);
-});
-
-test('跳序拦截：链中一个不过，后续即使高置信也全部拒绝', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const raw = { events: [
-    { id: 'e1', verdict: 'pending' },
-    { id: 'e2', verdict: 'done', evidence: '血池决战落幕', confidence: 0.99 },
-  ] };
-  const { accepted } = validateEventReconcile(raw, chain(), CTX);
-  assert.equal(accepted.length, 0);
-});
-
-test('证据接地：evidence 与记忆无 bigram 重叠 → 拒绝（模型编造）', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const raw = { events: [
-    { id: 'e1', verdict: 'done', evidence: '玩家亲手斩杀了魔尊统领', confidence: 0.99 },
-  ] };
-  const { accepted } = validateEventReconcile(raw, chain(), CTX);
-  assert.equal(accepted.length, 0);
-});
-
-test('证据接地(bigram)：转述/带省略号但语义对的证据应接地（实测存档11111的真实失败点）', async () => {
-  const { validateEventReconcile } = await modPromise;
-  // 事件 beat="鬼巫王与龙神合体失败被吞"，记忆里是"鬼巫王已死，龙神也已陨落"——
-  // 模型转述成带省略号的叙事措辞，逐字子串匹配会毙掉，bigram 重叠应放行
-  const raw = { events: [
-    { id: 'e1', verdict: 'done', evidence: '鬼巫王…龙神也已陨落', confidence: 0.95 },
-  ] };
-  const { accepted } = validateEventReconcile(raw, chain(), CTX);
-  assert.deepEqual(accepted.map(a => a.id), ['e1']);
-});
-
-test('证据语义关联：拒绝上下文中真实、但属于另一事件的 evidence', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const result = validateEventReconcile({ events: [
-    { id: 'e1', verdict: 'done', evidence: '谢艺拄着刀单臂撑在石壁上', matchedCore: '谢艺', confidence: 0.95 },
-  ] }, chain(), CTX, { requireEvidenceRelation: true });
-  assert.equal(result.accepted.length, 0);
-  assert.match(result.diagnostics.at(-1), /matchedCore/);
-});
-
-test('证据语义关联：matchedCore 必须同时属于当前事件、引文和上下文', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const result = validateEventReconcile({ events: [
-    { id: 'e1', verdict: 'done', evidence: '鬼巫王已死', matchedCore: '鬼巫王', confidence: 0.95 },
-  ] }, chain(), CTX, { requireEvidenceRelation: true });
-  assert.deepEqual(result.accepted.map(item => item.id), ['e1']);
-});
-
-
-test('void 阈值高于 done：0.8 的 void 拒绝、0.8 的 done 接受', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const asVoid = validateEventReconcile({ events: [
-    { id: 'e1', verdict: 'void', evidence: '鬼巫王已死', confidence: 0.8 },
-  ] }, chain(), CTX);
-  assert.equal(asVoid.accepted.length, 0, 'void@0.8 应拒');
-  const asDone = validateEventReconcile({ events: [
-    { id: 'e1', verdict: 'done', evidence: '鬼巫王已死', confidence: 0.8 },
-  ] }, chain(), CTX);
-  assert.equal(asDone.accepted.length, 1, 'done@0.8 应收');
-});
-
-test('Canon Rail 对账拒绝 void，默认链仍保留原有分歧放行', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const raw = { events: [
-    { id: 'e1', verdict: 'void', evidence: '鬼巫王已死', confidence: 0.95 },
-  ] };
-  const result = validateEventReconcile(raw, chain(), CTX, { allowVoid: false });
-  assert.equal(result.accepted.length, 0);
-  assert.match(result.diagnostics[0], /不允许 void/);
-});
-
-test('Canon Rail 对账要求每个完成锚点已在事实中覆盖', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const railCandidate = [{
-    id: 'rail-1', name: '段强被射杀', beat: '段强遭半兽人袭击身亡', flagKey: 'event.s01_02.done',
-    mustReach: '段强遭半兽人袭击身亡', completionEvidence: ['段强', '半兽人', '射杀'],
-  }];
-  const raw = { events: [{ id: 'rail-1', verdict: 'done', evidence: '段强遭半兽人射杀', confidence: 0.95 }] };
-  assert.equal(validateEventReconcile(raw, railCandidate, '段强遭半兽人射杀，程宗扬独自逃离。', { allowVoid: false }).accepted.length, 1);
-  const missing = validateEventReconcile(
-    { events: [{ id: 'rail-1', verdict: 'done', evidence: '段强遭半兽人袭击', confidence: 0.95 }] },
-    railCandidate,
-    '段强遭半兽人袭击，程宗扬独自逃离。',
-    { allowVoid: false },
-  );
-  assert.equal(missing.accepted.length, 0);
-  assert.match(missing.diagnostics.at(-1), /完成锚点/);
-});
-
-test('单次上限：一次最多落 MAX_FLAGS_PER_RUN 个', async () => {
-  const { validateEventReconcile, MAX_FLAGS_PER_RUN } = await modPromise;
-  const many = Array.from({ length: 8 }, (_, i) => ({
-    id: `e${i + 1}`, name: `E${i + 1}`, beat: 'x', flagKey: `event.x${i + 1}.done`,
-  }));
-  const raw = { events: many.map(c => ({ id: c.id, verdict: 'done', evidence: '鬼巫王已死', confidence: 0.99 })) };
-  const { accepted } = validateEventReconcile(raw, many, CTX);
-  assert.equal(accepted.length, MAX_FLAGS_PER_RUN);
-});
-
-test('applyReconcileFlags：扁平+嵌套双写，void 记审计标记', async () => {
-  const { applyReconcileFlags } = await modPromise;
-  const flags = { 'event.s06_01.done': false, event: { s06_03: { done: false } } };
-  applyReconcileFlags(flags, [
-    { id: 'e1', flagKey: 'event.s06_01.done', verdict: 'done', evidence: 'x' },
-    { id: 'e3', flagKey: 'event.s06_03.done', verdict: 'void', evidence: 'y' },
-  ]);
-  assert.equal(flags['event.s06_01.done'], true, '扁平键');
-  assert.equal(flags.event.s06_03.done, true, '嵌套键(读取优先,必须同步)');
-  assert.equal(flags['event.s06_03.void'], true, 'void 审计标记');
-});
-
-test('分歧详情护栏：worldDelta须接地、人物ID须能在canon解析', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const options = {
-    requireDivergenceDetails: true,
-    knownCharacterIds: new Set(['liuchao.character.xie_yi']),
-  };
-  const valid = validateEventReconcile({ events: [{
-    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
-    worldDelta: '谢艺拄着刀单臂撑在石壁上，仍然活着',
-    characterStates: { 'liuchao.character.xie_yi': 'alive' },
-  }] }, [chain()[2]], CTX, options);
-  assert.equal(valid.accepted.length, 1);
-  assert.equal(valid.accepted[0].characterStates['liuchao.character.xie_yi'], 'alive');
-
-  const noCharacter = validateEventReconcile({ events: [{
-    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
-    worldDelta: '谢艺拄着刀单臂撑在石壁上，预设桥段已失效',
-    characterStates: {},
-  }] }, [chain()[2]], CTX, options);
-  assert.equal(noCharacter.accepted.length, 1, '非人物型分歧允许空人物状态，但不会自动激活人物 IF');
-
-  const unknown = validateEventReconcile({ events: [{
-    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
-    worldDelta: '谢艺拄着刀单臂撑在石壁上，仍然活着',
-    characterStates: { 'liuchao.character.fake_xieyi': 'alive' },
-  }] }, [chain()[2]], CTX, options);
-  assert.equal(unknown.accepted.length, 0);
-  assert.match(unknown.diagnostics.at(-1), /未知角色 id/);
-});
-
-test('分歧详情护栏：knownCharacterIds 为空时拒绝人物状态，不能把空 registry 当作放行', async () => {
-  const { validateEventReconcile } = await modPromise;
-  const result = validateEventReconcile({ events: [{
-    id: 'e3', verdict: 'void', evidence: '谢艺拄着刀单臂撑在石壁上', confidence: 0.95,
-    worldDelta: '谢艺拄着刀单臂撑在石壁上，仍然活着',
-    characterStates: { 'liuchao.character.xie_yi': 'alive' },
-  }] }, [chain()[2]], CTX, {
-    requireDivergenceDetails: true,
-    knownCharacterIds: new Set(),
-  });
-  assert.equal(result.accepted.length, 0);
-  assert.match(result.diagnostics.at(-1), /未知角色 id/);
-});
+// 2026-11-02 用户拍板②：正文关键词共现不再是结算条件——高光证据词、谢艺／碧姬正文快路、模型读正文对账全部删除。
+// 留下的只有只读的候选链排序（冻结文件 AIBidirectionalSystem 仍按原名调用这些出口）。
 
 test('buildChainCandidates：排除已完成/已 done，按 axisSeq 排序，截断暴露上限', async () => {
   const { buildChainCandidates } = await modPromise;
@@ -244,172 +67,37 @@ test('event completionEvidence overrides the shorter Canon Rail fallback for mai
     ['左武第一军团', '王哲', '九阳', '日轮', '阿伽门侬', '焦土']);
 });
 
-test('shouldRunReconcile：停滞≥阈值每轮都触发', async () => {
-  const { shouldRunReconcile } = await modPromise;
-  // 阈值 10：>=10 每轮都触发（落账使 stall 归零自然停）
-  assert.equal(shouldRunReconcile(9), false);
-  assert.equal(shouldRunReconcile(10), true);
-  assert.equal(shouldRunReconcile(11), true);
-  assert.equal(shouldRunReconcile(33), true);
-  assert.equal(shouldRunReconcile(undefined), false);
-});
-
-function xieyiRuntimeSave() {
-  return {
-    世界: { 状态: { 剧本模组: {
-      modId: 'lcq.stage_06',
-      events: [{
-        id: 'lcq.event.s06_03', name: '谢艺死亡', axisSeq: 210,
-        axisBeat: '谢艺被闪电击中，重伤不治，临终将小紫托付给程宗扬',
-        completion: [{ path: 'flags.event.s06_03.done', operator: 'eq', value: true }],
-      }],
-      completedEventIds: [],
-      flags: { 'event.s06_03.done': false },
-      divergences: [],
-    } } },
-  };
-}
-
-test('R2-0V 确定性快路：只凭 GM 正文明示落死亡、生还或失踪互斥结果', async () => {
-  const { runDeterministicXieyiReconcile } = await modPromise;
-
-  const canon = xieyiRuntimeSave();
-  assert.equal(runDeterministicXieyiReconcile(canon, '谢艺倒在乱石间，呼吸断绝，确认其已经死亡。').length, 1);
-  assert.equal(canon.世界.状态.剧本模组.flags['event.s06_03.done'], true);
-  assert.equal(canon.世界.状态.剧本模组.flags['event.s06_03.void'], undefined);
-
-  const alive = xieyiRuntimeSave();
-  assert.ok(runDeterministicXieyiReconcile(alive, '谢艺重伤昏迷但尚有气息，众人救回了他，确认谢艺生还。').length >= 2);
-  assert.equal(alive.世界.状态.剧本模组.flags['event.s06_03.void'], true);
-  assert.equal(alive.世界.状态.剧本模组.flags['branch.lcq.if_xieyi_longrest.active'], true);
-  assert.equal(alive.世界.状态.剧本模组.flags['character.xie_yi.status'], 'longrest');
-
-  const survivedByNegation = xieyiRuntimeSave();
-  assert.ok(runDeterministicXieyiReconcile(survivedByNegation, '谢艺只是被余波震伤，并未当场殒命，小紫稳住了他最后一丝生机。').length >= 2);
-  assert.equal(survivedByNegation.世界.状态.剧本模组.flags['branch.lcq.if_xieyi_longrest.active'], true);
-
-  const survivedByVitalSigns = xieyiRuntimeSave();
-  assert.ok(runDeterministicXieyiReconcile(survivedByVitalSigns, '谢艺躺在榻上，胸口微微起伏，呼吸虽弱，却已经平稳。').length >= 2);
-  assert.equal(survivedByVitalSigns.世界.状态.剧本模组.flags['character.xie_yi.status'], 'longrest');
-
-  const survivedByStableBreathing = xieyiRuntimeSave();
-  assert.ok(runDeterministicXieyiReconcile(survivedByStableBreathing, '谢艺闭上眼睛，呼吸渐渐平稳下来。').length >= 2);
-
-  const missing = xieyiRuntimeSave();
-  assert.ok(runDeterministicXieyiReconcile(missing, '战场崩塌后谢艺下落不明，众人未找到遗体。').length >= 2);
-  assert.equal(missing.世界.状态.剧本模组.flags['event.s06_03.void'], true);
-  assert.equal(missing.世界.状态.剧本模组.flags['world.xieyi_absence.active'], true);
-  assert.equal(missing.世界.状态.剧本模组.flags['branch.lcq.if_xieyi_longrest.active'], undefined);
-});
-
-test('R2-0V 确定性快路不信玩家意图式或互相冲突的正文', async () => {
-  const { runDeterministicXieyiReconcile } = await modPromise;
-  const vague = xieyiRuntimeSave();
-  assert.deepEqual(runDeterministicXieyiReconcile(vague, '程宗扬打算设法救回谢艺，但战局仍未结束。'), []);
-  const conflict = xieyiRuntimeSave();
-  assert.deepEqual(runDeterministicXieyiReconcile(conflict, '有人误传谢艺战死，随后谢艺生还并走出废墟。'), []);
-});
-
-function bijiRuntimeSave() {
-  return {
-    世界: { 状态: { 剧本模组: {
-      modId: 'lcq.stage_06',
-      events: [{
-        id: 'lcq.event.s06_04', name: '小紫弑母', axisSeq: 220,
-        axisBeat: '小紫亲手杀死碧姬',
-        completion: [{ path: 'flags.event.s06_04.done', operator: 'eq', value: true }],
-      }],
-      completedEventIds: [],
-      flags: { 'event.s06_04.done': false },
-    } } },
-  };
-}
-
-test('stage_06 碧姬快路：仅 GM 正文明确小紫杀死碧姬时结算', async () => {
-  const { runDeterministicBijiReconcile } = await modPromise;
-  const completed = bijiRuntimeSave();
-  assert.equal(runDeterministicBijiReconcile(completed, '小紫将匕首刺入碧姬咽喉，静静看着碧姬死去。').length, 1);
-  assert.equal(completed.世界.状态.剧本模组.flags['event.s06_04.done'], true);
-
-  const aftermath = bijiRuntimeSave();
-  assert.equal(runDeterministicBijiReconcile(aftermath, '小紫伏在乐明珠怀里哭泣。凝羽走到碧姬的尸体旁，俯身合上她的眼睛。').length, 1);
-
-  const planned = bijiRuntimeSave();
-  assert.deepEqual(runDeterministicBijiReconcile(planned, '程宗扬打算让小紫亲手杀死碧姬。'), []);
-  const spared = bijiRuntimeSave();
-  assert.deepEqual(runDeterministicBijiReconcile(spared, '小紫最终放过碧姬，带她离开废墟。'), []);
-  const alive = bijiRuntimeSave();
-  assert.deepEqual(runDeterministicBijiReconcile(alive, '小紫站在一旁，碧姬仍然活着并向众人求救。'), []);
-});
-
-test('active noncritical highlight settles only after every declared evidence beat appears', async () => {
-  const { runDeterministicHighlightReconcile } = await modPromise;
+test('正文不再结算：证据词全部同现、人名＋死亡词同句、模型给出高置信结论，都不写任何 flag', async () => {
+  const mod = await modPromise;
   const save = {
     世界: { 状态: { 剧本模组: {
+      modId: 'lcq.stage_06',
       activeEventIds: ['event.highlight.demo'],
       completedEventIds: [],
       flags: {},
       events: [{
-        id: 'event.highlight.demo',
-        name: '高光',
-        critical: false,
+        id: 'event.highlight.demo', name: '高光', critical: false,
         completionEvidence: ['羊腿', '刀尖', '田荣'],
         completion: [{ path: 'flags.event.highlight.demo.done', operator: 'eq', value: true }],
       }],
     } } },
   };
-
-  assert.deepEqual(runDeterministicHighlightReconcile(save, '班超以羊腿和刀尖镇场。'), []);
-  assert.deepEqual(
-    runDeterministicHighlightReconcile(save, '班超打算以羊腿和刀尖镇场，之后替田荣留一条路。'),
-    [],
-  );
-  const changes = runDeterministicHighlightReconcile(save, '班超以羊腿和刀尖镇场，最后替田荣留了差事。');
-  assert.equal(changes.length, 1);
-  assert.equal(save.世界.状态.剧本模组.flags['event.highlight.demo.done'], true);
+  const text = '班超以羊腿和刀尖镇场，最后替田荣留了差事。谢艺战死。小紫亲手杀死碧姬。月霜的寒毒被真阳化解。';
+  assert.deepEqual(mod.runDeterministicHighlightReconcile(save, text), []);
+  assert.deepEqual(mod.runDeterministicXieyiReconcile(save, text), []);
+  assert.deepEqual(mod.runDeterministicBijiReconcile(save, text), []);
+  let called = 0;
+  assert.deepEqual(await mod.runEventReconcile({ saveData: save, recentText: text, userAction: '', generate: async () => { called++; return '{"events":[{"id":"event.highlight.demo","verdict":"done","evidence":"羊腿","confidence":0.99}]}'; } }), []);
+  assert.equal(called, 0, '不再请模型读正文对账');
+  assert.deepEqual(save.世界.状态.剧本模组.flags, {});
+  assert.equal(mod.shouldRunReconcile(99), false, '停滞不再触发对账');
+  assert.equal(mod.evidenceLikely(text, [{ id: 'e', name: '高光', beat: '班超以羊腿和刀尖镇场', flagKey: 'event.e.done' }]), false, '正文命中也不触发');
 });
 
-test('runEventReconcile 端到端(注入generate)：落账后 flag 生效、返回变更日志', async () => {
-  const { runEventReconcile } = await modPromise;
-  const saveData = {
-    世界: { 状态: { 剧本模组: {
-      events: [
-        { id: 'e1', name: '鬼巫王被吞', axisSeq: 1, axisBeat: '鬼巫王被吞', completion: [{ path: 'flags.event.s06_01.done', operator: 'eq', value: true }] },
-        { id: 'e3', name: '谢艺死亡', axisSeq: 3, axisBeat: '谢艺死亡', completion: [{ path: 'flags.event.s06_03.done', operator: 'eq', value: true }] },
-      ],
-      completedEventIds: [],
-      flags: { 'event.s06_01.done': false, 'event.s06_03.done': false },
-      canon: { characters: [{ id: 'liuchao.character.xie_yi' }] },
-    } } },
-    社交: { 记忆: { 隐式中期记忆: ['击杀鬼巫王后与苏荔同行离开鬼王峒', '谢艺拄刀而立与程宗扬说话'] } },
-  };
-  const changes = await runEventReconcile({
-    saveData, recentText: '', userAction: '',
-    generate: async () => JSON.stringify({ events: [
-      { id: 'e1', verdict: 'done', evidence: '击杀鬼巫王', matchedCore: '鬼巫王', confidence: 0.95 },
-      {
-        id: 'e3', verdict: 'void', evidence: '谢艺拄刀而立', matchedCore: '谢艺', confidence: 0.9,
-        worldDelta: '谢艺拄刀而立，仍然活着',
-        characterStates: { 'liuchao.character.xie_yi': 'alive' },
-      },
-    ] }),
-  });
-  const flags = saveData.世界.状态.剧本模组.flags;
-  assert.equal(flags['event.s06_01.done'], true);
-  assert.equal(flags['event.s06_03.done'], true);
-  assert.equal(flags['event.s06_03.void'], true);
-  assert.equal(saveData.世界.状态.剧本模组.divergences.length, 1);
-  assert.equal(changes.length, 3);
-  assert.equal(saveData.系统, undefined, '事件对账不应再把临时调试黑匣子写进存档');
-});
-
-test('evidenceLikely：正文命中事件名/beat 高重叠→触发；无关正文→不触发', async () => {
-  const { evidenceLikely } = await modPromise;
-  const cands = [
-    { id: 'q1', name: '秦桧初登场', beat: '秦桧在建康登场，与程宗扬初次相见', flagKey: 'event.q1.done' },
-    { id: 'q2', name: '秦桧归入麾下', beat: '秦桧决意投效', flagKey: 'event.q2.done' },
-  ];
-  assert.equal(evidenceLikely('厅中一名青衫文士拱手：「在下秦桧，见过程公子。」众人落座叙话，气氛渐热。', cands), true, '正文含事件名应触发');
-  assert.equal(evidenceLikely('夜色沉沉，一行人在渡口清点货物，商队伙计来回搬运，无事发生。', cands), false, '无关正文不触发');
-  assert.equal(evidenceLikely('短', cands), false, '过短正文不触发');
+test('源码里不再有正文共现结算：证据词全命中、命中锚点、正文人名＋结果词的判定都已删除', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(new URL('../src/services/eventReconcileService.ts', import.meta.url), 'utf8');
+  for (const gone of ['HIGHLIGHT_EVIDENCE_FALLBACK', 'hasCompletionEvidence', 'explicitOutcomeSentence', 'validateEventReconcile', 'applyReconcileFlags', 'aiService']) {
+    assert.ok(!source.includes(gone), gone);
+  }
 });

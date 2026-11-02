@@ -456,7 +456,8 @@ test('P0-1 abort 返回后后台 event_reconcile 不得写 live store 或 saveCu
   assert.deepEqual(characterStoreAbortCalls(), []);
 });
 
-test('P0-1 正常提交后才启动后台 event_reconcile', async () => {
+// 2026-11-02 用户拍板②：正文不再结算剧情拍，停滞也不再触发后台对账（shouldRunReconcile 恒 false）。
+test('P0-1 正常提交后也不再启动后台 event_reconcile（正文不结算）', async () => {
   const ctx = await setup();
   ctx.original.世界.状态.剧本模组 = stage02Runtime();
   refreshSnapshots(ctx);
@@ -473,14 +474,7 @@ test('P0-1 正常提交后才启动后台 event_reconcile', async () => {
     { userAction: '查看任务' },
   );
   assert.equal(abortReason, undefined);
-  assert.equal(eventReconcileAbortFinished().length, 0, '提交返回时后台对账不得已经写完');
   await new Promise(resolve => setTimeout(resolve, delayMs + 80));
-  assert.equal(eventReconcileAbortCalls().length, 1);
-  assert.equal(eventReconcileAbortFinished().length, 1);
-  assert.equal(ctx.store.toSaveData()?.世界?.状态?.剧本模组?.flags?.['event.s02_04.done'], true);
-  assert.equal(
-    (ctx.store.toSaveData()?.世界?.状态?.剧本模组?.divergences || []).some(item => item?.id === 'abort-test-divergence'),
-    true,
-  );
-  assert.equal(characterStoreAbortCalls().some(item => item.fn === 'saveCurrentGame'), true);
+  assert.equal(eventReconcileAbortCalls().length, 0, '停滞 10 回合也不再请模型读正文对账');
+  assert.notEqual(ctx.store.toSaveData()?.世界?.状态?.剧本模组?.flags?.['event.s02_04.done'], true);
 });
