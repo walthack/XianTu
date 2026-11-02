@@ -193,3 +193,18 @@ test('3 场面描写超出总耗时上限：掐断请求、改用模板，确认
     assert.ok(signals.length >= 1 && signals.every(s => s?.aborted), '超时的请求被掐断');
   } finally { NUM.applyGameNumbers({ combat: { narrationBudget: { totalMs: before } } }); }
 });
+
+// ───────────── 4) P2 新档游戏中弹出「检测到旧版宗门存档…宗门系统版本不匹配」迁移框，挡住掷骰按钮 ─────────────
+// 根因：剧本档开局 社交.宗门 为空（或按 V2 建），游戏中模型命令写 社交.宗门.*（如太乙真宗的成员信息）／store 补齐成员信息时
+// 只建出缺 版本 的对象，detectSectMigration 把「缺版本」一律当旧版存档，于是新档也弹迁移框。
+// 修：剧本档（晚于宗门 V2）不判迁移；非剧本的旧版存档照旧提示。
+test('4 剧本新档游戏中写出缺版本的 社交.宗门：不弹旧版宗门迁移；非剧本旧档照旧提示', async () => {
+  const { detectSectMigration } = await load('utils/sectMigration.ts');
+  const s = newGameAt('lcq.event.s01_04');
+  assert.equal(detectSectMigration(s).needed, false, '开局不弹');
+  s.社交 = { ...(s.社交 || {}), 宗门: { 成员信息: { 宗门名称: '太乙真宗', 职位: '外门弟子' } } };
+  const legacy = structuredClone(s);
+  delete legacy.世界.状态.剧本模组;
+  assert.equal(detectSectMigration(legacy).needed, true, '复现：同样的缺版本宗门数据在非剧本档里判为旧版');
+  assert.equal(detectSectMigration(s).needed, false, '剧本档不弹');
+});

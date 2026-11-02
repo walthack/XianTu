@@ -43,6 +43,11 @@ export const detectSectMigration = (saveData: SaveData | null): SectMigrationChe
   if (!saveData) {
     return check;
   }
+  // 剧本档（2026-06 起的固定剧本，晚于宗门 V2）开局即按 V2 建宗门（scenarioMods/relationships.ts），之后 社交.宗门 缺 版本 只可能是
+  // 游戏中的零散写入（模型命令写 社交.宗门.*、store 补齐成员信息），不是旧版存档，不弹迁移框（REPORT-8091-1892cfb6 P2：新档弹框挡住掷骰）。
+  if ((saveData as any).世界?.状态?.剧本模组) {
+    return check;
+  }
 
   const sectSystem = ((saveData as any).社交?.宗门 ?? null) as (SectSystemV2 & { 成员信息?: any }) | null;
 
