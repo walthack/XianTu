@@ -75,3 +75,53 @@ test('P2-B 地图出行没走成（无路线/重放核验）不动建议', async
   const panel = await read('src/components/dashboard/GameMapPanel.vue');
   assert.match(panel, /settleMapTravel\(save, selection\)\) \{[^\n]*\n\s*mapTravelBusy\.value = true;\n\s*try \{ gameStateStore\.loadFromSaveData\(save\);/);
 });
+
+// ---------- P2-C 结局回合发完成信号 ----------
+const B = await loadTs('../src/modules/scenarioMods/branchDecision.ts');
+const W = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+const TS = await loadTs('../src/composables/turnSignal.ts');
+const rt = s => s.世界.状态.剧本模组;
+function advance(s, a) {
+  assert.ok(R.recordStoryEventStructuredAction(s, a, { judgementResolution: { status: 'resolved', outcome: 'success', kind: 'explore' } }).attempted, a.actionId);
+  rt(s).worldTurn++; return R.advanceScenarioRuntime(s).saveData;
+}
+async function gambleDecision() {
+  let s = R.advanceScenarioRuntime(await fixture('prologue-before-s02_04')).saveData, decision;
+  for (let i = 0; i < 25; i++) {
+    const actions = R.getCurrentStoryEventActions(s); decision = B.detectBranchDecision(actions);
+    if (decision) break;
+    if (rt(s).activeEventIds.includes('lcq.event.s02_04')) {
+      W.settleWuyuanOpenWorldSelection(s, W.getWuyuanOpenWorldSelections(s)[0]); rt(s).worldTurn++; s = R.advanceScenarioRuntime(s).saveData;
+    } else s = advance(s, actions[0]);
+  }
+  assert.deepEqual(decision?.labels, ['接赌', '不赌']);
+  return { s, decision };
+}
+const flagsOf = s => ({ processing: false, ended: !!rt(s).gameOver?.endingId, choiceOnly: B.branchDecisionLocksInput(rt(s).gameOver ? null : B.detectBranchDecision(R.getCurrentStoryEventActions(s))) });
+
+test('P2-C 五原「不赌」进结局：回合收尾状态为 ended（输入框按设计不再恢复），信号照发且带结局 id；「接赌」为 ready', async () => {
+  const { s, decision } = await gambleDecision();
+  assert.equal(TS.turnStateOf(flagsOf(s)), 'choice', '分支点只能点选项');
+  const declined = advance(structuredClone(s), decision.options[1]);
+  const endingId = rt(declined).gameOver?.endingId;
+  assert.ok(endingId, '不赌进结局');
+  assert.equal(TS.turnStateOf(flagsOf(declined)), 'ended');
+  const accepted = advance(structuredClone(s), decision.options[0]);
+  assert.equal(TS.turnStateOf(flagsOf(accepted)), 'ready');
+  // 派发：结局回合也发；生成中（重复点发送被挡回）不发。
+  const target = new EventTarget(), got = [];
+  target.addEventListener(TS.TURN_COMPLETE_EVENT, e => got.push(e.detail));
+  assert.equal(TS.emitTurnComplete(target, { seq: 1, state: 'ended', endingId }), true);
+  assert.equal(TS.emitTurnComplete(target, { seq: 2, state: 'processing' }), false);
+  assert.deepEqual(got, [{ seq: 1, state: 'ended', endingId }]);
+  assert.equal(TS.turnStateOf({ processing: true, ended: true, choiceOnly: true }), 'processing');
+});
+
+test('P2-C 界面：sendMessage 最外层 finally（含被拦、出错、结局各路径）都发完成信号；输入区挂 data-turn-state / data-turn-seq', async () => {
+  const ui = await read('src/components/dashboard/MainGamePanel.vue');
+  assert.match(ui, /<div class="input-section" data-testid="turn-status" :data-turn-state="turnState" :data-turn-seq="turnCompleteSeq">/);
+  assert.match(ui, /const sendMessage = async[^\n]*\n\s*let diagnosticTurnId[^\n]*\n\s*try \{/);
+  assert.match(ui, /\} finally \{ sealDiagnosticTurn\(diagnosticTurnId\); await signalTurnComplete\(\); \}\n\};/);
+  assert.match(ui, /ended: !!scenarioGameOver\.value \|\| playtestFinished\.value, choiceOnly: branchDecisionInputLocked\.value/);
+  assert.match(ui, /if \(turnState\.value === 'processing'\) return;\n\s*turnCompleteSeq\.value\+\+;/);
+});

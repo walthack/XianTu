@@ -193,7 +193,7 @@
 
 
     <!-- 输入区域 -->
-    <div class="input-section">
+    <div class="input-section" data-testid="turn-status" :data-turn-state="turnState" :data-turn-seq="turnCompleteSeq">
       <section v-if="pendingJudgement" class="judgement-preflight-card">
         <div class="judgement-preflight-title">行动判定（尚未掷骰） · {{ judgementPromptLabels(pendingJudgement).kind }}</div>
         <div class="judgement-preflight-action">{{ pendingJudgement.actionText }}</div>
@@ -514,6 +514,7 @@
 
 <script setup lang="ts">
 import { mapPreparationNotice } from '@/modules/scenarioMods/travel/mapTravel';
+import { turnStateOf, emitTurnComplete } from '@/composables/turnSignal';
 import { shouldRestorePreTurnSave } from '@/utils/saveTurnRollback';
 import { worldEventBadgeCount } from '@/utils/worldEventRecords';
 import { stripActionOptionMetaWords, stripNarrativeMetaWords } from '@/utils/narrativeMetaWords';
@@ -1039,6 +1040,18 @@ const branchDecisionReady = computed(() => branchDecisionAllowsSend(
   inputText.value,
   engineOptionLine,
 ));
+// 回合完成信号（REPORT-8091-2ba71102 P2-C）：结局永久封输入，外部不能再拿「输入框恢复」判回合结束，见 composables/turnSignal.ts。
+const turnState = computed(() => turnStateOf({
+  processing: isAIProcessing.value, ended: !!scenarioGameOver.value || playtestFinished.value, choiceOnly: branchDecisionInputLocked.value,
+}));
+const turnCompleteSeq = ref(0);
+const signalTurnComplete = async () => {
+  await nextTick();
+  if (turnState.value === 'processing') return;
+  turnCompleteSeq.value++;
+  await nextTick();
+  emitTurnComplete(typeof window === 'undefined' ? undefined : window, { seq: turnCompleteSeq.value, state: turnState.value, endingId: scenarioGameOver.value?.endingId });
+};
 const stageDepartureOffer = computed(() => {
   const save = gameStateStore.toSaveData();
   return save && !scenarioGameOver.value && !isNanhuangDemoFinished(save) ? getStageDepartureOffer(save) : null;
@@ -2801,7 +2814,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       inputRef.value?.focus();
     }
   }
-  } finally { sealDiagnosticTurn(diagnosticTurnId); }
+  } finally { sealDiagnosticTurn(diagnosticTurnId); await signalTurnComplete(); }
 };
 
 const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
