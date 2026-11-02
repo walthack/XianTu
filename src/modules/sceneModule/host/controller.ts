@@ -33,6 +33,7 @@ export function combatLossTitle(c:{objective?:{text?:string}}):string{const goal
 export const NO_NEGOTIATION_NOTICE=negotiationConfig().notice;
 import { narrateBeat, noteSceneNarrative } from './narrate';
 import { applyWriteBack, syncSceneStatuses } from './writeback';
+import { composeShortTermMemoryEntry } from '@/utils/memorySanitizer';
 
 export interface HostDeps {
   persist: (save: SaveData) => Promise<void>;
@@ -53,6 +54,22 @@ function alignContract(a: ActiveScene, c: Contract): boolean {
 }
 function checkAbort(deps: HostDeps): void { if (deps.aborted?.()) throw new Error('scene_host_aborted'); }
 function history(save: SaveData): any[] { return ((save as any).系统.历史 ||= {}).叙事 ||= []; }
+const loseHeadline = (): string => String((GAME_NUMBERS.combat as any).sceneClose?.loseHeadline || '');
+/**
+ * 收场正文写进短期记忆（REPORT-8091-ef573ece P1）：场面每拍与收场原先只进叙事历史，叙事模型只读短期记忆，
+ * 下一回合不知道这一战已经分出胜负（随机战输了来袭者已散），接着写乱战。时间前缀与 gameStateStore.addToShortTermMemory 同口径。
+ */
+function rememberSceneClose(save: SaveData, text: string): void {
+  const t=(save as any).元数据?.时间,memory=((save as any).社交 ||= {}).记忆 ||= {};
+  const prefix=t ? `【仙道${t.年}年${t.月}月${t.日}日 ${String(t.小时 ?? 0).padStart(2,'0')}:${String(t.分钟 ?? 0).padStart(2,'0')}】` : '【未知时间】';
+  const entry=composeShortTermMemoryEntry(prefix,text);if(!entry)return;
+  for(const key of ['短期记忆','隐式中期记忆'])(Array.isArray(memory[key]) ? memory[key] : (memory[key]=[])).push(entry);
+}
+/** 收场正文：判负（不进结局）第一行写明这一战败了，免得玩家只看到交锋卡片消失。 */
+function closingBody(c:Contract,closingText:string,notes:string[],outcome:string,terminal:string[]):string {
+  const head=outcome==='lose' && loseHeadline() && !closingText.includes(loseHeadline()) ? [loseHeadline()] : [];
+  void c;return [...head,closingText,...notes,...terminal].filter(Boolean).join('\n');
+}
 function appendHistory(save: SaveData, text: string, playerText = '', image?: string | null): number {
   acknowledgeStageEntryPresentation(save,runtimeOf(save)?.modId);
   const rows = history(save); rows.push({ type: 'gm', role: 'assistant', content: text, time: '', userIntent: playerText, actionOptions: [], ...(image ? { image } : {}) }); return rows.length - 1;
@@ -202,7 +219,7 @@ export async function confirmSceneAction(source: SaveData,deps:HostDeps): Promis
   }
   syncSceneStatuses(save,c,a.state);
   // 6ccb 真机 P0：气血本拍落账打到保底即当拍判负（结果行补一句，叙事与收场同拍）。
-  if(settleDownedAfterHostSync(c,a.state)){confirmed.result.outcome=a.state.outcome;a.last.lines.push('你伤重倒下，这一战败了。');}
+  if(settleDownedAfterHostSync(c,a.state)){confirmed.result.outcome=a.state.outcome;a.last.lines.push(loseHeadline());}
   // 场面每拍也推进 worldTurn：限时增益（白尾豹「山神庇佑」）按同一回合数到期，不等战后下一个故事回合（05e63d31 真机：战中 14–19 拍仍生效）。
   runtimeOf(save).worldTurn+=1;writeExt(save,ext);expireRareEncounters(save);
   await deps.persist(save);checkAbort(deps); // Dice checkpoint BEFORE any model request.
@@ -230,7 +247,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     const settled=settleRandomEncounterClose(save,{id:a.eventId.slice(RANDOM_EVENT_PREFIX.length),outcome:closed.writeBack.outcome.kind==='win'?'win':'lose'});
     if(closed.writeBack.outcome.kind==='win'&&settled)grantLootSpoils(save,{locationId:settled.locKey,sourceId:a.eventId,enemyId:settled.enemyId});
     delete ext.stall[c.meta.id];
-    appendHistory(save,[a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)].join('\n'));
+    {const body=closingBody(c,a.closing.text,written.notes,closed.writeBack.outcome.kind,terminalLines(save,c,closed.writeBack));appendHistory(save,body);rememberSceneClose(save,body);}
   } else {
     // The engine checks the persisted CLOSED state, event/action and contract version before honoring this completion.
     const receiptScene=c.meta.hook.completionSceneByOutcome?.[closed.writeBack.outcome.kind as 'win'|'lose'];
@@ -238,7 +255,7 @@ async function closeHost(save:SaveData,ext:ReturnType<typeof readExt>,c:Contract
     if(!selection)throw new Error('场面收束对应的剧情动作已过期');
     const settled=recordStoryEventStructuredAction(save,selection);if(!settled.attempted || (receiptScene && !settled.completed))throw new Error('场面剧情收束未成立：'+settled.reason);
     if(receiptScene)applyStepSceneLedger(save,runtimeOf(save),a.eventId,a.actionId,receiptScene as Parameters<typeof applyStepSceneLedger>[4]);
-    appendHistory(save,[a.closing.text,...written.notes,...terminalLines(save,c,closed.writeBack)].join('\n'));
+    {const body=closingBody(c,a.closing.text,written.notes,closed.writeBack.outcome.kind,terminalLines(save,c,closed.writeBack));appendHistory(save,body);rememberSceneClose(save,body);}
   }
   if (runtimeOf(save).travelLedger?.timeConsumedAtTurn !== runtimeOf(save).worldTurn) settleTime(save, `combat:${c.meta.id}:${a.state.seed}:${a.eventId}`, actionTimeConfig().minutes.moment, 'combat');
   if(c.meta.id===F02_CONTRACT_ID&&closed.writeBack.outcome.kind==='win'){const row=closed.writeBack.finalStates.find(r=>r.party==='snake_man');if(row)recordShiweimoEnding(save,row.label);}

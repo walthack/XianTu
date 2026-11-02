@@ -200,6 +200,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'combat.preBattleSave.slotName', kind: 'string', required: true, section: 'combat' },
   { path: 'combat.preBattleSave.workingSlotName', kind: 'string', required: true, section: 'combat' },
   { path: 'combat.narrationBudget.totalMs', kind: 'int', required: true, min: 0, section: 'combat' },
+  { path: 'combat.sceneClose.loseHeadline', kind: 'string', required: true, section: 'combat' },
   { path: 'combat.heal.baseDifficulty', kind: 'number', required: true, section: 'combat' },
   { path: 'combat.heal.byTier', kind: 'object', required: true, section: 'combat' },
   { path: 'combat.heal.itemHpGainByGrade', kind: 'object', required: true, section: 'combat' },

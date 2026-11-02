@@ -163,3 +163,79 @@ test('1 MainGamePanel 接线：发送前认启程文字、停滞到点补主线�
   assert.match(panel, /stallAutoAdvance\(/);
   assert.match(panel, /noteStageDepartureIdleTurn\(/);
 });
+
+// ───────────── 2) P1 南荒交锋气血 10→1 后卡片消失、看不到判负；之后自由交手 5 次气血一直 1、不掷骰 ─────────────
+// 根因：随机战按合同（defeat.outcome=continue）判负收场、气血拉回 afterLossContinueHp=1，收场正文却只有合同的「你倒在地上……散入四野」，
+// 「这一战败了」只在掷骰当拍气血打到倒下时才补；而场面每拍与收场只进叙事历史、不进短期记忆，叙事模型下一回合不知道已经败了、来袭者已散，
+// 接着写乱战。玩家再「与来敌交手」，自由行动的对手是不在场名单里的无名来袭者（已散），交手票按 target_unavailable 拒掉——所以连掷骰都没有，气血也不动。
+// （f2d02e3b 修的是「对在场者交手失手扣血不保底」，这里的票根本没到判定那一步。）
+// 修：判负收场正文第一行写 combat.sceneClose.loseHeadline（mod-kit），掷骰当拍倒下的结果行同一句；收场正文（胜负都算）写进短期记忆，叙事接得上胜负。
+const host = await loadTs('../src/modules/sceneModule/host/controller.ts');
+const ext = await loadTs('../src/modules/sceneModule/host/ext.ts');
+const E = await loadTs('../src/modules/scenarioMods/randomEncounter.ts');
+const T = await loadTs('../src/modules/scenarioMods/freeAction/ticket.ts');
+async function randomBattle(hp) {
+  globalThis.location = { search: '?sceneModule=on', hostname: 'localhost', href: 'http://localhost/?sceneModule=on' };
+  let save = quiet(() => R.advanceScenarioRuntime(init.applyStrictScenarioInitializationToSave(createMinimalSaveDataV3(), init.buildStrictScenarioInitialization(JSON.parse(read('src/modules/scenarioMods/builtins/data/lcq.stage_05b.json'))))).saveData);
+  const config = structuredClone(GAME_NUMBERS.encounter), loc = 'lcq.location.guiwang_inn';
+  config.tiers.hostile = { chance: 1, cooldownTurns: 0 };
+  config.regions.nanhuang.zones = [{ key: loc, tier: 'hostile' }];
+  config.regions.nanhuang.pool = [{ enemyId: 'lcq.enemy.guiwang_warrior', level: 3, zones: [loc], weight: 1, count: [9, 9] }];
+  config.regions.nanhuang.skipDuringEventIds = [];
+  for (let i = 0; i < 4; i++) { rt(save).worldTurn++; E.tickRandomEncounter(save, { narrated: true, config }); }
+  assert.ok(E.pendingRandomBattle(save));
+  save.角色.属性.气血 = { 当前: hp, 上限: 100 };
+  save.社交 = { ...(save.社交 || {}), 记忆: { 短期记忆: ['【仙道200年1月10日 22:00】鬼王峒武士围了上来。'], 中期记忆: [], 长期记忆: [] } };
+  const h = { get save() { return save; }, deps: { persist: async next => { save = structuredClone(next); } } };
+  await quiet(() => host.submitSceneInput(h.save, '与来敌交手', h.deps));
+  return h;
+}
+const HEAD = () => GAME_NUMBERS.combat.sceneClose.loseHeadline;
+
+test('2 随机战判负：收场正文第一行写明这一战败了，并写进短期记忆（复现：只进叙事历史，模型不知道已败）', async () => {
+  assert.equal(HEAD(), '你伤重倒下，这一战败了。');
+  const h = await randomBattle(10);
+  ext.activeScene(h.save).state.forced = { action: Array(200).fill(1), defense: Array(400).fill(1) };
+  for (let i = 0; i < 12 && ext.activeScene(h.save); i++) {
+    if (!ext.activeScene(h.save).pending) await quiet(() => host.submitSceneInput(h.save, '与来敌交手', h.deps));
+    await quiet(() => host.confirmSceneAction(h.save, h.deps));
+  }
+  assert.equal(ext.activeScene(h.save), null, '交锋卡片收场');
+  assert.equal(ext.readExt(h.save).history.at(-1)?.outcome, 'lose');
+  assert.equal(h.save.角色.属性.气血.当前, GAME_NUMBERS.combat.woundRules.hp.afterLossContinueHp, '按合同输局继续，拉回 1');
+  assert.equal(rt(h.save).gameOver, undefined, '随机战合同 defeat=continue，不进结局');
+  const closing = String(h.save.系统.历史.叙事.at(-1).content);
+  assert.ok(closing.startsWith(HEAD()), `收场正文第一行写判负：${closing}`);
+  assert.match(closing, /散入四野/, '合同的输局收场照常');
+  const memory = h.save.社交.记忆.短期记忆.at(-1);
+  assert.ok(memory.includes(HEAD()) && memory.includes('散入四野'), '短期记忆里有这一战的胜负与来袭者已散');
+  assert.equal((closing.match(new RegExp(HEAD(), 'g')) || []).length, 1, '不重复');
+});
+
+test('2 随机战判胜：收场也写进短期记忆，不加判负行', async () => {
+  const h = await randomBattle(100);
+  ext.activeScene(h.save).state.forced = { action: Array(200).fill(20), defense: Array(400).fill(20) };
+  for (let i = 0; i < 40 && ext.activeScene(h.save); i++) {
+    if (!ext.activeScene(h.save).pending) await quiet(() => host.submitSceneInput(h.save, '与来敌交手', h.deps));
+    await quiet(() => host.confirmSceneAction(h.save, h.deps));
+  }
+  assert.equal(ext.readExt(h.save).history.at(-1)?.outcome, 'win');
+  const memory = h.save.社交.记忆.短期记忆.at(-1);
+  assert.match(memory, /来袭者尽数倒下/);
+  assert.ok(!memory.includes(HEAD()));
+});
+
+test('2 输局后「与来敌交手」：无名来袭者已散、不在在场名单，交手票按不在场拒掉（不掷骰的原因）', async () => {
+  const h = await randomBattle(10);
+  const raw = [{ actionClass: 'physical', variant: 'attack', targetId: 'lcq.enemy.guiwang_warrior', degree: 'normal', performed: 'yes', evidence: '与来敌交手', itemId: null }];
+  const checked = quiet(() => T.validateFreeActionTickets(raw, '与来敌交手', h.save));
+  assert.equal(checked.tickets.length, 0);
+  assert.deepEqual(checked.discards.map(d => d.reason), ['target_not_present']);
+  assert.equal(checked.refusals.length, 1, '只留一行「人不在身边、落了空」的未发生事实');
+});
+
+test('2 controller：判负结果行与收场同一句配置文案，不再写死', () => {
+  const src = read('src/modules/sceneModule/host/controller.ts');
+  assert.doesNotMatch(src, /'你伤重倒下，这一战败了。'/);
+  assert.equal((src.match(/rememberSceneClose\(save,body\)/g) || []).length, 2, '随机战与剧情战两个收场分支都写记忆');
+});
