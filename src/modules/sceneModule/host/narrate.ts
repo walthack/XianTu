@@ -93,7 +93,7 @@ export async function narrateBeat(
     const budget = budgetMs > 0 ? new AbortController() : undefined;
     const timer = budget ? setTimeout(() => budget.abort(), budgetMs) : undefined;
     const overBudget = budget ? new Promise<never>((_, reject) => budget.signal.addEventListener('abort', () => reject(new Error(`描写超过 ${budgetMs / 1000} 秒`)), { once: true })) : undefined;
-    overBudget?.catch(() => undefined);
+    overBudget?.catch(() => { /* lcq-allow: 超时只在 race 里生效（下面 catch 记进 problems 改用模板），这里只防未接住的拒绝 */ });
     const askWithin = (request: ModelRequest) => overBudget ? Promise.race([ask(request, budget!.signal), overBudget]) : ask(request);
     try {
       for (let attempt = 0; attempt < 2; attempt++) {
