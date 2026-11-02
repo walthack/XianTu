@@ -17,6 +17,7 @@ const R = await load('modules/scenarioMods/runtime.ts');
 const M = await load('modules/scenarioMods/travel/mapTravel.ts');
 const AT = await load('modules/scenarioMods/actionTime.ts');
 const RD = await load('modules/scenarioMods/travel/routeDays.ts');
+const TS = await load('composables/turnSignal.ts');
 const { GAME_NUMBERS: N } = await load('modules/sceneModule/numbers.ts');
 const travelUi = json('mod-kit/cross-country-travel-ui.json');
 const rt = s => s.世界.状态.剧本模组;
@@ -117,4 +118,59 @@ test('P1 文案进 mod-kit：国内地图标签取 cross-country-travel-ui.json�
   const src = read('src/modules/scenarioMods/travel/mapTravel.ts');
   assert.match(src, /label: travelUi\.domesticMapLabel/);
   assert.doesNotMatch(src, /rule\.minDays/);
+});
+
+// ───────────── P2 每回合都发 xiantu:turn-complete ─────────────
+// 根因：普通叙事回合在模型返回后先 setAIProcessing(false)（data-turn-state 立刻变 ready），再 await 终存档，
+// 最后才在 finally 里 seq+1 并派发；驱动以「state 转出 processing」先判结束、撤监听，事件晚到就没抓到。
+// 掷骰战斗拍（runSceneOperation 收尾后立刻返回）与结局（不走终存档）空档极短，所以只有这两类抓到。
+const flags = (s = {}) => inFlight => ({ processing: !!s.ai || inFlight, ended: !!s.ended, choiceOnly: !!s.choice });
+function listen() {
+  const target = new EventTarget(), got = [];
+  target.addEventListener(TS.TURN_COMPLETE_EVENT, e => got.push(e.detail));
+  return { target, got };
+}
+
+test('P2 普通叙事回合：模型已返回（isAIProcessing=false）但还在终存档时 state 仍是 processing；结清时 seq+1 与事件同步发出', () => {
+  const ledger = { inFlight: 0, seq: 0 }, { target, got } = listen(), ui = { ai: false };
+  TS.beginTurn(ledger);
+  ui.ai = true; ui.ai = false; // 生成、撤处理标志，进入终存档
+  assert.equal(TS.turnStateOf(flags(ui)(ledger.inFlight > 0)), 'processing', '回合未结清不能显示 ready');
+  assert.equal(ledger.seq, 0);
+  const detail = TS.completeTurn(ledger, flags(ui), target);
+  assert.deepEqual(detail, { seq: 1, state: 'ready' });
+  assert.deepEqual(got, [{ seq: 1, state: 'ready' }], '同步派发，不再隔 nextTick');
+  assert.equal(TS.turnStateOf(flags(ui)(ledger.inFlight > 0)), 'ready');
+  // 连续多回合每回合都发
+  for (let i = 2; i <= 4; i++) { TS.beginTurn(ledger); TS.completeTurn(ledger, flags(ui), target); }
+  assert.deepEqual(got.map(d => d.seq), [1, 2, 3, 4]);
+});
+
+test('P2 嵌套（sendMessage 内走场面 runSceneOperation）只在外层发一次；重复点发送被挡回不发；结局带 endingId；分支为 choice', () => {
+  const ledger = { inFlight: 0, seq: 0 }, { target, got } = listen();
+  TS.beginTurn(ledger); TS.beginTurn(ledger);
+  assert.equal(TS.completeTurn(ledger, flags(), target), null, '内层收尾不发');
+  assert.equal(TS.completeTurn(ledger, flags(), target)?.seq, 1);
+  // 回合进行中再点发送：被挡回的那次收尾不发，真正那次照发
+  TS.beginTurn(ledger); TS.beginTurn(ledger);
+  assert.equal(TS.completeTurn(ledger, flags({ ai: true }), target), null);
+  assert.equal(TS.completeTurn(ledger, flags({ choice: true }), target)?.state, 'choice');
+  TS.beginTurn(ledger);
+  assert.deepEqual(TS.completeTurn(ledger, flags({ ended: true }), target, 'lcq.ending.x'), { seq: 3, state: 'ended', endingId: 'lcq.ending.x' });
+  assert.deepEqual(got.map(d => d.seq), [1, 2, 3]);
+  // 账不会被多余的收尾减成负数
+  assert.equal(TS.completeTurn(ledger, flags(), target)?.seq, 4);
+  assert.equal(ledger.inFlight, 0);
+});
+
+test('P2 界面接线：sendMessage 与 runSceneOperation 都进门记账、收尾结账；turnState 计入未结清回合；强制重置清账', () => {
+  const ui = read('src/components/dashboard/MainGamePanel.vue');
+  assert.match(ui, /const sendMessage = async[^\n]*\n\s*let diagnosticTurnId[^\n]*\n\s*beginTurn\(turnLedger\);\n\s*try \{/);
+  assert.match(ui, /\} finally \{ sealDiagnosticTurn\(diagnosticTurnId\); signalTurnComplete\(\); \}\n\};/);
+  assert.match(ui, /async function runSceneOperation\([^\n]*\{\n(?:\s*\/\/[^\n]*\n)?\s*beginTurn\(turnLedger\);\n\s*try \{ await runSceneOperationInner\(operation\); \} finally \{ signalTurnComplete\(\); \}/);
+  assert.match(ui, /const turnState = computed\(\(\) => turnStateOf\(turnFlagsOf\(turnLedger\.inFlight > 0\)\)\);/);
+  assert.match(ui, /processing: isAIProcessing\.value \|\| inFlight,/);
+  assert.match(ui, /signalTurnComplete = \(\) => \{\n\s*completeTurn\(turnLedger, turnFlagsOf/);
+  assert.match(ui, /turnLedger\.inFlight = 0;/);
+  assert.match(ui, /:data-turn-state="turnState" :data-turn-seq="turnCompleteSeq"/);
 });

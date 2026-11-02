@@ -120,8 +120,8 @@ test('P2-C 五原「不赌」进结局：回合收尾状态为 ended（输入框
 test('P2-C 界面：sendMessage 最外层 finally（含被拦、出错、结局各路径）都发完成信号；输入区挂 data-turn-state / data-turn-seq', async () => {
   const ui = await read('src/components/dashboard/MainGamePanel.vue');
   assert.match(ui, /<div class="input-section" data-testid="turn-status" :data-turn-state="turnState" :data-turn-seq="turnCompleteSeq">/);
-  assert.match(ui, /const sendMessage = async[^\n]*\n\s*let diagnosticTurnId[^\n]*\n\s*try \{/);
-  assert.match(ui, /\} finally \{ sealDiagnosticTurn\(diagnosticTurnId\); await signalTurnComplete\(\); \}\n\};/);
+  assert.match(ui, /const sendMessage = async[^\n]*\n\s*let diagnosticTurnId[^\n]*\n\s*beginTurn\(turnLedger\);\n\s*try \{/);
+  assert.match(ui, /\} finally \{ sealDiagnosticTurn\(diagnosticTurnId\); signalTurnComplete\(\); \}\n\};/);
   assert.match(ui, /ended: !!scenarioGameOver\.value \|\| playtestFinished\.value, choiceOnly: branchDecisionInputLocked\.value/);
-  assert.match(ui, /if \(turnState\.value === 'processing'\) return;\n\s*turnCompleteSeq\.value\+\+;/);
+  assert.match(ui, /signalTurnComplete = \(\) => \{\n\s*completeTurn\(turnLedger, turnFlagsOf/);
 });

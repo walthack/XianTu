@@ -19,3 +19,23 @@ export function emitTurnComplete(target: EventTarget | undefined, detail: TurnCo
   target.dispatchEvent(new CustomEvent<TurnCompleteDetail>(TURN_COMPLETE_EVENT, { detail }));
   return true;
 }
+
+/**
+ * 回合账（REPORT-8091-4c8245a5 P2-1）：sendMessage / runSceneOperation 进门 beginTurn，收尾 completeTurn。
+ * 普通叙事回合在模型返回后先撤 isAIProcessing、再等终存档，以前这段空档里 data-turn-state 已是 ready 而信号还没发，
+ * 驱动按「state 转出 processing」先收工、就收不到事件。现在账没结清前 data-turn-state 一直是 processing；
+ * 结清时 seq+1 与派发在同一同步段完成，事件先于 DOM 刷新到达。嵌套（sendMessage 内调 runSceneOperation）只在最外层发一次。
+ */
+export interface TurnLedger { inFlight: number; seq: number }
+export function beginTurn(ledger: TurnLedger): void { ledger.inFlight++; }
+export function completeTurn(
+  ledger: TurnLedger, flagsOf: (processing: boolean) => TurnFlags, target: EventTarget | undefined, endingId?: string,
+): TurnCompleteDetail | null {
+  ledger.inFlight = Math.max(0, ledger.inFlight - 1);
+  const state = turnStateOf(flagsOf(ledger.inFlight > 0));
+  if (state === 'processing') return null;
+  ledger.seq++;
+  const detail: TurnCompleteDetail = endingId ? { seq: ledger.seq, state, endingId } : { seq: ledger.seq, state };
+  emitTurnComplete(target, detail);
+  return detail;
+}

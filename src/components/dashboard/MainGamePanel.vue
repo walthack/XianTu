@@ -514,7 +514,7 @@
 
 <script setup lang="ts">
 import { mapPreparationNotice } from '@/modules/scenarioMods/travel/mapTravel';
-import { turnStateOf, emitTurnComplete } from '@/composables/turnSignal';
+import { turnStateOf, beginTurn, completeTurn, type TurnLedger } from '@/composables/turnSignal';
 import { shouldRestorePreTurnSave } from '@/utils/saveTurnRollback';
 import { worldEventBadgeCount } from '@/utils/worldEventRecords';
 import { stripActionOptionMetaWords, stripNarrativeMetaWords } from '@/utils/narrativeMetaWords';
@@ -539,7 +539,7 @@ import { cancelModuleBackground, startModuleBackground } from '@/services/modula
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
 import { BRANCH_DECISION_BLOCKED_NOTICE, BRANCH_DECISION_HINT, BRANCH_DECISION_INPUT_PLACEHOLDER, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, branchDecisionLocksInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
-import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch } from 'vue';
+import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch, reactive } from 'vue';
 import {
   Send, Loader2, ChevronDown, ChevronRight, ScrollText, RotateCcw, Shield, BrainCircuit, Bell, History
 } from 'lucide-vue-next';
@@ -893,6 +893,7 @@ const forceResetAIProcessingState = () => {
   streamingMessageIndex.value = null;
   rawStreamingContent.value = '';
   persistAIProcessingState();
+  turnLedger.inFlight = 0; // 卡死的回合不再挡 data-turn-state
   toast.info(t('AI处理状态已重置'));
 };
 
@@ -1041,16 +1042,15 @@ const branchDecisionReady = computed(() => branchDecisionAllowsSend(
   engineOptionLine,
 ));
 // 回合完成信号（REPORT-8091-2ba71102 P2-C）：结局永久封输入，外部不能再拿「输入框恢复」判回合结束，见 composables/turnSignal.ts。
-const turnState = computed(() => turnStateOf({
-  processing: isAIProcessing.value, ended: !!scenarioGameOver.value || playtestFinished.value, choiceOnly: branchDecisionInputLocked.value,
-}));
-const turnCompleteSeq = ref(0);
-const signalTurnComplete = async () => {
-  await nextTick();
-  if (turnState.value === 'processing') return;
-  turnCompleteSeq.value++;
-  await nextTick();
-  emitTurnComplete(typeof window === 'undefined' ? undefined : window, { seq: turnCompleteSeq.value, state: turnState.value, endingId: scenarioGameOver.value?.endingId });
+// 回合账未结清（模型已返回、还在终存档）时仍算 processing，结清时 seq+1 与派发同步完成（REPORT-8091-4c8245a5 P2-1）。
+const turnLedger = reactive<TurnLedger>({ inFlight: 0, seq: 0 });
+const turnFlagsOf = (inFlight: boolean) => ({
+  processing: isAIProcessing.value || inFlight, ended: !!scenarioGameOver.value || playtestFinished.value, choiceOnly: branchDecisionInputLocked.value,
+});
+const turnState = computed(() => turnStateOf(turnFlagsOf(turnLedger.inFlight > 0)));
+const turnCompleteSeq = computed(() => turnLedger.seq);
+const signalTurnComplete = () => {
+  completeTurn(turnLedger, turnFlagsOf, typeof window === 'undefined' ? undefined : window, scenarioGameOver.value?.endingId);
 };
 const stageDepartureOffer = computed(() => {
   const save = gameStateStore.toSaveData();
@@ -1927,6 +1927,11 @@ const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
 };
 
 async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promise<unknown>) {
+  // 场面卡按钮（确认/选项/结束等）直接进这里，也是一拍，同样记账发完成信号；经 sendMessage 进来时只由外层发一次。
+  beginTurn(turnLedger);
+  try { await runSceneOperationInner(operation); } finally { signalTurnComplete(); }
+}
+async function runSceneOperationInner(operation: (save: any, deps: HostDeps) => Promise<unknown>) {
   if (isAIProcessing.value || !hasActiveCharacter.value) return;
   const save = gameStateStore.toSaveData();
   if (!save) return;
@@ -1962,6 +1967,7 @@ async function runSceneOperation(operation: (save: any, deps: HostDeps) => Promi
 }
 const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: JudgementResolution; restoreOnFailure?: SaveData | null }) => {
   let diagnosticTurnId: string | null = null;
+  beginTurn(turnLedger);
   try {
   const sceneSave = gameStateStore.toSaveData();
   if (sceneSave && hostNeeded(sceneSave, selectedScenarioEngineAction.value as any)) {
@@ -2814,7 +2820,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       inputRef.value?.focus();
     }
   }
-  } finally { sealDiagnosticTurn(diagnosticTurnId); await signalTurnComplete(); }
+  } finally { sealDiagnosticTurn(diagnosticTurnId); signalTurnComplete(); }
 };
 
 const executePendingJudgement = async (testOutcome?: JudgementOutcome) => {
