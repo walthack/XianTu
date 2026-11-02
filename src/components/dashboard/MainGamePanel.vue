@@ -617,7 +617,6 @@ import {
   getStageDepartureOffer,
   getTrackedStoryOpportunityActions,
   reconcileNaturalIntentMetadata,
-  resolveStoryEventActionFromPlayerText,
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
@@ -640,6 +639,7 @@ import {
   intentSaveFingerprint,
   NATURAL_INTENT_CLARIFY_DEFAULT,
   resolveNaturalIntent,
+  resolveStoryEventActionFromText,
   verifyFreshSelection,
 } from '@/modules/scenarioMods/naturalIntentRouter';
 import { isXingyuehuQuestPlaytestFinished } from '@/modules/scenarioMods/xingyuehuQuestPlaytest';
@@ -2097,7 +2097,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         saveData,
         playerText: inputSnapshot,
         selected: selectedScenarioEngineAction.value,
-        resolveFromText: resolveStoryEventActionFromPlayerText,
+        resolveFromText: resolveStoryEventActionFromText,
         signal: undefined,
         // 行动解释模块：预算/超时/推理档位由模块卡决定，模型按「回合模块模型」分配，未单独配置继承主流程。
         generate: async ({ systemPrompt, userPrompt, signal, requestId }) => {
@@ -2360,7 +2360,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       || (routedIntentAction?.source === 'event_engine' || routedIntentAction?.source === 'exploration_engine'
         ? routedIntentAction
         : undefined)
-      || (scenarioSaveAtSend ? resolveStoryEventActionFromPlayerText(scenarioSaveAtSend, userMessage) : undefined);
+      || (scenarioSaveAtSend ? resolveStoryEventActionFromText(scenarioSaveAtSend, userMessage) : undefined);
   // 跨国须在地图上点选目的地：跨国剧情罗盘（建议或手打）本轮不交事件引擎换国，只写准备并引导地图（REPORT-8091-75eaaee0 P2-2）。
   const crossCountryTravel = matchedEventAction && scenarioSaveAtSend ? crossCountryStoryTravel(scenarioSaveAtSend, matchedEventAction) : undefined;
   const resolvedEventAction = crossCountryTravel ? undefined : matchedEventAction;

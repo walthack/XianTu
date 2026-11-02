@@ -7,6 +7,7 @@ import { freeTextStatusSemanticRequest, validateFreeTextStatusProposals, type Fr
 import type { SaveData } from '@/types/game';
 import {
   getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding,
+  resolveStoryEventActionFromPlayerText,
   getTrackedStoryOpportunityActions,
   reconcileNaturalIntentMetadata,
   type ScenarioEventActionSelection,
@@ -409,6 +410,22 @@ export function resolveOptionalLineAlias(saveData: SaveData, playerText: string)
 /** 拿不准：照常让 NPC 回应，但不结算任何候选，也不回落关键词判定。 */
 function narrateWithoutSettlement(reason: string, usedModel: boolean): NaturalIntentResult {
   return { kind: 'free', reason, skipKeywordPreflight: true, usedModel };
+}
+
+const presentedLineKey = (value: unknown): string => String(value || '').normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
+/**
+ * 手打或填入的句子与引擎当前给出的建议原句一字不差（去标点空白后相等）＝点了那条建议；对不上再走作者短语（resolveStoryEventActionFromPlayerText）。
+ * REPORT-8091-f9737e0d P1：s01_03 建议原句「我上前查看那位伤者。」不在该拍作者短语里，按钮选择一丢（手打、驱动填入同一句）就永远落不了账，
+ * 而 s01_02 靠场外时钟、s01_01 原句恰好命中短语才没露馅。只认当前剧情/探索动作自己的原句，不做近义匹配；两条以上同句时不猜。
+ */
+export function resolveStoryEventActionFromText(saveData: SaveData, playerText: string): ScenarioEventActionSelection | undefined {
+  const key = presentedLineKey(playerText);
+  if (key) {
+    const hits = [...getCurrentStoryEventActions(saveData), ...getCurrentStoryExplorationActions(saveData)]
+      .filter(action => presentedLineKey(action.playerLine) === key || presentedLineKey(action.actionText) === key);
+    if (hits.length === 1) return hits[0];
+  }
+  return resolveStoryEventActionFromPlayerText(saveData, playerText);
 }
 
 type NaturalIntentInput = {
