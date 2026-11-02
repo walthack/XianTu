@@ -391,8 +391,9 @@ test('⑪ 打字跨国：本地只追加「准备前往、请开地图」一句�
   const config = JSON.parse(read('mod-kit/numbers-runtime.json')).crossCountryTravel;
   const save = { 元数据: { 版本号: 3 }, 角色: { 位置: { locationId: config.capitals.中立边陲 } }, 系统: { 扩展: {} }, 世界: { 状态: { 剧本模组: { worldTurn: 1, completedEventIds: [] } } } };
   const note = P.mapPreparation(save, '我即刻动身离开五原，南下宋国临安城。');
-  assert.match(note, /^你正在准备前往临安城?。请打开地图选择已开放路线/);
-  assert.equal(P.mapPreparationNotice(save, '我即刻动身离开五原，南下宋国临安城。'), '跨国出行请打开世界地图选择目的地');
+  // REPORT-8091-2ba71102 P2-A：临安城不是地图落点，按宋国代表地点引到临安（与罗盘同口径）。
+  assert.match(note, /^你正在准备前往临安城。请打开地图选择前往临安的已开放路线/);
+  assert.equal(P.mapPreparationNotice(save, '我即刻动身离开五原，南下宋国临安城。'), '跨国出行请先开地图去临安，到后再前往临安城');
   assert.equal(P.mapArrivalViolation(save, '程宗扬收拾行装，准备取道南下前往临安。'), false, '照提示写「准备前往」不会被模块守卫退稿');
   const main = read('src/components/dashboard/MainGamePanel.vue');
   assert.match(main, /if \(mapPrep\) \{ finalUserMessage \+= '\\n' \+ mapPrep;/, '拦截路径只在用户消息末尾追加一句');

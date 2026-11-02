@@ -1,6 +1,7 @@
 import { resolveStoryEventActionFromPlayerText } from '../runtime';
 import { randomUUID } from '@/utils/uuid';
 import runtimeNumbers from '../../../../mod-kit/numbers-runtime.json';
+import travelUi from '../../../../mod-kit/cross-country-travel-ui.json';
 import { mapEntryReady } from '../mapEntries';
 import { transitionToMapEntryStage } from '../strictInitializer';
 import locations from '../../../../mod-kit/entity-catalog/locations.json';
@@ -141,41 +142,68 @@ export function mapTravelArrivalNotice(save: SaveData): string {
  * 例外＝剧情写死的跨国转场：南荒行旅关（自有路线与时钟）与 crossCountryTravel.storyTransitionEventIds（如五原→南荒商队）。
  * 目标国在地图上也去不了时返回 undefined，沿用罗盘，免得卡关。
  */
-export function crossCountryStoryTravel(save: SaveData, action: { source?: string; eventId?: string; actionId?: string } | null | undefined): { toId: string; name: string; mapTargetId: string; mapTargetName: string } | undefined {
+export function crossCountryStoryTravel(save: SaveData, action: { source?: string; eventId?: string; actionId?: string } | null | undefined): CrossCountryTravelTarget | undefined {
   const actionId = String(action?.actionId || '');
   if (action?.source !== 'event_engine' || !actionId.startsWith('travel:')) return undefined;
   if (isNanhuangTravelStage((save as any)?.世界?.状态?.剧本模组?.modId)) return undefined;
   if ((crossCountryTravel.storyTransitionEventIds as readonly string[]).includes(String(action.eventId || ''))) return undefined;
   const toId = canonicalLocationId(actionId.slice('travel:'.length)), fromId = currentLocation(save).canonicalLocationId;
   if (!toId || !fromId || !isCrossCountry(fromId, toId)) return undefined;
-  const nameOf = (id: string) => locations.entries.find(e => canonicalLocationId(e.id) === canonicalLocationId(id))?.definition.name || '';
-  const mapTargetId = [toId, capitals[countryOf(toId)!]].find(id => id && mapTravelPreview(save, id));
-  return mapTargetId ? { toId, name: nameOf(toId), mapTargetId: canonicalLocationId(mapTargetId)!, mapTargetName: nameOf(mapTargetId) } : undefined;
+  return crossCountryTarget(save, toId);
 }
-/** 跨国剧情罗盘移动发给叙事的准备说明（本轮未出发）。 */
-export const crossCountryStoryTravelPreparation = (target: { name: string; mapTargetName: string }): string => target.name === target.mapTargetName
-  ? `你正在准备前往${target.name}。请打开地图选择已开放路线；本轮尚未出发，不能叙述已经跨国抵达。`
-  : `你正在准备前往${target.name}。请打开地图选择前往${target.mapTargetName}的已开放路线，到后再前往${target.name}；本轮尚未出发，不能叙述已经跨国抵达。`;
+export interface CrossCountryTravelTarget { toId: string; name: string; mapTargetId: string; mapTargetName: string }
+const locationName = (id: string) => locations.entries.find(e => canonicalLocationId(e.id) === canonicalLocationId(id))?.definition.name || '';
+/** 地图落点取目标地点本身，不是地图落点时取该国代表地点；地图上也去不了时 undefined。 */
+function crossCountryTarget(save: SaveData, toId: string): CrossCountryTravelTarget | undefined {
+  const mapTargetId = [toId, capitals[countryOf(toId)!]].find(id => id && mapTravelPreview(save, id));
+  return mapTargetId ? { toId, name: locationName(toId), mapTargetId: canonicalLocationId(mapTargetId)!, mapTargetName: locationName(mapTargetId) } : undefined;
+}
+const fillTravelUi = (template: string, target: { name: string; mapTargetName: string }) =>
+  template.replace(/\{name\}/g, target.name).replace(/\{mapTargetName\}/g, target.mapTargetName);
+/** 跨国剧情罗盘移动发给叙事的准备说明（本轮未出发）。文案在 mod-kit/cross-country-travel-ui.json。 */
+export const crossCountryStoryTravelPreparation = (target: { name: string; mapTargetName: string }): string =>
+  fillTravelUi(target.name === target.mapTargetName ? travelUi.preparationDirect : travelUi.preparationVia, target);
 /** 跨国剧情罗盘移动给玩家的提示（toast）。 */
 export function crossCountryStoryTravelToast(target: { mapTargetName: string }): string {
-  return `跨国出行须在地图上点选目的地：请打开地图前往${target.mapTargetName}。`;
+  return fillTravelUi(travelUi.toast, { name: '', ...target });
+}
+
+/** 手打文字里点名的跨国地点/国别（不经剧情罗盘）；与罗盘同口径给出地图落点（REPORT-8091-2ba71102 P2-A：舞都手打「我要去大明宫」须点名长安）。 */
+function crossCountryTextIntent(save: SaveData, text: string): { name: string; target?: CrossCountryTravelTarget } | undefined {
+  if (!/(?:去|到|前往|赴|出发|动身)/.test(text) || /(?:不去|别去|不前往|取消前往)/.test(text)) return undefined;
+  const from = countryOf(currentLocation(save).canonicalLocationId);
+  const places = locations.entries.filter(e => text.includes(e.definition.name) && countryOf(e.id) && countryOf(e.id) !== from).sort((a,b)=>b.definition.name.length-a.definition.name.length);
+  const nations = [...new Set(locations.entries.map(e => (e.definition as any).country).filter(Boolean))] as string[];
+  const name = places[0]?.definition.name || nations.find(n => n !== from && text.includes(n + '国'));
+  if (!name) return undefined;
+  // 同名地点（如两份「大明宫」）取第一处地图上走得通的；只点了国别时取该国代表地点。
+  const candidates = places.length ? places.filter(e => e.definition.name === name).map(e => e.id) : [capitals[name]].filter(Boolean);
+  for (const id of candidates) {
+    const target = crossCountryTarget(save, canonicalLocationId(id)!);
+    if (target) return { name, target: places.length ? target : { ...target, name: target.mapTargetName } };
+  }
+  return { name };
 }
 
 /** 已知跨国文字意图只提供准备材料，不能签发地图选择。 */
 export function mapPreparation(save: SaveData, text: string): string | undefined {
+  const intent = mapPreparationIntent(save, text);
+  return intent && crossCountryStoryTravelPreparation(intent.target || { name: intent.name, mapTargetName: intent.name });
+}
+function mapPreparationIntent(save: SaveData, text: string): { name: string; target?: CrossCountryTravelTarget } | undefined {
   // 已命中当前剧情罗盘移动：国内（或剧情写死的跨国转场）走本地剧情转场，不提示地图；跨国罗盘只写准备、引导地图。
   // 解析会整理合同缓存，因此只在副本上预览。
   const storyAction = resolveStoryEventActionFromPlayerText(structuredClone(save), text);
   if (storyAction?.actionId.startsWith('travel:')) {
     const across = crossCountryStoryTravel(save, storyAction);
-    return across ? crossCountryStoryTravelPreparation(across) : undefined;
+    return across ? { name: across.name, target: across } : undefined;
   }
-  if (!/(?:去|到|前往|赴|出发|动身)/.test(text) || /(?:不去|别去|不前往|取消前往)/.test(text)) return undefined;
-  const from = countryOf(currentLocation(save).canonicalLocationId);
-  const places = locations.entries.filter(e => text.includes(e.definition.name) && countryOf(e.id) && countryOf(e.id) !== from).sort((a,b)=>b.definition.name.length-a.definition.name.length);
-  const nations = [...new Set(locations.entries.map(e => (e.definition as any).country).filter(Boolean))] as string[];
-  const target = places[0]?.definition.name || nations.find(n => n !== from && text.includes(n + '国'));
-  return target ? `你正在准备前往${target}。请打开地图选择已开放路线；本轮尚未出发，不能叙述已经跨国抵达。` : undefined;
+  return crossCountryTextIntent(save, text);
+}
+/** 发送时的 toast：点名地图落点；地图上去不了的只给通用提示。 */
+export function mapPreparationToast(save: SaveData, text: string): string | undefined {
+  const intent = mapPreparationIntent(save, text);
+  return intent && (intent.target ? crossCountryStoryTravelToast(intent.target) : travelUi.genericToast);
 }
 /** 正文里的明确跨国抵达也须与本地位置一致，避免状态拦住而正文偷偷瞬移。 */
 export function mapArrivalViolation(save: SaveData, text: string): boolean {
@@ -200,8 +228,12 @@ export function mapTravelPreview(save: SaveData, toId: string): { key: string; l
 export function mapTravelConfirmed(preview: ReturnType<typeof mapTravelPreview>, confirmationKey: string | null): boolean {
   return !!preview && preview.key === confirmationKey;
 }
+/** 输入区常驻提示：点名「先开地图去某代表地点」（REPORT-8091-2ba71102 P2-A）；地图上去不了的只给通用提示。 */
 export function mapPreparationNotice(save: SaveData, text: string): string | undefined {
-  return mapPreparation(save, text) ? '跨国出行请打开世界地图选择目的地' : undefined;
+  const intent = mapPreparationIntent(save, text);
+  if (!intent) return undefined;
+  const { target } = intent;
+  return target ? fillTravelUi(target.name === target.mapTargetName ? travelUi.noticeDirect : travelUi.noticeVia, target) : travelUi.genericNotice;
 }
 /**
  * 地图标头（REPORT-8091-f76e07a7 ⑥）：剧本档的世界名称／背景是开关时写死的（唐关＝「六朝·唐国长安」＋长安、太真简介），人走到别处仍照旧。

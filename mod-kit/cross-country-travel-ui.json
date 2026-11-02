@@ -1,0 +1,10 @@
+{
+  "description": "跨国出行引导地图的文案（src/modules/scenarioMods/travel/mapTravel.ts）。剧情罗盘（建议按钮）与手打「去某地」同口径：地图落点取目标地点本身，不是地图落点时取该国代表地点（REPORT-8091-75eaaee0 P2-2、REPORT-8091-2ba71102 P2-A）。占位：{name}＝玩家要去的地点，{mapTargetName}＝地图上要点的落点。",
+  "preparationDirect": "你正在准备前往{name}。请打开地图选择已开放路线；本轮尚未出发，不能叙述已经跨国抵达。",
+  "preparationVia": "你正在准备前往{name}。请打开地图选择前往{mapTargetName}的已开放路线，到后再前往{name}；本轮尚未出发，不能叙述已经跨国抵达。",
+  "toast": "跨国出行须在地图上点选目的地：请打开地图前往{mapTargetName}。",
+  "noticeDirect": "跨国出行请先开地图去{mapTargetName}",
+  "noticeVia": "跨国出行请先开地图去{mapTargetName}，到后再前往{name}",
+  "genericNotice": "跨国出行请打开世界地图选择目的地",
+  "genericToast": "跨国旅行请打开地图选择路线。"
+}

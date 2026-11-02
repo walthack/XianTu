@@ -519,7 +519,7 @@ import { worldEventBadgeCount } from '@/utils/worldEventRecords';
 import { stripActionOptionMetaWords, stripNarrativeMetaWords } from '@/utils/narrativeMetaWords';
 import type { SaveData } from '@/types/game';
 import { randomUUID } from '@/utils/uuid';
-import { mapPreparation, crossCountryStoryTravel, crossCountryStoryTravelPreparation, crossCountryStoryTravelToast } from '@/modules/scenarioMods/travel/mapTravel';
+import { mapPreparation, mapPreparationToast, crossCountryStoryTravel, crossCountryStoryTravelPreparation, crossCountryStoryTravelToast } from '@/modules/scenarioMods/travel/mapTravel';
 import { actionTimeConfig } from '@/modules/scenarioMods/actionTime';
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
@@ -2397,7 +2397,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   const mapPrepSave = gameStateStore.toSaveData();
   const mapPrep = crossCountryTravel ? crossCountryStoryTravelPreparation(crossCountryTravel) : mapPrepSave ? mapPreparation(mapPrepSave, userMessage) : undefined;
-  if (mapPrep) { finalUserMessage += '\n' + mapPrep; toast.info(crossCountryTravel ? crossCountryStoryTravelToast(crossCountryTravel) : '跨国旅行请打开地图选择路线。'); }
+  if (mapPrep) { finalUserMessage += '\n' + mapPrep; toast.info(crossCountryTravel ? crossCountryStoryTravelToast(crossCountryTravel) : mapPreparationToast(mapPrepSave!, userMessage) || ''); }
   if (freeActionBlock) finalUserMessage += freeActionBlock;
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 

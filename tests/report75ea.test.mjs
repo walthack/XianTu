@@ -149,7 +149,8 @@ test('P2-2 跨国罗盘（建议原句或手打）只写准备、引导地图；
   assert.deepEqual({ ...across }, { toId: LINAN, name: '临安', mapTargetId: LINAN, mapTargetName: '临安' });
   for (const text of [travel.playerLine, '去临安', '我去见谢幼度']) {
     assert.match(M.mapPreparation(save, text) || '', /准备前往临安。请打开地图/, text);
-    assert.equal(M.mapPreparationNotice(save, text), '跨国出行请打开世界地图选择目的地');
+    // REPORT-8091-2ba71102 P2-A：常驻提示点名地图落点。
+    assert.equal(M.mapPreparationNotice(save, text), '跨国出行请先开地图去临安');
   }
   assert.match(M.crossCountryStoryTravelToast(across), /打开地图前往临安/);
   const ui = await read('src/components/dashboard/MainGamePanel.vue');
