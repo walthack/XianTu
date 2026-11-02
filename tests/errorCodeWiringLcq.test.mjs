@@ -322,7 +322,7 @@ test('LCQ-NAR-004：MainGamePanel 响应结构校验失败的两个出口（保�
   const block = text.slice(from, text.indexOf('// 尝试重新生成', from));
   const calls = [...block.matchAll(/logEvent\(\{ code: 'LCQ-NAR-004', echo: false, detail: \{ errors: summarizeList\(validation\.errors\), willRetry: (true|false) \} \}\);/g)].map(m => m[1]);
   assert.deepEqual(calls, ['false', 'true']);
-  assert.ok(block.indexOf("willRetry: false") < block.indexOf("toast.warning('AI响应格式不正确，已保留你的输入，可手动重试。');"));
+  assert.ok(block.indexOf("willRetry: false") < block.indexOf("noteTurnFailure('AI响应格式不正确，已保留你的输入，可手动重试。');"));
   assert.ok(block.indexOf("willRetry: true") < block.indexOf("toast.warning('AI响应格式不正确，正在重试...');"));
   const entries = await capture('LCQ-NAR-004', () => log.logEvent({ code: 'LCQ-NAR-004', echo: false, detail: { errors: summary.summarizeList(Array.from({ length: 12 }, (_, i) => `错误${i}`)), willRetry: true } }));
   assert.equal(entries[0].detail.errors.total, 12);

@@ -116,3 +116,26 @@ test('3 主线按钮空转 N 回合（N 读 mod-kit）只提示一次、提示�
   const panel = read('src/components/dashboard/MainGamePanel.vue');
   assert.match(panel, /const idleActionNotice = idleSave \? noteBeatActionIdleTurn\(idleSave\) : undefined;\s*idleDepartureNotice \|\|= idleActionNotice;/);
 });
+
+// ───────────── 4) P2 同一回合同时报「AI响应格式不正确，已保留你的输入」与「本回合未完成，已撤回本回合的判定与结算」 ─────────────
+// 根因：重复兜底——结构校验失败的出口先弹格式错误（并 aiResponse=null 返回），外层 finally 发现回合没成、撤回预结算，又独立弹一条撤回提示。
+// 两条说的是同一件事（这回合失败了、输入保留、可重发）。截断、叙事时限、请求失败也一样双弹。
+// 修：失败出口只记原因（noteTurnFailure），收尾撤回成功时合成一条「原因；本回合的判定与结算已撤回，可重新发送。」，没撤回则只弹原因。
+test('4 失败原因与撤回合成一条：各失败出口只记原因，不直接弹；finally 合成或单弹', () => {
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  const from = panel.indexOf('let narrativeBudgetExpired = false;');
+  const to = panel.indexOf('// 回合收尾：作者写明的到点', from);
+  const body = panel.slice(from, to);
+  for (const text of ['AI响应格式不正确，已保留你的输入，可手动重试。', '回应被截断，已保留你的输入，可手动重试。']) {
+    assert.doesNotMatch(body, new RegExp(`toast\\.warning\\('${text}'\\)`), text);
+    assert.match(body, new RegExp(`noteTurnFailure\\('${text}'\\)`), text);
+  }
+  assert.match(body, /if \(captured\.error\) \{ noteTurnFailure\(captured\.error\.message\);/);
+  assert.match(body, /noteTurnFailure\(String\(budget\.notice\)\.replace\('\{seconds\}'/, '叙事时限到点也只记原因');
+  assert.match(body, /noteTurnFailure\(`请求失败: \$\{errorMessage\}`, 'error'\);/);
+  assert.match(body, /if \(failureNotice\) toast\[failureNotice\.level\]\(`\$\{failureNotice\.text\.replace\(\/\[。\.\]\$\/u, ''\)\}；本回合的判定与结算已撤回，可重新发送。`\);\s*else toast\.info\('本回合未完成，已撤回本回合的判定与结算，可重新发送。'\);\s*failureNotice = null;/);
+  assert.match(body, /if \(failureNotice\) toast\[failureNotice\.level\]\(failureNotice\.text\);/);
+  // 合成文案示例
+  const merged = 'AI响应格式不正确，已保留你的输入，可手动重试。'.replace(/[。.]$/u, '') + '；本回合的判定与结算已撤回，可重新发送。';
+  assert.equal(merged, 'AI响应格式不正确，已保留你的输入，可手动重试；本回合的判定与结算已撤回，可重新发送。');
+});

@@ -114,8 +114,9 @@ test('P2-2 审核异常穿过冻结 catch 占位返回后，真实 UI 校验分�
   const captured=await A.captureAIResponseError(async()=>run(A.toUserFacingAIError(raw),()=>{},()=>false,class AgencyError extends Error{},()=>true,()=>false,()=>false,e=>({message:e.message})));
   assert.equal(captured.response.text,'（AI生成失败）');
   const notices=[];
-  const validate=cut(main.slice(main.indexOf('const captured = await captureAIResponseError')), '        const validation = validateProcessedAIResponse(aiResponse);','          const saveForRetry =', ['aiResponse','validateProcessedAIResponse','captured','toast','console'], '\n}\nreturn aiResponse;');
-  assert.equal(validate(captured.response,()=>({isValid:false,errors:[]}),captured,{warning:t=>notices.push(t)},{warn(){}}),undefined);
+  const validate=cut(main.slice(main.indexOf('const captured = await captureAIResponseError')), '        const validation = validateProcessedAIResponse(aiResponse);','          const saveForRetry =', ['aiResponse','validateProcessedAIResponse','captured','toast','console','noteTurnFailure'], '\n}\nreturn aiResponse;');
+  // REPORT-8091-98199e80 F2b 起失败原因经 noteTurnFailure 记下、收尾与撤回合成一条弹出。
+  assert.equal(validate(captured.response,()=>({isValid:false,errors:[]}),captured,{warning:t=>notices.push(t)},{warn(){}},t=>notices.push(t)),undefined);
   assert.match(notices[0],/LCQ-NET-012/); assert.match(notices[0],/没有推进/); assert.doesNotMatch(notices[0],/格式/);
   const later=await A.captureAIResponseError(async()=>({text:'other failure'}));assert.equal(later.error,undefined);
   const a=log.logEvent({code:'LCQ-NET-014',echo:false,detail:{settledLocally:false}}), b=log.logEvent({code:'LCQ-NET-014',echo:false,detail:{settledLocally:true}});

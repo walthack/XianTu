@@ -2504,6 +2504,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   let hasError = false;
   // 普通叙事总耗时上限（story.narrativeTurnBudget）：到点掐断本回合请求，按生成失败兜底（撤回预结算、保留输入）。
   let narrativeBudgetExpired = false;
+  // 本回合失败的原因提示：先记下，收尾时与「已撤回本回合的判定与结算」合成一条弹出（REPORT-8091-98199e80 F2b：同一回合两条提示）。
+  let turnFailureNotice: { level: 'warning' | 'error'; text: string } | null = null;
+  const noteTurnFailure = (text: string, level: 'warning' | 'error' = 'warning') => { turnFailureNotice = { level, text }; };
 
   try {
     // 获取当前角色
@@ -2569,7 +2572,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       ), Number(budget?.totalMs) || 0, () => {
         narrativeBudgetExpired = true;
         aiService.abortQingyuTurnRequests(qingyuTurnId);
-        toast.warning(String(budget.notice).replace('{seconds}', String(Math.round(budget.totalMs / 1000))));
+        noteTurnFailure(String(budget.notice).replace('{seconds}', String(Math.round(budget.totalMs / 1000))));
       }));
       if (captured.response.expired) {
         hasError = true;
@@ -2591,13 +2594,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       if (aiResponse) {
         if (aiResponse.generationError) throw Object.assign(new Error(aiResponse.generationError.message), { code: aiResponse.generationError.code });
         if (aiResponse.outputTruncated) {
-          toast.warning('回应被截断，已保留你的输入，可手动重试。');
+          noteTurnFailure('回应被截断，已保留你的输入，可手动重试。');
           aiResponse = null;
           return;
         }
         const validation = validateProcessedAIResponse(aiResponse);
         if (!validation.isValid) {
-          if (captured.error) { toast.warning(captured.error.message); aiResponse = null; return; }
+          if (captured.error) { noteTurnFailure(captured.error.message); aiResponse = null; return; }
           console.warn('[AI响应验证] 结构验证失败:', validation.errors);
           const saveForRetry = gameStateStore.toSaveData();
           if (
@@ -2606,7 +2609,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
             || (saveForRetry && usesFixedScenarioInventory(saveForRetry))
           ) {
             logEvent({ code: 'LCQ-NAR-004', echo: false, detail: { errors: summarizeList(validation.errors), willRetry: false } });
-            toast.warning('AI响应格式不正确，已保留你的输入，可手动重试。');
+            noteTurnFailure('AI响应格式不正确，已保留你的输入，可手动重试。');
             aiResponse = null;
             return;
           }
@@ -2629,7 +2632,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           if (retryResponse) {
             if (retryResponse.transactionCommitted) turnCommitted = true;
             if (retryResponse.outputTruncated) {
-              toast.warning('回应被截断，已保留你的输入，可手动重试。');
+              noteTurnFailure('回应被截断，已保留你的输入，可手动重试。');
               aiResponse = null;
               return;
             }
@@ -2833,7 +2836,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
     // 显示错误提示
     const errorMessage = error instanceof Error ? error.message : '未知错误';
-    toast.error(`请求失败: ${errorMessage}`);
+    noteTurnFailure(`请求失败: ${errorMessage}`, 'error');
 
     // 🔥 清理流式输出状态（失败时清除所有流式内容）
     uiStore.setAIProcessing(false);
@@ -2861,18 +2864,24 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     }
 
     // 回合失败：撤回本回合的本地预结算（判定写入、自由行动结算），判定卡回到待确认，可原样重发。
+    let failureNotice = turnFailureNotice as { level: 'warning' | 'error'; text: string } | null;
     if (aiResetToken === resetSnapshot && !aiResponse && !turnCommitted && preTurnSave) {
       try {
         if (shouldRestorePreTurnSave(preTurnSave, gameStateStore.toSaveData())) {
           gameStateStore.loadFromSaveData(preTurnSave);
           await characterStore.saveCurrentGame();
           refreshPendingJudgement();
-          toast.info('本回合未完成，已撤回本回合的判定与结算，可重新发送。');
+          // 失败原因与撤回合成一条（原先「AI响应格式不正确…」与「本回合未完成，已撤回…」各弹一条）。
+          if (failureNotice) toast[failureNotice.level](`${failureNotice.text.replace(/[。.]$/u, '')}；本回合的判定与结算已撤回，可重新发送。`);
+          else toast.info('本回合未完成，已撤回本回合的判定与结算，可重新发送。');
+          failureNotice = null;
         }
       } catch (restoreError) { // lcq-allow: 撤回失败直接告诉玩家改用「上次对话」回滚（发送前已备份），不再另记码
         toast.error(`本回合未完成，撤回本回合结算失败：${restoreError instanceof Error ? restoreError.message : String(restoreError)}；可在存档面板用「上次对话」回滚。`);
       }
     }
+    // 没撤回（无可撤的预结算或撤回失败）：失败原因单独弹。
+    if (failureNotice) toast[failureNotice.level](failureNotice.text);
 
     // 回合收尾：作者写明的到点本回合收束了哪拍（beat.resolve deadline）；启程按钮空转满 story.beatProgress.departureIdleTurns 回合、本拍主线按钮空转满 actionIdleTurns 回合都只提示，不自动出发、不代结算（用户 2026-11-02 拍板③④）。
     let idleDepartureNotice: string | undefined;
