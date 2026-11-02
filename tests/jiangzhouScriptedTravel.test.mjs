@@ -4,7 +4,7 @@ import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
 
-// 剧情罗盘移动（travel:）由本地事件引擎落位，跨国也不走地图选择；模型位置指令跨国仍由 canonGuard 拒。
+// 剧情罗盘移动（travel:）在事件引擎层可跨国落位（本文件只测引擎层）；界面层自 REPORT-8091-75eaaee0 P2-2 起，跨国罗盘不交引擎、改为只写准备并引导地图（见 tests/report75ea.test.mjs）。模型位置指令跨国仍由 canonGuard 拒。
 const readStage = async id => JSON.parse(await readFile(
   new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`, import.meta.url),
   'utf8',

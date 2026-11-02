@@ -392,6 +392,9 @@
       "enabled": true,
       "minDays": 1,
       "coordinateLi": 1
-    }
+    },
+    "storyTransitionEventIds": [
+      "lcq.event.s03_07"
+    ]
   }
 }

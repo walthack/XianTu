@@ -35,7 +35,8 @@ for (const old of [false, true]) test(`I-1 晋线完整文字路径不往返（$
   s = advance(s);
   assert.equal(R.getCurrentStoryEventActions(s)[0].actionId, 'travel:liuchao.location.linan');
   const before = structuredClone(s);
-  assert.equal(M.mapPreparation(s, '乘船前往临安'), undefined);
+  // REPORT-8091-75eaaee0 P2-2：跨国罗盘（江州晋→临安宋）不再由界面交事件引擎换国，只写准备、引导地图；以下仍测引擎层落位不往返。
+  assert.match(M.mapPreparation(s, '乘船前往临安') || '', /准备前往临安。请打开地图/);
   assert.deepEqual(s, before, '提示预览不修改存档');
   assert.equal(act(s, '乘船前往临安').completed, false, '到达不等于完成');
   assert.equal(s.角色.位置.locationId, 'liuchao.location.lin_an');

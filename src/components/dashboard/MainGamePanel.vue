@@ -518,7 +518,7 @@ import { worldEventBadgeCount } from '@/utils/worldEventRecords';
 import { stripActionOptionMetaWords, stripNarrativeMetaWords } from '@/utils/narrativeMetaWords';
 import type { SaveData } from '@/types/game';
 import { randomUUID } from '@/utils/uuid';
-import { mapPreparation } from '@/modules/scenarioMods/travel/mapTravel';
+import { mapPreparation, crossCountryStoryTravel, crossCountryStoryTravelPreparation, crossCountryStoryTravelToast } from '@/modules/scenarioMods/travel/mapTravel';
 import { actionTimeConfig } from '@/modules/scenarioMods/actionTime';
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
@@ -2341,13 +2341,16 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     : exactSelectedGambleRefusalAction
       || (routedIntentAction?.source === BAIHU_GAMBLE_REFUSAL_SOURCE ? routedIntentAction : undefined)
       || (scenarioSaveAtSend ? resolveBaihuGambleRefusalFromText(scenarioSaveAtSend, userMessage) : undefined);
-  const resolvedEventAction = resolvedGambleRefusalAction
+  const matchedEventAction = resolvedGambleRefusalAction
     ? undefined
     : exactSelectedEventAction
       || (routedIntentAction?.source === 'event_engine' || routedIntentAction?.source === 'exploration_engine'
         ? routedIntentAction
         : undefined)
       || (scenarioSaveAtSend ? resolveStoryEventActionFromPlayerText(scenarioSaveAtSend, userMessage) : undefined);
+  // 跨国须在地图上点选目的地：跨国剧情罗盘（建议或手打）本轮不交事件引擎换国，只写准备并引导地图（REPORT-8091-75eaaee0 P2-2）。
+  const crossCountryTravel = matchedEventAction && scenarioSaveAtSend ? crossCountryStoryTravel(scenarioSaveAtSend, matchedEventAction) : undefined;
+  const resolvedEventAction = crossCountryTravel ? undefined : matchedEventAction;
   const exactSelectedOpportunityAction = selectedScenarioEngineAction.value?.source === 'opportunity_engine'
     && selectedScenarioEngineAction.value.actionText === userMessage
     ? selectedScenarioEngineAction.value
@@ -2399,8 +2402,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     finalUserMessage += `\n【本地判定已结算】判定ID=${result.id}；类型=${labels.kind}；骰点=${result.roll}；总值=${result.total}；难度=${result.difficulty.value}；结果档（只给你看）=${labels.outcome}；正典策略=${labels.canonPolicy}；${progressNote ? `修为=${progressNote}；` : ''}已写入=${effectSummary}${localDamageApplied ? '；本地战斗伤害已结算' : ''}。${JUDGEMENT_RECEIPT_NO_COPY}；只叙述该既定结果和已写入状态，不得另行掷骰、改写数字、杜撰额外状态效果或写入系统.扩展.判定；若策略为${JUDGEMENT_CANON_POLICY_LABELS.route_process_only}，不得直接完成、作废或改写活动正典事件。\n`;
   }
   const mapPrepSave = gameStateStore.toSaveData();
-  const mapPrep = mapPrepSave ? mapPreparation(mapPrepSave, userMessage) : undefined;
-  if (mapPrep) { finalUserMessage += '\n' + mapPrep; toast.info('跨国旅行请打开地图选择路线。'); }
+  const mapPrep = crossCountryTravel ? crossCountryStoryTravelPreparation(crossCountryTravel) : mapPrepSave ? mapPreparation(mapPrepSave, userMessage) : undefined;
+  if (mapPrep) { finalUserMessage += '\n' + mapPrep; toast.info(crossCountryTravel ? crossCountryStoryTravelToast(crossCountryTravel) : '跨国旅行请打开地图选择路线。'); }
   if (freeActionBlock) finalUserMessage += freeActionBlock;
   console.log('[前端] 最终发送 finalUserMessage:', finalUserMessage);
 

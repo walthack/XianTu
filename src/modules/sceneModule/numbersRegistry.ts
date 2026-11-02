@@ -158,6 +158,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'crossCountryTravel.domesticRepresentative.enabled', kind: 'bool', required: true, section: 'runtime' },
   { path: 'crossCountryTravel.domesticRepresentative.minDays', kind: 'int', required: true, min: 0, section: 'runtime' },
   { path: 'crossCountryTravel.domesticRepresentative.coordinateLi', kind: 'number', required: true, min: 0, section: 'runtime' },
+  // 剧情写死的跨国转场（如五原→南荒商队）：罗盘移动照旧由事件引擎落位；其余跨国罗盘只写准备、引导地图（REPORT-8091-75eaaee0 P2-2）。
+  { path: 'crossCountryTravel.storyTransitionEventIds', kind: 'array', required: true, section: 'runtime' },
   { path: 'tuning.timeoutMs', kind: 'int', required: true, min: 1, section: 'runtime' },
   { path: 'ui.rightSidebar.showSecondaryLines', kind: 'bool', required: true, section: 'runtime' },
   { path: 'ui.rightSidebar.showLineCompass', kind: 'bool', required: true, section: 'runtime' },
