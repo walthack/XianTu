@@ -11,7 +11,7 @@ const make=(routes,overrides={})=>createModuleModelRuntime({definitions:GAME_MOD
 
 test('every registered module card passes the registry contract',()=>{
  for(const m of GAME_MODEL_MODULES)assert.deepEqual(validateModuleDefinition(m),[],m.id);
- assert.deepEqual(GAME_MODEL_MODULES.map(m=>m.id),['intent','narrative','memory','audit']);
+ assert.deepEqual(GAME_MODEL_MODULES.map(m=>m.id),['intent','narrative','memory','audit','consistency']);
  assert.equal(GAME_MODEL_MODULES.some(m=>m.id==='quality'),false);
 });
 test('incomplete module cards are refused at registration',()=>{

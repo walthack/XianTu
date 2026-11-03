@@ -1,6 +1,7 @@
 import { diagnosticContext, type RequestDiagnosticContext } from './requestLifecycleDiagnostics';
 import type { APIConfig, APIUsageType } from '@/stores/apiManagementStore';
 import type { GenerateOptions } from './aiService';
+import { DUAL_MODEL_CONFIG, type BackendReasoningEffort } from './dualModelConfig';
 
 /**
  * 模块卡：模块的身份是职责合同，模型只是其中可替换的一个槽位。
@@ -11,7 +12,10 @@ export type ModulePhase = 'intake' | 'settle' | 'compile' | 'render' | 'commit' 
 export interface ModuleModelPolicy {
   /** 单次请求输出上限（含推理）；API 配置的 maxTokens 更小时取更小值。 */
   maxTokens: number;
-  reasoningEffort: NonNullable<GenerateOptions['reasoningEffort']>;
+  /** 与 backendReasoning 二选一：前台/旧后台模块显式声明（多为 none），从而不被当成主叙事。 */
+  reasoningEffort?: NonNullable<GenerateOptions['reasoningEffort']>;
+  /** 双模型后端：请求带 backendReasoningEffort（玩家档位，'default' 回落 dual-model.json），不得用 none 关思考。 */
+  backendReasoning?: true;
   timeoutMs?: number;
   streaming?: boolean;
   timeoutMode?: GenerateOptions['timeoutMode'];
@@ -70,6 +74,13 @@ export const GAME_MODEL_MODULES: readonly ModelModuleDefinition[] = [
     lifecycle: 'production', promptKey: 'backgroundAuditInstruction', onFail: 'drop', onLate: 'drop',
     policy: { maxTokens: 4096, reasoningEffort: 'none', responseMode: 'text', streaming: true, timeoutMode: 'content_idle' },
   },
+  {
+    // 双模型后端（设计稿 2026-11-03-双模型分工 ①⑤⑧）：只读概要与账，提案 NPC 记忆与连续性提示，下回合落账。
+    id: DUAL_MODEL_CONFIG.dualModel.backend.moduleId, purpose: '后台一致性：按本回合概要与账提案 NPC 记忆、关系称谓与下一回合的连续性提示', phase: 'derive', blocking: false,
+    inheritUsageType: DUAL_MODEL_CONFIG.dualModel.backend.inheritUsageType as APIUsageType, write: 'proposal:社交.关系.记忆', consumers: ['社交.关系', 'narrative'],
+    lifecycle: 'production', onFail: 'drop', onLate: 'apply_next_turn',
+    policy: { maxTokens: DUAL_MODEL_CONFIG.dualModel.backend.maxTokens, backendReasoning: true, timeoutMs: DUAL_MODEL_CONFIG.dualModel.backend.timeoutMs, responseMode: 'text', streaming: true },
+  },
 ];
 
 /** 注册表合同：在注册时就拒绝不完整的模块卡，而不是等运行时才暴露。 */
@@ -81,6 +92,7 @@ export function validateModuleDefinition(definition: ModelModuleDefinition): str
   if (definition.blocking && definition.onLate !== 'drop') errors.push(`${definition.id}：前台模块迟到只能丢弃`);
   if (definition.lifecycle === 'dev' && !definition.retireWhen?.trim()) errors.push(`${definition.id}：dev 模块必须写明退场条件`);
   if (!(definition.policy?.maxTokens > 0)) errors.push(`${definition.id}：缺少输出预算`);
+  if (!definition.policy?.reasoningEffort === !definition.policy?.backendReasoning) errors.push(`${definition.id}：推理档须在 reasoningEffort 与 backendReasoning 中恰好声明一个`);
   return errors;
 }
 
@@ -111,6 +123,8 @@ export function createModuleModelRuntime(dependencies: {
   resolveRoute: (definition: ModelModuleDefinition) => ModuleRouteResolution;
   isEnabled: (definition: ModelModuleDefinition) => boolean;
   generate: (options: GenerateOptions) => Promise<string>;
+  /** 后端模块（policy.backendReasoning）的玩家档位；缺省＝'default'。 */
+  backendReasoningEffort?: (definition: ModelModuleDefinition) => BackendReasoningEffort;
 }) {
   const registry = new Map<string, ModelModuleDefinition>();
   for (const definition of dependencies.definitions) {
@@ -134,6 +148,7 @@ export function createModuleModelRuntime(dependencies: {
         usageType: definition.transportUsageType || definition.inheritUsageType,
         background: !definition.blocking,
         timeoutMs: policy.timeoutMs, reasoningEffort: policy.reasoningEffort,
+        ...(policy.backendReasoning ? { backendReasoningEffort: dependencies.backendReasoningEffort?.(definition) ?? 'default' } : {}),
         responseMode: policy.responseMode, should_stream: policy.streaming ?? false, requestMaxRetries: 0,
         timeoutMode: policy.timeoutMode, onTransportStart: input.onTransportStart,
         generation_id: input.generationId, signal: input.signal, qingyuTurnId: input.qingyuTurnId,

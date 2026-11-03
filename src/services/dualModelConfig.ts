@@ -14,7 +14,7 @@ export interface DualModelConfig {
     backend: {
       moduleId: string; inheritUsageType: string; defaultModel: string; reasoningEffort: string;
       summaryWindow: number; ledgerMemoryPerNpc: number; maxInputChars: number; continuityMaxItems: number;
-      maxLagTurns: number; waitMs: number; timeoutMs: number; degradedAttempts: number; hourlyBudget: number;
+      maxLagTurns: number; waitMs: number; timeoutMs: number; maxTokens: number; degradedAttempts: number; hourlyBudget: number;
     };
     frontend: { writesNpcMemory: boolean };
     billing: { allowedModels: string[]; blockUnlisted: boolean };
@@ -24,7 +24,7 @@ export interface DualModelConfig {
 
 export const DUAL_MODEL_CONFIG = raw as DualModelConfig;
 
-const POSITIVE_INTS = ['summaryWindow', 'ledgerMemoryPerNpc', 'maxInputChars', 'continuityMaxItems', 'maxLagTurns', 'timeoutMs', 'hourlyBudget'] as const;
+const POSITIVE_INTS = ['summaryWindow', 'ledgerMemoryPerNpc', 'maxInputChars', 'continuityMaxItems', 'maxLagTurns', 'timeoutMs', 'maxTokens', 'hourlyBudget'] as const;
 const NON_NEGATIVE_INTS = ['waitMs', 'degradedAttempts'] as const;
 
 /** 形状校验：返回问题列表，空＝通过。reasoningEffort 取值与 numbersRegistry 的 mainNarrative.effort 同表。 */
@@ -52,4 +52,38 @@ export function validateDualModelConfig(cfg: unknown = DUAL_MODEL_CONFIG): strin
   if (!int(c?.memory?.summaryMaxChars, 1)) problems.push('memory.summaryMaxChars 须为正整数');
   if (!text(c?.memory?.moderatedPlaceholder)) problems.push('memory.moderatedPlaceholder 不能为空');
   return problems;
+}
+
+/** API 配置页后端档位下拉的取值：'default' 加上除 off 以外的推理档（off 不给玩家选，关后端用开关）。 */
+export const BACKEND_REASONING_EFFORTS: readonly BackendReasoningEffort[] = [
+  'default', ...REASONING_EFFORT_LEVELS.filter(level => level !== 'off'),
+] as BackendReasoningEffort[];
+
+export const isBackendReasoningEffort = (value: unknown): value is BackendReasoningEffort =>
+  typeof value === 'string' && (BACKEND_REASONING_EFFORTS as readonly string[]).includes(value);
+
+/** 模型名是否命中 billing.allowedModels（正则，大小写不敏感）；空名不算命中，无效正则跳过（由校验报告）。 */
+export function isModelAllowed(model: string, config: DualModelConfig = DUAL_MODEL_CONFIG): boolean {
+  const name = String(model || '').trim();
+  if (!name) return false;
+  return config.dualModel.billing.allowedModels.some(pattern => {
+    try { return new RegExp(pattern, 'i').test(name); }
+    // lcq-allow: 无效正则由 validateDualModelConfig 报告，这里按不命中处理。
+    catch { return false; }
+  });
+}
+
+/**
+ * 按量付费确认（N1-B，22:18 起白名单只约束开发／测试默认值）：
+ * 开发／测试构建不弹确认（白名单约束的是默认值，由 isModelAllowed 判断）；
+ * 正式版不拦，只在模型名单外且该连接＋模型未确认过时返回 true。
+ */
+export function needsPaidConfirm(model: string, isDevBuild: boolean, confirmed: boolean, config: DualModelConfig = DUAL_MODEL_CONFIG): boolean {
+  if (isDevBuild || confirmed) return false;
+  return !isModelAllowed(model, config);
+}
+
+/** 后端是否开启（N3-A）：dualModel.enabled 是开发总闸，moduleEnabled.consistency 是玩家开关，任一关即关。 */
+export function consistencyEnabled(moduleSwitch: boolean, config: DualModelConfig = DUAL_MODEL_CONFIG): boolean {
+  return config.dualModel.enabled === true && moduleSwitch === true;
 }

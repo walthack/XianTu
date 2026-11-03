@@ -93,7 +93,8 @@ test('其他请求不受影响：模块、后台、非 main 用途、无回合�
 });
 
 test('游戏模型模块都显式声明推理档，因而不会被当成主叙事', () => {
-  for (const definition of GAME_MODEL_MODULES) assert.ok(definition.policy.reasoningEffort, definition.id);
+  // 双模型后端（consistency）改带 backendReasoningEffort，aiService 据此同样不判为主叙事。
+  for (const definition of GAME_MODEL_MODULES) assert.ok(definition.policy.reasoningEffort || definition.policy.backendReasoning, definition.id);
 });
 
 test('helper：非主叙事或无效 URL 一律空', () => {

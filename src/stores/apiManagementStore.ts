@@ -12,6 +12,7 @@ import { loadUserCloudData, saveUserCloudDataDetailed, type UserCloudSaveResult 
 import { isBackendConfigured } from '@/services/backendConfig';
 import { createLatestWriteQueue } from '@/utils/latestWriteQueue';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
+import { DUAL_MODEL_CONFIG, isBackendReasoningEffort, type BackendReasoningEffort } from '@/services/dualModelConfig';
 
 /** 界面开关优先；旧配置未设置（非布尔）时沿用 ai-content-moderation.json 的 fallbackEnabled。 */
 export const resolveModerationFallbackEnabled = (storeValue: unknown, jsonDefault: unknown): boolean =>
@@ -78,9 +79,32 @@ export interface ModuleAssignment {
 }
 export const MODULE_INHERIT = 'inherit';
 
-/** 研发/内测构建（非 production）默认开启后台审计；正式版默认关闭（用户裁定 Q5）。 */
+/** 研发/内测构建（非 production）默认开启后台审计与双模型后端；正式版默认关闭（用户裁定 Q5；双模型 N5-A 同口径）。 */
 const DEV_BUILD_DEFAULTS = typeof MODULE_DEV_DEFAULTS !== 'undefined' ? MODULE_DEV_DEFAULTS === true : false;
-const DEFAULT_MODULE_ENABLED: Record<string, boolean> = { audit: DEV_BUILD_DEFAULTS };
+const DEFAULT_MODULE_ENABLED: Record<string, boolean> = {
+  audit: DEV_BUILD_DEFAULTS,
+  [DUAL_MODEL_CONFIG.dualModel.backend.moduleId]: DEV_BUILD_DEFAULTS,
+};
+
+/** N1-B：玩家已确认的白名单外模型，按连接 id＋模型名记；确认后同一连接同一模型不再问。 */
+export interface PaidModelConfirmation {
+  apiId: string;
+  model: string;
+}
+
+const readModuleReasoningEffort = (saved: unknown): Record<string, BackendReasoningEffort> => {
+  const result: Record<string, BackendReasoningEffort> = {};
+  if (!saved || typeof saved !== 'object') return result;
+  for (const [id, value] of Object.entries(saved as Record<string, unknown>)) {
+    if (isBackendReasoningEffort(value) && value !== 'default') result[id] = value;
+  }
+  return result;
+};
+
+const readPaidModelConfirmations = (saved: unknown): PaidModelConfirmation[] =>
+  (Array.isArray(saved) ? saved : [])
+    .filter((c: any) => typeof c?.apiId === 'string' && typeof c?.model === 'string' && c.model.trim())
+    .map((c: any) => ({ apiId: c.apiId, model: c.model.trim() }));
 
 /**
  * 运行模式
@@ -231,6 +255,12 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
   // 模块自有开关（只登记有独立开关的模块，如后台审计）
   const moduleEnabled = ref<Record<string, boolean>>({ ...DEFAULT_MODULE_ENABLED });
 
+  // 模块推理档（只记玩家改过的；未记＝'default'，回落 dual-model.json backend.reasoningEffort）。不放进 APIConfig，避免共用连接时改到主叙事。
+  const moduleReasoningEffort = ref<Record<string, BackendReasoningEffort>>({});
+
+  // 白名单外模型的按量付费确认记录（N1-B）
+  const paidModelConfirmations = ref<PaidModelConfirmation[]>([]);
+
   // AI生成设置
   const aiGenerationSettings = ref({
     splitStep2Streaming: false, // 分步生成第2步是否使用流式传输（默认关闭）
@@ -328,6 +358,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     for (const [id, value] of Object.entries(savedModuleEnabled)) {
       if (typeof value === 'boolean') moduleEnabled.value[id] = value;
     }
+    moduleReasoningEffort.value = readModuleReasoningEffort(data.moduleReasoningEffort);
+    paidModelConfirmations.value = readPaidModelConfirmations(data.paidModelConfirmations);
   };
 
   const ensureDefaultConfig = () => {
@@ -355,6 +387,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     functionEnabled: functionEnabled.value,
     moduleAssignments: moduleAssignments.value,
     moduleEnabled: moduleEnabled.value,
+    moduleReasoningEffort: moduleReasoningEffort.value,
+    paidModelConfirmations: paidModelConfirmations.value,
     aiGenerationSettings: aiGenerationSettings.value
   });
 
@@ -557,6 +591,28 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     saveToStorage();
   };
 
+  const getModuleReasoningEffort = (moduleId: string): BackendReasoningEffort =>
+    moduleReasoningEffort.value[moduleId] ?? 'default';
+  const setModuleReasoningEffort = (moduleId: string, effort: BackendReasoningEffort) => {
+    if (!isBackendReasoningEffort(effort)) return;
+    const next = { ...moduleReasoningEffort.value };
+    if (effort === 'default') delete next[moduleId];
+    else next[moduleId] = effort;
+    moduleReasoningEffort.value = next;
+    saveToStorage();
+  };
+
+  const isPaidModelConfirmed = (apiId: string, model: string): boolean => {
+    const name = String(model || '').trim();
+    return !!name && paidModelConfirmations.value.some(c => c.apiId === apiId && c.model === name);
+  };
+  const confirmPaidModel = (apiId: string, model: string) => {
+    const name = String(model || '').trim();
+    if (!apiId || !name || isPaidModelConfirmed(apiId, name)) return;
+    paidModelConfirmations.value = [...paidModelConfirmations.value, { apiId, model: name }];
+    saveToStorage();
+  };
+
   // 切换API启用状态
   const toggleAPI = (id: string) => {
     const api = apiConfigs.value.find(a => a.id === id);
@@ -617,6 +673,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       functionEnabled: functionEnabled.value,
       moduleAssignments: moduleAssignments.value,
       moduleEnabled: moduleEnabled.value,
+      moduleReasoningEffort: moduleReasoningEffort.value,
+      paidModelConfirmations: paidModelConfirmations.value,
       aiGenerationSettings: aiGenerationSettings.value,
       exportTime: new Date().toISOString()
     };
@@ -689,6 +747,12 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
       if (data.moduleEnabled && typeof data.moduleEnabled === 'object') {
         moduleEnabled.value = { ...DEFAULT_MODULE_ENABLED, ...data.moduleEnabled };
       }
+      if (data.moduleReasoningEffort && typeof data.moduleReasoningEffort === 'object') {
+        moduleReasoningEffort.value = readModuleReasoningEffort(data.moduleReasoningEffort);
+      }
+      if (Array.isArray(data.paidModelConfirmations)) {
+        paidModelConfirmations.value = readPaidModelConfirmations(data.paidModelConfirmations);
+      }
       if (data.aiGenerationSettings) {
         aiGenerationSettings.value = {
           ...aiGenerationSettings.value,
@@ -724,6 +788,8 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     functionEnabled,
     moduleAssignments,
     moduleEnabled,
+    moduleReasoningEffort,
+    paidModelConfirmations,
     aiGenerationSettings,
     cloudSyncState,
     enabledAPIs,
@@ -745,6 +811,10 @@ export const useAPIManagementStore = defineStore('apiManagement', () => {
     getAPIForModule,
     isModuleEnabled,
     setModuleEnabled,
+    getModuleReasoningEffort,
+    setModuleReasoningEffort,
+    isPaidModelConfirmed,
+    confirmPaidModel,
     updateAIGenerationSettings,
     exportConfig,
     uploadConfigToCloud,

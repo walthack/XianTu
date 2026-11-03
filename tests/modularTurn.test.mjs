@@ -55,7 +55,8 @@ test('death bridges shorten long output or drop it without blocking the fixed en
 
 test('all four module policies stream with thinking disabled and no old ten-second deadline', async () => {
   const { GAME_MODEL_MODULES } = await jiti.import('../src/services/moduleModelRuntime.ts');
-  for (const definition of GAME_MODEL_MODULES) {
+  // 双模型后端（backendReasoning）按设计稿不得用 none 关思考，另在 dualModelSettings.test 钉住。
+  for (const definition of GAME_MODEL_MODULES.filter(d => !d.policy.backendReasoning)) {
     assert.equal(definition.policy.streaming, true, definition.id);
     assert.equal(definition.policy.reasoningEffort, 'none', definition.id);
     assert.equal(definition.policy.timeoutMode, 'content_idle', definition.id);

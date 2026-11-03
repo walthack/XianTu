@@ -8,9 +8,12 @@ import {
   createModuleModelRuntime, GAME_MODEL_MODULES,
   type ModelModuleDefinition, type ModelModuleInput, type ModuleRouteResolution,
 } from './moduleModelRuntime';
+import { DUAL_MODEL_CONFIG, consistencyEnabled } from './dualModelConfig';
+
+const CONSISTENCY_MODULE_ID = DUAL_MODEL_CONFIG.dualModel.backend.moduleId;
 
 /** 有独立开关的模块；其余模块沿用继承功能的开关。 */
-const MODULES_WITH_OWN_SWITCH = new Set(['audit']);
+const MODULES_WITH_OWN_SWITCH = new Set(['audit', CONSISTENCY_MODULE_ID]);
 
 export function resolveGameModuleRoute(definition: ModelModuleDefinition): ModuleRouteResolution {
   const api = useAPIManagementStore();
@@ -24,6 +27,8 @@ export function resolveGameModuleRoute(definition: ModelModuleDefinition): Modul
 
 export function isGameModuleEnabled(definition: ModelModuleDefinition): boolean {
   const api = useAPIManagementStore();
+  // 双模型后端（N3-A）：dualModel.enabled 总闸与玩家开关任一关即关。
+  if (definition.id === CONSISTENCY_MODULE_ID) return consistencyEnabled(api.isModuleEnabled(definition.id));
   return MODULES_WITH_OWN_SWITCH.has(definition.id)
     ? api.isModuleEnabled(definition.id)
     : api.isFunctionEnabled(definition.inheritUsageType);
@@ -35,6 +40,7 @@ export async function runGameModelModule(moduleId: string, input: ModelModuleInp
     definitions: GAME_MODEL_MODULES,
     resolveRoute: resolveGameModuleRoute,
     isEnabled: isGameModuleEnabled,
+    backendReasoningEffort: definition => useAPIManagementStore().getModuleReasoningEffort(definition.id),
     generate: async options => {
       try { return await aiService.generate(options); }
       catch (error) {

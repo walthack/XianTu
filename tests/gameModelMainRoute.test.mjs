@@ -29,7 +29,8 @@ test('four modules follow main configuration, not M3 or previous module assignme
     return '正文';
   };
   try {
-    for (const d of GAME_MODEL_MODULES) {
+    // 双模型后端（consistency）有独立开关与推理档，另在 dualModelSettings.test 钉住。
+    for (const d of GAME_MODEL_MODULES.filter(m => !m.policy.backendReasoning)) {
       assert.equal(resolveGameModuleRoute(d).config.id,'main-selected');
       assert.equal((await runGameModelModule(d.id,{system:'test',input:'action',generationId:d.id})).route.model,'MiniMax-M2.7-highspeed');
       // 叙事来源日志（LCQ-NAR-001）取场面描写模型名用：每次跑模块都报一次路由。
