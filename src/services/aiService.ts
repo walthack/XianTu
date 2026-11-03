@@ -1,4 +1,4 @@
-import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, retryReasoningOnce } from './aiReasoningModelPolicy';
+import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
 /**
@@ -77,6 +77,8 @@ type QingyuTransportBudget = {
   maxTokens?: number;
   qingyuTurnId?: string;
   reasoningEffort?: 'none' | 'low';
+  /** 前台回合主叙事（usageType=main、未指定推理档、非后台/非流空闲模块）；只此类请求带 aiRetry.reasoning.mainNarrative。 */
+  mainNarrative?: boolean;
   timeoutMode?: 'content_idle';
   onTransportStart?: () => void;
 };
@@ -930,12 +932,15 @@ class AIService {
   private bindQingyuTransportBudget(signal: AbortSignal | undefined, options: GenerateOptions): void {
     if (!signal) return;
     bindRequestDiagnosticContext(signal, options.diagnostics || diagnosticContext(options.usageType || 'main', options.generation_id, !!options.background));
+    const qingyuTurnId = options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined;
     qingyuTransportBudgetBySignal.set(signal, {
       usageType: options.usageType || 'main',
       reasoningEffort: options.reasoningEffort ?? (remainingQingyuTurnTimeMs(options.qingyuTurnId) !== null ? 'low' : undefined),
+      mainNarrative: (options.usageType || 'main') === 'main' && !options.background && !!qingyuTurnId
+        && options.reasoningEffort === undefined && options.timeoutMode === undefined,
       maxTokens: options.maxTokens,
       timeoutMode: options.timeoutMode, onTransportStart: options.onTransportStart,
-      qingyuTurnId: options.qingyuTurnId ?? peekActiveQingyuTurnId() ?? undefined,
+      qingyuTurnId,
     });
   }
 
@@ -1760,7 +1765,8 @@ class AIService {
           this.applyMaxTokensParam(requestBody, provider, model, safeMaxTokens);
           Object.assign(requestBody, optionalReasoningParam(provider, model, {
             url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
-          }) || {}, reasoningBudgetParam(url));
+          }) || {}, reasoningBudgetParam(url),
+            mainNarrativeReasoningParam(url, model, !!(signal && qingyuTransportBudgetBySignal.get(signal)?.mainNarrative)));
 
           // 如果指定了 JSON 格式，添加 response_format
           // 🔥 注意：某些模型/API不支持 response_format
@@ -1810,7 +1816,8 @@ class AIService {
         this.applyMaxTokensParam(requestBody, provider, model, safeMaxTokens);
         Object.assign(requestBody, optionalReasoningParam(provider, model, {
           url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
-        }) || {}, reasoningBudgetParam(url));
+        }) || {}, reasoningBudgetParam(url),
+          mainNarrativeReasoningParam(url, model, !!(signal && qingyuTransportBudgetBySignal.get(signal)?.mainNarrative)));
 
         // 如果指定了 JSON 格式，添加 response_format
         // 🔥 注意：某些模型/API不支持 response_format
@@ -2227,7 +2234,8 @@ class AIService {
     }
     Object.assign(requestBody, optionalReasoningParam(provider, model, {
       url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
-    }) || {}, reasoningBudgetParam(url));
+    }) || {}, reasoningBudgetParam(url),
+      mainNarrativeReasoningParam(url, model, !!(signal && qingyuTransportBudgetBySignal.get(signal)?.mainNarrative)));
 
     if (/^MiniMax-(?:M3|M2\.7(?:-highspeed)?)$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
       && signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none') {

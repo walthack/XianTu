@@ -9,6 +9,14 @@ registerNumbersValidator(() => {
   // lcq-allow: 配置错误交给 numbers validator 统一诊断并拒绝。
   catch { return ['aiRetry.reasoning.modelPattern 必须为有效正则']; }
 });
+registerNumbersValidator(() => {
+  const main = config().mainNarrative;
+  return (['modelPattern', 'hostPattern'] as const).flatMap(key => {
+    try { new RegExp(main[key], 'i'); return []; }
+    // lcq-allow: 配置错误交给 numbers validator 统一诊断并拒绝。
+    catch { return [`aiRetry.reasoning.mainNarrative.${key} 必须为有效正则`]; }
+  });
+});
 export function reasoningPolicy(model: string): boolean {
   if (observed.has(model.toLowerCase())) return true;
   try { return new RegExp(config().modelPattern, 'i').test(model); } catch { /* lcq-allow: validator 已拒绝无效正则，此处保守按普通模型处理。 */ return false; }
@@ -30,6 +38,20 @@ export function reasoningBudgetParam(url: string): Record<string, unknown> {
   try {
     if (config().budgetTokens > 0 && new URL(url).hostname === 'openrouter.ai') return { reasoning: { max_tokens: config().budgetTokens } };
   } catch { /* lcq-allow: 无效 URL 不发送可选参数，实际传输层负责报错。 */ }
+  return {};
+}
+/**
+ * 主叙事推理档：仅前台回合主叙事请求、模型与主机都命中配置时发送 reasoning_effort（MiniMax 官方参数，M3.1-Flash 默认 max）。
+ * effort=off 不发送；其他请求与未知端点保持原样。
+ */
+export function mainNarrativeReasoningParam(url: string, model: string, mainNarrative: boolean): Record<string, unknown> {
+  const main = config().mainNarrative;
+  if (!mainNarrative || main.effort === 'off') return {};
+  try {
+    if (new RegExp(main.modelPattern, 'i').test(model) && new RegExp(main.hostPattern, 'i').test(new URL(url).hostname)) {
+      return { reasoning_effort: main.effort };
+    }
+  } catch { /* lcq-allow: 无效 URL/正则不发送可选参数，正则由 validator 拒绝，传输层负责 URL 报错。 */ }
   return {};
 }
 export class ReasoningExhaustedError extends OutputTruncationError {

@@ -208,7 +208,13 @@
       "minTimeoutMs": 300000,
       "timeoutMultiplier": 3,
       "retryMultiplier": 2,
-      "budgetTokens": 0
+      "budgetTokens": 0,
+      "mainNarrative": {
+        "note": "主叙事（MainGamePanel→processPlayerAction 发出的 usageType=main 前台回合请求，含其截断补救与流式降级）的推理强度。只在 model 命中 modelPattern 且请求主机命中 hostPattern 时，请求体加 reasoning_effort=effort；其他请求（意图、模块演出、记忆、审计、后台、开局等）不带。MiniMax 官方：reasoning_effort 仅 MiniMax-M3.1-Flash 生效，可取 low/medium/high/xhigh/max，省略默认 max，不支持 none（400）；thinking 不可关闭。2026-11-03 用户批准压低主叙事推理强度（真机 s01 主叙事约 2 万字推理、55–90 秒，目标约 30 秒）。off＝不发送。",
+        "effort": "low",
+        "modelPattern": "^minimax-m3\\.1-flash",
+        "hostPattern": "^api\\.minimaxi?\\.(com|io)$"
+      }
     }
   },
   "feedback": {

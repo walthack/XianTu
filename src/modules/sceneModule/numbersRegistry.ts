@@ -113,6 +113,9 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'aiRetry.reasoning.timeoutMultiplier', kind: 'int', required: true, min: 1, max: 16, section: 'runtime' },
   { path: 'aiRetry.reasoning.retryMultiplier', kind: 'int', required: true, min: 2, max: 16, section: 'runtime' },
   { path: 'aiRetry.reasoning.budgetTokens', kind: 'int', required: true, min: 0, max: 128000, section: 'runtime' },
+  { path: 'aiRetry.reasoning.mainNarrative.effort', kind: 'string', required: true, oneOf: ['off', 'low', 'medium', 'high', 'xhigh', 'max'], section: 'runtime' },
+  { path: 'aiRetry.reasoning.mainNarrative.modelPattern', kind: 'string', required: true, section: 'runtime' },
+  { path: 'aiRetry.reasoning.mainNarrative.hostPattern', kind: 'string', required: true, section: 'runtime' },
   { path: 'story.trades', kind: 'array', required: true, section: 'progress' },
   { path: 'shop.sites', kind: 'object', required: true, section: 'progress' },
   // 搜刮回刷与战后搜尸（用户 2026-10-28 13:48 第5条）；categories 取值白名单在 locationLoot.ts 校验。

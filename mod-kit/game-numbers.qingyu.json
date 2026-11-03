@@ -270,12 +270,12 @@
       "totalMs": 45000
     },
     "sceneClose": {
-      "note": "场面收场的玩家可见文案与记忆（REPORT-8091-ef573ece P1：南荒随机战气血 10→1 判负后交锋卡片消失，正文只有「你倒在地上……散入四野」、没写这一战败了；场面收场又只进叙事历史、不进短期记忆，下一回合叙事模型不知道已经败了、来袭者已散，接着写乱战，玩家「与来敌交手」打的是不在场的人，判定被拒、不掷骰）。loseHeadline：判负（不进结局、按合同输局继续）时收场正文的第一行，掷骰当拍气血打到倒下的结果行也用它；收场正文同时写进短期记忆。",
-      "loseHeadline": "你伤重倒下，这一战败了。",
       "fatalEventIds": [
         "liuchao.event.qin_act3_baiqi",
         "liuchao.event.qin_raid_branch"
-      ]
+      ],
+      "note": "场面收场的玩家可见文案与记忆（REPORT-8091-ef573ece P1：南荒随机战气血 10→1 判负后交锋卡片消失，正文只有「你倒在地上……散入四野」、没写这一战败了；场面收场又只进叙事历史、不进短期记忆，下一回合叙事模型不知道已经败了、来袭者已散，接着写乱战，玩家「与来敌交手」打的是不在场的人，判定被拒、不掷骰）。loseHeadline：判负（不进结局、按合同输局继续）时收场正文的第一行，掷骰当拍气血打到倒下的结果行也用它；收场正文同时写进短期记忆。",
+      "loseHeadline": "你伤重倒下，这一战败了。"
     },
     "beatLimit": {
       "note": "场面战斗拍数门禁（sceneModule/beatLimit.ts）。max=0（默认）＝不设上限：战斗打到一方倒下或达成胜负条件才结束；只有合同显式声明为限时战（clock.beats + clock.onTimeout {type:close, as:win|lose}）才在时限到时按合同判赢或输。max 设为正整数时只作诊断：一场还没分出胜负、已打完的拍数超过 max 就记 LCQ-SAV-020（error），每多打一拍记一次，不改判。",
@@ -840,7 +840,9 @@
     "ticket": {
       "unlistedFoe": {
         "note": "无名来敌（REPORT-8091-98199e80 P1；设计稿 2026-11-02 2.4「自由交手打模型临场写出的敌人：仍走 freeAction 判定，用同一写回函数」）：这些变体（类.变体）的票，targetId 不是任何已知人物（没有关系记录也没有正典记录，常见为 null 或模型编的 id）时不再按 target_unavailable 拒掉，改按「对{label}出手」签发判定卡，确认后只结算玩家一方——非成功档按 freeAction.aftermath.hpLoss 扣气血、打到 ≤ combatDownedAt 判负，走 combatWriteback 统一写回；不写对方好感、伤势、记忆。点名的已知人物不在场仍按 target_unavailable 拒（#222④）。",
-        "variants": ["physical.attack"],
+        "variants": [
+          "physical.attack"
+        ],
         "label": "来敌"
       },
       "maxPerTurn": 2,
@@ -1880,7 +1882,13 @@
       "minTimeoutMs": 300000,
       "timeoutMultiplier": 3,
       "retryMultiplier": 2,
-      "budgetTokens": 0
+      "budgetTokens": 0,
+      "mainNarrative": {
+        "note": "主叙事（MainGamePanel→processPlayerAction 发出的 usageType=main 前台回合请求，含其截断补救与流式降级）的推理强度。只在 model 命中 modelPattern 且请求主机命中 hostPattern 时，请求体加 reasoning_effort=effort；其他请求（意图、模块演出、记忆、审计、后台、开局等）不带。MiniMax 官方：reasoning_effort 仅 MiniMax-M3.1-Flash 生效，可取 low/medium/high/xhigh/max，省略默认 max，不支持 none（400）；thinking 不可关闭。2026-11-03 用户批准压低主叙事推理强度（真机 s01 主叙事约 2 万字推理、55–90 秒，目标约 30 秒）。off＝不发送。",
+        "effort": "low",
+        "modelPattern": "^minimax-m3\\.1-flash",
+        "hostPattern": "^api\\.minimaxi?\\.(com|io)$"
+      }
     }
   },
   "feedback": {
