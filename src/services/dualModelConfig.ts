@@ -15,7 +15,7 @@ export interface DualModelConfig {
       moduleId: string; inheritUsageType: string; defaultModel: string; reasoningEffort: string;
       summaryWindow: number; ledgerMemoryPerNpc: number; maxInputChars: number; continuityMaxItems: number;
       maxLagTurns: number; waitMs: number; timeoutMs: number; maxTokens: number; degradedAttempts: number; hourlyBudget: number;
-      npcMemoryKeep: number; extensionKey: string; instruction: string;
+      npcMemoryKeep: number; extensionKey: string; continuityHeading: string; instruction: string;
       timeline: { yearsElapsedAtOpening: number };
     };
     ui: {
@@ -42,7 +42,7 @@ export function validateDualModelConfig(cfg: unknown = DUAL_MODEL_CONFIG): strin
   const int = (v: unknown, min: number) => Number.isInteger(v) && (v as number) >= min;
   if (typeof dm?.enabled !== 'boolean') problems.push('dualModel.enabled 须为布尔');
   if (!backend || typeof backend !== 'object') return [...problems, 'dualModel.backend 段缺失'];
-  for (const key of ['moduleId', 'inheritUsageType', 'defaultModel', 'extensionKey', 'instruction'] as const) if (!text(backend[key])) problems.push(`dualModel.backend.${key} 不能为空`);
+  for (const key of ['moduleId', 'inheritUsageType', 'defaultModel', 'extensionKey', 'continuityHeading', 'instruction'] as const) if (!text(backend[key])) problems.push(`dualModel.backend.${key} 不能为空`);
   if (!REASONING_EFFORT_LEVELS.includes(backend.reasoningEffort as string)) problems.push(`dualModel.backend.reasoningEffort 须为 ${REASONING_EFFORT_LEVELS.join('/')} 之一`);
   for (const key of POSITIVE_INTS) if (!int(backend[key], 1)) problems.push(`dualModel.backend.${key} 须为正整数`);
   for (const key of NON_NEGATIVE_INTS) if (!int(backend[key], 0)) problems.push(`dualModel.backend.${key} 须为非负整数`);

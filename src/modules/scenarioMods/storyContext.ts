@@ -30,6 +30,7 @@ import { undisclosedSelfFactsPromptLine } from './undisclosedSelfFacts';
 import { encounterPromptFacts } from './randomEncounter';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
 import { getBaihuGambleRefusalPrompt } from './baihuGambleRefusal';
+import { DUAL_MODEL_CONFIG } from '@/services/dualModelConfig';
 
 import type {
   ScenarioCondition,
@@ -755,6 +756,22 @@ ${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, 
 9. 角色成长必须由已发生剧情、关系变化或明确事件支撑；不得为了迎合单轮输入突然 OOC。`;
 }
 
+/**
+ * 双模型后端的连续性提示（设计稿 2026-11-03-双模型分工 ①⑧③，Q6-A）：读 系统.扩展.<extensionKey>.continuity 的 note，
+ * 最多 continuityMaxItems 条，下一回合注入主叙事。总闸 dualModel.enabled 关或无提示返回空串，调用处整段跳过；
+ * 玩家开关关闭时由 MainGamePanel 回合提交钩子清掉已存提示。
+ */
+export function formatConsistencyContinuity(saveData: SaveData): string {
+  const backend = DUAL_MODEL_CONFIG.dualModel.backend;
+  if (!DUAL_MODEL_CONFIG.dualModel.enabled) return '';
+  const list = readPath(saveData, ['系统', '扩展', backend.extensionKey, 'continuity']);
+  const notes = (Array.isArray(list) ? list : [])
+    .map(item => (typeof (item as { note?: unknown })?.note === 'string' ? (item as { note: string }).note.trim() : ''))
+    .filter(Boolean)
+    .slice(0, backend.continuityMaxItems);
+  return notes.length ? `${backend.continuityHeading}\n${notes.map(note => `- ${note}`).join('\n')}` : '';
+}
+
 export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   const promptState = structuredClone(saveData);
   const runtime = getRuntime(promptState);
@@ -1225,6 +1242,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   ].filter(Boolean).join('；');
   const openWorldLine = getWuyuanOpenWorldPrompt(saveData);
   const gambleRefusalLine = getBaihuGambleRefusalPrompt(saveData);
+  const continuityLine = formatConsistencyContinuity(saveData);
 
   return `# 当前剧本进度（仅限可见内容）
 ${stageLine ? `## 当前关卡\n${stageLine}\n\n` : ''}${chapterSection}
@@ -1257,7 +1275,7 @@ ${nextSection}
 ## 剧情标记
 ${JSON.stringify(runtime.flags || {})}
 
-${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${undisclosedLine ? `${undisclosedLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${encounterLine ? `${encounterLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${ledgerLine ? `${ledgerLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${relationshipEvolutionLine}\n\n${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n【正典叙事事实约束】：
+${focusedCharacterSection ? `${focusedCharacterSection}\n\n` : ''}${npcPrivateKnowledgeGuard ? `${npcPrivateKnowledgeGuard}\n\n` : ''}${globalIdentitySection ? `${globalIdentitySection}\n\n` : ''}${loadBearingLine ? `${loadBearingLine}\n\n` : ''}${divergenceLine ? `${divergenceLine}\n\n` : ''}${stageEntryLine ? `${stageEntryLine}\n\n` : ''}${undisclosedLine ? `${undisclosedLine}\n\n` : ''}${gameOverLine ? `${gameOverLine}\n\n` : ''}${fatalApproachLine ? `${fatalApproachLine}\n\n` : ''}${encounterLine ? `${encounterLine}\n\n` : ''}${settledBeatLine ? `${settledBeatLine}\n\n` : ''}${returnBridgeLine ? `${returnBridgeLine}\n\n` : ''}${divergenceControlLine ? `${divergenceControlLine}\n\n` : ''}${epistemicLine ? `${epistemicLine}\n\n` : ''}${worldActorLine ? `${worldActorLine}\n\n` : ''}${worldPushLine ? `${worldPushLine}\n\n` : ''}${steeringLine ? `${steeringLine}\n\n` : ''}${ledgerLine ? `${ledgerLine}\n\n` : ''}${reputationLine}\n\n${relationLine ? `${relationLine}\n\n` : ''}${relationshipEvolutionLine}\n\n${completedGoalLine ? `${completedGoalLine}\n\n` : ''}${improvLine}\n\n${continuityLine ? `${continuityLine}\n\n` : ''}【正典叙事事实约束】：
 1. 已知人物的姓名、别名、身份、物种、势力、亲属与政治关系均是事实字段：不得把人物写成兵器、坐骑、功法、物品或新角色；不得把称号、别名拆成另一个实体。
 2. 人物之间的血缘、主从、婚配、同党、结盟、仇怨，只有上文正典人物档案或当前事件明确写出时才可断言。没有依据时只能写“尚未可知/传闻待证”，绝不可因同姓、官职、阵营或历史常识擅自补关系。
 3. 叙事正文也必须遵守上述正典；这不是仅约束 tavern_commands 的规则。若玩家要求与正典矛盾的事实，明确说明冲突并以正典版本续写。

@@ -105,3 +105,42 @@ test('主叙事推理档不变：后端开启时主叙事请求仍带配置的 l
   assert.equal(chat.length, 1);
   assert.equal(chat[0].reasoning_effort, 'low');
 });
+
+// ---------------------------------------------------------------- 连续性提示注入（Q6-A）
+const { readFile } = await import('node:fs/promises');
+const story = await jiti.import('../src/modules/scenarioMods/storyContext.ts');
+const { parseScenarioMod } = await jiti.import('../src/modules/scenarioMods/validator.ts');
+const { createQingyuOpeningPlaytestSave } = await jiti.import('../src/modules/scenarioMods/qingyuOpeningPlaytest.ts');
+const stage01 = parseScenarioMod(JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8')));
+const BACKEND = DM.backend;
+const withHints = (notes) => {
+  const save = createQingyuOpeningPlaytestSave(stage01);
+  save.系统 ||= {}; save.系统.扩展 ||= {};
+  save.系统.扩展[BACKEND.extensionKey] = { turnId: '9:nd_9', turnIndex: 9, continuity: notes.map((note, i) => ({ kind: 'fact', about: `x${i}`, note })), relationNotes: [], summaryCheck: { ok: true, issue: '' } };
+  return save;
+};
+
+test('注入：有提示时下一回合剧本提示带连续性段，≤continuityMaxItems 条，空 note 跳过', async () => {
+  const notes = Array.from({ length: BACKEND.continuityMaxItems + 2 }, (_, i) => `第${i + 1}条连续性`);
+  const save = withHints(['  ', ...notes]);
+  const prompt = await withDual(true, () => story.buildScenarioStoryPrompt(save));
+  assert.ok(prompt.includes(BACKEND.continuityHeading));
+  const block = prompt.slice(prompt.indexOf(BACKEND.continuityHeading)).split('\n\n')[0];
+  assert.deepEqual(block.split('\n').slice(1), notes.slice(0, BACKEND.continuityMaxItems).map(note => `- ${note}`));
+  assert.ok(!prompt.includes(`第${BACKEND.continuityMaxItems + 1}条连续性`));
+  assert.match(prompt, new RegExp(`- 第${BACKEND.continuityMaxItems}条连续性\\n\\n【正典叙事事实约束】`));
+});
+
+test('跳过：无提示、空列表、总闸关时不留空段，剧本提示与无扩展时逐字相同', async () => {
+  const bare = createQingyuOpeningPlaytestSave(stage01);
+  const baseline = await withDual(true, () => story.buildScenarioStoryPrompt(bare));
+  assert.ok(!baseline.includes(BACKEND.continuityHeading));
+  assert.match(baseline, /\n\n【正典叙事事实约束】/);
+  assert.doesNotMatch(baseline, /\n\n\n【正典叙事事实约束】/, '不留空段');
+  for (const save of [withHints([]), withHints(['', '   '])]) {
+    assert.equal(await withDual(true, () => story.buildScenarioStoryPrompt(save)), baseline);
+  }
+  const hinted = withHints(['甲已答应打听消息。']);
+  assert.equal(story.buildScenarioStoryPrompt(hinted), story.buildScenarioStoryPrompt(bare), 'dualModel.enabled=false（默认）不注入');
+  assert.equal(story.formatConsistencyContinuity(hinted), '');
+});

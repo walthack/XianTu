@@ -22,6 +22,8 @@
       "npcMemoryKeep": 12,
       "npcMemoryKeepNote": "后端落账后每个 NPC 的 社交.关系.记忆 封顶条数（估计，与自由行动 memory.keep 同量级；按尾部最新保留）。",
       "extensionKey": "dualModelConsistency",
+      "continuityHeading": "【后台连续性提示（上回合整理，本回合须遵守，不必在正文复述）】",
+      "continuityNote": "下一回合注入主叙事剧本提示（Q6-A）：取 系统.扩展.<extensionKey>.continuity 的 note，最多 continuityMaxItems 条；总闸关或无提示时整段跳过。",
       "extensionNote": "连续性提示、关系称谓提案与 summaryCheck 存在 系统.扩展.<extensionKey> 下（设计稿①）；切档或关闭后端时清掉。",
       "timeline": {
         "yearsElapsedAtOpening": 4,
