@@ -518,6 +518,8 @@ import { turnStateOf, beginTurn, completeTurn, raceTurnBudget, type TurnLedger }
 import { shouldRestorePreTurnSave } from '@/utils/saveTurnRollback';
 import { worldEventBadgeCount } from '@/utils/worldEventRecords';
 import { stripActionOptionMetaWords, stripNarrativeMetaWords } from '@/utils/narrativeMetaWords';
+import { isNoSummary, reviewTextOf } from '@/services/narrativeSummary';
+import { loadDetailsFor } from '@/services/narrativeDetailStore';
 import type { SaveData } from '@/types/game';
 import { randomUUID } from '@/utils/uuid';
 import { mapPreparation, mapPreparationToast, crossCountryStoryTravel, crossCountryStoryTravelPreparation, crossCountryStoryTravelToast } from '@/modules/scenarioMods/travel/mapTravel';
@@ -1209,6 +1211,29 @@ const showStateChanges = (log: StateChangeLog | undefined) => {
   uiStore.openStateChangeViewer(log);
 };
 
+// 回看显示（详细描写不入档，设计稿 2026-11-03 第七节方案 B）：最新叙事条有本地全文副本就显示全文，没有显示概要。
+// 副本按 角色ID + 条目 detailId 存（与读档迁移同口径），这里只按最新一条的 detailId 异步取回。
+const NO_SUMMARY_REVIEW_TEXT = '本回合没有概要，本机也没有保存全文';
+const latestNarrativeDetails = ref<Record<string, string>>({});
+const narrativeDetailIdOf = (entry: unknown): string => {
+  const id = (entry as { detailId?: unknown } | null)?.detailId;
+  return typeof id === 'string' ? id : '';
+};
+let latestNarrativeDetailToken = 0;
+watch(
+  () => [characterStore.rootState.当前激活存档?.角色ID || '', narrativeDetailIdOf(gameStateStore.narrativeHistory?.slice(-1)[0])] as const,
+  async ([saveKey, detailId]) => {
+    const token = ++latestNarrativeDetailToken;
+    const loaded = detailId ? await loadDetailsFor(saveKey, [{ detailId }]) : {};
+    if (token === latestNarrativeDetailToken) latestNarrativeDetails.value = loaded;
+  },
+  { immediate: true }
+);
+const reviewDisplayText = (entry: unknown): string => {
+  const text = reviewTextOf(entry as { content?: unknown }, latestNarrativeDetails.value[narrativeDetailIdOf(entry)]);
+  return text === null ? t(NO_SUMMARY_REVIEW_TEXT) : text;
+};
+
 // 当前显示的叙述内容
 // 文本内容优先使用短期记忆最后一条，actionOptions和stateChanges从叙事历史获取
 const currentNarrative = computed(() => {
@@ -1236,10 +1261,10 @@ const currentNarrative = computed(() => {
   if (shortTermMemory && shortTermMemory.length > 0) {
     // 短期记忆使用push添加，最新的在末尾
     const latestMemory = shortTermMemory[shortTermMemory.length - 1];
-    content = latestMemory.replace(/^【.*?】\s*/, ''); // 移除时间前缀
+    content = isNoSummary(latestMemory) ? t(NO_SUMMARY_REVIEW_TEXT) : latestMemory.replace(/^【.*?】\s*/, ''); // 移除时间前缀
   } else if (narrativeHistory && narrativeHistory.length > 0) {
     // 回退到叙事历史
-    content = narrativeHistory[narrativeHistory.length - 1].content.replace(/^【.*?】\s*/, '');
+    content = reviewDisplayText(narrativeHistory[narrativeHistory.length - 1]).replace(/^【.*?】\s*/, '');
   }
 
   // 从叙事历史获取actionOptions和stateChanges
@@ -1249,7 +1274,7 @@ const currentNarrative = computed(() => {
     return {
       type: latestNarrative.type || 'narrative',
       userIntent: (latestNarrative as { userIntent?: string }).userIntent || '',
-      content: stripNarrativeMetaWords([latestNarrative.content.replace(/^【.*?】\s*/, '') || content || '...'].filter(Boolean).join('\n\n')),
+      content: stripNarrativeMetaWords([reviewDisplayText(latestNarrative).replace(/^【.*?】\s*/, '') || content || '...'].filter(Boolean).join('\n\n')),
       time: currentTimeString,
       stateChanges: latestNarrative.stateChanges || { changes: [] },
       image: latestNarrative.image,

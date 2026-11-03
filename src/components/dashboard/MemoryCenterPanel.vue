@@ -599,6 +599,8 @@ import { type MemoryFormatConfig } from '@/utils/memoryFormatConfig';
 import { AIBidirectionalSystem } from '@/utils/AIBidirectionalSystem'; // 导入AI系统
 import { vectorMemoryService, type VectorMemoryEntry } from '@/services/vectorMemoryService';
 import { narrativeRagService, type NarrativeRagEntry } from '@/services/narrativeRagService';
+import { reviewTextOf } from '@/services/narrativeSummary';
+import { loadDetailsFor } from '@/services/narrativeDetailStore';
 import { useAPIManagementStore } from '@/stores/apiManagementStore'; // 导入API管理Store
 import { summarizeMemoryShortTerm } from '@/services/promptRedaction';
 import moderationConfig from '../../../mod-kit/ai-content-moderation.json';
@@ -1529,7 +1531,7 @@ const deleteMemory = async (memory: Memory) => {
 /**
  * [重构] 导出叙事历史为小说格式
  */
-const exportMemoriesAsNovel = () => {
+const exportMemoriesAsNovel = async () => {
   try {
     const characterName = gameStateStore.character?.名字 || t('修仙者');
     const worldName = gameStateStore.worldInfo?.世界名称 || t('修仙世界');
@@ -1540,6 +1542,9 @@ const exportMemoriesAsNovel = () => {
       return;
     }
 
+    // 回看显示（详细描写不入档，设计稿 2026-11-03 第七节方案 B）：有本地全文副本用全文，没有用概要；无概要条写提示文案
+    const details = await loadDetailsFor(characterStore.rootState.当前激活存档?.角色ID || '', narrativeHistory);
+
     // 生成小说格式的文本
     let novelText = t('novelTitle', { characterName }) + '\n\n';
     novelText += `${t('世界档案')}: ${worldName}\n`;
@@ -1549,7 +1554,9 @@ const exportMemoriesAsNovel = () => {
 
     narrativeHistory.forEach((entry, index) => {
       const isPlayer = entry.type === 'user' || entry.type === 'player';
-      const content = entry.content.replace(/【.*?】/g, '').trim(); // 移除时间戳
+      const detailId = (entry as { detailId?: unknown }).detailId;
+      const reviewText = reviewTextOf(entry, typeof detailId === 'string' ? details[detailId] : undefined);
+      const content = (reviewText ?? t('本回合没有概要，本机也没有保存全文')).replace(/【.*?】/g, '').trim(); // 移除时间戳
 
       if (isPlayer) {
         novelText += `${t('我说')}: "${content}"\n`;

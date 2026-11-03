@@ -101,3 +101,23 @@ export async function hasDetail(saveKey: string, entryId: string): Promise<boole
 export async function deleteForSave(saveKey: string): Promise<void> {
   await currentBackend().deleteBySave(saveKey);
 }
+
+/** 回看显示：批量取叙事条目（带 detailId）的本地全文副本，返回 detailId→全文；读取失败的条目略过（回看退回概要）。 */
+export async function loadDetailsFor(saveKey: string, entries: readonly unknown[]): Promise<Record<string, string>> {
+  const out: Record<string, string> = {};
+  if (!saveKey) return out;
+  const ids = new Set<string>();
+  for (const entry of entries) {
+    const id = (entry as { detailId?: unknown } | null)?.detailId;
+    if (typeof id === 'string' && id) ids.add(id);
+  }
+  await Promise.all([...ids].map(async id => {
+    try {
+      const content = await getDetail(saveKey, id);
+      if (typeof content === 'string') out[id] = content;
+    } catch {
+      // lcq-allow: 副本库不可用时回看退回概要，不影响游戏
+    }
+  }));
+  return out;
+}

@@ -28,3 +28,13 @@ export function entriesForPrompt(shortTerm: readonly string[], latestRaw?: strin
   if (tailChars > 0 && raw) out.push(Array.from(raw).slice(-tailChars).join(''));
   return out;
 }
+
+/**
+ * 回看显示用的正文：有本地全文副本显示副本，没有显示存档里的概要；
+ * 概要是无概要标记、又没有副本时返回 null，由界面显示提示文案。
+ */
+export function reviewTextOf(entry: { content?: unknown } | null | undefined, detail?: string): string | null {
+  if (typeof detail === 'string' && detail.trim()) return detail;
+  const content = typeof entry?.content === 'string' ? entry.content : '';
+  return isNoSummary(content) ? null : content;
+}

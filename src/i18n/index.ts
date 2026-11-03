@@ -1123,6 +1123,7 @@ const autoTranslateMap: Record<string, string> = {
   '当前短期记忆：': 'Current short-term memories: ',
   '把最近{count}条短期记忆换成对应摘要，叙事历史原文不动': 'Replace the latest {count} short-term memories with their summaries; narrative history stays untouched',
   '最近短期记忆换成摘要': 'Summarize recent short-term memories',
+  '本回合没有概要，本机也没有保存全文': 'No summary for this turn, and no full text is kept on this device',
   '确定把最近{count}条短期记忆换成对应摘要吗？没有摘要的条目保持原样，叙事历史原文不会改动。': 'Replace the latest {count} short-term memories with their summaries? Entries without a summary stay as they are; narrative history is not changed.',
   '确认替换': 'Replace',
   '最近短期记忆没有可用摘要，未改动': 'No summaries available for recent short-term memories; nothing changed',
