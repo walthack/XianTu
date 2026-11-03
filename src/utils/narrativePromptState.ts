@@ -1,6 +1,54 @@
 import type { SaveData } from '@/types/game';
+import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
+import {
+  beatIntimateFor,
+  intimateInputHit,
+  pickPrivacyFields,
+  privateGateOpen,
+  projectNpcMemory,
+} from '@/modules/scenarioMods/promptLayers';
 
 type UnknownRecord = Record<string, any>;
+
+/**
+ * 社交.关系 只发在场角色（与 storyContext 同口径：computeScenarioPresence），存档本身不删。
+ * 在场 NPC 记忆只带最近 memory.npcPromptLimit 条；私密信息 走 privateGateOpen
+ * （本轮输入命中或激活拍 scene.intimate＋在场＋好感），门不过整块剔除，门过只留 privacyAllowedFields。
+ * 非剧本存档无在场口径，关系原样发送。
+ */
+function projectPromptRelations(
+  relations: unknown,
+  presenceSource: SaveData,
+  playerInput: string,
+): unknown {
+  if (!relations || typeof relations !== 'object' || Array.isArray(relations)) return relations;
+  const presence = computeScenarioPresence(presenceSource, playerInput);
+  if (!presence) return relations;
+  const characters = presence.runtime.canon?.characters || [];
+  const inputHit = intimateInputHit(playerInput);
+  const projected: UnknownRecord = {};
+  for (const [key, npc] of Object.entries(relations as UnknownRecord)) {
+    if (!npc || typeof npc !== 'object') continue;
+    const name = String(npc.名字 || key);
+    if (!presence.presentNames.has(key) && !presence.presentNames.has(name)) continue;
+    const entry: UnknownRecord = { ...npc };
+    if (Array.isArray(entry.记忆)) entry.记忆 = projectNpcMemory(entry.记忆);
+    if ('私密信息' in entry) {
+      const characterId = characters.find(character => character.id === key || character.name === name)?.id;
+      const open = privateGateOpen({
+        inputHit,
+        beatIntimate: presence.activeEvents.some(event => beatIntimateFor(event, characterId)),
+        present: true,
+        favor: Number(entry.好感度) || 0,
+      });
+      const privacy = open ? pickPrivacyFields(entry.私密信息) : null;
+      if (privacy) entry.私密信息 = privacy;
+      else delete entry.私密信息;
+    }
+    projected[key] = entry;
+  }
+  return projected;
+}
 
 /**
  * Build the state JSON sent to the narrator.
@@ -9,7 +57,11 @@ type UnknownRecord = Record<string, any>;
  * scenario prompts. Repeating those large immutable structures in the state JSON can push a
  * long-running session beyond an OpenAI-compatible endpoint's context window.
  */
-export function buildNarrativePromptState(state: SaveData): Record<string, unknown> {
+export function buildNarrativePromptState(
+  state: SaveData,
+  playerInput = '',
+  presenceSource: SaveData = state,
+): Record<string, unknown> {
   const source = state as UnknownRecord;
   const world = source.世界 || {};
   const worldState = world.状态 || {};
@@ -57,7 +109,7 @@ export function buildNarrativePromptState(state: SaveData): Record<string, unkno
       技能: source.角色?.技能,
     },
     社交: {
-      关系: source.社交?.关系,
+      关系: projectPromptRelations(source.社交?.关系, presenceSource, String(playerInput || '')),
       宗门: source.社交?.宗门,
       任务: source.社交?.任务,
       事件: source.社交?.事件,

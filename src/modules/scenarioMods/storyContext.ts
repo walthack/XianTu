@@ -785,6 +785,60 @@ export function createScenarioPromptState<T extends SaveData>(saveData: T): T {
   return promptState;
 }
 
+/**
+ * 在场名单（presence.ts 单一判据）：活跃事件 / 开场声明 / 位置同建筑 / 近期正文。
+ * buildScenarioStoryPrompt 与 narrativePromptState（社交.关系 只发在场者）共用同一口径。
+ */
+function computeStoryPresentNames(
+  saveData: SaveData,
+  runtime: StoryRuntime,
+  activeEvents: ScenarioModEvent[],
+  relations: Record<string, unknown> | undefined,
+): Set<string> {
+  const characters = runtime.canon?.characters || [];
+  const departed = new Set(departedPresentNames(runtime));
+  // 事件那一路同时兜住位置字段滞后——位置由 LLM 维护，实测会落后于剧情。
+  const eventCharacterNames = activeEvents
+    .flatMap(event => event.relatedCharacterIds || [])
+    .map(id => characters.find(character => character.id === id)?.name)
+    .filter((name): name is string => !!name && !departed.has(name));
+  const featuredCharacterNames = (runtime.opening?.featuredCharacterIds || [])
+    .map(id => characters.find(character => character.id === id)?.name)
+    .filter((name): name is string => !!name && !departed.has(name));
+  // 近期正文：只取 assistant 侧的最近两条，**不含玩家输入**（点名≠在场）。
+  const recentNarrative = (() => {
+    const history = readPath(saveData, ['系统', '历史', '叙事']);
+    if (!Array.isArray(history)) return '';
+    return history
+      .filter(entry => entry && typeof entry === 'object' && (entry as { role?: unknown }).role !== 'user')
+      .slice(-2)
+      .map(entry => String((entry as { content?: unknown }).content || ''))
+      .join('\n');
+  })();
+  return computePresentNames({
+    playerLocation: String(readPath(saveData, ['角色', '位置', '描述']) || ''),
+    relations,
+    eventCharacterNames,
+    featuredCharacterNames,
+    recentNarrative,
+    excludeNames: departed,
+  });
+}
+
+/** 在场名单与本轮激活拍（锚点＋按 contextText 召回的可选事件）；非剧本存档返回 null。 */
+export function computeScenarioPresence(saveData: SaveData, contextText = ''): {
+  runtime: StoryRuntime;
+  activeEvents: ScenarioModEvent[];
+  presentNames: Set<string>;
+} | null {
+  const runtime = getRuntime(saveData);
+  if (!runtime) return null;
+  const anchor = getScenarioFocusEvent(runtime as any);
+  const activeEvents = [...(anchor ? [anchor] : []), ...selectContextualOptionalEvents(runtime, anchor, contextText)];
+  const relations = readPath(saveData, ['社交', '关系']) as Record<string, unknown> | undefined;
+  return { runtime, activeEvents, presentNames: computeStoryPresentNames(saveData, runtime, activeEvents, relations) };
+}
+
 export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): string {
   const runtime = getRuntime(saveData);
   if (!runtime) return '';
@@ -956,33 +1010,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     : contextText;
   // 私密入口只读玩家本轮输入与当前激活拍，不使用近期正文或在场名单匹配词表。
   const intimacyGate = { sceneText: contextText, activeEvents };
-  // 在场判定（presence.ts 单一判据）：活跃事件 / 开场声明 / 位置同建筑。
-  // 事件那一路同时兜住位置字段滞后——位置由 LLM 维护，实测会落后于剧情。
-  const eventCharacterNames = activeEvents
-    .flatMap(event => event.relatedCharacterIds || [])
-    .map(id => characters.find(character => character.id === id)?.name)
-    .filter((name): name is string => !!name && !departed.has(name));
-  const featuredCharacterNames = (runtime.opening?.featuredCharacterIds || [])
-    .map(id => characters.find(character => character.id === id)?.name)
-    .filter((name): name is string => !!name && !departed.has(name));
-  // 近期正文：只取 assistant 侧的最近两条，**不含玩家输入**（点名≠在场）。
-  const recentNarrative = (() => {
-    const history = readPath(saveData, ['系统', '历史', '叙事']);
-    if (!Array.isArray(history)) return '';
-    return history
-      .filter(entry => entry && typeof entry === 'object' && (entry as { role?: unknown }).role !== 'user')
-      .slice(-2)
-      .map(entry => String((entry as { content?: unknown }).content || ''))
-      .join('\n');
-  })();
-  const presentNames = computePresentNames({
-    playerLocation: String(readPath(saveData, ['角色', '位置', '描述']) || ''),
-    relations,
-    eventCharacterNames,
-    featuredCharacterNames,
-    recentNarrative,
-    excludeNames: departed,
-  });
+  const presentNames = computeStoryPresentNames(saveData, runtime, activeEvents, relations);
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate, playerName, presentNames);
   const npcPrivateKnowledgeGuard = buildNpcPrivateKnowledgeGuard(runtime);
   const introducedIds = new Set(collectIntroducedCharacterIds(runtime));

@@ -1292,7 +1292,7 @@ class AIBidirectionalSystemClass {
       // 🔥 构建精简版存档数据（用于叙事判定，减少token消耗）
       // 无论单步还是分步模式，都使用精简版存档
       const buildNarrativeState = (): Record<string, unknown> =>
-        buildNarrativePromptState(stateForAI as SaveData);
+        buildNarrativePromptState(stateForAI as SaveData, userMessage, v3 as SaveData);
 
       const stateJsonString = JSON.stringify(buildNarrativeState());
 

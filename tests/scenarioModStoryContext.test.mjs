@@ -768,3 +768,60 @@ test('角色档案私密层：本轮输入/激活拍入口、在场与关系门�
   assert.ok(!prompt.includes('身体：' + profile.physical));
   assertLimits(prompt);
 });
+
+test('状态 JSON 社交.关系：只发在场者、记忆限条、私密信息按私密门剔除或只留清单字段，存档不删', async () => {
+  const { buildNarrativePromptState } = await loadTs('../src/utils/narrativePromptState.ts');
+  const { createScenarioPromptState } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const { AFFINITY_THRESHOLDS } = await loadTs('../src/modules/scenarioMods/affinityLadder.ts');
+  const { PROMPT_LAYERS } = await loadTs('../src/modules/scenarioMods/promptLayers.ts');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  const id = 'test.ningyu';
+  runtime.canon.characters.push({ id, name: '凝羽' }, { id: 'test.far', name: '远人' }, { id: 'test.spoke', name: '刚说话' });
+  runtime.opening.featuredCharacterIds = [id];
+  const memories = Array.from({ length: PROMPT_LAYERS.memory.npcPromptLimit + 3 }, (_, i) => `记忆${i}`);
+  save.社交 = save.社交 || {};
+  save.社交.关系 = {
+    凝羽: {
+      名字: '凝羽', 好感度: AFFINITY_THRESHOLDS.intimacyShallow, 记忆: memories,
+      私密信息: { 性格倾向: '内敛', 性取向: '异性', 是否为处女: true, 身体部位: [{ 部位名称: 'x' }] },
+    },
+    远人: { 名字: '远人', 好感度: 90, 当前位置: { 描述: '南荒·远处' }, 记忆: ['远人记忆'] },
+    刚说话: { 名字: '刚说话', 好感度: 0, 当前位置: { 描述: '南荒·远处' } },
+  };
+  save.系统 = save.系统 || {};
+  save.系统.历史 = { 叙事: [{ role: 'assistant', content: '刚说话拱手道：久等了。' }, { role: 'user', content: '远人在哪' }] };
+  const before = structuredClone(save);
+  // 与 AIBS 同形：状态 JSON 取自 createScenarioPromptState 并删掉叙事历史，在场口径读完整存档。
+  const stateForAI = createScenarioPromptState(save);
+  delete stateForAI.系统.历史.叙事;
+  const relationsFor = (input, source = save) => buildNarrativePromptState(stateForAI, input, source).社交.关系;
+
+  let relations = relationsFor('闲聊');
+  assert.deepEqual(Object.keys(relations).sort(), ['凝羽', '刚说话'].sort(), '远人不在场不发；近期正文刚出场者在场（玩家点名不算）');
+  assert.deepEqual(relations.凝羽.记忆, memories.slice(-PROMPT_LAYERS.memory.npcPromptLimit));
+  assert.equal('私密信息' in relations.凝羽, false, '无入口：私密信息整块剔除');
+
+  relations = relationsFor('亲吻');
+  const allowed = Object.keys(save.社交.关系.凝羽.私密信息).filter(key => PROMPT_LAYERS.privacyAllowedFields.includes(key));
+  assert.deepEqual(Object.keys(relations.凝羽.私密信息).sort(), allowed.sort(), '门过只带 privacyAllowedFields');
+  assert.equal(relations.凝羽.私密信息.是否为处女, undefined);
+
+  save.社交.关系.凝羽.好感度 = AFFINITY_THRESHOLDS.intimacyShallow - 1;
+  stateForAI.社交.关系.凝羽.好感度 = AFFINITY_THRESHOLDS.intimacyShallow - 1;
+  assert.equal('私密信息' in relationsFor('亲吻').凝羽, false, '好感不足：门不过');
+  save.社交.关系.凝羽.好感度 = AFFINITY_THRESHOLDS.intimacyShallow;
+  stateForAI.社交.关系.凝羽.好感度 = AFFINITY_THRESHOLDS.intimacyShallow;
+
+  runtime.events[0].scene = { intimate: true, characters: [id] };
+  assert.ok(relationsFor('闲聊').凝羽.私密信息, '激活拍 scene.intimate 入口');
+  delete runtime.events[0].scene;
+
+  // 存档本身不删：关系、记忆、私密信息原样保留。
+  save.社交.关系.凝羽.好感度 = before.社交.关系.凝羽.好感度;
+  assert.deepEqual(save.社交.关系, before.社交.关系);
+
+  // 非剧本存档无在场口径：关系原样发送（既有行为）。
+  const plain = { 社交: { 关系: { 某人: { 名字: '某人', 记忆: memories, 私密信息: { 性取向: 'x' } } } } };
+  assert.deepEqual(buildNarrativePromptState(plain, '亲吻').社交.关系, plain.社交.关系);
+});
