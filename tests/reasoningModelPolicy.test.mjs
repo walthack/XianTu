@@ -57,7 +57,8 @@ test('visible length truncation and empty stop do not trigger reasoning recovery
     await assert.rejects(call()); assert.equal(calls.length, 1);
   });
   await withAxios([reply('', 'thought', 'stop')], async calls => {
-    assert.equal(await call(), ''); assert.equal(calls.length, 1);
+    // 200 空正文归为 EmptyOutputError（LCQ-NET-019），仍不触发思考补救。
+    await assert.rejects(call(), e => e.code === 'OUTPUT_EMPTY'); assert.equal(calls.length, 1);
   });
 });
 test('cancelled exhausted request never starts retry', async () => {

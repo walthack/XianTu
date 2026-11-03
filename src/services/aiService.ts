@@ -19,7 +19,7 @@ import { bindRequestDiagnosticContext, diagnosticContext, inheritDiagnosticCance
 import { AiRequestTimeoutError, isAiRequestTimeout, withAiRequestDeadline } from './aiRequestDeadline';
 import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiManagementStore';
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
-import { contentModerationDetail, toUserFacingAIError } from './apiErrorMessage';
+import { contentModerationDetail, EmptyOutputError, isEmptyOutputError, toUserFacingAIError } from './apiErrorMessage';
 import { logError, logEvent } from '@/modules/diagnostics/log';
 import { summarizeError } from '@/modules/diagnostics/errorSummary';
 import { degradedModeForAttempt, degradedRecentEvents, replaceRecentEventsMessage } from './promptRedaction';
@@ -1799,6 +1799,14 @@ class AIService {
       });
     };
 
+    // 200 但正文为空（截断／思考耗尽已先分类）：只记 finish_reason、provider、model，不记正文。
+    const throwIfEmptyOutput = (content: string, finishReason: unknown): void => {
+      if (content.trim()) return;
+      const reason = typeof finishReason === 'string' ? finishReason : undefined;
+      logEvent({ code: 'LCQ-NET-019', echo: false, detail: { finishReason: reason, provider, model, usageType } });
+      throw new EmptyOutputError({ finishReason: reason });
+    };
+
     // 智谱AI使用不同的API路径
     const normalizedUrl = normalizeOpenAIBaseUrl(url);
     const chatEndpoint = provider === 'zhipu'
@@ -1811,8 +1819,11 @@ class AIService {
       if (streaming) {
         try {
           this.chargeQingyuLongTransport(signal);
-          return await this.streamingRequestOpenAI(url, apiKey, model, messages, temperature || 0.7, safeMaxTokens, onStreamChunk, responseFormat, provider, signal,
-            (finishReason, usage) => emitDiagnostic(0, finishReason, isTruncatedFinishReason(finishReason), usage));
+          let streamFinishReason: string | undefined;
+          const streamed = await this.streamingRequestOpenAI(url, apiKey, model, messages, temperature || 0.7, safeMaxTokens, onStreamChunk, responseFormat, provider, signal,
+            (finishReason, usage) => { streamFinishReason = finishReason; emitDiagnostic(0, finishReason, isTruncatedFinishReason(finishReason), usage); });
+          throwIfEmptyOutput(streamed, streamFinishReason);
+          return streamed;
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
           if (!this.isStreamUnsupportedError(msg) || (signal && qingyuTransportBudgetBySignal.get(signal)?.timeoutMode === 'content_idle')) throw e;
@@ -1866,6 +1877,7 @@ class AIService {
             throwTruncated(finishReason, 0, response.data.usage, content);
           }
           emitDiagnostic(0, finishReason, false, response.data.usage);
+          throwIfEmptyOutput(content, finishReason);
           console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
           return content;
         }
@@ -1917,6 +1929,7 @@ class AIService {
           throwTruncated(finishReason, 0, response.data.usage, content);
         }
         emitDiagnostic(0, finishReason, false, response.data.usage);
+        throwIfEmptyOutput(content, finishReason);
         console.log(`[AI服务-OpenAI] 响应长度: ${content.length}`);
         return content;
       }
@@ -1926,6 +1939,7 @@ class AIService {
       if (error instanceof AiHttpError) throw error;
       if (isAiRequestTimeout(error)) throw error;
       if (isOutputTruncationError(error)) throw error;
+      if (isEmptyOutputError(error)) throw error;
       if (axios.isAxiosError(error)) {
         if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
           throw new AiRequestTimeoutError('total', Number(error.config?.timeout) || 120000);

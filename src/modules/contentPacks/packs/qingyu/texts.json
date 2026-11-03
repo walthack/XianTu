@@ -373,6 +373,7 @@
   "report8091.qin.preview": "前往秦都咸阳落脚，打听商人求见秦王的门路。",
   "report8091.moderation.blocked": "内容审核未通过（LCQ-NET-012）。本回合没有推进，可调整行动后重试；启用自动切换后可使用“API管理”中的备用连接。",
   "report8091.moderation.local": "内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。",
+  "report8091.moderation.emptyOutput": "AI 返回了空正文，疑似被输出审核拦截（LCQ-NET-019）。本回合没有推进，可调整行动后重试。",
   "report8091.encounter.foreshadow": "{place}周围传来异样的声响，地上留着新鲜的踪迹。这里并不安全，你可以继续探查，也可以离开。",
   "report8091.encounter.reveal": "{enemy}循着动静现身，挡在前方。对方共{count}个，尚未交手，你可以决定如何应对。",
   "actionDisplay.lyl.event.han_court_grain_blame.hear_court_grain_cutoff.label": "观察 · 听清朝会上粮草被掐断",

@@ -31,6 +31,35 @@ export function contentModerationDetail(error: unknown): { status: number; provi
 export const isContentModerationError = (error: unknown): boolean => !!contentModerationDetail(error);
 
 /**
+ * HTTP 200 但正文为空（疑似输出阶段审核，LCQ-NET-019）：只按结构判断，不看内容。
+ * message 即玩家提示，不含原文；不入库、不推进回合，由调用方现有失败路径处理。
+ */
+export class EmptyOutputError extends Error {
+  readonly code = 'OUTPUT_EMPTY';
+  readonly finishReason?: string;
+
+  constructor(input: { finishReason?: string } = {}) {
+    super(packText('report8091.moderation.emptyOutput'));
+    this.name = 'EmptyOutputError';
+    this.finishReason = input.finishReason;
+  }
+}
+
+export function isEmptyOutputError(error: unknown): error is EmptyOutputError {
+  const seen = new Set<unknown>();
+  for (let current: any = error; current && typeof current === 'object' && !seen.has(current); current = current.cause) {
+    seen.add(current);
+    if (current instanceof EmptyOutputError || current.code === 'OUTPUT_EMPTY') return true;
+  }
+  return false;
+}
+
+/** 供 AIBS「AI响应为空或格式错误」处使用：原始响应为空归为 EmptyOutputError，否则仍是格式错误。 */
+export function emptyOutputError(raw: string): Error {
+  return String(raw ?? '').trim() ? new Error('AI响应为空或格式错误') : new EmptyOutputError();
+}
+
+/**
  * retries = 已自动重试的次数；大于 0 时文案如实写“已自动重试 N 次仍失败”，为 0/缺省则不声称重试过。
  * localFallback = 调用方在审核拦截后确实改用本地正文（模块叙事 / 场面描写走模板）；缺省为否：
  * 主叙事回合（AIBS）被拦截时不会产出本地叙事、时间不推进，文案只能如实说没推进（REPORT-8091-da90cb13 P2-3）。
@@ -42,7 +71,9 @@ export function toUserFacingAIError(error: unknown, info: { retries?: number; lo
   const quota = /insufficient[_ -]?quota|quota.{0,20}(?:exceed|耗尽|不足)|credit|余额|billing|payment required/i.test(message);
 
   let userMessage: string;
-  if (isContentModerationError(error)) {
+  if (isEmptyOutputError(error)) {
+    userMessage = packText('report8091.moderation.emptyOutput');
+  } else if (isContentModerationError(error)) {
     userMessage = info.localFallback
       ? packText('report8091.moderation.local')
       : packText('report8091.moderation.blocked');

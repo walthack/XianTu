@@ -82,6 +82,7 @@
 | LCQ-NET-016 | error | aiBidirectional | AI双向系统生成失败 | AIBS 回合主生成 catch 的 console.error「[AI双向系统] AI生成失败」经 consolePatch 按 CONSOLE_PREFIX_CODES 认领（冻结文件不改） | 查看 cause 与同回合 NET-014 的结算分支 | 否 |
 | LCQ-NET-017 | error | aiBidirectional | 回合正文生成失败，已用本地安全正文结算 | NET-014 的 detail.settledLocally=true 时采用此文案模板 | 核对本地合同回执；NET-014 为 false 时明确未本地结算 | 否 |
 | LCQ-NET-018 | warn | aiService | 审核拦截后以降级上下文重发 | 主叙事／module_narrative 请求收到 HTTP 422 且命中 fallbackMarkers（1026／new_sensitive），调用方提供了短期记忆与隐式中期记忆，用同一连接把「最近事件」换成摘要后重发；detail.attempt 第几次、detail.mode（rawLatestOnly 只留最新一条原文／summary 全摘要）、detail.entries 降级后条数、detail.originalEntries 原条数，不记正文 | 次数与各次形态见 mod-kit/ai-content-moderation.json 的 degradedAttempts、degradedContexts；同一请求看 LCQ-NET-012；降级仍被拒且无可再降时抛原审核错误，备用连接仍由 fallbackEnabled 控制 | 否 |
+| LCQ-NET-019 | warn | aiService | 200 但正文为空（疑似输出阶段审核） | OpenAI 兼容接口（流式或非流式）返回 HTTP 200，但去掉思考后的正文为空，且不属于截断（length／max_tokens）或思考耗尽（LCQ-NET-013）；只按结构判断，不看内容。抛 EmptyOutputError，玩家见文案 report8091.moderation.emptyOutput；不入库、不推进回合；detail.finishReason、detail.provider、detail.model、detail.usageType，不记正文 | 偶发可重试；同一档反复出现多为服务商输出阶段审核，对照同回合 LCQ-NET-012／018 与 finish_reason 判断 | 否 |
 | LCQ-NUM-001 | error | numbers | 数值配置对象无效 | tuning.json numbers 段里某处应为对象却写成了别的类型 | 按消息里的路径修正为对象 | 否 |
 | LCQ-NUM-002 | error | numbers | 数值配置含未知键 | numbers 段含 game-numbers.qingyu.json 里不存在的键（拼写错误或已删除的键） | 按消息里的路径核对键名；只能改已有键，不能新增 | 否 |
 | LCQ-NUM-003 | error | numbers | 数值配置类型无效 | numbers 段某个值的类型与默认值不同（数字写成字符串等）或为非有限数 | 按消息里的路径改成与默认值相同类型 | 否 |
