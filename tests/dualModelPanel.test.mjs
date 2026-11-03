@@ -29,6 +29,8 @@ test('配置页文案校验：缺文案/缺预算占位符均拒绝', () => {
   const errors = validateDualModelConfig(cfg).join();
   assert.match(errors, /reasoningLabel/);
   assert.match(errors, /hourlyBudget/);
+  cfg.dualModel.ui.defaultEffortLabel = 42;
+  assert.match(validateDualModelConfig(cfg).join(), /defaultEffortLabel/);
 });
 
 const { applyConfirmedBackendChange } = await loadTs('../src/services/dualModelPanel.ts');

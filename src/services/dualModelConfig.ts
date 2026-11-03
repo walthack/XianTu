@@ -51,7 +51,7 @@ export function validateDualModelConfig(cfg: unknown = DUAL_MODEL_CONFIG): strin
     if (!text(dm?.ui?.[key])) problems.push(`dualModel.ui.${key} 不能为空`);
   }
   for (const [key, placeholder] of [['defaultEffortLabel', '{effort}'], ['inheritedModelWarning', '{model}'], ['paidConfirmation', '{hourlyBudget}']] as const) {
-    if (!dm?.ui?.[key]?.includes(placeholder)) problems.push(`dualModel.ui.${key} 须包含 ${placeholder}`);
+    if (typeof dm?.ui?.[key] !== 'string' || !dm.ui[key].includes(placeholder)) problems.push(`dualModel.ui.${key} 须包含 ${placeholder}`);
   }
   if (typeof dm?.frontend?.writesNpcMemory !== 'boolean') problems.push('dualModel.frontend.writesNpcMemory 须为布尔');
   const allowed = dm?.billing?.allowedModels;
