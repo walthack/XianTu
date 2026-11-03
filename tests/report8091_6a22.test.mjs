@@ -71,12 +71,12 @@ async function gameStore(s) {
 }
 function engineOptions(store) {
   return cut(main, 'const scenarioEngineActionOptions = computed', '// 重要桥段推进卡片',
-    ['computed','isAIProcessing','currentScene','gameStateStore','advanceScenarioRuntime','scenarioGameOver','getWuyuanOpenWorldSelections','getBaihuGambleRefusalSelections','getCurrentStoryEventActions','getCurrentStoryExplorationActions','getTrackedStoryOpportunityActions','storyActionPresentation'], '\nreturn scenarioEngineActionOptions.value;')(
-      fn => ({ value: fn() }), {value:false}, {value:null}, store, R.advanceScenarioRuntime, {value:false}, ()=>[], ()=>[], R.getCurrentStoryEventActions, R.getCurrentStoryExplorationActions, R.getTrackedStoryOpportunityActions, V.storyActionPresentation);
+    ['computed','isAIProcessing','currentScene','gameStateStore','advanceScenarioRuntime','scenarioGameOver','getWuyuanOpenWorldSelections','getBaihuGambleRefusalSelections','getCurrentStoryEventActions','getCurrentStoryExplorationActions','getTrackedStoryOpportunityActions','storyActionPresentation','questGuideEnabled','questActionGate'], '\nreturn scenarioEngineActionOptions.value;')(
+      fn => ({ value: fn() }), {value:false}, {value:null}, store, R.advanceScenarioRuntime, {value:false}, ()=>[], ()=>[], R.getCurrentStoryEventActions, R.getCurrentStoryExplorationActions, R.getTrackedStoryOpportunityActions, V.storyActionPresentation, ()=>false, ()=>({ ok: true }));
 }
 function narrative(store, actions) {
-  return cut(main, 'const currentNarrative = computed', '// 绘图相关逻辑', ['computed','gameStateStore','formatCurrentTime','getStageEntryPresentation','scenarioEngineActionOptions','engineOptionLine','stripActionOptionMetaWords','stripNarrativeMetaWords'], '\nreturn currentNarrative.value;')(
-    fn => ({ value: fn() }), store, ()=>'time', R.getStageEntryPresentation, {value:actions}, a=>a.playerLine, x=>x, x=>x);
+  return cut(main, 'const currentNarrative = computed', '// 绘图相关逻辑', ['computed','gameStateStore','formatCurrentTime','getStageEntryPresentation','scenarioEngineActionOptions','engineOptionLine','stripActionOptionMetaWords','stripNarrativeMetaWords','questHidesButton'], '\nreturn currentNarrative.value;')(
+    fn => ({ value: fn() }), store, ()=>'time', R.getStageEntryPresentation, {value:actions}, a=>a.playerLine, x=>x, x=>x, ()=>false);
 }
 function qinReady() {
   let s = fixture('checkpoints/current-tang-entry.json');
@@ -88,10 +88,10 @@ function qinReady() {
 test('P1-3 地图双击确认→真实 store load/save→MainGamePanel computed：秦首拍行动建议非空', async () => {
   const store = await gameStore(qinReady());
   const map = read('src/components/dashboard/GameMapPanel.vue');
-  const fn = cut(map, 'const travelToSelectedLocation = async', 'const canvasRef', ['gameStateStore','mapTravelBusy','mapTravelUi','selectedLocation','mapTravelPreview','mapTravelNotice','mapTravelConfirmed','travelConfirmation','selectMapTravel','settleMapTravel','mapTravelArrivalNotice','stageDepartureArrived'], '\nreturn travelToSelectedLocation;');
+  const fn = cut(map, 'const travelToSelectedLocation = async', 'const canvasRef', ['gameStateStore','mapTravelBusy','mapTravelUi','selectedLocation','mapTravelPreview','mapTravelNotice','mapTravelConfirmed','travelConfirmation','selectMapTravel','settleMapTravel','mapTravelArrivalNotice','stageDepartureArrived','questArrivedDeparture','BUILTIN_SCENARIO_MODS'], '\nreturn travelToSelectedLocation;');
   const confirm={value:null}, busy={value:false};
   const BP = await load('modules/scenarioMods/beatProgress.ts');
-  const go = fn(store,busy,{isAIProcessing:false},{value:{id:'liuchao.location.xianyang'}},M.mapTravelPreview,{value:''},M.mapTravelConfirmed,confirm,M.selectMapTravel,M.settleMapTravel,M.mapTravelArrivalNotice,BP.stageDepartureArrived);
+  const go = fn(store,busy,{isAIProcessing:false},{value:{id:'liuchao.location.xianyang'}},M.mapTravelPreview,{value:''},M.mapTravelConfirmed,confirm,M.selectMapTravel,M.settleMapTravel,M.mapTravelArrivalNotice,BP.stageDepartureArrived,()=>undefined,[]);
   await go(); assert.ok(confirm.value); await go();
   const saved=store.toSaveData(); assert.equal(saved.角色.位置.描述,'秦·咸阳');
   assert.deepEqual(R.getCurrentStoryEventActions(saved).map(a=>a.eventId),['liuchao.event.qin_enter_xianyang']);

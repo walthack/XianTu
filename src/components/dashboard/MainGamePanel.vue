@@ -156,7 +156,7 @@
             <div class="engine-action-hint">{{ branchDecision ? BRANCH_DECISION_HINT : qingyuOpeningDemo ? t('可以直接描述行动，也可点按建议填入') : t('点按填入，可修改后发送') }}</div>
           </div>
 
-          <div v-if="stageDepartureOffer" class="action-options opportunity-action-options">
+          <div v-if="stageDepartureOffer && !questGuideOn" class="action-options opportunity-action-options">
             <button
               class="action-option-btn opportunity-action-btn"
               :disabled="isAIProcessing || stageDeparturePending"
@@ -633,7 +633,9 @@ import {
   type BaihuGambleRefusalSelection,
 } from '@/modules/scenarioMods/baihuGambleRefusal';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
-import { prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
+import { prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, beatTextNotThere, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
+import { noteQuestIdleTurn, questActionGate, questArrivedDeparture, questGuideEnabled, takeQuestApproachLead } from '@/modules/scenarioMods/questLog';
+import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import {
   abortInFlightNaturalIntent,
   freeActionOwnsText,
@@ -996,6 +998,10 @@ const qingyuOpeningDemo = computed(() => isQingyuOpeningPlaytestSave(gameStateSt
 const showScenarioActionMechanics = (option: ScenarioEngineActionSelection) => (
   !qingyuOpeningDemo.value || option.source !== 'event_engine'
 );
+// 任务引导（story.quest.enabled，默认关；questLog.ts）：开时撤主线、探索、启程按钮，玩家看任务日志与地图标记；关键选择拍仍出选项，
+// 作者写了 completion.where/who 的选项要人到了才弹（用户 2026-11-03 定 Q7=A）。开关关时以下过滤都不生效。
+const questGuideOn = computed(() => questGuideEnabled(gameStateStore.toSaveData()));
+const questHidesButton = (option: { source?: string }) => questGuideOn.value && (option.source === 'event_engine' || option.source === 'exploration_engine');
 const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(() => {
   if (isAIProcessing.value || currentScene.value) return [];
   const live = gameStateStore.toSaveData();
@@ -1007,7 +1013,8 @@ const scenarioEngineActionOptions = computed<ScenarioEngineActionSelection[]>(()
     .map(action => storyActionPresentation(action, save))
     // 五原落奴这拍由“先走到点心铺 → 选择应对过程 → 收束既定被抓事实”的局部合同承接。
     // 隐藏旧的宽泛单按钮，避免绕过移动、代价和失败转新状态。
-    .filter(action => !(openWorldActions.length && action.eventId === 'lcq.event.s02_04'));
+    .filter(action => !(openWorldActions.length && action.eventId === 'lcq.event.s02_04'))
+    .filter(action => !questGuideEnabled(save) || questActionGate(save, action).ok);
   return [
     ...eventActions,
     ...getCurrentStoryExplorationActions(save),
@@ -1022,7 +1029,7 @@ const keyBeatHighlight = ref(false);
 let keyBeatConfirmedByCard = false;
 // 锁定时建议区与分支区都显示固定选项；未激活的锁选项（如决定步之前的致命选项）不提前显示。
 const engineButtonOptions = computed(() => currentScene.value || playtestFinished.value ? [] : branchDecision.value ? branchDecision.value.options.map((option, i) => ({ ...option, label: branchDecision.value!.labels[i] })) :
-  scenarioEngineActionOptions.value.filter(option => !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
+  scenarioEngineActionOptions.value.filter(option => !questHidesButton(option) && !isKeyBeatCardAction(option as { source?: string; eventId?: string; actionId?: string })
     && !isDormantLockedOption(option as unknown as BranchDecisionCandidate)));
 /** 选项填入输入框时使用的原句（与 selectScenarioEngineAction 一致）。 */
 const engineOptionLine = (option: ScenarioEngineActionSelection): string => (
@@ -1113,6 +1120,25 @@ const departToNextStage = async () => {
   }
 };
 
+/** 任务引导：同国到达下一关开场落点即切关（questArrivedDeparture）；落点就是当前地时靠手打启程短语。 */
+const departToStage = async (stageId: string) => {
+  if (stageDeparturePending.value) return;
+  stageDeparturePending.value = true;
+  try {
+    const result = await gameStateStore.transitionToNextStage(stageId);
+    if (!result.ok) toast.warning(result.reason || '此刻还不能启程');
+    else toast.success(result.toName ? `已启程：${result.toName}` : '已启程');
+  } catch (error) { // lcq-allow: 切关失败直接 toast 告知玩家，与启程按钮 departToNextStage 同口径（切关内部已记码）
+    toast.error(String((error as Error)?.message || error));
+  } finally {
+    stageDeparturePending.value = false;
+  }
+};
+const departOnQuestArrival = async (before: SaveData | null | undefined, after: SaveData | null | undefined) => {
+  const stageId = questArrivedDeparture(before, after, BUILTIN_SCENARIO_MODS);
+  if (stageId) await departToStage(stageId);
+};
+
 // 流式输出状态
 const streamingMessageIndex = ref<number | null>(null);
 // 🔥 使用全局流式传输开关（从 uiStore 获取，切换页面不丢失）
@@ -1201,7 +1227,7 @@ const currentNarrative = computed(() => {
       content: stageEntry.text,
       time: currentTimeString,
       stateChanges: { changes: [] },
-      actionOptions: scenarioEngineActionOptions.value.map(engineOptionLine)
+      actionOptions: scenarioEngineActionOptions.value.filter(option => !questHidesButton(option)).map(engineOptionLine)
     };
   }
 
@@ -2097,6 +2123,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       uiStore.setAIProcessing(false);
       persistAIProcessingState();
       toast.info(mapTravelArrivalNotice(moved));
+      await departOnQuestArrival(saveData, moved);
       return;
     }
   }
@@ -2433,9 +2460,10 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     const via: BeatVia = exactSelectedEventAction ? 'button'
       : matchedEventAction ? (typedBeat?.via ?? (routedIntentAction ? 'other' : 'alias'))
       : otherEngine ? 'other'
+      : userMessage && beatTextNotThere(scenarioSaveAtSend, userMessage) ? 'notThere'
       : userMessage && beatActionTable(scenarioSaveAtSend).actions.length ? 'miss' : 'none';
     logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId } : undefined);
-    const missNotice = via === 'miss' ? beatMissNotice(scenarioSaveAtSend) : undefined;
+    const missNotice = via === 'miss' || via === 'notThere' ? beatMissNotice(scenarioSaveAtSend) : undefined;
     if (missNotice) toast.info(missNotice);
   }
 
@@ -2450,6 +2478,15 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   } else {
     finalUserMessage = actionQueueText ? `<行动趋向>${actionQueueText}</行动趋向>
 ` : '';
+  }
+  // 任务引导：本拍空转满 story.quest.approachTurns 回合、作者写了 approach，NPC 主动来找——只把作者写的引子注入这一回合，不结算。
+  if (!isFollowUpExecution && questGuideOn.value) {
+    const liveSave = gameStateStore.toSaveData();
+    const approachLead = liveSave ? takeQuestApproachLead(liveSave) : undefined;
+    if (approachLead && liveSave) {
+      gameStateStore.systemExtensions = (liveSave as any).系统.扩展;
+      finalUserMessage += `\n【场景引子（作者写定，本回合照此开场；不得替玩家完成本拍）】${approachLead}\n`;
+    }
   }
   if (resolvedEventAction) {
     const result = resolvedEventAction;
@@ -2885,12 +2922,20 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 
     // 回合收尾：作者写明的到点本回合收束了哪拍（beat.resolve deadline）；启程按钮空转满 story.beatProgress.departureIdleTurns 回合、本拍主线按钮空转满 actionIdleTurns 回合都只提示，不自动出发、不代结算（用户 2026-11-02 拍板③④）。
     let idleDepartureNotice: string | undefined;
+    let questArrivalStageId: string | undefined;
     if (aiResetToken === resetSnapshot && aiResponse) {
       const idleSave = gameStateStore.toSaveData();
       for (const eventId of deadlineResolvedThisTurn(scenarioSaveAtSend, idleSave)) logBeatResolve(idleSave, 'deadline', { eventId });
       idleDepartureNotice = idleSave ? noteStageDepartureIdleTurn(idleSave) : undefined;
       const idleActionNotice = idleSave ? noteBeatActionIdleTurn(idleSave) : undefined;
       idleDepartureNotice ||= idleActionNotice;
+      // 任务引导开：两种空转提示让给任务日志分级（3/6 回合放提示、8 回合 approach，只提示「日志已更新」）；
+      // 本关收束且下一关在别国时记下地图落点（stageDepartureMapTarget），人到了目标国由地图落账切关；同国到达开场落点即切关。
+      if (idleSave && questGuideEnabled(idleSave)) {
+        if (getStageDepartureOffer(idleSave)) stageDepartureMapTarget(idleSave, BUILTIN_SCENARIO_MODS);
+        idleDepartureNotice ||= noteQuestIdleTurn(idleSave).notice;
+        questArrivalStageId = questArrivedDeparture(scenarioSaveAtSend, idleSave, BUILTIN_SCENARIO_MODS);
+      }
       if (idleSave) gameStateStore.systemExtensions = (idleSave as any).系统.扩展;
     }
     // 最终统一存档（仅成功时）
@@ -2904,6 +2949,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         }
         console.log('[AI响应处理] 最终统一存档完成');
         if (idleDepartureNotice) toast.info(idleDepartureNotice);
+        if (questArrivalStageId) await departToStage(questArrivalStageId);
         if (aiResponse.transactionCommitted) {
           startModuleBackground(diagnosticTurnId);
           scheduleBackgroundAudit(diagnosticTurnId);

@@ -195,7 +195,7 @@
       </div>
 
       <!-- 任务目标（剧情主线 + 即兴目标；含逐拍/回轨/启程） -->
-      <div v-if="(questMain || questGoals.length || lineCompass)" class="collapsible-section quest-section">
+      <div v-if="(questMain || questGoals.length || lineCompass || questLog.current.length)" class="collapsible-section quest-section">
         <div class="section-header" @click="questCollapsed = !questCollapsed">
           <h3 class="section-title">
             <Clock :size="14" class="section-icon" />
@@ -208,6 +208,28 @@
           </button>
         </div>
         <div v-show="!questCollapsed" class="quest-body">
+          <!-- 任务日志（story.quest.enabled 开时取代主线按钮与「▶ 启程」；设计稿 2026-11-03）：当前／已完成按线分组，提示按卡住级别追加；「在地图上查看」只打开地图定位，不推进 -->
+          <div v-if="questGuideOn && (questLog.current.length || questLog.done.length)" class="quest-log" data-testid="quest-log">
+            <div v-for="group in questLogGroups" :key="group.line" class="quest-log-group">
+              <div class="quest-chapter"><span class="quest-tag quest-tag-main" :style="{ borderColor: group.color, color: group.color }">{{ group.icon }} {{ group.label }}</span></div>
+              <div v-for="entry in group.entries" :key="entry.key" class="quest-log-entry">
+                <div class="quest-event"><span class="quest-mark-main" :style="{ color: group.color }">{{ group.icon }}</span>{{ entry.title }}：{{ entry.objective }}</div>
+                <div v-if="entry.place" class="quest-more">{{ t('地点') }}：{{ entry.place }}</div>
+                <div v-for="(hint, i) in entry.hints" :key="i" class="quest-more quest-log-hint">· {{ hint }}</div>
+                <div v-if="entry.warn" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;">{{ entry.warn }}</div>
+                <button v-if="questMarkerKeys.has(entry.key)" class="quest-log-map" @click="viewQuestOnMap(entry.key)">{{ t('在地图上查看') }}</button>
+              </div>
+            </div>
+            <template v-if="questLog.done.length">
+              <div class="quest-more quest-line-others" @click="questDoneOpen = !questDoneOpen">{{ questDoneOpen ? '▾' : '▸' }} {{ t('已完成') }}（{{ questLog.done.length }}）</div>
+              <template v-if="questDoneOpen">
+                <div v-for="entry in questLog.done" :key="entry.key" class="quest-event quest-locked">
+                  <span class="quest-mark-side">✓</span>{{ entry.title }}：{{ entry.objective }}
+                  <div v-if="entry.result" class="quest-more">{{ entry.result }}</div>
+                </div>
+              </template>
+            </template>
+          </div>
           <div v-if="questMain || lineCompass" class="quest-main">
             <div v-if="questMain?.chapter" class="quest-chapter"><span class="quest-tag quest-tag-main">主线</span>{{ questMain.chapter }}</div>
             <!-- 当前线卡：ui.rightSidebar.showLineCompass 开时放在原主线指南针那一行的位置、取代它（用户 2026-10-27 09:26 Q1；位置按用户 2026-10-27 定，不放在章节行上方）；
@@ -230,7 +252,7 @@
               </template>
             </div>
             <template v-if="questMain">
-              <div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div>
+              <template v-if="!questGuideOn"><div v-for="ev in questMain.events" :key="ev" class="quest-event"><span class="quest-mark-main">◆</span>{{ ev }}</div></template>
               <div v-if="questMain.moreCount > 0" class="quest-more">{{ t('本关后续还有') }} {{ questMain.moreCount }} {{ t('个节点') }}</div>
               <div v-if="questMain.stallHint" class="quest-stall-hint" role="status" style="font-size:12px;margin-top:4px;line-height:1.4;opacity:0.85;">{{ questMain.stallHint }}</div>
               <div v-if="questMain.stallDebug" class="quest-stall-warn" style="color:#e6a23c;font-size:12px;margin-top:4px;line-height:1.4;">⚠️ 主线疑似脱节（已停滞 {{ questMain.stallCount }} 轮）——剧情可能已跑到主线前面，系统将自动尝试事件对账修复（可在 API 管理·事件对账 中关闭）</div>
@@ -241,7 +263,7 @@
                 {{ returningToCanon ? t('回轨中…') : t('↩ 斩线回轨') }}
               </button>
               <div v-if="questMain.cleared" class="quest-cleared">✅ {{ t('本关剧情已完成') }}</div>
-              <template v-if="questMain.next">
+              <template v-if="questMain.next && !questGuideOn">
                 <div class="quest-next">{{ t('此地诸事已暂告一段落。若已准备好，可顺势启程。') }}</div>
                 <button class="quest-next-btn" :disabled="stageSwitching || uiStore.isAIProcessing" @click="goNextStage">
                   {{ stageSwitching ? t('启程中…') : t('▶ 启程') }}
@@ -433,6 +455,7 @@ import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMod
 import { FESTIVAL, festivalView, startHeimohaiFestival } from '@/modules/scenarioMods/heimohaiFestival';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import { stageDepartureMapTarget } from '@/modules/scenarioMods/beatProgress';
+import { questGuideEnabled, questLogView, questMarkers, questConfig, type QuestEntry, type QuestLine } from '@/modules/scenarioMods/questLog';
 import { crossCountryStoryTravelToast } from '@/modules/scenarioMods/travel/mapTravel';
 import { useRouter } from 'vue-router';
 import { eventNameIndex, playerFacingText } from '@/utils/narrativeMetaWords';
@@ -564,6 +587,22 @@ const characterBeats = computed(() => {
   if (!objective) return view.resolved;
   return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective })).concat(view.character, view.resolved);
 });
+// 任务日志（story.quest.enabled；questLog.ts）：只读存档，开关关时为空。
+const questGuideOn = computed(() => questGuideEnabled(gameStateStore.toSaveData()));
+const questDoneOpen = ref(false);
+const questLog = computed(() => {
+  void (gameStateStore.worldState as any)?.剧本模组;
+  void gameStateStore.systemExtensions;
+  return questGuideOn.value ? questLogView(gameStateStore.toSaveData(), BUILTIN_SCENARIO_MODS) : { current: [], done: [] };
+});
+const questMarkerKeys = computed(() => new Set(questGuideOn.value ? questMarkers(gameStateStore.toSaveData(), BUILTIN_SCENARIO_MODS).map(marker => marker.key) : []));
+const questLogGroups = computed(() => {
+  const style = questConfig().markerStyle;
+  return (['main', 'country', 'character'] as QuestLine[])
+    .map(line => ({ line, ...style[line], entries: questLog.value.current.filter((entry: QuestEntry) => entry.line === line) }))
+    .filter(group => group.entries.length);
+});
+const viewQuestOnMap = (key: string) => { router.push({ path: '/game/world-map', query: { quest: key } }); };
 // 剧情主线：章节/活跃事件/清关状态/下一关（确定性，读 worldState.剧本模组）
 const sidebarStoryActions = () => {
   const save = gameStateStore.toSaveData();
@@ -2295,6 +2334,10 @@ const getReputationClass = (): string => {
 .quest-improv { border-top: 1px dashed rgba(255,255,255,0.12); padding-top: 6px; }
 .quest-goal { font-size: 12px; line-height: 1.5; opacity: 0.65; }
 .quest-cleared { font-size: 12px; color: #7dc87d; }
+.quest-log { margin-bottom: 6px; }
+.quest-log-entry { margin-bottom: 4px; }
+.quest-log-hint { opacity: 0.85; }
+.quest-log-map { margin-top: 2px; padding: 2px 6px; font-size: 11px; border: 1px solid var(--color-border, #555); background: transparent; color: inherit; border-radius: 4px; cursor: pointer; }
 .quest-next-btn { margin-top: 4px; width: 100%; padding: 5px 8px; font-size: 12px; border: 1px solid var(--color-accent, #d4af37); background: transparent; color: var(--color-accent, #d4af37); border-radius: 4px; cursor: pointer; }
 .quest-next-btn:hover:not(:disabled) { background: rgba(212,175,55,0.15); }
 .quest-next-btn:disabled { opacity: 0.5; cursor: default; }

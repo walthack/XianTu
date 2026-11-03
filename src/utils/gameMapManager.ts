@@ -1105,6 +1105,37 @@ export class GameMapManager {
     console.log(`[地图管理器] 更新NPC位置: 共${npcs.length}个NPC`);
   }
 
+  /**
+   * 任务标记（设计稿 2026-11-03「任务引导取代主线按钮」）：画在最上层（6），只显示、不可点结算；传空数组即撤掉。
+   * 颜色与图标来自 story.quest.markerStyle，坐标由调用方按地点 id 取地图上的地点。
+   */
+  updateQuestMarkers(markers: Array<{ key: string; name: string; icon: string; color: string; coordinates: GameCoordinates; highlight?: boolean }>) {
+    const questLayer = this.layers.get(6);
+    if (!questLayer) return;
+    for (const child of [...questLayer.children]) {
+      questLayer.removeChild(child);
+      child.destroy({ children: true });
+    }
+    for (const marker of markers) {
+      if (!Number.isFinite(marker.coordinates?.x) || !Number.isFinite(marker.coordinates?.y)) continue;
+      const color = Number.parseInt(String(marker.color || '#f59e0b').replace('#', ''), 16) || 0xf59e0b;
+      const container = new PIXI.Container();
+      container.x = marker.coordinates.x;
+      container.y = marker.coordinates.y - 70;
+      (container as any).userData = { type: 'quest', key: marker.key };
+      const ring = new PIXI.Graphics();
+      ring.lineStyle(marker.highlight ? 8 : 5, color, 0.95);
+      ring.beginFill(0xffffff, 0.9);
+      ring.drawCircle(0, 0, marker.highlight ? 34 : 26);
+      ring.endFill();
+      container.addChild(ring);
+      const icon = new PIXI.Text(marker.icon || '◆', { fontFamily: 'Microsoft YaHei, sans-serif', fontSize: 34, fill: color, fontWeight: '700', align: 'center' });
+      icon.anchor.set(0.5, 0.5);
+      container.addChild(icon);
+      questLayer.addChild(container);
+    }
+  }
+
   updatePlayerPosition(position: GameCoordinates, playerName: string = '玩家') {
     const playerLayer = this.layers.get(5); // MapLayer.PLAYER
     if (!playerLayer) return;

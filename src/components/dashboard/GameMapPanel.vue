@@ -265,6 +265,11 @@
         </button>
       </div>
       <div v-if="!legendCollapsed" class="legend-items">
+        <!-- 任务标记（story.quest.enabled 开且设置「显示任务标记」开）：点一条在图上定位，只看不推进 -->
+        <div v-for="marker in questMarkerList" :key="marker.key + marker.locationId" class="legend-item quest-legend-item" data-testid="quest-marker" @click="focusQuestMarker(marker.key)">
+          <span class="legend-icon" :style="{ color: marker.color }">{{ marker.icon }}</span>
+          <span>{{ marker.label }}：{{ marker.name }}<template v-if="marker.crossCountry">（{{ '跨国' }}）</template></span>
+        </div>
         <!-- 名山大川 -->
         <div class="legend-item">
           <Mountain :size="16" class="legend-icon mountain" />
@@ -397,6 +402,10 @@ import { GameMapManager } from '@/utils/gameMapManager';
 import { normalizeLocationsData, normalizeContinentBounds } from '@/utils/coordinateConverter';
 import { useUIStore } from '@/stores/uiStore';
 import { stageDepartureArrived } from '@/modules/scenarioMods/beatProgress';
+import { questArrivedDeparture, questGuideEnabled, questMarkers, type QuestMarker } from '@/modules/scenarioMods/questLog';
+import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
+import { canonicalLocationId } from '@/modules/scenarioMods/travel/locationIds';
+import { useRoute } from 'vue-router';
 import { selectMapTravel, settleMapTravel, mapTravelRestriction, withMapCapitalMarkers, withoutMapHiddenLocations, isMapHiddenLocation, mapTravelPreview, mapTravelConfirmed, mapTravelArrivalNotice, mapHeaderInfo } from '@/modules/scenarioMods/travel/mapTravel';
 import { useGameStateStore } from '@/stores/gameStateStore';
 import { toast } from '@/utils/toast';
@@ -434,7 +443,8 @@ const travelToSelectedLocation = async () => {
   try { gameStateStore.loadFromSaveData(save); await gameStateStore.saveGame(); mapTravelNotice.value = mapTravelArrivalNotice(save);
     // 跨国启程（用户 2026-11-02 拍板④）：启程按钮记下的下一关在别国，人到了目标国就在这里切关。
     const arrived = gameStateStore.toSaveData();
-    const departedStageId = arrived ? stageDepartureArrived(arrived) : undefined;
+    // 任务引导开（story.quest.enabled）：同国到了下一关开场落点也即切关（questArrivedDeparture；source＝出发前）。
+    const departedStageId = arrived ? stageDepartureArrived(arrived) || questArrivedDeparture(source, arrived, BUILTIN_SCENARIO_MODS) : undefined;
     if (arrived && departedStageId) {
       gameStateStore.systemExtensions = (arrived as any).系统.扩展;
       const departed = await gameStateStore.transitionToNextStage(departedStageId);
@@ -457,6 +467,33 @@ const selectedTravelPreview = computed(() => {
   return save && selectedLocation.value ? mapTravelPreview(save, String(selectedLocation.value.id || '')) : undefined;
 });
 watch(selectedLocation, () => { travelConfirmation.value = null; mapTravelNotice.value = ''; });
+
+// 任务标记（设计稿 2026-11-03「任务引导取代主线按钮」）：只取当前激活拍与待启程落点（questLog.questMarkers），坐标取地图上已加载的地点；
+// 开关关或设置「显示任务标记」关时为空。「在地图上查看」带 ?quest=<键> 进来时定位并高亮。
+const route = useRoute();
+const mapLocationsLoaded = ref<WorldLocation[]>([]);
+const questMarkerList = computed<QuestMarker[]>(() => {
+  void (gameStateStore.worldState as any)?.剧本模组;
+  void gameStateStore.location;
+  const save = gameStateStore.toSaveData();
+  return save && questGuideEnabled(save) && mapTravelUi.showQuestMarkers ? questMarkers(save, BUILTIN_SCENARIO_MODS) : [];
+});
+const questMarkerCoordinates = (marker: QuestMarker) => mapLocationsLoaded.value
+  .find(location => canonicalLocationId(String(location.id || '')) === marker.locationId)?.coordinates;
+const drawQuestMarkers = () => {
+  const focus = String(route?.query?.quest || '');
+  mapManager.value?.updateQuestMarkers(questMarkerList.value.flatMap(marker => {
+    const coordinates = questMarkerCoordinates(marker);
+    return coordinates ? [{ key: marker.key, name: marker.name, icon: marker.icon, color: marker.color, coordinates, highlight: marker.key === focus }] : [];
+  }));
+};
+const focusQuestMarker = (key: string) => {
+  const marker = questMarkerList.value.find(item => item.key === key);
+  const coordinates = marker ? questMarkerCoordinates(marker) : undefined;
+  if (coordinates) mapManager.value?.centerTo(coordinates.x, coordinates.y);
+};
+watch(questMarkerList, drawQuestMarkers, { deep: true });
+watch(() => route?.query?.quest, key => { drawQuestMarkers(); if (key) focusQuestMarker(String(key)); });
 const selectedContinent = ref<any | null>(null);
 const mapStatus = ref('初始化中...');
 const popupPosition = ref({ x: 0, y: 0 });
@@ -1946,6 +1983,7 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
         ? normalizeLocationsData(withMapCapitalMarkers(stageLocations), mapConfig)
         : stageLocations);
       let skippedSub = 0;
+      mapLocationsLoaded.value = locations;
       locations.forEach((location: WorldLocation) => {
         try {
           if (!capitalIds.has(location.id) && isCanonSubPlace(location, locations)) { skippedSub++; return; }
@@ -1993,6 +2031,8 @@ const loadMapData = async (options?: { silent?: boolean; reset?: boolean }) => {
       }
     }
 
+    drawQuestMarkers();
+    if (route?.query?.quest) focusQuestMarker(String(route.query.quest));
     mapStatus.value = `已加载 ${locationCount} 个地点`;
     if (!silent) {
       toast.success('地图加载完成');

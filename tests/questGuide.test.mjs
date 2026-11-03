@@ -259,3 +259,30 @@ test('开关开：自由输入路由（naturalIntentRouter）与发送前判定�
   moveTo(away, 'lcq.location.grassland', '中立边陲·草原');
   assert.equal(NI.resolveStoryEventActionFromText(away, '我向王哲请教他要交代的事'), undefined);
 }));
+
+test('UI 接线：开关开撤主线／探索／启程按钮（主面板与侧栏）、关键选择到点才弹；notThere 不算 miss；任务日志、地图标记、到达即切、approach 注入；开关关原路径不动', () => {
+  const panel = read('src/components/dashboard/MainGamePanel.vue');
+  assert.match(panel, /const questHidesButton = \(option: \{ source\?: string \}\) => questGuideOn\.value && \(option\.source === 'event_engine' \|\| option\.source === 'exploration_engine'\)/);
+  assert.match(panel, /scenarioEngineActionOptions\.value\.filter\(option => !questHidesButton\(option\) && !isKeyBeatCardAction/);
+  assert.match(panel, /\.filter\(action => !questGuideEnabled\(save\) \|\| questActionGate\(save, action\)\.ok\)/, '关键选择拍：人到了才弹选项');
+  assert.match(panel, /v-if="stageDepartureOffer && !questGuideOn"/);
+  assert.match(panel, /beatTextNotThere\(scenarioSaveAtSend, userMessage\) \? 'notThere'/);
+  assert.match(panel, /via === 'miss' \|\| via === 'notThere' \? beatMissNotice/);
+  assert.match(panel, /takeQuestApproachLead\(liveSave\)/);
+  assert.match(panel, /if \(idleSave && questGuideEnabled\(idleSave\)\) \{[\s\S]*?noteQuestIdleTurn\(idleSave\)[\s\S]*?questArrivedDeparture\(scenarioSaveAtSend, idleSave, BUILTIN_SCENARIO_MODS\)/);
+  assert.match(panel, /idleDepartureNotice = idleSave \? noteStageDepartureIdleTurn\(idleSave\) : undefined;/, '开关关的空转提示原样保留');
+  assert.match(panel, /await departOnQuestArrival\(saveData, moved\)/, '手打国内移动到达落点也切关');
+  const sidebar = read('src/components/dashboard/RightSidebar.vue');
+  assert.match(sidebar, /<template v-if="questMain\.next && !questGuideOn">/);
+  assert.match(sidebar, /data-testid="quest-log"/);
+  assert.match(sidebar, /questLogView\(gameStateStore\.toSaveData\(\), BUILTIN_SCENARIO_MODS\)/);
+  assert.match(sidebar, /path: '\/game\/world-map', query: \{ quest: key \}/, '「在地图上查看」只打开地图定位');
+  const map = read('src/components/dashboard/GameMapPanel.vue');
+  assert.match(map, /mapManager\.value\?\.updateQuestMarkers\(/);
+  assert.match(map, /questGuideEnabled\(save\) && mapTravelUi\.showQuestMarkers \? questMarkers\(save, BUILTIN_SCENARIO_MODS\)/);
+  assert.match(map, /stageDepartureArrived\(arrived\) \|\| questArrivedDeparture\(source, arrived, BUILTIN_SCENARIO_MODS\)/);
+  assert.match(read('src/utils/gameMapManager.ts'), /updateQuestMarkers\(markers:/);
+  const ui = read('src/stores/uiStore.ts');
+  assert.match(ui, /localStorage\.getItem\('showQuestMarkers'\) === null \? \(GAME_NUMBERS\.story as .*\)\.quest\?\.showMarkersDefault !== false/);
+  assert.match(read('src/components/dashboard/SettingsPanel.vue'), /v-if="questGuideOn" class="setting-item"[\s\S]*?uiStore\.showQuestMarkers/);
+});

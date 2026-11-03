@@ -1,6 +1,7 @@
 import { diagnosticBusyChanged } from '@/services/requestLifecycleDiagnostics';
 import { peekActiveQingyuTurnId } from '@/services/qingyuTurnLongRequests';
 import { defineStore } from 'pinia';
+import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
 import { ref, shallowRef, computed, type Component } from 'vue';
 import { sanitizeAITextForDisplay, extractTextFromJsonResponse } from '@/utils/textSanitizer';
 import { isBackendConfigured, fetchBackendVersion } from '@/services/backendConfig';
@@ -91,6 +92,8 @@ export const useUIStore = defineStore('ui', () => {
 
   // 🔥 [行动选项设置] 控制AI是否生成行动选项
   const enableActionOptions = ref(localStorage.getItem('enableActionOptions') !== 'false'); // 默认开启
+  // 设置项「显示任务标记」（任务引导 story.quest.enabled 开时地图上画任务标记）：没设过时取 story.quest.showMarkersDefault（用户 2026-11-03 定默认开）。
+  const showQuestMarkers = ref(localStorage.getItem('showQuestMarkers') === null ? (GAME_NUMBERS.story as { quest?: { showMarkersDefault?: boolean } }).quest?.showMarkersDefault !== false : localStorage.getItem('showQuestMarkers') !== 'false');
   const actionOptionsPrompt = ref(localStorage.getItem('actionOptionsPrompt') || ''); // 自定义行动选项提示词
 
   // 🛡️ [指令/存档保护强度] 控制 AI 指令校验与保护力度
@@ -442,6 +445,14 @@ export const useUIStore = defineStore('ui', () => {
     // 🔥 [NPC自动生成设置] 暴露NPC自动生成相关状态
     autoGenerateNpc,
     minNpcCount,
+
+    showQuestMarkers: computed({
+      get: () => showQuestMarkers.value,
+      set: (val) => {
+        showQuestMarkers.value = val;
+        localStorage.setItem('showQuestMarkers', String(val));
+      }
+    }),
 
     // 🔥 [行动选项设置] 暴露行动选项开关
     enableActionOptions: computed({

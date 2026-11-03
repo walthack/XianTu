@@ -211,6 +211,19 @@
             </div>
           </div>
 
+          <div v-if="questGuideOn" class="setting-item">
+            <div class="setting-info">
+              <label class="setting-name">{{ t('显示任务标记') }}</label>
+              <span class="setting-desc">{{ t('在地图上标出任务日志里当前目标的地点') }}</span>
+            </div>
+            <div class="setting-control">
+              <label class="setting-switch">
+                <input type="checkbox" v-model="uiStore.showQuestMarkers" />
+                <span class="switch-slider"></span>
+              </label>
+            </div>
+          </div>
+
           <div class="setting-item">
             <div class="setting-info">
               <label class="setting-name">{{ t('行动选项') }}</label>
@@ -422,6 +435,9 @@
 import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { Save, RotateCcw, Trash2, Download, Upload, FileText } from 'lucide-vue-next';
 import { toast } from '@/utils/toast';
+import { questGuideEnabled } from '@/modules/scenarioMods/questLog';
+/** 任务引导开时才出「显示任务标记」设置项（story.quest.enabled）。 */
+const questGuideOn = questGuideEnabled();
 import { debug } from '@/utils/debug';
 import { useI18n } from '@/i18n';
 import { DEFAULT_MUSIC_SETTINGS, notifyMusicSettingsChanged } from '@/utils/musicEngine';
