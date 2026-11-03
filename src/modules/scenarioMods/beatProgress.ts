@@ -13,15 +13,19 @@
  * 本拍主线按钮空转 actionIdleTurns 回合同样只提示（noteBeatActionIdleTurn）；
  * 下一关在别国时启程改为打开地图点选（stageDepartureMapTarget／stageDepartureArrived）。
  * runtime.ts 冻结：它在「关已就绪未切关」时把 stallTurns 清零，所以启程空转计数外置在 系统.扩展.stageDepartureIdle。
+ *
+ * 任务引导（story.quest.enabled，默认关；questLog.ts）：开时结算前先判 completion.where/who（不满足不结算、记 notThere、不算 miss），
+ * 另认作者在 mod-kit/quest-log/quests.json 追加的短语与启程短语、what=arrive 的到达即成；miss 提示只说「见任务日志」不列动作；
+ * 两种空转提示改由 questLog.noteQuestIdleTurn 分级放出。开关关时以下各函数与原来逐字同一行为。
  */
 import type { SaveData } from '@/types/game';
 import type { ScenarioMod } from './schema';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { logEvent } from '../diagnostics/log';
-import { isDefaultLineQuarantinedStageId } from './canonRail';
 import { isQingyuOpeningPlaytestSave } from './qingyuOpeningPlaytest';
 import { countryOf, crossCountryStageDeparture, type CrossCountryTravelTarget } from './travel/mapTravel';
 import { currentLocation } from './travel/travelLedger';
+import { nextStageModOf, questActionGate, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
 import {
   getCurrentStoryEventActions,
   getCurrentStoryExplorationActions,
@@ -47,9 +51,12 @@ export const beatLineKey = (value: unknown): string => String(value || '').norma
 export type BeatAction =
   | { kind: 'event'; selection: ScenarioEventActionSelection }
   | { kind: 'departure'; offer: ScenarioStageDepartureOffer };
-/** 输入方式：button 点按钮；exact 手打＝原句／标签；alias 命中作者短语；deadline 作者写明的到点；other 本回合走了别的引擎（自由行动、开放世界等）；miss 都没对上；none 本拍没有可做的动作。 */
-export type BeatVia = 'button' | 'exact' | 'alias' | 'deadline' | 'other' | 'miss' | 'none';
-export interface BeatResolution { via: 'exact' | 'alias'; action: BeatAction }
+/**
+ * 输入方式：button 点按钮；exact 手打＝原句／标签；alias 命中作者短语；deadline 作者写明的到点；other 本回合走了别的引擎（自由行动、开放世界等）；miss 都没对上；none 本拍没有可做的动作。
+ * 任务引导开时另有：arrive 到达即成（completion.what=arrive）；talk 预留（现按 intent 判，不产生）；notThere 命中了动作但人不在 where／who 不同场（不结算、不算 miss）。
+ */
+export type BeatVia = 'button' | 'exact' | 'alias' | 'deadline' | 'other' | 'miss' | 'none' | 'arrive' | 'talk' | 'notThere';
+export interface BeatResolution { via: 'exact' | 'alias' | 'arrive'; action: BeatAction }
 
 /** 本拍动作表：当前主线拍与探索拍的动作，本关收束后再加启程。 */
 export function beatActionTable(save: SaveData | null | undefined): { beatId?: string; actions: BeatAction[] } {
@@ -71,6 +78,11 @@ const actionLines = (action: BeatAction): unknown[] => action.kind === 'departur
  * 否则按作者短语（aliases，否定优先、歧义不认）匹配主线拍。都不中返回 undefined（不推进）。不改入参。
  */
 export function resolveBeatText(save: SaveData | null | undefined, text: string): BeatResolution | undefined {
+  const hit = resolveBeatTextUngated(save, text);
+  return hit && gateOk(save, hit) ? hit : questGuideEnabled(save) ? questExtraResolution(save!) : undefined;
+}
+
+function resolveBeatTextUngated(save: SaveData | null | undefined, text: string): BeatResolution | undefined {
   if (!save) return undefined;
   const key = beatLineKey(text);
   if (key) {
@@ -78,7 +90,28 @@ export function resolveBeatText(save: SaveData | null | undefined, text: string)
     if (hits.length === 1) return { via: 'exact', action: hits[0] };
   }
   const alias = resolveStoryEventActionFromPlayerText(save, text) || inquiryAlias(save, text);
-  return alias ? { via: 'alias', action: { kind: 'event', selection: alias } } : undefined;
+  if (alias) return { via: 'alias', action: { kind: 'event', selection: alias } };
+  if (!questGuideEnabled(save)) return undefined;
+  // 任务引导开：作者在 quests.json 另写的短语、下一关启程短语（开关关时不读）。
+  const extra = questAliasSelection(save, text);
+  if (extra) return { via: 'alias', action: { kind: 'event', selection: extra } };
+  const offer = questDepartureAliasHit(save, text) ? getStageDepartureOffer(save) : null;
+  return offer ? { via: 'alias', action: { kind: 'departure', offer } } : undefined;
+}
+
+const gateOk = (save: SaveData | null | undefined, hit: BeatResolution): boolean =>
+  hit.action.kind !== 'event' || questActionGate(save, hit.action.selection).ok;
+/** what=arrive 的动作人已到即成：手打没对上（或对上了别的动作但人不在）时也结算它。 */
+function questExtraResolution(save: SaveData): BeatResolution | undefined {
+  const arrive = questArriveSelection(save);
+  return arrive ? { via: 'arrive', action: { kind: 'event', selection: arrive } } : undefined;
+}
+
+/** 任务引导开时：这句话命中了本拍动作，但人不在 where／who 不同场（记 notThere，不结算、不算 miss）。开关关恒为 false。 */
+export function beatTextNotThere(save: SaveData | null | undefined, text: string): boolean {
+  if (!questGuideEnabled(save)) return false;
+  const hit = resolveBeatTextUngated(save, text);
+  return Boolean(hit && !gateOk(save, hit) && !questExtraResolution(save!));
 }
 
 /** 作者标了 allowInquiry（信息探问允许直接问句）的动作：句末问号不挡短语匹配；其余动作问句照旧不认。 */
@@ -93,6 +126,8 @@ function inquiryAlias(save: SaveData, text: string): ScenarioEventActionSelectio
 
 /** 手打对不上时的提示：列出本拍可做的动作（按钮上看到的文字）；本拍没有动作时不提示。 */
 export function beatMissNotice(save: SaveData | null | undefined): string | undefined {
+  // 任务引导开：不列动作，只说目标见任务日志（用户 2026-11-03 定 Q2=A）。
+  if (questGuideEnabled(save)) return beatActionTable(save).actions.length ? questConfig().missNotice : undefined;
   const labels = [...new Set(beatActionTable(save).actions.map(action => action.kind === 'departure' ? action.offer.label : action.selection.label))];
   return labels.length ? config().missNotice.replace('{actions}', labels.join('、')) : undefined;
 }
@@ -110,6 +145,10 @@ export function logBeatResolve(save: SaveData | null | undefined, via: BeatVia, 
     stageReady: Boolean(runtime.nextStageId && runtime.nextStageReadyId === runtime.nextStageId),
     modId: String(runtime.modId || ''),
   };
+  if (questGuideEnabled(save) && hit?.eventId && hit.actionId) {
+    const gate = questActionGate(save, { eventId: hit.eventId, actionId: hit.actionId });
+    Object.assign(detail, { where: gate.where ?? null, who: gate.who ?? null });
+  }
   return logEvent({ code: via === 'miss' ? 'LCQ-SAV-054' : 'LCQ-SAV-053', echo: false, detail });
 }
 
@@ -168,7 +207,7 @@ export function noteStageDepartureIdleTurn(save: SaveData | null | undefined): s
   const offer = getStageDepartureOffer(save);
   const stageId = String(runtimeOf(save)?.modId || '');
   const limit = Number(config().departureIdleTurns) || 0;
-  if (!offer || !limit || isQingyuOpeningPlaytestSave(save) || runtimeOf(save)?.gameOver) {
+  if (!offer || !limit || questGuideEnabled(save) || isQingyuOpeningPlaytestSave(save) || runtimeOf(save)?.gameOver) {
     delete ext[IDLE_KEY];
     return undefined;
   }
@@ -189,7 +228,7 @@ export function noteBeatActionIdleTurn(save: SaveData | null | undefined): strin
   if (!save || !ext) return undefined;
   const actions = getCurrentStoryEventActions(save);
   const limit = Number(config().actionIdleTurns) || 0;
-  if (!actions.length || !limit || getStageDepartureOffer(save) || isQingyuOpeningPlaytestSave(save) || runtimeOf(save)?.gameOver) {
+  if (!actions.length || !limit || questGuideEnabled(save) || getStageDepartureOffer(save) || isQingyuOpeningPlaytestSave(save) || runtimeOf(save)?.gameOver) {
     delete ext[ACTION_IDLE_KEY];
     return undefined;
   }
@@ -198,19 +237,6 @@ export function noteBeatActionIdleTurn(save: SaveData | null | undefined): strin
   const turns = prev?.stageId === stageId && prev?.eventId === eventId ? (Number(prev.turns) || 0) + 1 : 0;
   ext[ACTION_IDLE_KEY] = { stageId, eventId, turns: turns >= limit ? 0 : turns };
   return turns >= limit ? config().actionIdleNotice.replace('{label}', actions[0].label) : undefined;
-}
-
-/** 下一关模组（与切关同口径跳过默认路线的隔离关）。 */
-function nextStageMod(save: SaveData, mods: readonly ScenarioMod[]): ScenarioMod | undefined {
-  let targetId = String(runtimeOf(save)?.nextStageId || '');
-  const seen = new Set<string>();
-  let mod = mods.find(item => item.manifest.id === targetId);
-  while (mod && isDefaultLineQuarantinedStageId(targetId) && !seen.has(targetId)) {
-    seen.add(targetId);
-    targetId = mod.manifest.nextStageId || '';
-    mod = targetId ? mods.find(item => item.manifest.id === targetId) : undefined;
-  }
-  return mod;
 }
 
 /** 内置关（与切关同一来源；builtins 用 require.context，Node 测试环境取不到时按空表，照常直接启程）。 */
@@ -230,7 +256,7 @@ const MAP_KEY = 'stageDepartureMap';
  */
 export function stageDepartureMapTarget(save: SaveData | null | undefined, mods: readonly ScenarioMod[] = builtinMods()): CrossCountryTravelTarget | undefined {
   const offer = save ? getStageDepartureOffer(save) : null;
-  const next = save && offer ? nextStageMod(save, mods) : undefined;
+  const next = save && offer ? nextStageModOf(save, mods) : undefined;
   const target = next ? crossCountryStageDeparture(save!, next.manifest.id, next.scenario.opening?.locationId) : undefined;
   if (!target) return undefined;
   ((save as any).系统.扩展 ||= {})[MAP_KEY] = { nextStageId: offer!.nextStageId, toId: target.toId, mapTargetId: target.mapTargetId };

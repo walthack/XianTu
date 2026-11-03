@@ -1,0 +1,55 @@
+{
+  "note": "任务日志作者数据（设计稿 2026-11-03「任务引导取代主线按钮」；用户 2026-11-03 定，样板只做 lcq.stage_02）。只在 story.quest.enabled 开时生效（numbers-progress.json），关时整份不读＝现状。beats：按事件 id 写一拍的日志条目——line（main 主线／country 国家线／character 人物线）、lineId、title、objective（去哪、找谁、做什么，一句话，不超过 story.quest.objectiveMaxChars 字，不写怎么说、不写结果）、detail（可选背景，不写解法）、hints（卡住时按 level 逐级放出，回合数见 story.quest.hintTurns）、markers（place:<地点 id>／npc:<人物 id>；marker 写 hidden 不放标记，须同时写 hints）、doneText（结算后已完成栏写的一行结果）、approach（空转满 story.quest.approachTurns 回合 NPC 主动来找：who＋text 作为下一回合场景引子，不结算；人来了以后 where 按与 who 同场放宽）、hooks.character（人物剧情挂点，首版留空）、actions.<动作 id>.completion（where 地点 id 或 any；who 人物 id 或 none；what intent／arrive／talk／combat；talk 现有代码认不出「对谁说」，按 intent 判）、actions.<动作 id>.aliases（开关开时追加的作者短语：matchAny 命中其一、rejectIf 否定优先，各 ≤8 条）。stages：按关 id 写「上一关收束后前往本关」的启程条目 arrival（objective、hints、aliases＝手打启程短语；落点在别处时到达下一关开场地点即切关）。没写的拍回落到拍自带 objective 并记 LCQ-SAV-057。",
+  "beats": {
+    "lcq.event.s02_01": {
+      "line": "main",
+      "lineId": "lcq.main",
+      "title": "王哲传功",
+      "objective": "去帅帐找王哲，听他当面交代",
+      "detail": "王哲还有话要当面同你说。",
+      "hints": [
+        { "level": 1, "text": "王哲在帅帐等你。" },
+        { "level": 2, "text": "当面向王哲问起他要交代的事。" }
+      ],
+      "markers": ["place:lcq.location.shuai_zhang", "npc:lcq.character.wang_zhe"],
+      "doneText": "王哲为你筑基传功，把锦囊与三件托付交到你手里。",
+      "approach": {
+        "who": "lcq.character.wang_zhe",
+        "text": "王哲遣亲兵来请你，说有要事须当面交代。",
+        "moveMarker": false
+      },
+      "hooks": { "character": [] },
+      "actions": {
+        "advance_declared_objective": {
+          "completion": {
+            "where": "lcq.location.shuai_zhang",
+            "who": "lcq.character.wang_zhe",
+            "what": "intent"
+          },
+          "aliases": {
+            "matchAny": ["传功", "托付", "锦囊", "交代", "听王哲", "问王哲", "向王哲", "见王哲"],
+            "rejectIf": ["不听", "不接", "不要", "拒绝", "不去", "杀", "砍", "偷"]
+          }
+        }
+      }
+    }
+  },
+  "stages": {
+    "lcq.stage_02": {
+      "arrival": {
+        "line": "main",
+        "lineId": "lcq.main",
+        "title": "继续上路",
+        "objective": "诸事暂了，收拾行装继续上路",
+        "hints": [
+          { "level": 1, "text": "此地已无要事，可以动身了。" },
+          { "level": 2, "text": "说一声收拾行装、继续上路即可启程。" }
+        ],
+        "aliases": {
+          "matchAny": ["收拾行装", "继续旅程", "继续上路", "启程", "动身", "上路", "出发"],
+          "rejectIf": ["不走", "先不", "不启程", "不出发", "别走", "不动身", "不上路"]
+        }
+      }
+    }
+  }
+}

@@ -2391,6 +2391,42 @@
       "actionIdleNotice": "这一拍还没推进，点「{label}」即可继续主线。",
       "missNotice": "这句话没对上这一拍可做的动作，剧情没有推进。可做：{actions}"
     },
+    "quest": {
+      "note": "任务引导取代主线按钮（设计稿 2026-11-03「任务引导取代主线按钮」；用户 2026-11-03 定，代码 src/modules/scenarioMods/questLog.ts，作者数据 mod-kit/quest-log/quests.json）。enabled：功能开关，默认关＝现状（主线／探索／启程按钮照旧）；开时撤主线、探索、启程按钮，玩家看任务日志与地图标记，手打命中本拍动作（且在对的地方、对着对的人）才推进，关键选择拍仍出选项。objectiveMaxChars：日志目标一句话的字数上限（作者数据校验用）。hintTurns：本拍空转（激活后没推进的回合）满第 i 个值放出第 i+1 级提示（作者写的 hints），弹 logUpdatedNotice；按用户定 3、6。approachTurns：空转满这么多回合、且作者在拍上写了 approach，NPC 主动来找（只注入作者写的引子、who 算同场，不结算）；按用户定 8。作者写明到点（beatProgress.deadlineTurns）的拍，到点回合数不大于某级回合数时那一级不触发。deadlineWarnTurns：作者写明到点的拍，离到点还剩不超过这么多次空转时，日志预告 deadlineWarnText。showMarkersDefault：设置项「显示任务标记」的默认值（用户定默认开）。markerStyle：地图任务标记三种线（main 主线／country 国家线／character 人物线）的颜色与图标。missNotice：手打没对上本拍动作时的提示（不列动作，用户定）。departureObjective：本关收束、作者没写下一关 arrival 目标时，日志的启程目标（{place}＝下一关开场地点名）。anywhereText：作者写 where:any 的拍在日志里的地点说明。doneMax：已完成栏最多保留条数。",
+      "enabled": false,
+      "objectiveMaxChars": 24,
+      "hintTurns": [
+        3,
+        6
+      ],
+      "approachTurns": 8,
+      "deadlineWarnTurns": 1,
+      "deadlineWarnText": "时机将过",
+      "showMarkersDefault": true,
+      "markerStyle": {
+        "main": {
+          "color": "#f59e0b",
+          "icon": "◆",
+          "label": "主线"
+        },
+        "country": {
+          "color": "#3b82f6",
+          "icon": "◇",
+          "label": "国家线"
+        },
+        "character": {
+          "color": "#ec4899",
+          "icon": "●",
+          "label": "人物线"
+        }
+      },
+      "logUpdatedNotice": "任务日志已更新",
+      "missNotice": "这句话没对上这一拍要做的事，剧情没有推进。这一拍的目标见任务日志。",
+      "departureObjective": "收拾行装，前往{place}",
+      "anywhereText": "随时可做",
+      "missedText": "时机已过",
+      "doneMax": 50
+    },
     "narrativeTurnBudget": {
       "note": "普通叙事回合（MainGamePanel 发给 AIBidirectionalSystem.processPlayerAction 的那次生成，含其内部重试）的总耗时上限（毫秒）。到点掐断本回合在途请求、不再等，撤回本回合预结算（与生成失败同一兜底），保留玩家输入可直接重发，并弹 notice 提示；回合完成信号照常收尾。场面战描写另有 combat.narrationBudget。REPORT-8091-ef573ece P2：B15 回合模型流卡死 300 秒才中止重试。2026-11-03 用户定 90000→150000（保底）：主叙事 MiniMax-M3.1-Flash 推理档同日压到 low（aiRetry.reasoning.mainNarrative），目标每回合约 30 秒，150 秒只兜卡死，仍低于驱动 300 秒。0＝不设上限。不改模型／API 超时配置。",
       "totalMs": 150000,
