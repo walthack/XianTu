@@ -84,6 +84,24 @@ test('已有截断分类不受影响：length 空正文仍是截断，不是空�
   });
 });
 
+test('非 main 用途空正文仍返回空串、不报错（流式与非流式）',async()=>{
+  for(const usageType of ['memory_summary','background_audit','module_narrative']){
+    await logStore.flush();
+    const before=(await logStore.all()).filter(x=>x.code==='LCQ-NET-019').length;
+    await withFetch(async()=>streamOf('','stop'),async()=>{assert.equal(await call(true,{usageType}),'');});
+    const calls=await withAxios({data:{choices:[{message:{content:''},finish_reason:'stop'}]}},async()=>{assert.equal(await call(false,{usageType}),'');});
+    assert.equal(calls,1);
+    await logStore.flush();
+    assert.equal((await logStore.all()).filter(x=>x.code==='LCQ-NET-019').length,before,usageType);
+  }
+});
+
+test('显式 usageType=main 空正文同样报 EmptyOutputError',async()=>{
+  await withAxios({data:{choices:[{message:{content:''},finish_reason:'stop'}]}},async()=>{
+    await assert.rejects(()=>call(false,{usageType:'main'}),e=>isEmptyOutputError(e));
+  });
+});
+
 test('LCQ-NET-019 已登记 codes.ts 与 ERROR-CODES.md',async()=>{
   const {readFile}=await import('node:fs/promises');
   const codes=await readFile(new URL('../src/modules/diagnostics/codes.ts',import.meta.url),'utf8');

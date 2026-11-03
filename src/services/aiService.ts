@@ -1800,8 +1800,9 @@ class AIService {
     };
 
     // 200 但正文为空（截断／思考耗尽已先分类）：只记 finish_reason、provider、model，不记正文。
+    // 只限主叙事（usageType 未传按 main 计）；其他用途空正文仍返回空串。
     const throwIfEmptyOutput = (content: string, finishReason: unknown): void => {
-      if (content.trim()) return;
+      if (content.trim() || (usageType || 'main') !== 'main') return;
       const reason = typeof finishReason === 'string' ? finishReason : undefined;
       logEvent({ code: 'LCQ-NET-019', echo: false, detail: { finishReason: reason, provider, model, usageType } });
       throw new EmptyOutputError({ finishReason: reason });
