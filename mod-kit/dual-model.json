@@ -18,7 +18,17 @@
       "maxTokens": 16384,
       "maxTokensNote": "consistency 模块卡单次输出上限（含推理，估计；max 档推理较长，Q4 实测后校准）；API 连接的 maxTokens 更小时取更小值。",
       "degradedAttempts": 1,
-      "hourlyBudget": 60
+      "hourlyBudget": 60,
+      "npcMemoryKeep": 12,
+      "npcMemoryKeepNote": "后端落账后每个 NPC 的 社交.关系.记忆 封顶条数（估计，与自由行动 memory.keep 同量级；按尾部最新保留）。",
+      "extensionKey": "dualModelConsistency",
+      "extensionNote": "连续性提示、关系称谓提案与 summaryCheck 存在 系统.扩展.<extensionKey> 下（设计稿①）；切档或关闭后端时清掉。",
+      "timeline": {
+        "yearsElapsedAtOpening": 4,
+        "note": "18:35 时间线总约束：开局已过 4 年，全员成年，按新时间线算岁数；年龄由存档 社交.关系.出生日期 与 元数据.时间 现算，不引用原著岁数。"
+      },
+      "instruction": "你是后台一致性整理器，只读用户消息里的 JSON（summaries 概要、ledger 在场角色账、canonBase 基础设定、timeline 时间线、stateDelta 本回合变化），不写正文。只输出一个 JSON 对象：{\"turnId\":\"原样抄回\",\"npcMemory\":[{\"id\":\"ledger 里的 id\",\"entry\":\"一条一事的事实概要\"}],\"relationNotes\":[{\"id\":\"ledger 里的 id\",\"关系\":\"旧→新（仅关系称谓变化时）\"}],\"continuity\":[{\"kind\":\"timeline|canon|fact\",\"about\":\"id 或事项\",\"note\":\"下一回合应遵守的一句话\"}],\"summaryCheck\":{\"ok\":true,\"issue\":\"\"}}。npcMemory 只写本回合在场角色，每条不超过 {npcEntryMaxChars} 字；continuity 最多 {continuityMaxItems} 条；不写好感数值；summaryCheck 只标记概要是否与账、设定、时间线冲突，不改写概要。",
+      "degradedNote": "后端请求被 422/1026 拒时，去掉 summaries 与 ledger 记忆重发 degradedAttempts 次（设计稿④）。"
     },
     "frontend": { "writesNpcMemory": false },
     "billing": {

@@ -74,7 +74,7 @@ export const DEBUG_CATEGORIES = [
     id: 'ai', label: '模型请求与响应解析',
     paths: [
       ...at('services/', 'ai*', 'request*', 'httpClient.ts', 'openAIEndpoint.ts', 'apiErrorMessage.ts', 'optionalReasoningParams.ts', 'moduleModelRuntime.ts', 'gameModelModules.ts',
-        'modularTurnBackground.ts', 'dualModelConfig.ts', 'qingyuTurnLongRequests.ts', 'requestLifecycleDiagnostics.ts', 'backgroundAudit*', 'progressAuditService.ts', 'eventReconcileService.ts',
+        'modularTurnBackground.ts', 'dualModelConfig.ts', 'consistencyBackground.ts', 'qingyuTurnLongRequests.ts', 'requestLifecycleDiagnostics.ts', 'backgroundAudit*', 'progressAuditService.ts', 'eventReconcileService.ts',
         'narrativeResponseSalvage.ts', 'turnstile*'),
       ...sm('modularTurn.ts', 'backgroundAuditCore.ts'),
       ...at('utils/', 'AIBidirectionalSystem.ts', 'modelCommandPipeline.ts', 'repairCommandPipeline.ts', 'command*Validator.ts', 'processedAIResponseValidation.ts', 'jsonExtract.ts',

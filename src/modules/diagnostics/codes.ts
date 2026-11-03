@@ -158,6 +158,7 @@ export const ERROR_CODES = {
   'LCQ-NET-015': spec('warn', 'aiService', 'AI 接口不支持流式传输，已自动降级为非流式请求'),
   'LCQ-NET-018': spec('warn', 'aiService', '审核拦截后以降级上下文重发'),
   'LCQ-NET-019': spec('warn', 'aiService', '200 但正文为空（疑似输出阶段审核）'),
+  'LCQ-NET-020': spec('warn', 'consistencyBackground', '双模型后端一致性结果已丢弃或降级（不提示玩家）'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),
