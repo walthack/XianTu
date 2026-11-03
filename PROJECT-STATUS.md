@@ -734,3 +734,9 @@
 ## 2026-11-04 双模型第5步：API 配置页（Codex）
 
 开工：仅实现 consistency 中文说明、独立开关/推理档、N2/N6 提示及 N1-B 正式版确认，复用第2步配置存取；文案进 dual-model.json 并校验。开发构建不弹确认。按本步用户要求分项 tsc 后本地提交，最终全量测试；不推送、不读凭据，不改主叙事配置、canon、核心 prompt、AIBS 或任何 runtime.ts。
+
+交付：第5步已完成。APIManagementPanel 的 consistency 行显示中文说明、独立开关、default（配置 max）及五档推理选择；模型/主机不支持时置灰并提示，继承非默认型号时提示。正式版启用后端、改变独立/继承连接或编辑当前后端连接的模型/地址时，复用第2步“连接＋模型”确认记录；取消不改配置并还原控件，开发构建不弹。文案全部进 dual-model.json 并加非空/占位符校验；新辅助文件归现有 ui 日志大类，无新错误码/日志类别。
+
+提交：`ec2dad0a`（控件与提示）、`8cc629c1`（确认流程）、`a12aa10c`（文案类型回归）、`a46a7ebf`（源码日志归属）。各子项 tsc 通过后立即提交。最终 `npx tsc --noEmit` 0 error；`npx vue-tsc --noEmit` 退出 0；全量 `npm test` 3470 项，3457 通过 / 0 失败 / 13 跳过 / 0 TODO。首轮仅新辅助文件未登记日志归属失败，修正后相关 16 项与全量重跑均通过。`git diff --check` 通过；AIBS、任何 runtime.ts、主叙事配置、canon 和核心 prompt 均 0 行改动。本步按用户指定 tsc/测试及立即本地提交要求执行，未运行会重建 canon 数据的 canon:build；未推送、未做真实模型或 Q4 实测。
+
+后续边界：当前既有 `gameModelModules.ts:resolveGameModuleRoute` 仍将所有模块路由至 main；本步只实现配置页与持久化，不改后台执行接线。consistency 独立分配/继承 memory_summary 的实际请求路由须后续接线步骤对齐；配置页展示的是已保存的目标分配，不能据此声称后台请求已按此路由运行。
