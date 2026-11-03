@@ -56,6 +56,9 @@ import { EVENT_SYSTEM_RULES } from '@/utils/prompts/definitions/eventSystemRules
 import { PLAYER_PERSONALITY_RULES } from '@/utils/prompts/definitions/playerPersonality';
 import { LEGACY_RENDER_PLAN_INSTRUCTION } from '@/modules/scenarioMods/legacyRenderPlan';
 import { NPC_RELATION_NETWORK_RULES, NPC_RELATION_COMMANDS, NPC_FACTION_RULES } from '@/utils/prompts/definitions/npcRelationRules';
+import { getActivePinia } from 'pinia';
+import { useAPIManagementStore } from '@/stores/apiManagementStore';
+import { DUAL_MODEL_CONFIG, consistencyEnabled } from '@/services/dualModelConfig';
 
 export interface PromptDefinition {
   name: string;
@@ -162,13 +165,30 @@ const TEXT_FORMAT_RULES = [TEXT_FORMAT_MARKERS, DICE_ROLLING_RULES, COMBAT_DAMAG
 // 合并世界观标准
 const WORLD_STANDARDS = [REALM_ATTRIBUTE_STANDARDS, QUALITY_SYSTEM, MARTIAL_SYSTEM, EQUIPMENT_SYSTEM, CURRENCY_SYSTEM, REPUTATION_GUIDE].join('\n\n');
 
-export function getSystemPrompts(): Record<string, PromptDefinition> {
+// ==================== 双模型：前端 NPC 记忆与概要写法（设计稿 2026-11-03-双模型分工 ②⑧③；Q2-A／N4-A） ====================
+const DUAL_FRONTEND = DUAL_MODEL_CONFIG.dualModel.frontend;
+/** 非分步主叙事 coreRules 里让前端写 NPC 记忆的片段；后端开启时去掉（测试钉住它仍存在于 CORE_OUTPUT_RULES）。 */
+export const CORE_NPC_MEMORY_PUSH = '/记忆push';
+
+/** 后端开启（总闸与玩家开关同 isGameModuleEnabled 口径，N3-A）且配置不让前端写时，NPC 记忆只由后端写。无 pinia（测试/预渲染）按关闭处理。 */
+export function backendWritesNpcMemory(): boolean {
+  if (!DUAL_MODEL_CONFIG.dualModel.enabled || DUAL_FRONTEND.writesNpcMemory || !getActivePinia()) return false;
+  return consistencyEnabled(useAPIManagementStore().isModuleEnabled(DUAL_MODEL_CONFIG.dualModel.backend.moduleId));
+}
+
+const summaryInstruction = () => DUAL_FRONTEND.summaryInstruction.replace('{summaryMaxChars}', String(DUAL_MODEL_CONFIG.memory.summaryMaxChars));
+
+export function getSystemPrompts(options: { backendWritesNpcMemory?: boolean } = {}): Record<string, PromptDefinition> {
   const tavernEnv = isTavernEnv();
+  // 后端关闭时以下两处与原先逐字相同（N4-A）。
+  const backendMemory = options.backendWritesNpcMemory ?? backendWritesNpcMemory();
   return {
     // ==================== 核心请求提示词（合并版） ====================
     coreOutputRules: {
       name: '1. 输出格式',
-      content: CORE_OUTPUT_RULES,
+      content: backendMemory
+        ? `${CORE_OUTPUT_RULES.replace(CORE_NPC_MEMORY_PUSH, '')}\n${DUAL_FRONTEND.npcMemoryInstruction}\n${summaryInstruction()}`
+        : CORE_OUTPUT_RULES,
       category: 'coreRequest',
       description: 'JSON格式、数据同步',
       order: 1,
@@ -363,7 +383,7 @@ ${R2_9_NARRATIVE_GUARD_RULES}
 ### NPC交互 - 必须全面更新NPC状态！
 □ NPC出场 → set \`社交.关系.["角色ID"]\`（完整对象）
 □ 好感变化 → add \`社交.关系.["角色ID"].好感度\`
-□ NPC记忆（事件事实概要，一条一事，不超过 ${promptLayersConfig.memory.npcEntryMaxChars} 字） → push \`社交.关系.["角色ID"].记忆\`
+□ ${backendMemory ? DUAL_FRONTEND.npcMemoryInstruction : `NPC记忆（事件事实概要，一条一事，不超过 ${promptLayersConfig.memory.npcEntryMaxChars} 字） → push \`社交.关系.["角色ID"].记忆\``}
 □ NPC状态 → set \`社交.关系.["角色ID"].当前外貌状态\`
 □ NPC属性变化：气血/灵气/神识/境界/位置都要更新
 
@@ -378,7 +398,7 @@ ${R2_9_NARRATIVE_GUARD_RULES}
 □ 玩家本轮是否明确表示"暂时偏离主线自己去做别的"（先四处逛逛/先去办别的事/先歇一歇/暂时不追主线/先探索支线等）→ 若是，set \`系统.扩展.任务追踪.主线偏移提议\`=true（布尔信号；系统会据此静默数轮回主线引子并自动衰减，尊重玩家自主）；判不准、或本轮玩家明确要回主线/已在推进主线 → 不写此字段（保持现状）。注意：被动卡关、被敌人纠缠、迷路找不到方向都**不算**主动偏移，不要写此信号。冷却轮数由系统据本信号确定性置入并自动衰减，你只需写这个布尔信号。
 
 ## 🔴 输出格式（必须严格遵守）
-{"mid_term_memory":"50-100字摘要","tavern_commands":[{"action":"add","key":"元数据.时间.分钟","value":30}],"action_options":["选项1","选项2","选项3","选项4","选项5"]}
+{"mid_term_memory":"50-100字摘要","tavern_commands":[{"action":"add","key":"元数据.时间.分钟","value":30}],"action_options":["选项1","选项2","选项3","选项4","选项5"]}${backendMemory ? `\n${summaryInstruction()}` : ''}
 
 ## ✅ JSON与key规则（CRITICAL）
 - 只输出一个JSON对象，禁止任何前后缀文字、禁止 \`\`\` 代码块

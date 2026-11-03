@@ -40,7 +40,12 @@
       "inheritedModelWarning": "继承的模型不是 {model}，可为后台一致性单独选择连接。",
       "paidConfirmation": "后台一致性会自动发请求，每小时最多 {hourlyBudget} 次。所选模型不在默认白名单中，可能产生按量费用。是否确认使用？"
     },
-    "frontend": { "writesNpcMemory": false },
+    "frontend": {
+      "writesNpcMemory": false,
+      "note": "后端开启（dualModel.enabled 与玩家开关都开）且 writesNpcMemory=false 时，主叙事提示词换用下列两条（Q2-A／N4-A，第4步）；后端关闭时提示词与原先逐字相同。",
+      "npcMemoryInstruction": "NPC记忆 → 不写 `社交.关系.[\"角色ID\"].记忆`：后台一致性已开启，NPC 记忆由后台按概要整理；本条优先于其他段落里“push 记忆／补充其记忆”的说法。好感照常写。",
+      "summaryInstruction": "mid_term_memory（概要）只写事实：谁、在哪、做了什么、结果如何；亲密场面只记发生了什么关系上的事件，不写身体与过程；不超过 {summaryMaxChars} 字。这是归档写法，不改正文尺度。"
+    },
     "billing": {
       "note": "只约束开发／测试构建的默认值与实测脚本（22:18）；正式版对名单外模型在打开后端或改后端连接时确认一次（N1-B）。正则，大小写不敏感，全名锚定。",
       "allowedModels": ["^MiniMax-M3\\.1-Flash$"],

@@ -22,7 +22,7 @@ export interface DualModelConfig {
       name: string; description: string; enabledLabel: string; reasoningLabel: string;
       defaultEffortLabel: string; unsupportedReasoning: string; inheritedModelWarning: string; paidConfirmation: string;
     };
-    frontend: { writesNpcMemory: boolean };
+    frontend: { writesNpcMemory: boolean; npcMemoryInstruction: string; summaryInstruction: string };
     billing: { allowedModels: string[]; blockUnlisted: boolean };
   };
   memory: { summaryMaxChars: number; moderatedPlaceholder: string };
@@ -54,6 +54,8 @@ export function validateDualModelConfig(cfg: unknown = DUAL_MODEL_CONFIG): strin
     if (typeof dm?.ui?.[key] !== 'string' || !dm.ui[key].includes(placeholder)) problems.push(`dualModel.ui.${key} 须包含 ${placeholder}`);
   }
   if (typeof dm?.frontend?.writesNpcMemory !== 'boolean') problems.push('dualModel.frontend.writesNpcMemory 须为布尔');
+  for (const key of ['npcMemoryInstruction', 'summaryInstruction'] as const) if (!text(dm?.frontend?.[key])) problems.push(`dualModel.frontend.${key} 不能为空`);
+  if (typeof dm?.frontend?.summaryInstruction !== 'string' || !dm.frontend.summaryInstruction.includes('{summaryMaxChars}')) problems.push('dualModel.frontend.summaryInstruction 须包含 {summaryMaxChars}');
   const allowed = dm?.billing?.allowedModels;
   if (!Array.isArray(allowed) || allowed.some(p => !text(p))) problems.push('dualModel.billing.allowedModels 须为非空字符串数组');
   else for (const pattern of allowed) {
