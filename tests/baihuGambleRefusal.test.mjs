@@ -1176,7 +1176,7 @@ test('hard-coded option locks (user ruling 2026-10-02): only the deciding step l
   assert.equal(refusal.getBaihuGambleRefusalSelections(captured).length, 3);
   assert.equal(branch.detectBranchDecision(optionsOf(captured)), null);
 
-  // 表外不锁：签契那一拍、谈期限都是普通交谈。
+  // 签契那一拍、谈期限那一步不锁（南荒之约 2026-11-03 起只锁当面订约那一步）。
   for (const key of ['atS0206', 'atPact', 'atBond']) {
     assert.equal(branch.detectBranchDecision(optionsOf(at(key))), null, key);
   }
@@ -1280,7 +1280,7 @@ test('bond beat outcome is explicit: done means closed, outcome says signed or r
   assert.equal(guarded.accepted.length, 0);
 });
 
-test('south pact is ordinary conversation again (user ruling 2026-10-02): no key beat card, no lock, AI options kept', async () => {
+test('south pact term talk is ordinary conversation (user ruling 2026-10-02; 2026-11-03 locks only the sealing step): no key beat card, no lock, AI options kept', async () => {
   setActivePinia(createPinia());
   const { AIBidirectionalSystem } = await loadPipelineTs('../src/utils/AIBidirectionalSystem.ts');
   const cards = await loadTs('../src/modules/scenarioMods/keyBeatCards.ts');
