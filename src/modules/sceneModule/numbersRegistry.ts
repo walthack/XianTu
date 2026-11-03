@@ -23,11 +23,11 @@ export interface FieldSpec {
 export const SECTION_KEYS: Record<NumbersSection, readonly string[]> = {
   combat: ['combat', 'difficulty', 'judgement', 'factors', 'weights', 'goalModifiers', 'sceneDefaults', 'historicalPrototype', 'encounter'],
   progress: ['levels', 'training', 'techniques', 'status', 'currency', 'freeAction', 'affinity', 'reputation', 'lineBonds', 'npcCard', 'story', 'shop', 'crafting', 'loot'],
-  runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui', 'crossCountryTravel'],
+  runtime: ['version', 'tuning', 'diagnostics', 'saves', 'aiRetry', 'feedback', 'e2eSmoke', 'perf', 'ui', 'crossCountryTravel', 'narrative', 'prompt'],
   assist: ['assist'],
 };
 
-/** 33 个顶层键：version 为 int，其余为必填 object。 */
+/** 36 个顶层键：version 为 int，其余为必填 object。 */
 export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; section: NumbersSection }> = [
   { key: 'crossCountryTravel', kind: 'object', section: 'runtime' },
   { key: 'version', kind: 'int', section: 'runtime' },
@@ -63,6 +63,8 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'ui', kind: 'object', section: 'runtime' },
   { key: 'loot', kind: 'object', section: 'progress' },
   { key: 'encounter', kind: 'object', section: 'combat' },
+  { key: 'narrative', kind: 'object', section: 'runtime' },
+  { key: 'prompt', kind: 'object', section: 'runtime' },
 ];
 
 /** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读配置 story.lineOutcome.judgedLines，这里不写。 */
@@ -127,6 +129,9 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'aiRetry.reasoning.timeoutMultiplier', kind: 'int', required: true, min: 1, max: 16, section: 'runtime' },
   { path: 'aiRetry.reasoning.retryMultiplier', kind: 'int', required: true, min: 2, max: 16, section: 'runtime' },
   { path: 'aiRetry.reasoning.budgetTokens', kind: 'int', required: true, min: 0, max: 128000, section: 'runtime' },
+  { path: 'narrative.detailRetention', kind: 'string', required: true, oneOf: ['localOnly', 'none'], section: 'runtime' },
+  { path: 'narrative.noSummaryMarker', kind: 'string', required: true, section: 'runtime' },
+  { path: 'prompt.recentContext.tailChars', kind: 'int', required: true, min: 0, section: 'runtime' },
   { path: 'aiRetry.reasoning.mainNarrative.effort', kind: 'string', required: true, oneOf: ['off', 'low', 'medium', 'high', 'xhigh', 'max'], section: 'runtime' },
   { path: 'aiRetry.reasoning.mainNarrative.modelPattern', kind: 'string', required: true, section: 'runtime' },
   { path: 'aiRetry.reasoning.mainNarrative.hostPattern', kind: 'string', required: true, section: 'runtime' },

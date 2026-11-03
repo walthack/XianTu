@@ -3288,5 +3288,16 @@
     "storyTransitionEventIds": [
       "lcq.event.s03_07"
     ]
+  },
+  "narrative": {
+    "note": "详细描写不入档（设计稿 2026-11-03「提示词历史与审核拒绝」第七节方案 B；用户 2026-11-03 17:05 定）。回合存档（系统.历史.叙事／社交.记忆.短期记忆／隐式中期记忆）与提示词只用模型同次给出的概要 mid_term_memory；正文全文只另存本地副本（src/services/narrativeDetailStore.ts，独立 IndexedDB 库，不进存档、不进提示词、不进叙事检索、不随导出／云同步）。detailRetention：localOnly＝全文存本地副本供回看；none＝不存全文，回看只见概要。noSummaryMarker：概要为空时写进存档的「无概要」标记正文（src/services/narrativeSummary.ts；不截取正文兜底），提示词侧跳过带此标记的条目。",
+    "detailRetention": "localOnly",
+    "noSummaryMarker": "（本回合无概要）"
+  },
+  "prompt": {
+    "note": "发给模型的上下文（设计稿 2026-11-03「提示词历史与审核拒绝」第七节）。recentContext.tailChars：「最近事件」除概要外，再附最新一条正文末尾这么多字作衔接接口（src/services/narrativeSummary.ts entriesForPrompt）；会重新带入正文原文，用户 2026-11-03 定默认 0＝不附。",
+    "recentContext": {
+      "tailChars": 0
+    }
   }
 }
