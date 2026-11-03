@@ -398,5 +398,6 @@ test('⑪ 打字跨国：本地只追加「准备前往、请开地图」一句�
   const main = read('src/components/dashboard/MainGamePanel.vue');
   assert.match(main, /if \(mapPrep\) \{ finalUserMessage \+= '\\n' \+ mapPrep;/, '拦截路径只在用户消息末尾追加一句');
   const aibs = read('src/utils/AIBidirectionalSystem.ts');
-  assert.match(aibs, /throw new Error\('AI响应为空或格式错误'\)/, '空正文在冻结文件内抛出');
+  // 2026-11-03 422降级：AIBS 空正文改抛 emptyOutputError(response)（原始响应为空→EmptyOutputError，非空仍是「AI响应为空或格式错误」）。
+  assert.match(aibs, /throw emptyOutputError\(response\)/, '空正文在冻结文件内抛出');
 });

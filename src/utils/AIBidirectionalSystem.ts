@@ -3,6 +3,7 @@ import { readModuleActionTime } from '@/modules/scenarioMods/modularTurn';
 import { pilotOptionsPrompt, pilotOptionContext, selectPilotOptions, tagPilotOptions } from '@/modules/scenarioMods/legacyPilotActionOptions';
 import type { FreeTextStatusResolution } from '@/modules/sceneModule/host/freeTextStatusSemantic';
 import { settledStepScene } from '@/modules/scenarioMods/settledStepScene';
+import { emptyOutputError } from '@/services/apiErrorMessage';
 import {entityName} from '@/modules/scenarioMods/namedEntities';
 
 import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
@@ -1655,6 +1656,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           injects: injects as any,
           onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
           qingyuTurnId,
+          moderationDegrade: { shortTerm: memoryToSend, implicitMid: v3?.社交?.记忆?.隐式中期记忆 || [] },
         });
       }
 
@@ -1855,7 +1857,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
       }
       if (!gmResponse || !gmResponse.text || gmResponse.text.trim() === '') {
         console.error('[AI双向系统] AI响应为空，原始响应:', String(response).substring(0, 200));
-        throw new Error('AI响应为空或格式错误');
+        throw emptyOutputError(response);
       }
 
       // 普通 Legacy 在提交前即可结束流式层。Pilot 正文等本地事务提交后再发。
