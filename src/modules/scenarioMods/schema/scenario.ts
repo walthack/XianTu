@@ -126,6 +126,15 @@ export interface ScenarioNpcPrivateKnowledgeFact extends ScenarioInitialNpcPriva
   unlockedAtTurn?: number;
 }
 
+/**
+ * 事件场景标记。`intimate` 是私密层门的拍子入口（与玩家输入命中并列），
+ * 仍须过在场与关系确立两道门；`characters` 省略时取事件的 relatedCharacterIds。
+ */
+export interface ScenarioModEventScene {
+  intimate?: boolean;
+  characters?: string[];
+}
+
 export interface ScenarioModEvent {
   id: string;
   name: string;
@@ -175,6 +184,8 @@ export interface ScenarioModEvent {
   narrativeFactReceipts?: ScenarioNarrativeFactReceipt[];
   /** 无机会卡事件的本地完成合同；动作身份与判定结果均由引擎持有。 */
   playerCompletionContract?: ScenarioPlayerCompletionContract;
+  /** 场景标记（角色设定分层 P8）：只由作者标已知的亲密拍；判定只读数据，不让模型判断。 */
+  scene?: ScenarioModEventScene;
   /** 显式允许 non-critical 事件与主线并列展示；未标记的资料事件保持不可操作。 */
   exploration?: {
     role: 'seed' | 'investigate' | 'position' | 'payoff';

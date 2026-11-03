@@ -5703,6 +5703,12 @@
           "liuchao.character.bai_nichang",
           "liuchao.character.lv_zhi"
         ],
+        "scene": {
+          "intimate": true,
+          "characters": [
+            "liuchao.character.bai_nichang"
+          ]
+        },
         "locationId": "liuchao.location.changan",
         "axisId": "yange.136.1",
         "axisSeq": 1210,

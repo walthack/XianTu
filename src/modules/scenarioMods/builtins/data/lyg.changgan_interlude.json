@@ -6083,6 +6083,12 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
+        "scene": {
+          "intimate": true,
+          "characters": [
+            "liuchao.character.zhao_feiyan"
+          ]
+        },
         "objective": "探望赵飞燕，提出舞都会社",
         "playerCompletionContract": {
           "kind": "objective_action",

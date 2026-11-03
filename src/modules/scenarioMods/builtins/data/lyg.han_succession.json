@@ -5479,6 +5479,12 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
+        "scene": {
+          "intimate": true,
+          "characters": [
+            "liuchao.character.zhao_feiyan"
+          ]
+        },
         "objective": "在长秋宫加速登基事宜",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -5519,6 +5525,12 @@
         "relatedCharacterIds": [
           "liuchao.character.cheng_zongyang"
         ],
+        "scene": {
+          "intimate": true,
+          "characters": [
+            "liuchao.character.zhao_feiyan"
+          ]
+        },
         "objective": "从密道夜入长秋宫",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -6109,6 +6121,12 @@
           "liuchao.character.zhao_feiyan",
           "liuchao.character.cheng_zongyang"
         ],
+        "scene": {
+          "intimate": true,
+          "characters": [
+            "liuchao.character.zhao_feiyan"
+          ]
+        },
         "critical": false,
         "objective": "完成登基大典后的私密余波",
         "playerCompletionContract": {

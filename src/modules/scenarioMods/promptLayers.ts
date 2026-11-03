@@ -5,12 +5,14 @@
  *   - fieldLayer：staticProfile 字段归哪一层（base／gated／secret），最长路径优先，
  *     所以 `visualIdentity.trueForm` 归 secret、其余 `visualIdentity.*` 归 base。
  *   - privateGateOpen：私密层门＝（玩家输入命中 OR 拍子 scene.intimate）AND 在场 AND 关系已确立，三项同时满足才开（P3）。
+ *   - beatIntimateFor：当前激活拍是否对该角色标了 scene.intimate（拍子入口；characters 省略取 relatedCharacterIds）。
  *   - intimateInputHit：玩家本轮输入是否命中配置词表（原 intimacyProfiles.ts 写死的正则，原样搬入配置）。
  *   - pickPrivacyFields：私密信息门开时只留配置清单里的倾向类字段（P5）。
  *   - projectNpcMemory：NPC 记忆只取最近 npcPromptLimit 条（P6；不截条目本身，P9 不做写入时截断）。
  */
 import config from '../../../mod-kit/prompt-layers.json';
 import { AFFINITY_THRESHOLDS } from './affinityLadder';
+import type { ScenarioModEventScene } from './schema/scenario';
 
 export type PromptLayer = 'base' | 'gated' | 'secret';
 
@@ -46,6 +48,24 @@ export const INTIMATE_INPUT_RE = new RegExp(PROMPT_LAYERS.intimateInputPatterns.
 
 export function intimateInputHit(input: string | null | undefined): boolean {
   return !!input && INTIMATE_INPUT_RE.test(input);
+}
+
+/** 只读事件上判定所需的三个字段，便于测试与运行时事件共用。 */
+export interface IntimateBeatLike {
+  relatedCharacterIds?: string[];
+  scene?: ScenarioModEventScene;
+}
+
+/**
+ * 拍子入口：激活拍 scene.intimate === true 且角色在 scene.characters（省略取 relatedCharacterIds）里。
+ * 只是入口之一，在场与关系确立仍由 privateGateOpen 判。
+ */
+export function beatIntimateFor(activeEvent: IntimateBeatLike | null | undefined, characterId: string | null | undefined): boolean {
+  if (!activeEvent || !characterId || activeEvent.scene?.intimate !== true) return false;
+  const characters = Array.isArray(activeEvent.scene.characters)
+    ? activeEvent.scene.characters
+    : activeEvent.relatedCharacterIds;
+  return Array.isArray(characters) && characters.includes(characterId);
 }
 
 export interface PrivateGateInput {

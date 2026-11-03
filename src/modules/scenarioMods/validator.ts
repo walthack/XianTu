@@ -425,6 +425,14 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           }
         }
       }
+      if (entity.scene !== undefined) {
+        if (!isRecord(entity.scene)) {
+          add(`${entity.__path}.scene`, 'invalid_type', 'scene must be an object.');
+        } else {
+          optionalBoolean(entity.scene.intimate, `${entity.__path}.scene.intimate`, add);
+          validateIdArray(entity.scene.characters, `${entity.__path}.scene.characters`, add);
+        }
+      }
       if (entity.exploration !== undefined) {
         const explorationPath = `${entity.__path}.exploration`;
         if (!isRecord(entity.exploration)) {
