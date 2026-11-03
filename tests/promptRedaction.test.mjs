@@ -8,7 +8,7 @@ const jiti = createJiti(import.meta.url, { alias: { '@': fileURLToPath(new URL('
 const { default: moderationConfig } = await jiti.import('../mod-kit/ai-content-moderation.json');
 const {
   RECENT_EVENTS_PREFIX, RECENT_EVENTS_TAIL,
-  degradedRecentEvents, degradedModeForAttempt, replaceRecentEventsMessage, summarizeRecentShortTerm,
+  degradedRecentEvents, degradedModeForAttempt, replaceRecentEventsMessage, summarizeRecentShortTerm, summarizeMemoryShortTerm,
 } = await jiti.import('../src/services/promptRedaction.ts');
 
 const frozen = value => { Object.freeze(value); return value; };
@@ -92,4 +92,41 @@ test('summarizeRecentShortTerm：最近 n 条换摘要，缺摘要保持原样',
   assert.deepEqual(summarizeRecentShortTerm(shortTerm, mid, 0), ['原1', '原2', '原3', '原4']);
   assert.deepEqual(summarizeRecentShortTerm(shortTerm, ['摘4'], 10), ['原1', '原2', '原3', '摘4']);
   assert.deepEqual(shortTerm, ['原1', '原2', '原3', '原4']);
+});
+
+test('summarizeMemoryShortTerm：存档短期记忆最近 N 条（N 读配置）换摘要，历史.叙事不动，缺摘要保持原样', () => {
+  const narrative = [{ 类型: 'gm', 内容: '原1正文' }, { 类型: 'gm', 内容: '原4正文' }];
+  const save = {
+    社交: { 记忆: { 短期记忆: ['原1', '原2', '原3', '原4'], 隐式中期记忆: ['摘1', '摘2', '', '摘4'], 中期记忆: ['中1'] } },
+    系统: { 历史: { 叙事: narrative } },
+  };
+  const narrativeBefore = JSON.stringify(save.系统.历史.叙事);
+  const { shortTerm, replaced } = summarizeMemoryShortTerm(save.社交.记忆);
+  assert.deepEqual(shortTerm, ['原1', '摘2', '原3', '摘4']);
+  assert.equal(replaced, 2);
+  assert.deepEqual(save.社交.记忆.短期记忆, ['原1', '原2', '原3', '原4'], '入参不改，写回由调用方做');
+  save.社交.记忆.短期记忆 = shortTerm;
+  assert.equal(JSON.stringify(save.系统.历史.叙事), narrativeBefore);
+  assert.equal(save.系统.历史.叙事, narrative);
+  assert.deepEqual(save.社交.记忆.隐式中期记忆, ['摘1', '摘2', '', '摘4']);
+});
+
+test('summarizeMemoryShortTerm：全缺摘要或无记忆时不换（replaced=0）', () => {
+  assert.deepEqual(summarizeMemoryShortTerm({ 短期记忆: ['原1', '原2'], 隐式中期记忆: [] }), { shortTerm: ['原1', '原2'], replaced: 0 });
+  assert.deepEqual(summarizeMemoryShortTerm({ 短期记忆: ['原1'], 隐式中期记忆: ['  '] }), { shortTerm: ['原1'], replaced: 0 });
+  assert.deepEqual(summarizeMemoryShortTerm(null), { shortTerm: [], replaced: 0 });
+});
+
+test('记忆中心按钮：确认后调 summarizeMemoryShortTerm，只写回短期记忆、走 saveCurrentGame，不碰历史.叙事', () => {
+  const source = readFileSync(new URL('../src/components/dashboard/MemoryCenterPanel.vue', import.meta.url), 'utf8');
+  const start = source.indexOf('const summarizeRecentShortTermMemories');
+  const body = source.slice(start, source.indexOf('\n};\n', start));
+  assert.ok(start > 0 && source.includes('@click="summarizeRecentShortTermMemories"'));
+  assert.ok(source.includes('const manualSummaryRecentN = moderationConfig.manualSummaryRecentN;'));
+  assert.match(body, /uiStore\.showRetryDialog\(/);
+  assert.match(body, /summarizeMemoryShortTerm\(memory, manualSummaryRecentN\)/);
+  assert.match(body, /memory\.短期记忆 = shortTerm;/);
+  assert.match(body, /characterStore\.saveCurrentGame\(\)/);
+  assert.doesNotMatch(body, /历史\.叙事|\.叙事\s*=|系统\./);
+  assert.doesNotMatch(body.replace(/'[^']*'/g, "''"), /\b\d+\b(?<!\b0)/, '不写魔数');
 });

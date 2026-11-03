@@ -135,6 +135,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-056': spec('info', 'sceneModule', '战斗统一写回（combat.writeback）'),
   'LCQ-SAV-057': spec('info', 'beatProgress', '任务日志缺目标文案：作者没写 quest.objective，日志回落到拍自带 objective'),
   'LCQ-SAV-058': spec('info', 'beatProgress', '任务引导：本拍空转满回合数，作者写的 NPC 主动来找（approach）已触发'),
+  'LCQ-SAV-059': spec('error', 'memorySettings', '记忆中心「最近短期记忆换成摘要」写回存档失败'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

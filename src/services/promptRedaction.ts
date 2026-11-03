@@ -70,3 +70,18 @@ export function summarizeRecentShortTerm(shortTerm: readonly string[], implicitM
     ? alignedSummary(shortTerm, implicitMid, index) ?? entry
     : entry);
 }
+
+type MemoryLike = { 短期记忆?: unknown; 隐式中期记忆?: unknown };
+
+const stringsOf = (value: unknown): string[] => (Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []);
+
+/**
+ * 记忆中心手动按钮：按配置 manualSummaryRecentN 把 社交.记忆.短期记忆 最近 N 条换成对应摘要。
+ * 返回新的短期记忆数组与实际换掉的条数；只读入参，调用方写回存档（系统.历史.叙事 不经此处）。
+ */
+export function summarizeMemoryShortTerm(memory: MemoryLike | null | undefined, n: number = moderationConfig.manualSummaryRecentN): { shortTerm: string[]; replaced: number } {
+  const before = stringsOf(memory?.短期记忆);
+  const shortTerm = summarizeRecentShortTerm(before, stringsOf(memory?.隐式中期记忆), n);
+  const replaced = shortTerm.filter((entry, index) => entry !== before[index]).length;
+  return { shortTerm, replaced };
+}

@@ -170,6 +170,7 @@
 | LCQ-SAV-056 | info | sceneModule | 战斗统一写回（combat.writeback） | 场面或自由交手落账 | detail.source、from、to、downed、injuries 记录实际结果，不记输入原文 | 否 |
 | LCQ-SAV-057 | info | beatProgress | 任务日志缺目标文案：作者没写 quest.objective，日志回落到拍自带 objective | 只在 story.quest.enabled 开时：本拍（或待启程的下一关）在 mod-kit/quest-log/quests.json 没有 objective，日志改用拍的 objective 字段／story.quest.departureObjective（设计稿 2026-11-03 Q8=A，不让模型临场生成）；同一关同一拍本会话只记一次 | 按 detail.modId、detail.beatKey 汇总，给这些拍补 quests.json 条目 | 否 |
 | LCQ-SAV-058 | info | beatProgress | 任务引导：本拍空转满回合数，作者写的 NPC 主动来找（approach）已触发 | 只在 story.quest.enabled 开时：本拍空转满 story.quest.approachTurns 回合，且作者在 quests.json 写了 approach；下一回合注入作者引子、who 算同场，不结算 | 看 detail.beatId、detail.who、detail.idleTurns；频繁触发说明该拍的目标或短语需要补 | 否 |
+| LCQ-SAV-059 | error | memorySettings | 记忆中心「最近短期记忆换成摘要」写回存档失败 | 玩家在记忆中心点「最近短期记忆换成摘要」并确认后，characterStore.saveCurrentGame 抛错（存档槽缺失、IndexedDB 写入失败等）；只换 社交.记忆.短期记忆 最近 manualSummaryRecentN 条，系统.历史.叙事 不动；失败时内存里的短期记忆回滚为原样 | 看 detail.replaced、detail.n 与 cause；先确认当前有激活存档，再手动存档一次 | 否 |
 
 ## 已作废
 

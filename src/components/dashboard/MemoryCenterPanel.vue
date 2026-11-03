@@ -160,6 +160,21 @@
             📝 {{ t('手动总结中期记忆') }}
           </button>
         </div>
+
+        <!-- 最近短期记忆换成摘要（422 审核卡档时手动解） -->
+        <div class="manual-summary-section">
+          <div class="summary-info">
+            <span class="info-text">{{ t('当前短期记忆：') }} {{ shortTermMemories.length }} {{ t('条') }}</span>
+            <span class="info-hint">{{ t('把最近{count}条短期记忆换成对应摘要，叙事历史原文不动', { count: manualSummaryRecentN }) }}</span>
+          </div>
+          <button
+            class="action-btn warning"
+            @click="summarizeRecentShortTermMemories"
+            :disabled="shortTermMemories.length === 0"
+          >
+            🧾 {{ t('最近短期记忆换成摘要') }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -585,6 +600,9 @@ import { AIBidirectionalSystem } from '@/utils/AIBidirectionalSystem'; // 导入
 import { vectorMemoryService, type VectorMemoryEntry } from '@/services/vectorMemoryService';
 import { narrativeRagService, type NarrativeRagEntry } from '@/services/narrativeRagService';
 import { useAPIManagementStore } from '@/stores/apiManagementStore'; // 导入API管理Store
+import { summarizeMemoryShortTerm } from '@/services/promptRedaction';
+import moderationConfig from '../../../mod-kit/ai-content-moderation.json';
+import { logEvent } from '@/modules/diagnostics/log';
 
 interface Memory {
   type: 'short' | 'medium' | 'long';
@@ -1415,6 +1433,41 @@ const manualTriggerSummary = async () => {
   await AIBidirectionalSystem.triggerMemorySummary({
     useRawMode: memoryConfig.value.useRawMode,
     useStreaming: memoryConfig.value.useStreaming
+  });
+};
+
+const manualSummaryRecentN = moderationConfig.manualSummaryRecentN;
+
+/**
+ * 把最近 N 条短期记忆换成对应的隐式中期记忆摘要（N 读 manualSummaryRecentN）。
+ * 只改 社交.记忆.短期记忆，系统.历史.叙事 原文不动；缺摘要的条目保持原样。
+ */
+const summarizeRecentShortTermMemories = () => {
+  uiStore.showRetryDialog({
+    title: t('最近短期记忆换成摘要'),
+    message: t('确定把最近{count}条短期记忆换成对应摘要吗？没有摘要的条目保持原样，叙事历史原文不会改动。', { count: manualSummaryRecentN }),
+    confirmText: t('确认替换'),
+    cancelText: t('取消'),
+    onConfirm: async () => {
+      const memory = gameStateStore.memory;
+      const { shortTerm, replaced } = summarizeMemoryShortTerm(memory, manualSummaryRecentN);
+      if (!memory || replaced === 0) {
+        toast.info(t('最近短期记忆没有可用摘要，未改动'));
+        return;
+      }
+      const previous = memory.短期记忆;
+      memory.短期记忆 = shortTerm;
+      try {
+        await characterStore.saveCurrentGame();
+        await loadMemoryData();
+        toast.success(t('已把{count}条短期记忆换成摘要', { count: replaced }));
+      } catch (error) {
+        memory.短期记忆 = previous;
+        logEvent({ code: 'LCQ-SAV-059', cause: error, echo: false, detail: { replaced, n: manualSummaryRecentN } });
+        toast.error(t('短期记忆换成摘要失败'));
+      }
+    },
+    onCancel: () => {}
   });
 };
 
