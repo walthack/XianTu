@@ -213,6 +213,10 @@
               <label class="setting-name" :for="`module-model-${module.id}`">{{ module.name }}</label>
               <span class="setting-desc">{{ module.description }}</span>
               <span class="setting-desc">当前：{{ moduleRouteLabel(module) }}</span>
+              <template v-if="module.id === consistencyId">
+                <span v-if="!consistencyPanel.supportsReasoning" class="setting-desc">{{ dualModelUI.unsupportedReasoning }}</span>
+                <span v-if="consistencyPanel.inheritedWarning" class="setting-desc">{{ consistencyPanel.inheritedWarning }}</span>
+              </template>
               <span v-if="module.id === 'audit'" class="setting-desc">
                 只读、不影响游戏进程。开启后约每 {{ auditCheckpointTurns }} 回合调用一次所选模型，会占用该连接的 API 额度。
               </span>
@@ -222,8 +226,8 @@
             </div>
             <div class="setting-control">
               <div class="control-row">
-                <div v-if="module.id === 'audit'" class="inline-toggle">
-                  <label class="toggle-label" :for="`module-enabled-${module.id}`">启用</label>
+                <div v-if="(module.id === 'audit' || module.id === consistencyId)" class="inline-toggle">
+                  <label class="toggle-label" :for="`module-enabled-${module.id}`">{{ module.id === consistencyId ? dualModelUI.enabledLabel : '启用' }}</label>
                   <label class="setting-switch compact">
                     <input :id="`module-enabled-${module.id}`" type="checkbox"
                       :checked="apiStore.isModuleEnabled(module.id)"
@@ -246,6 +250,16 @@
                   <option :value="MODULE_INHERIT">继承「{{ getFunctionName(module.inheritUsageType) }}」</option>
                   <option v-for="api in apiStore.apiConfigs" :key="api.id" :value="api.id" :disabled="!api.enabled">
                     {{ getDisplayName(api) }} · {{ api.model || '未配置模型' }}{{ !api.enabled ? '（未启用）' : '' }}
+                  </option>
+                </select>
+                <select v-if="module.id === consistencyId" class="setting-select"
+                  :aria-label="dualModelUI.reasoningLabel"
+                  :disabled="!consistencyPanel.supportsReasoning"
+                  :title="consistencyPanel.supportsReasoning ? dualModelUI.reasoningLabel : dualModelUI.unsupportedReasoning"
+                  :value="apiStore.getModuleReasoningEffort(consistencyId)"
+                  @change="apiStore.setModuleReasoningEffort(consistencyId, ($event.target as HTMLSelectElement).value as BackendReasoningEffort)">
+                  <option v-for="effort in BACKEND_REASONING_EFFORTS" :key="effort" :value="effort">
+                    {{ effort === 'default' ? consistencyPanel.defaultEffortLabel : effort }}
                   </option>
                 </select>
               </div>
@@ -731,12 +745,19 @@ import { GAME_MODEL_MODULES, type ModelModuleDefinition } from '@/services/modul
 import { MODULE_INHERIT } from '@/stores/apiManagementStore';
 import { resolveGameModuleRoute } from '@/services/gameModelModules';
 import { exportBackgroundAuditLog, getBackgroundAuditLog } from '@/services/backgroundAudit';
+import { DUAL_MODEL_CONFIG, BACKEND_REASONING_EFFORTS, type BackendReasoningEffort } from '@/services/dualModelConfig';
+import { backendPanelState } from '@/services/dualModelPanel';
 import { AUDIT_CHECKPOINT_TURNS } from '@/modules/scenarioMods/backgroundAuditCore';
 
 const { t } = useI18n();
 const apiStore = useAPIManagementStore();
 const uiStore = useUIStore();
+const consistencyId = DUAL_MODEL_CONFIG.dualModel.backend.moduleId;
+const dualModelUI = DUAL_MODEL_CONFIG.dualModel.ui;
+const consistencyRoute = computed(() => apiStore.getAPIForModule(consistencyId, DUAL_MODEL_CONFIG.dualModel.backend.inheritUsageType as APIUsageType));
+const consistencyPanel = computed(() => backendPanelState(consistencyRoute.value.config, consistencyRoute.value.inherited));
 const moduleModelLabels: Record<string, { name: string; description: string }> = {
+  [consistencyId]: { name: dualModelUI.name, description: dualModelUI.description },
   intent: { name: '行动解释', description: '把自然输入解释成当前合法动作；建议选响应快的小模型。' },
   narrative: { name: '剧情演出', description: '模块链路试玩回合的前台正文；不判定、不改状态。' },
   memory: { name: '回合记忆', description: '正文提交后从原文摘录记忆，替换该回合的短期记忆条目。' },
@@ -749,7 +770,7 @@ const moduleModelSettings = GAME_MODEL_MODULES.map(module => ({
 const auditCheckpointTurns = AUDIT_CHECKPOINT_TURNS;
 const auditLogCount = ref(getBackgroundAuditLog().length);
 const moduleRouteLabel = (module: ModelModuleDefinition) => {
-  const route = resolveGameModuleRoute(module);
+  const route = module.id === consistencyId ? { ...consistencyRoute.value, viaHost: false } : resolveGameModuleRoute(module);
   if (route.viaHost) return '继承酒馆主流程';
   const model = route.config ? `${getDisplayName(route.config)} · ${route.config.model || '未配置模型'}` : '未配置';
   return route.inherited ? `继承「${getFunctionName(module.inheritUsageType)}」→ ${model}` : model;

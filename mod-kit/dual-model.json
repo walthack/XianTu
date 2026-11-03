@@ -30,6 +30,16 @@
       "instruction": "你是后台一致性整理器，只读用户消息里的 JSON（summaries 概要、ledger 在场角色账、canonBase 基础设定、timeline 时间线、stateDelta 本回合变化），不写正文。只输出一个 JSON 对象：{\"turnId\":\"原样抄回\",\"npcMemory\":[{\"id\":\"ledger 里的 id\",\"entry\":\"一条一事的事实概要\"}],\"relationNotes\":[{\"id\":\"ledger 里的 id\",\"关系\":\"旧→新（仅关系称谓变化时）\"}],\"continuity\":[{\"kind\":\"timeline|canon|fact\",\"about\":\"id 或事项\",\"note\":\"下一回合应遵守的一句话\"}],\"summaryCheck\":{\"ok\":true,\"issue\":\"\"}}。npcMemory 只写本回合在场角色，每条不超过 {npcEntryMaxChars} 字；continuity 最多 {continuityMaxItems} 条；不写好感数值；summaryCheck 只标记概要是否与账、设定、时间线冲突，不改写概要。",
       "degradedNote": "后端请求被 422/1026 拒时，去掉 summaries 与 ledger 记忆重发 degradedAttempts 次（设计稿④）。"
     },
+    "ui": {
+      "name": "后台一致性",
+      "description": "主叙事回合后整理概要与角色记忆，提供下一回合连续性提示。",
+      "enabledLabel": "启用",
+      "reasoningLabel": "后端推理档",
+      "defaultEffortLabel": "默认（{effort}）",
+      "unsupportedReasoning": "该模型不支持推理档，按服务商默认",
+      "inheritedModelWarning": "继承的模型不是 {model}，可为后台一致性单独选择连接。",
+      "paidConfirmation": "后台一致性会自动发请求，每小时最多 {hourlyBudget} 次。所选模型不在默认白名单中，可能产生按量费用。是否确认使用？"
+    },
     "frontend": { "writesNpcMemory": false },
     "billing": {
       "note": "只约束开发／测试构建的默认值与实测脚本（22:18）；正式版对名单外模型在打开后端或改后端连接时确认一次（N1-B）。正则，大小写不敏感，全名锚定。",

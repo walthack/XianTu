@@ -18,6 +18,10 @@ export interface DualModelConfig {
       npcMemoryKeep: number; extensionKey: string; instruction: string;
       timeline: { yearsElapsedAtOpening: number };
     };
+    ui: {
+      name: string; description: string; enabledLabel: string; reasoningLabel: string;
+      defaultEffortLabel: string; unsupportedReasoning: string; inheritedModelWarning: string; paidConfirmation: string;
+    };
     frontend: { writesNpcMemory: boolean };
     billing: { allowedModels: string[]; blockUnlisted: boolean };
   };
@@ -43,6 +47,12 @@ export function validateDualModelConfig(cfg: unknown = DUAL_MODEL_CONFIG): strin
   for (const key of POSITIVE_INTS) if (!int(backend[key], 1)) problems.push(`dualModel.backend.${key} 须为正整数`);
   for (const key of NON_NEGATIVE_INTS) if (!int(backend[key], 0)) problems.push(`dualModel.backend.${key} 须为非负整数`);
   if (!int((backend.timeline as { yearsElapsedAtOpening?: unknown } | undefined)?.yearsElapsedAtOpening, 0)) problems.push('dualModel.backend.timeline.yearsElapsedAtOpening 须为非负整数');
+  for (const key of ['name', 'description', 'enabledLabel', 'reasoningLabel', 'defaultEffortLabel', 'unsupportedReasoning', 'inheritedModelWarning', 'paidConfirmation'] as const) {
+    if (!text(dm?.ui?.[key])) problems.push(`dualModel.ui.${key} 不能为空`);
+  }
+  for (const [key, placeholder] of [['defaultEffortLabel', '{effort}'], ['inheritedModelWarning', '{model}'], ['paidConfirmation', '{hourlyBudget}']] as const) {
+    if (!dm?.ui?.[key]?.includes(placeholder)) problems.push(`dualModel.ui.${key} 须包含 ${placeholder}`);
+  }
   if (typeof dm?.frontend?.writesNpcMemory !== 'boolean') problems.push('dualModel.frontend.writesNpcMemory 须为布尔');
   const allowed = dm?.billing?.allowedModels;
   if (!Array.isArray(allowed) || allowed.some(p => !text(p))) problems.push('dualModel.billing.allowedModels 须为非空字符串数组');
