@@ -1,0 +1,52 @@
+{
+  "layers": {
+    "base": {
+      "fields": [
+        "identitySummary",
+        "personality",
+        "formsOfAddress",
+        "speechStyle",
+        "goals",
+        "weaknesses",
+        "relationToProtagonist",
+        "signatureAbilities",
+        "visualIdentity"
+      ]
+    },
+    "gated": {
+      "fields": ["principles"],
+      "gate": "favor"
+    },
+    "secret": {
+      "fields": ["visualIdentity.trueForm"],
+      "gate": "reveal"
+    },
+    "private": {
+      "source": "intimacyProfiles",
+      "gate": "intimate"
+    }
+  },
+  "private": {
+    "requirePresent": true,
+    "maxLinesPerCharacter": 6,
+    "favorTiers": "affinityLadder"
+  },
+  "privacyAllowedFields": [
+    "性格倾向",
+    "性取向",
+    "亲密偏好",
+    "亲密节奏",
+    "亲密需求",
+    "禁忌清单",
+    "安全偏好"
+  ],
+  "intimateInputPatterns": [
+    "亲吻", "接吻", "拥吻", "爱抚", "抚摸", "宽衣", "解带", "更衣", "沐浴", "同榻",
+    "同衾", "上榻", "床笫", "欢好", "交欢", "云雨", "双修", "求欢", "侍寝", "春宵",
+    "帐中", "榻上", "亲热", "情动", "裸", "赤身", "房事", "媾和"
+  ],
+  "memory": {
+    "npcEntryMaxChars": 60,
+    "npcPromptLimit": 5
+  }
+}

@@ -8,7 +8,7 @@ import {entityAliases} from './namedEntities';
  *
  * 两道门（都通过才注入，任一不过返回空串）：
  *   1. 名单门：只有 INTIMACY_PROFILES 里的角色才有档案；留白角色（苏妲己收编弧线、剑玉姬）不入本模块。
- *   2. 场景门：仅亲密场景注入；判定宁漏不误（见 INTIMATE_SCENE_RE 注释）。
+ *   2. 场景门：仅亲密场景注入；判定宁漏不误（见 isIntimateScene 上方注释）。
  * 通过后再按好感度分层揭示 tiers——档案不是一次性倾倒，随关系深入逐层显现。
  * 素材给到之后，**写不写、写到什么程度由 LLM 按场面判断**，本模块不代它决定。
  *
@@ -22,6 +22,7 @@ import {entityAliases} from './namedEntities';
  */
 
 import { AFFINITY_THRESHOLDS } from './affinityLadder';
+import { intimateInputHit } from './promptLayers';
 
 /**
  * 好感分层阈值：低层近乎公开、高层需长期关系。
@@ -38,8 +39,8 @@ const TIER_FAVOR = {
  * 亲密场景判定。**刻意宁漏不误**：漏判只是少注入一次风味，误判会把成人内容带进普通场景。
  * 与 R1-2 被砍掉的"关键词甲"不同——那处关键词是唯一决策者，这里只是四道门里最松的一道，
  * 且失败方向安全（漏 = 不注入）。不做否定/复合语义解析，只认强信号词。
+ * 词表在 mod-kit/prompt-layers.json 的 intimateInputPatterns（由 promptLayers.ts 读取）。
  */
-const INTIMATE_SCENE_RE = /亲吻|接吻|拥吻|爱抚|抚摸|宽衣|解带|更衣|沐浴|同榻|同衾|上榻|床笫|欢好|交欢|云雨|双修|求欢|侍寝|春宵|帐中|榻上|亲热|情动|裸|赤身|房事|媾和/;
 
 export interface IntimacyTier {
   /** 达到该好感度后揭示；0 = 关系确立即可见。 */
@@ -390,7 +391,7 @@ export interface IntimacyContext {
 }
 
 export function isIntimateScene(text: string): boolean {
-  return !!text && INTIMATE_SCENE_RE.test(text);
+  return intimateInputHit(text);
 }
 
 export function findIntimacyProfile(name: string): IntimacyProfile | undefined {
