@@ -1,3 +1,4 @@
+import promptLayers from '../../../mod-kit/prompt-layers.json';
 
 import {entityAliases} from './namedEntities';
 
@@ -112,12 +113,7 @@ interface RegistryEntry {
   review?: { humanNotes?: string[]; aliasMerged?: string[]; followUps?: string[] };
 }
 
-const DERIVED_TAGS = [
-  '【历程】', '【生辰】',
-  '【关系】', '【称呼】', '【谈吐】', '【底线】', '【目标】', '【软肋】', '【绝技】',
-  '【入伙】', '【情节】', '【结局】', '【阶段身份】', '【本阶段禁用】', '【人工正典】',
-  '【体貌】', '【装束】', '【真身特征】',
-];
+const DERIVED_TAGS = promptLayers.derivedNotePrefixes;
 
 function asArray<T>(value: T | T[] | undefined | null): T[] {
   if (value === undefined || value === null || value === '') return [];

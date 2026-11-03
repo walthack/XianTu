@@ -215,7 +215,7 @@ function createNpcProfile(source: ScenarioRelationshipSource, character: Scenari
     技能: { 掌握技能: nativeContent.skills },
     功法: { 修炼功法: nativeContent.primaryTechnique },
     人格底线: [],
-    记忆: [...(profile.memories || []), ...(profile.notes || []).filter(note => !note.startsWith('【内部约束·不入正文】'))],
+    记忆: [...(profile.memories || [])],
     当前外貌状态: profile.currentAppearance || '状态正常',
     当前内心想法: profile.currentThought || '依照剧本关系与当前事件行动。',
     头像: profile.avatar || '',

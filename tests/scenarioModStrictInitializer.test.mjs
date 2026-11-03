@@ -119,7 +119,6 @@ test('strict Mod identity and canon survive a save serialization round trip', as
   assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].好感度, 25);
   assert.deepEqual(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].记忆, [
     '穿越后卷入六朝风云。',
-    '生死根不得被其他 NPC 自动获得。',
     '在建康城外初次相遇',
   ]);
   assert.equal(reloaded.社交.关系[mod.canon.characters.find(c => c.name === '程宗扬').id].宗门, '太乙真宗');

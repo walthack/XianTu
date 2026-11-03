@@ -1,3 +1,4 @@
+import promptLayers from '../../../mod-kit/prompt-layers.json';
 import sacredFruit from './builtins/data/lyl.taiquan_sacred_fruit.json';
 import { normalizeLocationCountry } from './locationCountry';
 import retreat from './builtins/data/lyl.jiangzhou_retreat.json';
@@ -191,7 +192,17 @@ export function backfillMissingOffscreenResolution(rt: any): number {
   return filled;
 }
 
+/** 只移除旧档抄入的正典派生备注；事实记忆保持原文、顺序与重复项。 */
+export function removeDerivedRelationshipMemories(save: any): void {
+  for (const npc of Object.values(save?.社交?.关系 || {}) as any[]) {
+    if (!Array.isArray(npc?.记忆)) continue;
+    npc.记忆 = npc.记忆.filter((entry: unknown) =>
+      typeof entry !== 'string' || !promptLayers.derivedNotePrefixes.some(prefix => entry.startsWith(prefix)));
+  }
+}
+
 export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyStatuses: string[]; identitiesBackfilled: number; itemReceiptsBackfilled: number } {
+  removeDerivedRelationshipMemories(save);
   migrateTrainingCapNone(save);
   normalizeLocationCountry(save?.角色?.位置);
   repairChanganDescriptionTypo(save);

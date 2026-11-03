@@ -717,3 +717,10 @@
 验证：专项 42/42、阶段回归 12/12；最终 `npx tsc --noEmit` 退出 0；全量 `npm test` 退出 0，3426 项 / 3412 通过 / 0 失败 / 13 跳过 / 1 既有 TODO（AIBS 降级重发未接线）；`git diff --check` 通过。未做真人/真实模型验证。未改档案原文、冻结三文件、模型配置；不读取凭据，未推送。
 
 提交阻断：`npm run canon:build` 因缺 `mod-kit/generated/deepseek-v4-flash/qingyu/stages` 在启动阶段 ENOENT，未执行构建步骤。依据 CLAUDE.md/AGENTS.md“全绿才可 commit”未提交，已请求用户本步豁免但尚未收到答复。后续仅需获豁免或补齐源树后通过门禁，再作本地中文小提交；其它分层步骤不在本步范围。
+
+## 2026-11-03 NPC 关系记忆去派生备注（本步）
+
+范围：新建关系只复制 profile.memories；在现有 applyLoadRepairs 读档链清理 DERIVED_TAGS 前缀旧记忆，名单原样迁入 prompt-layers.json 共用。不改事实记忆、档案文本、冻结三文件或模型配置。已完成；本步非策划轮次。
+用户本轮明确允许沙箱本地检查点提交：缺 qingyu/stages，canon:build 未跑，以 tsc 与全量 npm test 全绿为提交条件；不推送。此授权取代本文件上节的待答复状态，仅适用于用户授权范围。
+
+交付验证：`npx tsc --noEmit` 退出 0；最终全量 `npm test` 退出 0，3429 项 / 3415 通过 / 0 失败 / 13 跳过 / 1 既有 TODO。新增迁移回归及分层专项 12/12，序列化专项 14/14。首轮两处旧预期已更新：三份检查点由原生成器重建（结构比对仅关系记忆变化），序列化断言不再要求 notes 入档。`git diff --check` 通过。首次相遇原有空记忆保护不变；未做真人/真实模型验证，未推送。canon:build 按上述授权未跑。

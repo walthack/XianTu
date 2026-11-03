@@ -26,6 +26,7 @@ export interface PromptLayersConfig {
   };
   private: { requirePresent: boolean; maxLinesPerCharacter: number; favorTiers: string };
   noteFields: Record<string, string>;
+  derivedNotePrefixes: string[];
   privacyAllowedFields: string[];
   intimateInputPatterns: string[];
   memory: { npcEntryMaxChars: number; npcPromptLimit: number };
@@ -137,6 +138,7 @@ export function validatePromptLayersConfig(cfg: unknown): string[] {
       || ![...seen.keys()].some(path => field === path || field.startsWith(`${path}.`)))) {
     errors.push('noteFields 须映射备注标签到已登记层级字段');
   }
+  if (!isStringList(c.derivedNotePrefixes) || !c.derivedNotePrefixes?.length) errors.push('derivedNotePrefixes 须为非空字符串数组');
   if (!isStringList(c.privacyAllowedFields)) errors.push('privacyAllowedFields 须为字符串数组');
   if (!isStringList(c.intimateInputPatterns) || !c.intimateInputPatterns?.length) errors.push('intimateInputPatterns 须为非空字符串数组');
   if (!isPositiveInt(c.memory?.npcEntryMaxChars)) errors.push('memory.npcEntryMaxChars 须为正整数');
