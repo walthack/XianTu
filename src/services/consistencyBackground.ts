@@ -439,6 +439,25 @@ export function startConsistencyBackground(host: ConsistencyHost, options: Start
   pump(host);
 }
 
+/**
+ * MainGamePanel 回合事务提交并存档后的接线（第4步；Q7-B 只接主叙事路径）：
+ * 模块／本地路径的响应带 moduleReceipt，不接（模块路径继续用现有 memory 模块）；未提交事务不接。
+ * 先判开关：关＝作废在途与排队并清已存提示，不发请求（N3-A）；开＝startConsistencyBackground。返回是否启动。
+ */
+export function startConsistencyAfterCommit(
+  host: ConsistencyHost,
+  response: { transactionCommitted?: boolean; moduleReceipt?: unknown; stateChanges?: StartConsistencyOptions['stateChanges'] } | null | undefined,
+  diagnosticTurnId?: string | null,
+): boolean {
+  if (!response?.transactionCommitted || response.moduleReceipt) return false;
+  if (!isEnabled(host)) {
+    cancelConsistencyBackground(host);
+    return false;
+  }
+  startConsistencyBackground(host, { stateChanges: response.stateChanges, diagnosticTurnId });
+  return true;
+}
+
 /** 默认边界：读写 gameStateStore／uiStore，角色与槽位、存盘由调用方传入的 characterStore 提供（本文件不导入它）。 */
 export function consistencyHostFrom(character: { rootState: { 当前激活存档?: { 角色ID?: string; 存档槽位?: string } | null }; saveCurrentGame(): Promise<unknown> }): ConsistencyHost {
   const state = useGameStateStore();

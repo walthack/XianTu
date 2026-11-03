@@ -539,6 +539,7 @@ import { resolveEndingImage } from '@/assets/endings';
 import { currentDiagnosticTurnId, noteTicketDiscard, sealDiagnosticTurn } from '@/services/requestLifecycleDiagnostics';
 import { cancelModuleBackground, startModuleBackground } from '@/services/modularTurnBackground';
 import { scheduleBackgroundAudit, yieldBackgroundAudit } from '@/services/backgroundAudit';
+import { cancelConsistencyBackground, consistencyHostFrom, startConsistencyAfterCommit } from '@/services/consistencyBackground';
 import { BRANCH_DECISION_BLOCKED_NOTICE, BRANCH_DECISION_HINT, BRANCH_DECISION_INPUT_PLACEHOLDER, BRANCH_DECISION_TITLE, branchDecisionAllowsSend, branchDecisionLocksInput, detectBranchDecision, isDormantLockedOption, type BranchDecisionCandidate } from '@/modules/scenarioMods/branchDecision';
 import { getActiveKeyBeatCard, isKeyBeatCardAction, KEY_BEAT_CARD_HINT, KEY_BEAT_CARD_TITLE, KEY_BEAT_CONFIRM_NOTICE, type KeyBeatCardOption } from '@/modules/scenarioMods/keyBeatCards';
 import { ref, onMounted, onActivated, onUnmounted, nextTick, computed, watch, reactive } from 'vue';
@@ -2978,6 +2979,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         if (aiResponse.transactionCommitted) {
           startModuleBackground(diagnosticTurnId);
           scheduleBackgroundAudit(diagnosticTurnId);
+          // 双模型后端：只接主叙事路径，内部先判开关（关＝作废并清旧提示）。
+          startConsistencyAfterCommit(consistencyHostFrom(characterStore), aiResponse, diagnosticTurnId);
         }
       } catch (storageError) {
         console.error('[AI响应处理] 最终统一存档失败:', storageError);
@@ -3154,6 +3157,8 @@ const initializePanelForSave = async () => {
 const resetPanelState = () => {
   console.log('[主面板] 检测到存档切换，正在重置面板状态...');
   abandonOwnedGameTurn();
+  // 切档：双模型后端在途与排队结果作废，清掉已存的连续性提示。
+  cancelConsistencyBackground(consistencyHostFrom(characterStore));
   actionQueue.clearActions();
   // currentNarrative 现在自动显示最新短期记忆
   inputText.value = '';

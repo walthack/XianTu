@@ -301,3 +301,45 @@ test('积压：在途不取消；等待任务落后超 maxLagTurns 回合的丢�
   assert.ok(!sent.includes(ids[0]), '最旧的等待任务已丢弃');
   assert.equal(sent.at(-1), ids.at(-1));
 });
+
+// ---------------------------------------------------------------- 第4步：接线（AIBS 0 行）
+
+test('接线（Q7-B）：只接已提交的主叙事回合；模块／本地路径（带 moduleReceipt）与未提交事务不启动', async () => {
+  cb.cancelConsistencyBackground();
+  const save = makeSave();
+  const { host, state } = makeHost(save, () => ok(latestId(save)));
+  assert.equal(cb.startConsistencyAfterCommit(host, { transactionCommitted: true, moduleReceipt: { id: 'g', path: 'modular' } }), false);
+  assert.equal(cb.startConsistencyAfterCommit(host, { transactionCommitted: true, moduleReceipt: { id: 'g', path: 'local' } }), false);
+  assert.equal(cb.startConsistencyAfterCommit(host, { transactionCommitted: false }), false);
+  assert.equal(cb.startConsistencyAfterCommit(host, null), false);
+  await settle();
+  assert.equal(state.calls.length, 0);
+  const changes = { changes: [{ key: '社交.关系.["t.character.jia"].好感度', oldValue: 26, newValue: 30 }] };
+  assert.equal(cb.startConsistencyAfterCommit(host, { transactionCommitted: true, stateChanges: changes }, 'turn-diag'), true);
+  await settle();
+  assert.equal(state.calls.length, 1);
+  assert.deepEqual(JSON.parse(state.calls[0].input).stateDelta.好感, [{ id: JIA, 变化: 4 }], 'stateChanges 透传');
+  assert.equal(state.calls[0].diagnostics.turnId, 'turn-diag');
+});
+
+test('接线（N3-A）：开关关先判，不发请求并清掉已存连续性提示', async () => {
+  cb.cancelConsistencyBackground();
+  const save = makeSave();
+  save.系统.扩展[KEY] = { turnId: 'old', turnIndex: 0, continuity: [{ kind: 'fact', about: 'x', note: '过期' }] };
+  const { host, state } = makeHost(save, () => ok(latestId(save)));
+  state.enabled = false;
+  const epochBefore = cb.consistencyBackgroundState().epoch;
+  assert.equal(cb.startConsistencyAfterCommit(host, { transactionCommitted: true }), false);
+  await settle();
+  assert.equal(state.calls.length, 0);
+  assert.equal(save.系统.扩展[KEY], undefined);
+  assert.ok(cb.consistencyBackgroundState().epoch > epochBefore, '在途与排队作废');
+});
+
+test('接线（静态）：MainGamePanel 在 transactionCommitted 分支调用、切档时 cancel(host)；AIBS 不引用', () => {
+  const panel = readFileSync(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
+  assert.match(panel, /if \(aiResponse\.transactionCommitted\) \{\s*startModuleBackground\(diagnosticTurnId\);\s*scheduleBackgroundAudit\(diagnosticTurnId\);[^}]*startConsistencyAfterCommit\(consistencyHostFrom\(characterStore\), aiResponse, diagnosticTurnId\);/);
+  assert.match(panel, /const resetPanelState = \(\) => \{[^}]*cancelConsistencyBackground\(consistencyHostFrom\(characterStore\)\);/);
+  const aibs = readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  assert.doesNotMatch(aibs, /consistencyBackground/);
+});
