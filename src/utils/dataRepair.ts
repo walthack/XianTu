@@ -20,7 +20,7 @@ import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { normalizeBackpackCurrencies } from '@/utils/currencySystem';
 import { 纪元基点 } from '@/utils/lifespanCalculator';
 import { stripNarrativeTimePrefix } from '@/utils/memorySanitizer';
-import { saveDetail } from '@/services/narrativeDetailStore';
+import { saveDetail, narrativeDetailId, NARRATIVE_DETAIL_MIGRATION_VERSION } from '@/services/narrativeDetailStore';
 import { summaryEntry } from '@/services/narrativeSummary';
 import { alignedSummary } from '@/services/promptRedaction';
 import { logError } from '@/modules/diagnostics/log';
@@ -594,17 +594,7 @@ export function createMinimalSaveDataV3(): SaveData {
   } as any;
 }
 
-/** 叙事条目上的迁移标记：值为版本号，标了就不再迁（重复读档不重复处理）。 */
-export const NARRATIVE_DETAIL_MIGRATION_VERSION = 1;
-
-function fnv1a32(input: string): string {
-  let hash = 0x811c9dc5;
-  for (let i = 0; i < input.length; i++) {
-    hash ^= input.charCodeAt(i);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return (hash >>> 0).toString(16).padStart(8, '0');
-}
+export { NARRATIVE_DETAIL_MIGRATION_VERSION };
 
 const timePrefixOf = (entry: string): string => {
   const trimmed = entry.trim();
@@ -658,7 +648,7 @@ export async function migrateNarrativeDetailOnLoad(save: any, saveKey: string): 
     if (!item || typeof item !== 'object' || isPlayerEntry(item)) continue;
     if (Number(item.detailMigrated) >= NARRATIVE_DETAIL_MIGRATION_VERSION) continue;
     const content = typeof item.content === 'string' ? item.content : '';
-    const detailId = `nd_${index}_${fnv1a32(content)}`;
+    const detailId = narrativeDetailId(index, content);
     try {
       if (content) await saveDetail(saveKey, detailId, content);
     } catch (error) {

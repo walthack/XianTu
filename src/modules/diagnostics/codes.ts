@@ -137,6 +137,7 @@ export const ERROR_CODES = {
   'LCQ-SAV-058': spec('info', 'beatProgress', '任务引导：本拍空转满回合数，作者写的 NPC 主动来找（approach）已触发'),
   'LCQ-SAV-059': spec('error', 'memorySettings', '记忆中心「最近短期记忆换成摘要」写回存档失败'),
   'LCQ-SAV-060': spec('warn', 'loadRepairs', '读档迁移叙事正文到本地全文副本写入失败，该条保留原文、不打标记，下次读档重试'),
+  'LCQ-SAV-061': spec('warn', 'aiBidirectional', '新回合叙事正文写本地全文副本失败，存档照常只留概要，回看该回合退回概要'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),

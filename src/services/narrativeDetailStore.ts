@@ -1,5 +1,6 @@
 import { openDB, type IDBPDatabase } from 'idb';
 import { GAME_NUMBERS } from '@/modules/sceneModule/numbers';
+import { logError } from '@/modules/diagnostics/log';
 
 /**
  * 叙事正文的本地全文副本（设计稿 2026-11-03「提示词历史与审核拒绝」第七节方案 B）。
@@ -95,6 +96,35 @@ export async function getDetail(saveKey: string, entryId: string): Promise<strin
 
 export async function hasDetail(saveKey: string, entryId: string): Promise<boolean> {
   return (await getDetail(saveKey, entryId)) !== undefined;
+}
+
+/** 叙事条目上的迁移标记：值为版本号，标了读档迁移就不再处理（新回合条目写入时即打上）。 */
+export const NARRATIVE_DETAIL_MIGRATION_VERSION = 1;
+
+function fnv1a32(input: string): string {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+/** 副本 id：叙事数组下标＋正文哈希（读档迁移与新回合写入同口径）。 */
+export function narrativeDetailId(index: number, content: string): string {
+  return `nd_${index}_${fnv1a32(content)}`;
+}
+
+/**
+ * 新回合写 系统.历史.叙事 的条目字段：content 与 summary 都只放概要，带 detailId 并打迁移标记（读档迁移跳过）；
+ * 正文全文按 存档标识＋detailId 另存本地副本，不等待，写失败记 LCQ-SAV-061（回看退回概要）。
+ */
+export function narrativeEntryWithDetail(saveKey: string, index: number, summary: string, fullText: string) {
+  const detailId = narrativeDetailId(index, fullText);
+  if (saveKey && fullText) {
+    saveDetail(saveKey, detailId, fullText).catch(error => logError('LCQ-SAV-061', error, { detail: { reason: 'detail_write_failed', index, detailId } }));
+  }
+  return { content: summary, summary, detailId, detailMigrated: NARRATIVE_DETAIL_MIGRATION_VERSION };
 }
 
 /** 删档时清掉该存档的全部全文副本。 */

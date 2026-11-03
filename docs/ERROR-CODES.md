@@ -172,6 +172,7 @@
 | LCQ-SAV-058 | info | beatProgress | 任务引导：本拍空转满回合数，作者写的 NPC 主动来找（approach）已触发 | 只在 story.quest.enabled 开时：本拍空转满 story.quest.approachTurns 回合，且作者在 quests.json 写了 approach；下一回合注入作者引子、who 算同场，不结算 | 看 detail.beatId、detail.who、detail.idleTurns；频繁触发说明该拍的目标或短语需要补 | 否 |
 | LCQ-SAV-059 | error | memorySettings | 记忆中心「最近短期记忆换成摘要」写回存档失败 | 玩家在记忆中心点「最近短期记忆换成摘要」并确认后，characterStore.saveCurrentGame 抛错（存档槽缺失、IndexedDB 写入失败等）；只换 社交.记忆.短期记忆 最近 manualSummaryRecentN 条，系统.历史.叙事 不动；失败时内存里的短期记忆回滚为原样 | 看 detail.replaced、detail.n 与 cause；先确认当前有激活存档，再手动存档一次 | 否 |
 | LCQ-SAV-060 | warn | loadRepairs | 读档迁移叙事正文到本地全文副本写入失败，该条保留原文、不打标记，下次读档重试 | dataRepair.ts 的 migrateNarrativeDetailOnLoad（characterStore.loadGame 在 applyLoadRepairs 后调用；设计稿 2026-11-03 第七节方案 B 详细描写不入档）把 系统.历史.叙事 条目的原 content 存进 narrativeDetailStore（IndexedDB 库 lcq-narrative-detail）时抛错（detail.reason=detail_write_failed），常见于浏览器禁用／配额满／隐私模式下 IndexedDB 不可写；该条不清正文、不改概要、不打 detailMigrated，其余条目与短期记忆照常迁移，不阻断读档 | 看 cause 与 detail.index、detail.detailId；确认浏览器 IndexedDB 可写后重新读档即迁；跑 tests/narrativeDetailMigration.test.mjs | 否 |
+| LCQ-SAV-061 | warn | aiBidirectional | 新回合叙事正文写本地全文副本失败，存档照常只留概要，回看该回合退回概要 | AIBidirectionalSystem 写 系统.历史.叙事 时经 narrativeDetailStore.narrativeEntryWithDetail 把正文全文不等待地存进 IndexedDB 库 lcq-narrative-detail（设计稿 2026-11-03 第七节方案 B 详细描写不入档），写入抛错（detail.reason=detail_write_failed），常见于浏览器禁用／配额满／隐私模式下 IndexedDB 不可写；条目已打 detailMigrated，读档迁移不会补写，该回合全文不再可回看，不阻断回合 | 看 cause 与 detail.index、detail.detailId；确认浏览器 IndexedDB 可写；跑 tests/narrativeDetailWiring.test.mjs | 否 |
 
 ## 已作废
 
