@@ -13,5 +13,11 @@
     "new_sensitive"
   ],
   "fallbackAttempts": 1,
-  "fallbackEnabled": false
+  "fallbackEnabled": false,
+  "degradedAttempts": 2,
+  "degradedContexts": [
+    "rawLatestOnly",
+    "summary"
+  ],
+  "manualSummaryRecentN": 3
 }

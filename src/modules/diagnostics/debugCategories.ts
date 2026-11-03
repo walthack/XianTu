@@ -85,7 +85,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'memory', label: '记忆与检索',
     paths: [
-      ...at('services/', 'characterRagService.ts', 'narrativeRagService.ts', 'vectorMemoryService.ts', 'embeddingService.ts'),
+      ...at('services/', 'characterRagService.ts', 'narrativeRagService.ts', 'vectorMemoryService.ts', 'embeddingService.ts', 'promptRedaction.ts'),
       'utils/memory*.ts', 'utils/backgroundMemory*.ts', 'utils/legacyForegroundRecall.ts', 'utils/regex.ts', 'types/memory.ts',
     ],
   },
