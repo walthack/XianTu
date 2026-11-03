@@ -1,3 +1,4 @@
+import promptLayersConfig from '../../../mod-kit/prompt-layers.json';
 import { actionTimePrompt } from '@/modules/scenarioMods/actionTime';
 /**
  * 默认提示词集合 - 完整版
@@ -175,7 +176,7 @@ export function getSystemPrompts(): Record<string, PromptDefinition> {
     },
     businessRules: {
       name: '2. 核心规则',
-      content: BUSINESS_RULES,
+      content: `${BUSINESS_RULES}\nNPC记忆是事件事实概要，一条一事，不超过 ${promptLayersConfig.memory.npcEntryMaxChars} 字。`,
       category: 'coreRequest',
       description: '境界、NPC、战斗规则',
       order: 2,
@@ -362,7 +363,7 @@ ${R2_9_NARRATIVE_GUARD_RULES}
 ### NPC交互 - 必须全面更新NPC状态！
 □ NPC出场 → set \`社交.关系.["角色ID"]\`（完整对象）
 □ 好感变化 → add \`社交.关系.["角色ID"].好感度\`
-□ NPC记忆 → push \`社交.关系.["角色ID"].记忆\`
+□ NPC记忆（事件事实概要，一条一事，不超过 ${promptLayersConfig.memory.npcEntryMaxChars} 字） → push \`社交.关系.["角色ID"].记忆\`
 □ NPC状态 → set \`社交.关系.["角色ID"].当前外貌状态\`
 □ NPC属性变化：气血/灵气/神识/境界/位置都要更新
 

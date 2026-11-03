@@ -1,3 +1,4 @@
+import promptLayersConfig from '../../mod-kit/prompt-layers.json';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
 
 /**
@@ -84,4 +85,35 @@ export function summarizeMemoryShortTerm(memory: MemoryLike | null | undefined, 
   const shortTerm = summarizeRecentShortTerm(before, stringsOf(memory?.隐式中期记忆), n);
   const replaced = shortTerm.filter((entry, index) => entry !== before[index]).length;
   return { shortTerm, replaced };
+}
+
+/** 与 AIBS 的状态 JSON 标记一致；只处理 system 消息末尾的完整状态 JSON。 */
+export const NARRATIVE_STATE_PREFIX = '# 游戏状态\n你正在修仙世界《仙途》中扮演GM。以下是当前完整游戏存档(JSON格式):\n';
+
+/** 降级重发专用：只裁剪 NPC 记忆数组，不改条目、其他状态或原消息。 */
+export function limitDegradedNpcMemories<T extends PromptMessage>(messages: readonly T[]): T[] {
+  return messages.map(message => {
+    if (message.role !== 'system' || typeof message.content !== 'string') return message;
+    const start = message.content.lastIndexOf(NARRATIVE_STATE_PREFIX);
+    if (start < 0) return message;
+    const jsonStart = start + NARRATIVE_STATE_PREFIX.length;
+    try {
+      const state = JSON.parse(message.content.slice(jsonStart));
+      const relations = state?.社交?.关系;
+      if (!relations || typeof relations !== 'object' || Array.isArray(relations)) return message;
+      let changed = false;
+      for (const npc of Object.values(relations)) {
+        if (!npc || typeof npc !== 'object' || Array.isArray(npc)) continue;
+        const record = npc as Record<string, unknown>;
+        if (Array.isArray(record.记忆) && record.记忆.length > promptLayersConfig.memory.npcDegradedPromptLimit) {
+          record.记忆 = record.记忆.slice(-promptLayersConfig.memory.npcDegradedPromptLimit);
+          changed = true;
+        }
+      }
+      return changed ? { ...message, content: message.content.slice(0, jsonStart) + JSON.stringify(state) } : message;
+    } catch {
+      // 标记后不是完整 JSON 时保留原消息，不猜测边界或改写正文。
+      return message;
+    }
+  });
 }

@@ -47,7 +47,8 @@
   ],
   "memory": {
     "npcEntryMaxChars": 60,
-    "npcPromptLimit": 5
+    "npcPromptLimit": 5,
+    "npcDegradedPromptLimit": 1
   },
   "derivedNotePrefixes": [
     "【历程】",

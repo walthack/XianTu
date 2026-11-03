@@ -22,7 +22,7 @@ import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIE
 import { contentModerationDetail, EmptyOutputError, isEmptyOutputError, toUserFacingAIError } from './apiErrorMessage';
 import { logError, logEvent } from '@/modules/diagnostics/log';
 import { summarizeError } from '@/modules/diagnostics/errorSummary';
-import { degradedModeForAttempt, degradedRecentEvents, replaceRecentEventsMessage } from './promptRedaction';
+import { degradedModeForAttempt, degradedRecentEvents, replaceRecentEventsMessage, limitDegradedNpcMemories } from './promptRedaction';
 import { AiHttpError, abortableDelay, aiRetryConfig, planAiRetry, readRetryAfterHeader, type AiRetryPlan } from './aiRetryPolicy';
 import {
   isTruncatedFinishReason,
@@ -1580,7 +1580,7 @@ class AIService {
     for (let attempt = 1; attempt <= moderationConfig.degradedAttempts; attempt++) {
       const mode = degradedModeForAttempt(attempt);
       const entries = degradedRecentEvents(source.shortTerm, source.implicitMid, mode);
-      const degradedMessages = replaceRecentEventsMessage(messages, entries);
+      const degradedMessages = limitDegradedNpcMemories(replaceRecentEventsMessage(messages, entries));
       if (JSON.stringify(degradedMessages) === JSON.stringify(previousMessages)) continue;
       previousMessages = degradedMessages;
       logEvent({ code: 'LCQ-NET-018', detail: { attempt, mode, entries: entries.length, originalEntries: source.shortTerm.length, usageType: usageType || 'main' }, echo: false });

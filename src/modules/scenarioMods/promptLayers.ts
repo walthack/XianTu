@@ -29,7 +29,7 @@ export interface PromptLayersConfig {
   derivedNotePrefixes: string[];
   privacyAllowedFields: string[];
   intimateInputPatterns: string[];
-  memory: { npcEntryMaxChars: number; npcPromptLimit: number };
+  memory: { npcEntryMaxChars: number; npcPromptLimit: number; npcDegradedPromptLimit: number };
 }
 
 export const PROMPT_LAYERS = config as PromptLayersConfig;
@@ -141,6 +141,7 @@ export function validatePromptLayersConfig(cfg: unknown): string[] {
   if (!isStringList(c.derivedNotePrefixes) || !c.derivedNotePrefixes?.length) errors.push('derivedNotePrefixes 须为非空字符串数组');
   if (!isStringList(c.privacyAllowedFields)) errors.push('privacyAllowedFields 须为字符串数组');
   if (!isStringList(c.intimateInputPatterns) || !c.intimateInputPatterns?.length) errors.push('intimateInputPatterns 须为非空字符串数组');
+  if (!isPositiveInt(c.memory?.npcDegradedPromptLimit)) errors.push('memory.npcDegradedPromptLimit 须为正整数');
   if (!isPositiveInt(c.memory?.npcEntryMaxChars)) errors.push('memory.npcEntryMaxChars 须为正整数');
   if (!Number.isInteger(c.memory?.npcPromptLimit) || (c.memory?.npcPromptLimit as number) < 0) errors.push('memory.npcPromptLimit 须为非负整数');
   return errors;
