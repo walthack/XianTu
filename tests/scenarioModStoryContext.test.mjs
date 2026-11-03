@@ -721,3 +721,50 @@ test('已落账的世界线分歧进入叙事 prompt，并要求人物采取行�
   assert.match(prompt, /相关人物据此采取行动/);
   assert.match(prompt, /不得把原著旧结果重新写回/);
 });
+
+test('角色档案私密层：本轮输入/激活拍入口、在场与关系门，硬约束常驻且不改存档', async () => {
+  const { buildScenarioStoryPrompt } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
+  const { findIntimacyProfile } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  const { AFFINITY_THRESHOLDS } = await loadTs('../src/modules/scenarioMods/affinityLadder.ts');
+  const profile = findIntimacyProfile('凝羽');
+  const save = await buildStorySave();
+  const runtime = save.世界.状态.剧本模组;
+  const id = 'test.ningyu';
+  runtime.canon.characters.push({ id, name: '凝羽', profile: {
+    personality: ['冷静'], notes: ['【软肋】测试软肋', '【底线】测试底线', '【真身特征】测试真身——仅显露时可见'],
+  } });
+  runtime.opening.featuredCharacterIds = [id];
+  runtime.canon.playerRelationships = [{ characterId: id, favorability: AFFINITY_THRESHOLDS.intimacyShallow }];
+  const assertLimits = prompt => {
+    for (const limit of profile.hardLimits) assert.ok(prompt.includes(limit));
+    assert.ok(prompt.includes('测试软肋'));
+    assert.ok(prompt.includes('测试真身——仅显露时可见'));
+  };
+  const before = structuredClone(save);
+  let prompt = buildScenarioStoryPrompt(save, '闲聊');
+  assertLimits(prompt);
+  assert.ok(!prompt.includes('身体：' + profile.physical));
+  assert.deepEqual(save, before);
+  prompt = buildScenarioStoryPrompt(save, '亲吻');
+  assert.ok(prompt.includes('身体：' + profile.physical));
+  assertLimits(prompt);
+
+  runtime.canon.playerRelationships[0].favorability = AFFINITY_THRESHOLDS.intimacyShallow - 1;
+  prompt = buildScenarioStoryPrompt(save, '亲吻');
+  assert.ok(!prompt.includes('身体：' + profile.physical));
+  assertLimits(prompt);
+  runtime.canon.playerRelationships[0].favorability = AFFINITY_THRESHOLDS.intimacyShallow;
+  runtime.events[0].scene = { intimate: true, characters: [id] };
+  assert.ok(buildScenarioStoryPrompt(save, '闲聊').includes('身体：' + profile.physical));
+  delete runtime.events[0].scene.characters;
+  runtime.events[0].relatedCharacterIds = [id];
+  assert.ok(buildScenarioStoryPrompt(save, '闲聊').includes('身体：' + profile.physical));
+  runtime.events[0].relatedCharacterIds = [];
+  runtime.events[0].scene.characters = [];
+  runtime.events[1].scene = { intimate: true, characters: [id] };
+  assert.ok(!buildScenarioStoryPrompt(save, '闲聊').includes('身体：' + profile.physical));
+  runtime.opening.featuredCharacterIds = [];
+  prompt = buildScenarioStoryPrompt(save, '凝羽亲吻');
+  assert.ok(!prompt.includes('身体：' + profile.physical));
+  assertLimits(prompt);
+});

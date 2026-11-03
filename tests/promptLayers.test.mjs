@@ -103,3 +103,15 @@ test('projectNpcMemory：取最近 npcPromptLimit 条，不截条目', () => {
   assert.deepEqual(layers.projectNpcMemory(undefined), []);
   assert.deepEqual(layers.projectNpcMemory('x'), []);
 });
+
+test('备注沿用底线门与真身约束，私密行数读配置且不裁硬约束原文', async () => {
+  const { projectProfileNotes, projectIntimacyLines, PROMPT_LAYERS } = await loadTs('../src/modules/scenarioMods/promptLayers.ts');
+  const notes = ['【软肋】甲', '【底线】乙', '【真身特征】丙——显露时可见', '阶段约束'];
+  assert.deepEqual(projectProfileNotes(notes, false, '未知'), [notes[0], notes[2], notes[3], '未知']);
+  assert.deepEqual(projectProfileNotes(notes, true, '未知'), notes);
+  const profile = { preferences: Array.from({ length: PROMPT_LAYERS.private.maxLinesPerCharacter + 2 }, (_, i) => String(i)), hardLimits: ['硬约束'], tiers: [] };
+  const snapshot = structuredClone(profile);
+  const lines = projectIntimacyLines(profile, { inputHit: true, present: true, favor: 100 });
+  assert.equal(lines.length, PROMPT_LAYERS.private.maxLinesPerCharacter);
+  assert.deepEqual(profile, snapshot);
+});

@@ -709,3 +709,11 @@
 ### BEAT-PROGRESS-20261102 · 接手续作（Codex）
 - 已读设计稿及既有 c4e5acee、516dacb1；接手战斗统一写回半成品，核对动作表、deadline、新档至 s03_07 与两项 ef57 回归。冻结文件、凭据、模型配置及临时目录不动；不 push/部署。
 - canon:build 被缺失 generated/deepseek-v4-flash/qingyu/stages 阻断；按提交纪律，未全绿不得新增 commit。秦 Q-20/Q-21 仍待剧情裁定，本轮只接失败策略，不启用待定剧情。离线验证进行中，真实模型/真机未测。
+
+## 2026-11-03 角色档案分层接线（代码完成，提交门禁阻断）
+
+交付：`storyContext.ts` 经 `promptLayers.ts` 投影基础档案和备注；备注标签映射进入 `mod-kit/prompt-layers.json`。私密门为激活拍指定角色或本轮输入命中，并要求在场与好感达到 intimacyShallow；私密内容按配置限行，hardLimits 原文随基础层常驻。保留原底线/真身门；两个阶段时序测试仅精确豁免常驻 hardLimits 原文行，其余泄露断言保留。
+
+验证：专项 42/42、阶段回归 12/12；最终 `npx tsc --noEmit` 退出 0；全量 `npm test` 退出 0，3426 项 / 3412 通过 / 0 失败 / 13 跳过 / 1 既有 TODO（AIBS 降级重发未接线）；`git diff --check` 通过。未做真人/真实模型验证。未改档案原文、冻结三文件、模型配置；不读取凭据，未推送。
+
+提交阻断：`npm run canon:build` 因缺 `mod-kit/generated/deepseek-v4-flash/qingyu/stages` 在启动阶段 ENOENT，未执行构建步骤。依据 CLAUDE.md/AGENTS.md“全绿才可 commit”未提交，已请求用户本步豁免但尚未收到答复。后续仅需获豁免或补齐源树后通过门禁，再作本地中文小提交；其它分层步骤不在本步范围。

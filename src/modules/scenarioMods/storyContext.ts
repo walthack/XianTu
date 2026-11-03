@@ -8,7 +8,8 @@ import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
 import { findRegistryIdentitiesByContext, getRegistrySpeechStyle, isXieyiSkillHidden } from './characterResolver';
-import { formatIntimacyProfile } from './intimacyProfiles';
+import { findIntimacyProfile } from './intimacyProfiles';
+import { beatIntimateFor, fieldLayer, intimateInputHit, projectIntimacyLines, projectProfileNotes } from './promptLayers';
 import { formatRelationStance } from './relationStance';
 import { formatAffinityCap } from './affinityCaps';
 import { computePresentNames, departedPresentNames, formatAbsenceGuard } from './presence';
@@ -550,17 +551,19 @@ function formatFocusedCharacter(
   character: ScenarioModCharacter,
   runtime: StoryRuntime,
   favByName?: Map<string, { fav: number; label: string }>,
-  intimacyGate?: { sceneText: string },
+  intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[] },
   playerName?: string,
   presentNames?: Set<string>,
 ): string {
   const isProtagonist = Boolean(playerName) && character.name === playerName;
   const sealed = formatSealedCharacter(character, runtime, isProtagonist, presentNames);
-  if (sealed !== undefined) return sealed;
+  const intimacyProfile = findIntimacyProfile(character.name);
+  const hardLimits = intimacyProfile?.hardLimits.map(limit => `    - 不可越界：${limit}`).join('\n');
+  if (sealed !== undefined) return [sealed, hardLimits].filter(Boolean).join('\n');
   const profile = character.profile || {};
   const lines: string[] = [`- ${character.name}（${[character.gender, character.role, character.realm].filter(Boolean).join('；') || '正典人物'}）`];
   const base = compactText(character.description || profile.origin || '');
-  if (base) lines.push(`  身份/定位：${base}`);
+  if (fieldLayer('identitySummary') === 'base' && base) lines.push(`  身份/定位：${base}`);
   // 归属(P3投影的 affiliations)——跨国称谓/同门认知的消费点
   const affiliations = (character as { affiliations?: Array<{ factionId?: string; role?: string }> }).affiliations || [];
   const factionNames = new Map((runtime.canon?.factions || []).map(f => [f.id, f.name]));
@@ -578,7 +581,7 @@ function formatFocusedCharacter(
     ? `  宗派限定：${sectNames.join('、')}；不得改写为其他宗派或凭亲属关系转移宗派/职位`
     : '  宗派限定：本阶段未声明宗派；不得补造成道士、某派弟子、掌教或教内职司');
   const personality = formatList(profile.personality);
-  if (personality) lines.push(`  性格：${personality}`);
+  if (fieldLayer('personality') === 'base' && personality) lines.push(`  性格：${personality}`);
   const intelligenceProfile = [
     ...(Array.isArray(profile.personality) ? profile.personality : []),
     character.description || '',
@@ -588,7 +591,7 @@ function formatFocusedCharacter(
     lines.push(`  内部角色行为要求（不得写入正文）：情报/决策场景中，必须由${character.name}本人先直接说出或实施至少一个具体方案（合格形态：“我已安排甲做乙，你现在可利用丙”），且该方案改变本轮选择；不得只报告情报、点头领命、等待主角追问，或只用旁白暗示“另有后手”。`);
   }
   const speechStyle = getRegistrySpeechStyle(character.name);
-  if (speechStyle) lines.push(`  谈吐：${speechStyle}`);
+  if (fieldLayer('speechStyle') === 'base' && speechStyle) lines.push(`  谈吐：${speechStyle}`);
   const voiceCard = formatVoiceCard(character.name, { modId: runtime.modId });
   if (voiceCard) lines.push(`  ${voiceCard}`);
   // 灵根=正典静态设定（R2-5：凝羽灵根曾被 LLM 改写）；"原作未载"占位不注入
@@ -596,7 +599,7 @@ function formatFocusedCharacter(
   if (spiritRootName && spiritRootName !== '原作未载') {
     lines.push(`  灵根：${spiritRootName}${profile.spiritRoot?.tier ? `（${profile.spiritRoot.tier}）` : ''}——正典设定，不得改写`);
   }
-  if (profile.appearance) lines.push(`  外貌：${compactText(profile.appearance)}`);
+  if (fieldLayer('visualIdentity') === 'base' && profile.appearance) lines.push(`  外貌：${compactText(profile.appearance)}`);
   if (profile.currentAppearance) lines.push(`  当前外貌：${compactText(profile.currentAppearance)}`);
   if (profile.currentThought) lines.push(`  当前心思：${compactText(profile.currentThought)}`);
   const memories = formatList(profile.memories, 5);
@@ -608,13 +611,7 @@ function formatFocusedCharacter(
   const label = live?.label ?? '';
   const reveal = shouldRevealBottomLine(fav, label);
   const rawNotes: string[] = Array.isArray(profile.notes) ? profile.notes.map((n: unknown) => String(n)) : [];
-  const hasBottom = rawNotes.some(note => note.startsWith('【底线】'));
-  const gatedNotes = reveal
-    ? rawNotes
-    : [
-        ...rawNotes.filter(note => !note.startsWith('【底线】')),
-        ...(hasBottom ? [BOTTOMLINE_HIDDEN_NOTE] : []),
-      ];
+  const gatedNotes = projectProfileNotes(rawNotes, reveal, BOTTOMLINE_HIDDEN_NOTE);
   const notes = formatList(gatedNotes, 8, 220);
   if (notes) lines.push(`  正典备注：${notes}`);
   const secretKnowledgeBoundary = CHARACTER_SECRET_KNOWLEDGE_BOUNDARIES[character.name];
@@ -685,13 +682,18 @@ function formatFocusedCharacter(
     );
     if (acquaintanceLine) lines.push(acquaintanceLine);
   }
-  // 亲密档案（R3-8B）：名单门与场景门都在 formatIntimacyProfile 内部执行，此处只负责喂参数。
-  if (intimacyGate) {
-    const intimacy = formatIntimacyProfile(character.name, {
-      sceneText: intimacyGate.sceneText,
+  // 硬约束随基础层常驻；私密内容才受入口、在场、好感和配置行数限制。
+  if (hardLimits) lines.push(hardLimits);
+  if (intimacyProfile && intimacyGate) {
+    const privateLines = projectIntimacyLines(intimacyProfile, {
+      inputHit: intimateInputHit(intimacyGate.sceneText),
+      beatIntimate: intimacyGate.activeEvents.some(event => beatIntimateFor(event, character.id)),
+      present: presentNames?.has(character.name) === true,
       favor: fav,
     });
-    if (intimacy) lines.push(`  ${intimacy}`);
+    if (privateLines.length) {
+      lines.push(`  内部亲密演出要求（不得写入正文）：${character.name}——\n${privateLines.map(line => `    - ${line}`).join('\n')}`);
+    }
   }
   return lines.join('\n');
 }
@@ -707,7 +709,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string }, playerName?: string, presentNames?: Set<string>): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[] }, playerName?: string, presentNames?: Set<string>): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -952,8 +954,8 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
   const focusContext = sameLocationList.length
     ? `${contextText}\n【在场】${sameLocationList.slice(0, 12).join('、')}`
     : contextText;
-  // 亲密档案门控参数：场景判定只看玩家本轮输入（不含在场名单，避免误判）
-  const intimacyGate = { sceneText: contextText };
+  // 私密入口只读玩家本轮输入与当前激活拍，不使用近期正文或在场名单匹配词表。
+  const intimacyGate = { sceneText: contextText, activeEvents };
   // 在场判定（presence.ts 单一判据）：活跃事件 / 开场声明 / 位置同建筑。
   // 事件那一路同时兜住位置字段滞后——位置由 LLM 维护，实测会落后于剧情。
   const eventCharacterNames = activeEvents

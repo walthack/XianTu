@@ -133,8 +133,17 @@ test('build-time and runtime gates preserve all fourteen stage-time projections'
   for (const name of ['程宗扬', '乐明珠', '小紫', '谢艺', '云苍峰', '凝羽', '武二郎', '苏荔', '祁远', '易彪', '骑白象的鬼王峒使者', '碧奴', '阿夕', '丹宸']) {
     assert.match(focused, new RegExp(name), name);
   }
+  // P4：hardLimits 原文常驻；仅精确豁免这些约束行，其余时序隔离继续校验。
+  const { findIntimacyProfile } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  let layeredFocus = focused;
+  for (const character of runtimeOf(save).canon.characters) {
+    for (const limit of findIntimacyProfile(character.name)?.hardLimits || []) {
+      layeredFocus = layeredFocus.replaceAll(`    - 不可越界：${limit}`, '');
+    }
+  }
+  for (const limit of findIntimacyProfile('小紫').hardLimits) assert.ok(focused.includes(limit));
   for (const marker of ['盘江程氏', '程氏商会', '紫妈妈', '毒宗唯一嫡传', '岳帅遗孤', '御姬奴', '凝奴']) {
-    assert.equal(focused.includes(marker), false, marker);
+    assert.equal(layeredFocus.includes(marker), false, marker);
   }
 });
 

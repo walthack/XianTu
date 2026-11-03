@@ -48,5 +48,17 @@
   "memory": {
     "npcEntryMaxChars": 60,
     "npcPromptLimit": 5
+  },
+  "noteFields": {
+    "【体貌】": "visualIdentity",
+    "【装束】": "visualIdentity",
+    "【真身特征】": "visualIdentity.trueForm",
+    "【关系】": "relationToProtagonist",
+    "【称呼】": "formsOfAddress",
+    "【谈吐】": "speechStyle",
+    "【底线】": "principles",
+    "【目标】": "goals",
+    "【软肋】": "weaknesses",
+    "【绝技】": "signatureAbilities"
   }
 }

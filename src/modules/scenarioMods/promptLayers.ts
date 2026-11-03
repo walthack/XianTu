@@ -1,7 +1,7 @@
 /**
  * 角色设定分层（设计稿 2026-11-03-角色设定分层.md §1.1／§1.4／§二；用户 18:07 拍板 P1=B）。
  *
- * 纯函数，只读 mod-kit/prompt-layers.json 与 affinityLadder 阈值，不接线：
+ * 纯函数，只读 mod-kit/prompt-layers.json 与 affinityLadder 阈值，由 storyContext 接线：
  *   - fieldLayer：staticProfile 字段归哪一层（base／gated／secret），最长路径优先，
  *     所以 `visualIdentity.trueForm` 归 secret、其余 `visualIdentity.*` 归 base。
  *   - privateGateOpen：私密层门＝（玩家输入命中 OR 拍子 scene.intimate）AND 在场 AND 关系已确立，三项同时满足才开（P3）。
@@ -12,6 +12,7 @@
  */
 import config from '../../../mod-kit/prompt-layers.json';
 import { AFFINITY_THRESHOLDS } from './affinityLadder';
+import type { IntimacyProfile } from './intimacyProfiles';
 import type { ScenarioModEventScene } from './schema/scenario';
 
 export type PromptLayer = 'base' | 'gated' | 'secret';
@@ -24,6 +25,7 @@ export interface PromptLayersConfig {
     private: { source: string; gate: string };
   };
   private: { requirePresent: boolean; maxLinesPerCharacter: number; favorTiers: string };
+  noteFields: Record<string, string>;
   privacyAllowedFields: string[];
   intimateInputPatterns: string[];
   memory: { npcEntryMaxChars: number; npcPromptLimit: number };
@@ -130,9 +132,42 @@ export function validatePromptLayersConfig(cfg: unknown): string[] {
   if (typeof c.private?.requirePresent !== 'boolean') errors.push('private.requirePresent 须为布尔');
   if (!isPositiveInt(c.private?.maxLinesPerCharacter)) errors.push('private.maxLinesPerCharacter 须为正整数');
   if (c.private?.favorTiers !== 'affinityLadder') errors.push('private.favorTiers 只支持 affinityLadder');
+  if (!c.noteFields || typeof c.noteFields !== 'object' || Array.isArray(c.noteFields)
+    || Object.entries(c.noteFields).some(([tag, field]) => !tag || typeof field !== 'string'
+      || ![...seen.keys()].some(path => field === path || field.startsWith(`${path}.`)))) {
+    errors.push('noteFields 须映射备注标签到已登记层级字段');
+  }
   if (!isStringList(c.privacyAllowedFields)) errors.push('privacyAllowedFields 须为字符串数组');
   if (!isStringList(c.intimateInputPatterns) || !c.intimateInputPatterns?.length) errors.push('intimateInputPatterns 须为非空字符串数组');
   if (!isPositiveInt(c.memory?.npcEntryMaxChars)) errors.push('memory.npcEntryMaxChars 须为正整数');
   if (!Number.isInteger(c.memory?.npcPromptLimit) || (c.memory?.npcPromptLimit as number) < 0) errors.push('memory.npcPromptLimit 须为非负整数');
   return errors;
+}
+
+/** 未登记的阶段/内部约束备注保留；secret 继续携带源备注已有的显露与知情门。 */
+export function projectProfileNotes(notes: string[], favorGate: boolean, hiddenNote: string): string[] {
+  let hidden = false;
+  const projected = notes.filter(note => {
+    const field = Object.entries(PROMPT_LAYERS.noteFields).find(([tag]) => note.startsWith(tag))?.[1];
+    if (field && fieldLayer(field) === 'gated' && !favorGate) {
+      hidden = true;
+      return false;
+    }
+    return true;
+  });
+  if (hidden) projected.push(hiddenNote);
+  return projected;
+}
+
+/** hardLimits 不参与私密内容预算，由调用方随基础档案发送。 */
+export function projectIntimacyLines(profile: IntimacyProfile, gate: PrivateGateInput): string[] {
+  if (!privateGateOpen(gate)) return [];
+  const revealed = (profile.tiers || [])
+    .filter(tier => gate.favor >= tier.minFavor)
+    .flatMap(tier => tier.reveals);
+  return [
+    ...(profile.physical ? [`身体：${profile.physical}`] : []),
+    ...profile.preferences,
+    ...(revealed.length ? [`当前关系可见：${revealed.join(' ')}`] : []),
+  ].slice(0, PROMPT_LAYERS.private.maxLinesPerCharacter);
 }
