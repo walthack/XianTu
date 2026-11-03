@@ -231,7 +231,7 @@
                   <label class="setting-switch compact">
                     <input :id="`module-enabled-${module.id}`" type="checkbox"
                       :checked="apiStore.isModuleEnabled(module.id)"
-                      @change="apiStore.setModuleEnabled(module.id, ($event.target as HTMLInputElement).checked)" />
+                      @change="updateModuleEnabled(module.id, $event)" />
                     <span class="switch-slider"></span>
                   </label>
                 </div>
@@ -246,7 +246,7 @@
                 </div>
                 <select :id="`module-model-${module.id}`" class="setting-select"
                   :value="apiStore.getModuleAssignment(module.id)"
-                  @change="apiStore.assignModuleAPI(module.id, ($event.target as HTMLSelectElement).value)">
+                  @change="updateModuleAssignment(module, $event)">
                   <option :value="MODULE_INHERIT">继承「{{ getFunctionName(module.inheritUsageType) }}」</option>
                   <option v-for="api in apiStore.apiConfigs" :key="api.id" :value="api.id" :disabled="!api.enabled">
                     {{ getDisplayName(api) }} · {{ api.model || '未配置模型' }}{{ !api.enabled ? '（未启用）' : '' }}
@@ -292,7 +292,7 @@
               <template v-else>
                 <select
                   :value="apiStore.apiAssignments.find(a => a.type === 'main')?.apiId"
-                  @change="updateAssignment('main', ($event.target as HTMLSelectElement).value)"
+                  @change="updateAssignment('main', $event)"
                   class="setting-select"
                 >
                   <option
@@ -345,7 +345,7 @@
             <div class="setting-control">
               <select
                 :value="apiStore.apiAssignments.find(a => a.type === 'instruction_generation')?.apiId"
-                @change="updateAssignment('instruction_generation', ($event.target as HTMLSelectElement).value)"
+                @change="updateAssignment('instruction_generation', $event)"
                 class="setting-select"
               >
                 <option
@@ -465,7 +465,7 @@
                 <!-- API分配下拉框 -->
                 <select
                   :value="apiStore.apiAssignments.find(a => a.type === funcType)?.apiId"
-                  @change="updateAssignment(funcType as APIUsageType, ($event.target as HTMLSelectElement).value)"
+                  @change="updateAssignment(funcType as APIUsageType, $event)"
                   class="setting-select"
                   :class="{ 'disabled-hint': funcType === 'embedding' && !vectorMemoryEnabled }"
                   :disabled="funcType === 'embedding' && !vectorMemoryEnabled"
@@ -746,7 +746,7 @@ import { MODULE_INHERIT } from '@/stores/apiManagementStore';
 import { resolveGameModuleRoute } from '@/services/gameModelModules';
 import { exportBackgroundAuditLog, getBackgroundAuditLog } from '@/services/backgroundAudit';
 import { DUAL_MODEL_CONFIG, BACKEND_REASONING_EFFORTS, type BackendReasoningEffort } from '@/services/dualModelConfig';
-import { backendPanelState } from '@/services/dualModelPanel';
+import { backendPanelState, applyConfirmedBackendChange, type BackendConnection } from '@/services/dualModelPanel';
 import { AUDIT_CHECKPOINT_TURNS } from '@/modules/scenarioMods/backgroundAuditCore';
 
 const { t } = useI18n();
@@ -756,6 +756,32 @@ const consistencyId = DUAL_MODEL_CONFIG.dualModel.backend.moduleId;
 const dualModelUI = DUAL_MODEL_CONFIG.dualModel.ui;
 const consistencyRoute = computed(() => apiStore.getAPIForModule(consistencyId, DUAL_MODEL_CONFIG.dualModel.backend.inheritUsageType as APIUsageType));
 const consistencyPanel = computed(() => backendPanelState(consistencyRoute.value.config, consistencyRoute.value.inherited));
+const isDevBuild = typeof MODULE_DEV_DEFAULTS !== 'undefined' && MODULE_DEV_DEFAULTS === true;
+const confirmBackendChange = (connection: BackendConnection | null, apply: () => void) =>
+  applyConfirmedBackendChange(connection, isDevBuild, {
+    isConfirmed: apiStore.isPaidModelConfirmed,
+    confirm: message => window.confirm(message),
+    remember: apiStore.confirmPaidModel,
+    apply,
+  });
+const updateModuleEnabled = (moduleId: string, event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const apply = () => apiStore.setModuleEnabled(moduleId, input.checked);
+  if (moduleId === consistencyId && input.checked) confirmBackendChange(consistencyRoute.value.config, apply);
+  else apply();
+  input.checked = apiStore.isModuleEnabled(moduleId);
+};
+const updateModuleAssignment = (module: ModelModuleDefinition, event: Event) => {
+  const select = event.target as HTMLSelectElement;
+  const apiId = select.value;
+  const apply = () => apiStore.assignModuleAPI(module.id, apiId);
+  if (module.id === consistencyId && apiId !== apiStore.getModuleAssignment(module.id)) {
+    const connection = apiStore.apiConfigs.find(api => api.id === apiId && api.enabled)
+      || apiStore.getAPIForType(module.inheritUsageType);
+    confirmBackendChange(connection, apply);
+  } else apply();
+  select.value = apiStore.getModuleAssignment(module.id);
+};
 const moduleModelLabels: Record<string, { name: string; description: string }> = {
   [consistencyId]: { name: dualModelUI.name, description: dualModelUI.description },
   intent: { name: '行动解释', description: '把自然输入解释成当前合法动作；建议选响应快的小模型。' },
@@ -1243,7 +1269,11 @@ const saveAPI = async () => {
   if (showEditDialog.value && editingAPIId.value) {
     // 编辑模式
     savedId = editingAPIId.value;
-    apiStore.updateAPI(savedId, { ...editingAPI.value, provider, url, apiKey, model });
+    const apply = () => apiStore.updateAPI(savedId, { ...editingAPI.value, provider, url, apiKey, model });
+    const current = consistencyRoute.value.config;
+    if (current?.id === savedId && (current.model !== model || current.url !== url)) {
+      if (!confirmBackendChange({ id: savedId, model, url }, apply)) return;
+    } else apply();
     toast.success(t('API配置已更新'));
   } else {
     // 新增模式
@@ -1291,8 +1321,18 @@ const syncDefaultAPIToService = () => {
 };
 
 // 更新功能分配
-const updateAssignment = (type: APIUsageType, apiId: string) => {
-  apiStore.assignAPI(type, apiId);
+const updateAssignment = (type: APIUsageType, event: Event) => {
+  const select = event.target as HTMLSelectElement;
+  const apiId = select.value;
+  const previous = apiStore.apiAssignments.find(a => a.type === type)?.apiId;
+  const apply = () => apiStore.assignAPI(type, apiId);
+  if (type === DUAL_MODEL_CONFIG.dualModel.backend.inheritUsageType && consistencyRoute.value.inherited && apiId !== previous) {
+    const connection = apiStore.apiConfigs.find(api => api.id === apiId && api.enabled) || null;
+    if (!confirmBackendChange(connection, apply)) {
+      select.value = previous || '';
+      return;
+    }
+  } else apply();
 
   // 如果分配指令生成到独立API，自动开启分步生成
   if (type === 'instruction_generation' && apiId !== 'default') {

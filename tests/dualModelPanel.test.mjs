@@ -30,3 +30,34 @@ test('配置页文案校验：缺文案/缺预算占位符均拒绝', () => {
   assert.match(errors, /reasoningLabel/);
   assert.match(errors, /hourlyBudget/);
 });
+
+const { applyConfirmedBackendChange } = await loadTs('../src/services/dualModelPanel.ts');
+test('N1-B：开发不弹、正式名单内不弹、名单外取消不改，确认记一次且换连接/型号重问', () => {
+  const records = new Set();
+  let asked = 0, applied = 0, accepted = false, message = '';
+  const actions = {
+    isConfirmed: (id, model) => records.has(JSON.stringify([id, model])),
+    confirm: text => { asked++; message = text; return accepted; },
+    remember: (id, model) => records.add(JSON.stringify([id, model])),
+    apply: () => { applied++; },
+  };
+  const paid = { ...connection, model: 'paid-model' };
+  assert.equal(applyConfirmedBackendChange(paid, true, actions), true);
+  assert.equal(applyConfirmedBackendChange(connection, false, actions), true);
+  assert.equal(asked, 0);
+  assert.equal(records.size, 0);
+  assert.equal(applyConfirmedBackendChange(paid, false, actions), false);
+  assert.equal(applied, 2);
+  assert.equal(records.size, 0);
+  assert.match(message, /后台一致性会自动发请求/);
+  assert.ok(message.includes(String(DUAL_MODEL_CONFIG.dualModel.backend.hourlyBudget)));
+  accepted = true;
+  assert.equal(applyConfirmedBackendChange(paid, false, actions), true);
+  assert.equal(records.size, 1);
+  const count = asked;
+  assert.equal(applyConfirmedBackendChange(paid, false, actions), true);
+  assert.equal(asked, count);
+  applyConfirmedBackendChange({ ...paid, id: 'other' }, false, actions);
+  applyConfirmedBackendChange({ ...paid, model: 'other' }, false, actions);
+  assert.equal(asked, count + 2);
+});
