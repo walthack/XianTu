@@ -3,7 +3,9 @@ import type { RequestDiagnosticContext } from './requestLifecycleDiagnostics';
  * 叙事 RAG 检索服务
  *
  * 来自“织界”的 RAG 方案适配版：
- * - 只索引系统历史中的 assistant/GM 叙事文本，不索引玩家输入
+ * - 只索引系统历史中的 assistant/GM 叙事概要（summary），不索引玩家输入
+ * - 详细描写不入档（设计稿 2026-11-03 第七节方案 B）：绝不读正文 content 全文，也不读本地全文副本；
+ *   无概要标记条与迁移前只有 content 的旧条目一律跳过
  * - 每个存档使用独立 IndexedDB
  * - 必须使用 API 管理里分配给 Embedding 的独立 API；未配置或失败时不建索引、不检索
  * - 发送前检索相关叙事片段，作为轻量上下文注入主提示词
@@ -16,6 +18,7 @@ import {
   normalizeToUnitVector,
   type EmbeddingRequestConfig,
 } from '@/services/embeddingService';
+import { isNoSummary } from '@/services/narrativeSummary';
 
 export interface NarrativeRagEntry {
   id: string;
@@ -83,9 +86,9 @@ function getNarrativeItems(saveData: any): Array<{ index: number; content: strin
     if (role && role !== 'assistant') continue;
     if (type && type !== 'gm' && type !== 'assistant') continue;
 
-    const content = String(item.content || '').trim();
-    if (!content) continue;
-    result.push({ index: i, content, time: typeof item.time === 'string' ? item.time : undefined });
+    const summary = typeof item.summary === 'string' ? item.summary.trim() : '';
+    if (!summary || isNoSummary(summary)) continue;
+    result.push({ index: i, content: summary, time: typeof item.time === 'string' ? item.time : undefined });
   }
   return result;
 }
@@ -295,12 +298,14 @@ class NarrativeRagService {
       await this.ensureIndexed(saveData);
     }
 
-    const results = await this.search(query);
+    // 只注入与当前存档概要一致的条目：旧版按正文建的索引条（autoIndex 关时未被 reconcile 清掉）不得进提示词
+    const expected = new Map(getNarrativeItems(saveData).map(item => [stableNarrativeId(item.index, item.content), item.content]));
+    const results = (await this.search(query)).filter(result => expected.get(result.entry.id) === result.entry.content);
     if (results.length === 0) return '';
 
     const lines = [
       '# 【历史叙事检索结果】',
-      '以下内容来自本角色当前存档的“历史叙事正文”向量检索结果，是此前已经发生过的具体剧情片段。',
+      '以下内容来自本角色当前存档的“历史叙事概要”向量检索结果，是此前已经发生过的剧情概要。',
       '使用要求：只在与当前输入相关时参考这些片段，用于保持前后因果、地点细节、人物承诺、战斗经过和事件连续性；不要把它们当作本轮新发生的剧情；不要机械复述；如果与当前游戏状态冲突，以当前游戏状态和最新叙事为准。',
       '',
     ];
