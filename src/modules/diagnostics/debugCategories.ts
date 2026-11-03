@@ -109,7 +109,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'ui', label: '界面',
     paths: [
-      'components/', 'views/', 'App.vue', 'main.ts', 'env.d.ts', 'router/', 'i18n/', 'composables/', 'stores/uiStore.ts',
+      'components/', 'views/', 'App.vue', 'main.ts', 'env.d.ts', 'router/', 'i18n/', 'composables/', 'stores/uiStore.ts', 'services/dualModelPanel.ts',
       ...at('utils/', 'panelBus.ts', 'toast.ts', 'fullscreen.ts', 'music*.ts', 'videoCache.ts', 'chatBus.ts', 'fatalFallback.ts', 'nsfw.ts', 'stateChangeFormatter.ts'),
       ...at('modules/diagnostics/', 'feedback.ts', 'export.ts', 'zip.ts', 'buildInfo.ts'),
     ],
