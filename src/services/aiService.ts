@@ -1,4 +1,5 @@
-import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
+import { reasoningPolicy, reasoningLimits, reasoningTimeout, observeReasoning, ReasoningExhaustedError, reasoningBudgetParam, mainNarrativeReasoningParam, backendReasoningParam, retryReasoningOnce } from './aiReasoningModelPolicy';
+import type { BackendReasoningEffort } from './dualModelConfig';
 import moderationConfig from '../../mod-kit/ai-content-moderation.json';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
 /**
@@ -80,6 +81,8 @@ type QingyuTransportBudget = {
   reasoningEffort?: 'none' | 'low';
   /** 前台回合主叙事（usageType=main、未指定推理档、非后台/非流空闲模块）；只此类请求带 aiRetry.reasoning.mainNarrative。 */
   mainNarrative?: boolean;
+  /** 双模型后端请求的推理档（设定即为后端请求，与 mainNarrative 互斥）；只此类请求带 dual-model backend.reasoningEffort。 */
+  backendReasoningEffort?: BackendReasoningEffort;
   timeoutMode?: 'content_idle';
   onTransportStart?: () => void;
 };
@@ -158,6 +161,8 @@ export interface GenerateOptions {
   timeoutMode?: 'content_idle';
   onTransportStart?: () => void;
   reasoningEffort?: 'none' | 'low';
+  /** 双模型后端（consistency）请求的推理档；'default'＝回落 mod-kit/dual-model.json。不放宽 reasoningEffort 类型，二者独立。 */
+  backendReasoningEffort?: BackendReasoningEffort;
   /** 清羽长请求预算所属回合。实际 HTTP/酒馆传输按此 id 计次。 */
   qingyuTurnId?: string;
   /** 后台模块不继承前台回合预算／取消归属。 */
@@ -951,11 +956,20 @@ class AIService {
       usageType: options.usageType || 'main',
       reasoningEffort: options.reasoningEffort ?? (remainingQingyuTurnTimeMs(options.qingyuTurnId) !== null ? 'low' : undefined),
       mainNarrative: (options.usageType || 'main') === 'main' && !options.background && !!qingyuTurnId
-        && options.reasoningEffort === undefined && options.timeoutMode === undefined,
+        && options.reasoningEffort === undefined && options.timeoutMode === undefined && options.backendReasoningEffort === undefined,
+      backendReasoningEffort: options.backendReasoningEffort,
       maxTokens: options.maxTokens,
       timeoutMode: options.timeoutMode, onTransportStart: options.onTransportStart,
       qingyuTurnId,
     });
+  }
+
+  /** 主叙事与双模型后端的 reasoning_effort（互斥：后端请求只走后端档位）。 */
+  private turnReasoningParam(url: string, model: string, signal?: AbortSignal): Record<string, unknown> {
+    const bound = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
+    return bound?.backendReasoningEffort !== undefined
+      ? backendReasoningParam(url, model, true, bound.backendReasoningEffort)
+      : mainNarrativeReasoningParam(url, model, !!bound?.mainNarrative);
   }
 
   /** 每次实际 long transport（含网络重试与非流降级）计一次预算。非清羽回合 consume 直接放行。 */
@@ -1841,7 +1855,7 @@ class AIService {
           Object.assign(requestBody, optionalReasoningParam(provider, model, {
             url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
           }) || {}, reasoningBudgetParam(url),
-            mainNarrativeReasoningParam(url, model, !!(signal && qingyuTransportBudgetBySignal.get(signal)?.mainNarrative)));
+            this.turnReasoningParam(url, model, signal));
 
           // 如果指定了 JSON 格式，添加 response_format
           // 🔥 注意：某些模型/API不支持 response_format
@@ -1893,7 +1907,7 @@ class AIService {
         Object.assign(requestBody, optionalReasoningParam(provider, model, {
           url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
         }) || {}, reasoningBudgetParam(url),
-          mainNarrativeReasoningParam(url, model, !!(signal && qingyuTransportBudgetBySignal.get(signal)?.mainNarrative)));
+          this.turnReasoningParam(url, model, signal));
 
         // 如果指定了 JSON 格式，添加 response_format
         // 🔥 注意：某些模型/API不支持 response_format
@@ -2313,7 +2327,7 @@ class AIService {
     Object.assign(requestBody, optionalReasoningParam(provider, model, {
       url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
     }) || {}, reasoningBudgetParam(url),
-      mainNarrativeReasoningParam(url, model, !!(signal && qingyuTransportBudgetBySignal.get(signal)?.mainNarrative)));
+      this.turnReasoningParam(url, model, signal));
 
     if (/^MiniMax-(?:M3|M2\.7(?:-highspeed)?)$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
       && signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none') {

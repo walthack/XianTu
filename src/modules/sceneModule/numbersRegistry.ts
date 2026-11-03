@@ -73,6 +73,9 @@ export const NATION_LINE_IDS: readonly string[] = ['nanhuang', 'jin', 'song', 'h
 /** story.lineUnlock.<lineId> 每线允许的键（太泉解锁设计稿 2026-10-27 §2；不设 enforce 开关，总策划 2026-10-27 定）。 */
 export const LINE_UNLOCK_KEYS: readonly string[] = ['note', 'minRealmLevel', 'minClosedLines', 'countTiers', 'requireDeadlinesCleared'];
 
+/** 推理档取值（MiniMax 官方 reasoning_effort；off＝不发送）。主叙事 mainNarrative.effort 与双模型后端 mod-kit/dual-model.json backend.reasoningEffort 共用。 */
+export const REASONING_EFFORT_LEVELS: readonly string[] = ['off', 'low', 'medium', 'high', 'xhigh', 'max'];
+
 /** 高频叶子：挡住缺字段 / 类型 / 粗范围；其余叶子仍靠补丁 typeof 对齐默认。 */
 export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'e2eSmoke.nanhuangEncounters.enabled', kind: 'bool', required: true, section: 'runtime' },
@@ -132,7 +135,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'narrative.detailRetention', kind: 'string', required: true, oneOf: ['localOnly', 'none'], section: 'runtime' },
   { path: 'narrative.noSummaryMarker', kind: 'string', required: true, section: 'runtime' },
   { path: 'prompt.recentContext.tailChars', kind: 'int', required: true, min: 0, section: 'runtime' },
-  { path: 'aiRetry.reasoning.mainNarrative.effort', kind: 'string', required: true, oneOf: ['off', 'low', 'medium', 'high', 'xhigh', 'max'], section: 'runtime' },
+  { path: 'aiRetry.reasoning.mainNarrative.effort', kind: 'string', required: true, oneOf: REASONING_EFFORT_LEVELS, section: 'runtime' },
   { path: 'aiRetry.reasoning.mainNarrative.modelPattern', kind: 'string', required: true, section: 'runtime' },
   { path: 'aiRetry.reasoning.mainNarrative.hostPattern', kind: 'string', required: true, section: 'runtime' },
   { path: 'story.trades', kind: 'array', required: true, section: 'progress' },

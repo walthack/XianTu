@@ -1,6 +1,8 @@
 import { GAME_NUMBERS, registerNumbersValidator } from '@/modules/sceneModule/numbers';
 import { logEvent } from '@/modules/diagnostics/log';
+import { REASONING_EFFORT_LEVELS } from '@/modules/sceneModule/numbersRegistry';
 import { OutputTruncationError } from './aiResponseTermination';
+import { DUAL_MODEL_CONFIG } from './dualModelConfig';
 
 const observed = new Set<string>(); // Session-only; never writes API settings.
 const config = () => GAME_NUMBERS.aiRetry.reasoning;
@@ -50,6 +52,22 @@ export function mainNarrativeReasoningParam(url: string, model: string, mainNarr
   try {
     if (new RegExp(main.modelPattern, 'i').test(model) && new RegExp(main.hostPattern, 'i').test(new URL(url).hostname)) {
       return { reasoning_effort: main.effort };
+    }
+  } catch { /* lcq-allow: 无效 URL/正则不发送可选参数，正则由 validator 拒绝，传输层负责 URL 报错。 */ }
+  return {};
+}
+/**
+ * 双模型后端推理档：只对后端请求（backend=true）发送；模型/主机名单沿用 mainNarrative.modelPattern/hostPattern，名单外不发（N2-A）。
+ * 档位取调用方传入值；'default'、缺省或非法值回落 mod-kit/dual-model.json backend.reasoningEffort。off 不发送；max 显式发送。
+ */
+export function backendReasoningParam(url: string, model: string, backend: boolean, effort?: string): Record<string, unknown> {
+  if (!backend) return {};
+  const picked = effort && effort !== 'default' && effort !== 'off' && REASONING_EFFORT_LEVELS.includes(effort) ? effort : DUAL_MODEL_CONFIG.dualModel.backend.reasoningEffort;
+  if (!REASONING_EFFORT_LEVELS.includes(picked) || picked === 'off') return {};
+  const main = config().mainNarrative;
+  try {
+    if (new RegExp(main.modelPattern, 'i').test(model) && new RegExp(main.hostPattern, 'i').test(new URL(url).hostname)) {
+      return { reasoning_effort: picked };
     }
   } catch { /* lcq-allow: 无效 URL/正则不发送可选参数，正则由 validator 拒绝，传输层负责 URL 报错。 */ }
   return {};

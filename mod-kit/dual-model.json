@@ -1,0 +1,32 @@
+{
+  "note": "双模型分工（设计稿 narrative-drafts/2026-11-03-双模型分工.md ⑤⑧；用户 2026-11-03 21:39／22:18／22:26 拍板）。前端主叙事写正文与概要，后端 consistency 模块只读概要与账、写 NPC 记忆与连续性提示。本文件只放配置，第1步未接线；校验见 src/services/dualModelConfig.ts。",
+  "dualModel": {
+    "enabled": false,
+    "backend": {
+      "moduleId": "consistency",
+      "inheritUsageType": "memory_summary",
+      "defaultModel": "MiniMax-M3.1-Flash",
+      "reasoningEffort": "max",
+      "reasoningNote": "后端推理档（Q4 实测前先用 max；22:18 定默认模型 MiniMax-M3.1-Flash）。取值同 aiRetry.reasoning.mainNarrative.effort；off＝不发送。是否发送沿用 mainNarrative.modelPattern/hostPattern，名单外不发（N2-A）；玩家在 API 配置页选 'default' 时回落本值。",
+      "summaryWindow": 8,
+      "ledgerMemoryPerNpc": 5,
+      "maxInputChars": 12000,
+      "continuityMaxItems": 3,
+      "maxLagTurns": 2,
+      "waitMs": 0,
+      "timeoutMs": 120000,
+      "degradedAttempts": 1,
+      "hourlyBudget": 60
+    },
+    "frontend": { "writesNpcMemory": false },
+    "billing": {
+      "note": "只约束开发／测试构建的默认值与实测脚本（22:18）；正式版对名单外模型在打开后端或改后端连接时确认一次（N1-B）。正则，大小写不敏感，全名锚定。",
+      "allowedModels": ["^MiniMax-M3\\.1-Flash$"],
+      "blockUnlisted": true
+    }
+  },
+  "memory": {
+    "summaryMaxChars": 100,
+    "moderatedPlaceholder": "（本回合概要待重写）"
+  }
+}
