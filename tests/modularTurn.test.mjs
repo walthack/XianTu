@@ -154,7 +154,8 @@ test('a demo marker forces the module route even for a non-isolated profile', as
   const save = createQingyuOpeningPlaytestSave(parseScenarioMod(JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8'))));
   const { resolveGameModuleRoute } = await isolatedJiti.import('../src/services/gameModelModules.ts');
   const { GAME_MODEL_MODULES } = await isolatedJiti.import('../src/services/moduleModelRuntime.ts');
-  for (const definition of GAME_MODEL_MODULES) assert.equal(resolveGameModuleRoute(definition).config.model, 'MiniMax-M3', definition.id);
+  // 双模型后端（consistency）按 N6-A 走自己的分配／继承 memory_summary，另在 dualModelSettings.test 钉住。
+  for (const definition of GAME_MODEL_MODULES.filter(m => !m.policy.backendReasoning)) assert.equal(resolveGameModuleRoute(definition).config.model, 'MiniMax-M3', definition.id);
   store.set(m.MODULE_TURN_SWITCH, 'false');
   const original = aiService.generate;
   aiService.generate = async options => {

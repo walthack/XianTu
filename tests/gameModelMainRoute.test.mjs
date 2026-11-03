@@ -37,7 +37,7 @@ test('four modules follow main configuration, not M3 or previous module assignme
       assert.deepEqual(narrativeSource.lastModelRoute(d.id),{model:'MiniMax-M2.7-highspeed',provider:'custom'});
     }
     api.apiConfigs[0].model = 'another-backend-model';
-    for (const d of GAME_MODEL_MODULES) assert.equal(resolveGameModuleRoute(d).config.model,'another-backend-model');
+    for (const d of GAME_MODEL_MODULES.filter(m => !m.policy.backendReasoning)) assert.equal(resolveGameModuleRoute(d).config.model,'another-backend-model');
   } finally { aiService.generate = original; }
 });
 

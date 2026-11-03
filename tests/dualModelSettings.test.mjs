@@ -12,7 +12,7 @@ const { createPinia, setActivePinia } = await import('pinia');
 const jiti = createJiti(import.meta.url, { alias: { '@': fileURLToPath(new URL('../src', import.meta.url)) } });
 const dual = await jiti.import('../src/services/dualModelConfig.ts');
 const { GAME_MODEL_MODULES, createModuleModelRuntime, validateModuleDefinition } = await jiti.import('../src/services/moduleModelRuntime.ts');
-const { isGameModuleEnabled, runGameModelModule } = await jiti.import('../src/services/gameModelModules.ts');
+const { isGameModuleEnabled, resolveGameModuleRoute, runGameModelModule } = await jiti.import('../src/services/gameModelModules.ts');
 const { aiService } = await jiti.import('../src/services/aiService.ts');
 const policy = await jiti.import('../src/services/aiReasoningModelPolicy.ts');
 
@@ -165,4 +165,35 @@ test('按量付费确认（N1-B）：开发构建不弹；正式版名单内不�
   const imported = await freshStore();
   imported.importConfig(reloaded.exportConfig());
   assert.equal(imported.isPaidModelConfirmed('paid', 'Some-Paid-Model'), true);
+});
+
+test('连接解析（N6-A，第4步）：consistency 用玩家单独选的连接，未分配继承 memory_summary，不走主叙事；其他模块仍走主叙事', async () => {
+  memory.clear();
+  const store = await freshStore();
+  store.apiConfigs.push(conn('summary', 'Summary-Model'), conn('backend', 'MiniMax-M3.1-Flash'));
+  store.assignAPI('memory_summary', 'summary');
+  let route = resolveGameModuleRoute(card);
+  assert.equal(route.config.id, 'summary', '未单独分配＝继承 memory_summary');
+  assert.equal(route.inherited, true);
+  assert.equal(route.viaHost, undefined);
+  store.assignModuleAPI(MODULE_ID, 'backend');
+  route = resolveGameModuleRoute(card);
+  assert.equal(route.config.id, 'backend', '玩家单独选的连接优先');
+  assert.equal(route.inherited, false);
+  store.apiConfigs.find(c => c.id === 'backend').enabled = false;
+  assert.equal(resolveGameModuleRoute(card).config.id, 'summary', '单独连接停用＝回到继承，不回落主叙事');
+  for (const d of GAME_MODEL_MODULES.filter(m => m.id !== MODULE_ID)) {
+    store.assignModuleAPI(d.id, 'backend');
+    assert.equal(resolveGameModuleRoute(d).config.id, 'default', `${d.id} 现有行为不变：统一走主叙事连接`);
+  }
+  // 经 runGameModelModule 实际发出的请求也用这条连接。
+  store.apiConfigs.find(c => c.id === 'backend').enabled = true;
+  store.setModuleEnabled(MODULE_ID, true);
+  const original = aiService.generate; let captured;
+  aiService.generate = async o => { captured = o; return 'ok'; };
+  try {
+    const result = await withDualEnabled(true, () => runGameModelModule(MODULE_ID, input));
+    assert.equal(captured.apiConfigOverride.id, 'backend');
+    assert.equal(result.route.configId, 'backend');
+  } finally { aiService.generate = original; }
 });

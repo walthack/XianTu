@@ -17,6 +17,9 @@ const MODULES_WITH_OWN_SWITCH = new Set(['audit', CONSISTENCY_MODULE_ID]);
 
 export function resolveGameModuleRoute(definition: ModelModuleDefinition): ModuleRouteResolution {
   const api = useAPIManagementStore();
+  // 双模型后端（N6-A）：玩家为 consistency 单独选的连接优先，未分配时继承 memory_summary 的连接；
+  // 不走主叙事连接，也不经酒馆宿主（宿主承载的是主叙事）。其余模块维持下方统一继承主模型。
+  if (definition.id === CONSISTENCY_MODULE_ID) return api.getAPIForModule(definition.id, definition.inheritUsageType);
   // 用户裁定：四个游戏模块统一继承后台主模型，不按模型名或模块独立分配覆盖。
   const config = api.getAPIForType('main');
   const inherited = true;
