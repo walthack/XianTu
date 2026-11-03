@@ -740,3 +740,11 @@
 提交：`ec2dad0a`（控件与提示）、`8cc629c1`（确认流程）、`a12aa10c`（文案类型回归）、`a46a7ebf`（源码日志归属）。各子项 tsc 通过后立即提交。最终 `npx tsc --noEmit` 0 error；`npx vue-tsc --noEmit` 退出 0；全量 `npm test` 3470 项，3457 通过 / 0 失败 / 13 跳过 / 0 TODO。首轮仅新辅助文件未登记日志归属失败，修正后相关 16 项与全量重跑均通过。`git diff --check` 通过；AIBS、任何 runtime.ts、主叙事配置、canon 和核心 prompt 均 0 行改动。本步按用户指定 tsc/测试及立即本地提交要求执行，未运行会重建 canon 数据的 canon:build；未推送、未做真实模型或 Q4 实测。
 
 后续边界：当前既有 `gameModelModules.ts:resolveGameModuleRoute` 仍将所有模块路由至 main；本步只实现配置页与持久化，不改后台执行接线。consistency 独立分配/继承 memory_summary 的实际请求路由须后续接线步骤对齐；配置页展示的是已保存的目标分配，不能据此声称后台请求已按此路由运行。
+
+## 2026-11-04 双模型第4步：接线（AIBS 0 行）
+
+交付：①MainGamePanel 回合事务提交分支调用 `startConsistencyAfterCommit`（只接主叙事路径：带 moduleReceipt 的模块／本地路径不接，Q7-B；先判开关，关＝作废并清已存提示）；⑥切档 `resetPanelState` 调用 `cancelConsistencyBackground(host)`；②defaultPrompts 按后端开关切换：开时分步指令与非分步 coreOutputRules 改为「前端不写 社交.关系.*.记忆」并加概要写法（字数读 memory.summaryMaxChars），关时与原先逐字相同（N4-A）；③storyContext 下一回合注入连续性提示（≤continuityMaxItems，无则整段跳过）；⑤consistency 连接用 moduleAssignments 玩家分配，未分配继承 memory_summary（N6-A），其他模块不变。文案进 dual-model.json 并校验。
+
+提交：`6bb7251a`（⑤）、`f3b69f95`（①⑥）、`1a8c0f5e`（②）、`701b5ce1`（③）。各子项 tsc 通过后提交；`npx vue-tsc --noEmit` 0；全量 `npm test` 3480 项，3467 通过 / 0 失败 / 13 跳过。AIBS、任何 runtime.ts、intimacyProfiles、canon 数据 0 行；未跑 canon:build（沙箱跑不了）；未推送。
+
+遗留：前端发送跳过 moderated 概要需改 AIBS 1360/1649/1663，本批不做。切档钩子在新档载入后触发时会清掉新档自带的连续性提示（最多少一回合提示，等于现状）。storyContext 原有「push 记忆／补充其记忆」字样未改，靠开时指令写明「本条优先」。
