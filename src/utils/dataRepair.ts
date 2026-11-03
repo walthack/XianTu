@@ -19,6 +19,12 @@ import { isSaveDataV3, migrateSaveDataToLatest } from '@/utils/saveMigration';
 import { validateSaveDataV3 } from '@/utils/saveValidationV3';
 import { normalizeBackpackCurrencies } from '@/utils/currencySystem';
 import { 纪元基点 } from '@/utils/lifespanCalculator';
+import { stripNarrativeTimePrefix } from '@/utils/memorySanitizer';
+import { saveDetail } from '@/services/narrativeDetailStore';
+import { summaryEntry } from '@/services/narrativeSummary';
+import { alignedSummary } from '@/services/promptRedaction';
+import { logError } from '@/modules/diagnostics/log';
+import { debugLog } from '@/modules/diagnostics/debugLog';
 
 /**
  * 修复并清洗存档数据，确保所有必需字段存在且格式正确
@@ -586,4 +592,96 @@ export function createMinimalSaveDataV3(): SaveData {
       联机: { 模式: '单机', 房间ID: null, 玩家ID: null, 只读路径: ['世界'], 世界曝光: false, 冲突策略: '服务器' },
     },
   } as any;
+}
+
+/** 叙事条目上的迁移标记：值为版本号，标了就不再迁（重复读档不重复处理）。 */
+export const NARRATIVE_DETAIL_MIGRATION_VERSION = 1;
+
+function fnv1a32(input: string): string {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < input.length; i++) {
+    hash ^= input.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
+const timePrefixOf = (entry: string): string => {
+  const trimmed = entry.trim();
+  return trimmed.slice(0, trimmed.length - stripNarrativeTimePrefix(trimmed).length);
+};
+
+const stringList = (value: unknown): string[] => (Array.isArray(value) ? value.map(item => (typeof item === 'string' ? item : '')) : []);
+
+const isPlayerEntry = (item: any): boolean => item?.role === 'user' || item?.type === 'user' || item?.type === 'player';
+
+/**
+ * 旧档读档迁移：详细描写不入档（设计稿 2026-11-03「提示词历史与审核拒绝」第七节方案 B）。不调用模型。
+ * - 社交.记忆.短期记忆：每条换成按末尾对齐的同序号隐式中期记忆；对不上或摘要为空的换成无概要标记（发送时 entriesForPrompt 跳过）。
+ * - 系统.历史.叙事（玩家输入条不动）：未迁移的条目先把原 content 存进本地全文副本（narrative.detailRetention 为 none 时不写），
+ *   再改为只存概要：与短期记忆同文的取对齐的隐式中期记忆；否则按时间前缀在隐式中期／中期记忆里唯一对上的取之；都没有标无概要。
+ *   条目留 detailId（副本 id）与 detailMigrated（版本号）。副本写入抛错的条目不清正文、不打标记，记 LCQ-SAV-060，下次读档重试。
+ * saveKey 用角色 ID：同一角色各存档槽（含读档接回的工作槽）的同文条目共用一份副本。只就地改 save，自身不抛错。
+ */
+export async function migrateNarrativeDetailOnLoad(save: any, saveKey: string): Promise<{ shortTermReplaced: number; narrativeMigrated: number; narrativeFailed: number }> {
+  const result = { shortTermReplaced: 0, narrativeMigrated: 0, narrativeFailed: 0 };
+  const memory = save?.社交?.记忆;
+  const shortTerm = stringList(memory?.短期记忆);
+  const implicitMid = stringList(memory?.隐式中期记忆);
+  const midTerm = stringList(memory?.中期记忆);
+  const narrative: any[] = Array.isArray(save?.系统?.历史?.叙事) ? save.系统.历史.叙事 : [];
+
+  // 叙事条目的概要来源：先用改写前的短期记忆按原文对上，再按时间前缀唯一对上
+  const shortTermSummaryByContent = new Map<string, string>();
+  shortTerm.forEach((entry, index) => {
+    const summary = alignedSummary(shortTerm, implicitMid, index);
+    if (entry && summary !== undefined) shortTermSummaryByContent.set(entry, summary);
+  });
+  const countBy = (keys: string[]) => keys.reduce((map, key) => map.set(key, (map.get(key) ?? 0) + 1), new Map<string, number>());
+  const memoryPool = [...implicitMid, ...midTerm].filter(entry => entry.trim() && stripNarrativeTimePrefix(entry.trim()).trim());
+  const memoryPrefixCount = countBy(memoryPool.map(timePrefixOf));
+  const narrativeTimeCount = countBy(narrative.filter(item => item && !isPlayerEntry(item)).map(item => (typeof item.time === 'string' ? item.time : '')));
+  const summaryForNarrative = (item: any): string => {
+    const content = typeof item.content === 'string' ? item.content : '';
+    const byContent = shortTermSummaryByContent.get(content);
+    if (byContent !== undefined) return byContent;
+    const time = typeof item.time === 'string' ? item.time : '';
+    if (time && memoryPrefixCount.get(time) === 1 && narrativeTimeCount.get(time) === 1) {
+      const match = memoryPool.find(entry => timePrefixOf(entry) === time);
+      if (match) return match;
+    }
+    return summaryEntry(time, '');
+  };
+
+  for (let index = 0; index < narrative.length; index++) {
+    const item = narrative[index];
+    if (!item || typeof item !== 'object' || isPlayerEntry(item)) continue;
+    if (Number(item.detailMigrated) >= NARRATIVE_DETAIL_MIGRATION_VERSION) continue;
+    const content = typeof item.content === 'string' ? item.content : '';
+    const detailId = `nd_${index}_${fnv1a32(content)}`;
+    try {
+      if (content) await saveDetail(saveKey, detailId, content);
+    } catch (error) {
+      result.narrativeFailed++;
+      logError('LCQ-SAV-060', error, { detail: { reason: 'detail_write_failed', index, detailId } });
+      continue;
+    }
+    const summary = summaryForNarrative(item);
+    item.content = summary;
+    item.summary = summary;
+    item.detailId = detailId;
+    item.detailMigrated = NARRATIVE_DETAIL_MIGRATION_VERSION;
+    result.narrativeMigrated++;
+  }
+
+  if (memory && typeof memory === 'object' && Array.isArray(memory.短期记忆)) {
+    const next = shortTerm.map((entry, index) => alignedSummary(shortTerm, implicitMid, index) ?? summaryEntry(timePrefixOf(entry), ''));
+    result.shortTermReplaced = next.filter((entry, index) => entry !== memory.短期记忆[index]).length;
+    memory.短期记忆 = next;
+  }
+
+  if (result.shortTermReplaced || result.narrativeMigrated || result.narrativeFailed) {
+    debugLog('save', '读档迁移：详细描写不入档', result);
+  }
+  return result;
 }

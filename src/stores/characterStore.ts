@@ -26,6 +26,7 @@ import { initializeCharacter } from '@/services/characterInitialization';
 import { createCharacter as createCharacterAPI, fetchCharacterProfile, updateCharacterSave, verifyStoredToken } from '@/services/request';
 import { isBackendConfigured } from '@/services/backendConfig';
 import { getAIDataRepairSystemPrompt } from '@/utils/prompts/tasks/dataRepairPrompts';
+import { migrateNarrativeDetailOnLoad } from '@/utils/dataRepair';
 import { updateLifespanFromGameTime, updateNpcLifespanFromGameTime } from '@/utils/lifespanCalculator'; // <-- 导入寿命计算工具
 import { updateMasteredSkills } from '@/utils/masteredSkillsCalculator'; // <-- 导入掌握技能计算工具
 import { updateStatusEffects } from '@/utils/statusEffectManager'; // <-- 导入状态效果管理工具
@@ -1096,6 +1097,8 @@ export const useCharacterStore = defineStore('characterV3', () => {
         targetSlot.存档数据 = outcome.data;
         // 读档修复：旧伤势按迁移表改挂（幂等）
         applyLoadRepairs(targetSlot.存档数据);
+        // 详细描写不入档（设计稿 2026-11-03 第七节方案 B）：旧档正文迁进本地副本、存档只留概要（幂等，不调用模型）
+        await migrateNarrativeDetailOnLoad(targetSlot.存档数据, charId);
       }
 
       try {

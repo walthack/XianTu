@@ -358,7 +358,7 @@ test('⑨ broken-load.json：经真实导入（importSave）收下，经真实�
   const loadGame = await storeFunction('loadGame', '\n  const saveActiveCharacterToStorage', {
     cloneDeep: structuredClone, debug: { log: noop, error: noop, warn: noop }, toast, useUIStore: () => ui, rootState, getOnlineSaveSlot: () => null,
     assertEntitySaveFormat: E.assertEntitySaveFormat, rejectFutureSaveVersion: F.rejectFutureSaveVersion, detectLegacySaveData: M.detectLegacySaveData,
-    validateLoadedSave: F.validateLoadedSave, loadSaveWithFallback, applyLoadRepairs: () => calls.push(['repair']), clearAllCharacterData: async () => calls.push(['clear']),
+    validateLoadedSave: F.validateLoadedSave, loadSaveWithFallback, applyLoadRepairs: () => calls.push(['repair']), migrateNarrativeDetailOnLoad: async () => {}, clearAllCharacterData: async () => calls.push(['clear']),
     shouldReattachLandingPlaytestWorkingCopy: () => false, packPlaytestWorkingSlot: () => null, checkpointWorkingCopy: () => null,
     useGameStateStore: () => ({ loadFromSaveData: () => calls.push(['loadState']) }), useActionQueueStore: () => ({ clearActions: noop }), isTavernEnv: () => false, reseedActiveSceneAfterLoad: noop,
     storage, resetLastConversationIfForeign: () => calls.push(['reset']), commitMetadataToStorage: () => calls.push(['metadata']),

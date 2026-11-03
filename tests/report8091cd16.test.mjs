@@ -77,7 +77,7 @@ function loadHarness(overrides = {}) {
     useUIStore: () => ui, rootState: { value: { 角色列表: { c: { 模式: '单机', 角色: { 名字: '程宗扬' }, 存档列表: { a: slot } } }, 当前激活存档: { 角色ID: 'c', 存档槽位: 'a' } } },
     getOnlineSaveSlot: () => null, isBackendConfigured: () => false, assertEntitySaveFormat: noop, rejectFutureSaveVersion: () => false,
     detectLegacySaveData: () => ({ needsMigration: false }), validateLoadedSave: async (_c, _s, d) => ({ status: 'ok', data: d }),
-    loadSaveWithFallback: async () => null, applyLoadRepairs: noop, clearAllCharacterData: async () => {},
+    loadSaveWithFallback: async () => null, applyLoadRepairs: noop, migrateNarrativeDetailOnLoad: async () => {}, clearAllCharacterData: async () => {},
     shouldReattachLandingPlaytestWorkingCopy: () => false, landingPlaytestWorkingSlot: () => '', packPlaytestWorkingSlot: () => null,
     applyLoadedSaveToWorkingSlotMeta: noop, checkpointWorkingCopy: () => null,
     useGameStateStore: () => ({ loadFromSaveData: () => calls.push('loaded') }), isTavernEnv: () => false, ensureSaveDataHasTavernNsfw: d => d,

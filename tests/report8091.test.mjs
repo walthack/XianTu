@@ -140,7 +140,7 @@ test('cp03 龙神尸身与新序幕检查点：SavePanel 解包＋真实 importS
   const slot=await importSave('c',structuredClone(u.payload.saves[0]));assert.ok(stored.has(slot),p);delete rootState.value.角色列表.c.存档列表[slot].存档数据;
   let loaded=null;const ui={startLoading:noop,updateLoadingText:noop,stopLoading:noop,showDetailModal:noop,hideDetailModal:noop};
   const loadGame=await storeFunction('loadGame','\n  const saveActiveCharacterToStorage',{cloneDeep:structuredClone,debug:{log:noop,error:noop,warn:noop},toast,useUIStore:()=>ui,rootState,getOnlineSaveSlot:()=>null,isBackendConfigured:()=>false,
-   assertEntitySaveFormat:Ent.assertEntitySaveFormat,rejectFutureSaveVersion:Fb.rejectFutureSaveVersion,detectLegacySaveData:M.detectLegacySaveData,validateLoadedSave:Fb.validateLoadedSave,loadSaveWithFallback:async(c,k)=>structuredClone(stored.get(k)),applyLoadRepairs:noop,clearAllCharacterData:async()=>{},
+   assertEntitySaveFormat:Ent.assertEntitySaveFormat,rejectFutureSaveVersion:Fb.rejectFutureSaveVersion,detectLegacySaveData:M.detectLegacySaveData,validateLoadedSave:Fb.validateLoadedSave,loadSaveWithFallback:async(c,k)=>structuredClone(stored.get(k)),applyLoadRepairs:noop,migrateNarrativeDetailOnLoad:async()=>{},clearAllCharacterData:async()=>{},
    shouldReattachLandingPlaytestWorkingCopy:()=>false,packPlaytestWorkingSlot:()=>null,checkpointWorkingCopy:()=>null,useGameStateStore:()=>({loadFromSaveData:d=>{loaded=d;}}),useActionQueueStore:()=>({clearActions:noop}),isTavernEnv:()=>false,reseedActiveSceneAfterLoad:noop,
    storage,resetLastConversationIfForeign:async()=>{},commitMetadataToStorage:async()=>{}});
   assert.equal(await loadGame('c',slot),true,p+JSON.stringify(toasts));assert.ok(loaded?.世界?.状态?.剧本模组,p);

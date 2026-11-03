@@ -16,7 +16,7 @@ export const RECENT_EVENTS_TAIL = '。根据这刚刚发生的文本事件，合
 type PromptMessage = { role: string; content: unknown };
 
 /** 短期记忆第 index 条按末尾对齐对应的隐式中期记忆摘要；缺失或空白返回 undefined。 */
-function alignedSummary(shortTerm: readonly string[], implicitMid: readonly string[], index: number): string | undefined {
+export function alignedSummary(shortTerm: readonly string[], implicitMid: readonly string[], index: number): string | undefined {
   const midIndex = implicitMid.length - (shortTerm.length - index);
   if (midIndex < 0) return undefined;
   const summary = implicitMid[midIndex];
