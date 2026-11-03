@@ -15,11 +15,12 @@ test('配置体检：仓库配置通过，坏配置报错', () => {
   const bad = structuredClone(config);
   bad.memory.npcPromptLimit = -1;
   bad.memory.npcEntryMaxChars = 0;
+  bad.memory.npcDegradedPromptLimit = 0;
   bad.private.requirePresent = 'yes';
   bad.intimateInputPatterns = [];
   bad.layers.gated.fields.push('weaknesses');
   const errors = layers.validatePromptLayersConfig(bad);
-  for (const key of ['npcPromptLimit', 'npcEntryMaxChars', 'requirePresent', 'intimateInputPatterns', 'weaknesses']) {
+  for (const key of ['npcPromptLimit', 'npcEntryMaxChars', 'npcDegradedPromptLimit', 'requirePresent', 'intimateInputPatterns', 'weaknesses']) {
     assert.ok(errors.some(error => error.includes(key)), `应报 ${key}：${errors.join('；')}`);
   }
   assert.ok(layers.validatePromptLayersConfig(null).length > 0);
@@ -28,6 +29,7 @@ test('配置体检：仓库配置通过，坏配置报错', () => {
 test('配置默认值：P6 记忆 60 字／5 条，私密层须在场，好感阶沿用 affinityLadder', () => {
   assert.equal(config.memory.npcEntryMaxChars, 60);
   assert.equal(config.memory.npcPromptLimit, 5);
+  assert.equal(config.memory.npcDegradedPromptLimit, 1);
   assert.equal(config.private.requirePresent, true);
   assert.equal(config.private.favorTiers, 'affinityLadder');
   assert.equal(config.layers.private.source, 'intimacyProfiles');
@@ -114,4 +116,20 @@ test('备注沿用底线门与真身约束，私密行数读配置且不裁硬�
   const lines = projectIntimacyLines(profile, { inputHit: true, present: true, favor: 100 });
   assert.equal(lines.length, PROMPT_LAYERS.private.maxLinesPerCharacter);
   assert.deepEqual(profile, snapshot);
+});
+
+test('NPC 记忆写法说明（§二第 1 条）：字数取配置 npcEntryMaxChars，主叙事与分步指令都带，源码不写死数字', async () => {
+  const { getSystemPrompts } = await loadTs('../src/services/prompts/defaultPrompts.ts');
+  const prompts = getSystemPrompts();
+  const n = config.memory.npcEntryMaxChars;
+  const rule = `事件事实概要，一条一事，不超过 ${n} 字`;
+  assert.ok(prompts.businessRules.content.includes(rule), 'businessRules 应带写法说明');
+  assert.ok(prompts.splitGenerationStep2.content.includes(rule), '分步指令清单应带写法说明');
+  const source = readFileSync(new URL('../src/services/prompts/defaultPrompts.ts', import.meta.url), 'utf8');
+  const lines = source.split('\n').filter(line => line.includes('事件事实概要'));
+  assert.equal(lines.length, 2);
+  for (const line of lines) {
+    assert.ok(line.includes('promptLayersConfig.memory.npcEntryMaxChars'), line);
+    assert.doesNotMatch(line.replace(/\$\{[^}]*\}/g, ''), /\d/, `不写死数字：${line}`);
+  }
 });

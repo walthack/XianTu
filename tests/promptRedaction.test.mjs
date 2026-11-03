@@ -130,3 +130,54 @@ test('记忆中心按钮：确认后调 summarizeMemoryShortTerm，只写回短�
   assert.doesNotMatch(body, /历史\.叙事|\.叙事\s*=|系统\./);
   assert.doesNotMatch(body.replace(/'[^']*'/g, "''"), /\b\d+\b(?<!\b0)/, '不写魔数');
 });
+
+// 设定分层 §二第 3 条：降级重发时 NPC 记忆只带最近 memory.npcDegradedPromptLimit 条（条数进配置，不硬编码）。
+const { NARRATIVE_STATE_PREFIX, limitDegradedNpcMemories } = await jiti.import('../src/services/promptRedaction.ts');
+const { default: promptLayersConfig } = await jiti.import('../mod-kit/prompt-layers.json');
+const stateMessage = (state, head = '系统规则\n') => ({ role: 'system', content: `${head}${NARRATIVE_STATE_PREFIX}${JSON.stringify(state)}` });
+const parseState = message => JSON.parse(message.content.slice(message.content.lastIndexOf(NARRATIVE_STATE_PREFIX) + NARRATIVE_STATE_PREFIX.length));
+
+test('NPC 记忆降级：状态 JSON 前缀照抄 AIBS 拼接处', () => {
+  const source = readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  assert.ok(source.includes(`\n${NARRATIVE_STATE_PREFIX}\${stateJsonString}\n\`.trim();`));
+});
+
+test('NPC 记忆降级：默认条数取配置 npcDegradedPromptLimit，每个 NPC 留最近几条，其余字段与消息不动', () => {
+  assert.equal(promptLayersConfig.memory.npcDegradedPromptLimit, 1);
+  const state = frozen({
+    角色: { 名字: '主角' },
+    社交: { 关系: {
+      a: { 名字: '甲', 好感度: 30, 记忆: ['旧一', '旧二', '最新甲'] },
+      b: { 名字: '乙', 记忆: ['仅一条'] },
+      c: { 名字: '丙' },
+    }, 宗门: { x: 1 } },
+  });
+  const user = frozen({ role: 'user', content: '观察' });
+  const original = frozen([stateMessage(state), user]);
+  const snapshot = JSON.stringify(original);
+  const out = limitDegradedNpcMemories(original);
+  assert.equal(JSON.stringify(original), snapshot, '不改原消息');
+  assert.equal(out[1], user);
+  assert.ok(out[0].content.startsWith(`系统规则\n${NARRATIVE_STATE_PREFIX}`));
+  const limited = parseState(out[0]);
+  const n = promptLayersConfig.memory.npcDegradedPromptLimit;
+  assert.deepEqual(limited.社交.关系.a.记忆, ['旧一', '旧二', '最新甲'].slice(-n));
+  assert.deepEqual(limited.社交.关系.b.记忆, ['仅一条']);
+  assert.equal(limited.社交.关系.a.好感度, 30);
+  assert.deepEqual({ ...limited, 社交: { ...limited.社交, 关系: null } }, { ...state, 社交: { ...state.社交, 关系: null } });
+  // 显式条数：按参数裁，条目文字不改。
+  assert.deepEqual(parseState(limitDegradedNpcMemories(original, 2)[0]).社交.关系.a.记忆, ['旧二', '最新甲']);
+});
+
+test('NPC 记忆降级：无可裁、非 system、无标记、JSON 不完整、坏条数时原样返回', () => {
+  const short = stateMessage({ 社交: { 关系: { a: { 记忆: ['一'] } } } });
+  assert.equal(limitDegradedNpcMemories([short])[0], short);
+  const asUser = { role: 'user', content: stateMessage({ 社交: { 关系: { a: { 记忆: ['一', '二'] } } } }).content };
+  assert.equal(limitDegradedNpcMemories([asUser])[0], asUser);
+  const plain = { role: 'system', content: '系统夹具' };
+  assert.equal(limitDegradedNpcMemories([plain])[0], plain);
+  const broken = { role: 'system', content: `${NARRATIVE_STATE_PREFIX}{"社交":{"关系":{"a":{"记忆":["一","二"]}}}}\n尾巴` };
+  assert.equal(limitDegradedNpcMemories([broken])[0], broken);
+  const many = stateMessage({ 社交: { 关系: { a: { 记忆: ['一', '二', '三'] } } } });
+  for (const bad of [0, -1, 1.5, Number.NaN]) assert.equal(limitDegradedNpcMemories([many], bad)[0], many, `坏条数 ${bad}`);
+});

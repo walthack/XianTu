@@ -124,3 +124,21 @@ test('降级重发不占单回合长请求名额',async()=>{
     assert.equal(calls,3);assert.equal(budget.remainingQingyuTurnLongRequests(turn),1);
   }finally{budget.endQingyuTurnLongRequests(turn);}
 });
+
+test('降级重发同时把状态 JSON 里每个 NPC 记忆裁到配置条数（设定分层 §二第 3 条），首发不裁',async()=>{
+  setup();const bodies=[];
+  const {NARRATIVE_STATE_PREFIX}=await jiti.import('../src/services/promptRedaction.ts');
+  const {default:layers}=await jiti.import('../mod-kit/prompt-layers.json');
+  const memories=['甲旧一','甲旧二','甲最新'];
+  const state={社交:{关系:{a:{名字:'甲',好感度:12,记忆:memories}}}};
+  const req=request({moderationDegrade:{shortTerm,implicitMid}});
+  req.injects[0]={...req.injects[0],content:`系统规则\n${NARRATIVE_STATE_PREFIX}${JSON.stringify(state)}`};
+  await withFetch(async(url,opt)=>{bodies.push(JSON.parse(opt.body));return bodies.length===1?rejected():ok();},async()=>{
+    assert.match(await aiService.generate(req),/静静等候/);
+  });
+  assert.equal(bodies.length,2);
+  const stateOf=body=>{const m=body.messages.find(x=>x.role==='system'&&x.content.includes(NARRATIVE_STATE_PREFIX));return JSON.parse(m.content.slice(m.content.lastIndexOf(NARRATIVE_STATE_PREFIX)+NARRATIVE_STATE_PREFIX.length));};
+  assert.deepEqual(stateOf(bodies[0]).社交.关系.a.记忆,memories);
+  assert.deepEqual(stateOf(bodies[1]).社交.关系.a.记忆,memories.slice(-layers.memory.npcDegradedPromptLimit));
+  assert.equal(stateOf(bodies[1]).社交.关系.a.好感度,12);
+});
