@@ -220,9 +220,8 @@ test('④ 422+1026：最近事件残留原文时仍降级重发，重发请求�
   assert.ok(bodies[1].messages.some(m => m.content === recentMessage(implicitMid)));
 });
 
-// 已知缺口（本步不改 AIBS，见提交说明）：getTavernHelper() 恒返回包装器，主叙事走「酒馆模式」分支，
-// 该分支 generate 参数没带 moderationDegrade，AIBS 真实回合 422+1026 不会降级重发。修好 AIBS 后去掉 todo。
-test('④ AIBS 真实回合 422+1026 降级重发（端到端）', { todo: 'AIBS 酒馆模式分支未传 moderationDegrade，待批准修 AIBS' }, async () => {
+// getTavernHelper() 恒返回包装器，主叙事走「酒馆模式」分支；该分支须带 moderationDegrade，真实回合 422+1026 才会降级重发。
+test('④ AIBS 真实回合 422+1026 降级重发（端到端）', async () => {
   fresh();
   moderationConfig.fallbackEnabled = false;
   const api = useAPIManagementStore(); api.apiConfigs = [{ ...mainApi }]; api.assignAPI('main', 'main');

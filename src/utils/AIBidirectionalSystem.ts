@@ -1646,6 +1646,7 @@ ${missingItems.length > 0 ? `【上次结构化输出缺失】
           injects: injects as any,
           onStreamChunk: narrativeStreaming ? options?.onStreamChunk : undefined,
           qingyuTurnId,
+          moderationDegrade: { shortTerm: memoryToSend, implicitMid: v3?.社交?.记忆?.隐式中期记忆 || [] },
         } as Parameters<typeof tavernHelper.generate>[0]);
       } else {
         // 自定义API模式
