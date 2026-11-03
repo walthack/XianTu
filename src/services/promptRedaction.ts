@@ -90,9 +90,23 @@ export function summarizeMemoryShortTerm(memory: MemoryLike | null | undefined, 
 /** 与 AIBS 的状态 JSON 标记一致；只处理 system 消息末尾的完整状态 JSON。 */
 export const NARRATIVE_STATE_PREFIX = '# 游戏状态\n你正在修仙世界《仙途》中扮演GM。以下是当前完整游戏存档(JSON格式):\n';
 
+/** 旧分步路径（@deprecated LEGACY，AIBS buildSplitSystemPrompt）的状态 JSON 标记，同样位于 system 消息末尾。 */
+export const LEGACY_SPLIT_STATE_PREFIX = '# 游戏状态（JSON）\n';
+
+/** 取最后出现的状态 JSON 标记后的起点；两种标记都含换行，JSON.stringify 正文里不会出现，取较后者即真正的状态段。 */
+function stateJsonStart(content: string): number {
+  let best = -1;
+  for (const prefix of [NARRATIVE_STATE_PREFIX, LEGACY_SPLIT_STATE_PREFIX]) {
+    const at = content.lastIndexOf(prefix);
+    if (at >= 0 && at + prefix.length > best) best = at + prefix.length;
+  }
+  return best;
+}
+
 /**
  * 降级重发专用（设计稿 2026-11-03-角色设定分层.md §二第 3 条）：每个 NPC 的记忆只留最近 limit 条，
  * 条数取 prompt-layers.json 的 memory.npcDegradedPromptLimit。只裁数组，不改条目文字、其他状态或原消息。
+ * 主路径与旧分步路径（LEGACY_SPLIT_STATE_PREFIX）两种状态标题都认，口径与条数相同。
  */
 export function limitDegradedNpcMemories<T extends PromptMessage>(
   messages: readonly T[],
@@ -102,9 +116,8 @@ export function limitDegradedNpcMemories<T extends PromptMessage>(
   if (!Number.isInteger(limit) || limit <= 0) return [...messages];
   return messages.map(message => {
     if (message.role !== 'system' || typeof message.content !== 'string') return message;
-    const start = message.content.lastIndexOf(NARRATIVE_STATE_PREFIX);
-    if (start < 0) return message;
-    const jsonStart = start + NARRATIVE_STATE_PREFIX.length;
+    const jsonStart = stateJsonStart(message.content);
+    if (jsonStart < 0) return message;
     try {
       const state = JSON.parse(message.content.slice(jsonStart));
       const relations = state?.社交?.关系;

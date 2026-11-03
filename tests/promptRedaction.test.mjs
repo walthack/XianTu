@@ -181,3 +181,47 @@ test('NPC 记忆降级：无可裁、非 system、无标记、JSON 不完整、�
   const many = stateMessage({ 社交: { 关系: { a: { 记忆: ['一', '二', '三'] } } } });
   for (const bad of [0, -1, 1.5, Number.NaN]) assert.equal(limitDegradedNpcMemories([many], bad)[0], many, `坏条数 ${bad}`);
 });
+
+const { LEGACY_SPLIT_STATE_PREFIX } = await jiti.import('../src/services/promptRedaction.ts');
+const legacyStateMessage = (state, head = '分步规则\n') => ({ role: 'system', content: `${head}${LEGACY_SPLIT_STATE_PREFIX}${JSON.stringify(state)}` });
+
+test('NPC 记忆降级（旧分步路径）：状态标题照抄 AIBS buildSplitSystemPrompt', () => {
+  const source = readFileSync(new URL('../src/utils/AIBidirectionalSystem.ts', import.meta.url), 'utf8');
+  assert.ok(source.includes(`\n${LEGACY_SPLIT_STATE_PREFIX}\${stateJsonString}\n\`.trim();`));
+});
+
+test('NPC 记忆降级（旧分步路径）：同一配置条数裁每个 NPC 记忆，标题前正文与其他字段不动', () => {
+  const state = frozen({
+    角色: { 名字: '主角' },
+    社交: { 关系: {
+      a: { 名字: '甲', 好感度: 30, 记忆: ['旧一', '旧二', '最新甲'] },
+      b: { 名字: '乙', 记忆: ['仅一条'] },
+    } },
+  });
+  const original = frozen([legacyStateMessage(state)]);
+  const snapshot = JSON.stringify(original);
+  const out = limitDegradedNpcMemories(original);
+  assert.equal(JSON.stringify(original), snapshot, '不改原消息');
+  const head = `分步规则\n${LEGACY_SPLIT_STATE_PREFIX}`;
+  assert.ok(out[0].content.startsWith(head));
+  const limited = JSON.parse(out[0].content.slice(head.length));
+  const n = promptLayersConfig.memory.npcDegradedPromptLimit;
+  assert.deepEqual(limited.社交.关系.a.记忆, ['旧一', '旧二', '最新甲'].slice(-n));
+  assert.deepEqual(limited.社交.关系.b.记忆, ['仅一条']);
+  assert.equal(limited.社交.关系.a.好感度, 30);
+  assert.deepEqual(limited.角色, state.角色);
+  assert.deepEqual(JSON.parse(limitDegradedNpcMemories(original, 2)[0].content.slice(head.length)).社交.关系.a.记忆, ['旧二', '最新甲']);
+});
+
+test('NPC 记忆降级（旧分步路径）：无可裁、JSON 不完整、坏条数原样返回；两种标题并存取末尾那段', () => {
+  const short = legacyStateMessage({ 社交: { 关系: { a: { 记忆: ['一'] } } } });
+  assert.equal(limitDegradedNpcMemories([short])[0], short);
+  const broken = { role: 'system', content: `${LEGACY_SPLIT_STATE_PREFIX}{"社交":{"关系":{"a":{"记忆":["一","二"]}}}}\n尾巴` };
+  assert.equal(limitDegradedNpcMemories([broken])[0], broken);
+  const many = legacyStateMessage({ 社交: { 关系: { a: { 记忆: ['一', '二', '三'] } } } });
+  for (const bad of [0, -1, 1.5, Number.NaN]) assert.equal(limitDegradedNpcMemories([many], bad)[0], many, `坏条数 ${bad}`);
+  // 规则正文里先出现旧标题（如说明文字），末尾才是主路径状态段：只裁末尾那段。
+  const mixed = stateMessage({ 社交: { 关系: { a: { 记忆: ['一', '二'] } } } }, `说明\n${LEGACY_SPLIT_STATE_PREFIX}（示意）\n`);
+  assert.deepEqual(parseState(limitDegradedNpcMemories([mixed])[0]).社交.关系.a.记忆, ['一', '二'].slice(-promptLayersConfig.memory.npcDegradedPromptLimit));
+  assert.ok(limitDegradedNpcMemories([mixed])[0].content.startsWith(`说明\n${LEGACY_SPLIT_STATE_PREFIX}（示意）\n${NARRATIVE_STATE_PREFIX}`));
+});
