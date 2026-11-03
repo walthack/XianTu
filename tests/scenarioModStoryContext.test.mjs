@@ -769,7 +769,7 @@ test('角色档案私密层：本轮输入/激活拍入口、在场与关系门�
   assertLimits(prompt);
 });
 
-test('状态 JSON 社交.关系：只发在场者、记忆限条、私密信息按私密门剔除或只留清单字段，存档不删', async () => {
+test('状态 JSON 社交.关系：不在场者只留清单字段、记忆限条、私密信息按私密门剔除或只留清单字段，存档不删', async () => {
   const { buildNarrativePromptState } = await loadTs('../src/utils/narrativePromptState.ts');
   const { createScenarioPromptState } = await loadTs('../src/modules/scenarioMods/storyContext.ts');
   const { AFFINITY_THRESHOLDS } = await loadTs('../src/modules/scenarioMods/affinityLadder.ts');
@@ -786,8 +786,11 @@ test('状态 JSON 社交.关系：只发在场者、记忆限条、私密信息�
       名字: '凝羽', 好感度: AFFINITY_THRESHOLDS.intimacyShallow, 记忆: memories,
       私密信息: { 性格倾向: '内敛', 性取向: '异性', 是否为处女: true, 身体部位: [{ 部位名称: 'x' }] },
     },
-    远人: { 名字: '远人', 好感度: 90, 当前位置: { 描述: '南荒·远处' }, 记忆: ['远人记忆'] },
-    刚说话: { 名字: '刚说话', 好感度: 0, 当前位置: { 描述: '南荒·远处' } },
+    远人: {
+      角色ID: 'test.far', 名字: '远人', 与玩家关系: '旧识', 好感度: 90, 当前位置: { 描述: '南荒·远处' },
+      记忆: ['远人记忆'], 私密信息: { 性格倾向: '外放' }, 当前内心想法: '想回去',
+    },
+    刚说话: { 名字: '刚说话', 好感度: 0, 当前位置: { 描述: '南荒·远处' }, 当前内心想法: '久等' },
   };
   save.系统 = save.系统 || {};
   save.系统.历史 = { 叙事: [{ role: 'assistant', content: '刚说话拱手道：久等了。' }, { role: 'user', content: '远人在哪' }] };
@@ -798,7 +801,15 @@ test('状态 JSON 社交.关系：只发在场者、记忆限条、私密信息�
   const relationsFor = (input, source = save) => buildNarrativePromptState(stateForAI, input, source).社交.关系;
 
   let relations = relationsFor('闲聊');
-  assert.deepEqual(Object.keys(relations).sort(), ['凝羽', '刚说话'].sort(), '远人不在场不发；近期正文刚出场者在场（玩家点名不算）');
+  assert.deepEqual(Object.keys(relations).sort(), ['凝羽', '刚说话', '远人'].sort(), '不在场者仍保留条目');
+  assert.deepEqual(Object.keys(relations.远人).sort(), PROMPT_LAYERS.absentRelationFields.filter(key => key in save.社交.关系.远人).sort(),
+    '远人不在场（玩家点名不算）：只留名字、关系、好感、位置等清单字段，省记忆与私密信息');
+  assert.deepEqual(relations.远人.当前位置, save.社交.关系.远人.当前位置);
+  assert.equal(relations.远人.好感度, 90);
+  for (const key of ['记忆', '私密信息']) assert.equal(PROMPT_LAYERS.absentRelationFields.includes(key), false);
+  assert.equal(relations.刚说话.当前内心想法, '久等', '近期正文刚出场者在场：整条保留');
+  assert.equal(relations.远人.当前内心想法, undefined);
+  assert.equal(relationsFor('亲吻').远人.私密信息, undefined, '不在场：输入命中也不带私密信息');
   assert.deepEqual(relations.凝羽.记忆, memories.slice(-PROMPT_LAYERS.memory.npcPromptLimit));
   assert.equal('私密信息' in relations.凝羽, false, '无入口：私密信息整块剔除');
 

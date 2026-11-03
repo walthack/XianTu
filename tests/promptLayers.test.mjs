@@ -18,9 +18,10 @@ test('配置体检：仓库配置通过，坏配置报错', () => {
   bad.memory.npcDegradedPromptLimit = 0;
   bad.private.requirePresent = 'yes';
   bad.intimateInputPatterns = [];
+  bad.absentRelationFields = ['名字', '记忆'];
   bad.layers.gated.fields.push('weaknesses');
   const errors = layers.validatePromptLayersConfig(bad);
-  for (const key of ['npcPromptLimit', 'npcEntryMaxChars', 'npcDegradedPromptLimit', 'requirePresent', 'intimateInputPatterns', 'weaknesses']) {
+  for (const key of ['npcPromptLimit', 'npcEntryMaxChars', 'npcDegradedPromptLimit', 'requirePresent', 'intimateInputPatterns', 'absentRelationFields', 'weaknesses']) {
     assert.ok(errors.some(error => error.includes(key)), `应报 ${key}：${errors.join('；')}`);
   }
   assert.ok(layers.validatePromptLayersConfig(null).length > 0);

@@ -3,6 +3,7 @@ import { computeScenarioPresence } from '@/modules/scenarioMods/storyContext';
 import {
   beatIntimateFor,
   intimateInputHit,
+  pickAbsentRelationFields,
   pickPrivacyFields,
   privateGateOpen,
   projectNpcMemory,
@@ -11,7 +12,8 @@ import {
 type UnknownRecord = Record<string, any>;
 
 /**
- * 社交.关系 只发在场角色（与 storyContext 同口径：computeScenarioPresence），存档本身不删。
+ * 社交.关系 按在场投影（与 storyContext 同口径：computeScenarioPresence），存档本身不删。
+ * 不在场 NPC 只留 absentRelationFields（名字、关系、好感、位置等），省记忆与私密信息。
  * 在场 NPC 记忆只带最近 memory.npcPromptLimit 条；私密信息 走 privateGateOpen
  * （本轮输入命中或激活拍 scene.intimate＋在场＋好感），门不过整块剔除，门过只留 privacyAllowedFields。
  * 非剧本存档无在场口径，关系原样发送。
@@ -30,7 +32,10 @@ function projectPromptRelations(
   for (const [key, npc] of Object.entries(relations as UnknownRecord)) {
     if (!npc || typeof npc !== 'object') continue;
     const name = String(npc.名字 || key);
-    if (!presence.presentNames.has(key) && !presence.presentNames.has(name)) continue;
+    if (!presence.presentNames.has(key) && !presence.presentNames.has(name)) {
+      projected[key] = pickAbsentRelationFields(npc);
+      continue;
+    }
     const entry: UnknownRecord = { ...npc };
     if (Array.isArray(entry.记忆)) entry.记忆 = projectNpcMemory(entry.记忆);
     if ('私密信息' in entry) {

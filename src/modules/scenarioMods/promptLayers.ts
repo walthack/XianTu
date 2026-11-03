@@ -9,6 +9,7 @@
  *   - intimateInputHit：玩家本轮输入是否命中配置词表（原 intimacyProfiles.ts 写死的正则，原样搬入配置）。
  *   - pickPrivacyFields：私密信息门开时只留配置清单里的倾向类字段（P5）。
  *   - projectNpcMemory：NPC 记忆只取最近 npcPromptLimit 条（P6；不截条目本身，P9 不做写入时截断）。
+ *   - pickAbsentRelationFields：不在场 NPC 的 社交.关系 条目只留 absentRelationFields（设计稿 §二、风险 1）。
  */
 import config from '../../../mod-kit/prompt-layers.json';
 import { AFFINITY_THRESHOLDS } from './affinityLadder';
@@ -28,6 +29,7 @@ export interface PromptLayersConfig {
   noteFields: Record<string, string>;
   derivedNotePrefixes: string[];
   privacyAllowedFields: string[];
+  absentRelationFields: string[];
   intimateInputPatterns: string[];
   memory: { npcEntryMaxChars: number; npcPromptLimit: number; npcDegradedPromptLimit: number };
 }
@@ -103,6 +105,17 @@ export function pickPrivacyFields(privacy: unknown): Record<string, unknown> | n
   return picked;
 }
 
+/** 不在场 NPC 只留清单字段（名字、关系、好感、位置等），省记忆与私密信息；非对象返回 null。 */
+export function pickAbsentRelationFields(npc: unknown): Record<string, unknown> | null {
+  if (!npc || typeof npc !== 'object' || Array.isArray(npc)) return null;
+  const source = npc as Record<string, unknown>;
+  const picked: Record<string, unknown> = {};
+  for (const field of PROMPT_LAYERS.absentRelationFields) {
+    if (Object.prototype.hasOwnProperty.call(source, field)) picked[field] = source[field];
+  }
+  return picked;
+}
+
 /** NPC 记忆取最近 npcPromptLimit 条（数组尾部为最新）；非数组返回空数组。 */
 export function projectNpcMemory<T>(list: T[] | null | undefined): T[] {
   if (!Array.isArray(list)) return [];
@@ -140,6 +153,10 @@ export function validatePromptLayersConfig(cfg: unknown): string[] {
   }
   if (!isStringList(c.derivedNotePrefixes) || !c.derivedNotePrefixes?.length) errors.push('derivedNotePrefixes 须为非空字符串数组');
   if (!isStringList(c.privacyAllowedFields)) errors.push('privacyAllowedFields 须为字符串数组');
+  if (!isStringList(c.absentRelationFields) || !c.absentRelationFields?.length
+    || c.absentRelationFields.some(field => field === '记忆' || field === '私密信息')) {
+    errors.push('absentRelationFields 须为非空字符串数组，且不含 记忆／私密信息');
+  }
   if (!isStringList(c.intimateInputPatterns) || !c.intimateInputPatterns?.length) errors.push('intimateInputPatterns 须为非空字符串数组');
   if (!isPositiveInt(c.memory?.npcDegradedPromptLimit)) errors.push('memory.npcDegradedPromptLimit 须为正整数');
   if (!isPositiveInt(c.memory?.npcEntryMaxChars)) errors.push('memory.npcEntryMaxChars 须为正整数');
