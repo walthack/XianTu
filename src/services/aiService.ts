@@ -22,6 +22,7 @@ import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIE
 import { contentModerationDetail, toUserFacingAIError } from './apiErrorMessage';
 import { logError, logEvent } from '@/modules/diagnostics/log';
 import { summarizeError } from '@/modules/diagnostics/errorSummary';
+import { degradedModeForAttempt, degradedRecentEvents, replaceRecentEventsMessage } from './promptRedaction';
 import { AiHttpError, abortableDelay, aiRetryConfig, planAiRetry, readRetryAfterHeader, type AiRetryPlan } from './aiRetryPolicy';
 import {
   isTruncatedFinishReason,
@@ -172,7 +173,14 @@ export interface GenerateOptions {
    * json_object 明确强制 JSON。
    */
   responseMode?: GenerateResponseMode;
+  /**
+   * 422／1026 审核拦截时的降级重发素材（短期记忆、隐式中期记忆，按末尾对齐）。
+   * 只用于构造发送副本，不写回存档；不传则不降级。
+   */
+  moderationDegrade?: ModerationDegradeSource;
 }
+
+export type ModerationDegradeSource = { shortTerm: string[]; implicitMid: string[] };
 
 export type GenerateResponseMode = 'configured' | 'text' | 'json_object';
 
@@ -191,6 +199,12 @@ export function resolveGenerateResponseFormat(
 export const MAIN_NARRATIVE_OUTPUT_CAP = 8192;
 /** @deprecated 不再把截断补救膨胀到 16000；保留别名以免旧测试/调用读到空值。 */
 export const TRUNCATION_RECOVERY_MAX_TOKENS = MAIN_NARRATIVE_OUTPUT_CAP;
+
+/** HTTP 422 且命中 fallbackMarkers（1026／new_sensitive）：可走降级重发与备用连接的审核拦截。 */
+function isModerationRetryable(error: unknown): error is AiHttpError {
+  return error instanceof AiHttpError && error.status === moderationConfig.status
+    && moderationConfig.fallbackMarkers.some(marker => error.message.toLowerCase().includes(marker));
+}
 
 function salvageTruncationError(error: unknown): string | null {
   if (!isOutputTruncationError(error)) return null;
@@ -1424,7 +1438,7 @@ class AIService {
     const usageType = options.usageType;
     const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = resolveGenerateResponseFormat(options, assignedConfig);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal, options.onModelRoute);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal, options.onModelRoute, 0, options.moderationDegrade);
   }
 
   private async generateRawWithCustomAPI(
@@ -1447,7 +1461,7 @@ class AIService {
     const assignedConfig = usageType ? this.getAPIConfigForUsageType(usageType) : null;
     const responseFormat = resolveGenerateResponseFormat(options, assignedConfig);
     console.log(`[AI服务-自定义Raw] shouldStream=${shouldStream}, hasOnStreamChunk=${!!options.onStreamChunk}, options.should_stream=${options.should_stream}, config.streaming=${this.config.streaming}`);
-    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal, options.onModelRoute);
+    return this.callAPI(messages, shouldStream, options.onStreamChunk, responseFormat, options.usageType, options.maxTokens, requestConfig, options.signal, options.onModelRoute, 0, options.moderationDegrade);
   }
 
   private async callAPI(
@@ -1461,6 +1475,8 @@ class AIService {
     signal?: AbortSignal,
     onModelRoute?: GenerateOptions['onModelRoute'],
     fallbackAttempt = 0,
+    moderationDegrade?: ModerationDegradeSource,
+    degradedResend = false,
   ): Promise<string> {
     const { provider, url, apiKey, model, temperature, maxTokens } = apiConfig;
 
@@ -1510,10 +1526,17 @@ class AIService {
     } catch (error) {
       const detail = contentModerationDetail(error);
       if (detail) logEvent({ code: 'LCQ-NET-012', cause: error, detail: { ...detail, provider, model, fallbackAttempt }, echo: false });
-      if (!(error instanceof AiHttpError) || error.status !== moderationConfig.status
-        || !moderationConfig.fallbackMarkers.some(marker => error.message.toLowerCase().includes(marker))
-        || fallbackAttempt >= moderationConfig.fallbackAttempts
+      if (!isModerationRetryable(error)
         || !['main', 'module_narrative'].includes(usageType || 'main') || signal?.aborted) throw error;
+      // 降级重发由发起的那一层统一推进，重发本身被拒时原样交回。
+      if (degradedResend) throw error;
+      if (moderationDegrade && fallbackAttempt === 0) {
+        const degraded = await this.resendWithDegradedContext(error, messages, moderationDegrade,
+          resend => this.callAPI(resend, streaming, onStreamChunk, responseFormat, usageType, maxTokensOverride, apiConfig, signal, onModelRoute, fallbackAttempt, undefined, true),
+          usageType, signal);
+        if (degraded !== undefined) return degraded;
+      }
+      if (fallbackAttempt >= moderationConfig.fallbackAttempts) throw error;
       // 开关 = API管理界面开关，未设置时沿用 ai-content-moderation.json 的 fallbackEnabled。
       const store = useAPIManagementStore();
       if (!store.effectiveModerationFallbackEnabled) throw error;
@@ -1538,6 +1561,46 @@ class AIService {
         }
       }
     }
+  }
+
+  /**
+   * 422／1026 后用同一连接逐档降级「最近事件」重发：第 n 次取 degradedModeForAttempt(n)，最多 degradedAttempts 次。
+   * 某档降级后与上一次发出的消息相同（该档无可降）则不重发、直接看下一档；次数用完返回 undefined，交回原有备用连接分支。
+   * 重发不占单回合长请求名额（同备用重发），但仍受同一 signal 上的回合总时限约束。
+   */
+  private async resendWithDegradedContext(
+    moderationError: AiHttpError,
+    messages: AIMessage[],
+    source: ModerationDegradeSource,
+    send: (messages: AIMessage[]) => Promise<string>,
+    usageType: APIUsageType | undefined,
+    signal: AbortSignal | undefined,
+  ): Promise<string | undefined> {
+    let previousMessages = messages;
+    for (let attempt = 1; attempt <= moderationConfig.degradedAttempts; attempt++) {
+      const mode = degradedModeForAttempt(attempt);
+      const entries = degradedRecentEvents(source.shortTerm, source.implicitMid, mode);
+      const degradedMessages = replaceRecentEventsMessage(messages, entries);
+      if (JSON.stringify(degradedMessages) === JSON.stringify(previousMessages)) continue;
+      previousMessages = degradedMessages;
+      logEvent({ code: 'LCQ-NET-018', detail: { attempt, mode, entries: entries.length, originalEntries: source.shortTerm.length, usageType: usageType || 'main' }, echo: false });
+      const previous = signal ? qingyuTransportBudgetBySignal.get(signal) : undefined;
+      if (signal) qingyuTransportBudgetBySignal.set(signal, { ...previous, usageType: usageType || 'main', moderationFallback: true });
+      try {
+        return await send(degradedMessages);
+      } catch (degradedError) {
+        // lcq-allow: 降级重发的传输与审核已由 diagnosticTransport／LCQ-NET-012 记录。
+        if (signal?.aborted || (degradedError as Error)?.name === 'AbortError') throw degradedError;
+        // 非审核类失败不再换档；保留最初的审核分类，阻止外层对同一提示词重试。
+        if (!isModerationRetryable(degradedError)) throw Object.assign(toUserFacingAIError(moderationError), { status: moderationError.status, retriesSpent: true, degradedCause: degradedError });
+      } finally {
+        if (signal) {
+          if (previous) qingyuTransportBudgetBySignal.set(signal, previous);
+          else qingyuTransportBudgetBySignal.delete(signal);
+        }
+      }
+    }
+    return undefined;
   }
 
   // OpenAI兼容格式（OpenAI、DeepSeek、自定义）

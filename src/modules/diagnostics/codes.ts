@@ -153,6 +153,7 @@ export const ERROR_CODES = {
   'LCQ-NET-016': spec('error', 'aiBidirectional', 'AI双向系统生成失败'),
   'LCQ-NET-017': spec('error', 'aiBidirectional', '回合正文生成失败，已用本地安全正文结算'),
   'LCQ-NET-015': spec('warn', 'aiService', 'AI 接口不支持流式传输，已自动降级为非流式请求'),
+  'LCQ-NET-018': spec('warn', 'aiService', '审核拦截后以降级上下文重发'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),
