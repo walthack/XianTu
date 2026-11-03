@@ -2392,8 +2392,8 @@
       "missNotice": "这句话没对上这一拍可做的动作，剧情没有推进。可做：{actions}"
     },
     "narrativeTurnBudget": {
-      "note": "普通叙事回合（MainGamePanel 发给 AIBidirectionalSystem.processPlayerAction 的那次生成，含其内部重试）的总耗时上限（毫秒）。到点掐断本回合在途请求、不再等，撤回本回合预结算（与生成失败同一兜底），保留玩家输入可直接重发，并弹 notice 提示；回合完成信号照常收尾。场面战描写另有 combat.narrationBudget。REPORT-8091-ef573ece P2：B15 回合模型流卡死 300 秒才中止重试。0＝不设上限。不改模型／API 超时配置。",
-      "totalMs": 90000,
+      "note": "普通叙事回合（MainGamePanel 发给 AIBidirectionalSystem.processPlayerAction 的那次生成，含其内部重试）的总耗时上限（毫秒）。到点掐断本回合在途请求、不再等，撤回本回合预结算（与生成失败同一兜底），保留玩家输入可直接重发，并弹 notice 提示；回合完成信号照常收尾。场面战描写另有 combat.narrationBudget。REPORT-8091-ef573ece P2：B15 回合模型流卡死 300 秒才中止重试。2026-11-03 用户定 90000→150000（保底）：主叙事 MiniMax-M3.1-Flash 推理档同日压到 low（aiRetry.reasoning.mainNarrative），目标每回合约 30 秒，150 秒只兜卡死，仍低于驱动 300 秒。0＝不设上限。不改模型／API 超时配置。",
+      "totalMs": 150000,
       "notice": "本回合叙事超过 {seconds} 秒仍未写完，已中止；你的输入已保留，可直接重新发送。"
     }
   },

@@ -101,3 +101,17 @@ test('helper：非主叙事或无效 URL 一律空', () => {
   assert.deepEqual(policy.mainNarrativeReasoningParam('not a url', 'MiniMax-M3.1-Flash', true), {});
   assert.deepEqual(policy.mainNarrativeReasoningParam('https://api.minimaxi.com/v1', 'MiniMax-M3.1-Flash', true), { reasoning_effort: configured().effort });
 });
+
+// 同日用户定：普通叙事回合总限时 story.narrativeTurnBudget.totalMs 90000→150000（保底），取自配置、面板不写死。
+test('回合总限时 150 秒取自 mod-kit，MainGamePanel 读配置传给 raceTurnBudget、不写死秒数', async () => {
+  const { readFileSync } = await import('node:fs');
+  const budget = numbers.GAME_NUMBERS.story.narrativeTurnBudget;
+  assert.equal(budget.totalMs, 150000);
+  assert.match(budget.note, /90000→150000/);
+  const merged = JSON.parse(readFileSync(new URL('../mod-kit/game-numbers.qingyu.json', import.meta.url), 'utf8'));
+  assert.equal(merged.story.narrativeTurnBudget.totalMs, 150000, '合并产物已重生成');
+  const panel = readFileSync(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
+  assert.match(panel, /const budget = \(GAME_NUMBERS\.story as any\)\.narrativeTurnBudget as \{ totalMs: number; notice: string \};/);
+  assert.match(panel, /\), Number\(budget\?\.totalMs\) \|\| 0, \(\) => \{/);
+  assert.doesNotMatch(panel, /raceTurnBudget\([^)]*\b(90000|150000)\b/);
+});

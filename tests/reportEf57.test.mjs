@@ -336,7 +336,7 @@ test('2 controller：判负结果行与收场同一句配置文案，不再写�
 // ───────────── 3) P2 普通叙事没有总时长上限：B15 模型流卡死 300 秒才中止重试，粘贴标签回合 101.7 秒 ─────────────
 // 根因：场面描写有 combat.narrationBudget（631f0936），普通叙事回合（processPlayerAction）只有流式空闲超时与重试，没有总时长上限；
 // 流卡住时整拍停在 processing，回合账不结清。
-// 修：story.narrativeTurnBudget.totalMs（mod-kit，90 秒）——MainGamePanel 用 raceTurnBudget 包住 processPlayerAction，到点掐断本回合在途请求、
+// 修：story.narrativeTurnBudget.totalMs（mod-kit，原 90 秒；2026-11-03 起 150 秒）——MainGamePanel 用 raceTurnBudget 包住 processPlayerAction，到点掐断本回合在途请求、
 // 不再等，按生成失败兜底（撤回本回合预结算、保留输入），弹配置里的提示；外层 finally 照常结清回合账、发完成信号。模型／API 配置不动。
 const TS = await loadTs('../src/composables/turnSignal.ts');
 test('3 raceTurnBudget：请求卡死到点即返回 expired、先调 onExpire；按时返回照常取值；失败照常抛；0＝不设上限', async () => {
