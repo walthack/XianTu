@@ -102,10 +102,22 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
   setActivePinia(createPinia());
   const { AIBidirectionalSystem } = await loadPipeline('../src/utils/AIBidirectionalSystem.ts');
   const { save } = await openingSave();
-  const lastNarrative = result => result.saveData.系统.历史.叙事.at(-1).content;
+  // 详细描写不入档：历史.叙事 只留概要，正文全文在本地副本（角色ID＋detailId）
+  const { useCharacterStore } = await loadPipeline('./stubs/characterStoreForAbortTest.ts');
+  useCharacterStore().rootState.当前激活存档 = { 角色ID: 'run4_publish', 存档槽位: 'slot' };
+  const detailStore = await loadPipeline('../src/services/narrativeDetailStore.ts');
+  detailStore.setNarrativeDetailBackend(detailStore.createMemoryDetailBackend());
+  const details = new Map();
+  const processGmResponse = async (...args) => {
+    const result = await AIBidirectionalSystem.processGmResponse(...args);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    details.set(result, await detailStore.getDetail('run4_publish', result.saveData.系统.历史.叙事.at(-1).detailId));
+    return result;
+  };
+  const lastNarrative = result => details.get(result);
   const hasStarSword = result => Boolean(result.saveData.角色.背包?.物品?.['lcq.item.star_sword']);
 
-  const scene = await AIBidirectionalSystem.processGmResponse(
+  const scene = await processGmResponse(
     { text: '案上仍放着锦囊，你没有伸手去接。', mid_term_memory: '看见锦囊。', tavern_commands: [], action_options: [] },
     structuredClone(save),
     false,
@@ -115,7 +127,7 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
   assert.match(lastNarrative(scene), /锦囊/);
   assert.equal(hasStarSword(scene), false);
 
-  const claim = await AIBidirectionalSystem.processGmResponse(
+  const claim = await processGmResponse(
     { text: '你接过星河剑。', mid_term_memory: '得剑。', tavern_commands: [], action_options: [] },
     structuredClone(save),
     false,
@@ -125,7 +137,7 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
   assert.match(lastNarrative(claim), /没有新的道具交付/);
   assert.equal(hasStarSword(claim), false);
 
-  const unknown = await AIBidirectionalSystem.processGmResponse(
+  const unknown = await processGmResponse(
     {
       text: '你点了点头。',
       mid_term_memory: '点头。',
@@ -139,7 +151,7 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
   );
   assert.equal(hasStarSword(unknown), false);
 
-  const bypass = await AIBidirectionalSystem.processGmResponse(
+  const bypass = await processGmResponse(
     { text: '你把那把星河剑别在腰间，像早就有了一样。', mid_term_memory: '别剑。', tavern_commands: [], action_options: [] },
     structuredClone(save),
     false,
@@ -150,7 +162,7 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
   assert.match(lastNarrative(bypass), /没有新的道具交付/);
   assert.equal(lastNarrative(bypass).includes('星河剑'), false);
 
-  const refs = await AIBidirectionalSystem.processGmResponse(
+  const refs = await processGmResponse(
     {
       text: '你点了点头。',
       mid_term_memory: '点头。',
@@ -170,7 +182,7 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
 
   // 真机报告场景：长正文 + 结构化未知道具 ID → 正文完整保留，背包不变。
   const longProse = '夜色压在废猎屋的檐下。凝羽把刀横在膝上，没有看你，只说门口风大。你在火塘边坐下，听她把今天的路线又理了一遍。火光把她的侧脸照得很淡，她说完便不再开口。';
-  const unknownRef = await AIBidirectionalSystem.processGmResponse(
+  const unknownRef = await processGmResponse(
     { text: longProse, mid_term_memory: '夜谈。', tavern_commands: [], item_references: [{ id: 'item_2000111_hut_slip', purpose: 'claim' }], action_options: ['继续守夜'] },
     structuredClone(save), false, () => false,
     { userAction: '我听他把话说完。', playerIntentText: '我听他把话说完。' },
@@ -179,7 +191,7 @@ test('publish path blocks unreceipted item grants and unknown IDs without treati
   assert.equal(lastNarrative(unknownRef).includes('没有新的道具交付'), false);
 
   // 正文只有一句越权获得：只删那一句，其余保留。
-  const mixed = await AIBidirectionalSystem.processGmResponse(
+  const mixed = await processGmResponse(
     { text: longProse + '你接过星河剑。', mid_term_memory: '夜谈。', tavern_commands: [], action_options: [] },
     structuredClone(save), false, () => false,
     { userAction: '我听他把话说完。', playerIntentText: '我听他把话说完。' },
@@ -951,10 +963,17 @@ test('凝羽合同中的西门庆旧事保留完整对白，未授权当前登�
   const text = '你收回真元，抬头看她。\n\n她开口，声音低得像从牙缝里挤出来的：\n\n"西门庆……当年把我从羽族旧部带出来，说是要教我剑道。"她顿了顿，"头几年确实是正经传授。"\n\n你听清她的旧事，仍未答应弑主。';
   const response = { text, mid_term_memory: '', tavern_commands: [], action_options: [] };
   useGameStateStore().loadFromSaveData(structuredClone(save));
+  // 详细描写不入档：历史.叙事 只留概要，完整对白在本地副本（角色ID＋detailId）
+  const { useCharacterStore } = await loadPipeline('./stubs/characterStoreForAbortTest.ts');
+  useCharacterStore().rootState.当前激活存档 = { 角色ID: 'run4_ningyu', 存档槽位: 'slot' };
+  const detailStore = await loadPipeline('../src/services/narrativeDetailStore.ts');
+  detailStore.setNarrativeDetailBackend(detailStore.createMemoryDetailBackend());
   const processed = await AIBidirectionalSystem.processGmResponse(response, save, false, () => false, {
     eventAction: action, eventActionProvenance: 'selected', playerIntentText: action.playerLine, narrativeAuthority: 'local_contract',
   });
-  assert.ok(processed.saveData.系统.历史.叙事.some(entry => String(entry.content || entry.内容 || entry.text || entry).includes('西门庆……当年')));
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const ningyuDetails = await Promise.all(processed.saveData.系统.历史.叙事.map(entry => entry?.detailId ? detailStore.getDetail('run4_ningyu', entry.detailId) : undefined));
+  assert.ok(ningyuDetails.some(detail => String(detail || '').includes('西门庆……当年')));
   assert.match(response.text, /西门庆……当年把我从羽族旧部带出来/);
   const historicalContext = mod.scenario.events.find(e => e.id === action.eventId).playerCompletionContract.actions[1].actionText;
   assert.ok(stripNarrativeUnintroducedCharacters('西门庆走进屋里，朝你开口。', [], historicalContext).conflicts.length > 0);

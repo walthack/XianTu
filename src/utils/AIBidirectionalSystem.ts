@@ -83,6 +83,8 @@ import { stripNsfwContent } from '@/utils/prompts/definitions/dataDefinitions';
 import { isSaveDataV3, migrateSaveDataToLatest } from './saveMigration';
 import { narrativeOutsideJson, parseJsonSmart, stripModelThinking } from '@/utils/jsonExtract';
 import { composeShortTermMemoryEntry, sanitizePersistedMemoryEntry } from '@/utils/memorySanitizer';
+import { summaryEntry, entriesForPrompt } from '@/services/narrativeSummary';
+import { narrativeEntryWithDetail } from '@/services/narrativeDetailStore';
 import { filterActionOptionsByPov } from '@/utils/actionOptionsPovGuard';
 import type { APIUsageType } from '@/stores/apiManagementStore';
 import { buildScenarioCanonPrompt } from '@/modules/scenarioMods/canonGuard';
@@ -1309,7 +1311,7 @@ class AIBidirectionalSystemClass {
       const assembledPrompt = await assembleSystemPrompt(activePrompts, uiStore.actionOptionsPrompt, stateForAI);
       const scenarioCanonPrompt = buildScenarioCanonPrompt(stateForAI as SaveData);
       // 聚焦上下文：玩家输入+近期叙事，供剧本 prompt 做确定性名字召回（点名的在场角色档案也注入，防自由闲聊零档案）
-      const focusContextText = [userMessage || '', (v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n')]
+      const focusContextText = [userMessage || '', entriesForPrompt(v3?.社交?.记忆?.短期记忆 || []).slice(-2).join('\n')]
         .filter(Boolean).join('\n');
       // 使用完整 runtime 做“下一拍”和玩家点名的非阻塞高光选择；输出到模型的状态 JSON
       // 仍由 buildNarrativePromptState 去重压缩，避免重复发送整份 canon/events。
@@ -1355,9 +1357,10 @@ ${stateJsonString}
 
       // 如果有短期记忆，作为独立的 assistant 消息发送
       const memoryToSend = (typeof shortTermMemoryForPrompt !== 'undefined' ? shortTermMemoryForPrompt : shortTermMemory) as string[];
-      if (memoryToSend.length > 0) {
+      const recentForPrompt = entriesForPrompt(memoryToSend);
+      if (recentForPrompt.length > 0) {
         injects.push({
-          content: `# 【最近事件】\n${memoryToSend.join('\n')}。根据这刚刚发生的文本事件，合理生成下一次文本信息，要保证衔接流畅、不断层，符合上文的文本信息`,
+          content: `# 【最近事件】\n${recentForPrompt.join('\n')}。根据这刚刚发生的文本事件，合理生成下一次文本信息，要保证衔接流畅、不断层，符合上文的文本信息`,
           role: 'assistant',
           depth: 2,
           position: 'in_chat',
@@ -2930,7 +2933,7 @@ ${step1Text}
         const newNarrative = {
           type: 'gm' as const,
           role: 'assistant' as const,
-          content: composeShortTermMemoryEntry(timePrefix, textContent),
+          ...narrativeEntryWithDetail(useCharacterStore().rootState.当前激活存档?.角色ID || '', (saveData as any).系统.历史.叙事.length, summaryEntry(timePrefix, midTermContent), composeShortTermMemoryEntry(timePrefix, textContent)),
           time: timePrefix,
           userIntent: options?.playerIntentText || '',
           image: settledEndingText ? endingPresentation(settledEnding).image || undefined : ((saveData as any)?.世界?.状态?.剧本模组?.events || [])
@@ -2949,7 +2952,7 @@ ${step1Text}
 
       if (behavior.appendShortTermMemoryFromText) {
         // #11:逐轮正文入库统一过清洗(剥 JSON 壳/思维链,防双时间戳),脏文本不落库
-        const shortMemoryEntry = composeShortTermMemoryEntry(timePrefix, textContent);
+        const shortMemoryEntry = summaryEntry(timePrefix, midTermContent);
         if (shortMemoryEntry) {
           if (!(saveData as any).社交) (saveData as any).社交 = {};
           if (!(saveData as any).社交.记忆) (saveData as any).社交.记忆 = { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] };
@@ -2977,8 +2980,7 @@ ${step1Text}
       if (!(saveData as any).社交) (saveData as any).社交 = {};
       if (!(saveData as any).社交.记忆) (saveData as any).社交.记忆 = { 短期记忆: [], 中期记忆: [], 长期记忆: [], 隐式中期记忆: [] };
       if (!Array.isArray((saveData as any).社交.记忆.隐式中期记忆)) (saveData as any).社交.记忆.隐式中期记忆 = [];
-      const fallback = textContent.length > behavior.implicitMidFallbackMaxLen ? `${textContent.slice(0, behavior.implicitMidFallbackMaxLen)}…` : textContent;
-      (saveData as any).社交.记忆.隐式中期记忆.push(`${timePrefix}${fallback}`);
+      (saveData as any).社交.记忆.隐式中期记忆.push(summaryEntry(timePrefix, midTermContent));
     }
 
     // 🔥 检查短期记忆是否超限，超限则删除最旧的短期记忆，并将对应的隐式中期记忆转化为正式中期记忆
