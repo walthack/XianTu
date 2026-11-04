@@ -26,6 +26,7 @@ import { beatActionRejectIf, beatKeyTurn, intentSettleConfig, resolveBeatText, t
 import { questActionGate, questGuideEnabled } from './questLog';
 import { logEvent } from '../diagnostics/log';
 import { freeActionConfig } from './freeAction/config';
+import { JUDGEMENT_KINDS } from '@/utils/judgementEngine';
 import { localTargetlessTickets, ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
 import { freeActionOwnerOf } from './freeAction/legacyGuard';
 import { notePlayerText, reportedTicketLabels } from './freeAction/playerTextDebug';
@@ -86,6 +87,11 @@ export interface NaturalIntentResult {
   hold?: boolean;
   /** 任务模式拍子判定小请求结算（via intent）：模型确定度与原话证据长度（不记原话）。 */
   beatIntent?: { certainty: string; evidenceLength: number };
+  /**
+   * 模型报的动作风险（掷骰来源第二档，freeAction.riskFromModel）：只在没落到作者动作的自由回合带；类别已限定在配置 kinds 内，
+   * 证据已复核逐字出自原话且为肯定句。skipKeywordPreflight 只跳过旧词表，不跳过它。
+   */
+  modelRisk?: { kind: string; source: 'intent' | 'beat_judge' };
   skipKeywordPreflight: boolean;
   usedModel: boolean;
 }
@@ -265,6 +271,8 @@ export function parseIntentJson(raw: string): {
   affinityDelta?: number;
   statusProposals?: unknown;
   tickets?: unknown;
+  risk?: string;
+  riskEv?: string;
 } | null {
   const text = String(raw || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
   if (!text) return null;
@@ -282,6 +290,8 @@ export function parseIntentJson(raw: string): {
       certainty: typeof parsed.certainty === 'string' ? parsed.certainty : undefined,
       statusProposals: parsed.statusProposals,
       tickets: parsed.tickets,
+      risk: typeof parsed.risk === 'string' ? parsed.risk : undefined,
+      riskEv: typeof parsed.riskEv === 'string' ? parsed.riskEv : undefined,
       affinityDelta: typeof parsed.affinityDelta === 'number' && Number.isFinite(parsed.affinityDelta) ? parsed.affinityDelta : undefined,
     };
   } catch {
@@ -362,6 +372,26 @@ export function resolveNaturalIntentFastPath(
   return undefined;
 }
 
+// ───────────── 掷骰来源第二档：模型报的动作风险（设计稿 2026-11-04「拍子判定按意思与风险」问二） ─────────────
+/** 配置 freeAction.riskFromModel 开着时可报的类别（只认现有 JudgementKind）；关着返回 undefined＝提示词与解析都不带。 */
+export function modelRiskKinds(): string[] | undefined {
+  const cfg = freeActionConfig().riskFromModel;
+  if (!cfg?.enabled) return undefined;
+  const kinds = (cfg.kinds || []).filter(kind => (JUDGEMENT_KINDS as readonly string[]).includes(kind));
+  return kinds.length ? kinds : undefined;
+}
+const riskPromptLine = (field: string, evField: string, kinds: readonly string[]): string =>
+  `${field}填玩家这句话里动作本身的风险类别，只能从${kinds.join('、')}里选，没有风险或拿不准填none；${field}不为none时${evField}填体现这个动作的原话逐字短语。问句、假设、转述、否定一律填none。`;
+/** 本地复核：类别在配置内、证据逐字出自原话、肯定句、不是问句／假设框。不过就当没有。 */
+export function verifyModelRisk(playerText: string, kind: unknown, evidence: unknown): string | undefined {
+  const kinds = modelRiskKinds();
+  if (!kinds || typeof kind !== 'string' || !kinds.includes(kind)) return undefined;
+  const ev = typeof evidence === 'string' ? evidence : '';
+  const text = String(playerText || '');
+  if (!ev || hasUnclearIntentFrame(text) || !evidenceBelongsToPlayer(text, ev) || !evidenceClauseIsAffirmative(text, ev)) return undefined;
+  return kind;
+}
+
 function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidate[], saveData?: SaveData): {
   systemPrompt: string;
   userPrompt: string;
@@ -369,6 +399,7 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
   // 自由行动票：freeAction 关闭时提示词与今天逐字一致。
   const tickets = saveData && freeActionConfig().enabled ? ticketPromptSection(saveData) : undefined;
   const statusRequest = freeTextStatusSemanticRequest(playerText, '');
+  const risk = modelRiskKinds();
   const statusCatalog = JSON.parse(statusRequest.input).catalog.filter((d: { evidenceFrom: string }) => d.evidenceFrom === 'input');
   const systemPrompt = [
     '你只做意图分类及独立状态提案。动作只能从候选里选一个，或返回 none。',
@@ -379,7 +410,8 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
     statusRequest.system.replace(/返回纯JSON.*?。没有状态/, 'statusProposals条目字段为statusId、actor(player/other/unknown)、assertion(current/denied/hypothetical/uncertain)、source(input)、evidence(逐字证据)、confidence(0到1)。没有状态'),
     '本次只有玩家输入，状态仅从statusCatalog的input条目提案，source必须input。statusProposals必须为数组，没有状态用空数组；动作none不等于没有状态。',
     ...(tickets ? [tickets.system] : []),
-    `只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]${tickets ? ',"tickets":[]' : ''}}`,
+    ...(risk ? [riskPromptLine('risk', 'riskEv', risk)] : []),
+    `只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]${tickets ? ',"tickets":[]' : ''}${risk ? ',"risk":"none","riskEv":""' : ''}}`,
   ].join('');
   const userPrompt = JSON.stringify({
     playerText,
@@ -461,6 +493,12 @@ function withLocalTickets(input: NaturalIntentInput, result: NaturalIntentResult
 
 export async function resolveNaturalIntent(input: NaturalIntentInput): Promise<NaturalIntentResult> {
   return withLocalTickets(input, await resolveNaturalIntentByModel(input));
+}
+
+/** 只有没落到作者动作的自由回合带模型风险。 */
+function withModelRisk(result: NaturalIntentResult, kind: string | undefined, source: 'intent' | 'beat_judge'): NaturalIntentResult {
+  if (!kind || result.kind !== 'free' || result.modelRisk) return result;
+  return { ...result, modelRisk: { kind, source } };
 }
 
 async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<NaturalIntentResult> {
@@ -548,6 +586,9 @@ async function classifyByIntentModel(
     }
     const parsed = parseIntentJson(output);
     if (!parsed) return classifierFailure('malformed', candidates);
+    const risk = verifyModelRisk(String(input.playerText || ''), parsed.risk, parsed.riskEv);
+    return withModelRisk(classifyParsed(parsed), risk, 'intent');
+    function classifyParsed(parsed: NonNullable<ReturnType<typeof parseIntentJson>>): NaturalIntentResult {
     // Verified only after cancellation and snapshot checks; old responses may omit the new field.
     const freeTextStatusResolution = parsed.statusProposals === undefined ? undefined
       : validateFreeTextStatusProposals(JSON.stringify({ proposals: parsed.statusProposals }), input.playerText, '', 'input');
@@ -616,6 +657,7 @@ async function classifyByIntentModel(
     const affection=candidates.find(c=>c.actionId===parsed.actionId&&c.eventId===('eventId' in selection?selection.eventId:undefined))?.affinityAssessment;
     if(affection){if(parsed.affinityDelta===undefined)return free('missing_affinity_assessment');(selection as ScenarioEventActionSelection).lineAffinityDelta=parsed.affinityDelta;}
     return { kind: 'matched', selection, skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution };
+    }
   } catch {
     if (input.signal?.aborted) {
       return { kind: 'failed', reason: 'aborted', clarification: NATURAL_INTENT_CLARIFY_DEFAULT, skipKeywordPreflight: true, usedModel: true };
@@ -639,7 +681,7 @@ type BeatJudgeGenerate = (input: {
 /** 小请求的判定结果：settled＝可结算；none＝模型说不是／不确定／被否决（照常走大请求结果）；failed＝超时／坏 JSON／报错（停下）。 */
 type BeatVerdict =
   | { kind: 'settled'; selection: ScenarioEventActionSelection | WuyuanOpenWorldSelection; certainty: string; evidenceLength: number }
-  | { kind: 'none'; reason: string }
+  | { kind: 'none'; reason: string; risk?: string }
   | { kind: 'failed'; reason: string };
 
 // 小请求自己的在途槽（不与 intent 的 inFlight 互相中止）。
@@ -652,13 +694,14 @@ export function abortInFlightBeatJudge(): void {
   beatInFlight = null;
 }
 
-export function buildBeatJudgePrompt(playerText: string, plan: BeatKeyPlan, evidenceMaxChars: number): { systemPrompt: string; userPrompt: string } {
+export function buildBeatJudgePrompt(playerText: string, plan: BeatKeyPlan, evidenceMaxChars: number, riskKinds?: readonly string[]): { systemPrompt: string; userPrompt: string } {
   const systemPrompt = [
     '你只判断玩家这句话是不是在做当前这一拍的某个动作。只能从actions里选一个id，或填none。',
     '判断依据是do描述的动作和ctx的处境；label只是名称。',
     '问句、假设、转述别人、否定、拒绝，或命中该动作rejectIf的，id填none并把neg设为true。只提到人名或地名不算做了动作。',
     `ev必须是玩家原话里逐字连续的一段（不超过${evidenceMaxChars}字）。c只填high或low：只有确定是在做这个动作才填high。`,
-    '只输出JSON：{"id":"动作id或none","c":"high或low","ev":"原话短语","neg":false}',
+    ...(riskKinds?.length ? [riskPromptLine('r', 'ev', riskKinds)] : []),
+    riskKinds?.length ? '只输出JSON：{"id":"动作id或none","c":"high或low","ev":"原话短语","neg":false,"r":"none"}' : '只输出JSON：{"id":"动作id或none","c":"high或low","ev":"原话短语","neg":false}',
   ].join('');
   const userPrompt = JSON.stringify({
     playerText,
@@ -670,7 +713,7 @@ export function buildBeatJudgePrompt(playerText: string, plan: BeatKeyPlan, evid
   return { systemPrompt, userPrompt };
 }
 
-export function parseBeatJudgeJson(raw: string): { id?: string; c?: string; ev?: string; neg?: boolean } | null {
+export function parseBeatJudgeJson(raw: string): { id?: string; c?: string; ev?: string; neg?: boolean; r?: string } | null {
   const text = String(raw || '').replace(/<think>[\s\S]*?<\/think>/gi, '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
   const found = text.match(/\{[\s\S]*\}/);
   if (!found) return null;
@@ -682,6 +725,7 @@ export function parseBeatJudgeJson(raw: string): { id?: string; c?: string; ev?:
       c: typeof parsed.c === 'string' ? parsed.c : undefined,
       ev: typeof parsed.ev === 'string' ? parsed.ev : undefined,
       neg: parsed.neg === true,
+      r: typeof parsed.r === 'string' ? parsed.r : undefined,
     };
   } catch {
     // lcq-allow: 坏 JSON 由调用方按 malformed 记 LCQ-SAV-062 并停下。
@@ -728,13 +772,15 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
   const finish = (verdict: BeatVerdict): BeatVerdict => {
     logEvent({ code: 'LCQ-SAV-062', echo: false, detail: {
       beatId: plan.beatId, key: plan.key, attempt, outcome: verdict.kind === 'settled' ? 'settled' : verdict.reason,
+      ...(verdict.kind === 'none' && verdict.risk ? { risk: verdict.risk } : {}),
       actionId: verdict.kind === 'settled' ? ('identityId' in verdict.selection ? verdict.selection.identityId : verdict.selection.actionId) : null, actions: plan.actions.length,
       inputTokens: usage.inputTokens ?? null, outputTokens: usage.outputTokens ?? null, elapsedMs: Date.now() - started,
     } });
     return verdict;
   };
   try {
-    const { systemPrompt, userPrompt } = buildBeatJudgePrompt(playerText, plan, judge.evidenceMaxChars);
+    const riskKinds = judge.returnRisk ? modelRiskKinds() : undefined;
+    const { systemPrompt, userPrompt } = buildBeatJudgePrompt(playerText, plan, judge.evidenceMaxChars, riskKinds);
     const out = await input.generateBeat!({
       systemPrompt, userPrompt, signal: controller.signal, requestId,
       maxTokens: judge.reasoningEffort === 'none' ? judge.maxTokens : judge.maxTokensWithReasoning,
@@ -746,7 +792,10 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
     if (intentSaveFingerprint(input.saveData) !== fingerprint) return finish({ kind: 'none', reason: 'state_changed' });
     const parsed = parseBeatJudgeJson(raw);
     if (!parsed) return finish({ kind: 'failed', reason: 'malformed' });
-    if (!parsed.id || parsed.id === 'none') return finish({ kind: 'none', reason: 'judged_none' });
+    if (!parsed.id || parsed.id === 'none') {
+      const risk = riskKinds ? verifyModelRisk(playerText, parsed.r, parsed.ev) : undefined;
+      return finish({ kind: 'none', reason: 'judged_none', ...(risk ? { risk } : {}) });
+    }
     const action = plan.actions.find(item => item.id === parsed.id);
     if (!action) return finish({ kind: 'none', reason: 'unknown_action' });
     // 否定只能否决；rejectIf 回来后再判一次（发前已在 beatKeyTurn 判过）。
@@ -792,5 +841,7 @@ function mergeBeatVerdict(input: NaturalIntentInput, big: NaturalIntentResult, v
   if (verdict.kind === 'failed' && big.kind !== 'matched' && big.kind !== 'failed' && !big.hold) {
     return { ...onClassifierFailure(`beat_judge_${verdict.reason}`, candidates), freeTextStatusResolution: big.freeTextStatusResolution };
   }
+  // 小请求判 none 但报了动作风险：大请求也没落到作者动作时，按掷骰第二档带上（大请求自己报的优先）。
+  if (verdict.kind === 'none' && verdict.risk) return withModelRisk(big, verdict.risk, 'beat_judge');
   return big;
 }

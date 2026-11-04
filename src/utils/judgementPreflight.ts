@@ -160,7 +160,36 @@ export function buildLocalJudgementPreflight(
   const riskText = stripReportedSpeech(normalized);
   const matched = RISK_RULES.find(([, matcher]) => matcher.test(riskText));
   if (!matched) return null;
-  const [kind] = matched;
+  return buildKindJudgementPreflight(matched[0], normalized, saveData, currentTurn, contract);
+}
+
+/**
+ * 掷骰来源第二档：模型报的动作风险（freeAction.riskFromModel，类别与证据已由路由复核）。出卡与旧词表同一条路，只是类别不靠词表。
+ * 设计稿 2026-11-04「拍子判定按意思与风险」问二；风险词表不动，只作没有模型时的兜底。
+ */
+export function buildModelRiskJudgementPreflight(
+  kind: JudgementKind,
+  actionText: string,
+  saveData: any,
+  currentTurn: number,
+): JudgementProposal | null {
+  const normalized = actionText.trim();
+  if (!normalized) return null;
+  const runtime = saveData?.世界?.状态?.剧本模组;
+  const profile = getCanonRailProfile(runtime);
+  const activeEventId = getNarrativeAnchorEvent(runtime || {})?.id
+    || (Array.isArray(runtime?.activeEventIds) ? runtime.activeEventIds[0] : undefined);
+  const contract = activeEventId ? getCanonRailContract(profile, activeEventId) : null;
+  return buildKindJudgementPreflight(kind, normalized, saveData, currentTurn, contract);
+}
+
+function buildKindJudgementPreflight(
+  kind: JudgementKind,
+  normalized: string,
+  saveData: any,
+  currentTurn: number,
+  contract: ReturnType<typeof getCanonRailContract>,
+): JudgementProposal {
   const data = calculateTurnJudgementData(
     saveData?.角色?.身份?.先天六司,
     saveData?.角色?.身份?.后天六司,

@@ -174,6 +174,8 @@ export interface FreeActionConfig {
    * 判定卡的技能/天赋因子：玩家已学的正典技能、身上的天赋，其名称与描述含该行动类（键取 类.变体 / 类 / 判定 kind，先中先用）标签词时给加成，
    * 否则只在卡上提示未掌握、无加成。skillBonus 可写数值引用；unavailableMarks 出现在技能描述里表示该技能眼下不能用。
    */
+  /** 掷骰来源第二档：模型报的动作风险类别（只认现有 JudgementKind）。 */
+  riskFromModel: { enabled: boolean; kinds: string[] };
   skillMatch: { skillBonus: number | string; talentBonus: number; maxSkill: number; maxTalent: number; unavailableMarks: string[]; tags: Record<string, string[]> };
 }
 

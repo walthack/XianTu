@@ -46,6 +46,9 @@ export type JudgementKind =
   | 'stealth'
   | 'scheme';
 
+/** 现有判定类别全集（模型报风险只能从这里选，不新增类别）。 */
+export const JUDGEMENT_KINDS: readonly JudgementKind[] = ['combat', 'escape', 'stealth', 'craft', 'cultivate', 'social', 'scheme', 'explore'];
+
 export type JudgementDifficultyBand = 'easy' | 'normal' | 'hard' | 'severe' | 'extreme';
 export type JudgementOutcome = 'critical_failure' | 'failure' | 'partial' | 'success' | 'great_success' | 'perfect';
 export type JudgementCanonPolicy = 'free' | 'route_process_only';

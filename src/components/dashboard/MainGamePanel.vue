@@ -590,8 +590,9 @@ import {
   type JudgementProposal,
   type JudgementResolution,
   type JudgementOutcome,
+  type JudgementKind,
 } from '@/utils/judgementEngine';
-import { buildLocalJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
+import { buildLocalJudgementPreflight, buildModelRiskJudgementPreflight, composeJudgementAction, prepareEventActionJudgement, shouldSkipJudgementPreflight } from '@/utils/judgementPreflight';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { getLastTurnTelemetry } from '@/utils/turnTelemetry';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
@@ -2187,6 +2188,8 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   let intentUnsettled = false;
   let intentRoute: { kind: string; usedModel: boolean; skipKeywordPreflight: boolean; reason?: string } | undefined;
   let routedBeatIntent: { certainty: string; evidenceLength: number } | undefined;
+  // 掷骰来源第二档：没落到作者动作的自由句，模型报的动作风险（路由已复核类别与证据）。
+  let routedModelRisk: { kind: string; source: string } | undefined;
   // 判定确认后的二次执行：票取自判定回执，不再重跑 intent。
   const followUpFreeAction = execution?.resolution?.authorityReceipt?.kind === 'free_action_judgement';
   // 拍子判定判中开放世界问题行动、先出了判定卡：确认后的二次执行沿用当初判中的选择，不再重跑意图（REPORT-8091 P1-1）。
@@ -2270,6 +2273,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         routedFreeActionRefusals = intent.freeActionRefusals ?? [];
         routedFreeActionOthers = intent.freeActionOthers ?? 0;
         intentUnsettled = intent.unsettled === true;
+        routedModelRisk = intent.modelRisk;
       }
       if (freeTextStatusResolution?.state === 'clarify') {
         intentHoldMessage.value = freeTextStatusResolution.reason || naturalIntentClarify(saveData);
@@ -2392,6 +2396,20 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
       rememberBeatOpenWorldJudgement({ judgementId: proposal.id, selection: beatOpenWorldAction, beatIntent: routedBeatIntent });
+      await persistJudgementSave(saveData);
+      uiStore.setAIProcessing(false);
+      persistAIProcessingState();
+      toast.info('此行动存在风险，请先确认判定');
+      return;
+    }
+  }
+  // 掷骰来源优先级（设计稿 2026-11-04「拍子判定按意思与风险」问二）：作者动作 judgement（上面合同判定）→ 模型报的动作风险 → 旧风险词表。
+  // 意图路由的 skipKeywordPreflight 只跳过词表，不跳过模型风险；自由行动票已接管、已有判定结果、点选动作时不出。
+  if (saveData && routedFreeText && routedModelRisk && !routedIntentAction && !selectedScenarioEngineAction.value
+    && !contractedJudgementResolution && !freeActionHandled && !ownedByFreeAction && !execution?.skipPreflight) {
+    const proposal = buildModelRiskJudgementPreflight(routedModelRisk.kind as JudgementKind, judgementAction, saveData, getNarrativeTurn(saveData));
+    if (proposal) {
+      persistPendingJudgement(saveData, proposal);
       await persistJudgementSave(saveData);
       uiStore.setAIProcessing(false);
       persistAIProcessingState();

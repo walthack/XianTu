@@ -352,3 +352,68 @@ test('intentMatch 只写 describe 也合法（只发给模型，不参与按字�
   assert.match(src, /describe === undefined/);
   assert.ok(V);
 });
+
+// 设计稿 2026-11-04「拍子判定按意思与风险」问二：掷骰来源 作者 judgement → 模型 risk（只认现有 8 类）→ 旧词表；skipKeywordPreflight 只跳过词表。
+test('模型风险复核：类别须在配置 kinds 内、证据逐字出自原话且为肯定句', () => {
+  const t = '我冒险从后窗强行冲出去';
+  assert.equal(NI.verifyModelRisk(t, 'escape', '从后窗强行冲出去'), 'escape');
+  assert.equal(NI.verifyModelRisk(t, 'flee', '从后窗强行冲出去'), undefined, '不认新类别');
+  assert.equal(NI.verifyModelRisk(t, 'escape', '翻墙逃走'), undefined, '证据不在原话');
+  assert.equal(NI.verifyModelRisk(t, 'escape', ''), undefined);
+  assert.equal(NI.verifyModelRisk('我要不要从后窗冲出去？', 'escape', '从后窗冲出去'), undefined, '问句不算');
+  const cfg = GAME_NUMBERS.freeAction.riskFromModel;
+  assert.deepEqual(cfg.kinds, ['combat', 'escape', 'stealth', 'craft', 'cultivate', 'social', 'scheme', 'explore']);
+  cfg.enabled = false;
+  try { assert.equal(NI.verifyModelRisk(t, 'escape', '从后窗强行冲出去'), undefined); assert.equal(NI.modelRiskKinds(), undefined); }
+  finally { cfg.enabled = true; }
+});
+
+test('小请求判 none 但报 r：带 modelRisk（beat_judge）；returnRisk 关则不问也不带', () => withQuest(true, async () => {
+  const text = '我蹲下查看那个受伤军士的伤势。';
+  const { result, calls } = await route(saveAt(S01_03), text, { id: 'none', c: 'low', ev: '查看那个受伤军士的伤势', neg: false, r: 'explore' });
+  assert.match(calls.prompts[0].systemPrompt, /"r":"none"/);
+  assert.equal(result.kind, 'free');
+  assert.deepEqual(result.modelRisk, { kind: 'explore', source: 'beat_judge' });
+  const bad = await route(saveAt(S01_03), text, { id: 'none', c: 'low', ev: '翻墙', neg: false, r: 'explore' });
+  assert.equal(bad.result.modelRisk, undefined, '证据不在原话不带');
+  const judge = QC.intentSettle.beatJudge;
+  judge.returnRisk = false;
+  try {
+    const off = await route(saveAt(S01_03), text, { id: 'none', c: 'low', ev: '查看那个受伤军士的伤势', neg: false, r: 'explore' });
+    assert.doesNotMatch(off.calls.prompts[0].systemPrompt, /"r"/);
+    assert.equal(off.result.modelRisk, undefined);
+  } finally { judge.returnRisk = true; }
+  // 判中作者动作：不带模型风险（作者动作自己的 judgement 优先）。
+  const hit = await route(saveAt(S01_03), text, { id: 'advance_declared_objective', c: 'high', ev: '查看那个受伤军士的伤势', neg: false, r: 'explore' });
+  assert.equal(hit.result.kind, 'matched'); assert.equal(hit.result.modelRisk, undefined);
+}));
+
+test('试玩范围内：大请求返回 none＋risk → modelRisk（intent），仍跳过旧词表；不出掷骰前提由界面按 modelRisk 出卡', () => withQuest(true, async () => {
+  const s = scopedLanding(saveAt(AFTER_S01));
+  const text = '我冒险从后窗强行冲出去';
+  let prompt = '';
+  const result = await NI.resolveNaturalIntent({
+    saveData: s, playerText: text, selected: null, resolveFromText: NI.resolveStoryEventActionFromText,
+    generate: async req => { prompt = req.systemPrompt; return JSON.stringify({ actionId: 'none', certainty: 'high', evidence: '', statusProposals: [], tickets: [], risk: 'escape', riskEv: '从后窗强行冲出去' }); },
+  });
+  assert.match(prompt, /"risk":"none","riskEv":""/);
+  assert.equal(result.kind, 'free');
+  assert.equal(result.skipKeywordPreflight, true);
+  assert.deepEqual(result.modelRisk, { kind: 'escape', source: 'intent' });
+  // 旧词表不含「冲出去」（词表不动），只有模型风险能出卡。
+  const JP = await loadTs('../src/utils/judgementPreflight.ts');
+  assert.equal(quiet(() => JP.buildLocalJudgementPreflight(text, s, 1)), null);
+  const proposal = quiet(() => JP.buildModelRiskJudgementPreflight('escape', text, s, 1));
+  assert.equal(proposal.kind, 'escape');
+  assert.equal(proposal.actionText, text);
+}));
+
+test('界面：模型风险出卡在合同判定之后、旧词表之前，且不受 skipKeywordPreflight 影响', () => {
+  const src = read('src/components/dashboard/MainGamePanel.vue');
+  const contract = src.indexOf('prepareEventActionJudgement(\n'), model = src.indexOf('buildModelRiskJudgementPreflight(routedModelRisk.kind'), keyword = src.indexOf('if (!shouldSkipJudgementPreflight({');
+  assert.ok(contract > 0 && model > contract && keyword > model);
+  const guard = src.slice(src.lastIndexOf('if (saveData && routedFreeText && routedModelRisk', model), model);
+  assert.doesNotMatch(guard, /skipKeywordPreflight/);
+  // 风险词表本身不动。
+  assert.match(read('src/utils/judgementPreflight.ts'), /\['escape', \/逃跑\|逃走\|逃离\|逃出去\|跑掉\|撤退\|脱身\|突围\|甩开\|摆脱\|冲出包围\|避开追兵\|/);
+});

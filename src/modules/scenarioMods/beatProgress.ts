@@ -326,6 +326,8 @@ export type IntentSettleConfig = {
     /** 计划带一次 ctx（objective → axisBeat → description），按 ctxMaxChars 截断。 */
     sendContext: boolean;
     ctxMaxChars: number;
+    /** 小请求同时报动作风险类别 r（freeAction.riskFromModel.kinds 或 none）。 */
+    returnRisk: boolean;
   };
 };
 export const intentSettleConfig = (): IntentSettleConfig | undefined =>
