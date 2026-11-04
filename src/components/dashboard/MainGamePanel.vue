@@ -630,6 +630,13 @@ import {
   type WuyuanOpenWorldSelection,
 } from '@/modules/scenarioMods/wuyuanOpenWorldSlice';
 import {
+  isBeatJudgedOpenWorldAction,
+  rememberBeatOpenWorldJudgement,
+  takeBeatOpenWorldJudgement,
+  beatOpenWorldOutcomeSettles,
+  settleBeatOpenWorldAfterNarrative,
+} from '@/modules/scenarioMods/beatOpenWorldJudgement';
+import {
   BAIHU_GAMBLE_REFUSAL_SOURCE,
   getBaihuGambleRefusalSelections,
   resolveBaihuGambleRefusalFromText,
@@ -705,6 +712,14 @@ const persistJudgementSave = async (save: any) => {
 // 随机遇敌：故事回合成功收尾后推进一次（只写 剧本模组.encounter；场面宿主回合不走这里）。
 // 固定文本、05b 模块路径没有模型遇敌事实包，先补本地演出，再推进既有遇敌阶段。
 // 作者跳年（如序幕四年）的过渡叙述也在这里接到本回合正文之后，只接一次；稀有遇见（白尾豹等）同样在这里结算。
+// 拍子判定判中的开放世界应对（REPORT-8091 P1-1）：主叙事成功后再结算（同事件动作在叙事处理里结算的次序），
+// 跳年过渡随后由 tickEncounterAfterTurn 接到本回合正文之后。
+const settleBeatOpenWorldTurn = async (selection: WuyuanOpenWorldSelection) => {
+  const settleSave = gameStateStore.toSaveData();
+  if (settleSave && settleBeatOpenWorldAfterNarrative(settleSave as any, selection)) {
+    await persistJudgementSave(advanceScenarioRuntime(settleSave as any).saveData);
+  }
+};
 const tickEncounterAfterTurn = async (resp: any) => {
   const s = gameStateStore.toSaveData(); if (!s) return;
   try {
@@ -2174,10 +2189,16 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   let routedBeatIntent: { certainty: string; evidenceLength: number } | undefined;
   // 判定确认后的二次执行：票取自判定回执，不再重跑 intent。
   const followUpFreeAction = execution?.resolution?.authorityReceipt?.kind === 'free_action_judgement';
+  // 拍子判定判中开放世界问题行动、先出了判定卡：确认后的二次执行沿用当初判中的选择，不再重跑意图（REPORT-8091 P1-1）。
+  const beatOpenWorldFollowUp = isFollowUpExecution ? takeBeatOpenWorldJudgement(execution?.resolution?.id) : undefined;
+  if (beatOpenWorldFollowUp) {
+    routedIntentAction = beatOpenWorldFollowUp.selection as ScenarioEngineActionSelection;
+    routedBeatIntent = beatOpenWorldFollowUp.beatIntent;
+  }
   let freeTextStatusResolution: FreeTextStatusResolution | undefined;
   let skipKeywordPreflightFromIntent = buttonSelected;
   let intentHeldProcessing = false;
-  if (saveData && !buttonSelected && !followUpFreeAction) {
+  if (saveData && !buttonSelected && !followUpFreeAction && !beatOpenWorldFollowUp) {
     const intentReset = aiResetToken;
     const inputSnapshot = inputText.value.trim();
     const activeSnapshot = characterStore.rootState.当前激活存档
@@ -2364,6 +2385,23 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     }
     if (prepared.kind === 'resolved') contractedJudgementResolution = prepared.resolution;
   }
+  // 拍子判定判中开放世界问题行动（s02_04 点心铺）：与认出的动作一样先走常规风险判定卡，不在本地直接写成功。
+  const beatOpenWorldAction = isBeatJudgedOpenWorldAction(routedBeatIntent, routedIntentAction) ? routedIntentAction : undefined;
+  if (saveData && beatOpenWorldAction && routedBeatIntent && !contractedJudgementResolution && !execution?.skipPreflight) {
+    const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
+    if (proposal) {
+      persistPendingJudgement(saveData, proposal);
+      rememberBeatOpenWorldJudgement({ judgementId: proposal.id, selection: beatOpenWorldAction, beatIntent: routedBeatIntent });
+      await persistJudgementSave(saveData);
+      uiStore.setAIProcessing(false);
+      persistAIProcessingState();
+      toast.info('此行动存在风险，请先确认判定');
+      return;
+    }
+  }
+  // 判定没过（或判了失败档）不结算；没出判定卡（原话不含风险）照常结算。结算在主叙事成功之后。
+  const beatOpenWorldSettles = Boolean(beatOpenWorldAction)
+    && beatOpenWorldOutcomeSettles(contractedJudgementResolution?.outcome, Boolean(contractedJudgementResolution));
   if (!shouldSkipJudgementPreflight({
     skipPreflight: execution?.skipPreflight || Boolean(contractedJudgementResolution) || freeActionHandled || ownedByFreeAction || skipKeywordPreflightFromIntent,
     selectedSource: selectedScenarioEngineAction.value?.source || routedIntentAction?.source,
@@ -2491,6 +2529,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     ? selectedScenarioEngineAction.value
     : undefined;
   const resolvedOpenWorldAction = exactSelectedEventAction || resolvedGambleRefusalAction || resolvedOpportunityAction
+    || (beatOpenWorldAction && !exactSelectedOpenWorldAction)
     ? undefined
     : exactSelectedOpenWorldAction
       || (routedIntentAction?.source === 'open_world_engine' ? routedIntentAction : undefined)
@@ -2499,9 +2538,9 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // 弹提示列出本拍可做的动作并记 miss（用户 2026-11-02 拍板②）。判定确认后的二次执行沿用当初那一回合的记录。
   if (!isFollowUpExecution && scenarioSaveAtSend) {
     const typedBeat = !exactSelectedEventAction && matchedEventAction ? resolveBeatText(scenarioSaveAtSend, userMessage) : undefined;
-    const otherEngine = Boolean(resolvedGambleRefusalAction || resolvedOpportunityAction || resolvedOpenWorldAction || routedFreeActionTickets.length || contractedJudgementResolution || followUpFreeAction || selfUse);
+    const otherEngine = Boolean(resolvedGambleRefusalAction || resolvedOpportunityAction || resolvedOpenWorldAction || beatOpenWorldAction || routedFreeActionTickets.length || contractedJudgementResolution || followUpFreeAction || selfUse);
     // 拍子判定小请求选中五原点心铺的地方应对（s02_04 只能经它落账）：仍记 via=intent。
-    const beatIntentOpenWorld = Boolean(routedBeatIntent && resolvedOpenWorldAction && routedIntentAction === resolvedOpenWorldAction);
+    const beatIntentOpenWorld = Boolean(beatOpenWorldAction && beatOpenWorldSettles);
     const via: BeatVia = exactSelectedEventAction ? 'button'
       : matchedEventAction ? (typedBeat?.via ?? (routedBeatIntent && routedIntentAction === matchedEventAction ? 'intent' : routedIntentAction ? 'other' : 'alias'))
       : beatIntentOpenWorld ? 'intent'
@@ -2509,7 +2548,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       : userMessage && beatTextNotThere(scenarioSaveAtSend, userMessage) ? 'notThere'
       : userMessage && beatActionTable(scenarioSaveAtSend).actions.length ? 'miss' : 'none';
     logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId, ...(via === 'intent' ? { intent: routedBeatIntent } : {}) }
-      : beatIntentOpenWorld && resolvedOpenWorldAction ? { actionId: resolvedOpenWorldAction.identityId, intent: routedBeatIntent } : undefined);
+      : beatIntentOpenWorld && beatOpenWorldAction ? { actionId: beatOpenWorldAction.identityId, intent: routedBeatIntent } : undefined);
     const missNotice = via === 'miss' || via === 'notThere' ? beatMissNotice(scenarioSaveAtSend) : undefined;
     if (missNotice) toast.info(missNotice);
   }
@@ -2542,6 +2581,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   }
   if (resolvedOpenWorldAction) {
     finalUserMessage += `\n【本地开放世界行动已预结算】类型=${OPEN_WORLD_KIND_LABELS[resolvedOpenWorldAction.kind] ?? resolvedOpenWorldAction.kind}；既定事实=${resolvedOpenWorldAction.settledFacts.join('；')}。只演出这些既定事实，不得另行移动玩家、改写路线、免除代价或写入开放世界账本。\n`;
+  }
+  if (beatOpenWorldAction && beatOpenWorldSettles) {
+    finalUserMessage += `\n【本地开放世界行动已预结算】类型=${OPEN_WORLD_KIND_LABELS[beatOpenWorldAction.kind] ?? beatOpenWorldAction.kind}；既定事实=${beatOpenWorldAction.settledFacts.join('；')}。只演出这些既定事实，不得另行移动玩家、改写路线、免除代价或写入开放世界账本。\n`;
+  } else if (beatOpenWorldAction) {
+    finalUserMessage += `\n【本地开放世界行动未成】判定未过，本回合不结算该应对；只演出判定结果，不得写成该应对已经成事。\n`;
   }
   if (resolvedGambleRefusalAction) {
     finalUserMessage += `\n【本地白湖拒赌冲突已预结算】动作=${resolvedGambleRefusalAction.actionId}；既定事实=${resolvedGambleRefusalAction.settledFacts.join('；')}。只演出这些既定事实。不得写成已经赌输、自愿签卖身契、已经逃脱，也不得改写尚未发生的南荒之约。\n`;
@@ -2885,6 +2929,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     // 🔥 [关键修复] 无论成功失败，都在这里清除AI处理状态
     // 成功的提示
     if (!hasError && aiResponse) {
+      if (beatOpenWorldSettles && beatOpenWorldAction) await settleBeatOpenWorldTurn(beatOpenWorldAction);
       await tickEncounterAfterTurn(aiResponse);
       toast.success('天机重现');
       // 清空已发送的图片
