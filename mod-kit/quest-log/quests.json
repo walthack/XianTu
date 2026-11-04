@@ -1,5 +1,5 @@
 {
-  "note": "任务日志作者数据（设计稿 2026-11-03「任务引导取代主线按钮」；用户 2026-11-03 定，样板只做 lcq.stage_02；lcq.event.gamble_bond_signed 补短语＝清羽 Demo 同拍作者短语（qingyuOpeningPlaytest.overlayDemoActionIntent）＋本拍卡片选项原话，任务模式撤按钮后手打能认出，REPORT-8091-68fe9d20 P1-4）。只在 story.quest.enabled 开时生效（numbers-progress.json），关时整份不读＝现状。beats：按事件 id 写一拍的日志条目——line（main 主线／country 国家线／character 人物线）、lineId、title、objective（去哪、找谁、做什么，一句话，不超过 story.quest.objectiveMaxChars 字，不写怎么说、不写结果）、detail（可选背景，不写解法）、hints（卡住时按 level 逐级放出，回合数见 story.quest.hintTurns）、markers（place:<地点 id>／npc:<人物 id>；marker 写 hidden 不放标记，须同时写 hints）、doneText（结算后已完成栏写的一行结果）、approach（空转满 story.quest.approachTurns 回合 NPC 主动来找：who＋text 作为下一回合场景引子，不结算；人来了以后 where 按与 who 同场放宽）、hooks.character（人物剧情挂点，首版留空）、actions.<动作 id>.completion（where 地点 id 或 any；who 人物 id 或 none；what intent／arrive／talk／combat；talk 现有代码认不出「对谁说」，按 intent 判）、actions.<动作 id>.aliases（开关开时追加的作者短语：matchAny 命中其一、rejectIf 否定优先，各 ≤8 条）。stages：按关 id 写「上一关收束后前往本关」的启程条目 arrival（objective、hints、aliases＝手打启程短语；落点在别处时到达下一关开场地点即切关）。没写的拍回落到拍自带 objective 并记 LCQ-SAV-057。",
+  "note": "任务日志作者数据（设计稿 2026-11-03「任务引导取代主线按钮」；用户 2026-11-03 定，样板只做 lcq.stage_02）。只在 story.quest.enabled 开时生效（numbers-progress.json），关时整份不读＝现状。beats：按事件 id 写一拍的日志条目——line（main 主线／country 国家线／character 人物线）、lineId、title、objective（去哪、找谁、做什么，一句话，不超过 story.quest.objectiveMaxChars 字，不写怎么说、不写结果）、detail（可选背景，不写解法）、hints（卡住时按 level 逐级放出，回合数见 story.quest.hintTurns）、markers（place:<地点 id>／npc:<人物 id>；marker 写 hidden 不放标记，须同时写 hints）、doneText（结算后已完成栏写的一行结果）、approach（空转满 story.quest.approachTurns 回合 NPC 主动来找：who＋text 作为下一回合场景引子，不结算；人来了以后 where 按与 who 同场放宽）、hooks.character（人物剧情挂点，首版留空）、actions.<动作 id>.completion（where 地点 id 或 any；who 人物 id 或 none；what intent／arrive／talk／combat；talk 现有代码认不出「对谁说」，按 intent 判）、actions.<动作 id>.aliases（开关开时追加的作者短语：matchAny 命中其一、rejectIf 否定优先，各 ≤8 条）。stages：按关 id 写「上一关收束后前往本关」的启程条目 arrival（objective、hints、aliases＝手打启程短语；落点在别处时到达下一关开场地点即切关）。没写的拍回落到拍自带 objective 并记 LCQ-SAV-057。",
   "beats": {
     "lcq.event.s02_01": {
       "line": "main",
@@ -29,26 +29,6 @@
           "aliases": {
             "matchAny": ["传功", "托付", "锦囊", "交代", "听王哲", "问王哲", "向王哲", "见王哲"],
             "rejectIf": ["不听", "不接", "不要", "拒绝", "不去", "杀", "砍", "偷"]
-          }
-        }
-      }
-    },
-    "lcq.event.gamble_bond_signed": {
-      "line": "main",
-      "lineId": "lcq.main",
-      "title": "落败签下卖身契",
-      "objective": "赌局局面骤变，面对眼前的刻香与契书做出回应",
-      "actions": {
-        "confirm_rigged_wager_loss": {
-          "aliases": {
-            "matchAny": ["检查刻香", "确认赌局落败", "看清刻香被动了手脚", "核对时限与刻香", "核对刻香", "盯住苏妲己的手"],
-            "rejectIf": ["赌就不必了", "不赌了", "我拒绝赌局", "我不参加赌局"]
-          }
-        },
-        "sign_the_bond": {
-          "aliases": {
-            "matchAny": ["回应眼前契书", "拿起契书", "签下身契", "面对赌债契书", "签下卖身契"],
-            "rejectIf": ["拒绝签契", "撕毁契书", "赌就不必了", "不赌了", "我拒绝赌局", "我不参加赌局"]
           }
         }
       }
