@@ -641,7 +641,6 @@ import { noteQuestIdleTurn, questActionGate, questArrivedDeparture, questGuideEn
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import {
   abortInFlightNaturalIntent,
-  abortInFlightBeatJudge,
   naturalIntentClarify,
   freeActionOwnsText,
   hasUnclearIntentFrame,
@@ -894,7 +893,7 @@ const persistAIProcessingState = () => {
 const forceResetAIProcessingState = () => {
   console.log('[强制重置] 清除AI处理状态和会话存储');
   // 取消所有正在进行的AI请求（包括重试中的）
-  abortInFlightNaturalIntent(); abortInFlightBeatJudge();
+  abortInFlightNaturalIntent();
   aiService.cancelAllRequests();
   aiResetToken += 1;
   uiStore.resetStreamingState();
@@ -951,7 +950,7 @@ const abandonOwnedGameTurn = () => {
     aiService.abortQingyuTurnRequests(owned);
   }
   if (!active || active === owned) {
-    abortInFlightNaturalIntent(); abortInFlightBeatJudge();
+    abortInFlightNaturalIntent();
     uiStore.resetStreamingState();
     streamingMessageIndex.value = null;
     rawStreamingContent.value = '';
@@ -1709,7 +1708,7 @@ const selectAction = (action: ActionItem) => {
 };
 
 const cancelAction = () => {
-  abortInFlightNaturalIntent(); abortInFlightBeatJudge();
+  abortInFlightNaturalIntent();
   resumeAfterCultivationSelection = false;
   selectedAction.value = null;
   selectedTime.value = 1;

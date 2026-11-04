@@ -121,7 +121,13 @@ type IntentGenerate = (input: {
 let inFlight: AbortController | null = null;
 let latestRequestId = '';
 
+/** 界面取消／重置：intent 与拍子判定小请求一起中止。 */
 export function abortInFlightNaturalIntent(): void {
+  abortIntentSlot();
+  abortInFlightBeatJudge();
+}
+
+function abortIntentSlot(): void {
   if (inFlight) noteDiagnosticCancellation(inFlight.signal, 'natural_intent_cancel');
   inFlight?.abort();
   inFlight = null;
@@ -510,7 +516,7 @@ async function classifyByIntentModel(
   fingerprint: string,
   classifierFailure: (reason: string, candidates: readonly NaturalIntentCandidate[]) => NaturalIntentResult,
 ): Promise<NaturalIntentResult> {
-  abortInFlightNaturalIntent();
+  abortIntentSlot();
   const controller = new AbortController();
   inFlight = controller;
   const requestId = `intent_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -676,6 +682,7 @@ export function parseBeatJudgeJson(raw: string): { id?: string; c?: string; ev?:
       neg: parsed.neg === true,
     };
   } catch {
+    // lcq-allow: 坏 JSON 由调用方按 malformed 记 LCQ-SAV-062 并停下。
     return null;
   }
 }
@@ -735,6 +742,7 @@ async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fi
     if (!fresh) return finish({ kind: 'none', reason: 'stale_or_ambiguous_candidate' });
     return finish({ kind: 'settled', selection: fresh, certainty: parsed.c, evidenceLength: compact(ev).length });
   } catch {
+    // lcq-allow: 每个分支都经 finish 记 LCQ-SAV-062（outcome＝timeout／aborted／classifier_error）。
     if (timedOut) return finish({ kind: 'failed', reason: 'timeout' });
     if (input.signal?.aborted || latestBeatRequestId !== requestId) return finish({ kind: 'none', reason: 'aborted' });
     return finish({ kind: 'failed', reason: 'classifier_error' });

@@ -331,7 +331,7 @@ const judgeKey = (value: unknown): string => String(value || '').normalize('NFKC
 const nameHit = (id: string, text: string): boolean => {
   if (!id) return false;
   const pattern = entityNamePattern('character', id);
-  try { return Boolean(pattern) && new RegExp(pattern, 'u').test(text); } catch { return false; }
+  try { return Boolean(pattern) && new RegExp(pattern, 'u').test(text); } catch { return false; /* lcq-allow: 人名别名正则由实体表生成，坏正则只当没提到这个人，不升关键拍。 */ }
 };
 
 /** 本拍动作的否定短语：作者 intentMatch.rejectIf＋quests.json aliases.rejectIf（每次现读存档，小请求回来后再判一次用）。 */
