@@ -655,6 +655,7 @@ export function abortInFlightBeatJudge(): void {
 export function buildBeatJudgePrompt(playerText: string, plan: BeatKeyPlan, evidenceMaxChars: number): { systemPrompt: string; userPrompt: string } {
   const systemPrompt = [
     '你只判断玩家这句话是不是在做当前这一拍的某个动作。只能从actions里选一个id，或填none。',
+    '判断依据是do描述的动作和ctx的处境；label只是名称。',
     '问句、假设、转述别人、否定、拒绝，或命中该动作rejectIf的，id填none并把neg设为true。只提到人名或地名不算做了动作。',
     `ev必须是玩家原话里逐字连续的一段（不超过${evidenceMaxChars}字）。c只填high或low：只有确定是在做这个动作才填high。`,
     '只输出JSON：{"id":"动作id或none","c":"high或low","ev":"原话短语","neg":false}',
@@ -663,7 +664,8 @@ export function buildBeatJudgePrompt(playerText: string, plan: BeatKeyPlan, evid
     playerText,
     ...(plan.place ? { place: plan.place } : {}),
     ...(plan.people.length ? { people: plan.people } : {}),
-    actions: plan.actions.map(item => ({ id: item.id, label: item.label, ...(item.rejectIf.length ? { rejectIf: item.rejectIf } : {}) })),
+    ...(plan.ctx ? { ctx: plan.ctx } : {}),
+    actions: plan.actions.map(item => ({ id: item.id, label: item.label, ...(item.do ? { do: item.do } : {}), ...(item.rejectIf.length ? { rejectIf: item.rejectIf } : {}) })),
   });
   return { systemPrompt, userPrompt };
 }

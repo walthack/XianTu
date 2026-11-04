@@ -320,6 +320,12 @@ export type IntentSettleConfig = {
     sendPlace: boolean;
     sendPeople: boolean;
     maxPeople: number;
+    /** 候选动作带 do（intentMatch.describe → actionText → label），按 doMaxChars 截断。 */
+    sendActionText: boolean;
+    doMaxChars: number;
+    /** 计划带一次 ctx（objective → axisBeat → description），按 ctxMaxChars 截断。 */
+    sendContext: boolean;
+    ctxMaxChars: number;
   };
 };
 export const intentSettleConfig = (): IntentSettleConfig | undefined =>
@@ -329,7 +335,7 @@ export const intentSettleConfig = (): IntentSettleConfig | undefined =>
  * id＝发给小请求的动作 id。settle＝真正落账的选择：五原点心铺（s02_04）这拍的合同动作要等开放世界里「拖延观察／抢出口」落了回执才收（runtime
  * wuyuanS0204MapContractMet），所以那时候候选换成这两个地方应对，结算走开放世界、由它连带完成 s02_04；selection 仍是本拍合同动作，供闸门与 rejectIf 用。
  */
-export interface BeatJudgeAction { id: string; selection: ScenarioEventActionSelection; label: string; rejectIf: string[]; settle?: WuyuanOpenWorldSelection }
+export interface BeatJudgeAction { id: string; selection: ScenarioEventActionSelection; label: string; rejectIf: string[]; settle?: WuyuanOpenWorldSelection; /** 玩家要做的动作描述（发给模型的依据）。 */ do?: string }
 export interface BeatKeyPlan {
   beatId: string;
   /** scene＝条件 1–3 全满足；lexical＝条件 1–2 满足、闸门未过但原话含本拍人名／地名／短语。 */
@@ -337,7 +343,16 @@ export interface BeatKeyPlan {
   actions: BeatJudgeAction[];
   place?: string;
   people: string[];
+  /** 本拍剧情一句话（每个计划只发一次）。 */
+  ctx?: string;
 }
+
+const clip = (value: unknown, max: number): string => {
+  const text = String(value ?? '').replace(/\s+/g, ' ').trim();
+  const limit = Math.max(0, Math.floor(Number(max) || 0));
+  return limit > 0 && Array.from(text).length > limit ? Array.from(text).slice(0, limit).join('') : text;
+};
+const firstText = (...values: unknown[]): string => String(values.find(value => typeof value === 'string' && value.trim()) || '');
 
 const judgeKey = (value: unknown): string => String(value || '').normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
 const nameHit = (id: string, text: string): boolean => {
@@ -393,11 +408,15 @@ export function beatKeyTurn(save: SaveData | null | undefined, text: string): Be
     if (selection.eventId === WUYUAN_S02_04_EVENT && wuyuanS0204Guidance(save)) {
       // 合同动作此刻会被 runtime 以 open_world_prerequisites 拒收：换成店里的两个地方应对（人不在点心铺时没有，就不发小请求）。
       for (const settle of getWuyuanOpenWorldSelections(save).filter(item => item.kind === 'problem_action')) {
-        actions.push({ id: settle.identityId, selection, label: settle.label, rejectIf, settle });
+        const describe = (settle as { intentMatch?: { describe?: string } }).intentMatch?.describe;
+        const actionText = (settle as { actionText?: string }).actionText;
+        actions.push({ id: settle.identityId, selection, label: settle.label, rejectIf, settle, ...(config.beatJudge.sendActionText ? { do: clip(firstText(describe, actionText, settle.label), config.beatJudge.doMaxChars) } : {}) });
       }
       continue;
     }
-    actions.push({ id: selection.actionId, selection, label: String(authored.label || selection.label), rejectIf });
+    const label = String(authored.label || selection.label);
+    actions.push({ id: selection.actionId, selection, label, rejectIf,
+      ...(config.beatJudge.sendActionText ? { do: clip(firstText(authored.intentMatch?.describe, authored.actionText, label), config.beatJudge.doMaxChars) } : {}) });
   }
   const candidates = actions.slice(0, Math.max(1, config.beatJudge.maxActions));
   if (!candidates.length) return undefined;
@@ -433,5 +452,6 @@ export function beatKeyTurn(save: SaveData | null | undefined, text: string): Be
       }
     }
   }
-  return { beatId: focus.id, key, actions: candidates, place, people: people.slice(0, Math.max(0, judge.maxPeople)) };
+  const ctx = judge.sendContext ? clip(firstText(event?.objective, event?.axisBeat, event?.description), judge.ctxMaxChars) : '';
+  return { beatId: focus.id, key, actions: candidates, place, people: people.slice(0, Math.max(0, judge.maxPeople)), ...(ctx ? { ctx } : {}) };
 }

@@ -287,6 +287,8 @@ export interface ScenarioPlayerCompletionContract {
       rejectIf?: string[];
       /** 信息探问允许直接问句，不把问句当承诺或交易。 */
       allowInquiry?: boolean;
+      /** 玩家要做的动作（第一人称描述），只发给拍子判定小请求看；不是词表，不参与按字匹配。 */
+      describe?: string;
     };
     /** 所列角色不在场时隐藏该动作。 */
     requiresPresentCharacterIds?: string[];

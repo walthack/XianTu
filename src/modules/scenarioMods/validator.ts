@@ -1985,7 +1985,12 @@ function validateIntentMatch(value: unknown, path: string, add: AddIssue): void 
       positive.add(normalized);
     });
   }
-  if (!hasPositive) {
+  // describe：作者写给拍子判定小请求看的动作描述（只发给模型，不参与按字匹配）；只写 describe 的 intentMatch 不需要 matchAny／matchAll。
+  const describe = value.describe;
+  if (describe !== undefined && !isNonEmptyString(describe)) {
+    add(`${path}.describe`, 'required_string', `${path}.describe must be a non-empty string.`);
+  }
+  if (!hasPositive && describe === undefined) {
     add(path, 'required_matcher', 'intentMatch must declare matchAny and/or matchAll.');
   }
   const rejected = value.rejectIf;

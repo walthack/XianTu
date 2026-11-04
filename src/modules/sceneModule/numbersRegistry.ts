@@ -130,6 +130,10 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.quest.intentSettle.beatJudge.sendPlace', kind: 'bool', required: true, section: 'progress' },
   { path: 'story.quest.intentSettle.beatJudge.sendPeople', kind: 'bool', required: true, section: 'progress' },
   { path: 'story.quest.intentSettle.beatJudge.maxPeople', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.quest.intentSettle.beatJudge.sendActionText', kind: 'bool', required: true, section: 'progress' },
+  { path: 'story.quest.intentSettle.beatJudge.doMaxChars', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.quest.intentSettle.beatJudge.sendContext', kind: 'bool', required: true, section: 'progress' },
+  { path: 'story.quest.intentSettle.beatJudge.ctxMaxChars', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.narrativeTurnBudget.totalMs', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.narrativeTurnBudget.notice', kind: 'string', required: true, section: 'progress' },
   // 罗盘移动按路程折天只用于这些剧情节点（actionTime.questTravelMinutes 读；2026-11-02 总策划定收窄）。

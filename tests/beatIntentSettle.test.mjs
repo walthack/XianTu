@@ -312,3 +312,43 @@ test('小请求超时：配置 timeoutMs=6000、timeoutRetries=1；超时后重�
     assert.equal(none.calls.beat, 1);
   } finally { judge.timeoutMs = prev; judge.timeoutRetries = 1; }
 }));
+
+// 设计稿 2026-11-04「拍子判定按意思与风险」问一：候选带 do（describe → actionText → label），计划带一次 ctx（objective → axisBeat → description），按配置截断。
+test('小请求候选带 do 与一次 ctx，按 doMaxChars／ctxMaxChars 截断；开关关掉则不发', () => withQuest(true, async () => {
+  const judge = QC.intentSettle.beatJudge;
+  assert.equal(judge.sendActionText, true); assert.equal(judge.doMaxChars, 60);
+  assert.equal(judge.sendContext, true); assert.equal(judge.ctxMaxChars, 60);
+  const s = saveAt(S01_03);
+  const text = '我蹲下查看那个受伤军士的伤势。';
+  const event = rt(s).events.find(e => e.id === 'lcq.event.s01_03');
+  const authored = event.playerCompletionContract.actions.find(a => a.id === 'advance_declared_objective');
+  const reply = { id: 'none', c: 'low', ev: '', neg: false };
+  const { calls } = await route(s, text, reply);
+  const payload = JSON.parse(calls.prompts[0].userPrompt);
+  const expectDo = Array.from(String(authored.intentMatch?.describe || authored.actionText || authored.label).replace(/\s+/g, ' ').trim()).slice(0, 60).join('');
+  assert.equal(payload.actions[0].do, expectDo);
+  const expectCtx = Array.from(String(event.objective || event.axisBeat || event.description).replace(/\s+/g, ' ').trim()).slice(0, 60).join('');
+  assert.equal(payload.ctx, expectCtx);
+  assert.match(calls.prompts[0].systemPrompt, /判断依据是do描述的动作和ctx的处境；label只是名称/);
+  // describe 优先于 actionText；截断按配置。
+  authored.intentMatch = { ...(authored.intentMatch || {}), describe: '我上前替受伤军士查看伤口并决定救不救他' };
+  const prev = judge.doMaxChars; judge.doMaxChars = 5;
+  try {
+    const plan = BP.beatKeyTurn(s, text);
+    assert.equal(plan.actions[0].do, '我上前替受');
+  } finally { judge.doMaxChars = prev; }
+  judge.sendActionText = false; judge.sendContext = false;
+  try {
+    const plan = BP.beatKeyTurn(s, text);
+    assert.equal(plan.actions[0].do, undefined); assert.equal(plan.ctx, undefined);
+    const off = JSON.parse(NI.buildBeatJudgePrompt(text, plan, 24).userPrompt);
+    assert.equal(off.ctx, undefined); assert.equal(off.actions[0].do, undefined);
+  } finally { judge.sendActionText = true; judge.sendContext = true; }
+}));
+
+test('intentMatch 只写 describe 也合法（只发给模型，不参与按字匹配）', async () => {
+  const V = await loadTs('../src/modules/scenarioMods/validator.ts');
+  const src = read('src/modules/scenarioMods/validator.ts');
+  assert.match(src, /describe === undefined/);
+  assert.ok(V);
+});
