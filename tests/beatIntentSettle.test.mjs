@@ -274,3 +274,12 @@ test('小请求预算：beat_judge 按配置 maxTokensWithReasoning 发、带 re
     assert.deepEqual(bodies.map(b => b.max_tokens), [judge.maxTokensWithReasoning]);
   } finally { axios.post = original; }
 });
+
+// REPORT-8091-a4a451cf P1：存档 位置.描述＝「中立边陲·草原·帅帐」时，草原／帅帐同为两字，原按正典顺序解析成草原 → s01_05 人在帅帐却被判不在场、动作表只剩前往、不发小请求。
+test('s01_05 描述「中立边陲·草原·帅帐」：解析为帅帐、本拍可做、关键拍成立', () => withQuest(true, () => {
+  const s = saveAt(S01_05_AWAY + 1);
+  assert.equal(R.getScenarioFocusEvent(rt(s)).id, 'lcq.event.s01_05');
+  s.角色.位置 = { 描述: '中立边陲·草原·帅帐', locationId: 'lcq.location.grassland' };
+  assert.deepEqual(R.getCurrentStoryEventActions(s).map(a => a.actionId), ['advance_declared_objective']);
+  assert.equal(BP.beatKeyTurn(s, '我在帅帐里把来历说清楚，请对方诊治我的伤')?.key, 'scene');
+}));

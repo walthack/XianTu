@@ -1036,9 +1036,12 @@ export function resolveLocationIdFromPosition(
 ): string | undefined {
   const desc = String(positionDescription || '').replace(/\s+/g, '');
   if (!desc || !locations?.length) return undefined;
+  // 同样长的名字（「中立边陲·草原·帅帐」里的草原／帅帐）取在描述里更靠后的那段：三段式描述越往后越具体
+  // （REPORT-8091-a4a451cf s01_05：原来按正典顺序取到草原，人在帅帐却被当成不在场，动作表只剩前往）。
+  const at = (name: string) => desc.lastIndexOf(name.replace(/\s+/g, ''));
   return locations
     .filter(l => l.name && l.name.length >= 2 && desc.includes(l.name.replace(/\s+/g, '')))
-    .sort((a, b) => b.name.length - a.name.length)[0]?.id;
+    .sort((a, b) => b.name.length - a.name.length || at(b.name) - at(a.name))[0]?.id;
 }
 
 /**
