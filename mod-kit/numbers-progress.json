@@ -1316,7 +1316,31 @@
       "departureObjective": "收拾行装，前往{place}",
       "anywhereText": "随时可做",
       "missedText": "时机已过",
-      "doneMax": 50
+      "doneMax": 50,
+      "intentSettle": {
+        "note": "任务模式拍子按意图结算（设计稿 2026-11-04「任务模式拍子按意图结算」方案 A＋第九节收窄；用户 2026-11-04 批准；代码 naturalIntentRouter.resolveBeatJudge、beatProgress.beatKeyTurn）。只在 story.quest 开时读。关键拍（有焦点拍、动作表不只剩前往、至少一个动作过 where/who 闸门；或原话含本拍人名／地名／短语）上按字链没对上，才发拍子判定小请求，与原 intent 请求并行。enabled：总开关。minCertainty：模型 c 须等于此值才结算（D2 只认 high）。excludeKinds：不走模型判定的拍（choice 关键选择／分支锁，fatal 致命选项，combat 战斗，D3）。logEvidenceLength：LCQ-SAV-053 detail 记 evidence 长度与 certainty（不记原话）。clarifyNotice：任务模式下「没听清」提示（取代『…或点按钮』）。beatJudge：小请求参数——maxTokens 推理关时输出上限；maxTokensWithReasoning 推理关不掉（reasoningEffort≠none）时的上限；reasoningEffort：none＝发关闭参数（仅传输层能关的模型生效），low＝显式发 low。MiniMax-M3.1-Flash 不支持 none、M2.7 思考不可关（aiRetry.reasoning.mainNarrative 注），故默认 low／512。timeoutMs 小请求超时；maxActions 焦点拍候选最多几条；evidenceMaxChars ev 长度上限；sendPlace／sendPeople 是否送地点名／在场人物名；maxPeople 人物名最多几个。",
+        "enabled": true,
+        "minCertainty": "high",
+        "excludeKinds": [
+          "choice",
+          "fatal",
+          "combat"
+        ],
+        "logEvidenceLength": true,
+        "clarifyNotice": "这一步没听清你要做什么。请直接说眼前这一动，这一拍的目标见任务日志。",
+        "beatJudge": {
+          "enabled": true,
+          "maxTokens": 128,
+          "maxTokensWithReasoning": 512,
+          "reasoningEffort": "low",
+          "timeoutMs": 4000,
+          "maxActions": 4,
+          "evidenceMaxChars": 24,
+          "sendPlace": true,
+          "sendPeople": true,
+          "maxPeople": 4
+        }
+      }
     },
     "narrativeTurnBudget": {
       "note": "普通叙事回合（MainGamePanel 发给 AIBidirectionalSystem.processPlayerAction 的那次生成，含其内部重试）的总耗时上限（毫秒）。到点掐断本回合在途请求、不再等，撤回本回合预结算（与生成失败同一兜底），保留玩家输入可直接重发，并弹 notice 提示；回合完成信号照常收尾。场面战描写另有 combat.narrationBudget。REPORT-8091-ef573ece P2：B15 回合模型流卡死 300 秒才中止重试。2026-11-03 用户定 90000→150000（保底）：主叙事 MiniMax-M3.1-Flash 推理档同日压到 low（aiRetry.reasoning.mainNarrative），目标每回合约 30 秒，150 秒只兜卡死，仍低于驱动 300 秒。0＝不设上限。不改模型／API 超时配置。",
