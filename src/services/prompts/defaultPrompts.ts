@@ -58,7 +58,7 @@ import { LEGACY_RENDER_PLAN_INSTRUCTION } from '@/modules/scenarioMods/legacyRen
 import { NPC_RELATION_NETWORK_RULES, NPC_RELATION_COMMANDS, NPC_FACTION_RULES } from '@/utils/prompts/definitions/npcRelationRules';
 import { getActivePinia } from 'pinia';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
-import { DUAL_MODEL_CONFIG, consistencyEnabled } from '@/services/dualModelConfig';
+import { DUAL_MODEL_CONFIG, consistencyEnabled, dualModelMasterEnabled } from '@/services/dualModelConfig';
 
 export interface PromptDefinition {
   name: string;
@@ -172,7 +172,7 @@ export const CORE_NPC_MEMORY_PUSH = '/记忆push';
 
 /** 后端开启（总闸与玩家开关同 isGameModuleEnabled 口径，N3-A）且配置不让前端写时，NPC 记忆只由后端写。无 pinia（测试/预渲染）按关闭处理。 */
 export function backendWritesNpcMemory(): boolean {
-  if (!DUAL_MODEL_CONFIG.dualModel.enabled || DUAL_FRONTEND.writesNpcMemory || !getActivePinia()) return false;
+  if (!dualModelMasterEnabled() || DUAL_FRONTEND.writesNpcMemory || !getActivePinia()) return false;
   return consistencyEnabled(useAPIManagementStore().isModuleEnabled(DUAL_MODEL_CONFIG.dualModel.backend.moduleId));
 }
 

@@ -30,7 +30,7 @@ import { undisclosedSelfFactsPromptLine } from './undisclosedSelfFacts';
 import { encounterPromptFacts } from './randomEncounter';
 import { getWuyuanOpenWorldPrompt } from './wuyuanOpenWorldSlice';
 import { getBaihuGambleRefusalPrompt } from './baihuGambleRefusal';
-import { DUAL_MODEL_CONFIG } from '@/services/dualModelConfig';
+import { DUAL_MODEL_CONFIG, dualModelMasterEnabled } from '@/services/dualModelConfig';
 
 import type {
   ScenarioCondition,
@@ -758,12 +758,12 @@ ${focusedCharacters.map(character => formatFocusedCharacter(character, runtime, 
 
 /**
  * 双模型后端的连续性提示（设计稿 2026-11-03-双模型分工 ①⑧③，Q6-A）：读 系统.扩展.<extensionKey>.continuity 的 note，
- * 最多 continuityMaxItems 条，下一回合注入主叙事。总闸 dualModel.enabled 关或无提示返回空串，调用处整段跳过；
+ * 最多 continuityMaxItems 条，下一回合注入主叙事。总闸（dualModelMasterEnabled：正式版 enabled／内测版 enabledDev）关或无提示返回空串，调用处整段跳过；
  * 玩家开关关闭时由 MainGamePanel 回合提交钩子清掉已存提示。
  */
 export function formatConsistencyContinuity(saveData: SaveData): string {
   const backend = DUAL_MODEL_CONFIG.dualModel.backend;
-  if (!DUAL_MODEL_CONFIG.dualModel.enabled) return '';
+  if (!dualModelMasterEnabled()) return '';
   const list = readPath(saveData, ['系统', '扩展', backend.extensionKey, 'continuity']);
   const notes = (Array.isArray(list) ? list : [])
     .map(item => (typeof (item as { note?: unknown })?.note === 'string' ? (item as { note: string }).note.trim() : ''))

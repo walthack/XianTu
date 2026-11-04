@@ -2,6 +2,8 @@
   "note": "双模型分工（设计稿 narrative-drafts/2026-11-03-双模型分工.md ⑤⑧；用户 2026-11-03 21:39／22:18／22:26 拍板）。前端主叙事写正文与概要，后端 consistency 模块只读概要与账、写 NPC 记忆与连续性提示。本文件只放配置，第1步未接线；校验见 src/services/dualModelConfig.ts。",
   "dualModel": {
     "enabled": false,
+    "enabledDev": true,
+    "enabledNote": "总闸按构建取值（src/utils/buildDefaults.ts）：正式版（--mode production）读 enabled，8091 内测版（--mode development，MODULE_DEV_DEFAULTS）读 enabledDev。用户 2026-11-04 11:31 批准内测默认开、正式版仍默认关。",
     "backend": {
       "moduleId": "consistency",
       "inheritUsageType": "memory_summary",

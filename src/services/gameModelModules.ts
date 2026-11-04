@@ -30,7 +30,7 @@ export function resolveGameModuleRoute(definition: ModelModuleDefinition): Modul
 
 export function isGameModuleEnabled(definition: ModelModuleDefinition): boolean {
   const api = useAPIManagementStore();
-  // 双模型后端（N3-A）：dualModel.enabled 总闸与玩家开关任一关即关。
+  // 双模型后端（N3-A）：总闸（dualModelMasterEnabled）与玩家开关任一关即关。
   if (definition.id === CONSISTENCY_MODULE_ID) return consistencyEnabled(api.isModuleEnabled(definition.id));
   return MODULES_WITH_OWN_SWITCH.has(definition.id)
     ? api.isModuleEnabled(definition.id)

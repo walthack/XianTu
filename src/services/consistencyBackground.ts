@@ -415,7 +415,7 @@ export function cancelConsistencyBackground(host?: Pick<ConsistencyHost, 'extens
 
 /**
  * 前台提交并存档后调用：先落账排队结果，再为本回合排一个后端任务。
- * 开关关（dualModel.enabled 或玩家开关）＝作废并清提示，不发请求；正式版名单外模型未确认＝不发请求。
+ * 开关关（总闸 dualModelMasterEnabled 或玩家开关）＝作废并清提示，不发请求；正式版名单外模型未确认＝不发请求。
  * 前台在途时不取消后端；前台忙时只排队，下次调用再发。
  */
 export function startConsistencyBackground(host: ConsistencyHost, options: StartConsistencyOptions = {}): void {

@@ -102,7 +102,7 @@ export const DEBUG_CATEGORIES = [
     id: 'content', label: '内容包、模组与数值配置',
     paths: [
       'modules/contentPacks/', ...sm('manager.ts', 'validator.ts', 'analyzer.ts', 'builtins/', 'schema/', 'entityCatalog.ts', 'namedEntities.ts', 'canonGuard.ts'),
-      'modules/sceneModule/numbers*.ts', 'modules/sceneModule/runtimeTuning.ts', 'utils/presetManager.ts',
+      'modules/sceneModule/numbers*.ts', 'modules/sceneModule/runtimeTuning.ts', 'utils/presetManager.ts', 'utils/buildDefaults.ts',
       ...at('services/', 'promptConfig.ts', 'promptStorage.ts', 'backendConfig.ts'),
     ],
   },

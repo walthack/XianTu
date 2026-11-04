@@ -4,6 +4,7 @@
  */
 import raw from '../../mod-kit/dual-model.json';
 import { REASONING_EFFORT_LEVELS } from '@/modules/sceneModule/numbersRegistry';
+import { IS_MODULE_DEV_BUILD, buildDefaultEnabled } from '@/utils/buildDefaults';
 
 /** 玩家在 API 配置页可选的后端档位；'default'＝用 dualModel.backend.reasoningEffort。 */
 export type BackendReasoningEffort = 'default' | 'low' | 'medium' | 'high' | 'xhigh' | 'max';
@@ -11,6 +12,7 @@ export type BackendReasoningEffort = 'default' | 'low' | 'medium' | 'high' | 'xh
 export interface DualModelConfig {
   dualModel: {
     enabled: boolean;
+    enabledDev: boolean;
     backend: {
       moduleId: string; inheritUsageType: string; defaultModel: string; reasoningEffort: string;
       summaryWindow: number; ledgerMemoryPerNpc: number; maxInputChars: number; continuityMaxItems: number;
@@ -41,6 +43,7 @@ export function validateDualModelConfig(cfg: unknown = DUAL_MODEL_CONFIG): strin
   const text = (v: unknown) => typeof v === 'string' && v.trim() !== '';
   const int = (v: unknown, min: number) => Number.isInteger(v) && (v as number) >= min;
   if (typeof dm?.enabled !== 'boolean') problems.push('dualModel.enabled 须为布尔');
+  if (typeof dm?.enabledDev !== 'boolean') problems.push('dualModel.enabledDev 须为布尔');
   if (!backend || typeof backend !== 'object') return [...problems, 'dualModel.backend 段缺失'];
   for (const key of ['moduleId', 'inheritUsageType', 'defaultModel', 'extensionKey', 'continuityHeading', 'instruction'] as const) if (!text(backend[key])) problems.push(`dualModel.backend.${key} 不能为空`);
   if (!REASONING_EFFORT_LEVELS.includes(backend.reasoningEffort as string)) problems.push(`dualModel.backend.reasoningEffort 须为 ${REASONING_EFFORT_LEVELS.join('/')} 之一`);
@@ -98,7 +101,12 @@ export function needsPaidConfirm(model: string, isDevBuild: boolean, confirmed: 
   return !isModelAllowed(model, config);
 }
 
-/** 后端是否开启（N3-A）：dualModel.enabled 是开发总闸，moduleEnabled.consistency 是玩家开关，任一关即关。 */
-export function consistencyEnabled(moduleSwitch: boolean, config: DualModelConfig = DUAL_MODEL_CONFIG): boolean {
-  return config.dualModel.enabled === true && moduleSwitch === true;
+/** 总闸：正式版读 dualModel.enabled，内测版读 dualModel.enabledDev（buildDefaults.ts）。所有判总闸处走这里。 */
+export function dualModelMasterEnabled(config: DualModelConfig = DUAL_MODEL_CONFIG, devBuild: boolean = IS_MODULE_DEV_BUILD): boolean {
+  return buildDefaultEnabled(config.dualModel, devBuild);
+}
+
+/** 后端是否开启（N3-A）：总闸（dualModelMasterEnabled）与玩家开关 moduleEnabled.consistency 任一关即关。 */
+export function consistencyEnabled(moduleSwitch: boolean, config: DualModelConfig = DUAL_MODEL_CONFIG, devBuild: boolean = IS_MODULE_DEV_BUILD): boolean {
+  return dualModelMasterEnabled(config, devBuild) && moduleSwitch === true;
 }
