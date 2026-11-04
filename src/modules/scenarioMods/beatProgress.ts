@@ -25,7 +25,10 @@ import { logEvent } from '../diagnostics/log';
 import { isQingyuOpeningPlaytestSave } from './qingyuOpeningPlaytest';
 import { countryOf, crossCountryStageDeparture, type CrossCountryTravelTarget } from './travel/mapTravel';
 import { currentLocation } from './travel/travelLedger';
-import { nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
+import { entityName, entityNamePattern } from './namedEntities';
+import { isKeyBeatCardAction } from './keyBeatCards';
+import { detectBranchDecision } from './branchDecision';
+import { locationName, nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
 import {
   getCurrentStoryEventActions,
   getCurrentStoryExplorationActions,
@@ -283,4 +286,119 @@ export function stageDepartureArrived(save: SaveData | null | undefined): string
   if (countryOf(currentLocation(save).canonicalLocationId) !== countryOf(pending.toId)) return undefined;
   delete ext[MAP_KEY];
   return pending.nextStageId;
+}
+
+// ───────────── 任务模式拍子按意图结算：关键拍判定（本地，不调模型） ─────────────
+/** 设计稿 2026-11-04「任务模式拍子按意图结算」第 8／9 节；配置 story.quest.intentSettle。 */
+export type IntentSettleConfig = {
+  enabled: boolean;
+  minCertainty: string;
+  excludeKinds: string[];
+  logEvidenceLength: boolean;
+  clarifyNotice: string;
+  beatJudge: {
+    enabled: boolean;
+    maxTokens: number;
+    maxTokensWithReasoning: number;
+    reasoningEffort: string;
+    timeoutMs: number;
+    maxActions: number;
+    evidenceMaxChars: number;
+    sendPlace: boolean;
+    sendPeople: boolean;
+    maxPeople: number;
+  };
+};
+export const intentSettleConfig = (): IntentSettleConfig | undefined =>
+  (questConfig() as unknown as { intentSettle?: IntentSettleConfig }).intentSettle;
+
+export interface BeatJudgeAction { selection: ScenarioEventActionSelection; label: string; rejectIf: string[] }
+export interface BeatKeyPlan {
+  beatId: string;
+  /** scene＝条件 1–3 全满足；lexical＝条件 1–2 满足、闸门未过但原话含本拍人名／地名／短语。 */
+  key: 'scene' | 'lexical';
+  actions: BeatJudgeAction[];
+  place?: string;
+  people: string[];
+}
+
+const judgeKey = (value: unknown): string => String(value || '').normalize('NFKC').toLowerCase().replace(/[\p{P}\p{S}\s]+/gu, '');
+const nameHit = (id: string, text: string): boolean => {
+  if (!id) return false;
+  const pattern = entityNamePattern('character', id);
+  try { return Boolean(pattern) && new RegExp(pattern, 'u').test(text); } catch { return false; }
+};
+
+/** 本拍动作的排除类别（D3）：choice 关键选择卡／分支锁，fatal 致命选项，combat 战斗拍。 */
+function beatActionKind(event: any, selection: ScenarioEventActionSelection, branch: boolean): string | undefined {
+  if (branch || isKeyBeatCardAction(selection)) return 'choice';
+  if ((event?.fatalOutcomes?.choices || []).some((item: any) => item?.id === selection.actionId)) return 'fatal';
+  if (questBeatSpec(selection.eventId)?.actions?.[selection.actionId]?.completion?.what === 'combat') return 'combat';
+  return undefined;
+}
+
+/**
+ * 关键拍判定（全本地）：只在任务引导开、intentSettle 与 beatJudge 都开时返回计划。
+ * 条件：1 有焦点拍；2 本拍动作表不只剩「前往」（作者动作，排除 choice／fatal／combat 与 rejectIf 已命中的）；
+ * 3 至少一个动作过 where/who 闸门。条件 3 不满足时，原话含本拍人名／地名／短语也升 K（lexical）。
+ * 返回 undefined＝不发小请求。
+ */
+export function beatKeyTurn(save: SaveData | null | undefined, text: string): BeatKeyPlan | undefined {
+  const config = intentSettleConfig();
+  const raw = String(text || '').trim();
+  if (!save || !raw || !config?.enabled || !config.beatJudge?.enabled || !questGuideEnabled(save)) return undefined;
+  const runtime = runtimeOf(save);
+  const focus = runtime ? getScenarioFocusEvent(runtime) : undefined;
+  if (!focus?.id) return undefined;
+  const event = (runtime?.events || []).find((item: any) => item?.id === focus.id);
+  const selections = getCurrentStoryEventActions(save).filter(item => item.eventId === focus.id && !item.actionId.startsWith('travel:'));
+  if (!selections.length) return undefined;
+  const branch = Boolean(detectBranchDecision(selections as any));
+  const excluded = new Set(config.excludeKinds || []);
+  const normalized = judgeKey(raw);
+  const spec = questBeatSpec(focus.id);
+  const actions: BeatJudgeAction[] = [];
+  for (const selection of selections) {
+    const authored = event?.playerCompletionContract?.actions?.find((item: any) => item?.id === selection.actionId);
+    if (!authored) continue;
+    const kind = beatActionKind(event, selection, branch);
+    if (kind && excluded.has(kind)) continue;
+    const rejectIf = [...(authored.intentMatch?.rejectIf || []), ...(spec?.actions?.[selection.actionId]?.aliases?.rejectIf || [])]
+      .map(String).filter(Boolean);
+    if (rejectIf.map(judgeKey).filter(Boolean).some(phrase => normalized.includes(phrase))) continue;
+    actions.push({ selection, label: String(authored.label || selection.label), rejectIf });
+  }
+  const candidates = actions.slice(0, Math.max(1, config.beatJudge.maxActions));
+  if (!candidates.length) return undefined;
+  const gated = candidates.some(item => questActionGate(save, item.selection).ok);
+  let key: BeatKeyPlan['key'] | undefined = gated ? 'scene' : undefined;
+  if (!key) {
+    const lexical = candidates.some(item => {
+      const authored = event?.playerCompletionContract?.actions?.find((a: any) => a?.id === item.selection.actionId);
+      const completion = spec?.actions?.[item.selection.actionId]?.completion;
+      const who = completion?.who && completion.who !== 'none' ? completion.who.replace(/^npc:/, '') : '';
+      const where = completion?.where && completion.where !== 'any' ? completion.where.replace(/^place:/, '') : String(event?.locationId || '');
+      const place = where ? judgeKey(locationName(where)) : '';
+      const phrases = [...(authored?.intentMatch?.matchAny || []), ...(spec?.actions?.[item.selection.actionId]?.aliases?.matchAny || [])]
+        .map(judgeKey).filter(Boolean);
+      return nameHit(who, raw) || (place.length >= 2 && normalized.includes(place)) || phrases.some(phrase => normalized.includes(phrase));
+    }) || (event?.relatedCharacterIds || []).some((id: string) => nameHit(id, raw));
+    if (lexical) key = 'lexical';
+  }
+  if (!key) return undefined;
+  const judge = config.beatJudge;
+  const here = currentLocation(save);
+  const place = judge.sendPlace ? (locationName(here.canonicalLocationId) || here.text || undefined) : undefined;
+  const people: string[] = [];
+  if (judge.sendPeople) {
+    const active = new Set<string>(runtime?.activeEventIds || []);
+    for (const item of runtime?.events || []) {
+      if (!active.has(item?.id)) continue;
+      for (const id of item.relatedCharacterIds || []) {
+        const name = entityName('character', id);
+        if (name && name !== id && !people.includes(name)) people.push(name);
+      }
+    }
+  }
+  return { beatId: focus.id, key, actions: candidates, place, people: people.slice(0, Math.max(0, judge.maxPeople)) };
 }
