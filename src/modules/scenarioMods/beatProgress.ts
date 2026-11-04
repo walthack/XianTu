@@ -25,7 +25,7 @@ import { logEvent } from '../diagnostics/log';
 import { isQingyuOpeningPlaytestSave } from './qingyuOpeningPlaytest';
 import { countryOf, crossCountryStageDeparture, type CrossCountryTravelTarget } from './travel/mapTravel';
 import { currentLocation } from './travel/travelLedger';
-import { nextStageModOf, questActionGate, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
+import { nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
 import {
   getCurrentStoryEventActions,
   getCurrentStoryExplorationActions,
@@ -53,9 +53,10 @@ export type BeatAction =
   | { kind: 'departure'; offer: ScenarioStageDepartureOffer };
 /**
  * 输入方式：button 点按钮；exact 手打＝原句／标签；alias 命中作者短语；deadline 作者写明的到点；other 本回合走了别的引擎（自由行动、开放世界等）；miss 都没对上；none 本拍没有可做的动作。
- * 任务引导开时另有：arrive 到达即成（completion.what=arrive）；talk 预留（现按 intent 判，不产生）；notThere 命中了动作但人不在 where／who 不同场（不结算、不算 miss）。
+ * 任务引导开时另有：arrive 到达即成（completion.what=arrive）；talk 预留（现按 intent 判，不产生）；notThere 命中了动作但人不在 where／who 不同场（不结算、不算 miss）；
+ * intent 关键拍按字没对上、拍子判定小请求判成（设计稿 2026-11-04「任务模式拍子按意图结算」第九节，naturalIntentRouter.resolveBeatJudge）。
  */
-export type BeatVia = 'button' | 'exact' | 'alias' | 'deadline' | 'other' | 'miss' | 'none' | 'arrive' | 'talk' | 'notThere';
+export type BeatVia = 'button' | 'exact' | 'alias' | 'deadline' | 'other' | 'miss' | 'none' | 'arrive' | 'talk' | 'notThere' | 'intent';
 export interface BeatResolution { via: 'exact' | 'alias' | 'arrive'; action: BeatAction }
 
 /** 本拍动作表：当前主线拍与探索拍的动作，本关收束后再加启程。 */
@@ -69,9 +70,20 @@ export function beatActionTable(save: SaveData | null | undefined): { beatId?: s
   return { beatId: getScenarioFocusEvent(runtime)?.id, actions };
 }
 
-const actionLines = (action: BeatAction): unknown[] => action.kind === 'departure'
+const actionLines = (save: SaveData, action: BeatAction): unknown[] => action.kind === 'departure'
   ? [action.offer.label]
-  : [action.selection.playerLine, action.selection.actionText, action.selection.label];
+  : [action.selection.playerLine, action.selection.actionText, action.selection.label, ...questLogLines(save, action.selection)];
+/**
+ * 任务引导开时比对表另加：作者原始 label（不带「行动 · 对象 ·」装饰）与任务日志里的目标（questLog.beatEntry 同一来源）。
+ * 设计稿 2026-11-04 第三节推测 1、D7：玩家照日志打出目标原文就该过。开关关时不加（与原来逐字同一行为）。致命选项不加目标。
+ */
+function questLogLines(save: SaveData, selection: ScenarioEventActionSelection): unknown[] {
+  if (!questGuideEnabled(save) || selection.actionId.startsWith('travel:')) return [];
+  const event = (runtimeOf(save)?.events || []).find((item: any) => item?.id === selection.eventId);
+  const authored = event?.playerCompletionContract?.actions?.find((item: any) => item?.id === selection.actionId);
+  if (!authored) return [];
+  return [authored.label, questBeatSpec(selection.eventId)?.objective || event?.objective];
+}
 
 /**
  * 手打文本 → 本拍动作（2.2 第 2、3 条）：与某个动作的原句／按钮标签／启程文字去标点空白后相等且唯一＝点了它；
@@ -86,7 +98,7 @@ function resolveBeatTextUngated(save: SaveData | null | undefined, text: string)
   if (!save) return undefined;
   const key = beatLineKey(text);
   if (key) {
-    const hits = beatActionTable(save).actions.filter(action => actionLines(action).some(line => beatLineKey(line) === key));
+    const hits = beatActionTable(save).actions.filter(action => actionLines(save, action).some(line => beatLineKey(line) === key));
     if (hits.length === 1) return { via: 'exact', action: hits[0] };
   }
   const alias = resolveStoryEventActionFromPlayerText(save, text) || inquiryAlias(save, text);
