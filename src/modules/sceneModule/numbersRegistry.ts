@@ -119,6 +119,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.quest.intentSettle.clarifyNotice', kind: 'string', required: true, section: 'progress' },
   { path: 'story.quest.intentSettle.beatJudge', kind: 'object', required: true, section: 'progress' },
   { path: 'story.quest.intentSettle.beatJudge.enabled', kind: 'bool', required: true, section: 'progress' },
+  { path: 'story.quest.intentSettle.beatJudge.model', kind: 'string', required: true, section: 'progress' },
   { path: 'story.quest.intentSettle.beatJudge.maxTokens', kind: 'int', required: true, min: 16, section: 'progress' },
   { path: 'story.quest.intentSettle.beatJudge.maxTokensWithReasoning', kind: 'int', required: true, min: 16, section: 'progress' },
   { path: 'story.quest.intentSettle.beatJudge.reasoningEffort', kind: 'string', required: true, section: 'progress' },

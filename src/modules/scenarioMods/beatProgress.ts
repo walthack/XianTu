@@ -307,6 +307,8 @@ export type IntentSettleConfig = {
   clarifyNotice: string;
   beatJudge: {
     enabled: boolean;
+    /** 拍子判定单独用的模型名（连接继承主流程，只换 model）；空串＝同主流程。 */
+    model?: string;
     maxTokens: number;
     maxTokensWithReasoning: number;
     reasoningEffort: string;

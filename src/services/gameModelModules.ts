@@ -59,17 +59,27 @@ export async function runGameModelModule(moduleId: string, input: ModelModuleInp
 }
 
 /**
+ * 拍子判定路由：连接（地址／密钥／provider）继承主流程，只把模型名换成 beatJudge.model（空＝不换）；酒馆宿主承载时不换。
+ */
+export function resolveBeatJudgeRoute(definition: ModelModuleDefinition, model?: string): ModuleRouteResolution {
+  const resolved = resolveGameModuleRoute(definition);
+  const name = String(model || '').trim();
+  if (!name || resolved.viaHost || !resolved.config) return resolved;
+  return { ...resolved, config: { ...resolved.config, model: name } };
+}
+
+/**
  * 任务模式拍子判定小请求（story.quest.intentSettle.beatJudge）：连接继承主流程，开关随主流程；
  * 推理档固定取配置（不读玩家的后端档位），usageType＝beat_judge 便于单独记 token。
  */
 export async function runBeatJudgeModule(
-  judge: { maxTokens: number; maxTokensWithReasoning: number; reasoningEffort: string; timeoutMs: number },
+  judge: { model?: string; maxTokens: number; maxTokensWithReasoning: number; reasoningEffort: string; timeoutMs: number },
   input: ModelModuleInput,
 ) {
   const definition = beatJudgeModuleDefinition(judge);
   const result = await createModuleModelRuntime({
     definitions: [definition],
-    resolveRoute: resolveGameModuleRoute,
+    resolveRoute: d => resolveBeatJudgeRoute(d, judge.model),
     isEnabled: isGameModuleEnabled,
     backendReasoningEffort: () => judge.reasoningEffort as BackendReasoningEffort,
     generate: options => aiService.generate(options),
