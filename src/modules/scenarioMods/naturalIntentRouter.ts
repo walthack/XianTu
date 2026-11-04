@@ -638,7 +638,7 @@ type BeatJudgeGenerate = (input: {
 
 /** 小请求的判定结果：settled＝可结算；none＝模型说不是／不确定／被否决（照常走大请求结果）；failed＝超时／坏 JSON／报错（停下）。 */
 type BeatVerdict =
-  | { kind: 'settled'; selection: ScenarioEventActionSelection; certainty: string; evidenceLength: number }
+  | { kind: 'settled'; selection: ScenarioEventActionSelection | WuyuanOpenWorldSelection; certainty: string; evidenceLength: number }
   | { kind: 'none'; reason: string }
   | { kind: 'failed'; reason: string };
 
@@ -663,7 +663,7 @@ export function buildBeatJudgePrompt(playerText: string, plan: BeatKeyPlan, evid
     playerText,
     ...(plan.place ? { place: plan.place } : {}),
     ...(plan.people.length ? { people: plan.people } : {}),
-    actions: plan.actions.map(item => ({ id: item.selection.actionId, label: item.label, ...(item.rejectIf.length ? { rejectIf: item.rejectIf } : {}) })),
+    actions: plan.actions.map(item => ({ id: item.id, label: item.label, ...(item.rejectIf.length ? { rejectIf: item.rejectIf } : {}) })),
   });
   return { systemPrompt, userPrompt };
 }
@@ -708,7 +708,7 @@ async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fi
   const finish = (verdict: BeatVerdict): BeatVerdict => {
     logEvent({ code: 'LCQ-SAV-062', echo: false, detail: {
       beatId: plan.beatId, key: plan.key, outcome: verdict.kind === 'settled' ? 'settled' : verdict.reason,
-      actionId: verdict.kind === 'settled' ? verdict.selection.actionId : null, actions: plan.actions.length,
+      actionId: verdict.kind === 'settled' ? ('identityId' in verdict.selection ? verdict.selection.identityId : verdict.selection.actionId) : null, actions: plan.actions.length,
       inputTokens: usage.inputTokens ?? null, outputTokens: usage.outputTokens ?? null, elapsedMs: Date.now() - started,
     } });
     return verdict;
@@ -727,7 +727,7 @@ async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fi
     const parsed = parseBeatJudgeJson(raw);
     if (!parsed) return finish({ kind: 'failed', reason: 'malformed' });
     if (!parsed.id || parsed.id === 'none') return finish({ kind: 'none', reason: 'judged_none' });
-    const action = plan.actions.find(item => item.selection.actionId === parsed.id);
+    const action = plan.actions.find(item => item.id === parsed.id);
     if (!action) return finish({ kind: 'none', reason: 'unknown_action' });
     // 否定只能否决；rejectIf 回来后再判一次（发前已在 beatKeyTurn 判过）。
     if (parsed.neg) return finish({ kind: 'none', reason: 'negated' });
@@ -737,8 +737,11 @@ async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fi
     if (!ev || ev.length > judge.evidenceMaxChars || !evidenceBelongsToPlayer(playerText, ev)) return finish({ kind: 'none', reason: 'bad_evidence' });
     if (!evidenceClauseIsAffirmative(playerText, ev)) return finish({ kind: 'none', reason: 'non_affirmative_evidence' });
     if (!questActionGate(input.saveData, action.selection).ok) return finish({ kind: 'none', reason: 'gate' });
-    const fresh = getCurrentStoryEventActions(input.saveData).find(item =>
-      item.eventId === action.selection.eventId && item.actionId === action.selection.actionId && item.contractHash === action.selection.contractHash);
+    const settle = action.settle;
+    const fresh = settle
+      ? getWuyuanOpenWorldSelections(input.saveData).find(item => item.kind === settle.kind && item.identityId === settle.identityId && item.receiptId === settle.receiptId)
+      : getCurrentStoryEventActions(input.saveData).find(item =>
+        item.eventId === action.selection.eventId && item.actionId === action.selection.actionId && item.contractHash === action.selection.contractHash);
     if (!fresh) return finish({ kind: 'none', reason: 'stale_or_ambiguous_candidate' });
     return finish({ kind: 'settled', selection: fresh, certainty: parsed.c, evidenceLength: compact(ev).length });
   } catch {

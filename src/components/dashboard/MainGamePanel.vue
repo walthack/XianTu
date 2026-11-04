@@ -2500,12 +2500,16 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   if (!isFollowUpExecution && scenarioSaveAtSend) {
     const typedBeat = !exactSelectedEventAction && matchedEventAction ? resolveBeatText(scenarioSaveAtSend, userMessage) : undefined;
     const otherEngine = Boolean(resolvedGambleRefusalAction || resolvedOpportunityAction || resolvedOpenWorldAction || routedFreeActionTickets.length || contractedJudgementResolution || followUpFreeAction || selfUse);
+    // 拍子判定小请求选中五原点心铺的地方应对（s02_04 只能经它落账）：仍记 via=intent。
+    const beatIntentOpenWorld = Boolean(routedBeatIntent && resolvedOpenWorldAction && routedIntentAction === resolvedOpenWorldAction);
     const via: BeatVia = exactSelectedEventAction ? 'button'
       : matchedEventAction ? (typedBeat?.via ?? (routedBeatIntent && routedIntentAction === matchedEventAction ? 'intent' : routedIntentAction ? 'other' : 'alias'))
+      : beatIntentOpenWorld ? 'intent'
       : otherEngine ? 'other'
       : userMessage && beatTextNotThere(scenarioSaveAtSend, userMessage) ? 'notThere'
       : userMessage && beatActionTable(scenarioSaveAtSend).actions.length ? 'miss' : 'none';
-    logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId, ...(via === 'intent' ? { intent: routedBeatIntent } : {}) } : undefined);
+    logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId, ...(via === 'intent' ? { intent: routedBeatIntent } : {}) }
+      : beatIntentOpenWorld && resolvedOpenWorldAction ? { actionId: resolvedOpenWorldAction.identityId, intent: routedBeatIntent } : undefined);
     const missNotice = via === 'miss' || via === 'notThere' ? beatMissNotice(scenarioSaveAtSend) : undefined;
     if (missNotice) toast.info(missNotice);
   }

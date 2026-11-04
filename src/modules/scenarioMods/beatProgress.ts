@@ -29,16 +29,20 @@ import { entityName, entityNamePattern } from './namedEntities';
 import { isKeyBeatCardAction } from './keyBeatCards';
 import { detectBranchDecision } from './branchDecision';
 import { scenarioPlayerId } from './playerIdentity';
+import { getWuyuanOpenWorldSelections, type WuyuanOpenWorldSelection } from './wuyuanOpenWorldSlice';
 import { locationName, nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
 import {
   getCurrentStoryEventActions,
   getCurrentStoryExplorationActions,
   getScenarioFocusEvent,
   getStageDepartureOffer,
+  wuyuanS0204Guidance,
   resolveStoryEventActionFromPlayerText,
   type ScenarioEventActionSelection,
   type ScenarioStageDepartureOffer,
 } from './runtime';
+
+const WUYUAN_S02_04_EVENT = 'lcq.event.s02_04';
 
 type BeatConfig = {
   deadlineTurns: Record<string, number>;
@@ -317,7 +321,11 @@ export type IntentSettleConfig = {
 export const intentSettleConfig = (): IntentSettleConfig | undefined =>
   (questConfig() as unknown as { intentSettle?: IntentSettleConfig }).intentSettle;
 
-export interface BeatJudgeAction { selection: ScenarioEventActionSelection; label: string; rejectIf: string[] }
+/**
+ * id＝发给小请求的动作 id。settle＝真正落账的选择：五原点心铺（s02_04）这拍的合同动作要等开放世界里「拖延观察／抢出口」落了回执才收（runtime
+ * wuyuanS0204MapContractMet），所以那时候候选换成这两个地方应对，结算走开放世界、由它连带完成 s02_04；selection 仍是本拍合同动作，供闸门与 rejectIf 用。
+ */
+export interface BeatJudgeAction { id: string; selection: ScenarioEventActionSelection; label: string; rejectIf: string[]; settle?: WuyuanOpenWorldSelection }
 export interface BeatKeyPlan {
   beatId: string;
   /** scene＝条件 1–3 全满足；lexical＝条件 1–2 满足、闸门未过但原话含本拍人名／地名／短语。 */
@@ -378,7 +386,14 @@ export function beatKeyTurn(save: SaveData | null | undefined, text: string): Be
     if (kind && excluded.has(kind)) continue;
     const rejectIf = beatActionRejectIf(save, selection);
     if (rejectIf.map(judgeKey).filter(Boolean).some(phrase => normalized.includes(phrase))) continue;
-    actions.push({ selection, label: String(authored.label || selection.label), rejectIf });
+    if (selection.eventId === WUYUAN_S02_04_EVENT && wuyuanS0204Guidance(save)) {
+      // 合同动作此刻会被 runtime 以 open_world_prerequisites 拒收：换成店里的两个地方应对（人不在点心铺时没有，就不发小请求）。
+      for (const settle of getWuyuanOpenWorldSelections(save).filter(item => item.kind === 'problem_action')) {
+        actions.push({ id: settle.identityId, selection, label: settle.label, rejectIf, settle });
+      }
+      continue;
+    }
+    actions.push({ id: selection.actionId, selection, label: String(authored.label || selection.label), rejectIf });
   }
   const candidates = actions.slice(0, Math.max(1, config.beatJudge.maxActions));
   if (!candidates.length) return undefined;

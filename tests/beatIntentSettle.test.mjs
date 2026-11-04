@@ -205,3 +205,42 @@ test('试玩范围内：小请求与 intent 并行，焦点拍动作不进大请
   assert.equal(out.kind, 'matched');
   assert.equal(out.selection.actionId, 'advance_declared_objective');
 }));
+
+// REPORT-8091-a4a451cf P0：s02_04 小请求判 high 却不落账。根因：这拍的合同动作要等五原开放世界「拖延观察／抢出口」先落回执（runtime open_world_prerequisites），
+// 小请求原先只给合同动作 advance_declared_objective → 结算被拒、attemptCount 不动。现在候选换成店里两个地方应对，按开放世界结算并连带完成 s02_04。
+test('端到端 s02_04：小请求判 high → 地方应对结算 → 本拍完成（attemptCount 1、completedEventIds 含 s02_04）', () => withQuest(true, async () => {
+  const { freshPrologueCheckpoint } = await import('../scripts/generate-prologue-checkpoint.mjs');
+  const W = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+  const { save } = await quiet(() => freshPrologueCheckpoint());
+  for (const p of cp.CONTENT_PACKS.playtests) if (p.openingTextId) delete save.系统.扩展[p.extensionKey];
+  assert.equal(R.getScenarioFocusEvent(rt(save)).id, 'lcq.event.s02_04');
+  const text = '我在点心铺里要了一笼包子，边慢慢吃边留意门外的动静';
+  // 旧行为的根因：合同动作此刻被拒收。
+  const contract = R.getCurrentStoryEventActions(save).find(a => a.eventId === 'lcq.event.s02_04');
+  assert.equal(quiet(() => R.recordStoryEventStructuredAction(structuredClone(save), contract)).reason, 'open_world_prerequisites');
+  const plan = BP.beatKeyTurn(save, text);
+  assert.deepEqual(plan.actions.map(a => a.id), ['lcq.action.wuyuan.delay_and_observe', 'lcq.action.wuyuan.break_for_exit']);
+  const { result, calls } = await route(save, text, { id: 'lcq.action.wuyuan.delay_and_observe', c: 'high', ev: '留意门外的动静', neg: false });
+  assert.equal(calls.beat, 1);
+  assert.equal(result.kind, 'matched');
+  assert.equal(result.reason, 'beat_intent');
+  assert.equal(result.selection.source, 'open_world_engine');
+  assert.ok(NI.verifyFreshSelection(save, { actionId: result.selection.identityId, source: 'open_world_engine', contractHash: result.selection.receiptId }));
+  const settled = quiet(() => W.settleWuyuanOpenWorldSelection(save, result.selection));
+  assert.equal(settled.settled, true);
+  assert.equal(settled.canonEventCompleted, true);
+  assert.equal(rt(save).eventActionStates['lcq.event.s02_04'].attemptCount, 1);
+  // 回合收尾推进运行时：本拍落定、焦点移到 s02_05（同真机点「用话头拖住他们」）。
+  save.系统.历史.叙事.push({ type: 'gm', content: '门外脚步声近了。' });
+  const after = quiet(() => R.advanceScenarioRuntime(save).saveData);
+  assert.ok(rt(after).completedEventIds.includes('lcq.event.s02_04'));
+  assert.equal(R.getScenarioFocusEvent(rt(after)).id, 'lcq.event.s02_05');
+}));
+
+test('s02_04 人还不在点心铺（只剩前往）：不发小请求', () => withQuest(true, async () => {
+  const { freshPrologueCheckpoint } = await import('../scripts/generate-prologue-checkpoint.mjs');
+  const { save } = await quiet(() => freshPrologueCheckpoint());
+  for (const p of cp.CONTENT_PACKS.playtests) if (p.openingTextId) delete save.系统.扩展[p.extensionKey];
+  rt(save).openWorldSlice.currentZoneId = 'lcq.zone.wuyuan.market';
+  assert.equal(BP.beatKeyTurn(save, '我在点心铺里要了一笼包子，边慢慢吃边留意门外的动静'), undefined);
+}));
