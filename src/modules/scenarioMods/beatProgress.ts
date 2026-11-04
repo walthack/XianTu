@@ -28,6 +28,7 @@ import { currentLocation } from './travel/travelLedger';
 import { entityName, entityNamePattern } from './namedEntities';
 import { isKeyBeatCardAction } from './keyBeatCards';
 import { detectBranchDecision } from './branchDecision';
+import { scenarioPlayerId } from './playerIdentity';
 import { locationName, nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
 import {
   getCurrentStoryEventActions,
@@ -333,6 +334,14 @@ const nameHit = (id: string, text: string): boolean => {
   try { return Boolean(pattern) && new RegExp(pattern, 'u').test(text); } catch { return false; }
 };
 
+/** 本拍动作的否定短语：作者 intentMatch.rejectIf＋quests.json aliases.rejectIf（每次现读存档，小请求回来后再判一次用）。 */
+export function beatActionRejectIf(save: SaveData | null | undefined, selection: Pick<ScenarioEventActionSelection, 'eventId' | 'actionId'>): string[] {
+  const event = (runtimeOf(save)?.events || []).find((item: any) => item?.id === selection.eventId);
+  const authored = event?.playerCompletionContract?.actions?.find((item: any) => item?.id === selection.actionId);
+  return [...(authored?.intentMatch?.rejectIf || []), ...(questBeatSpec(selection.eventId)?.actions?.[selection.actionId]?.aliases?.rejectIf || [])]
+    .map(String).filter(Boolean);
+}
+
 /** 本拍动作的排除类别（D3）：choice 关键选择卡／分支锁，fatal 致命选项，combat 战斗拍。 */
 function beatActionKind(event: any, selection: ScenarioEventActionSelection, branch: boolean): string | undefined {
   if (branch || isKeyBeatCardAction(selection)) return 'choice';
@@ -367,8 +376,7 @@ export function beatKeyTurn(save: SaveData | null | undefined, text: string): Be
     if (!authored) continue;
     const kind = beatActionKind(event, selection, branch);
     if (kind && excluded.has(kind)) continue;
-    const rejectIf = [...(authored.intentMatch?.rejectIf || []), ...(spec?.actions?.[selection.actionId]?.aliases?.rejectIf || [])]
-      .map(String).filter(Boolean);
+    const rejectIf = beatActionRejectIf(save, selection);
     if (rejectIf.map(judgeKey).filter(Boolean).some(phrase => normalized.includes(phrase))) continue;
     actions.push({ selection, label: String(authored.label || selection.label), rejectIf });
   }
@@ -396,9 +404,11 @@ export function beatKeyTurn(save: SaveData | null | undefined, text: string): Be
   const people: string[] = [];
   if (judge.sendPeople) {
     const active = new Set<string>(runtime?.activeEventIds || []);
+    const player = scenarioPlayerId(save);
     for (const item of runtime?.events || []) {
       if (!active.has(item?.id)) continue;
       for (const id of item.relatedCharacterIds || []) {
+        if (id === player) continue;
         const name = entityName('character', id);
         if (name && name !== id && !people.includes(name)) people.push(name);
       }

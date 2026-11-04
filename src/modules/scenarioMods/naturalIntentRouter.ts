@@ -22,7 +22,7 @@ import {
   type WuyuanOpenWorldSelection,
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
-import { beatKeyTurn, intentSettleConfig, resolveBeatText, type BeatKeyPlan } from './beatProgress';
+import { beatActionRejectIf, beatKeyTurn, intentSettleConfig, resolveBeatText, type BeatKeyPlan } from './beatProgress';
 import { questActionGate, questGuideEnabled } from './questLog';
 import { logEvent } from '../diagnostics/log';
 import { freeActionConfig } from './freeAction/config';
@@ -477,7 +477,11 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   }
 
   if (!isScopedNaturalIntentSave(input.saveData)) {
-    return { kind: 'free', skipKeywordPreflight: false, usedModel: false };
+    // 设计稿 2026-11-04 D9：不在试玩范围的存档仍不发 intent；任务模式开、关键拍、按字没对上时只发拍子判定小请求。
+    const plan = input.generateBeat ? beatKeyTurn(input.saveData, input.playerText) : undefined;
+    if (!plan) return { kind: 'free', skipKeywordPreflight: false, usedModel: false };
+    const verdict = await resolveBeatJudge(input, plan, intentSaveFingerprint(input.saveData));
+    return mergeBeatVerdict(input, { kind: 'free', skipKeywordPreflight: false, usedModel: true }, verdict, listNaturalIntentCandidates(input.saveData));
   }
   const optional = resolveOptionalLineAlias(input.saveData, input.playerText);
   if (optional) return { kind: 'alias', selection: optional, skipKeywordPreflight: true, usedModel: false };
@@ -720,7 +724,7 @@ async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fi
     if (!action) return finish({ kind: 'none', reason: 'unknown_action' });
     // 否定只能否决；rejectIf 回来后再判一次（发前已在 beatKeyTurn 判过）。
     if (parsed.neg) return finish({ kind: 'none', reason: 'negated' });
-    if (rejectHit(playerText, action.rejectIf)) return finish({ kind: 'none', reason: 'rejected_intent' });
+    if (rejectHit(playerText, [...action.rejectIf, ...beatActionRejectIf(input.saveData, action.selection)])) return finish({ kind: 'none', reason: 'rejected_intent' });
     if (parsed.c !== config.minCertainty) return finish({ kind: 'none', reason: 'low_certainty' });
     const ev = String(parsed.ev || '');
     if (!ev || ev.length > judge.evidenceMaxChars || !evidenceBelongsToPlayer(playerText, ev)) return finish({ kind: 'none', reason: 'bad_evidence' });
