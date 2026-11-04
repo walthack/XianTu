@@ -1,0 +1,57 @@
+// REPORT-8091-68fe9d20 P1-4 回归：五原赌局分支锁。
+// 短语补丁（8e51332b）已撤；此处只钉住五原赌局分支锁仍锁输入、出固定选项。
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { loadTs } from './loadTs.mjs';
+globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
+globalThis.location = { search: '', hostname: 'localhost' };
+const quiet = async fn => { const k = ['log', 'info', 'warn', 'error'], o = k.map(x => console[x]); k.forEach(x => { console[x] = () => {}; }); try { return await fn(); } finally { k.forEach((x, i) => { console[x] = o[i]; }); } };
+const R = await loadTs('../src/modules/scenarioMods/runtime.ts');
+const W = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
+const BP = await loadTs('../src/modules/scenarioMods/beatProgress.ts');
+const BD = await loadTs('../src/modules/scenarioMods/branchDecision.ts');
+const BG = await loadTs('../src/modules/scenarioMods/baihuGambleRefusal.ts');
+const Q = await loadTs('../src/modules/scenarioMods/questLog.ts');
+const cp = await loadTs('../src/modules/contentPacks/index.ts');
+const { GAME_NUMBERS } = await loadTs('../src/modules/sceneModule/numbers.ts');
+const { freshPrologueCheckpoint } = await import('../scripts/generate-prologue-checkpoint.mjs');
+const QC = GAME_NUMBERS.story.quest;
+const rt = s => s.世界.状态.剧本模组;
+const focus = s => R.getScenarioFocusEvent(rt(s))?.id;
+
+// 正式档（去掉 Demo 标记）走到 untilEvent 为焦点；分支锁一律选接赌／订约。
+async function questSaveAt(untilEvent) {
+  let { save } = await quiet(() => freshPrologueCheckpoint());
+  for (const p of cp.CONTENT_PACKS.playtests) if (p.openingTextId) delete save.系统.扩展[p.extensionKey];
+  await quiet(() => {
+    W.settleWuyuanOpenWorldSelection(save, W.getWuyuanOpenWorldSelections(save).find(a => a.kind === 'problem_action'));
+    save = R.advanceScenarioRuntime(save).saveData;
+    for (let n = 0; n < 20 && focus(save) !== untilEvent; n++) {
+      const ev = R.getScenarioFocusEvent(rt(save));
+      const ids = new Set(ev.playerCompletionContract.actions.map(a => a.id));
+      const a = R.getCurrentStoryEventActions(save).find(x => ids.has(x.actionId) && !/refuse/.test(x.actionId));
+      R.recordStoryEventStructuredAction(save, a);
+      save = R.advanceScenarioRuntime(save).saveData;
+    }
+  });
+  assert.equal(focus(save), untilEvent);
+  return save;
+}
+const withQuest = async fn => { const prev = QC.enabled; QC.enabled = true; try { return await fn(); } finally { QC.enabled = prev; } };
+
+test('五原赌局分支锁仍在：凝羽入局答复那步出「接赌／不赌」固定选项、锁输入', () => withQuest(async () => {
+  let save = await questSaveAt('lcq.event.ningyu_enters_gamble');
+  await quiet(() => {
+    const see = R.getCurrentStoryEventActions(save).find(a => a.actionId === 'see_ningyu_sent_into_gamble');
+    R.recordStoryEventStructuredAction(save, see);
+    save = R.advanceScenarioRuntime(save).saveData;
+  });
+  const opts = [...R.getCurrentStoryEventActions(save).filter(a => Q.questActionGate(save, a).ok), ...BG.getBaihuGambleRefusalSelections(save)];
+  const decision = BD.detectBranchDecision(opts);
+  assert.deepEqual(decision?.labels, ['接赌', '不赌']);
+  assert.equal(BD.branchDecisionLocksInput(decision), true);
+}));
+
+test('quests.json 自检无问题（短语条数 ≤8、目标字数）', () => {
+  assert.deepEqual(Q.validateQuestData(), []);
+});
