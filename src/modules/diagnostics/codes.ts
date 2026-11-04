@@ -160,6 +160,7 @@ export const ERROR_CODES = {
   'LCQ-NET-018': spec('warn', 'aiService', '审核拦截后以降级上下文重发'),
   'LCQ-NET-019': spec('warn', 'aiService', '200 但正文为空（疑似输出阶段审核）'),
   'LCQ-NET-020': spec('warn', 'consistencyBackground', '双模型后端一致性结果已丢弃或降级（不提示玩家）'),
+  'LCQ-NET-021': spec('warn', 'beatProgress', '任务模式拍子判定小请求（beat_judge）单次超时，已中止（按 beatJudge.timeoutRetries 重发或停下保留输入）'),
 
   'LCQ-PCK-001': spec('error', 'scenarioMods', '剧情模组库内容无效（mods 不是数组），按空库处理'),
   'LCQ-PCK-002': spec('warn', 'scenarioMods', '剧情模组文件不是有效 JSON'),

@@ -27,6 +27,8 @@ interface TurnDiagnostic {
   turnId: string; startedAt: number; foregroundReadyAt: number | null;
   backgroundEndedAt: number | null; backgroundPending: number; inFlightRequests: number; sealed: boolean;
 }
+/** 拍子判定小请求自己的计时器超时（naturalIntentRouter）：记专用码 LCQ-NET-021。 */
+export const BEAT_JUDGE_TIMEOUT_SOURCE = 'beat_judge_timeout';
 const LIMIT = 500;
 const requests: RequestLifecycleDiagnostic[] = [];
 function info(...args: unknown[]): void { try { console.info(...args); } catch { /* diagnostics must not fail a request */ } }
@@ -51,7 +53,9 @@ function noteRequestOutcome(entry: RequestLifecycleDiagnostic, error: unknown): 
   const ctx = { turnId: entry.turnId, requestId: entry.requestId };
   // 后台任务（记忆 / 审计 / 向量）失败不阻塞主流程，降一级记 warn。
   const level = entry.background ? 'warn' as const : undefined;
-  if (entry.status === 'timeout') {
+  if (entry.status === 'timeout' && entry.cancelSource === BEAT_JUDGE_TIMEOUT_SOURCE) {
+    logEvent({ code: 'LCQ-NET-021', detail, cause: error, ctx });
+  } else if (entry.status === 'timeout') {
     const phase = entry.timeoutPhase as keyof typeof NET_TIMEOUT_CODES;
     logEvent({ code: NET_TIMEOUT_CODES[phase] ?? NET_TIMEOUT_CODES.total, level, detail, cause: error, ctx });
   } else if (entry.status === 'http_error') logEvent({ code: 'LCQ-NET-004', detail, cause: error, ctx });

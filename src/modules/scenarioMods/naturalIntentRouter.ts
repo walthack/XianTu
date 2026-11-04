@@ -1,4 +1,4 @@
-import { inheritDiagnosticCancellation, noteDiagnosticCancellation, noteTicketDiscard } from '@/services/requestLifecycleDiagnostics';
+import { BEAT_JUDGE_TIMEOUT_SOURCE, inheritDiagnosticCancellation, noteDiagnosticCancellation, noteTicketDiscard } from '@/services/requestLifecycleDiagnostics';
 
 import {entityNamePattern} from './namedEntities';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
@@ -717,7 +717,12 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
   const onAbort = () => { inheritDiagnosticCancellation(input.signal, controller.signal); controller.abort(); };
   input.signal?.addEventListener('abort', onAbort, { once: true });
   let timedOut = false;
-  const timer = judge.timeoutMs > 0 ? setTimeout(() => { timedOut = true; controller.abort(); }, judge.timeoutMs) : undefined;
+  const timer = judge.timeoutMs > 0 ? setTimeout(() => {
+    timedOut = true;
+    // 先标原因再中止：诊断记成 timeout（LCQ-NET-021），不记成调用方取消。
+    noteDiagnosticCancellation(controller.signal, BEAT_JUDGE_TIMEOUT_SOURCE, 'total');
+    controller.abort();
+  }, judge.timeoutMs) : undefined;
   const started = Date.now();
   let usage: { inputTokens?: number; outputTokens?: number } = {};
   const finish = (verdict: BeatVerdict): BeatVerdict => {

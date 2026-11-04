@@ -22,6 +22,7 @@ import type { APIUsageType, APIConfig as StoreAPIConfig } from '@/stores/apiMana
 import { buildOpenAICompatibleEndpoint, normalizeOpenAIBaseUrl } from './openAIEndpoint';
 import { contentModerationDetail, EmptyOutputError, isEmptyOutputError, toUserFacingAIError } from './apiErrorMessage';
 import { logError, logEvent } from '@/modules/diagnostics/log';
+import { debugLog } from '@/modules/diagnostics/debugLog';
 import { summarizeError } from '@/modules/diagnostics/errorSummary';
 import { degradedModeForAttempt, degradedRecentEvents, replaceRecentEventsMessage, limitDegradedNpcMemories } from './promptRedaction';
 import { AiHttpError, abortableDelay, aiRetryConfig, planAiRetry, readRetryAfterHeader, type AiRetryPlan } from './aiRetryPolicy';
@@ -218,6 +219,12 @@ function salvageTruncationError(error: unknown): string | null {
 }
 
 /** 只补救未指定调用级预算的主叙事请求；意图分类等小预算调用截断即失败。 */
+/** 请求被中止／取消（signal 已中止、AbortError、axios ERR_CANCELED／CanceledError）：传输层不当失败报 console.error。 */
+export function isRequestCancellation(error: unknown, signal?: AbortSignal): boolean {
+  const e = error as { name?: string; code?: string } | undefined;
+  return Boolean(signal?.aborted) || e?.name === 'AbortError' || e?.name === 'CanceledError' || e?.code === 'ERR_CANCELED' || axios.isCancel(error);
+}
+
 export function shouldRecoverTruncation(options: Pick<GenerateOptions, 'usageType' | 'maxTokens' | 'signal'>, error: unknown): boolean {
   if (!isOutputTruncationError(error)) return false;
   if ((error as OutputTruncationError).recoveryAttempted) return false;
@@ -1961,7 +1968,9 @@ class AIService {
         return content;
       }
     } catch (error) {
-      console.error('[AI服务-OpenAI] 失败:', error);
+      // lcq-allow: 本 catch 一律原样或转型后抛出，真正的失败由请求诊断记 NET-004/005；中止／取消（超时计时器、用户取消、新请求顶掉）不是失败：只进调试日志，照原样抛出；真正的失败仍由请求诊断记 NET-004/005。
+      if (isRequestCancellation(error, signal)) debugLog('ai', '[AI服务-OpenAI] 请求已中止', { name: (error as { name?: string })?.name, code: (error as { code?: string })?.code });
+      else console.error('[AI服务-OpenAI] 失败:', error);
       if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
       if (error instanceof AiHttpError) throw error;
       if (isAiRequestTimeout(error)) throw error;
@@ -2109,7 +2118,9 @@ class AIService {
         return content;
       }
     } catch (error) {
-      console.error('[AI服务-Claude] 失败:', error);
+      // lcq-allow: 本 catch 一律原样或转型后抛出，真正的失败由请求诊断记 NET-004/005；中止／取消（超时计时器、用户取消、新请求顶掉）不是失败：只进调试日志，照原样抛出；真正的失败仍由请求诊断记 NET-004/005。
+      if (isRequestCancellation(error, signal)) debugLog('ai', '[AI服务-Claude] 请求已中止', { name: (error as { name?: string })?.name, code: (error as { code?: string })?.code });
+      else console.error('[AI服务-Claude] 失败:', error);
       if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
       if (error instanceof AiHttpError) throw error;
       if (isAiRequestTimeout(error)) throw error;
@@ -2270,7 +2281,9 @@ class AIService {
         }
       }
     } catch (error) {
-      console.error('[AI服务-Gemini] 失败:', error);
+      // lcq-allow: 本 catch 一律原样或转型后抛出，真正的失败由请求诊断记 NET-004/005；中止／取消（超时计时器、用户取消、新请求顶掉）不是失败：只进调试日志，照原样抛出；真正的失败仍由请求诊断记 NET-004/005。
+      if (isRequestCancellation(error, signal)) debugLog('ai', '[AI服务-Gemini] 请求已中止', { name: (error as { name?: string })?.name, code: (error as { code?: string })?.code });
+      else console.error('[AI服务-Gemini] 失败:', error);
       if (error instanceof QingyuTurnLongRequestBudgetError) throw error;
       if (error instanceof AiHttpError) throw error;
       if (isAiRequestTimeout(error)) throw error;
