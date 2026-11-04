@@ -641,7 +641,8 @@ const questMain = computed(() => {
   // 玩家可见的推进引导：停滞数轮且这一拍有可点的主线动作时出现（非调试信息）。
   const mainAction = anchor ? sidebarStoryActions().find((a: any) => a.eventId === anchor.id) : undefined;
   const anchorView = anchor ? resolveScenarioEventNarrative(anchor, rt.flags || {}, rt.divergences, rt) : null;
-  const stallHint = questStallHint(stallTurns, mainAction?.label, anchorView?.objective);
+  // 任务模式（story.quest 开）：不出「主线 · 行动」按钮提示（玩家看任务日志、直接说做法；空转提示由 questLog 分级放出）。
+  const stallHint = questGuideOn.value ? '' : questStallHint(stallTurns, mainAction?.label, anchorView?.objective);
   return {
     chapter: chapter ? `章节：${storyChapterTitle(rt.modId, anchor?.id, chapter.title || chapter.id)}` : '',
     events: compassReplaced ? [] : events,

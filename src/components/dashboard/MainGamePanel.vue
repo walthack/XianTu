@@ -636,15 +636,16 @@ import {
   type BaihuGambleRefusalSelection,
 } from '@/modules/scenarioMods/baihuGambleRefusal';
 import { isQingyuOpeningPlaytestSave, isNanhuangDemoFinished, nextNanhuangPhase } from '@/modules/scenarioMods/qingyuOpeningPlaytest';
-import { prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, beatTextNotThere, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
+import { intentSettleConfig, prepareBeatDeadlineTurn, applyBeatDeadlines, beatActionTable, beatMissNotice, beatTextNotThere, deadlineResolvedThisTurn, logBeatResolve, noteBeatActionIdleTurn, noteStageDepartureIdleTurn, resolveBeatText, stageDepartureMapTarget, type BeatVia } from '@/modules/scenarioMods/beatProgress';
 import { noteQuestIdleTurn, questActionGate, questArrivedDeparture, questGuideEnabled, takeQuestApproachLead } from '@/modules/scenarioMods/questLog';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import {
   abortInFlightNaturalIntent,
+  abortInFlightBeatJudge,
+  naturalIntentClarify,
   freeActionOwnsText,
   hasUnclearIntentFrame,
   intentSaveFingerprint,
-  NATURAL_INTENT_CLARIFY_DEFAULT,
   resolveNaturalIntent,
   resolveStoryEventActionFromText,
   verifyFreshSelection,
@@ -893,7 +894,7 @@ const persistAIProcessingState = () => {
 const forceResetAIProcessingState = () => {
   console.log('[强制重置] 清除AI处理状态和会话存储');
   // 取消所有正在进行的AI请求（包括重试中的）
-  abortInFlightNaturalIntent();
+  abortInFlightNaturalIntent(); abortInFlightBeatJudge();
   aiService.cancelAllRequests();
   aiResetToken += 1;
   uiStore.resetStreamingState();
@@ -950,7 +951,7 @@ const abandonOwnedGameTurn = () => {
     aiService.abortQingyuTurnRequests(owned);
   }
   if (!active || active === owned) {
-    abortInFlightNaturalIntent();
+    abortInFlightNaturalIntent(); abortInFlightBeatJudge();
     uiStore.resetStreamingState();
     streamingMessageIndex.value = null;
     rawStreamingContent.value = '';
@@ -1708,7 +1709,7 @@ const selectAction = (action: ActionItem) => {
 };
 
 const cancelAction = () => {
-  abortInFlightNaturalIntent();
+  abortInFlightNaturalIntent(); abortInFlightBeatJudge();
   resumeAfterCultivationSelection = false;
   selectedAction.value = null;
   selectedTime.value = 1;
@@ -2171,6 +2172,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   let routedFreeText = false;
   let intentUnsettled = false;
   let intentRoute: { kind: string; usedModel: boolean; skipKeywordPreflight: boolean; reason?: string } | undefined;
+  let routedBeatIntent: { certainty: string; evidenceLength: number } | undefined;
   // 判定确认后的二次执行：票取自判定回执，不再重跑 intent。
   const followUpFreeAction = execution?.resolution?.authorityReceipt?.kind === 'free_action_judgement';
   let freeTextStatusResolution: FreeTextStatusResolution | undefined;
@@ -2202,11 +2204,27 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           });
           return raw;
         },
+        // 任务模式拍子判定小请求（story.quest.intentSettle.beatJudge）：连接继承主流程，推理档与预算读配置；只在关键拍上由路由发出。
+        generateBeat: async ({ systemPrompt, userPrompt, signal, requestId }) => {
+          const { runBeatJudgeModule } = await import('@/services/gameModelModules');
+          const { peekAiRequestDiagnostics } = await import('@/services/aiResponseTermination');
+          const judged = () => peekAiRequestDiagnostics().filter(entry => entry.usageType === 'beat_judge');
+          const before = judged().length;
+          const { raw } = await runBeatJudgeModule(intentSettleConfig()!.beatJudge, {
+            system: systemPrompt, input: userPrompt, generationId: requestId, signal,
+          });
+          const after = judged();
+          const usage = after.length > before ? after[after.length - 1].usage : undefined;
+          const outputTokens = usage?.output;
+          const inputTokens = usage?.total !== undefined && outputTokens !== undefined ? usage.total - outputTokens : undefined;
+          return { raw, inputTokens, outputTokens };
+        },
       });
       if (!uiStore.isAIProcessing || aiResetToken !== intentReset) return;
+      routedBeatIntent = intent.beatIntent;
       if (inputText.value.trim() !== inputSnapshot) {
         noteTicketDiscard('intent', 'input_changed', (intent.selection && 'actionId' in intent.selection ? intent.selection.actionId : undefined));
-        toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+        toast.info(naturalIntentClarify(saveData));
         return;
       }
       const activeNow = characterStore.rootState.当前激活存档;
@@ -2214,13 +2232,13 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         || activeNow.角色ID !== activeSnapshot.角色ID
         || activeNow.存档槽位 !== activeSnapshot.存档槽位) {
         noteTicketDiscard('intent', 'slot_changed', (intent.selection && 'actionId' in intent.selection ? intent.selection.actionId : undefined));
-        toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+        toast.info(naturalIntentClarify(saveData));
         return;
       }
       const latestSave = gameStateStore.toSaveData();
       if (!latestSave || intentSaveFingerprint(latestSave) !== saveFingerprint) {
         noteTicketDiscard('intent', 'save_changed', (intent.selection && 'actionId' in intent.selection ? intent.selection.actionId : undefined));
-        toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+        toast.info(naturalIntentClarify(saveData));
         return;
       }
       skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
@@ -2234,14 +2252,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         intentUnsettled = intent.unsettled === true;
       }
       if (freeTextStatusResolution?.state === 'clarify') {
-        intentHoldMessage.value = freeTextStatusResolution.reason || NATURAL_INTENT_CLARIFY_DEFAULT;
+        intentHoldMessage.value = freeTextStatusResolution.reason || naturalIntentClarify(saveData);
         toast.info(intentHoldMessage.value);
         return;
       }
       if (intent.notice) toast.info(intent.notice);
       if (intent.kind === 'unclear' || intent.kind === 'failed') {
-        if (intent.hold) intentHoldMessage.value = intent.clarification || NATURAL_INTENT_CLARIFY_DEFAULT;
-        toast.info(intent.clarification || NATURAL_INTENT_CLARIFY_DEFAULT);
+        if (intent.hold) intentHoldMessage.value = intent.clarification || naturalIntentClarify(saveData);
+        toast.info(intent.clarification || naturalIntentClarify(saveData));
         return;
       }
       if (intent.selection) {
@@ -2257,7 +2275,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
           : intent.selection;
         if (intent.kind === 'matched' && !fresh) {
           noteTicketDiscard('intent', 'fresh_selection_failed', 'actionId' in intent.selection ? intent.selection.actionId : undefined);
-          toast.info(NATURAL_INTENT_CLARIFY_DEFAULT);
+          toast.info(naturalIntentClarify(saveData));
           return;
         }
         if(fresh && 'lineAffinityDelta' in intent.selection && Number.isFinite(intent.selection.lineAffinityDelta)) (fresh as any).lineAffinityDelta=intent.selection.lineAffinityDelta;
@@ -2484,11 +2502,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     const typedBeat = !exactSelectedEventAction && matchedEventAction ? resolveBeatText(scenarioSaveAtSend, userMessage) : undefined;
     const otherEngine = Boolean(resolvedGambleRefusalAction || resolvedOpportunityAction || resolvedOpenWorldAction || routedFreeActionTickets.length || contractedJudgementResolution || followUpFreeAction || selfUse);
     const via: BeatVia = exactSelectedEventAction ? 'button'
-      : matchedEventAction ? (typedBeat?.via ?? (routedIntentAction ? 'other' : 'alias'))
+      : matchedEventAction ? (typedBeat?.via ?? (routedBeatIntent && routedIntentAction === matchedEventAction ? 'intent' : routedIntentAction ? 'other' : 'alias'))
       : otherEngine ? 'other'
       : userMessage && beatTextNotThere(scenarioSaveAtSend, userMessage) ? 'notThere'
       : userMessage && beatActionTable(scenarioSaveAtSend).actions.length ? 'miss' : 'none';
-    logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId } : undefined);
+    logBeatResolve(scenarioSaveAtSend, via, matchedEventAction ? { eventId: matchedEventAction.eventId, actionId: matchedEventAction.actionId, ...(via === 'intent' ? { intent: routedBeatIntent } : {}) } : undefined);
     const missNotice = via === 'miss' || via === 'notThere' ? beatMissNotice(scenarioSaveAtSend) : undefined;
     if (missNotice) toast.info(missNotice);
   }

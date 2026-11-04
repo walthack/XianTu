@@ -23,7 +23,7 @@ import {
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { beatKeyTurn, intentSettleConfig, resolveBeatText, type BeatKeyPlan } from './beatProgress';
-import { questActionGate } from './questLog';
+import { questActionGate, questGuideEnabled } from './questLog';
 import { logEvent } from '../diagnostics/log';
 import { freeActionConfig } from './freeAction/config';
 import { localTargetlessTickets, ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
@@ -33,6 +33,10 @@ import { notePlayerText, reportedTicketLabels } from './freeAction/playerTextDeb
 export const NATURAL_INTENT_MAX_TOKENS = GAME_MODEL_MODULES.find(m=>m.id==='intent')!.policy.maxTokens;
 export const NATURAL_INTENT_TIMEOUT_MS = 10000;
 export const NATURAL_INTENT_CLARIFY_DEFAULT = '这一步我还没听清你要做什么。请直接说眼前这一动，或点按钮。';
+/** 「没听清」提示：任务模式（story.quest 开）不再叫玩家点按钮，改指任务日志（intentSettle.clarifyNotice）；关时原文。 */
+export function naturalIntentClarify(saveData: SaveData | null | undefined): string {
+  return (questGuideEnabled(saveData) && intentSettleConfig()?.clarifyNotice) || NATURAL_INTENT_CLARIFY_DEFAULT;
+}
 
 export type NaturalIntentKind =
   | 'button'
@@ -313,7 +317,7 @@ export function resolveNaturalIntentFastPath(
   if (!raw) {
     return {
       kind: 'unclear',
-      clarification: NATURAL_INTENT_CLARIFY_DEFAULT,
+      clarification: naturalIntentClarify(saveData),
       skipKeywordPreflight: true,
       usedModel: false,
     };

@@ -148,7 +148,7 @@ export function beatMissNotice(save: SaveData | null | undefined): string | unde
 }
 
 /** 每回合一条 beat.resolve（LCQ-SAV-053）；miss 另记 LCQ-SAV-054 单独计数，作为补 aliases 的依据。不记玩家原文。 */
-export function logBeatResolve(save: SaveData | null | undefined, via: BeatVia, hit?: { eventId?: string; actionId?: string }): ReturnType<typeof logEvent> {
+export function logBeatResolve(save: SaveData | null | undefined, via: BeatVia, hit?: { eventId?: string; actionId?: string; intent?: { certainty: string; evidenceLength: number } }): ReturnType<typeof logEvent> {
   const runtime = runtimeOf(save);
   if (!runtime) return null;
   const detail = {
@@ -163,6 +163,10 @@ export function logBeatResolve(save: SaveData | null | undefined, via: BeatVia, 
   if (questGuideEnabled(save) && hit?.eventId && hit.actionId) {
     const gate = questActionGate(save, { eventId: hit.eventId, actionId: hit.actionId });
     Object.assign(detail, { where: gate.where ?? null, who: gate.who ?? null });
+  }
+  // via=intent（拍子判定小请求结算）：记模型确定度与原话证据长度，不记原话（intentSettle.logEvidenceLength）。
+  if (via === 'intent' && hit?.intent && intentSettleConfig()?.logEvidenceLength) {
+    Object.assign(detail, { certainty: hit.intent.certainty, evidenceLength: hit.intent.evidenceLength });
   }
   return logEvent({ code: via === 'miss' ? 'LCQ-SAV-054' : 'LCQ-SAV-053', echo: false, detail });
 }
