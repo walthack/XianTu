@@ -96,6 +96,7 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.beatProgress.actionIdleNotice', kind: 'string', required: true, section: 'progress' },
   { path: 'story.beatProgress.missNotice', kind: 'string', required: true, section: 'progress' },
   { path: 'story.quest.enabled', kind: 'bool', required: true, section: 'progress' },
+  { path: 'story.quest.enabledDev', kind: 'bool', required: true, section: 'progress' },
   { path: 'story.quest.objectiveMaxChars', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.quest.hintTurns', kind: 'array', required: true, section: 'progress' },
   { path: 'story.quest.approachTurns', kind: 'int', required: true, min: 0, section: 'progress' },

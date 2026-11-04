@@ -1,7 +1,7 @@
 /**
  * 任务日志与地图任务标记（设计稿 2026-11-03「任务引导取代主线按钮」；用户 2026-11-03 定）。
  *
- * 功能开关 story.quest.enabled（mod-kit/numbers-progress.json，默认关）：关时本模块所有入口都是空操作，
+ * 功能开关 story.quest.enabled（mod-kit/numbers-progress.json，正式版默认关；8091 内测版读 enabledDev，默认开）：关时本模块所有入口都是空操作，
  * beatProgress／MainGamePanel／侧栏／地图照旧（主线、探索、启程按钮在场）。开时：
  *   - 撤主线、探索、启程按钮（UI 层），本拍动作表仍是唯一结算入口；
  *   - 日志写「目标＋地点＋人物」，地图放标记；作者数据在 mod-kit/quest-log/quests.json，没写的拍回落到拍自带 objective 并记 LCQ-SAV-057；
@@ -24,6 +24,7 @@ import { currentLocation } from './travel/travelLedger';
 import { canonicalLocationId, LOCATION_PARENTS } from './travel/locationIds';
 import questData from '../../../mod-kit/quest-log/quests.json';
 import locations from '../../../mod-kit/entity-catalog/locations.json';
+import { buildDefaultEnabled } from '@/utils/buildDefaults';
 import {
   getCurrentStoryEventActions,
   getScenarioFocusEvent,
@@ -55,6 +56,7 @@ type QuestData = { beats?: Record<string, QuestBeatSpec>; stages?: Record<string
 type MarkerStyle = { color: string; icon: string; label: string };
 export type QuestConfig = {
   enabled: boolean;
+  enabledDev: boolean;
   objectiveMaxChars: number;
   hintTurns: number[];
   approachTurns: number;
@@ -71,9 +73,9 @@ export type QuestConfig = {
 };
 
 export const questConfig = (): QuestConfig => (GAME_NUMBERS.story as unknown as { quest: QuestConfig }).quest;
-/** 功能开关：开时撤主线／探索／启程按钮，改由任务日志与地图标记引导。Demo（清羽开局试玩）档不受影响。 */
+/** 功能开关（正式版读 enabled、8091 内测版读 enabledDev，buildDefaults.ts）：开时撤主线／探索／启程按钮，改由任务日志与地图标记引导。Demo（清羽开局试玩）档不受影响。 */
 export function questGuideEnabled(save?: SaveData | null): boolean {
-  return questConfig()?.enabled === true && !(save && isQingyuOpeningPlaytestSave(save));
+  return buildDefaultEnabled(questConfig()) && !(save && isQingyuOpeningPlaytestSave(save));
 }
 
 const DATA = questData as unknown as QuestData;
