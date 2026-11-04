@@ -22,7 +22,9 @@ import {
   type WuyuanOpenWorldSelection,
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
-import { resolveBeatText } from './beatProgress';
+import { beatKeyTurn, intentSettleConfig, resolveBeatText, type BeatKeyPlan } from './beatProgress';
+import { questActionGate } from './questLog';
+import { logEvent } from '../diagnostics/log';
 import { freeActionConfig } from './freeAction/config';
 import { localTargetlessTickets, ticketPromptSection, validateFreeActionTickets, type FreeActionTicket } from './freeAction/ticket';
 import { freeActionOwnerOf } from './freeAction/legacyGuard';
@@ -78,6 +80,8 @@ export interface NaturalIntentResult {
   notice?: string;
   /** 正在固定事件链上、识别失败而停下：界面需常驻显示 clarification，直到玩家改输入或重发。 */
   hold?: boolean;
+  /** 任务模式拍子判定小请求结算（via intent）：模型确定度与原话证据长度（不记原话）。 */
+  beatIntent?: { certainty: string; evidenceLength: number };
   skipKeywordPreflight: boolean;
   usedModel: boolean;
 }
@@ -429,6 +433,8 @@ type NaturalIntentInput = {
   generate?: IntentGenerate;
   signal?: AbortSignal;
   resolveFromText?: (saveData: SaveData, playerText: string) => ScenarioEventActionSelection | undefined;
+  /** 任务模式拍子判定小请求（story.quest.intentSettle.beatJudge）；缺省＝不发。 */
+  generateBeat?: BeatJudgeGenerate;
 };
 
 /**
@@ -477,9 +483,25 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   }
 
   const fingerprint = intentSaveFingerprint(input.saveData);
-  const candidates = listNaturalIntentCandidates(input.saveData);
+  const allCandidates = listNaturalIntentCandidates(input.saveData);
+  // 任务模式关键拍（beatKeyTurn，本地判定）：另发拍子判定小请求，与原 intent 请求并行；焦点拍的主线动作只交小请求判，不进大请求候选。
+  const beatPlan = input.generateBeat ? beatKeyTurn(input.saveData, input.playerText) : undefined;
+  const candidates = beatPlan
+    ? allCandidates.filter(item => !(item.source === 'event_engine' && item.eventId === beatPlan.beatId))
+    : allCandidates;
   // An empty action catalog still permits independent catalog-constrained state recognition.
+  if (!beatPlan) return classifyByIntentModel(input, candidates, fingerprint, classifierFailure);
+  const beat = resolveBeatJudge(input, beatPlan, fingerprint);
+  const [big, verdict] = await Promise.all([classifyByIntentModel(input, candidates, fingerprint, classifierFailure), beat]);
+  return mergeBeatVerdict(input, big, verdict, allCandidates);
+}
 
+async function classifyByIntentModel(
+  input: NaturalIntentInput,
+  candidates: NaturalIntentCandidate[],
+  fingerprint: string,
+  classifierFailure: (reason: string, candidates: readonly NaturalIntentCandidate[]) => NaturalIntentResult,
+): Promise<NaturalIntentResult> {
   abortInFlightNaturalIntent();
   const controller = new AbortController();
   inFlight = controller;
@@ -495,7 +517,7 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
 
   try {
     const { systemPrompt, userPrompt } = buildIntentPrompt(String(input.playerText || '').trim(), candidates, input.saveData);
-    const output = await input.generate({
+    const output = await input.generate!({
       systemPrompt,
       userPrompt,
       maxTokens: NATURAL_INTENT_MAX_TOKENS,
@@ -589,4 +611,147 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
     input.signal?.removeEventListener('abort', onAbort);
     if (inFlight === controller) inFlight = null;
   }
+}
+
+// ───────────── 任务模式拍子判定小请求（设计稿 2026-11-04「任务模式拍子按意图结算」方案 A＋第 9 节） ─────────────
+type BeatJudgeGenerate = (input: {
+  systemPrompt: string;
+  userPrompt: string;
+  maxTokens: number;
+  signal?: AbortSignal;
+  requestId: string;
+}) => Promise<string | { raw: string; inputTokens?: number; outputTokens?: number }>;
+
+/** 小请求的判定结果：settled＝可结算；none＝模型说不是／不确定／被否决（照常走大请求结果）；failed＝超时／坏 JSON／报错（停下）。 */
+type BeatVerdict =
+  | { kind: 'settled'; selection: ScenarioEventActionSelection; certainty: string; evidenceLength: number }
+  | { kind: 'none'; reason: string }
+  | { kind: 'failed'; reason: string };
+
+// 小请求自己的在途槽（不与 intent 的 inFlight 互相中止）。
+let beatInFlight: AbortController | null = null;
+let latestBeatRequestId = '';
+
+export function abortInFlightBeatJudge(): void {
+  if (beatInFlight) noteDiagnosticCancellation(beatInFlight.signal, 'beat_judge_cancel');
+  beatInFlight?.abort();
+  beatInFlight = null;
+}
+
+export function buildBeatJudgePrompt(playerText: string, plan: BeatKeyPlan, evidenceMaxChars: number): { systemPrompt: string; userPrompt: string } {
+  const systemPrompt = [
+    '你只判断玩家这句话是不是在做当前这一拍的某个动作。只能从actions里选一个id，或填none。',
+    '问句、假设、转述别人、否定、拒绝，或命中该动作rejectIf的，id填none并把neg设为true。只提到人名或地名不算做了动作。',
+    `ev必须是玩家原话里逐字连续的一段（不超过${evidenceMaxChars}字）。c只填high或low：只有确定是在做这个动作才填high。`,
+    '只输出JSON：{"id":"动作id或none","c":"high或low","ev":"原话短语","neg":false}',
+  ].join('');
+  const userPrompt = JSON.stringify({
+    playerText,
+    ...(plan.place ? { place: plan.place } : {}),
+    ...(plan.people.length ? { people: plan.people } : {}),
+    actions: plan.actions.map(item => ({ id: item.selection.actionId, label: item.label, ...(item.rejectIf.length ? { rejectIf: item.rejectIf } : {}) })),
+  });
+  return { systemPrompt, userPrompt };
+}
+
+export function parseBeatJudgeJson(raw: string): { id?: string; c?: string; ev?: string; neg?: boolean } | null {
+  const text = String(raw || '').replace(/<think>[\s\S]*?<\/think>/gi, '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+  const found = text.match(/\{[\s\S]*\}/);
+  if (!found) return null;
+  try {
+    const parsed = JSON.parse(found[0]) as Record<string, unknown>;
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
+    return {
+      id: typeof parsed.id === 'string' ? parsed.id : undefined,
+      c: typeof parsed.c === 'string' ? parsed.c : undefined,
+      ev: typeof parsed.ev === 'string' ? parsed.ev : undefined,
+      neg: parsed.neg === true,
+    };
+  } catch {
+    return null;
+  }
+}
+
+const rejectHit = (playerText: string, rejectIf: readonly string[]): boolean =>
+  rejectIf.map(compact).filter(Boolean).some(word => compact(playerText).includes(word));
+
+async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fingerprint: string): Promise<BeatVerdict> {
+  const config = intentSettleConfig()!;
+  const judge = config.beatJudge;
+  const playerText = String(input.playerText || '').trim();
+  abortInFlightBeatJudge();
+  const controller = new AbortController();
+  beatInFlight = controller;
+  const requestId = `beat_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  latestBeatRequestId = requestId;
+  const onAbort = () => { inheritDiagnosticCancellation(input.signal, controller.signal); controller.abort(); };
+  input.signal?.addEventListener('abort', onAbort, { once: true });
+  let timedOut = false;
+  const timer = judge.timeoutMs > 0 ? setTimeout(() => { timedOut = true; controller.abort(); }, judge.timeoutMs) : undefined;
+  const started = Date.now();
+  let usage: { inputTokens?: number; outputTokens?: number } = {};
+  const finish = (verdict: BeatVerdict): BeatVerdict => {
+    logEvent({ code: 'LCQ-SAV-062', echo: false, detail: {
+      beatId: plan.beatId, key: plan.key, outcome: verdict.kind === 'settled' ? 'settled' : verdict.reason,
+      actionId: verdict.kind === 'settled' ? verdict.selection.actionId : null, actions: plan.actions.length,
+      inputTokens: usage.inputTokens ?? null, outputTokens: usage.outputTokens ?? null, elapsedMs: Date.now() - started,
+    } });
+    return verdict;
+  };
+  try {
+    const { systemPrompt, userPrompt } = buildBeatJudgePrompt(playerText, plan, judge.evidenceMaxChars);
+    const out = await input.generateBeat!({
+      systemPrompt, userPrompt, signal: controller.signal, requestId,
+      maxTokens: judge.reasoningEffort === 'none' ? judge.maxTokens : judge.maxTokensWithReasoning,
+    });
+    const raw = typeof out === 'string' ? out : out.raw;
+    if (typeof out !== 'string') usage = { inputTokens: out.inputTokens, outputTokens: out.outputTokens };
+    if (timedOut) return finish({ kind: 'failed', reason: 'timeout' });
+    if (controller.signal.aborted || latestBeatRequestId !== requestId) return finish({ kind: 'none', reason: 'stale' });
+    if (intentSaveFingerprint(input.saveData) !== fingerprint) return finish({ kind: 'none', reason: 'state_changed' });
+    const parsed = parseBeatJudgeJson(raw);
+    if (!parsed) return finish({ kind: 'failed', reason: 'malformed' });
+    if (!parsed.id || parsed.id === 'none') return finish({ kind: 'none', reason: 'judged_none' });
+    const action = plan.actions.find(item => item.selection.actionId === parsed.id);
+    if (!action) return finish({ kind: 'none', reason: 'unknown_action' });
+    // 否定只能否决；rejectIf 回来后再判一次（发前已在 beatKeyTurn 判过）。
+    if (parsed.neg) return finish({ kind: 'none', reason: 'negated' });
+    if (rejectHit(playerText, action.rejectIf)) return finish({ kind: 'none', reason: 'rejected_intent' });
+    if (parsed.c !== config.minCertainty) return finish({ kind: 'none', reason: 'low_certainty' });
+    const ev = String(parsed.ev || '');
+    if (!ev || ev.length > judge.evidenceMaxChars || !evidenceBelongsToPlayer(playerText, ev)) return finish({ kind: 'none', reason: 'bad_evidence' });
+    if (!evidenceClauseIsAffirmative(playerText, ev)) return finish({ kind: 'none', reason: 'non_affirmative_evidence' });
+    if (!questActionGate(input.saveData, action.selection).ok) return finish({ kind: 'none', reason: 'gate' });
+    const fresh = getCurrentStoryEventActions(input.saveData).find(item =>
+      item.eventId === action.selection.eventId && item.actionId === action.selection.actionId && item.contractHash === action.selection.contractHash);
+    if (!fresh) return finish({ kind: 'none', reason: 'stale_or_ambiguous_candidate' });
+    return finish({ kind: 'settled', selection: fresh, certainty: parsed.c, evidenceLength: compact(ev).length });
+  } catch {
+    if (timedOut) return finish({ kind: 'failed', reason: 'timeout' });
+    if (input.signal?.aborted || latestBeatRequestId !== requestId) return finish({ kind: 'none', reason: 'aborted' });
+    return finish({ kind: 'failed', reason: 'classifier_error' });
+  } finally {
+    if (timer) clearTimeout(timer);
+    input.signal?.removeEventListener('abort', onAbort);
+    if (beatInFlight === controller) beatInFlight = null;
+  }
+}
+
+/**
+ * 合并：小请求过了＝按本拍动作结算（via intent），同回合的自由行动票丢弃；
+ * 小请求失败（超时／坏 JSON）而大请求也没认出合同动作＝停下保留输入（第 9.4 节第 4 条）；其余照大请求结果。
+ */
+function mergeBeatVerdict(input: NaturalIntentInput, big: NaturalIntentResult, verdict: BeatVerdict, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult {
+  if (verdict.kind === 'settled') {
+    if (big.freeActionTickets?.length) for (const ticket of big.freeActionTickets) noteTicketDiscard('free_action', 'beat_intent_settled', `${ticket.actionClass}.${ticket.variant}`);
+    return {
+      kind: 'matched', selection: verdict.selection, reason: 'beat_intent', skipKeywordPreflight: true, usedModel: true,
+      beatIntent: { certainty: verdict.certainty, evidenceLength: verdict.evidenceLength },
+      ...(big.freeTextStatusResolution ? { freeTextStatusResolution: big.freeTextStatusResolution } : {}),
+    };
+  }
+  if (verdict.kind === 'failed' && big.kind !== 'matched' && big.kind !== 'failed' && !big.hold) {
+    return { ...onClassifierFailure(`beat_judge_${verdict.reason}`, candidates), freeTextStatusResolution: big.freeTextStatusResolution };
+  }
+  return big;
 }

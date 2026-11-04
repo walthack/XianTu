@@ -1047,7 +1047,8 @@ const getFunctionName = (type: APIUsageType): string => {
       progress_audit: '进度审计',
       event_reconcile: '事件对账',
       background_audit: '后台审计',
-      module_narrative: '剧情演出（模块）'
+      module_narrative: '剧情演出（模块）',
+      beat_judge: '拍子判定（任务模式）'
     };
   return names[type] || type;
 };
@@ -1069,7 +1070,8 @@ const getFunctionDesc = (type: APIUsageType): string => {
         progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）',
         event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）',
         background_audit: '只读跨回合一致性审计，结果只进本地日志（在「回合模块模型」中配置）',
-        module_narrative: '模块链路的前台正文（在「回合模块模型」中配置）'
+        module_narrative: '模块链路的前台正文（在「回合模块模型」中配置）',
+        beat_judge: '任务模式关键拍的意图判定小请求（继承主流程连接）'
       };
     return descs[type] || '';
   } else {
@@ -1087,7 +1089,8 @@ const getFunctionDesc = (type: APIUsageType): string => {
         progress_audit: '后台审计跨轮即兴目标：达成/失效/新增，仅更新任务目标（可用快速模型）',
         event_reconcile: '主线卡死自愈：停滞超阈值时核对存档记忆补落事件标记（哨兵触发、稀有调用，可用快速模型）',
         background_audit: '只读跨回合一致性审计，结果只进本地日志（在「回合模块模型」中配置）',
-        module_narrative: '模块链路的前台正文（在「回合模块模型」中配置）'
+        module_narrative: '模块链路的前台正文（在「回合模块模型」中配置）',
+        beat_judge: '任务模式关键拍的意图判定小请求（继承主流程连接）'
       };
     return descs[type] || '';
   }

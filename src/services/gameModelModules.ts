@@ -5,10 +5,10 @@ import { isTavernEnv } from '@/utils/tavern';
 import { aiService } from './aiService';
 import { noteModelRoute } from '@/modules/diagnostics/narrativeSource';
 import {
-  createModuleModelRuntime, GAME_MODEL_MODULES,
+  beatJudgeModuleDefinition, createModuleModelRuntime, GAME_MODEL_MODULES,
   type ModelModuleDefinition, type ModelModuleInput, type ModuleRouteResolution,
 } from './moduleModelRuntime';
-import { DUAL_MODEL_CONFIG, consistencyEnabled } from './dualModelConfig';
+import { DUAL_MODEL_CONFIG, consistencyEnabled, type BackendReasoningEffort } from './dualModelConfig';
 
 const CONSISTENCY_MODULE_ID = DUAL_MODEL_CONFIG.dualModel.backend.moduleId;
 
@@ -55,5 +55,25 @@ export async function runGameModelModule(moduleId: string, input: ModelModuleInp
   }).run(moduleId, input);
   // 叙事来源日志（LCQ-NAR-001）取场面描写的模型名用。
   noteModelRoute(moduleId, result.route);
+  return result;
+}
+
+/**
+ * 任务模式拍子判定小请求（story.quest.intentSettle.beatJudge）：连接继承主流程，开关随主流程；
+ * 推理档固定取配置（不读玩家的后端档位），usageType＝beat_judge 便于单独记 token。
+ */
+export async function runBeatJudgeModule(
+  judge: { maxTokens: number; maxTokensWithReasoning: number; reasoningEffort: string; timeoutMs: number },
+  input: ModelModuleInput,
+) {
+  const definition = beatJudgeModuleDefinition(judge);
+  const result = await createModuleModelRuntime({
+    definitions: [definition],
+    resolveRoute: resolveGameModuleRoute,
+    isEnabled: isGameModuleEnabled,
+    backendReasoningEffort: () => judge.reasoningEffort as BackendReasoningEffort,
+    generate: options => aiService.generate(options),
+  }).run(definition.id, input);
+  noteModelRoute(definition.id, result.route);
   return result;
 }

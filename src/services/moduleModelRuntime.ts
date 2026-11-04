@@ -83,6 +83,22 @@ export const GAME_MODEL_MODULES: readonly ModelModuleDefinition[] = [
   },
 ];
 
+/**
+ * 任务模式拍子判定小请求（设计稿 2026-11-04「任务模式拍子按意图结算」第 9 节）：不进 GAME_MODEL_MODULES（不出现在模块设置里），
+ * 连接与开关继承主流程；数值全读 story.quest.intentSettle.beatJudge。推理关不掉的模型显式发 reasoningEffort（backendReasoning 通道）。
+ */
+export function beatJudgeModuleDefinition(judge: { maxTokens: number; maxTokensWithReasoning: number; reasoningEffort: string; timeoutMs: number }): ModelModuleDefinition {
+  const off = judge.reasoningEffort === 'none';
+  return {
+    id: 'beat_judge', purpose: '任务模式关键拍：判断玩家原话是不是本拍某个动作，返回 id／确定度／原话证据／否定', phase: 'intake', blocking: true,
+    inheritUsageType: 'main', transportUsageType: 'beat_judge', write: 'proposal:actionId', consumers: ['settle'], lifecycle: 'production',
+    onFail: 'hold_on_contract', onLate: 'drop',
+    policy: off
+      ? { maxTokens: judge.maxTokens, reasoningEffort: 'none', timeoutMs: judge.timeoutMs, responseMode: 'text', streaming: false }
+      : { maxTokens: judge.maxTokensWithReasoning, backendReasoning: true, timeoutMs: judge.timeoutMs, responseMode: 'text', streaming: false },
+  };
+}
+
 /** 注册表合同：在注册时就拒绝不完整的模块卡，而不是等运行时才暴露。 */
 export function validateModuleDefinition(definition: ModelModuleDefinition): string[] {
   const errors: string[] = [];
