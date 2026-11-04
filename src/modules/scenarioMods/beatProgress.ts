@@ -311,6 +311,8 @@ export type IntentSettleConfig = {
     maxTokensWithReasoning: number;
     reasoningEffort: string;
     timeoutMs: number;
+    /** 单次超时后再发几次（只对超时；0＝不重发）。 */
+    timeoutRetries: number;
     maxActions: number;
     evidenceMaxChars: number;
     sendPlace: boolean;

@@ -690,7 +690,20 @@ export function parseBeatJudgeJson(raw: string): { id?: string; c?: string; ev?:
 const rejectHit = (playerText: string, rejectIf: readonly string[]): boolean =>
   rejectIf.map(compact).filter(Boolean).some(word => compact(playerText).includes(word));
 
+/**
+ * 拍子判定小请求：单次超时（beatJudge.timeoutMs）后按 beatJudge.timeoutRetries 重发；只有超时才重发（坏 JSON／报错／被否决照旧一次定）。
+ * 每次尝试各记一条 LCQ-SAV-062（detail.attempt 从 1 起）。
+ */
 async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fingerprint: string): Promise<BeatVerdict> {
+  const retries = Math.max(0, Math.floor(Number(intentSettleConfig()!.beatJudge.timeoutRetries) || 0));
+  let verdict = await resolveBeatJudgeOnce(input, plan, fingerprint, 1);
+  for (let attempt = 2; attempt <= retries + 1 && verdict.kind === 'failed' && verdict.reason === 'timeout' && !input.signal?.aborted; attempt++) {
+    verdict = await resolveBeatJudgeOnce(input, plan, fingerprint, attempt);
+  }
+  return verdict;
+}
+
+async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan, fingerprint: string, attempt: number): Promise<BeatVerdict> {
   const config = intentSettleConfig()!;
   const judge = config.beatJudge;
   const playerText = String(input.playerText || '').trim();
@@ -707,7 +720,7 @@ async function resolveBeatJudge(input: NaturalIntentInput, plan: BeatKeyPlan, fi
   let usage: { inputTokens?: number; outputTokens?: number } = {};
   const finish = (verdict: BeatVerdict): BeatVerdict => {
     logEvent({ code: 'LCQ-SAV-062', echo: false, detail: {
-      beatId: plan.beatId, key: plan.key, outcome: verdict.kind === 'settled' ? 'settled' : verdict.reason,
+      beatId: plan.beatId, key: plan.key, attempt, outcome: verdict.kind === 'settled' ? 'settled' : verdict.reason,
       actionId: verdict.kind === 'settled' ? ('identityId' in verdict.selection ? verdict.selection.identityId : verdict.selection.actionId) : null, actions: plan.actions.length,
       inputTokens: usage.inputTokens ?? null, outputTokens: usage.outputTokens ?? null, elapsedMs: Date.now() - started,
     } });

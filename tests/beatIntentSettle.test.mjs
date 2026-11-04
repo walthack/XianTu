@@ -283,3 +283,32 @@ test('s01_05 描述「中立边陲·草原·帅帐」：解析为帅帐、本拍
   assert.deepEqual(R.getCurrentStoryEventActions(s).map(a => a.actionId), ['advance_declared_objective']);
   assert.equal(BP.beatKeyTurn(s, '我在帅帐里把来历说清楚，请对方诊治我的伤')?.key, 'scene');
 }));
+
+// REPORT-8091-68fe9d20 P1-3：小请求单次超时 6 秒、超时再发 1 次；两值都在 story.quest.intentSettle.beatJudge（不写死）。
+test('小请求超时：配置 timeoutMs=6000、timeoutRetries=1；超时后重发一次，第二次成功即结算', () => withQuest(true, async () => {
+  const judge = QC.intentSettle.beatJudge;
+  assert.equal(judge.timeoutMs, 6000);
+  assert.equal(judge.timeoutRetries, 1);
+  const prev = judge.timeoutMs; judge.timeoutMs = 20;
+  const hang = req => new Promise((_, reject) => req.signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }));
+  try {
+    let n = 0;
+    const ok = { raw: JSON.stringify({ id: 'advance_declared_objective', c: 'high', ev: '查看那个受伤军士的伤势', neg: false }) };
+    const { result, calls } = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', req => (++n === 1 ? hang(req) : ok));
+    assert.equal(calls.beat, 2, '超时后重发一次');
+    assert.equal(result.kind, 'matched');
+    assert.equal(result.reason, 'beat_intent');
+    // 两次都超时：只重发 1 次，之后照旧停下保留输入。
+    const twice = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', hang);
+    assert.equal(twice.calls.beat, 2);
+    assert.equal(twice.result.kind, 'failed');
+    assert.equal(twice.result.hold, true);
+    // 坏 JSON 不是超时：不重发。
+    const bad = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', () => ({ raw: 'not json' }));
+    assert.equal(bad.calls.beat, 1);
+    // 配置 0＝不重发。
+    judge.timeoutRetries = 0;
+    const none = await route(saveAt(S01_03), '我蹲下查看那个受伤军士的伤势。', hang);
+    assert.equal(none.calls.beat, 1);
+  } finally { judge.timeoutMs = prev; judge.timeoutRetries = 1; }
+}));

@@ -2428,7 +2428,7 @@
       "missedText": "时机已过",
       "doneMax": 50,
       "intentSettle": {
-        "note": "任务模式拍子按意图结算（设计稿 2026-11-04「任务模式拍子按意图结算」方案 A＋第九节收窄；用户 2026-11-04 批准；代码 naturalIntentRouter.resolveBeatJudge、beatProgress.beatKeyTurn）。只在 story.quest 开时读。关键拍（有焦点拍、动作表不只剩前往、至少一个动作过 where/who 闸门；或原话含本拍人名／地名／短语）上按字链没对上，才发拍子判定小请求，与原 intent 请求并行。enabled：总开关。minCertainty：模型 c 须等于此值才结算（D2 只认 high）。excludeKinds：不走模型判定的拍（choice 关键选择／分支锁，fatal 致命选项，combat 战斗，D3）。logEvidenceLength：LCQ-SAV-053 detail 记 evidence 长度与 certainty（不记原话）。clarifyNotice：任务模式下「没听清」提示（取代『…或点按钮』）。beatJudge：小请求参数——maxTokens 推理关时输出上限；maxTokensWithReasoning 推理关不掉（reasoningEffort≠none）时的上限；reasoningEffort：none＝发关闭参数（仅传输层能关的模型生效），low＝显式发 low。MiniMax-M3.1-Flash 不支持 none、M2.7 思考不可关（aiRetry.reasoning.mainNarrative 注），故默认 low／512。timeoutMs 小请求超时；maxActions 焦点拍候选最多几条；evidenceMaxChars ev 长度上限；sendPlace／sendPeople 是否送地点名／在场人物名；maxPeople 人物名最多几个。",
+        "note": "任务模式拍子按意图结算（设计稿 2026-11-04「任务模式拍子按意图结算」方案 A＋第九节收窄；用户 2026-11-04 批准；代码 naturalIntentRouter.resolveBeatJudge、beatProgress.beatKeyTurn）。只在 story.quest 开时读。关键拍（有焦点拍、动作表不只剩前往、至少一个动作过 where/who 闸门；或原话含本拍人名／地名／短语）上按字链没对上，才发拍子判定小请求，与原 intent 请求并行。enabled：总开关。minCertainty：模型 c 须等于此值才结算（D2 只认 high）。excludeKinds：不走模型判定的拍（choice 关键选择／分支锁，fatal 致命选项，combat 战斗，D3）。logEvidenceLength：LCQ-SAV-053 detail 记 evidence 长度与 certainty（不记原话）。clarifyNotice：任务模式下「没听清」提示（取代『…或点按钮』）。beatJudge：小请求参数——maxTokens 推理关时输出上限；maxTokensWithReasoning 推理关不掉（reasoningEffort≠none）时的上限；reasoningEffort：none＝发关闭参数（仅传输层能关的模型生效），low＝显式发 low。MiniMax-M3.1-Flash 不支持 none、M2.7 思考不可关（aiRetry.reasoning.mainNarrative 注），故默认 low／512。timeoutMs 小请求单次超时；timeoutRetries 单次超时后再发几次（只对超时，0＝不重发；REPORT-8091-68fe9d20 定 6 秒＋重发 1 次）；maxActions 焦点拍候选最多几条；evidenceMaxChars ev 长度上限；sendPlace／sendPeople 是否送地点名／在场人物名；maxPeople 人物名最多几个。",
         "enabled": true,
         "minCertainty": "high",
         "excludeKinds": [
@@ -2443,7 +2443,8 @@
           "maxTokens": 128,
           "maxTokensWithReasoning": 512,
           "reasoningEffort": "low",
-          "timeoutMs": 4000,
+          "timeoutMs": 6000,
+          "timeoutRetries": 1,
           "maxActions": 4,
           "evidenceMaxChars": 24,
           "sendPlace": true,
