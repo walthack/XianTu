@@ -244,3 +244,33 @@ test('s02_04 人还不在点心铺（只剩前往）：不发小请求', () => w
   rt(save).openWorldSlice.currentZoneId = 'lcq.zone.wuyuan.market';
   assert.equal(BP.beatKeyTurn(save, '我在点心铺里要了一笼包子，边慢慢吃边留意门外的动静'), undefined);
 }));
+
+// REPORT-8091-a4a451cf P2：小请求实发 max_tokens 16384（推理模型最低预算覆盖了配置）。现按配置原值发、不翻倍重试；M3.1-Flash 推理档发配置的 low（该模型不支持 none）。
+test('小请求预算：beat_judge 按配置 maxTokensWithReasoning 发、带 reasoning_effort=low、思考耗尽不重试', async () => {
+  const { default: axios } = await import('axios');
+  const { aiService } = await loadTs('../src/services/aiService.ts');
+  const judge = QC.intentSettle.beatJudge;
+  const original = axios.post; const bodies = [];
+  axios.post = async (_url, body) => { bodies.push(body); return { data: { choices: [{ message: { content: '{"id":"none","c":"low","ev":"","neg":false}' }, finish_reason: 'stop' }] } }; };
+  try {
+    const raw = await aiService.generate({
+      user_input: 'fixture', should_stream: false, usageType: 'beat_judge', background: true, requestMaxRetries: 0,
+      apiConfigOverride: { provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: '', model: 'MiniMax-M3.1-Flash' },
+      maxTokens: judge.maxTokensWithReasoning, backendReasoningEffort: judge.reasoningEffort,
+    });
+    assert.match(raw, /"id":"none"/);
+    assert.equal(bodies.length, 1);
+    assert.equal(bodies[0].max_tokens, judge.maxTokensWithReasoning);
+    assert.equal(bodies[0].reasoning_effort, 'low');
+  } finally { axios.post = original; }
+  axios.post = async (_url, body) => { bodies.push(body); return { data: { choices: [{ message: { content: '', reasoning: 'thought' }, finish_reason: 'length' } ] } }; };
+  bodies.length = 0;
+  try {
+    await assert.rejects(aiService.generate({
+      user_input: 'fixture', should_stream: false, usageType: 'beat_judge', background: true, requestMaxRetries: 0,
+      apiConfigOverride: { provider: 'custom', url: 'https://api.minimaxi.com/v1', apiKey: '', model: 'MiniMax-M3.1-Flash' },
+      maxTokens: judge.maxTokensWithReasoning, backendReasoningEffort: judge.reasoningEffort,
+    }));
+    assert.deepEqual(bodies.map(b => b.max_tokens), [judge.maxTokensWithReasoning]);
+  } finally { axios.post = original; }
+});

@@ -1763,7 +1763,13 @@ class AIService {
     apiConfig: DirectAPIConfig = this.config.customAPI!,
     signal?: AbortSignal,
   ): Promise<string> {
-    const cap = reasoningLimits(apiConfig.model, this.getEffectiveRequestedMaxTokens(apiConfig.provider, apiConfig.model, apiConfig.maxTokens ?? 16000, usageType, maxTokensOverride));
+    const requested = this.getEffectiveRequestedMaxTokens(apiConfig.provider, apiConfig.model, apiConfig.maxTokens ?? 16000, usageType, maxTokensOverride);
+    // 拍子判定小请求（story.quest.intentSettle.beatJudge）：预算按配置原值发，不套推理模型的最低预算（16384）也不翻倍重试；
+    // 思考耗尽＝失败，由路由按 hold 停下（REPORT-8091-a4a451cf：配置 512 实发 16384）。
+    if (usageType === 'beat_judge') {
+      return this.callOpenAICompatibleAPIOnce(messages, streaming, onStreamChunk, responseFormat, usageType, requested, apiConfig, signal);
+    }
+    const cap = reasoningLimits(apiConfig.model, requested);
     return retryReasoningOnce(
       cap,
       cap => this.callOpenAICompatibleAPIOnce(messages, streaming, onStreamChunk, responseFormat, usageType, cap, apiConfig, signal),
@@ -1856,6 +1862,12 @@ class AIService {
             url, effort: signal ? qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort : undefined,
           }) || {}, reasoningBudgetParam(url),
             this.turnReasoningParam(url, model, signal));
+          // 拍子判定小请求配置 reasoningEffort=none 时（非流式）：同流式路径，MiniMax-M3 关思考、M2.7 系只分离思考字段（服务端关不掉）；M3.1-Flash 不支持 none，按配置不发 reasoning_effort。
+          if (usageType === 'beat_judge' && /^MiniMax-(?:M3|M2\.7(?:-highspeed)?)$/i.test(model) && /api\.minimax(?:i)?\.(?:com|io)/i.test(url)
+            && signal && qingyuTransportBudgetBySignal.get(signal)?.reasoningEffort === 'none') {
+            if (/^MiniMax-M3$/i.test(model)) requestBody.thinking = { type: 'disabled' };
+            requestBody.reasoning_split = true;
+          }
 
           // 如果指定了 JSON 格式，添加 response_format
           // 🔥 注意：某些模型/API不支持 response_format
