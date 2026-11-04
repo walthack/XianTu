@@ -504,6 +504,32 @@ test('confirming the rigged loss makes refuse-gamble too late', async () => {
   assert.ok(sign);
 });
 
+test('entering the bond beat grants the rigged loss; sign_the_bond needs no confirm first (2026-11-04)', async () => {
+  const { rtm, refusal } = fixtures.tools;
+  let save = at('atBond');
+  assert.equal(refusal.gambleAlreadyLostOrSigned(save), true, '进入契书拍即视为已认清作弊输局');
+  assert.equal(refusal.resolveBaihuGambleRefusalFromText(save, '赌就不必了'), undefined);
+  const actions = rtm.getCurrentStoryEventActions(save);
+  const confirm = actions.find(item => item.actionId === 'confirm_rigged_wager_loss');
+  assert.ok(confirm, 'confirm 仍作为可选反应保留');
+  const sign = actions.find(item => item.actionId === 'sign_the_bond');
+  assert.ok(sign, '签契不再要求先 confirm');
+  save = recordAndReload(rtm, save, sign).save;
+  assert.ok(runtimeOf(save).completedEventIds.includes('lcq.event.gamble_bond_signed'));
+});
+
+test('bond actions carry model-only describe text and no new keywords', async () => {
+  const { rtm } = fixtures.tools;
+  const save = at('atBond');
+  const bond = runtimeOf(save).events.find(item => item.id === 'lcq.event.gamble_bond_signed');
+  const actions = bond.playerCompletionContract.actions;
+  const confirm = actions.find(item => item.id === 'confirm_rigged_wager_loss');
+  const sign = actions.find(item => item.id === 'sign_the_bond');
+  assert.match(confirm.intentMatch.describe, /弹指催快了刻香/);
+  assert.match(sign.intentMatch.describe, /亲手在卖身契上签名/);
+  assert.equal(sign.requiresPreparation, undefined);
+});
+
 test('idempotent replay, JSON reload, stale default clicks, and south-pact fatal ending stay intact', async () => {
   const { rtm, refusal } = fixtures.tools;
   let save = at('atProposed');

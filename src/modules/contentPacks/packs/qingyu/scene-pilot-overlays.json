@@ -4301,7 +4301,10 @@
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
               "kind": "prepare",
-              "grantsPreparation": "rigged_wager_loss_seen"
+              "grantsPreparation": "rigged_wager_loss_seen",
+              "intentMatch": {
+                "describe": "看穿苏妲己弹指催快了刻香，认清这局是被她作弊判输的，不再当作香还没烧完。"
+              }
             },
             {
               "id": "sign_the_bond",
@@ -4313,9 +4316,9 @@
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
-              "requiresPreparation": [
-                "rigged_wager_loss_seen"
-              ]
+              "intentMatch": {
+                "describe": "认下这场被作弊判定的输局，亲手在卖身契上签名，从此成为白湖商馆的奴隶。"
+              }
             }
           ]
         },

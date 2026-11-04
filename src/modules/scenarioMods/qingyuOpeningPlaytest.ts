@@ -69,6 +69,8 @@ function overlayDemoActionIntent(
   action.intentMatch = {
     matchAny: [...new Set([...(action.intentMatch?.matchAny || []), ...extraAny])],
     ...(rejectIf.length ? { rejectIf } : {}),
+    // 模型侧动作描述（intentMatch.describe）只给拍子判定看，不参与词表匹配；叠词时保留。
+    ...(action.intentMatch?.describe ? { describe: action.intentMatch.describe } : {}),
   };
 }
 

@@ -203,6 +203,9 @@ export function gambleAlreadyLostOrSigned(saveData: SaveData | null | undefined)
   }
   const preparations = new Set(eventState(runtime, GAMBLE_BOND_EVENT_ID)?.preparations || []);
   if (preparations.has(LOSS_PREP)) return true;
+  // 用户裁定 2026-11-04：进入契书拍即视为已认清作弊输局（自动获得 rigged_wager_loss_seen），
+  // 签契不再以 confirm_rigged_wager_loss 为前置；confirm 只作可选反应。旧档扣押流程（refusal 记录存在）不受影响。
+  if (focusEventId(runtime) === GAMBLE_BOND_EVENT_ID && !readBaihuGambleRefusal(saveData)) return true;
   const attempts = eventState(runtime, GAMBLE_BOND_EVENT_ID)?.attempts || [];
   return attempts.some(item => item.actionId === 'confirm_rigged_wager_loss' || item.actionId === 'sign_the_bond');
 }
