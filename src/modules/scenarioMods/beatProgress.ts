@@ -410,9 +410,8 @@ export function beatKeyTurn(save: SaveData | null | undefined, text: string): Be
     if (selection.eventId === WUYUAN_S02_04_EVENT && wuyuanS0204Guidance(save)) {
       // 合同动作此刻会被 runtime 以 open_world_prerequisites 拒收：换成店里的两个地方应对（人不在点心铺时没有，就不发小请求）。
       for (const settle of getWuyuanOpenWorldSelections(save).filter(item => item.kind === 'problem_action')) {
-        const describe = (settle as { intentMatch?: { describe?: string } }).intentMatch?.describe;
-        const actionText = (settle as { actionText?: string }).actionText;
-        actions.push({ id: settle.identityId, selection, label: settle.label, rejectIf, settle, ...(config.beatJudge.sendActionText ? { do: clip(firstText(describe, actionText, settle.label), config.beatJudge.doMaxChars) } : {}) });
+        actions.push({ id: settle.identityId, selection, label: settle.label, rejectIf, settle,
+          ...(config.beatJudge.sendActionText ? { do: clip(firstText(settle.intentMatch?.describe, settle.actionText, settle.label), config.beatJudge.doMaxChars) } : {}) });
       }
       continue;
     }

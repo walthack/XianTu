@@ -193,6 +193,17 @@ export type WuyuanOpenWorldSelection = {
   actionText: string;
   settledFacts: string[];
   timeCost?: number;
+  /** 作者写给拍子判定小请求看的动作描述（只发给模型，不参与按字匹配）。 */
+  intentMatch?: { describe: string };
+};
+
+/**
+ * 点心铺两个应对的动作描述（intentMatch.describe，只发给拍子判定模型，不是词表、不参与按字匹配）。
+ * 2026-11-04 剧情策划定、用户批准（设计稿「拍子判定按意思与风险」问二 Q2-3）：不新增动作；后窗、后巷也算强行夺路，结局照旧 captured_injured、不掷骰。
+ */
+export const WUYUAN_PROBLEM_ACTION_DESCRIBE: Readonly<Record<string, string>> = {
+  'lcq.action.wuyuan.delay_and_observe': '不报来历、不动手，先用言语拖住逼近的人，借机看清门窗和他们押人的方向。',
+  'lcq.action.wuyuan.break_for_exit': '被围时不管从门、窗还是后巷，冒险动手强行夺路往外冲，想脱身但仍会被制住。',
 };
 
 type RuntimeWithSlice = {
@@ -380,6 +391,7 @@ export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorl
     return {
       source: 'open_world_engine' as const, kind: 'problem_action' as const, identityId: action.id,
       receiptId: receiptId(state, 'problem_action', action.id), label: action.label, timeCost: 1, actionText: action.actionText,
+      ...(WUYUAN_PROBLEM_ACTION_DESCRIBE[action.id] ? { intentMatch: { describe: WUYUAN_PROBLEM_ACTION_DESCRIBE[action.id] } } : {}),
       settledFacts: [...definition.settledFacts, ...(definition.costs || []).map(cost => `代价：${cost}`)],
     };
   }));

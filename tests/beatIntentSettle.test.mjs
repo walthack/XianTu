@@ -220,6 +220,9 @@ test('端到端 s02_04：小请求判 high → 地方应对结算 → 本拍完�
   assert.equal(quiet(() => R.recordStoryEventStructuredAction(structuredClone(save), contract)).reason, 'open_world_prerequisites');
   const plan = BP.beatKeyTurn(save, text);
   assert.deepEqual(plan.actions.map(a => a.id), ['lcq.action.wuyuan.delay_and_observe', 'lcq.action.wuyuan.break_for_exit']);
+  // 剧情策划 2026-11-04：两个应对带 intentMatch.describe（只发模型）；后窗、后巷也算强行夺路。
+  assert.deepEqual(plan.actions.map(a => a.do), [W.WUYUAN_PROBLEM_ACTION_DESCRIBE['lcq.action.wuyuan.delay_and_observe'], W.WUYUAN_PROBLEM_ACTION_DESCRIBE['lcq.action.wuyuan.break_for_exit']]);
+  assert.match(plan.actions[1].do, /门、窗还是后巷/);
   const { result, calls } = await route(save, text, { id: 'lcq.action.wuyuan.delay_and_observe', c: 'high', ev: '留意门外的动静', neg: false });
   assert.equal(calls.beat, 1);
   assert.equal(result.kind, 'matched');
