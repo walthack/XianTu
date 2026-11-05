@@ -415,6 +415,19 @@
     "kind": "action",
     "stage": "lcq.stage_02",
     "event": "lcq.event.silent_sheyi_village",
+    "action": "travel:lcq.location.sheyi_village",
+    "receipt": {
+      "attempted": true,
+      "completed": false,
+      "eventId": "lcq.event.silent_sheyi_village",
+      "actionId": "travel:lcq.location.sheyi_village",
+      "outcome": "success"
+    }
+  },
+  {
+    "kind": "action",
+    "stage": "lcq.stage_02",
+    "event": "lcq.event.silent_sheyi_village",
     "action": "confirm_sheyi_dark_and_silent",
     "receipt": {
       "attempted": true,
