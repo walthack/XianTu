@@ -421,6 +421,44 @@ export function settleNanhuangStageTransition(
   return cards;
 }
 
+
+/** 最近一次强制路途之后是否有玩家显式移动（玩家路途回执，或 arrive: 改投影离开强制终点）。 */
+function hasExplicitMoveSinceLastForced(ledger: NanhuangTravelLedger): boolean {
+  const receipts = ledger.state?.travelReceipts || [];
+  let lastForced = -1;
+  for (let i = receipts.length - 1; i >= 0; i -= 1) {
+    if (receipts[i].mode === 'forced') { lastForced = i; break; }
+  }
+  if (lastForced < 0) return true;
+  if (receipts.slice(lastForced + 1).some(item => item.mode === 'player')) return true;
+  const forcedTo = receipts[lastForced].toZoneId;
+  if (ledger.state.currentZoneId !== forcedTo) return true;
+  return (ledger.reprojections || []).some(item => String(item.cause || '').startsWith('arrive:') && item.toZoneId !== forcedTo);
+}
+
+/**
+ * 自动转场兜底：南荒关内，最近一次强制路途后若玩家未显式移动，而位置 locationId
+ * 与行旅账当前 zone 的 worldLocationId 不一致，则以账为准重新投影位置。
+ * 须在 refreshSaveEntityReferences 之后调用（叙事写回子地点描述后会按描述改偏 locationId）。
+ */
+export function reconcileNanhuangPositionFromLedger(saveData: SaveData, runtime: LedgerRuntime): void {
+  if (!isNanhuangTravelStage(runtime.modId)) return;
+  const ledger = runtime.travelLedger;
+  if (!ledger?.state?.currentZoneId) return;
+  const zoneId = ledger.state.currentZoneId;
+  const expected = canonicalLocationId(worldLocationIdOf(DEF, zoneId));
+  if (!expected) return;
+  const stored = (saveData as { 角色?: { 位置?: { locationId?: string } } }).角色?.位置?.locationId;
+  // 不可解析位置 fail closed：不纠正，免得把「不在场」拉回账上地点（星月湖 B1）。
+  const actual = canonicalLocationId(stored) || locationFromPosition(
+    (saveData as { 角色?: { 位置?: { 描述?: unknown } } }).角色?.位置?.描述,
+    runtime.canon?.locations,
+  ).canonicalLocationId;
+  if (!actual || actual === expected) return;
+  if (hasExplicitMoveSinceLastForced(ledger)) return;
+  projectPosition(saveData, runtime, zoneId);
+}
+
 export function getTravelCard(saveData: SaveData | null | undefined): TravelCard | undefined {
   return ((saveData as { 世界?: { 状态?: { 剧本模组?: LedgerRuntime } } } | null | undefined)?.世界?.状态?.剧本模组?.travelLedger?.lastCard);
 }

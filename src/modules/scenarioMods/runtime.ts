@@ -70,7 +70,7 @@ import { getNarrativeTurn } from '@/utils/actionGate';
 import { affinityBeatTaken, writableFreeActionState } from './freeAction/state';
 import { REPUTATION_EVENT_GRANT, type ReputationGrant } from './reputationLedger';
 import { lineCriticalFrozen } from './secondaryLines';
-import { currentLocation, locationFromPosition, noteNanhuangArrival, settleNanhuangForcedTravel, syncNanhuangRailTravel, type NanhuangTravelLedger } from './travel/travelLedger';
+import { currentLocation, locationFromPosition, noteNanhuangArrival, reconcileNanhuangPositionFromLedger, settleNanhuangForcedTravel, syncNanhuangRailTravel, type NanhuangTravelLedger } from './travel/travelLedger';
 import { locationWithin, sameCanonicalLocation } from './travel/locationIds';
 import { recordOffscreenDivergence, recordReconcileDivergences, type ScenarioDivergence } from './divergenceLedger';
 import {
@@ -4047,6 +4047,7 @@ export function advanceScenarioRuntime(saveData: SaveData): {
   releaseBaihuGambleRefusalIfEscaped(next);
 
   refreshSaveEntityReferences(next);
+  reconcileNanhuangPositionFromLedger(next, runtime);
   return { saveData: next, transitions, affinityGrants, reputationGrants };
 }
 

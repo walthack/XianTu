@@ -79,7 +79,8 @@ test('①a 冻结文件只改两处并已重新上锁：runtime.ts 不动，AIBS
     assert.equal(createHash('sha256').update(readFileSync(new URL('../' + f, import.meta.url))).digest('hex'), base.files[f], f);
   // 2026-11-01 19:38 用户批准 runtime.ts 只加错误码日志（SAV-043/044），原钉的 dc8f5518… 随之更新。
   // 2026-11-05 用户批准 runtime.ts 只改 1–3 行（商路拍出「前往」按钮，蛇彝村混合修），钉的 cba62f7c… 随之更新。
-  assert.equal(base.files['src/modules/scenarioMods/runtime.ts'], '23afe2e23fdb62efeb9b3d7906b2c4e8e372634e5a1acf1a2c4bec02a176e97e');
+  // 2026-11-05 用户批准 runtime.ts 只改 import + 1 行调用（强制路途后地点回写兜底 reconcileNanhuangPositionFromLedger）。
+  assert.equal(base.files['src/modules/scenarioMods/runtime.ts'], '0a655b2e8434e883d354da6bd942865bec04c44b3871b89efb87697672bd1348');
 });
 
 test('①a 普通叙事回合搜刮：先本地预结算出回执正文（不请求模型），落账按回执入包；清单未配置照旧交模型', () => {

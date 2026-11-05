@@ -6826,7 +6826,7 @@
             "lcq.character.np003",
             "lcq.character.np004"
           ],
-          "objective": "攀爬万古巨藤，到达崖顶",
+          "objective": "攀爬万古巨藤，脱困上行",
           "playerCompletionContract": {
             "kind": "objective_action",
             "settleOn": [
@@ -6835,11 +6835,11 @@
             "actions": [
               {
                 "id": "advance_declared_objective",
-                "label": "攀爬万古巨藤，到达崖顶",
-                "actionText": "我按当前主线目标行动：攀爬万古巨藤，到达崖顶",
+                "label": "攀爬万古巨藤，脱困上行",
+                "actionText": "我按当前主线目标行动：攀爬万古巨藤，脱困上行",
                 "timeCost": 1,
                 "outcomeText": {
-                  "success": "你已亲自执行“攀爬万古巨藤，到达崖顶”；事件完成真值将由本地引擎落账。",
+                  "success": "你已亲自执行“攀爬万古巨藤，脱困上行”；事件完成真值将由本地引擎落账。",
                   "partial": "该动作类型不产生 partial；若需要部分成功，必须改用专门的本地判定合同。",
                   "failure": "该动作类型不产生 failure；若需要失败与重试，必须改用专门的本地判定合同。"
                 },
@@ -6857,7 +6857,7 @@
                     "云苍峰"
                   ]
                 },
-                "sceneLocation": "万古巨藤半空石壁"
+                "sceneLocation": "万古巨藤（半空石壁）"
               }
             ]
           },
@@ -6924,7 +6924,7 @@
                     "阿葭"
                   ]
                 },
-                "sceneLocation": "巨藤崖顶"
+                "sceneLocation": "花苗寨（巨藤崖顶）"
               }
             ]
           },
