@@ -2392,7 +2392,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
   // 拍子判定判中开放世界问题行动（s02_04 点心铺）：与认出的动作一样先走常规风险判定卡，不在本地直接写成功。
   const beatOpenWorldAction = isBeatJudgedOpenWorldAction(routedBeatIntent, routedIntentAction) ? routedIntentAction : undefined;
   if (saveData && beatOpenWorldAction && routedBeatIntent && !contractedJudgementResolution && !execution?.skipPreflight) {
-    const proposal = buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
+    // 作者声明了判定类别（掷骰第一档）就按类别出卡；没声明才退回旧风险词表。
+    const authoredKind = beatOpenWorldAction.judgement?.kind;
+    const proposal = authoredKind
+      ? buildModelRiskJudgementPreflight(authoredKind, judgementAction, saveData, getNarrativeTurn(saveData))
+      : buildLocalJudgementPreflight(judgementAction, saveData, getNarrativeTurn(saveData));
     if (proposal) {
       persistPendingJudgement(saveData, proposal);
       rememberBeatOpenWorldJudgement({ judgementId: proposal.id, selection: beatOpenWorldAction, beatIntent: routedBeatIntent });

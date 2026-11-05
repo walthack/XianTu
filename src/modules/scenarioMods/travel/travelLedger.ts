@@ -194,6 +194,8 @@ export interface TravelCard {
 
 export interface NanhuangTravelLedger {
   deferredDepartureEventIds?: string[];
+  /** 每个被推迟离开的拍首次推迟时的 worldTurn（商路主线拍据此判断玩家是否已在新拍上过了一回合）。 */
+  deferredAtTurn?: Record<string, number>;
   sliceId: string;
   state: OpenWorldSliceRuntime;
   /** 跨关累积的已完成事件（切关后 completedEventIds 从空开始，三态与触发要看全程）。 */
@@ -387,7 +389,7 @@ export function syncNanhuangRailTravel(saveData: SaveData, runtime: LedgerRuntim
   const cards: TravelCard[] = [];
   for (const eventId of runtime.completedEventIds || []) {
     if (ledger.doneEventIds.includes(eventId)) continue;
-    if (deferDeparture?.(eventId)){ledger.deferredDepartureEventIds=[...new Set([...(ledger.deferredDepartureEventIds||[]),eventId])];continue;}
+    if (deferDeparture?.(eventId)){ledger.deferredDepartureEventIds=[...new Set([...(ledger.deferredDepartureEventIds||[]),eventId])];(ledger.deferredAtTurn||={})[eventId]??=Number(runtime.worldTurn)||0;continue;}
     // A different explicit journey can close an optional window: do not teleport back to replay its deferred route.
     if (ledger.deferredDepartureEventIds?.includes(eventId) && forcedRoutesFor(DEF,{afterEventDone:eventId}).every(route=>route.fromZoneId!==ledger.state.currentZoneId)){ledger.doneEventIds.push(eventId);continue;}
     // 65章白夷闲聊可选：留下离城前窗口，实际选择去山谷时才记这段半日。

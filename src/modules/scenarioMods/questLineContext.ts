@@ -6,6 +6,21 @@ import {canonicalLocationId,locationAncestors} from './travel/locationIds';
 import {namedEntity} from './namedEntities';
 import {currentLocation} from './travel/travelLedger';
 import {orderedDoneEventIds} from './playerLedgerRules';
+import {storyRouteLocation} from './eventNarrativeView';
+/** 作者写死的商路/押送主线拍（storyRouteLocation）已开始行动（动作落账或本拍已演）：被推迟的强制路线不再等支线，先把人送到这拍的地点。 */
+export function mainRouteBeatUnderway(save:any):boolean {
+ const r=save?.世界?.状态?.剧本模组;if(!r)return false;
+ const questBeatIds=new Set(QUEST_LINES.flatMap(l=>l.beats.map(b=>b.eventId)));
+ return (r.activeEventIds||[]).some((id:string)=>{
+  if(questBeatIds.has(id)||id.includes('_ins_')||!storyRouteLocation(id)||(r.completedEventIds||[]).includes(id))return false;
+  const st=r.eventActionStates?.[id];
+  if((st&&((st.preparations||[]).length||(st.attempts||[]).length||st.attemptCount>0))||r.sceneLedger?.lastBeat?.eventId===id)return true;
+  // 兜底：上一站的离开被推迟之后玩家又过了一回合（手打行动、叙事已往前写），本地位置不再停在上一站。
+  const l=r.travelLedger,turn=Number(r.worldTurn)||0;
+  const held=(l?.deferredDepartureEventIds||[]).filter((e:string)=>!(l.doneEventIds||[]).includes(e)).map((e:string)=>l.deferredAtTurn?.[e]).filter((t:unknown)=>Number.isFinite(t));
+  return held.length>0&&turn>Math.max(...held);
+ });
+}
 /** Scene cards are code-owned declarations. A prose mention never adds presence.
  * 已完成事件读编年史（跨关，orderedDoneEventIds＝done.* 同一口径），不读切关即重置的 rt.completedEventIds（右栏线入口复用分析 2026-10-27 §3-1／§7-1）。 */
 export function questLineContext(save:any,focusId?:string):LineContext {
@@ -36,6 +51,7 @@ export function expireQuestLineWindows(save:any){
 }
 /** Preserve an authored optional stop until completion or an explicit departure; never require doing it. The stop is declared by the line entry or by the beat's own requirement naming the finished event. */
 export function deferOptionalDeparture(save:any,eventId:string):boolean {
+ if(mainRouteBeatUnderway(save))return false;
  const contains=(c:any):boolean=>!!c&&('eventDone'in c?c.eventDone===eventId:'all'in c?c.all.some(contains):'any'in c?c.any.some(contains):false);
  const events=save.世界.状态.剧本模组.events||[];
  return QUEST_LINES.some(l=>l.beats.some(b=>(contains(l.entry)||(contains(b.requires)&&events.some((e:any)=>e.id===b.eventId)))&&!!questLineOffer(save,b.eventId)));

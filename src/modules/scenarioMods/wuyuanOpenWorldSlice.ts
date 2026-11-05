@@ -1,3 +1,4 @@
+import type { JudgementKind } from '@/utils/judgementEngine';
 import {entityNamePattern,entityRecognitionLabel} from './namedEntities';
 import {entityName} from './namedEntities';
 import {refreshSaveEntityReferences} from './entitySaveRefs';
@@ -195,6 +196,17 @@ export type WuyuanOpenWorldSelection = {
   timeCost?: number;
   /** 作者写给拍子判定小请求看的动作描述（只发给模型，不参与按字匹配）。 */
   intentMatch?: { describe: string };
+  /** 作者声明的判定类别（掷骰第一档）：拍子判中此动作时按这个类别出风险判定卡，不靠旧风险词表。 */
+  judgement?: { kind: JudgementKind };
+};
+
+/**
+ * 点心铺两个应对的作者判定类别（2026-11-05 用户批准「掷骰 P1」）：手打「冒险强行冲出去」判中 break_for_exit 时出 escape 判定卡；
+ * 拖住对方按 social。只声明类别，不加词、不改结局。
+ */
+export const WUYUAN_PROBLEM_ACTION_JUDGEMENT: Readonly<Record<string, { kind: JudgementKind }>> = {
+  'lcq.action.wuyuan.delay_and_observe': { kind: 'social' },
+  'lcq.action.wuyuan.break_for_exit': { kind: 'escape' },
 };
 
 /**
@@ -392,6 +404,7 @@ export function getWuyuanOpenWorldSelections(saveData: SaveData): WuyuanOpenWorl
       source: 'open_world_engine' as const, kind: 'problem_action' as const, identityId: action.id,
       receiptId: receiptId(state, 'problem_action', action.id), label: action.label, timeCost: 1, actionText: action.actionText,
       ...(WUYUAN_PROBLEM_ACTION_DESCRIBE[action.id] ? { intentMatch: { describe: WUYUAN_PROBLEM_ACTION_DESCRIBE[action.id] } } : {}),
+      ...(WUYUAN_PROBLEM_ACTION_JUDGEMENT[action.id] ? { judgement: { ...WUYUAN_PROBLEM_ACTION_JUDGEMENT[action.id] } } : {}),
       settledFacts: [...definition.settledFacts, ...(definition.costs || []).map(cost => `代价：${cost}`)],
     };
   }));

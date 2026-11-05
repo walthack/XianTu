@@ -2307,7 +2307,9 @@ function questTravelSelection(
   const nextAction = contract?.actions.find(action => actionState && eventActionAvailable(action, actionState, runtime, saveData) && (!requiredScene || sceneContractSupportsAction(requiredScene,action.id)));
   const targetLocationId = nextAction?.locationId || stepScene(runtime, event.id)?.locationId || event.locationId;
   // 按固定顺序的多步合同同样适用：人不在场不能做任何一步，完成后也就无须瞬移。
-  if (!contract || !targetLocationId || storyRouteLocation(event.id)) return undefined;
+  if (!contract || !targetLocationId) return undefined;
+  // 商路拍：作者地点就是这段路的目的地（如蛇彝村）才给「前往」；其余商路拍的 locationId 仍是五原占位，不出。
+  if (storyRouteLocation(event.id) && !storyRouteLocation(event.id)!.includes(locationNameById(runtime, targetLocationId) || '\u0000')) return undefined;
   if (OPEN_WORLD_OWNED_TRAVEL_EVENT_IDS.has(event.id)) return undefined;
   // 位置按三段解析（五原区内节点归到五原城）；仍解析不出时 fail closed，按不在场处理。
   const atLocationId = playerLocationId(saveData, runtime);
