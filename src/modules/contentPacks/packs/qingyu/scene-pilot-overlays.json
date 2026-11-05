@@ -5158,7 +5158,7 @@
         "relatedFactionIds": [
           "liuchao.faction.bai_hu_shang_guan"
         ],
-        "locationId": "liuchao.location.wuyuan",
+        "locationId": "lcq.location.sheyi_village",
         "objective": "抵达蛇彝村，把商队安顿下来",
         "playerCompletionContract": {
           "kind": "objective_action",
@@ -5177,7 +5177,10 @@
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
               "kind": "prepare",
-              "grantsPreparation": "sheyi_silence_confirmed"
+              "grantsPreparation": "sheyi_silence_confirmed",
+              "intentMatch": {
+                "describe": "到了蛇彝村，用任何方式查看或试探村寨，发现全村无灯、无人回应。"
+              }
             },
             {
               "id": "settle_caravan_in_silent_sheyi",
@@ -5189,9 +5192,9 @@
                 "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                 "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
               },
-              "requiresPreparation": [
-                "sheyi_silence_confirmed"
-              ]
+              "intentMatch": {
+                "describe": "带商队进入蛇彝村并把人马货物安顿下来；进寨安置时已看见村里无灯无人声。"
+              }
             }
           ]
         },

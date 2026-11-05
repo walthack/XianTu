@@ -4592,7 +4592,7 @@
           "relatedFactionIds": [
             "liuchao.faction.bai_hu_shang_guan"
           ],
-          "locationId": "liuchao.location.wuyuan",
+          "locationId": "lcq.location.sheyi_village",
           "objective": "抵达蛇彝村，把商队安顿下来",
           "playerCompletionContract": {
             "kind": "objective_action",
@@ -4611,7 +4611,10 @@
                   "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
                 },
                 "kind": "prepare",
-                "grantsPreparation": "sheyi_silence_confirmed"
+                "grantsPreparation": "sheyi_silence_confirmed",
+                "intentMatch": {
+                  "describe": "到了蛇彝村，用任何方式查看或试探村寨，发现全村无灯、无人回应。"
+                }
               },
               {
                 "id": "settle_caravan_in_silent_sheyi",
@@ -4623,9 +4626,9 @@
                   "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                   "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
                 },
-                "requiresPreparation": [
-                  "sheyi_silence_confirmed"
-                ]
+                "intentMatch": {
+                  "describe": "带商队进入蛇彝村并把人马货物安顿下来；进寨安置时已看见村里无灯无人声。"
+                }
               }
             ]
           },
@@ -4655,6 +4658,24 @@
       "path": "canon.locations[id=liuchao.location.changan].description",
       "from": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
       "to": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）"
+    },
+    {
+      "op": "insertBefore",
+      "path": "canon.locations",
+      "beforeId": "lcq.location.shuai_zhang",
+      "value": {
+        "id": "lcq.location.sheyi_village",
+        "name": "蛇彝村",
+        "description": "南荒蛇彝人村寨；商队抵达时无灯火、无人应答，真实情况尚未查明。",
+        "type": "村寨",
+        "continentId": "liuchao.continent.nanhuang",
+        "coordinates": {
+          "x": 4650,
+          "y": 7350
+        },
+        "features": [],
+        "country": "南荒"
+      }
     }
   ]
 }
