@@ -3,6 +3,7 @@ import { randomUUID } from '@/utils/uuid';
 import runtimeNumbers from '../../../../mod-kit/numbers-runtime.json';
 import travelUi from '../../../../mod-kit/cross-country-travel-ui.json';
 import { mapEntryReady } from '../mapEntries';
+import { syncPersistentLineEntries } from '../persistentLineEntries';
 import { transitionToMapEntryStage } from '../strictInitializer';
 import locations from '../../../../mod-kit/entity-catalog/locations.json';
 import { CONTENT_PACKS, packText } from '../../contentPacks';
@@ -147,6 +148,7 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
   position.locationId = selection.toId; position.描述 = `${countryOf(selection.toId)}·${loc?.name || ''}`;
   if (loc?.coordinates) { position.x = loc.coordinates.x; position.y = loc.coordinates.y; }
   clearDepartureActionOptions(save);
+  syncPersistentLineEntries(save);
   return true;
 }
 /**

@@ -1,5 +1,5 @@
 {
-  "version": "6faaf613af6ceeda",
+  "version": "c90b488eb7560a8f",
   "contracts": [
     {
       "meta": {
@@ -11324,7 +11324,7 @@
         {
           "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
           "name": "凝羽：她不会说",
-          "description": "第33章，南行途中的守夜，凝羽私下向你提出合作除掉苏妲己，主线事件已把她的开价摆到你面前。只描写你给她的答复：答应、拒绝，或先问她为什么；不写她吐露寒气来源，不写苏妲己的反应，不改变主线事件的完成。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
+          "description": "第33章，南行途中的守夜，凝羽私下向你提出合作除掉苏妲己，主线事件已把她的开价摆到你面前。只描写你给她的答复：答应、拒绝、先问她为什么，或明确先不答复；不写她吐露寒气来源，不写苏妲己的反应，不改变主线事件的完成。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
           "objective": "她要你杀她的主人，还要你连她一起杀。",
           "axisAnchor": "第33章",
           "critical": false,
@@ -11441,6 +11441,40 @@
                     "先问她为什么",
                     "为什么要这样",
                     "不表态"
+                  ]
+                }
+              },
+              {
+                "id": "act.ningyu.o2.defer",
+                "label": "先不答复她",
+                "actionText": "我暂时不答复凝羽的开价，这件事先放一放。",
+                "timeCost": 1,
+                "kind": "attempt",
+                "requiresPreparation": [],
+                "requiresPresentCharacterIds": [],
+                "cast": {
+                  "present": [
+                    "liuchao.character.ning_yu"
+                  ]
+                },
+                "sceneLocation": "商队宿处",
+                "sceneObjective": "承上：南行守夜，你还在琢磨她刚才说的话。 当下：她发过誓保护主人，现在却要你动手杀主人，还说出手时要连她一起杀了——这是陷阱，还是她在求救？",
+                "previousBeat": "南行守夜，你还在琢磨她刚才说的话。",
+                "fallbackText": "你没有接她的话，只说这件事先放一放。凝羽没再追问。",
+                "outcomeText": {
+                  "success": "你没有接她的话，只说这件事先放一放。凝羽没再追问。",
+                  "partial": "你没有接她的话，只说这件事先放一放。凝羽没再追问。",
+                  "failure": "你没有接她的话，只说这件事先放一放。凝羽没再追问。"
+                },
+                "intentMatch": {
+                  "matchAny": [
+                    "先不答复",
+                    "先放一放",
+                    "暂不答复"
+                  ],
+                  "rejectIf": [
+                    "答应她",
+                    "拒绝她"
                   ]
                 }
               }
@@ -11706,7 +11740,7 @@
         {
           "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
           "name": "凝羽：她不会说",
-          "description": "第85章，南荒山谷，云氏、花苗与你定下探峒的同行约定，凝羽被阴煞所伤，站立不稳，仍握着刀。只描写你对她进峒的安排：带着、留下，或先问她；选「留下」只改她的出场文本，不改主线事件的出场名单；不写毒瘾。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
+          "description": "第85章，南荒山谷，云氏、花苗与你定下探峒的同行约定，凝羽被阴煞所伤，站立不稳，仍握着刀。只描写你对她进峒的安排：带着、留下，或先问她，也可以明确先不安排；选「留下」时凝羽留在峒外、小魏留下照看，两人都不随主队进峒，直到驿馆会合；不写毒瘾。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
           "objective": "要进峒了，她站不稳。",
           "axisAnchor": "第85章",
           "critical": false,
@@ -11818,8 +11852,8 @@
               },
               {
                 "id": "act.ningyu.y5.stay",
-                "label": "留她在峒外，派人守着",
-                "actionText": "我把凝羽留在峒外，派人守着她。",
+                "label": "留她在峒外，让小魏守着",
+                "actionText": "我把凝羽留在峒外，让小魏守着她，安顿好再带她来驿馆。",
                 "timeCost": 1,
                 "kind": "attempt",
                 "requiresPreparation": [],
@@ -11842,24 +11876,25 @@
                 "sceneLocation": "南荒山谷",
                 "sceneObjective": "她连路都走不稳，却还握着刀——护着她，还是尊重她？",
                 "previousBeat": "碧鲮海边那夜，大潮漫过竹楼，你抱着她从水里浮起来；阴煞的那一下，她还没有缓过来。",
-                "fallbackText": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。",
+                "fallbackText": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。",
                 "outcomeText": {
-                  "success": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。",
-                  "partial": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。",
-                  "failure": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。"
+                  "success": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。",
+                  "partial": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。",
+                  "failure": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。"
                 },
                 "intentMatch": {
                   "matchAny": [
                     "留她在外",
                     "留在峒外",
-                    "派人守着"
+                    "派人守着",
+                    "小魏守着"
                   ]
                 }
               },
               {
                 "id": "act.ningyu.y5.stay.v_warm",
-                "label": "留她在峒外，派人守着",
-                "actionText": "我把凝羽留在峒外，派人守着她。",
+                "label": "留她在峒外，让小魏守着",
+                "actionText": "我把凝羽留在峒外，让小魏守着她，安顿好再带她来驿馆。",
                 "timeCost": 1,
                 "kind": "attempt",
                 "requiresPreparation": [],
@@ -11882,17 +11917,18 @@
                 "sceneLocation": "南荒山谷",
                 "sceneObjective": "她连路都走不稳，却还握着刀——护着她，还是尊重她？",
                 "previousBeat": "黑石滩那夜，你把干衣服递到她手边，她没说话，却收下了；如今她站不稳，握刀的手却没松。",
-                "fallbackText": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。",
+                "fallbackText": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。",
                 "outcomeText": {
-                  "success": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。",
-                  "partial": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。",
-                  "failure": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。"
+                  "success": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。",
+                  "partial": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。",
+                  "failure": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。"
                 },
                 "intentMatch": {
                   "matchAny": [
                     "留她在外",
                     "留在峒外",
-                    "派人守着"
+                    "派人守着",
+                    "小魏守着"
                   ]
                 }
               },
@@ -11973,6 +12009,86 @@
                     "问她自己",
                     "她自己的意思",
                     "先问她"
+                  ]
+                }
+              },
+              {
+                "id": "act.ningyu.y5.defer",
+                "label": "先不安排她，跟上队伍",
+                "actionText": "我暂时不安排凝羽进不进峒，先跟上队伍。",
+                "timeCost": 1,
+                "kind": "attempt",
+                "requiresPreparation": [],
+                "requiresPresentCharacterIds": [],
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.ningyu.care",
+                    "operator": "neq",
+                    "value": "warm"
+                  }
+                ],
+                "cast": {
+                  "present": [
+                    "liuchao.character.ning_yu",
+                    "liuchao.character.xie_yi",
+                    "liuchao.character.yun_cang_feng",
+                    "liuchao.character.su_li"
+                  ]
+                },
+                "sceneLocation": "南荒山谷",
+                "sceneObjective": "她连路都走不稳，却还握着刀——护着她，还是尊重她？",
+                "previousBeat": "碧鲮海边那夜，大潮漫过竹楼，你抱着她从水里浮起来；阴煞的那一下，她还没有缓过来。",
+                "fallbackText": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。",
+                "outcomeText": {
+                  "success": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。",
+                  "partial": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。",
+                  "failure": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。"
+                },
+                "intentMatch": {
+                  "matchAny": [
+                    "先不安排",
+                    "先跟上队伍",
+                    "这事先不说"
+                  ]
+                }
+              },
+              {
+                "id": "act.ningyu.y5.defer.v_warm",
+                "label": "先不安排她，跟上队伍",
+                "actionText": "我暂时不安排凝羽进不进峒，先跟上队伍。",
+                "timeCost": 1,
+                "kind": "attempt",
+                "requiresPreparation": [],
+                "requiresPresentCharacterIds": [],
+                "visibleWhen": [
+                  {
+                    "path": "flags.branch.ningyu.care",
+                    "operator": "eq",
+                    "value": "warm"
+                  }
+                ],
+                "cast": {
+                  "present": [
+                    "liuchao.character.ning_yu",
+                    "liuchao.character.xie_yi",
+                    "liuchao.character.yun_cang_feng",
+                    "liuchao.character.su_li"
+                  ]
+                },
+                "sceneLocation": "南荒山谷",
+                "sceneObjective": "她连路都走不稳，却还握着刀——护着她，还是尊重她？",
+                "previousBeat": "黑石滩那夜，你把干衣服递到她手边，她没说话，却收下了；如今她站不稳，握刀的手却没松。",
+                "fallbackText": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。",
+                "outcomeText": {
+                  "success": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。",
+                  "partial": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。",
+                  "failure": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。"
+                },
+                "intentMatch": {
+                  "matchAny": [
+                    "先不安排",
+                    "先跟上队伍",
+                    "这事先不说"
                   ]
                 }
               }
@@ -12563,6 +12679,71 @@
                     "托小魏",
                     "带回白湖",
                     "另写一封信"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin",
+          "name": "凝羽：她不会说",
+          "description": "第88章，鬼王峒驿馆，主队安顿下来后，留在峒外的凝羽由小魏陪着从正门进来会合。只写两人进门、凝羽站到程宗扬身后；不写拆信，不写毒瘾或治愈，不写额外路线。",
+          "objective": "驿馆安顿下来了，小魏该带凝羽来了。",
+          "axisAnchor": "第88章",
+          "critical": false,
+          "conditions": [],
+          "completion": [
+            {
+              "path": "flags.event.blank_letter_and_dagu_ins_ningyu_rejoin.done",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "relatedCharacterIds": [
+            "liuchao.character.ning_yu",
+            "lcq.character.nanhuang_xiaowei"
+          ],
+          "locationId": "lcq.location.guiwang_inn",
+          "exploration": {
+            "role": "seed"
+          },
+          "questLineBeatId": "beat.ningyu.y5_rejoin",
+          "sharedExperience": "suppress",
+          "playerCompletionContract": {
+            "kind": "objective_action",
+            "settleOn": [
+              "success"
+            ],
+            "actions": [
+              {
+                "id": "act.ningyu.y5.rejoin",
+                "label": "小魏带凝羽到驿馆会合",
+                "actionText": "安顿下来后，我等小魏带凝羽从正门进来会合。",
+                "timeCost": 1,
+                "kind": "attempt",
+                "requiresPreparation": [],
+                "requiresPresentCharacterIds": [],
+                "cast": {
+                  "present": [
+                    "liuchao.character.ning_yu",
+                    "lcq.character.nanhuang_xiaowei"
+                  ]
+                },
+                "sceneLocation": "鬼王峒驿馆",
+                "sceneObjective": "第88章，鬼王峒驿馆，主队安顿下来后，留在峒外的凝羽由小魏陪着从正门进来会合。只写两人进门、凝羽站到程宗扬身后；不写拆信，不写毒瘾或治愈，不写额外路线。",
+                "fallbackText": "驿馆的门帘一掀，小魏先进来，凝羽跟在后面。她扫了一眼屋里的人，在程宗扬身后站定。",
+                "forceFixed": true,
+                "outcomeText": {
+                  "success": "驿馆的门帘一掀，小魏先进来，凝羽跟在后面。她扫了一眼屋里的人，在程宗扬身后站定。",
+                  "partial": "驿馆的门帘一掀，小魏先进来，凝羽跟在后面。她扫了一眼屋里的人，在程宗扬身后站定。",
+                  "failure": "驿馆的门帘一掀，小魏先进来，凝羽跟在后面。她扫了一眼屋里的人，在程宗扬身后站定。"
+                },
+                "intentMatch": {
+                  "matchAny": [
+                    "等小魏带凝羽",
+                    "驿馆会合",
+                    "带凝羽进来"
                   ]
                 }
               }
@@ -14037,7 +14218,10 @@
           "requires": {
             "all": [
               {
-                "eventDone": "lcq.event.ningyu_regicide_offer"
+                "preparationDone": {
+                  "eventId": "lcq.event.ningyu_regicide_offer",
+                  "step": "ningyu_regicide_price_heard"
+                }
               },
               {
                 "presentActor": "liuchao.character.ning_yu"
@@ -14049,6 +14233,9 @@
           },
           "closeWhen": {
             "any": [
+              {
+                "eventDone": "lcq.event.ningyu_regicide_offer"
+              },
               {
                 "canonChapterAtLeast": 35
               }
@@ -14072,6 +14259,12 @@
                 "eventActionReceipt": {
                   "eventId": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
                   "actionId": "act.ningyu.o2.ask_why"
+                }
+              },
+              {
+                "eventActionReceipt": {
+                  "eventId": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
+                  "actionId": "act.ningyu.o2.defer"
                 }
               }
             ]
@@ -14161,6 +14354,14 @@
                 "stateId": "branch.ningyu.regicide_reply",
                 "value": "asked_why"
               }
+            ],
+            "act.ningyu.o2.defer": [
+              {
+                "kind": "setReceipt",
+                "receiptId": "rcpt.ningyu.o2.defer",
+                "mutexGroupId": "mutex.ningyu.o2",
+                "consumeAtEventIds": []
+              }
             ]
           },
           "role": [
@@ -14199,6 +14400,14 @@
               "intentId": "intent.ningyu.o2.ask_why",
               "outcomeId": "outcome.act.ningyu.o2.ask_why",
               "intentMatchId": "match.ningyu.o2.ask_why"
+            },
+            {
+              "actionId": "act.ningyu.o2.defer",
+              "kind": "attempt",
+              "labelId": "text.act.ningyu.o2.defer",
+              "intentId": "intent.ningyu.o2.defer",
+              "outcomeId": "outcome.act.ningyu.o2.defer",
+              "intentMatchId": "match.ningyu.o2.defer"
             }
           ],
           "sharedExperience": "default",
@@ -14391,7 +14600,10 @@
           "requires": {
             "all": [
               {
-                "eventDone": "lcq.event.guiwangdong_coop_pact"
+                "preparationDone": {
+                  "eventId": "lcq.event.guiwangdong_coop_pact",
+                  "step": "ningyu_relapse_settled"
+                }
               },
               {
                 "presentActor": "liuchao.character.ning_yu"
@@ -14403,6 +14615,9 @@
           },
           "closeWhen": {
             "any": [
+              {
+                "eventDone": "lcq.event.guiwangdong_coop_pact"
+              },
               {
                 "canonChapterAtLeast": 87
               }
@@ -14444,6 +14659,18 @@
                 "eventActionReceipt": {
                   "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
                   "actionId": "act.ningyu.y5.ask.v_warm"
+                }
+              },
+              {
+                "eventActionReceipt": {
+                  "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+                  "actionId": "act.ningyu.y5.defer"
+                }
+              },
+              {
+                "eventActionReceipt": {
+                  "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+                  "actionId": "act.ningyu.y5.defer.v_warm"
                 }
               }
             ]
@@ -14519,6 +14746,14 @@
                 "value": "go"
               }
             ],
+            "act.ningyu.y5.defer": [
+              {
+                "kind": "setReceipt",
+                "receiptId": "rcpt.ningyu.y5.defer",
+                "mutexGroupId": "mutex.ningyu.y5",
+                "consumeAtEventIds": []
+              }
+            ],
             "act.ningyu.y5.bring.v_warm": [
               {
                 "kind": "affinityGrant",
@@ -14586,6 +14821,14 @@
                 "kind": "setState",
                 "stateId": "branch.ningyu.enter_dong",
                 "value": "go"
+              }
+            ],
+            "act.ningyu.y5.defer.v_warm": [
+              {
+                "kind": "setReceipt",
+                "receiptId": "rcpt.ningyu.y5.defer",
+                "mutexGroupId": "mutex.ningyu.y5",
+                "consumeAtEventIds": []
               }
             ]
           },
@@ -14705,6 +14948,38 @@
                 }
               ],
               "previousId": "text.echo.ningyu.y5_enter.warm.previous"
+            },
+            {
+              "actionId": "act.ningyu.y5.defer",
+              "kind": "attempt",
+              "labelId": "text.act.ningyu.y5.defer",
+              "intentId": "intent.ningyu.y5.defer",
+              "outcomeId": "outcome.act.ningyu.y5.defer",
+              "intentMatchId": "match.ningyu.y5.defer",
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.ningyu.care",
+                  "operator": "neq",
+                  "value": "warm"
+                }
+              ]
+            },
+            {
+              "actionId": "act.ningyu.y5.defer.v_warm",
+              "kind": "attempt",
+              "labelId": "text.act.ningyu.y5.defer",
+              "intentId": "intent.ningyu.y5.defer",
+              "outcomeId": "outcome.act.ningyu.y5.defer",
+              "intentMatchId": "match.ningyu.y5.defer",
+              "variantOf": "act.ningyu.y5.defer",
+              "visibleWhen": [
+                {
+                  "path": "flags.branch.ningyu.care",
+                  "operator": "eq",
+                  "value": "warm"
+                }
+              ],
+              "previousId": "text.echo.ningyu.y5_enter.warm.previous"
             }
           ],
           "sharedExperience": "default",
@@ -14719,6 +14994,89 @@
           "canonChapter": 85,
           "briefId": "brief.ningyu.y5_enter",
           "objectiveId": "text.obj.ningyu.y5_enter"
+        },
+        {
+          "id": "beat.ningyu.y5_rejoin",
+          "mode": "standalone",
+          "hostEventId": null,
+          "eventId": "lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin",
+          "requires": {
+            "all": [
+              {
+                "flag": {
+                  "id": "branch.ningyu.enter_dong",
+                  "value": "stay"
+                }
+              },
+              {
+                "not": {
+                  "flag": {
+                    "id": "branch.ningyu.y5_rejoined",
+                    "value": true
+                  }
+                }
+              },
+              {
+                "not": {
+                  "preparationDone": {
+                    "eventId": "lcq.event.blank_letter_and_dagu",
+                    "step": "blank_letter_confirmed"
+                  }
+                }
+              },
+              {
+                "not": {
+                  "eventDone": "lcq.event.blank_letter_and_dagu"
+                }
+              }
+            ]
+          },
+          "completedBy": {
+            "eventActionReceipt": {
+              "eventId": "lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin",
+              "actionId": "act.ningyu.y5.rejoin"
+            }
+          },
+          "onComplete": [],
+          "byAction": {
+            "act.ningyu.y5.rejoin": [
+              {
+                "kind": "setState",
+                "stateId": "branch.ningyu.y5_rejoined",
+                "value": true
+              },
+              {
+                "kind": "setReceipt",
+                "receiptId": "rcpt.ningyu.y5_rejoin",
+                "mutexGroupId": "mutex.ningyu.y5_rejoin",
+                "consumeAtEventIds": []
+              }
+            ]
+          },
+          "role": [
+            "transition"
+          ],
+          "steps": [
+            {
+              "actionId": "act.ningyu.y5.rejoin",
+              "kind": "attempt",
+              "labelId": "text.act.ningyu.y5.rejoin",
+              "intentId": "intent.ningyu.y5.rejoin",
+              "outcomeId": "outcome.act.ningyu.y5.rejoin",
+              "intentMatchId": "match.ningyu.y5.rejoin",
+              "replyMode": "fixed"
+            }
+          ],
+          "sharedExperience": "suppress",
+          "stageId": "lcq.stage_05b",
+          "locationId": "lcq.location.guiwang_inn",
+          "presentActorIds": [
+            "liuchao.character.ning_yu",
+            "lcq.character.nanhuang_xiaowei"
+          ],
+          "canonChapter": 88,
+          "briefId": "brief.ningyu.y5_rejoin",
+          "objectiveId": "text.obj.ningyu.y5_rejoin"
         },
         {
           "id": "beat.ningyu.y6_door",
@@ -16865,7 +17223,8 @@
         "matchAny": [
           "留她在外",
           "留在峒外",
-          "派人守着"
+          "派人守着",
+          "小魏守着"
         ]
       },
       "match.ningyu.y5.ask": {
@@ -16979,6 +17338,31 @@
           "包好",
           "裹好",
           "止血"
+        ]
+      },
+      "match.ningyu.o2.defer": {
+        "matchAny": [
+          "先不答复",
+          "先放一放",
+          "暂不答复"
+        ],
+        "rejectIf": [
+          "答应她",
+          "拒绝她"
+        ]
+      },
+      "match.ningyu.y5.defer": {
+        "matchAny": [
+          "先不安排",
+          "先跟上队伍",
+          "这事先不说"
+        ]
+      },
+      "match.ningyu.y5.rejoin": {
+        "matchAny": [
+          "等小魏带凝羽",
+          "驿馆会合",
+          "带凝羽进来"
         ]
       }
     }
@@ -17423,7 +17807,7 @@
     "intent.ningyu.o2.ask_why": "我不表态，先问凝羽为什么要这样做。",
     "outcome.act.ningyu.o2.ask_why": "你没有应，只问她为什么。她握着刀没有答话，也没有走开。",
     "text.obj.ningyu.o2_regicide": "她要你杀她的主人，还要你连她一起杀。",
-    "brief.ningyu.o2_regicide": "第33章，南行途中的守夜，凝羽私下向你提出合作除掉苏妲己，主线事件已把她的开价摆到你面前。只描写你给她的答复：答应、拒绝，或先问她为什么；不写她吐露寒气来源，不写苏妲己的反应，不改变主线事件的完成。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
+    "brief.ningyu.o2_regicide": "第33章，南行途中的守夜，凝羽私下向你提出合作除掉苏妲己，主线事件已把她的开价摆到你面前。只描写你给她的答复：答应、拒绝、先问她为什么，或明确先不答复；不写她吐露寒气来源，不写苏妲己的反应，不改变主线事件的完成。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
     "text.card.ningyu.o2_regicide.previous": "南行守夜，你还在琢磨她刚才说的话。",
     "text.card.ningyu.o2_regicide.tension": "她发过誓保护主人，现在却要你动手杀主人，还说出手时要连她一起杀了——这是陷阱，还是她在求救？",
     "text.card.ningyu.o2_regicide.option1": "答应她",
@@ -17448,18 +17832,18 @@
     "text.act.ningyu.y5.bring": "让人扶着她，一同进峒",
     "intent.ningyu.y5.bring": "我让人扶着凝羽，带她一同进峒。",
     "outcome.act.ningyu.y5.bring": "你让人扶着她，一同往峒里走。她握着刀，没有说话。",
-    "text.act.ningyu.y5.stay": "留她在峒外，派人守着",
-    "intent.ningyu.y5.stay": "我把凝羽留在峒外，派人守着她。",
-    "outcome.act.ningyu.y5.stay": "你把她留在峒外，派人守着。她看了你一眼，把刀横在膝上。",
+    "text.act.ningyu.y5.stay": "留她在峒外，让小魏守着",
+    "intent.ningyu.y5.stay": "我把凝羽留在峒外，让小魏守着她，安顿好再带她来驿馆。",
+    "outcome.act.ningyu.y5.stay": "你对小魏说：“你守着她。我们进峒，到驿馆安顿下来，你再带她从正门进来找我们。”凝羽看了你一眼，把刀横在膝上。",
     "text.act.ningyu.y5.ask": "先问她自己的意思",
     "intent.ningyu.y5.ask": "我先问凝羽自己的意思。",
     "outcome.act.ningyu.y5.ask": "你先问她自己的意思。她没有答话，只把刀握紧，站直了身子。",
     "text.obj.ningyu.y5_enter": "要进峒了，她站不稳。",
-    "brief.ningyu.y5_enter": "第85章，南荒山谷，云氏、花苗与你定下探峒的同行约定，凝羽被阴煞所伤，站立不稳，仍握着刀。只描写你对她进峒的安排：带着、留下，或先问她；选「留下」只改她的出场文本，不改主线事件的出场名单；不写毒瘾。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
+    "brief.ningyu.y5_enter": "第85章，南荒山谷，云氏、花苗与你定下探峒的同行约定，凝羽被阴煞所伤，站立不稳，仍握着刀。只描写你对她进峒的安排：带着、留下，或先问她，也可以明确先不安排；选「留下」时凝羽留在峒外、小魏留下照看，两人都不随主队进峒，直到驿馆会合；不写毒瘾。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
     "text.card.ningyu.y5_enter.previous": "碧鲮海边那夜，大潮漫过竹楼，你抱着她从水里浮起来；阴煞的那一下，她还没有缓过来。",
     "text.card.ningyu.y5_enter.tension": "她连路都走不稳，却还握着刀——护着她，还是尊重她？",
     "text.card.ningyu.y5_enter.option1": "带她进峒",
-    "text.card.ningyu.y5_enter.option2": "留她在峒外，派人守着",
+    "text.card.ningyu.y5_enter.option2": "留她在峒外，让小魏守着",
     "text.card.ningyu.y5_enter.option3": "问她自己的意思",
     "text.echo.ningyu.y5_enter.warm.previous": "黑石滩那夜，你把干衣服递到她手边，她没说话，却收下了；如今她站不稳，握刀的手却没松。",
     "text.act.ningyu.y6.word": "隔着门说一句话",
@@ -17558,6 +17942,25 @@
     "text.card.lmz.l3_harpoon.option1": "替她把叉拔下来",
     "text.card.lmz.l3_harpoon.option2": "拔下来，再给她包扎",
     "text.echo.lmz.l3_harpoon.shielded.previous": "鲛人那一场刚过去，乐明珠还被鱼叉卡着；山顶碧潭那回你先护在她身前，这一回她没有躲，由着你靠近。",
+    "text.act.ningyu.y5.defer": "先不安排她，跟上队伍",
+    "intent.ningyu.y5.defer": "我暂时不安排凝羽进不进峒，先跟上队伍。",
+    "outcome.act.ningyu.y5.defer": "你没有就这事开口，转身跟上了队伍。凝羽握着刀，自己跟在后面。",
+    "text.act.ningyu.o2.defer": "先不答复她",
+    "intent.ningyu.o2.defer": "我暂时不答复凝羽的开价，这件事先放一放。",
+    "outcome.act.ningyu.o2.defer": "你没有接她的话，只说这件事先放一放。凝羽没再追问。",
+    "text.act.ningyu.y5.rejoin": "小魏带凝羽到驿馆会合",
+    "intent.ningyu.y5.rejoin": "安顿下来后，我等小魏带凝羽从正门进来会合。",
+    "outcome.act.ningyu.y5.rejoin": "驿馆的门帘一掀，小魏先进来，凝羽跟在后面。她扫了一眼屋里的人，在程宗扬身后站定。",
+    "text.obj.ningyu.y5_rejoin": "驿馆安顿下来了，小魏该带凝羽来了。",
+    "brief.ningyu.y5_rejoin": "第88章，鬼王峒驿馆，主队安顿下来后，留在峒外的凝羽由小魏陪着从正门进来会合。只写两人进门、凝羽站到程宗扬身后；不写拆信，不写毒瘾或治愈，不写额外路线。",
+    "text.prompt.beat.ningyu.o2_regicide": "凝羽还在等你答复她的开价。打开人物日志「这一拍谁有戏」可以回应或明确略过，也可以直接说。",
+    "text.prompt.beat.ningyu.y5_enter": "凝羽在等你安排她进不进峒。打开人物日志「这一拍谁有戏」可以回应或明确略过，也可以直接说。",
+    "text.prompt.line_response.clarify": "这句话既像在回应{names}，又像在推进眼前的事。请先说清你要先做哪一件，或在人物日志里点选回应／略过。",
+    "text.line_log.outcome.responded": "已回应",
+    "text.line_log.outcome.skipped": "已略过",
+    "text.line_log.outcome.expired": "主线继续后到期",
+    "text.line_log.respond": "回应",
+    "text.line_log.skip": "明确略过",
     "qin.liuchao.event.qin_hook_fangshi_rumor.description": "商会伙计一路打听，在你落脚处传来口信：「咸阳有个方士，逢人就说是程少主请来的。小的听到这话，不敢耽搁，赶来问您一声。」",
     "qin.liuchao.event.qin_hook_fangshi_rumor.axisBeat": "南荒、晋、宋、汉、唐中三条线收束后，商会伙计传来咸阳方士的口信。",
     "qin.liuchao.event.qin_hook_fangshi_rumor.objective": "听取口信，决定何时前往咸阳",

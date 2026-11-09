@@ -25,6 +25,8 @@ import { logEvent } from '../diagnostics/log';
 import { isQingyuOpeningPlaytestSave } from './qingyuOpeningPlaytest';
 import { countryOf, crossCountryStageDeparture, type CrossCountryTravelTarget } from './travel/mapTravel';
 import { currentLocation } from './travel/travelLedger';
+import { canonicalLocationId } from './travel/locationIds';
+import { VISIT_ONLY_MAP_LOCATION_IDS } from './persistentLineEntries';
 import { entityName, entityNamePattern } from './namedEntities';
 import { isKeyBeatCardAction } from './keyBeatCards';
 import { detectBranchDecision } from './branchDecision';
@@ -292,7 +294,10 @@ export function stageDepartureArrived(save: SaveData | null | undefined): string
   const ext = (save as any)?.系统?.扩展, pending = ext?.[MAP_KEY], runtime = runtimeOf(save);
   if (!save || !pending || !runtime) return undefined;
   if (runtime.nextStageReadyId !== pending.nextStageId) { delete ext[MAP_KEY]; return undefined; }
-  if (countryOf(currentLocation(save).canonicalLocationId) !== countryOf(pending.toId)) return undefined;
+  const here = currentLocation(save).canonicalLocationId;
+  if (countryOf(here) !== countryOf(pending.toId)) return undefined;
+  // 取物访问的落点（碧鲮）不算抵达下一关，待启程目标留着。
+  if (here && VISIT_ONLY_MAP_LOCATION_IDS.includes(here) && here !== canonicalLocationId(pending.toId)) return undefined;
   delete ext[MAP_KEY];
   return pending.nextStageId;
 }

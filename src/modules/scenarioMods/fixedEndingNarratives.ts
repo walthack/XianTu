@@ -12,6 +12,8 @@ import { isStepSceneStage } from './travel/stepScene';
 import { visibleModuleText } from './modularTurn';
 import { logEventOnce } from '../diagnostics/log';
 import { encounterPromptFacts } from './randomEncounter';
+import { authoritativeAbsentCharacterIds } from './presence';
+import { entityAliases } from './namedEntities';
 /** 剧情交接 2026-10-02：固定死亡正文；配图由 endingPresentation 提供。 */
 const ENDING_TEXTS: Readonly<Record<string,string>> = CONTENT_PACKS.texts;
 
@@ -124,7 +126,15 @@ export function stepScene(runtime: any, eventId?: string, actionId?: string): Sc
     return current?.timeAdvance ? { ...a, timeAdvance: current.timeAdvance } : a;
   });
   const prepared = runtime?.eventActionStates?.[eventId || '']?.preparations || [];
-  return actionId ? actions.find((a: any) => a.id === actionId) : actions.find((a: any) => (a.requiresPreparation || []).every((p: string) => prepared.includes(p)) && !(a.kind === 'prepare' && prepared.includes(a.grantsPreparation)));
+  return withoutHeldCast(runtime, actionId ? actions.find((a: any) => a.id === actionId) : actions.find((a: any) => (a.requiresPreparation || []).every((p: string) => prepared.includes(p)) && !(a.kind === 'prepare' && prepared.includes(a.grantsPreparation))));
+}
+/** 权威暂留的人（cast-gates authoritative）不进步卡在场／入场名册；作者名册原样留在合同里，条件解除即恢复。 */
+function withoutHeldCast(runtime: any, scene: any): any {
+  if (!scene?.cast) return scene;
+  const held = new Set(authoritativeAbsentCharacterIds(runtime).flatMap(id => [id, ...entityAliases('character', id)]));
+  if (!held.size) return scene;
+  const keep = (person: any) => !held.has(typeof person === 'string' ? person : String(person?.name || person?.id || ''));
+  return { ...scene, cast: { ...scene.cast, ...(Array.isArray(scene.cast.present) ? { present: scene.cast.present.filter(keep) } : {}), ...(Array.isArray(scene.cast.enter) ? { enter: scene.cast.enter.filter(keep) } : {}) } };
 }
 export function sceneDayPart(time: any): string {
   const hour = Number(time?.小时) || 0;

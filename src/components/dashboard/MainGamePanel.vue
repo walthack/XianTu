@@ -552,6 +552,7 @@ import { useCharacterStore } from '@/stores/characterStore';
 import { useActionQueueStore } from '@/stores/actionQueueStore';
 import { useUIStore } from '@/stores/uiStore';
 import { panelBus } from '@/utils/panelBus';
+import { noteLinePrompts } from '@/modules/scenarioMods/linePrompts';
 import { chatBus, type ChatBusPayload } from '@/utils/chatBus';
 import { EnhancedActionQueueManager } from '@/utils/enhancedActionQueue';
 import { AIBidirectionalSystem, getTavernHelper } from '@/utils/AIBidirectionalSystem';
@@ -1997,6 +1998,12 @@ const confirmBranchDecision = async (option: ScenarioEngineActionSelection) => {
   await sendMessage();
 };
 
+/** 人物日志「回应／明确略过」：与点同一条动作按钮相同，填入输入框等玩家发送。 */
+const onSelectLineAction = (payload?: { eventId?: string; actionId?: string }) => {
+  const option = scenarioEngineActionOptions.value.find(item => 'eventId' in item && item.eventId === payload?.eventId && 'actionId' in item && item.actionId === payload?.actionId);
+  if (option) selectScenarioEngineAction(option);
+  else toast.info(naturalIntentClarify(gameStateStore.toSaveData()));
+};
 const selectScenarioEngineAction = (option: ScenarioEngineActionSelection) => {
   selectedScenarioEngineAction.value = option;
   const playerLine = engineOptionLine(option);
@@ -3037,8 +3044,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
     // 回合收尾：作者写明的到点本回合收束了哪拍（beat.resolve deadline）；启程按钮空转满 story.beatProgress.departureIdleTurns 回合、本拍主线按钮空转满 actionIdleTurns 回合都只提示，不自动出发、不代结算（用户 2026-11-02 拍板③④）。
     let idleDepartureNotice: string | undefined;
     let questArrivalStageId: string | undefined;
+    let linePromptNotices: string[] = [];
     if (aiResetToken === resetSnapshot && aiResponse) {
       const idleSave = gameStateStore.toSaveData();
+      // 同场人物等回应：只在本回合正文已提交后提示，每拍一次（记进 系统.扩展，随下面的统一存档落盘）。
+      if (idleSave && aiResponse.transactionCommitted) linePromptNotices = noteLinePrompts(idleSave);
       for (const eventId of deadlineResolvedThisTurn(scenarioSaveAtSend, idleSave)) logBeatResolve(idleSave, 'deadline', { eventId });
       idleDepartureNotice = idleSave ? noteStageDepartureIdleTurn(idleSave) : undefined;
       const idleActionNotice = idleSave ? noteBeatActionIdleTurn(idleSave) : undefined;
@@ -3063,6 +3073,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         }
         console.log('[AI响应处理] 最终统一存档完成');
         if (idleDepartureNotice) toast.info(idleDepartureNotice);
+        for (const notice of linePromptNotices) toast.info(notice);
         if (questArrivalStageId) await departToStage(questArrivalStageId);
         if (aiResponse.transactionCommitted) {
           startModuleBackground(diagnosticTurnId);
@@ -3277,6 +3288,8 @@ onMounted(async () => {
     await initializePanelForSave();
     refreshPendingJudgement();
 
+    panelBus.on('select-line-action', onSelectLineAction);
+
     // 监听来自MemoryCenterPanel的配置更新事件
     panelBus.on('memory-settings-updated', (settings: unknown) => {
       console.log('[记忆设置] 接收到配置更新事件:', settings);
@@ -3388,6 +3401,7 @@ onActivated(() => {
 
 // 🔥 组件卸载时先放弃本组件回合，再清监听。非酒馆也必须取消在途请求。
 onUnmounted(() => {
+  panelBus.off('select-line-action', onSelectLineAction);
   console.log('[主面板] 组件卸载，放弃本组件回合并清理事件监听器');
   abandonOwnedGameTurn();
 

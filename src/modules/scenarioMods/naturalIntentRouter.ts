@@ -1,6 +1,7 @@
 import { BEAT_JUDGE_TIMEOUT_SOURCE, inheritDiagnosticCancellation, noteDiagnosticCancellation, noteTicketDiscard } from '@/services/requestLifecycleDiagnostics';
 
-import {entityNamePattern} from './namedEntities';
+import {entityName, entityNamePattern} from './namedEntities';
+import { CONTENT_PACKS } from '../contentPacks';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import {QUEST_LINES} from './questLines';
 import { freeTextStatusSemanticRequest, validateFreeTextStatusProposals, type FreeTextStatusResolution } from '../sceneModule/host/freeTextStatusSemantic';
@@ -184,6 +185,19 @@ export function intentSaveFingerprint(saveData: SaveData | null | undefined): st
   });
 }
 
+const characterLineOf = (eventId: string | undefined) => eventId ? QUEST_LINES.find(l => l.kind === 'character' && l.beats.some(b => b.eventId === eventId)) : undefined;
+/** 同场人物正等回应的候选（人物线拍的动作，含明确略过）。 */
+const awaitingResponses = (candidates: readonly NaturalIntentCandidate[]) => candidates.filter(c => characterLineOf(c.eventId));
+/** 一句话同时像在回应人物、又像在做别的动作：先澄清，不替玩家挑一笔结算（交接 2026-11-09 需求二）。 */
+function lineResponseClarify(awaiting: readonly NaturalIntentCandidate[], reason: string, usedModel: boolean): NaturalIntentResult {
+  const names = [...new Set(awaiting.flatMap(c => characterLineOf(c.eventId)!.ownerCharacterIds).map(id => entityName('character', id)))].join('、');
+  const text = String(CONTENT_PACKS.texts['text.prompt.line_response.clarify'] || '').replace('{names}', names);
+  noteTicketDiscard('intent', reason);
+  return { kind: 'unclear', reason, clarification: text, hold: true, skipKeywordPreflight: true, usedModel };
+}
+const pickedAwaiting = (result: NaturalIntentResult, awaiting: readonly NaturalIntentCandidate[]) =>
+  result.kind === 'matched' && !!result.selection && 'eventId' in result.selection && awaiting.some(c => c.eventId === (result.selection as ScenarioEventActionSelection).eventId);
+
 export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCandidate[] {
   reconcileNaturalIntentMetadata(saveData);
   const refusal = getBaihuGambleRefusalSelections(saveData).map(item => ({
@@ -202,7 +216,7 @@ export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCa
     playerLine: item.playerLine,
     contractHash: item.contractHash,
     intentMatch: (saveData as any).世界?.状态?.剧本模组?.events?.find((e:any)=>e.id===item.eventId)?.playerCompletionContract?.actions?.find((a:any)=>a.id===item.actionId)?.intentMatch,
-    affinityAssessment: (()=>{const l=QUEST_LINES.find(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===item.eventId));return l?{characterIds:l.ownerCharacterIds,loadBearing:!!l.loadBearing}:undefined;})(),
+    affinityAssessment: (()=>{const l=characterLineOf(item.eventId);const b=l?.beats.find(b=>b.eventId===item.eventId);return l&&b&&[...(b.byAction?.[item.actionId]||[]),...b.onComplete].some(e=>e.kind==='affinityGrant')?{characterIds:l.ownerCharacterIds,loadBearing:!!l.loadBearing}:undefined;})(),
   }));
   const opportunities = getTrackedStoryOpportunityActions(saveData).map(item => ({
     source: item.source,
@@ -411,6 +425,7 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
     '本次只有玩家输入，状态仅从statusCatalog的input条目提案，source必须input。statusProposals必须为数组，没有状态用空数组；动作none不等于没有状态。',
     ...(tickets ? [tickets.system] : []),
     ...(risk ? [riskPromptLine('risk', 'riskEv', risk)] : []),
+    ...(awaitingResponses(candidates).length ? ['人物线候选是同场人物正等玩家回应（含明确略过）。玩家这句话若同时在回应人物又在做另一个候选动作，或同时像在做两个以上候选，actionId填multiple，不要替玩家只挑一个。'] : []),
     `只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]${tickets ? ',"tickets":[]' : ''}${risk ? ',"risk":"none","riskEv":""' : ''}}`,
   ].join('');
   const userPrompt = JSON.stringify({
@@ -516,8 +531,16 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   }
   const classifierFailure = (reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult => onClassifierFailure(reason, candidates, ownedByFreeAction);
   const alias = input.resolveFromText?.(input.saveData, input.playerText);
-  if (alias && !QUEST_LINES.some(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===alias.eventId))) {
-    return { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
+  if (alias && !characterLineOf(alias.eventId)) {
+    const aliased: NaturalIntentResult = { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
+    // 同场人物正等回应时，主线短语命中不能静默吞掉人物回应：先让意图模型看一遍，人物回应也命中就澄清。
+    const awaiting = input.generate && isScopedNaturalIntentSave(input.saveData) ? awaitingResponses(listNaturalIntentCandidates(input.saveData)) : [];
+    if (!awaiting.length) return aliased;
+    const all = listNaturalIntentCandidates(input.saveData);
+    const big = await classifyByIntentModel(input, all, intentSaveFingerprint(input.saveData), classifierFailure);
+    if (big.reason === 'multiple_targets' || pickedAwaiting(big, awaiting)) return lineResponseClarify(awaiting, 'line_response_and_main_alias', true);
+    if (big.kind === 'failed' && ['aborted', 'stale', 'state_changed'].includes(String(big.reason))) return big;
+    return aliased;
   }
 
   if (!isScopedNaturalIntentSave(input.saveData)) {
@@ -628,6 +651,7 @@ async function classifyByIntentModel(
     };
     if (parsed.certainty !== 'high') return free('low_certainty', true);
     if (!parsed.actionId) return free('missing_action', true);
+    if (parsed.actionId === 'multiple' && awaitingResponses(candidates).length) return lineResponseClarify(awaitingResponses(candidates), 'multiple_targets', true);
     if (parsed.actionId === 'none') {
       return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution, ...withTickets() };
     }
@@ -830,6 +854,10 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
  * 小请求失败（超时／坏 JSON）而大请求也没认出合同动作＝停下保留输入（第 9.4 节第 4 条）；其余照大请求结果。
  */
 function mergeBeatVerdict(input: NaturalIntentInput, big: NaturalIntentResult, verdict: BeatVerdict, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult {
+  const awaiting = awaitingResponses(candidates);
+  if (verdict.kind === 'settled' && awaiting.length && (big.reason === 'multiple_targets' || pickedAwaiting(big, awaiting))) {
+    return lineResponseClarify(awaiting, 'line_response_and_beat_intent', true);
+  }
   if (verdict.kind === 'settled') {
     if (big.freeActionTickets?.length) for (const ticket of big.freeActionTickets) noteTicketDiscard('free_action', 'beat_intent_settled', `${ticket.actionClass}.${ticket.variant}`);
     return {
