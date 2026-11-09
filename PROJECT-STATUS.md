@@ -829,3 +829,11 @@
 提交：`6bb7251a`（⑤）、`f3b69f95`（①⑥）、`1a8c0f5e`（②）、`701b5ce1`（③）。各子项 tsc 通过后提交；`npx vue-tsc --noEmit` 0；全量 `npm test` 3480 项，3467 通过 / 0 失败 / 13 跳过。AIBS、任何 runtime.ts、intimacyProfiles、canon 数据 0 行；未跑 canon:build（沙箱跑不了）；未推送。
 
 遗留：前端发送跳过 moderated 概要需改 AIBS 1360/1649/1663，本批不做。切档钩子在新档载入后触发时会清掉新档自带的连续性提示（最多少一回合提示，等于现状）。storyContext 原有「push 记忆／补充其记忆」字样未改，靠开时指令写明「本条优先」。
+
+## 2026-11-09 南荒三项已批改动（交接 2026-11-09，分支 `cursor/nanhuang-three-approved-changes-3453`）
+
+范围：只做交接三项——藻丝极简取物、O2/Y5 同场回应、凝羽＋小魏暂留与驿馆会合；设计稿仅 §13 有效。C5、A1、C1–C4、N2 grantEventPreparation、旧 worktree 批次不在本步。runtime.ts 只改交接 §6 三处（+10/−2），frozen-baseline 只同步 runtime 哈希；AIBS 0 行。未调真实模型、未读凭据、未部署、未重启服务。
+
+交付：①碧鲮进南荒国内目的地；04b 之后的清羽关人在碧鲮村时由 `persistentLineEntries.ts` 在加载/切关/地图抵达/每回合补入取物事件，完成依据为线回执，旧档按路径回执/转移回执/持物映射，不重发；同行者按实际在场学到事实；抵达碧鲮不触发已准备转关。②O2/Y5 改为宿主准备落账后开场、加「明确略过」；右栏人物拍可展开「回应／明确略过」，记录已回应/已略过/主线继续后到期；提示在回合事务提交后写一次（`linePrompted`）；scoped 存档的自由输入同时命中线回应与主线别名时先澄清。③Y5「留下」后两人权威缺席（cast-gates），共同经历跳过缺席者；05b 当面拆信前强制会合拍（同笔提交正文、在场、`branch.ningyu.y5_rejoined`、回执）；两句定稿正文在 `src/modules/contentPacks/packs/qingyu/lines-texts.json`。
+
+验证：`npm run type-check` 0；`npx vue-tsc --noEmit` 0；专项 `tests/nanhuangApprovedChanges.test.mjs` 19/19；冻结门禁 `tests/perfTelemetry.test.mjs` 10/10；全量 `npm test` 退出 0，3550 项 / 3537 通过 / 0 失败 / 13 跳过。`npm run canon:build` 仍因缺 `mod-kit/generated/deepseek-v4-flash/qingyu/stages` 启动即 ENOENT（基线同样）；已逐个跑其非重建校验步骤，结果与基线一致或通过。未做真人/真实模型验证。
