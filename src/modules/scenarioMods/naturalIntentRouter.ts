@@ -1,12 +1,16 @@
 import { BEAT_JUDGE_TIMEOUT_SOURCE, inheritDiagnosticCancellation, noteDiagnosticCancellation, noteTicketDiscard } from '@/services/requestLifecycleDiagnostics';
 
-import {entityNamePattern} from './namedEntities';
+import {entityName, entityNamePattern} from './namedEntities';
+import { CONTENT_PACKS } from '../contentPacks';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import {QUEST_LINES} from './questLines';
+import { heldActions, heldPrerequisiteObjective } from './stayRejoin';
 import { freeTextStatusSemanticRequest, validateFreeTextStatusProposals, type FreeTextStatusResolution } from '../sceneModule/host/freeTextStatusSemantic';
+import type { ScenarioMod } from './schema';
 import type { SaveData } from '@/types/game';
 import {
-  getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding,
+  getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding, getStageDepartureOffer,
+  type ScenarioStageDepartureOffer,
   getTrackedStoryOpportunityActions,
   reconcileNaturalIntentMetadata,
   type ScenarioEventActionSelection,
@@ -23,7 +27,7 @@ import {
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { beatActionRejectIf, beatKeyTurn, intentSettleConfig, resolveBeatText, type BeatKeyPlan } from './beatProgress';
-import { questActionGate, questGuideEnabled } from './questLog';
+import { locationName, nextStageModOf, questConfig, questActionGate, questGuideEnabled } from './questLog';
 import { logEvent } from '../diagnostics/log';
 import { freeActionConfig } from './freeAction/config';
 import { JUDGEMENT_KINDS } from '@/utils/judgementEngine';
@@ -58,6 +62,8 @@ export interface NaturalIntentCandidate {
   contractHash: string;
   intentMatch?: unknown;
   affinityAssessment?: {characterIds:string[];loadBearing:boolean};
+  /** 暂扣的合同动作（stayRejoin.heldActions）：不可执行，只供语义判定命中后停下提示先做前置拍。 */
+  held?: boolean;
 }
 
 export type NaturalIntentSelection =
@@ -77,6 +83,7 @@ export interface NaturalIntentResult {
   freeActionOthers?: number;
   /** 识别降级（模型超时/坏 JSON）：本回合没有任何本地结算，界面须告诉叙事“未发生”。 */
   unsettled?: boolean;
+  stageDeparture?: ScenarioStageDepartureOffer;
   kind: NaturalIntentKind;
   selection?: NaturalIntentSelection;
   reason?: string;
@@ -184,7 +191,29 @@ export function intentSaveFingerprint(saveData: SaveData | null | undefined): st
   });
 }
 
-export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCandidate[] {
+const characterLineOf = (eventId: string | undefined) => eventId ? QUEST_LINES.find(l => l.kind === 'character' && l.beats.some(b => b.eventId === eventId)) : undefined;
+/** 同场人物正等回应的候选（人物线拍的动作，含明确略过）。 */
+const awaitingResponses = (candidates: readonly NaturalIntentCandidate[]) => candidates.filter(c => characterLineOf(c.eventId));
+/** 一句话同时像在回应人物、又像在做别的动作：先澄清，不替玩家挑一笔结算（交接 2026-11-09 需求二）。 */
+function lineResponseClarify(awaiting: readonly NaturalIntentCandidate[], reason: string, usedModel: boolean): NaturalIntentResult {
+  const names = [...new Set(awaiting.flatMap(c => characterLineOf(c.eventId)!.ownerCharacterIds).map(id => entityName('character', id)))].join('、');
+  const text = String(CONTENT_PACKS.texts['text.prompt.line_response.clarify'] || '').replace('{names}', names);
+  noteTicketDiscard('intent', reason);
+  return { kind: 'unclear', reason, clarification: text, hold: true, skipKeywordPreflight: true, usedModel };
+}
+const pickedAwaiting = (result: NaturalIntentResult, awaiting: readonly NaturalIntentCandidate[]) =>
+  result.kind === 'matched' && !!result.selection && 'eventId' in result.selection && awaiting.some(c => c.eventId === (result.selection as ScenarioEventActionSelection).eventId);
+
+function builtinMods(): ScenarioMod[] {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- Node harness injects mods; browser uses the same builtin table as departure.
+    return (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS || [];
+  } catch { // lcq-allow: Node harness has no require.context; tests inject the builtin table.
+    return [];
+  }
+}
+
+export function listNaturalIntentCandidates(saveData: SaveData, mods: readonly ScenarioMod[] = builtinMods()): NaturalIntentCandidate[] {
   reconcileNaturalIntentMetadata(saveData);
   const refusal = getBaihuGambleRefusalSelections(saveData).map(item => ({
     source: item.source,
@@ -202,7 +231,7 @@ export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCa
     playerLine: item.playerLine,
     contractHash: item.contractHash,
     intentMatch: (saveData as any).世界?.状态?.剧本模组?.events?.find((e:any)=>e.id===item.eventId)?.playerCompletionContract?.actions?.find((a:any)=>a.id===item.actionId)?.intentMatch,
-    affinityAssessment: (()=>{const l=QUEST_LINES.find(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===item.eventId));return l?{characterIds:l.ownerCharacterIds,loadBearing:!!l.loadBearing}:undefined;})(),
+    affinityAssessment: (()=>{const l=characterLineOf(item.eventId);const b=l?.beats.find(b=>b.eventId===item.eventId);return l&&b&&[...(b.byAction?.[item.actionId]||[]),...b.onComplete].some(e=>e.kind==='affinityGrant')?{characterIds:l.ownerCharacterIds,loadBearing:!!l.loadBearing}:undefined;})(),
   }));
   const opportunities = getTrackedStoryOpportunityActions(saveData).map(item => ({
     source: item.source,
@@ -221,7 +250,24 @@ export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCa
     playerLine: item.actionText,
     contractHash: item.receiptId,
   }));
-  return [...events, ...refusal, ...opportunities, ...openWorld];
+  const held = heldActions(saveData).map(item => ({
+    source: 'event_engine', actionId: item.actionId, eventId: item.eventId, label: item.label, playerLine: item.label, contractHash: '', held: true,
+  }));
+  const offer = getStageDepartureOffer(saveData);
+  const place = offer ? locationName(nextStageModOf(saveData, mods)?.scenario.opening?.locationId) : '';
+  const departure = offer ? [{ source: 'stage_departure', actionId: 'stage_departure',
+    label: `${offer.label} · ${questConfig().departureObjective.replace('{place}', place || offer.label)}`,
+    playerLine: offer.label, contractHash: offer.nextStageId }] : [];
+  return [...events, ...refusal, ...opportunities, ...openWorld, ...held, ...departure];
+}
+
+/** 命中暂扣动作：保留输入、不进叙事回合、不结算；提示复用前置拍既有目标文本。 */
+function heldActionClarify(saveData: SaveData, candidate: NaturalIntentCandidate): NaturalIntentResult | undefined {
+  const held = heldActions(saveData).find(item => item.eventId === candidate.eventId && item.actionId === candidate.actionId);
+  const clarification = held ? heldPrerequisiteObjective(held, saveData) : '';
+  if (!clarification) return undefined;
+  noteTicketDiscard('intent', 'held_action', candidate.actionId);
+  return { kind: 'unclear', reason: 'held_action', clarification, hold: true, skipKeywordPreflight: true, usedModel: true };
 }
 
 export function verifyFreshSelection(
@@ -231,7 +277,7 @@ export function verifyFreshSelection(
   const actionId = String(parsed.actionId || '').trim();
   if (!actionId) return undefined;
   const matches = listNaturalIntentCandidates(saveData).filter(item => {
-    if (item.actionId !== actionId) return false;
+    if (item.held || item.actionId !== actionId) return false;
     if (parsed.source && item.source !== parsed.source) return false;
     if (parsed.eventId && (item.eventId || '') !== parsed.eventId) return false;
     if (parsed.contractHash && item.contractHash !== parsed.contractHash) return false;
@@ -411,6 +457,8 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
     '本次只有玩家输入，状态仅从statusCatalog的input条目提案，source必须input。statusProposals必须为数组，没有状态用空数组；动作none不等于没有状态。',
     ...(tickets ? [tickets.system] : []),
     ...(risk ? [riskPromptLine('risk', 'riskEv', risk)] : []),
+    ...(awaitingResponses(candidates).length ? ['人物线候选是同场人物正等玩家回应（含明确略过）。玩家这句话若同时在回应人物又在做另一个候选动作，或同时像在做两个以上候选，actionId填multiple，不要替玩家只挑一个。'] : []),
+    ...(candidates.some(item => item.held) ? ['候选held=true是此刻还不能做的动作；玩家这句话若是在做它，照样填它的actionId，由代码拦下。'] : []),
     `只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]${tickets ? ',"tickets":[]' : ''}${risk ? ',"risk":"none","riskEv":""' : ''}}`,
   ].join('');
   const userPrompt = JSON.stringify({
@@ -425,6 +473,7 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
       label: item.label,
       contractHash: item.contractHash,
       intentMatch:item.intentMatch, affinityAssessment:item.affinityAssessment,
+      ...(item.held ? { held: true } : {}),
     })),
   });
   return { systemPrompt, userPrompt };
@@ -469,6 +518,7 @@ export function resolveStoryEventActionFromText(saveData: SaveData, playerText: 
 }
 
 type NaturalIntentInput = {
+  mods?: readonly ScenarioMod[];
   saveData: SaveData;
   playerText: string;
   selected?: { playerLine?: string; actionText?: string; source?: string } | null;
@@ -516,8 +566,16 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   }
   const classifierFailure = (reason: string, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult => onClassifierFailure(reason, candidates, ownedByFreeAction);
   const alias = input.resolveFromText?.(input.saveData, input.playerText);
-  if (alias && !QUEST_LINES.some(l=>l.kind==='character'&&l.beats.some(b=>b.eventId===alias.eventId))) {
-    return { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
+  if (alias && !characterLineOf(alias.eventId)) {
+    const aliased: NaturalIntentResult = { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
+    // 同场人物正等回应时，主线短语命中不能静默吞掉人物回应：先让意图模型看一遍，人物回应也命中就澄清。
+    const awaiting = input.generate && isScopedNaturalIntentSave(input.saveData) ? awaitingResponses(listNaturalIntentCandidates(input.saveData, input.mods)) : [];
+    if (!awaiting.length) return aliased;
+    const all = listNaturalIntentCandidates(input.saveData, input.mods);
+    const big = await classifyByIntentModel(input, all, intentSaveFingerprint(input.saveData), classifierFailure);
+    if (big.reason === 'multiple_targets' || pickedAwaiting(big, awaiting)) return lineResponseClarify(awaiting, 'line_response_and_main_alias', true);
+    if (big.kind === 'failed' && ['aborted', 'stale', 'state_changed'].includes(String(big.reason))) return big;
+    return aliased;
   }
 
   if (!isScopedNaturalIntentSave(input.saveData)) {
@@ -525,7 +583,7 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
     const plan = input.generateBeat ? beatKeyTurn(input.saveData, input.playerText) : undefined;
     if (!plan) return { kind: 'free', skipKeywordPreflight: false, usedModel: false };
     const verdict = await resolveBeatJudge(input, plan, intentSaveFingerprint(input.saveData));
-    return mergeBeatVerdict(input, { kind: 'free', skipKeywordPreflight: false, usedModel: true }, verdict, listNaturalIntentCandidates(input.saveData));
+    return mergeBeatVerdict(input, { kind: 'free', skipKeywordPreflight: false, usedModel: true }, verdict, listNaturalIntentCandidates(input.saveData, input.mods));
   }
   const optional = resolveOptionalLineAlias(input.saveData, input.playerText);
   if (optional) return { kind: 'alias', selection: optional, skipKeywordPreflight: true, usedModel: false };
@@ -535,11 +593,11 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   }
 
   const fingerprint = intentSaveFingerprint(input.saveData);
-  const allCandidates = listNaturalIntentCandidates(input.saveData);
+  const allCandidates = listNaturalIntentCandidates(input.saveData, input.mods);
   // 任务模式关键拍（beatKeyTurn，本地判定）：另发拍子判定小请求，与原 intent 请求并行；焦点拍的主线动作只交小请求判，不进大请求候选。
   const beatPlan = input.generateBeat ? beatKeyTurn(input.saveData, input.playerText) : undefined;
   const candidates = beatPlan
-    ? allCandidates.filter(item => !(item.source === 'event_engine' && item.eventId === beatPlan.beatId))
+    ? allCandidates.filter(item => item.held || !(item.source === 'event_engine' && item.eventId === beatPlan.beatId))
     : allCandidates;
   // An empty action catalog still permits independent catalog-constrained state recognition.
   if (!beatPlan) return classifyByIntentModel(input, candidates, fingerprint, classifierFailure);
@@ -628,6 +686,7 @@ async function classifyByIntentModel(
     };
     if (parsed.certainty !== 'high') return free('low_certainty', true);
     if (!parsed.actionId) return free('missing_action', true);
+    if (parsed.actionId === 'multiple' && awaitingResponses(candidates).length) return lineResponseClarify(awaitingResponses(candidates), 'multiple_targets', true);
     if (parsed.actionId === 'none') {
       return { kind: 'free', reason: 'explicit_none', skipKeywordPreflight: true, usedModel: true, freeTextStatusResolution, ...withTickets() };
     }
@@ -639,12 +698,20 @@ async function classifyByIntentModel(
     if (!parsed.evidence || !evidenceBelongsToPlayer(String(input.playerText || ''), parsed.evidence)) {
       return free('bad_evidence');
     }
+    const heldCandidate = candidates.find(c => c.held && c.actionId === parsed.actionId && (!parsed.eventId || c.eventId === parsed.eventId));
+    if (heldCandidate) return heldActionClarify(input.saveData, heldCandidate) || free('held_action');
     const chosenCandidate=candidates.find(c=>c.actionId===parsed.actionId&&(!parsed.eventId||c.eventId===parsed.eventId));
     const match=chosenCandidate?.intentMatch as {allowInquiry?:boolean;rejectIf?:string[]}|undefined;
     if((match?.rejectIf||[]).some(word=>compact(input.playerText).includes(compact(word))))return free('rejected_intent');
     const inquiry=match?.allowInquiry===true && !/^(如果|要是|假如|倘若|她说|他说|别人说)/.test(input.playerText.trim());
     if (!inquiry && !evidenceClauseIsAffirmative(String(input.playerText || ''), parsed.evidence)) {
       return free('non_affirmative_evidence');
+    }
+    if (chosenCandidate?.source === 'stage_departure' && (!parsed.source || parsed.source === chosenCandidate.source)) {
+      const offer = getStageDepartureOffer(input.saveData);
+      if (offer && offer.nextStageId === chosenCandidate.contractHash && (!parsed.contractHash || parsed.contractHash === offer.nextStageId))
+        return { kind: 'matched', stageDeparture: offer, skipKeywordPreflight: true, usedModel: true };
+      return free('stale_or_ambiguous_candidate');
     }
     const selection = verifyFreshSelection(input.saveData, parsed);
     if (!selection) return free('stale_or_ambiguous_candidate');
@@ -830,6 +897,10 @@ async function resolveBeatJudgeOnce(input: NaturalIntentInput, plan: BeatKeyPlan
  * 小请求失败（超时／坏 JSON）而大请求也没认出合同动作＝停下保留输入（第 9.4 节第 4 条）；其余照大请求结果。
  */
 function mergeBeatVerdict(input: NaturalIntentInput, big: NaturalIntentResult, verdict: BeatVerdict, candidates: readonly NaturalIntentCandidate[]): NaturalIntentResult {
+  const awaiting = awaitingResponses(candidates);
+  if (verdict.kind === 'settled' && awaiting.length && (big.reason === 'multiple_targets' || pickedAwaiting(big, awaiting))) {
+    return lineResponseClarify(awaiting, 'line_response_and_beat_intent', true);
+  }
   if (verdict.kind === 'settled') {
     if (big.freeActionTickets?.length) for (const ticket of big.freeActionTickets) noteTicketDiscard('free_action', 'beat_intent_settled', `${ticket.actionClass}.${ticket.variant}`);
     return {

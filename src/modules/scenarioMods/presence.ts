@@ -168,9 +168,47 @@ function qingyuStagePastWangZhe(runtime: DepartedRuntime | null | undefined): bo
 type CastGateCondition = {
   all?: CastGateCondition[]; any?: CastGateCondition[];
   done?: string; notDone?: string; entered?: string; notEntered?: string;
-  notPrepared?: { event: string; step: string }; flagTrue?: string;
+  notPrepared?: { event: string; step: string }; prepared?: { event: string; step: string }; flagTrue?: string;
+  flagEquals?: { id: string; value: string | number | boolean }; not?: CastGateCondition;
 };
-type CastGateRule = { permanent?: boolean; stages?: string[]; when?: CastGateCondition; exclude: string[] };
+type CastGateRule = { permanent?: boolean; authoritative?: boolean; stages?: string[]; when?: CastGateCondition; exclude: string[] };
+
+/** 权威暂留规则（authoritative）排除的人物 id：场景账写成 present 也不采信，在队身份不受影响。 */
+export function authoritativeAbsentCharacterIds(runtime: DepartedRuntime | null | undefined): string[] {
+  return [...new Set(castGateRuleHits(runtime, false, true).filter(ref => ref.startsWith('character:')).map(ref => ref.slice('character:'.length)))];
+}
+
+function castGateRuleHits(runtime: DepartedRuntime | null | undefined, permanentOnly: boolean, authoritativeOnly: boolean): string[] {
+  const done = (id: string) => eventIsCompleted(runtime, id);
+  const entered = (id: string) => done(id) || Boolean((runtime as { activeEventIds?: string[] })?.activeEventIds?.includes(id));
+  const prepared = (event: string, step: string) => Boolean((runtime as { eventActionStates?: Record<string, { preparations?: string[] }> })?.eventActionStates?.[event]?.preparations?.includes(step));
+  const holds = (cond: CastGateCondition | undefined): boolean => {
+    if (!cond) return true;
+    if (cond.all) return cond.all.every(holds);
+    if (cond.any) return cond.any.some(holds);
+    if (cond.not) return !holds(cond.not);
+    if (cond.done) return done(cond.done);
+    if (cond.notDone) return !done(cond.notDone);
+    if (cond.entered) return entered(cond.entered);
+    if (cond.notEntered) return !entered(cond.notEntered);
+    if (cond.notPrepared) return !prepared(cond.notPrepared.event, cond.notPrepared.step);
+    if (cond.prepared) return prepared(cond.prepared.event, cond.prepared.step);
+    if (cond.flagTrue) return readRuntimeFlag(runtime?.flags, cond.flagTrue) === true;
+    if (cond.flagEquals) return coerceFlagScalar(readRuntimeFlag(runtime?.flags, cond.flagEquals.id)) === cond.flagEquals.value;
+    return false;
+  };
+  const stage = String(runtime?.modId || '');
+  const refs: string[] = [];
+  // 规则数据在 mod-kit/entity-ledger/cast-gates.json，按书写顺序求值。
+  for (const rule of castGates.rules as CastGateRule[]) {
+    if (permanentOnly && !rule.permanent) continue;
+    if (authoritativeOnly && !rule.authoritative) continue;
+    if (rule.stages && !rule.stages.includes(stage)) continue;
+    if (!holds(rule.when)) continue;
+    refs.push(...rule.exclude);
+  }
+  return refs;
+}
 
 export function nanhuangCastExclusions(runtime: DepartedRuntime | null | undefined, permanentOnly = false): string[] {
   const names: string[] = [];
@@ -178,30 +216,9 @@ export function nanhuangCastExclusions(runtime: DepartedRuntime | null | undefin
   if (!permanentOnly && String(runtime?.modId || '').startsWith('lcq.stage_')) for(const card of runtime?.canon?.characters || []) {
     const w=card.presenceWindow;if(w && (chapter<w.firstChapter || chapter>w.lastPresentChapter)) names.push(...entityAliases('character',card.id));
   }
-  const done = (id: string) => eventIsCompleted(runtime, id);
-  const entered = (id: string) => done(id) || Boolean((runtime as { activeEventIds?: string[] })?.activeEventIds?.includes(id));
-  const holds = (cond: CastGateCondition | undefined): boolean => {
-    if (!cond) return true;
-    if (cond.all) return cond.all.every(holds);
-    if (cond.any) return cond.any.some(holds);
-    if (cond.done) return done(cond.done);
-    if (cond.notDone) return !done(cond.notDone);
-    if (cond.entered) return entered(cond.entered);
-    if (cond.notEntered) return !entered(cond.notEntered);
-    if (cond.notPrepared) return !(runtime as { eventActionStates?: Record<string, { preparations?: string[] }> })?.eventActionStates?.[cond.notPrepared.event]?.preparations?.includes(cond.notPrepared.step);
-    if (cond.flagTrue) return readRuntimeFlag(runtime?.flags, cond.flagTrue) === true;
-    return false;
-  };
-  const stage = String(runtime?.modId || '');
-  // 规则数据在 mod-kit/entity-ledger/cast-gates.json，按书写顺序求值。
-  for (const rule of castGates.rules as CastGateRule[]) {
-    if (permanentOnly && !rule.permanent) continue;
-    if (rule.stages && !rule.stages.includes(stage)) continue;
-    if (!holds(rule.when)) continue;
-    for (const ref of rule.exclude) {
-      const [kind, id] = ref.split(':');
-      names.push(...entityAliases(kind as 'character' | 'enemy', id));
-    }
+  for (const ref of castGateRuleHits(runtime, permanentOnly, false)) {
+    const [kind, id] = ref.split(':');
+    names.push(...entityAliases(kind as 'character' | 'enemy', id));
   }
   // 正在演出死亡或首次出现的事件仍可展示当时演员；落账后才退场。
   return [...new Set(names)];
@@ -220,7 +237,8 @@ export function departedPresentNames(runtime: DepartedRuntime | null | undefined
   const recorded = runtime?.sceneLedger?.actors || {};
   const inferred = nanhuangCastExclusions(runtime).filter(name => recorded[runtimeEntityId(runtime,name)]?.status !== 'present');
   const out = Object.entries(recorded).filter(([, actor]) => actor.status !== 'present').map(([id]) => runtimeEntityName(runtime,id));
-  return [...new Set([...names.filter(name => recorded[runtimeEntityId(runtime,name)]?.status !== 'present'), ...inferred, ...out])];
+  const held = authoritativeAbsentCharacterIds(runtime).flatMap(id => entityAliases('character', id));
+  return [...new Set([...names.filter(name => recorded[runtimeEntityId(runtime,name)]?.status !== 'present'), ...inferred, ...out, ...held])];
 }
 
 /** Persist inferred deaths onto runtime so later stages and old saves share one list. */

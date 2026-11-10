@@ -215,7 +215,10 @@ test('切关单测：沿正式 transition 走完整主路并跳过隔离关，�
     const dest = runtimeOf(save);
     assert.equal(dest.modId, expectedTo);
     const destSource = stages.find(stage => stage.manifest.id === expectedTo);
-    assert.deepEqual(eventIdsOf({ scenario: { events: dest.events } }), eventIdsOf(destSource));
+    // 2026-11-09 交接需求一：04b 之后的清羽关，人在碧鲮村且未取过藻丝时，切关即补上取物入口（07 开场就在碧鲮村）。
+    const carried = expectedTo === 'lcq.stage_07_qingyuan_jiankang' ? ['lcq.event.side_biling_algae_silk'] : [];
+    assert.deepEqual(eventIdsOf({ scenario: { events: dest.events } }), [...eventIdsOf(destSource), ...carried]);
+    for (const id of carried) assert.ok(!dest.completedEventIds.includes(id) && !dest.activeEventIds.includes(id), `${id} 不因切关伪完成或抢主线`);
     for (const key of FUTURE_DONE) {
       if (expectedTo === 'lcq.stage_07_qingyuan_jiankang' && key === 'event.xieyi_entrustment.done') {
         assert.notEqual(dest.flags[key], true, '进 07 不得预置托付 done');

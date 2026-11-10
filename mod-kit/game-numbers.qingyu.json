@@ -3248,7 +3248,8 @@
         "liuchao.location.xianyang"
       ],
       "南荒": [
-        "lcq.location.huamiao_village"
+        "lcq.location.huamiao_village",
+        "liuchao.location.biyu_village"
       ],
       "太泉": [
         "liuchao.location.canglan"

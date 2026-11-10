@@ -21,6 +21,12 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin:act.ningyu.y5.rejoin",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.blank_letter_and_dagu:face_xiaozi_dagu_reveal",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
       "aliases": []
@@ -207,6 +213,18 @@
     },
     {
       "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.defer.v_warm",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
       "id": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter:act.ningyu.y5.stay",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -328,6 +346,12 @@
     {
       "kind": "action",
       "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply:act.ningyu.o2.ask_why",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "action",
+      "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply:act.ningyu.o2.defer",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -8974,6 +8998,12 @@
       "kind": "event",
       "id": "lcq.event.blank_letter_and_dagu",
       "authoritySource": "src/modules/scenarioMods/builtins/data/lcq.stage_05b.json",
+      "aliases": []
+    },
+    {
+      "kind": "event",
+      "id": "lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -19957,6 +19987,12 @@
     },
     {
       "kind": "location",
+      "id": "lyl.location.taiquan_crater",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": []
+    },
+    {
+      "kind": "location",
       "id": "lyl.location.xianqian_dian",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []
@@ -20277,6 +20313,12 @@
     },
     {
       "kind": "receipt",
+      "id": "rcpt.ningyu.o2.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
       "id": "rcpt.ningyu.o2.refuse",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -20301,6 +20343,12 @@
     },
     {
       "kind": "receipt",
+      "id": "rcpt.ningyu.y5_rejoin",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
       "id": "rcpt.ningyu.y5.ask",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -20308,6 +20356,12 @@
     {
       "kind": "receipt",
       "id": "rcpt.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "receipt",
+      "id": "rcpt.ningyu.y5.defer",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -21411,6 +21465,12 @@
     },
     {
       "kind": "state",
+      "id": "branch.ningyu.y5_rejoined",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "state",
       "id": "state.lmz.promise_pan_secret",
       "authoritySource": "mod-kit/quest-lines/lines.json",
       "aliases": []
@@ -21437,6 +21497,12 @@
       "kind": "status",
       "id": "bleeding",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
+      "id": "buff.shanshen_blessing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
     {
@@ -22005,6 +22071,18 @@
     },
     {
       "kind": "text",
+      "id": "actionDisplay.lyl.event.han_court_grain_blame.hear_court_grain_cutoff.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "actionDisplay.lyl.event.han_court_grain_blame.hear_court_grain_cutoff.line",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "brief.baihu.o1_price",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22072,6 +22150,12 @@
     {
       "kind": "text",
       "id": "brief.ningyu.y5_enter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "brief.ningyu.y5_rejoin",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22299,6 +22383,12 @@
     },
     {
       "kind": "text",
+      "id": "free.block.selfUse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.block.settled",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22318,6 +22408,12 @@
     {
       "kind": "text",
       "id": "free.fact.affinity.worn",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.aftermath.downed",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22917,6 +23013,30 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.selfUse.cured",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.selfUse.noEffect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.selfUse.onUse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.selfUse.used",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.shield.done",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -23320,6 +23440,12 @@
     {
       "kind": "text",
       "id": "free.receipt.refused",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.receipt.selfUse",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -23769,6 +23895,12 @@
     },
     {
       "kind": "text",
+      "id": "intent.ningyu.o2.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "intent.ningyu.o2.refuse",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -23800,6 +23932,18 @@
     {
       "kind": "text",
       "id": "intent.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y5.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "intent.ningyu.y5.rejoin",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -24375,6 +24519,30 @@
     },
     {
       "kind": "text",
+      "id": "nanhuang.leopard.encounter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "nanhuang.leopard.line.a_xi",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "nanhuang.leopard.line.shiweimo",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "nanhuang.leopard.line.su_li",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "outcome.act.ask_biling_for_nylon",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -24537,6 +24705,12 @@
     },
     {
       "kind": "text",
+      "id": "outcome.act.ningyu.o2.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "outcome.act.ningyu.o2.refuse",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -24568,6 +24742,18 @@
     {
       "kind": "text",
       "id": "outcome.act.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y5.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "outcome.act.ningyu.y5.rejoin",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -26025,6 +26211,78 @@
     },
     {
       "kind": "text",
+      "id": "report8091.encounter.foreshadow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.encounter.reveal",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.han.arrived.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.han.arrived.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.han.arrived.playerLine",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.moderation.blocked",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.moderation.emptyOutput",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.moderation.local",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.qin.preview",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.brief.tagOn.opposed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.brief.tagOn.player_side",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.brief.tagOn.scene",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "scene.defense.part.assist",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -26253,6 +26511,12 @@
     },
     {
       "kind": "text",
+      "id": "text.act.ningyu.o2.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "text.act.ningyu.o2.refuse",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -26284,6 +26548,18 @@
     {
       "kind": "text",
       "id": "text.act.ningyu.y5.bring",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y5.defer",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.act.ningyu.y5.rejoin",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -26655,6 +26931,36 @@
     },
     {
       "kind": "text",
+      "id": "text.line_log.outcome.expired",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line_log.outcome.responded",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line_log.outcome.skipped",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line_log.respond",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.line_log.skip",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "text.line.biling_algae_silk.title",
       "authoritySource": "mod-kit/quest-lines/resources.json",
       "aliases": []
@@ -26769,6 +27075,12 @@
     },
     {
       "kind": "text",
+      "id": "text.obj.ningyu.y5_rejoin",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "text.obj.ningyu.y6_door",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -26792,9 +27104,21 @@
       "aliases": []
     },
     {
-      "kind": "location",
-      "id": "lyl.location.taiquan_crater",
-      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "kind": "text",
+      "id": "text.prompt.beat.ningyu.o2_regicide",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.prompt.beat.ningyu.y5_enter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "text.prompt.line_response.clarify",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     }
   ],

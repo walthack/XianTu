@@ -22,13 +22,15 @@ function fixture(beatId,{completed=[],active=[],affinity={}}={}){
 const offered=f=>rt.getCurrentStoryExplorationActions(f.save).filter(a=>a.eventId===f.b.eventId);
 function act(f,id){const a=rt.getCurrentStoryExplorationActions(f.save).find(a=>a.actionId===id);assert.ok(a,`${id} not offered`);f.r.worldTurn++;return rt.recordStoryEventStructuredAction(f.save,a);}
 const aff=(f,id)=>f.save.社交.关系[id].好感度;
+// 宿主准备正文已落账、宿主尚未完成：O2/Y5 的开场时点（交接 2026-11-09 §4）。
+function prepared(f,hostId,step){rt.getCurrentStoryEventActions(f.save);const st=f.r.eventActionStates[E(hostId)];assert.ok(st,hostId);st.preparations=[...new Set([...(st.preparations||[]),step])];return f;}
 const eventOf=f=>f.r.events.find(e=>e.id===f.b.eventId);
 const action=(f,id)=>eventOf(f).playerCompletionContract.actions.find(a=>a.id===id);
 
 // ---------------------------------------------------------------- pack integrity
 test('every pack beat is projected as an optional event and every new id is in the id table',()=>{
  assert.deepEqual(catalog.questLines.map(l=>l.id),PACK_LINES);
- assert.equal(beats.length,15);
+ assert.equal(beats.length,16); // 2026-11-09 交接需求三：凝羽暂留后的驿馆会合拍
  for(const b of beats){
   const stage=stageMod(b.stageId),e=stage.scenario.events.find(e=>e.id===b.eventId);
   assert.ok(e,b.eventId);assert.equal(e.critical,false);assert.equal(e.questLineBeatId,b.id);
@@ -107,13 +109,13 @@ test('O1 opens only while the fee event is the anchor; advancing alone never wri
  assert.equal(offered(f).length,0);
 });
 test('O2 records the regicide stance for both lines and moves her affinity by the configured weight',()=>{
- const f=fixture('beat.ningyu.o2_regicide',{completed:['ningyu_regicide_offer'],affinity:{[NY]:30}});
- assert.equal(offered(f).length,3);
+ const f=prepared(fixture('beat.ningyu.o2_regicide',{active:['ningyu_regicide_offer'],affinity:{[NY]:30}}),'ningyu_regicide_offer','ningyu_regicide_price_heard');
+ assert.deepEqual(offered(f).map(a=>a.actionId),['act.ningyu.o2.agree','act.ningyu.o2.refuse','act.ningyu.o2.ask_why','act.ningyu.o2.defer']);
  act(f,'act.ningyu.o2.ask_why');
  assert.equal(f.r.flags['branch.baihu.regicide_stance'],'deferred');assert.equal(f.r.flags['branch.ningyu.regicide_reply'],'asked_why');
  assert.equal(aff(f,NY),30+numbers.lineBonds.ningyu.regicideAskWhy);
  assert.match(f.save.社交.关系[NY].记忆.at(-1),/只问她为什么/);
- const g=fixture('beat.ningyu.o2_regicide',{completed:['ningyu_regicide_offer'],affinity:{[NY]:30}});
+ const g=prepared(fixture('beat.ningyu.o2_regicide',{active:['ningyu_regicide_offer'],affinity:{[NY]:30}}),'ningyu_regicide_offer','ningyu_regicide_price_heard');
  act(g,'act.ningyu.o2.refuse');assert.equal(g.r.flags['branch.baihu.regicide_stance'],'no');assert.equal(aff(g,NY),30+numbers.lineBonds.ningyu.regicideRefuse);
 });
 test('O3 stance then O5: a lie told at the mirror is the card the courier choice is shown with',()=>{
@@ -134,10 +136,10 @@ test('O3 stance then O5: a lie told at the mirror is the card the courier choice
 test('Y3 care is remembered, scored by config, and echoed into the Y5 card',()=>{
  const f=fixture('beat.ningyu.y3_fire',{completed:['rainforest_black_shoal'],affinity:{[NY]:30}});
  act(f,'act.ningyu.y3.private');assert.equal(f.r.flags['branch.ningyu.care'],'warm');assert.equal(aff(f,NY),30+numbers.lineBonds.ningyu.careWarm);
- const g=fixture('beat.ningyu.y5_enter',{completed:['guiwangdong_coop_pact'],affinity:{[NY]:30}});
- assert.deepEqual(offered(g).map(a=>a.actionId),['act.ningyu.y5.bring','act.ningyu.y5.stay','act.ningyu.y5.ask']);
+ const g=prepared(fixture('beat.ningyu.y5_enter',{active:['guiwangdong_coop_pact'],affinity:{[NY]:30}}),'guiwangdong_coop_pact','ningyu_relapse_settled');
+ assert.deepEqual(offered(g).map(a=>a.actionId),['act.ningyu.y5.bring','act.ningyu.y5.stay','act.ningyu.y5.ask','act.ningyu.y5.defer']);
  g.r.flags['branch.ningyu.care']='warm';
- assert.deepEqual(offered(g).map(a=>a.actionId),['act.ningyu.y5.bring.v_warm','act.ningyu.y5.stay.v_warm','act.ningyu.y5.ask.v_warm']);
+ assert.deepEqual(offered(g).map(a=>a.actionId),['act.ningyu.y5.bring.v_warm','act.ningyu.y5.stay.v_warm','act.ningyu.y5.ask.v_warm','act.ningyu.y5.defer.v_warm']);
  assert.match(action(g,'act.ningyu.y5.stay.v_warm').previousBeat,/干衣服/);
  act(g,'act.ningyu.y5.stay.v_warm');assert.equal(g.r.flags['branch.ningyu.enter_dong'],'stay');assert.equal(aff(g,NY),30+numbers.lineBonds.ningyu.enterStay);
 });

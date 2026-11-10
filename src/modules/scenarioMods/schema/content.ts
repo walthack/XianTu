@@ -52,7 +52,20 @@ export interface ScenarioModItemUse {
   minutes?: number;
 }
 
+/** 读取时按既有事实派生；按 states 的倒序选首个满足所有条件的展示态。 */
+export type ItemPresentationCondition =
+  | { kind: 'held' }
+  | { kind: 'eventCompleted'; eventId: string; stageId: string }
+  | { kind: 'preparation'; eventId: string; preparation: string };
+export interface ItemPresentationState {
+  id: string;
+  name: string;
+  description: string;
+  when: ItemPresentationCondition[];
+}
+
 export interface ScenarioModItem {
+  states?: ItemPresentationState[];
   /** 缺省按 type 推：consumable→consumable，weapon/armor→equipped；填了必须与类型一致。 */
   activation?: ScenarioModActivation;
   /** 剧情道具仅由剧情结算定向发放，不进入随机拾取/掉落。 */

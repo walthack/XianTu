@@ -7,21 +7,7 @@
       "ownerCharacterIds": [],
       "loadBearing": false,
       "entry": {
-        "all": [
-          {
-            "eventDone": "lcq.event.biling_bay_stance"
-          },
-          {
-            "atLocation": "liuchao.location.biyu_village"
-          }
-        ]
-      },
-      "closeWhen": {
-        "any": [
-          {
-            "eventDone": "lcq.event.ruins_ghost_warriors"
-          }
-        ]
+        "atLocation": "liuchao.location.biyu_village"
       },
       "beats": [
         {
@@ -33,9 +19,6 @@
             "all": [
               {
                 "presentActor": "lcq.character.biling_woman_ch80"
-              },
-              {
-                "presentActor": "liuchao.character.qi_yuan"
               },
               {
                 "atLocation": "liuchao.location.biyu_village"
@@ -103,11 +86,32 @@
             {
               "kind": "npcKnowledge",
               "actorIds": [
-                "liuchao.character.qi_yuan",
-                "lcq.character.np003",
+                "liuchao.character.qi_yuan"
+              ],
+              "factId": "fact.biling_algae_as_nylon",
+              "when": {
+                "presentActor": "liuchao.character.qi_yuan"
+              }
+            },
+            {
+              "kind": "npcKnowledge",
+              "actorIds": [
+                "lcq.character.np003"
+              ],
+              "factId": "fact.biling_algae_as_nylon",
+              "when": {
+                "presentActor": "lcq.character.np003"
+              }
+            },
+            {
+              "kind": "npcKnowledge",
+              "actorIds": [
                 "liuchao.character.yun_cang_feng"
               ],
-              "factId": "fact.biling_algae_as_nylon"
+              "factId": "fact.biling_algae_as_nylon",
+              "when": {
+                "presentActor": "liuchao.character.yun_cang_feng"
+              }
             },
             {
               "kind": "setReceipt",
@@ -121,10 +125,7 @@
           "locationId": "liuchao.location.biyu_village",
           "briefId": "brief.side.biling_algae_silk",
           "presentActorIds": [
-            "lcq.character.biling_woman_ch80",
-            "liuchao.character.qi_yuan",
-            "lcq.character.np003",
-            "liuchao.character.yun_cang_feng"
+            "lcq.character.biling_woman_ch80"
           ],
           "canonChapter": 80,
           "objectiveId": "text.line.biling_algae_silk.title"

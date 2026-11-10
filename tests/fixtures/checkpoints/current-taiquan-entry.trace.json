@@ -1197,19 +1197,6 @@
     "kind": "action",
     "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
     "event": "lcq.event.ruins_ghost_warriors",
-    "action": "travel:liuchao.location.south_wild_valley",
-    "receipt": {
-      "attempted": true,
-      "completed": false,
-      "eventId": "lcq.event.ruins_ghost_warriors",
-      "actionId": "travel:liuchao.location.south_wild_valley",
-      "outcome": "success"
-    }
-  },
-  {
-    "kind": "action",
-    "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
-    "event": "lcq.event.ruins_ghost_warriors",
     "action": "identify_dong_marks_in_ruins",
     "receipt": {
       "attempted": true,
@@ -1294,19 +1281,6 @@
       "completed": true,
       "eventId": "lcq.event.guiwangdong_coop_pact",
       "actionId": "seal_guiwangdong_coop_pact",
-      "outcome": "success"
-    }
-  },
-  {
-    "kind": "action",
-    "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
-    "event": "lcq.event.enter_dong_with_migu",
-    "action": "travel:liuchao.location.guiwang_dong",
-    "receipt": {
-      "attempted": true,
-      "completed": false,
-      "eventId": "lcq.event.enter_dong_with_migu",
-      "actionId": "travel:liuchao.location.guiwang_dong",
       "outcome": "success"
     }
   },

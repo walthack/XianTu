@@ -545,6 +545,7 @@ import { useActionQueueStore } from '@/stores/actionQueueStore'
 import { EnhancedActionQueueManager } from '@/utils/enhancedActionQueue'
 import { isTavernEnv } from '@/utils/tavern'
 import type { Item, ConsumableItem } from '@/types/game'
+import { inventoryItemEntries, resolveItemPresentation } from '@/modules/scenarioMods/itemPresentation'
 import { itemTierOf } from '@/data/itemQuality'
 import { formatTechniqueEffects } from '@/utils/cultivationSpeedCalculator'
 import { toast } from '@/utils/toast'
@@ -722,19 +723,17 @@ const unequipItem = async (slot: { name: string; slotKey: string; item: Item | n
 
 const itemList = computed<Item[]>(() => {
   const items = gameStateStore.inventory?.物品 || {}
+  const save = {
+    角色: { 背包: { 物品: items } },
+    世界: { 状态: { 剧本模组: gameStateStore.worldState?.剧本模组 } },
+  }
   // 物品现在是对象格式 Record<string, Item>
   // 过滤掉以 _ 开头的元数据字段（如 _AI装备流程提醒）
-  return Object.entries(items)
-    .filter(([key, val]) => {
-      // 过滤掉元数据字段
-      if (key.startsWith('_')) {
-        return false
-      }
-      // 过滤掉无效值
-      return val && typeof val === 'object'
-    })
-    .map(([, val]) => {
+  return inventoryItemEntries(items)
+    .filter(([key]) => !key.startsWith('_'))
+    .map(([key, val]) => {
       const item = val as Partial<Item>
+      const presentation = resolveItemPresentation(save, item.物品ID || key, item)
 
       // 🔍 调试：检查品质数据是否缺失
       if (!item.品质 && (item.类型 === '功法' || item.类型 === '装备')) {
@@ -749,10 +748,10 @@ const itemList = computed<Item[]>(() => {
       return {
         ...item,
         物品ID: String(item.物品ID || ''),
-        名称: String(item.名称 || ''),
+        名称: presentation.name,
         类型: String(item.类型 || '其他') as '装备' | '功法' | '丹药' | '材料' | '其他',
         品质: item.品质 || { quality: '凡', grade: 1 },
-        描述: String(item.描述 || ''),
+        描述: presentation.description,
         数量: Number(item.数量 || 1),
       } as Item
     })

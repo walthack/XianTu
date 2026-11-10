@@ -25,3 +25,25 @@ test('stage text/number references resolve before schema validation and missing/
   assert.equal(out.stages[0].scenario.opening.text,texts[original.$text]);
   assert.equal(out.stages[0].scenario.events[0].playerCompletionContract.actions[0].timeCost,1);
 }));
+
+test('held subject rules copy contract labels, accept optional anchors and reject unknown items or missing anchors',async()=>{
+ const {cp,mkdtemp,readFile,writeFile,rm}=await import('node:fs/promises');
+ const dir=await mkdtemp(join(root,'_newbot_tmp/pr1-letter-packs-'));
+ try{
+  await cp(join(root,'src/modules/contentPacks/packs'),dir,{recursive:true});
+  const path=join(dir,'qingyu/held-actions.json'),original=JSON.parse(await readFile(path,'utf8'));
+  const compile=()=>compileContentPacks({packsDir:dir});
+  const set=async rule=>writeFile(path,JSON.stringify([rule]));
+  let out=await compile(),rule=out.heldActions[0];
+  const contract=out.stages.flatMap(s=>s.scenario.events||[]).find(e=>e.id===rule.eventId)
+   || JSON.parse(await readFile(join(root,'src/modules/scenarioMods/builtins/data/lcq.stage_05b.json'),'utf8')).scenario.events.find(e=>e.id===rule.eventId);
+  assert.equal(rule.label,contract.playerCompletionContract.actions.find(a=>a.id===rule.actionId).label);
+  assert.equal(rule.subject.itemId,'lcq.item.crow_bamboo_tube');
+  assert.equal(rule.grantsPreparation,contract.playerCompletionContract.actions.find(a=>a.id===rule.actionId).grantsPreparation);
+  const metadataInSource={...original[0],grantsPreparation:'blank_letter_confirmed'};await set(metadataInSource);await assert.rejects(compile,/invalid held action/,'preparation remains compiler metadata, not an author rule field');
+  const badItem=structuredClone(original[0]);badItem.subject.itemId='missing.item';await set(badItem);await assert.rejects(compile,/invalid held action/);
+  const missing=structuredClone(original[0]);delete missing.eventId;delete missing.actionId;await set(missing);await assert.rejects(compile,/invalid held action/);
+  const actionOnly=structuredClone(original[0]);delete actionOnly.eventId;actionOnly.id='held.test.action-only';await set(actionOnly);out=await compile();assert.equal(out.heldActions[0].label,rule.label);
+  const eventOnly=structuredClone(original[0]);delete eventOnly.actionId;eventOnly.intentLabelId='text.obj.ningyu.y5_rejoin';await set(eventOnly);out=await compile();assert.equal(out.heldActions[0].label,out.texts[eventOnly.intentLabelId]);
+ }finally{await rm(dir,{recursive:true,force:true});}
+});

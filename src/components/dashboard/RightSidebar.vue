@@ -293,7 +293,16 @@
         <div v-show="!beatsCollapsed" class="quest-body">
           <div class="quest-main">
             <div v-for="(beat, i) in characterBeats" :key="`${beat.name}-${i}`" class="quest-event">
-              <span class="quest-mark-side">·</span>{{ beat.name }}——{{ beat.objective }}
+              <div :class="{ 'line-beat-toggle': beat.actions?.length }" @click="beat.actions?.length && toggleLineBeat(beat.beatId)">
+                <span class="quest-mark-side">·</span>{{ beat.name }}——{{ beat.objective }}
+                <span v-if="beat.actions?.length" class="line-beat-hint">{{ openLineBeat === beat.beatId ? '▾' : `▸ ${lineLogText('respond')}／${lineLogText('skip')}` }}</span>
+              </div>
+              <div v-if="beat.actions?.length && openLineBeat === beat.beatId" class="line-beat-actions">
+                <button v-for="action in beat.actions" :key="action.actionId" type="button" class="line-beat-action" :class="{ 'line-beat-skip': action.skip }"
+                  @click.stop="selectLineAction(beat.eventId, action.actionId)">
+                  {{ action.skip ? `${lineLogText('skip')}：` : `${lineLogText('respond')}：` }}{{ action.label }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -432,6 +441,8 @@
 
 <script setup lang="ts">
 import {questLineView} from '@/modules/scenarioMods/questLineView';
+import { CONTENT_PACKS } from '@/modules/contentPacks';
+import { panelBus } from '@/utils/panelBus';
 import { computed, ref } from 'vue';
 import { logError } from '@/modules/diagnostics/log';
 import { User, Sparkles, Heart, Droplet, Brain, Clock, Star, Zap } from 'lucide-vue-next';
@@ -577,16 +588,22 @@ const lineCompass = computed(() => {
 });
 // 人物任务：只问当前这一拍因为谁而不一样。事件 id 走 getScenarioFocusEvent，
 // 与主线 UI / 主叙事同一锚，避免从 activeEventIds 抽出资料事件。
-const characterBeats = computed(() => {
+const characterBeats = computed((): CharacterBeatRow[] => {
   const rt: any = epistemicRuntime.value;
   if (!rt || typeof rt !== 'object') return [];
   const event = currentQuestEvent(rt);
   const objective = visibleQuestObjective(rt, event);
   const view = questLineView(gameStateStore.toSaveData());
-  // 角色归宿（人物线已收束）不依赖当前拍，始终可见。
-  if (!objective) return view.resolved;
-  return characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective })).concat(view.character, view.resolved);
+  // 角色归宿（人物线已收束）与正等回应的人物拍不依赖当前拍，始终可见（任务引导开关都一样）。
+  const waiting = view.character.filter(beat => beat.actions.length);
+  if (!objective) return [...waiting, ...view.closed, ...view.resolved];
+  return [...characterBeatsAt(event?.id).map(beat => ({ name: beat.name, objective })), ...view.character, ...view.closed, ...view.resolved];
 });
+type CharacterBeatRow = { name: string; objective: string; beatId?: string; eventId?: string; actions?: Array<{ actionId: string; label: string; skip: boolean }> };
+const openLineBeat = ref<string | undefined>();
+const toggleLineBeat = (beatId?: string) => { openLineBeat.value = openLineBeat.value === beatId ? undefined : beatId; };
+const lineLogText = (key: 'respond' | 'skip') => CONTENT_PACKS.texts[`text.line_log.${key}`] || key;
+const selectLineAction = (eventId: string | undefined, actionId: string) => { void panelBus.emit('select-line-action', { eventId, actionId }); };
 // 任务日志（story.quest.enabled；questLog.ts）：只读存档，开关关时为空。
 const questGuideOn = computed(() => questGuideEnabled(gameStateStore.toSaveData()));
 const questDoneOpen = ref(false);
@@ -2322,6 +2339,12 @@ const getReputationClass = (): string => {
 .quest-section .quest-body { padding: 6px 10px 10px; display: flex; flex-direction: column; gap: 6px; }
 .quest-chapter { font-size: 12px; font-weight: 600; opacity: 0.9; display: flex; align-items: center; }
 .quest-event { font-size: 12px; line-height: 1.6; opacity: 0.95; font-weight: 500; padding-left: 2px; }
+.line-beat-toggle { cursor: pointer; }
+.line-beat-hint { margin-left: 6px; font-size: 11px; opacity: 0.7; }
+.line-beat-actions { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 6px 12px; }
+.line-beat-action { text-align: left; font-size: 12px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--color-border, rgba(127,127,127,0.35)); background: transparent; color: inherit; cursor: pointer; }
+.line-beat-action:hover { background: rgba(127,127,127,0.12); }
+.line-beat-skip { opacity: 0.8; }
 .quest-locked { opacity: 0.6; }
 .quest-line-others { cursor: pointer; padding-left: 2px; opacity: 0.55; }
 .quest-mark-main { color: var(--color-accent, #d4af37); font-weight: 700; margin-right: 6px; }
