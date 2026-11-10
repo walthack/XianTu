@@ -197,6 +197,7 @@ if (idSet.size !== entries.length) throw new Error('注册表存在重复 id（�
 // 手工补卡（游戏原创角色等）：只 append，id 撞车报错。2026-10-20 诗薇莫（F02）。
 // overrides：源卡已有条目的 staticProfile 字段覆盖（源卡不入库，手补的摘要放这里才不丢）；
 // 在 embedText 生成之后套用，不改检索文本；id 不在源卡里即报错。
+let supplementCharacters = [];
 {
   const sup = JSON.parse(readFileSync(join(root, 'mod-kit/character-registry-supplements.json'), 'utf8'));
   for (const o of sup.overrides || []) {
@@ -204,8 +205,28 @@ if (idSet.size !== entries.length) throw new Error('注册表存在重复 id（�
     if (!e) throw new Error(`补卡覆盖的 id 不在源卡生成的条目里：${o.id}`);
     e.staticProfile = { ...e.staticProfile, ...o.staticProfile };
   }
+  supplementCharacters = sup.characters || [];
+}
+// 原著依据出生年（C01，mod-kit/character-birth-years.json）：写进源卡生成的条目，覆盖源卡旧值；依据标注放条目顶层，不进角色档案与提示词。
+// 手工补卡的角色把出生年写在补卡源里（补卡源与总表同内容），不进这张表。
+// 年龄由运行时现算，这里只存出生年，不写派生的年龄或首登下限。
+{
+  const table = JSON.parse(readFileSync(join(root, 'mod-kit/character-birth-years.json'), 'utf8'));
+  const seen = new Set();
+  for (const row of table.entries || []) {
+    const e = entries.find(x => x.id === row.id);
+    if (!e) throw new Error(`出生年表的 id 不在源卡生成的条目里（手工补卡的出生年写在补卡源）：${row.id}`);
+    if (seen.has(row.id)) throw new Error(`出生年表 id 重复：${row.id}`);
+    if (!Number.isSafeInteger(row.birthYear) || !['原著', '推断', '下限'].includes(row.basis)) throw new Error(`出生年表条目无效：${row.id}`);
+    seen.add(row.id);
+    e.staticProfile = { ...e.staticProfile, birthYear: row.birthYear };
+    e.birthYearBasis = row.basis;
+  }
+  for (const row of table.notPersons || []) if (seen.has(row.id)) throw new Error(`非人物不进出生年表：${row.id}`);
+}
+{
   const have = new Set(entries.map(e => e.id));
-  for (const c of sup.characters || []) { if (have.has(c.id)) throw new Error(`补卡 id 与总表撞车：${c.id}`); entries.push(c); have.add(c.id); }
+  for (const c of supplementCharacters) { if (have.has(c.id)) throw new Error(`补卡 id 与总表撞车：${c.id}`); entries.push(c); have.add(c.id); }
 }
 // RAG 以 sourceHash 判断是否重建本地向量。注册表 ID/stagePresence 不只取决于角色卡，
 // 也取决于当前 stage 演员集合；只哈希 raw cards 会在演员移出关卡后留下旧向量 ID。

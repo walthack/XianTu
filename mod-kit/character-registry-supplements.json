@@ -35,8 +35,10 @@
           "location": "南荒",
           "locator": "六朝清羽记·第58章",
           "scene": "花苗女子，与石刚相好"
-        }
+        },
+        "birthYear": 202
       },
+      "birthYearBasis": "下限",
       "region": "南荒",
       "phaseIdentities": [],
       "review": {
@@ -84,8 +86,10 @@
           "location": "红苗（被点名）",
           "locator": "六朝清羽记·第91章",
           "scene": "红苗族的族长，娄蒙之父"
-        }
+        },
+        "birthYear": 180
       },
+      "birthYearBasis": "推断",
       "region": "南荒",
       "phaseIdentities": [],
       "review": {
@@ -160,8 +164,10 @@
           "location": "黑石滩蛇彝村寨",
           "locator": "六朝清羽记·第37章",
           "scene": "夜里从屋檐扑下袭击"
-        }
+        },
+        "birthYear": 202
       },
+      "birthYearBasis": "下限",
       "region": "南荒",
       "phaseIdentities": [],
       "review": {
@@ -188,6 +194,31 @@
             "faction": "白湖商馆",
             "role": "同行刀客"
           }
+        ]
+      }
+    },
+    {
+      "id": "liuchao.character.qin_han",
+      "source": "C01（用户 2026-11-10 20:10）：秦翰卡删去「白发萧索」，与出生年 202【下限】的现算年龄不冲突",
+      "staticProfile": {
+        "appearance": "头戴紫貂玉珰，锦衣华服，身材精悍，长发飞舞，虎目精光内敛，偶尔目露奇光。；夜眼锐利如鹰隼，目光阴冷。身形稳如渊岳，流露逼人气势。半显阳刚半显阴柔。"
+      }
+    },
+    {
+      "id": "liuchao.character.mao_yan_shou",
+      "source": "C01：卡面年龄句不进提示词，年龄由出生年现算（删「十五六岁年纪」）",
+      "staticProfile": {
+        "appearance": "面上一块巴掌大的青色疤痕，从左眉一直延伸到眼下；瘦巴巴的身体"
+      }
+    },
+    {
+      "id": "liuchao.character.ha_mi_chi",
+      "source": "C01：卡面年龄句不进提示词，年龄由出生年现算（删「十七岁该打熬筋骨」）",
+      "staticProfile": {
+        "principles": [
+          "严守族规，违者必惩（高衙内戒肉戒色、劈柴赎过）",
+          "长辈须严教后辈，溺爱是害",
+          "以技服人，术法较量不动声色"
         ]
       }
     }

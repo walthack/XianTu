@@ -1,0 +1,1270 @@
+{
+  "note": "角色原著依据出生年（C01，用户 2026-11-10 定；数据来源：出生年补全.md 最终版）。build-character-registry.mjs 在补卡之后写进总表 staticProfile.birthYear／birthYearBasis；年龄一律由运行时现算（当前游戏年−有效出生年），有效出生年＝min(出生年, 首登游戏年−18) 不写回这里或总表。basis：原著＝原文给出本人当下岁数或区间（取中值）；推断＝由原文线索推算；下限＝推不出，填 202（220−18）。notes：线索弱／下界／已故／卡源待核／疑同一人，未定。手工补卡的角色（阿伶、红苗族长、诗薇莫）出生年写在 character-registry-supplements.json 的补卡里。notPersons：非人物，不进人物年龄名单，卡不动。",
+  "notPersons": [
+    {
+      "id": "canon.character.a26c337a2c",
+      "name": "雪雪",
+      "reason": "魔犬，不是人物（总策划 2026-11-10 20:10 定；用户 20:10 确认）"
+    }
+  ],
+  "entries": [
+    {
+      "id": "canon.character.030c29e566",
+      "name": "高力士",
+      "birthYear": 170,
+      "basis": "推断",
+      "source": "自称「老奴」(ygx.txt:25543)；另一处叙述称其「老脸」(:12470，该段不引原文)；无数字，按老夫档取 50；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "canon.character.04096e3159",
+      "name": "南霁云",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句或档位词（首见 ygx.txt:15265）"
+    },
+    {
+      "id": "canon.character.0dd5135fb1",
+      "name": "蒲海云",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "「那名中年人文士打扮…竟然是…蒲海云」(ygx.txt:29375)；中年档取 40"
+    },
+    {
+      "id": "canon.character.16cd30ae70",
+      "name": "惠远",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "自称「小僧」，众称「小和尚」(yly.txt:14603、:14715)，无数字"
+    },
+    {
+      "id": "canon.character.1ffb4b2911",
+      "name": "谢安石",
+      "birthYear": 165,
+      "basis": "原著",
+      "source": "「那个，五十多岁年纪，正在说话的」→萧遥逸答「那是谢太傅」(qyj.txt:25864–25865)；五十几岁取中值 55"
+    },
+    {
+      "id": "canon.character.22b8bebbb3",
+      "name": "灭宝",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（qyj.txt:43607 起）"
+    },
+    {
+      "id": "canon.character.23aedf6533",
+      "name": "柳摇金",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "史叁称「那混血少女」，柳摇金应声(ygx.txt:38935–38936)，无数字"
+    },
+    {
+      "id": "canon.character.24b12c7229",
+      "name": "墨狼",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "九御「按年龄算，这九人应该都很年轻」(qyj.txt:34422)，无数字"
+    },
+    {
+      "id": "canon.character.2cf90450c5",
+      "name": "安康公主",
+      "birthYear": 205,
+      "basis": "原著",
+      "source": "「一个十四五岁的小姑娘」ygx.txt:18126–18128，取中值15"
+    },
+    {
+      "id": "canon.character.313817337a",
+      "name": "邳忌",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:23480 起）"
+    },
+    {
+      "id": "canon.character.3c47a9ac0b",
+      "name": "萧五",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（qyj.txt:19350 起）"
+    },
+    {
+      "id": "canon.character.42718c1f0d",
+      "name": "玄萝",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:17726 起）"
+    },
+    {
+      "id": "canon.character.44cb02bd12",
+      "name": "古冥隐",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「古冥隐是那个老太监吧？」(qyj.txt:24997)；「一个青衣小帽的老太监…鄙人古冥隐」(:25047)；老者档 60"
+    },
+    {
+      "id": "canon.character.4b8b3f6bd2",
+      "name": "任怀亮",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「一名年轻人…他和刘宜孙差不多年纪」(qyj.txt:40277–40279)；刘宜孙本身为 202【下限】，同取 202"
+    },
+    {
+      "id": "canon.character.4bec22a571",
+      "name": "杨艳",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（ygx.txt:26090 起）"
+    },
+    {
+      "id": "canon.character.4e519b8f03",
+      "name": "文泽",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "「一名文士打扮的中年人…『大将军麾下参军，文泽』」(qyj.txt:1075–1076)；中年档 40。原著首见在王哲军中（四年跳前）"
+    },
+    {
+      "id": "canon.character.4e7f730e2e",
+      "name": "沮渠二世",
+      "birthYear": 187,
+      "basis": "推断",
+      "source": "「直到十余年前…沮渠大师在诸僧拥戴下…成为二世大师」(yly.txt:6068)→十余年（中值 15）前已为成年僧人，按当时 18 倒推；下界",
+      "notes": [
+        "下界"
+      ]
+    },
+    {
+      "id": "canon.character.523920f51c",
+      "name": "郭槐",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「微微佝偻着背，纱帽下的鬓角白发丛生…又糟又老」(yly.txt:8205)；老者档 60"
+    },
+    {
+      "id": "canon.character.526e7db525",
+      "name": "不拾一世",
+      "birthYear": 142,
+      "basis": "推断",
+      "source": "「六十年前不拾大师便已经圆寂」(yly.txt:6067)→已故；按圆寂时至少 18 倒推，只是下界（原著另有「五十年前…一统佛门」ygx.txt:12321）",
+      "notes": [
+        "下界",
+        "已故"
+      ]
+    },
+    {
+      "id": "canon.character.5b1d16b519",
+      "name": "苏定方",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "只知「王彦章…年纪比苏定方、王忠嗣等人都小」(ygx.txt:20606)，无档位词；202 已长于王彦章 203，不冲突"
+    },
+    {
+      "id": "canon.character.60d8299aac",
+      "name": "王茂弘",
+      "birthYear": 160,
+      "basis": "原著",
+      "source": "「王茂弘已经是六十许人」(qyj.txt:26028)；「满头白发萧然」(:26037)；取 60"
+    },
+    {
+      "id": "canon.character.63ebcb52cd",
+      "name": "君雄飞",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「一名须发皆白的老者…『…倒省了老夫一番手脚』」(yly.txt:13679)；老者档 60"
+    },
+    {
+      "id": "canon.character.692c922f1c",
+      "name": "樊雄",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（ygx.txt:9260 起）"
+    },
+    {
+      "id": "canon.character.6b245ba149",
+      "name": "鱼无疾",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著登场前已死（「半年前，我兄弟鱼无疾被人剖心而死」qyj.txt:32009），无年龄句",
+      "notes": [
+        "已故"
+      ]
+    },
+    {
+      "id": "canon.character.6cb668f996",
+      "name": "张承业",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "刘贞亮骂「你这小儿」(ygx.txt:30219) 是辱称，无数字"
+    },
+    {
+      "id": "canon.character.6d6066e669",
+      "name": "法海",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "只在传说中提及；程宗扬称「法海老和尚」(yly.txt:751)；老者档 60；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "canon.character.6ec7e21839",
+      "name": "朱殷",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「在这个比自己还小许多的少女面前」(yly.txt:17172，少女指小紫)；只有相对、无档位词"
+    },
+    {
+      "id": "canon.character.71a9e8c63c",
+      "name": "虚日鼠",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:34594 起）"
+    },
+    {
+      "id": "canon.character.76603f3e4b",
+      "name": "刘彭祖",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「赵王刘彭祖年事已高」(yly.txt:30973)；老者档 60"
+    },
+    {
+      "id": "canon.character.7830fa3c26",
+      "name": "吴行德",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（qyj.txt:19463 起）"
+    },
+    {
+      "id": "canon.character.7ba7ded095",
+      "name": "小桃红",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（yly.txt:23737 起；「少女」只见于总表描述）"
+    },
+    {
+      "id": "canon.character.7cc75f4781",
+      "name": "尹思元",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:15445 起）"
+    },
+    {
+      "id": "canon.character.80c48524ad",
+      "name": "贾师宪",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「老者更是哈哈大笑…『…连我贾师宪的名号都没打听过』」(yly.txt:3326)，通篇自称「老夫」(qyj.txt:31184)；老者档 60"
+    },
+    {
+      "id": "canon.character.81d313b84d",
+      "name": "李十二娘",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（ygx.txt:17511 起）"
+    },
+    {
+      "id": "canon.character.83e108d676",
+      "name": "沈黄经",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「沈黄经是一位宽厚长者」(ygx.txt:17932)；「长者」偏德望，未达档位词。备注：原文称「长者」、在道门「颇有德望」，202（跳后 22 岁）与这一年长形象对不上；按总策划 2026-11-10 20:10 定维持 202"
+    },
+    {
+      "id": "canon.character.846aca5887",
+      "name": "孙天羽",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:5292 起）"
+    },
+    {
+      "id": "canon.character.8507fde74e",
+      "name": "鱼长老",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「一名黑衣老者…鱼长老」(yly.txt:141–142)，自称「老儿」(:143)；老者档 60"
+    },
+    {
+      "id": "canon.character.8cb16a5c6a",
+      "name": "青䝙",
+      "birthYear": 203,
+      "basis": "推断",
+      "source": "「一个穿着青衣的少年…看起来不过十六七岁」(qyj.txt:34321)，随后被唤「青貙」(:34327)；十六七取中值→17"
+    },
+    {
+      "id": "canon.character.90f9d5c8a9",
+      "name": "饿死的大魔头",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "只在莫如霖口述往事中出现（「那大魔头就活活饿死了」yly.txt:19733），已故、时点不明",
+      "notes": [
+        "已故"
+      ]
+    },
+    {
+      "id": "canon.character.95cc55fa42",
+      "name": "拂枢",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（qyj.txt:43607 起）"
+    },
+    {
+      "id": "canon.character.96776c538c",
+      "name": "小豹女",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "仅一处提及（yly.txt:9011），无年龄句"
+    },
+    {
+      "id": "canon.character.97c0d3c718",
+      "name": "柳淳风",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:17281 起）"
+    },
+    {
+      "id": "canon.character.9daa9afd8e",
+      "name": "宁素",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「那少女」(yly.txt:14732–14735)，无数字"
+    },
+    {
+      "id": "canon.character.9ec36f3055",
+      "name": "牛木獬",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "三书均无「牛木獬」此名（仅有斗木獬 yly.txt:34594、牛金牛），疑总表名字有误；列入 §二.9 卡源待核",
+      "notes": [
+        "卡源待核"
+      ]
+    },
+    {
+      "id": "canon.character.a0b3c7cb86",
+      "name": "王守澄",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句或档位词（ygx.txt:12480 起）"
+    },
+    {
+      "id": "canon.character.a409f09c22",
+      "name": "陈乔",
+      "birthYear": 185,
+      "basis": "推断",
+      "source": "「陈乔是星月湖大营的老兵」(yly.txt:23590)；按星月湖旧部档（同营「三十到四十岁之间」qyj.txt:37734）取 35，与匡仲玉同法；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "canon.character.a9ab3f4cb0",
+      "name": "光头大汉",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "泛称，原著多处不同人（qyj.txt:26424、yly.txt:16362），无年龄句"
+    },
+    {
+      "id": "canon.character.ad2b156b4d",
+      "name": "董媛",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原文以「美妇」称之、自报昭仪董媛(yly.txt:28436，该段不引原文)，无档位词"
+    },
+    {
+      "id": "canon.character.afe5070a50",
+      "name": "朱安世",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "卢景「朱安世年轻时还好，年纪越大心思越重」(yly.txt:36425)，暗示年长但无档位词。备注：他与剧孟（175）、郭解同为洛都豪侠头面人物（yly.txt:44175），202 显得比同辈小二十多岁，与原文相对年长关系对不上；按总策划 2026-11-10 20:10 定维持 202"
+    },
+    {
+      "id": "canon.character.b42046aa22",
+      "name": "王彦章",
+      "birthYear": 203,
+      "basis": "推断",
+      "source": "「他年纪比苏定方、王忠嗣等人都小，比吕奉先也大不了几岁」(ygx.txt:20606)；吕奉先 206，「几岁」取 3；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "canon.character.b9996d2635",
+      "name": "葛怀敏",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「葛怀敏年轻气盛」(qyj.txt:41034)，无数字"
+    },
+    {
+      "id": "canon.character.bda545d743",
+      "name": "室火猪",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:34594 起）"
+    },
+    {
+      "id": "canon.character.bfb37ec8c1",
+      "name": "持枪汉子",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:16368 起）"
+    },
+    {
+      "id": "canon.character.c31d8c326e",
+      "name": "枯僧",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "三书未见「枯僧」此名；列入 §二.9 卡源待核",
+      "notes": [
+        "卡源待核"
+      ]
+    },
+    {
+      "id": "canon.character.c607941d12",
+      "name": "燕姣然",
+      "birthYear": 187,
+      "basis": "推断",
+      "source": "谢艺回忆岳帅在晴州港时「还有一个人——光明观堂的燕氏双姝之一，燕姣然」(qyj.txt:11260)→岳帅在世（约十五年前，qyj.txt:10326）已出手，按当时 18 倒推；下界",
+      "notes": [
+        "下界"
+      ]
+    },
+    {
+      "id": "canon.character.caa231dd92",
+      "name": "林妙仙",
+      "birthYear": 187,
+      "basis": "推断",
+      "source": "「宗主林妙仙…直到十余年前华妙宗突然销声匿迹…击杀林妙仙」(qyj.txt:32427)→已故；十余年（中值 15）前已为宗主，按当时 18 倒推（下界）",
+      "notes": [
+        "下界",
+        "已故"
+      ]
+    },
+    {
+      "id": "canon.character.ccb02cf3ed",
+      "name": "宋三",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「一个瘦削男子，论模样倒和朱老头有八分相似」(yly.txt:14723)，无档位词"
+    },
+    {
+      "id": "canon.character.ccd9ad66ad",
+      "name": "刀疤大汉",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:16355 起）"
+    },
+    {
+      "id": "canon.character.ce2359cb21",
+      "name": "索元礼",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（ygx.txt:16410 起）"
+    },
+    {
+      "id": "canon.character.d30c910ed7",
+      "name": "张之煌",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（qyj.txt:19353 起）"
+    },
+    {
+      "id": "canon.character.d7e4622c98",
+      "name": "淖夫人",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「白发的淖夫人」(yly.txt:35070)；「白发苍苍的淖夫人…满是皱纹的脸」(:49525)；老者档 60"
+    },
+    {
+      "id": "canon.character.d9c55fd65a",
+      "name": "达古的孪生妻子",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原文仅封面标注（qyj.txt:12045），无年龄句"
+    },
+    {
+      "id": "canon.character.de573fc5b2",
+      "name": "玉音子",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:15028 起）"
+    },
+    {
+      "id": "canon.character.e4b6985cbc",
+      "name": "鱼弘志",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（ygx.txt:17567 起）；总表「推测为中年宦官」是总表自注，不是原文"
+    },
+    {
+      "id": "canon.character.ec3f210a60",
+      "name": "明镜雪",
+      "birthYear": 187,
+      "basis": "推断",
+      "source": "「十余年前，光明观堂的主人明净雪云游至白武族」(qyj.txt:4362)→十余年（中值 15）前已为观堂主人，按当时 18 倒推（下界）",
+      "notes": [
+        "下界"
+      ]
+    },
+    {
+      "id": "canon.character.ee3ffed582",
+      "name": "女土蝠",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（yly.txt:34594 起）"
+    },
+    {
+      "id": "canon.character.ee6a1a217a",
+      "name": "梁夫人",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「那妇人…却是梁夫人黄氏」(yly.txt:11618)，无数字；总表外貌「徐娘半老」在原著对应段实写刘娥（yly.txt:12800，该段不引原文）"
+    },
+    {
+      "id": "canon.character.f30f0e5545",
+      "name": "飞鸟熊藏",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（qyj.txt:24995 起）"
+    },
+    {
+      "id": "canon.character.fb2941e742",
+      "name": "曲武",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见年龄句（ygx.txt:26529 起）"
+    },
+    {
+      "id": "lcq.character.biling_woman_ch80",
+      "name": "碧鲮女子",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「那个年轻的碧鲮女子」(qyj.txt:11695)，无数字"
+    },
+    {
+      "id": "lcq.character.dai_jixue",
+      "name": "黛姬雪娜",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著无当下岁数（ygx.txt:20203「抚养到五岁」是幼年回忆）。跳前：只在王哲大战场景登场(qyj.txt:2008 起；总表 chapter17)，见面 220 时 18"
+    },
+    {
+      "id": "lcq.character.duan_qiang",
+      "name": "段强",
+      "birthYear": 200,
+      "basis": "推断",
+      "source": "主角从小的死党、同校，与主角同年（用户 2026-11-10 已定，原190无原文支持）"
+    },
+    {
+      "id": "lcq.character.mi_gu",
+      "name": "弥骨",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_ajia",
+      "name": "阿葭",
+      "birthYear": 202,
+      "basis": "推断",
+      "source": "「年长的阿葭」(qyj.txt:6157)；花苗两少女「一个十七八岁，另一个十五六岁」(:6066)，鹅黄＝阿夕(:6157)→宝蓝年长者即阿葭。十七八取中值 17.5→18（11-10 第 4 条改，原取 17／203）"
+    },
+    {
+      "id": "lcq.character.nanhuang_baiyi_chief",
+      "name": "白夷族长",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "云苍峰「这条商路…走了数十年，与白夷族长相知颇深」(qyj.txt:8784)；妻樨夫人三十余(:9552)；取40；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "lcq.character.nanhuang_blacksea_envoy",
+      "name": "黑衣丽人",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著无数字。疑同一人，未定：与齐羽仙（云龙吟「黑衣丽人」yly.txt:5885 起、:9413 自报齐羽仙）保留两张卡，不合并（总策划 11-10 第 5 条）",
+      "notes": [
+        "疑同一人，未定"
+      ]
+    },
+    {
+      "id": "lcq.character.nanhuang_dagu",
+      "name": "达古",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_heishe",
+      "name": "黑舌",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_kawa",
+      "name": "卡瓦",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「年轻的花苗汉子」(qyj.txt:6059)，无数字"
+    },
+    {
+      "id": "lcq.character.nanhuang_loumeng",
+      "name": "娄蒙",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「年轻的红苗汉子」(qyj.txt:13683)，无数字"
+    },
+    {
+      "id": "lcq.character.nanhuang_shekui",
+      "name": "蛇傀",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_shigang",
+      "name": "石刚",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_stonemason",
+      "name": "六朝石匠",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_xi_furen",
+      "name": "樨夫人",
+      "birthYear": 185,
+      "basis": "原著",
+      "source": "「樨夫人三十余岁年纪」(qyj.txt:9552)；旁证三女「依次相差十年左右」(:10297，阿夕约15→约35)。取35"
+    },
+    {
+      "id": "lcq.character.nanhuang_xiaojin",
+      "name": "小津",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_xiaowei",
+      "name": "小魏",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「年轻护卫」(qyj.txt:5238)，无数字"
+    },
+    {
+      "id": "lcq.character.nanhuang_yeao",
+      "name": "叶媪",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "老媪、自称老身，「苍老的眼中」「我女儿若是还在世，也该这么大了」(qyj.txt:7604，比照凝羽约25)；取60"
+    },
+    {
+      "id": "lcq.character.nanhuang_yixiong",
+      "name": "易雄",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lcq.character.nanhuang_yiyong",
+      "name": "易勇",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「年纪轻轻」(qyj.txt:8162)，无数字"
+    },
+    {
+      "id": "lcq.character.saan",
+      "name": "萨安",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "「他年纪已经不轻了」(qyj.txt:14213)；按中年档取40"
+    },
+    {
+      "id": "lcq.character.yue_shuang",
+      "name": "月霜",
+      "birthYear": 205,
+      "basis": "推断",
+      "source": "「比他小七八岁」qyj.txt:1573（用户 2026-11-10 已定）；跳前登场，开局不足18由运行时下限兜底，下限不写回"
+    },
+    {
+      "id": "lcq.character.zhu_nuo",
+      "name": "朱诺",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.a_jiman_bana",
+      "name": "阿姬曼·芭娜",
+      "birthYear": 205,
+      "basis": "原著",
+      "source": "「不过十四五岁的样子」qyj.txt:2586，取中值15"
+    },
+    {
+      "id": "liuchao.character.a_xi",
+      "name": "阿夕",
+      "birthYear": 204,
+      "basis": "推断",
+      "source": "两少女「十五六岁」qyj.txt:6066 靠「鹅黄筒裙的少女阿夕」:6157 对上，取中值16"
+    },
+    {
+      "id": "liuchao.character.an_le_gong_zhu",
+      "name": "安乐公主",
+      "birthYear": 205,
+      "basis": "原著",
+      "source": "「十五岁的少女」ygx.txt:33337–33338"
+    },
+    {
+      "id": "liuchao.character.bai_xian_er",
+      "name": "白仙儿",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "自报丹霞宗宗主之女，称少女(yly.txt:16140)，无数字"
+    },
+    {
+      "id": "liuchao.character.bi_shui_yu",
+      "name": "壁水貐",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.chai_yong_jian",
+      "name": "柴永剑",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.cheng_yuan_zhen",
+      "name": "程元振",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.dan_chao",
+      "name": "单超",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.deng_jing",
+      "name": "邓晶",
+      "birthYear": 205,
+      "basis": "推断",
+      "source": "乐明珠「我最要好的师姐妹」(qyj.txt:31706)，称少女；比照乐明珠(第一节205)同龄"
+    },
+    {
+      "id": "liuchao.character.dong_fang_man_qian",
+      "name": "东方曼倩",
+      "birthYear": 200,
+      "basis": "推断",
+      "source": "对主角说「你我年纪相近」(yly.txt:29654)；岳帅清剿黑魔海时「还是孩子」(ygx.txt:19521)。与主角同年，主角已定 20 岁（出生 200），用户 2026-11-10 已定"
+    },
+    {
+      "id": "liuchao.character.dong_xuan",
+      "name": "董宣",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「相貌英俊、气度豪勇的年轻人」(yly.txt:26027)，无数字"
+    },
+    {
+      "id": "liuchao.character.dong_zhuo",
+      "name": "董卓",
+      "birthYear": 170,
+      "basis": "推断",
+      "source": "自称「老臣」「老夫」(yly.txt:52649、:52823)，拂须髯；无数字，按老将档取50"
+    },
+    {
+      "id": "liuchao.character.fen_wu_chen",
+      "name": "焚无尘",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "程宗扬称「那冒火的老头」(yly.txt:19579)，本人自称「老夫」(:19581)；按老者档取 60（11-10 第 3 条复查新增，原 202【下限】）"
+    },
+    {
+      "id": "liuchao.character.feng_yuan",
+      "name": "冯源",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.feng_zi_dou",
+      "name": "冯子都",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "称「少年」(yly.txt:27077)，无数字"
+    },
+    {
+      "id": "liuchao.character.fu_an",
+      "name": "富安",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.gao_zhishang",
+      "name": "高智商",
+      "birthYear": 204,
+      "basis": "原著",
+      "source": "「看起来十六七岁」yly.txt:1121＋「不过十五六岁」:2220，交集16"
+    },
+    {
+      "id": "liuchao.character.gong_wan_gu",
+      "name": "宫万古",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.han_ding_guo",
+      "name": "韩定国",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.hou_xuan",
+      "name": "侯玄",
+      "birthYear": 185,
+      "basis": "推断",
+      "source": "星月湖八骏之二；同营校尉级「年纪大都在三十到四十岁之间」(qyj.txt:37734)，取35。总表「三四十岁」出自 :36355，该句实指崔中校，不是侯玄"
+    },
+    {
+      "id": "liuchao.character.huo_qu_bing",
+      "name": "霍去病",
+      "birthYear": 204,
+      "basis": "原著",
+      "source": "「霍少才十六」（第一节 §2.4）；旧「定18」由现算取代"
+    },
+    {
+      "id": "liuchao.character.jiang_an_shi",
+      "name": "蒋安世",
+      "birthYear": 175,
+      "basis": "原著",
+      "source": "「蒋安世是一个年过四旬的汉子」(yly.txt:25156)；四十几岁取中值 45（11-10 第 4 条改，原取 42／178）"
+    },
+    {
+      "id": "liuchao.character.jiang_chong",
+      "name": "江充",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.jiang_ying_qiu",
+      "name": "江映秋",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "长秋宫女傅，自称「老身」(yly.txt:30392)；按老妇档取60"
+    },
+    {
+      "id": "liuchao.character.jing_kong",
+      "name": "净空",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "「一名中年僧人…贫僧净空」(ygx.txt:11946)；取40"
+    },
+    {
+      "id": "liuchao.character.ju_meng",
+      "name": "剧孟",
+      "birthYear": 175,
+      "basis": "推断",
+      "source": "十五年前风波亭之变时已能「绊住」八骏之一斯明信(yly.txt:12245–12247)，当时至少约30→今约45；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "liuchao.character.kuang_zhong_yu",
+      "name": "匡仲玉",
+      "birthYear": 185,
+      "basis": "推断",
+      "source": "星月湖一连专职术者，岳帅时期已在营；「捋着胡须」(yly.txt:8305)；按星月湖旧部档(qyj.txt:37734)取35；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "liuchao.character.le_mingzhu",
+      "name": "乐明珠",
+      "birthYear": 205,
+      "basis": "推断",
+      "source": "自述六岁入门、九年→15（第一节 §2.1）"
+    },
+    {
+      "id": "liuchao.character.li_hong",
+      "name": "李宏",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.li_shi_shi",
+      "name": "李师师",
+      "birthYear": 202,
+      "basis": "原著",
+      "source": "母称已经十八岁（第一节 §2.2）"
+    },
+    {
+      "id": "liuchao.character.li_xun",
+      "name": "李训",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "其子李植自报「父…讳训」，已任大理寺司直(ygx.txt:11507)→父辈至少约40；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "liuchao.character.liao_fu",
+      "name": "廖扶",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "「一名中年人…汝南廖扶」(yly.txt:35428)；中年档取40"
+    },
+    {
+      "id": "liuchao.character.liu_yi_sun",
+      "name": "刘宜孙",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「年轻将领」(ygx.txt:14328)，无数字"
+    },
+    {
+      "id": "liuchao.character.liu_zhao",
+      "name": "刘诏",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.lv_fengxian",
+      "name": "吕奉先",
+      "birthYear": 206,
+      "basis": "原著",
+      "source": "自述「本公子都十四岁了」yly.txt:35077"
+    },
+    {
+      "id": "liuchao.character.meng_fei_qing",
+      "name": "孟非卿",
+      "birthYear": 174,
+      "basis": "推断",
+      "source": "辛卯档案「十九岁追随…三十一岁岳鹏举被诛」(qyj.txt:34457)＋岳帅死约十五年(:10326)→约46"
+    },
+    {
+      "id": "liuchao.character.meng_niang",
+      "name": "梦娘",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.mo_feng_lin",
+      "name": "墨枫林",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "中年档取40（第一节 §2.8）"
+    },
+    {
+      "id": "liuchao.character.mo_ru_lin",
+      "name": "莫如霖",
+      "birthYear": 187,
+      "basis": "推断",
+      "source": "「白胖的男子」(yly.txt:19210)，广源行主事；躲在苍澜「一是愧对岳帅…免得被人当成岳逆余党」(:20009)，认得「碧姬年轻时」(:19772)→岳帅在世时（约十五年前，qyj.txt:10326）已是成年人，按当时 18 倒推（11-10 第 3 条复查，原 202【下限】）；下界",
+      "notes": [
+        "下界"
+      ]
+    },
+    {
+      "id": "liuchao.character.mu_yan_qi",
+      "name": "穆嫣琪",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「那少女梳着双鬟」(qyj.txt:31952)，无数字"
+    },
+    {
+      "id": "liuchao.character.qi_yu_xian",
+      "name": "齐羽仙",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "三书未核到本人岁数句（§二.5.2）",
+      "notes": [
+        "疑同一人，未定"
+      ]
+    },
+    {
+      "id": "liuchao.character.qin_han",
+      "name": "秦翰",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（复查：qyj.txt:42136 只写其当年在天策府「同级的少年」，无当下档位词）。总表外貌「白发萧索」实属夏用和(yly.txt:40、qyj.txt:44063)。卡面修正提案，待 C01 实装时一并改，现在不动卡"
+    },
+    {
+      "id": "liuchao.character.shang_zhen_yu",
+      "name": "殇侯",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "秦桧「追随君侯已经二十余年」(qyj.txt:18281)，众称「他老人家」(:12067)；按老者档取60"
+    },
+    {
+      "id": "liuchao.character.shen_wan_ying",
+      "name": "申婉盈",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "用户 2026-11-03「≥18，不细定」（第一节 §2.3）"
+    },
+    {
+      "id": "liuchao.character.shi_yue",
+      "name": "石越",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.shi_zhi_sun",
+      "name": "石之隼",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "复查原著未见本人年龄句或档位词（REPORT:114「组建雪隼多年」非原文）"
+    },
+    {
+      "id": "liuchao.character.su_xiao",
+      "name": "苏骁",
+      "birthYear": 185,
+      "basis": "推断",
+      "source": "星月湖六营将领；同营校尉级「三十到四十岁之间」(qyj.txt:37734)，取35"
+    },
+    {
+      "id": "liuchao.character.tang_heng",
+      "name": "唐衡",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.tang_ji_chen",
+      "name": "唐季臣",
+      "birthYear": 180,
+      "basis": "推断",
+      "source": "「姓唐的中年人」(yly.txt:25469、:26323)；取40"
+    },
+    {
+      "id": "liuchao.character.tian_ling_zi",
+      "name": "田令孜",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "复查原著未见本人年龄句或档位词（「一王四贵」元老是身份，不是年龄描写；ygx.txt:30029「年事已高」指李辅国）"
+    },
+    {
+      "id": "liuchao.character.wang_hui",
+      "name": "王蕙",
+      "birthYear": 202,
+      "basis": "原著",
+      "source": "「顶多十七八岁」yly.txt:9309，取中值18"
+    },
+    {
+      "id": "liuchao.character.wang_meng",
+      "name": "王孟",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.wei_yue_yan",
+      "name": "危月燕",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.wu_ma_ma",
+      "name": "巫嬷嬷",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "自称「老妇姓巫」(qyj.txt:34537)；按老妇档取60"
+    },
+    {
+      "id": "liuchao.character.xi_ming_bo",
+      "name": "昔名博",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「周飞身边的老者昔名博」(yly.txt:16559)；取60"
+    },
+    {
+      "id": "liuchao.character.xia_yong_he",
+      "name": "夏用和",
+      "birthYear": 160,
+      "basis": "推断",
+      "source": "「夏帅上了年纪」(qyj.txt:40315)，「萧索的白发」(:44063)；按老者档取60"
+    },
+    {
+      "id": "liuchao.character.xiang_cheng_jun",
+      "name": "襄城君",
+      "birthYear": 195,
+      "basis": "推断",
+      "source": "自述为苏姨养女，「苏姨…一去便是二十余年…苏姨走时，奴家年纪尚小」(yly.txt:29800)→二十余年（中值 25）前已在世，出生年不晚于 195（11-10 第 3 条复查，原 202【下限】；「年纪尚小」无档位，只取下界）",
+      "notes": [
+        "下界"
+      ]
+    },
+    {
+      "id": "liuchao.character.xiao_ling_er",
+      "name": "小玲儿",
+      "birthYear": 204,
+      "basis": "原著",
+      "source": "「其实小玲儿已经十六岁了」yly.txt:5956"
+    },
+    {
+      "id": "liuchao.character.xiao_shi",
+      "name": "萧氏",
+      "birthYear": 180,
+      "basis": "原著",
+      "source": "他人当面说她十六岁生下皇帝、如今约四十（ygx.txt:32453）；叙述另称其已近中年（:34763）。两处均属性描写段，只记行号、不引原文。取 40（11-10 第 3 条复查，原 202【下限】）"
+    },
+    {
+      "id": "liuchao.character.xiao_zi",
+      "name": "小紫",
+      "birthYear": 205,
+      "basis": "原著",
+      "source": "「只是个十五岁的小丫头」qyj.txt:14127"
+    },
+    {
+      "id": "liuchao.character.xue_li",
+      "name": "薛礼",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「年轻军官」「皇图天策府骑兵科毕业生」(ygx.txt:27459)，「从军多年」(:27463)；复查无年长档位词，维持"
+    },
+    {
+      "id": "liuchao.character.yan_er",
+      "name": "雁儿",
+      "birthYear": 204,
+      "basis": "原著",
+      "source": "「她过罢年才满十六岁」qyj.txt:42470"
+    },
+    {
+      "id": "liuchao.character.yu_feng_wen",
+      "name": "郁奉文",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.yu_wu_yi",
+      "name": "鱼无夷",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「十五岁被指定为…家主」是往事(qyj.txt:34163)，无当下数字"
+    },
+    {
+      "id": "liuchao.character.yu_zi_wei",
+      "name": "虞紫薇",
+      "birthYear": 190,
+      "basis": "推断",
+      "source": "「她们姐妹出道十余年来从未失手」(qyj.txt:33810)；十余年取中值 15，出道年龄沿用原稿 15 岁→今约 30（11-10 第 4 条改，原 28／192）；线索弱（总策划 2026-11-10 20:10 定：保留现值）",
+      "notes": [
+        "线索弱"
+      ]
+    },
+    {
+      "id": "liuchao.character.yun_dan_liu",
+      "name": "云丹琉",
+      "birthYear": 202,
+      "basis": "原著",
+      "source": "「二九年华，一十八岁」（用户 2026-11-10 已定）"
+    },
+    {
+      "id": "liuchao.character.yun_ru_yao",
+      "name": "云如瑶",
+      "birthYear": 203,
+      "basis": "推断",
+      "source": "原文约17「比我还小一点」（用户 2026-11-10 已定，取代 #98）"
+    },
+    {
+      "id": "liuchao.character.zang_xiu",
+      "name": "臧修",
+      "birthYear": 185,
+      "basis": "推断",
+      "source": "「十七岁加入星月湖」(qyj.txt:34463)；大营建于孟非卿25岁、即岳死前6年(:34457)→今约32–38，取35"
+    },
+    {
+      "id": "liuchao.character.zhang_fang",
+      "name": "张放",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "天子游猎同伴「两名年轻人」之一(yly.txt:32541)，无数字"
+    },
+    {
+      "id": "liuchao.character.zhang_kang",
+      "name": "张亢",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句。备注：「张亢比他年龄大得多，曾经当过一任知州」(qyj.txt:35618，「他」指刘宜孙，202)，同为 202 与「大得多」对不上；按总策划 2026-11-10 20:10 定维持 202"
+    },
+    {
+      "id": "liuchao.character.zhang_shao_huang",
+      "name": "张少煌",
+      "birthYear": 202,
+      "basis": "推断",
+      "source": "「岳帅死的时候，他还是个吃屎的孩子」(qyj.txt:21569)，岳死约十五年→今约18"
+    },
+    {
+      "id": "liuchao.character.zhao_he_de",
+      "name": "赵合德",
+      "birthYear": 203,
+      "basis": "推断",
+      "source": "「安乐比合德小美女还小两岁」ygx.txt:33337＋安乐十五→17"
+    },
+    {
+      "id": "liuchao.character.zheng_zhu",
+      "name": "郑注",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "liuchao.character.zheng_zi_qing",
+      "name": "郑子卿",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "「年轻书生」(yly.txt:37200)，无数字"
+    },
+    {
+      "id": "lyl.character.liu_zijun",
+      "name": "刘子骏",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lyl.character.lv_ji_changshui",
+      "name": "吕戟",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    },
+    {
+      "id": "lyl.character.np060",
+      "name": "友通期",
+      "birthYear": 203,
+      "basis": "原著",
+      "source": "「车上一个少女十六七岁年纪」yly.txt:34321，取中值17"
+    },
+    {
+      "id": "lyl.character.zuo_huan",
+      "name": "左悺",
+      "birthYear": 202,
+      "basis": "下限",
+      "source": "原著未见本人年龄句（三书逐次出场±1行扫描）"
+    }
+  ]
+}

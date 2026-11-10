@@ -22,6 +22,7 @@ const steps = [
   ['同门/同族/同袍派生', 'node', ['scripts/derive-tongmen-edges.mjs', '--apply']],
   ['内置 mod 同步', 'node', ['scripts/sync-builtin-mods.mjs']],
   ['内容包合同/引用校验', 'node', ['scripts/content-packs.mjs', '--check']],
+  ['C01 年龄口径体检（缺出生年／下限抬升／现算不满18／派生字段）', 'node', ['scripts/audit-c01-ages.mjs']],
   ['人物内联副本↔总表一致性校验', 'node', ['scripts/validate-character-references.mjs']],
   ['统一实体索引重建', 'node', ['scripts/build-entity-index.mjs']],
   ['道具技能功法总表校验', 'node', ['scripts/validate-entity-catalog.mjs']],
