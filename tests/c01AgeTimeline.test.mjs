@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
 import { loadTs } from './loadTs.mjs';
 import { compileTimeline } from '../scripts/content-pack-timeline.mjs';
 import { auditC01Ages, c01AuditInputs } from '../scripts/audit-c01-ages.mjs';
@@ -167,10 +166,22 @@ test('T11 主角出生年只在新开档对齐：开档 220 → 进城拨 4 年 
   assert.match(source, /applyStrictScenarioInitializationToSave\(saveData, initialization, false, false\)/);
 });
 
-// 206/18 只在生成器档出现（不合指纹A：开局 220＋已拨 4−开局年龄 20＝204），生成器小 PR 会重生成；读档不修。
-test('T11b 主角旧档修复：生成器旧夹具（224 年、出生 206）不合指纹A，读档不修，读两次结果一样', () => {
-  const bundle = JSON.parse(execFileSync('git', ['show', '061a6c49:tests/fixtures/checkpoints/current-han-entry.json'], { encoding: 'utf8', maxBuffer: 1 << 28 }));
-  const save = bundle.saves[0].存档数据;
+// 206/18 只在旧生成器档出现（不合指纹A：开局 220＋已拨 4−开局年龄 20＝204）；读档不修。
+// 检查点夹具已按真实开局重生成（总策划 11-11 03:21 与 05:12；C01 v5：开局 20 岁、出生 200，读后 224 年为 24 岁），
+// 不再能代表 206，故改用内存构造态：从生成器的 224 年档改回旧生成器的形状（出生 206、寿命 18、未开寿命缓存）。
+test('T11b 主角旧档修复：旧生成器形状（224 年、出生 206、寿命 18、无缓存）不合指纹A，读档不修，读两次结果一样', async () => {
+  const fresh = async birthYear => {
+    const { save } = await quiet(() => freshPrologueCheckpoint());
+    save.角色.身份.出生日期.年 = birthYear;
+    save.角色.属性.寿命.当前 = 18;
+    delete save.系统.扩展.c01LifespanCacheVersion;
+    return save;
+  };
+  // 对照：同一构造态出生 204（合指纹A）会被修回 200，说明构造态确实已拨 4 年、修复在场。
+  const control = await fresh(204);
+  LR.applyLoadRepairs(control);
+  assert.equal(control.角色.身份.出生日期.年, 200);
+  const save = await fresh(206);
   assert.equal(save.元数据.时间.年, 224);
   assert.equal(save.角色.身份.出生日期.年, 206);
   LR.applyLoadRepairs(save);
@@ -179,6 +190,17 @@ test('T11b 主角旧档修复：生成器旧夹具（224 年、出生 206）不�
   LR.applyLoadRepairs(save);
   assert.deepEqual(save.角色.身份.出生日期, once.角色.身份.出生日期);
   assert.equal(save.元数据.时间.年, 224, '已有旧挂点回执，读档不补拨');
+});
+
+// 真实开局（总策划 11-11 03:21 与 05:12；C01 v5）：生成器夹具开局 20 岁、出生 200、先开缓存；224 年档读后应为 200/24，读档修复不动出生。
+test('T11c 重生成的 224 年检查点夹具：经真实读档入口后出生 200、年龄 24', async () => {
+  const { assertRealOpeningAfterLoad } = await import('../scripts/generate-prologue-checkpoint.mjs');
+  for (const stem of ['current-han-entry', 'current-tang-entry', 'current-taiquan-entry', 'current-prologue-before-s02_04',
+    'nanhuang-04b-before-letter-id', 'nanhuang-05b-inn-stay-before-rejoin']) {
+    const r = await quiet(() => assertRealOpeningAfterLoad(json(`tests/fixtures/checkpoints/${stem}.json`), stem));
+    assert.equal(r.before.year, 224, stem);
+    assert.deepEqual([r.after.birth.年, r.after.age], [200, 24], stem);
+  }
 });
 
 test('T12 读档补顺延：220 年旧档已过进城路线但没有跳年回执 → 读档静默拨到 224 并写回执，不出过场；再读不重复；已有 s02_04 回执的档不补', async () => {

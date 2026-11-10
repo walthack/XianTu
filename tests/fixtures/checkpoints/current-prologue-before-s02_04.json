@@ -26,7 +26,7 @@
             "名字": "程宗扬",
             "性别": "男",
             "出生日期": {
-              "年": 202,
+              "年": 200,
               "月": 1,
               "日": 1
             },
@@ -93,7 +93,7 @@
               "上限": 30
             },
             "寿命": {
-              "当前": 18,
+              "当前": 20,
               "上限": 80
             }
           },
@@ -331,7 +331,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.duan_qiang"
+              "原关系键": "lcq.character.duan_qiang",
+              "首见年": 220
             },
             "lcq.character.yue_shuang": {
               "角色ID": "lcq.character.yue_shuang",
@@ -439,7 +440,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.yue_shuang"
+              "原关系键": "lcq.character.yue_shuang",
+              "首见年": 220
             },
             "lcq.character.wang_zhe": {
               "角色ID": "lcq.character.wang_zhe",
@@ -546,7 +548,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.wang_zhe"
+              "原关系键": "lcq.character.wang_zhe",
+              "首见年": 220
             },
             "liuchao.character.su_daji": {
               "角色ID": "liuchao.character.su_daji",
@@ -644,7 +647,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.su_daji"
+              "原关系键": "liuchao.character.su_daji",
+              "首见年": 220
             },
             "liuchao.character.ning_yu": {
               "角色ID": "liuchao.character.ning_yu",
@@ -741,7 +745,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.ning_yu"
+              "原关系键": "liuchao.character.ning_yu",
+              "首见年": 220
             },
             "liuchao.character.lin_cai_quan": {
               "角色ID": "liuchao.character.lin_cai_quan",
@@ -831,7 +836,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lin_cai_quan"
+              "原关系键": "liuchao.character.lin_cai_quan",
+              "首见年": 220
             },
             "liuchao.character.zhuo_yunjun": {
               "角色ID": "liuchao.character.zhuo_yunjun",
@@ -926,7 +932,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.zhuo_yunjun"
+              "原关系键": "liuchao.character.zhuo_yunjun",
+              "首见年": 220
             },
             "lcq.character.han_geng": {
               "角色ID": "lcq.character.han_geng",
@@ -1028,7 +1035,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.han_geng"
+              "原关系键": "lcq.character.han_geng",
+              "首见年": 220
             },
             "lcq.character.np001": {
               "角色ID": "lcq.character.np001",
@@ -1120,7 +1128,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.np001"
+              "原关系键": "lcq.character.np001",
+              "首见年": 220
             },
             "lcq.character.agamenon": {
               "角色ID": "lcq.character.agamenon",
@@ -1214,7 +1223,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.agamenon"
+              "原关系键": "lcq.character.agamenon",
+              "首见年": 220
             },
             "lcq.character.dai_jixue": {
               "角色ID": "lcq.character.dai_jixue",
@@ -1305,7 +1315,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.dai_jixue"
+              "原关系键": "lcq.character.dai_jixue",
+              "首见年": 220
             }
           },
           "宗门": null,
@@ -1354,7 +1365,7 @@
                 "tags": [
                   "师徒"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "lcq.character.han_geng"
               },
@@ -1367,7 +1378,7 @@
                 "tags": [
                   "师徒"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "lcq.character.yue_shuang"
               },
@@ -1377,7 +1388,7 @@
                 "relation": "侍卫长",
                 "score": 25,
                 "type": "双向",
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "liuchao.character.su_daji",
                 "toLabel": "liuchao.character.ning_yu"
               },
@@ -1387,7 +1398,7 @@
                 "relation": "师兄弟",
                 "score": 60,
                 "type": "双向",
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.np001",
                 "toLabel": "lcq.character.wang_zhe"
               },
@@ -1397,7 +1408,7 @@
                 "relation": "仇敌",
                 "score": -55,
                 "type": "双向",
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "liuchao.character.su_daji",
                 "toLabel": "lcq.character.wang_zhe"
               },
@@ -1411,7 +1422,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1425,7 +1436,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1439,7 +1450,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "lcq.character.han_geng"
               },
@@ -1453,7 +1464,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1467,7 +1478,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "lcq.character.np001"
               },
@@ -1481,7 +1492,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1495,7 +1506,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1509,7 +1520,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "lcq.character.np001"
               },
@@ -1523,7 +1534,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1537,7 +1548,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "liuchao.character.lin_cai_quan",
                 "toLabel": "lcq.character.np001"
               },
@@ -1551,7 +1562,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "liuchao.character.lin_cai_quan",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1565,7 +1576,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.np001",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1579,7 +1590,7 @@
                   "同袍",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T14:16:35.198Z",
+                "updatedAt": "2026-11-10T21:22:02.627Z",
                 "fromLabel": "lcq.character.agamenon",
                 "toLabel": "lcq.character.dai_jixue"
               }
@@ -1595,7 +1606,7 @@
               "核心专名不得改写",
               "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
             ],
-            "生成时间": "2026-11-10T14:16:35.198Z",
+            "生成时间": "2026-11-10T21:22:02.627Z",
             "版本": "scenario-mod:lcq.stage_02@1.0.0",
             "大陆信息": [
               {
@@ -7848,7 +7859,7 @@
                 {
                   "id": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
                   "name": "凝羽：她不会说",
-                  "description": "第33章，南行途中的守夜，凝羽私下向你提出合作除掉苏妲己，主线事件已把她的开价摆到你面前。只描写你给她的答复：答应、拒绝，或先问她为什么；不写她吐露寒气来源，不写苏妲己的反应，不改变主线事件的完成。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
+                  "description": "第33章，南行途中的守夜，凝羽私下向你提出合作除掉苏妲己，主线事件已把她的开价摆到你面前。只描写你给她的答复：答应、拒绝、先问她为什么，或明确先不答复；不写她吐露寒气来源，不写苏妲己的反应，不改变主线事件的完成。代码按回执写入状态与好感；正文不自行改写好感、世界事实或主线结果。",
                   "objective": "她要你杀她的主人，还要你连她一起杀。",
                   "axisAnchor": "第33章",
                   "critical": false,
@@ -7965,6 +7976,40 @@
                             "先问她为什么",
                             "为什么要这样",
                             "不表态"
+                          ]
+                        }
+                      },
+                      {
+                        "id": "act.ningyu.o2.defer",
+                        "label": "先不答复她",
+                        "actionText": "我暂时不答复凝羽的开价，这件事先放一放。",
+                        "timeCost": 1,
+                        "kind": "attempt",
+                        "requiresPreparation": [],
+                        "requiresPresentCharacterIds": [],
+                        "cast": {
+                          "present": [
+                            "liuchao.character.ning_yu"
+                          ]
+                        },
+                        "sceneLocation": "商队宿处",
+                        "sceneObjective": "承上：南行守夜，你还在琢磨她刚才说的话。 当下：她发过誓保护主人，现在却要你动手杀主人，还说出手时要连她一起杀了——这是陷阱，还是她在求救？",
+                        "previousBeat": "南行守夜，你还在琢磨她刚才说的话。",
+                        "fallbackText": "你没有接她的话，只说这件事先放一放。凝羽没再追问。",
+                        "outcomeText": {
+                          "success": "你没有接她的话，只说这件事先放一放。凝羽没再追问。",
+                          "partial": "你没有接她的话，只说这件事先放一放。凝羽没再追问。",
+                          "failure": "你没有接她的话，只说这件事先放一放。凝羽没再追问。"
+                        },
+                        "intentMatch": {
+                          "matchAny": [
+                            "先不答复",
+                            "先放一放",
+                            "暂不答复"
+                          ],
+                          "rejectIf": [
+                            "答应她",
+                            "拒绝她"
                           ]
                         }
                       }
@@ -8797,6 +8842,7 @@
             ]
           },
           "扩展": {
+            "c01LifespanCacheVersion": 1,
             "剧本模组": {
               "modId": "lcq.stage_02",
               "modName": "六朝清羽记·第9章·传功",
