@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "南荒“尚未登场/已离场”人物排除规则（presence.ts 的 nanhuangCastExclusions 读取）。按书写顺序逐条求值，结果去重保序。permanent=true 的规则在只算永久离场时也生效，其余仅在计算临时缺席时生效。stages=该规则只在这些关生效（缺省=所有关）。when=触发条件，缺省=恒真：done=事件已完成（flag/completedEventIds/offscreenResolvedEventIds），notDone=未完成，entered=已完成或正在进行，notEntered=尚未进入，notPrepared=该事件动作预备里没有此步骤，flagTrue=运行时 flag 为 true，all/any 为与/或。exclude 为“kind:id”，kind=character|enemy。2026-10-14 自 presence.ts 字面量逐条迁入；原先写死的名词“白夷族长/蛇傀/六朝石匠”改按 id。",
+ "note": "南荒“尚未登场/已离场”人物排除规则（presence.ts 的 nanhuangCastExclusions 读取）。按书写顺序逐条求值，结果去重保序。permanent=true 的规则在只算永久离场时也生效，其余仅在计算临时缺席时生效。stages=该规则只在这些关生效（缺省=所有关）。when=触发条件，缺省=恒真：done=事件已完成（flag/completedEventIds/offscreenResolvedEventIds），notDone=未完成，entered=已完成或正在进行，notEntered=尚未进入，notPrepared=该事件动作预备里没有此步骤，flagTrue=运行时 flag 为 true，all/any 为与/或。exclude 为“kind:id”，kind=character|enemy。2026-10-14 自 presence.ts 字面量逐条迁入；原先写死的名词“白夷族长/蛇傀/六朝石匠”改按 id。 authoritative=true：权威暂留（例：Y5 选留下后凝羽、小魏暂留峒外至驿馆会合），场景账写 present 也不采信，且只算临时缺席、不持久化；flagEquals={id,value}=运行时 flag 等于该值，not=取反，prepared=该事件动作预备里已有此步骤。",
  "rules": [
   {
    "stages": [
@@ -484,6 +484,96 @@
     "character:liuchao.character.wu_er_lang",
     "character:liuchao.character.su_li",
     "character:lcq.character.nanhuang_shigang"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_04b_lingfei_baiyi_crisis"
+   ],
+   "authoritative": true,
+   "when": {
+    "all": [
+     {
+      "flagEquals": {
+       "id": "branch.ningyu.enter_dong",
+       "value": "stay"
+      }
+     },
+     {
+      "not": {
+       "flagTrue": "branch.ningyu.y5_rejoined"
+      }
+     },
+     {
+      "entered": "lcq.event.enter_dong_with_migu"
+     }
+    ]
+   },
+   "exclude": [
+    "character:liuchao.character.ning_yu",
+    "character:lcq.character.nanhuang_xiaowei"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05"
+   ],
+   "authoritative": true,
+   "when": {
+    "all": [
+     {
+      "flagEquals": {
+       "id": "branch.ningyu.enter_dong",
+       "value": "stay"
+      }
+     },
+     {
+      "not": {
+       "flagTrue": "branch.ningyu.y5_rejoined"
+      }
+     },
+     {
+      "entered": "lcq.event.s05_11"
+     }
+    ]
+   },
+   "exclude": [
+    "character:liuchao.character.ning_yu",
+    "character:lcq.character.nanhuang_xiaowei"
+   ]
+  },
+  {
+   "stages": [
+    "lcq.stage_05b"
+   ],
+   "authoritative": true,
+   "when": {
+    "all": [
+     {
+      "flagEquals": {
+       "id": "branch.ningyu.enter_dong",
+       "value": "stay"
+      }
+     },
+     {
+      "not": {
+       "flagTrue": "branch.ningyu.y5_rejoined"
+      }
+     },
+     {
+      "notPrepared": {
+       "event": "lcq.event.blank_letter_and_dagu",
+       "step": "blank_letter_confirmed"
+      }
+     },
+     {
+      "notDone": "lcq.event.blank_letter_and_dagu"
+     }
+    ]
+   },
+   "exclude": [
+    "character:liuchao.character.ning_yu",
+    "character:lcq.character.nanhuang_xiaowei"
    ]
   }
  ]

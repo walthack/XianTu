@@ -25,12 +25,15 @@ import { logEvent } from '../diagnostics/log';
 import { isQingyuOpeningPlaytestSave } from './qingyuOpeningPlaytest';
 import { countryOf, crossCountryStageDeparture, type CrossCountryTravelTarget } from './travel/mapTravel';
 import { currentLocation } from './travel/travelLedger';
+import { canonicalLocationId } from './travel/locationIds';
+import { VISIT_ONLY_MAP_LOCATION_IDS } from './persistentLineEntries';
 import { entityName, entityNamePattern } from './namedEntities';
 import { isKeyBeatCardAction } from './keyBeatCards';
 import { detectBranchDecision } from './branchDecision';
 import { scenarioPlayerId } from './playerIdentity';
 import { getWuyuanOpenWorldSelections, type WuyuanOpenWorldSelection } from './wuyuanOpenWorldSlice';
 import { locationName, nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
+import { heldActions, heldDepartureObjective } from './stayRejoin';
 import {
   getCurrentStoryEventActions,
   getCurrentStoryExplorationActions,
@@ -78,8 +81,9 @@ export function beatActionTable(save: SaveData | null | undefined): { beatId?: s
   return { beatId: getScenarioFocusEvent(runtime)?.id, actions };
 }
 
+// 启程另认暂扣提示里系统已显示的启程目标（stayRejoin.heldDepartureObjective，同一模板），与主线拍认任务日志文字同一规矩。
 const actionLines = (save: SaveData, action: BeatAction): unknown[] => action.kind === 'departure'
-  ? [action.offer.label]
+  ? [action.offer.label, ...heldActions(save).map(held => heldDepartureObjective(held, save))]
   : [action.selection.playerLine, action.selection.actionText, action.selection.label, ...questLogLines(save, action.selection)];
 /**
  * 任务引导开时比对表另加：作者原始 label（不带「行动 · 对象 ·」装饰）与任务日志里的目标（questLog.beatEntry 同一来源）。
@@ -292,7 +296,10 @@ export function stageDepartureArrived(save: SaveData | null | undefined): string
   const ext = (save as any)?.系统?.扩展, pending = ext?.[MAP_KEY], runtime = runtimeOf(save);
   if (!save || !pending || !runtime) return undefined;
   if (runtime.nextStageReadyId !== pending.nextStageId) { delete ext[MAP_KEY]; return undefined; }
-  if (countryOf(currentLocation(save).canonicalLocationId) !== countryOf(pending.toId)) return undefined;
+  const here = currentLocation(save).canonicalLocationId;
+  if (countryOf(here) !== countryOf(pending.toId)) return undefined;
+  // 取物访问的落点（碧鲮）不算抵达下一关，待启程目标留着。
+  if (here && VISIT_ONLY_MAP_LOCATION_IDS.includes(here) && here !== canonicalLocationId(pending.toId)) return undefined;
   delete ext[MAP_KEY];
   return pending.nextStageId;
 }

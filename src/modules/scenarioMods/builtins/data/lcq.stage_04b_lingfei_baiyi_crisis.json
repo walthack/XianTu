@@ -5968,7 +5968,7 @@
       {
         "id": "lcq.event.side_biling_algae_silk",
         "name": "霓龙丝的着落",
-        "description": "焚村次日天亮后，碧鲮族议事。问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。云苍峰嫌太细太薄，程宗扬却要透亮，完整不断、晒干不褪色，各色收购。只有明确下单才结算，打听并不等于已拿到样品。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+        "description": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
         "objective": "霓龙丝的着落",
         "axisAnchor": "第80章",
         "critical": false,
@@ -5981,10 +5981,7 @@
           }
         ],
         "relatedCharacterIds": [
-          "lcq.character.biling_woman_ch80",
-          "liuchao.character.qi_yuan",
-          "lcq.character.np003",
-          "liuchao.character.yun_cang_feng"
+          "lcq.character.biling_woman_ch80"
         ],
         "locationId": "liuchao.location.biyu_village",
         "exploration": {
@@ -6011,14 +6008,11 @@
               ],
               "cast": {
                 "present": [
-                  "lcq.character.biling_woman_ch80",
-                  "liuchao.character.qi_yuan",
-                  "lcq.character.np003",
-                  "liuchao.character.yun_cang_feng"
+                  "lcq.character.biling_woman_ch80"
                 ]
               },
               "sceneLocation": "碧鲮族",
-              "sceneObjective": "焚村次日天亮后，碧鲮族议事。问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。云苍峰嫌太细太薄，程宗扬却要透亮，完整不断、晒干不褪色，各色收购。只有明确下单才结算，打听并不等于已拿到样品。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+              "sceneObjective": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
               "fallbackText": "你向碧鲮女子打听霓龙丝。她说山里没有，却拿来一团湿藻丝，细得像头发，还要结实。",
               "outcomeText": {
                 "success": "你向碧鲮女子打听霓龙丝。她说山里没有，却拿来一团湿藻丝，细得像头发，还要结实。",
@@ -6049,14 +6043,11 @@
               ],
               "cast": {
                 "present": [
-                  "lcq.character.biling_woman_ch80",
-                  "liuchao.character.qi_yuan",
-                  "lcq.character.np003",
-                  "liuchao.character.yun_cang_feng"
+                  "lcq.character.biling_woman_ch80"
                 ]
               },
               "sceneLocation": "碧鲮族",
-              "sceneObjective": "焚村次日天亮后，碧鲮族议事。问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。云苍峰嫌太细太薄，程宗扬却要透亮，完整不断、晒干不褪色，各色收购。只有明确下单才结算，打听并不等于已拿到样品。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+              "sceneObjective": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
               "fallbackText": "云苍峰看过藻丝，嫌它太细太薄，织不成衣料。你要的却正是透亮。",
               "outcomeText": {
                 "success": "云苍峰看过藻丝，嫌它太细太薄，织不成衣料。你要的却正是透亮。",
@@ -6084,14 +6075,11 @@
               "requiresPresentCharacterIds": [],
               "cast": {
                 "present": [
-                  "lcq.character.biling_woman_ch80",
-                  "liuchao.character.qi_yuan",
-                  "lcq.character.np003",
-                  "liuchao.character.yun_cang_feng"
+                  "lcq.character.biling_woman_ch80"
                 ]
               },
               "sceneLocation": "碧鲮族",
-              "sceneObjective": "焚村次日天亮后，碧鲮族议事。问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。云苍峰嫌太细太薄，程宗扬却要透亮，完整不断、晒干不褪色，各色收购。只有明确下单才结算，打听并不等于已拿到样品。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+              "sceneObjective": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
               "fallbackText": "你提出各色都要，完整不断、晒干不褪色，真金白银地收购。碧鲮女子交给你藻丝样品。",
               "outcomeText": {
                 "success": "你提出各色都要，完整不断、晒干不褪色，真金白银地收购。碧鲮女子交给你藻丝样品。",

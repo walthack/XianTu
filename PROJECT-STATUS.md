@@ -165,7 +165,7 @@
 | 日期 | 内容 | 依据 | 谁定 | 落地 | 可撤回 |
 |---|---|---|---|---|---|
 | 11-01 00:10 | 南荒跨国落点＝花苗寨（地图补标记），熊耳铺只作南荒境内普通地点；白龙江口作剧情入口，与花苗寨落点并存（C-2） | 用户 10-31 00:32 两条记录有出入，取「地图补花苗寨标记作落点」一条；知识库 `50-用户已定口径.md`:20、`04-地图标注地名与方位.md`:173 | 总策划 | 代码已是花苗寨（`8ff5e956`） | 是 |
-| 11-01 00:10 | 序幕四年跳挂点放在 s02_04（落难为奴）之后（C-1）〔11-10 用户 19:46 改挂 B2：王哲陨落后、进五原城路线前，作时间线插入事件；s02_04 合同不改只作兜底，见裁定 #248〕 | 用户 10-21 21:26「五原为奴期间跳四年」；原挂 s01_06 与原著行序矛盾；知识库 50:55、40:10 | 总策划 | `dac8bce0` | 是 |
+| 11-01 00:10 | 序幕四年跳挂点放在 s02_04（落难为奴）之后（C-1） | 用户 10-21 21:26「五原为奴期间跳四年」；原挂 s01_06 与原著行序矛盾；知识库 50:55、40:10 | 总策划 | `dac8bce0` | 是 |
 | 11-01 00:10 | 同一件稀有物全局只给一次，掉落与搜刮共用（C-3） | 知识库 50:57 | 总策划 | `dac8bce0` | 是 |
 | 11-01 00:10 | 搜尸身走敌人掉落，不占搜刮额度（C-4） | 知识库 50:58 | 总策划 | `dac8bce0` | 是 |
 | 11-01 00:10 | 村寨（熊耳铺、花苗寨本寨、碧鲮村落）内不检遇敌（C-5） | 知识库 50:59 | 总策划 | `dac8bce0` | 是 |
@@ -829,3 +829,34 @@
 提交：`6bb7251a`（⑤）、`f3b69f95`（①⑥）、`1a8c0f5e`（②）、`701b5ce1`（③）。各子项 tsc 通过后提交；`npx vue-tsc --noEmit` 0；全量 `npm test` 3480 项，3467 通过 / 0 失败 / 13 跳过。AIBS、任何 runtime.ts、intimacyProfiles、canon 数据 0 行；未跑 canon:build（沙箱跑不了）；未推送。
 
 遗留：前端发送跳过 moderated 概要需改 AIBS 1360/1649/1663，本批不做。切档钩子在新档载入后触发时会清掉新档自带的连续性提示（最多少一回合提示，等于现状）。storyContext 原有「push 记忆／补充其记忆」字样未改，靠开时指令写明「本条优先」。
+
+## 2026-11-09 南荒三项已批改动（交接 2026-11-09，分支 `cursor/nanhuang-three-approved-changes-3453`）
+
+范围：只做交接三项——藻丝极简取物、O2/Y5 同场回应、凝羽＋小魏暂留与驿馆会合；设计稿仅 §13 有效。C5、A1、C1–C4、N2 grantEventPreparation、旧 worktree 批次不在本步。runtime.ts 只改交接 §6 三处（+10/−2），frozen-baseline 只同步 runtime 哈希；AIBS 0 行。未调真实模型、未读凭据、未部署、未重启服务。
+
+交付：①碧鲮进南荒国内目的地；04b 之后的清羽关人在碧鲮村时由 `persistentLineEntries.ts` 在加载/切关/地图抵达/每回合补入取物事件，完成依据为线回执，旧档按路径回执/转移回执/持物映射，不重发；同行者按实际在场学到事实；抵达碧鲮不触发已准备转关。②O2/Y5 改为宿主准备落账后开场、加「明确略过」；右栏人物拍可展开「回应／明确略过」，记录已回应/已略过/主线继续后到期；提示在回合事务提交后写一次（`linePrompted`）；scoped 存档的自由输入同时命中线回应与主线别名时先澄清。③Y5「留下」后两人权威缺席（cast-gates），共同经历跳过缺席者；05b 当面拆信前强制会合拍（同笔提交正文、在场、`branch.ningyu.y5_rejoined`、回执）；两句定稿正文在 `src/modules/contentPacks/packs/qingyu/lines-texts.json`。
+
+验证：`npm run type-check` 0；`npx vue-tsc --noEmit` 0；专项 `tests/nanhuangApprovedChanges.test.mjs` 19/19；冻结门禁 `tests/perfTelemetry.test.mjs` 10/10；全量 `npm test` 退出 0，3550 项 / 3537 通过 / 0 失败 / 13 跳过。`npm run canon:build` 仍因缺 `mod-kit/generated/deepseek-v4-flash/qingyu/stages` 启动即 ENOENT（基线同样）；已逐个跑其非重建校验步骤，结果与基线一致或通过。未做真人/真实模型验证。
+
+## 2026-11-10 PR1-LETTER-20261110 · 开工
+
+按已审定设计合批实现拆信修复①–④：启程语义候选、持信暂扣、读取时三态、南荒账本描述。基线 `852e1687`，分支 `pr1-letter-fix`；只改当前 worktree。冻结 runtime/AIBS/frozen-baseline，禁止 canon:build、服务器操作、commit/push；证据限离线与 mock，真实模型/8091 复测留待驱动方。
+
+### PR1-LETTER-20261110 · 2026-11-11 交付（未提交；上一版门禁经驱动方验证）
+
+- 实现①–④：`naturalIntentRouter.ts` 添加 `stage_departure` 语义候选，复用现有启程/目标文案和下一关开场地点（跳过隔离关）；`MainGamePanel.vue` 命中后接回原启程按钮入口。held规则加竹筒subject，按flags与持物/事件激活列候选，合同label由编译器复制，跨关前置提示复用启程目标；`actionHeldForRejoin`未改。
+- `itemPresentation.ts` 通用只读解析目录三态，读取本关完成、跨关chronicle事件记录、travelLedger.doneEventIds与preparations；背包和南荒账本共用。竹筒/锦囊隔离；原默认文案、aliases、公开知识、05b开场、事件与步骤标签不变。新模块只登记到已有日志大类并同步文档。
+- 离线证据：[专项测试](tests/nanhuangApprovedChanges.test.mjs)32/32；[内容包测试](tests/contentPacks.test.mjs)11/11；日志/错误守卫22/22；`npm run type-check`与`vue-tsc --noEmit`均0错；`node scripts/content-packs.mjs --check`和diff检查通过。新增6项测试。
+- 驱动方在允许回环监听的真实环境复跑上一版：type-check、Vue类型均0错；全量3564项 / 3551 pass / 0 fail / 13 skip。此前沙箱的两项listen EPERM属于环境限制；早期门禁与沙箱失败日志`.pr1-npm-test.log`、`.pr1-npm-test-final.log`、`.pr1-proto-bind.log`保留。本轮修复结果另记下方。
+- 生成命令仅`node scripts/content-packs.mjs`，产物`src/modules/contentPacks/generated/catalog.json`，版本`49b546680eead047`（修复轮1后）。三冻结文件与852e1687逐字节一致、diff 0行；未运行canon:build、未启停产品服务、未commit/push。
+- 成熟度：上一版实现与离线门禁已由驱动方验证；修复轮1结果见下方。未做浏览器/真实模型/8091复测。focusObjective防御加固、zoneId pastry_shop、顶栏重复、寿元C01、跨国持有物提示均留待另案；Grok控制面/正式验收状态不变。
+
+### PR1-LETTER-20261110 · 修复轮1开工
+
+按review1修复旧stay已拆信重复暂扣、混合背包空条目崩溃；可选背包只读视图小调整。驱动方已复跑上一版：type-check/Vue类型0错，3564项3551过/0败/13跳；本轮最终数字待复跑，冻结与不提交等约束不变。
+
+### PR1-LETTER-20261110 · 修复轮1交付（驱动方复跑）
+
+- 已修：旧 stay 档已拆信（事件曾经完成或已授 `blank_letter_confirmed`）不再重新暂扣；背包空条目/标量不再导致扫描抛错；背包展示改用只读视图。
+- 驱动方真实环境：`npm run type-check` 0 错，`vue-tsc --noEmit` 0 错，`node scripts/content-packs.mjs --check` 通过，`npm test` 3566 项 / 3553 过 / 0 败 / 13 跳。冻结三文件 0 行。
+- 第二轮只读审（Claude Opus）：两项已修确认；新发现态三离开 05b 后退回态二（准备状态不跨关），待总策划拍板是否本 PR 补。

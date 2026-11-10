@@ -21,7 +21,10 @@ import { getNarrativeTurn } from '@/utils/actionGate';
 import { questLineContext } from './questLineContext';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { filterLegacyPilotEventCharacterNames } from './legacyPilotScenes';
-import { resolveScenarioEventNarrative } from './eventNarrativeView';
+import { questCompassPhrases, resolveScenarioEventNarrative, storyRouteLocation } from './eventNarrativeView';
+import { heldActions, heldPrerequisiteObjective } from './stayRejoin';
+import { currentLocation } from './travel/travelLedger';
+import { locationWithin } from './travel/locationIds';
 import { ensureWuyuanOpenWorldSlice } from './wuyuanOpenWorldSlice';
 import { isInternalDevLanguage, stripInternalDevLanguage } from './legacyNarrativeContract';
 import { LEGACY_RENDER_PLAN_INSTRUCTION } from './legacyRenderPlan';
@@ -284,6 +287,19 @@ function uniqueFacts(values: Array<string | undefined>): string[] {
 }
 
 /**
+ * 没有选中步骤时的目标：人不在焦点事件所在地，用罗盘「去某地」指向主线；焦点下一步被暂扣，用前置拍既有目标文本；否则焦点 objective。
+ */
+function focusObjective(saveData: SaveData, runtime: any, focus: any): string {
+  if (!focus) return '';
+  const at = currentLocation(saveData).canonicalLocationId;
+  const pointer = at && focus.locationId && !storyRouteLocation(focus.id) && !locationWithin(at, focus.locationId)
+    ? questCompassPhrases(focus, runtime, at).join(' · ') : '';
+  if (pointer) return pointer;
+  const held = heldActions(runtime).find(item => item.eventId === focus.id);
+  return (held && heldPrerequisiteObjective(held)) || focus.objective;
+}
+
+/**
  * 自由输入（freeInputOffered 传入，即同时提供的其他候选）没有选中的作者步骤：selection 可缺省，
  * 其他候选的演员表也算场景内人物；一个都没有时回落到代码声明的在场人物（questLineContext），
  * 不让模型在一个人都没有的场景里即兴。
@@ -295,7 +311,7 @@ export function readLocalMemoryCapsule(saveData: SaveData, selection?: ScenarioE
   const eventId = selection?.eventId ?? focus?.id ?? '';
   const recent = ((saveData as any)?.社交?.记忆?.短期记忆 || []).slice(-1).join('\n');
   const card = selection ? stepScene(runtime, selection.eventId, selection.actionId) : undefined;
-  const currentObjective = playerFacingFact(card ? card.sceneObjective || (card as any).label : focus?.objective);
+  const currentObjective = playerFacingFact(card ? card.sceneObjective || (card as any).label : focusObjective(saveData, runtime, focus));
   const view = focus ? resolveScenarioEventNarrative(focus, runtime.flags || {}, runtime.divergences, runtime) : null;
   const completed = runtime.completedEventIds?.includes(focus?.id) || runtime.eventActionStates?.[focus?.id]?.readyAtTurn !== undefined;
   const facts = uniqueFacts([

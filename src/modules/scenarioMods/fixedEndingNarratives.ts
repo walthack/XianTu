@@ -7,12 +7,15 @@ import {applyStoryLevel} from './levelProgression';
 import { canonicalEndingId, endingPresentation } from './endingPresentation';
 import { runtimeEntityId, runtimeEntityName, migrateRuntimePersonRecords } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
+import { inventoryItemEntries, resolveItemPresentation } from './itemPresentation';
 import type { ScenarioStepScene } from './schema';
 import { advanceClock } from './travel/travelLedger';
 import { isStepSceneStage } from './travel/stepScene';
 import { visibleModuleText } from './modularTurn';
 import { logEventOnce } from '../diagnostics/log';
 import { encounterPromptFacts } from './randomEncounter';
+import { authoritativeAbsentCharacterIds } from './presence';
+import { entityAliases } from './namedEntities';
 /** 剧情交接 2026-10-02：固定死亡正文；配图由 endingPresentation 提供。 */
 const ENDING_TEXTS: Readonly<Record<string,string>> = CONTENT_PACKS.texts;
 
@@ -125,7 +128,15 @@ export function stepScene(runtime: any, eventId?: string, actionId?: string): Sc
     return current?.timeAdvance ? { ...a, timeAdvance: current.timeAdvance } : a;
   });
   const prepared = runtime?.eventActionStates?.[eventId || '']?.preparations || [];
-  return actionId ? actions.find((a: any) => a.id === actionId) : actions.find((a: any) => (a.requiresPreparation || []).every((p: string) => prepared.includes(p)) && !(a.kind === 'prepare' && prepared.includes(a.grantsPreparation)));
+  return withoutHeldCast(runtime, actionId ? actions.find((a: any) => a.id === actionId) : actions.find((a: any) => (a.requiresPreparation || []).every((p: string) => prepared.includes(p)) && !(a.kind === 'prepare' && prepared.includes(a.grantsPreparation))));
+}
+/** 权威暂留的人（cast-gates authoritative）不进步卡在场／入场名册；作者名册原样留在合同里，条件解除即恢复。 */
+function withoutHeldCast(runtime: any, scene: any): any {
+  if (!scene?.cast) return scene;
+  const held = new Set(authoritativeAbsentCharacterIds(runtime).flatMap(id => [id, ...entityAliases('character', id)]));
+  if (!held.size) return scene;
+  const keep = (person: any) => !held.has(typeof person === 'string' ? person : String(person?.name || person?.id || ''));
+  return { ...scene, cast: { ...scene.cast, ...(Array.isArray(scene.cast.present) ? { present: scene.cast.present.filter(keep) } : {}), ...(Array.isArray(scene.cast.enter) ? { enter: scene.cast.enter.filter(keep) } : {}) } };
 }
 export function sceneDayPart(time: any): string {
   const hour = Number(time?.小时) || 0;
@@ -234,7 +245,10 @@ export function sceneLedgerSummary(save: SaveData): Record<string, unknown> {
   return {
     日期: (save as any).元数据?.时间, 时段: sceneDayPart((save as any).元数据?.时间),
     主角: { 姓名: '程宗扬', 性别: '男', 身份: '白湖商馆南荒商队头领', 境界: (save as any).角色?.属性?.境界 },
-    货币: inventory?.货币 || {}, 关键物品: Object.values(inventory?.物品 || {}).map((i: any) => ({ 名称: i.名称, 数量: i.数量 })),
+    货币: inventory?.货币 || {}, 关键物品: inventoryItemEntries(inventory?.物品).map(([id, i]) => {
+      const item = resolveItemPresentation(save, i.物品ID || id, i);
+      return { 名称: item.name, 数量: i.数量, 描述: item.description };
+    }),
     人物状态: { ...Object.fromEntries(Object.entries(ledger?.actors||{}).map(([id,value])=>[runtimeEntityName(runtime,id),value])), ...(yiHuState ? { 易虎: yiHuState } : {}) }, 伤病: Object.fromEntries(Object.entries(ledger?.injuries||{}).map(([id,value])=>[runtimeEntityName(runtime,id),value])),
     群体伤病: Object.values(ledger?.groupInjuries || {}),
     已故: [...new Set([runtimeEntityName(runtime,"lcq.character.duan_qiang"), runtimeEntityName(runtime,"lcq.character.wang_zhe"), ...Object.entries(ledger?.actors || {}).filter(([, v]) => v.status === 'dead').map(([id]) => runtimeEntityName(runtime,id))])],

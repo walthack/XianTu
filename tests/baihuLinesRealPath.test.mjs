@@ -27,8 +27,11 @@ test('the walk is the real mainline: it crosses every stage and ends at the play
  assert.match(walk.end.reason,/本期南荒试玩已结束/);
 });
 
+// 只在玩家先做了某个人物选择后才开场的拍（requires 读人物线写下的 flag，如 Y5 留下后的驿馆会合）：只走主线不会出现，由下方分叉测试逐个覆盖。
+const choiceGated=b=>JSON.stringify(b.requires||{}).includes('"flag":');
 test('every pack beat shows options (>0) when the player only follows the mainline, at the place the player actually is',()=>{
- for(const b of beats){
+ assert.deepEqual(beats.filter(choiceGated).map(b=>b.id),['beat.ningyu.y5_rejoin']);
+ for(const b of beats.filter(b=>!choiceGated(b))){
   const o=offered.get(b.eventId);
   assert.ok(o,`${b.id} (${b.eventId}) never offered on the mainline walk`);
   assert.ok(o.actions.length>0,b.id);
@@ -75,9 +78,19 @@ test('O1 is offered while the player stands in a Wuyuan zone (the fee event is p
  assert.match(o1.at,/wuyuan/); // 真机路径（含 ensureWuyuanOpenWorldSlice）里玩家的 locationId 是五原本身，区内点心铺属于它assert.equal(o1.actions.length,3);
 });
 
-test('after the host event is done the departure waits for the optional beat, then the route continues (O2, Y3)',()=>{
+test('O2 opens once the host preparation prose is committed, before the host is done; answering does not move the player (2026-11-09 handoff §4)',()=>{
+ const save=fork('lcq.event.ningyu_regicide_offer_ins_ningyu_reply'),r=save.世界.状态.剧本模组;
+ assert.ok(r.eventActionStates['lcq.event.ningyu_regicide_offer'].preparations.includes('ningyu_regicide_price_heard'));
+ assert.ok(!r.completedEventIds.includes('lcq.event.ningyu_regicide_offer'),'the window opens before the host event is done');
+ assert.equal(save.角色.位置.locationId,'nh.caravan_camp');
+ const a=rt.getCurrentStoryExplorationActions(save).find(a=>a.actionId==='act.ningyu.o2.refuse');assert.ok(a);
+ r.worldTurn++;assert.equal(rt.recordStoryEventStructuredAction(save,a).completed,true);
+ assert.equal(save.角色.位置.locationId,'nh.caravan_camp','answering must not move the player back to the stage anchor');
+ assert.match(save.角色.位置.描述,/南荒途中/);
+});
+
+test('after the host event is done the departure waits for the optional beat, then the route continues (Y3)',()=>{
  for(const [id,host,before,after,reply] of [
-  ['lcq.event.ningyu_regicide_offer_ins_ningyu_reply','lcq.event.ningyu_regicide_offer','nh.caravan_camp','nh.zixi','act.ningyu.o2.refuse'],
   ['lcq.event.rainforest_black_shoal_ins_ningyu_fire','lcq.event.rainforest_black_shoal','nh.black_shoal','lcq.location.sheyi_village','act.ningyu.y3.nothing']]){
   const save=fork(id),r=save.世界.状态.剧本模组;
   assert.ok(r.completedEventIds.includes(host),'window opens after the host event is done');
@@ -96,7 +109,8 @@ test('unanswered, the held departure still leaves when the window closes (the be
  const i=visited.indexOf('nh.caravan_camp');
  assert.ok(i>=0);
  assert.deepEqual(visited.slice(i,i+4).filter(x=>x.startsWith('nh.')||x.includes('sheyi')),['nh.caravan_camp','nh.zixi','nh.black_shoal','lcq.location.sheyi_village']);
- assert.equal(offered.get('lcq.event.ningyu_regicide_offer_ins_ningyu_reply').focus,'lcq.event.zixi_taiyi_intercept');
+ // O2 在宿主准备正文落账后、宿主完成前开场（交接 2026-11-09 §4），第一次出现时焦点仍是宿主事件。
+ assert.equal(offered.get('lcq.event.ningyu_regicide_offer_ins_ningyu_reply').focus,'lcq.event.ningyu_regicide_offer');
 });
 
 test('following the mainline alone never settles an optional beat or writes a stance',()=>{
@@ -124,9 +138,10 @@ test('route beats read as part of the road: the optional chips share the route d
  assert.equal(route.storyRouteLocation('lcq.event.charge_sudaji_fee_ins_baihu_price'),undefined);
 });
 
-test('windows that depend on a finished host event stay open long enough to be seen (Y3, Y5, L3, L5)',()=>{
+test('windows that depend on a finished host event stay open long enough to be seen (Y3, L3, L5); Y5 opens on the host preparation',()=>{
  assert.equal(offered.get('lcq.event.rainforest_black_shoal_ins_ningyu_fire').focus,'lcq.event.silent_sheyi_village');
- assert.equal(offered.get('lcq.event.guiwangdong_coop_pact_ins_ningyu_enter').focus,'lcq.event.enter_dong_with_migu');
+ // Y5 改为宿主准备（ningyu_relapse_settled）落账即开场、宿主完成即到期（交接 2026-11-09 §4）。
+ assert.equal(offered.get('lcq.event.guiwangdong_coop_pact_ins_ningyu_enter').focus,'lcq.event.guiwangdong_coop_pact');
  assert.equal(offered.get('lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon').focus,'lcq.event.pull_harpoon_lemingzhu');
  assert.equal(offered.get('lcq.event.s05b_10_slave_revolt_and_phoenix_change_ins_lmz_redlight').focus,'lcq.event.ghost_king_swallowed');
 });

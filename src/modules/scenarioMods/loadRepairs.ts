@@ -22,6 +22,8 @@ import { debugLog } from '../diagnostics/debugLog';
 import stage01 from './builtins/data/lcq.stage_01.json';
 import { CONTENT_PACKS } from '../contentPacks';
 import { advanceScenarioRuntime } from './runtime';
+import { syncPersistentLineEntries } from './persistentLineEntries';
+import { clearStaleQuestLineExpiry } from './questLineContext';
 import { countryOf } from './travel/mapTravel';
 import locations from '../../../mod-kit/entity-catalog/locations.json';
 import { calendarConfig } from '@/utils/time';
@@ -318,6 +320,10 @@ export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyS
   backfillMissingOffscreenResolution(rt);
   // 旧版直接点地图入秦留下的口信当前拍（推进一轮会换掉 剧本模组 对象，之后改用新的）。
   if (repairLingeringMapEntryMessage(save)) rt = save.世界.状态.剧本模组;
+  // 关窗规则已删的拍：旧档按旧规则写下的 expired 作废（推进时同一迁移也跑）。
+  clearStaleQuestLineExpiry(save);
+  // 跨关常驻的可选拍入口（藻丝取物、05b 驿馆会合）：旧档事件表缺的补上，已取过的按回执不补。
+  syncPersistentLineEntries(save);
   if (rt.sceneLedger) injuryStore(save);
   // 冰蛊等剧情来源状态：旧档停在 05/05b 时读档补挂（幂等）。
   const storyStatuses = syncStoryStatuses(save);

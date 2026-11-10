@@ -1,4 +1,4 @@
-type PanelAction = 'refresh' | 'save' | 'test' | 'clear' | 'export' | 'stats' | 'memory-settings-updated';
+type PanelAction = 'refresh' | 'save' | 'test' | 'clear' | 'export' | 'stats' | 'memory-settings-updated' | 'select-line-action';
 
 type Handler = (payload?: any) => void | Promise<void>;
 

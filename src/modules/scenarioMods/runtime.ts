@@ -88,7 +88,8 @@ import {
 } from './inventoryTransactions';
 import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { formatQuestCompass, questCompassPhrases, storyRouteLocation } from './eventNarrativeView';
-import { departedPresentNames, stampDepartedCast } from './presence';
+import { authoritativeAbsentCharacterIds, departedPresentNames, stampDepartedCast } from './presence';
+import { actionHeldForRejoin } from './stayRejoin';
 import { releaseBaihuGambleRefusalIfEscaped } from './baihuGambleRefusal';
 import { resolveScopedPlayerLine, playerFacingActionLine, playerActionDisplayOverride } from './playerActionPresentation';
 import { enforceScenarioNpcAdulthood, ensureEncounteredScenarioCharacter } from './relationships';
@@ -1041,7 +1042,10 @@ const BATCH6_TEXT_CONTRACT_REVISIONS: Record<string, { from: string; to: string 
   "lcq.event.s03b_yinzhu_xiongerpu": {
     "from": "c3d65b9d",
     "to": "c2ebe3c0"
-  }
+  },
+  // 2026-11-09 同场回应：O2/Y5 加「明确略过」，Y5 留下改小魏照看；旧档准备状态与选择照旧承接。
+  'lcq.event.ningyu_regicide_offer_ins_ningyu_reply': { from: 'f27676f0', to: '37ca6495' },
+  'lcq.event.guiwangdong_coop_pact_ins_ningyu_enter': { from: 'aff4748f', to: '569a4d8b' },
 };
 
 function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModEvent): ScenarioEventActionState | undefined {
@@ -1110,6 +1114,7 @@ function eventActionAvailable(
   runtime: RuntimeState,
   saveData?: SaveData,
 ): boolean {
+  if (actionHeldForRejoin(runtime, action)) return false;
   if (saveData && (runtime.events.find(e=>e.playerCompletionContract?.actions.includes(action)) as any)?.questLineBeatId) {
     const e=runtime.events.find(e=>e.playerCompletionContract?.actions.includes(action))!;const offer=questLineOffer(saveData,e.id);if(!offer || !(action.requiresPresentCharacterIds||[]).every(id=>offer.ctx.presentActorIds.includes(id)))return false;
     const effects=offer.beat.byAction?.[action.id]||[];if(effects.some(e=>e.kind==='affinityGrant'&&!Number.isFinite((LINE_RESOURCES.affinityWeights as any)[e.weightId])))return false;
@@ -3669,12 +3674,15 @@ function settleSharedExperienceAffinity(
     const eventById = new Map((rt.events || []).map(event => [event.id, event]));
 
     const turn = getNarrativeTurn(saveData);
+    // 权威暂留（cast-gates authoritative）的人这段不在场，不按在场者计共历。
+    const absent = new Set(authoritativeAbsentCharacterIds(runtime));
     for (const eventId of pending) {
       const event = eventById.get(eventId);
       granted.add(eventId);
       if (!event || (event as any).sharedExperience === 'suppress') continue;
       const grant = isCriticalStoryEvent(event) ? AFFINITY_EVENT_GRANT.critical : AFFINITY_EVENT_GRANT.normal;
       for (const characterId of event.relatedCharacterIds || []) {
+        if (absent.has(characterId)) continue;
         const name = nameById.get(characterId);
         if (!name) continue;
         const npc = relationshipOf(saveData, characterId)?.profile;

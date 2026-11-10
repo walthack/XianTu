@@ -9,10 +9,10 @@ const cp=await loadTs('../src/modules/contentPacks/index.ts'),ec=await loadTs('.
 const rawMods=await Promise.all(ids.map(id=>readFile(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`,import.meta.url),'utf8').then(JSON.parse)));
 const mods=rawMods.map(raw=>{const mod=ec.resolveScenarioContent(cp.applyContentPackOverlays(raw));cr.resolveScenarioCharacters(mod.canon?.characters,mod.manifest.id);return mod;});
 globalThis.location={search:'?sceneModule=on',hostname:'localhost'};
-export async function walkMainline(onTop){
+export async function walkMainline(onTop,start){
 globalThis.__k=0;globalThis.__stuck=0;
 let save,trace=[],end;
-save=opening.createQingyuOpeningPlaytestSave(mods[0],new Date().toISOString(),2);const bypass=new Set();
+save=start?structuredClone(start):opening.createQingyuOpeningPlaytestSave(mods[0],new Date().toISOString(),2);const bypass=new Set();
 for(let n=0;n<2000;n++){
  let r=save.世界.状态.剧本模组,event=rt.getScenarioFocusEvent(r);
  if(onTop)onTop(save,event,n);
