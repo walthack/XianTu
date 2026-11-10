@@ -47,3 +47,12 @@ test('held subject rules copy contract labels, accept optional anchors and rejec
   const eventOnly=structuredClone(original[0]);delete eventOnly.actionId;eventOnly.intentLabelId='text.obj.ningyu.y5_rejoin';await set(eventOnly);out=await compile();assert.equal(out.heldActions[0].label,out.texts[eventOnly.intentLabelId]);
  }finally{await rm(dir,{recursive:true,force:true});}
 });
+
+test('heldActions and timeline compile together in the same catalog',async()=>{
+ const out=await compileContentPacks();
+ assert.ok(Array.isArray(out.heldActions)&&out.heldActions.length>0,'heldActions missing from compiled catalog');
+ assert.ok(out.timeline&&Array.isArray(out.timeline.inserts)&&out.timeline.inserts.length>0,'timeline inserts missing from compiled catalog');
+ assert.equal(out.heldActions[0].subject.itemId,'lcq.item.crow_bamboo_tube');
+ assert.equal(out.timeline.inserts[0].id,'qingyu.insert.grassland_four_years');
+ assert.equal(out.timeline.canonPresentYear,220);
+});
