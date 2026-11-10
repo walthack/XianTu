@@ -195,7 +195,7 @@ const idSet = new Set(entries.map(e => e.id));
 if (idSet.size !== entries.length) throw new Error('注册表存在重复 id（不应发生）');
 
 // 手工补卡（游戏原创角色等）：只 append，id 撞车报错。2026-10-20 诗薇莫（F02）。
-// overrides：源卡已有条目的 staticProfile 字段覆盖（源卡不入库，手补的摘要放这里才不丢）；
+// overrides：源卡已有条目的 staticProfile 字段覆盖，removeStaticProfileFields 删字段（源卡不入库，手补的摘要放这里才不丢）；
 // 在 embedText 生成之后套用，不改检索文本；id 不在源卡里即报错。
 let supplementCharacters = [];
 {
@@ -204,6 +204,10 @@ let supplementCharacters = [];
     const e = entries.find(x => x.id === o.id);
     if (!e) throw new Error(`补卡覆盖的 id 不在源卡生成的条目里：${o.id}`);
     e.staticProfile = { ...e.staticProfile, ...o.staticProfile };
+    for (const key of o.removeStaticProfileFields || []) {
+      if (!(key in e.staticProfile)) throw new Error(`补卡覆盖要删的字段不在条目里：${o.id}.staticProfile.${key}`);
+      delete e.staticProfile[key];
+    }
   }
   supplementCharacters = sup.characters || [];
 }

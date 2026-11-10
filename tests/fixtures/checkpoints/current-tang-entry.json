@@ -24720,7 +24720,7 @@
                   "settledAtTurn": 25
                 }
               ],
-              "reconciledRegistryVersion": "cr-2026-11-10-f2e6b03670091fd8",
+              "reconciledRegistryVersion": "cr-2026-11-10-e224b39b803721c7",
               "sceneLedger": {
                 "receipts": [
                   "lcq.event.s03b_snake_flower_bridge_01::advance_declared_objective",

@@ -1354,7 +1354,7 @@
                 "tags": [
                   "师徒"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "lcq.character.han_geng"
               },
@@ -1367,7 +1367,7 @@
                 "tags": [
                   "师徒"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "lcq.character.yue_shuang"
               },
@@ -1377,7 +1377,7 @@
                 "relation": "侍卫长",
                 "score": 25,
                 "type": "双向",
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "liuchao.character.su_daji",
                 "toLabel": "liuchao.character.ning_yu"
               },
@@ -1387,7 +1387,7 @@
                 "relation": "师兄弟",
                 "score": 60,
                 "type": "双向",
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.np001",
                 "toLabel": "lcq.character.wang_zhe"
               },
@@ -1397,7 +1397,7 @@
                 "relation": "仇敌",
                 "score": -55,
                 "type": "双向",
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "liuchao.character.su_daji",
                 "toLabel": "lcq.character.wang_zhe"
               },
@@ -1411,7 +1411,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1425,7 +1425,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1439,7 +1439,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "lcq.character.han_geng"
               },
@@ -1453,7 +1453,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1467,7 +1467,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "lcq.character.np001"
               },
@@ -1481,7 +1481,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1495,7 +1495,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1509,7 +1509,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "lcq.character.np001"
               },
@@ -1523,7 +1523,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1537,7 +1537,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "liuchao.character.lin_cai_quan",
                 "toLabel": "lcq.character.np001"
               },
@@ -1551,7 +1551,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "liuchao.character.lin_cai_quan",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1565,7 +1565,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.np001",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1579,7 +1579,7 @@
                   "同袍",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-10T12:47:38.946Z",
+                "updatedAt": "2026-11-10T13:38:40.208Z",
                 "fromLabel": "lcq.character.agamenon",
                 "toLabel": "lcq.character.dai_jixue"
               }
@@ -1595,7 +1595,7 @@
               "核心专名不得改写",
               "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
             ],
-            "生成时间": "2026-11-10T12:47:38.946Z",
+            "生成时间": "2026-11-10T13:38:40.208Z",
             "版本": "scenario-mod:lcq.stage_02@1.0.0",
             "大陆信息": [
               {
@@ -8256,7 +8256,7 @@
                   "settledAtTurn": 1
                 }
               ],
-              "reconciledRegistryVersion": "cr-2026-11-10-f2e6b03670091fd8",
+              "reconciledRegistryVersion": "cr-2026-11-10-e224b39b803721c7",
               "sceneLedger": {
                 "receipts": [],
                 "actors": {},

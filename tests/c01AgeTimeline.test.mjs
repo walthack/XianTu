@@ -255,3 +255,31 @@ test('原著未成年岁数不进卡与提示词：小紫 hardLimits、小紫 me
   assert.doesNotMatch(registry, /(?<!二)十五六岁年纪|白发萧索/);
   assert.match(PL.privateAgeConstraint('period', '小紫'), /普通童年回忆照常可写/);
 });
+
+test('补丁（剧情策划 11-10 清单）：宋主 200【推断】且删去往事岁数 storyAge；补表 6 项；无首登且开局年不满 18 的只报不挡', () => {
+  const registry = json('src/modules/scenarioMods/builtins/character-registry.json').characters;
+  const entry = id => registry.find(e => e.id === id);
+  const songZhu = 'canon.character.2a4df37bfa';
+  assert.equal(entry(songZhu).staticProfile.birthYear, 200);
+  assert.equal(entry(songZhu).birthYearBasis, '推断');
+  assert.equal('storyAge' in entry(songZhu).staticProfile, false, '「七八岁」是岳帅出事那年的往事岁数，不进总表');
+  assert.equal(CR.getRegistryAgeFacts({ id: songZhu }).storyAge, undefined);
+  assert.equal(CR.gateAgeNow(songZhu, 220), 20);
+  const sup = json('mod-kit/character-registry-supplements.json');
+  assert.deepEqual(sup.overrides.find(o => o.id === songZhu).removeStaticProfileFields, ['storyAge']);
+
+  const table = new Map(json('mod-kit/character-birth-years.json').entries.map(e => [e.id, e]));
+  for (const [id, year, basis] of [[songZhu, 200, '推断'], ['liuchao.character.guo_jing', 218, '推断'], ['liuchao.character.liu_xin', 217, '原著'],
+    ['canon.character.1d2719bc6f', 205, '原著'], ['canon.character.886a02fef4', 202, '下限'], ['lyl.character.np039', 202, '下限']]) {
+    assert.deepEqual([table.get(id)?.birthYear, table.get(id)?.basis], [year, basis], id);
+    assert.equal(entry(id).staticProfile.birthYear, year, id);
+  }
+  assert.match(table.get('liuchao.character.an_le_gong_zhu').source, /^「先帝嫡女安乐公主，年已及笄」\(ygx\.txt:36741\)/);
+  assert.equal(table.get('liuchao.character.yan_er').birthYear, 204);
+
+  const report = auditWith({});
+  assert.deepEqual([report.missing, report.under18], [[], []]);
+  assert.deepEqual(report.lifted.map(x => x.match(/（([^）]+)）/)[1]).sort(), [ID.yueShuang, 'liuchao.character.guo_jing', 'liuchao.character.liu_xin'].sort());
+  for (const x of report.noDebutMinor) assert.equal(CR.getRegistryDebutAxisSeq(x.match(/（([^）]+)）/)[1]), undefined, x);
+  assert.equal(report.noDebutMinor.some(x => x.includes(songZhu)), false);
+});

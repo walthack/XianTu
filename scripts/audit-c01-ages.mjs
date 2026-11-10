@@ -3,6 +3,7 @@
 //   缺出生年报告（敌人种类、生物、notPersons 不算人物）——运行时按满 18 处理，只报不挡；
 //   下限抬升清单（口径甲）：原著出生年在首登时不满 18、由运行时下限抬到 18 的人，只报不挡；
 //   现算仍不满 18 警告（口径乙）：下限之后首登仍不满 18，正常数据不会出现；
+//   无首登记录、在开局年（原著当下年）被提到会现算不满 18 的人：没有下限可兜，只报不挡；
 //   原著岁数越界：总表档案与关卡人物档案里写着的岁数（不该进卡与提示词），只报不挡；
 //   总表派生字段：有效出生年、首登年、现算年龄等派生值写回了总表即失败（派生值只在运行时现算）。
 // 用法：node scripts/audit-c01-ages.mjs [--json]；测试经 auditC01Ages(inputs) 换入改过的时间线或总表。
@@ -41,12 +42,15 @@ export function auditC01Ages({ registry, table, timeline, minAdult, stages } = c
     if (!debut.has(key) || seq < debut.get(key)) debut.set(key, seq);
   }
 
-  const missing = [], lifted = [], under18 = [];
+  const missing = [], lifted = [], under18 = [], noDebutMinor = [];
   for (const e of persons) {
     const birth = e.staticProfile?.birthYear;
     if (typeof birth !== 'number') { missing.push(`${e.id} ${e.canonicalName}`); continue; }
     const seq = debut.get(e.id);
-    if (seq === undefined) continue;
+    if (seq === undefined) {
+      if (canonPresentYear - birth < minAdult) noDebutMinor.push(`${e.canonicalName}（${e.id}）出生 ${birth}，${canonPresentYear} 年现算 ${canonPresentYear - birth} 岁`);
+      continue;
+    }
     const debutYear = canonPresentYear + shiftAt(seq);
     const effective = Math.min(birth, debutYear - minAdult);
     if (debutYear - birth < minAdult) lifted.push(`${e.canonicalName}（${e.id}）出生 ${birth}，首登 ${debutYear} 年原著口径 ${debutYear - birth} 岁 → 按 ${minAdult} 岁`);
@@ -74,19 +78,20 @@ export function auditC01Ages({ registry, table, timeline, minAdult, stages } = c
       for (const hit of ageHits.splice(before)) if (!seenStageText.has(hit)) { seenStageText.add(hit); ageHits.push(hit); }
     }
   }
-  return { persons: persons.length, missing, lifted, under18, ageHits, derived };
+  return { persons: persons.length, missing, lifted, under18, noDebutMinor, ageHits, derived };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const report = auditC01Ages();
-  const { missing, lifted, under18, ageHits, derived } = report;
+  const { missing, lifted, under18, noDebutMinor, ageHits, derived } = report;
   const minAdult = c01AuditInputs().minAdult;
   if (process.argv.includes('--json')) console.log(JSON.stringify(report, null, 2));
   else {
-    console.log(`C01 年龄体检：人物 ${report.persons}，缺出生年 ${missing.length}，下限抬升 ${lifted.length}，现算不满 ${minAdult} ${under18.length}，档案岁数 ${ageHits.length}，派生字段 ${derived.length}`);
+    console.log(`C01 年龄体检：人物 ${report.persons}，缺出生年 ${missing.length}，下限抬升 ${lifted.length}，现算不满 ${minAdult} ${under18.length}，无首登且开局年不满 ${minAdult} ${noDebutMinor.length}，档案岁数 ${ageHits.length}，派生字段 ${derived.length}`);
     for (const x of missing) console.log(`  [缺出生年·运行时按满 ${minAdult}] ${x}`);
     for (const x of lifted) console.log(`  [下限抬升·信息] ${x}`);
     for (const x of under18) console.log(`  [警告·现算不满 ${minAdult}] ${x}`);
+    for (const x of noDebutMinor) console.log(`  [无首登·开局年现算不满 ${minAdult}·信息] ${x}`);
     for (const x of ageHits) console.log(`  [档案岁数·待清] ${x}`);
     for (const x of derived) console.log(`  [失败·派生字段写回总表] ${x}`);
   }

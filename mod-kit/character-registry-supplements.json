@@ -1,5 +1,5 @@
 {
-  "note": "角色总表的手工补卡：生成脚本 build-character-registry.mjs 在源卡之后按 characters 顺序追加，id 撞车即报错；overrides 按 id 覆盖源卡已生成条目的 staticProfile 指定字段（不重算 embedText），id 不存在即报错。源卡 character-cards-v3.json 不入库，补卡/覆盖放这里才不会在重新生成时丢失。",
+  "note": "角色总表的手工补卡：生成脚本 build-character-registry.mjs 在源卡之后按 characters 顺序追加，id 撞车即报错；overrides 按 id 覆盖源卡已生成条目的 staticProfile 指定字段、removeStaticProfileFields 删掉指定字段（不重算 embedText；要删的字段不存在即报错），id 不存在即报错。源卡 character-cards-v3.json 不入库，补卡/覆盖放这里才不会在重新生成时丢失。",
   "characters": [
     {
       "id": "lcq.character.nanhuang_aling",
@@ -221,6 +221,13 @@
           "以技服人，术法较量不动声色"
         ]
       }
+    },
+    {
+      "id": "canon.character.2a4df37bfa",
+      "source": "C01（总策划 2026-11-10 21:14）：「七八岁」是岳帅出事时的往事岁数(qyj.txt:19158)，不是当下岁数，删去；年龄由出生年 200 现算",
+      "removeStaticProfileFields": [
+        "storyAge"
+      ]
     }
   ]
 }
