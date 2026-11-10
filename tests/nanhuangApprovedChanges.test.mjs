@@ -568,7 +568,7 @@ test('PR1-letter-③: all three item states derive from real walkthrough facts, 
  assert.equal(itemView.resolveItemPresentation(next,'lcq.item.backpack').description,ec.catalogItem('lcq.item.backpack').description||'','catalog fallback');
 });
 
-test('PR1-letter-③: the reopened state survives leaving 05b for 06 via cross-stage completion facts, in inventory and scene ledger',()=>{
+test('PR1-letter-③：离开 05b 后（跳过 06 进 07）态三仍在，背包与南荒账',()=>{
  // 走查终点停在 05b 试玩收束；去掉收束标记后走真实切关（06 在默认线隔离名单，按其 nextStageId 落到 07），得到离开 05b 后的真实存档形状。
  const source=structuredClone(plainWalk.save);assert.equal(runtimeOf(source).modId,'lcq.stage_05b');assert.ok(runtimeOf(source).eventActionStates[LETTER].preparations.includes('blank_letter_confirmed'));
  delete source.系统.扩展.清羽记开局.endEventId;
