@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { loadTs } from '../tests/loadTs.mjs';
-import { freshPrologueCheckpoint } from './generate-prologue-checkpoint.mjs';
+import { freshPrologueCheckpoint, assertRealOpeningAfterLoad } from './generate-prologue-checkpoint.mjs';
 
 const R = await loadTs('../src/modules/scenarioMods/runtime.ts');
 const I = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
@@ -130,6 +130,8 @@ export async function generateLineEntryCheckpoints() {
 
 export async function writeLineEntryCheckpoints(dir = outputDir) {
   const checkpoints = await generateLineEntryCheckpoints();
+  // 生成失败条件：全部档先过真实读档入口断言（出生 200、读后不被修复），任一不成立即抛错，不写半截。
+  for (const line of checkpointLines) await assertRealOpeningAfterLoad(checkpoints[line.id].bundle, `current-${line.id}-entry`);
   await mkdir(dir, { recursive: true });
   for (const line of checkpointLines) {
     const stem = new URL(`current-${line.id}-entry`, dir);

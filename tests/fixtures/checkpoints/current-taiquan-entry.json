@@ -26,7 +26,7 @@
             "名字": "程宗扬",
             "性别": "男",
             "出生日期": {
-              "年": 202,
+              "年": 200,
               "月": 1,
               "日": 1
             },
@@ -94,7 +94,7 @@
               "上限": 30
             },
             "寿命": {
-              "当前": 18,
+              "当前": 20,
               "上限": 80
             }
           },
@@ -352,7 +352,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.duan_qiang"
+              "原关系键": "lcq.character.duan_qiang",
+              "首见年": 220
             },
             "lcq.character.yue_shuang": {
               "角色ID": "lcq.character.yue_shuang",
@@ -460,7 +461,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.yue_shuang"
+              "原关系键": "lcq.character.yue_shuang",
+              "首见年": 220
             },
             "lcq.character.wang_zhe": {
               "角色ID": "lcq.character.wang_zhe",
@@ -567,7 +569,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.wang_zhe"
+              "原关系键": "lcq.character.wang_zhe",
+              "首见年": 220
             },
             "liuchao.character.su_daji": {
               "角色ID": "liuchao.character.su_daji",
@@ -665,7 +668,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.su_daji"
+              "原关系键": "liuchao.character.su_daji",
+              "首见年": 220
             },
             "liuchao.character.ning_yu": {
               "角色ID": "liuchao.character.ning_yu",
@@ -769,7 +773,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.ning_yu"
+              "原关系键": "liuchao.character.ning_yu",
+              "首见年": 220
             },
             "liuchao.character.lin_cai_quan": {
               "角色ID": "liuchao.character.lin_cai_quan",
@@ -859,7 +864,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lin_cai_quan"
+              "原关系键": "liuchao.character.lin_cai_quan",
+              "首见年": 220
             },
             "liuchao.character.zhuo_yunjun": {
               "角色ID": "liuchao.character.zhuo_yunjun",
@@ -956,7 +962,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.zhuo_yunjun"
+              "原关系键": "liuchao.character.zhuo_yunjun",
+              "首见年": 220
             },
             "lcq.character.han_geng": {
               "角色ID": "lcq.character.han_geng",
@@ -1058,7 +1065,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.han_geng"
+              "原关系键": "lcq.character.han_geng",
+              "首见年": 220
             },
             "lcq.character.np001": {
               "角色ID": "lcq.character.np001",
@@ -1150,7 +1158,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.np001"
+              "原关系键": "lcq.character.np001",
+              "首见年": 220
             },
             "lcq.character.agamenon": {
               "角色ID": "lcq.character.agamenon",
@@ -1244,7 +1253,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.agamenon"
+              "原关系键": "lcq.character.agamenon",
+              "首见年": 220
             },
             "lcq.character.dai_jixue": {
               "角色ID": "lcq.character.dai_jixue",
@@ -1335,7 +1345,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lcq.character.dai_jixue"
+              "原关系键": "lcq.character.dai_jixue",
+              "首见年": 220
             },
             "liuchao.character.a_jiman_bana": {
               "角色ID": "liuchao.character.a_jiman_bana",
@@ -1409,7 +1420,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.a_jiman_bana"
+              "原关系键": "liuchao.character.a_jiman_bana",
+              "首见年": 224
             },
             "liuchao.character.wu_er_lang": {
               "角色ID": "liuchao.character.wu_er_lang",
@@ -1493,7 +1505,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.wu_er_lang"
+              "原关系键": "liuchao.character.wu_er_lang",
+              "首见年": 224
             },
             "liuchao.character.su_li": {
               "角色ID": "liuchao.character.su_li",
@@ -1575,7 +1588,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.su_li"
+              "原关系键": "liuchao.character.su_li",
+              "首见年": 224
             },
             "liuchao.character.yun_cang_feng": {
               "角色ID": "liuchao.character.yun_cang_feng",
@@ -1662,7 +1676,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.yun_cang_feng"
+              "原关系键": "liuchao.character.yun_cang_feng",
+              "首见年": 224
             },
             "liuchao.character.xie_yi": {
               "角色ID": "liuchao.character.xie_yi",
@@ -1745,7 +1760,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.xie_yi"
+              "原关系键": "liuchao.character.xie_yi",
+              "首见年": 224
             },
             "liuchao.character.le_mingzhu": {
               "角色ID": "liuchao.character.le_mingzhu",
@@ -1825,7 +1841,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.le_mingzhu"
+              "原关系键": "liuchao.character.le_mingzhu",
+              "首见年": 224
             },
             "liuchao.character.shang_zhen_yu": {
               "角色ID": "liuchao.character.shang_zhen_yu",
@@ -1905,7 +1922,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.shang_zhen_yu"
+              "原关系键": "liuchao.character.shang_zhen_yu",
+              "首见年": 224
             },
             "liuchao.character.xiao_zi": {
               "角色ID": "liuchao.character.xiao_zi",
@@ -1993,7 +2011,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.xiao_zi"
+              "原关系键": "liuchao.character.xiao_zi",
+              "首见年": 224
             },
             "liuchao.character.pan_jinlian": {
               "角色ID": "liuchao.character.pan_jinlian",
@@ -2079,7 +2098,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.pan_jinlian"
+              "原关系键": "liuchao.character.pan_jinlian",
+              "首见年": 224
             },
             "liuchao.character.shen_wan_ying": {
               "角色ID": "liuchao.character.shen_wan_ying",
@@ -2171,7 +2191,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.shen_wan_ying"
+              "原关系键": "liuchao.character.shen_wan_ying",
+              "首见年": 224
             },
             "liuchao.character.qiu_shao_jun": {
               "角色ID": "liuchao.character.qiu_shao_jun",
@@ -2263,7 +2284,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.qiu_shao_jun"
+              "原关系键": "liuchao.character.qiu_shao_jun",
+              "首见年": 224
             },
             "liuchao.character.xie_youdu": {
               "角色ID": "liuchao.character.xie_youdu",
@@ -2365,7 +2387,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.xie_youdu"
+              "原关系键": "liuchao.character.xie_youdu",
+              "首见年": 224
             },
             "liuchao.character.qin_hui": {
               "角色ID": "liuchao.character.qin_hui",
@@ -2486,7 +2509,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.qin_hui"
+              "原关系键": "liuchao.character.qin_hui",
+              "首见年": 224
             },
             "liuchao.character.wang_tian_de": {
               "角色ID": "liuchao.character.wang_tian_de",
@@ -2592,7 +2616,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.wang_tian_de"
+              "原关系键": "liuchao.character.wang_tian_de",
+              "首见年": 224
             },
             "liuchao.character.xiang_ya": {
               "角色ID": "liuchao.character.xiang_ya",
@@ -2692,7 +2717,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.xiang_ya"
+              "原关系键": "liuchao.character.xiang_ya",
+              "首见年": 224
             },
             "liuchao.character.li_shi_shi": {
               "角色ID": "liuchao.character.li_shi_shi",
@@ -2788,7 +2814,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.li_shi_shi"
+              "原关系键": "liuchao.character.li_shi_shi",
+              "首见年": 224
             },
             "liuchao.character.ao_run": {
               "角色ID": "liuchao.character.ao_run",
@@ -2880,7 +2907,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.ao_run"
+              "原关系键": "liuchao.character.ao_run",
+              "首见年": 224
             },
             "liuchao.character.jin_wu_zhu": {
               "角色ID": "liuchao.character.jin_wu_zhu",
@@ -2975,7 +3003,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.jin_wu_zhu"
+              "原关系键": "liuchao.character.jin_wu_zhu",
+              "首见年": 224
             },
             "liuchao.character.bao_zi_tou": {
               "角色ID": "liuchao.character.bao_zi_tou",
@@ -3072,7 +3101,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.bao_zi_tou"
+              "原关系键": "liuchao.character.bao_zi_tou",
+              "首见年": 224
             },
             "liuchao.character.qing_mian_shou": {
               "角色ID": "liuchao.character.qing_mian_shou",
@@ -3167,7 +3197,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.qing_mian_shou"
+              "原关系键": "liuchao.character.qing_mian_shou",
+              "首见年": 224
             },
             "liuchao.character.lin_chong": {
               "角色ID": "liuchao.character.lin_chong",
@@ -3267,7 +3298,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lin_chong"
+              "原关系键": "liuchao.character.lin_chong",
+              "首见年": 224
             },
             "liuchao.character.lu_zhi_shen": {
               "角色ID": "liuchao.character.lu_zhi_shen",
@@ -3371,7 +3403,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lu_zhi_shen"
+              "原关系键": "liuchao.character.lu_zhi_shen",
+              "首见年": 224
             },
             "liuchao.character.teng_fu": {
               "角色ID": "liuchao.character.teng_fu",
@@ -3457,7 +3490,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.teng_fu"
+              "原关系键": "liuchao.character.teng_fu",
+              "首见年": 224
             },
             "liuchao.character.xiao_yao_yi": {
               "角色ID": "liuchao.character.xiao_yao_yi",
@@ -3561,7 +3595,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.xiao_yao_yi"
+              "原关系键": "liuchao.character.xiao_yao_yi",
+              "首见年": 224
             },
             "liuchao.character.sun_shou": {
               "角色ID": "liuchao.character.sun_shou",
@@ -3663,7 +3698,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.sun_shou"
+              "原关系键": "liuchao.character.sun_shou",
+              "首见年": 224
             },
             "liuchao.character.zhao_he_de": {
               "角色ID": "liuchao.character.zhao_he_de",
@@ -3774,7 +3810,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.zhao_he_de"
+              "原关系键": "liuchao.character.zhao_he_de",
+              "首见年": 224
             },
             "liuchao.character.lu_jing": {
               "角色ID": "liuchao.character.lu_jing",
@@ -3883,7 +3920,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lu_jing"
+              "原关系键": "liuchao.character.lu_jing",
+              "首见年": 224
             },
             "liuchao.character.yun_ru_yao": {
               "角色ID": "liuchao.character.yun_ru_yao",
@@ -4008,7 +4046,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.yun_ru_yao"
+              "原关系键": "liuchao.character.yun_ru_yao",
+              "首见年": 224
             },
             "liuchao.character.zhao_feiyan": {
               "角色ID": "liuchao.character.zhao_feiyan",
@@ -4119,7 +4158,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.zhao_feiyan"
+              "原关系键": "liuchao.character.zhao_feiyan",
+              "首见年": 224
             },
             "liuchao.character.xu_huang": {
               "角色ID": "liuchao.character.xu_huang",
@@ -4219,7 +4259,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.xu_huang"
+              "原关系键": "liuchao.character.xu_huang",
+              "首见年": 224
             },
             "liuchao.character.lv_ji": {
               "角色ID": "liuchao.character.lv_ji",
@@ -4333,7 +4374,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lv_ji"
+              "原关系键": "liuchao.character.lv_ji",
+              "首见年": 224
             },
             "lyl.character.lyu_buyi": {
               "角色ID": "lyl.character.lyu_buyi",
@@ -4431,7 +4473,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lyl.character.lyu_buyi"
+              "原关系键": "lyl.character.lyu_buyi",
+              "首见年": 224
             },
             "lyl.character.wen_qingyu": {
               "角色ID": "lyl.character.wen_qingyu",
@@ -4529,7 +4572,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lyl.character.wen_qingyu"
+              "原关系键": "lyl.character.wen_qingyu",
+              "首见年": 224
             },
             "liuchao.character.liu_ao": {
               "角色ID": "liuchao.character.liu_ao",
@@ -4632,7 +4676,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.liu_ao"
+              "原关系键": "liuchao.character.liu_ao",
+              "首见年": 224
             },
             "liuchao.character.lin_qing_pu": {
               "角色ID": "liuchao.character.lin_qing_pu",
@@ -4738,7 +4783,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lin_qing_pu"
+              "原关系键": "liuchao.character.lin_qing_pu",
+              "首见年": 224
             },
             "liuchao.character.jian_yu_ji": {
               "角色ID": "liuchao.character.jian_yu_ji",
@@ -4856,7 +4902,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.jian_yu_ji"
+              "原关系键": "liuchao.character.jian_yu_ji",
+              "首见年": 224
             },
             "liuchao.character.ruan_xiang_lin": {
               "角色ID": "liuchao.character.ruan_xiang_lin",
@@ -4952,7 +4999,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.ruan_xiang_lin"
+              "原关系键": "liuchao.character.ruan_xiang_lin",
+              "首见年": 224
             },
             "liuchao.character.gao_zhishang": {
               "角色ID": "liuchao.character.gao_zhishang",
@@ -5088,7 +5136,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.gao_zhishang"
+              "原关系键": "liuchao.character.gao_zhishang",
+              "首见年": 224
             },
             "liuchao.character.si_ming_xin": {
               "角色ID": "liuchao.character.si_ming_xin",
@@ -5186,7 +5235,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.si_ming_xin"
+              "原关系键": "liuchao.character.si_ming_xin",
+              "首见年": 224
             },
             "liuchao.character.cai_jingzhong": {
               "角色ID": "liuchao.character.cai_jingzhong",
@@ -5301,7 +5351,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.cai_jingzhong"
+              "原关系键": "liuchao.character.cai_jingzhong",
+              "首见年": 224
             },
             "liuchao.character.yun_dan_liu": {
               "角色ID": "liuchao.character.yun_dan_liu",
@@ -5441,7 +5492,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.yun_dan_liu"
+              "原关系键": "liuchao.character.yun_dan_liu",
+              "首见年": 224
             },
             "liuchao.character.guo_jie": {
               "角色ID": "liuchao.character.guo_jie",
@@ -5531,7 +5583,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.guo_jie"
+              "原关系键": "liuchao.character.guo_jie",
+              "首见年": 224
             },
             "liuchao.character.np069": {
               "角色ID": "liuchao.character.np069",
@@ -5627,7 +5680,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.np069"
+              "原关系键": "liuchao.character.np069",
+              "首见年": 224
             },
             "liuchao.character.yin_fulan": {
               "角色ID": "liuchao.character.yin_fulan",
@@ -5713,7 +5767,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.yin_fulan"
+              "原关系键": "liuchao.character.yin_fulan",
+              "首见年": 224
             },
             "liuchao.character.wang_hui": {
               "角色ID": "liuchao.character.wang_hui",
@@ -5800,7 +5855,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.wang_hui"
+              "原关系键": "liuchao.character.wang_hui",
+              "首见年": 224
             },
             "liuchao.character.he_yilian": {
               "角色ID": "liuchao.character.he_yilian",
@@ -5888,7 +5944,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.he_yilian"
+              "原关系键": "liuchao.character.he_yilian",
+              "首见年": 224
             },
             "liuchao.character.jing_li": {
               "角色ID": "liuchao.character.jing_li",
@@ -5977,7 +6034,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.jing_li"
+              "原关系键": "liuchao.character.jing_li",
+              "首见年": 224
             },
             "liuchao.character.lv_zhi": {
               "角色ID": "liuchao.character.lv_zhi",
@@ -6073,7 +6131,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.lv_zhi"
+              "原关系键": "liuchao.character.lv_zhi",
+              "首见年": 224
             },
             "liuchao.character.cheng_zongyang": {
               "角色ID": "liuchao.character.cheng_zongyang",
@@ -7141,7 +7200,8 @@
                 }
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.cheng_zongyang"
+              "原关系键": "liuchao.character.cheng_zongyang",
+              "首见年": 224
             },
             "lyl.character.liu_jian": {
               "角色ID": "lyl.character.liu_jian",
@@ -7237,7 +7297,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "lyl.character.liu_jian"
+              "原关系键": "lyl.character.liu_jian",
+              "首见年": 224
             },
             "liuchao.character.wang_meng": {
               "角色ID": "liuchao.character.wang_meng",
@@ -7325,7 +7386,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.wang_meng"
+              "原关系键": "liuchao.character.wang_meng",
+              "首见年": 224
             },
             "liuchao.character.huo_qu_bing": {
               "角色ID": "liuchao.character.huo_qu_bing",
@@ -7419,7 +7481,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.huo_qu_bing"
+              "原关系键": "liuchao.character.huo_qu_bing",
+              "首见年": 224
             },
             "liuchao.character.shi_jing_tang": {
               "角色ID": "liuchao.character.shi_jing_tang",
@@ -7506,7 +7569,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.shi_jing_tang"
+              "原关系键": "liuchao.character.shi_jing_tang",
+              "首见年": 224
             },
             "liuchao.character.ruan_xiang_ning": {
               "角色ID": "liuchao.character.ruan_xiang_ning",
@@ -7617,7 +7681,8 @@
                 "物品": {}
               },
               "实时关注": true,
-              "原关系键": "liuchao.character.ruan_xiang_ning"
+              "原关系键": "liuchao.character.ruan_xiang_ning",
+              "首见年": 224
             }
           },
           "宗门": null,
@@ -23276,6 +23341,7 @@
             ]
           },
           "扩展": {
+            "c01LifespanCacheVersion": 1,
             "剧本模组": {
               "modId": "lyl.taiquan_sacred_fruit",
               "modName": "六朝云龙吟·临安收束与赤阳圣果",

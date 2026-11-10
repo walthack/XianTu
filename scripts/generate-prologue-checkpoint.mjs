@@ -7,11 +7,40 @@ const opening = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.
 const wuyuan = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
 const packs = await loadTs('../src/modules/contentPacks/index.ts');
 const time = await loadTs('../src/modules/scenarioMods/actionTime.ts');
+/**
+ * 生成失败条件：档按落盘形状（JSON 往返）走真实读档入口——validateLoadedSave → applyLoadRepairs → migrateCalendar
+ * （characterStore.loadGame 与 gameStateStore.loadFromSaveData 的同一批函数），读后主角出生须仍为 开局年−开局年龄（200）、
+ * 未被修复改动、寿命缓存已开且 寿命.当前 等于现算年龄。不成立即抛错，CLI 以非 0 退出、不写文件。
+ */
+export async function assertRealOpeningAfterLoad(bundleOrSave, label) {
+  const [fallback, repairs, calendar, life] = await Promise.all([
+    loadTs('../src/utils/saveLoadFallback.ts'), loadTs('../src/modules/scenarioMods/loadRepairs.ts'),
+    loadTs('../src/utils/calendarMigration.ts'), loadTs('../src/utils/lifespanCalculator.ts')]);
+  const stage01 = JSON.parse(await readFile(new URL('../src/modules/scenarioMods/builtins/data/lcq.stage_01.json', import.meta.url), 'utf8'));
+  const age = packs.applyContentPackOverlays(stage01).scenario.opening.creationPreset.age;
+  const expectedBirthYear = life.计算起始年(age) - age;
+  const disk = JSON.parse(JSON.stringify(bundleOrSave?.saves ? bundleOrSave.saves[0].存档数据 : bundleOrSave));
+  const fail = msg => { throw Error(`[checkpoint ${label}] ${msg}`); };
+  const before = { year: disk.元数据.时间.年, birth: structuredClone(disk.角色.身份.出生日期), age: disk.角色.属性.寿命.当前 };
+  if (before.birth?.年 !== expectedBirthYear) fail(`生成档出生年 ${before.birth?.年} ≠ 开局年−开局年龄 ${expectedBirthYear}`);
+  if (!life.lifespanCacheEnabled(disk)) fail('生成档未像正式新建那样开寿命缓存');
+  const outcome = await fallback.validateLoadedSave('checkpoint-generator', label, disk, { keep: 0, readBackup: async () => null });
+  if (outcome.status !== 'ok') fail(`读档校验未通过：${outcome.status}`);
+  const loaded = outcome.data;
+  repairs.applyLoadRepairs(loaded);
+  calendar.migrateCalendar(loaded);
+  const after = { year: loaded.元数据.时间.年, birth: structuredClone(loaded.角色.身份.出生日期), age: loaded.角色.属性.寿命.当前 };
+  if (JSON.stringify(after.birth) !== JSON.stringify(before.birth)) fail(`读档修复改动了出生：${JSON.stringify(before.birth)} → ${JSON.stringify(after.birth)}`);
+  if (!life.lifespanCacheEnabled(loaded)) fail('读后寿命缓存未开启');
+  const nowAge = life.calculateAgeFromBirthdate(after.birth, loaded.元数据.时间);
+  if (after.age !== nowAge) fail(`读后寿命.当前 ${after.age} ≠ 现算年龄 ${nowAge}`);
+  return { label, before, after, expectedBirthYear, openingAge: age };
+}
 export async function freshPrologueCheckpoint({ beforeWuyuan = false } = {}) {
   const mods = await Promise.all(['lcq.stage_01', 'lcq.stage_02'].map(async id => packs.applyContentPackOverlays(JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`, import.meta.url), 'utf8')))));
   let save = opening.createQingyuOpeningPlaytestSave(mods[0], '2026-11-01T00:00:00.000Z');
   // 与正式创角相同：开局年由既有年龄公式计算，试玩 helper 的最小档默认年仅供测试。
-  const { 计算起始年 } = await loadTs('../src/utils/lifespanCalculator.ts');
+  const { 计算起始年, enableLifespanCache } = await loadTs('../src/utils/lifespanCalculator.ts');
   const age = mods[0].scenario.opening.creationPreset.age;
   const oldYear = save.元数据.时间.年;
   save.元数据.时间.年 = 计算起始年(age);
@@ -21,8 +50,12 @@ export async function freshPrologueCheckpoint({ beforeWuyuan = false } = {}) {
   }
   const { reconcileRegistryBirthdates } = await loadTs('../src/modules/scenarioMods/relationships.ts');
   reconcileRegistryBirthdates(save);
-  if (beforeWuyuan) save.角色.属性.寿命.当前 = age;
-  init.alignBirthWithStartYear(save, age);
+  // 真实开局（总策划 11-11 03:21 / 05:12；C01 v5）：正式创角写 寿命.当前=开局年龄（characterInitialization），
+  // 再按开局年对齐出生（出生=开局年−开局年龄=200），最后与正式新建一样开寿命缓存。
+  // 最小档自带的默认寿命 18 不能留着，否则 alignBirthWithStartYear 优先取它，出生被写成 202。
+  save.角色.属性.寿命.当前 = age;
+  if (!init.alignBirthWithStartYear(save, age)) throw Error('alignBirthWithStartYear failed');
+  enableLifespanCache(save);
   const trace = [];
   for (let n = 0; n < 100; n++) {
     const rt = save.世界.状态.剧本模组;
@@ -75,6 +108,7 @@ export async function freshPrologueCheckpoint({ beforeWuyuan = false } = {}) {
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const { save, trace } = await freshPrologueCheckpoint();
+  console.log('load check', JSON.stringify(await assertRealOpeningAfterLoad(save, 'current-prologue-before-s02_04')));
   const dir = 'tests/fixtures/checkpoints'; await mkdir(dir, { recursive: true });
   await writeFile(`${dir}/current-prologue-before-s02_04.json`, JSON.stringify({ type: 'saves', saves: [{ 存档名: save.元数据.存档名, 存档数据: save }] }, null, 2) + '\n');
   await writeFile(`${dir}/current-prologue-before-s02_04.trace.json`, JSON.stringify(trace, null, 2) + '\n');
