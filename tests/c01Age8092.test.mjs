@@ -287,8 +287,9 @@ test('新建后不中途读档跨过序幕：已启用现算缓存，首次读�
   }
 });
 
-test('未登记版本的旧档：提前调用年龄同步不覆盖旧缓存，读档先识别挪年再启用缓存', () => {
-  for (const oldBirth of [202, 206]) {
+test('未登记版本的旧档：提前调用年龄同步不覆盖旧缓存，读档按指纹A（开局年＋已拨年数−开局年龄）识别挪年再启用缓存', () => {
+  // 指纹A：开局预设 20 → 开局年 220，已拨 4 年 → 只有出生 204 是切关挪年特征；202／206 都不是，不修。
+  for (const [oldBirth, repaired] of [[202, 202], [204, 200], [206, 206]]) {
     const s = fresh();
     arrive(s);
     rt(s).modId = 'lcq.stage_03';
@@ -301,11 +302,67 @@ test('未登记版本的旧档：提前调用年龄同步不覆盖旧缓存，�
     assert.equal(A.lifespanCacheEnabled(s), false);
     L.applyLoadRepairs(s);
     assert.equal(A.lifespanCacheEnabled(s), true);
-    assert.equal(s.角色.身份.出生日期.年, 202);
-    assert.equal(life(s), 22);
+    assert.equal(s.角色.身份.出生日期.年, repaired, `出生 ${oldBirth}`);
+    assert.equal(life(s), 224 - repaired);
+    assert.equal(s.系统.扩展.c01ProtagonistBirth?.to, repaired === oldBirth ? undefined : repaired, '只有真正修了才打标记');
     L.applyLoadRepairs(s);
-    assert.equal(s.角色.身份.出生日期.年, 202);
+    assert.equal(s.角色.身份.出生日期.年, repaired);
   }
+});
+
+/** 无缓存旧档：夹具拨过四年进城正式回执（shifted=4），按参数改出生年／寿命缓存／开局预设。 */
+const legacyShifted = ({ birth, lifespan, modId = 'lcq.stage_02', openingAge, startYear }) => {
+  const s = fresh();
+  if (openingAge !== undefined) rt(s).opening.creationPreset.age = openingAge;
+  if (startYear !== undefined) s.元数据.时间.年 = startYear;
+  arrive(s);
+  rt(s).modId = modId;
+  delete s.系统.扩展[A.LIFESPAN_CACHE_VERSION_KEY];
+  delete s.系统.扩展.c01ProtagonistBirth;
+  s.角色.身份.出生日期.年 = birth;
+  s.角色.属性.寿命.当前 = lifespan;
+  return s;
+};
+
+test('指纹A：204/20@224 挪年档不论仍在序幕（stage_02，rt24-huamiao-loc 同态）还是已过序幕都修回 200、现算 24；再读不变', () => {
+  for (const modId of ['lcq.stage_02', 'lcq.stage_03']) {
+    const s = legacyShifted({ birth: 204, lifespan: 20, modId });
+    assert.equal(s.元数据.时间.年, 224);
+    L.applyLoadRepairs(s);
+    assert.equal(s.角色.身份.出生日期.年, 200, modId);
+    assert.equal(life(s), 24);
+    assert.deepEqual(s.系统.扩展.c01ProtagonistBirth, { version: 1, from: 204, to: 200 });
+    const once = structuredClone(s);
+    L.applyLoadRepairs(s);
+    assert.deepEqual(s.角色, once.角色, '再读不变');
+    assert.deepEqual(s.系统.扩展.c01ProtagonistBirth, once.系统.扩展.c01ProtagonistBirth);
+  }
+});
+
+test('指纹A：寿命已被写成现算年龄的 200/24@224 无缓存旧档不误修成 196，且不打修复标记', () => {
+  const s = legacyShifted({ birth: 200, lifespan: 24, modId: 'lcq.stage_03' });
+  L.applyLoadRepairs(s);
+  assert.equal(s.角色.身份.出生日期.年, 200);
+  assert.equal(life(s), 24);
+  assert.equal(s.系统.扩展.c01ProtagonistBirth, undefined);
+});
+
+test('指纹A：官方 14 岁开局（开局 214、拨 4 年到 218、出生 200）寿命仍 14 或已对齐 18 都不修', () => {
+  for (const lifespan of [14, 18]) {
+    const s = legacyShifted({ birth: 200, lifespan, openingAge: 14, startYear: 214 });
+    assert.equal(s.元数据.时间.年, 218);
+    L.applyLoadRepairs(s);
+    assert.equal(s.角色.身份.出生日期.年, 200, `寿命 ${lifespan}`);
+    assert.equal(life(s), 18);
+    assert.equal(s.系统.扩展.c01ProtagonistBirth, undefined);
+  }
+});
+
+test('指纹A：档内缺开局预设年龄时退回内置 stage_01 包的预设年龄', () => {
+  const s = legacyShifted({ birth: 204, lifespan: 20 });
+  delete rt(s).opening.creationPreset.age;
+  L.applyLoadRepairs(s);
+  assert.equal(s.角色.身份.出生日期.年, 200);
 });
 
 test('AI保护反例：混合括号路径、祖先容器载荷均不能写寿命当前值或首见年', () => {

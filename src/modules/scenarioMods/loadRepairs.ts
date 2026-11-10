@@ -17,7 +17,7 @@ import { logError, logEvent } from '../diagnostics/log';
 import { applyTimelineInserts, timelineAppliedYears, timelineConfig } from './timelineInserts';
 import { reconcileRegistryBirthdates } from './relationships';
 import { isRegistryPerson, getRegistryCanonicalId, registryPersonIdsInText } from './characterResolver';
-import { updateLifespanFromGameTime, lifespanCacheEnabled, enableLifespanCache } from '@/utils/lifespanCalculator';
+import { updateLifespanFromGameTime, lifespanCacheEnabled, enableLifespanCache, 计算起始年 } from '@/utils/lifespanCalculator';
 import { debugLog } from '../diagnostics/debugLog';
 import stage01 from './builtins/data/lcq.stage_01.json';
 import { CONTENT_PACKS } from '../contentPacks';
@@ -210,20 +210,24 @@ export function removeDerivedRelationshipMemories(save: any): void {
 }
 
 const BIRTH_REPAIR_KEY = 'c01ProtagonistBirth';
-const PROLOGUE_STAGE_IDS = ['lcq.stage_01', 'lcq.stage_02'];
+
+/** 开局年龄：档内剧本模组的开局预设（有限正数）优先，缺时退回内置 stage_01 包的预设。 */
+function openingAgeOf(rt: any): number {
+  const saved = Number(rt?.opening?.creationPreset?.age);
+  return Number.isFinite(saved) && saved > 0 ? saved : Number((stage01 as any).scenario.opening.creationPreset.age);
+}
 
 /**
- * 旧版每次切关都按「当前年−寿命.当前」重写主角出生年，跳年后的切关把出生年往后挪了插入事件的年数（206 而非 202）。
- * 只修带这个特征的旧档，且只修一次：已拨过时间线年数、已过序幕两关、出生年恰等于当前年−寿命.当前；修回＝减去已拨年数。
- * 寿命.当前 被剧情改过（禁术代价等）的旧档特征对不上，不动。
+ * 旧版每次切关都按「当前年−寿命.当前」重写主角出生年，跳年后的切关把出生年往后挪了插入事件的年数（204 而非 200）。
+ * 指纹（不看寿命.当前，旧档该值可能已被 AI 写成现算年龄）：已拨过时间线年数，且出生年＝开局年＋已拨年数−开局年龄，
+ * 开局年＝计算起始年(开局年龄)。不分是否已过序幕。修回＝减去已拨年数；只有真正修了才打标记（之后随即启用现算缓存）。
  */
 export function repairProtagonistBirthShift(save: any): { from: number; to: number } | null {
   const ext = save?.系统?.扩展, rt = save?.世界?.状态?.剧本模组, birth = save?.角色?.身份?.出生日期;
   if (!ext || !rt || !birth || ext[BIRTH_REPAIR_KEY] || lifespanCacheEnabled(save)) return null;
-  const now = Number(save?.元数据?.时间?.年), life = Number(save?.角色?.属性?.寿命?.当前);
   const shifted = timelineConfig().inserts.reduce((sum, insert) => sum + timelineAppliedYears(save, insert), 0);
-  ext[BIRTH_REPAIR_KEY] = { version: 1 };
-  if (!shifted || PROLOGUE_STAGE_IDS.includes(rt.modId) || !Number.isFinite(now) || !Number.isFinite(life) || birth.年 !== now - Math.floor(life)) return null;
+  const openingAge = openingAgeOf(rt);
+  if (!shifted || !Number.isFinite(openingAge) || birth.年 !== 计算起始年(openingAge) + shifted - openingAge) return null;
   const result = { from: birth.年, to: birth.年 - shifted };
   birth.年 = result.to;
   ext[BIRTH_REPAIR_KEY] = { version: 1, ...result };

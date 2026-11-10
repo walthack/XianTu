@@ -167,13 +167,14 @@ test('T11 主角出生年只在新开档对齐：开档 220 → 进城拨 4 年 
   assert.match(source, /applyStrictScenarioInitializationToSave\(saveData, initialization, false, false\)/);
 });
 
-test('T11b 主角旧档修复：切关挪过出生年的旧夹具（224 年、出生 206）读档后改回 202，读两次结果一样', () => {
+// 206/18 只在生成器档出现（不合指纹A：开局 220＋已拨 4−开局年龄 20＝204），生成器小 PR 会重生成；读档不修。
+test('T11b 主角旧档修复：生成器旧夹具（224 年、出生 206）不合指纹A，读档不修，读两次结果一样', () => {
   const bundle = JSON.parse(execFileSync('git', ['show', '061a6c49:tests/fixtures/checkpoints/current-han-entry.json'], { encoding: 'utf8', maxBuffer: 1 << 28 }));
   const save = bundle.saves[0].存档数据;
   assert.equal(save.元数据.时间.年, 224);
   assert.equal(save.角色.身份.出生日期.年, 206);
   LR.applyLoadRepairs(save);
-  assert.equal(save.角色.身份.出生日期.年, 202);
+  assert.equal(save.角色.身份.出生日期.年, 206);
   const once = structuredClone(save);
   LR.applyLoadRepairs(save);
   assert.deepEqual(save.角色.身份.出生日期, once.角色.身份.出生日期);
