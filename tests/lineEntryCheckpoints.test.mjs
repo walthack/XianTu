@@ -54,7 +54,7 @@ for (const line of checkpointLines) {
   });
 }
 
-test('重新运行生成器：三份完整存档及 trace 与仓库夹具一致', { timeout: 120000 }, async () => {
+test('重新运行生成器：首见年另验，其余三份完整存档及 trace 与仓库夹具一致', { timeout: 120000 }, async () => {
   const dir = await mkdtemp(join(tmpdir(), 'xiantu-line-checkpoints-'));
   try {
     const url = pathToFileURL(dir + '/');
@@ -62,7 +62,26 @@ test('重新运行生成器：三份完整存档及 trace 与仓库夹具一致'
     for (const line of checkpointLines) {
       for (const suffix of ['.json', '.trace.json']) {
         const name = `current-${line.id}-entry${suffix}`;
-        assert.deepEqual(await read(name, url), await read(name), name);
+        const actual = await read(name, url);
+        const expected = await read(name);
+        if (suffix === '.json') {
+          // 旧夹具保留；本次新增的每局首见年单独验证，不遮蔽任何其他字段差异。
+          for (const slot of actual.saves) {
+            const save = slot.存档数据;
+            const { LIFESPAN_CACHE_VERSION_KEY, LIFESPAN_CACHE_VERSION } = await loadTs('../src/utils/lifespanCalculator.ts');
+            assert.equal(save.系统.扩展[LIFESPAN_CACHE_VERSION_KEY], LIFESPAN_CACHE_VERSION);
+            delete save.系统.扩展[LIFESPAN_CACHE_VERSION_KEY];
+            for (const [id, year] of [['lcq.character.yue_shuang', 220], ['lcq.character.wang_zhe', 220], ['liuchao.character.le_mingzhu', 224], ['liuchao.character.pan_jinlian', 224]]) {
+              assert.equal(save.社交.关系[id].首见年, year, `${name}: ${id} 首见年`);
+            }
+            for (const npc of Object.values(slot.存档数据.社交.关系)) {
+              assert.ok(Number.isInteger(npc.首见年), `${name}: 首见年必须落账`);
+              assert.ok(npc.首见年 <= slot.存档数据.元数据.时间.年);
+              delete npc.首见年;
+            }
+          }
+        }
+        assert.deepEqual(actual, expected, name);
       }
     }
   } finally {
