@@ -33,6 +33,7 @@ import { detectBranchDecision } from './branchDecision';
 import { scenarioPlayerId } from './playerIdentity';
 import { getWuyuanOpenWorldSelections, type WuyuanOpenWorldSelection } from './wuyuanOpenWorldSlice';
 import { locationName, nextStageModOf, questActionGate, questBeatSpec, questAliasSelection, questArriveSelection, questConfig, questDepartureAliasHit, questGuideEnabled } from './questLog';
+import { heldActions, heldDepartureObjective } from './stayRejoin';
 import {
   getCurrentStoryEventActions,
   getCurrentStoryExplorationActions,
@@ -80,8 +81,9 @@ export function beatActionTable(save: SaveData | null | undefined): { beatId?: s
   return { beatId: getScenarioFocusEvent(runtime)?.id, actions };
 }
 
+// 启程另认暂扣提示里系统已显示的启程目标（stayRejoin.heldDepartureObjective，同一模板），与主线拍认任务日志文字同一规矩。
 const actionLines = (save: SaveData, action: BeatAction): unknown[] => action.kind === 'departure'
-  ? [action.offer.label]
+  ? [action.offer.label, ...heldActions(save).map(held => heldDepartureObjective(held, save))]
   : [action.selection.playerLine, action.selection.actionText, action.selection.label, ...questLogLines(save, action.selection)];
 /**
  * 任务引导开时比对表另加：作者原始 label（不带「行动 · 对象 ·」装饰）与任务日志里的目标（questLog.beatEntry 同一来源）。

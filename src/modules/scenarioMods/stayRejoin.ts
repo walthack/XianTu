@@ -76,9 +76,12 @@ export function heldActions(input: SaveData | RuntimeLike | null | undefined): H
 
 /** 前置拍的既有目标文本（beat objectiveId 解析后的 objective）；不另写文案。 */
 export function heldPrerequisiteObjective(held: HeldAction, save?: SaveData): string {
+  return heldDepartureObjective(held, save) || QUEST_LINES.flatMap(line => line.beats).find(beat => beat.id === held.prerequisiteBeatId)?.objective || '';
+}
+
+/** 前置拍在下一关、本关可启程时，提示给出的启程目标（departureObjective 模板）；否则 undefined。 */
+export function heldDepartureObjective(held: HeldAction, save?: SaveData): string | undefined {
   const beat = QUEST_LINES.flatMap(line => line.beats).find(beat => beat.id === held.prerequisiteBeatId);
-  if (save && beat?.stageId && beat.stageId !== save.世界?.状态?.剧本模组?.modId && getStageDepartureOffer(save)) {
-    return questConfig().departureObjective.replace('{place}', locationName(beat.locationId));
-  }
-  return beat?.objective || '';
+  return save && beat?.stageId && beat.stageId !== save.世界?.状态?.剧本模组?.modId && getStageDepartureOffer(save)
+    ? questConfig().departureObjective.replace('{place}', locationName(beat.locationId)) : undefined;
 }

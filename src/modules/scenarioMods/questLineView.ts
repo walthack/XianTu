@@ -21,7 +21,8 @@ export function questLineView(save:any){
  const offered=getCurrentStoryExplorationActions(save);
  return {
   secondary:QUEST_LINES.filter(l=>(l.kind==='secondary'||l.kind==='side')&&lineInsertionsAt([l],event?.id,ctx,state).length>0).map(l=>({id:l.id,name:l.name,kind:'支线',hint:l.entryHint,objective:lineInsertionsAt([l],event?.id,ctx,state)[0]?.beat.objective||''})),
-  character:lineInsertionsAt(QUEST_LINES.filter(l=>l.kind==='character'),event?.id,ctx,state).map(({line,beat})=>({name:line.ownerCharacterIds.map(id=>runtimeEntityName(r,id)).join('、'),objective:beat.objective,lineId:line.id,beatId:beat.id,eventId:beat.eventId,
+  // 声明了 stageId 的拍只在该关显示（判定仍在 questLines，不动）。
+  character:lineInsertionsAt(QUEST_LINES.filter(l=>l.kind==='character'),event?.id,ctx,state).filter(({beat})=>!beat.stageId||beat.stageId===r.modId).map(({line,beat})=>({name:line.ownerCharacterIds.map(id=>runtimeEntityName(r,id)).join('、'),objective:beat.objective,lineId:line.id,beatId:beat.id,eventId:beat.eventId,
    // 人物日志里可展开的「回应／明确略过」：只列引擎此刻真能执行的动作。
    actions:offered.filter(a=>a.eventId===beat.eventId).map(a=>({actionId:a.actionId,label:a.label,skip:SKIP_ACTION.test(a.actionId)}))})),
   // 提示过的人物回应拍怎么收场：已回应／明确略过／主线继续后到期分开记；未提示过的拍（requires 没满足、从未开场）不进这里。
