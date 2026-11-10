@@ -78,8 +78,16 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
  {const jiti=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
  // 暂扣动作（while 全部成立时该合同动作不可做，先做 prerequisiteBeatId 那一拍）：条件只读 flags，与步骤 visibleWhen 同形
  const beatIds=new Set(catalog.questLines.flatMap(l=>(l.beats||[]).map(b=>b.id)));
- for(const h of catalog.heldActions)if(!object(h)||Object.keys(h).some(k=>!['eventId','actionId','while','prerequisiteBeatId'].includes(k))||!events.get(h.eventId)?.playerCompletionContract?.actions?.some(a=>a.id===h.actionId)||!beatIds.has(h.prerequisiteBeatId)||!Array.isArray(h.while)||!h.while.length||h.while.some(c=>!object(c)||Object.keys(c).some(k=>!['path','operator','value'].includes(k))||typeof c.path!=='string'||!/^flags\.[a-zA-Z0-9_.:-]+$/.test(c.path)||!['eq','neq'].includes(c.operator)||!['string','number','boolean'].includes(typeof c.value)))fail(`invalid held action ${h?.eventId}:${h?.actionId}`);
- unique(catalog.heldActions,h=>`${h.eventId}:${h.actionId}`,'held action');
+ const itemIds=new Set([...JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/items.json'),'utf8')).entries.map(e=>e.id),...catalog.entities.filter(e=>e.kind==='item').map(e=>e.entry.id)]);
+ for(const h of catalog.heldActions){
+  const actions=h?.eventId?events.get(h.eventId)?.playerCompletionContract?.actions:[...events.values()].flatMap(e=>e.playerCompletionContract?.actions||[]);
+  const action=actions?.find(a=>a.id===h?.actionId);
+  if(!object(h)||Object.keys(h).some(k=>!['id','subject','intentLabelId','eventId','actionId','while','prerequisiteBeatId'].includes(k))||(!h.eventId&&!h.actionId)||(h.eventId!==undefined&&!events.has(h.eventId))||(h.actionId!==undefined&&!action)||(h.id!==undefined&&(typeof h.id!=='string'||!h.id))||(h.subject!==undefined&&(!object(h.subject)||Object.keys(h.subject).some(k=>k!=='itemId')||!itemIds.has(h.subject.itemId)))||(h.intentLabelId!==undefined&&!catalog.texts[h.intentLabelId])||!beatIds.has(h.prerequisiteBeatId)||!Array.isArray(h.while)||!h.while.length||h.while.some(c=>!object(c)||Object.keys(c).some(k=>!['path','operator','value'].includes(k))||typeof c.path!=='string'||!/^flags\.[a-zA-Z0-9_.:-]+$/.test(c.path)||!['eq','neq'].includes(c.operator)||!['string','number','boolean'].includes(typeof c.value)))fail(`invalid held action ${h?.eventId}:${h?.actionId}`);
+  h.label=h.intentLabelId?catalog.texts[h.intentLabelId]:action?.label;
+  if(action?.grantsPreparation)h.grantsPreparation=action.grantsPreparation;
+  if(typeof h.label!=='string'||!h.label)fail(`held action missing label ${h.eventId}:${h.actionId}`);
+ }
+ unique(catalog.heldActions,h=>h.id||`${h.eventId||''}:${h.actionId||''}`,'held action');
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);

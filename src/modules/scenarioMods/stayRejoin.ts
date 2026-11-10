@@ -1,5 +1,9 @@
 import { CONTENT_PACKS } from '../contentPacks';
 import { QUEST_LINES } from './questLines';
+import { eventEverCompleted, inventoryItemEntries, type EventCompletionFacts } from './itemPresentation';
+import type { SaveData } from '@/types/game';
+import { getStageDepartureOffer } from './runtime';
+import { locationName, questConfig } from './questLog';
 /**
  * Y5 选「留下」的两名同伴暂留峒外与驿馆会合（交接 2026-11-09 需求三）。
  * Y5 选「留下」写 branch.ningyu.enter_dong=stay；05b 会合拍成功提交写 branch.ningyu.y5_rejoined=true。
@@ -10,18 +14,24 @@ export const REJOINED_FLAG = 'branch.ningyu.y5_rejoined';
 
 /** while 全部成立时，eventId 的 actionId 暂扣，须先做完 prerequisiteBeatId 那一拍。条件只读 flags（与步骤 visibleWhen 同形）。 */
 export interface HeldActionRule {
-  eventId: string;
-  actionId: string;
+  id?: string;
+  subject?: { itemId: string };
+  intentLabelId?: string;
+  label?: string;
+  /** 编译器由锚定合同动作复制，不接受作者规则新增字段。 */
+  grantsPreparation?: string;
+  eventId?: string;
+  actionId?: string;
   while: Array<{ path: string; operator: 'eq' | 'neq'; value: string | number | boolean }>;
   prerequisiteBeatId: string;
 }
-export interface HeldAction { eventId: string; actionId: string; label: string; prerequisiteBeatId: string }
+export interface HeldAction { eventId?: string; actionId: string; label: string; prerequisiteBeatId: string }
 
-type RuntimeLike = {
+type RuntimeLike = EventCompletionFacts & {
   flags?: Record<string, unknown>;
   activeEventIds?: string[];
-  completedEventIds?: string[];
-  events?: Array<{ id: string; playerCompletionContract?: { actions?: Array<{ id?: string; label?: string }> } }>;
+  eventActionStates?: Record<string, { preparations?: string[] }>;
+  events?: Array<{ id: string; playerCompletionContract?: { actions?: Array<{ id?: string; label?: string; grantsPreparation?: string }> } }>;
 };
 
 export function awaitingRejoin(runtime: RuntimeLike | null | undefined): boolean {
@@ -45,16 +55,30 @@ export function actionHeldForRejoin(runtime: RuntimeLike | null | undefined, act
     && (owner ? owner.id === rule.eventId : !!runtime?.events?.find(event => event.id === rule.eventId)?.playerCompletionContract?.actions?.some(a => a.id === action.id)));
 }
 
-/** 当前被暂扣的合同动作（事件在场且未完成）：给意图判定作不可执行候选、给叙事胶囊换目标。 */
-export function heldActions(runtime: RuntimeLike | null | undefined): HeldAction[] {
+/** 持有规则物品或事件已激活时列出暂扣候选；兼容只传 runtime 的既有调用。 */
+export function heldActions(input: SaveData | RuntimeLike | null | undefined): HeldAction[] {
+  const save = input as SaveData | undefined;
+  const runtime = (save?.世界?.状态?.剧本模组 || input) as RuntimeLike | null | undefined;
+  const items = inventoryItemEntries(save?.角色?.背包?.物品);
   return (CONTENT_PACKS.heldActions || []).flatMap(rule => {
-    if (!ruleActive(rule, runtime) || !runtime?.activeEventIds?.includes(rule.eventId) || runtime.completedEventIds?.includes(rule.eventId)) return [];
-    const action = runtime.events?.find(event => event.id === rule.eventId)?.playerCompletionContract?.actions?.find(a => a.id === rule.actionId);
-    return action ? [{ eventId: rule.eventId, actionId: rule.actionId, label: String(action.label || ''), prerequisiteBeatId: rule.prerequisiteBeatId }] : [];
+    const owner = runtime?.events?.find(event => rule.eventId ? event.id === rule.eventId : event.playerCompletionContract?.actions?.some(a => a.id === rule.actionId));
+    const eventId = rule.eventId || owner?.id;
+    const action = owner?.playerCompletionContract?.actions?.find(a => a.id === rule.actionId);
+    const preparation = action?.grantsPreparation || rule.grantsPreparation;
+    if (eventId && (eventEverCompleted(runtime, eventId)
+      || (preparation && runtime?.eventActionStates?.[eventId]?.preparations?.includes(preparation)))) return [];
+    const holding = !!rule.subject && items.some(([key, item]) => (item.物品ID || key) === rule.subject!.itemId && Number(item.数量) > 0);
+    if (!ruleActive(rule, runtime) || !(holding || (rule.eventId && runtime?.activeEventIds?.includes(rule.eventId)))) return [];
+    const label = action?.label || rule.label || (rule.intentLabelId && CONTENT_PACKS.texts[rule.intentLabelId]);
+    return label ? [{ eventId: rule.eventId, actionId: rule.actionId || rule.id || rule.eventId!, label, prerequisiteBeatId: rule.prerequisiteBeatId }] : [];
   });
 }
 
 /** 前置拍的既有目标文本（beat objectiveId 解析后的 objective）；不另写文案。 */
-export function heldPrerequisiteObjective(held: HeldAction): string {
-  return QUEST_LINES.flatMap(line => line.beats).find(beat => beat.id === held.prerequisiteBeatId)?.objective || '';
+export function heldPrerequisiteObjective(held: HeldAction, save?: SaveData): string {
+  const beat = QUEST_LINES.flatMap(line => line.beats).find(beat => beat.id === held.prerequisiteBeatId);
+  if (save && beat?.stageId && beat.stageId !== save.世界?.状态?.剧本模组?.modId && getStageDepartureOffer(save)) {
+    return questConfig().departureObjective.replace('{place}', locationName(beat.locationId));
+  }
+  return beat?.objective || '';
 }

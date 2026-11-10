@@ -6,9 +6,11 @@ import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import {QUEST_LINES} from './questLines';
 import { heldActions, heldPrerequisiteObjective } from './stayRejoin';
 import { freeTextStatusSemanticRequest, validateFreeTextStatusProposals, type FreeTextStatusResolution } from '../sceneModule/host/freeTextStatusSemantic';
+import type { ScenarioMod } from './schema';
 import type { SaveData } from '@/types/game';
 import {
-  getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding,
+  getCurrentStoryEventActions, getCurrentStoryExplorationActions, previewWangZheStayEnding, getStageDepartureOffer,
+  type ScenarioStageDepartureOffer,
   getTrackedStoryOpportunityActions,
   reconcileNaturalIntentMetadata,
   type ScenarioEventActionSelection,
@@ -25,7 +27,7 @@ import {
 } from './wuyuanOpenWorldSlice';
 import { isScopedNaturalIntentSave } from './playtestNarrativeScope';
 import { beatActionRejectIf, beatKeyTurn, intentSettleConfig, resolveBeatText, type BeatKeyPlan } from './beatProgress';
-import { questActionGate, questGuideEnabled } from './questLog';
+import { locationName, nextStageModOf, questConfig, questActionGate, questGuideEnabled } from './questLog';
 import { logEvent } from '../diagnostics/log';
 import { freeActionConfig } from './freeAction/config';
 import { JUDGEMENT_KINDS } from '@/utils/judgementEngine';
@@ -81,6 +83,7 @@ export interface NaturalIntentResult {
   freeActionOthers?: number;
   /** 识别降级（模型超时/坏 JSON）：本回合没有任何本地结算，界面须告诉叙事“未发生”。 */
   unsettled?: boolean;
+  stageDeparture?: ScenarioStageDepartureOffer;
   kind: NaturalIntentKind;
   selection?: NaturalIntentSelection;
   reason?: string;
@@ -201,7 +204,16 @@ function lineResponseClarify(awaiting: readonly NaturalIntentCandidate[], reason
 const pickedAwaiting = (result: NaturalIntentResult, awaiting: readonly NaturalIntentCandidate[]) =>
   result.kind === 'matched' && !!result.selection && 'eventId' in result.selection && awaiting.some(c => c.eventId === (result.selection as ScenarioEventActionSelection).eventId);
 
-export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCandidate[] {
+function builtinMods(): ScenarioMod[] {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- Node harness injects mods; browser uses the same builtin table as departure.
+    return (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS || [];
+  } catch { // lcq-allow: Node harness has no require.context; tests inject the builtin table.
+    return [];
+  }
+}
+
+export function listNaturalIntentCandidates(saveData: SaveData, mods: readonly ScenarioMod[] = builtinMods()): NaturalIntentCandidate[] {
   reconcileNaturalIntentMetadata(saveData);
   const refusal = getBaihuGambleRefusalSelections(saveData).map(item => ({
     source: item.source,
@@ -238,16 +250,21 @@ export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCa
     playerLine: item.actionText,
     contractHash: item.receiptId,
   }));
-  const held = heldActions((saveData as any)?.世界?.状态?.剧本模组).map(item => ({
+  const held = heldActions(saveData).map(item => ({
     source: 'event_engine', actionId: item.actionId, eventId: item.eventId, label: item.label, playerLine: item.label, contractHash: '', held: true,
   }));
-  return [...events, ...refusal, ...opportunities, ...openWorld, ...held];
+  const offer = getStageDepartureOffer(saveData);
+  const place = offer ? locationName(nextStageModOf(saveData, mods)?.scenario.opening?.locationId) : '';
+  const departure = offer ? [{ source: 'stage_departure', actionId: 'stage_departure',
+    label: `${offer.label} · ${questConfig().departureObjective.replace('{place}', place || offer.label)}`,
+    playerLine: offer.label, contractHash: offer.nextStageId }] : [];
+  return [...events, ...refusal, ...opportunities, ...openWorld, ...held, ...departure];
 }
 
 /** 命中暂扣动作：保留输入、不进叙事回合、不结算；提示复用前置拍既有目标文本。 */
 function heldActionClarify(saveData: SaveData, candidate: NaturalIntentCandidate): NaturalIntentResult | undefined {
-  const held = heldActions((saveData as any)?.世界?.状态?.剧本模组).find(item => item.eventId === candidate.eventId && item.actionId === candidate.actionId);
-  const clarification = held ? heldPrerequisiteObjective(held) : '';
+  const held = heldActions(saveData).find(item => item.eventId === candidate.eventId && item.actionId === candidate.actionId);
+  const clarification = held ? heldPrerequisiteObjective(held, saveData) : '';
   if (!clarification) return undefined;
   noteTicketDiscard('intent', 'held_action', candidate.actionId);
   return { kind: 'unclear', reason: 'held_action', clarification, hold: true, skipKeywordPreflight: true, usedModel: true };
@@ -501,6 +518,7 @@ export function resolveStoryEventActionFromText(saveData: SaveData, playerText: 
 }
 
 type NaturalIntentInput = {
+  mods?: readonly ScenarioMod[];
   saveData: SaveData;
   playerText: string;
   selected?: { playerLine?: string; actionText?: string; source?: string } | null;
@@ -551,9 +569,9 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   if (alias && !characterLineOf(alias.eventId)) {
     const aliased: NaturalIntentResult = { kind: 'alias', selection: alias, skipKeywordPreflight: true, usedModel: false };
     // 同场人物正等回应时，主线短语命中不能静默吞掉人物回应：先让意图模型看一遍，人物回应也命中就澄清。
-    const awaiting = input.generate && isScopedNaturalIntentSave(input.saveData) ? awaitingResponses(listNaturalIntentCandidates(input.saveData)) : [];
+    const awaiting = input.generate && isScopedNaturalIntentSave(input.saveData) ? awaitingResponses(listNaturalIntentCandidates(input.saveData, input.mods)) : [];
     if (!awaiting.length) return aliased;
-    const all = listNaturalIntentCandidates(input.saveData);
+    const all = listNaturalIntentCandidates(input.saveData, input.mods);
     const big = await classifyByIntentModel(input, all, intentSaveFingerprint(input.saveData), classifierFailure);
     if (big.reason === 'multiple_targets' || pickedAwaiting(big, awaiting)) return lineResponseClarify(awaiting, 'line_response_and_main_alias', true);
     if (big.kind === 'failed' && ['aborted', 'stale', 'state_changed'].includes(String(big.reason))) return big;
@@ -565,7 +583,7 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
     const plan = input.generateBeat ? beatKeyTurn(input.saveData, input.playerText) : undefined;
     if (!plan) return { kind: 'free', skipKeywordPreflight: false, usedModel: false };
     const verdict = await resolveBeatJudge(input, plan, intentSaveFingerprint(input.saveData));
-    return mergeBeatVerdict(input, { kind: 'free', skipKeywordPreflight: false, usedModel: true }, verdict, listNaturalIntentCandidates(input.saveData));
+    return mergeBeatVerdict(input, { kind: 'free', skipKeywordPreflight: false, usedModel: true }, verdict, listNaturalIntentCandidates(input.saveData, input.mods));
   }
   const optional = resolveOptionalLineAlias(input.saveData, input.playerText);
   if (optional) return { kind: 'alias', selection: optional, skipKeywordPreflight: true, usedModel: false };
@@ -575,7 +593,7 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   }
 
   const fingerprint = intentSaveFingerprint(input.saveData);
-  const allCandidates = listNaturalIntentCandidates(input.saveData);
+  const allCandidates = listNaturalIntentCandidates(input.saveData, input.mods);
   // 任务模式关键拍（beatKeyTurn，本地判定）：另发拍子判定小请求，与原 intent 请求并行；焦点拍的主线动作只交小请求判，不进大请求候选。
   const beatPlan = input.generateBeat ? beatKeyTurn(input.saveData, input.playerText) : undefined;
   const candidates = beatPlan
@@ -688,6 +706,12 @@ async function classifyByIntentModel(
     const inquiry=match?.allowInquiry===true && !/^(如果|要是|假如|倘若|她说|他说|别人说)/.test(input.playerText.trim());
     if (!inquiry && !evidenceClauseIsAffirmative(String(input.playerText || ''), parsed.evidence)) {
       return free('non_affirmative_evidence');
+    }
+    if (chosenCandidate?.source === 'stage_departure' && (!parsed.source || parsed.source === chosenCandidate.source)) {
+      const offer = getStageDepartureOffer(input.saveData);
+      if (offer && offer.nextStageId === chosenCandidate.contractHash && (!parsed.contractHash || parsed.contractHash === offer.nextStageId))
+        return { kind: 'matched', stageDeparture: offer, skipKeywordPreflight: true, usedModel: true };
+      return free('stale_or_ambiguous_candidate');
     }
     const selection = verifyFreshSelection(input.saveData, parsed);
     if (!selection) return free('stale_or_ambiguous_candidate');

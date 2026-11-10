@@ -2271,6 +2271,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
         toast.info(naturalIntentClarify(saveData));
         return;
       }
+      if (intent.kind === 'matched' && intent.stageDeparture && !actionQueueText
+        && getStageDepartureOffer(latestSave)?.nextStageId === intent.stageDeparture.nextStageId) {
+        uiStore.setAIProcessing(false); persistAIProcessingState();
+        inputText.value = ''; lastSelectedActionOption.value = ''; selectedScenarioEngineAction.value = null;
+        logBeatResolve(latestSave, 'intent', { actionId: 'stage_departure' });
+        await departToNextStage();
+        return;
+      }
       skipKeywordPreflightFromIntent = intent.skipKeywordPreflight;
       freeTextStatusResolution = intent.freeTextStatusResolution;
       intentRoute = { kind: intent.kind, usedModel: intent.usedModel, skipKeywordPreflight: intent.skipKeywordPreflight, ...(intent.reason ? { reason: intent.reason } : {}) };

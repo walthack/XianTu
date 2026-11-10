@@ -27,6 +27,42 @@
         "id": "lcq.item.crow_bamboo_tube",
         "name": "竹筒",
         "description": "鸦人携带的竹筒，内装一张空白羊皮信。",
+        "states": [
+          {
+            "id": "sealed",
+            "name": "黑鸦竹筒",
+            "description": "从黑鸦信使翅下扯下的竹筒，长约一尺，两端用火漆封着，印着黑色篆书。",
+            "when": [
+              {
+                "kind": "held"
+              }
+            ]
+          },
+          {
+            "id": "blank_letter",
+            "name": "黑鸦密信",
+            "description": "竹筒里取出的一张羊皮纸，上面空无一字。云苍峰推断是用秘术写成，送到目的地才会显出字迹。",
+            "when": [
+              {
+                "kind": "eventCompleted",
+                "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_04",
+                "stageId": "lcq.stage_04b_lingfei_baiyi_crisis"
+              }
+            ]
+          },
+          {
+            "id": "reopened",
+            "name": "黑鸦密信",
+            "description": "在鬼王峒驿馆当众再打开，仍是一张白纸。谢艺看过后说「不是这里」，信的目的地另有其处。",
+            "when": [
+              {
+                "kind": "preparation",
+                "eventId": "lcq.event.blank_letter_and_dagu",
+                "preparation": "blank_letter_confirmed"
+              }
+            ]
+          }
+        ],
         "type": "other",
         "storyItem": true
       },

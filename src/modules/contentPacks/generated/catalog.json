@@ -1,5 +1,5 @@
 {
-  "version": "6756932569a63807",
+  "version": "49b546680eead047",
   "contracts": [
     {
       "meta": {
@@ -10827,6 +10827,9 @@
     {
       "eventId": "lcq.event.blank_letter_and_dagu",
       "actionId": "open_blank_letter_in_person",
+      "subject": {
+        "itemId": "lcq.item.crow_bamboo_tube"
+      },
       "while": [
         {
           "path": "flags.branch.ningyu.enter_dong",
@@ -10839,7 +10842,9 @@
           "value": true
         }
       ],
-      "prerequisiteBeatId": "beat.ningyu.y5_rejoin"
+      "prerequisiteBeatId": "beat.ningyu.y5_rejoin",
+      "label": "当面确认信笺仍是白纸",
+      "grantsPreparation": "blank_letter_confirmed"
     }
   ],
   "overlays": [

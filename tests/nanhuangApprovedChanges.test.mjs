@@ -35,6 +35,7 @@ function arriveByMap(save,toId){const sel=travel.selectMapTravel(save,toId);asse
 const plain=new Map();
 const plainWalk=await walkMainline((save,event)=>{
  const r=runtimeOf(save);
+ if(event?.id==='lcq.event.s04b_lingfei_baiyi_crisis_04'&&!plain.has('before_letter_identification'))plain.set('before_letter_identification',structuredClone(save));
  if(!plain.has('o2')&&lineActions(save,O2).length)plain.set('o2',structuredClone(save));
  if(!plain.has('o2_host_done')&&plain.has('o2')&&r.completedEventIds?.includes('lcq.event.ningyu_regicide_offer'))plain.set('o2_host_done',structuredClone(save));
  if(!plain.has('before_o2')&&event?.id==='lcq.event.ningyu_regicide_offer')plain.set('before_o2',structuredClone(save));
@@ -52,6 +53,7 @@ const stayWalk=await walkMainline((save,event)=>{
   stay.set('after_stay',structuredClone(save));
  }
  if(r.flags['branch.ningyu.enter_dong']==='stay'&&event?.id==='lcq.event.enter_dong_with_migu')stayEnterDong.push({save:structuredClone(save),event:event.id});
+ if(r.modId==='lcq.stage_04b_lingfei_baiyi_crisis'&&r.nextStageReadyId&&!stay.has('04b_ready'))stay.set('04b_ready',structuredClone(save));
  if(!stay.has('05b')&&r.modId==='lcq.stage_05b')stay.set('05b',structuredClone(save));
  if(event?.id===LETTER&&r.flags['branch.ningyu.y5_rejoined']!==true){
   stay.set('letter_held',structuredClone(save));
@@ -481,4 +483,151 @@ test('PR1-3: the travel card reads the current stay: Ning Yu / Xiao Wei are not 
  const after=structuredClone(stayEnterDong[0].save);runtimeOf(after).flags['branch.ningyu.y5_rejoined']=true;
  assert.ok(ledgerMod.getTravelCard(after).companions.includes('凝羽'),'once rejoined the card lists her again');
  const p=plain.get('y5');assert.deepEqual(ledgerMod.getTravelCard(p),runtimeOf(p).travelLedger?.lastCard,'non-stay unchanged');
+});
+
+// ═════════════ PR1-LETTER-20261110：审定拆信修复①–④ ═════════════
+const itemView=await loadTs('../src/modules/scenarioMods/itemPresentation.ts');
+const TUBE='lcq.item.crow_bamboo_tube',POUCH='lcq.item.jin_nang',IDENTIFY='lcq.event.s04b_lingfei_baiyi_crisis_04',CRISIS='lcq.stage_04b_lingfei_baiyi_crisis';
+const letterStates=[
+ {name:'黑鸦竹筒',description:'从黑鸦信使翅下扯下的竹筒，长约一尺，两端用火漆封着，印着黑色篆书。'},
+ {name:'黑鸦密信',description:'竹筒里取出的一张羊皮纸，上面空无一字。云苍峰推断是用秘术写成，送到目的地才会显出字迹。'},
+ {name:'黑鸦密信',description:'在鬼王峒驿馆当众再打开，仍是一张白纸。谢艺看过后说「不是这里」，信的目的地另有其处。'},
+];
+const departureMods=['lcq.stage_05','lcq.stage_05b'].map(id=>ec.resolveScenarioContent(cp.applyContentPackOverlays(JSON.parse(fs.readFileSync(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`,import.meta.url),'utf8')))));
+const readyStay=()=>{const save=structuredClone(stay.get('04b_ready'));assert.ok(save,'existing controlled Y5-stay walkthrough supplies stage-ready checkpoint');return save;};
+
+test('PR1-letter-②: tube held at 04b stage_ready offers the unloaded held action; mock hit keeps input and points to departure',async()=>{
+ const save=readyStay(),r=runtimeOf(save);
+ assert.ok(rt.getStageDepartureOffer(save));assert.ok(!r.events.some(e=>e.id===LETTER));assert.ok(!r.activeEventIds.includes(LETTER));
+ assert.equal(r.flags['branch.ningyu.enter_dong'],'stay');assert.equal(r.flags['branch.ningyu.y5_rejoined'],undefined);
+ assert.ok(save.角色.背包.物品[TUBE]);
+ const before=settledState(save),subject=held.heldActions(save).find(h=>h.actionId===OPEN);
+ assert.ok(subject);assert.equal(subject.label,cp.CONTENT_PACKS.heldActions[0].label,'compiler copied the original contract label');
+ const objective=questLog.questConfig().departureObjective.replace('{place}',questLog.locationName('lcq.location.guiwang_inn'));
+ assert.equal(held.heldPrerequisiteObjective(subject,save),objective);
+ const text='我想当面把那封信拆开看看';let modelInput;
+ const result=await nir.resolveNaturalIntent({saveData:save,mods:departureMods,playerText:text,selected:null,resolveFromText:nir.resolveStoryEventActionFromText,
+  generate:async input=>{modelInput=JSON.parse(input.userPrompt);return JSON.stringify({actionId:OPEN,eventId:LETTER,source:'event_engine',certainty:'high',evidence:'把那封信拆开看看',statusProposals:[]});}});
+ assert.ok(modelInput.candidates.some(c=>c.actionId===OPEN&&c.held));
+ assert.equal(result.kind,'unclear');assert.equal(result.hold,true);assert.equal(result.clarification,objective);
+ assert.equal(result.selection,undefined);assert.equal(result.stageDeparture,undefined);assert.equal(text,'我想当面把那封信拆开看看');
+ assert.deepEqual(settledState(save),before,'no narrative turn, flags or receipts advanced');
+ const rejoined=structuredClone(save);runtimeOf(rejoined).flags['branch.ningyu.y5_rejoined']=true;assert.equal(held.heldActions(rejoined).length,0);
+ const nonStay=structuredClone(save);delete runtimeOf(nonStay).flags['branch.ningyu.enter_dong'];assert.equal(held.heldActions(nonStay).length,0);
+ const noTube=structuredClone(save);delete noTube.角色.背包.物品[TUBE];assert.ok(noTube.角色.背包.物品[POUCH]);assert.equal(held.heldActions(noTube).length,0,'the pouch cannot substitute for the tube');
+ assert.equal(held.heldActions(stay.get('letter_held')).length,1,'05b activated-event fallback still works');
+});
+
+test('PR1-letter-①: stage departure is a semantic candidate using existing text and next opening; mock hit uses the existing transition to 05b',async()=>{
+ const save=readyStay(),before=runtimeOf(save).modId;
+ const candidate=nir.listNaturalIntentCandidates(save,departureMods).find(c=>c.source==='stage_departure');assert.ok(candidate);
+ assert.equal(candidate.label,rt.getStageDepartureOffer(save).label+' · '+questLog.questConfig().departureObjective.replace('{place}',questLog.locationName('lcq.location.guiwang_inn')));
+ assert.equal(candidate.intentMatch,undefined,'no new word list');assert.equal(candidate.aliases,undefined,'no new aliases');
+ const text='我们去阁罗安排的住处安顿';let prompt;
+ const result=await nir.resolveNaturalIntent({saveData:save,mods:departureMods,playerText:text,selected:null,resolveFromText:nir.resolveStoryEventActionFromText,
+  generate:async input=>{prompt=JSON.parse(input.userPrompt);return JSON.stringify({source:candidate.source,actionId:candidate.actionId,contractHash:candidate.contractHash,certainty:'high',evidence:text,statusProposals:[]});}});
+ assert.ok(prompt.candidates.some(c=>c.source==='stage_departure'&&c.label.includes('鬼王峒驿馆')));
+ assert.equal(result.kind,'matched');assert.deepEqual(result.stageDeparture,rt.getStageDepartureOffer(save));assert.equal(runtimeOf(save).modId,before,'classification itself is read-only');
+ const transition=init.transitionToNextScenarioStage(save,departureMods,result.stageDeparture.nextStageId);
+ assert.equal(transition.ok,true,transition.reason);const next=runtimeOf(transition.saveData);
+ assert.equal(next.modId,'lcq.stage_05b');assert.equal(transition.saveData.角色.位置.locationId,'lcq.location.guiwang_inn');
+ assert.ok(next.activeEventIds.includes(LETTER));assert.ok(JSON.stringify(next.travelLedger).includes('nh.r.stage.04b_05b'));
+ const ui=fs.readFileSync(new URL('../src/components/dashboard/MainGamePanel.vue',import.meta.url),'utf8');
+ assert.match(ui,/intent\.kind === 'matched' && intent\.stageDeparture[\s\S]*?await departToNextStage\(\);/,'semantic result reaches the existing button handler');
+ const routerSource=fs.readFileSync(new URL('../src/modules/scenarioMods/naturalIntentRouter.ts',import.meta.url),'utf8');
+ for(const word of ['阁罗安排的住处','不急着启程','把那封信拆开'])assert.ok(!routerSource.includes(word),'no sayings added to lexicons, aliases or regexes');
+ assert.deepEqual(ec.contentEntries('item').find(e=>e.id===TUBE).aliases,[]);
+});
+
+test('PR1-letter-①: model none/free for not departing leaves stage, position and departure readiness untouched',async()=>{
+ const save=readyStay();const before=structuredClone(save),text='不急着启程，先歇着';
+ const result=await nir.resolveNaturalIntent({saveData:save,mods:departureMods,playerText:text,selected:null,resolveFromText:nir.resolveStoryEventActionFromText,generate:mockIntent({actionId:'none',certainty:'high',evidence:'',statusProposals:[]})});
+ assert.equal(result.kind,'free');assert.equal(result.stageDeparture,undefined);assert.equal(result.selection,undefined);
+ assert.equal(runtimeOf(save).modId,runtimeOf(before).modId);assert.deepEqual(save.角色.位置,before.角色.位置);
+ assert.deepEqual(rt.getStageDepartureOffer(save),rt.getStageDepartureOffer(before));
+ const unready=structuredClone(save);delete runtimeOf(unready).nextStageReadyId;assert.ok(!nir.listNaturalIntentCandidates(unready,departureMods).some(c=>c.source==='stage_departure'));
+});
+
+test('PR1-letter-③: all three item states derive from real walkthrough facts, survive transition and never change the pouch or the save',()=>{
+ const sealed=structuredClone(plain.get('before_letter_identification'));assert.ok(sealed.角色.背包.物品[TUBE]);
+ assert.ok(!runtimeOf(sealed).completedEventIds.includes(IDENTIFY));assert.deepEqual(itemView.resolveItemPresentation(sealed,TUBE),letterStates[0]);
+ const identified=readyStay();assert.ok(runtimeOf(identified).completedEventIds.includes(IDENTIFY));assert.deepEqual(itemView.resolveItemPresentation(identified,TUBE),letterStates[1]);
+ const next=structuredClone(stay.get('05b')),r=runtimeOf(next);assert.equal(r.modId,'lcq.stage_05b');assert.ok(!r.completedEventIds.includes(IDENTIFY));assert.equal(r.flags[`event.${IDENTIFY}.done`],undefined);
+ const chronicle=r.chronicle.find(e=>e.id===`chronicle.${CRISIS}.${IDENTIFY}`);assert.equal(chronicle.type,'event');assert.equal(chronicle.stageId,CRISIS);
+ assert.ok(r.travelLedger.doneEventIds.includes(IDENTIFY));assert.deepEqual(itemView.resolveItemPresentation(next,TUBE),letterStates[1]);
+ const onlyChronicle=structuredClone(next);runtimeOf(onlyChronicle).travelLedger.doneEventIds=[];assert.deepEqual(itemView.resolveItemPresentation(onlyChronicle,TUBE),letterStates[1]);
+ const onlyTravel=structuredClone(next);runtimeOf(onlyTravel).chronicle=[];assert.deepEqual(itemView.resolveItemPresentation(onlyTravel,TUBE),letterStates[1]);
+ const reopened=structuredClone(plain.get('letter_open'));assert.ok(runtimeOf(reopened).eventActionStates[LETTER].preparations.includes('blank_letter_confirmed'));assert.deepEqual(itemView.resolveItemPresentation(reopened,TUBE),letterStates[2]);
+ for(const save of [sealed,identified,next,onlyChronicle,onlyTravel,reopened]){
+  const before=JSON.stringify(save),pouch=save.角色.背包.物品[POUCH];assert.ok(pouch);
+  assert.deepEqual(itemView.resolveItemPresentation(save,POUCH),{name:pouch.名称,description:pouch.描述});
+  itemView.resolveItemPresentation(save,TUBE);assert.equal(JSON.stringify(save),before,'presentation never writes state');
+ }
+ const ui=fs.readFileSync(new URL('../src/components/dashboard/InventoryPanel.vue',import.meta.url),'utf8');assert.match(ui,/resolveItemPresentation\(save, item\.物品ID \|\| key, item\)/);
+ const unknown=structuredClone(next);unknown.角色.背包.物品.custom={物品ID:'custom',名称:'自备物品',描述:'实例简介',数量:1};assert.deepEqual(itemView.resolveItemPresentation(unknown,'custom'),{name:'自备物品',description:'实例简介'});
+ assert.equal(itemView.resolveItemPresentation(next,'lcq.item.backpack').description,ec.catalogItem('lcq.item.backpack').description||'','catalog fallback');
+});
+
+test('PR1-letter-④: the compact free-turn prompt retains the current letter description and keeps the sealed pouch separate',async()=>{
+ const samples=[plain.get('before_letter_identification'),readyStay(),plain.get('letter_open')];
+ for(const [index,save] of samples.entries()){
+  const summary=scene.sceneLedgerSummary(save),letter=summary.关键物品.find(i=>i.名称===letterStates[index].name),pouch=summary.关键物品.find(i=>i.名称==='锦囊');
+  assert.deepEqual(letter,{名称:letterStates[index].name,数量:1,描述:letterStates[index].description});assert.ok(pouch);assert.match(pouch.描述,/火漆密封/);assert.notEqual(letter,pouch);
+  const sceneData={currentObjective:'',本轮结算:{},账本摘要:summary,recentNarrative:'旧正文'.repeat(6000)};
+  const prompt=narrator.buildCompactModuleNarrativePrompt('依本地已确认事实演出本回合',sceneData,['历史'.repeat(6000)]);assert.equal(prompt.compacted,true);
+  let sent;await (async input=>{sent=input;return 'mock narrative';})({system:prompt.system});
+  assert.ok(sent.system.includes(letterStates[index].description));assert.ok(sent.system.includes(pouch.描述));
+  if(index===1){assert.match(letter.描述,/空无一字/);assert.match(letter.描述,/云苍峰推断/);assert.doesNotMatch(letter.描述,/火漆密封/);}
+ }
+});
+
+// 修复轮1：旧已拆信档与混合背包边界。
+test('PR1-letter-R1: completed or prepared legacy stay saves never regain the held letter, including archived or unloaded contracts',async()=>{
+ const completed=runtimeOf(plainWalk.save);
+ const record=completed.chronicle.find(e=>e.id===`chronicle.lcq.stage_05b.${LETTER}`);assert.ok(record,'real completed walkthrough supplies the chronicle record');
+ for(const evidence of ['completedEventIds','chronicle','travelLedger','preparation','preparation_unloaded']){
+  const save=structuredClone(plainWalk.save),r=runtimeOf(save);
+  r.flags['branch.ningyu.enter_dong']='stay';delete r.flags['branch.ningyu.y5_rejoined'];
+  r.events=r.events.filter(e=>e.id!==REJOIN);r.activeEventIds=r.activeEventIds.filter(id=>id!==LETTER);
+  r.completedEventIds=r.completedEventIds.filter(id=>id!==LETTER);
+  r.chronicle=r.chronicle.filter(e=>e.id!==record.id);r.travelLedger.doneEventIds=r.travelLedger.doneEventIds.filter(id=>id!==LETTER);
+  r.eventActionStates[LETTER].preparations=[];
+  if(evidence==='completedEventIds')r.completedEventIds.push(LETTER);
+  if(evidence==='chronicle')r.chronicle.push(structuredClone(record));
+  if(evidence==='travelLedger')r.travelLedger.doneEventIds.push(LETTER);
+  if(evidence.startsWith('preparation'))r.eventActionStates[LETTER].preparations.push('blank_letter_confirmed');
+  if(evidence==='preparation_unloaded')r.events=r.events.filter(e=>e.id!==LETTER);
+  assert.ok(save.角色.背包.物品[TUBE]);
+  const assertReleased=()=>{
+   assert.ok(!held.heldActions(save).some(h=>h.actionId===OPEN),evidence);
+   assert.ok(!held.heldActions(r).some(h=>h.actionId===OPEN),`${evidence}: runtime-only compatibility`);
+   assert.ok(!nir.listNaturalIntentCandidates(save).some(c=>c.held&&c.actionId===OPEN),`${evidence}: no semantic hold candidate`);
+  };
+  assertReleased();loadRepairs.applyLoadRepairs(save);assertReleased();
+  assert.equal(lineActions(save,REJOIN).length,0,'already opened legacy saves have no rejoin to unlock');
+  assert.equal(r.flags['branch.ningyu.y5_rejoined'],undefined,'do not write a new rejoin fact');
+  const result=await nir.resolveNaturalIntent({saveData:save,playerText:'我当面把那封信拆开看看',selected:null,resolveFromText:nir.resolveStoryEventActionFromText,
+   generate:mockIntent({actionId:OPEN,eventId:LETTER,source:'event_engine',certainty:'high',evidence:'把那封信拆开看看',statusProposals:[]})});
+  assert.notEqual(result.reason,'held_action',`${evidence}: stale model choice cannot create a permanent hold`);
+ }
+ const unfinished=readyStay();assert.ok(held.heldActions(unfinished).some(h=>h.actionId===OPEN),'unloaded unfinished 04b action is still held');
+});
+
+test('PR1-letter-R1: null and non-object inventory slots are ignored by presentation, held candidates and ledger, with a minimal read-only view',()=>{
+ for(const source of [plain.get('before_letter_identification'),readyStay(),plain.get('letter_open')]){
+  const save=structuredClone(source),expected=itemView.resolveItemPresentation(save,TUBE);
+  const expectedHeld=held.heldActions(save),expectedLedger=scene.sceneLedgerSummary(save).关键物品;
+  save.角色.背包.物品={oldEmptySlot:null,missing:undefined,scalar:7,text:'old',boolean:false,array:[],...save.角色.背包.物品};
+  const before=JSON.stringify(save);
+  assert.deepEqual(itemView.resolveItemPresentation(save,TUBE),expected);
+  assert.deepEqual(held.heldActions(save),expectedHeld);
+  assert.deepEqual(scene.sceneLedgerSummary(save).关键物品,expectedLedger);
+  const view={角色:{背包:save.角色.背包},世界:{状态:{剧本模组:runtimeOf(save)}}};
+  assert.deepEqual(itemView.resolveItemPresentation(view,TUBE),expected);
+  const pouch=save.角色.背包.物品[POUCH];assert.deepEqual(itemView.resolveItemPresentation(view,POUCH),{name:pouch.名称,description:pouch.描述});
+  assert.equal(JSON.stringify(save),before,'scans remain read-only');
+ }
+ const ui=fs.readFileSync(new URL('../src/components/dashboard/InventoryPanel.vue',import.meta.url),'utf8');
+ const computed=ui.split('const itemList = computed<Item[]>(() => {')[1].split('const itemCategories')[0];
+ assert.ok(!computed.includes('toSaveData()'),'inventory presentation no longer clones the entire save');
 });
