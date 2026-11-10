@@ -222,9 +222,12 @@ let supplementCharacters = [];
     if (!e) throw new Error(`出生年表的 id 不在源卡生成的条目里（手工补卡的出生年写在补卡源）：${row.id}`);
     if (seen.has(row.id)) throw new Error(`出生年表 id 重复：${row.id}`);
     if (!Number.isSafeInteger(row.birthYear) || !['原著', '推断', '下限'].includes(row.basis)) throw new Error(`出生年表条目无效：${row.id}`);
+    if ('storyChild' in row && row.storyChild !== true) throw new Error(`出生年表 storyChild 只能写 true：${row.id}`);
     seen.add(row.id);
     e.staticProfile = { ...e.staticProfile, birthYear: row.birthYear };
     e.birthYearBasis = row.basis;
+    // 剧情小孩（用户逐人定）：运行时有效出生年取原著出生年、不套首登满 18 的下限；标记放顶层，不进角色档案与提示词。
+    if (row.storyChild) e.storyChild = true;
   }
   for (const row of table.notPersons || []) if (seen.has(row.id)) throw new Error(`非人物不进出生年表：${row.id}`);
 }

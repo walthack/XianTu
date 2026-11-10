@@ -1,9 +1,9 @@
 {
   "schema": "xiantu.character-registry.v1",
-  "version": "cr-2026-11-10-e224b39b803721c7",
-  "sourceHash": "e224b39b803721c7",
+  "version": "cr-2026-11-10-c323e31ef341c7f8",
+  "sourceHash": "c323e31ef341c7f8",
   "sourceGeneratedAt": "2026-06-30T12:50:33.965Z",
-  "generatedAt": "2026-11-10T13:30:50.488Z",
+  "generatedAt": "2026-11-10T13:57:38.570Z",
   "stats": {
     "total": 336,
     "stagePresent": 236,
@@ -17231,7 +17231,8 @@
         "conflicts": []
       },
       "embedText": "郭靖 ｜ 【汉国人物】 ｜ 舞阳侯府(继承人)、汉国游侠(郭解幼子) ｜ 登场于洛都郊外（郭解墓地） ｜ 懵懂天真、对同龄玩伴感到开心 ｜ 义子（程宗扬在郭大侠坟前立誓收为义子） ｜ 对程宗扬：父父；被他人称呼：郭靖、小郭靖、郭大侠的幼子 ｜ 其父郭大侠（郭解）去世；被程宗扬在坟前立誓收为义子；获赠侯爵之位；与定陶王（改名郭靖前身）互为朋友",
-      "birthYearBasis": "推断"
+      "birthYearBasis": "推断",
+      "storyChild": true
     },
     {
       "id": "liuchao.character.ha_mi_chi",
@@ -22863,7 +22864,8 @@
         "conflicts": []
       },
       "embedText": "定陶王 ｜ 刘欣 定陶王刘欣 ｜ 汉国天子/年幼的君王 ｜ 【汉国人物】 ｜ 凉州军(被拥立的傀儡皇帝)、汉国朝廷(被拥立傀儡天子（凉州军挟持）) ｜ 登场于昭阳宫 ｜ 年幼无知、依赖成人、偶有任性(如发脾气) ｜ 程宗扬曾拼死护他登上帝位 ｜ 程宗扬称呼其“那小屁孩” ｜ 被贾文和劫持(第1章)；被剑玉姬转移带走(第3章)；登基为天子(第2章)；试图保护阮香凝(第5章)；组合显示名已拆分：定陶王刘欣 -> 原名 刘欣，alias 定陶王。 用户裁定：批准。",
-      "birthYearBasis": "原著"
+      "birthYearBasis": "原著",
+      "storyChild": true
     },
     {
       "id": "liuchao.character.liu_yi_sun",

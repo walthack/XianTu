@@ -8237,7 +8237,7 @@
               "名字": "定陶王",
               "性别": "男",
               "出生日期": {
-                "年": 206,
+                "年": 217,
                 "月": 1,
                 "日": 1
               },
@@ -9637,7 +9637,7 @@
               "名字": "郭靖",
               "性别": "男",
               "出生日期": {
-                "年": 206,
+                "年": 218,
                 "月": 1,
                 "日": 1
               },
@@ -24720,7 +24720,7 @@
                   "settledAtTurn": 25
                 }
               ],
-              "reconciledRegistryVersion": "cr-2026-11-10-e224b39b803721c7",
+              "reconciledRegistryVersion": "cr-2026-11-10-c323e31ef341c7f8",
               "sceneLedger": {
                 "receipts": [
                   "lcq.event.s03b_snake_flower_bridge_01::advance_declared_objective",

@@ -112,6 +112,8 @@ interface RegistryEntry {
   /** 基础属性（等级、战斗强度、属性）。各阶段档只存与此不同的覆盖项，合并规则见 characterStatsMerge.ts。 */
   baseStats?: Record<string, unknown>;
   staticProfile?: RegistryStaticProfile;
+  /** 剧情小孩（出生年表逐人标，用户定）：有效出生年＝原著出生年，不套首登满成年线的下限。 */
+  storyChild?: boolean;
   phaseIdentities?: RegistryPhase[];
   review?: { humanNotes?: string[]; aliasMerged?: string[]; followUps?: string[] };
 }
@@ -316,14 +318,20 @@ export function getRegistryDebutAxisSeq(characterId: string): number | undefined
   return DEBUT_AXIS.get(byId.get(characterId)?.id || characterId);
 }
 
+/** 剧情小孩（出生年表逐人标 storyChild，用户 11-10 21:39 定）：不套首登下限，现算不满成年线时由唯一的年龄门把私密层关着。 */
+export function isRegistryStoryChild(characterId: string | undefined): boolean {
+  return !!characterId && byId.get(characterId)?.storyChild === true;
+}
+
 /**
  * 有效出生年＝min(总表出生年, 首登游戏年−成年线)，运行时现算，不写回总表（用户 2026-11-10 定）。
  * 首登游戏年＝原著当下年＋首登轴序之前插入事件的年数，所以改年数／删插入事件时跟着变。
- * 总表没有出生年返回 undefined；没有登场记录时不抬下限。
+ * 总表没有出生年返回 undefined；没有登场记录或是剧情小孩时不抬下限。
  */
 export function registryEffectiveBirthYear(characterId: string, timeline: PackTimeline = timelineConfig()): number | undefined {
   const birthYear = byId.get(characterId)?.staticProfile?.birthYear;
   if (typeof birthYear !== 'number' || !Number.isFinite(birthYear)) return undefined;
+  if (isRegistryStoryChild(characterId)) return birthYear;
   const debut = getRegistryDebutAxisSeq(characterId);
   if (debut === undefined) return birthYear;
   return Math.min(birthYear, timelineGameYearAt(debut, timeline) - minAdultAge());

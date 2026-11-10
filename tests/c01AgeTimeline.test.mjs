@@ -279,7 +279,45 @@ test('补丁（剧情策划 11-10 清单）：宋主 200【推断】且删去往
 
   const report = auditWith({});
   assert.deepEqual([report.missing, report.under18], [[], []]);
-  assert.deepEqual(report.lifted.map(x => x.match(/（([^）]+)）/)[1]).sort(), [ID.yueShuang, 'liuchao.character.guo_jing', 'liuchao.character.liu_xin'].sort());
+  assert.deepEqual(report.lifted.map(x => x.match(/（([^）]+)）/)[1]), [ID.yueShuang]);
   for (const x of report.noDebutMinor) assert.equal(CR.getRegistryDebutAxisSeq(x.match(/（([^）]+)）/)[1]), undefined, x);
   assert.equal(report.noDebutMinor.some(x => x.includes(songZhu)), false);
+});
+
+test('剧情小孩（用户 11-10 21:39 逐人定）：郭靖 218、定陶王 217 不套首登下限，现算不满 18 时只靠唯一的年龄门关私密层；存档不兜 18；体检单列不报警', () => {
+  const guoJing = 'liuchao.character.guo_jing', liuXin = 'liuchao.character.liu_xin';
+  const table = new Map(json('mod-kit/character-birth-years.json').entries.map(e => [e.id, e]));
+  assert.deepEqual(json('mod-kit/character-birth-years.json').entries.filter(e => e.storyChild).map(e => e.id).sort(), [guoJing, liuXin].sort());
+  assert.deepEqual([table.get(guoJing).birthYear, table.get(guoJing).basis, table.get(liuXin).birthYear, table.get(liuXin).basis], [218, '推断', 217, '原著']);
+  const registry = json('src/modules/scenarioMods/builtins/character-registry.json').characters;
+  for (const id of [guoJing, liuXin]) {
+    const entry = registry.find(e => e.id === id);
+    assert.equal(entry.storyChild, true);
+    assert.equal('storyChild' in entry.staticProfile, false, '标记不进角色档案与提示词');
+  }
+  assert.equal(CR.registryEffectiveBirthYear(guoJing), 218);
+  assert.equal(CR.registryEffectiveBirthYear(liuXin), 217);
+  assert.equal(meetYear(guoJing), 224);
+  assert.equal(meetAge(guoJing), 6);
+  assert.equal(meetAge(liuXin), 7);
+  assert.equal(PL.privateGateOpen(open({ ageNow: meetAge(guoJing) })), false, '现算 6 岁：门不开');
+  assert.equal(CR.gateAgeNow(liuXin, 235), 18);
+  assert.equal(PL.privateGateOpen(open({ ageNow: CR.gateAgeNow(liuXin, 235) })), true, '照日历长到 18 后按普通规则');
+  assert.equal(CR.isRegistryStoryChild(ID.yueShuang), false);
+  assert.equal(meetAge(ID.yueShuang), 18, '未标记的人仍套下限');
+
+  assert.equal(REL.estimateNpcAge({ id: guoJing, name: '郭靖' }, 224), 6);
+  const save = { 元数据: { 时间: { 年: 224, 月: 1, 日: 1 } }, 社交: { 关系: {
+    [guoJing]: { 名字: '郭靖', 出生日期: { 年: 206, 月: 1, 日: 1 } },
+    [ID.yueShuang]: { 名字: '月霜', 出生日期: { 年: 205, 月: 1, 日: 1 } },
+  } } };
+  REL.enforceScenarioNpcAdulthood(save);
+  assert.deepEqual(save.社交.关系[guoJing].出生日期, { 年: 218, 月: 1, 日: 1 }, '存档出生年对到原著出生年，不兜 18');
+  assert.equal(save.社交.关系[ID.yueShuang].出生日期.年, 202);
+
+  const report = auditWith({});
+  assert.deepEqual(report.under18, []);
+  assert.deepEqual(report.storyChildren.map(x => x.match(/（([^）]+)）/)[1]).sort(), [guoJing, liuXin].sort());
+  assert.ok(report.storyChildren.every(x => /私密层由年龄门关着/.test(x)));
+  assert.equal(report.lifted.some(x => x.includes(guoJing) || x.includes(liuXin)), false);
 });
