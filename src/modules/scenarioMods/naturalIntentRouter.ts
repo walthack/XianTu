@@ -4,6 +4,7 @@ import {entityName, entityNamePattern} from './namedEntities';
 import { CONTENT_PACKS } from '../contentPacks';
 import { GAME_MODEL_MODULES } from '@/services/moduleModelRuntime';
 import {QUEST_LINES} from './questLines';
+import { heldActions, heldPrerequisiteObjective } from './stayRejoin';
 import { freeTextStatusSemanticRequest, validateFreeTextStatusProposals, type FreeTextStatusResolution } from '../sceneModule/host/freeTextStatusSemantic';
 import type { SaveData } from '@/types/game';
 import {
@@ -59,6 +60,8 @@ export interface NaturalIntentCandidate {
   contractHash: string;
   intentMatch?: unknown;
   affinityAssessment?: {characterIds:string[];loadBearing:boolean};
+  /** 暂扣的合同动作（stayRejoin.heldActions）：不可执行，只供语义判定命中后停下提示先做前置拍。 */
+  held?: boolean;
 }
 
 export type NaturalIntentSelection =
@@ -235,7 +238,19 @@ export function listNaturalIntentCandidates(saveData: SaveData): NaturalIntentCa
     playerLine: item.actionText,
     contractHash: item.receiptId,
   }));
-  return [...events, ...refusal, ...opportunities, ...openWorld];
+  const held = heldActions((saveData as any)?.世界?.状态?.剧本模组).map(item => ({
+    source: 'event_engine', actionId: item.actionId, eventId: item.eventId, label: item.label, playerLine: item.label, contractHash: '', held: true,
+  }));
+  return [...events, ...refusal, ...opportunities, ...openWorld, ...held];
+}
+
+/** 命中暂扣动作：保留输入、不进叙事回合、不结算；提示复用前置拍既有目标文本。 */
+function heldActionClarify(saveData: SaveData, candidate: NaturalIntentCandidate): NaturalIntentResult | undefined {
+  const held = heldActions((saveData as any)?.世界?.状态?.剧本模组).find(item => item.eventId === candidate.eventId && item.actionId === candidate.actionId);
+  const clarification = held ? heldPrerequisiteObjective(held) : '';
+  if (!clarification) return undefined;
+  noteTicketDiscard('intent', 'held_action', candidate.actionId);
+  return { kind: 'unclear', reason: 'held_action', clarification, hold: true, skipKeywordPreflight: true, usedModel: true };
 }
 
 export function verifyFreshSelection(
@@ -245,7 +260,7 @@ export function verifyFreshSelection(
   const actionId = String(parsed.actionId || '').trim();
   if (!actionId) return undefined;
   const matches = listNaturalIntentCandidates(saveData).filter(item => {
-    if (item.actionId !== actionId) return false;
+    if (item.held || item.actionId !== actionId) return false;
     if (parsed.source && item.source !== parsed.source) return false;
     if (parsed.eventId && (item.eventId || '') !== parsed.eventId) return false;
     if (parsed.contractHash && item.contractHash !== parsed.contractHash) return false;
@@ -426,6 +441,7 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
     ...(tickets ? [tickets.system] : []),
     ...(risk ? [riskPromptLine('risk', 'riskEv', risk)] : []),
     ...(awaitingResponses(candidates).length ? ['人物线候选是同场人物正等玩家回应（含明确略过）。玩家这句话若同时在回应人物又在做另一个候选动作，或同时像在做两个以上候选，actionId填multiple，不要替玩家只挑一个。'] : []),
+    ...(candidates.some(item => item.held) ? ['候选held=true是此刻还不能做的动作；玩家这句话若是在做它，照样填它的actionId，由代码拦下。'] : []),
     `只输出 JSON：{"actionId":"候选id或none","source":"候选source或省略","eventId":"候选eventId或省略","evidence":"玩家原文中的短语","certainty":"high或low","affinityDelta":0,"statusProposals":[]${tickets ? ',"tickets":[]' : ''}${risk ? ',"risk":"none","riskEv":""' : ''}}`,
   ].join('');
   const userPrompt = JSON.stringify({
@@ -440,6 +456,7 @@ function buildIntentPrompt(playerText: string, candidates: NaturalIntentCandidat
       label: item.label,
       contractHash: item.contractHash,
       intentMatch:item.intentMatch, affinityAssessment:item.affinityAssessment,
+      ...(item.held ? { held: true } : {}),
     })),
   });
   return { systemPrompt, userPrompt };
@@ -562,7 +579,7 @@ async function resolveNaturalIntentByModel(input: NaturalIntentInput): Promise<N
   // 任务模式关键拍（beatKeyTurn，本地判定）：另发拍子判定小请求，与原 intent 请求并行；焦点拍的主线动作只交小请求判，不进大请求候选。
   const beatPlan = input.generateBeat ? beatKeyTurn(input.saveData, input.playerText) : undefined;
   const candidates = beatPlan
-    ? allCandidates.filter(item => !(item.source === 'event_engine' && item.eventId === beatPlan.beatId))
+    ? allCandidates.filter(item => item.held || !(item.source === 'event_engine' && item.eventId === beatPlan.beatId))
     : allCandidates;
   // An empty action catalog still permits independent catalog-constrained state recognition.
   if (!beatPlan) return classifyByIntentModel(input, candidates, fingerprint, classifierFailure);
@@ -663,6 +680,8 @@ async function classifyByIntentModel(
     if (!parsed.evidence || !evidenceBelongsToPlayer(String(input.playerText || ''), parsed.evidence)) {
       return free('bad_evidence');
     }
+    const heldCandidate = candidates.find(c => c.held && c.actionId === parsed.actionId && (!parsed.eventId || c.eventId === parsed.eventId));
+    if (heldCandidate) return heldActionClarify(input.saveData, heldCandidate) || free('held_action');
     const chosenCandidate=candidates.find(c=>c.actionId===parsed.actionId&&(!parsed.eventId||c.eventId===parsed.eventId));
     const match=chosenCandidate?.intentMatch as {allowInquiry?:boolean;rejectIf?:string[]}|undefined;
     if((match?.rejectIf||[]).some(word=>compact(input.playerText).includes(compact(word))))return free('rejected_intent');

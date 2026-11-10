@@ -8,7 +8,7 @@ import { transitionToMapEntryStage } from '../strictInitializer';
 import locations from '../../../../mod-kit/entity-catalog/locations.json';
 import { CONTENT_PACKS, packText } from '../../contentPacks';
 import type { SaveData } from '@/types/game';
-import { currentLocation, isNanhuangTravelStage } from './travelLedger';
+import { currentLocation, isNanhuangTravelStage, noteNanhuangArrival } from './travelLedger';
 import { canonicalLocationId, locationDescriptionWithCountry } from './locationIds';
 import { SEVERAL_DAYS_PLACEHOLDER } from '../openWorldSlice';
 import { settleTime, actionTimeConfig } from '../actionTime';
@@ -147,6 +147,9 @@ export function settleMapTravel(save: SaveData, selection: MapTravelSelection): 
   const position = (save as any).角色.位置;
   position.locationId = selection.toId; position.描述 = `${countryOf(selection.toId)}·${loc?.name || ''}`;
   if (loc?.coordinates) { position.x = loc.coordinates.x; position.y = loc.coordinates.y; }
+  // 南荒国内落点记行旅账（母地点权威），下一回合对账不再拉回旧地点；不加路线、不耗日。
+  const runtime = (save as any).世界?.状态?.剧本模组;
+  if (runtime) noteNanhuangArrival(runtime, selection.toId, `arrive:map:${selection.actionId}`);
   clearDepartureActionOptions(save);
   syncPersistentLineEntries(save);
   return true;

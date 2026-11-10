@@ -30207,7 +30207,8 @@
                     "atTurn": 31,
                     "fromZoneId": "nh.black_shoal",
                     "toZoneId": "nh.sheyi",
-                    "cause": "arrive:lcq.event.silent_sheyi_village"
+                    "cause": "arrive:lcq.event.silent_sheyi_village",
+                    "afterReceipts": 4
                   },
                   {
                     "atTurn": 11,

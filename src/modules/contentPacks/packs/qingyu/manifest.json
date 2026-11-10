@@ -50,5 +50,8 @@
   ],
   "mapEntries": [
     "map-entries.json"
+  ],
+  "heldActions": [
+    "held-actions.json"
   ]
 }

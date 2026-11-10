@@ -41,13 +41,19 @@ export function questLineContext(save:any,focusId?:string):LineContext {
 export function questLineOffer(save:any,eventId:string,focusId?:string){
  const r=save.世界.状态.剧本模组,ctx=questLineContext(save,focusId),state:LineState=r.questLineState||{version:1,receipts:{}};
  for(const line of QUEST_LINES){const beat=line.beats.find(b=>b.eventId===eventId);if(!beat)continue;
-  if(state.closedLines?.[line.id]!==undefined||state.receipts[beat.id]||state.expired?.[beat.id]||!lineConditionMet(line.entry,ctx)||(line.closeWhen&&lineConditionMet(line.closeWhen,ctx))||(beat.closeWhen&&lineConditionMet(beat.closeWhen,ctx))||(beat.requires&&!lineConditionMet(beat.requires,ctx)))return null;
+  if(state.closedLines?.[line.id]!==undefined||state.receipts[beat.id]||state.expired?.[beat.id]!==undefined||!lineConditionMet(line.entry,ctx)||(line.closeWhen&&lineConditionMet(line.closeWhen,ctx))||(beat.closeWhen&&lineConditionMet(beat.closeWhen,ctx))||(beat.requires&&!lineConditionMet(beat.requires,ctx)))return null;
   if(beat.ifOwnerAbsent==='no_trigger'&&!line.ownerCharacterIds.every(id=>ctx.presentActorIds.includes(id)))return null;
   return {line,beat,ctx};
  }
  return null;
 }
+/** 关窗规则改过的旧档迁移：拍的当前定义里线与拍都已无 closeWhen、又没有完成回执，旧 expired 记录作废；带 onExpire 的拍效果可能已落，不动（是否回滚待定）。 */
+export function clearStaleQuestLineExpiry(save:any){
+ const state=save?.世界?.状态?.剧本模组?.questLineState;if(!state?.expired)return;
+ for(const line of QUEST_LINES)for(const b of line.beats)if(state.expired[b.id]!==undefined&&!line.closeWhen&&!b.closeWhen&&!state.receipts?.[b.id]&&state.closedLines?.[line.id]===undefined&&!b.onExpire?.length)delete state.expired[b.id];
+}
 export function expireQuestLineWindows(save:any){
+ clearStaleQuestLineExpiry(save);
  const r=save.世界.状态.剧本模组,ctx=questLineContext(save),state=r.questLineState||={version:1,receipts:{}};
  for(const line of QUEST_LINES)for(const b of line.beats){if(state.receipts[b.id]||state.closedLines?.[line.id]!==undefined)continue;const close=(line.closeWhen&&lineConditionMet(line.closeWhen,ctx))||(b.closeWhen&&lineConditionMet(b.closeWhen,ctx));if(close){const first=state.expired?.[b.id]===undefined;(state.expired||={})[b.id]=r.worldTurn;r.activeEventIds=r.activeEventIds.filter((id:string)=>id!==b.eventId);if(first)for(const e of b.onExpire||[])if(e.kind==='setState')r.flags[e.stateId]=e.value;}}
 }

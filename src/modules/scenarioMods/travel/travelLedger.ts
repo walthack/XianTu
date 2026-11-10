@@ -7,8 +7,9 @@ import {entityName} from '../namedEntities';
 
 import {containsEntityLabel} from '../namedEntities';
 import {canonicalEntityId} from '../namedEntities';
+import {entityAliases} from '../namedEntities';
 import type { GameTime, SaveData } from '@/types/game';
-import { computePresentNames, departedPresentNames } from '../presence';
+import { authoritativeAbsentCharacterIds, computePresentNames, departedPresentNames } from '../presence';
 import { normalizeGameTime } from '@/utils/time';
 import {
   SEVERAL_DAYS_PLACEHOLDER,
@@ -203,8 +204,8 @@ export interface NanhuangTravelLedger {
   /** 旧档首次接入时按现位置推导，已完成拍只补 0 耗时回执。 */
   backfilled?: true;
   lastCard?: TravelCard;
-  /** 位置串与账不一致、或强制路线起点不是当前节点时的改投影记录。 */
-  reprojections?: Array<{ atTurn: number; fromZoneId: string; toZoneId: string; cause: string }>;
+  /** 位置串与账不一致、或强制路线起点不是当前节点时的改投影记录。afterReceipts＝记录时 travelReceipts 条数（arrive: 才记，用来与强制路途分先后）。 */
+  reprojections?: Array<{ atTurn: number; fromZoneId: string; toZoneId: string; cause: string; afterReceipts?: number }>;
 }
 
 type LedgerRuntime = {
@@ -433,7 +434,9 @@ function hasExplicitMoveSinceLastForced(ledger: NanhuangTravelLedger): boolean {
   if (receipts.slice(lastForced + 1).some(item => item.mode === 'player')) return true;
   const forcedTo = receipts[lastForced].toZoneId;
   if (ledger.state.currentZoneId !== forcedTo) return true;
-  return (ledger.reprojections || []).some(item => String(item.cause || '').startsWith('arrive:') && item.toZoneId !== forcedTo);
+  // 只认最近一次强制路途之后的 arrive:；旧记录没有 afterReceipts，先后不明，照旧算（不纠正）。
+  return (ledger.reprojections || []).some(item => String(item.cause || '').startsWith('arrive:') && item.toZoneId !== forcedTo
+    && (item.afterReceipts === undefined || item.afterReceipts > lastForced));
 }
 
 /**
@@ -459,8 +462,16 @@ export function reconcileNanhuangPositionFromLedger(saveData: SaveData, runtime:
   projectPosition(saveData, runtime, zoneId);
 }
 
+/** 路途卡在界面上就是当前同行栏：出发快照里的同伴按此刻的权威暂留现算剔除（不改账里的快照）。 */
 export function getTravelCard(saveData: SaveData | null | undefined): TravelCard | undefined {
-  return ((saveData as { 世界?: { 状态?: { 剧本模组?: LedgerRuntime } } } | null | undefined)?.世界?.状态?.剧本模组?.travelLedger?.lastCard);
+  const runtime = (saveData as { 世界?: { 状态?: { 剧本模组?: LedgerRuntime } } } | null | undefined)?.世界?.状态?.剧本模组;
+  const card = runtime?.travelLedger?.lastCard;
+  if (!card?.companions?.length) return card;
+  const absent = new Set(authoritativeAbsentCharacterIds(runtime as never).flatMap(id => entityAliases('character', id)));
+  const companions = card.companions.filter(name => !absent.has(name));
+  if (companions.length === card.companions.length) return card;
+  const { companions: _all, ...rest } = card;
+  return companions.length ? { ...rest, companions } : rest;
 }
 
 /** 地图／顶栏用：南荒每个节点的三态与可否前往。定义外的地点由调用方按隐藏处理（fail closed）。 */
@@ -494,6 +505,7 @@ export function noteNanhuangArrival(runtime: LedgerRuntime, locationId: string, 
   if (!ledger?.state || !zoneId || ledger.state.currentZoneId === zoneId) return;
   ledger.reprojections = [...(ledger.reprojections || []), {
     atTurn: Math.max(0, Number(runtime.worldTurn) || 0), fromZoneId: ledger.state.currentZoneId, toZoneId: zoneId, cause,
+    afterReceipts: (ledger.state.travelReceipts || []).length,
   }].slice(-20);
   ledger.state.currentZoneId = zoneId;
   ledger.state.knownZoneIds = [...new Set([...ledger.state.knownZoneIds, zoneId])];

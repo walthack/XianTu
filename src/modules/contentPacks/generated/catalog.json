@@ -1,5 +1,5 @@
 {
-  "version": "c90b488eb7560a8f",
+  "version": "6756932569a63807",
   "contracts": [
     {
       "meta": {
@@ -10821,6 +10821,25 @@
       "locationId": "liuchao.location.xianyang",
       "readyPath": "compass.qinEntryReady",
       "previewTextId": "report8091.qin.preview"
+    }
+  ],
+  "heldActions": [
+    {
+      "eventId": "lcq.event.blank_letter_and_dagu",
+      "actionId": "open_blank_letter_in_person",
+      "while": [
+        {
+          "path": "flags.branch.ningyu.enter_dong",
+          "operator": "eq",
+          "value": "stay"
+        },
+        {
+          "path": "flags.branch.ningyu.y5_rejoined",
+          "operator": "neq",
+          "value": true
+        }
+      ],
+      "prerequisiteBeatId": "beat.ningyu.y5_rejoin"
     }
   ],
   "overlays": [

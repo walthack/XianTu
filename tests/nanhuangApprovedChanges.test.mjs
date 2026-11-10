@@ -359,3 +359,126 @@ test('O2/Y5 old contract hashes migrate to the revised contract instead of reset
  assert.ok(r.events.find(e=>e.id===O2).playerCompletionContract.actions.some(a=>a.id==='act.ningyu.o2.defer'));
  assert.equal(r.eventActionStates[O2].contractHash,'37ca6495');
 });
+
+// ═════════════ PR #1 修复（设计稿 2026-11-10）：暂扣动作、旧到期迁移、地图记账、路途卡 ═════════════
+const ledgerMod=await loadTs('../src/modules/scenarioMods/travel/travelLedger.ts'),narrator=await loadTs('../src/modules/scenarioMods/legacyNarratorPacket.ts');
+const held=await loadTs('../src/modules/scenarioMods/stayRejoin.ts'),lines=await loadTs('../src/modules/scenarioMods/questLines.ts');
+const REJOIN_OBJECTIVE=texts['text.obj.ningyu.y5_rejoin'];
+const settledState=save=>{const r=runtimeOf(save);return structuredClone({states:r.eventActionStates?.[LETTER],flags:r.flags,receipts:r.pathReceipts,line:r.questLineState,turn:r.worldTurn});};
+
+test('PR1-1: held actions come from content-pack data; a cloned action object is still held; the rule lifts on rejoin and never applies off stay',()=>{
+ assert.deepEqual(cp.CONTENT_PACKS.heldActions.map(h=>[h.eventId,h.actionId,h.prerequisiteBeatId]),[[LETTER,OPEN,'beat.ningyu.y5_rejoin']]);
+ const r=runtimeOf(stay.get('letter_held'));
+ assert.deepEqual(held.heldActions(r).map(h=>[h.eventId,h.actionId,h.prerequisiteBeatId]),[[LETTER,OPEN,'beat.ningyu.y5_rejoin']]);
+ assert.equal(held.heldPrerequisiteObjective(held.heldActions(r)[0]),REJOIN_OBJECTIVE,'the hint is the rejoin beat objective, no new text');
+ const action=r.events.find(e=>e.id===LETTER).playerCompletionContract.actions.find(a=>a.id===OPEN);
+ assert.equal(held.actionHeldForRejoin(r,action),true);
+ assert.equal(held.actionHeldForRejoin(r,structuredClone(action)),true,'clone matched by eventId+actionId');
+ assert.equal(held.heldActions(runtimeOf(stay.get('rejoined'))).length,0);
+ assert.equal(held.heldActions(runtimeOf(plain.get('letter'))).length,0);
+ assert.equal(held.actionHeldForRejoin(runtimeOf(plain.get('letter')),action),false);
+});
+
+test('PR1-1: free input that means the held action asks to wait for the rejoin; input kept, no narrative turn, nothing settled',async()=>{
+ for(const text of ['我当面确认信笺仍是白纸','我当着谢艺的面拆开白纸信']){
+  const save=structuredClone(stay.get('letter_held'));const before=settledState(save);
+  const c=nir.listNaturalIntentCandidates(save).find(x=>x.held);
+  assert.ok(c&&c.eventId===LETTER&&c.actionId===OPEN,'the held action is a non-executable candidate');
+  let prompt='';
+  const evidence=text.includes('确认信笺')?'当面确认信笺仍是白纸':'拆开白纸信';
+  const result=await nir.resolveNaturalIntent({saveData:save,playerText:text,selected:null,resolveFromText:nir.resolveStoryEventActionFromText,
+   generate:async input=>{prompt=input.userPrompt;return JSON.stringify({actionId:OPEN,eventId:LETTER,source:'event_engine',certainty:'high',evidence,statusProposals:[]});}});
+  assert.ok(JSON.parse(prompt).candidates.some(x=>x.actionId===OPEN&&x.held===true),'the model sees the held candidate');
+  assert.equal(result.kind,'unclear',JSON.stringify(result));assert.equal(result.hold,true);assert.equal(result.reason,'held_action');
+  assert.equal(result.clarification,REJOIN_OBJECTIVE);assert.equal(result.selection,undefined);
+  assert.equal(nir.verifyFreshSelection(save,{actionId:OPEN,eventId:LETTER,source:'event_engine'}),undefined,'never turned into an executable selection');
+  assert.deepEqual(settledState(save),before,'attempts/flags/receipts unchanged');
+ }
+ // 会合后同句照常命中拆信候选（可执行）
+ const after=nir.listNaturalIntentCandidates(stay.get('rejoined'));
+ assert.ok(after.some(x=>x.actionId===OPEN&&!x.held));assert.ok(!after.some(x=>x.held));
+});
+
+test('PR1-1: a forged selection for the held action is refused at the execution entry with action_unavailable',()=>{
+ const save=structuredClone(stay.get('letter_held'));const before=settledState(save);
+ const free=structuredClone(save);delete runtimeOf(free).flags['branch.ningyu.enter_dong'];
+ const sel=rt.getCurrentStoryEventActions(free).find(a=>a.actionId===OPEN);assert.ok(sel);
+ const refused=rt.recordStoryEventStructuredAction(save,structuredClone(sel));
+ assert.notEqual(refused.attempted,true);assert.equal(refused.reason,'action_unavailable');
+ assert.deepEqual(settledState(save),before);
+});
+
+test('PR1-1: intent judged none (leak) → the free-turn capsule objective is the rejoin objective, not the letter',async()=>{
+ const save=structuredClone(stay.get('letter_held'));
+ const none=await nir.resolveNaturalIntent({saveData:save,playerText:'我当面确认信笺仍是白纸',selected:null,resolveFromText:nir.resolveStoryEventActionFromText,generate:mockIntent({actionId:'none',certainty:'high',evidence:'',statusProposals:[]})});
+ assert.equal(none.kind,'free');
+ const candidates=[...rt.getCurrentStoryEventActions(save),...rt.getCurrentStoryExplorationActions(save)];
+ // 胶囊按 playerFacingFact 去掉句末标点
+ const objective=REJOIN_OBJECTIVE.replace(/。$/,'');
+ assert.equal(narrator.readLocalMemoryCapsule(save,candidates[0],candidates.slice(1)).currentObjective,objective,'same call shape as the free turn');
+ assert.equal(narrator.readLocalMemoryCapsule(save).currentObjective,objective);
+ const letter=structuredClone(plain.get('letter'));
+ assert.equal(narrator.readLocalMemoryCapsule(letter).currentObjective,rt.getScenarioFocusEvent(runtimeOf(letter)).objective,'non-stay keeps the letter objective');
+});
+
+test('PR1-2: a stale expired record for a beat whose current definition has no close window and no completion is cleared on load and on advance',()=>{
+ const all=lines.QUEST_LINES.flatMap(l=>l.beats.map(b=>({l,b})));
+ const save=atBiyu(stageSave('lcq.stage_05b'));const r=runtimeOf(save);
+ r.questLineState={version:1,receipts:{},expired:Object.fromEntries(all.map(({b})=>[b.id,87]))};
+ loadRepairs.applyLoadRepairs(save);
+ const stale=({l,b})=>!l.closeWhen&&!b.closeWhen&&!b.onExpire?.length;
+ assert.ok(all.some(stale)&&all.some(x=>!stale(x)),'fixture covers both kinds');
+ for(const x of all)assert.equal(r.questLineState.expired[x.b.id],stale(x)?undefined:87,x.b.id);
+ assert.equal(r.questLineState.expired[ALGAE.beatId],undefined);
+ assert.ok(lineActions(save,ALGAE.eventId).some(a=>a.actionId==='act.ask_biling_for_nylon'),'the algae pickup is offered again');
+ // 推进路径同一迁移；有完成回执的不动
+ const adv=atBiyu(stageSave('lcq.stage_05b'));runtimeOf(adv).questLineState={version:1,receipts:{[ALGAE.beatId]:{receiptId:'x',turn:1,outcome:'success'}},expired:{[ALGAE.beatId]:87,'beat.ningyu.o2_regicide':87}};
+ ctxmod.clearStaleQuestLineExpiry(adv);
+ assert.equal(runtimeOf(adv).questLineState.expired[ALGAE.beatId],87,'completed beat untouched');
+ runtimeOf(adv).questLineState.receipts={};ctxmod.expireQuestLineWindows(adv);
+ assert.equal(runtimeOf(adv).questLineState.expired[ALGAE.beatId],undefined);
+ assert.notEqual(runtimeOf(adv).questLineState.expired['beat.ningyu.o2_regicide'],undefined,'a beat that still has a close window keeps its expiry');
+ // expired 口径：0 也算到期
+ const zero=atBiyu(stageSave('lcq.stage_05b'));entries.syncPersistentLineEntries(zero);runtimeOf(zero).questLineState={version:1,receipts:{},expired:{[ALGAE.beatId]:0}};
+ assert.equal(ctxmod.questLineOffer(zero,ALGAE.eventId),null);
+});
+
+test('PR1-2: a Nanhuang domestic map move is written to the travel ledger (arrive:map:), so the next turn does not pull the player back',()=>{
+ const save=structuredClone(stay.get('letter_held'));const r=runtimeOf(save);const zone=r.travelLedger.state.currentZoneId;
+ const sel=arriveByMap(save,BIYU);
+ assert.notEqual(r.travelLedger.state.currentZoneId,zone);
+ const last=r.travelLedger.reprojections.at(-1);
+ assert.equal(last.cause,`arrive:map:${sel.actionId}`);assert.equal(last.toZoneId,r.travelLedger.state.currentZoneId);
+ assert.equal(last.afterReceipts,r.travelLedger.state.travelReceipts.length);
+ const out=rt.advanceScenarioRuntime(save).saveData;
+ assert.equal(out.角色.位置.locationId,BIYU,'not pulled back to the inn');
+ assert.equal(runtimeOf(out).travelLedger.state.currentZoneId,last.toZoneId);
+ assert.ok(lineActions(out,ALGAE.eventId).some(a=>a.actionId==='act.ask_biling_for_nylon'));
+ const capsule=narrator.readLocalMemoryCapsule(out);
+ assert.notEqual(capsule.currentObjective,rt.getScenarioFocusEvent(runtimeOf(out)).objective,'away from the inn the free turn does not aim at the letter');
+ assert.match(capsule.currentObjective,/^去/);
+});
+
+test('PR1-2: only arrive: moves after the last forced route count as an explicit move; older ones no longer block the ledger correction',()=>{
+ const base=structuredClone(stay.get('letter_held'));const l=runtimeOf(base).travelLedger,receipts=l.state.travelReceipts;
+ const lastForced=receipts.map(x=>x.mode).lastIndexOf('forced');assert.ok(lastForced>=0);
+ const drifted=(afterReceipts)=>{const s=structuredClone(base);const sl=runtimeOf(s).travelLedger;
+  sl.reprojections=[{atTurn:1,fromZoneId:sl.state.currentZoneId,toZoneId:'nh.biyu',cause:'arrive:map:old',...(afterReceipts===undefined?{}:{afterReceipts})}];
+  s.角色.位置={...s.角色.位置,locationId:BIYU};ledgerMod.reconcileNanhuangPositionFromLedger(s,runtimeOf(s));return s.角色.位置.locationId;};
+ assert.notEqual(drifted(lastForced),BIYU,'an arrival before the last forced route does not block the correction');
+ assert.equal(drifted(receipts.length),BIYU,'an arrival after it still counts as the player moving');
+ assert.equal(drifted(undefined),BIYU,'legacy record without order keeps the old fail-closed behaviour');
+});
+
+test('PR1-3: the travel card reads the current stay: Ning Yu / Xiao Wei are not listed while held, and return after the rejoin',()=>{
+ for(const {save} of stayEnterDong){
+  const card=ledgerMod.getTravelCard(save);
+  for(const n of ['凝羽','小魏'])assert.ok(!(card?.companions||[]).includes(n),`${n} not on the card`);
+  if(runtimeOf(save).travelLedger?.lastCard)assert.deepEqual(runtimeOf(save).travelLedger.lastCard,structuredClone(runtimeOf(save).travelLedger.lastCard),'stored snapshot untouched');
+ }
+ const raw=runtimeOf(stayEnterDong[0].save).travelLedger.lastCard;
+ assert.ok(raw.companions.includes('凝羽'),'the departure snapshot still has her (the bug this fixes)');
+ const after=structuredClone(stayEnterDong[0].save);runtimeOf(after).flags['branch.ningyu.y5_rejoined']=true;
+ assert.ok(ledgerMod.getTravelCard(after).companions.includes('凝羽'),'once rejoined the card lists her again');
+ const p=plain.get('y5');assert.deepEqual(ledgerMod.getTravelCard(p),runtimeOf(p).travelLedger?.lastCard,'non-stay unchanged');
+});
