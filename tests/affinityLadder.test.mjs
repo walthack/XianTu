@@ -134,7 +134,11 @@ test('阈值锚点为用户裁定值（deep 已由 55 迁到 60）', async () =>
 });
 
 test('intimacyProfiles 的 deep 层随阈值迁移：55 不解锁、60 解锁（断具体文本，不比长度）', async () => {
-  const { formatIntimacyProfile } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  const { findIntimacyProfile } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  const { projectIntimacyLines } = await loadTs('../src/modules/scenarioMods/promptLayers.ts');
+  const lvzhi = findIntimacyProfile('吕雉');
+  const formatIntimacyProfile = (_name, { favor }) =>
+    [...projectIntimacyLines(lvzhi, { inputHit: true, present: true, favor }), ...lvzhi.hardLimits].join('\n');
   const scene = '两人同榻，宽衣解带。';
   const DEEP = '羞耻感常态化';          // 吕雉 deep 层原文
   const SHALLOW = '绝境求庇后委身';      // shallow 层，两档都该有

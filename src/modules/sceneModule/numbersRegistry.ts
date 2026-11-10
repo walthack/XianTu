@@ -88,7 +88,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   // 稀有遇见（通用，白尾豹为其中一条；REPORT-8091-f76e07a7）：条目逐项体检在 rareEncounters.ts 的 registerNumbersValidator。
   { path: 'e2eSmoke.rareEncounters.paramPrefix', kind: 'string', required: true, section: 'runtime' },
   { path: 'e2eSmoke.rareEncounters.chanceMulParam', kind: 'string', required: true, section: 'runtime' },
-  { path: 'story.actionTime.prologueYears', kind: 'int', required: true, min: 1, section: 'progress' },
+  { path: 'story.actionTime.prologueYears', kind: 'int', required: true, min: 0, section: 'progress' },
+  { path: 'story.timeline.canonPresentYear', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.beatProgress.deadlineTurns', kind: 'object', required: true, section: 'progress' },
   { path: 'story.beatProgress.departureIdleTurns', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.beatProgress.departureIdleNotice', kind: 'string', required: true, section: 'progress' },

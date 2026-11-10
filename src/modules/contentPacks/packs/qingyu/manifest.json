@@ -30,6 +30,7 @@
     "stage3-overlays.json",
     "time-overlays.json"
   ],
+  "timeline": "timeline.json",
   "questLines": [
     "lines-baihu.json",
     "lines-ningyu.json",

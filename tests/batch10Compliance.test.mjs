@@ -6,13 +6,14 @@ import {HAS_CHARACTER_CARDS_V3,skipUnless} from './sourceTree.mjs';
 const {estimateNpcAge,enforceScenarioNpcAdulthood,applyScenarioRelationshipsToSave}=await loadTs('../src/modules/scenarioMods/relationships.ts');
 const {createJudgementProposal,persistPendingJudgement,resolvePendingJudgement}=await loadTs('../src/utils/judgementEngine.ts');
 const {CHARACTER_QUESTS}=await loadTs('../src/modules/scenarioMods/characterQuests.ts');
-const {formatIntimacyProfile,INTIMACY_PROFILES}=await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+const {INTIMACY_PROFILES}=await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+const {projectIntimacyLines}=await loadTs('../src/modules/scenarioMods/promptLayers.ts');
 const read=async p=>JSON.parse(await readFile(new URL('../'+p,import.meta.url),'utf8'));
-test('C01 card storyAge/birthYear take precedence and no role produces age below18',()=>{
+test('C01 card birthYear/storyAge take precedence (birthYear first) and no role produces age below18',()=>{
  for(const role of ['幼帝','幼子','碧鲮村少女','花苗少女','学徒','侍女','凡人'])for(const id of ['a','b','c','d']){
   assert.ok(estimateNpcAge({id,name:id,role,realm:'凡人'},200)>=18);
  }
- assert.equal(estimateNpcAge({id:'a',name:'测试',profile:{storyAge:{value:'24'},birthYear:190}},220),24);
+ assert.equal(estimateNpcAge({id:'a',name:'测试',profile:{storyAge:{value:'24'},birthYear:190}},220),30);
  assert.equal(estimateNpcAge({id:'a',name:'测试',profile:{birthYear:190}},220),30);
  assert.equal(estimateNpcAge({id:'a',name:'测试',profile:{birthYear:202}},200),18);
  assert.equal(estimateNpcAge({id:'a',name:'测试',profile:{storyAge:{value:12}}},200),18);
@@ -53,7 +54,7 @@ test('C02 Zhuo forced cultivation absent from tasks; other audit beats retained'
 test('C02 YueShuang tiers retain hostility without replaying involuntary encounters',()=>{
  const p=INTIMACY_PROFILES.find(p=>p.names.includes('月霜'));
  assert.doesNotMatch(JSON.stringify([p.preferences,p.tiers]),/半强迫|反复交合|取血.*结合|每次结束/);
- const output=formatIntimacyProfile('月霜',{sceneText:'双修',favor:100});
+ const output=[...projectIntimacyLines(p,{inputHit:true,present:true,favor:100}),...p.hardLimits].join('\n');
  assert.match(output,/仅记录既成事实|仅.*事实/);assert.match(output,/不重复/);assert.match(output,/敌意|双标/);
 });
 test('C01a source cards and generated registry preserve adulthood and approved exceptions',async()=>{

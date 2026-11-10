@@ -146,7 +146,9 @@ test('② 草原不显示、不能点；地点数据保留', () => {
 });
 
 // ───────────── ③ 序幕四年 ─────────────
-test('③ 跳年挂在 s02_04 之后；跳年当回合正文后接过渡叙述，只接一次；旧档已在 s01_06 跳过不再跳也不接', async () => {
+// C01（#188 放行改写）：跳年改由时间线插入事件 qingyu.insert.grassland_four_years 拨（王哲陨落之后、进五原城路线之前）；
+// s02_04 合同原样保留（hash 不改），其 timeAdvance 只作兜底：结算到它时补拨尚未拨过的插入事件，旧挂点回执照算已拨。
+test('③ 草原四年挂在进城路线前；s02_04 合同不变只作兜底；过场排在本回合正文之前，只接一次；旧档已在 s01_06 跳过不再跳也不接', async () => {
   const event = CONTENT_PACKS.overlays.find(o => o.stageId === 'lcq.stage_02').events.find(e => e.id === 'lcq.event.s02_04');
   const action = event.playerCompletionContract.actions[0];
   assert.deepEqual({ ...action.timeAdvance }, { kind: 'calendarYears', years: N.GAME_NUMBERS.story.actionTime.prologueYears, supersedes: ['lcq.event.s01_06::advance_declared_objective'], interludeTextKey: 'qingyu.prologue.fourYears' });
@@ -156,16 +158,31 @@ test('③ 跳年挂在 s02_04 之后；跳年当回合正文后接过渡叙述�
   assert.deepEqual({ ...event, playerCompletionContract: { ...event.playerCompletionContract, actions: [rest] } }, builtin, '除 timeAdvance 外与内置 s02_04 逐字相同');
   const s01 = (await stageJson('lcq.stage_01')).scenario.events.find(e => e.id === 'lcq.event.s01_06');
   assert.equal(s01.playerCompletionContract.actions.some(a => a.timeAdvance), false);
-  const text = CONTENT_PACKS.texts['qingyu.prologue.fourYears'];
-  assert.match(text, /^肩上的奴印结了痂/); assert.match(text, /数到第四个冬天，就不再数了。/); assert.match(text, /推进石屋底下的地牢。$/);
-  assert.doesNotMatch(text, /【|】|lcq:/);
+  const [insert] = CONTENT_PACKS.timeline.inserts;
+  assert.equal(insert.id, 'qingyu.insert.grassland_four_years');
+  assert.equal(insert.years, 4);
+  assert.equal(insert.trigger.routeId, 'lcq.route.wuyuan.arrive_market');
+  assert.equal(insert.interludeTextKey, 'qingyu.prologue.grasslandFourYears');
+  const raw = CONTENT_PACKS.texts['qingyu.prologue.grasslandFourYears'];
+  assert.match(raw, /^焦土还在身后冒烟/); assert.match(raw, /已经流浪了\{story\.actionTime\.prologueYears\}年/); assert.match(raw, /朝五原城走去。$/);
+  assert.doesNotMatch(raw, /【|】|lcq:/);
+  const text = raw.replace('{story.actionTime.prologueYears}', '四');
   const s = { 元数据: { 时间: { 年: 220, 月: 3, 日: 1, 小时: 9, 分钟: 0 } }, 系统: { 扩展: {}, 历史: { 叙事: [{ type: 'gm', content: '【220年】你被烙上奴印。' }] } }, 社交: { 记忆: { 短期记忆: ['【220年】你被烙上奴印。'] } }, 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_02', events: [event], completedEventIds: [] } } } };
   F.applyStepSceneLedger(s, rt(s), event.id, action.id);
-  assert.equal(s.元数据.时间.年, 224);
+  assert.equal(s.元数据.时间.年, 224, '没走进城路线就到 s02_04：兜底补拨一次');
+  assert.ok(s.系统.扩展.actionTime.receipts['author:timeline:qingyu.insert.grassland_four_years:y4']);
   assert.equal(F.flushTimeSkipInterlude(s), text);
-  assert.equal(s.系统.历史.叙事[0].content, `【220年】你被烙上奴印。\n\n${text}`);
-  assert.equal(s.社交.记忆.短期记忆[0], `【220年】你被烙上奴印。\n\n${text}`);
+  assert.equal(s.系统.历史.叙事[0].content, `${text}\n\n【220年】你被烙上奴印。`);
+  assert.equal(s.社交.记忆.短期记忆[0], `${text}\n\n【220年】你被烙上奴印。`);
   assert.equal(F.flushTimeSkipInterlude(s), '');
+  F.applyStepSceneLedger(s, rt(s), event.id, action.id);
+  assert.equal(s.元数据.时间.年, 224, '已拨过不再拨');
+  const { daysPerMonth, monthsPerYear } = N.GAME_NUMBERS.story.actionTime.calendar;
+  const minutes = 4 * daysPerMonth * monthsPerYear * 1440;
+  const old = { 元数据: { 时间: { 年: 224, 月: 3, 日: 1, 小时: 9, 分钟: 0 } }, 系统: { 扩展: { actionTime: { receipts: { 'author:lcq.event.s01_06::advance_declared_objective': { minutes } } } } }, 世界: { 状态: { 剧本模组: { modId: 'lcq.stage_02', events: [event], completedEventIds: [] } } } };
+  F.applyStepSceneLedger(old, rt(old), event.id, action.id);
+  assert.equal(old.元数据.时间.年, 224);
+  assert.equal(F.flushTimeSkipInterlude(old), '');
   assert.match(read('src/components/dashboard/MainGamePanel.vue'), /const interlude = flushTimeSkipInterlude\(s\);/);
 });
 

@@ -21,6 +21,9 @@ import {entityNamePattern} from './namedEntities';
  * - 还原逻辑与构建期 scripts/apply-character-cards-v3-to-mod.mjs 的 buildNotes/applyCardToCharacter 一一对应。
  */
 import registryJson from './builtins/character-registry.json';
+import { CONTENT_PACKS, type PackTimeline } from '../contentPacks';
+import { timelineConfig, timelineGameYearAt } from './timelineAxis';
+import { logEventOnce } from '../diagnostics/log';
 import { syncCharacterNaming, namingChapter, namingFor, isSouthernStage, ledgerChapterGates } from './ledger/naming';
 import { ENEMY_KIND_TYPE, kindIdOf } from './actorInstances';
 import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
@@ -211,7 +214,6 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
       add('历程', `${mem.label || ''}${mem.text}`, 300);
     }
   }
-  if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
   // 走向类字段（关系/入伙/情节/结局）在角色总表里是全书终点快照，只在两种情况下取值：
   // ① 本关 phase 覆盖了该字段；② 角色在关系链上声明了转折（allowed-after-turning-point），
   //    且本关有投影却留空——既有约定：转折前逐关写“尚未…”，转折后留空沿用终态。
@@ -300,6 +302,45 @@ export function getRegistryCanonicalId(characterId: string): string | undefined 
 export function getRegistryAgeFacts(character: { id?: string; name?: string }) {
   const entry = byId.get(character.id || '') || byName.get(character.name || '');
   return { birthYear: entry?.staticProfile?.birthYear, storyAge: entry?.staticProfile?.storyAge };
+}
+
+// C01：内容包编译期索引的首次登场轴序按总表主 id 合并（关卡里的旧 id 走 idAliases）。
+const DEBUT_AXIS = new Map<string, number>();
+for (const [id, seq] of Object.entries(CONTENT_PACKS.timeline.characterDebuts)) {
+  const key = byId.get(id)?.id || id;
+  if (!DEBUT_AXIS.has(key) || seq < DEBUT_AXIS.get(key)!) DEBUT_AXIS.set(key, seq);
+}
+
+/** 首次登场的全局轴序；没有登场记录返回 undefined。 */
+export function getRegistryDebutAxisSeq(characterId: string): number | undefined {
+  return DEBUT_AXIS.get(byId.get(characterId)?.id || characterId);
+}
+
+/**
+ * 有效出生年＝min(总表出生年, 首登游戏年−成年线)，运行时现算，不写回总表（用户 2026-11-10 定）。
+ * 首登游戏年＝原著当下年＋首登轴序之前插入事件的年数，所以改年数／删插入事件时跟着变。
+ * 总表没有出生年返回 undefined；没有登场记录时不抬下限。
+ */
+export function registryEffectiveBirthYear(characterId: string, timeline: PackTimeline = timelineConfig()): number | undefined {
+  const birthYear = byId.get(characterId)?.staticProfile?.birthYear;
+  if (typeof birthYear !== 'number' || !Number.isFinite(birthYear)) return undefined;
+  const debut = getRegistryDebutAxisSeq(characterId);
+  if (debut === undefined) return birthYear;
+  return Math.min(birthYear, timelineGameYearAt(debut, timeline) - minAdultAge());
+}
+
+export const minAdultAge = (): number => promptLayers.private.minAdultAge;
+
+/**
+ * 私密门用的现算年龄：总表人物＝当前年−有效出生年，不读存档出生日期或年龄字段；
+ * 总表缺出生年按满成年线处理（不设缺值关门，记 LCQ-NAR-010）；不在总表的临时人物默认成年。
+ */
+export function gateAgeNow(characterId: string | undefined, currentYear: number, timeline: PackTimeline = timelineConfig()): number {
+  if (!Number.isFinite(currentYear) || !characterId || !isRegistryPerson(characterId)) return minAdultAge();
+  const effective = registryEffectiveBirthYear(characterId, timeline);
+  if (effective !== undefined) return currentYear - effective;
+  logEventOnce(`LCQ-NAR-010:${getRegistryCanonicalId(characterId)}`, { code: 'LCQ-NAR-010', detail: { characterId: getRegistryCanonicalId(characterId) } });
+  return minAdultAge();
 }
 
 // 总表优先：有本关相位 description／identity 的人物，阶段档文字以总表为准；待裁定者（账本 masterPrecedence）保持原行为。

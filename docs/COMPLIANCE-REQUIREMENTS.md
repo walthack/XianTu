@@ -78,6 +78,35 @@
     - 开门前只留 hardLimits：生产路径已按此拆开。`storyContext.ts:562`、`:686–687` 将 `hardLimits` 随基础层常驻（封印身份时亦附上，`:563`）；`promptLayers.ts:183–193` `projectIntimacyLines` 仅在 `privateGateOpen` 通过后注入身体／偏好／分层揭示，不含 hardLimits。`intimacyProfiles.ts:62–63` 亦写 hardLimits「任何时候都注入」。旧函数 `formatIntimacyProfile`（`:406–420`，现主要测试在用）仍把 hardLimits 放在场景门通过之后，与生产路径不同。
     - 倾向中禁止写或回忆其未成年期亲密内容：**代码未见实装**。`mod-kit/prompt-layers.json:34–42` `privacyAllowedFields` 含「性格倾向」等倾向类字段；`promptLayers.ts:98–107` `pickPrivacyFields` 只按字段名筛选，无未成年期亲密内容过滤。`intimacyProfiles.ts` 正文未见「未成年」约束。
     - 凝羽、潘金莲、申婉盈游戏内登场年龄写「≥18」、不细定：**代码未见实装**。总表仍写了具体出生年：凝羽 `character-registry.json:25657` `birthYear` 196；潘金莲 `:26508` 198；申婉盈 `:30764` 202。
+- **2026-11-10 用户定（年龄现算与时间线插入事件，C01 实装批）**
+  - 口径（用户 2026-11-10 18:40／18:50／18:52／19:18／19:19／19:24／19:46）：角色只存原著依据的出生年；年龄＝当前游戏年−有效出生年，运行时现算；有效出生年＝min(原著出生年, 首登游戏年−18)，下限不写回总表。四年跳是作者插入的时间线事件（挂在王哲陨落之后、进五原城路线之前），插入点之后的原著事件顺延；改年数、删掉或再插第二个事件，年龄都自动跟着变。私密门只有一道：现算年龄不满 18 不开私密层。不设「缺出生年关门」，不设「临时 NPC 永关」，不禁普通童年回忆（只禁未成年期亲密内容）。
+  - 2026-11-10 20:10／20:12：出生年以《出生年补全》最终版为准（151 人，另有补卡里 3 人、已有出生年者照旧）；雪雪是魔犬，不进人物年龄名单；段强取 200；秦翰卡删去「白发萧索」；出场时已死的人也存出生年；标【下限】的可以不写数字，只要 canon:build 不把它算作缺值（本批照表写了数字）。
+  - 下表只收用户定过的规则；「检查方法」与「代码位置」按本批代码核对。状态：已实现＝本批之前已有；本批＝本次实装；未查到＝没查到实现。
+
+| # | 规则（用户日期） | 检查方法 | 代码位置 | 状态 |
+|---|---|---|---|---|
+| A1 | 所有角色一律满 18，不具名配角也算（C01；裁定 #6／#175／#188；11-03 18:35） | `tests/npcAgeEstimate.test.mjs`、`tests/batch10Compliance.test.mjs`（C01 两条） | `relationships.ts:49–68` `estimateNpcAge`（各分支 `max(18,…)`）、`:98` `enforceScenarioNpcAdulthood`；`AIBidirectionalSystem.ts:845` 提示；`modularTurn.ts:230` 正文年龄闸 | 已实现 |
+| A2 | 游戏数据用成年措辞或不写年龄（C01） | `tests/batch10Compliance.test.mjs`（C01a） | stage 数据 notes；`characterResolver.ts` 小紫 role／appearance 覆盖 | 已实现（部分） |
+| A3 | 原著年龄只作内部依据，只留在 basis 与审核表，不进卡、提示词、固定文本、正文（C01；11-10 18:50、19:19） | `node scripts/audit-c01-ages.mjs`（canon:build 第 2 步之后）列「档案岁数·待清」，只报不挡；`tests/c01AgeTimeline.test.mjs`「原著未成年岁数不进卡与提示词」 | `scripts/audit-c01-ages.mjs`、`scripts/canon-build.mjs`；出生年依据只在 `mod-kit/character-birth-years.json` 的 `source`／总表条目顶层 `birthYearBasis`，不进 `staticProfile` 文本 | 本批（审计只报；19 处成年岁数措辞未清，不在本批） |
+| A4 | 缺年龄不猜；缺出生年由剧情策划补（标推断），补不出按登场 18 倒推；代码碰到缺值按 18 处理并在 canon:build 报缺，不关门（C01；11-10 19:24） | `audit-c01-ages.mjs`「缺出生年」（现为 0）；`tests/c01AgeTimeline.test.mjs` T9 | `characterResolver.ts:338` `gateAgeNow`（缺值按 18，记 `LCQ-NAR-010`）；出生年表 `mod-kit/character-birth-years.json` 经 `scripts/build-character-registry.mjs` 写入总表 | 本批 |
+| A7 | 时间线：元年沿用纪元；作者可插入原创事件并标年数；插入点之后的原著事件顺延；四年跳在王哲陨落后、进五原城路线前；后台「已过年数」由插入事件推出（11-03 18:34；11-10 18:50、18:52、19:46） | `tests/c01AgeTimeline.test.mjs` T1、T4、T5、T12、T13 与「构建期」；`node scripts/content-packs.mjs --check`（canon:build）校验挂点不跨原著事件、年数非负、过场占位只能是年数路径 | `packs/qingyu/timeline.json`；`scripts/content-pack-timeline.mjs`；`timelineAxis.ts`、`timelineInserts.ts:61` `applyTimelineInserts`；触发点 `wuyuanOpenWorldSlice.ts:372`（旁门进城）、`:494`（进城路线）、`fixedEndingNarratives.ts:145`（s02_04 兜底）；`consistencyBackground.ts:164` | 本批 |
+| A8 | 游戏年龄＝当前游戏年−出生年现算；跳后 +4、跳前不变；派生值不写回卡片和总表（11-03 18:34；11-10 18:40、18:50、19:18） | T1–T3、T6、T11；`audit-c01-ages.mjs`「派生字段」非空即失败 | `relationships.ts:49` `estimateNpcAge`（先读有效出生年）、`:77` `reconcileRegistryBirthdates`；`strictInitializer.ts:259–261`（出生年只在新开档对齐，切关不再挪） | 本批 |
+| A9 | 首次登场满 18 的下限按当前时间线现算，不写死、不写进总表（11-10 19:18） | T1（月霜）、T3、T4 | `characterResolver.ts:324` `registryEffectiveBirthYear`；首登索引 `catalog.timeline.characterDebuts`（`content-pack-timeline.mjs` `characterDebutIndex`） | 本批 |
+| A10 | 插入事件改动或删除后年龄自动跟随；有人现算不满 18：私密门不开、记日志，canon:build 和测试报警告（11-10 18:52、19:18） | T2–T4、T8；`audit-c01-ages.mjs`「现算不满 18」（口径乙）与「下限抬升」（口径甲，信息） | `promptLayers.ts:93` `privateAgeBlocked`；`storyContext.ts:701–703`（门因年龄不开时记 `LCQ-NAR-009`） | 本批 |
+| A11 | 私密层门以现算年龄满 18 为条件，不读存档年龄字段；这是唯一的年龄门（11-03 18:21；11-10 18:40、19:24） | T7；`tests/intimacyProfiles.test.mjs`「C01 年龄门只认现算年龄」；`tests/promptLayers.test.mjs` privateGateOpen | `promptLayers.ts:97` `privateGateOpen`；`characterResolver.ts:338` `gateAgeNow`（不读存档出生日期） | 本批 |
+| A12 | 开门前只留 hardLimits（11-03 18:21） | `tests/intimacyProfiles.test.mjs`「hardLimits 不受好感分层影响」；T8 | `storyContext.ts:563`、`:688`；`promptLayers.ts:195` `projectIntimacyLines`（旧 `formatIntimacyProfile` 本批删除） | 已实现 |
+| A13 | 状态 JSON 私密字段与 storyContext 走同一道门（11-10 19:19） | T7（两条链路都以 `gateAgeNow` 传 `ageNow`） | `narrativePromptState.ts:56–66` `gatePrivacy` 与 `storyContext.ts:690–697` 共用 `privateGateOpen` | 本批 |
+| A14 | 非剧本存档旁路也要过门（11-10 19:19） | T10 | `narrativePromptState.ts:33–36`（无在场口径时 私密信息 同样过门） | 本批 |
+| A15 | 临时 NPC 默认成年，按普通规则（在场＋输入命中＋关系已确立）（11-10 19:24） | T10 | `characterResolver.ts:338` `gateAgeNow`（不在总表取 18，不读存档） | 本批 |
+| A16 | 倾向中只禁未成年期的亲密／性内容，普通童年回忆、成长经历可写（11-03 18:21；11-10 19:24 收窄） | `tests/c01AgeTimeline.test.mjs`「原著未成年岁数…」（约束句文本）；门开时约束句排在私密段之前 | `mod-kit/prompt-layers.json` `private.minorPeriodConstraint`；`storyContext.ts:699`；`characterInitializationPrompts.ts:339` | 本批 |
+| A17 | 叙事、设定、提示词、文本不引用原著未成年岁数（11-03 18:34／18:35；11-10 19:24） | `modularTurn.ts:230` 正文年龄闸（已有）；`tests/c01AgeTimeline.test.mjs` 对小紫 hardLimits、小紫 memories、毛延寿外貌、秦翰外貌 grep 为 0 | `intimacyProfiles.ts:158`；`mod-kit/canon-authority-overlays/`（lcq 07–12、lyl、lyg 各关追加覆盖）；`mod-kit/character-registry-supplements.json` overrides（秦翰、毛延寿、哈米蚩） | 本批 |
+| A18 | 凝羽、潘金莲、申婉盈写 ≥18，不细定（11-03 20:16） | T1（申婉盈见面 ≥18）；`tests/intimacyProfiles.test.mjs`（凝羽现算 24） | 总表原值（凝羽 196、潘金莲 198）；申婉盈出生年表标「下限」202；通用下限兜底 | 本批 |
+| A19 | `estimateNpcAge` 遇「少女」不得估成未满 18（C01 ⚠） | `tests/npcAgeEstimate.test.mjs`「C01：少女称谓不覆盖成年估龄规则」 | `relationships.ts:49–68`（`max(18,…)`） | 已实现 |
+| A20 | 本批之外的 C01 ⚠ 项：阿夕 weaknesses「年龄小」、安乐公主 appearance、小玲儿「童颜」、05b 阿夕「小孩子气」、南荒扩展文档年龄锚 16 | — | 见上文「⚠ 未落实或冲突」 | 未查到实现（不在本批） |
+
+  - 另有两条用户 C01 要求没查到实现，不在本批：A5「年龄不作剧情推理锚点」（裁定 #88）、A6 测试口径「幼态词、未满 18 的数字年龄报缺口」。
+  - 合计 20 条：已实现 4（A1、A2、A12、A19），本批 13（A3、A4、A7–A11、A13–A18），未查到 3（A5、A6、A20）。
+  - 日志码：`LCQ-NAR-009`（现算不满 18，私密门不开）、`LCQ-NAR-010`（总表人物缺出生年，按 18 处理）、`LCQ-SAV-063`（静默补拨时间线插入事件）、`LCQ-SAV-064`（修复切关挪过的主角出生年），见 `docs/ERROR-CODES.md`。
 - **状态**：部分落实。
 
 ## C02 不做强迫双修/采补；不作为玩家手段；~~夺元搁置~~（夺元搁置已取消，见 #231）

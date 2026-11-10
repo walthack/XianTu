@@ -4,7 +4,8 @@
  * 纯函数，只读 mod-kit/prompt-layers.json 与 affinityLadder 阈值，由 storyContext 接线：
  *   - fieldLayer：staticProfile 字段归哪一层（base／gated／secret），最长路径优先，
  *     所以 `visualIdentity.trueForm` 归 secret、其余 `visualIdentity.*` 归 base。
- *   - privateGateOpen：私密层门＝（玩家输入命中 OR 拍子 scene.intimate）AND 在场 AND 关系已确立，三项同时满足才开（P3）。
+ *   - privateGateOpen：私密层门＝（玩家输入命中 OR 拍子 scene.intimate）AND 在场 AND 关系已确立，三项同时满足才开（P3）；
+ *     另有唯一的年龄门：现算年龄不满 private.minAdultAge 不开（C01，docs/COMPLIANCE-REQUIREMENTS.md）。
  *   - beatIntimateFor：当前激活拍是否对该角色标了 scene.intimate（拍子入口；characters 省略取 relatedCharacterIds）。
  *   - intimateInputHit：玩家本轮输入是否命中配置词表（原 intimacyProfiles.ts 写死的正则，原样搬入配置）。
  *   - pickPrivacyFields：私密信息门开时只留配置清单里的倾向类字段（P5）。
@@ -25,7 +26,7 @@ export interface PromptLayersConfig {
     secret: { fields: string[]; gate: string };
     private: { source: string; gate: string };
   };
-  private: { requirePresent: boolean; maxLinesPerCharacter: number; favorTiers: string };
+  private: { requirePresent: boolean; maxLinesPerCharacter: number; favorTiers: string; minAdultAge: number; minorNowConstraint: string; minorPeriodConstraint: string };
   noteFields: Record<string, string>;
   derivedNotePrefixes: string[];
   privacyAllowedFields: string[];
@@ -84,6 +85,13 @@ export interface PrivateGateInput {
   favor: number;
   /** 关系确立阈值；省略取 affinityLadder 的 intimacyShallow */
   thresholds?: { intimacyShallow: number };
+  /** 现算年龄（当前游戏年−有效出生年，见 characterResolver.gateAgeNow）；省略＝调用方不在剧本人物口径内，不判年龄 */
+  ageNow?: number;
+}
+
+/** 年龄门：现算年龄不满成年线。只有这一道，不因缺出生年或临时人物另设门。 */
+export function privateAgeBlocked(ageNow: number | undefined): boolean {
+  return typeof ageNow === 'number' && Number.isFinite(ageNow) && ageNow < PROMPT_LAYERS.private.minAdultAge;
 }
 
 export function privateGateOpen(input: PrivateGateInput): boolean {
@@ -91,7 +99,7 @@ export function privateGateOpen(input: PrivateGateInput): boolean {
   const present = !PROMPT_LAYERS.private.requirePresent || !!input.present;
   const threshold = (input.thresholds || AFFINITY_THRESHOLDS).intimacyShallow;
   const established = Number.isFinite(input.favor) && input.favor >= threshold;
-  return entry && present && established;
+  return entry && present && established && !privateAgeBlocked(input.ageNow);
 }
 
 /** 私密信息只留清单字段；非对象返回 null。 */
@@ -146,6 +154,10 @@ export function validatePromptLayersConfig(cfg: unknown): string[] {
   if (typeof c.private?.requirePresent !== 'boolean') errors.push('private.requirePresent 须为布尔');
   if (!isPositiveInt(c.private?.maxLinesPerCharacter)) errors.push('private.maxLinesPerCharacter 须为正整数');
   if (c.private?.favorTiers !== 'affinityLadder') errors.push('private.favorTiers 只支持 affinityLadder');
+  if (c.private?.minAdultAge !== 18) errors.push('private.minAdultAge 须为 18');
+  for (const key of ['minorNowConstraint', 'minorPeriodConstraint'] as const) {
+    if (typeof c.private?.[key] !== 'string' || !c.private[key].includes('{name}')) errors.push(`private.${key} 须为含 {name} 的字符串`);
+  }
   if (!c.noteFields || typeof c.noteFields !== 'object' || Array.isArray(c.noteFields)
     || Object.entries(c.noteFields).some(([tag, field]) => !tag || typeof field !== 'string'
       || ![...seen.keys()].some(path => field === path || field.startsWith(`${path}.`)))) {
@@ -190,4 +202,10 @@ export function projectIntimacyLines(profile: IntimacyProfile, gate: PrivateGate
     ...profile.preferences,
     ...(revealed.length ? [`当前关系可见：${revealed.join(' ')}`] : []),
   ].slice(0, PROMPT_LAYERS.private.maxLinesPerCharacter);
+}
+
+/** 合规约束句（配置 private.minorNowConstraint／minorPeriodConstraint），{name} 换成角色名。 */
+export function privateAgeConstraint(kind: 'now' | 'period', name: string): string {
+  const template = kind === 'now' ? PROMPT_LAYERS.private.minorNowConstraint : PROMPT_LAYERS.private.minorPeriodConstraint;
+  return template.split('{name}').join(name);
 }

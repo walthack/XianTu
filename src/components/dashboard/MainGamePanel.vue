@@ -712,7 +712,7 @@ const persistJudgementSave = async (save: any) => {
 };
 // 随机遇敌：故事回合成功收尾后推进一次（只写 剧本模组.encounter；场面宿主回合不走这里）。
 // 固定文本、05b 模块路径没有模型遇敌事实包，先补本地演出，再推进既有遇敌阶段。
-// 作者跳年（如序幕四年）的过渡叙述也在这里接到本回合正文之后，只接一次；稀有遇见（白尾豹等）同样在这里结算。
+// 作者跳年（时间线插入事件，如草原四年）的过渡叙述也在这里接进本回合正文（排在正文之前），只接一次；稀有遇见（白尾豹等）同样在这里结算。
 // 拍子判定判中的开放世界应对（REPORT-8091 P1-1）：主叙事成功后再结算（同事件动作在叙事处理里结算的次序），
 // 跳年过渡随后由 tickEncounterAfterTurn 接到本回合正文之后。
 const settleBeatOpenWorldTurn = async (selection: WuyuanOpenWorldSelection) => {

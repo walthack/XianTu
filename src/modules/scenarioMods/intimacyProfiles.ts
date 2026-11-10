@@ -6,16 +6,15 @@ import {entityAliases} from './namedEntities';
  * 内容源：character-canon/intimacy-profiles-draft.md（人工审定工作稿；本模块只是其运行时投影）
  * 相关裁定：#111 凤凰宝典处子边界 / #112 云如瑶逆转限房事层面 / #6 #43 成人内容边界
  *
- * 两道门（都通过才注入，任一不过返回空串）：
- *   1. 名单门：只有 INTIMACY_PROFILES 里的角色才有档案；留白角色（苏妲己收编弧线、剑玉姬）不入本模块。
- *   2. 场景门：仅亲密场景注入；判定宁漏不误（见 isIntimateScene 上方注释）。
- * 通过后再按好感度分层揭示 tiers——档案不是一次性倾倒，随关系深入逐层显现。
+ * 运行时投影由 promptLayers.projectIntimacyLines 负责（入口、在场、好感、年龄四项都过才发私密内容）；
+ * 本文件只放名单与内容。通过后再按好感度分层揭示 tiers——档案不是一次性倾倒，随关系深入逐层显现。
  * 素材给到之后，**写不写、写到什么程度由 LLM 按场面判断**，本模块不代它决定。
  *
- * 【刻意不做的两道门】（2026-07-21 用户裁定，避免后人"补全"）：
- *   - 年龄门：合规保证在上游——名单只收录经 R1-3 合规终审确认的成年角色
- *     （裁定 #6 涉性女角≥18、#98 云如瑶 16→18），正典数据层另有年龄门禁；
- *     曾实现的运行时现算依赖 stage 投影的 birthYear，缺字段会静默不注入，是自找的失败源。
+ * 年龄门（C01，用户 2026-11-10 定，取代 2026-07-21「刻意不做年龄门」）：现算年龄（当前游戏年−有效出生年）
+ * 不满 18 不开私密层，这是唯一一道年龄门；缺出生年按满 18 处理，不另设关门。规则、检查方法与代码位置见
+ * docs/COMPLIANCE-REQUIREMENTS.md「A. 年龄与私密层」。
+ *
+ * 【刻意不做的门】（2026-07-21 用户裁定，避免后人"补全"）：
  *   - 成人门（nsfwMode）：本作为成人向自用/内测项目（裁定 #43 成人描写不做自动处理），
  *     该开关默认即 true，拿它管"要不要写"属多余一层。
  *     ⚠️ 若将来转公开发行，本模块是 R1-3 已登记的「角色档案层 NSFW 门控」的作用面之一。
@@ -156,7 +155,7 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
     ],
     hardLimits: [
       '【正典身体边界·玉盏铃花·裁定#84】**与主角始终未发生确实的插入关系，元红保留**；亲密限于口手等非插入形态，不得写破。',
-      '【根本原因·不得写成"她不愿意"】她十五岁弑母时亲手毁掉以自身精魂灌养的玉盏铃花，自领**孤独终身诅咒**：**与她交合的男子必丧魂魄、沦为她的傀儡，且不以她的意志为转移**——她想放过主角也做不到。所以这不是矜持、不是欲擒故纵，是**她在拿命护着他**。',
+      '【根本原因·不得写成"她不愿意"】她弑母时亲手毁掉以自身精魂灌养的玉盏铃花，自领**孤独终身诅咒**：**与她交合的男子必丧魂魄、沦为她的傀儡，且不以她的意志为转移**——她想放过主角也做不到。所以这不是矜持、不是欲擒故纵，是**她在拿命护着他**。',
       '【解法·暗线，游戏内不得由角色直接说破】五灵石集齐方能解咒（血如意·火✓／黄泉玉·土✓／青冥琥珀·木✓／玄水玉·水✗／龙槎星辰·金✗，正文进度 3/5）；**只集四颗则改寄主**——交合后小紫魂魄寄于主角身上（作者预埋的悲剧岔路）。未集齐前任何"破例一次"都等于让主角丧魂。',
       '【动机链·不可省略】她因此"觉得亏欠主角"，遂以两种方式补偿：对其性癖极度包容，以及主动观察、引荐并调教其他后宫成员（尤以卓云君为最）。**她那套调教收服女性的招牌行为，根在这份亏欠上**——写她调教他人时不得丢掉这个由来，更不得写成单纯的支配欲。',
       '对程宗扬绝不真正加害；恶作剧捉弄不越此线。',
@@ -383,41 +382,10 @@ export const INTIMACY_PROFILES: IntimacyProfile[] = [
   },
 ];
 
-export interface IntimacyContext {
-  /** 当前场景文本（玩家本轮输入），用于亲密场景判定 */
-  sceneText: string;
-  /** 该角色当前好感度 */
-  favor: number;
-}
-
 export function isIntimateScene(text: string): boolean {
   return intimateInputHit(text);
 }
 
 export function findIntimacyProfile(name: string): IntimacyProfile | undefined {
   return INTIMACY_PROFILES.find(item => item.names.includes(name));
-}
-
-/**
- * 生成注入片段；两道门任一不过返回空串。
- * 标签刻意低显著度（R2-9 教训：醒目标题会被模型照抄进正文），
- * 且已同时登记进 textSanitizer 的**检测**与**清洗**两份清单。
- */
-export function formatIntimacyProfile(name: string, context: IntimacyContext): string {
-  const profile = findIntimacyProfile(name);
-  if (!profile) return '';
-  if (!isIntimateScene(context.sceneText)) return '';
-
-  const favor = Number.isFinite(context.favor) ? context.favor : 0;
-  const revealed = (profile.tiers || [])
-    .filter(tier => favor >= tier.minFavor)
-    .flatMap(tier => tier.reveals);
-
-  const lines: string[] = [];
-  if (profile.physical) lines.push(`身体：${profile.physical}`);
-  lines.push(...profile.preferences);
-  if (revealed.length) lines.push(`当前关系可见：${revealed.join(' ')}`);
-  lines.push(...profile.hardLimits.map(limit => `不可越界：${limit}`));
-
-  return `内部亲密演出要求（不得写入正文）：${name}——\n${lines.map(line => `    - ${line}`).join('\n')}`;
 }

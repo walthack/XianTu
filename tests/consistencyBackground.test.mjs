@@ -92,7 +92,11 @@ test('白名单：只读概要、在场账（记忆限条）、基础层、时�
   assert.equal(input.ledger[0].角色ID, JIA);
   assert.deepEqual(input.ledger[0].记忆, ['m3', 'm4', 'm5', 'm6', 'm7'].slice(-BACKEND.ledgerMemoryPerNpc));
   assert.deepEqual(input.canonBase, [{ id: JIA, 名字: '甲', 身份: '客栈掌柜', 性格: ['爽快'] }]);
-  assert.deepEqual(input.timeline, { 开局已过年数: BACKEND.timeline.yearsElapsedAtOpening, 当前年: 1004, 年龄: { [JIA]: 24 } });
+  // C01：开局已过年数由时间线插入事件的回执推出（不再读 dual-model 配置常量）；本档没有跳年回执即 0。
+  assert.deepEqual(input.timeline, { 开局已过年数: 0, 当前年: 1004, 年龄: { [JIA]: 24 } });
+  const jumped = makeSave();
+  jumped.系统.扩展.actionTime = { receipts: { 'author:lcq.event.s02_04::advance_declared_objective': { minutes: 4 * 360 * 1440 } } };
+  assert.equal(cb.buildConsistencyInput(jumped, cb.latestConsistencyTurn(jumped), {}).timeline.开局已过年数, 4, '旧挂点回执照算已过年数');
   assert.deepEqual(input.stateDelta, { 好感: [{ id: JIA, 变化: 4 }], 位置: '某城·客栈' }, '不在场者的好感变化不进');
   const text = JSON.stringify(input);
   for (const leaked of ['SECRET_PRIVACY', '私密信息', 'GATED_PRINCIPLE', 'CANON_MEMORY', 'SHORT_TERM_RAW', 'IMPLICIT_RAW', '乙', YI]) assert.ok(!text.includes(leaked), leaked);

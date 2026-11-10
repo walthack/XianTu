@@ -14,6 +14,7 @@ import { isGameModuleEnabled, resolveGameModuleRoute, runGameModelModule } from 
 import { GAME_MODEL_MODULES, type ModelModuleInput } from './moduleModelRuntime';
 import { DUAL_MODEL_CONFIG, needsPaidConfirm } from './dualModelConfig';
 import type { SaveData } from '@/types/game';
+import { timelineAppliedYears, timelineConfig } from '@/modules/scenarioMods/timelineInserts';
 
 /**
  * 双模型后端（consistency 模块，设计稿 2026-11-03-双模型分工 ①③④⑥「合规写法」；用户 22:26 定稿）。
@@ -160,7 +161,8 @@ function timelineOf(save: SaveData, present: PresentCharacter[]): ConsistencyInp
     const birth = item.profile.出生日期;
     if (isRecord(now) && Number.isFinite(now.年) && isRecord(birth) && Number.isFinite(birth.年)) ages[item.id] = calculateAgeFromBirthdate(birth as any, now as any);
   }
-  return { 开局已过年数: BACKEND.timeline.yearsElapsedAtOpening, ...(isRecord(now) && Number.isFinite(now.年) ? { 当前年: now.年 } : {}), 年龄: ages };
+  const elapsed = timelineConfig().inserts.reduce((sum, insert) => sum + timelineAppliedYears(save, insert), 0);
+  return { 开局已过年数: elapsed, ...(isRecord(now) && Number.isFinite(now.年) ? { 当前年: now.年 } : {}), 年龄: ages };
 }
 
 function stateDeltaOf(options: StartConsistencyOptions, present: PresentCharacter[]): ConsistencyInput['stateDelta'] {

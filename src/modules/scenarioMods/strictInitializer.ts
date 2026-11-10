@@ -30,6 +30,7 @@ import { departedPresentNames } from './presence';
 import { syncPlayerLedgers } from './identityLedger';
 import { LINE_FLAG_PREFIX } from './lineOutcomes';
 import { DEADLINE_FLAG_PREFIX } from './progressDeadlines';
+import { applyTimelineInserts } from './timelineInserts';
 
 export interface ScenarioModRuntimeState extends ScenarioProgressState {
   entitySaveFormat: number;
@@ -241,6 +242,7 @@ export function applyStrictScenarioInitializationToSave(
   saveData: SaveData,
   initialization: StrictScenarioInitialization,
   grantStarterInventory = true,
+  alignBirth = true,
 ): SaveData {
   const next = structuredClone(saveData);
   next.世界 = {
@@ -253,7 +255,10 @@ export function applyStrictScenarioInitializationToSave(
   };
   next.角色.位置 = initialization.initialLocation;
   initializeLevel(next);
-  alignBirthWithStartYear(next, initialization.runtimeState.opening?.creationPreset?.age);
+  // 出生年只在新开档对齐（按原著当下年）；切关沿用存档出生年（年龄＝当前年−出生年现算），否则跳年后每次切关都把出生年往后挪。
+  if (alignBirth) alignBirthWithStartYear(next, initialization.runtimeState.opening?.creationPreset?.age);
+  // 直接从插入点之后的关卡开局或切关时，已经过了的时间线插入事件静默补拨（不播过场）；在对齐出生年之后，年龄跟着长。
+  applyTimelineInserts(next, { silent: true });
   if(initialization.runtimeState.modId==='lcq.stage_01'){
     const item=catalogItem('lcq.item.np012');
     if(item){next.角色.背包 ||= {金钱:{},物品:{}} as any;next.角色.背包.物品 ||= {};
@@ -437,7 +442,7 @@ function transitionScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[
     ? structuredClone(rt.baihuGambleRefusal)
     : undefined;
   const initialization = buildStrictScenarioInitialization(mod);
-  const next = applyStrictScenarioInitializationToSave(saveData, initialization, false);
+  const next = applyStrictScenarioInitializationToSave(saveData, initialization, false, false);
   // 回填累积关系：旧值(好感/关系/记忆等)优先，新关正典只补新增字段与新记忆
   const relations = (next as any).社交.关系 as Record<string, any>;
   for (const [name, old] of Object.entries<any>(relationSnapshot)) {

@@ -2,18 +2,18 @@
   "type": "saves",
   "saves": [
     {
-      "存档名": "当前构建新档-五原为奴s02_04前-220年",
+      "存档名": "当前构建新档-五原为奴s02_04前-224年",
       "存档数据": {
         "元数据": {
           "版本号": 3,
           "存档ID": "qingyu-opening-playtest-v1",
-          "存档名": "当前构建新档-五原为奴s02_04前-220年",
+          "存档名": "当前构建新档-五原为奴s02_04前-224年",
           "游戏版本": "0.0.0",
           "创建时间": "2026-11-01T00:00:00.000Z",
           "更新时间": "2026-11-01T00:00:00.000Z",
           "游戏时长秒": 0,
           "时间": {
-            "年": 220,
+            "年": 224,
             "月": 1,
             "日": 1,
             "小时": 10,
@@ -173,80 +173,6 @@
                 "描述": "程宗扬从现代世界带来的拉链，被文泽视为珍贵物品。",
                 "已装备": false
               },
-              "lcq.technique.nine_sun_manual": {
-                "物品ID": "lcq.technique.nine_sun_manual",
-                "名称": "九阳神功口诀",
-                "类型": "功法",
-                "品质": {
-                  "quality": "凡",
-                  "grade": 1
-                },
-                "数量": 1,
-                "描述": "王哲传程宗扬的口诀，用于修炼九阳神功。",
-                "已装备": false,
-                "功法技能": [
-                  {
-                    "技能名称": "九阳神功",
-                    "技能描述": "太乙真宗核心功法，王哲传程宗扬口诀。",
-                    "熟练度要求": 0
-                  }
-                ],
-                "功法效果": {
-                  "修炼速度加成": 0.08,
-                  "属性加成": {
-                    "悟性": 1,
-                    "灵性": 1
-                  }
-                }
-              },
-              "lcq.item.backpack_plain": {
-                "物品ID": "lcq.item.backpack_plain",
-                "名称": "背包",
-                "类型": "其他",
-                "品质": {
-                  "quality": "凡",
-                  "grade": 1
-                },
-                "数量": 1,
-                "描述": "程宗扬从现代世界带来的背包。",
-                "已装备": false
-              },
-              "lcq.item.lingerie": {
-                "物品ID": "lcq.item.lingerie",
-                "名称": "情趣内衣",
-                "类型": "其他",
-                "品质": {
-                  "quality": "凡",
-                  "grade": 1
-                },
-                "数量": 1,
-                "描述": "程宗扬从现代世界带来的情趣内衣。",
-                "已装备": false
-              },
-              "lcq.item.vibrator": {
-                "物品ID": "lcq.item.vibrator",
-                "名称": "按摩棒",
-                "类型": "其他",
-                "品质": {
-                  "quality": "凡",
-                  "grade": 1
-                },
-                "数量": 1,
-                "描述": "程宗扬从现代世界带来的按摩棒。",
-                "已装备": false
-              },
-              "lcq.item.drug": {
-                "物品ID": "lcq.item.drug",
-                "名称": "摇头丸",
-                "类型": "其他",
-                "品质": {
-                  "quality": "凡",
-                  "grade": 1
-                },
-                "数量": 1,
-                "描述": "程宗扬从现代世界带来的摇头丸。",
-                "已装备": false
-              },
               "lcq.item.jin_nang": {
                 "物品ID": "lcq.item.jin_nang",
                 "名称": "锦囊",
@@ -317,7 +243,7 @@
               "名字": "段强",
               "性别": "男",
               "出生日期": {
-                "年": 182,
+                "年": 200,
                 "月": 1,
                 "日": 1
               },
@@ -412,7 +338,7 @@
               "名字": "月霜",
               "性别": "女",
               "出生日期": {
-                "年": 182,
+                "年": 202,
                 "月": 1,
                 "日": 1
               },
@@ -503,7 +429,6 @@
               "人格底线": [],
               "记忆": [
                 "在左武军担任骑手",
-                "【体质约束】月霜身具寒毒，需阳性能量调和（破坏后果：不调和则寒毒持续危害身体）",
                 "程宗扬与月霜发生关系并治愈其寒毒"
               ],
               "当前外貌状态": "女扮男装，英气逼人",
@@ -628,7 +553,7 @@
               "名字": "苏妲己",
               "性别": "女",
               "出生日期": {
-                "年": 182,
+                "年": 184,
                 "月": 1,
                 "日": 1
               },
@@ -709,9 +634,7 @@
               },
               "人格底线": [],
               "记忆": [
-                "在五原城经营白湖商馆",
-                "【性癖】被现代性玩具（按摩棒）插入；在男性面前展示下体；被支配；后庭性爱；口交",
-                "【身体】擅在两性中占据主动；喜折磨玩弄男人自尊；被征服后转为臣服"
+                "在五原城经营白湖商馆"
               ],
               "当前外貌状态": "妖艳绝伦",
               "当前内心想法": "依照剧本关系与当前事件行动。",
@@ -728,7 +651,7 @@
               "名字": "凝羽",
               "性别": "女",
               "出生日期": {
-                "年": 182,
+                "年": 196,
                 "月": 1,
                 "日": 1
               },
@@ -809,10 +732,7 @@
                 "修炼功法": null
               },
               "人格底线": [],
-              "记忆": [
-                "【功法约束】凝羽所习的太一经末技可能与双修功法相关，性行为须符合双修功法要求",
-                "【身体】嘴上拒绝肉体却顺从；晶莹敏感圣躯；肩头淡红月牙痕"
-              ],
+              "记忆": [],
               "当前外貌状态": "身姿矫健，神色冷峻",
               "当前内心想法": "依照剧本关系与当前事件行动。",
               "头像": "",
@@ -918,7 +838,7 @@
               "名字": "卓云君",
               "性别": "女",
               "出生日期": {
-                "年": 182,
+                "年": 187,
                 "月": 1,
                 "日": 1
               },
@@ -997,9 +917,7 @@
                 "白天强撑维护太乙真宗名声与仙姑高洁尊严",
                 "不愿外人窥见自己的黑暗/受虐一面"
               ],
-              "记忆": [
-                "【剧情弧】第一本被擒破处初调教→逃走→第三本再被捕获重新调教(顺从度重置后再堕落)"
-              ],
+              "记忆": [],
               "当前外貌状态": "状态正常",
               "当前内心想法": "依照剧本关系与当前事件行动。",
               "头像": "",
@@ -1015,7 +933,7 @@
               "名字": "韩庚",
               "性别": "男",
               "出生日期": {
-                "年": 182,
+                "年": 190,
                 "月": 1,
                 "日": 1
               },
@@ -1303,7 +1221,7 @@
               "名字": "黛姬雪娜",
               "性别": "女",
               "出生日期": {
-                "年": 173,
+                "年": 202,
                 "月": 1,
                 "日": 1
               },
@@ -1404,7 +1322,7 @@
           "记忆": {
             "短期记忆": [
               "雷光是紫色的。\n\n机舱在那一瞬间失去了所有声音——引擎、广播、邻座的呼吸，一齐没了。等你重新听见东西，耳朵里只剩风，草叶擦过脸颊的窸窣，以及远处某种连成一片的低鸣，像是很多人在同时喊叫。\n\n你趴在草里。掌心下面是湿的泥土和草根，不是座椅，不是金属。段强在几步开外，还没爬起来。\n\n天是亮的。风里有血腥味。",
-              "你从中州·帅帐出发。你抵达五原露天市集。路程消耗1轮。露天货棚和摊位挤在这一片，摊位直接铺到街面上。",
+              "你从中立边陲·帅帐出发。你抵达五原露天市集。路程消耗1轮。露天货棚和摊位挤在这一片，摊位直接铺到街面上。",
               "你从五原露天市集出发。你沿“沿人多的街面过去”前往点心铺。路程消耗1轮。点心铺这一侧，甜香和麦粉味压过街面的尘。"
             ],
             "中期记忆": [],
@@ -1436,7 +1354,7 @@
                 "tags": [
                   "师徒"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "lcq.character.han_geng"
               },
@@ -1449,7 +1367,7 @@
                 "tags": [
                   "师徒"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "lcq.character.yue_shuang"
               },
@@ -1459,7 +1377,7 @@
                 "relation": "侍卫长",
                 "score": 25,
                 "type": "双向",
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "liuchao.character.su_daji",
                 "toLabel": "liuchao.character.ning_yu"
               },
@@ -1469,7 +1387,7 @@
                 "relation": "师兄弟",
                 "score": 60,
                 "type": "双向",
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.np001",
                 "toLabel": "lcq.character.wang_zhe"
               },
@@ -1479,7 +1397,7 @@
                 "relation": "仇敌",
                 "score": -55,
                 "type": "双向",
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "liuchao.character.su_daji",
                 "toLabel": "lcq.character.wang_zhe"
               },
@@ -1493,7 +1411,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1507,7 +1425,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.wang_zhe",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1521,7 +1439,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "lcq.character.han_geng"
               },
@@ -1535,7 +1453,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1549,7 +1467,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "lcq.character.np001"
               },
@@ -1563,7 +1481,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.yue_shuang",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1577,7 +1495,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "liuchao.character.lin_cai_quan"
               },
@@ -1591,7 +1509,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "lcq.character.np001"
               },
@@ -1605,7 +1523,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.han_geng",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1619,7 +1537,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "liuchao.character.lin_cai_quan",
                 "toLabel": "lcq.character.np001"
               },
@@ -1633,7 +1551,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "liuchao.character.lin_cai_quan",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1647,7 +1565,7 @@
                   "同门",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.np001",
                 "toLabel": "liuchao.character.zhuo_yunjun"
               },
@@ -1661,7 +1579,7 @@
                   "同袍",
                   "同势力派生"
                 ],
-                "updatedAt": "2026-11-01T01:55:05.517Z",
+                "updatedAt": "2026-11-10T12:47:38.946Z",
                 "fromLabel": "lcq.character.agamenon",
                 "toLabel": "lcq.character.dai_jixue"
               }
@@ -1677,7 +1595,7 @@
               "核心专名不得改写",
               "使用六朝共享正典地图，禁止随机生成势力或地点覆盖已导入内容"
             ],
-            "生成时间": "2026-11-01T01:55:05.517Z",
+            "生成时间": "2026-11-10T12:47:38.946Z",
             "版本": "scenario-mod:lcq.stage_02@1.0.0",
             "大陆信息": [
               {
@@ -2202,6 +2120,27 @@
             ],
             "地点信息": [
               {
+                "id": "lcq.location.sheyi_village",
+                "名称": "蛇彝村",
+                "country": "南荒",
+                "位置": "南荒",
+                "coordinates": {
+                  "x": 4650,
+                  "y": 7350
+                },
+                "坐标": {
+                  "x": 4650,
+                  "y": 7350
+                },
+                "描述": "南荒蛇彝人村寨；商队抵达时无灯火、无人应答，真实情况尚未查明。",
+                "特色": "",
+                "安全等级": "较安全",
+                "开放状态": "开放",
+                "相关势力": [],
+                "类型": "城池",
+                "原始类型": "村寨"
+              },
+              {
                 "id": "lcq.location.shuai_zhang",
                 "名称": "帅帐",
                 "country": "中立边陲",
@@ -2472,7 +2411,7 @@
                   "x": 3159,
                   "y": 2767
                 },
-                "描述": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+                "描述": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）",
                 "特色": "",
                 "安全等级": "较安全",
                 "开放状态": "开放",
@@ -3894,6 +3833,19 @@
                 ],
                 "locations": [
                   {
+                    "id": "lcq.location.sheyi_village",
+                    "name": "蛇彝村",
+                    "description": "南荒蛇彝人村寨；商队抵达时无灯火、无人应答，真实情况尚未查明。",
+                    "type": "村寨",
+                    "continentId": "liuchao.continent.nanhuang",
+                    "coordinates": {
+                      "x": 4650,
+                      "y": 7350
+                    },
+                    "features": [],
+                    "country": "南荒"
+                  },
+                  {
                     "id": "lcq.location.shuai_zhang",
                     "name": "帅帐",
                     "description": "王哲的帅帐，位于山丘之上。",
@@ -4066,7 +4018,7 @@
                     "name": "长安",
                     "continentId": "liuchao.continent.zhongzhou",
                     "type": "城池",
-                    "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
+                    "description": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）",
                     "coordinates": {
                       "x": 3159,
                       "y": 2767
@@ -7162,7 +7114,8 @@
                             "不赌了",
                             "我拒绝赌局",
                             "我不参加赌局"
-                          ]
+                          ],
+                          "describe": "看穿苏妲己弹指催快了刻香，认清这局是被她作弊判输的，不再当作香还没烧完。"
                         }
                       },
                       {
@@ -7175,9 +7128,6 @@
                           "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                           "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
                         },
-                        "requiresPreparation": [
-                          "rigged_wager_loss_seen"
-                        ],
                         "intentMatch": {
                           "matchAny": [
                             "回应眼前契书",
@@ -7192,7 +7142,8 @@
                             "不赌了",
                             "我拒绝赌局",
                             "我不参加赌局"
-                          ]
+                          ],
+                          "describe": "认下这场被作弊判定的输局，亲手在卖身契上签名，从此成为白湖商馆的奴隶。"
                         }
                       }
                     ]
@@ -7711,7 +7662,7 @@
                   "relatedFactionIds": [
                     "liuchao.faction.bai_hu_shang_guan"
                   ],
-                  "locationId": "liuchao.location.wuyuan",
+                  "locationId": "lcq.location.sheyi_village",
                   "objective": "抵达蛇彝村，把商队安顿下来",
                   "playerCompletionContract": {
                     "kind": "objective_action",
@@ -7730,7 +7681,10 @@
                           "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
                         },
                         "kind": "prepare",
-                        "grantsPreparation": "sheyi_silence_confirmed"
+                        "grantsPreparation": "sheyi_silence_confirmed",
+                        "intentMatch": {
+                          "describe": "到了蛇彝村，用任何方式查看或试探村寨，发现全村无灯、无人回应。"
+                        }
                       },
                       {
                         "id": "settle_caravan_in_silent_sheyi",
@@ -7742,9 +7696,9 @@
                           "partial": "该动作不产生 partial；需要分歧时必须另建本地判定合同。",
                           "failure": "该动作不产生 failure；需要失败与重试时必须另建本地判定合同。"
                         },
-                        "requiresPreparation": [
-                          "sheyi_silence_confirmed"
-                        ]
+                        "intentMatch": {
+                          "describe": "带商队进入蛇彝村并把人马货物安顿下来；进寨安置时已看见村里无灯无人声。"
+                        }
                       }
                     ]
                   },
@@ -8302,7 +8256,7 @@
                   "settledAtTurn": 1
                 }
               ],
-              "reconciledRegistryVersion": "cr-2026-10-28-5b85c97567f60db0",
+              "reconciledRegistryVersion": "cr-2026-11-10-f2e6b03670091fd8",
               "sceneLedger": {
                 "receipts": [],
                 "actors": {},
@@ -8782,9 +8736,9 @@
                   {
                     "id": "travel:lcq.open_world.wuyuan_v1:travel:lcq.route.wuyuan.arrive_market:arrive",
                     "atTurn": 1,
-                    "cause": "你从中州·帅帐前往五原",
+                    "cause": "你从中立边陲·帅帐前往五原",
                     "effect": "你在付出1轮路程后抵达五原露天市集",
-                    "text": "因为你从中州·帅帐前往五原，所以你在付出1轮路程后抵达五原露天市集"
+                    "text": "因为你从中立边陲·帅帐前往五原，所以你在付出1轮路程后抵达五原露天市集"
                   },
                   {
                     "id": "travel:lcq.open_world.wuyuan_v1:travel:lcq.route.wuyuan.market_to_pastry_street:1",
@@ -8795,7 +8749,16 @@
                   }
                 ]
               },
-              "openWorldSliceLastWorldTurn": 7
+              "openWorldSliceLastWorldTurn": 7,
+              "authorTimeConsumedAtTurn": 7,
+              "timeSkipInterlude": {
+                "eventId": "qingyu.insert.grassland_four_years",
+                "actionId": "timeline",
+                "textKey": "qingyu.prologue.grasslandFourYears",
+                "years": 4,
+                "placement": "before",
+                "yearsPath": "story.actionTime.prologueYears"
+              }
             }
           }
         },
@@ -8823,7 +8786,7 @@
               },
               {
                 "type": "gm",
-                "content": "你从中州·帅帐出发。你抵达五原露天市集。路程消耗1轮。露天货棚和摊位挤在这一片，摊位直接铺到街面上。",
+                "content": "你从中立边陲·帅帐出发。你抵达五原露天市集。路程消耗1轮。露天货棚和摊位挤在这一片，摊位直接铺到街面上。",
                 "actionOptions": []
               },
               {
@@ -9084,6 +9047,26 @@
                   },
                   "newTime": {
                     "年": 220,
+                    "月": 1,
+                    "日": 1,
+                    "小时": 10,
+                    "分钟": 45
+                  },
+                  "version": 1
+                },
+                "author:timeline:qingyu.insert.grassland_four_years:y4": {
+                  "id": "author:timeline:qingyu.insert.grassland_four_years:y4",
+                  "source": "author",
+                  "minutes": 2073600,
+                  "oldTime": {
+                    "年": 220,
+                    "月": 1,
+                    "日": 1,
+                    "小时": 10,
+                    "分钟": 45
+                  },
+                  "newTime": {
+                    "年": 224,
                     "月": 1,
                     "日": 1,
                     "小时": 10,

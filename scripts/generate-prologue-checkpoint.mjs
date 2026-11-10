@@ -32,7 +32,7 @@ export async function freshPrologueCheckpoint() {
         save.社交.记忆.短期记忆.push(narrative);
       }
       if (!wuyuan.getWuyuanOpenWorldSelections(save).some(a => a.kind === 'problem_action')) throw Error('pastry actions missing');
-      save.元数据.存档名 = '当前构建新档-五原为奴s02_04前-220年';
+      save.元数据.存档名 = '当前构建新档-五原为奴s02_04前-224年';
       return { save, trace };
     }
     if (rt.gameOver) throw Error('unexpected ending');

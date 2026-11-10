@@ -30,6 +30,7 @@ import {
 } from './runtime';
 import { storyRouteLocation } from './eventNarrativeView';
 import { locationFromPosition } from './travel/travelLedger';
+import { applyTimelineInserts } from './timelineInserts';
 import {
   COMPOUND_ZONE_ID,
   FRONT_STREET_ZONE_ID,
@@ -367,6 +368,8 @@ export function ensureWuyuanOpenWorldSlice(saveData: SaveData): OpenWorldSliceRu
   }
   if (!inWuyuanSlice(runtime, saveData)) return undefined;
   const state = hydrateWuyuanSlice(runtime);
+  // 没走「前往五原」路线就到了城里（位置直写等侧门）：进切片即算过了草原四年，同样拨一次时间线。
+  applyTimelineInserts(saveData);
   applyCanonForcedRoutes(runtime);
   projectPlayerPosition(saveData, state);
   return state;
@@ -488,6 +491,7 @@ function settleArriveWuyuanMarket(saveData: SaveData, selection: WuyuanOpenWorld
       text: `因为你从${fromName}前往五原，所以你在付出1轮路程后抵达${to}`,
     });
   }
+  applyTimelineInserts(saveData);
   projectPlayerPosition(saveData, state);
   return { settled: true, idempotent: false, settledFacts: selection.settledFacts };
 }

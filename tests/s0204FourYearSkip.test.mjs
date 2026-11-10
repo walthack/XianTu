@@ -1,6 +1,5 @@
-// REPORT-8091-68fe9d20 P1-2：s02_04 跳年 220→224、落到白湖商馆水牢——核查结论为作者设计（dac8bce0：序幕四年由 s01_06 挪到 s02_04，
-// supersedes 防二次跳年；完成 s02_04 后强制落到水牢）。本测试钉住：只在 s02_04 结算时跳一次、过渡文本排队等回合正文之后接上、
-// 水牢挂在白湖庄园下（与过渡文本“押回城边那座庄园，推进石屋底下的地牢”一致）。时机问题（拍子判定直写成功）由 P1-1 修。
+// REPORT-8091-68fe9d20 P1-2：完成 s02_04 后强制落到白湖商馆水牢（作者设计）。C01（#188 放行改写）：草原四年改由时间线
+// 插入事件在进五原城路线时拨一次（王哲陨落之后），s02_04 只作兜底、正常流程不再跳；水牢挂在白湖庄园下。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -13,19 +12,21 @@ const W = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
 const { freshPrologueCheckpoint } = await import('../scripts/generate-prologue-checkpoint.mjs');
 const year = s => s.元数据.时间.年;
 
-test('四年跳只在 s02_04 结算时发生一次，并排队过渡文本', async () => {
-  let { save } = await quiet(() => freshPrologueCheckpoint());
+test('四年跳在进五原城路线时发生一次并排队过场；s02_04 结算与重复结算都不再跳', async () => {
+  let { save, trace } = await quiet(() => freshPrologueCheckpoint());
   const rt = () => save.世界.状态.剧本模组;
   assert.equal(R.getScenarioFocusEvent(rt())?.id, 'lcq.event.s02_04');
-  const before = year(save);
-  assert.equal(rt().timeSkipInterlude, undefined, 's02_04 之前不跳年');
+  assert.ok(trace.some(t => t.local === 'lcq.route.wuyuan.arrive_market'));
+  assert.equal(year(save), 224);
+  assert.equal(rt().timeSkipInterlude?.eventId, 'qingyu.insert.grassland_four_years', '过场排队，接进本回合正文');
+  delete rt().timeSkipInterlude;
   const action = W.getWuyuanOpenWorldSelections(save).find(a => a.kind === 'problem_action');
   await quiet(() => { W.settleWuyuanOpenWorldSelection(save, action); save = R.advanceScenarioRuntime(save).saveData; });
-  assert.equal(year(save), before + 4);
-  assert.ok(rt().timeSkipInterlude, '过渡文本排队，回合正文后接上');
+  assert.equal(year(save), 224);
+  assert.equal(rt().timeSkipInterlude, undefined, 's02_04 不再排过场');
   assert.equal(R.getScenarioFocusEvent(rt())?.id, 'lcq.event.s02_05');
   await quiet(() => { W.settleWuyuanOpenWorldSelection(save, action); save = R.advanceScenarioRuntime(save).saveData; });
-  assert.equal(year(save), before + 4, '重复结算不再跳年');
+  assert.equal(year(save), 224, '重复结算不再跳年');
 });
 
 test('水牢挂在白湖庄园下，与过渡文本落点一致', () => {

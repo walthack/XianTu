@@ -1,5 +1,5 @@
-import { settleTime } from './actionTime';
-import { calendarConfig } from '@/utils/time';
+import { applyTimelineInserts } from './timelineInserts';
+import { lineGapCountText } from './secondaryLineEntry';
 import {CONTENT_PACKS} from '../contentPacks';
 import {applyStoryLevel} from './levelProgression';
 
@@ -138,16 +138,11 @@ export function applyStepSceneLedger(save: SaveData, runtime: any, eventId: stri
   const base=stepScene(runtime,eventId,actionId);
   const scene=base && sceneOverride ? {...base,...sceneOverride} : base;
   if (!scene) return;
+  // 跳年只由时间线插入事件（内容包 timeline.json）拨：关卡动作上的 timeAdvance 是旧挂点，结算到这里只兜底补一次
+  // 本事件之前、尚未拨过的插入事件（正常流程已在进城路线拨过，这里不再拨）。
   if (scene.timeAdvance && !(runtime.completedEventIds || []).includes(eventId)) {
-    const jump = scene.timeAdvance, c = calendarConfig();
-    if (jump.kind !== 'calendarYears' || !Number.isSafeInteger(jump.years) || jump.years <= 0) throw new Error('LCQ-SAV-039');
-    const receipts = (save as any).系统?.扩展?.actionTime?.receipts || {};
-    // 挂点挪过的跳年：旧档已在旧挂点跳过的，不再跳第二次。
-    if (!(jump.supersedes || []).some(old => receipts[`author:${old}`])) {
-      const advanced = settleTime(save, `author:${eventId}::${actionId}`, jump.years * c.daysPerMonth * c.monthsPerYear * 1440, 'author');
-      (runtime as any).authorTimeConsumedAtTurn = runtime.worldTurn;
-      if (advanced && jump.interludeTextKey) runtime.timeSkipInterlude = { eventId, actionId, textKey: jump.interludeTextKey };
-    }
+    const axisSeq = (runtime.events || []).find((event: any) => event.id === eventId)?.axisSeq;
+    applyTimelineInserts(save, { reachedAxisSeq: Number.isFinite(axisSeq) ? axisSeq : undefined });
   }
   if (!isNanhuangSceneStage(runtime.modId)) return;
   const ledger: SceneLedger = runtime.sceneLedger ||= { receipts: [], actors: {}, injuries: {}, names: {}, worldFacts: [] };
@@ -190,10 +185,21 @@ export function flushTimeSkipInterlude(save: SaveData): string {
   const pending = runtime?.timeSkipInterlude;
   if (!pending) return '';
   delete runtime.timeSkipInterlude;
-  const text = CONTENT_PACKS.texts[pending.textKey];
-  if (typeof text !== 'string' || !text.trim()) return '';
-  appendToLatestNarrative(save, text);
+  const raw = CONTENT_PACKS.texts[pending.textKey];
+  if (typeof raw !== 'string' || !raw.trim()) return '';
+  const text = pending.yearsPath && Number.isInteger(pending.years) ? raw.split(`{${pending.yearsPath}}`).join(lineGapCountText(pending.years)) : raw;
+  if (pending.placement === 'before') prependToLatestNarrative(save, text);
+  else appendToLatestNarrative(save, text);
   return text;
+}
+
+/** 插入事件发生在触发它的原著事件之前：过场排在本回合正文之前。 */
+function prependToLatestNarrative(save: SaveData, text: string): void {
+  const history = (save as any).系统?.历史?.叙事;
+  const last = Array.isArray(history) ? history[history.length - 1] : undefined;
+  if (last && typeof last.content === 'string') last.content = [text, last.content].filter(Boolean).join('\n\n');
+  const memory = (save as any).社交?.记忆?.短期记忆;
+  if (Array.isArray(memory) && typeof memory[memory.length - 1] === 'string') memory[memory.length - 1] = `${text}\n\n${memory[memory.length - 1]}`;
 }
 /** 把本地定稿的文字接在本回合正文之后：叙事历史末条与短期记忆末条各接一段。 */
 export function appendToLatestNarrative(save: SaveData, text: string): void {

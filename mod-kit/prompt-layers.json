@@ -29,7 +29,10 @@
   "private": {
     "requirePresent": true,
     "maxLinesPerCharacter": 6,
-    "favorTiers": "affinityLadder"
+    "favorTiers": "affinityLadder",
+    "minAdultAge": 18,
+    "minorNowConstraint": "{name}现年未满十八岁：不开私密层，不写任何亲密或性内容。",
+    "minorPeriodConstraint": "不写{name}未满十八岁时期的任何亲密或性内容（含回忆、梦境、旁述）；普通童年回忆照常可写。"
   },
   "privacyAllowedFields": [
     "性格倾向",
