@@ -40,11 +40,11 @@ const rt = save => save.世界.状态.剧本模组;
 const auditWith = patch => auditC01Ages({ ...c01AuditInputs(), ...patch });
 const open = gate => ({ inputHit: true, present: true, favor: 100, ...gate });
 
-test('T1 基线（四年、挂在王哲陨落后进城路线前）：王哲 68、月霜 18 拨钟后 22、乐明珠 19、申婉盈≥18；月霜进下限抬升清单；乐明珠门可开', () => {
+test('T1 基线（四年、挂在王哲陨落后进城路线前）：王哲 55（重审后 165）、月霜 18 拨钟后 22、乐明珠 19、申婉盈≥18；月霜进下限抬升清单；乐明珠门可开', () => {
   assert.equal(N.GAME_NUMBERS.story.actionTime.prologueYears, 4);
   assert.equal(TIMELINE.canonPresentYear, 220);
   assert.deepEqual(TIMELINE.inserts.map(x => [x.id, x.years, x.anchor.afterAxisSeq, x.anchor.beforeAxisSeq]), [[INSERT_ID, 4, 30, 31]]);
-  assert.equal(meetAge(ID.wangZhe), 68);
+  assert.equal(meetAge(ID.wangZhe), 55);
   assert.equal(meetYear(ID.yueShuang), 220);
   assert.equal(meetAge(ID.yueShuang), 18, '月霜原著 15 岁见面，由下限抬到 18');
   assert.equal(CR.gateAgeNow(ID.yueShuang, 224), 22, '拨钟后照日历长');
@@ -62,7 +62,7 @@ test('T2 改 3 年：乐明珠见面 18，月霜、王哲不变；不改卡（�
   const t = withYears(3);
   assert.equal(meetAge(ID.leMingzhu, t), 18);
   assert.equal(meetAge(ID.yueShuang, t), 18);
-  assert.equal(meetAge(ID.wangZhe, t), 68);
+  assert.equal(meetAge(ID.wangZhe, t), 55);
   assert.equal(json('src/modules/scenarioMods/builtins/character-registry.json').characters.find(c => c.id === ID.leMingzhu).staticProfile.birthYear, 205);
   assert.deepEqual(auditWith({ timeline: t }).under18, []);
 });
@@ -106,7 +106,7 @@ test('T6 旧档对账：总表人物出生日期按当前时间线重写（改�
 
 test('T7 私密门不读存档年龄：存档出生日期折算 12 岁，但总表现算满 18 → 门开；两条链路（提示词与状态 JSON）同一道门', () => {
   const ageNow = CR.gateAgeNow(ID.ningYu, 220);
-  assert.equal(ageNow, 24);
+  assert.equal(ageNow, 21, '凝羽重审后 199');
   assert.ok(PL.privateGateOpen(open({ ageNow })));
   const storyContext = readFileSync(new URL('../src/modules/scenarioMods/storyContext.ts', import.meta.url), 'utf8');
   const promptState = readFileSync(new URL('../src/utils/narrativePromptState.ts', import.meta.url), 'utf8');
@@ -320,4 +320,30 @@ test('剧情小孩（用户 11-10 21:39 逐人定）：郭靖 218、定陶王 21
   assert.deepEqual(report.storyChildren.map(x => x.match(/（([^）]+)）/)[1]).sort(), [guoJing, liuXin].sort());
   assert.ok(report.storyChildren.every(x => /私密层由年龄门关着/.test(x)));
   assert.equal(report.lifted.some(x => x.includes(guoJing) || x.includes(liuXin)), false);
+});
+
+test('旧出生年重审＋长辈增量：152 条进表，依据含用户定；苏妲己 177／贾文和 162；襄城君仍 195；线索冲突已定；总表人物都有依据', () => {
+  const table = new Map(json('mod-kit/character-birth-years.json').entries.map(e => [e.id, e]));
+  const byName = name => [...table.values()].find(e => e.name === name);
+  assert.deepEqual([byName('程宗扬').birthYear, byName('程宗扬').basis], [200, '用户定']);
+  for (const [name, year] of [['凝羽', 199], ['班超', 194], ['萧遥逸', 193], ['秋少君', 200], ['谢艺', 190], ['武二郎', 190]]) {
+    assert.equal(byName(name).birthYear, year, name);
+    assert.ok(byName(name).notes.includes('线索冲突'), name);
+    assert.match(byName(name).source, /线索冲突已定，保持现取值/);
+  }
+  for (const [name, year] of [['郭解', 187], ['鲁智深', 187], ['徐君房', 182], ['蔡敬仲', 170], ['苏妲己', 177], ['贾文和', 162]]) {
+    assert.equal(byName(name).birthYear, year, name);
+    assert.equal(byName(name).basis, '推断', name);
+  }
+  assert.equal(byName('襄城君').birthYear, 195);
+  assert.ok([...table.values()].every(e => ['原著', '推断', '下限', '用户定'].includes(e.basis)));
+  const registry = json('src/modules/scenarioMods/builtins/character-registry.json').characters;
+  const notPersons = new Set(json('mod-kit/character-birth-years.json').notPersons.map(x => x.id));
+  const persons = registry.filter(e => !['enemy_kind', 'creature'].includes(e.entityType) && !notPersons.has(e.id));
+  assert.deepEqual(persons.filter(e => !e.birthYearBasis).map(e => e.id), []);
+  const report = auditWith({});
+  assert.deepEqual(report.missing, []);
+  assert.deepEqual(report.under18, []);
+  assert.deepEqual(report.lifted.map(x => x.match(/（([^）]+)）/)[1]), [ID.yueShuang], '只有月霜被下限抬升');
+  assert.deepEqual(report.storyChildren.map(x => x.match(/（([^）]+)）/)[1]).sort(), ['liuchao.character.guo_jing', 'liuchao.character.liu_xin'].sort());
 });

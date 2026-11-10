@@ -53,8 +53,8 @@ test('裁定 #111/#112/#114 的正典边界已进入 hardLimits', async () => {
 
 test('C01 年龄门只认现算年龄：存档写 12 岁不影响；现算 17 不开、拨钟到 21 开', async () => {
   const { gateAgeNow } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
-  // 凝羽总表出生年 196、跳前登场：220 年现算 24，与存档出生日期无关（gateAgeNow 不读存档）
-  assert.equal(gateAgeNow('liuchao.character.ning_yu', 220), 24);
+  // 凝羽总表出生年 199（11-10 旧值重审）、跳前登场：220 年现算 21，与存档出生日期无关（gateAgeNow 不读存档）
+  assert.equal(gateAgeNow('liuchao.character.ning_yu', 220), 21);
   assert.ok((await project('凝羽', { ...OPEN, ageNow: gateAgeNow('liuchao.character.ning_yu', 220) })).length > 0);
   // 构造样例：同一人现算 17 不开，只剩 hardLimits；四年后 21 开
   assert.equal(await project('凝羽', { ...OPEN, ageNow: 17 }), '');

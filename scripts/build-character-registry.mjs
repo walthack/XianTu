@@ -221,7 +221,7 @@ let supplementCharacters = [];
     const e = entries.find(x => x.id === row.id);
     if (!e) throw new Error(`出生年表的 id 不在源卡生成的条目里（手工补卡的出生年写在补卡源）：${row.id}`);
     if (seen.has(row.id)) throw new Error(`出生年表 id 重复：${row.id}`);
-    if (!Number.isSafeInteger(row.birthYear) || !['原著', '推断', '下限'].includes(row.basis)) throw new Error(`出生年表条目无效：${row.id}`);
+    if (!Number.isSafeInteger(row.birthYear) || !['原著', '推断', '下限', '用户定'].includes(row.basis)) throw new Error(`出生年表条目无效：${row.id}`);
     if ('storyChild' in row && row.storyChild !== true) throw new Error(`出生年表 storyChild 只能写 true：${row.id}`);
     seen.add(row.id);
     e.staticProfile = { ...e.staticProfile, birthYear: row.birthYear };
