@@ -1014,3 +1014,27 @@ PROJECT-STATUS改为当前真相→P0/P1负责人状态→简要交付→文档�
 - 证据层级：离线自动化。`tests/qinEntryWiring.test.mjs` 14/14（新增7项）；秦入口、六份 lineCompass 与 numbersRegistry 共9文件全部通过。仓库 `npm run type-check` 仅允许的 controller.ts:202 TS2559；`git diff --check` 通过。额外 vue-tsc 检查报出其他页面类型错误（日志 `/tmp/festival-vue-types.log`），不记为通过。沿用现有 node:test，仓库未配置 vitest。
 - 成熟度：实现与定向回归完成；未测浏览器/真人/模型，全量测试未跑。无新增诊断码；runtime/AIBS/核心 prompt/canon 数据未动，无冻结接线阻塞。未 commit/push。
 - 跨组依赖/下轮：剧情策划替换占位文案，浏览器核验点击与存档恢复；保持 Grok 控制面不变。
+
+### PR1-LETTER-20261110 · 系统/剧情共同开工
+
+- 目标：照审定稿落实①–④；剧情只采用按原著三态原文，不改知识/开场/事件标签。
+- 成熟度：实施中；证据待专项、类型检查与全量测试。未测：浏览器、真实模型、8091；冻结文件不动。
+- 依赖/下轮：驱动方完成提交与8091复测；focusObjective加固、寿元C01、zoneId与顶栏重复另案。
+
+#### PR1-LETTER-20261110 · 2026-11-11 系统/剧情共同交付
+
+- 交付：[实现与验证记录](../PROJECT-STATUS.md)、[拆信专项](../tests/nanhuangApprovedChanges.test.mjs)、[编译器专项](../tests/contentPacks.test.mjs)、[通用展示解析](../src/modules/scenarioMods/itemPresentation.ts)。①启程语义候选接原按钮入口；②持信暂扣与跨关前置目标；③原著三态读取时派生；④南荒账本完整描述。文案逐字采用审定三态，未改现有公开事实/开场/事件标签。
+- 成熟度：上一版实现与离线回归完成。驱动方真实环境复跑type-check/Vue类型0错，全量3564项3551过/0败/13跳；沙箱两项listen EPERM的原始失败日志保留。受控Y5-stay夹具、mock意图/叙事提示及跨关数据形状已覆盖；本轮修复结果见下方。
+- 未测：真实浏览器交互/真实模型/8091，未宣称玩家体验PASS。跨组依赖：驱动方复跑修复轮1、按权限完成提交与8091复测；当前未提交/部署、未运行canon:build，runtime/AIBS/frozen-baseline为0行。
+- 下轮建议/未做：focusObjective加固、zoneId残留pastry_shop、顶栏“南荒·南荒”、寿元C01、跨国持有物提示分别另案；保持原控制面。
+
+#### PR1-LETTER-20261110 · 修复轮1开工
+
+- 目标：仅修review1两项边界回归，并用最小只读背包/runtime视图替代展示整档复制。
+- 前置证据：驱动方上一版真实环境3564项3551过/0败/13跳，类型0错；本轮测试待完成。冻结/未测/控制面边界不变。
+
+#### PR1-LETTER-20261110 · 修复轮1交付（驱动方复跑）
+
+- 已修：旧 stay 档已拆信（事件曾经完成或已授 `blank_letter_confirmed`）不再重新暂扣；背包空条目/标量不再导致扫描抛错；背包展示改用只读视图。
+- 驱动方真实环境：`npm run type-check` 0 错，`vue-tsc --noEmit` 0 错，`node scripts/content-packs.mjs --check` 通过，`npm test` 3566 项 / 3553 过 / 0 败 / 13 跳。冻结三文件 0 行。
+- 第二轮只读审（Claude Opus）：两项已修确认；新发现态三离开 05b 后退回态二（准备状态不跨关），待总策划拍板是否本 PR 补。
