@@ -17,7 +17,6 @@ const REL = await loadTs('../src/modules/scenarioMods/relationships.ts');
 const LR = await loadTs('../src/modules/scenarioMods/loadRepairs.ts');
 const PL = await loadTs('../src/modules/scenarioMods/promptLayers.ts');
 const F = await loadTs('../src/modules/scenarioMods/fixedEndingNarratives.ts');
-const R = await loadTs('../src/modules/scenarioMods/runtime.ts');
 const I = await loadTs('../src/modules/scenarioMods/strictInitializer.ts');
 const W = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
 const P = await loadTs('../src/modules/contentPacks/index.ts');
