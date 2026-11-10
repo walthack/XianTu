@@ -1,4 +1,4 @@
-import { get, toPath } from 'lodash';
+import { get, isEqual, toPath } from 'lodash';
 import { splitRecordPath, npcRecordPath, normalizeNpcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 指令对象格式验证器
@@ -306,7 +306,7 @@ const holdsField = (node: unknown, rest: string[]): boolean => {
  * 字段本身禁写；祖先容器禁删除、禁非 set 动作、禁整体替换，深合并容器的载荷沿字段路径
  * 不得出现置空／非对象。给出 saveData 时，删除只在存档该容器下确有字段时才拒。
  */
-function engineAgeWriteViolation(parts: string[], action: unknown, value: unknown, saveData?: unknown, replaceOnly = false): boolean {
+function engineAgeWriteViolation(parts: string[], action: unknown, value: unknown, saveData?: unknown, replaceOnly = false, keepUnchangedFrom?: string[]): boolean {
   return ENGINE_AGE_FIELDS.some(field => {
     if (!parts.slice(0, field.length).every((token, i) => field[i] === '*' || field[i] === token)) return false;
     if (parts.length >= field.length) return true;
@@ -319,7 +319,40 @@ function engineAgeWriteViolation(parts: string[], action: unknown, value: unknow
       if (!Object.prototype.hasOwnProperty.call(payload, token)) return false;
       payload = payload[token];
     }
+    // 仅骨干：整体替换须带回原年龄字段（见 skeletonAgeDropViolation），原样带回不算改写；值不同仍拒。
+    if (keepUnchangedFrom && saveData !== undefined) {
+      const existing = get(saveData, [...keepUnchangedFrom, ...rest]);
+      if (existing !== undefined && isEqual(payload, existing)) return false;
+    }
     return true;
+  });
+}
+
+/**
+ * 仅骨干模式下执行器对对象 set 整体替换（不深合并）。存档已有的年龄字段须随载荷保留，
+ * 否则该条指令拒绝。非年龄字段不在此列。
+ */
+const AGE_FIELDS_KEPT_ON_REPLACE: string[][] = [
+  ['角色', '属性', '寿命', '当前'],
+  ['角色', '身份', '出生日期'],
+  ['系统', '扩展', 'c01LifespanCacheVersion'],
+  ['系统', '扩展', 'c01ProtagonistBirth'],
+  ['社交', '关系', '*', '出生日期'],
+  ['社交', '关系', '*', '首见年'],
+];
+/** 存档 node 下有该字段而 payload 沿同一路径未带（缺失或置空）时，返回丢掉的字段路径。 */
+const droppedAgeFields = (node: unknown, payload: unknown, rest: string[], prefix: string[]): string[] => {
+  if (!rest.length) return node !== undefined && node !== null && (payload === undefined || payload === null) ? [prefix.join('.')] : [];
+  if (!isPlainRecord(node)) return [];
+  const [head, ...tail] = rest;
+  return (head === '*' ? Object.keys(node) : [head]).flatMap(key =>
+    droppedAgeFields(node[key], isPlainRecord(payload) ? payload[key] : undefined, tail, [...prefix, key]));
+};
+function skeletonAgeDropViolation(parts: string[], value: unknown, saveData: unknown): string[] {
+  return AGE_FIELDS_KEPT_ON_REPLACE.flatMap(field => {
+    if (parts.length >= field.length) return [];
+    if (!parts.every((token, i) => field[i] === '*' || field[i] === token)) return [];
+    return droppedAgeFields(get(saveData, parts), value, field.slice(parts.length), parts);
   });
 }
 
@@ -339,7 +372,7 @@ function engineAgeWritePaths(key: string, value: unknown, saveData?: unknown): s
 /**
  * 验证单个指令对象
  */
-export function validateCommand(command: unknown, index: number, saveData?: unknown, replaceOnly = false): ValidationResult {
+export function validateCommand(command: unknown, index: number, saveData?: unknown, replaceOnly = false, protectionMode: 'strict' | 'skeleton' = 'strict'): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -353,9 +386,19 @@ export function validateCommand(command: unknown, index: number, saveData?: unkn
     // Type assertion after validation
     const cmd = command as Record<string, any>;
     if (typeof cmd.key === 'string') cmd.key = normalizedCommandPath(cmd.key);
-    if (typeof cmd.key === 'string' && (cmd.key === '角色.属性.寿命' || engineAgeWritePaths(cmd.key, cmd.value, saveData)
-      .some(parts => engineAgeWriteViolation(parts, cmd.action, cmd.value, saveData, replaceOnly)))) {
+    const skeleton = protectionMode === 'skeleton' && saveData !== undefined && !replaceOnly;
+    const agePaths = typeof cmd.key === 'string' ? engineAgeWritePaths(cmd.key, cmd.value, saveData) : [];
+    // 比对基准取执行器实际写入路径（人物键已解析为人物ID）。
+    const ageTarget = skeleton ? agePaths[agePaths.length - 1] : undefined;
+    if (typeof cmd.key === 'string' && (cmd.key === '角色.属性.寿命' || agePaths
+      .some(parts => engineAgeWriteViolation(parts, cmd.action, cmd.value, saveData, replaceOnly, ageTarget)))) {
       errors.push(`指令${index}: 寿命当前值／首见年及其迁移版本由引擎管理，禁止直接写入，或删除、置空、整体替换其所在容器`);
+    }
+    if (skeleton && cmd.action === 'set' && ageTarget) {
+      const dropped = skeletonAgeDropViolation(ageTarget, cmd.value, saveData);
+      if (dropped.length) {
+        errors.push(`指令${index}: 仅骨干模式下整体覆盖会丢掉年龄字段（${dropped.join('、')}），须在载荷中原样保留，否则拒绝`);
+      }
     }
 
     if (!cmd.action) {

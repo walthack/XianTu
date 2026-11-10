@@ -4,9 +4,21 @@ import type { TavernCommand } from '@/types/AIGameMaster';
 import type { SaveData } from '@/types/game';
 import { debugLog } from '@/modules/diagnostics/debugLog';
 
+/** 读取设置里的指令保护模式；读不到（无 pinia、无 localStorage 等）按 strict。 */
+async function readCommandProtectionMode(): Promise<'strict' | 'skeleton'> {
+  try {
+    const { useUIStore } = await import('@/stores/uiStore');
+    return (useUIStore() as { commandProtectionMode?: unknown }).commandProtectionMode === 'skeleton' ? 'skeleton' : 'strict';
+  } catch { // lcq-allow: 读不到保护设置（无 pinia、无 localStorage 等）按 strict，不得阻断命令校验链，也不记码
+    return 'strict';
+  }
+}
+
 /**
- * 模型命令进入执行器前的唯一校验链。保护模式不得参与此函数，skeleton 也不能
- * 跳过 runtime/canon 护栏、值校验或字段清洗。
+ * 模型命令进入执行器前的唯一校验链。保护模式不得用来放松此函数：skeleton 也不能
+ * 跳过 runtime/canon 护栏、值校验或字段清洗。保护模式在这里只做加严：skeleton 下
+ * 执行器对对象 set 整体替换，整体覆盖年龄父对象而未保留存档已有年龄字段的指令拒绝
+ * （2026-11-11 01:40 总策划定，见 commandValidator `skeletonAgeDropViolation`）。
  */
 export async function validateModelCommandPipeline(commands: unknown[], saveData: SaveData): Promise<{
   validCommands: TavernCommand[];
@@ -14,6 +26,7 @@ export async function validateModelCommandPipeline(commands: unknown[], saveData
   warnings: string[];
 }> {
   const { validateCommand, cleanCommands, normalizeCommandPaths } = await import('./commandValidator');
+  const protectionMode = await readCommandProtectionMode();
   // 路径规范化先于时间／剧情／权限护栏，点与括号写法受同一套检查。
   normalizeCommandPaths(commands);
   const timeRejected = commands.filter(cmd => localTimeCommandViolation(cmd));
@@ -24,7 +37,7 @@ export async function validateModelCommandPipeline(commands: unknown[], saveData
   const { validateAndRepairCommandValue } = await import('./commandValueValidator');
 
   scenarioGuardResult.accepted.forEach((cmd, index) => {
-    const formatResult = validateCommand(cmd, index, saveData);
+    const formatResult = validateCommand(cmd, index, saveData, false, protectionMode);
     warnings.push(...formatResult.warnings);
     if (!formatResult.valid) {
       rejectedCommands.push({ command: cmd, errors: formatResult.errors });
