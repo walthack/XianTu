@@ -90,6 +90,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'e2eSmoke.rareEncounters.chanceMulParam', kind: 'string', required: true, section: 'runtime' },
   { path: 'story.actionTime.prologueYears', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.timeline.canonPresentYear', kind: 'int', required: true, min: 1, section: 'progress' },
+  // 插入事件拨钟的计时器口径（设计稿 2026-11-11 §2；timelineInsertTimers.ts 读）：类别策略与锚点逐项体检在该文件的 registerNumbersValidator。
+  { path: 'story.timeline.insertTimers.categories', kind: 'object', required: true, section: 'progress' },
   { path: 'story.beatProgress.deadlineTurns', kind: 'object', required: true, section: 'progress' },
   { path: 'story.beatProgress.departureIdleTurns', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.beatProgress.departureIdleNotice', kind: 'string', required: true, section: 'progress' },

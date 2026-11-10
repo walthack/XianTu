@@ -2,6 +2,7 @@ import { migrateCalendar } from '@/utils/calendarMigration';
 import { syncMaigu } from '../freeAction/maigu';
 import { pruneSceneInjuries } from '../../sceneModule/host/injuries';
 import { updateStatusEffects } from '@/utils/statusEffectManager';
+import { applyInsertEventTimers } from '../timelineInsertTimers';
 import {entityNamePattern} from '../namedEntities';
 import {entityName} from '../namedEntities';
 
@@ -151,11 +152,14 @@ export type ClockAdvance = { minutes: number } | { days: number | 'several' };
  * 但只动日历、不动 worldTurn——几天路程不得一次触发几百回合的期限与延迟后果。
  * 'several'＝原著没写天数：内部按占位天数推进，给玩家看的日期改为「数日后」，直到下一次按具体天数推进。
  * 冰蛊不读本时钟。cause 只供回执与日志。
+ * options.insertEvent：时间线插入事件拨钟（只由 applyTimelineInserts 经 settleTime 打开）。写入新日期后、到期清理前
+ * 先按 story.timeline.insertTimers 平移 freeze 类计时器（timelineInsertTimers.ts）；不带标记时不运行。
  */
 export function advanceClock(
   saveData: SaveData,
   advance: ClockAdvance,
   cause: string,
+  options: { insertEvent?: boolean } = {},
 ): { oldValue: GameTime; newValue: GameTime; cause: string } | null {
   const meta = (saveData as { 元数据?: { 时间?: GameTime } } | null | undefined)?.元数据;
   if (!meta?.时间) return null;
@@ -174,6 +178,7 @@ export function advanceClock(
     if (several) newValue.相对日 = RELATIVE_DAY_LABEL;
   }
   meta.时间 = newValue;
+  if (options.insertEvent) applyInsertEventTimers(saveData, oldValue, newValue);
   if ((saveData as any).世界?.状态?.剧本模组) { syncMaigu(saveData); pruneSceneInjuries(saveData); }
   updateStatusEffects(saveData);
   return { oldValue, newValue, cause };

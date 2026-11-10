@@ -27,8 +27,8 @@ export function validCultivation(selection: CultivationSelection): boolean {
   const c = actionTimeConfig().cultivation;
   return selection?.kind === 'cultivation' && typeof selection.actionId === 'string' && !!selection.actionId && Number.isSafeInteger(selection.days) && selection.days >= c.minDays && selection.days <= c.maxDays;
 }
-/** 回执随动作克隆一起提交或丢弃；不使用全局上下文。 */
-export function settleTime(save: SaveData, id: string, minutes: number, source: string) {
+/** 回执随动作克隆一起提交或丢弃；不使用全局上下文。options.insertEvent 只由 applyTimelineInserts 打开（见 advanceClock）。 */
+export function settleTime(save: SaveData, id: string, minutes: number, source: string, options: { insertEvent?: boolean } = {}) {
   if (!Number.isFinite(minutes) || minutes < 0 || !id) throw new Error('LCQ-SAV-039');
   const s = save as any;
   const receipts = s.系统?.扩展?.actionTime?.receipts || {};
@@ -36,7 +36,7 @@ export function settleTime(save: SaveData, id: string, minutes: number, source: 
     if (receipts[id].minutes !== minutes || receipts[id].source !== source) { logEvent({ code: 'LCQ-SAV-039', detail: { id, source } }); throw new Error('LCQ-SAV-039'); }
     return null;
   }
-  const advanced = advanceClock(save, { minutes }, source);
+  const advanced = advanceClock(save, { minutes }, source, options);
   if (!advanced) return null;
   s.系统 ||= {}; s.系统.扩展 ||= {}; s.系统.扩展.actionTime ||= { version: 1, receipts: {} };
   s.系统.扩展.actionTime.receipts[id] = { id, source, minutes, oldTime: advanced.oldValue, newTime: advanced.newValue, version: 1 };

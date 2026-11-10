@@ -68,7 +68,7 @@ export function applyTimelineInserts(save: SaveData, options: { silent?: boolean
     const applied = timelineAppliedYears(save, insert);
     if (insert.years <= applied) continue;
     const fromYear = Number(meta.时间.年);
-    settleTime(save, `${receiptPrefix(insert)}y${insert.years}`, (insert.years - applied) * yearMinutes(), 'author');
+    settleTime(save, `${receiptPrefix(insert)}y${insert.years}`, (insert.years - applied) * yearMinutes(), 'author', { insertEvent: true });
     const result = { insertId: insert.id, years: insert.years - applied, fromYear, toYear: Number(meta.时间.年) };
     out.push(result);
     if (options.silent) {

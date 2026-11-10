@@ -1,0 +1,126 @@
+[
+  {
+    "kind": "source",
+    "generator": "freshPrologueCheckpoint",
+    "options": {
+      "beforeWuyuan": true
+    },
+    "note": "220 年焦土后进五原前，与 c01-before-wuyuan-220 同一停点；固定宿主时钟和随机种子，不固定游戏时钟。"
+  },
+  {
+    "event": "lcq.event.s01_01",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_02",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_03",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_04",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_06",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_05",
+    "action": "travel:lcq.location.command_tent",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s01_05",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "stage": "lcq.stage_02"
+  },
+  {
+    "opportunity": {
+      "source": "opportunity_engine",
+      "opportunityId": "opportunity.lcq.s02_01.take_full_mandate",
+      "stepId": "take_bag",
+      "actionId": "accept_silk_bag",
+      "label": "【推进·1/2】收下锦囊",
+      "actionText": "我当面从王哲案上收下锦囊，不让它再留在帐内无人认领。",
+      "timeCost": 1,
+      "contractHash": "b89c08c7"
+    },
+    "progressed": true
+  },
+  {
+    "opportunity": {
+      "source": "opportunity_engine",
+      "opportunityId": "opportunity.lcq.s02_01.take_full_mandate",
+      "stepId": "own_charge",
+      "actionId": "acknowledge_purge_charge",
+      "label": "【推进·2/2】认下托付",
+      "actionText": "我承认清理门户与传授九阳是我接下来要办的差事，不改口说只是代为保管。",
+      "timeCost": 1,
+      "contractHash": "b89c08c7"
+    },
+    "progressed": true
+  },
+  {
+    "event": "lcq.event.s02_03",
+    "action": "advance_declared_objective",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s02_02",
+    "action": "hold_left_army_line",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s02_02",
+    "action": "witness_wang_zhe_nine_suns",
+    "outcome": "success"
+  },
+  {
+    "event": "lcq.event.s02_02",
+    "action": "record_battlefield_aftermath",
+    "outcome": "success"
+  },
+  {
+    "kind": "timer",
+    "timer": "maiguAddiction",
+    "via": "freeAction/selfConsumable.settleSelfConsumable → maigu.afterItemFed",
+    "input": "我取出麻古服下",
+    "actorId": "liuchao.character.cheng_zongyang",
+    "result": {
+      "itemId": "lcq.item.np006",
+      "name": "麻古",
+      "count": 1,
+      "facts": [
+        "你服下了麻古，背包扣除1份",
+        "药效生效：感官亢奋"
+      ]
+    }
+  },
+  {
+    "kind": "timer",
+    "timer": "injuries",
+    "via": "freeAction/actorStatus.applyActorStatus",
+    "actorId": "liuchao.character.cheng_zongyang",
+    "statusId": "wound.burn",
+    "catalogMinutes": 10080,
+    "expiresAt": 114058725
+  },
+  {
+    "kind": "timer",
+    "timer": "freeActionCooldowns",
+    "via": "freeAction/state.writableFreeActionState(save).cooldowns（同 settle.ts 写法）",
+    "key": "transfer_qi:lcq.character.yue_shuang",
+    "at": 114048645
+  }
+]
