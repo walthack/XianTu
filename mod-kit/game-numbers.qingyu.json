@@ -2396,7 +2396,122 @@
     },
     "timeline": {
       "note": "C01 时间线（用户 2026-11-10 定）：元年沿用纪元，原著故事当下＝canonPresentYear（裁定 #29／#54 锚定的 220）。原著事件的游戏年份＝原著年份＋插入事件顺延量；插入事件写在内容包 timeline.json，年龄由运行时现算，不写回卡片和总表。",
-      "canonPresentYear": 220
+      "canonPresentYear": 220,
+      "insertTimers": {
+        "note": "插入事件拨钟时各计时器的到期口径（设计稿 2026-11-11「四年跳计时器口径」§2；用户 2026-11-11 00:35 定，总策划 00:43 审定；代码 src/modules/scenarioMods/timelineInsertTimers.ts）。只在时间线插入事件（applyTimelineInserts，含读档静默补拨）拨钟时生效，行旅/修炼/回合等普通推进不走这里。policy：natural＝不平移，按已过游戏时间自然到期；freeze＝锚点加上跳过的时长，剩余时长不变。anchors：存档路径（. 分段，* 匹配任一键或数组项）＋单位 minutes（游戏绝对分钟）／days（游戏日序）／gameTime（角色.效果 的 生成时间 对象，永久项不动）；where＝所在对象字段须全等才平移；linkPlayerEffect＝所在伤势行是主角时，同来源同名的 角色.效果 一并平移。作者以后加的限时窗口在这里登记一类或往已有类加锚点即可，不必改代码。不登记的（永久伤残、永久状态、按 worldTurn／编年时刻度计的回合限时、冰蛊等进度期限、稀有遇见增益）本钩子不动。",
+        "categories": {
+          "injuries": {
+            "policy": "natural",
+            "note": "限时伤势与场后按分钟保留的状态（expiresAt 为 null 的永久行不动）。",
+            "anchors": [
+              {
+                "path": "世界.状态.剧本模组.sceneLedger.statusRecords.actors.*.*.expiresAt",
+                "unit": "minutes",
+                "linkPlayerEffect": true
+              },
+              {
+                "path": "世界.状态.剧本模组.sceneLedger.statusRecords.groups.*.*.expiresAt",
+                "unit": "minutes"
+              }
+            ]
+          },
+          "statusEffects": {
+            "policy": "natural",
+            "note": "角色.效果 里的临时状态，含麻古药效「感官亢奋」（总策划 2026-11-11 裁定 2：自然到期，不纳入冻结）。",
+            "anchors": [
+              {
+                "path": "角色.效果.*.生成时间",
+                "unit": "gameTime"
+              }
+            ]
+          },
+          "freeActionCooldowns": {
+            "policy": "natural",
+            "note": "自由行动冷却（传功 cooldownMinutes）。",
+            "anchors": [
+              {
+                "path": "世界.状态.剧本模组.freeAction.cooldowns.*",
+                "unit": "minutes"
+              }
+            ]
+          },
+          "affinityHysteresis": {
+            "policy": "natural",
+            "note": "好感姿态滞回维持期（总策划裁定 1：自然到期；跳完下一回合未坐实的姿态立刻坐实）。",
+            "anchors": [
+              {
+                "path": "世界.状态.剧本模组.stanceStates.*.pending.sinceDay",
+                "unit": "days"
+              }
+            ]
+          },
+          "affinityRepeat": {
+            "policy": "natural",
+            "note": "自由行动好感重复窗口（总策划裁定 3）。",
+            "anchors": [
+              {
+                "path": "世界.状态.剧本模组.freeAction.repeatLedger.*.since",
+                "unit": "minutes"
+              }
+            ]
+          },
+          "drainRecovery": {
+            "policy": "natural",
+            "note": "夺元递减恢复（总策划裁定 3）。",
+            "anchors": [
+              {
+                "path": "世界.状态.剧本模组.freeAction.drainLedger.*.lastAt",
+                "unit": "minutes"
+              }
+            ]
+          },
+          "lootRespawn": {
+            "policy": "natural",
+            "note": "地点搜刮回刷（总策划裁定 3）。",
+            "anchors": [
+              {
+                "path": "世界.状态.剧本模组.locationLoot.windows.*.startDay",
+                "unit": "days"
+              }
+            ]
+          },
+          "maiguAddiction": {
+            "policy": "freeze",
+            "note": "麻古成瘾时钟与戒断（用户 2026-11-11 定不随跳到期）：渴求/戒断计时与戒断挂的「神志不清」一起平移（伤势行 expiresAt 与主角 角色.效果 生成时间两处同移）。「感官亢奋」不在此类。",
+            "anchors": [
+              {
+                "path": "世界.状态.剧本模组.maiguClock.*.lastDoseAt",
+                "unit": "minutes"
+              },
+              {
+                "path": "世界.状态.剧本模组.maiguClock.*.withdrawalAt",
+                "unit": "minutes"
+              },
+              {
+                "path": "世界.状态.剧本模组.sceneLedger.statusRecords.actors.*.*.expiresAt",
+                "unit": "minutes",
+                "where": {
+                  "sourceScene": "free:maigu.withdrawal"
+                },
+                "linkPlayerEffect": true
+              }
+            ]
+          },
+          "storyWindows": {
+            "policy": "freeze",
+            "note": "剧情限时窗口（用户 2026-11-11 定不随跳到期；总策划审定新增：施微沫救援窗口跳前已打开的，跳后不判死）。以后作者加的同类窗口往这里加锚点。",
+            "anchors": [
+              {
+                "path": "系统.扩展.lcq_shiweimo.endedAt",
+                "unit": "minutes",
+                "where": {
+                  "status": "pending"
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     "beatProgress": {
       "note": "剧情推进（设计稿 2026-11-02「剧情推进机制设计」；用户 2026-11-02 拍板 1–4，代码 src/modules/scenarioMods/beatProgress.ts）。deadlineTurns：作者在拍上写明到点（offscreenResolution 场外收束）的拍，停滞到点回合数按事件 id 配，载入／每回合发送前写进拍；只用于这里列出的拍，没有通用的「主线停滞 N 回合代玩家结算」。s01_06 月霜寒毒保留 5 回合（bbe2653a）。departureIdleTurns：本关已收束、启程按钮出现后又空转这么多回合，弹一次 departureIdleNotice（{label}＝启程按钮文字），只提示、不自动出发；0＝不提示。actionIdleTurns／actionIdleNotice：本拍主线动作按钮在场、本拍连续这么多回合没推进（启程按钮在场时不算），弹一次 actionIdleNotice（{label}＝第一个按钮文字），只提示、不代结算；取值同 departureIdleTurns（REPORT-8091-98199e80 P2：唐线「前往宣平坊宅院赴宴」连续 4 回合不点没有提示）；0＝不提示。missNotice：手打对不上本拍任何动作（原句、按钮标签、作者短语）时不推进，弹这句并列出本拍可做的动作（{actions}）。",

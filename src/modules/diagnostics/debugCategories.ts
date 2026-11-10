@@ -61,7 +61,7 @@ export const DEBUG_CATEGORIES = [
   {
     id: 'world', label: '世界与地图',
     paths: [...sm('travel/', 'mapEntries.ts', 'heimohaiFestival.ts', 'locationTypes.ts', 'locationCountry.ts', '*openWorldSlice.ts', '*OpenWorldSlice.ts'), 'utils/gameMapManager.ts', 'utils/coordinateConverter.ts', 'utils/worldEventRecords.ts', 'utils/sect*.ts', 'utils/worldGeneration/',
-      'utils/generators/', 'utils/time.ts', 'utils/calendarMigration.ts', 'utils/timeCommandGuard.ts', ...sm('actionTime.ts', 'timelineAxis.ts', 'timelineInserts.ts'), 'types/gameMap.ts', 'types/location.ts', 'types/worldMap.ts'],
+      'utils/generators/', 'utils/time.ts', 'utils/calendarMigration.ts', 'utils/timeCommandGuard.ts', ...sm('actionTime.ts', 'timelineAxis.ts', 'timelineInserts.ts', 'timelineInsertTimers.ts'), 'types/gameMap.ts', 'types/location.ts', 'types/worldMap.ts'],
   },
   {
     id: 'init', label: '开局与角色创建',
