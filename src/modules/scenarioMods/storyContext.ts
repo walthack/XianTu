@@ -552,7 +552,7 @@ export function formatSealedCharacter(
 function formatFocusedCharacter(
   character: ScenarioModCharacter,
   runtime: StoryRuntime,
-  favByName?: Map<string, { fav: number; label: string }>,
+  favByName?: Map<string, { fav: number; label: string; firstSeenYear?: number }>,
   intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[]; currentYear?: number },
   playerName?: string,
   presentNames?: Set<string>,
@@ -692,7 +692,7 @@ function formatFocusedCharacter(
       beatIntimate: intimacyGate.activeEvents.some(event => beatIntimateFor(event, character.id)),
       present: presentNames?.has(character.name) === true,
       favor: fav,
-      ageNow: gateAgeNow(character.id, Number(intimacyGate.currentYear)),
+      ageNow: gateAgeNow(character.id, Number(intimacyGate.currentYear), undefined, live?.firstSeenYear),
     };
     const privateLines = projectIntimacyLines(intimacyProfile, gate);
     if (privateLines.length) {
@@ -717,7 +717,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[]; currentYear?: number }, playerName?: string, presentNames?: Set<string>): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string; firstSeenYear?: number }>, intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[]; currentYear?: number }, playerName?: string, presentNames?: Set<string>): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -979,15 +979,16 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     名字?: string;
     与玩家关系?: string;
     好感度?: number;
+    首见年?: number;
     当前位置?: { 描述?: string };
   }> | undefined;
   // 玩家名：关系姿态层据此显式排除主角（见 formatFocusedCharacter 的两道门）。
   const playerName = String(readPath(saveData, ['角色', '身份', '名字']) || '').trim() || undefined;
-  const favByName = new Map<string, { fav: number; label: string }>();
+  const favByName = new Map<string, { fav: number; label: string; firstSeenYear?: number }>();
   if (relations && typeof relations === 'object') {
     for (const [key, npc] of Object.entries(relations)) {
       if (!npc || typeof npc !== 'object') continue;
-      const entry = { fav: Number(npc.好感度) || 0, label: String(npc.与玩家关系 || '') };
+      const entry = { fav: Number(npc.好感度) || 0, label: String(npc.与玩家关系 || ''), firstSeenYear: npc.首见年 };
       favByName.set(key, entry);
       if (npc.名字) favByName.set(String(npc.名字), entry);
     }

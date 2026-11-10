@@ -326,15 +326,16 @@ export function isRegistryStoryChild(characterId: string | undefined): boolean {
 /**
  * 有效出生年＝min(总表出生年, 首登游戏年−成年线)，运行时现算，不写回总表（用户 2026-11-10 定）。
  * 首登游戏年＝原著当下年＋首登轴序之前插入事件的年数，所以改年数／删插入事件时跟着变。
+ * 本局已见角色再以 firstSeenYear 封底；只读首见年，不读存档生日或年龄。
  * 总表没有出生年返回 undefined；没有登场记录或是剧情小孩时不抬下限。
  */
-export function registryEffectiveBirthYear(characterId: string, timeline: PackTimeline = timelineConfig()): number | undefined {
+export function registryEffectiveBirthYear(characterId: string, timeline: PackTimeline = timelineConfig(), firstSeenYear?: number): number | undefined {
   const birthYear = byId.get(characterId)?.staticProfile?.birthYear;
   if (typeof birthYear !== 'number' || !Number.isFinite(birthYear)) return undefined;
   if (isRegistryStoryChild(characterId)) return birthYear;
   const debut = getRegistryDebutAxisSeq(characterId);
-  if (debut === undefined) return birthYear;
-  return Math.min(birthYear, timelineGameYearAt(debut, timeline) - minAdultAge());
+  const effective = debut === undefined ? birthYear : Math.min(birthYear, timelineGameYearAt(debut, timeline) - minAdultAge());
+  return Number.isInteger(firstSeenYear) ? Math.min(effective, firstSeenYear! - minAdultAge()) : effective;
 }
 
 export const minAdultAge = (): number => promptLayers.private.minAdultAge;
@@ -343,9 +344,9 @@ export const minAdultAge = (): number => promptLayers.private.minAdultAge;
  * 私密门用的现算年龄：总表人物＝当前年−有效出生年，不读存档出生日期或年龄字段；
  * 总表缺出生年按满成年线处理（不设缺值关门，记 LCQ-NAR-010）；不在总表的临时人物默认成年。
  */
-export function gateAgeNow(characterId: string | undefined, currentYear: number, timeline: PackTimeline = timelineConfig()): number {
+export function gateAgeNow(characterId: string | undefined, currentYear: number, timeline: PackTimeline = timelineConfig(), firstSeenYear?: number): number {
   if (!Number.isFinite(currentYear) || !characterId || !isRegistryPerson(characterId)) return minAdultAge();
-  const effective = registryEffectiveBirthYear(characterId, timeline);
+  const effective = registryEffectiveBirthYear(characterId, timeline, firstSeenYear);
   if (effective !== undefined) return currentYear - effective;
   logEventOnce(`LCQ-NAR-010:${getRegistryCanonicalId(characterId)}`, { code: 'LCQ-NAR-010', detail: { characterId: getRegistryCanonicalId(characterId) } });
   return minAdultAge();
@@ -456,6 +457,33 @@ export function getRegistryIdentity(name: string): { canonicalName: string; alia
 export function getRegistryNamesById(characterId: string): string[] {
   const entry = byId.get(characterId);
   return entry ? unique([entry.canonicalName, ...(entry.aliases || [])]) : [];
+}
+
+let migrationPersonLabels: Map<string, Set<string>> | undefined;
+let migrationPersonPattern: RegExp | undefined;
+/** 迁移证据用完整姓名／别名最长匹配；同名多人返回 undefined，不把长姓名中的子串另算一人。 */
+export function registryPersonIdsInText(text: string): string[] | undefined {
+  if (!migrationPersonLabels) {
+    migrationPersonLabels = new Map();
+    for (const entry of new Set(byId.values())) {
+      if (!isRegistryPerson(entry.id)) continue;
+      for (const label of unique([entry.canonicalName, ...(entry.aliases || [])])) {
+        const ids = migrationPersonLabels.get(label) || new Set<string>();
+        ids.add(entry.id);
+        migrationPersonLabels.set(label, ids);
+      }
+    }
+    const escaped = [...migrationPersonLabels.keys()].sort((a, b) => b.length - a.length)
+      .map(label => label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    migrationPersonPattern = new RegExp(escaped.join('|'), 'g');
+  }
+  const ids = new Set<string>();
+  for (const hit of text.matchAll(migrationPersonPattern!)) {
+    const candidates = migrationPersonLabels.get(hit[0])!;
+    if (candidates.size !== 1) return undefined;
+    ids.add([...candidates][0]);
+  }
+  return [...ids];
 }
 
 /** 供当前人物提示词补回稳定谈吐；不携带阶段剧情，只用于避免角色被泛化为同一类口吻。 */

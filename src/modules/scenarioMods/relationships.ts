@@ -74,19 +74,21 @@ export function estimateNpcAge(character: ScenarioModCharacter, currentYear?: nu
 }
 
 /**
- * 总表人物的存档出生年与有效出生年对账（C01）：存档出生年＝min(有效出生年, 当前年−18)；剧情小孩＝有效出生年（原著出生年）。
+ * 总表人物的存档出生年与有效出生年对账（C01）：存档出生年＝min(有效出生年, 本局首见年−成年线)；剧情小孩＝有效出生年（原著出生年）。
  * 只认键或 角色ID 是总表 id 的条目；名字键的旧条目与临时人物不动。返回改动的条目键。
  */
 export function reconcileRegistryBirthdates(saveData: SaveData, timeline: PackTimeline = timelineConfig()): string[] {
   const now = saveData.元数据?.时间;
   if (!now || !Number.isFinite(now.年)) return [];
   const changed: string[] = [];
-  for (const [key, npc] of Object.entries(saveData.社交?.关系 || {}) as Array<[string, { 角色ID?: string; 出生日期?: { 年: number; 月?: number; 日?: number } }]>) {
+  for (const [key, npc] of Object.entries(saveData.社交?.关系 || {}) as Array<[string, { 角色ID?: string; 首见年?: number; 出生日期?: { 年: number; 月?: number; 日?: number } }]>) {
     if (!npc || typeof npc !== 'object') continue;
     const id = isRegistryPerson(key) ? key : npc.角色ID && isRegistryPerson(npc.角色ID) ? npc.角色ID : undefined;
     const effective = id ? registryEffectiveBirthYear(id, timeline) : undefined;
     if (effective === undefined) continue;
-    const target = isRegistryStoryChild(id) ? effective : Math.min(effective, now.年 - 18);
+    // 只记录年份；出生年仍每次由总表与当前时间线重算，不以存档旧生日为依据。
+    if (!Number.isInteger(npc.首见年) || npc.首见年! > now.年) npc.首见年 = now.年;
+    const target = isRegistryStoryChild(id) ? effective : registryEffectiveBirthYear(id!, timeline, npc.首见年)!;
     if (npc.出生日期?.年 === target) continue;
     npc.出生日期 = { 年: target, 月: 1, 日: 1 };
     changed.push(key);
@@ -102,7 +104,7 @@ export function enforceScenarioNpcAdulthood(saveData: SaveData): void {
   reconcileRegistryBirthdates(saveData);
   const now = saveData.元数据?.时间;
   if (!now || !Number.isFinite(now.年)) return;
-  for (const [key, npc] of Object.entries(saveData.社交?.关系 || {}) as Array<[string, { 角色ID?: string; 出生日期?: { 年: number; 月?: number; 日?: number } }]>) {
+  for (const [key, npc] of Object.entries(saveData.社交?.关系 || {}) as Array<[string, { 角色ID?: string; 首见年?: number; 出生日期?: { 年: number; 月?: number; 日?: number } }]>) {
     if (isRegistryStoryChild(key) || isRegistryStoryChild(npc?.角色ID)) continue;
     const birth = npc.出生日期;
     if (!birth || !Number.isFinite(birth.年)) continue;

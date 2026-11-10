@@ -59,7 +59,7 @@ function gatePrivacy(entry: UnknownRecord, inputHit: boolean, beatIntimate: bool
     beatIntimate,
     present: true,
     favor: Number(entry.好感度) || 0,
-    ageNow: gateAgeNow(characterId, currentYear),
+    ageNow: gateAgeNow(characterId, currentYear, undefined, entry.首见年),
   });
   const privacy = open ? pickPrivacyFields(entry.私密信息) : null;
   if (privacy) entry.私密信息 = privacy;

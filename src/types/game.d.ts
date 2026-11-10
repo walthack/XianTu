@@ -984,6 +984,8 @@ export interface PrivacyProfile {
 
 /** NPC核心档案 - 精简高效的数据结构 */
 export interface NpcProfile {
+  /** 本局第一次对账的游戏年；旧档在读档时由带日期的出现记录回填。 */
+  首见年?: number;
   /** Stable canon identity; old saves are backfilled without changing affinity. */
   角色ID?: string;
   // === 核心身份 ===
@@ -1088,6 +1090,8 @@ export interface GameTime extends AIMetadata {
 // --- 存档数据核心 ---
 
 export interface GameMessage {
+  /** 本地定稿的前／后追加段；全文副本回看也须按此顺序合成。 */
+  localInserts?: { before: string[]; after: string[] };
   image?: string;
   /** The player intent that produced this specific narrative, persisted with it. */
   userIntent?: string;

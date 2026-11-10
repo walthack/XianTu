@@ -13,16 +13,18 @@ export async function validateModelCommandPipeline(commands: unknown[], saveData
   rejectedCommands: Array<{ command: unknown; errors: string[] }>;
   warnings: string[];
 }> {
+  const { validateCommand, cleanCommands, normalizeCommandPaths } = await import('./commandValidator');
+  // 路径规范化先于时间／剧情／权限护栏，点与括号写法受同一套检查。
+  normalizeCommandPaths(commands);
   const timeRejected = commands.filter(cmd => localTimeCommandViolation(cmd));
   const scenarioGuardResult = guardScenarioModCommands(saveData, commands.filter(cmd => !timeRejected.includes(cmd)) as any[]);
   const validCommands: TavernCommand[] = [];
   const rejectedCommands = timeRejected.map(command => ({ command, errors: ['LCQ-SAV-037：模型不得写入日历或时间回执'] })).concat(scenarioGuardResult.rejected.map(item => ({ command: item.command, errors: [item.reason] })));
   const warnings: string[] = [];
-  const { validateCommand, cleanCommands } = await import('./commandValidator');
   const { validateAndRepairCommandValue } = await import('./commandValueValidator');
 
   scenarioGuardResult.accepted.forEach((cmd, index) => {
-    const formatResult = validateCommand(cmd, index);
+    const formatResult = validateCommand(cmd, index, saveData);
     warnings.push(...formatResult.warnings);
     if (!formatResult.valid) {
       rejectedCommands.push({ command: cmd, errors: formatResult.errors });

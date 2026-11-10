@@ -1,3 +1,4 @@
+import { enableLifespanCache } from '@/utils/lifespanCalculator';
 import { canonicalLocationCountry } from './locationCountry';
 import { mapEntryReady, type MapEntry } from './mapEntries';
 import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
@@ -256,7 +257,9 @@ export function applyStrictScenarioInitializationToSave(
   next.角色.位置 = initialization.initialLocation;
   initializeLevel(next);
   // 出生年只在新开档对齐（按原著当下年）；切关沿用存档出生年（年龄＝当前年−出生年现算），否则跳年后每次切关都把出生年往后挪。
-  if (alignBirth) alignBirthWithStartYear(next, initialization.runtimeState.opening?.creationPreset?.age);
+  if (alignBirth && alignBirthWithStartYear(next, initialization.runtimeState.opening?.creationPreset?.age)) {
+    enableLifespanCache(next);
+  }
   // 直接从插入点之后的关卡开局或切关时，已经过了的时间线插入事件静默补拨（不播过场）；在对齐出生年之后，年龄跟着长。
   applyTimelineInserts(next, { silent: true });
   if(initialization.runtimeState.modId==='lcq.stage_01'){

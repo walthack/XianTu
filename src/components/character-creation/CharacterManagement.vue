@@ -311,7 +311,7 @@
                             getRealmName(normalizeSaveDataV3(slot.存档数据)?.角色?.属性?.境界)
                           }}</span>
                           <span class="age-badge"
-                            >{{ normalizeSaveDataV3(slot.存档数据)?.角色?.属性?.寿命?.当前 ?? 18 }}岁</span
+                            >{{ ageForSaveCard(normalizeSaveDataV3(slot.存档数据)) }}岁</span
                           >
                         </div>
 
@@ -471,6 +471,7 @@
 </template>
 
 <script setup lang="ts">
+import { ageForSaveCard } from '@/utils/lifespanCalculator';
 import { computed, ref, nextTick, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCharacterStore } from '@/stores/characterStore';

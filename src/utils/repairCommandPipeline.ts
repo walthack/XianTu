@@ -1,4 +1,4 @@
-import { cleanCommand, validateRepairCommand } from '@/utils/commandValidator';
+import { cleanCommand, normalizeCommandPaths, validateRepairCommand } from '@/utils/commandValidator';
 import { validateAndRepairCommandValue } from '@/utils/commandValueValidator';
 import { debug } from '@/utils/debug';
 import { guardScenarioModCommands } from '@/modules/scenarioMods/canonGuard';
@@ -14,6 +14,8 @@ export async function executeValidatedRepairCommands(
   commands: RepairCommand[],
 ): Promise<string[]> {
   const errors: string[] = [];
+  // 路径规范化先于剧情／权限护栏，点与括号写法受同一套检查。
+  normalizeCommandPaths(commands);
   const nonRuntimeCommands = commands.filter(command => {
     const key = typeof command?.key === 'string' ? command.key.trim() : '';
     const touchesRuntime =

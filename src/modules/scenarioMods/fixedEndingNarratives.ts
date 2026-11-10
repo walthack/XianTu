@@ -1,3 +1,4 @@
+import { isNoSummary } from '@/services/narrativeSummary';
 import { applyTimelineInserts } from './timelineInserts';
 import { lineGapCountText } from './secondaryLineEntry';
 import {CONTENT_PACKS} from '../contentPacks';
@@ -193,21 +194,32 @@ export function flushTimeSkipInterlude(save: SaveData): string {
   return text;
 }
 
-/** 插入事件发生在触发它的原著事件之前：过场排在本回合正文之前。 */
-function prependToLatestNarrative(save: SaveData, text: string): void {
+/** 本地追加段同时记在概要与独立插入列表，回看全文副本时不丢稿、不重复拼概要。 */
+function insertToLatestNarrative(save: SaveData, text: string, placement: 'before' | 'after'): void {
+  if (!text.trim()) return;
+  const join = (content: string): string => {
+    const base = isNoSummary(content) ? '' : content;
+    return (placement === 'before' ? [text, base] : [base, text]).filter(Boolean).join('\n\n');
+  };
   const history = (save as any).系统?.历史?.叙事;
   const last = Array.isArray(history) ? history[history.length - 1] : undefined;
-  if (last && typeof last.content === 'string') last.content = [text, last.content].filter(Boolean).join('\n\n');
+  if (last && typeof last.content === 'string') {
+    const inserts = last.localInserts ||= { before: [], after: [] };
+    if (placement === 'before') inserts.before.unshift(text);
+    else inserts.after.push(text);
+    last.content = join(last.content);
+  }
   const memory = (save as any).社交?.记忆?.短期记忆;
-  if (Array.isArray(memory) && typeof memory[memory.length - 1] === 'string') memory[memory.length - 1] = `${text}\n\n${memory[memory.length - 1]}`;
+  if (Array.isArray(memory) && typeof memory[memory.length - 1] === 'string') memory[memory.length - 1] = join(memory[memory.length - 1]);
 }
-/** 把本地定稿的文字接在本回合正文之后：叙事历史末条与短期记忆末条各接一段。 */
+
+/** 插入事件发生在触发它的原著事件之前：过场排在本回合正文之前。 */
+export function prependToLatestNarrative(save: SaveData, text: string): void {
+  insertToLatestNarrative(save, text, 'before');
+}
+/** 把本地定稿接在正文之后；随机遇敌／稀有遇敌共用，同样支持有全文副本的回合。 */
 export function appendToLatestNarrative(save: SaveData, text: string): void {
-  const history = (save as any).系统?.历史?.叙事;
-  const last = Array.isArray(history) ? history[history.length - 1] : undefined;
-  if (last && typeof last.content === 'string') last.content = [last.content, text].filter(Boolean).join('\n\n');
-  const memory = (save as any).社交?.记忆?.短期记忆;
-  if (Array.isArray(memory) && typeof memory[memory.length - 1] === 'string') memory[memory.length - 1] = `${memory[memory.length - 1]}\n\n${text}`;
+  insertToLatestNarrative(save, text, 'after');
 }
 
 /** 运行时事实摘要，缺字段的旧档按已有回执推导，不从模型文字反填。 */

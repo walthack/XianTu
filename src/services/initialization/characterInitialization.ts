@@ -17,7 +17,7 @@ import { isTavernEnv } from '@/utils/tavern';
 import { useAPIManagementStore } from '@/stores/apiManagementStore';
 import { getNarrativeTurn } from '@/utils/actionGate';
 import { promptUsesSince, recordNarrativeSource } from '@/modules/diagnostics/narrativeSource';
-import { 纪元基点, 计算起始年 } from '@/utils/lifespanCalculator';
+import { 纪元基点, 计算起始年, enableLifespanCache } from '@/utils/lifespanCalculator';
 import { getNsfwSettingsFromStorage, ensureSystemConfigHasNsfw } from '@/utils/nsfw';
 import { createEmptyThousandDaoSystem } from '@/data/thousandDaoData';
 import { buildCharacterInitializationPrompt, buildCharacterSelectionsSummary } from '@/utils/prompts/tasks/characterInitializationPrompts';
@@ -1348,6 +1348,7 @@ export async function initializeCharacter(
     console.log('[初始化流程] completedSaveData类型:', typeof completedSaveData);
     console.log('[初始化流程] completedSaveData有效:', !!completedSaveData);
     backfillRelationshipIds(completedSaveData as any, (completedSaveData as any).世界?.状态?.剧本模组?.canon?.characters);
+    enableLifespanCache(completedSaveData);
     return completedSaveData;
 
   } catch (error) {

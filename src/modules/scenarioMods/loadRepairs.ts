@@ -16,12 +16,16 @@ import { backfillItemReceipts, noteChronicleGap } from './itemProvenance';
 import { logError, logEvent } from '../diagnostics/log';
 import { applyTimelineInserts, timelineAppliedYears, timelineConfig } from './timelineInserts';
 import { reconcileRegistryBirthdates } from './relationships';
+import { isRegistryPerson, getRegistryCanonicalId, registryPersonIdsInText } from './characterResolver';
+import { updateLifespanFromGameTime, lifespanCacheEnabled, enableLifespanCache } from '@/utils/lifespanCalculator';
 import { debugLog } from '../diagnostics/debugLog';
 import stage01 from './builtins/data/lcq.stage_01.json';
 import { CONTENT_PACKS } from '../contentPacks';
 import { advanceScenarioRuntime } from './runtime';
 import { countryOf } from './travel/mapTravel';
 import locations from '../../../mod-kit/entity-catalog/locations.json';
+import { calendarConfig } from '@/utils/time';
+import { stripNarrativeTimePrefix } from '@/utils/memorySanitizer';
 
 /** 读档一次性迁移的标记：系统.扩展.读档迁移.<迁移名> = 迁移版本号；标了就不再迁，玩家之后在设置里改回的值不会被冲掉。 */
 export const LOAD_MIGRATIONS_KEY = '读档迁移';
@@ -213,7 +217,7 @@ const PROLOGUE_STAGE_IDS = ['lcq.stage_01', 'lcq.stage_02'];
  */
 export function repairProtagonistBirthShift(save: any): { from: number; to: number } | null {
   const ext = save?.系统?.扩展, rt = save?.世界?.状态?.剧本模组, birth = save?.角色?.身份?.出生日期;
-  if (!ext || !rt || !birth || ext[BIRTH_REPAIR_KEY]) return null;
+  if (!ext || !rt || !birth || ext[BIRTH_REPAIR_KEY] || lifespanCacheEnabled(save)) return null;
   const now = Number(save?.元数据?.时间?.年), life = Number(save?.角色?.属性?.寿命?.当前);
   const shifted = timelineConfig().inserts.reduce((sum, insert) => sum + timelineAppliedYears(save, insert), 0);
   ext[BIRTH_REPAIR_KEY] = { version: 1 };
@@ -225,17 +229,87 @@ export function repairProtagonistBirthShift(save: any): { from: number; to: numb
   return result;
 }
 
+/**
+ * 旧档没有首见年时，只从本局带游戏年份的关系记忆／叙事／事件记录取最早出现年。
+ * 无日期的原作背景与现实保存时间都不能证明本局首见；证据不足用补拨前的读档年，
+ * 不从已经被旧逻辑推移的出生年或写死年龄反推。字段一经落账不再迁移。
+ */
+export function backfillRelationshipFirstSeenYears(save: any): void {
+  const now = save?.元数据?.时间?.年;
+  if (!Number.isInteger(now)) return;
+  const rt = save?.世界?.状态?.剧本模组;
+  const dateYear = (date: any): number | undefined => {
+    const calendar = calendarConfig();
+    return Number.isInteger(date?.年) && Number.isInteger(date?.月) && Number.isInteger(date?.日)
+      && date.月 >= 1 && date.月 <= calendar.monthsPerYear && date.日 >= 1 && date.日 <= calendar.daysPerMonth
+      ? date.年 : undefined;
+  };
+  const evidenceOf = (record: any): { year: number; ids: string[] } | undefined => {
+    // 无结构化来源的自由文字可能是背景／转述，不能证明本人已出现。
+    if (!record || typeof record !== 'object') return undefined;
+    if (record.source?.kind && record.source.kind !== 'observed') return undefined;
+    if (record.status && record.status !== 'confirmed') return undefined;
+    const date = record.发生时间 ?? record.游戏时间 ?? record.gameTime ?? record.时间 ?? record.time;
+    let year = dateYear(date);
+    const text = typeof record.content === 'string' ? record.content : '';
+    if (year === undefined) {
+      const datedText = typeof date === 'string' ? date : text;
+      // _formatGameTime 的完整年月日＋时分格式；兼容 memorySanitizer 已接受的仙历／仙道历旧前缀。
+      const prefix = datedText.match(/^【(?:仙道(?:历)?|仙历)(\d+)年(\d+)月(\d+)日 ([01]\d|2[0-3]):([0-5]\d)】/);
+      if (!prefix || stripNarrativeTimePrefix(datedText) === datedText) return undefined;
+      year = dateYear({ 年: Number(prefix[1]), 月: Number(prefix[2]), 日: Number(prefix[3]) });
+    }
+    if (year === undefined || year > now) return undefined;
+    const references = [record.subjectId, record.characterId, record.角色ID,
+      ...(Array.isArray(record.相关人物) ? record.相关人物 : [])];
+    const ids = [...new Set(references.filter((id): id is string => typeof id === 'string' && isRegistryPerson(id))
+      .map(id => getRegistryCanonicalId(id)!))];
+    if (ids.length) return { year, ids };
+    // 只有明确观察来源，且正文唯一指向一个完整姓名／别名时才接受文字身份。
+    if (record.source?.kind !== 'observed') return undefined;
+    const mentioned = registryPersonIdsInText(stripNarrativeTimePrefix(text));
+    return mentioned?.length === 1 ? { year, ids: mentioned } : undefined;
+  };
+  const list = (value: unknown): any[] => Array.isArray(value) ? value : [];
+  const history = [
+    ...list(save?.系统?.历史?.叙事),
+    ...Object.values(save?.社交?.记忆 || {}).flatMap(list),
+    ...list(rt?.chronicle),
+    ...Object.values(rt?.playerKnowledge || {}),
+    ...list(save?.社交?.事件?.事件记录),
+  ];
+  const historyEvidence = history.map(evidenceOf).filter(evidence => evidence !== undefined);
+  for (const [key, npc] of Object.entries(save?.社交?.关系 || {}) as Array<[string, any]>) {
+    if (!npc || typeof npc !== 'object' || (Number.isInteger(npc.首见年) && npc.首见年 <= now)) continue;
+    const id = isRegistryPerson(key) ? key : isRegistryPerson(npc.角色ID) ? npc.角色ID : undefined;
+    if (!id) continue;
+    const canonicalId = getRegistryCanonicalId(id);
+    const records = [...(Array.isArray(npc.记忆) ? npc.记忆 : [])].map(evidenceOf);
+    const years = [...records, ...historyEvidence].filter(evidence => evidence?.ids.includes(canonicalId!))
+      .map(evidence => evidence!.year);
+    npc.首见年 = Math.min(now, ...years);
+  }
+}
+
 export function applyLoadRepairs(save: any): { injuriesMigrated: boolean; storyStatuses: string[]; identitiesBackfilled: number; itemReceiptsBackfilled: number } {
   removeDerivedRelationshipMemories(save);
   migrateTrainingCapNone(save);
   normalizeLocationCountry(save?.角色?.位置);
   repairChanganDescriptionTypo(save);
+  backfillRelationshipFirstSeenYears(save);
   let rt = save?.世界?.状态?.剧本模组;
-  if (!rt || typeof rt !== 'object') return { injuriesMigrated: false, storyStatuses: [], identitiesBackfilled: 0, itemReceiptsBackfilled: 0 };
+  if (!rt || typeof rt !== 'object') {
+    reconcileRegistryBirthdates(save);
+    enableLifespanCache(save);
+    updateLifespanFromGameTime(save);
+    return { injuriesMigrated: false, storyStatuses: [], identitiesBackfilled: 0, itemReceiptsBackfilled: 0 };
+  }
   // C01：读档静默补拨已经过了的时间线插入事件（不重播过场），再对账总表人物出生年，最后修切关挪过的主角出生年（一次性）。
   applyTimelineInserts(save, { silent: true });
   reconcileRegistryBirthdates(save);
   repairProtagonistBirthShift(save);
+  enableLifespanCache(save);
+  updateLifespanFromGameTime(save);
   // 旧档缺作者后补的自由输入短语（s01_01）：只补缺失或已被取代的旧快照，见 backfillMissingIntentMatch。
   repairReport8091Route(rt);
   repairHanLuoduRoute(rt);

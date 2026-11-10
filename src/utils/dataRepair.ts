@@ -21,7 +21,7 @@ import { normalizeBackpackCurrencies } from '@/utils/currencySystem';
 import { 纪元基点 } from '@/utils/lifespanCalculator';
 import { stripNarrativeTimePrefix } from '@/utils/memorySanitizer';
 import { saveDetail, narrativeDetailId, NARRATIVE_DETAIL_MIGRATION_VERSION } from '@/services/narrativeDetailStore';
-import { summaryEntry } from '@/services/narrativeSummary';
+import { summaryEntry, withLocalNarrativeInserts } from '@/services/narrativeSummary';
 import { alignedSummary } from '@/services/promptRedaction';
 import { logError } from '@/modules/diagnostics/log';
 import { debugLog } from '@/modules/diagnostics/debugLog';
@@ -647,7 +647,16 @@ export async function migrateNarrativeDetailOnLoad(save: any, saveKey: string): 
     const item = narrative[index];
     if (!item || typeof item !== 'object' || isPlayerEntry(item)) continue;
     if (Number(item.detailMigrated) >= NARRATIVE_DETAIL_MIGRATION_VERSION) continue;
-    const content = typeof item.content === 'string' ? item.content : '';
+    let content = typeof item.content === 'string' ? item.content : '';
+    // 本地前／后追加段已经独立留档：旧正文进副本时只取基础正文，避免回看重复追加。
+    for (const text of item.localInserts?.before || []) {
+      if (content === text) content = '';
+      else if (content.startsWith(`${text}\n\n`)) content = content.slice(text.length + 2);
+    }
+    for (const text of [...(item.localInserts?.after || [])].reverse()) {
+      if (content === text) content = '';
+      else if (content.endsWith(`\n\n${text}`)) content = content.slice(0, -text.length - 2);
+    }
     const detailId = narrativeDetailId(index, content);
     try {
       if (content) await saveDetail(saveKey, detailId, content);
@@ -657,7 +666,7 @@ export async function migrateNarrativeDetailOnLoad(save: any, saveKey: string): 
       continue;
     }
     const summary = summaryForNarrative(item);
-    item.content = summary;
+    item.content = item.localInserts ? withLocalNarrativeInserts(summary, item.localInserts) : summary;
     item.summary = summary;
     item.detailId = detailId;
     item.detailMigrated = NARRATIVE_DETAIL_MIGRATION_VERSION;
