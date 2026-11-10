@@ -13,7 +13,7 @@
 
 | 编号 | 要求 | 来源 | 状态 |
 |---|---|---|---|
-| C01 | 所有角色满 18 岁；游戏数据和正文用成年措辞，不引原著年龄 | 用户已定（裁定 #6/#54/#98/#175/#188） | 部分落实 |
+| C01 | 所有角色满 18 岁；游戏数据和正文用成年措辞，不引原著年龄 | 用户已定（裁定 #6/#54/#98/#175/#188；2026-11-03 补定游戏时间线与亲密门） | 部分落实 |
 | C02 | 不做强迫性质的双修/采补，也不作为玩家可选手段；~~夺元方案搁置，只保留「击败后处置」接口。~~**（2026-10-17 已取消：①功法标签层面对双修/采补/鼎炉/夺元的回避，功法照原著处理，见 CANON-DECISIONS #230；②夺元搁置与夺元的合规标记：夺元、双修层面不再视为合规内容，见 CANON-DECISIONS #231；其余部分不变）** | 用户已定；功法标签回避部分、夺元搁置与夺元合规标记 2026-10-17 用户取消 | 部分落实（功法标签回避：已取消；夺元搁置：已取消） |
 | C03 | 原著的敌对、暴力、性侵害情节只记事实，不演出，不细写 | 用户已定 | 部分落实 |
 | C04 | 原著情欲内容不进可玩流程 | 用户已定 | 部分落实 |
@@ -65,6 +65,19 @@
     - overlay `lcq.stage_05b.json:2881` 阿夕 personality 仍有「小孩子气」（to 段）；builtin `lcq.stage_05b.json:1704` 同。
     - 剧情文档 `南荒扩展/08:7` 写「小紫年龄锚 16」「阿夕年龄锚 16」，`南荒扩展/07:122,160` 同，和 C01 冲突（卡上两人 birthYear 都是 202＝18）。列入待确认 Q2。
 - **测试口径**：看到「成年女子」「成年少女」、不写年龄、或者卡上年龄与原著不符，标 `〔合规 C01〕有意成年化`，不报错。看到幼态词、未满 18 的数字年龄、「年龄小」，报「合规缺口 C01」。
+- **2026-11-03 用户补定（游戏时间线与亲密门）**
+  - 11-03 18:34／18:35：游戏时间线独立于原著，开局已过 4 年；游戏中登场的所有角色均已成年。游戏内年龄＝原著登场年龄＋4＋登场后游戏时间，不按小说章节日历。原著登场约 15 岁者（乐明珠、小紫、月霜、云如瑶、云丹琉等）登场即约 19 岁。叙事、设定、提示词不引用原著未成年岁数。
+  - 11-03 18:21：亲密私密层的门以剧情日历算满 18 岁为条件（按上式计算，不读存档年龄字段）；开门前只留 hardLimits。倾向中禁止写或回忆其未成年期亲密内容。
+  - 11-03 18:21／20:16：年龄无法查证的凝羽、潘金莲、申婉盈，游戏内登场年龄写「≥18」即可，不细定。
+  - 说明：10-21「跳时后全员成年」口径仍有效。本补充不改 C01 原有要求与待确认项（Q2／Q3／Q14／Q17 等照旧）。
+  - 落实位置（只记已核对的代码行；未找到的写「代码未见实装」）：
+    - 开局已过 4 年：`mod-kit/dual-model.json:31` `backend.timeline.yearsElapsedAtOpening` 值为 4（`:32` 注记 18:35 时间线总约束）；`src/services/consistencyBackground.ts:50`、`:163` 将 `yearsElapsedAtOpening` 写入一致性输入的 `timeline.开局已过年数`；`src/services/dualModelConfig.ts:21`、`:52` 校验该字段为非负整数；`tests/consistencyBackground.test.mjs:95` 锁定该字段。
+    - 游戏内年龄算式（原著登场年龄＋4＋登场后游戏时间，不按小说章节日历；登场约 15 岁者登场即约 19 岁）：**代码未见实装**。相关现算仍走存档或总表字段，不是该算式：`consistencyBackground.ts:156–163` 的 `timeline.年龄` 由 `社交.关系.出生日期` 与 `元数据.时间` 经 `calculateAgeFromBirthdate` 现算（与 `dual-model.json:32` 注记一致）；`relationships.ts:47–73` 的 `estimateNpcAge` 优先读 `storyAge`，其次 `当前年 − birthYear`，下限 18；`characterResolver.ts:299–302` `getRegistryAgeFacts` 只取总表 `birthYear`／`storyAge`。总表仍按成年下限 18（或既有出生年）写，未见改为约 19：乐明珠 `character-registry.json:20300` `birthYear` 202；小紫 `:37067` 202；月霜 `:9865` 200；云丹琉 `:42799–42801` `storyAge` 18、`:42810` `birthYear` 202；云如瑶 `:43202–43204` `birthYear` 202、`storyAge` 18。
+    - 叙事／设定／提示词不引用原著未成年岁数：沿用 C01 既有门禁，不是本条新写的算式。`src/utils/AIBidirectionalSystem.ts:845` 分步 system 提示「全部为18岁以上成年人……不使用十五六岁、少年儿童等未成年年龄描写」（原落点记为 `:814`，已漂移）；`src/modules/scenarioMods/modularTurn.ts:227–230` `validateModuleCastNarrative` 年龄正则，命中抛「正文年龄冲突」。
+    - 亲密私密层门以剧情日历算满 18 岁、不读存档年龄字段：**代码未见实装**。现门不计算剧情日历年龄，也不读、不回避存档年龄字段。`promptLayers.ts:89–95` `privateGateOpen` 条件为（输入命中词表或拍子 `scene.intimate`）且在场且好感达 `intimacyShallow`；`promptLayers.ts:68–74` `beatIntimateFor`、`:55–57` `intimateInputHit`；接线于 `narrativePromptState.ts:17–18`、`:43–51` 与 `storyContext.ts:688–698`。`intimacyProfiles.ts:15–18` 写明年龄门放在上游名单，运行时现算曾依赖 stage `birthYear` 后已刻意不做。`tests/intimacyProfiles.test.mjs:65` 传入 `age: 12` 仍注入档案。
+    - 开门前只留 hardLimits：生产路径已按此拆开。`storyContext.ts:562`、`:686–687` 将 `hardLimits` 随基础层常驻（封印身份时亦附上，`:563`）；`promptLayers.ts:183–193` `projectIntimacyLines` 仅在 `privateGateOpen` 通过后注入身体／偏好／分层揭示，不含 hardLimits。`intimacyProfiles.ts:62–63` 亦写 hardLimits「任何时候都注入」。旧函数 `formatIntimacyProfile`（`:406–420`，现主要测试在用）仍把 hardLimits 放在场景门通过之后，与生产路径不同。
+    - 倾向中禁止写或回忆其未成年期亲密内容：**代码未见实装**。`mod-kit/prompt-layers.json:34–42` `privacyAllowedFields` 含「性格倾向」等倾向类字段；`promptLayers.ts:98–107` `pickPrivacyFields` 只按字段名筛选，无未成年期亲密内容过滤。`intimacyProfiles.ts` 正文未见「未成年」约束。
+    - 凝羽、潘金莲、申婉盈游戏内登场年龄写「≥18」、不细定：**代码未见实装**。总表仍写了具体出生年：凝羽 `character-registry.json:25657` `birthYear` 196；潘金莲 `:26508` 198；申婉盈 `:30764` 202。
 - **状态**：部分落实。
 
 ## C02 不做强迫双修/采补；不作为玩家手段；~~夺元搁置~~（夺元搁置已取消，见 #231）
