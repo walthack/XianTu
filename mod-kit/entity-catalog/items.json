@@ -61,6 +61,18 @@
                 "preparation": "blank_letter_confirmed"
               }
             ]
+          },
+          {
+            "id": "reopened_after_stage",
+            "name": "黑鸦密信",
+            "description": "在鬼王峒驿馆当众再打开，仍是一张白纸。谢艺看过后说「不是这里」，信的目的地另有其处。",
+            "when": [
+              {
+                "kind": "eventCompleted",
+                "eventId": "lcq.event.blank_letter_and_dagu",
+                "stageId": "lcq.stage_05b"
+              }
+            ]
           }
         ],
         "type": "other",

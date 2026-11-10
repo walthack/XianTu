@@ -568,6 +568,27 @@ test('PR1-letter-③: all three item states derive from real walkthrough facts, 
  assert.equal(itemView.resolveItemPresentation(next,'lcq.item.backpack').description,ec.catalogItem('lcq.item.backpack').description||'','catalog fallback');
 });
 
+test('PR1-letter-③: the reopened state survives leaving 05b for 06 via cross-stage completion facts, in inventory and scene ledger',()=>{
+ // 走查终点停在 05b 试玩收束；去掉收束标记后走真实切关（06 在默认线隔离名单，按其 nextStageId 落到 07），得到离开 05b 后的真实存档形状。
+ const source=structuredClone(plainWalk.save);assert.equal(runtimeOf(source).modId,'lcq.stage_05b');assert.ok(runtimeOf(source).eventActionStates[LETTER].preparations.includes('blank_letter_confirmed'));
+ delete source.系统.扩展.清羽记开局.endEventId;
+ const nextMods=['lcq.stage_06','lcq.stage_07_qingyuan_jiankang'].map(id=>ec.resolveScenarioContent(cp.applyContentPackOverlays(JSON.parse(fs.readFileSync(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`,import.meta.url),'utf8')))));
+ const transition=init.transitionToNextScenarioStage(source,nextMods);assert.equal(transition.ok,true,transition.reason);
+ const after=transition.saveData,r=runtimeOf(after);
+ assert.notEqual(r.modId,'lcq.stage_05b');assert.ok(after.角色.背包.物品[TUBE],'tube still held after leaving 05b');
+ assert.equal(r.eventActionStates?.[LETTER]?.preparations?.includes('blank_letter_confirmed')??false,false,'05b preparations are gone after transition');
+ assert.ok(!r.completedEventIds.includes(LETTER),'stage-local completion cleared');
+ const chronicle=r.chronicle.find(e=>e.id===`chronicle.lcq.stage_05b.${LETTER}`);assert.equal(chronicle?.type,'event');assert.equal(chronicle.stageId,'lcq.stage_05b');
+ assert.ok(r.travelLedger.doneEventIds.includes(LETTER));
+ const onlyChronicle=structuredClone(after);runtimeOf(onlyChronicle).travelLedger.doneEventIds=[];
+ const onlyTravel=structuredClone(after);runtimeOf(onlyTravel).chronicle=[];
+ for(const save of [after,onlyChronicle,onlyTravel]){
+  assert.deepEqual(itemView.resolveItemPresentation(save,TUBE),letterStates[2]);
+  const letter=scene.sceneLedgerSummary(save).关键物品.find(i=>i.名称===letterStates[2].name);
+  assert.deepEqual(letter,{名称:letterStates[2].name,数量:1,描述:letterStates[2].description});
+ }
+});
+
 test('PR1-letter-④: the compact free-turn prompt retains the current letter description and keeps the sealed pouch separate',async()=>{
  const samples=[plain.get('before_letter_identification'),readyStay(),plain.get('letter_open')];
  for(const [index,save] of samples.entries()){
