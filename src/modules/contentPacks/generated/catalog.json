@@ -1,5 +1,5 @@
 {
-  "version": "c518d1e9eeb05c89",
+  "version": "14f957a21d8557f9",
   "contracts": [
     {
       "meta": {
@@ -19719,7 +19719,13 @@
       }
     ],
     "characterDebuts": {
+      "canon.character.1d2719bc6f": 1103,
+      "canon.character.2a4df37bfa": 578,
+      "canon.character.2cf90450c5": 1144,
       "canon.character.7718ae444a": 563,
+      "canon.character.886a02fef4": 695,
+      "canon.character.8cb16a5c6a": 419,
+      "canon.character.b42046aa22": 1177,
       "lcq.character.agamenon": 19,
       "lcq.character.biling_woman_ch80": 42,
       "lcq.character.dai_jixue": 19,
@@ -19744,6 +19750,7 @@
       "liuchao.character.a_he_ma": 986,
       "liuchao.character.a_jiman_bana": 36,
       "liuchao.character.a_xi": 42,
+      "liuchao.character.an_le_gong_zhu": 1182,
       "liuchao.character.ao_run": 551,
       "liuchao.character.ba_bi_mo_seng": 986,
       "liuchao.character.bai_nichang": 1013,
@@ -19755,6 +19762,7 @@
       "liuchao.character.cheng_guang": 948,
       "liuchao.character.cheng_zongyang": 1,
       "liuchao.character.dan_chen": 162,
+      "liuchao.character.deng_jing": 383,
       "liuchao.character.ding_zhi_xiong": 665,
       "liuchao.character.dong_zhuo": 891,
       "liuchao.character.dragon_god": 205,
@@ -19838,6 +19846,7 @@
       "liuchao.character.xu_junfang": 665,
       "liuchao.character.xue_li": 1013,
       "liuchao.character.xue_yan_shan": 556,
+      "liuchao.character.yan_er": 243,
       "liuchao.character.yang_yuhuan": 1013,
       "liuchao.character.yi_hu": 80,
       "liuchao.character.yi_xin": 885,
@@ -19884,6 +19893,7 @@
       "lyl.character.lv_jujun": 885,
       "lyl.character.lyu_buyi": 555,
       "lyl.character.np001": 885,
+      "lyl.character.np039": 718,
       "lyl.character.np043": 885,
       "lyl.character.np060": 885,
       "lyl.character.np067": 885,

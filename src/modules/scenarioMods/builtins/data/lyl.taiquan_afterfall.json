@@ -3978,6 +3978,27 @@
         ],
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+      },
+      {
+        "id": "canon.character.886a02fef4",
+        "name": "阿兰迦",
+        "role": "公主",
+        "gender": "女",
+        "profile": {
+          "origin": "公主"
+        },
+        "level": null
+      },
+      {
+        "id": "lyl.character.np039",
+        "name": "义纵",
+        "role": "羽林军右营队正，后任舞都令",
+        "gender": "男",
+        "profile": {
+          "appearance": "脸上有伤疤",
+          "origin": "羽林军右营队正，后任舞都令"
+        },
+        "level": null
       }
     ],
     "playerRelationships": [
@@ -5553,7 +5574,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "canon.character.886a02fef4"
         ],
         "objective": "前往魔墟寻找宝物",
         "playerCompletionContract": {
@@ -5678,7 +5700,8 @@
           "liuchao.character.xiao_zi",
           "liuchao.character.shang_zhen_yu",
           "liuchao.character.gao_zhishang",
-          "liuchao.character.qing_mian_shou"
+          "liuchao.character.qing_mian_shou",
+          "lyl.character.np039"
         ],
         "locationId": "liuchao.location.wudu",
         "objective": "下首阳山，与冯源他们会合，再赶往舞都",

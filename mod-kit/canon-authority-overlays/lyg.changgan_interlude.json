@@ -333,6 +333,96 @@
         "程宗扬在襄城君府密室发现小紫已控制襄城君孙寿，小紫透露刺杀韩定国一事。",
         "程宗扬在临安某处（疑似沐羽城程氏住所或城外隐蔽处）（程宗扬骑在申婉盈臀上交合时，文中提及「卓云君亲传的房中术」，以背景人物方式首次被提及；随后在0090.html正式以奴婢身份向程宗扬回话） 初始身份：太乙真宗教御（蔺贼势力败落后被小紫收服的逃亡者，三魂七魄留"
       ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.characters",
+      "afterId": "liuchao.character.liao_qun_yu",
+      "value": {
+        "id": "canon.character.1d2719bc6f",
+        "name": "李成美",
+        "role": "陈王，内定皇太子",
+        "gender": "男",
+        "profile": {
+          "origin": "陈王，内定皇太子"
+        },
+        "level": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.xuanping_eunuch_murder].relatedCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "canon.character.1d2719bc6f"
+      ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.characters",
+      "afterId": "canon.character.1d2719bc6f",
+      "value": {
+        "id": "canon.character.2cf90450c5",
+        "name": "安康公主",
+        "role": "公主",
+        "gender": "女",
+        "profile": {
+          "origin": "公主"
+        },
+        "level": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_interlude_05_beat].relatedCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "canon.character.2cf90450c5"
+      ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.characters",
+      "afterId": "canon.character.2cf90450c5",
+      "value": {
+        "id": "canon.character.b42046aa22",
+        "name": "王彦章",
+        "role": "皇图天策府将领",
+        "gender": "男",
+        "profile": {
+          "appearance": "身材魁伟，虎背熊腰",
+          "origin": "皇图天策府将领"
+        },
+        "level": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_interlude_09_beat].relatedCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "canon.character.b42046aa22"
+      ]
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyg.event.changgan_interlude_10_beat].relatedCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.an_le_gong_zhu"
+      ]
     }
   ]
 }

@@ -153,6 +153,33 @@
         "危机解除后，程宗扬以岳鹏举身份线影响小紫，双方围绕鬼巫王与龙神合体形成临时协定。",
         "小紫倒戈、奴隶暴动、程宗扬反杀计划与乐明珠凤凰宝典异变共同把剧情推向最终决战。"
       ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.characters",
+      "afterId": "liuchao.character.lin_cai_quan",
+      "value": {
+        "id": "canon.character.2a4df37bfa",
+        "name": "宋主",
+        "role": "宋国皇帝",
+        "gender": "男",
+        "profile": {
+          "appearance": "唇红齿白、面如冠玉",
+          "origin": "宋国皇帝"
+        },
+        "level": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lyl.event.xiaoyingzhou_paper_mint].relatedCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "canon.character.2a4df37bfa"
+      ]
     }
   ]
 }

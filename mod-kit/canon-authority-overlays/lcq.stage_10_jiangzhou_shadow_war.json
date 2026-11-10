@@ -26,6 +26,60 @@
       "path": "canon.characters[id=liuchao.character.qin_han].profile.appearance",
       "from": "头戴紫貂玉珰，锦衣华服，身材精悍，长发飞舞，虎目精光内敛，偶尔目露奇光。；白发萧索，夜眼锐利如鹰隼，目光阴冷。身形稳如渊岳，流露逼人气势。半显阳刚半显阴柔。",
       "to": "头戴紫貂玉珰，锦衣华服，身材精悍，长发飞舞，虎目精光内敛，偶尔目露奇光。；夜眼锐利如鹰隼，目光阴冷。身形稳如渊岳，流露逼人气势。半显阳刚半显阴柔。"
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.characters",
+      "afterId": "lcq.character.yue_shuang",
+      "value": {
+        "id": "liuchao.character.deng_jing",
+        "name": "邓晶",
+        "role": "潘金莲的师妹",
+        "gender": "女",
+        "profile": {
+          "appearance": "两绺青丝垂在胸前，纤美如诗",
+          "origin": "潘金莲的师妹"
+        },
+        "level": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.s10_01_jiangzhou_order].relatedCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.deng_jing"
+      ]
+    },
+    {
+      "op": "insertAfter",
+      "path": "canon.characters",
+      "afterId": "liuchao.character.deng_jing",
+      "value": {
+        "id": "canon.character.8cb16a5c6a",
+        "name": "青䝙",
+        "gender": "男",
+        "profile": {},
+        "level": null
+      }
+    },
+    {
+      "op": "set",
+      "path": "scenario.events[id=lcq.event.s10_08_lair_reversal].relatedCharacterIds",
+      "from": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.meng_fei_qing"
+      ],
+      "to": [
+        "liuchao.character.cheng_zongyang",
+        "liuchao.character.xiao_zi",
+        "liuchao.character.meng_fei_qing",
+        "canon.character.8cb16a5c6a"
+      ]
     }
   ]
 }

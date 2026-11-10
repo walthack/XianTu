@@ -284,6 +284,43 @@ test('补丁（剧情策划 11-10 清单）：宋主 200【推断】且删去往
   assert.equal(report.noDebutMinor.some(x => x.includes(songZhu)), false);
 });
 
+test('C01 十人首登补丁：指定事件引用计入 characterDebuts，四年跳后 224 年见面，按出生年现算；名册列名不算首登', () => {
+  const registry = json('src/modules/scenarioMods/builtins/character-registry.json').characters;
+  const report = auditWith({});
+  const rows = [
+    ['宋主', 'canon.character.2a4df37bfa', 'lyl.xiaoyingzhou_blacksea_trap', 'lyl.event.xiaoyingzhou_paper_mint', 200, 24],
+    ['雁儿', 'liuchao.character.yan_er', 'lcq.stage_07_qingyuan_jiankang', 'lcq.event.jin_panjiang_shaozhu', 204, 20],
+    ['邓晶', 'liuchao.character.deng_jing', 'lcq.stage_10_jiangzhou_shadow_war', 'lcq.event.s10_01_jiangzhou_order', 205, 19],
+    ['青䝙', 'canon.character.8cb16a5c6a', 'lcq.stage_10_jiangzhou_shadow_war', 'lcq.event.s10_08_lair_reversal', 203, 21],
+    ['李成美', 'canon.character.1d2719bc6f', 'lyg.changgan_interlude', 'lyg.event.xuanping_eunuch_murder', 205, 19],
+    ['安康公主', 'canon.character.2cf90450c5', 'lyg.changgan_interlude', 'lyg.event.changgan_interlude_05_beat', 205, 19],
+    ['王彦章', 'canon.character.b42046aa22', 'lyg.changgan_interlude', 'lyg.event.changgan_interlude_09_beat', 203, 21],
+    ['安乐公主', 'liuchao.character.an_le_gong_zhu', 'lyg.changgan_interlude', 'lyg.event.changgan_interlude_10_beat', 205, 19],
+    ['阿兰迦', 'canon.character.886a02fef4', 'lyl.taiquan_afterfall', 'lyl.event.taiquan_afterfall_03_beat', 202, 22],
+    ['义纵', 'lyl.character.np039', 'lyl.taiquan_afterfall', 'lyl.event.han_shouyang_gaoyanei', 202, 22],
+  ];
+  for (const [name, id, stageId, eventId, birthYear, age] of rows) {
+    const stage = json(`src/modules/scenarioMods/builtins/data/${stageId}.json`);
+    const event = stage.scenario.events.find(e => e.id === eventId);
+    assert.equal(stage.canon.characters.filter(c => c.id === id).length, 1, `${name}：名册中恰好一张卡`);
+    assert.ok(event.relatedCharacterIds.includes(id), `${name}：指定事件引用`);
+    assert.ok(event.axisSeq >= 31, `${name}：四年跳之后`);
+    assert.equal(TIMELINE.characterDebuts[id], event.axisSeq, `${name}：首登取指定事件`);
+    assert.equal(CR.getRegistryDebutAxisSeq(id), event.axisSeq, name);
+    assert.equal(meetYear(id), 224, name);
+    assert.equal(registry.find(c => c.id === id).staticProfile.birthYear, birthYear, name);
+    assert.equal(meetAge(id), age, name);
+    assert.equal(age, 224 - birthYear, `${name}：无需下限抬升`);
+    assert.equal(report.noDebutMinor.some(x => x.includes(id)), false, name);
+
+    // 留下名册卡、移除本次出场引用后，该关不再产生此人的首登记录。
+    const rosterOnly = structuredClone(stage);
+    rosterOnly.scenario.events.find(e => e.id === eventId).relatedCharacterIds = event.relatedCharacterIds.filter(x => x !== id);
+    const timeline = compileTimeline({ rawInserts: [], numbers: json('mod-kit/game-numbers.qingyu.json'), stages: [rosterOnly], texts: {} });
+    assert.equal(timeline.characterDebuts[id], undefined, `${name}：名册列名不算登场`);
+  }
+});
+
 test('剧情小孩（用户 11-10 21:39 逐人定）：郭靖 218、定陶王 217 不套首登下限，现算不满 18 时只靠唯一的年龄门关私密层；存档不兜 18；体检单列不报警', () => {
   const guoJing = 'liuchao.character.guo_jing', liuXin = 'liuchao.character.liu_xin';
   const table = new Map(json('mod-kit/character-birth-years.json').entries.map(e => [e.id, e]));

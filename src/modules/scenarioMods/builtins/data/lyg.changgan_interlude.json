@@ -4288,6 +4288,37 @@
         },
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+      },
+      {
+        "id": "canon.character.1d2719bc6f",
+        "name": "李成美",
+        "role": "陈王，内定皇太子",
+        "gender": "男",
+        "profile": {
+          "origin": "陈王，内定皇太子"
+        },
+        "level": null
+      },
+      {
+        "id": "canon.character.2cf90450c5",
+        "name": "安康公主",
+        "role": "公主",
+        "gender": "女",
+        "profile": {
+          "origin": "公主"
+        },
+        "level": null
+      },
+      {
+        "id": "canon.character.b42046aa22",
+        "name": "王彦章",
+        "role": "皇图天策府将领",
+        "gender": "男",
+        "profile": {
+          "appearance": "身材魁伟，虎背熊腰",
+          "origin": "皇图天策府将领"
+        },
+        "level": null
       }
     ],
     "playerRelationships": [
@@ -6001,7 +6032,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "canon.character.2cf90450c5"
         ],
         "objective": "回应杨玉环试探，化解宗室疑问",
         "playerCompletionContract": {
@@ -6167,7 +6199,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "canon.character.b42046aa22"
         ],
         "objective": "返程途中，迎战黑衣人伏击",
         "playerCompletionContract": {
@@ -6207,7 +6240,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "liuchao.character.an_le_gong_zhu"
         ],
         "objective": "救出白霓裳，击杀王守澄",
         "playerCompletionContract": {
@@ -6925,7 +6959,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "canon.character.1d2719bc6f"
         ],
         "relatedFactionIds": [
           "liuchao.faction.tang_guo_chao_ting"

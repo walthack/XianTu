@@ -3964,6 +3964,17 @@
         },
         "level": null,
         "levelSource": "待剧情策划按原著逐时点核定；不从旧修仙名推导"
+      },
+      {
+        "id": "canon.character.2a4df37bfa",
+        "name": "宋主",
+        "role": "宋国皇帝",
+        "gender": "男",
+        "profile": {
+          "appearance": "唇红齿白、面如冠玉",
+          "origin": "宋国皇帝"
+        },
+        "level": null
       }
     ],
     "playerRelationships": [
@@ -6605,7 +6616,8 @@
           }
         ],
         "relatedCharacterIds": [
-          "liuchao.character.cheng_zongyang"
+          "liuchao.character.cheng_zongyang",
+          "canon.character.2a4df37bfa"
         ],
         "relatedFactionIds": [
           "lyg.faction.song_state"

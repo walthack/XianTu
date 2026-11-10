@@ -3525,7 +3525,8 @@
             "liuchao.character.cheng_zongyang",
             "liuchao.character.xiao_yao_yi",
             "liuchao.character.qin_hui",
-            "liuchao.character.wu_san_gui"
+            "liuchao.character.wu_san_gui",
+            "liuchao.character.yan_er"
           ],
           "relatedFactionIds": [
             "liuchao.faction.pan_jiang_cheng",

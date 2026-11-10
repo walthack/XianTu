@@ -24136,6 +24136,20 @@
                   },
                   "sourceEventId": "lyl.event.linjia_sees_ningyi"
                 },
+                "knowledge.player.entity.canon.character.2a4df37bfa": {
+                  "factId": "knowledge.player.entity.canon.character.2a4df37bfa",
+                  "subjectId": "canon.character.2a4df37bfa",
+                  "predicate": "known",
+                  "status": "confirmed",
+                  "disclosureScope": "player",
+                  "learnedAtTurn": 8,
+                  "claim": "你已知晓宋主",
+                  "source": {
+                    "kind": "observed",
+                    "label": "纸钞纳税"
+                  },
+                  "sourceEventId": "lyl.event.xiaoyingzhou_paper_mint"
+                },
                 "knowledge.player.entity.liuchao.character.jian_yu_ji": {
                   "factId": "knowledge.player.entity.liuchao.character.jian_yu_ji",
                   "subjectId": "liuchao.character.jian_yu_ji",
@@ -28553,6 +28567,16 @@
                   "identityAtMeeting": "次要人物",
                   "backfilled": false
                 },
+                "liuchao.character.yan_er": {
+                  "characterId": "liuchao.character.yan_er",
+                  "name": "雁儿",
+                  "kind": "encountered",
+                  "atStageId": "lcq.stage_07_qingyuan_jiankang",
+                  "atEventId": "lcq.event.jin_panjiang_shaozhu",
+                  "atWorldTurn": 13,
+                  "identityAtMeeting": "小婢",
+                  "backfilled": false
+                },
                 "liuchao.character.meng_fei_qing": {
                   "characterId": "liuchao.character.meng_fei_qing",
                   "name": "孟非卿",
@@ -28561,6 +28585,25 @@
                   "atEventId": "lcq.event.s07_05_eight_steeds_informed",
                   "atWorldTurn": 15,
                   "identityAtMeeting": "星月湖大营领袖、三团团长",
+                  "backfilled": false
+                },
+                "liuchao.character.deng_jing": {
+                  "characterId": "liuchao.character.deng_jing",
+                  "name": "邓晶",
+                  "kind": "encountered",
+                  "atStageId": "lcq.stage_10_jiangzhou_shadow_war",
+                  "atEventId": "lcq.event.s10_01_jiangzhou_order",
+                  "atWorldTurn": 2,
+                  "identityAtMeeting": "潘金莲的师妹",
+                  "backfilled": false
+                },
+                "canon.character.8cb16a5c6a": {
+                  "characterId": "canon.character.8cb16a5c6a",
+                  "name": "青䝙",
+                  "kind": "encountered",
+                  "atStageId": "lcq.stage_10_jiangzhou_shadow_war",
+                  "atEventId": "lcq.event.s10_08_lair_reversal",
+                  "atWorldTurn": 12,
                   "backfilled": false
                 },
                 "liuchao.character.xie_youdu": {
@@ -28683,6 +28726,16 @@
                   "identityAtMeeting": "林冲之妻（开场真实来历尚未揭示）",
                   "backfilled": false
                 },
+                "canon.character.2a4df37bfa": {
+                  "characterId": "canon.character.2a4df37bfa",
+                  "name": "宋主",
+                  "kind": "encountered",
+                  "atStageId": "lyl.xiaoyingzhou_blacksea_trap",
+                  "atEventId": "lyl.event.xiaoyingzhou_paper_mint",
+                  "atWorldTurn": 9,
+                  "identityAtMeeting": "宋国皇帝",
+                  "backfilled": false
+                },
                 "liuchao.character.pan_jinlian": {
                   "characterId": "liuchao.character.pan_jinlian",
                   "name": "潘金莲",
@@ -28714,6 +28767,26 @@
                   "kind": "encountered",
                   "atStageId": "lyl.taiquan_core_conflict",
                   "identityAtMeeting": "向导",
+                  "backfilled": false
+                },
+                "canon.character.886a02fef4": {
+                  "characterId": "canon.character.886a02fef4",
+                  "name": "阿兰迦",
+                  "kind": "encountered",
+                  "atStageId": "lyl.taiquan_afterfall",
+                  "atEventId": "lyl.event.taiquan_afterfall_03_beat",
+                  "atWorldTurn": 4,
+                  "identityAtMeeting": "公主",
+                  "backfilled": false
+                },
+                "lyl.character.np039": {
+                  "characterId": "lyl.character.np039",
+                  "name": "义纵",
+                  "kind": "encountered",
+                  "atStageId": "lyl.taiquan_afterfall",
+                  "atEventId": "lyl.event.han_shouyang_gaoyanei",
+                  "atWorldTurn": 8,
+                  "identityAtMeeting": "羽林军右营队正，后任舞都令",
                   "backfilled": false
                 },
                 "liuchao.character.yun_ru_yao": {

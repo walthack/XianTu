@@ -425,10 +425,15 @@ test('有出场的主要女性角色全部有姿态档案（用户要求的覆�
       for (const id of m[1].matchAll(/"([^"]+)"/g)) present.add(id[1]);
     }
   }
-  // 已知缺口（按 id）：2026-10-15 第三轮把阶段档 id 统一为总表 id 后，这两人才被正确识别为“有出场”
-  // （此前事件里用的是旧 id，对不上总表 id，被本测试漏算）。姿态档案是剧情内容，待剧情策划提供，不由代码侧编造。
+  // 已知缺口（按 id）：2026-10-15 第三轮统一阶段档 id 后，何漪莲／王蕙才被正确识别为“有出场”；
+  // 2026-11-10 C01 十人首登补丁补上雁儿／安乐公主／安康公主／阿兰迦的事件引用；四人均为总表主要女性。
+  // 姿态档案待剧情策划提供，不由代码侧编造。
   // 补上档案后必须从此名单删掉（下面的断言会强制）。
-  const KNOWN_GAP_IDS = new Set(['liuchao.character.he_yilian', 'liuchao.character.wang_hui']);
+  const KNOWN_GAP_IDS = new Set([
+    'liuchao.character.he_yilian', 'liuchao.character.wang_hui',
+    'liuchao.character.yan_er', 'liuchao.character.an_le_gong_zhu',
+    'canon.character.2cf90450c5', 'canon.character.886a02fef4',
+  ]);
   const women = registry.characters.filter(c => c.tier === '主要' && c.gender === '女' && present.has(c.id));
   const missing = women.filter(c => !KNOWN_GAP_IDS.has(c.id)).map(c => c.canonicalName).filter(name => !hasStanceProfile(name));
   assert.deepEqual(missing, [], `有出场却缺姿态档案的主要女性：${missing.join('、')}`);
