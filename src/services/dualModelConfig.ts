@@ -18,7 +18,6 @@ export interface DualModelConfig {
       summaryWindow: number; ledgerMemoryPerNpc: number; maxInputChars: number; continuityMaxItems: number;
       maxLagTurns: number; waitMs: number; timeoutMs: number; maxTokens: number; degradedAttempts: number; hourlyBudget: number;
       npcMemoryKeep: number; extensionKey: string; continuityHeading: string; instruction: string;
-      timeline: { yearsElapsedAtOpening: number };
     };
     ui: {
       name: string; description: string; enabledLabel: string; reasoningLabel: string;
@@ -49,7 +48,6 @@ export function validateDualModelConfig(cfg: unknown = DUAL_MODEL_CONFIG): strin
   if (!REASONING_EFFORT_LEVELS.includes(backend.reasoningEffort as string)) problems.push(`dualModel.backend.reasoningEffort 须为 ${REASONING_EFFORT_LEVELS.join('/')} 之一`);
   for (const key of POSITIVE_INTS) if (!int(backend[key], 1)) problems.push(`dualModel.backend.${key} 须为正整数`);
   for (const key of NON_NEGATIVE_INTS) if (!int(backend[key], 0)) problems.push(`dualModel.backend.${key} 须为非负整数`);
-  if (!int((backend.timeline as { yearsElapsedAtOpening?: unknown } | undefined)?.yearsElapsedAtOpening, 0)) problems.push('dualModel.backend.timeline.yearsElapsedAtOpening 须为非负整数');
   for (const key of ['name', 'description', 'enabledLabel', 'reasoningLabel', 'defaultEffortLabel', 'unsupportedReasoning', 'inheritedModelWarning', 'paidConfirmation'] as const) {
     if (!text(dm?.ui?.[key])) problems.push(`dualModel.ui.${key} 不能为空`);
   }

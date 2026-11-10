@@ -1,4 +1,5 @@
-import { splitRecordPath, npcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
+import { get, toPath } from 'lodash';
+import { splitRecordPath, npcRecordPath, normalizeNpcRecordPath } from '@/modules/scenarioMods/ledger/affinityIdentity';
 /**
  * 指令对象格式验证器
  *
@@ -39,7 +40,6 @@ const NUMERIC_VALUE_PATHS = [
   '角色.属性.灵气.上限',
   '角色.属性.神识.当前',
   '角色.属性.神识.上限',
-  '角色.属性.寿命.当前',
   '角色.属性.寿命.上限',
   '角色.位置.x',
   '角色.位置.y',
@@ -112,6 +112,9 @@ function isLikelyNumericPath(key: string): boolean {
  * 🔒 完全禁止AI操作的路径（系统管理，AI不得触碰）
  */
 const FORBIDDEN_PATHS: string[] = [
+  '系统.扩展.c01LifespanCacheVersion', // 缓存启用版本由初始化／读档迁移登记。
+  '系统.扩展.c01ProtagonistBirth', // 出生年旧档修复回执。
+  '角色.属性.寿命.当前', // 引擎按游戏时间现算的缓存，AI 只能改寿命上限。
   '社交.记忆',           // 玩家记忆由系统自动管理
   '角色.装备',           // 装备系统只读
   '角色.技能.掌握技能',  // 已掌握技能只读
@@ -265,10 +268,78 @@ function checkForbiddenPath(key: string, action: string, value: unknown): string
   return null;
 }
 
+/** 点／括号路径统一化，带点的人物 ID 保持为一个属性。后续校验与执行使用同一路径。 */
+function normalizedCommandPath(key: string): string {
+  return toPath(key).map((token, index) => /[.\[\]]/.test(token)
+    ? `${index ? '.' : ''}[${JSON.stringify(token)}]` : `${index ? '.' : ''}${token}`).join('');
+}
+
+/** 模型命令进入任何守卫前统一路径写法，保证点／括号路径受同一套护栏。原地改写 key。 */
+export function normalizeCommandPaths<T>(commands: T[]): T[] {
+  for (const cmd of commands) {
+    if (cmd && typeof cmd === 'object' && typeof (cmd as any).key === 'string') (cmd as any).key = normalizedCommandPath((cmd as any).key);
+  }
+  return commands;
+}
+
+/** 引擎管理的年龄字段；`*` 为任一人物键。 */
+const ENGINE_AGE_FIELDS: string[][] = [
+  ['角色', '属性', '寿命', '当前'],
+  ['系统', '扩展', 'c01LifespanCacheVersion'],
+  ['系统', '扩展', 'c01ProtagonistBirth'],
+  ['社交', '关系', '*', '首见年'],
+];
+const isPlainRecord = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
+/** 模型主通路执行器对这些容器的对象 set 做深合并；其余祖先 set 为整体替换。修复通路除外：其执行器一律整体替换（见 validateRepairCommand）。 */
+const isMergeContainer = (parts: string[]): boolean =>
+  (parts.length === 2 && parts[0] === '角色' && parts[1] === '属性')
+  || (parts.length === 3 && parts[0] === '社交' && parts[1] === '关系');
+/** 存档中 node 之下是否确有该字段（rest 为剩余段）。 */
+const holdsField = (node: unknown, rest: string[]): boolean => {
+  if (!rest.length) return node !== undefined;
+  if (!isPlainRecord(node)) return false;
+  const [head, ...tail] = rest;
+  return head === '*' ? Object.values(node).some(child => holdsField(child, tail)) : holdsField(node[head], tail);
+};
+
+/**
+ * 字段本身禁写；祖先容器禁删除、禁非 set 动作、禁整体替换，深合并容器的载荷沿字段路径
+ * 不得出现置空／非对象。给出 saveData 时，删除只在存档该容器下确有字段时才拒。
+ */
+function engineAgeWriteViolation(parts: string[], action: unknown, value: unknown, saveData?: unknown, replaceOnly = false): boolean {
+  return ENGINE_AGE_FIELDS.some(field => {
+    if (!parts.slice(0, field.length).every((token, i) => field[i] === '*' || field[i] === token)) return false;
+    if (parts.length >= field.length) return true;
+    const rest = field.slice(parts.length);
+    if (action === 'delete') return saveData === undefined || holdsField(get(saveData, parts), rest);
+    if (action !== 'set' || replaceOnly || !isMergeContainer(parts)) return true;
+    let payload: unknown = value;
+    for (const token of rest) {
+      if (!isPlainRecord(payload)) return true;
+      if (!Object.prototype.hasOwnProperty.call(payload, token)) return false;
+      payload = payload[token];
+    }
+    return true;
+  });
+}
+
+/**
+ * 年龄护栏要判的路径：原路径；人物键另加执行器同一解析（名字／别名 → 人物ID）后的实际写入路径。
+ * 解析为 null（执行器会拒）时只判原路径。
+ */
+function engineAgeWritePaths(key: string, value: unknown, saveData?: unknown): string[][] {
+  const paths = [toPath(key)];
+  if (saveData && paths[0][0] === '社交' && paths[0][1] === '关系' && paths[0].length > 2) {
+    const resolved = normalizeNpcRecordPath(key, saveData as any, value);
+    if (resolved !== null && resolved !== key) paths.push(splitRecordPath(resolved));
+  }
+  return paths;
+}
+
 /**
  * 验证单个指令对象
  */
-export function validateCommand(command: unknown, index: number): ValidationResult {
+export function validateCommand(command: unknown, index: number, saveData?: unknown, replaceOnly = false): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 
@@ -281,6 +352,11 @@ export function validateCommand(command: unknown, index: number): ValidationResu
 
     // Type assertion after validation
     const cmd = command as Record<string, any>;
+    if (typeof cmd.key === 'string') cmd.key = normalizedCommandPath(cmd.key);
+    if (typeof cmd.key === 'string' && (cmd.key === '角色.属性.寿命' || engineAgeWritePaths(cmd.key, cmd.value, saveData)
+      .some(parts => engineAgeWriteViolation(parts, cmd.action, cmd.value, saveData, replaceOnly)))) {
+      errors.push(`指令${index}: 寿命当前值／首见年及其迁移版本由引擎管理，禁止直接写入，或删除、置空、整体替换其所在容器`);
+    }
 
     if (!cmd.action) {
       errors.push(`指令${index}: 缺少action字段`);
@@ -342,7 +418,7 @@ export function validateCommand(command: unknown, index: number): ValidationResu
     // 与 value 无关，delete 同拦。合法写入路径（lifespanCalculator/dataValidation/修复脚本）不经指令通道。
     if (typeof cmd.key === 'string') {
       const staticTokens=splitRecordPath(cmd.key);
-      const staticFieldMatch=staticTokens[0]==='社交'&&staticTokens[1]==='关系'&&staticTokens.length===4&&['性别','灵根','种族','出生日期'].includes(staticTokens[3]) ? [cmd.key,staticTokens[3]]:null;
+      const staticFieldMatch=staticTokens[0]==='社交'&&staticTokens[1]==='关系'&&staticTokens.length===4&&['性别','灵根','种族','出生日期','首见年'].includes(staticTokens[3]) ? [cmd.key,staticTokens[3]]:null;
       if (staticFieldMatch) {
         errors.push(`指令${index}: NPC「${staticFieldMatch[1]}」为正典静态设定，禁止通过指令改写或删除`);
       }
@@ -388,7 +464,8 @@ export function validateCommand(command: unknown, index: number): ValidationResu
  * 让 repair 模型携带的 add/delete/push 意外获得写入权限。
  */
 export function validateRepairCommand(command: unknown, index: number): ValidationResult {
-  const result = validateCommand(command, index);
+  // 修复执行器用 setNestedValue 整体替换，无深合并容器：祖先容器整体 set 一律按替换判。
+  const result = validateCommand(command, index, undefined, true);
   const action = command && typeof command === 'object'
     ? (command as Record<string, unknown>).action
     : undefined;

@@ -2394,6 +2394,10 @@
         ]
       }
     },
+    "timeline": {
+      "note": "C01 时间线（用户 2026-11-10 定）：元年沿用纪元，原著故事当下＝canonPresentYear（裁定 #29／#54 锚定的 220）。原著事件的游戏年份＝原著年份＋插入事件顺延量；插入事件写在内容包 timeline.json，年龄由运行时现算，不写回卡片和总表。",
+      "canonPresentYear": 220
+    },
     "beatProgress": {
       "note": "剧情推进（设计稿 2026-11-02「剧情推进机制设计」；用户 2026-11-02 拍板 1–4，代码 src/modules/scenarioMods/beatProgress.ts）。deadlineTurns：作者在拍上写明到点（offscreenResolution 场外收束）的拍，停滞到点回合数按事件 id 配，载入／每回合发送前写进拍；只用于这里列出的拍，没有通用的「主线停滞 N 回合代玩家结算」。s01_06 月霜寒毒保留 5 回合（bbe2653a）。departureIdleTurns：本关已收束、启程按钮出现后又空转这么多回合，弹一次 departureIdleNotice（{label}＝启程按钮文字），只提示、不自动出发；0＝不提示。actionIdleTurns／actionIdleNotice：本拍主线动作按钮在场、本拍连续这么多回合没推进（启程按钮在场时不算），弹一次 actionIdleNotice（{label}＝第一个按钮文字），只提示、不代结算；取值同 departureIdleTurns（REPORT-8091-98199e80 P2：唐线「前往宣平坊宅院赴宴」连续 4 回合不点没有提示）；0＝不提示。missNotice：手打对不上本拍任何动作（原句、按钮标签、作者短语）时不推进，弹这句并列出本拍可做的动作（{actions}）。",
       "deadlineTurns": {

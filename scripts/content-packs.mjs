@@ -3,16 +3,18 @@ import {resolve,join,relative,isAbsolute} from 'node:path';
 import {createHash} from 'node:crypto';
 import {createJiti} from 'jiti';
 import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './content-pack-quest-lines.mjs';
+import {compileTimeline} from './content-pack-timeline.mjs';
 const root=resolve(import.meta.dirname,'..');
 const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries','heldActions'];
-const fields=['schemaVersion','id',...kinds,'texts','questLineResources','playtests','entries','lineCompass'];
+const fields=['schemaVersion','id',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline'];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
 const unique=(items,key,label)=>{const seen=new Set();for(const x of items){const id=key(x);if(typeof id!=='string'||!id.trim()||seen.has(id))fail(`${label} missing/duplicate id ${id}`);seen.add(id);}};
 /** Pure compiler: no writes until every pack validates. Paths confined to the source tree, including symlinks. */
 export async function compileContentPacks({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root,validateContracts=true}={}) {
- const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{}};
+ const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
+ const timelineInserts=[];
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set();
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
@@ -25,6 +27,7 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
   if(m.questLineResources){const res=resolveNumbers(await load(m.questLineResources),numbers,`${m.id}.questLineResources`);if(!object(res)||Object.keys(res).some(k=>!resourceKinds.includes(k)))fail(`${m.id}: invalid quest line resources`);for(const[kind,table]of Object.entries(res)){if(!object(table))fail(`${m.id}: invalid ${kind}`);const into=catalog.questLineResources[kind]||={};for(const[id,v]of Object.entries(table)){if(id in into)fail(`${m.id}: duplicate ${kind} ${id}`);into[id]=v;}}}
   // 线的下一步表（右栏线入口复用分析 2026-10-27 §5.2）：各包的 lines 合并，lineId 不得重复；内容校验在下面 validateLineCompassTable
   if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);catalog.lineCompass.lines.push(...t.lines);}
+  if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);timelineInserts.push(...v);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);catalog[k].push(...v);}
  }
  // Stage assets use the same numeric authority as quest lines; prose is held in pack texts.
@@ -76,6 +79,7 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
  // 只有 eventId 的步的通用句「回到{地点}看看」（R-4／P-12）：地点取该事件 locationId 在所在关 canon.locations 的名字，退回实体目录名；没有 locationId 记空串（运行时只显示线名）；地点 id 另记 lineCompassPlaceIds（travelHint 判已在该地，fix5939-2）
  {const catalogLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));const stageOfEvent=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,s])));for(const line of catalog.lineCompass.lines)for(const step of line.steps||[]){if(typeof step.eventId!=='string'||step.pending||!events.has(step.eventId)||step.eventId in catalog.lineCompassPlaces)continue;const locationId=events.get(step.eventId).locationId;const name=locationId?String((stageOfEvent.get(step.eventId)?.canon?.locations||[]).find(l=>l?.id===locationId)?.name||catalogLocationNames[locationId]||''):'';catalog.lineCompassPlaces[step.eventId]=name;catalog.lineCompassPlaceIds[step.eventId]=locationId||'';}}
  {const jiti=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
+ catalog.timeline=compileTimeline({rawInserts:timelineInserts,numbers,stages:[...stages.values()],texts:catalog.texts});
  // 暂扣动作（while 全部成立时该合同动作不可做，先做 prerequisiteBeatId 那一拍）：条件只读 flags，与步骤 visibleWhen 同形
  const beatIds=new Set(catalog.questLines.flatMap(l=>(l.beats||[]).map(b=>b.id)));
  const itemIds=new Set([...JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/items.json'),'utf8')).entries.map(e=>e.id),...catalog.entities.filter(e=>e.kind==='item').map(e=>e.entry.id)]);

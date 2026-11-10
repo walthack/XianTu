@@ -25,8 +25,10 @@ test('立场卡：四条声音约束都在（每档都注入），「称呼主�
 });
 
 test('亲密档案：外人前写侍卫长的冷面，不写成「凝羽姐姐」；删去「直呼其名」', async () => {
-  const { formatIntimacyProfile } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
-  const text = formatIntimacyProfile('凝羽', { sceneText: '他俯身亲吻她', favor: 100 });
+  const { findIntimacyProfile } = await loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+  const { projectIntimacyLines } = await loadTs('../src/modules/scenarioMods/promptLayers.ts');
+  const profile = findIntimacyProfile('凝羽');
+  const text = [...projectIntimacyLines(profile, { inputHit: true, present: true, favor: 100 }), ...profile.hardLimits].join('\n');
   assert.ok(text.includes('外人前是冷面寡言的白湖商馆侍卫长'));
   assert.doesNotMatch(text, /凝羽姐姐|威严冷艳|直呼其名/);
 });

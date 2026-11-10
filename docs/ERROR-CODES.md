@@ -64,6 +64,8 @@
 | LCQ-NAR-006 | warn | aiBidirectional | 分步生成第 2 步（指令）单次失败，重试或按空指令继续 | 分步生成开启时第 2 步（指令生成）请求失败或解析不出指令；共试 2 次，都失败则按空指令继续 | 看 detail.attempt 与 detail.error；检查 instruction_generation 的 API 分配与第 2 步流式开关 | 否 |
 | LCQ-NAR-007 | warn | aiBidirectional | 开局消息解析失败，转入容错提取 | 开局（初始消息）模型正文不是合法 JSON；容错依次试 JSON 代码块、整体 JSON、正则取 text，行动选项提取失败按空 | 看 detail.stage（parse / jsonBlock / actionOptions）与 detail.error；检查开局用的模型与强 JSON 设置 | 否 |
 | LCQ-NAR-008 | warn | aiBidirectional | 文本优化失败，沿用原文 | 开启了 text_optimization 功能，但优化请求失败或抛错，返回未优化的原文 | 看 detail.error；检查 text_optimization 的 API 分配；不影响回合 | 否 |
+| LCQ-NAR-009 | warn | promptLayers | 私密层因角色现算年龄不满 18 未开 | 入口（输入命中或拍子 scene.intimate）、在场、好感都满足，但现算年龄（当前游戏年−有效出生年，characterResolver.gateAgeNow）不满 prompt-layers.json 的 private.minAdultAge；storyContext 不发私密内容，改发 minorNowConstraint 一句（docs/COMPLIANCE-REQUIREMENTS.md A 节） | 看 detail.characterId 与 detail.ageNow；核对角色总表出生年与 catalog.timeline.characterDebuts；同一角色同一游戏年本会话只记一次 | 否 |
+| LCQ-NAR-010 | info | characterResolver | 角色总表缺出生年，私密门按已满 18 处理 | 总表人物 staticProfile.birthYear 缺值（不设「缺出生年关门」，用户 2026-11-10 定）；canon:build 的 audit-c01-ages 缺值报告应同时列出 | 看 detail.characterId；在 mod-kit/character-birth-years.json 补出生年后跑 npm run canon:build | 否 |
 | LCQ-NET-001 | error | aiService | AI 请求等待首个响应超时（first_byte） | 请求发出后迟迟没有首个响应字节（网络慢、服务端排队、API 地址错） | 看 requestId/turnId 对应的请求；检查 API 地址与网络；可手动重试 | 否 |
 | LCQ-NET-002 | error | aiService | AI 请求总耗时超时（total） | 整次请求超过总耗时上限（含回合预算耗尽） | 看 detail.stage；检查模型响应速度或调大超时；后台任务超时降为 warn | 否 |
 | LCQ-NET-003 | error | aiService | AI 正文流空闲超时（idle） | 流式正文开始后长时间没有新内容 | 多为服务端卡住或网络中断；手动重试，必要时换模型/代理 | 否 |
@@ -176,6 +178,8 @@
 | LCQ-SAV-060 | warn | loadRepairs | 读档迁移叙事正文到本地全文副本写入失败，该条保留原文、不打标记，下次读档重试 | dataRepair.ts 的 migrateNarrativeDetailOnLoad（characterStore.loadGame 在 applyLoadRepairs 后调用；设计稿 2026-11-03 第七节方案 B 详细描写不入档）把 系统.历史.叙事 条目的原 content 存进 narrativeDetailStore（IndexedDB 库 lcq-narrative-detail）时抛错（detail.reason=detail_write_failed），常见于浏览器禁用／配额满／隐私模式下 IndexedDB 不可写；该条不清正文、不改概要、不打 detailMigrated，其余条目与短期记忆照常迁移，不阻断读档 | 看 cause 与 detail.index、detail.detailId；确认浏览器 IndexedDB 可写后重新读档即迁；跑 tests/narrativeDetailMigration.test.mjs | 否 |
 | LCQ-SAV-061 | warn | aiBidirectional | 新回合叙事正文写本地全文副本失败，存档照常只留概要，回看该回合退回概要 | AIBidirectionalSystem 写 系统.历史.叙事 时经 narrativeDetailStore.narrativeEntryWithDetail 把正文全文不等待地存进 IndexedDB 库 lcq-narrative-detail（设计稿 2026-11-03 第七节方案 B 详细描写不入档），写入抛错（detail.reason=detail_write_failed），常见于浏览器禁用／配额满／隐私模式下 IndexedDB 不可写；条目已打 detailMigrated，读档迁移不会补写，该回合全文不再可回看，不阻断回合 | 看 cause 与 detail.index、detail.detailId；确认浏览器 IndexedDB 可写；跑 tests/narrativeDetailWiring.test.mjs | 否 |
 | LCQ-SAV-062 | info | beatProgress | 任务模式拍子判定小请求（beat.judge）：关键拍、结果、实际输入／输出 token 与耗时 | 只在 story.quest.enabled 与 story.quest.intentSettle.beatJudge.enabled 开时：关键拍（beatProgress.beatKeyTurn）上按字链没对上，naturalIntentRouter 发了拍子判定小请求；不记玩家原文 | 看 detail.beatId、detail.key（scene／lexical）、detail.outcome、detail.inputTokens、detail.outputTokens、detail.elapsedMs；outcome=timeout 多说明 timeoutMs 偏小或模型思考过长 | 否 |
+| LCQ-SAV-063 | info | timelineInserts | 读档或逐回合对账时静默补拨已过了的时间线插入事件年数（不重播过场） | 存档进度已过内容包 timeline.json 某插入事件（passedWhen 任一成立），但时间线回执与旧挂点回执合计年数少于配置年数：旧档在新版首次读档、配置年数调大、或直接从后段开局；只补差额，减少年数或删除插入事件不回拨 | 看 detail.insertId、detail.years、detail.fromYear、detail.toYear；回执在 系统.扩展.actionTime.receipts 的 author:timeline:<插入事件 id>:y<年数> | 否 |
+| LCQ-SAV-064 | info | loadRepairs | 读档修回旧版切关时往后挪了的主角出生年（一次性） | 旧版每次切关按「当前年−寿命.当前」重写主角出生年，跳年后切关把出生年挪后了插入事件的年数；仅在已拨过时间线年数、已过序幕两关、出生年恰等于当前年−寿命.当前 时修一次，标记 系统.扩展.c01ProtagonistBirth | 看 detail.from、detail.to；寿命.当前 被剧情改过的旧档不修，需要时手工核对出生年 | 否 |
 
 ## 已作废
 

@@ -21,6 +21,9 @@ import {entityNamePattern} from './namedEntities';
  * - 还原逻辑与构建期 scripts/apply-character-cards-v3-to-mod.mjs 的 buildNotes/applyCardToCharacter 一一对应。
  */
 import registryJson from './builtins/character-registry.json';
+import { CONTENT_PACKS, type PackTimeline } from '../contentPacks';
+import { timelineConfig, timelineGameYearAt } from './timelineAxis';
+import { logEventOnce } from '../diagnostics/log';
 import { syncCharacterNaming, namingChapter, namingFor, isSouthernStage, ledgerChapterGates } from './ledger/naming';
 import { ENEMY_KIND_TYPE, kindIdOf } from './actorInstances';
 import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
@@ -109,6 +112,8 @@ interface RegistryEntry {
   /** 基础属性（等级、战斗强度、属性）。各阶段档只存与此不同的覆盖项，合并规则见 characterStatsMerge.ts。 */
   baseStats?: Record<string, unknown>;
   staticProfile?: RegistryStaticProfile;
+  /** 剧情小孩（出生年表逐人标，用户定）：有效出生年＝原著出生年，不套首登满成年线的下限。 */
+  storyChild?: boolean;
   phaseIdentities?: RegistryPhase[];
   review?: { humanNotes?: string[]; aliasMerged?: string[]; followUps?: string[] };
 }
@@ -211,7 +216,6 @@ function buildNotes(entry: RegistryEntry, currentPhase: RegistryPhase | undefine
       add('历程', `${mem.label || ''}${mem.text}`, 300);
     }
   }
-  if (typeof profile.birthYear === 'number') add('生辰', `约纪元${profile.birthYear}年生（防误算：这是出生年，非年龄）`);
   // 走向类字段（关系/入伙/情节/结局）在角色总表里是全书终点快照，只在两种情况下取值：
   // ① 本关 phase 覆盖了该字段；② 角色在关系链上声明了转折（allowed-after-turning-point），
   //    且本关有投影却留空——既有约定：转折前逐关写“尚未…”，转折后留空沿用终态。
@@ -300,6 +304,52 @@ export function getRegistryCanonicalId(characterId: string): string | undefined 
 export function getRegistryAgeFacts(character: { id?: string; name?: string }) {
   const entry = byId.get(character.id || '') || byName.get(character.name || '');
   return { birthYear: entry?.staticProfile?.birthYear, storyAge: entry?.staticProfile?.storyAge };
+}
+
+// C01：内容包编译期索引的首次登场轴序按总表主 id 合并（关卡里的旧 id 走 idAliases）。
+const DEBUT_AXIS = new Map<string, number>();
+for (const [id, seq] of Object.entries(CONTENT_PACKS.timeline.characterDebuts)) {
+  const key = byId.get(id)?.id || id;
+  if (!DEBUT_AXIS.has(key) || seq < DEBUT_AXIS.get(key)!) DEBUT_AXIS.set(key, seq);
+}
+
+/** 首次登场的全局轴序；没有登场记录返回 undefined。 */
+export function getRegistryDebutAxisSeq(characterId: string): number | undefined {
+  return DEBUT_AXIS.get(byId.get(characterId)?.id || characterId);
+}
+
+/** 剧情小孩（出生年表逐人标 storyChild，用户 11-10 21:39 定）：不套首登下限，现算不满成年线时由唯一的年龄门把私密层关着。 */
+export function isRegistryStoryChild(characterId: string | undefined): boolean {
+  return !!characterId && byId.get(characterId)?.storyChild === true;
+}
+
+/**
+ * 有效出生年＝min(总表出生年, 首登游戏年−成年线)，运行时现算，不写回总表（用户 2026-11-10 定）。
+ * 首登游戏年＝原著当下年＋首登轴序之前插入事件的年数，所以改年数／删插入事件时跟着变。
+ * 本局已见角色再以 firstSeenYear 封底；只读首见年，不读存档生日或年龄。
+ * 总表没有出生年返回 undefined；没有登场记录或是剧情小孩时不抬下限。
+ */
+export function registryEffectiveBirthYear(characterId: string, timeline: PackTimeline = timelineConfig(), firstSeenYear?: number): number | undefined {
+  const birthYear = byId.get(characterId)?.staticProfile?.birthYear;
+  if (typeof birthYear !== 'number' || !Number.isFinite(birthYear)) return undefined;
+  if (isRegistryStoryChild(characterId)) return birthYear;
+  const debut = getRegistryDebutAxisSeq(characterId);
+  const effective = debut === undefined ? birthYear : Math.min(birthYear, timelineGameYearAt(debut, timeline) - minAdultAge());
+  return Number.isInteger(firstSeenYear) ? Math.min(effective, firstSeenYear! - minAdultAge()) : effective;
+}
+
+export const minAdultAge = (): number => promptLayers.private.minAdultAge;
+
+/**
+ * 私密门用的现算年龄：总表人物＝当前年−有效出生年，不读存档出生日期或年龄字段；
+ * 总表缺出生年按满成年线处理（不设缺值关门，记 LCQ-NAR-010）；不在总表的临时人物默认成年。
+ */
+export function gateAgeNow(characterId: string | undefined, currentYear: number, timeline: PackTimeline = timelineConfig(), firstSeenYear?: number): number {
+  if (!Number.isFinite(currentYear) || !characterId || !isRegistryPerson(characterId)) return minAdultAge();
+  const effective = registryEffectiveBirthYear(characterId, timeline, firstSeenYear);
+  if (effective !== undefined) return currentYear - effective;
+  logEventOnce(`LCQ-NAR-010:${getRegistryCanonicalId(characterId)}`, { code: 'LCQ-NAR-010', detail: { characterId: getRegistryCanonicalId(characterId) } });
+  return minAdultAge();
 }
 
 // 总表优先：有本关相位 description／identity 的人物，阶段档文字以总表为准；待裁定者（账本 masterPrecedence）保持原行为。
@@ -407,6 +457,33 @@ export function getRegistryIdentity(name: string): { canonicalName: string; alia
 export function getRegistryNamesById(characterId: string): string[] {
   const entry = byId.get(characterId);
   return entry ? unique([entry.canonicalName, ...(entry.aliases || [])]) : [];
+}
+
+let migrationPersonLabels: Map<string, Set<string>> | undefined;
+let migrationPersonPattern: RegExp | undefined;
+/** 迁移证据用完整姓名／别名最长匹配；同名多人返回 undefined，不把长姓名中的子串另算一人。 */
+export function registryPersonIdsInText(text: string): string[] | undefined {
+  if (!migrationPersonLabels) {
+    migrationPersonLabels = new Map();
+    for (const entry of new Set(byId.values())) {
+      if (!isRegistryPerson(entry.id)) continue;
+      for (const label of unique([entry.canonicalName, ...(entry.aliases || [])])) {
+        const ids = migrationPersonLabels.get(label) || new Set<string>();
+        ids.add(entry.id);
+        migrationPersonLabels.set(label, ids);
+      }
+    }
+    const escaped = [...migrationPersonLabels.keys()].sort((a, b) => b.length - a.length)
+      .map(label => label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    migrationPersonPattern = new RegExp(escaped.join('|'), 'g');
+  }
+  const ids = new Set<string>();
+  for (const hit of text.matchAll(migrationPersonPattern!)) {
+    const candidates = migrationPersonLabels.get(hit[0])!;
+    if (candidates.size !== 1) return undefined;
+    ids.add([...candidates][0]);
+  }
+  return [...ids];
 }
 
 /** 供当前人物提示词补回稳定谈吐；不携带阶段剧情，只用于避免角色被泛化为同一类口吻。 */

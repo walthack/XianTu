@@ -77,6 +77,10 @@ test('privateGateOpen：入口（输入命中或拍标记）、在场、关系�
   assert.equal(layers.privateGateOpen({ ...ok, favor: NaN }), false);
   assert.equal(layers.privateGateOpen({ ...ok, favor: 10, thresholds: { intimacyShallow: 10 } }), true, '阈值可注入');
   assert.equal(layers.privateGateOpen({ ...ok, favor: 9, thresholds: { intimacyShallow: 10 } }), false);
+  // C01 唯一的年龄门：现算年龄不满 18 不开；省略 ageNow 不判年龄
+  assert.equal(layers.privateGateOpen({ ...ok, ageNow: 17 }), false, '现算不满 18');
+  assert.equal(layers.privateGateOpen({ ...ok, ageNow: 18 }), true);
+  assert.equal(layers.privateGateOpen({ ...ok, ageNow: undefined }), true);
 });
 
 test('pickPrivacyFields：只留清单内的倾向类字段', () => {

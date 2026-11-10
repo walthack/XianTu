@@ -55,9 +55,23 @@ export function calculateBirthdateFromAge(currentAge: number, currentTime: GameT
   };
 }
 
+/** 显式版本区分旧的寿命当前值与现算缓存；旧档须完成出生年识别后才启用。 */
+export const LIFESPAN_CACHE_VERSION_KEY = 'c01LifespanCacheVersion';
+export const LIFESPAN_CACHE_VERSION = 1;
+export function lifespanCacheEnabled(saveData: any): boolean {
+  return Number(saveData?.系统?.扩展?.[LIFESPAN_CACHE_VERSION_KEY]) >= LIFESPAN_CACHE_VERSION;
+}
+export function enableLifespanCache(saveData: any): void {
+  // 没有角色寿命的残缺／元数据档无需启用缓存，也不应为此写入只读系统容器。
+  if (!saveData?.角色?.身份 || !saveData?.角色?.属性?.寿命) return;
+  saveData.系统 ||= {};
+  saveData.系统.扩展 ||= {};
+  saveData.系统.扩展[LIFESPAN_CACHE_VERSION_KEY] = LIFESPAN_CACHE_VERSION;
+}
+
 /**
  * 从SaveData中计算当前年龄（玩家）
- * 注意：不再自动更新 寿命.当前，年龄应该通过出生日期实时计算
+ * 寿命.当前 是出生日期现算年龄的缓存，供状态摘要等既有读取方使用。
  * @param saveData 存档数据
  * @returns 计算得到的年龄
  */
@@ -67,15 +81,19 @@ export function updateLifespanFromGameTime(saveData: any): number {
 
   if (!identity || typeof identity !== 'object') return 0;
 
-  // 如果没有出生日期，按默认年龄18推算（只补全出生日期，不写“年龄”冗余字段）
+  // 如果没有出生日期，按默认年龄18推算（沿用既有缺值兜底）
   if (!identity.出生日期) {
     const defaultAge = 18;
+    if (!lifespanCacheEnabled(saveData)) return defaultAge;
     identity.出生日期 = calculateBirthdateFromAge(defaultAge, currentTime);
-    return defaultAge;
   }
 
   // 根据出生日期计算当前年龄
-  return calculateAgeFromBirthdate(identity.出生日期, currentTime);
+  const age = calculateAgeFromBirthdate(identity.出生日期, currentTime);
+  const lifespan = saveData?.角色?.属性?.寿命;
+  // 未迁移旧档先只计算，不覆盖旧识别依据；读档修复／新建入口负责显式启用。
+  if (lifespan && typeof lifespan === 'object' && lifespanCacheEnabled(saveData)) lifespan.当前 = age;
+  return age;
 }
 
 /**
@@ -108,4 +126,14 @@ export function updateNpcLifespanFromGameTime(npcData: any, globalGameTime: Game
   if (baseInfo.年龄 !== undefined) baseInfo.年龄 = calculatedAge;
 
   return calculatedAge;
+}
+
+/** 存档列表按槽内游戏时间现算，不修改尚未读入的槽；缺生日才退回旧缓存。 */
+export function ageForSaveCard(saveData: any): number {
+  const birth = saveData?.角色?.身份?.出生日期;
+  const now = saveData?.元数据?.时间 ?? saveData?.游戏时间;
+  if (Number.isFinite(birth?.年) && Number.isFinite(now?.年)) {
+    return calculateAgeFromBirthdate({ 月: 1, 日: 1, ...birth }, { 月: 1, 日: 1, ...now });
+  }
+  return saveData?.角色?.属性?.寿命?.当前 ?? 18;
 }

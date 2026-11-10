@@ -3525,7 +3525,8 @@
             "liuchao.character.cheng_zongyang",
             "liuchao.character.xiao_yao_yi",
             "liuchao.character.qin_hui",
-            "liuchao.character.wu_san_gui"
+            "liuchao.character.wu_san_gui",
+            "liuchao.character.yan_er"
           ],
           "relatedFactionIds": [
             "liuchao.faction.pan_jiang_cheng",
@@ -3711,6 +3712,12 @@
       "path": "canon.locations[id=liuchao.location.changan].description",
       "from": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闘的体育盛事。）",
       "to": "唐国都城，六朝最大城市。 六朝蹴鞠圣地，唐室大明宫巍峨，城门巍峨，常有鞠社云集，设皇图天策府邸，街市热闹。（民俗：蹴鞠之风极盛，山岳正赛年年在此举办，六朝三十二支鞠社竞逐，是唐国最热闹的体育盛事。）"
+    },
+    {
+      "op": "set",
+      "path": "canon.characters[id=liuchao.character.qin_han].profile.appearance",
+      "from": "头戴紫貂玉珰，锦衣华服，身材精悍，长发飞舞，虎目精光内敛，偶尔目露奇光。；白发萧索，夜眼锐利如鹰隼，目光阴冷。身形稳如渊岳，流露逼人气势。半显阳刚半显阴柔。",
+      "to": "头戴紫貂玉珰，锦衣华服，身材精悍，长发飞舞，虎目精光内敛，偶尔目露奇光。；夜眼锐利如鹰隼，目光阴冷。身形稳如渊岳，流露逼人气势。半显阳刚半显阴柔。"
     }
   ]
 }

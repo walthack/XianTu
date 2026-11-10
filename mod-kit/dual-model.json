@@ -27,10 +27,7 @@
       "continuityHeading": "【后台连续性提示（上回合整理，本回合须遵守，不必在正文复述）】",
       "continuityNote": "下一回合注入主叙事剧本提示（Q6-A）：取 系统.扩展.<extensionKey>.continuity 的 note，最多 continuityMaxItems 条；总闸关或无提示时整段跳过。",
       "extensionNote": "连续性提示、关系称谓提案与 summaryCheck 存在 系统.扩展.<extensionKey> 下（设计稿①）；切档或关闭后端时清掉。",
-      "timeline": {
-        "yearsElapsedAtOpening": 4,
-        "note": "18:35 时间线总约束：开局已过 4 年，全员成年，按新时间线算岁数；年龄由存档 社交.关系.出生日期 与 元数据.时间 现算，不引用原著岁数。"
-      },
+      "timelineNote": "timeline.开局已过年数＝本存档已拨过的时间线插入事件年数（C01：内容包 timeline.json，按 系统.扩展.actionTime.receipts 现算，原 yearsElapsedAtOpening 固定 4 作废）；年龄由存档 社交.关系.出生日期 与 元数据.时间 现算，不引用原著岁数。",
       "instruction": "你是后台一致性整理器，只读用户消息里的 JSON（summaries 概要、ledger 在场角色账、canonBase 基础设定、timeline 时间线、stateDelta 本回合变化），不写正文。只输出一个 JSON 对象：{\"turnId\":\"原样抄回\",\"npcMemory\":[{\"id\":\"ledger 里的 id\",\"entry\":\"一条一事的事实概要\"}],\"relationNotes\":[{\"id\":\"ledger 里的 id\",\"关系\":\"旧→新（仅关系称谓变化时）\"}],\"continuity\":[{\"kind\":\"timeline|canon|fact\",\"about\":\"id 或事项\",\"note\":\"下一回合应遵守的一句话\"}],\"summaryCheck\":{\"ok\":true,\"issue\":\"\"}}。npcMemory 只写本回合在场角色，每条不超过 {npcEntryMaxChars} 字；continuity 最多 {continuityMaxItems} 条；不写好感数值；summaryCheck 只标记概要是否与账、设定、时间线冲突，不改写概要。",
       "degradedNote": "后端请求被 422/1026 拒时，去掉 summaries 与 ledger 记忆重发 degradedAttempts 次（设计稿④）。"
     },

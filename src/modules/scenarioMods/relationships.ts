@@ -5,8 +5,10 @@ import { techniqueSaveQuality } from '../../data/techniqueQuality';
 import {canonicalEntityId} from './namedEntities';
 import { backfillRelationshipIds, relationshipOf } from './ledger/affinityIdentity';
 import type { SaveData } from '@/types/game';
-import { getRegistryAgeFacts, getRegistryNamesById } from './characterResolver';
+import { getRegistryAgeFacts, getRegistryNamesById, isRegistryPerson, isRegistryStoryChild, registryEffectiveBirthYear } from './characterResolver';
 import { mergeFixedScenarioStarterInventory } from './fixedInventoryContracts';
+import { timelineConfig } from './timelineAxis';
+import type { PackTimeline } from '../contentPacks';
 
 import type {
   ScenarioModCharacter,
@@ -45,14 +47,21 @@ const REALM_AGE_RANGE: Record<string, [number, number]> = {
 };
 const NPC_LIFESPAN_CAP = 100;
 export function estimateNpcAge(character: ScenarioModCharacter, currentYear?: number): number {
+  const hasYear = typeof currentYear === 'number' && Number.isFinite(currentYear);
+  // C01：总表人物按有效出生年现算（总表出生年，首登不满 18 的抬到首登满 18；剧情小孩不抬、不兜 18）；出生年先于 storyAge。
+  const effective = character.id ? registryEffectiveBirthYear(character.id) : undefined;
+  if (effective !== undefined && hasYear) {
+    const age = Math.floor(currentYear! - effective);
+    return isRegistryStoryChild(character.id) ? Math.max(0, age) : Math.max(18, age);
+  }
   const card = getRegistryAgeFacts(character);
+  const birthYear = character.profile?.birthYear ?? card.birthYear;
+  if (typeof birthYear === 'number' && Number.isFinite(birthYear) && hasYear) {
+    return Math.max(18, Math.floor(currentYear! - birthYear));
+  }
   const storyAge = character.profile?.storyAge?.value ?? card.storyAge?.value;
   const ageValue = typeof storyAge === 'number' || typeof storyAge === 'string' ? Number(storyAge) : NaN;
   if (Number.isFinite(ageValue) && ageValue > 0) return Math.max(18, Math.floor(ageValue));
-  const birthYear = character.profile?.birthYear ?? card.birthYear;
-  if (typeof birthYear === 'number' && Number.isFinite(birthYear) && typeof currentYear === 'number' && Number.isFinite(currentYear)) {
-    return Math.max(18, Math.floor(currentYear - birthYear));
-  }
   const key = character.id || character.name || '';
   let h = 0;
   for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) >>> 0;
@@ -64,11 +73,39 @@ export function estimateNpcAge(character: ScenarioModCharacter, currentYear?: nu
   return Math.max(18, Math.min(age, NPC_LIFESPAN_CAP - 5));
 }
 
-/** 旧档曾按少女/幼帝估出未成年生日；仅修未满18的关系人物，不改成年生日。 */
+/**
+ * 总表人物的存档出生年与有效出生年对账（C01）：存档出生年＝min(有效出生年, 本局首见年−成年线)；剧情小孩＝有效出生年（原著出生年）。
+ * 只认键或 角色ID 是总表 id 的条目；名字键的旧条目与临时人物不动。返回改动的条目键。
+ */
+export function reconcileRegistryBirthdates(saveData: SaveData, timeline: PackTimeline = timelineConfig()): string[] {
+  const now = saveData.元数据?.时间;
+  if (!now || !Number.isFinite(now.年)) return [];
+  const changed: string[] = [];
+  for (const [key, npc] of Object.entries(saveData.社交?.关系 || {}) as Array<[string, { 角色ID?: string; 首见年?: number; 出生日期?: { 年: number; 月?: number; 日?: number } }]>) {
+    if (!npc || typeof npc !== 'object') continue;
+    const id = isRegistryPerson(key) ? key : npc.角色ID && isRegistryPerson(npc.角色ID) ? npc.角色ID : undefined;
+    const effective = id ? registryEffectiveBirthYear(id, timeline) : undefined;
+    if (effective === undefined) continue;
+    // 只记录年份；出生年仍每次由总表与当前时间线重算，不以存档旧生日为依据。
+    if (!Number.isInteger(npc.首见年) || npc.首见年! > now.年) npc.首见年 = now.年;
+    const target = isRegistryStoryChild(id) ? effective : registryEffectiveBirthYear(id!, timeline, npc.首见年)!;
+    if (npc.出生日期?.年 === target) continue;
+    npc.出生日期 = { 年: target, 月: 1, 日: 1 };
+    changed.push(key);
+  }
+  return changed;
+}
+
+/**
+ * 逐回合对账：总表人物的出生年对到有效出生年（改年数、删插入事件后跟着变），
+ * 再兜底旧档按少女/幼帝估出的未成年生日（仅修未满18的关系人物，不改成年生日；剧情小孩不兜）。
+ */
 export function enforceScenarioNpcAdulthood(saveData: SaveData): void {
+  reconcileRegistryBirthdates(saveData);
   const now = saveData.元数据?.时间;
   if (!now || !Number.isFinite(now.年)) return;
-  for (const npc of Object.values(saveData.社交?.关系 || {}) as Array<{ 出生日期?: { 年: number; 月?: number; 日?: number } }>) {
+  for (const [key, npc] of Object.entries(saveData.社交?.关系 || {}) as Array<[string, { 角色ID?: string; 首见年?: number; 出生日期?: { 年: number; 月?: number; 日?: number } }]>) {
+    if (isRegistryStoryChild(key) || isRegistryStoryChild(npc?.角色ID)) continue;
     const birth = npc.出生日期;
     if (!birth || !Number.isFinite(birth.年)) continue;
     const anniversaryPending = (now.月 || 1) < (birth.月 || 1)

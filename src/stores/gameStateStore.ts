@@ -39,6 +39,7 @@ import { recoverUnmarkedPlayerZeroHealth } from '@/utils/playerVitalGuard';
 import { composeShortTermMemoryEntry, sanitizePersistedMemoryArray } from '@/utils/memorySanitizer';
 import { stripInternalNarrativeControlLeaks } from '@/utils/textSanitizer';
 import { getBuildInfo } from '@/modules/diagnostics/buildInfo';
+import { updateLifespanFromGameTime } from '@/utils/lifespanCalculator';
 
 function buildTechniqueProgress(inventory: Inventory | null) {
   const progress: Record<string, { 熟练度: number; 已解锁技能: string[] }> = {};
@@ -190,6 +191,16 @@ const buildSinglePlayerRuntimeState = () => ({
   世界曝光: false,
   冲突策略: '服务器',
 });
+
+/** 寿命.当前 是现算缓存：store 的时间一变就按 store 自身的出生日期／时间刷新，不等存档拷贝或读档。 */
+function syncStoreLifespanCache(state: Pick<GameState, 'gameTime' | 'character' | 'attributes' | 'systemExtensions'>): void {
+  if (!state.gameTime) return;
+  updateLifespanFromGameTime({
+    元数据: { 时间: state.gameTime },
+    角色: { 身份: state.character, 属性: state.attributes },
+    系统: { 扩展: state.systemExtensions },
+  });
+}
 
 export const useGameStateStore = defineStore('gameState', {
   state: (): GameState => ({
@@ -546,6 +557,7 @@ export const useGameStateStore = defineStore('gameState', {
         this.cultivation = { 修炼功法: this.cultivationTechnique ?? null } as any;
       }
 
+      syncStoreLifespanCache(this);
       this.isGameLoaded = true;
     },
 
@@ -742,6 +754,7 @@ export const useGameStateStore = defineStore('gameState', {
     advanceGameTime(minutes: number) {
       if (!Number.isFinite(minutes) || minutes < 0) throw new Error('invalid_game_time');
       if (this.gameTime) this.gameTime = normalizeGameTime({ ...this.gameTime, 分钟: this.gameTime.分钟 + minutes });
+      syncStoreLifespanCache(this);
     },
 
     /**

@@ -832,7 +832,9 @@ test('状态 JSON 社交.关系：不在场者只留清单字段、记忆限条�
   save.社交.关系.凝羽.好感度 = before.社交.关系.凝羽.好感度;
   assert.deepEqual(save.社交.关系, before.社交.关系);
 
-  // 非剧本存档无在场口径：关系原样发送（既有行为）。
+  // 非剧本存档无在场口径：关系照常全发，只有 私密信息 同样过门（用户 11-10 19:19，A14）；存档不删。
   const plain = { 社交: { 关系: { 某人: { 名字: '某人', 记忆: memories, 私密信息: { 性取向: 'x' } } } } };
-  assert.deepEqual(buildNarrativePromptState(plain, '亲吻').社交.关系, plain.社交.关系);
+  const { 私密信息: _gated, ...plainRest } = plain.社交.关系.某人;
+  assert.deepEqual(buildNarrativePromptState(plain, '亲吻').社交.关系, { 某人: plainRest }, '好感不足：门不过，私密信息剔除');
+  assert.ok(plain.社交.关系.某人.私密信息);
 });

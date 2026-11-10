@@ -8,6 +8,7 @@ import {
   privateGateOpen,
   projectNpcMemory,
 } from '@/modules/scenarioMods/promptLayers';
+import { gateAgeNow } from '@/modules/scenarioMods/characterResolver';
 
 type UnknownRecord = Record<string, any>;
 
@@ -15,8 +16,8 @@ type UnknownRecord = Record<string, any>;
  * 社交.关系 按在场投影（与 storyContext 同口径：computeScenarioPresence），存档本身不删。
  * 不在场 NPC 只留 absentRelationFields（名字、关系、好感、位置等），省记忆与私密信息。
  * 在场 NPC 记忆只带最近 memory.npcPromptLimit 条；私密信息 走 privateGateOpen
- * （本轮输入命中或激活拍 scene.intimate＋在场＋好感），门不过整块剔除，门过只留 privacyAllowedFields。
- * 非剧本存档无在场口径，关系原样发送。
+ * （本轮输入命中或激活拍 scene.intimate＋在场＋好感＋现算年龄满 18），门不过整块剔除，门过只留 privacyAllowedFields。
+ * 非剧本存档无在场口径：关系照常全发，只有 私密信息 同样过门（无在场口径按在场计、无激活拍）。
  */
 function projectPromptRelations(
   relations: unknown,
@@ -25,11 +26,15 @@ function projectPromptRelations(
 ): unknown {
   if (!relations || typeof relations !== 'object' || Array.isArray(relations)) return relations;
   const presence = computeScenarioPresence(presenceSource, playerInput);
-  if (!presence) return relations;
-  const characters = presence.runtime.canon?.characters || [];
+  const characters = presence?.runtime.canon?.characters || [];
   const inputHit = intimateInputHit(playerInput);
+  const currentYear = Number((presenceSource as any)?.元数据?.时间?.年);
   const projected: UnknownRecord = {};
   for (const [key, npc] of Object.entries(relations as UnknownRecord)) {
+    if (!presence) {
+      projected[key] = npc && typeof npc === 'object' && '私密信息' in npc ? gatePrivacy({ ...npc }, inputHit, false, String(npc.角色ID || key), currentYear) : npc;
+      continue;
+    }
     if (!npc || typeof npc !== 'object') continue;
     const name = String(npc.名字 || key);
     if (!presence.presentNames.has(key) && !presence.presentNames.has(name)) {
@@ -40,19 +45,26 @@ function projectPromptRelations(
     if (Array.isArray(entry.记忆)) entry.记忆 = projectNpcMemory(entry.记忆);
     if ('私密信息' in entry) {
       const characterId = characters.find(character => character.id === key || character.name === name)?.id;
-      const open = privateGateOpen({
-        inputHit,
-        beatIntimate: presence.activeEvents.some(event => beatIntimateFor(event, characterId)),
-        present: true,
-        favor: Number(entry.好感度) || 0,
-      });
-      const privacy = open ? pickPrivacyFields(entry.私密信息) : null;
-      if (privacy) entry.私密信息 = privacy;
-      else delete entry.私密信息;
+      gatePrivacy(entry, inputHit, presence.activeEvents.some(event => beatIntimateFor(event, characterId)), characterId || String(entry.角色ID || key), currentYear);
     }
     projected[key] = entry;
   }
   return projected;
+}
+
+/** 私密信息 过门（与 storyContext 共用 privateGateOpen）：门不过整块剔除，门过只留 privacyAllowedFields。 */
+function gatePrivacy(entry: UnknownRecord, inputHit: boolean, beatIntimate: boolean, characterId: string, currentYear: number): UnknownRecord {
+  const open = privateGateOpen({
+    inputHit,
+    beatIntimate,
+    present: true,
+    favor: Number(entry.好感度) || 0,
+    ageNow: gateAgeNow(characterId, currentYear, undefined, entry.首见年),
+  });
+  const privacy = open ? pickPrivacyFields(entry.私密信息) : null;
+  if (privacy) entry.私密信息 = privacy;
+  else delete entry.私密信息;
+  return entry;
 }
 
 /**

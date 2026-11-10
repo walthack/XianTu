@@ -29,12 +29,21 @@ export function entriesForPrompt(shortTerm: readonly string[], latestRaw?: strin
   return out;
 }
 
+export interface LocalNarrativeInserts { before: string[]; after: string[] }
+
+/** 回看与旧正文迁移共用：无概要标记不成为追加稿之间的正文。 */
+export function withLocalNarrativeInserts(content: string, inserts?: LocalNarrativeInserts): string {
+  return [...(inserts?.before || []), isNoSummary(content) ? '' : content, ...(inserts?.after || [])].filter(Boolean).join('\n\n');
+}
+
 /**
  * 回看显示用的正文：有本地全文副本显示副本，没有显示存档里的概要；
  * 概要是无概要标记、又没有副本时返回 null，由界面显示提示文案。
  */
-export function reviewTextOf(entry: { content?: unknown } | null | undefined, detail?: string): string | null {
-  if (typeof detail === 'string' && detail.trim()) return detail;
+export function reviewTextOf(entry: { content?: unknown; localInserts?: LocalNarrativeInserts } | null | undefined, detail?: string): string | null {
+  if (typeof detail === 'string' && detail.trim()) {
+    return withLocalNarrativeInserts(detail, entry?.localInserts);
+  }
   const content = typeof entry?.content === 'string' ? entry.content : '';
   return isNoSummary(content) ? null : content;
 }

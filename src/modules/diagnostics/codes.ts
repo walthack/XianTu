@@ -139,6 +139,8 @@ export const ERROR_CODES = {
   'LCQ-SAV-060': spec('warn', 'loadRepairs', '读档迁移叙事正文到本地全文副本写入失败，该条保留原文、不打标记，下次读档重试'),
   'LCQ-SAV-061': spec('warn', 'aiBidirectional', '新回合叙事正文写本地全文副本失败，存档照常只留概要，回看该回合退回概要'),
   'LCQ-SAV-062': spec('info', 'beatProgress', '任务模式拍子判定小请求（beat.judge）：关键拍、结果、实际输入／输出 token 与耗时'),
+  'LCQ-SAV-063': spec('info', 'timelineInserts', '读档或逐回合对账时静默补拨已过了的时间线插入事件年数（不重播过场）'),
+  'LCQ-SAV-064': spec('info', 'loadRepairs', '读档修回旧版切关时往后挪了的主角出生年（一次性）'),
 
   'LCQ-NET-001': spec('error', 'aiService', 'AI 请求等待首个响应超时（first_byte）'),
   'LCQ-NET-002': spec('error', 'aiService', 'AI 请求总耗时超时（total）'),
@@ -177,6 +179,8 @@ export const ERROR_CODES = {
   'LCQ-NAR-006': spec('warn', 'aiBidirectional', '分步生成第 2 步（指令）单次失败，重试或按空指令继续'),
   'LCQ-NAR-007': spec('warn', 'aiBidirectional', '开局消息解析失败，转入容错提取'),
   'LCQ-NAR-008': spec('warn', 'aiBidirectional', '文本优化失败，沿用原文'),
+  'LCQ-NAR-009': spec('warn', 'promptLayers', '私密层因角色现算年龄不满 18 未开'),
+  'LCQ-NAR-010': spec('info', 'characterResolver', '角色总表缺出生年，私密门按已满 18 处理'),
 
   'LCQ-UI-001': spec('error', 'window', '页面未捕获异常（window error）'),
   'LCQ-UI-002': spec('error', 'window', '未处理的 Promise 拒绝（unhandledrejection）'),

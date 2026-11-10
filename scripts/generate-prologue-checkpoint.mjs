@@ -7,19 +7,31 @@ const opening = await loadTs('../src/modules/scenarioMods/qingyuOpeningPlaytest.
 const wuyuan = await loadTs('../src/modules/scenarioMods/wuyuanOpenWorldSlice.ts');
 const packs = await loadTs('../src/modules/contentPacks/index.ts');
 const time = await loadTs('../src/modules/scenarioMods/actionTime.ts');
-export async function freshPrologueCheckpoint() {
+export async function freshPrologueCheckpoint({ beforeWuyuan = false } = {}) {
   const mods = await Promise.all(['lcq.stage_01', 'lcq.stage_02'].map(async id => packs.applyContentPackOverlays(JSON.parse(await readFile(new URL(`../src/modules/scenarioMods/builtins/data/${id}.json`, import.meta.url), 'utf8')))));
   let save = opening.createQingyuOpeningPlaytestSave(mods[0], '2026-11-01T00:00:00.000Z');
   // 与正式创角相同：开局年由既有年龄公式计算，试玩 helper 的最小档默认年仅供测试。
   const { 计算起始年 } = await loadTs('../src/utils/lifespanCalculator.ts');
   const age = mods[0].scenario.opening.creationPreset.age;
+  const oldYear = save.元数据.时间.年;
   save.元数据.时间.年 = 计算起始年(age);
+  // helper 先建最小试玩历法再切正式 220 历，已经登记的首见年须随同平移。
+  for (const npc of Object.values(save.社交.关系)) {
+    if (Number.isInteger(npc.首见年)) npc.首见年 += save.元数据.时间.年 - oldYear;
+  }
+  const { reconcileRegistryBirthdates } = await loadTs('../src/modules/scenarioMods/relationships.ts');
+  reconcileRegistryBirthdates(save);
+  if (beforeWuyuan) save.角色.属性.寿命.当前 = age;
   init.alignBirthWithStartYear(save, age);
   const trace = [];
   for (let n = 0; n < 100; n++) {
     const rt = save.世界.状态.剧本模组;
     const event = runtime.getScenarioFocusEvent(rt);
     if (event?.id === 'lcq.event.s02_04') {
+      if (beforeWuyuan) {
+        save.元数据.存档名 = 'C01验收-焦土后进五原前-220年';
+        return { save, trace };
+      }
       // 点心铺前置同样走正式选择器；检查点停在成功执行 s02_04 之前。
       for (let step = 0; step < 4 && !wuyuan.getWuyuanOpenWorldSelections(save).some(a => a.kind === 'problem_action'); step++) {
         const local = wuyuan.resolveWuyuanOpenWorldSelectionFromText(save, '我去点心铺') || wuyuan.getWuyuanOpenWorldSelections(save).find(a => a.identityId === 'lcq.route.wuyuan.arrive_market');
@@ -32,7 +44,7 @@ export async function freshPrologueCheckpoint() {
         save.社交.记忆.短期记忆.push(narrative);
       }
       if (!wuyuan.getWuyuanOpenWorldSelections(save).some(a => a.kind === 'problem_action')) throw Error('pastry actions missing');
-      save.元数据.存档名 = '当前构建新档-五原为奴s02_04前-220年';
+      save.元数据.存档名 = '当前构建新档-五原为奴s02_04前-224年';
       return { save, trace };
     }
     if (rt.gameOver) throw Error('unexpected ending');

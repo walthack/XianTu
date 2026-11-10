@@ -3,81 +3,72 @@ import test from 'node:test';
 
 import { loadTs } from './loadTs.mjs';
 
+// 旧的 formatIntimacyProfile 口径与生产不同、没有 src 调用者，C01 删除；这里改测生产投影
+// promptLayers.projectIntimacyLines 与 INTIMACY_PROFILES[].hardLimits（storyContext 常驻发送）。
 const modPromise = loadTs('../src/modules/scenarioMods/intimacyProfiles.ts');
+const layersPromise = loadTs('../src/modules/scenarioMods/promptLayers.ts');
 
-const BASE = { sceneText: '他俯身亲吻她', favor: 100 };
+const OPEN = { inputHit: true, present: true, favor: 100 };
+const project = async (name, gate = OPEN) => {
+  const { findIntimacyProfile } = await modPromise;
+  const { projectIntimacyLines } = await layersPromise;
+  const profile = findIntimacyProfile(name);
+  return profile ? projectIntimacyLines(profile, gate).join('\n') : '';
+};
+const hardLimits = async name => (await modPromise).findIntimacyProfile(name).hardLimits.join('\n');
 
-test('两道门：名单/场景任一不过都不注入', async () => {
-  const { formatIntimacyProfile } = await modPromise;
-
-  // 通过基线
-  assert.ok(formatIntimacyProfile('凝羽', BASE).includes('内部亲密演出要求'));
-
-  // 名单门：不在表内的角色（含两名留白角色）永不注入
-  assert.equal(formatIntimacyProfile('霍子孟', BASE), '');
-  assert.equal(formatIntimacyProfile('苏妲己', BASE), '', '苏妲己收编弧线留白，不得入运行时');
-  assert.equal(formatIntimacyProfile('剑玉姬', BASE), '', '剑玉姬亲密线未开启，不得入运行时');
-
-  // 场景门：普通场景不注入
-  assert.equal(formatIntimacyProfile('凝羽', { ...BASE, sceneText: '两人在堂上议事' }), '');
-  assert.equal(formatIntimacyProfile('凝羽', { ...BASE, sceneText: '' }), '');
+test('名单与门：不在表内的角色（含两名留白角色）没有档案；入口不中不发私密内容', async () => {
+  const { findIntimacyProfile } = await modPromise;
+  assert.ok((await project('凝羽')).length > 0);
+  assert.equal(findIntimacyProfile('霍子孟'), undefined);
+  assert.equal(findIntimacyProfile('苏妲己'), undefined, '苏妲己收编弧线留白，不得入运行时');
+  assert.equal(findIntimacyProfile('剑玉姬'), undefined, '剑玉姬亲密线未开启，不得入运行时');
+  assert.equal(await project('凝羽', { ...OPEN, inputHit: false }), '');
+  assert.equal(await project('凝羽', { ...OPEN, present: false }), '');
 });
 
 test('好感分层：低好感只见浅层，高好感才解锁深层', async () => {
-  const { formatIntimacyProfile } = await modPromise;
-  const low = formatIntimacyProfile('潘金莲', { ...BASE, favor: 0 });
-  const high = formatIntimacyProfile('潘金莲', { ...BASE, favor: 100 });
-
+  const low = await project('潘金莲', { ...OPEN, favor: 20 });
+  const high = await project('潘金莲', { ...OPEN, favor: 100 });
   assert.ok(low.includes('鹤羽剑姬师姐'));
   assert.doesNotMatch(low, /受虐幻想已被逼问出/, '低好感不得提前揭示深层内容');
   assert.match(high, /受虐幻想已被逼问出/);
 });
 
-test('hardLimits 不受好感分层影响，任何时候都注入', async () => {
-  const { formatIntimacyProfile } = await modPromise;
-  for (const favor of [0, 100]) {
-    const text = formatIntimacyProfile('乐明珠', { ...BASE, favor });
-    assert.match(text, /元红未破/, '正典身体边界必须始终在场');
-    assert.match(text, /幼态措辞/, '合规红线必须始终在场');
-  }
+test('hardLimits 不受好感分层影响，任何时候都在（随基础档案常驻发送）', async () => {
+  const text = await hardLimits('乐明珠');
+  assert.match(text, /元红未破/, '正典身体边界必须始终在场');
+  assert.match(text, /幼态措辞/, '合规红线必须始终在场');
+  assert.doesNotMatch(await project('乐明珠', { ...OPEN, favor: 0 }), /元红未破/, 'hardLimits 不占私密内容预算');
 });
 
 test('裁定 #111/#112/#114 的正典边界已进入 hardLimits', async () => {
-  const { formatIntimacyProfile } = await modPromise;
-  // #111 凤凰宝典：两人都必须写明由她们主动恳求不破
-  for (const name of ['潘金莲', '乐明珠']) {
-    assert.match(formatIntimacyProfile(name, BASE), /凤凰宝典/);
-  }
-  // #112 云如瑶：逆转限房事层面，平日不变
-  const yunruyao = formatIntimacyProfile('云如瑶', BASE);
-  assert.match(yunruyao, /不得把逆转带出亲密场景/);
-  // 吕雉：处女功法作筹码
-  assert.match(formatIntimacyProfile('吕雉', BASE), /处子之身/);
-  // #114 碧姬：时序门控 + 母女同场硬禁
-  const biji = formatIntimacyProfile('碧姬', BASE);
+  for (const name of ['潘金莲', '乐明珠']) assert.match(await hardLimits(name), /凤凰宝典/);
+  assert.match(await hardLimits('云如瑶'), /不得把逆转带出亲密场景/);
+  assert.match(await hardLimits('吕雉'), /处子之身/);
+  const biji = await hardLimits('碧姬');
   assert.match(biji, /母女同场亲密是硬禁/);
   assert.match(biji, /生还/);
 });
 
-test('年龄/成人开关不再参与门控（裁定：合规保证在上游名单与正典数据层）', async () => {
-  const { formatIntimacyProfile } = await modPromise;
-  // 传入历史字段不应改变行为——门控只剩名单与场景
-  assert.ok(formatIntimacyProfile('凝羽', { ...BASE, nsfwMode: false, age: 12 }).includes('内部亲密演出要求'));
+test('C01 年龄门只认现算年龄：存档写 12 岁不影响；现算 17 不开、拨钟到 21 开', async () => {
+  const { gateAgeNow } = await loadTs('../src/modules/scenarioMods/characterResolver.ts');
+  // 凝羽总表出生年 199（11-10 旧值重审）、跳前登场：220 年现算 21，与存档出生日期无关（gateAgeNow 不读存档）
+  assert.equal(gateAgeNow('liuchao.character.ning_yu', 220), 21);
+  assert.ok((await project('凝羽', { ...OPEN, ageNow: gateAgeNow('liuchao.character.ning_yu', 220) })).length > 0);
+  // 构造样例：同一人现算 17 不开，只剩 hardLimits；四年后 21 开
+  assert.equal(await project('凝羽', { ...OPEN, ageNow: 17 }), '');
+  assert.ok((await hardLimits('凝羽')).length > 0);
+  assert.ok((await project('凝羽', { ...OPEN, ageNow: 21 })).length > 0);
 });
 
 test('注入标签同时登记进泄漏检测与清洗两份清单', async () => {
-  const { formatIntimacyProfile } = await modPromise;
   const { findInternalNarrativeControlLeaks, stripInternalNarrativeControlLeaks, sanitizeAITextForDisplay } =
     await loadTs('../src/utils/textSanitizer.ts');
-
-  const injected = formatIntimacyProfile('凝羽', BASE);
-  // 检测：整段泄漏能被识别，供表演门禁退回重写
+  const injected = `  内部亲密演出要求（不得写入正文）：凝羽——\n${(await project('凝羽')).split('\n').map(line => `    - ${line}`).join('\n')}`;
   assert.ok(findInternalNarrativeControlLeaks(injected).includes('亲密演出要求'));
-  // 清洗：标签被移除，且不再被检出
   assert.equal(findInternalNarrativeControlLeaks(stripInternalNarrativeControlLeaks(injected)).includes('亲密演出要求'), false);
-  // 展示路径同样清洗
   assert.doesNotMatch(sanitizeAITextForDisplay('内部亲密演出要求（不得写入正文）：她低下头。'), /内部亲密演出要求/);
-  // 早先的高智行为标签同属一族，一并覆盖
   assert.ok(findInternalNarrativeControlLeaks('内部角色行为要求（不得写入正文）：先说方案').includes('内部行为要求'));
 });
 

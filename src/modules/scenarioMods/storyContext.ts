@@ -7,9 +7,10 @@ import { getCurrentContractStep, getCurrentStoryEventActions, getScenarioFocusEv
 import { getCanonRailContract, getCanonRailProfile } from './canonRail';
 import { narrativeVariantReplacesCanonRail, resolveScenarioEventNarrative } from './eventNarrativeView';
 import { formatDivergencePrompt, type ScenarioDivergence } from './divergenceLedger';
-import { findRegistryIdentitiesByContext, getRegistrySpeechStyle, isXieyiSkillHidden } from './characterResolver';
+import { findRegistryIdentitiesByContext, gateAgeNow, getRegistrySpeechStyle, isXieyiSkillHidden } from './characterResolver';
+import { logEventOnce } from '../diagnostics/log';
 import { findIntimacyProfile } from './intimacyProfiles';
-import { beatIntimateFor, fieldLayer, intimateInputHit, projectIntimacyLines, projectProfileNotes } from './promptLayers';
+import { beatIntimateFor, fieldLayer, intimateInputHit, privateAgeBlocked, privateAgeConstraint, privateGateOpen, projectIntimacyLines, projectProfileNotes } from './promptLayers';
 import { formatRelationStance } from './relationStance';
 import { formatAffinityCap } from './affinityCaps';
 import { computePresentNames, departedPresentNames, formatAbsenceGuard } from './presence';
@@ -551,8 +552,8 @@ export function formatSealedCharacter(
 function formatFocusedCharacter(
   character: ScenarioModCharacter,
   runtime: StoryRuntime,
-  favByName?: Map<string, { fav: number; label: string }>,
-  intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[] },
+  favByName?: Map<string, { fav: number; label: string; firstSeenYear?: number }>,
+  intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[]; currentYear?: number },
   playerName?: string,
   presentNames?: Set<string>,
 ): string {
@@ -686,14 +687,20 @@ function formatFocusedCharacter(
   // 硬约束随基础层常驻；私密内容才受入口、在场、好感和配置行数限制。
   if (hardLimits) lines.push(hardLimits);
   if (intimacyProfile && intimacyGate) {
-    const privateLines = projectIntimacyLines(intimacyProfile, {
+    const gate = {
       inputHit: intimateInputHit(intimacyGate.sceneText),
       beatIntimate: intimacyGate.activeEvents.some(event => beatIntimateFor(event, character.id)),
       present: presentNames?.has(character.name) === true,
       favor: fav,
-    });
+      ageNow: gateAgeNow(character.id, Number(intimacyGate.currentYear), undefined, live?.firstSeenYear),
+    };
+    const privateLines = projectIntimacyLines(intimacyProfile, gate);
     if (privateLines.length) {
+      lines.push(`    - ${privateAgeConstraint('period', character.name)}`);
       lines.push(`  内部亲密演出要求（不得写入正文）：${character.name}——\n${privateLines.map(line => `    - ${line}`).join('\n')}`);
+    } else if (privateAgeBlocked(gate.ageNow) && privateGateOpen({ ...gate, ageNow: undefined })) {
+      lines.push(`    - ${privateAgeConstraint('now', character.name)}`);
+      logEventOnce(`LCQ-NAR-009:${character.id}:${intimacyGate.currentYear}`, { code: 'LCQ-NAR-009', detail: { characterId: character.id, ageNow: gate.ageNow } });
     }
   }
   return lines.join('\n');
@@ -710,7 +717,7 @@ function reputationTier(value: number): string {
   return '籍籍无名';
 }
 
-function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string }>, intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[] }, playerName?: string, presentNames?: Set<string>): string {
+function buildFocusedCharacterPrompt(runtime: StoryRuntime, activeEvents: ScenarioModEvent[], contextText = '', favByName?: Map<string, { fav: number; label: string; firstSeenYear?: number }>, intimacyGate?: { sceneText: string; activeEvents: ScenarioModEvent[]; currentYear?: number }, playerName?: string, presentNames?: Set<string>): string {
   const characters = runtime.canon?.characters || [];
   if (!characters.length) return '';
   const focusedIds = new Set<string>();
@@ -972,15 +979,16 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     名字?: string;
     与玩家关系?: string;
     好感度?: number;
+    首见年?: number;
     当前位置?: { 描述?: string };
   }> | undefined;
   // 玩家名：关系姿态层据此显式排除主角（见 formatFocusedCharacter 的两道门）。
   const playerName = String(readPath(saveData, ['角色', '身份', '名字']) || '').trim() || undefined;
-  const favByName = new Map<string, { fav: number; label: string }>();
+  const favByName = new Map<string, { fav: number; label: string; firstSeenYear?: number }>();
   if (relations && typeof relations === 'object') {
     for (const [key, npc] of Object.entries(relations)) {
       if (!npc || typeof npc !== 'object') continue;
-      const entry = { fav: Number(npc.好感度) || 0, label: String(npc.与玩家关系 || '') };
+      const entry = { fav: Number(npc.好感度) || 0, label: String(npc.与玩家关系 || ''), firstSeenYear: npc.首见年 };
       favByName.set(key, entry);
       if (npc.名字) favByName.set(String(npc.名字), entry);
     }
@@ -1026,7 +1034,7 @@ export function buildScenarioStoryPrompt(saveData: SaveData, contextText = ''): 
     ? `${contextText}\n【在场】${sameLocationList.slice(0, 12).join('、')}`
     : contextText;
   // 私密入口只读玩家本轮输入与当前激活拍，不使用近期正文或在场名单匹配词表。
-  const intimacyGate = { sceneText: contextText, activeEvents };
+  const intimacyGate = { sceneText: contextText, activeEvents, currentYear: Number((saveData as any)?.元数据?.时间?.年) };
   const presentNames = computeStoryPresentNames(saveData, runtime, activeEvents, relations);
   const focusedCharacterSection = buildFocusedCharacterPrompt(runtime, activeEvents, focusContext, favByName, intimacyGate, playerName, presentNames);
   const npcPrivateKnowledgeGuard = buildNpcPrivateKnowledgeGuard(runtime);

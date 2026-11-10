@@ -32,19 +32,21 @@ test('模型回血写入拦截，伤害与已经本地结算的治疗保留',asy
  const s=base();s.角色.属性.气血.当前=20;assert.equal(rejectModelHealthIncrease(s,{当前:44,上限:150}),false);assert.equal(s.角色.属性.气血.当前,20);
  s.角色.属性.气血.当前=89;assert.equal(rejectModelHealthIncrease(s,{当前:89,上限:150}),false);
 });
-test('从当前新游戏连续正式合同推进到 s02_04，完成后 220→224，过渡只发一次',async()=>{
- const {save,trace}=await freshPrologueCheckpoint();assert.equal(save.元数据.时间.年,220);assert.ok(trace.some(t=>t.event==='lcq.event.s01_06'));assert.equal(R.getScenarioFocusEvent(rt(save)).id,'lcq.event.s02_04');
+// C01（#188 放行改写）：草原四年改挂在进五原城路线（时间线插入事件），s02_04 不再是跳年点。
+test('从当前新游戏连续正式合同推进到 s02_04：进五原城路线时 220→224，过渡只发一次；完成 s02_04 不再跳',async()=>{
+ const {save,trace}=await freshPrologueCheckpoint();assert.ok(trace.some(t=>t.event==='lcq.event.s01_06'));assert.ok(trace.some(t=>t.local==='lcq.route.wuyuan.arrive_market'));assert.equal(R.getScenarioFocusEvent(rt(save)).id,'lcq.event.s02_04');
+ assert.equal(save.元数据.时间.年,224);assert.match(F.flushTimeSkipInterlude(save),/流浪了四年/);assert.equal(F.flushTimeSkipInterlude(save),'');
  const action=R.getCurrentStoryEventActions(save).find(a=>a.eventId==='lcq.event.s02_04');assert.ok(action);
- const result=completePastry(save);assert.equal(result.canonEventCompleted,true,JSON.stringify(result));assert.equal(save.元数据.时间.年,224);
- assert.match(F.flushTimeSkipInterlude(save),/第四年/);assert.equal(F.flushTimeSkipInterlude(save),'');
+ const result=completePastry(save);assert.equal(result.canonEventCompleted,true,JSON.stringify(result));assert.equal(save.元数据.时间.年,224);assert.equal(F.flushTimeSkipInterlude(save),'');
  R.recordStoryEventStructuredAction(save,action);assert.equal(save.元数据.时间.年,224);
 });
-test('旧 s02_04 合同缺跳年字段：成功时补当前耗时，保留旧合同与旧挂点回执',async()=>{
- const {save}=await freshPrologueCheckpoint();const event=rt(save).events.find(e=>e.id==='lcq.event.s02_04');event.playerCompletionContract.actions.forEach(a=>delete a.timeAdvance);
- save.元数据.时间.年=200;const before=structuredClone(event);const action=R.getCurrentStoryEventActions(save).find(a=>a.eventId===event.id);
- const old=structuredClone(save);old.系统.扩展.actionTime={receipts:{'author:lcq.event.s01_06::advance_declared_objective':{}}};
- assert.equal(completePastry(save).canonEventCompleted,true);assert.equal(save.元数据.时间.年,204);assert.deepEqual(event,before);assert.match(F.flushTimeSkipInterlude(save),/第四年/);
- completePastry(old);assert.equal(old.元数据.时间.年,200);assert.equal(F.flushTimeSkipInterlude(old),'');
+test('旧 s02_04 合同缺跳年字段：成功时不改合同、不二次跳；旧档已在 s01_06 跳过的同样不跳不接',async()=>{
+ const {save}=await freshPrologueCheckpoint();F.flushTimeSkipInterlude(save);const event=rt(save).events.find(e=>e.id==='lcq.event.s02_04');event.playerCompletionContract.actions.forEach(a=>delete a.timeAdvance);
+ const before=structuredClone(event);
+ const old=structuredClone(save);const legacy=old.系统.扩展.actionTime.receipts['author:timeline:qingyu.insert.grassland_four_years:y4'];
+ old.系统.扩展.actionTime.receipts={'author:lcq.event.s01_06::advance_declared_objective':legacy};
+ assert.equal(completePastry(save).canonEventCompleted,true);assert.equal(save.元数据.时间.年,224);assert.deepEqual(event,before);assert.equal(F.flushTimeSkipInterlude(save),'');
+ completePastry(old);assert.equal(old.元数据.时间.年,224);assert.equal(F.flushTimeSkipInterlude(old),'');
 });
 test('打字闭关弹窗确认一日自动恢复发送；取消不发送；结算一天幂等',()=>{
  const source=readFileSync('src/components/dashboard/MainGamePanel.vue','utf8');

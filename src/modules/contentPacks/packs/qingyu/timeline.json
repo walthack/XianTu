@@ -1,0 +1,13 @@
+[
+  {
+    "id": "qingyu.insert.grassland_four_years",
+    "anchor": { "afterAxisSeq": 30, "beforeAxisSeq": 31 },
+    "trigger": { "kind": "openWorldRoute", "routeId": "lcq.route.wuyuan.arrive_market" },
+    "passedWhen": { "anyEventDone": ["lcq.event.s02_04"], "minAxisSeq": 31, "sliceEntered": "lcq.open_world.wuyuan_v1" },
+    "years": { "$num": "story.actionTime.prologueYears" },
+    "order": 0,
+    "interludeTextKey": "qingyu.prologue.grasslandFourYears",
+    "supersedes": ["lcq.event.s02_04::advance_declared_objective", "lcq.event.s01_06::advance_declared_objective"],
+    "note": "原创事件：王哲陨落后草原流浪，进五原城（用户 2026-11-10 19:46 定 B2）。轴序 ≥31 的原著事件整体顺延 years 年。"
+  }
+]
