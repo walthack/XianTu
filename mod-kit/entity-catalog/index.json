@@ -19957,6 +19957,12 @@
     },
     {
       "kind": "location",
+      "id": "lyl.location.taiquan_crater",
+      "authoritySource": "mod-kit/entity-catalog/locations.json",
+      "aliases": []
+    },
+    {
+      "kind": "location",
       "id": "lyl.location.xianqian_dian",
       "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []
@@ -21441,6 +21447,12 @@
     },
     {
       "kind": "status",
+      "id": "buff.shanshen_blessing",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "status",
       "id": "dizzy",
       "authoritySource": "src/modules/sceneModule/contracts/statuses.json",
       "aliases": []
@@ -22005,6 +22017,18 @@
     },
     {
       "kind": "text",
+      "id": "actionDisplay.lyl.event.han_court_grain_blame.hear_court_grain_cutoff.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "actionDisplay.lyl.event.han_court_grain_blame.hear_court_grain_cutoff.line",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "brief.baihu.o1_price",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22299,6 +22323,12 @@
     },
     {
       "kind": "text",
+      "id": "free.block.selfUse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.block.settled",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -22318,6 +22348,12 @@
     {
       "kind": "text",
       "id": "free.fact.affinity.worn",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.aftermath.downed",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -22917,6 +22953,30 @@
     },
     {
       "kind": "text",
+      "id": "free.fact.selfUse.cured",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.selfUse.noEffect",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.selfUse.onUse",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.fact.selfUse.used",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "free.fact.shield.done",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -23320,6 +23380,12 @@
     {
       "kind": "text",
       "id": "free.receipt.refused",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "free.receipt.selfUse",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -24370,6 +24436,30 @@
     {
       "kind": "text",
       "id": "lineCompass.tang.step.tang_ganlu_zhuhuan",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "nanhuang.leopard.encounter",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "nanhuang.leopard.line.a_xi",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "nanhuang.leopard.line.shiweimo",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "nanhuang.leopard.line.su_li",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -26013,6 +26103,12 @@
     },
     {
       "kind": "text",
+      "id": "qingyu.prologue.grasslandFourYears",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "qingyu.stage02.opening",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
@@ -26020,6 +26116,78 @@
     {
       "kind": "text",
       "id": "realm.breakthrough.capped",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.encounter.foreshadow",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.encounter.reveal",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.han.arrived.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.han.arrived.objective",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.han.arrived.playerLine",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.moderation.blocked",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.moderation.emptyOutput",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.moderation.local",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "report8091.qin.preview",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.brief.tagOn.opposed",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.brief.tagOn.player_side",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "scene.brief.tagOn.scene",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []
     },
@@ -26789,12 +26957,6 @@
       "kind": "text",
       "id": "text.obj.ningyu.y6.recall",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
-      "aliases": []
-    },
-    {
-      "kind": "location",
-      "id": "lyl.location.taiquan_crater",
-      "authoritySource": "mod-kit/entity-catalog/locations.json",
       "aliases": []
     }
   ],
