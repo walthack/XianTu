@@ -23,9 +23,6 @@
   "statuses": [
     "statuses.json"
   ],
-  "stages": [
-    "stage-qin-xianyang.json"
-  ],
   "overlays": [
     "stage3-overlays.json",
     "time-overlays.json"
@@ -39,8 +36,7 @@
   "entities": [],
   "texts": [
     "texts.json",
-    "lines-texts.json",
-    "qin-texts.json"
+    "lines-texts.json"
   ],
   "questLineResources": "lines-resources.json",
   "lineCompass": "line-compass.json",
@@ -49,13 +45,7 @@
   "mapRoutes": [
     "map-routes.json"
   ],
-  "mapEntries": [
-    "map-entries.json"
-  ],
   "heldActions": [
     "held-actions.json"
-  ],
-  "rails": [
-    "rails.json"
   ]
 }

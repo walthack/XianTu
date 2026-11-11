@@ -1,0 +1,16 @@
+{
+  "lineCompass.qin.entry": "去咸阳，找那个方士问问",
+  "lineCompass.qin.name": "秦国",
+  "lineCompass.qin.step.qin_entry_envoy": "去咸阳，向秦廷递国书",
+  "lineCompass.qin.step.qin_entry_xu_unmet": "去咸阳，找那个方士问问",
+  "lineCompass.qin.step.qin_camp_route": "去城外军营看看",
+  "lineCompass.qin.step.qin_banquet": "进宫看看",
+  "lineCompass.qin.step.qin_purge_suxiao": "在咸阳城里打听打听",
+  "lineCompass.qin.step.qin_villa": "在咸阳四处走走看看",
+  "lineCompass.qin.step.qin_baiqi": "去城外军营看看",
+  "lineCompass.qin.step.qin_branch_raid": "去咸阳的商铺街看看",
+  "report8091.qin.preview": "前往秦都咸阳落脚，打听商人求见秦王的门路。",
+  "mapEntry.qin.return.label": "【扩写】了结咸阳之事，返回{stage}",
+  "mapEntry.qin.return.narrative": "【扩写·待剧情策划】咸阳诸事暂告一段落，你动身返回，回到了离开时的地方。",
+  "mapEntry.qin.return.chronicle": "【扩写】了结咸阳之事，返回「{stage}」"
+}

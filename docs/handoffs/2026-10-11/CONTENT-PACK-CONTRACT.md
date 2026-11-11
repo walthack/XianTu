@@ -90,3 +90,8 @@ F06–F09采用[31号合同原样归档](../../../mod-kit/source-documents/31-�
 - 地图入口的 `previewTextId`／`returnLabelTextId`／`returnTextId`／`returnChronicleTextId` 写了就必须是已有正文键。
 
 **重建与回滚**：`node scripts/content-packs.mjs` 先纯数据编译（不加载会读 `generated/catalog.json` 的 TS 模块），把新 catalog 写到位（旧文件先备份），再起子进程用 TS 校验器（validator／lint／questLines，它们加载时读磁盘上的 catalog）校验；失败则恢复旧文件（原来没有就删掉新文件）并报错。所以删掉 `catalog.json` 后单次重建即可。`--check` 不写文件：编译结果与磁盘不一致即报过期，一致再做 TS 校验。`compileContentPacks()` 只编译不写，其 TS 校验看到的是磁盘上的 catalog。
+
+## 2026-11-11 秦线独立包（阶段 3b）
+
+秦线是第一个独立的线包：`packs/qin/`，manifest `id: "qingyu.qin"`，`dependsOn: ["qingyu.core"]`。目录里有 `manifest.json`、`stage-qin-xianyang.json`（关）、`qin-texts.json`（关内正文）、`texts.json`（下一步表、地图入口预览与返回的 14 个正文键）、`line-compass.json`（只有 `lineId: "qin"` 一条）、`map-entries.json`（地图入口 `qin`）、`rails.json`。其中 `stage-qin-xianyang.json`、`qin-texts.json`、`map-entries.json`、`rails.json` 从 `packs/qingyu/` 整文件原样移来，`texts.json` 与 `line-compass.json` 是从核心包同名文件里拆出来的；上文「秦线示例」里的 `packs/qingyu/rails.json` 现在在 `packs/qin/rails.json`。
+核心包 `packs/qingyu/` 里不再有秦专属 id，`tests/contentPackSplit.test.mjs` 会检查这一点，并把秦包并回核心包后编译，结果必须与拆开时一致（texts 键序与 `version` 除外）。新增线包照这个结构来：一条线一个目录，依赖核心包，只放本线的关、正文、下一步表条目与入口。
