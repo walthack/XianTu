@@ -1,0 +1,59 @@
+[
+  {
+    "endingId": "lcq.ending.death.shanghou_relic",
+    "key": "E05",
+    "note": "B7 自 endingPresentation.ts endingKey 搬入：E05–E08 结局编号。"
+  },
+  {
+    "endingId": "lcq.ending.death.ghost_king_skull",
+    "key": "E06",
+    "battleLoss": {
+      "title": "天命的指引",
+      "kind": "death",
+      "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+      "tierFlag": "lcq.encounter.f10.tier",
+      "tier": "rout",
+      "facts": [
+        "程宗扬被封回龛窟，血没能沾上骨虎",
+        "鬼巫王剖开天命者的头颅",
+        "银镜中的同伴未能找到他",
+        "龙神照常吞下鬼巫王"
+      ]
+    },
+    "note": "B7 自 fixedEndingNarratives.ts BATTLE_LOSS_ENDINGS 搬入（E06–E08 三条战败结局，顺序即原表顺序）。战斗正式接入时消费此表；此处只录数据，不由LLM写tier触发，也不重复判slay_dragon/s06_02。"
+  },
+  {
+    "endingId": "lcq.ending.death.dragon_well",
+    "key": "E07",
+    "battleLoss": {
+      "title": "龙首无人",
+      "kind": "death",
+      "sourceEventId": "lcq.event.ghost_king_swallowed",
+      "tierFlag": "lcq.encounter.f13.tier",
+      "tier": "lose",
+      "facts": [
+        "你带乐明珠逃往洞窟裂缝时滚下碎石坡，背脊重伤",
+        "乐明珠被推进龙角下的空隙",
+        "程宗扬被埋在鬼王峒地底",
+        "龙神吞下鬼巫王，龙首无人号令反击"
+      ]
+    }
+  },
+  {
+    "endingId": "lcq.ending.fail.dragon_essence",
+    "key": "E08",
+    "battleLoss": {
+      "title": "龙精入体",
+      "kind": "failure",
+      "sourceEventId": "lcq.event.slay_dragon",
+      "tierFlag": "lcq.encounter.f14.tier",
+      "tier": "lose",
+      "facts": [
+        "龙神死去",
+        "龙精携鬼巫王残念进入程宗扬丹田",
+        "程宗扬存活，原来的自我不再主宰身体",
+        "本局结束，不可续玩"
+      ]
+    }
+  }
+]

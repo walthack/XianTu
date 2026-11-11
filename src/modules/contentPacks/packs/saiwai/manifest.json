@@ -12,5 +12,8 @@
   ],
   "stageMeta": [
     "stage-meta.json"
+  ],
+  "endings": [
+    "endings.json"
   ]
 }
