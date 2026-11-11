@@ -66,7 +66,8 @@ const rejects=(packs,re)=>withPacks(packs,c=>assert.rejects(c,re));
 test('合成包：编译通过，按包内顺序进 catalog 末段，note 剥掉',async()=>{
  const c=await compile({a:pack('test.a',[{eventId:EV2,note:'作者注',from:'00000001',to:'00000002'},{eventId:EV,from:'0000000a',to:'0000000b'}])});
  assert.deepStrictEqual(c.contractRevisions,[{eventId:EV2,from:'00000001',to:'00000002'},{eventId:EV,from:'0000000a',to:'0000000b'}]);
- assert.equal(Object.keys(c).at(-1),'contractRevisions');
+ // 末段：排在 compassConditions 之后（阶段 2b 的 worldEvents 也在末段，两者先后不作约束）
+ assert.ok(Object.keys(c).indexOf('contractRevisions')>Object.keys(c).indexOf('compassConditions'));
 });
 test('合成包：不声明时 contractRevisions 是空数组',async()=>{
  const c=await compile({a:{id:'test.a'}});
