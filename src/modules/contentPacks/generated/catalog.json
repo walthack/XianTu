@@ -1,5 +1,5 @@
 {
-  "version": "ed494b3d542c4086",
+  "version": "513f3b55b694e031",
   "contracts": [
     {
       "meta": {
@@ -21591,9 +21591,85 @@
     ]
   },
   "ifBranches": {
-    "branches": [],
-    "consequences": [],
-    "prompts": {}
+    "branches": [
+      {
+        "eventId": "lcq.event.s06_03",
+        "branchId": "lcq.if_xieyi_longrest",
+        "requiredCharacterId": "liuchao.character.xie_yi",
+        "acceptedStatuses": [
+          "alive",
+          "longrest",
+          "incapacitated"
+        ],
+        "flagCharacterSlug": "xie_yi",
+        "normalizedStatus": "longrest"
+      },
+      {
+        "eventId": "lcq.event.s06_04",
+        "branchId": "lcq.if_xiaozi_spares_mother",
+        "requiredCharacterId": "liuchao.character.bi_ji",
+        "acceptedStatuses": [
+          "alive",
+          "longrest",
+          "incapacitated"
+        ],
+        "flagCharacterSlug": "bi_ji",
+        "normalizedStatus": "alive",
+        "prompt": "小紫不得被写成已弑母；她或同行者必须当场决定如何处置仍活着的碧姬（看守、送离或交由可信者照料），并承接这项决定的余波。小紫的内核不因此改变，仍然心狠手辣，不得写成放下、转善或与碧姬和解；碧姬不悔改不感恩，只会依附当前最强的庇护者。"
+      },
+      {
+        "eventId": "lcq.event.s08_06_pursuit_repelled",
+        "branchId": "lcq.if_sudaji_slain_mochou",
+        "requiredCharacterId": "liuchao.character.su_daji",
+        "acceptedStatuses": [
+          "dead"
+        ],
+        "flagCharacterSlug": "su_daji",
+        "normalizedStatus": "dead",
+        "prompt": "苏妲己已死，不得让她继续出手追杀；后续应处理黑魔海遗留网络与权力真空，且星月湖战争仍会发生。"
+      },
+      {
+        "eventId": "lyg.event.s01_06",
+        "branchId": "lyg.if_guojie_longrest",
+        "requiredCharacterId": "liuchao.character.guo_jie",
+        "acceptedStatuses": [
+          "alive",
+          "longrest",
+          "incapacitated"
+        ],
+        "flagCharacterSlug": "guo_jie",
+        "normalizedStatus": "longrest",
+        "prompt": "郭解重伤生还；托孤已转为受限辅政之约。他不得改写定陶王登基，但应由游侠旧部、洛都耳目或程宗扬的护持具体承接。"
+      },
+      {
+        "eventId": "lyg.event.s01_07",
+        "branchId": "lyg.if_dongzhuo_longrest",
+        "requiredCharacterId": "liuchao.character.dong_zhuo",
+        "acceptedStatuses": [
+          "alive",
+          "longrest",
+          "incapacitated"
+        ],
+        "flagCharacterSlug": "dong_zhuo",
+        "normalizedStatus": "longrest",
+        "prompt": "董卓重伤未死且不得回京争权；贾文和必须收束凉州旧部、交代边地军情或其退场安排，定陶王登基不变。"
+      }
+    ],
+    "consequences": [
+      {
+        "eventId": "lcq.event.s06_03",
+        "requiredCharacterId": "liuchao.character.xie_yi",
+        "acceptedStatuses": [
+          "missing"
+        ],
+        "flagKey": "world.xieyi_absence.active",
+        "flagValue": true,
+        "prompt": "谢艺下落不明，既不得确认其死亡或安全，也不得启动长养 IF。星月湖须分出人手搜寻，并防备黑魔海借断线渗透；玩家可介入搜寻、护送或调查余波。"
+      }
+    ],
+    "prompts": {
+      "offscreen.lcq.xingyuehu_war": "这是玩家缺席时世界自行结算的战争后果：不得让战争倒带或写成玩家亲自参战；应以战报、伤员、戒严和粮线压力持续承接，玩家仍可选择介入余波或继续置身事外。"
+    }
   },
   "endings": [],
   "openWorldSlices": [],

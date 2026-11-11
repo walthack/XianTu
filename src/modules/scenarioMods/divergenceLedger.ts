@@ -53,68 +53,15 @@ export interface AutoConsequenceRule {
 }
 
 /**
- * R2-0V 首个纵切运行时 registry。
- * eventId 只召回候选；人物状态才确认分支，避免所有 void 原因都硬塞进同一 IF。
- * 来源：character-canon/qingyu.if-branches.json + CANON-DECISIONS #90。
+ * 数据（B5 起）：IF 自动分支 5 条、自动后果 1 条、按分歧记录 id 的后果提示 1 条在人物包
+ * `contentPacks/packs/characters/if-branches.json`，权威来源是那份 JSON（原来源注释在其 `note`）；
+ * 三张 `TS_*` 为空表，导出名与查询函数不变。
  */
-export const TS_AUTO_BRANCH_RULES: AutoBranchRule[] = [{
-  eventId: 'lcq.event.s06_03',
-  branchId: 'lcq.if_xieyi_longrest',
-  requiredCharacterId: 'liuchao.character.xie_yi',
-  acceptedStatuses: /^(alive|longrest|incapacitated)$/i,
-  flagCharacterSlug: 'xie_yi',
-  normalizedStatus: 'longrest',
-}, {
-  eventId: 'lcq.event.s06_04',
-  branchId: 'lcq.if_xiaozi_spares_mother',
-  requiredCharacterId: 'liuchao.character.bi_ji',
-  acceptedStatuses: /^(alive|longrest|incapacitated)$/i,
-  flagCharacterSlug: 'bi_ji',
-  normalizedStatus: 'alive',
-  prompt: '小紫不得被写成已弑母；她或同行者必须当场决定如何处置仍活着的碧姬（看守、送离或交由可信者照料），并承接这项决定的余波。小紫的内核不因此改变，仍然心狠手辣，不得写成放下、转善或与碧姬和解；碧姬不悔改不感恩，只会依附当前最强的庇护者。',
-}, {
-  eventId: 'lcq.event.s08_06_pursuit_repelled',
-  branchId: 'lcq.if_sudaji_slain_mochou',
-  requiredCharacterId: 'liuchao.character.su_daji',
-  acceptedStatuses: /^dead$/i,
-  flagCharacterSlug: 'su_daji',
-  normalizedStatus: 'dead',
-  prompt: '苏妲己已死，不得让她继续出手追杀；后续应处理黑魔海遗留网络与权力真空，且星月湖战争仍会发生。',
-}, {
-  eventId: 'lyg.event.s01_06',
-  branchId: 'lyg.if_guojie_longrest',
-  requiredCharacterId: 'liuchao.character.guo_jie',
-  acceptedStatuses: /^(alive|longrest|incapacitated)$/i,
-  flagCharacterSlug: 'guo_jie',
-  normalizedStatus: 'longrest',
-  prompt: '郭解重伤生还；托孤已转为受限辅政之约。他不得改写定陶王登基，但应由游侠旧部、洛都耳目或程宗扬的护持具体承接。',
-}, {
-  eventId: 'lyg.event.s01_07',
-  branchId: 'lyg.if_dongzhuo_longrest',
-  requiredCharacterId: 'liuchao.character.dong_zhuo',
-  acceptedStatuses: /^(alive|longrest|incapacitated)$/i,
-  flagCharacterSlug: 'dong_zhuo',
-  normalizedStatus: 'longrest',
-  prompt: '董卓重伤未死且不得回京争权；贾文和必须收束凉州旧部、交代边地军情或其退场安排，定陶王登基不变。',
-}];
+export const TS_AUTO_BRANCH_RULES: AutoBranchRule[] = [];
 
-/**
- * 没有把谢艺救回并不等于可以把原著死亡照抄回来。此处只登记“失踪”这个
- * 可续玩的失败后果；它刻意不激活长养 IF，也不伪称玩家完成了死亡事件。
- */
-export const TS_AUTO_CONSEQUENCE_RULES: AutoConsequenceRule[] = [{
-  eventId: 'lcq.event.s06_03',
-  requiredCharacterId: 'liuchao.character.xie_yi',
-  acceptedStatuses: /^missing$/i,
-  flagKey: 'world.xieyi_absence.active',
-  flagValue: true,
-  prompt: '谢艺下落不明，既不得确认其死亡或安全，也不得启动长养 IF。星月湖须分出人手搜寻，并防备黑魔海借断线渗透；玩家可介入搜寻、护送或调查余波。',
-}];
+export const TS_AUTO_CONSEQUENCE_RULES: AutoConsequenceRule[] = [];
 
-/** 按分歧记录 id 出的后果说明（引擎场外结算的世界事件，recordOffscreenDivergence 写的 id）。 */
-export const TS_DIVERGENCE_PROMPTS: Record<string, string> = {
-  'offscreen.lcq.xingyuehu_war': '这是玩家缺席时世界自行结算的战争后果：不得让战争倒带或写成玩家亲自参战；应以战报、伤员、戒严和粮线压力持续承接，玩家仍可选择介入余波或继续置身事外。',
-};
+export const TS_DIVERGENCE_PROMPTS: Record<string, string> = {};
 
 /** 包里的 acceptedStatuses（小写字母串）编译成与原表同形的正则：一个 → ^x$，多个 → ^(a|b)$，不分大小写（F0a）。 */
 export function acceptedStatusPattern(statuses: readonly string[]): RegExp {

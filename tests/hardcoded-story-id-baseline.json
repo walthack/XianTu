@@ -13,8 +13,8 @@
     "playtest."
   ],
   "总数": {
-    "文件数": 67,
-    "行数": 835
+    "文件数": 66,
+    "行数": 818
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -27,7 +27,6 @@
     "src/modules/scenarioMods/beatProgress.ts": 1,
     "src/modules/scenarioMods/branchDecision.ts": 6,
     "src/modules/scenarioMods/characterResolver.ts": 25,
-    "src/modules/scenarioMods/divergenceLedger.ts": 17,
     "src/modules/scenarioMods/endingPresentation.ts": 10,
     "src/modules/scenarioMods/eventNarrativeView.ts": 33,
     "src/modules/scenarioMods/fixedEndingNarratives.ts": 15,
