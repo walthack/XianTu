@@ -6,5 +6,8 @@
   ],
   "characterBeats": [
     "character-beats.json"
+  ],
+  "characterProfiles": [
+    "profiles.json"
   ]
 }

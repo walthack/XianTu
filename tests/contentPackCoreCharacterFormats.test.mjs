@@ -2,7 +2,7 @@
 // storyAxis、locationAliases、characterProfiles、ifBranches。编译夹具在 _newbot_tmp 下的临时 packs 目录（写法同 contentPackLineFormats）。
 // 不写死真实剧情 id：关、事件、地点、角色都从内置关、locations.json、实体总表动态挑；合成 id 一律 test.* 前缀。
 // 「与 TS 表重复」用合成的临时 TS 条目：本文件与编译器（scripts/*.mjs 的 jiti）共用模块缓存，用例里改 TS_ 表、用完还原，编译期校验看得到。
-// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后：没改口径的段自然变成空演练；人物拍点一段自 B2 起取合并值，仍是真演练）。
+// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后：没改口径的段自然变成空演练；人物拍点一段自 B2 起取合并值、姿态与好感上限自 B4 起取人物包 profiles.json，仍是真演练）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,readFile,readdir,writeFile,rm} from 'node:fs/promises';
@@ -443,14 +443,6 @@ test('归属：人物任务 id 不进通用扫描——别的包里同名的普�
 });
 
 // —— 搬迁演练：现有 TS 表整张转写进一个合成包，临时搬空 TS 表后编译，合并值与现在逐项相同 ——
-/** 从 TS 源码取 names 行（`...entityAliases("<kind>","<id>")` 与字面名字）与 cap 档位：搬迁预检用，表搬空后取到 0 条。 */
-const sourceEntries=async rel=>{
- const src=await readFile(join(root,rel),'utf8');
- const names=[...src.matchAll(/^    names: \[(.*)\],$/gm)].map(m=>{const entities=[],extraNames=[];for(const part of m[1].split(/,\s*(?=\.\.\.|')/)){const e=part.match(/^\.\.\.entityAliases\("(\w+)","([^"]+)"\)$/),x=part.match(/^'([^']*)'$/);
-  if(e){assert.equal(extraNames.length,0,`实体名排在字面名字之后，JSON 形状表达不了：${m[1]}`);entities.push({kind:e[1],id:e[2]});}else if(x)extraNames.push(x[1]);else assert.fail(`names 写法超出 entities＋extraNames：${part}`);}
-  return {entities,...(extraNames.length?{extraNames}:{})};});
- return {names,tiers:[...src.matchAll(/^    cap: tierMax\('(\w+)'\),$/gm)].map(m=>m[1])};
-};
 test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通过，合并值 deepStrictEqual 现值',async()=>{
  const lines=SL.SECONDARY_LINES.map((l,i)=>i?{...structuredClone(l),after:SL.SECONDARY_LINES[i-1].id}:structuredClone(l));
  const lce=Object.entries(SL.TS_LINE_CRITICAL_EVENTS).map(([eventId,lineId])=>({eventId,lineId}));
@@ -458,10 +450,9 @@ test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通�
  const beats={quests:structuredClone(CQ.CHARACTER_QUESTS),highlights:structuredClone(CQ.CHARACTER_HIGHLIGHTS)};
  const story={stageOrder:[...AX.STAGE_ORDER],layers:structuredClone(AX.MAIN_QUEST_LAYERS),stages:structuredClone(AX.MAIN_QUEST_STAGES),nodes:structuredClone(AX.MAIN_QUEST_NODES),requirements:structuredClone(AX.MAIN_QUEST_REQUIREMENTS)};
  const loc={canonical:{...LOC.TS_LOCATION_ID_ALIASES},parents:{...LOC.TS_LOCATION_PARENTS},display:structuredClone(LOC.TS_LOCATION_NAMES)};
- const st=await sourceEntries('src/modules/scenarioMods/stanceProfiles.ts'),ac=await sourceEntries('src/modules/scenarioMods/affinityCaps.ts');
- assert.equal(st.names.length,ST.TS_STANCE_PROFILES.length);assert.equal(ac.names.length,AC.TS_AFFINITY_CAPS.length);assert.equal(ac.tiers.length,AC.TS_AFFINITY_CAPS.length);
- const profiles={stance:ST.TS_STANCE_PROFILES.map((p,i)=>({...st.names[i],constant:p.constant,bands:p.bands})),
-  affinityCaps:AC.TS_AFFINITY_CAPS.map((c,i)=>({...ac.names[i],capTier:ac.tiers[i],reason:c.reason,liftedBy:c.liftedBy}))};
+ // B4 起姿态档案与好感上限在人物包里、TS 表为空：取人物包的 profiles.json 原样转写（含 note；不取 TS 表，否则表搬空后演练合出来是空的）
+ const {stance,affinityCaps}=await read(join(PACK_DIR,'characters/profiles.json'));const profiles={stance,affinityCaps};
+ assert.equal(stance.length,ST.STANCE_PROFILES.length);assert.equal(affinityCaps.length,AC.AFFINITY_CAPS.length);
  const statuses=r=>r.acceptedStatuses.source.replace(/^\^\(?|\)?\$$/g,'').split('|');
  const ifs={branches:DL.TS_AUTO_BRANCH_RULES.map(r=>({...r,acceptedStatuses:statuses(r)})),consequences:DL.TS_AUTO_CONSEQUENCE_RULES.map(r=>({...r,acceptedStatuses:statuses(r)})),prompts:{...DL.TS_DIVERGENCE_PROMPTS}};
  const before={lce:{...SL.LINE_CRITICAL_EVENTS},beats:{quests:CQ.CHARACTER_QUESTS,highlights:CQ.CHARACTER_HIGHLIGHTS},story:{stageOrder:AX.STAGE_ORDER,layers:AX.MAIN_QUEST_LAYERS,stages:AX.MAIN_QUEST_STAGES,nodes:AX.MAIN_QUEST_NODES,requirements:AX.MAIN_QUEST_REQUIREMENTS},
