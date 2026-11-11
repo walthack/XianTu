@@ -97,15 +97,10 @@ const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.chapter.stage_05': 'explore',
   'lcq.chapter.stage_06': 'climax',
 
-  'lyl.chapter.luoyang_cloud_secret': 'court',
-  'lyl.chapter.luoyang_cloud_secret_court': 'court',
-  'lyl.chapter.luoyang_coup': 'climax',
 
   'lyg.chapter.changgan_begins_liuxianping': 'daily',
   'lyg.chapter.changgan_begins': 'daily',
-  'lyg.chapter.dingtao_beijing': 'court',
   'lyg.chapter.liangzhou_league': 'battle',
-  'lyg.chapter.mijing_rumen': 'explore',
 };
 
 /** 内容包关的章配乐（chapters[].presentation.mood，编译期已校验为 MusicMood）；先于 CHAPTER_MOOD_MAP 查。 */
@@ -153,12 +148,7 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s06_01': 'climax',
   'lcq.event.s06_03': 'emotion',
 
-  'lyg.event.s01_01': 'battle',
-  'lyg.event.s01_07': 'lament',
-  'lyg.event.highlight_banchao_lamb_leg': 'intrigue',
   'lcq.event.s04_05': 'lament',
-  'lyg.event.s01_08': 'court',
-  'lyg.event.s02_09': 'aspire',
   'lyg.event.release_jingnian': 'court',
   'lyg.event.s03_01': 'daily',
   'lyg.event.s03_04': 'danger',
@@ -166,8 +156,6 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lyg.event.s06_07': 'aspire',
 
 
-  'lyg.event.s02_04': 'danger',
-  'lyl.event.s05_05': 'danger',
 };
 
 const EVENT_MOOD_PRIORITY: MusicMood[] = ['climax', 'horror', 'lament', 'blacksea', 'battle', 'danger', 'intrigue', 'explore', 'court', 'sensual', 'emotion', 'aspire', 'daily', 'theme'];

@@ -11,6 +11,7 @@ import type { ScenarioRuntimeTransition } from './runtime';
 import { debugLog } from '../diagnostics/debugLog';
 import { CONTENT_PACKS } from '../contentPacks';
 import { stageMetaOf, type StageMeta } from '../contentPacks/stageMeta';
+import { STAGE_ORDER } from './mainQuestAxis';
 
 export interface MilestoneReward {
   /** 完成哪一关授予 */
@@ -25,19 +26,8 @@ export interface MilestoneReward {
 
 // 落点必须符合原文故事线（来源：milestone-grants-scan 原文扫描 + 用户裁定 2026-07-03）。
 // 新增条目：补一行即可。跳过项：大行令(原文旋即被夺,引擎无撤销)/兰台典校(非正式官职)。
-// 已迁进内容包 stageMeta.milestoneReward 的关（宋：packs/song/stage-meta.json）不在本表。
+// 已迁进内容包 stageMeta.milestoneReward 的关（宋：packs/song/stage-meta.json；汉：packs/han/stage-meta.json）不在本表。
 export const TS_MILESTONE_REWARDS: MilestoneReward[] = [
-  {
-    stageId: 'lyl.luoyang_cloud_secret', // 六朝云龙吟·天石（洛都入局·买官洗白）
-    titles: ['汉国关内侯（买官）', '汉国大行令（领事·加常侍郎）'],
-    note: '经徐璜运作向天子买官洗白：诏拜关内侯、授大夫、领鸿胪寺大行令事、加常侍郎（可出入宫禁），全套一千四百万钱（云龙 0238-0239）。',
-  },
-  {
-    stageId: 'lyl.luoyang_coup', // 六朝云龙吟·封侯
-    titles: ['汉国舞阳侯'],
-    revokeTitles: ['汉国关内侯（买官）', '汉国大行令（领事·加常侍郎）'],
-    note: '洛都政局翻覆，先前买来的官爵作废（"还没捂热呢，可就飞了"，云龙 0360）；以功受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。',
-  },
   {
     stageId: 'lyg.shituolin_endgame', // 六朝燕歌行·尸陀林主与李辅国断点
     titles: ['唐国大都护', '上柱国'],
@@ -45,11 +35,16 @@ export const TS_MILESTONE_REWARDS: MilestoneReward[] = [
   },
 ];
 
-/** 全部里程碑奖励：内容包 stageMeta 的 milestoneReward（按 catalog 顺序）在前，TS 表在后（编译期校验两边不重复）。 */
+/**
+ * 全部里程碑奖励：内容包 stageMeta 的 milestoneReward（按 catalog 顺序）与 TS 表合并，再按关的故事序（STAGE_ORDER）稳定排序；
+ * 不在 STAGE_ORDER 里的关（包内关）排在最后、保持合并前的相对顺序（编译期校验两边不重复）。
+ * 故事序即各线搬迁前 TS 表的原顺序（汉线 S4：汉条目迁进汉包后，catalog 顺序 han<song 与原表 宋→汉→唐 不同）。
+ */
+const storyIndex = (stageId: string) => { const i = STAGE_ORDER.indexOf(stageId); return i < 0 ? STAGE_ORDER.length : i; };
 export const MILESTONE_REWARDS: MilestoneReward[] = [
   ...(CONTENT_PACKS.stageMeta || []).filter(m => m.milestoneReward).map(m => ({ stageId: m.stageId, ...m.milestoneReward! })),
   ...TS_MILESTONE_REWARDS,
-];
+].sort((a, b) => storyIndex(a.stageId) - storyIndex(b.stageId));
 
 /** 某关的里程碑奖励：先查内容包 stageMeta 的 milestoneReward，没有再查 TS_MILESTONE_REWARDS（编译期校验两边不重复）。 */
 export function milestoneRewardFor(stageId: unknown, stageMeta: readonly StageMeta[] = CONTENT_PACKS.stageMeta || []): MilestoneReward | undefined {

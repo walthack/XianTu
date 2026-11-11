@@ -19,7 +19,7 @@ const QIN_STAGE='lyg.qin_xianyang',QIN_EVENT='liuchao.event.qin_hook_fangshi_rum
 const {CONTENT_PACKS}=await loadTs('../src/modules/contentPacks/index.ts');
 const {quarantinedStageIds}=await loadTs('../src/modules/contentPacks/stageMeta.ts');
 const {TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS,DEFAULT_LINE_EXTRA_RAIL_BEATS}=await loadTs('../src/modules/scenarioMods/canonRail.ts');
-const {MILESTONE_REWARDS,milestoneRewardFor}=await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
+const {MILESTONE_REWARDS,TS_MILESTONE_REWARDS,milestoneRewardFor}=await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
 const {storyChapterTitleIn}=await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
 const {resolveFixedQuestObjectiveIn,FIXED_QUEST_OBJECTIVE_OVERRIDES}=await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
 const {SECONDARY_LINES,TS_SECONDARY_LINES,mergeSecondaryLines}=await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
@@ -49,9 +49,27 @@ const qinStage=async(m={})=>({id:'test.b',dependsOn:['test.a'],stages:['stage.js
 // 夹具改为从 TS 表动态挑第一条现存条目（配乐表按编译器同样的读源码法）；表搬空时这几条用例要改用合成的临时 TS 条目。
 const EVENT_MOOD_ID=(await readFile(join(root,'src/utils/musicLibrary.ts'),'utf8')).match(/const EVENT_MOOD_MAP: Record<string, MusicMood> = \{([\s\S]*?)\n\};/)?.[1].match(/^\s*'([^']+)': '[^']+',$/m)?.[1];
 assert.ok(EVENT_MOOD_ID,'EVENT_MOOD_MAP 已搬空：改用合成的临时 TS 条目');
-const EVENT_MOOD_STAGE=(await Promise.all((await readdir(join(root,'src/modules/scenarioMods/builtins/data'))).filter(f=>f.endsWith('.json')).map(f=>read(join(root,'src/modules/scenarioMods/builtins/data',f))))).find(m=>m.scenario.events.some(e=>e.id===EVENT_MOOD_ID)).manifest.id;
+const BUILTINS=await Promise.all((await readdir(join(root,'src/modules/scenarioMods/builtins/data'))).filter(f=>f.endsWith('.json')).sort().map(f=>read(join(root,'src/modules/scenarioMods/builtins/data',f))));
+const EVENT_MOOD_STAGE=BUILTINS.find(m=>m.scenario.events.some(e=>e.id===EVENT_MOOD_ID)).manifest.id;
 const TS_LINE_ID=TS_SECONDARY_LINES[0]?.id;
 assert.ok(TS_LINE_ID,'TS_SECONDARY_LINES 已搬空：改用合成的临时 TS 线');
+// 汉线 S4：汉的隔离、称号、目标、章配乐、整关章名特判迁出 TS（原夹具洛都封侯、liujian_takes_nangong、luoyang_cloud_secret 章、汉宫）。
+// 同样改为从 TS 表／特判动态挑现存条目；表搬空时这几条用例要改用合成的临时 TS 条目。
+const [,CH_MOOD_ID,CH_MOOD]=(await readFile(join(root,'src/utils/musicLibrary.ts'),'utf8')).match(/const CHAPTER_MOOD_MAP: Record<string, MusicMood> = \{([\s\S]*?)\n\};/)?.[1].match(/^\s*'([^']+)': '([^']+)',$/m)||[];
+assert.ok(CH_MOOD_ID,'CHAPTER_MOOD_MAP 已搬空：改用合成的临时 TS 条目');
+const CH_MOOD_STAGE=BUILTINS.find(m=>m.scenario.chapters.some(c=>c.id===CH_MOOD_ID)).manifest.id;
+const MR_STAGE=TS_MILESTONE_REWARDS[0]?.stageId;
+assert.ok(MR_STAGE,'TS_MILESTONE_REWARDS 已搬空：改用合成的临时 TS 条目');
+const OBJ_ID=Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES)[0];
+assert.ok(OBJ_ID,'FIXED_QUEST_OBJECTIVE_OVERRIDES 已搬空：改用合成的临时 TS 条目');
+const OBJ_STAGE=BUILTINS.find(m=>m.scenario.events.some(e=>e.id===OBJ_ID)).manifest.id;
+const Q_OFF=[...TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS].find(id=>id!=='lcq.stage_03');
+assert.ok(Q_OFF,'TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS 只剩 lcq.stage_03 或已搬空：改用合成的临时 TS 条目');
+// 整关章名特判（对表外探针事件也给出章名、且先于 stageMeta 的关，如现在的长安初定）：用探针按行为挑，不写死关 id
+const WHOLE_STAGE=BUILTINS.find(m=>{const id=m.manifest.id,ch=m.scenario.chapters.at(-1)?.id;if(!ch)return false;
+ const t=storyChapterTitleIn({...CONTENT_PACKS,stageMeta:[{stageId:id,presentation:{defaultUiChapterId:ch},chapterTitles:{[ch]:'不该出现'}}]},id,'x.event.__whole_stage_probe__','<<FALLBACK>>');
+ return t!=='<<FALLBACK>>'&&t!=='不该出现';});
+assert.ok(WHOLE_STAGE,'eventNarrativeView.ts 已没有整关章名特判：改用合成的临时特判');
 const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 
 const loadWithCatalog=async(rel,catalog)=>{
@@ -99,7 +117,7 @@ test('stageMeta 正例：编译后剥 note、补 chapterTitles；读取方先查
  assert.equal(quarantinedStageIds([{stageId:'lyl.taiquan_expedition',defaultLineQuarantined:false}],TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS).has('lyl.taiquan_expedition'),false,'写了 false 的关按 stageMeta 去掉');
  // 称号
  assert.deepEqual(milestoneRewardFor(S10,meta),{stageId:S10,titles:['测试称号'],note:'测试说明'});
- assert.equal(milestoneRewardFor('lyl.luoyang_coup',meta),MILESTONE_REWARDS.find(r=>r.stageId==='lyl.luoyang_coup'));
+ assert.equal(milestoneRewardFor(MR_STAGE,meta),MILESTONE_REWARDS.find(r=>r.stageId===MR_STAGE));
  // 章名：事件 uiChapterId → 关 defaultUiChapterId → fallback
  const packs={...CONTENT_PACKS,stageMeta:meta};
  assert.equal(storyChapterTitleIn(packs,S10,E2,FB),'攻江州令');
@@ -114,8 +132,9 @@ test('stageMeta 正例：编译后剥 note、补 chapterTitles；读取方先查
 });
 
 // 宋线 S4b 删了临安特判、宋的 TS 表条目迁进宋包：夹具改用仍留在 TS 里的汉宫特判、洛都封侯称号
+// 汉线 S4 又删了汉宫特判、汉称号：改用上面动态挑出的整关特判关（WHOLE_STAGE）与 TS 称号表现存条目（MR_STAGE）
 test('读取方优先级：既有特判仍先于 stageMeta，stageMeta 先于 TS 表',async()=>{
- const LIN_AN='lyl.han_palace_endgame',linAn=await builtin(LIN_AN);const intel=linAn.scenario.chapters[1].id;
+ const linAn=WHOLE_STAGE,LIN_AN=linAn.manifest.id;const intel=linAn.scenario.chapters.at(-1).id;
  const fake=[{stageId:LIN_AN,presentation:{defaultUiChapterId:intel},chapterTitles:{[intel]:'不该出现'}}];
  for(const e of linAn.scenario.events)assert.equal(storyChapterTitleIn({...CONTENT_PACKS,stageMeta:fake},LIN_AN,e.id,FB),storyChapterTitleIn(CONTENT_PACKS,LIN_AN,e.id,FB),e.id);
  // 目标：三条特判先于 stageMeta；stageMeta 先于 FIXED 表
@@ -124,13 +143,13 @@ test('读取方优先级：既有特判仍先于 stageMeta，stageMeta 先于 TS
  assert.equal(resolveFixedQuestObjectiveIn(objMeta,{id:special}),resolveFixedQuestObjectiveIn([],{id:special}));
  assert.equal(resolveFixedQuestObjectiveIn(objMeta,{id:tabled}),'包');
  // 称号：stageMeta 先于 MILESTONE_REWARDS
- const s12='lyl.luoyang_coup';
+ const s12=MR_STAGE;
  assert.deepEqual(milestoneRewardFor(s12,[{stageId:s12,milestoneReward:{titles:['包'],note:'包'}}]),{stageId:s12,titles:['包'],note:'包'});
 });
 
 test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_MOOD_MAP 之前；事件 mood 先于 EVENT_MOOD_MAP',async()=>{
  const meta=[...(await compile(metaPack([s10Meta()]))).stageMeta,
-  {stageId:'lyl.luoyang_cloud_secret',presentation:{chapters:{'lyl.chapter.luoyang_cloud_secret':{mood:'horror'}},events:{[EVENT_MOOD_ID]:{mood:'horror'}}}},
+  {stageId:CH_MOOD_STAGE,presentation:{chapters:{[CH_MOOD_ID]:{mood:'horror'}},events:{[EVENT_MOOD_ID]:{mood:'horror'}}}},
   {stageId:QIN_STAGE,presentation:{chapters:{'lyg.chapter.qin_xianyang_prologue':{mood:'horror'}}}}];
  const base=await loadWithCatalog('src/utils/musicLibrary.ts',CONTENT_PACKS);
  const withMeta=await loadWithCatalog('src/utils/musicLibrary.ts',{...CONTENT_PACKS,stageMeta:meta});
@@ -138,16 +157,16 @@ test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_
  assert.equal(base.resolveMusicMoodForChapter(LAIR),'battle','无 stageMeta 时走章 id 正则');
  assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:E2}]),'emotion');
  assert.equal(base.resolveMusicMoodForScenario(null,[{id:E2}]),base.resolveMusicMoodForScenario(null,[]));
- assert.equal(withMeta.resolveMusicMoodForChapter('lyl.chapter.luoyang_cloud_secret'),'horror','stageMeta 先于 CHAPTER_MOOD_MAP');
- assert.equal(base.resolveMusicMoodForChapter('lyl.chapter.luoyang_cloud_secret'),'court');
+ assert.equal(withMeta.resolveMusicMoodForChapter(CH_MOOD_ID),'horror','stageMeta 先于 CHAPTER_MOOD_MAP');
+ assert.equal(base.resolveMusicMoodForChapter(CH_MOOD_ID),CH_MOOD);
  assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:EVENT_MOOD_ID}]),'horror','stageMeta 先于 EVENT_MOOD_MAP');
  assert.equal(withMeta.resolveMusicMoodForChapter('lyg.chapter.qin_xianyang_prologue'),'court','包内关章 presentation.mood 先于 stageMeta');
 });
 
 test('stageMeta 隔离：canonRail 合并后的集合与 isDefaultLineQuarantinedStageId 读 catalog',async()=>{
- const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:'lyl.luoyang_coup',defaultLineQuarantined:false}]});
+ const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:Q_OFF,defaultLineQuarantined:false}]});
  assert.equal(rail.isDefaultLineQuarantinedStageId(S10),true);
- assert.equal(rail.isDefaultLineQuarantinedStageId('lyl.luoyang_coup'),false);
+ assert.equal(rail.isDefaultLineQuarantinedStageId(Q_OFF),false);
  assert.equal(rail.isDefaultLineQuarantinedStageId('lcq.stage_03'),true,'没写的关沿用 TS 表');
  assert.equal(rail.DEFAULT_LINE_QUARANTINED_STAGE_IDS.size,TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.size);
 });
@@ -175,13 +194,14 @@ test('stageMeta 反例：关、章、事件、mood、目标、称号与字段',a
 test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
  // 宋线 S4 把宋的条目迁出了这些 TS 表：夹具改用仍留在 TS 里的非宋条目
  await rejects(metaPack([{stageId:'lcq.stage_03',defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
- await rejects(metaPack([{stageId:'lyl.luoyang_coup',milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/);
- await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{events:{'lyl.event.liujian_takes_nangong':{objective:'x'}}}}]),/objective for lyl\.event\.liujian_takes_nangong already set in fixedQuestObjectives\.ts/);
+ await rejects(metaPack([{stageId:MR_STAGE,milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/);
+ await rejects(metaPack([{stageId:OBJ_STAGE,presentation:{events:{[OBJ_ID]:{objective:'x'}}}}]),new RegExp(`objective for ${reEsc(OBJ_ID)} already set in fixedQuestObjectives\\.ts`));
  await rejects(metaPack([{stageId:EVENT_MOOD_STAGE,presentation:{events:{[EVENT_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`event mood for ${reEsc(EVENT_MOOD_ID)} also set in musicLibrary\\.ts EVENT_MOOD_MAP`));
- await rejects(metaPack([{stageId:'lyl.luoyang_cloud_secret',presentation:{chapters:{'lyl.chapter.luoyang_cloud_secret':{mood:'court'}}}}]),/chapter mood for lyl\.chapter\.luoyang_cloud_secret also set in musicLibrary\.ts CHAPTER_MOOD_MAP/);
- // 汉宫的章名特判覆盖整关：迁 stageMeta 必须同时删掉特判（宋临安在 S4b 就是这样做的），否则 defaultUiChapterId／逐事件 uiChapterId 都不生效
- await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{defaultUiChapterId:'lyl.chapter.han_palace_endgame_palace'}}]),/stageMeta lyl\.han_palace_endgame: defaultUiChapterId is shadowed by eventNarrativeView\.ts/);
- await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{events:{'lyl.event.han_palace_endgame_01_beat':{uiChapterId:'lyl.chapter.han_palace_endgame_palace'}}}}]),/chapter title for lyl\.event\.han_palace_endgame_01_beat is already decided in eventNarrativeView\.ts/);
+ await rejects(metaPack([{stageId:CH_MOOD_STAGE,presentation:{chapters:{[CH_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`chapter mood for ${reEsc(CH_MOOD_ID)} also set in musicLibrary\\.ts CHAPTER_MOOD_MAP`));
+ // 整关章名特判（原夹具汉宫，汉线 S4 已删；现用 WHOLE_STAGE）：迁 stageMeta 必须同时删掉特判（宋临安在 S4b 就是这样做的），否则 defaultUiChapterId／逐事件 uiChapterId 都不生效
+ const W=WHOLE_STAGE.manifest.id,WCH=WHOLE_STAGE.scenario.chapters[0].id,WEV=WHOLE_STAGE.scenario.events[0].id;
+ await rejects(metaPack([{stageId:W,presentation:{defaultUiChapterId:WCH}}]),new RegExp(`stageMeta ${reEsc(W)}: defaultUiChapterId is shadowed by eventNarrativeView\\.ts`));
+ await rejects(metaPack([{stageId:W,presentation:{events:{[WEV]:{uiChapterId:WCH}}}}]),new RegExp(`chapter title for ${reEsc(WEV)} is already decided in eventNarrativeView\\.ts`));
  // lcq.stage_04 只对表里 7 拍特判：关默认章与表内事件重叠，逐事件查出来
  await rejects(metaPack([{stageId:'lcq.stage_04',presentation:{defaultUiChapterId:(await builtin('lcq.stage_04')).scenario.chapters[0].id}}]),/defaultUiChapterId is shadowed by eventNarrativeView\.ts \(event lcq\.event\.s04_0\d\)/);
 });
@@ -263,7 +283,8 @@ test('secondaryLines 反例：kind、status、节点关与事件、锚事件、�
  await rejects(linesPack([line({after:''})]),/after must name a line/);
  await rejects(linesPack([line(),line({id:'test_line2'})]),new RegExp(`test_line2: another pack line is already after ${reEsc(TS_LINE_ID)}`));
  await rejects(linesPack([line({after:'no_such_line'})]),/secondary line test_line: after no_such_line not found/);
- await rejects(linesPack([line({id:'han'})]),/secondary line han: duplicate id/);
+ // 汉线 S4：han 线迁出 TS，与 TS 线同 id 的夹具改用 TS_LINE_ID
+ await rejects(linesPack([line({id:TS_LINE_ID})]),new RegExp(`secondary line ${reEsc(TS_LINE_ID)}: duplicate id`));
  await rejects(linesPack([line(),line()]),/secondary line missing\/duplicate id test_line/);
 });
 
