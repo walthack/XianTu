@@ -1,6 +1,7 @@
 
 import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
 import { CONTENT_PACKS } from '@/modules/contentPacks';
+import { stageMetaChapterMood, stageMetaEvent } from '@/modules/contentPacks/stageMeta';
 import themeUrl from '@/assets/music/01-theme-cangmang.mp3';
 import dailyUrl from '@/assets/music/02-daily-shijing.mp3';
 import exploreUrl from '@/assets/music/03-explore-mijing.mp3';
@@ -115,6 +116,11 @@ const PACK_CHAPTER_MOOD_MAP = new Map(CONTENT_PACKS.stages.flatMap(stage => (sta
   .filter(chapter => chapter.presentation?.mood)
   .map(chapter => [chapter.id, chapter.presentation!.mood as MusicMood] as const)));
 
+/** 内容包 stageMeta 的章／事件配乐（编译期已校验为 MusicMood，且不与本文件两张表重复）；先于对应的 TS 表查。 */
+const STAGE_META = CONTENT_PACKS.stageMeta || [];
+const metaChapterMood = (chapterId: string) => stageMetaChapterMood(STAGE_META, chapterId) as MusicMood | undefined;
+const metaEventMood = (eventId: string) => stageMetaEvent(STAGE_META, eventId)?.mood as MusicMood | undefined;
+
 const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s01_01': 'theme',
   'lcq.event.s01_02': 'danger',
@@ -224,7 +230,7 @@ function normalizeEventText(event: ScenarioMusicEvent): string {
 
 export function resolveMusicMoodForChapter(chapterId: string | null | undefined): MusicMood {
   if (!chapterId) return 'theme';
-  const exactMood = PACK_CHAPTER_MOOD_MAP.get(chapterId) || CHAPTER_MOOD_MAP[chapterId];
+  const exactMood = PACK_CHAPTER_MOOD_MAP.get(chapterId) || metaChapterMood(chapterId) || CHAPTER_MOOD_MAP[chapterId];
   if (exactMood) return exactMood;
 
   return PATTERN_MOOD_RULES.find(([pattern]) => pattern.test(chapterId))?.[1] || 'daily';
@@ -265,8 +271,9 @@ export function resolveMusicMoodForScenario(
   const ruleMoods: MusicMood[] = [];
 
   for (const event of activeEvents) {
-    if (event.id && EVENT_MOOD_MAP[event.id]) {
-      exactMoods.push(EVENT_MOOD_MAP[event.id]);
+    const anchorMood = event.id ? metaEventMood(event.id) || EVENT_MOOD_MAP[event.id] : undefined;
+    if (anchorMood) {
+      exactMoods.push(anchorMood);
       continue;
     }
     const text = normalizeEventText(event);

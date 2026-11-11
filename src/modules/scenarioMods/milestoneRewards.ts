@@ -9,6 +9,8 @@
  */
 import type { ScenarioRuntimeTransition } from './runtime';
 import { debugLog } from '../diagnostics/debugLog';
+import { CONTENT_PACKS } from '../contentPacks';
+import { stageMetaOf, type StageMeta } from '../contentPacks/stageMeta';
 
 export interface MilestoneReward {
   /** 完成哪一关授予 */
@@ -47,6 +49,13 @@ export const MILESTONE_REWARDS: MilestoneReward[] = [
   },
 ];
 
+/** 某关的里程碑奖励：先查内容包 stageMeta 的 milestoneReward，没有再查 MILESTONE_REWARDS（编译期校验两边不重复）。 */
+export function milestoneRewardFor(stageId: unknown, stageMeta: readonly StageMeta[] = CONTENT_PACKS.stageMeta || []): MilestoneReward | undefined {
+  const meta = stageMetaOf(stageMeta, stageId)?.milestoneReward;
+  if (meta) return { stageId: stageId as string, ...meta };
+  return MILESTONE_REWARDS.find(r => r.stageId === stageId);
+}
+
 type AnySave = Record<string, any>;
 
 function readTitles(saveData: AnySave): string[] {
@@ -62,7 +71,7 @@ export function applyMilestoneRewards(saveData: AnySave, transitions: ScenarioRu
   if (!transitions.some(t => t.type === 'stage_ready')) return [];
   const currentStageId = saveData?.世界?.状态?.剧本模组?.modId;
   if (!currentStageId) return [];
-  const reward = MILESTONE_REWARDS.find(r => r.stageId === currentStageId);
+  const reward = milestoneRewardFor(currentStageId);
   if (!reward) return [];
 
   const identity = (saveData.角色 = saveData.角色 || {}).身份 = saveData.角色.身份 || {};

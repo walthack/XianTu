@@ -29,6 +29,9 @@ export function entityText(text:string):string{return text.replace(/\{\{entity:(
 /** A stable label selector for evidence that must retain its authored short form. */
 export function entityRecognitionLabel(kind:NamedEntityKind,id:string,labelId:string):string {const value=byId[kind].get(canonicalEntityId(kind,id))?.definition.recognitionLabels?.[labelId];if(typeof value!=='string')throw new Error(`Unknown recognition label: ${kind}/${id}/${labelId}`);return value;}
 
+/** 内容包文案（包 rail）：entityText 之外再解析 {{entityLabel:<kind>:<id>:<labelId>}}（取 entityRecognitionLabel）。 */
+export function entityTemplateText(text:string):string{return entityText(text).replace(/\{\{entityLabel:(character|location|faction|enemy|ending):([^}:]+):([^}:]+)\}\}/g,(_,kind:NamedEntityKind,id:string,labelId:string)=>entityRecognitionLabel(kind,id,labelId));}
+
 /** 形如 liuchao.character.xxx 的引用 id（不是给玩家看的名字）。 */
 export const isEntityIdLike=(value:unknown):boolean=>typeof value==='string'&&/^[a-z][a-z0-9_]*(?:\.[a-z0-9_-]+)+$/i.test(value.trim());
 const looseIds=new Map<string,string|null>();

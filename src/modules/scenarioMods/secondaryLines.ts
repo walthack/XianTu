@@ -38,6 +38,7 @@ import { acquaintanceOf, rankOf, type AcquaintanceLedger } from './acquaintanceL
 import type { LineUnlockOptions } from './lineUnlock';
 import type { ScenarioCondition } from './schema';
 import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
+import { CONTENT_PACKS, type PackSecondaryLine } from '../contentPacks';
 
 export type SecondaryLineKind = 'sect' | 'nation' | 'commerce' | 'expedition';
 
@@ -165,7 +166,7 @@ export function secondaryLinesAtEvent(eventId: string | undefined): SecondaryLin
  * 以及 live 关查无的（`lyg.location.changan`）。
  * 太乙山门「龙池」两个 id 都不可达，故太乙改走人物锚。
  */
-export const SECONDARY_LINES: SecondaryLine[] = [
+export const TS_SECONDARY_LINES: SecondaryLine[] = [
   // —— 商业线：锚事 ——
   {
     id: 'commerce',
@@ -913,6 +914,35 @@ export const SECONDARY_LINES: SecondaryLine[] = [
       + 'T14 换身后续：长安驱魂局，没剧本，留空待完成。旧「入仕唐廷的判据」作废。',
   },
 ];
+
+/**
+ * 把内容包的二级线（manifest.secondaryLines）插进 TS 表：每条插在 after 指向的线后面（after 可指向 TS 线或另一条包线）。
+ * 两条包线不能 after 同一条线；线 id 不能重复；after 找不到（含成环）报错。包线为空时原样返回 TS 表的拷贝顺序。
+ */
+export function mergeSecondaryLines(tsLines: readonly SecondaryLine[], packLines: readonly PackSecondaryLine[]): SecondaryLine[] {
+  const out: SecondaryLine[] = [...tsLines];
+  const ids = new Set(out.map(line => line.id));
+  const afters = new Set<string>();
+  for (const line of packLines) {
+    if (ids.has(line.id)) throw new Error(`secondary line ${line.id}: duplicate id`);
+    if (afters.has(line.after)) throw new Error(`secondary line ${line.id}: another pack line is already after ${line.after}`);
+    ids.add(line.id); afters.add(line.after);
+  }
+  let pending = [...packLines];
+  while (pending.length) {
+    const next = pending.filter(line => !out.some(placed => placed.id === line.after));
+    if (next.length === pending.length) throw new Error(`secondary line ${pending[0].id}: after ${pending[0].after} not found`);
+    for (const line of pending.filter(item => !next.includes(item))) {
+      const { after, ...rest } = line;
+      out.splice(out.findIndex(placed => placed.id === after) + 1, 0, rest);
+    }
+    pending = next;
+  }
+  return out;
+}
+
+/** 全部二级线：TS 表加内容包的线（顺序由 after 决定；旧 catalog 没有这一段时等于 TS 表）。 */
+export const SECONDARY_LINES: SecondaryLine[] = mergeSecondaryLines(TS_SECONDARY_LINES, CONTENT_PACKS.secondaryLines || []);
 
 /**
  * 人物锚的门槛：**真的见过**才算接得到。
