@@ -2,7 +2,8 @@ import { CONTENT_PACKS } from '../contentPacks';
 import type { ScenarioModEvent } from './schema';
 import { isScopedPlayerPresentationEvent } from './playtestNarrativeScope';
 
-const PLAYER_LINES: Record<string, string> = {
+/** 试玩事件窗里多动作事件的玩家句（F0b：与内容包 texts 的 scopedPlayerLine.<eventId>::<actionId> 合并，TS 表优先，编译期禁止两边都有）。 */
+export const TS_PLAYER_LINES: Readonly<Record<string, string>> = {
   'lcq.event.s01_01::advance_declared_objective': '我稳住自己并弄清身在何处。',
   'lcq.event.s01_02::advance_declared_objective': '我先保住自己和身边的人。',
   'lcq.event.s01_03::advance_declared_objective': '我上前查看那位伤者。',
@@ -38,7 +39,8 @@ export function scopedPlayerLineKey(eventId: string, actionId: string): string {
 }
 
 export function lookupScopedPlayerLine(eventId: string, actionId: string): string | undefined {
-  return PLAYER_LINES[scopedPlayerLineKey(eventId, actionId)];
+  const key = scopedPlayerLineKey(eventId, actionId);
+  return (TS_PLAYER_LINES as Record<string, string>)[key] ?? CONTENT_PACKS.texts[`scopedPlayerLine.${key}`];
 }
 
 export function resolveScopedPlayerLine(
@@ -68,16 +70,27 @@ export function playerFacingActionLine(line: string): string {
   return result ? (firstPerson > 0 ? result.slice(firstPerson) : result).replace(/[。]+$/, '') + '。' : '我查看眼前的情况。';
 }
 
-/** 旧合同在玩家面前不重复预设“离开后返回”，也不提前念阿葭死讯。 */
+/**
+ * 动作显示覆写的 TS 侧表：键 `<eventId>::<actionId>`，`<eventId>::*` 是事件级（任何动作都返回）。
+ * F0b：与内容包 texts 的 actionDisplay.<eventId>.<actionId|*>.line/label 合并；编译期禁止同一事件两边重叠。
+ * 武二郎工钱已改入源合同，不再由显示投影缩写。
+ */
+export const TS_ACTION_DISPLAY_OVERRIDES: Readonly<Record<string, { line: string; label: string }>> = {
+  'lcq.event.huamiao_coop_boundary::*': { line: '我跟云苍峰谈清进鬼王峒的合作边界。', label: '与云苍峰谈合作边界' },
+  'lcq.event.weapon_deal_with_geluo::open_weapon_talk_with_geluo': { line: '我向鬼王峒使者提出兵器生意。', label: '同使者谈兵器生意' },
+  'lcq.event.s03b_yinzhu_xiongerpu::yinzhu_strikes_ajia': { line: '我听见阿葭那边的蕨丛里有异响，提刀赶了过去。', label: '赶去阿葭身边查看异动' },
+  'lcq.event.s03b_yinzhu_xiongerpu::burn_yinzhu_victim': { line: '我照祁远的吩咐，和花苗人一起把阿葭、阴蛛和那具蛇彝遇害者焚化。', label: '焚化阿葭的遗体和阴蛛' },
+  'lcq.event.ningyu_regicide_offer::hear_ningyu_regicide_price': { line: '我听她说明条件。', label: '听她说明条件' },
+};
+
+/** 旧合同在玩家面前不重复预设“离开后返回”，也不提前念阿葭死讯。顺序：texts 逐动作键 → texts 事件级通配键 → TS 表逐动作 → TS 表事件级。 */
 export function playerActionDisplayOverride(eventId: string, actionId: string): { line: string; label?: string } | undefined {
-  const key = `actionDisplay.${eventId}.${actionId}`;
-  const line = CONTENT_PACKS.texts[`${key}.line`], label = CONTENT_PACKS.texts[`${key}.label`];
-  if (line && label) return { line, label };
-  // 武二郎工钱已改入源合同，不再由显示投影缩写。
-  if (eventId === 'lcq.event.huamiao_coop_boundary') return { line: '我跟云苍峰谈清进鬼王峒的合作边界。', label: '与云苍峰谈合作边界' };
-  if (eventId === 'lcq.event.weapon_deal_with_geluo' && actionId === 'open_weapon_talk_with_geluo') return { line: '我向鬼王峒使者提出兵器生意。', label: '同使者谈兵器生意' };
-  if (eventId === 'lcq.event.s03b_yinzhu_xiongerpu' && actionId === 'yinzhu_strikes_ajia') return { line: '我听见阿葭那边的蕨丛里有异响，提刀赶了过去。', label: '赶去阿葭身边查看异动' };
-  if (eventId === 'lcq.event.s03b_yinzhu_xiongerpu' && actionId === 'burn_yinzhu_victim') return { line: '我照祁远的吩咐，和花苗人一起把阿葭、阴蛛和那具蛇彝遇害者焚化。', label: '焚化阿葭的遗体和阴蛛' };
-  if (eventId === 'lcq.event.ningyu_regicide_offer' && actionId === 'hear_ningyu_regicide_price') return { line: '我听她说明条件。', label: '听她说明条件' };
-  return undefined;
+  for (const key of [`actionDisplay.${eventId}.${actionId}`, `actionDisplay.${eventId}.*`]) {
+    const line = CONTENT_PACKS.texts[`${key}.line`], label = CONTENT_PACKS.texts[`${key}.label`];
+    if (line && label) return { line, label };
+  }
+  const table = TS_ACTION_DISPLAY_OVERRIDES as Record<string, { line: string; label: string }>;
+  const hit = Object.prototype.hasOwnProperty.call(table, `${eventId}::${actionId}`) ? table[`${eventId}::${actionId}`]
+    : Object.prototype.hasOwnProperty.call(table, `${eventId}::*`) ? table[`${eventId}::*`] : undefined;
+  return hit ? { ...hit } : undefined;
 }

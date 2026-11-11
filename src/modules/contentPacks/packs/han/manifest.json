@@ -23,5 +23,8 @@
   ],
   "secondaryLines": [
     "secondary-lines.json"
+  ],
+  "lineCriticalEvents": [
+    "line-critical-events.json"
   ]
 }

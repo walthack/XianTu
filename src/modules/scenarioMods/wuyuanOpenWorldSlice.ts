@@ -43,18 +43,21 @@ import {
   WUYUAN_WORLD_LOCATION_ID,
   WUYUAN_ZONES,
 } from './travel/defs/qingyuWuyuanZones';
+import { CONTENT_PACKS } from '../contentPacks';
+import { resolveOpenWorldSlice, type TsOpenWorldSlicePart } from './travel/openWorldSlices';
 
-export const WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
-export const WUYUAN_SETTLEMENT_ID = 'lcq.settlement.wuyuan.v1';
-export const WUYUAN_MARKET_ARRIVAL_ID = 'lcq.route.wuyuan.arrive_market';
-export { WUYUAN_WORLD_LOCATION_ID };
-const PASTRY_TO_PRISON_ROUTE = 'lcq.route.wuyuan.pastry_taken_to_prison';
-const MARKET_TO_PRISON_ROUTE = 'lcq.route.wuyuan.market_taken_to_prison';
-const PRISON_TO_HALL_ROUTE = 'lcq.route.wuyuan.prison_taken_to_hall';
-const HALL_TO_GATE_ROUTE = 'lcq.route.baihu.hall_to_gate';
-const EXIT_FRONT_GATE_ROUTE = 'lcq.route.baihu.exit_front_gate';
+// F0b（2026-11-11）：本段（到 TS_WUYUAN_OPEN_WORLD_SLICE 为止）的 TS_* 是五原切片的 TS 侧数据（节点表另在 travel/defs/qingyuWuyuanZones.ts），
+// 与内容包 openWorldSlices（key 'wuyuan'）二选一；导出名不变。逻辑代码按名取的 id 在 constants 里。
+const TS_WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
+const TS_WUYUAN_SETTLEMENT_ID = 'lcq.settlement.wuyuan.v1';
+const TS_WUYUAN_MARKET_ARRIVAL_ID = 'lcq.route.wuyuan.arrive_market';
+const TS_PASTRY_TO_PRISON_ROUTE = 'lcq.route.wuyuan.pastry_taken_to_prison';
+const TS_MARKET_TO_PRISON_ROUTE = 'lcq.route.wuyuan.market_taken_to_prison';
+const TS_PRISON_TO_HALL_ROUTE = 'lcq.route.wuyuan.prison_taken_to_hall';
+const TS_HALL_TO_GATE_ROUTE = 'lcq.route.baihu.hall_to_gate';
+const TS_EXIT_FRONT_GATE_ROUTE = 'lcq.route.baihu.exit_front_gate';
 
-const WUYUAN_LEAF_RANK: Record<string, number> = {
+const TS_WUYUAN_LEAF_RANK: Record<string, number> = {
   [MARKET_ZONE_ID]: 0,
   [PASTRY_ZONE_ID]: 0,
   [PRISON_ZONE_ID]: 1,
@@ -63,8 +66,8 @@ const WUYUAN_LEAF_RANK: Record<string, number> = {
   [FRONT_STREET_ZONE_ID]: 4,
 };
 
-export const WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
-  id: WUYUAN_OPEN_WORLD_SLICE_ID,
+const TS_WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
+  id: TS_WUYUAN_OPEN_WORLD_SLICE_ID,
   initialZoneId: MARKET_ZONE_ID,
   zones: WUYUAN_ZONES,
   routes: [
@@ -85,27 +88,27 @@ export const WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
       requirementKey: 'lcq.knowledge.wuyuan.pastry_back_alley',
     },
     {
-      id: PASTRY_TO_PRISON_ROUTE,
+      id: TS_PASTRY_TO_PRISON_ROUTE,
       fromZoneId: PASTRY_ZONE_ID, toZoneId: PRISON_ZONE_ID,
       label: '被押往水牢', aliases: ['押走'], turnCost: 1,
     },
     {
-      id: MARKET_TO_PRISON_ROUTE,
+      id: TS_MARKET_TO_PRISON_ROUTE,
       fromZoneId: MARKET_ZONE_ID, toZoneId: PRISON_ZONE_ID,
       label: '被带进水牢', aliases: ['押进商馆'], turnCost: 1,
     },
     {
-      id: PRISON_TO_HALL_ROUTE,
+      id: TS_PRISON_TO_HALL_ROUTE,
       fromZoneId: PRISON_ZONE_ID, toZoneId: HALL_ZONE_ID,
       label: '被带到内院', aliases: ['带去内院'], turnCost: 1,
     },
     {
-      id: HALL_TO_GATE_ROUTE,
+      id: TS_HALL_TO_GATE_ROUTE,
       fromZoneId: HALL_ZONE_ID, toZoneId: GATE_ZONE_ID,
       label: '走到商馆大门', aliases: ['去大门'], turnCost: 1,
     },
     {
-      id: EXIT_FRONT_GATE_ROUTE,
+      id: TS_EXIT_FRONT_GATE_ROUTE,
       fromZoneId: GATE_ZONE_ID, toZoneId: FRONT_STREET_ZONE_ID,
       label: '迈出五原商馆', aliases: ['出馆', '出门前街'], turnCost: 1,
     },
@@ -205,7 +208,7 @@ export type WuyuanOpenWorldSelection = {
  * 点心铺两个应对的作者判定类别（2026-11-05 用户批准「掷骰 P1」）：手打「冒险强行冲出去」判中 break_for_exit 时出 escape 判定卡；
  * 拖住对方按 social。只声明类别，不加词、不改结局。
  */
-export const WUYUAN_PROBLEM_ACTION_JUDGEMENT: Readonly<Record<string, { kind: JudgementKind }>> = {
+const TS_WUYUAN_PROBLEM_ACTION_JUDGEMENT: Readonly<Record<string, { kind: JudgementKind }>> = {
   'lcq.action.wuyuan.delay_and_observe': { kind: 'social' },
   'lcq.action.wuyuan.break_for_exit': { kind: 'escape' },
 };
@@ -214,10 +217,40 @@ export const WUYUAN_PROBLEM_ACTION_JUDGEMENT: Readonly<Record<string, { kind: Ju
  * 点心铺两个应对的动作描述（intentMatch.describe，只发给拍子判定模型，不是词表、不参与按字匹配）。
  * 2026-11-04 剧情策划定、用户批准（设计稿「拍子判定按意思与风险」问二 Q2-3）：不新增动作；后窗、后巷也算强行夺路，结局照旧 captured_injured、不掷骰。
  */
-export const WUYUAN_PROBLEM_ACTION_DESCRIBE: Readonly<Record<string, string>> = {
+const TS_WUYUAN_PROBLEM_ACTION_DESCRIBE: Readonly<Record<string, string>> = {
   'lcq.action.wuyuan.delay_and_observe': '不报来历、不动手，先用言语拖住逼近的人，借机看清门窗和他们押人的方向。',
   'lcq.action.wuyuan.break_for_exit': '被围时不管从门、窗还是后巷，冒险动手强行夺路往外冲，想脱身但仍会被制住。',
 };
+
+/** TS 侧的五原切片（除节点表外的一份；整份搬进内容包后只留 key）。 */
+export const TS_WUYUAN_OPEN_WORLD_SLICE: TsOpenWorldSlicePart = {
+  key: 'wuyuan',
+  definition: TS_WUYUAN_OPEN_WORLD_DEFINITION,
+  constants: {
+    WUYUAN_SETTLEMENT_ID: TS_WUYUAN_SETTLEMENT_ID, WUYUAN_MARKET_ARRIVAL_ID: TS_WUYUAN_MARKET_ARRIVAL_ID,
+    PASTRY_TO_PRISON_ROUTE: TS_PASTRY_TO_PRISON_ROUTE, MARKET_TO_PRISON_ROUTE: TS_MARKET_TO_PRISON_ROUTE, PRISON_TO_HALL_ROUTE: TS_PRISON_TO_HALL_ROUTE,
+    HALL_TO_GATE_ROUTE: TS_HALL_TO_GATE_ROUTE, EXIT_FRONT_GATE_ROUTE: TS_EXIT_FRONT_GATE_ROUTE,
+  },
+  zoneRanks: TS_WUYUAN_LEAF_RANK,
+  actionJudgement: { ...TS_WUYUAN_PROBLEM_ACTION_JUDGEMENT },
+  actionDescribe: { ...TS_WUYUAN_PROBLEM_ACTION_DESCRIBE },
+};
+
+const WUYUAN = resolveOpenWorldSlice(CONTENT_PACKS.openWorldSlices || [], TS_WUYUAN_OPEN_WORLD_SLICE);
+const wuyuanId = (name: string): string => WUYUAN.constants?.[name] || '';
+export const WUYUAN_OPEN_WORLD_SLICE_ID: string = WUYUAN.definition.id;
+export const WUYUAN_SETTLEMENT_ID = wuyuanId('WUYUAN_SETTLEMENT_ID');
+export const WUYUAN_MARKET_ARRIVAL_ID = wuyuanId('WUYUAN_MARKET_ARRIVAL_ID');
+export { WUYUAN_WORLD_LOCATION_ID };
+const PASTRY_TO_PRISON_ROUTE = wuyuanId('PASTRY_TO_PRISON_ROUTE');
+const MARKET_TO_PRISON_ROUTE = wuyuanId('MARKET_TO_PRISON_ROUTE');
+const PRISON_TO_HALL_ROUTE = wuyuanId('PRISON_TO_HALL_ROUTE');
+const HALL_TO_GATE_ROUTE = wuyuanId('HALL_TO_GATE_ROUTE');
+const EXIT_FRONT_GATE_ROUTE = wuyuanId('EXIT_FRONT_GATE_ROUTE');
+const WUYUAN_LEAF_RANK: Readonly<Record<string, number>> = WUYUAN.zoneRanks || {};
+export const WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = WUYUAN.definition;
+export const WUYUAN_PROBLEM_ACTION_JUDGEMENT: Readonly<Record<string, { kind: JudgementKind }>> = WUYUAN.actionJudgement || {};
+export const WUYUAN_PROBLEM_ACTION_DESCRIBE: Readonly<Record<string, string>> = WUYUAN.actionDescribe || {};
 
 type RuntimeWithSlice = {
   modId?: string;

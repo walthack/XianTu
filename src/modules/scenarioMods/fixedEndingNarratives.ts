@@ -2,6 +2,7 @@ import { isNoSummary } from '@/services/narrativeSummary';
 import { applyTimelineInserts } from './timelineInserts';
 import { lineGapCountText } from './secondaryLineEntry';
 import {CONTENT_PACKS} from '../contentPacks';
+import type { PackEnding } from '../contentPacks/presentationFormats';
 import {applyStoryLevel} from './levelProgression';
 
 import { canonicalEndingId, endingPresentation } from './endingPresentation';
@@ -20,7 +21,8 @@ import { entityAliases } from './namedEntities';
 const ENDING_TEXTS: Readonly<Record<string,string>> = CONTENT_PACKS.texts;
 
 // 战斗正式接入时消费此表；此处只录数据，不由LLM写tier触发，也不重复判slay_dragon/s06_02。
-export const BATTLE_LOSS_ENDINGS = ([
+// F0b：TS 侧表，与内容包 endings 的 battleLoss 合并（TS 在前、包按 catalog 顺序在后，endingId 取外层；编译期禁止同一结局两边都有）。
+export const TS_BATTLE_LOSS_ENDINGS = ([
   {
     "endingId": "lcq.ending.death.ghost_king_skull",
     "title": "天命的指引",
@@ -63,15 +65,31 @@ export const BATTLE_LOSS_ENDINGS = ([
       "本局结束，不可续玩"
     ]
   }
-] as const).map(ending => ({ ...ending, presentation: endingPresentation(ending) }));
+] as const);
+/** TS 表在前、包 endings 的 battleLoss 按 catalog 顺序在后（endingId 取外层）；同一结局两边都有抛错（编译期已拦）。 */
+export function mergeBattleLossEndings<T extends { endingId: string }>(ts: readonly T[], endings: readonly PackEnding[]): T[] {
+  const pack = endings.filter(e => e.battleLoss).map(e => ({ endingId: e.endingId, ...e.battleLoss! })) as unknown as T[];
+  for (const e of pack) if (ts.some(t => t.endingId === e.endingId)) throw Error(`战败结局 ${e.endingId} 同时在 TS 表与内容包里`);
+  return [...ts, ...pack];
+}
+export const BATTLE_LOSS_ENDINGS = mergeBattleLossEndings(TS_BATTLE_LOSS_ENDINGS, CONTENT_PACKS.endings || []).map(ending => ({ ...ending, presentation: endingPresentation(ending) }));
 
 /**
  * 同一结局按来路追加的分支句（裁定簿 #240，用户 2026-10-27 00:35）：texts 键首行插正文开头、其余插结尾。
  * 来路认 gameOver.sourceEventId——阿姬曼路是武二郎入队拍的绝路，落结局时该拍尚未完成、不进编年史；期限到期等其它来路只给通用正文。
  */
-const ENDING_PATH_TEXTS: Readonly<Record<string, { sourceEventId: string; textKey: string }>> = {
+export const TS_ENDING_PATH_TEXTS: Readonly<Record<string, { sourceEventId: string; textKey: string }>> = {
   'lcq.ending.death.ajiman_bond': { sourceEventId: 'lcq.event.wuerlang_joins', textKey: 'lcq.ending.death.ajiman_bond.ajiman_path' },
 };
+/** F0b：与内容包 endings 的 pathText 合并（TS 在前；同一结局只有一句来路分支，两边都有抛错，编译期已拦）。 */
+export function mergeEndingPathTexts(ts: Readonly<Record<string, { sourceEventId: string; textKey: string }>>, endings: readonly PackEnding[]): Readonly<Record<string, { sourceEventId: string; textKey: string }>> {
+  const pack = endings.filter(e => e.pathText);
+  if (!pack.length) return ts;
+  const out = { ...ts };
+  for (const e of pack) { if (e.endingId in out) throw Error(`结局来路分支 ${e.endingId} 同时在 TS 表与内容包里`); out[e.endingId] = e.pathText!; }
+  return out;
+}
+const ENDING_PATH_TEXTS = mergeEndingPathTexts(TS_ENDING_PATH_TEXTS, CONTENT_PACKS.endings || []);
 
 export function fixedEndingNarrative(ending: { endingId: string; sourceEventId: string } | undefined): string | undefined {
   if (!ending) return undefined;
