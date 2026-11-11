@@ -221,7 +221,7 @@ test('escape result follows terminal states and writeback never mutates authored
 test('F13 new checkpoint enters host, guards through phases, and closes to dragon swallowing without jumping',async()=>{
  enable();const dir=await import('node:os').then(o=>o.tmpdir());const fs=await import('node:fs/promises');const cp=await import('node:child_process');
  const path=await fs.mkdtemp(dir+'/f13-host-');cp.execFileSync(process.execPath,['scripts/generate-scene-combat-checkpoints.mjs',path],{maxBuffer:8*1024*1024});
- const h=harness(JSON.parse(await fs.readFile(path+'/F13-before.json','utf8')).saves[0].存档数据);
+ const h=harness(JSON.parse(await fs.readFile(path+'/F13-before.json','utf8')).saves[0].存档数据);await fs.rm(path,{recursive:true,force:true});
  assert.equal(host.sceneCandidate(h.save)?.contract.meta.id,'combat.f13.ghost_king_final');
  for(let i=0;i<5&&!runtime(h.save).completedEventIds.includes('lcq.event.ghost_king_swallowed');i++){
   await host.submitSceneInput(h.save,'我守住井口，用血驱走阴煞',h.deps);force(h.save);await host.confirmSceneAction(h.save,h.deps);
