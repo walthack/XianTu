@@ -1,5 +1,5 @@
 {
-  "version": "513f3b55b694e031",
+  "version": "ca385e4a806b1d9a",
   "contracts": [
     {
       "meta": {
@@ -31157,5 +31157,56 @@
       "lyl.character.wen_qingyu": 555,
       "lyl.character.zuo_huan": 896
     }
-  }
+  },
+  "nationLines": [
+    {
+      "lineId": "nanhuang",
+      "order": 1,
+      "regions": [
+        "昭南"
+      ]
+    },
+    {
+      "lineId": "jin",
+      "order": 2,
+      "regions": [
+        "晋国"
+      ]
+    },
+    {
+      "lineId": "song",
+      "order": 3,
+      "regions": [
+        "宋国"
+      ]
+    },
+    {
+      "lineId": "han",
+      "order": 4,
+      "regions": [
+        "汉国"
+      ]
+    },
+    {
+      "lineId": "tang",
+      "order": 5,
+      "regions": [
+        "唐国"
+      ]
+    },
+    {
+      "lineId": "qin",
+      "order": 6,
+      "regions": [
+        "秦国"
+      ]
+    },
+    {
+      "lineId": "taiquan",
+      "order": 7,
+      "regions": [
+        "太泉"
+      ]
+    }
+  ]
 }
