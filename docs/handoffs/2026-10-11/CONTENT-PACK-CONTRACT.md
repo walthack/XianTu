@@ -310,14 +310,14 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 [{"lineId": "<国家线 id>", "order": <正整数>, "regions": ["<地区名，mod-kit/entity-ledger/overrides.json stageRegions 的值>"]}]
 ```
 
-只认这三个字段（段名按复核 M7 不叫 `lines`，那是人物线文件与下一步表）。七条国家线各登记在自己的线包里：`nanhuang`→`packs/zhaonan`、`jin`→`jin`、`song`→`song`、`han`→`han`、`tang`→`tang`、`qin`→`qin`、`taiquan`→`taiquan`，文件都叫 `nation-lines.json`。塞外不是国家线，`packs/saiwai` 不登记。
+只认这三个字段（段名按复核 M7 不叫 `lines`，那是人物线文件与下一步表）。七条国家线各登记在自己的线包里：`nanhuang`→`packs/zhaonan`、`jin`→`jin`、`song`→`song`、`han`→`han`、`tang`→`tang`、`qin`→`qin`、`taiquan`→`taiquan`，文件都叫 `nation-lines.json`。塞外不是国家线，`packs/saiwai` 不登记。（2026-11-12 更正：「只认这三个字段」已被后文「参数化派生条件与计入线、失败收束进包（阶段 2a）」节与「判档线与「失败是否结束游戏」进各线包（G4）」节取代：现在 `countsTowardClosedLines` 必填（布尔），另可写 `failureClosureEvents`、`judged`、`failEndsGame`；只写 lineId／order／regions 会报 `countsTowardClosedLines must be true or false`。）
 
 - **编译期校验**：`lineId` 非空、全部包里不重复（归属种类 `nationLine`，跨包报 `nationLine id X defined by both A and B`，同包报 `nation line missing/duplicate id`）；`order` 是正整数、全部包里不重复；`regions` 非空、元素非空且不重复，同一地区只能登记到一条线（`region R also registered to …`）。等价于原 numbers 里 `story.lineCompass.regionLines` 的校验（值须为国家线 id——现在结构上必然成立），并补上 lineId／地区不重复。
 - **catalog**：新顶层段 `nationLines`（按 `order` 排好，条目原样），放在末尾；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。
 - **顺序**：显式由 `order` 决定，与包的拓扑序、目录名无关。下一步表 `lineCompass.lines` 合并后按这次编译出的 `nationLines` 顺序稳定排序（原按 `numbersRegistry.ts` 的常量排）。现值 1–7 = 南荒、晋、宋、汉、唐、秦、太泉，与原常量逐项相同。
 - **运行时**：`src/modules/contentPacks/nationLines.ts` 只 import `generated/catalog.json`，导出 `NATION_LINES`、`PACK_NATION_LINE_IDS`、`NATION_LINE_OF_REGION`。`contentPacks/index.ts` 转导出这三个名字；`numbersRegistry.ts` 的 `NATION_LINE_IDS` 导出名不变，改为从 `../contentPacks` 取 `PACK_NATION_LINE_IDS`（场面模块只许引用 `../contentPacks`，`tests/sceneModuleIsolation.test.mjs`）；`lineCompass.ts` 的 `lineOfStage` 改查 `NATION_LINE_OF_REGION`。numbers 里删掉 `story.lineCompass.regionLines` 字段与它的必填项／校验。
 - **构建顺序（M2）**：编译器不再 import `numbersRegistry.ts` 排序；`validateLineCompassTable` 加第 4 个参数 `nationLineIds`（缺省 `NATION_LINE_IDS`），`validateWithTs` 传这次编译出的 `catalog.nationLines` 的 id，不用磁盘上的旧 catalog。因为 `numbers.ts` → `numbersRegistry.ts` 现在会读 catalog.json，`buildCatalog` 的逐拍演出关判定不再经 `stepScene.ts`（它 import `numbers.ts`），改读 `travel/defs/qingyuNanhuang.ts` 的 `NANHUANG_STEP_SCENE_STAGE_IDS`，按关 id 前缀判定（同 `isStepSceneStage`）。删掉 catalog.json 后单次重建仍可用，产物逐字节相同。
-- **加一条国家线**只改包数据（`tests/nationLinesPack.test.mjs` 用合成线 `test.nation` 在仓库副本里单次重建验证）。但 `numbersRegistry.ts` 的秦入口规则（阶段 2 才搬）要求「国家线去掉秦、太泉」恰为 numbers 的 `story.lineCompass.anyLineClosed.lineIds`，且每条在 `story.lineOutcome.failureClosureEvents` 有键：新线若不是秦／太泉，须同时补这两项 numbers 配置，否则数值冷启动校验（LCQ-NUM-007）失败。
+- **加一条国家线**只改包数据（`tests/nationLinesPack.test.mjs` 用合成线 `test.nation` 在仓库副本里单次重建验证）。但 `numbersRegistry.ts` 的秦入口规则（阶段 2 才搬）要求「国家线去掉秦、太泉」恰为 numbers 的 `story.lineCompass.anyLineClosed.lineIds`，且每条在 `story.lineOutcome.failureClosureEvents` 有键：新线若不是秦／太泉，须同时补这两项 numbers 配置，否则数值冷启动校验（LCQ-NUM-007）失败。（2026-11-12 更正：这条限制已被后文「参数化派生条件与计入线、失败收束进包（阶段 2a）」节取代：计入收束计数与失败收束事件搬进了各线 `nation-lines.json`，加国家线不再要改 numbers；判档线与「失败是否结束游戏」同样已进包，见后文 G4 节。）
 - 测试：`tests/lineCompass.test.mjs` 的地区映射断言改读合并结果，「塞外登记成国家线」的负例移到 `tests/nationLinesPack.test.mjs`（下一步表用未登记的 `saiwai` 报 `lineId must be one of …`；`塞外` 登记到两条线报错）。
 
 ## 2026-11-11 角色姿态档案与好感上限进人物包（B4）
@@ -462,3 +462,66 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - **numbers**：删 `story.lineOutcome.judgedLines`、`story.lineOutcome.failEndsGame`，改写 `lineOutcome.note` 相应半句；`tiers`、`writeOnce`、`story.lineUnlock`（含其 note 里提到 judgedLines 的半句）不动；重生 `game-numbers.qingyu.json`。tuning.json 若含这两个键会被 LCQ-NUM-002 整份拒绝（同 2a/2b），上线前确认部署那份。热改不再能改判档线或 failEndsGame（原来可以），改它们要改包并重编译。
 - **catalog**：只有 `nationLines` 六条各多两个字段与 version（`8d9aa2e611643877` → `518235dc6c3271a1`，内置模组重新播种一次）；删 catalog 后单次重建逐字节相同。
 - **测试**：`tests/g4JudgedLinesGolden.test.mjs`（新，22 项）在旧代码上冻结判档线集合与顺序、逐线 failEndsGame、逐线写档与规则表判档校验、16 份旧档与 5 种合成档的 `closedLineIds`（三种档位口径）、`nationClosedLineCount`、太泉 `lineUnlockStatus` 与 `unlock.taiquan` 读数，搬迁后逐字节不变。`syntheticLineAcceptance` 用例 4 的 G4 钉子改成正向断言（合成线写 `judged:true, failEndsGame:true` 后进判档线、`closedLineIds` 与太泉解锁数到它、`lineFailEndsGame` 读到 true），用例 8 加形状负例。G5–G7 的钉子不变（G3 在该测试里本来就没有钉子）。
+
+## 2026-11-12 编译期校验补充
+
+阶段末只读复核指出：几类包数据写错了也能通过编译与 `--check`，到运行时才静默失效。本节给「照文档新写一个线包」补护栏。现有七条线的数据原样通过，catalog 逐字节不变（version 仍是 `518235dc6c3271a1`）；删掉 catalog.json 后单次重建，产物逐字节相同。实现都在 `scripts/content-packs.mjs`，负例在 `tests/syntheticLineAcceptance.test.mjs` 用例 8，键名单对账在 `tests/extensionKeyRegistry.test.mjs`（新）。
+
+### 新增校验
+
+| 段 | 规则 | 报错原文 |
+|---|---|---|
+| `mapEntries` | 字段白名单＝运行时读取的字段：`id`、`stageId`、`eventId`、`locationId`、`readyPath`、`previewTextId`、`returnLabelTextId`、`returnTextId`、`returnChronicleTextId` | `map entry <id>: unknown field <字段>` |
+| `mapEntries` | `locationId` 须是规范地点 id：`mod-kit/entity-catalog/locations.json` 的条目 id，且不是包 `locationAliases.canonical` 的键。运行时按 `canonicalLocationId(点击的地点) === entry.locationId` 比对，写别名永远对不上 | `map entry <id>: locationId <L> is not a canonical location id (mod-kit/entity-catalog/locations.json entry id; aliases do not match at runtime)` |
+| `mapEntries` | 全部包里两条入口不得共用同一个 `locationId`，否则运行时 `find` 只取第一条 | `map entry <id>: locationId <L> also used by map entry <另一条 id>` |
+| `mapEntries` | 四个文案键写了就须在 texts。这条原来就有，现在由负例钉住 | `invalid map entry <id>`（与关、入口拍、readyPath 不合法同一句） |
+| `worldEvents` | `startedExtensionKey` 的保留键补齐：编译器的 `RESERVED_EXTENSION_KEYS` 补上了 `beatActionIdle` 等 src 实际在用的键，另并入试玩的 `extensionKey`（catalog.playtests），以及 `mod-kit/dual-model.json` 的 `dualModel.backend.extensionKey`（现值 `dualModelConsistency`）。`tests/extensionKeyRegistry.test.mjs` 扫描 src，扫出的键必须都已登记；以后新加扩展键却没登记，测试会红 | `world event <id>: startedExtensionKey <键> must match ^[A-Za-z][A-Za-z0-9]*$ and not be a reserved key`（原句不变） |
+| `worldEvents` | `closes[].stageId` 须满足二者之一：(1) 是 `lineId` 那条线的关，即关 → 地区（overrides `stageRegions` ∪ 包 `stageMeta.region`，同运行时 `STAGE_REGION`）→ 国家线（`nationLines.regions`）；(2) 是某条地图入口的关 | `world event <id>: closes: stage <S> is neither a stage of line <L> (stageRegions/stageMeta region) nor a map entry stage` |
+| `secondaryLines` | `entryHintKeys` 只在线写了 `unlock` 时才读（`secondaryLineEntry.ts`） | `secondary line <id>: entryHintKeys: only read for lines with unlock` |
+| `secondaryLines` | 外形：`{locked:{title,realm,lines,deadlinePrefix},variants:{<说法>:[…]}}`；`variants` 非空 | `… entryHintKeys: expected {locked:{title,realm,lines,deadlinePrefix},variants:{<variant>:[...]}}` |
+| `secondaryLines` | `locked` 只认这四个键；`deadlinePrefix` 非空 | `… entryHintKeys: locked must be {title,realm,lines,deadlinePrefix}` |
+| `secondaryLines` | `locked.title／realm／lines` 须是非空的正文键串（**是否存在于 texts 暂不查**，见下文「留待裁定」） | `… entryHintKeys: locked.title must be a non-empty text key, got "<值>"` |
+| `secondaryLines` | 每个说法是非空数组；每句是正文键串，或附句 `{key, when:[{path,operator,value}]}`（`when` 非空；条件只查形状：键白名单，`path`、`operator` 非空串）；附句的 `key` 非空 | `… variants.<说法> must be a non-empty array`；`… variants.<说法>[i] must be a non-empty text key`；`… variants.<说法>[i] must be a text key or {key,when:[{path,operator,value}]}`；`… variants.<说法>[i].key must be a non-empty text key` |
+| 内置关 | `src/modules/scenarioMods/builtins/data` 按文件名排序后再读（原来依赖文件系统的枚举顺序）。catalog 不变 | （无报错） |
+
+不查的：
+- `variants` 的说法名。闭集只在 TS 里：`secondaryLineEntry.ts` 的 `VARIANT_OF`，未导出。`unlock: taiquan` 取 `taiquanEntryVariant`，结果是 `song` 或 `wangzhe`；其余线一律取 `default`。说法名写错仍会静默退回 `entryHint`。
+- `when` 条件不过账本路径校验。`validator.ts` 里那套条件校验（`validateConditions`）没有导出，所以只查形状。
+
+### 本次没加、留待裁定的三条
+
+三条现有七条线的数据都满足，但实测会让既有测试的正例变红，所以没有落地。要么改测试夹具，要么换校验口径，须另行决定：
+- `nationLines.regions` 的每个地区须至少被一个关用到（overrides `stageRegions` 的值，或某个包的 `stageMeta[].region`）。七条线的地区都在 overrides 里，秦国来自 `lyg.qin_xianyang`。但 `tests/nationLinesPack.test.mjs` 的合成包用 `test.甲`、`test.地区` 这类没有关在用的地区，有 6 个用例会红；`syntheticLineAcceptance` 用例 8 的「stageMeta region 改成 塞外 也收」正例也会红。前文本页「国家线注册」节的格式示例写的是「地区名须为 stageRegions 的值」，这一点编译器现在仍不强制。
+- `secondaryLines[].entryHintKeys` 里的正文键须存在于 texts；期限句键＝`deadlinePrefix` ＋ `.` ＋ 期限 id（numbers `story.lineUnlock.<unlock>.requireDeadlinesCleared`）也须存在。太泉线的 7 个键都在，满足。但 `tests/contentPackCoreCharacterFormats.test.mjs` 的「搬迁演练：七张 TS 表…」把全部二级线（含太泉）放进一个没有 texts 的临时包里编译，会报 `secondary line taiquan: entryHintKeys: locked.title must name an existing text`。正文键写错，运行时仍只记一次 LCQ-PCK-005 并用兜底。
+- `compassConditions[].unlessLineClosedByWorldEvent` 须有某个世界事件的 `closes` 指向这条线。秦的 `qinEntryReady → qin` 由大祭关掉，满足。但 `tests/nationLinesPack.test.mjs` 的 compassConditions 用例，其正例写的是 `unlessLineClosedByWorldEvent: 'test.l0'`，同一次编译里没有世界事件，会红。
+
+### mapEntries 格式与语义
+
+manifest `mapEntries` 是 JSON 文件路径数组，每个文件是对象或对象数组（秦包 `packs/qin/map-entries.json`）：
+
+```json
+[{"id": "qin", "stageId": "lyg.qin_xianyang", "eventId": "liuchao.event.qin_hook_fangshi_rumor", "locationId": "liuchao.location.xianyang",
+  "readyPath": "compass.qinEntryReady", "previewTextId": "…", "returnLabelTextId": "…", "returnTextId": "…", "returnChronicleTextId": "…"}]
+```
+
+- `id`：入口 id，全部包里唯一。它也是 `系统.扩展.mapEntryMessages` 的键，以及 `系统.扩展.mapEntryResume.entryId` 的值。
+- `stageId`：目标关，须是包内关（`catalog.stages`）。
+- `eventId`：入口拍，即口信拍，须是目标关里的事件。
+  - 投递：`readyPath` 成立后，入口拍作为非关键的探索事件（`critical:false, exploration:true`）注入**当前关**，并激活一次（`mapEntryMessages.<id>.delivered`）。`done.<入口拍>` 成立以后不再投递。
+  - 从地图入关：`transitionToMapEntryStage` 会把入口拍直接记为已完成（写进 `completedEventIds`、从 `activeEventIds` 移除、`mapEntryMessages.<id>.done = true`），然后立即推进一轮，激活新关首批事件。不论玩家之前有没有处理口信，都这样记。
+  - 入口拍的下一拍用 `done.<入口拍>` 或 `flags.event.<入口拍>.done` 作条件都能正常激活（实测）。
+- `locationId`：地图上的规范地点 id，见上表。玩家在地图上选中这个地点（先过 `canonicalLocationId`），入口已开放就走「剧情入口转场」（不另计路程天数）切进目标关；入口没开放就不出这条行程。
+- `readyPath`：`compass.anyLineClosed`，或 `compass.<某条 compassConditions 的 id>`。入口开放还要同时满足：不在目标关里、没有 game over、不在场面中、没有挂起的 `mapEntryResume`、编年史里没进过目标关（去过一次就不再开放）、不是试玩档。
+- `previewTextId`（可选）：地图出行预览里这条行程的说明。
+- `returnLabelTextId`（可选）：写了才在目标关走完后提供「返回出发关」入口，这是按钮文字。不写就不提供返回，入口关自带下一关的走正常启程链。
+- `returnTextId`（可选）：返回时的叙事；缺省为空。
+- `returnChronicleTextId`（可选）：返回时编年史条目的标题；缺省为「完成「<目标关名>」」。
+- 三个 return 文案里的 `{stage}` 换成出发关名（`modName`，退回 `modId`）。
+
+### 现状提醒：编译期校验依赖磁盘上的实体索引
+
+编译期有几处查实体存在：`{{entity:…}}` 模板、`characterProfiles`／`ifBranches`、`persistentEntries` 的角色引用，以及任务线引用集合。它们经 `namedEntities.ts` 读 `mod-kit/entity-catalog/index.json`，而这份索引是用**上一版** catalog 生成的，`--check` 不检查它。所以：
+- 包内新建的角色，第一次编译时就被引用，会报 unknown character，要先重建索引；
+- 从包里删掉的实体，旧索引里还在，校验照样通过。
+
+这一条牵涉 canon:build 流水线，本次没有改。

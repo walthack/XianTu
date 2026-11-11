@@ -23,6 +23,9 @@ fields.push('compassConditions');
 fields.push('contractRevisions');
 // 世界事件（阶段 2b）：manifest.worldEvents 是文件列表，每个文件是 [{id,eventId,actionId,startedExtensionKey,stageId,availableWhen,blockedInStageIds,closes,textKeys}]；编译后进 catalog.worldEvents
 fields.push('worldEvents');
+// 世界事件 startedExtensionKey 不得占用的 系统.扩展 键：src 里读写过的键（tests/contentPackValidation.test.mjs 扫描 src 核对，新加的键没登记会红）；
+// 另在编译时并上试玩 extensionKey（catalog.playtests）与 mod-kit/dual-model.json 的后端 extensionKey。只有 ^[A-Za-z][A-Za-z0-9]*$ 的键会真撞上，其余照登记
+export const RESERVED_EXTENSION_KEYS=['mapEntryResume','mapEntryMessages','读档迁移','actionTime','questLog','stageDepartureMap','stageDepartureIdle','specialNpcId','linePrompted','combatHeadline','c01ProtagonistBirth','c01LifespanCacheVersion','beatActionIdle','lcq_shiweimo','_reconcileDebug','任务追踪','判定','剧本模组','回合模块试玩','场面模块','开发验收','战斗检查点来源','战斗试玩','星月湖任务线试玩','行动门控','离线初始化'];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
@@ -99,7 +102,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);own('timeline',v);timelineInserts.push(...v);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);own(k,v);catalog[k].push(...v);}
  }
- const builtinDir=join(sourceRoot,'src/modules/scenarioMods/builtins/data');const builtins=await Promise.all((await readdir(builtinDir)).filter(x=>x.endsWith('.json')).map(async x=>JSON.parse(await readFile(join(builtinDir,x),'utf8'))));
+ const builtinDir=join(sourceRoot,'src/modules/scenarioMods/builtins/data');const builtins=await Promise.all((await readdir(builtinDir)).filter(x=>x.endsWith('.json')).sort().map(async x=>JSON.parse(await readFile(join(builtinDir,x),'utf8'))));
  const baseEvents=new Map(builtins.flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,structuredClone(e)])));
  // overlay 新增的事件（既不是内置事件、也不是某包关内事件）归该包；改写已有事件算引用
  const stageEvents=new Set([...defs.keys()].filter(k=>k.startsWith('event\u0000')));
@@ -268,6 +271,18 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(!object(raw)||Object.keys(raw).some(k=>!['id','name','kind','anchorCharacterIds','anchorLocationIds','anchorEventIds','anchorEventPending','entryHint','unlock','entryHintKeys','basis','nodes','pendingExpansion','after','note'].includes(k)))fail(`${at}: invalid fields`);
   const {note,...line}=raw;
   if((note!==undefined&&typeof note!=='string')||!text(line.name)||!['sect','nation','commerce','expedition'].includes(line.kind)||!text(line.entryHint)||!text(line.basis)||!texts(line.anchorCharacterIds)||!texts(line.anchorLocationIds)||!texts(line.anchorEventIds)||(line.anchorEventPending!==undefined&&line.anchorEventPending!==true)||(line.unlock!==undefined&&!text(line.unlock))||(line.entryHintKeys!==undefined&&!object(line.entryHintKeys))||(line.pendingExpansion!==undefined&&typeof line.pendingExpansion!=='string'))fail(`${at}: invalid fields`);
+  // entryHintKeys（2026-11-12）：形状与读取方 secondaryLineEntry.ts 一致——只在有 unlock 时读；locked 四个键、variants 每个说法是非空句列表（文本键，或 {key,when} 附句）；
+  // 文本键只查是非空串（不查是否在 texts：tests/contentPackCoreCharacterFormats.test.mjs 搬迁演练把太泉线放进无 texts 的包里编译，待裁定）。variants 的说法名不查（闭集只在 TS：secondaryLineEntry.ts VARIANT_OF，未导出）；when 只查形状
+  {const k=line.entryHintKeys,hk=`${at}: entryHintKeys`,key=(v,where)=>{if(!text(v))fail(`${hk}: ${where} must be a non-empty text key, got ${JSON.stringify(v)}`);};
+  if(k!==undefined){
+   if(line.unlock===undefined)fail(`${hk}: only read for lines with unlock`);
+   if(Object.keys(k).some(x=>!['locked','variants'].includes(x))||!object(k.locked)||!object(k.variants)||!Object.keys(k.variants).length)fail(`${hk}: expected {locked:{title,realm,lines,deadlinePrefix},variants:{<variant>:[...]}}`);
+   if(Object.keys(k.locked).some(x=>!['title','realm','lines','deadlinePrefix'].includes(x))||!text(k.locked.deadlinePrefix))fail(`${hk}: locked must be {title,realm,lines,deadlinePrefix}`);
+   for(const x of ['title','realm','lines'])key(k.locked[x],`locked.${x}`);
+   for(const [variant,parts] of Object.entries(k.variants)){const w=`variants.${variant}`;if(!Array.isArray(parts)||!parts.length)fail(`${hk}: ${w} must be a non-empty array`);
+    parts.forEach((p,i)=>{if(typeof p==='string')return key(p,`${w}[${i}]`);
+     if(!object(p)||Object.keys(p).some(x=>!['key','when'].includes(x))||!Array.isArray(p.when)||!p.when.length||p.when.some(c=>!object(c)||Object.keys(c).some(x=>!['path','operator','value'].includes(x))||!text(c.path)||!text(c.operator)))fail(`${hk}: ${w}[${i}] must be a text key or {key,when:[{path,operator,value}]}`);
+     key(p.key,`${w}[${i}].key`);});}}}
   // F0a：全部包线里至多一条不写 after（排最前）；TS 表非空时不允许，在 validateWithTs 查（mergeSecondaryLines）
   if(line.after===undefined){if(headless)fail(`${at}: only one pack line may omit after (${headless} already does)`);headless=line.id;}
   else{if(!text(line.after))fail(`${at}: after must name a line`);if(afters.has(line.after))fail(`${at}: another pack line is already after ${line.after}`);afters.add(line.after);}
@@ -306,14 +321,23 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // 合同哈希迁移表（BZ1）：放在 compassConditions 之后（catalog 末段），既有校验的报错先后不变
  catalog.contractRevisions=compileContractRevisions(contractRevisions,{events});
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
+ // 2026-11-12：字段白名单＝运行时读取的字段（mapEntries.ts MapEntry）；locationId 须是规范地点 id（locations.json 主 id，且不是包 locationAliases.canonical 的键——运行时按 canonicalLocationId 比对，别名永远对不上），且不与别的入口共用（运行时 find 只取第一条）
+ {const mainLocationIds=new Set(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>e.id)),entryOfLocation=new Map();
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);
+  for(const k of Object.keys(object(e)?e:{}))if(!['id','stageId','eventId','locationId','readyPath','previewTextId','returnLabelTextId','returnTextId','returnChronicleTextId'].includes(k))fail(`map entry ${e.id}: unknown field ${k}`);
   if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||!['compass.anyLineClosed',...catalog.compassConditions.map(x=>`compass.${x.id}`)].includes(e.readyPath)||[e.previewTextId,e.returnLabelTextId,e.returnTextId,e.returnChronicleTextId].some(id=>id!==undefined&&!(id in catalog.texts)))fail(`invalid map entry ${e.id}`);
- }
+  if(!mainLocationIds.has(e.locationId)||e.locationId in catalog.locationAliases.canonical)fail(`map entry ${e.id}: locationId ${e.locationId} is not a canonical location id (mod-kit/entity-catalog/locations.json entry id; aliases do not match at runtime)`);
+  if(entryOfLocation.has(e.locationId))fail(`map entry ${e.id}: locationId ${e.locationId} also used by map entry ${entryOfLocation.get(e.locationId)}`);entryOfLocation.set(e.locationId,e.id);
+ }}
  // 世界事件（阶段 2b，大祭）：放在地图入口校验之后（blockedInStageIds 要对照本次编译出的 mapEntries）；一律用这次编译出的 stages／events／nationLines／mapEntries／texts，不读磁盘上的旧 catalog（M2）。
  // stageId 有 canon rail 在 validateWithTs 里查（CANON_RAIL_PROFILES 是 TS 表）
  {const str=v=>typeof v==='string'&&v.trim().length>0,lineIds=new Set(catalog.nationLines.map(x=>x.lineId)),entryStages=new Set(catalog.mapEntries.map(e=>e.stageId));
-  const reservedKeys=new Set(['mapEntryResume','mapEntryMessages','读档迁移','actionTime','questLog','stageDepartureMap','stageDepartureIdle','specialNpcId','linePrompted','combatHeadline','c01ProtagonistBirth','c01LifespanCacheVersion',...catalog.playtests.map(p=>p.extensionKey)]);
+  const dualModel=JSON.parse(await readFile(join(sourceRoot,'mod-kit/dual-model.json'),'utf8'));
+  const reservedKeys=new Set([...RESERVED_EXTENSION_KEYS,...catalog.playtests.map(p=>p.extensionKey),...[dualModel.dualModel?.backend?.extensionKey].filter(Boolean)]);
+  // closes[].stageId 的归属（2026-11-12）：关 → 地区（overrides stageRegions ∪ 包 stageMeta.region，同运行时 STAGE_REGION）→ 国家线（nationLines.regions）；或是某条地图入口的关
+  const stageRegions={...JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-ledger/overrides.json'),'utf8')).stageRegions,...Object.fromEntries(catalog.stageMeta.filter(m=>m.region!==undefined).map(m=>[m.stageId,m.region]))};
+  const lineOfStage=id=>catalog.nationLines.find(l=>l.regions.includes(stageRegions[id]))?.lineId;
   const textKeyNames=['label','warning','transition','blocked'],closedLines=new Map();
   unique(worldEvents,x=>x?.id,'world event');
   for(const k of ['eventId','actionId','startedExtensionKey'])unique(worldEvents,x=>x?.[k],`world event ${k}`);
@@ -331,6 +355,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
     if(!lineIds.has(c.lineId))fail(`${at}: closes: unknown nation line ${c.lineId}`);
     if(closedLines.has(c.lineId))fail(`${at}: closes: line ${c.lineId} is also closed by world event ${closedLines.get(c.lineId)}`);closedLines.set(c.lineId,x.id);
     if(!stages.has(c.stageId))fail(`${at}: closes: unknown stage ${c.stageId}`);
+    if(lineOfStage(c.stageId)!==c.lineId&&!entryStages.has(c.stageId))fail(`${at}: closes: stage ${c.stageId} is neither a stage of line ${c.lineId} (stageRegions/stageMeta region) nor a map entry stage`);
     if(!(stages.get(c.stageId).scenario?.events||[]).some(e=>e?.id===c.messageEventId))fail(`${at}: closes: messageEventId ${c.messageEventId} is not in stage ${c.stageId}`);}
    if(!object(x.textKeys)||Object.keys(x.textKeys).length!==textKeyNames.length||!textKeyNames.every(k=>str(x.textKeys[k])&&typeof catalog.texts[x.textKeys[k]]==='string'))fail(`${at}: textKeys must name existing texts for ${textKeyNames.join('/')}`);
    if(!str(catalog.texts[x.textKeys.label]))fail(`${at}: label text must not be empty`);}
