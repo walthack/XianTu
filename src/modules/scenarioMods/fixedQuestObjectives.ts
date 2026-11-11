@@ -49,8 +49,6 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
   'lyl.event.liujian_takes_nangong': '打听南宫方向忽然动兵的消息',
   'lyl.event.lvji_defiles_consort': '与赵合德藏在含光殿藻井上，屏息看清殿中变故',
   'lyl.event.s06_01b': '在藻井上藏住自己与赵合德，看清殿中变故',
-  'lyl.event.rescue_yu_sisters': '从天井困兽处救出虞氏姐妹',
-  'lyl.event.xingyin_beast_traps': '查明天井里困兽与被困者的情况',
 });
 
 export function resolveFixedQuestObjective(event: QuestObjectiveEventLike | null | undefined): string {

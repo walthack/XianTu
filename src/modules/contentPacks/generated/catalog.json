@@ -1,5 +1,5 @@
 {
-  "version": "f9a470b88e4226b9",
+  "version": "d699bc9db34b8bec",
   "contracts": [
     {
       "meta": {
@@ -12548,6 +12548,342 @@
           "allowedElaboration": "可补足丰乐楼的交锋与齐羽仙的威胁，不得改写协议条款。"
         }
       ]
+    },
+    {
+      "id": "yunlong.taiquan_afterfall",
+      "modId": "lyl.taiquan_afterfall",
+      "chapterId": "lyl.chapter.taiquan_afterfall_taquan",
+      "orderedEventIds": [
+        "lyl.event.taiquan_afterfall_01_beat",
+        "lyl.event.taiquan_afterfall_02_beat",
+        "lyl.event.taiquan_afterfall_03_beat",
+        "lyl.event.taiquan_afterfall_04_beat",
+        "lyl.event.taiquan_afterfall_05_beat",
+        "lyl.event.han_shouyang_gaoyanei",
+        "lyl.event.taiquan_afterfall_06_beat",
+        "lyl.event.taiquan_afterfall_07_beat",
+        "lyl.event.han_wudu_bingsi",
+        "lyl.event.jin_guangyuan_ledger",
+        "lyl.event.taiquan_afterfall_08_beat",
+        "lyl.event.taiquan_afterfall_09_beat",
+        "lyl.event.han_court_grain_blame",
+        "lyl.event.taiquan_afterfall_10_beat"
+      ],
+      "contracts": [
+        {
+          "eventId": "lyl.event.taiquan_afterfall_01_beat",
+          "mustReach": "程宗扬与虞白樱在蚁穴中发生关系，以排出淫毒。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_02_beat",
+          "mustReach": "何漪莲与尹馥兰被小紫弃于下水道，程宗扬救下。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_03_beat",
+          "mustReach": "周飞在魔墟中发现玄秘贝已失，后找到琉璃天珠，遭多方势力争夺。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_04_beat",
+          "mustReach": "小紫与莫如霖对质其母碧姬和珠宝丢失之事，莫如霖承认与碧姬有染。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_05_beat",
+          "mustReach": "程宗扬与小紫探索人类居住区发现KTV卖场，推测太泉古阵为避难所。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.han_shouyang_gaoyanei",
+          "mustReach": "程宗扬下首阳山，在山脚与冯源、哈迷蚩、青面兽和高智商一行会合，得知此地是汉国首阳山，随即赶往舞都。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "在首阳山脚久留不去舞都",
+            "本拍就见到云如瑶",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足下山所见、山棚里的重逢与赶路，不得改写会合的人与去向。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_06_beat",
+          "mustReach": "程宗扬多次登门提亲因小紫身份遭拒，最终私奔带走云如瑶。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_07_beat",
+          "mustReach": "平亭侯因宁成上奏有罪下诏狱，邳家覆灭。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.han_wudu_bingsi",
+          "mustReach": "云如瑶决定亲自去七里坊游冶台对面的饼肆做工，程宗扬下灶和面蒸饼、拉高智商打下手，帮她把饼肆撑起来。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "程宗扬劝住云如瑶不去饼肆",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足和面蒸饼的忙乱与饼肆外的人潮，不得改写云如瑶做饼的决定。"
+        },
+        {
+          "eventId": "lyl.event.jin_guangyuan_ledger",
+          "mustReach": "程宗扬把广源行在晋国的旧账揭开，对上龙宸这条线。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "本拍就与龙宸正面交手",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足翻查旧账的经过，不得改写账目指向龙宸的结论。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_08_beat",
+          "mustReach": "高智商以假名甄厚道与冯子都结交，展示软晶玉杯并赠送贵宾卡和纸钞，冯子都透露西邸卖官渠道并暗示徐璜为天子内臣。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_09_beat",
+          "mustReach": "程宗扬通过徐璜向赵飞燕献太乙真宗求子仙符，符上附赵合德银链，赵飞燕召见得知程宗扬见过赵合德。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.han_court_grain_blame",
+          "mustReach": "汉廷朝会上御史王温舒攻击丞相韦玄成，左武军粮草因此不继；程宗扬追问究竟是谁的责任。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "本拍就定下罪责",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足朝会上的争执与打听来的内情，不得改写粮草不继的起因。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_afterfall_10_beat",
+          "mustReach": "程宗扬在襄城君府密室发现小紫已控制襄城君孙寿，小紫透露刺杀韩定国一事。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        }
+      ]
+    },
+    {
+      "id": "yunlong.taiquan_core_conflict",
+      "modId": "lyl.taiquan_core_conflict",
+      "chapterId": "lyl.chapter.escape_ant_hill",
+      "orderedEventIds": [
+        "lyl.event.yu_baiying_truce",
+        "lyl.event.find_exit"
+      ],
+      "contracts": [
+        {
+          "eventId": "lyl.event.yu_baiying_truce",
+          "mustReach": "虞白樱在魔墟中被行淫兽捕获，程宗扬救出她。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.find_exit",
+          "mustReach": "程宗扬和虞白樱在蚁穴中，程宗扬被触肢咬伤，虞白樱为其吸出淫毒。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        }
+      ]
+    },
+    {
+      "id": "yunlong.taiquan_sacred_fruit",
+      "modId": "lyl.taiquan_sacred_fruit",
+      "chapterId": "lyl.chapter.taiquan_sacred_fruit_linan_close",
+      "orderedEventIds": [
+        "lyl.event.taiquan_sacred_fruit_01",
+        "lyl.event.taiquan_sacred_fruit_02",
+        "lyl.event.taiquan_sacred_fruit_03",
+        "lyl.event.sacred_against_lin",
+        "lyl.event.sacred_jin_drought",
+        "lyl.event.taiquan_sacred_fruit_04",
+        "lyl.event.taiquan_sacred_fruit_05",
+        "lyl.event.taiquan_sacred_fruit_06",
+        "lyl.event.taiquan_sacred_fruit_07",
+        "lyl.event.taiquan_sacred_fruit_08",
+        "lyl.event.taiquan_sacred_fruit_09",
+        "lyl.event.taiquan_sacred_fruit_10"
+      ],
+      "contracts": [
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_01",
+          "mustReach": "卓云君杀死米远志，直属营伤亡惨重，游婵被劫；众人撤回翠微园，李师师处置伤员；郭槐经脉尽绝，被太皇太后冷淡打发。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_02",
+          "mustReach": "程宗扬与秦桧等人在翠微园花厅讨论黑魔海撤出宋国条件，决定稳扎稳打，分头行事。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_03",
+          "mustReach": "程宗扬与高俅密谈，得知宋主生母为韦太后等身世疑云。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.sacred_against_lin",
+          "mustReach": "程宗扬在翠微园向卓云君承诺对付现任掌教蔺采泉，并写下盘江程氏的股份分配。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "本拍就对蔺采泉动手",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足两人的讨论与股份的写法，不得改写承诺内容。"
+        },
+        {
+          "eventId": "lyl.event.sacred_jin_drought",
+          "mustReach": "程宗扬与张少煌会面，得知晋国大旱与王茂弘的意图，决定全力收粮，并把建康当成营销中心来做。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改为放弃晋国粮市",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足会面与收粮的盘算，不得改写决定。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_04",
+          "mustReach": "程宗扬随陈琳进入云涛观迷楼，发现楼内机关及小紫等人。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_05",
+          "mustReach": "小紫让梦娘说出岳鹏举在迷楼中藏有钥匙及太泉熊谷一四七五。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_06",
+          "mustReach": "四月二十六日盘江程氏首次股东大会召开，通过分红、发行股票及粮食经营主营提案。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_07",
+          "mustReach": "程宗扬一行抵达苍澜镇，物价高昂，程宗扬购买衣物兵器。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_08",
+          "mustReach": "殇侯用赤婴粉假招骗君雄飞耗真元后拧断其颈并灭魂。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_09",
+          "mustReach": "酒店内，宋三与活无常、死有分下毒欲劫持左彤芝等人，武二郎以铁轨击败二人，宋三逃入下水道。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        },
+        {
+          "eventId": "lyl.event.taiquan_sacred_fruit_10",
+          "mustReach": "多派势力在火山口争夺赤阳圣果，最终被萧遥逸吞下一颗。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "改写本拍原著结果",
+            "提前演出后续剧情"
+          ],
+          "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+        }
+      ]
     }
   ],
   "stageMeta": [
@@ -12793,6 +13129,48 @@
           },
           "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": {
             "objective": "在小瀛洲先应对眼前的杀局"
+          }
+        }
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "presentation": {
+        "events": {
+          "lyl.event.taiquan_sacred_fruit_08": {
+            "mood": "battle"
+          },
+          "lyl.event.taiquan_sacred_fruit_07": {
+            "mood": "daily"
+          }
+        }
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_core_conflict",
+      "presentation": {
+        "events": {
+          "lyl.event.yin_fulan_aid": {
+            "mood": "aspire"
+          },
+          "lyl.event.find_exit": {
+            "mood": "explore"
+          }
+        }
+      }
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "presentation": {
+        "events": {
+          "lyl.event.taiquan_afterfall_06_beat": {
+            "mood": "emotion"
+          },
+          "lyl.event.rescue_yu_sisters": {
+            "objective": "从天井困兽处救出虞氏姐妹"
+          },
+          "lyl.event.xingyin_beast_traps": {
+            "objective": "查明天井里困兽与被困者的情况"
           }
         }
       }
@@ -13276,6 +13654,146 @@
         }
       ],
       "pendingExpansion": "线形：卷入贾师宪清岳党 → 查清粮战与围城 → 相府／太尉／后宫立场 → 纸钞落地逼退＋昭南索赔 → 礼部侍郎、通问计议使。顶点＝礼部侍郎、通问计议使（seq 1134）。578 共同监制、1160 出资解困并进 S11，不另封「宝钞使」。S5／S6／S9／S11 需新增。S5 用屯田司员外郎，不用「客卿」。威远／武穆王府不上链。"
+    },
+    {
+      "after": "commerce",
+      "id": "taiquan",
+      "name": "太泉古阵",
+      "kind": "expedition",
+      "anchorEventIds": [
+        "lcq.event.s02_01",
+        "lyl.event.taiquan_sacred_fruit_05"
+      ],
+      "entryHint": "岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。",
+      "unlock": "taiquan",
+      "entryHintKeys": {
+        "locked": {
+          "title": "line.taiquan.locked.title",
+          "realm": "line.taiquan.locked.realm",
+          "lines": "line.taiquan.locked.lines",
+          "deadlinePrefix": "line.taiquan.locked.deadline"
+        },
+        "variants": {
+          "song": [
+            "line.taiquan.entry.song",
+            {
+              "key": "line.taiquan.entry.song.key",
+              "when": [
+                {
+                  "path": "done.lyl.event.taiquan_sacred_fruit_05",
+                  "operator": "eq",
+                  "value": true
+                }
+              ]
+            }
+          ],
+          "wangzhe": [
+            "line.taiquan.entry.wangzhe"
+          ]
+        }
+      },
+      "basis": "**用户裁定 2026-08-19**：「太泉这一段，我觉得照理说应该单独拿出来，不应该放在原先的主轴里。」\n此前这 8 拍挂在主轴上，而主轴按同日裁定只保留「开局→王哲三托付」＋两个通关条件，不再作为任务清单展示。太泉恰是**条件一（修为达六阳，前往太泉古阵祭祀故人）的落点**，内容上也自成一条完整的弧：摸迷楼机关 → 问出钥匙暗号 → 争赤阳圣果 → 反制潘金莲的追兵 → 找到核心区出口 → 魔墟夺宝 → 进人类居住区。\n⚠ `kind: expedition` 是新档位：它既不是宗派（无法统）也不是国家（不是政权地盘），是一处**远征目的地**。故不受「国家线跟玩家在这个国家的行动」那条地理规则约束。\n⚠ 「太泉古阵＝系统入口」是我们的设计推断，**正典只写「祭祀故人」，全书无「祭祀大阵」字样**（见主轴文档与裁定 #159／#160）。本线文案不得把它叙述成开启装置。\n**整线解锁（用户 2026-10-27 01:12／01:28 定）**：境界≥坐照、至少收束一条国家线、冰蛊已了结，三条同时满足（阈值读 story.lineUnlock.taiquan）；没解锁照样显示入口，标题「时机未到」按缺项出句。进太泉说法分两版：萧遥逸受伤拍 s12_10 已完成＝原著版，否则王哲托付版（用户 2026-10-27 08:17 批方案 §10 措辞）。已走进太泉（门后任一节点完成）一律视为已解锁（总策划 2026-10-27 定）。",
+      "nodes": [
+        {
+          "reviewSummary": "随陈琳进云涛观迷楼，摸清机关，撞见小紫等人",
+          "status": "ready",
+          "stageId": "lyl.taiquan_sacred_fruit",
+          "eventId": "lyl.event.taiquan_sacred_fruit_04",
+          "beforeUnlock": true
+        },
+        {
+          "reviewSummary": "经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五",
+          "status": "ready",
+          "stageId": "lyl.taiquan_sacred_fruit",
+          "eventId": "lyl.event.taiquan_sacred_fruit_05",
+          "beforeUnlock": true
+        },
+        {
+          "reviewSummary": "到火山口争赤阳圣果，最终被萧遥逸吞下一颗",
+          "status": "ready",
+          "stageId": "lyl.taiquan_sacred_fruit",
+          "eventId": "lyl.event.taiquan_sacred_fruit_10"
+        },
+        {
+          "reviewSummary": "与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏",
+          "status": "ready",
+          "stageId": "lyl.taiquan_core_conflict",
+          "eventId": "lyl.event.plan_counterattack"
+        },
+        {
+          "reviewSummary": "与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去",
+          "status": "ready",
+          "stageId": "lyl.taiquan_core_conflict",
+          "eventId": "lyl.event.yin_yang_counter"
+        },
+        {
+          "reviewSummary": "蚁穴被咬，虞白樱吸出淫毒——找到通往核心区的出口",
+          "status": "ready",
+          "stageId": "lyl.taiquan_core_conflict",
+          "eventId": "lyl.event.find_exit"
+        },
+        {
+          "reviewSummary": "天井玻璃破了，赤阳藤外侵、行淫兽盘踞——尹馥兰被触肢缠在幕内",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.xingyin_beast_traps"
+        },
+        {
+          "reviewSummary": "潘金莲与虞紫薇互推进触肢；潘金莲夺走虞白樱的赤阳圣果走了",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.pan_yu_tentacle_clash"
+        },
+        {
+          "reviewSummary": "凿碎玻璃、以死气护身穿过触肢丛，把虞白樱与虞紫薇救出来",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.rescue_yu_sisters"
+        },
+        {
+          "reviewSummary": "小紫用雪雪打服虞白樱，合金手铐一锁——姐妹俩成了她的侍奴",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.xiaozi_binds_yu_sisters"
+        },
+        {
+          "reviewSummary": "进魔墟：玄秘贝已失，周飞找到琉璃天珠，多方开抢",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.taiquan_afterfall_03_beat"
+        },
+        {
+          "reviewSummary": "与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.taiquan_afterfall_05_beat"
+        },
+        {
+          "reviewSummary": "居住区里潘金莲循迹逼问你是不是黑魔海的人——用阴阳鱼污了她的净化术",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.pan_settlement_clash"
+        },
+        {
+          "reviewSummary": "潘金莲凭《河图》从拱门带走朱殷与乐明珠，出了太泉",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.pan_hetu_exit"
+        },
+        {
+          "reviewSummary": "焚无尘被假圣果戏弄后临死自爆——秘境入口就此毁了",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.fen_wuchen_destroys_gate"
+        },
+        {
+          "reviewSummary": "与小紫、朱老头经传送阵离开太泉，落在首阳山一带；阵要十年才能再充能",
+          "status": "ready",
+          "stageId": "lyl.taiquan_afterfall",
+          "eventId": "lyl.event.taiquan_portal_exit"
+        }
+      ],
+      "pendingExpansion": "正典写到进入人类居住区、推测古阵是避难所为止。「修为达六阳后祭祀故人」这一拍**正典无对应 event**（原著中程宗扬从未履行此托付；修为上原著第268章入第五级坐照（qyj 41202），燕歌行入第六级通幽（lyg 8080）），属待扩，不在本阶段设计。"
     }
   ],
   "overlays": [
@@ -20109,7 +20627,6 @@
     "lineCompass.nanhuang.name": "南荒",
     "lineCompass.han.name": "汉国",
     "lineCompass.tang.name": "唐国",
-    "lineCompass.taiquan.name": "太泉古阵",
     "lineCompass.step.returnTo": "回到{地点}看看",
     "lineCompass.nanhuang.step.nh_enter_caravan": "随商队出五原，往南荒去",
     "lineCompass.nanhuang.step.nh_sheyi_village": "去蛇彝村看看",
@@ -20138,12 +20655,6 @@
     "lineCompass.tang.step.tang_d7_secret_treaty": "在长安城里打听打听",
     "lineCompass.tang.step.tang_d7_publish": "在长安城里留意朝廷动静",
     "lineCompass.tang.step.tang_ganlu_zhuhuan": "回长安城里看看",
-    "lineCompass.taiquan.step.tq_entry_fruit": "去苍澜的太泉古阵",
-    "lineCompass.taiquan.step.tq_entry_wangzhe": "去苍澜，打听进古阵的路",
-    "lineCompass.taiquan.step.tq_xionggu_key": "去熊谷看看",
-    "lineCompass.taiquan.step.tq_chiyang_fruit": "往古阵深处走走",
-    "lineCompass.taiquan.step.tq_xuanyuan_mijing": "去古阵西部找那块红石",
-    "lineCompass.taiquan.step.tq_exit_to_han": "找条路出古阵",
     "scene.defense.part.self": "本人",
     "scene.defense.part.contract": "自身防御",
     "scene.defense.part.level": "境界差",
@@ -20647,7 +21158,14 @@
     "lineCompass.song.step.song_yuanwailang": "离开江州，往临安去",
     "lineCompass.song.step.song_xuezhun_takeover": "去约好的地方看看",
     "lineCompass.song.step.song_ximen_xiaoyingzhou": "去小瀛洲看看",
-    "lineCompass.song.step.song_yuntao_niaoren": "在临安城里四处看看"
+    "lineCompass.song.step.song_yuntao_niaoren": "在临安城里四处看看",
+    "lineCompass.taiquan.name": "太泉古阵",
+    "lineCompass.taiquan.step.tq_entry_fruit": "去苍澜的太泉古阵",
+    "lineCompass.taiquan.step.tq_entry_wangzhe": "去苍澜，打听进古阵的路",
+    "lineCompass.taiquan.step.tq_xionggu_key": "去熊谷看看",
+    "lineCompass.taiquan.step.tq_chiyang_fruit": "往古阵深处走走",
+    "lineCompass.taiquan.step.tq_xuanyuan_mijing": "去古阵西部找那块红石",
+    "lineCompass.taiquan.step.tq_exit_to_han": "找条路出古阵"
   },
   "playtests": [
     {

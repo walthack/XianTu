@@ -1,0 +1,137 @@
+{
+  "version": 1,
+  "lines": [
+    {
+      "lineId": "taiquan",
+      "nameKey": "lineCompass.taiquan.name",
+      "anchorLine": "taiquan",
+      "closedWhen": [
+        {
+          "path": "done.lyl.event.taiquan_portal_exit",
+          "operator": "eq",
+          "value": true
+        }
+      ],
+      "steps": [
+        {
+          "id": "tq_entry_fruit",
+          "eventId": "lyl.event.taiquan_sacred_fruit_07",
+          "when": [
+            {
+              "path": "unlock.taiquan",
+              "operator": "eq",
+              "value": true
+            },
+            {
+              "path": "done.lcq.event.s12_10_rescue_xiao",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_entry_fruit",
+          "note": "宋版入口（P-15；lcq:42253–42258）"
+        },
+        {
+          "id": "tq_entry_wangzhe",
+          "eventId": "lyl.event.taiquan_sacred_fruit_07",
+          "when": [
+            {
+              "path": "unlock.taiquan",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_entry_wangzhe",
+          "note": "兜底：王哲托付（lcq:1687–1691）"
+        },
+        {
+          "id": "tq_canglan_mist",
+          "eventId": "lyl.event.taiquan_sacred_fruit_08",
+          "note": "≈"
+        },
+        {
+          "id": "tq_enter_array",
+          "pending": true,
+          "note": "pending：仓库无进阵事件（liuchao.event.enter_taiquan 内容是临安军情，不能用，P-10），本次不新建"
+        },
+        {
+          "id": "tq_xionggu_key",
+          "when": [
+            {
+              "path": "done.lyl.event.taiquan_sacred_fruit_05",
+              "operator": "eq",
+              "value": true
+            },
+            {
+              "path": "done.lyl.event.taiquan_sacred_fruit_07",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_xionggu_key",
+          "pending": true,
+          "note": "pending：仓库无熊谷事件，until 缺读取点，本次不新建；lyl:11959、11577"
+        },
+        {
+          "id": "tq_chiyang_fruit",
+          "eventId": "lyl.event.taiquan_sacred_fruit_10",
+          "when": [
+            {
+              "path": "done.lcq.event.s12_10_rescue_xiao",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_chiyang_fruit",
+          "note": "≈ lcq:42253"
+        },
+        {
+          "id": "tq_yinyang_fish",
+          "eventId": "lyl.event.yin_yang_counter",
+          "note": "按关链排在 sacred_fruit 关各步之后、afterfall 关各步之前（core_conflict 关，原著顺序 666；剧情策划稿 §14.3-4，总策划定）：阴阳鱼反击完成后只算过本步，afterfall 三步照常轮到，「找条路出古阵」要等 tq_city_in_film 过了才出"
+        },
+        {
+          "id": "tq_beast_traps",
+          "eventId": "lyl.event.xingyin_beast_traps",
+          "note": "≈"
+        },
+        {
+          "id": "tq_mowu",
+          "eventId": "lyl.event.taiquan_afterfall_03_beat"
+        },
+        {
+          "id": "tq_xuanyuan_mijing",
+          "when": [
+            {
+              "path": "done.lyl.event.taiquan_sacred_fruit_07",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_xuanyuan_mijing",
+          "pending": true,
+          "note": "pending：仓库无轩辕秘境事件，until 缺读取点，本次不新建；lcq:1687"
+        },
+        {
+          "id": "tq_city_in_film",
+          "eventId": "lyl.event.taiquan_afterfall_05_beat",
+          "note": "≈"
+        },
+        {
+          "id": "tq_exit_to_han",
+          "eventId": "lyl.event.taiquan_portal_exit",
+          "when": [
+            {
+              "path": "done.lyl.event.decide_yin_fulan_fate",
+              "operator": "eq",
+              "value": true
+            }
+          ],
+          "hintKey": "lineCompass.taiquan.step.tq_exit_to_han",
+          "note": "≈ 文案不写去向"
+        }
+      ],
+      "note": "已知读锚（s02_01／_05）；解锁读 unlock.taiquan；closedWhen 暂用 taiquan_portal_exit"
+    }
+  ]
+}
