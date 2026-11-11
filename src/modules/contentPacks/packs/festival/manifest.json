@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "qingyu.festival",
+  "dependsOn": [
+    "qingyu.core",
+    "qingyu.qin"
+  ],
+  "texts": [
+    "texts.json"
+  ],
+  "worldEvents": [
+    "world-events.json"
+  ]
+}

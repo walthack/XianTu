@@ -1,5 +1,5 @@
 {
-  "version": "a8bc6072e692db28",
+  "version": "20d6aaf285a59294",
   "contracts": [
     {
       "meta": {
@@ -30875,6 +30875,10 @@
     "mapEntry.qin.return.label": "【扩写】了结咸阳之事，返回{stage}",
     "mapEntry.qin.return.narrative": "【扩写·待剧情策划】咸阳诸事暂告一段落，你动身返回，回到了离开时的地方。",
     "mapEntry.qin.return.chronicle": "【扩写】了结咸阳之事，返回「{stage}」",
+    "worldEvent.heimohaiFestival.label": "开启大祭",
+    "worldEvent.heimohaiFestival.warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+    "worldEvent.heimohaiFestival.transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。",
+    "worldEvent.heimohaiFestival.blocked": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。",
     "scopedPlayerLine.lcq.event.s01_01::advance_declared_objective": "我稳住自己并弄清身在何处。",
     "scopedPlayerLine.lcq.event.s01_02::advance_declared_objective": "我先保住自己和身边的人。",
     "scopedPlayerLine.lcq.event.s01_03::advance_declared_objective": "我上前查看那位伤者。",
@@ -33151,6 +33155,32 @@
       "kind": "closedLinesAtLeast",
       "min": "story.lineCompass.qinEntry.minClosedLines",
       "unlessLineClosedByWorldEvent": "qin"
+    }
+  ],
+  "worldEvents": [
+    {
+      "id": "heimohaiFestival",
+      "eventId": "lyg.event.heimohai_festival_start",
+      "actionId": "start_heimohai_festival",
+      "startedExtensionKey": "festivalStarted",
+      "stageId": "lyg.shituolin_endgame",
+      "availableWhen": "stageRailSettled",
+      "blockedInStageIds": [
+        "lyg.qin_xianyang"
+      ],
+      "closes": [
+        {
+          "lineId": "qin",
+          "stageId": "lyg.qin_xianyang",
+          "messageEventId": "liuchao.event.qin_hook_fangshi_rumor"
+        }
+      ],
+      "textKeys": {
+        "label": "worldEvent.heimohaiFestival.label",
+        "warning": "worldEvent.heimohaiFestival.warning",
+        "transition": "worldEvent.heimohaiFestival.transition",
+        "blocked": "worldEvent.heimohaiFestival.blocked"
+      }
     }
   ]
 }

@@ -1,0 +1,952 @@
+{
+ "FESTIVAL": {
+  "eventId": "lyg.event.heimohai_festival_start",
+  "finalStageId": "lyg.shituolin_endgame",
+  "qinStageId": "lyg.qin_xianyang",
+  "qinLineId": "qin",
+  "qinMessageEventId": "liuchao.event.qin_hook_fangshi_rumor",
+  "actionId": "start_heimohai_festival",
+  "warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+  "transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。",
+  "blocked": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。",
+  "label": "开启大祭"
+ },
+ "cases": {
+  "final-rail-unsettled": {
+   "before": {
+    "view": {
+     "warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+     "available": false,
+     "blocked": "",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": true,
+    "mapSelectable": true,
+    "messageActive": false,
+    "messageInChapters": false,
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [
+      {
+       "type": "event_activated",
+       "id": "liuchao.event.qin_hook_fangshi_rumor"
+      }
+     ],
+     "messageActive": true
+    }
+   },
+   "tries": [
+    {
+     "choice": {
+      "source": "tick",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "not_the_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    }
+   ],
+   "repeat": {
+    "result": {
+     "ok": false,
+     "note": ""
+    },
+    "diff": []
+   },
+   "after": {
+    "view": {
+     "warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+     "available": false,
+     "blocked": "",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": true,
+    "mapSelectable": true,
+    "messageActive": false,
+    "messageInChapters": false,
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [
+      {
+       "type": "event_activated",
+       "id": "liuchao.event.qin_hook_fangshi_rumor"
+      }
+     ],
+     "messageActive": true
+    }
+   }
+  },
+  "final-rail-settled": {
+   "before": {
+    "view": {
+     "warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+     "available": true,
+     "blocked": "",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": true,
+    "mapSelectable": true,
+    "messageActive": false,
+    "messageInChapters": false,
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [
+      {
+       "type": "event_activated",
+       "id": "liuchao.event.qin_hook_fangshi_rumor"
+      }
+     ],
+     "messageActive": true
+    }
+   },
+   "tries": [
+    {
+     "choice": {
+      "source": "tick",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "not_the_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": true,
+      "note": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+     },
+     "diff": [
+      [
+       "世界.状态.剧本模组.chronicle",
+       {
+        "$missing": true
+       },
+       [
+        {
+         "id": "chronicle.lyg.shituolin_endgame.lyg.event.heimohai_festival_start",
+         "type": "event",
+         "stageId": "lyg.shituolin_endgame",
+         "title": "开启大祭",
+         "detail": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。",
+         "sequence": 1
+        }
+       ]
+      ],
+      [
+       "世界.状态.剧本模组.completedEventIds.19",
+       {
+        "$missing": true
+       },
+       "lyg.event.heimohai_festival_start"
+      ],
+      [
+       "系统.扩展.festivalStarted",
+       {
+        "$missing": true
+       },
+       true
+      ]
+     ]
+    }
+   ],
+   "repeat": {
+    "result": {
+     "ok": false,
+     "note": ""
+    },
+    "diff": []
+   },
+   "after": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "",
+     "transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+    },
+    "qinClosedByFestival": true,
+    "lineClosedByWorldEvent": true,
+    "qinEntryReady": false,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": false,
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   }
+  },
+  "qin-from-entry": {
+   "before": {
+    "view": {
+     "warning": "",
+     "available": true,
+     "blocked": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": true,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true,
+      "done": true
+     }
+    },
+    "lineCompass": {
+     "current": {
+      "lineId": "qin",
+      "name": "秦国",
+      "step": "<<COMPASS_POINTER>>",
+      "source": "focus"
+     },
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   },
+   "tries": [
+    {
+     "choice": {
+      "source": "tick",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "not_the_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+     },
+     "diff": []
+    }
+   ],
+   "repeat": {
+    "result": {
+     "ok": false,
+     "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+    },
+    "diff": []
+   },
+   "after": {
+    "view": {
+     "warning": "",
+     "available": true,
+     "blocked": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": true,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true,
+      "done": true
+     }
+    },
+    "lineCompass": {
+     "current": {
+      "lineId": "qin",
+      "name": "秦国",
+      "step": "<<COMPASS_POINTER>>",
+      "source": "focus"
+     },
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   }
+  },
+  "qin-from-entry-rail-unsettled": {
+   "before": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": true,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true,
+      "done": true
+     }
+    },
+    "lineCompass": {
+     "current": {
+      "lineId": "qin",
+      "name": "秦国",
+      "step": "<<COMPASS_POINTER>>",
+      "source": "focus"
+     },
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   },
+   "tries": [
+    {
+     "choice": {
+      "source": "tick",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "not_the_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+     },
+     "diff": []
+    }
+   ],
+   "repeat": {
+    "result": {
+     "ok": false,
+     "note": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。"
+    },
+    "diff": []
+   },
+   "after": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "【扩写】秦地之事尚未了结，请先完成秦线，再赴黑魔海大祭。",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": true,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true,
+      "done": true
+     }
+    },
+    "lineCompass": {
+     "current": {
+      "lineId": "qin",
+      "name": "秦国",
+      "step": "<<COMPASS_POINTER>>",
+      "source": "focus"
+     },
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   }
+  },
+  "started-before-qin": {
+   "before": {
+    "view": {
+     "warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+     "available": true,
+     "blocked": "",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": true,
+    "mapSelectable": true,
+    "messageActive": true,
+    "messageInChapters": false,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true
+     }
+    },
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": true
+    }
+   },
+   "tries": [
+    {
+     "choice": {
+      "source": "tick",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "not_the_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": true,
+      "note": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+     },
+     "diff": [
+      [
+       "世界.状态.剧本模组.activeEventIds.0",
+       "liuchao.event.qin_hook_fangshi_rumor",
+       {
+        "$missing": true
+       }
+      ],
+      [
+       "世界.状态.剧本模组.chronicle.19",
+       {
+        "$missing": true
+       },
+       {
+        "id": "chronicle.lyg.shituolin_endgame.lyg.event.heimohai_festival_start",
+        "type": "event",
+        "stageId": "lyg.shituolin_endgame",
+        "title": "开启大祭",
+        "detail": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。",
+        "sequence": 20
+       }
+      ],
+      [
+       "世界.状态.剧本模组.completedEventIds.19",
+       {
+        "$missing": true
+       },
+       "lyg.event.heimohai_festival_start"
+      ],
+      [
+       "系统.扩展.festivalStarted",
+       {
+        "$missing": true
+       },
+       true
+      ]
+     ]
+    }
+   ],
+   "repeat": {
+    "result": {
+     "ok": false,
+     "note": ""
+    },
+    "diff": []
+   },
+   "after": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "",
+     "transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+    },
+    "qinClosedByFestival": true,
+    "lineClosedByWorldEvent": true,
+    "qinEntryReady": false,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": false,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true
+     }
+    },
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   }
+  },
+  "started-before-qin-known": {
+   "before": {
+    "view": {
+     "warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+     "available": true,
+     "blocked": "",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": true,
+    "mapSelectable": true,
+    "messageActive": false,
+    "messageInChapters": false,
+    "lineCompass": {
+     "current": null,
+     "others": [
+      {
+       "lineId": "qin",
+       "name": "秦国",
+       "locked": false,
+       "hintLines": []
+      }
+     ],
+     "entryHints": [
+      {
+       "lineId": "qin",
+       "text": "去咸阳，找那个方士问问"
+      }
+     ]
+    },
+    "qinEntryHint": true,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   },
+   "tries": [
+    {
+     "choice": {
+      "source": "tick",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "not_the_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": true,
+      "note": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+     },
+     "diff": [
+      [
+       "世界.状态.剧本模组.chronicle.1",
+       {
+        "$missing": true
+       },
+       {
+        "id": "chronicle.lyg.shituolin_endgame.lyg.event.heimohai_festival_start",
+        "type": "event",
+        "stageId": "lyg.shituolin_endgame",
+        "title": "开启大祭",
+        "detail": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。",
+        "sequence": 2
+       }
+      ],
+      [
+       "世界.状态.剧本模组.completedEventIds.20",
+       {
+        "$missing": true
+       },
+       "lyg.event.heimohai_festival_start"
+      ],
+      [
+       "系统.扩展.festivalStarted",
+       {
+        "$missing": true
+       },
+       true
+      ]
+     ]
+    }
+   ],
+   "repeat": {
+    "result": {
+     "ok": false,
+     "note": ""
+    },
+    "diff": []
+   },
+   "after": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "",
+     "transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+    },
+    "qinClosedByFestival": true,
+    "lineClosedByWorldEvent": true,
+    "qinEntryReady": false,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": false,
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   }
+  },
+  "started-after-qin": {
+   "before": {
+    "view": {
+     "warning": "【扩写】大祭将近：黑魔海圣教大祭在即，未了之事宜早作打算。",
+     "available": true,
+     "blocked": "",
+     "transition": ""
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": true,
+    "messageInChapters": false,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true
+     }
+    },
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   },
+   "tries": [
+    {
+     "choice": {
+      "source": "tick",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "not_the_festival"
+     },
+     "result": {
+      "ok": false,
+      "note": ""
+     },
+     "diff": []
+    },
+    {
+     "choice": {
+      "source": "player",
+      "actionId": "start_heimohai_festival"
+     },
+     "result": {
+      "ok": true,
+      "note": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+     },
+     "diff": [
+      [
+       "世界.状态.剧本模组.chronicle.20",
+       {
+        "$missing": true
+       },
+       {
+        "id": "chronicle.lyg.shituolin_endgame.lyg.event.heimohai_festival_start",
+        "type": "event",
+        "stageId": "lyg.shituolin_endgame",
+        "title": "开启大祭",
+        "detail": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。",
+        "sequence": 21
+       }
+      ],
+      [
+       "世界.状态.剧本模组.completedEventIds.19",
+       {
+        "$missing": true
+       },
+       "lyg.event.heimohai_festival_start"
+      ],
+      [
+       "系统.扩展.festivalStarted",
+       {
+        "$missing": true
+       },
+       true
+      ]
+     ]
+    }
+   ],
+   "repeat": {
+    "result": {
+     "ok": false,
+     "note": ""
+    },
+    "diff": []
+   },
+   "after": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "",
+     "transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+    },
+    "qinClosedByFestival": false,
+    "lineClosedByWorldEvent": false,
+    "qinEntryReady": true,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": true,
+    "messageInChapters": false,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true
+     }
+    },
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   }
+  },
+  "started-reread": {
+   "saved": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "",
+     "transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+    },
+    "qinClosedByFestival": true,
+    "lineClosedByWorldEvent": true,
+    "qinEntryReady": false,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": false,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true
+     }
+    },
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   },
+   "reread": {
+    "view": {
+     "warning": "",
+     "available": false,
+     "blocked": "",
+     "transition": "【扩写·待剧情策划】你决定赴黑魔海，圣教大祭由此开始。"
+    },
+    "qinClosedByFestival": true,
+    "lineClosedByWorldEvent": true,
+    "qinEntryReady": false,
+    "mapEntryReady": false,
+    "mapSelectable": false,
+    "messageActive": false,
+    "messageInChapters": false,
+    "mapEntryMessages": {
+     "qin": {
+      "delivered": true
+     }
+    },
+    "lineCompass": {
+     "current": null,
+     "others": [],
+     "entryHints": []
+    },
+    "qinEntryHint": false,
+    "nextAdvance": {
+     "messageTransitions": [],
+     "messageActive": false
+    }
+   }
+  }
+ }
+}
