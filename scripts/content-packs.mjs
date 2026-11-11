@@ -148,8 +148,10 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const {mergeExtraRailBeats}=extraBeats.length?await tsLoader().import(join(root,'src/modules/scenarioMods/canonRailMerge.ts')):{};
  catalog.rails=catalog.rails.map((raw,i)=>{
   const at=`rail ${raw?.modId}`;
-  if(!object(raw)||Object.keys(raw).some(k=>!['id','modId','chapterId','orderedEventIds','contracts','note'].includes(k))||(raw.note!==undefined&&typeof raw.note!=='string'))fail(`${at}: invalid fields`);
+  if(!object(raw)||Object.keys(raw).some(k=>!['id','modId','handReviewed','chapterId','orderedEventIds','contracts','note'].includes(k))||(raw.note!==undefined&&typeof raw.note!=='string')||(raw.handReviewed!==undefined&&raw.handReviewed!==true))fail(`${at}: invalid fields`);
   let {note,...r}=resolveText(raw,`rails.${i}`);const stage=stages.get(r.modId);if(!stage)fail(`${at}: unknown stage`);
+  // 塞外线 S4：handReviewed: true 标记搬进包的手审档，运行时排在包内关 rail 与生成档之前（canonRail.ts）；只给挂内置关的档用
+  if(r.handReviewed&&catalog.stages.some(s=>s.manifest.id===r.modId))fail(`${at}: handReviewed is only for built-in stages`);
   if(extraBeats.some(x=>x.modId===r.modId)){try{[r]=mergeExtraRailBeats([r],extraBeats);}catch(e){fail(`${at}: ${e.message}`);}}
   if(!(stage.scenario?.chapters||[]).some(c=>c.id===r.chapterId))fail(`${at}: chapter ${r.chapterId} not in stage`);
   const own=new Set((stage.scenario?.events||[]).map(e=>e.id));const str=v=>typeof v==='string'&&v.length>0;

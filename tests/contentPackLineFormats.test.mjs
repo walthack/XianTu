@@ -63,8 +63,9 @@ assert.ok(MR_STAGE,'TS_MILESTONE_REWARDS 已搬空：改用合成的临时 TS �
 const OBJ_ID=Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES)[0];
 assert.ok(OBJ_ID,'FIXED_QUEST_OBJECTIVE_OVERRIDES 已搬空：改用合成的临时 TS 条目');
 const OBJ_STAGE=BUILTINS.find(m=>m.scenario.events.some(e=>e.id===OBJ_ID)).manifest.id;
-const Q_OFF=[...TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS].find(id=>id!=='lcq.stage_03');
-assert.ok(Q_OFF,'TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS 只剩 lcq.stage_03 或已搬空：改用合成的临时 TS 条目');
+// 塞外线 S4 把 lcq.stage_03 的隔离也迁进了塞外包：两个隔离夹具都从 TS 表动态挑（Q_OFF 注入成 false，TS_QUARANTINED_ID 验证「没写的关沿用 TS 表」）
+const [Q_OFF,TS_QUARANTINED_ID]=[...TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS];
+assert.ok(Q_OFF&&TS_QUARANTINED_ID,'TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS 不足两条或已搬空：改用合成的临时 TS 条目');
 // 整关章名特判（对表外探针事件也给出章名、且先于 stageMeta 的关，如现在的长安初定）：用探针按行为挑，不写死关 id
 const WHOLE_STAGE=BUILTINS.find(m=>{const id=m.manifest.id,ch=m.scenario.chapters.at(-1)?.id;if(!ch)return false;
  const t=storyChapterTitleIn({...CONTENT_PACKS,stageMeta:[{stageId:id,presentation:{defaultUiChapterId:ch},chapterTitles:{[ch]:'不该出现'}}]},id,'x.event.__whole_stage_probe__','<<FALLBACK>>');
@@ -167,7 +168,7 @@ test('stageMeta 隔离：canonRail 合并后的集合与 isDefaultLineQuarantine
  const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:Q_OFF,defaultLineQuarantined:false}]});
  assert.equal(rail.isDefaultLineQuarantinedStageId(S10),true);
  assert.equal(rail.isDefaultLineQuarantinedStageId(Q_OFF),false);
- assert.equal(rail.isDefaultLineQuarantinedStageId('lcq.stage_03'),true,'没写的关沿用 TS 表');
+ assert.equal(rail.isDefaultLineQuarantinedStageId(TS_QUARANTINED_ID),true,'没写的关沿用 TS 表');
  assert.equal(rail.DEFAULT_LINE_QUARANTINED_STAGE_IDS.size,TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.size);
 });
 
@@ -193,7 +194,7 @@ test('stageMeta 反例：关、章、事件、mood、目标、称号与字段',a
 
 test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
  // 宋线 S4 把宋的条目迁出了这些 TS 表：夹具改用仍留在 TS 里的非宋条目
- await rejects(metaPack([{stageId:'lcq.stage_03',defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
+ await rejects(metaPack([{stageId:TS_QUARANTINED_ID,defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
  await rejects(metaPack([{stageId:MR_STAGE,milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/);
  await rejects(metaPack([{stageId:OBJ_STAGE,presentation:{events:{[OBJ_ID]:{objective:'x'}}}}]),new RegExp(`objective for ${reEsc(OBJ_ID)} already set in fixedQuestObjectives\\.ts`));
  await rejects(metaPack([{stageId:EVENT_MOOD_STAGE,presentation:{events:{[EVENT_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`event mood for ${reEsc(EVENT_MOOD_ID)} also set in musicLibrary\\.ts EVENT_MOOD_MAP`));
