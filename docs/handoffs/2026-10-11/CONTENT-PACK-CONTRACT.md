@@ -312,3 +312,17 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - 不需要 `dependsOn` 别的包：`dependsOn` 只有 `qingyu.core` 时编译通过，归属扫描没有报引用其它包定义的 id，没有成环。
 - `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的姿态／上限两段改为取人物包 `profiles.json` 原样转写（TS 表搬空后原来的源码解析取到 0 条）；源码解析辅助函数 `sourceEntries` 因此无人使用，已删。
 - catalog 只变 `characterProfiles` 段与 version；棘轮 `stanceProfiles.ts` 48 → 0、`affinityCaps.ts` 13 → 0（总数 1019 → 958，文件 68 → 66）。
+
+## 2026-11-11 塞外／昭南／晋／太泉的展示残留进各线包（B6）
+
+用 F0b 的格式把四条线 S4 之后留在框架 TS 的展示数据搬进各线包；包 JSON 由脚本从当前 TS 的求值结果转写（转写逻辑同 `contentPackPresentationFormats` 的搬迁演练），没有手抄。没有新增格式、没有改编译器。
+
+- **塞外包**（`packs/saiwai`）：manifest 新增 `texts: ["texts.json"]`（新文件）。stageMeta `lcq.stage_02`：`lockedDecision` 3 条（ningyu_enters_gamble、sudaji_south_pact、free_ajiman）、`routeLocation` 5 条、`compassObjectiveOnly`（s02_04）、`objective`（s02_04，原代码特判）、`compatNarrativeVariants`（gamble_bond_signed 3 条、ningyu_enters_gamble 1 条，整组搬）、关级 `uiChapterByRouteLocation`（原 stage_02 按地点分段算法，该关没有 `defaultUiChapterId`）。texts：`scopedPlayerLine.*` 26 条（stage_01 6、stage_02 20）、`actionDisplay.lcq.event.ningyu_regicide_offer.hear_ningyu_regicide_price.line/label`。
+- **昭南包**：stageMeta `lcq.stage_04` 7 条、`lcq.stage_04b_lingfei_baiyi_crisis` 12 条 `uiChapterTitle`（原两处章名特判；方案写 18，实际 7 + 12 = 19）；04b 的 `objective` 2 条（huamiao 特判、武二郎 `{{entity:…}}` 模板）；`lcq.stage_05b`：`lockedDecision` 2 条（s05b_09、xieyi_entrustment）、shanghou 的 `compatNarrativeVariants`（`priority: "before-event-variants"`、`relatedFactionIds: []`）、小紫 `objective`（模板）。texts：huamiao 的事件级 `actionDisplay.<e>.*.line/label`，geluo 1 对、yinzhu 2 对逐动作键。
+- **晋包** `lcq.stage_07_qingyuan_jiankang`：s07_05 的 `compatNarrativeVariants`。**太泉包** `lyl.taiquan_afterfall`：han_shouyang_gaoyanei 的 `objective: {"$text":"report8091.han.arrived.objective"}` 与 `actionPresentation`（到舞都）。
+- TS 侧：`TS_PLAYER_LINES`、`TS_ACTION_DISPLAY_OVERRIDES`、`TS_COMPAT_NARRATIVE_VARIANTS`、`TS_STORY_ROUTE_LOCATIONS`、`TS_STORY_ACTION_PRESENTATIONS` 为空，`TS_COMPASS_OBJECTIVE_ONLY_EVENT_IDS` 为空集合，`FIXED_QUEST_OBJECTIVE_OVERRIDES` 为 `Object.freeze({})`；`resolveFixedQuestObjectiveIn` 的三条特判、`storyChapterTitleIn` 的 stage_04／04b 特判与 stage_02 算法删掉（函数末尾 `return fallback;`；演练用的两个锚点行保留）。
+- **留在 TS：`TS_LOCKED_DECISIONS` 的 shanghou_revealed 一条。** `residualTablesSnapshot` 钉了 `LOCKED_DECISIONS` 的键顺序（shanghou → 塞外 3 把 → 昭南 2 把），合并规则是「TS 在前、包按 catalog 顺序在后」，shanghou 与另两把昭南锁同在 05b，进包就排不回第一位。运行时只按事件 id 取锁（`branchDecision.ts` 唯一读取处），键顺序没有行为影响；若要清零，需用户同意改这项快照的键顺序，或给 `lockedDecision` 加排序字段（本批没做）。合并顺序依赖塞外包排在昭南包之前（目录名字母序、两包都只依赖核心包）；以后谁改这两个包的 `dependsOn`，要复核这项快照。
+- 注释：分支锁的分组注释进塞外 stage_02、昭南 05b 的顶层 `note`；兼容变体的来源写进各条必填的 `note`；塞外 stage_02 原 note 里「目标特判、按地点分段的章名是算法，留在 TS」改为记录本批搬入的内容。
+- catalog：`stageMeta` 新增 41 个事件／关级字段（原有字段字节不变、关顺序不变），`texts` 新增 36 键（原键不变），其余段不变；version `ed494b3d542c4086` → `ec3948d6059d3eb5`。
+- 棘轮：`playerActionPresentation.ts` 31 → 0、`fixedQuestObjectives.ts` 5 → 0、`branchDecision.ts` 6 → 1、`eventNarrativeView.ts` 33 → 6（剩主角 id 回退 2 行、汉／唐从 stageMeta 派生的 4 个导出），总数 835 → 767、文件数 67 → 65，前缀模板行不变（1）。
+- 测试：四个 `*PackMigration` 的「未搬残留」改为残留 0（塞外、昭南另把 `playerActionPresentation.ts`／`branchDecision.ts` 纳入检查，昭南断言 `branchDecision.ts` 只剩 shanghou）；`contentPackLineFormats` 的目标「与 TS 重复」反例改用合成的临时 TS 目标（`withTsObjective`，临时替换模块导出 `resolveFixedQuestObjectiveIn`，覆盖表是冻结对象加不进条目），「只对部分拍特判」反例改用 `WHOLE_STAGE` 第一拍的合成临时特判，读取方优先级一项里依赖已删特判的两半退化为空；`report75ea` 改读合并后的 `LOCKED_DECISIONS`（原按源码正则读 TS 表）；`fixedQuestObjectives` 的覆盖事件计数 61 → 64（三条原代码特判原先不在计数集合里）。护栏测试与 `tests/fixtures/` 一字未改、原样通过。

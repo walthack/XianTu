@@ -2,8 +2,8 @@
 // - CANON_RAIL_PROFILES 的数组顺序与搬迁前相同（期望是搬迁前在 048ca74a 上导出的 modId 顺序）、modId 不重复；本线没有手审档，4 个生成档进包后按 modId 归位；
 // - 包二级线文案可写 {{entity:…}}：运行时解析成名字（与搬前 entityText 的结果逐字相等由快照兜住），编译器校验实体存在；
 // - 昭南 6 关的关／事件／章 id 不再写在 canonRail.ts、musicLibrary.ts、milestoneRewards.ts 里；
-// - fixedQuestObjectives.ts 只残留两条用 entityText 的目标（stageMeta 的 objective 不解析模板）与 huamiao_coop_boundary 特判；
-// - eventNarrativeView.ts 只残留 stage_04／04b 的写死章名特判（返回的字符串不是该关已有章的标题，stageMeta 表达不了）与 shanghou_revealed 的条件改写；
+// - fixedQuestObjectives.ts、eventNarrativeView.ts、playerActionPresentation.ts 里昭南 id 残留为 0（B6：三条目标、stage_04／04b 章名串、
+//   shanghou 的条件改写、动作显示都进了昭南包 stageMeta／texts）；branchDecision.ts 只残留 shanghou 那把锁（合并表键顺序被快照钉住，见该文件注释）；
 // - secondaryLines.ts 不再有 id 为 zhaonan 的那条线；残留的昭南 id 只在别的线挂在昭南事件上的节点与锚事件里（按任务范围不动）。
 // musicLibrary.ts 的章 id 正则兜底（PATTERN_MOOD_RULES）里只有不带前缀的关名片段，本测试按完整 id 查，不受影响。
 import test from 'node:test';
@@ -69,19 +69,12 @@ test('昭南 6 关的关／事件／章 id 不再写在框架 TS 文件里（允
   for (const file of ['src/modules/scenarioMods/canonRail.ts', 'src/utils/musicLibrary.ts', 'src/modules/scenarioMods/milestoneRewards.ts']) {
     assert.deepEqual(src(file).match(token) || [], [], file);
   }
-  const objectives = src('src/modules/scenarioMods/fixedQuestObjectives.ts').split('\n').filter(line => line.match(token));
-  assert.deepEqual(objectives.map(line => line.match(token)), [['lcq.event.wuerlang_slays_dagu'], ['lcq.event.s05b_02_xiaozi_exposed'], ['lcq.event.huamiao_coop_boundary']]);
-  assert.match(objectives[0], /: entityText\(/);
-  assert.match(objectives[1], /: entityText\(/);
-  assert.match(objectives[2], /^\s*if \(eventId === 'lcq\.event\.huamiao_coop_boundary'\) return /);
-  assert.deepEqual(src('src/modules/scenarioMods/eventNarrativeView.ts').match(token) || [], [
-    'lcq.event.shanghou_revealed',
-    'lcq.stage_04', 'lcq.event.s04_02', 'lcq.event.s04_03', 'lcq.event.s04_01', 'lcq.event.s04_04', 'lcq.event.s04_05', 'lcq.event.s04_06', 'lcq.event.s04_07',
-    'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.event.enter_dong_with_migu', 'lcq.event.huamiao_coop_boundary', 'lcq.event.guiwangdong_coop_pact',
-    'lcq.event.yiyang_repels_yinsha', 'lcq.event.wuerlang_slays_dagu', 'lcq.event.ruins_ghost_warriors', 'lcq.event.biling_bay_stance',
-    'lcq.event.haishen_hall_merfolk', 'lcq.event.pull_harpoon_lemingzhu',
-    'lcq.event.regroup_caravan_envoy', 'lcq.event.weapon_deal_with_geluo', 'lcq.event.spot_dong_informant',
-  ]);
+  // B6：目标、章名串、shanghou 条件改写、动作显示都进了昭南包，残留为 0；分支锁只留 shanghou 一条在 TS（键顺序）
+  for (const file of ['src/modules/scenarioMods/fixedQuestObjectives.ts', 'src/modules/scenarioMods/eventNarrativeView.ts',
+    'src/modules/scenarioMods/playerActionPresentation.ts']) {
+    assert.deepEqual(src(file).match(token) || [], [], file);
+  }
+  assert.deepEqual(src('src/modules/scenarioMods/branchDecision.ts').match(token) || [], ['lcq.event.shanghou_revealed']);
   assert.equal(TS_SECONDARY_LINES.some(line => line.id === 'zhaonan'), false);
   assert.doesNotMatch(src('src/modules/scenarioMods/secondaryLines.ts'), /id: 'zhaonan'/);
   // 残留只在别的线的节点行（`{ reviewSummary: …, stageId[, eventId] }`）与锚事件行里

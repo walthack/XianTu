@@ -37,6 +37,23 @@
         },
         "lyl.event.xingyin_beast_traps": {
           "objective": "查明天井里困兽与被困者的情况"
+        },
+        "lyl.event.han_shouyang_gaoyanei": {
+          "actionPresentation": [
+            {
+              "actionId": "descend_shouyang_to_wudu",
+              "whenLocationId": "liuchao.location.wudu",
+              "label": {
+                "$text": "report8091.han.arrived.label"
+              },
+              "playerLine": {
+                "$text": "report8091.han.arrived.playerLine"
+              }
+            }
+          ],
+          "objective": {
+            "$text": "report8091.han.arrived.objective"
+          }
         }
       }
     }
