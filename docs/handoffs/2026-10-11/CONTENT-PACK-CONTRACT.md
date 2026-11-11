@@ -171,3 +171,16 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - `CANON_RAIL_PROFILES` 拼装没改：晋没有手审档，3 个生成档进包后照宋 S4 的规则按 `modId` 归位，全表顺序与搬前相同（`tests/jinPackMigration.test.mjs`）。catalog 的 `rails` 段按包顺序拼接，晋档排在秦档之前；运行时只认按关分组后的顺序，不受影响。`tests/contentPackSplit.test.mjs` 的比较口径相应把 `rails` 按 `modId` 排后再比。
 - 二级线：`jin` 是包线、`song` 接在它后面（链式 `after`）。`tests/contentPackLineFormats.test.mjs` 的二级线与事件配乐夹具改为从 TS 表动态取第一条现存条目（`TS_SECONDARY_LINES[0]`、`EVENT_MOOD_MAP` 首条），表搬空时须改用合成的临时 TS 条目。
 - 未搬（留在 TS）：`eventNarrativeView.ts` `legacyNarrativeVariants` 里 `s07_05_eight_steeds_informed` 的谢艺生还改写（stageMeta 无此字段）；`divergenceLedger.ts` 挂 `s08_06_pursuit_repelled` 的分歧项；别的线挂在晋事件上的节点与锚。
+
+## 2026-11-11 汉线数据进包（汉线 S4）
+
+汉包 `packs/han/`（`id: "qingyu.han"`，`dependsOn: ["qingyu.core", "qingyu.song"]`）：`rails.generated.json`（汉 5 个生成档；隔离关 `lyl.luoyang_coup` 没有档）、`rail-extra-beats.json`（汉 4 条加拍）、`stage-meta.json`（汉 6 关：隔离 1、称号 2、章名、章配乐 5、事件配乐 7、目标 15）、`secondary-lines.json`（`han` 线，`after: "song"`）、`line-compass.json`（`lineId: "han"`）、`texts.json`（10 个 `lineCompass.han.*`）。汉 6 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋不同之处：
+- **汉包 `dependsOn` 加了 `qingyu.song`**（`after: "song"`）。包顺序按依赖排为 core → jin → qin → song → han，不再是目录名序：catalog 的 `stageMeta`／`rails`／`secondaryLines` 里汉条目排在最后。
+- **`MILESTONE_REWARDS` 合并值改按故事序排**：stageMeta 与 TS 表合并后按 `mainQuestAxis.ts` 的 `STAGE_ORDER` 稳定排序（不在其中的包内关排最后、保持合并前相对顺序）。故事序就是搬迁前 TS 表的原顺序（宋→汉→唐），所以快照钉的数组顺序不变；唐线搬称号时不用再改。
+- **章名特判删了汉宫、洛都两处**，改由汉包 stageMeta 供数：汉宫 `defaultUiChapterId`＝「汉宫突入」章、「宫变之夜」8 拍逐事件 `uiChapterId`；洛都只给「洛都风云」4 拍写 `uiChapterId`、不设默认章。导出名 `HAN_PALACE_NIGHT_EVENT_IDS`、`LUOYANG_COURT_EVENT_IDS` 保留（快照钉住），改为从 stageMeta 派生（`stageMeta.ts` 新增 `stageMetaUiChapterEventIds`，按文件顺序）。
+- 隔离集合 `DEFAULT_LINE_QUARANTINED_STAGE_IDS` 的成员不变，迭代顺序随包序变了（`lyl.luoyang_coup` 从 TS 段移到末尾）；所有读取方只用 `.has`。
+- `dingtao_beijing.json` 里的 3 处 `presentation` 是 `timeline.reveal.presentation`（急报标题与正文），不是界面章名字段，与 stageMeta 不重叠。
+- `tests/contentPackLineFormats.test.mjs` 宋 S4 留下的汉夹具（汉宫整关章名特判、洛都封侯称号、`liujian_takes_nangong` 目标、`luoyang_cloud_secret` 章配乐、`luoyang_coup` 隔离、`han` 二级线同 id）改为动态挑：章配乐取 `CHAPTER_MOOD_MAP` 首条、称号取 `TS_MILESTONE_REWARDS[0]`、目标取 `FIXED_QUEST_OBJECTIVE_OVERRIDES` 首键、隔离取 TS 表里非 `lcq.stage_03` 的一条、整关章名特判用表外探针事件按行为挑、二级线同 id 用 `TS_LINE_ID`；表或特判搬空时顶层断言报错，须改用合成的临时条目。
+- 未搬（留在 TS）：`LINE_CRITICAL_EVENTS`；别的线挂在汉事件上的节点；`lyl.event.han_shouyang_gaoyanei` 的目标 packText 特判与动作特判（事件属太泉余波关）。

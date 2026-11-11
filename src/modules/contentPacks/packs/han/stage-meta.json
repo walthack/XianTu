@@ -1,0 +1,185 @@
+[
+  {
+    "note": "章名原为 eventNarrativeView.ts 特判（LUOYANG_COURT_EVENT_IDS 的 4 拍标「洛都风云」，其余不设默认章）；原注释：汉宫：rail 章是新首章「宫变之夜」，整关停在它上面；其余拍照旧标「汉宫突入」。洛都：rail 章仍是首章，第二章「洛都风云」的拍单标（五线补全·汉 2026-10-28）；称号奖励原在 milestoneRewards.ts TS_MILESTONE_REWARDS（原注释：六朝云龙吟·天石（洛都入局·买官洗白））",
+    "stageId": "lyl.luoyang_cloud_secret",
+    "milestoneReward": {
+      "titles": [
+        "汉国关内侯（买官）",
+        "汉国大行令（领事·加常侍郎）"
+      ],
+      "note": "经徐璜运作向天子买官洗白：诏拜关内侯、授大夫、领鸿胪寺大行令事、加常侍郎（可出入宫禁），全套一千四百万钱（云龙 0238-0239）。"
+    },
+    "presentation": {
+      "chapters": {
+        "lyl.chapter.luoyang_cloud_secret": {
+          "mood": "court"
+        },
+        "lyl.chapter.luoyang_cloud_secret_court": {
+          "mood": "court"
+        }
+      },
+      "events": {
+        "lyl.event.han_yuedan_ping": {
+          "uiChapterId": "lyl.chapter.luoyang_cloud_secret_court"
+        },
+        "lyl.event.han_huo_villa": {
+          "uiChapterId": "lyl.chapter.luoyang_cloud_secret_court"
+        },
+        "lyl.event.han_xingyue_framed": {
+          "uiChapterId": "lyl.chapter.luoyang_cloud_secret_court"
+        },
+        "lyl.event.han_limit_field": {
+          "uiChapterId": "lyl.chapter.luoyang_cloud_secret_court"
+        },
+        "lyl.event.s05_05": {
+          "mood": "danger"
+        }
+      }
+    }
+  },
+  {
+    "note": "隔离关：原在 canonRail.ts TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS；称号奖励原在 milestoneRewards.ts TS_MILESTONE_REWARDS（原注释：六朝云龙吟·封侯）",
+    "stageId": "lyl.luoyang_coup",
+    "defaultLineQuarantined": true,
+    "milestoneReward": {
+      "titles": [
+        "汉国舞阳侯"
+      ],
+      "revokeTitles": [
+        "汉国关内侯（买官）",
+        "汉国大行令（领事·加常侍郎）"
+      ],
+      "note": "洛都政局翻覆，先前买来的官爵作废（\"还没捂热呢，可就飞了\"，云龙 0360）；以功受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。"
+    },
+    "presentation": {
+      "chapters": {
+        "lyl.chapter.luoyang_coup": {
+          "mood": "climax"
+        }
+      },
+      "events": {
+        "lyl.event.s06_01b": {
+          "objective": "在藻井上藏住自己与赵合德，看清殿中变故"
+        }
+      }
+    }
+  },
+  {
+    "note": "章名原为 eventNarrativeView.ts 特判（HAN_PALACE_NIGHT_EVENT_IDS 的 8 拍标「宫变之夜」，其余含表外事件标「汉宫突入」）；原注释：汉宫：rail 章是新首章「宫变之夜」，整关停在它上面；其余拍照旧标「汉宫突入」。洛都：rail 章仍是首章，第二章「洛都风云」的拍单标（五线补全·汉 2026-10-28）",
+    "stageId": "lyl.han_palace_endgame",
+    "presentation": {
+      "defaultUiChapterId": "lyl.chapter.han_palace_endgame_palace",
+      "events": {
+        "lyl.event.lvji_defiles_consort": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night",
+          "objective": "与赵合德藏在含光殿藻井上，屏息看清殿中变故"
+        },
+        "lyl.event.emperor_death_spreads": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night"
+        },
+        "lyl.event.arrange_escape_route": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night"
+        },
+        "lyl.event.liujian_takes_nangong": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night",
+          "objective": "打听南宫方向忽然动兵的消息"
+        },
+        "lyl.event.changqiu_palace_defense": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night"
+        },
+        "lyl.event.bounty_and_hu_cavalry": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night"
+        },
+        "lyl.event.han_jianyu_refused": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night"
+        },
+        "lyl.event.lvfengxian_breaks_line": {
+          "uiChapterId": "lyl.chapter.han_palace_endgame_night"
+        },
+        "lyl.event.han_palace_endgame_10_beat": {
+          "objective": "赶到阙楼，看清刘建这一场如何收场"
+        },
+        "lyl.event.han_power_vacuum": {
+          "objective": "打听宫里忽然乱起来的消息"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyg.dingtao_beijing",
+    "presentation": {
+      "chapters": {
+        "lyg.chapter.dingtao_beijing": {
+          "mood": "court"
+        }
+      },
+      "events": {
+        "lyg.event.s01_01": {
+          "mood": "battle"
+        },
+        "lyg.event.s01_07": {
+          "mood": "lament"
+        },
+        "lyg.event.highlight_banchao_lamb_leg": {
+          "mood": "intrigue",
+          "objective": "看清班超如何压住这场议价"
+        },
+        "lyg.event.s01_08": {
+          "mood": "court"
+        },
+        "lyg.event.debut_chengguang": {
+          "objective": "听清席上把江都王王后扯进哪段旧事"
+        },
+        "lyg.event.debut_jiawenhe": {
+          "objective": "听清战车上那位谋士对当前局势怎么说"
+        },
+        "lyg.event.debut_lvzhi": {
+          "objective": "看清长秋宫前凤辇里坐着的人"
+        },
+        "lyg.event.debut_qiyuxian": {
+          "objective": "应对翠微园门外阶下那位黑衣来客"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyg.mijing_rumen",
+    "presentation": {
+      "chapters": {
+        "lyg.chapter.mijing_rumen": {
+          "mood": "explore"
+        }
+      },
+      "events": {
+        "lyg.event.s02_09": {
+          "mood": "aspire"
+        },
+        "lyg.event.s02_04": {
+          "mood": "danger"
+        },
+        "lyg.event.mijing_superuser_roster": {
+          "objective": "触碰龙珠，听清它如何点验在场之人"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyg.han_succession",
+    "presentation": {
+      "events": {
+        "lyg.event.debut_bainichang": {
+          "objective": "看清赵归真引进静室的白衣女子"
+        },
+        "lyg.event.debut_quanyuji": {
+          "objective": "看清徐府内院勘查女尸的女捕头"
+        },
+        "lyg.event.debut_yangyuhuan": {
+          "objective": "看清当庭挽弓施射的那位戎装女子"
+        },
+        "lyg.event.han_succession_09_beat": {
+          "objective": "在登基典仪中先稳住失控的真气"
+        }
+      }
+    }
+  }
+]
