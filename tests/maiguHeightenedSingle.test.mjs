@@ -159,6 +159,34 @@ test('背包「使用」按钮：settleButtonUses 挂恰好 1 条感官亢奋 + 
   assert.equal(heightenedEffects(save, cfg).length, 1);
 });
 
+// 阶段末复核（2026-11-12）：按钮点下时已扣份数，发送时才取「之前」账，背包事实块算出增减为零，
+// 同一个事实包里一条说「已服下、背包已扣除」，一条说「没有消耗任何物品，不得写成用掉」。把补结算的份数加回「之前」账后两条一致。
+test('背包「使用」按钮：只点了使用的回合，背包事实块写出扣了几份，不再说「没有让背包物品增减」', async () => {
+  const FACTS = await loadTs('../src/modules/scenarioMods/freeAction/facts.ts');
+  const save = await quiet(() => G.loadLikeGame(bundle, 'c01-before-wuyuan-220'));
+  const cfg = MG.maiguConfig(), def = EC.contentDefinition('item', cfg.itemId);
+  // 原有 4 份，按钮点下时已扣 2 份（enhancedActionQueue.useItem），发送时背包里是 2 份。
+  save.角色.背包.物品[cfg.itemId] = { 物品ID: cfg.itemId, 名称: def.name, 类型: '丹药', 数量: 2, 描述: '', 已装备: false };
+  const before = FACTS.inventoryCounts(save);
+  const used = SC.settleButtonUses(save, [{ id: 'action_c', itemId: cfg.itemId, quantity: 2 }]);
+  const unchanged = PACK.packText('free.block.inventory.unchanged').slice(0, 20);
+  assert.ok(FACTS.renderInventoryBlock(before, save).includes(unchanged), '复现：不加回时落到「没有增减」那句');
+  const block = FACTS.renderInventoryBlock(FACTS.restoreButtonUses(before, used), save);
+  assert.ok(!block.includes(unchanged), block);
+  assert.ok(block.includes(PACK.packText('free.block.inventory.delta.lose').split('{name}').join(def.name).split('{count}').join('2')), block);
+  // 用光的那种：按钮点下时条目已从背包删掉，「之前」账里没有这一项，名字取结算结果里的。
+  delete save.角色.背包.物品[cfg.itemId];
+  const emptied = FACTS.inventoryCounts(save);
+  const last = SC.settleButtonUses(save, [{ id: 'action_d', itemId: cfg.itemId, quantity: 1 }]);
+  assert.ok(FACTS.renderInventoryBlock(FACTS.restoreButtonUses(emptied, last), save).includes(def.name));
+  // 已结算过的队列项（重发）不再加回。
+  const fresh = FACTS.inventoryCounts(save), freshSize = fresh.size;
+  assert.equal(FACTS.restoreButtonUses(fresh, SC.settleButtonUses(save, [{ id: 'action_d', itemId: cfg.itemId, quantity: 1 }])).size, freshSize);
+  // 面板接线：发送路径在渲染背包事实块之前调用它。
+  const panel = readFileSync(new URL('../src/components/dashboard/MainGamePanel.vue', import.meta.url), 'utf8');
+  assert.ok(panel.indexOf('restoreButtonUses(inventoryBefore, buttonUsed)') > 0 && panel.indexOf('restoreButtonUses(inventoryBefore, buttonUsed)') < panel.indexOf('renderInventoryBlock(inventoryBefore'));
+});
+
 test('背包「使用」按钮：不在物品总表里的消耗品、非消耗品不结算', async () => {
   const save = await quiet(() => G.loadLikeGame(bundle, 'c01-before-wuyuan-220'));
   const nonConsumable = items.entries.find(e => e.definition?.type && e.definition.type !== 'consumable');

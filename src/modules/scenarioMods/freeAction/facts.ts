@@ -80,6 +80,15 @@ export function inventoryCounts(save: unknown): Map<string, { name: string; coun
 }
 
 /**
+ * 背包「使用」按钮点下时就扣了份数，而「之前」账是回合发送时才取的：把本回合补结算的份数加回去，
+ * 背包事实块才会写出扣了几份（否则增减为零，落到「没有交付、拿取、消耗任何物品」那句，与「已服下」矛盾）。原地改并返回 before。
+ */
+export function restoreButtonUses(before: Map<string, { name: string; count: number }>, used: ReadonlyArray<{ itemId: string; name: string; count: number }>): Map<string, { name: string; count: number }> {
+  for (const use of used) before.set(use.itemId, { name: before.get(use.itemId)?.name ?? use.name, count: (before.get(use.itemId)?.count ?? 0) + use.count });
+  return before;
+}
+
+/**
  * 给叙事的背包事实：本回合背包增减（对比结算前的快照）+ 背包现有。
  * 叙事常把“送出/拿到”写成已成而背包没动；把背包的实际账写进叙述包，让“没发生”有据可依。
  */
