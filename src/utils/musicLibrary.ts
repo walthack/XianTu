@@ -90,9 +90,6 @@ export const MUSIC_TRACKS: Record<MusicMood, MusicTrack[]> = {
 };
 
 const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
-  'lcq.chapter.stage_01': 'theme',
-  'lcq.chapter.stage_02': 'daily',
-  'lcq.chapter.stage_03': 'court',
   'lcq.chapter.stage_04': 'battle',
   'lcq.chapter.stage_05': 'explore',
   'lcq.chapter.stage_06': 'climax',
@@ -111,24 +108,6 @@ const metaChapterMood = (chapterId: string) => stageMetaChapterMood(STAGE_META, 
 const metaEventMood = (eventId: string) => stageMetaEvent(STAGE_META, eventId)?.mood as MusicMood | undefined;
 
 const EVENT_MOOD_MAP: Record<string, MusicMood> = {
-  'lcq.event.s01_01': 'theme',
-  'lcq.event.s01_02': 'danger',
-  'lcq.event.s01_03': 'battle',
-  'lcq.event.s01_04': 'battle',
-  'lcq.event.s01_05': 'aspire',
-  'lcq.event.s01_06': 'emotion',
-
-  'lcq.event.s02_01': 'aspire',
-  'lcq.event.s02_02': 'lament',
-  'lcq.event.s02_03': 'danger',
-  'lcq.event.s02_04': 'danger',
-  'lcq.event.s02_05': 'battle',
-  'lcq.event.s02_06': 'court',
-
-  'lcq.event.s03_02': 'danger',
-  'lcq.event.s03_03': 'danger',
-  'lcq.event.s03_04': 'emotion',
-
   'lcq.event.s04_01': 'danger',
   'lcq.event.s04_03': 'aspire',
   'lcq.event.s04_06': 'emotion',

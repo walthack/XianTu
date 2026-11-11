@@ -196,6 +196,17 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - `tests/contentPackLineFormats.test.mjs` 宋 S4 留下的汉夹具（汉宫整关章名特判、洛都封侯称号、`liujian_takes_nangong` 目标、`luoyang_cloud_secret` 章配乐、`luoyang_coup` 隔离、`han` 二级线同 id）改为动态挑：章配乐取 `CHAPTER_MOOD_MAP` 首条、称号取 `TS_MILESTONE_REWARDS[0]`、目标取 `FIXED_QUEST_OBJECTIVE_OVERRIDES` 首键、隔离取 TS 表里非 `lcq.stage_03` 的一条、整关章名特判用表外探针事件按行为挑、二级线同 id 用 `TS_LINE_ID`；表或特判搬空时顶层断言报错，须改用合成的临时条目。
 - 未搬（留在 TS）：`LINE_CRITICAL_EVENTS`；别的线挂在汉事件上的节点；`lyl.event.han_shouyang_gaoyanei` 的目标 packText 特判与动作特判（事件属太泉余波关）。
 
+## 2026-11-11 塞外线数据进包（塞外线 S4）
+
+塞外包 `packs/saiwai/`（`id: "qingyu.saiwai"`，`dependsOn: ["qingyu.core"]`）：`rails.json`（塞外 2 个**手审**档：stage_01／02，带 `handReviewed: true`）、`stage-meta.json`（3 关：stage_03 隔离、3 条章配乐、15 条事件配乐、2 条目标）。塞外不是国家线：没有二级线、下一步表、`lineCompass.*` 正文；没有生成档、加拍、称号。3 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋、太泉不同之处：
+- **手审 rail 档进包**：TS `HAND_REVIEWED_CANON_RAIL_PROFILES` 原样搬进手写 `rails.json`，`entityName(kind,id)`／`entityRecognitionLabel(kind,id,label)` 改写为 `{{entity:kind:id}}`／`{{entityLabel:kind:id:label}}`（运行时解析，结果与搬前逐字相同）。TS 常量保留为空数组。
+- **保序靠 `handReviewed: true`**：包 rail 条目可选字段，只收 `true`，只许挂内置关（挂包内关编译报错）。`CANON_RAIL_PROFILES` = TS 手审档 → **包 rail 里 `handReviewed: true` 的档（按包顺序、文件内顺序，运行时去掉该标记）** → 挂包内关的包 rail（秦）→ 其余挂内置关的包 rail 与生成档按 `modId` 排。没写这个字段的手写 rails 文件仍按 `modId` 归位（与原规则相同）。全表顺序与搬前相同（`tests/saiwaiPackMigration.test.mjs`）。
+- rail 生成器仍用 `manualStageIds` 排除 stage_01／02；万一生成出来，路由会因手写 `rails.json` 认领而报错（fail closed），不会覆盖。
+- 隔离：`lcq.stage_03` 从 TS 隔离表移到 stageMeta `defaultLineQuarantined: true`。成员不变，`DEFAULT_LINE_QUARANTINED_STAGE_IDS` 的迭代顺序变了（stage_03 排到 TS 剩余各关之后）；现有读取方只用 `.has()`。`tests/contentPackLineFormats.test.mjs` 的 TS 隔离夹具改为从 `TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS` 动态取（避开注入成 false 的 `lyl.luoyang_coup`）。
+- 未搬（留在 TS）：`fixedQuestObjectives.ts` 与 `formatQuestCompass` 的 `s02_04` 特判；`eventNarrativeView.ts` 里 stage_02 按地点分段的章名算法（含 `storyRouteLocation` 表）与 `legacyNarrativeVariants` 的 `gamble_bond_signed`／`ningyu_enters_gamble` 条件改写；开局/试玩代码、`loadRepairs.ts` 的 stage_01 旧短语快照；别的线挂在塞外事件上的节点。
+
 ## 2026-11-11 唐线数据进包（唐线 S4）
 
 唐包 `packs/tang/`（`id: "qingyu.tang"`，`dependsOn: ["qingyu.core", "qingyu.han"]`）：`rails.generated.json`（唐 6 个生成档；隔离关 `lyg.ganlu_bian`、`lyg.shixiang_ambush` 没有档）、`rail-extra-beats.json`（唐 8 条加拍）、`stage-meta.json`（唐 6 关有条目：隔离 2、称号 1、章名 2 关、章配乐 3、事件配乐 5、目标 2）、`secondary-lines.json`（`tang` 线，`after: "han"`）、`line-compass.json`（`lineId: "tang"`）、`texts.json`（8 个 `lineCompass.tang.*`）。唐 8 关的 stage JSON 仍在 `builtins/data`。

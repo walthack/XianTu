@@ -2,6 +2,7 @@
 
 // Deterministically turns source-axis events plus cached DeepSeek outline reviews
 // into runtime profiles. Existing hand-reviewed stages stay in canonRail.ts.
+// （塞外线 S4：lcq.stage_01／02 的手审档已搬到 packs/saiwai/rails.json，仍由下面 manualStageIds 排除；若生成出来，路由会因手写文件认领而报错）
 
 import { existsSync, readdirSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
