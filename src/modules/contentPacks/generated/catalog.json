@@ -1,5 +1,5 @@
 {
-  "version": "40487229c22c6b8d",
+  "version": "74d1db8348d26b0a",
   "contracts": [
     {
       "meta": {
@@ -17608,7 +17608,6 @@
   },
   "entities": [],
   "texts": {
-    "lineCompass.qin.entry": "去咸阳，找那个方士问问",
     "qingyu.opening": "雷光是紫色的。\n\n机舱在那一瞬间失去了所有声音——引擎、广播、邻座的呼吸，一齐没了。等你重新听见东西，耳朵里只剩风，草叶擦过脸颊的窸窣，以及远处某种连成一片的低鸣，像是很多人在同时喊叫。\n\n你趴在草里。掌心下面是湿的泥土和草根，不是座椅，不是金属。段强在几步开外，还没爬起来。\n\n天是亮的。风里有血腥味。",
     "qingyu.stage02.opening": "帅帐里灯火压得很低。\n\n帐外还能听见远处的喊杀，但这里已经静下来了。案上有一只未拆的锦囊，对面的人还坐着，像是有话要当面说完。\n\n帐帘刚落下。你站在门槛里。",
     "lcq.ending.death.shanghou_relic": "指尖碰到那层凝固的灰尘时，你先听见了一声极轻的嗡鸣。\n那声音你太熟了。小区楼下的配电箱，地铁隧道里的变压器，夏夜空调外机旁的铁皮柜，都是这样低低的、不肯停歇的嗡嗡声。你在那个世界里从它们旁边走过一千次，从没多看一眼。它们的门上贴着同一个标记：黄底，黑边，一道红色的拐弯箭头。\n手臂上的汗毛先竖了起来，接着是头皮。空气里浮起一股焦甜的腥气，像雷雨落下之前的味道。你想把手缩回来，手指却不听使唤，像被一只看不见的铁钳攥住，五指反而越扣越紧。\n然后它进来了。\n起初不是疼，是一股蛮横的力量从指尖灌进来，顺着胳膊直撞胸口。全身的筋肉在同一瞬间抽紧，牙关咬得咯咯作响，你连一声都叫不出来。心口猛地一顿，又胡乱跳了几下，像一面被人乱擂的破鼓。丹田里那团真阳被惊醒了，生死根疯了一样翻涌，却不知该往哪里去。\n眼前白了一下。你闻到头发烧焦的味道，然后是皮肉。殇侯说过，以往的测试者一触之下便化作火球。那时你还在心里嘀咕：有这么厉害吗？现在你知道了，衣襟上已经蹿起了火苗。\n你忽然想起路边那些骨头。藤蔓底下一层压着一层，一直铺到土径尽头。一百六十七个。他们大概也是这样，被一句“天命之人”说动了心，伸出手去，以为前面就是荣华富贵。\n可你本来认得这个标记。你比他们中的任何一个都认得。\n隔着那片白光，你好像看见殇侯站了起来，又慢慢坐了回去。他捋了捋胡须，叹了口气，那声音很轻，像在惋惜一颗又被失手摔碎的夜明珠。\n最后一个念头竟有点好笑：苏妲己的冰蛊等了你三个月，到底没能等到。\n雨还在下。\n等雨停了，那条红土路边会多出一具焦黑的骨头。用不了几年，藤蔓就会把它盖住，空洞的眼窝里，也会长出青草。",
@@ -17896,7 +17895,6 @@
     "lineCompass.song.name": "宋国",
     "lineCompass.han.name": "汉国",
     "lineCompass.tang.name": "唐国",
-    "lineCompass.qin.name": "秦国",
     "lineCompass.taiquan.name": "太泉古阵",
     "lineCompass.step.returnTo": "回到{地点}看看",
     "lineCompass.nanhuang.step.nh_enter_caravan": "随商队出五原，往南荒去",
@@ -17944,14 +17942,6 @@
     "lineCompass.tang.step.tang_d7_secret_treaty": "在长安城里打听打听",
     "lineCompass.tang.step.tang_d7_publish": "在长安城里留意朝廷动静",
     "lineCompass.tang.step.tang_ganlu_zhuhuan": "回长安城里看看",
-    "lineCompass.qin.step.qin_entry_envoy": "去咸阳，向秦廷递国书",
-    "lineCompass.qin.step.qin_entry_xu_unmet": "去咸阳，找那个方士问问",
-    "lineCompass.qin.step.qin_camp_route": "去城外军营看看",
-    "lineCompass.qin.step.qin_banquet": "进宫看看",
-    "lineCompass.qin.step.qin_purge_suxiao": "在咸阳城里打听打听",
-    "lineCompass.qin.step.qin_villa": "在咸阳四处走走看看",
-    "lineCompass.qin.step.qin_baiqi": "去城外军营看看",
-    "lineCompass.qin.step.qin_branch_raid": "去咸阳的商铺街看看",
     "lineCompass.taiquan.step.tq_entry_fruit": "去苍澜的太泉古阵",
     "lineCompass.taiquan.step.tq_entry_wangzhe": "去苍澜，打听进古阵的路",
     "lineCompass.taiquan.step.tq_xionggu_key": "去熊谷看看",
@@ -17980,10 +17970,6 @@
     "report8091.han.arrived.label": "在舞都安顿，与冯源一行会合",
     "report8091.han.arrived.playerLine": "我在舞都安顿下来，与冯源他们会合，打听云如瑶的下落。",
     "report8091.han.arrived.objective": "在舞都与冯源一行会合，打听云如瑶的下落",
-    "report8091.qin.preview": "前往秦都咸阳落脚，打听商人求见秦王的门路。",
-    "mapEntry.qin.return.label": "【扩写】了结咸阳之事，返回{stage}",
-    "mapEntry.qin.return.narrative": "【扩写·待剧情策划】咸阳诸事暂告一段落，你动身返回，回到了离开时的地方。",
-    "mapEntry.qin.return.chronicle": "【扩写】了结咸阳之事，返回「{stage}」",
     "report8091.moderation.blocked": "内容审核未通过（LCQ-NET-012）。本回合没有推进，可调整行动后重试；启用自动切换后可使用“API管理”中的备用连接。",
     "report8091.moderation.local": "内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。",
     "report8091.moderation.emptyOutput": "AI 返回了空正文，疑似被输出审核拦截（LCQ-NET-019）。本回合没有推进，可调整行动后重试。",
@@ -18431,7 +18417,21 @@
     "qin.rail.text.67": "可补足离开咸阳前的安顿与回望；国家层面的结果按原著走向，不扩写决战结算。",
     "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.label": "先记下，手头的事办完再说",
     "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.actionText": "先记下，手头的事办完再说",
-    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.outcomeText.success": "你记下了口信，继续处理手头的事。伙计应声退下，不再提起此事。"
+    "qin.liuchao.event.qin_hook_fangshi_rumor.playerCompletionContract.actions.1.outcomeText.success": "你记下了口信，继续处理手头的事。伙计应声退下，不再提起此事。",
+    "lineCompass.qin.entry": "去咸阳，找那个方士问问",
+    "lineCompass.qin.name": "秦国",
+    "lineCompass.qin.step.qin_entry_envoy": "去咸阳，向秦廷递国书",
+    "lineCompass.qin.step.qin_entry_xu_unmet": "去咸阳，找那个方士问问",
+    "lineCompass.qin.step.qin_camp_route": "去城外军营看看",
+    "lineCompass.qin.step.qin_banquet": "进宫看看",
+    "lineCompass.qin.step.qin_purge_suxiao": "在咸阳城里打听打听",
+    "lineCompass.qin.step.qin_villa": "在咸阳四处走走看看",
+    "lineCompass.qin.step.qin_baiqi": "去城外军营看看",
+    "lineCompass.qin.step.qin_branch_raid": "去咸阳的商铺街看看",
+    "report8091.qin.preview": "前往秦都咸阳落脚，打听商人求见秦王的门路。",
+    "mapEntry.qin.return.label": "【扩写】了结咸阳之事，返回{stage}",
+    "mapEntry.qin.return.narrative": "【扩写·待剧情策划】咸阳诸事暂告一段落，你动身返回，回到了离开时的地方。",
+    "mapEntry.qin.return.chronicle": "【扩写】了结咸阳之事，返回「{stage}」"
   },
   "playtests": [
     {

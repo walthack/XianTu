@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "qingyu.qin",
+  "dependsOn": [
+    "qingyu.core"
+  ],
+  "stages": [
+    "stage-qin-xianyang.json"
+  ],
+  "texts": [
+    "qin-texts.json",
+    "texts.json"
+  ],
+  "lineCompass": "line-compass.json",
+  "mapEntries": [
+    "map-entries.json"
+  ],
+  "rails": [
+    "rails.json"
+  ]
+}

@@ -6,7 +6,7 @@ import {resolve,join} from 'node:path';
 import {compileContentPacks} from '../scripts/content-packs.mjs';
 
 const root=resolve(import.meta.dirname,'..');
-const qingyu=join(root,'src/modules/contentPacks/packs/qingyu');
+const qinDir=join(root,'src/modules/contentPacks/packs/qin');
 const read=async p=>JSON.parse(await readFile(p,'utf8'));
 const QIN_STAGE='lyg.qin_xianyang',QIN_EVENT='liuchao.event.qin_hook_fangshi_rumor';
 
@@ -24,8 +24,8 @@ const withPacks=async(packs,fn)=>{
 };
 const texts=(id,t)=>({id,texts:['texts.json'],files:{'texts.json':t}});
 // 包 a 只有秦关正文，包 b 只有秦关（194 处 $text 全指向 a 的键）
-const qinTextsPack=async(extra={})=>({id:'test.a',texts:['texts.json'],files:{'texts.json':{...await read(join(qingyu,'qin-texts.json')),...extra}}});
-const qinStagePack=async(m={})=>({id:'test.b',stages:['stage.json'],files:{'stage.json':await read(join(qingyu,'stage-qin-xianyang.json'))},...m});
+const qinTextsPack=async(extra={})=>({id:'test.a',texts:['texts.json'],files:{'texts.json':{...await read(join(qinDir,'qin-texts.json')),...extra}}});
+const qinStagePack=async(m={})=>({id:'test.b',stages:['stage.json'],files:{'stage.json':await read(join(qinDir,'stage-qin-xianyang.json'))},...m});
 
 test('dependsOn must name existing other packs, without duplicates or cycles',async()=>{
  await withPacks({a:{...texts('test.a',{'k.a':'甲'}),dependsOn:['test.nope']}},async compile=>assert.rejects(compile,/test\.a\.dependsOn: unknown pack test\.nope/));
@@ -50,7 +50,7 @@ test('$text into another pack needs dependsOn',async()=>{
  const a=await qinTextsPack();
  await withPacks({a,b:await qinStagePack()},async compile=>assert.rejects(compile,/test\.b references qin\.\S+ owned by test\.a; add dependsOn/));
  await withPacks({a,b:await qinStagePack({dependsOn:['test.a']})},async compile=>{
-  const out=await compile();const original=(await read(join(qingyu,'stage-qin-xianyang.json'))).scenario.opening.text.$text;
+  const out=await compile();const original=(await read(join(qinDir,'stage-qin-xianyang.json'))).scenario.opening.text.$text;
   assert.equal(out.stages[0].scenario.opening.text,a.files['texts.json'][original]);
  });
 });

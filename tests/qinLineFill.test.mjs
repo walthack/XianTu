@@ -110,7 +110,7 @@ test('秦：汉使入口只读身份，不以受封事件冒认持有；知情�
   }
 });
 test('秦：正文与单步成本由内容包编译器解析', async () => {
-  const raw = JSON.parse(fs.readFileSync('src/modules/contentPacks/packs/qingyu/stage-qin-xianyang.json', 'utf8'));
+  const raw = JSON.parse(fs.readFileSync('src/modules/contentPacks/packs/qin/stage-qin-xianyang.json', 'utf8'));
   for (const e of raw.scenario.events) {
     const compiled = mod.scenario.events.find(c => c.id === e.id);
     assert.equal(compiled.description, CONTENT_PACKS.texts[e.description.$text]);
