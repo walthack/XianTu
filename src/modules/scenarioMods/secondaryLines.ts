@@ -228,65 +228,6 @@ export const TS_SECONDARY_LINES: SecondaryLine[] = [
       + '另有 3 条在隔离关（`final_preparations`／`s05_04`／`s06_02`），其中 `s05_04`「以兵器生意化解危机」'
       + '与本线首节点 `weapon_deal_with_geluo` 同为 seq 134 同一拍的双版本，取可达那件即可，不申请放出隔离。',
   },
-  // —— 太泉：条件一的落点，自成一段 ——
-  {
-    id: 'taiquan',
-    name: '太泉古阵',
-    kind: 'expedition',
-    // 锚＝你知道太泉古阵这件事的那一拍（太泉解锁设计稿 2026-10-27 §5，命中任一即可）：
-    // 王哲传功与托付 s02_01（所有正常开局必经，没解锁也显示入口）；迷楼「太泉钥匙」_05 兜底从云龙吟开局的试玩包。
-    // 原锚 _02「黑魔海撤出谈判」与「钥匙在迷楼」对不上，去掉。
-    anchorEventIds: ['lcq.event.s02_01', 'lyl.event.taiquan_sacred_fruit_05'],
-    entryHint: '岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。',
-    unlock: 'taiquan',
-    // 文案定案：「时机未到」按方案 二-4；两版说法按方案 §10（用户 2026-10-27 08:17 批），入口不点徐君房名字。
-    entryHintKeys: {
-      locked: {
-        title: 'line.taiquan.locked.title',
-        realm: 'line.taiquan.locked.realm',
-        lines: 'line.taiquan.locked.lines',
-        deadlinePrefix: 'line.taiquan.locked.deadline',
-      },
-      variants: {
-        song: ['line.taiquan.entry.song', { key: 'line.taiquan.entry.song.key', when: [{ path: 'done.lyl.event.taiquan_sacred_fruit_05', operator: 'eq', value: true }] }],
-        wangzhe: ['line.taiquan.entry.wangzhe'],
-      },
-    },
-    basis: '**用户裁定 2026-08-19**：「太泉这一段，我觉得照理说应该单独拿出来，不应该放在原先的主轴里。」\n'
-      + '此前这 8 拍挂在主轴上，而主轴按同日裁定只保留「开局→王哲三托付」＋两个通关条件，'
-      + '不再作为任务清单展示。太泉恰是**条件一（修为达六阳，前往太泉古阵祭祀故人）的落点**，'
-      + '内容上也自成一条完整的弧：摸迷楼机关 → 问出钥匙暗号 → 争赤阳圣果 → 反制潘金莲的追兵 '
-      + '→ 找到核心区出口 → 魔墟夺宝 → 进人类居住区。\n'
-      + '⚠ `kind: expedition` 是新档位：它既不是宗派（无法统）也不是国家（不是政权地盘），'
-      + '是一处**远征目的地**。故不受「国家线跟玩家在这个国家的行动」那条地理规则约束。\n'
-      + '⚠ 「太泉古阵＝系统入口」是我们的设计推断，**正典只写「祭祀故人」，全书无「祭祀大阵」字样**'
-      + '（见主轴文档与裁定 #159／#160）。本线文案不得把它叙述成开启装置。\n'
-      + '**整线解锁（用户 2026-10-27 01:12／01:28 定）**：境界≥坐照、至少收束一条国家线、冰蛊已了结，三条同时满足'
-      + '（阈值读 story.lineUnlock.taiquan）；没解锁照样显示入口，标题「时机未到」按缺项出句。'
-      + '进太泉说法分两版：萧遥逸受伤拍 s12_10 已完成＝原著版，否则王哲托付版（用户 2026-10-27 08:17 批方案 §10 措辞）。'
-      + '已走进太泉（门后任一节点完成）一律视为已解锁（总策划 2026-10-27 定）。',
-    nodes: [
-      { reviewSummary: '随陈琳进云涛观迷楼，摸清机关，撞见小紫等人', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_04', beforeUnlock: true },
-      { reviewSummary: '经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_05', beforeUnlock: true },
-      { reviewSummary: '到火山口争赤阳圣果，最终被萧遥逸吞下一颗', status: 'ready', stageId: 'lyl.taiquan_sacred_fruit', eventId: 'lyl.event.taiquan_sacred_fruit_10' },
-      { reviewSummary: '与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.plan_counterattack' },
-      { reviewSummary: '与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.yin_yang_counter' },
-      { reviewSummary: '蚁穴被咬，虞白樱吸出淫毒——找到通往核心区的出口', status: 'ready', stageId: 'lyl.taiquan_core_conflict', eventId: 'lyl.event.find_exit' },
-      { reviewSummary: '天井玻璃破了，赤阳藤外侵、行淫兽盘踞——尹馥兰被触肢缠在幕内', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.xingyin_beast_traps' },
-      { reviewSummary: '潘金莲与虞紫薇互推进触肢；潘金莲夺走虞白樱的赤阳圣果走了', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.pan_yu_tentacle_clash' },
-      { reviewSummary: '凿碎玻璃、以死气护身穿过触肢丛，把虞白樱与虞紫薇救出来', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.rescue_yu_sisters' },
-      { reviewSummary: '小紫用雪雪打服虞白樱，合金手铐一锁——姐妹俩成了她的侍奴', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.xiaozi_binds_yu_sisters' },
-      { reviewSummary: '进魔墟：玄秘贝已失，周飞找到琉璃天珠，多方开抢', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_03_beat' },
-      { reviewSummary: '与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_afterfall_05_beat' },
-      { reviewSummary: '居住区里潘金莲循迹逼问你是不是黑魔海的人——用阴阳鱼污了她的净化术', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.pan_settlement_clash' },
-      { reviewSummary: '潘金莲凭《河图》从拱门带走朱殷与乐明珠，出了太泉', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.pan_hetu_exit' },
-      { reviewSummary: '焚无尘被假圣果戏弄后临死自爆——秘境入口就此毁了', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.fen_wuchen_destroys_gate' },
-      { reviewSummary: '与小紫、朱老头经传送阵离开太泉，落在首阳山一带；阵要十年才能再充能', status: 'ready', stageId: 'lyl.taiquan_afterfall', eventId: 'lyl.event.taiquan_portal_exit' },
-    ],
-    pendingExpansion: '正典写到进入人类居住区、推测古阵是避难所为止。'
-      + '「修为达六阳后祭祀故人」这一拍**正典无对应 event**（原著中程宗扬从未履行此托付；'
-      + '修为上原著第268章入第五级坐照（qyj 41202），燕歌行入第六级通幽（lyg 8080）），属待扩，不在本阶段设计。',
-  },
   // —— 宗派线：锚人 ——
   {
     id: 'taiyi',
