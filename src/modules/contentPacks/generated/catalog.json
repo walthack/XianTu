@@ -1,5 +1,5 @@
 {
-  "version": "8625053c492d45c1",
+  "version": "5dc9243674e0ce22",
   "contracts": [
     {
       "meta": {
@@ -18678,6 +18678,26 @@
       "pendingExpansion": "线形：以汉使入长安 → 卷入佛门纷争 → 大战窥基魔身 → 甘露变 → 李辅国换身暂告一段落。**顶点是临时的**（用户裁定 2026-08-16）：大都护、上柱国（恩同亲王，seq 1396）只是原著段用完时的收束点，不是这条线的终局——李辅国换身之后还有戏，等剧本写出来再往后扩。所以它与其余七条线的顶点不同档：那七条是\"这条线打穿了\"，唐国这个是\"原著素材到此为止\"。T12 需新增 `shituolin_endgame_title_daduhu`（1395 登基／1397 辞官劝告并进）。T14 换身后续：长安驱魂局，没剧本，留空待完成。旧「入仕唐廷的判据」作废。"
     }
   ],
+  "lineCriticalEvents": [],
+  "characterBeats": {
+    "quests": [],
+    "highlights": []
+  },
+  "storyAxis": null,
+  "locationAliases": {
+    "canonical": {},
+    "parents": {},
+    "display": {}
+  },
+  "characterProfiles": {
+    "stance": [],
+    "affinityCaps": []
+  },
+  "ifBranches": {
+    "branches": [],
+    "consequences": [],
+    "prompts": {}
+  },
   "overlays": [
     {
       "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",

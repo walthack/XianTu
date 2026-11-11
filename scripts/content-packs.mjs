@@ -6,11 +6,13 @@ import {createHash} from 'node:crypto';
 import {createJiti} from 'jiti';
 import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './content-pack-quest-lines.mjs';
 import {compileTimeline} from './content-pack-timeline.mjs';
+import {coreFormatKinds,emptyCoreFormats,coreDefinedIds,compileCoreFormats,validateCoreFormatsWithTs} from './content-pack-core-formats.mjs';
 const root=resolve(import.meta.dirname,'..');
 const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries','heldActions','rails'];
 // 线路格式（宋线 S2）：stageMeta、railExtraBeats、secondaryLines 都是文件列表，每个文件是数组；编译后 railExtraBeats 并进包 rail，不单独进 catalog
 const lineFormatKinds=['stageMeta','railExtraBeats','secondaryLines'];
-const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline',...lineFormatKinds];
+// 核心轨与人物轨（F0a）：lineCriticalEvents、characterBeats、storyAxis、locationAliases、characterProfiles、ifBranches，见 content-pack-core-formats.mjs
+const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline',...lineFormatKinds,...coreFormatKinds];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
@@ -41,12 +43,13 @@ const definedIds=(kind,x)=>{
  if(kind==='lineCompass')return [['lineId',x.lineId]];
  if(kind==='overlays'||kind==='stageMeta'||kind==='railExtraBeats')return [];
  if(kind==='secondaryLines')return [['secondaryLine',x.id]];
+ if(coreFormatKinds.includes(kind))return coreDefinedIds(kind,x);
  return [[kind,x.id]];
 };
 /** 只建 catalog（纯数据）：不经 jiti 加载任何会读 generated/catalog.json 的模块。资产路径限定在源码树内（含符号链接）。 */
 async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root}={}) {
- const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],rails:[],stageMeta:[],secondaryLines:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
- const timelineInserts=[],lineFormats=Object.fromEntries(lineFormatKinds.map(k=>[k,[]]));
+ const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],rails:[],stageMeta:[],secondaryLines:[],...emptyCoreFormats(),overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
+ const timelineInserts=[],lineFormats=Object.fromEntries(lineFormatKinds.map(k=>[k,[]])),coreRaw=Object.fromEntries(coreFormatKinds.map(k=>[k,[]]));
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set(),packs=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
@@ -65,6 +68,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   const own=(kind,items)=>{for(const x of items){raw.push({kind,value:x});for(const [ns,id] of definedIds(kind,x))define(ns,id,m.id);}};
   for(const k of kinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);const items=Array.isArray(value)?value:[value];own(k,items);catalog[k].push(...items);}}
   for(const k of lineFormatKinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);if(!Array.isArray(value))fail(`${m.id}.${k}: expected array`);own(k,value);lineFormats[k].push(...value);}}
+  // F0a：lineCriticalEvents 的文件是数组，其余是对象；形状在 compileCoreFormats 里校验。原始值进归属扫描
+  for(const k of coreFormatKinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);own(k,Array.isArray(value)?value:[value]);coreRaw[k].push({packId:m.id,value});}}
   for(const file of [m.texts].flat().filter(Boolean)){const texts=await load(file);if(!object(texts))fail(`${m.id}: invalid texts`);for(const[id,text]of Object.entries(texts)){define('text',id,m.id);if(typeof text!=='string'||!text||id in catalog.texts)fail(`${m.id}: invalid/duplicate text ${id}`);catalog.texts[id]=text;}}
   if(m.questLineResources){const value=await load(m.questLineResources);raw.push({kind:'questLineResources',value});const res=resolveNumbers(value,numbers,`${m.id}.questLineResources`);if(!object(res)||Object.keys(res).some(k=>!resourceKinds.includes(k)))fail(`${m.id}: invalid quest line resources`);for(const[kind,table]of Object.entries(res)){if(!object(table))fail(`${m.id}: invalid ${kind}`);const into=catalog.questLineResources[kind]||={};for(const[id,v]of Object.entries(table)){define(kind,id,m.id);if(id in into)fail(`${m.id}: duplicate ${kind} ${id}`);into[id]=v;}}}
   // 线的下一步表（右栏线入口复用分析 2026-10-27 §5.2）：各包的 lines 合并，lineId 不得重复；内容校验在 validateWithTs 的 validateLineCompassTable
@@ -159,14 +164,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(!Array.isArray(r.contracts)||r.contracts.length!==r.orderedEventIds.length||r.contracts.some((c,j)=>!object(c)||Object.keys(c).some(k=>!['eventId','mustReach','completionEvidence','forbiddenInCanon','allowedElaboration'].includes(k))||c.eventId!==r.orderedEventIds[j]||!str(c.mustReach)||!str(c.allowedElaboration)||!Array.isArray(c.completionEvidence)||!c.completionEvidence.every(str)||!Array.isArray(c.forbiddenInCanon)||!c.forbiddenInCanon.every(str)))fail(`${at}: invalid contracts`);
   return r;
  });
- // 包 rail 文案里的动态名字：{{entity:<kind>:<id>}}、{{entityLabel:<kind>:<id>:<labelId>}}，运行时由 canonRail.ts 解析；这里只校验写法、实体与标签存在
- // 昭南线 S4：包二级线（secondaryLines）同样可写，运行时由 secondaryLines.ts 解析；一并在这里校验
- {const found=[];const scan=v=>{if(typeof v==='string')for(const x of v.matchAll(/\{\{([^{}]*)\}\}/g))found.push(x[1]);else if(Array.isArray(v))v.forEach(scan);else if(object(v))Object.values(v).forEach(scan);};scan(catalog.rails);scan(lineFormats.secondaryLines);
- if(found.length){const {namedEntity,entityRecognitionLabel}=await tsLoader().import(join(root,'src/modules/scenarioMods/namedEntities.ts'));const kindRe='(character|location|faction|enemy|ending)';
-  for(const t of found){const e=t.match(new RegExp(`^entity:${kindRe}:([^}]+)$`)),l=t.match(new RegExp(`^entityLabel:${kindRe}:([^}:]+):([^}:]+)$`));
-   if(e){if(!namedEntity(e[1],e[2]))fail(`rail entity {{${t}}}: unknown ${e[1]} ${e[2]}`);}
-   else if(l){if(!namedEntity(l[1],l[2]))fail(`rail entity {{${t}}}: unknown ${l[1]} ${l[2]}`);try{entityRecognitionLabel(l[1],l[2],l[3]);}catch{fail(`rail entity {{${t}}}: unknown label ${l[3]}`);}}
-   else fail(`rail entity {{${t}}}: expected entity:<kind>:<id> or entityLabel:<kind>:<id>:<labelId>`);}}}
+ // 包 rail 文案里的动态名字：{{entity:<kind>:<id>}}、{{entityLabel:<kind>:<id>:<labelId>}}，运行时由 canonRail.ts 解析；这里只校验写法、实体与标签存在（二级线同样，见下）
+ await checkEntityTemplates('rail',catalog.rails);
  // 界面章名与配乐（秦线 PR B）：包内关的事件 presentation.uiChapterId 指向同一关已有章；章 presentation 只收 mood，取值为 musicLibrary.ts 的 MusicMood
  {const music=await readFile(join(sourceRoot,'src/utils/musicLibrary.ts'),'utf8');const moods=new Set([...(music.match(/export type MusicMood =([^;]+);/)?.[1]||'').matchAll(/'([^']+)'/g)].map(x=>x[1]));if(!moods.size)fail('MusicMood not found in musicLibrary.ts');
  for(const s of catalog.stages){const chapterIds=new Set((s.scenario?.chapters||[]).map(c=>c.id));
@@ -202,13 +201,15 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // 二级线（宋线 S2）：SecondaryLine 加 after（插在哪条线后面）。kind／status 合法；ready 节点的关存在、事件属于该关；锚事件存在（anchorEventPending 除外）；锚地点在 locations.json（含别名）；
  // 包线之间 id、after 不重复。after 指向的线是否存在、id 是否与 TS 线重复在 validateWithTs 查。note（线上、节点上）只给作者看，剥掉
  unique(lineFormats.secondaryLines,x=>x?.id,'secondary line');
- {const afters=new Set(),text=v=>typeof v==='string'&&v.trim().length>0,texts=v=>v===undefined||(Array.isArray(v)&&v.every(text));
+ {let headless;const afters=new Set(),text=v=>typeof v==='string'&&v.trim().length>0,texts=v=>v===undefined||(Array.isArray(v)&&v.every(text));
  catalog.secondaryLines=lineFormats.secondaryLines.map(raw=>{
   const at=`secondary line ${raw?.id}`;
   if(!object(raw)||Object.keys(raw).some(k=>!['id','name','kind','anchorCharacterIds','anchorLocationIds','anchorEventIds','anchorEventPending','entryHint','unlock','entryHintKeys','basis','nodes','pendingExpansion','after','note'].includes(k)))fail(`${at}: invalid fields`);
   const {note,...line}=raw;
   if((note!==undefined&&typeof note!=='string')||!text(line.name)||!['sect','nation','commerce','expedition'].includes(line.kind)||!text(line.entryHint)||!text(line.basis)||!texts(line.anchorCharacterIds)||!texts(line.anchorLocationIds)||!texts(line.anchorEventIds)||(line.anchorEventPending!==undefined&&line.anchorEventPending!==true)||(line.unlock!==undefined&&!text(line.unlock))||(line.entryHintKeys!==undefined&&!object(line.entryHintKeys))||(line.pendingExpansion!==undefined&&typeof line.pendingExpansion!=='string'))fail(`${at}: invalid fields`);
-  if(!text(line.after))fail(`${at}: after must name a line`);if(afters.has(line.after))fail(`${at}: another pack line is already after ${line.after}`);afters.add(line.after);
+  // F0a：全部包线里至多一条不写 after（排最前）；TS 表非空时不允许，在 validateWithTs 查（mergeSecondaryLines）
+  if(line.after===undefined){if(headless)fail(`${at}: only one pack line may omit after (${headless} already does)`);headless=line.id;}
+  else{if(!text(line.after))fail(`${at}: after must name a line`);if(afters.has(line.after))fail(`${at}: another pack line is already after ${line.after}`);afters.add(line.after);}
   if(!line.anchorEventPending)for(const id of line.anchorEventIds||[])if(!events.has(id))fail(`${at}: unknown anchor event ${id}`);
   for(const id of line.anchorLocationIds||[])if(!locationIds.has(id))fail(`${at}: unknown anchor location ${id}`);
   if(!Array.isArray(line.nodes)||!line.nodes.length)fail(`${at}: nodes must be a non-empty array`);
@@ -221,12 +222,27 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   });
   return line;
  });}
+ // 二级线文案里的动态名字（F0a 搬迁预检：TS 线有 entityText 模板），运行时由 secondaryLines.ts 解析
+ await checkEntityTemplates('secondary line',catalog.secondaryLines);
+ // 核心轨与人物轨（F0a）
+ {const loc=JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries;
+  Object.assign(catalog,await compileCoreFormats(coreRaw,{stages,events,builtinStageIds:builtins.map(s=>s.manifest.id),location:{ids:locationIds,mainIds:new Set(loc.map(e=>e.id)),aliasIds:new Set(loc.flatMap(e=>e.aliases||[]))}}));}
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);
   if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||e.readyPath!=='compass.qinEntryReady'||[e.previewTextId,e.returnLabelTextId,e.returnTextId,e.returnChronicleTextId].some(id=>id!==undefined&&!(id in catalog.texts)))fail(`invalid map entry ${e.id}`);
  }
  const serialized=JSON.stringify({...catalog,version:''});catalog.version=createHash('sha256').update(serialized).digest('hex').slice(0,16);return {catalog,ctx:{stages,events,baseEvents,sourceRoot}};
+}
+/** 文案里 {{…}} 动态名字的写法、实体与标签存在（只有出现 {{ 时才加载 namedEntities）。label 进报错文案。 */
+async function checkEntityTemplates(label,value){
+ const found=[];const scan=v=>{if(typeof v==='string')for(const x of v.matchAll(/\{\{([^{}]*)\}\}/g))found.push(x[1]);else if(Array.isArray(v))v.forEach(scan);else if(object(v))Object.values(v).forEach(scan);};scan(value);
+ if(!found.length)return;
+ const {namedEntity,entityRecognitionLabel}=await tsLoader().import(join(root,'src/modules/scenarioMods/namedEntities.ts'));const kindRe='(character|location|faction|enemy|ending)';
+ for(const t of found){const e=t.match(new RegExp(`^entity:${kindRe}:([^}]+)$`)),l=t.match(new RegExp(`^entityLabel:${kindRe}:([^}:]+):([^}:]+)$`));
+  if(e){if(!namedEntity(e[1],e[2]))fail(`${label} entity {{${t}}}: unknown ${e[1]} ${e[2]}`);}
+  else if(l){if(!namedEntity(l[1],l[2]))fail(`${label} entity {{${t}}}: unknown ${l[1]} ${l[2]}`);try{entityRecognitionLabel(l[1],l[2],l[3]);}catch{fail(`${label} entity {{${t}}}: unknown label ${l[3]}`);}}
+  else fail(`${label} entity {{${t}}}: expected entity:<kind>:<id> or entityLabel:<kind>:<id>:<labelId>`);}
 }
 /**
  * 经 jiti 加载 TS 校验器做的校验：validator.ts、lint.ts、questLines.ts 加载时会读磁盘上的 generated/catalog.json，
@@ -240,6 +256,7 @@ async function validateWithTs(catalog,{stages,events,baseEvents,sourceRoot},{val
  if(catalog.questLines.length){const jiti=tsLoader();const {parseQuestLines,validateQuestLineReferences}=await jiti.import(join(root,'src/modules/scenarioMods/questLines.ts'));const resources=JSON.parse(await readFile(join(sourceRoot,'mod-kit/quest-lines/resources.json'),'utf8'));const texts={...resources.texts,...catalog.texts};const table=parseQuestLines({version:1,lines:catalog.questLines},id=>{if(!(id in texts))fail(`missing quest text ${id}`);return texts[id];},{...resources.intentMatches,...catalog.questLineResources.intentMatches});const index=JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/index.json'),'utf8'));const refs=new Set(index.entries.map(e=>`${e.kind}:${e.id}`));for(const [id,event]of events){refs.add(`event:${id}`);for(const a of event.playerCompletionContract?.actions||[])refs.add(`action:${id}:${a.id}`);}for(const x of catalog.entities)refs.add(`${x.kind}:${x.entry.id}`);for(const id of Object.keys(texts))refs.add(`text:${id}`);for(const[plural,kind]of [['memories','memoryTemplate'],['facts','fact'],['affinityWeights','affinityWeight'],['salience','salience']])for(const id of Object.keys(catalog.questLineResources[plural]||{}))refs.add(`${kind}:${id}`);for(const l of table.lines)for(const b of l.beats)for(const e of [...b.onComplete,...Object.values(b.byAction||{}).flat(),...(b.onExpire||[])]){if(e.kind==='setState'){refs.add(`state:${e.stateId}`);refs.add(`flag:${e.stateId}`);}if(e.kind==='setReceipt')refs.add(`receipt:${e.receiptId}`);}for(const l of table.lines)for(const b of l.beats)for(const a of b.steps||[])for(const c of a.visibleWhen||[])if(!refs.has(`state:${c.path.replace(/^flags\./,'')}`))fail(`${b.id}/${a.actionId}: visibleWhen reads undefined state ${c.path}`);const errors=validateQuestLineReferences(table,(kind,id,eventId)=>refs.has(`${kind}:${kind==='action'?`${eventId}:${id}`:id}`));if(errors.length)fail(errors.join('; '));}
  {const jiti=tsLoader();const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
  await validateLineFormatsWithTs(catalog,stages,sourceRoot);
+ await validateCoreFormatsWithTs(catalog);
 }
 /**
  * 线路格式与 TS 表的交叉校验（宋线 S2）：新段为空时不加载任何模块。TS 读取方一律用传入的新 catalog 调纯函数（不靠模块自己读磁盘 catalog），

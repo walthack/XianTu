@@ -46,7 +46,12 @@
  *   回头、找殇侯解蛊、拖到毒发，都合法。不要做出馆已在死村里，也不要把白湖写成南荒锚。
  *
  * 设计全文见 `docs/R3-10-MAIN-QUEST-AXIS-DRAFT-2026-08-16.md`。
+ *
+ * 内容包 `storyAxis`（F0a）：全局至多一份，含 stageOrder／layers／stages／nodes／requirements 五段；
+ * 有包声明时下面五张 TS 表必须全空（二选一，不逐条合并，`resolveStoryAxis`），导出名不变。
  */
+import { CONTENT_PACKS } from '../contentPacks';
+import type { PackStoryAxis } from '../contentPacks/coreFormats';
 
 /**
  * 主线完成要求（用户裁定 2026-08-16）——王哲三托付里承重的两条。
@@ -80,7 +85,7 @@ export interface MainQuestRequirement {
   basis: string;
 }
 
-export const MAIN_QUEST_REQUIREMENTS: MainQuestRequirement[] = [
+export const TS_MAIN_QUEST_REQUIREMENTS: MainQuestRequirement[] = [
   {
     id: 'taiquan_rite',
     text: '修为达六阳，前往太泉古阵祭祀故人。',
@@ -195,7 +200,7 @@ export interface MainQuestNode {
  * 六层长期方向。锚在王哲三托付上——故事内已有人向主角下达长期任务，
  * 主线轴不必外部强加，只需把这份托付逐层加深。
  */
-export const MAIN_QUEST_LAYERS: MainQuestLayerDef[] = [
+export const TS_MAIN_QUEST_LAYERS: MainQuestLayerDef[] = [
   {
     layer: 1,
     text: '活下来，弄清自己是怎么来的。',
@@ -241,7 +246,7 @@ export const MAIN_QUEST_LAYERS: MainQuestLayerDef[] = [
  * 路径只写 `world.r2_*` 与 `offscreenResolvedEventIds`，不写 `flags.event.*.done`，
  * 章节完成条件永不满足（详见设计文档 §1）。
  */
-export const STAGE_ORDER: string[] = [
+export const TS_STAGE_ORDER: string[] = [
   'lcq.stage_01', 'lcq.stage_02', 'lcq.stage_03', 'lcq.stage_03b_snake_flower_bridge',
   'lcq.stage_04', 'lcq.stage_04b_lingfei_baiyi_crisis', 'lcq.stage_05', 'lcq.stage_05b',
   'lcq.stage_06', 'lcq.stage_07_qingyuan_jiankang', 'lcq.stage_08_jiankang_coup',
@@ -280,7 +285,7 @@ export const STAGE_ORDER: string[] = [
  *   故秘境两关（`han_palace_endgame`／`mijing_rumen`）与太泉同属 `taiquan` 支柱，
  *   不是各自独立的两件事。⏳ 待回 EPUB 坐实白光的落点后，两段可考虑合并叙述。
  */
-export const MAIN_QUEST_STAGES: MainQuestStageRole[] = [
+export const TS_MAIN_QUEST_STAGES: MainQuestStageRole[] = [
   { stageId: 'lcq.stage_01', role: '落地：穿越、失去同伴', pillars: [] },
   { stageId: 'lcq.stage_02', role: '王哲三托付；白湖脱身＝强制段终点', pillars: ['bloodline', 'taiquan'] },
   // stage_03 是旧关卡包（赌局至蛇彝村），默认路线隔离。进南荒不是本关任务，
@@ -311,7 +316,7 @@ export const MAIN_QUEST_STAGES: MainQuestStageRole[] = [
 ];
 
 /** 主轴 20 节点，按 `STAGE_ORDER` 链序排列。 */
-export const MAIN_QUEST_NODES: MainQuestNode[] = [
+export const TS_MAIN_QUEST_NODES: MainQuestNode[] = [
   // 血脉线开场。要求二「保住至少一名岳血后裔」此前在节点表里**零命中**——
   // 玩家照主轴走完，两条完成要求一条都不会达成（实测 2026-08-16）。
   //
@@ -378,6 +383,29 @@ export const MAIN_QUEST_NODES: MainQuestNode[] = [
   { stageId: 'lyg.han_succession', reviewSummary: '程赵之子这条血脉如何成立（未来待扩）', status: 'pending', bloodlineBranch: 'zhao' },
   // #20 文案压了两拍：斩断肉身 s12 ＋ 阻止夺舍 s13；落夺舍拍（终局收束）。
 ];
+
+/** 包主轴与 TS 表二选一：catalog 没有 storyAxis 时用 TS 表；有则 TS 五张表必须全空（编译期已查，这里兜底）。 */
+export function resolveStoryAxis(ts: PackStoryAxis, pack: PackStoryAxis | null | undefined): PackStoryAxis {
+  if (!pack) return ts;
+  const left = (Object.keys(ts) as Array<keyof PackStoryAxis>).filter(key => ts[key].length);
+  if (left.length) throw new Error(`storyAxis: declared by a content pack, but mainQuestAxis.ts TS tables are not empty (${left.join(', ')})`);
+  return pack;
+}
+
+const AXIS = resolveStoryAxis({
+  stageOrder: TS_STAGE_ORDER, layers: TS_MAIN_QUEST_LAYERS, stages: TS_MAIN_QUEST_STAGES,
+  nodes: TS_MAIN_QUEST_NODES, requirements: TS_MAIN_QUEST_REQUIREMENTS,
+}, CONTENT_PACKS.storyAxis);
+/** 主线完成要求（见 TS_MAIN_QUEST_REQUIREMENTS 的说明）。 */
+export const MAIN_QUEST_REQUIREMENTS: MainQuestRequirement[] = AXIS.requirements;
+/** 六层长期方向（见 TS_MAIN_QUEST_LAYERS）。 */
+export const MAIN_QUEST_LAYERS: MainQuestLayerDef[] = AXIS.layers;
+/** 全关链序（见 TS_STAGE_ORDER；编译期核对等于沿 nextStageId 走出的链）。 */
+export const STAGE_ORDER: string[] = AXIS.stageOrder;
+/** 主轴关卡（见 TS_MAIN_QUEST_STAGES）。 */
+export const MAIN_QUEST_STAGES: MainQuestStageRole[] = AXIS.stages;
+/** 主轴节点（见 TS_MAIN_QUEST_NODES）。 */
+export const MAIN_QUEST_NODES: MainQuestNode[] = AXIS.nodes;
 
 /**
  * 取当前应显示的主轴节点。
