@@ -1,0 +1,591 @@
+[
+  {
+    "id": "qingyu.stage_03b_snake_flower_bridge",
+    "modId": "lcq.stage_03b_snake_flower_bridge",
+    "chapterId": "lcq.chapter.s03b_snake_flower_bridge_snake",
+    "orderedEventIds": [
+      "lcq.event.s03b_snake_flower_bridge_01",
+      "lcq.event.s03b_snake_flower_bridge_02",
+      "lcq.event.s03b_snake_flower_bridge_03",
+      "lcq.event.s03b_snake_flower_bridge_04",
+      "lcq.event.s03b_snake_flower_bridge_05",
+      "lcq.event.s03b_snake_flower_bridge_06",
+      "lcq.event.s03b_snake_flower_bridge_07"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s03b_snake_flower_bridge_01",
+        "mustReach": "程宗扬与凝羽遭蛇彝人袭击，程宗扬中毒受伤，凝羽斩杀蛇彝人。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s03b_snake_flower_bridge_02",
+        "mustReach": "程宗扬等人在蛇彝族长屋内发现五十余具女尸，被以仪式性方式残虐致死，疑似鬼王峒所为，商队决定焚屋离去。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s03b_snake_flower_bridge_03",
+        "mustReach": "祁远透露鬼王峒擅巫术屠村，谢艺指出尸体附近有鬼王峒血符，商队意识到已卷入南荒仇杀，仓促撤离。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s03b_snake_flower_bridge_04",
+        "mustReach": "云苍峰提议两支商队同行去白夷族，程宗扬同意并透露寻找霓龙丝的目标，谢艺提供碧鲮族线索，双方达成合作。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s03b_snake_flower_bridge_05",
+        "mustReach": "商队攀爬万古巨藤时，藤桥突然折断，被困在半空石壁，进退两难。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s03b_snake_flower_bridge_06",
+        "mustReach": "花苗族长阿依苏荔率族人出现，以歌声对答后抛出绳索，救商队脱困，并引众人登上崖顶。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s03b_snake_flower_bridge_07",
+        "mustReach": "鬼王峒势力扩张至花苗领地，花苗族长苏荔无奈屈服，选出龙神新娘与两名少女作为贡物送往熊耳铺。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "qingyu.stage_04",
+    "modId": "lcq.stage_04",
+    "chapterId": "lcq.chapter.stage_04",
+    "orderedEventIds": [
+      "lcq.event.s04_02",
+      "lcq.event.s04_03",
+      "lcq.event.s04_01",
+      "lcq.event.s04_04",
+      "lcq.event.s04_05",
+      "lcq.event.s04_06",
+      "lcq.event.s04_07"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s04_02",
+        "mustReach": "商队与花苗人遭遇鬼王峒武士袭击，武二郎以双刀斩杀多名武士，扭转战局。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04_03",
+        "mustReach": "程宗扬得知乐明珠是光明观堂弟子，她自告奋勇作为新娘前往鬼王峒，目的是刺杀鬼巫王为民除害。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04_01",
+        "mustReach": "苏荔向程宗扬和武二郎透露花苗与红苗联合，利用送亲之名深入鬼王峒刺杀鬼巫王的秘密计划。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04_04",
+        "mustReach": "夜晚，谢艺、云苍峰和祁远目睹从门外蔓延的黑色发丝袭击朱老头，但发丝在接近他时突然退缩，随后谢艺一刀劈碎木门，发丝如幻影般消失无踪。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04_05",
+        "mustReach": "朱老头故意绕路被识破后加快行程；山洪突袭商队，易虎先救起易彪，又将一名被卷走的年轻军士拉回，以千斤坠硬扛洪峰后被巨石砸中并卷走；易彪跪岸认兄送别。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04_06",
+        "mustReach": "程宗扬发现凝羽因麻古成瘾而痛苦，向乐明珠请求解毒，乐明珠应允协助但缺乏经验。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04_07",
+        "mustReach": "白夷族长突然改变交易方式，要求云氏商会在十日内支付五万银铢现款，而非以货易货。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "qingyu.stage_04b_lingfei_baiyi_crisis",
+    "modId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "chapterId": "lcq.chapter.s04b_lingfei_baiyi_crisis_mirror",
+    "orderedEventIds": [
+      "lcq.event.s04b_lingfei_baiyi_crisis_01",
+      "lcq.event.s04b_lingfei_baiyi_crisis_02",
+      "lcq.event.s04b_lingfei_baiyi_crisis_03",
+      "lcq.event.s04b_lingfei_baiyi_crisis_04",
+      "lcq.event.s04b_lingfei_baiyi_crisis_05",
+      "lcq.event.s04b_lingfei_baiyi_crisis_06",
+      "lcq.event.s04b_lingfei_baiyi_crisis_07",
+      "lcq.event.s04b_lingfei_baiyi_crisis_08",
+      "lcq.event.s04b_lingfei_baiyi_crisis_09",
+      "lcq.event.s04b_lingfei_baiyi_crisis_10",
+      "lcq.event.s04b_lingfei_baiyi_crisis_11",
+      "lcq.event.s04b_lingfei_baiyi_crisis_12",
+      "lcq.event.s04b_lingfei_baiyi_crisis_13",
+      "lcq.event.s04b_lingfei_baiyi_crisis_14",
+      "lcq.event.s04b_lingfei_baiyi_crisis_15",
+      "lcq.event.s04b_lingfei_baiyi_crisis_16",
+      "lcq.event.s04b_lingfei_baiyi_crisis_17",
+      "lcq.event.s04b_lingfei_baiyi_crisis_18",
+      "lcq.event.s04b_lingfei_baiyi_crisis_19"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_01",
+        "mustReach": "程宗扬说服武二郎参与明晚夺取灵飞镜的行动，武二郎同意协助。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+        "mustReach": "乐明珠挺身而出与鸦人激战，但因经验不足被擒，鸦人得意之际遭阿夕暗算。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+        "mustReach": "程宗扬趁机偷袭，一刀斩下鸦人首级，救下乐明珠和阿夕。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_04",
+        "mustReach": "程宗扬和武二郎处理鸦人尸体，发现其携带的空白羊皮纸，经云苍峰鉴定为秘法传讯信，推测黑魔海与鬼王峒勾结，目标指向白夷族。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+        "mustReach": "程宗扬等人发现白夷祭坛下藏有灵飞镜，程宗扬触发机关坠入洞穴，武二郎相救，最终在洞中寻得灵飞镜。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_06",
+        "mustReach": "云苍峰与花苗族长苏荔商议，花苗欲与白夷联手对抗鬼王峒，苏荔自伤以示决心。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_07",
+        "mustReach": "程宗扬借助易勇的水镜术与苏妲己传讯，报告南荒遭遇黑魔海，苏妲己警告他不要招惹对方并尽快寻找霓龙丝。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_08",
+        "mustReach": "程宗扬通过灵飞镜目睹樨夫人受辱，识破白夷族与鬼王峒勾结的阴谋，紧急下令接回同伴并准备撤离。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+        "mustReach": "鬼王峒使者杀死白夷族长，其妻樨夫人成为新任族长，并与鬼王峒勾结。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+        "mustReach": "程宗扬等人追入地宫甬道，遭遇鬼王峒使者设下的陷阱，花苗人被绑在木塔上，鬼武士围攻众人，战斗爆发。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_11",
+        "mustReach": "被鬼王峒改造的易虎（血虎）出现，攻击武二郎，易彪试图唤醒兄长未果，血虎继续战斗。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_12",
+        "mustReach": "凝羽从暗处突袭，刺穿鬼王峒使者的手掌，斩杀巫师，但烟雾中的毒术威胁仍在。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_13",
+        "mustReach": "谢艺独入地宫，以残忍手段击杀鬼王峒使者及所有武士，拷问碧宛下落无果后斩首。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+        "mustReach": "商队众人聚议，讨论下一步行动方向，苏荔坚持前往鬼王峒，武二郎反对但最终妥协，决定先同往碧鲮族再作商议。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_15",
+        "mustReach": "程宗扬发现阿夕异常，质问谢艺，谢艺承认设计让程宗扬与阿葭接触，并透露灵飞镜和遥控器将在南荒重逢，暗示与鬼巫王冲突。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_16",
+        "mustReach": "程宗扬从云苍峰处得知岳帅生平及星月湖渊源，推测谢艺寻找的女子是岳帅姬妾。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_17",
+        "mustReach": "队伍在湿热盆地遭遇鳄鱼袭击，一匹走骡被拖入泥潭，祁远为取回龙睛玉冒险与鳄鱼搏斗，苏荔射杀鳄鱼救险，众人惊险撤离。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_18",
+        "mustReach": "谢艺以现代休闲装扮出现，与程宗扬讨论玻璃制造技术，并透露岳帅晕血及遗腹女等秘密。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+        "mustReach": "夜间突发巨浪，海水淹没竹楼，程宗扬与凝羽逃生，程宗扬决定寻找云苍峰。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "qingyu.stage_05b",
+    "modId": "lcq.stage_05b",
+    "chapterId": "lcq.chapter.stage_05b_investigation",
+    "orderedEventIds": [
+      "lcq.event.s05b_01_binu_reveals_xiaozi",
+      "lcq.event.s05b_02_xiaozi_exposed",
+      "lcq.event.s05b_03_saan_secret_path",
+      "lcq.event.s05b_04_enter_ghost_palace",
+      "lcq.event.s05b_05a_meet_ghost_king",
+      "lcq.event.s05b_05b_ideology_duel_and_defeat",
+      "lcq.event.s05b_06_breakout_and_reunion",
+      "lcq.event.s05b_07_xiaozi_trap",
+      "lcq.event.s05b_08a_rescue_suli",
+      "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+      "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+      "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+      "lcq.event.ghost_king_swallowed",
+      "lcq.event.slay_dragon",
+      "lcq.event.xieyi_entrustment",
+      "lcq.event.xiaozi_kills_mother",
+      "lcq.event.tribes_pledge"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s05b_01_binu_reveals_xiaozi",
+        "mustReach": "程宗扬从碧姬处得知小紫曾自荐为鬼巫王奴仆，结合过往事件怀疑小紫并非白痴，怒斥谢艺知情不报。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_02_xiaozi_exposed",
+        "mustReach": "程宗扬闯入质问小紫，揭露其残忍本性，包括杀害黑舌、控制阿夕等罪行，小紫以天真伪装应对并威胁。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_03_saan_secret_path",
+        "mustReach": "程宗扬决定冒险潜入鬼王峒宫殿寻找乐明珠，众人虽知九死一生但仍选择同行，萨安提供一条秘密小道。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_04_enter_ghost_palace",
+        "mustReach": "程宗扬、谢艺、武二郎和凝羽先行进入鬼王宫，谢艺通过地面痕迹判断小紫带着一人经过，众人决定先找乐明珠而非鬼巫王。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_05a_meet_ghost_king",
+        "mustReach": "鬼巫王以蛇彝复仇和南荒战乱为由，向程宗扬宣扬其统一南荒、结束部族争斗的征服计划。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+        "mustReach": "乐明珠成功从敌人中逃脱，通过银镜现身；同时武二郎、凝羽、谢艺等人会合，开始对抗岩浆怪物，程宗扬得知援军靠近，士气大增。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_06_breakout_and_reunion",
+        "mustReach": "程宗扬在鬼王宫内找到已自行解迷药的乐明珠，二人重逢。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_07_xiaozi_trap",
+        "mustReach": "程宗扬在黑暗中被小紫诱骗坠入深渊，目睹乐明珠被小紫控制并遭受凌辱，情况危急。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_08a_rescue_suli",
+        "mustReach": "程宗扬指挥小紫拔出苏荔体内的控制长针，解救苏荔并制伏小紫。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+        "mustReach": "程宗扬与苏荔对抗尸鬼，女尸朱诺咬死丹宸，程宗扬脱险。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+        "mustReach": "程宗扬提议趁鬼巫王合体前返回暗杀，众人商议后同意此冒险计划。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+        "mustReach": "乐明珠因程宗扬无意中传输死气而触发凤凰宝典第七层异变，谢艺揭露其是光明观堂为岳帅培养的姬妾，程宗扬决定先杀鬼巫王再处理关系。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.ghost_king_swallowed",
+        "mustReach": "鬼巫王以祭品唤醒龙神，反被龙神一口吞食。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.slay_dragon",
+        "mustReach": "程宗扬借小紫指点刺穿龙颅、破坏苍龙星阵，龙神坠亡。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情",
+          "在本拍结算谢艺命运或完成托付"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.xieyi_entrustment",
+        "mustReach": "赶到重伤谢艺身边，听清把小紫带往星月湖的托付；命运由承接或救治判定结算。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "提前演出后续剧情",
+          "在本纵切生成 missing",
+          "不经救治判定合同写活谢艺",
+          "把 s06_03 改名或迁走"
+        ],
+        "allowedElaboration": "可补足针法、呼吸、哭骂与托付现场的过渡，不得改写死／生真值。"
+      },
+      {
+        "eventId": "lcq.event.xiaozi_kills_mother",
+        "mustReach": "追上小紫，见证她与母亲碧姬对质后亲手弑母，并承接余波。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.tribes_pledge",
+        "mustReach": "程宗扬解散鬼王峒势力，要求三族和平共处，龙神尸骸收益分十份。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  }
+]

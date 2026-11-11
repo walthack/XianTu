@@ -49,16 +49,19 @@ const qinStage=async(m={})=>({id:'test.b',dependsOn:['test.a'],stages:['stage.js
 // 晋线 S4：晋的事件配乐、jin 二级线迁出 TS。EVENT_MOOD_MAP、TS_SECONDARY_LINES 的条目都属某条线、终将搬空，
 // 夹具改为从 TS 表动态挑第一条现存条目（配乐表按编译器同样的读源码法）；表搬空时这几条用例要改用合成的临时 TS 条目。
 const EVENT_MOOD_ID=(await readFile(join(root,'src/utils/musicLibrary.ts'),'utf8')).match(/const EVENT_MOOD_MAP: Record<string, MusicMood> = \{([\s\S]*?)\n\};/)?.[1].match(/^\s*'([^']+)': '[^']+',$/m)?.[1];
-assert.ok(EVENT_MOOD_ID,'EVENT_MOOD_MAP 已搬空：改用合成的临时 TS 条目');
+// 昭南线 S4（八条线全部进包）之后 EVENT_MOOD_MAP、CHAPTER_MOOD_MAP、TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS 都已搬空：
+// 配乐两张表由编译器读 musicLibrary.ts 源码取键，没法塞合成条目——「先于 TS 表」「与 TS 表重复」这几条只在表里还有条目时才断言；
+// stageMeta 自身生效的断言改用任取的内置章／事件（MOOD_CH／MOOD_EV）。
 const BUILTINS=await Promise.all((await readdir(join(root,'src/modules/scenarioMods/builtins/data'))).filter(f=>f.endsWith('.json')).sort().map(f=>read(join(root,'src/modules/scenarioMods/builtins/data',f))));
-const EVENT_MOOD_STAGE=BUILTINS.find(m=>m.scenario.events.some(e=>e.id===EVENT_MOOD_ID)).manifest.id;
+const EVENT_MOOD_STAGE=EVENT_MOOD_ID&&BUILTINS.find(m=>m.scenario.events.some(e=>e.id===EVENT_MOOD_ID)).manifest.id;
 const TS_LINE_ID=TS_SECONDARY_LINES[0]?.id;
 assert.ok(TS_LINE_ID,'TS_SECONDARY_LINES 已搬空：改用合成的临时 TS 线');
 // 汉线 S4：汉的隔离、称号、目标、章配乐、整关章名特判迁出 TS（原夹具洛都封侯、liujian_takes_nangong、luoyang_cloud_secret 章、汉宫）。
 // 同样改为从 TS 表／特判动态挑现存条目；表搬空时这几条用例要改用合成的临时 TS 条目。
 const [,CH_MOOD_ID,CH_MOOD]=(await readFile(join(root,'src/utils/musicLibrary.ts'),'utf8')).match(/const CHAPTER_MOOD_MAP: Record<string, MusicMood> = \{([\s\S]*?)\n\};/)?.[1].match(/^\s*'([^']+)': '([^']+)',$/m)||[];
-assert.ok(CH_MOOD_ID,'CHAPTER_MOOD_MAP 已搬空：改用合成的临时 TS 条目');
-const CH_MOOD_STAGE=BUILTINS.find(m=>m.scenario.chapters.some(c=>c.id===CH_MOOD_ID)).manifest.id;
+const CH_MOOD_STAGE=CH_MOOD_ID&&BUILTINS.find(m=>m.scenario.chapters.some(c=>c.id===CH_MOOD_ID)).manifest.id;
+const MOOD_BUILTIN=BUILTINS.find(m=>m.scenario.chapters.length&&m.scenario.events.length);
+const MOOD_STAGE=CH_MOOD_STAGE||MOOD_BUILTIN.manifest.id,MOOD_CH=CH_MOOD_ID||MOOD_BUILTIN.scenario.chapters[0].id,MOOD_EV=EVENT_MOOD_ID||MOOD_BUILTIN.scenario.events[0].id;
 // 唐线 S4：唐称号迁出后 TS_MILESTONE_REWARDS 已搬空：改用合成的临时 TS 条目——用例里临时推进 TS 表、用完删掉。
 // 本文件与编译器（scripts/content-packs.mjs 的 jiti）共用 jiti 模块缓存，拿到的是同一个数组，所以编译期校验也看得到这条
 // （不共用时下面「与 TS 表重复」的 rejects 会因为编译通过而红，不会静默放过）。
@@ -69,8 +72,11 @@ const OBJ_ID=Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES)[0];
 assert.ok(OBJ_ID,'FIXED_QUEST_OBJECTIVE_OVERRIDES 已搬空：改用合成的临时 TS 条目');
 const OBJ_STAGE=BUILTINS.find(m=>m.scenario.events.some(e=>e.id===OBJ_ID)).manifest.id;
 // 塞外线 S4 把 lcq.stage_03 的隔离也迁进了塞外包：两个隔离夹具都从 TS 表动态挑（Q_OFF 注入成 false，TS_QUARANTINED_ID 验证「没写的关沿用 TS 表」）
+// 昭南线 S4 之后 TS 隔离表已搬空：Q_OFF／TS_QUARANTINED_ID 在表里还有条目时照旧取前两条；搬空后「与 TS 表重复」的编译期反例
+// 用合成的临时 TS 条目（临时 add 进导出的 Set、用完删掉——编译器与本文件共用同一个模块对象，同 withTsMilestone）。
 const [Q_OFF,TS_QUARANTINED_ID]=[...TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS];
-assert.ok(Q_OFF&&TS_QUARANTINED_ID,'TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS 不足两条或已搬空：改用合成的临时 TS 条目');
+const Q_SYNTH=BUILTINS.map(m=>m.manifest.id).find(id=>!CONTENT_PACKS.stageMeta?.some(m=>m.stageId===id&&m.defaultLineQuarantined!==undefined)&&!TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(id)&&id!=='lcq.stage_10_jiangzhou_shadow_war');
+const withTsQuarantine=async fn=>{TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.add(Q_SYNTH);try{return await fn();}finally{TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.delete(Q_SYNTH);}};
 // 唐线 S4：长安初定／长安插曲特判迁进唐包后，eventNarrativeView.ts 已没有整关章名特判：编译期反例改用合成的临时特判——
 // 临时替换模块导出的 storyChapterTitleIn（同上，编译器与本文件共用同一个模块对象），给 WHOLE_STAGE 的任何事件都定章名，用完还原。
 const WHOLE_STAGE=BUILTINS.find(m=>m.scenario.chapters.length&&m.scenario.events.length);
@@ -159,7 +165,7 @@ test('读取方优先级：既有特判仍先于 stageMeta，stageMeta 先于 TS
 
 test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_MOOD_MAP 之前；事件 mood 先于 EVENT_MOOD_MAP',async()=>{
  const meta=[...(await compile(metaPack([s10Meta()]))).stageMeta,
-  {stageId:CH_MOOD_STAGE,presentation:{chapters:{[CH_MOOD_ID]:{mood:'horror'}},events:{[EVENT_MOOD_ID]:{mood:'horror'}}}},
+  {stageId:MOOD_STAGE,presentation:{chapters:{[MOOD_CH]:{mood:'horror'}},events:{[MOOD_EV]:{mood:'horror'}}}},
   {stageId:QIN_STAGE,presentation:{chapters:{'lyg.chapter.qin_xianyang_prologue':{mood:'horror'}}}}];
  const base=await loadWithCatalog('src/utils/musicLibrary.ts',CONTENT_PACKS);
  const withMeta=await loadWithCatalog('src/utils/musicLibrary.ts',{...CONTENT_PACKS,stageMeta:meta});
@@ -167,18 +173,20 @@ test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_
  assert.equal(base.resolveMusicMoodForChapter(LAIR),'battle','无 stageMeta 时走章 id 正则');
  assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:E2}]),'emotion');
  assert.equal(base.resolveMusicMoodForScenario(null,[{id:E2}]),base.resolveMusicMoodForScenario(null,[]));
- assert.equal(withMeta.resolveMusicMoodForChapter(CH_MOOD_ID),'horror','stageMeta 先于 CHAPTER_MOOD_MAP');
- assert.equal(base.resolveMusicMoodForChapter(CH_MOOD_ID),CH_MOOD);
- assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:EVENT_MOOD_ID}]),'horror','stageMeta 先于 EVENT_MOOD_MAP');
+ assert.equal(withMeta.resolveMusicMoodForChapter(MOOD_CH),'horror','stageMeta 章配乐生效（表里还有条目时即「先于 CHAPTER_MOOD_MAP」）');
+ if(CH_MOOD_ID)assert.equal(base.resolveMusicMoodForChapter(CH_MOOD_ID),CH_MOOD);
+ assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:MOOD_EV}]),'horror','stageMeta 事件配乐生效（表里还有条目时即「先于 EVENT_MOOD_MAP」）');
  assert.equal(withMeta.resolveMusicMoodForChapter('lyg.chapter.qin_xianyang_prologue'),'court','包内关章 presentation.mood 先于 stageMeta');
 });
 
 test('stageMeta 隔离：canonRail 合并后的集合与 isDefaultLineQuarantinedStageId 读 catalog',async()=>{
- const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:Q_OFF,defaultLineQuarantined:false}]});
+ const off=Q_OFF||Q_SYNTH;
+ const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:off,defaultLineQuarantined:false}]});
  assert.equal(rail.isDefaultLineQuarantinedStageId(S10),true);
- assert.equal(rail.isDefaultLineQuarantinedStageId(Q_OFF),false);
- assert.equal(rail.isDefaultLineQuarantinedStageId(TS_QUARANTINED_ID),true,'没写的关沿用 TS 表');
- assert.equal(rail.DEFAULT_LINE_QUARANTINED_STAGE_IDS.size,TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.size);
+ assert.equal(rail.isDefaultLineQuarantinedStageId(off),false);
+ if(TS_QUARANTINED_ID)assert.equal(rail.isDefaultLineQuarantinedStageId(TS_QUARANTINED_ID),true,'没写的关沿用 TS 表');
+ // S10 加入（+1）；Q_OFF 在 TS 表里时被去掉（−1），表已搬空时没有可去掉的
+ assert.equal(rail.DEFAULT_LINE_QUARANTINED_STAGE_IDS.size,TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.size+(Q_OFF?0:1));
 });
 
 test('stageMeta 反例：关、章、事件、mood、目标、称号与字段',async()=>{
@@ -203,11 +211,11 @@ test('stageMeta 反例：关、章、事件、mood、目标、称号与字段',a
 
 test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
  // 宋线 S4 把宋的条目迁出了这些 TS 表：夹具改用仍留在 TS 里的非宋条目
- await rejects(metaPack([{stageId:TS_QUARANTINED_ID,defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
+ await withTsQuarantine(()=>rejects(metaPack([{stageId:Q_SYNTH,defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/));
  await withTsMilestone(()=>rejects(metaPack([{stageId:MR_STAGE,milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/));
  await rejects(metaPack([{stageId:OBJ_STAGE,presentation:{events:{[OBJ_ID]:{objective:'x'}}}}]),new RegExp(`objective for ${reEsc(OBJ_ID)} already set in fixedQuestObjectives\\.ts`));
- await rejects(metaPack([{stageId:EVENT_MOOD_STAGE,presentation:{events:{[EVENT_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`event mood for ${reEsc(EVENT_MOOD_ID)} also set in musicLibrary\\.ts EVENT_MOOD_MAP`));
- await rejects(metaPack([{stageId:CH_MOOD_STAGE,presentation:{chapters:{[CH_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`chapter mood for ${reEsc(CH_MOOD_ID)} also set in musicLibrary\\.ts CHAPTER_MOOD_MAP`));
+ if(EVENT_MOOD_ID)await rejects(metaPack([{stageId:EVENT_MOOD_STAGE,presentation:{events:{[EVENT_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`event mood for ${reEsc(EVENT_MOOD_ID)} also set in musicLibrary\\.ts EVENT_MOOD_MAP`));
+ if(CH_MOOD_ID)await rejects(metaPack([{stageId:CH_MOOD_STAGE,presentation:{chapters:{[CH_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`chapter mood for ${reEsc(CH_MOOD_ID)} also set in musicLibrary\\.ts CHAPTER_MOOD_MAP`));
  // 整关章名特判（原夹具汉宫，汉线 S4 已删；唐线 S4 删了最后一个长安初定，现用 WHOLE_STAGE 上的合成临时特判）：迁 stageMeta 必须同时删掉特判（宋临安在 S4b 就是这样做的），否则 defaultUiChapterId／逐事件 uiChapterId 都不生效
  const W=WHOLE_STAGE.manifest.id,WCH=WHOLE_STAGE.scenario.chapters[0].id,WEV=WHOLE_STAGE.scenario.events[0].id;
  await withWholeStageSpecial(async()=>{
@@ -230,7 +238,10 @@ test('stageMeta 包内关：包内 presentation.uiChapterId 先于 stageMeta，�
 });
 
 // rail 夹具：取一条不在 TS 加拍表里的生成档（纯字符串文案）当包 rail
-const generated=await read(join(root,'src/modules/scenarioMods/canonRailProfiles.generated.json'));
+// 昭南线 S4 之后核心生成档已搬空：夹具改从核心生成档 + 各包的 rails.generated.json（同一形状的未合并生成档）里挑
+const PACKS_DIR=join(root,'src/modules/contentPacks/packs');
+const generated=[...await read(join(root,'src/modules/scenarioMods/canonRailProfiles.generated.json')),
+ ...(await Promise.all((await readdir(PACKS_DIR)).sort().map(d=>read(join(PACKS_DIR,d,'rails.generated.json')).catch(()=>[])))).flat()];
 const P=generated.find(p=>p.orderedEventIds.length>=4&&!DEFAULT_LINE_EXTRA_RAIL_BEATS.some(x=>x.modId===p.modId));
 const railPack=(rail,extras)=>({p:{id:'test.rail',rails:['rails.json'],...(extras?{railExtraBeats:['extra.json']}:{}),files:{'rails.json':[rail],...(extras?{'extra.json':extras}:{})}}});
 const without=(p,i)=>({...p,orderedEventIds:p.orderedEventIds.filter((_,j)=>j!==i),contracts:p.contracts.filter((_,j)=>j!==i)});
@@ -252,8 +263,12 @@ test('railExtraBeats 反例：锚点、重复、合同数、无 rail、二选一
  await rejects(railPack(base,[x({modId:'lcq.stage_01'})]),/railExtraBeats lcq\.stage_01: no pack rail for this stage/);
  await rejects(railPack(base,[x({beforeEventId:P.orderedEventIds[3]})]),/railExtraBeats \S+: invalid fields/);
  await rejects(railPack(base,[x({eventIds:['lyl.event.debut_jingli'],contracts:[{...P.contracts[2],eventId:'lyl.event.debut_jingli'}]})]),/orderedEventIds must be distinct events of the stage/);
- const shared=generated.find(p=>DEFAULT_LINE_EXTRA_RAIL_BEATS.some(e=>e.modId===p.modId));
- await rejects(railPack(shared),new RegExp(`rail ${shared.modId.replaceAll('.','\\.')}: also listed in canonRail\\.ts DEFAULT_LINE_EXTRA_RAIL_BEATS`));
+ // TS 加拍表已搬空时改用合成的临时 TS 条目（临时 push、用完 pop；编译器与本文件共用同一个模块对象）
+ const shared=generated.find(p=>DEFAULT_LINE_EXTRA_RAIL_BEATS.some(e=>e.modId===p.modId))||P;
+ const synth=!DEFAULT_LINE_EXTRA_RAIL_BEATS.some(e=>e.modId===shared.modId);
+ if(synth)DEFAULT_LINE_EXTRA_RAIL_BEATS.push({modId:shared.modId,afterEventId:shared.orderedEventIds[0],eventIds:[],contracts:[]});
+ try{await rejects(railPack(shared),new RegExp(`rail ${shared.modId.replaceAll('.','\\.')}: also listed in canonRail\\.ts DEFAULT_LINE_EXTRA_RAIL_BEATS`));}
+ finally{if(synth)DEFAULT_LINE_EXTRA_RAIL_BEATS.pop();}
 });
 
 test('包 rail 动态名字：编译期校验实体与标签，catalog 留原样，canonRail 合并时解析',async()=>{

@@ -1,0 +1,142 @@
+[
+  {
+    "stageId": "lcq.stage_03b_snake_flower_bridge",
+    "presentation": {
+      "events": {
+        "lcq.event.s03b_snake_flower_bridge_07": {
+          "mood": "danger"
+        },
+        "lcq.event.s03b_wanwu_night": {
+          "objective": "循谢艺的指点进入夜林，接回受惊的阿葭"
+        },
+        "lcq.event.s03b_yinzhu_xiongerpu": {
+          "objective": "处理阴蛛留下的死者，再到熊耳铺找向导"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lcq.stage_04",
+    "presentation": {
+      "chapters": {
+        "lcq.chapter.stage_04": {
+          "mood": "battle"
+        }
+      },
+      "events": {
+        "lcq.event.s04_01": {
+          "mood": "danger"
+        },
+        "lcq.event.s04_03": {
+          "mood": "aspire",
+          "objective": "听清乐明珠为什么要假扮新娘"
+        },
+        "lcq.event.s04_06": {
+          "mood": "emotion"
+        },
+        "lcq.event.s04_05": {
+          "mood": "lament"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "presentation": {
+      "events": {
+        "lcq.event.s04b_lingfei_baiyi_crisis_05": {
+          "mood": "explore"
+        },
+        "lcq.event.s04b_lingfei_baiyi_crisis_14": {
+          "mood": "court"
+        },
+        "lcq.event.s04b_lingfei_baiyi_crisis_01": {
+          "mood": "danger"
+        },
+        "lcq.event.s04b_lingfei_baiyi_crisis_04": {
+          "mood": "explore"
+        },
+        "lcq.event.s04b_xi_furen_trade_route": {
+          "objective": "与樨夫人谈清白夷族长与商路的交换条件"
+        },
+        "lcq.event.s04b_lingfei_baiyi_crisis_19": {
+          "objective": "从被巨浪淹没的竹楼里脱身"
+        }
+      }
+    }
+  },
+  {
+    "note": "隔离关：原在 canonRail.ts TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS",
+    "stageId": "lcq.stage_05",
+    "defaultLineQuarantined": true,
+    "presentation": {
+      "chapters": {
+        "lcq.chapter.stage_05": {
+          "mood": "explore"
+        }
+      },
+      "events": {
+        "lcq.event.s05_03": {
+          "mood": "explore"
+        },
+        "lcq.event.s05_05": {
+          "mood": "battle"
+        },
+        "lcq.event.s05_08": {
+          "mood": "battle"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lcq.stage_05b",
+    "presentation": {
+      "events": {
+        "lcq.event.s05b_ice_gu_detour": {
+          "objective": "和祁远算清蛊患期限，商议前往叶媪山村"
+        },
+        "lcq.event.s05b_wuer_suli_depart": {
+          "objective": "听苏荔说清来意，再与武二郎结清工钱道别"
+        },
+        "lcq.event.s05b_shanghou_reads_letter": {
+          "objective": "接受殇侯解蛊，再请他辨认黑鸦使者的白纸信"
+        },
+        "lcq.event.s05b_yeao_palm_ningyu_stays": {
+          "objective": "接受叶媪诊视，听清凝羽为何需要留村调养"
+        },
+        "lcq.event.debut_lemingzhu": {
+          "objective": "看清商队里那个被扯掉头饰的新娘"
+        },
+        "lcq.event.blank_letter_and_dagu": {
+          "objective": "当面核这封白纸信笺，并应对小紫当着阁罗说的话"
+        },
+        "lcq.event.hongmiao_controlled": {
+          "objective": "看清红苗此刻的状态，并把苏荔从阁罗手里暂时保下"
+        },
+        "lcq.event.s05b_10_slave_revolt_and_phoenix_change": {
+          "objective": "趁集会大乱，设法潜入鬼王宫"
+        }
+      }
+    }
+  },
+  {
+    "note": "隔离关：原在 canonRail.ts TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS",
+    "stageId": "lcq.stage_06",
+    "defaultLineQuarantined": true,
+    "presentation": {
+      "chapters": {
+        "lcq.chapter.stage_06": {
+          "mood": "climax"
+        }
+      },
+      "events": {
+        "lcq.event.s06_01": {
+          "mood": "climax"
+        },
+        "lcq.event.s06_03": {
+          "mood": "emotion"
+        }
+      }
+    }
+  }
+]

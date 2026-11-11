@@ -90,9 +90,6 @@ export const MUSIC_TRACKS: Record<MusicMood, MusicTrack[]> = {
 };
 
 const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
-  'lcq.chapter.stage_04': 'battle',
-  'lcq.chapter.stage_05': 'explore',
-  'lcq.chapter.stage_06': 'climax',
 
 
 };
@@ -108,23 +105,6 @@ const metaChapterMood = (chapterId: string) => stageMetaChapterMood(STAGE_META, 
 const metaEventMood = (eventId: string) => stageMetaEvent(STAGE_META, eventId)?.mood as MusicMood | undefined;
 
 const EVENT_MOOD_MAP: Record<string, MusicMood> = {
-  'lcq.event.s04_01': 'danger',
-  'lcq.event.s04_03': 'aspire',
-  'lcq.event.s04_06': 'emotion',
-
-  'lcq.event.s03b_snake_flower_bridge_07': 'danger',
-  'lcq.event.s04b_lingfei_baiyi_crisis_05': 'explore',
-  'lcq.event.s04b_lingfei_baiyi_crisis_14': 'court',
-  'lcq.event.s04b_lingfei_baiyi_crisis_01': 'danger',
-  'lcq.event.s04b_lingfei_baiyi_crisis_04': 'explore',
-
-  'lcq.event.s05_03': 'explore',
-  'lcq.event.s05_05': 'battle',
-  'lcq.event.s05_08': 'battle',
-  'lcq.event.s06_01': 'climax',
-  'lcq.event.s06_03': 'emotion',
-
-  'lcq.event.s04_05': 'lament',
 
 
 };
