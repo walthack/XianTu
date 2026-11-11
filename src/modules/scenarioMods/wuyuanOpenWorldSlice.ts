@@ -32,162 +32,14 @@ import { storyRouteLocation } from './eventNarrativeView';
 import { locationFromPosition } from './travel/travelLedger';
 import { applyTimelineInserts } from './timelineInserts';
 import {
-  COMPOUND_ZONE_ID,
-  FRONT_STREET_ZONE_ID,
-  GATE_ZONE_ID,
   HALL_ZONE_ID,
   MARKET_ZONE_ID,
   PASTRY_ZONE_ID,
   PRISON_ZONE_ID,
-  SETTLEMENT_ZONE_ID,
   WUYUAN_WORLD_LOCATION_ID,
-  WUYUAN_ZONES,
 } from './travel/defs/qingyuWuyuanZones';
 import { CONTENT_PACKS } from '../contentPacks';
 import { resolveOpenWorldSlice, type TsOpenWorldSlicePart } from './travel/openWorldSlices';
-
-// F0b（2026-11-11）：本段（到 TS_WUYUAN_OPEN_WORLD_SLICE 为止）的 TS_* 是五原切片的 TS 侧数据（节点表另在 travel/defs/qingyuWuyuanZones.ts），
-// 与内容包 openWorldSlices（key 'wuyuan'）二选一；导出名不变。逻辑代码按名取的 id 在 constants 里。
-const TS_WUYUAN_OPEN_WORLD_SLICE_ID = 'lcq.open_world.wuyuan_v1';
-const TS_WUYUAN_SETTLEMENT_ID = 'lcq.settlement.wuyuan.v1';
-const TS_WUYUAN_MARKET_ARRIVAL_ID = 'lcq.route.wuyuan.arrive_market';
-const TS_PASTRY_TO_PRISON_ROUTE = 'lcq.route.wuyuan.pastry_taken_to_prison';
-const TS_MARKET_TO_PRISON_ROUTE = 'lcq.route.wuyuan.market_taken_to_prison';
-const TS_PRISON_TO_HALL_ROUTE = 'lcq.route.wuyuan.prison_taken_to_hall';
-const TS_HALL_TO_GATE_ROUTE = 'lcq.route.baihu.hall_to_gate';
-const TS_EXIT_FRONT_GATE_ROUTE = 'lcq.route.baihu.exit_front_gate';
-
-const TS_WUYUAN_LEAF_RANK: Record<string, number> = {
-  [MARKET_ZONE_ID]: 0,
-  [PASTRY_ZONE_ID]: 0,
-  [PRISON_ZONE_ID]: 1,
-  [HALL_ZONE_ID]: 2,
-  [GATE_ZONE_ID]: 3,
-  [FRONT_STREET_ZONE_ID]: 4,
-};
-
-const TS_WUYUAN_OPEN_WORLD_DEFINITION: OpenWorldSliceDefinition = {
-  id: TS_WUYUAN_OPEN_WORLD_SLICE_ID,
-  initialZoneId: MARKET_ZONE_ID,
-  zones: WUYUAN_ZONES,
-  routes: [
-    {
-      id: 'lcq.route.wuyuan.pastry_to_market_street',
-      fromZoneId: PASTRY_ZONE_ID, toZoneId: MARKET_ZONE_ID,
-      label: '沿街面退回市集', aliases: ['退回市集', '退回五原露天市集', '回市集', '回到市集', '返回市集'], turnCost: 1,
-    },
-    {
-      id: 'lcq.route.wuyuan.market_to_pastry_street',
-      fromZoneId: MARKET_ZONE_ID, toZoneId: PASTRY_ZONE_ID,
-      label: '沿人多的街面过去', aliases: ['走街面', '沿街', '人多的路'], turnCost: 1,
-    },
-    {
-      id: 'lcq.route.wuyuan.market_to_pastry_alley',
-      fromZoneId: MARKET_ZONE_ID, toZoneId: PASTRY_ZONE_ID,
-      label: '绕较安静的后巷', aliases: ['走后巷', '绕后巷', '安静的路'], turnCost: 2,
-      requirementKey: 'lcq.knowledge.wuyuan.pastry_back_alley',
-    },
-    {
-      id: TS_PASTRY_TO_PRISON_ROUTE,
-      fromZoneId: PASTRY_ZONE_ID, toZoneId: PRISON_ZONE_ID,
-      label: '被押往水牢', aliases: ['押走'], turnCost: 1,
-    },
-    {
-      id: TS_MARKET_TO_PRISON_ROUTE,
-      fromZoneId: MARKET_ZONE_ID, toZoneId: PRISON_ZONE_ID,
-      label: '被带进水牢', aliases: ['押进商馆'], turnCost: 1,
-    },
-    {
-      id: TS_PRISON_TO_HALL_ROUTE,
-      fromZoneId: PRISON_ZONE_ID, toZoneId: HALL_ZONE_ID,
-      label: '被带到内院', aliases: ['带去内院'], turnCost: 1,
-    },
-    {
-      id: TS_HALL_TO_GATE_ROUTE,
-      fromZoneId: HALL_ZONE_ID, toZoneId: GATE_ZONE_ID,
-      label: '走到商馆大门', aliases: ['去大门'], turnCost: 1,
-    },
-    {
-      id: TS_EXIT_FRONT_GATE_ROUTE,
-      fromZoneId: GATE_ZONE_ID, toZoneId: FRONT_STREET_ZONE_ID,
-      label: '迈出五原商馆', aliases: ['出馆', '出门前街'], turnCost: 1,
-    },
-  ],
-  notices: [
-    {
-      id: 'lcq.notice.wuyuan.market_layout',
-      source: '市集货棚旁的旧木牌', reliability: 'confirmed', atZoneId: 'lcq.zone.wuyuan.market',
-      text: '木牌只画了眼前市集的货棚、马匹摊位和点心铺方向；这里没有城门与官署标记。',
-    },
-    {
-      id: 'lcq.notice.wuyuan.pastry_back_alley',
-      source: '相邻货摊摊主的低声提醒', reliability: 'rumor', atZoneId: 'lcq.zone.wuyuan.market',
-      text: '摊主说点心铺后面另有一条安静窄巷，但他没有保证巷里一定安全。',
-      unlockZoneIds: ['lcq.zone.wuyuan.pastry_shop'],
-      unlockRouteIds: ['lcq.route.wuyuan.market_to_pastry_alley'],
-      unlockRequirementKeys: ['lcq.knowledge.wuyuan.pastry_back_alley'],
-    },
-  ],
-  // 只引用 stage02 已有角色 ID。王哲属于此前帅帐阶段，明确不在本表。
-  actors: [
-    {
-      id: 'liuchao.character.ning_yu', name: '凝羽', initialZoneId: 'lcq.zone.wuyuan.baihu_hall',
-      desire: '观察局势，判断眼前的人是否值得出手相助', initialStatus: '尚未与玩家照面',
-    },
-    {
-      id: 'liuchao.character.su_daji', name: '苏妲己', initialZoneId: 'lcq.zone.wuyuan.baihu_hall',
-      desire: '掌握商馆内的谈判与交易主动', initialStatus: '尚未与玩家照面',
-    },
-  ],
-  problems: [{
-    id: 'lcq.problem.wuyuan.pastry_capture', atZoneId: 'lcq.zone.wuyuan.pastry_shop',
-    title: '点心铺里的逼近', objective: '陌生人从两面逼近；先保住性命并看清他们把人往哪里带',
-    initialState: 'confronted', terminalStates: ['captured_observant', 'captured_injured'],
-    actionIds: ['lcq.action.wuyuan.delay_and_observe', 'lcq.action.wuyuan.break_for_exit'],
-  }],
-  actions: [
-    {
-      id: 'lcq.action.wuyuan.delay_and_observe', problemId: 'lcq.problem.wuyuan.pastry_capture',
-      label: '用话头拖住他们', actionText: '你不报来历，先用话头拖住逼近的人，同时看清门窗与押送方向。',
-      aliases: ['拖住他们', '用话头拖延', '先交涉', '观察退路'], rejectIf: ['不交涉', '不说话'],
-      availableInStates: ['confronted'], outcome: 'partial', nextProblemState: 'captured_observant',
-      settledFacts: ['对方没有被说服，只短暂停了手', '你看清了门窗与后来押送的方向', '人数差距使你最终仍被制住'],
-      costs: ['外地口音引来额外留意'],
-      consequences: [
-        {
-          id: 'ningyu_notices_composure', delayTurns: 4, actorId: 'liuchao.character.ning_yu',
-          cause: '你在点心铺被围时仍先观察而没有乱报身份', effect: '凝羽后来见到你时先留意你的镇定与观察力',
-          apply: { actorStatus: '留意玩家是否能在受制时保持清醒' },
-        },
-        {
-          id: 'remembered_route_opens', delayTurns: 12,
-          cause: '你在被押走前记住了门窗与转折方向', effect: '商馆内出现可继续核对的脱身路线线索',
-          apply: { problemId: 'lcq.problem.wuyuan.pastry_capture', problemState: 'route_memory_available' },
-        },
-      ],
-    },
-    {
-      id: 'lcq.action.wuyuan.break_for_exit', problemId: 'lcq.problem.wuyuan.pastry_capture',
-      label: '撞开桌案抢出口', actionText: '你抢先撞开桌案冲向出口，不把这次突围写成已经逃脱。',
-      aliases: ['撞开桌案', '抢出口', '冲向出口', '动手脱身'], rejectIf: ['不动手', '不冲'],
-      availableInStates: ['confronted'], outcome: 'failure-forward', nextProblemState: 'captured_injured',
-      settledFacts: ['你撞开了第一人，却被更多人从侧后封住', '你没有逃脱，但记住了对方合围与押送的次序', '你带着新伤被制住'],
-      costs: ['新增一处可见伤势'],
-      consequences: [
-        {
-          id: 'ningyu_notices_injury', delayTurns: 4, actorId: 'liuchao.character.ning_yu',
-          cause: '你在点心铺抢出口失败并带伤被押走', effect: '凝羽后来见到你时先判断伤势与仍可行动的余地',
-          apply: { actorStatus: '先观察玩家伤势与行动余地' },
-        },
-        {
-          id: 'guard_pattern_remembered', delayTurns: 12,
-          cause: '你亲身撞过合围并记住押送次序', effect: '商馆内出现可利用的换岗与合围空隙线索',
-          apply: { problemId: 'lcq.problem.wuyuan.pastry_capture', problemState: 'guard_pattern_available' },
-        },
-      ],
-    },
-  ],
-};
 
 export type WuyuanOpenWorldSelection = {
   source: 'open_world_engine';
@@ -205,36 +57,11 @@ export type WuyuanOpenWorldSelection = {
 };
 
 /**
- * 点心铺两个应对的作者判定类别（2026-11-05 用户批准「掷骰 P1」）：手打「冒险强行冲出去」判中 break_for_exit 时出 escape 判定卡；
- * 拖住对方按 social。只声明类别，不加词、不改结局。
+ * TS 侧的五原切片（除节点表外的一份）：已整份搬进内容包，只留 key。B8（2026-11-11）起五原切片的数据（路线、告示、角色、问题、动作、
+ * 节点深浅、判定类别、动作描述，以及逻辑代码按名取的 id）整份在塞外包 open-world-slices.json（key 'wuyuan'，原注释在条目 note 里）；
+ * 下面的导出名不变，从解析结果取。
  */
-const TS_WUYUAN_PROBLEM_ACTION_JUDGEMENT: Readonly<Record<string, { kind: JudgementKind }>> = {
-  'lcq.action.wuyuan.delay_and_observe': { kind: 'social' },
-  'lcq.action.wuyuan.break_for_exit': { kind: 'escape' },
-};
-
-/**
- * 点心铺两个应对的动作描述（intentMatch.describe，只发给拍子判定模型，不是词表、不参与按字匹配）。
- * 2026-11-04 剧情策划定、用户批准（设计稿「拍子判定按意思与风险」问二 Q2-3）：不新增动作；后窗、后巷也算强行夺路，结局照旧 captured_injured、不掷骰。
- */
-const TS_WUYUAN_PROBLEM_ACTION_DESCRIBE: Readonly<Record<string, string>> = {
-  'lcq.action.wuyuan.delay_and_observe': '不报来历、不动手，先用言语拖住逼近的人，借机看清门窗和他们押人的方向。',
-  'lcq.action.wuyuan.break_for_exit': '被围时不管从门、窗还是后巷，冒险动手强行夺路往外冲，想脱身但仍会被制住。',
-};
-
-/** TS 侧的五原切片（除节点表外的一份；整份搬进内容包后只留 key）。 */
-export const TS_WUYUAN_OPEN_WORLD_SLICE: TsOpenWorldSlicePart = {
-  key: 'wuyuan',
-  definition: TS_WUYUAN_OPEN_WORLD_DEFINITION,
-  constants: {
-    WUYUAN_SETTLEMENT_ID: TS_WUYUAN_SETTLEMENT_ID, WUYUAN_MARKET_ARRIVAL_ID: TS_WUYUAN_MARKET_ARRIVAL_ID,
-    PASTRY_TO_PRISON_ROUTE: TS_PASTRY_TO_PRISON_ROUTE, MARKET_TO_PRISON_ROUTE: TS_MARKET_TO_PRISON_ROUTE, PRISON_TO_HALL_ROUTE: TS_PRISON_TO_HALL_ROUTE,
-    HALL_TO_GATE_ROUTE: TS_HALL_TO_GATE_ROUTE, EXIT_FRONT_GATE_ROUTE: TS_EXIT_FRONT_GATE_ROUTE,
-  },
-  zoneRanks: TS_WUYUAN_LEAF_RANK,
-  actionJudgement: { ...TS_WUYUAN_PROBLEM_ACTION_JUDGEMENT },
-  actionDescribe: { ...TS_WUYUAN_PROBLEM_ACTION_DESCRIBE },
-};
+export const TS_WUYUAN_OPEN_WORLD_SLICE: TsOpenWorldSlicePart = { key: 'wuyuan' };
 
 const WUYUAN = resolveOpenWorldSlice(CONTENT_PACKS.openWorldSlices || [], TS_WUYUAN_OPEN_WORLD_SLICE);
 const wuyuanId = (name: string): string => WUYUAN.constants?.[name] || '';

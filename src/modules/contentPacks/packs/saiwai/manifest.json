@@ -4,10 +4,19 @@
   "dependsOn": [
     "qingyu.core"
   ],
+  "texts": [
+    "texts.json"
+  ],
   "rails": [
     "rails.json"
   ],
   "stageMeta": [
     "stage-meta.json"
+  ],
+  "endings": [
+    "endings.json"
+  ],
+  "openWorldSlices": [
+    "open-world-slices.json"
   ]
 }

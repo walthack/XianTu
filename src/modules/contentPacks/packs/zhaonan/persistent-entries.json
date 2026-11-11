@@ -1,0 +1,27 @@
+[
+  {
+    "kind": "algae",
+    "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+    "notBeforeStageIds": [
+      "lcq.stage_01",
+      "lcq.stage_02",
+      "lcq.stage_03",
+      "lcq.stage_03b_snake_flower_bridge",
+      "lcq.stage_04"
+    ],
+    "beatId": "beat.side.biling_algae_silk.01",
+    "eventId": "lcq.event.side_biling_algae_silk",
+    "locationId": "liuchao.location.biyu_village",
+    "characterId": "lcq.character.biling_woman_ch80",
+    "itemId": "lcq.item.biling_algae_sample",
+    "receiptId": "rcpt.side.biling_algae_silk.ordered",
+    "note": "藻丝取物（交接 2026-11-09 需求一，B8 从 persistentLineEntries.ts 搬入）：拍只投影在 04b；04b 之后的各关在加载、切关、地图抵达和每回合推进时，人在碧鲮就把取物事件、持物的本地人与样品定义补进本关运行时。stageId 是取物事件原生投影的关（也是模板事件与持物人／样品定义的来源）；notBeforeStageIds：04b 之前的关不碰藻丝；04b 本身事件已原生投影，只做旧档完成映射。"
+  },
+  {
+    "kind": "rejoin",
+    "beatId": "beat.ningyu.y5_rejoin",
+    "eventId": "lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin",
+    "stageId": "lcq.stage_05b",
+    "note": "驿馆会合（交接 2026-11-09 需求三旧档，B8 从 persistentLineEntries.ts 搬入）：有可靠「留下」记录、尚未会合的 05b 旧档，内嵌事件表里没有会合拍时按当前内容包补上（是否开场仍由拍自己的 requires 决定）。"
+  }
+]

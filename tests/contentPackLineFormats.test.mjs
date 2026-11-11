@@ -22,7 +22,7 @@ const {TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS,DEFAULT_LINE_EXTRA_RAIL_BEATS}=awai
 const {TS_MILESTONE_REWARDS,milestoneRewardFor}=await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
 const NV=await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
 const {storyChapterTitleIn}=NV;
-const {resolveFixedQuestObjectiveIn,FIXED_QUEST_OBJECTIVE_OVERRIDES}=await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
+const {resolveFixedQuestObjectiveIn}=await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
 const {SECONDARY_LINES,TS_SECONDARY_LINES,mergeSecondaryLines}=await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
 const {entityName}=await loadTs('../src/modules/scenarioMods/namedEntities.ts');
 
@@ -73,9 +73,16 @@ const MOOD_STAGE=CH_MOOD_STAGE||MOOD_BUILTIN.manifest.id,MOOD_CH=CH_MOOD_ID||MOO
 const MR_STAGE=BUILTINS.map(m=>m.manifest.id).find(id=>!milestoneRewardFor(id));
 const withTsMilestone=async fn=>{const r={stageId:MR_STAGE,titles:['合成称号'],note:'合成的临时 TS 条目'};TS_MILESTONE_REWARDS.push(r);
  try{return await fn();}finally{TS_MILESTONE_REWARDS.splice(TS_MILESTONE_REWARDS.indexOf(r),1);}};
-const OBJ_ID=Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES)[0];
-assert.ok(OBJ_ID,'FIXED_QUEST_OBJECTIVE_OVERRIDES 已搬空：改用合成的临时 TS 条目');
-const OBJ_STAGE=BUILTINS.find(m=>m.scenario.events.some(e=>e.id===OBJ_ID)).manifest.id;
+// B6：FIXED_QUEST_OBJECTIVE_OVERRIDES 与三条目标特判已搬空（进了昭南／塞外／太泉包 stageMeta），覆盖表是冻结对象加不进条目：
+// 「与 TS 重复」改用合成的临时 TS 目标——临时替换模块导出的 resolveFixedQuestObjectiveIn（同 withWholeStageSpecial，编译器与本文件共用同一个模块对象），
+// 给 OBJ_ID（一个 TS 与 stageMeta 都没给目标的内置事件）返回合成目标，用完还原。
+const FQ=await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
+const META_OBJECTIVE_IDS=new Set((CONTENT_PACKS.stageMeta||[]).flatMap(m=>Object.entries(m.presentation?.events||{}).filter(([,e])=>e.objective).map(([id])=>id)));
+const freeObjective=e=>!META_OBJECTIVE_IDS.has(e.id)&&!resolveFixedQuestObjectiveIn([],{id:e.id});
+const OBJ_BUILTIN=BUILTINS.find(m=>m.scenario.events.some(freeObjective));
+const OBJ_STAGE=OBJ_BUILTIN.manifest.id,OBJ_ID=OBJ_BUILTIN.scenario.events.find(freeObjective).id;
+const withTsObjective=async fn=>{const orig=FQ.resolveFixedQuestObjectiveIn;FQ.resolveFixedQuestObjectiveIn=(meta,e)=>String(e?.id||'')===OBJ_ID?'合成的临时 TS 目标':orig(meta,e);
+ try{return await fn();}finally{FQ.resolveFixedQuestObjectiveIn=orig;}};
 // 塞外线 S4 把 lcq.stage_03 的隔离也迁进了塞外包：两个隔离夹具都从 TS 表动态挑（Q_OFF 注入成 false，TS_QUARANTINED_ID 验证「没写的关沿用 TS 表」）
 // 昭南线 S4 之后 TS 隔离表已搬空：Q_OFF／TS_QUARANTINED_ID 在表里还有条目时照旧取前两条；搬空后「与 TS 表重复」的编译期反例
 // 用合成的临时 TS 条目（临时 add 进导出的 Set、用完删掉——编译器与本文件共用同一个模块对象，同 withTsMilestone）。
@@ -156,13 +163,12 @@ test('读取方优先级：既有特判仍先于 stageMeta，stageMeta 先于 TS
  const linAn=await builtin('lcq.stage_04'),LIN_AN=linAn.manifest.id;const intel=linAn.scenario.chapters.at(-1).id;
  const fake=[{stageId:LIN_AN,presentation:{defaultUiChapterId:intel},chapterTitles:{[intel]:'不该出现'}}];
  const decided=linAn.scenario.events.filter(e=>storyChapterTitleIn({...CONTENT_PACKS,stageMeta:[]},LIN_AN,e.id,FB)!==FB);
- assert.ok(decided.length,'lcq.stage_04 已没有逐拍章名特判：改用别的特判或合成的临时特判');
+ // B6：stage_04／04b 的逐拍章名特判已进昭南包 stageMeta（uiChapterTitle），eventNarrativeView.ts 已没有章名特判，decided 为空、这一半退化为空
  for(const e of decided)assert.equal(storyChapterTitleIn({...CONTENT_PACKS,stageMeta:fake},LIN_AN,e.id,FB),storyChapterTitleIn(CONTENT_PACKS,LIN_AN,e.id,FB),e.id);
- // 目标：三条特判先于 stageMeta；stageMeta 先于 FIXED 表
- const special='lcq.event.s02_04',tabled=Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES)[0];
- const objMeta=[{stageId:'x',presentation:{events:{[special]:{objective:'包'},[tabled]:{objective:'包'}}}}];
- assert.equal(resolveFixedQuestObjectiveIn(objMeta,{id:special}),resolveFixedQuestObjectiveIn([],{id:special}));
- assert.equal(resolveFixedQuestObjectiveIn(objMeta,{id:tabled}),'包');
+ // 目标：stageMeta 先于 event.objective（B6 起三条特判与 FIXED 表都已搬空，「特判先于 stageMeta」「stageMeta 先于 FIXED 表」退化为空）
+ const objMeta=[{stageId:'x',presentation:{events:{[OBJ_ID]:{objective:'包'}}}}];
+ assert.equal(resolveFixedQuestObjectiveIn(objMeta,{id:OBJ_ID,objective:'事件'}),'包');
+ assert.equal(resolveFixedQuestObjectiveIn([],{id:OBJ_ID,objective:'事件'}),'事件');
  // 称号：stageMeta 先于 MILESTONE_REWARDS
  const s12=MR_STAGE;
  await withTsMilestone(()=>assert.deepEqual(milestoneRewardFor(s12,[{stageId:s12,milestoneReward:{titles:['包'],note:'包'}}]),{stageId:s12,titles:['包'],note:'包'}));
@@ -218,7 +224,7 @@ test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
  // 宋线 S4 把宋的条目迁出了这些 TS 表：夹具改用仍留在 TS 里的非宋条目
  await withTsQuarantine(()=>rejects(metaPack([{stageId:Q_SYNTH,defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/));
  await withTsMilestone(()=>rejects(metaPack([{stageId:MR_STAGE,milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/));
- await rejects(metaPack([{stageId:OBJ_STAGE,presentation:{events:{[OBJ_ID]:{objective:'x'}}}}]),new RegExp(`objective for ${reEsc(OBJ_ID)} already set in fixedQuestObjectives\\.ts`));
+ await withTsObjective(()=>rejects(metaPack([{stageId:OBJ_STAGE,presentation:{events:{[OBJ_ID]:{objective:'x'}}}}]),new RegExp(`objective for ${reEsc(OBJ_ID)} already set in fixedQuestObjectives\\.ts`)));
  if(EVENT_MOOD_ID)await rejects(metaPack([{stageId:EVENT_MOOD_STAGE,presentation:{events:{[EVENT_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`event mood for ${reEsc(EVENT_MOOD_ID)} also set in musicLibrary\\.ts EVENT_MOOD_MAP`));
  if(CH_MOOD_ID)await rejects(metaPack([{stageId:CH_MOOD_STAGE,presentation:{chapters:{[CH_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`chapter mood for ${reEsc(CH_MOOD_ID)} also set in musicLibrary\\.ts CHAPTER_MOOD_MAP`));
  // 整关章名特判（原夹具汉宫，汉线 S4 已删；唐线 S4 删了最后一个长安初定，现用 WHOLE_STAGE 上的合成临时特判）：迁 stageMeta 必须同时删掉特判（宋临安在 S4b 就是这样做的），否则 defaultUiChapterId／逐事件 uiChapterId 都不生效
@@ -227,8 +233,10 @@ test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
   await rejects(metaPack([{stageId:W,presentation:{defaultUiChapterId:WCH}}]),new RegExp(`stageMeta ${reEsc(W)}: defaultUiChapterId is shadowed by eventNarrativeView\\.ts`));
   await rejects(metaPack([{stageId:W,presentation:{events:{[WEV]:{uiChapterId:WCH}}}}]),new RegExp(`chapter title for ${reEsc(WEV)} is already decided in eventNarrativeView\\.ts`));
  });
- // lcq.stage_04 只对表里 7 拍特判：关默认章与表内事件重叠，逐事件查出来
- await rejects(metaPack([{stageId:'lcq.stage_04',presentation:{defaultUiChapterId:(await builtin('lcq.stage_04')).scenario.chapters[0].id}}]),/defaultUiChapterId is shadowed by eventNarrativeView\.ts \(event lcq\.event\.s04_0\d\)/);
+ // 只对部分拍特判（原夹具 lcq.stage_04 的 7 拍，B6 已进昭南包 stageMeta 的 uiChapterTitle）：改用合成的临时逐拍特判——只给 WHOLE_STAGE 的第一拍定章名，
+ // 关默认章与这一拍重叠，逐事件查出来（同 withWholeStageSpecial，临时替换模块导出、用完还原）
+ const origTitle=NV.storyChapterTitleIn;NV.storyChapterTitleIn=(packs,modId,eventId,fallback)=>modId===W&&eventId===WEV?'合成逐拍特判':origTitle(packs,modId,eventId,fallback);
+ try{await rejects(metaPack([{stageId:W,presentation:{defaultUiChapterId:WCH}}]),new RegExp(`defaultUiChapterId is shadowed by eventNarrativeView\\.ts \\(event ${reEsc(WEV)}\\)`));}finally{NV.storyChapterTitleIn=origTitle;}
 });
 
 test('stageMeta 包内关：包内 presentation.uiChapterId 先于 stageMeta，其余事件取 defaultUiChapterId',async()=>{

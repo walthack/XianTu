@@ -14,65 +14,9 @@ import { stageMetaChapterTitle, stageMetaEvent, stageMetaRouteChapterTitle, stag
 // 即使升级应用，仍会继续使用当初写进 runtime.events 的旧完成合同。
 // F0b（2026-11-11）：本表与内容包 stageMeta 事件的 compatNarrativeVariants 同形（按事件 id，TS 表有就不看包，编译期禁止两边都有）；
 // 带 priority: 'before-event-variants' 的条目先于事件自带的 narrativeVariants 生效，只改写文案字段、不参与 narrativeVariantReplacesCanonRail。
+// B6 起数据全在塞外、昭南、晋包 stageMeta，TS 表留空。
 type CompatNarrativeVariant = Omit<StageMetaCompatNarrativeVariant, 'when' | 'replacesCanonRail'> & { when: ScenarioCondition[]; replacesCanonRail?: boolean };
-export const TS_COMPAT_NARRATIVE_VARIANTS: Readonly<Record<string, CompatNarrativeVariant[]>> = {
-  'lcq.event.gamble_bond_signed': [
-    {
-      when: [
-        { path: 'flags.event.gamble_bond_signed.refused_capture', operator: 'eq', value: true },
-        { path: 'flags.world.baihu.hall_controlled', operator: 'eq', value: true },
-      ],
-      replacesCanonRail: true,
-      name: '拒赌后被商馆扣押',
-      description: '程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；苏妲己命人拿下后，他仍受白湖商馆控制。',
-      axisBeat: '程宗扬拒赌后被扣押，仍受白湖商馆控制；此事不是赌输签契。',
-      objective: '面对拒赌后被扣押、仍受商馆控制的局面',
-    },
-    {
-      when: [{ path: 'flags.event.gamble_bond_signed.refused_capture', operator: 'eq', value: true }],
-      replacesCanonRail: true,
-      name: '拒赌后离开商馆',
-      description: '程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；后来已从白湖商馆脱身，当前不再受商馆扣押。',
-      axisBeat: '程宗扬曾拒赌并未签契，现已离馆；此事不是赌输签契。',
-      objective: '承接拒赌后离馆的既成历史，不得改写成赌输或当前仍被扣押',
-    },
-    {
-      when: [{ path: 'flags.world.baihu.gamble_refusal_phase', operator: 'eq', value: 'capture_ordered' }],
-      replacesCanonRail: true,
-      name: '拒赌后的拘拿',
-      description: '你已拒绝这场赌局。苏妲己翻脸命人拿下，你尚未脱开商馆控制；此事不是赌局落败或签契。',
-      axisBeat: '苏妲己因拒赌命人拿下；不得写成已经赌输或自愿签卖身契。',
-      objective: '苏妲己已因你拒赌命人拿下，先应对眼前拘拿',
-    },
-  ],
-  'lcq.event.ningyu_enters_gamble': [{
-    when: [{ path: 'flags.world.baihu.gamble_refusal_phase', operator: 'eq', value: 'capture_ordered' }],
-    replacesCanonRail: true,
-    name: '拒赌后的拘拿',
-    description: '凝羽已被差遣入局的当场，你拒绝与苏妲己对赌。苏妲己翻脸命人拿下，你尚未脱开商馆控制。',
-    axisBeat: '你已拒绝赌局，苏妲己命人拿下；不得写成已经赌输或签契。',
-    objective: '苏妲己已因你拒赌命人拿下，先应对眼前拘拿',
-  }],
-  'lcq.event.s07_05_eight_steeds_informed': [{
-    when: [{ path: 'flags.event.s06_03.void', operator: 'eq', value: true }],
-    replacesCanonRail: true,
-    name: '谢艺生还的后果',
-    description: '孟非卿得知谢艺生还，以及鬼王峒一役留下的变故；他必须据此调度星月湖人手，而非只确认消息。',
-    axisBeat: '孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。',
-    objective: '说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排',
-  }],
-  // 未做测试时（既没完成、也没拒测）的山村测试：先于一切变体，并清空相关势力（原 resolveScenarioEventNarrativeRaw 里的特判）。
-  'lcq.event.shanghou_revealed': [{
-    when: [
-      { path: 'flags.event.shanghou_revealed.done', operator: 'neq', value: true },
-      { path: 'flags.event.shanghou_revealed.relic_test_refused', operator: 'neq', value: true },
-    ],
-    priority: 'before-event-variants',
-    relatedFactionIds: [], name: '山村中的测试', objective: '随叶媪进堂，听主人说明测试',
-    description: '进村前路边有白骨。堂中主人打开鲨皮红木箱，展示黄底黑边三角与红色拐弯箭头，警告167人触碰后化为火球。只写眼前物件和警告，不解释电、高压，不提前揭露朱老头本相，不替玩家选择。',
-    axisBeat: '堂中主人要求测试天命之人，玩家尚未决定是否触碰。',
-  }],
-};
+export const TS_COMPAT_NARRATIVE_VARIANTS: Readonly<Record<string, CompatNarrativeVariant[]>> = {};
 
 function compatNarrativeVariants(eventId: string): readonly CompatNarrativeVariant[] | undefined {
   return Object.prototype.hasOwnProperty.call(TS_COMPAT_NARRATIVE_VARIANTS, eventId)
@@ -183,7 +127,6 @@ export const LIUXIANPING_EVENT_IDS: ReadonlySet<string> = stageMetaUiChapterEven
 /** 长安插曲首章（rail 章）以外三章的拍，按章名分：同上，取自唐包 stageMeta（按章首次出现的顺序分组）；导出名保留（测试钉住）。 */
 export const CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS: ReadonlyArray<readonly [string, ReadonlySet<string>]> = stageMetaUiChapterGroups(CONTENT_PACKS.stageMeta || [], 'lyg.changgan_interlude');
 
-/** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 /**
  * 地图入口口信拍（mapEntries[].eventId，如咸阳传闻）被注入到出发关里演；章名取它所属目标关的章，
  * 不随出发关的拍落进「抵达长安灞桥」之类的章（REPORT-8091-da90cb13 P2-2）。
@@ -214,44 +157,20 @@ export function storyChapterTitle(modId: string | undefined, eventId: string | u
 export function storyChapterTitleIn(packs: ChapterTitlePacks, modId: string | undefined, eventId: string | undefined, fallback: string): string {
   const hookTitle = eventId ? mapEntryHookChapterTitle(packs, modId, eventId) : undefined;
   if (hookTitle) return hookTitle;
-  if (modId === 'lcq.stage_04' && eventId) return ({
-    'lcq.event.s04_02': '第46章·袭击', 'lcq.event.s04_03': '第47章·新娘身份',
-    'lcq.event.s04_01': '第49章·刺王密谋', 'lcq.event.s04_04': '第51章·发蛊',
-    'lcq.event.s04_05': '第52章·旱洪', 'lcq.event.s04_06': '第54章·穿山',
-    'lcq.event.s04_07': '第55章·白夷迎客',
-  } as Record<string, string>)[eventId] || fallback;
-  if (modId === 'lcq.stage_04b_lingfei_baiyi_crisis' && eventId) {
-    if (eventId === 'lcq.event.enter_dong_with_migu') return '第86章·随弥骨入峒';
-    if (['lcq.event.huamiao_coop_boundary', 'lcq.event.guiwangdong_coop_pact'].includes(eventId)) return '第85章·进峒之约';
-    if (eventId === 'lcq.event.yiyang_repels_yinsha') return '第84章·阴煞';
-    if (eventId === 'lcq.event.wuerlang_slays_dagu') return '第83章·虎威';
-    if (eventId === 'lcq.event.ruins_ghost_warriors') return '第82章·迎敌';
-    if (eventId === 'lcq.event.biling_bay_stance') return '第80章·碧鲮前路';
-    if (['lcq.event.haishen_hall_merfolk', 'lcq.event.pull_harpoon_lemingzhu'].includes(eventId)) return '海神殿';
-    if (['lcq.event.regroup_caravan_envoy','lcq.event.weapon_deal_with_geluo','lcq.event.spot_dong_informant'].includes(eventId)) return '商队与峒使';
-  }
   // 内容包关：事件写了 presentation.uiChapterId 的标那一章；没写的照下面回退
   const packTitle = eventId ? packUiChapterTitle(packs, modId, eventId) : undefined;
   if (packTitle) return packTitle;
-  // 内容包 stageMeta（包内关或内置关）：事件的 uiChapterId，其次该关 defaultUiChapterId；排在上面各特判之后（编译期校验不与特判重叠）
+  // 内容包 stageMeta（包内关或内置关）：事件的 uiChapterId，其次该关 defaultUiChapterId；排在地图入口口信拍与包内关章名之后
   const metaTitle = eventId ? stageMetaChapterTitle(packs.stageMeta || [], modId, eventId) : undefined;
   if (metaTitle) return metaTitle;
-  // 内容包 stageMeta 关级 uiChapterByRouteLocation（F0b）：按 storyRouteLocation 分段；编译期校验不与下面的 TS 算法重叠
+  // 内容包 stageMeta 关级 uiChapterByRouteLocation（F0b）：按 storyRouteLocation 分段（B6 起塞外 stage_02 的按地点分段在这里）
   const routeTitle = eventId ? stageMetaRouteChapterTitle(packs.stageMeta || [], modId, eventId, storyRouteLocationIn(packs.stageMeta || [], eventId), fallback) : undefined;
   if (routeTitle !== undefined) return routeTitle;
-  if (modId !== 'lcq.stage_02' || !eventId) return fallback;
-  if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
-  return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';
+  return fallback;
 }
 
-/** 作者写死地点的商路／押送拍（F0b：与内容包 stageMeta 事件的 routeLocation 合并，TS 表优先，编译期禁止两边都有）。 */
-export const TS_STORY_ROUTE_LOCATIONS: Readonly<Record<string, string>> = {
-  'lcq.event.iron_bridge_ambush': '南荒途中·铁索桥',
-  'lcq.event.ningyu_regicide_offer': '南荒途中·商队宿处',
-  'lcq.event.zixi_taiyi_intercept': '南荒途中·紫溪',
-  'lcq.event.rainforest_black_shoal': '南荒途中·雨林黑石滩',
-  'lcq.event.silent_sheyi_village': '南荒·蛇彝村',
-};
+/** 作者写死地点的商路／押送拍（F0b：与内容包 stageMeta 事件的 routeLocation 合并，TS 表优先，编译期禁止两边都有）。B6 起 5 条都在塞外包 stageMeta，TS 表留空。 */
+export const TS_STORY_ROUTE_LOCATIONS: Readonly<Record<string, string>> = {};
 
 export function storyRouteLocation(eventId: string): string | undefined {
   return storyRouteLocationIn(CONTENT_PACKS.stageMeta || [], eventId);
@@ -336,8 +255,8 @@ export function questCompassPhrases(
   return phrases;
 }
 
-/** 罗盘只显示目标、不写去哪见谁的拍（F0b：与内容包 stageMeta 事件的 compassObjectiveOnly 合并）。 */
-export const TS_COMPASS_OBJECTIVE_ONLY_EVENT_IDS: ReadonlySet<string> = new Set(['lcq.event.s02_04']);
+/** 罗盘只显示目标、不写去哪见谁的拍（F0b：与内容包 stageMeta 事件的 compassObjectiveOnly 合并；B6 起数据在塞外包，TS 集合留空）。 */
+export const TS_COMPASS_OBJECTIVE_ONLY_EVENT_IDS: ReadonlySet<string> = new Set<string>();
 
 /** 任务栏罗盘：去哪、见谁。不剧透结果，不替代 objective。 */
 export function formatQuestCompass(
@@ -426,10 +345,8 @@ export function questStallHint(stallTurns: unknown, mainActionLabel: string | un
   return `主线已有 ${turns} 轮没有推进：可直接点行动区的「主线 · ${mainActionLabel}」，或照目标行动${goalNote}。`;
 }
 
-/** 按所在地点换展示的动作（F0b：与内容包 stageMeta 事件的 actionPresentation 合并，TS 表在前；TS 表里存正文键，用时才 packText）。 */
-export const TS_STORY_ACTION_PRESENTATIONS: ReadonlyArray<{ eventId: string; actionId: string; whenLocationId: string; labelTextId: string; playerLineTextId: string }> = [
-  { eventId: 'lyl.event.han_shouyang_gaoyanei', actionId: 'descend_shouyang_to_wudu', whenLocationId: 'liuchao.location.wudu', labelTextId: 'report8091.han.arrived.label', playerLineTextId: 'report8091.han.arrived.playerLine' },
-];
+/** 按所在地点换展示的动作（F0b：与内容包 stageMeta 事件的 actionPresentation 合并，TS 表在前；TS 表里存正文键，用时才 packText；B6 起数据在太泉包，TS 表留空）。 */
+export const TS_STORY_ACTION_PRESENTATIONS: ReadonlyArray<{ eventId: string; actionId: string; whenLocationId: string; labelTextId: string; playerLineTextId: string }> = [];
 
 /** 旅行已经落位后，行动展示承接所在地；合同 id/hash 与结算条件不变。 */
 export function storyActionPresentation<T extends { eventId: string; actionId: string; label: string; playerLine: string }>(action: T, save: any): T {
