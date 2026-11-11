@@ -90,6 +90,9 @@ function parseCompleteObject(raw: string): Record<string, unknown> | null {
   return null;
 }
 
+/** 坏掉的回包外壳里已闭合的正文字段（text／叙事文本／narrative）；没有或没闭合返回 null。 */
+export const closedNarrativeField = (raw: string): string | null => extractCompleteJsonStringField(String(raw || ''), TEXT_KEYS);
+
 export function salvageCompleteNarrativeResponse(raw: string): SalvagedNarrativeResponse | null {
   const parsed = parseCompleteObject(raw);
   if (parsed) {
