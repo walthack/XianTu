@@ -1,4 +1,6 @@
-import {readFile,readdir,mkdir,writeFile,realpath,rename} from 'node:fs/promises';
+import {readFile,readdir,mkdir,writeFile,realpath,rename,copyFile,rm} from 'node:fs/promises';
+import {execFile} from 'node:child_process';
+import {promisify} from 'node:util';
 import {resolve,join,relative,isAbsolute} from 'node:path';
 import {createHash} from 'node:crypto';
 import {createJiti} from 'jiti';
@@ -6,30 +8,72 @@ import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './
 import {compileTimeline} from './content-pack-timeline.mjs';
 const root=resolve(import.meta.dirname,'..');
 const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries','heldActions','rails'];
-const fields=['schemaVersion','id',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline'];
+const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline'];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
 const unique=(items,key,label)=>{const seen=new Set();for(const x of items){const id=key(x);if(typeof id!=='string'||!id.trim()||seen.has(id))fail(`${label} missing/duplicate id ${id}`);seen.add(id);}};
-/** Pure compiler: no writes until every pack validates. Paths confined to the source tree, including symlinks. */
-export async function compileContentPacks({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root,validateContracts=true}={}) {
+const tsLoader=()=>createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});
+const generatedDir=join(root,'src/modules/contentPacks/generated'),catalogPath=join(generatedDir,'catalog.json');
+const serialize=c=>JSON.stringify(c,null,2)+'\n';
+/** 包顺序：dependsOn 先校验（字符串数组、包存在、不依赖自己、不重复、无环），再拓扑排序；同时就绪的按目录名取。单包时与按目录名排序相同。 */
+function orderPacks(packs){
+ const byId=new Map(packs.map(p=>[p.m.id,p]));const deps=m=>m.dependsOn??[];
+ for(const {m} of packs){const d=deps(m);if(!Array.isArray(d)||d.some(x=>typeof x!=='string'))fail(`${m.id}.dependsOn: expected string array`);for(const x of d){if(x===m.id)fail(`${m.id}.dependsOn: depends on itself`);if(!byId.has(x))fail(`${m.id}.dependsOn: unknown pack ${x}`);}if(new Set(d).size!==d.length)fail(`${m.id}.dependsOn: duplicate entry`);}
+ const state=new Map(),path=[];const visit=id=>{if(state.get(id)==='done')return;if(state.get(id)==='open')fail(`dependsOn cycle ${[...path.slice(path.indexOf(id)),id].join(' → ')}`);state.set(id,'open');path.push(id);for(const d of deps(byId.get(id).m))visit(d);path.pop();state.set(id,'done');};
+ for(const {m} of packs)visit(m.id);
+ const placed=new Set(),out=[];while(out.length<packs.length){const next=packs.find(p=>!placed.has(p.m.id)&&deps(p.m).every(d=>placed.has(d)));placed.add(next.m.id);out.push(next);}
+ const closure=new Map();const visible=id=>{if(!closure.has(id)){const s=new Set([id]);for(const d of deps(byId.get(id).m))for(const x of visible(d))s.add(x);closure.set(id,s);}return closure.get(id);};
+ return {ordered:out,visible};
+}
+// 归属检查的引用候选：整串；账本路径去前缀（再去 .outcome/.from/.status/.state 后缀）；按 :: 和 : 拆开的各段。只做整串相等，不做子串匹配
+const LEDGER_PREFIX=/^(done|flags|line|acq|identity|knows\.player|item|party|deadline|unlock|compass)\./,LEDGER_SUFFIX=/\.(outcome|from|status|state)$/;
+const referenceCandidates=s=>{const out=new Set([s,...s.split('::'),...s.split(':')]);const tail=s.replace(LEDGER_PREFIX,'');if(tail!==s){out.add(tail);out.add(tail.replace(LEDGER_SUFFIX,''));}return out;};
+/** 包定义的 id，按种类分命名空间：[种类, id]（只登记包资产里的，不含内置关与 mod-kit）。overlay 事件另算：见 buildCatalog。 */
+const definedIds=(kind,x)=>{
+ if(!object(x))return [];
+ if(kind==='stages')return [['stage',x.manifest?.id],...(x.scenario?.events||[]).map(e=>['event',e?.id]),...(x.scenario?.chapters||[]).map(c=>['chapter',c?.id])];
+ if(kind==='questLines')return [['questLine',x.id],...(x.beats||[]).map(b=>['beat',b?.id])];
+ if(kind==='contracts'||kind==='drafts')return [['contract',x.meta?.id]];
+ if(kind==='entities')return [[`entity.${x.kind}`,x.entry?.id]];
+ if(kind==='lineCompass')return [['lineId',x.lineId]];
+ if(kind==='overlays')return [];
+ return [[kind,x.id]];
+};
+/** 只建 catalog（纯数据）：不经 jiti 加载任何会读 generated/catalog.json 的模块。资产路径限定在源码树内（含符号链接）。 */
+async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root}={}) {
  const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],rails:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
  const timelineInserts=[];
  const numbers=await loadNumbers(sourceRoot);
- const packIds=new Set();
+ const packIds=new Set(),packs=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
-  const base=join(packsDir,dir);const m=JSON.parse(await readFile(join(base,'manifest.json'),'utf8'));
+  const m=JSON.parse(await readFile(join(packsDir,dir,'manifest.json'),'utf8'));
   if(!object(m)||m.schemaVersion!==1||typeof m.id!=='string'||!m.id||packIds.has(m.id))fail(`${dir}: invalid version/id`);packIds.add(m.id);
   for(const k of Object.keys(m))if(!fields.includes(k))fail(`${m.id}: unsupported field ${k}`);
-  const load=async path=>{if(typeof path!=='string'||isAbsolute(path)||path.split(/[\\/]/).includes('..'))fail(`${m.id}: unsafe asset path`);const p=await realpath(path.startsWith('src/')||path.startsWith('mod-kit/')?resolve(sourceRoot,path):resolve(base,path));const rel=relative(await realpath(sourceRoot),p);if(rel.startsWith('..')||isAbsolute(rel)||!p.endsWith('.json'))fail(`${m.id}: asset outside source tree`);return JSON.parse(await readFile(p,'utf8'));};
-  for(const k of kinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);catalog[k].push(...(Array.isArray(value)?value:[value]));}}
-  for(const file of [m.texts].flat().filter(Boolean)){const texts=await load(file);if(!object(texts))fail(`${m.id}: invalid texts`);for(const[id,text]of Object.entries(texts)){if(typeof text!=='string'||!text||id in catalog.texts)fail(`${m.id}: invalid/duplicate text ${id}`);catalog.texts[id]=text;}}
-  if(m.questLineResources){const res=resolveNumbers(await load(m.questLineResources),numbers,`${m.id}.questLineResources`);if(!object(res)||Object.keys(res).some(k=>!resourceKinds.includes(k)))fail(`${m.id}: invalid quest line resources`);for(const[kind,table]of Object.entries(res)){if(!object(table))fail(`${m.id}: invalid ${kind}`);const into=catalog.questLineResources[kind]||={};for(const[id,v]of Object.entries(table)){if(id in into)fail(`${m.id}: duplicate ${kind} ${id}`);into[id]=v;}}}
-  // 线的下一步表（右栏线入口复用分析 2026-10-27 §5.2）：各包的 lines 合并，lineId 不得重复；内容校验在下面 validateLineCompassTable
-  if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);catalog.lineCompass.lines.push(...t.lines);}
-  if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);timelineInserts.push(...v);}
-  for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);catalog[k].push(...v);}
+  packs.push({dir,m});
  }
+ const {ordered,visible}=orderPacks(packs);
+ // 归属：同一种类的同一 id 只能由一个包定义（defs）；引用不分种类，owners 记某个字符串由哪些包定义。rawByPack 存各包原始资产（$text、数值解析之前），供加载完后扫引用。都只在编译过程中存在，不写进 catalog
+ const defs=new Map(),owners=new Map(),rawByPack=new Map();
+ const define=(ns,id,packId)=>{if(typeof id!=='string'||!id)return;const key=`${ns}\u0000${id}`,prev=defs.get(key);if(prev!==undefined&&prev!==packId)fail(`${ns} id ${id} defined by both ${prev} and ${packId}`);defs.set(key,packId);if(!owners.has(id))owners.set(id,new Set());owners.get(id).add(packId);};
+ for(const {dir,m} of ordered){
+  const base=join(packsDir,dir);const raw=[];rawByPack.set(m.id,raw);
+  const load=async path=>{if(typeof path!=='string'||isAbsolute(path)||path.split(/[\\/]/).includes('..'))fail(`${m.id}: unsafe asset path`);const p=await realpath(path.startsWith('src/')||path.startsWith('mod-kit/')?resolve(sourceRoot,path):resolve(base,path));const rel=relative(await realpath(sourceRoot),p);if(rel.startsWith('..')||isAbsolute(rel)||!p.endsWith('.json'))fail(`${m.id}: asset outside source tree`);return JSON.parse(await readFile(p,'utf8'));};
+  const own=(kind,items)=>{for(const x of items){raw.push({kind,value:x});for(const [ns,id] of definedIds(kind,x))define(ns,id,m.id);}};
+  for(const k of kinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);const items=Array.isArray(value)?value:[value];own(k,items);catalog[k].push(...items);}}
+  for(const file of [m.texts].flat().filter(Boolean)){const texts=await load(file);if(!object(texts))fail(`${m.id}: invalid texts`);for(const[id,text]of Object.entries(texts)){define('text',id,m.id);if(typeof text!=='string'||!text||id in catalog.texts)fail(`${m.id}: invalid/duplicate text ${id}`);catalog.texts[id]=text;}}
+  if(m.questLineResources){const value=await load(m.questLineResources);raw.push({kind:'questLineResources',value});const res=resolveNumbers(value,numbers,`${m.id}.questLineResources`);if(!object(res)||Object.keys(res).some(k=>!resourceKinds.includes(k)))fail(`${m.id}: invalid quest line resources`);for(const[kind,table]of Object.entries(res)){if(!object(table))fail(`${m.id}: invalid ${kind}`);const into=catalog.questLineResources[kind]||={};for(const[id,v]of Object.entries(table)){define(kind,id,m.id);if(id in into)fail(`${m.id}: duplicate ${kind} ${id}`);into[id]=v;}}}
+  // 线的下一步表（右栏线入口复用分析 2026-10-27 §5.2）：各包的 lines 合并，lineId 不得重复；内容校验在 validateWithTs 的 validateLineCompassTable
+  if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);own('lineCompass',t.lines);catalog.lineCompass.lines.push(...t.lines);}
+  if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);own('timeline',v);timelineInserts.push(...v);}
+  for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);own(k,v);catalog[k].push(...v);}
+ }
+ const builtinDir=join(sourceRoot,'src/modules/scenarioMods/builtins/data');const builtins=await Promise.all((await readdir(builtinDir)).filter(x=>x.endsWith('.json')).map(async x=>JSON.parse(await readFile(join(builtinDir,x),'utf8'))));
+ const baseEvents=new Map(builtins.flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,structuredClone(e)])));
+ // overlay 新增的事件（既不是内置事件、也不是某包关内事件）归该包；改写已有事件算引用
+ const stageEvents=new Set([...defs.keys()].filter(k=>k.startsWith('event\u0000')));
+ for(const [packId,raw] of rawByPack)for(const {kind,value} of raw)if(kind==='overlays'&&object(value))for(const e of value.events||[])if(typeof e?.id==='string'&&!baseEvents.has(e.id)&&!stageEvents.has(`event\u0000${e.id}`))define('event',e.id,packId);
+ for(const [packId,raw] of rawByPack){const seen=visible(packId);const scan=v=>{if(typeof v==='string'){for(const c of referenceCandidates(v)){const q=owners.get(c);if(q&&![...q].some(x=>seen.has(x)))fail(`${packId} references ${c} owned by ${[...q].join('/')}; add dependsOn`);}}else if(Array.isArray(v))v.forEach(scan);else if(object(v))for(const[k,x]of Object.entries(v)){scan(k);scan(x);}};for(const {value} of raw)scan(value);}
  // Stage assets use the same numeric authority as quest lines; prose is held in pack texts.
  const resolveText=(value,where)=>{
   if(Array.isArray(value))return value.map((v,i)=>resolveText(v,`${where}.${i}`));
@@ -40,14 +84,13 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
  catalog.stages=catalog.stages.map((s,i)=>resolveText(resolveNumbers(s,numbers,`stages.${i}`),`stages.${i}`));
  catalog.questLines=catalog.questLines.map((l,i)=>expandEchoes(resolveNumbers(l,numbers,`questLines.${i}`)));
  unique([...catalog.contracts,...catalog.drafts],x=>x.meta?.id,'contract');unique(catalog.statuses,x=>x.id,'status');unique(catalog.stages,x=>x.manifest?.id,'stage');unique(catalog.playtests,x=>x.id,'playtest');unique(catalog.entries,x=>x.id,'entry');unique(catalog.questLines,x=>x.id,'quest line');unique(catalog.entities,x=>`${x.kind}:${x.entry?.id}`,'entity');
- const builtinDir=join(sourceRoot,'src/modules/scenarioMods/builtins/data');const builtins=await Promise.all((await readdir(builtinDir)).filter(x=>x.endsWith('.json')).map(async x=>JSON.parse(await readFile(join(builtinDir,x),'utf8'))));
- const baseEvents=new Map(builtins.flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,structuredClone(e)])));
  const stages=new Map(builtins.map(x=>[x.manifest.id,x]));for(const s of catalog.stages){if(stages.has(s.manifest.id))fail(`stage shadows builtin ${s.manifest.id}`);stages.set(s.manifest.id,s);}
  catalog.overlays=resolveNumbers(catalog.overlays,numbers,'overlays');
  catalog.mapRoutes=resolveNumbers(catalog.mapRoutes,numbers,'mapRoutes');
  const applyOverlay=await import('./content-pack-overlays.mjs');applyOverlay.applyPackOverlays(stages,catalog.overlays);
  if(catalog.questLines.length){
-  const jiti0=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {isNanhuangSceneStage}=await jiti0.import(join(root,'src/modules/scenarioMods/fixedEndingNarratives.ts'));
+  // 只取逐拍演出关判定；不经 fixedEndingNarratives（它 import contentPacks，会读 generated/catalog.json，M2）
+  const {isStepSceneStage:isNanhuangSceneStage}=await tsLoader().import(join(root,'src/modules/scenarioMods/travel/stepScene.ts'));
   const base=JSON.parse(await readFile(join(sourceRoot,'mod-kit/quest-lines/resources.json'),'utf8'));
   const routeLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));
   for(const [stageId,projected] of projectQuestLineEvents({lines:catalog.questLines,stages,texts:{...base.texts,...catalog.texts},intentMatches:{...base.intentMatches,...catalog.questLineResources.intentMatches},guardCovers:isNanhuangSceneStage,routeLocationNames})){const overlay={stageId,events:projected};catalog.overlays.push(overlay);applyOverlay.applyPackOverlays(stages,[overlay]);}
@@ -70,15 +113,12 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
  const hooks=new Set();for(const c of catalog.contracts){if(c.meta?.readiness==='draft'||c.meta?.pendingDecisions?.length)fail(`unresolved contract ${c.meta?.id}`);const h=c.meta?.hook;if(!events.has(h?.eventId))fail(`contract ${c.meta.id}: missing event ${h?.eventId}`);if(!events.get(h.eventId)?.playerCompletionContract?.actions?.some(a=>a.id===h.actionId))fail(`contract ${c.meta.id}: missing action ${h.actionId}`);if(h.compatibleActionIds!==undefined&&(!Array.isArray(h.compatibleActionIds)||new Set(h.compatibleActionIds).size!==h.compatibleActionIds.length||h.compatibleActionIds.some(id=>!baseEvents.get(h.eventId)?.playerCompletionContract?.actions?.some(a=>a.id===id&&a.kind!=='prepare'))))fail(`contract ${c.meta.id}: invalid compatible action`);
  if(h.completionSceneByOutcome){if(!object(h.completionSceneByOutcome))fail('invalid outcome completion scene');for(const[k,v]of Object.entries(h.completionSceneByOutcome)){if(!['win','lose'].includes(k)||!object(v)||Object.keys(v).some(key=>!['fixedFacts','fallbackText','factChecks','cast','dayPart','sceneLocation','ledgerEffects'].includes(key)))fail(`contract ${c.meta.id}: unsafe completion override`);}}
  const key=JSON.stringify([h.eventId,h.actionId,h.requiredFlag||'']);if(hooks.has(key))fail(`ambiguous contract hook ${key}`);hooks.add(key);}
- if(validateContracts){const jiti=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {lintContract}=await jiti.import(join(root,'src/modules/sceneModule/lint.ts'));const {validateScenarioMod}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));for(const stage of [...catalog.stages,...catalog.overlays.map(o=>stages.get(o.stageId))]){const v=validateScenarioMod(stage);if(!v.valid)fail(`invalid stage/overlay ${stage.manifest?.id}: ${JSON.stringify(v.issues)}`);}
- for(const c of catalog.contracts)for(const patch of Object.values(c.meta.hook.completionSceneByOutcome||{}))for(const actionId of [c.meta.hook.actionId,...(c.meta.hook.compatibleActionIds||[])]){const stage=structuredClone([...stages.values()].find(s=>s.scenario.events.some(e=>e.id===c.meta.hook.eventId)));let event=stage.scenario.events.find(e=>e.id===c.meta.hook.eventId);if(actionId!==c.meta.hook.actionId){const base=structuredClone(baseEvents.get(event.id));stage.scenario.events[stage.scenario.events.findIndex(e=>e.id===event.id)]=base;event=base;}const action=event.playerCompletionContract.actions.find(a=>a.id===actionId);Object.assign(action,patch);const v=validateScenarioMod(stage);if(!v.valid)fail(`invalid completion override ${c.meta.id}/${actionId}: ${JSON.stringify(v.issues)}`);}
- const book=JSON.parse(await readFile(join(sourceRoot,'src/modules/sceneModule/contracts/statuses.json'),'utf8'));unique([...book,...catalog.statuses],x=>x.id,'catalog status');for(const c of [...catalog.contracts,...catalog.drafts]){const report=lintContract({...c,statuses:[...(c.statuses||[]),...book,...catalog.statuses]});if(report.errors.length)fail(`${c.meta.id}: ${report.errors.join('; ')}`);}}
  const baseEntities=await Promise.all(['items','skills','techniques'].map(async k=>JSON.parse(await readFile(join(sourceRoot,`mod-kit/entity-catalog/${k}.json`),'utf8'))));
  for(const x of catalog.entities)if(!['item','skill','technique'].includes(x.kind)||!object(x.entry)||typeof x.entry.id!=='string'||!Array.isArray(x.entry.aliases)||!object(x.entry.definition)||!object(x.entry.stageVariants))fail('invalid entity increment');else if(baseEntities[['item','skill','technique'].indexOf(x.kind)].entries.some(e=>e.id===x.entry.id))fail(`entity shadows authority ${x.entry.id}`);
- if(catalog.questLines.length){const jiti=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {parseQuestLines,validateQuestLineReferences}=await jiti.import(join(root,'src/modules/scenarioMods/questLines.ts'));const resources=JSON.parse(await readFile(join(sourceRoot,'mod-kit/quest-lines/resources.json'),'utf8'));const texts={...resources.texts,...catalog.texts};const table=parseQuestLines({version:1,lines:catalog.questLines},id=>{if(!(id in texts))fail(`missing quest text ${id}`);return texts[id];},{...resources.intentMatches,...catalog.questLineResources.intentMatches});const index=JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/index.json'),'utf8'));const refs=new Set(index.entries.map(e=>`${e.kind}:${e.id}`));for(const [id,event]of events){refs.add(`event:${id}`);for(const a of event.playerCompletionContract?.actions||[])refs.add(`action:${id}:${a.id}`);}for(const x of catalog.entities)refs.add(`${x.kind}:${x.entry.id}`);for(const id of Object.keys(texts))refs.add(`text:${id}`);for(const[plural,kind]of [['memories','memoryTemplate'],['facts','fact'],['affinityWeights','affinityWeight'],['salience','salience']])for(const id of Object.keys(catalog.questLineResources[plural]||{}))refs.add(`${kind}:${id}`);for(const l of table.lines)for(const b of l.beats)for(const e of [...b.onComplete,...Object.values(b.byAction||{}).flat(),...(b.onExpire||[])]){if(e.kind==='setState'){refs.add(`state:${e.stateId}`);refs.add(`flag:${e.stateId}`);}if(e.kind==='setReceipt')refs.add(`receipt:${e.receiptId}`);}for(const l of table.lines)for(const b of l.beats)for(const a of b.steps||[])for(const c of a.visibleWhen||[])if(!refs.has(`state:${c.path.replace(/^flags\./,'')}`))fail(`${b.id}/${a.actionId}: visibleWhen reads undefined state ${c.path}`);const errors=validateQuestLineReferences(table,(kind,id,eventId)=>refs.has(`${kind}:${kind==='action'?`${eventId}:${id}`:id}`));if(errors.length)fail(errors.join('; '));}
  // 只有 eventId 的步的通用句「回到{地点}看看」（R-4／P-12）：地点取该事件 locationId 在所在关 canon.locations 的名字，退回实体目录名；没有 locationId 记空串（运行时只显示线名）；地点 id 另记 lineCompassPlaceIds（travelHint 判已在该地，fix5939-2）
+ // 线顺序（右栏「别处」的显示顺序）与包顺序无关：按 NATION_LINE_IDS 稳定排序；numbersRegistry.ts 没有 import
+ {const {NATION_LINE_IDS}=await tsLoader().import(join(root,'src/modules/sceneModule/numbersRegistry.ts'));const rank=id=>{const i=NATION_LINE_IDS.indexOf(id);return i<0?Infinity:i;};catalog.lineCompass.lines.sort((x,y)=>rank(x?.lineId)-rank(y?.lineId));}
  {const catalogLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));const stageOfEvent=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,s])));for(const line of catalog.lineCompass.lines)for(const step of line.steps||[]){if(typeof step.eventId!=='string'||step.pending||!events.has(step.eventId)||step.eventId in catalog.lineCompassPlaces)continue;const locationId=events.get(step.eventId).locationId;const name=locationId?String((stageOfEvent.get(step.eventId)?.canon?.locations||[]).find(l=>l?.id===locationId)?.name||catalogLocationNames[locationId]||''):'';catalog.lineCompassPlaces[step.eventId]=name;catalog.lineCompassPlaceIds[step.eventId]=locationId||'';}}
- {const jiti=createJiti(import.meta.url,{interopDefault:true,alias:{'@':join(root,'src')}});const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
  catalog.timeline=compileTimeline({rawInserts:timelineInserts,numbers,stages:[...stages.values()],texts:catalog.texts});
  // 暂扣动作（while 全部成立时该合同动作不可做，先做 prerequisiteBeatId 那一拍）：条件只读 flags，与步骤 visibleWhen 同形
  const beatIds=new Set(catalog.questLines.flatMap(l=>(l.beats||[]).map(b=>b.id)));
@@ -112,10 +152,41 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);
-  if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||e.readyPath!=='compass.qinEntryReady')fail(`invalid map entry ${e.id}`);
+  if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||e.readyPath!=='compass.qinEntryReady'||[e.previewTextId,e.returnLabelTextId,e.returnTextId,e.returnChronicleTextId].some(id=>id!==undefined&&!(id in catalog.texts)))fail(`invalid map entry ${e.id}`);
  }
- const serialized=JSON.stringify({...catalog,version:''});catalog.version=createHash('sha256').update(serialized).digest('hex').slice(0,16);return catalog;
+ const serialized=JSON.stringify({...catalog,version:''});catalog.version=createHash('sha256').update(serialized).digest('hex').slice(0,16);return {catalog,ctx:{stages,events,baseEvents,sourceRoot}};
 }
-export async function writeContentPacks(options){const c=await compileContentPacks(options);const dir=join(root,'src/modules/contentPacks/generated');await mkdir(dir,{recursive:true});const temp=join(dir,`.catalog.${process.pid}.tmp`);await writeFile(temp,JSON.stringify(c,null,2)+'\n');await rename(temp,join(dir,'catalog.json'));return c;}
-export async function checkContentPacks(){const c=await compileContentPacks();const generated=JSON.parse(await readFile(join(root,'src/modules/contentPacks/generated/catalog.json'),'utf8'));if(JSON.stringify(c)!==JSON.stringify(generated))fail('generated catalog is stale; run node scripts/content-packs.mjs');return c;}
-if(process.argv[1]===import.meta.filename){const c=process.argv.includes('--check')?await checkContentPacks():await writeContentPacks();console.log(`Content Pack ${c.version}: ${c.contracts.length} contracts, ${c.playtests.length} playtests, ${c.entries.length} entries`);}
+/**
+ * 经 jiti 加载 TS 校验器做的校验：validator.ts、lint.ts、questLines.ts 加载时会读磁盘上的 generated/catalog.json，
+ * 所以这里看到的「当前目录」是磁盘上的那份。writeContentPacks 先写新 catalog 再在子进程里跑本函数（jiti 的 moduleCache:false
+ * 不会重读被 TS 模块 import 的 json，实测 2.6.1），校验失败回滚。
+ */
+async function validateWithTs(catalog,{stages,events,baseEvents,sourceRoot},{validateContracts=true}={}){
+ if(validateContracts){const jiti=tsLoader();const {lintContract}=await jiti.import(join(root,'src/modules/sceneModule/lint.ts'));const {validateScenarioMod}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));for(const stage of [...catalog.stages,...catalog.overlays.map(o=>stages.get(o.stageId))]){const v=validateScenarioMod(stage);if(!v.valid)fail(`invalid stage/overlay ${stage.manifest?.id}: ${JSON.stringify(v.issues)}`);}
+ for(const c of catalog.contracts)for(const patch of Object.values(c.meta.hook.completionSceneByOutcome||{}))for(const actionId of [c.meta.hook.actionId,...(c.meta.hook.compatibleActionIds||[])]){const stage=structuredClone([...stages.values()].find(s=>s.scenario.events.some(e=>e.id===c.meta.hook.eventId)));let event=stage.scenario.events.find(e=>e.id===c.meta.hook.eventId);if(actionId!==c.meta.hook.actionId){const base=structuredClone(baseEvents.get(event.id));stage.scenario.events[stage.scenario.events.findIndex(e=>e.id===event.id)]=base;event=base;}const action=event.playerCompletionContract.actions.find(a=>a.id===actionId);Object.assign(action,patch);const v=validateScenarioMod(stage);if(!v.valid)fail(`invalid completion override ${c.meta.id}/${actionId}: ${JSON.stringify(v.issues)}`);}
+ const book=JSON.parse(await readFile(join(sourceRoot,'src/modules/sceneModule/contracts/statuses.json'),'utf8'));unique([...book,...catalog.statuses],x=>x.id,'catalog status');for(const c of [...catalog.contracts,...catalog.drafts]){const report=lintContract({...c,statuses:[...(c.statuses||[]),...book,...catalog.statuses]});if(report.errors.length)fail(`${c.meta.id}: ${report.errors.join('; ')}`);}}
+ if(catalog.questLines.length){const jiti=tsLoader();const {parseQuestLines,validateQuestLineReferences}=await jiti.import(join(root,'src/modules/scenarioMods/questLines.ts'));const resources=JSON.parse(await readFile(join(sourceRoot,'mod-kit/quest-lines/resources.json'),'utf8'));const texts={...resources.texts,...catalog.texts};const table=parseQuestLines({version:1,lines:catalog.questLines},id=>{if(!(id in texts))fail(`missing quest text ${id}`);return texts[id];},{...resources.intentMatches,...catalog.questLineResources.intentMatches});const index=JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/index.json'),'utf8'));const refs=new Set(index.entries.map(e=>`${e.kind}:${e.id}`));for(const [id,event]of events){refs.add(`event:${id}`);for(const a of event.playerCompletionContract?.actions||[])refs.add(`action:${id}:${a.id}`);}for(const x of catalog.entities)refs.add(`${x.kind}:${x.entry.id}`);for(const id of Object.keys(texts))refs.add(`text:${id}`);for(const[plural,kind]of [['memories','memoryTemplate'],['facts','fact'],['affinityWeights','affinityWeight'],['salience','salience']])for(const id of Object.keys(catalog.questLineResources[plural]||{}))refs.add(`${kind}:${id}`);for(const l of table.lines)for(const b of l.beats)for(const e of [...b.onComplete,...Object.values(b.byAction||{}).flat(),...(b.onExpire||[])]){if(e.kind==='setState'){refs.add(`state:${e.stateId}`);refs.add(`flag:${e.stateId}`);}if(e.kind==='setReceipt')refs.add(`receipt:${e.receiptId}`);}for(const l of table.lines)for(const b of l.beats)for(const a of b.steps||[])for(const c of a.visibleWhen||[])if(!refs.has(`state:${c.path.replace(/^flags\./,'')}`))fail(`${b.id}/${a.actionId}: visibleWhen reads undefined state ${c.path}`);const errors=validateQuestLineReferences(table,(kind,id,eventId)=>refs.has(`${kind}:${kind==='action'?`${eventId}:${id}`:id}`));if(errors.length)fail(errors.join('; '));}
+ {const jiti=tsLoader();const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
+}
+/** 编译 + TS 校验，不写文件。注意：TS 校验看到的是磁盘上的 catalog（见 validateWithTs）；要校验刚编出的新 catalog 用 writeContentPacks。 */
+export async function compileContentPacks(options={}){const {catalog,ctx}=await buildCatalog(options);await validateWithTs(catalog,ctx,options);return catalog;}
+/** 重建 catalog：先写（临时文件 rename 到位，旧文件先备份），再起子进程做 TS 校验；校验失败恢复旧文件（原来没有就删掉新文件）后报错。删掉 catalog.json 后单次重建可用（M2）。 */
+export async function writeContentPacks(options={}){
+ const {catalog}=await buildCatalog(options);await mkdir(generatedDir,{recursive:true});
+ const temp=join(generatedDir,`.catalog.${process.pid}.tmp`),backup=join(generatedDir,`.catalog.${process.pid}.bak`);
+ await writeFile(temp,serialize(catalog));
+ const hadOld=await copyFile(catalogPath,backup).then(()=>true,e=>{if(e.code==='ENOENT')return false;throw e;});
+ await rename(temp,catalogPath);
+ try{await promisify(execFile)(process.execPath,[import.meta.filename,'--validate-only',JSON.stringify(options)],{cwd:root,maxBuffer:64<<20});}
+ catch(e){if(hadOld)await rename(backup,catalogPath);else await rm(catalogPath,{force:true});fail(`validation failed, ${hadOld?'restored previous catalog':'removed new catalog'}: ${String(e.stderr||e.message).trim()}`);}
+ if(hadOld)await rm(backup,{force:true});
+ return catalog;
+}
+/** 子进程入口：重新编译，确认与磁盘逐字节相同，再做 TS 校验（此时磁盘上就是新 catalog）。 */
+async function validateOnDisk(options){const {catalog,ctx}=await buildCatalog(options);if(await readFile(catalogPath,'utf8')!==serialize(catalog))fail('catalog on disk differs from this build');await validateWithTs(catalog,ctx,options);}
+export async function checkContentPacks(){const {catalog,ctx}=await buildCatalog();const generated=JSON.parse(await readFile(catalogPath,'utf8'));if(JSON.stringify(catalog)!==JSON.stringify(generated))fail('generated catalog is stale; run node scripts/content-packs.mjs');await validateWithTs(catalog,ctx);return catalog;}
+if(process.argv[1]===import.meta.filename){
+ const i=process.argv.indexOf('--validate-only');
+ if(i>=0){try{await validateOnDisk(JSON.parse(process.argv[i+1]||'{}'));}catch(e){console.error(e.message);process.exitCode=1;}}
+ else{const c=process.argv.includes('--check')?await checkContentPacks():await writeContentPacks();console.log(`Content Pack ${c.version}: ${c.contracts.length} contracts, ${c.playtests.length} playtests, ${c.entries.length} entries`);}
+}
