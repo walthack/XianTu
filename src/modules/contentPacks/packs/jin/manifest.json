@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "id": "qingyu.jin",
   "dependsOn": [
-    "qingyu.core"
+    "qingyu.core",
+    "qingyu.zhaonan"
   ],
   "texts": [
     "texts.json"

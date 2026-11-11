@@ -217,3 +217,16 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - **`TS_MILESTONE_REWARDS` 搬空**（`[]`），全部称号都在 stageMeta；`MILESTONE_REWARDS` 照汉线按 `STAGE_ORDER` 排，顺序不变。
 - `tang` 是 `TS_SECONDARY_LINES` 与核心包 `line-compass.json` 的最后一条：TS 侧删块后 zhaonan 收尾 `},` 原样；JSON 侧前一项的 `},` 改 `}`。
 - `tests/contentPackLineFormats.test.mjs`：称号与整关章名特判两类 TS 侧都已搬空，改用**合成的临时 TS 条目**——用例内往 `TS_MILESTONE_REWARDS` 临时推一条、临时替换 `eventNarrativeView` 模块导出的 `storyChapterTitleIn`（编译器与测试经 jiti 共用模块缓存，拿到同一模块对象），用完还原；「既有特判先于 stageMeta」改用 `lcq.stage_04` 逐拍特判。
+
+## 2026-11-11 昭南（南荒）线数据进包（昭南线 S4）
+
+昭南包 `packs/zhaonan/`（`id: "qingyu.zhaonan"`，`dependsOn: ["qingyu.core"]`）：`rails.generated.json`（4 个生成档：03b／04／04b／05b）、`rail-extra-beats.json`（7 条加拍）、`stage-meta.json`（6 关：05／06 隔离、3 条章配乐、14 条事件配乐、13 条目标）、`secondary-lines.json`（`zhaonan` 线，`after: "heimohai"`）、`line-compass.json`（`lineId: "nanhuang"`）、`texts.json`（12 个 `lineCompass.nanhuang.*`）。6 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋、汉、塞外不同之处：
+- **两个 id**：下一步表 lineId 是 `nanhuang`、正文键 `lineCompass.nanhuang.*`；二级线 id 是 `zhaonan`。包目录与包 id 用 `zhaonan`。
+- **包二级线可写 `{{entity:…}}`／`{{entityLabel:…}}`**（本线是第一条带动态名字的包线：3 个节点的 `reviewSummary` 与 `pendingExpansion` 原用 `entityText(...)`）。运行时 `secondaryLines.ts` 在并入 TS 表之前解析（同包 rail，名字不冻进 catalog）；编译器把 `secondaryLines` 并进原有的 rail 模板校验（实体、标签须存在，报错前缀仍为 `rail entity`）。`mergeSecondaryLines` 本身不解析，编译期的 `validateWithTs` 拿到的是模板原文。
+- **加拍里的 `entityText(...)`** 直接写成模板串：加拍编译时并进包 rail，由 rail 原有的解析处理。
+- **晋包 `dependsOn` 加 `qingyu.zhaonan`**（晋线 `after: "zhaonan"`）。包拓扑序因此变为 … → saiwai → zhaonan → jin → song → …，catalog 里 `rails`／`stageMeta` 的拼接顺序跟着变；运行时 `CANON_RAIL_PROFILES` 按关分组排序，不受影响。
+- 保序：本线没有手审档，4 个生成档进包后照宋 S4 的拼装按 `modId` 归位，没改拼装代码。
+- 隔离：05／06 移到 stageMeta，成员不变，`DEFAULT_LINE_QUARANTINED_STAGE_IDS` 迭代顺序变了（同汉、塞外）。
+- 未搬（留在 TS）：`eventNarrativeView.ts` 里 stage_04 的逐事件章名表与 04b 的多分支——返回的是写死的「第46章·袭击」「海神殿」「商队与峒使」等，不是该关已有章的标题，stageMeta 的 `uiChapterId` 表达不了；`legacyNarrativeVariants` 的 `shanghou_revealed` 条件改写；`fixedQuestObjectives.ts` 里用 `entityText` 的两条目标（`wuerlang_slays_dagu`、`s05b_02_xiaozi_exposed`，stageMeta 的 objective 不解析模板）与 `huamiao_coop_boundary` 特判；别的线挂在昭南事件上的节点与锚。`tests/contentPackLineFormats.test.mjs` 的「逐事件特判与默认章重叠」反例用的就是留在 TS 的 stage_04 特判。
