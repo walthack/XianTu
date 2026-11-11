@@ -261,3 +261,14 @@ catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvent
 - 人物包本身不引用别的包定义的 id（拍点与高光的事件都在内置关），`dependsOn: ["qingyu.core"]` 按任务规定写；核心包不反向依赖人物包。
 - 读源码的两处改读合并值：`tests/criticalEventCoverage.test.mjs` 的人物层认领改读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`（认领集合前后都是 120 个 id，欠账不变）；`scripts/quest-report.mjs` 的人物任务与二级线改用 jiti 读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`／`SECONDARY_LINES`（主轴仍正则读源码）。
 - catalog 只变 `characterBeats` 段与 version；棘轮 `characterQuests.ts` 116 → 0（总数 1135 → 1019，文件 69 → 68）。
+
+## 2026-11-11 角色姿态档案与好感上限进人物包（B4）
+
+人物包 `packs/characters/`（`qingyu.characters`，`dependsOn` 仍只有 `qingyu.core`）manifest 加 `characterProfiles: ["profiles.json"]`。`stanceProfiles.ts` 的 `TS_STANCE_PROFILES`（49 条）与 `affinityCaps.ts` 的 `TS_AFFINITY_CAPS`（13 条）原样搬入 `profiles.json` 的 `stance`／`affinityCaps`，两张 TS 表为空数组；`STANCE_PROFILES`／`AFFINITY_CAPS`／`formatStanceProfile`／`hasStanceProfile`／`affinityCapFor`／`formatAffinityCap`／`packEntityNames`／`mergeStanceProfiles`／`mergeAffinityCaps` 导出名与行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
+- 写法照 F0a：每条 `names` 写成 `entities`（`entityAliases` 展开，原表重复展开的实体照写几遍；含 enemy 两条姿态、一条上限）＋ `extraNames`（字面名字，如「贾诩」「秦伴当」「小环」）；`cap` 写成 `capTier`（原 `tierMax('…')` 的档位 id）。文案（含成人内容）逐字照搬，用合并函数还原后与原表 deepStrictEqual。
+- 顺序：JSON 顺序即原表顺序；TS 表为空，合并值就是包的顺序，`find` 取第一条命中的优先级不变。
+- 注释：表内 10 处 `//` 注释（姿态 8、上限 2）进 `note`：夹在条目之间的分节注释进下一条，条目内部的注释进本条；编译时剥掉。
+- 裁定簿核过：两张表没有 AFF_PROTECTED／AGE_PROTECTED／DEBUT_PROTECTED／USER_CANON 标记（裁定簿的 AFF_PROTECTED 指角色归属字段）。凝羽姿态 constant 的四条声音约束（#242，执法 `tests/ningyuVoice`）原样搬入，该测试读合并值，未改。
+- 不需要 `dependsOn` 别的包：`dependsOn` 只有 `qingyu.core` 时编译通过，归属扫描没有报引用其它包定义的 id，没有成环。
+- `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的姿态／上限两段改为取人物包 `profiles.json` 原样转写（TS 表搬空后原来的源码解析取到 0 条）；源码解析辅助函数 `sourceEntries` 因此无人使用，已删。
+- catalog 只变 `characterProfiles` 段与 version；棘轮 `stanceProfiles.ts` 48 → 0、`affinityCaps.ts` 13 → 0（总数 1019 → 958，文件 68 → 66）。
