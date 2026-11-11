@@ -4,6 +4,8 @@
     "order": 5,
     "regions": [
       "唐国"
-    ]
+    ],
+    "countsTowardClosedLines": true,
+    "failureClosureEvents": []
   }
 ]

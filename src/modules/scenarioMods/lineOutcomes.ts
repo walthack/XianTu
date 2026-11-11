@@ -7,7 +7,7 @@ import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { orderedDoneEventIds, playerLedgerRules, type PlayerLedgerRules } from './playerLedgerRules';
 import { logError } from '../diagnostics/log';
 import { debugEnabled, debugLog } from '../diagnostics/debugLog';
-import { CONTENT_PACKS } from '../contentPacks';
+import { CONTENT_PACKS, CLOSURE_TALLY_LINE_IDS, FAILURE_CLOSURE_EVENTS } from '../contentPacks';
 
 export const lineOutcomeTiers = (): readonly string[] => GAME_NUMBERS.story.lineOutcome.tiers;
 
@@ -68,14 +68,14 @@ const lastFallback = new Map<string, boolean>();
  * ② 没写、规则表 lineOutcomes 里已有这条线的规则：未收束（等规则写档）；
  * ③ 规则表里还没有这条线的规则：退回读线的下一步表里配好的收束事件 closedWhen，按编年史判，记 identity 调试日志（结果变了才记）。
  * 「没去」「半路走掉」＝没有收束记录、也没走到收束事件，都不算（用户 2026-10-27 01:12 定）。不编各线胜负规则，规则表留给剧情侧填。
- * 太泉不计入由调用方的线集合决定（judgedLines、story.lineCompass.anyLineClosed.lineIds 都不含 taiquan）。
+ * 太泉不计入由调用方的线集合决定（judgedLines、计入线 CLOSURE_TALLY_LINE_IDS 都不含 taiquan）。
  */
 export function lineClosed(lineId: string, runtime: unknown, opts: LineClosedOptions = {}): boolean {
   const flags = (runtime as { flags?: Record<string, unknown> } | undefined)?.flags;
   const outcome = readLineOutcome(flags && typeof flags === 'object' ? flags : undefined, lineId);
   if (outcome !== undefined && lineOutcomeTiers().includes(outcome)) return (opts.tiers ?? lineOutcomeTiers()).includes(outcome);
-  // 正式失败终点由数据登记；空表不猜失败。与正常 closedWhen 并行，不关闭旧档回退。
-  const failures = GAME_NUMBERS.story.lineOutcome.failureClosureEvents as Record<string, readonly string[]>;
+  // 正式失败终点由各线包 nation-lines.json 的 failureClosureEvents 登记；空表不猜失败。与正常 closedWhen 并行，不关闭旧档回退。
+  const failures = FAILURE_CLOSURE_EVENTS;
   const done = new Set(orderedDoneEventIds(runtime));
   if (failures[lineId]?.some(eventId => done.has(eventId))) return (opts.tiers ?? lineOutcomeTiers()).includes('unresolved');
   if (playerLedgerRules().lineOutcomes.some(rule => rule.lineId === lineId)) return false;
@@ -88,10 +88,9 @@ export function lineClosed(lineId: string, runtime: unknown, opts: LineClosedOpt
   return closed;
 }
 
-/** 秦入口只数配置中的五条国家线；同线多终点、重复完成记录均只计一次。 */
+/** 已收束的计入线条数（各线包 countsTowardClosedLines 为 true 的线，按 order）；同线多终点、重复完成记录均只计一次。 */
 export function nationClosedLineCount(runtime: unknown): number {
-  return [...new Set(GAME_NUMBERS.story.lineCompass.anyLineClosed.lineIds)]
-    .filter(lineId => lineClosed(lineId, runtime)).length;
+  return [...new Set(CLOSURE_TALLY_LINE_IDS)].filter(lineId => lineClosed(lineId, runtime)).length;
 }
 
 /** 已收束的判档线（太泉解锁设计稿 2026-10-27 §3）：按 judgedLineIds() 的顺序逐条读 lineClosed；tiers 缺省取全部档位。非判档线（太泉）不在其中。纯读，不写 flags。 */

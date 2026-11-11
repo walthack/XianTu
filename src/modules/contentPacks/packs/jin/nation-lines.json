@@ -4,6 +4,8 @@
     "order": 2,
     "regions": [
       "晋国"
-    ]
+    ],
+    "countsTowardClosedLines": true,
+    "failureClosureEvents": []
   }
 ]

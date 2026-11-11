@@ -4,6 +4,7 @@
     "order": 6,
     "regions": [
       "秦国"
-    ]
+    ],
+    "countsTowardClosedLines": false
   }
 ]

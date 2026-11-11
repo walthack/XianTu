@@ -4,6 +4,7 @@
     "order": 7,
     "regions": [
       "太泉"
-    ]
+    ],
+    "countsTowardClosedLines": false
   }
 ]

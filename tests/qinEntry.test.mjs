@@ -8,7 +8,8 @@ const { validateAgainstRegistry } = await loadTs('../src/modules/sceneModule/num
 const { validateLineCompassTable, validateScenarioMod } = await loadTs('../src/modules/scenarioMods/validator.ts');
 const { CONTENT_PACKS: packs } = await loadTs('../src/modules/contentPacks/index.ts');
 const { lineCompassView } = await loadTs('../src/modules/scenarioMods/lineCompass.ts');
-const ids = n.story.lineCompass.anyLineClosed.lineIds;
+// 阶段 2a：计入线、失败收束事件由各线包 nation-lines.json 派生（原 numbers 的 anyLineClosed.lineIds、lineOutcome.failureClosureEvents）
+const { CLOSURE_TALLY_LINE_IDS: ids, FAILURE_CLOSURE_EVENTS } = await loadTs('../src/modules/contentPacks/index.ts');
 const closers = ids.map(id => packs.lineCompass.lines.find(l => l.lineId === id).closedWhen[0].path.slice(5));
 const rt = events => ({ flags: {}, completedEventIds: events, chronicle: [] });
 for (const count of [0, 2, 3, 5]) test(`秦入口 ${count} 条正常收束`, () => {
@@ -25,7 +26,7 @@ test('秦、太泉不计；宋的太泉事件仅算宋；重复事件和收束�
   assert.equal(nationClosedLineCount({ ...rt([]), flags: { 'line.qin.outcome': 'resolved', 'line.taiquan.outcome': 'unresolved' } }), 0);
 });
 test('配置失败终点无需改代码；不屏蔽原 closedWhen；同线多失败只算一次', () => {
-  const failures = n.story.lineOutcome.failureClosureEvents.nanhuang;
+  const failures = FAILURE_CLOSURE_EVENTS.nanhuang;
   try {
     // 合同夹具，不把这两个事件裁定为正式失败终点。
     failures.push('test.failure.a', 'test.failure.b');
@@ -46,12 +47,9 @@ test('秦入口数值注册校验边界、线清单、失败映射', () => {
     const tree = structuredClone(n); tree.story.lineCompass.qinEntry.minClosedLines = value;
     assert.ok(validateAgainstRegistry(tree).some(e => e.includes('qinEntry.minClosedLines')));
   }
-  for (const value of [['nanhuang'], [...ids, 'qin'], [...ids, 'taiquan'], [...ids, ids[0]]]) {
-    const tree = structuredClone(n); tree.story.lineCompass.anyLineClosed.lineIds = value;
-    assert.ok(validateAgainstRegistry(tree).some(e => e.includes('anyLineClosed.lineIds')));
-  }
-  const tree = structuredClone(n); tree.story.lineOutcome.failureClosureEvents.nanhuang = ['x', 'x'];
-  assert.ok(validateAgainstRegistry(tree).some(e => e.includes('failureClosureEvents')));
+  // 线清单与失败映射搬进各线包后改在编译期校验（tests/nationLinesPack.test.mjs）；numbers 里不再有这两个键
+  assert.equal(n.story.lineCompass.anyLineClosed, undefined);
+  assert.equal(n.story.lineOutcome.failureClosureEvents, undefined);
 });
 test('派生路径 validator 接受 qinEntryReady，只许布尔比较', () => {
   const table = structuredClone(packs.lineCompass);

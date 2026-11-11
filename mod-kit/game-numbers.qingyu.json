@@ -2266,13 +2266,6 @@
         "han": false,
         "tang": false,
         "qin": false
-      },
-      "failureClosureEvents": {
-        "nanhuang": [],
-        "jin": [],
-        "song": [],
-        "han": [],
-        "tang": []
       }
     },
     "lineUnlock": {
@@ -2306,16 +2299,6 @@
           "要打起来了",
           "覆灭",
           "背叛"
-        ]
-      },
-      "anyLineClosed": {
-        "note": "国家线计数共用清单：南荒、晋、宋、汉、唐；太泉、秦不计。anyLineClosed 表示至少一线收束；秦入口改读 compass.qinEntryReady，阈值见 qinEntry.minClosedLines。",
-        "lineIds": [
-          "nanhuang",
-          "jin",
-          "song",
-          "han",
-          "tang"
         ]
       },
       "qinEntry": {

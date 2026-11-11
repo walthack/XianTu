@@ -9,6 +9,10 @@ export function qinClosedByFestival(save: any, rt = runtime(save)): boolean {
   return save?.系统?.扩展?.festivalStarted === true && rt?.modId !== FESTIVAL.qinStageId
     && !(rt?.chronicle || []).some((e: any) => e.stageId === FESTIVAL.qinStageId);
 }
+/** 通用名（阶段 2a，供包声明的派生条件 unlessLineClosedByWorldEvent 读）：该线是否已被世界事件关闭。2b 之前只有大祭关秦一种；2b 换到 worldEvents。 */
+export function lineClosedByWorldEvent(save: any, rt: unknown, lineId: string): boolean {
+  return lineId === FESTIVAL.qinLineId && qinClosedByFestival(save, rt);
+}
 /** Same rail settlement rules as advanceScenarioRuntime/isEventSettled, including void beats. */
 function finalStageComplete(rt: any): boolean {
   if (rt?.modId !== FESTIVAL.finalStageId) return false;

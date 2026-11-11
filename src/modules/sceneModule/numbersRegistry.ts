@@ -4,7 +4,7 @@
  * - 热改合并后：已登记叶子的范围 / 枚举 / 元组 → LCQ-NUM-008（与 004 并列，模块业务仍走 006）
  * 与 registerNumbersValidator 分工：registry = 结构／类型／粗范围；validator = 跨字段业务。
  */
-import { PACK_NATION_LINE_IDS } from '../contentPacks';
+import { PACK_NATION_LINE_IDS, CLOSURE_TALLY_LINE_IDS, COMPASS_CONDITIONS } from '../contentPacks';
 
 export type FieldKind = 'number' | 'int' | 'bool' | 'string' | 'object' | 'array' | 'tuple2';
 
@@ -235,10 +235,8 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.qin.actionTimeCost', kind: 'int', required: true, min: 1, max: 1, section: 'progress' },
   { path: 'story.lineCompass.hint.maxChars', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.lineCompass.hint.bannedWords', kind: 'array', required: true, section: 'progress' },
-  { path: 'story.lineCompass.anyLineClosed.lineIds', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineCompass.qinEntry.minClosedLines', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.lineCompass.festival', kind: 'object', required: true, section: 'progress' },
-  { path: 'story.lineOutcome.failureClosureEvents', kind: 'object', required: true, section: 'progress' },
   { path: 'diagnostics.debug.categories', kind: 'object', required: true, section: 'runtime' },
   { path: 'affinity.range.min', kind: 'number', required: true, section: 'progress' },
   { path: 'affinity.range.max', kind: 'number', required: true, section: 'progress' },
@@ -423,21 +421,11 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
   }
 
   // 交叉：当前线卡（右栏线入口复用分析 2026-10-27 §5.1）。定性词须为非空字符串（地区→线映射已移到各线包 nationLines，内容包编译期校验，秦线 PR C）
-  // compass.anyLineClosed 计入的线（R-3）：须为国家线、不得重复；太泉、秦不计入
-  const anyClosedLines = atPath(tree, 'story.lineCompass.anyLineClosed.lineIds');
-  if (Array.isArray(anyClosedLines)) anyClosedLines.forEach((lineId, i) => {
-    if (typeof lineId !== 'string' || !NATION_LINE_IDS.includes(lineId) || lineId === 'qin' || lineId === 'taiquan' || anyClosedLines.indexOf(lineId) !== i) errors.push(`字段值无效：story.lineCompass.anyLineClosed.lineIds[${i}]=${String(lineId)}（须为国家线 id、不重复，太泉／秦不计入）`);
-  });
-  const expectedQinLines = NATION_LINE_IDS.filter(id => id !== 'qin' && id !== 'taiquan');
-  if (Array.isArray(anyClosedLines) && (anyClosedLines.length !== expectedQinLines.length || expectedQinLines.some(id => !anyClosedLines.includes(id)))) errors.push('story.lineCompass.anyLineClosed.lineIds 须恰为南荒、晋、宋、汉、唐');
-  const threshold = atPath(tree, 'story.lineCompass.qinEntry.minClosedLines');
-  if (typeof threshold === 'number' && Array.isArray(anyClosedLines) && threshold > new Set(anyClosedLines).size) errors.push('story.lineCompass.qinEntry.minClosedLines 不得超过计入线数');
-  const failures = atPath(tree, 'story.lineOutcome.failureClosureEvents');
-  if (kindOk(failures, 'object')) {
-    for (const [lineId, events] of Object.entries(failures as Record<string, unknown>)) {
-      if (!expectedQinLines.includes(lineId) || !Array.isArray(events) || events.some(id => typeof id !== 'string' || !id.trim()) || new Set(events).size !== events.length) errors.push(`story.lineOutcome.failureClosureEvents.${lineId} 须为计入国家线的无重复非空事件 id 列表`);
-    }
-    if (expectedQinLines.some(id => !Object.prototype.hasOwnProperty.call(failures, id))) errors.push('story.lineOutcome.failureClosureEvents 须包含五条计入国家线');
+  // 包声明的 compass.<id> 阈值引用数值权威路径时（阶段 2a，秦入口 story.lineCompass.qinEntry.minClosedLines）：不得超过计入线数（计入线由各线包 countsTowardClosedLines 派生，同 NATION_LINE_IDS）
+  for (const condition of COMPASS_CONDITIONS) {
+    if (typeof condition.min !== 'string') continue;
+    const threshold = atPath(tree, condition.min);
+    if (typeof threshold === 'number' && threshold > CLOSURE_TALLY_LINE_IDS.length) errors.push(`${condition.min} 不得超过计入线数`);
   }
   const bannedWords = atPath(tree, 'story.lineCompass.hint.bannedWords');
   if (Array.isArray(bannedWords)) bannedWords.forEach((word, i) => {

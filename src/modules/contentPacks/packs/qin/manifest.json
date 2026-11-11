@@ -20,5 +20,8 @@
   ],
   "rails": [
     "rails.json"
+  ],
+  "compassConditions": [
+    "compass-conditions.json"
   ]
 }

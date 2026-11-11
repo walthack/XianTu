@@ -68,7 +68,8 @@ test('event ids and done.<event> paths into another pack need dependsOn',async()
 
 test('dependsOn is transitive and map entry text ids must exist',async()=>{
  const a=await qinTextsPack({'test.a.preview':'预告'}),b=await qinStagePack({dependsOn:['test.a']});
- const entry={id:'test.entry',stageId:QIN_STAGE,eventId:QIN_EVENT,locationId:'liuchao.location.xianyang',readyPath:'compass.qinEntryReady',previewTextId:'test.a.preview'};
+ // readyPath 须是本次编译声明过的 compass.<id> 或保留的 compass.anyLineClosed（阶段 2a）；合成包集里没有秦包的 compassConditions，用保留 id
+ const entry={id:'test.entry',stageId:QIN_STAGE,eventId:QIN_EVENT,locationId:'liuchao.location.xianyang',readyPath:'compass.anyLineClosed',previewTextId:'test.a.preview'};
  const c=dependsOn=>({id:'test.c',mapEntries:['entries.json'],files:{'entries.json':[entry]},...(dependsOn?{dependsOn}:{})});
  await withPacks({a,b,c:c()},async compile=>assert.rejects(compile,/test\.c references \S+ owned by test\.b/));
  await withPacks({a,b,c:c(['test.b'])},async compile=>assert.equal((await compile()).mapEntries[0].previewTextId,'test.a.preview','c depends on b, b on a: a is visible to c'));

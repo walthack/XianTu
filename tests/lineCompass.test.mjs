@@ -221,11 +221,9 @@ test('R-3 compass.anyLineClosed：南荒／晋／宋／汉／唐任一 closedWhe
   assert.deepEqual(ledger.parseLedgerPath('compass.anyLineClosed'), { kind: 'compass', id: 'anyLineClosed' });
   assert.equal(ledger.parseLedgerPath('compass.nope').invalid, true);
   assert.deepEqual(ledger.LEDGER_OPERATORS.compass, ['eq', 'neq']);
-  assert.deepEqual(numbers.GAME_NUMBERS.story.lineCompass.anyLineClosed.lineIds, ['nanhuang', 'jin', 'song', 'han', 'tang']);
-  assert.ok(registry.FIELD_SPECS.some(s => s.path === 'story.lineCompass.anyLineClosed.lineIds'));
-  const tree = JSON.parse(fs.readFileSync('mod-kit/game-numbers.qingyu.json', 'utf8'));
-  tree.story.lineCompass.anyLineClosed.lineIds.push('taiquan');
-  assert.ok(registry.validateAgainstRegistry(tree).some(e => e.includes('anyLineClosed.lineIds')), '太泉不计入');
+  // 阶段 2a：计入的线由各线包 nation-lines.json 的 countsTowardClosedLines 派生（原 numbers 的 story.lineCompass.anyLineClosed.lineIds），太泉、秦包写 false
+  assert.deepEqual([...nation.CLOSURE_TALLY_LINE_IDS], ['nanhuang', 'jin', 'song', 'han', 'tang']);
+  assert.deepEqual(nation.NATION_LINES.filter(l => !l.countsTowardClosedLines).map(l => l.lineId), ['qin', 'taiquan'], '太泉、秦不计入');
   const holds = save => ledger.evaluateLedgerCondition(ANY_CLOSED, rtOf(save), save);
   assert.equal(holds(saveOf()), false);
   for (const [lineId, [stage, eventId]] of Object.entries(CLOSERS)) assert.equal(holds(saveOf({ done: [[S02, WANGZHE], [stage, eventId]] })), true, lineId);
