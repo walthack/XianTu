@@ -9,7 +9,6 @@ import { CONTENT_PACKS } from '../contentPacks';
 import { catalogItem, resolveScenarioContent } from './entityCatalog';
 import { awaitingRejoin } from './stayRejoin';
 import { currentLocation } from './travel/travelLedger';
-import stage04b from './builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json';
 
 /** 只补清羽记本书已登记的关（lcq.*）；别的书另有主角与地图，不带这条入口。 */
 const QINGYU_STAGE_PREFIX = 'lcq.';
@@ -17,7 +16,7 @@ const QINGYU_STAGE_PREFIX = 'lcq.';
 /**
  * 两种常驻入口（F0b 2026-11-11：与内容包 persistentEntries 合并，TS 在前、包按 catalog 顺序在后，每种全局至多一条）。
  * algae：stageId 是取物事件原生投影的关（04b，也是模板事件与持物人／样品定义的来源）；notBeforeStageIds 是不碰藻丝的 04b 之前各关。
- * 包里的 algae 条目由编译器带上 templateEvent（从它的关抄出的事件，内置关取原始事件，同下面的静态 import）。
+ * 包里的 algae 条目由编译器带上 templateEvent（从它的关抄出的事件，内置关取原始事件；B8 前 TS 条目从静态 import 的 04b 关数据取，同一份）。
  */
 export interface PersistentEntry {
   kind: 'algae' | 'rejoin';
@@ -25,26 +24,8 @@ export interface PersistentEntry {
   locationId?: string; characterId?: string; itemId?: string; receiptId?: string; notBeforeStageIds?: string[];
   templateEvent?: unknown;
 }
-export const TS_PERSISTENT_ENTRIES: PersistentEntry[] = [
-  {
-    kind: 'algae',
-    stageId: 'lcq.stage_04b_lingfei_baiyi_crisis',
-    /** 04b 之前的关不碰藻丝；04b 本身事件已原生投影，只做旧档完成映射。 */
-    notBeforeStageIds: ['lcq.stage_01', 'lcq.stage_02', 'lcq.stage_03', 'lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04'],
-    beatId: 'beat.side.biling_algae_silk.01',
-    eventId: 'lcq.event.side_biling_algae_silk',
-    locationId: 'liuchao.location.biyu_village',
-    characterId: 'lcq.character.biling_woman_ch80',
-    itemId: 'lcq.item.biling_algae_sample',
-    receiptId: 'rcpt.side.biling_algae_silk.ordered',
-  },
-  {
-    kind: 'rejoin',
-    beatId: 'beat.ningyu.y5_rejoin',
-    eventId: 'lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin',
-    stageId: 'lcq.stage_05b',
-  },
-];
+/** TS 侧的常驻入口：B8（2026-11-11）起两种都在昭南包 persistent-entries.json（说明在条目 note 里），这里已搬空。 */
+export const TS_PERSISTENT_ENTRIES: PersistentEntry[] = [];
 
 /** 合并后按种类取唯一一条（TS 在前、包在后；同一种两条抛错，编译期已拦；一条都没有也抛错）。 */
 export function persistentEntryIn(entries: readonly PersistentEntry[], kind: PersistentEntry['kind']): PersistentEntry {
@@ -98,8 +79,8 @@ export function algaeCollected(save: SaveData | null | undefined): boolean {
 let algaeSource: { event: any; character: any; item: any } | undefined;
 function algaeTemplate() {
   if (algaeSource) return algaeSource;
-  // 包条目带编译器抄好的模板事件；TS 条目沿用静态 import 的 04b 原始关数据
-  const event = ALGAE.templateEvent ?? (stage04b as any).scenario.events.find((e: any) => e.id === ALGAE_ENTRY.eventId);
+  // 包条目带编译器抄好的模板事件（内置关取原始事件）
+  const event = ALGAE.templateEvent as any;
   const holder = resolveScenarioContent({ manifest: { id: STAGE_04B }, canon: { characters: [] }, scenario: { optionalActorIds: [ALGAE_ENTRY.characterId] } }) as any;
   const item = catalogItem(ALGAE_ENTRY.itemId, STAGE_04B);
   if (!event || !item) throw Error(`藻丝取物入口模板缺失：${!event ? ALGAE_ENTRY.eventId : ALGAE_ENTRY.itemId}`);

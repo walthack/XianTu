@@ -1,5 +1,5 @@
 {
-  "version": "bc06a3b4ba7a9e18",
+  "version": "a8bc6072e692db28",
   "contracts": [
     {
       "meta": {
@@ -15961,7 +15961,9 @@
             "mood": "danger"
           },
           "lcq.event.s02_04": {
-            "mood": "danger"
+            "mood": "danger",
+            "compassObjectiveOnly": true,
+            "objective": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人"
           },
           "lcq.event.s02_05": {
             "mood": "battle"
@@ -15971,7 +15973,139 @@
           },
           "lcq.event.wuerlang_joins": {
             "objective": "问清走投无路的武二郎是否随队南行"
+          },
+          "lcq.event.ningyu_enters_gamble": {
+            "lockedDecision": [
+              [
+                "answer_ningyu_on_debut",
+                "接赌"
+              ],
+              [
+                "refuse_gamble_take_paolao",
+                "不赌"
+              ]
+            ],
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.world.baihu.gamble_refusal_phase",
+                    "operator": "eq",
+                    "value": "capture_ordered"
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后的拘拿",
+                "description": "凝羽已被差遣入局的当场，你拒绝与苏妲己对赌。苏妲己翻脸命人拿下，你尚未脱开商馆控制。",
+                "axisBeat": "你已拒绝赌局，苏妲己命人拿下；不得写成已经赌输或签契。",
+                "objective": "苏妲己已因你拒赌命人拿下，先应对眼前拘拿"
+              }
+            ]
+          },
+          "lcq.event.sudaji_south_pact": {
+            "lockedDecision": [
+              [
+                "seal_three_month_south_pact",
+                "当面订下三个月南荒之约"
+              ],
+              [
+                "refuse_term_take_paolao",
+                "拒绝期限，要她现在就动炮烙"
+              ]
+            ]
+          },
+          "lcq.event.free_ajiman": {
+            "lockedDecision": [
+              [
+                "tear_bond_and_face_blockade",
+                "当面撕契并改道出城"
+              ],
+              [
+                "pocket_ajiman_bond",
+                "先收起身契，出城再说"
+              ]
+            ]
+          },
+          "lcq.event.iron_bridge_ambush": {
+            "routeLocation": "南荒途中·铁索桥"
+          },
+          "lcq.event.ningyu_regicide_offer": {
+            "routeLocation": "南荒途中·商队宿处"
+          },
+          "lcq.event.zixi_taiyi_intercept": {
+            "routeLocation": "南荒途中·紫溪"
+          },
+          "lcq.event.rainforest_black_shoal": {
+            "routeLocation": "南荒途中·雨林黑石滩"
+          },
+          "lcq.event.silent_sheyi_village": {
+            "routeLocation": "南荒·蛇彝村"
+          },
+          "lcq.event.gamble_bond_signed": {
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.event.gamble_bond_signed.refused_capture",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "flags.world.baihu.hall_controlled",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后被商馆扣押",
+                "description": "程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；苏妲己命人拿下后，他仍受白湖商馆控制。",
+                "axisBeat": "程宗扬拒赌后被扣押，仍受白湖商馆控制；此事不是赌输签契。",
+                "objective": "面对拒赌后被扣押、仍受商馆控制的局面"
+              },
+              {
+                "when": [
+                  {
+                    "path": "flags.event.gamble_bond_signed.refused_capture",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后离开商馆",
+                "description": "程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；后来已从白湖商馆脱身，当前不再受商馆扣押。",
+                "axisBeat": "程宗扬曾拒赌并未签契，现已离馆；此事不是赌输签契。",
+                "objective": "承接拒赌后离馆的既成历史，不得改写成赌输或当前仍被扣押"
+              },
+              {
+                "when": [
+                  {
+                    "path": "flags.world.baihu.gamble_refusal_phase",
+                    "operator": "eq",
+                    "value": "capture_ordered"
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后的拘拿",
+                "description": "你已拒绝这场赌局。苏妲己翻脸命人拿下，你尚未脱开商馆控制；此事不是赌局落败或签契。",
+                "axisBeat": "苏妲己因拒赌命人拿下；不得写成已经赌输或自愿签卖身契。",
+                "objective": "苏妲己已因你拒赌命人拿下，先应对眼前拘拿"
+              }
+            ]
           }
+        },
+        "uiChapterByRouteLocation": {
+          "keepFallbackEventIds": [
+            "lcq.event.s02_01",
+            "lcq.event.s02_03",
+            "lcq.event.s02_02"
+          ],
+          "rules": [
+            {
+              "routeLocationIncludes": "南荒",
+              "title": "南荒商路"
+            }
+          ],
+          "defaultTitle": "五原"
         }
       }
     },
@@ -16026,17 +16160,30 @@
         },
         "events": {
           "lcq.event.s04_01": {
-            "mood": "danger"
+            "mood": "danger",
+            "uiChapterTitle": "第49章·刺王密谋"
           },
           "lcq.event.s04_03": {
             "mood": "aspire",
-            "objective": "听清乐明珠为什么要假扮新娘"
+            "objective": "听清乐明珠为什么要假扮新娘",
+            "uiChapterTitle": "第47章·新娘身份"
           },
           "lcq.event.s04_06": {
-            "mood": "emotion"
+            "mood": "emotion",
+            "uiChapterTitle": "第54章·穿山"
           },
           "lcq.event.s04_05": {
-            "mood": "lament"
+            "mood": "lament",
+            "uiChapterTitle": "第52章·旱洪"
+          },
+          "lcq.event.s04_02": {
+            "uiChapterTitle": "第46章·袭击"
+          },
+          "lcq.event.s04_04": {
+            "uiChapterTitle": "第51章·发蛊"
+          },
+          "lcq.event.s04_07": {
+            "uiChapterTitle": "第55章·白夷迎客"
           }
         }
       }
@@ -16062,6 +16209,44 @@
           },
           "lcq.event.s04b_lingfei_baiyi_crisis_19": {
             "objective": "从被巨浪淹没的竹楼里脱身"
+          },
+          "lcq.event.enter_dong_with_migu": {
+            "uiChapterTitle": "第86章·随弥骨入峒"
+          },
+          "lcq.event.huamiao_coop_boundary": {
+            "uiChapterTitle": "第85章·进峒之约",
+            "objective": "跟云苍峰谈清进鬼王峒的合作边界"
+          },
+          "lcq.event.guiwangdong_coop_pact": {
+            "uiChapterTitle": "第85章·进峒之约"
+          },
+          "lcq.event.yiyang_repels_yinsha": {
+            "uiChapterTitle": "第84章·阴煞"
+          },
+          "lcq.event.wuerlang_slays_dagu": {
+            "uiChapterTitle": "第83章·虎威",
+            "objective": "撑住{{entity:character:lcq.character.nanhuang_dagu}}这一波围攻，看清武二郎能否打开缺口"
+          },
+          "lcq.event.ruins_ghost_warriors": {
+            "uiChapterTitle": "第82章·迎敌"
+          },
+          "lcq.event.biling_bay_stance": {
+            "uiChapterTitle": "第80章·碧鲮前路"
+          },
+          "lcq.event.haishen_hall_merfolk": {
+            "uiChapterTitle": "海神殿"
+          },
+          "lcq.event.pull_harpoon_lemingzhu": {
+            "uiChapterTitle": "海神殿"
+          },
+          "lcq.event.regroup_caravan_envoy": {
+            "uiChapterTitle": "商队与峒使"
+          },
+          "lcq.event.weapon_deal_with_geluo": {
+            "uiChapterTitle": "商队与峒使"
+          },
+          "lcq.event.spot_dong_informant": {
+            "uiChapterTitle": "商队与峒使"
           }
         }
       }
@@ -16115,6 +16300,57 @@
           },
           "lcq.event.s05b_10_slave_revolt_and_phoenix_change": {
             "objective": "趁集会大乱，设法潜入鬼王宫"
+          },
+          "lcq.event.shanghou_revealed": {
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.event.shanghou_revealed.done",
+                    "operator": "neq",
+                    "value": true
+                  },
+                  {
+                    "path": "flags.event.shanghou_revealed.relic_test_refused",
+                    "operator": "neq",
+                    "value": true
+                  }
+                ],
+                "priority": "before-event-variants",
+                "relatedFactionIds": [],
+                "name": "山村中的测试",
+                "objective": "随叶媪进堂，听主人说明测试",
+                "description": "进村前路边有白骨。堂中主人打开鲨皮红木箱，展示黄底黑边三角与红色拐弯箭头，警告167人触碰后化为火球。只写眼前物件和警告，不解释电、高压，不提前揭露朱老头本相，不替玩家选择。",
+                "axisBeat": "堂中主人要求测试天命之人，玩家尚未决定是否触碰。"
+              }
+            ]
+          },
+          "lcq.event.s05b_09_temporary_pact_with_xiaozi": {
+            "lockedDecision": [
+              [
+                "support_xieyi_counterstrike",
+                "协助谢艺准备反杀，随队返回"
+              ],
+              [
+                "rest_then_follow_team",
+                "不主动支援，先休整，随队同行"
+              ]
+            ]
+          },
+          "lcq.event.xieyi_entrustment": {
+            "lockedDecision": [
+              [
+                "accept_entrustment",
+                "承接"
+              ],
+              [
+                "rescue_xieyi",
+                "救治"
+              ]
+            ]
+          },
+          "lcq.event.s05b_02_xiaozi_exposed": {
+            "objective": "质问小紫，把阿夕的异常和{{entity:character:lcq.character.nanhuang_heishe}}死因问清楚"
           }
         }
       }
@@ -16149,7 +16385,23 @@
             "objective": "接待上门的萧遥逸：交骨灰，或协助密送伤员"
           },
           "lcq.event.s07_05_eight_steeds_informed": {
-            "objective": "向孟非卿说明谢艺的下场，并留下实质安排"
+            "objective": "向孟非卿说明谢艺的下场，并留下实质安排",
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.event.s06_03.void",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "谢艺生还的后果",
+                "description": "孟非卿得知谢艺生还，以及鬼王峒一役留下的变故；他必须据此调度星月湖人手，而非只确认消息。",
+                "axisBeat": "孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。",
+                "objective": "说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排"
+              }
+            ]
           },
           "lcq.event.s07_03_xiaozi_appears": {
             "objective": "应对突然现身的小紫与被制住的局面"
@@ -16609,6 +16861,17 @@
           },
           "lyl.event.xingyin_beast_traps": {
             "objective": "查明天井里困兽与被困者的情况"
+          },
+          "lyl.event.han_shouyang_gaoyanei": {
+            "actionPresentation": [
+              {
+                "actionId": "descend_shouyang_to_wudu",
+                "whenLocationId": "liuchao.location.wudu",
+                "label": "在舞都安顿，与冯源一行会合",
+                "playerLine": "我在舞都安顿下来，与冯源他们会合，打听云如瑶的下落。"
+              }
+            ],
+            "objective": "在舞都与冯源一行会合，打听云如瑶的下落"
           }
         }
       }
@@ -20300,11 +20563,360 @@
       }
     ]
   },
-  "storyAxis": null,
+  "storyAxis": {
+    "stageOrder": [
+      "lcq.stage_01",
+      "lcq.stage_02",
+      "lcq.stage_03",
+      "lcq.stage_03b_snake_flower_bridge",
+      "lcq.stage_04",
+      "lcq.stage_04b_lingfei_baiyi_crisis",
+      "lcq.stage_05",
+      "lcq.stage_05b",
+      "lcq.stage_06",
+      "lcq.stage_07_qingyuan_jiankang",
+      "lcq.stage_08_jiankang_coup",
+      "lcq.stage_09_trade_and_escape",
+      "lcq.stage_10_jiangzhou_shadow_war",
+      "lcq.stage_11_lieshan_battle",
+      "lcq.stage_12_jiangzhou_counterwar",
+      "lyl.jiangzhou_retreat",
+      "lyl.lin_an_black_sea",
+      "lyl.lin_an_bridge",
+      "lyl.taiquan_expedition",
+      "lyl.xiaoyingzhou_blacksea_trap",
+      "lyl.taiquan_sacred_fruit",
+      "lyl.taiquan_core_conflict",
+      "lyl.taiquan_afterfall",
+      "lyl.luoyang_cloud_secret",
+      "lyl.luoyang_coup",
+      "lyl.han_palace_endgame",
+      "lyg.dingtao_beijing",
+      "lyg.mijing_rumen",
+      "lyg.han_succession",
+      "lyg.changgan_begins",
+      "lyg.shixiang_ambush",
+      "lyg.changgan_interlude",
+      "lyg.ganlu_bian",
+      "lyg.liangzhou_league",
+      "lyg.buddhist_conspiracy",
+      "lyg.ganlu_aftershock",
+      "lyg.shituolin_endgame"
+    ],
+    "layers": [
+      {
+        "layer": 1,
+        "text": "活下来，弄清自己是怎么来的。",
+        "unlockStageIds": []
+      },
+      {
+        "layer": 2,
+        "text": "王哲把三件事交给了你：拆锦囊、修为到六阳去太泉古阵祭祀、守护岳帅后人月霜。",
+        "unlockStageIds": [
+          "lcq.stage_02"
+        ]
+      },
+      {
+        "layer": 3,
+        "text": "身边这些人各自背着来历，小紫的尤其深。",
+        "unlockStageIds": [
+          "lcq.stage_05"
+        ]
+      },
+      {
+        "layer": 4,
+        "text": "太泉古阵里有说不通的东西——王哲要你去，恐怕不只是为了祭祀。",
+        "unlockStageIds": [
+          "lyl.taiquan_sacred_fruit"
+        ]
+      },
+      {
+        "layer": 5,
+        "text": "这地方是养人的——而且有人在按名册找人，你身边的人在名册上。",
+        "unlockStageIds": [
+          "lyl.taiquan_afterfall",
+          "lyl.han_palace_endgame",
+          "lyg.mijing_rumen"
+        ]
+      },
+      {
+        "layer": 6,
+        "text": "这世界本身在回滚你做的一切。",
+        "unlockStageIds": [],
+        "restricted": true
+      }
+    ],
+    "stages": [
+      {
+        "stageId": "lcq.stage_01",
+        "role": "落地：穿越、失去同伴",
+        "pillars": []
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "role": "王哲三托付；白湖脱身＝强制段终点",
+        "pillars": [
+          "bloodline",
+          "taiquan"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_03",
+        "role": "（旧包）白湖后续；不承担进南荒",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_03b_snake_flower_bridge",
+        "role": "小紫入队",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+        "role": "血脉揭示：岳帅遗腹女",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_05",
+        "role": "鬼王峒初探；碧姬线浮出",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_05b",
+        "role": "鬼王宫潜入",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_06",
+        "role": "唤龙授艺；碧姬线收束",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.lin_an_bridge",
+        "role": "赵飞燕线起点",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "role": "剑玉姬真身＝岳萼身份揭示；九阳交换",
+        "pillars": [
+          "bloodline",
+          "taiquan"
+        ]
+      },
+      {
+        "stageId": "lyl.taiquan_sacred_fruit",
+        "role": "太泉钥匙；赤阳圣果；高俅秘辛探身世",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.taiquan_core_conflict",
+        "role": "太泉蚁穴脱困",
+        "pillars": [
+          "taiquan"
+        ]
+      },
+      {
+        "stageId": "lyl.taiquan_afterfall",
+        "role": "探索人类居住区＝揭盅段；云如瑶＝岳霏",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.han_palace_endgame",
+        "role": "秘境入口（光柱；与太泉同系统，见上方注释）",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.mijing_rumen",
+        "role": "秘境续（小玲儿在本关窗口内被认定为超级用户，但事件层未落拍）；与太泉同系统",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.han_succession",
+        "role": "赵飞燕·子嗣线（毕业生受孕锚）",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.changgan_interlude",
+        "role": "血脉：百衲衣寻岳霏",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.shituolin_endgame",
+        "role": "连载断点；鬼王线回响",
+        "pillars": []
+      }
+    ],
+    "nodes": [
+      {
+        "stageId": "lcq.stage_01",
+        "reviewSummary": "战场遇月霜，卓云君烈火救下你俩，太乙真宗教御全歼兽蛮",
+        "status": "ready",
+        "eventId": "lcq.event.s01_03",
+        "bloodlineBranch": "yueshuang"
+      },
+      {
+        "stageId": "lcq.stage_01",
+        "reviewSummary": "月霜强灌丹药，你在真阳驱使下与她性交，寒毒得解",
+        "status": "ready",
+        "eventId": "lcq.event.s01_06",
+        "bloodlineBranch": "yueshuang"
+      },
+      {
+        "stageId": "lcq.stage_01",
+        "reviewSummary": "王哲发现你身上有生死根，耗真气筑基，传下九阳神功口诀",
+        "status": "ready",
+        "eventId": "lcq.event.s01_05"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "接下王哲三托：保管锦囊、六阳后去太泉古阵、守护月霜",
+        "status": "ready",
+        "eventId": "lcq.event.s02_01"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "五原城把你当逃奴拿下，颈上烙了奴隶印记",
+        "status": "ready",
+        "eventId": "lcq.event.s02_04"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "地牢里阿姬曼引你出逃，出去就撞上戈龙等人设的局",
+        "status": "ready",
+        "eventId": "lcq.event.s02_05"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "识破白湖商馆主人苏妲己的伪装，被囚起来追问霓龙丝",
+        "status": "ready",
+        "eventId": "lcq.event.s02_06"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "凝羽奉苏妲己之命入局，你当面认清她的处境",
+        "status": "ready",
+        "eventId": "lcq.event.ningyu_enters_gamble"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "与苏妲己订下三月南荒之约：采不到霓龙丝就受炮烙",
+        "status": "ready",
+        "eventId": "lcq.event.sudaji_south_pact"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "为救凝羽对赌，苏妲己作弊加速刻香，你签下卖身契入了商馆奴籍",
+        "status": "ready",
+        "eventId": "lcq.event.gamble_bond_signed"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "替苏妲己取物之前谈定六十金铢",
+        "status": "ready",
+        "eventId": "lcq.event.charge_sudaji_fee"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "取得阿姬曼身契当面撕毁",
+        "status": "ready",
+        "eventId": "lcq.event.free_ajiman"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "从白湖商馆的死局里脱身，走出五原商馆",
+        "status": "ready",
+        "eventId": "lcq.event.baihu_shangguan_escape"
+      },
+      {
+        "stageId": "lyl.taiquan_afterfall",
+        "reviewSummary": "修为到六阳，开启古阵内的入口（未来待扩）",
+        "status": "pending"
+      },
+      {
+        "stageId": "lyl.taiquan_afterfall",
+        "reviewSummary": "小玲儿在太泉的那一拍（未来待扩）",
+        "status": "pending",
+        "bloodlineBranch": "xiaolinger"
+      },
+      {
+        "stageId": "lyg.han_succession",
+        "reviewSummary": "程赵之子这条血脉如何成立（未来待扩）",
+        "status": "pending",
+        "bloodlineBranch": "zhao"
+      }
+    ],
+    "requirements": [
+      {
+        "id": "taiquan_rite",
+        "text": "修为达六阳，前往太泉古阵祭祀故人。",
+        "basis": "lcq.stage_02 axisBeat ＋ MiniMax 全书重抽「修为达六阳后往太泉古阵祭祀故人」。曾推断的\"祭祀大阵＝系统入口\"已被全书扫描削弱（全书无\"祭祀大阵\"字样），故人身份未写明。"
+      },
+      {
+        "id": "bloodline_survivor",
+        "text": "至少保住一名岳血后裔。",
+        "basis": "ENDING-BLUEPRINT §11：接口＝岳血／岳魂，血脉线全员终战有功能位。不要求集齐。"
+      }
+    ]
+  },
   "locationAliases": {
-    "canonical": {},
-    "parents": {},
-    "display": {}
+    "canonical": {
+      "liuchao.location.xiong_er_pu": "liuchao.location.xiongerpu",
+      "liuchao.location.gui_wang_dong_palace": "liuchao.location.gui_wang_gong",
+      "liuchao.location.bai_yi_valley": "liuchao.location.baiyi"
+    },
+    "parents": {
+      "liuchao.location.gui_wang_gong": "liuchao.location.guiwang_dong",
+      "liuchao.location.gui_wang_gong.jingshen_tai": "liuchao.location.gui_wang_gong",
+      "lcq.location.guiwang_inn": "liuchao.location.guiwang_dong",
+      "liuchao.location.sea_temple": "liuchao.location.biyu_village"
+    },
+    "display": {
+      "liuchao.location.baiyi": {
+        "name": "白夷谷",
+        "displayAliases": [
+          "白夷族"
+        ]
+      },
+      "liuchao.location.gui_wang_gong": {
+        "name": "鬼王宫",
+        "displayAliases": [
+          "鬼王峒宫殿"
+        ]
+      },
+      "liuchao.location.longchi": {
+        "name": "龙池"
+      }
+    }
   },
   "characterProfiles": {
     "stance": [
@@ -21671,9 +22283,1285 @@
       "offscreen.lcq.xingyuehu_war": "这是玩家缺席时世界自行结算的战争后果：不得让战争倒带或写成玩家亲自参战；应以战报、伤员、戒严和粮线压力持续承接，玩家仍可选择介入余波或继续置身事外。"
     }
   },
-  "endings": [],
-  "openWorldSlices": [],
-  "persistentEntries": [],
+  "endings": [
+    {
+      "endingId": "lcq.ending.death.baihu_beheading",
+      "key": "E01"
+    },
+    {
+      "endingId": "lcq.ending.death.ajiman_bond",
+      "key": "E02",
+      "pathText": {
+        "sourceEventId": "lcq.event.wuerlang_joins",
+        "textKey": "lcq.ending.death.ajiman_bond.ajiman_path"
+      }
+    },
+    {
+      "endingId": "lcq.ending.death.paolao",
+      "key": "E03"
+    },
+    {
+      "endingId": "lcq.ending.death.wangzhe_blast",
+      "key": "E04"
+    },
+    {
+      "endingId": "lcq.ending.death.shanghou_relic",
+      "key": "E05"
+    },
+    {
+      "endingId": "lcq.ending.death.ghost_king_skull",
+      "key": "E06",
+      "battleLoss": {
+        "title": "天命的指引",
+        "kind": "death",
+        "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+        "tierFlag": "lcq.encounter.f10.tier",
+        "tier": "rout",
+        "facts": [
+          "程宗扬被封回龛窟，血没能沾上骨虎",
+          "鬼巫王剖开天命者的头颅",
+          "银镜中的同伴未能找到他",
+          "龙神照常吞下鬼巫王"
+        ]
+      }
+    },
+    {
+      "endingId": "lcq.ending.death.dragon_well",
+      "key": "E07",
+      "battleLoss": {
+        "title": "龙首无人",
+        "kind": "death",
+        "sourceEventId": "lcq.event.ghost_king_swallowed",
+        "tierFlag": "lcq.encounter.f13.tier",
+        "tier": "lose",
+        "facts": [
+          "你带乐明珠逃往洞窟裂缝时滚下碎石坡，背脊重伤",
+          "乐明珠被推进龙角下的空隙",
+          "程宗扬被埋在鬼王峒地底",
+          "龙神吞下鬼巫王，龙首无人号令反击"
+        ]
+      }
+    },
+    {
+      "endingId": "lcq.ending.fail.dragon_essence",
+      "key": "E08",
+      "battleLoss": {
+        "title": "龙精入体",
+        "kind": "failure",
+        "sourceEventId": "lcq.event.slay_dragon",
+        "tierFlag": "lcq.encounter.f14.tier",
+        "tier": "lose",
+        "facts": [
+          "龙神死去",
+          "龙精携鬼巫王残念进入程宗扬丹田",
+          "程宗扬存活，原来的自我不再主宰身体",
+          "本局结束，不可续玩"
+        ]
+      }
+    }
+  ],
+  "openWorldSlices": [
+    {
+      "key": "wuyuan",
+      "definition": {
+        "id": "lcq.open_world.wuyuan_v1",
+        "initialZoneId": "lcq.zone.wuyuan.market",
+        "zones": [
+          {
+            "id": "lcq.zone.wuyuan.settlement",
+            "name": "五原城镇",
+            "kind": "settlement",
+            "standable": false,
+            "worldLocationId": "liuchao.location.wuyuan"
+          },
+          {
+            "id": "lcq.zone.wuyuan.market",
+            "name": "五原露天市集",
+            "aliases": [
+              "五原市集",
+              "露天市集",
+              "市集"
+            ],
+            "kind": "street",
+            "parentZoneId": "lcq.zone.wuyuan.settlement",
+            "worldLocationId": "liuchao.location.wuyuan"
+          },
+          {
+            "id": "lcq.zone.wuyuan.pastry_shop",
+            "name": "点心铺",
+            "aliases": [
+              "糕饼铺",
+              "饼铺"
+            ],
+            "kind": "interior",
+            "parentZoneId": "lcq.zone.wuyuan.settlement",
+            "worldLocationId": "liuchao.location.wuyuan"
+          },
+          {
+            "id": "lcq.zone.wuyuan.baihu_front_street",
+            "name": "白湖商馆门前街",
+            "aliases": [
+              "商馆门前",
+              "门前街"
+            ],
+            "kind": "street",
+            "parentZoneId": "lcq.zone.wuyuan.settlement",
+            "worldLocationId": "liuchao.location.wuyuan"
+          },
+          {
+            "id": "lcq.zone.wuyuan.baihu_compound",
+            "name": "白湖商馆",
+            "aliases": [
+              "五原商馆"
+            ],
+            "kind": "compound",
+            "parentZoneId": "lcq.zone.wuyuan.settlement",
+            "worldLocationId": "liuchao.location.wuyuan",
+            "standable": false
+          },
+          {
+            "id": "lcq.zone.wuyuan.baihu_hall",
+            "name": "白湖商馆内院",
+            "aliases": [
+              "商馆内院"
+            ],
+            "kind": "interior",
+            "parentZoneId": "lcq.zone.wuyuan.baihu_compound",
+            "worldLocationId": "liuchao.location.wuyuan"
+          },
+          {
+            "id": "lcq.zone.wuyuan.water_prison",
+            "name": "白湖商馆水牢",
+            "aliases": [
+              "水牢"
+            ],
+            "kind": "interior",
+            "parentZoneId": "lcq.zone.wuyuan.baihu_compound",
+            "worldLocationId": "liuchao.location.wuyuan"
+          },
+          {
+            "id": "lcq.zone.wuyuan.baihu_gate",
+            "name": "白湖商馆大门",
+            "aliases": [
+              "商馆大门"
+            ],
+            "kind": "interior",
+            "parentZoneId": "lcq.zone.wuyuan.baihu_compound",
+            "worldLocationId": "liuchao.location.wuyuan"
+          }
+        ],
+        "routes": [
+          {
+            "id": "lcq.route.wuyuan.pastry_to_market_street",
+            "fromZoneId": "lcq.zone.wuyuan.pastry_shop",
+            "toZoneId": "lcq.zone.wuyuan.market",
+            "label": "沿街面退回市集",
+            "aliases": [
+              "退回市集",
+              "退回五原露天市集",
+              "回市集",
+              "回到市集",
+              "返回市集"
+            ],
+            "turnCost": 1
+          },
+          {
+            "id": "lcq.route.wuyuan.market_to_pastry_street",
+            "fromZoneId": "lcq.zone.wuyuan.market",
+            "toZoneId": "lcq.zone.wuyuan.pastry_shop",
+            "label": "沿人多的街面过去",
+            "aliases": [
+              "走街面",
+              "沿街",
+              "人多的路"
+            ],
+            "turnCost": 1
+          },
+          {
+            "id": "lcq.route.wuyuan.market_to_pastry_alley",
+            "fromZoneId": "lcq.zone.wuyuan.market",
+            "toZoneId": "lcq.zone.wuyuan.pastry_shop",
+            "label": "绕较安静的后巷",
+            "aliases": [
+              "走后巷",
+              "绕后巷",
+              "安静的路"
+            ],
+            "turnCost": 2,
+            "requirementKey": "lcq.knowledge.wuyuan.pastry_back_alley"
+          },
+          {
+            "id": "lcq.route.wuyuan.pastry_taken_to_prison",
+            "fromZoneId": "lcq.zone.wuyuan.pastry_shop",
+            "toZoneId": "lcq.zone.wuyuan.water_prison",
+            "label": "被押往水牢",
+            "aliases": [
+              "押走"
+            ],
+            "turnCost": 1
+          },
+          {
+            "id": "lcq.route.wuyuan.market_taken_to_prison",
+            "fromZoneId": "lcq.zone.wuyuan.market",
+            "toZoneId": "lcq.zone.wuyuan.water_prison",
+            "label": "被带进水牢",
+            "aliases": [
+              "押进商馆"
+            ],
+            "turnCost": 1
+          },
+          {
+            "id": "lcq.route.wuyuan.prison_taken_to_hall",
+            "fromZoneId": "lcq.zone.wuyuan.water_prison",
+            "toZoneId": "lcq.zone.wuyuan.baihu_hall",
+            "label": "被带到内院",
+            "aliases": [
+              "带去内院"
+            ],
+            "turnCost": 1
+          },
+          {
+            "id": "lcq.route.baihu.hall_to_gate",
+            "fromZoneId": "lcq.zone.wuyuan.baihu_hall",
+            "toZoneId": "lcq.zone.wuyuan.baihu_gate",
+            "label": "走到商馆大门",
+            "aliases": [
+              "去大门"
+            ],
+            "turnCost": 1
+          },
+          {
+            "id": "lcq.route.baihu.exit_front_gate",
+            "fromZoneId": "lcq.zone.wuyuan.baihu_gate",
+            "toZoneId": "lcq.zone.wuyuan.baihu_front_street",
+            "label": "迈出五原商馆",
+            "aliases": [
+              "出馆",
+              "出门前街"
+            ],
+            "turnCost": 1
+          }
+        ],
+        "notices": [
+          {
+            "id": "lcq.notice.wuyuan.market_layout",
+            "source": "市集货棚旁的旧木牌",
+            "reliability": "confirmed",
+            "atZoneId": "lcq.zone.wuyuan.market",
+            "text": "木牌只画了眼前市集的货棚、马匹摊位和点心铺方向；这里没有城门与官署标记。"
+          },
+          {
+            "id": "lcq.notice.wuyuan.pastry_back_alley",
+            "source": "相邻货摊摊主的低声提醒",
+            "reliability": "rumor",
+            "atZoneId": "lcq.zone.wuyuan.market",
+            "text": "摊主说点心铺后面另有一条安静窄巷，但他没有保证巷里一定安全。",
+            "unlockZoneIds": [
+              "lcq.zone.wuyuan.pastry_shop"
+            ],
+            "unlockRouteIds": [
+              "lcq.route.wuyuan.market_to_pastry_alley"
+            ],
+            "unlockRequirementKeys": [
+              "lcq.knowledge.wuyuan.pastry_back_alley"
+            ]
+          }
+        ],
+        "actors": [
+          {
+            "id": "liuchao.character.ning_yu",
+            "name": "凝羽",
+            "initialZoneId": "lcq.zone.wuyuan.baihu_hall",
+            "desire": "观察局势，判断眼前的人是否值得出手相助",
+            "initialStatus": "尚未与玩家照面"
+          },
+          {
+            "id": "liuchao.character.su_daji",
+            "name": "苏妲己",
+            "initialZoneId": "lcq.zone.wuyuan.baihu_hall",
+            "desire": "掌握商馆内的谈判与交易主动",
+            "initialStatus": "尚未与玩家照面"
+          }
+        ],
+        "problems": [
+          {
+            "id": "lcq.problem.wuyuan.pastry_capture",
+            "atZoneId": "lcq.zone.wuyuan.pastry_shop",
+            "title": "点心铺里的逼近",
+            "objective": "陌生人从两面逼近；先保住性命并看清他们把人往哪里带",
+            "initialState": "confronted",
+            "terminalStates": [
+              "captured_observant",
+              "captured_injured"
+            ],
+            "actionIds": [
+              "lcq.action.wuyuan.delay_and_observe",
+              "lcq.action.wuyuan.break_for_exit"
+            ]
+          }
+        ],
+        "actions": [
+          {
+            "id": "lcq.action.wuyuan.delay_and_observe",
+            "problemId": "lcq.problem.wuyuan.pastry_capture",
+            "label": "用话头拖住他们",
+            "actionText": "你不报来历，先用话头拖住逼近的人，同时看清门窗与押送方向。",
+            "aliases": [
+              "拖住他们",
+              "用话头拖延",
+              "先交涉",
+              "观察退路"
+            ],
+            "rejectIf": [
+              "不交涉",
+              "不说话"
+            ],
+            "availableInStates": [
+              "confronted"
+            ],
+            "outcome": "partial",
+            "nextProblemState": "captured_observant",
+            "settledFacts": [
+              "对方没有被说服，只短暂停了手",
+              "你看清了门窗与后来押送的方向",
+              "人数差距使你最终仍被制住"
+            ],
+            "costs": [
+              "外地口音引来额外留意"
+            ],
+            "consequences": [
+              {
+                "id": "ningyu_notices_composure",
+                "delayTurns": 4,
+                "actorId": "liuchao.character.ning_yu",
+                "cause": "你在点心铺被围时仍先观察而没有乱报身份",
+                "effect": "凝羽后来见到你时先留意你的镇定与观察力",
+                "apply": {
+                  "actorStatus": "留意玩家是否能在受制时保持清醒"
+                }
+              },
+              {
+                "id": "remembered_route_opens",
+                "delayTurns": 12,
+                "cause": "你在被押走前记住了门窗与转折方向",
+                "effect": "商馆内出现可继续核对的脱身路线线索",
+                "apply": {
+                  "problemId": "lcq.problem.wuyuan.pastry_capture",
+                  "problemState": "route_memory_available"
+                }
+              }
+            ]
+          },
+          {
+            "id": "lcq.action.wuyuan.break_for_exit",
+            "problemId": "lcq.problem.wuyuan.pastry_capture",
+            "label": "撞开桌案抢出口",
+            "actionText": "你抢先撞开桌案冲向出口，不把这次突围写成已经逃脱。",
+            "aliases": [
+              "撞开桌案",
+              "抢出口",
+              "冲向出口",
+              "动手脱身"
+            ],
+            "rejectIf": [
+              "不动手",
+              "不冲"
+            ],
+            "availableInStates": [
+              "confronted"
+            ],
+            "outcome": "failure-forward",
+            "nextProblemState": "captured_injured",
+            "settledFacts": [
+              "你撞开了第一人，却被更多人从侧后封住",
+              "你没有逃脱，但记住了对方合围与押送的次序",
+              "你带着新伤被制住"
+            ],
+            "costs": [
+              "新增一处可见伤势"
+            ],
+            "consequences": [
+              {
+                "id": "ningyu_notices_injury",
+                "delayTurns": 4,
+                "actorId": "liuchao.character.ning_yu",
+                "cause": "你在点心铺抢出口失败并带伤被押走",
+                "effect": "凝羽后来见到你时先判断伤势与仍可行动的余地",
+                "apply": {
+                  "actorStatus": "先观察玩家伤势与行动余地"
+                }
+              },
+              {
+                "id": "guard_pattern_remembered",
+                "delayTurns": 12,
+                "cause": "你亲身撞过合围并记住押送次序",
+                "effect": "商馆内出现可利用的换岗与合围空隙线索",
+                "apply": {
+                  "problemId": "lcq.problem.wuyuan.pastry_capture",
+                  "problemState": "guard_pattern_available"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "constants": {
+        "SETTLEMENT_ZONE_ID": "lcq.zone.wuyuan.settlement",
+        "MARKET_ZONE_ID": "lcq.zone.wuyuan.market",
+        "PASTRY_ZONE_ID": "lcq.zone.wuyuan.pastry_shop",
+        "FRONT_STREET_ZONE_ID": "lcq.zone.wuyuan.baihu_front_street",
+        "COMPOUND_ZONE_ID": "lcq.zone.wuyuan.baihu_compound",
+        "HALL_ZONE_ID": "lcq.zone.wuyuan.baihu_hall",
+        "PRISON_ZONE_ID": "lcq.zone.wuyuan.water_prison",
+        "GATE_ZONE_ID": "lcq.zone.wuyuan.baihu_gate",
+        "WUYUAN_SETTLEMENT_ID": "lcq.settlement.wuyuan.v1",
+        "WUYUAN_MARKET_ARRIVAL_ID": "lcq.route.wuyuan.arrive_market",
+        "PASTRY_TO_PRISON_ROUTE": "lcq.route.wuyuan.pastry_taken_to_prison",
+        "MARKET_TO_PRISON_ROUTE": "lcq.route.wuyuan.market_taken_to_prison",
+        "PRISON_TO_HALL_ROUTE": "lcq.route.wuyuan.prison_taken_to_hall",
+        "HALL_TO_GATE_ROUTE": "lcq.route.baihu.hall_to_gate",
+        "EXIT_FRONT_GATE_ROUTE": "lcq.route.baihu.exit_front_gate"
+      },
+      "zoneRanks": {
+        "lcq.zone.wuyuan.market": 0,
+        "lcq.zone.wuyuan.pastry_shop": 0,
+        "lcq.zone.wuyuan.water_prison": 1,
+        "lcq.zone.wuyuan.baihu_hall": 2,
+        "lcq.zone.wuyuan.baihu_gate": 3,
+        "lcq.zone.wuyuan.baihu_front_street": 4
+      },
+      "actionJudgement": {
+        "lcq.action.wuyuan.delay_and_observe": {
+          "kind": "social"
+        },
+        "lcq.action.wuyuan.break_for_exit": {
+          "kind": "escape"
+        }
+      },
+      "actionDescribe": {
+        "lcq.action.wuyuan.delay_and_observe": "不报来历、不动手，先用言语拖住逼近的人，借机看清门窗和他们押人的方向。",
+        "lcq.action.wuyuan.break_for_exit": "被围时不管从门、窗还是后巷，冒险动手强行夺路往外冲，想脱身但仍会被制住。"
+      },
+      "positionNodes": {
+        "segment": "五原",
+        "placeLocationId": "liuchao.location.wuyuan"
+      }
+    },
+    {
+      "key": "nanhuang",
+      "definition": {
+        "id": "lcq.travel.nanhuang_v1",
+        "initialZoneId": "nh.wuyuan",
+        "zones": [
+          {
+            "id": "nh.wuyuan",
+            "name": "五原城",
+            "worldLocationId": "liuchao.location.wuyuan",
+            "areaId": "area.wuyuan"
+          },
+          {
+            "id": "nh.iron_bridge",
+            "country": "南荒",
+            "name": "铁索桥",
+            "areaId": "area.songqin"
+          },
+          {
+            "id": "nh.caravan_camp",
+            "country": "南荒",
+            "name": "商队宿处",
+            "areaId": "area.songqin"
+          },
+          {
+            "id": "nh.zixi",
+            "country": "南荒",
+            "name": "紫溪",
+            "areaId": "area.songqin"
+          },
+          {
+            "id": "nh.black_shoal",
+            "country": "南荒",
+            "name": "雨林黑石滩",
+            "areaId": "area.songqin"
+          },
+          {
+            "id": "nh.sheyi",
+            "country": "南荒",
+            "name": "蛇彝村",
+            "worldLocationId": "lcq.location.sheyi_village",
+            "areaId": "area.sheyi"
+          },
+          {
+            "id": "nh.giant_vine",
+            "country": "南荒",
+            "name": "万古巨藤",
+            "worldLocationId": "lcq.location.giant_vine",
+            "areaId": "area.giant_vine"
+          },
+          {
+            "id": "nh.huamiao",
+            "country": "南荒",
+            "name": "花苗寨",
+            "worldLocationId": "lcq.location.huamiao_village",
+            "areaId": "area.huamiao"
+          },
+          {
+            "id": "nh.xiongerpu",
+            "country": "南荒",
+            "name": "熊耳铺",
+            "worldLocationId": "liuchao.location.xiongerpu",
+            "areaId": "area.xiongerpu",
+            "heardWhen": [
+              "lcq.event.s03b_snake_flower_bridge_04"
+            ]
+          },
+          {
+            "id": "nh.shan_jian",
+            "country": "南荒",
+            "name": "南荒山涧",
+            "worldLocationId": "liuchao.location.shan_jian",
+            "areaId": "area.songqin"
+          },
+          {
+            "id": "nh.yeao",
+            "country": "南荒",
+            "name": "南荒山村",
+            "worldLocationId": "lcq.location.yeao_village",
+            "areaId": "area.yeao"
+          },
+          {
+            "id": "nh.baiyi",
+            "country": "南荒",
+            "name": "白夷族",
+            "worldLocationId": "liuchao.location.baiyi",
+            "areaId": "area.baiyi",
+            "heardWhen": [
+              "lcq.event.s03b_snake_flower_bridge_04"
+            ]
+          },
+          {
+            "id": "nh.biyu",
+            "country": "南荒",
+            "name": "碧鲮族",
+            "worldLocationId": "liuchao.location.biyu_village",
+            "areaId": "area.biyu",
+            "heardWhen": [
+              "lcq.event.s03b_snake_flower_bridge_01"
+            ]
+          },
+          {
+            "id": "nh.sea_temple",
+            "country": "南荒",
+            "name": "海神殿",
+            "kind": "interior",
+            "parentZoneId": "nh.biyu",
+            "worldLocationId": "liuchao.location.sea_temple",
+            "heardWhen": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_16"
+            ]
+          },
+          {
+            "id": "nh.south_wild_valley",
+            "country": "南荒",
+            "name": "南荒山谷",
+            "worldLocationId": "liuchao.location.south_wild_valley",
+            "areaId": "area.guidao",
+            "heardWhen": [
+              "lcq.event.biling_bay_stance"
+            ]
+          },
+          {
+            "id": "nh.guiwang_dong",
+            "country": "南荒",
+            "name": "鬼王峒",
+            "worldLocationId": "liuchao.location.guiwang_dong",
+            "areaId": "area.guiwang"
+          },
+          {
+            "id": "nh.guiwang_inn",
+            "country": "南荒",
+            "name": "鬼王峒驿馆",
+            "kind": "interior",
+            "parentZoneId": "nh.guiwang_dong",
+            "worldLocationId": "lcq.location.guiwang_inn"
+          },
+          {
+            "id": "nh.gui_wang_gong",
+            "country": "南荒",
+            "name": "鬼王宫",
+            "kind": "interior",
+            "parentZoneId": "nh.guiwang_dong",
+            "worldLocationId": "liuchao.location.gui_wang_gong",
+            "heardWhen": [
+              "lcq.event.guiwangdong_coop_pact"
+            ]
+          },
+          {
+            "id": "nh.jingshen_tai",
+            "country": "南荒",
+            "name": "鬼王宫深井祭台",
+            "kind": "interior",
+            "parentZoneId": "nh.gui_wang_gong",
+            "worldLocationId": "liuchao.location.gui_wang_gong.jingshen_tai"
+          },
+          {
+            "id": "nh.departure_camp",
+            "country": "南荒",
+            "name": "南荒散峒营地",
+            "worldLocationId": "lcq.location.nanhuang_departure_camp",
+            "areaId": "area.sandong"
+          }
+        ],
+        "routes": [
+          {
+            "id": "nh.r.after.wuerlang",
+            "fromZoneId": "nh.wuyuan",
+            "toZoneId": "nh.iron_bridge",
+            "label": "随商队离开五原",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 3,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.wuerlang_joins"
+            },
+            "durationLabel": "三日",
+            "summary": "商队离开五原，沿南下商路前行，铁索桥已在眼前。"
+          },
+          {
+            "id": "nh.r.after.iron_bridge",
+            "fromZoneId": "nh.iron_bridge",
+            "toZoneId": "nh.caravan_camp",
+            "label": "到商队宿处",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.iron_bridge_ambush"
+            }
+          },
+          {
+            "id": "nh.r.after.ningyu_offer",
+            "fromZoneId": "nh.caravan_camp",
+            "toZoneId": "nh.zixi",
+            "label": "行至紫溪",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.ningyu_regicide_offer"
+            }
+          },
+          {
+            "id": "nh.r.after.zixi",
+            "fromZoneId": "nh.zixi",
+            "toZoneId": "nh.black_shoal",
+            "label": "穿过雨林到黑石滩",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.zixi_taiyi_intercept"
+            }
+          },
+          {
+            "id": "nh.r.after.black_shoal",
+            "fromZoneId": "nh.black_shoal",
+            "toZoneId": "nh.sheyi",
+            "label": "抵达蛇彝村",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.rainforest_black_shoal"
+            }
+          },
+          {
+            "id": "nh.r.stage.02_03b",
+            "fromZoneId": "nh.sheyi",
+            "toZoneId": "nh.sheyi",
+            "label": "接续蛇彝村行程",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "stageTransition": "lcq.stage_02→lcq.stage_03b_snake_flower_bridge"
+            }
+          },
+          {
+            "id": "nh.r.after.s03b_04",
+            "fromZoneId": "nh.sheyi",
+            "toZoneId": "nh.giant_vine",
+            "label": "离开蛇彝村",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 1,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s03b_snake_flower_bridge_04"
+            },
+            "durationLabel": "一日"
+          },
+          {
+            "id": "nh.r.after.s03b_05",
+            "fromZoneId": "nh.giant_vine",
+            "toZoneId": "nh.huamiao",
+            "label": "过巨藤去花苗寨",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 1,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s03b_snake_flower_bridge_05"
+            },
+            "durationLabel": "一日"
+          },
+          {
+            "id": "nh.r.after.wanwu_night",
+            "fromZoneId": "nh.huamiao",
+            "toZoneId": "nh.xiongerpu",
+            "label": "随送亲队去熊耳铺",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 1,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s03b_yinzhu_xiongerpu::burn_yinzhu_victim"
+            },
+            "durationLabel": "当日"
+          },
+          {
+            "id": "nh.r.stage.03b_04",
+            "fromZoneId": "nh.xiongerpu",
+            "toZoneId": "nh.shan_jian",
+            "label": "送亲队离开熊耳铺",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 2,
+            "forcedBy": {
+              "stageTransition": "lcq.stage_03b_snake_flower_bridge→lcq.stage_04"
+            },
+            "durationLabel": "两日",
+            "summary": "离开熊耳铺，在大山中行走两日，接近叶媪所在的村寨。"
+          },
+          {
+            "id": "nh.r.after.s04_01",
+            "fromZoneId": "nh.shan_jian",
+            "toZoneId": "nh.yeao",
+            "label": "到叶媪山村落脚",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s04_01"
+            }
+          },
+          {
+            "id": "nh.r.after.s04_04",
+            "fromZoneId": "nh.yeao",
+            "toZoneId": "nh.shan_jian",
+            "label": "继续走山涧旧路",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s04_04"
+            },
+            "durationLabel": "五日",
+            "summary": "离开叶媪山村，商队在朱老头带领下继续穿山五日。"
+          },
+          {
+            "id": "nh.r.after.s04_06",
+            "fromZoneId": "nh.shan_jian",
+            "toZoneId": "nh.baiyi",
+            "label": "送亲队到白夷",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 0.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s04_06"
+            },
+            "durationLabel": "半日"
+          },
+          {
+            "id": "nh.r.after.s04b_13",
+            "fromZoneId": "nh.baiyi",
+            "toZoneId": "nh.south_wild_valley",
+            "label": "离开白夷",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 0.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s04b_lingfei_baiyi_crisis_13"
+            },
+            "durationLabel": "半日"
+          },
+          {
+            "id": "nh.r.after.s04b_14",
+            "fromZoneId": "nh.south_wild_valley",
+            "toZoneId": "nh.biyu",
+            "label": "同往碧鲮",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 0.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s04b_lingfei_baiyi_crisis_14"
+            },
+            "durationLabel": "半日"
+          },
+          {
+            "id": "nh.r.after.s04b_19",
+            "fromZoneId": "nh.biyu",
+            "toZoneId": "nh.sea_temple",
+            "label": "去海神殿",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+            }
+          },
+          {
+            "id": "nh.r.after.pull_harpoon",
+            "fromZoneId": "nh.sea_temple",
+            "toZoneId": "nh.biyu",
+            "label": "回碧鲮村",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.pull_harpoon_lemingzhu"
+            }
+          },
+          {
+            "id": "nh.r.after.biling_bay",
+            "fromZoneId": "nh.biyu",
+            "toZoneId": "nh.south_wild_valley",
+            "label": "离开碧鲮",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 0.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.biling_bay_stance"
+            },
+            "durationLabel": "半日"
+          },
+          {
+            "id": "nh.r.after.yiyang",
+            "fromZoneId": "nh.south_wild_valley",
+            "toZoneId": "nh.biyu",
+            "label": "回碧鲮",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 0.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.yiyang_repels_yinsha"
+            },
+            "durationLabel": "半日"
+          },
+          {
+            "id": "nh.r.after.huamiao_coop",
+            "fromZoneId": "nh.biyu",
+            "toZoneId": "nh.south_wild_valley",
+            "label": "再入古道",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 0.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.huamiao_coop_boundary"
+            },
+            "durationLabel": "半日"
+          },
+          {
+            "id": "nh.r.after.coop_pact",
+            "fromZoneId": "nh.south_wild_valley",
+            "toZoneId": "nh.guiwang_dong",
+            "label": "随弥骨入峒",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.guiwangdong_coop_pact"
+            },
+            "durationLabel": "五日",
+            "summary": "沿古道连走五日，随弥骨入峒。"
+          },
+          {
+            "id": "nh.r.stage.04b_05b",
+            "fromZoneId": "nh.guiwang_dong",
+            "toZoneId": "nh.guiwang_inn",
+            "label": "到驿馆安顿",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "stageTransition": "lcq.stage_04b_lingfei_baiyi_crisis→lcq.stage_05b"
+            }
+          },
+          {
+            "id": "nh.r.after.s05b_03",
+            "fromZoneId": "nh.guiwang_dong",
+            "toZoneId": "nh.gui_wang_gong",
+            "label": "经密道入鬼王宫",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s05b_03_saan_secret_path"
+            }
+          },
+          {
+            "id": "nh.r.after.s05b_06",
+            "fromZoneId": "nh.gui_wang_gong",
+            "toZoneId": "nh.jingshen_tai",
+            "label": "下深井祭台",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s05b_06_breakout_and_reunion"
+            }
+          },
+          {
+            "id": "nh.r.after.s05b_08b",
+            "fromZoneId": "nh.jingshen_tai",
+            "toZoneId": "nh.gui_wang_gong",
+            "label": "回宫中",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+            }
+          },
+          {
+            "id": "nh.r.after.s05b_10",
+            "fromZoneId": "nh.gui_wang_gong",
+            "toZoneId": "nh.jingshen_tai",
+            "label": "再下祭台",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+            }
+          },
+          {
+            "id": "nh.r.after.ghost_king",
+            "fromZoneId": "nh.jingshen_tai",
+            "toZoneId": "nh.guiwang_dong",
+            "label": "出宫回峒中",
+            "turnCost": 1,
+            "kind": "local",
+            "forcedBy": {
+              "afterEventDone": "lcq.event.ghost_king_swallowed"
+            }
+          },
+          {
+            "id": "nh.r.after.tribes_pledge",
+            "fromZoneId": "nh.guiwang_dong",
+            "toZoneId": "nh.departure_camp",
+            "label": "散峒",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 0.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.tribes_pledge"
+            },
+            "durationLabel": "半日"
+          },
+          {
+            "id": "nh.r.after.wuer_suli",
+            "fromZoneId": "nh.departure_camp",
+            "toZoneId": "nh.yeao",
+            "label": "往南荒山村",
+            "turnCost": 1,
+            "kind": "journey",
+            "dayCost": 1.5,
+            "forcedBy": {
+              "afterEventDone": "lcq.event.s05b_wuer_suli_depart"
+            },
+            "durationLabel": "一天多",
+            "summary": "朱老头说一天多工夫就到。"
+          }
+        ],
+        "areas": [
+          {
+            "id": "area.wuyuan",
+            "name": "五原",
+            "continent": "中州"
+          },
+          {
+            "id": "area.sheyi",
+            "name": "蛇彝村",
+            "continent": "南荒",
+            "freeRoamWhen": {
+              "until": [
+                "lcq.event.s03b_snake_flower_bridge_04"
+              ]
+            }
+          },
+          {
+            "id": "area.giant_vine",
+            "name": "万古巨藤",
+            "continent": "南荒"
+          },
+          {
+            "id": "area.huamiao",
+            "name": "花苗寨",
+            "continent": "南荒",
+            "freeRoamWhen": {
+              "after": [
+                "lcq.event.s03b_snake_flower_bridge_06"
+              ],
+              "until": [
+                "lcq.event.s03b_yinzhu_xiongerpu"
+              ]
+            }
+          },
+          {
+            "id": "area.xiongerpu",
+            "name": "熊耳铺",
+            "continent": "南荒"
+          },
+          {
+            "id": "area.songqin",
+            "name": "送亲路",
+            "continent": "南荒"
+          },
+          {
+            "id": "area.baiyi",
+            "name": "白夷",
+            "continent": "南荒",
+            "freeRoamWhen": {
+              "after": [
+                "lcq.event.s04b_lingfei_baiyi_crisis_01"
+              ],
+              "until": [
+                "lcq.event.s04b_lingfei_baiyi_crisis_13"
+              ]
+            }
+          },
+          {
+            "id": "area.biyu",
+            "name": "碧鲮",
+            "continent": "南荒",
+            "freeRoamWhen": {
+              "after": [
+                "lcq.event.s04b_lingfei_baiyi_crisis_15"
+              ],
+              "until": [
+                "lcq.event.biling_bay_stance"
+              ]
+            }
+          },
+          {
+            "id": "area.guidao",
+            "name": "古道",
+            "continent": "南荒"
+          },
+          {
+            "id": "area.guiwang",
+            "name": "鬼王峒",
+            "continent": "南荒",
+            "freeRoamWhen": {
+              "until": [
+                "lcq.event.s05b_03_saan_secret_path"
+              ]
+            }
+          },
+          {
+            "id": "area.sandong",
+            "name": "散峒营地",
+            "continent": "南荒"
+          },
+          {
+            "id": "area.yeao",
+            "name": "南荒山村",
+            "continent": "南荒",
+            "freeRoamWhen": {
+              "after": [
+                "lcq.event.s05b_wuer_suli_depart"
+              ]
+            }
+          }
+        ],
+        "notices": [],
+        "actors": [],
+        "problems": [],
+        "actions": []
+      },
+      "stageIds": [
+        "lcq.stage_02",
+        "lcq.stage_03b_snake_flower_bridge",
+        "lcq.stage_04",
+        "lcq.stage_04b_lingfei_baiyi_crisis",
+        "lcq.stage_05b"
+      ],
+      "stepSceneStagePrefixes": [
+        "lcq.stage_03b",
+        "lcq.stage_04"
+      ],
+      "positionNodes": {
+        "segment": "碧鲮族",
+        "placeLocationId": "liuchao.location.biyu_village",
+        "nodes": [
+          {
+            "zoneId": "nh.sea_temple",
+            "names": [
+              "海神殿"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "persistentEntries": [
+    {
+      "kind": "algae",
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "notBeforeStageIds": [
+        "lcq.stage_01",
+        "lcq.stage_02",
+        "lcq.stage_03",
+        "lcq.stage_03b_snake_flower_bridge",
+        "lcq.stage_04"
+      ],
+      "beatId": "beat.side.biling_algae_silk.01",
+      "eventId": "lcq.event.side_biling_algae_silk",
+      "locationId": "liuchao.location.biyu_village",
+      "characterId": "lcq.character.biling_woman_ch80",
+      "itemId": "lcq.item.biling_algae_sample",
+      "receiptId": "rcpt.side.biling_algae_silk.ordered",
+      "templateEvent": {
+        "id": "lcq.event.side_biling_algae_silk",
+        "name": "霓龙丝的着落",
+        "description": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+        "objective": "霓龙丝的着落",
+        "axisAnchor": "第80章",
+        "critical": false,
+        "conditions": [],
+        "completion": [
+          {
+            "path": "flags.event.side_biling_algae_silk.done",
+            "operator": "eq",
+            "value": true
+          }
+        ],
+        "relatedCharacterIds": [
+          "lcq.character.biling_woman_ch80"
+        ],
+        "locationId": "liuchao.location.biyu_village",
+        "exploration": {
+          "role": "seed"
+        },
+        "questLineBeatId": "beat.side.biling_algae_silk.01",
+        "sharedExperience": "default",
+        "playerCompletionContract": {
+          "kind": "objective_action",
+          "settleOn": [
+            "success"
+          ],
+          "actions": [
+            {
+              "id": "act.ask_biling_for_nylon",
+              "label": "向碧鲮人打听霓龙丝",
+              "actionText": "我向碧鲮人打听霓龙丝。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "requiresPreparation": [],
+              "grantsPreparation": "prep.nylon_asked",
+              "requiresPresentCharacterIds": [
+                "lcq.character.biling_woman_ch80"
+              ],
+              "cast": {
+                "present": [
+                  "lcq.character.biling_woman_ch80"
+                ]
+              },
+              "sceneLocation": "碧鲮族",
+              "sceneObjective": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+              "fallbackText": "你向碧鲮女子打听霓龙丝。她说山里没有，却拿来一团湿藻丝，细得像头发，还要结实。",
+              "outcomeText": {
+                "success": "你向碧鲮女子打听霓龙丝。她说山里没有，却拿来一团湿藻丝，细得像头发，还要结实。",
+                "partial": "你向碧鲮女子打听霓龙丝。她说山里没有，却拿来一团湿藻丝，细得像头发，还要结实。",
+                "failure": "你向碧鲮女子打听霓龙丝。她说山里没有，却拿来一团湿藻丝，细得像头发，还要结实。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "打听霓龙丝",
+                  "哪里有霓龙丝",
+                  "询问霓龙丝",
+                  "找霓龙丝"
+                ]
+              }
+            },
+            {
+              "id": "act.have_yun_examine_algae",
+              "label": "请云苍峰看看这藻丝能不能织",
+              "actionText": "我请云苍峰看看这藻丝能不能织。",
+              "timeCost": 1,
+              "kind": "prepare",
+              "requiresPreparation": [
+                "prep.nylon_asked"
+              ],
+              "grantsPreparation": "prep.algae_examined",
+              "requiresPresentCharacterIds": [
+                "liuchao.character.yun_cang_feng"
+              ],
+              "cast": {
+                "present": [
+                  "lcq.character.biling_woman_ch80"
+                ]
+              },
+              "sceneLocation": "碧鲮族",
+              "sceneObjective": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+              "fallbackText": "云苍峰看过藻丝，嫌它太细太薄，织不成衣料。你要的却正是透亮。",
+              "outcomeText": {
+                "success": "云苍峰看过藻丝，嫌它太细太薄，织不成衣料。你要的却正是透亮。",
+                "partial": "云苍峰看过藻丝，嫌它太细太薄，织不成衣料。你要的却正是透亮。",
+                "failure": "云苍峰看过藻丝，嫌它太细太薄，织不成衣料。你要的却正是透亮。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "看看这藻丝",
+                  "看看海藻丝",
+                  "请云苍峰鉴定",
+                  "能不能织"
+                ]
+              }
+            },
+            {
+              "id": "act.commission_algae_purchase",
+              "label": "向碧鲮族下单收购各色藻丝",
+              "actionText": "我向碧鲮族下单收购各色藻丝。",
+              "timeCost": 1,
+              "kind": "attempt",
+              "requiresPreparation": [
+                "prep.nylon_asked"
+              ],
+              "requiresPresentCharacterIds": [],
+              "cast": {
+                "present": [
+                  "lcq.character.biling_woman_ch80"
+                ]
+              },
+              "sceneLocation": "碧鲮族",
+              "sceneObjective": "在碧鲮族问到霓龙丝，碧鲮女子说山里没有，拿来一团湿藻丝，比头发还结实；礁石上的黑绿，珊瑚上的红白，礁石含铜的是黄的。程宗扬要透亮，完整不断、晒干不褪色，各色都要。只有明确下单才结算，打听并不等于已拿到样品。祁远、云苍峰等人只在实际同行时出场和发言，不在场就不写。不编女子姓名，不编收购价格，不写前夜杀戮、小紫外貌或岳帅调侃。",
+              "fallbackText": "你提出各色都要，完整不断、晒干不褪色，真金白银地收购。碧鲮女子交给你藻丝样品。",
+              "outcomeText": {
+                "success": "你提出各色都要，完整不断、晒干不褪色，真金白银地收购。碧鲮女子交给你藻丝样品。",
+                "partial": "你提出各色都要，完整不断、晒干不褪色，真金白银地收购。碧鲮女子交给你藻丝样品。",
+                "failure": "你提出各色都要，完整不断、晒干不褪色，真金白银地收购。碧鲮女子交给你藻丝样品。"
+              },
+              "intentMatch": {
+                "matchAny": [
+                  "收购各色",
+                  "下单收购",
+                  "买下藻丝",
+                  "收购藻丝",
+                  "这些颜色我都要"
+                ],
+                "rejectIf": [
+                  "不收购",
+                  "不买",
+                  "先不下单"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "kind": "rejoin",
+      "beatId": "beat.ningyu.y5_rejoin",
+      "eventId": "lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin",
+      "stageId": "lcq.stage_05b"
+    }
+  ],
   "overlays": [
     {
       "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
@@ -28987,6 +30875,34 @@
     "mapEntry.qin.return.label": "【扩写】了结咸阳之事，返回{stage}",
     "mapEntry.qin.return.narrative": "【扩写·待剧情策划】咸阳诸事暂告一段落，你动身返回，回到了离开时的地方。",
     "mapEntry.qin.return.chronicle": "【扩写】了结咸阳之事，返回「{stage}」",
+    "scopedPlayerLine.lcq.event.s01_01::advance_declared_objective": "我稳住自己并弄清身在何处。",
+    "scopedPlayerLine.lcq.event.s01_02::advance_declared_objective": "我先保住自己和身边的人。",
+    "scopedPlayerLine.lcq.event.s01_03::advance_declared_objective": "我上前查看那位伤者。",
+    "scopedPlayerLine.lcq.event.s01_04::advance_declared_objective": "我设法带着伤者脱险。",
+    "scopedPlayerLine.lcq.event.s01_05::advance_declared_objective": "我请他先诊治我的伤。",
+    "scopedPlayerLine.lcq.event.s01_06::advance_declared_objective": "我应对眼前危局。",
+    "scopedPlayerLine.lcq.event.s02_01::advance_declared_objective": "我接过锦囊，听清并认下王哲的托付。",
+    "scopedPlayerLine.lcq.event.s02_03::advance_declared_objective": "我在乱军中求生并观察战局。",
+    "scopedPlayerLine.lcq.event.s02_02::hold_left_army_line": "我先看清左武军为何覆灭。",
+    "scopedPlayerLine.lcq.event.s02_02::witness_wang_zhe_nine_suns": "我守在王哲身边，看他施展九阳。",
+    "scopedPlayerLine.lcq.event.s02_02::record_battlefield_aftermath": "我查看焦土余波，看清王哲和左武军的结局。",
+    "scopedPlayerLine.lcq.event.s02_04::advance_declared_objective": "我先应付眼前的盘问与拉扯。",
+    "scopedPlayerLine.lcq.event.s02_05::advance_declared_objective": "我判断她要带我去哪。",
+    "scopedPlayerLine.lcq.event.s02_06::advance_declared_objective": "我与馆主周旋，看清她是谁。",
+    "scopedPlayerLine.lcq.event.ningyu_enters_gamble::see_ningyu_sent_into_gamble": "我看清凝羽奉命进入这场赌局。",
+    "scopedPlayerLine.lcq.event.ningyu_enters_gamble::answer_ningyu_on_debut": "我当面回应凝羽，接下这场赌局。",
+    "scopedPlayerLine.lcq.event.sudaji_south_pact::offer_nylon_clue_for_term": "我用霓龙丝产地线索换三个月期限。",
+    "scopedPlayerLine.lcq.event.sudaji_south_pact::seal_three_month_south_pact": "我当面订下三个月南荒之约。",
+    "scopedPlayerLine.lcq.event.sudaji_south_pact::refuse_term_take_paolao": "我不接三个月的条件。",
+    "scopedPlayerLine.lcq.event.gamble_bond_signed::confirm_rigged_wager_loss": "我当面核对刻香和时限。",
+    "scopedPlayerLine.lcq.event.gamble_bond_signed::sign_the_bond": "我签下眼前这份契书。",
+    "scopedPlayerLine.lcq.event.charge_sudaji_fee::name_sixty_zhu_before_help": "我先开出六十金铢工价。",
+    "scopedPlayerLine.lcq.event.charge_sudaji_fee::lock_fee_then_remove_device": "谈定报酬后，我才按约取出器物。",
+    "scopedPlayerLine.lcq.event.free_ajiman::take_ajiman_bond_in_hand": "我用五十金铢买下阿姬曼，将她的身契拿在手里。",
+    "scopedPlayerLine.lcq.event.free_ajiman::tear_bond_and_face_blockade": "我当着阿姬曼的面撕毁身契，还她自由；遇到封锁后改道出城。",
+    "scopedPlayerLine.lcq.event.baihu_shangguan_escape::walk_out_wuyuan_shangguan": "我走出五原商馆。",
+    "actionDisplay.lcq.event.ningyu_regicide_offer.hear_ningyu_regicide_price.line": "我听她说明条件。",
+    "actionDisplay.lcq.event.ningyu_regicide_offer.hear_ningyu_regicide_price.label": "听她说明条件",
     "lineCompass.nanhuang.name": "南荒",
     "lineCompass.nanhuang.step.nh_enter_caravan": "随商队出五原，往南荒去",
     "lineCompass.nanhuang.step.nh_sheyi_village": "去蛇彝村看看",
@@ -28999,6 +30915,14 @@
     "lineCompass.nanhuang.step.nh_guiwang_approach": "去鬼王峒附近看看",
     "lineCompass.nanhuang.step.nh_f10_ghost_king_probe": "走萨安说的那条路看看",
     "lineCompass.nanhuang.step.nh_shanghou_ice_gu": "回来时住过的山村看看",
+    "actionDisplay.lcq.event.huamiao_coop_boundary.*.line": "我跟云苍峰谈清进鬼王峒的合作边界。",
+    "actionDisplay.lcq.event.huamiao_coop_boundary.*.label": "与云苍峰谈合作边界",
+    "actionDisplay.lcq.event.weapon_deal_with_geluo.open_weapon_talk_with_geluo.line": "我向鬼王峒使者提出兵器生意。",
+    "actionDisplay.lcq.event.weapon_deal_with_geluo.open_weapon_talk_with_geluo.label": "同使者谈兵器生意",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.yinzhu_strikes_ajia.line": "我听见阿葭那边的蕨丛里有异响，提刀赶了过去。",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.yinzhu_strikes_ajia.label": "赶去阿葭身边查看异动",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.burn_yinzhu_victim.line": "我照祁远的吩咐，和花苗人一起把阿葭、阴蛛和那具蛇彝遇害者焚化。",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.burn_yinzhu_victim.label": "焚化阿葭的遗体和阴蛛",
     "lineCompass.jin.name": "晋国",
     "lineCompass.jin.step.jin_arrive_from_nanhuang": "去建康，把商号开起来",
     "lineCompass.jin.step.jin_arrive_icegu": "去建康，托人想想办法",

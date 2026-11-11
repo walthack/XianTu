@@ -10,17 +10,9 @@ export function canonicalEndingId(ending: EndingRef | undefined): string {
   return ending.endingId === 'lcq.ending.death.paolao' && ending.sourceEventId === 'lcq.event.ningyu_enters_gamble'
     ? 'lcq.ending.death.baihu_beheading' : ending.endingId;
 }
-/** 结局编号（F0b：TS 侧表，与内容包 endings 的 key 合并，TS 在前、包按 catalog 顺序在后；编译期禁止同一结局或同一编号两边都有）。 */
-export const TS_ENDING_KEYS: Readonly<Record<string, string>> = {
-  'lcq.ending.death.baihu_beheading': 'E01',
-  'lcq.ending.death.ajiman_bond': 'E02',
-  'lcq.ending.death.paolao': 'E03',
-  'lcq.ending.death.wangzhe_blast': 'E04',
-  'lcq.ending.death.shanghou_relic': 'E05',
-  'lcq.ending.death.ghost_king_skull': 'E06',
-  'lcq.ending.death.dragon_well': 'E07',
-  'lcq.ending.fail.dragon_essence': 'E08',
-};
+/** 结局编号（F0b：TS 侧表，与内容包 endings 的 key 合并，TS 在前、包按 catalog 顺序在后；编译期禁止同一结局或同一编号两边都有）。
+ *  B7：E01–E04 已搬进塞外包 endings.json、E05–E08 已搬进昭南包 endings.json，TS 侧留空。 */
+export const TS_ENDING_KEYS: Readonly<Record<string, string>> = {};
 export function mergeEndingKeys(ts: Readonly<Record<string, string>>, endings: readonly PackEnding[]): Readonly<Record<string, string>> {
   const pack = endings.filter(e => e.key !== undefined);
   if (!pack.length) return ts;

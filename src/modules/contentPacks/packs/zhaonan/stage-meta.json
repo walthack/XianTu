@@ -16,6 +16,7 @@
     }
   },
   {
+    "note": "B6 搬入：逐事件章名串 uiChapterTitle 7 条，原在 eventNarrativeView.ts storyChapterTitleIn 的 stage_04 特判",
     "stageId": "lcq.stage_04",
     "presentation": {
       "chapters": {
@@ -25,22 +26,36 @@
       },
       "events": {
         "lcq.event.s04_01": {
-          "mood": "danger"
+          "mood": "danger",
+          "uiChapterTitle": "第49章·刺王密谋"
         },
         "lcq.event.s04_03": {
           "mood": "aspire",
-          "objective": "听清乐明珠为什么要假扮新娘"
+          "objective": "听清乐明珠为什么要假扮新娘",
+          "uiChapterTitle": "第47章·新娘身份"
         },
         "lcq.event.s04_06": {
-          "mood": "emotion"
+          "mood": "emotion",
+          "uiChapterTitle": "第54章·穿山"
         },
         "lcq.event.s04_05": {
-          "mood": "lament"
+          "mood": "lament",
+          "uiChapterTitle": "第52章·旱洪"
+        },
+        "lcq.event.s04_02": {
+          "uiChapterTitle": "第46章·袭击"
+        },
+        "lcq.event.s04_04": {
+          "uiChapterTitle": "第51章·发蛊"
+        },
+        "lcq.event.s04_07": {
+          "uiChapterTitle": "第55章·白夷迎客"
         }
       }
     }
   },
   {
+    "note": "B6 搬入：逐事件章名串 uiChapterTitle 12 条，原在 eventNarrativeView.ts storyChapterTitleIn 的 stage_04b 特判；目标 2 条，原在 fixedQuestObjectives.ts（huamiao 的特判、武二郎的覆盖表 entityText 模板）",
     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
     "presentation": {
       "events": {
@@ -61,6 +76,44 @@
         },
         "lcq.event.s04b_lingfei_baiyi_crisis_19": {
           "objective": "从被巨浪淹没的竹楼里脱身"
+        },
+        "lcq.event.enter_dong_with_migu": {
+          "uiChapterTitle": "第86章·随弥骨入峒"
+        },
+        "lcq.event.huamiao_coop_boundary": {
+          "uiChapterTitle": "第85章·进峒之约",
+          "objective": "跟云苍峰谈清进鬼王峒的合作边界"
+        },
+        "lcq.event.guiwangdong_coop_pact": {
+          "uiChapterTitle": "第85章·进峒之约"
+        },
+        "lcq.event.yiyang_repels_yinsha": {
+          "uiChapterTitle": "第84章·阴煞"
+        },
+        "lcq.event.wuerlang_slays_dagu": {
+          "uiChapterTitle": "第83章·虎威",
+          "objective": "撑住{{entity:character:lcq.character.nanhuang_dagu}}这一波围攻，看清武二郎能否打开缺口"
+        },
+        "lcq.event.ruins_ghost_warriors": {
+          "uiChapterTitle": "第82章·迎敌"
+        },
+        "lcq.event.biling_bay_stance": {
+          "uiChapterTitle": "第80章·碧鲮前路"
+        },
+        "lcq.event.haishen_hall_merfolk": {
+          "uiChapterTitle": "海神殿"
+        },
+        "lcq.event.pull_harpoon_lemingzhu": {
+          "uiChapterTitle": "海神殿"
+        },
+        "lcq.event.regroup_caravan_envoy": {
+          "uiChapterTitle": "商队与峒使"
+        },
+        "lcq.event.weapon_deal_with_geluo": {
+          "uiChapterTitle": "商队与峒使"
+        },
+        "lcq.event.spot_dong_informant": {
+          "uiChapterTitle": "商队与峒使"
         }
       }
     }
@@ -89,6 +142,7 @@
     }
   },
   {
+    "note": "B6 搬入：shanghou 的山村测试改写（eventNarrativeView.ts 特判）、小紫目标（fixedQuestObjectives.ts 覆盖表 entityText 模板）；分支锁 2 条（branchDecision.ts LOCKED_DECISIONS；shanghou 那把锁留在 TS 表，因为合并表的键顺序被快照钉住，它排在塞外 3 把锁之前。原注释：支不支援谢艺（原著第103–106章，反杀计划成形后、出发前）：支援只登记回执，救治判定时公开 +2（裁定 #168）；谢艺托付（原著第114章）：承接遗言或施针救治，救治要乐明珠在场，不在场时锁里只剩承接）",
     "stageId": "lcq.stage_05b",
     "presentation": {
       "events": {
@@ -115,6 +169,58 @@
         },
         "lcq.event.s05b_10_slave_revolt_and_phoenix_change": {
           "objective": "趁集会大乱，设法潜入鬼王宫"
+        },
+        "lcq.event.shanghou_revealed": {
+          "compatNarrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.event.shanghou_revealed.done",
+                  "operator": "neq",
+                  "value": true
+                },
+                {
+                  "path": "flags.event.shanghou_revealed.relic_test_refused",
+                  "operator": "neq",
+                  "value": true
+                }
+              ],
+              "priority": "before-event-variants",
+              "relatedFactionIds": [],
+              "name": "山村中的测试",
+              "objective": "随叶媪进堂，听主人说明测试",
+              "description": "进村前路边有白骨。堂中主人打开鲨皮红木箱，展示黄底黑边三角与红色拐弯箭头，警告167人触碰后化为火球。只写眼前物件和警告，不解释电、高压，不提前揭露朱老头本相，不替玩家选择。",
+              "axisBeat": "堂中主人要求测试天命之人，玩家尚未决定是否触碰。",
+              "note": "未做测试时（既没完成、也没拒测）的山村测试：先于一切变体，并清空相关势力（原 resolveScenarioEventNarrativeRaw 里的特判）"
+            }
+          ]
+        },
+        "lcq.event.s05b_09_temporary_pact_with_xiaozi": {
+          "lockedDecision": [
+            [
+              "support_xieyi_counterstrike",
+              "协助谢艺准备反杀，随队返回"
+            ],
+            [
+              "rest_then_follow_team",
+              "不主动支援，先休整，随队同行"
+            ]
+          ]
+        },
+        "lcq.event.xieyi_entrustment": {
+          "lockedDecision": [
+            [
+              "accept_entrustment",
+              "承接"
+            ],
+            [
+              "rescue_xieyi",
+              "救治"
+            ]
+          ]
+        },
+        "lcq.event.s05b_02_xiaozi_exposed": {
+          "objective": "质问小紫，把阿夕的异常和{{entity:character:lcq.character.nanhuang_heishe}}死因问清楚"
         }
       }
     }

@@ -75,8 +75,8 @@ test('P2-1 界面：输入框与发送键都挂分支锁禁用，占位与提示
 });
 
 test('P2-1 通用于全部固定选项锁：每把锁激活时都关闭自由输入，手打选项原文也不代选', async () => {
-  const src = await read('src/modules/scenarioMods/branchDecision.ts');
-  const table = [...src.matchAll(/'([^']+)': \[\['([^']+)', '([^']+)'\], \['([^']+)', '([^']+)'\]\]/g)];
+  // B6：锁表大部分搬进塞外、昭南包 stageMeta（lockedDecision），改读合并后的 LOCKED_DECISIONS（原来按源码正则读 TS 表）
+  const table = Object.entries(B.LOCKED_DECISIONS).map(([eventId, [[a1, l1], [a2, l2]]]) => [null, eventId, a1, l1, a2, l2]);
   assert.deepEqual(table.map(m => m[1]).sort(), ['lcq.event.free_ajiman', 'lcq.event.ningyu_enters_gamble', 'lcq.event.s05b_09_temporary_pact_with_xiaozi', 'lcq.event.shanghou_revealed', 'lcq.event.sudaji_south_pact', 'lcq.event.xieyi_entrustment']);
   for (const [, eventId, a1, l1, a2, l2] of table) {
     const options = [a1, a2].map(actionId => ({ source: 'event_engine', eventId, actionId, label: actionId, playerLine: `line:${actionId}` }));

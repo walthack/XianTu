@@ -96,7 +96,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const stageEvents=new Set([...defs.keys()].filter(k=>k.startsWith('event\u0000')));
  for(const [packId,raw] of rawByPack)for(const {kind,value} of raw)if(kind==='overlays'&&object(value))for(const e of value.events||[])if(typeof e?.id==='string'&&!baseEvents.has(e.id)&&!stageEvents.has(`event\u0000${e.id}`))define('event',e.id,packId);
  // B1：二级线的 after 只是全局排序提示（mergeSecondaryLines 在全部包线上解析），不算跨包引用，不要求 dependsOn；找不到、成环、同 after、重复 id 照旧报错
- const unscanned=(kind,value)=>{if(kind!=='secondaryLines'||!object(value))return value;const {after:_after,...rest}=value;return rest;};
+ // B3：主轴 stages[].pillars 是编译期按枚举（bloodline｜taiquan）校验的闭集，不是 id 引用（"taiquan" 与太泉包的线 id 同名），不进归属扫描；storyAxis 其余字段照扫
+ const unscanned=(kind,value)=>{if(!object(value))return value;if(kind==='storyAxis'&&Array.isArray(value.stages))return {...value,stages:value.stages.map(s=>{if(!object(s))return s;const {pillars:_pillars,...rest}=s;return rest;})};if(kind!=='secondaryLines')return value;const {after:_after,...rest}=value;return rest;};
  for(const [packId,raw] of rawByPack){const seen=visible(packId);const scan=v=>{if(typeof v==='string'){for(const c of referenceCandidates(v)){const q=owners.get(c);if(q&&![...q].some(x=>seen.has(x)))fail(`${packId} references ${c} owned by ${[...q].join('/')}; add dependsOn`);}}else if(Array.isArray(v))v.forEach(scan);else if(object(v))for(const[k,x]of Object.entries(v)){scan(k);scan(x);}};for(const {kind,value} of raw)scan(unscanned(kind,value));}
  // Stage assets use the same numeric authority as quest lines; prose is held in pack texts.
  const resolveText=(value,where)=>{

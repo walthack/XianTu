@@ -86,7 +86,8 @@ test('复审通过的坏目标由固定表现层覆盖，不改 event 合同', a
   const { CONTENT_PACKS } = await loadTs('../src/modules/contentPacks/index.ts');
   const overriddenIds = new Set([...Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES),
     ...CONTENT_PACKS.stageMeta.flatMap(m => Object.entries(m.presentation?.events || {}).filter(([, e]) => e.objective).map(([id]) => id))]);
-  assert.equal(overriddenIds.size, 61);
+  // B6：原三条代码特判（s02_04、huamiao_coop_boundary、han_shouyang_gaoyanei）不在表里、原先没计入，搬进 stageMeta 后计入：61 → 64
+  assert.equal(overriddenIds.size, 64);
   assert.equal(
     resolveFixedQuestObjective({
       id: 'lcq.event.s03_12',

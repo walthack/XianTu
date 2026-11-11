@@ -2,7 +2,7 @@ import { isNoSummary } from '@/services/narrativeSummary';
 import { applyTimelineInserts } from './timelineInserts';
 import { lineGapCountText } from './secondaryLineEntry';
 import {CONTENT_PACKS} from '../contentPacks';
-import type { PackEnding } from '../contentPacks/presentationFormats';
+import type { PackEnding, PackBattleLossEnding } from '../contentPacks/presentationFormats';
 import {applyStoryLevel} from './levelProgression';
 
 import { canonicalEndingId, endingPresentation } from './endingPresentation';
@@ -22,50 +22,8 @@ const ENDING_TEXTS: Readonly<Record<string,string>> = CONTENT_PACKS.texts;
 
 // 战斗正式接入时消费此表；此处只录数据，不由LLM写tier触发，也不重复判slay_dragon/s06_02。
 // F0b：TS 侧表，与内容包 endings 的 battleLoss 合并（TS 在前、包按 catalog 顺序在后，endingId 取外层；编译期禁止同一结局两边都有）。
-export const TS_BATTLE_LOSS_ENDINGS = ([
-  {
-    "endingId": "lcq.ending.death.ghost_king_skull",
-    "title": "天命的指引",
-    "kind": "death",
-    "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
-    "tierFlag": "lcq.encounter.f10.tier",
-    "tier": "rout",
-    "facts": [
-      "程宗扬被封回龛窟，血没能沾上骨虎",
-      "鬼巫王剖开天命者的头颅",
-      "银镜中的同伴未能找到他",
-      "龙神照常吞下鬼巫王"
-    ]
-  },
-  {
-    "endingId": "lcq.ending.death.dragon_well",
-    "title": "龙首无人",
-    "kind": "death",
-    "sourceEventId": "lcq.event.ghost_king_swallowed",
-    "tierFlag": "lcq.encounter.f13.tier",
-    "tier": "lose",
-    "facts": [
-      "你带乐明珠逃往洞窟裂缝时滚下碎石坡，背脊重伤",
-      "乐明珠被推进龙角下的空隙",
-      "程宗扬被埋在鬼王峒地底",
-      "龙神吞下鬼巫王，龙首无人号令反击"
-    ]
-  },
-  {
-    "endingId": "lcq.ending.fail.dragon_essence",
-    "title": "龙精入体",
-    "kind": "failure",
-    "sourceEventId": "lcq.event.slay_dragon",
-    "tierFlag": "lcq.encounter.f14.tier",
-    "tier": "lose",
-    "facts": [
-      "龙神死去",
-      "龙精携鬼巫王残念进入程宗扬丹田",
-      "程宗扬存活，原来的自我不再主宰身体",
-      "本局结束，不可续玩"
-    ]
-  }
-] as const);
+// B7：三条战败结局（E06–E08）已搬进昭南包 endings.json，TS 侧留空。
+export const TS_BATTLE_LOSS_ENDINGS: readonly (PackBattleLossEnding & { endingId: string })[] = [];
 /** TS 表在前、包 endings 的 battleLoss 按 catalog 顺序在后（endingId 取外层）；同一结局两边都有抛错（编译期已拦）。 */
 export function mergeBattleLossEndings<T extends { endingId: string }>(ts: readonly T[], endings: readonly PackEnding[]): T[] {
   const pack = endings.filter(e => e.battleLoss).map(e => ({ endingId: e.endingId, ...e.battleLoss! })) as unknown as T[];
@@ -77,10 +35,9 @@ export const BATTLE_LOSS_ENDINGS = mergeBattleLossEndings(TS_BATTLE_LOSS_ENDINGS
 /**
  * 同一结局按来路追加的分支句（裁定簿 #240，用户 2026-10-27 00:35）：texts 键首行插正文开头、其余插结尾。
  * 来路认 gameOver.sourceEventId——阿姬曼路是武二郎入队拍的绝路，落结局时该拍尚未完成、不进编年史；期限到期等其它来路只给通用正文。
+ * B7：阿姬曼来路分支句已搬进塞外包 endings.json，TS 侧留空。
  */
-export const TS_ENDING_PATH_TEXTS: Readonly<Record<string, { sourceEventId: string; textKey: string }>> = {
-  'lcq.ending.death.ajiman_bond': { sourceEventId: 'lcq.event.wuerlang_joins', textKey: 'lcq.ending.death.ajiman_bond.ajiman_path' },
-};
+export const TS_ENDING_PATH_TEXTS: Readonly<Record<string, { sourceEventId: string; textKey: string }>> = {};
 /** F0b：与内容包 endings 的 pathText 合并（TS 在前；同一结局只有一句来路分支，两边都有抛错，编译期已拦）。 */
 export function mergeEndingPathTexts(ts: Readonly<Record<string, { sourceEventId: string; textKey: string }>>, endings: readonly PackEnding[]): Readonly<Record<string, { sourceEventId: string; textKey: string }>> {
   const pack = endings.filter(e => e.pathText);
