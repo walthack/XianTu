@@ -206,3 +206,16 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - rail 生成器仍用 `manualStageIds` 排除 stage_01／02；万一生成出来，路由会因手写 `rails.json` 认领而报错（fail closed），不会覆盖。
 - 隔离：`lcq.stage_03` 从 TS 隔离表移到 stageMeta `defaultLineQuarantined: true`。成员不变，`DEFAULT_LINE_QUARANTINED_STAGE_IDS` 的迭代顺序变了（stage_03 排到 TS 剩余各关之后）；现有读取方只用 `.has()`。`tests/contentPackLineFormats.test.mjs` 的 TS 隔离夹具改为从 `TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS` 动态取（避开注入成 false 的 `lyl.luoyang_coup`）。
 - 未搬（留在 TS）：`fixedQuestObjectives.ts` 与 `formatQuestCompass` 的 `s02_04` 特判；`eventNarrativeView.ts` 里 stage_02 按地点分段的章名算法（含 `storyRouteLocation` 表）与 `legacyNarrativeVariants` 的 `gamble_bond_signed`／`ningyu_enters_gamble` 条件改写；开局/试玩代码、`loadRepairs.ts` 的 stage_01 旧短语快照；别的线挂在塞外事件上的节点。
+
+## 2026-11-11 昭南（南荒）线数据进包（昭南线 S4）
+
+昭南包 `packs/zhaonan/`（`id: "qingyu.zhaonan"`，`dependsOn: ["qingyu.core"]`）：`rails.generated.json`（4 个生成档：03b／04／04b／05b）、`rail-extra-beats.json`（7 条加拍）、`stage-meta.json`（6 关：05／06 隔离、3 条章配乐、14 条事件配乐、13 条目标）、`secondary-lines.json`（`zhaonan` 线，`after: "heimohai"`）、`line-compass.json`（`lineId: "nanhuang"`）、`texts.json`（12 个 `lineCompass.nanhuang.*`）。6 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋、汉、塞外不同之处：
+- **两个 id**：下一步表 lineId 是 `nanhuang`、正文键 `lineCompass.nanhuang.*`；二级线 id 是 `zhaonan`。包目录与包 id 用 `zhaonan`。
+- **包二级线可写 `{{entity:…}}`／`{{entityLabel:…}}`**（本线是第一条带动态名字的包线：3 个节点的 `reviewSummary` 与 `pendingExpansion` 原用 `entityText(...)`）。运行时 `secondaryLines.ts` 在并入 TS 表之前解析（同包 rail，名字不冻进 catalog）；编译器把 `secondaryLines` 并进原有的 rail 模板校验（实体、标签须存在，报错前缀仍为 `rail entity`）。`mergeSecondaryLines` 本身不解析，编译期的 `validateWithTs` 拿到的是模板原文。
+- **加拍里的 `entityText(...)`** 直接写成模板串：加拍编译时并进包 rail，由 rail 原有的解析处理。
+- **晋包 `dependsOn` 加 `qingyu.zhaonan`**（晋线 `after: "zhaonan"`）。包拓扑序因此变为 … → saiwai → zhaonan → jin → song → …，catalog 里 `rails`／`stageMeta` 的拼接顺序跟着变；运行时 `CANON_RAIL_PROFILES` 按关分组排序，不受影响。
+- 保序：本线没有手审档，4 个生成档进包后照宋 S4 的拼装按 `modId` 归位，没改拼装代码。
+- 隔离：05／06 移到 stageMeta，成员不变，`DEFAULT_LINE_QUARANTINED_STAGE_IDS` 迭代顺序变了（同汉、塞外）。
+- 未搬（留在 TS）：`eventNarrativeView.ts` 里 stage_04 的逐事件章名表与 04b 的多分支——返回的是写死的「第46章·袭击」「海神殿」「商队与峒使」等，不是该关已有章的标题，stageMeta 的 `uiChapterId` 表达不了；`legacyNarrativeVariants` 的 `shanghou_revealed` 条件改写；`fixedQuestObjectives.ts` 里用 `entityText` 的两条目标（`wuerlang_slays_dagu`、`s05b_02_xiaozi_exposed`，stageMeta 的 objective 不解析模板）与 `huamiao_coop_boundary` 特判；别的线挂在昭南事件上的节点与锚。`tests/contentPackLineFormats.test.mjs` 的「逐事件特判与默认章重叠」反例用的就是留在 TS 的 stage_04 特判。

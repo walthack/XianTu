@@ -160,7 +160,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   return r;
  });
  // 包 rail 文案里的动态名字：{{entity:<kind>:<id>}}、{{entityLabel:<kind>:<id>:<labelId>}}，运行时由 canonRail.ts 解析；这里只校验写法、实体与标签存在
- {const found=[];const scan=v=>{if(typeof v==='string')for(const x of v.matchAll(/\{\{([^{}]*)\}\}/g))found.push(x[1]);else if(Array.isArray(v))v.forEach(scan);else if(object(v))Object.values(v).forEach(scan);};scan(catalog.rails);
+ // 昭南线 S4：包二级线（secondaryLines）同样可写，运行时由 secondaryLines.ts 解析；一并在这里校验
+ {const found=[];const scan=v=>{if(typeof v==='string')for(const x of v.matchAll(/\{\{([^{}]*)\}\}/g))found.push(x[1]);else if(Array.isArray(v))v.forEach(scan);else if(object(v))Object.values(v).forEach(scan);};scan(catalog.rails);scan(lineFormats.secondaryLines);
  if(found.length){const {namedEntity,entityRecognitionLabel}=await tsLoader().import(join(root,'src/modules/scenarioMods/namedEntities.ts'));const kindRe='(character|location|faction|enemy|ending)';
   for(const t of found){const e=t.match(new RegExp(`^entity:${kindRe}:([^}]+)$`)),l=t.match(new RegExp(`^entityLabel:${kindRe}:([^}:]+):([^}:]+)$`));
    if(e){if(!namedEntity(e[1],e[2]))fail(`rail entity {{${t}}}: unknown ${e[1]} ${e[2]}`);}
