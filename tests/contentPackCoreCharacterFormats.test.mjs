@@ -2,7 +2,7 @@
 // storyAxis、locationAliases、characterProfiles、ifBranches。编译夹具在 _newbot_tmp 下的临时 packs 目录（写法同 contentPackLineFormats）。
 // 不写死真实剧情 id：关、事件、地点、角色都从内置关、locations.json、实体总表动态挑；合成 id 一律 test.* 前缀。
 // 「与 TS 表重复」用合成的临时 TS 条目：本文件与编译器（scripts/*.mjs 的 jiti）共用模块缓存，用例里改 TS_ 表、用完还原，编译期校验看得到。
-// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后：没改口径的段自然变成空演练；人物拍点一段自 B2 起取合并值、姿态与好感上限自 B4 起取人物包 profiles.json，仍是真演练）。
+// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后：没改口径的段自然变成空演练；人物拍点一段自 B2 起取合并值、姿态与好感上限自 B4 起取人物包 profiles.json、地点三张表自 B3 起取核心包 location-aliases.json，仍是真演练）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,readFile,readdir,writeFile,rm} from 'node:fs/promises';
@@ -72,7 +72,10 @@ const OTHER_EVENT=BUILTINS.find(m=>m!==STAGE&&m.scenario.events.length).scenario
 const NEW_ID='test.event.not_yet_written';
 const QUARANTINED=BUILTINS.find(m=>DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(m.manifest.id)&&m.scenario.events.length);
 const LOCS=(await read(join(root,'mod-kit/entity-catalog/locations.json'))).entries;
-const tsLocIds=new Set([...Object.entries(LOC.TS_LOCATION_ID_ALIASES).flat(),...Object.entries(LOC.TS_LOCATION_PARENTS).flat(),...Object.keys(LOC.TS_LOCATION_NAMES)]);
+// B3 起三张手写表在核心包里、TS 表为空：合成地点要避开 TS 表与包里已用的 id（否则正例并入真实 catalog 时撞键）
+const PACK_LOC=CONTENT_PACKS.locationAliases||{};
+const tsLocIds=new Set([...Object.entries(LOC.TS_LOCATION_ID_ALIASES).flat(),...Object.entries(LOC.TS_LOCATION_PARENTS).flat(),...Object.keys(LOC.TS_LOCATION_NAMES),
+ ...Object.entries(PACK_LOC.canonical||{}).flat(),...Object.entries(PACK_LOC.parents||{}).flat(),...Object.keys(PACK_LOC.display||{})]);
 const [LA,LB,LC]=LOCS.map(e=>e.id).filter(id=>!tsLocIds.has(id)&&!LOCS.some(e=>(e.aliases||[]).includes(id)));
 const LOC_ALIAS=LOCS.flatMap(e=>e.aliases||[]).find(Boolean);
 const tsNames=new Set([...ST.TS_STANCE_PROFILES,...AC.TS_AFFINITY_CAPS].flatMap(p=>p.names));
@@ -279,7 +282,9 @@ test('locationAliases 正例：三张表并在 TS 表之后；canonicalLocationI
  const {note,...expected}=locs();assert.deepStrictEqual(out.locationAliases,expected);
  assert.deepEqual(Object.keys(LOC.mergeLocationTable('x',{'test.a':1},{'test.b':2})),['test.a','test.b']);
  assert.throws(()=>LOC.mergeLocationTable('parents',{[LB]:LA},out.locationAliases.parents),new RegExp(`locationAliases parents ${reEsc(LB)}: duplicate`));
- const loc=await loadWithCatalog('src/modules/scenarioMods/travel/locationIds.ts',{...CONTENT_PACKS,locationAliases:out.locationAliases});
+ // 合成三张表接在真实 catalog 的 locationAliases 之后（B3 起真实数据在核心包里，不能整段换掉）
+ const merged=Object.fromEntries(['canonical','parents','display'].map(k=>[k,{...(PACK_LOC[k]||{}),...out.locationAliases[k]}]));
+ const loc=await loadWithCatalog('src/modules/scenarioMods/travel/locationIds.ts',{...CONTENT_PACKS,locationAliases:merged});
  assert.equal(loc.canonicalLocationId('test.location.old'),NE.canonicalEntityId('location',LA));
  assert.equal(loc.locationWithin(LB,LC),true);assert.equal(loc.locationWithin(LC,LB),false);
  assert.equal(loc.locationIdByRegisteredName('测试别称'),LB);
@@ -449,14 +454,16 @@ test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通�
  // B2 起人物任务与高光在人物包里、TS 表为空：同二级线，取合并值转写（不取 TS 表，否则表搬空后演练合出来是空的）
  const beats={quests:structuredClone(CQ.CHARACTER_QUESTS),highlights:structuredClone(CQ.CHARACTER_HIGHLIGHTS)};
  const story={stageOrder:[...AX.STAGE_ORDER],layers:structuredClone(AX.MAIN_QUEST_LAYERS),stages:structuredClone(AX.MAIN_QUEST_STAGES),nodes:structuredClone(AX.MAIN_QUEST_NODES),requirements:structuredClone(AX.MAIN_QUEST_REQUIREMENTS)};
- const loc={canonical:{...LOC.TS_LOCATION_ID_ALIASES},parents:{...LOC.TS_LOCATION_PARENTS},display:structuredClone(LOC.TS_LOCATION_NAMES)};
+ // B3 起地点三张手写表在核心包里、TS 表为空：取核心包的 location-aliases.json 原样转写（含 note；同姿态一段的理由）
+ const loc=await read(join(PACK_DIR,'qingyu/location-aliases.json'));
+ assert.equal(Object.keys(loc.parents).length,Object.keys(LOC.LOCATION_PARENTS).length);assert.equal(Object.keys(loc.display).length,Object.keys(LOC.LOCATION_NAMES).length);
  // B4 起姿态档案与好感上限在人物包里、TS 表为空：取人物包的 profiles.json 原样转写（含 note；不取 TS 表，否则表搬空后演练合出来是空的）
  const {stance,affinityCaps}=await read(join(PACK_DIR,'characters/profiles.json'));const profiles={stance,affinityCaps};
  assert.equal(stance.length,ST.STANCE_PROFILES.length);assert.equal(affinityCaps.length,AC.AFFINITY_CAPS.length);
  const statuses=r=>r.acceptedStatuses.source.replace(/^\^\(?|\)?\$$/g,'').split('|');
  const ifs={branches:DL.TS_AUTO_BRANCH_RULES.map(r=>({...r,acceptedStatuses:statuses(r)})),consequences:DL.TS_AUTO_CONSEQUENCE_RULES.map(r=>({...r,acceptedStatuses:statuses(r)})),prompts:{...DL.TS_DIVERGENCE_PROMPTS}};
  const before={lce:{...SL.LINE_CRITICAL_EVENTS},beats:{quests:CQ.CHARACTER_QUESTS,highlights:CQ.CHARACTER_HIGHLIGHTS},story:{stageOrder:AX.STAGE_ORDER,layers:AX.MAIN_QUEST_LAYERS,stages:AX.MAIN_QUEST_STAGES,nodes:AX.MAIN_QUEST_NODES,requirements:AX.MAIN_QUEST_REQUIREMENTS},
-  loc:{canonical:{...LOC.TS_LOCATION_ID_ALIASES},parents:{...LOC.LOCATION_PARENTS},display:{...LOC.LOCATION_NAMES}},stance:ST.STANCE_PROFILES,caps:AC.AFFINITY_CAPS,
+  loc:{canonical:LOC.mergeLocationTable('c',LOC.TS_LOCATION_ID_ALIASES,PACK_LOC.canonical),parents:{...LOC.LOCATION_PARENTS},display:{...LOC.LOCATION_NAMES}},stance:ST.STANCE_PROFILES,caps:AC.AFFINITY_CAPS,
   ifs:DL.mergeIfBranches({branches:DL.TS_AUTO_BRANCH_RULES,consequences:DL.TS_AUTO_CONSEQUENCE_RULES,prompts:DL.TS_DIVERGENCE_PROMPTS},undefined)};
  const files={'lines.json':lines,'lce.json':lce,'beats.json':beats,'axis.json':story,'loc.json':loc,'profiles.json':profiles,'if.json':ifs};
  const manifest={id:'test.rehearsal',secondaryLines:['lines.json'],lineCriticalEvents:['lce.json'],characterBeats:['beats.json'],storyAxis:['axis.json'],locationAliases:['loc.json'],characterProfiles:['profiles.json'],ifBranches:['if.json'],files};

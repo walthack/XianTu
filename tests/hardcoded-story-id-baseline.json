@@ -13,8 +13,8 @@
     "playtest."
   ],
   "总数": {
-    "文件数": 67,
-    "行数": 835
+    "文件数": 66,
+    "行数": 825
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -66,7 +66,6 @@
     "src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts": 27,
     "src/modules/scenarioMods/travel/defs/qingyuNanhuangStepScenes.ts": 2,
     "src/modules/scenarioMods/travel/defs/qingyuWuyuanZones.ts": 9,
-    "src/modules/scenarioMods/travel/locationIds.ts": 10,
     "src/modules/scenarioMods/travel/travelLedger.ts": 15,
     "src/modules/scenarioMods/voiceCards.ts": 2,
     "src/modules/scenarioMods/wuyuanOpenWorldSlice.ts": 65,

@@ -1,5 +1,5 @@
 {
-  "version": "ed494b3d542c4086",
+  "version": "db269708a589beff",
   "contracts": [
     {
       "meta": {
@@ -20302,9 +20302,34 @@
   },
   "storyAxis": null,
   "locationAliases": {
-    "canonical": {},
-    "parents": {},
-    "display": {}
+    "canonical": {
+      "liuchao.location.xiong_er_pu": "liuchao.location.xiongerpu",
+      "liuchao.location.gui_wang_dong_palace": "liuchao.location.gui_wang_gong",
+      "liuchao.location.bai_yi_valley": "liuchao.location.baiyi"
+    },
+    "parents": {
+      "liuchao.location.gui_wang_gong": "liuchao.location.guiwang_dong",
+      "liuchao.location.gui_wang_gong.jingshen_tai": "liuchao.location.gui_wang_gong",
+      "lcq.location.guiwang_inn": "liuchao.location.guiwang_dong",
+      "liuchao.location.sea_temple": "liuchao.location.biyu_village"
+    },
+    "display": {
+      "liuchao.location.baiyi": {
+        "name": "白夷谷",
+        "displayAliases": [
+          "白夷族"
+        ]
+      },
+      "liuchao.location.gui_wang_gong": {
+        "name": "鬼王宫",
+        "displayAliases": [
+          "鬼王峒宫殿"
+        ]
+      },
+      "liuchao.location.longchi": {
+        "name": "龙池"
+      }
+    }
   },
   "characterProfiles": {
     "stance": [

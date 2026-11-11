@@ -312,3 +312,12 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - 不需要 `dependsOn` 别的包：`dependsOn` 只有 `qingyu.core` 时编译通过，归属扫描没有报引用其它包定义的 id，没有成环。
 - `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的姿态／上限两段改为取人物包 `profiles.json` 原样转写（TS 表搬空后原来的源码解析取到 0 条）；源码解析辅助函数 `sourceEntries` 因此无人使用，已删。
 - catalog 只变 `characterProfiles` 段与 version；棘轮 `stanceProfiles.ts` 48 → 0、`affinityCaps.ts` 13 → 0（总数 1019 → 958，文件 68 → 66）。
+
+## 2026-11-11 地点别名进核心包（B3 前半；主轴停手）
+
+核心包 `packs/qingyu/location-aliases.json`（manifest 新增 `locationAliases`）：原 `travel/locationIds.ts` 的 `TS_LOCATION_ID_ALIASES`（3 条）→ `canonical`、`TS_LOCATION_PARENTS`（4 条）→ `parents`、`TS_LOCATION_NAMES`（3 条）→ `display`，键序不变；原文件头的主策划／剧情裁定注释进文件顶层 `note`。三张 TS 表为 `{}`；`LOCATION_ID_ALIASES`（仍 `Object.freeze`，实体总表派生在前）／`LOCATION_PARENTS`／`LOCATION_NAMES` 与全部查询函数导出名、行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
+- 核心包不需要新的 `dependsOn`：引用的都是 `locations.json` 里的地点 id，归属扫描通过。
+- 留在 TS：`NANHUANG_CONTINENT_IDS`（`auditLocationIds` 的南荒多边形判断用的代码常量；`liuchao.continent.` 不在棘轮前缀表里，不计数）。
+- `tests/contentPackCoreCharacterFormats.test.mjs`：locationAliases 正例的合成三张表改为接在真实 catalog 段之后（原来整段换掉，真实数据搬进包后会被丢掉），合成地点另避开包里已用的 id；搬迁演练的地点一段改取 `location-aliases.json` 原样转写（同 B4 的姿态一段）。
+- catalog 只变 `locationAliases` 段与 version（`ed494b3d542c4086` → `db269708a589beff`）；棘轮 `travel/locationIds.ts` 10 → 0（总数 835 → 825，文件 67 → 66）。
+- **主轴（`mainQuestAxis.ts` 五张表）未搬，停手待裁定**：`stages[].pillars` 的枚举值 `"taiquan"`（7 关）与太泉包定义的二级线 id `taiquan` 同名，通用归属扫描把它算成核心包引用太泉包（`qingyu.core references taiquan owned by qingyu.taiquan; add dependsOn`），而太泉包已依赖核心包，补依赖即成环。`pillars` 是编译期按枚举校验的闭集，不是 id 引用；可选解法见 B3 报告。五张 TS 表原样未动（F0a 二选一规则下不能只搬一部分）。

@@ -50,5 +50,8 @@
   ],
   "secondaryLines": [
     "secondary-lines.json"
+  ],
+  "locationAliases": [
+    "location-aliases.json"
   ]
 }
