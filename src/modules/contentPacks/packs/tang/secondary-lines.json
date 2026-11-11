@@ -1,0 +1,513 @@
+[
+  {
+    "after": "han",
+    "id": "tang",
+    "name": "唐国",
+    "kind": "nation",
+    "note": "锚事件：主家小姐的旧事（seq 1061，id 仍是 changgan_fanseng_hunt）。袁天罡说不清番僧是否专冲穿越者，不得写成定论。 2026-10-28 五线补全·唐把它挂上留仙坪章 rail，1059／1060 新建抵留仙坪、镇上相士补上。",
+    "anchorEventIds": [
+      "lyg.event.changgan_fanseng_hunt"
+    ],
+    "anchorLocationIds": [
+      "liuchao.location.changan"
+    ],
+    "entryHint": "袁天罡说起主家小姐被番僧带走的旧事，说不清是否专冲穿越者；佛门近来在长安大肆扩张，唐国本来崇道，如今佛门要压过道门。",
+    "basis": "长安＝唐国都城，第 30 关可达。**这次不是孪生 id 坑**（实测，2026-08-16）：`lyg.location.changan` 确实存在于 6 个关，但那 6 关同时都有 `liuchao.location.changan`——是真子集，收一个就够，加了等于没加。（旧 basis 写它「live 关查无」，与实测不符，已改。结论没变，理由是错的。汉国洛都那次是真孪生：24 关 vs 6 关互不覆盖，必须全收。）**引子＝世界此刻的状态**（2026-10-28 返修，不得坐实猎杀）：袁天罡讲主家小姐被番僧带走的旧事，说不清是否专冲穿越者（seq 1061）；且正在长安大肆扩张（`investigate_te_master` 的 objective 即「确认释特昧普的**扩张方式**与外援」，手法是强制灌顶收服摩尼寺）。**「唐国本来崇道」是正典明写的设定**（用户指出，已核）：卓云君卷「在**崇信道家的唐宋两国**，太乙真宗的教御每每受到国师的礼遇」；申婉盈卷「太乙真宗在唐国和宋国势力极强」；赵归真卷「唐国佛门势力固然强大，道门势力也不小」；最硬的一条是**杨玉环本人**——「先皇钦命太乙真宗、阳钧宗、乾贞道、长青宗、瑶池宗一同授箓传道」，她的别名「太真公主」就是道号：朝廷把自己的贵妃送进道门受箓，比任何描述都能说明国朝的立场。于是这条线的赌注也清楚了——沮渠二世卷：「如果能让**唐国正式将佛门列为国教，彻底压倒道门**，绝对是一椿不世奇功」。番僧要的不是杀几个穿越者，是夺国教之位。（另记一处结构：seq 1055 他是**以舞阳侯身份**出使唐国的——**汉国线的顶点就是本线的入场券**，八条线里第一处明确的\"顶点喂入口\"。这层不写进指引，只作日后分层的依据。）",
+    "nodes": [
+      {
+        "note": "锚事件：seq 1061 袁天罡讲主家小姐的旧事，说不清是否专冲穿越者。1059 抵留仙坪、1060 镇上相士由五线补全·唐（2026-10-28）新建。",
+        "reviewSummary": "审汪臻，问明白员外传说多是编造",
+        "status": "ready",
+        "stageId": "lyg.han_succession",
+        "eventId": "lyg.event.han_succession_10_beat"
+      },
+      {
+        "reviewSummary": "在留仙坪多留一日，盯住同住客栈的周飞一伙与廖群玉",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.tang_liuxianping_arrive"
+      },
+      {
+        "reviewSummary": "堵下镇上的落魄老相士，他承认也是穿越者，借名袁天罡",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.tang_liuxianping_xiangshi"
+      },
+      {
+        "note": "T1 汉使身份并进同关 s03_09",
+        "reviewSummary": "听袁天罡讲主家小姐被番僧带走的旧事，他并说不清是否专冲穿越者",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.changgan_fanseng_hunt"
+      },
+      {
+        "reviewSummary": "入长安宣平坊落脚，石超接风——吕奉先已在城中惹事",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.s03_01"
+      },
+      {
+        "reviewSummary": "街头撞见杨玉环驾轻车伤人训话，潘金莲提剑为她警戒",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.s03_03"
+      },
+      {
+        "note": "T4 并进 buddhist_conspiracy_04／_06（火遁／佛咒，过程）",
+        "reviewSummary": "听小紫的说法：她称不是闯进去的，是从兴庆宫遗迹被传送进塔——僧众不认",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.xiaozi_teleported_into_dayanta"
+      },
+      {
+        "note": "T5 并进 _09_beat／_10_beat",
+        "reviewSummary": "要救大雁塔里的小紫与吕雉——窥基断水，她握着铸铁炸弹",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.s03_08"
+      },
+      {
+        "reviewSummary": "夜访慈恩寺，碑上疑白行简是穿越者；汉使身份救走炸塔的小紫",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.s03_09"
+      },
+      {
+        "note": "T7 并进 ganlu_aftershock_07_beat",
+        "reviewSummary": "从杨玉环处厘清北司与佛门各自在查什么",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.north_bureau_buddhist_moves"
+      },
+      {
+        "reviewSummary": "与小紫潜入青龙寺，摸清释特昧普的扩张方式与外援",
+        "status": "ready",
+        "stageId": "lyg.changgan_begins",
+        "eventId": "lyg.event.qinglongsi_te_master"
+      },
+      {
+        "note": "T9 并进 shituolin_endgame_10_beat 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。",
+        "reviewSummary": "潜入青龙寺确认释特昧普的扩张方式与外援",
+        "status": "ready",
+        "stageId": "lyg.shixiang_ambush",
+        "eventId": "lyg.event.investigate_te_master"
+      },
+      {
+        "reviewSummary": "把鸿胪寺的礼遇和朝会资格拿回来",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.honglusi_amends"
+      },
+      {
+        "reviewSummary": "确认鸿胪寺恢复的礼遇与元正朝会资格——段文楚登场",
+        "status": "ready",
+        "stageId": "lyg.shixiang_ambush",
+        "eventId": "lyg.event.shixiang_s11"
+      },
+      {
+        "reviewSummary": "确认慈恩寺红莲演法与唐皇敕令之间的张力",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.cien_red_lotus"
+      },
+      {
+        "note": "T11：objective 是阻止夺舍；axisBeat 写明当场没拦住",
+        "reviewSummary": "确认红莲演法与唐皇敕令之间的张力——观海登场",
+        "status": "ready",
+        "stageId": "lyg.shixiang_ambush",
+        "eventId": "lyg.event.shixiang_s12"
+      },
+      {
+        "note": "序按 axisSeq：搜查宫中 1382 在受封 1396 之前，先前顶点排在了它前面。 搜查宫中那一拍是原著段与续写第二幕的咬合点，但仍早于受封，顶点收尾。",
+        "reviewSummary": "元正朝会上核验徐君房的地球仪，对照秦使说辞",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.yuanzheng_globe"
+      },
+      {
+        "reviewSummary": "核验徐君房的地球仪知识与秦使说辞",
+        "status": "ready",
+        "stageId": "lyg.shixiang_ambush",
+        "eventId": "lyg.event.shixiang_s13"
+      },
+      {
+        "note": "T14 用户裁定（2026-08-16）：没剧本，先留空，不要自行续写",
+        "reviewSummary": "查宣平坊那桩宦官命案，别急着定谁是幕后",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.xuanping_eunuch_murder"
+      },
+      {
+        "reviewSummary": "摸清废弃兴庆宫，标出地下入口",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.survey_xingqing_palace"
+      },
+      {
+        "reviewSummary": "稳住太子伤势，把误伤消息压下去",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.prince_injury_control"
+      },
+      {
+        "reviewSummary": "在水香楼布好诱捕",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.shuixiang_lure_setup"
+      },
+      {
+        "reviewSummary": "压住麻痹毒势，封住毒方刺客的藏身范围",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.spot_poison_assassin"
+      },
+      {
+        "reviewSummary": "池畔隔开毒烟，把飞鸟萤子擒下",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.poolside_capture"
+      },
+      {
+        "reviewSummary": "隔离毒烟并擒获飞鸟萤子",
+        "status": "ready",
+        "stageId": "lyg.shixiang_ambush",
+        "eventId": "lyg.event.final_showdown"
+      },
+      {
+        "reviewSummary": "炸开摩尼寺打开营救窗口，女师是否脱险待确认",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.blast_moni_temple"
+      },
+      {
+        "reviewSummary": "听信永讲清蕃密邪径内幕，据此决定怎么应对",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.xinyong_reveals_fanmi"
+      },
+      {
+        "reviewSummary": "听清蕃密内幕并作出有依据的应对决定——信永登场",
+        "status": "ready",
+        "stageId": "lyg.shixiang_ambush",
+        "eventId": "lyg.event.forewarned_from_xinyong"
+      },
+      {
+        "reviewSummary": "审飞鸟萤子，她拒绝合作",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.interrogate_feiniao_yingzi"
+      },
+      {
+        "reviewSummary": "在长安面见唐皇，接下昭南索赔：交张亢、赔款，否则兴兵",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.changgan_interlude_03_beat"
+      },
+      {
+        "reviewSummary": "受礼部侍郎、通问计议使，用这颗印解宋困",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.song_tongwen"
+      },
+      {
+        "reviewSummary": "与昭南卿士囊瓦谈崩，他拒了程氏方案并加码兑付",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.changgan_interlude_04_beat"
+      },
+      {
+        "reviewSummary": "升平客栈连夜谈判，密约条款大致谈妥，只卡在张亢——条款不让、人不交",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.tang_secret_treaty_signed"
+      },
+      {
+        "reviewSummary": "摸清窥基改唆娑梵寺主刺你——瑶池宗已退出",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.changgan_interlude_06_beat"
+      },
+      {
+        "reviewSummary": "疑吕雉泄了赵飞燕的消息，计划以她为饵钓十方丛林",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.changgan_interlude_08_beat"
+      },
+      {
+        "reviewSummary": "正月初九鸿胪寺公布昭南与宋国和约，你成了长安各方关注的焦点",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.honglusi_treaty_announced"
+      },
+      {
+        "reviewSummary": "返程迎战四十余名黑衣人伏击",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.changgan_interlude_09_beat"
+      },
+      {
+        "reviewSummary": "救出白霓裳，击杀王守澄——墨枫林登场",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.changgan_interlude_10_beat"
+      },
+      {
+        "reviewSummary": "从杨玉环接下李昂密令：天策府闭门不涉，去牵制鱼朝恩",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.liang_secret_order"
+      },
+      {
+        "reviewSummary": "听清李昂对天策府与鱼朝恩的安排",
+        "status": "ready",
+        "stageId": "lyg.ganlu_bian",
+        "eventId": "lyg.event.li_jinxiang_meeting"
+      },
+      {
+        "reviewSummary": "核对黎锦香对王守澄案与广源行的说法——鱼玄机登场",
+        "status": "ready",
+        "stageId": "lyg.ganlu_bian",
+        "eventId": "lyg.event.yang_yuhuan_report"
+      },
+      {
+        "reviewSummary": "听黎锦香说清：周飞与十方丛林合谋针对程宅",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.zhoufei_conspiracy"
+      },
+      {
+        "reviewSummary": "问出飞鸟家族与布都御魂剑柄的关系",
+        "status": "ready",
+        "stageId": "lyg.changgan_interlude",
+        "eventId": "lyg.event.feiniao_hilt_clue"
+      },
+      {
+        "reviewSummary": "确认权宦追凶分工与内部猜忌——李辅国、田令孜、仇士良登场",
+        "status": "ready",
+        "stageId": "lyg.ganlu_bian",
+        "eventId": "lyg.event.release_jingnian"
+      },
+      {
+        "reviewSummary": "汇总甘露局势并决定是否释放番僧搅局——李训、郑注、净念登场",
+        "status": "ready",
+        "stageId": "lyg.ganlu_bian",
+        "eventId": "lyg.event.su_sha_identified"
+      },
+      {
+        "reviewSummary": "铁马堂擂台进八强，周飞三家全胜——下一场对丹霞宗悬殊",
+        "status": "ready",
+        "stageId": "lyg.liangzhou_league",
+        "eventId": "lyg.event.s06_02"
+      },
+      {
+        "reviewSummary": "查清仇士良夺神策军：张承业、杨家接管，疑田令孜联佛门藩镇杀王守澄",
+        "status": "ready",
+        "stageId": "lyg.liangzhou_league",
+        "eventId": "lyg.event.s06_04"
+      },
+      {
+        "reviewSummary": "查清李宏在仇士良门前刺匡佑、自残嫁祸和尚，意在宦官内讧",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_01_beat"
+      },
+      {
+        "reviewSummary": "自称不拾一世转世，念真经震慑十方丛林围杀",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_03_beat"
+      },
+      {
+        "reviewSummary": "砍断兴唐寺灯树，在火海里斩了龙宸的杀手脱身",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_04_beat"
+      },
+      {
+        "reviewSummary": "拦截龙宸翼火蛇，救下惊理——王彦章、燕姣然登场",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_05_beat"
+      },
+      {
+        "reviewSummary": "随吕雉飞入大雁塔，被释特昧普困进佛咒幻境",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_06_beat"
+      },
+      {
+        "reviewSummary": "采纳贾文和之计，部署先取田令孜以乱破局",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_07_beat"
+      },
+      {
+        "reviewSummary": "拒了窥基假诏和剃度，刘贞亮传诏被挡，当场动手",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_08_beat"
+      },
+      {
+        "reviewSummary": "在程宅揭穿窥基伪造法旨——沮渠二世、净空登场",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_09_beat"
+      },
+      {
+        "reviewSummary": "在程宅应对窥基弃佛入魔，看他施血海遁走",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_10_beat"
+      },
+      {
+        "reviewSummary": "在大明宫躲开仇士良神策军屠城，乱党正被满城搜捕",
+        "status": "ready",
+        "stageId": "lyg.buddhist_conspiracy",
+        "eventId": "lyg.event.buddhist_conspiracy_11_beat"
+      },
+      {
+        "reviewSummary": "持仇士良令牌经杨玉环入宫，潜入蓬莱秘阁见他威逼李昂",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_02_beat"
+      },
+      {
+        "reviewSummary": "查清窥基弃佛后长安寺庙道观遭劫，官府已瘫痪",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_03_beat"
+      },
+      {
+        "reviewSummary": "听取李训在秘阁的供词——鱼弘志登场",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_04_beat"
+      },
+      {
+        "reviewSummary": "旁观李辅国审宦官：田令孜、刘贞亮死，鱼弘志净身待赐死",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_05_beat"
+      },
+      {
+        "reviewSummary": "听贾文和建议杀李昂以安天下——你还没决定",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_06_beat"
+      },
+      {
+        "reviewSummary": "到曲江苑看到鱼弘志被程元振逼着弑了李昂，王德妃已先死",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_07_beat"
+      },
+      {
+        "reviewSummary": "随仇士良返宫，得知李辅国已弑君、萧太后失踪",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_08_beat"
+      },
+      {
+        "reviewSummary": "向罗令询问惨案详情",
+        "status": "ready",
+        "stageId": "lyg.ganlu_aftershock",
+        "eventId": "lyg.event.ganlu_aftershock_09_beat"
+      },
+      {
+        "reviewSummary": "探听李辅国重分职权：程元振任枢密使，仇士良留用，继位人选在议",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_01_beat"
+      },
+      {
+        "reviewSummary": "赶到独柳树，看着王涯、舒元舆等宰执家眷被腰斩",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_02_beat"
+      },
+      {
+        "reviewSummary": "赶到现场，看清窥基已显尸陀林主真身，释特昧普正在对抗",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_04_beat"
+      },
+      {
+        "reviewSummary": "合力打散窥基魔身——头颅附老太监跑了，释特昧普也逃了",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_05_beat"
+      },
+      {
+        "reviewSummary": "接中行说急报，赶回宫确认江王李炎已入宫",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_06_beat"
+      },
+      {
+        "reviewSummary": "查清太液池黑雾是李辅国夺舍的护持之法",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_07_beat"
+      },
+      {
+        "reviewSummary": "探查婆娑宝树培育地点——安乐公主登场",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_08_beat"
+      },
+      {
+        "reviewSummary": "随杨玉环奉诏讨逆：她宣布李辅国假传圣旨，杀向大明宫",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_09_beat"
+      },
+      {
+        "reviewSummary": "莲座前砍向李辅国，受伤后被潘金莲、白霓裳救下",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_10_beat"
+      },
+      {
+        "reviewSummary": "李辅国把你和杨玉环、吕雉、潘金莲、白霓裳收进浮屠塔",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_11_beat"
+      },
+      {
+        "reviewSummary": "以生死根吸尽死气，联手斩断李辅国肉身",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_12_beat"
+      },
+      {
+        "reviewSummary": "你拦不住：李辅国魂魄占了返老的太皇太后郭氏，李炎把你打断",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_13_beat"
+      },
+      {
+        "reviewSummary": "谎称斩了李辅国喂的妖祟，以血藤为证，避开弑后的罪",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.claim_slew_demon"
+      },
+      {
+        "reviewSummary": "接旨大都护、上柱国",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_title_daduhu"
+      },
+      {
+        "reviewSummary": "听贾文和：找五肉五甘露可驱李辅国魂——太皇太后魂魄或还在",
+        "status": "ready",
+        "stageId": "lyg.shituolin_endgame",
+        "eventId": "lyg.event.shituolin_endgame_14_beat"
+      },
+      {
+        "reviewSummary": "换身后续：长安驱魂局",
+        "status": "pending"
+      }
+    ],
+    "pendingExpansion": "线形：以汉使入长安 → 卷入佛门纷争 → 大战窥基魔身 → 甘露变 → 李辅国换身暂告一段落。**顶点是临时的**（用户裁定 2026-08-16）：大都护、上柱国（恩同亲王，seq 1396）只是原著段用完时的收束点，不是这条线的终局——李辅国换身之后还有戏，等剧本写出来再往后扩。所以它与其余七条线的顶点不同档：那七条是\"这条线打穿了\"，唐国这个是\"原著素材到此为止\"。T12 需新增 `shituolin_endgame_title_daduhu`（1395 登基／1397 辞官劝告并进）。T14 换身后续：长安驱魂局，没剧本，留空待完成。旧「入仕唐廷的判据」作废。"
+  }
+]

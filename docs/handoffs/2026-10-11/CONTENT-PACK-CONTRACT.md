@@ -206,3 +206,14 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - rail 生成器仍用 `manualStageIds` 排除 stage_01／02；万一生成出来，路由会因手写 `rails.json` 认领而报错（fail closed），不会覆盖。
 - 隔离：`lcq.stage_03` 从 TS 隔离表移到 stageMeta `defaultLineQuarantined: true`。成员不变，`DEFAULT_LINE_QUARANTINED_STAGE_IDS` 的迭代顺序变了（stage_03 排到 TS 剩余各关之后）；现有读取方只用 `.has()`。`tests/contentPackLineFormats.test.mjs` 的 TS 隔离夹具改为从 `TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS` 动态取（避开注入成 false 的 `lyl.luoyang_coup`）。
 - 未搬（留在 TS）：`fixedQuestObjectives.ts` 与 `formatQuestCompass` 的 `s02_04` 特判；`eventNarrativeView.ts` 里 stage_02 按地点分段的章名算法（含 `storyRouteLocation` 表）与 `legacyNarrativeVariants` 的 `gamble_bond_signed`／`ningyu_enters_gamble` 条件改写；开局/试玩代码、`loadRepairs.ts` 的 stage_01 旧短语快照；别的线挂在塞外事件上的节点。
+
+## 2026-11-11 唐线数据进包（唐线 S4）
+
+唐包 `packs/tang/`（`id: "qingyu.tang"`，`dependsOn: ["qingyu.core", "qingyu.han"]`）：`rails.generated.json`（唐 6 个生成档；隔离关 `lyg.ganlu_bian`、`lyg.shixiang_ambush` 没有档）、`rail-extra-beats.json`（唐 8 条加拍）、`stage-meta.json`（唐 6 关有条目：隔离 2、称号 1、章名 2 关、章配乐 3、事件配乐 5、目标 2）、`secondary-lines.json`（`tang` 线，`after: "han"`）、`line-compass.json`（`lineId: "tang"`）、`texts.json`（8 个 `lineCompass.tang.*`）。唐 8 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋、汉不同之处：
+- **长安初定、长安插曲两处章名特判删掉**，改由唐包 stageMeta 供数：长安初定 `defaultUiChapterId`＝「抵达长安灞桥」、留仙坪 3 拍逐事件 `uiChapterId`＝「留仙坪」；长安插曲三章（年节与朝局／失踪与伏击／甘露前夜）的拍逐事件写 `uiChapterId`，**不设默认章**（原特判 `?? fallback`）。至此 `eventNarrativeView.ts` 已没有整关章名特判。
+- 导出名 `LIUXIANPING_EVENT_IDS` 保留，照汉线用 `stageMetaUiChapterEventIds` 派生；`CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS`（`[章名, 事件集合][]`）用新增的 `stageMetaUiChapterGroups(meta, stageId)` 派生：按 `uiChapterId` 分组，章按 events 里首次出现的顺序、事件按文件顺序，章名取编译器写入的 `chapterTitles`。
+- **`TS_MILESTONE_REWARDS` 搬空**（`[]`），全部称号都在 stageMeta；`MILESTONE_REWARDS` 照汉线按 `STAGE_ORDER` 排，顺序不变。
+- `tang` 是 `TS_SECONDARY_LINES` 与核心包 `line-compass.json` 的最后一条：TS 侧删块后 zhaonan 收尾 `},` 原样；JSON 侧前一项的 `},` 改 `}`。
+- `tests/contentPackLineFormats.test.mjs`：称号与整关章名特判两类 TS 侧都已搬空，改用**合成的临时 TS 条目**——用例内往 `TS_MILESTONE_REWARDS` 临时推一条、临时替换 `eventNarrativeView` 模块导出的 `storyChapterTitleIn`（编译器与测试经 jiti 共用模块缓存，拿到同一模块对象），用完还原；「既有特判先于 stageMeta」改用 `lcq.stage_04` 逐拍特判。

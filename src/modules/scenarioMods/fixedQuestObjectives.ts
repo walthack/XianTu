@@ -23,8 +23,6 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
   'lcq.event.s05b_shanghou_reads_letter': '接受殇侯解蛊，再请他辨认黑鸦使者的白纸信',
   'lcq.event.s05b_yeao_palm_ningyu_stays': '接受叶媪诊视，听清凝羽为何需要留村调养',
   'lcq.event.debut_lemingzhu': '看清商队里那个被扯掉头饰的新娘',
-  'lyg.event.debut_daiqisi': '看清佛堂废墟里被禁锢的那位妇人',
-  'lyg.event.debut_shefuren': '看清卧室里挽鞭出场的黑衣侍奴',
   'lcq.event.blank_letter_and_dagu': '当面核这封白纸信笺，并应对小紫当着阁罗说的话',
   'lcq.event.hongmiao_controlled': '看清红苗此刻的状态，并把苏荔从阁罗手里暂时保下',
   'lcq.event.s04b_lingfei_baiyi_crisis_19': '从被巨浪淹没的竹楼里脱身',

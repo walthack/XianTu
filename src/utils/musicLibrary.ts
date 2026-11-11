@@ -95,9 +95,6 @@ const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.chapter.stage_06': 'climax',
 
 
-  'lyg.chapter.changgan_begins_liuxianping': 'daily',
-  'lyg.chapter.changgan_begins': 'daily',
-  'lyg.chapter.liangzhou_league': 'battle',
 };
 
 /** 内容包关的章配乐（chapters[].presentation.mood，编译期已校验为 MusicMood）；先于 CHAPTER_MOOD_MAP 查。 */
@@ -128,11 +125,6 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s06_03': 'emotion',
 
   'lcq.event.s04_05': 'lament',
-  'lyg.event.release_jingnian': 'court',
-  'lyg.event.s03_01': 'daily',
-  'lyg.event.s03_04': 'danger',
-  'lyg.event.s06_03': 'emotion',
-  'lyg.event.s06_07': 'aspire',
 
 
 };

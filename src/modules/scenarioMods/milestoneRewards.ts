@@ -26,14 +26,8 @@ export interface MilestoneReward {
 
 // 落点必须符合原文故事线（来源：milestone-grants-scan 原文扫描 + 用户裁定 2026-07-03）。
 // 新增条目：补一行即可。跳过项：大行令(原文旋即被夺,引擎无撤销)/兰台典校(非正式官职)。
-// 已迁进内容包 stageMeta.milestoneReward 的关（宋：packs/song/stage-meta.json；汉：packs/han/stage-meta.json）不在本表。
-export const TS_MILESTONE_REWARDS: MilestoneReward[] = [
-  {
-    stageId: 'lyg.shituolin_endgame', // 六朝燕歌行·尸陀林主与李辅国断点
-    titles: ['唐国大都护', '上柱国'],
-    note: '诛杀李辅国，唐国朝廷重赏：官拜大都护（向由亲王遥领，暗示等同亲王）、勋授上柱国（燕歌 0292）。',
-  },
-];
+// 已迁进内容包 stageMeta.milestoneReward 的关（宋：packs/song/stage-meta.json；汉：packs/han/stage-meta.json；唐：packs/tang/stage-meta.json）不在本表。
+export const TS_MILESTONE_REWARDS: MilestoneReward[] = [];
 
 /**
  * 全部里程碑奖励：内容包 stageMeta 的 milestoneReward（按 catalog 顺序）与 TS 表合并，再按关的故事序（STAGE_ORDER）稳定排序；
