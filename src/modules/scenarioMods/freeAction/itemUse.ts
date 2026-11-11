@@ -8,6 +8,7 @@ import { contentDefinition } from '../entityCatalog';
 import { applyActorStatus, type ApplyStatusResult } from './actorStatus';
 import type { StatusParams } from '../../sceneModule/types';
 import { GAME_NUMBERS } from '../../sceneModule/numbers';
+import { maiguConfig } from './maigu';
 
 export interface ItemOnUse { statusId: string; doses?: number; minutes?: number; params?: StatusParams }
 export interface ItemEffect { tags: string[]; onUse: ItemOnUse[] }
@@ -17,8 +18,18 @@ export function itemEffectOf(itemId: string): ItemEffect {
   return { tags: [...(def?.effectTags || [])], onUse: (def?.onUse || []).map(use => ({ ...use })) };
 }
 
+/**
+ * 麻古（maiguConfig().itemId）的 onUse「感官亢奋」只声明不写：声明留给闸门（gates 非 item_mismatch）、
+ * 喂药 sedative_done 分支与自服事实块「药效生效」；真正挂状态的是紧随其后的 afterItemFed（maigu.ts，
+ * 时长 heightened.minutes、来源 maigu.dose）。这里再写一次会让 角色.效果 按来源多出一条孤儿。
+ */
+const declaredOnly = (itemId: string, use: ItemOnUse): boolean => {
+  const cfg = maiguConfig();
+  return !!cfg && itemId === cfg.itemId && use.statusId === cfg.heightenedStatus;
+};
+
 export function applyItemOnUse(save: SaveData, actorId: string, itemId: string, sourceId?: string): ApplyStatusResult[] {
-  return itemEffectOf(itemId).onUse.map(use => applyActorStatus(save, actorId, use.statusId, { sourceId: sourceId ?? itemId, doses: use.doses, ...(use.minutes !== undefined ? { minutes: use.minutes } : {}), ...(use.params ? { params: use.params } : {}) }));
+  return itemEffectOf(itemId).onUse.filter(use => !declaredOnly(itemId, use)).map(use => applyActorStatus(save, actorId, use.statusId, { sourceId: sourceId ?? itemId, doses: use.doses, ...(use.minutes !== undefined ? { minutes: use.minutes } : {}), ...(use.params ? { params: use.params } : {}) }));
 }
 
 /** 用带 tag 标签的药解除 statusId 时要改挂的状态（status.itemTagDowngrade）；没有降级＝直接解除。 */

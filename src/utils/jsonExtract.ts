@@ -1,3 +1,5 @@
+import { closedNarrativeField } from '@/services/narrativeResponseSalvage';
+
 export function stripModelThinking(text: string): string {
   return String(text || '')
     .replace(/<(?:ant[-_]?)?(?:think|thinking)>[\s\S]*?<\/(?:ant[-_]?)?(?:think|thinking)>/gi, '')
@@ -101,7 +103,10 @@ export function narrativeOutsideJson(text: string): string {
     }
   }
   if (rest === null) return '';
-  return rest.replace(/```(?:json)?/gi, '').replace(/\n{3,}/g, '\n\n').trim();
+  const outside = rest.replace(/```(?:json)?/gi, '').replace(/\n{3,}/g, '\n\n').trim();
+  // 剩下的是坏掉的回包外壳（模型把 {"text":"…"] 写坏，只有尾部数组被解析走，8092 91a0d2c3 真机）：
+  // 只取其中已闭合的正文字段；取不出就当没有正文，不把原始 JSON 当叙事。
+  return /^\{\s*"/.test(outside) ? (closedNarrativeField(outside) || '').trim() : outside;
 }
 
 export function parseJsonFromText<T = unknown>(text: string): T {

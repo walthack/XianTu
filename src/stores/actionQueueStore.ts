@@ -54,9 +54,9 @@ export const useActionQueueStore = defineStore('actionQueue', () => {
     }
     // --- 冲突解决逻辑结束 ---
 
-    // 检查是否已经有相同类型的操作，如果有则替换
+    // 检查是否已经有相同类型的操作，如果有则替换（「使用」每按一次各记一条：各自带份数、各自可撤回，回合发送时逐条结算药效）
     const existingIndex = pendingActions.value.findIndex(
-      a => !newAction.cultivation && a.type === action.type && a.itemName === action.itemName && a.npcId === action.npcId
+      a => !newAction.cultivation && newAction.type !== 'use' && a.type === action.type && a.itemName === action.itemName && a.npcId === action.npcId
     );
     
     if (existingIndex !== -1) {
