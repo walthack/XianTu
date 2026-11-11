@@ -1,5 +1,6 @@
 
 import {entityNamePattern} from '@/modules/scenarioMods/namedEntities';
+import { CONTENT_PACKS } from '@/modules/contentPacks';
 import themeUrl from '@/assets/music/01-theme-cangmang.mp3';
 import dailyUrl from '@/assets/music/02-daily-shijing.mp3';
 import exploreUrl from '@/assets/music/03-explore-mijing.mp3';
@@ -104,11 +105,15 @@ const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
 
   'lyg.chapter.changgan_begins_liuxianping': 'daily',
   'lyg.chapter.changgan_begins': 'daily',
-  'lyg.chapter.qin_xianyang_prologue': 'court',
   'lyg.chapter.dingtao_beijing': 'court',
   'lyg.chapter.liangzhou_league': 'battle',
   'lyg.chapter.mijing_rumen': 'explore',
 };
+
+/** 内容包关的章配乐（chapters[].presentation.mood，编译期已校验为 MusicMood）；先于 CHAPTER_MOOD_MAP 查。 */
+const PACK_CHAPTER_MOOD_MAP = new Map(CONTENT_PACKS.stages.flatMap(stage => (stage.scenario.chapters || [])
+  .filter(chapter => chapter.presentation?.mood)
+  .map(chapter => [chapter.id, chapter.presentation!.mood as MusicMood] as const)));
 
 const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s01_01': 'theme',
@@ -219,7 +224,7 @@ function normalizeEventText(event: ScenarioMusicEvent): string {
 
 export function resolveMusicMoodForChapter(chapterId: string | null | undefined): MusicMood {
   if (!chapterId) return 'theme';
-  const exactMood = CHAPTER_MOOD_MAP[chapterId];
+  const exactMood = PACK_CHAPTER_MOOD_MAP.get(chapterId) || CHAPTER_MOOD_MAP[chapterId];
   if (exactMood) return exactMood;
 
   return PATTERN_MOOD_RULES.find(([pattern]) => pattern.test(chapterId))?.[1] || 'daily';

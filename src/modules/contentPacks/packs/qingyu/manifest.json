@@ -54,5 +54,8 @@
   ],
   "heldActions": [
     "held-actions.json"
+  ],
+  "rails": [
+    "rails.json"
   ]
 }

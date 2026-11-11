@@ -166,6 +166,8 @@ export interface ScenarioModEvent {
      * 只用于渲染门禁，不进入 playerCompletionContract 或合同哈希。
      */
     stepGuardTerms?: Record<string, string[]>;
+    /** 界面章名取同一关里这一章的标题（不改挂章、activation 与 rail 归属）；只从内容包 catalog 读，不读存档里烘焙的事件。 */
+    uiChapterId?: string;
   };
   /** 程序层事件时钟；相对“事件首次具备结构条件”的世界回合计时。 */
   timeline?: ScenarioModEventTimeline;
@@ -770,6 +772,10 @@ export interface ScenarioModChapter {
   activation?: ScenarioCondition[];
   completion?: ScenarioCondition[];
   eventIds?: string[];
+  /** 纯展示：本章配乐（musicLibrary 的 MusicMood，内容包编译期校验）；只从内容包 catalog 读。 */
+  presentation?: {
+    mood?: string;
+  };
 }
 
 export type ScenarioStoryMode = 'canon_companion';
