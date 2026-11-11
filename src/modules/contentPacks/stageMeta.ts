@@ -49,6 +49,15 @@ export function stageMetaUiChapterEventIds(meta: readonly StageMeta[], stageId: 
     .filter(([, event]) => event.uiChapterId === chapterId).map(([eventId]) => eventId));
 }
 
+/** 某关 stageMeta 里写了 uiChapterId 的事件按章分组：[章标题, 事件 id]，章按首次出现的顺序、事件按文件顺序。 */
+export function stageMetaUiChapterGroups(meta: readonly StageMeta[], stageId: string): Array<readonly [string, Set<string>]> {
+  const m = stageMetaOf(meta, stageId), groups = new Map<string, Set<string>>();
+  for (const [eventId, event] of Object.entries(m?.presentation?.events || {})) {
+    if (event.uiChapterId) (groups.get(event.uiChapterId) || groups.set(event.uiChapterId, new Set()).get(event.uiChapterId)!).add(eventId);
+  }
+  return [...groups].map(([chapterId, ids]) => [m?.chapterTitles?.[chapterId] ?? chapterId, ids] as const);
+}
+
 /** 隔离关集合：stageMeta 写了 defaultLineQuarantined 的关按它（true 加入、false 去掉），没写的沿用 TS 表。 */
 export function quarantinedStageIds(meta: readonly StageMeta[], tsIds: Iterable<string>): Set<string> {
   const out = new Set(tsIds);

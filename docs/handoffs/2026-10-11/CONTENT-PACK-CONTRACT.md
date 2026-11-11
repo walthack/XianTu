@@ -195,3 +195,14 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - `dingtao_beijing.json` 里的 3 处 `presentation` 是 `timeline.reveal.presentation`（急报标题与正文），不是界面章名字段，与 stageMeta 不重叠。
 - `tests/contentPackLineFormats.test.mjs` 宋 S4 留下的汉夹具（汉宫整关章名特判、洛都封侯称号、`liujian_takes_nangong` 目标、`luoyang_cloud_secret` 章配乐、`luoyang_coup` 隔离、`han` 二级线同 id）改为动态挑：章配乐取 `CHAPTER_MOOD_MAP` 首条、称号取 `TS_MILESTONE_REWARDS[0]`、目标取 `FIXED_QUEST_OBJECTIVE_OVERRIDES` 首键、隔离取 TS 表里非 `lcq.stage_03` 的一条、整关章名特判用表外探针事件按行为挑、二级线同 id 用 `TS_LINE_ID`；表或特判搬空时顶层断言报错，须改用合成的临时条目。
 - 未搬（留在 TS）：`LINE_CRITICAL_EVENTS`；别的线挂在汉事件上的节点；`lyl.event.han_shouyang_gaoyanei` 的目标 packText 特判与动作特判（事件属太泉余波关）。
+
+## 2026-11-11 唐线数据进包（唐线 S4）
+
+唐包 `packs/tang/`（`id: "qingyu.tang"`，`dependsOn: ["qingyu.core", "qingyu.han"]`）：`rails.generated.json`（唐 6 个生成档；隔离关 `lyg.ganlu_bian`、`lyg.shixiang_ambush` 没有档）、`rail-extra-beats.json`（唐 8 条加拍）、`stage-meta.json`（唐 6 关有条目：隔离 2、称号 1、章名 2 关、章配乐 3、事件配乐 5、目标 2）、`secondary-lines.json`（`tang` 线，`after: "han"`）、`line-compass.json`（`lineId: "tang"`）、`texts.json`（8 个 `lineCompass.tang.*`）。唐 8 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋、汉不同之处：
+- **长安初定、长安插曲两处章名特判删掉**，改由唐包 stageMeta 供数：长安初定 `defaultUiChapterId`＝「抵达长安灞桥」、留仙坪 3 拍逐事件 `uiChapterId`＝「留仙坪」；长安插曲三章（年节与朝局／失踪与伏击／甘露前夜）的拍逐事件写 `uiChapterId`，**不设默认章**（原特判 `?? fallback`）。至此 `eventNarrativeView.ts` 已没有整关章名特判。
+- 导出名 `LIUXIANPING_EVENT_IDS` 保留，照汉线用 `stageMetaUiChapterEventIds` 派生；`CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS`（`[章名, 事件集合][]`）用新增的 `stageMetaUiChapterGroups(meta, stageId)` 派生：按 `uiChapterId` 分组，章按 events 里首次出现的顺序、事件按文件顺序，章名取编译器写入的 `chapterTitles`。
+- **`TS_MILESTONE_REWARDS` 搬空**（`[]`），全部称号都在 stageMeta；`MILESTONE_REWARDS` 照汉线按 `STAGE_ORDER` 排，顺序不变。
+- `tang` 是 `TS_SECONDARY_LINES` 与核心包 `line-compass.json` 的最后一条：TS 侧删块后 zhaonan 收尾 `},` 原样；JSON 侧前一项的 `},` 改 `}`。
+- `tests/contentPackLineFormats.test.mjs`：称号与整关章名特判两类 TS 侧都已搬空，改用**合成的临时 TS 条目**——用例内往 `TS_MILESTONE_REWARDS` 临时推一条、临时替换 `eventNarrativeView` 模块导出的 `storyChapterTitleIn`（编译器与测试经 jiti 共用模块缓存，拿到同一模块对象），用完还原；「既有特判先于 stageMeta」改用 `lcq.stage_04` 逐拍特判。
