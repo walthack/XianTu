@@ -10,7 +10,9 @@ const root=resolve(import.meta.dirname,'..');
 const packsDir=join(root,'src/modules/contentPacks/packs');
 const read=async p=>JSON.parse(await readFile(p,'utf8'));
 // 比较口径（方案 §4）：texts 只按键查，键序不计；version 是内容哈希，随顺序变
-const norm=c=>JSON.stringify({...c,version:'',texts:Object.fromEntries(Object.entries(c.texts).sort(([a],[b])=>a<b?-1:a>b?1:0))});
+// 晋线 S4：rails 按包顺序拼接，晋包目录名排在秦包前，拆包时晋档在秦档前、并回核心包时秦档在前；运行时 CANON_RAIL_PROFILES 自己按关排，rails 也按 modId 比
+const byModId=(a,b)=>a.modId<b.modId?-1:a.modId>b.modId?1:0;
+const norm=c=>JSON.stringify({...c,version:'',rails:[...c.rails].sort(byModId),texts:Object.fromEntries(Object.entries(c.texts).sort(([a],[b])=>a<b?-1:a>b?1:0))});
 const QIN_ONLY=/qin_xianyang|liuchao\.event\.qin_|lineCompass\.qin|report8091\.qin|mapEntry\.qin/;
 
 test('qin pack merged back into core compiles to the same catalog as the split packs',async()=>{

@@ -161,3 +161,13 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - rail 生成器 `build-canon-rail-profiles.mjs`：包 manifest `rails` 里文件名以 `.generated.json` 结尾的文件「认领」其中各档的 `modId`，生成的档写回那个包文件，不进 `canonRailProfiles.generated.json`；手写 rails 文件认领、两个文件认领同一关、认领了却没生成，一律报错（`scripts/canon-rail-routing.mjs`，`tests/canonRailRouting.test.mjs`）。
 - 称号：TS 表改名 `TS_MILESTONE_REWARDS`；`MILESTONE_REWARDS` 改为合并值（stageMeta 的 `milestoneReward` 按 catalog 顺序在前，TS 表在后），编译期重复检查查 `TS_MILESTONE_REWARDS`。
 - 章名特判里的临安分支已删，改由宋包 stageMeta 的 `defaultUiChapterId` 与首章 10 拍的 `uiChapterId` 供数。
+
+## 2026-11-11 晋线数据进包（晋线 S4）
+
+晋包 `packs/jin/`（`id: "qingyu.jin"`，`dependsOn: ["qingyu.core"]`）：`rails.generated.json`（晋 3 个生成档：stage_07／08／09）、`rail-extra-beats.json`（晋 6 条加拍）、`stage-meta.json`（晋 3 关：10 条目标、1 条事件配乐；晋没有隔离关、称号、章名特判、章配乐、手审 rail 档）、`secondary-lines.json`（`jin` 线，`after: "zhaonan"`）、`line-compass.json`（`lineId: "jin"`）、`texts.json`（9 个 `lineCompass.jin.*`）。晋 3 关的 stage JSON 仍在 `builtins/data`。
+
+与宋不同之处：
+- **宋包 `dependsOn` 加了 `qingyu.jin`**：宋线 `after: "jin"` 是对晋包线 id 的引用，归属检查要求宋包能看见晋包（`qingyu.song references jin owned by qingyu.jin`）。晋包不引用宋包定义的任何 id，不成环。包顺序随之为 core → jin → qin → song。
+- `CANON_RAIL_PROFILES` 拼装没改：晋没有手审档，3 个生成档进包后照宋 S4 的规则按 `modId` 归位，全表顺序与搬前相同（`tests/jinPackMigration.test.mjs`）。catalog 的 `rails` 段按包顺序拼接，晋档排在秦档之前；运行时只认按关分组后的顺序，不受影响。`tests/contentPackSplit.test.mjs` 的比较口径相应把 `rails` 按 `modId` 排后再比。
+- 二级线：`jin` 是包线、`song` 接在它后面（链式 `after`）。`tests/contentPackLineFormats.test.mjs` 的二级线与事件配乐夹具改为从 TS 表动态取第一条现存条目（`TS_SECONDARY_LINES[0]`、`EVENT_MOOD_MAP` 首条），表搬空时须改用合成的临时 TS 条目。
+- 未搬（留在 TS）：`eventNarrativeView.ts` `legacyNarrativeVariants` 里 `s07_05_eight_steeds_informed` 的谢艺生还改写（stageMeta 无此字段）；`divergenceLedger.ts` 挂 `s08_06_pursuit_repelled` 的分歧项；别的线挂在晋事件上的节点与锚。

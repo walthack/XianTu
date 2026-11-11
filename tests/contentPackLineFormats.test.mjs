@@ -3,7 +3,7 @@
 // 运行时读取：纯函数直接传合成 stageMeta；模块级读 catalog 的（canonRail、musicLibrary）把 CONTENT_PACKS 换成合成 catalog 后从临时目录加载。
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {mkdtemp,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
+import {mkdtemp,mkdir,readFile,readdir,writeFile,rm} from 'node:fs/promises';
 import {resolve,join,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {createJiti} from 'jiti';
@@ -22,7 +22,7 @@ const {TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS,DEFAULT_LINE_EXTRA_RAIL_BEATS}=awai
 const {MILESTONE_REWARDS,milestoneRewardFor}=await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
 const {storyChapterTitleIn}=await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
 const {resolveFixedQuestObjectiveIn,FIXED_QUEST_OBJECTIVE_OVERRIDES}=await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
-const {SECONDARY_LINES,mergeSecondaryLines}=await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+const {SECONDARY_LINES,TS_SECONDARY_LINES,mergeSecondaryLines}=await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
 const {entityName}=await loadTs('../src/modules/scenarioMods/namedEntities.ts');
 
 /** packs: {目录名: {manifest 其余字段, files: {文件名: 内容}}}；id 写在 manifest 里。 */
@@ -45,6 +45,15 @@ const qinTexts=async()=>({id:'test.a',texts:['texts.json'],files:{'texts.json':a
 const qinStage=async(m={})=>({id:'test.b',dependsOn:['test.a'],stages:['stage.json'],files:{'stage.json':await read(join(qinDir,'stage-qin-xianyang.json'))},...m});
 
 /** 把 TS 模块复制到临时目录加载：CONTENT_PACKS 换成合成 catalog，相对 import 改成原目录的绝对路径，mp3 换成字符串。 */
+// 晋线 S4：晋的事件配乐、jin 二级线迁出 TS。EVENT_MOOD_MAP、TS_SECONDARY_LINES 的条目都属某条线、终将搬空，
+// 夹具改为从 TS 表动态挑第一条现存条目（配乐表按编译器同样的读源码法）；表搬空时这几条用例要改用合成的临时 TS 条目。
+const EVENT_MOOD_ID=(await readFile(join(root,'src/utils/musicLibrary.ts'),'utf8')).match(/const EVENT_MOOD_MAP: Record<string, MusicMood> = \{([\s\S]*?)\n\};/)?.[1].match(/^\s*'([^']+)': '[^']+',$/m)?.[1];
+assert.ok(EVENT_MOOD_ID,'EVENT_MOOD_MAP 已搬空：改用合成的临时 TS 条目');
+const EVENT_MOOD_STAGE=(await Promise.all((await readdir(join(root,'src/modules/scenarioMods/builtins/data'))).filter(f=>f.endsWith('.json')).map(f=>read(join(root,'src/modules/scenarioMods/builtins/data',f))))).find(m=>m.scenario.events.some(e=>e.id===EVENT_MOOD_ID)).manifest.id;
+const TS_LINE_ID=TS_SECONDARY_LINES[0]?.id;
+assert.ok(TS_LINE_ID,'TS_SECONDARY_LINES 已搬空：改用合成的临时 TS 线');
+const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+
 const loadWithCatalog=async(rel,catalog)=>{
  const file=join(root,rel),source=await readFile(file,'utf8');
  const dir=await mkdtemp(join(root,'_newbot_tmp/song-s2-inject-'));
@@ -121,7 +130,7 @@ test('读取方优先级：既有特判仍先于 stageMeta，stageMeta 先于 TS
 
 test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_MOOD_MAP 之前；事件 mood 先于 EVENT_MOOD_MAP',async()=>{
  const meta=[...(await compile(metaPack([s10Meta()]))).stageMeta,
-  {stageId:'lyl.luoyang_cloud_secret',presentation:{chapters:{'lyl.chapter.luoyang_cloud_secret':{mood:'horror'}},events:{'lcq.event.s09_04_weaving_trade':{mood:'horror'}}}},
+  {stageId:'lyl.luoyang_cloud_secret',presentation:{chapters:{'lyl.chapter.luoyang_cloud_secret':{mood:'horror'}},events:{[EVENT_MOOD_ID]:{mood:'horror'}}}},
   {stageId:QIN_STAGE,presentation:{chapters:{'lyg.chapter.qin_xianyang_prologue':{mood:'horror'}}}}];
  const base=await loadWithCatalog('src/utils/musicLibrary.ts',CONTENT_PACKS);
  const withMeta=await loadWithCatalog('src/utils/musicLibrary.ts',{...CONTENT_PACKS,stageMeta:meta});
@@ -131,7 +140,7 @@ test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_
  assert.equal(base.resolveMusicMoodForScenario(null,[{id:E2}]),base.resolveMusicMoodForScenario(null,[]));
  assert.equal(withMeta.resolveMusicMoodForChapter('lyl.chapter.luoyang_cloud_secret'),'horror','stageMeta 先于 CHAPTER_MOOD_MAP');
  assert.equal(base.resolveMusicMoodForChapter('lyl.chapter.luoyang_cloud_secret'),'court');
- assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:'lcq.event.s09_04_weaving_trade'}]),'horror','stageMeta 先于 EVENT_MOOD_MAP');
+ assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:EVENT_MOOD_ID}]),'horror','stageMeta 先于 EVENT_MOOD_MAP');
  assert.equal(withMeta.resolveMusicMoodForChapter('lyg.chapter.qin_xianyang_prologue'),'court','包内关章 presentation.mood 先于 stageMeta');
 });
 
@@ -168,7 +177,7 @@ test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
  await rejects(metaPack([{stageId:'lcq.stage_03',defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
  await rejects(metaPack([{stageId:'lyl.luoyang_coup',milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/);
  await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{events:{'lyl.event.liujian_takes_nangong':{objective:'x'}}}}]),/objective for lyl\.event\.liujian_takes_nangong already set in fixedQuestObjectives\.ts/);
- await rejects(metaPack([{stageId:'lcq.stage_09_trade_and_escape',presentation:{events:{'lcq.event.s09_04_weaving_trade':{mood:'court'}}}}]),/event mood for lcq\.event\.s09_04_weaving_trade also set in musicLibrary\.ts EVENT_MOOD_MAP/);
+ await rejects(metaPack([{stageId:EVENT_MOOD_STAGE,presentation:{events:{[EVENT_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`event mood for ${reEsc(EVENT_MOOD_ID)} also set in musicLibrary\\.ts EVENT_MOOD_MAP`));
  await rejects(metaPack([{stageId:'lyl.luoyang_cloud_secret',presentation:{chapters:{'lyl.chapter.luoyang_cloud_secret':{mood:'court'}}}}]),/chapter mood for lyl\.chapter\.luoyang_cloud_secret also set in musicLibrary\.ts CHAPTER_MOOD_MAP/);
  // 汉宫的章名特判覆盖整关：迁 stageMeta 必须同时删掉特判（宋临安在 S4b 就是这样做的），否则 defaultUiChapterId／逐事件 uiChapterId 都不生效
  await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{defaultUiChapterId:'lyl.chapter.han_palace_endgame_palace'}}]),/stageMeta lyl\.han_palace_endgame: defaultUiChapterId is shadowed by eventNarrativeView\.ts/);
@@ -229,19 +238,19 @@ test('包 rail 动态名字：编译期校验实体与标签，catalog 留原样
  await rejects(railPack(named('{{name}}')),/expected entity:<kind>:<id>/);
 });
 
-const line=(patch={})=>({id:'test_line',name:'测试线',kind:'nation',after:'jin',note:'作者备注',anchorEventIds:[E1],anchorLocationIds:['liuchao.location.jiangzhou'],entryHint:'去江州。',basis:'测试。',
+const line=(patch={})=>({id:'test_line',name:'测试线',kind:'nation',after:TS_LINE_ID,note:'作者备注',anchorEventIds:[E1],anchorLocationIds:['liuchao.location.jiangzhou'],entryHint:'去江州。',basis:'测试。',
  nodes:[{reviewSummary:'第一步',status:'ready',stageId:S10,eventId:E2,note:'节点备注'},{reviewSummary:'待扩',status:'pending'}],...patch});
 
 test('secondaryLines 正例：剥 note、保留 after；合并后按 after 插位，可接在另一条包线后面',async()=>{
  const out=await compile(linesPack([line(),line({id:'test_line2',after:'test_line',anchorEventIds:['lcq.event.not_yet'],anchorEventPending:true})]));
  assert.equal(out.secondaryLines.length,2);
  assert.equal('note' in out.secondaryLines[0],false);assert.equal(out.secondaryLines[0].nodes.some(n=>'note' in n),false);
- assert.equal(out.secondaryLines[0].after,'jin');
+ assert.equal(out.secondaryLines[0].after,TS_LINE_ID);
  // 宋线 S4c：song 线从 TS 表迁进宋包，基底改用合并后的 SECONDARY_LINES（只换读取来源）
  const merged=mergeSecondaryLines(SECONDARY_LINES,out.secondaryLines);const ids=merged.map(l=>l.id);
- const jin=ids.indexOf('jin');assert.deepEqual(ids.slice(jin,jin+4),['jin','test_line','test_line2','song']);
+ const at=ids.indexOf(TS_LINE_ID),next=SECONDARY_LINES[SECONDARY_LINES.findIndex(l=>l.id===TS_LINE_ID)+1]?.id;assert.deepEqual(ids.slice(at,at+4),[TS_LINE_ID,'test_line','test_line2',next].filter(Boolean));
  assert.deepEqual(ids.filter(id=>!id.startsWith('test_')),SECONDARY_LINES.map(l=>l.id));
- assert.equal('after' in merged[jin+1],false);
+ assert.equal('after' in merged[at+1],false);
 });
 
 test('secondaryLines 反例：kind、status、节点关与事件、锚事件、锚地点、after、id',async()=>{
@@ -252,7 +261,7 @@ test('secondaryLines 反例：kind、status、节点关与事件、锚事件、�
  await rejects(linesPack([line({anchorEventIds:['lcq.event.not_yet']})]),/unknown anchor event lcq\.event\.not_yet/);
  await rejects(linesPack([line({anchorLocationIds:['liuchao.location.nowhere']})]),/unknown anchor location liuchao\.location\.nowhere/);
  await rejects(linesPack([line({after:''})]),/after must name a line/);
- await rejects(linesPack([line(),line({id:'test_line2'})]),/test_line2: another pack line is already after jin/);
+ await rejects(linesPack([line(),line({id:'test_line2'})]),new RegExp(`test_line2: another pack line is already after ${reEsc(TS_LINE_ID)}`));
  await rejects(linesPack([line({after:'no_such_line'})]),/secondary line test_line: after no_such_line not found/);
  await rejects(linesPack([line({id:'han'})]),/secondary line han: duplicate id/);
  await rejects(linesPack([line(),line()]),/secondary line missing\/duplicate id test_line/);

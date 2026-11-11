@@ -1,0 +1,178 @@
+[
+  {
+    "after": "zhaonan",
+    "id": "jin",
+    "name": "晋国",
+    "kind": "nation",
+    "note": "锚事件已于 2026-08-17 写出（`palace_haunting_rumor`, seq 241），故摘掉 anchorEventPending，由事件锚精确判定；建康地点锚退为指引落点说明。",
+    "anchorEventIds": [
+      "lcq.event.palace_haunting_rumor"
+    ],
+    "anchorLocationIds": [
+      "liuchao.location.jiankang"
+    ],
+    "entryHint": "建康宫城闹鬼的传闻。",
+    "basis": "建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。**引子＝世界此刻的状态，不是原著那一场戏**（用户 2026-08-16 两轮裁定）：先是「想插手晋国朝局，去建康」这种模板话被打回；改写后我又写成了场景复述（用灵飞镜窥宫、撞见大汉从假山钻出、萧遥逸提议夜探台城），同样被打回——**那等于把玩家绑回原著的单一路径：他必须以那个方式撞见才算入线。**现在只给传闻，怎么撞见是玩家的事。正典依据：seq 241 灵飞镜窥宫撞见可疑大汉、seq 242 与萧遥逸谈「宫禁闹鬼」并夜探台城，seq 268 查出那是徐度安插的幽冥宗卧底——篡位的前戏。这些是**闹鬼传闻底下的真相**，不写进指引（引擎不替玩家剧透）。",
+    "nodes": [
+      {
+        "note": "锚事件：seq 241–242 灵飞镜窥宫、与萧遥逸谈「宫禁闹鬼」。beat 有、event 无，需新增。",
+        "reviewSummary": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员",
+        "status": "ready",
+        "stageId": "lcq.stage_07_qingyuan_jiankang",
+        "eventId": "lcq.event.xiaoyaoyi_arrives"
+      },
+      {
+        "reviewSummary": "萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧",
+        "status": "ready",
+        "stageId": "lcq.stage_07_qingyuan_jiankang",
+        "eventId": "lcq.event.s07_01_old_case"
+      },
+      {
+        "reviewSummary": "用灵飞镜窥见假山大汉钻出，被他察觉——宫禁闹鬼传开",
+        "status": "ready",
+        "stageId": "lcq.stage_07_qingyuan_jiankang",
+        "eventId": "lcq.event.palace_haunting_rumor"
+      },
+      {
+        "reviewSummary": "云家宴上起身解围，被云家主人当众称作「盘江程氏的少主」",
+        "status": "ready",
+        "stageId": "lcq.stage_07_qingyuan_jiankang",
+        "eventId": "lcq.event.jin_panjiang_shaozhu"
+      },
+      {
+        "note": "J2 并进 s08_03_beifu_rescue",
+        "reviewSummary": "与萧遥逸夜探神龙殿：晋帝昏迷如死，似遭操控",
+        "status": "ready",
+        "stageId": "lcq.stage_07_qingyuan_jiankang",
+        "eventId": "lcq.event.s07_07_dragon_hall"
+      },
+      {
+        "reviewSummary": "在皇宫与云丹琉交手后逃生",
+        "status": "ready",
+        "stageId": "lcq.stage_07_qingyuan_jiankang",
+        "eventId": "lcq.event.s07_08_palace_escape"
+      },
+      {
+        "reviewSummary": "萧遥逸一行入鹰愁峪，遭徐敖州府兵军弩伏击，被困谷中",
+        "status": "ready",
+        "stageId": "lcq.stage_08_jiankang_coup",
+        "eventId": "lcq.event.s08_01_eagle_valley"
+      },
+      {
+        "reviewSummary": "与吴三桂死守木垒，重伤仍击退州府兵",
+        "status": "ready",
+        "stageId": "lcq.stage_08_jiankang_coup",
+        "eventId": "lcq.event.s08_02_wood_fort"
+      },
+      {
+        "reviewSummary": "易彪率北府兵扮禁军全歼州府兵——萧遥逸识破他们身份",
+        "status": "ready",
+        "stageId": "lcq.stage_08_jiankang_coup",
+        "eventId": "lcq.event.s08_03_beifu_rescue"
+      },
+      {
+        "reviewSummary": "九阳修复经脉，突破入微境，以珊瑚匕首逼退苏妲己",
+        "status": "ready",
+        "stageId": "lcq.stage_08_jiankang_coup",
+        "eventId": "lcq.event.s08_05_breakthrough"
+      },
+      {
+        "reviewSummary": "在宫室应对东瀛忍者——飞鸟熊藏登场",
+        "status": "ready",
+        "stageId": "lcq.stage_08_jiankang_coup",
+        "eventId": "lcq.event.s08_07_palace_ninja"
+      },
+      {
+        "reviewSummary": "随萧遥逸闯昭明宫刑室，逼退古冥隐",
+        "status": "ready",
+        "stageId": "lcq.stage_08_jiankang_coup",
+        "eventId": "lcq.event.s08_09_zhaoming_night"
+      },
+      {
+        "reviewSummary": "玄武湖上秦桧、吴三桂救下晋帝太后，古冥隐败逃",
+        "status": "ready",
+        "stageId": "lcq.stage_08_jiankang_coup",
+        "eventId": "lcq.event.s08_10_xuanwu_rescue"
+      },
+      {
+        "note": "J9 前半已有 s12_14_chenxing_appears／s12_15_capture_jingli；后半需新增",
+        "reviewSummary": "看清分赃：萧家江宁、云家盐业、你一无所得",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.spoils_split"
+      },
+      {
+        "reviewSummary": "与萧遥逸复盘：八骏已离，幽长老被杀，北府兵权归谢幼度",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.s09_01_eight_steeds_leave"
+      },
+      {
+        "note": "顶点占位：原文未明，称号待定（seq 334「程宗扬无所得」） ⏳ 扩写部分，本阶段不再细化（用户裁定 2026-08-16）：正典无此拍，只标未来待扩。",
+        "reviewSummary": "问清王茂弘：相府无为让权给萧侯，承诺保晋国二十年太平",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.xiangfu_stance"
+      },
+      {
+        "reviewSummary": "与小紫、卓云君从排水沟逃出建康，挡下苏妲己追杀",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.s09_05_drain_escape"
+      },
+      {
+        "reviewSummary": "以飞鸟熊藏身份潜伏，从游婵处摸清广阳布局后脱身",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.s09_07_feiniao_infiltration"
+      },
+      {
+        "reviewSummary": "收下泉玉姬用一魂一魄炼的魂丹，她的生死自此在你手里",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.quanyuji_soul_pill"
+      },
+      {
+        "reviewSummary": "在六扇门审问泉玉姬",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.s09_08_six_doors_confession"
+      },
+      {
+        "reviewSummary": "揭穿泉玉姬是黑魔海御姬奴，并得知江州危急",
+        "status": "ready",
+        "stageId": "lcq.stage_09_trade_and_escape",
+        "eventId": "lcq.event.s09_09_jiangzhou_crisis"
+      },
+      {
+        "reviewSummary": "确认晋相腾出江州让宋军剿星月湖，不惜毁城",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.jin_vacate_jiangzhou"
+      },
+      {
+        "reviewSummary": "听张少煌得知晋旱与王茂弘意图，决定全力收粮，建康做营销中心",
+        "status": "ready",
+        "stageId": "lyl.taiquan_sacred_fruit",
+        "eventId": "lyl.event.sacred_jin_drought"
+      },
+      {
+        "reviewSummary": "把广源行在晋的旧账揭开（龙宸这条线）",
+        "status": "ready",
+        "stageId": "lyl.taiquan_afterfall",
+        "eventId": "lyl.event.jin_guangyuan_ledger"
+      },
+      {
+        "reviewSummary": "押运云氏五万金铢至伊水，被龙宸杀手劫走，反击损失惨重",
+        "status": "ready",
+        "stageId": "lyl.luoyang_cloud_secret",
+        "eventId": "lyl.event.s05_09"
+      },
+      {
+        "reviewSummary": "在晋廷取得一个名分（未来待扩，原文未明）",
+        "status": "pending"
+      }
+    ],
+    "pendingExpansion": "线形：进建康看清帝室架空 → 宫变调查 → 相府／北府／云家立场（分赃无所得）→ 晋旱收粮＋广源行旧账 → 晋廷承认特许商权。顶点＝占位名分，原文未明、称号待定（seq 334 反证）。节点文案不写死官名。J4／J6／J7／J8／J9后半／J10 需新增。J9 前半已有龙宸 s12_14／s12_15。旧「清远斩吴」归太乙；「同门旧案」改挂汉国入口。"
+  }
+]

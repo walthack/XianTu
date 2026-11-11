@@ -152,7 +152,6 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s05_08': 'battle',
   'lcq.event.s06_01': 'climax',
   'lcq.event.s06_03': 'emotion',
-  'lcq.event.s09_04_weaving_trade': 'court',
 
   'lyg.event.s01_01': 'battle',
   'lyg.event.s01_07': 'lament',

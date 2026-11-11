@@ -1,0 +1,11 @@
+{
+  "lineCompass.jin.name": "晋国",
+  "lineCompass.jin.step.jin_arrive_from_nanhuang": "去建康，把商号开起来",
+  "lineCompass.jin.step.jin_arrive_icegu": "去建康，托人想想办法",
+  "lineCompass.jin.step.jin_arrive_skip_nh": "去建康，找门路做生意",
+  "lineCompass.jin.step.jin_qingyuan_case": "去清远玄真观，拆开锦囊",
+  "lineCompass.jin.step.jin_back_jiankang": "回建康，看看商号",
+  "lineCompass.jin.step.palace_ask": "在建康打听宫里最近有什么事",
+  "lineCompass.jin.step.jin_eagle_beifu": "出建康城走走",
+  "lineCompass.jin.step.jin_back_after_eagle": "从鹰愁峪回建康"
+}
