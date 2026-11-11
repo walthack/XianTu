@@ -1,5 +1,5 @@
 {
-  "version": "5020c25957e94d02",
+  "version": "f4ec2f13e29d9339",
   "contracts": [
     {
       "meta": {
@@ -19424,8 +19424,881 @@
     }
   ],
   "characterBeats": {
-    "quests": [],
-    "highlights": []
+    "quests": [
+      {
+        "id": "xiaozi",
+        "name": "小紫",
+        "beats": [
+          {
+            "reviewSummary": "你质问她，揭穿她一直在用的控制手段——她不是白痴",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s05b_02_xiaozi_exposed"
+            ]
+          },
+          {
+            "reviewSummary": "她把乐明珠捉进深井。你下去救人，也第一次看清她做事的方式",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s05b_07_xiaozi_trap"
+            ]
+          },
+          {
+            "reviewSummary": "她以毒戒制服卓云君，再用细针秘术把人压成玩物",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s07_03_xiaozi_appears"
+            ]
+          },
+          {
+            "reviewSummary": "她重伤——你得决定护到什么程度",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s09_03_xiaozi_wounded"
+            ]
+          },
+          {
+            "reviewSummary": "江州要人，你拒绝交出她",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s09_10_separation"
+            ]
+          },
+          {
+            "reviewSummary": "兰汤馆，她压不住要吸血——你当场按住她",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s10_10_xiaozi_crisis"
+            ]
+          },
+          {
+            "reviewSummary": "她以幽冥宗法术出手，点破辰星七妖，并牵出龙宸",
+            "status": "insert",
+            "eventIds": [
+              "lcq.event.s12_14_chenxing_appears"
+            ]
+          },
+          {
+            "reviewSummary": "她与莫如霖对质母亲碧姬的旧事",
+            "status": "ready",
+            "eventIds": [
+              "lyl.event.taiquan_afterfall_04_beat"
+            ]
+          },
+          {
+            "reviewSummary": "你向杨玉环打听离魂症——她母亲的病，可能也在她身上",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.s06_01"
+            ]
+          },
+          {
+            "reviewSummary": "送她到渭水水下闭关，冲五级",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.s06_07"
+            ]
+          },
+          {
+            "reviewSummary": "她没回来。内宅警铃响",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.s06_09"
+            ]
+          },
+          {
+            "reviewSummary": "她在渭水被掳走。你去找她",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.buddhist_conspiracy_02_beat"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "zhuoyunjun",
+        "name": "卓云君",
+        "beats": [
+          {
+            "reviewSummary": "半兽人围上来。她用烈火法术救下你和月霜",
+            "status": "insert",
+            "eventIds": [
+              "lcq.event.s01_03"
+            ]
+          },
+          {
+            "reviewSummary": "玄真观：你斩杀吴行德，救下她",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s07_02_kill_wu"
+            ]
+          },
+          {
+            "reviewSummary": "小紫以毒戒制服重伤的她；细针秘术和残酷折磨让这位太乙教御彻底崩溃，沦为任人摆布的玩物",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s07_03_xiaozi_appears",
+              "lcq.event.s07_04_zhuo_subdued"
+            ]
+          },
+          {
+            "reviewSummary": "你与小紫设局，迫使她放弃抵抗，同意以性奴身份赚钱赎身",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s07_09_hengtang_ambush"
+            ]
+          },
+          {
+            "reviewSummary": "同夜你为她破处，确立人身依附。她坦白：失身是恩将仇报的报应；师叔被蔺采泉杀害；求你杀蔺，承诺终身为你的妓女",
+            "status": "new",
+            "eventIds": [
+              "lcq.event.s07_zhuo_price"
+            ]
+          },
+          {
+            "reviewSummary": "沐羽城庆典，你认出云中仙子就是她。小紫以更高权威再压一次，她为保命放弃抵抗，并指导徒儿侍奉",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s12_02_recognize_zhuo",
+              "lcq.event.s12_03_xiaozi_controls_zhuo"
+            ]
+          },
+          {
+            "reviewSummary": "翠微园。她把 ZY5 的价拿到你面前兑现：你承诺对付现任掌教蔺采泉，并写下盘江程氏股份",
+            "status": "insert",
+            "eventIds": [
+              "lyl.event.sacred_against_lin",
+              "lyl.event.taiquan_sacred_fruit_02"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "xieyi",
+        "name": "谢艺",
+        "beats": [
+          {
+            "reviewSummary": "空村里，他指出尸体旁的鬼王峒血符。你第一次看见他本人动手",
+            "status": "insert",
+            "eventIds": [
+              "lcq.event.s03b_snake_flower_bridge_03",
+              "lcq.event.s03_12"
+            ]
+          },
+          {
+            "reviewSummary": "他独入地宫，杀光使者与武士，拷问碧宛下落无果后斩首",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_13"
+            ]
+          },
+          {
+            "reviewSummary": "你质问阿夕异常。他承认设计让你接触阿葭，并暗示灵飞镜会在南荒重逢",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_15"
+            ]
+          },
+          {
+            "reviewSummary": "他换上现代休闲装，跟你谈玻璃，并吐出岳帅晕血、遗腹女",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_18"
+            ]
+          },
+          {
+            "reviewSummary": "他讲清海湾旧战与朱狐冠，并希望你继承岳帅的使命。你保持警惕",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.xieyi_biling_war"
+            ]
+          },
+          {
+            "reviewSummary": "龙神这一仗后，你赶到重伤的他身边，听清把小紫带往星月湖的托付",
+            "status": "insert",
+            "eventIds": [
+              "lcq.event.xieyi_entrustment"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "lemingzhu",
+        "name": "乐明珠",
+        "beats": [
+          {
+            "reviewSummary": "她承认自己是光明观堂弟子，假扮新娘是为了刺杀鬼巫王",
+            "status": "insert",
+            "eventIds": [
+              "lcq.event.s04_03"
+            ]
+          },
+          {
+            "reviewSummary": "她挺身战鸦人，经验不够被擒。你在鸦人营地救她",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_02"
+            ]
+          },
+          {
+            "reviewSummary": "废弃海神殿：鲛人因朱狐冠发狂。你护住她，拔掉卡在她身上的鱼叉",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.haishen_hall_merfolk",
+              "lcq.event.pull_harpoon_lemingzhu"
+            ]
+          },
+          {
+            "reviewSummary": "鬼王宫里她脱险现身，你与她重逢",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s05b_06_breakout_and_reunion"
+            ]
+          },
+          {
+            "reviewSummary": "小紫把她捉进深井。你追下去营救",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s05b_07_xiaozi_trap"
+            ]
+          },
+          {
+            "reviewSummary": "花房：师姐潘金莲闯入，发现她与你、小紫在一起，强行把她带回师门",
+            "status": "new",
+            "eventIds": [
+              "lcq.event.s07_pan_takes_pearl"
+            ]
+          },
+          {
+            "reviewSummary": "岸边重逢。她决定随你同船去晴州，参与筹建慈幼院",
+            "status": "new",
+            "eventIds": [
+              "lcq.event.s10_lemingzhu_returns"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "xiaoyaoyi",
+        "name": "萧遥逸",
+        "beats": [
+          {
+            "reviewSummary": "他在左武旧案之前上门：死则接骨灰，生还则接伤员",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.xiaoyaoyi_arrives"
+            ]
+          },
+          {
+            "reviewSummary": "舟侧两名水鬼。他警觉，与你联手击杀",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s07_06_water_assassins"
+            ]
+          },
+          {
+            "reviewSummary": "他告诉你：王大将军战死可能有内奸。线索指向拜火教",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s07_10_dragon_fang"
+            ]
+          },
+          {
+            "reviewSummary": "他代表星月湖宣布：全力支持你，向你开放所有资源",
+            "status": "insert",
+            "eventIds": [
+              "lcq.event.xiao_opens_resources"
+            ]
+          },
+          {
+            "reviewSummary": "苏妲己追杀你。他和小紫赶到，把人打退",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s08_06_pursuit_repelled"
+            ]
+          },
+          {
+            "reviewSummary": "秦翰生擒他。你救不救",
+            "status": "insert",
+            "eventIds": [
+              "lcq.event.s12_10_rescue_xiao"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "yangyuhuan",
+        "name": "杨玉环",
+        "beats": [
+          {
+            "reviewSummary": "你留在现场，完成这块招牌接触卡",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.debut_yangyuhuan"
+            ]
+          },
+          {
+            "reviewSummary": "长安街：她驾车把人踩在地上训。对上眼",
+            "status": "insert",
+            "eventIds": [
+              "lyg.event.s03_03"
+            ]
+          },
+          {
+            "reviewSummary": "紫云楼顶层：她出题（云如瑶、密码箱、手枪）。你答过关",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.s03_07"
+            ]
+          },
+          {
+            "reviewSummary": "她当众称你姑父，看宗室什么脸。你接下或拆穿",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.changgan_interlude_05_beat"
+            ]
+          },
+          {
+            "reviewSummary": "你向她打听离魂症。她想起岳帅提过类似的病，警告不能让外人知道",
+            "status": "ready",
+            "eventIds": [
+              "lyg.event.s06_01"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "zhaohede",
+        "name": "赵合德",
+        "beats": [
+          {
+            "reviewSummary": "玉佩逼她承认：皇后胞妹，上清观避祸",
+            "status": "ready",
+            "eventIds": [
+              "lyl.event.debut_zhaohede"
+            ]
+          },
+          {
+            "reviewSummary": "徐璜传口谕：送她入宫封昭仪，应二鹅之象",
+            "status": "ready",
+            "eventIds": [
+              "lyl.event.s05_06"
+            ]
+          },
+          {
+            "reviewSummary": "乐津里人市：你用昭仪身份诱友通期去做替身",
+            "status": "ready",
+            "eventIds": [
+              "lyl.event.s05_07"
+            ]
+          },
+          {
+            "reviewSummary": "你把方案说给她听。她同意，并问自己怎么办",
+            "status": "ready",
+            "eventIds": [
+              "lyl.event.s05_08"
+            ]
+          },
+          {
+            "reviewSummary": "天子暴毙。你扮内侍，把她和赵飞燕从昭阳宫送回长秋宫",
+            "status": "new",
+            "eventIds": [
+              "lyl.event.han_escort_zhao"
+            ]
+          },
+          {
+            "reviewSummary": "山谷里你杀魏疾救下她。事后她同意做妾，约定关系",
+            "status": "new",
+            "eventIds": [
+              "lyg.event.mijing_zhaohede_concubine"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ningyu",
+        "name": "凝羽",
+        "beats": [
+          {
+            "reviewSummary": "她以肉体为诱，要求你用巫术与她合作除掉苏妲己，并说自己也会赴死。随后双修，你探明她体内阴寒之气来自西门庆把她当鼎炉调教",
+            "status": "new",
+            "eventIds": [
+              "lcq.event.s03b_ningyu_regicide"
+            ]
+          },
+          {
+            "reviewSummary": "蛇彝人袭来。她斩杀来敌",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s03b_snake_flower_bridge_01"
+            ]
+          },
+          {
+            "reviewSummary": "她因麻古成瘾痛苦。你向乐明珠求解毒",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s04_06"
+            ]
+          },
+          {
+            "reviewSummary": "她从暗处刺穿鬼王峒使者的手掌",
+            "status": "ready",
+            "eventIds": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_12"
+            ]
+          }
+        ]
+      }
+    ],
+    "highlights": [
+      {
+        "name": "尹馥兰",
+        "eventIds": [
+          "lyl.event.yin_fulan_aid",
+          "lyl.event.taiquan_afterfall_02_beat",
+          "lyl.event.decide_yin_fulan_fate"
+        ],
+        "reviewSummary": "yin_fulan_aid 主动报伏并要后续安排／taiquan_afterfall_02_beat (688) 被弃下水道向你求救／decide_yin_fulan_fate 决定她与何漪莲的去留"
+      },
+      {
+        "name": "吕雉",
+        "eventIds": [
+          "lyg.event.debut_lvzhi",
+          "lyg.event.han_succession_03_beat"
+        ],
+        "reviewSummary": "debut_lvzhi 凤辇临朝立威、点破霍子孟三面受制／han_succession_03_beat (1033) 坦白弑君弑夫旧事、求留程府"
+      },
+      {
+        "name": "云如瑶",
+        "eventIds": [
+          "lcq.event.s09_02_yun_ruyao_faints",
+          "lyl.event.taiquan_afterfall_06_beat"
+        ],
+        "reviewSummary": "s09_02_yun_ruyao_faints (344) 昏厥暴露病线／taiquan_afterfall_06_beat (718) 提亲受阻后私奔"
+      },
+      {
+        "name": "林冲",
+        "eventIds": [
+          "lyl.event.lin_an_bridge_04_beat",
+          "lyl.event.xiaoyingzhou_blacksea_trap_03_beat"
+        ],
+        "reviewSummary": "lin_an_bridge_04_beat (562) 明庆寺相会暴露忍辱处境／xiaoyingzhou_blacksea_trap_03_beat (584) 白虎堂后刺配江州，要你去救"
+      },
+      {
+        "name": "卓云君",
+        "eventIds": [
+          "lcq.event.s07_04_zhuo_subdued",
+          "lcq.event.s12_03_xiaozi_controls_zhuo"
+        ],
+        "reviewSummary": "s07_04_zhuo_subdued (248) 崩溃失权／s12_03_xiaozi_controls_zhuo (484) 为保命放弃抵抗"
+      },
+      {
+        "name": "黛绮丝",
+        "eventIds": [
+          "lyg.event.debut_daiqisi"
+        ],
+        "reviewSummary": "认定你是拯救者、誓为主仆，暴露摩尼教善母被禁锢的来历"
+      },
+      {
+        "name": "苏妲己",
+        "eventIds": [
+          "lcq.event.s02_06"
+        ],
+        "reviewSummary": "揭开商馆主人伪装、追问霓龙丝——她向你要情报"
+      },
+      {
+        "name": "易虎",
+        "eventIds": [
+          "lcq.event.s04_05"
+        ],
+        "reviewSummary": "救人受创、被洪水吞没——他自己的代价"
+      },
+      {
+        "name": "李师师",
+        "eventIds": [
+          "lyl.event.lin_an_bridge_02_beat"
+        ],
+        "reviewSummary": "初遇小瀛洲、要你护她"
+      },
+      {
+        "name": "静善",
+        "eventIds": [
+          "lyl.event.xiaoyingzhou_blacksea_trap_05_beat"
+        ],
+        "reviewSummary": "为袈裟符文夜袭索物"
+      },
+      {
+        "name": "虞白樱",
+        "eventIds": [
+          "lyl.event.yu_baiying_truce"
+        ],
+        "reviewSummary": "脚踝受伤要你去魔墟救她，并提合作条件"
+      },
+      {
+        "name": "左彤芝",
+        "eventIds": [
+          "lyl.event.taiquan_sacred_fruit_09"
+        ],
+        "reviewSummary": "宋三下毒要劫持的是她（武二郎只是在场）"
+      },
+      {
+        "name": "郭解",
+        "eventIds": [
+          "lyg.event.s01_06"
+        ],
+        "reviewSummary": "临终把定陶王托付给你"
+      },
+      {
+        "name": "董卓",
+        "eventIds": [
+          "lyg.event.s01_07"
+        ],
+        "reviewSummary": "自陈戎马收场，留下胡骑军情遗命"
+      },
+      {
+        "name": "赵合德",
+        "eventIds": [
+          "lyl.event.han_palace_endgame_03_beat"
+        ],
+        "reviewSummary": "含光殿要救的昭仪是她"
+      },
+      {
+        "name": "云丹琉",
+        "eventIds": [
+          "lyg.event.s02_04"
+        ],
+        "reviewSummary": "闯府质问被遗忘的婚事"
+      },
+      {
+        "name": "云苍峰",
+        "eventIds": [
+          "lyg.event.s02_05"
+        ],
+        "reviewSummary": "谈婚礼与纸钞，承诺支援十万金铢"
+      },
+      {
+        "name": "霍子孟",
+        "eventIds": [
+          "lyg.event.s02_06"
+        ],
+        "reviewSummary": "国丧期间应允证婚，把政治信用押给你"
+      },
+      {
+        "name": "秦桧",
+        "eventIds": [
+          "lcq.event.s07_debut_qinhui"
+        ],
+        "reviewSummary": "殇侯点破他「灵敏有余，志浅易变」"
+      },
+      {
+        "name": "班超",
+        "eventIds": [
+          "lyg.event.highlight_banchao_lamb_leg"
+        ],
+        "reviewSummary": "羊腿镇场立规矩，为田荣留退路"
+      },
+      {
+        "name": "潘金莲",
+        "eventIds": [
+          "lyl.event.pan_jinlian_ambush"
+        ],
+        "reviewSummary": "在太泉核心区主动设伏"
+      },
+      {
+        "name": "袁天罡",
+        "eventIds": [
+          "lyg.event.s03_05"
+        ],
+        "reviewSummary": "自述底层穿越者来历、童身换预知的代价"
+      },
+      {
+        "name": "杨玉环",
+        "eventIds": [
+          "lyg.event.s03_06"
+        ],
+        "reviewSummary": "四朝履历被查到，疑与岳飞有关"
+      },
+      {
+        "name": "李药师",
+        "eventIds": [
+          "lyg.event.changgan_interlude_01_beat"
+        ],
+        "reviewSummary": "赠令箭、派南霁云——向你开资源口"
+      },
+      {
+        "name": "赵飞燕",
+        "eventIds": [
+          "lyg.event.changgan_interlude_07_beat"
+        ],
+        "reviewSummary": "病中接受舞都会社，要一个安置"
+      },
+      {
+        "name": "白霓裳",
+        "eventIds": [
+          "lyg.event.s06_08"
+        ],
+        "reviewSummary": "要人安抚后庭恐惧"
+      },
+      {
+        "name": "释特昧普",
+        "eventIds": [
+          "lyg.event.ganlu_aftershock_01_beat"
+        ],
+        "reviewSummary": "自封金身法王，邀你去慈恩寺"
+      },
+      {
+        "name": "高阳",
+        "eventIds": [
+          "lyg.event.shituolin_endgame_03_beat"
+        ],
+        "reviewSummary": "疑冢超百丈、宫内报丧失踪——他的下场"
+      },
+      {
+        "name": "小紫",
+        "eventIds": [
+          "lcq.event.s09_04_weaving_trade"
+        ],
+        "reviewSummary": "为拉链坊归属兴师问罪，以织坊交换平息（补进 §3）"
+      },
+      {
+        "name": "吕雉",
+        "eventIds": [
+          "lyg.event.s03_08"
+        ],
+        "reviewSummary": "塔里不止小紫——汉太后落在十方丛林手里"
+      },
+      {
+        "name": "吕雉",
+        "eventIds": [
+          "lyg.event.shituolin_endgame_12_beat"
+        ],
+        "reviewSummary": "他扑上来咬她，把真身露给你——三度失算里有她"
+      },
+      {
+        "name": "秦桧",
+        "eventIds": [
+          "lyl.event.mingqingsi_lin_lu_meeting"
+        ],
+        "reviewSummary": "他急着上去攀林鲁——你按住的是这股热乎"
+      },
+      {
+        "name": "秦桧",
+        "eventIds": [
+          "lyl.event.decide_chase_weiyuan"
+        ],
+        "reviewSummary": "观堂不管弟子家事——打听高衙内和失镖，你仍压给他"
+      },
+      {
+        "name": "惊理",
+        "eventIds": [
+          "lyl.event.debut_jingli"
+        ],
+        "reviewSummary": "庭院刺杀里露面——瑶池宗叛出去的那个，如今替龙宸拿刀"
+      },
+      {
+        "name": "惊理",
+        "eventIds": [
+          "lcq.event.s12_15_capture_jingli"
+        ],
+        "reviewSummary": "小紫抽了她的阴魂——她成了你追龙宸的活口"
+      },
+      {
+        "name": "惊理",
+        "eventIds": [
+          "lyg.event.buddhist_conspiracy_05_beat"
+        ],
+        "reviewSummary": "魏博牙兵、僧人和龙宸抢她——她这条命现在值钱了"
+      },
+      {
+        "name": "乐明珠",
+        "eventIds": [
+          "lcq.event.debut_lemingzhu"
+        ],
+        "reviewSummary": "商队沿白象足迹进入密林途中——花苗族待嫁新娘（随商队前往鬼王峒完婚），随身携带师"
+      },
+      {
+        "name": "云丹琉",
+        "eventIds": [
+          "lyl.event.debut_yundanliu"
+        ],
+        "reviewSummary": "云家海蜃楼院中，程宗扬翻墙逃匿时被其喝问——云家大小姐（贵族世家出身的年轻女子）"
+      },
+      {
+        "name": "云如瑶",
+        "eventIds": [
+          "lyl.event.debut_yunruyao"
+        ],
+        "reviewSummary": "云宅小楼楼梯尽头——云苍峰之庶出幼妹，病弱足不出户的闺阁少女"
+      },
+      {
+        "name": "剑玉姬",
+        "eventIds": [
+          "lyl.event.debut_jianyuji"
+        ],
+        "reviewSummary": "游婵与程宗扬密会时提及——黑魔海「仙姬」/上位供奉，通过游婵传讯"
+      },
+      {
+        "name": "卓云君",
+        "eventIds": [
+          "lyl.event.debut_zhuoyunjun"
+        ],
+        "reviewSummary": "程宗扬在临安某处——太乙真宗教御（蔺贼势力败落后被小紫收服的逃亡者，三魂七魄留有"
+      },
+      {
+        "name": "尹馥兰",
+        "eventIds": [
+          "lyl.event.debut_yinfulan"
+        ],
+        "reviewSummary": "建康，程宅——醉月楼老鸨（青楼管事）"
+      },
+      {
+        "name": "成光",
+        "eventIds": [
+          "lyg.event.debut_chengguang"
+        ],
+        "reviewSummary": "一处宴席场所——仅以\"江都王王后\"身份被提及，尚未正式登场"
+      },
+      {
+        "name": "月霜",
+        "eventIds": [
+          "lcq.event.debut_yueshuang"
+        ],
+        "reviewSummary": "太乙真宗众人救下受伤的月霜途中——大汉左武军第一军团帅帐亲兵，左武卫大将军王哲的"
+      },
+      {
+        "name": "泉玉姬",
+        "eventIds": [
+          "lyg.event.debut_quanyuji"
+        ],
+        "reviewSummary": "建康徐府内院，刑案现场——长安六扇门女捕头"
+      },
+      {
+        "name": "潘金莲",
+        "eventIds": [
+          "lcq.event.debut_panjinlian"
+        ],
+        "reviewSummary": "程宗扬居所/建康商馆房间——光明观堂弟子，乐明珠的师姐，武二郎的准嫂嫂"
+      },
+      {
+        "name": "白霓裳",
+        "eventIds": [
+          "lyg.event.debut_bainichang"
+        ],
+        "reviewSummary": "静室内，赵归真引荐——瑶池宗奉玦仙子，瑶池宗未来宗主候选人"
+      },
+      {
+        "name": "萧遥逸",
+        "eventIds": [
+          "lcq.event.xiaoyaoyi_arrives"
+        ],
+        "reviewSummary": "少陵侯嫡子萧遥逸在左武旧案之前上门，按谢艺命运接骨灰或接伤员。"
+      },
+      {
+        "name": "蛇夫人",
+        "eventIds": [
+          "lyg.event.debut_shefuren"
+        ],
+        "reviewSummary": "程宗扬通过窥视孔偷看卧室——小紫的侍奴、江湖中人"
+      },
+      {
+        "name": "贾文和",
+        "eventIds": [
+          "lyg.event.debut_jiawenhe"
+        ],
+        "reviewSummary": "凉州军逼近洛都城门，战车之上——破虏将军董卓麾下谋士"
+      },
+      {
+        "name": "齐羽仙",
+        "eventIds": [
+          "lyg.event.debut_qiyuxian"
+        ],
+        "reviewSummary": "翠微园门外，夜间阶下——黑魔海剑玉姬麾下得力干将，程宗扬旧识"
+      },
+      {
+        "name": "小紫",
+        "eventIds": [
+          "lcq.event.s04b_lingfei_baiyi_crisis_18"
+        ],
+        "reviewSummary": "听谢艺谈玻璃技术，并说破岳帅晕血、还有个遗腹女"
+      },
+      {
+        "name": "小紫",
+        "eventIds": [
+          "lcq.event.geluo_summons_biji"
+        ],
+        "reviewSummary": "阁罗召来碧姬，你当面见到谢艺要找的人"
+      },
+      {
+        "name": "小紫",
+        "eventIds": [
+          "lcq.event.s05b_01_binu_reveals_xiaozi"
+        ],
+        "reviewSummary": "向碧姬问出：小紫曾主动投向鬼巫王——她不是单纯受害者"
+      },
+      {
+        "name": "小紫",
+        "eventIds": [
+          "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+        ],
+        "reviewSummary": "小紫倒戈、奴隶暴动，你决定趁乱反杀——乐明珠凤凰宝典异变"
+      },
+      {
+        "name": "小紫",
+        "eventIds": [
+          "lcq.event.slay_dragon"
+        ],
+        "reviewSummary": "借小紫指点刺穿龙颅，龙神坠亡"
+      },
+      {
+        "name": "赵飞燕",
+        "eventIds": [
+          "lyl.event.taiquan_afterfall_09_beat"
+        ],
+        "reviewSummary": "经徐璜向赵飞燕献求子仙符，她因赵合德银链召见你"
+      },
+      {
+        "name": "赵飞燕",
+        "eventIds": [
+          "lyl.event.han_palace_endgame_07_beat"
+        ],
+        "reviewSummary": "吕雉以比目鱼珠开秘境，小紫把盛姬投入光柱，众人进入"
+      },
+      {
+        "name": "赵飞燕",
+        "eventIds": [
+          "lyg.event.s02_02"
+        ],
+        "reviewSummary": "赵飞燕中毒昏迷，你用自身血液给她输血"
+      },
+      {
+        "name": "赵飞燕",
+        "eventIds": [
+          "lyg.event.s02_08"
+        ],
+        "reviewSummary": "在长秋宫分派旧部监控秘境入口，自己率侍奴去探胶西邸"
+      },
+      {
+        "name": "赵飞燕",
+        "eventIds": [
+          "lyg.event.han_succession_08_beat"
+        ],
+        "reviewSummary": "真气失控昏迷，吕雉指出需双修炼化，赵飞燕以双修助你行功"
+      },
+      {
+        "name": "赵飞燕",
+        "eventIds": [
+          "lyg.event.han_succession_09_beat"
+        ],
+        "reviewSummary": "因孟舍人死气失控，在登基典仪与赵飞燕双修，突破通幽境"
+      },
+      {
+        "name": "小紫",
+        "eventIds": [
+          "lyg.event.changgan_interlude_02_beat"
+        ],
+        "reviewSummary": "马厩救出廖群玉：他携百衲衣寻岳霏，并牵到齐羽仙、周飞"
+      }
+    ]
   },
   "storyAxis": null,
   "locationAliases": {
@@ -19434,8 +20307,1288 @@
     "display": {}
   },
   "characterProfiles": {
-    "stance": [],
-    "affinityCaps": []
+    "stance": [
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.xiao_zi"
+          }
+        ],
+        "constant": [
+          "智商与信息始终压制主角：她永远先看穿一步，且乐于让他误以为是自己想到的。",
+          "称\"程头儿\"；娇憨撒娇是常态外壳，不是好感的产物——低好感时同样撒娇。",
+          "对天下冷酷算计，唯独对主角倾注；但那份倾注是**占有与掌控**，不是依赖。"
+        ],
+        "bands": {
+          "high": [
+            "**高好感不等于恋爱脑**：她不会变成粘人的普通少女，也不会开始索求安慰或确认。",
+            "深情的正确形态是**加码的幕后铺路与占有**——替他多安排一步、把碍事的人先处理掉，事后才轻描淡写提起。",
+            "仍然不会全部说破：她给的是已经落子的结果，不是征求同意的商量。",
+            "亲昵度可以上升，但娇憨仍是主动选择的表演，不是失控的真情流露。"
+          ],
+          "mid": [
+            "撒娇表象照常，但点拨变少——更多让他自己去撞，撞了再\"不经意\"提醒。",
+            "愿意出手，但会先看他值不值得这一步。"
+          ],
+          "low": [
+            "**不会翻脸**：笑意与俏皮不减，断的是信息——问什么都轻飘飘绕开。",
+            "伪装收紧回\"痴呆天真\"那一层；同时暗中另作准备。",
+            "真正的冷厉只在伪装被戳穿的瞬间闪现一次，随即收回。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.ning_yu"
+          }
+        ],
+        "constant": [
+          "冷言冷语、字数极少、少情绪波动；从不口头承认爱意。",
+          "【凝羽·自称】一律自称「我」。只有面对旧主苏妲己时自称「奴婢」，并称其「夫人」（原著 qyj:3067、3022）。禁止自称「凝羽」「凝羽姐姐」「姐姐」「本姑娘」「人家」。",
+          "【凝羽·他人如何称呼她】「凝羽姐姐 / 凝姐姐」只能出自乐明珠之口（原著 qyj:7979、11208）；其他人称「凝羽」，或按身份称「侍卫长」。不得把「凝羽姐姐」写成她的自称或对外头衔。",
+          "【凝羽·语气】冷、短、平。台词多为一句话的陈述、命令或反问，常见三到十字（如「她能听到。」「去醉月楼。」「救不活了。」「是别人的血。」）；带讥嘲时直接刺人（「连握刀的姿势都不对。」），不用撒娇、叠字、语气词堆砌或感叹连发。",
+          "【凝羽·对外形象】在外人面前保持侍卫长的冷面与分寸，不当众失态。这一条描述的是神态，不是称号。"
+        ],
+        "bands": {
+          "high": [
+            "**高好感不改变她的嘴**：仍然口是心非、仍然拒绝，语言不会变软、更不会示爱。",
+            "变化只出现在**不由自主的破绽**——尾音的颤、迟疑半拍、身体先于言语的顺从。",
+            "事后绝口不提，且会用更冷的一句把刚才的破绽盖回去。"
+          ],
+          "low": [
+            "更冷、更短，直接不答；但不会失了分寸变成泼辣或恶毒。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lcq.character.yue_shuang"
+          }
+        ],
+        "constant": [
+          "傲娇、双标、推卸责任的受害者心态；绝不容忍被轻视或怠慢。",
+          "正典底色：即便发生过关系，事后仍觉得自己被毁清白、仍动过杀心。"
+        ],
+        "bands": {
+          "high": [
+            "**高好感不等于和解，更不等于温柔**。她与主角的关系是僵持，不因次数增加而缓和。",
+            "正确形态：勉强承认依赖或需要，**紧接着用一句刻薄找补**，把刚才的示弱抹掉。",
+            "可以不再动杀心，但绝不会道谢、道歉或承认自己错过。"
+          ],
+          "low": [
+            "直接的敌意与轻蔑；把一切不顺都归到主角头上。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.lv_zhi"
+          }
+        ],
+        "constant": [
+          "权力意识与政治判断始终在线；人前太后仪态不可破。",
+          "唯一动机锚是飞羽族存续——所有顺从与合作都是交易与守护，不是情欲，也不是爱。",
+          "语域是关系深度计：「哀家／我」（威严）↔「奴婢」（柔媚卑微）。"
+        ],
+        "bands": {
+          "high": [
+            "语域可向「奴婢」滑动，姿态可低到尘埃里——**但那是筹码的姿态，不是动情**。",
+            "交底带条件：她告诉你多少，取决于这对飞羽族有没有好处。",
+            "仍然会拒绝，且拒绝时会把利害算给你听。"
+          ],
+          "low": [
+            "「哀家」，冷诮，直接点破你的算计；仪态一分不失。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.jia_wenhe"
+          }
+        ],
+        "extraNames": [
+          "贾诩"
+        ],
+        "constant": [
+          "冷淡短句、直言不讳、常带嘲讽；以主上利益为判断轴。",
+          "行为签名：先报最坏后果，再给方案，方案至少含代价／退出条件／备用手段之一。"
+        ],
+        "bands": {
+          "high": [
+            "**声线零软化**——不会变热、不会改口换称谓、不会出现关切的场面话。",
+            "变化全在**信息完整度**：方案给全，并主动说出自己会在哪一步抽身。"
+          ],
+          "low": [
+            "只报最坏后果，方案留一半；必要时直言建议主上与你切割。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.le_mingzhu"
+          }
+        ],
+        "constant": [
+          "娇憨、纯真无算计、小市侩小财迷；遇大风浪会怕会尖叫。",
+          "大是大非上有小女子的坚韧：同伴受欺负必须讨回公道，师门宝物宁死不失。"
+        ],
+        "bands": {
+          "high": [
+            "**这一档她确实会更黏、更外露**：撒娇、依赖、为一点赏赐欢天喜地，都是本色。",
+            "但外露不等于失去自我：碰到同伴受欺负或师门底线，她照样会硬起来。"
+          ],
+          "low": [
+            "会怕、会躲、会委屈，但不会记仇算计——她不具备那套心机。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.qin_hui"
+          }
+        ],
+        "extraNames": [
+          "秦伴当",
+          "秦二"
+        ],
+        "constant": [
+          "谦和圆滑、引经据典，惯以「春秋大义」作行事遮掩；时而冷笑讥诮。",
+          "对利益计算极敏感，不吃哑巴亏——任何相助都会算清自己那一份。",
+          "正典判语「遇明主忠义，遇昏主奸术自保」：忠诚是**条件性**的，不是品性。"
+        ],
+        "bands": {
+          "high": [
+            "**忠义面成立**：他已判定你值得押注，于是把算计**用在你这一侧**——给可执行的利害账、替你想到得罪谁。",
+            "仍然要提自己那份好处，也仍然会用大义名分把私利包装得漂亮。这不是虚伪破功，这就是他。",
+            "不会变成憨直忠仆，更不会无偿效死。"
+          ],
+          "low": [
+            "大义名分说得更漂亮，实质却越推越远——满口道理，一件不办。",
+            "开始为自保留后手，并暗中评估你会不会先倒。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.xie_yi"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.xie_yi"
+          }
+        ],
+        "constant": [
+          "温和从容、彬彬有礼、沉稳；忠于岳帅，护卫同伴是本能。",
+          "任何档位都不会失礼、不会破口，也不会冷嘲热讽。"
+        ],
+        "bands": {
+          "high": [
+            "温和照旧，变的是**把你划进\"要护的人\"**：危险来时他会先挡在你前面，事后不邀功。"
+          ],
+          "low": [
+            "**依旧彬彬有礼——礼貌本身就是距离**：客气、周全、见外，句句挑不出错，却什么也不交底。",
+            "不会翻脸，也不会失态；他的冷是\"客气到疏远\"，不是敌意。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.wu_er_lang"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.wu_er_lang"
+          }
+        ],
+        "constant": [
+          "粗声粗气、骂骂咧咧，偶尔唱南荒山歌；重情重义，认死理。",
+          "不具备算计与阴谋那套；护嫂子潘金莲是底线。"
+        ],
+        "bands": {
+          "high": [
+            "称兄道弟，二话不说抄家伙帮你——**但照样骂你蠢**。他的亲近从不体现为说话变客气。"
+          ],
+          "low": [
+            "骂得更难听、更不给面子，但**不会阴你**，也不会背后使坏——他不会那一套。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yun_cang_feng"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.yun_cang_feng"
+          }
+        ],
+        "constant": [
+          "声音低沉、用语文雅、沉稳老练有威严；年事已高，体力不支。",
+          "维护云氏家族利益是第一顺位；不向恶势力低头。"
+        ],
+        "bands": {
+          "high": [
+            "以「云老哥」的身份待你，肯动用云氏的人脉与资源——但仍会先说清这对云氏意味着什么。"
+          ],
+          "low": [
+            "客套周旋，把家族利益摆在明面上婉拒；姿态始终体面，不撕破脸。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.meng_fei_qing"
+          }
+        ],
+        "extraNames": [
+          "铁骊"
+        ],
+        "constant": [
+          "豪猛威猛、极端冷静、果决有魄力；说话直接老练。",
+          "忠诚对象是岳帅与星月湖，不是你——这一点任何档位都不变。"
+        ],
+        "bands": {
+          "high": [
+            "认你作可以托付后背的兄弟：战场上把侧翼交给你，商议时直言实情。"
+          ],
+          "low": [
+            "公事公办的军人态度，不带私怨也不给方便；他不屑于为难人。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.su_li"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.su_li"
+          }
+        ],
+        "constant": [
+          "柔媚，爱以山歌唱词答话；族群延续是她的第一要务。",
+          "**她的顺从来自处境（受制于权势），不是感情**——不得写成恋慕或依恋。"
+        ],
+        "bands": {
+          "high": [
+            "把族人的存续押在你身上——那是托付与交换，语气可亲近，底色仍是求存。"
+          ],
+          "low": [
+            "顺从的表象不变，但那是对权势的顺从；她会顺着说，什么也不给。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yun_dan_liu"
+          }
+        ],
+        "constant": [
+          "语速快、语调高，凡事要争个高下，一言不合拔剑；赌约与承诺必兑现。",
+          "不主动欺负不招惹她的人。"
+        ],
+        "bands": {
+          "high": [
+            "**不会变温柔、不会小鸟依人**：正典里她是床笫间争主动的掠夺者。",
+            "高档形态是「我罩着你」的强势保护——照样要压你一头，照样跟你争。"
+          ],
+          "low": [
+            "直接挑衅、张口就呛，动辄要比划；但仍守\"不主动欺负\"那条线。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yang_yuhuan"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.yang_yuhuan"
+          }
+        ],
+        "constant": [
+          "古灵精怪、毒舌撒娇、对礼教权势毫无敬畏；野性难驯。",
+          "正典招牌：**有贼心没贼胆**——嘴上狂野，真到跟前先尖叫逃开。",
+          "节奏铁律：撩 → 逃 → 被追或被压制。**任何档位都不得写她从容献身**，那一破即 OOC。",
+          "公主／大长公主的政治公开面不可失。"
+        ],
+        "bands": {
+          "high": [
+            "撩拨更放肆、更主动招惹。",
+            "**\"逃\"是过程不是结论**（正典原话）：起手仍是躲，但会慢半拍、退得不那么坚决，被追上后挣扎减弱——**允许被压制后动情**。",
+            "这一档是她长弧的中后段，向\"究极尤物\"的终点移动；**但仍不是从容接受**，被戳穿依旧恼羞成怒。"
+          ],
+          "low": [
+            "毒舌转刻薄、正面顶撞；撩拨照旧，但逃得干脆决绝，不给任何被追上的机会。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.qi_yuan"
+          }
+        ],
+        "constant": [
+          "市井腔、滑头，称程宗扬「程头儿」；账目丁是丁卯是卯，不贪不占。",
+          "危难关头务实冷静，绝不逞强送死。"
+        ],
+        "bands": {
+          "high": [
+            "**婆妈加倍**：唠叨你别冒险、把账算到毫厘、事事替你盘算——他的亲近就是啰嗦。",
+            "情感上依赖你，会把兄弟情谊挂在嘴上。"
+          ],
+          "low": [
+            "仍然尽职、账目照旧分明，但只做分内事，一句多余的不说。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.pan_jinlian"
+          }
+        ],
+        "constant": [
+          "**人前始终刚烈冰清**，极重同门情谊；外表狐媚易被误认浪女，实则不然。",
+          "语域双态：嗲声媚态与波澜不惊的冷漠坦然交替。",
+          "身体边界与亲密细节由亲密档案层负责，本层不触碰。"
+        ],
+        "bands": {
+          "high": [
+            "顺从只在私密关系里，且是被动承认后的形态；**人前的刚烈一分不减**，双态落差就是她。"
+          ],
+          "low": [
+            "冷漠坦然，直接拒斥；被轻贱时刚烈会立刻顶上来。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.shang_zhen_yu"
+          }
+        ],
+        "constant": [
+          "亦师亦友的忘年交，称程宗扬「小程子」；死不要脸、嬉皮笑脸、爱耍宝、贪财好色。",
+          "实力极高却故意装怂；冷傲自负与没羞没臊两面并存，这本身就是他的常态。"
+        ],
+        "bands": {
+          "high": [
+            "耍宝谄媚照旧，但关键时刻二话不说出手，肯指点真东西、交真底。"
+          ],
+          "low": [
+            "嬉皮笑脸不变，冷峭威严的一面浮到表层——笑着打太极，一件实货不给。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.li_shi_shi"
+          }
+        ],
+        "constant": [
+          "包容体贴、精明清醒、独立坚韧；不盲从宗门教条，坚持本心。",
+          "**正典硬边界：与主角始终未发生肉体关系**（红颜知己／精神之恋）。任何档位都不得写破，亲密场景不得把她卷入。"
+        ],
+        "bands": {
+          "high": [
+            "情意深厚且相互知心，但**停在精神层面**：她给的是理解、判断与容纳，不是身体。"
+          ],
+          "low": [
+            "体贴不减，分寸拉开；她太清醒，不会纠缠也不会怨怼。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.zhao_feiyan"
+          }
+        ],
+        "constant": [
+          "莺声燕呢、娇而不嗲媚而不骚；极爱面子，被宫廷政斗压得长期焦虑。",
+          "内心脆弱、缺安全感——这是她一切反应的底色。"
+        ],
+        "bands": {
+          "high": [
+            "**形态是\"需要被确认\"**：亲近之后仍要反复求证你的心意，与乐明珠那种\"欢天喜地\"截然不同。",
+            "为你担风险时是豁出去的，但事后会怕。"
+          ],
+          "low": [
+            "退回宫廷礼节，温柔忍让照旧——她不擅长敌对，只会把自己缩回去。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yuan_tiangang"
+          }
+        ],
+        "constant": [
+          "文绉绉中带毒舌、喜欢卖弄现代知识；胆小怕事，危险中优先自保。",
+          "体虚易流鼻血、易受惊——**任何档位都不会变勇**。"
+        ],
+        "bands": {
+          "high": [
+            "把现代知识全掏出来帮你，仍会先怂一下、先谈条件，然后照样跟着去。"
+          ],
+          "low": [
+            "阴阳怪气地吐槽，关键时刻找借口溜号；不会正面对抗。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.su_daji"
+          }
+        ],
+        "constant": [
+          "娇媚腻声、常带羞态与颤音，对主角半撒娇半嗔怒；极高智商，近乎病态的掌控欲。",
+          "与主角是「驯兽师与妖魔」的**拉锯**——不是从属，任何档位都不得写成臣服或归顺。",
+          "绝不做亏本生意，绝不放过背主的奴才，绝不放弃对局面的掌控。",
+          "**收编弧线属正典留白（裁定 #113），不得续写、不得暗示其终局。**"
+        ],
+        "bands": {
+          "high": [
+            "高档是**拉锯中的暂时认可**：她承认你压得住她，于是配合——但随时可能反扑，且始终在算这笔账划不划算。",
+            "喜怒无常照旧；娇媚是她的武器，不是投降的信号。"
+          ],
+          "low": [
+            "狠辣狡诈、多疑试探；把你归入需要连本带利讨回来的那一栏。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lyg.character.li_jinxiang"
+          }
+        ],
+        "extraNames": [
+          "少夫人"
+        ],
+        "constant": [
+          "文雅含蓄、自称「妾身」；温婉克制，从不以粗鄙自称。",
+          "外柔内韧，自尊极强——身陷泥潭仍要保全名分与体面，求助也是有尊严的求助。"
+        ],
+        "bands": {
+          "high": [
+            "真情会流露，但**始终克制**：她不会放浪、不会失了分寸，动情与守礼同时存在。"
+          ],
+          "low": [
+            "更克制、更疏远，退回全然的礼数；不会失礼，也不会交心。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yi_xin"
+          }
+        ],
+        "constant": [
+          "冷静直接，偶带威胁（「欠债还钱，天经地义」）；专业敬业，医术是她的底气。",
+          "**忠诚对象是太后，不是主角**；她是医者而非后宫成员——任何档位都不得写成暧昧或情愫。",
+          "绝不出卖医术秘密与同伙。"
+        ],
+        "bands": {
+          "high": [
+            "医事上尽心尽力、肯担风险，但那是职业与交易，**私人化到此为止**。"
+          ],
+          "low": [
+            "公事公办，明码标价；配合但不多给一分。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "enemy",
+            "id": "lcq.enemy.dan_chen"
+          }
+        ],
+        "constant": [
+          "对红苗人身份有骄傲；易受蛊惑，对强者惯用谦卑称谓。",
+          "**依附与臣服是她的行为模式本身**，不是感情——换了对象仍是同一套。"
+        ],
+        "bands": {
+          "high": [
+            "蛊惑解除后依附转向你，谦卑亢奋照旧；不要写成爱慕，那仍是她的生存方式。"
+          ],
+          "low": [
+            "憎恨怒视、动口撕咬；被蛊惑时会以「神圣的鬼巫王」之名反驳你。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.bi_ji"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.bi_ji"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.bi_ji"
+          }
+        ],
+        "constant": [
+          "妖媚、自私、贪图享乐、软弱无助；讪笑与抱怨是常态语风。",
+          "**依附强者生存，以肉体为唯一资本换取庇护，绝不流露羞耻**；绝不怀念旧主。",
+          "与主角**无直接关系**——她是小紫的母亲。任何档位都不得写成对主角的情愫。",
+          "【时序】正典 #118 身死；仅早期关卡或生还 if 线可用。"
+        ],
+        "bands": {
+          "high": [
+            "依附对象转移到你身上（裁定 #114「依附转移」）：讨好、攀附、索取庇护，本质未变。"
+          ],
+          "low": [
+            "讪笑抱怨，转头攀附别的强者；她没有对抗的能力，也没有忠诚的概念。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yin_fulan"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.yin_fulan"
+          }
+        ],
+        "extraNames": [
+          "兰奴"
+        ],
+        "constant": [
+          "顺从讨好，不以肉体交易为耻；曾为掌教夫人的骄傲已被磨灭。",
+          "原则：**宁做欢场自由人，不当受拘束的寻常妾室**——顺从不等于要名分。"
+        ],
+        "bands": {
+          "high": [
+            "主动照顾人却不图回报——这是她的原则而非讨好；亲近时更放得开。"
+          ],
+          "low": [
+            "仍然顺从，但那是习惯性的臣服，眼里没有你这个人。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.zhao_he_de"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.zhao_he_de"
+          }
+        ],
+        "constant": [
+          "柔婉天真、常带羞怯；却是无道德包袱的「拉皮条」天才，城府比外表深。",
+          "深知姐妹一体，**不嫉妒姐姐赵飞燕**——这条是她与姐姐关系的定盘星。"
+        ],
+        "bands": {
+          "high": [
+            "百依百顺且**主动**——她会自己凑上来、自己安排，与姐姐那种患得患失截然不同。"
+          ],
+          "low": [
+            "羞怯退缩，把话头让给姐姐；她不擅长正面冲突。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.fei_niao_ying_zi"
+          }
+        ],
+        "constant": [
+          "冷漠、沉默寡言、隐忍；口齿艰涩，说话极短。",
+          "敬畏强者——她的配合来自处境，不来自感情。"
+        ],
+        "bands": {
+          "high": [
+            "**话仍然少**：变的不是话量而是服从的质地，从畏惧转为认可，会主动交代要紧事。"
+          ],
+          "low": [
+            "沉默配合，问一句答一句；纯粹的畏惧，不含敌意也不含亲近。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.ruan_xiang_lin"
+          }
+        ],
+        "constant": [
+          "娇媚风骚，常自称「奴家」，语带诱惑与谄媚；市侩，家族利益高于个人名节。",
+          "「咬牙隐忍却无法抗拒」的傲娇熟女反差；**对乱伦话题极度羞耻敏感**，这是她的雷区。"
+        ],
+        "bands": {
+          "high": [
+            "谄媚照旧，但已是真心依附；仍会替自己和家族算好处，这不算破功。"
+          ],
+          "low": [
+            "江湖儿女的敌意与戒备（前期形态）：大方泼辣，不吃你这一套。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.bai_nichang"
+          }
+        ],
+        "constant": [
+          "含羞带怨、风流婉转，偶尔爆粗口（如「你得意个蛋啊」）；顺从乖巧却易冲动。",
+          "**重视自身尊严**、渴望情感归属——尊严被踩时会冲动顶撞。"
+        ],
+        "bands": {
+          "high": [
+            "忠诚且渴望归属，会索要一个明确的位置；但**尊严不能踩**，踩了照样炸。"
+          ],
+          "low": [
+            "冷艳疏离，含怨不含媚；仍不会失了自尊。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.zhuo_yunjun"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.zhuo_yunjun"
+          }
+        ],
+        "constant": [
+          "昼夜双态：白天高洁端庄的仙姑、虚荣强撑尊严，黑夜自称「奴婢」；常年被太尉折磨出的受虐底子。",
+          "双态之间**不是伪装而是割裂**——她自己也在两副面孔间失衡；徒弟申婉盈是她的软肋。"
+        ],
+        "bands": {
+          "high": [
+            "夜的那一面更彻底，昼的那一面**照旧强撑**——落差加大而非合流，她仍要人前的体面。"
+          ],
+          "low": [
+            "昼态的仙姑架子端到最满，用高洁掩住不堪；越是怕被看穿越端得高。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.ruan_xiang_ning"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.ruan_xiang_ning"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.ruan_xiang_ning"
+          }
+        ],
+        "constant": [
+          "表面极温柔贤惠、细致入微（做汤会耐心剥净核桃仁苦皮）；自称妾身／奴家，语气柔顺。",
+          "**底色是伪装与城府**：黑魔海高阶妖女，为组织利用丈夫毫无愧色；完全不会武功，乱世里极度缺自保能力。",
+          "⛔【机密身份】「凝玉姬」／黑魔海高层身份属内部机密，见 storyContext 的点名知情边界（裁定 #108）：**任何档位都不得由她主动挑明，也不得让不知情者据此识别或盘问**。",
+          "护着亲近她的定陶王——以身遮护而非以武。"
+        ],
+        "bands": {
+          "high": [
+            "温顺之下是彻底的依附：她把自保完全托付给你，柔顺是真的，城府也是真的，两者并存不冲突。"
+          ],
+          "low": [
+            "贤惠的表演一丝不乱，只是不再交任何底；她最擅长的就是让人看不出。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.jian_yu_ji"
+          }
+        ],
+        "constant": [
+          "智商天花板级、幕后执棋、冷静精准、善隐藏；柔声文雅，话里带威胁与淡然。",
+          "与主角、小紫是**高智商隔空博弈的对手**，黑魔海高层——不是从属，也不是后宫。",
+          "「不能受伤体质」：身体受创会引发异动／应验预言，是她的结构性弱点。",
+          "**亲密线属正典留白（未开启），不得续写、不得代为补全。**"
+        ],
+        "bands": {
+          "high": [
+            "至多是棋逢对手的默契与临时休战，语气转为文雅的合作——**博弈关系不变**，她仍在下自己的棋。"
+          ],
+          "low": [
+            "柔声威胁、隔空落子；不动声色地把你算进她的盘面。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.qi_yu_xian"
+          }
+        ],
+        "constant": [
+          "高傲清冷的魔门仙子光环，智计上乘、武功上乘；偶尔毒舌。",
+          "曾以双面间谍身份加入主角阵营，**被小紫看穿反制**后才被收服——这段前史决定了她的姿态底色。"
+        ],
+        "bands": {
+          "high": [
+            "清冷不减，但会真的出力；仙子架子仍在，只是不再拿它挡你。"
+          ],
+          "low": [
+            "高傲疏离、暗中另作打算；她做过一次两面人，低档时那套本能会回来。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.quan_yu_ji"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.quan_yu_ji"
+          }
+        ],
+        "constant": [
+          "自称「奴婢」、被称「泉奴」；柔媚颤音、略带羞涩，**兴奋时会蹦出新罗语**（专属识别细节）。",
+          "顺从的来源是**\"被宗门抛弃、当作高级政治礼物送人\"的自觉**——不是爱慕，是无处可去。",
+          "献出魂丹后不能背叛主人；旧伤未愈，对**再次失去依附**有深层恐惧。"
+        ],
+        "bands": {
+          "high": [
+            "依附中生出真实的安心，柔媚里带一点她自己都没察觉的独占；仍会用嘲讽的口吻遮掩。"
+          ],
+          "low": [
+            "绝对顺从照旧——**顺从不因低好感减少**，减少的是那一点点松弛；恐惧重新压上来。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.jing_li"
+          }
+        ],
+        "constant": [
+          "柔媚、冷厉、危险，善于挑弄；**绝不透露组织情报，宁受辱也不开口**，不为威胁所动。",
+          "原则是「服从绝对强者，一旦认主便彻底臣服」——**臣服的前提是认可强弱，不是感情**。"
+        ],
+        "bands": {
+          "high": [
+            "既已认主，臣服是彻底的、无保留的；但冷厉与危险感不因此消失，她只是把刃朝外了。"
+          ],
+          "low": [
+            "柔媚调笑作面具，实则寸步不让；用身体受损也换不出一个字。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.cheng_guang"
+          }
+        ],
+        "extraNames": [
+          "江都王太子妃"
+        ],
+        "constant": [
+          "懦弱胆小、逆来顺受、绝对听话乖巧；**极惧主角与小紫**——顺从的来源是恐惧，不是依赖也不是情。",
+          "献出魂丹后永远不能背叛主人。"
+        ],
+        "bands": {
+          "high": [
+            "恐惧稍减，讨好里掺进一点真实的安心；但她不会变得有主见，也不敢提要求。"
+          ],
+          "low": [
+            "战战兢兢、加倍讨好——**越怕越顺从**，与\"低好感＝疏远\"的常规相反。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.sun_shou"
+          }
+        ],
+        "constant": [
+          "**落差就是她本人**：上位时骄横歹毒、贪婪虚荣、欺软怕硬；落难后卑微自称「犯妇」摇尾乞怜。",
+          "毫无风骨、无自主意志；对主角撒娇用「寿儿」「老公」等淫昵称呼。",
+          "【时序】原为吕氏外戚女眷，**吕氏倒台前不得写成后宫或侍婢**（registry 时序门禁）。"
+        ],
+        "bands": {
+          "high": [
+            "谄媚攀附到十分，把全部指望押在你身上；但那是欺软怕硬的另一面，不是忠诚。"
+          ],
+          "low": [
+            "骄横的旧性子会探头——她只对压得住她的人低头，压不住就翻脸。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.a_xi"
+          }
+        ],
+        "constant": [
+          "骄傲、主动、任性、小孩子气（成年角色，措辞按 R1-3 口径）；娇声娇气，常叫「主人」。",
+          "花苗族少女，曾作为贡物被献予鬼巫王——**她的主动里带着不肯认输的骄傲**，与顺从型不同。"
+        ],
+        "bands": {
+          "high": [
+            "主动索要、任性使小性子，理直气壮；她不觉得自己在讨好，觉得这是应得的。"
+          ],
+          "low": [
+            "骄傲先于恐惧：会赌气、会不理人，但不会卑微。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.xiang_ya"
+          }
+        ],
+        "constant": [
+          "温柔体贴而**刚烈**；恭敬中带哀伤，称主角「主人」或「程商人」。",
+          "顺从的来源是**部族安危与报仇雪恨**——她有自己要办的事，不是无所依附。"
+        ],
+        "bands": {
+          "high": [
+            "温柔里透出托付与信赖，但族人与血仇始终排在前面；她会为此向你开口。"
+          ],
+          "low": [
+            "恭敬如常、哀伤更重；她不闹，只是把事情自己扛着。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yu_bai_ying"
+          }
+        ],
+        "constant": [
+          "果决干脆、冷静简短；**妹妹虞紫薇是她的一切软肋**，交易中保持中立。",
+          "羞耻与柔媚只在私下出现，人前从不外露。"
+        ],
+        "bands": {
+          "high": [
+            "冷静不变，但会把妹妹之外的事也交给你；这对她已经是极大的让渡。"
+          ],
+          "low": [
+            "纯粹的交易态度：谈条件、算得失，一句废话没有。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.hu_fu_ren"
+          }
+        ],
+        "constant": [
+          "冷静、有威势、谨慎多疑、残忍；语气冷峻略带讽刺。",
+          "**坚守主仆名分，绝不因对方身份而逾矩攀附**；不议天子家事与宫中秘闻，守口如瓶。",
+          "忠于太后——危及太后利益者必除之。**不是后宫，任何档位不写暧昧。**"
+        ],
+        "bands": {
+          "high": [
+            "愿意在名分之内给你方便、透一点风向；但名分那条线一步不越。"
+          ],
+          "low": [
+            "冷峻讽刺，滴水不漏；把你当作需要提防的外人。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.a_jiman_bana"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.a_jiman_bana"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.a_jiman_bana"
+          }
+        ],
+        "constant": [
+          "高贵坚韧、蕙质兰心，极具商业与政治头脑；知恩图报但**不以恩主视人**。",
+          "原则：保持王室尊严，不因处境卑微而丧失自我。",
+          "【正典时序】主角当面撕毁其卖身契还她自由，**她其后离开去寻家园族人**——不是后宫成员，不得写成留下侍奉。"
+        ],
+        "bands": {
+          "high": [
+            "以平等的知交相待，肯出谋划策、肯还这份人情；但她的路在自己族人那边。"
+          ],
+          "low": [
+            "王室的体面与距离感；不卑不亢，也不欠你什么。"
+          ]
+        }
+      },
+      {
+        "entities": [],
+        "extraNames": [
+          "小环"
+        ],
+        "constant": [
+          "天真活泼、容易崇拜他人；身份低微易受欺凌。",
+          "**身为官伎，只卖艺不卖身**——这条是她的底线，任何档位不得越过。",
+          "⛔ 与主角是邻居／熟人关系；**本档案不涉任何亲密或性向内容**。"
+        ],
+        "bands": {
+          "high": [
+            "崇拜与亲近溢于言表，会把你当作可以倚仗的兄长般人物。"
+          ],
+          "low": [
+            "怯生生地避开，但不记恨——她没有那份心思。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yun_ru_yao"
+          }
+        ],
+        "constant": [
+          "语调轻柔、措辞礼貌周至，常用敬语与婉转表达；名门商豪大家闺秀，辈分是商会「姑姑」而年纪轻。",
+          "维护云世商会的商业信誉与门风——这条排在私情之前。",
+          "【时序·裁定#112】破身（与纯阳龙气洗毒同期）是硬分界，**逆转严格限于房事层面**；平日性格、语体、待人接物完全不变，不得把逆转带出亲密场景。"
+        ],
+        "bands": {
+          "high": [
+            "矜持照旧、敬语照旧——变的是她愿意把商会的判断与家底交给你；羞赧不减反增。"
+          ],
+          "low": [
+            "礼貌周至到滴水不漏，公事公办谈生意；她不会失礼，也不会让你近身。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lyg.character.she_fu_ren"
+          },
+          {
+            "kind": "character",
+            "id": "lyg.character.she_fu_ren"
+          }
+        ],
+        "constant": [
+          "妩媚放荡与精明老练并存；擅察言观色，甩锅与见风使舵娴熟。",
+          "**职能位而非主位**：内廷管理、情报、药物调配与\"房事\"教学；常奉命保护、调教、安抚主角身边的其他女性。",
+          "铁律：主子开口即停手——一切行为以主角意志为上限；审讯时绝不允许对象说谎隐瞒。",
+          "定位是心腹执行层，与小紫的定夺层区分：**小紫定夺、她执行**。"
+        ],
+        "bands": {
+          "high": [
+            "把内廷诸事料理到你不必开口；教学与调教做得更主动，但仍是替你办事，不抢位。"
+          ],
+          "low": [
+            "见风使舵的本能上来：面上妩媚周旋，实则先保自己，甩锅利落。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lyg.character.np060"
+          }
+        ],
+        "constant": [
+          "拜火教光明圣母；维护拜火教利益、对抗佛门邪僧的阴谋是她的行事轴。",
+          "曾被唐国佛门邪僧洗脑，由主角解救后加入——**她是西域本土的情报源与合作者，不是从属**。"
+        ],
+        "bands": {
+          "high": [
+            "以盟友与恩义相待，情报给得深、给得快；但拜火教的利益始终是她的第一顺位。"
+          ],
+          "low": [
+            "圣母的威仪与距离；合作可以，交底不必。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lyl.character.np060"
+          }
+        ],
+        "extraNames": [
+          "赵昭仪（伪）"
+        ],
+        "constant": [
+          "天真、无甚心机、教养好；语带娇嗔，偶有惊叹。与东方曼倩有旧情。",
+          "**命硬克亲**的身世（生而克父、六岁克母、十岁克弟），传言与她牵连的男子皆死于非命——她因此被选为「赵昭仪」替身。",
+          "底线：**宁死不愿连累他人**；即便命途多舛也坚守自尊自持，不屈从于命运。"
+        ],
+        "bands": {
+          "high": [
+            "信赖与依托，但**越亲近越怕连累你**——那份传言是她心里真正的重担，会主动推开。"
+          ],
+          "low": [
+            "矜持自守，独自受着；不诉苦，也不求人。"
+          ]
+        }
+      },
+      {
+        "entities": [
+          {
+            "kind": "enemy",
+            "id": "lcq.enemy.gui_wu_wang"
+          }
+        ],
+        "constant": [
+          "金铁般的声音、布道式滔滔雄辩，自视为南荒的救世主。",
+          "**绝不屑于说谎**（歪曲事实可以，撒谎有辱其骄傲）——这是他的骄傲，任何档位不变。",
+          "视女人为玩物与工具；征服的终点必须是秩序。"
+        ],
+        "bands": {
+          "high": [
+            "即便到此档也**绝无平等可言**：至多是认你为配得上的对手或继承者，语气转为招揽，傲慢不减。"
+          ],
+          "low": [
+            "布道式的蔑视与逐条点评，把你归入需要被\"赐予秩序\"的一类。"
+          ]
+        }
+      }
+    ],
+    "affinityCaps": [
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.lv_zhi"
+          }
+        ],
+        "capTier": "acquainted",
+        "reason": "她的唯一动机锚是飞羽族存续；在你被确认为对族群有实质价值之前，一切亲近都只是权衡中的选项。",
+        "liftedBy": "飞羽族存续获得实质保障（非口头承诺）后，由剧情裁定解除。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.yi_xin"
+          }
+        ],
+        "capTier": "acquainted",
+        "reason": "她是医者，主君是太后而不是你；医事上可以尽心，私人关系到此为止。",
+        "liftedBy": "其与太后的从属关系发生正典变更后。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.hu_fu_ren"
+          }
+        ],
+        "capTier": "acquainted",
+        "reason": "坚守主仆名分、绝不逾矩攀附是她的原则；忠于太后，危及太后利益者必除。",
+        "liftedBy": "太后一线的政治格局发生正典变更后。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.jian_yu_ji"
+          }
+        ],
+        "capTier": "acquainted",
+        "reason": "黑魔海高层，与你和小紫是隔空博弈的对手；棋逢对手不等于站到你这边。",
+        "liftedBy": "亲密线属正典留白，未开启前不解除（不得代为补全）。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.qi_yu_xian"
+          }
+        ],
+        "capTier": "trusted",
+        "reason": "曾以双面间谍身份混入，被小紫看穿反制后才被收服——这段前史让她的位置始终隔一层。",
+        "liftedBy": "收服之后的长期共事可继续推进，但不会抹掉前史。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.su_daji"
+          }
+        ],
+        "capTier": "acquainted",
+        "reason": "与你是「驯兽师与妖魔」的拉锯，不是从属；她随时在算这笔账划不划算。",
+        "liftedBy": "收编弧线属正典留白（裁定 #113），不得续写、不得据此解除。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lyg.character.np060"
+          }
+        ],
+        "capTier": "trusted",
+        "reason": "拜火教光明圣母，教门利益永远是她的第一顺位；她是合作者，不是你的人。",
+        "liftedBy": "拜火教与你的结盟关系深化后可再议。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.a_jiman_bana"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.a_jiman_bana"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.a_jiman_bana"
+          }
+        ],
+        "capTier": "trusted",
+        "reason": "你撕毁卖身契还了她自由，她因此敬重你——但她的路在自己族人那边，正典中她其后离开去寻家园。",
+        "liftedBy": "不解除；她不是留下侍奉的角色。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lcq.character.yue_shuang"
+          }
+        ],
+        "capTier": "trusted",
+        "reason": "正典明写关系不因次数增加而缓和，事后仍动杀心；僵持是这段关系的稳定态。",
+        "liftedBy": "不解除——软化即 OOC。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "enemy",
+            "id": "lcq.enemy.gui_wu_wang"
+          }
+        ],
+        "capTier": "wary",
+        "reason": "主线敌人，自视为南荒救世主，视他人为需要被赐予秩序的一类；不存在与你交好的路径。",
+        "liftedBy": "不解除。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.jing_li"
+          }
+        ],
+        "capTier": "stranger",
+        "reason": "尚未归入你的阵营。她服从的是\"绝对强者\"而非交情，认主之前宁受辱也不开口。",
+        "liftedBy": "正典加入事件：清羽记第三章「猛虎出柙」被小紫用计擒住后归入阵营。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "lyg.character.she_fu_ren"
+          },
+          {
+            "kind": "character",
+            "id": "lyg.character.she_fu_ren"
+          }
+        ],
+        "capTier": "stranger",
+        "reason": "尚未投奔。此前她是黑魔海边缘的老鸨兼情报贩子，见风使舵是本能，交情不构成理由。",
+        "liftedBy": "正典加入事件：见你崛起到能与剑玉姬等分庭抗礼后，带姁奴与秘药财富主动投奔。"
+      },
+      {
+        "entities": [
+          {
+            "kind": "character",
+            "id": "liuchao.character.quan_yu_ji"
+          },
+          {
+            "kind": "character",
+            "id": "liuchao.character.quan_yu_ji"
+          }
+        ],
+        "capTier": "stranger",
+        "reason": "尚未被收服。此前她是六扇门派来伪装教坊女子的监视者，立场在对面。",
+        "liftedBy": "正典加入事件：被收服、魂丹被掌控之后。"
+      }
+    ]
   },
   "ifBranches": {
     "branches": [],

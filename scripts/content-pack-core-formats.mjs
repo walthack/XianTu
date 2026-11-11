@@ -16,9 +16,11 @@ const strip=({note,...rest})=>rest;
 export const coreFormatKinds=['lineCriticalEvents','characterBeats','storyAxis','locationAliases','characterProfiles','ifBranches'];
 /** catalog 里的空段（没有包声明时）。 */
 export const emptyCoreFormats=()=>({lineCriticalEvents:[],characterBeats:{quests:[],highlights:[]},storyAxis:null,locationAliases:{canonical:{},parents:{},display:{}},characterProfiles:{stance:[],affinityCaps:[]},ifBranches:{branches:[],consequences:[],prompts:{}}});
-/** 归属：人物任务 id（种类 characterQuest）、IF 分支 id（种类 ifBranch）登记为包定义；其余几段只引用别处的 id。 */
+/** 归属：IF 分支 id（种类 ifBranch）登记为包定义；其余几段只引用别处的 id。
+ * 人物任务 id（characterBeats.quests[].id，如短词人名）是单独的命名空间，只在 characterBeats 段内使用，不登记进通用归属：
+ * 别的包里恰好同名的普通字符串（例如核心包场面合同的局部参与者 id）不算对人物包的引用（B2，2026-11-11 主驱动裁定）。
+ * 唯一性另由 compileCoreFormats（全部包之间，报 defined by both）与 validateCoreFormatsWithTs（与 TS 表之间）保证；人物拍点里的事件 id 照常进通用扫描。 */
 export function coreDefinedIds(kind,x){
- if(kind==='characterBeats'&&object(x))return (Array.isArray(x.quests)?x.quests:[]).map(q=>['characterQuest',q?.id]);
  if(kind==='ifBranches'&&object(x))return (Array.isArray(x.branches)?x.branches:[]).map(b=>['ifBranch',b?.branchId]);
  return [];
 }
@@ -43,11 +45,11 @@ export async function compileCoreFormats(raw,{stages,events,builtinStageIds,loca
    if(!events.has(x.eventId))fail(`${at}: unknown event`);if(seen.has(x.eventId))fail(`${at}: appears twice`);seen.add(x.eventId);
    out.lineCriticalEvents.push(strip(x));}}}
 
- // 人物任务与高光：status ∈ ready/new/insert；ready/insert 的 eventIds 都存在，new 的（建议 id）都不存在；quest id 全部包里不重复；同名同事件的高光不重复
- {const ids=new Set(),highlights=new Set();for(const file of raw.characterBeats){const v=fileObject('characterBeats',file,['quests','highlights']);
+ // 人物任务与高光：status ∈ ready/new/insert；ready/insert 的 eventIds 都存在，new 的（建议 id）都不存在；quest id 全部包里不重复（不进通用归属，见 coreDefinedIds）；同名同事件的高光不重复
+ {const ids=new Map(),highlights=new Set();for(const file of raw.characterBeats){const v=fileObject('characterBeats',file,['quests','highlights']);
   for(const q of list('characterBeats.quests',file.packId,v.quests)){const at=`characterBeats quest ${q?.id}`;
    if(!onlyKeys(q,['id','name','beats','note'])||!noteOk(q)||!text(q.id)||!text(q.name)||!Array.isArray(q.beats)||!q.beats.length)fail(`${at}: invalid fields`);
-   if(ids.has(q.id))fail(`${at}: duplicate id`);ids.add(q.id);
+   if(ids.has(q.id))fail(ids.get(q.id)===file.packId?`${at}: duplicate id`:`characterQuest id ${q.id} defined by both ${ids.get(q.id)} and ${file.packId}`);ids.set(q.id,file.packId);
    const beats=q.beats.map((b,j)=>{
     if(!onlyKeys(b,['reviewSummary','status','eventIds','note'])||!noteOk(b)||!text(b.reviewSummary)||!STATUSES.includes(b.status)||!texts(b.eventIds)||!b.eventIds.length||!distinct(b.eventIds))fail(`${at}: beat ${j}: invalid fields`);
     for(const id of b.eventIds){if(b.status==='new'&&events.has(id))fail(`${at}: beat ${j}: new beat suggests ${id}, which already exists (use ready/insert)`);if(b.status!=='new'&&!events.has(id))fail(`${at}: beat ${j}: unknown event ${id}`);}

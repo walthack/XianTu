@@ -34,7 +34,6 @@ test('每条 critical event 都被三级链认领；欠账只减不增', async (
   for (const src of [
     'src/modules/scenarioMods/mainQuestAxis.ts',
     'src/modules/scenarioMods/secondaryLines.ts',
-    'src/modules/scenarioMods/characterQuests.ts',
   ]) {
     const text = fs.readFileSync(src, 'utf8');
     for (const m of text.matchAll(/'((?:lcq|lyl|lyg|liuchao)\.event\.[a-zA-Z0-9_]+)'/g)) claimed.add(m[1]);
@@ -44,6 +43,9 @@ test('每条 critical event 都被三级链认领；欠账只减不增', async (
   for (const line of CONTENT_PACKS.secondaryLines || []) {
     for (const id of [...(line.anchorEventIds || []), ...line.nodes.map(n => n.eventId).filter(Boolean)]) claimed.add(id);
   }
+  // B2：人物任务与高光从 characterQuests.ts 迁进人物包 character-beats.json（TS 表已空）；人物层认领改读合并值，口径不变（全部拍与高光的 eventIds）
+  const { CHARACTER_QUESTS, CHARACTER_HIGHLIGHTS } = await loadTs('../src/modules/scenarioMods/characterQuests.ts');
+  for (const id of [...CHARACTER_QUESTS.flatMap(q => q.beats.flatMap(b => b.eventIds)), ...CHARACTER_HIGHLIGHTS.flatMap(h => h.eventIds)]) claimed.add(id);
 
   const orphans = [...critical.keys()].filter(id => !claimed.has(id)).sort();
 

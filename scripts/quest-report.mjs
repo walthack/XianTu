@@ -114,11 +114,15 @@ const PENDING_REVIEW = [
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { createJiti } from 'jiti';
 
 const ROOT = process.cwd();
 const DATA = 'src/modules/scenarioMods/builtins/data';
 const AXIS = 'src/modules/scenarioMods/mainQuestAxis.ts';
 const LINES = 'src/modules/scenarioMods/secondaryLines.ts';
+// 二级线与人物任务读**合并值**（B2，2026-11-11）：各线二级线、人物任务与高光已陆续迁进内容包（TS 表只剩一部分或为空），
+// 正则读 TS 源码会漏掉包里的那些；故经 jiti 加载模块，读 SECONDARY_LINES／CHARACTER_QUESTS／CHARACTER_HIGHLIGHTS。主轴仍正则读源码。
+const loadModule = rel => createJiti(import.meta.url, { interopDefault: true, alias: { '@': path.join(ROOT, 'src') } }).import(path.join(ROOT, rel));
 const CHARDOC = 'docs/R3-10-CHARACTER-QUESTS-DRAFT-2026-08-16.md';
 
 // ── 事件层：id → { seq, name, stage }
@@ -215,17 +219,19 @@ const tiers = [{
   id: 'main', name: '主轴', tier: 1,
   nodes: parseNodes(axisSrc.slice(axisStart, axisSrc.indexOf('\n];', axisStart))),
 }];
-// B1：二级线已全部进内容包（secondaryLines.ts 的 TS 表为空），改读合并后的 SECONDARY_LINES（同 build-entity-index.mjs，经 jiti）
-const { createJiti } = await import('jiti');
-const { SECONDARY_LINES } = await createJiti(import.meta.url, { alias: { '@': path.join(ROOT, 'src') } }).import(path.join(ROOT, LINES));
+const { SECONDARY_LINES } = await loadModule(LINES);
 for (const line of SECONDARY_LINES) {
   tiers.push({
     id: line.id, name: line.name, tier: 2, kind: line.kind,
-    anchor: line.anchorEventIds?.length === 1 ? line.anchorEventIds[0] : undefined,
+    anchor: line.anchorEventIds?.[0],
     anchorPending: Boolean(line.anchorEventPending),
     hint: line.entryHint ?? '',
     nodes: line.nodes.map(n => ({
-      text: n.reviewSummary, status: n.status, eventId: n.eventId, stageId: n.stageId, branch: undefined,
+      text: n.reviewSummary,
+      status: n.status,
+      eventId: n.eventId,
+      stageId: n.stageId,
+      branch: undefined,
       seq: n.eventId && n.status === 'ready' ? events.get(n.eventId)?.seq : undefined,
       exists: n.eventId ? events.has(n.eventId) : false,
     })),
@@ -234,33 +240,29 @@ for (const line of SECONDARY_LINES) {
 
 // ── 人物线：从文档抽「挂在哪个 event 下」。↪ 插入 与 ✅ 已有 都算挂点。
 // ── 人物任务：**读模块，不读文档**（2026-08-18）。
-// 文档是草稿，`characterQuests.ts` 才是接进游戏的那份——待审稿必须审代码里真有的东西。
-// 仍用正则抽（报表不引入 TS 运行时）。
+// 文档是草稿，接进游戏的那份才算——待审稿必须审游戏里真有的东西。
+// B2 起权威来源是人物包 `packs/characters/character-beats.json`，读 `characterQuests.ts` 的合并值（TS 表已空）。
 const CHARMOD = 'src/modules/scenarioMods/characterQuests.ts';
 const chars = [];
-if (fs.existsSync(path.join(ROOT, CHARMOD))) {
-  const src = fs.readFileSync(path.join(ROOT, CHARMOD), 'utf8');
-  const questBlock = src.slice(src.indexOf('CHARACTER_QUESTS'), src.indexOf('CHARACTER_HIGHLIGHTS'));
-  let cur = null;
-  for (const line of questBlock.split('\n')) {
-    const nm = line.match(/^\s*name: '([^']+)',\s*$/);
-    if (nm) { cur = { name: nm[1], hooks: [] }; chars.push(cur); continue; }
-    const beat = line.match(/\{ reviewSummary: '(.*?)', status: '(\w+)', eventIds: \[(.*?)\] \}/);
-    if (!cur || !beat) continue;
-    const ids = [...beat[3].matchAll(/'([^']+)'/g)].map(x => x[1]);
-    if (beat[2] === 'new' || !ids.length) continue;
-    cur.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert: beat[2] === 'insert', isNew: false,
-                     label: '', visible: beat[1] });
+{
+  const { CHARACTER_QUESTS, CHARACTER_HIGHLIGHTS } = await loadModule(CHARMOD);
+  for (const quest of CHARACTER_QUESTS) {
+    const cur = { name: quest.name, hooks: [] }; chars.push(cur);
+    for (const beat of quest.beats) {
+      const ids = beat.eventIds;
+      if (beat.status === 'new' || !ids.length) continue;
+      cur.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert: beat.status === 'insert', isNew: false,
+                       label: '', visible: beat.reviewSummary });
+    }
   }
   // A 档单点高光：不成线，但同样是人物挂点，也要进待审稿。
-  const hlBlock = src.slice(src.indexOf('CHARACTER_HIGHLIGHTS: CharacterHighlight[]'));
   const byName = new Map(chars.map(c => [c.name, c]));
-  for (const m of hlBlock.matchAll(/\{ name: '([^']+)', eventIds: \[(.*?)\], reviewSummary: '(.*?)' \}/g)) {
-    const ids = [...m[2].matchAll(/'([^']+)'/g)].map(x => x[1]);
+  for (const h of CHARACTER_HIGHLIGHTS) {
+    const ids = h.eventIds;
     if (!ids.length) continue;
-    let c = byName.get(m[1]);
-    if (!c) { c = { name: m[1], hooks: [], highlightOnly: true }; chars.push(c); byName.set(m[1], c); }
-    c.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert: true, isNew: false, label: 'A档', visible: m[3] });
+    let c = byName.get(h.name);
+    if (!c) { c = { name: h.name, hooks: [], highlightOnly: true }; chars.push(c); byName.set(h.name, c); }
+    c.hooks.push({ eventId: ids[0], alsoIds: ids.slice(1), insert: true, isNew: false, label: 'A档', visible: h.reviewSummary });
   }
 }
 

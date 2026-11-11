@@ -239,7 +239,7 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 
 **`lineCriticalEvents`**：`[{"note":"可选","eventId":"<事件>","lineId":"<二级线>"}]`。事件存在（隔离关事件也算）；`eventId` 全部包里不重复；`lineId` 是 TS 线或同一次编译里的包线；不能同时在 TS 表里。运行时 `LINE_CRITICAL_EVENTS` 仍是原来那个对象：TS 条目在前，包条目按 catalog 顺序就地并入；`TS_LINE_CRITICAL_EVENTS` 是并入前的拷贝。`lineCriticalFrozen` 不变。
 
-**`characterBeats`**：`{"quests":[{"id","name","beats":[{"reviewSummary","status","eventIds":[],"note?"}],"note?"}],"highlights":[{"name","eventIds":[],"reviewSummary","note?"}]}`，字段同 `CharacterQuest`／`CharacterHighlight`。`status` ∈ ready／new／insert；ready／insert 的 `eventIds` 都存在，**new 的（建议 id）都必须不存在**；quest id 归属种类 `characterQuest`，全部包与 TS 表里唯一；同名且 `eventIds` 相同的高光不得重复（含与 TS 表）。`CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS` = TS 表在前、包按 catalog 顺序在后（`mergeCharacterBeats`）。
+**`characterBeats`**：`{"quests":[{"id","name","beats":[{"reviewSummary","status","eventIds":[],"note?"}],"note?"}],"highlights":[{"name","eventIds":[],"reviewSummary","note?"}]}`，字段同 `CharacterQuest`／`CharacterHighlight`。`status` ∈ ready／new／insert；ready／insert 的 `eventIds` 都存在，**new 的（建议 id）都必须不存在**；quest id 全部包与 TS 表里唯一（不进通用归属扫描，见下文「归属」）；同名且 `eventIds` 相同的高光不得重复（含与 TS 表）。`CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS` = TS 表在前、包按 catalog 顺序在后（`mergeCharacterBeats`）。
 
 **`storyAxis`**：`{"note?","stageOrder":[],"layers":[],"stages":[],"nodes":[],"requirements":[]}`，各段条目字段同 `mainQuestAxis.ts` 的类型，可带 `note`。全局至多一份；**有包声明时 `TS_STAGE_ORDER`／`TS_MAIN_QUEST_LAYERS／STAGES／NODES／REQUIREMENTS` 必须全空**（二选一，不逐条合并，`resolveStoryAxis`）。编译期：`stageOrder` 等于从首项沿 `manifest.nextStageId` 走出的链（不分叉、无环、走到没有 `nextStageId` 为止）并覆盖全部内置关（包内关可以不在链上，现状如此：秦关没有 `nextStageId`）；`layer` 是 1–6 的整数、不重复，`restricted` 只收 `true`；`unlockStageIds`、`stages[].stageId`、`nodes[].stageId` 是已有关；`pillars` ⊆ bloodline／taiquan；ready 节点的 `eventId` 属于该关、pending 节点不写 `eventId`；`locationId` 在 `locations.json`（含别名）；`bloodlineBranch`、`requirements[].id` 取类型里的枚举值。
 
@@ -249,7 +249,7 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 
 **`ifBranches`**：`{"branches":[{"eventId","branchId","requiredCharacterId","acceptedStatuses":["alive",…],"flagCharacterSlug","normalizedStatus","prompt?","note?"}],"consequences":[{"eventId","requiredCharacterId","acceptedStatuses":[…],"flagKey","flagValue","prompt?","note?"}],"prompts":{"<分歧记录 id>":"…"}}`。`acceptedStatuses` 是不重复的小写字母串，运行时编译成与原表同形的正则（一个 `^x$`、多个 `^(a|b)$`，`i` 标志；原表三种写法都能这样表达，测试逐条核对）。事件存在、`requiredCharacterId` 是角色；`branchId` 归属种类 `ifBranch`，全部包与 TS 表里唯一；同事件同人物的后果、`prompts` 的键不重复（含 TS）；`flagValue` 是字符串／数字／布尔。本批把 `formatDivergencePrompt` 的三元式改成查表：TS 规则表加 `prompt` 字段、按 id 的那条进 `TS_DIVERGENCE_PROMPTS`；查找顺序同原式——分支（按 `branchId`，没有 prompt 的分支继续往下）→ 分歧记录 id → 后果（同事件、人物状态命中；**状态不 trim**，同原式；落旗标的匹配仍 trim）。
 
-**归属**：`characterQuest`、`ifBranch` 两种 id 登记为包定义；六段的原始值都进通用字符串扫描，引用别的包定义的关、事件等要 `dependsOn`。
+**归属**：`ifBranch` 登记为包定义；六段的原始值都进通用字符串扫描，引用别的包定义的关、事件等要 `dependsOn`。**人物任务 id（`characterBeats.quests[].id`）不进通用归属扫描**（B2 起，原因见 B2 一节）：它是 characterBeats 段内的单独命名空间，别的包里恰好同名的字符串不算对人物包的引用；唯一性另行保证——全部包之间由编译期校验（两个包定义同一 id 报 `characterQuest id … defined by both A and B`，同包内重复报 `duplicate id`），与 TS 表之间由 `validateCoreFormatsWithTs`。人物拍点与高光里的事件 id 照常进通用扫描。
 
 catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvents: []`、`characterBeats: {quests:[],highlights:[]}`、`storyAxis: null`、`locationAliases: {canonical:{},parents:{},display:{}}`、`characterProfiles: {stance:[],affinityCaps:[]}`、`ifBranches: {branches:[],consequences:[],prompts:{}}`；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。棘轮：`divergenceLedger.ts` 三元式里 7 行带 id 的判断改为规则表的 `prompt` 字段与 `TS_DIVERGENCE_PROMPTS`（新增 1 行键），实扫 23 → 17，基线同批重写（总数 1313 → 1307）。
 
@@ -264,3 +264,23 @@ catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvent
 - 留在 TS：`secondaryLineDisplayName` 的黑魔海显示名特判（代码）；`TS_SECONDARY_LINES` 上方文档注释里的孪生地点 id 举例（棘轮剩 5 行）。
 - `scripts/quest-report.mjs` 原来按正则读 `secondaryLines.ts` 源码，表搬空后一条二级线都读不到，改为经 jiti 读合并后的 `SECONDARY_LINES`（同 `build-entity-index.mjs`）。
 - 测试：`contentPackLineFormats` 的 `TS_LINE_ID` 改为合成的临时 TS 线（`withTsLine`，用例内推进 `TS_SECONDARY_LINES`、用完删掉，同 `withTsMilestone`）；汉／晋／塞外／太泉／唐／昭南六个迁移测试里「secondaryLines.ts 残留只在别的线的节点里」改为「残留为 0」（汉、唐另断言承重表在 TS 里只剩声明行与 `};`）；`contentPackCoreCharacterFormats` 搬迁演练的承重表改读合并值（同演练里的二级线）。棘轮 `secondaryLines.ts` 127 → 5，总数 1135 → 1013。
+
+## 2026-11-11 人物任务与高光进人物包（B2）
+
+人物包 `packs/characters/`（`id: "qingyu.characters"`，`dependsOn: ["qingyu.core"]`）：`character-beats.json`（`{quests, highlights}`）。`characterQuests.ts` 的 `TS_CHARACTER_QUESTS`（8 条人物任务、53 拍）与 `TS_CHARACTER_HIGHLIGHTS`（63 条）原样搬入、顺序不变，两张 TS 表为空数组；`CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`／`characterBeatsAt`／`characterQuestProgress`／`mergeCharacterBeats` 导出名与行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`），不再改文档重抽。
+- 合规 C02 那行注释（`s12_zhuo_forced` 暂停）原样放进卓云君下一拍（翠微园）的 `note`；被暂停的那一拍不搬也不恢复。
+- **归属规则改动**（主驱动裁定，解法 1）：F0a 原把人物任务 id 登记为包定义（种类 `characterQuest`），而归属扫描不分种类。核心包 `packs/qingyu/f07.json`（场面合同）里有 3 处合同内部 id 与人物任务 id 同名——`parties[6].id = "ningyu"`、`elements[1].id = "xieyi"`、`closing.lose.fixedCosts[2].target = "ningyu"`——与人物任务无关，却被当成核心包引用人物包，要求核心包 `dependsOn` 人物包，与人物包 `dependsOn` 核心包成环。现改为人物任务 id 不进通用扫描（改动只在 `scripts/content-pack-core-formats.mjs`：`coreDefinedIds` 不再返回 `characterQuest`，跨包唯一性由 `compileCoreFormats` 报 `defined by both`；`scripts/content-packs.mjs` 未改）。其余格式的归属规则不变。
+- 人物包本身不引用别的包定义的 id（拍点与高光的事件都在内置关），`dependsOn: ["qingyu.core"]` 按任务规定写；核心包不反向依赖人物包。
+- 读源码的两处改读合并值：`tests/criticalEventCoverage.test.mjs` 的人物层认领改读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`（认领集合前后都是 120 个 id，欠账不变）；`scripts/quest-report.mjs` 的人物任务与二级线改用 jiti 读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`／`SECONDARY_LINES`（主轴仍正则读源码）。
+- catalog 只变 `characterBeats` 段与 version；棘轮 `characterQuests.ts` 116 → 0（总数 1135 → 1019，文件 69 → 68）。
+
+## 2026-11-11 角色姿态档案与好感上限进人物包（B4）
+
+人物包 `packs/characters/`（`qingyu.characters`，`dependsOn` 仍只有 `qingyu.core`）manifest 加 `characterProfiles: ["profiles.json"]`。`stanceProfiles.ts` 的 `TS_STANCE_PROFILES`（49 条）与 `affinityCaps.ts` 的 `TS_AFFINITY_CAPS`（13 条）原样搬入 `profiles.json` 的 `stance`／`affinityCaps`，两张 TS 表为空数组；`STANCE_PROFILES`／`AFFINITY_CAPS`／`formatStanceProfile`／`hasStanceProfile`／`affinityCapFor`／`formatAffinityCap`／`packEntityNames`／`mergeStanceProfiles`／`mergeAffinityCaps` 导出名与行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
+- 写法照 F0a：每条 `names` 写成 `entities`（`entityAliases` 展开，原表重复展开的实体照写几遍；含 enemy 两条姿态、一条上限）＋ `extraNames`（字面名字，如「贾诩」「秦伴当」「小环」）；`cap` 写成 `capTier`（原 `tierMax('…')` 的档位 id）。文案（含成人内容）逐字照搬，用合并函数还原后与原表 deepStrictEqual。
+- 顺序：JSON 顺序即原表顺序；TS 表为空，合并值就是包的顺序，`find` 取第一条命中的优先级不变。
+- 注释：表内 10 处 `//` 注释（姿态 8、上限 2）进 `note`：夹在条目之间的分节注释进下一条，条目内部的注释进本条；编译时剥掉。
+- 裁定簿核过：两张表没有 AFF_PROTECTED／AGE_PROTECTED／DEBUT_PROTECTED／USER_CANON 标记（裁定簿的 AFF_PROTECTED 指角色归属字段）。凝羽姿态 constant 的四条声音约束（#242，执法 `tests/ningyuVoice`）原样搬入，该测试读合并值，未改。
+- 不需要 `dependsOn` 别的包：`dependsOn` 只有 `qingyu.core` 时编译通过，归属扫描没有报引用其它包定义的 id，没有成环。
+- `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的姿态／上限两段改为取人物包 `profiles.json` 原样转写（TS 表搬空后原来的源码解析取到 0 条）；源码解析辅助函数 `sourceEntries` 因此无人使用，已删。
+- catalog 只变 `characterProfiles` 段与 version；棘轮 `stanceProfiles.ts` 48 → 0、`affinityCaps.ts` 13 → 0（总数 1019 → 958，文件 68 → 66）。
