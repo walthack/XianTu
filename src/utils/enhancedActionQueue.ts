@@ -405,6 +405,8 @@ export class EnhancedActionQueueManager {
       const useEffect = (consumableTypes.includes(item.类型) && '使用效果' in item) ? item.使用效果 : item.描述 || '无特殊效果';
       actionQueue.addAction({
         type: 'use',
+        itemId: item.物品ID,
+        quantity,
         itemName: item.名称,
         itemType: item.类型,
         description: `使用了 ${quantity} 个《${item.名称}》（效果：${useEffect}）`

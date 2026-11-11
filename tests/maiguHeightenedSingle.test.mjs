@@ -134,3 +134,36 @@ test('验收 4/5：np006 声明不变（无 effectTags、保留 onUse）；其�
     assert.equal(save.世界.状态.剧本模组.maiguClock?.[NING_YU], undefined, `${id}: 不动渴求计时`);
   }
 });
+
+// 8092 90def980 真机 1A：背包「使用」按钮只扣份数、不落药效。按钮路径在回合发送时走 settleButtonUses 补结算（不再扣份数）。
+test('背包「使用」按钮：settleButtonUses 挂恰好 1 条感官亢奋 + 成瘾，不再扣份数，同一队列项不重复结算', async () => {
+  const save = await quiet(() => G.loadLikeGame(bundle, 'c01-before-wuyuan-220'));
+  const cfg = MG.maiguConfig(), def = EC.contentDefinition('item', cfg.itemId), pid = PID.scenarioPlayerId(save);
+  save.角色.背包.物品[cfg.itemId] = { 物品ID: cfg.itemId, 名称: def.name, 类型: '丹药', 数量: 4, 描述: '', 已装备: false };
+  const uses = [{ id: 'action_a', itemId: cfg.itemId, quantity: 1 }];
+  const used = SC.settleButtonUses(save, uses);
+  assert.equal(used.length, 1);
+  assert.equal(used[0].count, 1);
+  assert.match(SC.renderSelfConsumableReceipt(used[0]), /已服用：.*麻古.*药效生效：感官亢奋/);
+  assert.equal(heightenedRows(save, cfg, pid).length, 1, 'statusRecords 一行');
+  assert.equal(heightenedEffects(save, cfg).length, 1, '角色.效果 一条');
+  assert.equal(heightenedEffects(save, cfg)[0].持续时间分钟, cfg.heightened.minutes);
+  assert.ok((INJ.injuryStore(save).actors[pid] || []).some(r => r.statusId === cfg.addictionStatus), '成瘾');
+  assert.equal(save.角色.背包.物品[cfg.itemId].数量, 4, '份数由按钮点下时扣，这里不再扣');
+  assert.deepEqual(SC.settleButtonUses(save, uses), [], '同一队列项重发不重复结算');
+  // 一次按 2 份：仍只有一条感官亢奋；事实行不重复。
+  const twice = SC.settleButtonUses(save, [{ id: 'action_b', itemId: cfg.itemId, quantity: 2 }]);
+  assert.equal(twice[0].count, 2);
+  assert.equal(new Set(twice[0].facts).size, twice[0].facts.length);
+  assert.equal(heightenedRows(save, cfg, pid).length, 1);
+  assert.equal(heightenedEffects(save, cfg).length, 1);
+});
+
+test('背包「使用」按钮：不在物品总表里的消耗品、非消耗品不结算', async () => {
+  const save = await quiet(() => G.loadLikeGame(bundle, 'c01-before-wuyuan-220'));
+  const nonConsumable = items.entries.find(e => e.definition?.type && e.definition.type !== 'consumable');
+  assert.ok(nonConsumable, '夹具前提：总表里有非消耗品');
+  const before = JSON.stringify(save);
+  assert.deepEqual(SC.settleButtonUses(save, [{ id: 'x', itemId: 'no.such.item', quantity: 1 }, { id: 'y', itemId: nonConsumable.id, quantity: 1 }]), []);
+  assert.equal(JSON.stringify(save), before);
+});
