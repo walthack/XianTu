@@ -23,6 +23,9 @@
   "secondaryLines": [
     "secondary-lines.json"
   ],
+  "endings": [
+    "endings.json"
+  ],
   "openWorldSlices": [
     "open-world-slices.json"
   ],

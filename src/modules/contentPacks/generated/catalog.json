@@ -1,5 +1,5 @@
 {
-  "version": "95f05996173bed2e",
+  "version": "2a57503bd6fe72d7",
   "contracts": [
     {
       "meta": {
@@ -15961,7 +15961,9 @@
             "mood": "danger"
           },
           "lcq.event.s02_04": {
-            "mood": "danger"
+            "mood": "danger",
+            "compassObjectiveOnly": true,
+            "objective": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人"
           },
           "lcq.event.s02_05": {
             "mood": "battle"
@@ -15971,7 +15973,139 @@
           },
           "lcq.event.wuerlang_joins": {
             "objective": "问清走投无路的武二郎是否随队南行"
+          },
+          "lcq.event.ningyu_enters_gamble": {
+            "lockedDecision": [
+              [
+                "answer_ningyu_on_debut",
+                "接赌"
+              ],
+              [
+                "refuse_gamble_take_paolao",
+                "不赌"
+              ]
+            ],
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.world.baihu.gamble_refusal_phase",
+                    "operator": "eq",
+                    "value": "capture_ordered"
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后的拘拿",
+                "description": "凝羽已被差遣入局的当场，你拒绝与苏妲己对赌。苏妲己翻脸命人拿下，你尚未脱开商馆控制。",
+                "axisBeat": "你已拒绝赌局，苏妲己命人拿下；不得写成已经赌输或签契。",
+                "objective": "苏妲己已因你拒赌命人拿下，先应对眼前拘拿"
+              }
+            ]
+          },
+          "lcq.event.sudaji_south_pact": {
+            "lockedDecision": [
+              [
+                "seal_three_month_south_pact",
+                "当面订下三个月南荒之约"
+              ],
+              [
+                "refuse_term_take_paolao",
+                "拒绝期限，要她现在就动炮烙"
+              ]
+            ]
+          },
+          "lcq.event.free_ajiman": {
+            "lockedDecision": [
+              [
+                "tear_bond_and_face_blockade",
+                "当面撕契并改道出城"
+              ],
+              [
+                "pocket_ajiman_bond",
+                "先收起身契，出城再说"
+              ]
+            ]
+          },
+          "lcq.event.iron_bridge_ambush": {
+            "routeLocation": "南荒途中·铁索桥"
+          },
+          "lcq.event.ningyu_regicide_offer": {
+            "routeLocation": "南荒途中·商队宿处"
+          },
+          "lcq.event.zixi_taiyi_intercept": {
+            "routeLocation": "南荒途中·紫溪"
+          },
+          "lcq.event.rainforest_black_shoal": {
+            "routeLocation": "南荒途中·雨林黑石滩"
+          },
+          "lcq.event.silent_sheyi_village": {
+            "routeLocation": "南荒·蛇彝村"
+          },
+          "lcq.event.gamble_bond_signed": {
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.event.gamble_bond_signed.refused_capture",
+                    "operator": "eq",
+                    "value": true
+                  },
+                  {
+                    "path": "flags.world.baihu.hall_controlled",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后被商馆扣押",
+                "description": "程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；苏妲己命人拿下后，他仍受白湖商馆控制。",
+                "axisBeat": "程宗扬拒赌后被扣押，仍受白湖商馆控制；此事不是赌输签契。",
+                "objective": "面对拒赌后被扣押、仍受商馆控制的局面"
+              },
+              {
+                "when": [
+                  {
+                    "path": "flags.event.gamble_bond_signed.refused_capture",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后离开商馆",
+                "description": "程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；后来已从白湖商馆脱身，当前不再受商馆扣押。",
+                "axisBeat": "程宗扬曾拒赌并未签契，现已离馆；此事不是赌输签契。",
+                "objective": "承接拒赌后离馆的既成历史，不得改写成赌输或当前仍被扣押"
+              },
+              {
+                "when": [
+                  {
+                    "path": "flags.world.baihu.gamble_refusal_phase",
+                    "operator": "eq",
+                    "value": "capture_ordered"
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "拒赌后的拘拿",
+                "description": "你已拒绝这场赌局。苏妲己翻脸命人拿下，你尚未脱开商馆控制；此事不是赌局落败或签契。",
+                "axisBeat": "苏妲己因拒赌命人拿下；不得写成已经赌输或自愿签卖身契。",
+                "objective": "苏妲己已因你拒赌命人拿下，先应对眼前拘拿"
+              }
+            ]
           }
+        },
+        "uiChapterByRouteLocation": {
+          "keepFallbackEventIds": [
+            "lcq.event.s02_01",
+            "lcq.event.s02_03",
+            "lcq.event.s02_02"
+          ],
+          "rules": [
+            {
+              "routeLocationIncludes": "南荒",
+              "title": "南荒商路"
+            }
+          ],
+          "defaultTitle": "五原"
         }
       }
     },
@@ -16026,17 +16160,30 @@
         },
         "events": {
           "lcq.event.s04_01": {
-            "mood": "danger"
+            "mood": "danger",
+            "uiChapterTitle": "第49章·刺王密谋"
           },
           "lcq.event.s04_03": {
             "mood": "aspire",
-            "objective": "听清乐明珠为什么要假扮新娘"
+            "objective": "听清乐明珠为什么要假扮新娘",
+            "uiChapterTitle": "第47章·新娘身份"
           },
           "lcq.event.s04_06": {
-            "mood": "emotion"
+            "mood": "emotion",
+            "uiChapterTitle": "第54章·穿山"
           },
           "lcq.event.s04_05": {
-            "mood": "lament"
+            "mood": "lament",
+            "uiChapterTitle": "第52章·旱洪"
+          },
+          "lcq.event.s04_02": {
+            "uiChapterTitle": "第46章·袭击"
+          },
+          "lcq.event.s04_04": {
+            "uiChapterTitle": "第51章·发蛊"
+          },
+          "lcq.event.s04_07": {
+            "uiChapterTitle": "第55章·白夷迎客"
           }
         }
       }
@@ -16062,6 +16209,44 @@
           },
           "lcq.event.s04b_lingfei_baiyi_crisis_19": {
             "objective": "从被巨浪淹没的竹楼里脱身"
+          },
+          "lcq.event.enter_dong_with_migu": {
+            "uiChapterTitle": "第86章·随弥骨入峒"
+          },
+          "lcq.event.huamiao_coop_boundary": {
+            "uiChapterTitle": "第85章·进峒之约",
+            "objective": "跟云苍峰谈清进鬼王峒的合作边界"
+          },
+          "lcq.event.guiwangdong_coop_pact": {
+            "uiChapterTitle": "第85章·进峒之约"
+          },
+          "lcq.event.yiyang_repels_yinsha": {
+            "uiChapterTitle": "第84章·阴煞"
+          },
+          "lcq.event.wuerlang_slays_dagu": {
+            "uiChapterTitle": "第83章·虎威",
+            "objective": "撑住{{entity:character:lcq.character.nanhuang_dagu}}这一波围攻，看清武二郎能否打开缺口"
+          },
+          "lcq.event.ruins_ghost_warriors": {
+            "uiChapterTitle": "第82章·迎敌"
+          },
+          "lcq.event.biling_bay_stance": {
+            "uiChapterTitle": "第80章·碧鲮前路"
+          },
+          "lcq.event.haishen_hall_merfolk": {
+            "uiChapterTitle": "海神殿"
+          },
+          "lcq.event.pull_harpoon_lemingzhu": {
+            "uiChapterTitle": "海神殿"
+          },
+          "lcq.event.regroup_caravan_envoy": {
+            "uiChapterTitle": "商队与峒使"
+          },
+          "lcq.event.weapon_deal_with_geluo": {
+            "uiChapterTitle": "商队与峒使"
+          },
+          "lcq.event.spot_dong_informant": {
+            "uiChapterTitle": "商队与峒使"
           }
         }
       }
@@ -16115,6 +16300,57 @@
           },
           "lcq.event.s05b_10_slave_revolt_and_phoenix_change": {
             "objective": "趁集会大乱，设法潜入鬼王宫"
+          },
+          "lcq.event.shanghou_revealed": {
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.event.shanghou_revealed.done",
+                    "operator": "neq",
+                    "value": true
+                  },
+                  {
+                    "path": "flags.event.shanghou_revealed.relic_test_refused",
+                    "operator": "neq",
+                    "value": true
+                  }
+                ],
+                "priority": "before-event-variants",
+                "relatedFactionIds": [],
+                "name": "山村中的测试",
+                "objective": "随叶媪进堂，听主人说明测试",
+                "description": "进村前路边有白骨。堂中主人打开鲨皮红木箱，展示黄底黑边三角与红色拐弯箭头，警告167人触碰后化为火球。只写眼前物件和警告，不解释电、高压，不提前揭露朱老头本相，不替玩家选择。",
+                "axisBeat": "堂中主人要求测试天命之人，玩家尚未决定是否触碰。"
+              }
+            ]
+          },
+          "lcq.event.s05b_09_temporary_pact_with_xiaozi": {
+            "lockedDecision": [
+              [
+                "support_xieyi_counterstrike",
+                "协助谢艺准备反杀，随队返回"
+              ],
+              [
+                "rest_then_follow_team",
+                "不主动支援，先休整，随队同行"
+              ]
+            ]
+          },
+          "lcq.event.xieyi_entrustment": {
+            "lockedDecision": [
+              [
+                "accept_entrustment",
+                "承接"
+              ],
+              [
+                "rescue_xieyi",
+                "救治"
+              ]
+            ]
+          },
+          "lcq.event.s05b_02_xiaozi_exposed": {
+            "objective": "质问小紫，把阿夕的异常和{{entity:character:lcq.character.nanhuang_heishe}}死因问清楚"
           }
         }
       }
@@ -16149,7 +16385,23 @@
             "objective": "接待上门的萧遥逸：交骨灰，或协助密送伤员"
           },
           "lcq.event.s07_05_eight_steeds_informed": {
-            "objective": "向孟非卿说明谢艺的下场，并留下实质安排"
+            "objective": "向孟非卿说明谢艺的下场，并留下实质安排",
+            "compatNarrativeVariants": [
+              {
+                "when": [
+                  {
+                    "path": "flags.event.s06_03.void",
+                    "operator": "eq",
+                    "value": true
+                  }
+                ],
+                "replacesCanonRail": true,
+                "name": "谢艺生还的后果",
+                "description": "孟非卿得知谢艺生还，以及鬼王峒一役留下的变故；他必须据此调度星月湖人手，而非只确认消息。",
+                "axisBeat": "孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。",
+                "objective": "说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排"
+              }
+            ]
           },
           "lcq.event.s07_03_xiaozi_appears": {
             "objective": "应对突然现身的小紫与被制住的局面"
@@ -16609,6 +16861,17 @@
           },
           "lyl.event.xingyin_beast_traps": {
             "objective": "查明天井里困兽与被困者的情况"
+          },
+          "lyl.event.han_shouyang_gaoyanei": {
+            "actionPresentation": [
+              {
+                "actionId": "descend_shouyang_to_wudu",
+                "whenLocationId": "liuchao.location.wudu",
+                "label": "在舞都安顿，与冯源一行会合",
+                "playerLine": "我在舞都安顿下来，与冯源他们会合，打听云如瑶的下落。"
+              }
+            ],
+            "objective": "在舞都与冯源一行会合，打听云如瑶的下落"
           }
         }
       }
@@ -21671,7 +21934,83 @@
       "offscreen.lcq.xingyuehu_war": "这是玩家缺席时世界自行结算的战争后果：不得让战争倒带或写成玩家亲自参战；应以战报、伤员、戒严和粮线压力持续承接，玩家仍可选择介入余波或继续置身事外。"
     }
   },
-  "endings": [],
+  "endings": [
+    {
+      "endingId": "lcq.ending.death.baihu_beheading",
+      "key": "E01"
+    },
+    {
+      "endingId": "lcq.ending.death.ajiman_bond",
+      "key": "E02",
+      "pathText": {
+        "sourceEventId": "lcq.event.wuerlang_joins",
+        "textKey": "lcq.ending.death.ajiman_bond.ajiman_path"
+      }
+    },
+    {
+      "endingId": "lcq.ending.death.paolao",
+      "key": "E03"
+    },
+    {
+      "endingId": "lcq.ending.death.wangzhe_blast",
+      "key": "E04"
+    },
+    {
+      "endingId": "lcq.ending.death.shanghou_relic",
+      "key": "E05"
+    },
+    {
+      "endingId": "lcq.ending.death.ghost_king_skull",
+      "key": "E06",
+      "battleLoss": {
+        "title": "天命的指引",
+        "kind": "death",
+        "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+        "tierFlag": "lcq.encounter.f10.tier",
+        "tier": "rout",
+        "facts": [
+          "程宗扬被封回龛窟，血没能沾上骨虎",
+          "鬼巫王剖开天命者的头颅",
+          "银镜中的同伴未能找到他",
+          "龙神照常吞下鬼巫王"
+        ]
+      }
+    },
+    {
+      "endingId": "lcq.ending.death.dragon_well",
+      "key": "E07",
+      "battleLoss": {
+        "title": "龙首无人",
+        "kind": "death",
+        "sourceEventId": "lcq.event.ghost_king_swallowed",
+        "tierFlag": "lcq.encounter.f13.tier",
+        "tier": "lose",
+        "facts": [
+          "你带乐明珠逃往洞窟裂缝时滚下碎石坡，背脊重伤",
+          "乐明珠被推进龙角下的空隙",
+          "程宗扬被埋在鬼王峒地底",
+          "龙神吞下鬼巫王，龙首无人号令反击"
+        ]
+      }
+    },
+    {
+      "endingId": "lcq.ending.fail.dragon_essence",
+      "key": "E08",
+      "battleLoss": {
+        "title": "龙精入体",
+        "kind": "failure",
+        "sourceEventId": "lcq.event.slay_dragon",
+        "tierFlag": "lcq.encounter.f14.tier",
+        "tier": "lose",
+        "facts": [
+          "龙神死去",
+          "龙精携鬼巫王残念进入程宗扬丹田",
+          "程宗扬存活，原来的自我不再主宰身体",
+          "本局结束，不可续玩"
+        ]
+      }
+    }
+  ],
   "openWorldSlices": [
     {
       "key": "wuyuan",
@@ -30187,6 +30526,34 @@
     "mapEntry.qin.return.label": "【扩写】了结咸阳之事，返回{stage}",
     "mapEntry.qin.return.narrative": "【扩写·待剧情策划】咸阳诸事暂告一段落，你动身返回，回到了离开时的地方。",
     "mapEntry.qin.return.chronicle": "【扩写】了结咸阳之事，返回「{stage}」",
+    "scopedPlayerLine.lcq.event.s01_01::advance_declared_objective": "我稳住自己并弄清身在何处。",
+    "scopedPlayerLine.lcq.event.s01_02::advance_declared_objective": "我先保住自己和身边的人。",
+    "scopedPlayerLine.lcq.event.s01_03::advance_declared_objective": "我上前查看那位伤者。",
+    "scopedPlayerLine.lcq.event.s01_04::advance_declared_objective": "我设法带着伤者脱险。",
+    "scopedPlayerLine.lcq.event.s01_05::advance_declared_objective": "我请他先诊治我的伤。",
+    "scopedPlayerLine.lcq.event.s01_06::advance_declared_objective": "我应对眼前危局。",
+    "scopedPlayerLine.lcq.event.s02_01::advance_declared_objective": "我接过锦囊，听清并认下王哲的托付。",
+    "scopedPlayerLine.lcq.event.s02_03::advance_declared_objective": "我在乱军中求生并观察战局。",
+    "scopedPlayerLine.lcq.event.s02_02::hold_left_army_line": "我先看清左武军为何覆灭。",
+    "scopedPlayerLine.lcq.event.s02_02::witness_wang_zhe_nine_suns": "我守在王哲身边，看他施展九阳。",
+    "scopedPlayerLine.lcq.event.s02_02::record_battlefield_aftermath": "我查看焦土余波，看清王哲和左武军的结局。",
+    "scopedPlayerLine.lcq.event.s02_04::advance_declared_objective": "我先应付眼前的盘问与拉扯。",
+    "scopedPlayerLine.lcq.event.s02_05::advance_declared_objective": "我判断她要带我去哪。",
+    "scopedPlayerLine.lcq.event.s02_06::advance_declared_objective": "我与馆主周旋，看清她是谁。",
+    "scopedPlayerLine.lcq.event.ningyu_enters_gamble::see_ningyu_sent_into_gamble": "我看清凝羽奉命进入这场赌局。",
+    "scopedPlayerLine.lcq.event.ningyu_enters_gamble::answer_ningyu_on_debut": "我当面回应凝羽，接下这场赌局。",
+    "scopedPlayerLine.lcq.event.sudaji_south_pact::offer_nylon_clue_for_term": "我用霓龙丝产地线索换三个月期限。",
+    "scopedPlayerLine.lcq.event.sudaji_south_pact::seal_three_month_south_pact": "我当面订下三个月南荒之约。",
+    "scopedPlayerLine.lcq.event.sudaji_south_pact::refuse_term_take_paolao": "我不接三个月的条件。",
+    "scopedPlayerLine.lcq.event.gamble_bond_signed::confirm_rigged_wager_loss": "我当面核对刻香和时限。",
+    "scopedPlayerLine.lcq.event.gamble_bond_signed::sign_the_bond": "我签下眼前这份契书。",
+    "scopedPlayerLine.lcq.event.charge_sudaji_fee::name_sixty_zhu_before_help": "我先开出六十金铢工价。",
+    "scopedPlayerLine.lcq.event.charge_sudaji_fee::lock_fee_then_remove_device": "谈定报酬后，我才按约取出器物。",
+    "scopedPlayerLine.lcq.event.free_ajiman::take_ajiman_bond_in_hand": "我用五十金铢买下阿姬曼，将她的身契拿在手里。",
+    "scopedPlayerLine.lcq.event.free_ajiman::tear_bond_and_face_blockade": "我当着阿姬曼的面撕毁身契，还她自由；遇到封锁后改道出城。",
+    "scopedPlayerLine.lcq.event.baihu_shangguan_escape::walk_out_wuyuan_shangguan": "我走出五原商馆。",
+    "actionDisplay.lcq.event.ningyu_regicide_offer.hear_ningyu_regicide_price.line": "我听她说明条件。",
+    "actionDisplay.lcq.event.ningyu_regicide_offer.hear_ningyu_regicide_price.label": "听她说明条件",
     "lineCompass.nanhuang.name": "南荒",
     "lineCompass.nanhuang.step.nh_enter_caravan": "随商队出五原，往南荒去",
     "lineCompass.nanhuang.step.nh_sheyi_village": "去蛇彝村看看",
@@ -30199,6 +30566,14 @@
     "lineCompass.nanhuang.step.nh_guiwang_approach": "去鬼王峒附近看看",
     "lineCompass.nanhuang.step.nh_f10_ghost_king_probe": "走萨安说的那条路看看",
     "lineCompass.nanhuang.step.nh_shanghou_ice_gu": "回来时住过的山村看看",
+    "actionDisplay.lcq.event.huamiao_coop_boundary.*.line": "我跟云苍峰谈清进鬼王峒的合作边界。",
+    "actionDisplay.lcq.event.huamiao_coop_boundary.*.label": "与云苍峰谈合作边界",
+    "actionDisplay.lcq.event.weapon_deal_with_geluo.open_weapon_talk_with_geluo.line": "我向鬼王峒使者提出兵器生意。",
+    "actionDisplay.lcq.event.weapon_deal_with_geluo.open_weapon_talk_with_geluo.label": "同使者谈兵器生意",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.yinzhu_strikes_ajia.line": "我听见阿葭那边的蕨丛里有异响，提刀赶了过去。",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.yinzhu_strikes_ajia.label": "赶去阿葭身边查看异动",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.burn_yinzhu_victim.line": "我照祁远的吩咐，和花苗人一起把阿葭、阴蛛和那具蛇彝遇害者焚化。",
+    "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.burn_yinzhu_victim.label": "焚化阿葭的遗体和阴蛛",
     "lineCompass.jin.name": "晋国",
     "lineCompass.jin.step.jin_arrive_from_nanhuang": "去建康，把商号开起来",
     "lineCompass.jin.step.jin_arrive_icegu": "去建康，托人想想办法",

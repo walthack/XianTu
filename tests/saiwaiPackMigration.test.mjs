@@ -2,7 +2,7 @@
 // - CANON_RAIL_PROFILES 的数组顺序与搬迁前相同：两个手审档搬进包后靠 rails.json 的 handReviewed: true 仍排在最前（期望是搬迁前在 7e71f44b 上导出的 modId 顺序）、modId 不重复；
 // - handReviewed 标记不漏进运行时档；编译器拒绝非 true 的 handReviewed、拒绝挂包内关的 handReviewed；
 // - 塞外 3 关的关／事件／章 id 不再写在 canonRail.ts、musicLibrary.ts、milestoneRewards.ts 里；
-// - fixedQuestObjectives.ts 只残留 s02_04 的目标特判；eventNarrativeView.ts 只残留 legacyNarrativeVariants 的两条条件改写、stage_02 按地点分段的章名算法（含 storyRouteLocation 表）与 formatQuestCompass 的 s02_04 特判（都不是表，未搬）；
+// - fixedQuestObjectives.ts、eventNarrativeView.ts、playerActionPresentation.ts、branchDecision.ts 里塞外 id 残留为 0（B6：s02_04 目标与罗盘、兼容变体、按地点分段的章名与 routeLocation、玩家句与动作显示、3 把分支锁都进了塞外包 stageMeta／texts）；
 // - secondaryLines.ts 没有塞外线（本来就没有）；残留的塞外 id 只在别的线的节点、锚事件与 basis 文字里（按任务范围不动）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -63,14 +63,11 @@ test('塞外 3 关的关／事件／章 id 不再写在框架 TS 文件里（允
   for (const file of ['src/modules/scenarioMods/canonRail.ts', 'src/utils/musicLibrary.ts', 'src/modules/scenarioMods/milestoneRewards.ts']) {
     assert.deepEqual(src(file).match(token) || [], [], file);
   }
-  assert.deepEqual(src('src/modules/scenarioMods/fixedQuestObjectives.ts').match(token) || [], ['lcq.event.s02_04']);
-  assert.deepEqual(src('src/modules/scenarioMods/eventNarrativeView.ts').match(token) || [], [
-    'lcq.event.gamble_bond_signed', 'lcq.event.ningyu_enters_gamble',
-    'lcq.stage_02', 'lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02',
-    'lcq.event.iron_bridge_ambush', 'lcq.event.ningyu_regicide_offer', 'lcq.event.zixi_taiyi_intercept',
-    'lcq.event.rainforest_black_shoal', 'lcq.event.silent_sheyi_village',
-    'lcq.event.s02_04',
-  ]);
+  // B6：S4 留下的目标特判、兼容变体、章名算法、routeLocation、罗盘特判，以及玩家句、动作显示、分支锁都进了塞外包，残留为 0
+  for (const file of ['src/modules/scenarioMods/fixedQuestObjectives.ts', 'src/modules/scenarioMods/eventNarrativeView.ts',
+    'src/modules/scenarioMods/playerActionPresentation.ts', 'src/modules/scenarioMods/branchDecision.ts']) {
+    assert.deepEqual(src(file).match(token) || [], [], file);
+  }
   assert.equal(TS_SECONDARY_LINES.some(line => /saiwai|wuyuan/.test(line.id)), false);
   // 残留只在别的线的节点行、锚事件行与 basis 文字行里
   const hits = src('src/modules/scenarioMods/secondaryLines.ts').split('\n').filter(line => line.match(token));
