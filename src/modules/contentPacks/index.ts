@@ -25,5 +25,5 @@ export function contentPackPersistentFlagIds(): ReadonlySet<string> {
 }
 
 /** 国家线注册与地区映射（秦线 PR C），见 nationLines.ts；sceneModule 只许引用本模块（tests/sceneModuleIsolation.test.mjs），numbersRegistry.ts 经这里取。 */
-export { NATION_LINES, PACK_NATION_LINE_IDS, NATION_LINE_OF_REGION } from './nationLines';
-export type { NationLine } from './nationLines';
+export { NATION_LINES, PACK_NATION_LINE_IDS, NATION_LINE_OF_REGION, CLOSURE_TALLY_LINE_IDS, FAILURE_CLOSURE_EVENTS, COMPASS_CONDITIONS } from './nationLines';
+export type { NationLine, CompassCondition } from './nationLines';

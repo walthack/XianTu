@@ -1,0 +1,8 @@
+[
+  {
+    "id": "qinEntryReady",
+    "kind": "closedLinesAtLeast",
+    "min": "story.lineCompass.qinEntry.minClosedLines",
+    "unlessLineClosedByWorldEvent": "qin"
+  }
+]

@@ -1,5 +1,5 @@
 {
-  "version": "c3325293ca4f4bb4",
+  "version": "a8bc6072e692db28",
   "contracts": [
     {
       "meta": {
@@ -33088,49 +33088,69 @@
       "order": 1,
       "regions": [
         "昭南"
-      ]
+      ],
+      "countsTowardClosedLines": true,
+      "failureClosureEvents": []
     },
     {
       "lineId": "jin",
       "order": 2,
       "regions": [
         "晋国"
-      ]
+      ],
+      "countsTowardClosedLines": true,
+      "failureClosureEvents": []
     },
     {
       "lineId": "song",
       "order": 3,
       "regions": [
         "宋国"
-      ]
+      ],
+      "countsTowardClosedLines": true,
+      "failureClosureEvents": []
     },
     {
       "lineId": "han",
       "order": 4,
       "regions": [
         "汉国"
-      ]
+      ],
+      "countsTowardClosedLines": true,
+      "failureClosureEvents": []
     },
     {
       "lineId": "tang",
       "order": 5,
       "regions": [
         "唐国"
-      ]
+      ],
+      "countsTowardClosedLines": true,
+      "failureClosureEvents": []
     },
     {
       "lineId": "qin",
       "order": 6,
       "regions": [
         "秦国"
-      ]
+      ],
+      "countsTowardClosedLines": false
     },
     {
       "lineId": "taiquan",
       "order": 7,
       "regions": [
         "太泉"
-      ]
+      ],
+      "countsTowardClosedLines": false
+    }
+  ],
+  "compassConditions": [
+    {
+      "id": "qinEntryReady",
+      "kind": "closedLinesAtLeast",
+      "min": "story.lineCompass.qinEntry.minClosedLines",
+      "unlessLineClosedByWorldEvent": "qin"
     }
   ]
 }

@@ -4,6 +4,8 @@
     "order": 3,
     "regions": [
       "宋国"
-    ]
+    ],
+    "countsTowardClosedLines": true,
+    "failureClosureEvents": []
   }
 ]

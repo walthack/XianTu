@@ -4,6 +4,8 @@
     "order": 1,
     "regions": [
       "昭南"
-    ]
+    ],
+    "countsTowardClosedLines": true,
+    "failureClosureEvents": []
   }
 ]

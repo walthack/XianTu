@@ -1,4 +1,4 @@
-import { qinClosedByFestival } from './heimohaiFestival';
+import { lineClosedByWorldEvent } from './heimohaiFestival';
 /**
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
  * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts），进度期限 deadline.*（同稿 §4.5，数据源 progressDeadlines.ts），
@@ -18,16 +18,19 @@ import { isInParty } from './partyLedger';
 import { deadlineState } from './progressDeadlines';
 import { lineUnlockLedgerValue } from './lineUnlock';
 import { SECONDARY_LINES, secondaryLineUnlockOptions } from './secondaryLines';
-import { GAME_NUMBERS } from '../sceneModule/numbers';
+import { resolveNumberRef } from '../sceneModule/numbers';
+import { CLOSURE_TALLY_LINE_IDS, COMPASS_CONDITIONS } from '../contentPacks';
 
 export type LedgerPathKind = 'identity' | 'done' | 'line' | 'acq' | 'knows' | 'item' | 'party' | 'deadline' | 'unlock' | 'compass';
 
 /**
  * 派生读取点 compass.<id>（R-3，总策划定）：现算，不落存档。
- * anyLineClosed＝story.lineCompass.anyLineClosed.lineIds（南荒／晋／宋／汉／唐；太泉、秦不算）里任一条 lineClosed（收束唯一读取点）。
- * 秦线知情拍读 qinEntryReady＝计数达到配置阈值；knownWhen 读 Q-1 done。closedWhen 只许 done.*（validator 拦），lineClosed 按编年史判，不回读账本条件，不会成环。
+ * anyLineClosed＝计入线 CLOSURE_TALLY_LINE_IDS（各线包 countsTowardClosedLines，现为南荒／晋／宋／汉／唐；太泉、秦不算）里任一条 lineClosed（收束唯一读取点）。
+ * 其余 id 由各包 manifest.compassConditions 声明（阶段 2a）：秦线知情拍读的 qinEntryReady 由秦包声明为 closedLinesAtLeast（计数达到配置阈值）；knownWhen 读 Q-1 done。
+ * closedWhen 只许 done.*（validator 拦），lineClosed 按编年史判，不回读账本条件，不会成环。
+ * 保留 id anyLineClosed 之后接包声明的 id，现值仍为 ['anyLineClosed','qinEntryReady']（旧档事件 conditions 里烘焙了 compass.qinEntryReady，秦包必须一直声明它）。
  */
-export const COMPASS_DERIVED_IDS = ['anyLineClosed', 'qinEntryReady'] as const;
+export const COMPASS_DERIVED_IDS: readonly string[] = ['anyLineClosed', ...COMPASS_CONDITIONS.map(condition => condition.id)];
 
 export interface ParsedLedgerPath {
   kind: LedgerPathKind;
@@ -98,7 +101,7 @@ export function parseLedgerPath(path: string): ParsedLedgerPath | undefined {
   if (path.startsWith('unlock.')) return { kind: 'unlock', id: rest('unlock.') };
   if (path.startsWith('compass.')) {
     const id = rest('compass.');
-    return (COMPASS_DERIVED_IDS as readonly string[]).includes(id) ? { kind: 'compass', id } : { kind: 'compass', id: '', invalid: true };
+    return COMPASS_DERIVED_IDS.includes(id) ? { kind: 'compass', id } : { kind: 'compass', id: '', invalid: true };
   }
   return undefined;
 }
@@ -124,7 +127,15 @@ const asRecord = <T>(value: unknown): T | undefined =>
 
 /** compass.anyLineClosed：任一计入的国家线已收束（lineClosed）。 */
 function anyNationLineClosed(runtime: unknown): boolean {
-  return GAME_NUMBERS.story.lineCompass.anyLineClosed.lineIds.some((lineId: string) => lineClosed(lineId, runtime));
+  return CLOSURE_TALLY_LINE_IDS.some(lineId => lineClosed(lineId, runtime));
+}
+
+/** 包声明的 compass.<id>（closedLinesAtLeast）：先判 unlessLineClosedByWorldEvent，再计数（顺序同原 qinEntryReady；lineClosed 有调试日志副作用）。min 现读数值权威，热改有效。 */
+function compassConditionHolds(id: string, runtime: unknown, save?: unknown): boolean | undefined {
+  const condition = COMPASS_CONDITIONS.find(c => c.id === id);
+  if (!condition) return undefined;
+  if (condition.unlessLineClosedByWorldEvent !== undefined && lineClosedByWorldEvent(save, runtime, condition.unlessLineClosedByWorldEvent)) return false;
+  return nationClosedLineCount(runtime) >= resolveNumberRef(condition.min);
 }
 
 function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): unknown {
@@ -169,11 +180,7 @@ function readPath(parsed: ParsedLedgerPath, runtime: unknown, save?: unknown): u
     }
     case 'compass':
       // 只读收束档与编年史（closedWhen 只许 done.*），不新增存档字段
-      switch (parsed.id) {
-        case 'anyLineClosed': return anyNationLineClosed(runtime);
-        case 'qinEntryReady': return !qinClosedByFestival(save, runtime) && nationClosedLineCount(runtime) >= GAME_NUMBERS.story.lineCompass.qinEntry.minClosedLines;
-        default: return undefined;
-      }
+      return parsed.id === 'anyLineClosed' ? anyNationLineClosed(runtime) : compassConditionHolds(parsed.id, runtime, save);
   }
 }
 

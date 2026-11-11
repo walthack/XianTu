@@ -17,6 +17,8 @@ const lineFormatKinds=['stageMeta','railExtraBeats','secondaryLines'];
 const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline',...lineFormatKinds,...coreFormatKinds,...presentationFormatKinds];
 // 国家线注册与地区映射（秦线 PR C）：manifest.nationLines 是文件列表，每个文件是 [{lineId,order,regions}]；编译后按 order 排成 catalog.nationLines
 fields.push('nationLines');
+// 参数化派生条件（阶段 2a）：manifest.compassConditions 是文件列表，每个文件是 [{id,kind,min,unlessLineClosedByWorldEvent?}]；编译后进 catalog.compassConditions，路径 compass.<id>
+fields.push('compassConditions');
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
@@ -46,6 +48,7 @@ const definedIds=(kind,x)=>{
  if(kind==='entities')return [[`entity.${x.kind}`,x.entry?.id]];
  if(kind==='lineCompass')return [['lineId',x.lineId]];
  if(kind==='nationLines')return [['nationLine',x?.lineId]];
+ if(kind==='compassConditions')return [['compassCondition',x?.id]];
  if(kind==='overlays'||kind==='stageMeta'||kind==='railExtraBeats')return [];
  if(kind==='secondaryLines')return [['secondaryLine',x.id]];
  if(coreFormatKinds.includes(kind))return coreDefinedIds(kind,x);
@@ -58,7 +61,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const timelineInserts=[],lineFormats=Object.fromEntries(lineFormatKinds.map(k=>[k,[]])),coreRaw=Object.fromEntries(coreFormatKinds.map(k=>[k,[]])),presentationRaw=Object.fromEntries(presentationFormatKinds.map(k=>[k,[]]));
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set(),packs=[];
- const nationLines=[];
+ const nationLines=[],compassConditions=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
   const m=JSON.parse(await readFile(join(packsDir,dir,'manifest.json'),'utf8'));
   if(!object(m)||m.schemaVersion!==1||typeof m.id!=='string'||!m.id||packIds.has(m.id))fail(`${dir}: invalid version/id`);packIds.add(m.id);
@@ -83,6 +86,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   // 线的下一步表（右栏线入口复用分析 2026-10-27 §5.2）：各包的 lines 合并，lineId 不得重复；内容校验在 validateWithTs 的 validateLineCompassTable
   if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);own('lineCompass',t.lines);catalog.lineCompass.lines.push(...t.lines);}
   if(!Array.isArray(m.nationLines||[]))fail(`${m.id}.nationLines: expected file list`);for(const path of m.nationLines||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.nationLines: expected array`);own('nationLines',v);nationLines.push(...v.map(value=>({packId:m.id,value})));}
+  if(!Array.isArray(m.compassConditions||[]))fail(`${m.id}.compassConditions: expected file list`);for(const path of m.compassConditions||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.compassConditions: expected array`);own('compassConditions',v);compassConditions.push(...v);}
   if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);own('timeline',v);timelineInserts.push(...v);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);own(k,v);catalog[k].push(...v);}
  }
@@ -141,10 +145,20 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // 运行时 NATION_LINE_IDS（numbersRegistry.ts）与地区→线映射都从它派生；编译期一律用这次编译出的值，不读磁盘上的旧 catalog（M2）
  {const byOrder=new Map(),byRegion=new Map(),str=v=>typeof v==='string'&&v.trim().length>0;
   for(const {packId,value:x} of nationLines){const at=`nation line ${x?.lineId}`;
-   if(!object(x)||Object.keys(x).some(k=>!['lineId','order','regions'].includes(k))||!str(x.lineId)||!Number.isSafeInteger(x.order)||x.order<1||!Array.isArray(x.regions)||!x.regions.length||!x.regions.every(str)||new Set(x.regions).size!==x.regions.length)fail(`${at}: invalid fields`);
+   if(!object(x)||Object.keys(x).some(k=>!['lineId','order','regions','countsTowardClosedLines','failureClosureEvents'].includes(k))||!str(x.lineId)||!Number.isSafeInteger(x.order)||x.order<1||!Array.isArray(x.regions)||!x.regions.length||!x.regions.every(str)||new Set(x.regions).size!==x.regions.length)fail(`${at}: invalid fields`);
    if(byOrder.has(x.order))fail(`${at}: order ${x.order} also used by ${byOrder.get(x.order)}`);byOrder.set(x.order,x.lineId);
    for(const r of x.regions){if(byRegion.has(r))fail(`${at}: region ${r} also registered to ${byRegion.get(r)} (${packId})`);byRegion.set(r,x.lineId);}}
   catalog.nationLines=nationLines.map(x=>x.value).sort((a,b)=>a.order-b.order);unique(catalog.nationLines,x=>x.lineId,'nation line');}
+ // 阶段 2a：计入收束计数的线与失败收束事件（原 numbers 的 story.lineCompass.anyLineClosed.lineIds、story.lineOutcome.failureClosureEvents）搬进各线 nation-lines.json；
+ // 参数化派生条件 compassConditions（秦入口 compass.qinEntryReady）在下文地图入口校验之前查。一律用这次编译出的 nationLines 与 compassConditions，不读磁盘上的旧 catalog（M2）
+ {const str=v=>typeof v==='string'&&v.trim().length>0;
+  for(const x of catalog.nationLines){const at=`nation line ${x.lineId}`;
+   if(typeof x.countsTowardClosedLines!=='boolean')fail(`${at}: countsTowardClosedLines must be true or false`);
+   const f=x.failureClosureEvents;if(f===undefined)continue;
+   if(!x.countsTowardClosedLines)fail(`${at}: failureClosureEvents is only for lines with countsTowardClosedLines: true`);
+   if(!Array.isArray(f)||!f.every(str)||new Set(f).size!==f.length)fail(`${at}: failureClosureEvents must be distinct non-empty event ids`);
+   for(const id of f)if(!events.has(id))fail(`${at}: failureClosureEvents: unknown event ${id}`);}
+ }
  // 线顺序（右栏「别处」的显示顺序）与包顺序无关：按这次编译出的 nationLines 顺序稳定排序
  {const ids=catalog.nationLines.map(x=>x.lineId);const rank=id=>{const i=ids.indexOf(id);return i<0?Infinity:i;};catalog.lineCompass.lines.sort((x,y)=>rank(x?.lineId)-rank(y?.lineId));}
  {const catalogLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));const stageOfEvent=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,s])));for(const line of catalog.lineCompass.lines)for(const step of line.steps||[]){if(typeof step.eventId!=='string'||step.pending||!events.has(step.eventId)||step.eventId in catalog.lineCompassPlaces)continue;const locationId=events.get(step.eventId).locationId;const name=locationId?String((stageOfEvent.get(step.eventId)?.canon?.locations||[]).find(l=>l?.id===locationId)?.name||catalogLocationNames[locationId]||''):'';catalog.lineCompassPlaces[step.eventId]=name;catalog.lineCompassPlaceIds[step.eventId]=locationId||'';}}
@@ -253,10 +267,22 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // 展示类（F0b）
  checkPresentationTextKeys(catalog.texts,events);
  Object.assign(catalog,await compilePresentationFormats(presentationRaw,{stages,events,baseEvents,locationIds,itemIds,beatIds,texts:catalog.texts,packContracts:[...catalog.contracts,...catalog.drafts],sourceRoot}));
+ // 参数化派生条件（阶段 2a）：放在 rail 等既有校验之后、地图入口 readyPath 校验之前，既有校验的报错先后不变
+ {const str=v=>typeof v==='string'&&v.trim().length>0;
+  const tally=catalog.nationLines.filter(x=>x.countsTowardClosedLines).length,lineIds=new Set(catalog.nationLines.map(x=>x.lineId));
+  unique(compassConditions,x=>x?.id,'compass condition');
+  for(const x of compassConditions){const at=`compass condition ${x?.id}`;
+   if(!object(x)||Object.keys(x).some(k=>!['id','kind','min','unlessLineClosedByWorldEvent'].includes(k)))fail(`${at}: invalid fields`);
+   if(x.id==='anyLineClosed')fail(`${at}: anyLineClosed is reserved`);
+   if(x.kind!=='closedLinesAtLeast')fail(`${at}: kind must be closedLinesAtLeast`);
+   const min=typeof x.min==='string'?x.min.split('.').reduce((o,k)=>o?.[k],numbers):x.min;
+   if(!Number.isSafeInteger(min)||min<1||min>tally)fail(`${at}: min ${typeof x.min==='string'?`${x.min}=${String(min)}`:String(min)} must be an integer from 1 to ${tally} (lines counted toward closed lines)`);
+   if(x.unlessLineClosedByWorldEvent!==undefined&&!lineIds.has(x.unlessLineClosedByWorldEvent))fail(`${at}: unlessLineClosedByWorldEvent: unknown nation line ${x.unlessLineClosedByWorldEvent}`);}
+  catalog.compassConditions=compassConditions;}
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);
-  if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||e.readyPath!=='compass.qinEntryReady'||[e.previewTextId,e.returnLabelTextId,e.returnTextId,e.returnChronicleTextId].some(id=>id!==undefined&&!(id in catalog.texts)))fail(`invalid map entry ${e.id}`);
+  if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||!['compass.anyLineClosed',...catalog.compassConditions.map(x=>`compass.${x.id}`)].includes(e.readyPath)||[e.previewTextId,e.returnLabelTextId,e.returnTextId,e.returnChronicleTextId].some(id=>id!==undefined&&!(id in catalog.texts)))fail(`invalid map entry ${e.id}`);
  }
  const serialized=JSON.stringify({...catalog,version:''});catalog.version=createHash('sha256').update(serialized).digest('hex').slice(0,16);return {catalog,ctx:{stages,events,baseEvents,sourceRoot}};
 }
