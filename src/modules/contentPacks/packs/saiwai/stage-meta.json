@@ -31,7 +31,7 @@
     }
   },
   {
-    "note": "塞外·五原：章配乐 1、事件配乐 6（musicLibrary.ts）、目标 1（fixedQuestObjectives.ts）。s02_04 的目标特判、按地点分段的章名（eventNarrativeView.ts storyRouteLocation）是算法，留在 TS",
+    "note": "塞外·五原：章配乐 1、事件配乐 6（musicLibrary.ts）、目标 1（fixedQuestObjectives.ts）。B6 搬入：s02_04 的目标特判（fixedQuestObjectives.ts）与罗盘只显示目标、商路／押送拍的 routeLocation 5 条、按地点分段的章名 uiChapterByRouteLocation（原注释：短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题）、旧档兼容变体 2 个事件（eventNarrativeView.ts）；分支锁 3 条（branchDecision.ts LOCKED_DECISIONS，原注释：白湖赌局（第18-19章）凝羽入局后当面答复的那一步，不赌＝致命选项（炮烙）；三个月南荒之约（第18章）当面订约那一步，谈期限的准备步不锁，拒绝期限＝致命选项（炮烙）；撕毁阿姬曼身契（第23章）撕契那一步，阿姬曼生气并入同一场戏；不撕：本拍照常完成、只记路线回执，冰蛊结局延后到武二郎入队那一拍触发（裁定 #169））",
     "stageId": "lcq.stage_02",
     "presentation": {
       "chapters": {
@@ -50,7 +50,9 @@
           "mood": "danger"
         },
         "lcq.event.s02_04": {
-          "mood": "danger"
+          "mood": "danger",
+          "compassObjectiveOnly": true,
+          "objective": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人"
         },
         "lcq.event.s02_05": {
           "mood": "battle"
@@ -60,7 +62,143 @@
         },
         "lcq.event.wuerlang_joins": {
           "objective": "问清走投无路的武二郎是否随队南行"
+        },
+        "lcq.event.ningyu_enters_gamble": {
+          "lockedDecision": [
+            [
+              "answer_ningyu_on_debut",
+              "接赌"
+            ],
+            [
+              "refuse_gamble_take_paolao",
+              "不赌"
+            ]
+          ],
+          "compatNarrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.world.baihu.gamble_refusal_phase",
+                  "operator": "eq",
+                  "value": "capture_ordered"
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "拒赌后的拘拿",
+              "description": "凝羽已被差遣入局的当场，你拒绝与苏妲己对赌。苏妲己翻脸命人拿下，你尚未脱开商馆控制。",
+              "axisBeat": "你已拒绝赌局，苏妲己命人拿下；不得写成已经赌输或签契。",
+              "objective": "苏妲己已因你拒赌命人拿下，先应对眼前拘拿",
+              "note": "旧档兼容（原 eventNarrativeView.ts 兼容层）：只在事件没有自带 narrativeVariants（老存档快照）时补位，新版关卡数据有变体时不生效"
+            }
+          ]
+        },
+        "lcq.event.sudaji_south_pact": {
+          "lockedDecision": [
+            [
+              "seal_three_month_south_pact",
+              "当面订下三个月南荒之约"
+            ],
+            [
+              "refuse_term_take_paolao",
+              "拒绝期限，要她现在就动炮烙"
+            ]
+          ]
+        },
+        "lcq.event.free_ajiman": {
+          "lockedDecision": [
+            [
+              "tear_bond_and_face_blockade",
+              "当面撕契并改道出城"
+            ],
+            [
+              "pocket_ajiman_bond",
+              "先收起身契，出城再说"
+            ]
+          ]
+        },
+        "lcq.event.iron_bridge_ambush": {
+          "routeLocation": "南荒途中·铁索桥"
+        },
+        "lcq.event.ningyu_regicide_offer": {
+          "routeLocation": "南荒途中·商队宿处"
+        },
+        "lcq.event.zixi_taiyi_intercept": {
+          "routeLocation": "南荒途中·紫溪"
+        },
+        "lcq.event.rainforest_black_shoal": {
+          "routeLocation": "南荒途中·雨林黑石滩"
+        },
+        "lcq.event.silent_sheyi_village": {
+          "routeLocation": "南荒·蛇彝村"
+        },
+        "lcq.event.gamble_bond_signed": {
+          "compatNarrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.event.gamble_bond_signed.refused_capture",
+                  "operator": "eq",
+                  "value": true
+                },
+                {
+                  "path": "flags.world.baihu.hall_controlled",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "拒赌后被商馆扣押",
+              "description": "程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；苏妲己命人拿下后，他仍受白湖商馆控制。",
+              "axisBeat": "程宗扬拒赌后被扣押，仍受白湖商馆控制；此事不是赌输签契。",
+              "objective": "面对拒赌后被扣押、仍受商馆控制的局面",
+              "note": "旧档兼容（原 eventNarrativeView.ts 兼容层）：只在事件没有自带 narrativeVariants（老存档快照）时补位，新版关卡数据有变体时不生效"
+            },
+            {
+              "when": [
+                {
+                  "path": "flags.event.gamble_bond_signed.refused_capture",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "拒赌后离开商馆",
+              "description": "程宗扬明确拒绝与苏妲己对赌，并未入局也未签卖身契；后来已从白湖商馆脱身，当前不再受商馆扣押。",
+              "axisBeat": "程宗扬曾拒赌并未签契，现已离馆；此事不是赌输签契。",
+              "objective": "承接拒赌后离馆的既成历史，不得改写成赌输或当前仍被扣押",
+              "note": "旧档兼容（原 eventNarrativeView.ts 兼容层）：只在事件没有自带 narrativeVariants（老存档快照）时补位，新版关卡数据有变体时不生效"
+            },
+            {
+              "when": [
+                {
+                  "path": "flags.world.baihu.gamble_refusal_phase",
+                  "operator": "eq",
+                  "value": "capture_ordered"
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "拒赌后的拘拿",
+              "description": "你已拒绝这场赌局。苏妲己翻脸命人拿下，你尚未脱开商馆控制；此事不是赌局落败或签契。",
+              "axisBeat": "苏妲己因拒赌命人拿下；不得写成已经赌输或自愿签卖身契。",
+              "objective": "苏妲己已因你拒赌命人拿下，先应对眼前拘拿",
+              "note": "旧档兼容（原 eventNarrativeView.ts 兼容层）：只在事件没有自带 narrativeVariants（老存档快照）时补位，新版关卡数据有变体时不生效"
+            }
+          ]
         }
+      },
+      "uiChapterByRouteLocation": {
+        "keepFallbackEventIds": [
+          "lcq.event.s02_01",
+          "lcq.event.s02_03",
+          "lcq.event.s02_02"
+        ],
+        "rules": [
+          {
+            "routeLocationIncludes": "南荒",
+            "title": "南荒商路"
+          }
+        ],
+        "defaultTitle": "五原"
       }
     }
   },

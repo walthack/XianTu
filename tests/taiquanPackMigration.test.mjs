@@ -1,8 +1,8 @@
 // 太泉线 S4：太泉线数据从框架 TS 搬进 packs/taiquan 之后的结构断言（逐项内容相等由 songPackSnapshot／linesPackSnapshot／各回放夹具兜住）。
 // - CANON_RAIL_PROFILES 的数组顺序与搬迁前相同（期望是搬迁前在 dc947d94 上导出的 modId 顺序）、modId 不重复；
 // - 太泉 3 关的关／事件／章 id 不再写在 canonRail.ts、musicLibrary.ts、milestoneRewards.ts 里；
-// - fixedQuestObjectives.ts、eventNarrativeView.ts 各只允许残留 1 处 lyl.event.han_shouyang_gaoyanei：
-//   前者是 packText 目标特判（stageMeta 的 objective 不解析 packText，未搬），后者是 storyActionPresentation 的到舞都改写（不是章名表，未搬）；
+// - fixedQuestObjectives.ts、eventNarrativeView.ts 里原各残留 1 处 lyl.event.han_shouyang_gaoyanei（packText 目标特判、到舞都的动作展示），
+//   B6 已搬进太泉包 stageMeta（objective {"$text"}、actionPresentation），残留为 0；
 // - secondaryLines.ts 不再有 id 为 taiquan 的那条线；残留的太泉 id 只在别的线挂在太泉事件上的节点里（按任务范围不动）。
 // musicLibrary.ts 的章 id 正则兜底（PATTERN_MOOD_RULES）里只有不带 lyl. 前缀的关名片段，本测试按完整 id 查，不受影响。
 import test from 'node:test';
@@ -42,8 +42,9 @@ test('太泉 3 关的关／事件／章 id 不再写在框架 TS 文件里（允
   for (const file of ['src/modules/scenarioMods/canonRail.ts', 'src/utils/musicLibrary.ts', 'src/modules/scenarioMods/milestoneRewards.ts']) {
     assert.deepEqual(src(file).match(token) || [], [], file);
   }
-  assert.deepEqual(src('src/modules/scenarioMods/fixedQuestObjectives.ts').match(token) || [], ['lyl.event.han_shouyang_gaoyanei']);
-  assert.deepEqual(src('src/modules/scenarioMods/eventNarrativeView.ts').match(token) || [], ['lyl.event.han_shouyang_gaoyanei']);
+  // B6：目标与到舞都的动作展示进了太泉包 stageMeta，残留为 0
+  assert.deepEqual(src('src/modules/scenarioMods/fixedQuestObjectives.ts').match(token) || [], []);
+  assert.deepEqual(src('src/modules/scenarioMods/eventNarrativeView.ts').match(token) || [], []);
   assert.equal(TS_SECONDARY_LINES.some(line => line.id === 'taiquan'), false);
   assert.doesNotMatch(src('src/modules/scenarioMods/secondaryLines.ts'), /id: 'taiquan'|unlock: 'taiquan'/);
   // 残留只在别的线的节点行（`{ reviewSummary: …, stageId, eventId }`）里

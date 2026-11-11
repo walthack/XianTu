@@ -1,7 +1,7 @@
 // 晋线 S4：晋线数据从框架 TS 搬进 packs/jin 之后的结构断言（逐项内容相等由 songPackSnapshot／songReplayFixtures／qinReplayFixtures 兜住）。
 // - CANON_RAIL_PROFILES 的数组顺序与搬迁前相同（期望是搬迁前在 cdbe3e23 上导出的 modId 顺序）、modId 不重复；
 // - 晋 3 关的关／事件／章 id 不再写在 canonRail.ts、musicLibrary.ts、fixedQuestObjectives.ts、milestoneRewards.ts 里；
-// - eventNarrativeView.ts 只允许残留 1 处：legacyNarrativeVariants 的 lcq.event.s07_05_eight_steeds_informed（谢艺生还的条件改写，stageMeta 没有这种字段，未搬）；
+// - eventNarrativeView.ts 原残留 1 处（s07_05 谢艺生还的旧档兼容改写）B6 已搬进晋包 stageMeta 的 compatNarrativeVariants，残留为 0；
 // - secondaryLines.ts 不再有 id 为 jin 的那条线；残留的晋 id 只在别的线挂在晋事件上的节点里（按任务范围不动）。
 // musicLibrary.ts 的章 id 正则兜底（PATTERN_MOOD_RULES）里只有不带 lcq. 前缀的关名片段，本测试按完整 id 查，不受影响。
 import test from 'node:test';
@@ -42,7 +42,8 @@ test('晋 3 关的关／事件／章 id 不再写在框架 TS 文件里（允许
     'src/modules/scenarioMods/fixedQuestObjectives.ts', 'src/modules/scenarioMods/milestoneRewards.ts']) {
     assert.deepEqual(src(file).match(token) || [], [], file);
   }
-  assert.deepEqual(src('src/modules/scenarioMods/eventNarrativeView.ts').match(token) || [], ['lcq.event.s07_05_eight_steeds_informed']);
+  // B6：s07_05 的旧档兼容改写进晋包 stageMeta（compatNarrativeVariants），残留为 0
+  assert.deepEqual(src('src/modules/scenarioMods/eventNarrativeView.ts').match(token) || [], []);
   assert.equal(TS_SECONDARY_LINES.some(line => line.id === 'jin'), false);
   assert.doesNotMatch(src('src/modules/scenarioMods/secondaryLines.ts'), /id: 'jin'/);
   // 残留只在别的线的节点行（`{ reviewSummary: …, stageId, eventId }`）与锚事件行（汉线以 s07_01_old_case 为入口锚）里

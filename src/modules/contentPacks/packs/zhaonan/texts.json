@@ -10,5 +10,13 @@
   "lineCompass.nanhuang.step.nh_f08_dagu": "离开碧鲮，跟大伙上路",
   "lineCompass.nanhuang.step.nh_guiwang_approach": "去鬼王峒附近看看",
   "lineCompass.nanhuang.step.nh_f10_ghost_king_probe": "走萨安说的那条路看看",
-  "lineCompass.nanhuang.step.nh_shanghou_ice_gu": "回来时住过的山村看看"
+  "lineCompass.nanhuang.step.nh_shanghou_ice_gu": "回来时住过的山村看看",
+  "actionDisplay.lcq.event.huamiao_coop_boundary.*.line": "我跟云苍峰谈清进鬼王峒的合作边界。",
+  "actionDisplay.lcq.event.huamiao_coop_boundary.*.label": "与云苍峰谈合作边界",
+  "actionDisplay.lcq.event.weapon_deal_with_geluo.open_weapon_talk_with_geluo.line": "我向鬼王峒使者提出兵器生意。",
+  "actionDisplay.lcq.event.weapon_deal_with_geluo.open_weapon_talk_with_geluo.label": "同使者谈兵器生意",
+  "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.yinzhu_strikes_ajia.line": "我听见阿葭那边的蕨丛里有异响，提刀赶了过去。",
+  "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.yinzhu_strikes_ajia.label": "赶去阿葭身边查看异动",
+  "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.burn_yinzhu_victim.line": "我照祁远的吩咐，和花苗人一起把阿葭、阴蛛和那具蛇彝遇害者焚化。",
+  "actionDisplay.lcq.event.s03b_yinzhu_xiongerpu.burn_yinzhu_victim.label": "焚化阿葭的遗体和阴蛛"
 }

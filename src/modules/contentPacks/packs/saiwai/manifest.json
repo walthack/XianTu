@@ -4,6 +4,9 @@
   "dependsOn": [
     "qingyu.core"
   ],
+  "texts": [
+    "texts.json"
+  ],
   "rails": [
     "rails.json"
   ],

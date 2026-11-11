@@ -10,7 +10,24 @@
           "objective": "接待上门的萧遥逸：交骨灰，或协助密送伤员"
         },
         "lcq.event.s07_05_eight_steeds_informed": {
-          "objective": "向孟非卿说明谢艺的下场，并留下实质安排"
+          "objective": "向孟非卿说明谢艺的下场，并留下实质安排",
+          "compatNarrativeVariants": [
+            {
+              "when": [
+                {
+                  "path": "flags.event.s06_03.void",
+                  "operator": "eq",
+                  "value": true
+                }
+              ],
+              "replacesCanonRail": true,
+              "name": "谢艺生还的后果",
+              "description": "孟非卿得知谢艺生还，以及鬼王峒一役留下的变故；他必须据此调度星月湖人手，而非只确认消息。",
+              "axisBeat": "孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。",
+              "objective": "说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排",
+              "note": "旧档兼容（原 eventNarrativeView.ts 兼容层）：只在事件没有自带 narrativeVariants（老存档快照）时补位，新版关卡数据有变体时不生效"
+            }
+          ]
         },
         "lcq.event.s07_03_xiaozi_appears": {
           "objective": "应对突然现身的小紫与被制住的局面"
