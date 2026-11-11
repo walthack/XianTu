@@ -607,7 +607,7 @@ import { tickRareEncounters } from '@/modules/scenarioMods/rareEncounters';
 import { logError, logEvent } from '@/modules/diagnostics/log';
 import { summarizeError, summarizeList } from '@/modules/diagnostics/errorSummary';
 import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenarioMods/freeAction/turn';
-import { settleSelfConsumable, renderSelfConsumableBlock, renderSelfConsumableReceipt } from '@/modules/scenarioMods/freeAction/selfConsumable';
+import { settleSelfConsumable, settleButtonUses, renderSelfConsumableBlock, renderSelfConsumableReceipt } from '@/modules/scenarioMods/freeAction/selfConsumable';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
 import { finishCombatNarrative } from '@/modules/sceneModule/host/combatWriteback';
 import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
@@ -2500,6 +2500,14 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	    await persistJudgementSave(selfUseSave);
 	    freeActionBlock += renderSelfConsumableBlock(selfUse);
 	  }
+	  // 背包「使用」按钮：点下时只扣了份数，药效在这里按自服同一口径补结算（8092 90def980 真机 1A）。
+	  const buttonUses = actionQueue.pendingActions.flatMap(a => a.type === 'use' && typeof a.itemId === 'string' ? [{ id: a.id, itemId: a.itemId, quantity: Number(a.quantity) || 1 }] : []);
+	  const buttonUseSave = buttonUses.length ? gameStateStore.toSaveData() : null;
+	  const buttonUsed = buttonUseSave ? settleButtonUses(buttonUseSave, buttonUses) : [];
+	  if (buttonUsed.length) {
+	    await persistJudgementSave(buttonUseSave);
+	    freeActionBlock += buttonUsed.map(renderSelfConsumableBlock).join('');
+	  }
 	  // 叙述包带上背包的实际账（增减 + 现有），叙事才不会把没发生的交付写成已成。
 	  if (freeActionBlock) freeActionBlock += renderInventoryBlock(inventoryBefore, gameStateStore.toSaveData());
 	  // 回执：被拒、给予成功、到顶轻回执（可关）、其他——持久显示（不是一闪而过的 toast），玩家下次发送或点“收起”才清除。
@@ -2510,6 +2518,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	    ...(freeActionConfig().affinity.lightReceipt && affinityNotes.length ? { affinity: affinityNotes } : {}),
 	  });
 	  if (selfUse) freeActionReceipts.value.push(renderSelfConsumableReceipt(selfUse));
+	  freeActionReceipts.value.push(...buttonUsed.map(renderSelfConsumableReceipt));
 
 	  const userMessage = inputText.value.trim();
 	  console.log('[前端] 用户输入 inputText.value:', inputText.value);

@@ -2,6 +2,7 @@
  * 麻古：普通依赖 debuff（用户 2026-10-19 23:45/23:47/23:50 定），不涉性与意愿，对双修无任何加成（双修仍只看好感）。
  * - 给药（自由行动喂药，或使用物品路径）→ afterItemFed：挂「感官亢奋」（时长 heightened.minutes），挂 / 续「麻古成瘾」，
  *   解除戒断挂上的「神志不清」，渴求计时从此刻重新开始。
+ *   物品总表里麻古的 onUse「感官亢奋」只声明不写（applyItemOnUse 跳过它）；感官亢奋只由 afterItemFed 挂这一条。
  * - syncMaigu（每回合叙事兜底入口调用）：
  *   · presetActors：原著已成瘾的角色在所列关卡自动带成瘾（成瘾只由状态目录里的剧情旗标解除，#177）；
  *   · 成瘾者距上次给药超过 addiction.cravingMinutes：挂「神志不清」addiction.withdrawalMinutes 分钟（戒断开始）；
@@ -45,7 +46,7 @@ function clearWithdrawal(save: SaveData, actorId: string, cfg: MaiguConfig): boo
   return true;
 }
 
-/** 给药之后：感官亢奋、成瘾、解戒断、重置渴求计时。不是麻古就什么都不做。 */
+/** 给药之后：感官亢奋、成瘾、解戒断、重置渴求计时。不是麻古就什么都不做。感官亢奋只在这里写（onUse 声明在 applyItemOnUse 里跳过）。 */
 export function afterItemFed(save: SaveData, actorId: string, itemId: string): void {
   const cfg = maiguConfig();
   if (!cfg || itemId !== cfg.itemId || !runtimeOf(save)) return;
