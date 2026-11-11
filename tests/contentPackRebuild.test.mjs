@@ -9,7 +9,12 @@ import {resolve,join} from 'node:path';
 
 const root=resolve(import.meta.dirname,'..');
 const CATALOG='src/modules/contentPacks/generated/catalog.json';
-const LINE_COMPASS='src/modules/contentPacks/packs/qingyu/line-compass.json';
+// 昭南线 S4 之后核心包的下一步表已空（七条国家线各进各的包）：改用第一个下一步表非空的包
+const PACKS='src/modules/contentPacks/packs';
+let LINE_COMPASS;
+for(const d of (await readdir(join(root,PACKS))).sort()){const f=`${PACKS}/${d}/line-compass.json`;
+ const j=await readFile(join(root,f),'utf8').then(JSON.parse,()=>null);if(j?.lines?.length){LINE_COMPASS=f;break;}}
+assert.ok(LINE_COMPASS,'没有任何包带非空的 line-compass.json');
 
 test('rebuild from a deleted catalog in one run, and roll back when TS validation fails',async t=>{
  const copy=await mkdtemp(join(tmpdir(),'xiantu-stage3a-rebuild-'));
