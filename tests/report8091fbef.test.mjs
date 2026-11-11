@@ -116,7 +116,8 @@ test('③ 【扩写】【扩写·待剧情策划】对玩家只隐藏标记、�
   assert.equal(W.stripNarrativeMetaWords('【第三日】风起'), '【第三日】风起', '别的方括号不动');
   const sidebar = read('src/components/dashboard/RightSidebar.vue');
   assert.match(sidebar, /warning: playerFacingText\(view\.warning\), blocked: playerFacingText\(view\.blocked\), transition: playerFacingText\(view\.transition\)/);
-  assert.match(sidebar, /festivalError\.value = playerFacingText\(result\.note\)/);
+  // 阶段 2b：右栏改为世界事件通用卡片，错误按卡片 id 记（口径同前：拒绝原因也走 playerFacingText）
+  assert.match(sidebar, /worldEventError\.value\[card\.id\] = playerFacingText\(result\.note\)/);
   assert.match(read('src/components/dashboard/MainGamePanel.vue'), /content: stripNarrativeMetaWords\(/);
 });
 
@@ -140,12 +141,16 @@ test('④ 编年史跨关继承拍只记了 id：右栏显示事件中文名，�
 });
 
 // ⑤ 开祭按钮 ───────────────────────────────────────────────
-test('⑤ 开祭按钮名统一为「开启大祭」：权威分包、合并物、运行时常量一致，源码无旧名', async () => {
+// 阶段 2b：按钮名的权威从 numbers 的 story.lineCompass.festival.label 搬到 packs/festival/texts.json（世界事件 heimohaiFestival 的 label），
+// 右栏改为按 worldEventViews 渲染通用卡片；本用例改为断言 catalog 正文、兼容常量与卡片 label，不再匹配 RightSidebar 源码形状（改的是测试口径，不是行为）。
+test('⑤ 开祭按钮名统一为「开启大祭」：包正文、运行时常量、右栏卡片一致，源码无旧名', async () => {
   const { FESTIVAL } = await loadTs('../src/modules/scenarioMods/heimohaiFestival.ts');
+  const { CONTENT_PACKS } = await loadTs('../src/modules/contentPacks/index.ts');
+  const { worldEventViews } = await loadTs('../src/modules/scenarioMods/worldEvents.ts');
+  const def = CONTENT_PACKS.worldEvents.find(x => x.id === 'heimohaiFestival');
+  assert.equal(CONTENT_PACKS.texts[def.textKeys.label], '开启大祭');
   assert.equal(FESTIVAL.label, '开启大祭');
-  assert.equal(JSON.parse(read('mod-kit/numbers-progress.json')).story.lineCompass.festival.label, '开启大祭');
-  assert.equal(JSON.parse(read('mod-kit/game-numbers.qingyu.json')).story.lineCompass.festival.label, '开启大祭');
-  assert.match(read('src/components/dashboard/RightSidebar.vue'), /@click="beginFestival">\{\{ FESTIVAL\.label \}\}<\/button>/);
+  assert.equal(worldEventViews(null).find(x => x.id === 'heimohaiFestival').label, '开启大祭');
   assert.match(read('docs/ERROR-CODES.md'), /右栏点击「开启大祭」/);
   const { execSync } = await import('node:child_process');
   const hits = execSync('git grep -l "黑魔海大祭开始" -- src mod-kit/*.json scripts || true', { cwd: new URL('..', import.meta.url), encoding: 'utf8' }).trim();

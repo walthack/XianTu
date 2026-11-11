@@ -1,4 +1,4 @@
-import { lineClosedByWorldEvent } from './heimohaiFestival';
+import { lineClosedByWorldEvent } from './worldEvents';
 /**
  * 账本条件读取（身份账设计稿 2026-10-25 §4）：变体求值用的五类路径
  * identity.* / done.* / line.*.outcome / acq.* / knows.player.*，道具来路 item.*（补充设计稿 2026-10-26 §2.4），在队 party.*（同稿 §3.4，数据源 partyLedger.ts），进度期限 deadline.*（同稿 §4.5，数据源 progressDeadlines.ts），

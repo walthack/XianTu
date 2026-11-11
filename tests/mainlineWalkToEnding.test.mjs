@@ -14,7 +14,7 @@ const F = await loadTs('../src/modules/scenarioMods/heimohaiFestival.ts');
 const { validateSaveDataV3 } = await loadTs('../src/utils/saveValidationV3.ts');
 const { assertEntitySaveFormat } = await loadTs('../src/modules/scenarioMods/entitySaveFormat.ts');
 const NUMBERS = JSON.parse(readFileSync(new URL('../mod-kit/numbers-progress.json', import.meta.url), 'utf8'));
-const FINAL = NUMBERS.story.lineCompass.festival.finalStageId;
+const FINAL = F.FESTIVAL.finalStageId;
 const START = 'lcq.stage_01';
 
 const progress = save => {

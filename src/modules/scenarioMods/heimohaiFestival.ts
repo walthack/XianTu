@@ -1,55 +1,36 @@
+/**
+ * 兼容薄壳（阶段 2b）：大祭已改成包里声明的世界事件（packs/festival，id heimohaiFestival），逻辑在 worldEvents.ts。
+ * 这里的导出名永久保留（tests/、scripts/dev/make-test-saves.mjs 照旧调用）；src 里的通用模块不要再 import 本文件，改用 worldEvents.ts。
+ * FESTIVAL 的 10 个键与原 numbers 的 story.lineCompass.festival 同名同值，由包声明和包 texts 拼出。
+ */
 import type { SaveData } from '@/types/game';
-import { GAME_NUMBERS } from '../sceneModule/numbers';
-import { getCanonRailProfile } from './canonRail';
-import { activeScene } from '../sceneModule/host/ext';
+import { WORLD_EVENTS, worldEventText, worldEventCloseHolds, worldEventView, startWorldEvent } from './worldEvents';
+export { lineClosedByWorldEvent } from './worldEvents';
 
-export const FESTIVAL = GAME_NUMBERS.story.lineCompass.festival;
+const DEF = WORLD_EVENTS.find(x => x.id === 'heimohaiFestival');
+if (!DEF) throw Error('缺少世界事件 heimohaiFestival（packs/festival/world-events.json）');
+const QIN = DEF.closes[0];
+
+export const FESTIVAL = {
+  eventId: DEF.eventId,
+  finalStageId: DEF.stageId,
+  qinStageId: QIN.stageId,
+  qinLineId: QIN.lineId,
+  qinMessageEventId: QIN.messageEventId,
+  actionId: DEF.actionId,
+  warning: worldEventText(DEF, 'warning'),
+  transition: worldEventText(DEF, 'transition'),
+  blocked: worldEventText(DEF, 'blocked'),
+  label: worldEventText(DEF, 'label'),
+};
 const runtime = (save: any) => save?.世界?.状态?.剧本模组;
 export function qinClosedByFestival(save: any, rt = runtime(save)): boolean {
-  return save?.系统?.扩展?.festivalStarted === true && rt?.modId !== FESTIVAL.qinStageId
-    && !(rt?.chronicle || []).some((e: any) => e.stageId === FESTIVAL.qinStageId);
-}
-/** 通用名（阶段 2a，供包声明的派生条件 unlessLineClosedByWorldEvent 读）：该线是否已被世界事件关闭。2b 之前只有大祭关秦一种；2b 换到 worldEvents。 */
-export function lineClosedByWorldEvent(save: any, rt: unknown, lineId: string): boolean {
-  return lineId === FESTIVAL.qinLineId && qinClosedByFestival(save, rt);
-}
-/** Same rail settlement rules as advanceScenarioRuntime/isEventSettled, including void beats. */
-function finalStageComplete(rt: any): boolean {
-  if (rt?.modId !== FESTIVAL.finalStageId) return false;
-  const rail = getCanonRailProfile(rt);
-  return !!rail?.orderedEventIds.length && rail.orderedEventIds.every(id => {
-    if (rt.completedEventIds.includes(id) || (rt.offscreenResolvedEventIds || []).includes(id)) return true;
-    const condition = rt.events.find((e: any) => e.id === id)?.completion?.[0];
-    return condition?.path?.startsWith('flags.') && condition.path.endsWith('.done')
-      && rt.flags[condition.path.slice('flags.'.length).replace(/\.done$/, '.void')] === true;
-  });
+  return worldEventCloseHolds(save, rt, DEF!, QIN);
 }
 export function festivalView(save: any) {
-  const rt = runtime(save);
-  const started = save?.系统?.扩展?.festivalStarted === true;
-  const inQin = rt?.modId === FESTIVAL.qinStageId;
-  const source = inQin ? save?.系统?.扩展?.mapEntryResume?.runtime : rt;
-  return {
-    warning: !started && rt?.modId === FESTIVAL.finalStageId ? FESTIVAL.warning : '',
-    available: !started && finalStageComplete(source) && !rt?.gameOver && !activeScene(save),
-    blocked: inQin ? FESTIVAL.blocked : '',
-    transition: started ? FESTIVAL.transition : '',
-  };
+  return worldEventView(save, DEF!);
 }
 /** Only the explicit UI choice calls this; ticks and narrative reconciliation never do. */
 export function startHeimohaiFestival(save: SaveData, choice: { source: string; actionId: string }) {
-  const view = festivalView(save);
-  if (view.blocked) return { ok: false, note: view.blocked };
-  if (choice?.source !== 'player' || choice.actionId !== FESTIVAL.actionId || !view.available) return { ok: false, note: '' };
-  const s = save as any, rt = runtime(save);
-  ((s.系统 ||= {}).扩展 ||= {}).festivalStarted = true;
-  if (!rt.completedEventIds.includes(FESTIVAL.eventId)) rt.completedEventIds.push(FESTIVAL.eventId);
-  const chronicle = rt.chronicle ||= [];
-  chronicle.push({ id: `chronicle.${rt.modId}.${FESTIVAL.eventId}`, type: 'event', stageId: rt.modId,
-    title: FESTIVAL.label, detail: FESTIVAL.transition, sequence: chronicle.length + 1 });
-  if (qinClosedByFestival(save)) {
-    rt.activeEventIds = rt.activeEventIds.filter((id: string) => id !== FESTIVAL.qinMessageEventId);
-    for (const chapter of rt.chapters) chapter.eventIds = chapter.eventIds.filter((id: string) => id !== FESTIVAL.qinMessageEventId);
-  }
-  return { ok: true, note: FESTIVAL.transition };
+  return startWorldEvent(save, DEF!.id, choice);
 }
