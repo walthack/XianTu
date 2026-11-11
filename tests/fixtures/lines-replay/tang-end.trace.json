@@ -1,0 +1,4052 @@
+[
+ {
+  "kind": "source",
+  "generator": "formalNewSave",
+  "nonEngineProgress": [],
+  "note": "正式（非隔离试玩）新档：同 characterInitialization 的 strict mod 路径（推进循环照抄 tests/mainlineWalker.mjs）。沿正式关链用真实动作推进；固定宿主时钟和随机种子，不固定游戏时钟。本批无派生夹具、无手工改动。"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_05",
+  "action": "travel:lcq.location.command_tent",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_01",
+  "to": "lcq.stage_02"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_02",
+  "opportunity": "opportunity.lcq.s02_01.take_full_mandate",
+  "progressed": true
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_02",
+  "opportunity": "opportunity.lcq.s02_01.take_full_mandate",
+  "progressed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "hold_left_army_line",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "witness_wang_zhe_nine_suns",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "record_battlefield_aftermath",
+  "completed": true
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.route.wuyuan.arrive_market",
+  "settled": true,
+  "canonEventCompleted": false
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.route.wuyuan.market_to_pastry_street",
+  "settled": true,
+  "canonEventCompleted": false
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.action.wuyuan.delay_and_observe",
+  "settled": true,
+  "canonEventCompleted": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_enters_gamble",
+  "action": "see_ningyu_sent_into_gamble",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_enters_gamble",
+  "action": "answer_ningyu_on_debut",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.sudaji_south_pact",
+  "action": "offer_nylon_clue_for_term",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.sudaji_south_pact",
+  "action": "seal_three_month_south_pact",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.gamble_bond_signed",
+  "action": "confirm_rigged_wager_loss",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.gamble_bond_signed",
+  "action": "sign_the_bond",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.charge_sudaji_fee",
+  "action": "name_sixty_zhu_before_help",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.charge_sudaji_fee",
+  "action": "lock_fee_then_remove_device",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.free_ajiman",
+  "action": "take_ajiman_bond_in_hand",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.free_ajiman",
+  "action": "tear_bond_and_face_blockade",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.baihu_shangguan_escape",
+  "action": "walk_out_wuyuan_shangguan",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.wuerlang_joins",
+  "action": "confirm_wuerlang_no_prior_promise",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.wuerlang_joins",
+  "action": "secure_wuerlang_southbound",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.iron_bridge_ambush",
+  "action": "stabilize_wuerlang_on_route",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.iron_bridge_ambush",
+  "action": "break_iron_bridge_ambush",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_regicide_offer",
+  "action": "hear_ningyu_regicide_price",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_regicide_offer",
+  "action": "trace_ningyu_cold_qi_source",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.zixi_taiyi_intercept",
+  "action": "face_taiyi_at_zixi",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.zixi_taiyi_intercept",
+  "action": "pull_qiyuan_back_aboard",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.rainforest_black_shoal",
+  "action": "bear_rainforest_losses",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.rainforest_black_shoal",
+  "action": "follow_ningyu_fire_across_shoal",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.silent_sheyi_village",
+  "action": "travel:lcq.location.sheyi_village",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.silent_sheyi_village",
+  "action": "confirm_sheyi_dark_and_silent",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.silent_sheyi_village",
+  "action": "settle_caravan_in_silent_sheyi",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_02",
+  "to": "lcq.stage_03b_snake_flower_bridge"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_wanwu_night",
+  "action": "follow_xieyi_hint_into_woods",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_wanwu_night",
+  "action": "find_victim_and_ajia",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_yinzhu_xiongerpu",
+  "action": "yinzhu_strikes_ajia",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_yinzhu_xiongerpu",
+  "action": "burn_yinzhu_victim",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_yinzhu_xiongerpu",
+  "action": "pick_zhu88_as_guide",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_03b_snake_flower_bridge",
+  "to": "lcq.stage_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_05",
+  "action": "respond_to_flash_flood",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_05",
+  "action": "witness_yihu_last_stand",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_05",
+  "action": "stay_for_yibiao_farewell",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_04",
+  "to": "lcq.stage_04b_lingfei_baiyi_crisis"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_08",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_11",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_12",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_xi_furen_trade_route",
+  "action": "hold_xi_furen_to_terms",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_xi_furen_trade_route",
+  "action": "seal_baiyi_trade_route",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_13",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+  "action": "travel:liuchao.location.south_wild_valley",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_15",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_16",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.xieyi_biling_war",
+  "action": "hear_xieyi_biling_war_and_crown",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.xieyi_biling_war",
+  "action": "answer_xieyi_yue_unfinished",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_17",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.xiaozi_first_appears",
+  "action": "recognize_xiaozi",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_18",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_19",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.haishen_hall_merfolk",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.pull_harpoon_lemingzhu",
+  "action": "pull_harpoon_from_mingzhu",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.pull_harpoon_lemingzhu",
+  "action": "stabilize_mingzhu_after_harpoon",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.regroup_caravan_envoy",
+  "action": "regroup_remaining_caravan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.regroup_caravan_envoy",
+  "action": "confirm_guiwang_envoy_at_bay",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.weapon_deal_with_geluo",
+  "action": "open_weapon_talk_with_geluo",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.weapon_deal_with_geluo",
+  "action": "close_weapon_deal_with_geluo",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.spot_dong_informant",
+  "action": "clarify_weapon_deal_danger",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.spot_dong_informant",
+  "action": "handle_dong_eavesdropper",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.biling_bay_stance",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.ruins_ghost_warriors",
+  "action": "identify_dong_marks_in_ruins",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.ruins_ghost_warriors",
+  "action": "help_yibiao_hold_ruins",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.wuerlang_slays_dagu",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.yiyang_repels_yinsha",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.huamiao_coop_boundary",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.guiwangdong_coop_pact",
+  "action": "settle_ningyu_relapse",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.guiwangdong_coop_pact",
+  "action": "seal_guiwangdong_coop_pact",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.enter_dong_with_migu",
+  "action": "stop_migu_reception_clash",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.enter_dong_with_migu",
+  "action": "follow_migu_and_map_slave_routes",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "to": "lcq.stage_05b"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.blank_letter_and_dagu",
+  "action": "open_blank_letter_in_person",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.blank_letter_and_dagu",
+  "action": "face_xiaozi_dagu_reveal",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.geluo_summons_biji",
+  "action": "watch_geluo_summon_binu",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.geluo_summons_biji",
+  "action": "meet_biji_xieyi_seeks",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.escape_cave_mechanism",
+  "action": "slip_guards_on_mechanism_alarm",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.escape_cave_mechanism",
+  "action": "find_passable_cave_in_cliff",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.hongmiao_controlled",
+  "action": "confirm_hongmiao_allies_controlled",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.hongmiao_controlled",
+  "action": "keep_suli_from_geluo",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_01_binu_reveals_xiaozi",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_02_xiaozi_exposed",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_03_saan_secret_path",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_04_enter_ghost_palace",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_05a_meet_ghost_king",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_06_breakout_and_reunion",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_07_xiaozi_trap",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_08a_rescue_suli",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+  "action": "advance_declared_objective",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_09_temporary_pact_with_xiaozi",
+  "action": "support_xieyi_counterstrike",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_10_slave_revolt_and_phoenix_change",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.ghost_king_swallowed",
+  "action": "travel:liuchao.location.gui_wang_gong.jingshen_tai",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.ghost_king_swallowed",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.slay_dragon",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.xieyi_entrustment",
+  "action": "accept_entrustment",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.xiaozi_kills_mother",
+  "action": "chase_xiaozi_to_biji",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.xiaozi_kills_mother",
+  "action": "witness_xiaozi_kills_mother",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.tribes_pledge",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_ice_gu_detour",
+  "action": "count_days_with_qiyuan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_ice_gu_detour",
+  "action": "split_party_to_yeao_village",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_wuer_suli_depart",
+  "action": "hear_suli_true_aim",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_wuer_suli_depart",
+  "action": "settle_with_wuer_and_part",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.shanghou_revealed",
+  "action": "follow_yeao_to_shanghou",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.shanghou_revealed",
+  "action": "refuse_shanghou_relic_test",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.shanghou_revealed",
+  "action": "confirm_zhu_is_shanghou",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_shanghou_reads_letter",
+  "action": "hand_blank_letter_to_shanghou",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_shanghou_reads_letter",
+  "action": "hear_twenty_year_rite",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_yeao_palm_ningyu_stays",
+  "action": "take_yeao_palm",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.s05b_yeao_palm_ningyu_stays",
+  "action": "accept_ningyu_stays",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.shanghou_cures_ice_gu",
+  "action": "accept_shanghou_ice_gu_cure",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_05b",
+  "event": "lcq.event.shanghou_cures_ice_gu",
+  "action": "hear_shanghou_confirm_ice_gu_gone",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_05b",
+  "to": "lcq.stage_07_qingyuan_jiankang"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_00a_shanghou_trading_house",
+  "action": "hear_shanghou_trading_house",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_00b_return_north",
+  "action": "leave_nanhuang_north",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_00c_arrive_jiankang",
+  "action": "settle_in_yuji_lane",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.xiaoyaoyi_arrives",
+  "action": "deliver_ashes",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_01_old_case",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_02_kill_wu",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.wangzhe_letter",
+  "action": "travel:liuchao.location.qingyuan_jin",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.wangzhe_letter",
+  "action": "read_wangzhe_secret_letter",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_03_xiaozi_appears",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.palace_haunting_rumor",
+  "action": "travel:liuchao.location.jiankang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.palace_haunting_rumor",
+  "action": "spy_palace_with_lingfei_mirror",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.jin_panjiang_shaozhu",
+  "action": "rise_at_yun_banquet",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_04_zhuo_subdued",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_05_eight_steeds_informed",
+  "action": "report_death",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.xiao_opens_resources",
+  "action": "hear_xingyue_support_dead",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_06_water_assassins",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_07_dragon_hall",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_08_palace_escape",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_09_hengtang_ambush",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_07_qingyuan_jiankang",
+  "event": "lcq.event.s07_10_dragon_fang",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_07_qingyuan_jiankang",
+  "to": "lcq.stage_08_jiankang_coup"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_01_eagle_valley",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_02_wood_fort",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_03_beifu_rescue",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_04_sudaji_enters",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_05_breakthrough",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_06_pursuit_repelled",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.palm_oath_shanghou",
+  "action": "travel:liuchao.location.jiankang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.palm_oath_shanghou",
+  "action": "tell_xiao_qinhui_blacksea",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.palm_oath_shanghou",
+  "action": "palm_oath_not_against_shanghou",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_07_palace_ninja",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_08_gumingyin_plot",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_09_zhaoming_night",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_08_jiankang_coup",
+  "event": "lcq.event.s08_10_xuanwu_rescue",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_08_jiankang_coup",
+  "to": "lcq.stage_09_trade_and_escape"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.spoils_split",
+  "action": "travel:liuchao.location.jiankang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.spoils_split",
+  "action": "hear_spoils_xiao_yun",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.spoils_split",
+  "action": "confirm_cheng_got_nothing",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_01_eight_steeds_leave",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.xiangfu_stance",
+  "action": "ask_wang_xiangfu_side",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.xiangfu_stance",
+  "action": "hear_wang_wuwei_peace",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_02_yun_ruyao_faints",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_03_xiaozi_wounded",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_04_weaving_trade",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_05_drain_escape",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_06_blacksea_fracture",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_07_feiniao_infiltration",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_08_six_doors_confession",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_09_jiangzhou_crisis",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_09_trade_and_escape",
+  "event": "lcq.event.s09_10_separation",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_09_trade_and_escape",
+  "to": "lcq.stage_10_jiangzhou_shadow_war"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_01_jiangzhou_order",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_02_yeying_pass",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.yeying_seat_struggle",
+  "action": "overhear_lin_shang_yeying",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.yeying_seat_struggle",
+  "action": "confirm_taiyi_seat_struggle",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_03_ninja_trace",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "opportunity": "opportunity.lcq.s10_04.close_supply_gap"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "opportunity": "opportunity.lcq.s10_04.close_supply_gap"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_05_war_funds",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_06_ruined_temple",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_07_preemptive_strike",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_08_lair_reversal",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_09_yin_yang_fish",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_10_jiangzhou_shadow_war",
+  "event": "lcq.event.s10_10_xiaozi_crisis",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_10_jiangzhou_shadow_war",
+  "to": "lcq.stage_11_lieshan_battle"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_01_pengri_arrives",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_02_cement_fortress",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_03_protect_yueshuang",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_04_xingyue_appears",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_05_wangtao_breaks",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_06_snow_battle",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_07_camp_falls",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_08_jiangzhou_lockdown",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_09_grain_plan",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_11_lieshan_battle",
+  "event": "lcq.event.s11_10_sanchuankou_defeat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_11_lieshan_battle",
+  "to": "lcq.stage_12_jiangzhou_counterwar"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_01_grain_route_blocked",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_02_recognize_zhuo",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_03_xiaozi_controls_zhuo",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.jin_vacate_jiangzhou",
+  "action": "hear_jin_vacate_plan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.jin_vacate_jiangzhou",
+  "action": "confirm_song_free_to_raid",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_04_river_granary",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.tuntian_post",
+  "action": "accept_tuntian_yuanwailang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.tuntian_post",
+  "action": "enter_native_place_on_roll",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_05_granary_fire_plan",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_06_dragon_guard_routs",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_07_left_wing_raid",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_08_dingchuan_raid",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_09_ge_huaimin_killed",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_10_rescue_xiao",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_11_siege_begins",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_12_gate_fire",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_13_long_siege",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.pengyi_takeover",
+  "action": "ask_meng_pengyi_permission",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.pengyi_takeover",
+  "action": "take_over_pengyi_holdings",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_14_chenxing_appears",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_15_capture_jingli",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_16_corpse_poison",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_17_shanghou_stays",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_12_jiangzhou_counterwar",
+  "event": "lcq.event.s12_18_linan_grain_order",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_12_jiangzhou_counterwar",
+  "to": "lyl.jiangzhou_retreat"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_02",
+  "action": "travel:liuchao.location.linan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_03",
+  "action": "travel:liuchao.location.jingxi_village",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_04",
+  "action": "travel:liuchao.location.junzhou",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.jiangzhou_retreat",
+  "event": "lyl.event.s01_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.jiangzhou_retreat",
+  "to": "lyl.lin_an_bridge"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.linan_arrive_fengbo",
+  "action": "travel:liuchao.location.linan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.linan_arrive_fengbo",
+  "action": "enter_linan_qiantang_gate",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.linan_arrive_fengbo",
+  "action": "stop_at_fengbo_pavilion",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.tail_li_shishi",
+  "action": "follow_li_shishi_carriage_to_weiyuan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.tail_li_shishi",
+  "action": "confirm_li_shishi_return_reason",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.survey_wumu_mansion",
+  "action": "circle_wumu_record_layout",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.survey_wumu_mansion",
+  "action": "leave_wumu_without_alerting",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.evade_huangchengsi",
+  "action": "spot_huangchengsi_tail",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.evade_huangchengsi",
+  "action": "enter_mingqingsi_as_merchant",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.mingqingsi_lin_lu_meeting",
+  "action": "watch_lin_lu_exchange_names",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.mingqingsi_lin_lu_meeting",
+  "action": "leave_mingqingsi_unseen",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.decode_bianmenwa_note",
+  "action": "decode_qifu_cipher_to_bianmenwa",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.decode_bianmenwa_note",
+  "action": "reply_xue_yanshan_meeting",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.weiyuan_extortion",
+  "action": "hear_yu_ziyuan_weiyuan_probe",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.weiyuan_extortion",
+  "action": "confirm_gao_extortion_terms",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.libu_registration",
+  "action": "register_at_libu_panjiang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.libu_registration",
+  "action": "verify_lin_chong_taken_dossiers",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.meet_xue_yanshan",
+  "action": "hear_xue_taihu_ambush",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.meet_xue_yanshan",
+  "action": "accept_xuesun_remnant_charge",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.blacksea_iron_puppet",
+  "action": "mirror_jiangzhou_iron_puppet",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.blacksea_iron_puppet",
+  "action": "mirror_xiaozi_yin_soul",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.identify_xue_cold_poison",
+  "action": "diagnose_xue_cold_poison",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.identify_xue_cold_poison",
+  "action": "ask_xue_about_guiya",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.leifeng_pagoda_invite",
+  "action": "accept_leifeng_invite",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.leifeng_pagoda_invite",
+  "action": "climb_leifeng_with_li_shishi",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.lin_an_bridge_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.leifeng_repel_gao",
+  "action": "stop_luqian_taking_li_shishi",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.leifeng_repel_gao",
+  "action": "drive_gao_yanei_off_pagoda",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.lin_an_bridge_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.decide_chase_weiyuan",
+  "action": "review_leifeng_with_qin_hui",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.decide_chase_weiyuan",
+  "action": "order_continue_weiyuan_inquiry",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.lin_an_bridge_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.pass_kotian_stone",
+  "action": "view_kotian_stone_sword",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.pass_kotian_stone",
+  "action": "go_bianmenwa_by_cipher",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.lin_an_bridge_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.ivory_visit_weiyuan",
+  "action": "offer_ivory_escort_to_weiyuan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.ivory_visit_weiyuan",
+  "action": "confirm_weiyuan_marriage_decision",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.siying_lane_saber_ambush",
+  "action": "watch_linchong_buy_saber",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.siying_lane_saber_ambush",
+  "action": "confirm_ambush_without_breaking",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.lin_an_bridge_xieyi_tomb",
+  "action": "meet_yueshuang_outside_linan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.lin_an_bridge",
+  "event": "lyl.event.lin_an_bridge_xieyi_tomb",
+  "action": "worship_yue_and_xieyi_tomb",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.lin_an_bridge",
+  "to": "lyl.xiaoyingzhou_blacksea_trap"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.linjia_sees_ningyi",
+  "action": "identify_ningyi_as_ruan_xiangning",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.linjia_sees_ningyi",
+  "action": "note_black_sea_mismatch",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xihu_villa_eavesdrop",
+  "action": "infiltrate_xihu_villa",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xihu_villa_eavesdrop",
+  "action": "overhear_yanei_plot_against_lin",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_paper_plan",
+  "action": "ask_jia_current_brief",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_paper_mint",
+  "action": "force_paper_tax_and_retreat",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_lin_takes_seat",
+  "action": "witness_helinyuan_succession",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.song_baochao_appointed",
+  "action": "accept_baochao_post",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.xiaoyingzhou_blacksea_trap",
+  "event": "lyl.event.xiaoyingzhou_cement_truce",
+  "action": "trade_qingzhou_cement_for_truce",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.xiaoyingzhou_blacksea_trap",
+  "to": "lyl.taiquan_sacred_fruit"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.sacred_against_lin",
+  "action": "promise_zhuo_against_lin",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.sacred_against_lin",
+  "action": "write_panjiang_cheng_shares",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.sacred_jin_drought",
+  "action": "hear_jin_drought_and_buy_grain",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.sacred_jin_drought",
+  "action": "make_jiankang_grain_hub",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_08",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_09",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_10",
+  "action": "travel:lyl.location.taiquan_crater",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_sacred_fruit",
+  "event": "lyl.event.taiquan_sacred_fruit_10",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.taiquan_sacred_fruit",
+  "to": "lyl.taiquan_core_conflict"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_core_conflict",
+  "event": "lyl.event.yu_baiying_truce",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_core_conflict",
+  "event": "lyl.event.find_exit",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.taiquan_core_conflict",
+  "to": "lyl.taiquan_afterfall"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.han_shouyang_gaoyanei",
+  "action": "travel:liuchao.location.wudu",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.han_shouyang_gaoyanei",
+  "action": "descend_shouyang_to_wudu",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.han_wudu_bingsi",
+  "action": "help_yunruyao_bingsi",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.jin_guangyuan_ledger",
+  "action": "open_jin_guangyuan_ledgers",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.jin_guangyuan_ledger",
+  "action": "match_ledgers_to_longchen",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_08_beat",
+  "action": "travel:lyl.location.luoyang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.han_court_grain_blame",
+  "action": "hear_court_grain_cutoff",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.han_court_grain_blame",
+  "action": "ask_who_cut_zuowu_grain",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.taiquan_afterfall",
+  "event": "lyl.event.taiquan_afterfall_10_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.taiquan_afterfall",
+  "to": "lyl.luoyang_cloud_secret"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.s05_08",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyl.luoyang_cloud_secret",
+  "opportunity": "opportunity.lyl.s05_09.salvage_convoy"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyl.luoyang_cloud_secret",
+  "opportunity": "opportunity.lyl.s05_09.salvage_convoy"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.han_yuedan_ping",
+  "action": "attend_yuedan_ping",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.han_huo_villa",
+  "action": "sneak_into_huo_villa",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.han_xingyue_framed",
+  "action": "show_watch_gain_yan_trust",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.han_xingyue_framed",
+  "action": "hear_xingyue_framed_for_zuowu",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.han_limit_field",
+  "action": "buy_fields_with_paper_notes",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.luoyang_cloud_secret",
+  "event": "lyl.event.han_limit_field",
+  "action": "see_limit_field_drag_yun",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.luoyang_cloud_secret",
+  "to": "lyl.han_palace_endgame"
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.lvji_defiles_consort",
+  "action": "hold_hede_silent_on_coffer",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.lvji_defiles_consort",
+  "action": "watch_lvji_defile_youtongqi",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.emperor_death_spreads",
+  "action": "disguise_as_neishi_leave_zhaoyang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.emperor_death_spreads",
+  "action": "escort_zhao_sisters_to_changqiu",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.arrange_escape_route",
+  "action": "exit_palace_by_secret_passage",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.arrange_escape_route",
+  "action": "convene_and_assign_dingtao",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.liujian_takes_nangong",
+  "action": "see_liujian_seize_nangong",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.liujian_takes_nangong",
+  "action": "confirm_armory_fell_to_liujian",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.changqiu_palace_defense",
+  "action": "hold_changqiu_steps",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.changqiu_palace_defense",
+  "action": "keep_liujian_alive_for_now",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.bounty_and_hu_cavalry",
+  "action": "post_changqiu_private_bounty",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.bounty_and_hu_cavalry",
+  "action": "send_ahead_for_huan_yu",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_jianyu_refused",
+  "action": "hear_chengguang_for_liujian",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_jianyu_refused",
+  "action": "hear_cai_expose_liujian",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_jianyu_refused",
+  "action": "refuse_jianyu_to_her_face",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.lvfengxian_breaks_line",
+  "action": "watch_age_battle_from_que",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.lvfengxian_breaks_line",
+  "action": "block_empress_north_palace_transfer",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyl.han_palace_endgame",
+  "event": "lyl.event.han_palace_endgame_10_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyl.han_palace_endgame",
+  "to": "lyg.dingtao_beijing"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_05.first_edict"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_05.first_edict"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_05.first_edict"
+ },
+ {
+  "kind": "wait",
+  "stage": "lyg.dingtao_beijing",
+  "focus": null,
+  "turn": 4
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_06.royal_escape"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_06.royal_escape"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_06.royal_escape"
+ },
+ {
+  "kind": "wait",
+  "stage": "lyg.dingtao_beijing",
+  "focus": "lyg.event.s01_06",
+  "turn": 8
+ },
+ {
+  "kind": "wait",
+  "stage": "lyg.dingtao_beijing",
+  "focus": "lyg.event.s01_06",
+  "turn": 9
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_07.border_warning"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_07.border_warning"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_07.border_warning"
+ },
+ {
+  "kind": "wait",
+  "stage": "lyg.dingtao_beijing",
+  "focus": "lyg.event.s01_07",
+  "turn": 13
+ },
+ {
+  "kind": "wait",
+  "stage": "lyg.dingtao_beijing",
+  "focus": "lyg.event.s01_07",
+  "turn": 14
+ },
+ {
+  "kind": "wait",
+  "stage": "lyg.dingtao_beijing",
+  "focus": null,
+  "turn": 15
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_08.verify_shengji"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lyg.dingtao_beijing",
+  "opportunity": "opportunity.lyg.s01_08.verify_shengji"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.dingtao_beijing",
+  "event": "lyg.event.han_marquis_wuyang_enfeoff",
+  "action": "travel:liuchao.location.luoyang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.dingtao_beijing",
+  "event": "lyg.event.han_marquis_wuyang_enfeoff",
+  "action": "accept_wuyang_marquis",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.dingtao_beijing",
+  "event": "lyg.event.s01_09",
+  "action": "deliver_empress_decree",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.dingtao_beijing",
+  "to": "lyg.mijing_rumen"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_03",
+  "action": "travel:liuchao.location.changqiu_palace",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_05",
+  "action": "travel:liuchao.location.luoyang",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_06",
+  "action": "travel:liuchao.location.shangguan_li_hufu",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_07",
+  "action": "travel:liuchao.location.jin_fu",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_08",
+  "action": "travel:liuchao.location.changqiu_palace",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_08",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.s02_09",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.mijing_rumen",
+  "event": "lyg.event.mijing_superuser_roster",
+  "action": "touch_pearl_verify_superuser_roster",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.mijing_rumen",
+  "to": "lyg.han_succession"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.han_succession",
+  "event": "lyg.event.han_succession_10_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.han_succession",
+  "to": "lyg.changgan_begins"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.tang_liuxianping_arrive",
+  "action": "settle_liuxianping_watch_guests",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.tang_liuxianping_xiangshi",
+  "action": "confront_liuxianping_xiangshi",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.changgan_fanseng_hunt",
+  "action": "hear_yuan_fanseng_hunt",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_01",
+  "action": "travel:liuchao.location.changan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_08",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_09",
+  "action": "travel:lyg.location.daciensi",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.s03_09",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.qinglongsi_te_master",
+  "action": "travel:liuchao.location.changan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.qinglongsi_te_master",
+  "action": "infiltrate_qinglongsi_watch_expansion",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_begins",
+  "event": "lyg.event.qinglongsi_te_master",
+  "action": "withdraw_qinglongsi_with_notes",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.changgan_begins",
+  "to": "lyg.changgan_interlude"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.north_bureau_buddhist_moves",
+  "action": "travel:lyg.location.changan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.north_bureau_buddhist_moves",
+  "action": "hear_beisi_buddhist_leads",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.north_bureau_buddhist_moves",
+  "action": "record_beisi_buddhist_directions",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.honglusi_amends",
+  "action": "verify_honglusi_courtesy",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.honglusi_amends",
+  "action": "confirm_yuanzheng_eligibility",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.cien_red_lotus",
+  "action": "record_cien_red_lotus_stances",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.cien_red_lotus",
+  "action": "compare_emperor_restraint_order",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.yuanzheng_globe",
+  "action": "test_xu_junfang_globe",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.yuanzheng_globe",
+  "action": "record_qin_envoy_rhetoric",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.xuanping_eunuch_murder",
+  "action": "inspect_xuanping_eunuch_scene",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.xuanping_eunuch_murder",
+  "action": "keep_xuanping_motive_branches",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.survey_xingqing_palace",
+  "action": "survey_xingqing_ruins",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.survey_xingqing_palace",
+  "action": "mark_xingqing_underground",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.prince_injury_control",
+  "action": "stabilize_prince_wound",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.prince_injury_control",
+  "action": "contain_prince_injury_news",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.shuixiang_lure_setup",
+  "action": "set_shuixiang_watches",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.shuixiang_lure_setup",
+  "action": "finish_shuixiang_lure_ring",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.spot_poison_assassin",
+  "action": "contain_paralysis_poison",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.spot_poison_assassin",
+  "action": "seal_assassin_hide_range",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.poolside_capture",
+  "action": "isolate_poolside_smoke",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.poolside_capture",
+  "action": "capture_feiniao_yingzi_feint",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.blast_moni_temple",
+  "action": "blast_moni_rescue_window",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.blast_moni_temple",
+  "action": "confirm_moni_teacher_fate",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.xinyong_reveals_fanmi",
+  "action": "hear_xinyong_fanmi_inside",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.xinyong_reveals_fanmi",
+  "action": "decide_fanmi_response",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.interrogate_feiniao_yingzi",
+  "action": "travel:liuchao.location.changan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.interrogate_feiniao_yingzi",
+  "action": "open_feiniao_interrogation",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.interrogate_feiniao_yingzi",
+  "action": "record_feiniao_three_refusals",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.song_tongwen",
+  "action": "accept_libu_tongwen_seal",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.tang_secret_treaty_signed",
+  "action": "travel:lyg.location.changan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.tang_secret_treaty_signed",
+  "action": "hold_treaty_bottom_lines",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.honglusi_treaty_announced",
+  "action": "watch_treaty_announcement",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.changgan_interlude_10_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.liang_secret_order",
+  "action": "hear_yang_closed_gate_order",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.liang_secret_order",
+  "action": "separate_yu_chaoen_hold",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.zhoufei_conspiracy",
+  "action": "hear_li_zhou_conglin_terms",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.zhoufei_conspiracy",
+  "action": "confirm_zhou_conglin_plot",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.feiniao_hilt_clue",
+  "action": "ask_feiniao_family_employer",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.changgan_interlude",
+  "event": "lyg.event.feiniao_hilt_clue",
+  "action": "record_hilt_and_seal_clues",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.changgan_interlude",
+  "to": "lyg.liangzhou_league"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_02",
+  "action": "travel:lyg.location.liangzhou_arena",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_03",
+  "action": "travel:lyg.location.weishui",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_07",
+  "action": "travel:lyg.location.wuyang_mansion",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_08",
+  "action": "travel:liuchao.location.changan",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_08",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.liangzhou_league",
+  "event": "lyg.event.s06_09",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.liangzhou_league",
+  "to": "lyg.buddhist_conspiracy"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_10_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.buddhist_conspiracy",
+  "event": "lyg.event.buddhist_conspiracy_11_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.buddhist_conspiracy",
+  "to": "lyg.ganlu_aftershock"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.ganlu_aftershock",
+  "event": "lyg.event.ganlu_aftershock_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lyg.ganlu_aftershock",
+  "to": "lyg.shituolin_endgame"
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_01_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_02_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_03_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_04_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_05_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_06_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_07_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_08_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_09_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_10_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_11_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_12_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_13_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_title_daduhu",
+  "action": "receive_daduhu_shangzhuguo_edict",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_14_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lyg.shituolin_endgame",
+  "event": "lyg.event.shituolin_endgame_15_beat",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "checkpoint",
+  "fixture": "tang-end",
+  "stage": "lyg.shituolin_endgame",
+  "chapter": null,
+  "focus": null,
+  "completed": 16,
+  "active": 1,
+  "closedLines": [
+   "nanhuang",
+   "jin",
+   "song",
+   "han",
+   "tang"
+  ],
+  "lineOutcomes": {},
+  "nextStageId": null,
+  "nextStageReadyId": null,
+  "stallTurns": 0,
+  "location": "lyg.location.wuyang_mansion",
+  "expect": {
+   "presentation": {
+    "chapterTitles": {
+     "lyg.event.shituolin_endgame_01_beat": "尸陀林主",
+     "lyg.event.shituolin_endgame_02_beat": "尸陀林主",
+     "lyg.event.shituolin_endgame_03_beat": "尸陀林主",
+     "lyg.event.shituolin_endgame_04_beat": "尸陀林主",
+     "lyg.event.shituolin_endgame_05_beat": "尸陀林主",
+     "lyg.event.shituolin_endgame_06_beat": "李辅国夺舍",
+     "lyg.event.shituolin_endgame_07_beat": "李辅国夺舍",
+     "lyg.event.shituolin_endgame_08_beat": "李辅国夺舍",
+     "lyg.event.shituolin_endgame_09_beat": "李辅国夺舍",
+     "lyg.event.shituolin_endgame_10_beat": "李辅国夺舍",
+     "lyg.event.shituolin_endgame_11_beat": "李辅国夺舍",
+     "lyg.event.shituolin_endgame_12_beat": "李辅国夺舍",
+     "lyg.event.shituolin_endgame_13_beat": "旧怨追问",
+     "lyg.event.shituolin_endgame_14_beat": "旧怨追问",
+     "lyg.event.shituolin_endgame_15_beat": "旧怨追问",
+     "lyg.event.shituolin_endgame_title_daduhu": "旧怨追问",
+     "lyg.event.claim_slew_demon": "旧怨追问",
+     "liuchao.event.qin_hook_fangshi_rumor": "咸阳传闻"
+    },
+    "chapterMusic": {
+     "lyg.chapter.shituolin_endgame_kui_ji": "climax",
+     "lyg.chapter.shituolin_endgame_li_fuguo": "climax",
+     "lyg.chapter.shituolin_endgame_old_grudge": "climax"
+    },
+    "eventMusic": {
+     "lyg.event.shituolin_endgame_01_beat": "climax",
+     "lyg.event.shituolin_endgame_02_beat": "climax",
+     "lyg.event.shituolin_endgame_03_beat": "climax",
+     "lyg.event.shituolin_endgame_04_beat": "climax",
+     "lyg.event.shituolin_endgame_05_beat": "climax",
+     "lyg.event.shituolin_endgame_06_beat": "climax",
+     "lyg.event.shituolin_endgame_07_beat": "climax",
+     "lyg.event.shituolin_endgame_08_beat": "climax",
+     "lyg.event.shituolin_endgame_09_beat": "climax",
+     "lyg.event.shituolin_endgame_10_beat": "climax",
+     "lyg.event.shituolin_endgame_11_beat": "climax",
+     "lyg.event.shituolin_endgame_12_beat": "climax",
+     "lyg.event.shituolin_endgame_13_beat": "climax",
+     "lyg.event.shituolin_endgame_14_beat": "climax",
+     "lyg.event.shituolin_endgame_15_beat": "climax",
+     "lyg.event.shituolin_endgame_title_daduhu": "climax",
+     "lyg.event.claim_slew_demon": "climax",
+     "liuchao.event.qin_hook_fangshi_rumor": "climax"
+    },
+    "currentMusic": "theme",
+    "objectives": {
+     "lyg.event.shituolin_endgame_01_beat": "前往内侍省探听职权变动详情",
+     "lyg.event.shituolin_endgame_02_beat": "赶往独柳树刑场查看行刑情况",
+     "lyg.event.shituolin_endgame_03_beat": "去善果寺询问高阳坟墓方位",
+     "lyg.event.shituolin_endgame_04_beat": "前往尸陀林主现身处探查",
+     "lyg.event.shituolin_endgame_05_beat": "与众人合力消灭窥基魔身",
+     "lyg.event.shituolin_endgame_06_beat": "前往皇宫确认江王入宫之事",
+     "lyg.event.shituolin_endgame_07_beat": "调查太液池黑雾来源",
+     "lyg.event.shituolin_endgame_08_beat": "探查婆娑宝树培育地点",
+     "lyg.event.shituolin_endgame_09_beat": "前往大明宫参与讨逆行动",
+     "lyg.event.shituolin_endgame_10_beat": "在莲座前迎战李辅国",
+     "lyg.event.shituolin_endgame_11_beat": "设法逃出浮屠塔困局",
+     "lyg.event.shituolin_endgame_12_beat": "联手斩断李辅国肉身",
+     "lyg.event.shituolin_endgame_13_beat": "阻止太皇太后被夺舍",
+     "lyg.event.shituolin_endgame_14_beat": "搜查宫中找五肉五甘露",
+     "lyg.event.shituolin_endgame_15_beat": "在庵堂审讯齐羽仙查旧怨",
+     "lyg.event.shituolin_endgame_title_daduhu": "接旨受封大都护、勋授上柱国",
+     "lyg.event.claim_slew_demon": "用血藤谎称斩妖，避开弑杀太皇太后的罪责",
+     "liuchao.event.qin_hook_fangshi_rumor": "听取口信，决定何时前往咸阳"
+    }
+   },
+   "bakedPresentation": {
+    "events": [],
+    "chapters": []
+   },
+   "lineCompass": {
+    "current": {
+     "lineId": "taiquan",
+     "name": "太泉古阵",
+     "step": "",
+     "source": "recent"
+    },
+    "others": [],
+    "entryHints": []
+   },
+   "transitionProbe": {
+    "ok": false,
+    "reason": "已是最终关，无下一关"
+   }
+  }
+ }
+]

@@ -1,0 +1,805 @@
+[
+ {
+  "kind": "source",
+  "generator": "formalNewSave",
+  "nonEngineProgress": [],
+  "note": "正式（非隔离试玩）新档：同 characterInitialization 的 strict mod 路径（推进循环照抄 tests/mainlineWalker.mjs）。沿正式关链用真实动作推进；固定宿主时钟和随机种子，不固定游戏时钟。本批无派生夹具、无手工改动。"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_05",
+  "action": "travel:lcq.location.command_tent",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_01",
+  "to": "lcq.stage_02"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_02",
+  "opportunity": "opportunity.lcq.s02_01.take_full_mandate",
+  "progressed": true
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_02",
+  "opportunity": "opportunity.lcq.s02_01.take_full_mandate",
+  "progressed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "hold_left_army_line",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "witness_wang_zhe_nine_suns",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "record_battlefield_aftermath",
+  "completed": true
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.route.wuyuan.arrive_market",
+  "settled": true,
+  "canonEventCompleted": false
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.route.wuyuan.market_to_pastry_street",
+  "settled": true,
+  "canonEventCompleted": false
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.action.wuyuan.delay_and_observe",
+  "settled": true,
+  "canonEventCompleted": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_enters_gamble",
+  "action": "see_ningyu_sent_into_gamble",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_enters_gamble",
+  "action": "answer_ningyu_on_debut",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.sudaji_south_pact",
+  "action": "offer_nylon_clue_for_term",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.sudaji_south_pact",
+  "action": "seal_three_month_south_pact",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.gamble_bond_signed",
+  "action": "confirm_rigged_wager_loss",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.gamble_bond_signed",
+  "action": "sign_the_bond",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.charge_sudaji_fee",
+  "action": "name_sixty_zhu_before_help",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.charge_sudaji_fee",
+  "action": "lock_fee_then_remove_device",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.free_ajiman",
+  "action": "take_ajiman_bond_in_hand",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.free_ajiman",
+  "action": "tear_bond_and_face_blockade",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.baihu_shangguan_escape",
+  "action": "walk_out_wuyuan_shangguan",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.wuerlang_joins",
+  "action": "confirm_wuerlang_no_prior_promise",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.wuerlang_joins",
+  "action": "secure_wuerlang_southbound",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.iron_bridge_ambush",
+  "action": "stabilize_wuerlang_on_route",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.iron_bridge_ambush",
+  "action": "break_iron_bridge_ambush",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_regicide_offer",
+  "action": "hear_ningyu_regicide_price",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_regicide_offer",
+  "action": "trace_ningyu_cold_qi_source",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.zixi_taiyi_intercept",
+  "action": "face_taiyi_at_zixi",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.zixi_taiyi_intercept",
+  "action": "pull_qiyuan_back_aboard",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.rainforest_black_shoal",
+  "action": "bear_rainforest_losses",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.rainforest_black_shoal",
+  "action": "follow_ningyu_fire_across_shoal",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.silent_sheyi_village",
+  "action": "travel:lcq.location.sheyi_village",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.silent_sheyi_village",
+  "action": "confirm_sheyi_dark_and_silent",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.silent_sheyi_village",
+  "action": "settle_caravan_in_silent_sheyi",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_02",
+  "to": "lcq.stage_03b_snake_flower_bridge"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_snake_flower_bridge_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_wanwu_night",
+  "action": "follow_xieyi_hint_into_woods",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_wanwu_night",
+  "action": "find_victim_and_ajia",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_yinzhu_xiongerpu",
+  "action": "yinzhu_strikes_ajia",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_yinzhu_xiongerpu",
+  "action": "burn_yinzhu_victim",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_03b_snake_flower_bridge",
+  "event": "lcq.event.s03b_yinzhu_xiongerpu",
+  "action": "pick_zhu88_as_guide",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_03b_snake_flower_bridge",
+  "to": "lcq.stage_04"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_05",
+  "action": "respond_to_flash_flood",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_05",
+  "action": "witness_yihu_last_stand",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_05",
+  "action": "stay_for_yibiao_farewell",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04",
+  "event": "lcq.event.s04_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_04",
+  "to": "lcq.stage_04b_lingfei_baiyi_crisis"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_07",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_08",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_09",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_10",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_11",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_12",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_xi_furen_trade_route",
+  "action": "hold_xi_furen_to_terms",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_xi_furen_trade_route",
+  "action": "seal_baiyi_trade_route",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_13",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+  "action": "travel:liuchao.location.south_wild_valley",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_14",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_15",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "event": "lcq.event.s04b_lingfei_baiyi_crisis_16",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "checkpoint",
+  "fixture": "zhaonan-mid",
+  "stage": "lcq.stage_04b_lingfei_baiyi_crisis",
+  "chapter": "lcq.chapter.s04b_lingfei_baiyi_crisis_mirror",
+  "focus": "lcq.event.xieyi_biling_war",
+  "completed": 17,
+  "active": 1,
+  "closedLines": [],
+  "lineOutcomes": {},
+  "nextStageId": "lcq.stage_05",
+  "nextStageReadyId": null,
+  "stallTurns": 0,
+  "location": "liuchao.location.biyu_village",
+  "expect": {
+   "railDone": 17,
+   "presentation": {
+    "chapterTitles": {
+     "lcq.event.s04b_lingfei_baiyi_crisis_01": "灵飞镜与鸦人",
+     "lcq.event.s04b_lingfei_baiyi_crisis_02": "灵飞镜与鸦人",
+     "lcq.event.s04b_lingfei_baiyi_crisis_03": "灵飞镜与鸦人",
+     "lcq.event.s04b_lingfei_baiyi_crisis_04": "灵飞镜与鸦人",
+     "lcq.event.s04b_lingfei_baiyi_crisis_05": "灵飞镜与鸦人",
+     "lcq.event.s04b_lingfei_baiyi_crisis_06": "白夷生变",
+     "lcq.event.s04b_lingfei_baiyi_crisis_07": "白夷生变",
+     "lcq.event.s04b_lingfei_baiyi_crisis_08": "白夷生变",
+     "lcq.event.s04b_lingfei_baiyi_crisis_09": "白夷生变",
+     "lcq.event.s04b_lingfei_baiyi_crisis_10": "白夷生变",
+     "lcq.event.s04b_lingfei_baiyi_crisis_11": "白夷生变",
+     "lcq.event.s04b_lingfei_baiyi_crisis_12": "白夷生变",
+     "lcq.event.s04b_lingfei_baiyi_crisis_13": "杀使与大潮",
+     "lcq.event.s04b_lingfei_baiyi_crisis_14": "杀使与大潮",
+     "lcq.event.s04b_lingfei_baiyi_crisis_15": "杀使与大潮",
+     "lcq.event.s04b_lingfei_baiyi_crisis_16": "杀使与大潮",
+     "lcq.event.s04b_lingfei_baiyi_crisis_17": "杀使与大潮",
+     "lcq.event.s04b_lingfei_baiyi_crisis_18": "杀使与大潮",
+     "lcq.event.s04b_lingfei_baiyi_crisis_19": "杀使与大潮",
+     "lcq.event.haishen_hall_merfolk": "海神殿",
+     "lcq.event.xieyi_biling_war": "杀使与大潮",
+     "lcq.event.weapon_deal_with_geluo": "商队与峒使",
+     "lcq.event.guiwangdong_coop_pact": "第85章·进峒之约",
+     "lcq.event.ice_gu_coercion": "",
+     "lcq.event.persuade_wuerlang": "",
+     "lcq.event.spot_dong_informant": "商队与峒使",
+     "lcq.event.ruins_ghost_warriors": "第82章·迎敌",
+     "lcq.event.enter_dong_with_migu": "第86章·随弥骨入峒",
+     "lcq.event.xiaozi_first_appears": "杀使与大潮",
+     "lcq.event.pull_harpoon_lemingzhu": "海神殿",
+     "lcq.event.regroup_caravan_envoy": "商队与峒使",
+     "lcq.event.wuerlang_slays_dagu": "第83章·虎威",
+     "lcq.event.yiyang_repels_yinsha": "第84章·阴煞",
+     "lcq.event.biling_bay_stance": "第80章·碧鲮前路",
+     "lcq.event.huamiao_coop_boundary": "第85章·进峒之约",
+     "lcq.event.s04b_xi_furen_trade_route": "杀使与大潮",
+     "lcq.event.zhu88_heimohai_chat": "灵飞镜与鸦人",
+     "lcq.event.side_biling_algae_silk": "杀使与大潮",
+     "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report": "",
+     "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter": "",
+     "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow": "",
+     "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon": ""
+    },
+    "chapterMusic": {
+     "lcq.chapter.s04b_lingfei_baiyi_crisis_mirror": "daily",
+     "lcq.chapter.s04b_lingfei_baiyi_crisis_baiyi": "daily",
+     "lcq.chapter.s04b_lingfei_baiyi_crisis_aftermath": "daily"
+    },
+    "eventMusic": {
+     "lcq.event.s04b_lingfei_baiyi_crisis_01": "danger",
+     "lcq.event.s04b_lingfei_baiyi_crisis_02": "battle",
+     "lcq.event.s04b_lingfei_baiyi_crisis_03": "battle",
+     "lcq.event.s04b_lingfei_baiyi_crisis_04": "explore",
+     "lcq.event.s04b_lingfei_baiyi_crisis_05": "explore",
+     "lcq.event.s04b_lingfei_baiyi_crisis_06": "court",
+     "lcq.event.s04b_lingfei_baiyi_crisis_07": "danger",
+     "lcq.event.s04b_lingfei_baiyi_crisis_08": "danger",
+     "lcq.event.s04b_lingfei_baiyi_crisis_09": "danger",
+     "lcq.event.s04b_lingfei_baiyi_crisis_10": "battle",
+     "lcq.event.s04b_lingfei_baiyi_crisis_11": "horror",
+     "lcq.event.s04b_lingfei_baiyi_crisis_12": "battle",
+     "lcq.event.s04b_lingfei_baiyi_crisis_13": "battle",
+     "lcq.event.s04b_lingfei_baiyi_crisis_14": "court",
+     "lcq.event.s04b_lingfei_baiyi_crisis_15": "danger",
+     "lcq.event.s04b_lingfei_baiyi_crisis_16": "explore",
+     "lcq.event.s04b_lingfei_baiyi_crisis_17": "battle",
+     "lcq.event.s04b_lingfei_baiyi_crisis_18": "explore",
+     "lcq.event.s04b_lingfei_baiyi_crisis_19": "explore",
+     "lcq.event.haishen_hall_merfolk": "blacksea",
+     "lcq.event.xieyi_biling_war": "daily",
+     "lcq.event.weapon_deal_with_geluo": "danger",
+     "lcq.event.guiwangdong_coop_pact": "aspire",
+     "lcq.event.ice_gu_coercion": "aspire",
+     "lcq.event.persuade_wuerlang": "theme",
+     "lcq.event.spot_dong_informant": "court",
+     "lcq.event.ruins_ghost_warriors": "daily",
+     "lcq.event.enter_dong_with_migu": "daily",
+     "lcq.event.xiaozi_first_appears": "daily",
+     "lcq.event.pull_harpoon_lemingzhu": "daily",
+     "lcq.event.regroup_caravan_envoy": "danger",
+     "lcq.event.wuerlang_slays_dagu": "battle",
+     "lcq.event.yiyang_repels_yinsha": "horror",
+     "lcq.event.biling_bay_stance": "battle",
+     "lcq.event.huamiao_coop_boundary": "intrigue",
+     "lcq.event.s04b_xi_furen_trade_route": "horror",
+     "lcq.event.zhu88_heimohai_chat": "daily",
+     "lcq.event.side_biling_algae_silk": "aspire",
+     "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report": "explore",
+     "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter": "horror",
+     "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow": "battle",
+     "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon": "blacksea"
+    },
+    "currentMusic": "daily",
+    "objectives": {
+     "lcq.event.s04b_lingfei_baiyi_crisis_01": "与武二郎商议明晚夺镜计划",
+     "lcq.event.s04b_lingfei_baiyi_crisis_02": "在鸦人营地救出乐明珠",
+     "lcq.event.s04b_lingfei_baiyi_crisis_03": "趁机斩杀鸦人首领",
+     "lcq.event.s04b_lingfei_baiyi_crisis_04": "送羊皮纸至云苍峰鉴定",
+     "lcq.event.s04b_lingfei_baiyi_crisis_05": "前往白夷祭坛寻找灵飞镜",
+     "lcq.event.s04b_lingfei_baiyi_crisis_06": "与花苗族长商议联手之事",
+     "lcq.event.s04b_lingfei_baiyi_crisis_07": "用水镜传讯联系苏妲己",
+     "lcq.event.s04b_lingfei_baiyi_crisis_08": "用灵飞镜查探白夷阴谋",
+     "lcq.event.s04b_lingfei_baiyi_crisis_09": "观察白夷族长变动",
+     "lcq.event.s04b_lingfei_baiyi_crisis_10": "追入地宫甬道躲避陷阱",
+     "lcq.event.s04b_lingfei_baiyi_crisis_11": "在战场应对血虎攻击",
+     "lcq.event.s04b_lingfei_baiyi_crisis_12": "协助凝羽突袭鬼王峒使者",
+     "lcq.event.s04b_lingfei_baiyi_crisis_13": "潜入地宫查明碧宛下落",
+     "lcq.event.s04b_lingfei_baiyi_crisis_14": "与商队商议前往碧鲮族",
+     "lcq.event.s04b_lingfei_baiyi_crisis_15": "质问谢艺关于阿夕异常",
+     "lcq.event.s04b_lingfei_baiyi_crisis_16": "向云苍峰打听岳帅旧闻",
+     "lcq.event.s04b_lingfei_baiyi_crisis_17": "在湿热盆地躲避鳄鱼袭击",
+     "lcq.event.s04b_lingfei_baiyi_crisis_18": "与谢艺讨论制造技术",
+     "lcq.event.s04b_lingfei_baiyi_crisis_19": "从被巨浪淹没的竹楼里脱身",
+     "lcq.event.haishen_hall_merfolk": "在海神殿抵御鲛人，护住受困的乐明珠",
+     "lcq.event.xieyi_biling_war": "听谢艺讲清碧鲮旧战与朱狐冠来历，并回应他希望你承接岳帅未竟之事",
+     "lcq.event.weapon_deal_with_geluo": "以兵器生意与鬼王峒使者阁罗化解危机",
+     "lcq.event.guiwangdong_coop_pact": "安置旧伤复发的凝羽，并与云氏、花苗结成探查鬼王峒的同行约定",
+     "lcq.event.ice_gu_coercion": "确认苏妲己以冰蛊逼迫南行，并在两日内组织南荒队伍",
+     "lcq.event.persuade_wuerlang": "劝住要折返五原的武二郎，并让商队继续南行",
+     "lcq.event.spot_dong_informant": "厘清兵器交易背后的危险，并处置偷听的鬼王峒眼线",
+     "lcq.event.ruins_ghost_warriors": "在古道废墟识别鬼王峒标记，并协助易彪守住阵地",
+     "lcq.event.enter_dong_with_migu": "随弥骨进入鬼王峒，阻止接待冲突升级并记清洞内路线与奴隶区",
+     "lcq.event.xiaozi_first_appears": "看清刚来问好的碧鲮少女",
+     "lcq.event.pull_harpoon_lemingzhu": "拔除鱼叉并稳定乐明珠伤势",
+     "lcq.event.regroup_caravan_envoy": "收拢残余商队，并确认鬼王峒使者已抵达海湾",
+     "lcq.event.wuerlang_slays_dagu": "撑住达古这一波围攻，看清武二郎能否打开缺口",
+     "lcq.event.yiyang_repels_yinsha": "护住苏荔并以一阳境阳气逼退阴煞",
+     "lcq.event.biling_bay_stance": "赶到碧鲮湾，打断焚村并看清他们此刻敢不敢站出来",
+     "lcq.event.huamiao_coop_boundary": "跟云苍峰谈清进鬼王峒的合作边界",
+     "lcq.event.s04b_xi_furen_trade_route": "与樨夫人谈清白夷族长与商路的交换条件",
+     "lcq.event.zhu88_heimohai_chat": "听朱老头聊聊黑魔海旧闻",
+     "lcq.event.side_biling_algae_silk": "霓龙丝的着落",
+     "lcq.event.s04b_lingfei_baiyi_crisis_07_ins_baihu_report": "水镜那头在等你开口。",
+     "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter": "要进峒了，她站不稳。",
+     "lcq.event.s04b_lingfei_baiyi_crisis_02_ins_lmz_crow": "她冲出去了。",
+     "lcq.event.pull_harpoon_lemingzhu_ins_lmz_harpoon": "她被鱼叉卡住了。"
+    }
+   },
+   "bakedPresentation": {
+    "events": [
+     "lcq.event.huamiao_coop_boundary"
+    ],
+    "chapters": []
+   },
+   "lineCompass": {
+    "current": {
+     "lineId": "nanhuang",
+     "name": "南荒",
+     "step": "<<COMPASS_POINTER>>",
+     "source": "focus"
+    },
+    "others": [
+     {
+      "lineId": "jin",
+      "name": "晋国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "song",
+      "name": "宋国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "han",
+      "name": "汉国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "tang",
+      "name": "唐国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "taiquan",
+      "name": "太泉古阵 · 时机未到",
+      "locked": true,
+      "hintLines": [
+       "王哲的托付还记着：「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」「如果未达六阳之境，根本无法进入太泉古阵。」六阳，差不多就是第五级坐照的修为——眼下还没到。",
+       "手头的事还没了结。至少还得先了结一处的大事，才腾得出手。"
+      ]
+     }
+    ],
+    "entryHints": []
+   }
+  }
+ }
+]
