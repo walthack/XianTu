@@ -1,0 +1,52 @@
+[
+  {
+    "note": "汉国：帝统归属在 dingtao_beijing 这一关定下。行尾：秦桧斩刘建",
+    "eventId": "lyg.event.s01_01",
+    "lineId": "han"
+  },
+  {
+    "note": "贾文和劫持定陶王",
+    "eventId": "lyg.event.s01_02",
+    "lineId": "han"
+  },
+  {
+    "note": "董卓挟持定陶王出洛都",
+    "eventId": "lyg.event.s01_03",
+    "lineId": "han"
+  },
+  {
+    "note": "霍子孟见吕雉",
+    "eventId": "lyg.event.s01_04",
+    "lineId": "han"
+  },
+  {
+    "note": "董卓拥立定陶王为帝",
+    "eventId": "lyg.event.s01_05",
+    "lineId": "han"
+  },
+  {
+    "note": "吕冀赐死",
+    "eventId": "lyg.event.s01_09",
+    "lineId": "han"
+  },
+  {
+    "note": "汉国：政变中段。这四条在隔离关 lyl.luoyang_coup 上，当前默认路线够不到， 先登记；该关的处置见 docs/R3-10-HAN-QUESTLINE-2026-08-16.md。行尾：天子暴毙消息传遍洛都",
+    "eventId": "lyl.event.s06_01",
+    "lineId": "han"
+  },
+  {
+    "note": "刘建攻占南宫与武库",
+    "eventId": "lyl.event.s06_03",
+    "lineId": "han"
+  },
+  {
+    "note": "长秋宫守卫战",
+    "eventId": "lyl.event.s06_04",
+    "lineId": "han"
+  },
+  {
+    "note": "吕奉先单骑破阵",
+    "eventId": "lyl.event.s06_06",
+    "lineId": "han"
+  }
+]
