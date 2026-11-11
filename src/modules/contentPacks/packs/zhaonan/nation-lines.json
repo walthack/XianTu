@@ -6,6 +6,8 @@
       "昭南"
     ],
     "countsTowardClosedLines": true,
-    "failureClosureEvents": []
+    "failureClosureEvents": [],
+    "judged": true,
+    "failEndsGame": false
   }
 ]

@@ -4,7 +4,7 @@
  * - 热改合并后：已登记叶子的范围 / 枚举 / 元组 → LCQ-NUM-008（与 004 并列，模块业务仍走 006）
  * 与 registerNumbersValidator 分工：registry = 结构／类型／粗范围；validator = 跨字段业务。
  */
-import { PACK_NATION_LINE_IDS, CLOSURE_TALLY_LINE_IDS, COMPASS_CONDITIONS } from '../contentPacks';
+import { PACK_NATION_LINE_IDS, CLOSURE_TALLY_LINE_IDS, JUDGED_LINE_IDS, COMPASS_CONDITIONS } from '../contentPacks';
 
 export type FieldKind = 'number' | 'int' | 'bool' | 'string' | 'object' | 'array' | 'tuple2';
 
@@ -69,7 +69,7 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'prompt', kind: 'object', section: 'runtime' },
 ];
 
-/** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读配置 story.lineOutcome.judgedLines，这里不写。
+/** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读各线包 nation-lines.json 的 judged（G4），这里不写。
  * 由各线包 manifest.nationLines 派生（秦线 PR C），顺序按包里的 order；加线只改包数据。 */
 export const NATION_LINE_IDS: readonly string[] = PACK_NATION_LINE_IDS;
 
@@ -199,8 +199,6 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'story.stepScene.minutesPerBeat', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.lineOutcome.tiers', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineOutcome.writeOnce', kind: 'bool', required: true, section: 'progress' },
-  { path: 'story.lineOutcome.judgedLines', kind: 'array', required: true, section: 'progress' },
-  { path: 'story.lineOutcome.failEndsGame', kind: 'object', required: true, section: 'progress' },
   { path: 'story.lineUnlock.taiquan.minRealmLevel', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.lineUnlock.taiquan.minClosedLines', kind: 'int', required: true, min: 0, section: 'progress' },
   { path: 'story.lineUnlock.taiquan.countTiers', kind: 'array', required: true, section: 'progress' },
@@ -358,24 +356,10 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
     if (Array.isArray(sworn) && sworn[1] !== rangeMax) errors.push('affinity.range.max 须等于 tiers.sworn[1]');
   }
 
-  // 交叉：判档线须为不重复的国家线 id；失败是否结束游戏须逐线配置，键正好是判档线，值为 bool
   const fatalEvents = atPath(tree, 'combat.sceneClose.fatalEventIds');
   if (Array.isArray(fatalEvents) && (fatalEvents.some(id => typeof id !== 'string' || !id.trim()) || new Set(fatalEvents).size !== fatalEvents.length)) errors.push('combat.sceneClose.fatalEventIds 须为不重复的非空事件 id');
-  const judgedLines = atPath(tree, 'story.lineOutcome.judgedLines');
-  const judged = Array.isArray(judgedLines) ? judgedLines : [];
-  judged.forEach((lineId, i) => {
-    if (typeof lineId !== 'string' || !NATION_LINE_IDS.includes(lineId)) errors.push(`未知国家线：story.lineOutcome.judgedLines[${i}]=${String(lineId)}`);
-    else if (judged.indexOf(lineId) !== i) errors.push(`判档线重复：story.lineOutcome.judgedLines[${i}]=${lineId}`);
-  });
-  const failEndsGame = atPath(tree, 'story.lineOutcome.failEndsGame');
-  if (kindOk(failEndsGame, 'object') && Array.isArray(judgedLines)) {
-    const table = failEndsGame as Record<string, unknown>;
-    for (const lineId of judged) if (typeof lineId === 'string' && !(lineId in table)) errors.push(`缺字段：story.lineOutcome.failEndsGame.${lineId}`);
-    for (const [lineId, value] of Object.entries(table)) {
-      if (!judged.includes(lineId)) errors.push(`非判档线：story.lineOutcome.failEndsGame.${lineId}（不在 story.lineOutcome.judgedLines）`);
-      else if (typeof value !== 'boolean') errors.push(`字段类型无效：story.lineOutcome.failEndsGame.${lineId} 须为 bool`);
-    }
-  }
+  // 判档线与失败是否结束游戏（G4）已搬进各线包 nation-lines.json 的 judged／failEndsGame，形状与「failEndsGame 只写在判档线上」由编译器校验；下文 minClosedLines 上限读判档线条数
+  const judged = JUDGED_LINE_IDS;
 
   // 交叉：整线解锁（太泉解锁设计稿 2026-10-27 §2）。键须为国家线（另可有 note）；每线只许 LINE_UNLOCK_KEYS；
   // minRealmLevel ≤ levels.max、minClosedLines ≤ 判档线条数（否则门永远打不开）、countTiers ⊆ lineOutcome.tiers 不重复；

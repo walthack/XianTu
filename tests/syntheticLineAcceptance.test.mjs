@@ -5,12 +5,12 @@
 // 仓库里的包、catalog、builtins、mod-kit 一律不碰（最后一项用例逐字节核对副本 src 与仓库 src，并核对仓库 catalog 未变）。
 //
 // 合成线用到的线级格式：manifest（dependsOn）、stages（包内关，3 拍 rail + 1 拍加拍 + 失败收束拍 + 口信拍）、texts、nationLines（注册、
-// 地区、计入收束、失败收束事件）、rails、railExtraBeats、stageMeta（称号、默认章、章配乐、事件章名／配乐／目标）、secondaryLines（after）、
+// 地区、计入收束、失败收束事件、判档 judged 与 failEndsGame（G4））、rails、railExtraBeats、stageMeta（称号、默认章、章配乐、事件章名／配乐／目标）、secondaryLines（after）、
 // lineCompass（含 closedWhen）、mapEntries、mapRoutes、compassConditions、lineCriticalEvents、contractRevisions、worldEvents（closes 指向本线）、
-// stageMeta.region（关 → 地区，G2）。G1（单次编译、跨关 done.*）与 G2 已修，原现状钉子改成了正向断言（用例 1、2、7），负例在用例 8。
+// stageMeta.region（关 → 地区，G2）。G1（单次编译、跨关 done.*）、G2 与 G4（判档线进包）已修，原现状钉子改成了正向断言（用例 1、2、4、7），负例在用例 8。
 // 不适用、只钉现状的：endings（结局实体在 mod-kit）、persistentEntries（只有 algae／rejoin 两种、各全局一条）、openWorldSlices（只有 TS 写死的 key 有读取方）。
 //
-// 「现状钉子」：标【缺口】的断言钉的是「目前加一条线还得改非包文件」的现状（G4–G7）；缺口修掉后这些断言会变红，届时把它们改成正向断言。
+// 「现状钉子」：标【缺口】的断言钉的是「目前加一条线还得改非包文件」的现状（G5–G7）；缺口修掉后这些断言会变红，届时把它们改成正向断言。
 // 缺口清单与建议修法见 accept-summary.md（结构验收报告）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -90,7 +90,7 @@ function syntheticPackFiles(template) {
       'zztest.rail.arrive.mustReach': '合成：抵达测试城。',
       'worldEvent.zzTestWorld.label': '开启测试世界事件', 'worldEvent.zzTestWorld.warning': '合成警告', 'worldEvent.zzTestWorld.transition': '合成过渡', 'worldEvent.zzTestWorld.blocked': '合成：此处不可用',
     },
-    'nation-lines.json': [{ lineId: LINE, order: 8, regions: [REGION], countsTowardClosedLines: true, failureClosureEvents: [EV('fail')] }],
+    'nation-lines.json': [{ lineId: LINE, order: 8, regions: [REGION], countsTowardClosedLines: true, failureClosureEvents: [EV('fail')], judged: true, failEndsGame: true }],
     'line-compass.json': { version: 1, lines: [{ lineId: LINE, nameKey: 'lineCompass.zz_test.name', anchorLine: LINE,
       closedWhen: [{ path: `done.${EV('settle')}`, operator: 'eq', value: true }], steps }] },
     'map-entries.json': [{ id: LINE, stageId: STAGE, eventId: EV('arrive'), locationId: LOC, readyPath: 'compass.zzTestReady', previewTextId: 'mapEntry.zz_test.preview',
@@ -236,8 +236,26 @@ test('4 计入收束：记为已收束后「已收束 N 条线」加一，number
   // 失败收束事件：编年史里有 zztest.event.fail 即按 unresolved 收束
   const failed = { modId: STAGE, flags: {}, completedEventIds: [EV('fail')], chronicle: [], events: [{ id: EV('fail') }] };
   assert.equal(LO.lineClosed(LINE, failed), true);
-  // 【缺口 G4】判档线（numbers story.lineOutcome.judgedLines／failEndsGame）不含新线：太泉解锁的「已收束判档线」不数它
-  assert.deepEqual(LO.closedLineIds(plus), ['nanhuang', 'jin']);
+  // G4 正向：本包写 judged: true 即是判档线（按 order 排在最后），numbers 不改；太泉解锁的「已收束判档线」数它
+  const nl = await M('modules/contentPacks/nationLines.ts');
+  assert.deepEqual([...nl.JUDGED_LINE_IDS], ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin', LINE]);
+  assert.deepEqual(nl.FAIL_ENDS_GAME, { nanhuang: false, jin: false, song: false, han: false, tang: false, qin: false, [LINE]: true });
+  assert.deepEqual([...LO.judgedLineIds()], [...nl.JUDGED_LINE_IDS]);
+  assert.equal(LO.lineFailEndsGame(LINE), true, '本包写的 failEndsGame: true 读得到');
+  assert.equal(LO.lineFailEndsGame('jin'), false);
+  assert.deepEqual(LO.closedLineIds(plus), ['nanhuang', 'jin', LINE]);
+  const flags = {};
+  assert.equal(LO.writeLineOutcome(flags, LINE, 'resolved'), true, '判档线可写收束档');
+  assert.deepEqual(flags, { [`line.${LINE}.outcome`]: 'resolved' });
+  const PL = await M('modules/scenarioMods/playerLedgerRules.ts');
+  assert.deepEqual(PL.validatePlayerLedgerRules({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [{ eventId: EV('settle'), lineId: LINE, outcome: 'resolved' }] }, { identities: [] }), [], '规则表可给本线写收束档（判档校验读包；线 id、事件 id 的缺省来源已并上包里的线与事件，不必进实体索引）');
+  const U = await M('modules/scenarioMods/lineUnlock.ts');
+  const onlyMine = { 角色: { 身份: {}, 属性: { 境界: '坐照' }, 位置: {}, 背包: { 金钱: {}, 物品: {} } }, 社交: { 关系: {} }, 系统: { 扩展: {} },
+    世界: { 状态: { 剧本模组: { modId: 'lcq.stage_01', flags: { [`line.${LINE}.outcome`]: 'resolved' }, completedEventIds: [], activeEventIds: [], chronicle: [] } } } };
+  const status = U.lineUnlockStatus(onlyMine, 'taiquan', { required: true });
+  assert.deepEqual(status.lines, { closedIds: [LINE], need: 1, short: 0 }, '太泉解锁数到本线');
+  assert.equal(status.missing.includes('lines'), false);
+  assert.equal(U.lineUnlockStatus({ ...onlyMine, 世界: { 状态: { 剧本模组: { ...onlyMine.世界.状态.剧本模组, flags: {} } } } }, 'taiquan', { required: true }).missing.includes('lines'), true, '对照：本线未收束时线数不够');
 });
 
 test('5 开局：从合成关 strict initializer 开局，沿 rail 推进到最后一拍，不抛错；线卡、收束、世界事件随之变化', async () => {
@@ -348,7 +366,7 @@ test('7 G1、G2 正向：跨关读本线 done.*、关→地区归本线；其余
   } finally { await rm(neg, { recursive: true, force: true }); }
 });
 
-test('8 负例：缺 dependsOn、地区重复登记、rail 引用不存在的事件、依赖不存在的包、stageMeta region（地区不存在、关不属于本包、与 overrides 重复），编译报错', async () => {
+test('8 负例：judged／failEndsGame 形状（G4）、缺 dependsOn、地区重复登记、rail 引用不存在的事件、依赖不存在的包、stageMeta region（地区不存在、关不属于本包、与 overrides 重复），编译报错', async () => {
   assert.ok(built);
   const { compileContentPacks } = await import(pathToFileURL(join(copy, 'scripts/content-packs.mjs')).href);
   const neg = await mkdtemp(join(copy, 'src/modules/contentPacks/_neg-'));
@@ -365,6 +383,15 @@ test('8 负例：缺 dependsOn、地区重复登记、rail 引用不存在的事
     const QIN_EVENT = 'liuchao.event.qin_hook_fangshi_rumor';
     await assert.rejects(await variant(f => f['secondary-lines.json'][0].anchorEventIds.push(QIN_EVENT)), new RegExp(`${PACK_ID.replace('.', '\\.')} references ${QIN_EVENT.replaceAll('.', '\\.')} owned by qingyu\\.qin; add dependsOn`));
     assert.ok(await (await variant(f => { f['secondary-lines.json'][0].anchorEventIds.push(QIN_EVENT); f['manifest.json'].dependsOn.push('qingyu.qin'); }))(), '补上 dependsOn 即通过');
+    // G4：judged／failEndsGame 形状——failEndsGame 只许写在 judged: true 的线上；类型须为布尔；判档线必写 failEndsGame
+    const nlEdit = patch => f => { const x = f['nation-lines.json'][0]; delete x.judged; delete x.failEndsGame; Object.assign(x, patch); };
+    await assert.rejects(await variant(nlEdit({ failEndsGame: false })), /nation line zz_test: failEndsGame is only for lines with judged: true/);
+    await assert.rejects(await variant(nlEdit({ judged: false, failEndsGame: true })), /nation line zz_test: failEndsGame is only for lines with judged: true/);
+    await assert.rejects(await variant(nlEdit({ judged: 'true', failEndsGame: false })), /nation line zz_test: judged must be true or false/);
+    await assert.rejects(await variant(nlEdit({ judged: true, failEndsGame: 'no' })), /nation line zz_test: judged line must set failEndsGame to true or false/);
+    await assert.rejects(await variant(nlEdit({ judged: true })), /nation line zz_test: judged line must set failEndsGame to true or false/);
+    assert.ok(!(await (await variant(nlEdit({})))()).nationLines.find(l => l.lineId === LINE).judged, '不写 judged＝不判档（同太泉），编译通过');
+    assert.ok(await (await variant(nlEdit({ judged: false })))(), 'judged: false 且不写 failEndsGame，编译通过');
     // 地区重复登记：秦国已归 qin 线
     await assert.rejects(await variant(f => { f['nation-lines.json'][0].regions = ['秦国']; }), /nation line zz_test: region 秦国 also registered to qin/);
     // rail 引用不存在的事件（报错文案不点事件名）

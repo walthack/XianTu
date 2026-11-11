@@ -1,7 +1,7 @@
 /**
  * 玩家账本规则表（身份账设计稿 2026-10-25 §3.1 / §6）：「事件 → 身份 / 收束档」的唯一映射。
  * 规则表 mod-kit/player-ledger-rules.json，身份定义 mod-kit/entity-catalog/identities.json；唯一道具组 itemGroups 见补充设计稿 2026-10-26 §2.2，在队账 partyJoins / partyLeaves / partyOpenings 见同稿 §3.2，进度期限 progressTicks / progressDeadlines 见同稿 §4.3；
- * 档位集合、判档线集合、身份 kind 集合与期限数值只读数值配置 story.lineOutcome.tiers / story.lineOutcome.judgedLines / story.identity.kinds / story.progressDeadline.limits，这里不写死。
+ * 档位集合、判档线集合、身份 kind 集合与期限数值只读数值配置 story.lineOutcome.tiers / story.identity.kinds / story.progressDeadline.limits 与各线包 nation-lines.json 的 judged（G4），这里不写死。
  */
 import rulesJson from '../../../mod-kit/player-ledger-rules.json';
 import identitiesJson from '../../../mod-kit/entity-catalog/identities.json';
@@ -10,7 +10,7 @@ import index from '../../../mod-kit/entity-catalog/index.json';
 import stageAccess from '../../../mod-kit/entity-catalog/stage-access.json';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { NATION_LINE_IDS } from '../sceneModule/numbersRegistry';
-import { CONTENT_PACKS } from '../contentPacks';
+import { CONTENT_PACKS, JUDGED_LINE_IDS } from '../contentPacks';
 
 export interface IdentityGrantRule {
   eventId: string;
@@ -21,7 +21,7 @@ export interface IdentityGrantRule {
   redirectIdentityId?: string;
 }
 export interface IdentityRevokeRule { eventId: string; identityId: string }
-/** outcome ∈ story.lineOutcome.tiers；lineId ∈ story.lineOutcome.judgedLines（太泉不判档） */
+/** outcome ∈ story.lineOutcome.tiers；lineId ∈ 判档线（各线包 nation-lines.json judged: true；太泉不判档） */
 export interface LineOutcomeRule { eventId: string; lineId: string; outcome: string }
 
 /** 唯一道具组（补充设计稿 2026-10-26 §2.2）：同一件东西在各书里的 id，组内任一件得过就不再发（口径读 story.itemProvenance.dedupeBy）。 */
@@ -175,11 +175,12 @@ export const identityKinds = (): readonly string[] => GAME_NUMBERS.story.identit
 export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: PlayerLedgerRefs = {}): string[] {
   const errors: string[] = [];
   const defs = refs.identities ?? playerIdentityDefs();
-  const eventIds = new Set(refs.eventIds ?? indexIds('event'));
-  const lineIds = new Set(refs.lineIds ?? indexIds('line'));
+  // 缺省来源并上内容包：事件用 knownEventIds()（实体索引 ∪ 包关与 overlay 的事件，G1），线并上包注册的国家线；新线写规则不必先进实体索引
+  const eventIds = new Set(refs.eventIds ?? knownEventIds());
+  const lineIds = new Set(refs.lineIds ?? [...indexIds('line'), ...NATION_LINE_IDS]);
   const factionIds = new Set(refs.factionIds ?? indexIds('faction'));
   const tiers = refs.tiers ?? GAME_NUMBERS.story.lineOutcome.tiers;
-  const judgedLines = refs.judgedLines ?? GAME_NUMBERS.story.lineOutcome.judgedLines;
+  const judgedLines = refs.judgedLines ?? JUDGED_LINE_IDS;
   const kinds = refs.kinds ?? identityKinds();
   const identityIds = new Set<string>();
 
