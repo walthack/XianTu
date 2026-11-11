@@ -1,5 +1,5 @@
 {
-  "version": "11f2443b94d2011a",
+  "version": "dec098c5c72998d1",
   "contracts": [
     {
       "meta": {
@@ -10114,6 +10114,9 @@
             },
             "exploration": {
               "role": "seed"
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act1"
             }
           },
           {
@@ -10170,6 +10173,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act1"
             }
           },
           {
@@ -10225,6 +10231,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act1"
             }
           },
           {
@@ -10280,6 +10289,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act1"
             }
           },
           {
@@ -10347,6 +10359,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act2"
             }
           },
           {
@@ -10412,6 +10427,9 @@
             },
             "exploration": {
               "role": "payoff"
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act2"
             }
           },
           {
@@ -10467,6 +10485,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act2"
             }
           },
           {
@@ -10531,6 +10552,9 @@
             },
             "exploration": {
               "role": "investigate"
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act2"
             }
           },
           {
@@ -10598,6 +10622,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act2"
             }
           },
           {
@@ -10653,6 +10680,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act2"
             }
           },
           {
@@ -10709,6 +10739,9 @@
                   }
                 }
               ]
+            },
+            "presentation": {
+              "uiChapterId": "lyg.chapter.qin_xianyang_act3"
             }
           }
         ],
@@ -10735,7 +10768,10 @@
               "liuchao.event.qin_yu_sisters_refuge",
               "liuchao.event.qin_yu_sisters_act2",
               "liuchao.event.qin_ningyu_coldtrace"
-            ]
+            ],
+            "presentation": {
+              "mood": "court"
+            }
           },
           {
             "id": "lyg.chapter.qin_xianyang_act1",
@@ -10845,6 +10881,182 @@
       "prerequisiteBeatId": "beat.ningyu.y5_rejoin",
       "label": "当面确认信笺仍是白纸",
       "grantsPreparation": "blank_letter_confirmed"
+    }
+  ],
+  "rails": [
+    {
+      "id": "qin.xianyang",
+      "modId": "lyg.qin_xianyang",
+      "chapterId": "lyg.chapter.qin_xianyang_prologue",
+      "orderedEventIds": [
+        "liuchao.event.qin_hook_fangshi_rumor",
+        "liuchao.event.qin_enter_xianyang",
+        "liuchao.event.qin_find_xu",
+        "liuchao.event.qin_entry_camp",
+        "liuchao.event.qin_king_refuses",
+        "liuchao.event.qin_xu_auspice",
+        "liuchao.event.qin_new_year_banquet",
+        "liuchao.event.qin_palace_sealed",
+        "liuchao.event.qin_succession_fight",
+        "liuchao.event.qin_purge_hunted",
+        "liuchao.event.qin_heimohai_message",
+        "liuchao.event.qin_xiaoling_villa",
+        "liuchao.event.qin_bo_family",
+        "liuchao.event.qin_close_default"
+      ],
+      "contracts": [
+        {
+          "eventId": "liuchao.event.qin_hook_fangshi_rumor",
+          "mustReach": "商会的一个伙计传来消息：咸阳宫里有个方士冒用程宗扬的名头出入秦宫；程宗扬决定亲自去咸阳问个明白。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "提前揭示方士在秦宫里的处境",
+            "提前演出入咸阳之后的剧情"
+          ],
+          "allowedElaboration": "可补足伙计传话的场面与程宗扬的反应；伙计只知道传闻，不知道秦宫内情。"
+        },
+        {
+          "eventId": "liuchao.event.qin_enter_xianyang",
+          "mustReach": "程宗扬入秦，在咸阳落脚；秦国以军功赐爵，商人进不了朝堂，见秦王成了第一道关。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "程宗扬一到咸阳就见到秦王",
+            "提前演出举鼎或宫变"
+          ],
+          "allowedElaboration": "可补足入秦途中与咸阳城中的见闻；不得改写秦国以军功赐爵、商人地位低的设定。"
+        },
+        {
+          "eventId": "liuchao.event.qin_find_xu",
+          "mustReach": "程宗扬在咸阳找到徐君房；徐君房说半路接到「程少主传来的话」才来咸阳办事，把程宗扬当成靠山。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "程宗扬承认自己传过话",
+            "提前揭示那对双胞胎的来历",
+            "提前演出祥瑞之托"
+          ],
+          "allowedElaboration": "可补足徐君房的方士做派与诉苦；没见过徐君房的存档按初见写，见过的按重逢写。"
+        },
+        {
+          "eventId": "liuchao.event.qin_entry_camp",
+          "mustReach": "程宗扬在城外军营替北地边军办妥马匹粮秣，结识一个只说自己是「公子稷手下」的无名小将，并攒下军功贵族的人情换来觐见秦王。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "点出小将的姓名",
+            "小将投靠程宗扬",
+            "提前演出争位"
+          ],
+          "allowedElaboration": "可补足军营操练与交割马匹粮秣的场面；小将只报「公子稷手下」，不报姓名。"
+        },
+        {
+          "eventId": "liuchao.event.qin_king_refuses",
+          "mustReach": "秦王嬴荡当面拒绝程宗扬的商会与财政提议；一位御前力士附和说王的修为没在阵上见过血，秦王变了脸色；程宗扬留在咸阳。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "秦王接受提议",
+            "程宗扬当场离开秦国",
+            "提前演出举鼎"
+          ],
+          "allowedElaboration": "可补足殿上的礼仪与问答；秦王回绝的理由是秦国靠军功立国，不得改写。"
+        },
+        {
+          "eventId": "liuchao.event.qin_xu_auspice",
+          "mustReach": "徐君房向程宗扬求助：那对双胞胎逼他准备登基大典和「黑龙降世」的祥瑞，弄不出来就杀他；秦王还活着却要备登基大典，成为疑点。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "提前揭示谁要登基",
+            "提前揭示那对双胞胎受谁雇用",
+            "秦王在本拍出事"
+          ],
+          "allowedElaboration": "可补足徐君房苦练水晶球的样子与程宗扬帮不帮的态度；只留下疑点，不给答案。"
+        },
+        {
+          "eventId": "liuchao.event.qin_new_year_banquet",
+          "mustReach": "年节宴上御前力士当众请王赏力、比试举鼎，秦王的腿被鼎砸断；程宗扬坐在偏殿，看不清殿上，只听到惨叫。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "程宗扬阻止举鼎",
+            "程宗扬亲眼看清谁动了手脚",
+            "秦王当场身亡"
+          ],
+          "allowedElaboration": "可补足宴席与偏殿的场面；程宗扬只看到听到偏殿能及的部分。"
+        },
+        {
+          "eventId": "liuchao.event.qin_palace_sealed",
+          "mustReach": "秦军封闭宫门、宫里杀了一夜；次日得知秦王当夜身亡、没有子嗣，身边高手被太后以护驾不力赐死。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "程宗扬救下秦王",
+            "秦王留下子嗣",
+            "提前演出争位"
+          ],
+          "allowedElaboration": "可补足封宫一夜的惊险与天亮后的传闻；死讯的细节只到原著所写。"
+        },
+        {
+          "eventId": "liuchao.event.qin_succession_fight",
+          "mustReach": "公子壮、公子雍带兵入宫争位又攻打公子芾，公子悝助兄；公子稷突然出现，手下一个小将带几十人击溃上千人，活捉公子壮、公子雍。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "点出小将的姓名",
+            "程宗扬出手左右胜负",
+            "提前演出清洗"
+          ],
+          "allowedElaboration": "可补足城中乱象与宫门前一战的场面；程宗扬只是旁观，不改胜负。"
+        },
+        {
+          "eventId": "liuchao.event.qin_purge_hunted",
+          "mustReach": "公子稷登基，芈夫人杀太后、公子壮、公子雍与一批大臣，自立为太后并封锁消息，几万人被押到河边斩首；广源行向新太后告密，程宗扬被当成政变幕后之人遭到追捕。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "程宗扬被捕",
+            "程宗扬阻止清洗",
+            "提前揭示举鼎之夜的真相"
+          ],
+          "allowedElaboration": "清洗只记事实，不细写行刑；可补足躲避搜捕的经过。见过苏骁的存档由他作内应，没见过的写成自称同乡的老卒。"
+        },
+        {
+          "eventId": "liuchao.event.qin_heimohai_message",
+          "mustReach": "黑魔海在秦国的人替宫里一位女官向程宗扬递话：举鼎那夜有人截了她的胡，愿与程宗扬互通消息；程宗扬不应不拒。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "授予或接受天命侯名分",
+            "点出那位女官的姓名",
+            "程宗扬与黑魔海结盟"
+          ],
+          "allowedElaboration": "可补足递话的场面；天命侯的名分在秦国不授、不接。"
+        },
+        {
+          "eventId": "liuchao.event.qin_xiaoling_villa",
+          "mustReach": "程宗扬在广源行咸阳别院发现一名被药物控制的女囚，听执事说「这是武穆王的女儿，留着跟星月湖讨价」；只作暗示，不给证据、不下判定。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "坐实女囚的身世",
+            "说出岳霏这个名字",
+            "本拍救出女囚"
+          ],
+          "allowedElaboration": "可补足潜入别院的经过；女囚为成年女子，不描写年龄与幼态。认得小玲儿的存档按旧敌重逢写。"
+        },
+        {
+          "eventId": "liuchao.event.qin_bo_family",
+          "mustReach": "帛十三被调往占城、帛十六接管秦国；帛十三留在咸阳的旧部私下投向程宗扬，说出帛家分国经营的规矩。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "帛十三或帛十六死在秦国",
+            "本拍拆掉广源行在秦国的盘子"
+          ],
+          "allowedElaboration": "可补足旧部开价与程宗扬盘算的场面；帛十三、帛十六本人不出场。"
+        },
+        {
+          "eventId": "liuchao.event.qin_close_default",
+          "mustReach": "秦国由芈太后与昭南一系把持，广源行坐收秦国财计；徐君房靠黑龙祥瑞保命，被派作秦国正使；程宗扬离开咸阳。",
+          "completionEvidence": [],
+          "forbiddenInCanon": [
+            "程宗扬推翻芈太后",
+            "徐君房死在秦国",
+            "提前演出秦国以外的后续"
+          ],
+          "allowedElaboration": "可补足离开咸阳前的安顿与回望；国家层面的结果按原著走向，不扩写决战结算。"
+        }
+      ]
     }
   ],
   "overlays": [

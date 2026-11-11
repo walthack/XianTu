@@ -5,7 +5,7 @@ import {createJiti} from 'jiti';
 import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './content-pack-quest-lines.mjs';
 import {compileTimeline} from './content-pack-timeline.mjs';
 const root=resolve(import.meta.dirname,'..');
-const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries','heldActions'];
+const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries','heldActions','rails'];
 const fields=['schemaVersion','id',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline'];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -13,7 +13,7 @@ const fail=s=>{throw new Error(`Content Pack: ${s}`);};
 const unique=(items,key,label)=>{const seen=new Set();for(const x of items){const id=key(x);if(typeof id!=='string'||!id.trim()||seen.has(id))fail(`${label} missing/duplicate id ${id}`);seen.add(id);}};
 /** Pure compiler: no writes until every pack validates. Paths confined to the source tree, including symlinks. */
 export async function compileContentPacks({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root,validateContracts=true}={}) {
- const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
+ const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],rails:[],overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
  const timelineInserts=[];
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set();
@@ -92,6 +92,23 @@ export async function compileContentPacks({packsDir=join(root,'src/modules/conte
   if(typeof h.label!=='string'||!h.label)fail(`held action missing label ${h.eventId}:${h.actionId}`);
  }
  unique(catalog.heldActions,h=>h.id||`${h.eventId||''}:${h.actionId||''}`,'held action');
+ // 正典 rail（秦线 PR B）：每条挂到一个已有关，同一关只登记一条；拍序只取该关的事件，合同与拍序逐位对齐；文案用 $text 引用包内正文。note 只给作者看，不进 catalog
+ unique(catalog.rails,r=>r?.modId,'rail modId');unique(catalog.rails,r=>r?.id,'rail');
+ catalog.rails=catalog.rails.map((raw,i)=>{
+  const at=`rail ${raw?.modId}`;
+  if(!object(raw)||Object.keys(raw).some(k=>!['id','modId','chapterId','orderedEventIds','contracts','note'].includes(k))||(raw.note!==undefined&&typeof raw.note!=='string'))fail(`${at}: invalid fields`);
+  const {note,...r}=resolveText(raw,`rails.${i}`);const stage=stages.get(r.modId);if(!stage)fail(`${at}: unknown stage`);
+  if(!(stage.scenario?.chapters||[]).some(c=>c.id===r.chapterId))fail(`${at}: chapter ${r.chapterId} not in stage`);
+  const own=new Set((stage.scenario?.events||[]).map(e=>e.id));const str=v=>typeof v==='string'&&v.length>0;
+  if(!Array.isArray(r.orderedEventIds)||!r.orderedEventIds.length||new Set(r.orderedEventIds).size!==r.orderedEventIds.length||r.orderedEventIds.some(id=>!own.has(id)))fail(`${at}: orderedEventIds must be distinct events of the stage`);
+  if(!Array.isArray(r.contracts)||r.contracts.length!==r.orderedEventIds.length||r.contracts.some((c,j)=>!object(c)||Object.keys(c).some(k=>!['eventId','mustReach','completionEvidence','forbiddenInCanon','allowedElaboration'].includes(k))||c.eventId!==r.orderedEventIds[j]||!str(c.mustReach)||!str(c.allowedElaboration)||!Array.isArray(c.completionEvidence)||!c.completionEvidence.every(str)||!Array.isArray(c.forbiddenInCanon)||!c.forbiddenInCanon.every(str)))fail(`${at}: invalid contracts`);
+  return r;
+ });
+ // 界面章名与配乐（秦线 PR B）：包内关的事件 presentation.uiChapterId 指向同一关已有章；章 presentation 只收 mood，取值为 musicLibrary.ts 的 MusicMood
+ {const music=await readFile(join(sourceRoot,'src/utils/musicLibrary.ts'),'utf8');const moods=new Set([...(music.match(/export type MusicMood =([^;]+);/)?.[1]||'').matchAll(/'([^']+)'/g)].map(x=>x[1]));if(!moods.size)fail('MusicMood not found in musicLibrary.ts');
+ for(const s of catalog.stages){const chapterIds=new Set((s.scenario?.chapters||[]).map(c=>c.id));
+  for(const e of s.scenario?.events||[])if(e.presentation?.uiChapterId!==undefined&&!chapterIds.has(e.presentation.uiChapterId))fail(`event ${e.id}: uiChapterId ${e.presentation.uiChapterId} is not a chapter of ${s.manifest.id}`);
+  for(const c of s.scenario?.chapters||[])if(c.presentation!==undefined&&(!object(c.presentation)||Object.keys(c.presentation).some(k=>k!=='mood')||!moods.has(c.presentation.mood)))fail(`chapter ${c.id}: invalid presentation`);}}
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);

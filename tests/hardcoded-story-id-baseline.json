@@ -14,7 +14,7 @@
   ],
   "总数": {
     "文件数": 71,
-    "行数": 1999
+    "行数": 1966
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -27,12 +27,12 @@
     "src/modules/scenarioMods/baihuGambleRefusal.ts": 12,
     "src/modules/scenarioMods/beatProgress.ts": 1,
     "src/modules/scenarioMods/branchDecision.ts": 6,
-    "src/modules/scenarioMods/canonRail.ts": 397,
+    "src/modules/scenarioMods/canonRail.ts": 367,
     "src/modules/scenarioMods/characterQuests.ts": 116,
     "src/modules/scenarioMods/characterResolver.ts": 25,
     "src/modules/scenarioMods/divergenceLedger.ts": 23,
     "src/modules/scenarioMods/endingPresentation.ts": 10,
-    "src/modules/scenarioMods/eventNarrativeView.ts": 42,
+    "src/modules/scenarioMods/eventNarrativeView.ts": 40,
     "src/modules/scenarioMods/fixedEndingNarratives.ts": 15,
     "src/modules/scenarioMods/fixedInventoryContracts.ts": 9,
     "src/modules/scenarioMods/fixedQuestObjectives.ts": 64,
@@ -84,15 +84,15 @@
     "src/services/characterRagService.ts": 1,
     "src/services/prompts/defaultPrompts.ts": 1,
     "src/utils/AIBidirectionalSystem.ts": 28,
-    "src/utils/musicLibrary.ts": 84,
+    "src/utils/musicLibrary.ts": 83,
     "src/utils/narrativePromptState.ts": 1,
     "src/utils/narrativeStateReconciler.ts": 21,
     "src/utils/prompts/cot/cotCore.ts": 1
   },
   "前缀模板行": {
-    "总数": 7,
+    "总数": 6,
     "按文件计数": {
-      "src/modules/scenarioMods/eventNarrativeView.ts": 6,
+      "src/modules/scenarioMods/eventNarrativeView.ts": 5,
       "src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts": 1
     }
   }

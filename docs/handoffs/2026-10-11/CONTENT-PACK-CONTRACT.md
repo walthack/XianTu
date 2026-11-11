@@ -49,3 +49,30 @@ F06–F09采用[31号合同原样归档](../../../mod-kit/source-documents/31-�
 ## 2026-10-28 stage 资源引用
 
 `stages` JSON 的值可用单键对象 `{"$text":"正文键"}` 引用该次编译合并的 pack texts，也可用 `{"$num":"story.qin.actionTimeCost"}` 引用数值权威。编译时递归替换后再做完整 stage schema 校验；缺键、混合字段对象立即失败，不生成半份 catalog。runtime 接收的仍是普通 ScenarioMod，不增加 TS 关卡注册或条件分支。
+
+## 2026-11-11 正典 rail 与界面展示字段（秦线 PR B）
+
+三个字段，下一条线照填即可；都只从编译后的 catalog 读，不读存档里烘焙的事件/章对象，旧档不用迁移。
+
+**manifest `rails`**：JSON 文件路径数组（与 `mapEntries` 同做法）。每个文件是 rail 档数组，一关一条：
+
+```json
+[{
+  "note": "可选，只给作者看，不进 catalog",
+  "id": "<rail id>", "modId": "<已有 stage id>", "chapterId": "<该关的 rail 章 id>",
+  "orderedEventIds": ["<该关事件 id>", "…"],
+  "contracts": [{
+    "eventId": "<与 orderedEventIds 同位的事件 id>",
+    "mustReach": {"$text": "<正文键>"}, "completionEvidence": [],
+    "forbiddenInCanon": [{"$text": "<正文键>"}], "allowedElaboration": {"$text": "<正文键>"}
+  }]
+}]
+```
+
+字段与 `CanonRailProfile` / `CanonRailContract` 相同；文案可写普通字符串或 `{"$text":…}`（引用 pack texts，编译时替换）。编译期校验：只认上列字段；`modId` 是已有 stage（内置或包内），同一 `modId`、同一 `id` 只登记一次；`chapterId` 是该关的章；`orderedEventIds` 不重复且都属于该关；`contracts` 与 `orderedEventIds` 逐位对齐，文案非空。运行时 `CANON_RAIL_PROFILES` = TS 手审档 + catalog `rails` + 生成档，再统一套 `DEFAULT_LINE_EXTRA_RAIL_BEATS`；同一 `modId` 不得同时留在 TS 里（测试钉数组长度等于 modId 去重数）。
+
+**事件 `presentation.uiChapterId`**（包内 stage）：界面章名改标同一关里这一章的标题，不改挂章、activation 与 rail 归属。用于整关停在 rail 章上、后几幕的拍仍要照幕标的情形。未写时 `storyChapterTitle` 用调用方给的回退（通常是当前所在章）。编译期校验指向同一关已有章 id。不进合同哈希（哈希只算 `playerCompletionContract`）。
+
+**章 `presentation.mood`**（包内 stage）：本章配乐，取值必须是 `src/utils/musicLibrary.ts` 的 `MusicMood`（编译期按源码里的类型声明校验）；章 `presentation` 目前只收 `mood`。`resolveMusicMoodForChapter` 先查 catalog，再回退 TS 里的 `CHAPTER_MOOD_MAP` 与模式规则。
+
+秦线示例：`packs/qingyu/rails.json`；`stage-qin-xianyang.json` 后三幕与三个条件拍的 `uiChapterId`、序幕章 `mood: "court"`。
