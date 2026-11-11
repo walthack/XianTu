@@ -13,8 +13,8 @@
     "playtest."
   ],
   "总数": {
-    "文件数": 61,
-    "行数": 653
+    "文件数": 60,
+    "行数": 588
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -42,7 +42,7 @@
     "src/modules/scenarioMods/liuchaoEntry.ts": 1,
     "src/modules/scenarioMods/loadRepairs.ts": 18,
     "src/modules/scenarioMods/locationLoot.ts": 2,
-    "src/modules/scenarioMods/mainQuestAxis.ts": 59,
+    "src/modules/scenarioMods/mainQuestAxis.ts": 4,
     "src/modules/scenarioMods/narrativeBoundaries.ts": 18,
     "src/modules/scenarioMods/narrativePerformanceGuard.ts": 1,
     "src/modules/scenarioMods/naturalIntentRouter.ts": 3,
@@ -60,7 +60,6 @@
     "src/modules/scenarioMods/shiweimoRescue.ts": 1,
     "src/modules/scenarioMods/storyContext.ts": 4,
     "src/modules/scenarioMods/strictInitializer.ts": 2,
-    "src/modules/scenarioMods/travel/locationIds.ts": 10,
     "src/modules/scenarioMods/travel/travelLedger.ts": 15,
     "src/modules/scenarioMods/voiceCards.ts": 2,
     "src/modules/scenarioMods/wuyuanOpenWorldSlice.ts": 32,

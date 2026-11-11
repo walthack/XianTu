@@ -331,6 +331,19 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的姿态／上限两段改为取人物包 `profiles.json` 原样转写（TS 表搬空后原来的源码解析取到 0 条）；源码解析辅助函数 `sourceEntries` 因此无人使用，已删。
 - catalog 只变 `characterProfiles` 段与 version；棘轮 `stanceProfiles.ts` 48 → 0、`affinityCaps.ts` 13 → 0（总数 1019 → 958，文件 68 → 66）。
 
+## 2026-11-11 地点别名与主轴进核心包（B3）
+
+核心包 `packs/qingyu/location-aliases.json`（manifest 新增 `locationAliases`）：原 `travel/locationIds.ts` 的 `TS_LOCATION_ID_ALIASES`（3 条）→ `canonical`、`TS_LOCATION_PARENTS`（4 条）→ `parents`、`TS_LOCATION_NAMES`（3 条）→ `display`，键序不变；原文件头的主策划／剧情裁定注释进文件顶层 `note`。三张 TS 表为 `{}`；`LOCATION_ID_ALIASES`（仍 `Object.freeze`，实体总表派生在前）／`LOCATION_PARENTS`／`LOCATION_NAMES` 与全部查询函数导出名、行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
+- 核心包不需要新的 `dependsOn`：引用的都是 `locations.json` 里的地点 id，归属扫描通过。
+- 留在 TS：`NANHUANG_CONTINENT_IDS`（`auditLocationIds` 的南荒多边形判断用的代码常量；`liuchao.continent.` 不在棘轮前缀表里，不计数）。
+- `tests/contentPackCoreCharacterFormats.test.mjs`：locationAliases 正例的合成三张表改为接在真实 catalog 段之后（原来整段换掉，真实数据搬进包后会被丢掉），合成地点另避开包里已用的 id；搬迁演练的地点一段改取 `location-aliases.json` 原样转写（同 B4 的姿态一段）。
+- catalog 只变 `locationAliases` 段与 version（`ed494b3d542c4086` → `db269708a589beff`）；棘轮 `travel/locationIds.ts` 10 → 0（总数 835 → 825，文件 67 → 66）。
+- 主轴（后半，裁定后续做）：核心包 `packs/qingyu/story-axis.json`（manifest 新增 `storyAxis`）：原 `mainQuestAxis.ts` 的 `TS_STAGE_ORDER`（37）→ `stageOrder`、`TS_MAIN_QUEST_LAYERS`（6）→ `layers`、`TS_MAIN_QUEST_STAGES`（18）→ `stages`、`TS_MAIN_QUEST_NODES`（16）→ `nodes`、`TS_MAIN_QUEST_REQUIREMENTS`（2）→ `requirements`，由脚本从 TS 模块求值结果直接转写，各段顺序与条目键序不变；`stageOrder` 原样照抄（编译期核对等于 `nextStageId` 链）。五张 TS 表同批清空为 `[]`；`STAGE_ORDER`／`MAIN_QUEST_*` 导出名、类型与 `resolveMainQuestNodes`／`resolveCurrentMainQuestNode`／`resolveMainQuestLayer`（及 `resolveStoryAxis`）不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
+  - 注释：条目内或条目之间的注释进紧随的那一条的 `note`（层 3 条、关 5 条、节点 5 条；节点表 baihu 之后、pending 之前的整段注释进下一条 pending 节点），表尾 `#20` 注释与来源说明进文件顶层 `note`；编译时剥掉。删掉的 63 行非空注释逐行核对过都在 JSON 里。
+  - **归属规则（B3 裁定）**：通用归属扫描跳过 `storyAxis.stages[].pillars`。它是编译期按枚举（`bloodline｜taiquan`）校验的闭集，不是 id 引用；`"taiquan"` 与太泉包的二级线 id 同名，而太泉包依赖核心包，不跳就成环。做法同 B1 跳过二级线 `after`（`scripts/content-packs.mjs` 的 `unscanned`），只跳这一个字段：storyAxis 里其余字段（`stages[].stageId`、节点的 `stageId`／`eventId`／`locationId`、`layers[].unlockStageIds` 等）照扫，跨包引用仍要 `dependsOn`；`pillars` 写枚举外的值仍编译报错。机制测试：`contentPackCoreCharacterFormats` 的「归属：storyAxis 的 pillars 不进通用扫描」正反例。
+  - 留在 TS：`mainQuestAxis.ts` 类型与文件头的设计说明注释里用反引号写的 4 处关 id（文件头「正典原文 `lcq.stage_02`」、`MainQuestRequirement` 的 JSDoc 两处、`MainQuestNode.locationId` 的字段说明），不是表条目，按裁定不改写。
+  - catalog 只变 `storyAxis` 段（`null` → 五段）与 version（`c1836130a7d5935c` → `f19d311861823a0d`）；棘轮 `mainQuestAxis.ts` 59 → 4（总数 808 → 753，文件数 65 不变）。
+
 ## 2026-11-11 塞外／昭南／晋／太泉的展示残留进各线包（B6）
 
 用 F0b 的格式把四条线 S4 之后留在框架 TS 的展示数据搬进各线包；包 JSON 由脚本从当前 TS 的求值结果转写（转写逻辑同 `contentPackPresentationFormats` 的搬迁演练），没有手抄。没有新增格式、没有改编译器。

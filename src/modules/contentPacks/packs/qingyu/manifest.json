@@ -50,5 +50,11 @@
   ],
   "secondaryLines": [
     "secondary-lines.json"
+  ],
+  "locationAliases": [
+    "location-aliases.json"
+  ],
+  "storyAxis": [
+    "story-axis.json"
   ]
 }

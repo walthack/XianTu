@@ -1,5 +1,5 @@
 {
-  "version": "2a57503bd6fe72d7",
+  "version": "c3325293ca4f4bb4",
   "contracts": [
     {
       "meta": {
@@ -20563,11 +20563,360 @@
       }
     ]
   },
-  "storyAxis": null,
+  "storyAxis": {
+    "stageOrder": [
+      "lcq.stage_01",
+      "lcq.stage_02",
+      "lcq.stage_03",
+      "lcq.stage_03b_snake_flower_bridge",
+      "lcq.stage_04",
+      "lcq.stage_04b_lingfei_baiyi_crisis",
+      "lcq.stage_05",
+      "lcq.stage_05b",
+      "lcq.stage_06",
+      "lcq.stage_07_qingyuan_jiankang",
+      "lcq.stage_08_jiankang_coup",
+      "lcq.stage_09_trade_and_escape",
+      "lcq.stage_10_jiangzhou_shadow_war",
+      "lcq.stage_11_lieshan_battle",
+      "lcq.stage_12_jiangzhou_counterwar",
+      "lyl.jiangzhou_retreat",
+      "lyl.lin_an_black_sea",
+      "lyl.lin_an_bridge",
+      "lyl.taiquan_expedition",
+      "lyl.xiaoyingzhou_blacksea_trap",
+      "lyl.taiquan_sacred_fruit",
+      "lyl.taiquan_core_conflict",
+      "lyl.taiquan_afterfall",
+      "lyl.luoyang_cloud_secret",
+      "lyl.luoyang_coup",
+      "lyl.han_palace_endgame",
+      "lyg.dingtao_beijing",
+      "lyg.mijing_rumen",
+      "lyg.han_succession",
+      "lyg.changgan_begins",
+      "lyg.shixiang_ambush",
+      "lyg.changgan_interlude",
+      "lyg.ganlu_bian",
+      "lyg.liangzhou_league",
+      "lyg.buddhist_conspiracy",
+      "lyg.ganlu_aftershock",
+      "lyg.shituolin_endgame"
+    ],
+    "layers": [
+      {
+        "layer": 1,
+        "text": "活下来，弄清自己是怎么来的。",
+        "unlockStageIds": []
+      },
+      {
+        "layer": 2,
+        "text": "王哲把三件事交给了你：拆锦囊、修为到六阳去太泉古阵祭祀、守护岳帅后人月霜。",
+        "unlockStageIds": [
+          "lcq.stage_02"
+        ]
+      },
+      {
+        "layer": 3,
+        "text": "身边这些人各自背着来历，小紫的尤其深。",
+        "unlockStageIds": [
+          "lcq.stage_05"
+        ]
+      },
+      {
+        "layer": 4,
+        "text": "太泉古阵里有说不通的东西——王哲要你去，恐怕不只是为了祭祀。",
+        "unlockStageIds": [
+          "lyl.taiquan_sacred_fruit"
+        ]
+      },
+      {
+        "layer": 5,
+        "text": "这地方是养人的——而且有人在按名册找人，你身边的人在名册上。",
+        "unlockStageIds": [
+          "lyl.taiquan_afterfall",
+          "lyl.han_palace_endgame",
+          "lyg.mijing_rumen"
+        ]
+      },
+      {
+        "layer": 6,
+        "text": "这世界本身在回滚你做的一切。",
+        "unlockStageIds": [],
+        "restricted": true
+      }
+    ],
+    "stages": [
+      {
+        "stageId": "lcq.stage_01",
+        "role": "落地：穿越、失去同伴",
+        "pillars": []
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "role": "王哲三托付；白湖脱身＝强制段终点",
+        "pillars": [
+          "bloodline",
+          "taiquan"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_03",
+        "role": "（旧包）白湖后续；不承担进南荒",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_03b_snake_flower_bridge",
+        "role": "小紫入队",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+        "role": "血脉揭示：岳帅遗腹女",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_05",
+        "role": "鬼王峒初探；碧姬线浮出",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_05b",
+        "role": "鬼王宫潜入",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lcq.stage_06",
+        "role": "唤龙授艺；碧姬线收束",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.lin_an_bridge",
+        "role": "赵飞燕线起点",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "role": "剑玉姬真身＝岳萼身份揭示；九阳交换",
+        "pillars": [
+          "bloodline",
+          "taiquan"
+        ]
+      },
+      {
+        "stageId": "lyl.taiquan_sacred_fruit",
+        "role": "太泉钥匙；赤阳圣果；高俅秘辛探身世",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.taiquan_core_conflict",
+        "role": "太泉蚁穴脱困",
+        "pillars": [
+          "taiquan"
+        ]
+      },
+      {
+        "stageId": "lyl.taiquan_afterfall",
+        "role": "探索人类居住区＝揭盅段；云如瑶＝岳霏",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyl.han_palace_endgame",
+        "role": "秘境入口（光柱；与太泉同系统，见上方注释）",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.mijing_rumen",
+        "role": "秘境续（小玲儿在本关窗口内被认定为超级用户，但事件层未落拍）；与太泉同系统",
+        "pillars": [
+          "taiquan",
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.han_succession",
+        "role": "赵飞燕·子嗣线（毕业生受孕锚）",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.changgan_interlude",
+        "role": "血脉：百衲衣寻岳霏",
+        "pillars": [
+          "bloodline"
+        ]
+      },
+      {
+        "stageId": "lyg.shituolin_endgame",
+        "role": "连载断点；鬼王线回响",
+        "pillars": []
+      }
+    ],
+    "nodes": [
+      {
+        "stageId": "lcq.stage_01",
+        "reviewSummary": "战场遇月霜，卓云君烈火救下你俩，太乙真宗教御全歼兽蛮",
+        "status": "ready",
+        "eventId": "lcq.event.s01_03",
+        "bloodlineBranch": "yueshuang"
+      },
+      {
+        "stageId": "lcq.stage_01",
+        "reviewSummary": "月霜强灌丹药，你在真阳驱使下与她性交，寒毒得解",
+        "status": "ready",
+        "eventId": "lcq.event.s01_06",
+        "bloodlineBranch": "yueshuang"
+      },
+      {
+        "stageId": "lcq.stage_01",
+        "reviewSummary": "王哲发现你身上有生死根，耗真气筑基，传下九阳神功口诀",
+        "status": "ready",
+        "eventId": "lcq.event.s01_05"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "接下王哲三托：保管锦囊、六阳后去太泉古阵、守护月霜",
+        "status": "ready",
+        "eventId": "lcq.event.s02_01"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "五原城把你当逃奴拿下，颈上烙了奴隶印记",
+        "status": "ready",
+        "eventId": "lcq.event.s02_04"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "地牢里阿姬曼引你出逃，出去就撞上戈龙等人设的局",
+        "status": "ready",
+        "eventId": "lcq.event.s02_05"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "识破白湖商馆主人苏妲己的伪装，被囚起来追问霓龙丝",
+        "status": "ready",
+        "eventId": "lcq.event.s02_06"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "凝羽奉苏妲己之命入局，你当面认清她的处境",
+        "status": "ready",
+        "eventId": "lcq.event.ningyu_enters_gamble"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "与苏妲己订下三月南荒之约：采不到霓龙丝就受炮烙",
+        "status": "ready",
+        "eventId": "lcq.event.sudaji_south_pact"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "为救凝羽对赌，苏妲己作弊加速刻香，你签下卖身契入了商馆奴籍",
+        "status": "ready",
+        "eventId": "lcq.event.gamble_bond_signed"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "替苏妲己取物之前谈定六十金铢",
+        "status": "ready",
+        "eventId": "lcq.event.charge_sudaji_fee"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "取得阿姬曼身契当面撕毁",
+        "status": "ready",
+        "eventId": "lcq.event.free_ajiman"
+      },
+      {
+        "stageId": "lcq.stage_02",
+        "reviewSummary": "从白湖商馆的死局里脱身，走出五原商馆",
+        "status": "ready",
+        "eventId": "lcq.event.baihu_shangguan_escape"
+      },
+      {
+        "stageId": "lyl.taiquan_afterfall",
+        "reviewSummary": "修为到六阳，开启古阵内的入口（未来待扩）",
+        "status": "pending"
+      },
+      {
+        "stageId": "lyl.taiquan_afterfall",
+        "reviewSummary": "小玲儿在太泉的那一拍（未来待扩）",
+        "status": "pending",
+        "bloodlineBranch": "xiaolinger"
+      },
+      {
+        "stageId": "lyg.han_succession",
+        "reviewSummary": "程赵之子这条血脉如何成立（未来待扩）",
+        "status": "pending",
+        "bloodlineBranch": "zhao"
+      }
+    ],
+    "requirements": [
+      {
+        "id": "taiquan_rite",
+        "text": "修为达六阳，前往太泉古阵祭祀故人。",
+        "basis": "lcq.stage_02 axisBeat ＋ MiniMax 全书重抽「修为达六阳后往太泉古阵祭祀故人」。曾推断的\"祭祀大阵＝系统入口\"已被全书扫描削弱（全书无\"祭祀大阵\"字样），故人身份未写明。"
+      },
+      {
+        "id": "bloodline_survivor",
+        "text": "至少保住一名岳血后裔。",
+        "basis": "ENDING-BLUEPRINT §11：接口＝岳血／岳魂，血脉线全员终战有功能位。不要求集齐。"
+      }
+    ]
+  },
   "locationAliases": {
-    "canonical": {},
-    "parents": {},
-    "display": {}
+    "canonical": {
+      "liuchao.location.xiong_er_pu": "liuchao.location.xiongerpu",
+      "liuchao.location.gui_wang_dong_palace": "liuchao.location.gui_wang_gong",
+      "liuchao.location.bai_yi_valley": "liuchao.location.baiyi"
+    },
+    "parents": {
+      "liuchao.location.gui_wang_gong": "liuchao.location.guiwang_dong",
+      "liuchao.location.gui_wang_gong.jingshen_tai": "liuchao.location.gui_wang_gong",
+      "lcq.location.guiwang_inn": "liuchao.location.guiwang_dong",
+      "liuchao.location.sea_temple": "liuchao.location.biyu_village"
+    },
+    "display": {
+      "liuchao.location.baiyi": {
+        "name": "白夷谷",
+        "displayAliases": [
+          "白夷族"
+        ]
+      },
+      "liuchao.location.gui_wang_gong": {
+        "name": "鬼王宫",
+        "displayAliases": [
+          "鬼王峒宫殿"
+        ]
+      },
+      "liuchao.location.longchi": {
+        "name": "龙池"
+      }
+    }
   },
   "characterProfiles": {
     "stance": [

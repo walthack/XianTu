@@ -1,0 +1,31 @@
+{
+  "note": "地点手写别名（canonical，原 TS_LOCATION_ID_ALIASES）、子地点 → 父地点（parents，原 TS_LOCATION_PARENTS）、规范名与显示别名（display，原 TS_LOCATION_NAMES），B3 原样搬入，键序不变。权威来源现为本文件，改了再跑 node scripts/content-packs.mjs。地点实体总表派生的别名仍在 travel/locationIds.ts 里先展开，本文件 canonical 排在其后。原文件头裁定注释：主策划 2026-10-03 裁定： 1. 同名同坐标的重复 id 并到下表规范侧； 2. 鬼王峒宫殿并入鬼王宫，鬼王宫是鬼王峒的子地点——进峒≠到宫，宫殿单独到达、单独解锁；坐标待校准； 3. 白夷谷并入 baiyi，规范名「白夷谷」，「白夷族」为显示别名； 4. 两个龙池是同一处，规范 id 取 liuchao.location.longchi；坐标冲突待校准。 剧情裁定：海神殿是碧鲮（biyu_village）的子地点。",
+  "canonical": {
+    "liuchao.location.xiong_er_pu": "liuchao.location.xiongerpu",
+    "liuchao.location.gui_wang_dong_palace": "liuchao.location.gui_wang_gong",
+    "liuchao.location.bai_yi_valley": "liuchao.location.baiyi"
+  },
+  "parents": {
+    "liuchao.location.gui_wang_gong": "liuchao.location.guiwang_dong",
+    "liuchao.location.gui_wang_gong.jingshen_tai": "liuchao.location.gui_wang_gong",
+    "lcq.location.guiwang_inn": "liuchao.location.guiwang_dong",
+    "liuchao.location.sea_temple": "liuchao.location.biyu_village"
+  },
+  "display": {
+    "liuchao.location.baiyi": {
+      "name": "白夷谷",
+      "displayAliases": [
+        "白夷族"
+      ]
+    },
+    "liuchao.location.gui_wang_gong": {
+      "name": "鬼王宫",
+      "displayAliases": [
+        "鬼王峒宫殿"
+      ]
+    },
+    "liuchao.location.longchi": {
+      "name": "龙池"
+    }
+  }
+}
