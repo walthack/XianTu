@@ -108,60 +108,28 @@ test('story.lineOutcome.tiers 必填非空', async () => {
   assert.deepEqual(numbers.GAME_NUMBERS.story.lineOutcome.tiers, before);
 });
 
-test('story.lineOutcome.failEndsGame 键正好是 judgedLines（太泉不判档）、值为 bool', async () => {
+test('G4：判档线与 failEndsGame 已搬进各线包 nation-lines.json，numbers 里不再有 story.lineOutcome.judgedLines／failEndsGame（太泉不判档）', async () => {
   const registry = await loadTs('../src/modules/sceneModule/numbersRegistry.ts');
   const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
+  const packs = await loadTs('../src/modules/contentPacks/index.ts');
   const lineIds = new Set(readJson('mod-kit/entity-catalog/index.json').entries.filter(e => e.kind === 'line').map(e => e.id));
   for (const id of registry.NATION_LINE_IDS) assert.ok(lineIds.has(id), `实体索引缺国家线 ${id}`);
-  const fresh = () => structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
-  const base = fresh();
-  const judged = registry.NATION_LINE_IDS.filter(id => id !== 'taiquan');
-  assert.deepEqual([...base.story.lineOutcome.judgedLines].sort(), [...judged].sort());
-  assert.deepEqual(Object.keys(base.story.lineOutcome.failEndsGame).sort(), [...base.story.lineOutcome.judgedLines].sort());
-  assert.ok(Object.values(base.story.lineOutcome.failEndsGame).every(v => v === false));
+  // 判档线＝国家线去掉太泉，顺序同 NATION_LINE_IDS；逐线失败可继续
+  assert.deepEqual(packs.JUDGED_LINE_IDS, registry.NATION_LINE_IDS.filter(id => id !== 'taiquan'));
+  assert.deepEqual(packs.FAIL_ENDS_GAME, Object.fromEntries(packs.JUDGED_LINE_IDS.map(id => [id, false])));
+  // numbers 与 registry 都不再登记这两个键
+  const base = structuredClone(readJson('mod-kit/game-numbers.qingyu.json'));
+  assert.equal('judgedLines' in base.story.lineOutcome, false);
+  assert.equal('failEndsGame' in base.story.lineOutcome, false);
+  assert.equal('judgedLines' in numbers.GAME_NUMBERS.story.lineOutcome, false);
+  assert.equal('failEndsGame' in numbers.GAME_NUMBERS.story.lineOutcome, false);
+  assert.equal(registry.FIELD_SPECS.some(s => s.path === 'story.lineOutcome.judgedLines' || s.path === 'story.lineOutcome.failEndsGame'), false);
   assert.deepEqual(registry.validateAgainstRegistry(base, 'cold'), []);
-  // 缺线
-  const missing = fresh();
-  delete missing.story.lineOutcome.failEndsGame.qin;
-  assert.ok(registry.validateAgainstRegistry(missing, 'cold').some(e => e === '缺字段：story.lineOutcome.failEndsGame.qin'));
-  // 多线：非判档的太泉、未知线都拒
-  const extra = fresh();
-  extra.story.lineOutcome.failEndsGame.taiquan = false;
-  extra.story.lineOutcome.failEndsGame.chu = true;
-  const extraErrors = registry.validateAgainstRegistry(extra, 'cold');
-  assert.ok(extraErrors.some(e => e.startsWith('非判档线：story.lineOutcome.failEndsGame.taiquan')));
-  assert.ok(extraErrors.some(e => e.startsWith('非判档线：story.lineOutcome.failEndsGame.chu')));
-  // 判档线集合走配置：把太泉加进 judgedLines 并补键即通过
-  const withTaiquan = fresh();
-  withTaiquan.story.lineOutcome.judgedLines.push('taiquan');
-  withTaiquan.story.lineOutcome.failEndsGame.taiquan = false;
-  assert.deepEqual(registry.validateAgainstRegistry(withTaiquan, 'cold'), []);
-  // judgedLines：未知线、重复、空、缺失
-  const badJudged = fresh();
-  badJudged.story.lineOutcome.judgedLines.push('chu', 'jin');
-  const badErrors = registry.validateAgainstRegistry(badJudged, 'cold');
-  assert.ok(badErrors.some(e => e === '未知国家线：story.lineOutcome.judgedLines[6]=chu'));
-  assert.ok(badErrors.some(e => e === '判档线重复：story.lineOutcome.judgedLines[7]=jin'));
-  const emptyJudged = fresh();
-  emptyJudged.story.lineOutcome.judgedLines = [];
-  assert.ok(registry.validateAgainstRegistry(emptyJudged, 'cold').some(e => /judgedLines 不能为空数组/.test(e)));
-  const noJudged = fresh();
-  delete noJudged.story.lineOutcome.judgedLines;
-  assert.ok(registry.validateAgainstRegistry(noJudged, 'cold').some(e => e === '缺字段：story.lineOutcome.judgedLines'));
-  // 值不是 bool
-  const wrong = fresh();
-  wrong.story.lineOutcome.failEndsGame.song = 'yes';
-  assert.ok(registry.validateAgainstRegistry(wrong, 'cold').some(e => /failEndsGame\.song 须为 bool/.test(e)));
-  // 整段缺失
-  const absent = fresh();
-  delete absent.story.lineOutcome.failEndsGame;
-  assert.ok(registry.validateAgainstRegistry(absent, 'cold').some(e => e === '缺字段：story.lineOutcome.failEndsGame'));
-  // 热改加未知线被拒，原值不变
-  assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { failEndsGame: { taiquan: false } } } }), err => err.code === 'LCQ-NUM-002');
-  assert.equal('taiquan' in numbers.GAME_NUMBERS.story.lineOutcome.failEndsGame, false);
-  // 热改缩判档线而不删键被拒，原值不变
-  assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { judgedLines: ['jin'] } } }), err => err.code === 'LCQ-NUM-008');
-  assert.equal(numbers.GAME_NUMBERS.story.lineOutcome.judgedLines.length, judged.length);
+  // 热改（tuning.json）再写这两个键：未知数值配置，整份拒绝，原值不变
+  assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: true } } } }), err => err.code === 'LCQ-NUM-002');
+  assert.throws(() => numbers.applyGameNumbers({ story: { lineOutcome: { judgedLines: ['jin'] } } }), err => err.code === 'LCQ-NUM-002');
+  assert.equal('failEndsGame' in numbers.GAME_NUMBERS.story.lineOutcome, false);
+  assert.equal('judgedLines' in numbers.GAME_NUMBERS.story.lineOutcome, false);
 });
 
 test('diagnostics.debug.categories 必填 object', async () => {

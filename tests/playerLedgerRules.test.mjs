@@ -21,10 +21,10 @@ test('仓库秦线收束规则与只读身份定义通过校验', async () => {
   assert.deepEqual(validatePlayerLedgerRules(table), []);
 });
 
-test('太泉不判档：收束规则的 lineId 须在 story.lineOutcome.judgedLines', async () => {
+test('太泉不判档：收束规则的 lineId 须是判档线（各线包 nation-lines.json judged，G4）', async () => {
   const { validatePlayerLedgerRules } = await modPromise;
-  const numbers = await loadTs('../src/modules/sceneModule/numbers.ts');
-  assert.equal(numbers.GAME_NUMBERS.story.lineOutcome.judgedLines.includes('taiquan'), false);
+  const packs = await loadTs('../src/modules/contentPacks/index.ts');
+  assert.equal(packs.JUDGED_LINE_IDS.includes('taiquan'), false);
   const table = rules({ lineOutcomes: [{ eventId: EVENT, lineId: 'taiquan', outcome: 'resolved' }] });
   // 太泉是已知国家线（实体索引 kind=line），报的是非判档而不是未知
   assert.deepEqual(validatePlayerLedgerRules(table, { identities: [] }), [`收束规则 ${EVENT} → taiquan：lineId 不在 story.lineOutcome.judgedLines（非判档线不写收束档）：taiquan`]);

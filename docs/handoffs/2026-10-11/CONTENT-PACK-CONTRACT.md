@@ -448,3 +448,17 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
   - 取舍：没选 `nation-lines.json` 加 `stageIds`，因为那样映射的是关→线，地区还得另外推，而一条线可以有多个地区。也没选给包内关 manifest 加字段，因为那会改 ScenarioMod 的 schema，内置关也共用这个 schema。`stageMeta` 本来就是「包对某一关的元数据」，按 stageId 全局唯一、已经进归属扫描，加一个字段改动最小。
   - 现有八条线不搬：`stageRegions` 留在 overrides 原地（含秦包关 `lyg.qin_xianyang`）。
 - **测试**：`syntheticLineAcceptance` 用例 1、2、7 的 G1、G2 现状钉子改成正向断言：单次编译与 `--check` 通过；副本里改动的非包文件只有 catalog.json，实体索引逐字节不变；离开本关后跨关读到本线事件、`closedWhen` 收束生效；`STAGE_REGION`、`lineOfStage` 认得新关，下一步表没写的拍也归本线，地区立足度计入本关。用例 8 加了负例：下一步表 eventId 与 closedWhen 指向不存在的事件、地区不存在、空串、内置关、别包的关缺 dependsOn、与 overrides 重复（同值）。G4–G7 的钉子不变。
+
+## 2026-11-12 判档线与「失败是否结束游戏」进各线包（G4）
+
+结构验收的缺口 G4：判档线集合（太泉解锁数的「已收束判档线」、收束档写入口、规则表 lineId 校验都读它）与逐线「失败是否结束游戏」原在 numbers 的 `story.lineOutcome.judgedLines`／`failEndsGame`，加线要改 numbers。现搬进各线包 `nation-lines.json`（用户 2026-11-11 15:06 批准「把 numbers 里的剧情映射搬进内容包」）。取值逐项不变：判档线仍是 nanhuang、jin、song、han、tang、qin，顺序相同，六条 `failEndsGame` 全 false；太泉不判档。
+
+- **格式**：`nation-lines.json` 条目加两个可选字段 `judged`、`failEndsGame`，例如 `{"lineId":"qin","order":6,"regions":["秦国"],"countsTowardClosedLines":false,"judged":true,"failEndsGame":false}`。
+  - `judged`：布尔，缺省＝不判档。六条判档线写 `true`，太泉不写。
+  - `failEndsGame`：布尔，**只许、且必须**写在 `judged: true` 的线上（即原「键须正好是 judgedLines」）。
+- **编译期校验**（`scripts/content-packs.mjs`，接在阶段 2a 的 nationLines 新字段校验之后）：`judged must be true or false`；`failEndsGame is only for lines with judged: true`（不写 judged 或 `judged:false` 时写了 failEndsGame）；`judged line must set failEndsGame to true or false`（判档线缺写或类型不对）。键白名单加这两个字段。原 registry 的「元素须为国家线 id、不重复」由 lineId 唯一性天然保证；**不再要求判档线至少一条**（局部编译合法），实际约束由 registry 的 `minClosedLines ≤ 判档线条数` 兜底。
+- **顺序**：判档线顺序＝`catalog.nationLines` 的 order 顺序（编译器已排好），与原 numbers 数组逐项相同。读顺序的只有 `closedLineIds`（`judgedLineIds().filter(...)`，太泉解锁的 `lines.closedIds` 随之）。
+- **运行时**：`nationLines.ts` 新导出 `JUDGED_LINE_IDS`（按 order）、`FAIL_ENDS_GAME`（判档线 → 布尔，非判档线没有键），经 `contentPacks/index.ts` 转导出。`lineOutcomes.ts` 的 `judgedLineIds()`、`lineFailEndsGame()` 名字与签名不变，改读这两个常量（`lineFailEndsGame` 加了 own-property 判断，原型链键恒 false）；`playerLedgerRules.ts` 校验的缺省判档集合改为 `JUDGED_LINE_IDS`（`refs.judgedLines` 参数保留）；`numbersRegistry.ts` 删两条 FIELD_SPEC 与原交叉校验段，`minClosedLines` 上限改读 `JUDGED_LINE_IDS.length`。报错／日志文案（`LCQ-SAV-024`、规则表「lineId 不在 story.lineOutcome.judgedLines」、`minClosedLines > story.lineOutcome.judgedLines 条数`）为保持逐字节等价**原样未改**，文案里的旧键名已不存在，留待以后统一改。
+- **numbers**：删 `story.lineOutcome.judgedLines`、`story.lineOutcome.failEndsGame`，改写 `lineOutcome.note` 相应半句；`tiers`、`writeOnce`、`story.lineUnlock`（含其 note 里提到 judgedLines 的半句）不动；重生 `game-numbers.qingyu.json`。tuning.json 若含这两个键会被 LCQ-NUM-002 整份拒绝（同 2a/2b），上线前确认部署那份。热改不再能改判档线或 failEndsGame（原来可以），改它们要改包并重编译。
+- **catalog**：只有 `nationLines` 六条各多两个字段与 version（`8d9aa2e611643877` → `518235dc6c3271a1`，内置模组重新播种一次）；删 catalog 后单次重建逐字节相同。
+- **测试**：`tests/g4JudgedLinesGolden.test.mjs`（新，22 项）在旧代码上冻结判档线集合与顺序、逐线 failEndsGame、逐线写档与规则表判档校验、16 份旧档与 5 种合成档的 `closedLineIds`（三种档位口径）、`nationClosedLineCount`、太泉 `lineUnlockStatus` 与 `unlock.taiquan` 读数，搬迁后逐字节不变。`syntheticLineAcceptance` 用例 4 的 G4 钉子改成正向断言（合成线写 `judged:true, failEndsGame:true` 后进判档线、`closedLineIds` 与太泉解锁数到它、`lineFailEndsGame` 读到 true），用例 8 加形状负例。G5–G7 的钉子不变（G3 在该测试里本来就没有钉子）。

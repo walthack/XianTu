@@ -10,6 +10,10 @@ export interface NationLine {
   countsTowardClosedLines: boolean;
   /** 失败收束事件（任一已完成即判本线 unresolved 收束；阶段 2a 自 numbers 的 story.lineOutcome.failureClosureEvents 搬来），只许计入线写，缺省为空 */
   failureClosureEvents?: string[];
+  /** 是否判收束档（G4 自 numbers 的 story.lineOutcome.judgedLines 搬来），缺省为不判档（太泉不写） */
+  judged?: boolean;
+  /** 该判档线失败（unresolved）是否当场结束游戏（G4 自 numbers 的 story.lineOutcome.failEndsGame 搬来）；只许、且必须写在 judged: true 的线上 */
+  failEndsGame?: boolean;
 }
 
 /** 参数化派生条件 compass.<id>（阶段 2a，各包 manifest.compassConditions）：已收束的计入线数 ≥ min；min 是整数或数值权威路径（运行时现读，热改有效）；
@@ -30,6 +34,12 @@ export const CLOSURE_TALLY_LINE_IDS: readonly string[] = NATION_LINES.filter(lin
 
 /** 计入线 → 失败收束事件（没写为空表）；非计入线没有键。 */
 export const FAILURE_CLOSURE_EVENTS: Readonly<Record<string, readonly string[]>> = Object.fromEntries(NATION_LINES.filter(line => line.countsTowardClosedLines).map(line => [line.lineId, line.failureClosureEvents ?? []]));
+
+/** 判档线 id（judged: true），顺序同 NATION_LINES（按 order）。 */
+export const JUDGED_LINE_IDS: readonly string[] = NATION_LINES.filter(line => line.judged === true).map(line => line.lineId);
+
+/** 判档线 → 失败是否结束游戏（编译器保证判档线都写了布尔）；非判档线没有键。 */
+export const FAIL_ENDS_GAME: Readonly<Record<string, boolean>> = Object.fromEntries(NATION_LINES.filter(line => line.judged === true).map(line => [line.lineId, line.failEndsGame === true]));
 
 /** 包声明的参数化派生条件（编译器已查过 id 唯一、不是保留 id anyLineClosed）。 */
 export const COMPASS_CONDITIONS: readonly CompassCondition[] = (raw as unknown as { compassConditions: CompassCondition[] }).compassConditions;

@@ -154,7 +154,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // 运行时 NATION_LINE_IDS（numbersRegistry.ts）与地区→线映射都从它派生；编译期一律用这次编译出的值，不读磁盘上的旧 catalog（M2）
  {const byOrder=new Map(),byRegion=new Map(),str=v=>typeof v==='string'&&v.trim().length>0;
   for(const {packId,value:x} of nationLines){const at=`nation line ${x?.lineId}`;
-   if(!object(x)||Object.keys(x).some(k=>!['lineId','order','regions','countsTowardClosedLines','failureClosureEvents'].includes(k))||!str(x.lineId)||!Number.isSafeInteger(x.order)||x.order<1||!Array.isArray(x.regions)||!x.regions.length||!x.regions.every(str)||new Set(x.regions).size!==x.regions.length)fail(`${at}: invalid fields`);
+   if(!object(x)||Object.keys(x).some(k=>!['lineId','order','regions','countsTowardClosedLines','failureClosureEvents','judged','failEndsGame'].includes(k))||!str(x.lineId)||!Number.isSafeInteger(x.order)||x.order<1||!Array.isArray(x.regions)||!x.regions.length||!x.regions.every(str)||new Set(x.regions).size!==x.regions.length)fail(`${at}: invalid fields`);
    if(byOrder.has(x.order))fail(`${at}: order ${x.order} also used by ${byOrder.get(x.order)}`);byOrder.set(x.order,x.lineId);
    for(const r of x.regions){if(byRegion.has(r))fail(`${at}: region ${r} also registered to ${byRegion.get(r)} (${packId})`);byRegion.set(r,x.lineId);}}
   catalog.nationLines=nationLines.map(x=>x.value).sort((a,b)=>a.order-b.order);unique(catalog.nationLines,x=>x.lineId,'nation line');}
@@ -168,6 +168,12 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
    if(!Array.isArray(f)||!f.every(str)||new Set(f).size!==f.length)fail(`${at}: failureClosureEvents must be distinct non-empty event ids`);
    for(const id of f)if(!events.has(id))fail(`${at}: failureClosureEvents: unknown event ${id}`);}
  }
+ // G4：判档线与「失败是否结束游戏」（原 numbers 的 story.lineOutcome.judgedLines／failEndsGame）搬进各线 nation-lines.json：judged 可选、布尔，缺省＝不判档（太泉不写）；
+ // failEndsGame 只许、且必须写在 judged: true 的线上（原「键须正好是 judgedLines」），布尔。判档线顺序＝catalog.nationLines 的 order 顺序
+ for(const x of catalog.nationLines){const at=`nation line ${x.lineId}`;
+  if(x.judged!==undefined&&typeof x.judged!=='boolean')fail(`${at}: judged must be true or false`);
+  if(x.judged!==true){if(x.failEndsGame!==undefined)fail(`${at}: failEndsGame is only for lines with judged: true`);continue;}
+  if(typeof x.failEndsGame!=='boolean')fail(`${at}: judged line must set failEndsGame to true or false`);}
  // 线顺序（右栏「别处」的显示顺序）与包顺序无关：按这次编译出的 nationLines 顺序稳定排序
  {const ids=catalog.nationLines.map(x=>x.lineId);const rank=id=>{const i=ids.indexOf(id);return i<0?Infinity:i;};catalog.lineCompass.lines.sort((x,y)=>rank(x?.lineId)-rank(y?.lineId));}
  {const catalogLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));const stageOfEvent=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,s])));for(const line of catalog.lineCompass.lines)for(const step of line.steps||[]){if(typeof step.eventId!=='string'||step.pending||!events.has(step.eventId)||step.eventId in catalog.lineCompassPlaces)continue;const locationId=events.get(step.eventId).locationId;const name=locationId?String((stageOfEvent.get(step.eventId)?.canon?.locations||[]).find(l=>l?.id===locationId)?.name||catalogLocationNames[locationId]||''):'';catalog.lineCompassPlaces[step.eventId]=name;catalog.lineCompassPlaceIds[step.eventId]=locationId||'';}}

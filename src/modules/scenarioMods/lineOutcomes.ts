@@ -1,22 +1,22 @@
 /**
  * 国家线收束档（身份账设计稿 2026-10-25 §3.2 / §3.3）：写进 flags 扁平键 line.<lineId>.outcome，不另加存档字段。
- * 档位集合（resolved/unresolved；「没去」＝无收束记录，不是档位）、是否只写一次、判档线集合、失败是否结束游戏只读数值配置 story.lineOutcome.{tiers,writeOnce,judgedLines,failEndsGame}；写入只由规则表驱动，按完成顺序幂等同步。
+ * 档位集合（resolved/unresolved；「没去」＝无收束记录，不是档位）与是否只写一次只读数值配置 story.lineOutcome.{tiers,writeOnce}；判档线集合与失败是否结束游戏读各线包 nation-lines.json 的 judged／failEndsGame（G4）；写入只由规则表驱动，按完成顺序幂等同步。
  * 「这条线收束了没有」只有一个读取点 lineClosed（总策划定，真机 1f9f24127b4e 报告③）：当前线卡、compass.anyLineClosed、太泉解锁都读它。
  */
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { orderedDoneEventIds, playerLedgerRules, type PlayerLedgerRules } from './playerLedgerRules';
 import { logError } from '../diagnostics/log';
 import { debugEnabled, debugLog } from '../diagnostics/debugLog';
-import { CONTENT_PACKS, CLOSURE_TALLY_LINE_IDS, FAILURE_CLOSURE_EVENTS } from '../contentPacks';
+import { CONTENT_PACKS, CLOSURE_TALLY_LINE_IDS, FAILURE_CLOSURE_EVENTS, JUDGED_LINE_IDS, FAIL_ENDS_GAME } from '../contentPacks';
 
 export const lineOutcomeTiers = (): readonly string[] => GAME_NUMBERS.story.lineOutcome.tiers;
 
-/** 判档线集合（story.lineOutcome.judgedLines；用户 2026-10-26 定太泉不判档）。 */
-export const judgedLineIds = (): readonly string[] => GAME_NUMBERS.story.lineOutcome.judgedLines;
+/** 判档线集合（各线包 nation-lines.json judged: true，按 order；G4 自 numbers 的 story.lineOutcome.judgedLines 搬来；用户 2026-10-26 定太泉不判档）。 */
+export const judgedLineIds = (): readonly string[] => JUDGED_LINE_IDS;
 
-/** 该判档线失败是否当场结束游戏（story.lineOutcome.failEndsGame，registry 保证键正好是判档线）；只有配置为 true 才结束，非判档线（如太泉）与未知 id 一律 false。本函数只读配置，不接游戏结束流程。 */
+/** 该判档线失败是否当场结束游戏（各线包 nation-lines.json failEndsGame，编译器保证只写在、且必写在判档线上）；只有配置为 true 才结束，非判档线（如太泉）与未知 id 一律 false。本函数只读配置，不接游戏结束流程。 */
 export const lineFailEndsGame = (lineId: string): boolean =>
-  (GAME_NUMBERS.story.lineOutcome.failEndsGame as Record<string, boolean | undefined>)[lineId] === true;
+  Object.prototype.hasOwnProperty.call(FAIL_ENDS_GAME, lineId) && FAIL_ENDS_GAME[lineId] === true;
 
 /** 国家线 flags 命名空间：收束档只有规则表这一个写入口（模型 set、任务线 setState 都不得写），切关时整段继承。 */
 export const LINE_FLAG_PREFIX = 'line.';

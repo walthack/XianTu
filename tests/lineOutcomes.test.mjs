@@ -119,22 +119,17 @@ test('太泉不判档：非判档线拒写 line.<id>.outcome，记 LCQ-SAV-024�
   assert.equal((await logged('notJudged')).length, 3);
 });
 
-test('lineFailEndsGame 逐线读 failEndsGame，国家线默认失败可继续，太泉不判档', async () => {
+test('lineFailEndsGame 逐线读各线包 nation-lines.json 的 failEndsGame（G4），国家线默认失败可继续，太泉不判档', async () => {
   const { lineFailEndsGame, judgedLineIds } = await modPromise;
-  const { GAME_NUMBERS, applyGameNumbers } = await numbersPromise;
+  const { FAIL_ENDS_GAME } = await loadTs('../src/modules/contentPacks/index.ts');
   const LINES = ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin'];
   assert.deepEqual([...judgedLineIds()].sort(), [...LINES].sort());
-  assert.deepEqual(Object.keys(GAME_NUMBERS.story.lineOutcome.failEndsGame).sort(), [...LINES].sort());
+  assert.deepEqual(Object.keys(FAIL_ENDS_GAME).sort(), [...LINES].sort());
   for (const lineId of LINES) assert.equal(lineFailEndsGame(lineId), false, lineId);
   assert.equal(lineFailEndsGame('taiquan'), false);
-  applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: true } } } });
-  try {
-    assert.equal(lineFailEndsGame('han'), true);
-    assert.equal(lineFailEndsGame('jin'), false);
-  } finally {
-    applyGameNumbers({ story: { lineOutcome: { failEndsGame: { han: false } } } });
-  }
-  assert.equal(lineFailEndsGame('han'), false);
+  // 原型链上的键不算配置
+  assert.equal(lineFailEndsGame('constructor'), false);
+  // 取 true 的读法（只有配置为 true 才结束）由 tests/syntheticLineAcceptance.test.mjs 用合成线包覆盖；numbers 热改不再能改它（numbersRegistry.test.mjs）
 });
 
 test('closedLineIds：按 judgedLines 顺序、非判档线手写也不算、tiers 过滤（太泉解锁设计稿 2026-10-27 §3 / §10-2）；入参是 runtime，逐条读 lineClosed', async () => {

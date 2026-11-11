@@ -62,7 +62,7 @@ test('败局策略：缺出口结束；显式 continue、lose 收束与国家线
   }
   const win = { kind: 'win' }; H.applyCombatDefeatPolicy(c, win, 'test.event', 'attack');
   assert.equal(win.endingId, undefined);
-  assert.ok(Object.values(N.story.lineOutcome.failEndsGame).every(value => value === false));
+  assert.ok(Object.values((await loadTs('../src/modules/contentPacks/index.ts')).FAIL_ENDS_GAME).every(value => value === false));
 });
 
 test('秦 Q-20/Q-21：配置中的两拍即使 continue 也结束；不启用待定剧情', () => {
