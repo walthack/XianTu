@@ -4,6 +4,8 @@
  * - 热改合并后：已登记叶子的范围 / 枚举 / 元组 → LCQ-NUM-008（与 004 并列，模块业务仍走 006）
  * 与 registerNumbersValidator 分工：registry = 结构／类型／粗范围；validator = 跨字段业务。
  */
+import { PACK_NATION_LINE_IDS } from '../contentPacks';
+
 export type FieldKind = 'number' | 'int' | 'bool' | 'string' | 'object' | 'array' | 'tuple2';
 
 export type NumbersSection = 'combat' | 'progress' | 'runtime' | 'assist';
@@ -67,8 +69,9 @@ export const REQUIRED_TOP: ReadonlyArray<{ key: string; kind: 'int' | 'object'; 
   { key: 'prompt', kind: 'object', section: 'runtime' },
 ];
 
-/** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读配置 story.lineOutcome.judgedLines，这里不写。 */
-export const NATION_LINE_IDS: readonly string[] = ['nanhuang', 'jin', 'song', 'han', 'tang', 'qin', 'taiquan'];
+/** 7 条并行国家线 id（身份账设计稿 2026-10-25 §10 Q2；均在实体索引 kind=line，nanhuang/qin 登记于 entity-catalog/lines.json）。其中哪些判档读配置 story.lineOutcome.judgedLines，这里不写。
+ * 由各线包 manifest.nationLines 派生（秦线 PR C），顺序按包里的 order；加线只改包数据。 */
+export const NATION_LINE_IDS: readonly string[] = PACK_NATION_LINE_IDS;
 
 /** story.lineUnlock.<lineId> 每线允许的键（太泉解锁设计稿 2026-10-27 §2；不设 enforce 开关，总策划 2026-10-27 定）。 */
 export const LINE_UNLOCK_KEYS: readonly string[] = ['note', 'minRealmLevel', 'minClosedLines', 'countTiers', 'requireDeadlinesCleared'];
@@ -230,7 +233,6 @@ export const FIELD_SPECS: readonly FieldSpec[] = [
   { path: 'ui.worldSelection.showGenericWorlds', kind: 'bool', required: true, section: 'runtime' },
   { path: 'ui.modeSelection.showGenericStart', kind: 'bool', required: true, section: 'runtime' },
   { path: 'story.qin.actionTimeCost', kind: 'int', required: true, min: 1, max: 1, section: 'progress' },
-  { path: 'story.lineCompass.regionLines', kind: 'object', required: true, section: 'progress' },
   { path: 'story.lineCompass.hint.maxChars', kind: 'int', required: true, min: 1, section: 'progress' },
   { path: 'story.lineCompass.hint.bannedWords', kind: 'array', required: true, section: 'progress' },
   { path: 'story.lineCompass.anyLineClosed.lineIds', kind: 'array', required: true, section: 'progress' },
@@ -420,13 +422,7 @@ export function validateAgainstRegistry(tree: unknown, mode: RegistryMode = 'col
     }
   }
 
-  // 交叉：当前线卡地区映射（右栏线入口复用分析 2026-10-27 §5.1）。值须为国家线 id；定性词须为非空字符串
-  const regionLines = atPath(tree, 'story.lineCompass.regionLines');
-  if (kindOk(regionLines, 'object')) {
-    for (const [region, lineId] of Object.entries(regionLines as Record<string, unknown>)) {
-      if (typeof lineId !== 'string' || !NATION_LINE_IDS.includes(lineId)) errors.push(`未知国家线：story.lineCompass.regionLines.${region}=${String(lineId)}`);
-    }
-  }
+  // 交叉：当前线卡（右栏线入口复用分析 2026-10-27 §5.1）。定性词须为非空字符串（地区→线映射已移到各线包 nationLines，内容包编译期校验，秦线 PR C）
   // compass.anyLineClosed 计入的线（R-3）：须为国家线、不得重复；太泉、秦不计入
   const anyClosedLines = atPath(tree, 'story.lineCompass.anyLineClosed.lineIds');
   if (Array.isArray(anyClosedLines)) anyClosedLines.forEach((lineId, i) => {

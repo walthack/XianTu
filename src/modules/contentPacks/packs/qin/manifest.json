@@ -12,6 +12,9 @@
     "texts.json"
   ],
   "lineCompass": "line-compass.json",
+  "nationLines": [
+    "nation-lines.json"
+  ],
   "mapEntries": [
     "map-entries.json"
   ],
