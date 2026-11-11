@@ -7,12 +7,14 @@ import {createJiti} from 'jiti';
 import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './content-pack-quest-lines.mjs';
 import {compileTimeline} from './content-pack-timeline.mjs';
 import {coreFormatKinds,emptyCoreFormats,coreDefinedIds,compileCoreFormats,validateCoreFormatsWithTs} from './content-pack-core-formats.mjs';
+// 展示类（F0b）：endings、openWorldSlices、persistentEntries 三段，stageMeta 事件新字段与 texts 通配键，见 content-pack-presentation-formats.mjs
+import {presentationFormatKinds,emptyPresentationFormats,presentationDefinedIds,stageMetaEventExtraKeys,stageMetaPresentationExtraKeys,checkStageMetaPresentationExtras,presentationTextKeyReferences,checkPresentationTextKeys,compilePresentationFormats,rawStepScenePrefixes,validatePresentationFormatsWithTs} from './content-pack-presentation-formats.mjs';
 const root=resolve(import.meta.dirname,'..');
 const kinds=['contracts','drafts','statuses','stages','overlays','questLines','entities','mapRoutes','mapEntries','heldActions','rails'];
 // 线路格式（宋线 S2）：stageMeta、railExtraBeats、secondaryLines 都是文件列表，每个文件是数组；编译后 railExtraBeats 并进包 rail，不单独进 catalog
 const lineFormatKinds=['stageMeta','railExtraBeats','secondaryLines'];
 // 核心轨与人物轨（F0a）：lineCriticalEvents、characterBeats、storyAxis、locationAliases、characterProfiles、ifBranches，见 content-pack-core-formats.mjs
-const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline',...lineFormatKinds,...coreFormatKinds];
+const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline',...lineFormatKinds,...coreFormatKinds,...presentationFormatKinds];
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
@@ -44,12 +46,13 @@ const definedIds=(kind,x)=>{
  if(kind==='overlays'||kind==='stageMeta'||kind==='railExtraBeats')return [];
  if(kind==='secondaryLines')return [['secondaryLine',x.id]];
  if(coreFormatKinds.includes(kind))return coreDefinedIds(kind,x);
+ if(presentationFormatKinds.includes(kind))return presentationDefinedIds(kind,x);
  return [[kind,x.id]];
 };
 /** 只建 catalog（纯数据）：不经 jiti 加载任何会读 generated/catalog.json 的模块。资产路径限定在源码树内（含符号链接）。 */
 async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'),sourceRoot=root}={}) {
- const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],rails:[],stageMeta:[],secondaryLines:[],...emptyCoreFormats(),overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
- const timelineInserts=[],lineFormats=Object.fromEntries(lineFormatKinds.map(k=>[k,[]])),coreRaw=Object.fromEntries(coreFormatKinds.map(k=>[k,[]]));
+ const catalog={version:'',contracts:[],drafts:[],statuses:[],stages:[],mapRoutes:[],mapEntries:[],heldActions:[],rails:[],stageMeta:[],secondaryLines:[],...emptyCoreFormats(),...emptyPresentationFormats(),overlays:[],questLines:[],questLineResources:{},entities:[],texts:{},playtests:[],entries:[],lineCompass:{version:1,lines:[]},lineCompassPlaces:{},lineCompassPlaceIds:{},timeline:null};
+ const timelineInserts=[],lineFormats=Object.fromEntries(lineFormatKinds.map(k=>[k,[]])),coreRaw=Object.fromEntries(coreFormatKinds.map(k=>[k,[]])),presentationRaw=Object.fromEntries(presentationFormatKinds.map(k=>[k,[]]));
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set(),packs=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
@@ -70,7 +73,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   for(const k of lineFormatKinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);if(!Array.isArray(value))fail(`${m.id}.${k}: expected array`);own(k,value);lineFormats[k].push(...value);}}
   // F0a：lineCriticalEvents 的文件是数组，其余是对象；形状在 compileCoreFormats 里校验。原始值进归属扫描
   for(const k of coreFormatKinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);own(k,Array.isArray(value)?value:[value]);coreRaw[k].push({packId:m.id,value});}}
-  for(const file of [m.texts].flat().filter(Boolean)){const texts=await load(file);if(!object(texts))fail(`${m.id}: invalid texts`);for(const[id,text]of Object.entries(texts)){define('text',id,m.id);if(typeof text!=='string'||!text||id in catalog.texts)fail(`${m.id}: invalid/duplicate text ${id}`);catalog.texts[id]=text;}}
+  for(const k of presentationFormatKinds){if(!Array.isArray(m[k]||[]))fail(`${m.id}.${k}: expected file list`);for(const path of m[k]||[]){const value=await load(path);if(!Array.isArray(value))fail(`${m.id}.${k}: expected array`);own(k,value);presentationRaw[k].push({packId:m.id,value});}}
+  for(const file of [m.texts].flat().filter(Boolean)){const texts=await load(file);if(!object(texts))fail(`${m.id}: invalid texts`);for(const[id,text]of Object.entries(texts)){define('text',id,m.id);raw.push({kind:'texts',value:presentationTextKeyReferences(id)});if(typeof text!=='string'||!text||id in catalog.texts)fail(`${m.id}: invalid/duplicate text ${id}`);catalog.texts[id]=text;}}
   if(m.questLineResources){const value=await load(m.questLineResources);raw.push({kind:'questLineResources',value});const res=resolveNumbers(value,numbers,`${m.id}.questLineResources`);if(!object(res)||Object.keys(res).some(k=>!resourceKinds.includes(k)))fail(`${m.id}: invalid quest line resources`);for(const[kind,table]of Object.entries(res)){if(!object(table))fail(`${m.id}: invalid ${kind}`);const into=catalog.questLineResources[kind]||={};for(const[id,v]of Object.entries(table)){define(kind,id,m.id);if(id in into)fail(`${m.id}: duplicate ${kind} ${id}`);into[id]=v;}}}
   // 线的下一步表（右栏线入口复用分析 2026-10-27 §5.2）：各包的 lines 合并，lineId 不得重复；内容校验在 validateWithTs 的 validateLineCompassTable
   if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);own('lineCompass',t.lines);catalog.lineCompass.lines.push(...t.lines);}
@@ -82,7 +86,9 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // overlay 新增的事件（既不是内置事件、也不是某包关内事件）归该包；改写已有事件算引用
  const stageEvents=new Set([...defs.keys()].filter(k=>k.startsWith('event\u0000')));
  for(const [packId,raw] of rawByPack)for(const {kind,value} of raw)if(kind==='overlays'&&object(value))for(const e of value.events||[])if(typeof e?.id==='string'&&!baseEvents.has(e.id)&&!stageEvents.has(`event\u0000${e.id}`))define('event',e.id,packId);
- for(const [packId,raw] of rawByPack){const seen=visible(packId);const scan=v=>{if(typeof v==='string'){for(const c of referenceCandidates(v)){const q=owners.get(c);if(q&&![...q].some(x=>seen.has(x)))fail(`${packId} references ${c} owned by ${[...q].join('/')}; add dependsOn`);}}else if(Array.isArray(v))v.forEach(scan);else if(object(v))for(const[k,x]of Object.entries(v)){scan(k);scan(x);}};for(const {value} of raw)scan(value);}
+ // B1：二级线的 after 只是全局排序提示（mergeSecondaryLines 在全部包线上解析），不算跨包引用，不要求 dependsOn；找不到、成环、同 after、重复 id 照旧报错
+ const unscanned=(kind,value)=>{if(kind!=='secondaryLines'||!object(value))return value;const {after:_after,...rest}=value;return rest;};
+ for(const [packId,raw] of rawByPack){const seen=visible(packId);const scan=v=>{if(typeof v==='string'){for(const c of referenceCandidates(v)){const q=owners.get(c);if(q&&![...q].some(x=>seen.has(x)))fail(`${packId} references ${c} owned by ${[...q].join('/')}; add dependsOn`);}}else if(Array.isArray(v))v.forEach(scan);else if(object(v))for(const[k,x]of Object.entries(v)){scan(k);scan(x);}};for(const {kind,value} of raw)scan(unscanned(kind,value));}
  // Stage assets use the same numeric authority as quest lines; prose is held in pack texts.
  const resolveText=(value,where)=>{
   if(Array.isArray(value))return value.map((v,i)=>resolveText(v,`${where}.${i}`));
@@ -98,8 +104,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  catalog.mapRoutes=resolveNumbers(catalog.mapRoutes,numbers,'mapRoutes');
  const applyOverlay=await import('./content-pack-overlays.mjs');applyOverlay.applyPackOverlays(stages,catalog.overlays);
  if(catalog.questLines.length){
-  // 只取逐拍演出关判定；不经 fixedEndingNarratives（它 import contentPacks，会读 generated/catalog.json，M2）
-  const {isStepSceneStage:isNanhuangSceneStage}=await tsLoader().import(join(root,'src/modules/scenarioMods/travel/stepScene.ts'));
+  // 只取逐拍演出关判定；不经 stepScene.ts／fixedEndingNarratives（它们 import contentPacks，会读 generated/catalog.json，M2）：TS 侧前缀取纯数据，再并上本次编译里各包 openWorldSlices 的前缀（F0b）
+  const {TS_STEP_SCENE_STAGE_PREFIXES,isStepSceneStageIn}=await tsLoader().import(join(root,'src/modules/scenarioMods/travel/openWorldSlices.ts'));const stepScenePrefixes=[...TS_STEP_SCENE_STAGE_PREFIXES,...rawStepScenePrefixes(presentationRaw)],isNanhuangSceneStage=id=>isStepSceneStageIn(stepScenePrefixes,id);
   const base=JSON.parse(await readFile(join(sourceRoot,'mod-kit/quest-lines/resources.json'),'utf8'));
   const routeLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));
   for(const [stageId,projected] of projectQuestLineEvents({lines:catalog.questLines,stages,texts:{...base.texts,...catalog.texts},intentMatches:{...base.intentMatches,...catalog.questLineResources.intentMatches},guardCovers:isNanhuangSceneStage,routeLocationNames})){const overlay={stageId,events:projected};catalog.overlays.push(overlay);applyOverlay.applyPackOverlays(stages,[overlay]);}
@@ -174,7 +180,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // stageMeta（宋线 S2）：每条挂一个关（包内关或内置关），stageId 不重复；章、事件属于这一关；uiChapterId／defaultUiChapterId 是这一关的章；mood 属于 MusicMood；objective 非空。
  // 事件配乐与目标按事件 id 全局查，所以同一事件 id 在全部 stageMeta 里只能出现一次（章配乐同理）；包内关已有 presentation 的事件／章不得再写。编译后补 chapterTitles，note 剥掉。与 TS 表是否重复在 validateWithTs 查
  unique(lineFormats.stageMeta,x=>x?.stageId,'stageMeta stageId');
- const metaEvents=new Set(),metaChapters=new Set(),text=v=>typeof v==='string'&&v.trim().length>0;
+ const metaEvents=new Set(),metaChapters=new Set(),metaTemplates=[],text=v=>typeof v==='string'&&v.trim().length>0;
  catalog.stageMeta=lineFormats.stageMeta.map((raw,i)=>{
   const at=`stageMeta ${raw?.stageId}`;
   if(!object(raw)||Object.keys(raw).some(k=>!['stageId','defaultLineQuarantined','milestoneReward','presentation','note'].includes(k))||(raw.note!==undefined&&typeof raw.note!=='string'))fail(`${at}: invalid fields`);
@@ -182,7 +188,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(x.defaultLineQuarantined!==undefined&&typeof x.defaultLineQuarantined!=='boolean')fail(`${at}: defaultLineQuarantined must be boolean`);
   const r=x.milestoneReward;if(r!==undefined&&(!object(r)||Object.keys(r).some(k=>!['titles','revokeTitles','note'].includes(k))||!Array.isArray(r.titles)||!r.titles.length||!r.titles.every(text)||(r.revokeTitles!==undefined&&(!Array.isArray(r.revokeTitles)||!r.revokeTitles.every(text)))||!text(r.note)))fail(`${at}: invalid milestoneReward`);
   const p=x.presentation;if(p===undefined)return x;
-  if(!object(p)||Object.keys(p).some(k=>!['defaultUiChapterId','chapters','events'].includes(k))||(p.chapters!==undefined&&!object(p.chapters))||(p.events!==undefined&&!object(p.events)))fail(`${at}: invalid presentation`);
+  if(!object(p)||Object.keys(p).some(k=>!['defaultUiChapterId','chapters','events',...stageMetaPresentationExtraKeys].includes(k))||(p.chapters!==undefined&&!object(p.chapters))||(p.events!==undefined&&!object(p.events)))fail(`${at}: invalid presentation`);
   const chapters=new Map((stage.scenario?.chapters||[]).map(c=>[c.id,c])),events=new Map((stage.scenario?.events||[]).map(e=>[e.id,e])),chapterTitles={};
   const chapter=id=>{if(!chapters.has(id))fail(`${at}: ${id} is not a chapter of ${x.stageId}`);return chapters.get(id);};
   const titled=id=>{const t=chapter(id).title;if(!text(t))fail(`${at}: chapter ${id} has no title`);chapterTitles[id]=t;};
@@ -190,14 +196,17 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   for(const [id,c] of Object.entries(p.chapters||{})){const own=chapter(id);if(!object(c)||Object.keys(c).some(k=>k!=='mood')||!moods.has(c.mood))fail(`${at}: chapter ${id}: invalid mood`);if(own.presentation?.mood!==undefined)fail(`${at}: chapter ${id} already has presentation.mood`);if(metaChapters.has(id))fail(`stageMeta chapter ${id} appears twice`);metaChapters.add(id);}
   for(const [id,e] of Object.entries(p.events||{})){
    if(!events.has(id))fail(`${at}: ${id} is not an event of ${x.stageId}`);
-   if(!object(e)||!Object.keys(e).length||Object.keys(e).some(k=>!['uiChapterId','mood','objective'].includes(k)))fail(`${at}: event ${id}: invalid fields`);
+   if(!object(e)||!Object.keys(e).length||Object.keys(e).some(k=>!['uiChapterId','mood','objective',...stageMetaEventExtraKeys].includes(k)))fail(`${at}: event ${id}: invalid fields`);
    if(metaEvents.has(id))fail(`stageMeta event ${id} appears twice`);metaEvents.add(id);
    if(e.uiChapterId!==undefined){titled(e.uiChapterId);if(events.get(id).presentation?.uiChapterId!==undefined)fail(`${at}: event ${id} already has presentation.uiChapterId`);}
    if(e.mood!==undefined&&!moods.has(e.mood))fail(`${at}: event ${id}: invalid mood ${e.mood}`);
    if(e.objective!==undefined&&!text(e.objective))fail(`${at}: event ${id}: empty objective`);
   }
+  metaTemplates.push(...checkStageMetaPresentationExtras({at,stageId:x.stageId,presentation:p,stageEvents:events,locationIds}));
   return Object.keys(chapterTitles).length?{...x,chapterTitles}:x;
- });}
+ });
+ // F0b：stageMeta 目标里的 {{entity:…}}／{{entityLabel:…}}，运行时由 fixedQuestObjectives.ts 解析
+ await checkEntityTemplates('stageMeta objective',metaTemplates);}
  // 二级线（宋线 S2）：SecondaryLine 加 after（插在哪条线后面）。kind／status 合法；ready 节点的关存在、事件属于该关；锚事件存在（anchorEventPending 除外）；锚地点在 locations.json（含别名）；
  // 包线之间 id、after 不重复。after 指向的线是否存在、id 是否与 TS 线重复在 validateWithTs 查。note（线上、节点上）只给作者看，剥掉
  unique(lineFormats.secondaryLines,x=>x?.id,'secondary line');
@@ -227,6 +236,9 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  // 核心轨与人物轨（F0a）
  {const loc=JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries;
   Object.assign(catalog,await compileCoreFormats(coreRaw,{stages,events,builtinStageIds:builtins.map(s=>s.manifest.id),location:{ids:locationIds,mainIds:new Set(loc.map(e=>e.id)),aliasIds:new Set(loc.flatMap(e=>e.aliases||[]))}}));}
+ // 展示类（F0b）
+ checkPresentationTextKeys(catalog.texts,events);
+ Object.assign(catalog,await compilePresentationFormats(presentationRaw,{stages,events,baseEvents,locationIds,itemIds,beatIds,texts:catalog.texts,packContracts:[...catalog.contracts,...catalog.drafts],sourceRoot}));
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);
@@ -257,6 +269,7 @@ async function validateWithTs(catalog,{stages,events,baseEvents,sourceRoot},{val
  {const jiti=tsLoader();const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
  await validateLineFormatsWithTs(catalog,stages,sourceRoot);
  await validateCoreFormatsWithTs(catalog);
+ await validatePresentationFormatsWithTs(catalog,stages);
 }
 /**
  * 线路格式与 TS 表的交叉校验（宋线 S2）：新段为空时不加载任何模块。TS 读取方一律用传入的新 catalog 调纯函数（不靠模块自己读磁盘 catalog），

@@ -445,7 +445,7 @@ test('归属：人物任务 id 不进通用扫描——别的包里同名的普�
 // —— 搬迁演练：现有 TS 表整张转写进一个合成包，临时搬空 TS 表后编译，合并值与现在逐项相同 ——
 test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通过，合并值 deepStrictEqual 现值',async()=>{
  const lines=SL.SECONDARY_LINES.map((l,i)=>i?{...structuredClone(l),after:SL.SECONDARY_LINES[i-1].id}:structuredClone(l));
- const lce=Object.entries(SL.TS_LINE_CRITICAL_EVENTS).map(([eventId,lineId])=>({eventId,lineId}));
+ const lce=Object.entries(SL.LINE_CRITICAL_EVENTS).map(([eventId,lineId])=>({eventId,lineId}));
  // B2 起人物任务与高光在人物包里、TS 表为空：同二级线，取合并值转写（不取 TS 表，否则表搬空后演练合出来是空的）
  const beats={quests:structuredClone(CQ.CHARACTER_QUESTS),highlights:structuredClone(CQ.CHARACTER_HIGHLIGHTS)};
  const story={stageOrder:[...AX.STAGE_ORDER],layers:structuredClone(AX.MAIN_QUEST_LAYERS),stages:structuredClone(AX.MAIN_QUEST_STAGES),nodes:structuredClone(AX.MAIN_QUEST_NODES),requirements:structuredClone(AX.MAIN_QUEST_REQUIREMENTS)};

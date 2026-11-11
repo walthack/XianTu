@@ -11,25 +11,66 @@ import { awaitingRejoin } from './stayRejoin';
 import { currentLocation } from './travel/travelLedger';
 import stage04b from './builtins/data/lcq.stage_04b_lingfei_baiyi_crisis.json';
 
-const STAGE_04B = 'lcq.stage_04b_lingfei_baiyi_crisis';
 /** 只补清羽记本书已登记的关（lcq.*）；别的书另有主角与地图，不带这条入口。 */
 const QINGYU_STAGE_PREFIX = 'lcq.';
-/** 04b 之前的关不碰藻丝；04b 本身事件已原生投影，只做旧档完成映射。 */
-const BEFORE_ALGAE: readonly string[] = ['lcq.stage_01', 'lcq.stage_02', 'lcq.stage_03', 'lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04'];
+
+/**
+ * 两种常驻入口（F0b 2026-11-11：与内容包 persistentEntries 合并，TS 在前、包按 catalog 顺序在后，每种全局至多一条）。
+ * algae：stageId 是取物事件原生投影的关（04b，也是模板事件与持物人／样品定义的来源）；notBeforeStageIds 是不碰藻丝的 04b 之前各关。
+ * 包里的 algae 条目由编译器带上 templateEvent（从它的关抄出的事件，内置关取原始事件，同下面的静态 import）。
+ */
+export interface PersistentEntry {
+  kind: 'algae' | 'rejoin';
+  beatId: string; eventId: string; stageId: string;
+  locationId?: string; characterId?: string; itemId?: string; receiptId?: string; notBeforeStageIds?: string[];
+  templateEvent?: unknown;
+}
+export const TS_PERSISTENT_ENTRIES: PersistentEntry[] = [
+  {
+    kind: 'algae',
+    stageId: 'lcq.stage_04b_lingfei_baiyi_crisis',
+    /** 04b 之前的关不碰藻丝；04b 本身事件已原生投影，只做旧档完成映射。 */
+    notBeforeStageIds: ['lcq.stage_01', 'lcq.stage_02', 'lcq.stage_03', 'lcq.stage_03b_snake_flower_bridge', 'lcq.stage_04'],
+    beatId: 'beat.side.biling_algae_silk.01',
+    eventId: 'lcq.event.side_biling_algae_silk',
+    locationId: 'liuchao.location.biyu_village',
+    characterId: 'lcq.character.biling_woman_ch80',
+    itemId: 'lcq.item.biling_algae_sample',
+    receiptId: 'rcpt.side.biling_algae_silk.ordered',
+  },
+  {
+    kind: 'rejoin',
+    beatId: 'beat.ningyu.y5_rejoin',
+    eventId: 'lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin',
+    stageId: 'lcq.stage_05b',
+  },
+];
+
+/** 合并后按种类取唯一一条（TS 在前、包在后；同一种两条抛错，编译期已拦；一条都没有也抛错）。 */
+export function persistentEntryIn(entries: readonly PersistentEntry[], kind: PersistentEntry['kind']): PersistentEntry {
+  const hits = entries.filter(x => x.kind === kind);
+  if (hits.length > 1) throw Error(`常驻入口 ${kind} 同时在内容包与 TS 里定义`);
+  if (!hits.length) throw Error(`缺少常驻入口 ${kind}`);
+  return hits[0];
+}
+const ENTRIES = [...TS_PERSISTENT_ENTRIES, ...((CONTENT_PACKS.persistentEntries || []) as PersistentEntry[])];
+const ALGAE = persistentEntryIn(ENTRIES, 'algae'), REJOIN = persistentEntryIn(ENTRIES, 'rejoin');
+const STAGE_04B = ALGAE.stageId;
+const BEFORE_ALGAE: readonly string[] = ALGAE.notBeforeStageIds || [];
 
 export const ALGAE_ENTRY = {
-  beatId: 'beat.side.biling_algae_silk.01',
-  eventId: 'lcq.event.side_biling_algae_silk',
-  locationId: 'liuchao.location.biyu_village',
-  characterId: 'lcq.character.biling_woman_ch80',
-  itemId: 'lcq.item.biling_algae_sample',
-  receiptId: 'rcpt.side.biling_algae_silk.ordered',
+  beatId: ALGAE.beatId,
+  eventId: ALGAE.eventId,
+  locationId: ALGAE.locationId!,
+  characterId: ALGAE.characterId!,
+  itemId: ALGAE.itemId!,
+  receiptId: ALGAE.receiptId!,
 } as const;
 
 export const REJOIN_ENTRY = {
-  beatId: 'beat.ningyu.y5_rejoin',
-  eventId: 'lcq.event.blank_letter_and_dagu_ins_ningyu_rejoin',
-  stageId: 'lcq.stage_05b',
+  beatId: REJOIN.beatId,
+  eventId: REJOIN.eventId,
+  stageId: REJOIN.stageId,
 } as const;
 
 /** 地图上只作取物访问的落点：到这里不算抵达待启程的下一关。 */
@@ -57,7 +98,8 @@ export function algaeCollected(save: SaveData | null | undefined): boolean {
 let algaeSource: { event: any; character: any; item: any } | undefined;
 function algaeTemplate() {
   if (algaeSource) return algaeSource;
-  const event = (stage04b as any).scenario.events.find((e: any) => e.id === ALGAE_ENTRY.eventId);
+  // 包条目带编译器抄好的模板事件；TS 条目沿用静态 import 的 04b 原始关数据
+  const event = ALGAE.templateEvent ?? (stage04b as any).scenario.events.find((e: any) => e.id === ALGAE_ENTRY.eventId);
   const holder = resolveScenarioContent({ manifest: { id: STAGE_04B }, canon: { characters: [] }, scenario: { optionalActorIds: [ALGAE_ENTRY.characterId] } }) as any;
   const item = catalogItem(ALGAE_ENTRY.itemId, STAGE_04B);
   if (!event || !item) throw Error(`藻丝取物入口模板缺失：${!event ? ALGAE_ENTRY.eventId : ALGAE_ENTRY.itemId}`);

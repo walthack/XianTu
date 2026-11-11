@@ -7,6 +7,8 @@
  * 锁只作用于输入方式，选中后仍走原有结构化动作与本地合同，不改任何结算。
  */
 import uiConfig from '../../../mod-kit/branch-decision-ui.json';
+import { CONTENT_PACKS } from '../contentPacks';
+import type { StageMeta } from '../contentPacks/stageMeta';
 
 export interface BranchDecisionCandidate {
   source: string;
@@ -27,8 +29,9 @@ export const BRANCH_DECISION_HINT: string = uiConfig.hint;
 export const BRANCH_DECISION_INPUT_PLACEHOLDER: string = uiConfig.inputPlaceholder;
 export const BRANCH_DECISION_BLOCKED_NOTICE: string = uiConfig.blockedSendNotice;
 
-/** eventId → [动作 id, 显示文案]；第一项是决定动作，其余是同一时刻的其他固定选项（含致命选项）。 */
-export const LOCKED_DECISIONS: Readonly<Record<string, ReadonlyArray<readonly [string, string]>>> = {
+type LockedDecisionTable = Readonly<Record<string, ReadonlyArray<readonly [string, string]>>>;
+/** eventId → [动作 id, 显示文案]；第一项是决定动作，其余是同一时刻的其他固定选项（含致命选项）。F0b：TS 侧表，与内容包 stageMeta 事件的 lockedDecision 合并。 */
+export const TS_LOCKED_DECISIONS: LockedDecisionTable = {
   'lcq.event.shanghou_revealed': [['refuse_shanghou_relic_test', '认出警示标记，不碰'], ['touch_shanghou_relic', '伸手去碰那件神物']],
   // 白湖赌局（第18-19章）：凝羽入局后当面答复的那一步。不赌＝致命选项（炮烙）。
   'lcq.event.ningyu_enters_gamble': [['answer_ningyu_on_debut', '接赌'], ['refuse_gamble_take_paolao', '不赌']],
@@ -42,6 +45,17 @@ export const LOCKED_DECISIONS: Readonly<Record<string, ReadonlyArray<readonly [s
   // 谢艺托付（原著第114章）：承接遗言或施针救治；救治要乐明珠在场，不在场时锁里只剩承接。
   'lcq.event.xieyi_entrustment': [['accept_entrustment', '承接'], ['rescue_xieyi', '救治']],
 };
+
+/** TS 表在前、包（stageMeta 事件 lockedDecision）按 catalog 顺序在后；同一事件两边都有抛错（编译期已拦）。包里没有时返回 TS 表本身。 */
+export function mergeLockedDecisions(ts: LockedDecisionTable, stageMeta: readonly StageMeta[]): LockedDecisionTable {
+  const pack = stageMeta.flatMap(m => Object.entries(m.presentation?.events || {}).filter(([, e]) => e.lockedDecision).map(([id, e]) => [id, e.lockedDecision!] as const));
+  if (!pack.length) return ts;
+  const out: Record<string, ReadonlyArray<readonly [string, string]>> = { ...ts };
+  for (const [id, entries] of pack) { if (id in out) throw Error(`分支锁 ${id} 同时在 TS 表与内容包里`); out[id] = entries; }
+  return out;
+}
+
+export const LOCKED_DECISIONS: LockedDecisionTable = mergeLockedDecisions(TS_LOCKED_DECISIONS, CONTENT_PACKS.stageMeta || []);
 
 function lockedEntry(option: BranchDecisionCandidate): ReadonlyArray<readonly [string, string]> | undefined {
   return option.source === 'event_engine' && option.eventId ? LOCKED_DECISIONS[option.eventId] : undefined;
