@@ -402,6 +402,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
           optionalString(entity.presentation.targetLabel, `${entity.__path}.presentation.targetLabel`, add);
           optionalString(entity.presentation.image, `${entity.__path}.presentation.image`, add);
           optionalString(entity.presentation.playerLine, `${entity.__path}.presentation.playerLine`, add);
+          optionalString(entity.presentation.uiChapterId, `${entity.__path}.presentation.uiChapterId`, add);
           if (entity.presentation.stepGuardTerms !== undefined) {
             const guardPath = `${entity.__path}.presentation.stepGuardTerms`;
             if (!isRecord(entity.presentation.stepGuardTerms)) {

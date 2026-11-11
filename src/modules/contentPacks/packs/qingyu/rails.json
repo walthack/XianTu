@@ -1,0 +1,311 @@
+[
+  {
+    "note": "秦线（五线补全·秦 Q-1–Q-17、Q-23，2026-10-28）：全部为扩写，不挂原著轴。第三幕 Q-18–Q-22（推翻结局）待用户拍板 Q2，拍板后插在 qin_close_default 之前，收束改为二选一。",
+    "id": "qin.xianyang",
+    "modId": "lyg.qin_xianyang",
+    "chapterId": "lyg.chapter.qin_xianyang_prologue",
+    "orderedEventIds": [
+      "liuchao.event.qin_hook_fangshi_rumor",
+      "liuchao.event.qin_enter_xianyang",
+      "liuchao.event.qin_find_xu",
+      "liuchao.event.qin_entry_camp",
+      "liuchao.event.qin_king_refuses",
+      "liuchao.event.qin_xu_auspice",
+      "liuchao.event.qin_new_year_banquet",
+      "liuchao.event.qin_palace_sealed",
+      "liuchao.event.qin_succession_fight",
+      "liuchao.event.qin_purge_hunted",
+      "liuchao.event.qin_heimohai_message",
+      "liuchao.event.qin_xiaoling_villa",
+      "liuchao.event.qin_bo_family",
+      "liuchao.event.qin_close_default"
+    ],
+    "contracts": [
+      {
+        "eventId": "liuchao.event.qin_hook_fangshi_rumor",
+        "mustReach": {
+          "$text": "qin.rail.text.1"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.2"
+          },
+          {
+            "$text": "qin.rail.text.3"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.4"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_enter_xianyang",
+        "mustReach": {
+          "$text": "qin.rail.text.5"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.6"
+          },
+          {
+            "$text": "qin.rail.text.7"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.8"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_find_xu",
+        "mustReach": {
+          "$text": "qin.rail.text.9"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.10"
+          },
+          {
+            "$text": "qin.rail.text.11"
+          },
+          {
+            "$text": "qin.rail.text.12"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.13"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_entry_camp",
+        "mustReach": {
+          "$text": "qin.rail.text.14"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.15"
+          },
+          {
+            "$text": "qin.rail.text.16"
+          },
+          {
+            "$text": "qin.rail.text.17"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.18"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_king_refuses",
+        "mustReach": {
+          "$text": "qin.rail.text.19"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.20"
+          },
+          {
+            "$text": "qin.rail.text.21"
+          },
+          {
+            "$text": "qin.rail.text.22"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.23"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_xu_auspice",
+        "mustReach": {
+          "$text": "qin.rail.text.24"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.25"
+          },
+          {
+            "$text": "qin.rail.text.26"
+          },
+          {
+            "$text": "qin.rail.text.27"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.28"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_new_year_banquet",
+        "mustReach": {
+          "$text": "qin.rail.text.29"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.30"
+          },
+          {
+            "$text": "qin.rail.text.31"
+          },
+          {
+            "$text": "qin.rail.text.32"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.33"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_palace_sealed",
+        "mustReach": {
+          "$text": "qin.rail.text.34"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.35"
+          },
+          {
+            "$text": "qin.rail.text.36"
+          },
+          {
+            "$text": "qin.rail.text.37"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.38"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_succession_fight",
+        "mustReach": {
+          "$text": "qin.rail.text.39"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.40"
+          },
+          {
+            "$text": "qin.rail.text.41"
+          },
+          {
+            "$text": "qin.rail.text.42"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.43"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_purge_hunted",
+        "mustReach": {
+          "$text": "qin.rail.text.44"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.45"
+          },
+          {
+            "$text": "qin.rail.text.46"
+          },
+          {
+            "$text": "qin.rail.text.47"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.48"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_heimohai_message",
+        "mustReach": {
+          "$text": "qin.rail.text.49"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.50"
+          },
+          {
+            "$text": "qin.rail.text.51"
+          },
+          {
+            "$text": "qin.rail.text.52"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.53"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_xiaoling_villa",
+        "mustReach": {
+          "$text": "qin.rail.text.54"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.55"
+          },
+          {
+            "$text": "qin.rail.text.56"
+          },
+          {
+            "$text": "qin.rail.text.57"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.58"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_bo_family",
+        "mustReach": {
+          "$text": "qin.rail.text.59"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.60"
+          },
+          {
+            "$text": "qin.rail.text.61"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.62"
+        }
+      },
+      {
+        "eventId": "liuchao.event.qin_close_default",
+        "mustReach": {
+          "$text": "qin.rail.text.63"
+        },
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          {
+            "$text": "qin.rail.text.64"
+          },
+          {
+            "$text": "qin.rail.text.65"
+          },
+          {
+            "$text": "qin.rail.text.66"
+          }
+        ],
+        "allowedElaboration": {
+          "$text": "qin.rail.text.67"
+        }
+      }
+    ]
+  }
+]

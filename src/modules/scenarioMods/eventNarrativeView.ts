@@ -185,13 +185,6 @@ export const CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS: ReadonlyArray<readonly [strin
   ['甘露前夜', ['liang_secret_order', 'zhoufei_conspiracy', 'feiniao_hilt_clue']],
 ].map(([title, ids]) => [title as string, new Set((ids as string[]).map(id => `lyg.event.${id}`))] as const);
 
-/** lyg.qin_xianyang 序幕（rail 章）以外三章的拍，按章名分（与关卡数据同步，测试钉住）；挂在序幕章里的条件拍按它所属的幕标。 */
-export const QIN_XIANYANG_CHAPTER_EVENT_IDS: ReadonlyArray<readonly [string, ReadonlySet<string>]> = [
-  ['年节封宫', ['qin_yu_sisters_refuge', 'qin_new_year_banquet', 'qin_palace_sealed', 'qin_succession_fight']],
-  ['清洗', ['qin_purge_hunted', 'qin_yu_sisters_act2', 'qin_heimohai_message', 'qin_ningyu_coldtrace', 'qin_xiaoling_villa', 'qin_bo_family']],
-  ['掌秦', ['qin_close_default']],
-].map(([title, ids]) => [title as string, new Set((ids as string[]).map(id => `liuchao.event.${id}`))] as const);
-
 /** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 /**
  * 地图入口口信拍（mapEntries[].eventId，如咸阳传闻）被注入到出发关里演；章名取它所属目标关的章，
@@ -201,6 +194,16 @@ function mapEntryHookChapterTitle(modId: string | undefined, eventId: string): s
   const entry = (CONTENT_PACKS.mapEntries || []).find(e => e.eventId === eventId && e.stageId !== modId);
   const stage = entry && CONTENT_PACKS.stages.find(s => s.manifest.id === entry.stageId);
   return (stage?.scenario.chapters || []).find(c => (c.eventIds || []).includes(eventId))?.title || undefined;
+}
+
+/**
+ * 内容包关的事件可写 presentation.uiChapterId：界面标那一章的标题，不改挂章（整关停在 rail 章上时，后几幕的拍照幕标）。
+ * 只按 modId + eventId 查 catalog，不读存档里烘焙的事件或章对象（旧档烘焙的事件没有这个字段）。
+ */
+function packUiChapterTitle(modId: string | undefined, eventId: string): string | undefined {
+  const stage = CONTENT_PACKS.stages.find(s => s.manifest.id === modId);
+  const uiChapterId = stage?.scenario.events?.find(e => e.id === eventId)?.presentation?.uiChapterId;
+  return uiChapterId ? stage?.scenario.chapters?.find(c => c.id === uiChapterId)?.title || undefined : undefined;
 }
 
 export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
@@ -230,8 +233,9 @@ export function storyChapterTitle(modId: string | undefined, eventId: string | u
   // 唐：长安初定、长安插曲的 rail 章都改成了新首章（留仙坪／佛门暗潮与元正朝会），整关停在它上面；其余拍照旧标原章（五线补全·唐 2026-10-28）
   if (modId === 'lyg.changgan_begins' && eventId) return LIUXIANPING_EVENT_IDS.has(eventId) ? '留仙坪' : '抵达长安灞桥';
   if (modId === 'lyg.changgan_interlude' && eventId) return CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS.find(([, ids]) => ids.has(eventId))?.[0] ?? fallback;
-  // 秦（内容包关）：rail 章是序幕「咸阳传闻」，整关停在它上面；其余拍按所属的幕标（五线补全·秦 2026-10-28）
-  if (modId === 'lyg.qin_xianyang' && eventId) return QIN_XIANYANG_CHAPTER_EVENT_IDS.find(([, ids]) => ids.has(eventId))?.[0] ?? fallback;
+  // 内容包关：事件写了 presentation.uiChapterId 的标那一章；没写的照下面回退
+  const packTitle = eventId ? packUiChapterTitle(modId, eventId) : undefined;
+  if (packTitle) return packTitle;
   if (modId !== 'lcq.stage_02' || !eventId) return fallback;
   if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
   return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';
