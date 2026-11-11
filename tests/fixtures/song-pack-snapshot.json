@@ -1,0 +1,7231 @@
+{
+ "note": "宋线 S0「先钉」快照：由基线 da0edee9 的现行实现导出一次写入，之后不再重生（tests/songPackSnapshot.test.mjs 只读本文件）。搬迁后输出须与此逐项相同；确需改行为时改本文件并在 PR 写明原因。rails/chapterTitles/chapterMusic/eventMusic/objectives 只覆盖宋 8 关；secondaryLines*/resolveAvailableLines/quarantine/milestoneReward* 是共享表，覆盖全部线。",
+ "songStageIds": [
+  "lcq.stage_10_jiangzhou_shadow_war",
+  "lcq.stage_11_lieshan_battle",
+  "lcq.stage_12_jiangzhou_counterwar",
+  "lyl.jiangzhou_retreat",
+  "lyl.lin_an_black_sea",
+  "lyl.lin_an_bridge",
+  "lyl.taiquan_expedition",
+  "lyl.xiaoyingzhou_blacksea_trap"
+ ],
+ "rails": {
+  "lcq.stage_10_jiangzhou_shadow_war": {
+   "id": "qingyu.stage_10_jiangzhou_shadow_war",
+   "modId": "lcq.stage_10_jiangzhou_shadow_war",
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_orders",
+   "orderedEventIds": [
+    "lcq.event.s10_01_jiangzhou_order",
+    "lcq.event.s10_02_yeying_pass",
+    "lcq.event.yeying_seat_struggle",
+    "lcq.event.s10_03_ninja_trace",
+    "lcq.event.s10_04_left_army_review",
+    "lcq.event.s10_05_war_funds",
+    "lcq.event.s10_06_ruined_temple",
+    "lcq.event.s10_07_preemptive_strike",
+    "lcq.event.s10_08_lair_reversal",
+    "lcq.event.s10_09_yin_yang_fish",
+    "lcq.event.s10_10_xiaozi_crisis"
+   ],
+   "contracts": [
+    {
+     "eventId": "lcq.event.s10_01_jiangzhou_order",
+     "mustReach": "贾师宪无视王丞相回书，下令攻下江州以清除岳鹏举余党，并计划利用上四军展示军力。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_02_yeying_pass",
+     "mustReach": "程宗扬一行抵达夜影关，因宋军封锁云水航道被迫停航，改走陆路前往晴州。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.yeying_seat_struggle",
+     "mustReach": "程宗扬在夜影关听清：蔺采泉与商乐轩表面追查卓云君叛教，实则在争太乙掌教之位。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "让掌教之争在本拍分出胜负",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足夜影关见闻与两人言语间的机锋，不得提前定下掌教人选。"
+    },
+    {
+     "eventId": "lcq.event.s10_03_ninja_trace",
+     "mustReach": "月霜在雪隼佣兵团住处遭遇东瀛女忍者偷窃，双方交手后女忍者负伤逃脱，石之隼判定其为东瀛忍者。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_04_left_army_review",
+     "mustReach": "程宗扬与孟非卿分析王哲左武军覆灭原因，推断有人故意切断补给并泄漏军机，排除金蜜镝嫌疑。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_05_war_funds",
+     "mustReach": "程宗扬利用云氏作为幌子，以鹏翼社为抵押，成功从陶弘敏处以月息两分借得十万金铢，解决孟非卿军资短缺的燃眉之急。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_06_ruined_temple",
+     "mustReach": "程宗扬夜探时跟踪可疑人物至破道观，认出元行健是林之澜手下，暗示黑魔海势力介入。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_07_preemptive_strike",
+     "mustReach": "程宗扬基于三个理由主张先发制人打击黑魔海，以保护月霜并消除后患。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_08_lair_reversal",
+     "mustReach": "星月湖孟非卿率众与黑魔海巫嬷嬷、鱼无夷等人在洞穴内激战，黑魔海记士辛卯暴露星月湖成员信息，鱼无夷以毒网偷袭孟非卿，局势逆转。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_09_yin_yang_fish",
+     "mustReach": "鱼无夷识破程宗扬伪装，在濒死前将阴阳鱼藏于马王巷七海客栈的线索告知他，作为对黑魔海的报复。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s10_10_xiaozi_crisis",
+     "mustReach": "小紫在兰汤馆引诱乐明珠后咬破其脖颈吸血，被程宗扬及时阻止。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    }
+   ]
+  },
+  "lcq.stage_11_lieshan_battle": {
+   "id": "qingyu.stage_11_lieshan_battle",
+   "modId": "lcq.stage_11_lieshan_battle",
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_fortress",
+   "orderedEventIds": [
+    "lcq.event.s11_01_pengri_arrives",
+    "lcq.event.s11_02_cement_fortress",
+    "lcq.event.s11_03_protect_yueshuang",
+    "lcq.event.s11_04_xingyue_appears",
+    "lcq.event.s11_05_wangtao_breaks",
+    "lcq.event.s11_06_snow_battle",
+    "lcq.event.s11_07_camp_falls",
+    "lcq.event.s11_08_jiangzhou_lockdown",
+    "lcq.event.s11_09_grain_plan",
+    "lcq.event.s11_10_sanchuankou_defeat"
+   ],
+   "contracts": [
+    {
+     "eventId": "lcq.event.s11_01_pengri_arrives",
+     "mustReach": "捧日军骑兵都抵达烈山，刘宜孙与张亢率部作为先锋，为大军选择营地。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_02_cement_fortress",
+     "mustReach": "萧遥逸向程宗扬展示两个月内建成的十二座水泥城堡及悬楼等新型城防，大幅提升江州防御能力。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_03_protect_yueshuang",
+     "mustReach": "孟非卿命程宗扬率一营三十人及雪隼佣兵团六百人赴烈山三川口，保护月霜，避免其擅自冲锋，并授予指挥权与计时器。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_04_xingyue_appears",
+     "mustReach": "星月湖中央军潜伏雪中突然现身，以齐声口号和统一黑色军装震慑捧日军前锋。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_05_wangtao_breaks",
+     "mustReach": "八骏之一王韬以一人之力突入宋军前阵，焚天斧击溃宋军防线，导致前阵崩溃。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_06_snow_battle",
+     "mustReach": "星月湖四营与宋军铁甲营在三川口雪原激战，双方伤亡过半仍不退却。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_07_camp_falls",
+     "mustReach": "敌寇术者施展雷诀引闪电击毁宋军大纛，随后御林军刀队疾攻，轻易攻破木栅，宋军中军大营陷落。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_08_jiangzhou_lockdown",
+     "mustReach": "捧日右厢军击败星月湖前锋后抵近三川口，两日后越过烈山兵临江州，江州城全城戒严并加固城防。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_09_grain_plan",
+     "mustReach": "程宗扬向云苍峰透露粮战全盘计划：以三十万金铢买晴州二百万石粮食为储备，再以五十万金铢拉升宋国粮价至每石三贯，先从筠州布行暗桩切入。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s11_10_sanchuankou_defeat",
+     "mustReach": "宋军在三川口遭遇西夏军十倍兵力围攻，主将刘平重伤后因后军都监黄德和临阵脱逃导致溃败，最终被俘。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    }
+   ]
+  },
+  "lcq.stage_12_jiangzhou_counterwar": {
+   "id": "qingyu.stage_12_jiangzhou_counterwar",
+   "modId": "lcq.stage_12_jiangzhou_counterwar",
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "orderedEventIds": [
+    "lcq.event.s12_01_grain_route_blocked",
+    "lcq.event.s12_02_recognize_zhuo",
+    "lcq.event.s12_03_xiaozi_controls_zhuo",
+    "lcq.event.jin_vacate_jiangzhou",
+    "lcq.event.s12_04_river_granary",
+    "lcq.event.tuntian_post",
+    "lcq.event.s12_05_granary_fire_plan",
+    "lcq.event.s12_06_dragon_guard_routs",
+    "lcq.event.s12_07_left_wing_raid",
+    "lcq.event.s12_08_dingchuan_raid",
+    "lcq.event.s12_09_ge_huaimin_killed",
+    "lcq.event.s12_10_rescue_xiao",
+    "lcq.event.s12_11_siege_begins",
+    "lcq.event.s12_12_gate_fire",
+    "lcq.event.s12_13_long_siege",
+    "lcq.event.pengyi_takeover",
+    "lcq.event.s12_14_chenxing_appears",
+    "lcq.event.s12_15_capture_jingli",
+    "lcq.event.s12_16_corpse_poison",
+    "lcq.event.s12_17_shanghou_stays",
+    "lcq.event.s12_18_linan_grain_order"
+   ],
+   "contracts": [
+    {
+     "eventId": "lcq.event.s12_01_grain_route_blocked",
+     "mustReach": "程宗扬发现浮凌江下游乱石滩无法通航，人力运输成本过高，导致粮食转运计划受阻。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_02_recognize_zhuo",
+     "mustReach": "程宗扬在沐羽城的新年庆典中，辨认出云中仙子正是仇敌卓云君，决定暗中复仇。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_03_xiaozi_controls_zhuo",
+     "mustReach": "小紫突然现身，以更高权威压制卓云君，迫使她彻底臣服并指导徒儿侍奉，卓云君为保命放弃抵抗。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.jin_vacate_jiangzhou",
+     "mustReach": "晋国丞相与重臣定计腾出江州，让宋军入境剿星月湖，不惜毁城应对。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "晋廷出兵护江州",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足消息传到江州的经过与众人的反应，不得改写晋廷让地的决定。"
+    },
+    {
+     "eventId": "lcq.event.s12_04_river_granary",
+     "mustReach": "滕知州被程宗扬言辞感动，同意在江边设粮仓由程记粮铺经营，秦桧推辞官仓私营，改为借用，程宗扬借机掩护运粮。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.tuntian_post",
+     "mustReach": "滕甫赞赏程宗扬的义举，为他捐官屯田司员外郎；程宗扬接下职位，把籍贯落进册。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改授团练等别的官职",
+      "把员外郎写成实权要职",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足滕甫推官、秦桧比较品秩与落籍的过程，不得改写所授官职。"
+    },
+    {
+     "eventId": "lcq.event.s12_05_granary_fire_plan",
+     "mustReach": "程宗扬计划放火烧毁常平仓以操纵粮价",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_06_dragon_guard_routs",
+     "mustReach": "桑怿与斯明信、卢景激战，终因寡不敌众被斩首，第一军溃败。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_07_left_wing_raid",
+     "mustReach": "星月湖大营突袭宋军龙卫左厢军，宋军指挥体系被摧毁，但随军文官耿傅挺身而出指挥残部结阵死守，与武英共生死，拖延时间以待援军。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_08_dingchuan_raid",
+     "mustReach": "星月湖大营在孟非卿主持下，决定以奇袭战术攻击宋军定川寨，目标为阵斩主将葛怀敏，以扭转宋军兵力优势。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_09_ge_huaimin_killed",
+     "mustReach": "定川寨宋军溃逃，葛怀敏率军突围，遭遇孟非卿雷区伏击，最终被孟非卿斩杀。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_10_rescue_xiao",
+     "mustReach": "大貂珰秦翰生擒萧遥逸，程宗扬以九阳神功拼死相救，击伤秦翰一指，救下萧遥逸。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_11_siege_begins",
+     "mustReach": "宋军连夜调动两万余兵力，携带投石机、巢车、云梯等重型器械，对江州城发动全面攻城战。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_12_gate_fire",
+     "mustReach": "星月湖军以水泥门闸和滚油火攻，消灭进入城门洞的宋军冲车部队。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_13_long_siege",
+     "mustReach": "宋军采用堆土山和挖地道战术，战事陷入僵持，江州城面临长期围困。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.pengyi_takeover",
+     "mustReach": "程宗扬取得孟非卿许可，全盘接管鹏翼社及星月湖大营暗中操控的产业。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "孟非卿拒绝入股或收回产业",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足营帐内谈入股与交接产业的细节，不得改写接管结果。"
+    },
+    {
+     "eventId": "lcq.event.s12_14_chenxing_appears",
+     "mustReach": "小紫现身出手，以幽冥宗法术与黄泉玉臂钏对抗刺客，点破辰星七妖身份并提及龙宸组织。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_15_capture_jingli",
+     "mustReach": "小紫用都卢难旦妖铃抽取四名刺客阴魂，施展幽冥爪击败龙宸刺客惊理，并擒获之。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_16_corpse_poison",
+     "mustReach": "鸩羽殇侯施展尸毒制造毒尸，宋军阵线崩溃，程宗扬得救。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_17_shanghou_stays",
+     "mustReach": "程宗扬以经济和人情筹码说服殇侯留守江州两个月，殇侯答应派出近卫军协助防守。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lcq.event.s12_18_linan_grain_order",
+     "mustReach": "程宗扬通过水镜命令秦桧在筠州抛售粮食并散布宋军和谈谣言，以打压粮价后低价收购。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    }
+   ]
+  },
+  "lyl.jiangzhou_retreat": {
+   "id": "yunlong.jiangzhou_retreat",
+   "modId": "lyl.jiangzhou_retreat",
+   "chapterId": "lyl.chapter.jiangzhou_retreat",
+   "orderedEventIds": [
+    "lyl.event.s01_01",
+    "lyl.event.s01_02",
+    "lyl.event.s01_03",
+    "lyl.event.s01_04",
+    "lyl.event.s01_05"
+   ],
+   "contracts": [
+    {
+     "eventId": "lyl.event.s01_01",
+     "mustReach": "夏用和与秦翰于江州主持决战，宋军大溃，粮尽兵疲，决定退军，秦翰率选锋营断后。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.s01_02",
+     "mustReach": "程宗扬乘船离江州赴临安，途中遇谢幼度与鱼长老对峙，谢幼度退敌。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.s01_03",
+     "mustReach": "王团练手下乡兵屠荆溪村寨、凌辱妇女，程宗扬等人赶到救援，斩杀乡兵。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.s01_04",
+     "mustReach": "程宗扬以昭南人名义与滕甫交易三十万石粮食，每石九百铜铢，滕甫挪用军费支付。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.s01_05",
+     "mustReach": "程宗扬以五千石粮食诱王团练以劣米换新粮，导致常平仓失火，王团练被查。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    }
+   ]
+  },
+  "lyl.lin_an_bridge": {
+   "id": "yunlong.lin_an_bridge",
+   "modId": "lyl.lin_an_bridge",
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "orderedEventIds": [
+    "lyl.event.linan_arrive_fengbo",
+    "lyl.event.tail_li_shishi",
+    "lyl.event.survey_wumu_mansion",
+    "lyl.event.evade_huangchengsi",
+    "lyl.event.mingqingsi_lin_lu_meeting",
+    "lyl.event.decode_bianmenwa_note",
+    "lyl.event.weiyuan_extortion",
+    "lyl.event.libu_registration",
+    "lyl.event.meet_xue_yanshan",
+    "lyl.event.blacksea_iron_puppet",
+    "lyl.event.identify_xue_cold_poison",
+    "lyl.event.leifeng_pagoda_invite",
+    "lyl.event.lin_an_bridge_01_beat",
+    "lyl.event.leifeng_repel_gao",
+    "lyl.event.lin_an_bridge_02_beat",
+    "lyl.event.decide_chase_weiyuan",
+    "lyl.event.lin_an_bridge_03_beat",
+    "lyl.event.pass_kotian_stone",
+    "lyl.event.lin_an_bridge_04_beat",
+    "lyl.event.ivory_visit_weiyuan",
+    "lyl.event.siying_lane_saber_ambush",
+    "lyl.event.lin_an_bridge_xieyi_tomb"
+   ],
+   "contracts": [
+    {
+     "eventId": "lyl.event.linan_arrive_fengbo",
+     "mustReach": "程宗扬一行由钱塘门进入临安，途经风波亭后赶往落脚处；熟识谢艺时在亭后谢艺墓前上香叩首，未识谢艺不出谢艺；谢艺长养线不得出现谢艺墓。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "拜祭岳鹏举的空坟",
+      "谢艺长养线出现谢艺墓或空墓冒充已葬",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足入城所见、风波亭的冷落与众人致意，不得改写死／生真值。"
+    },
+    {
+     "eventId": "lyl.event.tail_li_shishi",
+     "mustReach": "程宗扬尾随李师师的马车至威远镖局，确认她为何突然返回临安。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "与李师师当面相认",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足沿街尾随与打听镖局底细，不得把她回家的缘故改成别的。"
+    },
+    {
+     "eventId": "lyl.event.survey_wumu_mansion",
+     "mustReach": "程宗扬绕武穆王府查清建筑方位，不惊动周边暗梢。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "当场潜入王府",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足王府封条与府内楼阁的外观，不得写入府所见。"
+    },
+    {
+     "eventId": "lyl.event.evade_huangchengsi",
+     "mustReach": "程宗扬识破皇城司尾随，不动手，以富商身份掩护行踪进入明庆寺。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "与盯梢者动手",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足买香、拜佛与寺中僧人的市侩，不得暴露真实身份。"
+    },
+    {
+     "eventId": "lyl.event.mingqingsi_lin_lu_meeting",
+     "mustReach": "程宗扬在明庆寺菜园外旁观鲁智深倒拔垂杨柳、林冲上前通名，判断时机未到，没有贸然结交便离寺。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "本拍与林冲或鲁智深结交",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足拔柳场面与两人通名，不得让程宗扬当场露面结识。"
+    },
+    {
+     "eventId": "lyl.event.decode_bianmenwa_note",
+     "mustReach": "程宗扬解读祈福榜上的接头暗号，并答复薛延山的会面请求。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "点破线人的真实身份",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足字条内容与秦桧的进言，不得提前写出会面结果。"
+    },
+    {
+     "eventId": "lyl.event.weiyuan_extortion",
+     "mustReach": "程宗扬听取俞子元的调查，确认高衙内勒索威远镖局的条件。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "程宗扬替威远镖局出头顶下这桩事",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足失镖来由与高衙内的来历，不得改写勒索条件。"
+    },
+    {
+     "eventId": "lyl.event.libu_registration",
+     "mustReach": "程宗扬完成吏部报到，查明林冲调走了哪些档案。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "在吏部与林冲翻脸",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足报到过场与打点书吏，不得改写林冲调档的事实。"
+    },
+    {
+     "eventId": "lyl.event.meet_xue_yanshan",
+     "mustReach": "程宗扬在西湖农居听完薛延山讲述太湖遇袭，并接下照管雪隼残部的托付。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "点破袭击者身份",
+      "让薛延山在本拍伤愈",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足农居见面与遇袭经过，不得提前写出薛延山的结局。"
+    },
+    {
+     "eventId": "lyl.event.blacksea_iron_puppet",
+     "mustReach": "程宗扬人在临安，经水镜看见江州场外铁傀儡重创虎翼军，小紫取走龙睛玉并抽取一名军官阴魂试驱傀儡。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "程宗扬亲临江州",
+      "点破同行老者的身份",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足水镜里的战场与小紫的举动，不得改写战果。"
+    },
+    {
+     "eventId": "lyl.event.identify_xue_cold_poison",
+     "mustReach": "程宗扬检查薛延山身上的寒毒，并确认他是否见过鬼牙。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "当场解去寒毒",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足诊脉与比对鬼牙的过程，不得写成已经治愈。"
+    },
+    {
+     "eventId": "lyl.event.leifeng_pagoda_invite",
+     "mustReach": "程宗扬应李师师之邀，与她一同登上雷峰塔。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "本拍就与高衙内冲突",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足雷峰夕照与塔上闲谈，不得提前写出后续冲突。"
+    },
+    {
+     "eventId": "lyl.event.lin_an_bridge_01_beat",
+     "mustReach": "程宗扬在便门瓦牡丹棚获情报，涉及宋军部署、贾师宪决策、林冲背景等，疑线人在皇城司。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.leifeng_repel_gao",
+     "mustReach": "程宗扬在雷峰塔阻止陆谦强带走李师师，逼高衙内一行退走。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "当场重伤或杀死高衙内",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足陆谦出手与秦桧解围的细节，不得改写高衙内退走的结果。"
+    },
+    {
+     "eventId": "lyl.event.lin_an_bridge_02_beat",
+     "mustReach": "程宗扬与李师师游小瀛洲，遇梁公子等恶少，程宗扬出手教训，李师师因母亲被辱痛哭。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.decide_chase_weiyuan",
+     "mustReach": "程宗扬与秦桧复盘雷峰塔冲突，决定继续调查威远失镖。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "本拍查出劫镖之人",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足车中议论与对光明观堂的分析，不得提前揭开失镖真相。"
+    },
+    {
+     "eventId": "lyl.event.lin_an_bridge_03_beat",
+     "mustReach": "程宗扬与众人分析黑魔海可能通过林娘子渗透禁军，决定拜访鲁智深。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.pass_kotian_stone",
+     "mustReach": "程宗扬看过朝天门下的叩天石，按暗号约定前往便门瓦。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "取走叩天石上的剑",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足剑铭与秦桧的议论，不得改写去便门瓦的约定。"
+    },
+    {
+     "eventId": "lyl.event.lin_an_bridge_04_beat",
+     "mustReach": "程宗扬在明庆寺与鲁智深、林冲饮酒，林冲因高衙内调戏林娘子而忍气吞声。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.ivory_visit_weiyuan",
+     "mustReach": "程宗扬以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "当场替李师师退婚",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足登门送礼与阮香琳的言谈，不得改写夫妇俩的决定。"
+    },
+    {
+     "eventId": "lyl.event.siying_lane_saber_ambush",
+     "mustReach": "程宗扬在司营巷旁观林冲买刀并确认伏击结果，不贸然打断高衙内的布局。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "出手打断买刀或伏击",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足卖刀汉子与林冲的交易，不得改写伏击结果。"
+    },
+    {
+     "eventId": "lyl.event.lin_an_bridge_xieyi_tomb",
+     "mustReach": "出城迎接月霜等人，到风波亭后拜祭岳鹏举；谢艺墓只在死亡线出现。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "生还线出现谢艺墓或空墓冒充已葬",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足迎接与祭扫过程，不得改写死／生真值。"
+    }
+   ]
+  },
+  "lyl.xiaoyingzhou_blacksea_trap": {
+   "id": "yunlong.xiaoyingzhou_blacksea_trap",
+   "modId": "lyl.xiaoyingzhou_blacksea_trap",
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "orderedEventIds": [
+    "lyl.event.linjia_sees_ningyi",
+    "lyl.event.xihu_villa_eavesdrop",
+    "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+    "lyl.event.xiaoyingzhou_paper_plan",
+    "lyl.event.xiaoyingzhou_paper_mint",
+    "lyl.event.xiaoyingzhou_lin_takes_seat",
+    "lyl.event.song_baochao_appointed",
+    "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+    "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+    "lyl.event.xiaoyingzhou_cement_truce"
+   ],
+   "contracts": [
+    {
+     "eventId": "lyl.event.linjia_sees_ningyi",
+     "mustReach": "程宗扬在林家认出凝姨就是阮香凝，发现她与成婚多年的表象不符，怀疑她与黑魔海有关。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "坐实阮香凝的黑魔海身份",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足林家作客的场面，疑点只记下不点破。"
+    },
+    {
+     "eventId": "lyl.event.xihu_villa_eavesdrop",
+     "mustReach": "程宗扬潜入西湖别业，从梁上听见高衙内与陆谦复盘失镖圈套，并确认他们还要继续设计林冲。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "当场现身阻止",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足循车辙追踪与梁上所闻，不得改写密谋内容。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+     "mustReach": "程宗扬与李师师在前往梵天寺途中遭禁军伏击，马车被毁，俞子元掩护。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+     "mustReach": "蔺采泉以支持江州为条件，要求程宗扬承认九阳神功出自他，换取太乙真宗支持。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_paper_plan",
+     "mustReach": "程宗扬在多宝阁与贾师宪会面，贾师宪提出发行纸币，程宗扬要求纸币能纳税、发行数量须经认可。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "程宗扬拒绝推纸币",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足会面的讨价还价，不得改写两项条件。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_paper_mint",
+     "mustReach": "程宗扬由童贯引见入宫觐见宋主，宋主同意纸币用于缴纳赋税，并要求双方共同监制。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "纸币由程宗扬独自发行",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足觐见过程与宋主的问答，不得改写共同监制的安排。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_lin_takes_seat",
+     "mustReach": "蔺采泉在临安鹤林观宣布继承太乙真宗掌教，秋少君填补齐放鹤空缺出任教御。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改由他人继任掌教",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足鹤林观的仪式与在场众人，不得改写继任结果。"
+    },
+    {
+     "eventId": "lyl.event.song_baochao_appointed",
+     "mustReach": "户部新设宝钞局，宋主亲笔点程宗扬以屯田司员外郎兼任宝钞局主事，诏旨下达。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改封宝钞使或别的官名",
+      "把宝钞局写成有衙门的实权机构",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足消息先一步传来与诏书送到的经过，不得改写所授差使。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+     "mustReach": "林冲因持刀闯入白虎堂被刺配江州，程宗扬与鲁智深计划营救。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+     "mustReach": "程宗扬在野猪林与多方混战，孙天羽被俘认叔，静善与鲁智深冲突，林冲身份暴露，皇城司与六扇门介入，大孚灵鹫寺僧众自爆，林冲重伤，鲁智深展示易筋经，黑衣丽人抢夺衣钵，程宗扬抄录袈裟英文。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+     "mustReach": "静善尼姑为袈裟符文夜袭程宗扬，被炸弹击退，程宗扬受伤。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+     "mustReach": "程宗扬穿夜用迷彩服潜入明庆寺观音殿，藏身藻井观察太皇太后与太后，被郭槐和封德明制住，后因劳力士手表被太皇太后认出而获释。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+     "mustReach": "剑玉姬与西门庆分析太医局医档，发现刘太后用药线索，涉及韦太后宫女，剑玉姬处理了西门庆的宫女。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+     "mustReach": "程宗扬在小瀛洲设伏，与西门庆、剑玉姬、小玲儿等交战，直属营与翻江会水匪激战，西门庆和李师师受伤。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+     "mustReach": "程宗扬在保宁寺放生池发现剑玉姬水中无影，识破幻术；剑玉姬露出真身，郭槐以龙爪手攻击，程宗扬用屠龙刀搏斗，真气耗尽时引丹田异变，屠龙刀寒力涌入引发龙吟。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+     "mustReach": "米远志奉蔺采泉之命助阵，已死老僧展八臂魔僧真身激战；郭槐以荡星鞭击败但遭剑玉姬真身暗算；程宗扬用雷射刀偷袭剑玉姬得手；蒙面客抢走屠龙刀助程宗扬撤退；卓云君腰斩西门庆；剑玉姬带西门庆等撤退，齐姐劫游婵离去。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "改写本拍原著结果",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+    },
+    {
+     "eventId": "lyl.event.xiaoyingzhou_cement_truce",
+     "mustReach": "程宗扬与剑玉姬在丰乐楼谈定：黑魔海获晴州水泥五年代理权，承诺五年不踏入宋国。",
+     "completionEvidence": [],
+     "forbiddenInCanon": [
+      "谈判破裂",
+      "黑魔海就此退出六朝",
+      "提前演出后续剧情"
+     ],
+     "allowedElaboration": "可补足丰乐楼的交锋与齐羽仙的威胁，不得改写协议条款。"
+    }
+   ]
+  }
+ },
+ "chapterTitles": {
+  "lcq.stage_10_jiangzhou_shadow_war": {
+   "lcq.event.s10_01_jiangzhou_order": "<<FALLBACK>>",
+   "lcq.event.s10_02_yeying_pass": "<<FALLBACK>>",
+   "lcq.event.s10_03_ninja_trace": "<<FALLBACK>>",
+   "lcq.event.s10_04_left_army_review": "<<FALLBACK>>",
+   "lcq.event.s10_05_war_funds": "<<FALLBACK>>",
+   "lcq.event.s10_06_ruined_temple": "<<FALLBACK>>",
+   "lcq.event.s10_07_preemptive_strike": "<<FALLBACK>>",
+   "lcq.event.s10_08_lair_reversal": "<<FALLBACK>>",
+   "lcq.event.s10_09_yin_yang_fish": "<<FALLBACK>>",
+   "lcq.event.s10_10_xiaozi_crisis": "<<FALLBACK>>",
+   "lcq.event.yeying_seat_struggle": "<<FALLBACK>>",
+   "lcq.event.yuanxingjian_interrogated": "<<FALLBACK>>",
+   "lcq.event.blacksea_vault_split": "<<FALLBACK>>",
+   "lcq.event.yuanxingjian_disposed": "<<FALLBACK>>",
+   "lyl.event.__song_s0_not_in_catalog__": "<<FALLBACK>>"
+  },
+  "lcq.stage_11_lieshan_battle": {
+   "lcq.event.s11_01_pengri_arrives": "<<FALLBACK>>",
+   "lcq.event.s11_02_cement_fortress": "<<FALLBACK>>",
+   "lcq.event.s11_03_protect_yueshuang": "<<FALLBACK>>",
+   "lcq.event.s11_04_xingyue_appears": "<<FALLBACK>>",
+   "lcq.event.s11_05_wangtao_breaks": "<<FALLBACK>>",
+   "lcq.event.s11_06_snow_battle": "<<FALLBACK>>",
+   "lcq.event.s11_07_camp_falls": "<<FALLBACK>>",
+   "lcq.event.s11_08_jiangzhou_lockdown": "<<FALLBACK>>",
+   "lcq.event.s11_09_grain_plan": "<<FALLBACK>>",
+   "lcq.event.s11_10_sanchuankou_defeat": "<<FALLBACK>>",
+   "lcq.event.qiushaojun_breaks_with_linzhilan": "<<FALLBACK>>",
+   "lcq.event.sanchuankou_result_rumor": "<<FALLBACK>>",
+   "lyl.event.__song_s0_not_in_catalog__": "<<FALLBACK>>"
+  },
+  "lcq.stage_12_jiangzhou_counterwar": {
+   "lcq.event.s12_01_grain_route_blocked": "<<FALLBACK>>",
+   "lcq.event.s12_02_recognize_zhuo": "<<FALLBACK>>",
+   "lcq.event.s12_03_xiaozi_controls_zhuo": "<<FALLBACK>>",
+   "lcq.event.s12_04_river_granary": "<<FALLBACK>>",
+   "lcq.event.s12_05_granary_fire_plan": "<<FALLBACK>>",
+   "lcq.event.s12_06_dragon_guard_routs": "<<FALLBACK>>",
+   "lcq.event.s12_07_left_wing_raid": "<<FALLBACK>>",
+   "lcq.event.s12_08_dingchuan_raid": "<<FALLBACK>>",
+   "lcq.event.s12_09_ge_huaimin_killed": "<<FALLBACK>>",
+   "lcq.event.s12_10_rescue_xiao": "<<FALLBACK>>",
+   "lcq.event.s12_11_siege_begins": "<<FALLBACK>>",
+   "lcq.event.s12_12_gate_fire": "<<FALLBACK>>",
+   "lcq.event.s12_13_long_siege": "<<FALLBACK>>",
+   "lcq.event.s12_14_chenxing_appears": "<<FALLBACK>>",
+   "lcq.event.s12_15_capture_jingli": "<<FALLBACK>>",
+   "lcq.event.s12_16_corpse_poison": "<<FALLBACK>>",
+   "lcq.event.s12_17_shanghou_stays": "<<FALLBACK>>",
+   "lcq.event.s12_18_linan_grain_order": "<<FALLBACK>>",
+   "lcq.event.pengyi_takeover": "<<FALLBACK>>",
+   "lcq.event.jin_vacate_jiangzhou": "<<FALLBACK>>",
+   "lcq.event.tuntian_post": "<<FALLBACK>>",
+   "lyl.event.__song_s0_not_in_catalog__": "<<FALLBACK>>"
+  },
+  "lyl.jiangzhou_retreat": {
+   "lyl.event.s01_01": "<<FALLBACK>>",
+   "lyl.event.s01_02": "<<FALLBACK>>",
+   "lyl.event.s01_03": "<<FALLBACK>>",
+   "lyl.event.s01_04": "<<FALLBACK>>",
+   "lyl.event.s01_05": "<<FALLBACK>>",
+   "lyl.event.debut_zhuoyunjun": "<<FALLBACK>>",
+   "lyl.event.__song_s0_not_in_catalog__": "<<FALLBACK>>"
+  },
+  "lyl.lin_an_black_sea": {
+   "lyl.event.debut_ruan_sisters": "<<FALLBACK>>",
+   "liuchao.event.wei_yuan_first_contact": "<<FALLBACK>>",
+   "lyl.event.ruan_xiangning_secret": "<<FALLBACK>>",
+   "liuchao.event.lin_chong_confront": "<<FALLBACK>>",
+   "lyl.event.mingqingsi_encounter": "<<FALLBACK>>",
+   "liuchao.event.gather_intel": "<<FALLBACK>>",
+   "liuchao.event.factory_registration": "<<FALLBACK>>",
+   "liuchao.event.xue_sun_meeting": "<<FALLBACK>>",
+   "liuchao.event.cold_poison_mystery": "<<FALLBACK>>",
+   "lyl.event.ruan_xianglin_scheme": "<<FALLBACK>>",
+   "liuchao.event.wei_yuan_crisis_deepen": "<<FALLBACK>>",
+   "liuchao.event.gao_yanei_showdown": "<<FALLBACK>>",
+   "liuchao.event.you_chan_meeting": "<<FALLBACK>>",
+   "liuchao.event.black_sea_approach": "<<FALLBACK>>",
+   "liuchao.event.final_preparations": "<<FALLBACK>>",
+   "lyl.event.__song_s0_not_in_catalog__": "<<FALLBACK>>"
+  },
+  "lyl.lin_an_bridge": {
+   "lyl.event.linan_arrive_fengbo": "初抵临安",
+   "lyl.event.lin_an_bridge_01_beat": "临安疑线",
+   "lyl.event.lin_an_bridge_02_beat": "临安疑线",
+   "lyl.event.lin_an_bridge_03_beat": "临安疑线",
+   "lyl.event.lin_an_bridge_04_beat": "临安疑线",
+   "lyl.event.debut_yundanliu": "临安疑线",
+   "lyl.event.debut_yunruyao": "临安疑线",
+   "lyl.event.debut_zhaohede": "临安疑线",
+   "lyl.event.debut_yinfulan": "临安疑线",
+   "lyl.event.debut_jingli": "临安疑线",
+   "lyl.event.debut_jianyuji": "临安疑线",
+   "lyl.event.lin_an_bridge_xieyi_tomb": "临安疑线",
+   "lyl.event.mingqingsi_lin_lu_meeting": "初抵临安",
+   "lyl.event.blacksea_iron_puppet": "初抵临安",
+   "lyl.event.siying_lane_saber_ambush": "临安疑线",
+   "lyl.event.tail_li_shishi": "初抵临安",
+   "lyl.event.evade_huangchengsi": "初抵临安",
+   "lyl.event.libu_registration": "初抵临安",
+   "lyl.event.leifeng_pagoda_invite": "临安疑线",
+   "lyl.event.leifeng_repel_gao": "临安疑线",
+   "lyl.event.weiyuan_extortion": "初抵临安",
+   "lyl.event.ivory_visit_weiyuan": "临安疑线",
+   "lyl.event.survey_wumu_mansion": "初抵临安",
+   "lyl.event.decode_bianmenwa_note": "初抵临安",
+   "lyl.event.meet_xue_yanshan": "初抵临安",
+   "lyl.event.identify_xue_cold_poison": "临安疑线",
+   "lyl.event.decide_chase_weiyuan": "临安疑线",
+   "lyl.event.pass_kotian_stone": "临安疑线",
+   "lyl.event.xue_yanshan_slain": "临安疑线",
+   "lyl.event.__song_s0_not_in_catalog__": "临安疑线"
+  },
+  "lyl.taiquan_expedition": {
+   "liuchao.event.enter_taiquan": "<<FALLBACK>>",
+   "liuchao.event.reconnoiter": "<<FALLBACK>>",
+   "liuchao.event.du_zong_raid": "<<FALLBACK>>",
+   "liuchao.event.fruit_conflict": "<<FALLBACK>>",
+   "liuchao.event.escape_taiquan": "<<FALLBACK>>",
+   "lyl.event.__song_s0_not_in_catalog__": "<<FALLBACK>>"
+  },
+  "lyl.xiaoyingzhou_blacksea_trap": {
+   "lyl.event.xiaoyingzhou_blacksea_trap_01_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_02_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_03_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_04_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_05_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_06_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_07_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_09_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_blacksea_trap_10_beat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_lin_takes_seat": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_cement_truce": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_paper_plan": "<<FALLBACK>>",
+   "lyl.event.xiaoyingzhou_paper_mint": "<<FALLBACK>>",
+   "lyl.event.song_baochao_appointed": "<<FALLBACK>>",
+   "lyl.event.linjia_sees_ningyi": "<<FALLBACK>>",
+   "lyl.event.xihu_villa_eavesdrop": "<<FALLBACK>>",
+   "lyl.event.linchong_still_exiled": "<<FALLBACK>>",
+   "lyl.event.__song_s0_not_in_catalog__": "<<FALLBACK>>"
+  }
+ },
+ "chapterMusic": {
+  "lcq.chapter.stage_10_jiangzhou_shadow_war_orders": "battle",
+  "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou": "battle",
+  "lcq.chapter.stage_10_jiangzhou_shadow_war_lair": "battle",
+  "lcq.chapter.stage_11_lieshan_battle_fortress": "battle",
+  "lcq.chapter.stage_11_lieshan_battle_sanchuankou": "battle",
+  "lcq.chapter.stage_11_lieshan_battle_grain": "battle",
+  "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad": "battle",
+  "lcq.chapter.stage_12_jiangzhou_counterwar_dingchuan": "battle",
+  "lcq.chapter.stage_12_jiangzhou_counterwar_siege": "battle",
+  "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing": "battle",
+  "lyl.chapter.jiangzhou_retreat": "daily",
+  "liuchao.chapter.arrival": "daily",
+  "liuchao.chapter.lin_chong_track": "daily",
+  "liuchao.chapter.wei_yuan_affair": "daily",
+  "liuchao.chapter.xue_sun_trust": "daily",
+  "liuchao.chapter.black_sea_prelude": "daily",
+  "lyl.chapter.lin_an_bridge_arrival": "court",
+  "lyl.chapter.lin_an_bridge_intel": "court",
+  "liuchao.chapter.arrival_in_canglan": "explore",
+  "liuchao.chapter.taiquan_exploration": "explore",
+  "liuchao.chapter.alliance_and_conflict": "explore",
+  "liuchao.chapter.hunt_for_fruit": "battle",
+  "liuchao.chapter.final_showdown": "climax",
+  "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong": "blacksea",
+  "lyl.chapter.xiaoyingzhou_blacksea_trap_trap": "blacksea"
+ },
+ "eventMusic": {
+  "lcq.event.s10_01_jiangzhou_order": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_orders",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "court"
+  },
+  "lcq.event.s10_02_yeying_pass": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_orders",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_03_ninja_trace": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou",
+   "idOnly": "battle",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_04_left_army_review": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_05_war_funds": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_06_ruined_temple": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_07_preemptive_strike": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_lair",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_08_lair_reversal": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_lair",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_09_yin_yang_fish": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_lair",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s10_10_xiaozi_crisis": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_lair",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.yeying_seat_struggle": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_orders",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.yuanxingjian_interrogated": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.blacksea_vault_split": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_lair",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.yuanxingjian_disposed": {
+   "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_qingzhou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_01_pengri_arrives": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_fortress",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_02_cement_fortress": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_fortress",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_03_protect_yueshuang": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_fortress",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_04_xingyue_appears": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_sanchuankou",
+   "idOnly": "aspire",
+   "full": "aspire",
+   "anchorOnly": "aspire"
+  },
+  "lcq.event.s11_05_wangtao_breaks": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_sanchuankou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_06_snow_battle": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_sanchuankou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_07_camp_falls": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_sanchuankou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_08_jiangzhou_lockdown": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_grain",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_09_grain_plan": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_grain",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s11_10_sanchuankou_defeat": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_grain",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.qiushaojun_breaks_with_linzhilan": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_grain",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.sanchuankou_result_rumor": {
+   "chapterId": "lcq.chapter.stage_11_lieshan_battle_sanchuankou",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_01_grain_route_blocked": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_02_recognize_zhuo": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_03_xiaozi_controls_zhuo": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_04_river_granary": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_05_granary_fire_plan": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_06_dragon_guard_routs": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_dingchuan",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_07_left_wing_raid": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_dingchuan",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_08_dingchuan_raid": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_dingchuan",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_09_ge_huaimin_killed": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_dingchuan",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_10_rescue_xiao": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_siege",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_11_siege_begins": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_siege",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_12_gate_fire": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_siege",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_13_long_siege": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_siege",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_14_chenxing_appears": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing",
+   "idOnly": "danger",
+   "full": "danger",
+   "anchorOnly": "danger"
+  },
+  "lcq.event.s12_15_capture_jingli": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_16_corpse_poison": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.s12_17_shanghou_stays": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing",
+   "idOnly": "aspire",
+   "full": "aspire",
+   "anchorOnly": "aspire"
+  },
+  "lcq.event.s12_18_linan_grain_order": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_chenxing",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.pengyi_takeover": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_siege",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.jin_vacate_jiangzhou": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lcq.event.tuntian_post": {
+   "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.s01_01": {
+   "chapterId": "lyl.chapter.jiangzhou_retreat",
+   "idOnly": "danger",
+   "full": "danger",
+   "anchorOnly": "danger"
+  },
+  "lyl.event.s01_02": {
+   "chapterId": "lyl.chapter.jiangzhou_retreat",
+   "idOnly": "daily",
+   "full": "daily",
+   "anchorOnly": "daily"
+  },
+  "lyl.event.s01_03": {
+   "chapterId": "lyl.chapter.jiangzhou_retreat",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "battle"
+  },
+  "lyl.event.s01_04": {
+   "chapterId": "lyl.chapter.jiangzhou_retreat",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "court"
+  },
+  "lyl.event.s01_05": {
+   "chapterId": "lyl.chapter.jiangzhou_retreat",
+   "idOnly": "danger",
+   "full": "danger",
+   "anchorOnly": "danger"
+  },
+  "lyl.event.debut_zhuoyunjun": {
+   "chapterId": "lyl.chapter.jiangzhou_retreat",
+   "idOnly": "daily",
+   "full": "sensual",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.debut_ruan_sisters": {
+   "chapterId": "liuchao.chapter.arrival",
+   "idOnly": "daily",
+   "full": "daily",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.wei_yuan_first_contact": {
+   "chapterId": "liuchao.chapter.arrival",
+   "idOnly": "daily",
+   "full": "danger",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.ruan_xiangning_secret": {
+   "chapterId": "liuchao.chapter.arrival",
+   "idOnly": "daily",
+   "full": "explore",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.lin_chong_confront": {
+   "chapterId": "liuchao.chapter.arrival",
+   "idOnly": "daily",
+   "full": "danger",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.mingqingsi_encounter": {
+   "chapterId": "liuchao.chapter.arrival",
+   "idOnly": "intrigue",
+   "full": "intrigue",
+   "anchorOnly": "intrigue"
+  },
+  "liuchao.event.gather_intel": {
+   "chapterId": "liuchao.chapter.lin_chong_track",
+   "idOnly": "daily",
+   "full": "emotion",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.factory_registration": {
+   "chapterId": "liuchao.chapter.lin_chong_track",
+   "idOnly": "daily",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.xue_sun_meeting": {
+   "chapterId": "liuchao.chapter.wei_yuan_affair",
+   "idOnly": "daily",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.cold_poison_mystery": {
+   "chapterId": "liuchao.chapter.wei_yuan_affair",
+   "idOnly": "daily",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.ruan_xianglin_scheme": {
+   "chapterId": "liuchao.chapter.wei_yuan_affair",
+   "idOnly": "daily",
+   "full": "daily",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.wei_yuan_crisis_deepen": {
+   "chapterId": "liuchao.chapter.xue_sun_trust",
+   "idOnly": "daily",
+   "full": "daily",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.gao_yanei_showdown": {
+   "chapterId": "liuchao.chapter.xue_sun_trust",
+   "idOnly": "daily",
+   "full": "daily",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.you_chan_meeting": {
+   "chapterId": "liuchao.chapter.xue_sun_trust",
+   "idOnly": "daily",
+   "full": "explore",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.black_sea_approach": {
+   "chapterId": "liuchao.chapter.black_sea_prelude",
+   "idOnly": "daily",
+   "full": "daily",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.final_preparations": {
+   "chapterId": "liuchao.chapter.black_sea_prelude",
+   "idOnly": "aspire",
+   "full": "aspire",
+   "anchorOnly": "aspire"
+  },
+  "lyl.event.linan_arrive_fengbo": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.lin_an_bridge_01_beat": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "explore",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.lin_an_bridge_02_beat": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.lin_an_bridge_03_beat": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "danger",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.lin_an_bridge_04_beat": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "explore",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.debut_yundanliu": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.debut_yunruyao": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.debut_zhaohede": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "climax",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.debut_yinfulan": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "danger",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.debut_jingli": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.debut_jianyuji": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.lin_an_bridge_xieyi_tomb": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.mingqingsi_lin_lu_meeting": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.blacksea_iron_puppet": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.siying_lane_saber_ambush": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.tail_li_shishi": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.evade_huangchengsi": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.libu_registration": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.leifeng_pagoda_invite": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.leifeng_repel_gao": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.weiyuan_extortion": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "explore",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.ivory_visit_weiyuan": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.survey_wumu_mansion": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.decode_bianmenwa_note": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.meet_xue_yanshan": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.identify_xue_cold_poison": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.decide_chase_weiyuan": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "explore",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.pass_kotian_stone": {
+   "chapterId": "lyl.chapter.lin_an_bridge_intel",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xue_yanshan_slain": {
+   "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.enter_taiquan": {
+   "chapterId": "liuchao.chapter.arrival_in_canglan",
+   "idOnly": "explore",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.reconnoiter": {
+   "chapterId": "liuchao.chapter.taiquan_exploration",
+   "idOnly": "explore",
+   "full": "danger",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.du_zong_raid": {
+   "chapterId": "liuchao.chapter.alliance_and_conflict",
+   "idOnly": "explore",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.fruit_conflict": {
+   "chapterId": "liuchao.chapter.hunt_for_fruit",
+   "idOnly": "battle",
+   "full": "battle",
+   "anchorOnly": "theme"
+  },
+  "liuchao.event.escape_taiquan": {
+   "chapterId": "liuchao.chapter.final_showdown",
+   "idOnly": "climax",
+   "full": "climax",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_01_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_02_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "court",
+   "full": "court",
+   "anchorOnly": "court"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_03_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_04_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "lament",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_05_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_06_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_trap",
+   "idOnly": "danger",
+   "full": "danger",
+   "anchorOnly": "danger"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_07_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_trap",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_trap",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_09_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_trap",
+   "idOnly": "blacksea",
+   "full": "climax",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_10_beat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_trap",
+   "idOnly": "blacksea",
+   "full": "climax",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_lin_takes_seat": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_cement_truce": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_trap",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_paper_plan": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xiaoyingzhou_paper_mint": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.song_baochao_appointed": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.linjia_sees_ningyi": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.xihu_villa_eavesdrop": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  },
+  "lyl.event.linchong_still_exiled": {
+   "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+   "idOnly": "blacksea",
+   "full": "blacksea",
+   "anchorOnly": "theme"
+  }
+ },
+ "objectives": {
+  "lcq.event.s10_01_jiangzhou_order": {
+   "idOnly": "",
+   "full": "前往江州城，探查贾师宪的军令部署"
+  },
+  "lcq.event.s10_02_yeying_pass": {
+   "idOnly": "",
+   "full": "抵达夜影关，改走陆路前往晴州"
+  },
+  "lcq.event.s10_03_ninja_trace": {
+   "idOnly": "",
+   "full": "在雪隼佣兵团驻地，追查东瀛女忍者行踪"
+  },
+  "lcq.event.s10_04_left_army_review": {
+   "idOnly": "",
+   "full": "与孟非卿复盘左武军覆灭原因"
+  },
+  "lcq.event.s10_05_war_funds": {
+   "idOnly": "",
+   "full": "找陶弘敏借十万金铢军资"
+  },
+  "lcq.event.s10_06_ruined_temple": {
+   "idOnly": "",
+   "full": "夜探破道观，跟踪可疑人物"
+  },
+  "lcq.event.s10_07_preemptive_strike": {
+   "idOnly": "",
+   "full": "计划先发制人打击黑魔海"
+  },
+  "lcq.event.s10_08_lair_reversal": {
+   "idOnly": "",
+   "full": "在星月湖洞穴对抗黑魔海袭击"
+  },
+  "lcq.event.s10_09_yin_yang_fish": {
+   "idOnly": "",
+   "full": "前往马王巷七海客栈寻找阴阳鱼"
+  },
+  "lcq.event.s10_10_xiaozi_crisis": {
+   "idOnly": "",
+   "full": "在兰汤馆阻止小紫吸血行为"
+  },
+  "lcq.event.yeying_seat_struggle": {
+   "idOnly": "",
+   "full": "在夜影关听清蔺采泉与商乐轩在争太乙掌教之位"
+  },
+  "lcq.event.yuanxingjian_interrogated": {
+   "idOnly": "",
+   "full": "审出元行健背后是谁"
+  },
+  "lcq.event.blacksea_vault_split": {
+   "idOnly": "与孟非卿当面谈清银库这笔钱怎么分",
+   "full": "与孟非卿当面谈清银库这笔钱怎么分"
+  },
+  "lcq.event.yuanxingjian_disposed": {
+   "idOnly": "",
+   "full": "亲手了结元行健"
+  },
+  "lcq.event.s11_01_pengri_arrives": {
+   "idOnly": "",
+   "full": "前往烈山，侦察捧日军"
+  },
+  "lcq.event.s11_02_cement_fortress": {
+   "idOnly": "",
+   "full": "前往江州，查看水泥城防"
+  },
+  "lcq.event.s11_03_protect_yueshuang": {
+   "idOnly": "",
+   "full": "率部赴三川口，保护月霜"
+  },
+  "lcq.event.s11_04_xingyue_appears": {
+   "idOnly": "",
+   "full": "在雪原对峙星月湖军"
+  },
+  "lcq.event.s11_05_wangtao_breaks": {
+   "idOnly": "",
+   "full": "抵挡王韬的焚天斧攻势"
+  },
+  "lcq.event.s11_06_snow_battle": {
+   "idOnly": "",
+   "full": "在三川口雪原与宋军激战"
+  },
+  "lcq.event.s11_07_camp_falls": {
+   "idOnly": "",
+   "full": "防守中军大营，抵御雷诀"
+  },
+  "lcq.event.s11_08_jiangzhou_lockdown": {
+   "idOnly": "",
+   "full": "前往江州，协助城防戒严"
+  },
+  "lcq.event.s11_09_grain_plan": {
+   "idOnly": "",
+   "full": "从筠州布行暗桩切入，实施粮战"
+  },
+  "lcq.event.s11_10_sanchuankou_defeat": {
+   "idOnly": "",
+   "full": "在三川口抵御西夏军围攻"
+  },
+  "lcq.event.qiushaojun_breaks_with_linzhilan": {
+   "idOnly": "",
+   "full": "弄清秋少君为什么与林之澜翻脸"
+  },
+  "lcq.event.sanchuankou_result_rumor": {
+   "idOnly": "",
+   "full": "向江州城里问清三川口那一仗的结局"
+  },
+  "lcq.event.s12_01_grain_route_blocked": {
+   "idOnly": "",
+   "full": "探查浮凌江乱石滩，另寻运粮路线"
+  },
+  "lcq.event.s12_02_recognize_zhuo": {
+   "idOnly": "",
+   "full": "在沐羽城庆典中确认卓云君身份"
+  },
+  "lcq.event.s12_03_xiaozi_controls_zhuo": {
+   "idOnly": "",
+   "full": "观察小紫如何压制卓云君"
+  },
+  "lcq.event.s12_04_river_granary": {
+   "idOnly": "",
+   "full": "说服滕知州在江边设粮仓"
+  },
+  "lcq.event.s12_05_granary_fire_plan": {
+   "idOnly": "",
+   "full": "策划烧毁常平仓"
+  },
+  "lcq.event.s12_06_dragon_guard_routs": {
+   "idOnly": "",
+   "full": "支援龙卫第一军抗敌"
+  },
+  "lcq.event.s12_07_left_wing_raid": {
+   "idOnly": "",
+   "full": "突袭龙卫左厢军营地"
+  },
+  "lcq.event.s12_08_dingchuan_raid": {
+   "idOnly": "",
+   "full": "奇袭定川寨宋军"
+  },
+  "lcq.event.s12_09_ge_huaimin_killed": {
+   "idOnly": "",
+   "full": "在定川寨外伏击葛怀敏"
+  },
+  "lcq.event.s12_10_rescue_xiao": {
+   "idOnly": "",
+   "full": "救下被擒的萧遥逸"
+  },
+  "lcq.event.s12_11_siege_begins": {
+   "idOnly": "",
+   "full": "防守江州城抵御攻城"
+  },
+  "lcq.event.s12_12_gate_fire": {
+   "idOnly": "",
+   "full": "在城门用火攻消灭冲车"
+  },
+  "lcq.event.s12_13_long_siege": {
+   "idOnly": "",
+   "full": "应对江州长期围困"
+  },
+  "lcq.event.s12_14_chenxing_appears": {
+   "idOnly": "",
+   "full": "在江州城对抗辰星七妖"
+  },
+  "lcq.event.s12_15_capture_jingli": {
+   "idOnly": "",
+   "full": "擒获龙宸刺客惊理"
+  },
+  "lcq.event.s12_16_corpse_poison": {
+   "idOnly": "",
+   "full": "利用尸毒击溃宋军阵线"
+  },
+  "lcq.event.s12_17_shanghou_stays": {
+   "idOnly": "",
+   "full": "说服殇侯留守江州"
+  },
+  "lcq.event.s12_18_linan_grain_order": {
+   "idOnly": "",
+   "full": "命令秦桧在筠州抛售粮食"
+  },
+  "lcq.event.pengyi_takeover": {
+   "idOnly": "向孟非卿请示鹏翼社与暗产此后由谁经营",
+   "full": "向孟非卿请示鹏翼社与暗产此后由谁经营"
+  },
+  "lcq.event.jin_vacate_jiangzhou": {
+   "idOnly": "听清晋相就要腾出江州的定计",
+   "full": "听清晋相就要腾出江州的定计"
+  },
+  "lcq.event.tuntian_post": {
+   "idOnly": "",
+   "full": "接下屯田司员外郎，把籍贯落进册"
+  },
+  "lyl.event.s01_01": {
+   "idOnly": "",
+   "full": "前往江州协助撤退"
+  },
+  "lyl.event.s01_02": {
+   "idOnly": "",
+   "full": "乘船抵达临安"
+  },
+  "lyl.event.s01_03": {
+   "idOnly": "",
+   "full": "赶往荆溪村寨救援"
+  },
+  "lyl.event.s01_04": {
+   "idOnly": "",
+   "full": "在江州与滕甫交易粮食"
+  },
+  "lyl.event.s01_05": {
+   "idOnly": "",
+   "full": "在常平仓设局诱王团练"
+  },
+  "lyl.event.debut_zhuoyunjun": {
+   "idOnly": "把被点到的这个名字先问清楚",
+   "full": "把被点到的这个名字先问清楚"
+  },
+  "lyl.event.debut_ruan_sisters": {
+   "idOnly": "",
+   "full": "在风波亭后拜祭谢艺并安顿临安落脚处"
+  },
+  "liuchao.event.wei_yuan_first_contact": {
+   "idOnly": "",
+   "full": "跟上李师师的马车，确认她为何突然返回临安"
+  },
+  "lyl.event.ruan_xiangning_secret": {
+   "idOnly": "",
+   "full": "绕武穆王府查清建筑方位，不惊动周边暗梢"
+  },
+  "liuchao.event.lin_chong_confront": {
+   "idOnly": "",
+   "full": "不与皇城司动手，以富商身份掩护行踪进入明庆寺"
+  },
+  "lyl.event.mingqingsi_encounter": {
+   "idOnly": "",
+   "full": "旁观鲁智深与林冲相识，在身份暴露前离开"
+  },
+  "liuchao.event.gather_intel": {
+   "idOnly": "",
+   "full": "解读祈福暗号，并答复薛延山的会面请求"
+  },
+  "liuchao.event.factory_registration": {
+   "idOnly": "",
+   "full": "完成客卿报到，并查明林冲调走了哪些档案"
+  },
+  "liuchao.event.xue_sun_meeting": {
+   "idOnly": "",
+   "full": "听完薛延山讲述太湖遇袭，并接下照管雪隼残部的托付"
+  },
+  "liuchao.event.cold_poison_mystery": {
+   "idOnly": "",
+   "full": "检查薛延山的寒毒，并确认他是否见过鬼牙"
+  },
+  "lyl.event.ruan_xianglin_scheme": {
+   "idOnly": "",
+   "full": "接受李师师的邀请，与她一同登上雷峰塔"
+  },
+  "liuchao.event.wei_yuan_crisis_deepen": {
+   "idOnly": "",
+   "full": "听取俞子元的调查，确认高衙内勒索威远镖局的条件"
+  },
+  "liuchao.event.gao_yanei_showdown": {
+   "idOnly": "",
+   "full": "在雷峰塔阻止陆谦强带李师师，并逼高衙内一行退走"
+  },
+  "liuchao.event.you_chan_meeting": {
+   "idOnly": "",
+   "full": "与秦桧复盘雷峰塔冲突，决定继续调查失镖"
+  },
+  "liuchao.event.black_sea_approach": {
+   "idOnly": "",
+   "full": "看完江州场外插叙，不把场外事件写成主角亲历"
+  },
+  "liuchao.event.final_preparations": {
+   "idOnly": "",
+   "full": "看过叩天石后，按暗号约定前往便门瓦"
+  },
+  "lyl.event.linan_arrive_fengbo": {
+   "idOnly": "",
+   "full": "由钱塘门进临安，在风波亭停一停，再去落脚处安顿"
+  },
+  "lyl.event.lin_an_bridge_01_beat": {
+   "idOnly": "",
+   "full": "前往便门瓦牡丹棚打探情报"
+  },
+  "lyl.event.lin_an_bridge_02_beat": {
+   "idOnly": "",
+   "full": "去小瀛洲保护李师师"
+  },
+  "lyl.event.lin_an_bridge_03_beat": {
+   "idOnly": "",
+   "full": "拜访鲁智深"
+  },
+  "lyl.event.lin_an_bridge_04_beat": {
+   "idOnly": "",
+   "full": "去明庆寺与鲁智深林冲会面"
+  },
+  "lyl.event.debut_yundanliu": {
+   "idOnly": "应付翻墙逃匿时身后那声喝问",
+   "full": "应付翻墙逃匿时身后那声喝问"
+  },
+  "lyl.event.debut_yunruyao": {
+   "idOnly": "看清楼上独坐的那位披裘少女",
+   "full": "看清楼上独坐的那位披裘少女"
+  },
+  "lyl.event.debut_zhaohede": {
+   "idOnly": "看清榻边喂药的人，再决定如何开口",
+   "full": "看清榻边喂药的人，再决定如何开口"
+  },
+  "lyl.event.debut_yinfulan": {
+   "idOnly": "在宴席上把这个从五原来的人认清楚",
+   "full": "在宴席上把这个从五原来的人认清楚"
+  },
+  "lyl.event.debut_jingli": {
+   "idOnly": "在庭院遇袭时看清小紫点破的那个人",
+   "full": "在庭院遇袭时看清小紫点破的那个人"
+  },
+  "lyl.event.debut_jianyuji": {
+   "idOnly": "听清游婵转述的那封来信在说什么",
+   "full": "听清游婵转述的那封来信在说什么"
+  },
+  "lyl.event.lin_an_bridge_xieyi_tomb": {
+   "idOnly": "",
+   "full": "出城迎接月霜等人，到风波亭后拜祭岳鹏举；谢艺墓只在死亡线出现"
+  },
+  "lyl.event.mingqingsi_lin_lu_meeting": {
+   "idOnly": "",
+   "full": "到明庆寺旁观林冲与鲁智深初会，并在身份暴露前离开"
+  },
+  "lyl.event.blacksea_iron_puppet": {
+   "idOnly": "",
+   "full": "用水镜看清江州铁傀儡重创虎翼军，以及小紫取走龙睛玉、抽取阴魂试傀儡"
+  },
+  "lyl.event.siying_lane_saber_ambush": {
+   "idOnly": "在司营巷看清林冲买刀这一场",
+   "full": "在司营巷看清林冲买刀这一场"
+  },
+  "lyl.event.tail_li_shishi": {
+   "idOnly": "",
+   "full": "尾随李师师的马车至威远镖局，确认她为何突然返回临安"
+  },
+  "lyl.event.evade_huangchengsi": {
+   "idOnly": "",
+   "full": "识破皇城司尾随，不动手，以富商身份掩护行踪进入明庆寺"
+  },
+  "lyl.event.libu_registration": {
+   "idOnly": "",
+   "full": "完成吏部报到，查明林冲调走了哪些档案"
+  },
+  "lyl.event.leifeng_pagoda_invite": {
+   "idOnly": "",
+   "full": "应李师师之邀，与她一同登上雷峰塔"
+  },
+  "lyl.event.leifeng_repel_gao": {
+   "idOnly": "",
+   "full": "在雷峰塔阻止陆谦强带走李师师，逼高衙内一行退走"
+  },
+  "lyl.event.weiyuan_extortion": {
+   "idOnly": "",
+   "full": "听取俞子元的调查，确认高衙内勒索威远镖局的条件"
+  },
+  "lyl.event.ivory_visit_weiyuan": {
+   "idOnly": "",
+   "full": "以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定"
+  },
+  "lyl.event.survey_wumu_mansion": {
+   "idOnly": "",
+   "full": "绕武穆王府查清建筑方位，不惊动周边暗梢"
+  },
+  "lyl.event.decode_bianmenwa_note": {
+   "idOnly": "",
+   "full": "解读祈福暗号，并答复薛延山的会面请求"
+  },
+  "lyl.event.meet_xue_yanshan": {
+   "idOnly": "",
+   "full": "听完薛延山讲述太湖遇袭，并接下照管雪隼残部的托付"
+  },
+  "lyl.event.identify_xue_cold_poison": {
+   "idOnly": "",
+   "full": "检查薛延山的寒毒，并确认他是否见过鬼牙"
+  },
+  "lyl.event.decide_chase_weiyuan": {
+   "idOnly": "",
+   "full": "与秦桧复盘雷峰塔冲突，决定继续调查失镖"
+  },
+  "lyl.event.pass_kotian_stone": {
+   "idOnly": "",
+   "full": "看过叩天石后，按暗号约定前往便门瓦"
+  },
+  "lyl.event.xue_yanshan_slain": {
+   "idOnly": "",
+   "full": "查明薛延山的下落"
+  },
+  "liuchao.event.enter_taiquan": {
+   "idOnly": "",
+   "full": "核对三份军情，改用人力把秦翰计划送往江州"
+  },
+  "liuchao.event.reconnoiter": {
+   "idOnly": "",
+   "full": "以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定"
+  },
+  "liuchao.event.du_zong_raid": {
+   "idOnly": "",
+   "full": "旁观林冲买刀并确认伏击结果，不贸然打断高衙内的布局"
+  },
+  "liuchao.event.fruit_conflict": {
+   "idOnly": "",
+   "full": "在林家确认凝姨的真实身份，并保留刚发现的疑点"
+  },
+  "liuchao.event.escape_taiquan": {
+   "idOnly": "",
+   "full": "跟踪阮香琳进入西湖别业，听清失镖圈套与对付林冲的计划"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_01_beat": {
+   "idOnly": "应对前往梵天寺途中的伏击",
+   "full": "应对前往梵天寺途中的伏击"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_02_beat": {
+   "idOnly": "",
+   "full": "前往江州与蔺采泉交易"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_03_beat": {
+   "idOnly": "",
+   "full": "前往江州营救林冲"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_04_beat": {
+   "idOnly": "在野猪林里先保住自己和身边的人",
+   "full": "在野猪林里先保住自己和身边的人"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_05_beat": {
+   "idOnly": "",
+   "full": "在野猪林防范静善"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_06_beat": {
+   "idOnly": "",
+   "full": "潜入明庆寺观音殿"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_07_beat": {
+   "idOnly": "",
+   "full": "在太医局调查医档"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": {
+   "idOnly": "在小瀛洲先应对眼前的杀局",
+   "full": "在小瀛洲先应对眼前的杀局"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_09_beat": {
+   "idOnly": "",
+   "full": "前往保宁寺放生池"
+  },
+  "lyl.event.xiaoyingzhou_blacksea_trap_10_beat": {
+   "idOnly": "",
+   "full": "在保宁寺突围"
+  },
+  "lyl.event.xiaoyingzhou_lin_takes_seat": {
+   "idOnly": "到鹤林观，看清太乙真宗此刻由谁主事",
+   "full": "到鹤林观，看清太乙真宗此刻由谁主事"
+  },
+  "lyl.event.xiaoyingzhou_cement_truce": {
+   "idOnly": "",
+   "full": "用晴州水泥代理权换黑魔海五年不踏入宋国"
+  },
+  "lyl.event.xiaoyingzhou_paper_plan": {
+   "idOnly": "",
+   "full": "问清贾师宪此刻要你推的是什么"
+  },
+  "lyl.event.xiaoyingzhou_paper_mint": {
+   "idOnly": "",
+   "full": "让纸钞能纳税，以此逼宋军退兵"
+  },
+  "lyl.event.song_baochao_appointed": {
+   "idOnly": "",
+   "full": "接下宝钞局主事的诏旨"
+  },
+  "lyl.event.linjia_sees_ningyi": {
+   "idOnly": "",
+   "full": "到林家确认凝姨就是阮香凝，并记下她与黑魔海有关的疑点"
+  },
+  "lyl.event.xihu_villa_eavesdrop": {
+   "idOnly": "",
+   "full": "潜入西湖别业，听清高衙内对付林冲的密谋"
+  },
+  "lyl.event.linchong_still_exiled": {
+   "idOnly": "",
+   "full": "确认林冲仍赴江州：野猪林未死、刺配未撤"
+  }
+ },
+ "secondaryLines": [
+  {
+   "id": "commerce",
+   "name": "商道",
+   "kind": "commerce",
+   "anchorEventIds": [
+    "lcq.event.weapon_deal_with_geluo"
+   ],
+   "entryHint": "兵器一笔买卖就化开了刀兵——这条路你走得通，往下还有织坊、粮仓、钱庄和一整个商社。",
+   "basis": "**本线此前完全缺失**（用户 2026-08-17 由「盘江股东大会」一条孤儿反查发现）。实测事件层以商业为主语的拍共 18 条，去掉 3 条隔离件后是一条**从 seq 134 贯到 885 的完整弧**，跨度为八条线之最：兵器生意（134）→ 织坊换局（359）→ 十万金铢军资（404）→ 粮战全盘（465）→ 常平仓火计（496）→ 接管鹏翼社（534）→ 临安粮战令（550）→ 问清纸钞／纸钞纳税（575／578）→ 水泥换休战（618）→ 盘江股东大会（644）→ 纸钞买田（885）。主语一路在变：先是**换钱**，接着是**换军资**，再往后是**定粮价**、**接管商社**、**发行货币**、**开股东大会**，最后用自己发的钞去**买田**——这是全书唯一一条把「有钱」变成「有权」的链，而它一条节点都没落。锚不取更早的 `s03_03`（seq 38「以新奇器物向苏妲己索酬」）：那一拍在隔离关 `lcq.stage_03`，锚上去线就打不开。**双喂说明**：134／404／534／575／578／618／885 已被昭南、江州、宋国等线认领，本线共用不独占——同一拍在不同线里问的问题不同（那边问「仗怎么打赢」，这边问「钱从哪来、之后归谁」）。",
+   "nodes": [
+    {
+     "reviewSummary": "与樨夫人谈定白夷商路与珠宝价格",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_xi_furen_trade_route"
+    },
+    {
+     "reviewSummary": "以兵器生意跟鬼王峒使者阁罗敲定交易，化解眼前危机",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.weapon_deal_with_geluo"
+    },
+    {
+     "reviewSummary": "以织坊交换，暂时平息小紫为拉链坊兴师问罪",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_04_weaving_trade"
+    },
+    {
+     "reviewSummary": "以鹏翼社抵押向陶弘敏借得十万金铢，解孟非卿军资",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_05_war_funds"
+    },
+    {
+     "reviewSummary": "向云苍峰摊开粮战全盘，先从筠州布行暗桩切入",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_09_grain_plan"
+    },
+    {
+     "reviewSummary": "探明浮凌江乱石滩难通航，粮食转运陷入成本危机",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_01_grain_route_blocked"
+    },
+    {
+     "reviewSummary": "让滕知州同意江边粮仓交程记粮铺经营，秦桧改口借用",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_04_river_granary"
+    },
+    {
+     "reviewSummary": "定下烧毁常平仓的火计，粮战进入实操",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_05_granary_fire_plan"
+    },
+    {
+     "reviewSummary": "得孟非卿许可，接管鹏翼社及星月湖暗控产业",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.pengyi_takeover"
+    },
+    {
+     "reviewSummary": "水镜令秦桧在筠州抛粮并散布和谈谣言，为临安压价铺路",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_18_linan_grain_order"
+    },
+    {
+     "reviewSummary": "当面问清贾师宪要推纸币——你要求能纳税且限量",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_paper_plan"
+    },
+    {
+     "reviewSummary": "让纸钞能纳税——自己发的钱，官府认了",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_paper_mint"
+    },
+    {
+     "reviewSummary": "用晴州水泥代理权，换黑魔海五年不入宋",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_cement_truce"
+    },
+    {
+     "reviewSummary": "开盘江程氏第一次股东大会：分红、发股、定主业",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_06"
+    },
+    {
+     "reviewSummary": "在苍澜镇采购衣物兵器，记下这里贵得不正常",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_07"
+    },
+    {
+     "reviewSummary": "用纸钞与云秀峰、郭解联手买田——限田令要削到云家",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.han_limit_field"
+    },
+    {
+     "reviewSummary": "程氏商会方案被囊瓦回绝，兑付改成八折、年五百万、十年",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.changgan_interlude_04_beat"
+    },
+    {
+     "reviewSummary": "商社成势之后归谁、能换到什么（未来待扩）",
+     "status": "pending"
+    }
+   ],
+   "pendingExpansion": "⚠ **本线的设计意图与另外八条不同**（用户 2026-08-17）：「商业线单独做成一条二级线，我本来的设想是后期通过**商业版图的扩展**（攻略各个国家获得**地区声望**）来获得**稳定的金钱／物品**。」——即它不是第九条平行故事线，而是**下游汇聚层**：其余八条线打下的地盘，在这条线上结算成收入。下面这条 seq 134→885 的节点弧只是它的**故事脊椎**。实测地基（2026-08-17，⚠ 先前此处写「地区声望不存在」是错的——按中文 grep 漏看了英文命名的引擎模块，已更正）：① **全局声望已是引擎因果**：`settleEventReputation`（runtime.ts）按承重事件确定性给分（critical 20／normal 6，见 `reputationLedger.REPUTATION_EVENT_GRANT`）。② **地区立足度已实现**：`reputationLedger.regionStanding()` 返回 `地区 → 0..100`，键沿用国家线同一套（塞外／昭南／晋国／宋国／汉国／唐国／太泉…），正是本线要消费的形状。**但它目前零消费者**——写出来没有任何地方调用。③ 钱包齐备：`src/utils/currencySystem.ts` 多币种钱包，目前只有 `InventoryPanel` 在写。④ **真正缺的只有折现层**：`regionStanding` × 本线进度 → 每回合收益结进钱包。`reputationLedger` 的文件头当初就是这么立项的：「它是商队经营层的前置。经营层的定义是『别处的地位在此处折现』」。⑤ **待裁定的设计问题**：`regionStanding` 由 `STAGE_ORDER` 走过比例**派生**，即「主线打到哪就在哪有分量」，玩家无法主动经营某地。若要玩家能选择投入，需另加一个本线节点可推的分量；否则就是「打到哪赚到哪」。\n\n**正典写到「用纸钞买田」（seq 885）为止**，再往后商社的政治收束无拍，标待扩不细化。另有 3 条在隔离关（`final_preparations`／`s05_04`／`s06_02`），其中 `s05_04`「以兵器生意化解危机」与本线首节点 `weapon_deal_with_geluo` 同为 seq 134 同一拍的双版本，取可达那件即可，不申请放出隔离。"
+  },
+  {
+   "id": "taiquan",
+   "name": "太泉古阵",
+   "kind": "expedition",
+   "anchorEventIds": [
+    "lcq.event.s02_01",
+    "lyl.event.taiquan_sacred_fruit_05"
+   ],
+   "entryHint": "岳鹏举把太泉的钥匙藏在云涛观迷楼里，暗号是「太泉熊谷一四七五」——那地方进得去。",
+   "unlock": "taiquan",
+   "entryHintKeys": {
+    "locked": {
+     "title": "line.taiquan.locked.title",
+     "realm": "line.taiquan.locked.realm",
+     "lines": "line.taiquan.locked.lines",
+     "deadlinePrefix": "line.taiquan.locked.deadline"
+    },
+    "variants": {
+     "song": [
+      "line.taiquan.entry.song",
+      {
+       "key": "line.taiquan.entry.song.key",
+       "when": [
+        {
+         "path": "done.lyl.event.taiquan_sacred_fruit_05",
+         "operator": "eq",
+         "value": true
+        }
+       ]
+      }
+     ],
+     "wangzhe": [
+      "line.taiquan.entry.wangzhe"
+     ]
+    }
+   },
+   "basis": "**用户裁定 2026-08-19**：「太泉这一段，我觉得照理说应该单独拿出来，不应该放在原先的主轴里。」\n此前这 8 拍挂在主轴上，而主轴按同日裁定只保留「开局→王哲三托付」＋两个通关条件，不再作为任务清单展示。太泉恰是**条件一（修为达六阳，前往太泉古阵祭祀故人）的落点**，内容上也自成一条完整的弧：摸迷楼机关 → 问出钥匙暗号 → 争赤阳圣果 → 反制潘金莲的追兵 → 找到核心区出口 → 魔墟夺宝 → 进人类居住区。\n⚠ `kind: expedition` 是新档位：它既不是宗派（无法统）也不是国家（不是政权地盘），是一处**远征目的地**。故不受「国家线跟玩家在这个国家的行动」那条地理规则约束。\n⚠ 「太泉古阵＝系统入口」是我们的设计推断，**正典只写「祭祀故人」，全书无「祭祀大阵」字样**（见主轴文档与裁定 #159／#160）。本线文案不得把它叙述成开启装置。\n**整线解锁（用户 2026-10-27 01:12／01:28 定）**：境界≥坐照、至少收束一条国家线、冰蛊已了结，三条同时满足（阈值读 story.lineUnlock.taiquan）；没解锁照样显示入口，标题「时机未到」按缺项出句。进太泉说法分两版：萧遥逸受伤拍 s12_10 已完成＝原著版，否则王哲托付版（用户 2026-10-27 08:17 批方案 §10 措辞）。已走进太泉（门后任一节点完成）一律视为已解锁（总策划 2026-10-27 定）。",
+   "nodes": [
+    {
+     "reviewSummary": "随陈琳进云涛观迷楼，摸清机关，撞见小紫等人",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_04",
+     "beforeUnlock": true
+    },
+    {
+     "reviewSummary": "经小紫、梦娘问出：岳鹏举把钥匙藏在迷楼，暗号太泉熊谷一四七五",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_05",
+     "beforeUnlock": true
+    },
+    {
+     "reviewSummary": "到火山口争赤阳圣果，最终被萧遥逸吞下一颗",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_10"
+    },
+    {
+     "reviewSummary": "与尹馥兰商定：用阴阳鱼和地形反制潘金莲——硬刚还是设伏",
+     "status": "ready",
+     "stageId": "lyl.taiquan_core_conflict",
+     "eventId": "lyl.event.plan_counterattack"
+    },
+    {
+     "reviewSummary": "与尹馥兰用阴阳鱼反击潘金莲，把追兵挡回去",
+     "status": "ready",
+     "stageId": "lyl.taiquan_core_conflict",
+     "eventId": "lyl.event.yin_yang_counter"
+    },
+    {
+     "reviewSummary": "蚁穴被咬，虞白樱吸出淫毒——找到通往核心区的出口",
+     "status": "ready",
+     "stageId": "lyl.taiquan_core_conflict",
+     "eventId": "lyl.event.find_exit"
+    },
+    {
+     "reviewSummary": "天井玻璃破了，赤阳藤外侵、行淫兽盘踞——尹馥兰被触肢缠在幕内",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.xingyin_beast_traps"
+    },
+    {
+     "reviewSummary": "潘金莲与虞紫薇互推进触肢；潘金莲夺走虞白樱的赤阳圣果走了",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.pan_yu_tentacle_clash"
+    },
+    {
+     "reviewSummary": "凿碎玻璃、以死气护身穿过触肢丛，把虞白樱与虞紫薇救出来",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.rescue_yu_sisters"
+    },
+    {
+     "reviewSummary": "小紫用雪雪打服虞白樱，合金手铐一锁——姐妹俩成了她的侍奴",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.xiaozi_binds_yu_sisters"
+    },
+    {
+     "reviewSummary": "进魔墟：玄秘贝已失，周飞找到琉璃天珠，多方开抢",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.taiquan_afterfall_03_beat"
+    },
+    {
+     "reviewSummary": "与小紫探人类居住区，撞见KTV卖场，推测太泉古阵是避难所",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.taiquan_afterfall_05_beat"
+    },
+    {
+     "reviewSummary": "居住区里潘金莲循迹逼问你是不是黑魔海的人——用阴阳鱼污了她的净化术",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.pan_settlement_clash"
+    },
+    {
+     "reviewSummary": "潘金莲凭《河图》从拱门带走朱殷与乐明珠，出了太泉",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.pan_hetu_exit"
+    },
+    {
+     "reviewSummary": "焚无尘被假圣果戏弄后临死自爆——秘境入口就此毁了",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.fen_wuchen_destroys_gate"
+    },
+    {
+     "reviewSummary": "与小紫、朱老头经传送阵离开太泉，落在首阳山一带；阵要十年才能再充能",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.taiquan_portal_exit"
+    }
+   ],
+   "pendingExpansion": "正典写到进入人类居住区、推测古阵是避难所为止。「修为达六阳后祭祀故人」这一拍**正典无对应 event**（原著中程宗扬从未履行此托付；修为上原著第268章入第五级坐照（qyj 41202），燕歌行入第六级通幽（lyg 8080）），属待扩，不在本阶段设计。"
+  },
+  {
+   "id": "taiyi",
+   "name": "太乙真宗",
+   "kind": "sect",
+   "anchorEventIds": [
+    "lcq.event.s01_04"
+   ],
+   "anchorCharacterIds": [
+    "lcq.character.wang_zhe"
+   ],
+   "entryHint": "太乙真宗的修士已经在战场上报了名号；先随他们离开，等见到王哲时再问清这条门路。",
+   "basis": "王哲是把程宗扬拉进太乙的人——`lcq.event.s01_04` objective 字面即「加入太乙真宗阵营」，并在 `stage_02` 传功托付。**开局强制剧情就会见到他，等于自动开启**（用户确认 2026-08-16）。（山门龙池两个 id 均不可达，故不用地点锚。）",
+   "nodes": [
+    {
+     "reviewSummary": "太乙四教御救下你并收留：蔺采泉、商乐轩、夙未央、卓云君",
+     "status": "ready",
+     "stageId": "lcq.stage_01",
+     "eventId": "lcq.event.s01_04"
+    },
+    {
+     "reviewSummary": "王哲为你筑基传九阳，托下锦囊、太泉古阵与守护月霜",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.s02_01"
+    },
+    {
+     "reviewSummary": "王哲九阳合一如日轮殉军——太乙掌教之位就此空出",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.s02_02"
+    },
+    {
+     "reviewSummary": "顶住太乙在紫溪拦船，交涉并把落水的祁远救回",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.zixi_taiyi_intercept"
+    },
+    {
+     "reviewSummary": "读王哲留下的密信：他要你替他清理太乙的门户",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.wangzhe_letter"
+    },
+    {
+     "reviewSummary": "夜影关听清：蔺采泉与商乐轩借查卓云君叛教，实在争掌教之位",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.yeying_seat_struggle"
+    },
+    {
+     "reviewSummary": "破道观又撞见元行健——他替林之澜办事，而线索指向黑魔海",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_06_ruined_temple"
+    },
+    {
+     "reviewSummary": "审出元行健：暗算月霜是林之澜指使，蔺采泉因拜火教来晴州",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.yuanxingjian_interrogated"
+    },
+    {
+     "reviewSummary": "亲手了结元行健——审出他是林之澜的人之后",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.yuanxingjian_disposed"
+    },
+    {
+     "reviewSummary": "听清秋少君因元行健之死与林之澜决裂——还被疑卓云君失踪",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.qiushaojun_breaks_with_linzhilan"
+    },
+    {
+     "reviewSummary": "蔺采泉开价：他支持江州，换你承认九阳神功出自太乙、出自他",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat"
+    },
+    {
+     "reviewSummary": "到鹤林观看清：蔺采泉继任掌教，秋少君补齐放鹤出任教御",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_lin_takes_seat"
+    },
+    {
+     "reviewSummary": "在翠微园向卓云君承诺对付蔺采泉，并写下盘江程氏股份",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.sacred_against_lin"
+    },
+    {
+     "reviewSummary": "扳倒现任掌教、取得掌教之位（未来待扩）",
+     "status": "pending"
+    },
+    {
+     "reviewSummary": "锦囊出指令、齐羽仙反用（续写第二幕）",
+     "status": "pending"
+    }
+   ],
+   "pendingExpansion": "**顶点是扩写，本阶段只标待扩**（用户裁定 2026-08-16）：正典写到对手蔺采泉自立掌教（seq 581）与程宗扬承诺对付他（seq 629）为止，**程侧授名 timeline 无拍**。扳倒掌教、多数教御、自坐或扶代理人——这些都是我们的扩写，不在本阶段细化。卓云君收服链（`s07_02`～`s07_04` 等）按裁定归人物任务，不写成本线节点，只在「承诺对付掌教」一拍旁留插入点。"
+  },
+  {
+   "id": "xingyuehu",
+   "name": "星月湖",
+   "kind": "sect",
+   "anchorEventIds": [
+    "lcq.event.s04b_lingfei_baiyi_crisis_16"
+   ],
+   "anchorCharacterIds": [
+    "liuchao.character.xie_yi",
+    "liuchao.character.xiao_yao_yi"
+   ],
+   "entryHint": "想搭上星月湖，去找八骏——先是谢艺，江州之后可找萧遥逸。",
+   "basis": "**用八骏，不用月霜**（用户裁定 2026-08-16）：月霜是要护的人，不是引你进门的人；八骏才是星月湖建制（蓝图 §10：孟非卿掌军／萧遥逸掌谍报商网／谢艺护岳帅父女）。**八骏里只取谢艺与萧遥逸**（用户裁定 2026-08-16）：这两人才是程宗扬实际打交道的，孟非卿／卢景／王韬／斯明信不作入口，崔茂在默认线事件层不可达。任一见过即开线，最早由谢艺第 4 关触发——比月霜第 1 关合理，开局就开星月湖太早。",
+   "nodes": [
+    {
+     "reviewSummary": "向云苍峰问清岳帅生平与星月湖渊源——谢艺要找的或是岳帅姬妾",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_16"
+    },
+    {
+     "reviewSummary": "听谢艺讲清碧鲮与鲛族旧战、朱狐冠来历，他要你接岳帅未竟之事",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.xieyi_biling_war"
+    },
+    {
+     "reviewSummary": "刺穿龙颅破苍龙星阵，龙神坠亡",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.slay_dragon"
+    },
+    {
+     "reviewSummary": "赶到重伤谢艺身边，听清把小紫带往星月湖的托付",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.xieyi_entrustment"
+    },
+    {
+     "reviewSummary": "听殇侯交代去建康开商号",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_00a_shanghou_trading_house"
+    },
+    {
+     "reviewSummary": "连夜出南荒，沿江北上",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_00b_return_north"
+    },
+    {
+     "reviewSummary": "到晋都建康，在玉鸡巷安家",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_00c_arrive_jiankang"
+    },
+    {
+     "reviewSummary": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.xiaoyaoyi_arrives"
+    },
+    {
+     "reviewSummary": "萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_01_old_case"
+    },
+    {
+     "reviewSummary": "按谢艺命运向孟非卿说明下场，并留下实质安排",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_05_eight_steeds_informed"
+    },
+    {
+     "reviewSummary": "萧遥逸代表星月湖，向你开放资源",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.xiao_opens_resources"
+    },
+    {
+     "reviewSummary": "古冥隐点破第八骏是萧遥逸，要以太后贵妃为饵杀剑玉姬——身份已暴露",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_08_gumingyin_plot"
+    },
+    {
+     "reviewSummary": "看萧遥逸闯入昭明宫刑室，把古冥隐逼走",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_09_zhaoming_night"
+    },
+    {
+     "reviewSummary": "与萧遥逸复盘：八骏已离、幽长老被杀、谢幼度夺北府兵",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_01_eight_steeds_leave"
+    },
+    {
+     "reviewSummary": "以鹏翼社抵押，向陶弘敏月息两分借十万金铢解孟非卿军资",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_05_war_funds"
+    },
+    {
+     "reviewSummary": "受命率一营与雪隼六百赴三川口护月霜，并拿到前线指挥权",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_03_protect_yueshuang"
+    },
+    {
+     "reviewSummary": "星月湖中央军自雪中现身，齐声口号震慑捧日军前锋",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_04_xingyue_appears"
+    },
+    {
+     "reviewSummary": "抵挡王韬焚天斧——他一人突入宋军前阵，防线崩溃",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_05_wangtao_breaks"
+    },
+    {
+     "reviewSummary": "星月湖四营与宋军铁甲营在三川口血战，双方伤亡过半仍不退",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_06_snow_battle"
+    },
+    {
+     "reviewSummary": "桑怿与斯明信、卢景激战被斩，龙卫第一军溃败",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_06_dragon_guard_routs"
+    },
+    {
+     "reviewSummary": "突袭龙卫左厢摧毁指挥，耿傅率残部结阵死守待援",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_07_left_wing_raid"
+    },
+    {
+     "reviewSummary": "孟非卿拍板奇袭定川寨，目标阵斩葛怀敏以扭兵力劣势",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_08_dingchuan_raid"
+    },
+    {
+     "reviewSummary": "定川寨外，孟非卿以雷区伏击突围宋军，阵斩葛怀敏",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_09_ge_huaimin_killed"
+    },
+    {
+     "reviewSummary": "取得孟非卿许可，全盘接管鹏翼社与星月湖暗产",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.pengyi_takeover"
+    },
+    {
+     "reviewSummary": "解读祈福暗号，并答复薛延山的会面请求",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.decode_bianmenwa_note"
+    },
+    {
+     "reviewSummary": "西湖农居听薛延山讲完太湖遇袭，接下照管雪隼残部的托付",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.meet_xue_yanshan"
+    },
+    {
+     "reviewSummary": "查清薛延山身上寒毒，并确认他是否见过鬼牙",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.identify_xue_cold_poison"
+    },
+    {
+     "reviewSummary": "查明薛延山在西湖藏身处被杀、首级被取，冯源逃回报信",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.xue_yanshan_slain"
+    },
+    {
+     "reviewSummary": "出城接月霜等股东，到风波亭祭岳鹏举与谢艺墓",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.lin_an_bridge_xieyi_tomb"
+    },
+    {
+     "reviewSummary": "岳帅归营、番号恢复、冤案洗雪（续写第二幕）",
+     "status": "pending"
+    }
+   ],
+   "pendingExpansion": "顶点＝**全盘接管鹏翼社与星月湖暗产**（seq 534 `第280章·默契`），形态与汉国 979 同构：名分换经营权，不是去当第八个骏。旧的「入营判据」pending 作废——正典的完成键就是 534，不该另发明一套军籍手续。此前的开放资源（276）、抵押借钱（404）、三川口指挥权（439）、江州并肩都只是**立场**：仍是他们的资源，你在用。"
+  },
+  {
+   "id": "heimohai",
+   "name": "黑魔海",
+   "kind": "sect",
+   "anchorEventIds": [
+    "lcq.event.s04b_lingfei_baiyi_crisis_04"
+   ],
+   "entryHint": "鸦人尸体上搜出一张空白羊皮纸，云苍峰说那是秘法传讯——黑魔海与鬼王峒勾结；苏妲己的回话只有一句：别惹他们，也别报她的名头。",
+   "basis": "**引子＝玩家怎么第一次知道\"黑魔海\"这个名字**（用户裁定 2026-08-16）：原来那句「名分不在总坛里，在人身上」是讲给设计者听的机制说明，不是钩子。正典最早两拍：seq 93 从鸦人尸体上搜出一张**空白羊皮纸**，云苍峰鉴定是秘法传讯，指向黑魔海与鬼王峒勾结；seq 100 程宗扬报给苏妲己，**她的回话是警告他别招惹**。用户点评：「这张白纸就透露了黑魔海这个组织，很像上古卷轴的血手信」——即你不是被派去查它，是有人把它塞进了你手里。（该拍已是本线第 2 节点 `s04b_lingfei_baiyi_crisis_04`，指引与节点同源。）秘密组织不靠走进总坛加入（蓝图总坛在昭南，事件层从未落地）。正典里程宗扬是毒宗系「被庇护者」，蓝图 §13-C 定案「名义天命侯＝殇侯，毒宗实推的继承人＝程宗扬」。同一 id 两个名字：第 5 关以「朱老头」现身，第 10 关以「殇侯」现身。**用殇侯不用小紫**（用户授权判断 2026-08-16）：小紫第 8 关才可达（首现关 `stage_05` 被隔离），且她已是主轴血脉线核心承重（层三解锁门／遗孤名册／大祭备用容器），兼作黑魔海入口会让玩家分不清\"认识小紫\"是在推血脉还是在入毒宗。",
+   "nodes": [
+    {
+     "reviewSummary": "查清夜间发丝是叶媪发蛊，逼近朱老头却退缩",
+     "status": "ready",
+     "stageId": "lcq.stage_04",
+     "eventId": "lcq.event.s04_04"
+    },
+    {
+     "reviewSummary": "把羊皮纸交云苍峰鉴定：疑黑魔海与鬼王峒勾结白夷",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_04"
+    },
+    {
+     "reviewSummary": "白夷闲聊：朱老头主动聊黑魔海来历，装不识字、丢信、讨钱，不给门路",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.zhu88_heimohai_chat"
+    },
+    {
+     "reviewSummary": "第86章随弥骨入峒，到驿馆见黑魔海工匠，云苍峰指出两方联系已非一日",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.enter_dong_with_migu"
+    },
+    {
+     "reviewSummary": "第90章谢艺谈黑魔海太一经，现有机关山洞事件未承载这段谈话",
+     "status": "pending",
+     "stageId": "lcq.stage_05b"
+    },
+    {
+     "reviewSummary": "第106章小紫解释黑魔海帮鬼巫王吸收龙神力量的图谋",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi"
+    },
+    {
+     "reviewSummary": "龙神决战收束南荒黑魔海图谋",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.slay_dragon"
+    },
+    {
+     "reviewSummary": "当面确认朱老头就是殇侯，听他称你是天命之人",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.shanghou_revealed"
+    },
+    {
+     "reviewSummary": "解蛊后辨认白纸信，听清廿载共祭与师兄旧怨",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_shanghou_reads_letter"
+    },
+    {
+     "reviewSummary": "接受叶媪诊视，安排凝羽留村调养",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_yeao_palm_ningyu_stays"
+    },
+    {
+     "reviewSummary": "确认冰蛊已解，接受殇侯授艺",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.shanghou_cures_ice_gu"
+    },
+    {
+     "reviewSummary": "收下殇侯交出的秦桧——他改称主公，成你身边第一智囊",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_qinhui_join"
+    },
+    {
+     "reviewSummary": "在庭院迎入苏妲己——黑魔海高压对局正式摊开",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_04_sudaji_enters"
+    },
+    {
+     "reviewSummary": "向萧遥逸点破秦桧与毒宗，击掌约下不与殇侯为敌",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.palm_oath_shanghou"
+    },
+    {
+     "reviewSummary": "古冥隐设毒计：剑玉姬这条线第一次露面",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_08_gumingyin_plot"
+    },
+    {
+     "reviewSummary": "挡下苏妲己追杀，靠小紫血祭之术从排水沟坠江脱身",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_05_drain_escape"
+    },
+    {
+     "reviewSummary": "查清：游婵杀死内堂太监，黑魔海嫡传与外聘香主裂开",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_06_blacksea_fracture"
+    },
+    {
+     "reviewSummary": "以飞鸟熊藏身份从游婵处问清黑魔海广阳布局",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_07_feiniao_infiltration"
+    },
+    {
+     "reviewSummary": "揭穿泉玉姬潜伏六扇门十年，她是黑魔海御姬奴",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_09_jiangzhou_crisis"
+    },
+    {
+     "reviewSummary": "追查月霜遇袭：石之隼判定是东瀛忍者，其人已逃",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_03_ninja_trace"
+    },
+    {
+     "reviewSummary": "定下先发制人打黑魔海——为护月霜、除江州后患",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_07_preemptive_strike"
+    },
+    {
+     "reviewSummary": "洞穴激战：辛卯泄出星月湖，鱼无夷毒网偷袭孟非卿",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_08_lair_reversal"
+    },
+    {
+     "reviewSummary": "从鱼无夷濒死处拿到阴阳鱼所在，当作反制黑魔海的钥匙",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_09_yin_yang_fish"
+    },
+    {
+     "reviewSummary": "从黑魔海银库取出五万金铢，与孟非卿谈定四六分成",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.blacksea_vault_split"
+    },
+    {
+     "reviewSummary": "小紫擒获龙宸刺客惊理——拿到追查龙宸与黑魔海的入口",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_15_capture_jingli"
+    },
+    {
+     "reviewSummary": "殇侯施尸毒破开宋军阵线，你因此得救",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_16_corpse_poison"
+    },
+    {
+     "reviewSummary": "用人情和经济筹码请殇侯留守两月，换来近卫军协防",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_17_shanghou_stays"
+    },
+    {
+     "reviewSummary": "尾随李师师的马车到威远镖局，弄清她为何突然回临安",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.tail_li_shishi"
+    },
+    {
+     "reviewSummary": "水镜看见小紫驱铁傀儡重创虎翼军，取龙睛玉并以阴魂试傀儡",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.blacksea_iron_puppet"
+    },
+    {
+     "reviewSummary": "野猪林乱战：林冲重伤衣钵被夺，你抄下袈裟符文",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat"
+    },
+    {
+     "reviewSummary": "静善为袈裟符文夜袭，被炸弹击退——你也受了伤",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat"
+    },
+    {
+     "reviewSummary": "明庆寺撞见旧识郭槐",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat"
+    },
+    {
+     "reviewSummary": "在太医局查医档，摸清剑玉姬已借刘太后用药落子",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat"
+    },
+    {
+     "reviewSummary": "在小瀛洲设伏对上剑玉姬、西门庆——西门庆与李师师受伤",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat"
+    },
+    {
+     "reviewSummary": "在保宁寺放生池逼出剑玉姬真身——屠龙刀异变龙吟",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat"
+    },
+    {
+     "reviewSummary": "保宁寺突围：卓云君腰斩西门庆，剑玉姬带人撤走",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat"
+    },
+    {
+     "reviewSummary": "撤回翠微园收拾残局——游婵被劫，直属营伤亡惨重",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_01"
+    },
+    {
+     "reviewSummary": "用晴州水泥代理权，换黑魔海五年不入宋",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_cement_truce"
+    },
+    {
+     "reviewSummary": "殇侯用赤婴粉耗尽君雄飞真元后拧颈灭魂",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_08"
+    },
+    {
+     "reviewSummary": "查清宅下异动：惊理发现黑魔海黑鸦使者，其是卧底",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.s05_05"
+    },
+    {
+     "reviewSummary": "听剑玉姬以成光换支持刘建，蔡敬仲揭劣迹后当面回绝",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_jianyu_refused"
+    },
+    {
+     "reviewSummary": "郭解被剑玉姬刺穿心脉，临终把定陶王托付给你",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_06"
+    },
+    {
+     "reviewSummary": "听阮香凝说定陶王因盛姬亲近她——盛姬是黑魔海御姬奴",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_08"
+    },
+    {
+     "reviewSummary": "在庵堂性交安抚鱼玄机，同时审讯齐羽仙追问双姬旧怨",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_15_beat"
+    },
+    {
+     "reviewSummary": "取得天命侯名分（未来待扩）",
+     "status": "pending"
+    },
+    {
+     "reviewSummary": "大祭：与潘金莲对决、总坛覆灭（续写第二幕）",
+     "status": "pending"
+    }
+   ],
+   "pendingExpansion": "**顶点是扩写，本阶段只标待扩**（用户裁定 2026-08-16）。天命侯（蓝图 §13-C：名义殇侯、毒宗实推程宗扬）正典有词、**无授名**——seq 222 是殇侯称你「天命之人」的谶语，1155 是中行说私室失言的一声惊呼且被当场怒斥，全库 396 条 event 搜「天命侯」命中 0。故不编一道「殇侯当场封侯」，而是在既有庇护关系上做成可完成的名分拍：完成键＝毒宗侧承认传承已归程，不是有人叫了一声。"
+  },
+  {
+   "id": "zhaonan",
+   "name": "昭南",
+   "kind": "nation",
+   "anchorEventIds": [
+    "lcq.event.s03b_snake_flower_bridge_02"
+   ],
+   "anchorLocationIds": [
+    "liuchao.location.wuyuan",
+    "liuchao.location.wu_yuan_cheng"
+   ],
+   "anchorCharacterIds": [
+    "liuchao.character.yun_cang_feng",
+    "liuchao.character.wu_er_lang"
+   ],
+   "entryHint": "南荒没有可投的朝廷。跟云苍峰的商队走，或者自己出五原南门沿商路南下——到了蛇彝村，才会知道这一带出了什么事。",
+   "basis": "**原破例已作废**（Helgen 切法 9ac33d8，2026-08-17）：先前昭南是唯一用人物锚的国家线，理由是「南荒没有可投的朝廷，只有带你进去的人」。现在入口改成「出五原南门一直走」——那是个地方，商队降为默认矢量上最常见的交通、不是门票，破例的前提不再成立。**两条路都算**（用户 2026-08-16）：跟商队走，或自己南下到蛇彝村见证——同汉国的双路入口。故回归常规国家线：锚五原城（**孪生 id 全收**：`wuyuan` 30 关／`wu_yuan_cheng` 1 关），云苍峰／武二郎保留为引路人说明、不参与判定。判定仍在事件锚（灭村那一拍）。",
+   "nodes": [
+    {
+     "reviewSummary": "当面认清凝羽处境并回应——她奉苏妲己之命进赌局",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.ningyu_enters_gamble"
+    },
+    {
+     "reviewSummary": "识破白湖商馆主人苏妲己的伪装——她要的是霓龙丝的下落",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.s02_06"
+    },
+    {
+     "reviewSummary": "与苏妲己订下三月南荒之约——采霓龙丝，否则炮烙",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.sudaji_south_pact"
+    },
+    {
+     "reviewSummary": "赌局落败，苏妲己作弊——签下卖身契，落入白湖商馆奴籍",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.gamble_bond_signed"
+    },
+    {
+     "reviewSummary": "帮苏妲己取物前，谈定六十金铢报酬",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.charge_sudaji_fee"
+    },
+    {
+     "reviewSummary": "撕毁阿姬曼身契——出城路线已被封锁",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.free_ajiman"
+    },
+    {
+     "reviewSummary": "从白湖商馆的死局里脱身，走出五原商馆",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.baihu_shangguan_escape"
+    },
+    {
+     "reviewSummary": "满城围捕下逼出武二郎入队——他走投无路才答应",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.wuerlang_joins"
+    },
+    {
+     "reviewSummary": "稳住武二郎伤势，带队突破铁索桥伏击",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.iron_bridge_ambush"
+    },
+    {
+     "reviewSummary": "听清凝羽弑主开价，并探明她体内阴寒之气来源",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.ningyu_regicide_offer"
+    },
+    {
+     "reviewSummary": "在紫溪现身跟太乙交涉，并把落水的祁远救回船队",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.zixi_taiyi_intercept"
+    },
+    {
+     "reviewSummary": "依凝羽火光带两支商队渡过黑石滩——雨林有伤亡",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.rainforest_black_shoal"
+    },
+    {
+     "reviewSummary": "把商队安进无灯火无人声的蛇彝村",
+     "status": "ready",
+     "stageId": "lcq.stage_02",
+     "eventId": "lcq.event.silent_sheyi_village"
+    },
+    {
+     "reviewSummary": "查清蛇彝长屋屠村，痕迹指向鬼王峒，焚屋撤离",
+     "status": "ready",
+     "stageId": "lcq.stage_03b_snake_flower_bridge",
+     "eventId": "lcq.event.s03b_snake_flower_bridge_02"
+    },
+    {
+     "reviewSummary": "与云苍峰同行赴白夷，透露霓龙丝——谢艺给出碧鲮线索",
+     "status": "ready",
+     "stageId": "lcq.stage_03b_snake_flower_bridge",
+     "eventId": "lcq.event.s03b_snake_flower_bridge_04"
+    },
+    {
+     "reviewSummary": "带着商队攀万古巨藤，藤桥一断被困半空石壁",
+     "status": "ready",
+     "stageId": "lcq.stage_03b_snake_flower_bridge",
+     "eventId": "lcq.event.s03b_snake_flower_bridge_05"
+    },
+    {
+     "reviewSummary": "求助花苗族长，脱离困境——苏荔登场",
+     "status": "ready",
+     "stageId": "lcq.stage_03b_snake_flower_bridge",
+     "eventId": "lcq.event.s03b_snake_flower_bridge_06"
+    },
+    {
+     "reviewSummary": "问清花苗：苏荔被迫送出龙神新娘与贡物——去向熊耳铺",
+     "status": "ready",
+     "stageId": "lcq.stage_03b_snake_flower_bridge",
+     "eventId": "lcq.event.s03b_snake_flower_bridge_07"
+    },
+    {
+     "reviewSummary": "万舞夜循谢艺指点入林，接回阿葭",
+     "status": "ready",
+     "stageId": "lcq.stage_03b_snake_flower_bridge",
+     "eventId": "lcq.event.s03b_wanwu_night"
+    },
+    {
+     "reviewSummary": "处理阴蛛余波，到熊耳铺选择向导",
+     "status": "ready",
+     "stageId": "lcq.stage_03b_snake_flower_bridge",
+     "eventId": "lcq.event.s03b_yinzhu_xiongerpu"
+    },
+    {
+     "reviewSummary": "乐明珠自认光明观堂弟子：她假扮花苗新娘，是为刺杀鬼巫王",
+     "status": "ready",
+     "stageId": "lcq.stage_04",
+     "eventId": "lcq.event.s04_03"
+    },
+    {
+     "reviewSummary": "同苏荔谈清刺杀鬼巫王的密谋",
+     "status": "ready",
+     "stageId": "lcq.stage_04",
+     "eventId": "lcq.event.s04_01"
+    },
+    {
+     "reviewSummary": "与白夷族长交涉：他改要十日五万银铢现款，不再以货易货",
+     "status": "ready",
+     "stageId": "lcq.stage_04",
+     "eventId": "lcq.event.s04_07"
+    },
+    {
+     "reviewSummary": "说服武二郎，把明晚夺取灵飞镜的计划谈定",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_01"
+    },
+    {
+     "reviewSummary": "趁机斩下鸦人，救下乐明珠和阿夕",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_03"
+    },
+    {
+     "reviewSummary": "在白夷祭坛下坠洞，得武二郎相救后寻得灵飞镜",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_05"
+    },
+    {
+     "reviewSummary": "听云苍峰与苏荔谈定：花苗准备联手白夷抗峒",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_06"
+    },
+    {
+     "reviewSummary": "借易勇水镜向苏妲己报黑魔海——她警告快寻霓龙丝",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_07"
+    },
+    {
+     "reviewSummary": "用灵飞镜查探白夷阴谋——樨夫人登场",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_08"
+    },
+    {
+     "reviewSummary": "看清鬼王峒使者换掉族长，樨夫人接掌白夷",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_09"
+    },
+    {
+     "reviewSummary": "追入地宫甬道，躲开鬼王峒使者的陷阱与鬼武士",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_10"
+    },
+    {
+     "reviewSummary": "挡下血虎易虎扑向武二郎，易彪没能唤醒兄长",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_11"
+    },
+    {
+     "reviewSummary": "压住苏荔硬闯鬼王峒，先同武二郎等人改往碧鲮",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_14"
+    },
+    {
+     "reviewSummary": "看祁远下水取回龙睛玉，苏荔射杀鳄鱼救险",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_17"
+    },
+    {
+     "reviewSummary": "在碧鲮湾当面回应少女小紫登场",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.xiaozi_first_appears"
+    },
+    {
+     "reviewSummary": "与凝羽从淹没竹楼逃出，改去寻找云苍峰",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+    },
+    {
+     "reviewSummary": "在废弃海神殿挡住鲛人，护住受困的乐明珠",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.haishen_hall_merfolk"
+    },
+    {
+     "reviewSummary": "拔除鱼叉稳定乐明珠伤势",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.pull_harpoon_lemingzhu"
+    },
+    {
+     "reviewSummary": "收拢残余商队，确认鬼王峒使者已抵达海湾",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.regroup_caravan_envoy"
+    },
+    {
+     "reviewSummary": "以兵器生意跟鬼王峒使者阁罗敲定交易，化解眼前危机",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.weapon_deal_with_geluo"
+    },
+    {
+     "reviewSummary": "处置偷听的鬼王峒眼线，厘清兵器交易背后的危险",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.spot_dong_informant"
+    },
+    {
+     "reviewSummary": "赶到碧鲮湾斩杀蛇傀——碧鲮族获释后反攻鬼王峒",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.biling_bay_stance"
+    },
+    {
+     "reviewSummary": "在古道废墟认出鬼王峒标记，帮易彪守住阵地",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.ruins_ghost_warriors"
+    },
+    {
+     "reviewSummary": "撑住达古围攻，见证武二郎斩达古扭转战局",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.wuerlang_slays_dagu"
+    },
+    {
+     "reviewSummary": "护住苏荔以一阳境逼退阴煞",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.yiyang_repels_yinsha"
+    },
+    {
+     "reviewSummary": "跟花苗谈清进峒边界：与云氏平等合作，不是依附",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.huamiao_coop_boundary"
+    },
+    {
+     "reviewSummary": "安置旧伤复发的凝羽，与云氏、花苗谈成探峒同行",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.guiwangdong_coop_pact"
+    },
+    {
+     "reviewSummary": "随弥骨进峒，拦住接待冲突，记清路线与奴隶区",
+     "status": "ready",
+     "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+     "eventId": "lcq.event.enter_dong_with_migu"
+    },
+    {
+     "reviewSummary": "打开白纸信笺仍是白纸，小紫当着阁罗说破达古已死",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.blank_letter_and_dagu"
+    },
+    {
+     "reviewSummary": "阁罗召来碧姬——当面见到谢艺要找的人",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.geluo_summons_biji"
+    },
+    {
+     "reviewSummary": "借机关异动摆脱看守，从岩壁找出可通行山洞",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.escape_cave_mechanism"
+    },
+    {
+     "reviewSummary": "看出红苗已被峒里控制，先把苏荔保下来",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.hongmiao_controlled"
+    },
+    {
+     "reviewSummary": "从萨安处获取鬼王宫密道",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_03_saan_secret_path"
+    },
+    {
+     "reviewSummary": "同谢艺、武二郎、凝羽潜入鬼王宫，循小紫痕迹先找乐明珠",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_04_enter_ghost_palace"
+    },
+    {
+     "reviewSummary": "潜入鬼王宫见鬼巫王——听清统一南荒与龙神计划",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_05a_meet_ghost_king"
+    },
+    {
+     "reviewSummary": "与鬼巫王交锋，设法脱身——丹宸登场",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_05b_ideology_duel_and_defeat"
+    },
+    {
+     "reviewSummary": "跃入深井平台救苏荔，解开螺旋长针脱身",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_08a_rescue_suli"
+    },
+    {
+     "reviewSummary": "在祭台对抗尸鬼，寻找突围机会——朱诺登场",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+    },
+    {
+     "reviewSummary": "稳住乐明珠药效，以岳鹏举身份线劝小紫临时反杀鬼巫王",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_09_temporary_pact_with_xiaozi"
+    },
+    {
+     "reviewSummary": "小紫倒戈、奴隶暴动，你决定反杀——乐明珠凤凰宝典异变",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+    },
+    {
+     "reviewSummary": "祭台决战：鬼巫王唤醒龙神，反被龙神一口吞掉",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.ghost_king_swallowed"
+    },
+    {
+     "reviewSummary": "借小紫指点了结龙神",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.slay_dragon"
+    },
+    {
+     "reviewSummary": "赶到重伤谢艺身边，听清把小紫带往星月湖的托付",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.xieyi_entrustment"
+    },
+    {
+     "reviewSummary": "追上小紫，见证她对质后亲手弑母碧姬并接下余波",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.xiaozi_kills_mother"
+    },
+    {
+     "reviewSummary": "算清冰蛊期限，决定改走叶媪山村",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_ice_gu_detour"
+    },
+    {
+     "reviewSummary": "解散鬼王峒，令三族共处，龙神尸骸收益分十份",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.tribes_pledge"
+    },
+    {
+     "reviewSummary": "听苏荔来意，与武二郎结清工钱道别",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.s05b_wuer_suli_depart"
+    },
+    {
+     "reviewSummary": "循朱老头留下的路线进入村落，当面确认殇侯身份与天命之说",
+     "status": "ready",
+     "stageId": "lcq.stage_05b",
+     "eventId": "lcq.event.shanghou_revealed"
+    }
+   ],
+   "pendingExpansion": "线形：商队进南荒 → 查清蛇彝 → 取得花苗／白夷／碧鲮立场（观望≠归附）→ 决战鬼巫王／龙神 → 散峒后三族真正归附。顶点＝三族真正归附（Z11 `s05b_tribes_pledge`）。隔离关 stage_05／06 不放出；斩蛇傀、合作边界挂04b，吞噬、杀龙、散峒挂05b。上述五拍已挂接（2026-10-03方案R）。谢艺托付及生死承接不进本链（星月湖交接）。麟趾朝廷、芈氏外家、阖闾破郢、凝羽回归仍是开放线扩展位，不进这 11 条。"
+  },
+  {
+   "id": "jin",
+   "name": "晋国",
+   "kind": "nation",
+   "anchorEventIds": [
+    "lcq.event.palace_haunting_rumor"
+   ],
+   "anchorLocationIds": [
+    "liuchao.location.jiankang"
+   ],
+   "entryHint": "建康宫城闹鬼的传闻。",
+   "basis": "建康＝晋国都城（官方附录地图 jin-nanzhao 幅在场；描述「晋国都城」）。第 10 关可达。**引子＝世界此刻的状态，不是原著那一场戏**（用户 2026-08-16 两轮裁定）：先是「想插手晋国朝局，去建康」这种模板话被打回；改写后我又写成了场景复述（用灵飞镜窥宫、撞见大汉从假山钻出、萧遥逸提议夜探台城），同样被打回——**那等于把玩家绑回原著的单一路径：他必须以那个方式撞见才算入线。**现在只给传闻，怎么撞见是玩家的事。正典依据：seq 241 灵飞镜窥宫撞见可疑大汉、seq 242 与萧遥逸谈「宫禁闹鬼」并夜探台城，seq 268 查出那是徐度安插的幽冥宗卧底——篡位的前戏。这些是**闹鬼传闻底下的真相**，不写进指引（引擎不替玩家剧透）。",
+   "nodes": [
+    {
+     "reviewSummary": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.xiaoyaoyi_arrives"
+    },
+    {
+     "reviewSummary": "萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_01_old_case"
+    },
+    {
+     "reviewSummary": "用灵飞镜窥见假山大汉钻出，被他察觉——宫禁闹鬼传开",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.palace_haunting_rumor"
+    },
+    {
+     "reviewSummary": "云家宴上起身解围，被云家主人当众称作「盘江程氏的少主」",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.jin_panjiang_shaozhu"
+    },
+    {
+     "reviewSummary": "与萧遥逸夜探神龙殿：晋帝昏迷如死，似遭操控",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_07_dragon_hall"
+    },
+    {
+     "reviewSummary": "在皇宫与云丹琉交手后逃生",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_08_palace_escape"
+    },
+    {
+     "reviewSummary": "萧遥逸一行入鹰愁峪，遭徐敖州府兵军弩伏击，被困谷中",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_01_eagle_valley"
+    },
+    {
+     "reviewSummary": "与吴三桂死守木垒，重伤仍击退州府兵",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_02_wood_fort"
+    },
+    {
+     "reviewSummary": "易彪率北府兵扮禁军全歼州府兵——萧遥逸识破他们身份",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_03_beifu_rescue"
+    },
+    {
+     "reviewSummary": "九阳修复经脉，突破入微境，以珊瑚匕首逼退苏妲己",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_05_breakthrough"
+    },
+    {
+     "reviewSummary": "在宫室应对东瀛忍者——飞鸟熊藏登场",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_07_palace_ninja"
+    },
+    {
+     "reviewSummary": "随萧遥逸闯昭明宫刑室，逼退古冥隐",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_09_zhaoming_night"
+    },
+    {
+     "reviewSummary": "玄武湖上秦桧、吴三桂救下晋帝太后，古冥隐败逃",
+     "status": "ready",
+     "stageId": "lcq.stage_08_jiankang_coup",
+     "eventId": "lcq.event.s08_10_xuanwu_rescue"
+    },
+    {
+     "reviewSummary": "看清分赃：萧家江宁、云家盐业、你一无所得",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.spoils_split"
+    },
+    {
+     "reviewSummary": "与萧遥逸复盘：八骏已离，幽长老被杀，北府兵权归谢幼度",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_01_eight_steeds_leave"
+    },
+    {
+     "reviewSummary": "问清王茂弘：相府无为让权给萧侯，承诺保晋国二十年太平",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.xiangfu_stance"
+    },
+    {
+     "reviewSummary": "与小紫、卓云君从排水沟逃出建康，挡下苏妲己追杀",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_05_drain_escape"
+    },
+    {
+     "reviewSummary": "以飞鸟熊藏身份潜伏，从游婵处摸清广阳布局后脱身",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_07_feiniao_infiltration"
+    },
+    {
+     "reviewSummary": "收下泉玉姬用一魂一魄炼的魂丹，她的生死自此在你手里",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.quanyuji_soul_pill"
+    },
+    {
+     "reviewSummary": "在六扇门审问泉玉姬",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_08_six_doors_confession"
+    },
+    {
+     "reviewSummary": "揭穿泉玉姬是黑魔海御姬奴，并得知江州危急",
+     "status": "ready",
+     "stageId": "lcq.stage_09_trade_and_escape",
+     "eventId": "lcq.event.s09_09_jiangzhou_crisis"
+    },
+    {
+     "reviewSummary": "确认晋相腾出江州让宋军剿星月湖，不惜毁城",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.jin_vacate_jiangzhou"
+    },
+    {
+     "reviewSummary": "听张少煌得知晋旱与王茂弘意图，决定全力收粮，建康做营销中心",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.sacred_jin_drought"
+    },
+    {
+     "reviewSummary": "把广源行在晋的旧账揭开（龙宸这条线）",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.jin_guangyuan_ledger"
+    },
+    {
+     "reviewSummary": "押运云氏五万金铢至伊水，被龙宸杀手劫走，反击损失惨重",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.s05_09"
+    },
+    {
+     "reviewSummary": "在晋廷取得一个名分（未来待扩，原文未明）",
+     "status": "pending"
+    }
+   ],
+   "pendingExpansion": "线形：进建康看清帝室架空 → 宫变调查 → 相府／北府／云家立场（分赃无所得）→ 晋旱收粮＋广源行旧账 → 晋廷承认特许商权。顶点＝占位名分，原文未明、称号待定（seq 334 反证）。节点文案不写死官名。J4／J6／J7／J8／J9后半／J10 需新增。J9 前半已有龙宸 s12_14／s12_15。旧「清远斩吴」归太乙；「同门旧案」改挂汉国入口。"
+  },
+  {
+   "id": "song",
+   "name": "宋国",
+   "kind": "nation",
+   "anchorEventIds": [
+    "lcq.event.s10_01_jiangzhou_order"
+   ],
+   "anchorLocationIds": [
+    "liuchao.location.jiangzhou",
+    "liuchao.location.linan",
+    "liuchao.location.lin_an"
+   ],
+   "entryHint": "贾师宪已经大举集结，江州要打起来了。",
+   "basis": "临安＝宋国都城。`linan` 覆盖 30 关为主，`lin_an` 只 1 关，一并收下防漏；`linan_city` 只在隔离关 `taiquan_expedition`，不收。**另收江州**（2026-08-16）：正典里宋国不是你走进临安才遇上的——seq 380 卢景带来消息，贾师宪大举集结、江州兵危，程宗扬当场决定改道去援；seq 383 贾师宪下令攻江州清岳党。（指引只说这个局势本身，不写\"卢景带信来\"——**报信人是谁不该写死**，同晋、唐两条。）本线第一个节点就落在 seq 383，而临安要到 seq 559 才落脚：只锚都城等于让入口比第一拍晚 176 拍。这与汉国「只锚洛都、把第 10 关的旧案漏掉」是同一个错，一并纠正。",
+   "nodes": [
+    {
+     "reviewSummary": "探明贾师宪无视王丞相回书，下令攻江州清岳党，还要用上四军示威",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_01_jiangzhou_order"
+    },
+    {
+     "reviewSummary": "在夜影关因宋军封锁云水航道，改走陆路去晴州",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_02_yeying_pass"
+    },
+    {
+     "reviewSummary": "从濒死的鱼无夷处拿到阴阳鱼藏在七海客栈的线索",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_09_yin_yang_fish"
+    },
+    {
+     "reviewSummary": "侦察烈山：捧日军骑兵已到，刘宜孙、张亢选营，三川口成形",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_01_pengri_arrives"
+    },
+    {
+     "reviewSummary": "萧遥逸展示十二座水泥城堡与悬楼，江州城防大幅提升",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_02_cement_fortress"
+    },
+    {
+     "reviewSummary": "与小紫、孟非卿守中军，木栅仍被术者与御林军破开",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_07_camp_falls"
+    },
+    {
+     "reviewSummary": "向江州问清三川口的结局——捧日军三个军被星月湖击溃，不是捷报",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.sanchuankou_result_rumor"
+    },
+    {
+     "reviewSummary": "赶回江州，协助全城戒严并加固城防",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_08_jiangzhou_lockdown"
+    },
+    {
+     "reviewSummary": "在三川口抵御西夏围攻，后军黄德和脱逃改写前线",
+     "status": "ready",
+     "stageId": "lcq.stage_11_lieshan_battle",
+     "eventId": "lcq.event.s11_10_sanchuankou_defeat"
+    },
+    {
+     "reviewSummary": "同萧遥逸、云苍峰探明浮凌江乱石滩，粮运走不通",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_01_grain_route_blocked"
+    },
+    {
+     "reviewSummary": "说动滕知州在江边设粮仓交程记粮铺经营——秦桧改口说只是借用",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_04_river_granary"
+    },
+    {
+     "reviewSummary": "接下滕甫捐来的屯田司员外郎，把籍贯落进册",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.tuntian_post"
+    },
+    {
+     "reviewSummary": "从秦翰手里拼死救下萧遥逸，击伤其一指，重伤线开启",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_10_rescue_xiao"
+    },
+    {
+     "reviewSummary": "防守江州：宋军连夜两万余人携投石机、巢车、云梯全面攻城",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_11_siege_begins"
+    },
+    {
+     "reviewSummary": "城门用水泥门闸和滚油烧掉宋军冲车，江州守城占先",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_12_gate_fire"
+    },
+    {
+     "reviewSummary": "应对宋军改用土山和地道，江州进入长期围困",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_13_long_siege"
+    },
+    {
+     "reviewSummary": "小紫点破刺客是辰星七妖——背后是龙宸",
+     "status": "ready",
+     "stageId": "lcq.stage_12_jiangzhou_counterwar",
+     "eventId": "lcq.event.s12_14_chenxing_appears"
+    },
+    {
+     "reviewSummary": "协助江州退军：宋军粮尽大溃，秦翰选锋营断后",
+     "status": "ready",
+     "stageId": "lyl.jiangzhou_retreat",
+     "eventId": "lyl.event.s01_01"
+    },
+    {
+     "reviewSummary": "乘船前往临安——鱼长老登场",
+     "status": "ready",
+     "stageId": "lyl.jiangzhou_retreat",
+     "eventId": "lyl.event.s01_02"
+    },
+    {
+     "reviewSummary": "赶到荆溪村寨，斩杀屠寨凌辱妇女的王团练乡兵",
+     "status": "ready",
+     "stageId": "lyl.jiangzhou_retreat",
+     "eventId": "lyl.event.s01_03"
+    },
+    {
+     "reviewSummary": "尾随李师师马车到威远镖局，确认她突然回临安的缘故",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.tail_li_shishi"
+    },
+    {
+     "reviewSummary": "识破皇城司盯梢，不动手，以富商身份掩护进明庆寺",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.evade_huangchengsi"
+    },
+    {
+     "reviewSummary": "绕武穆王府查清建筑方位，没惊动周边暗梢",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.survey_wumu_mansion"
+    },
+    {
+     "reviewSummary": "由钱塘门进临安，在风波亭停车——见过谢艺的，到亭后谢艺墓前上香",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.linan_arrive_fengbo"
+    },
+    {
+     "reviewSummary": "在风波亭后拜祭谢艺并安顿临安落脚处——敖润、冯源、林清浦登场",
+     "status": "ready",
+     "stageId": "lyl.lin_an_black_sea",
+     "eventId": "lyl.event.debut_ruan_sisters"
+    },
+    {
+     "reviewSummary": "听俞子元回报，确认高衙内勒索威远镖局的条件",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.weiyuan_extortion"
+    },
+    {
+     "reviewSummary": "明庆寺外看鲁智深倒拔垂杨柳、林冲上前通名——你按住秦桧，没有贸然结交",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.mingqingsi_lin_lu_meeting"
+    },
+    {
+     "reviewSummary": "办完吏部报到，查明林冲调走了哪些档案",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.libu_registration"
+    },
+    {
+     "reviewSummary": "便门瓦牡丹棚摸到宋军部署、贾师宪决策、林冲底细，线人疑在皇城司",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.lin_an_bridge_01_beat"
+    },
+    {
+     "reviewSummary": "应李师师之邀登雷峰塔",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.leifeng_pagoda_invite"
+    },
+    {
+     "reviewSummary": "雷峰塔拦住陆谦强带走李师师，逼退高衙内一行",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.leifeng_repel_gao"
+    },
+    {
+     "reviewSummary": "研判黑魔海或经林娘子渗禁军，决定去拜访鲁智深",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.lin_an_bridge_03_beat"
+    },
+    {
+     "reviewSummary": "与秦桧复盘雷峰塔冲突，决定继续追查威远失镖",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.decide_chase_weiyuan"
+    },
+    {
+     "reviewSummary": "看过叩天石，按暗号约定赶往便门瓦接头",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.pass_kotian_stone"
+    },
+    {
+     "reviewSummary": "以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.ivory_visit_weiyuan"
+    },
+    {
+     "reviewSummary": "以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定——阮香琳登场",
+     "status": "ready",
+     "stageId": "lyl.taiquan_expedition",
+     "eventId": "liuchao.event.reconnoiter"
+    },
+    {
+     "reviewSummary": "司营巷旁观林冲买刀，确认伏击结果，不打断高衙内的局",
+     "status": "ready",
+     "stageId": "lyl.lin_an_bridge",
+     "eventId": "lyl.event.siying_lane_saber_ambush"
+    },
+    {
+     "reviewSummary": "林家认出凝姨是阮香凝，婚后表象不对，疑她通黑魔海",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.linjia_sees_ningyi"
+    },
+    {
+     "reviewSummary": "在林家确认凝姨的真实身份，并保留刚发现的疑点——青面兽、阮香凝登场",
+     "status": "ready",
+     "stageId": "lyl.taiquan_expedition",
+     "eventId": "liuchao.event.fruit_conflict"
+    },
+    {
+     "reviewSummary": "潜入西湖别业，听清高衙内与陆谦复盘失镖圈套，还要继续设计林冲",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xihu_villa_eavesdrop"
+    },
+    {
+     "reviewSummary": "偕李师师赴梵天寺遭禁军伏击，马车被毁，俞子元掩护",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat"
+    },
+    {
+     "reviewSummary": "多宝阁问清贾师宪要你推纸币——你要纸币能纳税、发行量须经认可",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_paper_plan"
+    },
+    {
+     "reviewSummary": "童贯引见宋主，纸币获准纳税并共同监制",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_paper_mint"
+    },
+    {
+     "reviewSummary": "户部新设宝钞局，宋主亲笔点你以员外郎兼任宝钞局主事",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.song_baochao_appointed"
+    },
+    {
+     "reviewSummary": "林冲持刀闯白虎堂被刺配江州，你与鲁智深计划营救",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat"
+    },
+    {
+     "reviewSummary": "坐实林冲没被救下——刺配照旧，他仍要去江州",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.linchong_still_exiled"
+    },
+    {
+     "reviewSummary": "潜入明庆寺观音殿，被郭槐、封德明制住，太皇太后认出劳力士后放人",
+     "status": "ready",
+     "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+     "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat"
+    },
+    {
+     "reviewSummary": "与高俅密谈，得知宋主生母是韦太后等宫廷身世疑云",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_03"
+    }
+   ],
+   "pendingExpansion": "线形：卷入贾师宪清岳党 → 查清粮战与围城 → 相府／太尉／后宫立场 → 纸钞落地逼退＋昭南索赔 → 礼部侍郎、通问计议使。顶点＝礼部侍郎、通问计议使（seq 1134）。578 共同监制、1160 出资解困并进 S11，不另封「宝钞使」。S5／S6／S9／S11 需新增。S5 用屯田司员外郎，不用「客卿」。威远／武穆王府不上链。"
+  },
+  {
+   "id": "han",
+   "name": "汉国",
+   "kind": "nation",
+   "anchorEventIds": [
+    "lcq.event.s07_01_old_case"
+   ],
+   "anchorLocationIds": [
+    "liuchao.location.luoyang",
+    "lyl.location.luoyang"
+   ],
+   "anchorCharacterIds": [
+    "liuchao.character.xiao_yao_yi"
+   ],
+   "entryHint": "汉廷的账从一桩旧案查起——找萧遥逸问清左武军是怎么覆灭的；或者直接去洛都。",
+   "basis": "洛都＝汉国都城。**两个孪生 id 全收**：`liuchao.location.luoyang` 覆盖 24 关、`lyl.location.luoyang` 覆盖 6 关（含抵达关 `luoyang_cloud_secret`，那关没有 atlas 那个）。早先只填后者是错的——汉国线 6 关里只有 3 关能响，`dingtao_beijing` 与 `han_succession` 玩家人在洛都却触发不了。",
+   "nodes": [
+    {
+     "reviewSummary": "萧遥逸在左武旧案之前上门：死则接骨灰，生还则接伤员",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.xiaoyaoyi_arrives"
+    },
+    {
+     "reviewSummary": "萧遥逸交代左武军怎么覆灭，以及岳帅旧案上的分歧",
+     "status": "ready",
+     "stageId": "lcq.stage_07_qingyuan_jiankang",
+     "eventId": "lcq.event.s07_01_old_case"
+    },
+    {
+     "reviewSummary": "与孟非卿复盘王哲左武军覆灭：有人切断补给、泄军机，排除金蜜镝",
+     "status": "ready",
+     "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+     "eventId": "lcq.event.s10_04_left_army_review"
+    },
+    {
+     "reviewSummary": "抵达苍澜镇，看清昂贵物价与太泉异常",
+     "status": "ready",
+     "stageId": "lyl.taiquan_sacred_fruit",
+     "eventId": "lyl.event.taiquan_sacred_fruit_07"
+    },
+    {
+     "reviewSummary": "与虞白樱从蚁穴脱险，太泉余波进了身体",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.taiquan_afterfall_01_beat"
+    },
+    {
+     "reviewSummary": "下首阳山，在山脚与冯源、高智商一行会合，赶往舞都",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.han_shouyang_gaoyanei"
+    },
+    {
+     "reviewSummary": "前往洛都查明风波——宁成登场",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.taiquan_afterfall_07_beat"
+    },
+    {
+     "reviewSummary": "云如瑶要亲自去七里坊的饼肆做工，你下灶和面蒸饼帮她撑起来",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.han_wudu_bingsi"
+    },
+    {
+     "reviewSummary": "与冯子都结交探听渠道——高智商、徐璜登场",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.taiquan_afterfall_08_beat"
+    },
+    {
+     "reviewSummary": "汉廷朝会上追问：王温舒攻韦玄成，左武军粮草不继究竟谁的责",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.han_court_grain_blame"
+    },
+    {
+     "reviewSummary": "襄城君府密室发现小紫已控制孙寿，并透露刺杀韩定国",
+     "status": "ready",
+     "stageId": "lyl.taiquan_afterfall",
+     "eventId": "lyl.event.taiquan_afterfall_10_beat"
+    },
+    {
+     "reviewSummary": "与云苍峰商定开首阳山铜矿，并经西邸买二千石官与郡县小吏",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.s05_01"
+    },
+    {
+     "reviewSummary": "在山口镇应对吕氏兄弟调来的卫尉、屯骑等四军围杀",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.s05_03"
+    },
+    {
+     "reviewSummary": "在宅院抵御吕氏死士进攻——哈迷蚩登场",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.s05_04"
+    },
+    {
+     "reviewSummary": "随朱老头赴石室书院月旦评，见识谶纬怎么左右洛都风向",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.han_yuedan_ping"
+    },
+    {
+     "reviewSummary": "与斯明信夜潜霍家别院，找严君平的下落",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.han_huo_villa"
+    },
+    {
+     "reviewSummary": "严君平告知星月湖被诬致左武军覆没，末块玉牌藏胶西",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.han_xingyue_framed"
+    },
+    {
+     "reviewSummary": "与云秀峰、郭解用纸钞买下一千五百顷田，看清限田令要卷进云家",
+     "status": "ready",
+     "stageId": "lyl.luoyang_cloud_secret",
+     "eventId": "lyl.event.han_limit_field"
+    },
+    {
+     "reviewSummary": "与赵合德藏在含光殿藻井，看完吕冀淫辱友通期全过程",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.lvji_defiles_consort"
+    },
+    {
+     "reviewSummary": "在藻井上屏息藏住自己与赵合德，看完含光殿中发生的一切——刘骜、义姁登场",
+     "status": "ready",
+     "stageId": "lyl.luoyang_coup",
+     "eventId": "lyl.event.s06_01b"
+    },
+    {
+     "reviewSummary": "扮作内侍混出昭阳宫，护赵飞燕与赵合德撤回长秋宫",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.emperor_death_spreads"
+    },
+    {
+     "reviewSummary": "扮作内侍混出昭阳宫，护送赵飞燕与赵合德撤回长秋宫——中行说、刘建登场",
+     "status": "ready",
+     "stageId": "lyl.luoyang_coup",
+     "eventId": "lyl.event.s06_01"
+    },
+    {
+     "reviewSummary": "从密道出宫召齐各方：定下拥立定陶王，分派任务",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.arrange_escape_route"
+    },
+    {
+     "reviewSummary": "从密道出宫，召齐各方定下拥立定陶王并分派任务——程郑登场",
+     "status": "ready",
+     "stageId": "lyl.luoyang_coup",
+     "eventId": "lyl.event.s06_02"
+    },
+    {
+     "reviewSummary": "确认刘建已起兵攻占南宫与武库",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.liujian_takes_nangong"
+    },
+    {
+     "reviewSummary": "守住长秋宫台阶，同时留着刘建的命",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.changqiu_palace_defense"
+    },
+    {
+     "reviewSummary": "守住长秋宫台阶，并看住刘建的性命不能在此时丢掉——蔡敬仲登场",
+     "status": "ready",
+     "stageId": "lyl.luoyang_coup",
+     "eventId": "lyl.event.s06_04"
+    },
+    {
+     "reviewSummary": "立赏格稳住长秋宫守军，抢在两方使节前争取到胡骑校尉桓郁",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.bounty_and_hu_cavalry"
+    },
+    {
+     "reviewSummary": "看住阿阁不让吕氏接走赵皇后——吕奉先已单骑破阵",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.lvfengxian_breaks_line"
+    },
+    {
+     "reviewSummary": "前往吕冀营帐查探情况——吕雉登场",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_01_beat"
+    },
+    {
+     "reviewSummary": "从传闻得知：天子已死，含光殿落到吕冀手里，刘建已起兵占了南宫",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_power_vacuum"
+    },
+    {
+     "reviewSummary": "决定是否出面拥立定陶王",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_sponsor_dingtao"
+    },
+    {
+     "reviewSummary": "随左武军进入皇宫——古格尔、吕巨君登场",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_02_beat"
+    },
+    {
+     "reviewSummary": "走复道遇伏，借秦桧烟雾脱身",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_04_beat"
+    },
+    {
+     "reviewSummary": "赶到平朔殿，吕巨君已与廖扶自焚",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_05_beat"
+    },
+    {
+     "reviewSummary": "闻清语掳走赵飞燕赵合德，云丹琉救下定陶王",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_06_beat"
+    },
+    {
+     "reviewSummary": "接应逃出北宫的赵飞燕、赵合德——合德把姐姐救了出来",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.zhao_sisters_flee_north_palace"
+    },
+    {
+     "reviewSummary": "赶往洛都津门：董卓率三千凉州军无虎符入京，斩杀骑手",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_08_beat"
+    },
+    {
+     "reviewSummary": "随金蜜镝攻入永安宫，把刘建逼上阙楼",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_09_beat"
+    },
+    {
+     "reviewSummary": "赶到阙楼，由秦桧斩下刘建并取其首",
+     "status": "ready",
+     "stageId": "lyl.han_palace_endgame",
+     "eventId": "lyl.event.han_palace_endgame_10_beat"
+    },
+    {
+     "reviewSummary": "贾文和挟持定陶王对峙，最终以五名扈卫代价放行",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_02"
+    },
+    {
+     "reviewSummary": "随董卓凉州军挟定陶王出洛都，军士割袍追随",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_03"
+    },
+    {
+     "reviewSummary": "长秋宫听吕雉向霍子孟宣布退位、处置吕冀，支持立定陶王",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_04"
+    },
+    {
+     "reviewSummary": "到昭阳宫：董卓拥立定陶王为帝，贾文和献大赦、选材、迁都",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_05"
+    },
+    {
+     "reviewSummary": "剑玉姬刺穿郭解心脉，他临终把定陶王托付给你",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_06"
+    },
+    {
+     "reviewSummary": "董卓死在贾文和怀里，留下胡骑异动、边地将有剧变的军情",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_07"
+    },
+    {
+     "reviewSummary": "以拥立首功受封舞阳侯，实封五千户；推掉少府，只要经营权",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.han_marquis_wuyang_enfeoff"
+    },
+    {
+     "reviewSummary": "奉懿旨至永巷当众凌辱并赐死吕冀，其妻孙寿发配为奴",
+     "status": "ready",
+     "stageId": "lyg.dingtao_beijing",
+     "eventId": "lyg.event.s01_09"
+    },
+    {
+     "reviewSummary": "率众为郭解送葬，立郭靖为义子并让他继承舞阳侯",
+     "status": "ready",
+     "stageId": "lyg.mijing_rumen",
+     "eventId": "lyg.event.s02_01"
+    },
+    {
+     "reviewSummary": "探视金蜜镝——他装伤避嫌；你以成亲相胁，他默许不干涉帝统",
+     "status": "ready",
+     "stageId": "lyg.mijing_rumen",
+     "eventId": "lyg.event.s02_07"
+    },
+    {
+     "reviewSummary": "触龙珠唤醒冰冰，拿到超级管理员权限——当场验明谁在名单上",
+     "status": "ready",
+     "stageId": "lyg.mijing_rumen",
+     "eventId": "lyg.event.mijing_superuser_roster"
+    },
+    {
+     "reviewSummary": "分兵：自己与云丹琉追巫宗，卓云君等人回帝陵",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_01_beat"
+    },
+    {
+     "reviewSummary": "在帝陵调查赵氏父兄下落——单超登场",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_02_beat"
+    },
+    {
+     "reviewSummary": "蔡敬仲转来：中行说要贾文和害死后帝，拥立你为帝",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_04_beat"
+    },
+    {
+     "reviewSummary": "赵合德说让赵飞燕怀你的孩子破中行说，并称你是阳武侯之子",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_05_beat"
+    },
+    {
+     "reviewSummary": "与赵飞燕决定加速定陶王登基",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_06_beat"
+    },
+    {
+     "reviewSummary": "从密道夜入长秋宫见赵飞燕、赵合德，察觉自己真元滞涩",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_07_beat"
+    },
+    {
+     "reviewSummary": "登基大典上真气失控，吕雉点破须双修，赵飞燕以双修之姿助你行功",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_08_beat"
+    }
+   ],
+   "pendingExpansion": "入口改挂（2026-08-16）：`s07_01_old_case` 跟着八骏查左武军覆灭，第 10 关即可入线；该节点同时喂星月湖。顶点＝封舞阳侯（实封五千户），辞少府只经商（seq 979）；2026-10-28 五线补全·汉 H20 新建 han_marquis_wuyang_enfeoff 落地。限田、星月湖被诬、朝会粮草账、宫变之夜八拍已挂章上 rail；真空传闻／拥立选择是没亲历宫变之夜的条件拍，只挂章。`s10_04_left_army_review` 可加深调查、双喂星月湖。`taiquan_afterfall_07` 降为「人到洛都」地理拍，不再当入口。"
+  },
+  {
+   "id": "tang",
+   "name": "唐国",
+   "kind": "nation",
+   "anchorEventIds": [
+    "lyg.event.changgan_fanseng_hunt"
+   ],
+   "anchorLocationIds": [
+    "liuchao.location.changan"
+   ],
+   "entryHint": "袁天罡说起主家小姐被番僧带走的旧事，说不清是否专冲穿越者；佛门近来在长安大肆扩张，唐国本来崇道，如今佛门要压过道门。",
+   "basis": "长安＝唐国都城，第 30 关可达。**这次不是孪生 id 坑**（实测，2026-08-16）：`lyg.location.changan` 确实存在于 6 个关，但那 6 关同时都有 `liuchao.location.changan`——是真子集，收一个就够，加了等于没加。（旧 basis 写它「live 关查无」，与实测不符，已改。结论没变，理由是错的。汉国洛都那次是真孪生：24 关 vs 6 关互不覆盖，必须全收。）**引子＝世界此刻的状态**（2026-10-28 返修，不得坐实猎杀）：袁天罡讲主家小姐被番僧带走的旧事，说不清是否专冲穿越者（seq 1061）；且正在长安大肆扩张（`investigate_te_master` 的 objective 即「确认释特昧普的**扩张方式**与外援」，手法是强制灌顶收服摩尼寺）。**「唐国本来崇道」是正典明写的设定**（用户指出，已核）：卓云君卷「在**崇信道家的唐宋两国**，太乙真宗的教御每每受到国师的礼遇」；申婉盈卷「太乙真宗在唐国和宋国势力极强」；赵归真卷「唐国佛门势力固然强大，道门势力也不小」；最硬的一条是**杨玉环本人**——「先皇钦命太乙真宗、阳钧宗、乾贞道、长青宗、瑶池宗一同授箓传道」，她的别名「太真公主」就是道号：朝廷把自己的贵妃送进道门受箓，比任何描述都能说明国朝的立场。于是这条线的赌注也清楚了——沮渠二世卷：「如果能让**唐国正式将佛门列为国教，彻底压倒道门**，绝对是一椿不世奇功」。番僧要的不是杀几个穿越者，是夺国教之位。（另记一处结构：seq 1055 他是**以舞阳侯身份**出使唐国的——**汉国线的顶点就是本线的入场券**，八条线里第一处明确的\"顶点喂入口\"。这层不写进指引，只作日后分层的依据。）",
+   "nodes": [
+    {
+     "reviewSummary": "审汪臻，问明白员外传说多是编造",
+     "status": "ready",
+     "stageId": "lyg.han_succession",
+     "eventId": "lyg.event.han_succession_10_beat"
+    },
+    {
+     "reviewSummary": "在留仙坪多留一日，盯住同住客栈的周飞一伙与廖群玉",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.tang_liuxianping_arrive"
+    },
+    {
+     "reviewSummary": "堵下镇上的落魄老相士，他承认也是穿越者，借名袁天罡",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.tang_liuxianping_xiangshi"
+    },
+    {
+     "reviewSummary": "听袁天罡讲主家小姐被番僧带走的旧事，他并说不清是否专冲穿越者",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.changgan_fanseng_hunt"
+    },
+    {
+     "reviewSummary": "入长安宣平坊落脚，石超接风——吕奉先已在城中惹事",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.s03_01"
+    },
+    {
+     "reviewSummary": "街头撞见杨玉环驾轻车伤人训话，潘金莲提剑为她警戒",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.s03_03"
+    },
+    {
+     "reviewSummary": "听小紫的说法：她称不是闯进去的，是从兴庆宫遗迹被传送进塔——僧众不认",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.xiaozi_teleported_into_dayanta"
+    },
+    {
+     "reviewSummary": "要救大雁塔里的小紫与吕雉——窥基断水，她握着铸铁炸弹",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.s03_08"
+    },
+    {
+     "reviewSummary": "夜访慈恩寺，碑上疑白行简是穿越者；汉使身份救走炸塔的小紫",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.s03_09"
+    },
+    {
+     "reviewSummary": "从杨玉环处厘清北司与佛门各自在查什么",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.north_bureau_buddhist_moves"
+    },
+    {
+     "reviewSummary": "与小紫潜入青龙寺，摸清释特昧普的扩张方式与外援",
+     "status": "ready",
+     "stageId": "lyg.changgan_begins",
+     "eventId": "lyg.event.qinglongsi_te_master"
+    },
+    {
+     "reviewSummary": "潜入青龙寺确认释特昧普的扩张方式与外援",
+     "status": "ready",
+     "stageId": "lyg.shixiang_ambush",
+     "eventId": "lyg.event.investigate_te_master"
+    },
+    {
+     "reviewSummary": "把鸿胪寺的礼遇和朝会资格拿回来",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.honglusi_amends"
+    },
+    {
+     "reviewSummary": "确认鸿胪寺恢复的礼遇与元正朝会资格——段文楚登场",
+     "status": "ready",
+     "stageId": "lyg.shixiang_ambush",
+     "eventId": "lyg.event.shixiang_s11"
+    },
+    {
+     "reviewSummary": "确认慈恩寺红莲演法与唐皇敕令之间的张力",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.cien_red_lotus"
+    },
+    {
+     "reviewSummary": "确认红莲演法与唐皇敕令之间的张力——观海登场",
+     "status": "ready",
+     "stageId": "lyg.shixiang_ambush",
+     "eventId": "lyg.event.shixiang_s12"
+    },
+    {
+     "reviewSummary": "元正朝会上核验徐君房的地球仪，对照秦使说辞",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.yuanzheng_globe"
+    },
+    {
+     "reviewSummary": "核验徐君房的地球仪知识与秦使说辞",
+     "status": "ready",
+     "stageId": "lyg.shixiang_ambush",
+     "eventId": "lyg.event.shixiang_s13"
+    },
+    {
+     "reviewSummary": "查宣平坊那桩宦官命案，别急着定谁是幕后",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.xuanping_eunuch_murder"
+    },
+    {
+     "reviewSummary": "摸清废弃兴庆宫，标出地下入口",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.survey_xingqing_palace"
+    },
+    {
+     "reviewSummary": "稳住太子伤势，把误伤消息压下去",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.prince_injury_control"
+    },
+    {
+     "reviewSummary": "在水香楼布好诱捕",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.shuixiang_lure_setup"
+    },
+    {
+     "reviewSummary": "压住麻痹毒势，封住毒方刺客的藏身范围",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.spot_poison_assassin"
+    },
+    {
+     "reviewSummary": "池畔隔开毒烟，把飞鸟萤子擒下",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.poolside_capture"
+    },
+    {
+     "reviewSummary": "隔离毒烟并擒获飞鸟萤子",
+     "status": "ready",
+     "stageId": "lyg.shixiang_ambush",
+     "eventId": "lyg.event.final_showdown"
+    },
+    {
+     "reviewSummary": "炸开摩尼寺打开营救窗口，女师是否脱险待确认",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.blast_moni_temple"
+    },
+    {
+     "reviewSummary": "听信永讲清蕃密邪径内幕，据此决定怎么应对",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.xinyong_reveals_fanmi"
+    },
+    {
+     "reviewSummary": "听清蕃密内幕并作出有依据的应对决定——信永登场",
+     "status": "ready",
+     "stageId": "lyg.shixiang_ambush",
+     "eventId": "lyg.event.forewarned_from_xinyong"
+    },
+    {
+     "reviewSummary": "审飞鸟萤子，她拒绝合作",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.interrogate_feiniao_yingzi"
+    },
+    {
+     "reviewSummary": "在长安面见唐皇，接下昭南索赔：交张亢、赔款，否则兴兵",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.changgan_interlude_03_beat"
+    },
+    {
+     "reviewSummary": "受礼部侍郎、通问计议使，用这颗印解宋困",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.song_tongwen"
+    },
+    {
+     "reviewSummary": "与昭南卿士囊瓦谈崩，他拒了程氏方案并加码兑付",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.changgan_interlude_04_beat"
+    },
+    {
+     "reviewSummary": "升平客栈连夜谈判，密约条款大致谈妥，只卡在张亢——条款不让、人不交",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.tang_secret_treaty_signed"
+    },
+    {
+     "reviewSummary": "摸清窥基改唆娑梵寺主刺你——瑶池宗已退出",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.changgan_interlude_06_beat"
+    },
+    {
+     "reviewSummary": "疑吕雉泄了赵飞燕的消息，计划以她为饵钓十方丛林",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.changgan_interlude_08_beat"
+    },
+    {
+     "reviewSummary": "正月初九鸿胪寺公布昭南与宋国和约，你成了长安各方关注的焦点",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.honglusi_treaty_announced"
+    },
+    {
+     "reviewSummary": "返程迎战四十余名黑衣人伏击",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.changgan_interlude_09_beat"
+    },
+    {
+     "reviewSummary": "救出白霓裳，击杀王守澄——墨枫林登场",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.changgan_interlude_10_beat"
+    },
+    {
+     "reviewSummary": "从杨玉环接下李昂密令：天策府闭门不涉，去牵制鱼朝恩",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.liang_secret_order"
+    },
+    {
+     "reviewSummary": "听清李昂对天策府与鱼朝恩的安排",
+     "status": "ready",
+     "stageId": "lyg.ganlu_bian",
+     "eventId": "lyg.event.li_jinxiang_meeting"
+    },
+    {
+     "reviewSummary": "核对黎锦香对王守澄案与广源行的说法——鱼玄机登场",
+     "status": "ready",
+     "stageId": "lyg.ganlu_bian",
+     "eventId": "lyg.event.yang_yuhuan_report"
+    },
+    {
+     "reviewSummary": "听黎锦香说清：周飞与十方丛林合谋针对程宅",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.zhoufei_conspiracy"
+    },
+    {
+     "reviewSummary": "问出飞鸟家族与布都御魂剑柄的关系",
+     "status": "ready",
+     "stageId": "lyg.changgan_interlude",
+     "eventId": "lyg.event.feiniao_hilt_clue"
+    },
+    {
+     "reviewSummary": "确认权宦追凶分工与内部猜忌——李辅国、田令孜、仇士良登场",
+     "status": "ready",
+     "stageId": "lyg.ganlu_bian",
+     "eventId": "lyg.event.release_jingnian"
+    },
+    {
+     "reviewSummary": "汇总甘露局势并决定是否释放番僧搅局——李训、郑注、净念登场",
+     "status": "ready",
+     "stageId": "lyg.ganlu_bian",
+     "eventId": "lyg.event.su_sha_identified"
+    },
+    {
+     "reviewSummary": "铁马堂擂台进八强，周飞三家全胜——下一场对丹霞宗悬殊",
+     "status": "ready",
+     "stageId": "lyg.liangzhou_league",
+     "eventId": "lyg.event.s06_02"
+    },
+    {
+     "reviewSummary": "查清仇士良夺神策军：张承业、杨家接管，疑田令孜联佛门藩镇杀王守澄",
+     "status": "ready",
+     "stageId": "lyg.liangzhou_league",
+     "eventId": "lyg.event.s06_04"
+    },
+    {
+     "reviewSummary": "查清李宏在仇士良门前刺匡佑、自残嫁祸和尚，意在宦官内讧",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_01_beat"
+    },
+    {
+     "reviewSummary": "自称不拾一世转世，念真经震慑十方丛林围杀",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_03_beat"
+    },
+    {
+     "reviewSummary": "砍断兴唐寺灯树，在火海里斩了龙宸的杀手脱身",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_04_beat"
+    },
+    {
+     "reviewSummary": "拦截龙宸翼火蛇，救下惊理——王彦章、燕姣然登场",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_05_beat"
+    },
+    {
+     "reviewSummary": "随吕雉飞入大雁塔，被释特昧普困进佛咒幻境",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_06_beat"
+    },
+    {
+     "reviewSummary": "采纳贾文和之计，部署先取田令孜以乱破局",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_07_beat"
+    },
+    {
+     "reviewSummary": "拒了窥基假诏和剃度，刘贞亮传诏被挡，当场动手",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_08_beat"
+    },
+    {
+     "reviewSummary": "在程宅揭穿窥基伪造法旨——沮渠二世、净空登场",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_09_beat"
+    },
+    {
+     "reviewSummary": "在程宅应对窥基弃佛入魔，看他施血海遁走",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_10_beat"
+    },
+    {
+     "reviewSummary": "在大明宫躲开仇士良神策军屠城，乱党正被满城搜捕",
+     "status": "ready",
+     "stageId": "lyg.buddhist_conspiracy",
+     "eventId": "lyg.event.buddhist_conspiracy_11_beat"
+    },
+    {
+     "reviewSummary": "持仇士良令牌经杨玉环入宫，潜入蓬莱秘阁见他威逼李昂",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_02_beat"
+    },
+    {
+     "reviewSummary": "查清窥基弃佛后长安寺庙道观遭劫，官府已瘫痪",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_03_beat"
+    },
+    {
+     "reviewSummary": "听取李训在秘阁的供词——鱼弘志登场",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_04_beat"
+    },
+    {
+     "reviewSummary": "旁观李辅国审宦官：田令孜、刘贞亮死，鱼弘志净身待赐死",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_05_beat"
+    },
+    {
+     "reviewSummary": "听贾文和建议杀李昂以安天下——你还没决定",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_06_beat"
+    },
+    {
+     "reviewSummary": "到曲江苑看到鱼弘志被程元振逼着弑了李昂，王德妃已先死",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_07_beat"
+    },
+    {
+     "reviewSummary": "随仇士良返宫，得知李辅国已弑君、萧太后失踪",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_08_beat"
+    },
+    {
+     "reviewSummary": "向罗令询问惨案详情",
+     "status": "ready",
+     "stageId": "lyg.ganlu_aftershock",
+     "eventId": "lyg.event.ganlu_aftershock_09_beat"
+    },
+    {
+     "reviewSummary": "探听李辅国重分职权：程元振任枢密使，仇士良留用，继位人选在议",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_01_beat"
+    },
+    {
+     "reviewSummary": "赶到独柳树，看着王涯、舒元舆等宰执家眷被腰斩",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_02_beat"
+    },
+    {
+     "reviewSummary": "赶到现场，看清窥基已显尸陀林主真身，释特昧普正在对抗",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_04_beat"
+    },
+    {
+     "reviewSummary": "合力打散窥基魔身——头颅附老太监跑了，释特昧普也逃了",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_05_beat"
+    },
+    {
+     "reviewSummary": "接中行说急报，赶回宫确认江王李炎已入宫",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_06_beat"
+    },
+    {
+     "reviewSummary": "查清太液池黑雾是李辅国夺舍的护持之法",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_07_beat"
+    },
+    {
+     "reviewSummary": "探查婆娑宝树培育地点——安乐公主登场",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_08_beat"
+    },
+    {
+     "reviewSummary": "随杨玉环奉诏讨逆：她宣布李辅国假传圣旨，杀向大明宫",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_09_beat"
+    },
+    {
+     "reviewSummary": "莲座前砍向李辅国，受伤后被潘金莲、白霓裳救下",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_10_beat"
+    },
+    {
+     "reviewSummary": "李辅国把你和杨玉环、吕雉、潘金莲、白霓裳收进浮屠塔",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_11_beat"
+    },
+    {
+     "reviewSummary": "以生死根吸尽死气，联手斩断李辅国肉身",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_12_beat"
+    },
+    {
+     "reviewSummary": "你拦不住：李辅国魂魄占了返老的太皇太后郭氏，李炎把你打断",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_13_beat"
+    },
+    {
+     "reviewSummary": "谎称斩了李辅国喂的妖祟，以血藤为证，避开弑后的罪",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.claim_slew_demon"
+    },
+    {
+     "reviewSummary": "接旨大都护、上柱国",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_title_daduhu"
+    },
+    {
+     "reviewSummary": "听贾文和：找五肉五甘露可驱李辅国魂——太皇太后魂魄或还在",
+     "status": "ready",
+     "stageId": "lyg.shituolin_endgame",
+     "eventId": "lyg.event.shituolin_endgame_14_beat"
+    },
+    {
+     "reviewSummary": "换身后续：长安驱魂局",
+     "status": "pending"
+    }
+   ],
+   "pendingExpansion": "线形：以汉使入长安 → 卷入佛门纷争 → 大战窥基魔身 → 甘露变 → 李辅国换身暂告一段落。**顶点是临时的**（用户裁定 2026-08-16）：大都护、上柱国（恩同亲王，seq 1396）只是原著段用完时的收束点，不是这条线的终局——李辅国换身之后还有戏，等剧本写出来再往后扩。所以它与其余七条线的顶点不同档：那七条是\"这条线打穿了\"，唐国这个是\"原著素材到此为止\"。T12 需新增 `shituolin_endgame_title_daduhu`（1395 登基／1397 辞官劝告并进）。T14 换身后续：长安驱魂局，没剧本，留空待完成。旧「入仕唐廷的判据」作废。"
+  }
+ ],
+ "secondaryLinesAtEvent": {
+  "lcq.event.baihu_shangguan_escape": [
+   "zhaonan"
+  ],
+  "lcq.event.biling_bay_stance": [
+   "zhaonan"
+  ],
+  "lcq.event.blacksea_vault_split": [
+   "heimohai"
+  ],
+  "lcq.event.blank_letter_and_dagu": [
+   "zhaonan"
+  ],
+  "lcq.event.charge_sudaji_fee": [
+   "zhaonan"
+  ],
+  "lcq.event.enter_dong_with_migu": [
+   "heimohai",
+   "zhaonan"
+  ],
+  "lcq.event.escape_cave_mechanism": [
+   "zhaonan"
+  ],
+  "lcq.event.free_ajiman": [
+   "zhaonan"
+  ],
+  "lcq.event.gamble_bond_signed": [
+   "zhaonan"
+  ],
+  "lcq.event.geluo_summons_biji": [
+   "zhaonan"
+  ],
+  "lcq.event.ghost_king_swallowed": [
+   "zhaonan"
+  ],
+  "lcq.event.guiwangdong_coop_pact": [
+   "zhaonan"
+  ],
+  "lcq.event.haishen_hall_merfolk": [
+   "zhaonan"
+  ],
+  "lcq.event.hongmiao_controlled": [
+   "zhaonan"
+  ],
+  "lcq.event.huamiao_coop_boundary": [
+   "zhaonan"
+  ],
+  "lcq.event.iron_bridge_ambush": [
+   "zhaonan"
+  ],
+  "lcq.event.jin_panjiang_shaozhu": [
+   "jin"
+  ],
+  "lcq.event.jin_vacate_jiangzhou": [
+   "jin"
+  ],
+  "lcq.event.ningyu_enters_gamble": [
+   "zhaonan"
+  ],
+  "lcq.event.ningyu_regicide_offer": [
+   "zhaonan"
+  ],
+  "lcq.event.palace_haunting_rumor": [
+   "jin"
+  ],
+  "lcq.event.palm_oath_shanghou": [
+   "heimohai"
+  ],
+  "lcq.event.pengyi_takeover": [
+   "commerce",
+   "xingyuehu"
+  ],
+  "lcq.event.pull_harpoon_lemingzhu": [
+   "zhaonan"
+  ],
+  "lcq.event.qiushaojun_breaks_with_linzhilan": [
+   "taiyi"
+  ],
+  "lcq.event.quanyuji_soul_pill": [
+   "jin"
+  ],
+  "lcq.event.rainforest_black_shoal": [
+   "zhaonan"
+  ],
+  "lcq.event.regroup_caravan_envoy": [
+   "zhaonan"
+  ],
+  "lcq.event.ruins_ghost_warriors": [
+   "zhaonan"
+  ],
+  "lcq.event.s01_04": [
+   "taiyi"
+  ],
+  "lcq.event.s02_01": [
+   "taiyi"
+  ],
+  "lcq.event.s02_02": [
+   "taiyi"
+  ],
+  "lcq.event.s02_06": [
+   "zhaonan"
+  ],
+  "lcq.event.s03b_snake_flower_bridge_02": [
+   "zhaonan"
+  ],
+  "lcq.event.s03b_snake_flower_bridge_04": [
+   "zhaonan"
+  ],
+  "lcq.event.s03b_snake_flower_bridge_05": [
+   "zhaonan"
+  ],
+  "lcq.event.s03b_snake_flower_bridge_06": [
+   "zhaonan"
+  ],
+  "lcq.event.s03b_snake_flower_bridge_07": [
+   "zhaonan"
+  ],
+  "lcq.event.s03b_wanwu_night": [
+   "zhaonan"
+  ],
+  "lcq.event.s03b_yinzhu_xiongerpu": [
+   "zhaonan"
+  ],
+  "lcq.event.s04_01": [
+   "zhaonan"
+  ],
+  "lcq.event.s04_03": [
+   "zhaonan"
+  ],
+  "lcq.event.s04_04": [
+   "heimohai"
+  ],
+  "lcq.event.s04_07": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_01": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_03": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_04": [
+   "heimohai"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_05": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_06": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_07": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_08": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_09": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_10": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_11": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_14": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_16": [
+   "xingyuehu"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_17": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_lingfei_baiyi_crisis_19": [
+   "zhaonan"
+  ],
+  "lcq.event.s04b_xi_furen_trade_route": [
+   "commerce"
+  ],
+  "lcq.event.s05b_03_saan_secret_path": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_04_enter_ghost_palace": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_05a_meet_ghost_king": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_05b_ideology_duel_and_defeat": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_08a_rescue_suli": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_08b_altar_corpse_fight_and_danchen": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_09_temporary_pact_with_xiaozi": [
+   "heimohai",
+   "zhaonan"
+  ],
+  "lcq.event.s05b_10_slave_revolt_and_phoenix_change": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_ice_gu_detour": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_shanghou_reads_letter": [
+   "heimohai"
+  ],
+  "lcq.event.s05b_wuer_suli_depart": [
+   "zhaonan"
+  ],
+  "lcq.event.s05b_yeao_palm_ningyu_stays": [
+   "heimohai"
+  ],
+  "lcq.event.s07_00a_shanghou_trading_house": [
+   "xingyuehu"
+  ],
+  "lcq.event.s07_00b_return_north": [
+   "xingyuehu"
+  ],
+  "lcq.event.s07_00c_arrive_jiankang": [
+   "xingyuehu"
+  ],
+  "lcq.event.s07_01_old_case": [
+   "xingyuehu",
+   "jin",
+   "han"
+  ],
+  "lcq.event.s07_05_eight_steeds_informed": [
+   "xingyuehu"
+  ],
+  "lcq.event.s07_07_dragon_hall": [
+   "jin"
+  ],
+  "lcq.event.s07_08_palace_escape": [
+   "jin"
+  ],
+  "lcq.event.s07_qinhui_join": [
+   "heimohai"
+  ],
+  "lcq.event.s08_01_eagle_valley": [
+   "jin"
+  ],
+  "lcq.event.s08_02_wood_fort": [
+   "jin"
+  ],
+  "lcq.event.s08_03_beifu_rescue": [
+   "jin"
+  ],
+  "lcq.event.s08_04_sudaji_enters": [
+   "heimohai"
+  ],
+  "lcq.event.s08_05_breakthrough": [
+   "jin"
+  ],
+  "lcq.event.s08_07_palace_ninja": [
+   "jin"
+  ],
+  "lcq.event.s08_08_gumingyin_plot": [
+   "xingyuehu",
+   "heimohai"
+  ],
+  "lcq.event.s08_09_zhaoming_night": [
+   "xingyuehu",
+   "jin"
+  ],
+  "lcq.event.s08_10_xuanwu_rescue": [
+   "jin"
+  ],
+  "lcq.event.s09_01_eight_steeds_leave": [
+   "xingyuehu",
+   "jin"
+  ],
+  "lcq.event.s09_04_weaving_trade": [
+   "commerce"
+  ],
+  "lcq.event.s09_05_drain_escape": [
+   "heimohai",
+   "jin"
+  ],
+  "lcq.event.s09_06_blacksea_fracture": [
+   "heimohai"
+  ],
+  "lcq.event.s09_07_feiniao_infiltration": [
+   "heimohai",
+   "jin"
+  ],
+  "lcq.event.s09_08_six_doors_confession": [
+   "jin"
+  ],
+  "lcq.event.s09_09_jiangzhou_crisis": [
+   "heimohai",
+   "jin"
+  ],
+  "lcq.event.s10_01_jiangzhou_order": [
+   "song"
+  ],
+  "lcq.event.s10_02_yeying_pass": [
+   "song"
+  ],
+  "lcq.event.s10_03_ninja_trace": [
+   "heimohai"
+  ],
+  "lcq.event.s10_04_left_army_review": [
+   "han"
+  ],
+  "lcq.event.s10_05_war_funds": [
+   "commerce",
+   "xingyuehu"
+  ],
+  "lcq.event.s10_06_ruined_temple": [
+   "taiyi"
+  ],
+  "lcq.event.s10_07_preemptive_strike": [
+   "heimohai"
+  ],
+  "lcq.event.s10_08_lair_reversal": [
+   "heimohai"
+  ],
+  "lcq.event.s10_09_yin_yang_fish": [
+   "heimohai",
+   "song"
+  ],
+  "lcq.event.s11_01_pengri_arrives": [
+   "song"
+  ],
+  "lcq.event.s11_02_cement_fortress": [
+   "song"
+  ],
+  "lcq.event.s11_03_protect_yueshuang": [
+   "xingyuehu"
+  ],
+  "lcq.event.s11_04_xingyue_appears": [
+   "xingyuehu"
+  ],
+  "lcq.event.s11_05_wangtao_breaks": [
+   "xingyuehu"
+  ],
+  "lcq.event.s11_06_snow_battle": [
+   "xingyuehu"
+  ],
+  "lcq.event.s11_07_camp_falls": [
+   "song"
+  ],
+  "lcq.event.s11_08_jiangzhou_lockdown": [
+   "song"
+  ],
+  "lcq.event.s11_09_grain_plan": [
+   "commerce"
+  ],
+  "lcq.event.s11_10_sanchuankou_defeat": [
+   "song"
+  ],
+  "lcq.event.s12_01_grain_route_blocked": [
+   "commerce",
+   "song"
+  ],
+  "lcq.event.s12_04_river_granary": [
+   "commerce",
+   "song"
+  ],
+  "lcq.event.s12_05_granary_fire_plan": [
+   "commerce"
+  ],
+  "lcq.event.s12_06_dragon_guard_routs": [
+   "xingyuehu"
+  ],
+  "lcq.event.s12_07_left_wing_raid": [
+   "xingyuehu"
+  ],
+  "lcq.event.s12_08_dingchuan_raid": [
+   "xingyuehu"
+  ],
+  "lcq.event.s12_09_ge_huaimin_killed": [
+   "xingyuehu"
+  ],
+  "lcq.event.s12_10_rescue_xiao": [
+   "song"
+  ],
+  "lcq.event.s12_11_siege_begins": [
+   "song"
+  ],
+  "lcq.event.s12_12_gate_fire": [
+   "song"
+  ],
+  "lcq.event.s12_13_long_siege": [
+   "song"
+  ],
+  "lcq.event.s12_14_chenxing_appears": [
+   "song"
+  ],
+  "lcq.event.s12_15_capture_jingli": [
+   "heimohai"
+  ],
+  "lcq.event.s12_16_corpse_poison": [
+   "heimohai"
+  ],
+  "lcq.event.s12_17_shanghou_stays": [
+   "heimohai"
+  ],
+  "lcq.event.s12_18_linan_grain_order": [
+   "commerce"
+  ],
+  "lcq.event.sanchuankou_result_rumor": [
+   "song"
+  ],
+  "lcq.event.shanghou_cures_ice_gu": [
+   "heimohai"
+  ],
+  "lcq.event.shanghou_revealed": [
+   "heimohai",
+   "zhaonan"
+  ],
+  "lcq.event.silent_sheyi_village": [
+   "zhaonan"
+  ],
+  "lcq.event.slay_dragon": [
+   "xingyuehu",
+   "heimohai",
+   "zhaonan"
+  ],
+  "lcq.event.spoils_split": [
+   "jin"
+  ],
+  "lcq.event.spot_dong_informant": [
+   "zhaonan"
+  ],
+  "lcq.event.sudaji_south_pact": [
+   "zhaonan"
+  ],
+  "lcq.event.tribes_pledge": [
+   "zhaonan"
+  ],
+  "lcq.event.tuntian_post": [
+   "song"
+  ],
+  "lcq.event.wangzhe_letter": [
+   "taiyi"
+  ],
+  "lcq.event.weapon_deal_with_geluo": [
+   "commerce",
+   "zhaonan"
+  ],
+  "lcq.event.wuerlang_joins": [
+   "zhaonan"
+  ],
+  "lcq.event.wuerlang_slays_dagu": [
+   "zhaonan"
+  ],
+  "lcq.event.xiangfu_stance": [
+   "jin"
+  ],
+  "lcq.event.xiao_opens_resources": [
+   "xingyuehu"
+  ],
+  "lcq.event.xiaoyaoyi_arrives": [
+   "xingyuehu",
+   "jin",
+   "han"
+  ],
+  "lcq.event.xiaozi_first_appears": [
+   "zhaonan"
+  ],
+  "lcq.event.xiaozi_kills_mother": [
+   "zhaonan"
+  ],
+  "lcq.event.xieyi_biling_war": [
+   "xingyuehu"
+  ],
+  "lcq.event.xieyi_entrustment": [
+   "xingyuehu",
+   "zhaonan"
+  ],
+  "lcq.event.yeying_seat_struggle": [
+   "taiyi"
+  ],
+  "lcq.event.yiyang_repels_yinsha": [
+   "zhaonan"
+  ],
+  "lcq.event.yuanxingjian_disposed": [
+   "taiyi"
+  ],
+  "lcq.event.yuanxingjian_interrogated": [
+   "taiyi"
+  ],
+  "lcq.event.zhu88_heimohai_chat": [
+   "heimohai"
+  ],
+  "lcq.event.zixi_taiyi_intercept": [
+   "taiyi",
+   "zhaonan"
+  ],
+  "liuchao.event.fruit_conflict": [
+   "song"
+  ],
+  "liuchao.event.reconnoiter": [
+   "song"
+  ],
+  "lyg.event.blast_moni_temple": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_01_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_03_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_04_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_05_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_06_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_07_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_08_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_09_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_10_beat": [
+   "tang"
+  ],
+  "lyg.event.buddhist_conspiracy_11_beat": [
+   "tang"
+  ],
+  "lyg.event.changgan_fanseng_hunt": [
+   "tang"
+  ],
+  "lyg.event.changgan_interlude_03_beat": [
+   "tang"
+  ],
+  "lyg.event.changgan_interlude_04_beat": [
+   "commerce",
+   "tang"
+  ],
+  "lyg.event.changgan_interlude_06_beat": [
+   "tang"
+  ],
+  "lyg.event.changgan_interlude_08_beat": [
+   "tang"
+  ],
+  "lyg.event.changgan_interlude_09_beat": [
+   "tang"
+  ],
+  "lyg.event.changgan_interlude_10_beat": [
+   "tang"
+  ],
+  "lyg.event.cien_red_lotus": [
+   "tang"
+  ],
+  "lyg.event.claim_slew_demon": [
+   "tang"
+  ],
+  "lyg.event.feiniao_hilt_clue": [
+   "tang"
+  ],
+  "lyg.event.final_showdown": [
+   "tang"
+  ],
+  "lyg.event.forewarned_from_xinyong": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_02_beat": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_03_beat": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_04_beat": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_05_beat": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_06_beat": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_07_beat": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_08_beat": [
+   "tang"
+  ],
+  "lyg.event.ganlu_aftershock_09_beat": [
+   "tang"
+  ],
+  "lyg.event.han_marquis_wuyang_enfeoff": [
+   "han"
+  ],
+  "lyg.event.han_succession_01_beat": [
+   "han"
+  ],
+  "lyg.event.han_succession_02_beat": [
+   "han"
+  ],
+  "lyg.event.han_succession_04_beat": [
+   "han"
+  ],
+  "lyg.event.han_succession_05_beat": [
+   "han"
+  ],
+  "lyg.event.han_succession_06_beat": [
+   "han"
+  ],
+  "lyg.event.han_succession_07_beat": [
+   "han"
+  ],
+  "lyg.event.han_succession_08_beat": [
+   "han"
+  ],
+  "lyg.event.han_succession_10_beat": [
+   "tang"
+  ],
+  "lyg.event.honglusi_amends": [
+   "tang"
+  ],
+  "lyg.event.honglusi_treaty_announced": [
+   "tang"
+  ],
+  "lyg.event.interrogate_feiniao_yingzi": [
+   "tang"
+  ],
+  "lyg.event.investigate_te_master": [
+   "tang"
+  ],
+  "lyg.event.li_jinxiang_meeting": [
+   "tang"
+  ],
+  "lyg.event.liang_secret_order": [
+   "tang"
+  ],
+  "lyg.event.mijing_superuser_roster": [
+   "han"
+  ],
+  "lyg.event.north_bureau_buddhist_moves": [
+   "tang"
+  ],
+  "lyg.event.poolside_capture": [
+   "tang"
+  ],
+  "lyg.event.prince_injury_control": [
+   "tang"
+  ],
+  "lyg.event.qinglongsi_te_master": [
+   "tang"
+  ],
+  "lyg.event.release_jingnian": [
+   "tang"
+  ],
+  "lyg.event.s01_02": [
+   "han"
+  ],
+  "lyg.event.s01_03": [
+   "han"
+  ],
+  "lyg.event.s01_04": [
+   "han"
+  ],
+  "lyg.event.s01_05": [
+   "han"
+  ],
+  "lyg.event.s01_06": [
+   "heimohai",
+   "han"
+  ],
+  "lyg.event.s01_07": [
+   "han"
+  ],
+  "lyg.event.s01_08": [
+   "heimohai"
+  ],
+  "lyg.event.s01_09": [
+   "han"
+  ],
+  "lyg.event.s02_01": [
+   "han"
+  ],
+  "lyg.event.s02_07": [
+   "han"
+  ],
+  "lyg.event.s03_01": [
+   "tang"
+  ],
+  "lyg.event.s03_03": [
+   "tang"
+  ],
+  "lyg.event.s03_08": [
+   "tang"
+  ],
+  "lyg.event.s03_09": [
+   "tang"
+  ],
+  "lyg.event.s06_02": [
+   "tang"
+  ],
+  "lyg.event.s06_04": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_01_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_02_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_04_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_05_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_06_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_07_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_08_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_09_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_10_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_11_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_12_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_13_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_14_beat": [
+   "tang"
+  ],
+  "lyg.event.shituolin_endgame_15_beat": [
+   "heimohai"
+  ],
+  "lyg.event.shituolin_endgame_title_daduhu": [
+   "tang"
+  ],
+  "lyg.event.shixiang_s11": [
+   "tang"
+  ],
+  "lyg.event.shixiang_s12": [
+   "tang"
+  ],
+  "lyg.event.shixiang_s13": [
+   "tang"
+  ],
+  "lyg.event.shuixiang_lure_setup": [
+   "tang"
+  ],
+  "lyg.event.song_tongwen": [
+   "tang"
+  ],
+  "lyg.event.spot_poison_assassin": [
+   "tang"
+  ],
+  "lyg.event.su_sha_identified": [
+   "tang"
+  ],
+  "lyg.event.survey_xingqing_palace": [
+   "tang"
+  ],
+  "lyg.event.tang_liuxianping_arrive": [
+   "tang"
+  ],
+  "lyg.event.tang_liuxianping_xiangshi": [
+   "tang"
+  ],
+  "lyg.event.tang_secret_treaty_signed": [
+   "tang"
+  ],
+  "lyg.event.xiaozi_teleported_into_dayanta": [
+   "tang"
+  ],
+  "lyg.event.xinyong_reveals_fanmi": [
+   "tang"
+  ],
+  "lyg.event.xuanping_eunuch_murder": [
+   "tang"
+  ],
+  "lyg.event.yang_yuhuan_report": [
+   "tang"
+  ],
+  "lyg.event.yuanzheng_globe": [
+   "tang"
+  ],
+  "lyg.event.zhoufei_conspiracy": [
+   "tang"
+  ],
+  "lyl.event.__song_s0_not_in_catalog__": [],
+  "lyl.event.arrange_escape_route": [
+   "han"
+  ],
+  "lyl.event.blacksea_iron_puppet": [
+   "heimohai"
+  ],
+  "lyl.event.bounty_and_hu_cavalry": [
+   "han"
+  ],
+  "lyl.event.changqiu_palace_defense": [
+   "han"
+  ],
+  "lyl.event.debut_ruan_sisters": [
+   "song"
+  ],
+  "lyl.event.decide_chase_weiyuan": [
+   "song"
+  ],
+  "lyl.event.decode_bianmenwa_note": [
+   "xingyuehu"
+  ],
+  "lyl.event.emperor_death_spreads": [
+   "han"
+  ],
+  "lyl.event.evade_huangchengsi": [
+   "song"
+  ],
+  "lyl.event.fen_wuchen_destroys_gate": [
+   "taiquan"
+  ],
+  "lyl.event.find_exit": [
+   "taiquan"
+  ],
+  "lyl.event.han_court_grain_blame": [
+   "han"
+  ],
+  "lyl.event.han_huo_villa": [
+   "han"
+  ],
+  "lyl.event.han_jianyu_refused": [
+   "heimohai"
+  ],
+  "lyl.event.han_limit_field": [
+   "commerce",
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_01_beat": [
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_02_beat": [
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_04_beat": [
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_05_beat": [
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_06_beat": [
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_08_beat": [
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_09_beat": [
+   "han"
+  ],
+  "lyl.event.han_palace_endgame_10_beat": [
+   "han"
+  ],
+  "lyl.event.han_power_vacuum": [
+   "han"
+  ],
+  "lyl.event.han_shouyang_gaoyanei": [
+   "han"
+  ],
+  "lyl.event.han_sponsor_dingtao": [
+   "han"
+  ],
+  "lyl.event.han_wudu_bingsi": [
+   "han"
+  ],
+  "lyl.event.han_xingyue_framed": [
+   "han"
+  ],
+  "lyl.event.han_yuedan_ping": [
+   "han"
+  ],
+  "lyl.event.identify_xue_cold_poison": [
+   "xingyuehu"
+  ],
+  "lyl.event.ivory_visit_weiyuan": [
+   "song"
+  ],
+  "lyl.event.jin_guangyuan_ledger": [
+   "jin"
+  ],
+  "lyl.event.leifeng_pagoda_invite": [
+   "song"
+  ],
+  "lyl.event.leifeng_repel_gao": [
+   "song"
+  ],
+  "lyl.event.libu_registration": [
+   "song"
+  ],
+  "lyl.event.lin_an_bridge_01_beat": [
+   "song"
+  ],
+  "lyl.event.lin_an_bridge_03_beat": [
+   "song"
+  ],
+  "lyl.event.lin_an_bridge_xieyi_tomb": [
+   "xingyuehu"
+  ],
+  "lyl.event.linan_arrive_fengbo": [
+   "song"
+  ],
+  "lyl.event.linchong_still_exiled": [
+   "song"
+  ],
+  "lyl.event.linjia_sees_ningyi": [
+   "song"
+  ],
+  "lyl.event.liujian_takes_nangong": [
+   "han"
+  ],
+  "lyl.event.lvfengxian_breaks_line": [
+   "han"
+  ],
+  "lyl.event.lvji_defiles_consort": [
+   "han"
+  ],
+  "lyl.event.meet_xue_yanshan": [
+   "xingyuehu"
+  ],
+  "lyl.event.mingqingsi_lin_lu_meeting": [
+   "song"
+  ],
+  "lyl.event.pan_hetu_exit": [
+   "taiquan"
+  ],
+  "lyl.event.pan_settlement_clash": [
+   "taiquan"
+  ],
+  "lyl.event.pan_yu_tentacle_clash": [
+   "taiquan"
+  ],
+  "lyl.event.pass_kotian_stone": [
+   "song"
+  ],
+  "lyl.event.plan_counterattack": [
+   "taiquan"
+  ],
+  "lyl.event.rescue_yu_sisters": [
+   "taiquan"
+  ],
+  "lyl.event.s01_01": [
+   "song"
+  ],
+  "lyl.event.s01_02": [
+   "song"
+  ],
+  "lyl.event.s01_03": [
+   "song"
+  ],
+  "lyl.event.s05_01": [
+   "han"
+  ],
+  "lyl.event.s05_03": [
+   "han"
+  ],
+  "lyl.event.s05_04": [
+   "han"
+  ],
+  "lyl.event.s05_05": [
+   "heimohai"
+  ],
+  "lyl.event.s05_09": [
+   "jin"
+  ],
+  "lyl.event.s06_01": [
+   "han"
+  ],
+  "lyl.event.s06_01b": [
+   "han"
+  ],
+  "lyl.event.s06_02": [
+   "han"
+  ],
+  "lyl.event.s06_04": [
+   "han"
+  ],
+  "lyl.event.sacred_against_lin": [
+   "taiyi"
+  ],
+  "lyl.event.sacred_jin_drought": [
+   "jin"
+  ],
+  "lyl.event.siying_lane_saber_ambush": [
+   "song"
+  ],
+  "lyl.event.song_baochao_appointed": [
+   "song"
+  ],
+  "lyl.event.survey_wumu_mansion": [
+   "song"
+  ],
+  "lyl.event.tail_li_shishi": [
+   "heimohai",
+   "song"
+  ],
+  "lyl.event.taiquan_afterfall_01_beat": [
+   "han"
+  ],
+  "lyl.event.taiquan_afterfall_03_beat": [
+   "taiquan"
+  ],
+  "lyl.event.taiquan_afterfall_05_beat": [
+   "taiquan"
+  ],
+  "lyl.event.taiquan_afterfall_07_beat": [
+   "han"
+  ],
+  "lyl.event.taiquan_afterfall_08_beat": [
+   "han"
+  ],
+  "lyl.event.taiquan_afterfall_10_beat": [
+   "han"
+  ],
+  "lyl.event.taiquan_portal_exit": [
+   "taiquan"
+  ],
+  "lyl.event.taiquan_sacred_fruit_01": [
+   "heimohai"
+  ],
+  "lyl.event.taiquan_sacred_fruit_03": [
+   "song"
+  ],
+  "lyl.event.taiquan_sacred_fruit_04": [
+   "taiquan"
+  ],
+  "lyl.event.taiquan_sacred_fruit_05": [
+   "taiquan"
+  ],
+  "lyl.event.taiquan_sacred_fruit_06": [
+   "commerce"
+  ],
+  "lyl.event.taiquan_sacred_fruit_07": [
+   "commerce",
+   "han"
+  ],
+  "lyl.event.taiquan_sacred_fruit_08": [
+   "heimohai"
+  ],
+  "lyl.event.taiquan_sacred_fruit_10": [
+   "taiquan"
+  ],
+  "lyl.event.weiyuan_extortion": [
+   "song"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_01_beat": [
+   "song"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_02_beat": [
+   "taiyi"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_03_beat": [
+   "song"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_04_beat": [
+   "heimohai"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_05_beat": [
+   "heimohai"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_06_beat": [
+   "heimohai",
+   "song"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_07_beat": [
+   "heimohai"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": [
+   "heimohai"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_09_beat": [
+   "heimohai"
+  ],
+  "lyl.event.xiaoyingzhou_blacksea_trap_10_beat": [
+   "heimohai"
+  ],
+  "lyl.event.xiaoyingzhou_cement_truce": [
+   "commerce",
+   "heimohai"
+  ],
+  "lyl.event.xiaoyingzhou_lin_takes_seat": [
+   "taiyi"
+  ],
+  "lyl.event.xiaoyingzhou_paper_mint": [
+   "commerce",
+   "song"
+  ],
+  "lyl.event.xiaoyingzhou_paper_plan": [
+   "commerce",
+   "song"
+  ],
+  "lyl.event.xiaozi_binds_yu_sisters": [
+   "taiquan"
+  ],
+  "lyl.event.xihu_villa_eavesdrop": [
+   "song"
+  ],
+  "lyl.event.xingyin_beast_traps": [
+   "taiquan"
+  ],
+  "lyl.event.xue_yanshan_slain": [
+   "xingyuehu"
+  ],
+  "lyl.event.yin_yang_counter": [
+   "taiquan"
+  ],
+  "lyl.event.zhao_sisters_flee_north_palace": [
+   "han"
+  ],
+  "<undefined>": []
+ },
+ "resolveAvailableLines": {
+  "empty": [],
+  "byLocation": {
+   "liuchao.location.changan": [],
+   "liuchao.location.jiangzhou": [],
+   "liuchao.location.jiankang": [],
+   "liuchao.location.lin_an": [],
+   "liuchao.location.linan": [],
+   "liuchao.location.luoyang": [],
+   "liuchao.location.wu_yuan_cheng": [],
+   "liuchao.location.wuyuan": [],
+   "lyl.location.luoyang": [],
+   "liuchao.location.__none__": []
+  },
+  "byCharacter": {
+   "lcq.character.wang_zhe:rumored": [],
+   "lcq.character.wang_zhe:introduced": [],
+   "lcq.character.wang_zhe:encountered": [],
+   "lcq.character.wang_zhe:joined": [],
+   "liuchao.character.wu_er_lang:rumored": [],
+   "liuchao.character.wu_er_lang:introduced": [],
+   "liuchao.character.wu_er_lang:encountered": [],
+   "liuchao.character.wu_er_lang:joined": [],
+   "liuchao.character.xiao_yao_yi:rumored": [],
+   "liuchao.character.xiao_yao_yi:introduced": [],
+   "liuchao.character.xiao_yao_yi:encountered": [],
+   "liuchao.character.xiao_yao_yi:joined": [],
+   "liuchao.character.xie_yi:rumored": [],
+   "liuchao.character.xie_yi:introduced": [],
+   "liuchao.character.xie_yi:encountered": [],
+   "liuchao.character.xie_yi:joined": [],
+   "liuchao.character.yun_cang_feng:rumored": [],
+   "liuchao.character.yun_cang_feng:introduced": [],
+   "liuchao.character.yun_cang_feng:encountered": [],
+   "liuchao.character.yun_cang_feng:joined": []
+  },
+  "byAnchorEvent": {
+   "lcq.event.palace_haunting_rumor": [
+    "jin"
+   ],
+   "lcq.event.s01_04": [
+    "taiyi"
+   ],
+   "lcq.event.s02_01": [
+    "taiquan"
+   ],
+   "lcq.event.s03b_snake_flower_bridge_02": [
+    "zhaonan"
+   ],
+   "lcq.event.s04b_lingfei_baiyi_crisis_04": [
+    "heimohai"
+   ],
+   "lcq.event.s04b_lingfei_baiyi_crisis_16": [
+    "xingyuehu"
+   ],
+   "lcq.event.s07_01_old_case": [
+    "han"
+   ],
+   "lcq.event.s10_01_jiangzhou_order": [
+    "song"
+   ],
+   "lcq.event.weapon_deal_with_geluo": [
+    "commerce"
+   ],
+   "lyg.event.changgan_fanseng_hunt": [
+    "tang"
+   ],
+   "lyl.event.taiquan_sacred_fruit_05": [
+    "taiquan"
+   ]
+  },
+  "everything": [
+   "commerce",
+   "taiquan",
+   "taiyi",
+   "xingyuehu",
+   "heimohai",
+   "zhaonan",
+   "jin",
+   "song",
+   "han",
+   "tang"
+  ]
+ },
+ "secondaryLineUnlockOptions": {
+  "commerce": null,
+  "taiquan": {
+   "required": true,
+   "enteredEventIds": [
+    "lyl.event.taiquan_sacred_fruit_10",
+    "lyl.event.plan_counterattack",
+    "lyl.event.yin_yang_counter",
+    "lyl.event.find_exit",
+    "lyl.event.xingyin_beast_traps",
+    "lyl.event.pan_yu_tentacle_clash",
+    "lyl.event.rescue_yu_sisters",
+    "lyl.event.xiaozi_binds_yu_sisters",
+    "lyl.event.taiquan_afterfall_03_beat",
+    "lyl.event.taiquan_afterfall_05_beat",
+    "lyl.event.pan_settlement_clash",
+    "lyl.event.pan_hetu_exit",
+    "lyl.event.fen_wuchen_destroys_gate",
+    "lyl.event.taiquan_portal_exit"
+   ]
+  },
+  "taiyi": null,
+  "xingyuehu": null,
+  "heimohai": null,
+  "zhaonan": null,
+  "jin": null,
+  "song": null,
+  "han": null,
+  "tang": null
+ },
+ "secondaryLineDisplayName": {
+  "commerce|": "商道",
+  "commerce|第1章": "商道",
+  "commerce|第120章": "商道",
+  "commerce|第121章": "商道",
+  "commerce|第300章": "商道",
+  "taiquan|": "太泉古阵",
+  "taiquan|第1章": "太泉古阵",
+  "taiquan|第120章": "太泉古阵",
+  "taiquan|第121章": "太泉古阵",
+  "taiquan|第300章": "太泉古阵",
+  "taiyi|": "太乙真宗",
+  "taiyi|第1章": "太乙真宗",
+  "taiyi|第120章": "太乙真宗",
+  "taiyi|第121章": "太乙真宗",
+  "taiyi|第300章": "太乙真宗",
+  "xingyuehu|": "星月湖",
+  "xingyuehu|第1章": "星月湖",
+  "xingyuehu|第120章": "星月湖",
+  "xingyuehu|第121章": "星月湖",
+  "xingyuehu|第300章": "星月湖",
+  "heimohai|": "黑魔海",
+  "heimohai|第1章": "黑魔海",
+  "heimohai|第120章": "黑魔海",
+  "heimohai|第121章": "黑魔海／毒宗",
+  "heimohai|第300章": "黑魔海／毒宗",
+  "zhaonan|": "昭南",
+  "zhaonan|第1章": "昭南",
+  "zhaonan|第120章": "昭南",
+  "zhaonan|第121章": "昭南",
+  "zhaonan|第300章": "昭南",
+  "jin|": "晋国",
+  "jin|第1章": "晋国",
+  "jin|第120章": "晋国",
+  "jin|第121章": "晋国",
+  "jin|第300章": "晋国",
+  "song|": "宋国",
+  "song|第1章": "宋国",
+  "song|第120章": "宋国",
+  "song|第121章": "宋国",
+  "song|第300章": "宋国",
+  "han|": "汉国",
+  "han|第1章": "汉国",
+  "han|第120章": "汉国",
+  "han|第121章": "汉国",
+  "han|第300章": "汉国",
+  "tang|": "唐国",
+  "tang|第1章": "唐国",
+  "tang|第120章": "唐国",
+  "tang|第121章": "唐国",
+  "tang|第300章": "唐国"
+ },
+ "quarantine": {
+  "lcq.stage_01": false,
+  "lcq.stage_02": false,
+  "lcq.stage_03": true,
+  "lcq.stage_03b_snake_flower_bridge": false,
+  "lcq.stage_04": false,
+  "lcq.stage_04b_lingfei_baiyi_crisis": false,
+  "lcq.stage_05": true,
+  "lcq.stage_05b": false,
+  "lcq.stage_06": true,
+  "lcq.stage_07_qingyuan_jiankang": false,
+  "lcq.stage_08_jiankang_coup": false,
+  "lcq.stage_09_trade_and_escape": false,
+  "lcq.stage_10_jiangzhou_shadow_war": false,
+  "lcq.stage_11_lieshan_battle": false,
+  "lcq.stage_12_jiangzhou_counterwar": false,
+  "lyg.buddhist_conspiracy": false,
+  "lyg.changgan_begins": false,
+  "lyg.changgan_interlude": false,
+  "lyg.dingtao_beijing": false,
+  "lyg.ganlu_aftershock": false,
+  "lyg.ganlu_bian": true,
+  "lyg.han_succession": false,
+  "lyg.liangzhou_league": false,
+  "lyg.mijing_rumen": false,
+  "lyg.shituolin_endgame": false,
+  "lyg.shixiang_ambush": true,
+  "lyl.han_palace_endgame": false,
+  "lyl.jiangzhou_retreat": false,
+  "lyl.lin_an_black_sea": true,
+  "lyl.lin_an_bridge": false,
+  "lyl.luoyang_cloud_secret": false,
+  "lyl.luoyang_coup": true,
+  "lyl.taiquan_afterfall": false,
+  "lyl.taiquan_core_conflict": false,
+  "lyl.taiquan_expedition": true,
+  "lyl.taiquan_sacred_fruit": false,
+  "lyl.xiaoyingzhou_blacksea_trap": false,
+  "lyg.qin_xianyang": false,
+  "lyl.__unknown_stage__": false
+ },
+ "quarantineNonString": [
+  false,
+  false,
+  false,
+  false
+ ],
+ "milestoneRewards": [
+  {
+   "stageId": "lcq.stage_12_jiangzhou_counterwar",
+   "titles": [
+    "宋国工部屯田司员外郎"
+   ],
+   "note": "粮战功成，筠州知州滕甫招揽为宋国客卿，举荐任工部屯田司员外郎（清羽 ch324）。"
+  },
+  {
+   "stageId": "lyl.luoyang_cloud_secret",
+   "titles": [
+    "汉国关内侯（买官）",
+    "汉国大行令（领事·加常侍郎）"
+   ],
+   "note": "经徐璜运作向天子买官洗白：诏拜关内侯、授大夫、领鸿胪寺大行令事、加常侍郎（可出入宫禁），全套一千四百万钱（云龙 0238-0239）。"
+  },
+  {
+   "stageId": "lyl.luoyang_coup",
+   "titles": [
+    "汉国舞阳侯"
+   ],
+   "revokeTitles": [
+    "汉国关内侯（买官）",
+    "汉国大行令（领事·加常侍郎）"
+   ],
+   "note": "洛都政局翻覆，先前买来的官爵作废（\"还没捂热呢，可就飞了\"，云龙 0360）；以功受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。"
+  },
+  {
+   "stageId": "lyg.shituolin_endgame",
+   "titles": [
+    "唐国大都护",
+    "上柱国"
+   ],
+   "note": "诛杀李辅国，唐国朝廷重赏：官拜大都护（向由亲王遥领，暗示等同亲王）、勋授上柱国（燕歌 0292）。"
+  }
+ ],
+ "milestoneRewardQuery": {
+  "lcq.stage_01": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_02": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_03": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_03b_snake_flower_bridge": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_04": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_04b_lingfei_baiyi_crisis": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_05": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_05b": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_06": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_07_qingyuan_jiankang": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_08_jiankang_coup": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_09_trade_and_escape": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_10_jiangzhou_shadow_war": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_11_lieshan_battle": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lcq.stage_12_jiangzhou_counterwar": {
+   "fresh": {
+    "notes": [
+     "获得称号「宋国工部屯田司员外郎」：粮战功成，筠州知州滕甫招揽为宋国客卿，举荐任工部屯田司员外郎（清羽 ch324）。"
+    ],
+    "titles": [
+     "宋国工部屯田司员外郎"
+    ]
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.buddhist_conspiracy": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.changgan_begins": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.changgan_interlude": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.dingtao_beijing": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.ganlu_aftershock": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.ganlu_bian": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.han_succession": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.liangzhou_league": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.mijing_rumen": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.shituolin_endgame": {
+   "fresh": {
+    "notes": [
+     "获得称号「唐国大都护、上柱国」：诛杀李辅国，唐国朝廷重赏：官拜大都护（向由亲王遥领，暗示等同亲王）、勋授上柱国（燕歌 0292）。"
+    ],
+    "titles": [
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.shixiang_ambush": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.han_palace_endgame": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.jiangzhou_retreat": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.lin_an_black_sea": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.lin_an_bridge": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.luoyang_cloud_secret": {
+   "fresh": {
+    "notes": [
+     "获得称号「汉国关内侯（买官）、汉国大行令（领事·加常侍郎）」：经徐璜运作向天子买官洗白：诏拜关内侯、授大夫、领鸿胪寺大行令事、加常侍郎（可出入宫禁），全套一千四百万钱（云龙 0238-0239）。"
+    ],
+    "titles": [
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）"
+    ]
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.luoyang_coup": {
+   "fresh": {
+    "notes": [
+     "获得称号「汉国舞阳侯」：洛都政局翻覆，先前买来的官爵作废（\"还没捂热呢，可就飞了\"，云龙 0360）；以功受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。"
+    ],
+    "titles": [
+     "汉国舞阳侯"
+    ]
+   },
+   "allHeld": {
+    "notes": [
+     "失去称号「汉国关内侯（买官）、汉国大行令（领事·加常侍郎）」：洛都政局翻覆，先前买来的官爵作废（\"还没捂热呢，可就飞了\"，云龙 0360）；以功受封汉国舞阳侯（实封五千户，舞阳相程郑主政）。"
+    ],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.taiquan_afterfall": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.taiquan_core_conflict": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.taiquan_expedition": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.taiquan_sacred_fruit": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.xiaoyingzhou_blacksea_trap": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyg.qin_xianyang": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  },
+  "lyl.__unknown_stage__": {
+   "fresh": {
+    "notes": [],
+    "titles": []
+   },
+   "allHeld": {
+    "notes": [],
+    "titles": [
+     "宋国工部屯田司员外郎",
+     "汉国关内侯（买官）",
+     "汉国大行令（领事·加常侍郎）",
+     "汉国舞阳侯",
+     "唐国大都护",
+     "上柱国"
+    ]
+   },
+   "notReady": {
+    "notes": [],
+    "titles": []
+   }
+  }
+ }
+}
