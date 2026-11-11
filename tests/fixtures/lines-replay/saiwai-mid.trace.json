@@ -1,0 +1,322 @@
+[
+ {
+  "kind": "source",
+  "generator": "formalNewSave",
+  "nonEngineProgress": [],
+  "note": "正式（非隔离试玩）新档：同 characterInitialization 的 strict mod 路径（推进循环照抄 tests/mainlineWalker.mjs）。沿正式关链用真实动作推进；固定宿主时钟和随机种子，不固定游戏时钟。本批无派生夹具、无手工改动。"
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_01",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_02",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_04",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_05",
+  "action": "travel:lcq.location.command_tent",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_01",
+  "event": "lcq.event.s01_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "stage",
+  "from": "lcq.stage_01",
+  "to": "lcq.stage_02"
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_02",
+  "opportunity": "opportunity.lcq.s02_01.take_full_mandate",
+  "progressed": true
+ },
+ {
+  "kind": "opportunity",
+  "stage": "lcq.stage_02",
+  "opportunity": "opportunity.lcq.s02_01.take_full_mandate",
+  "progressed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_03",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "hold_left_army_line",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "witness_wang_zhe_nine_suns",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_02",
+  "action": "record_battlefield_aftermath",
+  "completed": true
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.route.wuyuan.arrive_market",
+  "settled": true,
+  "canonEventCompleted": false
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.route.wuyuan.market_to_pastry_street",
+  "settled": true,
+  "canonEventCompleted": false
+ },
+ {
+  "kind": "local",
+  "selection": "lcq.action.wuyuan.delay_and_observe",
+  "settled": true,
+  "canonEventCompleted": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_05",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.s02_06",
+  "action": "advance_declared_objective",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_enters_gamble",
+  "action": "see_ningyu_sent_into_gamble",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.ningyu_enters_gamble",
+  "action": "answer_ningyu_on_debut",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.sudaji_south_pact",
+  "action": "offer_nylon_clue_for_term",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.sudaji_south_pact",
+  "action": "seal_three_month_south_pact",
+  "completed": true
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.gamble_bond_signed",
+  "action": "confirm_rigged_wager_loss",
+  "completed": false
+ },
+ {
+  "kind": "action",
+  "stage": "lcq.stage_02",
+  "event": "lcq.event.gamble_bond_signed",
+  "action": "sign_the_bond",
+  "completed": true
+ },
+ {
+  "kind": "checkpoint",
+  "fixture": "saiwai-mid",
+  "stage": "lcq.stage_02",
+  "chapter": "lcq.chapter.stage_02",
+  "focus": "lcq.event.charge_sudaji_fee",
+  "completed": 9,
+  "active": 1,
+  "closedLines": [],
+  "lineOutcomes": {},
+  "nextStageId": "lcq.stage_03",
+  "nextStageReadyId": null,
+  "stallTurns": 0,
+  "location": "lcq.zone.wuyuan.pastry_shop",
+  "expect": {
+   "railDone": 9,
+   "presentation": {
+    "chapterTitles": {
+     "lcq.event.s02_01": "第10章·军团",
+     "lcq.event.s02_02": "第10章·军团",
+     "lcq.event.s02_03": "第10章·军团",
+     "lcq.event.s02_04": "五原",
+     "lcq.event.s02_05": "五原",
+     "lcq.event.s02_06": "五原",
+     "lcq.event.baihu_shangguan_escape": "五原",
+     "lcq.event.sudaji_south_pact": "五原",
+     "lcq.event.wuerlang_joins": "五原",
+     "lcq.event.ningyu_regicide_offer": "南荒商路",
+     "lcq.event.gamble_bond_signed": "五原",
+     "lcq.event.charge_sudaji_fee": "五原",
+     "lcq.event.free_ajiman": "五原",
+     "lcq.event.iron_bridge_ambush": "南荒商路",
+     "lcq.event.rainforest_black_shoal": "南荒商路",
+     "lcq.event.ningyu_enters_gamble": "五原",
+     "lcq.event.zixi_taiyi_intercept": "南荒商路",
+     "lcq.event.silent_sheyi_village": "南荒商路",
+     "lcq.event.charge_sudaji_fee_ins_baihu_price": "五原",
+     "lcq.event.ningyu_regicide_offer_ins_ningyu_reply": "南荒商路",
+     "lcq.event.rainforest_black_shoal_ins_ningyu_fire": "南荒商路"
+    },
+    "chapterMusic": {
+     "lcq.chapter.stage_02": "daily"
+    },
+    "eventMusic": {
+     "lcq.event.s02_01": "aspire",
+     "lcq.event.s02_02": "lament",
+     "lcq.event.s02_03": "danger",
+     "lcq.event.s02_04": "danger",
+     "lcq.event.s02_05": "battle",
+     "lcq.event.s02_06": "court",
+     "lcq.event.baihu_shangguan_escape": "daily",
+     "lcq.event.sudaji_south_pact": "daily",
+     "lcq.event.wuerlang_joins": "daily",
+     "lcq.event.ningyu_regicide_offer": "aspire",
+     "lcq.event.gamble_bond_signed": "daily",
+     "lcq.event.charge_sudaji_fee": "daily",
+     "lcq.event.free_ajiman": "daily",
+     "lcq.event.iron_bridge_ambush": "battle",
+     "lcq.event.rainforest_black_shoal": "daily",
+     "lcq.event.ningyu_enters_gamble": "daily",
+     "lcq.event.zixi_taiyi_intercept": "daily",
+     "lcq.event.silent_sheyi_village": "daily",
+     "lcq.event.charge_sudaji_fee_ins_baihu_price": "theme",
+     "lcq.event.ningyu_regicide_offer_ins_ningyu_reply": "aspire",
+     "lcq.event.rainforest_black_shoal_ins_ningyu_fire": "theme"
+    },
+    "currentMusic": "daily",
+    "objectives": {
+     "lcq.event.s02_01": "王哲还有事要当面交代，先听他把话说完",
+     "lcq.event.s02_02": "左武军已与联军开战，先保住自己和月霜，跟上战局变化",
+     "lcq.event.s02_03": "在秦军与罗马军的交战中求生并观察战局",
+     "lcq.event.s02_04": "先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人",
+     "lcq.event.s02_05": "地牢里有人靠近你，先判断她要带你去哪",
+     "lcq.event.s02_06": "在白湖商馆与馆主当面周旋，看清她究竟是谁",
+     "lcq.event.baihu_shangguan_escape": "从白湖商馆的死局里脱身，走出五原商馆",
+     "lcq.event.sudaji_south_pact": "面对苏妲己就霓龙丝一事的逼问，谈清眼下能换到的期限",
+     "lcq.event.wuerlang_joins": "问清走投无路的武二郎是否随队南行",
+     "lcq.event.ningyu_regicide_offer": "当面听清凝羽私下的合作条件，并探明她体内阴寒之气从何而来",
+     "lcq.event.gamble_bond_signed": "赌局局面骤变，面对眼前的刻香与契书做出回应",
+     "lcq.event.charge_sudaji_fee": "在帮苏妲己取出新奇器物前谈定六十金铢报酬",
+     "lcq.event.free_ajiman": "取得阿姬曼的身契并当面还她自由，再设法出城",
+     "lcq.event.iron_bridge_ambush": "先稳住武二郎伤势，再带队过铁索桥",
+     "lcq.event.rainforest_black_shoal": "收拢雨林里的伤员，按岸边火光把两支商队渡过黑石滩",
+     "lcq.event.ningyu_enters_gamble": "凝羽突然入局，当面看清她此刻的处境并回应",
+     "lcq.event.zixi_taiyi_intercept": "应对紫溪上太乙真宗拦船，护住船上的人",
+     "lcq.event.silent_sheyi_village": "抵达蛇彝村，把商队安顿下来",
+     "lcq.event.charge_sudaji_fee_ins_baihu_price": "她有求于你。你是奴隶，还是来谈价的？",
+     "lcq.event.ningyu_regicide_offer_ins_ningyu_reply": "她要你杀她的主人，还要你连她一起杀。",
+     "lcq.event.rainforest_black_shoal_ins_ningyu_fire": "火是她点的。她什么也没说。"
+    }
+   },
+   "bakedPresentation": {
+    "events": [
+     "lcq.event.wuerlang_joins",
+     "lcq.event.ningyu_regicide_offer",
+     "lcq.event.silent_sheyi_village"
+    ],
+    "chapters": []
+   },
+   "lineCompass": {
+    "current": null,
+    "others": [
+     {
+      "lineId": "nanhuang",
+      "name": "南荒",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "jin",
+      "name": "晋国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "song",
+      "name": "宋国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "han",
+      "name": "汉国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "tang",
+      "name": "唐国",
+      "locked": false,
+      "hintLines": []
+     },
+     {
+      "lineId": "taiquan",
+      "name": "太泉古阵 · 时机未到",
+      "locked": true,
+      "hintLines": [
+       "王哲的托付还记着：「等你的修为突破六阳后，往苍澜的太泉古阵去一趟。」「如果未达六阳之境，根本无法进入太泉古阵。」六阳，差不多就是第五级坐照的修为——眼下还没到。",
+       "手头的事还没了结。至少还得先了结一处的大事，才腾得出手。"
+      ]
+     }
+    ],
+    "entryHints": []
+   }
+  }
+ }
+]
