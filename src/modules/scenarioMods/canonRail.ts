@@ -1,6 +1,8 @@
 import { CONTENT_PACKS } from '../contentPacks';
 import {entityName,entityRecognitionLabel} from './namedEntities';
-import {entityText} from './namedEntities';
+import {entityText,entityTemplateText} from './namedEntities';
+import { quarantinedStageIds } from '../contentPacks/stageMeta';
+import { mergeExtraRailBeats, type CanonRailExtraBeats } from './canonRailMerge';
 /**
  * Canon Rail keeps the default Six Dynasties route on its source-backed beats.
  *
@@ -16,7 +18,7 @@ import { GENERATED_CANON_RAIL_PROFILES } from './canonRailProfiles.generated';
  * beat is unanchored, or source review found a material anchor conflict. They
  * may only be reached by an explicit IF route after their canon is rebuilt.
  */
-export const DEFAULT_LINE_QUARANTINED_STAGE_IDS = new Set([
+export const TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS: ReadonlySet<string> = new Set([
   'lyl.taiquan_expedition',
   'lcq.stage_03',
   'lcq.stage_05',
@@ -26,6 +28,9 @@ export const DEFAULT_LINE_QUARANTINED_STAGE_IDS = new Set([
   'lyl.lin_an_black_sea',
   'lyl.luoyang_coup',
 ]);
+
+/** 合并后的隔离集合：内容包 stageMeta 写了 defaultLineQuarantined 的关按它，没写的沿用上面的 TS 表（编译期校验两边不重复）。 */
+export const DEFAULT_LINE_QUARANTINED_STAGE_IDS = quarantinedStageIds(CONTENT_PACKS.stageMeta || [], TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS);
 
 export function isDefaultLineQuarantinedStageId(stageId: unknown): boolean {
   return typeof stageId === 'string' && DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(stageId);
@@ -272,13 +277,7 @@ const HAND_REVIEWED_CANON_RAIL_PROFILES: CanonRailProfile[] = [
  * re-running the generator, which would pull every hanging critical onto the
  * spine. Overlay chapter bindings remain the authoritative data hang.
  */
-const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
-  modId: string;
-  afterEventId?: string;
-  beforeEventId?: string;
-  eventIds: string[];
-  contracts: CanonRailContract[];
-}> = [
+export const DEFAULT_LINE_EXTRA_RAIL_BEATS: CanonRailExtraBeats[] = [
   {
     "modId": "lcq.stage_03b_snake_flower_bridge",
     "afterEventId": "lcq.event.s03b_snake_flower_bridge_07",
@@ -1438,38 +1437,15 @@ const DEFAULT_LINE_EXTRA_RAIL_BEATS: Array<{
 ];
 
 function withDefaultLineExtraRailBeats(profiles: CanonRailProfile[]): CanonRailProfile[] {
-  return profiles.map(profile => {
-    const extras = DEFAULT_LINE_EXTRA_RAIL_BEATS.filter(item => item.modId === profile.modId);
-    if (!extras.length) return profile;
-    let orderedEventIds = [...profile.orderedEventIds];
-    let contracts = [...profile.contracts];
-    for (const extra of extras) {
-      const already = extra.eventIds.filter(id => orderedEventIds.includes(id));
-      if (already.length) {
-        throw new Error(`${profile.modId} extra rail beat already present: ${already.join(', ')}`);
-      }
-      if (extra.contracts.length !== extra.eventIds.length) {
-        throw new Error(`${profile.modId} extra rail beat contracts must match eventIds`);
-      }
-      const anchorId = extra.afterEventId || extra.beforeEventId;
-      const afterIndex = anchorId ? orderedEventIds.indexOf(anchorId) : -1;
-      if (afterIndex < 0) {
-        throw new Error(`${profile.modId} extra rail beat missing insertion anchor ${anchorId}`);
-      }
-      const insertAt = afterIndex + (extra.beforeEventId ? 0 : 1);
-      orderedEventIds = [
-        ...orderedEventIds.slice(0, insertAt),
-        ...extra.eventIds,
-        ...orderedEventIds.slice(insertAt),
-      ];
-      contracts = [
-        ...contracts.slice(0, insertAt),
-        ...extra.contracts,
-        ...contracts.slice(insertAt),
-      ];
-    }
-    return { ...profile, orderedEventIds, contracts };
-  });
+  return mergeExtraRailBeats(profiles, DEFAULT_LINE_EXTRA_RAIL_BEATS);
+}
+
+/** 包 rail 文案里的 {{entity:…}}／{{entityLabel:…}} 在这里解析成名字（编译期已校验实体与标签存在；名字不冻进 catalog）。 */
+function withEntityText<T>(value: T): T {
+  if (typeof value === 'string') return entityTemplateText(value) as T;
+  if (Array.isArray(value)) return value.map(withEntityText) as T;
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, withEntityText(v)])) as T;
+  return value;
 }
 
 /**
@@ -1480,7 +1456,7 @@ function withDefaultLineExtraRailBeats(profiles: CanonRailProfile[]): CanonRailP
 export const CANON_RAIL_PROFILES: CanonRailProfile[] = withDefaultLineExtraRailBeats([
   ...HAND_REVIEWED_CANON_RAIL_PROFILES,
   // 内容包关的 rail（manifest.rails，编译期已校验关、拍、文案）；旧 catalog 没有这一段时为空，编译器自身的导入链也会走到这里
-  ...(CONTENT_PACKS.rails || []),
+  ...(CONTENT_PACKS.rails || []).map(withEntityText),
   ...GENERATED_CANON_RAIL_PROFILES,
 ]);
 

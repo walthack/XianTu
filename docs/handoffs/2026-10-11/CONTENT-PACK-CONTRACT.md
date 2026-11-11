@@ -95,3 +95,59 @@ F06–F09采用[31号合同原样归档](../../../mod-kit/source-documents/31-�
 
 秦线是第一个独立的线包：`packs/qin/`，manifest `id: "qingyu.qin"`，`dependsOn: ["qingyu.core"]`。目录里有 `manifest.json`、`stage-qin-xianyang.json`（关）、`qin-texts.json`（关内正文）、`texts.json`（下一步表、地图入口预览与返回的 14 个正文键）、`line-compass.json`（只有 `lineId: "qin"` 一条）、`map-entries.json`（地图入口 `qin`）、`rails.json`。其中 `stage-qin-xianyang.json`、`qin-texts.json`、`map-entries.json`、`rails.json` 从 `packs/qingyu/` 整文件原样移来，`texts.json` 与 `line-compass.json` 是从核心包同名文件里拆出来的；上文「秦线示例」里的 `packs/qingyu/rails.json` 现在在 `packs/qin/rails.json`。
 核心包 `packs/qingyu/` 里不再有秦专属 id，`tests/contentPackSplit.test.mjs` 会检查这一点，并把秦包并回核心包后编译，结果必须与拆开时一致（texts 键序与 `version` 除外）。新增线包照这个结构来：一条线一个目录，依赖核心包，只放本线的关、正文、下一步表条目与入口。
+
+## 2026-11-11 线路格式 stageMeta／railExtraBeats／secondaryLines（宋线 S2）
+
+三个 manifest 字段，都是 JSON 文件路径数组，每个文件是数组；三者只建机制，现有线的数据仍在 TS 里，迁哪条线就把那条线的条目从 TS 删掉、写进包里（同一条目两边都有 → 编译报错）。都只按 id 查编译后的 catalog，不读存档里烘焙的事件/章对象。条目里的 `note` 只给作者看，编译时剥掉。
+
+**manifest `stageMeta`**：一关一条，`stageId` 可以是包内关，也可以是内置关（builtins/data，全局 id）：
+
+```json
+[{
+  "note": "可选",
+  "stageId": "<关 id>",
+  "defaultLineQuarantined": true,
+  "milestoneReward": {"titles": ["<称号>"], "revokeTitles": ["<可选，剥夺的称号>"], "note": "<授予说明>"},
+  "presentation": {
+    "defaultUiChapterId": "<该关的章 id：本关事件没单写 uiChapterId 时界面标这一章>",
+    "chapters": {"<该关的章 id>": {"mood": "<MusicMood>"}},
+    "events": {"<该关的事件 id>": {"uiChapterId": "<该关的章 id>", "mood": "<MusicMood>", "objective": "<玩家目标>"}}
+  }
+}]
+```
+
+各键都可选（`stageId` 除外）。编译期校验：只认上列字段；`stageId` 是已有关、全部 stageMeta 里不重复；章、事件属于这一关（事件含 overlay 并入的）；`uiChapterId`／`defaultUiChapterId` 是这一关有标题的章；`mood` 属于 `MusicMood`；`objective` 非空；事件 id、章 id 在全部 stageMeta 里只出现一次；包内关已写 `presentation.uiChapterId` 的事件、已写 `presentation.mood` 的章不得再写。编译器给条目补 `chapterTitles`（章 id → 标题），运行时据此出章名。与 TS 表重复即报错：隔离关在 `canonRail.ts` 的 `TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS`、称号在 `MILESTONE_REWARDS`、目标在 `fixedQuestObjectives.ts`（表与三条特判）、配乐在 `musicLibrary.ts` 的 `CHAPTER_MOOD_MAP`／`EVENT_MOOD_MAP`、章名已由 `storyChapterTitle` 的特判或包内关 presentation 决定（`defaultUiChapterId` 用探针事件查整关特判，内置关另逐个查本关事件）。
+
+读取顺序（新段为空时与原来逐项相同）：
+- 隔离：`DEFAULT_LINE_QUARANTINED_STAGE_IDS`／`isDefaultLineQuarantinedStageId` = TS 表，stageMeta 写了 `true` 的加入、写了 `false` 的去掉。
+- 称号：`milestoneRewardFor(stageId)` 先 stageMeta，再 `MILESTONE_REWARDS`。
+- 章名 `storyChapterTitle`：地图入口口信拍 → 各关特判（stage_04、04b、临安、汉宫、洛都、长安初定、长安插曲）→ 包内关事件 `presentation.uiChapterId` → **stageMeta 事件 `uiChapterId` → stageMeta `defaultUiChapterId`** → stage_02 地点分段 → 回退。所以迁临安时要在同一 PR 删掉临安特判，否则编译报「shadowed」。
+- 配乐：章 = 包内关章 `presentation.mood` → stageMeta 章 mood → `CHAPTER_MOOD_MAP` → 章 id 正则；事件锚点 = stageMeta 事件 mood → `EVENT_MOOD_MAP`。
+- 目标：三条特判 → stageMeta 事件 `objective` → `FIXED_QUEST_OBJECTIVE_OVERRIDES` → `event.objective`。
+
+**manifest `railExtraBeats`**：形状同 `canonRail.ts` 的 `DEFAULT_LINE_EXTRA_RAIL_BEATS` 条目，`afterEventId` 与 `beforeEventId` 二选一，文案可用 `{"$text":…}`：
+
+```json
+[{"note": "可选", "modId": "<有包 rail 的关>", "afterEventId": "<rail 里已有的事件>",
+  "eventIds": ["<该关事件>"],
+  "contracts": [{"eventId": "<同位事件>", "mustReach": "…", "completionEvidence": [], "forbiddenInCanon": ["…"], "allowedElaboration": "…"}]}]
+```
+
+编译器用 `canonRailMerge.ts` 的 `mergeExtraRailBeats`（运行时 TS 加拍表用的同一个函数，报错文案相同）并进同一次编译里同 `modId` 的包 rail，再过上面 rail 的全部校验；catalog 只存合并后的 rail，没有 `railExtraBeats` 段。`modId` 没有包 rail → 报错。同一 `modId` 的包 rail 不能同时出现在 TS 的 `DEFAULT_LINE_EXTRA_RAIL_BEATS` 里（运行时会再插一次）。
+
+**包 rail 的动态名字**：rail（含加拍）文案里可写 `{{entity:<kind>:<id>}}`（显示名，同 `namedEntities.ts` 的 `entityText`）和 `{{entityLabel:<kind>:<id>:<labelId>}}`（`entityRecognitionLabel`，标签在 `mod-kit/entity-ledger/overrides.json` 的 `recognitionLabels`）。kind 取 character／location／faction／enemy／ending。catalog 里保留模板原样，`canonRail.ts` 合并包 rail 时用 `entityTemplateText` 解析，名字跟着实体总表走。编译期校验写法、实体存在、标签存在；其它 `{{…}}` 一律报错。
+
+**manifest `secondaryLines`**：每条是 `SecondaryLine`（见 `secondaryLines.ts`）加 `after`（插在哪条线后面）和可选 `note`；节点也可带 `note`（TS 里夹在节点之间的 `//` 注释搬到下一个节点的 `note`）：
+
+```json
+[{"after": "<已有线 id>", "id": "<新线 id>", "name": "…", "kind": "nation",
+  "anchorEventIds": ["<事件>"], "anchorLocationIds": ["<地点>"], "entryHint": "…", "basis": "…",
+  "nodes": [{"note": "可选", "reviewSummary": "…", "status": "ready", "stageId": "<关>", "eventId": "<该关事件>"},
+            {"reviewSummary": "…", "status": "pending"}]}]
+```
+
+编译期校验：只认 `SecondaryLine` 字段加 `after`／`note`；`kind` ∈ sect／nation／commerce／expedition，`status` ∈ ready／new／pending；`ready` 节点的关存在、事件属于该关；锚事件存在（`anchorEventPending: true` 的除外）；`anchorLocationIds` 在 `locations.json`（含别名）；包线之间 id 不重复、不能有两条 `after` 同一条线；`after` 能找到（TS 线或另一条包线，不能成环）、id 不与 TS 线重复（validateWithTs）。运行时 `SECONDARY_LINES` = `mergeSecondaryLines(TS_SECONDARY_LINES, catalog.secondaryLines)`：每条包线紧跟在 `after` 那条后面，输出不带 `after`。
+
+**归属**：`secondaryLines` 的线 id 登记为包定义（种类 `secondaryLine`）；三段里写到的关、章、事件、rail 的 `modId` 走通用字符串扫描，引用别的包定义的 id 要 `dependsOn`（`tests/contentPackLineFormats.test.mjs` 钉住）。注意 `after` 也是普通字符串：核心包下一步表登记了 `lineId` `jin`／`han` 等，包线 `after: "jin"` 会被算成引用核心包。
+
+catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时 version 也随之变化，内置模组重新播种一次）。
