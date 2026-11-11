@@ -13,8 +13,8 @@
     "playtest."
   ],
   "总数": {
-    "文件数": 69,
-    "行数": 1135
+    "文件数": 68,
+    "行数": 1019
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -27,7 +27,6 @@
     "src/modules/scenarioMods/baihuGambleRefusal.ts": 12,
     "src/modules/scenarioMods/beatProgress.ts": 1,
     "src/modules/scenarioMods/branchDecision.ts": 6,
-    "src/modules/scenarioMods/characterQuests.ts": 116,
     "src/modules/scenarioMods/characterResolver.ts": 25,
     "src/modules/scenarioMods/divergenceLedger.ts": 17,
     "src/modules/scenarioMods/endingPresentation.ts": 10,
