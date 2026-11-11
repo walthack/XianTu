@@ -426,3 +426,25 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - **numbers**：删 `story.lineCompass.festival` 整段（`mod-kit/numbers-progress.json`）与 `numbersRegistry.ts` 的对应 FIELD_SPEC，重生 `game-numbers.qingyu.json`。tuning.json 若含 `story.lineCompass.festival` 会被 LCQ-NUM-002 整份拒绝，上线前确认部署那份。
 - **必须永久保留**：`系统.扩展.festivalStarted`、`lyg.event.heimohai_festival_start`、`start_heimohai_festival`、编年史 id 格式 `chronicle.<modId>.<eventId>`、`heimohaiFestival.ts` 的导出名、按钮文案「开启大祭」。
 - 测试：`tests/festivalReplay.test.mjs`（新）在旧代码上冻结 8 种情形的 `festivalView`、`startHeimohaiFestival` 返回与存档 diff（期望在 `tests/fixtures/festival-replay/expected.json`），重构后逐字节不变；`tests/worldEventsPack.test.mjs`（新）是编译期负例、搬迁逐字与「通用模块不 import heimohaiFestival」的钉子。
+
+## 2026-11-12 新国家线即插即用：已知事件含包关事件、关→地区进包（G1、G2）
+
+结构验收（`tests/syntheticLineAcceptance.test.mjs`）发现的两个硬缺口。修完后加一条新国家线只放线包目录、**单次编译**即可，不再重建 mod-kit 实体索引，也不再改 `overrides.json`。现有八条线、全部旧档行为逐项不变；catalog 逐字节不变（`8d9aa2e611643877`）。
+
+- **G1 已知事件**：
+  - 运行时 `playerLedgerRules.ts` 的 `knownEventIds()` 由「实体索引 kind=event」改为「实体索引 ∪ `CONTENT_PACKS.stages` 的事件 ∪ `CONTENT_PACKS.overlays` 的事件（含人物线投影出的 `_ins_` 事件）」。口径与编译器的 `events` 表一致（内置关套 overlay 加包内关；内置关原始事件都在索引里）。读它的有 `orderedDoneEventIds`（跨关 `done.*`、`closedWhen`、右栏线卡、`lineOfEvent`）和 validator 的缺省值。`playerLedgerRules.ts` 新 import `../contentPacks`；它本来就经 numbers 间接读 catalog，依赖方向没变。
+  - validator：`validateLineCompassTable` 加第 5 个参数 `knownEvents`，`validateScenarioMod` 加第 2 个参数 `{ knownEventIds }`，内部 `checkLedgerRefs` 也加了同名参数，缺省都是 `knownEventIds()`。下一步表 `step.eventId`、正式步与 pending 步的 `done.*`、关内账本条件的 `done.*` 都查这张表。
+  - 编译器（`validateWithTs`）给这三处传 `new Set(events.keys())`，也就是这次编译出的事件表。不经运行时 `knownEventIds()`，所以不读磁盘上的 catalog 或实体索引（M2）。不存在的事件照样报 `Unknown event id`。
+  - 等价性：现有数据里，包关与 overlay 的 40 个事件全在索引里；索引 585 个事件恰好等于编译器事件表，两个方向的差集都为空。所以编译期和运行时的集合都没变。
+- **G2 关→地区**：
+  - 格式：`stageMeta` 条目加可选字段 `region`（地区名），例如 `{"stageId":"<包内关>","region":"<地区>"}`，可以和 `presentation` 等字段写在同一条里。
+  - 运行时 `reputationLedger.ts`：`STAGE_REGION = { ...overrides.stageRegions, ...包 stageMeta 的 region }`，包声明按 stageMeta 顺序接在后面。`lineOfStage`、`lineOfEvent` 的回退、`regionStanding` 都随之认得新关。
+  - 编译期校验：
+    - 值必须是非空串；
+    - 只许给**包内关**写（内置关的地区在 overrides）。关属于别的包时，要由通用归属扫描要求 `dependsOn`；
+    - 地区必须是 overrides `stageRegions` 已有的值，或这次编译登记的某条国家线的 `regions`（所以「塞外」也收）；
+    - overrides 已有的关不得再写，同值也报错，保持单一真值。overrides 由编译器从 `mod-kit/entity-ledger/overrides.json` 只读。
+  - 报错文案：`stageMeta X: region must be a non-empty string`、`region is only for stages defined in a pack …`、`region also set in mod-kit/entity-ledger/overrides.json stageRegions`、`unknown region R …`。
+  - 取舍：没选 `nation-lines.json` 加 `stageIds`，因为那样映射的是关→线，地区还得另外推，而一条线可以有多个地区。也没选给包内关 manifest 加字段，因为那会改 ScenarioMod 的 schema，内置关也共用这个 schema。`stageMeta` 本来就是「包对某一关的元数据」，按 stageId 全局唯一、已经进归属扫描，加一个字段改动最小。
+  - 现有八条线不搬：`stageRegions` 留在 overrides 原地（含秦包关 `lyg.qin_xianyang`）。
+- **测试**：`syntheticLineAcceptance` 用例 1、2、7 的 G1、G2 现状钉子改成正向断言：单次编译与 `--check` 通过；副本里改动的非包文件只有 catalog.json，实体索引逐字节不变；离开本关后跨关读到本线事件、`closedWhen` 收束生效；`STAGE_REGION`、`lineOfStage` 认得新关，下一步表没写的拍也归本线，地区立足度计入本关。用例 8 加了负例：下一步表 eventId 与 closedWhen 指向不存在的事件、地区不存在、空串、内置关、别包的关缺 dependsOn、与 overrides 重复（同值）。G4–G7 的钉子不变。

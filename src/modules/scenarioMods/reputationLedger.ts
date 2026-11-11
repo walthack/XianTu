@@ -1,5 +1,6 @@
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
+import { CONTENT_PACKS } from '../contentPacks';
 /**
  * 声望的确定性锚点（P1-4）——把"扬名"从模型自觉改成引擎因果。
  *
@@ -40,9 +41,13 @@ export const REPUTATION_EVENT_GRANT = GAME_NUMBERS.reputation.eventGrant;
  * 这样商队经营层可以直接消费同一套键，不必再做一次归属。
  * 南荒并入昭南（地图：昭南三地坐标全在南荒大陆内；蓝图 §6 昭南底牌明写「鬼王峒／南荒」）。
  * 塞外与太泉不是国家线，但地理上独立，单列。
- * 数据在 `mod-kit/entity-ledger/overrides.json` 的 `stageRegions`（2026-10-14 自此处字面量迁入，顺序与内容不变）。
+ * 数据在 `mod-kit/entity-ledger/overrides.json` 的 `stageRegions`（2026-10-14 自此处字面量迁入，顺序与内容不变）；
+ * 包内关可在内容包 stageMeta 写 `region`（G2），按 stageMeta 顺序接在 overrides 之后（编译期保证不与 overrides 重复）。
  */
-export const STAGE_REGION: Record<string, string> = ledgerOverrides.stageRegions;
+export const STAGE_REGION: Record<string, string> = {
+  ...ledgerOverrides.stageRegions,
+  ...Object.fromEntries((CONTENT_PACKS.stageMeta || []).filter(m => m.region).map(m => [m.stageId, m.region as string])),
+};
 
 /** 引擎侧一次声望结算的明细，供调用方推进玩家可见的状态流。 */
 export interface ReputationGrant {

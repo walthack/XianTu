@@ -10,6 +10,7 @@ import index from '../../../mod-kit/entity-catalog/index.json';
 import stageAccess from '../../../mod-kit/entity-catalog/stage-access.json';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { NATION_LINE_IDS } from '../sceneModule/numbersRegistry';
+import { CONTENT_PACKS } from '../contentPacks';
 
 export interface IdentityGrantRule {
   eventId: string;
@@ -390,13 +391,21 @@ export function setPlayerLedgerRulesForTest(rules?: PlayerLedgerRules): void {
 }
 
 let knownEventIdSet: Set<string> | undefined;
-/** 实体索引 kind=event 的 id 集合（缓存）。 */
-export const knownEventIds = (): Set<string> => (knownEventIdSet ||= indexIds('event'));
+/**
+ * 已知事件 id 集合（缓存）＝实体索引 kind=event ∪ 内容包关（CONTENT_PACKS.stages）的事件 ∪ 包 overlay 的事件（含人物线投影出的事件）。
+ * 后两项让新线的包只编译一次就能跨关读 done.*，不必先重建 mod-kit 实体索引（G1）；口径与编译器的 events 表一致（内置关事件都在索引里）。
+ * 编译期不经这里：编译器给 validator 传本次编译出的事件表（M2，不读磁盘上的旧 catalog）。
+ */
+export const knownEventIds = (): Set<string> => (knownEventIdSet ||= new Set([
+  ...indexIds('event'),
+  ...CONTENT_PACKS.stages.flatMap(s => s.scenario?.events ?? []).map(e => e.id),
+  ...CONTENT_PACKS.overlays.flatMap(o => o.events ?? []).map(e => e.id),
+]));
 
 /**
  * 已完成事件（done.* 与规则处理共用这一个口径，身份账设计稿 §4.2）：
  * ① 编年史 type='event' 且 id 恰好为 chronicle.<stageId>.<eventId> 的条目，按 sequence 排（跨关继承）；
- *    eventId 须是已知事件（实体索引 kind=event ∪ 本关 runtime.events），
+ *    eventId 须是已知事件（knownEventIds：实体索引 kind=event ∪ 内容包关与 overlay 的事件，再 ∪ 本关 runtime.events），
  *    所以 <eventId>.refused_capture 这类附加条目、type='world' 场外结算都不算；
  * ② 本关 completedEventIds 里尚未出现的按原顺序补在后面，只为补「已完成、编年史尚未落账」的同回合空档；
  *    场外结算（offscreenResolvedEventIds / eventTimeline.outcome='offscreen'）与玩家尚未获知的事件不补，同编年史入账口径。
