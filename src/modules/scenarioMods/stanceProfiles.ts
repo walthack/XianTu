@@ -24,6 +24,8 @@ import {entityAliases} from './namedEntities';
  */
 
 import type { AffinityStance } from './affinityLadder';
+import { CONTENT_PACKS } from '../contentPacks';
+import type { PackEntityNames, PackStanceProfile } from '../contentPacks/coreFormats';
 
 export interface StanceProfile {
   names: string[];
@@ -49,7 +51,7 @@ export interface StanceProfile {
  * 刻意不收录：**苏妲己**（收编弧线留白，裁定 #113，任何 agent 不得代为续写）。
  * 材料过薄不收：俞子元（registry 仅"忠诚/尽职/情感丰富"三词，写出来必然是通用套话）。
  */
-export const STANCE_PROFILES: StanceProfile[] = [
+export const TS_STANCE_PROFILES: StanceProfile[] = [
   {
     names: [...entityAliases("character","liuchao.character.xiao_zi")],
     constant: [
@@ -692,6 +694,19 @@ export const STANCE_PROFILES: StanceProfile[] = [
     },
   },
 ];
+
+/** 包档案的 names：实体别名按 entities 顺序展开（可重复，保留原表的重复别名），再接 extraNames（F0a）。 */
+export function packEntityNames(entry: PackEntityNames): string[] {
+  return [...entry.entities.flatMap(e => entityAliases(e.kind, e.id)), ...(entry.extraNames || [])];
+}
+
+/** TS 表在前、包档案按 catalog 顺序在后（formatStanceProfile 用 find 取第一条命中，顺序即优先级）。 */
+export function mergeStanceProfiles(ts: readonly StanceProfile[], pack: readonly PackStanceProfile[]): StanceProfile[] {
+  return [...ts, ...pack.map(entry => ({ names: packEntityNames(entry), constant: entry.constant, bands: entry.bands }))];
+}
+
+/** 全部姿态档案：TS 表加内容包 characterProfiles.stance（catalog 没有这一段时等于 TS 表）。 */
+export const STANCE_PROFILES: StanceProfile[] = mergeStanceProfiles(TS_STANCE_PROFILES, CONTENT_PACKS.characterProfiles?.stance || []);
 
 /**
  * 取该角色在当前档位的专属条款。无档案返回空串，调用方回落通用五维。

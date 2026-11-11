@@ -217,3 +217,25 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - **`TS_MILESTONE_REWARDS` 搬空**（`[]`），全部称号都在 stageMeta；`MILESTONE_REWARDS` 照汉线按 `STAGE_ORDER` 排，顺序不变。
 - `tang` 是 `TS_SECONDARY_LINES` 与核心包 `line-compass.json` 的最后一条：TS 侧删块后 zhaonan 收尾 `},` 原样；JSON 侧前一项的 `},` 改 `}`。
 - `tests/contentPackLineFormats.test.mjs`：称号与整关章名特判两类 TS 侧都已搬空，改用**合成的临时 TS 条目**——用例内往 `TS_MILESTONE_REWARDS` 临时推一条、临时替换 `eventNarrativeView` 模块导出的 `storyChapterTitleIn`（编译器与测试经 jiti 共用模块缓存，拿到同一模块对象），用完还原；「既有特判先于 stageMeta」改用 `lcq.stage_04` 逐拍特判。
+
+## 2026-11-11 核心与人物数据的新包格式（F0a）
+
+六个 manifest 新字段加 `secondaryLines` 的一条新规则，只建机制，现有数据仍在 TS 里；迁哪张表就把那张表的条目从 TS 删掉、写进包里（同一条目两边都有 → 编译报错，`storyAxis` 例外，见下）。都是 JSON 文件路径数组；`lineCriticalEvents` 的文件是数组，其余五种的文件是对象。条目（以及文件顶层）的 `note` 只给作者看，编译时剥掉——TS 里夹在条目之间的 `//` 注释搬到下一条的 `note`，表尾没有下一条的注释搬到文件顶层 `note`。编译逻辑在 `scripts/content-pack-core-formats.mjs`，catalog 形状的类型在 `src/modules/contentPacks/coreFormats.ts`。读取函数仍同步、无副作用，导出名与类型不变；新段为空时合并值与原 TS 表逐项相同（`tests/contentPackCoreCharacterFormats.test.mjs` 钉住）。
+
+**`secondaryLines` 首条**：全部包线里至多一条不写 `after`，它排最前；只在 `TS_SECONDARY_LINES` 为空时允许（`omits after, but TS_SECONDARY_LINES is not empty`）。catalog 里这一条没有 `after` 键。包线文案里可写 `{{entity:<kind>:<id>}}`／`{{entityLabel:<kind>:<id>:<labelId>}}`，写法与实体在编译期校验，catalog 留模板，`SECONDARY_LINES` 合并时解析（同包 rail）。
+
+**`lineCriticalEvents`**：`[{"note":"可选","eventId":"<事件>","lineId":"<二级线>"}]`。事件存在（隔离关事件也算）；`eventId` 全部包里不重复；`lineId` 是 TS 线或同一次编译里的包线；不能同时在 TS 表里。运行时 `LINE_CRITICAL_EVENTS` 仍是原来那个对象：TS 条目在前，包条目按 catalog 顺序就地并入；`TS_LINE_CRITICAL_EVENTS` 是并入前的拷贝。`lineCriticalFrozen` 不变。
+
+**`characterBeats`**：`{"quests":[{"id","name","beats":[{"reviewSummary","status","eventIds":[],"note?"}],"note?"}],"highlights":[{"name","eventIds":[],"reviewSummary","note?"}]}`，字段同 `CharacterQuest`／`CharacterHighlight`。`status` ∈ ready／new／insert；ready／insert 的 `eventIds` 都存在，**new 的（建议 id）都必须不存在**；quest id 归属种类 `characterQuest`，全部包与 TS 表里唯一；同名且 `eventIds` 相同的高光不得重复（含与 TS 表）。`CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS` = TS 表在前、包按 catalog 顺序在后（`mergeCharacterBeats`）。
+
+**`storyAxis`**：`{"note?","stageOrder":[],"layers":[],"stages":[],"nodes":[],"requirements":[]}`，各段条目字段同 `mainQuestAxis.ts` 的类型，可带 `note`。全局至多一份；**有包声明时 `TS_STAGE_ORDER`／`TS_MAIN_QUEST_LAYERS／STAGES／NODES／REQUIREMENTS` 必须全空**（二选一，不逐条合并，`resolveStoryAxis`）。编译期：`stageOrder` 等于从首项沿 `manifest.nextStageId` 走出的链（不分叉、无环、走到没有 `nextStageId` 为止）并覆盖全部内置关（包内关可以不在链上，现状如此：秦关没有 `nextStageId`）；`layer` 是 1–6 的整数、不重复，`restricted` 只收 `true`；`unlockStageIds`、`stages[].stageId`、`nodes[].stageId` 是已有关；`pillars` ⊆ bloodline／taiquan；ready 节点的 `eventId` 属于该关、pending 节点不写 `eventId`；`locationId` 在 `locations.json`（含别名）；`bloodlineBranch`、`requirements[].id` 取类型里的枚举值。
+
+**`locationAliases`**：`{"note?","canonical":{"<旧 id>":"<规范 id>"},"parents":{"<子>":"<父>"},"display":{"<id>":{"name","displayAliases?":[]}}}`。比方案多了 `parents`（`LOCATION_PARENTS` 也是地点数据表）。`canonical` 的值是 `locations.json` 的规范 id、不是另一条别名的键（不成链，含 TS 表），键不是 `locations.json` 已有的别名（否则会覆盖实体总表派生的那条）；`parents` 两端在 `locations.json`（含别名），合 TS 表后不成环；`display` 的键在 `locations.json`（含别名）。三张表的键全部包里唯一、不得与 `TS_LOCATION_ID_ALIASES`／`TS_LOCATION_PARENTS`／`TS_LOCATION_NAMES` 重复。运行时 `LOCATION_ID_ALIASES` = 实体总表派生 → TS 手写 → 包（仍 `Object.freeze`）；`LOCATION_PARENTS`／`LOCATION_NAMES` = TS → 包（`mergeLocationTable`）。
+
+**`characterProfiles`**：`{"stance":[{"entities":[{"kind":"character|enemy","id"}],"extraNames?":[],"constant":[],"bands":{"low|mid|high":[]},"note?"}],"affinityCaps":[{"entities":[…],"extraNames?":[],"capTier":"<AFFINITY_TIERS id>","reason","liftedBy","note?"}]}`。`names` 运行时算：`entities` 逐个 `entityAliases` 展开（**可重复**，原表就有同一角色写两三遍的条目，展开后的重复名字原样保留）再接 `extraNames`；原表 names 都是「实体在前、字面名字在后」，逐条还原核过。`cap` = `capTier` 那档的 `max`。实体存在；展开后的名字在同一张表的两条里不能重复（`find` 取第一条，重复即后一条失效），也不能与 TS 表重名；姿态与上限是两张表，同一人可两边都有。`STANCE_PROFILES`／`AFFINITY_CAPS` = TS 表在前、包按 catalog 顺序在后，顺序即优先级。
+
+**`ifBranches`**：`{"branches":[{"eventId","branchId","requiredCharacterId","acceptedStatuses":["alive",…],"flagCharacterSlug","normalizedStatus","prompt?","note?"}],"consequences":[{"eventId","requiredCharacterId","acceptedStatuses":[…],"flagKey","flagValue","prompt?","note?"}],"prompts":{"<分歧记录 id>":"…"}}`。`acceptedStatuses` 是不重复的小写字母串，运行时编译成与原表同形的正则（一个 `^x$`、多个 `^(a|b)$`，`i` 标志；原表三种写法都能这样表达，测试逐条核对）。事件存在、`requiredCharacterId` 是角色；`branchId` 归属种类 `ifBranch`，全部包与 TS 表里唯一；同事件同人物的后果、`prompts` 的键不重复（含 TS）；`flagValue` 是字符串／数字／布尔。本批把 `formatDivergencePrompt` 的三元式改成查表：TS 规则表加 `prompt` 字段、按 id 的那条进 `TS_DIVERGENCE_PROMPTS`；查找顺序同原式——分支（按 `branchId`，没有 prompt 的分支继续往下）→ 分歧记录 id → 后果（同事件、人物状态命中；**状态不 trim**，同原式；落旗标的匹配仍 trim）。
+
+**归属**：`characterQuest`、`ifBranch` 两种 id 登记为包定义；六段的原始值都进通用字符串扫描，引用别的包定义的关、事件等要 `dependsOn`。
+
+catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvents: []`、`characterBeats: {quests:[],highlights:[]}`、`storyAxis: null`、`locationAliases: {canonical:{},parents:{},display:{}}`、`characterProfiles: {stance:[],affinityCaps:[]}`、`ifBranches: {branches:[],consequences:[],prompts:{}}`；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。棘轮：`divergenceLedger.ts` 三元式里 7 行带 id 的判断改为规则表的 `prompt` 字段与 `TS_DIVERGENCE_PROMPTS`（新增 1 行键），实扫 23 → 17，基线同批重写（总数 1313 → 1307）。

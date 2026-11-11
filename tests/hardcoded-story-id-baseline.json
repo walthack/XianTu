@@ -14,7 +14,7 @@
   ],
   "总数": {
     "文件数": 70,
-    "行数": 1313
+    "行数": 1307
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -30,7 +30,7 @@
     "src/modules/scenarioMods/canonRail.ts": 70,
     "src/modules/scenarioMods/characterQuests.ts": 116,
     "src/modules/scenarioMods/characterResolver.ts": 25,
-    "src/modules/scenarioMods/divergenceLedger.ts": 23,
+    "src/modules/scenarioMods/divergenceLedger.ts": 17,
     "src/modules/scenarioMods/endingPresentation.ts": 10,
     "src/modules/scenarioMods/eventNarrativeView.ts": 34,
     "src/modules/scenarioMods/fixedEndingNarratives.ts": 15,

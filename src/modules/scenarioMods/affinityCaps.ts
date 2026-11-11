@@ -21,6 +21,9 @@ import { canonicalIdentityName } from './ledger/affinityIdentity';
 
 import { AFFINITY_TIERS } from './affinityLadder';
 import { JOINED_RELATION_RE as SETTLED_RELATION_RE } from './acquaintanceLedger';
+import { CONTENT_PACKS } from '../contentPacks';
+import type { PackAffinityCap } from '../contentPacks/coreFormats';
+import { packEntityNames } from './stanceProfiles';
 
 export interface AffinityCap {
   names: string[];
@@ -37,7 +40,7 @@ const tierMax = (id: string) => AFFINITY_TIERS.find(t => t.id === id)!.max;
 // 关系标签一旦表明归属，即视为正典加入事件已发生，cap 失效。
 // 判据引用相识账本的唯一定义——此前本文件自带一份，与账本那份各自漏词（都漏了「主仆」）。
 
-export const AFFINITY_CAPS: readonly AffinityCap[] = [
+export const TS_AFFINITY_CAPS: AffinityCap[] = [
   // —— 立场先于情感：忠诚有明确排序，感情排在后面 ——
   {
     names: [...entityAliases("character","liuchao.character.lv_zhi")],
@@ -119,7 +122,15 @@ export const AFFINITY_CAPS: readonly AffinityCap[] = [
     reason: '尚未被收服。此前她是六扇门派来伪装教坊女子的监视者，立场在对面。',
     liftedBy: '正典加入事件：被收服、魂丹被掌控之后。',
   },
-] as const;
+];
+
+/** TS 表在前、包条目按 catalog 顺序在后（affinityCapFor 用 find 取第一条命中）；capTier 是档位 id，取该档 max（F0a）。 */
+export function mergeAffinityCaps(ts: readonly AffinityCap[], pack: readonly PackAffinityCap[]): AffinityCap[] {
+  return [...ts, ...pack.map(entry => ({ names: packEntityNames(entry), cap: tierMax(entry.capTier), reason: entry.reason, liftedBy: entry.liftedBy }))];
+}
+
+/** 全部好感上限：TS 表加内容包 characterProfiles.affinityCaps。 */
+export const AFFINITY_CAPS: readonly AffinityCap[] = mergeAffinityCaps(TS_AFFINITY_CAPS, CONTENT_PACKS.characterProfiles?.affinityCaps || []);
 
 /**
  * 取该角色当前的好感上限。返回 `null` 表示无上限。

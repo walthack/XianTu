@@ -14,7 +14,12 @@
  * 抽取器见 scratchpad `extract_cq.py`／`gen_cq.py`。**改内容改文档再重抽，不要手改本文件的表。**
  * 抽取时逐条把文档里的 id 解析成真实 event id（跨书重名用 `axisSeq` 消歧），
  * 解析不了的会报错——所以本文件里的 `ready`／`insert` id 都是真实存在的。
+ *
+ * 内容包 `characterBeats`（F0a）：包里的人物任务与高光并在 TS 表之后（`mergeCharacterBeats`），导出名不变；
+ * 编译期校验 status、事件存在性（`new` 的建议 id 必须**不存在**）、quest id 唯一、与 TS 表不重复。
  */
+import { CONTENT_PACKS } from '../contentPacks';
+import type { PackCharacterBeats } from '../contentPacks/coreFormats';
 
 export type CharacterBeatStatus =
   /** 已有独立 event 承载这一拍。 */
@@ -54,7 +59,7 @@ export interface CharacterHighlight {
   reviewSummary: string;
 }
 
-export const CHARACTER_QUESTS: CharacterQuest[] = [
+export const TS_CHARACTER_QUESTS: CharacterQuest[] = [
   {
     id: 'xiaozi',
     name: '小紫',
@@ -159,7 +164,7 @@ export const CHARACTER_QUESTS: CharacterQuest[] = [
   },
 ];
 
-export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
+export const TS_CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
   { name: '尹馥兰', eventIds: ['lyl.event.yin_fulan_aid', 'lyl.event.taiquan_afterfall_02_beat', 'lyl.event.decide_yin_fulan_fate'], reviewSummary: 'yin_fulan_aid 主动报伏并要后续安排／taiquan_afterfall_02_beat (688) 被弃下水道向你求救／decide_yin_fulan_fate 决定她与何漪莲的去留' },
   { name: '吕雉', eventIds: ['lyg.event.debut_lvzhi', 'lyg.event.han_succession_03_beat'], reviewSummary: 'debut_lvzhi 凤辇临朝立威、点破霍子孟三面受制／han_succession_03_beat (1033) 坦白弑君弑夫旧事、求留程府' },
   { name: '云如瑶', eventIds: ['lcq.event.s09_02_yun_ruyao_faints', 'lyl.event.taiquan_afterfall_06_beat'], reviewSummary: 's09_02_yun_ruyao_faints (344) 昏厥暴露病线／taiquan_afterfall_06_beat (718) 提亲受阻后私奔' },
@@ -224,6 +229,23 @@ export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = [
   { name: '赵飞燕', eventIds: ['lyg.event.han_succession_09_beat'], reviewSummary: '因孟舍人死气失控，在登基典仪与赵飞燕双修，突破通幽境' },
   { name: '小紫', eventIds: ['lyg.event.changgan_interlude_02_beat'], reviewSummary: '马厩救出廖群玉：他携百衲衣寻岳霏，并牵到齐羽仙、周飞' },
 ];
+
+/** TS 表在前、包按 catalog 顺序在后；quest id 与 TS 重复即报错（编译期已查，这里兜底）。 */
+export function mergeCharacterBeats(
+  ts: { quests: readonly CharacterQuest[]; highlights: readonly CharacterHighlight[] },
+  pack: Partial<PackCharacterBeats> | undefined,
+): { quests: CharacterQuest[]; highlights: CharacterHighlight[] } {
+  const quests = [...ts.quests, ...(pack?.quests || [])];
+  const ids = new Set<string>();
+  for (const quest of quests) { if (ids.has(quest.id)) throw new Error(`character quest ${quest.id}: duplicate id`); ids.add(quest.id); }
+  return { quests, highlights: [...ts.highlights, ...(pack?.highlights || [])] };
+}
+
+const MERGED = mergeCharacterBeats({ quests: TS_CHARACTER_QUESTS, highlights: TS_CHARACTER_HIGHLIGHTS }, CONTENT_PACKS.characterBeats);
+/** 全部人物任务：TS 表加内容包（catalog 没有这一段时等于 TS 表）。 */
+export const CHARACTER_QUESTS: CharacterQuest[] = MERGED.quests;
+/** 全部单点高光：TS 表加内容包。 */
+export const CHARACTER_HIGHLIGHTS: CharacterHighlight[] = MERGED.highlights;
 
 /**
  * 当前这一拍上，有谁的戏。

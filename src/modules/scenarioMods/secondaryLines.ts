@@ -1,4 +1,4 @@
-import {entityText} from './namedEntities';
+import {entityText,entityTemplateText} from './namedEntities';
 /**
  * 二级线入口（R3-10）——把"能不能接到这条线"从模型自觉改成引擎确定性。
  *
@@ -39,6 +39,7 @@ import type { LineUnlockOptions } from './lineUnlock';
 import type { ScenarioCondition } from './schema';
 import ledgerOverrides from '../../../mod-kit/entity-ledger/overrides.json';
 import { CONTENT_PACKS, type PackSecondaryLine } from '../contentPacks';
+import type { PackLineCriticalEvent } from '../contentPacks/coreFormats';
 
 export type SecondaryLineKind = 'sect' | 'nation' | 'commerce' | 'expedition';
 
@@ -520,12 +521,19 @@ export function mergeSecondaryLines(tsLines: readonly SecondaryLine[], packLines
   const out: SecondaryLine[] = [...tsLines];
   const ids = new Set(out.map(line => line.id));
   const afters = new Set<string>();
+  // F0a：全部包线里至多一条不写 after，它排最前；只在 TS 表为空时允许（否则「最前」与 TS 首条冲突）
+  let head: PackSecondaryLine | undefined;
   for (const line of packLines) {
     if (ids.has(line.id)) throw new Error(`secondary line ${line.id}: duplicate id`);
-    if (afters.has(line.after)) throw new Error(`secondary line ${line.id}: another pack line is already after ${line.after}`);
-    ids.add(line.id); afters.add(line.after);
+    if (line.after === undefined) {
+      if (head) throw new Error(`secondary line ${line.id}: only one pack line may omit after (${head.id} already does)`);
+      if (tsLines.length) throw new Error(`secondary line ${line.id}: omits after, but TS_SECONDARY_LINES is not empty`);
+      head = line;
+    } else if (afters.has(line.after)) throw new Error(`secondary line ${line.id}: another pack line is already after ${line.after}`);
+    ids.add(line.id); if (line.after !== undefined) afters.add(line.after);
   }
-  let pending = [...packLines];
+  if (head) { const { after: _after, ...rest } = head; out.unshift(rest); }
+  let pending = packLines.filter(line => line !== head);
   while (pending.length) {
     const next = pending.filter(line => !out.some(placed => placed.id === line.after));
     if (next.length === pending.length) throw new Error(`secondary line ${pending[0].id}: after ${pending[0].after} not found`);
@@ -538,8 +546,22 @@ export function mergeSecondaryLines(tsLines: readonly SecondaryLine[], packLines
   return out;
 }
 
+/**
+ * 包线文案里的动态名字（F0a 搬迁预检：TS 线里有 entityText 模板）：{{entity:<kind>:<id>}}、{{entityLabel:<kind>:<id>:<labelId>}}，
+ * 运行时解析（同包 rail），catalog 留模板原样；没有模板的包线原样返回。
+ */
+function withEntityTemplates<T>(value: T): T {
+  if (typeof value === 'string') return entityTemplateText(value) as T;
+  if (Array.isArray(value)) return value.map(withEntityTemplates) as T;
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, withEntityTemplates(v)])) as T;
+  return value;
+}
+export function resolvePackSecondaryLineTemplates(lines: readonly PackSecondaryLine[]): PackSecondaryLine[] {
+  return lines.map(line => JSON.stringify(line).includes('{{') ? withEntityTemplates(line) : line);
+}
+
 /** 全部二级线：TS 表加内容包的线（顺序由 after 决定；旧 catalog 没有这一段时等于 TS 表）。 */
-export const SECONDARY_LINES: SecondaryLine[] = mergeSecondaryLines(TS_SECONDARY_LINES, CONTENT_PACKS.secondaryLines || []);
+export const SECONDARY_LINES: SecondaryLine[] = mergeSecondaryLines(TS_SECONDARY_LINES, resolvePackSecondaryLineTemplates(CONTENT_PACKS.secondaryLines || []));
 
 /**
  * 人物锚的门槛：**真的见过**才算接得到。
@@ -649,6 +671,18 @@ export const LINE_CRITICAL_EVENTS: Record<string, string> = {
   'lyl.event.s06_04': 'han', // 长秋宫守卫战
   'lyl.event.s06_06': 'han', // 吕奉先单骑破阵
 };
+/** 上表本身（并入内容包 lineCriticalEvents 之前的拷贝，F0a）：编译期查重读它。上表随后就地并入包条目，导出名与对象不变。 */
+export const TS_LINE_CRITICAL_EVENTS: Record<string, string> = { ...LINE_CRITICAL_EVENTS };
+/** TS 表在前、包条目按 catalog 顺序在后；同一事件两边都有即报错（编译期已查，这里兜底）。 */
+export function mergeLineCriticalEvents(ts: Readonly<Record<string, string>>, pack: readonly PackLineCriticalEvent[]): Record<string, string> {
+  const out = { ...ts };
+  for (const { eventId, lineId } of pack) {
+    if (eventId in out) throw new Error(`line critical event ${eventId}: duplicate`);
+    out[eventId] = lineId;
+  }
+  return out;
+}
+Object.assign(LINE_CRITICAL_EVENTS, mergeLineCriticalEvents(TS_LINE_CRITICAL_EVENTS, CONTENT_PACKS.lineCriticalEvents || []));
 
 /**
  * 从存档的位置描述反查地点 id。

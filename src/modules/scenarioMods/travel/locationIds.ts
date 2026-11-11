@@ -1,4 +1,6 @@
 import {namedEntityEntries,canonicalEntityId} from '../namedEntities';
+import { CONTENT_PACKS } from '../../contentPacks';
+import type { PackLocationAliases } from '../../contentPacks/coreFormats';
 /**
  * 地点规范 id、别名、父子关系与规范名（P0-4 移动系统）。
  *
@@ -9,28 +11,52 @@ import {namedEntityEntries,canonicalEntityId} from '../namedEntities';
  *   3. 白夷谷并入 baiyi，规范名「白夷谷」，「白夷族」为显示别名；
  *   4. 两个龙池是同一处，规范 id 取 liuchao.location.longchi；坐标冲突待校准。
  * 剧情裁定：海神殿是碧鲮（biyu_village）的子地点。
+ *
+ * 内容包 `locationAliases`（F0a）：canonical／parents／display 三张表分别并在下面 TS 表之后（`mergeLocationTable`），
+ * 导出名与类型不变；地点实体总表派生的别名（namedEntityEntries）仍排最前。编译期查重：同一键两边都有即报错。
  */
-export const LOCATION_ID_ALIASES: Readonly<Record<string,string>> = Object.freeze({
-  ...Object.fromEntries(namedEntityEntries('location').flatMap(e=>e.aliases.filter(id=>id.includes('.location.')).map(id=>[id,e.id]))),
+/** 手写别名（地点实体总表派生之外的那几条）。 */
+export const TS_LOCATION_ID_ALIASES: Record<string,string> = {
   'liuchao.location.xiong_er_pu':'liuchao.location.xiongerpu',
   'liuchao.location.gui_wang_dong_palace':'liuchao.location.gui_wang_gong',
   'liuchao.location.bai_yi_valley':'liuchao.location.baiyi',
+};
+
+/** TS 表在前、包按 catalog 顺序在后；键重复即报错（编译期已查，这里兜底）。 */
+export function mergeLocationTable<T>(label: string, ts: Readonly<Record<string, T>>, pack: Readonly<Record<string, T>> | undefined): Record<string, T> {
+  const out = { ...ts };
+  for (const [key, value] of Object.entries(pack || {})) {
+    if (key in out) throw new Error(`locationAliases ${label} ${key}: duplicate`);
+    out[key] = value;
+  }
+  return out;
+}
+const PACK_LOCATIONS: Partial<PackLocationAliases> = CONTENT_PACKS.locationAliases || {};
+
+export const LOCATION_ID_ALIASES: Readonly<Record<string,string>> = Object.freeze({
+  ...Object.fromEntries(namedEntityEntries('location').flatMap(e=>e.aliases.filter(id=>id.includes('.location.')).map(id=>[id,e.id]))),
+  ...mergeLocationTable('canonical', TS_LOCATION_ID_ALIASES, PACK_LOCATIONS.canonical),
 });
 
 /** 子地点 → 父地点（规范 id）。人在子地点算在父地点；人在父地点不算到了子地点。 */
-export const LOCATION_PARENTS: Readonly<Record<string, string>> = {
+export const TS_LOCATION_PARENTS: Record<string, string> = {
   'liuchao.location.gui_wang_gong': 'liuchao.location.guiwang_dong',
   'liuchao.location.gui_wang_gong.jingshen_tai': 'liuchao.location.gui_wang_gong',
   'lcq.location.guiwang_inn': 'liuchao.location.guiwang_dong',
   'liuchao.location.sea_temple': 'liuchao.location.biyu_village',
 };
 
+/** 子地点 → 父地点：TS 表加内容包。 */
+export const LOCATION_PARENTS: Readonly<Record<string, string>> = mergeLocationTable('parents', TS_LOCATION_PARENTS, PACK_LOCATIONS.parents);
+
 /** 规范名与显示别名：位置串里出现这些名字也解析到该规范 id（当前关正典里没有该地点时用）。 */
-export const LOCATION_NAMES: Readonly<Record<string, { name: string; displayAliases?: string[] }>> = {
+export const TS_LOCATION_NAMES: Record<string, { name: string; displayAliases?: string[] }> = {
   'liuchao.location.baiyi': { name: '白夷谷', displayAliases: ['白夷族'] },
   'liuchao.location.gui_wang_gong': { name: '鬼王宫', displayAliases: ['鬼王峒宫殿'] },
   'liuchao.location.longchi': { name: '龙池' },
 };
+/** 规范名与显示别名：TS 表加内容包 display。 */
+export const LOCATION_NAMES: Readonly<Record<string, { name: string; displayAliases?: string[] }>> = mergeLocationTable('display', TS_LOCATION_NAMES, PACK_LOCATIONS.display);
 
 export function canonicalLocationId(id: string): string;
 export function canonicalLocationId(id: string | undefined): string | undefined;
