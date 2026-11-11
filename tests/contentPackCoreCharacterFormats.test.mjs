@@ -447,6 +447,24 @@ test('归属：人物任务 id 不进通用扫描——别的包里同名的普�
  assert.equal((await compile({a,b,c:{id:'test.c',dependsOn:['test.b'],characterBeats:['f.json'],files:{'f.json':beatQuest}}})).characterBeats.quests[0].beats[0].eventIds[0],QE);
 });
 
+// B3 裁定：主轴 stages[].pillars 是编译期按枚举校验的闭集，不是 id 引用，不进通用归属扫描（核心包主轴的 "taiquan" 与太泉包的线 id 同名，太泉包依赖核心包）；只跳这一个字段
+test('归属：storyAxis 的 pillars 不进通用扫描——与别的包的线 id 同名不要求 dependsOn；storyAxis 里真正的跨包 id 引用仍要 dependsOn；枚举外的值仍编译报错',()=>withTsLines([],()=>withEmptyAxis(async()=>{
+ const lines={id:'test.lines',secondaryLines:['l.json'],files:{'l.json':[line({id:'taiquan'})]}};
+ const axisPack=(patch,extra={})=>({id:'test.axis',storyAxis:['a.json'],files:{'a.json':axis(patch)},...extra});
+ // 正例：pillars 取值与 test.lines 定义的线 id 同名，test.axis 不依赖 test.lines，编译通过
+ const out=await compile({lines,axis:axisPack({stages:[{stageId:S,role:'测试关',pillars:['bloodline','taiquan']}]})});
+ assert.deepEqual(out.storyAxis.stages[0].pillars,['bloodline','taiquan']);assert.deepEqual(out.secondaryLines.map(l=>l.id),['taiquan']);
+ // 反例：storyAxis 里 pillars 以外的字段引用别的包定义的关（同一条 stages 的 stageId、节点的 stageId／eventId），不写 dependsOn 仍报错
+ const a={id:'test.a',texts:['texts.json'],files:{'texts.json':await read(join(qinDir,'qin-texts.json'))}};
+ const qinStage=await read(join(qinDir,'stage-qin-xianyang.json'));const QS=qinStage.manifest.id,QE=qinStage.scenario.events[0].id;
+ const b={id:'test.b',dependsOn:['test.a'],stages:['stage.json'],files:{'stage.json':qinStage}};
+ const owned=/test\.axis references \S+ owned by test\.b; add dependsOn/;
+ await rejects({a,b,axis:axisPack({stages:[{stageId:QS,role:'包内关',pillars:['taiquan']}]})},owned);
+ await rejects({a,b,axis:axisPack({nodes:[{stageId:QS,reviewSummary:'包内关事件',status:'ready',eventId:QE}]})},owned);
+ // 反例：pillars 写了枚举外的值（哪怕是别的包定义的线 id），仍按枚举编译报错
+ await rejects({lines:{...lines,files:{'l.json':[line({id:'test_pillar_line'})]}},axis:axisPack({stages:[{stageId:S,role:'x',pillars:['test_pillar_line']}]})},/storyAxis\.stages\.0: invalid fields/);
+})));
+
 // —— 搬迁演练：现有 TS 表整张转写进一个合成包，临时搬空 TS 表后编译，合并值与现在逐项相同 ——
 test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通过，合并值 deepStrictEqual 现值',async()=>{
  const lines=SL.SECONDARY_LINES.map((l,i)=>i?{...structuredClone(l),after:SL.SECONDARY_LINES[i-1].id}:structuredClone(l));

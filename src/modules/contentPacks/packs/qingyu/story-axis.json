@@ -1,0 +1,339 @@
+{
+  "note": "主线轴五段数据（原 mainQuestAxis.ts 的 TS_STAGE_ORDER／TS_MAIN_QUEST_LAYERS／STAGES／NODES／REQUIREMENTS），B3 原样搬入，各段顺序不变。权威来源现为本文件，改了再跑 node scripts/content-packs.mjs。类型、设计说明与三个查询函数仍在 mainQuestAxis.ts。stageOrder 编译期核对等于沿 manifest.nextStageId 走出的链。节点表尾原注释：#20 文案压了两拍：斩断肉身 s12 ＋ 阻止夺舍 s13；落夺舍拍（终局收束）。",
+  "stageOrder": [
+    "lcq.stage_01",
+    "lcq.stage_02",
+    "lcq.stage_03",
+    "lcq.stage_03b_snake_flower_bridge",
+    "lcq.stage_04",
+    "lcq.stage_04b_lingfei_baiyi_crisis",
+    "lcq.stage_05",
+    "lcq.stage_05b",
+    "lcq.stage_06",
+    "lcq.stage_07_qingyuan_jiankang",
+    "lcq.stage_08_jiankang_coup",
+    "lcq.stage_09_trade_and_escape",
+    "lcq.stage_10_jiangzhou_shadow_war",
+    "lcq.stage_11_lieshan_battle",
+    "lcq.stage_12_jiangzhou_counterwar",
+    "lyl.jiangzhou_retreat",
+    "lyl.lin_an_black_sea",
+    "lyl.lin_an_bridge",
+    "lyl.taiquan_expedition",
+    "lyl.xiaoyingzhou_blacksea_trap",
+    "lyl.taiquan_sacred_fruit",
+    "lyl.taiquan_core_conflict",
+    "lyl.taiquan_afterfall",
+    "lyl.luoyang_cloud_secret",
+    "lyl.luoyang_coup",
+    "lyl.han_palace_endgame",
+    "lyg.dingtao_beijing",
+    "lyg.mijing_rumen",
+    "lyg.han_succession",
+    "lyg.changgan_begins",
+    "lyg.shixiang_ambush",
+    "lyg.changgan_interlude",
+    "lyg.ganlu_bian",
+    "lyg.liangzhou_league",
+    "lyg.buddhist_conspiracy",
+    "lyg.ganlu_aftershock",
+    "lyg.shituolin_endgame"
+  ],
+  "layers": [
+    {
+      "layer": 1,
+      "text": "活下来，弄清自己是怎么来的。",
+      "unlockStageIds": []
+    },
+    {
+      "layer": 2,
+      "text": "王哲把三件事交给了你：拆锦囊、修为到六阳去太泉古阵祭祀、守护岳帅后人月霜。",
+      "unlockStageIds": [
+        "lcq.stage_02"
+      ]
+    },
+    {
+      "note": "门必须挂在**事件层**首现关，不能挂 canon.characters 在场关： 小紫在 stage_03b 只是 canon 名单里有，事件层首现是 stage_05（实测 21 关命中，首关 stage_05）。 挂早一关会让玩家还没见到人就被告知\"小紫的来历尤其深\"。",
+      "layer": 3,
+      "text": "身边这些人各自背着来历，小紫的尤其深。",
+      "unlockStageIds": [
+        "lcq.stage_05"
+      ]
+    },
+    {
+      "layer": 4,
+      "text": "太泉古阵里有说不通的东西——王哲要你去，恐怕不只是为了祭祀。",
+      "unlockStageIds": [
+        "lyl.taiquan_sacred_fruit"
+      ]
+    },
+    {
+      "note": "到达即升层，不设选择：发现\"这世界是养人的\"之后不可能真忘记， 原文云龙 #141「决定炸毁并遗忘」只是小说的艺术性收尾（用户裁定 2026-08-16）。",
+      "layer": 5,
+      "text": "这地方是养人的——而且有人在按名册找人，你身边的人在名册上。",
+      "unlockStageIds": [
+        "lyl.taiquan_afterfall",
+        "lyl.han_palace_endgame",
+        "lyg.mijing_rumen"
+      ]
+    },
+    {
+      "note": "解锁靠三碎片认知落 playerKnowledge，不由关卡推进给出，故 unlockStageIds 为空。",
+      "layer": 6,
+      "text": "这世界本身在回滚你做的一切。",
+      "unlockStageIds": [],
+      "restricted": true
+    }
+  ],
+  "stages": [
+    {
+      "stageId": "lcq.stage_01",
+      "role": "落地：穿越、失去同伴",
+      "pillars": []
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "role": "王哲三托付；白湖脱身＝强制段终点",
+      "pillars": [
+        "bloodline",
+        "taiquan"
+      ]
+    },
+    {
+      "note": "stage_03 是旧关卡包（赌局至蛇彝村），默认路线隔离。进南荒不是本关任务， 是出白湖后朝前走的默认矢量。谢艺在蛇彝村，属昭南开门之后。",
+      "stageId": "lcq.stage_03",
+      "role": "（旧包）白湖后续；不承担进南荒",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lcq.stage_03b_snake_flower_bridge",
+      "role": "小紫入队",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "note": "谢艺说破「岳帅还有个遗腹女」（`s04b_..._18`, seq 121）落在本关——血脉揭示拍，故收进主轴关。",
+      "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",
+      "role": "血脉揭示：岳帅遗腹女",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lcq.stage_05",
+      "role": "鬼王峒初探；碧姬线浮出",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lcq.stage_05b",
+      "role": "鬼王宫潜入",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lcq.stage_06",
+      "role": "唤龙授艺；碧姬线收束",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lyl.lin_an_bridge",
+      "role": "赵飞燕线起点",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+      "role": "剑玉姬真身＝岳萼身份揭示；九阳交换",
+      "pillars": [
+        "bloodline",
+        "taiquan"
+      ]
+    },
+    {
+      "stageId": "lyl.taiquan_sacred_fruit",
+      "role": "太泉钥匙；赤阳圣果；高俅秘辛探身世",
+      "pillars": [
+        "taiquan",
+        "bloodline"
+      ]
+    },
+    {
+      "note": "太泉段整条排进主轴后补进来（2026-08-16）：蚁穴脱困那一拍（`find_exit`, seq 667）落在这一关。 此前排除它是因为共享正典注入会让它假阳性扫出「太泉／核心区」（见上方注释）； 但现在挂的是**实名 event**，不是靠扫描猜的，可以收。",
+      "stageId": "lyl.taiquan_core_conflict",
+      "role": "太泉蚁穴脱困",
+      "pillars": [
+        "taiquan"
+      ]
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "role": "探索人类居住区＝揭盅段；云如瑶＝岳霏",
+      "pillars": [
+        "taiquan",
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lyl.han_palace_endgame",
+      "role": "秘境入口（光柱；与太泉同系统，见上方注释）",
+      "pillars": [
+        "taiquan",
+        "bloodline"
+      ]
+    },
+    {
+      "note": "⚠ 旧注写「小玲儿唯一在场关」有误：实测事件层她只出现在 `xiaoyingzhou` 的小瀛洲杀局一条。 本关窗口（986–1012）虽覆盖 seq 1012「被系统认定为超级用户」，但那一拍没有落成 event。",
+      "stageId": "lyg.mijing_rumen",
+      "role": "秘境续（小玲儿在本关窗口内被认定为超级用户，但事件层未落拍）；与太泉同系统",
+      "pillars": [
+        "taiquan",
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lyg.han_succession",
+      "role": "赵飞燕·子嗣线（毕业生受孕锚）",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "note": "百衲衣寻小公主岳霏（seq 1123）落在本关——岳血后裔，属血脉支柱，故收进主轴关。",
+      "stageId": "lyg.changgan_interlude",
+      "role": "血脉：百衲衣寻岳霏",
+      "pillars": [
+        "bloodline"
+      ]
+    },
+    {
+      "stageId": "lyg.shituolin_endgame",
+      "role": "连载断点；鬼王线回响",
+      "pillars": []
+    }
+  ],
+  "nodes": [
+    {
+      "note": "血脉线开场。要求二「保住至少一名岳血后裔」此前在节点表里**零命中**—— 玩家照主轴走完，两条完成要求一条都不会达成（实测 2026-08-16）。 ⚠ 只补开场这两拍，**不补三川口护月霜**（用户裁定 2026-08-16）：要求写的是「至少一名」， 月霜只是王哲点名的默认人选、可被小紫等替代。堆三条月霜节点会把可替换的接口 读成唯一路径，与「不要求集齐」相矛盾。小紫那几拍（追问过往／临时协定／托付） 已经是另一个候选接口，主轴不必再替玩家指定保谁。",
+      "stageId": "lcq.stage_01",
+      "reviewSummary": "战场遇月霜，卓云君烈火救下你俩，太乙真宗教御全歼兽蛮",
+      "status": "ready",
+      "eventId": "lcq.event.s01_03",
+      "bloodlineBranch": "yueshuang"
+    },
+    {
+      "stageId": "lcq.stage_01",
+      "reviewSummary": "月霜强灌丹药，你在真阳驱使下与她性交，寒毒得解",
+      "status": "ready",
+      "eventId": "lcq.event.s01_06",
+      "bloodlineBranch": "yueshuang"
+    },
+    {
+      "note": "#1 落点＝帅帐见王哲（旅程终点拍）；坠落／半兽人在 s01_01–s01_04。",
+      "stageId": "lcq.stage_01",
+      "reviewSummary": "王哲发现你身上有生死根，耗真气筑基，传下九阳神功口诀",
+      "status": "ready",
+      "eventId": "lcq.event.s01_05"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "接下王哲三托：保管锦囊、六阳后去太泉古阵、守护月霜",
+      "status": "ready",
+      "eventId": "lcq.event.s02_01"
+    },
+    {
+      "note": "── 强制段：五原城落奴 → 白湖商馆脱身（用户 2026-08-19 指出此前漏落）── 这一段之所以在主轴而不在昭南线：它是**教程段**——玩家在这里第一次经历 「走到某处 → 见到某人 → 触发一段剧情 → 再推进下一步」的完整循环， 并拿到第一个同行者（凝羽，挂在 seq 42「冰蛊逼南行」）。 上面第 281 行早把本关角色记成「王哲三托付；白湖脱身＝强制段终点」， 但节点一直没落——rail 延长（覆盖全关 18 拍）做了，主轴这一半漏了。 昭南线仍认领同一批 event（双喂），两边看到的是同一段剧情的不同用途。",
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "五原城把你当逃奴拿下，颈上烙了奴隶印记",
+      "status": "ready",
+      "eventId": "lcq.event.s02_04"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "地牢里阿姬曼引你出逃，出去就撞上戈龙等人设的局",
+      "status": "ready",
+      "eventId": "lcq.event.s02_05"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "识破白湖商馆主人苏妲己的伪装，被囚起来追问霓龙丝",
+      "status": "ready",
+      "eventId": "lcq.event.s02_06"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "凝羽奉苏妲己之命入局，你当面认清她的处境",
+      "status": "ready",
+      "eventId": "lcq.event.ningyu_enters_gamble"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "与苏妲己订下三月南荒之约：采不到霓龙丝就受炮烙",
+      "status": "ready",
+      "eventId": "lcq.event.sudaji_south_pact"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "为救凝羽对赌，苏妲己作弊加速刻香，你签下卖身契入了商馆奴籍",
+      "status": "ready",
+      "eventId": "lcq.event.gamble_bond_signed"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "替苏妲己取物之前谈定六十金铢",
+      "status": "ready",
+      "eventId": "lcq.event.charge_sudaji_fee"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "取得阿姬曼身契当面撕毁",
+      "status": "ready",
+      "eventId": "lcq.event.free_ajiman"
+    },
+    {
+      "stageId": "lcq.stage_02",
+      "reviewSummary": "从白湖商馆的死局里脱身，走出五原商馆",
+      "status": "ready",
+      "eventId": "lcq.event.baihu_shangguan_escape"
+    },
+    {
+      "note": "强制段终点（Helgen 洞口，用户裁定 2026-08-17）。 s02_06 只落到「被囚＋追问霓龙丝」，rail 禁止在那一拍脱身。本拍才是出馆。 地点＝五原商馆。不作废成南荒路上的锚定拍。 作废建议 id：`lcq.event.s03b_baihu_caravan_south`（那是按关改挂的旧写法）。 出馆后不要再加「必须到蛇彝村」主干节点——朝前走就会到，回头也合法。 #6 隔离关 stage_05（原 s05_11 进峒 + s05_13 辨认碧姬）。可达关无同事实 → new。 建议 id 挂 `lcq.stage_05b` 前缀（不放出隔离）。 血脉揭示（用户裁定 2026-08-16）：玩家得先**知道**某人是岳血，要求二对他才可见。 三条候选各有揭示拍：月霜＝王哲托付（`s02_01`，已在主干）；小紫这条＝本拍。 #8 文案压了两拍：临时协定 s05b_09 ＋ 奴隶倒戈 s05b_10；落倒戈拍（含小紫倒戈）。 #9 隔离关 stage_06（s06_03 谢艺托付 + s06_04 碧姬了断）。谢艺托付已由星月湖 并进昭南杀龙 event——复用同一建议 id，不另开。建议挂 `lcq.stage_05b` 后缀。 太泉段：现成剧情整条排进来（用户裁定 2026-08-16）。此前主轴只取了钥匙与居住区两拍， 而这一段在事件层是完整的探索链——迷楼机关→取果→蚁穴→魔墟→古阵，共 8 条现成 event。 ⏳ 六阳开启古阵内的入口：正典压根没有这一拍——原著里程宗扬从未履行此托付 （他去太泉是为赤阳圣果救人；修为上第268章入第五级坐照 qyj 41202、燕歌行入第六级通幽 lyg 8080， 「祭祀故人」仍无正典 event，太泉解锁设计稿 2026-10-27 §5 纠错）。按扩写口径只标待扩，不细化。 小玲儿必须在太泉有一拍（用户裁定 2026-08-16）。正典没把她放进太泉段—— 她在 seq 610 小瀛洲（太泉之前）、788 割喉吕奉先、1012 **被系统认定为超级用户**、1016 被擒， 正好卡在太泉前后两头。故这是扩写，只记要求不设计。她与小紫同属「超级用户」那一类。 #17 文案「武帝像前」偏 s02_09；「安排秘境探索」本体是 s02_08（胶西邸／长秋宫）。 原为 new＋挂隔离关 `lcq.stage_05`，等裁定。2026-08-17 查明**不必新增**： 隔离件 `s05_13`「阁罗召来碧姬」在孤儿救援时已重建为可达的 `geluo_summons_biji`（seq 158）， description 明写「程宗扬首次当面见到谢艺寻找的人」，正是这一拍。 与昭南线双喂：昭南读「进峒进展」，主轴读「岳氏血脉候选的当面辨认」。 超级用户名单（用户提议 2026-08-16，已核实）：seq 1010「程触龙珠触发 AI 冰冰，获超级管理员权限； **众人验证身份**，小紫雪雪被电击」、1012「小玲儿……**被系统认定为超级用户**」。 这一拍是**要求二对玩家可见的机制**——系统当场验明谁在名单上，而不是靠叙述告诉玩家谁算岳血。 ⚠ 实测：全库 396 条 event 搜「超级用户／超级管理员／冰冰／验证身份」**命中 0**， 且 seq 1007–1012 整段六拍事件层空白。正典有、游戏没落地 → `new`，不是待扩。 #18 与汉国二级线同锚 s08（促成登基）；「长秋宫」字面更近 s06，但护住赵氏／登基收束在大典拍。",
+      "stageId": "lyl.taiquan_afterfall",
+      "reviewSummary": "修为到六阳，开启古阵内的入口（未来待扩）",
+      "status": "pending"
+    },
+    {
+      "stageId": "lyl.taiquan_afterfall",
+      "reviewSummary": "小玲儿在太泉的那一拍（未来待扩）",
+      "status": "pending",
+      "bloodlineBranch": "xiaolinger"
+    },
+    {
+      "note": "程赵之子按用户裁定只标待扩（2026-08-16）：正典 seq 1052 有「宣布赵飞燕有孕」， 但把它认成「岳血候选」是我们的推演，不是正典写明的血脉认定——不给建议 id，不设计。",
+      "stageId": "lyg.han_succession",
+      "reviewSummary": "程赵之子这条血脉如何成立（未来待扩）",
+      "status": "pending",
+      "bloodlineBranch": "zhao"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "taiquan_rite",
+      "text": "修为达六阳，前往太泉古阵祭祀故人。",
+      "basis": "lcq.stage_02 axisBeat ＋ MiniMax 全书重抽「修为达六阳后往太泉古阵祭祀故人」。曾推断的\"祭祀大阵＝系统入口\"已被全书扫描削弱（全书无\"祭祀大阵\"字样），故人身份未写明。"
+    },
+    {
+      "id": "bloodline_survivor",
+      "text": "至少保住一名岳血后裔。",
+      "basis": "ENDING-BLUEPRINT §11：接口＝岳血／岳魂，血脉线全员终战有功能位。不要求集齐。"
+    }
+  ]
+}

@@ -14,7 +14,7 @@
   ],
   "总数": {
     "文件数": 65,
-    "行数": 808
+    "行数": 753
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -43,7 +43,7 @@
     "src/modules/scenarioMods/liuchaoEntry.ts": 1,
     "src/modules/scenarioMods/loadRepairs.ts": 18,
     "src/modules/scenarioMods/locationLoot.ts": 2,
-    "src/modules/scenarioMods/mainQuestAxis.ts": 59,
+    "src/modules/scenarioMods/mainQuestAxis.ts": 4,
     "src/modules/scenarioMods/narrativeBoundaries.ts": 18,
     "src/modules/scenarioMods/narrativePerformanceGuard.ts": 1,
     "src/modules/scenarioMods/naturalIntentRouter.ts": 3,
