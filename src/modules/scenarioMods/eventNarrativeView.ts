@@ -6,6 +6,7 @@ import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { evaluateLedgerCondition } from './ledgerConditions';
 import { computePresentNames } from './presence';
 import { CONTENT_PACKS, packText } from '../contentPacks';
+import { stageMetaChapterTitle } from '../contentPacks/stageMeta';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
@@ -190,9 +191,9 @@ export const CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS: ReadonlyArray<readonly [strin
  * 地图入口口信拍（mapEntries[].eventId，如咸阳传闻）被注入到出发关里演；章名取它所属目标关的章，
  * 不随出发关的拍落进「抵达长安灞桥」之类的章（REPORT-8091-da90cb13 P2-2）。
  */
-function mapEntryHookChapterTitle(modId: string | undefined, eventId: string): string | undefined {
-  const entry = (CONTENT_PACKS.mapEntries || []).find(e => e.eventId === eventId && e.stageId !== modId);
-  const stage = entry && CONTENT_PACKS.stages.find(s => s.manifest.id === entry.stageId);
+function mapEntryHookChapterTitle(packs: ChapterTitlePacks, modId: string | undefined, eventId: string): string | undefined {
+  const entry = (packs.mapEntries || []).find(e => e.eventId === eventId && e.stageId !== modId);
+  const stage = entry && packs.stages.find(s => s.manifest.id === entry.stageId);
   return (stage?.scenario.chapters || []).find(c => (c.eventIds || []).includes(eventId))?.title || undefined;
 }
 
@@ -200,14 +201,21 @@ function mapEntryHookChapterTitle(modId: string | undefined, eventId: string): s
  * 内容包关的事件可写 presentation.uiChapterId：界面标那一章的标题，不改挂章（整关停在 rail 章上时，后几幕的拍照幕标）。
  * 只按 modId + eventId 查 catalog，不读存档里烘焙的事件或章对象（旧档烘焙的事件没有这个字段）。
  */
-function packUiChapterTitle(modId: string | undefined, eventId: string): string | undefined {
-  const stage = CONTENT_PACKS.stages.find(s => s.manifest.id === modId);
+function packUiChapterTitle(packs: ChapterTitlePacks, modId: string | undefined, eventId: string): string | undefined {
+  const stage = packs.stages.find(s => s.manifest.id === modId);
   const uiChapterId = stage?.scenario.events?.find(e => e.id === eventId)?.presentation?.uiChapterId;
   return uiChapterId ? stage?.scenario.chapters?.find(c => c.id === uiChapterId)?.title || undefined : undefined;
 }
 
+/** storyChapterTitle 读的 catalog 段（测试与编译器校验可传合成数据）。 */
+export type ChapterTitlePacks = Pick<typeof CONTENT_PACKS, 'mapEntries' | 'stages' | 'stageMeta'>;
+
 export function storyChapterTitle(modId: string | undefined, eventId: string | undefined, fallback: string): string {
-  const hookTitle = eventId ? mapEntryHookChapterTitle(modId, eventId) : undefined;
+  return storyChapterTitleIn(CONTENT_PACKS, modId, eventId, fallback);
+}
+
+export function storyChapterTitleIn(packs: ChapterTitlePacks, modId: string | undefined, eventId: string | undefined, fallback: string): string {
+  const hookTitle = eventId ? mapEntryHookChapterTitle(packs, modId, eventId) : undefined;
   if (hookTitle) return hookTitle;
   if (modId === 'lcq.stage_04' && eventId) return ({
     'lcq.event.s04_02': '第46章·袭击', 'lcq.event.s04_03': '第47章·新娘身份',
@@ -234,8 +242,11 @@ export function storyChapterTitle(modId: string | undefined, eventId: string | u
   if (modId === 'lyg.changgan_begins' && eventId) return LIUXIANPING_EVENT_IDS.has(eventId) ? '留仙坪' : '抵达长安灞桥';
   if (modId === 'lyg.changgan_interlude' && eventId) return CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS.find(([, ids]) => ids.has(eventId))?.[0] ?? fallback;
   // 内容包关：事件写了 presentation.uiChapterId 的标那一章；没写的照下面回退
-  const packTitle = eventId ? packUiChapterTitle(modId, eventId) : undefined;
+  const packTitle = eventId ? packUiChapterTitle(packs, modId, eventId) : undefined;
   if (packTitle) return packTitle;
+  // 内容包 stageMeta（包内关或内置关）：事件的 uiChapterId，其次该关 defaultUiChapterId；排在上面各特判之后（编译期校验不与特判重叠）
+  const metaTitle = eventId ? stageMetaChapterTitle(packs.stageMeta || [], modId, eventId) : undefined;
+  if (metaTitle) return metaTitle;
   if (modId !== 'lcq.stage_02' || !eventId) return fallback;
   if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
   return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';

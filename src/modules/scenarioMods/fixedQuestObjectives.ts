@@ -1,4 +1,5 @@
-import { packText } from '../contentPacks';
+import { CONTENT_PACKS, packText } from '../contentPacks';
+import { stageMetaEvent, type StageMeta } from '../contentPacks/stageMeta';
 import {entityText} from './namedEntities';
 /**
  * 玩家侧固定任务目标覆盖。
@@ -78,10 +79,17 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
 });
 
 export function resolveFixedQuestObjective(event: QuestObjectiveEventLike | null | undefined): string {
+  return resolveFixedQuestObjectiveIn(CONTENT_PACKS.stageMeta || [], event);
+}
+
+/** 顺序：下面三条特判 → 内容包 stageMeta 的 presentation.events[id].objective → 上表 → event.objective（编译期校验 stageMeta 不与特判、上表重复）。 */
+export function resolveFixedQuestObjectiveIn(stageMeta: readonly StageMeta[], event: QuestObjectiveEventLike | null | undefined): string {
   const eventId = String(event?.id || '').trim();
   if (eventId === 'lyl.event.han_shouyang_gaoyanei') return packText('report8091.han.arrived.objective');
   if (eventId === 'lcq.event.s02_04') return '先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人';
   if (eventId === 'lcq.event.huamiao_coop_boundary') return '跟云苍峰谈清进鬼王峒的合作边界';
+  const packObjective = stageMetaEvent(stageMeta, eventId)?.objective;
+  if (packObjective) return packObjective;
   if (eventId && FIXED_QUEST_OBJECTIVE_OVERRIDES[eventId]) {
     return FIXED_QUEST_OBJECTIVE_OVERRIDES[eventId];
   }
