@@ -24530,6 +24530,24 @@
     },
     {
       "kind": "text",
+      "id": "mapEntry.qin.return.chronicle",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "mapEntry.qin.return.label",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
+      "id": "mapEntry.qin.return.narrative",
+      "authoritySource": "src/modules/contentPacks/generated/catalog.json",
+      "aliases": []
+    },
+    {
+      "kind": "text",
       "id": "nanhuang.leopard.encounter",
       "authoritySource": "src/modules/contentPacks/generated/catalog.json",
       "aliases": []

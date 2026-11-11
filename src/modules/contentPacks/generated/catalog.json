@@ -1,5 +1,5 @@
 {
-  "version": "11f2443b94d2011a",
+  "version": "eeaa09274fea8c88",
   "contracts": [
     {
       "meta": {
@@ -10820,7 +10820,10 @@
       "eventId": "liuchao.event.qin_hook_fangshi_rumor",
       "locationId": "liuchao.location.xianyang",
       "readyPath": "compass.qinEntryReady",
-      "previewTextId": "report8091.qin.preview"
+      "previewTextId": "report8091.qin.preview",
+      "returnLabelTextId": "mapEntry.qin.return.label",
+      "returnTextId": "mapEntry.qin.return.narrative",
+      "returnChronicleTextId": "mapEntry.qin.return.chronicle"
     }
   ],
   "heldActions": [
@@ -17766,6 +17769,9 @@
     "report8091.han.arrived.playerLine": "我在舞都安顿下来，与冯源他们会合，打听云如瑶的下落。",
     "report8091.han.arrived.objective": "在舞都与冯源一行会合，打听云如瑶的下落",
     "report8091.qin.preview": "前往秦都咸阳落脚，打听商人求见秦王的门路。",
+    "mapEntry.qin.return.label": "【扩写】了结咸阳之事，返回{stage}",
+    "mapEntry.qin.return.narrative": "【扩写·待剧情策划】咸阳诸事暂告一段落，你动身返回，回到了离开时的地方。",
+    "mapEntry.qin.return.chronicle": "【扩写】了结咸阳之事，返回「{stage}」",
     "report8091.moderation.blocked": "内容审核未通过（LCQ-NET-012）。本回合没有推进，可调整行动后重试；启用自动切换后可使用“API管理”中的备用连接。",
     "report8091.moderation.local": "内容审核未通过（LCQ-NET-012）。本回合将使用本地叙事；启用自动切换后可使用“API管理”中的备用连接。",
     "report8091.moderation.emptyOutput": "AI 返回了空正文，疑似被输出审核拦截（LCQ-NET-019）。本回合没有推进，可调整行动后重试。",

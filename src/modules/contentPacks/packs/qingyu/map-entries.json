@@ -5,6 +5,9 @@
     "eventId": "liuchao.event.qin_hook_fangshi_rumor",
     "locationId": "liuchao.location.xianyang",
     "readyPath": "compass.qinEntryReady",
-    "previewTextId": "report8091.qin.preview"
+    "previewTextId": "report8091.qin.preview",
+    "returnLabelTextId": "mapEntry.qin.return.label",
+    "returnTextId": "mapEntry.qin.return.narrative",
+    "returnChronicleTextId": "mapEntry.qin.return.chronicle"
   }
 ]

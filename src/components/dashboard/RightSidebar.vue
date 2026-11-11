@@ -466,6 +466,7 @@ import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMod
 import { FESTIVAL, festivalView, startHeimohaiFestival } from '@/modules/scenarioMods/heimohaiFestival';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import { stageDepartureMapTarget } from '@/modules/scenarioMods/beatProgress';
+import { getMapEntryReturnOffer } from '@/modules/scenarioMods/mapEntryReturn';
 import { questGuideEnabled, questLogView, questMarkers, questConfig, type QuestEntry, type QuestLine } from '@/modules/scenarioMods/questLog';
 import { crossCountryStoryTravelToast } from '@/modules/scenarioMods/travel/mapTravel';
 import { useRouter } from 'vue-router';
@@ -643,6 +644,8 @@ const questMain = computed(() => {
   const save = gameStateStore.toSaveData();
   const departure = ready && save ? getStageDepartureOffer(save) : null;
   if (departure?.label && !events.length) events.push(departure.label);
+  const mapEntryReturn = save ? getMapEntryReturnOffer(save) : null;
+  if (mapEntryReturn && !events.length) events.push(playerFacingText(mapEntryReturn.label));
   // 线卡是否取代这一行主线指南针，看线卡本身（用户 2026-10-27 09:26 Q1）。
   // showLineCompass 关时 lineCompass 已返回 null。不能看 events.length：锚点为空时启程句是上面才推进去的。
   const compassReplaced = Boolean(lineCompass.value);
