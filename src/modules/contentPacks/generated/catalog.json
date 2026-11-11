@@ -1,5 +1,5 @@
 {
-  "version": "8d9aa2e611643877",
+  "version": "518235dc6c3271a1",
   "contracts": [
     {
       "meta": {
@@ -33094,7 +33094,9 @@
         "昭南"
       ],
       "countsTowardClosedLines": true,
-      "failureClosureEvents": []
+      "failureClosureEvents": [],
+      "judged": true,
+      "failEndsGame": false
     },
     {
       "lineId": "jin",
@@ -33103,7 +33105,9 @@
         "晋国"
       ],
       "countsTowardClosedLines": true,
-      "failureClosureEvents": []
+      "failureClosureEvents": [],
+      "judged": true,
+      "failEndsGame": false
     },
     {
       "lineId": "song",
@@ -33112,7 +33116,9 @@
         "宋国"
       ],
       "countsTowardClosedLines": true,
-      "failureClosureEvents": []
+      "failureClosureEvents": [],
+      "judged": true,
+      "failEndsGame": false
     },
     {
       "lineId": "han",
@@ -33121,7 +33127,9 @@
         "汉国"
       ],
       "countsTowardClosedLines": true,
-      "failureClosureEvents": []
+      "failureClosureEvents": [],
+      "judged": true,
+      "failEndsGame": false
     },
     {
       "lineId": "tang",
@@ -33130,7 +33138,9 @@
         "唐国"
       ],
       "countsTowardClosedLines": true,
-      "failureClosureEvents": []
+      "failureClosureEvents": [],
+      "judged": true,
+      "failEndsGame": false
     },
     {
       "lineId": "qin",
@@ -33138,7 +33148,9 @@
       "regions": [
         "秦国"
       ],
-      "countsTowardClosedLines": false
+      "countsTowardClosedLines": false,
+      "judged": true,
+      "failEndsGame": false
     },
     {
       "lineId": "taiquan",

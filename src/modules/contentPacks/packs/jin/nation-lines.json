@@ -6,6 +6,8 @@
       "晋国"
     ],
     "countsTowardClosedLines": true,
-    "failureClosureEvents": []
+    "failureClosureEvents": [],
+    "judged": true,
+    "failEndsGame": false
   }
 ]

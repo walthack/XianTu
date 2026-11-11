@@ -5,6 +5,8 @@
     "regions": [
       "秦国"
     ],
-    "countsTowardClosedLines": false
+    "countsTowardClosedLines": false,
+    "judged": true,
+    "failEndsGame": false
   }
 ]
