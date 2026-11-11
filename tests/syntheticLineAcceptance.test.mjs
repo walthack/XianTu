@@ -248,7 +248,7 @@ test('4 计入收束：记为已收束后「已收束 N 条线」加一，number
   assert.equal(LO.writeLineOutcome(flags, LINE, 'resolved'), true, '判档线可写收束档');
   assert.deepEqual(flags, { [`line.${LINE}.outcome`]: 'resolved' });
   const PL = await M('modules/scenarioMods/playerLedgerRules.ts');
-  assert.deepEqual(PL.validatePlayerLedgerRules({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [{ eventId: EV('settle'), lineId: LINE, outcome: 'resolved' }] }, { identities: [], lineIds: [...nl.PACK_NATION_LINE_IDS], eventIds: [EV('settle')] }), [], '规则表可给本线写收束档（判档校验读包；线 id、事件 id 的缺省来源是实体索引，不属 G4，这里显式传）');
+  assert.deepEqual(PL.validatePlayerLedgerRules({ version: 1, identityGrants: [], identityRevokes: [], lineOutcomes: [{ eventId: EV('settle'), lineId: LINE, outcome: 'resolved' }] }, { identities: [] }), [], '规则表可给本线写收束档（判档校验读包；线 id、事件 id 的缺省来源已并上包里的线与事件，不必进实体索引）');
   const U = await M('modules/scenarioMods/lineUnlock.ts');
   const onlyMine = { 角色: { 身份: {}, 属性: { 境界: '坐照' }, 位置: {}, 背包: { 金钱: {}, 物品: {} } }, 社交: { 关系: {} }, 系统: { 扩展: {} },
     世界: { 状态: { 剧本模组: { modId: 'lcq.stage_01', flags: { [`line.${LINE}.outcome`]: 'resolved' }, completedEventIds: [], activeEventIds: [], chronicle: [] } } } };
