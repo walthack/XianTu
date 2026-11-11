@@ -619,7 +619,7 @@ import { issueFreeActionJudgement, settleFreeActionTurn } from '@/modules/scenar
 import { settleSelfConsumable, settleButtonUses, renderSelfConsumableBlock, renderSelfConsumableReceipt } from '@/modules/scenarioMods/freeAction/selfConsumable';
 import { freeActionConfig } from '@/modules/scenarioMods/freeAction/config';
 import { finishCombatNarrative } from '@/modules/sceneModule/host/combatWriteback';
-import { gateText, inventoryCounts, renderInventoryBlock, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
+import { gateText, inventoryCounts, renderInventoryBlock, restoreButtonUses, renderReceipts, renderRefusedBlock } from '@/modules/scenarioMods/freeAction/facts';
 import { notePlayerText } from '@/modules/scenarioMods/freeAction/playerTextDebug';
 import { logGateRefusal } from '@/modules/scenarioMods/freeAction/refusalLog';
 import { packText } from '@/modules/contentPacks';
@@ -2535,6 +2535,7 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
 	  if (buttonUsed.length) {
 	    await persistJudgementSave(buttonUseSave);
 	    freeActionBlock += buttonUsed.map(renderSelfConsumableBlock).join('');
+	    restoreButtonUses(inventoryBefore, buttonUsed);
 	  }
 	  // 叙述包带上背包的实际账（增减 + 现有），叙事才不会把没发生的交付写成已成。
 	  if (freeActionBlock) freeActionBlock += renderInventoryBlock(inventoryBefore, gameStateStore.toSaveData());
@@ -3136,6 +3137,11 @@ const sendMessage = async (execution?: { skipPreflight?: boolean; resolution?: J
       inputRef.value?.focus();
     }
   }
+  } catch (error) { // lcq-allow: 内层 try 之外抛出的异常（本地预结算失败等）照旧上抛，由全局兜底记码；这里只解开「AI 处理中」，否则输入框锁到刷新为止
+    uiStore.setAIProcessing(false);
+    persistAIProcessingState();
+    toast.error(`本回合未能发送：${error instanceof Error ? error.message : String(error)}`);
+    throw error;
   } finally { sealDiagnosticTurn(diagnosticTurnId); signalTurnComplete(); }
 };
 
