@@ -175,8 +175,9 @@ export const identityKinds = (): readonly string[] => GAME_NUMBERS.story.identit
 export function validatePlayerLedgerRules(rules: PlayerLedgerRules, refs: PlayerLedgerRefs = {}): string[] {
   const errors: string[] = [];
   const defs = refs.identities ?? playerIdentityDefs();
-  const eventIds = new Set(refs.eventIds ?? indexIds('event'));
-  const lineIds = new Set(refs.lineIds ?? indexIds('line'));
+  // 缺省来源并上内容包：事件用 knownEventIds()（实体索引 ∪ 包关与 overlay 的事件，G1），线并上包注册的国家线；新线写规则不必先进实体索引
+  const eventIds = new Set(refs.eventIds ?? knownEventIds());
+  const lineIds = new Set(refs.lineIds ?? [...indexIds('line'), ...NATION_LINE_IDS]);
   const factionIds = new Set(refs.factionIds ?? indexIds('faction'));
   const tiers = refs.tiers ?? GAME_NUMBERS.story.lineOutcome.tiers;
   const judgedLines = refs.judgedLines ?? JUDGED_LINE_IDS;
