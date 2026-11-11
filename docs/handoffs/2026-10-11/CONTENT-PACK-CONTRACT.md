@@ -302,6 +302,24 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - 读源码的两处改读合并值：`tests/criticalEventCoverage.test.mjs` 的人物层认领改读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`（认领集合前后都是 120 个 id，欠账不变）；`scripts/quest-report.mjs` 的人物任务与二级线改用 jiti 读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`／`SECONDARY_LINES`（主轴仍正则读源码）。
 - catalog 只变 `characterBeats` 段与 version；棘轮 `characterQuests.ts` 116 → 0（总数 1135 → 1019，文件 69 → 68）。
 
+## 2026-11-11 国家线注册与地区映射进包（秦线 PR C）
+
+**manifest `nationLines`**：JSON 文件路径数组（同 `mapEntries`／`stageMeta`），每个文件是数组：
+
+```json
+[{"lineId": "<国家线 id>", "order": <正整数>, "regions": ["<地区名，mod-kit/entity-ledger/overrides.json stageRegions 的值>"]}]
+```
+
+只认这三个字段（段名按复核 M7 不叫 `lines`，那是人物线文件与下一步表）。七条国家线各登记在自己的线包里：`nanhuang`→`packs/zhaonan`、`jin`→`jin`、`song`→`song`、`han`→`han`、`tang`→`tang`、`qin`→`qin`、`taiquan`→`taiquan`，文件都叫 `nation-lines.json`。塞外不是国家线，`packs/saiwai` 不登记。
+
+- **编译期校验**：`lineId` 非空、全部包里不重复（归属种类 `nationLine`，跨包报 `nationLine id X defined by both A and B`，同包报 `nation line missing/duplicate id`）；`order` 是正整数、全部包里不重复；`regions` 非空、元素非空且不重复，同一地区只能登记到一条线（`region R also registered to …`）。等价于原 numbers 里 `story.lineCompass.regionLines` 的校验（值须为国家线 id——现在结构上必然成立），并补上 lineId／地区不重复。
+- **catalog**：新顶层段 `nationLines`（按 `order` 排好，条目原样），放在末尾；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。
+- **顺序**：显式由 `order` 决定，与包的拓扑序、目录名无关。下一步表 `lineCompass.lines` 合并后按这次编译出的 `nationLines` 顺序稳定排序（原按 `numbersRegistry.ts` 的常量排）。现值 1–7 = 南荒、晋、宋、汉、唐、秦、太泉，与原常量逐项相同。
+- **运行时**：`src/modules/contentPacks/nationLines.ts` 只 import `generated/catalog.json`，导出 `NATION_LINES`、`PACK_NATION_LINE_IDS`、`NATION_LINE_OF_REGION`。`contentPacks/index.ts` 转导出这三个名字；`numbersRegistry.ts` 的 `NATION_LINE_IDS` 导出名不变，改为从 `../contentPacks` 取 `PACK_NATION_LINE_IDS`（场面模块只许引用 `../contentPacks`，`tests/sceneModuleIsolation.test.mjs`）；`lineCompass.ts` 的 `lineOfStage` 改查 `NATION_LINE_OF_REGION`。numbers 里删掉 `story.lineCompass.regionLines` 字段与它的必填项／校验。
+- **构建顺序（M2）**：编译器不再 import `numbersRegistry.ts` 排序；`validateLineCompassTable` 加第 4 个参数 `nationLineIds`（缺省 `NATION_LINE_IDS`），`validateWithTs` 传这次编译出的 `catalog.nationLines` 的 id，不用磁盘上的旧 catalog。因为 `numbers.ts` → `numbersRegistry.ts` 现在会读 catalog.json，`buildCatalog` 的逐拍演出关判定不再经 `stepScene.ts`（它 import `numbers.ts`），改读 `travel/defs/qingyuNanhuang.ts` 的 `NANHUANG_STEP_SCENE_STAGE_IDS`，按关 id 前缀判定（同 `isStepSceneStage`）。删掉 catalog.json 后单次重建仍可用，产物逐字节相同。
+- **加一条国家线**只改包数据（`tests/nationLinesPack.test.mjs` 用合成线 `test.nation` 在仓库副本里单次重建验证）。但 `numbersRegistry.ts` 的秦入口规则（阶段 2 才搬）要求「国家线去掉秦、太泉」恰为 numbers 的 `story.lineCompass.anyLineClosed.lineIds`，且每条在 `story.lineOutcome.failureClosureEvents` 有键：新线若不是秦／太泉，须同时补这两项 numbers 配置，否则数值冷启动校验（LCQ-NUM-007）失败。
+- 测试：`tests/lineCompass.test.mjs` 的地区映射断言改读合并结果，「塞外登记成国家线」的负例移到 `tests/nationLinesPack.test.mjs`（下一步表用未登记的 `saiwai` 报 `lineId must be one of …`；`塞外` 登记到两条线报错）。
+
 ## 2026-11-11 角色姿态档案与好感上限进人物包（B4）
 
 人物包 `packs/characters/`（`qingyu.characters`，`dependsOn` 仍只有 `qingyu.core`）manifest 加 `characterProfiles: ["profiles.json"]`。`stanceProfiles.ts` 的 `TS_STANCE_PROFILES`（49 条）与 `affinityCaps.ts` 的 `TS_AFFINITY_CAPS`（13 条）原样搬入 `profiles.json` 的 `stance`／`affinityCaps`，两张 TS 表为空数组；`STANCE_PROFILES`／`AFFINITY_CAPS`／`formatStanceProfile`／`hasStanceProfile`／`affinityCapFor`／`formatAffinityCap`／`packEntityNames`／`mergeStanceProfiles`／`mergeAffinityCaps` 导出名与行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
@@ -326,3 +344,13 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - catalog：`stageMeta` 新增 41 个事件／关级字段（原有字段字节不变、关顺序不变），`texts` 新增 36 键（原键不变），其余段不变；version `ed494b3d542c4086` → `ec3948d6059d3eb5`。
 - 棘轮：`playerActionPresentation.ts` 31 → 0、`fixedQuestObjectives.ts` 5 → 0、`branchDecision.ts` 6 → 1、`eventNarrativeView.ts` 33 → 6（剩主角 id 回退 2 行、汉／唐从 stageMeta 派生的 4 个导出），总数 835 → 767、文件数 67 → 65，前缀模板行不变（1）。
 - 测试：四个 `*PackMigration` 的「未搬残留」改为残留 0（塞外、昭南另把 `playerActionPresentation.ts`／`branchDecision.ts` 纳入检查，昭南断言 `branchDecision.ts` 只剩 shanghou）；`contentPackLineFormats` 的目标「与 TS 重复」反例改用合成的临时 TS 目标（`withTsObjective`，临时替换模块导出 `resolveFixedQuestObjectiveIn`，覆盖表是冻结对象加不进条目），「只对部分拍特判」反例改用 `WHOLE_STAGE` 第一拍的合成临时特判，读取方优先级一项里依赖已删特判的两半退化为空；`report75ea` 改读合并后的 `LOCKED_DECISIONS`（原按源码正则读 TS 表）；`fixedQuestObjectives` 的覆盖事件计数 61 → 64（三条原代码特判原先不在计数集合里）。护栏测试与 `tests/fixtures/` 一字未改、原样通过。
+
+## 2026-11-11 IF 分歧表进人物包（B5）
+
+人物包 `packs/characters/`（`qingyu.characters`，`dependsOn` 仍只有 `qingyu.core`）manifest 加 `ifBranches: ["if-branches.json"]`。`divergenceLedger.ts` 的 `TS_AUTO_BRANCH_RULES`（5 条，其中 4 条带 `prompt`，`lcq.if_xieyi_longrest` 没有）、`TS_AUTO_CONSEQUENCE_RULES`（1 条，带 `prompt`）与 `TS_DIVERGENCE_PROMPTS`（1 条：`offscreen.lcq.xingyuehu_war`）原样搬入 `if-branches.json` 的 `branches`／`consequences`／`prompts`，三张 TS 表为空；`resolveReconcileBranchId`／`recordReconcileDivergences`／`recordOffscreenDivergence`／`formatDivergencePrompt`／`acceptedStatusPattern`／`mergeIfBranches` 导出名与行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
+- 写法照 F0a：`acceptedStatuses` 写字符串数组（`["alive","longrest","incapacitated"]`、`["dead"]`、`["missing"]`），运行时编译出的正则与原表逐字相同；条目键序与原表相同。文案（含人物裁定 #92／#93／#97／#114 的约束句）由脚本从原 TS 模块直接转写，逐字相同。
+- 注释：分支表头注释（R2-0V registry 说明 + 来源 `character-canon/qingyu.if-branches.json` + CANON-DECISIONS #90）进第一条分支的 `note`；后果表上方注释进那条后果的 `note`；`prompts` 是「id → 文案」的对象，条目不能带 `note`，它上方那句注释进文件顶层 `note`。编译时剥掉。
+- 顺序：TS 表为空，合并后的分支／后果顺序就是 JSON 顺序（`find` 取第一条命中，s06_03 的分支与失踪后果互斥，顺序不影响结果）；`formatDivergencePrompt` 的查找顺序（分支 → 分歧记录 id → 后果；后果匹配状态不 trim、落旗标的匹配 trim）是代码，没动。
+- 留在 TS 的只有代码：`characterFlagSlug`、落旗标逻辑、查找函数本身；`offscreen.lcq.xingyuehu_war` 这个 id 仍由冻结文件 `runtime.ts` 生成，只有它的提示在包里。
+- `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的分歧一段改为取人物包 `if-branches.json` 原样转写、对照值改为真实 catalog 段的合并（TS 表搬空后原来的转写取到 0 条）。
+- catalog 只变 `ifBranches` 段与 version（`a10abf5c8c597660` → `e3952d7c9800d358`）；棘轮 `divergenceLedger.ts` 17 → 0（总数 958 → 941，文件 66 → 65）。

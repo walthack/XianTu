@@ -9,5 +9,8 @@
   ],
   "characterProfiles": [
     "profiles.json"
+  ],
+  "ifBranches": [
+    "if-branches.json"
   ]
 }

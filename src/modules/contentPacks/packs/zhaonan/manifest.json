@@ -8,6 +8,9 @@
     "texts.json"
   ],
   "lineCompass": "line-compass.json",
+  "nationLines": [
+    "nation-lines.json"
+  ],
   "rails": [
     "rails.generated.json"
   ],

@@ -7,7 +7,7 @@ import { qinClosedByFestival, FESTIVAL } from './heimohaiFestival';
  * - 已知＝锚已满足（anchorLine＝旧二级线 id，锚读编年史 knownSecondaryLines）或 knownWhen 全满足；未知的线不出现，也不进折叠行。
  * - 收束＝唯一读取点 lineClosed（lineOutcomes.ts）：line.<id>.outcome 有档按档，规则表还没有本线规则时退回读 closedWhen（按编年史）；收束的线卡片和折叠行都撤（Q6）。
  * - 整线解锁（story.lineUnlock，太泉）：没解锁不当当前线，只在折叠行灰显，标题与缺项句复用 secondaryLineEntryView 的锁定分支。
- * - 当前线（Q7）：焦点事件所在国家线（下一步表里写了这个 eventId 的线，否则按焦点事件所在关的地区 story.lineCompass.regionLines）；
+ * - 当前线（Q7）：焦点事件所在国家线（下一步表里写了这个 eventId 的线，否则按焦点事件所在关的地区，地区映射在各线包 nationLines）；
  *   不在任何线上、或那条线未知／已收束／没解锁，取编年史里最近推进过、未收束的线；都没有返回 null，右栏退回原主线指南针那一句（Q1）。
  * - 下一步：按顺序取第一条非占位（draft）、非待建（pending）、when 全满足、未过（until 全满足即过；没写 until 时 eventId 已完成即过）的一步。
  *   分路线（03／03b、05／04b 同序号拍、06／05b、lin_an_black_sea／lin_an_bridge、luoyang_coup／han_palace_endgame、shixiang_ambush／changgan_interlude，
@@ -22,6 +22,7 @@ import { qinClosedByFestival, FESTIVAL } from './heimohaiFestival';
  * 表在内容包 line-compass.json（schema 见 LineCompassTable），文案在 texts，编译期由 validator.validateLineCompassTable 校验。
  */
 import { CONTENT_PACKS } from '../contentPacks';
+import { NATION_LINE_OF_REGION } from '../contentPacks/nationLines';
 import { GAME_NUMBERS } from '../sceneModule/numbers';
 import { logEventOnce } from '../diagnostics/log';
 import { debugEnabled, debugLog } from '../diagnostics/debugLog';
@@ -176,11 +177,11 @@ function debugOnChange(msg: string, data: () => unknown): void {
 }
 const loggedNoPlace = new Set<string>();
 
-/** 关卡 → 国家线（story.lineCompass.regionLines，按 stageRegions 的地区名）；塞外等不登记的地区为 undefined。 */
+/** 关卡 → 国家线（各线包 nationLines 的 regions，按 stageRegions 的地区名）；塞外等不登记的地区为 undefined。 */
 export function lineOfStage(stageId: string | undefined): string | undefined {
   if (!stageId) return undefined;
   const region = STAGE_REGION[stageId];
-  return region ? (GAME_NUMBERS.story.lineCompass.regionLines as Record<string, string>)[region] : undefined;
+  return region ? NATION_LINE_OF_REGION[region] : undefined;
 }
 
 /** 事件 → 国家线：下一步表里写了这个 eventId 的线优先，否则按所在关的地区。 */
