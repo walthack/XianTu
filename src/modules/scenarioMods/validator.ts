@@ -58,7 +58,8 @@ function validateScenarioPath(path: unknown): boolean {
   return parts.every(part => part.length > 0 && !FORBIDDEN_PATH_SEGMENTS.has(part));
 }
 
-export function validateScenarioMod(input: unknown): ScenarioModValidationResult {
+/** knownEventIds：done.* 引用别关事件时的已知事件表，缺省为运行时 knownEventIds()；编译器传本次编译出的事件表（G1，M2）。 */
+export function validateScenarioMod(input: unknown, options: { knownEventIds?: ReadonlySet<string> } = {}): ScenarioModValidationResult {
   const issues: ScenarioModValidationIssue[] = [];
   const add = (path: string, code: string, message: string) => issues.push({ path, code, message });
 
@@ -1277,7 +1278,7 @@ export function validateScenarioMod(input: unknown): ScenarioModValidationResult
       checkRefs(entity.eventIds, eventIds, `${path}.eventIds`, 'event', add);
     });
   }
-  checkLedgerRefs(ledgerRefs, eventIds, characterIds, itemIds, add);
+  checkLedgerRefs(ledgerRefs, eventIds, characterIds, itemIds, add, options.knownEventIds);
 
   if (isRecord(rules) && Array.isArray(rules.contentAccess)) {
     const contentIds = new Set([...skillIds, ...techniqueIds, ...itemIds]);
@@ -2384,11 +2385,11 @@ function validateLedgerCondition(condition: ScenarioCondition, itemPath: string,
 }
 
 /**
- * 账本路径引用的 id 须存在：事件＝本 mod ∪ 实体索引；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引；
+ * 账本路径引用的 id 须存在：事件＝本 mod ∪ 已知事件表（缺省 knownEventIds()＝实体索引 ∪ 内容包关事件，编译器传本次编译出的事件表）；人物＝本 mod ∪ 名册；身份＝identities.json；线＝实体索引；
  * 道具＝规则表 itemGroups 的组 id ∪ 本 mod 物品 ∪ 实体索引 kind=item；在队人物＝实体索引 kind=character（在队账规则只收索引人物）；期限＝规则表 progressDeadlines 的 id；
  * 整线解锁＝story.lineUnlock 的线键。
  */
-function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, characterIds: Set<string>, itemIds: Set<string>, add: AddIssue): void {
+function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, characterIds: Set<string>, itemIds: Set<string>, add: AddIssue, knownEvents: ReadonlySet<string> = knownEventIds()): void {
   if (!refs.length) return;
   const identityIds = new Set(playerIdentityDefs().map(def => def.id));
   const lineIds = indexIds('line');
@@ -2399,7 +2400,7 @@ function checkLedgerRefs(refs: LedgerConditionRef[], eventIds: Set<string>, char
   const deadlineIds = new Set(refs.some(ref => ref.parsed.kind === 'deadline') ? (playerLedgerRules().progressDeadlines ?? []).map(def => def.id) : []);
   for (const { parsed, path } of refs) {
     const { kind, id } = parsed;
-    if (kind === 'done' && !eventIds.has(id) && !knownEventIds().has(id)) add(path, 'missing_reference', `Unknown event id "${id}".`);
+    if (kind === 'done' && !eventIds.has(id) && !knownEvents.has(id)) add(path, 'missing_reference', `Unknown event id "${id}".`);
     if (kind === 'identity' && !identityIds.has(id)) add(path, 'missing_reference', `Unknown identity id "${id}".`);
     if (kind === 'line' && !lineIds.has(id)) add(path, 'missing_reference', `Unknown line id "${id}".`);
     if (kind === 'acq' && !characterIds.has(id) && getRegistryNamesById(id).length === 0) add(path, 'missing_reference', `Unknown character id "${id}".`);
@@ -2485,8 +2486,9 @@ const LINE_COMPASS_PLACE_SLOT = '{地点}';
  * - travelHint 步（fix5939-2）：只能是 true，须同时有 eventId 与 hintKey，传了 places 时文案须含该事件地点名，否则 invalid_travel_hint；
  * - draft 步的文案（若有）须以【待剧情策划】开头，运行时一律跳过。
  * - lineId 须在 nationLineIds 里（缺省 NATION_LINE_IDS；内容包编译时传这次编译出的 catalog.nationLines，不用磁盘上的旧 catalog，秦线 PR C／M2）。
+ * - step.eventId 与 done.* 查 knownEvents（缺省运行时 knownEventIds()；内容包编译时传这次编译出的事件表，新线包关的事件单次编译即可通过，G1／M2）。
  */
-export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>, places?: Readonly<Record<string, string>>, nationLineIds: readonly string[] = NATION_LINE_IDS): ScenarioModValidationIssue[] {
+export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>, places?: Readonly<Record<string, string>>, nationLineIds: readonly string[] = NATION_LINE_IDS, knownEvents: ReadonlySet<string> = knownEventIds()): ScenarioModValidationIssue[] {
   const issues: ScenarioModValidationIssue[] = [];
   const add: AddIssue = (path, code, message) => issues.push({ path, code, message });
   if (!isRecord(table) || table.version !== 1 || !Array.isArray(table.lines)) {
@@ -2570,7 +2572,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
       optionalString(step.note, `${sp}.note`, add);
       if (!pending && step.eventId === undefined && step.hintKey === undefined) add(sp, 'required_value', 'A step needs eventId or hintKey.');
       if (step.eventId !== undefined) {
-        if (typeof step.eventId !== 'string' || !(pending ? /^[a-z]+\.event\.[a-z0-9_]+$/.test(step.eventId) : knownEventIds().has(step.eventId))) add(`${sp}.eventId`, 'missing_reference', `Unknown event id "${String(step.eventId)}".`);
+        if (typeof step.eventId !== 'string' || !(pending ? /^[a-z]+\.event\.[a-z0-9_]+$/.test(step.eventId) : knownEvents.has(step.eventId))) add(`${sp}.eventId`, 'missing_reference', `Unknown event id "${String(step.eventId)}".`);
       }
       conditions(step.when, `${sp}.when`, pending ? pendingLedger : ledger);
       conditions(step.until, `${sp}.until`, pending ? pendingLedger : ledger);
@@ -2605,12 +2607,12 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
       checkHintText(value, `${sp}.hintKey`);
     });
   });
-  checkLedgerRefs(ledger.refs, new Set(), new Set(), new Set(), add);
+  checkLedgerRefs(ledger.refs, new Set(), new Set(), new Set(), add, knownEvents);
   const pendingRefs = pendingLedger.refs.filter(ref => {
-    if (ref.parsed.kind !== 'done' || knownEventIds().has(ref.parsed.id)) return true;
+    if (ref.parsed.kind !== 'done' || knownEvents.has(ref.parsed.id)) return true;
     if (!/^[a-z]+\.event\.[a-z0-9_]+$/.test(ref.parsed.id)) add(ref.path, 'missing_reference', `Pending done.* must still look like an event id, got "${ref.parsed.id}".`);
     return false;
   });
-  checkLedgerRefs(pendingRefs, new Set(), new Set(), new Set(), add);
+  checkLedgerRefs(pendingRefs, new Set(), new Set(), new Set(), add, knownEvents);
   return issues;
 }

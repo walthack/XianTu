@@ -177,7 +177,7 @@ function debugOnChange(msg: string, data: () => unknown): void {
 }
 const loggedNoPlace = new Set<string>();
 
-/** 关卡 → 国家线（各线包 nationLines 的 regions，按 stageRegions 的地区名）；塞外等不登记的地区为 undefined。 */
+/** 关卡 → 国家线（各线包 nationLines 的 regions，按 STAGE_REGION＝overrides stageRegions ∪ 包 stageMeta region 的地区名）；塞外等不登记的地区为 undefined。 */
 export function lineOfStage(stageId: string | undefined): string | undefined {
   if (!stageId) return undefined;
   const region = STAGE_REGION[stageId];

@@ -6,10 +6,11 @@
 //
 // 合成线用到的线级格式：manifest（dependsOn）、stages（包内关，3 拍 rail + 1 拍加拍 + 失败收束拍 + 口信拍）、texts、nationLines（注册、
 // 地区、计入收束、失败收束事件）、rails、railExtraBeats、stageMeta（称号、默认章、章配乐、事件章名／配乐／目标）、secondaryLines（after）、
-// lineCompass（含 closedWhen）、mapEntries、mapRoutes、compassConditions、lineCriticalEvents、contractRevisions、worldEvents（closes 指向本线）。
+// lineCompass（含 closedWhen）、mapEntries、mapRoutes、compassConditions、lineCriticalEvents、contractRevisions、worldEvents（closes 指向本线）、
+// stageMeta.region（关 → 地区，G2）。G1（单次编译、跨关 done.*）与 G2 已修，原现状钉子改成了正向断言（用例 1、2、7），负例在用例 8。
 // 不适用、只钉现状的：endings（结局实体在 mod-kit）、persistentEntries（只有 algae／rejoin 两种、各全局一条）、openWorldSlices（只有 TS 写死的 key 有读取方）。
 //
-// 「现状钉子」：标【缺口】的断言钉的是「目前加一条线还得改非包文件」的现状；缺口修掉后这些断言会变红，届时把它们改成正向断言。
+// 「现状钉子」：标【缺口】的断言钉的是「目前加一条线还得改非包文件」的现状（G4–G7）；缺口修掉后这些断言会变红，届时把它们改成正向断言。
 // 缺口清单与建议修法见 accept-summary.md（结构验收报告）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -74,8 +75,8 @@ function syntheticStage(template) {
 }
 const contract = e => ({ eventId: e, mustReach: `合成：${e} 必达。`, completionEvidence: [], forbiddenInCanon: ['合成：不得跳拍'], allowedElaboration: '合成：可补细节。' });
 
-/** 合成线包的全部文件（文件名 → 内容）。lineCompassEvents=false 时下一步表不写 eventId／closedWhen（两段编译的第一段，见用例 1）。 */
-function syntheticPackFiles(template, { lineCompassEvents = true } = {}) {
+/** 合成线包的全部文件（文件名 → 内容）。 */
+function syntheticPackFiles(template) {
   const steps = [{ id: 'zz_arrive', eventId: EV('arrive'), hintKey: 'lineCompass.zz_test.step.arrive' }, { id: 'zz_settle', eventId: EV('settle'), hintKey: 'lineCompass.zz_test.step.settle' }];
   return {
     'manifest.json': { schemaVersion: 1, id: PACK_ID, dependsOn: ['qingyu.core'], stages: ['stage-zztest.json'], texts: ['texts.json'], lineCompass: 'line-compass.json',
@@ -91,8 +92,7 @@ function syntheticPackFiles(template, { lineCompassEvents = true } = {}) {
     },
     'nation-lines.json': [{ lineId: LINE, order: 8, regions: [REGION], countsTowardClosedLines: true, failureClosureEvents: [EV('fail')] }],
     'line-compass.json': { version: 1, lines: [{ lineId: LINE, nameKey: 'lineCompass.zz_test.name', anchorLine: LINE,
-      ...(lineCompassEvents ? { closedWhen: [{ path: `done.${EV('settle')}`, operator: 'eq', value: true }] } : {}),
-      steps: lineCompassEvents ? steps : steps.map(({ eventId, ...s }) => s) }] },
+      closedWhen: [{ path: `done.${EV('settle')}`, operator: 'eq', value: true }], steps }] },
     'map-entries.json': [{ id: LINE, stageId: STAGE, eventId: EV('arrive'), locationId: LOC, readyPath: 'compass.zzTestReady', previewTextId: 'mapEntry.zz_test.preview',
       returnLabelTextId: 'mapEntry.zz_test.return.label', returnTextId: 'mapEntry.zz_test.return.narrative', returnChronicleTextId: 'mapEntry.zz_test.return.chronicle' }],
     'map-routes.json': [{ id: 'zztest.route.yong_xianyang', fromId: LOC, toId: 'liuchao.location.xianyang', dayCost: 2, unlockWhen: [EV('arrive')] }],
@@ -100,7 +100,7 @@ function syntheticPackFiles(template, { lineCompassEvents = true } = {}) {
     'rails.json': [{ note: '合成 rail：三拍', id: 'zztest.rail', modId: STAGE, chapterId: CH1, orderedEventIds: RAIL_BASE,
       contracts: RAIL_BASE.map(e => e === EV('arrive') ? { ...contract(e), mustReach: { $text: 'zztest.rail.arrive.mustReach' } } : contract(e)) }],
     'rail-extra-beats.json': [{ note: '合成加拍', modId: STAGE, afterEventId: EV('inquire'), eventIds: [EXTRA], contracts: [contract(EXTRA)] }],
-    'stage-meta.json': [{ stageId: STAGE, milestoneReward: { titles: ['测试城客'], note: '合成称号' },
+    'stage-meta.json': [{ stageId: STAGE, region: REGION, milestoneReward: { titles: ['测试城客'], note: '合成称号' },
       presentation: { defaultUiChapterId: CH1, chapters: { [CH1]: { mood: 'court' } }, events: { [EV('settle')]: { uiChapterId: CH2, mood: 'battle', objective: '合成：stageMeta 目标覆盖' } } } }],
     'secondary-lines.json': [{ after: 'tang', id: LINE, name: '测试国', kind: 'nation', anchorEventIds: [EV('arrive')], anchorLocationIds: [LOC], entryHint: '合成入口提示。', basis: '合成验收线。',
       nodes: [{ reviewSummary: '抵达测试城', status: 'ready', stageId: STAGE, eventId: EV('arrive') }, { reviewSummary: '了结此事', status: 'ready', stageId: STAGE, eventId: EV('settle') },
@@ -130,20 +130,10 @@ const node = (...args) => spawnSync(process.execPath, args, { cwd: copy, encodin
 const errText = r => `${r.stdout}\n${r.stderr}`.split('\n').filter(l => !/^\s+at /.test(l)).join('\n');
 let built = false;
 
-test('1 只加数据：线包目录 + 两段编译 + 重建实体索引后，content-packs 编译与 --check 全绿', async () => {
-  // 【缺口 G1】一次写全、单次编译不行：下一步表校验（validator.validateLineCompassTable → knownEventIds）只认 mod-kit 实体索引里的事件，
-  // 而索引由 build-entity-index.mjs 从 catalog 派生——新包关的事件第一次编译时还不在索引里。编译失败会恢复旧 catalog。
+test('1 只加数据：线包目录一次写全，单次编译与 --check 全绿（不重建实体索引）', async () => {
+  // G1 已修：下一步表 eventId／closedWhen 与 done.* 的已知事件由编译器传这次编译出的事件表，新包关的事件第一次编译就认得
   await writePack(PACKS, syntheticPackFiles(TEMPLATE));
-  const once = node('scripts/content-packs.mjs');
-  assert.notEqual(once.status, 0, '单次编译居然通过了：G1 已修，把这一段改成单次编译');
-  assert.match(errText(once), /invalid lineCompass: .*Unknown event id \\"zztest\.event\.arrive\\"/);
-  assert.equal(await sha(CATALOG), REPO_CATALOG_SHA, '失败的编译应恢复原 catalog');
-  // 现行绕法：第一段下一步表不写 eventId／closedWhen → 编译 → 重建实体索引（写 mod-kit 生成物）→ 第二段写全 → 编译 → --check
-  await writePack(PACKS, syntheticPackFiles(TEMPLATE, { lineCompassEvents: false }));
   let r = node('scripts/content-packs.mjs'); assert.equal(r.status, 0, errText(r));
-  r = node('scripts/build-entity-index.mjs'); assert.equal(r.status, 0, errText(r));
-  await writePack(PACKS, syntheticPackFiles(TEMPLATE));
-  r = node('scripts/content-packs.mjs'); assert.equal(r.status, 0, errText(r));
   r = node('scripts/content-packs.mjs', '--check'); assert.equal(r.status, 0, errText(r));
   // 加的数据文件清单（全部在线包目录里）
   assert.deepEqual((await readdir(join(PACKS, PACK_DIR))).sort(), Object.keys(syntheticPackFiles(TEMPLATE)).sort());
@@ -154,7 +144,7 @@ test('1 只加数据：线包目录 + 两段编译 + 重建实体索引后，con
   built = true;
 });
 
-test('2 副本里被改动的非包文件只有两个生成物：catalog.json 与 mod-kit 实体索引（后者只多了合成线的行）', async () => {
+test('2 副本里被改动的非包文件只有生成物 catalog.json（mod-kit 实体索引不动）', async () => {
   assert.ok(built);
   const changed = [];
   const walk = async rel => {
@@ -169,21 +159,11 @@ test('2 副本里被改动的非包文件只有两个生成物：catalog.json �
   for (const x of ['src', 'mod-kit', 'scripts']) await walk(x);
   const packFiles = changed.filter(p => p.startsWith(`src/modules/contentPacks/packs/${PACK_DIR}/`));
   assert.equal(packFiles.length, Object.keys(syntheticPackFiles(TEMPLATE)).length);
-  assert.deepEqual(changed.filter(p => !packFiles.includes(p)).sort(), [INDEX, 'src/modules/contentPacks/generated/catalog.json'].sort());
+  assert.deepEqual(changed.filter(p => !packFiles.includes(p)), ['src/modules/contentPacks/generated/catalog.json']);
   // 副本 src 的 .ts/.vue 与仓库逐字节相同（上面的遍历已覆盖；这里单独点名，免得以后放宽 changed 的口径时漏掉）
   assert.ok(!changed.some(p => /\.(ts|vue)$/.test(p)));
-  // 【缺口 G1】实体索引是 mod-kit 下的生成物，content-packs 不生成它；新增行全是合成线的
-  const key = e => `${e.kind}:${e.id}`;
-  const before = new Map((await read(join(root, INDEX))).entries.map(e => [key(e), JSON.stringify(e)]));
-  const after = new Map((await read(join(copy, INDEX))).entries.map(e => [key(e), JSON.stringify(e)]));
-  assert.deepEqual([...before.keys()].filter(k => !after.has(k) || after.get(k) !== before.get(k)), [], '索引里原有行不删不改');
-  const added = [...after.keys()].filter(k => !before.has(k));
-  const ours = added.filter(k => /zz_?test|zzTest/.test(k));
-  assert.deepEqual(ours.filter(k => k.startsWith('event:')).sort(), [EXTRA, ...RAIL_BASE, EV('fail'), EV('rumor')].map(e => `event:${e}`).sort());
-  assert.ok(ours.includes(`line:${LINE}`) && ours.includes(`chapter:${CH1}`));
-  // 其余新增行是仓库索引本身就落后于 catalog 的正文键（与本线无关；canon:build 会重建）
-  const repoTexts = (await read(REPO_CATALOG)).texts;
-  assert.ok(added.filter(k => !ours.includes(k)).every(k => k.startsWith('text:') && k.slice(5) in repoTexts));
+  // G1 已修：mod-kit 实体索引逐字节未变，不必重建
+  assert.equal(await sha(join(copy, INDEX)), await sha(join(root, INDEX)));
 });
 
 // ── 运行时：从副本加载 TS（catalog 已是含合成线的那份）────────────────────────────────────────────
@@ -327,21 +307,24 @@ test('6 地图入口：正式 stage_01 新档在派生条件成立后可经地�
   assert.equal(r.saveData.系统.扩展.mapEntryResume.entryId, LINE);
 });
 
-test('7 现状钉子：加线仍要改的非包文件（缺口修掉后这些断言变红，改成正向断言）', async () => {
+test('7 G1、G2 正向：跨关读本线 done.*、关→地区归本线；其余缺口的现状钉子（G5–G7，修掉后变红，改成正向断言）', async () => {
   assert.ok(built);
   const LC = await M('modules/scenarioMods/lineCompass.ts');
   const RL = await M('modules/scenarioMods/reputationLedger.ts');
-  // 【缺口 G2】关 → 地区在 mod-kit/entity-ledger/overrides.json 的 stageRegions，包不能声明：新关没有地区，lineOfStage 认不出本线
-  assert.equal(RL.STAGE_REGION[STAGE], undefined);
-  assert.equal(LC.lineOfStage(STAGE), undefined);
-  assert.equal(LC.lineOfEvent(EV('inquire'), STAGE), undefined, '下一步表没写的拍不归任何线');
-  // 【缺口 G1·运行时】跨关 done.*（编年史）只认实体索引里的事件：索引没重建时，离开合成关后本线事件不算完成
-  const stale = createJiti(import.meta.url, { interopDefault: true, moduleCache: false, alias: { '@': join(root, 'src') } });
-  const repoRules = await stale.import(join(root, 'src/modules/scenarioMods/playerLedgerRules.ts'));
-  const away = { modId: 'lcq.stage_01', completedEventIds: [], chronicle: [{ type: 'event', id: `chronicle.${STAGE}.${EV('settle')}`, stageId: STAGE, sequence: 1 }] };
-  assert.deepEqual(repoRules.orderedDoneEventIds(away), [], '仓库索引（未重建）下跨关读不到合成线事件');
+  // G2 已修：包内关在 stageMeta 写 region，STAGE_REGION＝overrides ∪ 包声明；lineOfStage 认得出本线，下一步表没写的拍也归本线
+  assert.equal(RL.STAGE_REGION[STAGE], REGION);
+  assert.equal(LC.lineOfStage(STAGE), LINE);
+  assert.equal(LC.lineOfEvent(EV('inquire'), STAGE), LINE, '下一步表没写的拍按关的地区归本线');
+  assert.equal(RL.regionStanding(STAGE, [STAGE])[REGION], 100, '地区立足度计入本关');
+  // G1·运行时已修：已知事件＝实体索引 ∪ 包关事件；索引没重建（用例 2 核对过逐字节未变），离开合成关后本线事件照样算完成，closedWhen 收束生效
   const copyRules = await M('modules/scenarioMods/playerLedgerRules.ts');
-  assert.deepEqual(copyRules.orderedDoneEventIds(away), [EV('settle')], '副本重建索引后读得到');
+  const away = { modId: 'lcq.stage_01', flags: {}, completedEventIds: [], chronicle: [{ type: 'event', id: `chronicle.${STAGE}.${EV('settle')}`, stageId: STAGE, sequence: 1 }] };
+  assert.equal(copyRules.indexIds('event').has(EV('settle')), false, '本线事件不在实体索引里');
+  assert.equal(copyRules.knownEventIds().has(EV('settle')), true);
+  assert.deepEqual(copyRules.orderedDoneEventIds(away), [EV('settle')], '离开本关后跨关读得到本线事件');
+  const LO = await M('modules/scenarioMods/lineOutcomes.ts');
+  assert.equal(LO.lineClosed(LINE, away), true, '离开本关后 closedWhen done.zztest.event.settle 照样收束');
+  assert.equal(LO.lineClosed(LINE, { ...away, chronicle: [] }), false);
   // 包格式不适用于新线的三种，各钉一条现状
   const { compileContentPacks } = await import(pathToFileURL(join(copy, 'scripts/content-packs.mjs')).href);
   const neg = await mkdtemp(join(copy, 'src/modules/contentPacks/_neg-'));
@@ -365,7 +348,7 @@ test('7 现状钉子：加线仍要改的非包文件（缺口修掉后这些断
   } finally { await rm(neg, { recursive: true, force: true }); }
 });
 
-test('8 负例：缺 dependsOn、地区重复登记、rail 引用不存在的事件、依赖不存在的包，编译报错', async () => {
+test('8 负例：缺 dependsOn、地区重复登记、rail 引用不存在的事件、依赖不存在的包、stageMeta region（地区不存在、关不属于本包、与 overrides 重复），编译报错', async () => {
   assert.ok(built);
   const { compileContentPacks } = await import(pathToFileURL(join(copy, 'scripts/content-packs.mjs')).href);
   const neg = await mkdtemp(join(copy, 'src/modules/contentPacks/_neg-'));
@@ -388,6 +371,20 @@ test('8 负例：缺 dependsOn、地区重复登记、rail 引用不存在的事
     await assert.rejects(await variant(f => { f['rails.json'][0].orderedEventIds = [...RAIL_BASE, EV('no_such')]; f['rails.json'][0].contracts.push(contract(EV('no_such'))); }), /rail zztest\.stage_01: orderedEventIds must be distinct events of the stage/);
     // 依赖不存在的包
     await assert.rejects(await variant(f => f['manifest.json'].dependsOn.push('zztest.missing')), /zztest\.line\.dependsOn: unknown pack zztest\.missing/);
+    // G1：编译期已知事件是这次编译出的事件表，不是「什么都放行」——下一步表的 eventId、closedWhen 的 done.* 指向不存在的事件照样报错
+    await assert.rejects(await variant(f => { f['line-compass.json'].lines[0].steps[0].eventId = EV('no_such'); }), /invalid lineCompass: .*steps\[0\]\.eventId.*Unknown event id \\"zztest\.event\.no_such\\"/);
+    await assert.rejects(await variant(f => { f['line-compass.json'].lines[0].closedWhen[0].path = `done.${EV('no_such')}`; }), /invalid lineCompass: .*closedWhen.*Unknown event id \\"zztest\.event\.no_such\\"/);
+    // G2 stageMeta region：地区不存在（既不在 overrides stageRegions，也不在任何国家线 regions）、空串
+    await assert.rejects(await variant(f => { f['stage-meta.json'][0].region = '无此国'; }), /stageMeta zztest\.stage_01: unknown region 无此国/);
+    await assert.rejects(await variant(f => { f['stage-meta.json'][0].region = ''; }), /stageMeta zztest\.stage_01: region must be a non-empty string/);
+    // 已知地区不限于国家线：overrides 里已有的「塞外」不是国家线，也收（该关的 lineOfStage 随之为 undefined）
+    assert.ok(await (await variant(f => { f['stage-meta.json'][0].region = '塞外'; }))());
+    // 关不属于本包：内置关（地区在 overrides）
+    await assert.rejects(await variant(f => f['stage-meta.json'].push({ stageId: 'lyg.buddhist_conspiracy', region: REGION })), /stageMeta lyg\.buddhist_conspiracy: region is only for stages defined in a pack/);
+    // 关不属于本包：秦包的包内关，本包没依赖秦包 → 归属扫描报错
+    await assert.rejects(await variant(f => f['stage-meta.json'].push({ stageId: 'lyg.qin_xianyang', region: REGION })), /zztest\.line references lyg\.qin_xianyang owned by qingyu\.qin; add dependsOn/);
+    // 补上依赖后：该关已在 overrides stageRegions（秦国），同值也报重复（单一真值）
+    await assert.rejects(await variant(f => { f['stage-meta.json'].push({ stageId: 'lyg.qin_xianyang', region: '秦国' }); f['manifest.json'].dependsOn.push('qingyu.qin'); }), /stageMeta lyg\.qin_xianyang: region also set in mod-kit\/entity-ledger\/overrides\.json stageRegions/);
   } finally { await rm(neg, { recursive: true, force: true }); }
 });
 

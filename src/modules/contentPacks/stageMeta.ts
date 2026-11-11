@@ -34,6 +34,8 @@ export interface StageMetaRouteChapterTitles {
 export interface StageMetaMilestoneReward { titles: string[]; revokeTitles?: string[]; note: string }
 export interface StageMeta {
   stageId: string;
+  /** 关 → 地区（G2）：只给包内关写，运行时并入 reputationLedger.ts 的 STAGE_REGION；取值为 overrides stageRegions 已有的地区或某条国家线的 regions，overrides 已有的关不得再写（编译期校验）。 */
+  region?: string;
   defaultLineQuarantined?: boolean;
   milestoneReward?: StageMetaMilestoneReward;
   presentation?: {
