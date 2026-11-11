@@ -49,6 +49,7 @@ test('cross-book highlight batch keeps full contracts and deterministic completi
 
 test('highlight batch uses explicit per-event BGM moods', async () => {
   const source = await readFile(new URL('../src/utils/musicLibrary.ts', import.meta.url), 'utf8');
+  const catalog = JSON.parse(await readFile(new URL('../src/modules/contentPacks/generated/catalog.json', import.meta.url), 'utf8'));
   const expectations = {
     'lcq.event.s02_02': 'lament',
     'lcq.event.s04_05': 'lament',
@@ -59,7 +60,9 @@ test('highlight batch uses explicit per-event BGM moods', async () => {
 
   for (const [eventId, expectedMood] of Object.entries(expectations)) {
     const mapping = `'${eventId}': '${expectedMood}'`;
-    assert.equal(source.split(mapping).length - 1, 1, `${eventId} should have one explicit ${expectedMood} mapping`);
+    // 宋线 S4b：宋事件的配乐锚点迁进宋包 stageMeta（presentation.events[id].mood）；计数改读 musicLibrary.ts 源码与 catalog stageMeta 两处，期望不变
+    const metaMappings = catalog.stageMeta.filter(m => m.presentation?.events?.[eventId]?.mood === expectedMood).length;
+    assert.equal(source.split(mapping).length - 1 + metaMappings, 1, `${eventId} should have one explicit ${expectedMood} mapping`);
   }
 });
 

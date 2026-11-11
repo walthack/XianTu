@@ -25,12 +25,8 @@ export interface MilestoneReward {
 
 // 落点必须符合原文故事线（来源：milestone-grants-scan 原文扫描 + 用户裁定 2026-07-03）。
 // 新增条目：补一行即可。跳过项：大行令(原文旋即被夺,引擎无撤销)/兰台典校(非正式官职)。
-export const MILESTONE_REWARDS: MilestoneReward[] = [
-  {
-    stageId: 'lcq.stage_12_jiangzhou_counterwar', // 六朝清羽记·江州反攻收束
-    titles: ['宋国工部屯田司员外郎'],
-    note: '粮战功成，筠州知州滕甫招揽为宋国客卿，举荐任工部屯田司员外郎（清羽 ch324）。',
-  },
+// 已迁进内容包 stageMeta.milestoneReward 的关（宋：packs/song/stage-meta.json）不在本表。
+export const TS_MILESTONE_REWARDS: MilestoneReward[] = [
   {
     stageId: 'lyl.luoyang_cloud_secret', // 六朝云龙吟·天石（洛都入局·买官洗白）
     titles: ['汉国关内侯（买官）', '汉国大行令（领事·加常侍郎）'],
@@ -49,11 +45,17 @@ export const MILESTONE_REWARDS: MilestoneReward[] = [
   },
 ];
 
-/** 某关的里程碑奖励：先查内容包 stageMeta 的 milestoneReward，没有再查 MILESTONE_REWARDS（编译期校验两边不重复）。 */
+/** 全部里程碑奖励：内容包 stageMeta 的 milestoneReward（按 catalog 顺序）在前，TS 表在后（编译期校验两边不重复）。 */
+export const MILESTONE_REWARDS: MilestoneReward[] = [
+  ...(CONTENT_PACKS.stageMeta || []).filter(m => m.milestoneReward).map(m => ({ stageId: m.stageId, ...m.milestoneReward! })),
+  ...TS_MILESTONE_REWARDS,
+];
+
+/** 某关的里程碑奖励：先查内容包 stageMeta 的 milestoneReward，没有再查 TS_MILESTONE_REWARDS（编译期校验两边不重复）。 */
 export function milestoneRewardFor(stageId: unknown, stageMeta: readonly StageMeta[] = CONTENT_PACKS.stageMeta || []): MilestoneReward | undefined {
   const meta = stageMetaOf(stageMeta, stageId)?.milestoneReward;
   if (meta) return { stageId: stageId as string, ...meta };
-  return MILESTONE_REWARDS.find(r => r.stageId === stageId);
+  return TS_MILESTONE_REWARDS.find(r => r.stageId === stageId);
 }
 
 type AnySave = Record<string, any>;

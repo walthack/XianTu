@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "qingyu.song",
+  "dependsOn": [
+    "qingyu.core"
+  ],
+  "texts": [
+    "texts.json"
+  ],
+  "lineCompass": "line-compass.json",
+  "rails": [
+    "rails.generated.json"
+  ],
+  "railExtraBeats": [
+    "rail-extra-beats.json"
+  ],
+  "stageMeta": [
+    "stage-meta.json"
+  ],
+  "secondaryLines": [
+    "secondary-lines.json"
+  ]
+}

@@ -39,6 +39,11 @@ test('每条 critical event 都被三级链认领；欠账只减不增', async (
     const text = fs.readFileSync(src, 'utf8');
     for (const m of text.matchAll(/'((?:lcq|lyl|lyg|liuchao)\.event\.[a-zA-Z0-9_]+)'/g)) claimed.add(m[1]);
   }
+  // 宋线 S4c：song 二级线从 secondaryLines.ts 迁进宋包 secondary-lines.json；内容包的二级线（catalog）同样算二级线层认领，只换读取来源
+  const { CONTENT_PACKS } = await loadTs('../src/modules/contentPacks/index.ts');
+  for (const line of CONTENT_PACKS.secondaryLines || []) {
+    for (const id of [...(line.anchorEventIds || []), ...line.nodes.map(n => n.eventId).filter(Boolean)]) claimed.add(id);
+  }
 
   const orphans = [...critical.keys()].filter(id => !claimed.has(id)).sort();
 

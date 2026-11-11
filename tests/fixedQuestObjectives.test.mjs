@@ -82,7 +82,11 @@ test('复审通过的坏目标由固定表现层覆盖，不改 event 合同', a
     FIXED_QUEST_OBJECTIVE_OVERRIDES,
     resolveFixedQuestObjective,
   } = await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
-  assert.equal(Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES).length, 61);
+  // 宋线 S4b：宋事件的 15 条覆盖迁进宋包 stageMeta（presentation.events[id].objective）；计数改读两处合起来的事件集合，期望不变
+  const { CONTENT_PACKS } = await loadTs('../src/modules/contentPacks/index.ts');
+  const overriddenIds = new Set([...Object.keys(FIXED_QUEST_OBJECTIVE_OVERRIDES),
+    ...CONTENT_PACKS.stageMeta.flatMap(m => Object.entries(m.presentation?.events || {}).filter(([, e]) => e.objective).map(([id]) => id))]);
+  assert.equal(overriddenIds.size, 61);
   assert.equal(
     resolveFixedQuestObjective({
       id: 'lcq.event.s03_12',
