@@ -21,6 +21,8 @@ fields.push('nationLines');
 fields.push('compassConditions');
 // 合同哈希迁移表（BZ1）：manifest.contractRevisions 是文件列表，每个文件是 [{eventId,from,to,note?}]；编译后进 catalog.contractRevisions（末尾），见 compileContractRevisions
 fields.push('contractRevisions');
+// 世界事件（阶段 2b）：manifest.worldEvents 是文件列表，每个文件是 [{id,eventId,actionId,startedExtensionKey,stageId,availableWhen,blockedInStageIds,closes,textKeys}]；编译后进 catalog.worldEvents
+fields.push('worldEvents');
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
@@ -52,6 +54,7 @@ const definedIds=(kind,x)=>{
  if(kind==='nationLines')return [['nationLine',x?.lineId]];
  if(kind==='compassConditions')return [['compassCondition',x?.id]];
  if(kind==='contractRevisions')return [];
+ if(kind==='worldEvents')return [['worldEvent',x?.id]];
  if(kind==='overlays'||kind==='stageMeta'||kind==='railExtraBeats')return [];
  if(kind==='secondaryLines')return [['secondaryLine',x.id]];
  if(coreFormatKinds.includes(kind))return coreDefinedIds(kind,x);
@@ -64,7 +67,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const timelineInserts=[],lineFormats=Object.fromEntries(lineFormatKinds.map(k=>[k,[]])),coreRaw=Object.fromEntries(coreFormatKinds.map(k=>[k,[]])),presentationRaw=Object.fromEntries(presentationFormatKinds.map(k=>[k,[]]));
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set(),packs=[];
- const nationLines=[],compassConditions=[];
+ const nationLines=[],compassConditions=[],worldEvents=[];
  const contractRevisions=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
   const m=JSON.parse(await readFile(join(packsDir,dir,'manifest.json'),'utf8'));
@@ -92,6 +95,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(!Array.isArray(m.nationLines||[]))fail(`${m.id}.nationLines: expected file list`);for(const path of m.nationLines||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.nationLines: expected array`);own('nationLines',v);nationLines.push(...v.map(value=>({packId:m.id,value})));}
   if(!Array.isArray(m.compassConditions||[]))fail(`${m.id}.compassConditions: expected file list`);for(const path of m.compassConditions||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.compassConditions: expected array`);own('compassConditions',v);compassConditions.push(...v);}
   if(!Array.isArray(m.contractRevisions||[]))fail(`${m.id}.contractRevisions: expected file list`);for(const path of m.contractRevisions||[]){const value=await load(path);own('contractRevisions',Array.isArray(value)?value:[value]);contractRevisions.push({packId:m.id,value});}
+  if(!Array.isArray(m.worldEvents||[]))fail(`${m.id}.worldEvents: expected file list`);for(const path of m.worldEvents||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.worldEvents: expected array`);own('worldEvents',v);worldEvents.push(...v);}
   if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);own('timeline',v);timelineInserts.push(...v);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);own(k,v);catalog[k].push(...v);}
  }
@@ -291,6 +295,31 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);
   if(!stage?.scenario.events.some(event=>event.id===e.eventId)||typeof e.locationId!=='string'||!['compass.anyLineClosed',...catalog.compassConditions.map(x=>`compass.${x.id}`)].includes(e.readyPath)||[e.previewTextId,e.returnLabelTextId,e.returnTextId,e.returnChronicleTextId].some(id=>id!==undefined&&!(id in catalog.texts)))fail(`invalid map entry ${e.id}`);
  }
+ // 世界事件（阶段 2b，大祭）：放在地图入口校验之后（blockedInStageIds 要对照本次编译出的 mapEntries）；一律用这次编译出的 stages／events／nationLines／mapEntries／texts，不读磁盘上的旧 catalog（M2）。
+ // stageId 有 canon rail 在 validateWithTs 里查（CANON_RAIL_PROFILES 是 TS 表）
+ {const str=v=>typeof v==='string'&&v.trim().length>0,lineIds=new Set(catalog.nationLines.map(x=>x.lineId)),entryStages=new Set(catalog.mapEntries.map(e=>e.stageId));
+  const reservedKeys=new Set(['mapEntryResume','mapEntryMessages','读档迁移','actionTime','questLog','stageDepartureMap','stageDepartureIdle','specialNpcId','linePrompted','combatHeadline','c01ProtagonistBirth','c01LifespanCacheVersion',...catalog.playtests.map(p=>p.extensionKey)]);
+  const textKeyNames=['label','warning','transition','blocked'],closedLines=new Map();
+  unique(worldEvents,x=>x?.id,'world event');
+  for(const k of ['eventId','actionId','startedExtensionKey'])unique(worldEvents,x=>x?.[k],`world event ${k}`);
+  for(const x of worldEvents){const at=`world event ${x?.id}`;
+   if(!object(x)||Object.keys(x).some(k=>!['id','eventId','actionId','startedExtensionKey','stageId','availableWhen','blockedInStageIds','closes','textKeys'].includes(k))||!['id','eventId','actionId','startedExtensionKey','stageId'].every(k=>str(x[k])))fail(`${at}: invalid fields`);
+   if(events.has(x.eventId))fail(`${at}: eventId ${x.eventId} is also a stage event`);
+   if(!/^[A-Za-z][A-Za-z0-9]*$/.test(x.startedExtensionKey)||reservedKeys.has(x.startedExtensionKey))fail(`${at}: startedExtensionKey ${x.startedExtensionKey} must match ^[A-Za-z][A-Za-z0-9]*$ and not be a reserved key`);
+   if(!stages.has(x.stageId))fail(`${at}: unknown stage ${x.stageId}`);
+   if(x.availableWhen!=='stageRailSettled')fail(`${at}: availableWhen must be stageRailSettled`);
+   if(!Array.isArray(x.blockedInStageIds)||!x.blockedInStageIds.every(str)||new Set(x.blockedInStageIds).size!==x.blockedInStageIds.length)fail(`${at}: blockedInStageIds must be distinct stage ids`);
+   for(const id of x.blockedInStageIds)if(!entryStages.has(id))fail(`${at}: blockedInStageIds: ${id} is not a map entry stage`);
+   if(!Array.isArray(x.closes))fail(`${at}: closes must be an array`);
+   for(const c of x.closes){
+    if(!object(c)||Object.keys(c).some(k=>!['lineId','stageId','messageEventId'].includes(k))||!['lineId','stageId','messageEventId'].every(k=>str(c[k])))fail(`${at}: closes: invalid fields`);
+    if(!lineIds.has(c.lineId))fail(`${at}: closes: unknown nation line ${c.lineId}`);
+    if(closedLines.has(c.lineId))fail(`${at}: closes: line ${c.lineId} is also closed by world event ${closedLines.get(c.lineId)}`);closedLines.set(c.lineId,x.id);
+    if(!stages.has(c.stageId))fail(`${at}: closes: unknown stage ${c.stageId}`);
+    if(!(stages.get(c.stageId).scenario?.events||[]).some(e=>e?.id===c.messageEventId))fail(`${at}: closes: messageEventId ${c.messageEventId} is not in stage ${c.stageId}`);}
+   if(!object(x.textKeys)||Object.keys(x.textKeys).length!==textKeyNames.length||!textKeyNames.every(k=>str(x.textKeys[k])&&typeof catalog.texts[x.textKeys[k]]==='string'))fail(`${at}: textKeys must name existing texts for ${textKeyNames.join('/')}`);
+   if(!str(catalog.texts[x.textKeys.label]))fail(`${at}: label text must not be empty`);}
+  catalog.worldEvents=worldEvents;}
  const serialized=JSON.stringify({...catalog,version:''});catalog.version=createHash('sha256').update(serialized).digest('hex').slice(0,16);return {catalog,ctx:{stages,events,baseEvents,sourceRoot}};
 }
 /** 文案里 {{…}} 动态名字的写法、实体与标签存在（只有出现 {{ 时才加载 namedEntities）。label 进报错文案。 */
@@ -317,6 +346,8 @@ async function validateWithTs(catalog,{stages,events,baseEvents,sourceRoot},{val
  await validateLineFormatsWithTs(catalog,stages,sourceRoot);
  await validateCoreFormatsWithTs(catalog);
  await validatePresentationFormatsWithTs(catalog,stages);
+ // 世界事件的 stageId 必须有 canon rail（可用性按 rail 结算口径判）；没有世界事件时不加载
+ if((catalog.worldEvents||[]).length){const {CANON_RAIL_PROFILES}=await tsLoader().import(join(root,'src/modules/scenarioMods/canonRail.ts'));for(const x of catalog.worldEvents)if(!CANON_RAIL_PROFILES.some(p=>p.modId===x.stageId))fail(`world event ${x.id}: stage ${x.stageId} has no canon rail`);}
 }
 /**
  * 线路格式与 TS 表的交叉校验（宋线 S2）：新段为空时不加载任何模块。TS 读取方一律用传入的新 catalog 调纯函数（不靠模块自己读磁盘 catalog），

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "heimohaiFestival",
+    "eventId": "lyg.event.heimohai_festival_start",
+    "actionId": "start_heimohai_festival",
+    "startedExtensionKey": "festivalStarted",
+    "stageId": "lyg.shituolin_endgame",
+    "availableWhen": "stageRailSettled",
+    "blockedInStageIds": [
+      "lyg.qin_xianyang"
+    ],
+    "closes": [
+      {
+        "lineId": "qin",
+        "stageId": "lyg.qin_xianyang",
+        "messageEventId": "liuchao.event.qin_hook_fangshi_rumor"
+      }
+    ],
+    "textKeys": {
+      "label": "worldEvent.heimohaiFestival.label",
+      "warning": "worldEvent.heimohaiFestival.warning",
+      "transition": "worldEvent.heimohaiFestival.transition",
+      "blocked": "worldEvent.heimohaiFestival.blocked"
+    }
+  }
+]

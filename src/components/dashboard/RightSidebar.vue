@@ -9,13 +9,15 @@
     </div>
 
     <div v-if="isDataLoaded && characterInfo" class="sidebar-content">
-      <div v-if="festival.warning || festival.available || festival.transition" class="quest-section">
-        <p v-if="festival.warning">{{ festival.warning }}</p>
-        <button v-if="festival.available" class="quest-next-btn" :disabled="festivalSaving || uiStore.isAIProcessing || !!festival.blocked" @click="beginFestival">{{ FESTIVAL.label }}</button>
-        <p v-if="festival.available && festival.blocked">{{ festival.blocked }}</p>
-        <p v-if="festival.transition">{{ festival.transition }}</p>
-        <p v-if="festivalError">{{ festivalError }}</p>
-      </div>
+      <template v-for="card in worldEventCards" :key="card.id">
+        <div v-if="card.view.warning || card.view.available || card.view.transition" class="quest-section">
+          <p v-if="card.view.warning">{{ card.view.warning }}</p>
+          <button v-if="card.view.available" class="quest-next-btn" :disabled="!!worldEventSaving[card.id] || uiStore.isAIProcessing || !!card.view.blocked" @click="beginWorldEvent(card)">{{ card.label }}</button>
+          <p v-if="card.view.available && card.view.blocked">{{ card.view.blocked }}</p>
+          <p v-if="card.view.transition">{{ card.view.transition }}</p>
+          <p v-if="worldEventError[card.id]">{{ worldEventError[card.id] }}</p>
+        </div>
+      </template>
       <!-- 核心数值 -->
       <div class="vitals-section">
         <h3 class="section-title">
@@ -463,7 +465,7 @@ import {
   TRACKED_OPPORTUNITY_MAX_TURNS,
 } from '@/modules/scenarioMods/runtime';
 import { showSecondaryLines, sidebarAvailableLines } from '@/modules/scenarioMods/sidebarLineEntries';
-import { FESTIVAL, festivalView, startHeimohaiFestival } from '@/modules/scenarioMods/heimohaiFestival';
+import { worldEventViews, startWorldEvent } from '@/modules/scenarioMods/worldEvents';
 import { BUILTIN_SCENARIO_MODS } from '@/modules/scenarioMods/builtins';
 import { stageDepartureMapTarget } from '@/modules/scenarioMods/beatProgress';
 import { getMapEntryReturnOffer } from '@/modules/scenarioMods/mapEntryReturn';
@@ -551,25 +553,26 @@ const availableLines = computed(() => {
 // fallback＝原主线指南针的「去X · 见Y」（questCompassPhrases），没有当前线时卡片显示它（总策划定，避免玩家什么提示都没有）；
 // 不带冒号后的固定目标（用户 2026-10-27 定）。
 // 显示层去掉【扩写】类占位标记（文字保留，配置原文不动），见 narrativeMetaWords.ts。
-const festival = computed(() => {
-  const view = festivalView(gameStateStore.toSaveData());
-  return { ...view, warning: playerFacingText(view.warning), blocked: playerFacingText(view.blocked), transition: playerFacingText(view.transition) };
-});
-const festivalSaving = ref(false);
-const festivalError = ref('');
-const beginFestival = async () => {
-  if (festivalSaving.value || uiStore.isAIProcessing) return;
-  festivalSaving.value = true;
-  festivalError.value = '';
+// 世界事件卡片（worldEvents.ts，阶段 2b；现在只有大祭）：每个包声明的世界事件一张，saving／error 按卡片 id 分开记。
+const worldEventCards = computed(() => worldEventViews(gameStateStore.toSaveData()).map(card => {
+  const view = card.view;
+  return { ...card, view: { ...view, warning: playerFacingText(view.warning), blocked: playerFacingText(view.blocked), transition: playerFacingText(view.transition) } };
+}));
+const worldEventSaving = ref<Record<string, boolean>>({});
+const worldEventError = ref<Record<string, string>>({});
+const beginWorldEvent = async (card: { id: string; actionId: string }) => {
+  if (worldEventSaving.value[card.id] || uiStore.isAIProcessing) return;
+  worldEventSaving.value[card.id] = true;
+  worldEventError.value[card.id] = '';
   try {
     const save = gameStateStore.toSaveData();
     if (!save) return;
-    const result = startHeimohaiFestival(save, { source: 'player', actionId: FESTIVAL.actionId });
-    if (!result.ok) { festivalError.value = playerFacingText(result.note); return; }
+    const result = startWorldEvent(save, card.id, { source: 'player', actionId: card.actionId });
+    if (!result.ok) { worldEventError.value[card.id] = playerFacingText(result.note); return; }
     gameStateStore.loadFromSaveData(save);
     await gameStateStore.saveGame();
-  } catch (error) { festivalError.value = String(error); logError('LCQ-UI-007', error); }
-  finally { festivalSaving.value = false; }
+  } catch (error) { worldEventError.value[card.id] = String(error); logError('LCQ-UI-007', error); }
+  finally { worldEventSaving.value[card.id] = false; }
 };
 const lineCompass = computed(() => {
   if (!showLineCompass()) return null;

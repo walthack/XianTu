@@ -31,6 +31,8 @@ test('qin pack merged back into core compiles to the same catalog as the split p
   await writeFile(join(core,cm.lineCompass),JSON.stringify(lc));
   await writeFile(join(core,'manifest.json'),JSON.stringify(cm));
   await rm(qin,{recursive:true});
+  // 阶段 2b：大祭包 qingyu.festival 依赖秦包（引用秦关、口信事件、qin 线）；秦并回核心后，这条依赖改由核心包满足
+  for(const d of await readdir(dir)){const p=join(dir,d,'manifest.json'),m=await read(p).catch(()=>null);if(m?.dependsOn?.includes('qingyu.qin')){m.dependsOn=[...new Set(m.dependsOn.map(x=>x==='qingyu.qin'?'qingyu.core':x))];await writeFile(p,JSON.stringify(m));}}
   const merged=await compileContentPacks({packsDir:dir});
   const split=await compileContentPacks();
   assert.ok(split.stages.some(s=>s.manifest.id==='lyg.qin_xianyang'));
