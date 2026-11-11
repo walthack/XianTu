@@ -2,7 +2,7 @@
 // storyAxis、locationAliases、characterProfiles、ifBranches。编译夹具在 _newbot_tmp 下的临时 packs 目录（写法同 contentPackLineFormats）。
 // 不写死真实剧情 id：关、事件、地点、角色都从内置关、locations.json、实体总表动态挑；合成 id 一律 test.* 前缀。
 // 「与 TS 表重复」用合成的临时 TS 条目：本文件与编译器（scripts/*.mjs 的 jiti）共用模块缓存，用例里改 TS_ 表、用完还原，编译期校验看得到。
-// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后：没改口径的段自然变成空演练；人物拍点一段自 B2 起取合并值、姿态与好感上限自 B4 起取人物包 profiles.json，仍是真演练）。
+// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后：没改口径的段自然变成空演练；人物拍点一段自 B2 起取合并值、姿态与好感上限自 B4 起取人物包 profiles.json、IF 分歧自 B5 起取人物包 if-branches.json，仍是真演练）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,readFile,readdir,writeFile,rm} from 'node:fs/promises';
@@ -453,11 +453,12 @@ test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通�
  // B4 起姿态档案与好感上限在人物包里、TS 表为空：取人物包的 profiles.json 原样转写（含 note；不取 TS 表，否则表搬空后演练合出来是空的）
  const {stance,affinityCaps}=await read(join(PACK_DIR,'characters/profiles.json'));const profiles={stance,affinityCaps};
  assert.equal(stance.length,ST.STANCE_PROFILES.length);assert.equal(affinityCaps.length,AC.AFFINITY_CAPS.length);
- const statuses=r=>r.acceptedStatuses.source.replace(/^\^\(?|\)?\$$/g,'').split('|');
- const ifs={branches:DL.TS_AUTO_BRANCH_RULES.map(r=>({...r,acceptedStatuses:statuses(r)})),consequences:DL.TS_AUTO_CONSEQUENCE_RULES.map(r=>({...r,acceptedStatuses:statuses(r)})),prompts:{...DL.TS_DIVERGENCE_PROMPTS}};
+ // B5 起 IF 分支、后果与按 id 的提示在人物包里、三张 TS 表为空：取人物包的 if-branches.json 原样转写（含 note）；对照值是真实 catalog 段与空 TS 表的合并（即模块内部用的规则表）
+ const ifs=await read(join(PACK_DIR,'characters/if-branches.json'));
+ assert.equal(ifs.branches.length,CONTENT_PACKS.ifBranches.branches.length);assert.equal(ifs.consequences.length,CONTENT_PACKS.ifBranches.consequences.length);
  const before={lce:{...SL.LINE_CRITICAL_EVENTS},beats:{quests:CQ.CHARACTER_QUESTS,highlights:CQ.CHARACTER_HIGHLIGHTS},story:{stageOrder:AX.STAGE_ORDER,layers:AX.MAIN_QUEST_LAYERS,stages:AX.MAIN_QUEST_STAGES,nodes:AX.MAIN_QUEST_NODES,requirements:AX.MAIN_QUEST_REQUIREMENTS},
   loc:{canonical:{...LOC.TS_LOCATION_ID_ALIASES},parents:{...LOC.LOCATION_PARENTS},display:{...LOC.LOCATION_NAMES}},stance:ST.STANCE_PROFILES,caps:AC.AFFINITY_CAPS,
-  ifs:DL.mergeIfBranches({branches:DL.TS_AUTO_BRANCH_RULES,consequences:DL.TS_AUTO_CONSEQUENCE_RULES,prompts:DL.TS_DIVERGENCE_PROMPTS},undefined)};
+  ifs:DL.mergeIfBranches({branches:DL.TS_AUTO_BRANCH_RULES,consequences:DL.TS_AUTO_CONSEQUENCE_RULES,prompts:DL.TS_DIVERGENCE_PROMPTS},CONTENT_PACKS.ifBranches)};
  const files={'lines.json':lines,'lce.json':lce,'beats.json':beats,'axis.json':story,'loc.json':loc,'profiles.json':profiles,'if.json':ifs};
  const manifest={id:'test.rehearsal',secondaryLines:['lines.json'],lineCriticalEvents:['lce.json'],characterBeats:['beats.json'],storyAxis:['axis.json'],locationAliases:['loc.json'],characterProfiles:['profiles.json'],ifBranches:['if.json'],files};
  const out=await withTsLines([],()=>withTsRecord(SL.TS_LINE_CRITICAL_EVENTS,{},()=>withTsArray(CQ.TS_CHARACTER_QUESTS,[],()=>withTsArray(CQ.TS_CHARACTER_HIGHLIGHTS,[],()=>withEmptyAxis(()=>

@@ -272,3 +272,13 @@ catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvent
 - 不需要 `dependsOn` 别的包：`dependsOn` 只有 `qingyu.core` 时编译通过，归属扫描没有报引用其它包定义的 id，没有成环。
 - `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的姿态／上限两段改为取人物包 `profiles.json` 原样转写（TS 表搬空后原来的源码解析取到 0 条）；源码解析辅助函数 `sourceEntries` 因此无人使用，已删。
 - catalog 只变 `characterProfiles` 段与 version；棘轮 `stanceProfiles.ts` 48 → 0、`affinityCaps.ts` 13 → 0（总数 1019 → 958，文件 68 → 66）。
+
+## 2026-11-11 IF 分歧表进人物包（B5）
+
+人物包 `packs/characters/`（`qingyu.characters`，`dependsOn` 仍只有 `qingyu.core`）manifest 加 `ifBranches: ["if-branches.json"]`。`divergenceLedger.ts` 的 `TS_AUTO_BRANCH_RULES`（5 条，其中 4 条带 `prompt`，`lcq.if_xieyi_longrest` 没有）、`TS_AUTO_CONSEQUENCE_RULES`（1 条，带 `prompt`）与 `TS_DIVERGENCE_PROMPTS`（1 条：`offscreen.lcq.xingyuehu_war`）原样搬入 `if-branches.json` 的 `branches`／`consequences`／`prompts`，三张 TS 表为空；`resolveReconcileBranchId`／`recordReconcileDivergences`／`recordOffscreenDivergence`／`formatDivergencePrompt`／`acceptedStatusPattern`／`mergeIfBranches` 导出名与行为不变。权威来源现为这份 JSON（改了再跑 `node scripts/content-packs.mjs`）。
+- 写法照 F0a：`acceptedStatuses` 写字符串数组（`["alive","longrest","incapacitated"]`、`["dead"]`、`["missing"]`），运行时编译出的正则与原表逐字相同；条目键序与原表相同。文案（含人物裁定 #92／#93／#97／#114 的约束句）由脚本从原 TS 模块直接转写，逐字相同。
+- 注释：分支表头注释（R2-0V registry 说明 + 来源 `character-canon/qingyu.if-branches.json` + CANON-DECISIONS #90）进第一条分支的 `note`；后果表上方注释进那条后果的 `note`；`prompts` 是「id → 文案」的对象，条目不能带 `note`，它上方那句注释进文件顶层 `note`。编译时剥掉。
+- 顺序：TS 表为空，合并后的分支／后果顺序就是 JSON 顺序（`find` 取第一条命中，s06_03 的分支与失踪后果互斥，顺序不影响结果）；`formatDivergencePrompt` 的查找顺序（分支 → 分歧记录 id → 后果；后果匹配状态不 trim、落旗标的匹配 trim）是代码，没动。
+- 留在 TS 的只有代码：`characterFlagSlug`、落旗标逻辑、查找函数本身；`offscreen.lcq.xingyuehu_war` 这个 id 仍由冻结文件 `runtime.ts` 生成，只有它的提示在包里。
+- `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的分歧一段改为取人物包 `if-branches.json` 原样转写、对照值改为真实 catalog 段的合并（TS 表搬空后原来的转写取到 0 条）。
+- catalog 只变 `ifBranches` 段与 version（`a10abf5c8c597660` → `e3952d7c9800d358`）；棘轮 `divergenceLedger.ts` 17 → 0（总数 958 → 941，文件 66 → 65）。
