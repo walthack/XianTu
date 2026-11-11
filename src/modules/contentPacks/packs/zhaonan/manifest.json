@@ -22,5 +22,11 @@
   ],
   "secondaryLines": [
     "secondary-lines.json"
+  ],
+  "openWorldSlices": [
+    "open-world-slices.json"
+  ],
+  "persistentEntries": [
+    "persistent-entries.json"
   ]
 }

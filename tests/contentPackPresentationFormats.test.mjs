@@ -103,8 +103,8 @@ test('新段为空：catalog 有三个空段；读取方合并值等于 TS 表�
  for(const catalog of [without,{...CONTENT_PACKS,...emptyPresentationFormats()}]){
   const bd=await loadWithCatalog('src/modules/scenarioMods/branchDecision.ts',{...catalog,stageMeta:[]});assert.equal(bd.LOCKED_DECISIONS,bd.TS_LOCKED_DECISIONS);
   const ep=await loadWithCatalog('src/modules/scenarioMods/endingPresentation.ts',catalog);for(const id of [...tsEndingIds,ENDING])assert.equal(ep.endingKey({endingId:id,sourceEventId:''}),EP.TS_ENDING_KEYS[id]||'');
-  const pe=await loadWithCatalog('src/modules/scenarioMods/persistentLineEntries.ts',catalog);
-  for(const kind of ['algae','rejoin'])assert.equal(pe.TS_PERSISTENT_ENTRIES.find(x=>x.kind===kind).eventId,(kind==='algae'?pe.ALGAE_ENTRY:pe.REJOIN_ENTRY).eventId);
+  if(!DECLARED.has('persistentEntries')){const pe=await loadWithCatalog('src/modules/scenarioMods/persistentLineEntries.ts',catalog);
+   for(const kind of ['algae','rejoin'])assert.equal(pe.TS_PERSISTENT_ENTRIES.find(x=>x.kind===kind).eventId,(kind==='algae'?pe.ALGAE_ENTRY:pe.REJOIN_ENTRY).eventId);}
   if(!DECLARED.has('openWorldSlices')){const nh=await loadWithCatalog('src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts',catalog);assert.equal(nh.QINGYU_NANHUANG_DEFINITION,nh.TS_NANHUANG_OPEN_WORLD_SLICE.definition);assert.deepStrictEqual(nh.NANHUANG_STAGE_IDS,NH.NANHUANG_STAGE_IDS);}
  }
  assert.deepStrictEqual(FE.mergeBattleLossEndings(FE.TS_BATTLE_LOSS_ENDINGS,[]),[...FE.TS_BATTLE_LOSS_ENDINGS]);assert.equal(FE.mergeEndingPathTexts(FE.TS_ENDING_PATH_TEXTS,[]),FE.TS_ENDING_PATH_TEXTS);
@@ -439,7 +439,8 @@ test('搬迁演练：展示类 TS 表与两处代码特判都能逐项无损写�
   assert.deepStrictEqual(EP.mergeEndingKeys({},out.endings),before.endingKeys);
   assert.deepStrictEqual(FE.mergeBattleLossEndings([],out.endings),before.battle);
   assert.deepStrictEqual(FE.mergeEndingPathTexts({},out.endings),before.paths);
-  assert.deepStrictEqual(OW.stepSceneStagePrefixesIn(out.openWorldSlices,[]),before.prefixes);
+  // 现行合并值（TS 在前、真实包在后）：B8 把前缀搬进昭南包之前就是 TS 表本身
+  assert.deepStrictEqual(OW.stepSceneStagePrefixesIn(out.openWorldSlices,[]),OW.stepSceneStagePrefixesIn(CONTENT_PACKS.openWorldSlices||[],before.prefixes));
   if(OW.tsOpenWorldSliceHasData(before.nanhuang)){const nh=OW.resolveOpenWorldSlice(out.openWorldSlices,{key:before.nanhuang.key});const {key,...rest}=before.nanhuang;assert.deepStrictEqual({...nh,key:undefined},{...rest,key:undefined});}
   if(OW.tsOpenWorldSliceHasData(before.wuyuan)){const w=OW.resolveOpenWorldSlice(out.openWorldSlices,{key:before.wuyuan.key});
    assert.deepStrictEqual(w.definition,WO.WUYUAN_OPEN_WORLD_DEFINITION);assert.deepStrictEqual(w.definition.zones,WZ.WUYUAN_ZONES);assert.deepStrictEqual(w.zoneRanks,before.wuyuan.zoneRanks);

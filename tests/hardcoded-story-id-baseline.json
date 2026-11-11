@@ -13,8 +13,8 @@
     "playtest."
   ],
   "总数": {
-    "文件数": 66,
-    "行数": 818
+    "文件数": 63,
+    "行数": 739
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -48,7 +48,7 @@
     "src/modules/scenarioMods/narrativePerformanceGuard.ts": 1,
     "src/modules/scenarioMods/naturalIntentRouter.ts": 3,
     "src/modules/scenarioMods/openWorldSlice.ts": 1,
-    "src/modules/scenarioMods/persistentLineEntries.ts": 9,
+    "src/modules/scenarioMods/persistentLineEntries.ts": 1,
     "src/modules/scenarioMods/playerActionPresentation.ts": 31,
     "src/modules/scenarioMods/playerAgencyGuard.ts": 3,
     "src/modules/scenarioMods/playerLedgerRules.ts": 2,
@@ -62,13 +62,10 @@
     "src/modules/scenarioMods/shiweimoRescue.ts": 1,
     "src/modules/scenarioMods/storyContext.ts": 4,
     "src/modules/scenarioMods/strictInitializer.ts": 2,
-    "src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts": 27,
-    "src/modules/scenarioMods/travel/defs/qingyuNanhuangStepScenes.ts": 2,
-    "src/modules/scenarioMods/travel/defs/qingyuWuyuanZones.ts": 9,
     "src/modules/scenarioMods/travel/locationIds.ts": 10,
     "src/modules/scenarioMods/travel/travelLedger.ts": 15,
     "src/modules/scenarioMods/voiceCards.ts": 2,
-    "src/modules/scenarioMods/wuyuanOpenWorldSlice.ts": 65,
+    "src/modules/scenarioMods/wuyuanOpenWorldSlice.ts": 32,
     "src/modules/scenarioMods/xingyuehuLandingPlaytest.ts": 20,
     "src/modules/scenarioMods/xingyuehuQuestPlaytest.ts": 24,
     "src/modules/scenarioMods/xingyuehuQuestPlaytestExperience.ts": 17,
@@ -85,9 +82,7 @@
     "src/utils/prompts/cot/cotCore.ts": 1
   },
   "前缀模板行": {
-    "总数": 1,
-    "按文件计数": {
-      "src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts": 1
-    }
+    "总数": 0,
+    "按文件计数": {}
   }
 }

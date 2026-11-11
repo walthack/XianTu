@@ -9,5 +9,8 @@
   ],
   "stageMeta": [
     "stage-meta.json"
+  ],
+  "openWorldSlices": [
+    "open-world-slices.json"
   ]
 }

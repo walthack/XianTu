@@ -139,7 +139,7 @@ export async function compilePresentationFormats(raw,ctx){
 
  // 行旅切片：形状同 OpenWorldSliceDefinition（原样转 JSON），外加 key（TS 导出按它取）、stageIds、stepSceneStagePrefixes、positionNodes、constants、zoneRanks、actionJudgement、actionDescribe
  {const keys=new Set(),defIds=new Set(),prefixes=new Set();
-  const {JUDGEMENT_KINDS}=raw.openWorldSlices.length?await tsLoader().import(join(root,'src/utils/judgementEngine.ts')):{};
+  const {JUDGEMENT_KINDS}=raw.openWorldSlices.length?await tsLoader().import(join(root,'src/utils/judgementKinds.ts')):{};
   for(const s of files('openWorldSlices')){const at=`openWorldSlices ${s?.key}`;
    if(!onlyKeys(s,SLICE_KEYS)||!noteOk(s)||!text(s.key)||!object(s.definition))fail(`${at}: invalid fields`);
    if(keys.has(s.key))fail(`${at}: key appears twice`);keys.add(s.key);

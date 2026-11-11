@@ -1,0 +1,653 @@
+[
+  {
+    "key": "nanhuang",
+    "definition": {
+      "id": "lcq.travel.nanhuang_v1",
+      "initialZoneId": "nh.wuyuan",
+      "zones": [
+        {
+          "id": "nh.wuyuan",
+          "name": "五原城",
+          "worldLocationId": "liuchao.location.wuyuan",
+          "areaId": "area.wuyuan"
+        },
+        {
+          "id": "nh.iron_bridge",
+          "country": "南荒",
+          "name": "铁索桥",
+          "areaId": "area.songqin"
+        },
+        {
+          "id": "nh.caravan_camp",
+          "country": "南荒",
+          "name": "商队宿处",
+          "areaId": "area.songqin"
+        },
+        {
+          "id": "nh.zixi",
+          "country": "南荒",
+          "name": "紫溪",
+          "areaId": "area.songqin"
+        },
+        {
+          "id": "nh.black_shoal",
+          "country": "南荒",
+          "name": "雨林黑石滩",
+          "areaId": "area.songqin"
+        },
+        {
+          "id": "nh.sheyi",
+          "country": "南荒",
+          "name": "蛇彝村",
+          "worldLocationId": "lcq.location.sheyi_village",
+          "areaId": "area.sheyi"
+        },
+        {
+          "id": "nh.giant_vine",
+          "country": "南荒",
+          "name": "万古巨藤",
+          "worldLocationId": "lcq.location.giant_vine",
+          "areaId": "area.giant_vine"
+        },
+        {
+          "id": "nh.huamiao",
+          "country": "南荒",
+          "name": "花苗寨",
+          "worldLocationId": "lcq.location.huamiao_village",
+          "areaId": "area.huamiao"
+        },
+        {
+          "id": "nh.xiongerpu",
+          "country": "南荒",
+          "name": "熊耳铺",
+          "worldLocationId": "liuchao.location.xiongerpu",
+          "areaId": "area.xiongerpu",
+          "heardWhen": [
+            "lcq.event.s03b_snake_flower_bridge_04"
+          ]
+        },
+        {
+          "id": "nh.shan_jian",
+          "country": "南荒",
+          "name": "南荒山涧",
+          "worldLocationId": "liuchao.location.shan_jian",
+          "areaId": "area.songqin"
+        },
+        {
+          "id": "nh.yeao",
+          "country": "南荒",
+          "name": "南荒山村",
+          "worldLocationId": "lcq.location.yeao_village",
+          "areaId": "area.yeao"
+        },
+        {
+          "id": "nh.baiyi",
+          "country": "南荒",
+          "name": "白夷族",
+          "worldLocationId": "liuchao.location.baiyi",
+          "areaId": "area.baiyi",
+          "heardWhen": [
+            "lcq.event.s03b_snake_flower_bridge_04"
+          ]
+        },
+        {
+          "id": "nh.biyu",
+          "country": "南荒",
+          "name": "碧鲮族",
+          "worldLocationId": "liuchao.location.biyu_village",
+          "areaId": "area.biyu",
+          "heardWhen": [
+            "lcq.event.s03b_snake_flower_bridge_01"
+          ]
+        },
+        {
+          "id": "nh.sea_temple",
+          "country": "南荒",
+          "name": "海神殿",
+          "kind": "interior",
+          "parentZoneId": "nh.biyu",
+          "worldLocationId": "liuchao.location.sea_temple",
+          "heardWhen": [
+            "lcq.event.s04b_lingfei_baiyi_crisis_16"
+          ]
+        },
+        {
+          "id": "nh.south_wild_valley",
+          "country": "南荒",
+          "name": "南荒山谷",
+          "worldLocationId": "liuchao.location.south_wild_valley",
+          "areaId": "area.guidao",
+          "heardWhen": [
+            "lcq.event.biling_bay_stance"
+          ]
+        },
+        {
+          "id": "nh.guiwang_dong",
+          "country": "南荒",
+          "name": "鬼王峒",
+          "worldLocationId": "liuchao.location.guiwang_dong",
+          "areaId": "area.guiwang"
+        },
+        {
+          "id": "nh.guiwang_inn",
+          "country": "南荒",
+          "name": "鬼王峒驿馆",
+          "kind": "interior",
+          "parentZoneId": "nh.guiwang_dong",
+          "worldLocationId": "lcq.location.guiwang_inn"
+        },
+        {
+          "id": "nh.gui_wang_gong",
+          "country": "南荒",
+          "name": "鬼王宫",
+          "kind": "interior",
+          "parentZoneId": "nh.guiwang_dong",
+          "worldLocationId": "liuchao.location.gui_wang_gong",
+          "heardWhen": [
+            "lcq.event.guiwangdong_coop_pact"
+          ]
+        },
+        {
+          "id": "nh.jingshen_tai",
+          "country": "南荒",
+          "name": "鬼王宫深井祭台",
+          "kind": "interior",
+          "parentZoneId": "nh.gui_wang_gong",
+          "worldLocationId": "liuchao.location.gui_wang_gong.jingshen_tai"
+        },
+        {
+          "id": "nh.departure_camp",
+          "country": "南荒",
+          "name": "南荒散峒营地",
+          "worldLocationId": "lcq.location.nanhuang_departure_camp",
+          "areaId": "area.sandong"
+        }
+      ],
+      "routes": [
+        {
+          "id": "nh.r.after.wuerlang",
+          "fromZoneId": "nh.wuyuan",
+          "toZoneId": "nh.iron_bridge",
+          "label": "随商队离开五原",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 3,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.wuerlang_joins"
+          },
+          "durationLabel": "三日",
+          "summary": "商队离开五原，沿南下商路前行，铁索桥已在眼前。"
+        },
+        {
+          "id": "nh.r.after.iron_bridge",
+          "fromZoneId": "nh.iron_bridge",
+          "toZoneId": "nh.caravan_camp",
+          "label": "到商队宿处",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.iron_bridge_ambush"
+          }
+        },
+        {
+          "id": "nh.r.after.ningyu_offer",
+          "fromZoneId": "nh.caravan_camp",
+          "toZoneId": "nh.zixi",
+          "label": "行至紫溪",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.ningyu_regicide_offer"
+          }
+        },
+        {
+          "id": "nh.r.after.zixi",
+          "fromZoneId": "nh.zixi",
+          "toZoneId": "nh.black_shoal",
+          "label": "穿过雨林到黑石滩",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.zixi_taiyi_intercept"
+          }
+        },
+        {
+          "id": "nh.r.after.black_shoal",
+          "fromZoneId": "nh.black_shoal",
+          "toZoneId": "nh.sheyi",
+          "label": "抵达蛇彝村",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.rainforest_black_shoal"
+          }
+        },
+        {
+          "id": "nh.r.stage.02_03b",
+          "fromZoneId": "nh.sheyi",
+          "toZoneId": "nh.sheyi",
+          "label": "接续蛇彝村行程",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "stageTransition": "lcq.stage_02→lcq.stage_03b_snake_flower_bridge"
+          }
+        },
+        {
+          "id": "nh.r.after.s03b_04",
+          "fromZoneId": "nh.sheyi",
+          "toZoneId": "nh.giant_vine",
+          "label": "离开蛇彝村",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 1,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s03b_snake_flower_bridge_04"
+          },
+          "durationLabel": "一日"
+        },
+        {
+          "id": "nh.r.after.s03b_05",
+          "fromZoneId": "nh.giant_vine",
+          "toZoneId": "nh.huamiao",
+          "label": "过巨藤去花苗寨",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 1,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s03b_snake_flower_bridge_05"
+          },
+          "durationLabel": "一日"
+        },
+        {
+          "id": "nh.r.after.wanwu_night",
+          "fromZoneId": "nh.huamiao",
+          "toZoneId": "nh.xiongerpu",
+          "label": "随送亲队去熊耳铺",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 1,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s03b_yinzhu_xiongerpu::burn_yinzhu_victim"
+          },
+          "durationLabel": "当日"
+        },
+        {
+          "id": "nh.r.stage.03b_04",
+          "fromZoneId": "nh.xiongerpu",
+          "toZoneId": "nh.shan_jian",
+          "label": "送亲队离开熊耳铺",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 2,
+          "forcedBy": {
+            "stageTransition": "lcq.stage_03b_snake_flower_bridge→lcq.stage_04"
+          },
+          "durationLabel": "两日",
+          "summary": "离开熊耳铺，在大山中行走两日，接近叶媪所在的村寨。"
+        },
+        {
+          "id": "nh.r.after.s04_01",
+          "fromZoneId": "nh.shan_jian",
+          "toZoneId": "nh.yeao",
+          "label": "到叶媪山村落脚",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s04_01"
+          }
+        },
+        {
+          "id": "nh.r.after.s04_04",
+          "fromZoneId": "nh.yeao",
+          "toZoneId": "nh.shan_jian",
+          "label": "继续走山涧旧路",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s04_04"
+          },
+          "durationLabel": "五日",
+          "summary": "离开叶媪山村，商队在朱老头带领下继续穿山五日。"
+        },
+        {
+          "id": "nh.r.after.s04_06",
+          "fromZoneId": "nh.shan_jian",
+          "toZoneId": "nh.baiyi",
+          "label": "送亲队到白夷",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 0.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s04_06"
+          },
+          "durationLabel": "半日"
+        },
+        {
+          "id": "nh.r.after.s04b_13",
+          "fromZoneId": "nh.baiyi",
+          "toZoneId": "nh.south_wild_valley",
+          "label": "离开白夷",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 0.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s04b_lingfei_baiyi_crisis_13"
+          },
+          "durationLabel": "半日"
+        },
+        {
+          "id": "nh.r.after.s04b_14",
+          "fromZoneId": "nh.south_wild_valley",
+          "toZoneId": "nh.biyu",
+          "label": "同往碧鲮",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 0.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s04b_lingfei_baiyi_crisis_14"
+          },
+          "durationLabel": "半日"
+        },
+        {
+          "id": "nh.r.after.s04b_19",
+          "fromZoneId": "nh.biyu",
+          "toZoneId": "nh.sea_temple",
+          "label": "去海神殿",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s04b_lingfei_baiyi_crisis_19"
+          }
+        },
+        {
+          "id": "nh.r.after.pull_harpoon",
+          "fromZoneId": "nh.sea_temple",
+          "toZoneId": "nh.biyu",
+          "label": "回碧鲮村",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.pull_harpoon_lemingzhu"
+          }
+        },
+        {
+          "id": "nh.r.after.biling_bay",
+          "fromZoneId": "nh.biyu",
+          "toZoneId": "nh.south_wild_valley",
+          "label": "离开碧鲮",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 0.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.biling_bay_stance"
+          },
+          "durationLabel": "半日"
+        },
+        {
+          "id": "nh.r.after.yiyang",
+          "fromZoneId": "nh.south_wild_valley",
+          "toZoneId": "nh.biyu",
+          "label": "回碧鲮",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 0.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.yiyang_repels_yinsha"
+          },
+          "durationLabel": "半日"
+        },
+        {
+          "id": "nh.r.after.huamiao_coop",
+          "fromZoneId": "nh.biyu",
+          "toZoneId": "nh.south_wild_valley",
+          "label": "再入古道",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 0.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.huamiao_coop_boundary"
+          },
+          "durationLabel": "半日"
+        },
+        {
+          "id": "nh.r.after.coop_pact",
+          "fromZoneId": "nh.south_wild_valley",
+          "toZoneId": "nh.guiwang_dong",
+          "label": "随弥骨入峒",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.guiwangdong_coop_pact"
+          },
+          "durationLabel": "五日",
+          "summary": "沿古道连走五日，随弥骨入峒。"
+        },
+        {
+          "id": "nh.r.stage.04b_05b",
+          "fromZoneId": "nh.guiwang_dong",
+          "toZoneId": "nh.guiwang_inn",
+          "label": "到驿馆安顿",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "stageTransition": "lcq.stage_04b_lingfei_baiyi_crisis→lcq.stage_05b"
+          }
+        },
+        {
+          "id": "nh.r.after.s05b_03",
+          "fromZoneId": "nh.guiwang_dong",
+          "toZoneId": "nh.gui_wang_gong",
+          "label": "经密道入鬼王宫",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s05b_03_saan_secret_path"
+          }
+        },
+        {
+          "id": "nh.r.after.s05b_06",
+          "fromZoneId": "nh.gui_wang_gong",
+          "toZoneId": "nh.jingshen_tai",
+          "label": "下深井祭台",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s05b_06_breakout_and_reunion"
+          }
+        },
+        {
+          "id": "nh.r.after.s05b_08b",
+          "fromZoneId": "nh.jingshen_tai",
+          "toZoneId": "nh.gui_wang_gong",
+          "label": "回宫中",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s05b_08b_altar_corpse_fight_and_danchen"
+          }
+        },
+        {
+          "id": "nh.r.after.s05b_10",
+          "fromZoneId": "nh.gui_wang_gong",
+          "toZoneId": "nh.jingshen_tai",
+          "label": "再下祭台",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s05b_10_slave_revolt_and_phoenix_change"
+          }
+        },
+        {
+          "id": "nh.r.after.ghost_king",
+          "fromZoneId": "nh.jingshen_tai",
+          "toZoneId": "nh.guiwang_dong",
+          "label": "出宫回峒中",
+          "turnCost": 1,
+          "kind": "local",
+          "forcedBy": {
+            "afterEventDone": "lcq.event.ghost_king_swallowed"
+          }
+        },
+        {
+          "id": "nh.r.after.tribes_pledge",
+          "fromZoneId": "nh.guiwang_dong",
+          "toZoneId": "nh.departure_camp",
+          "label": "散峒",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 0.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.tribes_pledge"
+          },
+          "durationLabel": "半日"
+        },
+        {
+          "id": "nh.r.after.wuer_suli",
+          "fromZoneId": "nh.departure_camp",
+          "toZoneId": "nh.yeao",
+          "label": "往南荒山村",
+          "turnCost": 1,
+          "kind": "journey",
+          "dayCost": 1.5,
+          "forcedBy": {
+            "afterEventDone": "lcq.event.s05b_wuer_suli_depart"
+          },
+          "durationLabel": "一天多",
+          "summary": "朱老头说一天多工夫就到。"
+        }
+      ],
+      "areas": [
+        {
+          "id": "area.wuyuan",
+          "name": "五原",
+          "continent": "中州"
+        },
+        {
+          "id": "area.sheyi",
+          "name": "蛇彝村",
+          "continent": "南荒",
+          "freeRoamWhen": {
+            "until": [
+              "lcq.event.s03b_snake_flower_bridge_04"
+            ]
+          }
+        },
+        {
+          "id": "area.giant_vine",
+          "name": "万古巨藤",
+          "continent": "南荒"
+        },
+        {
+          "id": "area.huamiao",
+          "name": "花苗寨",
+          "continent": "南荒",
+          "freeRoamWhen": {
+            "after": [
+              "lcq.event.s03b_snake_flower_bridge_06"
+            ],
+            "until": [
+              "lcq.event.s03b_yinzhu_xiongerpu"
+            ]
+          }
+        },
+        {
+          "id": "area.xiongerpu",
+          "name": "熊耳铺",
+          "continent": "南荒"
+        },
+        {
+          "id": "area.songqin",
+          "name": "送亲路",
+          "continent": "南荒"
+        },
+        {
+          "id": "area.baiyi",
+          "name": "白夷",
+          "continent": "南荒",
+          "freeRoamWhen": {
+            "after": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_01"
+            ],
+            "until": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_13"
+            ]
+          }
+        },
+        {
+          "id": "area.biyu",
+          "name": "碧鲮",
+          "continent": "南荒",
+          "freeRoamWhen": {
+            "after": [
+              "lcq.event.s04b_lingfei_baiyi_crisis_15"
+            ],
+            "until": [
+              "lcq.event.biling_bay_stance"
+            ]
+          }
+        },
+        {
+          "id": "area.guidao",
+          "name": "古道",
+          "continent": "南荒"
+        },
+        {
+          "id": "area.guiwang",
+          "name": "鬼王峒",
+          "continent": "南荒",
+          "freeRoamWhen": {
+            "until": [
+              "lcq.event.s05b_03_saan_secret_path"
+            ]
+          }
+        },
+        {
+          "id": "area.sandong",
+          "name": "散峒营地",
+          "continent": "南荒"
+        },
+        {
+          "id": "area.yeao",
+          "name": "南荒山村",
+          "continent": "南荒",
+          "freeRoamWhen": {
+            "after": [
+              "lcq.event.s05b_wuer_suli_depart"
+            ]
+          }
+        }
+      ],
+      "notices": [],
+      "actors": [],
+      "problems": [],
+      "actions": []
+    },
+    "stageIds": [
+      "lcq.stage_02",
+      "lcq.stage_03b_snake_flower_bridge",
+      "lcq.stage_04",
+      "lcq.stage_04b_lingfei_baiyi_crisis",
+      "lcq.stage_05b"
+    ],
+    "stepSceneStagePrefixes": [
+      "lcq.stage_03b",
+      "lcq.stage_04"
+    ],
+    "positionNodes": {
+      "segment": "碧鲮族",
+      "placeLocationId": "liuchao.location.biyu_village",
+      "nodes": [
+        {
+          "zoneId": "nh.sea_temple",
+          "names": [
+            "海神殿"
+          ]
+        }
+      ]
+    },
+    "note": "南荒行旅定义（P0-4 第 3 步，B8 从 travel/defs/qingyuNanhuang.ts 原样搬入，id 为求值后的值）。依据：06-地图与移动_剧情侧需求 §2/§3/§6，主策划地点裁定（2026-10-03），以及各关 rail 的实际 locationId（只按数据声明强制路线，不替数据补地点）。节点的 worldLocationId 一律填规范 id；子地点（海神殿、鬼王宫、深井祭台、驿馆）挂父节点。强制路线：前一拍完成（afterEventDone）或转关（stageTransition）时触发，走回执，不经 LLM。已知累计路程不重复收费；近距离用片刻/半日/一日，远距离无明载才用数日。第52章第五天从离开叶媪山村起算，村至山涧五日；第118章一天多按1.5天。stage_02出五原立即记账，沿途五拍仍逐拍演出，转03b不重复记南下路程。原行内注释：area.songqin——04 整关在送亲路上，不开放自由移动；area.guidao——古道→入峒（第82–86章）强制路程，不开放自由移动；area.guiwang——驿馆附近有限自由（第87–92章），s05b_03一激活即结束自由段；nh.guiwang_dong——05b_01/02的合同绑定峒域，驿馆是其子地点，已经算在峒内；nh.gui_wang_gong——鬼王宫是峒的子地点：进峒≠到宫，单独到达，第85章有人提及后可听闻；nh.r.stage.02_03b——旧档没有出发账时只补到达，绝不在转关重收南下天数。stageIds：行旅账管理的关卡（切入 03b 时由 02→03b 转关建立）。stepSceneStagePrefixes：南荒逐拍演出的关卡（每拍有固定演出卡，非卡片 dayPart 时按 story.stepScene.minutesPerBeat 推进时间），按前缀匹配，与原 isNanhuangSceneStage 正则 ^lcq\\.stage_0(?:3b|4|4b) 同义，不含 stage_02 / stage_05b。positionNodes：碧鲮的区内节点表（剧情裁定：海神殿是碧鲮的子地点；「南荒·海神殿」解析为碧鲮族＋海神殿）。"
+  }
+]

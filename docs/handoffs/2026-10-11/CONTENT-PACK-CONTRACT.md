@@ -340,3 +340,14 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - 留在 TS 的只有代码：`characterFlagSlug`、落旗标逻辑、查找函数本身；`offscreen.lcq.xingyuehu_war` 这个 id 仍由冻结文件 `runtime.ts` 生成，只有它的提示在包里。
 - `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的分歧一段改为取人物包 `if-branches.json` 原样转写、对照值改为真实 catalog 段的合并（TS 表搬空后原来的转写取到 0 条）。
 - catalog 只变 `ifBranches` 段与 version（`a10abf5c8c597660` → `e3952d7c9800d358`）；棘轮 `divergenceLedger.ts` 17 → 0（总数 958 → 941，文件 66 → 65）。
+
+## 2026-11-11 行旅定义与常驻入口进塞外／昭南包（B8）
+
+塞外包 `packs/saiwai/` manifest 加 `openWorldSlices: ["open-world-slices.json"]`；昭南包 `packs/zhaonan/` manifest 加 `openWorldSlices: ["open-world-slices.json"]`、`persistentEntries: ["persistent-entries.json"]`。两包的 `dependsOn` 仍只有 `qingyu.core`：编译通过，归属扫描没有报引用别包定义的 id，没有成环；核心包 `timeline.json` 的 `sliceEntered` 引用五原切片 id，不需要改依赖（`definition.id` 不登记归属，F0b）。
+- **昭南 `open-world-slices.json`**：一条，key `nanhuang`。原 `travel/defs/qingyuNanhuang.ts` 的 definition（areas 12、zones 20、routes 29，notices／actors／problems／actions 为空）、`stageIds`（5 关）、`stepSceneStagePrefixes`（`lcq.stage_03b`、`lcq.stage_04`，原 `qingyuNanhuangStepScenes.ts`）、`positionNodes`（碧鲮：segment、placeLocationId、海神殿一节点）。
+- **塞外 `open-world-slices.json`**：一条，key `wuyuan`，整份五原切片：definition 的 zones（8）来自原 `qingyuWuyuanZones.ts`，routes 8／notices 2／actors 2／problems 1／actions 2 来自原 `wuyuanOpenWorldSlice.ts`；`constants` 两份合并（节点 id 8 个在前，切片与路线 id 7 个在后）；`zoneRanks`（6 个节点）、`actionJudgement`、`actionDescribe`；`positionNodes` 只有 segment／placeLocationId（无节点表）。
+- **昭南 `persistent-entries.json`**：algae、rejoin 两条，按原顺序。编译器给 algae 带上 `templateEvent`（04b 内置关原始事件，与原静态 import 深相等），catalog 因此多出一份事件，属预期。
+- **生成方式**：JSON 由脚本从当前 TS 模块的求值结果转写（转写同 `contentPackPresentationFormats` 搬迁演练第 1 步），id 都是求值后的值；`E()`／`B03()`／`B04B()`／`journey()`／`local()`／`after()` 随表删掉，前缀模板行归零。原文件头注释与行内注释进条目 `note`（编译时剥掉）。
+- **TS 侧**：`TS_NANHUANG_OPEN_WORLD_SLICE`、`TS_WUYUAN_ZONE_PART`、`TS_WUYUAN_OPEN_WORLD_SLICE` 只剩 `{key}`；`TS_NANHUANG_STEP_SCENE_STAGE_IDS` 为 `[]`；`TS_PERSISTENT_ENTRIES` 为 `[]`，`persistentLineEntries.ts` 对 04b 关 JSON 的静态 import（只给 TS 条目兜底取模板）随之删掉。全部原导出名、类型与取值不变（两棵树逐项对比）。留在 TS 的：`wuyuanOpenWorldSlice.ts` 的逻辑代码（强制路线、王哲殉军、`hasDepartedWuyuan` 事件列表等），`persistentLineEntries.ts` 的 `QINGYU_STAGE_PREFIX`。
+- **编译器（M2，纯机制）**：`openWorldSlices` 非空时编译器要读 `JUDGEMENT_KINDS`，原来经 `src/utils/judgementEngine.ts`，其 import 链会读 `generated/catalog.json`，删掉 catalog 后单次重建失败（`contentPackRebuild`、`nationLinesPack` 报红）。改为：`JudgementKind`／`JUDGEMENT_KINDS` 原样拆到纯模块 `src/utils/judgementKinds.ts`，`judgementEngine.ts` 原名转导出，编译器读纯模块。
+- catalog 只变 `openWorldSlices`、`persistentEntries` 两段与 version（`ca385e4a806b1d9a` → `95f05996173bed2e`）；棘轮总数 818 → 739（文件 66 → 63），前缀模板行 1 → 0。
