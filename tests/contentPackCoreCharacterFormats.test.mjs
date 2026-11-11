@@ -2,7 +2,7 @@
 // storyAxis、locationAliases、characterProfiles、ifBranches。编译夹具在 _newbot_tmp 下的临时 packs 目录（写法同 contentPackLineFormats）。
 // 不写死真实剧情 id：关、事件、地点、角色都从内置关、locations.json、实体总表动态挑；合成 id 一律 test.* 前缀。
 // 「与 TS 表重复」用合成的临时 TS 条目：本文件与编译器（scripts/*.mjs 的 jiti）共用模块缓存，用例里改 TS_ 表、用完还原，编译期校验看得到。
-// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后自然变成空演练）。
+// 最后一组「搬迁演练」把现有 TS 表整张转写成包 JSON、临时搬空 TS 表后编译，合并值必须与现在逐项 deepStrictEqual（表搬空后：没改口径的段自然变成空演练；人物拍点一段自 B2 起取合并值，仍是真演练）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,mkdir,readFile,readdir,writeFile,rm} from 'node:fs/promises';
@@ -422,6 +422,26 @@ test('归属检查扫得到新段：引用包内关的事件要 dependsOn；人�
  await rejects({x:{id:'test.x',characterBeats:['f.json'],files:{'f.json':{quests:[quest()]}}},y:{id:'test.y',characterBeats:['f.json'],files:{'f.json':{quests:[quest()]}}}},/characterQuest id test_quest defined by both test\.x and test\.y/);
 });
 
+// B2 裁定：人物任务 id 是 characterBeats 段内的单独命名空间，不进通用归属扫描（核心包场面合同里有与人物任务 id 同名的局部 id）
+test('归属：人物任务 id 不进通用扫描——别的包里同名的普通字符串不算引用；同一人物任务 id 两个包定义仍报错；人物拍点的事件照常要 dependsOn',async()=>{
+ const holder={id:'test.holder',characterBeats:['f.json'],files:{'f.json':{quests:[quest()]}}};
+ // 别的包（无依赖）里出现与人物任务 id 同名的字符串（stance 的 extraNames 是进通用扫描的自由字符串）：整串、a:b 拆段、账本前缀尾
+ const other={id:'test.other',characterProfiles:['f.json'],files:{'f.json':{stance:[stance({extraNames:['test_quest','party:test_quest','flags.test_quest']})]}}};
+ const out=await compile({holder,other});
+ assert.deepEqual(out.characterBeats.quests.map(q=>q.id),['test_quest']);
+ // 反方向（人物包不依赖别的包）也不触发
+ await compile({holder:{...holder,dependsOn:['test.other']},other});
+ // 两个包定义同一人物任务 id：不论有没有依赖都报错
+ await rejects({holder,y:{id:'test.y',dependsOn:['test.holder'],characterBeats:['f.json'],files:{'f.json':{quests:[quest({name:'另一人'})]}}}},/characterQuest id test_quest defined by both test\.holder and test\.y/);
+ // 人物拍点引用包内关的事件：不写 dependsOn 仍报错
+ const a={id:'test.a',texts:['texts.json'],files:{'texts.json':await read(join(qinDir,'qin-texts.json'))}};
+ const qinStage=await read(join(qinDir,'stage-qin-xianyang.json'));const QE=qinStage.scenario.events[0].id;
+ const b={id:'test.b',dependsOn:['test.a'],stages:['stage.json'],files:{'stage.json':qinStage}};
+ const beatQuest={quests:[quest({beats:[{reviewSummary:'包内关事件',status:'ready',eventIds:[QE]}]})]};
+ await rejects({a,b,c:{id:'test.c',characterBeats:['f.json'],files:{'f.json':beatQuest}}},/test\.c references \S+ owned by test\.b; add dependsOn/);
+ assert.equal((await compile({a,b,c:{id:'test.c',dependsOn:['test.b'],characterBeats:['f.json'],files:{'f.json':beatQuest}}})).characterBeats.quests[0].beats[0].eventIds[0],QE);
+});
+
 // —— 搬迁演练：现有 TS 表整张转写进一个合成包，临时搬空 TS 表后编译，合并值与现在逐项相同 ——
 /** 从 TS 源码取 names 行（`...entityAliases("<kind>","<id>")` 与字面名字）与 cap 档位：搬迁预检用，表搬空后取到 0 条。 */
 const sourceEntries=async rel=>{
@@ -434,7 +454,8 @@ const sourceEntries=async rel=>{
 test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通过，合并值 deepStrictEqual 现值',async()=>{
  const lines=SL.SECONDARY_LINES.map((l,i)=>i?{...structuredClone(l),after:SL.SECONDARY_LINES[i-1].id}:structuredClone(l));
  const lce=Object.entries(SL.TS_LINE_CRITICAL_EVENTS).map(([eventId,lineId])=>({eventId,lineId}));
- const beats={quests:structuredClone(CQ.TS_CHARACTER_QUESTS),highlights:structuredClone(CQ.TS_CHARACTER_HIGHLIGHTS)};
+ // B2 起人物任务与高光在人物包里、TS 表为空：同二级线，取合并值转写（不取 TS 表，否则表搬空后演练合出来是空的）
+ const beats={quests:structuredClone(CQ.CHARACTER_QUESTS),highlights:structuredClone(CQ.CHARACTER_HIGHLIGHTS)};
  const story={stageOrder:[...AX.STAGE_ORDER],layers:structuredClone(AX.MAIN_QUEST_LAYERS),stages:structuredClone(AX.MAIN_QUEST_STAGES),nodes:structuredClone(AX.MAIN_QUEST_NODES),requirements:structuredClone(AX.MAIN_QUEST_REQUIREMENTS)};
  const loc={canonical:{...LOC.TS_LOCATION_ID_ALIASES},parents:{...LOC.TS_LOCATION_PARENTS},display:structuredClone(LOC.TS_LOCATION_NAMES)};
  const st=await sourceEntries('src/modules/scenarioMods/stanceProfiles.ts'),ac=await sourceEntries('src/modules/scenarioMods/affinityCaps.ts');
