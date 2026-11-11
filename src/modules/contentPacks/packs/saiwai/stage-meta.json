@@ -1,0 +1,93 @@
+[
+  {
+    "note": "塞外·开局（荒原）：章配乐 1、事件配乐 6，原在 musicLibrary.ts CHAPTER_MOOD_MAP／EVENT_MOOD_MAP",
+    "stageId": "lcq.stage_01",
+    "presentation": {
+      "chapters": {
+        "lcq.chapter.stage_01": {
+          "mood": "theme"
+        }
+      },
+      "events": {
+        "lcq.event.s01_01": {
+          "mood": "theme"
+        },
+        "lcq.event.s01_02": {
+          "mood": "danger"
+        },
+        "lcq.event.s01_03": {
+          "mood": "battle"
+        },
+        "lcq.event.s01_04": {
+          "mood": "battle"
+        },
+        "lcq.event.s01_05": {
+          "mood": "aspire"
+        },
+        "lcq.event.s01_06": {
+          "mood": "emotion"
+        }
+      }
+    }
+  },
+  {
+    "note": "塞外·五原：章配乐 1、事件配乐 6（musicLibrary.ts）、目标 1（fixedQuestObjectives.ts）。s02_04 的目标特判、按地点分段的章名（eventNarrativeView.ts storyRouteLocation）是算法，留在 TS",
+    "stageId": "lcq.stage_02",
+    "presentation": {
+      "chapters": {
+        "lcq.chapter.stage_02": {
+          "mood": "daily"
+        }
+      },
+      "events": {
+        "lcq.event.s02_01": {
+          "mood": "aspire"
+        },
+        "lcq.event.s02_02": {
+          "mood": "lament"
+        },
+        "lcq.event.s02_03": {
+          "mood": "danger"
+        },
+        "lcq.event.s02_04": {
+          "mood": "danger"
+        },
+        "lcq.event.s02_05": {
+          "mood": "battle"
+        },
+        "lcq.event.s02_06": {
+          "mood": "court"
+        },
+        "lcq.event.wuerlang_joins": {
+          "objective": "问清走投无路的武二郎是否随队南行"
+        }
+      }
+    }
+  },
+  {
+    "note": "塞外·隔离关：defaultLineQuarantined 原在 canonRail.ts TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS；章配乐 1、事件配乐 3（musicLibrary.ts）、目标 1（fixedQuestObjectives.ts）",
+    "stageId": "lcq.stage_03",
+    "defaultLineQuarantined": true,
+    "presentation": {
+      "chapters": {
+        "lcq.chapter.stage_03": {
+          "mood": "court"
+        }
+      },
+      "events": {
+        "lcq.event.s03_02": {
+          "mood": "danger"
+        },
+        "lcq.event.s03_03": {
+          "mood": "danger"
+        },
+        "lcq.event.s03_04": {
+          "mood": "emotion"
+        },
+        "lcq.event.s03_12": {
+          "objective": "进入这座无灯火的蛇彝村，先安置商队"
+        }
+      }
+    }
+  }
+]

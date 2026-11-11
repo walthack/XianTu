@@ -182,3 +182,14 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - 核心包 `line-compass.json` 里 `taiquan` 原是最后一条，切掉后前一条（`tang`）的 `},` 改成 `}`，其余字节不动；catalog 的 `lineCompass` 段逐字节同搬前。
 - 加拍表里领起「汉线补全」的三行注释夹在太泉圣果与太泉余波条目之间、同时领起其后洛都（汉关）条目：TS 里保留，复制进包里第一条余波加拍的 `note`。
 - 未搬（留在 TS）：`fixedQuestObjectives.ts` 里 `han_shouyang_gaoyanei` 的 packText 目标特判、`eventNarrativeView.ts` 的 `storyActionPresentation`（同一事件到舞都改写）；`lineUnlock.ts`、`loadRepairs.ts` 的太泉逻辑；别的线挂在太泉事件上的节点。
+
+## 2026-11-11 塞外线数据进包（塞外线 S4）
+
+塞外包 `packs/saiwai/`（`id: "qingyu.saiwai"`，`dependsOn: ["qingyu.core"]`）：`rails.json`（塞外 2 个**手审**档：stage_01／02，带 `handReviewed: true`）、`stage-meta.json`（3 关：stage_03 隔离、3 条章配乐、15 条事件配乐、2 条目标）。塞外不是国家线：没有二级线、下一步表、`lineCompass.*` 正文；没有生成档、加拍、称号。3 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋、太泉不同之处：
+- **手审 rail 档进包**：TS `HAND_REVIEWED_CANON_RAIL_PROFILES` 原样搬进手写 `rails.json`，`entityName(kind,id)`／`entityRecognitionLabel(kind,id,label)` 改写为 `{{entity:kind:id}}`／`{{entityLabel:kind:id:label}}`（运行时解析，结果与搬前逐字相同）。TS 常量保留为空数组。
+- **保序靠 `handReviewed: true`**：包 rail 条目可选字段，只收 `true`，只许挂内置关（挂包内关编译报错）。`CANON_RAIL_PROFILES` = TS 手审档 → **包 rail 里 `handReviewed: true` 的档（按包顺序、文件内顺序，运行时去掉该标记）** → 挂包内关的包 rail（秦）→ 其余挂内置关的包 rail 与生成档按 `modId` 排。没写这个字段的手写 rails 文件仍按 `modId` 归位（与原规则相同）。全表顺序与搬前相同（`tests/saiwaiPackMigration.test.mjs`）。
+- rail 生成器仍用 `manualStageIds` 排除 stage_01／02；万一生成出来，路由会因手写 `rails.json` 认领而报错（fail closed），不会覆盖。
+- 隔离：`lcq.stage_03` 从 TS 隔离表移到 stageMeta `defaultLineQuarantined: true`。成员不变，`DEFAULT_LINE_QUARANTINED_STAGE_IDS` 的迭代顺序变了（stage_03 排到 TS 剩余各关之后）；现有读取方只用 `.has()`。`tests/contentPackLineFormats.test.mjs` 的 TS 隔离夹具改为从 `TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS` 动态取（避开注入成 false 的 `lyl.luoyang_coup`）。
+- 未搬（留在 TS）：`fixedQuestObjectives.ts` 与 `formatQuestCompass` 的 `s02_04` 特判；`eventNarrativeView.ts` 里 stage_02 按地点分段的章名算法（含 `storyRouteLocation` 表）与 `legacyNarrativeVariants` 的 `gamble_bond_signed`／`ningyu_enters_gamble` 条件改写；开局/试玩代码、`loadRepairs.ts` 的 stage_01 旧短语快照；别的线挂在塞外事件上的节点。

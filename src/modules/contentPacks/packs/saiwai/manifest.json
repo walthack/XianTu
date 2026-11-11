@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "qingyu.saiwai",
+  "dependsOn": [
+    "qingyu.core"
+  ],
+  "rails": [
+    "rails.json"
+  ],
+  "stageMeta": [
+    "stage-meta.json"
+  ]
+}

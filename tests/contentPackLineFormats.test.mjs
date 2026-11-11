@@ -52,6 +52,9 @@ assert.ok(EVENT_MOOD_ID,'EVENT_MOOD_MAP 已搬空：改用合成的临时 TS 条
 const EVENT_MOOD_STAGE=(await Promise.all((await readdir(join(root,'src/modules/scenarioMods/builtins/data'))).filter(f=>f.endsWith('.json')).map(f=>read(join(root,'src/modules/scenarioMods/builtins/data',f))))).find(m=>m.scenario.events.some(e=>e.id===EVENT_MOOD_ID)).manifest.id;
 const TS_LINE_ID=TS_SECONDARY_LINES[0]?.id;
 assert.ok(TS_LINE_ID,'TS_SECONDARY_LINES 已搬空：改用合成的临时 TS 线');
+// 塞外线 S4 把 lcq.stage_03 的隔离迁进塞外包：TS 隔离夹具同样改为动态挑一个现存条目（避开下面注入成 false 的 lyl.luoyang_coup）
+const TS_QUARANTINED_ID=[...TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS].find(id=>id!=='lyl.luoyang_coup');
+assert.ok(TS_QUARANTINED_ID,'TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS 已搬空：改用合成的临时 TS 条目');
 const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
 
 const loadWithCatalog=async(rel,catalog)=>{
@@ -148,7 +151,7 @@ test('stageMeta 隔离：canonRail 合并后的集合与 isDefaultLineQuarantine
  const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:'lyl.luoyang_coup',defaultLineQuarantined:false}]});
  assert.equal(rail.isDefaultLineQuarantinedStageId(S10),true);
  assert.equal(rail.isDefaultLineQuarantinedStageId('lyl.luoyang_coup'),false);
- assert.equal(rail.isDefaultLineQuarantinedStageId('lcq.stage_03'),true,'没写的关沿用 TS 表');
+ assert.equal(rail.isDefaultLineQuarantinedStageId(TS_QUARANTINED_ID),true,'没写的关沿用 TS 表');
  assert.equal(rail.DEFAULT_LINE_QUARANTINED_STAGE_IDS.size,TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.size);
 });
 
@@ -174,7 +177,7 @@ test('stageMeta 反例：关、章、事件、mood、目标、称号与字段',a
 
 test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
  // 宋线 S4 把宋的条目迁出了这些 TS 表：夹具改用仍留在 TS 里的非宋条目
- await rejects(metaPack([{stageId:'lcq.stage_03',defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
+ await rejects(metaPack([{stageId:TS_QUARANTINED_ID,defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
  await rejects(metaPack([{stageId:'lyl.luoyang_coup',milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/);
  await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{events:{'lyl.event.liujian_takes_nangong':{objective:'x'}}}}]),/objective for lyl\.event\.liujian_takes_nangong already set in fixedQuestObjectives\.ts/);
  await rejects(metaPack([{stageId:EVENT_MOOD_STAGE,presentation:{events:{[EVENT_MOOD_ID]:{mood:'court'}}}}]),new RegExp(`event mood for ${reEsc(EVENT_MOOD_ID)} also set in musicLibrary\\.ts EVENT_MOOD_MAP`));
