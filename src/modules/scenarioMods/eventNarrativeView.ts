@@ -6,20 +6,16 @@ import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { evaluateLedgerCondition } from './ledgerConditions';
 import { computePresentNames } from './presence';
 import { CONTENT_PACKS, packText } from '../contentPacks';
-import { stageMetaChapterTitle, stageMetaUiChapterEventIds, stageMetaUiChapterGroups } from '../contentPacks/stageMeta';
+import { stageMetaChapterTitle, stageMetaEvent, stageMetaRouteChapterTitle, stageMetaUiChapterEventIds, stageMetaUiChapterGroups, type StageMeta, type StageMetaCompatNarrativeVariant } from '../contentPacks/stageMeta';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
 // 对列入兼容层的稳定事件，代码侧覆盖旧快照中的过时 variant；否则老存档
 // 即使升级应用，仍会继续使用当初写进 runtime.events 的旧完成合同。
-const legacyNarrativeVariants: Record<string, Array<{
-  when: ScenarioCondition[];
-  replacesCanonRail?: boolean;
-  name?: string;
-  description?: string;
-  axisBeat?: string;
-  objective?: string;
-}>> = {
+// F0b（2026-11-11）：本表与内容包 stageMeta 事件的 compatNarrativeVariants 同形（按事件 id，TS 表有就不看包，编译期禁止两边都有）；
+// 带 priority: 'before-event-variants' 的条目先于事件自带的 narrativeVariants 生效，只改写文案字段、不参与 narrativeVariantReplacesCanonRail。
+type CompatNarrativeVariant = Omit<StageMetaCompatNarrativeVariant, 'when' | 'replacesCanonRail'> & { when: ScenarioCondition[]; replacesCanonRail?: boolean };
+export const TS_COMPAT_NARRATIVE_VARIANTS: Readonly<Record<string, CompatNarrativeVariant[]>> = {
   'lcq.event.gamble_bond_signed': [
     {
       when: [
@@ -65,7 +61,28 @@ const legacyNarrativeVariants: Record<string, Array<{
     axisBeat: '孟非卿确认谢艺仍然生还，当场至少作出一项具体安排：派人接应或探望谢艺，或命人调查黑魔海与鬼王峒线索。',
     objective: '说明谢艺生还与鬼王峒变故，并见证孟非卿作出具体安排',
   }],
+  // 未做测试时（既没完成、也没拒测）的山村测试：先于一切变体，并清空相关势力（原 resolveScenarioEventNarrativeRaw 里的特判）。
+  'lcq.event.shanghou_revealed': [{
+    when: [
+      { path: 'flags.event.shanghou_revealed.done', operator: 'neq', value: true },
+      { path: 'flags.event.shanghou_revealed.relic_test_refused', operator: 'neq', value: true },
+    ],
+    priority: 'before-event-variants',
+    relatedFactionIds: [], name: '山村中的测试', objective: '随叶媪进堂，听主人说明测试',
+    description: '进村前路边有白骨。堂中主人打开鲨皮红木箱，展示黄底黑边三角与红色拐弯箭头，警告167人触碰后化为火球。只写眼前物件和警告，不解释电、高压，不提前揭露朱老头本相，不替玩家选择。',
+    axisBeat: '堂中主人要求测试天命之人，玩家尚未决定是否触碰。',
+  }],
 };
+
+function compatNarrativeVariants(eventId: string): readonly CompatNarrativeVariant[] | undefined {
+  return Object.prototype.hasOwnProperty.call(TS_COMPAT_NARRATIVE_VARIANTS, eventId)
+    ? TS_COMPAT_NARRATIVE_VARIANTS[eventId]
+    : stageMetaEvent(CONTENT_PACKS.stageMeta || [], eventId)?.compatNarrativeVariants as CompatNarrativeVariant[] | undefined;
+}
+/** 兼容层里只填补老存档缺失 variants 的那部分（不含 before-event-variants）。 */
+function fillInCompatVariants(eventId: string): CompatNarrativeVariant[] | undefined {
+  return compatNarrativeVariants(eventId)?.filter(item => !item.priority);
+}
 
 function flagValue(flags: Record<string, unknown>, path: string): unknown {
   if (!path.startsWith('flags.')) return undefined;
@@ -121,14 +138,13 @@ function resolveScenarioEventNarrativeRaw(
   divergences?: ScenarioDivergence[],
   runtime?: unknown,
 ): ScenarioModEvent {
-  if (event.id === 'lcq.event.shanghou_revealed'
-    && flagValue(flags, 'flags.event.shanghou_revealed.done') !== true
-    && flagValue(flags, 'flags.event.shanghou_revealed.relic_test_refused') !== true) {
-    return { ...event, relatedFactionIds: [], name: '山村中的测试', objective: '随叶媪进堂，听主人说明测试',
-      description: '进村前路边有白骨。堂中主人打开鲨皮红木箱，展示黄底黑边三角与红色拐弯箭头，警告167人触碰后化为火球。只写眼前物件和警告，不解释电、高压，不提前揭露朱老头本相，不替玩家选择。',
-      axisBeat: '堂中主人要求测试天命之人，玩家尚未决定是否触碰。' };
+  const first = compatNarrativeVariants(event.id)?.find(item => item.priority === 'before-event-variants'
+    && item.when.every(condition => matches(condition, flags, runtime)));
+  if (first) {
+    const { when, priority, ...rewrite } = first;
+    return { ...event, ...rewrite, ...(rewrite.relatedFactionIds ? { relatedFactionIds: [...rewrite.relatedFactionIds] } : {}) };
   }
-  const compatibilityVariants = legacyNarrativeVariants[event.id];
+  const compatibilityVariants = fillInCompatVariants(event.id);
   // 新版内置关卡的数据是权威；兼容层只填补老存档快照缺失的 variants，不能反向覆盖新数据。
   const variants = event.narrativeVariants?.length ? event.narrativeVariants : compatibilityVariants;
   const variant = variants?.find(item => item.when.every(condition => matches(condition, flags, runtime)));
@@ -220,21 +236,31 @@ export function storyChapterTitleIn(packs: ChapterTitlePacks, modId: string | un
   // 内容包 stageMeta（包内关或内置关）：事件的 uiChapterId，其次该关 defaultUiChapterId；排在上面各特判之后（编译期校验不与特判重叠）
   const metaTitle = eventId ? stageMetaChapterTitle(packs.stageMeta || [], modId, eventId) : undefined;
   if (metaTitle) return metaTitle;
+  // 内容包 stageMeta 关级 uiChapterByRouteLocation（F0b）：按 storyRouteLocation 分段；编译期校验不与下面的 TS 算法重叠
+  const routeTitle = eventId ? stageMetaRouteChapterTitle(packs.stageMeta || [], modId, eventId, storyRouteLocationIn(packs.stageMeta || [], eventId), fallback) : undefined;
+  if (routeTitle !== undefined) return routeTitle;
   if (modId !== 'lcq.stage_02' || !eventId) return fallback;
   if (['lcq.event.s02_01', 'lcq.event.s02_03', 'lcq.event.s02_02'].includes(eventId)) return fallback;
   return storyRouteLocation(eventId)?.includes('南荒') ? '南荒商路' : '五原';
 }
 
+/** 作者写死地点的商路／押送拍（F0b：与内容包 stageMeta 事件的 routeLocation 合并，TS 表优先，编译期禁止两边都有）。 */
+export const TS_STORY_ROUTE_LOCATIONS: Readonly<Record<string, string>> = {
+  'lcq.event.iron_bridge_ambush': '南荒途中·铁索桥',
+  'lcq.event.ningyu_regicide_offer': '南荒途中·商队宿处',
+  'lcq.event.zixi_taiyi_intercept': '南荒途中·紫溪',
+  'lcq.event.rainforest_black_shoal': '南荒途中·雨林黑石滩',
+  'lcq.event.silent_sheyi_village': '南荒·蛇彝村',
+};
+
 export function storyRouteLocation(eventId: string): string | undefined {
+  return storyRouteLocationIn(CONTENT_PACKS.stageMeta || [], eventId);
+}
+
+export function storyRouteLocationIn(stageMeta: readonly StageMeta[], eventId: string): string | undefined {
   // 可选姿态拍（`<主线事件>_ins_<线>`）演在主线事件所在的路上，不另起地点。
   eventId = eventId.split('_ins_')[0];
-  return ({
-    'lcq.event.iron_bridge_ambush': '南荒途中·铁索桥',
-    'lcq.event.ningyu_regicide_offer': '南荒途中·商队宿处',
-    'lcq.event.zixi_taiyi_intercept': '南荒途中·紫溪',
-    'lcq.event.rainforest_black_shoal': '南荒途中·雨林黑石滩',
-    'lcq.event.silent_sheyi_village': '南荒·蛇彝村',
-  } as Record<string, string>)[eventId];
+  return (TS_STORY_ROUTE_LOCATIONS as Record<string, string>)[eventId] ?? stageMetaEvent(stageMeta, eventId)?.routeLocation;
 }
 
 /** 合同已有准备拍落账（事件进行中）时，去X 指向下一个可做动作 sceneLocation 里能认出的正典地点（取名字最长的命中）；认不出、或还没开打，仍用事件 locationId（fix5939-2） */
@@ -310,6 +336,9 @@ export function questCompassPhrases(
   return phrases;
 }
 
+/** 罗盘只显示目标、不写去哪见谁的拍（F0b：与内容包 stageMeta 事件的 compassObjectiveOnly 合并）。 */
+export const TS_COMPASS_OBJECTIVE_ONLY_EVENT_IDS: ReadonlySet<string> = new Set(['lcq.event.s02_04']);
+
 /** 任务栏罗盘：去哪、见谁。不剧透结果，不替代 objective。 */
 export function formatQuestCompass(
   event: ScenarioModEvent | null | undefined,
@@ -318,7 +347,7 @@ export function formatQuestCompass(
   present?: ReadonlySet<string>,
 ): string {
   const objective = resolveFixedQuestObjective(event);
-  if (event?.id === 'lcq.event.s02_04') return objective;
+  if (event?.id && (TS_COMPASS_OBJECTIVE_ONLY_EVENT_IDS.has(event.id) || stageMetaEvent(CONTENT_PACKS.stageMeta || [], event.id)?.compassObjectiveOnly)) return objective;
   const pointer = questCompassPhrases(event, runtime, atLocationId, present).join(' · ');
   if (!pointer) return objective;
   if (!objective) return pointer;
@@ -332,7 +361,7 @@ export function narrativeVariantReplacesCanonRail(
   divergences?: ScenarioDivergence[],
   runtime?: unknown,
 ): boolean {
-  const compatibilityVariants = legacyNarrativeVariants[event.id];
+  const compatibilityVariants = fillInCompatVariants(event.id);
   const variants = event.narrativeVariants?.length ? event.narrativeVariants : compatibilityVariants;
   const explicitReplacement = variants?.some(item => item.replacesCanonRail === true
     && item.when.every(condition => matches(condition, flags, runtime))) ?? false;
@@ -397,9 +426,16 @@ export function questStallHint(stallTurns: unknown, mainActionLabel: string | un
   return `主线已有 ${turns} 轮没有推进：可直接点行动区的「主线 · ${mainActionLabel}」，或照目标行动${goalNote}。`;
 }
 
+/** 按所在地点换展示的动作（F0b：与内容包 stageMeta 事件的 actionPresentation 合并，TS 表在前；TS 表里存正文键，用时才 packText）。 */
+export const TS_STORY_ACTION_PRESENTATIONS: ReadonlyArray<{ eventId: string; actionId: string; whenLocationId: string; labelTextId: string; playerLineTextId: string }> = [
+  { eventId: 'lyl.event.han_shouyang_gaoyanei', actionId: 'descend_shouyang_to_wudu', whenLocationId: 'liuchao.location.wudu', labelTextId: 'report8091.han.arrived.label', playerLineTextId: 'report8091.han.arrived.playerLine' },
+];
+
 /** 旅行已经落位后，行动展示承接所在地；合同 id/hash 与结算条件不变。 */
 export function storyActionPresentation<T extends { eventId: string; actionId: string; label: string; playerLine: string }>(action: T, save: any): T {
-  if (action.eventId !== 'lyl.event.han_shouyang_gaoyanei' || action.actionId !== 'descend_shouyang_to_wudu'
-    || save?.角色?.位置?.locationId !== 'liuchao.location.wudu') return action;
-  return { ...action, label: packText('report8091.han.arrived.label'), playerLine: packText('report8091.han.arrived.playerLine') };
+  const at = save?.角色?.位置?.locationId;
+  const ts = TS_STORY_ACTION_PRESENTATIONS.find(p => p.eventId === action.eventId && p.actionId === action.actionId && p.whenLocationId === at);
+  if (ts) return { ...action, label: packText(ts.labelTextId), playerLine: packText(ts.playerLineTextId) };
+  const pack = stageMetaEvent(CONTENT_PACKS.stageMeta || [], action.eventId)?.actionPresentation?.find(p => p.actionId === action.actionId && p.whenLocationId === at);
+  return pack ? { ...action, label: pack.label, playerLine: pack.playerLine } : action;
 }
