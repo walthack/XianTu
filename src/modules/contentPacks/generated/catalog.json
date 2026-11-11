@@ -1,5 +1,5 @@
 {
-  "version": "5dc9243674e0ce22",
+  "version": "b79fd126a0c74192",
   "contracts": [
     {
       "meta": {
@@ -18698,6 +18698,9 @@
     "consequences": [],
     "prompts": {}
   },
+  "endings": [],
+  "openWorldSlices": [],
+  "persistentEntries": [],
   "overlays": [
     {
       "stageId": "lcq.stage_04b_lingfei_baiyi_crisis",

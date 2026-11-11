@@ -1,4 +1,7 @@
 import type { OpenWorldArea, OpenWorldRoute, OpenWorldSliceDefinition, OpenWorldZone } from '../../openWorldSlice';
+import { CONTENT_PACKS } from '../../../contentPacks';
+import { resolveOpenWorldSlice, type TsOpenWorldSlicePart } from '../openWorldSlices';
+import { TS_NANHUANG_STEP_SCENE_STAGE_IDS } from './qingyuNanhuangStepScenes';
 
 /**
  * 南荒行旅定义（P0-4 第 3 步）。依据：06-地图与移动_剧情侧需求 §2/§3/§6，主策划地点裁定（2026-10-03），
@@ -9,11 +12,14 @@ import type { OpenWorldArea, OpenWorldRoute, OpenWorldSliceDefinition, OpenWorld
  * - 已知累计路程不重复收费；近距离用片刻/半日/一日，远距离无明载才用数日。
  * - 第52章第五天从离开叶媪山村起算，村至山涧五日；第118章一天多按1.5天。
  * - stage_02出五原立即记账，沿途五拍仍逐拍演出，转03b不重复记南下路程。
+ *
+ * F0b（2026-11-11）：下面的 TS_* 是 TS 侧数据，经 TS_NANHUANG_OPEN_WORLD_SLICE 与内容包 openWorldSlices（key 'nanhuang'）二选一，
+ * 导出名不变（文件末尾）。逐拍演出关前缀拆到 qingyuNanhuangStepScenes.ts（编译器要在没有 catalog 时读它）。
  */
-export const NANHUANG_TRAVEL_SLICE_ID = 'lcq.travel.nanhuang_v1';
+const TS_NANHUANG_TRAVEL_SLICE_ID = 'lcq.travel.nanhuang_v1';
 
 /** 行旅账管理的关卡（切入 03b 时由 02→03b 转关建立）。 */
-export const NANHUANG_STAGE_IDS = [
+const TS_NANHUANG_STAGE_IDS = [
   'lcq.stage_02',
   'lcq.stage_03b_snake_flower_bridge',
   'lcq.stage_04',
@@ -21,20 +27,13 @@ export const NANHUANG_STAGE_IDS = [
   'lcq.stage_05b',
 ] as const;
 
-/**
- * 逐拍演出的关卡（每拍有固定演出卡，非卡片 dayPart 时按 story.stepScene.minutesPerBeat 推进时间）。
- * 按前缀匹配，与原 isNanhuangSceneStage 正则 ^lcq\.stage_0(?:3b|4|4b) 同义；不含 stage_02 / stage_05b。
- */
-export const NANHUANG_STEP_SCENE_STAGE_IDS = [
-  'lcq.stage_03b',
-  'lcq.stage_04',
-] as const;
+/** 逐拍演出的关卡：见 qingyuNanhuangStepScenes.ts（F0b 原样拆出）。 */
 
 const E = (short: string): string => `lcq.event.${short}`;
 const B03 = (n: string): string => E(`s03b_snake_flower_bridge_${n}`);
 const B04B = (n: string): string => E(`s04b_lingfei_baiyi_crisis_${n}`);
 
-export const NANHUANG_AREAS: OpenWorldArea[] = [
+const TS_NANHUANG_AREAS: OpenWorldArea[] = [
   { id: 'area.wuyuan', name: '五原', continent: '中州' },
   { id: 'area.sheyi', name: '蛇彝村', continent: '南荒', freeRoamWhen: { until: [B03('04')] } },
   { id: 'area.giant_vine', name: '万古巨藤', continent: '南荒' },
@@ -52,7 +51,7 @@ export const NANHUANG_AREAS: OpenWorldArea[] = [
   { id: 'area.yeao', name: '南荒山村', continent: '南荒', freeRoamWhen: { after: [E('s05b_wuer_suli_depart')] } },
 ];
 
-export const NANHUANG_ZONES: OpenWorldZone[] = [
+const TS_NANHUANG_ZONES: OpenWorldZone[] = [
   { id: 'nh.wuyuan', name: '五原城', worldLocationId: 'liuchao.location.wuyuan', areaId: 'area.wuyuan' },
   { id: 'nh.iron_bridge', country: '南荒', name: '铁索桥', areaId: 'area.songqin' },
   { id: 'nh.caravan_camp', country: '南荒', name: '商队宿处', areaId: 'area.songqin' },
@@ -87,7 +86,7 @@ function local(id: string, from: string, to: string, label: string, forcedBy: Op
 
 const after = (eventId: string): OpenWorldRoute['forcedBy'] => ({ afterEventDone: eventId });
 
-export const NANHUANG_ROUTES: OpenWorldRoute[] = [
+const TS_NANHUANG_ROUTES: OpenWorldRoute[] = [
   journey('nh.r.after.wuerlang', 'nh.wuyuan', 'nh.iron_bridge', '随商队离开五原', after(E('wuerlang_joins')),
     { dayCost: 3, durationLabel: '三日', summary: '商队离开五原，沿南下商路前行，铁索桥已在眼前。' }),
   local('nh.r.after.iron_bridge', 'nh.iron_bridge', 'nh.caravan_camp', '到商队宿处', after(E('iron_bridge_ambush'))),
@@ -126,12 +125,12 @@ export const NANHUANG_ROUTES: OpenWorldRoute[] = [
     { dayCost: 1.5, durationLabel: '一天多', summary: '朱老头说一天多工夫就到。' }),
 ];
 
-export const QINGYU_NANHUANG_DEFINITION: OpenWorldSliceDefinition = {
-  id: NANHUANG_TRAVEL_SLICE_ID,
+const TS_QINGYU_NANHUANG_DEFINITION: OpenWorldSliceDefinition = {
+  id: TS_NANHUANG_TRAVEL_SLICE_ID,
   initialZoneId: 'nh.wuyuan',
-  zones: NANHUANG_ZONES,
-  routes: NANHUANG_ROUTES,
-  areas: NANHUANG_AREAS,
+  zones: TS_NANHUANG_ZONES,
+  routes: TS_NANHUANG_ROUTES,
+  areas: TS_NANHUANG_AREAS,
   notices: [],
   actors: [],
   problems: [],
@@ -139,8 +138,29 @@ export const QINGYU_NANHUANG_DEFINITION: OpenWorldSliceDefinition = {
 };
 
 /** 碧鲮的区内节点表（剧情裁定：海神殿是碧鲮的子地点；「南荒·海神殿」解析为碧鲮族＋海神殿）。 */
-export const BIYU_POSITION_SEGMENT = '碧鲮族';
-export const BIYU_WORLD_LOCATION_ID = 'liuchao.location.biyu_village';
-export const BIYU_POSITION_NODES: ReadonlyArray<{ zoneId: string; names: string[] }> = [
+const TS_BIYU_POSITION_SEGMENT = '碧鲮族';
+const TS_BIYU_WORLD_LOCATION_ID = 'liuchao.location.biyu_village';
+const TS_BIYU_POSITION_NODES: Array<{ zoneId: string; names: string[] }> = [
   { zoneId: 'nh.sea_temple', names: ['海神殿'] },
 ];
+
+/** TS 侧的南荒切片（整份搬进内容包后只留 key）。 */
+export const TS_NANHUANG_OPEN_WORLD_SLICE: TsOpenWorldSlicePart = {
+  key: 'nanhuang',
+  definition: TS_QINGYU_NANHUANG_DEFINITION,
+  stageIds: [...TS_NANHUANG_STAGE_IDS],
+  stepSceneStagePrefixes: [...TS_NANHUANG_STEP_SCENE_STAGE_IDS],
+  positionNodes: { segment: TS_BIYU_POSITION_SEGMENT, placeLocationId: TS_BIYU_WORLD_LOCATION_ID, nodes: TS_BIYU_POSITION_NODES },
+};
+
+const NH = resolveOpenWorldSlice(CONTENT_PACKS.openWorldSlices || [], TS_NANHUANG_OPEN_WORLD_SLICE);
+export const NANHUANG_TRAVEL_SLICE_ID: string = NH.definition.id;
+export const NANHUANG_STAGE_IDS: readonly string[] = NH.stageIds || [];
+export const NANHUANG_STEP_SCENE_STAGE_IDS: readonly string[] = NH.stepSceneStagePrefixes || [];
+export const NANHUANG_AREAS: OpenWorldArea[] = NH.definition.areas || [];
+export const NANHUANG_ZONES: OpenWorldZone[] = NH.definition.zones;
+export const NANHUANG_ROUTES: OpenWorldRoute[] = NH.definition.routes;
+export const QINGYU_NANHUANG_DEFINITION: OpenWorldSliceDefinition = NH.definition;
+export const BIYU_POSITION_SEGMENT: string = NH.positionNodes?.segment || '';
+export const BIYU_WORLD_LOCATION_ID: string = NH.positionNodes?.placeLocationId || '';
+export const BIYU_POSITION_NODES: ReadonlyArray<{ zoneId: string; names: string[] }> = NH.positionNodes?.nodes || [];

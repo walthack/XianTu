@@ -252,3 +252,31 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 **归属**：`characterQuest`、`ifBranch` 两种 id 登记为包定义；六段的原始值都进通用字符串扫描，引用别的包定义的关、事件等要 `dependsOn`。
 
 catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvents: []`、`characterBeats: {quests:[],highlights:[]}`、`storyAxis: null`、`locationAliases: {canonical:{},parents:{},display:{}}`、`characterProfiles: {stance:[],affinityCaps:[]}`、`ifBranches: {branches:[],consequences:[],prompts:{}}`；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。棘轮：`divergenceLedger.ts` 三元式里 7 行带 id 的判断改为规则表的 `prompt` 字段与 `TS_DIVERGENCE_PROMPTS`（新增 1 行键），实扫 23 → 17，基线同批重写（总数 1313 → 1307）。
+
+## 2026-11-11 展示类数据的新包格式（F0b）
+
+stageMeta 事件加六个字段、关级加一个字段，texts 加两种键名约定，manifest 加三个新段 `endings`／`openWorldSlices`／`persistentEntries`（都是 JSON 文件路径数组，每个文件是数组）。只建机制，现有数据仍在 TS 里；搬哪张表就把那张表的条目从 TS 删掉、写进包里（同一条目两边都有 → 编译报错；行旅切片、常驻入口按整份／整种二选一，见下）。条目 `note` 只给作者看，编译时剥掉。编译逻辑在 `scripts/content-pack-presentation-formats.mjs`，三个新段的类型在 `src/modules/contentPacks/presentationFormats.ts`，stageMeta 新字段的类型在 `src/modules/contentPacks/stageMeta.ts`。读取函数仍同步、无副作用，导出名与类型不变；新段、新字段为空时读取结果与原 TS 表逐项相同（`tests/contentPackPresentationFormats.test.mjs` 钉住，含一项把现有 TS 表整张写进包、临时搬空 TS 后编译并逐项对照的搬迁演练）。
+
+**stageMeta 事件新字段**（`presentation.events[<事件>]`，与 `uiChapterId`／`mood`／`objective` 同级；整条 stageMeta 先做 `$text` 解析）：
+- `uiChapterTitle`：直接给章名串（可 `{"$text"}`），与 `uiChapterId` 互斥；事件自带 `presentation.uiChapterId` 时不许写。优先级同 `uiChapterId`（地图入口口信拍 → TS 逐关特判 → 包内关 presentation → stageMeta），被 TS 特判遮住即报错（探针同宋 S2）。
+- `routeLocation`：`storyRouteLocation` 的地点串；`_ins_` 事件不许写（读取时剥掉 `_ins_` 取主线事件）。查找：TS 表 `TS_STORY_ROUTE_LOCATIONS` → stageMeta。
+- `compassObjectiveOnly: true`：任务栏罗盘只显示目标。
+- `lockedDecision: [["<动作>","<文案>"],…]`：分支锁；首项是决定动作、必须是合同动作，其余可以是致命选项（`fatalOutcomes.choices`）；动作不重复。`LOCKED_DECISIONS` = TS 表在前、包按 catalog 顺序在后。
+- `actionPresentation: [{"actionId","whenLocationId","label","playerLine"}]`：玩家在该地点时换动作展示（label、playerLine 可 `{"$text"}`）；动作是合同动作、地点在 `locations.json`，(动作, 地点) 不重复。查找：TS 表 → stageMeta。
+- `compatNarrativeVariants: [{"when":[{path,operator:eq|neq,value}],"priority?":"before-event-variants","replacesCanonRail?":true,"name?","description?","axisBeat?","objective?","relatedFactionIds?":[],"note"}]`：声明化的旧档兼容变体，**`note` 必填（写来源）**。不带 `priority` 的条目只在事件没有自带 `narrativeVariants` 时生效（同原 `legacyNarrativeVariants`，按数组顺序取第一条命中，参与 `narrativeVariantReplacesCanonRail`）；带 `priority: "before-event-variants"` 的先于一切变体、只改写文案字段（`relatedFactionIds` 可覆写为空数组），不参与 `replacesCanonRail`（两者同写报错）。按事件 id 二选一：TS 表 `TS_COMPAT_NARRATIVE_VARIANTS` 有这个事件就不看包，编译期禁止两边都有。
+- `objective`：除纯文本、`{"$text"}` 外，可写 `{{entity:<kind>:<id>}}`／`{{entityLabel:…}}`，编译期校验，catalog 留模板，`resolveFixedQuestObjective` 读时解析。
+
+**stageMeta 关级 `presentation.uiChapterByRouteLocation`**：`{"keepFallbackEventIds?":[…],"rules":[{"routeLocationIncludes","title"}],"defaultTitle?"}`。该关事件（含 `_ins_`）的章名：在 `keepFallbackEventIds` 里 → 调用方的 fallback；否则取第一条 `storyRouteLocation` 包含 `routeLocationIncludes` 的规则的 `title`，都不中取 `defaultTitle`，没有 `defaultTitle` 取 fallback。排在事件级 `uiChapterTitle`／`uiChapterId` 与 `defaultUiChapterId` 之后，与 `defaultUiChapterId` 互斥；被 TS 章名算法遮住（探针事件或该关任一事件已有结果）即报错。
+
+**texts 键名约定**：
+- `actionDisplay.<事件>.<动作|*>.line` + `.label`（成对）：动作显示覆写；`*` 是事件级通配（任何动作都返回）。查找：包逐动作键 → 包通配键 → TS 表 `TS_ACTION_DISPLAY_OVERRIDES`（键 `<事件>::<动作>`，`<事件>::*` 为事件级）逐动作 → TS 事件级。同一事件包与 TS 重叠即报错。
+- `scopedPlayerLine.<事件>::<动作>`：试玩事件窗的玩家句；查找：TS 表 `TS_PLAYER_LINES` → texts。两边都有即报错。
+- 两种键都要求事件存在、非通配动作是该事件的动作或致命选项；键里的事件 id 进归属扫描。
+
+**`endings`**：`[{"endingId","key?":"E01","battleLoss?":{"title","kind":"death|failure","sourceEventId","tierFlag":"….tier","tier","facts":[…]},"pathText?":{"sourceEventId","textKey"},"note?"}]`，三项可分可合，至少写一项。结局实体存在、`endingId` 不重复、`key` 全部包里唯一；`battleLoss` 的来源事件存在且有场面合同挂在它上面（否则 tierFlag 永远不会落）；`pathText` 的来源事件存在、`textKey` 是已有正文键。`endingKey`／`BATTLE_LOSS_ENDINGS`／来路分支句 = TS 表（`TS_ENDING_KEYS`／`TS_BATTLE_LOSS_ENDINGS`／`TS_ENDING_PATH_TEXTS`）在前、包按 catalog 顺序在后；同一结局（或同一编号）两边都有即报错。`canonicalEndingId`、`migrateLegacyE01Ending` 留在框架。
+
+**`openWorldSlices`**：`[{"key","definition":<OpenWorldSliceDefinition 原样>,"stageIds?":[…],"stepSceneStagePrefixes?":[…],"positionNodes?":{"segment","placeLocationId","nodes?":[{"zoneId","names"}]},"constants?":{"<大写名>":"<id>"},"zoneRanks?":{"<zone>":<整数>},"actionJudgement?":{"<动作>":{"kind"}},"actionDescribe?":{"<动作>":"…"},"note?"}]`。`key` 是 TS 导出取用它的绑定名（`nanhuang`、`wuyuan`），归属种类 `openWorldSlice`；`definition.id` 全局唯一但**不登记归属**（核心包 `timeline.json` 的 `sliceEntered` 已引用五原切片 id，登记了就要核心包依赖塞外包，成环）。校验：区／路线／区域／告示／角色／问题／动作 id 各自唯一；路线起止、父区、告示所在、问题所在、后果改写的区存在，父区不成环；`worldLocationId`、`placeLocationId` 在 `locations.json`；`freeRoamWhen`、`heardWhen`、`unlockWhen`、`background.when`、`forcedBy.afterEventDone` 引用的事件（可带 `::动作`）存在；`forcedBy.stageTransition` 是 `<关>→<关>`；`requirementKey` 必须有告示或后果解锁；`stepSceneStagePrefixes` 至少匹配一个关、全局不重复；`actionJudgement.kind` 是 `JUDGEMENT_KINDS`。读取：按 `key` 与 TS 那份二选一（`resolveOpenWorldSlice`），包里有就用包的、TS 那份须只剩 `key`（五原分在 `qingyuWuyuanZones.ts` 与 `wuyuanOpenWorldSlice.ts` 两份，都要清空）。逐拍演出前缀 = `TS_STEP_SCENE_STAGE_PREFIXES` 在前、各包 `stepSceneStagePrefixes` 在后，编译器（questLines 投影的 `guardCovers`）与运行时 `isStepSceneStage` 同口径。
+
+**`persistentEntries`**：`[{"kind":"algae","beatId","eventId","stageId","locationId","characterId","itemId","receiptId","notBeforeStageIds":[…],"note?"} | {"kind":"rejoin","beatId","eventId","stageId","note?"}]`。每种全局至多一条；关存在、事件属于该关、拍子在包线或 `mod-kit` 基础线里；algae 的地点、角色、物品、`notBeforeStageIds` 都存在。编译器给 algae 条目带上 `templateEvent`（从它的关抄出的事件，内置关取原始事件，同原静态 import）。读取：`TS_PERSISTENT_ENTRIES` 在前、包在后，按种类取唯一一条（`persistentEntryIn`，两条或零条都抛错）；`QINGYU_STAGE_PREFIX` 留在框架。
+
+catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openWorldSlices: []`、`persistentEntries: []`；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。为让编译器在没有 catalog 时也能取逐拍演出前缀，`NANHUANG_STEP_SCENE_STAGE_IDS` 的 TS 数据原样拆到 `travel/defs/qingyuNanhuangStepScenes.ts`（导出名不变）。棘轮：`shanghou_revealed` 的特判改为 `TS_COMPAT_NARRATIVE_VARIANTS` 条目（`eventNarrativeView.ts` 34 → 33），南荒逐拍前缀 2 行移入新文件（29 → 27 + 2），总数 1135 → 1134、文件数 69 → 70，基线同批重写。

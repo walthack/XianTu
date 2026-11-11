@@ -1,6 +1,6 @@
 import { CONTENT_PACKS, packText } from '../contentPacks';
 import { stageMetaEvent, type StageMeta } from '../contentPacks/stageMeta';
-import {entityText} from './namedEntities';
+import {entityText,entityTemplateText} from './namedEntities';
 /**
  * 玩家侧固定任务目标覆盖。
  *
@@ -30,7 +30,8 @@ export function resolveFixedQuestObjectiveIn(stageMeta: readonly StageMeta[], ev
   if (eventId === 'lcq.event.s02_04') return '先到点心铺，在店内拖延观察或伺机脱身，再应对追捕逃奴的人';
   if (eventId === 'lcq.event.huamiao_coop_boundary') return '跟云苍峰谈清进鬼王峒的合作边界';
   const packObjective = stageMetaEvent(stageMeta, eventId)?.objective;
-  if (packObjective) return packObjective;
+  // F0b：stageMeta 目标可写 {{entity:…}}／{{entityLabel:…}}（编译期校验，catalog 留模板，这里解析，同包二级线）；{"$text"} 编译时已换成正文
+  if (packObjective) return packObjective.includes('{{') ? entityTemplateText(packObjective) : packObjective;
   if (eventId && FIXED_QUEST_OBJECTIVE_OVERRIDES[eventId]) {
     return FIXED_QUEST_OBJECTIVE_OVERRIDES[eventId];
   }
