@@ -14,7 +14,7 @@
   ],
   "总数": {
     "文件数": 71,
-    "行数": 1966
+    "行数": 1798
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -27,15 +27,15 @@
     "src/modules/scenarioMods/baihuGambleRefusal.ts": 12,
     "src/modules/scenarioMods/beatProgress.ts": 1,
     "src/modules/scenarioMods/branchDecision.ts": 6,
-    "src/modules/scenarioMods/canonRail.ts": 367,
+    "src/modules/scenarioMods/canonRail.ts": 283,
     "src/modules/scenarioMods/characterQuests.ts": 116,
     "src/modules/scenarioMods/characterResolver.ts": 25,
     "src/modules/scenarioMods/divergenceLedger.ts": 23,
     "src/modules/scenarioMods/endingPresentation.ts": 10,
-    "src/modules/scenarioMods/eventNarrativeView.ts": 40,
+    "src/modules/scenarioMods/eventNarrativeView.ts": 38,
     "src/modules/scenarioMods/fixedEndingNarratives.ts": 15,
     "src/modules/scenarioMods/fixedInventoryContracts.ts": 9,
-    "src/modules/scenarioMods/fixedQuestObjectives.ts": 64,
+    "src/modules/scenarioMods/fixedQuestObjectives.ts": 49,
     "src/modules/scenarioMods/intimacyProfiles.ts": 16,
     "src/modules/scenarioMods/ledger/naming.ts": 5,
     "src/modules/scenarioMods/legacyNarrativePilot.ts": 1,
@@ -48,7 +48,7 @@
     "src/modules/scenarioMods/loadRepairs.ts": 18,
     "src/modules/scenarioMods/locationLoot.ts": 2,
     "src/modules/scenarioMods/mainQuestAxis.ts": 59,
-    "src/modules/scenarioMods/milestoneRewards.ts": 4,
+    "src/modules/scenarioMods/milestoneRewards.ts": 3,
     "src/modules/scenarioMods/narrativeBoundaries.ts": 18,
     "src/modules/scenarioMods/narrativePerformanceGuard.ts": 1,
     "src/modules/scenarioMods/naturalIntentRouter.ts": 3,
@@ -63,7 +63,7 @@
     "src/modules/scenarioMods/r2AcceptanceFixtures.ts": 5,
     "src/modules/scenarioMods/relationships.ts": 1,
     "src/modules/scenarioMods/runtime.ts": 74,
-    "src/modules/scenarioMods/secondaryLines.ts": 439,
+    "src/modules/scenarioMods/secondaryLines.ts": 389,
     "src/modules/scenarioMods/shiweimoRescue.ts": 1,
     "src/modules/scenarioMods/stanceProfiles.ts": 48,
     "src/modules/scenarioMods/storyContext.ts": 4,
@@ -84,15 +84,15 @@
     "src/services/characterRagService.ts": 1,
     "src/services/prompts/defaultPrompts.ts": 1,
     "src/utils/AIBidirectionalSystem.ts": 28,
-    "src/utils/musicLibrary.ts": 83,
+    "src/utils/musicLibrary.ts": 67,
     "src/utils/narrativePromptState.ts": 1,
     "src/utils/narrativeStateReconciler.ts": 21,
     "src/utils/prompts/cot/cotCore.ts": 1
   },
   "前缀模板行": {
-    "总数": 6,
+    "总数": 5,
     "按文件计数": {
-      "src/modules/scenarioMods/eventNarrativeView.ts": 5,
+      "src/modules/scenarioMods/eventNarrativeView.ts": 4,
       "src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts": 1
     }
   }

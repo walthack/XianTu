@@ -11,6 +11,10 @@ import { loadTs } from './loadTs.mjs';
 const rtm = await loadTs('../src/modules/scenarioMods/runtime.ts');
 const { CANON_RAIL_PROFILES } = await loadTs('../src/modules/scenarioMods/canonRail.ts');
 const view = await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
+// 宋线 S4b：「初抵临安」首章拍集合从 eventNarrativeView.ts 的 LIN_AN_ARRIVAL_EVENT_IDS 搬进宋包 stageMeta（uiChapterId 指向首章的事件），这里只换读取来源
+const { CONTENT_PACKS } = await loadTs('../src/modules/contentPacks/index.ts');
+const LIN_AN_ARRIVAL_EVENT_IDS = new Set(Object.entries(CONTENT_PACKS.stageMeta.find(m => m.stageId === 'lyl.lin_an_bridge').presentation.events)
+  .filter(([, e]) => e.uiChapterId === 'lyl.chapter.lin_an_bridge_arrival').map(([id]) => id));
 const stageOf = id => JSON.parse(fs.readFileSync(`src/modules/scenarioMods/builtins/data/${id}.json`, 'utf8'));
 
 /** 跟着主线（rail 拍优先）逐拍完成，返回完成顺序与是否 stage_ready。 */
@@ -73,11 +77,11 @@ test('宋线补全：临安首章「初抵临安」是 rail 章，开关第一�
   assert.equal(CANON_RAIL_PROFILES.find(p => p.modId === mod.manifest.id).chapterId, arrival.id);
   assert.equal(playthrough(mod.manifest.id).order[0], 'lyl.event.linan_arrive_fengbo');
   assert.deepEqual(intel.activation, [{ path: 'flags.chapter.lyl.lin_an_bridge.arrival.done', operator: 'eq', value: true }]);
-  const arrivalRail = arrival.eventIds.filter(id => view.LIN_AN_ARRIVAL_EVENT_IDS.has(id));
-  assert.deepEqual([...view.LIN_AN_ARRIVAL_EVENT_IDS].sort(), [...arrivalRail].sort(), '章名表与首章承重拍同步');
+  const arrivalRail = arrival.eventIds.filter(id => LIN_AN_ARRIVAL_EVENT_IDS.has(id));
+  assert.deepEqual([...LIN_AN_ARRIVAL_EVENT_IDS].sort(), [...arrivalRail].sort(), '章名表与首章承重拍同步');
   for (const id of arrivalRail) assert.equal(view.storyChapterTitle(mod.manifest.id, id, arrival.title), '初抵临安');
   for (const id of arrival.eventIds) {
-    if (!view.LIN_AN_ARRIVAL_EVENT_IDS.has(id)) assert.equal(view.storyChapterTitle(mod.manifest.id, id, arrival.title), '临安疑线');
+    if (!LIN_AN_ARRIVAL_EVENT_IDS.has(id)) assert.equal(view.storyChapterTitle(mod.manifest.id, id, arrival.title), '临安疑线');
   }
   for (const id of intel.eventIds) assert.equal(view.storyChapterTitle(mod.manifest.id, id, arrival.title), '临安疑线');
 });
@@ -138,7 +142,7 @@ test('宋线临安：换首章后原首章 6 张登场卡与薛延山遇害随�
   const timed = walk(false);
   const first = 'lyl.event.linan_arrive_fengbo';
   for (const id of LINAN_DEBUTS) assert.ok(timed.activeBefore.get(first).includes(id), `${id} 关一开即开放（不随迁就永远不激活）`);
-  for (const id of view.LIN_AN_ARRIVAL_EVENT_IDS) assert.ok(!timed.activeBefore.get(id).includes(XUE_SLAIN), `${id} 时薛延山遇害还没开放`);
+  for (const id of LIN_AN_ARRIVAL_EVENT_IDS) assert.ok(!timed.activeBefore.get(id).includes(XUE_SLAIN), `${id} 时薛延山遇害还没开放`);
   assert.ok(timed.activeBefore.get('lyl.event.identify_xue_cold_poison').includes(XUE_SLAIN), '江州铁傀儡场外拍完成（原临安疑线开章）后薛延山遇害开放');
 
   const done = walk(true);

@@ -1,0 +1,317 @@
+[
+  {
+    "after": "jin",
+    "id": "song",
+    "name": "宋国",
+    "kind": "nation",
+    "note": "江州与临安都收：和汉国同一处毛病——锚只填都城，线就要等到 seq 559 才开，而它第一个节点在 seq 383。江州是宋国找上门来的地方，比临安早得多。锚＝你知道那件事的那一拍（用户裁定 2026-08-16）。",
+    "anchorEventIds": [
+      "lcq.event.s10_01_jiangzhou_order"
+    ],
+    "anchorLocationIds": [
+      "liuchao.location.jiangzhou",
+      "liuchao.location.linan",
+      "liuchao.location.lin_an"
+    ],
+    "entryHint": "贾师宪已经大举集结，江州要打起来了。",
+    "basis": "临安＝宋国都城。`linan` 覆盖 30 关为主，`lin_an` 只 1 关，一并收下防漏；`linan_city` 只在隔离关 `taiquan_expedition`，不收。**另收江州**（2026-08-16）：正典里宋国不是你走进临安才遇上的——seq 380 卢景带来消息，贾师宪大举集结、江州兵危，程宗扬当场决定改道去援；seq 383 贾师宪下令攻江州清岳党。（指引只说这个局势本身，不写\"卢景带信来\"——**报信人是谁不该写死**，同晋、唐两条。）本线第一个节点就落在 seq 383，而临安要到 seq 559 才落脚：只锚都城等于让入口比第一拍晚 176 拍。这与汉国「只锚洛都、把第 10 关的旧案漏掉」是同一个错，一并纠正。",
+    "nodes": [
+      {
+        "reviewSummary": "探明贾师宪无视王丞相回书，下令攻江州清岳党，还要用上四军示威",
+        "status": "ready",
+        "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+        "eventId": "lcq.event.s10_01_jiangzhou_order"
+      },
+      {
+        "reviewSummary": "在夜影关因宋军封锁云水航道，改走陆路去晴州",
+        "status": "ready",
+        "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+        "eventId": "lcq.event.s10_02_yeying_pass"
+      },
+      {
+        "note": "S2 并进 s11_09_grain_plan",
+        "reviewSummary": "从濒死的鱼无夷处拿到阴阳鱼藏在七海客栈的线索",
+        "status": "ready",
+        "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+        "eventId": "lcq.event.s10_09_yin_yang_fish"
+      },
+      {
+        "note": "S3 并进 s12_16_corpse_poison 高潮战不只一拍：它的展开在事件层现成躺着，先前每场仗只挑了中间那一条代表拍。",
+        "reviewSummary": "侦察烈山：捧日军骑兵已到，刘宜孙、张亢选营，三川口成形",
+        "status": "ready",
+        "stageId": "lcq.stage_11_lieshan_battle",
+        "eventId": "lcq.event.s11_01_pengri_arrives"
+      },
+      {
+        "reviewSummary": "萧遥逸展示十二座水泥城堡与悬楼，江州城防大幅提升",
+        "status": "ready",
+        "stageId": "lcq.stage_11_lieshan_battle",
+        "eventId": "lcq.event.s11_02_cement_fortress"
+      },
+      {
+        "reviewSummary": "与小紫、孟非卿守中军，木栅仍被术者与御林军破开",
+        "status": "ready",
+        "stageId": "lcq.stage_11_lieshan_battle",
+        "eventId": "lcq.event.s11_07_camp_falls"
+      },
+      {
+        "reviewSummary": "向江州问清三川口的结局——捧日军三个军被星月湖击溃，不是捷报",
+        "status": "ready",
+        "stageId": "lcq.stage_11_lieshan_battle",
+        "eventId": "lcq.event.sanchuankou_result_rumor"
+      },
+      {
+        "reviewSummary": "赶回江州，协助全城戒严并加固城防",
+        "status": "ready",
+        "stageId": "lcq.stage_11_lieshan_battle",
+        "eventId": "lcq.event.s11_08_jiangzhou_lockdown"
+      },
+      {
+        "reviewSummary": "在三川口抵御西夏围攻，后军黄德和脱逃改写前线",
+        "status": "ready",
+        "stageId": "lcq.stage_11_lieshan_battle",
+        "eventId": "lcq.event.s11_10_sanchuankou_defeat"
+      },
+      {
+        "reviewSummary": "同萧遥逸、云苍峰探明浮凌江乱石滩，粮运走不通",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.s12_01_grain_route_blocked"
+      },
+      {
+        "reviewSummary": "说动滕知州在江边设粮仓交程记粮铺经营——秦桧改口说只是借用",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.s12_04_river_granary"
+      },
+      {
+        "reviewSummary": "接下滕甫捐来的屯田司员外郎，把籍贯落进册",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.tuntian_post"
+      },
+      {
+        "reviewSummary": "从秦翰手里拼死救下萧遥逸，击伤其一指，重伤线开启",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.s12_10_rescue_xiao"
+      },
+      {
+        "note": "S4 抵达／祭墓建议并进 lin_an_arrive，不单开",
+        "reviewSummary": "防守江州：宋军连夜两万余人携投石机、巢车、云梯全面攻城",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.s12_11_siege_begins"
+      },
+      {
+        "reviewSummary": "城门用水泥门闸和滚油烧掉宋军冲车，江州守城占先",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.s12_12_gate_fire"
+      },
+      {
+        "reviewSummary": "应对宋军改用土山和地道，江州进入长期围困",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.s12_13_long_siege"
+      },
+      {
+        "reviewSummary": "小紫点破刺客是辰星七妖——背后是龙宸",
+        "status": "ready",
+        "stageId": "lcq.stage_12_jiangzhou_counterwar",
+        "eventId": "lcq.event.s12_14_chenxing_appears"
+      },
+      {
+        "reviewSummary": "协助江州退军：宋军粮尽大溃，秦翰选锋营断后",
+        "status": "ready",
+        "stageId": "lyl.jiangzhou_retreat",
+        "eventId": "lyl.event.s01_01"
+      },
+      {
+        "reviewSummary": "乘船前往临安——鱼长老登场",
+        "status": "ready",
+        "stageId": "lyl.jiangzhou_retreat",
+        "eventId": "lyl.event.s01_02"
+      },
+      {
+        "reviewSummary": "赶到荆溪村寨，斩杀屠寨凌辱妇女的王团练乡兵",
+        "status": "ready",
+        "stageId": "lyl.jiangzhou_retreat",
+        "eventId": "lyl.event.s01_03"
+      },
+      {
+        "reviewSummary": "尾随李师师马车到威远镖局，确认她突然回临安的缘故",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.tail_li_shishi"
+      },
+      {
+        "note": "S5 另建议 lyl.event.lin_an_libu（临安落册）；文案用屯田司员外郎，不用「客卿」",
+        "reviewSummary": "识破皇城司盯梢，不动手，以富商身份掩护进明庆寺",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.evade_huangchengsi"
+      },
+      {
+        "note": "序按 axisSeq：太皇太后 604 在高俅 624 之前，先前两条排反了。",
+        "reviewSummary": "绕武穆王府查清建筑方位，没惊动周边暗梢",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.survey_wumu_mansion"
+      },
+      {
+        "note": "S1 默认路线的抵达拍（五线补全·宋 2026-10-28）；隔离关同 seq 那拍保留在下一行",
+        "reviewSummary": "由钱塘门进临安，在风波亭停车——见过谢艺的，到亭后谢艺墓前上香",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.linan_arrive_fengbo"
+      },
+      {
+        "reviewSummary": "在风波亭后拜祭谢艺并安顿临安落脚处——敖润、冯源、林清浦登场",
+        "status": "ready",
+        "stageId": "lyl.lin_an_black_sea",
+        "eventId": "lyl.event.debut_ruan_sisters"
+      },
+      {
+        "reviewSummary": "听俞子元回报，确认高衙内勒索威远镖局的条件",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.weiyuan_extortion"
+      },
+      {
+        "note": "S10 并进 changgan_interlude_04_beat",
+        "reviewSummary": "明庆寺外看鲁智深倒拔垂杨柳、林冲上前通名——你按住秦桧，没有贸然结交",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.mingqingsi_lin_lu_meeting"
+      },
+      {
+        "reviewSummary": "办完吏部报到，查明林冲调走了哪些档案",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.libu_registration"
+      },
+      {
+        "reviewSummary": "便门瓦牡丹棚摸到宋军部署、贾师宪决策、林冲底细，线人疑在皇城司",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.lin_an_bridge_01_beat"
+      },
+      {
+        "reviewSummary": "应李师师之邀登雷峰塔",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.leifeng_pagoda_invite"
+      },
+      {
+        "reviewSummary": "雷峰塔拦住陆谦强带走李师师，逼退高衙内一行",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.leifeng_repel_gao"
+      },
+      {
+        "reviewSummary": "研判黑魔海或经林娘子渗禁军，决定去拜访鲁智深",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.lin_an_bridge_03_beat"
+      },
+      {
+        "reviewSummary": "与秦桧复盘雷峰塔冲突，决定继续追查威远失镖",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.decide_chase_weiyuan"
+      },
+      {
+        "reviewSummary": "看过叩天石，按暗号约定赶往便门瓦接头",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.pass_kotian_stone"
+      },
+      {
+        "reviewSummary": "以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.ivory_visit_weiyuan"
+      },
+      {
+        "reviewSummary": "以押运象牙为名试探李寅臣夫妇，查明他们对李师师婚事的决定——阮香琳登场",
+        "status": "ready",
+        "stageId": "lyl.taiquan_expedition",
+        "eventId": "liuchao.event.reconnoiter"
+      },
+      {
+        "reviewSummary": "司营巷旁观林冲买刀，确认伏击结果，不打断高衙内的局",
+        "status": "ready",
+        "stageId": "lyl.lin_an_bridge",
+        "eventId": "lyl.event.siying_lane_saber_ambush"
+      },
+      {
+        "reviewSummary": "林家认出凝姨是阮香凝，婚后表象不对，疑她通黑魔海",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.linjia_sees_ningyi"
+      },
+      {
+        "reviewSummary": "在林家确认凝姨的真实身份，并保留刚发现的疑点——青面兽、阮香凝登场",
+        "status": "ready",
+        "stageId": "lyl.taiquan_expedition",
+        "eventId": "liuchao.event.fruit_conflict"
+      },
+      {
+        "reviewSummary": "潜入西湖别业，听清高衙内与陆谦复盘失镖圈套，还要继续设计林冲",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.xihu_villa_eavesdrop"
+      },
+      {
+        "reviewSummary": "偕李师师赴梵天寺遭禁军伏击，马车被毁，俞子元掩护",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat"
+      },
+      {
+        "reviewSummary": "多宝阁问清贾师宪要你推纸币——你要纸币能纳税、发行量须经认可",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.xiaoyingzhou_paper_plan"
+      },
+      {
+        "reviewSummary": "童贯引见宋主，纸币获准纳税并共同监制",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.xiaoyingzhou_paper_mint"
+      },
+      {
+        "reviewSummary": "户部新设宝钞局，宋主亲笔点你以员外郎兼任宝钞局主事",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.song_baochao_appointed"
+      },
+      {
+        "reviewSummary": "林冲持刀闯白虎堂被刺配江州，你与鲁智深计划营救",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat"
+      },
+      {
+        "reviewSummary": "坐实林冲没被救下——刺配照旧，他仍要去江州",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.linchong_still_exiled"
+      },
+      {
+        "reviewSummary": "潜入明庆寺观音殿，被郭槐、封德明制住，太皇太后认出劳力士后放人",
+        "status": "ready",
+        "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat"
+      },
+      {
+        "reviewSummary": "与高俅密谈，得知宋主生母是韦太后等宫廷身世疑云",
+        "status": "ready",
+        "stageId": "lyl.taiquan_sacred_fruit",
+        "eventId": "lyl.event.taiquan_sacred_fruit_03"
+      }
+    ],
+    "pendingExpansion": "线形：卷入贾师宪清岳党 → 查清粮战与围城 → 相府／太尉／后宫立场 → 纸钞落地逼退＋昭南索赔 → 礼部侍郎、通问计议使。顶点＝礼部侍郎、通问计议使（seq 1134）。578 共同监制、1160 出资解困并进 S11，不另封「宝钞使」。S5／S6／S9／S11 需新增。S5 用屯田司员外郎，不用「客卿」。威远／武穆王府不上链。"
+  }
+]

@@ -1,0 +1,192 @@
+[
+  {
+    "stageId": "lcq.stage_10_jiangzhou_shadow_war",
+    "presentation": {
+      "events": {
+        "lcq.event.s10_01_jiangzhou_order": {
+          "mood": "court"
+        },
+        "lcq.event.blacksea_vault_split": {
+          "objective": "与孟非卿当面谈清银库这笔钱怎么分"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lcq.stage_11_lieshan_battle",
+    "presentation": {
+      "events": {
+        "lcq.event.s11_04_xingyue_appears": {
+          "mood": "aspire"
+        }
+      }
+    }
+  },
+  {
+    "note": "称号奖励原在 milestoneRewards.ts MILESTONE_REWARDS（原注释：六朝清羽记·江州反攻收束）",
+    "stageId": "lcq.stage_12_jiangzhou_counterwar",
+    "milestoneReward": {
+      "titles": [
+        "宋国工部屯田司员外郎"
+      ],
+      "note": "粮战功成，筠州知州滕甫招揽为宋国客卿，举荐任工部屯田司员外郎（清羽 ch324）。"
+    },
+    "presentation": {
+      "events": {
+        "lcq.event.s12_14_chenxing_appears": {
+          "mood": "danger"
+        },
+        "lcq.event.s12_17_shanghou_stays": {
+          "mood": "aspire"
+        },
+        "lcq.event.jin_vacate_jiangzhou": {
+          "objective": "听清晋相就要腾出江州的定计"
+        },
+        "lcq.event.pengyi_takeover": {
+          "objective": "向孟非卿请示鹏翼社与暗产此后由谁经营"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyl.jiangzhou_retreat",
+    "presentation": {
+      "chapters": {
+        "lyl.chapter.jiangzhou_retreat": {
+          "mood": "daily"
+        }
+      },
+      "events": {
+        "lyl.event.s01_01": {
+          "mood": "danger"
+        },
+        "lyl.event.s01_02": {
+          "mood": "daily"
+        },
+        "lyl.event.s01_03": {
+          "mood": "battle"
+        },
+        "lyl.event.s01_04": {
+          "mood": "court"
+        },
+        "lyl.event.s01_05": {
+          "mood": "danger"
+        },
+        "lyl.event.debut_zhuoyunjun": {
+          "objective": "把被点到的这个名字先问清楚"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyl.lin_an_black_sea",
+    "defaultLineQuarantined": true,
+    "presentation": {
+      "events": {
+        "lyl.event.mingqingsi_encounter": {
+          "mood": "intrigue"
+        },
+        "liuchao.event.final_preparations": {
+          "mood": "aspire"
+        }
+      }
+    }
+  },
+  {
+    "note": "章名原在 eventNarrativeView.ts：rail 章是首章「初抵临安」，整关停在它上面；原「临安疑线」章的拍照旧标疑线（五线补全·宋 2026-10-28）。首章 10 个承重拍写 uiChapterId（原 LIN_AN_ARRIVAL_EVENT_IDS，与关卡数据同步，songLineFill 测试钉住）；同章随迁的 6 张登场卡与薛延山遇害仍标「临安疑线」，不在此列。关内其余事件（含表外、运行时注入的）靠 defaultUiChapterId 标「临安疑线」。",
+    "stageId": "lyl.lin_an_bridge",
+    "presentation": {
+      "defaultUiChapterId": "lyl.chapter.lin_an_bridge_intel",
+      "chapters": {
+        "lyl.chapter.lin_an_bridge_arrival": {
+          "mood": "court"
+        },
+        "lyl.chapter.lin_an_bridge_intel": {
+          "mood": "court"
+        }
+      },
+      "events": {
+        "lyl.event.linan_arrive_fengbo": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.tail_li_shishi": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.survey_wumu_mansion": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.evade_huangchengsi": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.mingqingsi_lin_lu_meeting": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.decode_bianmenwa_note": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.weiyuan_extortion": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.libu_registration": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.meet_xue_yanshan": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.blacksea_iron_puppet": {
+          "uiChapterId": "lyl.chapter.lin_an_bridge_arrival"
+        },
+        "lyl.event.debut_jianyuji": {
+          "objective": "听清游婵转述的那封来信在说什么"
+        },
+        "lyl.event.debut_jingli": {
+          "objective": "在庭院遇袭时看清小紫点破的那个人"
+        },
+        "lyl.event.debut_yinfulan": {
+          "objective": "在宴席上把这个从五原来的人认清楚"
+        },
+        "lyl.event.debut_yundanliu": {
+          "objective": "应付翻墙逃匿时身后那声喝问"
+        },
+        "lyl.event.debut_yunruyao": {
+          "objective": "看清楼上独坐的那位披裘少女"
+        },
+        "lyl.event.debut_zhaohede": {
+          "objective": "看清榻边喂药的人，再决定如何开口"
+        },
+        "lyl.event.siying_lane_saber_ambush": {
+          "objective": "在司营巷看清林冲买刀这一场"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyl.taiquan_expedition",
+    "defaultLineQuarantined": true
+  },
+  {
+    "stageId": "lyl.xiaoyingzhou_blacksea_trap",
+    "presentation": {
+      "events": {
+        "lyl.event.xiaoyingzhou_blacksea_trap_02_beat": {
+          "mood": "court"
+        },
+        "lyl.event.xiaoyingzhou_blacksea_trap_06_beat": {
+          "mood": "danger"
+        },
+        "lyl.event.xiaoyingzhou_lin_takes_seat": {
+          "objective": "到鹤林观，看清太乙真宗此刻由谁主事"
+        },
+        "lyl.event.xiaoyingzhou_blacksea_trap_01_beat": {
+          "objective": "应对前往梵天寺途中的伏击"
+        },
+        "lyl.event.xiaoyingzhou_blacksea_trap_04_beat": {
+          "objective": "在野猪林里先保住自己和身边的人"
+        },
+        "lyl.event.xiaoyingzhou_blacksea_trap_08_beat": {
+          "objective": "在小瀛洲先应对眼前的杀局"
+        }
+      }
+    }
+  }
+]

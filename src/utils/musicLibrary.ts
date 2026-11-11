@@ -97,12 +97,9 @@ const CHAPTER_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.chapter.stage_05': 'explore',
   'lcq.chapter.stage_06': 'climax',
 
-  'lyl.chapter.jiangzhou_retreat': 'daily',
   'lyl.chapter.luoyang_cloud_secret': 'court',
   'lyl.chapter.luoyang_cloud_secret_court': 'court',
   'lyl.chapter.luoyang_coup': 'climax',
-  'lyl.chapter.lin_an_bridge_arrival': 'court',
-  'lyl.chapter.lin_an_bridge_intel': 'court',
 
   'lyg.chapter.changgan_begins_liuxianping': 'daily',
   'lyg.chapter.changgan_begins': 'daily',
@@ -156,16 +153,11 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lcq.event.s06_01': 'climax',
   'lcq.event.s06_03': 'emotion',
   'lcq.event.s09_04_weaving_trade': 'court',
-  'lcq.event.s10_01_jiangzhou_order': 'court',
-  'lcq.event.s12_14_chenxing_appears': 'danger',
-  'lcq.event.s12_17_shanghou_stays': 'aspire',
-  'lcq.event.s11_04_xingyue_appears': 'aspire',
 
   'lyg.event.s01_01': 'battle',
   'lyg.event.s01_07': 'lament',
   'lyg.event.highlight_banchao_lamb_leg': 'intrigue',
   'lcq.event.s04_05': 'lament',
-  'lyl.event.mingqingsi_encounter': 'intrigue',
   'lyg.event.s01_08': 'court',
   'lyg.event.s02_09': 'aspire',
   'lyg.event.release_jingnian': 'court',
@@ -174,13 +166,7 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lyg.event.s06_03': 'emotion',
   'lyg.event.s06_07': 'aspire',
 
-  'liuchao.event.final_preparations': 'aspire',
 
-  'lyl.event.s01_01': 'danger',
-  'lyl.event.s01_02': 'daily',
-  'lyl.event.s01_03': 'battle',
-  'lyl.event.s01_04': 'court',
-  'lyl.event.s01_05': 'danger',
   'lyg.event.s02_04': 'danger',
   'lyl.event.s05_05': 'danger',
   'lyl.event.yin_fulan_aid': 'aspire',
@@ -188,8 +174,6 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lyl.event.taiquan_afterfall_06_beat': 'emotion',
   'lyl.event.taiquan_sacred_fruit_07': 'daily',
   'lyl.event.find_exit': 'explore',
-  'lyl.event.xiaoyingzhou_blacksea_trap_02_beat': 'court',
-  'lyl.event.xiaoyingzhou_blacksea_trap_06_beat': 'danger',
 };
 
 const EVENT_MOOD_PRIORITY: MusicMood[] = ['climax', 'horror', 'lament', 'blacksea', 'battle', 'danger', 'intrigue', 'explore', 'court', 'sensual', 'emotion', 'aspire', 'daily', 'theme'];

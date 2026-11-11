@@ -151,3 +151,13 @@ F06–F09采用[31号合同原样归档](../../../mod-kit/source-documents/31-�
 **归属**：`secondaryLines` 的线 id 登记为包定义（种类 `secondaryLine`）；三段里写到的关、章、事件、rail 的 `modId` 走通用字符串扫描，引用别的包定义的 id 要 `dependsOn`（`tests/contentPackLineFormats.test.mjs` 钉住）。注意 `after` 也是普通字符串：核心包下一步表登记了 `lineId` `jin`／`han` 等，包线 `after: "jin"` 会被算成引用核心包。
 
 catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时 version 也随之变化，内置模组重新播种一次）。
+
+## 2026-11-11 宋线数据进包（宋线 S4）
+
+宋包 `packs/song/`（`id: "qingyu.song"`，`dependsOn: ["qingyu.core"]`）：`rails.generated.json`（宋 6 个生成档）、`rail-extra-beats.json`（宋 13 条加拍，编译时并进上面的档）、`stage-meta.json`（宋 8 关：隔离、称号、章名、配乐、目标）、`secondary-lines.json`（`song` 线，`after: "jin"`）、`line-compass.json`（`lineId: "song"`）、`texts.json`（11 个 `lineCompass.song.*`）。宋 8 关的 stage JSON 仍在 `builtins/data`（全局 id）。
+
+本批对前文的改动：
+- `CANON_RAIL_PROFILES` = TS 手审档 → 挂包内关的包 rail（秦）→ 挂内置关的包 rail 与生成档合在一起按 `modId` 排（等于生成器按关文件名写出的顺序），再统一套 TS `DEFAULT_LINE_EXTRA_RAIL_BEATS`。宋 6 档搬进包后数组顺序与搬前相同（`tests/songPackMigration.test.mjs` 钉住）。
+- rail 生成器 `build-canon-rail-profiles.mjs`：包 manifest `rails` 里文件名以 `.generated.json` 结尾的文件「认领」其中各档的 `modId`，生成的档写回那个包文件，不进 `canonRailProfiles.generated.json`；手写 rails 文件认领、两个文件认领同一关、认领了却没生成，一律报错（`scripts/canon-rail-routing.mjs`，`tests/canonRailRouting.test.mjs`）。
+- 称号：TS 表改名 `TS_MILESTONE_REWARDS`；`MILESTONE_REWARDS` 改为合并值（stageMeta 的 `milestoneReward` 按 catalog 顺序在前，TS 表在后），编译期重复检查查 `TS_MILESTONE_REWARDS`。
+- 章名特判里的临安分支已删，改由宋包 stageMeta 的 `defaultUiChapterId` 与首章 10 拍的 `uiChapterId` 供数。

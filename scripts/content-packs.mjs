@@ -253,7 +253,7 @@ async function validateLineFormatsWithTs(catalog,stages,sourceRoot){
   for(const m of meta)if(m.defaultLineQuarantined!==undefined&&TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.has(m.stageId))fail(`stageMeta ${m.stageId}: defaultLineQuarantined also set in canonRail.ts TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS`);
  }
  if(!meta.length&&!lines.length)return;
- if(meta.some(m=>m.milestoneReward)){const {MILESTONE_REWARDS}=await jiti.import(join(root,'src/modules/scenarioMods/milestoneRewards.ts'));for(const m of meta)if(m.milestoneReward&&MILESTONE_REWARDS.some(r=>r.stageId===m.stageId))fail(`stageMeta ${m.stageId}: milestoneReward also set in milestoneRewards.ts MILESTONE_REWARDS`);}
+ if(meta.some(m=>m.milestoneReward)){const {TS_MILESTONE_REWARDS}=await jiti.import(join(root,'src/modules/scenarioMods/milestoneRewards.ts'));for(const m of meta)if(m.milestoneReward&&TS_MILESTONE_REWARDS.some(r=>r.stageId===m.stageId))fail(`stageMeta ${m.stageId}: milestoneReward also set in milestoneRewards.ts TS_MILESTONE_REWARDS`);}
  const events=meta.flatMap(m=>Object.entries(m.presentation?.events||{}).map(([id,e])=>({stageId:m.stageId,id,...e})));
  if(events.some(e=>e.objective)){const {resolveFixedQuestObjectiveIn}=await jiti.import(join(root,'src/modules/scenarioMods/fixedQuestObjectives.ts'));for(const e of events)if(e.objective&&resolveFixedQuestObjectiveIn([],{id:e.id}))fail(`stageMeta ${e.stageId}: objective for ${e.id} already set in fixedQuestObjectives.ts`);}
  // 章名：去掉 stageMeta 后用新 catalog 跑 storyChapterTitleIn，若已有结果（特判、包内关 presentation、地图入口口信拍），stageMeta 写了也不生效 → 报错。

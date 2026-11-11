@@ -1,0 +1,683 @@
+[
+  {
+    "id": "qingyu.stage_10_jiangzhou_shadow_war",
+    "modId": "lcq.stage_10_jiangzhou_shadow_war",
+    "chapterId": "lcq.chapter.stage_10_jiangzhou_shadow_war_orders",
+    "orderedEventIds": [
+      "lcq.event.s10_01_jiangzhou_order",
+      "lcq.event.s10_02_yeying_pass",
+      "lcq.event.s10_03_ninja_trace",
+      "lcq.event.s10_04_left_army_review",
+      "lcq.event.s10_05_war_funds",
+      "lcq.event.s10_06_ruined_temple",
+      "lcq.event.s10_07_preemptive_strike",
+      "lcq.event.s10_08_lair_reversal",
+      "lcq.event.s10_09_yin_yang_fish",
+      "lcq.event.s10_10_xiaozi_crisis"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s10_01_jiangzhou_order",
+        "mustReach": "贾师宪无视王丞相回书，下令攻下江州以清除岳鹏举余党，并计划利用上四军展示军力。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_02_yeying_pass",
+        "mustReach": "程宗扬一行抵达夜影关，因宋军封锁云水航道被迫停航，改走陆路前往晴州。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_03_ninja_trace",
+        "mustReach": "月霜在雪隼佣兵团住处遭遇东瀛女忍者偷窃，双方交手后女忍者负伤逃脱，石之隼判定其为东瀛忍者。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_04_left_army_review",
+        "mustReach": "程宗扬与孟非卿分析王哲左武军覆灭原因，推断有人故意切断补给并泄漏军机，排除金蜜镝嫌疑。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_05_war_funds",
+        "mustReach": "程宗扬利用云氏作为幌子，以鹏翼社为抵押，成功从陶弘敏处以月息两分借得十万金铢，解决孟非卿军资短缺的燃眉之急。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_06_ruined_temple",
+        "mustReach": "程宗扬夜探时跟踪可疑人物至破道观，认出元行健是林之澜手下，暗示黑魔海势力介入。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_07_preemptive_strike",
+        "mustReach": "程宗扬基于三个理由主张先发制人打击黑魔海，以保护月霜并消除后患。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_08_lair_reversal",
+        "mustReach": "星月湖孟非卿率众与黑魔海巫嬷嬷、鱼无夷等人在洞穴内激战，黑魔海记士辛卯暴露星月湖成员信息，鱼无夷以毒网偷袭孟非卿，局势逆转。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_09_yin_yang_fish",
+        "mustReach": "鱼无夷识破程宗扬伪装，在濒死前将阴阳鱼藏于马王巷七海客栈的线索告知他，作为对黑魔海的报复。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s10_10_xiaozi_crisis",
+        "mustReach": "小紫在兰汤馆引诱乐明珠后咬破其脖颈吸血，被程宗扬及时阻止。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "qingyu.stage_11_lieshan_battle",
+    "modId": "lcq.stage_11_lieshan_battle",
+    "chapterId": "lcq.chapter.stage_11_lieshan_battle_fortress",
+    "orderedEventIds": [
+      "lcq.event.s11_01_pengri_arrives",
+      "lcq.event.s11_02_cement_fortress",
+      "lcq.event.s11_03_protect_yueshuang",
+      "lcq.event.s11_04_xingyue_appears",
+      "lcq.event.s11_05_wangtao_breaks",
+      "lcq.event.s11_06_snow_battle",
+      "lcq.event.s11_07_camp_falls",
+      "lcq.event.s11_08_jiangzhou_lockdown",
+      "lcq.event.s11_09_grain_plan",
+      "lcq.event.s11_10_sanchuankou_defeat"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s11_01_pengri_arrives",
+        "mustReach": "捧日军骑兵都抵达烈山，刘宜孙与张亢率部作为先锋，为大军选择营地。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_02_cement_fortress",
+        "mustReach": "萧遥逸向程宗扬展示两个月内建成的十二座水泥城堡及悬楼等新型城防，大幅提升江州防御能力。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_03_protect_yueshuang",
+        "mustReach": "孟非卿命程宗扬率一营三十人及雪隼佣兵团六百人赴烈山三川口，保护月霜，避免其擅自冲锋，并授予指挥权与计时器。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_04_xingyue_appears",
+        "mustReach": "星月湖中央军潜伏雪中突然现身，以齐声口号和统一黑色军装震慑捧日军前锋。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_05_wangtao_breaks",
+        "mustReach": "八骏之一王韬以一人之力突入宋军前阵，焚天斧击溃宋军防线，导致前阵崩溃。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_06_snow_battle",
+        "mustReach": "星月湖四营与宋军铁甲营在三川口雪原激战，双方伤亡过半仍不退却。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_07_camp_falls",
+        "mustReach": "敌寇术者施展雷诀引闪电击毁宋军大纛，随后御林军刀队疾攻，轻易攻破木栅，宋军中军大营陷落。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_08_jiangzhou_lockdown",
+        "mustReach": "捧日右厢军击败星月湖前锋后抵近三川口，两日后越过烈山兵临江州，江州城全城戒严并加固城防。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_09_grain_plan",
+        "mustReach": "程宗扬向云苍峰透露粮战全盘计划：以三十万金铢买晴州二百万石粮食为储备，再以五十万金铢拉升宋国粮价至每石三贯，先从筠州布行暗桩切入。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s11_10_sanchuankou_defeat",
+        "mustReach": "宋军在三川口遭遇西夏军十倍兵力围攻，主将刘平重伤后因后军都监黄德和临阵脱逃导致溃败，最终被俘。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "qingyu.stage_12_jiangzhou_counterwar",
+    "modId": "lcq.stage_12_jiangzhou_counterwar",
+    "chapterId": "lcq.chapter.stage_12_jiangzhou_counterwar_grainroad",
+    "orderedEventIds": [
+      "lcq.event.s12_01_grain_route_blocked",
+      "lcq.event.s12_02_recognize_zhuo",
+      "lcq.event.s12_03_xiaozi_controls_zhuo",
+      "lcq.event.s12_04_river_granary",
+      "lcq.event.s12_05_granary_fire_plan",
+      "lcq.event.s12_06_dragon_guard_routs",
+      "lcq.event.s12_07_left_wing_raid",
+      "lcq.event.s12_08_dingchuan_raid",
+      "lcq.event.s12_09_ge_huaimin_killed",
+      "lcq.event.s12_10_rescue_xiao",
+      "lcq.event.s12_11_siege_begins",
+      "lcq.event.s12_12_gate_fire",
+      "lcq.event.s12_13_long_siege",
+      "lcq.event.s12_14_chenxing_appears",
+      "lcq.event.s12_15_capture_jingli",
+      "lcq.event.s12_16_corpse_poison",
+      "lcq.event.s12_17_shanghou_stays",
+      "lcq.event.s12_18_linan_grain_order"
+    ],
+    "contracts": [
+      {
+        "eventId": "lcq.event.s12_01_grain_route_blocked",
+        "mustReach": "程宗扬发现浮凌江下游乱石滩无法通航，人力运输成本过高，导致粮食转运计划受阻。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_02_recognize_zhuo",
+        "mustReach": "程宗扬在沐羽城的新年庆典中，辨认出云中仙子正是仇敌卓云君，决定暗中复仇。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_03_xiaozi_controls_zhuo",
+        "mustReach": "小紫突然现身，以更高权威压制卓云君，迫使她彻底臣服并指导徒儿侍奉，卓云君为保命放弃抵抗。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_04_river_granary",
+        "mustReach": "滕知州被程宗扬言辞感动，同意在江边设粮仓由程记粮铺经营，秦桧推辞官仓私营，改为借用，程宗扬借机掩护运粮。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_05_granary_fire_plan",
+        "mustReach": "程宗扬计划放火烧毁常平仓以操纵粮价",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_06_dragon_guard_routs",
+        "mustReach": "桑怿与斯明信、卢景激战，终因寡不敌众被斩首，第一军溃败。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_07_left_wing_raid",
+        "mustReach": "星月湖大营突袭宋军龙卫左厢军，宋军指挥体系被摧毁，但随军文官耿傅挺身而出指挥残部结阵死守，与武英共生死，拖延时间以待援军。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_08_dingchuan_raid",
+        "mustReach": "星月湖大营在孟非卿主持下，决定以奇袭战术攻击宋军定川寨，目标为阵斩主将葛怀敏，以扭转宋军兵力优势。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_09_ge_huaimin_killed",
+        "mustReach": "定川寨宋军溃逃，葛怀敏率军突围，遭遇孟非卿雷区伏击，最终被孟非卿斩杀。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_10_rescue_xiao",
+        "mustReach": "大貂珰秦翰生擒萧遥逸，程宗扬以九阳神功拼死相救，击伤秦翰一指，救下萧遥逸。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_11_siege_begins",
+        "mustReach": "宋军连夜调动两万余兵力，携带投石机、巢车、云梯等重型器械，对江州城发动全面攻城战。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_12_gate_fire",
+        "mustReach": "星月湖军以水泥门闸和滚油火攻，消灭进入城门洞的宋军冲车部队。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_13_long_siege",
+        "mustReach": "宋军采用堆土山和挖地道战术，战事陷入僵持，江州城面临长期围困。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_14_chenxing_appears",
+        "mustReach": "小紫现身出手，以幽冥宗法术与黄泉玉臂钏对抗刺客，点破辰星七妖身份并提及龙宸组织。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_15_capture_jingli",
+        "mustReach": "小紫用都卢难旦妖铃抽取四名刺客阴魂，施展幽冥爪击败龙宸刺客惊理，并擒获之。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_16_corpse_poison",
+        "mustReach": "鸩羽殇侯施展尸毒制造毒尸，宋军阵线崩溃，程宗扬得救。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_17_shanghou_stays",
+        "mustReach": "程宗扬以经济和人情筹码说服殇侯留守江州两个月，殇侯答应派出近卫军协助防守。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lcq.event.s12_18_linan_grain_order",
+        "mustReach": "程宗扬通过水镜命令秦桧在筠州抛售粮食并散布宋军和谈谣言，以打压粮价后低价收购。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "yunlong.jiangzhou_retreat",
+    "modId": "lyl.jiangzhou_retreat",
+    "chapterId": "lyl.chapter.jiangzhou_retreat",
+    "orderedEventIds": [
+      "lyl.event.s01_01",
+      "lyl.event.s01_02",
+      "lyl.event.s01_03",
+      "lyl.event.s01_04",
+      "lyl.event.s01_05"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyl.event.s01_01",
+        "mustReach": "夏用和与秦翰于江州主持决战，宋军大溃，粮尽兵疲，决定退军，秦翰率选锋营断后。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s01_02",
+        "mustReach": "程宗扬乘船离江州赴临安，途中遇谢幼度与鱼长老对峙，谢幼度退敌。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s01_03",
+        "mustReach": "王团练手下乡兵屠荆溪村寨、凌辱妇女，程宗扬等人赶到救援，斩杀乡兵。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s01_04",
+        "mustReach": "程宗扬以昭南人名义与滕甫交易三十万石粮食，每石九百铜铢，滕甫挪用军费支付。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s01_05",
+        "mustReach": "程宗扬以五千石粮食诱王团练以劣米换新粮，导致常平仓失火，王团练被查。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "yunlong.lin_an_bridge",
+    "modId": "lyl.lin_an_bridge",
+    "chapterId": "lyl.chapter.lin_an_bridge_arrival",
+    "orderedEventIds": [
+      "lyl.event.lin_an_bridge_01_beat",
+      "lyl.event.lin_an_bridge_02_beat",
+      "lyl.event.lin_an_bridge_03_beat",
+      "lyl.event.lin_an_bridge_04_beat"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyl.event.lin_an_bridge_01_beat",
+        "mustReach": "程宗扬在便门瓦牡丹棚获情报，涉及宋军部署、贾师宪决策、林冲背景等，疑线人在皇城司。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.lin_an_bridge_02_beat",
+        "mustReach": "程宗扬与李师师游小瀛洲，遇梁公子等恶少，程宗扬出手教训，李师师因母亲被辱痛哭。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.lin_an_bridge_03_beat",
+        "mustReach": "程宗扬与众人分析黑魔海可能通过林娘子渗透禁军，决定拜访鲁智深。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.lin_an_bridge_04_beat",
+        "mustReach": "程宗扬在明庆寺与鲁智深、林冲饮酒，林冲因高衙内调戏林娘子而忍气吞声。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "yunlong.xiaoyingzhou_blacksea_trap",
+    "modId": "lyl.xiaoyingzhou_blacksea_trap",
+    "chapterId": "lyl.chapter.xiaoyingzhou_blacksea_trap_linchong",
+    "orderedEventIds": [
+      "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+      "lyl.event.xiaoyingzhou_blacksea_trap_10_beat"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_01_beat",
+        "mustReach": "程宗扬与李师师在前往梵天寺途中遭禁军伏击，马车被毁，俞子元掩护。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_02_beat",
+        "mustReach": "蔺采泉以支持江州为条件，要求程宗扬承认九阳神功出自他，换取太乙真宗支持。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_03_beat",
+        "mustReach": "林冲因持刀闯入白虎堂被刺配江州，程宗扬与鲁智深计划营救。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_04_beat",
+        "mustReach": "程宗扬在野猪林与多方混战，孙天羽被俘认叔，静善与鲁智深冲突，林冲身份暴露，皇城司与六扇门介入，大孚灵鹫寺僧众自爆，林冲重伤，鲁智深展示易筋经，黑衣丽人抢夺衣钵，程宗扬抄录袈裟英文。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_05_beat",
+        "mustReach": "静善尼姑为袈裟符文夜袭程宗扬，被炸弹击退，程宗扬受伤。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_06_beat",
+        "mustReach": "程宗扬穿夜用迷彩服潜入明庆寺观音殿，藏身藻井观察太皇太后与太后，被郭槐和封德明制住，后因劳力士手表被太皇太后认出而获释。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_07_beat",
+        "mustReach": "剑玉姬与西门庆分析太医局医档，发现刘太后用药线索，涉及韦太后宫女，剑玉姬处理了西门庆的宫女。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_08_beat",
+        "mustReach": "程宗扬在小瀛洲设伏，与西门庆、剑玉姬、小玲儿等交战，直属营与翻江会水匪激战，西门庆和李师师受伤。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_09_beat",
+        "mustReach": "程宗扬在保宁寺放生池发现剑玉姬水中无影，识破幻术；剑玉姬露出真身，郭槐以龙爪手攻击，程宗扬用屠龙刀搏斗，真气耗尽时引丹田异变，屠龙刀寒力涌入引发龙吟。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.xiaoyingzhou_blacksea_trap_10_beat",
+        "mustReach": "米远志奉蔺采泉之命助阵，已死老僧展八臂魔僧真身激战；郭槐以荡星鞭击败但遭剑玉姬真身暗算；程宗扬用雷射刀偷袭剑玉姬得手；蒙面客抢走屠龙刀助程宗扬撤退；卓云君腰斩西门庆；剑玉姬带西门庆等撤退，齐姐劫游婵离去。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  }
+]

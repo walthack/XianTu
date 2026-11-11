@@ -18,11 +18,11 @@ const QIN_STAGE='lyg.qin_xianyang',QIN_EVENT='liuchao.event.qin_hook_fangshi_rum
 
 const {CONTENT_PACKS}=await loadTs('../src/modules/contentPacks/index.ts');
 const {quarantinedStageIds}=await loadTs('../src/modules/contentPacks/stageMeta.ts');
-const {TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS,DEFAULT_LINE_QUARANTINED_STAGE_IDS,DEFAULT_LINE_EXTRA_RAIL_BEATS}=await loadTs('../src/modules/scenarioMods/canonRail.ts');
+const {TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS,DEFAULT_LINE_EXTRA_RAIL_BEATS}=await loadTs('../src/modules/scenarioMods/canonRail.ts');
 const {MILESTONE_REWARDS,milestoneRewardFor}=await loadTs('../src/modules/scenarioMods/milestoneRewards.ts');
 const {storyChapterTitleIn}=await loadTs('../src/modules/scenarioMods/eventNarrativeView.ts');
 const {resolveFixedQuestObjectiveIn,FIXED_QUEST_OBJECTIVE_OVERRIDES}=await loadTs('../src/modules/scenarioMods/fixedQuestObjectives.ts');
-const {SECONDARY_LINES,TS_SECONDARY_LINES,mergeSecondaryLines}=await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
+const {SECONDARY_LINES,mergeSecondaryLines}=await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
 const {entityName}=await loadTs('../src/modules/scenarioMods/namedEntities.ts');
 
 /** packs: {目录名: {manifest 其余字段, files: {文件名: 内容}}}；id 写在 manifest 里。 */
@@ -68,14 +68,15 @@ const s10Meta=()=>({stageId:S10,note:'作者备注，编译时剥掉',defaultLin
  presentation:{defaultUiChapterId:QINGZHOU,chapters:{[LAIR]:{mood:'horror'}},events:{[E2]:{uiChapterId:ORDERS,mood:'emotion',objective:'测试目标'}}}});
 const FB='<<FALLBACK>>';
 
-test('新段为空时：catalog 只多两个空段，读取方与 TS 表逐项相同',()=>{
- assert.deepEqual(CONTENT_PACKS.stageMeta,[]);
- assert.deepEqual(CONTENT_PACKS.secondaryLines,[]);
- assert.deepEqual([...DEFAULT_LINE_QUARANTINED_STAGE_IDS],[...TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS]);
- assert.equal(SECONDARY_LINES.length,TS_SECONDARY_LINES.length);
- SECONDARY_LINES.forEach((line,i)=>assert.equal(line,TS_SECONDARY_LINES[i]));
- for(const r of MILESTONE_REWARDS)assert.equal(milestoneRewardFor(r.stageId),r);
- assert.equal(milestoneRewardFor(S10),undefined);
+// 宋线 S4 起真实 catalog 已有宋包的 stageMeta／secondaryLines：「新段为空」改为注入去掉这两段的 catalog 后加载读取方
+test('新段为空时：catalog 只多两个空段，读取方与 TS 表逐项相同',async()=>{
+ const empty={...CONTENT_PACKS,stageMeta:[],secondaryLines:[]};
+ const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',empty),sl=await loadWithCatalog('src/modules/scenarioMods/secondaryLines.ts',empty),mr=await loadWithCatalog('src/modules/scenarioMods/milestoneRewards.ts',empty);
+ assert.deepEqual([...rail.DEFAULT_LINE_QUARANTINED_STAGE_IDS],[...rail.TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS]);
+ assert.equal(sl.SECONDARY_LINES.length,sl.TS_SECONDARY_LINES.length);
+ sl.SECONDARY_LINES.forEach((line,i)=>assert.equal(line,sl.TS_SECONDARY_LINES[i]));
+ for(const r of mr.MILESTONE_REWARDS)assert.equal(mr.milestoneRewardFor(r.stageId),r);
+ assert.equal(mr.milestoneRewardFor(S10),undefined);
 });
 
 test('stageMeta 正例：编译后剥 note、补 chapterTitles；读取方先查 stageMeta、无值回退',async()=>{
@@ -89,7 +90,7 @@ test('stageMeta 正例：编译后剥 note、补 chapterTitles；读取方先查
  assert.equal(quarantinedStageIds([{stageId:'lyl.taiquan_expedition',defaultLineQuarantined:false}],TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS).has('lyl.taiquan_expedition'),false,'写了 false 的关按 stageMeta 去掉');
  // 称号
  assert.deepEqual(milestoneRewardFor(S10,meta),{stageId:S10,titles:['测试称号'],note:'测试说明'});
- assert.equal(milestoneRewardFor('lcq.stage_12_jiangzhou_counterwar',meta),MILESTONE_REWARDS.find(r=>r.stageId==='lcq.stage_12_jiangzhou_counterwar'));
+ assert.equal(milestoneRewardFor('lyl.luoyang_coup',meta),MILESTONE_REWARDS.find(r=>r.stageId==='lyl.luoyang_coup'));
  // 章名：事件 uiChapterId → 关 defaultUiChapterId → fallback
  const packs={...CONTENT_PACKS,stageMeta:meta};
  assert.equal(storyChapterTitleIn(packs,S10,E2,FB),'攻江州令');
@@ -103,8 +104,9 @@ test('stageMeta 正例：编译后剥 note、补 chapterTitles；读取方先查
  assert.equal(resolveFixedQuestObjectiveIn([],{id:E2,objective:'原目标'}),'原目标');
 });
 
+// 宋线 S4b 删了临安特判、宋的 TS 表条目迁进宋包：夹具改用仍留在 TS 里的汉宫特判、洛都封侯称号
 test('读取方优先级：既有特判仍先于 stageMeta，stageMeta 先于 TS 表',async()=>{
- const LIN_AN='lyl.lin_an_bridge',linAn=await builtin(LIN_AN);const intel=linAn.scenario.chapters[1].id;
+ const LIN_AN='lyl.han_palace_endgame',linAn=await builtin(LIN_AN);const intel=linAn.scenario.chapters[1].id;
  const fake=[{stageId:LIN_AN,presentation:{defaultUiChapterId:intel},chapterTitles:{[intel]:'不该出现'}}];
  for(const e of linAn.scenario.events)assert.equal(storyChapterTitleIn({...CONTENT_PACKS,stageMeta:fake},LIN_AN,e.id,FB),storyChapterTitleIn(CONTENT_PACKS,LIN_AN,e.id,FB),e.id);
  // 目标：三条特判先于 stageMeta；stageMeta 先于 FIXED 表
@@ -113,13 +115,13 @@ test('读取方优先级：既有特判仍先于 stageMeta，stageMeta 先于 TS
  assert.equal(resolveFixedQuestObjectiveIn(objMeta,{id:special}),resolveFixedQuestObjectiveIn([],{id:special}));
  assert.equal(resolveFixedQuestObjectiveIn(objMeta,{id:tabled}),'包');
  // 称号：stageMeta 先于 MILESTONE_REWARDS
- const s12='lcq.stage_12_jiangzhou_counterwar';
+ const s12='lyl.luoyang_coup';
  assert.deepEqual(milestoneRewardFor(s12,[{stageId:s12,milestoneReward:{titles:['包'],note:'包'}}]),{stageId:s12,titles:['包'],note:'包'});
 });
 
 test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_MOOD_MAP 之前；事件 mood 先于 EVENT_MOOD_MAP',async()=>{
  const meta=[...(await compile(metaPack([s10Meta()]))).stageMeta,
-  {stageId:'lyl.lin_an_bridge',presentation:{chapters:{'lyl.chapter.lin_an_bridge_arrival':{mood:'horror'}},events:{'lcq.event.s10_01_jiangzhou_order':{mood:'horror'}}}},
+  {stageId:'lyl.luoyang_cloud_secret',presentation:{chapters:{'lyl.chapter.luoyang_cloud_secret':{mood:'horror'}},events:{'lcq.event.s09_04_weaving_trade':{mood:'horror'}}}},
   {stageId:QIN_STAGE,presentation:{chapters:{'lyg.chapter.qin_xianyang_prologue':{mood:'horror'}}}}];
  const base=await loadWithCatalog('src/utils/musicLibrary.ts',CONTENT_PACKS);
  const withMeta=await loadWithCatalog('src/utils/musicLibrary.ts',{...CONTENT_PACKS,stageMeta:meta});
@@ -127,16 +129,16 @@ test('stageMeta 配乐：章 mood 排在包内关 presentation 之后、CHAPTER_
  assert.equal(base.resolveMusicMoodForChapter(LAIR),'battle','无 stageMeta 时走章 id 正则');
  assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:E2}]),'emotion');
  assert.equal(base.resolveMusicMoodForScenario(null,[{id:E2}]),base.resolveMusicMoodForScenario(null,[]));
- assert.equal(withMeta.resolveMusicMoodForChapter('lyl.chapter.lin_an_bridge_arrival'),'horror','stageMeta 先于 CHAPTER_MOOD_MAP');
- assert.equal(base.resolveMusicMoodForChapter('lyl.chapter.lin_an_bridge_arrival'),'court');
- assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:'lcq.event.s10_01_jiangzhou_order'}]),'horror','stageMeta 先于 EVENT_MOOD_MAP');
+ assert.equal(withMeta.resolveMusicMoodForChapter('lyl.chapter.luoyang_cloud_secret'),'horror','stageMeta 先于 CHAPTER_MOOD_MAP');
+ assert.equal(base.resolveMusicMoodForChapter('lyl.chapter.luoyang_cloud_secret'),'court');
+ assert.equal(withMeta.resolveMusicMoodForScenario(null,[{id:'lcq.event.s09_04_weaving_trade'}]),'horror','stageMeta 先于 EVENT_MOOD_MAP');
  assert.equal(withMeta.resolveMusicMoodForChapter('lyg.chapter.qin_xianyang_prologue'),'court','包内关章 presentation.mood 先于 stageMeta');
 });
 
 test('stageMeta 隔离：canonRail 合并后的集合与 isDefaultLineQuarantinedStageId 读 catalog',async()=>{
- const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:'lyl.taiquan_expedition',defaultLineQuarantined:false}]});
+ const rail=await loadWithCatalog('src/modules/scenarioMods/canonRail.ts',{...CONTENT_PACKS,stageMeta:[{stageId:S10,defaultLineQuarantined:true},{stageId:'lyl.luoyang_coup',defaultLineQuarantined:false}]});
  assert.equal(rail.isDefaultLineQuarantinedStageId(S10),true);
- assert.equal(rail.isDefaultLineQuarantinedStageId('lyl.taiquan_expedition'),false);
+ assert.equal(rail.isDefaultLineQuarantinedStageId('lyl.luoyang_coup'),false);
  assert.equal(rail.isDefaultLineQuarantinedStageId('lcq.stage_03'),true,'没写的关沿用 TS 表');
  assert.equal(rail.DEFAULT_LINE_QUARANTINED_STAGE_IDS.size,TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS.size);
 });
@@ -162,14 +164,15 @@ test('stageMeta 反例：关、章、事件、mood、目标、称号与字段',a
 });
 
 test('stageMeta 反例：与 TS 表重复（validateWithTs）',async()=>{
- await rejects(metaPack([{stageId:'lyl.taiquan_expedition',defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
- await rejects(metaPack([{stageId:'lcq.stage_12_jiangzhou_counterwar',milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/);
- await rejects(metaPack([{stageId:'lyl.lin_an_bridge',presentation:{events:{'lyl.event.debut_jingli':{objective:'x'}}}}]),/objective for lyl\.event\.debut_jingli already set in fixedQuestObjectives\.ts/);
- await rejects(metaPack([{stageId:S10,presentation:{events:{[E1]:{mood:'court'}}}}]),/event mood for lcq\.event\.s10_01_jiangzhou_order also set in musicLibrary\.ts EVENT_MOOD_MAP/);
- await rejects(metaPack([{stageId:'lyl.lin_an_bridge',presentation:{chapters:{'lyl.chapter.lin_an_bridge_arrival':{mood:'court'}}}}]),/chapter mood for lyl\.chapter\.lin_an_bridge_arrival also set in musicLibrary\.ts CHAPTER_MOOD_MAP/);
- // 临安的章名特判覆盖整关：迁 stageMeta 必须同时删掉特判（S4b），否则 defaultUiChapterId／逐事件 uiChapterId 都不生效
- await rejects(metaPack([{stageId:'lyl.lin_an_bridge',presentation:{defaultUiChapterId:'lyl.chapter.lin_an_bridge_intel'}}]),/stageMeta lyl\.lin_an_bridge: defaultUiChapterId is shadowed by eventNarrativeView\.ts/);
- await rejects(metaPack([{stageId:'lyl.lin_an_bridge',presentation:{events:{'lyl.event.debut_jingli':{uiChapterId:'lyl.chapter.lin_an_bridge_intel'}}}}]),/chapter title for lyl\.event\.debut_jingli is already decided in eventNarrativeView\.ts/);
+ // 宋线 S4 把宋的条目迁出了这些 TS 表：夹具改用仍留在 TS 里的非宋条目
+ await rejects(metaPack([{stageId:'lcq.stage_03',defaultLineQuarantined:true}]),/defaultLineQuarantined also set in canonRail\.ts/);
+ await rejects(metaPack([{stageId:'lyl.luoyang_coup',milestoneReward:{titles:['x'],note:'x'}}]),/milestoneReward also set in milestoneRewards\.ts/);
+ await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{events:{'lyl.event.liujian_takes_nangong':{objective:'x'}}}}]),/objective for lyl\.event\.liujian_takes_nangong already set in fixedQuestObjectives\.ts/);
+ await rejects(metaPack([{stageId:'lcq.stage_09_trade_and_escape',presentation:{events:{'lcq.event.s09_04_weaving_trade':{mood:'court'}}}}]),/event mood for lcq\.event\.s09_04_weaving_trade also set in musicLibrary\.ts EVENT_MOOD_MAP/);
+ await rejects(metaPack([{stageId:'lyl.luoyang_cloud_secret',presentation:{chapters:{'lyl.chapter.luoyang_cloud_secret':{mood:'court'}}}}]),/chapter mood for lyl\.chapter\.luoyang_cloud_secret also set in musicLibrary\.ts CHAPTER_MOOD_MAP/);
+ // 汉宫的章名特判覆盖整关：迁 stageMeta 必须同时删掉特判（宋临安在 S4b 就是这样做的），否则 defaultUiChapterId／逐事件 uiChapterId 都不生效
+ await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{defaultUiChapterId:'lyl.chapter.han_palace_endgame_palace'}}]),/stageMeta lyl\.han_palace_endgame: defaultUiChapterId is shadowed by eventNarrativeView\.ts/);
+ await rejects(metaPack([{stageId:'lyl.han_palace_endgame',presentation:{events:{'lyl.event.han_palace_endgame_01_beat':{uiChapterId:'lyl.chapter.han_palace_endgame_palace'}}}}]),/chapter title for lyl\.event\.han_palace_endgame_01_beat is already decided in eventNarrativeView\.ts/);
  // lcq.stage_04 只对表里 7 拍特判：关默认章与表内事件重叠，逐事件查出来
  await rejects(metaPack([{stageId:'lcq.stage_04',presentation:{defaultUiChapterId:(await builtin('lcq.stage_04')).scenario.chapters[0].id}}]),/defaultUiChapterId is shadowed by eventNarrativeView\.ts \(event lcq\.event\.s04_0\d\)/);
 });
@@ -234,9 +237,10 @@ test('secondaryLines 正例：剥 note、保留 after；合并后按 after 插�
  assert.equal(out.secondaryLines.length,2);
  assert.equal('note' in out.secondaryLines[0],false);assert.equal(out.secondaryLines[0].nodes.some(n=>'note' in n),false);
  assert.equal(out.secondaryLines[0].after,'jin');
- const merged=mergeSecondaryLines(TS_SECONDARY_LINES,out.secondaryLines);const ids=merged.map(l=>l.id);
+ // 宋线 S4c：song 线从 TS 表迁进宋包，基底改用合并后的 SECONDARY_LINES（只换读取来源）
+ const merged=mergeSecondaryLines(SECONDARY_LINES,out.secondaryLines);const ids=merged.map(l=>l.id);
  const jin=ids.indexOf('jin');assert.deepEqual(ids.slice(jin,jin+4),['jin','test_line','test_line2','song']);
- assert.deepEqual(ids.filter(id=>!id.startsWith('test_')),TS_SECONDARY_LINES.map(l=>l.id));
+ assert.deepEqual(ids.filter(id=>!id.startsWith('test_')),SECONDARY_LINES.map(l=>l.id));
  assert.equal('after' in merged[jin+1],false);
 });
 
@@ -250,7 +254,7 @@ test('secondaryLines 反例：kind、status、节点关与事件、锚事件、�
  await rejects(linesPack([line({after:''})]),/after must name a line/);
  await rejects(linesPack([line(),line({id:'test_line2'})]),/test_line2: another pack line is already after jin/);
  await rejects(linesPack([line({after:'no_such_line'})]),/secondary line test_line: after no_such_line not found/);
- await rejects(linesPack([line({id:'song'})]),/secondary line song: duplicate id/);
+ await rejects(linesPack([line({id:'han'})]),/secondary line han: duplicate id/);
  await rejects(linesPack([line(),line()]),/secondary line missing\/duplicate id test_line/);
 });
 
