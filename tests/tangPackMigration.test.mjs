@@ -60,11 +60,8 @@ test('唐 8 关的关／事件／章 id 不再写在框架 TS 文件里（允许
   const lines = src('src/modules/scenarioMods/secondaryLines.ts').split('\n');
   const critStart = lines.indexOf('export const LINE_CRITICAL_EVENTS: Record<string, string> = {');
   const critEnd = lines.indexOf('};', critStart);
-  assert.ok(critStart > 0 && critEnd > critStart);
-  const hits = lines.map((line, i) => [line, i]).filter(([line]) => line.match(token));
-  assert.ok(hits.length > 0);
-  for (const [line, i] of hits) {
-    if (i > critStart && i < critEnd) continue;
-    assert.match(line, /^\s*\{ reviewSummary: .*stageId: '[^']+', eventId: '[^']+' \},?$/, line);
-  }
+  // B1：四条非国家线进核心包、LINE_CRITICAL_EVENTS 条目进汉包后，TS 表只剩声明行与 `};`，本线 id 残留为 0
+  assert.ok(critStart > 0 && critEnd === critStart + 1);
+  const hits = lines.filter(line => line.match(token));
+  assert.deepEqual(hits, []);
 });

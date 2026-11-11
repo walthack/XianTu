@@ -54,8 +54,13 @@ const EVENT_MOOD_ID=(await readFile(join(root,'src/utils/musicLibrary.ts'),'utf8
 // stageMeta 自身生效的断言改用任取的内置章／事件（MOOD_CH／MOOD_EV）。
 const BUILTINS=await Promise.all((await readdir(join(root,'src/modules/scenarioMods/builtins/data'))).filter(f=>f.endsWith('.json')).sort().map(f=>read(join(root,'src/modules/scenarioMods/builtins/data',f))));
 const EVENT_MOOD_STAGE=EVENT_MOOD_ID&&BUILTINS.find(m=>m.scenario.events.some(e=>e.id===EVENT_MOOD_ID)).manifest.id;
-const TS_LINE_ID=TS_SECONDARY_LINES[0]?.id;
-assert.ok(TS_LINE_ID,'TS_SECONDARY_LINES 已搬空：改用合成的临时 TS 线');
+// B1：四条非国家线进核心包后 TS_SECONDARY_LINES 已搬空：改用合成的临时 TS 线——用例里临时推进 TS 表、用完删掉（同下面的 withTsMilestone，
+// 编译器与本文件共用同一个模块对象）。
+const TS_LINE_ID='test_ts_line';
+const TS_SYNTH_LINE={id:TS_LINE_ID,name:'合成 TS 线',kind:'nation',entryHint:'合成。',basis:'合成的临时 TS 线。',nodes:[{reviewSummary:'待扩',status:'pending'}]};
+assert.ok(!SECONDARY_LINES.some(l=>l.id===TS_LINE_ID));
+const withTsLine=async fn=>{TS_SECONDARY_LINES.push(TS_SYNTH_LINE);
+ try{return await fn();}finally{TS_SECONDARY_LINES.splice(TS_SECONDARY_LINES.indexOf(TS_SYNTH_LINE),1);}};
 // 汉线 S4：汉的隔离、称号、目标、章配乐、整关章名特判迁出 TS（原夹具洛都封侯、liujian_takes_nangong、luoyang_cloud_secret 章、汉宫）。
 // 同样改为从 TS 表／特判动态挑现存条目；表搬空时这几条用例要改用合成的临时 TS 条目。
 const [,CH_MOOD_ID,CH_MOOD]=(await readFile(join(root,'src/utils/musicLibrary.ts'),'utf8')).match(/const CHAPTER_MOOD_MAP: Record<string, MusicMood> = \{([\s\S]*?)\n\};/)?.[1].match(/^\s*'([^']+)': '([^']+)',$/m)||[];
@@ -288,19 +293,21 @@ test('包 rail 动态名字：编译期校验实体与标签，catalog 留原样
 const line=(patch={})=>({id:'test_line',name:'测试线',kind:'nation',after:TS_LINE_ID,note:'作者备注',anchorEventIds:[E1],anchorLocationIds:['liuchao.location.jiangzhou'],entryHint:'去江州。',basis:'测试。',
  nodes:[{reviewSummary:'第一步',status:'ready',stageId:S10,eventId:E2,note:'节点备注'},{reviewSummary:'待扩',status:'pending'}],...patch});
 
-test('secondaryLines 正例：剥 note、保留 after；合并后按 after 插位，可接在另一条包线后面',async()=>{
+test('secondaryLines 正例：剥 note、保留 after；合并后按 after 插位，可接在另一条包线后面',()=>withTsLine(async()=>{
  const out=await compile(linesPack([line(),line({id:'test_line2',after:'test_line',anchorEventIds:['lcq.event.not_yet'],anchorEventPending:true})]));
  assert.equal(out.secondaryLines.length,2);
  assert.equal('note' in out.secondaryLines[0],false);assert.equal(out.secondaryLines[0].nodes.some(n=>'note' in n),false);
  assert.equal(out.secondaryLines[0].after,TS_LINE_ID);
  // 宋线 S4c：song 线从 TS 表迁进宋包，基底改用合并后的 SECONDARY_LINES（只换读取来源）
- const merged=mergeSecondaryLines(SECONDARY_LINES,out.secondaryLines);const ids=merged.map(l=>l.id);
- const at=ids.indexOf(TS_LINE_ID),next=SECONDARY_LINES[SECONDARY_LINES.findIndex(l=>l.id===TS_LINE_ID)+1]?.id;assert.deepEqual(ids.slice(at,at+4),[TS_LINE_ID,'test_line','test_line2',next].filter(Boolean));
+ // B1：TS 线是合成的，基底＝合并后的 SECONDARY_LINES 在首条之后插入这条合成 TS 线
+ const base=[SECONDARY_LINES[0],TS_SYNTH_LINE,...SECONDARY_LINES.slice(1)];
+ const merged=mergeSecondaryLines(base,out.secondaryLines);const ids=merged.map(l=>l.id);
+ const at=ids.indexOf(TS_LINE_ID),next=base[base.findIndex(l=>l.id===TS_LINE_ID)+1]?.id;assert.deepEqual(ids.slice(at,at+4),[TS_LINE_ID,'test_line','test_line2',next].filter(Boolean));
  assert.deepEqual(ids.filter(id=>!id.startsWith('test_')),SECONDARY_LINES.map(l=>l.id));
  assert.equal('after' in merged[at+1],false);
-});
+}));
 
-test('secondaryLines 反例：kind、status、节点关与事件、锚事件、锚地点、after、id',async()=>{
+test('secondaryLines 反例：kind、status、节点关与事件、锚事件、锚地点、after、id',()=>withTsLine(async()=>{
  await rejects(linesPack([line({kind:'guild'})]),/secondary line test_line: invalid fields/);
  await rejects(linesPack([line({nodes:[{reviewSummary:'x',status:'done'}]})]),/node 0: invalid fields/);
  await rejects(linesPack([line({nodes:[{reviewSummary:'x',status:'ready',stageId:'lcq.no_such_stage',eventId:E2}]})]),/node 0: unknown stage lcq\.no_such_stage/);
@@ -313,9 +320,20 @@ test('secondaryLines 反例：kind、status、节点关与事件、锚事件、�
  // 汉线 S4：han 线迁出 TS，与 TS 线同 id 的夹具改用 TS_LINE_ID
  await rejects(linesPack([line({id:TS_LINE_ID})]),new RegExp(`secondary line ${reEsc(TS_LINE_ID)}: duplicate id`));
  await rejects(linesPack([line(),line()]),/secondary line missing\/duplicate id test_line/);
+}));
+
+// B1：二级线的 after 只是全局排序提示，不算跨包引用（四条非国家线进核心包后，核心包 taiyi 要 after 太泉包的 taiquan，而太泉包依赖核心包）
+test('secondaryLines 的 after 跨包不需要 dependsOn；跨包成环、跨包同 after 仍报错',async()=>{
+ const pack=(id,lines)=>({id,secondaryLines:['l.json'],files:{'l.json':lines}});
+ const out=await compile({x:pack('test.x',[line({id:'test_x',after:undefined}),line({id:'test_x2',after:'test_y'})]),y:pack('test.y',[line({id:'test_y',after:'test_x'})])});
+ assert.deepEqual(mergeSecondaryLines([],out.secondaryLines).map(l=>l.id),['test_x','test_y','test_x2']);
+ await rejects({x:pack('test.x',[line({id:'test_x',after:'test_y'})]),y:pack('test.y',[line({id:'test_y',after:'test_x'})])},/secondary line test_x: after test_y not found/);
+ await rejects({x:pack('test.x',[line({id:'test_x',after:undefined})]),y:pack('test.y',[line({id:'test_y',after:'test_x'})]),z:pack('test.z',[line({id:'test_z',after:'test_x'})])},/test_z: another pack line is already after test_x/);
+ // 线里 after 以外的字符串照旧走归属扫描：节点引用别的包定义的线 id 仍要 dependsOn
+ await rejects({x:pack('test.x',[line({id:'test_x',after:undefined})]),y:pack('test.y',[line({id:'test_y',after:'test_x',nodes:[{reviewSummary:'x',status:'pending',stageId:'test_x'}]})])},/test\.y references test_x owned by test\.x; add dependsOn/);
 });
 
-test('归属检查认得新段里的 id：引用包内关、事件、rail 要 dependsOn',async()=>{
+test('归属检查认得新段里的 id：引用包内关、事件、rail 要 dependsOn',()=>withTsLine(async()=>{
  const a=await qinTexts(),b=await qinStage();
  const owned=new RegExp(`test\\.c references \\S+ owned by test\\.b; add dependsOn`);
  const c=(m,deps)=>({id:'test.c',...m,...(deps?{dependsOn:['test.b']}:{})});
@@ -331,4 +349,4 @@ test('归属检查认得新段里的 id：引用包内关、事件、rail 要 de
  await rejects({a,b:bRail,c:c(extras)},owned);
  const out=await compile({a,b:bRail,c:{...c(extras,true),dependsOn:['test.a','test.b']}});
  assert.deepEqual(out.rails[0].orderedEventIds,qinRail.orderedEventIds);
-});
+}));

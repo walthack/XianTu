@@ -252,3 +252,15 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 **归属**：`characterQuest`、`ifBranch` 两种 id 登记为包定义；六段的原始值都进通用字符串扫描，引用别的包定义的关、事件等要 `dependsOn`。
 
 catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvents: []`、`characterBeats: {quests:[],highlights:[]}`、`storyAxis: null`、`locationAliases: {canonical:{},parents:{},display:{}}`、`characterProfiles: {stance:[],affinityCaps:[]}`、`ifBranches: {branches:[],consequences:[],prompts:{}}`；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。棘轮：`divergenceLedger.ts` 三元式里 7 行带 id 的判断改为规则表的 `prompt` 字段与 `TS_DIVERGENCE_PROMPTS`（新增 1 行键），实扫 23 → 17，基线同批重写（总数 1313 → 1307）。
+
+## 2026-11-11 非国家线四条二级线与线承重事件进包（B1）
+
+核心包 `packs/qingyu/secondary-lines.json`（manifest 新增 `secondaryLines`）：商道 `commerce`（首条，**不写 `after`**）、太乙 `taiyi`（`after: "taiquan"`）、星月湖 `xingyuehu`（`after: "taiyi"`）、黑魔海 `heimohai`（`after: "xingyuehu"`）。汉包 `packs/han/line-critical-events.json`（manifest 新增 `lineCriticalEvents`）：原 `LINE_CRITICAL_EVENTS` 10 条（`dingtao_beijing` 6 条、隔离关 `luoyang_coup` 4 条，全部是汉关事件、`lineId: "han"`），原顺序。至此 `TS_SECONDARY_LINES` 为空数组；`LINE_CRITICAL_EVENTS` 只剩声明行与 `};`（对象就地并入汉包条目，导出名与对象不变），`TS_LINE_CRITICAL_EVENTS` 为 `{}`。
+
+- **二级线的 `after` 不算跨包引用（新规则）**：`after` 只是全局排序提示——`mergeSecondaryLines` 在全部包线（catalog 拼接）加 TS 线上统一解析，与包顺序无关，所以归属扫描跳过包线顶层的 `after` 字段，不要求 `dependsOn`。原因：核心包 `taiyi` 要接在太泉包的 `taiquan` 后面，而太泉包依赖核心包，按旧规则会成环。线里 `after` 以外的字符串（节点、锚、`entryHintKeys` 的键等）照旧扫描。保留的报错：`after` 找不到（含成环）、两条线 `after` 同一条线（跨包也查）、id 重复、多于一条不写 `after`。已有各国家线包为 `after` 加的 `dependsOn`（宋→晋、晋→昭南、汉→宋、唐→汉）多余但无害，不动。`tests/contentPackLineFormats.test.mjs` 钉住「跨包 after 不需要 dependsOn；跨包成环、跨包同 after 仍报错；after 以外的字段仍要 dependsOn」。
+- 写法：线与节点之间的 `//` 注释进相邻线或节点的 `note`（同昭南：`字段：注释`，多行用空格拼）；原表尾的「国家／地区线：锚地」分节注释后面没有 TS 线了，放进 `heimohai` 的 `note`。星月湖一个节点的 `entityText(...)` 写成 `{{entity:character:liuchao.character.shang_zhen_yu}}`；`basis`／`pendingExpansion`／`entryHint` 的 `+` 拼接合成一个字符串（值逐字相同，含 `\n\n`）。承重事件每行行尾的注释、两段分组注释进各条的 `note`。
+- catalog：`secondaryLines` 6 → 10 条（新 4 条在前，原 6 条字节不变）、`lineCriticalEvents` 0 → 10 条，其余段不变；version `5dc9243674e0ce22` → `5020c25957e94d02`。
+- 合并后的整表顺序不变：commerce → taiquan → taiyi → xingyuehu → heimohai → zhaonan → jin → song → han → tang（songPackSnapshot 钉住）。
+- 留在 TS：`secondaryLineDisplayName` 的黑魔海显示名特判（代码）；`TS_SECONDARY_LINES` 上方文档注释里的孪生地点 id 举例（棘轮剩 5 行）。
+- `scripts/quest-report.mjs` 原来按正则读 `secondaryLines.ts` 源码，表搬空后一条二级线都读不到，改为经 jiti 读合并后的 `SECONDARY_LINES`（同 `build-entity-index.mjs`）。
+- 测试：`contentPackLineFormats` 的 `TS_LINE_ID` 改为合成的临时 TS 线（`withTsLine`，用例内推进 `TS_SECONDARY_LINES`、用完删掉，同 `withTsMilestone`）；汉／晋／塞外／太泉／唐／昭南六个迁移测试里「secondaryLines.ts 残留只在别的线的节点里」改为「残留为 0」（汉、唐另断言承重表在 TS 里只剩声明行与 `};`）；`contentPackCoreCharacterFormats` 搬迁演练的承重表改读合并值（同演练里的二级线）。棘轮 `secondaryLines.ts` 127 → 5，总数 1135 → 1013。

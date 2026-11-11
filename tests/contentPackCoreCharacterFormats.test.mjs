@@ -433,7 +433,7 @@ const sourceEntries=async rel=>{
 };
 test('搬迁演练：七张 TS 表都能逐项无损写成包 JSON，编译通过，合并值 deepStrictEqual 现值',async()=>{
  const lines=SL.SECONDARY_LINES.map((l,i)=>i?{...structuredClone(l),after:SL.SECONDARY_LINES[i-1].id}:structuredClone(l));
- const lce=Object.entries(SL.TS_LINE_CRITICAL_EVENTS).map(([eventId,lineId])=>({eventId,lineId}));
+ const lce=Object.entries(SL.LINE_CRITICAL_EVENTS).map(([eventId,lineId])=>({eventId,lineId}));
  const beats={quests:structuredClone(CQ.TS_CHARACTER_QUESTS),highlights:structuredClone(CQ.TS_CHARACTER_HIGHLIGHTS)};
  const story={stageOrder:[...AX.STAGE_ORDER],layers:structuredClone(AX.MAIN_QUEST_LAYERS),stages:structuredClone(AX.MAIN_QUEST_STAGES),nodes:structuredClone(AX.MAIN_QUEST_NODES),requirements:structuredClone(AX.MAIN_QUEST_REQUIREMENTS)};
  const loc={canonical:{...LOC.TS_LOCATION_ID_ALIASES},parents:{...LOC.TS_LOCATION_PARENTS},display:structuredClone(LOC.TS_LOCATION_NAMES)};

@@ -47,5 +47,8 @@
   ],
   "heldActions": [
     "held-actions.json"
+  ],
+  "secondaryLines": [
+    "secondary-lines.json"
   ]
 }

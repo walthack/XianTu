@@ -209,20 +209,26 @@ function parseNodes(blob) {
 }
 
 const axisSrc = fs.readFileSync(path.join(ROOT, AXIS), 'utf8');
-const linesSrc = fs.readFileSync(path.join(ROOT, LINES), 'utf8');
 
 const axisStart = axisSrc.indexOf('MAIN_QUEST_NODES: MainQuestNode[]');
 const tiers = [{
   id: 'main', name: '主轴', tier: 1,
   nodes: parseNodes(axisSrc.slice(axisStart, axisSrc.indexOf('\n];', axisStart))),
 }];
-for (const m of linesSrc.matchAll(/id: '(\w+)',\s*\n\s*name: '([^']+)',\s*\n\s*kind: '(\w+)',([\s\S]*?)pendingExpansion:/g)) {
+// B1：二级线已全部进内容包（secondaryLines.ts 的 TS 表为空），改读合并后的 SECONDARY_LINES（同 build-entity-index.mjs，经 jiti）
+const { createJiti } = await import('jiti');
+const { SECONDARY_LINES } = await createJiti(import.meta.url, { alias: { '@': path.join(ROOT, 'src') } }).import(path.join(ROOT, LINES));
+for (const line of SECONDARY_LINES) {
   tiers.push({
-    id: m[1], name: m[2], tier: 2, kind: m[3],
-    anchor: m[4].match(/anchorEventIds: \['([^']+)'\]/)?.[1],
-    anchorPending: m[4].includes('anchorEventPending'),
-    hint: m[4].match(/entryHint: '([^']+)'/)?.[1] ?? '',
-    nodes: parseNodes(m[4]),
+    id: line.id, name: line.name, tier: 2, kind: line.kind,
+    anchor: line.anchorEventIds?.length === 1 ? line.anchorEventIds[0] : undefined,
+    anchorPending: Boolean(line.anchorEventPending),
+    hint: line.entryHint ?? '',
+    nodes: line.nodes.map(n => ({
+      text: n.reviewSummary, status: n.status, eventId: n.eventId, stageId: n.stageId, branch: undefined,
+      seq: n.eventId && n.status === 'ready' ? events.get(n.eventId)?.seq : undefined,
+      exists: n.eventId ? events.has(n.eventId) : false,
+    })),
   });
 }
 
