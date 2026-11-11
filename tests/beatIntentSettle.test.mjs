@@ -288,9 +288,9 @@ test('s01_05 描述「中立边陲·草原·帅帐」：解析为帅帐、本拍
 }));
 
 // REPORT-8091-68fe9d20 P1-3：小请求单次超时 6 秒、超时再发 1 次；两值都在 story.quest.intentSettle.beatJudge（不写死）。
-test('小请求超时：配置 timeoutMs=6000、timeoutRetries=1；超时后重发一次，第二次成功即结算', () => withQuest(true, async () => {
+test('小请求超时：配置 timeoutMs=10000、timeoutRetries=1；超时后重发一次，第二次成功即结算', () => withQuest(true, async () => {
   const judge = QC.intentSettle.beatJudge;
-  assert.equal(judge.timeoutMs, 6000);
+  assert.equal(judge.timeoutMs, 10000);
   assert.equal(judge.timeoutRetries, 1);
   const prev = judge.timeoutMs; judge.timeoutMs = 20;
   const hang = req => new Promise((_, reject) => req.signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }));

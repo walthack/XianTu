@@ -17,13 +17,13 @@ const { backendReasoningParam } = await jiti.import('../src/services/aiReasoning
 const cfg = (id, model) => ({ id, name:id, model, provider:'custom', url:'https://api.minimaxi.com/v1', apiKey:'fixture', enabled:true, maxTokens:4096 });
 const judgeOf = f => JSON.parse(readFileSync(new URL(`../mod-kit/${f}`, import.meta.url), 'utf8')).story.quest.intentSettle.beatJudge;
 
-test('beatJudge config: model M2.7-highspeed, low/512, 6s + 1 retry (both config copies)', () => {
+test('beatJudge config: model M2.7-highspeed, low/512, 10s + 1 retry (both config copies)', () => {
   for (const f of ['numbers-progress.json', 'game-numbers.qingyu.json']) {
     const j = judgeOf(f);
     assert.equal(j.model, 'MiniMax-M2.7-highspeed', f);
     assert.equal(j.reasoningEffort, 'low', f);
     assert.equal(j.maxTokensWithReasoning, 512, f);
-    assert.equal(j.timeoutMs, 6000, f);
+    assert.equal(j.timeoutMs, 10000, f);
     assert.equal(j.timeoutRetries, 1, f);
   }
 });
@@ -47,7 +47,7 @@ test('beat_judge swaps only the model name; main connection untouched', async ()
     assert.equal(seen.apiConfigOverride.model, 'MiniMax-M2.7-highspeed');
     assert.equal(seen.apiConfigOverride.url, 'https://api.minimaxi.com/v1');
     assert.equal(seen.maxTokens, 512);
-    assert.equal(seen.timeoutMs, 6000);
+    assert.equal(seen.timeoutMs, 10000);
     assert.equal(seen.usageType, 'beat_judge');
   } finally { aiService.generate = original; }
   // M2.7-highspeed 不认 reasoning_effort：名单外不发。
