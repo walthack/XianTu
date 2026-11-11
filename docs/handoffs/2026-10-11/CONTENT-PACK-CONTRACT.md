@@ -76,3 +76,17 @@ F06–F09采用[31号合同原样归档](../../../mod-kit/source-documents/31-�
 **章 `presentation.mood`**（包内 stage）：本章配乐，取值必须是 `src/utils/musicLibrary.ts` 的 `MusicMood`（编译期按源码里的类型声明校验）；章 `presentation` 目前只收 `mood`。`resolveMusicMoodForChapter` 先查 catalog，再回退 TS 里的 `CHAPTER_MOOD_MAP` 与模式规则。
 
 秦线示例：`packs/qingyu/rails.json`；`stage-qin-xianyang.json` 后三幕与三个条件拍的 `uiChapterId`、序幕章 `mood: "court"`。
+
+## 2026-11-11 多包与包间依赖（阶段 3a）
+
+**manifest `dependsOn`**（可选，缺省 `[]`）：字符串数组，列出本包要引用的其他包 id。必须是已存在的包、不能是自己、不能重复、不能成环（报错给出环路 `a → b → a`）。可见性按传递闭包算：A 依赖 B、B 依赖 C，则 A 可引用 C 的 id。
+
+**编译顺序**：按 `dependsOn` 拓扑排序，同时就绪的按目录名取；各类条目按这个顺序拼接。下一步表 `lineCompass.lines` 合并后再按 `NATION_LINE_IDS` 稳定排序，右栏线顺序与包顺序无关。
+
+**归属规则**（只在编译期做，catalog 不记归属）：
+- 包定义的 id：正文键；包内关的 stage id、事件 id、章 id；任务线 id、beat id；合同 `meta.id`；实体 `entry.id`；lineCompass 的 `lineId`；timeline 插入项、试玩、入口、状态、地图路线、地图入口、暂扣动作、rail 的 `id`；questLineResources 各表的键；overlay 新增的事件（既非内置事件、也非某包关内事件）。内置关（builtins/data）和 mod-kit 的 id 不登记，任何包可引用（到阶段 4 为止）。
+- 同一种类的同一 id 由两个包定义 → `<种类> id X defined by both A and B`。不同种类同名不算冲突（如地图入口 `qin` 与线 `qin`）。
+- 引用：扫描每个包的原始资产（`$text`／数值解析之前；正文文件的值不扫），对每个字符串（含对象键）取候选：整串；去掉账本前缀 `done|flags|line|acq|identity|knows.player|item|party|deadline|unlock|compass.` 后的部分，及其再去 `.outcome|.from|.status|.state` 后缀；按 `::`、`:` 拆开的各段。候选整串等于某包定义的 id，而定义它的包都不在本包及其依赖闭包内 → `P references X owned by Q; add dependsOn`。只做整串相等，不做子串匹配。
+- 地图入口的 `previewTextId`／`returnLabelTextId`／`returnTextId`／`returnChronicleTextId` 写了就必须是已有正文键。
+
+**重建与回滚**：`node scripts/content-packs.mjs` 先纯数据编译（不加载会读 `generated/catalog.json` 的 TS 模块），把新 catalog 写到位（旧文件先备份），再起子进程用 TS 校验器（validator／lint／questLines，它们加载时读磁盘上的 catalog）校验；失败则恢复旧文件（原来没有就删掉新文件）并报错。所以删掉 `catalog.json` 后单次重建即可。`--check` 不写文件：编译结果与磁盘不一致即报过期，一致再做 TS 校验。`compileContentPacks()` 只编译不写，其 TS 校验看到的是磁盘上的 catalog。
