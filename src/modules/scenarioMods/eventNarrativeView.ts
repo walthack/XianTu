@@ -6,7 +6,7 @@ import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { evaluateLedgerCondition } from './ledgerConditions';
 import { computePresentNames } from './presence';
 import { CONTENT_PACKS, packText } from '../contentPacks';
-import { stageMetaChapterTitle, stageMetaUiChapterEventIds } from '../contentPacks/stageMeta';
+import { stageMetaChapterTitle, stageMetaUiChapterEventIds, stageMetaUiChapterGroups } from '../contentPacks/stageMeta';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
@@ -161,19 +161,11 @@ export const HAN_PALACE_NIGHT_EVENT_IDS: ReadonlySet<string> = stageMetaUiChapte
 /** 洛都「洛都风云」章的拍：同上，取自汉包 stageMeta；导出名保留（测试钉住）。 */
 export const LUOYANG_COURT_EVENT_IDS: ReadonlySet<string> = stageMetaUiChapterEventIds(CONTENT_PACKS.stageMeta || [], 'lyl.luoyang_cloud_secret', 'lyl.chapter.luoyang_cloud_secret_court');
 
-/** lyg.changgan_begins「留仙坪」章的承重拍（与关卡数据同步，测试钉住）；同章另挂的两条非 rail 拍开放在灞桥段，不在此列。 */
-export const LIUXIANPING_EVENT_IDS: ReadonlySet<string> = new Set([
-  'tang_liuxianping_arrive', 'tang_liuxianping_xiangshi', 'changgan_fanseng_hunt',
-].map(id => `lyg.event.${id}`));
+/** 长安初定「留仙坪」章的承重拍：唐线 S4 起取自唐包 stageMeta（packs/tang/stage-meta.json 里 uiChapterId 为该章的事件，文件顺序）；导出名保留（测试钉住）。同章另挂的两条非 rail 拍开放在灞桥段，不在此列。 */
+export const LIUXIANPING_EVENT_IDS: ReadonlySet<string> = stageMetaUiChapterEventIds(CONTENT_PACKS.stageMeta || [], 'lyg.changgan_begins', 'lyg.chapter.changgan_begins_liuxianping');
 
-/** lyg.changgan_interlude 首章（rail 章）以外三章的拍，按章名分（与关卡数据同步，测试钉住）。 */
-export const CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS: ReadonlyArray<readonly [string, ReadonlySet<string>]> = [
-  ['年节与朝局', ['changgan_interlude_01_beat', 'changgan_interlude_02_beat', 'changgan_interlude_03_beat', 'song_tongwen',
-    'changgan_interlude_04_beat', 'tang_secret_treaty_signed', 'changgan_interlude_05_beat']],
-  ['失踪与伏击', ['changgan_interlude_06_beat', 'changgan_interlude_07_beat', 'changgan_interlude_08_beat', 'honglusi_treaty_announced',
-    'changgan_interlude_09_beat', 'changgan_interlude_10_beat']],
-  ['甘露前夜', ['liang_secret_order', 'zhoufei_conspiracy', 'feiniao_hilt_clue']],
-].map(([title, ids]) => [title as string, new Set((ids as string[]).map(id => `lyg.event.${id}`))] as const);
+/** 长安插曲首章（rail 章）以外三章的拍，按章名分：同上，取自唐包 stageMeta（按章首次出现的顺序分组）；导出名保留（测试钉住）。 */
+export const CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS: ReadonlyArray<readonly [string, ReadonlySet<string>]> = stageMetaUiChapterGroups(CONTENT_PACKS.stageMeta || [], 'lyg.changgan_interlude');
 
 /** 短版 stage02 合并了多段原著章节；界面按当前剧情地点标段，不沿用第10章标题。 */
 /**
@@ -222,9 +214,6 @@ export function storyChapterTitleIn(packs: ChapterTitlePacks, modId: string | un
     if (['lcq.event.haishen_hall_merfolk', 'lcq.event.pull_harpoon_lemingzhu'].includes(eventId)) return '海神殿';
     if (['lcq.event.regroup_caravan_envoy','lcq.event.weapon_deal_with_geluo','lcq.event.spot_dong_informant'].includes(eventId)) return '商队与峒使';
   }
-  // 唐：长安初定、长安插曲的 rail 章都改成了新首章（留仙坪／佛门暗潮与元正朝会），整关停在它上面；其余拍照旧标原章（五线补全·唐 2026-10-28）
-  if (modId === 'lyg.changgan_begins' && eventId) return LIUXIANPING_EVENT_IDS.has(eventId) ? '留仙坪' : '抵达长安灞桥';
-  if (modId === 'lyg.changgan_interlude' && eventId) return CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS.find(([, ids]) => ids.has(eventId))?.[0] ?? fallback;
   // 内容包关：事件写了 presentation.uiChapterId 的标那一章；没写的照下面回退
   const packTitle = eventId ? packUiChapterTitle(packs, modId, eventId) : undefined;
   if (packTitle) return packTitle;

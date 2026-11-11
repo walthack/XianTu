@@ -1,0 +1,142 @@
+[
+  {
+    "note": "章名原为 eventNarrativeView.ts 特判（LIUXIANPING_EVENT_IDS 的 3 拍标「留仙坪」，其余含表外事件标「抵达长安灞桥」）；原注释：唐：长安初定、长安插曲的 rail 章都改成了新首章（留仙坪／佛门暗潮与元正朝会），整关停在它上面；其余拍照旧标原章（五线补全·唐 2026-10-28）",
+    "stageId": "lyg.changgan_begins",
+    "presentation": {
+      "defaultUiChapterId": "lyg.chapter.changgan_begins",
+      "chapters": {
+        "lyg.chapter.changgan_begins_liuxianping": {
+          "mood": "daily"
+        },
+        "lyg.chapter.changgan_begins": {
+          "mood": "daily"
+        }
+      },
+      "events": {
+        "lyg.event.tang_liuxianping_arrive": {
+          "uiChapterId": "lyg.chapter.changgan_begins_liuxianping"
+        },
+        "lyg.event.tang_liuxianping_xiangshi": {
+          "uiChapterId": "lyg.chapter.changgan_begins_liuxianping"
+        },
+        "lyg.event.changgan_fanseng_hunt": {
+          "uiChapterId": "lyg.chapter.changgan_begins_liuxianping"
+        },
+        "lyg.event.s03_01": {
+          "mood": "daily"
+        },
+        "lyg.event.s03_04": {
+          "mood": "danger"
+        },
+        "lyg.event.debut_shefuren": {
+          "objective": "看清卧室里挽鞭出场的黑衣侍奴"
+        }
+      }
+    }
+  },
+  {
+    "note": "隔离关：原在 canonRail.ts TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS",
+    "stageId": "lyg.shixiang_ambush",
+    "defaultLineQuarantined": true
+  },
+  {
+    "note": "章名原为 eventNarrativeView.ts 特判（CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS 三章的拍各标本章，其余不设默认章、回退 fallback）；原注释：唐：长安初定、长安插曲的 rail 章都改成了新首章（留仙坪／佛门暗潮与元正朝会），整关停在它上面；其余拍照旧标原章（五线补全·唐 2026-10-28）",
+    "stageId": "lyg.changgan_interlude",
+    "presentation": {
+      "events": {
+        "lyg.event.changgan_interlude_01_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_court"
+        },
+        "lyg.event.changgan_interlude_02_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_court"
+        },
+        "lyg.event.changgan_interlude_03_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_court"
+        },
+        "lyg.event.song_tongwen": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_court"
+        },
+        "lyg.event.changgan_interlude_04_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_court"
+        },
+        "lyg.event.tang_secret_treaty_signed": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_court"
+        },
+        "lyg.event.changgan_interlude_05_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_court"
+        },
+        "lyg.event.changgan_interlude_06_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_ambush"
+        },
+        "lyg.event.changgan_interlude_07_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_ambush"
+        },
+        "lyg.event.changgan_interlude_08_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_ambush"
+        },
+        "lyg.event.honglusi_treaty_announced": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_ambush"
+        },
+        "lyg.event.changgan_interlude_09_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_ambush"
+        },
+        "lyg.event.changgan_interlude_10_beat": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_ambush"
+        },
+        "lyg.event.liang_secret_order": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_tail"
+        },
+        "lyg.event.zhoufei_conspiracy": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_tail"
+        },
+        "lyg.event.feiniao_hilt_clue": {
+          "uiChapterId": "lyg.chapter.changgan_interlude_tail"
+        },
+        "lyg.event.debut_daiqisi": {
+          "objective": "看清佛堂废墟里被禁锢的那位妇人"
+        }
+      }
+    }
+  },
+  {
+    "note": "隔离关：原在 canonRail.ts TS_DEFAULT_LINE_QUARANTINED_STAGE_IDS",
+    "stageId": "lyg.ganlu_bian",
+    "defaultLineQuarantined": true,
+    "presentation": {
+      "events": {
+        "lyg.event.release_jingnian": {
+          "mood": "court"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyg.liangzhou_league",
+    "presentation": {
+      "chapters": {
+        "lyg.chapter.liangzhou_league": {
+          "mood": "battle"
+        }
+      },
+      "events": {
+        "lyg.event.s06_03": {
+          "mood": "emotion"
+        },
+        "lyg.event.s06_07": {
+          "mood": "aspire"
+        }
+      }
+    }
+  },
+  {
+    "note": "称号奖励原在 milestoneRewards.ts TS_MILESTONE_REWARDS（原注释：六朝燕歌行·尸陀林主与李辅国断点）",
+    "stageId": "lyg.shituolin_endgame",
+    "milestoneReward": {
+      "titles": [
+        "唐国大都护",
+        "上柱国"
+      ],
+      "note": "诛杀李辅国，唐国朝廷重赏：官拜大都护（向由亲王遥领，暗示等同亲王）、勋授上柱国（燕歌 0292）。"
+    }
+  }
+]
