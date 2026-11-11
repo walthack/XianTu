@@ -15,8 +15,6 @@ export interface QuestObjectiveEventLike {
 }
 
 export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> = Object.freeze({
-  'lyg.event.debut_daiqisi': '看清佛堂废墟里被禁锢的那位妇人',
-  'lyg.event.debut_shefuren': '看清卧室里挽鞭出场的黑衣侍奴',
   'lcq.event.wuerlang_slays_dagu': entityText("撑住{{entity:character:lcq.character.nanhuang_dagu}}这一波围攻，看清武二郎能否打开缺口"),
   'lcq.event.s05b_02_xiaozi_exposed': entityText("质问小紫，把阿夕的异常和{{entity:character:lcq.character.nanhuang_heishe}}死因问清楚"),
 });
