@@ -1,0 +1,564 @@
+[
+  {
+    "id": "yange.dingtao_beijing",
+    "modId": "lyg.dingtao_beijing",
+    "chapterId": "lyg.chapter.dingtao_beijing",
+    "orderedEventIds": [
+      "lyg.event.s01_01",
+      "lyg.event.s01_02",
+      "lyg.event.s01_03",
+      "lyg.event.s01_04",
+      "lyg.event.s01_05",
+      "lyg.event.s01_06",
+      "lyg.event.s01_07",
+      "lyg.event.s01_08",
+      "lyg.event.s01_09"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyg.event.s01_01",
+        "mustReach": "秦桧在永安宫斩刘建首级，吴三桂擒成光并卸其关节，平叛军士气大涨。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_02",
+        "mustReach": "贾文和挟持定陶王为人质，与程宗扬、董卓、霍子孟等对峙，最终以五名扈卫代价放行。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_03",
+        "mustReach": "董卓率凉州军挟持定陶王出洛都，程宗扬等五人随行，凉州军士割袍追随。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_04",
+        "mustReach": "吕雉在长秋宫凤辇内与霍子孟对话，宣布退位、处置吕冀等，支持立定陶王。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_05",
+        "mustReach": "董卓在昭阳宫先帝灵前拥立定陶王为帝，贾文和献计大赦、选材、迁都等。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_06",
+        "mustReach": "郭解被剑玉姬一剑刺穿腋下，伤及心脉，临终将定陶王托付给程宗扬。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_07",
+        "mustReach": "董卓被卢景、敖润暗箭射中肩头重伤，在贾文和怀中去世。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_08",
+        "mustReach": "阮香凝告知程宗扬定陶王因盛姬而亲近她，程宗扬惊觉盛姬是黑魔海御姬奴。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s01_09",
+        "mustReach": "程宗扬奉懿旨至永巷赐死吕冀，其妻孙寿发配为奴。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "yange.han_succession",
+    "modId": "lyg.han_succession",
+    "chapterId": "lyg.chapter.han_succession_succession",
+    "orderedEventIds": [
+      "lyg.event.han_succession_01_beat",
+      "lyg.event.han_succession_02_beat",
+      "lyg.event.han_succession_03_beat",
+      "lyg.event.han_succession_04_beat",
+      "lyg.event.han_succession_05_beat",
+      "lyg.event.han_succession_06_beat",
+      "lyg.event.han_succession_07_beat",
+      "lyg.event.han_succession_08_beat",
+      "lyg.event.han_succession_09_beat",
+      "lyg.event.han_succession_10_beat"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyg.event.han_succession_01_beat",
+        "mustReach": "程分兵两路，自与云丹琉追巫宗，卓云君等回帝陵。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_02_beat",
+        "mustReach": "中常侍单超等人告知程宗扬，皇后赵飞燕的父亲和兄弟失踪。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_03_beat",
+        "mustReach": "吕雉向云丹琉坦白弑君弑夫经历及吕氏对赵昭仪的阴谋，表示愿留程府，云丹琉警告她勿争宠。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_04_beat",
+        "mustReach": "蔡敬仲向小紫、朱老头报告中行说提议贾文和一起害死皇后和天子以拥立程宗扬为帝的计谋，小紫令其转告程宗扬。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_05_beat",
+        "mustReach": "事后赵飞燕哭泣质问，赵合德解释蛇夫人计划让赵飞燕怀上程宗扬孩子以应对中行说阴谋，并提及程宗扬为阳武侯之子。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_06_beat",
+        "mustReach": "在流言和劝谏后程宗扬与赵飞燕决定加速定陶王登基，夜入长秋宫多次交合，但程宗扬因真气失控昏迷濒死，吕雉令赵飞燕在群臣参拜时以交合姿势助其炼化真元。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_07_beat",
+        "mustReach": "程宗扬从密道夜入长秋宫，与赵飞燕欢合时察觉真元运行滞涩（精关不畅），随后与赵合德欢好。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_08_beat",
+        "mustReach": "程宗扬因真气失控昏迷、半身冷半身热，吕雉指出需双修炼化；赵飞燕在登基大典上以双修之姿助其行功。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_09_beat",
+        "mustReach": "程宗扬因孟舍人死气失控，在登基典仪期间与赵飞燕双修突破至通幽境。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.han_succession_10_beat",
+        "mustReach": "敖润擒获汪臻，程宗扬审问白员外传说及诗文细节，汪臻交代多数传说为编造。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "yange.mijing_rumen",
+    "modId": "lyg.mijing_rumen",
+    "chapterId": "lyg.chapter.mijing_rumen",
+    "orderedEventIds": [
+      "lyg.event.s02_01",
+      "lyg.event.s02_02",
+      "lyg.event.s02_03",
+      "lyg.event.s02_04",
+      "lyg.event.s02_05",
+      "lyg.event.s02_06",
+      "lyg.event.s02_07",
+      "lyg.event.s02_08",
+      "lyg.event.s02_09"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyg.event.s02_01",
+        "mustReach": "程率众为郭解送葬，立郭靖为义子继承舞阳侯。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_02",
+        "mustReach": "赵飞燕秘境脱身后中毒昏迷，程用自身血液输血。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_03",
+        "mustReach": "程割腕输血救赵飞燕，赵醒封程舞阳侯；吕雉被命侍寝后晕厥，谣言称程为武帝嫡脉，程阳亢需处子化解。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_04",
+        "mustReach": "云丹琉闯入质问婚事，程想起与云如瑶婚期已误。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_05",
+        "mustReach": "程在洛都迎云苍峰，商议婚礼、纸钞财政，云承诺支援十万金铢。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_06",
+        "mustReach": "程以皇后指名请霍子孟做媒，霍应允并同意国丧期间办喜事。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_07",
+        "mustReach": "程探视金蜜镝，金假装重伤避嫌；程借成亲威胁改帝统，金默许。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_08",
+        "mustReach": "程在长秋宫召集旧部分配监控秘境入口，自率侍奴探胶西邸。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyg.event.s02_09",
+        "mustReach": "程拜武帝像后星光化游龙绕身，众人震惊误认有帝王血脉。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "yunlong.han_palace_endgame",
+    "modId": "lyl.han_palace_endgame",
+    "chapterId": "lyl.chapter.han_palace_endgame_night",
+    "orderedEventIds": [
+      "lyl.event.han_palace_endgame_01_beat",
+      "lyl.event.han_palace_endgame_02_beat",
+      "lyl.event.han_palace_endgame_03_beat",
+      "lyl.event.han_palace_endgame_04_beat",
+      "lyl.event.han_palace_endgame_05_beat",
+      "lyl.event.han_palace_endgame_06_beat",
+      "lyl.event.han_palace_endgame_07_beat",
+      "lyl.event.han_palace_endgame_08_beat",
+      "lyl.event.han_palace_endgame_09_beat",
+      "lyl.event.han_palace_endgame_10_beat"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyl.event.han_palace_endgame_01_beat",
+        "mustReach": "吕冀被中行说刺了十七刀重伤卧床，太后吕雉入帐责备他与晴州商会密谋杀刘建，商会转头给了刘建二十万金铢。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_02_beat",
+        "mustReach": "吕巨君率左武军与兽蛮入宫，程宗扬认出古格尔。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_03_beat",
+        "mustReach": "程宗扬在含光殿击杀古格尔，救出昭仪。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_04_beat",
+        "mustReach": "程宗扬等人走复道遇伏，秦桧用烟雾掩护，程宗扬脱身。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_05_beat",
+        "mustReach": "吕巨君在平朔殿自焚，廖扶陪同。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_06_beat",
+        "mustReach": "闻清语掳走赵飞燕与赵合德，云丹琉救下定陶王。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_07_beat",
+        "mustReach": "吕雉用比目鱼珠开启秘境入口，小紫将盛姬投入光柱，众人进入秘境。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_08_beat",
+        "mustReach": "董卓率三千凉州军入洛都津门，声称奉大将军令入京但无虎符，斩杀骑手。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_09_beat",
+        "mustReach": "金蜜镝率军攻入永安宫，刘建退守阙楼。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.han_palace_endgame_10_beat",
+        "mustReach": "秦桧在阙楼中斩杀刘建，取其头颅。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  },
+  {
+    "id": "yunlong.luoyang_cloud_secret",
+    "modId": "lyl.luoyang_cloud_secret",
+    "chapterId": "lyl.chapter.luoyang_cloud_secret",
+    "orderedEventIds": [
+      "lyl.event.s05_01",
+      "lyl.event.s05_02",
+      "lyl.event.s05_03",
+      "lyl.event.s05_04",
+      "lyl.event.s05_05",
+      "lyl.event.s05_06",
+      "lyl.event.s05_07",
+      "lyl.event.s05_08",
+      "lyl.event.s05_09"
+    ],
+    "contracts": [
+      {
+        "eventId": "lyl.event.s05_01",
+        "mustReach": "程宗扬与云苍峰商议首阳山铜矿开采及买官事宜，计划通过西邸购买二千石官职及郡县小吏官职。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_02",
+        "mustReach": "程宗扬将公孙弘、朱买臣等名单交给徐璜，徐璜大喜同意在八日内筹齐八万金铢。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_03",
+        "mustReach": "吕氏兄弟调动卫尉、屯骑等四支汉军精锐及死士，围杀程宗扬等人于山口镇。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_04",
+        "mustReach": "吕氏死士攻入程宗扬宅院，哈迷蚩变身苍狼血战重伤，宅院因地震陷落。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_05",
+        "mustReach": "惊理发现黑魔海黑鸦使者从宅中地下飞出，程宗扬得知其卧底身份。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_06",
+        "mustReach": "徐璜传天子口谕命程宗扬送赵合德入宫封昭仪以应二鹅之象。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_07",
+        "mustReach": "程宗扬在乐津里人市遇到友通期，以昭仪身份相诱说服其入宫替代赵合德。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_08",
+        "mustReach": "程宗扬向赵合德说明找友通期冒充入宫的计划，赵合德同意并询问自身后续安排。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      },
+      {
+        "eventId": "lyl.event.s05_09",
+        "mustReach": "云氏五万金铢在伊水附近被龙宸杀手劫走，云丹琉与程宗扬率众反击损失惨重。",
+        "completionEvidence": [],
+        "forbiddenInCanon": [
+          "改写本拍原著结果",
+          "提前演出后续剧情"
+        ],
+        "allowedElaboration": "可补足场景、对话、即时行动与相邻拍点之间的过渡。"
+      }
+    ]
+  }
+]

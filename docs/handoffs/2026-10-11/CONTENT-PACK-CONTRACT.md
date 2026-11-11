@@ -183,6 +183,19 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - 加拍表里领起「汉线补全」的三行注释夹在太泉圣果与太泉余波条目之间、同时领起其后洛都（汉关）条目：TS 里保留，复制进包里第一条余波加拍的 `note`。
 - 未搬（留在 TS）：`fixedQuestObjectives.ts` 里 `han_shouyang_gaoyanei` 的 packText 目标特判、`eventNarrativeView.ts` 的 `storyActionPresentation`（同一事件到舞都改写）；`lineUnlock.ts`、`loadRepairs.ts` 的太泉逻辑；别的线挂在太泉事件上的节点。
 
+## 2026-11-11 汉线数据进包（汉线 S4）
+
+汉包 `packs/han/`（`id: "qingyu.han"`，`dependsOn: ["qingyu.core", "qingyu.song"]`）：`rails.generated.json`（汉 5 个生成档；隔离关 `lyl.luoyang_coup` 没有档）、`rail-extra-beats.json`（汉 4 条加拍）、`stage-meta.json`（汉 6 关：隔离 1、称号 2、章名、章配乐 5、事件配乐 7、目标 15）、`secondary-lines.json`（`han` 线，`after: "song"`）、`line-compass.json`（`lineId: "han"`）、`texts.json`（10 个 `lineCompass.han.*`）。汉 6 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋不同之处：
+- **汉包 `dependsOn` 加了 `qingyu.song`**（`after: "song"`）。包顺序按依赖排为 core → jin → qin → song → han，不再是目录名序：catalog 的 `stageMeta`／`rails`／`secondaryLines` 里汉条目排在最后。
+- **`MILESTONE_REWARDS` 合并值改按故事序排**：stageMeta 与 TS 表合并后按 `mainQuestAxis.ts` 的 `STAGE_ORDER` 稳定排序（不在其中的包内关排最后、保持合并前相对顺序）。故事序就是搬迁前 TS 表的原顺序（宋→汉→唐），所以快照钉的数组顺序不变；唐线搬称号时不用再改。
+- **章名特判删了汉宫、洛都两处**，改由汉包 stageMeta 供数：汉宫 `defaultUiChapterId`＝「汉宫突入」章、「宫变之夜」8 拍逐事件 `uiChapterId`；洛都只给「洛都风云」4 拍写 `uiChapterId`、不设默认章。导出名 `HAN_PALACE_NIGHT_EVENT_IDS`、`LUOYANG_COURT_EVENT_IDS` 保留（快照钉住），改为从 stageMeta 派生（`stageMeta.ts` 新增 `stageMetaUiChapterEventIds`，按文件顺序）。
+- 隔离集合 `DEFAULT_LINE_QUARANTINED_STAGE_IDS` 的成员不变，迭代顺序随包序变了（`lyl.luoyang_coup` 从 TS 段移到末尾）；所有读取方只用 `.has`。
+- `dingtao_beijing.json` 里的 3 处 `presentation` 是 `timeline.reveal.presentation`（急报标题与正文），不是界面章名字段，与 stageMeta 不重叠。
+- `tests/contentPackLineFormats.test.mjs` 宋 S4 留下的汉夹具（汉宫整关章名特判、洛都封侯称号、`liujian_takes_nangong` 目标、`luoyang_cloud_secret` 章配乐、`luoyang_coup` 隔离、`han` 二级线同 id）改为动态挑：章配乐取 `CHAPTER_MOOD_MAP` 首条、称号取 `TS_MILESTONE_REWARDS[0]`、目标取 `FIXED_QUEST_OBJECTIVE_OVERRIDES` 首键、隔离取 TS 表里非 `lcq.stage_03` 的一条、整关章名特判用表外探针事件按行为挑、二级线同 id 用 `TS_LINE_ID`；表或特判搬空时顶层断言报错，须改用合成的临时条目。
+- 未搬（留在 TS）：`LINE_CRITICAL_EVENTS`；别的线挂在汉事件上的节点；`lyl.event.han_shouyang_gaoyanei` 的目标 packText 特判与动作特判（事件属太泉余波关）。
+
 ## 2026-11-11 塞外线数据进包（塞外线 S4）
 
 塞外包 `packs/saiwai/`（`id: "qingyu.saiwai"`，`dependsOn: ["qingyu.core"]`）：`rails.json`（塞外 2 个**手审**档：stage_01／02，带 `handReviewed: true`）、`stage-meta.json`（3 关：stage_03 隔离、3 条章配乐、15 条事件配乐、2 条目标）。塞外不是国家线：没有二级线、下一步表、`lineCompass.*` 正文；没有生成档、加拍、称号。3 关的 stage JSON 仍在 `builtins/data`。

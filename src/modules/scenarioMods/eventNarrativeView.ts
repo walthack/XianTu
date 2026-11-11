@@ -6,7 +6,7 @@ import { resolveFixedQuestObjective } from './fixedQuestObjectives';
 import { evaluateLedgerCondition } from './ledgerConditions';
 import { computePresentNames } from './presence';
 import { CONTENT_PACKS, packText } from '../contentPacks';
-import { stageMetaChapterTitle } from '../contentPacks/stageMeta';
+import { stageMetaChapterTitle, stageMetaUiChapterEventIds } from '../contentPacks/stageMeta';
 
 // 旧存档把事件快照直接落在 runtime.events 中。它们不会随着内置关卡
 // 数据升级而自动补齐 narrativeVariants，因此这里保留极小的兼容层。
@@ -155,16 +155,11 @@ type QuestCompassRuntime = {
   eventActionStates?: Record<string, { preparations?: string[] }>;
 } | null | undefined;
 
-/** lyl.han_palace_endgame「宫变之夜」章的拍（与关卡数据同步，测试钉住）。 */
-export const HAN_PALACE_NIGHT_EVENT_IDS: ReadonlySet<string> = new Set([
-  'lvji_defiles_consort', 'emperor_death_spreads', 'arrange_escape_route', 'liujian_takes_nangong',
-  'changqiu_palace_defense', 'bounty_and_hu_cavalry', 'han_jianyu_refused', 'lvfengxian_breaks_line',
-].map(id => `lyl.event.${id}`));
+/** 汉宫「宫变之夜」章的拍：汉线 S4 起取自汉包 stageMeta（packs/han/stage-meta.json 里 uiChapterId 为该章的事件，文件顺序）；导出名保留（测试钉住）。 */
+export const HAN_PALACE_NIGHT_EVENT_IDS: ReadonlySet<string> = stageMetaUiChapterEventIds(CONTENT_PACKS.stageMeta || [], 'lyl.han_palace_endgame', 'lyl.chapter.han_palace_endgame_night');
 
-/** lyl.luoyang_cloud_secret「洛都风云」章的拍（与关卡数据同步，测试钉住）。 */
-export const LUOYANG_COURT_EVENT_IDS: ReadonlySet<string> = new Set([
-  'han_yuedan_ping', 'han_huo_villa', 'han_xingyue_framed', 'han_limit_field',
-].map(id => `lyl.event.${id}`));
+/** 洛都「洛都风云」章的拍：同上，取自汉包 stageMeta；导出名保留（测试钉住）。 */
+export const LUOYANG_COURT_EVENT_IDS: ReadonlySet<string> = stageMetaUiChapterEventIds(CONTENT_PACKS.stageMeta || [], 'lyl.luoyang_cloud_secret', 'lyl.chapter.luoyang_cloud_secret_court');
 
 /** lyg.changgan_begins「留仙坪」章的承重拍（与关卡数据同步，测试钉住）；同章另挂的两条非 rail 拍开放在灞桥段，不在此列。 */
 export const LIUXIANPING_EVENT_IDS: ReadonlySet<string> = new Set([
@@ -227,9 +222,6 @@ export function storyChapterTitleIn(packs: ChapterTitlePacks, modId: string | un
     if (['lcq.event.haishen_hall_merfolk', 'lcq.event.pull_harpoon_lemingzhu'].includes(eventId)) return '海神殿';
     if (['lcq.event.regroup_caravan_envoy','lcq.event.weapon_deal_with_geluo','lcq.event.spot_dong_informant'].includes(eventId)) return '商队与峒使';
   }
-  // 汉宫：rail 章是新首章「宫变之夜」，整关停在它上面；其余拍照旧标「汉宫突入」。洛都：rail 章仍是首章，第二章「洛都风云」的拍单标（五线补全·汉 2026-10-28）
-  if (modId === 'lyl.han_palace_endgame' && eventId) return HAN_PALACE_NIGHT_EVENT_IDS.has(eventId) ? '宫变之夜' : '汉宫突入';
-  if (modId === 'lyl.luoyang_cloud_secret' && eventId && LUOYANG_COURT_EVENT_IDS.has(eventId)) return '洛都风云';
   // 唐：长安初定、长安插曲的 rail 章都改成了新首章（留仙坪／佛门暗潮与元正朝会），整关停在它上面；其余拍照旧标原章（五线补全·唐 2026-10-28）
   if (modId === 'lyg.changgan_begins' && eventId) return LIUXIANPING_EVENT_IDS.has(eventId) ? '留仙坪' : '抵达长安灞桥';
   if (modId === 'lyg.changgan_interlude' && eventId) return CHANGGAN_INTERLUDE_CHAPTER_EVENT_IDS.find(([, ids]) => ids.has(eventId))?.[0] ?? fallback;

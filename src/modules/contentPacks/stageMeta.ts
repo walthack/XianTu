@@ -43,6 +43,12 @@ export function stageMetaChapterTitle(meta: readonly StageMeta[], modId: unknown
   return chapterId ? m.chapterTitles?.[chapterId] || undefined : undefined;
 }
 
+/** 某关 stageMeta 里 uiChapterId 为该章的事件 id（按文件里的顺序）。 */
+export function stageMetaUiChapterEventIds(meta: readonly StageMeta[], stageId: string, chapterId: string): Set<string> {
+  return new Set(Object.entries(stageMetaOf(meta, stageId)?.presentation?.events || {})
+    .filter(([, event]) => event.uiChapterId === chapterId).map(([eventId]) => eventId));
+}
+
 /** 隔离关集合：stageMeta 写了 defaultLineQuarantined 的关按它（true 加入、false 去掉），没写的沿用 TS 表。 */
 export function quarantinedStageIds(meta: readonly StageMeta[], tsIds: Iterable<string>): Set<string> {
   const out = new Set(tsIds);
