@@ -470,6 +470,8 @@ export function reconcileNanhuangPositionFromLedger(saveData: SaveData, runtime:
 /** 路途卡在界面上就是当前同行栏：出发快照里的同伴按此刻的权威暂留现算剔除（不改账里的快照）。 */
 export function getTravelCard(saveData: SaveData | null | undefined): TravelCard | undefined {
   const runtime = (saveData as { 世界?: { 状态?: { 剧本模组?: LedgerRuntime } } } | null | undefined)?.世界?.状态?.剧本模组;
+  // lastCard 留在存档里不清除；路程只在南荒行旅关结算，离开后（晋、汉、唐……）不再显示这张过期的卡。
+  if (!isNanhuangTravelStage(runtime?.modId)) return undefined;
   const card = runtime?.travelLedger?.lastCard;
   if (!card?.companions?.length) return card;
   const absent = new Set(authoritativeAbsentCharacterIds(runtime as never).flatMap(id => entityAliases('character', id)));
