@@ -171,3 +171,22 @@ export async function validateCoreFormatsWithTs(catalog){
   for(const x of ifb.consequences||[])if(TS_AUTO_CONSEQUENCE_RULES.some(t=>t.eventId===x.eventId&&t.requiredCharacterId===x.requiredCharacterId))fail(`ifBranches consequence ${x.eventId}: also in divergenceLedger.ts TS_AUTO_CONSEQUENCE_RULES`);
   for(const id of Object.keys(ifb.prompts||{}))if(id in TS_DIVERGENCE_PROMPTS)fail(`ifBranches prompt ${id}: also in divergenceLedger.ts TS_DIVERGENCE_PROMPTS`);}
 }
+
+/**
+ * 合同哈希迁移表（BZ1，2026-11-12）：manifest.contractRevisions 是文件列表，每个文件是 [{eventId,from,to,note?}]，编译成 catalog.contractRevisions
+ * （顺序 = 包顺序 × 文件顺序 × 条目顺序；note 剥掉），供冻结的 runtime.ts BATCH6_TEXT_CONTRACT_REVISIONS 按 eventId 查。
+ * 纯数据校验：只认四个字段；事件存在（events = 套过 overlay 与人物线投影的全部事件）；from／to 是 8 位小写十六进制且不相等；eventId 全部包里只出现一次。
+ * 不校验 to 等于当前合同哈希：哈希函数 stableContractHash 在冻结的 runtime.ts 里且未导出；两条已失效条目原样保留（纯搬迁）；另抄一份算法会走样。由 tests/contractRevisionsPack.test.mjs 守失效集合。
+ */
+export function compileContractRevisions(raw,{events}){
+ const out=[],owner=new Map(),hash=v=>typeof v==='string'&&/^[0-9a-f]{8}$/.test(v);
+ for(const {packId,value} of raw){if(!Array.isArray(value))fail(`${packId}.contractRevisions: expected array`);
+  for(const x of value){const at=`contractRevision ${x?.eventId}`;
+   if(!onlyKeys(x,['eventId','from','to','note'])||!noteOk(x)||!text(x.eventId))fail(`${at}: invalid fields`);
+   if(!events.has(x.eventId))fail(`${at}: unknown event`);
+   if(!hash(x.from)||!hash(x.to))fail(`${at}: from/to must be 8-digit lowercase hex`);
+   if(x.from===x.to)fail(`${at}: from equals to`);
+   if(owner.has(x.eventId))fail(owner.get(x.eventId)===packId?`${at}: duplicate eventId`:`contractRevision ${x.eventId} defined by both ${owner.get(x.eventId)} and ${packId}`);
+   owner.set(x.eventId,packId);out.push(strip(x));}}
+ return out;
+}

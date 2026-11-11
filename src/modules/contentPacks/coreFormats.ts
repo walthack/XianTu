@@ -47,3 +47,6 @@ export interface PackIfConsequence {
   flagKey: string; flagValue: string | number | boolean; prompt?: string;
 }
 export interface PackIfBranches { branches: PackIfBranch[]; consequences: PackIfConsequence[]; prompts: Record<string, string> }
+
+/** 合同哈希迁移（BZ1）：存档里 eventId 的合同哈希为 from、当前合同为 to 时承接（runtime.ts BATCH6_TEXT_CONTRACT_REVISIONS 由本段构造）。 */
+export interface PackContractRevision { eventId: string; from: string; to: string }

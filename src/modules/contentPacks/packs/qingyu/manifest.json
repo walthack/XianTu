@@ -56,5 +56,8 @@
   ],
   "storyAxis": [
     "story-axis.json"
+  ],
+  "contractRevisions": [
+    "contract-revisions.json"
   ]
 }

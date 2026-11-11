@@ -97,6 +97,7 @@ import { fixedStoryInventoryEffects } from './fixedInventoryContracts';
 import { isScopedPlayerPresentationEvent } from './playtestNarrativeScope';
 import { logEvent, logEventOnce } from '../diagnostics/log';
 import { summarizeError } from '../diagnostics/errorSummary';
+import { CONTENT_PACKS } from '../contentPacks';
 
 
 export interface ScenarioProgressState {
@@ -1011,42 +1012,9 @@ function stableContractHashWithoutIntentMatch(contract: unknown): string {
   return (result >>> 0).toString(16).padStart(8, '0');
 }
 
-// 第六批仅改变公开文案；精确双哈希迁移不放宽其他合同变化的失效保护。
-const BATCH6_TEXT_CONTRACT_REVISIONS: Record<string, { from: string; to: string }> = {
-  // 第十一批碧姬规范名文案；只承接这一对精确合同，不重置旧档召见进度。
-  'lcq.event.geluo_summons_biji': { from: 'e0119be2', to: 'f0f6dac7' },
-  // 第十批门禁发现第九批两处按钮label未与目标对齐；仅显示文案精确迁移。
-  'lcq.event.s02_04': { from: 'f6f916da', to: '68462843' },
-  'lcq.event.huamiao_coop_boundary': { from: 'dc6ab360', to: 'b0a94a70' },
-  'lcq.event.s04_01': { from: 'fbe74510', to: '2c96d09c' },
-  "lcq.event.wuerlang_joins": {
-    "from": "e6c7f972",
-    "to": "59e75a25"
-  },
-  "lcq.event.ningyu_regicide_offer": {
-    "from": "88b5c491",
-    "to": "19003cbb"
-  },
-  "lcq.event.rainforest_black_shoal": {
-    "from": "112b54d3",
-    "to": "5bf7c0f8"
-  },
-  "lcq.event.silent_sheyi_village": {
-    "from": "fa40aeb2",
-    "to": "d33e6b9d"
-  },
-  "lcq.event.s03b_wanwu_night": {
-    "from": "d3222695",
-    "to": "02ee3be2"
-  },
-  "lcq.event.s03b_yinzhu_xiongerpu": {
-    "from": "c3d65b9d",
-    "to": "c2ebe3c0"
-  },
-  // 2026-11-09 同场回应：O2/Y5 加「明确略过」，Y5 留下改小魏照看；旧档准备状态与选择照旧承接。
-  'lcq.event.ningyu_regicide_offer_ins_ningyu_reply': { from: 'f27676f0', to: '37ca6495' },
-  'lcq.event.guiwangdong_coop_pact_ins_ningyu_enter': { from: 'aff4748f', to: '569a4d8b' },
-};
+// 第六批起的精确双哈希迁移表在核心包 contract-revisions.json（BZ1 原样搬入，原注释进条目 note）；不放宽其他合同变化的失效保护。
+const BATCH6_TEXT_CONTRACT_REVISIONS: Record<string, { from: string; to: string }> = Object.fromEntries(
+  (CONTENT_PACKS.contractRevisions || []).map(r => [r.eventId, { from: r.from, to: r.to }]));
 
 function reconcileEventActionContract(runtime: RuntimeState, event: ScenarioModEvent): ScenarioEventActionState | undefined {
   const contract = event.playerCompletionContract;

@@ -6,7 +6,7 @@ import {createHash} from 'node:crypto';
 import {createJiti} from 'jiti';
 import {loadNumbers,resolveNumbers,expandEchoes,projectQuestLineEvents} from './content-pack-quest-lines.mjs';
 import {compileTimeline} from './content-pack-timeline.mjs';
-import {coreFormatKinds,emptyCoreFormats,coreDefinedIds,compileCoreFormats,validateCoreFormatsWithTs} from './content-pack-core-formats.mjs';
+import {coreFormatKinds,emptyCoreFormats,coreDefinedIds,compileCoreFormats,validateCoreFormatsWithTs,compileContractRevisions} from './content-pack-core-formats.mjs';
 // 展示类（F0b）：endings、openWorldSlices、persistentEntries 三段，stageMeta 事件新字段与 texts 通配键，见 content-pack-presentation-formats.mjs
 import {presentationFormatKinds,emptyPresentationFormats,presentationDefinedIds,stageMetaEventExtraKeys,stageMetaPresentationExtraKeys,checkStageMetaPresentationExtras,presentationTextKeyReferences,checkPresentationTextKeys,compilePresentationFormats,rawStepScenePrefixes,validatePresentationFormatsWithTs} from './content-pack-presentation-formats.mjs';
 const root=resolve(import.meta.dirname,'..');
@@ -19,6 +19,8 @@ const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResour
 fields.push('nationLines');
 // 参数化派生条件（阶段 2a）：manifest.compassConditions 是文件列表，每个文件是 [{id,kind,min,unlessLineClosedByWorldEvent?}]；编译后进 catalog.compassConditions，路径 compass.<id>
 fields.push('compassConditions');
+// 合同哈希迁移表（BZ1）：manifest.contractRevisions 是文件列表，每个文件是 [{eventId,from,to,note?}]；编译后进 catalog.contractRevisions（末尾），见 compileContractRevisions
+fields.push('contractRevisions');
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
@@ -49,6 +51,7 @@ const definedIds=(kind,x)=>{
  if(kind==='lineCompass')return [['lineId',x.lineId]];
  if(kind==='nationLines')return [['nationLine',x?.lineId]];
  if(kind==='compassConditions')return [['compassCondition',x?.id]];
+ if(kind==='contractRevisions')return [];
  if(kind==='overlays'||kind==='stageMeta'||kind==='railExtraBeats')return [];
  if(kind==='secondaryLines')return [['secondaryLine',x.id]];
  if(coreFormatKinds.includes(kind))return coreDefinedIds(kind,x);
@@ -62,6 +65,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set(),packs=[];
  const nationLines=[],compassConditions=[];
+ const contractRevisions=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
   const m=JSON.parse(await readFile(join(packsDir,dir,'manifest.json'),'utf8'));
   if(!object(m)||m.schemaVersion!==1||typeof m.id!=='string'||!m.id||packIds.has(m.id))fail(`${dir}: invalid version/id`);packIds.add(m.id);
@@ -87,6 +91,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);own('lineCompass',t.lines);catalog.lineCompass.lines.push(...t.lines);}
   if(!Array.isArray(m.nationLines||[]))fail(`${m.id}.nationLines: expected file list`);for(const path of m.nationLines||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.nationLines: expected array`);own('nationLines',v);nationLines.push(...v.map(value=>({packId:m.id,value})));}
   if(!Array.isArray(m.compassConditions||[]))fail(`${m.id}.compassConditions: expected file list`);for(const path of m.compassConditions||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.compassConditions: expected array`);own('compassConditions',v);compassConditions.push(...v);}
+  if(!Array.isArray(m.contractRevisions||[]))fail(`${m.id}.contractRevisions: expected file list`);for(const path of m.contractRevisions||[]){const value=await load(path);own('contractRevisions',Array.isArray(value)?value:[value]);contractRevisions.push({packId:m.id,value});}
   if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);own('timeline',v);timelineInserts.push(...v);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);own(k,v);catalog[k].push(...v);}
  }
@@ -279,6 +284,8 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
    if(!Number.isSafeInteger(min)||min<1||min>tally)fail(`${at}: min ${typeof x.min==='string'?`${x.min}=${String(min)}`:String(min)} must be an integer from 1 to ${tally} (lines counted toward closed lines)`);
    if(x.unlessLineClosedByWorldEvent!==undefined&&!lineIds.has(x.unlessLineClosedByWorldEvent))fail(`${at}: unlessLineClosedByWorldEvent: unknown nation line ${x.unlessLineClosedByWorldEvent}`);}
   catalog.compassConditions=compassConditions;}
+ // 合同哈希迁移表（BZ1）：放在 compassConditions 之后（catalog 末段），既有校验的报错先后不变
+ catalog.contractRevisions=compileContractRevisions(contractRevisions,{events});
  unique(catalog.mapEntries,e=>e.id,'mapEntries');
  for(const e of catalog.mapEntries){
   const stage=catalog.stages.find(s=>s.manifest.id===e.stageId);

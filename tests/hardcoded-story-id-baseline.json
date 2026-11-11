@@ -14,7 +14,7 @@
   ],
   "总数": {
     "文件数": 60,
-    "行数": 588
+    "行数": 576
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -55,7 +55,7 @@
     "src/modules/scenarioMods/questLog.ts": 3,
     "src/modules/scenarioMods/r2AcceptanceFixtures.ts": 5,
     "src/modules/scenarioMods/relationships.ts": 1,
-    "src/modules/scenarioMods/runtime.ts": 74,
+    "src/modules/scenarioMods/runtime.ts": 62,
     "src/modules/scenarioMods/secondaryLines.ts": 5,
     "src/modules/scenarioMods/shiweimoRescue.ts": 1,
     "src/modules/scenarioMods/storyContext.ts": 4,
