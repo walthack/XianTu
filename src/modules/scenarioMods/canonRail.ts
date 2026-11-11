@@ -621,75 +621,9 @@ export const DEFAULT_LINE_EXTRA_RAIL_BEATS: CanonRailExtraBeats[] = [
       allowedElaboration: '可补足场景、对话、即时行动与相邻拍点之间的过渡。',
     }],
   },
-  {
-    modId: 'lyl.taiquan_sacred_fruit',
-    afterEventId: 'lyl.event.taiquan_sacred_fruit_03',
-    eventIds: ['lyl.event.sacred_against_lin', 'lyl.event.sacred_jin_drought'],
-    contracts: [
-      {
-        eventId: 'lyl.event.sacred_against_lin',
-        mustReach: '程宗扬在翠微园向卓云君承诺对付现任掌教蔺采泉，并写下盘江程氏的股份分配。',
-        completionEvidence: [],
-        forbiddenInCanon: ['本拍就对蔺采泉动手', '提前演出后续剧情'],
-        allowedElaboration: '可补足两人的讨论与股份的写法，不得改写承诺内容。',
-      },
-      {
-        eventId: 'lyl.event.sacred_jin_drought',
-        mustReach: '程宗扬与张少煌会面，得知晋国大旱与王茂弘的意图，决定全力收粮，并把建康当成营销中心来做。',
-        completionEvidence: [],
-        forbiddenInCanon: ['改为放弃晋国粮市', '提前演出后续剧情'],
-        allowedElaboration: '可补足会面与收粮的盘算，不得改写决定。',
-      },
-    ],
-  },
   // 汉线补全（剧情策划 2026-10-28 五线补全·汉 H1–H20；用户 2026-10-28 01:26 授权）：欠账拍按原著序挂章上 rail，新建拍同上 rail。
   // 排序：按 axisSeq，同 seq 按原著行序（yly）——718：H1 抵舞都 22618 → 云如瑶私奔 22934；898：赏格争胡骑 47300 → 回绝剑玉姬 47483。
   // H17 汉宫真空（901）、H18 是否拥立（902）是「没亲历宫变之夜」的条件拍（conditions 取反），只挂汉宫突入章、不上 rail。
-  {
-    modId: 'lyl.taiquan_afterfall',
-    beforeEventId: 'lyl.event.taiquan_afterfall_06_beat',
-    eventIds: ['lyl.event.han_shouyang_gaoyanei'],
-    contracts: [{
-      eventId: 'lyl.event.han_shouyang_gaoyanei',
-      mustReach: '程宗扬下首阳山，在山脚与冯源、哈迷蚩、青面兽和高智商一行会合，得知此地是汉国首阳山，随即赶往舞都。',
-      completionEvidence: [],
-      forbiddenInCanon: ['在首阳山脚久留不去舞都', '本拍就见到云如瑶', '提前演出后续剧情'],
-      allowedElaboration: '可补足下山所见、山棚里的重逢与赶路，不得改写会合的人与去向。',
-    }],
-  },
-  {
-    modId: 'lyl.taiquan_afterfall',
-    afterEventId: 'lyl.event.taiquan_afterfall_07_beat',
-    eventIds: ['lyl.event.han_wudu_bingsi', 'lyl.event.jin_guangyuan_ledger'],
-    contracts: [
-      {
-        eventId: 'lyl.event.han_wudu_bingsi',
-        mustReach: '云如瑶决定亲自去七里坊游冶台对面的饼肆做工，程宗扬下灶和面蒸饼、拉高智商打下手，帮她把饼肆撑起来。',
-        completionEvidence: [],
-        forbiddenInCanon: ['程宗扬劝住云如瑶不去饼肆', '提前演出后续剧情'],
-        allowedElaboration: '可补足和面蒸饼的忙乱与饼肆外的人潮，不得改写云如瑶做饼的决定。',
-      },
-      {
-        eventId: 'lyl.event.jin_guangyuan_ledger',
-        mustReach: '程宗扬把广源行在晋国的旧账揭开，对上龙宸这条线。',
-        completionEvidence: [],
-        forbiddenInCanon: ['本拍就与龙宸正面交手', '提前演出后续剧情'],
-        allowedElaboration: '可补足翻查旧账的经过，不得改写账目指向龙宸的结论。',
-      },
-    ],
-  },
-  {
-    modId: 'lyl.taiquan_afterfall',
-    afterEventId: 'lyl.event.taiquan_afterfall_09_beat',
-    eventIds: ['lyl.event.han_court_grain_blame'],
-    contracts: [{
-      eventId: 'lyl.event.han_court_grain_blame',
-      mustReach: '汉廷朝会上御史王温舒攻击丞相韦玄成，左武军粮草因此不继；程宗扬追问究竟是谁的责任。',
-      completionEvidence: [],
-      forbiddenInCanon: ['本拍就定下罪责', '提前演出后续剧情'],
-      allowedElaboration: '可补足朝会上的争执与打听来的内情，不得改写粮草不继的起因。',
-    }],
-  },
   // 唐线补全（剧情策划 2026-10-28 五线补全·唐 T1–T24；用户 2026-10-28 01:26 授权）：欠账拍按原著序挂章上 rail，新建拍同上 rail。
   // 留仙坪三拍排在 s03_01 之前（rail 章改为新首章「留仙坪」）；青龙寺（1096）接 s03_09 之后——它在本关，比下一关首拍北司佛门（1093）晚 3 个 seq，
   // 原著 #69 公敌（ygx 12301）确在 #72 婴衣（12812）之前，属跨关小倒序；overlay 不能删事件，挪关要改生成源，本次不动，已报待核。

@@ -56,8 +56,8 @@ test('仓库现状：两处生成档并回生成器输出（按关 id 排＝生�
   const corePath = join(root, 'src/modules/scenarioMods/canonRailProfiles.generated.json');
   const claims = await readPackRailClaims(join(root, 'src/modules/contentPacks/packs'), root);
   const generatedFiles = claims.filter(c => c.generated).map(c => c.file);
-  // 晋线 S4：晋 3 档进 packs/jin/rails.generated.json（读包顺序按目录名）；汉线 S4：汉 5 档进 packs/han/rails.generated.json
-  assert.deepEqual(generatedFiles, ['src/modules/contentPacks/packs/han/rails.generated.json', 'src/modules/contentPacks/packs/jin/rails.generated.json', 'src/modules/contentPacks/packs/song/rails.generated.json']);
+  // 晋线 S4：晋 3 档进 packs/jin/rails.generated.json（读包顺序按目录名）；汉线 S4：汉 5 档进 packs/han/rails.generated.json；太泉线 S4：太泉 3 档进 packs/taiquan/rails.generated.json
+  assert.deepEqual(generatedFiles, ['src/modules/contentPacks/packs/han/rails.generated.json', 'src/modules/contentPacks/packs/jin/rails.generated.json', 'src/modules/contentPacks/packs/song/rails.generated.json', 'src/modules/contentPacks/packs/taiquan/rails.generated.json']);
   const texts = new Map(await Promise.all([corePath, ...generatedFiles.map(f => join(root, f))].map(async f => [f, await readFile(f, 'utf8')])));
   const all = [...texts.values()].flatMap(t => JSON.parse(t)).sort((a, b) => (a.modId < b.modId ? -1 : a.modId > b.modId ? 1 : 0));
   const { core, packs } = routeRailProfiles(all, claims);

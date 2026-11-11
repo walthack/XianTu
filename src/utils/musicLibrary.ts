@@ -156,11 +156,6 @@ const EVENT_MOOD_MAP: Record<string, MusicMood> = {
   'lyg.event.s06_07': 'aspire',
 
 
-  'lyl.event.yin_fulan_aid': 'aspire',
-  'lyl.event.taiquan_sacred_fruit_08': 'battle',
-  'lyl.event.taiquan_afterfall_06_beat': 'emotion',
-  'lyl.event.taiquan_sacred_fruit_07': 'daily',
-  'lyl.event.find_exit': 'explore',
 };
 
 const EVENT_MOOD_PRIORITY: MusicMood[] = ['climax', 'horror', 'lament', 'blacksea', 'battle', 'danger', 'intrigue', 'explore', 'court', 'sensual', 'emotion', 'aspire', 'daily', 'theme'];

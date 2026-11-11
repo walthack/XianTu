@@ -172,6 +172,17 @@ catalog 新增两个顶层段 `stageMeta: []`、`secondaryLines: []`（为空时
 - 二级线：`jin` 是包线、`song` 接在它后面（链式 `after`）。`tests/contentPackLineFormats.test.mjs` 的二级线与事件配乐夹具改为从 TS 表动态取第一条现存条目（`TS_SECONDARY_LINES[0]`、`EVENT_MOOD_MAP` 首条），表搬空时须改用合成的临时 TS 条目。
 - 未搬（留在 TS）：`eventNarrativeView.ts` `legacyNarrativeVariants` 里 `s07_05_eight_steeds_informed` 的谢艺生还改写（stageMeta 无此字段）；`divergenceLedger.ts` 挂 `s08_06_pursuit_repelled` 的分歧项；别的线挂在晋事件上的节点与锚。
 
+## 2026-11-11 太泉线数据进包（太泉线 S4）
+
+太泉包 `packs/taiquan/`（`id: "qingyu.taiquan"`，`dependsOn: ["qingyu.core", "qingyu.song"]`）：`rails.generated.json`（太泉 3 个生成档：圣果／核心冲突／余波）、`rail-extra-beats.json`（4 条加拍）、`stage-meta.json`（3 关：5 条事件配乐、2 条目标；太泉没有隔离关、称号、章名特判、章配乐、手审 rail 档）、`secondary-lines.json`（`taiquan` 线，`after: "commerce"`）、`line-compass.json`（`lineId: "taiquan"`）、`texts.json`（7 个 `lineCompass.taiquan.*`）。3 关的 stage JSON 仍在 `builtins/data`。
+
+与宋、晋不同之处：
+- **太泉包 `dependsOn` 加了 `qingyu.song`**：二级线 `entryHintKeys.variants.song`（进太泉的原著版说法）这个对象键整串等于宋包定义的线 id `song`，归属检查扫对象键，报 `qingyu.taiquan references song owned by qingyu.song`。宋包不引用太泉包定义的任何 id（宋下一步表引用的太泉圣果关是内置关，不归包），不成环；包顺序 core → jin → qin → song → taiquan。键名由 `lineUnlock.ts` 读取，不改名。
+- 二级线 `taiquan` 带 `unlock`、`entryHintKeys`（S2 白名单已认，节点 `beforeUnlock` 也已认），原样进包；`entryHintKeys` 里引用的 `line.taiquan.*` 正文键仍在核心包 `texts.json`（不属 `lineCompass.*`，本批不搬），太泉包依赖核心包可见。
+- 核心包 `line-compass.json` 里 `taiquan` 原是最后一条，切掉后前一条（`tang`）的 `},` 改成 `}`，其余字节不动；catalog 的 `lineCompass` 段逐字节同搬前。
+- 加拍表里领起「汉线补全」的三行注释夹在太泉圣果与太泉余波条目之间、同时领起其后洛都（汉关）条目：TS 里保留，复制进包里第一条余波加拍的 `note`。
+- 未搬（留在 TS）：`fixedQuestObjectives.ts` 里 `han_shouyang_gaoyanei` 的 packText 目标特判、`eventNarrativeView.ts` 的 `storyActionPresentation`（同一事件到舞都改写）；`lineUnlock.ts`、`loadRepairs.ts` 的太泉逻辑；别的线挂在太泉事件上的节点。
+
 ## 2026-11-11 汉线数据进包（汉线 S4）
 
 汉包 `packs/han/`（`id: "qingyu.han"`，`dependsOn: ["qingyu.core", "qingyu.song"]`）：`rails.generated.json`（汉 5 个生成档；隔离关 `lyl.luoyang_coup` 没有档）、`rail-extra-beats.json`（汉 4 条加拍）、`stage-meta.json`（汉 6 关：隔离 1、称号 2、章名、章配乐 5、事件配乐 7、目标 15）、`secondary-lines.json`（`han` 线，`after: "song"`）、`line-compass.json`（`lineId: "han"`）、`texts.json`（10 个 `lineCompass.han.*`）。汉 6 关的 stage JSON 仍在 `builtins/data`。

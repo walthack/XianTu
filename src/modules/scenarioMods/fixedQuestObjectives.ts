@@ -34,8 +34,6 @@ export const FIXED_QUEST_OBJECTIVE_OVERRIDES: Readonly<Record<string, string>> =
   'lcq.event.wuerlang_slays_dagu': entityText("撑住{{entity:character:lcq.character.nanhuang_dagu}}这一波围攻，看清武二郎能否打开缺口"),
   'lcq.event.s05b_02_xiaozi_exposed': entityText("质问小紫，把阿夕的异常和{{entity:character:lcq.character.nanhuang_heishe}}死因问清楚"),
   'lcq.event.s04_03': '听清乐明珠为什么要假扮新娘',
-  'lyl.event.rescue_yu_sisters': '从天井困兽处救出虞氏姐妹',
-  'lyl.event.xingyin_beast_traps': '查明天井里困兽与被困者的情况',
 });
 
 export function resolveFixedQuestObjective(event: QuestObjectiveEventLike | null | undefined): string {

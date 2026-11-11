@@ -1,0 +1,44 @@
+[
+  {
+    "stageId": "lyl.taiquan_sacred_fruit",
+    "presentation": {
+      "events": {
+        "lyl.event.taiquan_sacred_fruit_08": {
+          "mood": "battle"
+        },
+        "lyl.event.taiquan_sacred_fruit_07": {
+          "mood": "daily"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyl.taiquan_core_conflict",
+    "presentation": {
+      "events": {
+        "lyl.event.yin_fulan_aid": {
+          "mood": "aspire"
+        },
+        "lyl.event.find_exit": {
+          "mood": "explore"
+        }
+      }
+    }
+  },
+  {
+    "stageId": "lyl.taiquan_afterfall",
+    "presentation": {
+      "events": {
+        "lyl.event.taiquan_afterfall_06_beat": {
+          "mood": "emotion"
+        },
+        "lyl.event.rescue_yu_sisters": {
+          "objective": "从天井困兽处救出虞氏姐妹"
+        },
+        "lyl.event.xingyin_beast_traps": {
+          "objective": "查明天井里困兽与被困者的情况"
+        }
+      }
+    }
+  }
+]
