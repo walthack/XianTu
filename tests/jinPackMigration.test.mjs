@@ -47,6 +47,6 @@ test('晋 3 关的关／事件／章 id 不再写在框架 TS 文件里（允许
   assert.doesNotMatch(src('src/modules/scenarioMods/secondaryLines.ts'), /id: 'jin'/);
   // 残留只在别的线的节点行（`{ reviewSummary: …, stageId, eventId }`）与锚事件行（汉线以 s07_01_old_case 为入口锚）里
   const hits = src('src/modules/scenarioMods/secondaryLines.ts').split('\n').filter(line => line.match(token));
-  assert.ok(hits.length > 0);
-  for (const line of hits) assert.match(line, /^\s*(\{ reviewSummary: .*stageId: '[^']+', eventId: '[^']+' \},?|anchorEventIds: \['[^']+'\],)$/, line);
+  // B1：四条非国家线进核心包后 secondaryLines.ts 已没有任何线与节点，本线 id 残留为 0
+  assert.deepEqual(hits, []);
 });

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "id": "qingyu.characters",
+  "dependsOn": [
+    "qingyu.core"
+  ],
+  "characterBeats": [
+    "character-beats.json"
+  ],
+  "characterProfiles": [
+    "profiles.json"
+  ]
+}
