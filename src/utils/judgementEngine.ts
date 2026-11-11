@@ -7,6 +7,7 @@ import { JUDGEMENT_STATE_PATH, type TurnJudgementData } from './judgementRules';
 import type { ActionClass, Degree } from '@/modules/scenarioMods/freeAction/config';
 import { dualBuffConfig, failureAftermathEffects, selfBuffEffect } from '@/modules/scenarioMods/freeAction/outcomeEffects';
 import { writeCombatResult, type CombatResult } from '@/modules/sceneModule/host/combatWriteback';
+import { JUDGEMENT_KINDS, type JudgementKind } from './judgementKinds';
 
 export interface EventActionJudgementReceipt {
   kind: 'event_action_judgement';
@@ -36,18 +37,8 @@ export interface JudgementSpiritCost {
   criticalFailureRatio: number;
 }
 
-export type JudgementKind =
-  | 'combat'
-  | 'cultivate'
-  | 'craft'
-  | 'explore'
-  | 'social'
-  | 'escape'
-  | 'stealth'
-  | 'scheme';
-
-/** 现有判定类别全集（模型报风险只能从这里选，不新增类别）。 */
-export const JUDGEMENT_KINDS: readonly JudgementKind[] = ['combat', 'escape', 'stealth', 'craft', 'cultivate', 'social', 'scheme', 'explore'];
+/** 判定类别与全集在纯模块 judgementKinds.ts（内容包编译器要在没有 catalog 时读它），这里原名转导出。 */
+export { JUDGEMENT_KINDS, type JudgementKind };
 
 export type JudgementDifficultyBand = 'easy' | 'normal' | 'hard' | 'severe' | 'extreme';
 export type JudgementOutcome = 'critical_failure' | 'failure' | 'partial' | 'success' | 'great_success' | 'perfect';

@@ -15,5 +15,8 @@
   ],
   "endings": [
     "endings.json"
+  ],
+  "openWorldSlices": [
+    "open-world-slices.json"
   ]
 }

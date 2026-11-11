@@ -25,5 +25,11 @@
   ],
   "endings": [
     "endings.json"
+  ],
+  "openWorldSlices": [
+    "open-world-slices.json"
+  ],
+  "persistentEntries": [
+    "persistent-entries.json"
   ]
 }
