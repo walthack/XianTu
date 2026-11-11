@@ -21,3 +21,11 @@
 `npm run type-check` 仅 `src/modules/sceneModule/host/controller.ts(202,42)` TS2559（允许的既有错误）；无新增类型错误。内容包 `--check`、`git diff --check` 和冻结哈希校验通过。runtime 新行号 1、4034，各增一行；原 rail 3967–3980 内容未改，AIBS 无 diff。
 
 后续建议：按独立授权处理返回流程与 rail 首拍缺陷，开展浏览器/真实模型验证。控制面与审核路由不变。
+
+## 返回流程（2026-11-11）
+
+- 判定 `mapEntryReturn.ts` `mapEntryReturnTarget`：有 `mapEntryResume`、当前关就是该入口关且无 `nextStageId`、未 gameOver、无进行中场面、无当前章、无激活事件、`hasPendingProductionCriticalEvent` 为假（stage_ready 条件去掉 nextStageId）。线 outcome 不作条件。
+- 执行 `strictInitializer.ts` `transitionFromMapEntryStage`：以 `mapEntryResume.runtime` 为底恢复出发关进度与位置，世界线 flag（与切关同一个 `isWorldlineFlagKey`）、编年史、身份/相识/知识等账取入口关当前值；不计时、不重发物品；删除续点，追加 `chronicle.mapEntryReturn.<entryId>`。
+- 入口重入门：`mapEntryReady` 新增「编年史里没有该入口关 stageId 的记录」，返回后不会再开放同一入口。
+- `map-entries.json` 新可选字段：`returnLabelTextId`（按钮/右栏文案，`{stage}`=出发关名；不声明则该入口不提供返回）、`returnTextId`（返回过场，走 `stageEntryPresentation`）、`returnChronicleTextId`（编年史标题）。文本在 `texts.json`，带【扩写】/【扩写·待剧情策划】标记，显示层去标记。
+- UI：主面板「继续旅程」位置的兄弟按钮（任务模式下也显示）→ `gameStateStore.returnFromMapEntry`；右栏无锚点时显示同一文案。测试 `tests/mapEntryReturn.test.mjs`。

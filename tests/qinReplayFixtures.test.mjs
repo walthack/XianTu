@@ -3,7 +3,7 @@
 // 四份夹具同一条链：入秦前未达阈值 → 阈值达成且口信已「先记下」→ 地图入秦走到第一幕中段 → 秦 rail 14 拍走完。
 // 与原始口径的差异（引擎现状，详见 impl-summary）：夹具 1 未投递口信、无烘焙的 compass.qinEntryReady；
 // 夹具 3 没有救过虞氏姐妹（结构化动作够不到 lyl.event.rescue_yu_sisters），秦关条件拍全部未触发；
-// 夹具 4 的 nextStageReadyId 为 null（地图入秦的秦关 nextStageId 为空，当前构建无回主链入口）。
+// 夹具 4 的 nextStageReadyId 为 null（地图入秦的秦关 nextStageId 为空）；回主链走 mapEntryReturn，不走 nextStageReadyId（tests/mapEntryReturn.test.mjs）。
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -28,6 +28,7 @@ const { validateSaveDataV3 } = await loadTs('../src/utils/saveValidationV3.ts');
 const { assertEntitySaveFormat } = await loadTs('../src/modules/scenarioMods/entitySaveFormat.ts');
 const fallback = await loadTs('../src/utils/saveLoadFallback.ts');
 const repairs = await loadTs('../src/modules/scenarioMods/loadRepairs.ts');
+const { getMapEntryReturnOffer } = await loadTs('../src/modules/scenarioMods/mapEntryReturn.ts');
 const calendar = await loadTs('../src/utils/calendarMigration.ts');
 
 const QIN = 'lyg.qin_xianyang';
@@ -196,7 +197,7 @@ test('qin-rail-mid：第一幕中段（封宫已完成、焦点夺位），可�
   assert.ok(!rt(step.save).activeEventIds.includes(q('yu_sisters_act2')));
 });
 
-test('qin-rail-end：rail 14 拍走完、line.qin.outcome=unresolved；nextStageReadyId 为空（地图入秦的秦关无下一关）', async () => {
+test('qin-rail-end：rail 14 拍走完、line.qin.outcome=unresolved；nextStageReadyId 为空，回主链走 mapEntryReturn，不走 nextStageReadyId', async () => {
   const save = await loadLikeGame(importBundle(read('qin-rail-end'), FIXTURES['qin-rail-end'].name), 'qin-rail-end');
   const s = rt(save);
   assert.deepEqual(s.completedEventIds, QIN_RAIL);
@@ -209,6 +210,7 @@ test('qin-rail-end：rail 14 拍走完、line.qin.outcome=unresolved；nextStage
   assert.equal(s.nextStageId ?? null, null);
   assert.equal(s.nextStageReadyId ?? null, null);
   assert.equal(save.系统.扩展.mapEntryResume.runtime.modId, 'lyl.taiquan_sacred_fruit');
+  assert.ok(getMapEntryReturnOffer(save));
   assert.equal(s.gameOver ?? false, false);
 });
 

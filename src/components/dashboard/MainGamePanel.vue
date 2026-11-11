@@ -165,6 +165,15 @@
               {{ stageDeparturePending ? t('启程中…') : stageDepartureOffer.label }}
             </button>
           </div>
+          <div v-else-if="mapEntryReturnOffer" class="action-options opportunity-action-options">
+            <button
+              class="action-option-btn opportunity-action-btn"
+              :disabled="isAIProcessing || stageDeparturePending"
+              @click="returnFromMapEntry"
+            >
+              {{ stageDeparturePending ? t('启程中…') : stripNarrativeMetaWords(mapEntryReturnOffer.label) }}
+            </button>
+          </div>
 
           <!-- 行动选项 -->
           <div
@@ -626,6 +635,7 @@ import {
   type ScenarioEventActionSelection,
   type ScenarioOpportunityActionSelection,
 } from '@/modules/scenarioMods/runtime';
+import { getMapEntryReturnOffer } from '@/modules/scenarioMods/mapEntryReturn';
 import {
   getWuyuanOpenWorldSelections,
   resolveWuyuanOpenWorldSelectionFromText,
@@ -1088,6 +1098,24 @@ const stageDepartureOffer = computed(() => {
   return save && !scenarioGameOver.value && !isNanhuangDemoFinished(save) ? getStageDepartureOffer(save) : null;
 });
 const stageDeparturePending = ref(false);
+// 地图入口关走完后回出发关；任务日志不提供这个入口，所以任务模式下也显示。
+const mapEntryReturnOffer = computed(() => {
+  const save = gameStateStore.toSaveData();
+  return save && !scenarioGameOver.value ? getMapEntryReturnOffer(save) : null;
+});
+const returnFromMapEntry = async () => {
+  const offer = mapEntryReturnOffer.value;
+  if (!offer || stageDeparturePending.value || isAIProcessing.value || currentScene.value) return;
+  stageDeparturePending.value = true;
+  try {
+    const result = await gameStateStore.returnFromMapEntry(offer.entryId);
+    if (!result.ok) toast.warning(result.reason || '此刻还不能启程');
+  } catch (error) { // lcq-allow: 返回失败直接 toast 告知玩家，与启程按钮 departToNextStage 同口径
+    toast.error(String((error as Error)?.message || error));
+  } finally {
+    stageDeparturePending.value = false;
+  }
+};
 const nextPlaytestPhase = computed(() => nanhuangDemoFinished.value ? nextNanhuangPhase(gameStateStore.toSaveData()) : undefined);
 const phaseContinuePending = ref(false);
 const continueToNextPhase = async () => {
@@ -1267,7 +1295,7 @@ const currentNarrative = computed(() => {
     return {
       type: 'stage_entry',
       image: undefined as string | undefined,
-      content: stageEntry.text,
+      content: stripNarrativeMetaWords(stageEntry.text),
       time: currentTimeString,
       stateChanges: { changes: [] },
       actionOptions: scenarioEngineActionOptions.value.filter(option => !questHidesButton(option)).map(engineOptionLine)

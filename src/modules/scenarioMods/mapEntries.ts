@@ -5,13 +5,14 @@ import { resolveLedgerPath } from './ledgerConditions';
 import { activeScene } from '../sceneModule/host/ext';
 import { syncPersistentLineEntries } from './persistentLineEntries';
 
-export interface MapEntry { id: string; stageId: string; eventId: string; locationId: string; readyPath: string; previewTextId?: string }
+export interface MapEntry { id: string; stageId: string; eventId: string; locationId: string; readyPath: string; previewTextId?: string; returnLabelTextId?: string; returnTextId?: string; returnChronicleTextId?: string }
 
 export function mapEntryReady(save: SaveData, entry: MapEntry): boolean {
   const rt = (save as any).世界?.状态?.剧本模组;
   const ext = (save as any).系统?.扩展 || {};
   return !!rt && !rt.gameOver && !activeScene(save) && rt.modId !== entry.stageId
-    && !ext.mapEntryResume && !Object.values(ext).some((v: any) => typeof v?.kind === 'string' && /demo|playtest/.test(v.kind))
+    && !ext.mapEntryResume && !(rt.chronicle || []).some((e: any) => e?.stageId === entry.stageId) // 去过一次就不再开放（返回后续点已删）
+    && !Object.values(ext).some((v: any) => typeof v?.kind === 'string' && /demo|playtest/.test(v.kind))
     && resolveLedgerPath(entry.readyPath, rt, save)?.value === true;
 }
 

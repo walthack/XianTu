@@ -1,6 +1,7 @@
 import { enableLifespanCache } from '@/utils/lifespanCalculator';
 import { canonicalLocationCountry } from './locationCountry';
 import { mapEntryReady, type MapEntry } from './mapEntries';
+import { mapEntryReturnTarget, mapEntryReturnText } from './mapEntryReturn';
 import {overlayPackPlaytestOpening, contentPackPersistentFlagIds} from '../contentPacks';
 import { syncStoryStatuses } from './freeAction/bingGu';
 import {levelOf} from '../../utils/realmUtils';
@@ -341,6 +342,95 @@ export function transitionToMapEntryStage(saveData: SaveData, entry: MapEntry, m
   return result;
 }
 
+function loadBuiltinMods(): ScenarioMod[] | undefined {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports -- builtins use require.context and are unavailable to the Node harness.
+    return (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS;
+  } catch { return undefined; /* lcq-allow: 调用方按「内置剧情模组不可用」拒绝切关 */ }
+}
+
+/** 跨关携带的世界线 flag（切关与地图入口返回同一口径）。 */
+function isWorldlineFlagKey(key: string, persistentContractFlags: ReadonlySet<string>): boolean {
+  return persistentContractFlags.has(key)
+    || key.startsWith('branch.')
+    || key.startsWith('scene.')
+    || key.startsWith('character.')
+    || key.endsWith('.void')
+    || key.startsWith('world.baihu.')
+    || key.startsWith(LINE_FLAG_PREFIX)
+    || key.startsWith(DEADLINE_FLAG_PREFIX)
+    || key === 'event.gamble_bond_signed.refused_capture'
+    || key === 'event.gamble_bond_signed.outcome';
+}
+
+/**
+ * 地图入口关走完后回到出发关：以入关时存下的出发关 runtime（mapEntryResume.runtime）为底恢复关内进度，
+ * 玩家历史（编年史、身份/相识/知识账、世界线 flag 等）取入口关当前值。不另计时，不重发初始物品。
+ */
+export function transitionFromMapEntryStage(saveData: SaveData, modsOverride?: ScenarioMod[]): StageTransitionResult {
+  const target = mapEntryReturnTarget(saveData);
+  if (!target) return { saveData, ok: false, reason: '入口关剧情尚未走完' };
+  const { entry } = target;
+  const mods = modsOverride || loadBuiltinMods();
+  const mod = mods?.find(item => item.manifest.id === target.base.modId);
+  if (!mod) return { saveData, ok: false, reason: `未找到出发关模组 ${target.base.modId}` };
+  const next = structuredClone(saveData) as any;
+  const cur = next.世界.状态.剧本模组;
+  const ext = next.系统.扩展;
+  syncPlayerLedgers(cur);
+  if (cur.gameOver) return { saveData, ok: false, reason: '本局已结束' };
+  const base = structuredClone(ext.mapEntryResume.runtime);
+  const persistent = contentPackPersistentFlagIds();
+  const keepFlags = (flags: Record<string, unknown> | undefined, worldline: boolean) =>
+    Object.fromEntries(Object.entries(flags || {}).filter(([key]) => isWorldlineFlagKey(key, persistent) === worldline));
+  // 入关时入口关拿到的是出发关世界线 flag 的副本，入口关的值更新；出发关自己的事件 flag 原样恢复，入口关的关内 flag 不带回。
+  base.flags = { ...keepFlags(base.flags, false), ...keepFlags(cur.flags, true) };
+  const chronicle = structuredClone(Array.isArray(cur.chronicle) ? cur.chronicle : []);
+  const chronicleId = `chronicle.mapEntryReturn.${entry.id}`;
+  if (!chronicle.some((item: any) => item?.id === chronicleId)) {
+    chronicle.push({
+      id: chronicleId, type: 'stage', stageId: entry.stageId,
+      title: entry.returnChronicleTextId ? mapEntryReturnText(entry.returnChronicleTextId, base) : `完成「${cur.modName || cur.modId}」`,
+      sequence: chronicle.length + 1,
+    });
+  }
+  base.chronicle = chronicle;
+  for (const field of ['playerIdentities', 'acquaintances', 'stanceStates', 'playerKnowledge', 'pathReceipts', 'npcPrivateKnowledge']) {
+    base[field] = { ...(base[field] || {}), ...(cur[field] || {}) };
+  }
+  for (const field of ['divergences', 'questLineState', 'inventoryTransferReceipts', 'locationLoot', 'sceneLedger', 'personIdentities', 'reconciledRegistryVersion', 'baihuGambleRefusal']) {
+    if (cur[field] !== undefined) base[field] = structuredClone(cur[field]);
+  }
+  const departed = [...new Set([...(base.departedCast || []), ...(cur.departedCast || [])])];
+  if (departed.length) base.departedCast = departed;
+  // 出发关快照里可能残留入关前的开场卡，不能再展示。
+  delete base.stageEntryPresentation;
+  next.世界.状态.剧本模组 = base;
+  next.世界.信息 = buildStrictScenarioInitialization(mod).worldInfo;
+  next.角色.位置 = structuredClone(ext.mapEntryResume.position);
+  ext.剧本模组 = { modId: base.modId, modName: base.modName, modVersion: base.modVersion, mode: base.mode };
+  delete ext.mapEntryResume;
+  backfillRelationshipIds(next, base.canon?.characters);
+  // 最近一段正文附带的建议是按入口关写的（同地图抵达 clearDepartureActionOptions）。
+  const latest = next.系统?.历史?.叙事?.at?.(-1);
+  if (latest && Array.isArray(latest.actionOptions) && latest.actionOptions.length) latest.actionOptions = [];
+  const advanced = advanceScenarioRuntime(next);
+  const advancedRuntime = (advanced.saveData as any).世界.状态.剧本模组;
+  const presentation = entry.returnTextId ? mapEntryReturnText(entry.returnTextId, base) : '';
+  if (presentation) {
+    advancedRuntime.stageEntryPresentation = {
+      fromStageId: String(cur.modId),
+      ...(cur.modName ? { fromStageName: String(cur.modName) } : {}),
+      toStageId: String(base.modId),
+      ...(base.modName ? { toStageName: String(base.modName) } : {}),
+      enteredAtTurn: Math.max(0, Number(advancedRuntime.worldTurn) || 0),
+      text: presentation,
+    };
+  }
+  syncStoryStatuses(advanced.saveData);
+  return { saveData: advanced.saveData, ok: true, from: cur.modId, to: base.modId, toName: base.modName };
+}
+
 function transitionScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[], entry?: MapEntry): StageTransitionResult {
   const rt = (saveData as any)?.世界?.状态?.剧本模组;
   if (!rt?.modId) return { saveData, ok: false, reason: '当前存档无剧本运行时' };
@@ -352,13 +442,8 @@ function transitionScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[
   const configuredTargetId = entry?.stageId || rt.nextStageId;
   if (!configuredTargetId) return { saveData, ok: false, reason: '已是最终关，无下一关' };
   if (!entry && rt.nextStageReadyId !== configuredTargetId) return { saveData, ok: false, reason: '本关关键剧情尚未完成' };
-  let mods = modsOverride;
-  if (!mods) {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports -- builtins use require.context and are unavailable to the Node harness.
-      mods = (require('./builtins') as { BUILTIN_SCENARIO_MODS: ScenarioMod[] }).BUILTIN_SCENARIO_MODS;
-    } catch { return { saveData, ok: false, reason: '内置剧情模组不可用' }; }
-  }
+  const mods = modsOverride || loadBuiltinMods();
+  if (!mods) return { saveData, ok: false, reason: '内置剧情模组不可用' };
   let targetId = configuredTargetId;
   let mod = (mods || []).find(item => item.manifest.id === targetId);
   const skipped = new Set<string>();
@@ -429,18 +514,7 @@ function transitionScenarioStage(saveData: SaveData, modsOverride?: ScenarioMod[
     });
   }
   const persistentContractFlags = contentPackPersistentFlagIds();
-  const inheritedWorldlineFlags = Object.fromEntries(Object.entries(rt.flags || {}).filter(([key]) =>
-    persistentContractFlags.has(key)
-    || key.startsWith('branch.')
-    || key.startsWith('scene.')
-    || key.startsWith('character.')
-    || key.endsWith('.void')
-    || key.startsWith('world.baihu.')
-    || key.startsWith(LINE_FLAG_PREFIX)
-    || key.startsWith(DEADLINE_FLAG_PREFIX)
-    || key === 'event.gamble_bond_signed.refused_capture'
-    || key === 'event.gamble_bond_signed.outcome',
-  ));
+  const inheritedWorldlineFlags = Object.fromEntries(Object.entries(rt.flags || {}).filter(([key]) => isWorldlineFlagKey(key, persistentContractFlags)));
   const inheritedBaihuGambleRefusal = rt.baihuGambleRefusal && typeof rt.baihuGambleRefusal === 'object'
     ? structuredClone(rt.baihuGambleRefusal)
     : undefined;

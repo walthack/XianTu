@@ -316,6 +316,29 @@ export const useGameStateStore = defineStore('gameState', {
       }
     },
 
+    /** 地图入口关走完后回出发关（玩家点按钮触发），与启程共用防重入，随后落盘。 */
+    async returnFromMapEntry(expectedEntryId?: string): Promise<{ ok: boolean; reason?: string; toName?: string }> {
+      if (stageTransitionInFlight) return { ok: false, reason: '启程正在进行，请勿重复操作' };
+      stageTransitionInFlight = true;
+      try {
+        const { useUIStore } = await import('./uiStore');
+        if (useUIStore().isAIProcessing) return { ok: false, reason: '请等待本轮叙事结束后再启程' };
+        const save = this.toSaveData();
+        if (!save) return { ok: false, reason: '存档数据不完整' };
+        if (expectedEntryId && (save as any)?.系统?.扩展?.mapEntryResume?.entryId !== expectedEntryId) {
+          return { ok: false, reason: '启程目标已经变化，请重新确认' };
+        }
+        const { transitionFromMapEntryStage } = await import('@/modules/scenarioMods/strictInitializer');
+        const result = transitionFromMapEntryStage(save);
+        if (!result.ok) return { ok: false, reason: result.reason };
+        this.loadFromSaveData(result.saveData);
+        await this.saveGame();
+        return { ok: true, toName: result.toName };
+      } finally {
+        stageTransitionInFlight = false;
+      }
+    },
+
     /** 本期试玩结束后「继续到下一期」：同一份隔离档，终点标记挪到下一期，进度保留，随后落盘。 */
     async continueToNextPlaytestPhase(): Promise<{ ok: boolean; reason?: string }> {
       const { useUIStore } = await import('./uiStore');
