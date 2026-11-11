@@ -1,5 +1,5 @@
 {
-  "version": "20d6aaf285a59294",
+  "version": "8d9aa2e611643877",
   "contracts": [
     {
       "meta": {
@@ -33155,6 +33155,68 @@
       "kind": "closedLinesAtLeast",
       "min": "story.lineCompass.qinEntry.minClosedLines",
       "unlessLineClosedByWorldEvent": "qin"
+    }
+  ],
+  "contractRevisions": [
+    {
+      "eventId": "lcq.event.geluo_summons_biji",
+      "from": "e0119be2",
+      "to": "f0f6dac7"
+    },
+    {
+      "eventId": "lcq.event.s02_04",
+      "from": "f6f916da",
+      "to": "68462843"
+    },
+    {
+      "eventId": "lcq.event.huamiao_coop_boundary",
+      "from": "dc6ab360",
+      "to": "b0a94a70"
+    },
+    {
+      "eventId": "lcq.event.s04_01",
+      "from": "fbe74510",
+      "to": "2c96d09c"
+    },
+    {
+      "eventId": "lcq.event.wuerlang_joins",
+      "from": "e6c7f972",
+      "to": "59e75a25"
+    },
+    {
+      "eventId": "lcq.event.ningyu_regicide_offer",
+      "from": "88b5c491",
+      "to": "19003cbb"
+    },
+    {
+      "eventId": "lcq.event.rainforest_black_shoal",
+      "from": "112b54d3",
+      "to": "5bf7c0f8"
+    },
+    {
+      "eventId": "lcq.event.silent_sheyi_village",
+      "from": "fa40aeb2",
+      "to": "d33e6b9d"
+    },
+    {
+      "eventId": "lcq.event.s03b_wanwu_night",
+      "from": "d3222695",
+      "to": "02ee3be2"
+    },
+    {
+      "eventId": "lcq.event.s03b_yinzhu_xiongerpu",
+      "from": "c3d65b9d",
+      "to": "c2ebe3c0"
+    },
+    {
+      "eventId": "lcq.event.ningyu_regicide_offer_ins_ningyu_reply",
+      "from": "f27676f0",
+      "to": "37ca6495"
+    },
+    {
+      "eventId": "lcq.event.guiwangdong_coop_pact_ins_ningyu_enter",
+      "from": "aff4748f",
+      "to": "569a4d8b"
     }
   ],
   "worldEvents": [
