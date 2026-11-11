@@ -2484,8 +2484,9 @@ const LINE_COMPASS_PLACE_SLOT = '{地点}';
  *   有这种步时模板须在 texts、含 {地点}；传了 places（eventId → 地点显示名，content-packs 编译时从各关事件 locationId 求得）时，代入后的句子同样守字数与定性词；
  * - travelHint 步（fix5939-2）：只能是 true，须同时有 eventId 与 hintKey，传了 places 时文案须含该事件地点名，否则 invalid_travel_hint；
  * - draft 步的文案（若有）须以【待剧情策划】开头，运行时一律跳过。
+ * - lineId 须在 nationLineIds 里（缺省 NATION_LINE_IDS；内容包编译时传这次编译出的 catalog.nationLines，不用磁盘上的旧 catalog，秦线 PR C／M2）。
  */
-export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>, places?: Readonly<Record<string, string>>): ScenarioModValidationIssue[] {
+export function validateLineCompassTable(table: unknown, texts: Readonly<Record<string, string>>, places?: Readonly<Record<string, string>>, nationLineIds: readonly string[] = NATION_LINE_IDS): ScenarioModValidationIssue[] {
   const issues: ScenarioModValidationIssue[] = [];
   const add: AddIssue = (path, code, message) => issues.push({ path, code, message });
   if (!isRecord(table) || table.version !== 1 || !Array.isArray(table.lines)) {
@@ -2537,7 +2538,7 @@ export function validateLineCompassTable(table: unknown, texts: Readonly<Record<
     const at = `lineCompass.lines[${li}]`;
     if (!isRecord(line)) { add(at, 'invalid_type', `${at} must be an object.`); return; }
     for (const key of Object.keys(line)) if (!['lineId', 'nameKey', 'anchorLine', 'knownWhen', 'closedWhen', 'entryHint', 'steps', 'note'].includes(key)) add(`${at}.${key}`, 'unknown_field', `Unknown field "${key}".`);
-    if (typeof line.lineId !== 'string' || !NATION_LINE_IDS.includes(line.lineId)) add(`${at}.lineId`, 'invalid_enum', `lineId must be one of ${NATION_LINE_IDS.join('/')}.`);
+    if (typeof line.lineId !== 'string' || !nationLineIds.includes(line.lineId)) add(`${at}.lineId`, 'invalid_enum', `lineId must be one of ${nationLineIds.join('/')}.`);
     else if (seenLines.has(line.lineId)) add(`${at}.lineId`, 'duplicate_id', `Duplicate line "${line.lineId}".`);
     else seenLines.add(line.lineId);
     if (typeof line.nameKey !== 'string' || !isNonEmptyString(texts[line.nameKey])) add(`${at}.nameKey`, 'missing_text', `Line name text "${String(line.nameKey)}" is missing.`);

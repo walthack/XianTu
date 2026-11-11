@@ -13,6 +13,8 @@ const kinds=['contracts','drafts','statuses','stages','overlays','questLines','e
 const lineFormatKinds=['stageMeta','railExtraBeats','secondaryLines'];
 // 核心轨与人物轨（F0a）：lineCriticalEvents、characterBeats、storyAxis、locationAliases、characterProfiles、ifBranches，见 content-pack-core-formats.mjs
 const fields=['schemaVersion','id','dependsOn',...kinds,'texts','questLineResources','playtests','entries','lineCompass','timeline',...lineFormatKinds,...coreFormatKinds];
+// 国家线注册与地区映射（秦线 PR C）：manifest.nationLines 是文件列表，每个文件是 [{lineId,order,regions}]；编译后按 order 排成 catalog.nationLines
+fields.push('nationLines');
 const resourceKinds=['memories','facts','affinityWeights','salience','intentMatches'];
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const fail=s=>{throw new Error(`Content Pack: ${s}`);};
@@ -41,6 +43,7 @@ const definedIds=(kind,x)=>{
  if(kind==='contracts'||kind==='drafts')return [['contract',x.meta?.id]];
  if(kind==='entities')return [[`entity.${x.kind}`,x.entry?.id]];
  if(kind==='lineCompass')return [['lineId',x.lineId]];
+ if(kind==='nationLines')return [['nationLine',x?.lineId]];
  if(kind==='overlays'||kind==='stageMeta'||kind==='railExtraBeats')return [];
  if(kind==='secondaryLines')return [['secondaryLine',x.id]];
  if(coreFormatKinds.includes(kind))return coreDefinedIds(kind,x);
@@ -52,6 +55,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const timelineInserts=[],lineFormats=Object.fromEntries(lineFormatKinds.map(k=>[k,[]])),coreRaw=Object.fromEntries(coreFormatKinds.map(k=>[k,[]]));
  const numbers=await loadNumbers(sourceRoot);
  const packIds=new Set(),packs=[];
+ const nationLines=[];
  for(const dir of (await readdir(packsDir,{withFileTypes:true})).filter(x=>x.isDirectory()).map(x=>x.name).sort()){
   const m=JSON.parse(await readFile(join(packsDir,dir,'manifest.json'),'utf8'));
   if(!object(m)||m.schemaVersion!==1||typeof m.id!=='string'||!m.id||packIds.has(m.id))fail(`${dir}: invalid version/id`);packIds.add(m.id);
@@ -74,6 +78,7 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
   if(m.questLineResources){const value=await load(m.questLineResources);raw.push({kind:'questLineResources',value});const res=resolveNumbers(value,numbers,`${m.id}.questLineResources`);if(!object(res)||Object.keys(res).some(k=>!resourceKinds.includes(k)))fail(`${m.id}: invalid quest line resources`);for(const[kind,table]of Object.entries(res)){if(!object(table))fail(`${m.id}: invalid ${kind}`);const into=catalog.questLineResources[kind]||={};for(const[id,v]of Object.entries(table)){define(kind,id,m.id);if(id in into)fail(`${m.id}: duplicate ${kind} ${id}`);into[id]=v;}}}
   // 线的下一步表（右栏线入口复用分析 2026-10-27 §5.2）：各包的 lines 合并，lineId 不得重复；内容校验在 validateWithTs 的 validateLineCompassTable
   if(m.lineCompass){const t=await load(m.lineCompass);if(!object(t)||t.version!==1||!Array.isArray(t.lines))fail(`${m.id}.lineCompass: expected {version:1,lines:[]}`);if(t.note!==undefined&&typeof t.note!=='string')fail(`${m.id}.lineCompass: invalid note`);own('lineCompass',t.lines);catalog.lineCompass.lines.push(...t.lines);}
+  if(!Array.isArray(m.nationLines||[]))fail(`${m.id}.nationLines: expected file list`);for(const path of m.nationLines||[]){const v=await load(path);if(!Array.isArray(v))fail(`${m.id}.nationLines: expected array`);own('nationLines',v);nationLines.push(...v.map(value=>({packId:m.id,value})));}
   if(m.timeline){const v=await load(m.timeline);if(!Array.isArray(v))fail(`${m.id}.timeline: expected array`);own('timeline',v);timelineInserts.push(...v);}
   for(const k of ['playtests','entries'])if(m[k]){const v=await load(m[k]);if(!Array.isArray(v))fail(`${m.id}.${k}: expected array`);own(k,v);catalog[k].push(...v);}
  }
@@ -98,8 +103,9 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  catalog.mapRoutes=resolveNumbers(catalog.mapRoutes,numbers,'mapRoutes');
  const applyOverlay=await import('./content-pack-overlays.mjs');applyOverlay.applyPackOverlays(stages,catalog.overlays);
  if(catalog.questLines.length){
-  // 只取逐拍演出关判定；不经 fixedEndingNarratives（它 import contentPacks，会读 generated/catalog.json，M2）
-  const {isStepSceneStage:isNanhuangSceneStage}=await tsLoader().import(join(root,'src/modules/scenarioMods/travel/stepScene.ts'));
+  // 只取逐拍演出关判定；不经 fixedEndingNarratives（它 import contentPacks，会读 generated/catalog.json，M2）。
+  // 也不经 stepScene.ts：它 import numbers.ts → numbersRegistry.ts → contentPacks（index.ts → nationLines.ts）→ catalog.json（秦线 PR C）；这里读同一份关 id 表，判定同 isStepSceneStage（关 id 前缀）
+  const {NANHUANG_STEP_SCENE_STAGE_IDS}=await tsLoader().import(join(root,'src/modules/scenarioMods/travel/defs/qingyuNanhuang.ts'));const isNanhuangSceneStage=id=>NANHUANG_STEP_SCENE_STAGE_IDS.some(stageId=>(id||'').startsWith(stageId));
   const base=JSON.parse(await readFile(join(sourceRoot,'mod-kit/quest-lines/resources.json'),'utf8'));
   const routeLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));
   for(const [stageId,projected] of projectQuestLineEvents({lines:catalog.questLines,stages,texts:{...base.texts,...catalog.texts},intentMatches:{...base.intentMatches,...catalog.questLineResources.intentMatches},guardCovers:isNanhuangSceneStage,routeLocationNames})){const overlay={stageId,events:projected};catalog.overlays.push(overlay);applyOverlay.applyPackOverlays(stages,[overlay]);}
@@ -125,8 +131,16 @@ async function buildCatalog({packsDir=join(root,'src/modules/contentPacks/packs'
  const baseEntities=await Promise.all(['items','skills','techniques'].map(async k=>JSON.parse(await readFile(join(sourceRoot,`mod-kit/entity-catalog/${k}.json`),'utf8'))));
  for(const x of catalog.entities)if(!['item','skill','technique'].includes(x.kind)||!object(x.entry)||typeof x.entry.id!=='string'||!Array.isArray(x.entry.aliases)||!object(x.entry.definition)||!object(x.entry.stageVariants))fail('invalid entity increment');else if(baseEntities[['item','skill','technique'].indexOf(x.kind)].entries.some(e=>e.id===x.entry.id))fail(`entity shadows authority ${x.entry.id}`);
  // 只有 eventId 的步的通用句「回到{地点}看看」（R-4／P-12）：地点取该事件 locationId 在所在关 canon.locations 的名字，退回实体目录名；没有 locationId 记空串（运行时只显示线名）；地点 id 另记 lineCompassPlaceIds（travelHint 判已在该地，fix5939-2）
- // 线顺序（右栏「别处」的显示顺序）与包顺序无关：按 NATION_LINE_IDS 稳定排序；numbersRegistry.ts 没有 import
- {const {NATION_LINE_IDS}=await tsLoader().import(join(root,'src/modules/sceneModule/numbersRegistry.ts'));const rank=id=>{const i=NATION_LINE_IDS.indexOf(id);return i<0?Infinity:i;};catalog.lineCompass.lines.sort((x,y)=>rank(x?.lineId)-rank(y?.lineId));}
+ // 国家线注册（秦线 PR C）：只认 lineId／order／regions；lineId、order 全部包里不重复，同一地区只登记到一条线。按 order 排成 catalog.nationLines，
+ // 运行时 NATION_LINE_IDS（numbersRegistry.ts）与地区→线映射都从它派生；编译期一律用这次编译出的值，不读磁盘上的旧 catalog（M2）
+ {const byOrder=new Map(),byRegion=new Map(),str=v=>typeof v==='string'&&v.trim().length>0;
+  for(const {packId,value:x} of nationLines){const at=`nation line ${x?.lineId}`;
+   if(!object(x)||Object.keys(x).some(k=>!['lineId','order','regions'].includes(k))||!str(x.lineId)||!Number.isSafeInteger(x.order)||x.order<1||!Array.isArray(x.regions)||!x.regions.length||!x.regions.every(str)||new Set(x.regions).size!==x.regions.length)fail(`${at}: invalid fields`);
+   if(byOrder.has(x.order))fail(`${at}: order ${x.order} also used by ${byOrder.get(x.order)}`);byOrder.set(x.order,x.lineId);
+   for(const r of x.regions){if(byRegion.has(r))fail(`${at}: region ${r} also registered to ${byRegion.get(r)} (${packId})`);byRegion.set(r,x.lineId);}}
+  catalog.nationLines=nationLines.map(x=>x.value).sort((a,b)=>a.order-b.order);unique(catalog.nationLines,x=>x.lineId,'nation line');}
+ // 线顺序（右栏「别处」的显示顺序）与包顺序无关：按这次编译出的 nationLines 顺序稳定排序
+ {const ids=catalog.nationLines.map(x=>x.lineId);const rank=id=>{const i=ids.indexOf(id);return i<0?Infinity:i;};catalog.lineCompass.lines.sort((x,y)=>rank(x?.lineId)-rank(y?.lineId));}
  {const catalogLocationNames=Object.fromEntries(JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/locations.json'),'utf8')).entries.map(e=>[e.id,e.definition?.name]).filter(([,n])=>n));const stageOfEvent=new Map([...stages.values()].flatMap(s=>(s.scenario?.events||[]).map(e=>[e.id,s])));for(const line of catalog.lineCompass.lines)for(const step of line.steps||[]){if(typeof step.eventId!=='string'||step.pending||!events.has(step.eventId)||step.eventId in catalog.lineCompassPlaces)continue;const locationId=events.get(step.eventId).locationId;const name=locationId?String((stageOfEvent.get(step.eventId)?.canon?.locations||[]).find(l=>l?.id===locationId)?.name||catalogLocationNames[locationId]||''):'';catalog.lineCompassPlaces[step.eventId]=name;catalog.lineCompassPlaceIds[step.eventId]=locationId||'';}}
  catalog.timeline=compileTimeline({rawInserts:timelineInserts,numbers,stages:[...stages.values()],texts:catalog.texts});
  // 暂扣动作（while 全部成立时该合同动作不可做，先做 prerequisiteBeatId 那一拍）：条件只读 flags，与步骤 visibleWhen 同形
@@ -254,7 +268,7 @@ async function validateWithTs(catalog,{stages,events,baseEvents,sourceRoot},{val
  for(const c of catalog.contracts)for(const patch of Object.values(c.meta.hook.completionSceneByOutcome||{}))for(const actionId of [c.meta.hook.actionId,...(c.meta.hook.compatibleActionIds||[])]){const stage=structuredClone([...stages.values()].find(s=>s.scenario.events.some(e=>e.id===c.meta.hook.eventId)));let event=stage.scenario.events.find(e=>e.id===c.meta.hook.eventId);if(actionId!==c.meta.hook.actionId){const base=structuredClone(baseEvents.get(event.id));stage.scenario.events[stage.scenario.events.findIndex(e=>e.id===event.id)]=base;event=base;}const action=event.playerCompletionContract.actions.find(a=>a.id===actionId);Object.assign(action,patch);const v=validateScenarioMod(stage);if(!v.valid)fail(`invalid completion override ${c.meta.id}/${actionId}: ${JSON.stringify(v.issues)}`);}
  const book=JSON.parse(await readFile(join(sourceRoot,'src/modules/sceneModule/contracts/statuses.json'),'utf8'));unique([...book,...catalog.statuses],x=>x.id,'catalog status');for(const c of [...catalog.contracts,...catalog.drafts]){const report=lintContract({...c,statuses:[...(c.statuses||[]),...book,...catalog.statuses]});if(report.errors.length)fail(`${c.meta.id}: ${report.errors.join('; ')}`);}}
  if(catalog.questLines.length){const jiti=tsLoader();const {parseQuestLines,validateQuestLineReferences}=await jiti.import(join(root,'src/modules/scenarioMods/questLines.ts'));const resources=JSON.parse(await readFile(join(sourceRoot,'mod-kit/quest-lines/resources.json'),'utf8'));const texts={...resources.texts,...catalog.texts};const table=parseQuestLines({version:1,lines:catalog.questLines},id=>{if(!(id in texts))fail(`missing quest text ${id}`);return texts[id];},{...resources.intentMatches,...catalog.questLineResources.intentMatches});const index=JSON.parse(await readFile(join(sourceRoot,'mod-kit/entity-catalog/index.json'),'utf8'));const refs=new Set(index.entries.map(e=>`${e.kind}:${e.id}`));for(const [id,event]of events){refs.add(`event:${id}`);for(const a of event.playerCompletionContract?.actions||[])refs.add(`action:${id}:${a.id}`);}for(const x of catalog.entities)refs.add(`${x.kind}:${x.entry.id}`);for(const id of Object.keys(texts))refs.add(`text:${id}`);for(const[plural,kind]of [['memories','memoryTemplate'],['facts','fact'],['affinityWeights','affinityWeight'],['salience','salience']])for(const id of Object.keys(catalog.questLineResources[plural]||{}))refs.add(`${kind}:${id}`);for(const l of table.lines)for(const b of l.beats)for(const e of [...b.onComplete,...Object.values(b.byAction||{}).flat(),...(b.onExpire||[])]){if(e.kind==='setState'){refs.add(`state:${e.stateId}`);refs.add(`flag:${e.stateId}`);}if(e.kind==='setReceipt')refs.add(`receipt:${e.receiptId}`);}for(const l of table.lines)for(const b of l.beats)for(const a of b.steps||[])for(const c of a.visibleWhen||[])if(!refs.has(`state:${c.path.replace(/^flags\./,'')}`))fail(`${b.id}/${a.actionId}: visibleWhen reads undefined state ${c.path}`);const errors=validateQuestLineReferences(table,(kind,id,eventId)=>refs.has(`${kind}:${kind==='action'?`${eventId}:${id}`:id}`));if(errors.length)fail(errors.join('; '));}
- {const jiti=tsLoader();const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces);if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
+ {const jiti=tsLoader();const {validateLineCompassTable}=await jiti.import(join(root,'src/modules/scenarioMods/validator.ts'));const issues=validateLineCompassTable(catalog.lineCompass,catalog.texts,catalog.lineCompassPlaces,catalog.nationLines.map(x=>x.lineId));if(issues.length)fail(`invalid lineCompass: ${JSON.stringify(issues)}`);}
  await validateLineFormatsWithTs(catalog,stages,sourceRoot);
  await validateCoreFormatsWithTs(catalog);
 }

@@ -261,3 +261,21 @@ catalog 在 `secondaryLines` 之后新增六个顶层空段：`lineCriticalEvent
 - 人物包本身不引用别的包定义的 id（拍点与高光的事件都在内置关），`dependsOn: ["qingyu.core"]` 按任务规定写；核心包不反向依赖人物包。
 - 读源码的两处改读合并值：`tests/criticalEventCoverage.test.mjs` 的人物层认领改读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`（认领集合前后都是 120 个 id，欠账不变）；`scripts/quest-report.mjs` 的人物任务与二级线改用 jiti 读 `CHARACTER_QUESTS`／`CHARACTER_HIGHLIGHTS`／`SECONDARY_LINES`（主轴仍正则读源码）。
 - catalog 只变 `characterBeats` 段与 version；棘轮 `characterQuests.ts` 116 → 0（总数 1135 → 1019，文件 69 → 68）。
+
+## 2026-11-11 国家线注册与地区映射进包（秦线 PR C）
+
+**manifest `nationLines`**：JSON 文件路径数组（同 `mapEntries`／`stageMeta`），每个文件是数组：
+
+```json
+[{"lineId": "<国家线 id>", "order": <正整数>, "regions": ["<地区名，mod-kit/entity-ledger/overrides.json stageRegions 的值>"]}]
+```
+
+只认这三个字段（段名按复核 M7 不叫 `lines`，那是人物线文件与下一步表）。七条国家线各登记在自己的线包里：`nanhuang`→`packs/zhaonan`、`jin`→`jin`、`song`→`song`、`han`→`han`、`tang`→`tang`、`qin`→`qin`、`taiquan`→`taiquan`，文件都叫 `nation-lines.json`。塞外不是国家线，`packs/saiwai` 不登记。
+
+- **编译期校验**：`lineId` 非空、全部包里不重复（归属种类 `nationLine`，跨包报 `nationLine id X defined by both A and B`，同包报 `nation line missing/duplicate id`）；`order` 是正整数、全部包里不重复；`regions` 非空、元素非空且不重复，同一地区只能登记到一条线（`region R also registered to …`）。等价于原 numbers 里 `story.lineCompass.regionLines` 的校验（值须为国家线 id——现在结构上必然成立），并补上 lineId／地区不重复。
+- **catalog**：新顶层段 `nationLines`（按 `order` 排好，条目原样），放在末尾；其余字节不变，version 随之变化（内置模组重新播种一次，同宋 S2）。
+- **顺序**：显式由 `order` 决定，与包的拓扑序、目录名无关。下一步表 `lineCompass.lines` 合并后按这次编译出的 `nationLines` 顺序稳定排序（原按 `numbersRegistry.ts` 的常量排）。现值 1–7 = 南荒、晋、宋、汉、唐、秦、太泉，与原常量逐项相同。
+- **运行时**：`src/modules/contentPacks/nationLines.ts` 只 import `generated/catalog.json`，导出 `NATION_LINES`、`PACK_NATION_LINE_IDS`、`NATION_LINE_OF_REGION`。`contentPacks/index.ts` 转导出这三个名字；`numbersRegistry.ts` 的 `NATION_LINE_IDS` 导出名不变，改为从 `../contentPacks` 取 `PACK_NATION_LINE_IDS`（场面模块只许引用 `../contentPacks`，`tests/sceneModuleIsolation.test.mjs`）；`lineCompass.ts` 的 `lineOfStage` 改查 `NATION_LINE_OF_REGION`。numbers 里删掉 `story.lineCompass.regionLines` 字段与它的必填项／校验。
+- **构建顺序（M2）**：编译器不再 import `numbersRegistry.ts` 排序；`validateLineCompassTable` 加第 4 个参数 `nationLineIds`（缺省 `NATION_LINE_IDS`），`validateWithTs` 传这次编译出的 `catalog.nationLines` 的 id，不用磁盘上的旧 catalog。因为 `numbers.ts` → `numbersRegistry.ts` 现在会读 catalog.json，`buildCatalog` 的逐拍演出关判定不再经 `stepScene.ts`（它 import `numbers.ts`），改读 `travel/defs/qingyuNanhuang.ts` 的 `NANHUANG_STEP_SCENE_STAGE_IDS`，按关 id 前缀判定（同 `isStepSceneStage`）。删掉 catalog.json 后单次重建仍可用，产物逐字节相同。
+- **加一条国家线**只改包数据（`tests/nationLinesPack.test.mjs` 用合成线 `test.nation` 在仓库副本里单次重建验证）。但 `numbersRegistry.ts` 的秦入口规则（阶段 2 才搬）要求「国家线去掉秦、太泉」恰为 numbers 的 `story.lineCompass.anyLineClosed.lineIds`，且每条在 `story.lineOutcome.failureClosureEvents` 有键：新线若不是秦／太泉，须同时补这两项 numbers 配置，否则数值冷启动校验（LCQ-NUM-007）失败。
+- 测试：`tests/lineCompass.test.mjs` 的地区映射断言改读合并结果，「塞外登记成国家线」的负例移到 `tests/nationLinesPack.test.mjs`（下一步表用未登记的 `saiwai` 报 `lineId must be one of …`；`塞外` 登记到两条线报错）。

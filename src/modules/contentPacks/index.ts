@@ -23,3 +23,7 @@ export function overlayPackPlaytestOpening(input:ScenarioMod,extensions:Record<s
 export function contentPackPersistentFlagIds(): ReadonlySet<string> {
   return new Set(CONTENT_PACKS.contracts.flatMap(c => [c.meta.hook.requiredFlag, c.meta.hook.escapeFlag, c.meta.hook.consumedFlag].filter((id): id is string => !!id)));
 }
+
+/** 国家线注册与地区映射（秦线 PR C），见 nationLines.ts；sceneModule 只许引用本模块（tests/sceneModuleIsolation.test.mjs），numbersRegistry.ts 经这里取。 */
+export { NATION_LINES, PACK_NATION_LINE_IDS, NATION_LINE_OF_REGION } from './nationLines';
+export type { NationLine } from './nationLines';

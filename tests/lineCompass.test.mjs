@@ -13,6 +13,7 @@ const { validateLineCompassTable } = await loadTs('../src/modules/scenarioMods/v
 const secondary = await loadTs('../src/modules/scenarioMods/secondaryLines.ts');
 const entry = await loadTs('../src/modules/scenarioMods/secondaryLineEntry.ts');
 const packs = await loadTs('../src/modules/contentPacks/index.ts');
+const nation = await loadTs('../src/modules/contentPacks/nationLines.ts');
 const log = await loadTs('../src/modules/diagnostics/log.ts');
 const store = await loadTs('../src/modules/diagnostics/store.ts');
 const texts = packs.CONTENT_PACKS.texts;
@@ -42,13 +43,14 @@ test('配置：ui.rightSidebar.showLineCompass 默认 true 已登记（用户 20
   assert.equal(merged.ui.rightSidebar.showSecondaryLines, false, '「可投的门路」仍隐藏');
   assert.equal(compass.showLineCompass(), true);
   assert.ok(registry.FIELD_SPECS.some(s => s.path === 'ui.rightSidebar.showLineCompass' && s.kind === 'bool' && s.required && s.section === 'runtime'));
-  for (const path of ['story.lineCompass.regionLines', 'story.lineCompass.hint.maxChars', 'story.lineCompass.hint.bannedWords']) assert.ok(registry.FIELD_SPECS.some(s => s.path === path), path);
-  const regionLines = numbers.GAME_NUMBERS.story.lineCompass.regionLines;
+  for (const path of ['story.lineCompass.hint.maxChars', 'story.lineCompass.hint.bannedWords']) assert.ok(registry.FIELD_SPECS.some(s => s.path === path), path);
+  // 地区映射（秦线 PR C）：从 numbers 的 story.lineCompass.regionLines 移到各线包 nationLines，读合并结果；numbers 里不再有这个字段
+  assert.ok(!registry.FIELD_SPECS.some(s => s.path === 'story.lineCompass.regionLines'));
+  assert.equal('regionLines' in numbers.GAME_NUMBERS.story.lineCompass, false);
+  const regionLines = nation.NATION_LINE_OF_REGION;
   assert.deepEqual(Object.values(regionLines).sort(), ['han', 'jin', 'nanhuang', 'qin', 'song', 'taiquan', 'tang']);
   assert.equal(regionLines['塞外'], undefined, '塞外不是国家线');
-  const tree = structuredClone(merged);
-  tree.story.lineCompass.regionLines['塞外'] = 'saiwai';
-  assert.ok(registry.validateAgainstRegistry(tree).some(e => e.includes('story.lineCompass.regionLines.塞外')));
+  // 「塞外登记成国家线」的负例移到包编译校验：tests/nationLinesPack.test.mjs
   assert.equal(compass.lineOfStage(S07), 'jin');
   assert.equal(compass.lineOfStage(S02), undefined);
   assert.equal(compass.lineOfStage('lyl.taiquan_sacred_fruit'), 'taiquan');
