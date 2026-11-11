@@ -14,7 +14,7 @@
   ],
   "总数": {
     "文件数": 66,
-    "行数": 818
+    "行数": 800
   },
   "按文件计数": {
     "src/components/character-creation/CharacterManagement.vue": 2,
@@ -27,9 +27,9 @@
     "src/modules/scenarioMods/beatProgress.ts": 1,
     "src/modules/scenarioMods/branchDecision.ts": 6,
     "src/modules/scenarioMods/characterResolver.ts": 25,
-    "src/modules/scenarioMods/endingPresentation.ts": 10,
+    "src/modules/scenarioMods/endingPresentation.ts": 2,
     "src/modules/scenarioMods/eventNarrativeView.ts": 33,
-    "src/modules/scenarioMods/fixedEndingNarratives.ts": 15,
+    "src/modules/scenarioMods/fixedEndingNarratives.ts": 5,
     "src/modules/scenarioMods/fixedInventoryContracts.ts": 9,
     "src/modules/scenarioMods/fixedQuestObjectives.ts": 5,
     "src/modules/scenarioMods/intimacyProfiles.ts": 16,

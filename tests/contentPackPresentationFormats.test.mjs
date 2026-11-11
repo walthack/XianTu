@@ -256,7 +256,7 @@ test('endings：key／battleLoss／pathText 三种可分可合；TS 在前、包
  await bad([{endingId:ENDING,pathText:{sourceEventId:E1,textKey:'test.missing'}}],/pathText text test\.missing unknown/);
  await bad([{endingId:ENDING,pathText:{sourceEventId:'test.event.none',textKey:'test.path'}}],/pathText source event test\.event\.none unknown/);
  await withAdded(EP.TS_ENDING_KEYS,{[ENDING]:'E77'},()=>bad([{endingId:ENDING,key:'E99'}],/key also in endingPresentation\.ts TS_ENDING_KEYS/));
- await bad([{endingId:ENDING,key:Object.values(EP.TS_ENDING_KEYS)[0]??'E01'}],Object.keys(EP.TS_ENDING_KEYS).length?/key also in endingPresentation\.ts TS_ENDING_KEYS/:/./);
+ await withAdded(EP.TS_ENDING_KEYS,{[other]:'E77'},()=>bad([{endingId:ENDING,key:'E77'}],/key also in endingPresentation\.ts TS_ENDING_KEYS/));
  await withArray(FE.TS_BATTLE_LOSS_ENDINGS,[...FE.TS_BATTLE_LOSS_ENDINGS,{endingId:ENDING}],()=>bad([{endingId:ENDING,battleLoss:battle}],/battleLoss also in fixedEndingNarratives\.ts TS_BATTLE_LOSS_ENDINGS/));
  await withAdded(FE.TS_ENDING_PATH_TEXTS,{[ENDING]:{sourceEventId:E1,textKey:'x'}},()=>bad([{endingId:ENDING,pathText:{sourceEventId:E1,textKey:'test.path'}}],/pathText also in fixedEndingNarratives\.ts TS_ENDING_PATH_TEXTS/));
 });
@@ -378,7 +378,7 @@ const stripChapterSpecials=s=>s.replace(/(  if \(hookTitle\) return hookTitle;\n
  .replace(/  if \(modId !== '[^']+' \|\| !eventId\) return fallback;\n[\s\S]*?\n  return storyRouteLocation\(eventId\)[^\n]*\n/,'  return fallback;\n');
 
 test('搬迁演练：展示类 TS 表与两处代码特判都能逐项无损写进包（真实包目录副本），临时搬空 TS 后编译通过，读取结果与现在逐项相同',async()=>{
- const before={locks:{...BD.LOCKED_DECISIONS},endingKeys:{...EP.TS_ENDING_KEYS},battle:structuredClone(FE.TS_BATTLE_LOSS_ENDINGS),paths:{...FE.TS_ENDING_PATH_TEXTS},prefixes:[...OW.TS_STEP_SCENE_STAGE_PREFIXES],entries:structuredClone(PE.TS_PERSISTENT_ENTRIES),
+ const before={locks:{...BD.LOCKED_DECISIONS},endingKeys:{...EP.mergeEndingKeys(EP.TS_ENDING_KEYS,CONTENT_PACKS.endings||[])},battle:structuredClone(FE.mergeBattleLossEndings(FE.TS_BATTLE_LOSS_ENDINGS,CONTENT_PACKS.endings||[])),paths:{...FE.mergeEndingPathTexts(FE.TS_ENDING_PATH_TEXTS,CONTENT_PACKS.endings||[])},prefixes:[...OW.TS_STEP_SCENE_STAGE_PREFIXES],entries:structuredClone(PE.TS_PERSISTENT_ENTRIES),
   nanhuang:structuredClone(NH.TS_NANHUANG_OPEN_WORLD_SLICE),wuyuanZones:structuredClone(WZ.TS_WUYUAN_ZONE_PART),wuyuan:structuredClone(WO.TS_WUYUAN_OPEN_WORLD_SLICE)};
  // 1. 转写：事件级字段按事件所在关归到 stageMeta；关级字段同理
  const add=new Map();const at=(stageId,eventId)=>{if(!add.has(stageId))add.set(stageId,{events:{},presentation:{}});const s=add.get(stageId);return eventId?(s.events[eventId]||={}):s.presentation;};

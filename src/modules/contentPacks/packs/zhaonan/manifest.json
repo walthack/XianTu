@@ -22,5 +22,8 @@
   ],
   "secondaryLines": [
     "secondary-lines.json"
+  ],
+  "endings": [
+    "endings.json"
   ]
 }

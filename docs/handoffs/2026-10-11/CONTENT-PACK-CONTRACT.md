@@ -340,3 +340,16 @@ catalog 在 `ifBranches` 之后新增三个顶层空段：`endings: []`、`openW
 - 留在 TS 的只有代码：`characterFlagSlug`、落旗标逻辑、查找函数本身；`offscreen.lcq.xingyuehu_war` 这个 id 仍由冻结文件 `runtime.ts` 生成，只有它的提示在包里。
 - `tests/contentPackCoreCharacterFormats.test.mjs` 搬迁演练的分歧一段改为取人物包 `if-branches.json` 原样转写、对照值改为真实 catalog 段的合并（TS 表搬空后原来的转写取到 0 条）。
 - catalog 只变 `ifBranches` 段与 version（`a10abf5c8c597660` → `e3952d7c9800d358`）；棘轮 `divergenceLedger.ts` 17 → 0（总数 958 → 941，文件 66 → 65）。
+
+## 2026-11-11 结局表进塞外／昭南包（B7）
+
+塞外包 `packs/saiwai/` 与昭南包 `packs/zhaonan/` 的 manifest 各加 `endings: ["endings.json"]`（只加这一段，其它行不动）。条目用 F0b 的 `endings` 格式，由脚本从 TS 求值结果转写（同 `contentPackPresentationFormats` 搬迁演练的转写），不手抄：
+
+- 塞外 `endings.json`（4 条）：E01 `baihu_beheading`、E02 `ajiman_bond`（带 `pathText`：来源 `lcq.event.wuerlang_joins`，正文键 `lcq.ending.death.ajiman_bond.ajiman_path`）、E03 `paolao`、E04 `wangzhe_blast`。
+- 昭南 `endings.json`（4 条）：E05 `shanghou_relic`；E06 `ghost_king_skull`、E07 `dragon_well`、E08 `fail.dragon_essence` 三条 `key` 与 `battleLoss` 写在同一条里（`endingId` 全部包里只能出现一次）。三条战败结局的来源事件都在 05b，各自挂着场面合同，编译通过。
+- 归属：`endingId` 与结局里的事件都不是别的包定义的 id，两包 `dependsOn` 仍只有 `qingyu.core`，无成环。
+- 顺序：包按目录名编译，`saiwai` 在 `zhaonan` 前，合并后的结局编号表仍是 E01→E08；TS 表为空，`BATTLE_LOSS_ENDINGS` 就是昭南包的顺序 E06→E07→E08，与原表相同（B0 深快照 `residual-tables-snapshot.json` 原样通过）。
+- 注释：`ENDING_PATH_TEXTS` 的裁定簿 #240 说明、战败表「战斗正式接入时消费」说明进对应条目的 `note`（编译时剥掉）；TS 侧原注释保留并注明已搬。
+- TS 侧：`TS_ENDING_KEYS`、`TS_BATTLE_LOSS_ENDINGS`、`TS_ENDING_PATH_TEXTS` 清空，导出名、合并函数、`BATTLE_LOSS_ENDINGS` 导出不变（冻结的 `runtime.ts:3799` 和 `sceneModule/host/controller.ts` 照旧读合并值）。`TS_BATTLE_LOSS_ENDINGS` 原来靠 `as const` 推类型，清空后显式标成 `readonly (PackBattleLossEnding & { endingId })[]`。留在 TS：`canonicalEndingId` 的旧 E01 别名（2 行，旧档补丁）、`migrateLegacyE01Ending`，以及 `fixedEndingNarratives.ts` 里的 `applyStepSceneLedger` 九阳一行和 `sceneLedgerSummary` 4 行（都是代码）。
+- 测试：`tests/contentPackPresentationFormats.test.mjs` 两处——endings 反例「包 key 与 TS 编号同值」改为先往 TS 表临时加一个编号再撞（原写法在 TS 表为空时退化成撞合成包外的 E01，合成包编译不含真实包，测不到）；搬迁演练的 `before.endingKeys／battle／paths` 改取当前合并值（同一测试的 `locks` 早就这样写）。
+- catalog 只变 `endings` 段（0 → 8 条）与 version（`ca385e4a806b1d9a` → `4e5ec9ab27c9e9da`）；棘轮 `endingPresentation.ts` 10 → 2、`fixedEndingNarratives.ts` 15 → 5（总数 818 → 800，文件数 66 不变）。

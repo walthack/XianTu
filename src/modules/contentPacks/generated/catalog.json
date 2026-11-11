@@ -1,5 +1,5 @@
 {
-  "version": "ca385e4a806b1d9a",
+  "version": "4e5ec9ab27c9e9da",
   "contracts": [
     {
       "meta": {
@@ -21671,7 +21671,83 @@
       "offscreen.lcq.xingyuehu_war": "这是玩家缺席时世界自行结算的战争后果：不得让战争倒带或写成玩家亲自参战；应以战报、伤员、戒严和粮线压力持续承接，玩家仍可选择介入余波或继续置身事外。"
     }
   },
-  "endings": [],
+  "endings": [
+    {
+      "endingId": "lcq.ending.death.baihu_beheading",
+      "key": "E01"
+    },
+    {
+      "endingId": "lcq.ending.death.ajiman_bond",
+      "key": "E02",
+      "pathText": {
+        "sourceEventId": "lcq.event.wuerlang_joins",
+        "textKey": "lcq.ending.death.ajiman_bond.ajiman_path"
+      }
+    },
+    {
+      "endingId": "lcq.ending.death.paolao",
+      "key": "E03"
+    },
+    {
+      "endingId": "lcq.ending.death.wangzhe_blast",
+      "key": "E04"
+    },
+    {
+      "endingId": "lcq.ending.death.shanghou_relic",
+      "key": "E05"
+    },
+    {
+      "endingId": "lcq.ending.death.ghost_king_skull",
+      "key": "E06",
+      "battleLoss": {
+        "title": "天命的指引",
+        "kind": "death",
+        "sourceEventId": "lcq.event.s05b_05b_ideology_duel_and_defeat",
+        "tierFlag": "lcq.encounter.f10.tier",
+        "tier": "rout",
+        "facts": [
+          "程宗扬被封回龛窟，血没能沾上骨虎",
+          "鬼巫王剖开天命者的头颅",
+          "银镜中的同伴未能找到他",
+          "龙神照常吞下鬼巫王"
+        ]
+      }
+    },
+    {
+      "endingId": "lcq.ending.death.dragon_well",
+      "key": "E07",
+      "battleLoss": {
+        "title": "龙首无人",
+        "kind": "death",
+        "sourceEventId": "lcq.event.ghost_king_swallowed",
+        "tierFlag": "lcq.encounter.f13.tier",
+        "tier": "lose",
+        "facts": [
+          "你带乐明珠逃往洞窟裂缝时滚下碎石坡，背脊重伤",
+          "乐明珠被推进龙角下的空隙",
+          "程宗扬被埋在鬼王峒地底",
+          "龙神吞下鬼巫王，龙首无人号令反击"
+        ]
+      }
+    },
+    {
+      "endingId": "lcq.ending.fail.dragon_essence",
+      "key": "E08",
+      "battleLoss": {
+        "title": "龙精入体",
+        "kind": "failure",
+        "sourceEventId": "lcq.event.slay_dragon",
+        "tierFlag": "lcq.encounter.f14.tier",
+        "tier": "lose",
+        "facts": [
+          "龙神死去",
+          "龙精携鬼巫王残念进入程宗扬丹田",
+          "程宗扬存活，原来的自我不再主宰身体",
+          "本局结束，不可续玩"
+        ]
+      }
+    }
+  ],
   "openWorldSlices": [],
   "persistentEntries": [],
   "overlays": [
